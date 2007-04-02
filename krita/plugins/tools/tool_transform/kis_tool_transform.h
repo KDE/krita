@@ -75,8 +75,8 @@ public:
 
 public:
 
-    void notifyCommandAdded(KCommand *);
-    void notifyCommandExecuted(KCommand *);
+    void notifyCommandAdded(K3Command *);
+    void notifyCommandExecuted(K3Command *);
 
 public:
     virtual void deactivate();

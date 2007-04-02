@@ -43,7 +43,7 @@ class QPoint;
 class QMatrix;
 class QTimer;
 class QPaintEngine;
-class KNamedCommand;
+class K3NamedCommand;
 class QUndoCommand;
 
 class KoStore;
@@ -501,7 +501,7 @@ public:
      * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
      * you can
      */
-    KisRandomAccessorPixel createRandomAccessor(Q_INT32 x, Q_INT32 y);
+    KisRandomAccessorPixel createRandomAccessor(qint32 x, qint32 y);
 
     /**
      * This function creates a random accessor which allow to randomly access any pixels on
@@ -509,7 +509,7 @@ public:
      * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
      * you can
      */
-    KisRandomConstAccessorPixel createRandomConstAccessor(Q_INT32 x, Q_INT32 y) const;
+    KisRandomConstAccessorPixel createRandomConstAccessor(qint32 x, qint32 y) const;
 
     /**
      * This function create a random accessor which can easily access to sub pixel values.

@@ -607,10 +607,10 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
                 double maxDistance = 0;
 
-                Q_UINT8 redThis = layerPointer[2];
-                Q_UINT8 greenThis = layerPointer[1];
-                Q_UINT8 blueThis = layerPointer[0];
-                Q_UINT8 thisPixelOpacity = layerPointer[3];
+                quint8 redThis = layerPointer[2];
+                quint8 greenThis = layerPointer[1];
+                quint8 blueThis = layerPointer[0];
+                quint8 thisPixelOpacity = layerPointer[3];
 
                 for (int yOffset = -1; yOffset < 2; yOffset++) {
                     for (int xOffset = -1; xOffset < 2; xOffset++) {
@@ -622,11 +622,11 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                             if (sampleX >= startx && sampleX <= endx && sampleY >= starty && sampleY <= endy) {
                                 uint x = sampleX - startx;
                                 uint y = sampleY - starty;
-                                Q_UINT8 * pixelPos = layer.bits() + (y * width * 4) + (x * 4);
-                                Q_UINT8 red = *(pixelPos +2);
-                                Q_UINT8 green = *(pixelPos + 1);
-                                Q_UINT8 blue = *pixelPos;
-                                Q_UINT8 opacity = *(pixelPos + 3);
+                                quint8 * pixelPos = layer.bits() + (y * width * 4) + (x * 4);
+                                quint8 red = *(pixelPos +2);
+                                quint8 green = *(pixelPos + 1);
+                                quint8 blue = *pixelPos;
+                                quint8 opacity = *(pixelPos + 3);
 
                                 double dRed = (red * opacity - redThis * thisPixelOpacity) / 65535.0;
                                 double dGreen = (green * opacity - greenThis * thisPixelOpacity) / 65535.0;

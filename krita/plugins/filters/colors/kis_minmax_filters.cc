@@ -23,10 +23,10 @@
 #include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 
-typedef void (*funcMaxMin)(const Q_UINT8* , Q_UINT8* , uint );
+typedef void (*funcMaxMin)(const quint8* , quint8* , uint );
 
 template<typename _TYPE>
-void maximize(const Q_UINT8* s, Q_UINT8* d, uint nbpixels)
+void maximize(const quint8* s, quint8* d, uint nbpixels)
 {
     const _TYPE* sT = (_TYPE*)(s);
     _TYPE* dT = (_TYPE*)(d);
@@ -48,7 +48,7 @@ void maximize(const Q_UINT8* s, Q_UINT8* d, uint nbpixels)
 }
 
 template<typename _TYPE>
-        void minimize(const Q_UINT8* s, Q_UINT8* d, uint nbpixels)
+        void minimize(const quint8* s, quint8* d, uint nbpixels)
 {
     const _TYPE* sT = (_TYPE*)(s);
     _TYPE* dT = (_TYPE*)(d);
@@ -85,16 +85,16 @@ void KisFilterMax::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
     setProgressTotalSteps(size.width() * size.height());
 
     KoColorSpace * cs = src->colorSpace();
-    Q_INT32 nC = cs->colorChannelCount();
+    qint32 nC = cs->colorChannelCount();
     
     funcMaxMin F;
     KoChannelInfo::enumChannelValueType cT = cs->channels()[0]->channelValueType();
     if( cT == KoChannelInfo::UINT8 || cT == KoChannelInfo::INT8 )
     {
-        F = & maximize<Q_UINT8>;
+        F = & maximize<quint8>;
     } else if( cT == KoChannelInfo::UINT16 || cT == KoChannelInfo::INT16 )
     {
-        F = & maximize<Q_UINT8>;
+        F = & maximize<quint8>;
     } else if( cT == KoChannelInfo::FLOAT32 )
     {
         F = & maximize<float>;
@@ -131,16 +131,16 @@ void KisFilterMin::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
     setProgressTotalSteps(size.width() * size.height());
 
     KoColorSpace * cs = src->colorSpace();
-    Q_INT32 nC = cs->colorChannelCount();
+    qint32 nC = cs->colorChannelCount();
     
     funcMaxMin F;
     KoChannelInfo::enumChannelValueType cT = cs->channels()[0]->channelValueType();
     if( cT == KoChannelInfo::UINT8 || cT == KoChannelInfo::INT8 )
     {
-        F = & minimize<Q_UINT8>;
+        F = & minimize<quint8>;
     } else if( cT == KoChannelInfo::UINT16 || cT == KoChannelInfo::INT16 )
     {
-        F = & minimize<Q_UINT8>;
+        F = & minimize<quint8>;
     } else if( cT == KoChannelInfo::FLOAT32 )
     {
         F = & minimize<float>;

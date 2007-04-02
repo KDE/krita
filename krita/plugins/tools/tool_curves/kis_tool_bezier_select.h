@@ -37,7 +37,7 @@ public:
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SELECT; }
-    virtual Q_UINT32 priority() { return 10; }
+    virtual quint32 priority() { return 10; }
 
 protected:
 

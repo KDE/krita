@@ -108,9 +108,9 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
-    Q_INT32 x;
+    qint32 x;
     double xFraction;
-    Q_INT32 y;
+    qint32 y;
     double yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
@@ -132,12 +132,12 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
     m_painter->setPressure(info.pressure);
 
     QPointF srcPointF = pt - m_painter->duplicateOffset();
-    QPoint srcPoint = QPoint(x - static_cast<Q_INT32>(m_painter->duplicateOffset().x()),
-                             y - static_cast<Q_INT32>(m_painter->duplicateOffset().y()));
+    QPoint srcPoint = QPoint(x - static_cast<qint32>(m_painter->duplicateOffset().x()),
+                             y - static_cast<qint32>(m_painter->duplicateOffset().y()));
 
 
-    Q_INT32 sw = dab->extent().width();
-    Q_INT32 sh = dab->extent().height();
+    qint32 sw = dab->extent().width();
+    qint32 sh = dab->extent().height();
 
     if (srcPoint.x() < 0 )
         srcPoint.setX(0);
@@ -236,8 +236,8 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
 
     if(heal)
     {
-        Q_UINT16 dataDevice[4];
-        Q_UINT16 dataSrcDev[4];
+        quint16 dataDevice[4];
+        quint16 dataSrcDev[4];
         double* matrix = new double[ 3 * sw * sh ];
         // First divide
         KoColorSpace* deviceCs = device->colorSpace();
@@ -248,12 +248,12 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
         {
             for(int i= 0; !srcDevIt.isDone(); i++)
             {
-                deviceCs->toLabA16(deviceIt.rawData(), (Q_UINT8*)dataDevice, 1);
-                deviceCs->toLabA16(srcDevIt.rawData(), (Q_UINT8*)dataSrcDev, 1);
+                deviceCs->toLabA16(deviceIt.rawData(), (quint8*)dataDevice, 1);
+                deviceCs->toLabA16(srcDevIt.rawData(), (quint8*)dataSrcDev, 1);
                 // Division
                 for( int k = 0; k < 3; k++)
                 {
-                    matrixIt[k] = dataDevice[k] / (double)QMAX( (int)dataSrcDev [k], 1);
+                    matrixIt[k] = dataDevice[k] / (double)qMax( (int)dataSrcDev [k], 1);
                 }
                 ++deviceIt;
                 ++srcDevIt;
@@ -283,14 +283,14 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
         {
             for(int i= 0; !srcDevIt.isDone(); i++)
             {
-                deviceCs->toLabA16(deviceIt.rawData(), (Q_UINT8*)dataDevice, 1);
-                deviceCs->toLabA16(srcDevIt.rawData(), (Q_UINT8*)dataSrcDev, 1);
+                deviceCs->toLabA16(deviceIt.rawData(), (quint8*)dataDevice, 1);
+                deviceCs->toLabA16(srcDevIt.rawData(), (quint8*)dataSrcDev, 1);
                 // Multiplication
                 for( int k = 0; k < 3; k++)
                 {
-                    dataSrcDev[k] = (int)CLAMP( matrixIt[k] * QMAX((int) dataSrcDev[k], 1), 0, 65535 );
+                    dataSrcDev[k] = (int)CLAMP( matrixIt[k] * qMax((int) dataSrcDev[k], 1), 0, 65535 );
                 }
-                deviceCs->fromLabA16((Q_UINT8*)dataSrcDev, srcDevIt.rawData(), 1);
+                deviceCs->fromLabA16((quint8*)dataSrcDev, srcDevIt.rawData(), 1);
                 ++deviceIt;
                 ++srcDevIt;
                 matrixIt +=3;
@@ -325,8 +325,8 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-    Q_INT32 sx = dstRect.x() - x;
-    Q_INT32 sy = dstRect.y() - y;
+    qint32 sx = dstRect.x() - x;
+    qint32 sy = dstRect.y() - y;
     sw = dstRect.width();
     sh = dstRect.height();
 

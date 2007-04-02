@@ -24,7 +24,7 @@
 
 #include "kis_ycbcr_traits.h"
 
-typedef KoYCbCrTraits<Q_UINT8> YCbCrU8Traits;
+typedef KoYCbCrTraits<quint8> YCbCrU8Traits;
 
 class KisYCbCrU8ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU8Traits>
 {

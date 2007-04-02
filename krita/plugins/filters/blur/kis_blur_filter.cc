@@ -39,9 +39,9 @@
 //     k->height = img.height();
 //     k->offset = 0;
 //     uint count = k->width * k->height;
-//     k->data = new Q_INT32[count];
-//     Q_INT32* itData = k->data;
-//     Q_UINT8* itImg = img.bits();
+//     k->data = new qint32[count];
+//     qint32* itData = k->data;
+//     quint8* itImg = img.bits();
 //     k->factor = 0;
 //     for(uint i = 0; i < count; ++i , ++itData, itImg+=4)
 //     {
@@ -119,7 +119,7 @@ void KisBlurFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
 
     if( rotate != 0)
     {
-        QWMatrix m;
+        QMatrix m;
         m.rotate( rotate );
         mask = mask.transformed( m );
         if( (mask.height() & 1) || mask.width() & 1)

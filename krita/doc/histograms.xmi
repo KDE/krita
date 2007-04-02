@@ -77,7 +77,7 @@
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="988" isRoot="false" isAbstract="false" name="const KisCompositeOp&amp;" elementReference="880" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1008" isRoot="false" isAbstract="false" name="const KisLayerSP" elementReference="435" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1018" isRoot="false" isAbstract="false" name="const KisLayerSP&amp;" elementReference="435" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1045" isRoot="false" isAbstract="false" name="KCommand*" elementReference="879" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1045" isRoot="false" isAbstract="false" name="K3Command*" elementReference="879" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1063" isRoot="false" isAbstract="false" name="KisUndoAdapter*" elementReference="875" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1066" isRoot="false" isAbstract="false" name="KisGuideMgr*" elementReference="1065" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1101" isRoot="false" isAbstract="false" name="KisImage&amp;" elementReference="425" />
@@ -86,7 +86,7 @@
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1163" isRoot="false" isAbstract="false" name="const KisPaintDeviceImpl&amp;" elementReference="312" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1167" isRoot="false" isAbstract="false" name="DCOPObject*" elementReference="877" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1176" isRoot="false" isAbstract="false" name="const QPoint&amp;" elementReference="1139" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1181" isRoot="false" isAbstract="false" name="KNamedCommand*" elementReference="1141" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1181" isRoot="false" isAbstract="false" name="K3NamedCommand*" elementReference="1141" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1183" isRoot="false" isAbstract="false" name="const bool" elementReference="5" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1249" isRoot="false" isAbstract="false" name="const QImage&amp;" elementReference="925" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1268" isRoot="false" isAbstract="false" name="QColor*" elementReference="1267" />
@@ -3146,7 +3146,7 @@ of choice, and rounded to a reasonable precision to avoid 0.999999" isSpecificat
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="876" isRoot="false" isAbstract="false" name="KisPainter" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="877" isRoot="false" isAbstract="false" name="DCOPObject" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="878" isRoot="false" isAbstract="false" name="KisDoc" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="879" isRoot="false" isAbstract="false" name="KCommand" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="879" isRoot="false" isAbstract="false" name="K3Command" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="880" isRoot="false" isAbstract="false" name="KisCompositeOp" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="881" isRoot="false" isAbstract="false" name="KisColor" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="882" isRoot="false" isAbstract="false" name="KisFilterStrategy" />
@@ -3165,7 +3165,7 @@ of choice, and rounded to a reasonable precision to avoid 0.999999" isSpecificat
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1138" isRoot="false" isAbstract="false" name="QSize" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1139" isRoot="false" isAbstract="false" name="QPoint" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1140" isRoot="false" isAbstract="false" name="QMatrix" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1141" isRoot="false" isAbstract="false" name="KNamedCommand" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1141" isRoot="false" isAbstract="false" name="K3NamedCommand" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1142" isRoot="false" isAbstract="false" name="KisRotateVisitor" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1143" isRoot="false" isAbstract="false" name="KisScaleVisitor" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1147" isRoot="false" isAbstract="false" name="KisPaintDevice" />

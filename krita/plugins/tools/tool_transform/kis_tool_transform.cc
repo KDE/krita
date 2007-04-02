@@ -161,7 +161,7 @@ void KisToolTransform::activate()
 {
     if(m_subject && m_currentImage && m_currentImage->activeDevice())
     {
-        //connect(m_subject, commandExecuted(KCommand *c), this, notifyCommandAdded( KCommand * c));
+        //connect(m_subject, commandExecuted(K3Command *c), this, notifyCommandAdded( KCommand * c));
         m_subject->undoAdapter()->setCommandHistoryListener( this );
 
         TransformCmd * cmd=0;
@@ -754,7 +754,7 @@ void KisToolTransform::transform()
     }
 }
 
-void KisToolTransform::notifyCommandAdded( KCommand * command)
+void KisToolTransform::notifyCommandAdded( K3Command * command)
 {
     TransformCmd * cmd = dynamic_cast<TransformCmd*>(command);
     if (cmd == 0) {
@@ -765,7 +765,7 @@ void KisToolTransform::notifyCommandAdded( KCommand * command)
     }
 }
 
-void KisToolTransform::notifyCommandExecuted( KCommand * command)
+void KisToolTransform::notifyCommandExecuted( K3Command * command)
 {
     Q_UNUSED(command);
     TransformCmd * cmd=0;

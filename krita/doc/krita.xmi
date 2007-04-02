@@ -1193,7 +1193,7 @@ pixels in the brush." visibility="public" xmi.id="705" type="virtual KisAlphaMas
      <UML:Parameter visibility="private" xmi.id="919" value="" type="bool" name="singleViewMode" />
     </UML:Operation>
     <UML:Operation visibility="protected" xmi.id="920" type="virtual void" name="addCommand" >
-     <UML:Parameter visibility="private" xmi.id="921" value="" type="KCommand *" name="cmd" />
+     <UML:Parameter visibility="private" xmi.id="921" value="" type="K3Command *" name="cmd" />
     </UML:Operation>
     <UML:Operation visibility="public" xmi.id="922" type="void" name="addImage" >
      <UML:Parameter visibility="private" xmi.id="923" value="" type="KisImageSP" name="img" />
@@ -1371,10 +1371,10 @@ pixels in the brush." visibility="public" xmi.id="705" type="virtual KisAlphaMas
     <UML:Operation visibility="public" xmi.id="1056" type="qint32" name="undoLimit" />
     <UML:Operation visibility="public" xmi.id="1057" type="virtual " name="~KisDoc" />
     <UML:Attribute visibility="private" xmi.id="903" value="" type="KisSelectionSP" name="m_clipboard" />
-    <UML:Attribute visibility="private" xmi.id="904" value="" type="KCommandHistory *" name="m_cmdHistory" />
+    <UML:Attribute visibility="private" xmi.id="904" value="" type="K3CommandHistory *" name="m_cmdHistory" />
     <UML:Attribute visibility="private" xmi.id="905" value="" type="KisStrategyColorSpaceMap" name="m_colorspaces" />
     <UML:Attribute visibility="private" xmi.id="906" value="" type="qint32" name="m_conversionDepth" />
-    <UML:Attribute visibility="private" xmi.id="907" value="" type="KMacroCommand *" name="m_currentMacro" />
+    <UML:Attribute visibility="private" xmi.id="907" value="" type="K3MacroCommand *" name="m_currentMacro" />
     <UML:Attribute visibility="private" xmi.id="908" value="" type="DCOPObject *" name="m_dcop" />
     <UML:Attribute visibility="private" xmi.id="909" value="" type="vKisImageSP" name="m_images" />
     <UML:Attribute visibility="private" xmi.id="910" value="" type="KisNameServer *" name="m_nserver" />
@@ -1682,7 +1682,7 @@ pixels in the brush." visibility="public" xmi.id="705" type="virtual KisAlphaMas
     <UML:Operation visibility="public" xmi.id="1340" type="quint32" name="depth" />
     <UML:Operation visibility="public" xmi.id="1341" type="bool" name="empty" />
     <UML:Operation visibility="public" xmi.id="1342" type="void" name="enableUndo" >
-     <UML:Parameter visibility="private" xmi.id="1343" value="" type="KCommandHistory *" name="history" />
+     <UML:Parameter visibility="private" xmi.id="1343" value="" type="K3CommandHistory *" name="history" />
     </UML:Operation>
     <UML:Operation visibility="protected" xmi.id="1344" type="void" name="expand" >
      <UML:Parameter visibility="private" xmi.id="1345" value="" type="KisPaintDeviceSP" name="dev" />
@@ -1850,7 +1850,7 @@ pixels in the brush." visibility="public" xmi.id="705" type="virtual KisAlphaMas
     <UML:Attribute visibility="private" xmi.id="1282" value="" type="KisSelectionSP" name="m_selection" />
     <UML:Attribute visibility="private" xmi.id="1283" value="" type="KisChannelSP" name="m_selectionMask" />
     <UML:Attribute visibility="private" xmi.id="1284" value="" type="KisTileMgrSP" name="m_shadow" />
-    <UML:Attribute visibility="private" xmi.id="1286" value="" type="KCommandHistory *" name="m_undoHistory" />
+    <UML:Attribute visibility="private" xmi.id="1286" value="" type="K3CommandHistory *" name="m_undoHistory" />
     <UML:Attribute visibility="private" xmi.id="1287" value="" type="KUrl" name="m_uri" />
     <UML:Attribute visibility="private" xmi.id="1288" value="" type="QBitArray" name="m_visible" />
     <UML:Attribute visibility="private" xmi.id="1289" value="" type="qint32" name="m_width" />
@@ -2290,8 +2290,8 @@ cannot be abstract, because otherwise this class would be abstract." visibility=
     </UML:Operation>
     <UML:Operation visibility="public" xmi.id="1816" type="KisPaintDeviceSP" name="device" />
     <UML:Operation visibility="public" xmi.id="1817" type="QRect" name="dirtyRect" />
-    <UML:Operation visibility="public" xmi.id="1818" type="KCommand *" name="end" />
-    <UML:Operation visibility="public" xmi.id="1819" type="KCommand *" name="endTransaction" />
+    <UML:Operation visibility="public" xmi.id="1818" type="K3Command *" name="end" />
+    <UML:Operation visibility="public" xmi.id="1819" type="K3Command *" name="endTransaction" />
     <UML:Operation visibility="public" xmi.id="1820" type="void" name="eraseAt" >
      <UML:Parameter visibility="private" xmi.id="1821" value="" type="const QPoint &amp;" name="pos" />
      <UML:Parameter visibility="private" xmi.id="1822" value="" type="const qint32" name="pressure" />
@@ -2764,7 +2764,7 @@ in the constructor, you have to call loadAsync.
      <UML:Parameter visibility="private" xmi.id="2179" value="" type="const KisUndoAdapter &amp;" />
     </UML:Operation>
     <UML:Operation visibility="public" xmi.id="2180" type="virtual void" isAbstract="true" name="addCommand" >
-     <UML:Parameter visibility="private" xmi.id="2181" value="" type="KCommand *" name="cmd" />
+     <UML:Parameter visibility="private" xmi.id="2181" value="" type="K3Command *" name="cmd" />
     </UML:Operation>
     <UML:Operation visibility="public" xmi.id="2182" type="virtual void" isAbstract="true" name="beginMacro" >
      <UML:Parameter visibility="private" xmi.id="2183" value="" type="const QString &amp;" name="macroName" />
@@ -36874,7 +36874,7 @@ in the constructor, you have to call loadAsync.
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="904" tag="tblock_2" canDelete="false" indentLevel="1" role_id="-1" text=" KCommandHistory * m_cmdHistory;" >
+              <ccfdeclarationcodeblock parent_id="904" tag="tblock_2" canDelete="false" indentLevel="1" role_id="-1" text=" K3CommandHistory * m_cmdHistory;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -36889,7 +36889,7 @@ in the constructor, you have to call loadAsync.
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="907" tag="tblock_5" canDelete="false" indentLevel="1" role_id="-1" text=" KMacroCommand * m_currentMacro;" >
+              <ccfdeclarationcodeblock parent_id="907" tag="tblock_5" canDelete="false" indentLevel="1" role_id="-1" text=" K3MacroCommand * m_currentMacro;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -37115,7 +37115,7 @@ in the constructor, you have to call loadAsync.
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="904" tag="tblock_2" canDelete="false" indentLevel="1" role_id="-1" text=" KCommandHistory * m_cmdHistory;" >
+       <ccfdeclarationcodeblock parent_id="904" tag="tblock_2" canDelete="false" indentLevel="1" role_id="-1" text=" K3CommandHistory * m_cmdHistory;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -37175,7 +37175,7 @@ in the constructor, you have to call loadAsync.
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="907" tag="tblock_5" canDelete="false" indentLevel="1" role_id="-1" text=" KMacroCommand * m_currentMacro;" >
+       <ccfdeclarationcodeblock parent_id="907" tag="tblock_5" canDelete="false" indentLevel="1" role_id="-1" text=" K3MacroCommand * m_currentMacro;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -40586,7 +40586,7 @@ in the constructor, you have to call loadAsync.
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1286" tag="tblock_26" canDelete="false" indentLevel="1" role_id="-1" text=" KCommandHistory * m_undoHistory;" >
+              <ccfdeclarationcodeblock parent_id="1286" tag="tblock_26" canDelete="false" indentLevel="1" role_id="-1" text=" K3CommandHistory * m_undoHistory;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -41457,7 +41457,7 @@ in the constructor, you have to call loadAsync.
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1286" tag="tblock_26" canDelete="false" indentLevel="1" role_id="-1" text=" KCommandHistory * m_undoHistory;" >
+       <ccfdeclarationcodeblock parent_id="1286" tag="tblock_26" canDelete="false" indentLevel="1" role_id="-1" text=" K3CommandHistory * m_undoHistory;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>

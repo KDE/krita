@@ -410,9 +410,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                             ++it;
                         }
                     } else {
-                        Q_UINT8 *src = row_pointer;
+                        quint8 *src = row_pointer;
                         while (!it.isDone()) {
-                            Q_UINT8 *d = it.rawData();
+                            quint8 *d = it.rawData();
                             d[0] = *(src++);
                             if(transform) cmsDoTransform(transform, d, d, 1);
                             if(hasalpha) d[1] = *(src++);
@@ -438,9 +438,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                             ++it;
                         }
                     } else {
-                        Q_UINT8 *src = row_pointer;
+                        quint8 *src = row_pointer;
                         while (!it.isDone()) {
-                            Q_UINT8 *d = it.rawData();
+                            quint8 *d = it.rawData();
                             d[2] = *(src++);
                             d[1] = *(src++);
                             d[0] = *(src++);
@@ -455,7 +455,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     {
                         KisPNGStream stream(row_pointer, color_nb_bits);
                         while (!it.isDone()) {
-                            Q_UINT8 *d = it.rawData();
+                            quint8 *d = it.rawData();
                             png_color c = palette[ stream.nextValue() ];
                             d[2] = c.red;
                             d[1] = c.green;
@@ -616,7 +616,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisPaintD
         bool toomuchcolor = false;
         while( !it.isDone() )
         {
-            const Q_UINT8* c = it.rawData();
+            const quint8* c = it.rawData();
             bool findit = false;
             for(int i = 0; i < num_palette; i++)
             {
@@ -796,10 +796,10 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisPaintD
                 break;
             case PNG_COLOR_TYPE_PALETTE:
             {
-                Q_UINT8 *dst = row_pointers[y];
+                quint8 *dst = row_pointers[y];
                 KisPNGStream writestream(dst, color_nb_bits);
                 while (!it.isDone()) {
-                    const Q_UINT8 *d = it.rawData();
+                    const quint8 *d = it.rawData();
                     int i;
                     for(i = 0; i < num_palette; i++)
                     {

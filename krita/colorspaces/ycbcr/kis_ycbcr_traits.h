@@ -57,10 +57,10 @@ struct KoYCbCrTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
 #undef CLAMP_TO_CHANNELSIZE
 
     static const _channels_type_ MIDDLE_VALUE = (KoColorSpaceMathsTraits<_channels_type_>::max + 1) / 2;
-    static const Q_UINT8 y_pos = 0;
-    static const Q_UINT8 cb_pos = 1;
-    static const Q_UINT8 cr_pos = 2;
-    static const Q_UINT8 alpha_pos = 3;
+    static const quint8 y_pos = 0;
+    static const quint8 cb_pos = 1;
+    static const quint8 cr_pos = 2;
+    static const quint8 alpha_pos = 3;
     
     struct Pixel {
         _channels_type_ Y;

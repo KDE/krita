@@ -238,7 +238,7 @@ QImage KisAdjustmentLayer::createThumbnail(qint32 w, qint32 h)
         w = qint32(double(srcw) / srch * h);
 
     QColor c;
-    Q_UINT8 opacity;
+    quint8 opacity;
     QImage img(w, h, QImage::Format_RGB32);
 
     for (qint32 y=0; y < h; ++y) {

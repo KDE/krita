@@ -39,9 +39,9 @@ class KisPerspectiveTransformWorker : public KisProgressSubject
     private:
         virtual void cancel() { m_cancelRequested = true; }
     private:
-        Q_INT32 m_progressTotalSteps;
-        Q_INT32 m_lastProgressReport;
-        Q_INT32 m_progressStep;
+        qint32 m_progressTotalSteps;
+        qint32 m_lastProgressReport;
+        qint32 m_progressStep;
         double m_xcenter, m_ycenter, m_p, m_q;
         KisPaintDeviceSP m_dev;
         bool m_cancelRequested;

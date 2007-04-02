@@ -102,7 +102,7 @@ void KisSimpleNoiseReducer::process(const KisPaintDeviceSP src, const QPoint& sr
         {
             if(srcIt.isSelected())
             {
-                Q_UINT8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
+                quint8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
                 if( diff > threshold)
                 {
                     cs->bitBlt( dstIt.rawData(), 0, cs, intermIt.rawData(), 0, 0, 0, 255, 1, 1, cs->compositeOp(COMPOSITE_COPY) );

@@ -776,8 +776,8 @@ void KisLayerManager::rotateLayer(double radians)
         r = dev->exactBounds();
     double cx = r.x()+r.width()/2.0;
     double cy = r.y()+r.height()/2.0;
-    Q_INT32 tx = Q_INT32(cx*cos(radians) - cy*sin(radians) - cx + 0.5);
-    Q_INT32 ty = Q_INT32(cy*cos(radians) + cx*sin(radians) - cy + 0.5);
+    qint32 tx = qint32(cx*cos(radians) - cy*sin(radians) - cx + 0.5);
+    qint32 ty = qint32(cy*cos(radians) + cx*sin(radians) - cy + 0.5);
     KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, radians, -tx, -ty, m_view->statusBar()->progress(), filter);
     tw.run();
 

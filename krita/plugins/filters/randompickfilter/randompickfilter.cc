@@ -100,11 +100,11 @@ void KisFilterRandomPick::process(const KisPaintDeviceSP src, const QPoint& srcT
     KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
     KisRandomConstAccessorPixel srcRA = src->createRandomConstAccessor(0, 0);
 
-    Q_INT32 threshold = (RAND_MAX / 100) * (100 - level);
+    qint32 threshold = (RAND_MAX / 100) * (100 - level);
 
-    Q_UINT8 weights[2];
+    quint8 weights[2];
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
-    const Q_UINT8* pixels[2];
+    const quint8* pixels[2];
     KoMixColorsOp * mixOp = cs->mixColorsOp();
     while(!srcIt.isDone())
     {

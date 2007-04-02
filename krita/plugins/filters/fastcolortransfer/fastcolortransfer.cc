@@ -123,10 +123,10 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
     KisRectConstIteratorPixel srcLABIt = srcLAB->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
     while(!srcLABIt.isDone())
     {
-        const Q_UINT16* data = reinterpret_cast<const Q_UINT16*>(srcLABIt.oldRawData());
-        Q_UINT32 L = data[0];
-        Q_UINT32 A = data[1];
-        Q_UINT32 B = data[2];
+        const quint16* data = reinterpret_cast<const quint16*>(srcLABIt.oldRawData());
+        quint32 L = data[0];
+        quint32 A = data[1];
+        quint32 B = data[2];
         meanL_src += L;
         meanA_src += A;
         meanB_src += B;
@@ -149,10 +149,10 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
     KisRectConstIteratorPixel refIt = ref->createRectConstIterator(0, 0, importedImage->width(), importedImage->height());
     while(!refIt.isDone())
     {
-        const Q_UINT16* data = reinterpret_cast<const Q_UINT16*>(refIt.oldRawData());
-        Q_UINT32 L = data[0];
-        Q_UINT32 A = data[1];
-        Q_UINT32 B = data[2];
+        const quint16* data = reinterpret_cast<const quint16*>(refIt.oldRawData());
+        quint32 L = data[0];
+        quint32 A = data[1];
+        quint32 B = data[2];
         meanL_ref += L;
         meanA_ref += A;
         meanB_ref += B;
@@ -180,10 +180,10 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
         KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
         while(!dstIt.isDone())
         {
-            Q_UINT16* data = reinterpret_cast<Q_UINT16*>(dstIt.rawData());
-            data[0] = (Q_UINT16)CLAMP( ( (double)data[0] - meanL_src) * coefL + meanL_ref, 0., 65535.);
-            data[1] = (Q_UINT16)CLAMP( ( (double)data[1] - meanA_src) * coefA + meanA_ref, 0., 65535.);
-            data[2] = (Q_UINT16)CLAMP( ( (double)data[2] - meanB_src) * coefB + meanB_ref, 0., 65535.);
+            quint16* data = reinterpret_cast<quint16*>(dstIt.rawData());
+            data[0] = (quint16)CLAMP( ( (double)data[0] - meanL_src) * coefL + meanL_ref, 0., 65535.);
+            data[1] = (quint16)CLAMP( ( (double)data[1] - meanA_src) * coefA + meanA_ref, 0., 65535.);
+            data[2] = (quint16)CLAMP( ( (double)data[2] - meanB_src) * coefB + meanB_ref, 0., 65535.);
             ++dstIt;
         }
     }

@@ -32,10 +32,10 @@ KisRandomSubAccessorPixel::~KisRandomSubAccessorPixel()
 }
 
 
-void KisRandomSubAccessorPixel::sampledOldRawData(Q_UINT8* dst)
+void KisRandomSubAccessorPixel::sampledOldRawData(quint8* dst)
 {
-    const Q_UINT8* pixels[4];
-    Q_UINT8 weights[4];
+    const quint8* pixels[4];
+    quint8 weights[4];
     int x = (int)floor(m_currentPoint.x());
     int y = (int)floor(m_currentPoint.y());
     double hsub = m_currentPoint.x() - x;
@@ -57,10 +57,10 @@ void KisRandomSubAccessorPixel::sampledOldRawData(Q_UINT8* dst)
     m_device->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 4, dst);
 }
 
-void KisRandomSubAccessorPixel::sampledRawData(Q_UINT8* dst)
+void KisRandomSubAccessorPixel::sampledRawData(quint8* dst)
 {
-    const Q_UINT8* pixels[4];
-    Q_UINT8 weights[4];
+    const quint8* pixels[4];
+    quint8 weights[4];
     int x = (int)floor(m_currentPoint.x());
     int y = (int)floor(m_currentPoint.y());
     double hsub = m_currentPoint.x() - x;

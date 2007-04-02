@@ -96,7 +96,7 @@
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1398" isRoot="false" isAbstract="false" name="KisDataManager*" elementReference="423" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1443" isRoot="false" isAbstract="false" name="KisImage*" elementReference="383" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1448" isRoot="false" isAbstract="false" name="const KisPaintDevice&amp;" elementReference="388" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1465" isRoot="false" isAbstract="false" name="KNamedCommand*" elementReference="1432" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1465" isRoot="false" isAbstract="false" name="K3NamedCommand*" elementReference="1432" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1467" isRoot="false" isAbstract="false" name="const bool" elementReference="558" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1510" isRoot="false" isAbstract="false" name="const QImage&amp;" elementReference="879" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1526" isRoot="false" isAbstract="false" name="QColor*" elementReference="591" />
@@ -3167,7 +3167,7 @@ MITCHELL_FILTER
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1429" isRoot="false" isAbstract="false" name="KisRectIteratorPixel" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1430" isRoot="false" isAbstract="false" name="KisVLineIteratorPixel" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1431" isRoot="false" isAbstract="false" name="KisHLineIteratorPixel" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1432" isRoot="false" isAbstract="false" name="KNamedCommand" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1432" isRoot="false" isAbstract="false" name="K3NamedCommand" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1618" isRoot="false" isAbstract="false" name="qint8" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1674" isRoot="false" isAbstract="false" name="KAction" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1675" isRoot="false" isAbstract="false" name="KisView" />
@@ -9063,7 +9063,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
             </codeoperation>
             <codeoperation parent_id="1461" tag="operation_1461" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param c &amp;#010;@param x &amp;#010;@param y &amp;#010;@return KNamedCommand*  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param c &amp;#010;@param x &amp;#010;@param y &amp;#010;@return K3NamedCommand*  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1466" tag="operation_1466" canDelete="false" indentLevel="1" >
@@ -33451,7 +33451,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="1432" parent_class="1432" fileExt=".java" fileName="KNamedCommand" >
+    <classifiercodedocument writeOutCode="true" package="" id="1432" parent_class="1432" fileExt=".java" fileName="K3NamedCommand" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -33465,7 +33465,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="1432" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class KNamedCommand&amp;#010;" />
+        <javacodedocumentation tag="" text="Class K3NamedCommand&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -33484,7 +33484,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public KNamedCommand ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public K3NamedCommand ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -33676,7 +33676,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="1465" parent_class="1465" fileExt=".java" fileName="KNamedCommand*" >
+    <classifiercodedocument writeOutCode="true" package="" id="1465" parent_class="1465" fileExt=".java" fileName="K3NamedCommand*" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -33690,7 +33690,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="1465" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class KNamedCommand*&amp;#010;" />
+        <javacodedocumentation tag="" text="Class K3NamedCommand*&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -33709,7 +33709,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public KNamedCommand* ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public K3NamedCommand* ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>

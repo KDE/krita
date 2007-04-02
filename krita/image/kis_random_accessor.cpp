@@ -21,12 +21,12 @@
 
 #include "kis_tiled_random_accessor.h"
 
-KisRandomConstAccessor::KisRandomConstAccessor(KisTiledDataManager *ktm, Q_INT32 x, Q_INT32 y, Q_INT32 offsetx, Q_INT32 offsety, bool writable) : m_offsetx(offsetx), m_offsety(offsety)
+KisRandomConstAccessor::KisRandomConstAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, bool writable) : m_offsetx(offsetx), m_offsety(offsety)
 {
     m_accessor = new KisTiledRandomAccessor(ktm, x, y, writable);
 }
 
-KisRandomConstAccessor::KisRandomConstAccessor(KisTiledDataManager *ktm, Q_INT32 x, Q_INT32 y, Q_INT32 offsetx, Q_INT32 offsety) : m_offsetx(offsetx), m_offsety(offsety)
+KisRandomConstAccessor::KisRandomConstAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety) : m_offsetx(offsetx), m_offsety(offsety)
 {
     m_accessor = new KisTiledRandomAccessor(ktm, x, y, false);
 }
@@ -40,22 +40,22 @@ KisRandomConstAccessor::~KisRandomConstAccessor()
     
 }
 
-void KisRandomConstAccessor::moveTo(Q_INT32 x, Q_INT32 y)
+void KisRandomConstAccessor::moveTo(qint32 x, qint32 y)
 {
     m_accessor->moveTo(x - m_offsetx, y  - m_offsety);
 }
 
-const Q_UINT8* KisRandomConstAccessor::rawData() const
+const quint8* KisRandomConstAccessor::rawData() const
 {
     return m_accessor->rawData();
 }
 
-Q_UINT8* KisRandomAccessor::rawData() const
+quint8* KisRandomAccessor::rawData() const
 {
     return m_accessor->rawData();
 }
 
-const Q_UINT8* KisRandomConstAccessor::oldRawData() const
+const quint8* KisRandomConstAccessor::oldRawData() const
 {
     return m_accessor->oldRawData();
 }

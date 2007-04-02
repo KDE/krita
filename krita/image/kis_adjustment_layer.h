@@ -26,7 +26,7 @@
 #include "KoCompositeOp.h"
 #include <krita_export.h>
 
-class KNamedCommand;
+class K3NamedCommand;
 class QPainter;
 class KisGroupLayer;
 class KisFilterConfiguration;

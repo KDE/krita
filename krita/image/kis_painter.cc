@@ -311,13 +311,13 @@ void KisPainter::bitBlt(QPoint pos, const KisPaintDeviceSP src, QRect srcRect )
     bitBlt( pos.x(), pos.y(), m_compositeOp, src, m_opacity, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height() );
 }
 
-void KisPainter::bltMask(Q_INT32 dx, Q_INT32 dy,
+void KisPainter::bltMask(qint32 dx, qint32 dy,
                          const KoCompositeOp *op,
                          const KisPaintDeviceSP srcdev,
                          const KisPaintDeviceSP selMask,
-                         Q_UINT8 opacity,
-                         Q_INT32 sx, Q_INT32 sy,
-                         Q_INT32 sw, Q_INT32 sh)
+                         quint8 opacity,
+                         qint32 sx, qint32 sy,
+                         qint32 sw, qint32 sh)
 {
     if (srcdev.isNull()) return;
 

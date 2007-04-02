@@ -166,7 +166,7 @@ void KisToolPerspectiveTransform::activate()
     m_currentSelectedPoint = 0;
     if(m_subject && m_currentImage && m_currentImage->activeDevice())
     {
-        //connect(m_subject, commandExecuted(KCommand *c), this, notifyCommandAdded( KCommand * c));
+        //connect(m_subject, commandExecuted(K3Command *c), this, notifyCommandAdded( KCommand * c));
         m_subject->undoAdapter()->setCommandHistoryListener( this );
 
         PerspectiveTransformCmd * cmd=0;
@@ -198,7 +198,7 @@ void KisToolPerspectiveTransform::activate()
 
 void KisToolPerspectiveTransform::initHandles()
 {
-//     Q_INT32 x,y,w,h;
+//     qint32 x,y,w,h;
     
 
     KisPaintDeviceSP dev = m_currentImage->activeDevice();
@@ -635,7 +635,7 @@ void KisToolPerspectiveTransform::transform()
     }
 }
 
-void KisToolPerspectiveTransform::notifyCommandAdded( KCommand * command)
+void KisToolPerspectiveTransform::notifyCommandAdded( K3Command * command)
 {
     PerspectiveTransformCmd * cmd = dynamic_cast<PerspectiveTransformCmd*>(command);
     if (cmd == 0) {
@@ -646,7 +646,7 @@ void KisToolPerspectiveTransform::notifyCommandAdded( KCommand * command)
     }
 }
 
-void KisToolPerspectiveTransform::notifyCommandExecuted( KCommand * command)
+void KisToolPerspectiveTransform::notifyCommandExecuted( K3Command * command)
 {
     Q_UNUSED(command);
     PerspectiveTransformCmd * cmd=0;

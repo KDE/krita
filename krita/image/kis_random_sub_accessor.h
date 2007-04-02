@@ -32,8 +32,8 @@ class  KRITAIMAGE_EXPORT KisRandomSubAccessorPixel{
         /**
          * Copy the sampled old value to destination
          */
-        void sampledOldRawData(Q_UINT8* dst);
-        void sampledRawData(Q_UINT8* dst);
+        void sampledOldRawData(quint8* dst);
+        void sampledRawData(quint8* dst);
         inline void moveTo(double x, double y) { m_currentPoint.setX(x); m_currentPoint.setY(y); }
         inline void moveTo(const QPointF& p ) { m_currentPoint = p; }
     private:

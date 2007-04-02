@@ -236,13 +236,13 @@ public:
      * @param sw the width of the region
      * @param sh the height of the region
      */
-    void bltMask(Q_INT32 dx, Q_INT32 dy,
+    void bltMask(qint32 dx, qint32 dy,
                       const KoCompositeOp *op,
                       const KisPaintDeviceSP src,
                       const KisPaintDeviceSP selMask,
-                      Q_UINT8 opacity,
-                      Q_INT32 sx, Q_INT32 sy,
-                      Q_INT32 sw, Q_INT32 sh);
+                      quint8 opacity,
+                      qint32 sx, qint32 sy,
+                      qint32 sw, qint32 sh);
 
 
     /**
@@ -612,7 +612,7 @@ protected:
     bool m_duplicateHealing;
     int m_duplicateHealingRadius;
     bool m_duplicatePerspectiveCorrection;
-    Q_UINT8 m_opacity;
+    quint8 m_opacity;
     KisFilterSP m_filter;
     KisPaintOp * m_paintOp;
     double m_pressure;

@@ -181,10 +181,10 @@ void KisCImgFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
         srcRGB16->convertTo(rgb16CS);
         KisRectConstIteratorPixel it = srcRGB16->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
         while (!it.isDone()) {
-            const Q_UINT16* data = reinterpret_cast<const Q_UINT16*>(it.rawData());
+            const quint16* data = reinterpret_cast<const quint16*>(it.rawData());
 
-            Q_INT32 x = it.x() - rect.x();
-            Q_INT32 y = it.y() - rect.y();
+            qint32 x = it.x() - rect.x();
+            qint32 y = it.y() - rect.y();
 
             img(x, y, 0) = data[0];
             img(x, y, 1) = data[1];
@@ -200,8 +200,8 @@ void KisCImgFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
             QColor color;
             cs->toQColor(it.rawData(), &color);
 
-            Q_INT32 x = it.x() - rect.x();
-            Q_INT32 y = it.y() - rect.y();
+            qint32 x = it.x() - rect.x();
+            qint32 y = it.y() - rect.y();
 
             img(x, y, 0) = color.red();
             img(x, y, 1) = color.green();
@@ -234,10 +234,10 @@ void KisCImgFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
             {
                 KisRectIteratorPixel it = srcRGB16->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
                 while (!it.isDone()) {
-                    Q_INT32 x = it.x() - rect.x();
-                    Q_INT32 y = it.y() - rect.y();
+                    qint32 x = it.x() - rect.x();
+                    qint32 y = it.y() - rect.y();
 
-                    Q_UINT16* data = reinterpret_cast<Q_UINT16*>(it.rawData());
+                    quint16* data = reinterpret_cast<quint16*>(it.rawData());
 
                     data[0] = img(x, y, 0) ;
                     data[1] = img(x, y, 1) ;
@@ -256,8 +256,8 @@ void KisCImgFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
 
                 if (it.isSelected()) {
 
-                    Q_INT32 x = it.x() - rect.x();
-                    Q_INT32 y = it.y() - rect.y();
+                    qint32 x = it.x() - rect.x();
+                    qint32 y = it.y() - rect.y();
 
                     QColor color((int)img(x, y, 0), (int)img(x, y, 1), (int)img(x, y, 2));
 

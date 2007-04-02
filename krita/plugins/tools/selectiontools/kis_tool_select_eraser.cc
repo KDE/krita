@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kcommand.h>
+#include <k3command.h>
 #include <klocale.h>
 
 #include "kis_brush.h"

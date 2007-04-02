@@ -119,14 +119,14 @@ private:
 private:
 
     // We don't want these methods to be used on selections:
-    void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
+    void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
         {
             KisPaintDevice::extent(x,y,w,h);
         }
 
     QRect extent() const { return KisPaintDevice::extent(); }
 
-    void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
+    void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
         {
             return KisPaintDevice::exactBounds(x,y,w,h);
         }

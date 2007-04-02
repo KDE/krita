@@ -350,8 +350,8 @@ private:
     KisSharedPtr<Target> paintIndirect(KisPaintDeviceSP source,
                                        KisSharedPtr<Target> target,
                                        KisIndirectPaintingSupport* layer,
-                                       Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
-                                       Q_INT32 w, Q_INT32 h) {
+                                       qint32 sx, qint32 sy, qint32 dx, qint32 dy,
+                                       qint32 w, qint32 h) {
         KisPainter gc2(target.data());
         gc2.bitBlt(dx, dy, COMPOSITE_COPY, source,
                    OPACITY_OPAQUE, sx, sy, w, h);

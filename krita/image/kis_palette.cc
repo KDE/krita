@@ -218,7 +218,7 @@ bool KisPalette::init()
             m_columns = columns.toInt();
             index = 3;
         }
-        for (Q_INT32 i = index; i < lines.size(); i++) {
+        for (qint32 i = index; i < lines.size(); i++) {
             if (lines[i].startsWith("#")) {
                 m_comment += lines[i].mid(1).trimmed() + ' ';
             }

@@ -570,7 +570,7 @@ void KisIndirectPaintingSupport::setTemporaryCompositeOp(const KoCompositeOp* c)
     m_compositeOp = c;
 }
 
-void KisIndirectPaintingSupport::setTemporaryOpacity(Q_UINT8 o) {
+void KisIndirectPaintingSupport::setTemporaryOpacity(quint8 o) {
     m_compositeOpacity = o;
 }
 
@@ -582,7 +582,7 @@ const KoCompositeOp* KisIndirectPaintingSupport::temporaryCompositeOp() const {
     return m_compositeOp;
 }
 
-Q_UINT8 KisIndirectPaintingSupport::temporaryOpacity() const {
+quint8 KisIndirectPaintingSupport::temporaryOpacity() const {
     return m_compositeOpacity;
 }
 

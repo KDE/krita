@@ -353,7 +353,7 @@ void KisPaintLayer::createMaskFromSelection(KisSelectionSP from) {
     m_d->maskAsSelection = new KisSelection(); // Anonymous selection is good enough
 
     // Default pixel is opaque white == don't mask?
-    Q_UINT8 const defPixel[] = { 255, 255 };
+    quint8 const defPixel[] = { 255, 255 };
     m_d->mask->dataManager()->setDefaultPixel(defPixel);
 
     if (from) {
@@ -439,7 +439,7 @@ void KisPaintLayer::genericMaskCreationHelper() {
     m_d->maskAsSelection = new KisSelection(); // Anonymous selection is good enough
 
     // Default pixel is opaque white == don't mask?
-    Q_UINT8 const defPixel[] = { 255, 255 };
+    quint8 const defPixel[] = { 255, 255 };
     m_d->mask->dataManager()->setDefaultPixel(defPixel);
 
     setDirty();

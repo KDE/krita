@@ -208,7 +208,7 @@ void KisPaintEngine::initPainter(QPainter &p)
     }
     if (d->flags & DirtyTransform) {
         kDebug(41001) << "\tDirtyTransform" << endl;
-        p.setWorldMatrix(d->matrix*p.worldMatrix());
+        p.setMatrix(d->matrix*p.worldMatrix());
     }
     if (d->flags & DirtyPen) {
         kDebug(41001) << "\tDirtyPen" << endl;

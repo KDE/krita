@@ -27,7 +27,7 @@
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15479" isRoot="false" isAbstract="false" name="unsigned long" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15480" isRoot="false" isAbstract="false" name="string" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15491" isRoot="false" isAbstract="false" name="double*" elementReference="15474" />
-    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15496" isRoot="false" isAbstract="false" name="KCommand*" elementReference="15482" />
+    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15496" isRoot="false" isAbstract="false" name="K3Command*" elementReference="15482" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15500" isRoot="false" isAbstract="false" name="KoShapeManager*" elementReference="15483" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15503" isRoot="false" isAbstract="false" name="const QRectF&amp;" elementReference="15502" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15506" isRoot="false" isAbstract="false" name="KoTool*" elementReference="15484" />
@@ -65,10 +65,10 @@
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22166" isRoot="false" isAbstract="false" name="const KUrl&amp;" elementReference="22165" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22181" isRoot="false" isAbstract="false" name="QDomDocument&amp;" elementReference="22057" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22186" isRoot="false" isAbstract="false" name="const QDomElement&amp;" elementReference="22184" />
-    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22241" isRoot="false" isAbstract="false" name="KCommandHistory*" elementReference="22028" />
+    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22241" isRoot="false" isAbstract="false" name="K3CommandHistory*" elementReference="22028" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22244" isRoot="false" isAbstract="false" name="Q3PtrList&lt; KisCommandHistoryListener >" elementReference="22243" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22247" isRoot="false" isAbstract="false" name="KisNameServer*" elementReference="22031" />
-    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22249" isRoot="false" isAbstract="false" name="KMacroCommand*" elementReference="22029" />
+    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22249" isRoot="false" isAbstract="false" name="K3MacroCommand*" elementReference="22029" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22256" isRoot="false" isAbstract="false" name="QMap&lt; KisLayer *, QString >" elementReference="22255" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23046" isRoot="false" isAbstract="false" name="const KoSelectionSet&amp;" elementReference="23045" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23049" isRoot="false" isAbstract="false" name="QList&lt; QPointF >&amp;" elementReference="23048" />
@@ -572,7 +572,7 @@ and a contrasting color used for the background.
       </UML:Operation>
      </UML:Classifier.feature>
      <UML:Namespace.ownedElement>
-      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="15669" xmi.id="15482" isRoot="false" isAbstract="false" name="KCommand" />
+      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="15669" xmi.id="15482" isRoot="false" isAbstract="false" name="K3Command" />
      </UML:Namespace.ownedElement>
     </UML:Class>
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15739" isRoot="false" isAbstract="false" name="KisQPainterCanvas" >
@@ -755,8 +755,8 @@ execute notification is given on undo and redo" isSpecification="false" isLeaf="
      </UML:Classifier.feature>
     </UML:Class>
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22027" isRoot="false" isAbstract="false" name="QImage" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22028" isRoot="false" isAbstract="false" name="KCommandHistory" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22029" isRoot="false" isAbstract="false" name="KMacroCommand" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22028" isRoot="false" isAbstract="false" name="K3CommandHistory" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22029" isRoot="false" isAbstract="false" name="K3MacroCommand" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22030" isRoot="false" isAbstract="false" name="KoColorProfile" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22031" isRoot="false" isAbstract="false" name="KisNameServer" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22032" isRoot="false" isAbstract="false" name="KisChildDoc" />

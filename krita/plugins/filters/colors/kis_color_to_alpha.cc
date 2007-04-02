@@ -66,16 +66,16 @@ void KisFilterColorToAlpha::process(const KisPaintDeviceSP src, const QPoint& sr
     setProgressTotalSteps(size.width() * size.height());
 
     KoColorSpace * cs = src->colorSpace();
-    Q_INT32 pixelsize = cs->pixelSize();
+    qint32 pixelsize = cs->pixelSize();
     
-    Q_UINT8* color = new Q_UINT8[pixelsize];
+    quint8* color = new quint8[pixelsize];
     cs->fromQColor(cTA, color);
     
     while( ! srcIt.isDone() )
     {
         if(srcIt.isSelected())
         {
-            Q_UINT8 d = cs->difference(color, srcIt.oldRawData());
+            quint8 d = cs->difference(color, srcIt.oldRawData());
             if( d >= threshold )
             {
                     cs->setAlpha(dstIt.rawData(), 255, 1);

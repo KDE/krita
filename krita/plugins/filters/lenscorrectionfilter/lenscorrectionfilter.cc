@@ -117,7 +117,7 @@ void KisFilterLensCorrection::process(const KisPaintDeviceSP src, const QPoint& 
     double mult_sq = correctionnearcenter / 200.0;
     double mult_qd = correctionnearedges / 200.0;
 
-    Q_UINT16 lab[4];
+    quint16 lab[4];
 
     int tx = dstTopLeft.x() - srcTopLeft.x();
     int ty = dstTopLeft.y() - srcTopLeft.y();
@@ -139,11 +139,11 @@ void KisFilterLensCorrection::process(const KisPaintDeviceSP src, const QPoint& 
 
         srcRSA.moveTo( QPointF( srcX + tx, srcY+ty ) );
         srcRSA.sampledOldRawData( dstIt.rawData() );
-        cs->toLabA16( dstIt.rawData(), (Q_UINT8*)lab, 1);
+        cs->toLabA16( dstIt.rawData(), (quint8*)lab, 1);
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-        lab[0] = CLAMP( lab[0] * static_cast<Q_UINT16>( brighten ), 0, 65535);
-        cs->fromLabA16( (Q_UINT8*)lab, dstIt.rawData(), 1);
+        lab[0] = CLAMP( lab[0] * static_cast<quint16>( brighten ), 0, 65535);
+        cs->fromLabA16( (quint8*)lab, dstIt.rawData(), 1);
 
         ++dstIt;
         incProgress();

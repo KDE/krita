@@ -42,7 +42,7 @@ public:
     //
 
     virtual void setup(KActionCollection *collection);
-    virtual Q_UINT32 priority() { return 3; }
+    virtual quint32 priority() { return 3; }
     virtual enumToolType toolType() { return TOOL_VIEW; }
     virtual void buttonPress(KoPointerEvent *event);
     virtual void move(KoPointerEvent *event);
@@ -77,7 +77,7 @@ private:
 
     QPointFVector m_points;
     PerspectiveGridEditionMode m_mode;
-    Q_INT32 m_handleSize, m_handleHalfSize;
+    qint32 m_handleSize, m_handleHalfSize;
     KisPerspectiveGridNodeSP m_selectedNode1, m_selectedNode2;
 
 };

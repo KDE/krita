@@ -121,7 +121,7 @@ void KCurve::keyPressEvent(QKeyEvent *e)
     {
         m_points[m_grab_point_index].rx() = m_grabOriginalX;
         m_points[m_grab_point_index].ry() = m_grabOriginalY;
-        setCursor( KCursor::arrowCursor() );
+        setCursor( Qt::ArrowCursor );
         m_dragging = false;
         repaint();
         emit modified();
@@ -273,7 +273,7 @@ void KCurve::mousePressEvent ( QMouseEvent * e )
     m_dragging = true;
     m_draggedawaypointindex = -1;
 
-    setCursor( KCursor::crossCursor() );
+    setCursor( Qt::CrossCursor );
     repaint();
 }
 
@@ -284,7 +284,7 @@ void KCurve::mouseReleaseEvent ( QMouseEvent * e )
     if (e->button() != Qt::LeftButton)
         return;
 
-    setCursor( KCursor::arrowCursor() );
+    setCursor( Qt::ArrowCursor );
     m_dragging = false;
     repaint();
     emit modified();
@@ -302,9 +302,9 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
         int nearestPointIndex = nearestPointInRange(QPointF(x, y));
 
         if (nearestPointIndex < 0)
-            setCursor( KCursor::arrowCursor() );
+            setCursor( Qt::ArrowCursor );
         else
-            setCursor( KCursor::crossCursor() );
+            setCursor( Qt::CrossCursor );
     }
     else  // Else, drag the selected point
     {
@@ -322,7 +322,7 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
         if (removepoint == true && m_draggedawaypointindex != -1)
             return;
 
-        setCursor( KCursor::crossCursor() );
+        setCursor( Qt::CrossCursor );
 
         x += m_grabOffsetX;
         y += m_grabOffsetY;

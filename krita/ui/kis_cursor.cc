@@ -298,7 +298,7 @@ QCursor KisCursor::moveCursor()
 
 QCursor KisCursor::handCursor()
 {
-    return KCursor::handCursor();
+    return Qt::PointingHandCursor;
 }
 
 QCursor KisCursor::selectCursor()

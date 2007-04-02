@@ -97,12 +97,12 @@ void KisFilterNoise::process(const KisPaintDeviceSP src, const QPoint& srcTopLef
     KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height() );
     KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
 
-    Q_UINT8* interm = new Q_UINT8[ cs->pixelSize() ];
-    Q_INT32 threshold = (RAND_MAX / 100) * (100 - level);
+    quint8* interm = new quint8[ cs->pixelSize() ];
+    qint32 threshold = (RAND_MAX / 100) * (100 - level);
 
-    Q_UINT8 weights[2];
+    quint8 weights[2];
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
-    const Q_UINT8* pixels[2];
+    const quint8* pixels[2];
     pixels[0] = interm;
 
     KoMixColorsOp * mixOp = cs->mixColorsOp();

@@ -83,7 +83,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg)
     }
 
     KUrl::List urls;
-    Q_INT32 rc = 0;
+    qint32 rc = 0;
 
     if (urlArg.isEmpty()) {
         QString mimelist = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import).join(" ");

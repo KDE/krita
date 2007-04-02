@@ -49,7 +49,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, doub
 void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     KisSelectionSP dstSelection;
-    Q_INT32 pixelSize = src->pixelSize();
+    qint32 pixelSize = src->pixelSize();
     QRect r;
     KoColorSpace *cs = src->colorSpace();
 
@@ -67,7 +67,7 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
     KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), r.top(), r.width());
     KisHLineIterator vit = dst->createHLineIterator(r.x(), r.top(), r.width());
     KisHLineIterator dstSelIt = dstSelection->createHLineIterator(r.x(), r.top(), r.width());
-    for (Q_INT32 i = 0; i < r.height(); ++i) {
+    for (qint32 i = 0; i < r.height(); ++i) {
             while (!hit.isDone()) {
             if (hit.isSelected())  {
                 memcpy(vit.rawData(), hit.rawData(), pixelSize);
@@ -433,7 +433,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         dstStart += int(floor(lineNum * shear));
 
         // Build a temporary line
-        T srcIt = createIterator <T>(src, QMAX(srcStart - extraLen, srcStartData), lineNum, srcLen+2*extraLen);
+        T srcIt = createIterator <T>(src, qMax(srcStart - extraLen, srcStartData), lineNum, srcLen+2*extraLen);
         qint32 i = 0;
         qint32 x = srcStart - extraLen;
 

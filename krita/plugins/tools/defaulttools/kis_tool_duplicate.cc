@@ -223,7 +223,7 @@ QWidget* KisToolDuplicate::createOptionWidget()
     int healingradius = 20;
     if( m_currentBrush )
     {
-        healingradius = 2 * QMAX(m_currentBrush->width(),m_currentBrush->height());
+        healingradius = 2 * qMax(m_currentBrush->width(),m_currentBrush->height());
     }
     
     m_healingRadius->setValue( healingradius );

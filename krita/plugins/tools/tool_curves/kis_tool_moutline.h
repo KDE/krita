@@ -76,7 +76,7 @@ public:
 
     virtual void setup (KActionCollection*);
     virtual enumToolType toolType() { return TOOL_SELECT; }
-    virtual Q_UINT32 priority() { return 9; }
+    virtual quint32 priority() { return 9; }
 
     virtual void keyPress(QKeyEvent*);
     virtual void buttonPress(KoPointerEvent*);

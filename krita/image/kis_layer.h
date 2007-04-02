@@ -291,10 +291,10 @@ public:
     // Indirect painting
     void setTemporaryTarget(KisPaintDeviceSP t);
     void setTemporaryCompositeOp(const KoCompositeOp* c);
-    void setTemporaryOpacity(Q_UINT8 o);
+    void setTemporaryOpacity(quint8 o);
     KisPaintDeviceSP temporaryTarget();
     const KoCompositeOp* temporaryCompositeOp() const;
-    Q_UINT8 temporaryOpacity() const;
+    quint8 temporaryOpacity() const;
 
     // Or I could make KisLayer a virtual base of KisIndirectPaintingSupport and so, but
     // I'm sure virtual diamond inheritance isn't as appreciated as this
@@ -306,7 +306,7 @@ private:
     // To simulate the indirect painting
     KisPaintDeviceSP m_temporaryTarget;
     const KoCompositeOp* m_compositeOp;
-    Q_UINT8 m_compositeOpacity;
+    quint8 m_compositeOpacity;
 
 };
 

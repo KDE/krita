@@ -227,19 +227,19 @@ void KisBrushOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
     if (m_pressureOpacity) {
         if (!m_customOpacity)
-            m_painter->setOpacity((Q_INT8)(origOpacity * info.pressure));
+            m_painter->setOpacity((qint8)(origOpacity * info.pressure));
         else
-            m_painter->setOpacity((Q_INT8)(origOpacity * scaleToCurve(info.pressure, m_opacityCurve)));
+            m_painter->setOpacity((qint8)(origOpacity * scaleToCurve(info.pressure, m_opacityCurve)));
     }
 
     if (m_pressureDarken) {
         KoColor darkened = origColor;
         // Darken docs aren't really clear about what exactly the amount param can have as value...
-        Q_UINT32 darkenAmount;
+        quint32 darkenAmount;
         if (!m_customDarken)
-            darkenAmount = (Q_INT32)(255  - 75 * info.pressure);
+            darkenAmount = (qint32)(255  - 75 * info.pressure);
         else
-            darkenAmount = (Q_INT32)(255  - 75 * scaleToCurve(info.pressure, m_darkenCurve));
+            darkenAmount = (qint32)(255  - 75 * scaleToCurve(info.pressure, m_darkenCurve));
 
         KoColorTransformation* transfo = darkened.colorSpace()->createDarkenAdjustement(darkenAmount, false, 0.0);
         transfo->transform(origColor.data(), darkened.data(), 1);

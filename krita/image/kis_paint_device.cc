@@ -969,14 +969,14 @@ KisVLineConstIteratorPixel  KisPaintDevice::createVLineConstIterator(qint32 x, q
 
 }
 
-KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(Q_INT32 x, Q_INT32 y) {
+KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(qint32 x, qint32 y) {
     if(hasSelection())
         return KisRandomAccessorPixel(m_datamanager.data(), m_d->selection->m_datamanager.data(), x, y, m_d->x, m_d->y);
     else
         return KisRandomAccessorPixel(m_datamanager.data(), NULL, x, y, m_d->x, m_d->y);
 }
 
-KisRandomConstAccessorPixel KisPaintDevice::createRandomConstAccessor(Q_INT32 x, Q_INT32 y) const {
+KisRandomConstAccessorPixel KisPaintDevice::createRandomConstAccessor(qint32 x, qint32 y) const {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     if(hasSelection())
     {

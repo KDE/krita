@@ -29,7 +29,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <kcommand.h>
+#include <k3command.h>
 #include <klocale.h>
 
 #include <kis_layer.h>

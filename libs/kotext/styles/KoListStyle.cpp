@@ -159,3 +159,19 @@ bool KoListStyle::operator==(const KoListStyle &other) const {
 QTextList *KoListStyle::textList(const QTextDocument *doc) {
     return m_textLists[doc];
 }
+
+// static
+KoListStyle* KoListStyle::fromTextList(QTextList *list) {
+    KoListStyle *answer = new KoListStyle();
+
+    QTextListFormat format = list->format();
+    int i=0;
+    while(properties[i] != -1) {
+        int key = properties[i];
+        if(format.hasProperty(key))
+            answer->setProperty(key, format.property(key));
+        i++;
+    }
+
+    return answer;
+}

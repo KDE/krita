@@ -19,6 +19,8 @@
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
 #include "KoTextBlockData.h"
+#include "KoTextDocumentLayout.h"
+#include "KoStyleManager.h"
 
 #include "Styles_p.h"
 
@@ -974,11 +976,32 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
 }
 
 // static
-KoParagraphStyle *KoParagraphStyle::fromBlockFormat(const QTextBlockFormat &format) {
-    KoParagraphStyle *answer = new KoParagraphStyle();
-    answer->remove(PercentLineHeight);
-    delete answer->characterStyle(); // TODO instead replace it with a character style from a QTextCharFormat
-    answer->d->charStyle = 0;
+KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block) {
+    QTextBlockFormat format = block.blockFormat();
+    KoParagraphStyle *answer = 0;
+    KoCharacterStyle *charStyle = 0;
+    int styleId = format.intProperty(StyleId);
+    if(styleId > 0) {
+        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (block.document()->documentLayout());
+        if(layout) {
+            KoStyleManager *sm = layout->styleManager();
+            if(sm) {
+                KoParagraphStyle *style = sm->paragraphStyle(styleId);
+                if(style)
+                    answer = new KoParagraphStyle(*style);
+                charStyle = sm->characterStyle(format.intProperty(KoCharacterStyle::StyleId));
+            }
+        }
+    }
+    if(answer == 0) {
+        answer = new KoParagraphStyle();
+        answer->remove(PercentLineHeight);
+        delete answer->characterStyle();
+    }
+    answer->d->charStyle = charStyle;
+
+    if(block.textList())
+        answer->d->listStyle = KoListStyle::fromTextList(block.textList());
 
     int i=0;
     while(properties[i] != -1) {
@@ -987,8 +1010,6 @@ KoParagraphStyle *KoParagraphStyle::fromBlockFormat(const QTextBlockFormat &form
             answer->setProperty(key, format.property(key));
         i++;
     }
-
-    // listStyle ??
 
     return answer;
 }

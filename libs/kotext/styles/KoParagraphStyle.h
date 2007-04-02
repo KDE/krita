@@ -132,30 +132,31 @@ public:
      * Note that lineSpacing() is added to this.
      * @see setLineSpacingFromFont
      */
-    void setLineHeightPercent(int lineHeight)
-       ;
+    void setLineHeightPercent(int lineHeight);
+    /// @see setLineHeightPercent
     int lineHeightPercent() const;
 
     /**
      * Sets the line height to a specific pt-based height, ignoring the font size.
      * Note that lineSpacing() is added to this.
      */
-    void setLineHeightAbsolute(double height)
-       ;
+    void setLineHeightAbsolute(double height);
+    /// @see setLineHeightAbsolute
     double lineHeightAbsolute() const;
 
     /**
      * Sets the line height to have a minimum height in pt.
      */
     void setMinimumLineHeight(double height);
+    /// @see setMinimumLineHeight
     double minimumLineHeight() const;
 
     /**
      * Sets the space between two lines to be a specific height. The total linespacing will become
      * the line height + this height.  Where the line height is dependent on the font.
      */
-    void setLineSpacing(double spacing)
-       ;
+    void setLineSpacing(double spacing);
+    /// @see setLineSpacing
     double lineSpacing() const;
 
     /**
@@ -320,7 +321,7 @@ public:
     QColor bottomBorderColor();
 
 
-    // ************ properties from QTextFormat
+    // ************ properties from QTextBlockFormat
     /// duplicated property from QTextBlockFormat
     void setTopMargin(double topMargin);
     /// duplicated property from QTextBlockFormat
@@ -436,7 +437,7 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
      */
     void loadOasis(KoStyleStack& styleStack);
 
-    static KoParagraphStyle *fromBlockFormat(const QTextBlockFormat &format);
+    static KoParagraphStyle *fromBlock(const QTextBlock &block);
 
 private:
     void setProperty(int key, const QVariant &value);

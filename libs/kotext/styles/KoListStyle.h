@@ -158,6 +158,8 @@ public:
 
     QTextList *textList(const QTextDocument *doc);
 
+    static KoListStyle* fromTextList(QTextList *list);
+
 protected:
     friend class KoParagraphStyle;
     void addUser() { m_refCount++; }

@@ -73,7 +73,9 @@ void KoCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool /
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
-    charSelect = new KCharSelect( page, _chr, QFont(_font) );
+    charSelect = new KCharSelect( page );
+    charSelect->setCurrentChar( _chr );
+    charSelect->setCurrentFont( QFont(_font) );
     connect(charSelect, SIGNAL(charSelected()),this, SLOT(slotDoubleClicked()));
     charSelect->resize( charSelect->sizeHint() );
 //     charSelect->enableFontCombo( true );

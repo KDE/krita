@@ -108,7 +108,7 @@ SymbolCombo::selectChar()
 	dialog.setMainWidget(select);
 
 	if (!(m_edit->text().isNull()))
-		select->setChar(m_edit->text().at(0));
+		select->setCurrentChar(m_edit->text().at(0));
 
 	if (dialog.exec() == QDialog::Accepted)
 		m_edit->setText(select->currentChar());

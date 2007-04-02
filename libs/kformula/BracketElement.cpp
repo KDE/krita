@@ -242,7 +242,7 @@ bool BracketElement::readAttributesFromMathMLDom(const QDomElement& element)
     else { // mfenced, see attributes in section 3.3.8.2
         leftType = LeftRoundBracket;
         rightType = RightRoundBracket;
-        QString openStr = element.attribute( "open" ).stripWhiteSpace();
+        QString openStr = element.attribute( "open" ).trimmed();
         if ( !openStr.isNull() ) {
             m_customLeft = true;
             if ( openStr == "[" )
@@ -268,7 +268,7 @@ bool BracketElement::readAttributesFromMathMLDom(const QDomElement& element)
             else // TODO: Check for entity references
                 leftType = LeftRoundBracket;
         }
-        QString closeStr = element.attribute( "close" ).stripWhiteSpace();
+        QString closeStr = element.attribute( "close" ).trimmed();
         if ( !closeStr.isNull() ) {
             m_customRight = true;
             if ( closeStr == "[" )
@@ -294,7 +294,7 @@ bool BracketElement::readAttributesFromMathMLDom(const QDomElement& element)
             else // TODO: Check for entity references
                 rightType = LeftRoundBracket;
         }
-        m_separators = element.attribute( "separators" ).simplifyWhiteSpace();
+        m_separators = element.attribute( "separators" ).simplified();
     }
     return true;
 }
@@ -322,7 +322,7 @@ int BracketElement::readContentFromMathMLDom(QDomNode& node)
             empty = true;
         }
         if ( nodeNum > 1 ) { // More than two elements inside, infer a mrow
-            kdWarning() << "NodeNum: " << nodeNum << endl;
+            kWarning() << "NodeNum: " << nodeNum << endl;
             QDomDocument doc = node.ownerDocument();
             QDomElement de = doc.createElement( "mrow" );
             int i = 0;
@@ -333,7 +333,7 @@ int BracketElement::readContentFromMathMLDom(QDomNode& node)
             } while ( ++i < nodeNum );
             parent.insertAfter( de, open );
             node = de;
-            kdWarning() << doc.toString() << endl;
+            kWarning() << doc.toString() << endl;
         }
     }
     else {
@@ -451,11 +451,11 @@ int BracketElement::searchOperator( const QDomNode& node )
                 QString form = e.attribute( "form" );
                 QString f;
                 if ( ! form.isNull() ) {
-                    f = form.stripWhiteSpace().lower();
+                    f = form.trimmed().lower();
                 }
                 QString fence = e.attribute( "fence" );
                 if ( ! fence.isNull() ) {
-                    if ( fence.stripWhiteSpace().lower() == "false" ) {
+                    if ( fence.trimmed().lower() == "false" ) {
                         continue;
                     }
                     if ( ! f.isNull() ) {
@@ -472,7 +472,7 @@ int BracketElement::searchOperator( const QDomNode& node )
                 QDomNode child = e.firstChild();
                 QString name;
                 if ( child.isText() )
-                    name = child.toText().data().stripWhiteSpace();
+                    name = child.toText().data().trimmed();
                 else if ( child.isEntityReference() )
                     name = child.nodeName();
                 else 

@@ -55,7 +55,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
         return false;
     }
 
-    QString formStr = element.attribute( "form" ).stripWhiteSpace().lower();
+    QString formStr = element.attribute( "form" ).trimmed().lower();
     if ( ! formStr.isNull() ) {
         m_customForm = true;
         if ( formStr == "prefix" ) {
@@ -72,7 +72,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_customForm = false;
         }
     }
-    QString fenceStr = element.attribute( "fence" ).stripWhiteSpace().lower();
+    QString fenceStr = element.attribute( "fence" ).trimmed().lower();
     if ( ! fenceStr.isNull() ) {
         m_customFence = true;
         if ( fenceStr == "true" ) {
@@ -86,7 +86,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_customFence = false;
         }
     }
-    QString separatorStr = element.attribute( "separator" ).stripWhiteSpace().lower();
+    QString separatorStr = element.attribute( "separator" ).trimmed().lower();
     if ( ! separatorStr.isNull() ) {
         m_customSeparator = true;
         if ( separatorStr == "true" ) {
@@ -100,7 +100,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_customSeparator = false;
         }
     }
-    QString lspaceStr = element.attribute( "lspace" ).stripWhiteSpace().lower();
+    QString lspaceStr = element.attribute( "lspace" ).trimmed().lower();
     if ( ! lspaceStr.isNull() ) {
         m_customLSpace = true;
         m_lspace = getSize( lspaceStr, &m_lspaceType );
@@ -108,7 +108,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_lspaceType = getSpace( lspaceStr );
         }
     }
-    QString rspaceStr = element.attribute( "rspace" ).stripWhiteSpace().lower();
+    QString rspaceStr = element.attribute( "rspace" ).trimmed().lower();
     if ( ! rspaceStr.isNull() ) {
         m_customRSpace = true;
         m_rspace = getSize( rspaceStr, &m_rspaceType );
@@ -116,7 +116,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_rspaceType = getSpace( rspaceStr );
         }
     }
-    QString stretchyStr = element.attribute( "stretchy" ).stripWhiteSpace().lower();
+    QString stretchyStr = element.attribute( "stretchy" ).trimmed().lower();
     if ( ! stretchyStr.isNull() ) {
         m_customStretchy = true;
         if ( stretchyStr == "true" ) {
@@ -130,7 +130,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_customStretchy = false;
         }
     }
-    QString symmetricStr = element.attribute( "symmetric" ).stripWhiteSpace().lower();
+    QString symmetricStr = element.attribute( "symmetric" ).trimmed().lower();
     if ( ! symmetricStr.isNull() ) {
         m_customSymmetric = true;
         if ( symmetricStr == "true" ) {
@@ -144,7 +144,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_customSymmetric = false;
         }
     }
-    QString maxsizeStr = element.attribute( "maxsize" ).stripWhiteSpace().lower();
+    QString maxsizeStr = element.attribute( "maxsize" ).trimmed().lower();
     if ( ! maxsizeStr.isNull() ) {
         m_customMaxSize = true;
         if ( maxsizeStr == "infinity" ) {
@@ -157,7 +157,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             }
         }
     }
-    QString minsizeStr = element.attribute( "minsize" ).stripWhiteSpace().lower();
+    QString minsizeStr = element.attribute( "minsize" ).trimmed().lower();
     if ( ! minsizeStr.isNull() ) {
         m_customMinSize = true;
         m_minSize = getSize( minsizeStr, &m_minSizeType );
@@ -165,7 +165,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_minSizeType = getSpace( minsizeStr );
         }
     }
-    QString largeopStr = element.attribute( "largeop" ).stripWhiteSpace().lower();
+    QString largeopStr = element.attribute( "largeop" ).trimmed().lower();
     if ( ! largeopStr.isNull() ) {
         m_customLargeOp = true;
         if ( largeopStr == "true" ) {
@@ -179,7 +179,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_customLargeOp = false;
         }
     }
-    QString movablelimitsStr = element.attribute( "movablelimits" ).stripWhiteSpace().lower();
+    QString movablelimitsStr = element.attribute( "movablelimits" ).trimmed().lower();
     if ( ! movablelimitsStr.isNull() ) {
         m_customMovableLimits = true;
         if ( movablelimitsStr == "true" ) {
@@ -193,7 +193,7 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
             m_customMovableLimits = false;
         }
     }
-    QString accentStr = element.attribute( "accent" ).stripWhiteSpace().lower();
+    QString accentStr = element.attribute( "accent" ).trimmed().lower();
     if ( ! accentStr.isNull() ) {
         m_customAccent = true;
         if ( accentStr == "true" ) {

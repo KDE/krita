@@ -151,7 +151,7 @@ class GroupWidgetBase : public QWidget
 				f.setBold(true);
 				p.setFont(f);
 				p.drawText(indent+8, 0, width()-(indent+8),
-						height(), Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
+						height(), Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
 						m_titleStr);
 			}
 //			p.setPen(palette().active().mid());
@@ -580,7 +580,7 @@ EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int 
 	K3ListViewItem::paintCell(p, cg, column, width, align);
 	p->setPen(cg.text());
 	p->drawText(QRect(0,0, totalWidth, height()),
-		Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, text(0));*/
+		Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, text(0));*/
 }
 
 void

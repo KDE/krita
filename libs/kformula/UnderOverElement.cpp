@@ -54,10 +54,10 @@ bool UnderOverElement::readAttributesFromMathMLDom( const QDomElement& element )
         return false;
     }
 
-    QString tag = element.tagName().stripWhiteSpace().lower();
+    QString tag = element.tagName().trimmed().lower();
 
     if ( tag == "munder" || tag == "munderover" ) {
-        QString accentunderStr = element.attribute( "accentunder" ).stripWhiteSpace().lower();
+        QString accentunderStr = element.attribute( "accentunder" ).trimmed().lower();
         if ( ! accentunderStr.isNull() ) {
             if ( accentunderStr == "true" ) {
                 m_customAccentUnder = true;
@@ -74,7 +74,7 @@ bool UnderOverElement::readAttributesFromMathMLDom( const QDomElement& element )
         }
     }
     if ( tag == "mover" || tag == "munderover" ) {
-        QString accentStr = element.attribute( "accent" ).stripWhiteSpace().lower();
+        QString accentStr = element.attribute( "accent" ).trimmed().lower();
         if ( ! accentStr.isNull() ) {
             if ( accentStr == "true" ) {
                 m_customAccent = true;

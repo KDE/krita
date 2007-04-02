@@ -118,19 +118,19 @@ bool PaddedElement::readAttributesFromMathMLDom(const QDomElement& element)
         return false;
     }
 
-    QString widthStr = element.attribute( "width" ).stripWhiteSpace().lower();
+    QString widthStr = element.attribute( "width" ).trimmed().lower();
     if ( ! widthStr.isNull() ) {
         m_width = readSizeAttribute( widthStr, &m_widthType, &m_widthRelative );
     }
-    QString lspaceStr = element.attribute( "lspace" ).stripWhiteSpace().lower();
+    QString lspaceStr = element.attribute( "lspace" ).trimmed().lower();
     if ( ! lspaceStr.isNull() ) {
         m_lspace = readSizeAttribute( lspaceStr, &m_lspaceType, &m_lspaceRelative );
     }
-    QString heightStr = element.attribute( "height" ).stripWhiteSpace().lower();
+    QString heightStr = element.attribute( "height" ).trimmed().lower();
     if ( ! heightStr.isNull() ) {
         m_height = readSizeAttribute( heightStr, &m_heightType, &m_heightRelative );
     }
-    QString depthStr = element.attribute( "depth" ).stripWhiteSpace().lower();
+    QString depthStr = element.attribute( "depth" ).trimmed().lower();
     if ( ! depthStr.isNull() ) {
         m_depth = readSizeAttribute( depthStr, &m_depthType, &m_depthRelative );
     }
@@ -158,53 +158,53 @@ double PaddedElement::readSizeAttribute( const QString& str, SizeType* st, bool*
     if ( index != -1 ) {
         int index2 = str.find( "%" );
         if ( index2 != -1 ) {
-            return str2size( str.left( index2 ).stripWhiteSpace(), st, WidthRelativeSize ) / 100.0;
+            return str2size( str.left( index2 ).trimmed(), st, WidthRelativeSize ) / 100.0;
         }
-        return str2size( str.left( index ).stripWhiteSpace(), st, WidthRelativeSize );
+        return str2size( str.left( index ).trimmed(), st, WidthRelativeSize );
     }
     index = str.find( "height" );
     if ( index != -1 ) {
         int index2 = str.find( "%" );
         if ( index2 != -1 ) {
-            return str2size( str.left( index2 ).stripWhiteSpace(), st, HeightRelativeSize ) / 100.0;
+            return str2size( str.left( index2 ).trimmed(), st, HeightRelativeSize ) / 100.0;
         }
-        return str2size( str.left( index ).stripWhiteSpace(), st, HeightRelativeSize );
+        return str2size( str.left( index ).trimmed(), st, HeightRelativeSize );
     }
     index = str.find( "%" );
     if ( index != -1 ) {
-        return str2size( str.left( index ).stripWhiteSpace(), st, RelativeSize ) / 100.0;
+        return str2size( str.left( index ).trimmed(), st, RelativeSize ) / 100.0;
     }
     index = str.find( "pt", 0, false );
     if ( index != -1 ) {
-        return str2size( str.left( index ).stripWhiteSpace(), st, AbsoluteSize );
+        return str2size( str.left( index ).trimmed(), st, AbsoluteSize );
     }
     index = str.find( "mm", 0, false );
     if ( index != -1 ) {
-        return str2size( str.left( index ).stripWhiteSpace(), st, AbsoluteSize ) * 72.0 / 20.54;
+        return str2size( str.left( index ).trimmed(), st, AbsoluteSize ) * 72.0 / 20.54;
     }
     index = str.find( "cm", 0, false );
     if ( index != -1 ) {
-        return str2size( str.left( index ).stripWhiteSpace(), st, AbsoluteSize ) * 72.0 / 2.54;
+        return str2size( str.left( index ).trimmed(), st, AbsoluteSize ) * 72.0 / 2.54;
     }
     index = str.find( "in", 0, false );
     if ( index != -1 ) {
-        return str2size( str.left( index ).stripWhiteSpace(), st, AbsoluteSize ) * 72.0;
+        return str2size( str.left( index ).trimmed(), st, AbsoluteSize ) * 72.0;
     }
     index = str.find( "em", 0, false );
     if ( index != -1 ) {
-        return str2size( str.left( index ).stripWhiteSpace(), st, RelativeSize );
+        return str2size( str.left( index ).trimmed(), st, RelativeSize );
     }
     index = str.find( "ex", 0, false );
     if ( index != -1 ) {
-        return str2size( str.left( index ).stripWhiteSpace(), st, RelativeSize );
+        return str2size( str.left( index ).trimmed(), st, RelativeSize );
     }
     index = str.find( "pc", 0, false );
     if ( index != -1 ) {
-        return str2size( str.left( index ).stripWhiteSpace(), st, AbsoluteSize ) * 12.0;
+        return str2size( str.left( index ).trimmed(), st, AbsoluteSize ) * 12.0;
     }
     index = str.find( "px", 0, false );
     if ( index != -1 ) {
-        return str2size( str.left( index ).stripWhiteSpace(), st, PixelSize );
+        return str2size( str.left( index ).trimmed(), st, PixelSize );
     }
     // If there's no unit, assume 'pt'
     return str2size( str, st, AbsoluteSize );

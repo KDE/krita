@@ -44,7 +44,7 @@ int TokenElement::buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNod
     while ( ! n.isNull() ) {
         if ( n.isText() ) {
             QString textelements = n.toText().data();
-            textelements = textelements.stripWhiteSpace();
+            textelements = textelements.trimmed();
                 
             for (uint i = 0; i < textelements.length(); i++) {
                 TextElement* child = new TextElement(textelements[i]);

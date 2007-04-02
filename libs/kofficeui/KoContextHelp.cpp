@@ -256,7 +256,7 @@ void KoHelpView::mouseMoveEvent( QMouseEvent* e )
 	if ( !currentText->anchorAt( e->pos() ).isEmpty() )
 		setCursor( Qt::PointingHandCursor );
 	else
-		setCursor( KCursor::arrowCursor() );
+		setCursor( Qt::ArrowCursor );
 } // KoHelpView::mouseMove
 
 bool KoHelpView::eventFilter( QObject*, QEvent* e )

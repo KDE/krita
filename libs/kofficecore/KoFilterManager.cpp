@@ -571,7 +571,7 @@ bool KoFilterManager::filterAvailable( KoFilterEntry::Ptr entry )
 
         // This code is "borrowed" from klibloader ;)
         QByteArray symname = "check_" + library->name().toLatin1();
-        void* sym = library->symbol( symname );
+	KLibrary::void_function_ptr sym = library->resolveFunction( symname );
         if ( !sym )
         {
             kWarning( 30500 ) << "The library " << library->name()

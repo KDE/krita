@@ -80,6 +80,13 @@ public slots:
     */
     void setDocumentSize( const QSizeF &documentSize );
 
+    /**
+     * Sets a fitting margin that is used when zooming to page size/width.
+     * Note that the fit margin is given in pixels.
+     * @param margin the new fit margin to use, the default is zero
+     */
+    void setFitMargin( int margin );
+
 signals:
     // the document can use the emitted data for persistency purposes.
     void zoomChanged (KoZoomMode::Mode mode, double zoom);
@@ -108,6 +115,7 @@ private:
     KoZoomAction *m_action;
     QSizeF m_pageSize;
     QSizeF m_documentSize;
+    int m_fitMargin;
 };
 
 #endif

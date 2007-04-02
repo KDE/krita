@@ -236,7 +236,7 @@ void KoPathPoint::paint( QPainter &painter, const QSizeF &size, KoPointTypes typ
             painter.drawRect( handle.translated( point() ) );
         else if( properties() & IsSymmetric )
         {
-            QWMatrix matrix;
+            QMatrix matrix;
             matrix.rotate( 45.0 );
             QPolygonF poly( handle );
             poly = matrix.map( poly );

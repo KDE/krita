@@ -342,10 +342,10 @@ void KoFrame::mouseMoveEvent( QMouseEvent* ev )
     else if ( r7.contains( ev->pos() ) || r8.contains( ev->pos() ) )
       setCursor( Qt::SizeHorCursor );
     else
-      setCursor( KCursor::handCursor() );
+      setCursor( Qt::PointingHandCursor );
   }
   else
-    setCursor( KCursor::handCursor() );
+    setCursor( Qt::PointingHandCursor );
 }
 
 void KoFrame::mouseReleaseEvent( QMouseEvent* )

@@ -345,7 +345,7 @@ bool KoContainerHandler::eventFilter( QObject*, QEvent* ev )
         else if ( gadget == KoChild::MidLeft || gadget == KoChild::MidRight )
             targetWidget->setCursor( Qt::SizeHorCursor );
         else if ( gadget == KoChild::Move )
-            targetWidget->setCursor( KCursor::handCursor() );
+            targetWidget->setCursor( Qt::PointingHandCursor );
         else
         {
 //            targetWidget->setCursor( arrowCursor );

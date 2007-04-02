@@ -101,14 +101,14 @@ KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
     d->shearCursors[5] = QCursor(shearPixmap.transformed(QMatrix().rotate(225)));
     d->shearCursors[6] = QCursor(shearPixmap.transformed(QMatrix().rotate(270)));
     d->shearCursors[7] = QCursor(shearPixmap.transformed(QMatrix().rotate(315)));
-    d->sizeCursors[0] = KCursor::sizeVerCursor();
-    d->sizeCursors[1] = KCursor::sizeBDiagCursor();
-    d->sizeCursors[2] = KCursor::sizeHorCursor();
-    d->sizeCursors[3] = KCursor::sizeFDiagCursor();
-    d->sizeCursors[4] = KCursor::sizeVerCursor();
-    d->sizeCursors[5] = KCursor::sizeBDiagCursor();
-    d->sizeCursors[6] = KCursor::sizeHorCursor();
-    d->sizeCursors[7] = KCursor::sizeFDiagCursor();
+    d->sizeCursors[0] = Qt::SizeVerCursor;
+    d->sizeCursors[1] = Qt::SizeBDiagCursor;
+    d->sizeCursors[2] = Qt::SizeHorCursor;
+    d->sizeCursors[3] = Qt::SizeFDiagCursor;
+    d->sizeCursors[4] = Qt::SizeVerCursor;
+    d->sizeCursors[5] = Qt::SizeBDiagCursor;
+    d->sizeCursors[6] = Qt::SizeHorCursor;
+    d->sizeCursors[7] = Qt::SizeFDiagCursor;
 }
 
 KoInteractionTool::~KoInteractionTool()

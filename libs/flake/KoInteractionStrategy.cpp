@@ -86,7 +86,7 @@ KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoPointerEvent *eve
             return new KoShapeMoveStrategy(parent, canvas, event->point);
     }
 
-    KoShape * object( shapeManager->shapeAt( event->point, (event->modifiers() & Qt::ShiftButton) ? KoFlake::NextUnselected : KoFlake::ShapeOnTop ) );
+    KoShape * object( shapeManager->shapeAt( event->point, (event->modifiers() & Qt::ShiftModifier) ? KoFlake::NextUnselected : KoFlake::ShapeOnTop ) );
     if( !object && handle == KoFlake::NoHandle) {
         if ( ( event->modifiers() & Qt::ControlModifier ) == 0 )
         {

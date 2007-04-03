@@ -277,6 +277,9 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
     if (d->canvasData->activeTool) {
         foreach(QAction *action, d->canvasData->activeTool->actions().values())
             action->setEnabled(false);
+        // repaint the decorations before we deactivate the tool as it might deleted 
+        // data needed for the repaint
+        d->canvasData->activeTool->repaintDecorations();
         d->canvasData->activeTool->deactivate();
         disconnect(d->canvasData->activeTool, SIGNAL(sigCursorChanged(QCursor)),
                 this, SLOT(updateCursor(QCursor)));
@@ -285,7 +288,6 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
         disconnect(d->canvasData->activeTool, SIGNAL(sigActivateTemporary(const QString &)),
                 this, SLOT(switchToolTemporaryRequested(const QString &)));
         disconnect(d->canvasData->activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
-        d->canvasData->activeTool->repaintDecorations();
     }
     d->canvasData->activeTool = tool;
     connect(d->canvasData->activeTool, SIGNAL(sigCursorChanged(QCursor)),

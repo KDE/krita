@@ -83,12 +83,11 @@ public:
     enum Property {
         ListItemPrefix = QTextFormat::UserProperty+1000, ///< The text to be printed before the listItem
         ListItemSuffix, ///< The text to be printed after the listItem
-        ConsecutiveNumbering,   ///< when true don't let non-numbering parags restart numbering
         StartValue,     ///< First value to use
         Level,          ///< list nesting level, is 1 or higher, or zero when implied
         DisplayLevel,   ///< show this many levels. Is always lower than the (implied) level.
         CharacterStyleId,///< CharacterStyle used for markup of the counter
-        BulletCharacter,///< an int with the unicode value of the character
+        BulletCharacter,///< an int with the unicode value of the character (for CustomCharItem)
         BulletSize,     ///< size in percent relative to the height of the text
         Alignment,      ///< Alignment of the counter
         MinimumWidth    ///< The minimum width, in pt, of the listItem including the prefix/suffix.
@@ -113,18 +112,6 @@ public:
     QString listItemPrefix() const { return propertyString(ListItemPrefix); }
     void setListItemSuffix(const QString &suffix) { setProperty(ListItemSuffix, suffix  ); }
     QString listItemSuffix() const { return propertyString(ListItemSuffix); }
-    /**
-     * If true keep numbering even if there was a lower list in between listitems.
-     * This attribute specifies whether or not the list style uses consecutive numbering for
-     * all list levels or whether each list level restarts the numbering.
-     */
-    void setConsecutiveNumbering(bool on) { setProperty(ConsecutiveNumbering, on  ); }
-    /**
-     * If true keep numbering even if there was a lower list in between listitems.
-     * This attribute specifies whether or not the list style uses consecutive numbering for
-     * all list levels or whether each list level restarts the numbering.
-     */
-    bool consecutiveNumbering() const { return propertyBoolean (ConsecutiveNumbering); }
     void setStartValue(int value) { setProperty(StartValue, value  ); }
     int startValue() const { return propertyInt (StartValue); }
     void setLevel(int level) { setProperty(Level, level  ); }

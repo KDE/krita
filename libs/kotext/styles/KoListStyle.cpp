@@ -29,7 +29,6 @@ static const int properties[] = {
     QTextListFormat::ListStyle,
     KoListStyle::ListItemPrefix,
     KoListStyle::ListItemSuffix,
-    KoListStyle::ConsecutiveNumbering,
     KoListStyle::StartValue,
     KoListStyle::Level,
     KoListStyle::DisplayLevel,

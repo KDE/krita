@@ -5,22 +5,6 @@ include(CheckFunctionExists)
 
 if (SHOULD_BUILD_KRITA)
 
-    macro_optional_find_package(OpenGL)
-
-    set(HAVE_OPENGL 0)
-
-    if(OPENGL_FOUND)
-        message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
-        if(QT_QTOPENGL_FOUND)
-            message(STATUS "Found Qt OpenGL support")
-            set(HAVE_OPENGL 1)
-        else(QT_QTOPENGL_FOUND)
-            message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
-        endif(QT_QTOPENGL_FOUND)
-    else(OPENGL_FOUND)
-        message(STATUS "Did NOT find OpenGL libraries")
-    endif(OPENGL_FOUND)
-
     if(NOT HAVE_OPENGL)
         message(STATUS " * krita will not be able to use OpenGL for")
         message(STATUS "   hardware accelerated rendering.")

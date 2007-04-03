@@ -35,6 +35,12 @@
 #include <QScrollBar>
 #include <QEvent>
 
+#include <config-opengl.h>
+
+#ifdef HAVE_OPENGL
+#include <QGLWidget>
+#endif
+
 class KoCanvasController::Private
 {
 public:
@@ -342,12 +348,31 @@ void KoCanvasController::setDocumentOffset()
     if ( pt.y() > m_d->documentSize.height() ) pt.setY( m_d->documentSize.height() );
     emit( moveDocumentOffset( pt ) );
 
-    if(m_d->canvas->canvasWidget()) {
-        QPoint diff = m_d->documentOffset - pt;
-        m_d->canvas->canvasWidget()->scroll(diff.x(), diff.y());
+    QWidget *canvasWidget = m_d->canvas->canvasWidget();
+
+    if (canvasWidget) {
+        if (!canvasIsOpenGL()) {
+            QPoint diff = m_d->documentOffset - pt;
+            canvasWidget->scroll(diff.x(), diff.y());
+        }
     }
 
     m_d->documentOffset = pt;
+}
+
+bool KoCanvasController::canvasIsOpenGL() const
+{
+    QWidget *canvasWidget = m_d->canvas->canvasWidget();
+
+    if (canvasWidget) {
+#ifdef HAVE_OPENGL
+        if (qobject_cast<QGLWidget*>(canvasWidget) != 0) {
+            return true;
+        }
+#endif
+    }
+
+    return false;
 }
 
 void KoCanvasController::resetScrollBars()

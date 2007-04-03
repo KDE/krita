@@ -19,6 +19,7 @@
 #define KIS_OPENGL_IMAGE_CONTEXT_H_
 
 #include <config-krita.h>
+#include <config-opengl.h>
 
 #ifdef HAVE_OPENGL
 

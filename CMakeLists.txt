@@ -44,6 +44,23 @@ macro_optional_find_package(OpenEXR)
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
 
+macro_optional_find_package(OpenGL)
+set(HAVE_OPENGL 0)
+
+if(OPENGL_FOUND)
+    message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
+    if(QT_QTOPENGL_FOUND)
+        message(STATUS "Found Qt OpenGL support")
+        set(HAVE_OPENGL 1)
+    else(QT_QTOPENGL_FOUND)
+        message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
+    endif(QT_QTOPENGL_FOUND)
+else(OPENGL_FOUND)
+    message(STATUS "Did NOT find OpenGL libraries")
+endif(OPENGL_FOUND)
+
+configure_file(config-opengl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-opengl.h )
+
 include (TestBigEndian)
 TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 configure_file(config-endian.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-endian.h )

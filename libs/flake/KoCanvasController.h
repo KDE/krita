@@ -281,6 +281,7 @@ private:
     void setDocumentOffset();
 
     void resetScrollBars();
+    bool canvasIsOpenGL() const;
 
 private:
 

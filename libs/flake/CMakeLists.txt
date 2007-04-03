@@ -102,6 +102,10 @@ kde4_add_library(flake SHARED ${flake_SRCS})
 
 target_link_libraries(flake ${KDE4_KDEUI_LIBS} kofficecore pigment)
 
+if(HAVE_OPENGL)
+    target_link_libraries(flake ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
+endif(HAVE_OPENGL)
+
 set_target_properties(flake PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
 ########### install files ###############

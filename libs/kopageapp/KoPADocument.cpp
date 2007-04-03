@@ -19,7 +19,6 @@
 
 #include "KoPADocument.h"
 
-#include <kcommand.h>
 #include <KTemporaryFile>
 
 #include <KoStore.h>

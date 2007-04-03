@@ -613,16 +613,6 @@ void KoPathTool::activate (bool temporary) {
 
 void KoPathTool::deactivate() {
     m_pointSelection.clear();
-    foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes()) 
-    {
-        KoPathShape *pathShape = dynamic_cast<KoPathShape*> (shape);
-
-        if ( !shape->isLocked() && pathShape )
-        {
-            // it is only needed to repaint the current canvas
-            repaint( pathShape->boundingRect() );
-        }
-    }
 
     delete m_activeHandle;
     m_activeHandle = 0;

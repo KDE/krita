@@ -26,7 +26,6 @@
 
 #include "KoInteractionStrategy.h"
 
-#include <kcommand.h>
 
 class KoCreateShapesTool::Private {
 public:

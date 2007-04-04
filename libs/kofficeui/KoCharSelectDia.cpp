@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,12 +29,19 @@
 #include <kdebug.h>
 #include <KStandardGuiItem>
 
+class KoCharSelectDia::Private {
+public:
+    Private() : charSelect(0) {}
+    KCharSelect *charSelect;
+};
+
 /******************************************************************/
 /* class KoCharSelectDia                                           */
 /******************************************************************/
 
-KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont , bool _modal)
-    : KDialog( parent )
+KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _modal)
+    : KDialog( parent ),
+    d(new Private())
 {
     setCaption( i18n("Select Character") );
     setModal( _modal );
@@ -41,7 +49,7 @@ KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QChar
     setDefaultButton( Ok );
     setObjectName( name );
 
-    initDialog(_chr,_font,_enableFont);
+    initDialog(_chr,_font);
 
     KGuiItem okItem = KStandardGuiItem::ok(); // start from std item to keep the OK icon...
     okItem.setText( i18n("&Insert") );
@@ -50,7 +58,8 @@ KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QChar
 }
 
 KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr, bool _modal )
-    : KDialog( parent )
+    : KDialog( parent ),
+    d(new Private())
 {
     setCaption( i18n("Select Character") );
     setModal( _modal );
@@ -58,37 +67,38 @@ KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QStri
     setDefaultButton( User1 );
     setObjectName( name );
 
-    initDialog(_chr,_font,true);
+    initDialog(_chr,_font);
 
     setButtonText( User1, i18n("&Insert") );
     setButtonToolTip( User1, i18n("Insert the selected character in the text") );
     connect(this,SIGNAL(user1Clicked()),this,SLOT(slotUser1()));
 }
 
-void KoCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool /*_enableFont*/)
+void KoCharSelectDia::initDialog(const QChar &_chr, const QString &_font)
 {
     QWidget *page = mainWidget()/*plainPage()*/;
 
-    grid = new QGridLayout( page );
+    QGridLayout *grid = new QGridLayout( page );
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
-    charSelect = new KCharSelect( page );
-    charSelect->setCurrentChar( _chr );
-    charSelect->setCurrentFont( QFont(_font) );
-    connect(charSelect, SIGNAL(charSelected()),this, SLOT(slotDoubleClicked()));
-    charSelect->resize( charSelect->sizeHint() );
-//     charSelect->enableFontCombo( true );
-    grid->addWidget( charSelect, 0, 0 );
+    d->charSelect = new KCharSelect( page );
+    d->charSelect->setCurrentChar( _chr );
+    d->charSelect->setCurrentFont( QFont(_font) );
+    connect(d->charSelect, SIGNAL(charSelected()),this, SLOT(slotDoubleClicked()));
+    d->charSelect->resize( d->charSelect->sizeHint() );
+//     d->charSelect->enableFontCombo( true );
+    grid->addWidget( d->charSelect, 0, 0 );
 
-    grid->addItem( new QSpacerItem( charSelect->width(), 0 ), 0, 0 );
-    grid->addItem( new QSpacerItem( 0, charSelect->height() ), 0, 0 );
+    grid->addItem( new QSpacerItem( d->charSelect->width(), 0 ), 0, 0 );
+    grid->addItem( new QSpacerItem( 0, d->charSelect->height() ), 0, 0 );
     grid->setRowStretch( 0, 0 );
-    charSelect->setFocus();
+    d->charSelect->setFocus();
 }
 
 KoCharSelectDia::~KoCharSelectDia()
 {
+    delete d;
 }
 
 void KoCharSelectDia::closeDialog()
@@ -96,11 +106,12 @@ void KoCharSelectDia::closeDialog()
     KDialog::close();
 }
 
-bool KoCharSelectDia::selectChar( QString &_font, QChar &_chr, bool _enableFont, QWidget* parent, const char* name )
+// static
+bool KoCharSelectDia::selectChar( QString &_font, QChar &_chr, QWidget* parent, const char* name)
 {
     bool res = false;
 
-    KoCharSelectDia *dlg = new KoCharSelectDia( parent, name, _chr, _font, _enableFont );
+    KoCharSelectDia *dlg = new KoCharSelectDia( parent, name, _chr, _font);
     dlg->setFocus();
     if ( dlg->exec() == Accepted )
     {
@@ -116,12 +127,12 @@ bool KoCharSelectDia::selectChar( QString &_font, QChar &_chr, bool _enableFont,
 
 QChar KoCharSelectDia::chr() const
 {
-    return charSelect->currentChar();
+    return d->charSelect->currentChar();
 }
 
 QString KoCharSelectDia::font() const
 {
-    return charSelect->font().family();
+    return d->charSelect->font().family();
 }
 
 void KoCharSelectDia::slotUser1()

@@ -368,7 +368,7 @@ void KisOpenGLImageContext::setSelectionDisplayEnabled(bool enable)
     m_displaySelection = enable;
 }
 
-void KisOpenGLImageContext::slotImageUpdated(QRect rc)
+void KisOpenGLImageContext::slotImageUpdated(const QRect &rc)
 {
     QRect r = rc & m_image->bounds();
 

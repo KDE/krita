@@ -520,13 +520,6 @@ void KisView2::connectCurrentImage()
         connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
 
         m_d->maskManager->maskUpdated();
-
-
-        {
-            connect(img.data(), SIGNAL(sigImageUpdated(const QRect &)), m_d->canvas, SLOT(updateCanvasProjection(const QRect &)));
-            connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->canvas, SLOT(setImageSize( qint32, qint32)) );
-        }
-
     }
     m_d->canvas->connectCurrentImage();
     if( m_d->layerBox )
@@ -544,7 +537,6 @@ void KisView2::disconnectCurrentImage()
 
         img->disconnect(this);
         img->disconnect( m_d->layerManager );
-        img->disconnect( m_d->canvas );
         img->disconnect( m_d->selectionManager );
         if( m_d->statusBar )
             img->disconnect( m_d->statusBar );
@@ -554,10 +546,7 @@ void KisView2::disconnectCurrentImage()
         if( m_d->birdEyeBox )
             m_d->birdEyeBox->setImage(KisImageSP(0));
         m_d->canvas->disconnectCurrentImage();
-
     }
-
-
 }
 
 void KisView2::slotUpdateFullScreen(bool toggle)

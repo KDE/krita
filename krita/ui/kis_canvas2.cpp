@@ -237,40 +237,30 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     }
 }
 
-
 void KisCanvas2::updateCanvasProjection( const QRect & rc )
 {
 #ifdef HAVE_OPENGL
-    if ( m_d->currentCanvasIsOpenGL ) {
-
-        Q_ASSERT( !m_d->openGLImageContext.isNull() );
-        if ( !m_d->openGLImageContext.isNull() ) {
-            m_d->openGLImageContext->update( rc );
-        }
-    }
-    else {
+    // Should never have an OpenGL image context and get here as that connects
+    // to the image directly.
+    Q_ASSERT( m_d->openGLImageContext.isNull() );
 #endif
-        // XXX: Use the KisQPainterImageContext here
-        QPainter p( &m_d->canvasCache );
+    // XXX: Use the KisQPainterImageContext here
+    QPainter p( &m_d->canvasCache );
 
-        p.setCompositionMode( QPainter::CompositionMode_Source );
-        p.drawImage( rc.x(), rc.y(),
-                     image()->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
-                                              m_d->monitorProfile,
-                                              m_d->view->resourceProvider()->HDRExposure() )
-                     , 0, 0, rc.width(), rc.height() );
-        p.end();
+    p.setCompositionMode( QPainter::CompositionMode_Source );
+    p.drawImage( rc.x(), rc.y(),
+                 image()->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
+                                          m_d->monitorProfile,
+                                          m_d->view->resourceProvider()->HDRExposure() )
+                 , 0, 0, rc.width(), rc.height() );
+    p.end();
 
-        QRect vRect = viewRectFromImagePixels( rc );
+    QRect vRect = viewRectFromImagePixels( rc );
 
-        if ( !vRect.isEmpty() ) {
-            m_d->canvasWidget->preScale( vRect );
-            m_d->canvasWidget->widget()->update( vRect );
-        }
-
-#ifdef HAVE_OPENGL
+    if ( !vRect.isEmpty() ) {
+        m_d->canvasWidget->preScale( vRect );
+        m_d->canvasWidget->widget()->update( vRect );
     }
-#endif
 }
 
 
@@ -350,9 +340,14 @@ void KisCanvas2::setImageSize( qint32 w, qint32 h )
 void KisCanvas2::connectCurrentImage()
 {
 #ifdef HAVE_OPENGL
-    if (!m_d->openGLImageContext.isNull()) {
-        connect(m_d->openGLImageContext.data(), SIGNAL(sigImageUpdated(QRegion)), SLOT(slotOpenGLImageUpdated(QRegion)));
-        connect(m_d->openGLImageContext.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize(qint32, qint32)));
+    if (m_d->openGLImageContext) {
+        connect(m_d->openGLImageContext, SIGNAL(sigImageUpdated(const QRect &)), SLOT(updateCanvas()));
+        connect(m_d->openGLImageContext, SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize(qint32, qint32)));
+    } else {
+#endif
+    connect(m_d->view->image(), SIGNAL(sigImageUpdated(const QRect &)), SLOT(updateCanvasProjection(const QRect &)));
+    connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize( qint32, qint32)) );
+#ifdef HAVE_OPENGL
     }
 #endif
 }
@@ -360,10 +355,11 @@ void KisCanvas2::connectCurrentImage()
 void KisCanvas2::disconnectCurrentImage()
 {
 #ifdef HAVE_OPENGL
-    if (!m_d->openGLImageContext.isNull()) {
+    if (m_d->openGLImageContext) {
         m_d->openGLImageContext->disconnect(this);
     }
 #endif
+    m_d->view->image()->disconnect( this );
 }
 
 void KisCanvas2::resetCanvas()

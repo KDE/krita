@@ -99,9 +99,9 @@ signals:
     /**
      * Emitted whenever an action has caused the image to be recomposited.
      *
-     * @param region  The region that has been recomposited.
+     * @param r  The rectangle that has been recomposited.
      */
-    void sigImageUpdated(QRegion region);
+    void sigImageUpdated(const QRect &r);
 
     /**
      * Emitted whenever the image size changes.
@@ -124,7 +124,7 @@ protected:
     static bool imageCanShareImageContext(KisImageSP image);
 
 protected slots:
-    void slotImageUpdated(QRect r);
+    void slotImageUpdated(const QRect &);
     void slotImageSizeChanged(qint32 w, qint32 h);
 
 private:

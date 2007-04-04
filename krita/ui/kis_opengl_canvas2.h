@@ -54,6 +54,38 @@ public:
 
     virtual ~KisOpenGLCanvas2();
 
+public: // QWidget
+
+    /// reimplemented method from superclass
+    void keyPressEvent( QKeyEvent *e );
+
+    /// reimplemented method from superclass
+    void mouseMoveEvent(QMouseEvent *e);
+
+    /// reimplemented method from superclass
+    void mousePressEvent(QMouseEvent *e);
+
+    /// reimplemented method from superclass
+    void mouseReleaseEvent(QMouseEvent *e);
+
+    /// reimplemented method from superclass
+    void mouseDoubleClickEvent(QMouseEvent *e);
+
+    /// reimplemented method from superclass
+    void keyReleaseEvent (QKeyEvent *e);
+
+    /// reimplemented method from superclass
+    //void paintEvent(QPaintEvent * ev);
+
+    /// reimplemented method from superclass
+    void tabletEvent( QTabletEvent *e );
+
+    /// reimplemented method from superclass
+    void wheelEvent( QWheelEvent *e );
+
+    /// reimplemented method from superclass
+    bool event(QEvent *event);
+
 protected:
 
     void initializeGL();

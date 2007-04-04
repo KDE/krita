@@ -74,6 +74,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOp
     m_d->toolProxy = KoToolManager::instance()->createToolProxy(m_d->canvas);
     m_d->openGLImageContext = context;
     m_d->viewConverter = canvas->viewConverter();
+    setAcceptDrops( true );
+    setFocusPolicy(Qt::StrongFocus);
 
     if (isSharing()) {
         kDebug(41001) << "Created QGLWidget with sharing\n";
@@ -223,6 +225,56 @@ void KisOpenGLCanvas2::documentOffsetMoved( QPoint pt )
     updateGL();
 }
 
+void KisOpenGLCanvas2::mouseMoveEvent(QMouseEvent *e) {
+    m_d->toolProxy->mouseMoveEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+}
+
+void KisOpenGLCanvas2::mousePressEvent(QMouseEvent *e) {
+    m_d->toolProxy->mousePressEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+}
+
+void KisOpenGLCanvas2::mouseReleaseEvent(QMouseEvent *e) {
+    m_d->toolProxy->mouseReleaseEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+}
+
+void KisOpenGLCanvas2::mouseDoubleClickEvent(QMouseEvent *e) {
+    m_d->toolProxy->mouseDoubleClickEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+}
+
+void KisOpenGLCanvas2::keyPressEvent( QKeyEvent *e ) {
+    m_d->toolProxy->keyPressEvent(e);
+}
+
+void KisOpenGLCanvas2::keyReleaseEvent (QKeyEvent *e) {
+    m_d->toolProxy->keyReleaseEvent(e);
+}
+
+void KisOpenGLCanvas2::tabletEvent( QTabletEvent *e )
+{
+    kDebug(41010) << "tablet event: " << e->pressure() << endl;
+    m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument(  e->pos() + m_d->documentOffset ) );
+}
+
+void KisOpenGLCanvas2::wheelEvent( QWheelEvent *e )
+{
+    m_d->toolProxy->wheelEvent( e, m_d->viewConverter->viewToDocument( e->pos() + m_d->documentOffset ) );
+}
+
+bool KisOpenGLCanvas2::event (QEvent *event) {
+    // we should forward tabs, and let tools decide if they should be used or ignored.
+    // if the tool ignores it, it will move focus.
+    if(event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*> (event);
+        if(keyEvent->key() == Qt::Key_Backtab)
+            return true;
+        if(keyEvent->key() == Qt::Key_Tab && event->type() == QEvent::KeyPress) {
+            // we loose key-release events, which I think is not an issue.
+            keyPressEvent(keyEvent);
+            return true;
+        }
+    }
+    return QWidget::event(event);
+}
 
 #include "kis_opengl_canvas2.moc"
 #endif // HAVE_OPENGL

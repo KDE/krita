@@ -29,11 +29,21 @@
  */
 class KOFFICEUI_EXPORT KoLayoutVisitor {
 public:
+    /// Constructor
     KoLayoutVisitor();
     ~KoLayoutVisitor();
 
+    /**
+     * Visit looks at the widget and all the widget placed on it (as children) and checks to see
+     * if they should be used for the layout process.
+     * @param widget the widget to visit.
+     */
     void visit(QWidget *widget);
 
+    /**
+     * This will do the actual work, which is to align the labels properly based on all the widgets visited.
+     * Call relayout only once after all the widgets are visited.
+     */
     void relayout();
 
 private:

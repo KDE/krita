@@ -100,8 +100,8 @@ void KoLayoutVisitor::relayout() {
             if(! column.contains(layout))
                 column.insert(layout, item.label);
 
-            layout->setAlignment(item.label, Qt::AlignRight);
-            item.label->setAlignment(Qt::AlignRight);
+            layout->setAlignment(item.label, Qt::AlignRight | Qt::AlignVCenter);
+            item.label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         }
         void finish() {
             alterColumnWidth();

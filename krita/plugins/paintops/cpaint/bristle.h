@@ -31,7 +31,7 @@ class Bristle {
 
 public:
 
-    Bristle () {};
+    Bristle () { inkAmount = 0; }
 
     ~Bristle () {}
 

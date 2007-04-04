@@ -40,12 +40,16 @@ public:
         delete stylesPrivate;
         stylesPrivate = 0;
         charStyle = 0; // QObject will delete it.
-        if(listStyle) {
-            listStyle->removeUser();
-            if(listStyle->userCount() == 0)
-                delete listStyle;
-            listStyle = 0;
-        }
+        removeListStyle();
+    }
+
+    void removeListStyle() {
+        if(listStyle == 0)
+            return;
+        listStyle->removeUser();
+        if(listStyle->userCount() == 0)
+            delete listStyle;
+        listStyle = 0;
     }
 
     QString name;
@@ -249,7 +253,7 @@ void KoParagraphStyle::setListStyle(const KoListStyle &style) {
 }
 
 void KoParagraphStyle::removeListStyle() {
-    delete d->listStyle; d->listStyle = 0;
+    d->removeListStyle();
 }
 
 static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString& borderstyle) {

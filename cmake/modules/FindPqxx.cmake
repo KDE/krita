@@ -18,11 +18,20 @@ find_library(PQXX_LIBRARIES NAMES pqxx
 
 if(PQXX_INCLUDE_DIR AND PQXX_LIBRARIES)
    set(PQXX_FOUND TRUE)
-   message(STATUS "Found libpqxx: ${PQXX_INCLUDE_DIR}, ${PQXX_LIBRARIES}")
 else(PQXX_INCLUDE_DIR AND PQXX_LIBRARIES)
    set(PQXX_FOUND FALSE)
-   message(STATUS "libpqxx not found.")
 endif(PQXX_INCLUDE_DIR AND PQXX_LIBRARIES)
+
+if (PQXX_FOUND)
+  if (NOT Pqxx_FIND_QUIETLY)
+    message(STATUS "Found libpqxx: ${PQXX_INCLUDE_DIR}, ${PQXX_LIBRARIES}")
+  endif (NOT Pqxx_FIND_QUIETLY)
+else (PQXX_FOUND)
+  if (Pqxx_FIND_REQUIRED)
+    message(FATAL_ERROR "libpqxx not found.")
+  endif (Pqxx_FIND_REQUIRED)
+endif (PQXX_FOUND)
+
 
 mark_as_advanced(PQXX_INCLUDE_DIR PQXX_LIBRARIES)
 

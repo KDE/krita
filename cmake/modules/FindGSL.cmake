@@ -66,8 +66,13 @@ ENDIF (GSL_INCLUDE_DIR AND GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_VERSION
 # output status
 #
 IF (GSL_FOUND)
+     if (NOT GSL_FIND_QUIETLY)
 	MESSAGE (STATUS "Found GNU Scientific Library ${GSL_VERSION}: ${GSL_INCLUDE_DIR} ${GSL_LIBRARIES};${GSL_CBLAS_LIBRARIES}")
+     endif(NOT GSL_FIND_QUIETLY)
 ELSE (GSL_FOUND)
+     if (GSL_FIND_REQUIRED)
 	MESSAGE (STATUS "GNU Scientific Library not found. "
 			"KSpread's solver plugin won't be compiled.")
+     endif (GSL_FIND_REQUIRED)
 ENDIF (GSL_FOUND)
+

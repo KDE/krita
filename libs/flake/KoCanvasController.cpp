@@ -186,11 +186,15 @@ int KoCanvasController::canvasOffsetY() const {
 }
 
 void KoCanvasController::updateCanvasOffsetX() {
+    // save new preferred x-center
+    m_d->preferredCenterFractionX = (0.5 * viewport()->width() - canvasOffsetX() ) / m_d->documentSize.width();
     emit canvasOffsetXChanged(canvasOffsetX());
     m_d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
 }
 
 void KoCanvasController::updateCanvasOffsetY() {
+    // save new preferred y-center
+    m_d->preferredCenterFractionY = (0.5 * viewport()->height() - canvasOffsetY() ) / m_d->documentSize.height();
     emit canvasOffsetYChanged(canvasOffsetY());
     m_d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
 }
@@ -257,18 +261,17 @@ void KoCanvasController::recenterPreferred()
 {
     if(viewport()->width() >= m_d->documentSize.width()
                 && viewport()->height() >= m_d->documentSize.height())
-        return; // no ned to center when image is smaller than viewport
+        return; // no need to center when image is smaller than viewport
 
     QPoint center = QPoint(int(m_d->documentSize.width() * m_d->preferredCenterFractionX),
                                         int(m_d->documentSize.height() * m_d->preferredCenterFractionY));
 
-    // convert into a canvas based point
-    QPoint cp = center + m_d->canvas->documentOrigin();
-    cp.rx() += m_d->canvas->canvasWidget()->x() + frameWidth();
-    cp.ry() += m_d->canvas->canvasWidget()->y() + frameWidth();
+    // convert into a viewport based point
+    center.rx() += m_d->canvas->canvasWidget()->x() + frameWidth();
+    center.ry() += m_d->canvas->canvasWidget()->y() + frameWidth();
 
     // calculate the difference to the viewport centerpoint
-    QPoint topLeft = cp - 0.5 * QPoint( viewport()->width(), viewport()->height() );
+    QPoint topLeft = center - 0.5 * QPoint( viewport()->width(), viewport()->height() );
 
     QScrollBar *hBar = horizontalScrollBar();
     // try to centralize the centerpoint which we want to make visible
@@ -421,6 +424,13 @@ void KoCanvasController::pan(const QPoint distance) {
     QScrollBar *vBar = verticalScrollBar();
     if( vBar && vBar->isVisible() )
         vBar->setValue( vBar->value() + distance.y());
+}
+
+void KoCanvasController::setPreferredCenter( const QPoint &viewPoint )
+{
+    m_d->preferredCenterFractionX = 1.0 * viewPoint.x() / m_d->documentSize.width();
+    m_d->preferredCenterFractionY = 1.0 * viewPoint.y() / m_d->documentSize.height();
+    recenterPreferred();
 }
 
 // XXX: Apparently events are not propagated to the viewport widget by

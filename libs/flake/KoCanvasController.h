@@ -188,6 +188,12 @@ public:
      */
     void recenterPreferred();
 
+    /**
+     * Sets the preferred center point in pixels.
+     * @param viewPoint the new preferred center
+     */
+    void setPreferredCenter( const QPoint &viewPoint );
+
     void pan(const QPoint distance);
 
 signals:

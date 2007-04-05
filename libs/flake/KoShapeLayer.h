@@ -40,22 +40,6 @@ public:
     virtual void paintComponent(QPainter &, const KoViewConverter &) {}
     bool hitTest( const QPointF &position ) const;
     virtual QRectF boundingRect() const;
-private:
-    class LayerMembers: public KoShapeContainerModel {
-        public:
-            LayerMembers();
-            ~LayerMembers();
-            void add(KoShape *child);
-            void setClipping(const KoShape *child, bool clipping);
-            bool childClipped(const KoShape *child) const;
-            void remove(KoShape *child);
-            int count() const;
-            QList<KoShape*> iterator() const;
-            void containerChanged(KoShapeContainer *container);
-
-        private: // members
-            QList <KoShape *> m_layerMembers;
-    };
 };
 
 #endif // __KOSHAPELAYER_H__

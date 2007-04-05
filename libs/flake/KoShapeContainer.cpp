@@ -19,6 +19,7 @@
 #include <kdebug.h>
 
 #include "KoShapeContainer.h"
+#include "KoShapeContainerModel.h"
 
 #include <QPointF>
 #include <QPainter>

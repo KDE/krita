@@ -18,9 +18,10 @@
 */
 
 #include "KoShapeLayer.h"
+#include "SimpleShapeContainerModel.h"
 
 KoShapeLayer::KoShapeLayer()
-: KoShapeContainer(new LayerMembers())
+: KoShapeContainer(new SimpleShapeContainerModel())
 {
     setSelectable(false);
 }
@@ -44,53 +45,4 @@ QRectF KoShapeLayer::boundingRect() const
     }
 
     return bb;
-}
-
-
-//  ############# LayerMembers #############
-KoShapeLayer::LayerMembers::LayerMembers()
-{
-}
-
-KoShapeLayer::LayerMembers::~LayerMembers()
-{
-}
-
-void KoShapeLayer::LayerMembers::add(KoShape *child)
-{
-    if(m_layerMembers.contains(child))
-        return;
-    m_layerMembers.append(child);
-}
-
-void KoShapeLayer::LayerMembers::remove(KoShape *child)
-{
-    m_layerMembers.removeAll(child);
-}
-
-int KoShapeLayer::LayerMembers::count() const
-{
-    return m_layerMembers.count();
-}
-
-QList<KoShape*> KoShapeLayer::LayerMembers::iterator() const
-{
-    return QList<KoShape*>(m_layerMembers);
-}
-
-void KoShapeLayer::LayerMembers::containerChanged(KoShapeContainer *container)
-{
-    Q_UNUSED(container);
-}
-
-void KoShapeLayer::LayerMembers::setClipping(const KoShape *child, bool clipping)
-{
-    Q_UNUSED(child);
-    Q_UNUSED(clipping);
-}
-
-bool KoShapeLayer::LayerMembers::childClipped(const KoShape *child) const
-{
-    Q_UNUSED(child);
-    return false;
 }

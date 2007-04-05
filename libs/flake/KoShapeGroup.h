@@ -49,21 +49,6 @@ public:
     bool hitTest( const QPointF &position ) const;
 
 private:
-    class GroupMembers: public KoShapeContainerModel {
-        public:
-            GroupMembers() {};
-            ~GroupMembers() {}
-            void add(KoShape *child);
-            void setClipping(const KoShape *child, bool clipping);
-            bool childClipped(const KoShape *child) const;
-            void remove(KoShape *child);
-            int count() const;
-            QList<KoShape*> iterator() const;
-            void containerChanged(KoShapeContainer *container);
-
-        private: // members
-            QList <KoShape *> m_groupMembers;
-    };
 
     void childCountChanged();
 };

@@ -18,9 +18,11 @@
  */
 
 #include "KoShapeGroup.h"
+#include "KoShapeContainerModel.h"
+#include "SimpleShapeContainerModel.h"
 
 KoShapeGroup::KoShapeGroup()
-: KoShapeContainer(new GroupMembers())
+: KoShapeContainer(new SimpleShapeContainerModel())
 {
 }
 
@@ -31,39 +33,6 @@ void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &conv
 
 bool KoShapeGroup::hitTest( const QPointF &position ) const {
     Q_UNUSED(position);
-    return false;
-}
-
-//  ############# GroupMembers #############
-void KoShapeGroup::GroupMembers::add(KoShape *child) {
-    if(m_groupMembers.contains(child))
-        return;
-    m_groupMembers.append(child);
-}
-
-void KoShapeGroup::GroupMembers::remove(KoShape *child) {
-    m_groupMembers.removeAll(child);
-}
-
-int KoShapeGroup::GroupMembers::count() const {
-    return m_groupMembers.count();
-}
-
-QList<KoShape*> KoShapeGroup::GroupMembers::iterator() const {
-    return QList<KoShape*>(m_groupMembers);
-}
-
-void KoShapeGroup::GroupMembers::containerChanged(KoShapeContainer *container) {
-    Q_UNUSED(container);
-}
-
-void KoShapeGroup::GroupMembers::setClipping(const KoShape *child, bool clipping) {
-    Q_UNUSED(child);
-    Q_UNUSED(clipping);
-}
-
-bool KoShapeGroup::GroupMembers::childClipped(const KoShape *child) const {
-    Q_UNUSED(child);
     return false;
 }
 

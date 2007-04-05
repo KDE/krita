@@ -233,3 +233,7 @@ QList<KoShape*> KoShapeContainer::iterator() const {
     return d->children->iterator();
 }
 
+KoShapeContainerModel *KoShapeContainer::model() const {
+    return d->children;
+}
+

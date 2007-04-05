@@ -32,16 +32,16 @@ class QPointF;
 class KoShapeContainerModel;
 
 /**
- * This is the base class that all Flake group-objects are based on.
- * Extending from this class allows you to have child-objects.
- * Like the KoShape class, this object is a visible class with
+ * This is the base class that all Flake group-shapes are based on.
+ * Extending from this class allows you to have child-shapes.
+ * Like the KoShape class, this shape is a visible class with
  * a position and a size. It can paint itself as well if you implement
  * the paintComponent() method.
  *
  * <p>The most important feature of this class is that you can make
  * other KoShape classes to be children of this container.
  *
- * <p>The effect of grouping those objects is that their position
+ * <p>The effect of grouping those shapes is that their position
  * is relative to the position of the container. Move the container and
  * all children move with it.
  *
@@ -58,7 +58,7 @@ class KoShapeContainerModel;
  * addChild() and removeChild(). However, they only forward their requests to the
  * data model KoShapeContainerModel and if you provide a custom implementation
  * of that model any means can be used to maintain a list of children, as long as
- * you will take care to register them with the appropriate object manager.
+ * you will take care to register them with the appropriate shape manager.
  *
  * <p>An example usage where a custom model might be useful is when you have a
  * container for text areas which are split into columns.  If you resize the container
@@ -88,15 +88,15 @@ public:
 
     /**
      * Add a child to this container.
-     * @param object the child to be managed in the container.
+     * @param shape the child to be managed in the container.
      */
-    void addChild(KoShape *object);
+    void addChild(KoShape *shape);
 
     /**
      * Remove a child to be completely separated from the container.
-     * @param object the child to be removed.
+     * @param shape the child to be removed.
      */
-    void removeChild(KoShape *object);
+    void removeChild(KoShape *shape);
 
     /**
      * Return the current number of children registered.
@@ -122,10 +122,10 @@ public:
 
     /**
      * @brief Paint the component
-     * Implement this method to allow the object to paint itself, just like the KoShape::paint()
+     * Implement this method to allow the shape to paint itself, just like the KoShape::paint()
      * method does.
      *
-     * @param painter used for painting the object
+     * @param painter used for painting the shape
      * @param converter to convert between internal and view coordinates.
      * @see applyConversion()
      */
@@ -134,10 +134,15 @@ public:
     void repaint() const;
 
     /**
-     * Create and return an iterator over all child objects.
-     * @return an interator over all child objects.
+     * Create and return an iterator over all child shapes.
+     * @return an interator over all child shapes.
      */
     QList<KoShape*> iterator() const;
+
+    /**
+     * return the model for this container
+     */
+    KoShapeContainerModel *model() const;
 
 protected:
     /**

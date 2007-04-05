@@ -25,6 +25,7 @@
 #include <flake_export.h>
 
 class KoShape;
+class KoShapeContainer;
 
 /**
  * The interface for the container model.

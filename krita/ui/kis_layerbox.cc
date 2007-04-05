@@ -49,6 +49,8 @@
 #include <klocale.h>
 #include <khbox.h>
 #include <kicon.h>
+
+#include "KoSliderCombo.h"
 #include <KoDocumentSectionView.h>
 #include "KoColorSpace.h"
 
@@ -59,7 +61,6 @@
 #include <kis_group_layer.h>
 
 #include "kis_cmb_composite.h"
-#include "kis_int_spinbox.h"
 #include "kis_view2.h"
 #include "kis_layer_manager.h"
 
@@ -126,8 +127,8 @@ KisLayerBox::KisLayerBox()
     connect(bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     connect(bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
     connect(bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
-    connect(intOpacity, SIGNAL(valueChanged(int, bool)), SIGNAL(sigOpacityChanged(int, bool)));
-    connect(intOpacity, SIGNAL(finishedChanging(int, int)), SIGNAL(sigOpacityFinishedChanging(int, int)));
+    connect(doubleOpacity, SIGNAL(valueChanged(int, bool)), SIGNAL(sigOpacityChanged(int, bool)));
+    connect(doubleOpacity, SIGNAL(finishedChanging(int, int)), SIGNAL(sigOpacityFinishedChanging(int, int)));
     connect(cmbComposite, SIGNAL(activated(const KoCompositeOp*)), SIGNAL(sigItemComposite(const KoCompositeOp*)));
 }
 
@@ -197,7 +198,7 @@ void KisLayerBox::updateUI()
     bnDelete->setEnabled(m_image->activeLayer());
     bnRaise->setEnabled(m_image->activeLayer() && (m_image->activeLayer()->prevSibling() || m_image->activeLayer()->parent()));
     bnLower->setEnabled(m_image->activeLayer() && m_image->activeLayer()->nextSibling());
-    intOpacity->setEnabled(m_image->activeLayer());
+    doubleOpacity->setEnabled(m_image->activeLayer());
     cmbComposite->setEnabled(m_image->activeLayer());
     if (KisLayerSP active = m_image->activeLayer())
     {
@@ -228,9 +229,9 @@ void KisLayerBox::slotSetColorSpace(const KoColorSpace * colorSpace)
 void KisLayerBox::slotSetOpacity(int opacity)
 {
     Q_ASSERT( opacity >= 0 && opacity <= 100 );
-    intOpacity->blockSignals(true);
-    intOpacity->setValue(opacity);
-    intOpacity->blockSignals(false);
+    doubleOpacity->blockSignals(true);
+    //doubleOpacity->setValue(opacity);
+    doubleOpacity->blockSignals(false);
 }
 
 void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &index)
@@ -383,10 +384,10 @@ void KisLayerBox::slotPropertiesClicked()
 void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
 {
     setUpdatesEnabled(enable);
-    intOpacity->setUpdatesEnabled(enable);
+    //doubleOpacity->setUpdatesEnabled(enable);
     cmbComposite->setUpdatesEnabled(enable);
 
-    intOpacity->blockSignals(!enable);
+    doubleOpacity->blockSignals(!enable);
     cmbComposite->blockSignals(!enable);
 }
 

@@ -31,6 +31,7 @@ set(kofficeui_LIB_SRCS
    KoRuler.cpp
    KoShapeSelector.cpp
    KoShapeGeometry.cpp
+   KoSliderCombo.cpp
    KoTabBar.cpp
    KoTabChooser.cpp
    KoTemplateChooseDia.cpp

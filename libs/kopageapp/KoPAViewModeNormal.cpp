@@ -27,10 +27,14 @@
 #include <KoShapeManager.h>
 #include "KoPACanvas.h"
 #include "KoPADocument.h"
+#include "KoPAPage.h"
+#include "KoPAMasterPage.h"
 #include "KoPAView.h"
 
 KoPAViewModeNormal::KoPAViewModeNormal( KoPAView * view, KoPACanvas * canvas )
 : KoPAViewMode( view, canvas )
+, m_masterMode( false )
+, m_savedPage( 0 )                       
 {
 }
 
@@ -111,4 +115,19 @@ void KoPAViewModeNormal::keyReleaseEvent( QKeyEvent *event )
 void KoPAViewModeNormal::wheelEvent( QWheelEvent * event, const QPointF &point )
 {
     m_toolProxy->wheelEvent( event, point );
+}
+
+void KoPAViewModeNormal::setMasterMode( bool master )
+{
+    KoPAPage * page = dynamic_cast<KoPAPage *>( m_view->activePage() );
+    if ( master ) {
+        if ( page ) {
+            m_view->setActivePage( page->masterPage() );
+            m_savedPage = page;
+        }
+    }
+    else if ( m_savedPage ) {
+        m_view->setActivePage( m_savedPage );
+        m_savedPage = 0;
+    }
 }

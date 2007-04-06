@@ -22,6 +22,8 @@
 
 #include "KoPAViewMode.h"
 
+class KoPAPage;
+
 class KOPAGEAPP_EXPORT KoPAViewModeNormal : public KoPAViewMode
 {
 public:
@@ -37,6 +39,23 @@ public:
     void keyPressEvent( QKeyEvent *event );
     void keyReleaseEvent( QKeyEvent *event );
     void wheelEvent( QWheelEvent * event, const QPointF &point );
+
+    /**
+     * @brief Switch the active view mode to work on master/normal pages
+     *
+     * When it is switched to master mode the master page of the current active page
+     * is selected. If it switches back the page which was shown before going into 
+     * the master mode is shown. If the mode is the same nothing happens.
+     *
+     * @param master if true work on master pages, if false work on normal pages
+     */
+    virtual void setMasterMode( bool master );
+
+private:
+    /// if true it works on master pages, if false on normal pages
+    bool m_masterMode;
+    /// the page which was active before entering the master mode
+    KoPAPage * m_savedPage;
 };
 
 #endif /* KOPAVIEWMODENORMAL_H */

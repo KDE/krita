@@ -153,6 +153,10 @@ void KoPAView::initActions()
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
     actionCollection()->addAction("view_snaptogrid", m_actionViewSnapToGrid);
 
+    m_actionViewShowMasterPages = new KToggleAction(i18n( "Show Master Pages" ), this );
+    actionCollection()->addAction( "view_masterpages", m_actionViewShowMasterPages );
+    connect( m_actionViewShowMasterPages, SIGNAL( triggered( bool ) ), this, SLOT( setMasterMode( bool ) ) );
+
     m_viewRulers  = new KToggleAction(i18n("Show Rulers"), this);
     actionCollection()->addAction("view_rulers", m_viewRulers );
     m_viewRulers->setToolTip(i18n("Show/hide the view's rulers"));
@@ -172,6 +176,11 @@ void KoPAView::viewGrid()
 void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, double zoom )
 {
     kopaCanvas()->update();
+}
+
+void KoPAView::setMasterMode( bool master )
+{
+    m_viewMode->setMasterMode( master );
 }
 
 KoShapeManager* KoPAView::shapeManager() const

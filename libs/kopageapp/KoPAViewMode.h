@@ -48,6 +48,16 @@ public:
     virtual void keyPressEvent( QKeyEvent *event ) = 0;
     virtual void keyReleaseEvent( QKeyEvent *event ) = 0;
     virtual void wheelEvent( QWheelEvent * event, const QPointF &point ) = 0;
+
+    /**
+     * @brief Switch the active view mode to work on master/normal pages
+     *
+     * The default implementation does not change anything. If it is needed in the
+     * view mode you have to implement it.
+     *
+     * @param master if true work on master pages, if false work on normal pages
+     */
+    virtual void setMasterMode( bool master ) { Q_UNUSED(master); }
     
 protected:
     KoPACanvas * m_canvas;

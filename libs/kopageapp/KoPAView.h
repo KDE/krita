@@ -91,6 +91,9 @@ protected slots:
     void viewGrid();
     void slotZoomChanged( KoZoomMode::Mode mode, double zoom );
 
+    /// Change the current view mode to work on master pages
+    void setMasterMode( bool master );
+
     /// Called when the canvas controller is resized
     virtual void canvasControllerResized();
 
@@ -113,6 +116,7 @@ private:
 
     KToggleAction *m_actionViewSnapToGrid;
     KToggleAction *m_actionViewShowGrid;
+    KToggleAction *m_actionViewShowMasterPages;
 
     KoRuler *m_horizontalRuler;
     KoRuler *m_verticalRuler;

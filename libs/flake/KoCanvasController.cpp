@@ -44,7 +44,8 @@
 class KoCanvasController::Private
 {
 public:
-    Private() : canvas(0), canvasMode( Centered ), toolOptionWidget(0), margin(0) {}
+    Private() : canvas(0), canvasMode( Centered ), toolOptionWidget(0), margin(0)
+    ,ignoreScrollSignals(false) {}
     KoCanvasBase * canvas;
     CanvasMode canvasMode;
     QWidget * toolOptionWidget;
@@ -54,6 +55,7 @@ public:
     Viewport * viewportWidget;
     double preferredCenterFractionX;
     double preferredCenterFractionY;
+    bool ignoreScrollSignals;
 };
 
 KoCanvasController::KoCanvasController(QWidget *parent)
@@ -186,6 +188,8 @@ int KoCanvasController::canvasOffsetY() const {
 }
 
 void KoCanvasController::updateCanvasOffsetX() {
+    if(m_d->ignoreScrollSignals)
+        return;
     // save new preferred x-center
     m_d->preferredCenterFractionX = (0.5 * viewport()->width() - canvasOffsetX() ) / m_d->documentSize.width();
     emit canvasOffsetXChanged(canvasOffsetX());
@@ -193,6 +197,8 @@ void KoCanvasController::updateCanvasOffsetX() {
 }
 
 void KoCanvasController::updateCanvasOffsetY() {
+    if(m_d->ignoreScrollSignals)
+        return;
     // save new preferred y-center
     m_d->preferredCenterFractionY = (0.5 * viewport()->height() - canvasOffsetY() ) / m_d->documentSize.height();
     emit canvasOffsetYChanged(canvasOffsetY());
@@ -332,9 +338,11 @@ void KoCanvasController::setToolOptionWidget(QWidget *widget) {
 
 void KoCanvasController::setDocumentSize( const QSize & sz )
 {
+    m_d->ignoreScrollSignals = true;
     m_d->documentSize = sz;
     m_d->viewportWidget->setDocumentSize( sz );
     resetScrollBars();
+    m_d->ignoreScrollSignals = false;
 }
 
 void KoCanvasController::setDocumentOffset()

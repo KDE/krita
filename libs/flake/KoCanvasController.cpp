@@ -5,6 +5,7 @@
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

@@ -30,7 +30,7 @@
 class KoParagraphStyle;
 class KoCharacterStyle;
 class KoTextShapeData;
-class KoVariable;
+class KoInlineObject;
 class QTextCursor;
 class QStackedWidget;
 class KoTextLocator;
@@ -110,10 +110,10 @@ public slots:
     void nextParagraph();
 
     /**
-     * Insert a variable at the current cursor position. Possibly replacing the selection.
-     * @param variable the new variable.
+     * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
+     * @param inliner the object to insert.
      */
-    void insertVariable(KoVariable *variable);
+    void insertInlineObject(KoInlineObject *inliner);
 
     /**
      * Set the selected text to follow the layout of the paragraph style.

@@ -370,8 +370,12 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2) {
 }
 
 void KoShape::setParent(KoShapeContainer *parent) {
-    if(dynamic_cast<KoShape*>(parent) != this)
+    if(d->parent == parent)
+        return;
+    if(parent && dynamic_cast<KoShape*>(parent) != this) {
         d->parent = parent;
+        parent->addChild(this);
+    }
     else
         d->parent = 0;
     recalcMatrix();

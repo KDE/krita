@@ -22,7 +22,7 @@
 #include "KoTextDocumentLayout.h"
 #include "KoTextShapeData.h"
 #include "KoInlineTextObjectManager.h"
-#include "KoVariable.h"
+// #include "KoInlineObject.h"
 #include "KoTextLocator.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
@@ -310,11 +310,11 @@ void KoTextSelectionHandler::selectFont(QWidget *parent) {
     delete fontDlg;
 }
 
-void KoTextSelectionHandler::insertVariable(KoVariable *variable) {
+void KoTextSelectionHandler::insertInlineObject(KoInlineObject *inliner) {
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineObjectTextManager());
-    layout->inlineObjectTextManager()->insertInlineObject(*d->caret, variable);
+    layout->inlineObjectTextManager()->insertInlineObject(*d->caret, inliner);
 }
 
 void KoTextSelectionHandler::setStyle(KoParagraphStyle* style) {

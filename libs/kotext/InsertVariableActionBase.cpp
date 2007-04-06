@@ -18,8 +18,7 @@
  */
 
 #include "InsertVariableActionBase.h"
-//   #include "KoInlineTextObjectManager.h"
-//   #include "KoVariableManager.h"
+#include "KoVariable.h"
 #include "KoTextSelectionHandler.h"
 
 #include <KoToolProxy.h>
@@ -43,7 +42,7 @@ void InsertVariableActionBase::activated() {
     if(handler) {
         KoVariable *variable = createVariable();
         if(variable)
-            handler->insertVariable(variable);
+            handler->insertInlineObject(variable);
     }
     else
         kWarning(32500) << "InsertVariableAction: No texttool selected while trying to insert variable\n";

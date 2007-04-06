@@ -153,16 +153,15 @@ public:
 
     KoShape* shapeForPosition(int position) const;
 
+    /// reimplemented from QAbstractTextDocumentLayout
+    void documentChanged(int position, int charsRemoved, int charsAdded);
+
 public slots:
     /// make sure we start a layout run
     void scheduleLayout();
 
 protected:
     LayoutState *m_state;
-
-    friend class KoVariable;
-    /// reimplemented from QAbstractTextDocumentLayout
-    void documentChanged(int position, int charsRemoved, int charsAdded);
 
     /// make sure we start a layout run
     virtual void relayout();

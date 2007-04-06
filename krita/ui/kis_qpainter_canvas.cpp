@@ -310,16 +310,9 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
         if ( scaleX > 2.0 && scaleY > 2.0 ) {
             QTime t;
             t.start();
-#ifndef USE_QT_SCALING
             QImage img2 = ImageUtils::sampleImage(canvasImage, dstSize.width(), dstSize.height(), drawRect);
-            kDebug() << "imageutiles sampleImage " << t.elapsed()  << endl;
-#else
-            t.restart();
-            QImage img2 = canvasImage.copy( drawRect );
-            img2 = img2.scaled( dstSize, Qt::KeepAspectRatio, Qt::FastTransformation );
-            kDebug() << "qimage fast scale: " << t.elapsed()  << endl;
-#endif
-            gc.drawImage( rc.topLeft(), img2 );
+            kDebug(41010) << "imageutiles sampleImage " << t.elapsed()  << endl;
+           gc.drawImage( rc.topLeft(), img2 );
         }
         else {
             // Go from the widget coordinates to points
@@ -341,11 +334,11 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
             t.start();
 #ifndef USE_QT_SCALING
             QImage img2 = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
-            kDebug() << "Imageutils scale: " << t.elapsed() << endl;
+            kDebug(41010) << "Imageutils scale: " << t.elapsed() << endl;
 #else
             t.restart();
             QImage img2 = croppedImage.scaled( sz, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-            kDebug() << "qimage smooth scale: " << t.elapsed() << endl;
+            kDebug(41010) << "qimage smooth scale: " << t.elapsed() << endl;
 #endif
             gc.drawImage( rc.topLeft(), img2 );
 

@@ -280,13 +280,19 @@ void KoPADocument::addShape( KoShape * shape )
         page = dynamic_cast<KoPAPageBase*>( parent );
     }
 
+    bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0; 
+
     foreach( KoView *view, views() )
     {
         KoPAView * kopaView = static_cast<KoPAView*>( view );
-        if ( page == kopaView->activePage() )
-        {
-            KoPACanvas *canvas = kopaView->kopaCanvas();
-            canvas->shapeManager()->add( shape );
+        KoPAPage * p;
+        if ( page == kopaView->activePage() ) {
+            kopaView->kopaCanvas()->shapeManager()->add( shape );
+        }
+        else if ( isMaster && ( p = dynamic_cast<KoPAPage*>( kopaView->activePage() ) ) != 0 ) {
+            if ( p->masterPage() == page ) {
+                kopaView->kopaCanvas()->masterShapeManager()->add( shape );
+            }
         }
     }
 }
@@ -304,14 +310,19 @@ void KoPADocument::removeShape( KoShape *shape )
         page = dynamic_cast<KoPAPageBase*>( parent );
     }
 
+    bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0; 
+
     foreach( KoView *view, views() ) 
     {
         KoPAView * kopaView = static_cast<KoPAView*>( view );
-
-        if ( page == kopaView->activePage() )    
-        {
-            KoPACanvas *canvas = kopaView->kopaCanvas();
-            canvas->shapeManager()->remove( shape );
+        KoPAPage * p;
+        if ( page == kopaView->activePage() ) {
+            kopaView->kopaCanvas()->shapeManager()->remove( shape );
+        }
+        else if ( isMaster && ( p = dynamic_cast<KoPAPage*>( kopaView->activePage() ) ) != 0 ) {
+            if ( p->masterPage() == page ) {
+                kopaView->kopaCanvas()->masterShapeManager()->remove( shape );
+            }
         }
     }
 }

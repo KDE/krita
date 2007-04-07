@@ -92,13 +92,7 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     m_d->toolProxy = KoToolManager::instance()->createToolProxy(m_d->canvas);
     setAutoFillBackground(true);
     //setAttribute( Qt::WA_OpaquePaintEvent );
-    QPixmap tile(cfg.checkSize() * 2, cfg.checkSize() * 2);
-    tile.fill(Qt::white);
-    QPainter pt(&tile);
-    pt.fillRect(0, 0, cfg.checkSize(), cfg.checkSize(), cfg.checkersColor());
-    pt.fillRect(cfg.checkSize(), cfg.checkSize(), cfg.checkSize(), cfg.checkSize(), cfg.checkersColor());
-    pt.end();
-    m_d->checkBrush = QBrush(tile);
+    m_d->checkBrush = QBrush(checkImage(cfg.checkSize()));
     setAcceptDrops( true );
     setFocusPolicy(Qt::StrongFocus);
 }

@@ -63,10 +63,12 @@ public:
     void setMonitorProfile(KoColorProfile *profile);
     void setHDRExposure(float exposure);
 
+    void generateBackgroundTexture(QImage checkImage);
+
     GLuint backgroundTexture() const;
 
-    static const int BACKGROUND_TEXTURE_WIDTH = 64;
-    static const int BACKGROUND_TEXTURE_HEIGHT = 64;
+    static const int BACKGROUND_TEXTURE_CHECK_SIZE = 32;
+    static const int BACKGROUND_TEXTURE_SIZE = BACKGROUND_TEXTURE_CHECK_SIZE * 2;
 
     // Get the image texture tile containing the point (pixelX, pixelY).
     GLuint imageTextureTile(int pixelX, int pixelY) const;
@@ -114,7 +116,6 @@ signals:
 protected:
     KisOpenGLImageContext(KisImageSP image, KoColorProfile *monitorProfile);
 
-    void generateBackgroundTexture();
     void createImageTextureTiles();
     void destroyImageTextureTiles();
     int imageTextureTileIndex(int x, int y) const;

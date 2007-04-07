@@ -99,6 +99,7 @@ set(kritaui_LIB_SRCS
     kis_shape_controller.cpp
     kis_png_converter.cpp
     kis_channelflags_widget.cpp
+    kis_abstract_canvas_widget.cpp
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})

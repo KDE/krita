@@ -39,10 +39,7 @@
 #include "kis_opengl_image_context.h"
 #include "kis_view2.h"
 #include "kis_resource_provider.h"
-
-#define PATTERN_WIDTH 64
-#define PATTERN_HEIGHT 64
-
+#include "kis_config.h"
 
 namespace {
 // XXX: Remove this with Qt 4.3
@@ -76,6 +73,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOp
     m_d->viewConverter = canvas->viewConverter();
     setAcceptDrops( true );
     setFocusPolicy(Qt::StrongFocus);
+    setAttribute(Qt::WA_NoSystemBackground);
+    context->generateBackgroundTexture(checkImage(KisOpenGLImageContext::BACKGROUND_TEXTURE_CHECK_SIZE));
 
     if (isSharing()) {
         kDebug(41001) << "Created QGLWidget with sharing\n";
@@ -84,10 +83,9 @@ KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOp
     }
 }
 
-
-
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
 {
+    delete m_d;
 }
 
 void KisOpenGLCanvas2::initializeGL()
@@ -108,8 +106,6 @@ void KisOpenGLCanvas2::resizeGL(int w, int h)
 void KisOpenGLCanvas2::paintGL()
 {
     kDebug() << "paintGL\n";
-
-    //glDrawBuffer(GL_BACK);
 
     QColor widgetBackgroundColor = palette().color(QPalette::Mid);
 
@@ -139,29 +135,52 @@ void KisOpenGLCanvas2::paintGL()
     glViewport(0, 0, width(), height());
     glOrtho(0, width(), height(), 0, -1, 1);
 
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+
+    KisConfig cfg;
+    GLfloat checkSizeScale = KisOpenGLImageContext::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
+
+    glScalef(checkSizeScale, checkSizeScale, 1.0);
+
+    if ( cfg.scrollCheckers() ) {
+        glTranslatef(static_cast<GLfloat>(m_d->documentOffset.x()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_SIZE, 
+                     static_cast<GLfloat>(m_d->documentOffset.y()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_SIZE, 
+                     0.0);
+    }
+
+    glScalef(scaleX, scaleY, 1.0);
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    glScalef(scaleX, scaleY, 1.0);
 
     glBindTexture(GL_TEXTURE_2D, m_d->openGLImageContext->backgroundTexture());
 
     glEnable(GL_TEXTURE_2D);
+
     glBegin(GL_QUADS);
 
     glTexCoord2f(0.0, 0.0);
     glVertex2f(0.0, 0.0);
 
-    glTexCoord2f((img->width() * scaleX) / KisOpenGLImageContext::BACKGROUND_TEXTURE_WIDTH, 0.0);
-    glVertex2f(img->width() * scaleX, 0.0);
+    glTexCoord2f(img->width() / KisOpenGLImageContext::BACKGROUND_TEXTURE_SIZE, 0.0);
+    glVertex2f(img->width(), 0.0);
 
-    glTexCoord2f((img->width() * scaleX) / KisOpenGLImageContext::BACKGROUND_TEXTURE_WIDTH,
-                     (img->height() * scaleY) / KisOpenGLImageContext::BACKGROUND_TEXTURE_HEIGHT);
-    glVertex2f(img->width() * scaleX, img->height() * scaleY);
+    glTexCoord2f(img->width() / KisOpenGLImageContext::BACKGROUND_TEXTURE_SIZE,
+                 img->height() / KisOpenGLImageContext::BACKGROUND_TEXTURE_SIZE);
+    glVertex2f(img->width(), img->height());
 
-    glTexCoord2f(0.0, (img->height() * scaleX) / KisOpenGLImageContext::BACKGROUND_TEXTURE_HEIGHT);
-    glVertex2f(0.0, img->height() * scaleY);
+    glTexCoord2f(0.0, img->height() / KisOpenGLImageContext::BACKGROUND_TEXTURE_SIZE);
+    glVertex2f(0.0, img->height());
 
     glEnd();
 
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     glTranslatef(-m_d->documentOffset.x(), -m_d->documentOffset.y(), 0.0);
     glScalef(scaleX, scaleY, 1.0);
 
@@ -210,9 +229,10 @@ void KisOpenGLCanvas2::paintGL()
     // XXX: Draw selections, masks, visualisations, grids, guides
     //m_gridManager->drawGrid(wr, 0, true);
     QPainter gc ( this );
-    m_d->toolProxy->paint(gc, *m_d->viewConverter );
 
-    //swapBuffers();
+    gc.translate(-m_d->documentOffset.x(), -m_d->documentOffset.y());
+
+    m_d->toolProxy->paint(gc, *m_d->viewConverter );
 }
 
 KoToolProxy * KisOpenGLCanvas2::toolProxy() {

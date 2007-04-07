@@ -98,7 +98,6 @@ KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KoColorProfile *m
 
     SharedContextWidget->makeCurrent();
     glGenTextures(1, &m_backgroundTexture);
-    generateBackgroundTexture();
 
     GLint max_texture_size;
 
@@ -235,7 +234,6 @@ void KisOpenGLImageContext::setMonitorProfile(KoColorProfile *monitorProfile)
 {
     if (monitorProfile != m_monitorProfile) {
         m_monitorProfile = monitorProfile;
-        generateBackgroundTexture();
         updateImageTextureTiles(m_image->bounds());
     }
 }
@@ -252,7 +250,7 @@ void KisOpenGLImageContext::setHDRExposure(float exposure)
     }
 }
 
-void KisOpenGLImageContext::generateBackgroundTexture()
+void KisOpenGLImageContext::generateBackgroundTexture(QImage checkImage)
 {
     SharedContextWidget->makeCurrent();
 
@@ -265,23 +263,11 @@ void KisOpenGLImageContext::generateBackgroundTexture()
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    QImage backgroundImage (PATTERN_WIDTH, PATTERN_HEIGHT, QImage::Format_RGB32);
+    Q_ASSERT(checkImage.width() == BACKGROUND_TEXTURE_SIZE);
+    Q_ASSERT(checkImage.height() == BACKGROUND_TEXTURE_SIZE);
 
-    for (int y = 0; y < PATTERN_HEIGHT; y++)
-    {
-        for (int x = 0; x < PATTERN_WIDTH; x++)
-        {
-            quint8 v = 128 + 63 * ((x / 16 + y / 16) % 2);
-            backgroundImage.setPixel(x, y, qRgb(v, v, v));
-        }
-    }
-
-    // XXX: temp.
-    Q_ASSERT(backgroundImage.width() == BACKGROUND_TEXTURE_WIDTH);
-    Q_ASSERT(backgroundImage.height() == BACKGROUND_TEXTURE_HEIGHT);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, 0,
-                 GL_BGRA, GL_UNSIGNED_BYTE, backgroundImage.bits());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE, 0,
+                 GL_BGRA, GL_UNSIGNED_BYTE, checkImage.bits());
 }
 
 GLuint KisOpenGLImageContext::backgroundTexture() const

@@ -21,6 +21,8 @@
 class QWidget;
 class QRect;
 class QPoint;
+class QImage;
+
 class KoToolProxy;
 
 class KisAbstractCanvasWidget {
@@ -50,6 +52,13 @@ public:
      * image, pre-translated with the document offset
      */
     virtual void preScale( const QRect & rc ) { Q_UNUSED( rc ); }
+
+    /**
+     * Returns one check of the background checkerboard pattern.
+     * 
+     * @param checkSize the size of the check
+     */
+    QImage checkImage(qint32 checkSize);
 };
 
 #endif // _KIS_ABSTRACT_CANVAS_WIDGET_

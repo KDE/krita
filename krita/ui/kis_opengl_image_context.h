@@ -27,7 +27,7 @@
 
 #include <qgl.h>
 #include <QObject>
-#include <q3valuevector.h>
+#include <QVector>
 
 #include <krita_export.h>
 
@@ -139,7 +139,7 @@ private:
     static const int PREFERRED_IMAGE_TEXTURE_WIDTH;
     static const int PREFERRED_IMAGE_TEXTURE_HEIGHT;
 
-    Q3ValueVector<GLuint> m_imageTextureTiles;
+    QVector<GLuint> m_imageTextureTiles;
     int m_imageTextureTileWidth;
     int m_imageTextureTileHeight;
     int m_numImageTextureTileColumns;

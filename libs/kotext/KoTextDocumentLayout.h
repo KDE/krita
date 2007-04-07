@@ -166,13 +166,12 @@ protected:
     /// make sure we start a layout run
     virtual void relayout();
 
-private:
     /// reimplemented
-    void drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format);
+    virtual void drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format);
     /// reimplemented
-    void positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
+    virtual void positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
     /// reimplemented
-    void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
+    virtual void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
 
 private:
     Q_PRIVATE_SLOT(d, void relayoutPrivate())

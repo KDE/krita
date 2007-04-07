@@ -121,8 +121,10 @@ public:
     /**
      * Update the size of the inline object.
      * Each time the text is painted, as well as when the paragraph this variable is in, this method
-     * is called. You should alter the size of the variable if the content has changed.
+     * is called. You should alter the size of the object if the content has changed.
      * Altering the size is done by altering the 'object' parameter using QTextInlineObject::setWidth(),
+     * Note that this method is called while painting; and thus is time sensitive; avoid doing anything time
+     * consuming.
      * QTextInlineObject::setAscent() and QTextInlineObject::setDescent() methods.
      * @param document the text document this inline object is operating on.
      * @param object the inline object properties

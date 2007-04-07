@@ -57,6 +57,7 @@ kDebug() << "setContainer " << container << endl;
         bool first = model == 0; // first time
         model = dynamic_cast<KoTextShapeContainerModel*> (container->model());
         if(first) {
+kDebug() << "**** setContainer first time\n";
             distance = shape->position();
             model->addAnchor(parent);
         }
@@ -113,8 +114,8 @@ kDebug() << "KoTextAnchor::updatePosition " << posInDocument << endl;
     d->position = posInDocument;
     d->setContainer(dynamic_cast<KoShapeContainer*> (shapeForPosition(document, posInDocument)));
 
-    if(d->model)
-        d->model->reposition(d->shape);
+//   if(d->model)
+//       d->model->reposition(d->shape);
 }
 
 void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) {
@@ -123,9 +124,6 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
     Q_UNUSED(posInDocument);
     Q_UNUSED(format);
     Q_UNUSED(pd);
-
-    if(d->model)
-        d->model->reposition(d->shape);
 }
 
 void KoTextAnchor::paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) {

@@ -157,7 +157,7 @@ private:
     KisConfig& operator=(const KisConfig&);
 
 private:
-    mutable KSharedConfigPtr m_cfg;
+    mutable KConfigGroup m_cfg;
 };
 
 #endif // KIS_CONFIG_H_

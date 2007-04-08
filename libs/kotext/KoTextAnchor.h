@@ -75,6 +75,7 @@ public:
             const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
     const QPointF &offset() const;
+    void setOffset(const QPointF &offset);
 
 private:
     class Private;

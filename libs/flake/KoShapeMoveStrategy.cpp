@@ -23,6 +23,8 @@
 
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
+#include "KoShapeContainer.h"
+#include "KoShapeContainerModel.h"
 #include "KoSelection.h"
 #include "KoPointerEvent.h"
 #include "commands/KoShapeMoveCommand.h"
@@ -74,6 +76,8 @@ void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     int i=0;
     foreach(KoShape *shape, m_selectedShapes) {
         diff = m_previousPositions.at(i) + m_diff - shape->position();
+        if(shape->parent())
+            shape->parent()->model()->proposeMove(shape, diff);
         m_canvas->clipToDocument(shape, diff);
         QPointF newPos (shape->position() + diff);
         m_newPositions[i] = newPos;

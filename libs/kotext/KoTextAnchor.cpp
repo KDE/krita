@@ -31,13 +31,12 @@ public:
     Private(KoTextAnchor *p, KoShape *s)
         : parent(p),
         shape(s),
-        horizontalAlignment(HorizontalOffset),
-        verticalAlignment(VerticalOffset),
+        horizontalAlignment(Left),
+        verticalAlignment(TopOfParagraph),
         document(0),
         position(-1),
         model(0)
     {
-        distance = shape->position();
     }
 
     void relayout() {
@@ -49,18 +48,14 @@ public:
     }
 
     void setContainer(KoShapeContainer *container) {
-kDebug() << "setContainer " << container << endl;
         if(container == 0) {
             model = 0;
             return;
         }
         bool first = model == 0; // first time
         model = dynamic_cast<KoTextShapeContainerModel*> (container->model());
-        if(first) {
-kDebug() << "**** setContainer first time\n";
-            distance = shape->position();
+        if(first)
             model->addAnchor(parent);
-        }
     }
 
     KoTextAnchor * const parent;
@@ -90,12 +85,17 @@ KoShape *KoTextAnchor::shape() const {
 }
 
 void KoTextAnchor::setAlignment(KoTextAnchor::AnchorHorizontal horizontal) {
+    if(d->horizontalAlignment == horizontal)
+        return;
     d->horizontalAlignment = horizontal;
     d->relayout();
 }
 
 void KoTextAnchor::setAlignment(KoTextAnchor::AnchorVertical vertical) {
+    if(d->verticalAlignment == vertical)
+        return;
     d->verticalAlignment = vertical;
+    d->relayout();
 }
 
 KoTextAnchor::AnchorVertical KoTextAnchor::verticalAlignment() const {
@@ -107,7 +107,6 @@ KoTextAnchor::AnchorHorizontal KoTextAnchor::horizontalAlignment() const {
 }
 
 void KoTextAnchor::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) {
-kDebug() << "KoTextAnchor::updatePosition " << posInDocument << endl;
     Q_UNUSED(object);
     Q_UNUSED(format);
     d->document = document;
@@ -147,5 +146,9 @@ const QTextDocument *KoTextAnchor::document() const {
 
 const QPointF &KoTextAnchor::offset() const {
     return d->distance;
+}
+
+void KoTextAnchor::setOffset(const QPointF &offset) {
+    d->distance = offset;
 }
 

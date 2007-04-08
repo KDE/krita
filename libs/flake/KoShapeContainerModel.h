@@ -20,9 +20,10 @@
 #ifndef KOSHAPECONTAINERMODEL_H
 #define KOSHAPECONTAINERMODEL_H
 
-#include <QList>
-
 #include <flake_export.h>
+
+#include <QList>
+#include <QPointF>
 
 class KoShape;
 class KoShapeContainer;
@@ -90,6 +91,8 @@ public:
      * @param container the actual container that changed.
      */
     virtual void containerChanged(KoShapeContainer *container) = 0;
+
+    virtual void proposeMove(KoShape *child, QPointF &move) { Q_UNUSED(child); Q_UNUSED(move); }
 };
 
 #endif

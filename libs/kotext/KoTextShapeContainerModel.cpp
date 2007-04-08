@@ -87,7 +87,6 @@ void KoTextShapeContainerModel::containerChanged(KoShapeContainer *container) {
 }
 
 void KoTextShapeContainerModel::addAnchor(KoTextAnchor *anchor) {
-kDebug() << "addAnchor!\n";
     Relation *relation = d->children.value(anchor->shape());
     Q_ASSERT(relation);
     relation->anchor = anchor;
@@ -188,32 +187,68 @@ kDebug() << "    y: " << newPosition.y() << endl;
     shape->setPosition(newPosition);
 }
 
-/* workflows
+void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move) {
+    Relation *relation = d->children.value( child);
+    if(relation == 0 || relation->anchor == 0)
+        return;
 
-1) child shape moves
-Position is determined by this model; so we need the shapeMoveStrategy to get vetoable coordinate changes through this model.
-When we have that we can alter the anchor to the new alignment policies.  Which will do a relayout
+    QPointF newPosition = child->position() + move;
+    QRectF parentShapeRect(QPointF(0,0), child->parent()->size());
+//kDebug() << "proposeMove: " << move << " | " << newPosition << " | " << parentShapeRect << endl;
 
-2) text anchor moves
-The anchor get notified.  The anchor tells us that we need to reposition the child.
-  void reposition(anchor, shape);
-Using the data from the anchor, we place the shape at the right position.
+    if(qAbs(newPosition.x()) < 10) // align left
+        relation->anchor->setAlignment(KoTextAnchor::Left);
+    else if(qAbs(parentShapeRect.width() - newPosition.x()) < 10.0)
+        relation->anchor->setAlignment(KoTextAnchor::Right);
+    else if(qAbs(parentShapeRect.width() / 2.0 - newPosition.x()) < 10.0)
+        relation->anchor->setAlignment(KoTextAnchor::Center);
+    /*else {
+        relation->anchor->setAlignment(KoTextAnchor::HorizontalOffset);
+        // TODO
+        //QPointF offset = relation->anchor->offset();
+        //offset.setX(offset.x() + move.x());
+        //relation->anchor->setOffset(offset);
+    } */
 
-3) parent shape moves
-Children move automatically; little to do.
-For children which are aligned to the side of the page we may need to update the position so they will stay at the same vertical position.
+    if(qAbs(newPosition.y() < 10)) // TopOfFrame
+{//kDebug() << "  TopOfFrame\n";
+        relation->anchor->setAlignment(KoTextAnchor::TopOfFrame);
+}
+    else if(qAbs(parentShapeRect.height() - newPosition.y()) < 10.0)
+{//kDebug() << "  BottomOfFrame\n";
+        relation->anchor->setAlignment(KoTextAnchor::BottomOfFrame); // TODO
+}
+    else { // need layout info..
+        QTextBlock block = relation->anchor->document()->findBlock(relation->anchor->positionInDocument());
+        QTextLayout *layout = block.layout();
+        if(layout->lineCount() > 0) {
+            KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (child->parent()->userData());
+            QTextLine tl = layout->lineAt(0);
+            double y = tl.y() - data->documentOffset() - newPosition.y();
+            if(y >= 0 && y < 10)
+{//kDebug() << "  TopOfParagraph " << y << "\n";
+                relation->anchor->setAlignment(KoTextAnchor::TopOfParagraph);
+}
+            else {
+                tl = layout->lineAt(layout->lineCount()-1);
+                y = newPosition.y() - tl.y() - data->documentOffset() - tl.ascent();
+                if(y >= 0 && y < 10)
+{//kDebug() << "  BottomOfParagraph " << y << endl;
+                    relation->anchor->setAlignment(KoTextAnchor::BottomOfParagraph); // TODO
+}
+                else {
+                    tl = layout->lineForTextPosition(relation->anchor->positionInDocument() - block.position());
+                    y = tl.y() - data->documentOffset() - newPosition.y();
+                    if(y >= 0 && y < 10)
+{//kDebug() << "  AboveCurrentLine\n";
+                        relation->anchor->setAlignment(KoTextAnchor::AboveCurrentLine);
+}
+                    //else  do VerticalOffset here as well?
+                }
+            }
+        }
+    }
 
-
-Init
-4) loading
-??
-
-5) inlining by user [done]
-New anchor is created and added with the child as member.
-When layout comes the anchor figures out which frame is the 'parent' and it adds the child.
-This class will then get notified.
-The anchor should also register itself with this model.
-  void addAnchor(KoTextAnchor *)
-point 2 is followed next.
-
-*/
+    move.setX(0); // let the text layout move it.
+    move.setY(0);
+}

@@ -55,6 +55,7 @@ public:
     void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
     bool setFollowupShape(KoShape *) { return false; }
     void clearTillEnd() {}
+    int cursorPosition() const { return 0; }
 
     KoStyleManager *m_styleManager;
 };

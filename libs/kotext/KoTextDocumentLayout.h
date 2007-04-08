@@ -119,6 +119,7 @@ public:
         virtual double width() = 0;
         virtual double x() = 0;
         virtual double y() = 0;
+        virtual int cursorPosition() const = 0;
         /// return the y offset of the document at start of shape.
         virtual double docOffsetInShape() const = 0;
         /// when a line is added, update internal vars.  Return true if line does not fit in shape

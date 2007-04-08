@@ -46,6 +46,8 @@ public:
     /// reimplemented from KoShapeContainerModel
     virtual void containerChanged(KoShapeContainer *container);
 
+    virtual void proposeMove(KoShape *child, QPointF &move);
+
     /// each child that is added due to being anchored in the text has an anchor; register it for rules based placement.
     void addAnchor(KoTextAnchor *anchor);
     /// When a shape is removed or stops being anchored, remove it.

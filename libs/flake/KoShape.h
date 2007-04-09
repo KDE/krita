@@ -561,7 +561,7 @@ public:
      * Returns the name of the shape.
      * @return the shapes name
      */
-    const QString & name() const;
+    QString name() const;
 
     /**
      * Sets the name of the shape.

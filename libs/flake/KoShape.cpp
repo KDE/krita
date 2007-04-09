@@ -694,7 +694,7 @@ void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converte
 }
 
 
-const QString & KoShape::name() const {
+QString KoShape::name() const {
     return d->name;
 }
 

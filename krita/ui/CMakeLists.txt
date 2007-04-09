@@ -138,10 +138,10 @@ kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/
 target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} kritaimage kofficeui kopainter  ${PNG_LIBRARIES})
 
 if(HAVE_OPENGL)
-    target_link_libraries(kritaui
-        ${OPENGL_LIBRARIES}
-        ${QT_QTOPENGL_LIBRARY}
-        )
+    target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
+    if(HAVE_GLEW)
+        target_link_libraries(kritaui ${GLEW_LIBRARIES})
+    endif(HAVE_GLEW)
 endif(HAVE_OPENGL)
 
 if(HAVE_XINPUTEXT)

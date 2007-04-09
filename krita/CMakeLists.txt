@@ -1,14 +1,24 @@
 project(krita)
 
-macro_optional_find_package(Kunittest)
-include(CheckFunctionExists)
-
 if (SHOULD_BUILD_KRITA)
 
-    if(NOT HAVE_OPENGL)
-        message(STATUS " * krita will not be able to use OpenGL for")
-        message(STATUS "   hardware accelerated rendering.")
-    endif(NOT HAVE_OPENGL)
+    macro_optional_find_package(Kunittest)
+    include(CheckFunctionExists)
+
+    macro_optional_find_package(GLEW)
+    macro_bool_to_01(GLEW_FOUND HAVE_GLEW)
+    configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
+
+    if(HAVE_OPENGL)
+        if(HAVE_GLEW)
+            message(STATUS "GLEW found!")
+        else(HAVE_GLEW)
+            message(STATUS "GLEW NOT found - krita will not be able to use OpenGL shaders")
+        endif(HAVE_GLEW)
+    else(HAVE_OPENGL)
+        message(STATUS "OpenGL NOT found - krita will not be able to use OpenGL for")
+        message(STATUS "hardware accelerated rendering.")
+    endif(HAVE_OPENGL)
 
 #    if(X11_Xinput_FOUND)
 #        set(HAVE_XINPUTEXT 1)
@@ -27,11 +37,11 @@ if (SHOULD_BUILD_KRITA)
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-krita.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krita.h)
 
-	set(LINK_OPENEXR_LIB)
-	if(OPENEXR_FOUND)
-    	include_directories(${OPENEXR_INCLUDE_DIR})
-    	set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
-	endif(OPENEXR_FOUND)
+    set(LINK_OPENEXR_LIB)
+    if(OPENEXR_FOUND)
+        include_directories(${OPENEXR_INCLUDE_DIR})
+        set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
+    endif(OPENEXR_FOUND)
 
 
     set(KRITA_INCLUDES
@@ -59,6 +69,9 @@ if (SHOULD_BUILD_KRITA)
 
     if(HAVE_OPENGL)
         include_directories(${OPENGL_INCLUDE_DIR})
+        if(HAVE_GLEW)
+            include_directories(${GLEW_INCLUDE_DIR})
+        endif(HAVE_GLEW)
     endif(HAVE_OPENGL)
 
     if(HAVE_XINPUTEXT)

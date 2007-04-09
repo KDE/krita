@@ -28,7 +28,7 @@ KoPathToolFactory::KoPathToolFactory(QObject *parent)
 {
     setToolTip (i18n("Path editing tool"));
     setToolType (dynamicToolType());
-    setIcon ("group");
+    setIcon ("editpath");
     setPriority (2);
     setActivationShapeId (KoPathShapeId);
 }

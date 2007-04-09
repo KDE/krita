@@ -1,7 +1,5 @@
 For anyone that wants to hack on flake here is a list of things that need to be done;
 
-* Add a 'name' (QString) field to KoShape with the proper setter + getter.
-
 == Connectors ==
 * Add properties to KoShapeConnector (Private class)
   - line width

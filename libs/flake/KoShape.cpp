@@ -2,6 +2,7 @@
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -88,6 +89,7 @@ public:
     QSizeF size; // size in pt
     QPointF pos; // position (top left) in pt
     QString shapeId;
+    QString name; ///< the shapes names
 
     QMatrix matrix;
 
@@ -691,3 +693,11 @@ void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converte
     painter.scale(zoomX, zoomY);
 }
 
+
+const QString & KoShape::name() const {
+    return d->name;
+}
+
+void KoShape::setName( const QString & name ) {
+    d->name = name;
+}

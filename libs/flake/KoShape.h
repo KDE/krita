@@ -2,6 +2,7 @@
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -555,6 +556,18 @@ public:
      * Return all the connections made to or from this shape.
      */
     QList<KoShapeConnection*> connections() const;
+
+    /**
+     * Returns the name of the shape.
+     * @return the shapes name
+     */
+    const QString & name() const;
+
+    /**
+     * Sets the name of the shape.
+     * @param name the new shape name
+     */
+    void setName( const QString & name );
 
 protected:
     /**

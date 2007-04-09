@@ -26,9 +26,14 @@
 
 class KoTextAnchor;
 
-/// A model to position children of the text shape.
+/**
+ *  A model to position children of the text shape.
+ * All anchored frames are children of the text shape, and they get positioned
+ * by the text layouter (only KWord at this time).
+ */
 class KOTEXT_EXPORT KoTextShapeContainerModel : public KoShapeContainerModel {
 public:
+    /// constructor
     KoTextShapeContainerModel();
 
     /// reimplemented from KoShapeContainerModel
@@ -54,10 +59,6 @@ public:
     void addAnchor(KoTextAnchor *anchor);
     /// When a shape is removed or stops being anchored, remove it.
     void removeAnchor(KoTextAnchor *anchor);
-
-    /// Check the anchor rules and move the shape to the right place.
-    void reposition(KoShape *shape);
-
 
 private:
     class Private;

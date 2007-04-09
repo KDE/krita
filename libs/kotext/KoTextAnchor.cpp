@@ -158,6 +158,9 @@ const QPointF &KoTextAnchor::offset() const {
 }
 
 void KoTextAnchor::setOffset(const QPointF &offset) {
+    if(d->distance == offset)
+        return;
     d->distance = offset;
+    d->relayout();
 }
 

@@ -54,27 +54,58 @@ public:
         HorizontalOffset
     };
 
+    /**
+     * Constructor.
+     * @parm shape the anchored shape that this anchor links to.
+     */
     KoTextAnchor(KoShape *shape);
     ~KoTextAnchor();
 
+    /**
+     * Return the shape that is linked to from the text anchor.
+     */
     KoShape *shape() const;
 
+    /**
+     * The linked shape will be placed based on the combined horizontal and vertical alignments.
+     * Setting the alignment will trigger a relayout of the text and soon after reposition the
+     * anchored shape.
+     * @param horizontal the new horizontal alignment
+     */
     void setAlignment(AnchorHorizontal horizontal);
+    /**
+     * The linked shape will be placed based on the combined horizontal and vertical alignments.
+     * Setting the alignment will trigger a relayout of the text and soon after reposition the
+     * anchored shape.
+     * @param vertical the new vertical alignment
+     */
     void setAlignment(AnchorVertical vertical);
+
+    /// return the current vertical aligment
     AnchorVertical verticalAlignment() const;
+
+    /// return the current horizontal aligment
     AnchorHorizontal horizontalAlignment() const;
 
+    /// returns the cursor position in the document where this anchor is positioned.
     int positionInDocument() const;
+
+    /// returns the document that this anchor is associated with.
     const QTextDocument *document() const;
 
+    /// reimplemented from KoInlineObject
     virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
             int posInDocument, const QTextCharFormat &format);
+    /// reimplemented from KoInlineObject
     virtual void resize(const QTextDocument *document, QTextInlineObject object,
             int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    /// reimplemented from KoInlineObject
     virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
             const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
+    /// return the offset from the origin.
     const QPointF &offset() const;
+    /// set the new offset. Causes a new layout soon.
     void setOffset(const QPointF &offset);
 
 private:

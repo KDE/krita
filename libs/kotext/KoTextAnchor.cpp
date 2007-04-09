@@ -24,6 +24,7 @@
 #include <KoShapeContainer.h>
 
 #include <QTextInlineObject>
+#include <QFontMetricsF>
 #include <KDebug>
 
 class KoTextAnchor::Private {
@@ -31,8 +32,8 @@ public:
     Private(KoTextAnchor *p, KoShape *s)
         : parent(p),
         shape(s),
-        horizontalAlignment(Left),
-        verticalAlignment(TopOfParagraph),
+        horizontalAlignment(HorizontalOffset),
+        verticalAlignment(VerticalOffset),
         document(0),
         position(-1),
         model(0)
@@ -112,9 +113,6 @@ void KoTextAnchor::updatePosition(const QTextDocument *document, QTextInlineObje
     d->document = document;
     d->position = posInDocument;
     d->setContainer(dynamic_cast<KoShapeContainer*> (shapeForPosition(document, posInDocument)));
-
-//   if(d->model)
-//       d->model->reposition(d->shape);
 }
 
 void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) {
@@ -123,6 +121,17 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
     Q_UNUSED(posInDocument);
     Q_UNUSED(format);
     Q_UNUSED(pd);
+
+    if(horizontalAlignment() == HorizontalOffset && verticalAlignment() == VerticalOffset) {
+        object.setWidth(d->shape->size().width());
+        object.setAscent(d->shape->size().height());
+    }
+    else {
+        QFontMetricsF fm(format.font());
+        object.setWidth(0);
+        object.setAscent(fm.ascent());
+    }
+    object.setDescent(0);
 }
 
 void KoTextAnchor::paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) {

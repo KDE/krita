@@ -126,6 +126,8 @@ public:
         virtual bool addLine(QTextLine &line) = 0;
         /// prepare for next paragraph; return false if there is no next parag.
         virtual bool nextParag() = 0;
+        // revert layout to the previous paragraph. Return false if there is no previous paragraph.
+        virtual bool previousParag() = 0;
         virtual double documentOffsetInShape() = 0;
         /// paint the document
         virtual void draw(QPainter *painter, const PaintContext & context ) = 0;

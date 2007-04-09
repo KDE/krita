@@ -43,6 +43,7 @@ public:
         return QList<KoShape*>(m_members);
     }
     void containerChanged(KoShapeContainer *) { }
+    void childChanged(KoShape *, KoShape::ChangeType ) { }
 
 private: // members
     QList <KoShape *> m_members;

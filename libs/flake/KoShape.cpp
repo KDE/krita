@@ -21,6 +21,7 @@
 
 #include "KoShape.h"
 #include "KoShapeContainer.h"
+#include "KoShapeContainerModel.h"
 #include "KoSelection.h"
 #include "KoPointerEvent.h"
 #include "KoInsets.h"
@@ -42,9 +43,9 @@
 
 #include <kdebug.h>
 
-class KoShapePrivate {
+class KoShape::Private {
 public:
-    KoShapePrivate()
+    Private(KoShape *shape)
         : scaleX( 1 ),
         scaleY( 1 ),
         angle( 0 ),
@@ -62,13 +63,20 @@ public:
         userData(0),
         appData(0),
         backgroundBrush(Qt::NoBrush),
-        border(0)
+        border(0),
+        me(shape)
     {
     }
 
-    ~KoShapePrivate() {
+    ~Private() {
         delete userData;
         delete appData;
+    }
+
+    void shapeChanged(ChangeType type) {
+        if(parent)
+            parent->model()->childChanged(me, type);
+        me->shapeChanged(type);
     }
 
     double scaleX;
@@ -100,10 +108,11 @@ public:
     QBrush backgroundBrush; ///< Stands for the background color / fill etc.
     KoShapeBorderModel *border; ///< points to a border, or 0 if there is no border
     QList<KoShapeConnection*> connections;
+    KoShape *me;
 };
 
 KoShape::KoShape()
-    : d(new KoShapePrivate())
+    : d(new Private(this))
 {
     recalcMatrix();
 }
@@ -227,7 +236,7 @@ void KoShape::scale( double sx, double sy )
     d->scaleX = sx;
     d->scaleY = sy;
     recalcMatrix();
-    shapeChanged(ScaleChanged);
+    d->shapeChanged(ScaleChanged);
 }
 
 void KoShape::rotate( double angle )
@@ -238,7 +247,7 @@ void KoShape::rotate( double angle )
     while(d->angle >= 360) d->angle -= 360;
     while(d->angle <= -360) d->angle += 360;
     recalcMatrix();
-    shapeChanged(RotationChanged);
+    d->shapeChanged(RotationChanged);
 }
 
 void KoShape::shear( double sx, double sy )
@@ -248,7 +257,7 @@ void KoShape::shear( double sx, double sy )
     d->shearX = sx;
     d->shearY = sy;
     recalcMatrix();
-    shapeChanged(ShearChanged);
+    d->shapeChanged(ShearChanged);
 }
 
 void KoShape::resize( const QSizeF &newSize )
@@ -269,7 +278,7 @@ void KoShape::resize( const QSizeF &newSize )
         point.setY(point.y() * fy);
     }
     recalcMatrix();
-    shapeChanged(SizeChanged);
+    d->shapeChanged(SizeChanged);
 }
 
 void KoShape::setPosition( const QPointF &position )
@@ -278,7 +287,7 @@ void KoShape::setPosition( const QPointF &position )
         return;
     d->pos = position;
     recalcMatrix();
-    shapeChanged(PositionChanged);
+    d->shapeChanged(PositionChanged);
 }
 
 bool KoShape::hitTest( const QPointF &position ) const
@@ -379,7 +388,7 @@ void KoShape::setParent(KoShapeContainer *parent) {
     else
         d->parent = 0;
     recalcMatrix();
-    shapeChanged(ParentChanged);
+    d->shapeChanged(ParentChanged);
 }
 
 int KoShape::zIndex() const {

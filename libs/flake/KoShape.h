@@ -46,7 +46,6 @@ class KoShapeManager;
 class KoShapeUserData;
 class KoViewConverter;
 class KoShapeApplicationData;
-class KoShapePrivate;
 class KoShapeSavingContext;
 class KoCanvasBase;
 class KoGenStyle;
@@ -83,6 +82,17 @@ class KoGenStyle;
 class FLAKE_EXPORT KoShape
 {
 public:
+    /// Used by shapeChanged() to select which change was made
+    enum ChangeType {
+        PositionChanged, ///< used after a setPosition()
+        RotationChanged, ///< used after a rotate()
+        ScaleChanged,   ///< used after a scale()
+        ShearChanged,   ///< used after a shear()
+        SizeChanged,    ///< used after a resize()
+        ParentChanged,   ///< used after a setParent()
+        CollisionDetected ///< used when another shape moved in our boundingrect
+    };
+
     /**
      * @brief Constructor
      */
@@ -595,17 +605,6 @@ protected:
      */
     void notifyChanged();
 
-    /// Used by shapeChanged() to select which change was made
-    enum ChangeType {
-        PositionChanged, ///< used after a setPosition()
-        RotationChanged, ///< used after a rotate()
-        ScaleChanged,   ///< used after a scale()
-        ShearChanged,   ///< used after a shear()
-        SizeChanged,    ///< used after a resize()
-        ParentChanged,   ///< used after a setParent()
-        CollisionDetected ///< used when another shape moved in our boundingrect
-    };
-
     /**
      * A hook that allows inheriting classes to do something after a KoShape property changed
      * This is called whenever the shape, position rotation or scale properties were altered.
@@ -656,7 +655,9 @@ private:
     void addShapeManager( KoShapeManager * manager );
     void removeShapeManager( KoShapeManager * manager );
 
-    KoShapePrivate * const d;
+    class Private;
+    friend class Private;
+    Private * const d;
 };
 
 #endif

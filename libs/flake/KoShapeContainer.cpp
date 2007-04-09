@@ -75,6 +75,7 @@ public:
     }
 
     void containerChanged(KoShapeContainer *) { }
+    void childChanged(KoShape *, KoShape::ChangeType ) { }
 
 private:
     /**

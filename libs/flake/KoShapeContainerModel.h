@@ -22,10 +22,11 @@
 
 #include <flake_export.h>
 
+#include <KoShape.h>
+
 #include <QList>
 #include <QPointF>
 
-class KoShape;
 class KoShapeContainer;
 
 /**
@@ -93,6 +94,8 @@ public:
     virtual void containerChanged(KoShapeContainer *container) = 0;
 
     virtual void proposeMove(KoShape *child, QPointF &move) { Q_UNUSED(child); Q_UNUSED(move); }
+
+    virtual void childChanged(KoShape *child, KoShape::ChangeType type) = 0;
 };
 
 #endif

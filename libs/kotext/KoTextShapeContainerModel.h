@@ -45,8 +45,10 @@ public:
     virtual QList<KoShape*> iterator() const;
     /// reimplemented from KoShapeContainerModel
     virtual void containerChanged(KoShapeContainer *container);
-
+    /// reimplemented from KoShapeContainerModel
     virtual void proposeMove(KoShape *child, QPointF &move);
+    /// reimplemented from KoShapeContainerModel
+    virtual void childChanged(KoShape *child, KoShape::ChangeType type);
 
     /// each child that is added due to being anchored in the text has an anchor; register it for rules based placement.
     void addAnchor(KoTextAnchor *anchor);
@@ -55,6 +57,7 @@ public:
 
     /// Check the anchor rules and move the shape to the right place.
     void reposition(KoShape *shape);
+
 
 private:
     class Private;

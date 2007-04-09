@@ -49,6 +49,7 @@ public:
     double docOffsetInShape() const { return 0; }
     bool addLine(QTextLine &) { return false; }
     bool nextParag() { return false; }
+    bool previousParag() { return false; }
     double documentOffsetInShape() { return 0; }
     void draw(QPainter *, const QAbstractTextDocumentLayout::PaintContext &) {}
     KoStyleManager *styleManager() const { return m_styleManager; }

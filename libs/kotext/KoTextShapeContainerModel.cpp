@@ -20,6 +20,7 @@
 #include "KoTextShapeContainerModel.h"
 #include "KoTextAnchor.h"
 #include "KoTextShapeData.h"
+#include "KoTextDocumentLayout.h"
 
 #include <QTextBlock>
 #include <QTextLayout>
@@ -82,8 +83,24 @@ QList<KoShape*> KoTextShapeContainerModel::iterator() const {
 }
 
 void KoTextShapeContainerModel::containerChanged(KoShapeContainer *container) {
+kDebug() << "KoTextShapeContainerModel::containerChanged\n";
     // TODO
     // For children which are aligned to the side of the page we may need to update the position so they will stay at the same vertical position.
+}
+
+void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType type) {
+    if(type == KoShape::RotationChanged || type == KoShape::ScaleChanged ||
+            type == KoShape::ShearChanged || type == KoShape::SizeChanged) {
+
+        KoTextShapeData *data  = dynamic_cast<KoTextShapeData*> (child->parent()->userData());
+        Q_ASSERT(data);
+        data->faul();
+
+        KoTextDocumentLayout *lay= dynamic_cast<KoTextDocumentLayout*> (data->document()->documentLayout());
+        if(lay)
+            lay->interruptLayout();
+        data->fireResizeEvent();
+    }
 }
 
 void KoTextShapeContainerModel::addAnchor(KoTextAnchor *anchor) {

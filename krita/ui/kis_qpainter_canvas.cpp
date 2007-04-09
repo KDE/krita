@@ -246,6 +246,7 @@ void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
 
     QImage img = QImage( width, height, QImage::Format_ARGB32 );
     QPainter gc( &img );
+    gc.setCompositionMode( QPainter::CompositionMode_Source );
 
     if (!m_d->prescaledImage.isNull()) {
 

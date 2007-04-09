@@ -271,7 +271,7 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     // ---------------------- Load initial three bumpmap scanlines
 
     KoColorSpace * srcCs = src->colorSpace();
-    Q3ValueVector<KoChannelInfo *> channels = srcCs->channels();
+    QList<KoChannelInfo *> channels = srcCs->channels();
 
     // One byte per pixel, converted from the bumpmap layer.
     quint8 * bm_row1 = new quint8[bm_w];

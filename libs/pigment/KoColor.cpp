@@ -196,12 +196,12 @@ void KoColor::fromQColor(const QColor& c, quint8 opacity) const
 void KoColor::dump() const
 {
     //kDebug(DBG_AREA_CMS) << "KoColor (" << this << "), " << d->colorSpace->id().name() << "\n";
-    Q3ValueVector<KoChannelInfo *> channels = d->colorSpace->channels();
+    QList<KoChannelInfo *> channels = d->colorSpace->channels();
 
-    Q3ValueVector<KoChannelInfo *>::const_iterator begin = channels.begin();
-    Q3ValueVector<KoChannelInfo *>::const_iterator end = channels.end();
+    QList<KoChannelInfo *>::const_iterator begin = channels.begin();
+    QList<KoChannelInfo *>::const_iterator end = channels.end();
 
-    for (Q3ValueVector<KoChannelInfo *>::const_iterator it = begin; it != end; ++it)
+    for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it)
     {
         KoChannelInfo * ch = (*it);
         // XXX: setNum always takes a byte.

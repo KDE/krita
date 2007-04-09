@@ -322,7 +322,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     connect(m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
 
     // Fill in the channel chooser
-    Q3ValueVector<KoChannelInfo *> channels = dev->colorSpace()->channels();
+    QList<KoChannelInfo *> channels = dev->colorSpace()->channels();
     for(unsigned int val=0; val < dev->colorSpace()->colorChannelCount(); val++)
         m_page->cmbChannel->addItem(channels.at(val)->name());
     connect( m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));

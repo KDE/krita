@@ -32,7 +32,7 @@ struct KoColorSpace::Private {
     QString name;
     QHash<QString, KoCompositeOp *> compositeOps;
     KoColorSpaceRegistry * parent;
-    Q3ValueVector<KoChannelInfo *> channels;
+    QList<KoChannelInfo *> channels;
     KoMixColorsOp* mixColorsOp;
     KoConvolutionOp* convolutionOp;
     QThreadStorage< QVector<quint8>* > conversionCache;
@@ -72,7 +72,7 @@ QString KoColorSpace::name() const {return d->name;}
 quint32 KoColorSpace::colorSpaceType() const { return d->cmType; }
 icColorSpaceSignature KoColorSpace::colorSpaceSignature() const { return d->colorSpaceSignature; }
 
-Q3ValueVector<KoChannelInfo *> KoColorSpace::channels() const
+QList<KoChannelInfo *> KoColorSpace::channels() const
 {
     return d->channels;
 }

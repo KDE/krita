@@ -178,13 +178,13 @@ class Iterator : public IteratorBase
 
         QVariant channel(uint channelnr)
         {
-            Q3ValueVector<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
+            QList<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
             return channelnr < uint(channels.count()) ? channelValue(channels[channelnr]) : QVariant();
         }
 
         void setChannel(uint channelnr, const QVariant& value)
         {
-            Q3ValueVector<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
+            QList<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
             if(channelnr < uint(channels.count()))
                 setChannelValue(channels[channelnr], value);
         }
@@ -197,18 +197,18 @@ class Iterator : public IteratorBase
         QVariantList pixel()
         {
             QVariantList pixel;
-            Q3ValueVector<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
-            for(Q3ValueVector<KoChannelInfo*>::iterator itC = channels.begin(); itC != channels.end(); ++itC)
+            QList<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
+            for(QList<KoChannelInfo*>::iterator itC = channels.begin(); itC != channels.end(); ++itC)
                 pixel.push_back( channelValue(*itC) );
             return pixel;
         }
 
         void setPixel(QVariantList pixel)
         {
-            Q3ValueVector<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
+            QList<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
             uint i = 0;
             const uint size = pixel.size();
-            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end() && i < size; ++itC, ++i)
+            for(QList<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end() && i < size; ++itC, ++i)
                 setChannelValue(*itC, pixel[i]);
         }
 

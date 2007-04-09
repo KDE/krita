@@ -20,7 +20,6 @@
 #define _KIS_HISTOGRAM_PRODUCER_
 
 #include <qglobal.h>
-#include <Q3ValueVector>
 #include <ksharedptr.h>
 
 #include <pigment_export.h>
@@ -77,7 +76,7 @@ public:
 
     // Methods with general information about this specific producer
     virtual const KoID& id() const = 0;
-    virtual Q3ValueVector<KoChannelInfo *> channels() = 0;
+    virtual QList<KoChannelInfo *> channels() = 0;
     virtual qint32 numberOfBins() = 0;
     virtual QString positionToString(double pos) const = 0;
     virtual double viewFrom() const = 0;

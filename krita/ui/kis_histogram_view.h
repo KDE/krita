@@ -93,7 +93,7 @@ private:
     KisHistogramSP m_histogram;
     KoColorSpace* m_cs;
     KoHistogramProducerSP m_currentProducer;
-    Q3ValueVector<KoChannelInfo *> m_channels;
+    QList<KoChannelInfo *> m_channels;
     // Maps the channels in m_channels to a real channel offset in the producer->channels()
     Q3ValueVector<qint32> m_channelToOffset;
     QStringList m_channelStrings;

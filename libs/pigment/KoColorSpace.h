@@ -26,10 +26,8 @@
 #include <QImage>
 #include <QHash>
 #include <QVector>
+#include <QList>
 #include <QBitArray>
-
-#include <q3valuevector.h>
-#include <q3valuelist.h>
 
 #include "KoColorSpaceConstants.h"
 #include <KoChannelInfo.h>
@@ -147,8 +145,8 @@ public:
 
     //========== Channels =====================================================//
 
-    /// Return a vector describing all the channels this color model has.
-    virtual Q3ValueVector<KoChannelInfo *> channels() const;
+    /// Return a list describing all the channels this color model has.
+    virtual QList<KoChannelInfo *> channels() const;
 
     /**
      * The total number of channels for a single pixel in this color model
@@ -604,8 +602,8 @@ public:
      * created paint device. XXX: Currently this uses times and not
      * threads.
      */
-    virtual Q3ValueList<KisFilter*> createBackgroundFilters() const
-        { return Q3ValueList<KisFilter*>(); };
+    virtual QList<KisFilter*> createBackgroundFilters() const
+        { return QList<KisFilter*>(); };
 protected:
     /**
      * Use this function in the constructor of your colorspace to add the information about a channel.

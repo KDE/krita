@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QList>
+
 #include "KoHistogramProducer.h"
 #include "KoBasicHistogramProducers.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include "KoColorSpace.h"
 
@@ -45,7 +45,7 @@ QList<KoID> KoHistogramProducerFactoryRegistry::listKeysCompatibleWith(
         KoColorSpace* colorSpace) const
 {
     QList<KoID> list;
-    Q3ValueList<float> preferredList;
+    QList<float> preferredList;
     storageMap::const_iterator it = m_storage.begin();
     storageMap::const_iterator endit = m_storage.end();
     // O(n^2), can't this be done better? (But preferrably not by looking up the preferredness
@@ -53,8 +53,8 @@ QList<KoID> KoHistogramProducerFactoryRegistry::listKeysCompatibleWith(
     while( it != endit ) {
         if (it->second->isCompatibleWith(colorSpace)) {
             float preferred = it->second->preferrednessLevelWith(colorSpace);
-            Q3ValueList<float>::iterator pit = preferredList.begin();
-            Q3ValueList<float>::iterator pend = preferredList.end();
+            QList<float>::iterator pit = preferredList.begin();
+            QList<float>::iterator pend = preferredList.end();
             QList<KoID>::iterator lit = list.begin();
 
             while (pit != pend && preferred <= *pit) {

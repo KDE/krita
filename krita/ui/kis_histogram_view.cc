@@ -148,7 +148,7 @@ void KisHistogramView::setCurrentChannels(KoHistogramProducerSP producer, Q3Valu
         return;
     }
 
-    Q3ValueVector<KoChannelInfo *> producerChannels = m_currentProducer->channels();
+    QList<KoChannelInfo *> producerChannels = m_currentProducer->channels();
 
     for (int i = 0; i < channels.count(); i++) {
         // Also makes sure the channel is actually in the producer's list
@@ -202,7 +202,7 @@ void KisHistogramView::setActiveChannel(int channel)
         m_histogram->setChannel(0); // Set a default channel, just being nice
     } else {
         m_color = false;
-        Q3ValueVector<KoChannelInfo *> channels = m_currentProducer->channels();
+        QList<KoChannelInfo *> channels = m_currentProducer->channels();
         for (int i = 0; i < channels.count(); i++) {
             KoChannelInfo* channel = channels.at(i);
             if (channel->name() == info.channel->name()) {
@@ -254,7 +254,7 @@ void KisHistogramView::addProducerChannels(KoHistogramProducerSP producer) {
         info.isProducer = true;
         info.producer = producer;
         // channel not used for a producer
-        Q3ValueVector<KoChannelInfo *> channels = info.producer->channels();
+        QList<KoChannelInfo *> channels = info.producer->channels();
         int count = channels.count();
         m_comboInfo.append(info);
         m_channelStrings.append(producer->id() . name());

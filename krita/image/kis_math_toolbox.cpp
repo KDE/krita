@@ -66,7 +66,7 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
 {
     qint32 depth = src->colorSpace()->colorChannelCount();
     Q3MemArray<PtrToDouble> f(depth);
-    Q3ValueVector<KoChannelInfo *> cis = src->colorSpace()->channels();
+    QList<KoChannelInfo *> cis = src->colorSpace()->channels();
     for(qint32 k = 0; k < depth; k++)
     {
         switch( cis[k]->channelValueType() )
@@ -120,7 +120,7 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
 {
     qint32 depth = dst->colorSpace()->colorChannelCount();
     Q3MemArray<PtrFromDouble> f(depth);
-    Q3ValueVector<KoChannelInfo *> cis = dst->colorSpace()->channels();
+    QList<KoChannelInfo *> cis = dst->colorSpace()->channels();
     for(qint32 k = 0; k < depth; k++)
     {
         switch( cis[k]->channelValueType() )

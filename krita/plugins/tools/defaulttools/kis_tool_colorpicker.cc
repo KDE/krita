@@ -197,7 +197,7 @@ void KisToolColorPicker::displayPickedColor()
 {
     if (m_pickedColor.data() && m_optionsWidget) {
 
-        Q3ValueVector<KoChannelInfo *> channels = m_pickedColor.colorSpace()->channels();
+        QList<KoChannelInfo *> channels = m_pickedColor.colorSpace()->channels();
         m_optionsWidget->listViewChannels->clear();
 
         for (int i = 0; i < channels.count(); ++i) {

@@ -22,7 +22,6 @@
 
 #include <QColor>
 #include <QMetaType>
-#include <q3valuevector.h>
 #include <pigment_export.h>
 
 class KoColorProfile;

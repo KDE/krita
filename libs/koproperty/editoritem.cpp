@@ -78,9 +78,9 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QCo
 		p->drawRect(xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE);
 		p->fillRect(xmarg+1, marg + 1, BRANCHBOX_SIZE-2, BRANCHBOX_SIZE-2,
 //			item->listView()->paletteBackgroundColor());
-			cg.base());
+			cg.brush(QPalette::Active, QPalette::Base));
 //		p->setPen( item->listView()->paletteForegroundColor() );
-		p->setPen( cg.foreground() );
+		p->setPen( cg.color(QPalette::Active, QPalette::Foreground) );
 		p->drawLine(xmarg+2, marg+BRANCHBOX_SIZE/2, xmarg+BRANCHBOX_SIZE-3, marg+BRANCHBOX_SIZE/2);
 		if(!isOpen) {
 			p->drawLine(xmarg+BRANCHBOX_SIZE/2, marg+2,
@@ -99,7 +99,10 @@ class GroupWidgetBase : public QWidget
 		, m_isOpen(true)
 		, m_mouseDown(false)
 		{
-			setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed, 0, 1));
+			QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Fixed);
+			sp.setHorizontalStretch(0);
+			sp.setVerticalStretch(1);
+			setSizePolicy(sp);
 		}
 
 		void setText( const QString &text )
@@ -146,7 +149,7 @@ class GroupWidgetBase : public QWidget
 			if (!m_titleStr.isNull())
 			{
 				int indent = 16 + (m_miniicon.isNull() ? 0 : (m_miniicon.width()+4));
-				p.setPen(palette().active().text());
+				p.setPen(palette().color(QPalette::Text));
 				QFont f = p.font();
 				f.setBold(true);
 				p.setFont(f);
@@ -210,7 +213,10 @@ GroupContainer::GroupContainer(const QString& title, QWidget* parent)
 : QWidget(parent)
 , d(new Private())
 {
-	setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed, 0, 1));
+	QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Fixed);
+	sp.setHorizontalStretch(0);
+	sp.setVerticalStretch(1);
+	setSizePolicy(sp);
 	d->lyr = new QVBoxLayout(this);
 	d->groupWidget = new GroupWidgetBase(this);
 	d->groupWidget->setText( title );
@@ -227,7 +233,7 @@ void GroupContainer::setContents( QWidget* contents )
 {
 	if (d->contents) {
 		d->contents->hide();
-		d->lyr->remove(d->contents);
+		d->lyr->removeWidget(d->contents);
 		delete d->contents;
 	}
 	d->contents = contents;

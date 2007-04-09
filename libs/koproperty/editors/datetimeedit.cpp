@@ -73,9 +73,9 @@ void
 DateTimeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 	p->eraseRect(r);
-	Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDateTime(value.toDateTime(), true /* use short format*/, false /*no sec */ ));
+	Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDateTime(value.toDateTime(), KLocale::ShortDate, false /*no sec */ ));
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
-//		KGlobal::locale()->formatDateTime(value.toDateTime(), true /* use short format*/, false /*no sec */ ));
+//		KGlobal::locale()->formatDateTime(value.toDateTime(), KLocale::ShortDate, false /*no sec */ ));
 }
 
 void

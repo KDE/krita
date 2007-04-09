@@ -74,8 +74,8 @@ void
 DateEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 	p->eraseRect(r);
-	Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDate(value.toDate(), true /* use short format*/ ));
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, KGlobal::locale()->formatDate(value.toDate(), true /* use short format*/ ));
+	Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDate(value.toDate(), KLocale::ShortDate));
+//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, KGlobal::locale()->formatDate(value.toDate(), KLocale::ShortDate));
 }
 
 void

@@ -241,13 +241,13 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
         return i18n("No date set"); // e.g. old KWord documents
 
     if (m_strFormat.toLower() == "locale" || m_strFormat.isEmpty())
-        return KGlobal::locale()->formatDate( dateTime.date(), false );
+        return KGlobal::locale()->formatDate( dateTime.date(), KLocale::LongDate );
     else if ( m_strFormat.toLower() == "localeshort" )
-        return KGlobal::locale()->formatDate( dateTime.date(), true );
+        return KGlobal::locale()->formatDate( dateTime.date(), KLocale::ShortDate );
     else if ( m_strFormat.toLower() == "localedatetime" )
-        return KGlobal::locale()->formatDateTime( dateTime, false );
+        return KGlobal::locale()->formatDateTime( dateTime, KLocale::LongDate );
     else if ( m_strFormat.toLower() == "localedatetimeshort" )
-        return KGlobal::locale()->formatDateTime( dateTime, true );
+        return KGlobal::locale()->formatDateTime( dateTime, KLocale::ShortDate );
 
     QString tmp ( dateTime.toString(m_strFormat) );
     const int month = dateTime.date().month();
@@ -2542,7 +2542,7 @@ QString KoNoteVariable::fieldCode()
 
 QString KoNoteVariable::createdNote() const
 {
-    return KGlobal::locale()->formatDate( m_createdNoteDate, false );
+    return KGlobal::locale()->formatDate( m_createdNoteDate, KLocale::LongDate );
 }
 
 void KoNoteVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*context*/ )

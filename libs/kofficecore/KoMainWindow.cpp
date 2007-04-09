@@ -1273,7 +1273,7 @@ void KoMainWindow::print(bool quick) {
     if ( title.isEmpty() ) {
         // #139905
         const QString programName = componentData().aboutData() ? componentData().aboutData()->programName() : componentData().componentName();
-        title = i18n("%1 unsaved document (%2)").arg(programName).arg(KGlobal::locale()->formatDate(QDate::currentDate(), true/*short*/));
+        title = i18n("%1 unsaved document (%2)").arg(programName).arg(KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
     }
     printer.setDocName( title );
     printer.setDocFileName( fileName );

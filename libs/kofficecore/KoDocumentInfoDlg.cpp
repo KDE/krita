@@ -157,7 +157,7 @@ void KoDocumentInfoDlg::initAboutTab()
             QPixmap p = KIconLoader::global()->loadIcon( "decrypted", K3Icon::Small );
             d->m_aboutUi->lblEncrypted->setText( i18n( "This document will be decrypted" ) );
             d->m_aboutUi->lblEncryptedPic->setPixmap( p );
-            d->m_aboutUi->pbEncrypt->setText( i18n( "Don't d&ecrypt" ) );
+            d->m_aboutUi->pbEncrypt->setText( i18n( "Do not decrypt" ) );
         }
         else {
             QPixmap p = KIconLoader::global()->loadIcon( "encrypted", K3Icon::Small );
@@ -171,7 +171,7 @@ void KoDocumentInfoDlg::initAboutTab()
             QPixmap p = KIconLoader::global()->loadIcon( "encrypted", K3Icon::Small );
             d->m_aboutUi->lblEncrypted->setText( i18n( "This document will be encrypted." ) );
             d->m_aboutUi->lblEncryptedPic->setPixmap( p );
-            d->m_aboutUi->pbEncrypt->setText( i18n( "Don't &encrypt" ) );
+            d->m_aboutUi->pbEncrypt->setText( i18n( "Do not encrypt" ) );
         }
         else {
             QPixmap p = KIconLoader::global()->loadIcon( "decrypted", K3Icon::Small );
@@ -295,7 +295,7 @@ void KoDocumentInfoDlg::slotToggleEncryption()
             QPixmap p = KIconLoader::global()->loadIcon( "decrypted", K3Icon::Small );
             d->m_aboutUi->lblEncrypted->setText( i18n( "This document will be decrypted" ) );
             d->m_aboutUi->lblEncryptedPic->setPixmap( p );
-            d->m_aboutUi->pbEncrypt->setText( i18n( "Don't d&ecrypt" ) );
+            d->m_aboutUi->pbEncrypt->setText( i18n( "Do not decrypt" ) );
         }
         else {
             QPixmap p = KIconLoader::global()->loadIcon( "encrypted", K3Icon::Small );
@@ -309,7 +309,7 @@ void KoDocumentInfoDlg::slotToggleEncryption()
             QPixmap p = KIconLoader::global()->loadIcon( "encrypted", K3Icon::Small );
             d->m_aboutUi->lblEncrypted->setText( i18n( "This document will be encrypted." ) );
             d->m_aboutUi->lblEncryptedPic->setPixmap( p );
-            d->m_aboutUi->pbEncrypt->setText( i18n( "Don't &encrypt" ) );
+            d->m_aboutUi->pbEncrypt->setText( i18n( "Do not encrypt" ) );
         }
         else {
             QPixmap p = KIconLoader::global()->loadIcon( "decrypted", K3Icon::Small );

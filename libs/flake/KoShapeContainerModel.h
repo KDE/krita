@@ -93,8 +93,25 @@ public:
      */
     virtual void containerChanged(KoShapeContainer *container) = 0;
 
+    /**
+     * This method is called when the user tries to move a shape that is a child of the
+     * container this model represents.
+     * The child itself is not yet moved; it is proposed to be moved over the param move distance.
+     * You can alter the value of the move to affect the actual distance moved.
+     * The default implementation does nothing.
+     * @param child the child of this container that the user is trying to move.
+     * @param move the distance that the user proposes to move child from the current position.
+     */
     virtual void proposeMove(KoShape *child, QPointF &move) { Q_UNUSED(child); Q_UNUSED(move); }
 
+    /**
+     * This method is called when one of the child shapes has been modified.
+     * When a child shape is rotated, moved or scaled/skewed this method will be called
+     * to inform the container of such a change.  The change has already happened at the
+     * time this method is called.
+     * @param child the child that has been changed
+     * @param type this enum shows which change the child has had.
+     */
     virtual void childChanged(KoShape *child, KoShape::ChangeType type) = 0;
 };
 

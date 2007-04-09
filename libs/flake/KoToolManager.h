@@ -202,6 +202,13 @@ protected:
      */
     void switchInputDevice(const KoInputDevice &device);
 
+    /**
+     * Whenever a new tool proxy class is instantiated, it will use this method to register itself
+     * so the toolManager can update it to the latest active tool.
+     * @param proxy the proxy to register.
+     * @param canvas which canvas the proxy is associated with; whenever a new tool is selected for that canvas,
+     *        the proxy gets an update.
+     */
     void registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas);
 
 private:

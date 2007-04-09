@@ -31,6 +31,10 @@
 class FLAKE_EXPORT KoToolSelection : public QObject {
     Q_OBJECT
 public:
+    /**
+     * Constructor.
+     * @param parent a parent for memory management purposes.
+     */
     explicit KoToolSelection(QObject *parent = 0);
     virtual ~KoToolSelection();
 

@@ -42,12 +42,22 @@ public:
      */
     KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, QUndoCommand *parent = 0);
 
+    /// An enum for defining what kind of reordering to use.
     enum MoveShapeType  {
-        RaiseShape,
-        LowerShape,
-        BringToFront,
-        SendToBack
+        RaiseShape,     ///< raise the selected shape to the level that it is above the shape that is on top of it.
+        LowerShape,     ///< Lower the selected shape to the level that it is below the shape that is below it.
+        BringToFront,   ///< Raise the selected shape to be on top of all shapes.
+        SendToBack      ///< Lower the selected shape to be below all other shapes.
     };
+
+    /**
+     * Create a new KoShapeReorderCommand by calculating the new indexes required to move the shapes
+     * according to the move parameter.
+     * @param shapes all the shapes that should be moved.
+     * @param manager the shapeManager that contains all the shapes that could have their indexes changed.
+     * @param move the moving type.
+     * @param parent the parent command for grouping purposes.
+     */
     static KoShapeReorderCommand *createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager,
             MoveShapeType move, QUndoCommand *parent = 0);
 

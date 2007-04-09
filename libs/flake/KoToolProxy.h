@@ -95,6 +95,7 @@ public:
 
 protected:
     friend class KoToolManager;
+    /// the toolManager tells us which KoCanvasController this toolProxy is working for.
     void setCanvasController(KoCanvasController *controller);
 
 private:

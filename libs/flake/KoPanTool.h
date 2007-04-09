@@ -32,6 +32,10 @@ class KoCanvasController;
  */
 class KoPanTool : public KoTool {
 public:
+    /**
+     * Constructor.
+     * @param canvas the canvas this tool works on.
+     */
     explicit KoPanTool(KoCanvasBase *canvas);
 
     /// reimplemented from superclass

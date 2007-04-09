@@ -57,6 +57,7 @@ class KoCanvasBase;
 class FLAKE_EXPORT KoCanvasController : public QAbstractScrollArea {
     Q_OBJECT
 public:
+    /// An enum to alter the positioning and size of the canvas insize the canvas controller
     enum CanvasMode {
         AlignTop,  ///< canvas is top aligned if smaller than the viewport
         Centered,   ///< canvas is centered if smaller than the viewport
@@ -195,6 +196,10 @@ public:
      */
     void setPreferredCenter( const QPoint &viewPoint );
 
+    /**
+     * Move the canvas over the x and y distance of the parameter distance
+     * @param distance the distance in pixels.  A positive distance means moving the canvas up/left.
+     */
     void pan(const QPoint distance);
 
 signals:
@@ -275,12 +280,17 @@ protected slots:
     void updateCanvasOffsetY();
 
 protected:
-
+    /// reimplemented from QWidget
     void paintEvent( QPaintEvent * event );
+    /// reimplemented from QWidget
     void resizeEvent(QResizeEvent * resizeEvent);
+    /// reimplemented from QWidget
     void dragEnterEvent( QDragEnterEvent * event );
+    /// reimplemented from QWidget
     void dropEvent( QDropEvent *event );
+    /// reimplemented from QWidget
     void dragMoveEvent ( QDragMoveEvent *event );
+    /// reimplemented from QWidget
     void dragLeaveEvent( QDragLeaveEvent *event );
 
 private:

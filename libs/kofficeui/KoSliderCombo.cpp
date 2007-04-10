@@ -23,12 +23,14 @@
 #include <QSlider>
 #include <QStyle>
 #include <QStylePainter>
+#include <QStyleOptionSlider>
 #include <QLineEdit>
 #include <QValidator>
 #include <QHBoxLayout>
 #include <QFrame>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QDoubleSpinBox>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -64,7 +66,6 @@ void KoSliderComboContainer::mousePressEvent(QMouseEvent *e)
 class KoSliderCombo::KoSliderComboPrivate {
 public:
 
-    QLineEdit * lineEdit;
     QValidator *m_validator;
     QTimer m_timer;
     KoSliderComboContainer *container;
@@ -76,14 +77,10 @@ public:
 };
 
 KoSliderCombo::KoSliderCombo(QWidget *parent)
-    : QWidget(parent)
+   : QComboBox(parent)
 {
     d = new KoSliderComboPrivate();
-    d->m_timer.setSingleShot(true);
-    d->arrowState = QStyle::State_None;
 
-    d->lineEdit = new QLineEdit(this);
-    d->lineEdit->setText("0.00");
     d->minimum = 0.0;
     d->maximum = 100.0;
     d->decimals = 2;
@@ -108,36 +105,16 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-    connect(&(d->m_timer), SIGNAL(timeout()), this, SLOT(slotTimeout()));
+    setEditable(true);
+    setEditText(KGlobal::locale()->formatNumber(0, d->decimals));
+
     connect(d->slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
-    connect(d->lineEdit, SIGNAL(editingFinished()), SLOT(lineEditFinished()));
+    connect(this, SIGNAL(editTextChanged (const QString &)), SLOT(lineEditFinished(const QString &)));
 }
 
 KoSliderCombo::~KoSliderCombo()
 {
     delete d;
-}
-
-void KoSliderCombo::updateLineEditGeometry()
-{
-    QStyleOptionComboBox opt = styleOption();
-    QRect editRect = style()->subControlRect(QStyle::CC_ComboBox, &opt,
-                                                QStyle::SC_ComboBoxEditField, this);
-    d->lineEdit->setGeometry(editRect);
-}
-
-void KoSliderCombo::updateArrow(QStyle::StateFlag state)
-{
-    if (d->arrowState == state)
-        return;
-    d->arrowState = state;
-    QStyleOptionComboBox opt = styleOption();
-    update(style()->subControlRect(QStyle::CC_ComboBox, &opt, QStyle::SC_ComboBoxArrow));
-}
-
-void KoSliderCombo::resizeEvent(QResizeEvent *)
-{
-    updateLineEditGeometry();
 }
 
 QSize KoSliderCombo::sizeHint() const
@@ -183,10 +160,17 @@ QStyleOptionComboBox KoSliderCombo::styleOption() const
 
 void KoSliderCombo::showPopup()
 {
-    QStyleOptionComboBox opt = styleOption();
+    QStyleOptionSlider opt;
+    opt.init(d->slider);
+    opt.maximum=256;
+    opt.sliderPosition = opt.sliderValue = d->slider->value();
+    int hdlPos = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle).center().x();
+
+    QStyleOptionComboBox optThis = styleOption();
+    int arrowPos = style()->subControlRect(QStyle::CC_ComboBox, &optThis, QStyle::SC_ComboBoxArrow).center().x();
 
     QSize popSize = d->container->size();
-    QRect popupRect(mapToGlobal(QPoint(size().width() - popSize.width(), size().height())), popSize);
+    QRect popupRect(mapToGlobal(QPoint(arrowPos - hdlPos - d->slider->x(), size().height())), popSize);
     d->container->setGeometry(popupRect);
 
     d->container->raise();
@@ -208,9 +192,6 @@ void KoSliderCombo::changeEvent(QEvent *e)
 {
     switch (e->type())
     {
-        case QEvent::StyleChange:
-            updateLineEditGeometry();
-            break;
         case QEvent::EnabledChange:
             if (!isEnabled())
                 hidePopup();
@@ -218,26 +199,10 @@ void KoSliderCombo::changeEvent(QEvent *e)
         case QEvent::PaletteChange:
             d->container->setPalette(palette());
             break;
-        case QEvent::FontChange:
-            d->container->setFont(font());
-            updateLineEditGeometry();
-            break;
         default:
             break;
     }
-    QWidget::changeEvent(e);
-}
-
-void KoSliderCombo::focusInEvent(QFocusEvent *e)
-{
-    update();
-    d->lineEdit->event((QEvent *)e);
-}
-
-void KoSliderCombo::focusOutEvent(QFocusEvent *e)
-{
-    update();
-    d->lineEdit->event((QEvent *)e);
+    QComboBox::changeEvent(e);
 }
 
 void KoSliderCombo::paintEvent(QPaintEvent *)
@@ -251,30 +216,6 @@ void KoSliderCombo::paintEvent(QPaintEvent *)
     gc.drawControl(QStyle::CE_ComboBoxLabel, opt);
 }
 
-bool KoSliderCombo::event(QEvent *event)
-{
-    switch(event->type())
-    {
-        case QEvent::LayoutDirectionChange:
-        case QEvent::ApplicationLayoutDirectionChange:
-            updateLineEditGeometry();
-            break;
-        case QEvent::HoverEnter:
-        case QEvent::HoverLeave:
-        case QEvent::HoverMove:
-/*    if (const QHoverEvent *he = static_cast<const QHoverEvent *>(event))
-        d->updateHoverControl(he->pos());
-*/
-            break;
-        case QEvent::ShortcutOverride:
-            return d->lineEdit->event(event);
-            break;
-        default:
-            break;
-    }
-    return QWidget::event(event);
-}
-
 void KoSliderCombo::mousePressEvent(QMouseEvent *e)
 {
     QStyleOptionComboBox opt = styleOption();
@@ -282,22 +223,23 @@ void KoSliderCombo::mousePressEvent(QMouseEvent *e)
                                                            this);
     if (sc == QStyle::SC_ComboBoxArrow && !d->container->isVisible())
     {
-        updateArrow(QStyle::State_Sunken);
         showPopup();
     }
+    else
+        QComboBox::mousePressEvent(e);
 }
 
-void KoSliderCombo::lineEditFinished()
+void KoSliderCombo::lineEditFinished( const QString & text)
 {
-    double value = d->lineEdit->text().toDouble();
+    double value = text.toDouble();
     d->slider->setValue(int((value - d->minimum) * 256 / d->maximum + 0.5));
 }
 
 void KoSliderCombo::sliderValueChanged(int slidervalue)
 {
-    d->lineEdit->setText(KGlobal::locale()->formatNumber(d->minimum + d->maximum*slidervalue/256, d->decimals));
+    setEditText(KGlobal::locale()->formatNumber(d->minimum + d->maximum*slidervalue/256, d->decimals));
 
-    double value = d->lineEdit->text().toDouble();
+    double value = (QComboBox::currentText()).toDouble();
     emit valueChanged(value);
 }
 

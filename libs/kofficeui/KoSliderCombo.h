@@ -20,7 +20,7 @@
 #ifndef KOSLIDERCOMBO_H_
 #define KOSLIDERCOMBO_H_
 
-#include <QWidget>
+#include <QComboBox>
 #include <QStyleOptionComboBox>
 
 #include <kofficeui_export.h>
@@ -28,11 +28,11 @@
 /**
  * @short A widget for double values with a popup slider
  *
- * KoSliderCombo combines a QLineedit and a dropdown QSlider
- * to make an easy to use control for setting a value.
+ * KoSliderCombo combines a QLineEdit and a dropdown QSlider
+ * to make an easy to use control for setting a double value.
  *
  */
-class KOFFICEUI_EXPORT KoSliderCombo : public QWidget
+class KOFFICEUI_EXPORT KoSliderCombo : public QComboBox
 {
 
     Q_OBJECT
@@ -48,16 +48,44 @@ public:
 
     /**
      * Destructor
-     *
-     *
      */
     virtual ~KoSliderCombo();
 
-    double maximum() const;
-    double minimum() const;
+    /**
+     * The precision of values given as the number of digits after the period.
+     * default is 2
+     */
     double decimals() const;
+
+    /**
+     * The minimum value that can be entered.
+     * default is 0
+     */
+    double minimum() const;
+
+    /**
+     * The maximum value that can be entered.
+     * default is 100
+     */
+    double maximum() const;
+
+    /**
+     * Sets the precision of the entered values.
+     * @param d the number of digits after the period
+     */
+
     void setDecimals(int d);
+
+    /**
+     * Sets the minimum value that can be entered.
+     * @param min the minimum value
+     */
     void setMinimum(double min);
+
+    /**
+     * Sets the maximum value that can be entered.
+     * @param max the maximum value
+     */
     void setMaximum(double max);
 
     virtual QSize minimumSizeHint() const;
@@ -76,22 +104,16 @@ signals:
 
 protected:
     virtual void paintEvent(QPaintEvent *);
-    virtual void resizeEvent(QResizeEvent *);
     virtual void hideEvent(QHideEvent *);
     virtual void changeEvent(QEvent *e);
-    virtual void focusInEvent(QFocusEvent *e);
-    virtual void focusOutEvent(QFocusEvent *e);
-    virtual bool event(QEvent *event);
     virtual void mousePressEvent(QMouseEvent *e);
 
 private slots:
     void sliderValueChanged(int value);
-    void lineEditFinished();
+    void lineEditFinished( const QString & text);
 
 private:
     QStyleOptionComboBox styleOption() const;
-    void updateLineEditGeometry();
-    void updateArrow(QStyle::StateFlag state);
     void showPopup();
     void hidePopup();
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 David Faure <faure@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,7 +46,7 @@ public:
     /// Destructor
     ~KoXmlWriter();
 
-    QIODevice *device() const { return m_dev; }
+    QIODevice *device() const;
 
     /**
      * Start the XML document.
@@ -211,7 +212,7 @@ public:
      * @return the current indentation level.
      * Useful when creating a sub-KoXmlWriter (see addCompleteElement)
      */
-    int indentLevel() const { return m_tags.size() + m_baseIndentLevel; }
+    int indentLevel() const;
 
 private:
     struct Tag {
@@ -232,16 +233,11 @@ private:
     // Try to use it as much as possible, especially with constants.
     void writeString( const QString& str );
 
-    // unused and possibly incorrect if length != size
-    //inline void writeCString( const QCString& cstr ) {
-    //    m_dev->write( cstr.data(), cstr.size() - 1 );
-    //}
-
     inline void writeCString( const char* cstr ) {
-        m_dev->write( cstr, qstrlen( cstr ) );
+        device()->write( cstr, qstrlen( cstr ) );
     }
     inline void writeChar( char c ) {
-        m_dev->putChar( c );
+        device()->putChar( c );
     }
     inline void closeStartElement( Tag& tag ) {
         if ( !tag.openingTagClosed ) {
@@ -254,17 +250,8 @@ private:
     void prepareForTextNode();
     void init();
 
-    QIODevice* m_dev;
-    QStack<Tag> m_tags;
-    int m_baseIndentLevel;
-
     class Private;
     Private * const d;
-
-    char* m_indentBuffer; // maybe make it static, but then it needs a KStaticDeleter,
-                          // and would eat 1K all the time... Maybe refcount it :)
-    char* m_escapeBuffer; // can't really be static if we want to be thread-safe
-    static const int s_escapeBufferLen = 10000;
 
     KoXmlWriter( const KoXmlWriter & ); // forbidden
     KoXmlWriter& operator=( const KoXmlWriter & ); // forbidden

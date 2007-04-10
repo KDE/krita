@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 David Faure <faure@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,38 +27,51 @@
 #include <float.h>
 
 static const int s_indentBufferLength = 100;
+static const int s_escapeBufferLen = 10000;
 
 class KoXmlWriter::Private
 {
+public:
+    Private(QIODevice* dev_, int indentLevel = 0) : dev(dev_), baseIndentLevel(indentLevel) {}
+    ~Private() {
+        delete[] indentBuffer;
+        delete[] escapeBuffer;
+    }
+
+    QIODevice* dev;
+    QStack<Tag> tags;
+    int baseIndentLevel;
+
+    char* indentBuffer; // maybe make it static, but then it needs a KStaticDeleter,
+                          // and would eat 1K all the time... Maybe refcount it :)
+    char* escapeBuffer; // can't really be static if we want to be thread-safe
 };
 
 KoXmlWriter::KoXmlWriter( QIODevice* dev, int indentLevel )
-    : m_dev( dev ), m_baseIndentLevel( indentLevel ), d( 0 )
+    : d( new Private(dev, indentLevel) )
 {
     init();
 }
 
 void KoXmlWriter::init()
 {
-    m_indentBuffer = new char[ s_indentBufferLength ];
-    memset( m_indentBuffer, ' ', s_indentBufferLength );
-    *m_indentBuffer = '\n'; // write newline before indentation, in one go
+    d->indentBuffer = new char[ s_indentBufferLength ];
+    memset( d->indentBuffer, ' ', s_indentBufferLength );
+    *d->indentBuffer = '\n'; // write newline before indentation, in one go
 
-    m_escapeBuffer = new char[s_escapeBufferLen];
-    if ( !m_dev->isOpen() )
-        m_dev->open( QIODevice::WriteOnly );
+    d->escapeBuffer = new char[s_escapeBufferLen];
+    if ( !d->dev->isOpen() )
+        d->dev->open( QIODevice::WriteOnly );
 }
 
 KoXmlWriter::~KoXmlWriter()
 {
-    delete[] m_indentBuffer;
-    delete[] m_escapeBuffer;
     delete d;
 }
 
 void KoXmlWriter::startDocument( const char* rootElemName, const char* publicId, const char* systemId )
 {
-    Q_ASSERT( m_tags.isEmpty() );
+    Q_ASSERT( d->tags.isEmpty() );
     writeCString( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
     // There isn't much point in a doctype if there's no DTD to refer to
     // (I'm told that files that are validated by a RelaxNG schema cannot refer to the schema)
@@ -77,14 +91,14 @@ void KoXmlWriter::endDocument()
 {
     // just to do exactly like QDom does (newline at end of file).
     writeChar( '\n' );
-    Q_ASSERT( m_tags.isEmpty() );
+    Q_ASSERT( d->tags.isEmpty() );
 }
 
 // returns the value of indentInside of the parent
 bool KoXmlWriter::prepareForChild()
 {
-    if ( !m_tags.isEmpty() ) {
-        Tag& parent = m_tags.top();
+    if ( !d->tags.isEmpty() ) {
+        Tag& parent = d->tags.top();
         if ( !parent.hasChildren ) {
             closeStartElement( parent );
             parent.hasChildren = true;
@@ -100,7 +114,7 @@ bool KoXmlWriter::prepareForChild()
 
 void KoXmlWriter::prepareForTextNode()
 {
-    Tag& parent = m_tags.top();
+    Tag& parent = d->tags.top();
     if ( !parent.hasChildren ) {
         closeStartElement( parent );
         parent.hasChildren = true;
@@ -115,7 +129,7 @@ void KoXmlWriter::startElement( const char* tagName, bool indentInside )
     // Tell parent that it has children
     bool parentIndent = prepareForChild();
 
-    m_tags.push( Tag( tagName, parentIndent && indentInside ) );
+    d->tags.push( Tag( tagName, parentIndent && indentInside ) );
     writeChar( '<' );
     writeCString( tagName );
     //kDebug() << k_funcinfo << tagName << endl;
@@ -142,18 +156,18 @@ void KoXmlWriter::addCompleteElement( QIODevice* indev )
         qint64 len = indev->read( buffer.data(), buffer.size() );
         if ( len <= 0 ) // e.g. on error
             break;
-        m_dev->write( buffer.data(), len );
+        d->dev->write( buffer.data(), len );
     }
 }
 
 void KoXmlWriter::endElement()
 {
-    if ( m_tags.isEmpty() )
+    if ( d->tags.isEmpty() )
         kWarning() << "Ouch, endElement() was called more times than startElement(). "
             "The generated XML will be invalid! "
             "Please report this bug (by saving the document to another format...)" << endl;
 
-    Tag tag = m_tags.pop();
+    Tag tag = d->tags.pop();
     //kDebug() << k_funcinfo << " tagName=" << tag.tagName << " hasChildren=" << tag.hasChildren << endl;
     if ( !tag.hasChildren ) {
         writeCString( "/>" );
@@ -175,7 +189,7 @@ void KoXmlWriter::addTextNode( const QByteArray& cstr )
     prepareForTextNode();
     char* escaped = escapeForXML( cstr.constData(), cstr.size() );
     writeCString( escaped );
-    if(escaped != m_escapeBuffer)
+    if(escaped != d->escapeBuffer)
         delete[] escaped;
 }
 
@@ -184,7 +198,7 @@ void KoXmlWriter::addTextNode( const char* cstr )
     prepareForTextNode();
     char* escaped = escapeForXML( cstr, -1 );
     writeCString( escaped );
-    if(escaped != m_escapeBuffer)
+    if(escaped != d->escapeBuffer)
         delete[] escaped;
 }
 
@@ -204,7 +218,7 @@ void KoXmlWriter::addAttribute( const char* attrName, const QByteArray& value )
     writeCString("=\"");
     char* escaped = escapeForXML( value.constData(), value.size() );
     writeCString( escaped );
-    if(escaped != m_escapeBuffer)
+    if(escaped != d->escapeBuffer)
         delete[] escaped;
     writeChar( '"' );
 }
@@ -216,7 +230,7 @@ void KoXmlWriter::addAttribute( const char* attrName, const char* value )
     writeCString("=\"");
     char* escaped = escapeForXML( value, -1 );
     writeCString( escaped );
-    if(escaped != m_escapeBuffer)
+    if(escaped != d->escapeBuffer)
         delete[] escaped;
     writeChar( '"' );
 }
@@ -239,7 +253,7 @@ void KoXmlWriter::addAttributePt( const char* attrName, double value )
 void KoXmlWriter::writeIndent()
 {
     // +1 because of the leading '\n'
-    m_dev->write( m_indentBuffer, qMin( indentLevel() + 1,
+    d->dev->write( d->indentBuffer, qMin( indentLevel() + 1,
                                         s_indentBufferLength ) );
 }
 
@@ -247,18 +261,18 @@ void KoXmlWriter::writeString( const QString& str )
 {
     // cachegrind says .utf8() is where most of the time is spent
     const QByteArray cstr = str.toUtf8();
-    m_dev->write( cstr );
+    d->dev->write( cstr );
 }
 
-// In case of a reallocation (ret value != m_buffer), the caller owns the return value,
+// In case of a reallocation (ret value != d->buffer), the caller owns the return value,
 // it must delete it (with [])
 char* KoXmlWriter::escapeForXML( const char* source, int length = -1 ) const
 {
     // we're going to be pessimistic on char length; so lets make the outputLength less
     // the amount one char can take: 6
-    char* destBoundary = m_escapeBuffer + s_escapeBufferLen - 6;
-    char* destination = m_escapeBuffer;
-    char* output = m_escapeBuffer;
+    char* destBoundary = d->escapeBuffer + s_escapeBufferLen - 6;
+    char* destination = d->escapeBuffer;
+    char* output = d->escapeBuffer;
     const char* src = source; // src moves, source remains
     for ( ;; ) {
         if(destination >= destBoundary) {
@@ -271,8 +285,8 @@ char* KoXmlWriter::escapeForXML( const char* source, int length = -1 ) const
             uint newLength = length * 6 + 1; // worst case. 6 is due to &quot; and &apos;
             char* buffer = new char[ newLength ];
             destBoundary = buffer + newLength;
-            uint amountOfCharsAlreadyCopied = destination - m_escapeBuffer;
-            memcpy( buffer, m_escapeBuffer, amountOfCharsAlreadyCopied );
+            uint amountOfCharsAlreadyCopied = destination - d->escapeBuffer;
+            memcpy( buffer, d->escapeBuffer, amountOfCharsAlreadyCopied );
             output = buffer;
             destination = buffer + amountOfCharsAlreadyCopied;
         }
@@ -457,3 +471,12 @@ void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCac
         endElement();
     }
 }
+
+QIODevice *KoXmlWriter::device() const {
+    return d->dev;
+}
+
+int KoXmlWriter::indentLevel() const {
+    return d->tags.size() + d->baseIndentLevel;
+}
+

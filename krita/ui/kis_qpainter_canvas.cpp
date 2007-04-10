@@ -398,6 +398,7 @@ void KisQPainterCanvas::preScale( const QRect & rc )
         QTime t;
         t.start();
         QPainter gc( &m_d->prescaledImage );
+        gc.setCompositionMode( QPainter::CompositionMode_Source );
         drawScaledImage( rc, gc);
         kDebug(41010) << "Prescaling took " << t.elapsed() << endl;
     }

@@ -59,7 +59,7 @@ KoLineBorder::~KoLineBorder() {
     delete d;
 }
 
-void KoLineBorder::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
+void KoLineBorder::fillStyle( KoGenStyle &style, KoShapeSavingContext *context )
 {
     Q_UNUSED( context );
     // TODO implement all possibilities

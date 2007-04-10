@@ -18,11 +18,12 @@
 */
 
 #include "KoPAPageBase.h"
+#include "KoPASavingContext.h"
 
 #include <QDebug>
 
-#include <KoShapeLayer.h>
 #include <KoShapeSavingContext.h>
+#include <KoShapeLayer.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoOasisStyles.h>
@@ -60,21 +61,21 @@ void KoPAPageBase::paintComponent(QPainter& painter, const KoViewConverter& conv
     Q_UNUSED(converter);
 }
 
-bool KoPAPageBase::saveOdf( KoPASavingContext &paContext ) const
+void KoPAPageBase::saveOdf( KoShapeSavingContext * context )
 {
+    KoPASavingContext *paContext = static_cast<KoPASavingContext*>(context);
     createOdfPageTag( paContext );
 
-    paContext.xmlWriter().addAttribute( "draw:style-name", saveOdfPageStyle( paContext ) );
+    paContext->xmlWriter().addAttribute( "draw:style-name", saveOdfPageStyle( paContext ) );
 
     saveOdfShapes( paContext );
     saveOdfAnimations( paContext );
     saveOdfPresentationNotes();        
 
-    paContext.xmlWriter().endElement(); //draw:page
-    return true;
+    paContext->xmlWriter().endElement(); //draw:page
 }
 
-bool KoPAPageBase::saveOdfShapes( KoPASavingContext &paContext ) const
+void KoPAPageBase::saveOdfShapes( KoPASavingContext *paContext ) const
 {
     QList<KoShape*> shapes( iterator() );
     QList<KoShape*> tlshapes;
@@ -96,28 +97,26 @@ bool KoPAPageBase::saveOdfShapes( KoPASavingContext &paContext ) const
     foreach( KoShape *shape, tlshapes ) {
         shape->saveOdf( paContext );
     }
-
-    return true;
 }
 
-QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext &paContext ) const
+QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext *paContext ) const
 {
     KoGenStyle style( KoPAStyles::STYLE_PAGE, "drawing-page" );
 
-    if ( paContext.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
+    if ( paContext->isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
         style.setAutoStyleInStylesDotXml( true );
     }
 
     saveOdfPageStyleData( style, paContext );
 
-    return paContext.mainStyles().lookup( style, "dp" );
+    return paContext->mainStyles().lookup( style, "dp" );
 }
 
-void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
+void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext *paContext ) const
 {
     //TODO
     QBrush background( Qt::white );
-    KoOasisStyles::saveOasisFillStyle( style, paContext.mainStyles(), background );
+    KoOasisStyles::saveOasisFillStyle( style, paContext->mainStyles(), background );
 }
 
 bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoOasisLoadingContext & loadingContext )

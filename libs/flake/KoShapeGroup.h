@@ -47,6 +47,8 @@ public:
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
     /// always returns false since the group itself can't be selected or hit
     bool hitTest( const QPointF &position ) const;
+    /// reimplemented from KoShape
+    virtual void saveOdf( KoShapeSavingContext * context );
 
 private:
 

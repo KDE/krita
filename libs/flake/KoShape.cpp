@@ -145,92 +145,6 @@ void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &convert
     }*/
 }
 
-bool KoShape::saveOdf( KoShapeSavingContext & context )
-{
-    const char * tag = odfTagName();
-    if ( tag[0] == '\0' )
-    {
-        kWarning(30006) << "No support for shape yet. Not saving!" << endl;
-    }
-    else
-    {
-        context.xmlWriter().startElement( tag );
-        context.xmlWriter().addAttribute( context.isSet( KoShapeSavingContext::PresentationShape ) ? 
-                                          "presentation:style-name": "draw:style-name", 
-                                          getStyle( context ) );
-
-        if ( context.isSet( KoShapeSavingContext::DrawId ) )
-        {
-            context.xmlWriter().addAttribute( "draw:id", context.drawId( this ) );
-        }
-
-        saveOdfData( context );
-        context.xmlWriter().endElement();
-    }
-    return true;
-}
-
-void KoShape::saveOdfSizeAndPosition( KoShapeSavingContext &context ) const
-{
-    QSizeF s( size() );
-    context.xmlWriter().addAttributePt( "svg:width", s.width() );
-    context.xmlWriter().addAttributePt( "svg:height", s.height() );
-
-    if ( d->scaleX == 1 and d->scaleY == 1 && d->angle == 0 && d->shearX == 0 && d->shearY == 0 )
-    {
-        QPointF pos( position() );
-        context.xmlWriter().addAttributePt( "svg:x", pos.x() );
-        context.xmlWriter().addAttributePt( "svg:y", pos.y() );
-    }
-    else
-    {
-        // looks like position is not needed it would be svg:x="0" and svg:y="0"
-        // looks like OO 2.0 can not load the translation in the matrix 
-        QString m = QString( "matrix(%1 %2 %3 %4 %5 %6)" ).arg( d->matrix.m11() ).arg( d->matrix.m12() )
-                                                          .arg( d->matrix.m21() ).arg( d->matrix.m22() )
-                                                          .arg( d->matrix.dx() ) .arg( d->matrix.dy() );
-        context.xmlWriter().addAttribute( "draw:transform", m );
-    }
-}
-
-QString KoShape::getStyle( KoShapeSavingContext &context )
-{
-    KoGenStyle style;
-    if ( context.isSet( KoShapeSavingContext::PresentationShape ) ) {
-        style = KoGenStyle( KoGenStyle::STYLE_PRESENTATIONAUTO, "presentation" );
-    }
-    else {
-        style = KoGenStyle( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
-    }
-
-    fillStyle( style, context );
-    
-    if ( context.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
-        style.setAutoStyleInStylesDotXml( true );
-    }
-
-    return context.mainStyles().lookup( style, context.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
-}
-
-void KoShape::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
-{
-    KoShapeBorderModel * b = border();
-    if ( b )
-    {
-        b->fillStyle( style, context );
-    }
-    QBrush bg( background() );
-    switch ( bg.style() )
-    {
-        case Qt::NoBrush:
-            style.addProperty( "draw:fill","none" );
-            break;
-        default:    
-            //KoOasisStyles::saveOasisFillStyle( style, context.mainStyles(), bg );
-            break;
-    }
-}
-
 void KoShape::scale( double sx, double sy )
 {
     if(d->scaleX == sx && d->scaleY == sy)
@@ -591,7 +505,7 @@ void KoShape::setBackground ( const QBrush & brush ) {
     d->backgroundBrush = brush;
 }
 
-const QBrush& KoShape::background () {
+QBrush KoShape::background() const {
     return d->backgroundBrush;
 }
 
@@ -686,14 +600,6 @@ QList<KoShapeConnection*> KoShape::connections() const {
     return d->connections;
 }
 
-// static
-void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converter) {
-    double zoomX, zoomY;
-    converter.zoom(&zoomX, &zoomY);
-    painter.scale(zoomX, zoomY);
-}
-
-
 QString KoShape::name() const {
     return d->name;
 }
@@ -701,3 +607,131 @@ QString KoShape::name() const {
 void KoShape::setName( const QString & name ) {
     d->name = name;
 }
+
+// loading & saving methods
+
+QString KoShape::style( KoShapeSavingContext *context ) const
+{
+    KoGenStyle style;
+    if ( context->isSet( KoShapeSavingContext::PresentationShape ) ) {
+        style = KoGenStyle( KoGenStyle::STYLE_PRESENTATIONAUTO, "presentation" );
+    }
+    else {
+        style = KoGenStyle( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
+    }
+
+    // and fill the style
+    KoShapeBorderModel * b = border();
+    if ( b )
+    {
+        b->fillStyle( style, context );
+    }
+    QBrush bg( background() );
+    switch ( bg.style() )
+    {
+        case Qt::NoBrush:
+            style.addProperty( "draw:fill","none" );
+            break;
+        default:    // TODO all the other ones.
+            //KoOasisStyles::saveOasisFillStyle( style, context->mainStyles(), bg );
+            break;
+    }
+
+    if ( context->isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
+        style.setAutoStyleInStylesDotXml( true );
+    }
+
+    return context->mainStyles().lookup( style, context->isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
+}
+
+void KoShape::saveOdfTransformationAttributes(KoShapeSavingContext *context) const {
+    // just like in shapes; ODF allows you to manipulate the 'matrix' after setting an
+    // ofset on the shape (using the x and y positions).   Lets save them here.
+    bool rotate = qAbs(d->angle) > 1E-6;
+    bool skew = qAbs(d->shearX) > 1E-6 || qAbs(d->shearY) > 1E-6;
+    bool scale = qAbs(d->scaleX - 1) > 1E-6 || qAbs(d->scaleY -1) > 1E-6;
+
+    if(rotate && (skew || scale)) {
+        QMatrix matrix; // can't use transformationMatrix() as that includes transformation of the container as well.
+        QSizeF size(this->size());
+        if ( d->angle != 0 )
+        {
+            matrix.translate( size.width() / 2.0 * d->scaleX, size.height() / 2.0 * d->scaleY );
+            matrix.translate( size.height() / 2.0 * d->shearX, size.width() / 2.0 * d->shearY );
+            matrix.rotate( d->angle );
+            matrix.translate( -size.width() / 2.0 * d->scaleX, -size.height() / 2.0 * d->scaleY );
+            matrix.translate( -size.height() / 2.0 * d->shearX, -size.width() / 2.0 * d->shearY );
+        }
+        matrix.shear( d->shearX, d->shearY );
+        matrix.scale( d->scaleX, d->scaleY );
+
+        QString m = QString( "matrix(0 0 %3 %4 %5pt %6pt)" ).arg( matrix.m11() ).arg( matrix.m12() )
+            .arg( matrix.m21() ).arg( matrix.m22() )
+            .arg( matrix.dx() ) .arg( matrix.dy() );
+        context->xmlWriter().addAttribute( "draw:transform", m );
+    }
+    else {
+        QString transform;
+        if(rotate)
+            transform = "rotate("+ QString::number(d->angle) +')';
+        if(skew)
+            transform = "skewX("+ QString::number(d->shearX) +") skewY("+ QString::number(d->shearY) +')';
+        if(scale) {
+            transform += "scale("+ QString::number(d->scaleX);
+            if(d->scaleX != d->scaleY)
+                transform += ','+ QString::number(d->scaleY);
+            transform += ')';
+        }
+
+        context->xmlWriter().addAttribute( "draw:transform", transform );
+    }
+}
+
+void KoShape::saveOdfMandatoryAttributes(KoShapeSavingContext *context) const {
+    context->xmlWriter().addAttribute( context->isSet( KoShapeSavingContext::PresentationShape ) ? 
+                                      "presentation:style-name": "draw:style-name",
+                                      style( context ) );
+
+    if ( context->isSet( KoShapeSavingContext::DrawId ) )
+    {
+        context->xmlWriter().addAttribute( "draw:id", context->drawId( this ) );
+    }
+
+    QList<const char*> tags = context->xmlWriter().tagHierarchy();
+    tags.removeAt(tags.count()-1); // remove the last; as its the current open tag.
+    foreach(const char* tag, tags) {
+        if(QString(tag) == QString("draw:frame"))
+            return; // we don't store those.
+    }
+    context->xmlWriter().addAttribute("draw:z-index", zIndex());
+}
+
+void KoShape::saveOdfSizePositionAttributes(KoShapeSavingContext *context) const {
+    QList<const char*> tags = context->xmlWriter().tagHierarchy();
+    tags.removeAt(tags.count()-1); // remove the last; as its the current open tag.
+    foreach(const char* tag, tags) {
+        if(QString(tag) == QString("draw:frame"))
+            return; // we don't store those.
+    }
+
+    QSizeF s( size() );
+    context->xmlWriter().addAttributePt( "svg:width", s.width() );
+    context->xmlWriter().addAttributePt( "svg:height", s.height() );
+    context->xmlWriter().addAttributePt( "svg:x", d->pos.x() );
+    context->xmlWriter().addAttributePt( "svg:y", d->pos.y() );
+}
+
+void KoShape::saveOdfConnections(KoShapeSavingContext *context) const {
+    // TODO  save "draw-glue-point" elements (9.2.19)
+}
+
+// end loading & saving methods
+
+
+// static
+void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converter) {
+    double zoomX, zoomY;
+    converter.zoom(&zoomX, &zoomY);
+    painter.scale(zoomX, zoomY);
+}
+

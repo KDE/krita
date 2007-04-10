@@ -34,15 +34,15 @@ KoPAMasterPage::~KoPAMasterPage()
 {
 }
 
-void KoPAMasterPage::createOdfPageTag( KoPASavingContext &paContext ) const
+void KoPAMasterPage::createOdfPageTag( KoPASavingContext *paContext ) const
 {
     KoGenStyle pageLayoutStyle = pageLayout().saveOasis();
     pageLayoutStyle.setAutoStyleInStylesDotXml( true );
     pageLayoutStyle.addAttribute( "style:page-usage", "all" );
-    QString pageLayoutName( paContext.mainStyles().lookup( pageLayoutStyle, "pm" ) );
+    QString pageLayoutName( paContext->mainStyles().lookup( pageLayoutStyle, "pm" ) );
 
-    paContext.xmlWriter().startElement( "style:master-page" );
-    paContext.xmlWriter().addAttribute( "style:name", "Standard" ); //TODO
-    paContext.addMasterPage( this, "Standard" );
-    paContext.xmlWriter().addAttribute( "style:page-layout-name", pageLayoutName );
+    paContext->xmlWriter().startElement( "style:master-page" );
+    paContext->xmlWriter().addAttribute( "style:name", "Standard" ); //TODO
+    paContext->addMasterPage( this, "Standard" );
+    paContext->xmlWriter().addAttribute( "style:page-layout-name", pageLayoutName );
 }

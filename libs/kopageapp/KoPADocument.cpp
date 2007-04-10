@@ -114,7 +114,7 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     // save master pages
     foreach( KoPAPageBase *page, m_masterPages )
     {
-        page->saveOdf( paContext );
+        page->saveOdf( &paContext );
     }
     masterStylesTmpWriter.endElement();
 
@@ -134,7 +134,7 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     // save pages
     foreach ( KoPAPageBase *page, m_pages )
     {
-        page->saveOdf( paContext );
+        page->saveOdf( &paContext );
         paContext.incrementPage();
     }
 

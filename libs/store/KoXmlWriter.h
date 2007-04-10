@@ -214,6 +214,11 @@ public:
      */
     int indentLevel() const;
 
+    /**
+     * Return all the open tags at this time, root element first.
+     */
+    QList<const char*> tagHierarchy() const;
+
 private:
     struct Tag {
         Tag( const char* t = 0, bool ind = true )

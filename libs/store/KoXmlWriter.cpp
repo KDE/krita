@@ -480,3 +480,11 @@ int KoXmlWriter::indentLevel() const {
     return d->tags.size() + d->baseIndentLevel;
 }
 
+QList<const char*> KoXmlWriter::tagHierarchy() const {
+    QList<const char*> answer;
+    foreach(Tag tag, d->tags)
+        answer.append(tag.tagName);
+
+    return answer;
+}
+

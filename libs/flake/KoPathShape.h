@@ -587,7 +587,7 @@ public:
     /**
      * @brief Creates separate path shapes, one for each existing subpath.
      * @param separatedPaths the list which contains the separated path shapes
-     * @return true if separating the path was successful, else false 
+     * @return true if separating the path was successful, false otherwise
      */
     bool separate( QList<KoPathShape*> & separatedPaths );
 

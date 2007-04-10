@@ -42,7 +42,7 @@ public:
     /// @return the masterpage of this page
     KoPAMasterPage * masterPage() { return m_masterPage; }
 protected:
-    virtual void createOdfPageTag( KoPASavingContext &paContext ) const;
+    virtual void createOdfPageTag( KoPASavingContext *paContext ) const;
 
     KoPAMasterPage * m_masterPage;
 };

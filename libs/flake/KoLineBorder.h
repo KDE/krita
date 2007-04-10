@@ -80,7 +80,7 @@ public:
     /// Stes the color
     void setColor( const QColor & color );
 
-    virtual void fillStyle( KoGenStyle &style, KoShapeSavingContext &context ); 
+    virtual void fillStyle( KoGenStyle &style, KoShapeSavingContext *context );
     virtual void borderInsets(const KoShape *shape, KoInsets &insets);
     virtual bool hasTransparency();
     virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter);

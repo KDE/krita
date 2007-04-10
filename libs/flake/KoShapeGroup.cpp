@@ -20,6 +20,8 @@
 #include "KoShapeGroup.h"
 #include "KoShapeContainerModel.h"
 #include "SimpleShapeContainerModel.h"
+#include "KoShapeSavingContext.h"
+#include "KoXmlWriter.h"
 
 KoShapeGroup::KoShapeGroup()
 : KoShapeContainer(new SimpleShapeContainerModel())
@@ -40,4 +42,16 @@ void KoShapeGroup::childCountChanged() {
     QRectF br = boundingRect();
     setPosition( br.topLeft() );
     resize( br.size() );
+}
+
+void KoShapeGroup::saveOdf( KoShapeSavingContext * context ) {
+    context->xmlWriter().startElement( "draw:g" );
+    saveOdfMandatoryAttributes(context);
+    context->xmlWriter().addAttributePt( "svg:y", position().y() );
+
+    foreach(KoShape* shape, iterator()) // store children.
+        shape->saveOdf(context);
+
+    saveOdfConnections(context);
+    context->xmlWriter().endElement();
 }

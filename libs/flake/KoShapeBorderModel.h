@@ -51,7 +51,7 @@ public:
      * @param style object
      * @param context used for saving
      */
-    virtual void fillStyle( KoGenStyle &style, KoShapeSavingContext &context ) = 0; 
+    virtual void fillStyle( KoGenStyle &style, KoShapeSavingContext *context ) = 0;
 
     /**
      * Return a new borderInsets object filled with the size around the shape that this

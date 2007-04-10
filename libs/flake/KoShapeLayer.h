@@ -40,6 +40,8 @@ public:
     virtual void paintComponent(QPainter &, const KoViewConverter &) {}
     bool hitTest( const QPointF &position ) const;
     virtual QRectF boundingRect() const;
+    /// reimplemented from KoShape
+    virtual void saveOdf( KoShapeSavingContext * context );
 };
 
 #endif // __KOSHAPELAYER_H__

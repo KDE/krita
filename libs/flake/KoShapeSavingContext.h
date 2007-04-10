@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSHAPESAVEINGCONTEXT_H
-#define KOSHAPESAVEINGCONTEXT_H
+#ifndef KOSHAPESAVINGCONTEXT_H
+#define KOSHAPESAVINGCONTEXT_H
 
 #include <flake_export.h>
 
@@ -41,13 +41,13 @@ public:
     /// The Style used for saving the shape
     enum KoShapeSavingOption
     {
-        /** 
-         * If set the style of family peresentation is used, when not set the 
+        /**
+         * If set the style of family presentation is used, when not set the
          * family graphic is used.
          * See OpenDocument 9.2.15 Common Drawing Shape Attributes / Style
          */
-        PresentationShape = 1,  
-        /** 
+        PresentationShape = 1,
+        /**
          * Save the draw:id used for referencing the shape.
          * See OpenDocument 9.2.15 Common Drawing Shape Attributes / ID
          */
@@ -122,19 +122,19 @@ public:
      *
      * @return the draw id for the shape or and empty string if it was not found
      */
-    const QString drawId( KoShape * shape, bool insert = true );
+    const QString drawId( const KoShape * shape, bool insert = true );
 
-protected:    
+protected:
     KoXmlWriter *m_xmlWriter;
     KoSavingContext &m_context;
 
     KoShapeSavingOptions m_savingOptions;
 
-    QMap<KoShape *, QString> m_drawIds;
+    QMap<const KoShape *, QString> m_drawIds;
     int m_drawId;
-    // TODO handle realtive positions
+    // TODO handle relative positions
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( KoShapeSavingContext::KoShapeSavingOptions )
 
-#endif // KOSHAPESAVEINGCONTEXT_H
+#endif // KOSHAPESAVINGCONTEXT_H

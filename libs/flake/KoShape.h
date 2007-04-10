@@ -133,29 +133,23 @@ public:
     virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
 
     /**
-     * @brief Save the shape
-     *
-     * This is the method that will be called when saving a shape as a described in 
-     * OpenDocument 9.2 Drawing Shapes. This method saves the common attributes of the
-     * drawing shapes.
-     * The special data for every shape is saved in @see saveOdfData().
-     *
-     * Please don't use yet as the design is not yet finished.
-     *
-     * @see saveOdfContent
+     * @brief store the shape data as ODF XML.
+     * This is the method that will be called when saving a shape as a described in¬
+     * OpenDocument 9.2 Drawing Shapes.
+     * @see saveOdfSizePositionAttributes(), saveOdfMandatoryAttributes(), saveOdfTransformationAttributes()
      */
-    bool saveOdf( KoShapeSavingContext & context );
+    virtual void saveOdf( KoShapeSavingContext * context ) { Q_UNUSED(context); } ; // = 0;
 
     /**
-     * @brief Save the shape
+     * This method can be used while saving the shape as ODF to add the size and
+     * the position of a shape attributes to the current element.
      *
-     * This is used to save a shape that is not used as a Drawing Shape, e.g.
-     * a text shape that is used as main part of the document as described in
-     * OpenDocument 2.3.1 Text Documents.
-     *
-     * Please don't use yet as the design is not yet finished.
+     * This also takes the transformation into account. Use in shapes which have
+     * Size, Position and transformation as defined in ODF 9.2.15 Common Drawing
+     * Shape Attributes.
+     * @see saveOdf()
      */
-    virtual bool saveOdfContext( KoShapeSavingContext & context ) { Q_UNUSED( context ); return true; }
+    void saveOdfSizePositionAttributes(KoShapeSavingContext *context) const;
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -298,7 +292,7 @@ public:
      * will be able to tell if its transparent or not.
      * @return the background-brush
      */
-    const QBrush& background ();
+    QBrush background() const;
 
     /**
      * Returns true if there is some transparency, false if the shape is fully opaque.
@@ -569,49 +563,50 @@ public:
      */
     void setName( const QString & name );
 
+
 protected:
-    /**
-     * @brief Get the tag name used for saving
-     *
-     * Get the name of the tag used for saving drawing shape
-     *
-     * This will be a pure virtual function once all shapes implemented it.
-     *
-     * @return the name of the tag
-     *
-     * @see saveOdf()
-     */
-    virtual const char * odfTagName() const { return ""; }
 
+/* ** loading saving helper methods */
     /**
-     * @brief Save the data that is special by each shape
-     *
-     * This will be a pure virtual function once all shapes implemented it.
-     *
-     * @return true if successful, false otherwise
-     *
-     * @see saveOdf()
-     */
-    virtual bool saveOdfData( KoShapeSavingContext &context ) const { Q_UNUSED( context ); return true; }
-
-    /**
-     * @brief Save the size and the position of a shape 
+     * This method can be used while saving the shape as ODF to add the size and
+     * the position of a shape attributes to the current element.
      *
      * This also takes the transformation into account. Use in shapes which have
-     * Size, Position and transformation as defined in ODF 9.2.15 Common Drawing 
+     * Size & Position as defined in ODF 9.2.15 Common Drawing
      * Shape Attributes.
+     * @see saveOdf, saveOdfMandatoryAttributes(), style(), saveOdfSizePositionAttributes()
      */
-    void saveOdfSizeAndPosition( KoShapeSavingContext &context ) const;
+    void saveOdfTransformationAttributes(KoShapeSavingContext *context) const;
 
     /**
-     * @brief Fill the style object
+     * This method can be used while saving the shape as ODF to add the mandatory
+     * attributes to the current element.
      *
-     * @param style object
-     * @param context used for saving
-     *
-     * @see saveOdf()
+     * The following attributes will be added;  ID, Z-Index, Layer and Style
+     * as defined in ODF 9.2.15 Common Drawing Shape Attributes.
+     * @see saveOdf, saveOdfTransformationAttributes(), style(), saveOdfSizePositionAttributes()
      */
-    void fillStyle( KoGenStyle &style, KoShapeSavingContext &context ); 
+    void saveOdfMandatoryAttributes(KoShapeSavingContext *context) const;
+
+    /**
+     * Add a new draw-glue-point element for each connections() present on this shape.
+     */
+    void saveOdfConnections(KoShapeSavingContext *context) const;
+
+    /**
+     * @brief Get the style used for the shape
+     *
+     * This method calls fillStyle and add then the style to the context
+     *
+     * @param context used for saving
+     * @return the name of the style
+     * @see saveOdf
+     */
+    QString style( KoShapeSavingContext *context ) const;
+
+
+/* ** end loading saving */
+
 
     /**
      * Update the position of the shape in the tree of the KoShapeManager.
@@ -654,16 +649,6 @@ protected:
     void removeConnection(KoShapeConnection *connection);
 
 private:
-    /**
-     * @brief Get the style used for the shape
-     *
-     * This method calls fillStyle and add then the style to the context
-     *
-     * @param context used for saving
-     * @return the name of the style
-     */
-    QString getStyle( KoShapeSavingContext &context );
-
     friend class KoShapeManager;
     void addShapeManager( KoShapeManager * manager );
     void removeShapeManager( KoShapeManager * manager );

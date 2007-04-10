@@ -65,9 +65,9 @@ KoShapeSavingContext::KoShapeSavingOptions KoShapeSavingContext::options() const
     return m_savingOptions;
 }
 
-const QString KoShapeSavingContext::drawId( KoShape * shape, bool insert )
+const QString KoShapeSavingContext::drawId( const KoShape * shape, bool insert )
 {
-    QMap<KoShape *, QString>::const_iterator it( m_drawIds.find( shape ) );
+    QMap<const KoShape *, QString>::const_iterator it( m_drawIds.find( shape ) );
     if ( it == m_drawIds.constEnd() && insert == true )
     {
         it = m_drawIds.insert( shape, QString( "shape" ).arg( ++m_drawId ) );

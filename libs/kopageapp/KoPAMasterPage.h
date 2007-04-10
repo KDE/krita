@@ -40,7 +40,7 @@ public:
     void setPageLayout(const KoPageLayout& layout) { m_pageLayout = layout; }
 
 protected:
-    virtual void createOdfPageTag( KoPASavingContext &paContext ) const;
+    virtual void createOdfPageTag( KoPASavingContext *paContext ) const;
 
     KoPageLayout m_pageLayout;
 };

@@ -127,9 +127,22 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     t.start();
     if ( cfg.scrollCheckers() ) {
+
+        QRect fillRect = ev->rect();
+
+        if (m_d->documentOffset.x() > 0) {
+            fillRect.adjust(0, 0, m_d->documentOffset.x(), 0);
+        } else {
+            fillRect.adjust(m_d->documentOffset.x(), 0, 0, 0);
+        }
+        if (m_d->documentOffset.y() > 0) {
+            fillRect.adjust(0, 0, 0, m_d->documentOffset.y());
+        } else {
+            fillRect.adjust(0, m_d->documentOffset.y(), 0, 0);
+        }
         gc.save();
         gc.translate(-m_d->documentOffset );
-        gc.fillRect( ev->rect(), m_d->checkBrush );
+        gc.fillRect( fillRect, m_d->checkBrush );
         gc.restore();
     }
     else {

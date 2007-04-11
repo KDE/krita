@@ -46,7 +46,7 @@ void KoShapeGroup::childCountChanged() {
 
 void KoShapeGroup::saveOdf( KoShapeSavingContext * context ) {
     context->xmlWriter().startElement( "draw:g" );
-    saveOdfMandatoryAttributes(context);
+    saveOdfAttributes(context, OdfMandatories);
     context->xmlWriter().addAttributePt( "svg:y", position().y() );
 
     foreach(KoShape* shape, iterator()) // store children.

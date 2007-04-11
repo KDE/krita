@@ -51,7 +51,7 @@ KoGenStyles & KoShapeSavingContext::mainStyles()
     return m_context.mainStyles(); 
 }
 
-bool KoShapeSavingContext::isSet( KoShapeSavingOption option ) const
+bool KoShapeSavingContext::isSet( ShapeSavingOption option ) const
 {
     return m_savingOptions & option;
 }
@@ -60,9 +60,19 @@ void KoShapeSavingContext::setOptions( KoShapeSavingOptions options )
 {
     m_savingOptions = options;
 }
+
 KoShapeSavingContext::KoShapeSavingOptions KoShapeSavingContext::options() const
 {
     return m_savingOptions;
+}
+
+void KoShapeSavingContext::addOption( ShapeSavingOption option) {
+    m_savingOptions = m_savingOptions | option;
+}
+
+void KoShapeSavingContext::removeOption( ShapeSavingOption option) {
+    if(isSet(option))
+        m_savingOptions = m_savingOptions ^ option; // xor to remove it.
 }
 
 const QString KoShapeSavingContext::drawId( const KoShape * shape, bool insert )

@@ -22,6 +22,7 @@
 
 #include "KoShape.h"
 #include "KoShapeContainer.h"
+#include "KoShapeLayer.h"
 #include "KoShapeContainerModel.h"
 #include "KoSelection.h"
 #include "KoPointerEvent.h"
@@ -609,6 +610,9 @@ void KoShape::setName( const QString & name ) {
 }
 
 // loading & saving methods
+void KoShape::saveOdfConnections(KoShapeSavingContext *context) const {
+    // TODO  save "draw-glue-point" elements (9.2.19)
+}
 
 QString KoShape::style( KoShapeSavingContext *context ) const
 {
@@ -644,85 +648,88 @@ QString KoShape::style( KoShapeSavingContext *context ) const
     return context->mainStyles().lookup( style, context->isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
 }
 
-void KoShape::saveOdfTransformationAttributes(KoShapeSavingContext *context) const {
-    // just like in shapes; ODF allows you to manipulate the 'matrix' after setting an
-    // ofset on the shape (using the x and y positions).   Lets save them here.
-    bool rotate = qAbs(d->angle) > 1E-6;
-    bool skew = qAbs(d->shearX) > 1E-6 || qAbs(d->shearY) > 1E-6;
-    bool scale = qAbs(d->scaleX - 1) > 1E-6 || qAbs(d->scaleY -1) > 1E-6;
+void KoShape::saveOdfFrameAttributes(KoShapeSavingContext *context) {
+    saveOdfAttributes(context, FrameAttributes);
+    context->addOption(KoShapeSavingContext::FrameOpened);
+}
 
-    if(rotate && (skew || scale)) {
-        QMatrix matrix; // can't use transformationMatrix() as that includes transformation of the container as well.
-        QSizeF size(this->size());
-        if ( d->angle != 0 )
+void KoShape::saveOdfAttributes(KoShapeSavingContext *context, int attributes) const {
+    if(attributes & OdfMandatories) {
+        // all items that should be written to 'draw:frame' and any other 'draw:' object that inherits this shape
+        context->xmlWriter().addAttribute( context->isSet( KoShapeSavingContext::PresentationShape ) ?
+                                          "presentation:style-name": "draw:style-name",
+                                          style( context ) );
+
+        if ( context->isSet( KoShapeSavingContext::DrawId ) )
         {
-            matrix.translate( size.width() / 2.0 * d->scaleX, size.height() / 2.0 * d->scaleY );
-            matrix.translate( size.height() / 2.0 * d->shearX, size.width() / 2.0 * d->shearY );
-            matrix.rotate( d->angle );
-            matrix.translate( -size.width() / 2.0 * d->scaleX, -size.height() / 2.0 * d->scaleY );
-            matrix.translate( -size.height() / 2.0 * d->shearX, -size.width() / 2.0 * d->shearY );
-        }
-        matrix.shear( d->shearX, d->shearY );
-        matrix.scale( d->scaleX, d->scaleY );
-
-        QString m = QString( "matrix(0 0 %3 %4 %5pt %6pt)" ).arg( matrix.m11() ).arg( matrix.m12() )
-            .arg( matrix.m21() ).arg( matrix.m22() )
-            .arg( matrix.dx() ) .arg( matrix.dy() );
-        context->xmlWriter().addAttribute( "draw:transform", m );
-    }
-    else {
-        QString transform;
-        if(rotate)
-            transform = "rotate("+ QString::number(d->angle) +')';
-        if(skew)
-            transform = "skewX("+ QString::number(d->shearX) +") skewY("+ QString::number(d->shearY) +')';
-        if(scale) {
-            transform += "scale("+ QString::number(d->scaleX);
-            if(d->scaleX != d->scaleY)
-                transform += ','+ QString::number(d->scaleY);
-            transform += ')';
+            context->xmlWriter().addAttribute( "draw:id", context->drawId( this ) );
         }
 
-        context->xmlWriter().addAttribute( "draw:transform", transform );
-    }
-}
-
-void KoShape::saveOdfMandatoryAttributes(KoShapeSavingContext *context) const {
-    context->xmlWriter().addAttribute( context->isSet( KoShapeSavingContext::PresentationShape ) ? 
-                                      "presentation:style-name": "draw:style-name",
-                                      style( context ) );
-
-    if ( context->isSet( KoShapeSavingContext::DrawId ) )
-    {
-        context->xmlWriter().addAttribute( "draw:id", context->drawId( this ) );
+        if(d->parent && dynamic_cast<KoShapeLayer*> (d->parent))
+            context->xmlWriter().addAttribute("draw:layer", d->parent->name());
     }
 
-    QList<const char*> tags = context->xmlWriter().tagHierarchy();
-    tags.removeAt(tags.count()-1); // remove the last; as its the current open tag.
-    foreach(const char* tag, tags) {
-        if(QString(tag) == QString("draw:frame"))
-            return; // we don't store those.
-    }
-    context->xmlWriter().addAttribute("draw:z-index", zIndex());
-}
-
-void KoShape::saveOdfSizePositionAttributes(KoShapeSavingContext *context) const {
-    QList<const char*> tags = context->xmlWriter().tagHierarchy();
-    tags.removeAt(tags.count()-1); // remove the last; as its the current open tag.
-    foreach(const char* tag, tags) {
-        if(QString(tag) == QString("draw:frame"))
-            return; // we don't store those.
+    // all items after this should not be written out when they have already be written in
+    // a 'draw:frame' attribute.
+    if(context->isSet(KoShapeSavingContext::FrameOpened)) {
+        context->removeOption(KoShapeSavingContext::FrameOpened);
+        return;
     }
 
-    QSizeF s( size() );
-    context->xmlWriter().addAttributePt( "svg:width", s.width() );
-    context->xmlWriter().addAttributePt( "svg:height", s.height() );
-    context->xmlWriter().addAttributePt( "svg:x", d->pos.x() );
-    context->xmlWriter().addAttributePt( "svg:y", d->pos.y() );
-}
+    if(attributes & OdfSize) {
+        QSizeF s( size() );
+        context->xmlWriter().addAttributePt( "svg:width", s.width() );
+        context->xmlWriter().addAttributePt( "svg:height", s.height() );
+        context->xmlWriter().addAttributePt( "svg:x", d->pos.x() );
+        context->xmlWriter().addAttributePt( "svg:y", d->pos.y() );
+    }
 
-void KoShape::saveOdfConnections(KoShapeSavingContext *context) const {
-    // TODO  save "draw-glue-point" elements (9.2.19)
+    if(attributes & OdfMandatories) {
+        context->xmlWriter().addAttribute("draw:z-index", zIndex());
+    }
+
+    if(attributes & OdfTransformation) {
+        // just like in shapes; ODF allows you to manipulate the 'matrix' after setting an
+        // ofset on the shape (using the x and y positions).   Lets save them here.
+        bool rotate = qAbs(d->angle) > 1E-6;
+        bool skew = qAbs(d->shearX) > 1E-6 || qAbs(d->shearY) > 1E-6;
+        bool scale = qAbs(d->scaleX - 1) > 1E-6 || qAbs(d->scaleY -1) > 1E-6;
+
+        if(rotate && (skew || scale)) {
+            QMatrix matrix; // can't use transformationMatrix() as that includes transformation of the container as well.
+            QSizeF size(this->size());
+            if ( d->angle != 0 )
+            {
+                matrix.translate( size.width() / 2.0 * d->scaleX, size.height() / 2.0 * d->scaleY );
+                matrix.translate( size.height() / 2.0 * d->shearX, size.width() / 2.0 * d->shearY );
+                matrix.rotate( d->angle );
+                matrix.translate( -size.width() / 2.0 * d->scaleX, -size.height() / 2.0 * d->scaleY );
+                matrix.translate( -size.height() / 2.0 * d->shearX, -size.width() / 2.0 * d->shearY );
+            }
+            matrix.shear( d->shearX, d->shearY );
+            matrix.scale( d->scaleX, d->scaleY );
+
+            QString m = QString( "matrix(0 0 %3 %4 %5pt %6pt)" ).arg( matrix.m11() ).arg( matrix.m12() )
+                .arg( matrix.m21() ).arg( matrix.m22() )
+                .arg( matrix.dx() ) .arg( matrix.dy() );
+            context->xmlWriter().addAttribute( "draw:transform", m );
+        }
+        else if(rotate || skew || scale) {
+            QString transform;
+            if(rotate)
+                transform = "rotate("+ QString::number(d->angle) +')';
+            if(skew)
+                transform = "skewX("+ QString::number(d->shearX) +") skewY("+ QString::number(d->shearY) +')';
+            if(scale) {
+                transform += "scale("+ QString::number(d->scaleX);
+                if(d->scaleX != d->scaleY)
+                    transform += ','+ QString::number(d->scaleY);
+                transform += ')';
+            }
+
+            context->xmlWriter().addAttribute( "draw:transform", transform );
+        }
+    }
 }
 
 // end loading & saving methods

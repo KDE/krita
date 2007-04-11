@@ -141,15 +141,11 @@ public:
     virtual void saveOdf( KoShapeSavingContext * context ) { Q_UNUSED(context); } ; // = 0;
 
     /**
-     * This method can be used while saving the shape as ODF to add the size and
-     * the position of a shape attributes to the current element.
-     *
-     * This also takes the transformation into account. Use in shapes which have
-     * Size, Position and transformation as defined in ODF 9.2.15 Common Drawing
-     * Shape Attributes.
-     * @see saveOdf()
+     * When saving this shape to ODF, you may nest it in a 'draw:frame' and shape properties should be
+     * saved as attributes on that element instead of on the normal shape.  After starting to write such
+     * an element you can call this method to write all relevant properties.
      */
-    void saveOdfSizePositionAttributes(KoShapeSavingContext *context) const;
+    void saveOdfFrameAttributes(KoShapeSavingContext *context);
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -567,26 +563,25 @@ public:
 protected:
 
 /* ** loading saving helper methods */
-    /**
-     * This method can be used while saving the shape as ODF to add the size and
-     * the position of a shape attributes to the current element.
-     *
-     * This also takes the transformation into account. Use in shapes which have
-     * Size & Position as defined in ODF 9.2.15 Common Drawing
-     * Shape Attributes.
-     * @see saveOdf, saveOdfMandatoryAttributes(), style(), saveOdfSizePositionAttributes()
-     */
-    void saveOdfTransformationAttributes(KoShapeSavingContext *context) const;
+    /// attributes from ODF 1.1 chapter 9.2.15 Common Drawing Shape Attributes
+    enum OdfAttribute {
+        OdfTransformation = 1,  ///< Store transformation information
+        OdfSize = 2,            ///< Store size information
+        OdfPosition = 4,        ///< Store position of shape
+        OdfMandatories = 8,     ///< Id, z-index, layer and style
+
+        FrameAttributes = OdfMandatories | OdfSize | OdfPosition | OdfTransformation
+    };
 
     /**
-     * This method can be used while saving the shape as ODF to add the mandatory
-     * attributes to the current element.
+     * This method can be used while saving the shape as ODF to add the data
+     * stored on this shape to the current element.
      *
-     * The following attributes will be added;  ID, Z-Index, Layer and Style
-     * as defined in ODF 9.2.15 Common Drawing Shape Attributes.
-     * @see saveOdf, saveOdfTransformationAttributes(), style(), saveOdfSizePositionAttributes()
+     * @param context the context for the current save.
+     * @param attributes a number of OdfAttribute items to state which attributes to save.
+     * @see saveOdf
      */
-    void saveOdfMandatoryAttributes(KoShapeSavingContext *context) const;
+    void saveOdfAttributes(KoShapeSavingContext *context, int attributes) const;
 
     /**
      * Add a new draw-glue-point element for each connections() present on this shape.
@@ -603,7 +598,6 @@ protected:
      * @see saveOdf
      */
     QString style( KoShapeSavingContext *context ) const;
-
 
 /* ** end loading saving */
 

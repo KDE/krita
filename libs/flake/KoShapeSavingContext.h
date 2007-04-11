@@ -39,7 +39,7 @@ class FLAKE_EXPORT KoShapeSavingContext
 {
 public:
     /// The Style used for saving the shape
-    enum KoShapeSavingOption
+    enum ShapeSavingOption
     {
         /**
          * If set the style of family presentation is used, when not set the
@@ -55,9 +55,10 @@ public:
         /**
          * If set the automatic style will be marked as being needed in styles.xml
          */
-        AutoStyleInStyleXml = 4
+        AutoStyleInStyleXml = 4,
+        FrameOpened = 8     ///< If a 'draw:frame' tag has been openened shape properties should be saved differently
     };
-    Q_DECLARE_FLAGS( KoShapeSavingOptions, KoShapeSavingOption )
+    Q_DECLARE_FLAGS( KoShapeSavingOptions, ShapeSavingOption )
 
     /**
      * @brief Constructor
@@ -96,7 +97,7 @@ public:
      *
      * @return ture if the option is set, false otherwise
      */
-    bool isSet( KoShapeSavingOption option ) const;
+    bool isSet( ShapeSavingOption option ) const;
 
     /**
      * @brief Set the options to use
@@ -104,6 +105,10 @@ public:
      * @param options to use
      */
     void setOptions( KoShapeSavingOptions options );
+
+    void addOption( ShapeSavingOption option);
+
+    void removeOption( ShapeSavingOption option);
 
     /**
      * @brief Get the options used

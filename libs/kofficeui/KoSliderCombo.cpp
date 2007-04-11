@@ -65,7 +65,7 @@ void KoSliderComboContainer::mousePressEvent(QMouseEvent *e)
 
 class KoSliderCombo::KoSliderComboPrivate {
 public:
-
+    KoSliderCombo *thePublic;
     QValidator *m_validator;
     QTimer m_timer;
     KoSliderComboContainer *container;
@@ -74,19 +74,26 @@ public:
     double minimum;
     double maximum;
     int decimals;
+
+    void showPopup();
+    void hidePopup();
+
+    void sliderValueChanged(int value);
+    void lineEditFinished( const QString & text);
 };
 
 KoSliderCombo::KoSliderCombo(QWidget *parent)
    : QComboBox(parent)
+    ,d(new KoSliderComboPrivate())
 {
-    d = new KoSliderComboPrivate();
-
+    d->thePublic = this;
     d->minimum = 0.0;
     d->maximum = 100.0;
     d->decimals = 2;
     d->container = new KoSliderComboContainer(this);
     d->container->setAttribute(Qt::WA_WindowPropagation);
-    QStyleOptionComboBox opt = styleOption();
+    QStyleOptionComboBox opt;
+    opt.init(this);
     d->container->setFrameStyle(style()->styleHint(QStyle::SH_ComboBox_PopupFrameStyle, &opt, this));
 
     d->slider = new QSlider(Qt::Horizontal);
@@ -94,7 +101,6 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     d->slider->setMaximum(256);
     d->slider->setPageStep(10);
     d->slider->setValue(0);
-    //d->slider->setTracking(false);
     d->container->resize(200, 30);
 
     QHBoxLayout * l = new QHBoxLayout();
@@ -132,60 +138,46 @@ QSize KoSliderCombo::minimumSizeHint() const
     sh.setHeight(qMax(fm.lineSpacing(), 14) + 2);
 
     // add style and strut values
-    QStyleOptionComboBox opt = styleOption();
+    QStyleOptionComboBox opt;
+    opt.init(this);
+    opt.subControls = QStyle::SC_All;
+    opt.editable = true;
     sh = style()->sizeFromContents(QStyle::CT_ComboBox, &opt, sh, this);
 
     return sh.expandedTo(QApplication::globalStrut());
 }
 
-QStyleOptionComboBox KoSliderCombo::styleOption() const
-{
-    QStyleOptionComboBox opt;
-    opt.init(this);
-
-    opt.subControls = QStyle::SC_All;
-    opt.currentText = KGlobal::locale()->formatNumber(666, 0);
-    opt.editable = true;
-
-    if (d->arrowState == QStyle::State_Sunken) {
-        opt.activeSubControls = QStyle::SC_ComboBoxArrow;
-        opt.state |= d->arrowState;
-    }
-
-    if (d->container && d->container->isVisible())
-        opt.state |= QStyle::State_On;
-
-    return opt;
-}
-
-void KoSliderCombo::showPopup()
+void KoSliderCombo::KoSliderComboPrivate::showPopup()
 {
     QStyleOptionSlider opt;
-    opt.init(d->slider);
+    opt.init(slider);
     opt.maximum=256;
-    opt.sliderPosition = opt.sliderValue = d->slider->value();
-    int hdlPos = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle).center().x();
+    opt.sliderPosition = opt.sliderValue = slider->value();
+    int hdlPos = thePublic->style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle).center().x();
 
-    QStyleOptionComboBox optThis = styleOption();
-    int arrowPos = style()->subControlRect(QStyle::CC_ComboBox, &optThis, QStyle::SC_ComboBoxArrow).center().x();
+    QStyleOptionComboBox optThis;
+    optThis.init(thePublic);
+    optThis.subControls = QStyle::SC_All;
+    optThis.editable = true;
+    int arrowPos = thePublic->style()->subControlRect(QStyle::CC_ComboBox, &optThis, QStyle::SC_ComboBoxArrow).center().x();
 
-    QSize popSize = d->container->size();
-    QRect popupRect(mapToGlobal(QPoint(arrowPos - hdlPos - d->slider->x(), size().height())), popSize);
-    d->container->setGeometry(popupRect);
+    QSize popSize = container->size();
+    QRect popupRect(thePublic->mapToGlobal(QPoint(arrowPos - hdlPos - slider->x(), thePublic->size().height())), popSize);
+    container->setGeometry(popupRect);
 
-    d->container->raise();
-    d->container->show();
-    d->slider->setFocus();
+    container->raise();
+    container->show();
+    slider->setFocus();
 }
 
-void KoSliderCombo::hidePopup()
+void KoSliderCombo::KoSliderComboPrivate::hidePopup()
 {
-    d->container->hide();
+    container->hide();
 }
 
 void KoSliderCombo::hideEvent(QHideEvent *)
 {
-    hidePopup();
+    d->hidePopup();
 }
 
 void KoSliderCombo::changeEvent(QEvent *e)
@@ -194,7 +186,7 @@ void KoSliderCombo::changeEvent(QEvent *e)
     {
         case QEvent::EnabledChange:
             if (!isEnabled())
-                hidePopup();
+                d->hidePopup();
             break;
         case QEvent::PaletteChange:
             d->container->setPalette(palette());
@@ -211,36 +203,42 @@ void KoSliderCombo::paintEvent(QPaintEvent *)
 
     gc.setPen(palette().color(QPalette::Text));
 
-    QStyleOptionComboBox opt = styleOption();
+    QStyleOptionComboBox opt;
+    opt.init(this);
+    opt.subControls = QStyle::SC_All;
+    opt.editable = true;
     gc.drawComplexControl(QStyle::CC_ComboBox, opt);
     gc.drawControl(QStyle::CE_ComboBoxLabel, opt);
 }
 
 void KoSliderCombo::mousePressEvent(QMouseEvent *e)
 {
-    QStyleOptionComboBox opt = styleOption();
+    QStyleOptionComboBox opt;
+    opt.init(this);
+    opt.subControls = QStyle::SC_All;
+    opt.editable = true;
     QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt, e->pos(),
                                                            this);
     if (sc == QStyle::SC_ComboBoxArrow && !d->container->isVisible())
     {
-        showPopup();
+        d->showPopup();
     }
     else
         QComboBox::mousePressEvent(e);
 }
 
-void KoSliderCombo::lineEditFinished( const QString & text)
+void KoSliderCombo::KoSliderComboPrivate::lineEditFinished( const QString & text)
 {
     double value = text.toDouble();
-    d->slider->setValue(int((value - d->minimum) * 256 / d->maximum + 0.5));
+    slider->setValue(int((value - minimum) * 256 / maximum + 0.5));
 }
 
-void KoSliderCombo::sliderValueChanged(int slidervalue)
+void KoSliderCombo::KoSliderComboPrivate::sliderValueChanged(int slidervalue)
 {
-    setEditText(KGlobal::locale()->formatNumber(d->minimum + d->maximum*slidervalue/256, d->decimals));
+    thePublic->setEditText(KGlobal::locale()->formatNumber(minimum + maximum*slidervalue/256, decimals));
 
-    double value = (QComboBox::currentText()).toDouble();
-    emit valueChanged(value);
+    double value = thePublic->currentText().toDouble();
+    emit thePublic->valueChanged(value);
 }
 
 double KoSliderCombo::maximum() const

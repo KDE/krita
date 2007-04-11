@@ -21,7 +21,6 @@
 #define KOSLIDERCOMBO_H_
 
 #include <QComboBox>
-#include <QStyleOptionComboBox>
 
 #include <kofficeui_export.h>
 
@@ -71,10 +70,10 @@ public:
 
     /**
      * Sets the precision of the entered values.
-     * @param d the number of digits after the period
+     * @param number the number of digits after the period
      */
 
-    void setDecimals(int d);
+    void setDecimals(int number);
 
     /**
      * Sets the minimum value that can be entered.
@@ -88,8 +87,8 @@ public:
      */
     void setMaximum(double max);
 
-    virtual QSize minimumSizeHint() const;
-    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const; ///reimplemented from QComboBox
+    virtual QSize sizeHint() const; ///reimplemented from QComboBox
 
 public slots:
 
@@ -103,22 +102,17 @@ signals:
     void valueChanged(double value);
 
 protected:
-    virtual void paintEvent(QPaintEvent *);
-    virtual void hideEvent(QHideEvent *);
-    virtual void changeEvent(QEvent *e);
-    virtual void mousePressEvent(QMouseEvent *e);
-
-private slots:
-    void sliderValueChanged(int value);
-    void lineEditFinished( const QString & text);
+    virtual void paintEvent(QPaintEvent *); ///reimplemented from QComboBox
+    virtual void hideEvent(QHideEvent *); ///reimplemented from QComboBox
+    virtual void changeEvent(QEvent *e); ///reimplemented from QComboBox
+    virtual void mousePressEvent(QMouseEvent *e); ///reimplemented from QComboBox
 
 private:
-    QStyleOptionComboBox styleOption() const;
-    void showPopup();
-    void hidePopup();
+    Q_PRIVATE_SLOT(d, void sliderValueChanged(int value))
+    Q_PRIVATE_SLOT(d, void lineEditFinished( const QString & text))
 
     class KoSliderComboPrivate;
-    KoSliderComboPrivate *d;
+    KoSliderComboPrivate * const d;
 };
 
 #endif

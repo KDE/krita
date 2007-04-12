@@ -33,11 +33,8 @@ class KoRgbU16ColorSpace : public KoLcmsColorSpace<KoRgbU16Traits>
 class KoRgbU16ColorSpaceFactory : public KoColorSpaceFactory
 {
     public:
-    /**
-     * Krita definition for use in .kra files and internally: unchanging name +
-     * i18n'able description.
-     */
-        virtual KoID id() const { return KoID("RGBA16", i18n("RGB (16-bit integer/channel)")); };
+        virtual QString id() const { return "RGBA16"; }
+        virtual QString name() const { return i18n("RGB (16-bit integer/channel)"); }
 
     /**
          * lcms colorspace type definition.

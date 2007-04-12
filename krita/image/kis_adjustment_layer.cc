@@ -75,7 +75,7 @@ QIcon KisAdjustmentLayer::icon() const
 KoDocumentSectionModel::PropertyList KisAdjustmentLayer::properties() const
 {
     PropertyList l = super::properties();
-    l << Property(i18n("Filter"), KisFilterRegistry::instance()->get(filter()->name())->id().name());
+    l << Property(i18n("Filter"), KisFilterRegistry::instance()->value(filter()->name())->name());
     return l;
 }
 

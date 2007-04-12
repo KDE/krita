@@ -39,11 +39,8 @@ class PIGMENT_XYZ_U16_EXPORT KisXyzU16ColorSpace : public KoLcmsColorSpace<XyzU1
 class KisXyzU16ColorSpaceFactory : public KoColorSpaceFactory
 {
     public:
-    /**
-     * Krita definition for use in .kra files and internally: unchanging name +
-     * i18n'able description.
-     */
-        virtual KoID id() const { return KoID("XYZA16", i18n("XYZ (16-bit integer/channel)")); };
+        virtual QString id() const { return "XYZA16"; }
+        virtual QString name() const { return i18n("XYZ (16-bit integer/channel)"); }
 
     /**
          * lcms colorspace type definition.

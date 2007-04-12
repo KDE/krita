@@ -409,7 +409,7 @@ void KisImage::rotate(double radians, KisProgressDisplayInterface *progress)
         m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
     }
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KoID("Triangle"));
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
     KisTransformVisitor visitor (KisImageSP(this), 1.0, 1.0, 0, 0, radians, -tx, -ty, progress, filter);
     m_d->rootLayer->accept(visitor);
 

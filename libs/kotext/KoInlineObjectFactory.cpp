@@ -49,12 +49,7 @@ KoInlineObjectFactory::~KoInlineObjectFactory() {
     delete d;
 }
 
-const KoID KoInlineObjectFactory::id() const {
-    // can we please get rid of KoID.  There is no reason that we should encode a name with every Id.
-    return KoID(d->id, "");
-}
-
-const QString &KoInlineObjectFactory::objectId() const {
+const QString &KoInlineObjectFactory::id() const {
     return d->id;
 }
 

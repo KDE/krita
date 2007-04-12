@@ -196,7 +196,8 @@ public:
     bool autoUpdate();
 
     /// @return Unique identification for this filter
-    inline const KoID id() const { return m_id; };
+    inline QString id() const { return m_id.id(); }
+    inline QString name() const { return m_id.name(); }
 
     /// @return the submenu in the filters menu does filter want to go?
     inline QString menuCategory() const { return m_category; };
@@ -227,7 +228,7 @@ public:
 protected:
 
     /// @return the name of config group in KConfig
-    inline QString configEntryGroup() { return id().id() + "_filter_bookmarks"; }
+    inline QString configEntryGroup() { return id() + "_filter_bookmarks"; }
     /// @return the default configuration as defined by whoever wrote the plugin
     virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP); // FIXME: this name sucks so much
 

@@ -37,11 +37,8 @@ class PIGMENT_CMYK_U16_EXPORT KisCmykU16ColorSpace : public KoLcmsColorSpace<Cmy
 class KisCmykU16ColorSpaceFactory : public KoColorSpaceFactory
 {
     public:
-    /**
-     * Krita definition for use in .kra files and internally: unchanging name +
-     * i18n'able description.
-     */
-        virtual KoID id() const { return KoID("CMYKA16", i18n("CMYK (16-bit integer/channel)")); };
+        virtual QString id() const { return "CMYKA16"; }
+        virtual QString name() const { return i18n("CMYK (16-bit integer/channel)"); }
 
     /**
          * lcms colorspace type definition.

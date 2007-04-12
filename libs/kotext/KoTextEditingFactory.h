@@ -53,12 +53,7 @@ public:
      * return the id for the variable this factory creates.
      * @return the id for the variable this factory creates.
      */
-    const QString &objectId() const;
-
-    /**
-     * Create a KoID for the variable this factory creates.
-     */
-    const KoID id() const;
+    QString id() const;
 
     /**
      * return if the plugin this factory creates has to be shown in the context menu.

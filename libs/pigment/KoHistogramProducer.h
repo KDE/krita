@@ -105,7 +105,8 @@ public:
     virtual bool isCompatibleWith(KoColorSpace* colorSpace) const = 0;
     /// Returns a float in the [0.0, 1.0] range, 0.0 means this is a very generic method
     virtual float preferrednessLevelWith(KoColorSpace* colorSpace) const = 0;
-    virtual const KoID& id() const { return m_id; }
+    virtual QString id() const { return m_id.id(); }
+    virtual QString name() const { return m_id.name(); }
 protected:
     KoID m_id;
 };

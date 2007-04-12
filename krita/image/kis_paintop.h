@@ -127,7 +127,8 @@ public:
      * @param painter the painter used to draw
      */
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter) = 0;
-    virtual KoID id() { return KoID("abstractpaintop", i18n("Abstract PaintOp")); }
+    virtual QString id() const { return "abstractpaintop"; }
+    virtual QString name() const { return  i18n("Abstract PaintOp"); }
 
     /**
      * The filename of the pixmap we can use to represent this paintop in the ui.
@@ -139,7 +140,7 @@ public:
      * in various tools. If false, it won't show up in the toolchest.
      * The KoColorSpace argument can be used when certain paintops only support a specific cs
      */
-    virtual bool userVisible(KoColorSpace * cs = 0) { return KoID(cs->id()) != KoID("WET", ""); }
+    virtual bool userVisible(KoColorSpace * cs = 0) { return cs && cs->id() != "WET"; }
 
     /**
      * Create and return an (abstracted) widget with options for this paintop when used with the

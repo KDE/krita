@@ -154,7 +154,7 @@ void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerS
                 kDebug() << filterTypeSplit[0] << " | " <<  filterTypeSplit[1] << " | " << filterTypeSplit[2] << endl;
                 if(filterTypeSplit[0] == "applications" and filterTypeSplit[1] == "krita")
                 {
-                    f = KisFilterRegistry::instance()->get(filterTypeSplit[2]);
+                    f = KisFilterRegistry::instance()->value(filterTypeSplit[2]);
                 }
                 kDebug() << f << endl;
                 KisFilterConfiguration * kfc = f->defaultConfiguration(0);

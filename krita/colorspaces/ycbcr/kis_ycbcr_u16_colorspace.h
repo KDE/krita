@@ -41,11 +41,8 @@ class KisYCbCrU16ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU16Traits>
 class KisYCbCrU16ColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
-    /**
-     * Krita definition for use in .kra files and internally: unchanging name +
-     * i18n'able description.
-     */
-    virtual KoID id() const { return KoID("YCbCrAU16", i18n("YCBCR (16-bit integer/channel)")); };
+    virtual QString id() const { return "YCbCrAU16"; }
+    virtual QString name() const { return i18n("YCBCR (16-bit integer/channel)"); }
 
     /**
      * lcms colorspace type definition.

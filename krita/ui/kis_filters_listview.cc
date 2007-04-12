@@ -80,12 +80,12 @@ public:
             }
 
             setFinished( true );
-            kDebug() << "done " << m_item->filter()->id().name() << endl;
+            kDebug() << "done " << m_item->filter()->name() << endl;
         }
 
     KisFiltersIconViewItem * item()
         {
-            kDebug() << "getting item " << m_item->filter()->id().name() << endl;
+            kDebug() << "getting item " << m_item->filter()->name() << endl;
             m_item->setIcon( QPixmap::fromImage( m_image ) );
             return m_item;
         }
@@ -192,13 +192,8 @@ void KisFiltersListView::buildPreviews()
 
     QRect bounds = m_thumb->exactBounds();
 
-    QList<KoID> l = KisFilterRegistry::instance()->listKeys();
-    QList<KoID>::iterator it;
-    it = l.begin();
-    // Iterate over the list of filters
-    for (it = l.begin(); it !=  l.end(); ++it) {
-        KisFilterSP filter = KisFilterRegistry::instance()->get(*it);
-
+    foreach(QString id, KisFilterRegistry::instance()->keys()) {
+        KisFilterSP filter = KisFilterRegistry::instance()->value(id);
         // Check if filter support the preview and work with the current colorspace
         if (filter->supportsPreview() && filter->workWith( m_original->colorSpace() ) ) {
 
@@ -213,7 +208,7 @@ void KisFiltersListView::buildPreviews()
             {
                 KisFiltersIconViewItem * item = new KisFiltersIconViewItem(filter.data(), itc.value());
                 // XXX: deep copy the thumb?
-                item->setText( filter->id().name() );
+                item->setText( filter->name() );
                 KisPaintDeviceSP thumbPreview = KisPaintDeviceSP(new KisPaintDevice(*m_thumb));
                 ThumbnailJob * job = new ThumbnailJob( this, thumbPreview, item, m_profile, bounds );
                 m_weaver->enqueue( job );

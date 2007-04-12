@@ -88,7 +88,7 @@ void Image::resize(int width, int height, int x, int y)
 
 void Image::scale(double widthfactor, double heightfactor)
 {
-    m_image->scale( widthfactor, heightfactor, 0, KisFilterStrategyRegistry::instance()->get( "Mitchell") );
+    m_image->scale( widthfactor, heightfactor, 0, KisFilterStrategyRegistry::instance()->value( "Mitchell") );
 }
 
 void Image::rotate(double angle)

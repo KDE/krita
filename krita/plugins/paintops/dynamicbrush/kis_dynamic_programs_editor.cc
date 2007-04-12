@@ -48,7 +48,7 @@ void KisDynamicProgramsEditor::setCurrentProgram(const QString& text)
 {
     kDebug() << "program changed to " << text << endl;
     if(m_currentEditor) delete m_currentEditor;
-    KisDynamicProgram* program = KisDynamicProgramRegistry::instance()->get( text );
+    KisDynamicProgram* program = KisDynamicProgramRegistry::instance()->value( text );
     Q_ASSERT(program);
     m_currentEditor = program->createEditor( m_dynamicProgramsEditor->frame);
     m_frameVBoxLayout->addWidget(m_currentEditor);

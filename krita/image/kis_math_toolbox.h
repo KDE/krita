@@ -52,7 +52,8 @@ class KRITAIMAGE_EXPORT KisMathToolbox : public QObject {
         KisMathToolbox(KoID id);
         ~KisMathToolbox();
     public:
-        inline KoID id() { return m_id; };
+        inline QString id() { return m_id.id(); }
+        inline QString name() { return m_id.name(); }
         /**
          * This function initialize a wavelet structure
          * @param lay the layer that will be used for the transformation

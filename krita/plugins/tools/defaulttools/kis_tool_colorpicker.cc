@@ -237,7 +237,7 @@ QWidget* KisToolColorPicker::createOptionWidget()
     connect(m_optionsWidget->radius, SIGNAL(valueChanged(int)),
             SLOT(slotChangeRadius(int)));
 
-    KisResourceServerBase* srv = KisResourceServerRegistry::instance()->get("PaletteServer");
+    KisResourceServerBase* srv = KisResourceServerRegistry::instance()->value("PaletteServer");
 
     if (!srv) {
         return m_optionsWidget;

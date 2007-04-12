@@ -38,11 +38,8 @@ class KisYCbCrU8ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU8Traits>
 class KisYCbCrU8ColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
-    /**
-     * Krita definition for use in .kra files and internally: unchanging name +
-     * i18n'able description.
-     */
-    virtual KoID id() const { return KoID("YCbCrAU8", i18n("YCBCR (8-bit integer/channel)")); };
+    virtual QString id() const { return "YCbCrAU8"; }
+    virtual QString name() const { return i18n("YCBCR (8-bit integer/channel)"); }
 
     /**
      * lcms colorspace type definition.

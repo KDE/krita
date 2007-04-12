@@ -128,7 +128,7 @@ QList<KoID> KisHistogramView::listProducers()
 void KisHistogramView::setCurrentChannels(const KoID& producerID, Q3ValueVector<KoChannelInfo *> channels)
 {
     setCurrentChannels(
-        KoHistogramProducerFactoryRegistry::instance()->get(producerID)->generate(),
+        KoHistogramProducerFactoryRegistry::instance()->value(producerID.id())->generate(),
         channels);
 }
 
@@ -238,7 +238,7 @@ void KisHistogramView::setChannels()
     } else {
         for (int i = 0; i < list.count(); i++) {
             KoID id(list.at(i));
-            addProducerChannels( KoHistogramProducerFactoryRegistry::instance()->get(id)->generate() );
+            addProducerChannels( KoHistogramProducerFactoryRegistry::instance()->value(id.id())->generate() );
         }
     }
 

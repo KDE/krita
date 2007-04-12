@@ -50,7 +50,7 @@ KoToolFactory::~KoToolFactory()
     delete d;
 }
 
-const QString &KoToolFactory::toolId() const {
+QString KoToolFactory::id() const {
     return d->id;
 }
 
@@ -58,23 +58,23 @@ int KoToolFactory::priority() const {
     return d->priority;
 }
 
-const QString& KoToolFactory::toolType() const {
+QString KoToolFactory::toolType() const {
     return d->toolType;
 }
 
-const QString& KoToolFactory::toolTip() const {
+QString KoToolFactory::toolTip() const {
     return d->tooltip;
 }
 
-const QString& KoToolFactory::icon() const {
+QString KoToolFactory::icon() const {
     return d->icon;
 }
 
-const QString &KoToolFactory::activationShapeId() const {
+QString KoToolFactory::activationShapeId() const {
     return d->activationId;
 }
 
-const KShortcut& KoToolFactory::shortcut() const {
+KShortcut KoToolFactory::shortcut() const {
     return d->shortcut;
 }
 
@@ -103,12 +103,7 @@ void KoToolFactory::setShortcut(const KShortcut & shortcut)
     d->shortcut = shortcut;
 }
 
-
-const KoID KoToolFactory::id() const {
-    return KoID(d->id, d->name);
-}
-
-const QString& KoToolFactory::name() const {
+QString KoToolFactory::name() const {
     return d->name;
 }
 

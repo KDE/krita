@@ -35,11 +35,8 @@ class KisCmykU8ColorSpace : public KoLcmsColorSpace<CmykU8Traits>
 class KisCmykU8ColorSpaceFactory : public KoColorSpaceFactory
 {
     public:
-    /**
-     * Krita definition for use in .kra files and internally: unchanging name +
-     * i18n'able description.
-     */
-        virtual KoID id() const { return KoID("CMYK", i18n("CMYK (8-bit integer/channel)")); };
+        virtual QString id() const { return "CMYK"; }
+        virtual QString name() const { return i18n("CMYK (8-bit integer/channel)"); }
 
     /**
          * lcms colorspace type definition.

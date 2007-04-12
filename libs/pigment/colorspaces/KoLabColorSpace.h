@@ -42,11 +42,10 @@ class KoLabColorSpace : public KoLcmsColorSpace<KoLabU16Traits>
 class KoLabColorSpaceFactory : public KoColorSpaceFactory
 {
     public:
-    /**
-     * Krita definition for use in .kra files and internally: unchanging name +
-     * i18n'able description.
-     */
-        virtual KoID id() const { return KoID("LABA", i18n("L*a*b* (16-bit integer/channel)")); };
+        /// reimplemented from KoColorSpaceFactory
+        virtual QString id() const { return "LABA"; }
+        /// reimplemented from KoColorSpaceFactory
+        virtual QString name() const { return i18n("L*a*b* (16-bit integer/channel)"); }
 
         /**
          * lcms colorspace type definition.

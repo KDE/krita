@@ -33,7 +33,7 @@ KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvas
 : KoShapeRubberSelectStrategy(tool, canvas, clicked, true)
 {
     KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(m_parent);
-    KoShapeFactory *factory = KoShapeRegistry::instance()->get(parent->shapeId());
+    KoShapeFactory *factory = KoShapeRegistry::instance()->value(parent->shapeId());
     if( factory)
     {
         const KoProperties *props = parent->shapeProperties();
@@ -51,7 +51,7 @@ KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvas
 
 QUndoCommand* KoCreateShapeStrategy::createCommand() {
     KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(m_parent);
-    KoShapeFactory *factory = KoShapeRegistry::instance()->get(parent->shapeId());
+    KoShapeFactory *factory = KoShapeRegistry::instance()->value(parent->shapeId());
     if(! factory) {
         kWarning(30006) << "Application requested a shape that is not registered '" <<
             parent->shapeId() << "'" << endl;
@@ -65,7 +65,7 @@ QUndoCommand* KoCreateShapeStrategy::createCommand() {
     else
         shape = factory->createDefaultShape();
     if( shape->shapeId().isEmpty() )
-        shape->setShapeId(factory->shapeId());
+        shape->setShapeId(factory->id());
     QRectF rect = selectRect();
     shape->setPosition(rect.topLeft());
     QSizeF newSize = rect.size();

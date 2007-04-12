@@ -130,7 +130,7 @@ public:
     KoBasicHistogramProducerFactory(const KoID& id, KoColorSpace *colorSpace)
         : KoHistogramProducerFactory(id), m_cs(colorSpace) {}
     virtual ~KoBasicHistogramProducerFactory() {}
-    virtual KoHistogramProducerSP generate() { return KoHistogramProducerSP(new T(id(), m_cs)); }
+    virtual KoHistogramProducerSP generate() { return KoHistogramProducerSP(new T(KoID(id(), name()), m_cs)); }
     virtual bool isCompatibleWith(KoColorSpace* colorSpace) const { return colorSpace->id() == m_cs->id(); }
     virtual float preferrednessLevelWith(KoColorSpace* /*colorSpace*/) const { return 1.0; }
 protected:

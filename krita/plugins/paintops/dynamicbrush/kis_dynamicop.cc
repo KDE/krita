@@ -90,7 +90,7 @@ KisDynamicOpSettings::~KisDynamicOpSettings()
 KisDynamicBrush* KisDynamicOpSettings::createBrush() const
 {
     KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
-    KisDynamicProgram* program = KisDynamicProgramRegistry::instance()->get( m_uiOptions->comboBoxPrograms->currentText() );
+    KisDynamicProgram* program = KisDynamicProgramRegistry::instance()->value( m_uiOptions->comboBoxPrograms->currentText() );
     Q_ASSERT(program);
     current->setProgram(program);
     return current;

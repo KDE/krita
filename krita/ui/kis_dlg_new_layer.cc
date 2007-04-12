@@ -95,11 +95,11 @@ void NewLayerDialog::fillCmbProfiles(const KoID & s)
 {
     m_page->cmbProfile->clear();
 
-    if (!KoColorSpaceRegistry::instance()->exists(s)) {
+    if (!KoColorSpaceRegistry::instance()->contains(s.id())) {
         return;
     }
 
-    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->get(s);
+    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());
     if (csf == 0) return;
 
     QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );

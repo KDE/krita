@@ -37,11 +37,8 @@ class PIGMENT_RGB_U8_EXPORT KisRgbColorSpace : public KoLcmsColorSpace<RgbU8Trai
 class KisRgbColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
-    /**
-     * Krita definition for use in .kra files and internally: unchanging name +
-     * i18n'able description.
-     */
-    virtual KoID id() const { return KoID("RGBA", i18n("RGB (8-bit integer/channel)")); };
+    virtual QString id() const { return "RGBA"; }
+    virtual QString name() const { return i18n("RGB (8-bit integer/channel)"); }
 
     /**
      * lcms colorspace type definition.

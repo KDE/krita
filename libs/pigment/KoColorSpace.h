@@ -626,10 +626,14 @@ class KoColorSpaceFactory {
 public:
     virtual ~KoColorSpaceFactory() {}
     /**
-     * ID for use in files and internally: unchanging name +
-     * i18n'able description.
+     * Return the unchanging name of this color space
      */
-    virtual KoID id() const = 0;
+    virtual QString id() const = 0;
+
+    /**
+     * return the i18n'able description.
+     */
+    virtual QString name() const = 0;
 
     /**
      * lcms colorspace type definition.

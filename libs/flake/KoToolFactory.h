@@ -77,16 +77,12 @@ public:
      * return the id for the tool this factory creates.
      * @return the id for the tool this factory creates.
      */
-    const QString &toolId() const;
+    QString id() const;
     /**
      * return the user visible (and translated) name to be seen by the user.
      * @return the user visible (and translated) name to be seen by the user.
      */
-    const QString &name() const;
-    /**
-     * Create a KoID for the tool this factory creates.
-     */
-    const KoID id() const;
+    QString name() const;
     /**
      * Returns The priority of this tool in its section in the toolbox
      * @return The priority of this tool.
@@ -96,17 +92,17 @@ public:
      * returns the type of tool, used to group tools in the toolbox
      * @return the type of tool
      */
-    const QString &toolType() const;
+    QString toolType() const;
     /**
      * return a translated tooltip Text
      * @return a translated tooltip Text
      */
-    const QString &toolTip() const;
+    QString toolTip() const;
     /**
      * return the basename of the icon for this tool
      * @return the basename of the icon for this tool
      */
-    const QString& icon() const;
+    QString icon() const;
 
     /**
      * Return the id of the shape we can process.
@@ -142,7 +138,7 @@ public:
      * @see setActivationShapeId()
      * @return the id of a shape, or an empty string for all shapes.
      */
-    const QString &activationShapeId() const;
+    QString activationShapeId() const;
 
     /**
      * Return the default keyboard shortcut for activation of this tool (if
@@ -150,7 +146,7 @@ public:
      *
      * @return the shortcut
      */
-    const KShortcut& shortcut() const;
+    KShortcut shortcut() const;
 
     /**
      * Returns if the tools instance this factory creates can be reused between input devices.

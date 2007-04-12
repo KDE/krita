@@ -45,15 +45,15 @@ void ToolHelper::buttonPressed() {
     emit toolActivated(this);
 }
 
-const QString &ToolHelper::id() const {
-    return m_toolFactory->toolId();
+QString ToolHelper::id() const {
+    return m_toolFactory->id();
 }
 
-const QString &ToolHelper::activationShapeId() const {
+QString ToolHelper::activationShapeId() const {
     return m_toolFactory->activationShapeId();
 }
 
-const QString& ToolHelper::name() const {
+QString ToolHelper::name() const {
     return m_toolFactory->name();
 }
 
@@ -63,7 +63,7 @@ KoTool *ToolHelper::createTool(KoCanvasBase *canvas) const {
     return tool;
 }
 
-const QString &ToolHelper::toolType() const {
+QString ToolHelper::toolType() const {
     return m_toolFactory->toolType();
 }
 
@@ -71,7 +71,7 @@ int ToolHelper::priority() const {
     return m_toolFactory->priority();
 }
 
-const KShortcut& ToolHelper::shortcut() const {
+KShortcut ToolHelper::shortcut() const {
     return m_toolFactory->shortcut();
 }
 

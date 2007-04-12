@@ -37,7 +37,7 @@ KoShape * KoPathShapeFactory::createDefaultShape() const {
     path->curveTo( QPointF( 50, -20 ), QPointF( 100, -20 ), QPointF( 100, 50 ) );
     path->normalize();
     path->setBorder( new KoLineBorder( 1.0 ) );
-    path->setShapeId(shapeId());
+    path->setShapeId(id());
     return path;
 }
 

@@ -113,7 +113,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
             m_view->statusBar()->progress()->setSubject(filter, true, true);
             filter->setProgressDisplay(m_view->statusBar()->progress());
 
-            KisTransaction * cmd = new KisTransaction(filter->id().name(), dev);
+            KisTransaction * cmd = new KisTransaction(filter->name(), dev);
 
             filter->process(dev, rect, config);
 

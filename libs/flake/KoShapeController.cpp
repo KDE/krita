@@ -58,7 +58,7 @@ QUndoCommand* KoShapeController::addShape( KoShape *shape, QUndoCommand *parent 
 {
     Q_ASSERT(d->canvas->shapeManager());
 
-    KoShapeFactory *factory = KoShapeRegistry::instance()->get( shape->shapeId() );
+    KoShapeFactory *factory = KoShapeRegistry::instance()->value( shape->shapeId() );
     Q_ASSERT(factory);
     int z=0;
     foreach(KoShape *sh, d->canvas->shapeManager()->shapes())

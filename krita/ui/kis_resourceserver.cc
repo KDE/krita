@@ -172,11 +172,11 @@ KisResourceServerRegistry::KisResourceServerRegistry()
     t4.wait();
     t5.wait();
 
-    add( KoID( "BrushServer", ""), brushServer );
-    add( KoID( "ImagePipeBrushServer", ""), imagePipeBrushServer );
-    add( KoID( "PatternServer", ""), patternServer );
-    add( KoID( "GradientServer", ""), gradientServer );
-    add( KoID( "PaletteServer", ""), paletteServer );
+    add( "BrushServer", brushServer );
+    add( "ImagePipeBrushServer", imagePipeBrushServer );
+    add( "PatternServer", patternServer );
+    add( "GradientServer", gradientServer );
+    add( "PaletteServer", paletteServer );
 
 }
 

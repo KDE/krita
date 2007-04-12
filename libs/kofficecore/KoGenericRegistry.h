@@ -22,8 +22,11 @@
 #define _KO_GENERIC_REGISTRY_H_
 
 #include "KoID.h"
+
+#include <kdemacros.h>
 #include <QList>
-#include <map>
+#include <QString>
+#include <QHash>
 
 /**
  * Base class for registry objects.
@@ -35,8 +38,6 @@
  */
 template<typename T>
 class KoGenericRegistry {
-protected:
-    typedef std::map<KoID, T> storageMap;
 public:
     KoGenericRegistry() { }
     virtual ~KoGenericRegistry() { }
@@ -44,89 +45,95 @@ public:
 public:
     /**
      * add an object to the registry
-     * @param item the item to add (NOTE: T must have an KoID id() function)
+     * @param item the item to add (NOTE: T must have an QString id() const   function)
      */
     void add(T item)
     {
-        m_storage.insert( typename storageMap::value_type( item->id(), item) );
+        m_hash.insert(item->id(), item);
     }
+
+    /**
+     * add an object to the registry
+     * @param id the id of the object
+     * @param item the item to add
+     */
+    void add(const QString &id, T item)
+    {
+        m_hash.insert(id, item);
+    }
+
     /**
      * add an object to the registry
      * @param id the id of the object
      * @param item the item
      */
-    void add(KoID id, T item)
+    KDE_DEPRECATED void add(KoID id, T item)
     {
-        m_storage.insert(typename storageMap::value_type(id, item));
+        m_hash.insert(id.id(), item);
     }
+
     /**
      * This function remove an item from the registry
      * @return the object which have been remove from the registry and which can be safely delete
      */
-    T remove(const KoID& name)
+    KDE_DEPRECATED void remove(const KoID& name)
     {
-        T p = 0;
-        typename storageMap::iterator it = m_storage.find(name);
-        if (it != m_storage.end()) {
-            m_storage.erase(it);
-            p = it->second;
-        }
-        return p;
+        m_hash.remove(name.id());
     }
-    /**
-     * This function remove an item from the registry
-     * @param id the identifiant of the object
-     * @return the object which have been remove from the registry and which can be safely delete
-     */
-    T remove(const QString& id)
-    {
-        return remove(KoID(id,""));
+
+    void remove (const QString &id) {
+        m_hash.remove(id);
     }
+
     /**
      * This function allow to get an object from its KoID
      * @param name the KoID of the object
      * @return T the object
      */
-    T get(const KoID& name) const
+    KDE_DEPRECATED T get(const KoID& name) const
     {
-        T p = T(0);
-        typename storageMap::const_iterator it = m_storage.find(name);
-        if (it != m_storage.end()) {
-            p = it->second;
-        }
-        return p;
+        return m_hash.value(name.id());
     }
 
     /**
      * Get a single entry based on the identifying part of KoID, not the
      * the descriptive part.
      */
-    T get(const QString& id) const
+    KDE_DEPRECATED T get(const QString& id) const
     {
-        return get(KoID(id, ""));
+        return value(id);
     }
 
     /**
      * @param id
      * @return true if there is an object corresponding to id
      */
-    bool exists(const KoID& id) const
+    KDE_DEPRECATED bool exists(const KoID& id) const
     {
-        typename storageMap::const_iterator it = m_storage.find(id);
-        return (it != m_storage.end());
+        return m_hash.contains(id.id());
     }
 
-    bool exists(const QString& id) const
+    KDE_DEPRECATED bool exists(const QString& id) const
     {
-        return exists(KoID(id, ""));
+        return contains(id);
     }
+
+    bool contains(const QString &id) const {
+        return m_hash.contains(id);
+    }
+
+    const T value(const QString &id) const {
+        return m_hash.value(id);
+    }
+
+#if 0
     /**
      * This function allow to search a KoID from the name.
      * @param t the name to search
      * @param result The result is filled in this variable
      * @return true if the search has been successful, false otherwise
      */
-    bool search(const QString& t, KoID& result) const
+    KDE_DEPRECATED bool search(const QString& t, KoID& result) const
     {
         for(typename storageMap::const_iterator it = m_storage.begin();
             it != m_storage.end(); ++it)
@@ -139,42 +146,24 @@ public:
         }
         return false;
     }
+#endif
 
     /** This function return a list of all the keys in KoID format
      */
     QList<KoID> listKeys() const
     {
-        QList<KoID> list;
-        typename storageMap::const_iterator it = m_storage.begin();
-        typename storageMap::const_iterator endit = m_storage.end();
-        while( it != endit )
-        {
-            list.append(it->first);
-            ++it;
-        }
-        return list;
-    }
-
-    /**
-     * Returns a list of all the keys
-     * @returns a list of all the keys
-     */
-    QList<QString> keys() const {
-        QList<QString> answer;
-        typename storageMap::const_iterator it = m_storage.begin();
-        typename storageMap::const_iterator endit = m_storage.end();
-        while( it != endit )
-        {
-            answer.append(it->first.id());
-            ++it;
-        }
+        QList<KoID> answer;
+        foreach(QString key, m_hash.keys())
+            answer.append(KoID(key, value(key)->name()));
         return answer;
     }
 
-protected:
-    KoGenericRegistry(const KoGenericRegistry&) { }
-    KoGenericRegistry operator=(const KoGenericRegistry&) { }
-    storageMap m_storage;
+    QList<QString> keys() const {
+        return m_hash.keys();
+    }
+
+private:
+    QHash<QString, T> m_hash;
 };
 
 #endif

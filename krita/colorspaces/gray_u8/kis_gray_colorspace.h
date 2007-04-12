@@ -36,11 +36,8 @@ class KRITA_GRAY_U8_EXPORT KisGrayColorSpace : public KoLcmsColorSpace<GrayU8Tra
 class KisGrayColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
-    /**
-     * Krita definition for use in .kra files and internally: unchanging name +
-     * i18n'able description.
-     */
-    virtual KoID id() const { return KoID("GRAY", i18n("Grayscale (8-bit integer/channel)")); };
+    virtual QString id() const { return "GRAY"; }
+    virtual QString name() const { return i18n("Grayscale (8-bit integer/channel)"); }
 
     /**
      * lcms colorspace type definition.

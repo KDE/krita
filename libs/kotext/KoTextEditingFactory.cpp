@@ -42,12 +42,7 @@ KoTextEditingFactory::~KoTextEditingFactory() {
     delete d;
 }
 
-const KoID KoTextEditingFactory::id() const {
-    // can we please get rid of KoID.  There is no reason that we should encode a name with every Id.
-    return KoID(d->id, "");
-}
-
-const QString &KoTextEditingFactory::objectId() const {
+QString KoTextEditingFactory::id() const {
     return d->id;
 }
 

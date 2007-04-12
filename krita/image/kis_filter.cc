@@ -85,7 +85,7 @@ KisFilterConfiguration* KisFilter::loadFromBookmark(const QString& configname)
     if(not existInBookmark(configname)) return 0;
     KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup(configEntryGroup());
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfiguration* config = new KisFilterConfiguration(id(), 1);
     config->fromXML(cfg->readEntry<QString>(configname, ""));
     cfg->setGroup("");
     return config;

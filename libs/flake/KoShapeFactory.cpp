@@ -47,24 +47,20 @@ KoShapeFactory::~KoShapeFactory() {
     delete d;
 }
 
-const KoID KoShapeFactory::id() const {
-    return KoID(d->id, d->name);
-}
-
-const QString & KoShapeFactory::toolTip() const {
+QString KoShapeFactory::toolTip() const {
     return d->tooltip;
 }
 
-const QString & KoShapeFactory::icon() const {
+QString KoShapeFactory::icon() const {
     return d->iconName;
 }
 
-const QString& KoShapeFactory::name() const {
+QString KoShapeFactory::name() const {
     return d->name;
 }
 
 void KoShapeFactory::addTemplate(KoShapeTemplate &params) {
-    params.id = shapeId();
+    params.id = d->id;
     d->templates.append(params);
 }
 
@@ -76,7 +72,7 @@ void KoShapeFactory::setIcon(const QString & iconName) {
     d->iconName = iconName;
 }
 
-const QString &KoShapeFactory::shapeId() const {
+QString KoShapeFactory::id() const {
     return d->id;
 }
 

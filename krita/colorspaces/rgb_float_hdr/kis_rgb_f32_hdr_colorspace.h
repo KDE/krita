@@ -48,7 +48,8 @@ public:
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KoID id() const { return KoID("RGBAF32", i18n("RGB (32-bit float/channel) for High Dynamic Range imaging")); };
+    virtual QString id() const { return "RGBAF32"; }
+    virtual QString name() const { return i18n("RGB (32-bit float/channel) for High Dynamic Range imaging"); }
 
     /**
      * lcms colorspace type definition.

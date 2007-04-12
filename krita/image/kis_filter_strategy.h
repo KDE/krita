@@ -33,7 +33,8 @@ class KRITAIMAGE_EXPORT KisFilterStrategy
         KisFilterStrategy(KoID id) : m_id(id) {}
         virtual ~KisFilterStrategy() {}
 
-        KoID id() {return m_id;};
+        QString id() {return m_id.id();}
+        QString name() {return m_id.name();}
         virtual double valueAt(double /*t*/) const {return 0;};
         virtual quint32 intValueAt(qint32 t) const {return quint32(255*valueAt(t/256.0));};
         double support() { return supportVal;};

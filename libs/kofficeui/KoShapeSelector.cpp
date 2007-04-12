@@ -105,7 +105,7 @@ public:
     }
 
     void visit(KoCreateShapesTool *tool) {
-        tool->setShapeId(m_shapeFactory->shapeId());
+        tool->setShapeId(m_shapeFactory->id());
         tool->setShapeProperties(0);
     }
 
@@ -113,7 +113,7 @@ public:
         return m_shapeFactory->toolTip();
     }
 
-    const QString &groupId() const { return m_shapeFactory->shapeId(); }
+    QString groupId() const { return m_shapeFactory->id(); }
 
 private:
     KoShapeFactory *m_shapeFactory;
@@ -139,8 +139,8 @@ KoShapeSelector::~KoShapeSelector() {
 }
 
 void KoShapeSelector::loadShapeTypes() {
-    foreach(KoID id, KoShapeRegistry::instance()->listKeys()) {
-        KoShapeFactory *factory = KoShapeRegistry::instance()->get(id);
+    foreach(QString id, KoShapeRegistry::instance()->keys()) {
+        KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
         bool oneAdded=false;
         foreach(KoShapeTemplate shapeTemplate, factory->templates()) {
             oneAdded=true;

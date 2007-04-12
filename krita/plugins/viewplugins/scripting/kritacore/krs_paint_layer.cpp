@@ -105,7 +105,7 @@ QObject* PaintLayer::createVLineIterator(uint x, uint y, uint height)
 
 QObject* PaintLayer::createHistogram(const QString& histoname, uint typenr)
 {
-    KoHistogramProducerFactory* factory = KoHistogramProducerFactoryRegistry::instance()->get(histoname);
+    KoHistogramProducerFactory* factory = KoHistogramProducerFactoryRegistry::instance()->value(histoname);
 
     /*
     QList<KoID> listID = KisHistogramProducerFactoryRegistry::instance()->listKeys();
@@ -162,7 +162,7 @@ void PaintLayer::endPainting()
 
 QObject* PaintLayer::fastWaveletTransformation()
 {
-    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( paintLayer()->paintDevice()->colorSpace()->mathToolboxId() );
+    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->value( paintLayer()->paintDevice()->colorSpace()->mathToolboxId().id() );
     QRect rect = paintLayer()->exactBounds();
     KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(paintLayer()->paintDevice(), rect);
     return new Wavelet(wav);
@@ -175,7 +175,7 @@ bool PaintLayer::fastWaveletUntransformation(QObject* wavelet)
         kWarning() << "The passed argument is not a valid Wavelet-object." << endl;
         return false;
     }
-    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( paintLayer()->paintDevice()->colorSpace()->mathToolboxId() );
+    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->value( paintLayer()->paintDevice()->colorSpace()->mathToolboxId().id() );
     QRect rect = paintLayer()->exactBounds();
     mathToolbox->fastWaveletUntransformation( paintLayer()->paintDevice(), rect, wav->wavelet() );
     return true;

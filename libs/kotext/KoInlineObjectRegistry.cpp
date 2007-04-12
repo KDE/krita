@@ -46,7 +46,7 @@ KoInlineObjectRegistry* KoInlineObjectRegistry::instance() {
 QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const {
     QList<QAction*> answer;
     foreach(QString key, keys()) {
-        KoInlineObjectFactory *factory = get(key);
+        KoInlineObjectFactory *factory = value(key);
         if(factory->type() == KoInlineObjectFactory::TextVariable) {
             foreach(KoInlineObjectTemplate templ, factory->templates()) {
                 answer.append(new InsertVariableAction(host, factory, templ));

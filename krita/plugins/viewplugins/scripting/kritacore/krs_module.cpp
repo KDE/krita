@@ -126,7 +126,7 @@ QObject* Module::createHSVColor(int hue, int saturation, int value)
 
 QObject* Module::pattern(const QString& patternname)
 {
-    KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->get("PatternServer");
+    KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->value("PatternServer");
     foreach(KisResource* res, rServer->resources())
         if(res->name() == patternname)
             return new Pattern(this, dynamic_cast<KisPattern*>(res), true);
@@ -136,7 +136,7 @@ QObject* Module::pattern(const QString& patternname)
 
 QObject* Module::brush(const QString& brushname)
 {
-    KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->get("BrushServer");
+    KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->value("BrushServer");
     foreach(KisResource* res, rServer->resources())
         if(res->name() == brushname)
             return new Brush(this, dynamic_cast<KisBrush*>(res), true);

@@ -38,7 +38,7 @@ Filter::~Filter()
 
 const QString Filter::name()
 {
-    return m_filter->id().name();
+    return m_filter->name();
 }
 
 const QVariant Filter::property(const QString& name)

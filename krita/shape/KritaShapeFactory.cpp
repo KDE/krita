@@ -50,7 +50,6 @@ KritaShapeFactory::KritaShapeFactory( QObject* parent, const QStringList& list )
 KoShape* KritaShapeFactory::createDefaultShape() const
 {
     KritaShape* shape = new KritaShape(KUrl(), "sRGB built-in - (lcms internal)");
-    shape->setShapeId( shapeId() );
     return shape;
 }
 
@@ -58,7 +57,6 @@ KoShape* KritaShapeFactory::createShape( const KoProperties* params ) const
 {
     // XXX; Get the url and profile name from the params
     KritaShape* shape = new KritaShape(KUrl(), "sRGB built-in - (lcms internal)" );
-    shape->setShapeId( shapeId() );
     return shape;
 }
 

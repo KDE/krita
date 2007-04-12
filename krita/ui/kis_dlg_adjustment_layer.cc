@@ -206,7 +206,7 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( QListWidgetItem * item )
 
     if (!m_customName) {
         m_freezeName = true;
-        m_layerName->setText(m_currentFilter->id().name());
+        m_layerName->setText(m_currentFilter->name());
         m_freezeName = false;
     }
 

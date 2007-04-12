@@ -161,7 +161,7 @@ KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & name) cons
 
 QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const QString &id)
 {
-    return profilesFor(get(id));
+    return profilesFor(value(id));
 }
 
 QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoColorSpaceFactory * csf)
@@ -201,7 +201,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QStri
 
     if(profileName.isEmpty())
     {
-        KoColorSpaceFactory *csf = get(csID);
+        KoColorSpaceFactory *csf = value(csID);
 
         if(!csf)
             return 0;
@@ -212,7 +212,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QStri
     QString name = csID + "<comb>" + profileName;
 
     if (d->csMap.find(name) == d->csMap.end()) {
-        KoColorSpaceFactory *csf = get(csID);
+        KoColorSpaceFactory *csf = value(csID);
         if(!csf)
         {
             kDebug() << "Unknown color space type : " << csf << endl;
@@ -248,7 +248,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoCol
         if(!cs)
         {
             // The profile was not stored and thus not the combination either
-            KoColorSpaceFactory *csf = get(csID);
+            KoColorSpaceFactory *csf = value(csID);
             if(!csf)
             {
                 kDebug() << "Unknown color space type : " << csf << endl;

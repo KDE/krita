@@ -147,14 +147,10 @@ public:
     const QList<KoShapeConfigFactory*> &panelFactories();
 
     /**
-     * Create a KoID for the shape this factory creates.
-     */
-    const KoID id() const;
-    /**
      * return the id for the shape this factory creates.
      * @return the id for the shape this factory creates.
      */
-    const QString & shapeId() const;
+    QString id() const;
     /**
      * Return all the templates this factory knows about.
      * Each template shows a different way to create a shape this factory is specialized in.
@@ -164,17 +160,17 @@ public:
      * return a translated tooltip Text for a selector of shapes
      * @return a translated tooltip Text
      */
-    const QString & toolTip() const;
+    QString toolTip() const;
     /**
      * return the basename of the icon for a selector of shapes
      * @return the basename of the icon for a selector of shapes
      */
-    const QString & icon() const;
+    QString icon() const;
     /**
      * return the user visible (and translated) name to be seen by the user.
      * @return the user visible (and translated) name to be seen by the user.
      */
-    const QString & name() const;
+    QString name() const;
 
 protected:
 

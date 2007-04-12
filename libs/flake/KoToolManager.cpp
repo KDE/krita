@@ -161,7 +161,7 @@ void KoToolManager::setup() {
     KoShapeRegistry::instance();
     KoToolRegistry *registry = KoToolRegistry::instance();
     foreach(QString id, registry->keys()) {
-        ToolHelper *t = new ToolHelper(registry->get(id));
+        ToolHelper *t = new ToolHelper(registry->value(id));
         d->tools.append(t);
     }
 

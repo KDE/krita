@@ -85,11 +85,17 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 
 KisPaintOp * KisPaintOpRegistry::paintOp(const KoID & id, const KisPaintOpSettings * settings, KisPainter * painter) const
 {
+    return paintOp(id.id(), settings, painter);
+}
+
+KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettings * settings, KisPainter * painter) const
+{
+    return paintOp(KoID(id, ""), settings, painter);
     if (painter == 0) {
         kWarning() << " KisPaintOpRegistry::paintOp painter is null";
         return 0;
     }
-    KisPaintOpFactorySP f = get(id);
+    KisPaintOpFactorySP f = value(id);
    if (f) {
         return f->createOp(settings, painter);
     }
@@ -98,14 +104,9 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KoID & id, const KisPaintOpSettin
     }
 }
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettings * settings, KisPainter * painter) const
-{
-    return paintOp(KoID(id, ""), settings, painter);
-}
-
 KisPaintOpSettings * KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice) const
 {
-    KisPaintOpFactorySP f = get(id);
+    KisPaintOpFactorySP f = value(id.id());
     if (f)
         return f->settings( parent, inputDevice );
 
@@ -115,7 +116,7 @@ KisPaintOpSettings * KisPaintOpRegistry::settings(const KoID& id, QWidget * pare
 bool KisPaintOpRegistry::userVisible(const KoID & id, KoColorSpace* cs) const
 {
 
-    KisPaintOpFactorySP f = get(id);
+    KisPaintOpFactorySP f = value(id.id());
     if (!f) {
         kDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
         return false;
@@ -126,7 +127,7 @@ bool KisPaintOpRegistry::userVisible(const KoID & id, KoColorSpace* cs) const
 
 QString KisPaintOpRegistry::pixmap(const KoID & id) const
 {
-    KisPaintOpFactorySP f = get(id);
+    KisPaintOpFactorySP f = value(id.id());
 
     if (!f) {
         kDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";

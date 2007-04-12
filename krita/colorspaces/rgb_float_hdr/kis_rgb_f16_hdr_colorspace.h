@@ -50,7 +50,8 @@ public:
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KoID id() const { return KoID("RGBAF16HALF", i18n("RGB (16-bit float/channel) for High Dynamic Range imaging")); };
+    virtual QString id() const { return "RGBAF16HALF"; }
+    virtual QString name() const { return i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"); }
 
     /**
      * lcms colorspace type definition.

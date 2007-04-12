@@ -89,7 +89,7 @@ public:
     KisPreviewDialog * lastDialog;
     KisFilterConfigWidget * lastWidget;
 
-    QList<KoID> filterList; // Map the actions in the signalmapper to the filters
+    QList<QString> filterList; // Map the actions in the signalmapper to the filters
     QSignalMapper * filterMapper;
 
     Q3Dict<KActionMenu> filterActionMenus;
@@ -143,10 +143,10 @@ void KisFilterManager::setup(KActionCollection * ac)
     KActionMenu * other = 0;
     KActionMenu * am = 0;
 
-    m_d->filterList = KisFilterRegistry::instance()->listKeys();
+    m_d->filterList = KisFilterRegistry::instance()->keys();
 
-    for ( QList<KoID>::Iterator it = m_d->filterList.begin(); it != m_d->filterList.end(); ++it ) {
-        f = KisFilterRegistry::instance()->get(*it);
+    for ( QList<QString>::Iterator it = m_d->filterList.begin(); it != m_d->filterList.end(); ++it ) {
+        f = KisFilterRegistry::instance()->value(*it);
         if (!f) break;
 
         QString s = f->menuCategory();
@@ -227,14 +227,14 @@ void KisFilterManager::setup(KActionCollection * ac)
 
     f = 0;
     i = 0;
-    for ( QList<KoID>::Iterator it = m_d->filterList.begin(); it != m_d->filterList.end(); ++it ) {
-        f = KisFilterRegistry::instance()->get(*it);
+    for ( QList<QString>::Iterator it = m_d->filterList.begin(); it != m_d->filterList.end(); ++it ) {
+        f = KisFilterRegistry::instance()->value(*it);
 
         if (!f) break;
 
         // Create action
         KAction * a = new KAction(f->menuEntry(), this);
-        ac->addAction(QString("krita_filter_%1").arg((*it).id()).toAscii(), a);
+        ac->addAction(QString("krita_filter_%1").arg((*it)).toAscii(), a);
         connect(a, SIGNAL(triggered()), m_d->filterMapper, SLOT(map()));
 
 
@@ -281,7 +281,7 @@ void KisFilterManager::updateGUI()
     m_d->reapplyAction->setEnabled(m_d->lastFilterConfig);
     if (m_d->lastFilterConfig)
         m_d->reapplyAction->setText(i18n("Apply Filter Again") + ": "
-            + KisFilterRegistry::instance()->get(m_d->lastFilterConfig->name())->id().name());
+            + KisFilterRegistry::instance()->value(m_d->lastFilterConfig->name())->name());
     else
         m_d->reapplyAction->setText(i18n("Apply Filter Again"));
 
@@ -290,7 +290,7 @@ void KisFilterManager::updateGUI()
     for (a = m_d->filterActions.first(); a; a = m_d->filterActions.next(), i++) {
         // XXX: This should always be true: investigate later! BSAR
         if (i < m_d->filterList.count()) {
-            KisFilterSP filter = KisFilterRegistry::instance()->get(m_d->filterList[i]);
+            KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterList[i]);
             if(player && filter->workWith( player->paintDevice()->colorSpace()))
             {
                 a->setEnabled(enable);
@@ -344,7 +344,7 @@ bool KisFilterManager::apply()
     //m_d->lastFilter->setProgressDisplay( m_d->view->progressDisplay());
 
     KisTransaction * cmd = 0;
-    if (img->undo()) cmd = new KisTransaction(m_d->lastFilter->id().name(), dev);
+    if (img->undo()) cmd = new KisTransaction(m_d->lastFilter->name(), dev);
 
 
     if ( !m_d->lastFilter->supportsThreading() ) {
@@ -360,7 +360,7 @@ bool KisFilterManager::apply()
     m_d->reapplyAction->setEnabled(m_d->lastFilterConfig);
     if (m_d->lastFilterConfig)
         m_d->reapplyAction->setText(i18n("Apply Filter Again") + ": "
-            + KisFilterRegistry::instance()->get(m_d->lastFilterConfig->name())->id().name());
+            + KisFilterRegistry::instance()->value(m_d->lastFilterConfig->name())->name());
 
     else
         m_d->reapplyAction->setText(i18n("Apply Filter Again"));
@@ -410,7 +410,7 @@ void KisFilterManager::slotApplyFilter(int i)
         if (m_d->lastFilter->colorSpaceIndependence() == TO_LAB16) {
             if (KMessageBox::warningContinueCancel(m_d->view,
                                                i18n("The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. "
-                                                       , m_d->lastFilter->id().name()
+                                                       , m_d->lastFilter->name()
                                                        , dev->colorSpace()->name()),
                                                i18n("Filter Will Convert Your Layer Data"),
                                                KGuiItem(i18n("Continue")),
@@ -421,7 +421,7 @@ void KisFilterManager::slotApplyFilter(int i)
         else if (m_d->lastFilter->colorSpaceIndependence() == TO_RGBA8) {
             if (KMessageBox::warningContinueCancel(m_d->view,
                                                i18n("The %1 filter will convert your %2 data to 8-bit RGBA and vice versa. "
-                                                       , m_d->lastFilter->id().name()
+                                                       , m_d->lastFilter->name()
                                                        , dev->colorSpace()->name()),
                                                i18n("Filter Will Convert Your Layer Data"),
                                                KGuiItem(i18n("Continue")),
@@ -433,7 +433,7 @@ void KisFilterManager::slotApplyFilter(int i)
     m_d->lastFilter->disableProgress();
 
     // Create the config dialog
-    m_d->lastDialog = new KisPreviewDialog(m_d->view, m_d->lastFilter->id().name().toAscii(), m_d->lastFilter->id().name());
+    m_d->lastDialog = new KisPreviewDialog(m_d->view, m_d->lastFilter->name().toAscii(), m_d->lastFilter->name());
     Q_CHECK_PTR(m_d->lastDialog);
     m_d->lastWidget = m_d->lastFilter->createConfigurationWidget( (QWidget*)m_d->lastDialog->container(), dev );
 

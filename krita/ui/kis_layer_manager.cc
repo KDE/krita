@@ -768,7 +768,7 @@ void KisLayerManager::rotateLayer(double radians)
         Q_CHECK_PTR(t);
     }
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KoID("Triangle"));
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
     QRect r;
     if(dev->hasSelection())
         r = dev->selection()->selectedExactRect();

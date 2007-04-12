@@ -36,11 +36,8 @@ class KRITA_GRAY_U16_EXPORT KisGrayU16ColorSpace : public KoLcmsColorSpace<GrayU
 class KisGrayU16ColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
-    /**
-     * Krita definition for use in .kra files and internally: unchanging name +
-     * i18n'able description.
-     */
-    virtual KoID id() const { return KoID("GRAY16", i18n("Grayscale (16-bit integer/channel)")); };
+    virtual QString id() const { return "GRAY16"; }
+    virtual QString name() const { return i18n("Grayscale (16-bit integer/channel)"); }
 
     /**
      * lcms colorspace type definition.

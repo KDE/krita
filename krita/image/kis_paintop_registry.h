@@ -48,7 +48,7 @@ public:
     KisPaintOp * paintOp(const KoID& id, const KisPaintOpSettings * settings, KisPainter * painter) const;
 
     /**
-     * Return a newly created paintopd
+     * Return a newly created paintop
      */
     KisPaintOp * paintOp(const QString& id, const KisPaintOpSettings * settings, KisPainter * painter) const;
 

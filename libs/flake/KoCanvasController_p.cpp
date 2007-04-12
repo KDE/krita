@@ -113,7 +113,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
 
         // The rest of this method is mostly a copy paste from the KoCreateShapeStrategy
         // So, lets remove this again when Zagge adds his new class that does this kind of thing. (KoLoadSave)
-        KoShapeFactory *factory = KoShapeRegistry::instance()->get(id);
+        KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
         if(! factory) {
             kWarning(30006) << "Application requested a shape that is not registered '" <<
                 id << "', Ignoring" << endl;
@@ -131,7 +131,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         else
             m_draggedShape = factory->createDefaultShape();
         if( m_draggedShape->shapeId().isEmpty() )
-            m_draggedShape->setShapeId(factory->shapeId());
+            m_draggedShape->setShapeId(factory->id());
         m_draggedShape->setZIndex(INT_MAX);
 
         m_parent->canvas()->shapeManager()->add(m_draggedShape);

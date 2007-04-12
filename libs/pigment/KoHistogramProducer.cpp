@@ -18,6 +18,8 @@
 
 #include <QList>
 
+#include <KoID.h>
+
 #include "KoHistogramProducer.h"
 #include "KoBasicHistogramProducers.h"
 
@@ -46,13 +48,10 @@ QList<KoID> KoHistogramProducerFactoryRegistry::listKeysCompatibleWith(
 {
     QList<KoID> list;
     QList<float> preferredList;
-    storageMap::const_iterator it = m_storage.begin();
-    storageMap::const_iterator endit = m_storage.end();
-    // O(n^2), can't this be done better? (But preferrably not by looking up the preferredness
-    // during the sorting...
-    while( it != endit ) {
-        if (it->second->isCompatibleWith(colorSpace)) {
-            float preferred = it->second->preferrednessLevelWith(colorSpace);
+    foreach(KoID id, listKeys()) {
+        KoHistogramProducerFactory *f = value(id.id());
+        if (f->isCompatibleWith(colorSpace)) {
+            float preferred = f->preferrednessLevelWith(colorSpace);
             QList<float>::iterator pit = preferredList.begin();
             QList<float>::iterator pend = preferredList.end();
             QList<KoID>::iterator lit = list.begin();
@@ -62,10 +61,9 @@ QList<KoID> KoHistogramProducerFactoryRegistry::listKeysCompatibleWith(
                 ++lit;
             }
 
-            list.insert(lit, it->first);
+            list.insert(lit, id);
             preferredList.insert(pit, preferred);
         }
-        ++it;
     }
     return list;
 }

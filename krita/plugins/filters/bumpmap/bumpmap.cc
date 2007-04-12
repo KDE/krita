@@ -89,7 +89,7 @@ KritaBumpmap::~KritaBumpmap()
 {
 }
 
-KisFilterBumpmap::KisFilterBumpmap() : KisFilter(id(), "map", i18n("&Bumpmap..."))
+KisFilterBumpmap::KisFilterBumpmap() : KisFilter(KoID("bumpmap", i18n("Bumpmap")), "map", i18n("&Bumpmap..."))
 {
 }
 

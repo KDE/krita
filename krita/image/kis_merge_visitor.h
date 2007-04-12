@@ -266,7 +266,7 @@ public:
             if (!cfg) return false;
 
 
-            KisFilterSP f = KisFilterRegistry::instance()->get( cfg->name() );
+            KisFilterSP f = KisFilterRegistry::instance()->value( cfg->name() );
             if (!f) return false;
 
             // Possibly enlarge the rect that changed (like for convolution filters)

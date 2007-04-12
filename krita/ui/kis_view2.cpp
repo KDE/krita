@@ -574,7 +574,7 @@ void KisView2::slotPreferences()
 
 void KisView2::slotEditPalette()
 {
-    KisResourceServerBase* srv = KisResourceServerRegistry::instance()->get("PaletteServer");
+    KisResourceServerBase* srv = KisResourceServerRegistry::instance()->value("PaletteServer");
     if (!srv) {
         return;
     }

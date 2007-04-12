@@ -279,9 +279,9 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
             m_view->resourceProvider(), SLOT(slotBrushActivated(KisResource*)));
 
     KisResourceServerBase* rServer;
-    rServer = KisResourceServerRegistry::instance()->get("ImagePipeBrushServer");
+    rServer = KisResourceServerRegistry::instance()->value("ImagePipeBrushServer");
     m_brushMediator->connectServer(rServer);
-    rServer = KisResourceServerRegistry::instance()->get("BrushServer");
+    rServer = KisResourceServerRegistry::instance()->value("BrushServer");
     m_brushMediator->connectServer(rServer);
 
     KisControlFrame::connect(view->resourceProvider(), SIGNAL(sigBrushChanged(KisBrush *)),
@@ -329,7 +329,7 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
             view->resourceProvider(), SLOT(slotPatternActivated(KisResource*)));
 
     KisResourceServerBase* rServer;
-    rServer = KisResourceServerRegistry::instance()->get("PatternServer");
+    rServer = KisResourceServerRegistry::instance()->value("PatternServer");
     m_patternMediator->connectServer(rServer);
 
     KisControlFrame::connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern *)),
@@ -369,7 +369,7 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
 
 
     KisResourceServerBase* rServer;
-    rServer = KisResourceServerRegistry::instance()->get("GradientServer");
+    rServer = KisResourceServerRegistry::instance()->value("GradientServer");
     m_gradientMediator->connectServer(rServer);
 
     connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KisGradient *)),

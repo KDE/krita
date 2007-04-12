@@ -201,7 +201,7 @@ bool KisDoc2::init()
     m_d->nserver = new KisNameServer(1);
     Q_CHECK_PTR(m_d->nserver);
 
-    if (!KoColorSpaceRegistry::instance()->exists(KoID("RGBA",""))) {
+    if (!KoColorSpaceRegistry::instance()->contains("RGBA")) {
         KMessageBox::sorry(0, i18n("No colorspace modules loaded: cannot run Krita"));
         return false;
     }
@@ -599,7 +599,7 @@ KisAdjustmentLayerSP KisDoc2::loadAdjustmentLayer(const QDomElement& element, Ki
         return KisAdjustmentLayerSP(0);
     }
 
-    KisFilterSP f = KisFilterRegistry::instance()->get(filtername);
+    KisFilterSP f = KisFilterRegistry::instance()->value(filtername);
     if (!f) {
         kWarning(DBG_AREA_FILE) << "No filter for filtername " << filtername << "\n";
         return KisAdjustmentLayerSP(0); // XXX: We don't have this filter. We should warn about it!

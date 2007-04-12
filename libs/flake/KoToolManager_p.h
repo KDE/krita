@@ -41,19 +41,19 @@ public:
     explicit ToolHelper(KoToolFactory *tool);
     QAbstractButton *createButton();
     /// wrapper around KoToolFactory::id();
-    const QString &id() const;
+    QString id() const;
     /// wrapper around KoToolFactory::name();
-    const QString &name() const;
+    QString name() const;
     /// wrapper around KoToolFactory::toolType();
-    const QString &toolType() const;
+    QString toolType() const;
     /// wrapper around KoToolFactory::activationShapeId();
-    const QString &activationShapeId() const;
+    QString activationShapeId() const;
     /// wrapper around KoToolFactory::priority();
     int priority() const;
     KoTool *createTool(KoCanvasBase *canvas) const;
     int uniqueId() const { return m_uniqueId; }
     /// wrapper around KoToolFactory::shortcut()
-    const KShortcut& shortcut() const;
+    KShortcut shortcut() const;
     /// wrapper around KoToolFactory::inputDeviceAgnostic()
     bool inputDeviceAgnostic() const;
 

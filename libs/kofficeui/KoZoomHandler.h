@@ -118,12 +118,12 @@ public:
     KoZoomMode::Mode zoomMode() const { return m_zoomMode; }
 
     // Input: pt. Output: pixels. Resolution and zoom are applied.
-    int zoomItXOld( double z ) const  KDE_DEPRECATED
+    KDE_DEPRECATED int zoomItXOld( double z ) const
         {
             return qRound( m_zoomedResolutionX * z );
         }
 
-    int zoomItYOld( double z ) const KDE_DEPRECATED
+    KDE_DEPRECATED int zoomItYOld( double z ) const
         {
             return qRound( m_zoomedResolutionY * z );
         }
@@ -138,9 +138,9 @@ public:
             return m_zoomedResolutionY * z ;
         }
 
-    QPoint zoomPointOld( const QPointF & p ) const KDE_DEPRECATED;
+    KDE_DEPRECATED QPoint zoomPointOld( const QPointF & p ) const;
 
-    QRect zoomRectOld( const QRectF & r ) const KDE_DEPRECATED;
+    KDE_DEPRECATED QRect zoomRectOld( const QRectF & r ) const;
 
     /**
      * Returns the size in pixels for a input size in points.
@@ -152,15 +152,15 @@ public:
      * (like when inserting a picture), but then please take
      * care of it afterwards, when you know the reference point.
      */
-    QSize zoomSizeOld( const QSizeF & s ) const KDE_DEPRECATED;
+    KDE_DEPRECATED QSize zoomSizeOld( const QSizeF & s ) const;
 
     // Input: pixels. Output: pt.
-    double unzoomItXOld( int x ) const KDE_DEPRECATED
+    KDE_DEPRECATED double unzoomItXOld( int x ) const
         {
             return static_cast<double>( x ) / m_zoomedResolutionX;
         }
 
-    double unzoomItYOld( int y ) const KDE_DEPRECATED
+    KDE_DEPRECATED double unzoomItYOld( int y ) const
         {
             return static_cast<double>( y ) / m_zoomedResolutionY;
         }
@@ -175,9 +175,9 @@ public:
             return  y / m_zoomedResolutionY;
         }
 
-    QPointF unzoomPointOldF( const QPoint & p ) const KDE_DEPRECATED;
+    KDE_DEPRECATED QPointF unzoomPointOldF( const QPoint & p ) const;
 
-    QRectF unzoomRectOldF (const QRect & r ) const KDE_DEPRECATED;
+    KDE_DEPRECATED QRectF unzoomRectOldF (const QRect & r ) const;
 
     // KoViewConverter-interface methods
 

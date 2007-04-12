@@ -26,7 +26,7 @@
 
 class QTextDocument;
 class QTextCursor;
-class KoShapeSavingContext;
+class KoXmlWriter;
 
 /**
  * The data store that is held by each KoTextShape instance.
@@ -112,7 +112,7 @@ public:
     void setPageNumber(int page);
     int pageNumber() const;
 
-    void saveOdf(KoShapeSavingContext * context) const;
+    void saveOdf(KoXmlWriter *writer, int from = 0, int to = -1) const;
 
 signals:
     /**

@@ -18,7 +18,6 @@
  */
 
 #include "KoTextShapeData.h"
-#include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 
 #include <KDebug>
@@ -121,13 +120,17 @@ int KoTextShapeData::pageNumber() const {
     return d->pageNumber;
 }
 
-void KoTextShapeData::saveOdf(KoShapeSavingContext * context) const {
-    KoXmlWriter *writer = &context->xmlWriter();
-
-    QTextBlock block = d->document->begin();
-    while(block.isValid()) {
+void KoTextShapeData::saveOdf(KoXmlWriter *writer, int from, int to) const {
+    QTextBlock block = d->document->findBlock(from);
+    while(block.isValid() && block.position() < to) {
         writer->startElement( "text:p", false );
-        writer->addTextSpan( block.text() );
+        if(block.position() < from || block.position() + block.length() > to) {
+            int start = qMax(0, from - block.position());
+            int end = qMin(to, block.position() + block.length());
+            writer->addTextSpan( block.text().mid(start, end - (start + block.position())) );
+        }
+        else
+            writer->addTextSpan( block.text() );
         writer->endElement();
         block = block.next();
     }

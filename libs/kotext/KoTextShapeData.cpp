@@ -18,7 +18,12 @@
  */
 
 #include "KoTextShapeData.h"
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
+
+#include <KDebug>
 #include <QTextDocument>
+#include <QTextBlock>
 
 class KoTextShapeData::Private {
 public:
@@ -114,6 +119,18 @@ void KoTextShapeData::setPageNumber(int page) {
 
 int KoTextShapeData::pageNumber() const {
     return d->pageNumber;
+}
+
+void KoTextShapeData::saveOdf(KoShapeSavingContext * context) const {
+    KoXmlWriter *writer = &context->xmlWriter();
+
+    QTextBlock block = d->document->begin();
+    while(block.isValid()) {
+        writer->startElement( "text:p", false );
+        writer->addTextSpan( block.text() );
+        writer->endElement();
+        block = block.next();
+    }
 }
 
 #include "KoTextShapeData.moc"

@@ -22,11 +22,11 @@
 
 #include <KoShapeUserData.h>
 #include <KoInsets.h>
-
 #include <kotext_export.h>
 
 class QTextDocument;
 class QTextCursor;
+class KoShapeSavingContext;
 
 /**
  * The data store that is held by each KoTextShape instance.
@@ -111,6 +111,8 @@ public:
 
     void setPageNumber(int page);
     int pageNumber() const;
+
+    void saveOdf(KoShapeSavingContext * context) const;
 
 signals:
     /**

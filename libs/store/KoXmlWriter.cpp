@@ -417,8 +417,8 @@ void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCac
                 // (and both we and OO.o ignore leading spaces in <text:p> or <text:h> elements...)
                 if (!leadingSpace)
                 {
-                str += ' ';
-                --nrSpaces;
+                    str += ' ';
+                    --nrSpaces;
                 }
                 if ( nrSpaces > 0 ) { // there are more spaces
                     if ( !str.isEmpty() )

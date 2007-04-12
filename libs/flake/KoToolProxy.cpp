@@ -23,6 +23,7 @@
 #include "KoPointerEvent.h"
 #include "KoInputDevice.h"
 #include "KoToolManager.h"
+#include "KoToolSelection.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
 
@@ -247,6 +248,7 @@ void KoToolProxy::setActiveTool(KoTool *tool) {
         disconnect(d->activeTool, SIGNAL(sigSelectionChanged(bool)), this, SLOT(selectionChanged(bool)));
     d->activeTool = tool;
     connect(d->activeTool, SIGNAL(sigSelectionChanged(bool)), this, SLOT(selectionChanged(bool)));
+    d->selectionChanged(d->activeTool->selection() && d->activeTool->selection()->hasSelection());
 }
 
 void KoToolProxy::setCanvasController(KoCanvasController *controller) {

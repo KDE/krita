@@ -591,10 +591,12 @@ public:
      */
     bool separate( QList<KoPathShape*> & separatedPaths );
 
+#ifndef NDEBUG
     /**
      * @brief print debug information about a the points of the path
      */
     void debugPath();
+#endif
 
     /**
      * @brief transform point from shape coordinates to document coordinates

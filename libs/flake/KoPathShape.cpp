@@ -420,7 +420,6 @@ void KoPathShape::paintDebug( QPainter &painter )
     painter.restore();
     qDebug() << "nop = " << i;
 }
-#endif
 
 void KoPathShape::debugPath()
 {
@@ -434,6 +433,7 @@ void KoPathShape::debugPath()
         }
     }
 }
+#endif
 
 QPointF KoPathShape::shapeToDocument( const QPointF &point ) const
 {

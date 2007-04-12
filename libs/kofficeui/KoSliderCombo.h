@@ -87,8 +87,8 @@ public:
      */
     void setMaximum(double max);
 
-    virtual QSize minimumSizeHint() const; ///reimplemented from QComboBox
-    virtual QSize sizeHint() const; ///reimplemented from QComboBox
+    virtual QSize minimumSizeHint() const; ///< reimplemented from QComboBox
+    virtual QSize sizeHint() const; ///< reimplemented from QComboBox
 
 public slots:
 
@@ -102,14 +102,14 @@ signals:
     void valueChanged(double value);
 
 protected:
-    virtual void paintEvent(QPaintEvent *); ///reimplemented from QComboBox
-    virtual void hideEvent(QHideEvent *); ///reimplemented from QComboBox
-    virtual void changeEvent(QEvent *e); ///reimplemented from QComboBox
-    virtual void mousePressEvent(QMouseEvent *e); ///reimplemented from QComboBox
+    virtual void paintEvent(QPaintEvent *); ///< reimplemented from QComboBox
+    virtual void hideEvent(QHideEvent *); ///< reimplemented from QComboBox
+    virtual void changeEvent(QEvent *e); ///< reimplemented from QComboBox
+    virtual void mousePressEvent(QMouseEvent *e); ///< reimplemented from QComboBox
 
 private:
     Q_PRIVATE_SLOT(d, void sliderValueChanged(int value))
-    Q_PRIVATE_SLOT(d, void lineEditFinished( const QString & text))
+    Q_PRIVATE_SLOT(d, void lineEditFinished())
 
     class KoSliderComboPrivate;
     KoSliderComboPrivate * const d;

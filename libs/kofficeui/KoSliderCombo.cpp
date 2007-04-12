@@ -79,7 +79,7 @@ public:
     void hidePopup();
 
     void sliderValueChanged(int value);
-    void lineEditFinished( const QString & text);
+    void lineEditFinished();
 };
 
 KoSliderCombo::KoSliderCombo(QWidget *parent)
@@ -115,7 +115,7 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     setEditText(KGlobal::locale()->formatNumber(0, d->decimals));
 
     connect(d->slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
-    connect(this, SIGNAL(editTextChanged (const QString &)), SLOT(lineEditFinished(const QString &)));
+    connect(lineEdit(), SIGNAL(editingFinished()), SLOT(lineEditFinished()));
 }
 
 KoSliderCombo::~KoSliderCombo()
@@ -227,10 +227,13 @@ void KoSliderCombo::mousePressEvent(QMouseEvent *e)
         QComboBox::mousePressEvent(e);
 }
 
-void KoSliderCombo::KoSliderComboPrivate::lineEditFinished( const QString & text)
+void KoSliderCombo::KoSliderComboPrivate::lineEditFinished()
 {
-    double value = text.toDouble();
+    double value = thePublic->currentText().toDouble();
+    slider->blockSignals(true);
     slider->setValue(int((value - minimum) * 256 / maximum + 0.5));
+    slider->blockSignals(false);
+    emit thePublic->valueChanged(value);
 }
 
 void KoSliderCombo::KoSliderComboPrivate::sliderValueChanged(int slidervalue)

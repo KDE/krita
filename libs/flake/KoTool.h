@@ -95,7 +95,7 @@ public:
      *
      * Deprecated: this method may move to KoToolFactory.
      */
-    virtual QString KDE_DEPRECATED quickHelp() const { return ""; }
+    virtual KDE_DEPRECATED QString quickHelp() const { return ""; }
 
     /**
      * Returns the internal selection option of this tool.
@@ -182,6 +182,13 @@ public:
     /// return the last emitted cursor
     QCursor cursor() const;
 
+    /**
+     * copies the tools selection to the clipboard.
+     * The default implementation is empty to aid tools that don't have any selection.
+     * @see selection()
+     */
+    virtual void copy() {};
+
 public slots:
     /**
      * This method is called when this tool instance is activated.
@@ -246,6 +253,12 @@ signals:
      * The KoToolManager should connect to this signal to handle cursors further.
      */
     void sigCursorChanged(QCursor cursor);
+
+    /**
+     * A tool can have a selection that is copy-able, this signal is emitted when that status changes.
+     * @param hasSelection is true when the tool holds selected data.
+     */
+    void sigSelectionChanged(bool hasSelection);
 
 protected:
     /**

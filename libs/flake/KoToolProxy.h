@@ -77,8 +77,6 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
     /// Forwarded to the current KoTool
     void wheelEvent ( QWheelEvent * event, const QPointF &point  );
-    /// Set the new active tool.
-    void setActiveTool(KoTool *tool);
 
     /**
      * Retrieves the entire collection of actions for the active tool
@@ -87,19 +85,30 @@ public:
     QHash<QString, QAction*> actions() const;
 
     /**
-     * Call this to get data _from_ the tool, instead of events _to_ the tool,
-     * namely what the tool thinks is the current selection on the data contained
-     * inside the tool.
+     * Proxies for KoTool::selection()
      */
     KoToolSelection* selection();
+
+    /// copies the selection to the clipboard
+    void copy();
+
+signals:
+    /**
+     * A tool can have a selection that is copy-able, this signal is emitted when that status changes.
+     * @param hasSelection is true when the tool holds selected data.
+     */
+    void selectionChanged(bool hasSelection);
 
 protected:
     friend class KoToolManager;
     /// the toolManager tells us which KoCanvasController this toolProxy is working for.
     void setCanvasController(KoCanvasController *controller);
+    /// Set the new active tool.
+    void setActiveTool(KoTool *tool);
 
 private:
     Q_PRIVATE_SLOT(d, void timeout())
+    Q_PRIVATE_SLOT(d, void selectionChanged(bool))
 
     class Private;
     Private * const d;

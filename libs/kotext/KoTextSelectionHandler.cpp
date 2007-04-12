@@ -383,4 +383,8 @@ void KoTextSelectionHandler::setCaret(QTextCursor *caret) {
     d->caret = caret;
 }
 
+bool KoTextSelectionHandler::hasSelection() {
+    return d->caret && d->caret->hasSelection();
+}
+
 #include <KoTextSelectionHandler.moc>

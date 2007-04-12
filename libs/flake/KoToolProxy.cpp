@@ -71,7 +71,7 @@ namespace {
 
 class KoToolProxy::Private {
 public:
-    Private() : activeTool(0), tabletPressed(false), controller(0) {
+    Private(KoToolProxy *p) : activeTool(0), tabletPressed(false), hasSelection(false), controller(0), parent(p) {
         scrollTimer.setInterval(100);
     }
 
@@ -106,16 +106,25 @@ public:
             scrollTimer.start();
     }
 
+    void selectionChanged(bool newSelection) {
+        if(hasSelection == newSelection)
+            return;
+        hasSelection = newSelection;
+        emit parent->selectionChanged(hasSelection);
+    }
+
     KoTool *activeTool;
     bool tabletPressed;
+    bool hasSelection;
     QTimer scrollTimer;
     QPointF scrollEdgePoint;
     KoCanvasController *controller;
+    KoToolProxy *parent;
 };
 
 KoToolProxy::KoToolProxy(KoCanvasBase *canvas, QObject *parent)
     : QObject(parent),
-    d(new Private())
+    d(new Private(this))
 {
     KoToolManager::instance()->registerToolProxy(this, canvas);
 
@@ -233,7 +242,11 @@ KoToolSelection* KoToolProxy::selection() {
 }
 
 void KoToolProxy::setActiveTool(KoTool *tool) {
+    Q_ASSERT(tool);
+    if(d->activeTool)
+        disconnect(d->activeTool, SIGNAL(sigSelectionChanged(bool)), this, SLOT(selectionChanged(bool)));
     d->activeTool = tool;
+    connect(d->activeTool, SIGNAL(sigSelectionChanged(bool)), this, SLOT(selectionChanged(bool)));
 }
 
 void KoToolProxy::setCanvasController(KoCanvasController *controller) {
@@ -242,6 +255,11 @@ void KoToolProxy::setCanvasController(KoCanvasController *controller) {
 
 QHash<QString, QAction*> KoToolProxy::actions() const {
     return d->activeTool ? d->activeTool->actions() : QHash<QString, QAction*>();
+}
+
+void KoToolProxy::copy() {
+    if (d->activeTool)
+        d->activeTool->copy();
 }
 
 #include <KoToolProxy.moc>

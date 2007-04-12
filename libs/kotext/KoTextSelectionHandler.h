@@ -53,6 +53,9 @@ public:
      */
     bool insertIndexMarker();
 
+    /// reimplemented from KoToolSelection
+    virtual bool hasSelection();
+
 public slots:
 
     /**

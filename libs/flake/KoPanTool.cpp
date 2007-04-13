@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,7 +39,7 @@ bool KoPanTool::wantsAutoScroll() {
 }
 
 void KoPanTool::mousePressEvent( KoPointerEvent *event ) {
-    m_lastPosition = event->point;
+    m_lastPosition = documentToViewport( event->point );
     event->accept();
     useCursor(QCursor(Qt::ClosedHandCursor));
 }
@@ -49,10 +50,11 @@ void KoPanTool::mouseMoveEvent( KoPointerEvent *event ) {
         return;
     event->accept();
 
-    QPointF distance( m_canvas->viewConverter()->documentToView(m_lastPosition - event->point) );
+    QPointF actualPosition = documentToViewport( event->point );
+    QPointF distance( m_lastPosition - actualPosition );
     m_controller->pan(distance.toPoint());
 
-    m_lastPosition = event->point;
+    m_lastPosition = actualPosition;
 }
 
 void KoPanTool::mouseReleaseEvent( KoPointerEvent *event ) {
@@ -72,4 +74,12 @@ void KoPanTool::activate(bool temporary) {
         emit sigDone();
     m_temporary = temporary;
     useCursor(QCursor(Qt::OpenHandCursor), true);
+}
+
+QPointF KoPanTool::documentToViewport( const QPointF &p ) {
+    QPointF viewportPoint = m_canvas->viewConverter()->documentToView( p );
+    viewportPoint += m_canvas->documentOrigin();
+    viewportPoint += QPoint( m_controller->canvasOffsetX(), m_controller->canvasOffsetY() );
+
+    return viewportPoint;
 }

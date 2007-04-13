@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -57,6 +58,7 @@ public:
     void setCanvasController(KoCanvasController *controller) { m_controller = controller; }
 
 private:
+    QPointF documentToViewport( const QPointF &p );
     KoCanvasController *m_controller;
     QPointF m_lastPosition;
     bool m_temporary;

@@ -114,7 +114,7 @@ void NewLayerDialog::fillCmbComposite(const KoID & s)
 {
     m_page->cmbComposite->clear();
 
-    if (!KoColorSpaceRegistry::instance()->exists(s)) {
+    if (!KoColorSpaceRegistry::instance()->contains(s.id())) {
         return;
     }
 

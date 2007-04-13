@@ -101,12 +101,13 @@ public:
 
       void ensureItemShown( KStatusBar * sb )
       {
+            Q_ASSERT(m_widget);
             if ( !m_visible )
             {
                 if( m_permanent )
-		    sb->addPermanentWidget( m_widget, m_stretch );
-		else
-		    sb->addWidget( m_widget, m_stretch );
+                    sb->addPermanentWidget( m_widget, m_stretch );
+                else
+                    sb->addWidget( m_widget, m_stretch );
 
                 m_visible = true;
                 m_widget->show();

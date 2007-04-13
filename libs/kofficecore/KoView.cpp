@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
+// local directory
+#include "KoDockRegistry.h"
+
 #include <KoView.h>
 #include <KoDocument.h>
 #include <KoMainWindow.h>
@@ -196,6 +199,12 @@ KoView::KoView( KoDocument *document, QWidget *parent )
 
   d->m_scrollTimer = new QTimer( this );
   connect (d->m_scrollTimer, SIGNAL( timeout() ), this, SLOT( slotAutoScroll() ) );
+
+    // add all plugins.
+    foreach(QString docker, KoDockRegistry::instance()->keys()) {
+        KoDockFactory *factory = KoDockRegistry::instance()->value(docker);
+        createDockWidget(factory);
+    }
 }
 
 KoView::~KoView()

@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOSHAPESELECTOR_H
-#define KOSHAPESELECTOR_H
+#ifndef SHAPESELECTOR_H
+#define SHAPESELECTOR_H
 
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
@@ -41,11 +41,11 @@ class QPainter;
  * The shape selector shows a widget that holds templates and clipboard data
  * for the user to easilly move that between apps and maintain functionality.
  */
-class KoShapeSelector : public QDockWidget {
+class ShapeSelector : public QDockWidget {
     Q_OBJECT
 public:
-    explicit KoShapeSelector(QWidget *parent = 0);
-    ~KoShapeSelector();
+    explicit ShapeSelector(QWidget *parent = 0);
+    ~ShapeSelector();
 
 private slots:
     void loadShapeTypes();
@@ -77,7 +77,7 @@ private:
     /// \internal
     class Canvas : public QWidget, public KoCanvasBase {
         public:
-            explicit Canvas(KoShapeSelector *parent);
+            explicit Canvas(ShapeSelector *parent);
             void gridSize (double *horizontal, double *vertical) const;
             bool snapToGrid() const { return false; }
             void addCommand (QUndoCommand *command);
@@ -101,7 +101,7 @@ private:
         private:
             DummyShapeController m_shapeController;
             DummyViewConverter m_converter;
-            KoShapeSelector *m_parent;
+            ShapeSelector *m_parent;
             bool m_emitItemSelected;
     };
 

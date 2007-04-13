@@ -91,8 +91,8 @@ private:
 
 private:
     static KoPluginLoader *m_singleton;
-
-    QStringList m_loadedServiceTypes;
+    class Private;
+    Private * const d;
 };
 
 #endif // KO_PLUGIN_LOADER_H

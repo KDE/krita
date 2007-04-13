@@ -20,10 +20,11 @@
 #ifndef KODOCKREGISTRY_
 #define KODOCKREGISTRY_
 
-#include <QObject>
-
 #include "KoGenericRegistry.h"
-#include <KoDockFactory.h>
+#include "KoDockFactory.h"
+#include "kofficecore_export.h"
+
+#include <QObject>
 
 /**
  * This singleton class keeps a register of all available flake tools,
@@ -33,7 +34,7 @@
  * XXX: Make it possible for this class to load not just flake tools,
    but also the app-specific KoTool-based tools. (BSAR)
  */
-class KoDockRegistry : public QObject, public KoGenericRegistry<KoDockFactory*> {
+class KOFFICECORE_EXPORT KoDockRegistry : public QObject, public KoGenericRegistry<KoDockFactory*> {
     Q_OBJECT
 
 public:

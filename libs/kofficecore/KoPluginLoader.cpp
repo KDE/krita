@@ -27,12 +27,19 @@
 
 #include <KoPluginLoader.h>
 
+class KoPluginLoader::Private {
+public:
+    QStringList loadedServiceTypes;
+};
+
 KoPluginLoader::KoPluginLoader()
+    : d(new Private())
 {
 }
 
 KoPluginLoader::~KoPluginLoader()
 {
+    delete d;
 }
 
 KoPluginLoader *KoPluginLoader::m_singleton = 0;
@@ -50,14 +57,15 @@ KoPluginLoader* KoPluginLoader::instance()
 void KoPluginLoader::load(const QString & serviceType, const QString & versionString)
 {
     // Don't load the same plugins again
-    if (m_loadedServiceTypes.contains(serviceType)) {
+    if (d->loadedServiceTypes.contains(serviceType)) {
         return;
     }
-    m_loadedServiceTypes << serviceType;
+    d->loadedServiceTypes << serviceType;
+    QString query = QString::fromLatin1("(Type == 'Service')");
+    if(! versionString.isEmpty())
+        query += QString::fromLatin1(" and (%1)").arg(versionString);
 
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType,
-                                 QString::fromLatin1("(Type == 'Service') and (%1)").arg(versionString));
-
+    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
 
     foreach(KService::Ptr service, offers) {
         int errCode = 0;

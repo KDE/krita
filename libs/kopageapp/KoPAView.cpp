@@ -29,7 +29,6 @@
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
 #include <KoToolBoxFactory.h>
-#include <KoShapeSelectorFactory.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoZoomAction.h>
@@ -130,8 +129,6 @@ void KoPAView::initGUI()
 
     KoToolBoxFactory toolBoxFactory(m_canvasController, "Tools" );
     createDockWidget( &toolBoxFactory );
-    KoShapeSelectorFactory shapeSelectorFactory;
-    createDockWidget( &shapeSelectorFactory );
     KoToolDockerFactory toolDockerFactory;
     KoToolDocker* toolDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
     connect( m_canvasController, SIGNAL( toolOptionWidgetChanged( QWidget* ) ), 

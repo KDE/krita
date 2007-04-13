@@ -54,7 +54,6 @@
 #include <KoShape.h>
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>
-#include <KoShapeSelectorFactory.h>
 #include <KoZoomHandler.h>
 #include <KoViewConverter.h>
 #include <KoView.h>
@@ -391,9 +390,6 @@ void KisView2::createGUI()
 
     KoToolBoxFactory toolBoxFactory( m_d->canvasController, "Krita" );
     createDockWidget( &toolBoxFactory );
-
-    KoShapeSelectorFactory shapeSelectorFactory;
-    createDockWidget( &shapeSelectorFactory );
 
     KoColorDockerFactory colorDockerFactory;
     KoColorDocker * docker = qobject_cast<KoColorDocker*>( createDockWidget( &colorDockerFactory ) );

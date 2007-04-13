@@ -17,20 +17,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOSHAPESELECTORFACTORY_H
-#define KOSHAPESELECTORFACTORY_H
+#ifndef SHAPESELECTORFACTORY_H
+#define SHAPESELECTORFACTORY_H
 
 #include <KoDockFactory.h>
-#include <kofficeui_export.h>
 
 /**
- * The factory used for creating the shape KoShapeSelector as a dockFactory
+ * The factory used for creating the shape ShapeSelector as a dockFactory
  */
-class KOFFICEUI_EXPORT KoShapeSelectorFactory : public KoDockFactory
+class ShapeSelectorFactory : public KoDockFactory
 {
 public:
     /// constructor
-    KoShapeSelectorFactory();
+    ShapeSelectorFactory();
 
     virtual QString id() const;
     Qt::DockWidgetArea defaultDockWidgetArea() const;

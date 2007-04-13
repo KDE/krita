@@ -29,7 +29,6 @@ set(kofficeui_LIB_SRCS
    KoPartSelectAction.cpp
    KoPictureFilePreview.cpp
    KoRuler.cpp
-   KoShapeSelector.cpp
    KoShapeGeometry.cpp
    KoSliderCombo.cpp
    KoTabBar.cpp
@@ -47,7 +46,6 @@ set(kofficeui_LIB_SRCS
    tkcombobox.cpp 
    tktoolbarbutton.cpp
    KoToolBoxFactory.cpp
-   KoShapeSelectorFactory.cpp
     KoToolDocker.cpp
     KoToolDockerFactory.cpp
     KoLayoutVisitor.cpp
@@ -109,7 +107,6 @@ install(
     tkcombobox.h
     tktoolbarbutton.h
     KoToolBoxFactory.h
-    KoShapeSelectorFactory.h
     KoToolDocker.h
     KoToolDockerFactory.h
     DESTINATION

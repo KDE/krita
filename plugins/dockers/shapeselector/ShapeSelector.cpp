@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoShapeSelector.h"
+#include "shapeselector/ShapeSelector.h"
 
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
@@ -120,8 +120,8 @@ private:
 };
 
 
-// ************** KoShapeSelector ************
-KoShapeSelector::KoShapeSelector(QWidget *parent)
+// ************** ShapeSelector ************
+ShapeSelector::ShapeSelector(QWidget *parent)
 : QDockWidget(i18n("Shapes"), parent)
 {
     setObjectName("ShapeSelector");
@@ -133,12 +133,12 @@ KoShapeSelector::KoShapeSelector(QWidget *parent)
     QTimer::singleShot(0, this, SLOT(loadShapeTypes()));
 }
 
-KoShapeSelector::~KoShapeSelector() {
+ShapeSelector::~ShapeSelector() {
     delete m_shapeManager;
     delete m_canvas;
 }
 
-void KoShapeSelector::loadShapeTypes() {
+void ShapeSelector::loadShapeTypes() {
     foreach(QString id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
         bool oneAdded=false;
@@ -152,7 +152,7 @@ void KoShapeSelector::loadShapeTypes() {
     }
 }
 
-void KoShapeSelector::itemSelected() {
+void ShapeSelector::itemSelected() {
     KoShape *koShape = m_shapeManager->selection()->firstSelectedShape();
     if(koShape == 0)
         return;
@@ -166,7 +166,7 @@ void KoShapeSelector::itemSelected() {
     }
 }
 
-void KoShapeSelector::add(KoShape *shape) {
+void ShapeSelector::add(KoShape *shape) {
     int x=5, y=5; // 5 = gap
     int w = (int) shape->size().width();
     bool ok=true; // lets be optimistic ;)
@@ -193,46 +193,46 @@ void KoShapeSelector::add(KoShape *shape) {
 
 
 // ************ DummyViewConverter **********
-QPointF KoShapeSelector::DummyViewConverter::documentToView (const QPointF &documentPoint) const {
+QPointF ShapeSelector::DummyViewConverter::documentToView (const QPointF &documentPoint) const {
     return documentPoint;
 }
 
-QPointF KoShapeSelector::DummyViewConverter::viewToDocument (const QPointF &viewPoint) const {
+QPointF ShapeSelector::DummyViewConverter::viewToDocument (const QPointF &viewPoint) const {
     return viewPoint;
 }
 
-QRectF KoShapeSelector::DummyViewConverter::documentToView (const QRectF &documentRect) const {
+QRectF ShapeSelector::DummyViewConverter::documentToView (const QRectF &documentRect) const {
     return documentRect;
 }
 
-QRectF KoShapeSelector::DummyViewConverter::viewToDocument (const QRectF &viewRect) const {
+QRectF ShapeSelector::DummyViewConverter::viewToDocument (const QRectF &viewRect) const {
     return viewRect;
 }
 
-void KoShapeSelector::DummyViewConverter::zoom (double *zoomX, double *zoomY) const {
+void ShapeSelector::DummyViewConverter::zoom (double *zoomX, double *zoomY) const {
     *zoomX = 1.0;
     *zoomY = 1.0;
 }
 
-double KoShapeSelector::DummyViewConverter::documentToViewX (double documentX) const {
+double ShapeSelector::DummyViewConverter::documentToViewX (double documentX) const {
     return documentX;
 }
 
-double KoShapeSelector::DummyViewConverter::documentToViewY (double documentY) const {
+double ShapeSelector::DummyViewConverter::documentToViewY (double documentY) const {
     return documentY;
 }
 
-double KoShapeSelector::DummyViewConverter::viewToDocumentX (double viewX) const {
+double ShapeSelector::DummyViewConverter::viewToDocumentX (double viewX) const {
     return viewX;
 }
 
-double KoShapeSelector::DummyViewConverter::viewToDocumentY (double viewY) const {
+double ShapeSelector::DummyViewConverter::viewToDocumentY (double viewY) const {
     return viewY;
 }
 
 
 // ********* Canvas **********
-KoShapeSelector::Canvas::Canvas(KoShapeSelector *parent)
+ShapeSelector::Canvas::Canvas(ShapeSelector *parent)
 : QWidget(parent)
 , KoCanvasBase( &m_shapeController )
 , m_parent(parent)
@@ -243,24 +243,24 @@ KoShapeSelector::Canvas::Canvas(KoShapeSelector *parent)
     setAcceptDrops(true);
 }
 
-void KoShapeSelector::Canvas::gridSize (double *horizontal, double *vertical) const {
+void ShapeSelector::Canvas::gridSize (double *horizontal, double *vertical) const {
     Q_UNUSED(horizontal);
     Q_UNUSED(vertical);
 }
 
-void KoShapeSelector::Canvas::updateCanvas (const QRectF &rc) {
+void ShapeSelector::Canvas::updateCanvas (const QRectF &rc) {
     QRect rect = rc.toRect();
     rect.adjust(-2, -2, 2, 2); // grow for to anti-aliasing
     update(rect);
 }
 
-void  KoShapeSelector::Canvas::addCommand (QUndoCommand *command) {
+void  ShapeSelector::Canvas::addCommand (QUndoCommand *command) {
     command->redo();
     delete command;
 }
 
 // event handlers
-void KoShapeSelector::Canvas::mousePressEvent(QMouseEvent *event) {
+void ShapeSelector::Canvas::mousePressEvent(QMouseEvent *event) {
     KoShape *clickedShape = shapeManager()->shapeAt(event->pos());
     foreach(KoShape *shape, shapeManager()->selection()->selectedShapes())
         shape->repaint();
@@ -273,7 +273,7 @@ void KoShapeSelector::Canvas::mousePressEvent(QMouseEvent *event) {
     clickedShape->repaint();
 }
 
-void KoShapeSelector::Canvas::tabletEvent(QTabletEvent *event) {
+void ShapeSelector::Canvas::tabletEvent(QTabletEvent *event) {
     event->ignore();
     if(event->type() != QEvent::TabletMove)
         return;
@@ -289,7 +289,7 @@ void KoShapeSelector::Canvas::tabletEvent(QTabletEvent *event) {
     // if not accepted it will fall through and be offered as a mouseMoveEvent
 }
 
-void KoShapeSelector::Canvas::mouseMoveEvent(QMouseEvent *event) {
+void ShapeSelector::Canvas::mouseMoveEvent(QMouseEvent *event) {
     KoShape *clickedShape = shapeManager()->selection()->firstSelectedShape();
     if(clickedShape == 0)
         return;
@@ -336,7 +336,7 @@ void KoShapeSelector::Canvas::mouseMoveEvent(QMouseEvent *event) {
         m_emitItemSelected = false;
 }
 
-void  KoShapeSelector::Canvas::dragEnterEvent(QDragEnterEvent *event) {
+void  ShapeSelector::Canvas::dragEnterEvent(QDragEnterEvent *event) {
     if (event->source() == this && (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
                 event->mimeData()->hasFormat(SHAPEID_MIMETYPE))) {
         event->setDropAction(Qt::MoveAction);
@@ -344,13 +344,13 @@ void  KoShapeSelector::Canvas::dragEnterEvent(QDragEnterEvent *event) {
     }
 }
 
-void KoShapeSelector::Canvas::mouseReleaseEvent(QMouseEvent *event) {
+void ShapeSelector::Canvas::mouseReleaseEvent(QMouseEvent *event) {
     Q_UNUSED(event);
     if(m_emitItemSelected)
         m_parent->itemSelected();
 }
 
-void  KoShapeSelector::Canvas::dropEvent(QDropEvent *event) {
+void  ShapeSelector::Canvas::dropEvent(QDropEvent *event) {
     QByteArray itemData;
     bool isTemplate = true;
     if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE))
@@ -381,7 +381,7 @@ void  KoShapeSelector::Canvas::dropEvent(QDropEvent *event) {
     }
 }
 
-void KoShapeSelector::Canvas::paintEvent(QPaintEvent * e) {
+void ShapeSelector::Canvas::paintEvent(QPaintEvent * e) {
     QPainter painter( this );
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setClipRect(e->rect());
@@ -398,7 +398,7 @@ void KoShapeSelector::Canvas::paintEvent(QPaintEvent * e) {
     painter.end();
 }
 
-bool KoShapeSelector::Canvas::event(QEvent *e) {
+bool ShapeSelector::Canvas::event(QEvent *e) {
     if (e->type() == QEvent::ToolTip) {
         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
 
@@ -414,4 +414,4 @@ bool KoShapeSelector::Canvas::event(QEvent *e) {
     return QWidget::event(e);
 }
 
-#include "KoShapeSelector.moc"
+#include "ShapeSelector.moc"

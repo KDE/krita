@@ -31,19 +31,19 @@ class QDockWidget;
  */
 class KOFFICECORE_EXPORT KoDockFactory
 {
-    public:
-        KoDockFactory() {}
-        virtual ~KoDockFactory() {}
+public:
+    KoDockFactory() {}
+    virtual ~KoDockFactory() {}
 
-        /// @return the id of the dock widget
-        virtual QString id() const = 0;
+    /// @return the id of the dock widget
+    virtual QString id() const = 0;
 
-        /// @return the dock widget area the widget should appear in by default
-        virtual Qt::DockWidgetArea defaultDockWidgetArea() const = 0;
+    /// @return the dock widget area the widget should appear in by default
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const = 0;
 
-        /// Creates the dock widget
-        /// @return the created dock widget
-        virtual QDockWidget* createDockWidget() = 0;
+    /// Creates the dock widget
+    /// @return the created dock widget
+    virtual QDockWidget* createDockWidget() = 0;
 };
 
 #endif

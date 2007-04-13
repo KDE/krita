@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
+/* This file is part of the KDE project
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,28 +16,17 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef PLUGIN_H
+#define PLUGIN_H
 
-#include "KoShapeSelectorFactory.h"
+#include <QObject>
 
-#include <QDockWidget>
+class Plugin : public QObject {
+    Q_OBJECT
 
-#include <KoShapeSelector.h>
+public:
+    Plugin(QObject * parent,  const QStringList & );
+    ~Plugin() {}
+};
 
-KoShapeSelectorFactory::KoShapeSelectorFactory()
-{
-}
-
-QString KoShapeSelectorFactory::id() const
-{
-    return QString("ShapeSelector");
-}
-
-Qt::DockWidgetArea KoShapeSelectorFactory::defaultDockWidgetArea() const
-{
-    return Qt::LeftDockWidgetArea;
-}
-
-QDockWidget* KoShapeSelectorFactory::createDockWidget()
-{
-    return new KoShapeSelector();
-}
+#endif

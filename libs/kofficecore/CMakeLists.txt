@@ -118,7 +118,6 @@ install(TARGETS kodocinfopropspage DESTINATION ${PLUGIN_INSTALL_DIR} )
 ########### install files ###############
 
 install(FILES kodocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kofficedocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install(FILES koffice_shell.rc DESTINATION ${DATA_INSTALL_DIR}/koffice )
 install( FILES
     KoContainerHandler.h

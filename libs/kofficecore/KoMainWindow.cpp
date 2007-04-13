@@ -1767,20 +1767,20 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
 {
     QDockWidget* dockWidget = 0;
 
-    if( !d->m_dockWidgetMap.contains( factory->dockId() ) ) {
+    if( !d->m_dockWidgetMap.contains( factory->id() ) ) {
         dockWidget = factory->createDockWidget();
         Q_ASSERT(dockWidget);
-        dockWidget->setObjectName(factory->dockId());
+        dockWidget->setObjectName(factory->id());
         dockWidget->setParent( this );
         addDockWidget( factory->defaultDockWidgetArea(), dockWidget );
-        d->m_dockWidgetMap.insert( factory->dockId(), dockWidget );
+        d->m_dockWidgetMap.insert( factory->id(), dockWidget );
 
         if( dockWidget->features() & QDockWidget::DockWidgetClosable ) {
             d->m_dockWidgetMenu->setVisible( true );
             d->m_dockWidgetMenu->addAction( dockWidget->toggleViewAction() );
         }
     } else {
-        dockWidget = d->m_dockWidgetMap[ factory->dockId() ];
+        dockWidget = d->m_dockWidgetMap[ factory->id() ];
     }
 
     // XXX: Create koffice-wide dialog pane with the palette font size

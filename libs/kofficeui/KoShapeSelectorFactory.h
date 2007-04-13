@@ -32,7 +32,7 @@ public:
     /// constructor
     KoShapeSelectorFactory();
 
-    QString dockId() const;
+    virtual QString id() const;
     Qt::DockWidgetArea defaultDockWidgetArea() const;
     QDockWidget* createDockWidget();
 };

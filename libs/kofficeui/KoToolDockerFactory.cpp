@@ -21,7 +21,7 @@
 
 #include "KoToolDockerFactory.h"
 
-QString KoToolDockerFactory::dockId() const
+QString KoToolDockerFactory::id() const
 {
     return QString("KoToolOptionsDocker");
 }
@@ -34,6 +34,6 @@ Qt::DockWidgetArea KoToolDockerFactory::defaultDockWidgetArea() const
 QDockWidget* KoToolDockerFactory::createDockWidget()
 {
     KoToolDocker * dockWidget = new KoToolDocker();
-    dockWidget->setObjectName( dockId() );
+    dockWidget->setObjectName( id() );
     return dockWidget;
 }

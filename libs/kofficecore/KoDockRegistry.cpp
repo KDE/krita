@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
+/* This file is part of the KDE project
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,27 +17,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoShapeSelectorFactory.h"
+#include "KoDockRegistry.h"
+#include "KoPluginLoader.h"
 
-#include <QDockWidget>
+#include <kstaticdeleter.h>
 
-#include <KoShapeSelector.h>
+KoDockRegistry::KoDockRegistry() {
+}
 
-KoShapeSelectorFactory::KoShapeSelectorFactory()
+void KoDockRegistry::init() {
+    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Dock"));
+}
+
+KoDockRegistry::~KoDockRegistry()
 {
 }
 
-QString KoShapeSelectorFactory::id() const
+// static
+KoDockRegistry *KoDockRegistry::s_instance = 0;
+static KStaticDeleter<KoDockRegistry> staticToolRegistryDeleter;
+
+KoDockRegistry* KoDockRegistry::instance()
 {
-    return QString("ShapeSelector");
+    if(KoDockRegistry::s_instance == 0) {
+        staticToolRegistryDeleter.setObject(s_instance, new KoDockRegistry());
+        KoDockRegistry::s_instance->init();
+    }
+    return KoDockRegistry::s_instance;
 }
 
-Qt::DockWidgetArea KoShapeSelectorFactory::defaultDockWidgetArea() const
-{
-    return Qt::LeftDockWidgetArea;
-}
-
-QDockWidget* KoShapeSelectorFactory::createDockWidget()
-{
-    return new KoShapeSelector();
-}
+#include "KoDockRegistry.moc"

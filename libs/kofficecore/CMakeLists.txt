@@ -72,6 +72,7 @@ set(kofficecore_LIB_SRCS
     KoViewChild.cpp
     KoGridData.cpp
     KoGuidesData.cpp
+    KoDockRegistry.cpp
 )
 
 kde4_automoc(${kofficecore_LIB_SRCS})

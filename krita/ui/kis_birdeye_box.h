@@ -76,7 +76,7 @@ public:
         {
         }
 
-    virtual QString dockId() const
+    virtual QString id() const
         {
             return QString( "KisBirdeyeBox" );
         }
@@ -89,7 +89,7 @@ public:
     virtual QDockWidget* createDockWidget()
         {
             KisBirdEyeBox * dockWidget = new KisBirdEyeBox(m_view);
-            dockWidget->setObjectName(dockId());
+            dockWidget->setObjectName(id());
 
             return dockWidget;
         }

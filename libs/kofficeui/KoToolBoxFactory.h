@@ -35,7 +35,7 @@ public:
     explicit KoToolBoxFactory(KoCanvasController *canvas, const QString& appName);
     ~KoToolBoxFactory();
 
-    QString dockId() const;
+    virtual QString id() const;
     Qt::DockWidgetArea defaultDockWidgetArea() const;
     QDockWidget* createDockWidget();
 

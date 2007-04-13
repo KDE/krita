@@ -35,7 +35,7 @@ class KOKROSS_EXPORT KoScriptingDockerFactory : public KoDockFactory
         KoScriptingDockerFactory(QWidget* parent, Kross::GUIClient* guiclient);
         virtual ~KoScriptingDockerFactory();
         Kross::GUIClient* guiClient() const;
-        virtual QString dockId() const;
+        virtual QString id() const;
         virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
         virtual QDockWidget* createDockWidget();
     private:

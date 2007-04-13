@@ -82,7 +82,7 @@ public:
      * for instance:
      * KoPluginLoader::instance()->load("KOffice/Flake", "([X-Flake-Version] == 3)");
      */
-    void load(const QString & serviceType, const QString & versionString);
+    void load(const QString & serviceType, const QString & versionString = QString());
 
 private:
     KoPluginLoader();

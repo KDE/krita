@@ -83,7 +83,7 @@ public:
     KisPaletteDockerFactory(KisView2 * view) { m_view = view; }
     ~KisPaletteDockerFactory() {}
 
-    QString dockId() const;
+    virtual QString id() const;
     Qt::DockWidgetArea defaultDockWidgetArea() const;
     QDockWidget * createDockWidget();
 

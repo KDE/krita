@@ -40,7 +40,7 @@ KoToolBoxFactory::~KoToolBoxFactory() {
     delete d;
 }
 
-QString KoToolBoxFactory::dockId() const
+QString KoToolBoxFactory::id() const
 {
     return QString("ToolBox");
 }

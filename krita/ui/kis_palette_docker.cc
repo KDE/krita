@@ -134,7 +134,7 @@ void KisPaletteDocker::colorSelected( const KoColor& color )
     m_view->resourceProvider()->setFGColor(color);
 }
 
-QString KisPaletteDockerFactory::dockId() const
+QString KisPaletteDockerFactory::id() const
 {
     return QString("KisPaletteDocker");
 }
@@ -147,7 +147,7 @@ Qt::DockWidgetArea KisPaletteDockerFactory::defaultDockWidgetArea() const
 QDockWidget* KisPaletteDockerFactory::createDockWidget()
 {
     KisPaletteDocker* dockWidget = new KisPaletteDocker(m_view);
-    dockWidget->setObjectName(dockId());
+    dockWidget->setObjectName(id());
 
     return dockWidget;
 }

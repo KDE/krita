@@ -65,7 +65,7 @@ Kross::GUIClient* KoScriptingDockerFactory::guiClient() const
     return d->guiclient;
 }
 
-QString KoScriptingDockerFactory::dockId() const
+QString KoScriptingDockerFactory::id() const
 {
     return "Scripting";
 }
@@ -77,7 +77,9 @@ Qt::DockWidgetArea KoScriptingDockerFactory::defaultDockWidgetArea() const
 
 QDockWidget* KoScriptingDockerFactory::createDockWidget()
 {
-    return new KoScriptingDocker(d->parent, d->guiclient);
+    QDockWidget *dw =  new KoScriptingDocker(d->parent, d->guiclient);
+    dw->setObjectName(id());
+    return dw;
 }
 
 /***********************************************************************

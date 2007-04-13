@@ -36,7 +36,7 @@ class KOFFICECORE_EXPORT KoDockFactory
         virtual ~KoDockFactory() {}
 
         /// @return the id of the dock widget
-        virtual QString dockId() const = 0;
+        virtual QString id() const = 0;
 
         /// @return the dock widget area the widget should appear in by default
         virtual Qt::DockWidgetArea defaultDockWidgetArea() const = 0;

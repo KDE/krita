@@ -116,7 +116,7 @@ class KisLayerBoxFactory : public KoDockFactory
 public:
     KisLayerBoxFactory() { }
 
-    virtual QString dockId() const
+    virtual QString id() const
         {
             return QString( "Layers" );
         }
@@ -130,7 +130,7 @@ public:
         {
             KisLayerBox * dockWidget = new KisLayerBox();
 
-            dockWidget->setObjectName(dockId());
+            dockWidget->setObjectName(id());
 
             return dockWidget;
         }

@@ -36,7 +36,7 @@ public:
     ~KoToolDockerFactory() {}
 
     /// reimplemented from parent
-    QString dockId() const;
+    virtual QString id() const;
     /// reimplemented from parent
     Qt::DockWidgetArea defaultDockWidgetArea() const;
     /// reimplemented from parent

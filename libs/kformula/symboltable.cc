@@ -107,16 +107,6 @@ QFont SymbolTable::font( QChar symbol, const QFont& f ) const
 }
 
 
-CharClass SymbolTable::charClass( QChar symbol ) const
-{
-    Q_UNUSED( symbol );
-
-    return ORDINARY;
-    // FIXME
-    // return entry( symbol, style ).charClass();
-}
-
-
 QChar SymbolTable::unicodeFromSymbolFont( QChar pos ) const
 {
     return symbolFontHelper.unicodeFromSymbolFont( pos );

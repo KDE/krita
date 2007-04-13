@@ -29,10 +29,11 @@
 #include <QVector>
 
 #include "kformuladefs.h"
+#include "kformula_export.h"
 
 class KConfig;
 
-namespace KFormula
+namespace FormulaShape
 {
 
 class ContextStyle;
@@ -95,8 +96,6 @@ class KOFORMULA_EXPORT SymbolTable
     QString name( QChar symbol ) const;
 
     QFont font( QChar symbol, const QFont& f ) const;
-
-    CharClass charClass( QChar symbol ) const;
 
     /**
      * @returns a string with all greek letters.

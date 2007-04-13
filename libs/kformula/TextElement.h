@@ -28,10 +28,11 @@
 
 #include "BasicElement.h"
 
+
+namespace FormulaShape {
+
 class SymbolTable;
-
-namespace KFormula {
-
+ 
 /**
  * @short Implementation of the MathML
  * An element that represents one char.
@@ -52,103 +53,36 @@ public:
     
 
     /**
-     * @returns the type of this element. Used for
-     * parsing a sequence.
-     */
-    virtual TokenType getTokenType() const;
-
-    /**
      * @returns true if we don't want to see the element.
      */
     virtual bool isInvisible() const;
 
     /**
-     * @returns the character that represents this element. Used for
-     * parsing a sequence.
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
      */
-    virtual QChar getCharacter() const { return character; }
+    virtual void paint( QPainter& painter, const AttributeManager* am );
 
     /**
-     * Calculates our width and height and
-     * our children's parentPosition.
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
      */
-    virtual void calcSizes(const ContextStyle& context, 
-                           ContextStyle::TextStyle tstyle, 
-                           ContextStyle::IndexStyle istyle,
-                           StyleAttributes& style );
-
-    /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
-     */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       StyleAttributes& style,
-                       const LuPixelPoint& parentOrigin );
-
-    /**
-     * Dispatch this FontCommand to all our TextElement children.
-     */
-//    virtual void dispatchFontCommand( FontCommand* cmd );
-
-    CharStyle getCharStyle() const { return charStyle(); }
-    void setCharStyle( CharStyle cs );
-
-    CharFamily getCharFamily() const { return charFamily(); }
-    void setCharFamily( CharFamily cf );
-
-    char format() const { return m_format; }
-
-    /**
-     * @returns whether we are a symbol (greek letter).
-     */
-    bool isSymbol() const { return symbol; }
-
+    virtual void layout( const AttributeManager* am );
+    
 protected:
     //Save/load support
 
     virtual void writeMathMLContent( KoXmlWriter* , bool ) const ;
 
     /**
-     * @returns the tag name of this element type.
-     */
-    virtual QString getTagName() const { return "TEXT"; }
-
-    /**
-     * Appends our attributes to the dom element.
-     */
-    virtual void writeDom(QDomElement element);
-
-    /**
-     * Reads our attributes from the element.
-     * Returns false if it failed.
-     */
-    virtual bool readAttributesFromDom(QDomElement element);
-
-    /**
-     * Reads our content from the node. Sets the node to the next node
-     * that needs to be read.
-     * Returns false if it failed.
-     */
-    virtual bool readContentFromDom(QDomNode& node);
-
-    /**
      * @returns the char that is used to draw with the given font.
      */
-    QChar getRealCharacter(const ContextStyle& context);
+    QChar character() const { return m_character; }
 
     /**
      * @returns the font to be used for the element.
      */
-    QFont getFont(const ContextStyle& context, const StyleAttributes& style);
-
-    /**
-     * Sets up the painter to be used for drawing.
-     */
-    void setUpPainter(const ContextStyle& context, QPainter& painter);
+	QFont getFont( const AttributeManager* am );
 
     const SymbolTable& getSymbolTable() const;
 
@@ -157,39 +91,15 @@ private:
     /**
      * Our content.
      */
-    QChar character;
+    QChar m_character;
 
     /**
      * Whether this character is a symbol.
      */
     bool symbol;
 
-    /**
-     * The attribute of the char. "anyChar" means leave the default.
-     *
-     * This must be in sync with the definition in kformuladefs.h!
-     */
-    CharStyle charStyle() const { return static_cast<CharStyle>( m_format & 0x0f ); }
-    void charStyle( CharStyle cs )
-        { m_format = ( m_format & 0xf0 ) | static_cast<char>( cs ); }
-
-    /**
-     * Very rarely used so it's actually a shame to have it here.
-     *
-     * This must be in sync with the definition in kformuladefs.h!
-     */
-    CharFamily charFamily() const
-        { return static_cast<CharFamily>( m_format >> 4 ); }
-    void charFamily( CharFamily cf )
-        { m_format = ( m_format & 0x0f ) | ( static_cast<char>( cf ) << 4 ); }
-
-    /**
-     * To save space both CharStyle and CharFamily are packed into one
-     * char.
-     */
-    char m_format;
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // TEXTELEMENT_H

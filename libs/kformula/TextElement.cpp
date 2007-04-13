@@ -34,17 +34,15 @@
 #include "fontstyle.h"
 #include "FormulaElement.h"
 //#include "kformulacommand.h"
-#include "SequenceElement.h"
 #include "symboltable.h"
+#include "AttributeManager.h"
 
 
-namespace KFormula {
+namespace FormulaShape {
 
 TextElement::TextElement( QChar ch, bool beSymbol, BasicElement* parent ) 
-    : BasicElement( parent ), character( ch ), symbol( beSymbol )
+    : BasicElement( parent ), m_character( ch ), symbol( beSymbol )
 {
-    charStyle( anyChar );
-    charFamily( anyFamily );
 }
 
 const QList<BasicElement*> TextElement::childElements()
@@ -54,44 +52,8 @@ const QList<BasicElement*> TextElement::childElements()
 
 void TextElement::writeMathMLContent( KoXmlWriter* writer, bool /* oasisFormat */ ) const
 {
-    writer->addTextNode( getCharacter() );
+    writer->addTextNode( character() );
 }
-
-
-TokenType TextElement::getTokenType() const
-{
-    if ( isSymbol() ) {
-        return getSymbolTable().charClass( character );
-    }
-
-    switch ( character.unicode() ) {
-    case '+':
-    case '-':
-    case '*':
-        //case '/':  because it counts as text -- no extra spaces
-        return BINOP;
-    case '=':
-    case '<':
-    case '>':
-        return RELATION;
-    case ',':
-    case ';':
-    case ':':
-        return PUNCTUATION;
-    case '\\':
-        return SEPARATOR;
-    case '\0':
-        return ELEMENT;
-    default:
-        if ( character.isNumber() ) {
-            return NUMBER;
-        }
-        else {
-            return ORDINARY;
-        }
-    }
-}
-
 
 
 bool TextElement::isInvisible() const
@@ -104,6 +66,65 @@ bool TextElement::isInvisible() const
 }
 
 
+/**
+ * Render the element to the given QPainter
+ * @param painter The QPainter to paint the element to
+ */
+void TextElement::paint( QPainter& painter, const AttributeManager* am )
+{
+    // Invisible characters
+    if ( character() == applyFunctionChar || character() == invisibleTimes || character() == invisibleComma )
+        return;
+
+     // Color handling.
+     // TODO: most of this should be handled by AttributeManager
+     QVariant color = am->valueOf( "mathcolor" );
+     if ( color.isNull() )
+         color = am->valueOf( "color" );
+     if ( color.canConvert( QVariant::Color ) )
+         painter.setPen( color.value<QColor>() );
+     else
+         painter.setPen( QColor( "black" ) );
+     
+     // TODO: Default fonts should be read from settings
+     // Font style handling
+     QFont font = getFont( am );
+     painter.setFont( font );
+
+     // FIXME: get rid of context
+     /*
+    if ( character() != QChar::Null ) {
+        luPixel bl = getBaseline();
+        if ( bl == -1 ) {
+            // That's quite hacky and actually not the way it's
+            // meant to be. You shouldn't calculate a lot in
+            // draw. But I don't see how else to deal with
+            // baseline==0 glyphs without yet another flag.
+
+            bl = -( getHeight()/2 + context.axisHeight( tstyle, factor ) );
+        }
+        painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
+                          context.layoutUnitToPixelY( myPos.y()+bl ),
+                          character() );
+    }
+    else {
+        painter.setPen( QPen( context.getErrorColor(),
+                              context.layoutUnitToPixelX( context.getLineWidth( factor ) ) ) );
+        painter.drawRect( context.layoutUnitToPixelX( myPos.x() ),
+                          context.layoutUnitToPixelY( myPos.y() ),
+                          context.layoutUnitToPixelX( getWidth() ),
+                          context.layoutUnitToPixelY( getHeight() ) );
+        }
+     */
+     painter.drawText( 0, 0, character() ); // FIXME
+}
+
+void TextElement::layout( const AttributeManager* am )
+{
+}
+
+#warning "Port and remove obsolete code"
+#if 0  
 /**
  * Calculates our width and height and
  * our children's parentPosition.
@@ -126,13 +147,13 @@ void TextElement::calcSizes( const ContextStyle& context,
     font.setPointSizeF( size < style.scriptMinSize() ? style.scriptMinSize() : size );
 
     QFontMetrics fm( font );
-    if ( character == applyFunctionChar || character == invisibleTimes || character == invisibleComma ) {
+    if ( character() == applyFunctionChar || character() == invisibleTimes || character() == invisibleComma ) {
         setWidth( 0 );
         setHeight( 0 );
         setBaseline( getHeight() );
     }
     else {
-        QChar ch = getRealCharacter( context );
+        QChar ch = character();
         if ( ch == QChar::null ) {
             setWidth( qRound( context.getEmptyRectWidth( factor ) * 2./3. ) );
             setHeight( qRound( context.getEmptyRectHeight( factor ) * 2./3. ) );
@@ -166,7 +187,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                         StyleAttributes& style,
                         const LuPixelPoint& parentOrigin )
 {
-    if ( character == applyFunctionChar || character == invisibleTimes || character == invisibleComma ) {
+    if ( character() == applyFunctionChar || character() == invisibleTimes || character() == invisibleComma ) {
         return;
     }
 
@@ -208,7 +229,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
     }
     else {
 */
-        QChar ch = getRealCharacter(context);
+        QChar ch = character();
         if ( ch != QChar::Null ) {
             luPixel bl = getBaseline();
             if ( bl == -1 ) {
@@ -231,223 +252,60 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                               context.layoutUnitToPixelY( getHeight() ) );
         }
 }
+#endif // 0
 
-
-/*void TextElement::dispatchFontCommand( FontCommand* cmd )
+QFont TextElement::getFont( const AttributeManager* am )
 {
-    //cmd->addTextElement( this );
-}*/
-
-void TextElement::setCharStyle( CharStyle cs )
-{
-    charStyle( cs );
-//    formula()->changed();
-}
-
-void TextElement::setCharFamily( CharFamily cf )
-{
-    charFamily( cf );
-//    formula()->changed();
-}
-
-QChar TextElement::getRealCharacter(const ContextStyle& context)
-{
-    return character;
-/*
-    if ( !isSymbol() ) {
-        const FontStyle& fontStyle = context.fontStyle();
-        const AlphaTable* alphaTable = fontStyle.alphaTable();
-        if ( alphaTable != 0 ) {
-#ifdef __GNUC__
-#warning "port it"				
-#endif
-            //AlphaTableEntry ate = alphaTable->entry( character,
-            //                                         charFamily(),
-             //                                        charStyle() );
-            //if ( ate.valid() ) {
-            //    return ate.pos;
-            //}
+    QFont font;
+    QVariant mathVariant = am->valueOf( "mathvariant" );
+    if ( mathVariant.canConvert( QVariant::Int ) ) {
+        MathVariant variant = static_cast<MathVariant>(mathVariant.toInt());
+        switch ( variant ) {
+        case Normal:
+            font.setItalic( false );
+            font.setBold( false );
+            break;
+        case Bold:
+            font.setItalic( false );
+            font.setBold( true );
+            break;
+        case Italic:
+            font.setItalic( true );
+            font.setBold( false );
+            break;
+        case BoldItalic:
+            font.setItalic( true );
+            font.setBold( true );
+            break;
         }
-        return character;
     }
     else {
-        return getSymbolTable().character(character, charStyle());
+        QVariant fontFamily = am->valueOf( "fontfamily" );
+        if ( fontFamily.canConvert( QVariant::String ) ) {
+            QString family = fontFamily.toString();
+            font = QFont( family );
+        }
     }
-*/
-}
 
-
-QFont TextElement::getFont( const ContextStyle& context, const StyleAttributes& style )
-{
-    const FontStyle& fontStyle = context.fontStyle();
-    QFont font;
+    /*
     if ( style.customFont() ) {
         font = style.font();
     }
-    /*
-    else if (getElementType() != 0) {
-        font = getElementType()->getFont(context);
-    }
-    */
     else {
         font = context.getDefaultFont();
     }
-    switch ( charStyle() ) {
-    case anyChar:
-        font.setItalic( false );
-        font.setBold( false );
-        break;
-    case normalChar:
-        font.setItalic( false );
-        font.setBold( false );
-        break;
-    case boldChar:
-        font.setItalic( false );
-        font.setBold( true );
-        break;
-    case italicChar:
-        font.setItalic( true );
-        font.setBold( false );
-        break;
-    case boldItalicChar:
-        font.setItalic( true );
-        font.setBold( true );
-        break;
-    }
-    return fontStyle.symbolTable()->font( character, font );
+    */
+//    return fontStyle.symbolTable()->font( character(), font );
+    return font;
 }
 
-
-void TextElement::setUpPainter(const ContextStyle& context, QPainter& painter)
-{
-/*    if (getElementType() != 0) {
-        getElementType()->setUpPainter(context, painter);
-    }
-    else {
-        painter.setPen(Qt::red);
-    }*/
-}
-
+/*
 const SymbolTable& TextElement::getSymbolTable() const
 {
 //    return formula()->getSymbolTable();
     static SymbolTable s;
     return s;
 }
-
-
-/**
- * Appends our attributes to the dom element.
- */
-void TextElement::writeDom(QDomElement element)
-{
-    BasicElement::writeDom(element);
-    element.setAttribute("CHAR", QString(character));
-    //QString s;
-    //element.setAttribute("CHAR", s.sprintf( "#x%05X", character ) );
-    if (symbol) element.setAttribute("SYMBOL", "3");
-
-    switch ( charStyle() ) {
-    case anyChar: break;
-    case normalChar: element.setAttribute("STYLE", "normal"); break;
-    case boldChar: element.setAttribute("STYLE", "bold"); break;
-    case italicChar: element.setAttribute("STYLE", "italic"); break;
-    case boldItalicChar: element.setAttribute("STYLE", "bolditalic"); break;
-    }
-
-    switch ( charFamily() ) {
-    case normalFamily: element.setAttribute("FAMILY", "normal"); break;
-    case scriptFamily: element.setAttribute("FAMILY", "script"); break;
-    case frakturFamily: element.setAttribute("FAMILY", "fraktur"); break;
-    case doubleStruckFamily: element.setAttribute("FAMILY", "doublestruck"); break;
-    case anyFamily: break;
-    }
-}
-
-/**
- * Reads our attributes from the element.
- * Returns false if it failed.
- */
-bool TextElement::readAttributesFromDom(QDomElement element)
-{
-    if (!BasicElement::readAttributesFromDom(element)) {
-        return false;
-    }
-    QString charStr = element.attribute("CHAR");
-    if(!charStr.isNull()) {
-        character = charStr.at(0);
-    }
-    QString symbolStr = element.attribute("SYMBOL");
-    if(!symbolStr.isNull()) {
-        int symbolInt = symbolStr.toInt();
-        if ( symbolInt == 1 ) {
-            character = getSymbolTable().unicodeFromSymbolFont(character);
-        }
-        if ( symbolInt == 2 ) {
-            switch ( character.unicode() ) {
-            case 0x03D5: character = 0x03C6; break;
-            case 0x03C6: character = 0x03D5; break;
-            case 0x03Ba: character = 0x03BA; break;
-            case 0x00B4: character = 0x2032; break;
-            case 0x2215: character = 0x2244; break;
-            case 0x00B7: character = 0x2022; break;
-            case 0x1D574: character = 0x2111; break;
-            case 0x1D579: character = 0x211C; break;
-            case 0x2219: character = 0x22C5; break;
-            case 0x2662: character = 0x26C4; break;
-            case 0x220B: character = 0x220D; break;
-            case 0x224C: character = 0x2245; break;
-            case 0x03DB: character = 0x03C2; break;
-            }
-        }
-        symbol = symbolInt != 0;
-    }
-
-    QString styleStr = element.attribute("STYLE");
-    if ( styleStr == "normal" ) {
-        charStyle( normalChar );
-    }
-    else if ( styleStr == "bold" ) {
-        charStyle( boldChar );
-    }
-    else if ( styleStr == "italic" ) {
-        charStyle( italicChar );
-    }
-    else if ( styleStr == "bolditalic" ) {
-        charStyle( boldItalicChar );
-    }
-    else {
-        charStyle( anyChar );
-    }
-
-    QString familyStr = element.attribute( "FAMILY" );
-    if ( familyStr == "normal" ) {
-        charFamily( normalFamily );
-    }
-    else if ( familyStr == "script" ) {
-        charFamily( scriptFamily );
-    }
-    else if ( familyStr == "fraktur" ) {
-        charFamily( frakturFamily );
-    }
-    else if ( familyStr == "doublestruck" ) {
-        charFamily( doubleStruckFamily );
-    }
-    else {
-        charFamily( anyFamily );
-    }
-
-    return true;
-}
-
-/**
- * Reads our content from the node. Sets the node to the next node
- * that needs to be read.
- * Returns false if it failed.
- */
-bool TextElement::readContentFromDom(QDomNode& node)
-{
-    return BasicElement::readContentFromDom(node);
-}
+*/
 
 } // namespace KFormula

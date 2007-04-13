@@ -40,7 +40,7 @@ KoColorDocker::~KoColorDocker()
 {
 }
 
-QString KoColorDockerFactory::dockId() const
+QString KoColorDockerFactory::id() const
 {
     return QString("KoColorDocker");
 }
@@ -53,7 +53,7 @@ Qt::DockWidgetArea KoColorDockerFactory::defaultDockWidgetArea() const
 QDockWidget* KoColorDockerFactory::createDockWidget()
 {
     KoColorDocker* widget = new KoColorDocker(m_showOpacitySlider);
-    widget->setObjectName(dockId());
+    widget->setObjectName(id());
 
     return widget;
 }

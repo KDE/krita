@@ -352,7 +352,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     QList<KoID> keys =
         KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_dev->colorSpace());
     KoHistogramProducerFactory *hpf;
-    hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
+    hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0).id());
     m_histogram = new KisHistogram(m_dev, hpf->generate(), LINEAR);
 
     setActiveChannel(0);

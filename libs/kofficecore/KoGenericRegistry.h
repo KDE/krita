@@ -31,10 +31,7 @@
 /**
  * Base class for registry objects.
  *
- * Items are mapped by KoID. A KoID is the combination of
- * a non-localized string that can be used in files and a
- * user-visible, translated string that can be used in the
- * user interface.
+ * Items are mapped by QString as a unique Id.
  */
 template<typename T>
 class KoGenericRegistry {
@@ -63,41 +60,15 @@ public:
     }
 
     /**
-     * add an object to the registry
-     * @param id the id of the object
-     * @param item the item
-     */
-    KDE_DEPRECATED void add(KoID id, T item)
-    {
-        m_hash.insert(id.id(), item);
-    }
-
-    /**
      * This function remove an item from the registry
-     * @return the object which have been remove from the registry and which can be safely delete
      */
-    KDE_DEPRECATED void remove(const KoID& name)
-    {
-        m_hash.remove(name.id());
-    }
-
     void remove (const QString &id) {
         m_hash.remove(id);
     }
 
     /**
-     * This function allow to get an object from its KoID
-     * @param name the KoID of the object
-     * @return T the object
-     */
-    KDE_DEPRECATED T get(const KoID& name) const
-    {
-        return m_hash.value(name.id());
-    }
-
-    /**
-     * Get a single entry based on the identifying part of KoID, not the
-     * the descriptive part.
+     * Retrieve the object from the registry based on the unique identifier string
+     * @param id the id
      */
     KDE_DEPRECATED T get(const QString& id) const
     {
@@ -105,50 +76,24 @@ public:
     }
 
     /**
-     * @param id
-     * @return true if there is an object corresponding to id
+     * @return if there is an object stored in the registry identified by the id.
+     * @param id the unique identifier string
      */
-    KDE_DEPRECATED bool exists(const KoID& id) const
-    {
-        return m_hash.contains(id.id());
-    }
-
-    KDE_DEPRECATED bool exists(const QString& id) const
-    {
-        return contains(id);
-    }
-
     bool contains(const QString &id) const {
         return m_hash.contains(id);
     }
 
+    /**
+     * Retrieve the object from the registry based on the unique identifier string
+     * @param id the id
+     */
     const T value(const QString &id) const {
         return m_hash.value(id);
     }
 
-#if 0
     /**
-     * This function allow to search a KoID from the name.
-     * @param t the name to search
-     * @param result The result is filled in this variable
-     * @return true if the search has been successful, false otherwise
-     */
-    KDE_DEPRECATED bool search(const QString& t, KoID& result) const
-    {
-        for(typename storageMap::const_iterator it = m_storage.begin();
-            it != m_storage.end(); ++it)
-        {
-            if(it->first.name() == t)
-            {
-                result = it->first;
-                return true;
-            }
-        }
-        return false;
-    }
-#endif
-
-    /** This function return a list of all the keys in KoID format
+     * This function return a list of all the keys in KoID format by using the name() method
+     * on the objects stored in the registry.
      */
     QList<KoID> listKeys() const
     {
@@ -158,6 +103,9 @@ public:
         return answer;
     }
 
+    /**
+     * @return a list of all keys
+     */
     QList<QString> keys() const {
         return m_hash.keys();
     }

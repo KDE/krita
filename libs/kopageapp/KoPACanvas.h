@@ -23,11 +23,13 @@
 #include <QWidget>
 #include <KoCanvasBase.h>
 
+#include "kopageapp_export.h"
+
 class KoPAView;
 class KoPADocument;
 
 /// Widget that shows a KoPAPage
-class KoPACanvas : public QWidget, public KoCanvasBase
+class KOPAGEAPP_EXPORT KoPACanvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
 public:

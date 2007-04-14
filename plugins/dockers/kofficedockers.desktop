@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Dockers plugin
-Name[x-test]=xxKOffice Dockers pluginxx
 ServiceTypes=KOffice/Dock
 Type=Service
 X-KDE-Library=kofficedockers

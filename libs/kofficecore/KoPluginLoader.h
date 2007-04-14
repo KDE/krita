@@ -68,6 +68,29 @@ class KOFFICECORE_EXPORT KoPluginLoader : public QObject
     Q_OBJECT
 
 public:
+    /**
+     * Config object for load()
+     * It is possible to limit which plugins will be loaded in the KConfig configuration file by
+     * stating explicitly which plugins are wanted.
+     */
+    struct PluginsConfig {
+        PluginsConfig() : group(0), whiteList(0), blacklist(0) {}
+        /**
+         * The properties are retrieved from the config using the following construct;
+         * /code
+         *  KConfigGroup configGroup = KGlobal::config()->group(config.group);
+         * /endcode
+         * For most cases you can pass the string "koffice" into this variable.
+         */
+        const char * group;
+        /// This contains the variable name for the list of plugins (by library name) the user wants to load
+        const char * whiteList;
+        /// This contains the variable name for the list of plugins (by library name) that will not be loaded
+        const char * blacklist;
+        /// A registry can state it wants to load a default set of plugins instead of all plugins
+        /// when the application starts the first time.  Append all such plugin (library) names to this list.
+        QStringList defaults;
+    };
 
     ~KoPluginLoader();
 
@@ -81,8 +104,16 @@ public:
      * Load all plugins that conform to the versiontype and versionstring,
      * for instance:
      * KoPluginLoader::instance()->load("KOffice/Flake", "([X-Flake-Version] == 3)");
+     * This method allows you to optionally limit the plugins that are loaded by version, but also
+     * using a user configurable set of config options.
+     * If you pass a PluginsConfig struct only those plugins are loaded that are specified in the
+     * application config file.  New plugins found since last start will be automatically loaded.
+     * @param serviceType The string used to identify the plugins.
+     * @param versionString A string match that allows you to check for a specific version
+     * @param config when passing a valid config only the wanted plugins are actually loaded
+     * @return a list of services (by library name) that were not know in the config
      */
-    void load(const QString & serviceType, const QString & versionString = QString());
+    void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig() );
 
 private:
     KoPluginLoader();
@@ -90,7 +121,6 @@ private:
     KoPluginLoader operator=(const KoPluginLoader&);
 
 private:
-    static KoPluginLoader *m_singleton;
     class Private;
     Private * const d;
 };

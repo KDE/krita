@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KoPluginLoader.h"
+
 #include <QString>
 #include <QStringList>
 
@@ -24,12 +26,13 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstaticdeleter.h>
-
-#include <KoPluginLoader.h>
+#include <KConfig>
 
 class KoPluginLoader::Private {
 public:
     QStringList loadedServiceTypes;
+
+    static KoPluginLoader *singleton;
 };
 
 KoPluginLoader::KoPluginLoader()
@@ -42,35 +45,66 @@ KoPluginLoader::~KoPluginLoader()
     delete d;
 }
 
-KoPluginLoader *KoPluginLoader::m_singleton = 0;
-static KStaticDeleter<KoPluginLoader> staticShapeRegistryDeleter;
+KoPluginLoader *KoPluginLoader::Private::singleton = 0;
+static KStaticDeleter<KoPluginLoader> pluginLoaderStatic;
 
 KoPluginLoader* KoPluginLoader::instance()
 {
-    if(KoPluginLoader::m_singleton == 0)
+    if(KoPluginLoader::Private::singleton == 0)
     {
-        staticShapeRegistryDeleter.setObject(m_singleton, new KoPluginLoader());
+        pluginLoaderStatic.setObject(Private::singleton, new KoPluginLoader());
     }
-    return KoPluginLoader::m_singleton;
+    return KoPluginLoader::Private::singleton;
 }
 
-void KoPluginLoader::load(const QString & serviceType, const QString & versionString)
-{
+void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config) {
     // Don't load the same plugins again
     if (d->loadedServiceTypes.contains(serviceType)) {
         return;
     }
+    // kDebug() << "KoPluginLoader::load " << serviceType << kBacktrace() << endl;
     d->loadedServiceTypes << serviceType;
     QString query = QString::fromLatin1("(Type == 'Service')");
     if(! versionString.isEmpty())
         query += QString::fromLatin1(" and (%1)").arg(versionString);
 
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
+    KService::List plugins;
+    bool configChanged = false;
+    QList<QString> blacklist; // what we will save out afterwards
+    if(config.whiteList && config.blacklist && config.group) {
+        kDebug(30003) << "loading " << serviceType << " with checking the config\n";
+        KConfigGroup configGroup = KGlobal::config()->group(config.group);
+        QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
+        QList<QString> knownList;
 
-    foreach(KService::Ptr service, offers) {
+        // if there was no list of defaults; all plugins are loaded.
+        const bool firstStart = !config.defaults.isEmpty() && !configGroup.hasKey(config.whiteList);
+        knownList = configGroup.readEntry(config.blacklist, knownList);
+        if(firstStart)
+            configChanged = true;
+
+        foreach(KSharedPtr<KService> service, offers) {
+            QString lib = service->library();
+            if(whiteList.contains(lib))
+                plugins.append(service);
+            else if(!firstStart && !blacklist.contains(lib)) { // also load newly installed plugins.
+                plugins.append(service);
+                configChanged = true;
+            }
+            else
+                blacklist << service->library();
+        }
+    }
+    else
+        plugins = offers;
+
+    QList<QString> whiteList;
+    foreach(KSharedPtr<KService> service, plugins) {
         int errCode = 0;
         QObject * plugin = KService::createInstance<QObject>(service, this, QStringList(), &errCode );
         if ( plugin ) {
+            whiteList << service->library();
             kDebug(30003) << "Loaded plugin " << service->name() << endl;
             delete plugin;
         }
@@ -78,5 +112,12 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             kWarning(30003) <<"loading plugin '" << service->name() << "' failed, "<< KLibLoader::errorString( errCode ) << " ("<< errCode << ")\n";
         }
     }
+
+    if(configChanged && config.whiteList && config.blacklist && config.group) {
+        KConfigGroup configGroup = KGlobal::config()->group(config.group);
+        configGroup.writeEntry(config.whiteList, whiteList);
+        configGroup.writeEntry(config.blacklist, blacklist);
+    }
 }
+
 #include "KoPluginLoader.moc"

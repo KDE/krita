@@ -76,10 +76,9 @@ KisProjection::KisProjection( KisImageSP image, KisGroupLayerSP rootLayer )
     m_d->locked = false;
 
     m_d->weaver = new Weaver();
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    cfg->setGroup("");
-    m_d->weaver->setMaximumNumberOfThreads( cfg->readEntry("maxprojectionthreads",  10) );
-    m_d->updateRectSize = cfg->readEntry( "updaterectsize", 512 );
+    KConfigGroup cfg = KGlobal::config()->group("");
+    m_d->weaver->setMaximumNumberOfThreads( cfg.readEntry("maxprojectionthreads",  10) );
+    m_d->updateRectSize = cfg.readEntry( "updaterectsize", 512 );
     connect( m_d->weaver, SIGNAL( jobDone(Job*) ), this, SLOT( slotUpdateUi( Job* ) ) );
 
     connect( this, SIGNAL( sigProjectionUpdated( const QRect & ) ), image.data(), SLOT(slotProjectionUpdated( const QRect &) ) );

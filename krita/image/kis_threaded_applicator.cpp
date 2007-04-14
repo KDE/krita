@@ -50,10 +50,9 @@ KisThreadedApplicator::KisThreadedApplicator( KisPaintDeviceSP dev, const QRect 
     m_d->jobFactory = jobFactory;
     m_d->margin = margin;
 
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    cfg->setGroup("");
-    m_d->maxThreads = cfg->readEntry("maxthreads",  10);
-    m_d->tileSize = cfg->readEntry( "threadingtilesize", 512 );
+    KConfigGroup cfg = KGlobal::config()->group("");
+    m_d->maxThreads = cfg.readEntry("maxthreads",  10);
+    m_d->tileSize = cfg.readEntry( "threadingtilesize", 512 );
 
     m_d->weaver = new Weaver();
     m_d->weaver->setMaximumNumberOfThreads( m_d->maxThreads );

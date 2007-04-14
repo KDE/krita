@@ -154,9 +154,8 @@ void KisFiltersListView::init()
     setMinimumWidth(160);
 
     m_weaver = new Weaver();
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    cfg->setGroup("");
-    m_weaver->setMaximumNumberOfThreads( cfg->readEntry("maxthreads",  10) );
+    KConfigGroup cfg = KGlobal::config()->group("");
+    m_weaver->setMaximumNumberOfThreads( cfg.readEntry("maxthreads",  10) );
     connect( m_weaver, SIGNAL( jobDone(Job*) ), this, SLOT( itemDone( Job* ) ) );
 
 }

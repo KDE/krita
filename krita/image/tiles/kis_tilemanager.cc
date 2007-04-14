@@ -69,10 +69,9 @@ KisTileManager::KisTileManager() {
     }
     m_currentInMem = 0;
 
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    cfg->setGroup("");
-    m_maxInMem = cfg->readEntry("maxtilesinmem",  4000);
-    m_swappiness = cfg->readEntry("swappiness", 100);
+    KConfigGroup cfg = KGlobal::config()->group("");
+    m_maxInMem = cfg.readEntry("maxtilesinmem",  4000);
+    m_swappiness = cfg.readEntry("swappiness", 100);
 
     m_tileSize = KisTile::WIDTH * KisTile::HEIGHT;
     for (int i = 0; i < 8; i++) {
@@ -557,10 +556,9 @@ void KisTileManager::reclaimTileToPool(quint8* data, qint32 pixelSize) {
 
 void KisTileManager::configChanged() {
     QMutexLocker lock(m_bigKritaLock);
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    cfg->setGroup("");
-    m_maxInMem = cfg->readEntry("maxtilesinmem",  4000);
-    m_swappiness = cfg->readEntry("swappiness", 100);
+    KConfigGroup cfg = KGlobal::config()->group("");
+    m_maxInMem = cfg.readEntry("maxtilesinmem",  4000);
+    m_swappiness = cfg.readEntry("swappiness", 100);
 
     m_swapMutex->lock();
     doSwapping();

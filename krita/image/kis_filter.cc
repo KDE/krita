@@ -74,20 +74,16 @@ void KisFilter::saveToBookmark(const QString& configname, KisFilterConfiguration
 {
     if ( config == 0 ) return;
 
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    cfg->setGroup(configEntryGroup());
-    cfg->writeEntry(configname,config->toString());
-    cfg->setGroup("");
+    KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
+    cfg.writeEntry(configname,config->toString());
 }
 
 KisFilterConfiguration* KisFilter::loadFromBookmark(const QString& configname)
 {
     if(not existInBookmark(configname)) return 0;
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    cfg->setGroup(configEntryGroup());
+    KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
     KisFilterConfiguration* config = new KisFilterConfiguration(id(), 1);
-    config->fromXML(cfg->readEntry<QString>(configname, ""));
-    cfg->setGroup("");
+    config->fromXML(cfg.readEntry<QString>(configname, ""));
     return config;
 }
 

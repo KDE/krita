@@ -46,8 +46,8 @@ public:
 public slots:
 
     void setZoom( int percentage );
-    void setPosition( int x, int y );
-    void setSize( int w, int h );
+    void documentMousePositionChanged( const QPointF &p );
+    void imageSizeChanged( qint32 w, qint32 h );
     void setSelection( KisImageSP img );
     void setProfile( KisImageSP img );
     void setHelp( const QString &t );

@@ -365,6 +365,10 @@ void KisView2::slotLoadingFinished()
 
     m_d->canvas->setImageSize( img->width(), img->height() );
 
+    if(m_d->statusBar) {
+        m_d->statusBar->imageSizeChanged(img->width(), img->height());
+    }
+
     m_d->layerManager->layersUpdated();
     updateGUI();
 
@@ -406,6 +410,9 @@ void KisView2::createGUI()
     m_d->layerBox = qobject_cast<KisLayerBox*>( createDockWidget( &layerboxFactory ) );
 
     m_d->statusBar = KoView::statusBar() ? new KisStatusBar( KoView::statusBar(), this ) : 0;
+    connect(m_d->canvasController, SIGNAL( documentMousePositionChanged(const QPointF & )), 
+            m_d->statusBar, SLOT( documentMousePositionChanged( const QPointF & ) ) );
+
     m_d->controlFrame = new KisControlFrame( mainWindow(), this );
 
     show();
@@ -504,6 +511,7 @@ void KisView2::connectCurrentImage()
         if( m_d->statusBar ) {
             connect(img.data(), SIGNAL(sigColorSpaceChanged(KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
             connect(img.data(), SIGNAL(sigProfileChanged(KoColorProfile * )), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+            connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->statusBar, SLOT(imageSizeChanged(qint32, qint32)));
         }
 
         connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), m_d->layerManager, SLOT(layersUpdated()));

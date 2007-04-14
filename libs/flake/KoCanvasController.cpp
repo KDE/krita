@@ -216,8 +216,13 @@ bool KoCanvasController::eventFilter(QObject* watched, QEvent* event) {
         }
         else if ( event->type() == QEvent::MouseMove ) {
             QMouseEvent * mouseEvent = dynamic_cast<QMouseEvent*>( event );
-            if ( mouseEvent )
+            if ( mouseEvent ) {
+                QPoint pixelPos = (mouseEvent->pos() - m_d->canvas->documentOrigin()) + m_d->documentOffset;
+                QPointF documentPos = m_d->canvas->viewConverter()->viewToDocument(pixelPos);
+
+                emit documentMousePositionChanged( documentPos );
                 emit canvasMousePositionChanged( mouseEvent->pos() );
+            }
         }
     }
     return false;

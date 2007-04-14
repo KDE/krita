@@ -240,6 +240,13 @@ public:
     void setResolution(double xres, double yres);
 
     /**
+     * Convert a PostScript Pt coordinate to a pixel coordinate.
+     *
+     * @param ptCoord PostScript Pt coordinate to convert.
+     */
+    QPointF ptCoordToPixelCoord(const QPointF &ptCoord) const;
+
+    /**
      * Return the width of the image
      */
     qint32 width() const;

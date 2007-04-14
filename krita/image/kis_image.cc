@@ -555,6 +555,11 @@ void KisImage::setResolution(double xres, double yres)
     m_d->yres = yres;
 }
 
+QPointF KisImage::ptCoordToPixelCoord(const QPointF &ptCoord) const
+{
+    return QPointF(ptCoord.x() * xRes(), ptCoord.y() * yRes());
+}
+
 qint32 KisImage::width() const
 {
     return m_d->width;

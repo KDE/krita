@@ -35,12 +35,24 @@
 
 #include "kis_label_progress.h"
 #include "kis_view2.h"
+#include "kis_canvas2.h"
+#include "KoViewConverter.h"
 
+enum {
+    IMAGE_SIZE_ID,
+    POINTER_POSITION_ID
+};
 
 KisStatusBar::KisStatusBar(KStatusBar * sb, KisView2 * view )
     : m_view( view )
     , m_statusbar( sb )
 {
+    sb->insertFixedItem("99999 x 99999", IMAGE_SIZE_ID);
+    sb->insertFixedItem("99999, 99999", POINTER_POSITION_ID);
+
+    sb->changeItem("", POINTER_POSITION_ID);
+    sb->changeItem("", IMAGE_SIZE_ID);
+
     // XXX: Use the KStatusbar fixed size labels!
     m_statusBarSelectionLabel = new KSqueezedTextLabel(sb);
     sb->addWidget(m_statusBarSelectionLabel,2);
@@ -57,9 +69,7 @@ KisStatusBar::KisStatusBar(KStatusBar * sb, KisView2 * view )
     sb->addPermanentWidget(m_progress, 2);
 
     m_progress->hide();
-
 }
-
 
 KisStatusBar::~KisStatusBar()
 {
@@ -78,16 +88,29 @@ void KisStatusBar::setZoom( int zoom )
     }
 */}
 
-void KisStatusBar::setPosition( int x, int y )
+void KisStatusBar::documentMousePositionChanged( const QPointF &pos )
 {
-    Q_UNUSED(x);
-    Q_UNUSED(y);
+    QPointF pixelPos = m_view->image()->ptCoordToPixelCoord(pos);
+
+    if (pixelPos.x() < 0) {
+        pixelPos.setX(0);
+    }
+    if (pixelPos.y() < 0) {
+        pixelPos.setY(0);
+    }
+    if (pixelPos.x() > m_view->image()->width() - 1) {
+        pixelPos.setX(m_view->image()->width() - 1);
+    }
+    if (pixelPos.y() > m_view->image()->height() - 1) {
+        pixelPos.setY(m_view->image()->height() - 1);
+    }
+
+    m_statusbar->changeItem(QString("%1, %2").arg((int)pixelPos.x()).arg((int)pixelPos.y()), POINTER_POSITION_ID);
 }
 
-void KisStatusBar::setSize( int w, int h )
+void KisStatusBar::imageSizeChanged( qint32 w, qint32 h )
 {
-    Q_UNUSED(w);
-    Q_UNUSED(h);
+    m_statusbar->changeItem(QString("%1 x %2").arg(w).arg(h), IMAGE_SIZE_ID);
 }
 
 void KisStatusBar::setSelection( KisImageSP img )

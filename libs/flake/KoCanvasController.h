@@ -233,6 +233,12 @@ signals:
     void canvasMousePositionChanged(const QPoint & pos );
 
     /**
+     * Emitted when the cursor is moved over the canvas widget.
+     * @param pos the position in document coordinates.
+     */
+    void documentMousePositionChanged(const QPointF & pos );
+
+    /**
      * Emitted when the entire controller size changes
      * @param size the size in widget pixels.
      */

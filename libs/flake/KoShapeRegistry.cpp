@@ -33,10 +33,16 @@ KoShapeRegistry::KoShapeRegistry()
 }
 
 void KoShapeRegistry::init() {
+    KoPluginLoader::PluginsConfig config;
+    config.whiteList = "FlakePlugins";
+    config.blacklist = "FlakePluginsDisabled";
+    config.group = "koffice";
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Flake"),
-                                      QString::fromLatin1("[X-Flake-Version] == 1"));
+                                      QString::fromLatin1("[X-Flake-Version] == 1"), config);
+    config.whiteList = "ShapePlugins";
+    config.blacklist = "ShapePluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Shape"),
-                                     QString::fromLatin1("[X-Flake-Version] == 1"));
+                                     QString::fromLatin1("[X-Flake-Version] == 1"), config);
 
     // Also add our hard-coded basic shape
     add( new KoPathShapeFactory(this, QStringList()) );

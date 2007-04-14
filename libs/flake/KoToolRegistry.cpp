@@ -27,8 +27,14 @@ KoToolRegistry::KoToolRegistry() {
 }
 
 void KoToolRegistry::init() {
+    KoPluginLoader::PluginsConfig config;
+    config.whiteList = "FlakePlugins";
+    config.blacklist = "FlakePluginsDisabled";
+    config.group = "koffice";
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Flake"),
                                       QString::fromLatin1("[X-Flake-Version] == 1"));
+    config.whiteList = "ToolPlugins";
+    config.blacklist = "ToolPluginsDisabled";
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Tool"),
                                       QString::fromLatin1("[X-Flake-Version] == 1"));
 }

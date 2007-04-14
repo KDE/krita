@@ -88,7 +88,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             QString lib = service->library();
             if(whiteList.contains(lib))
                 plugins.append(service);
-            else if(!firstStart && !blacklist.contains(lib)) { // also load newly installed plugins.
+            else if(!firstStart && !knownList.contains(lib)) { // also load newly installed plugins.
                 plugins.append(service);
                 configChanged = true;
             }

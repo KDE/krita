@@ -27,8 +27,8 @@ KoDockRegistry::KoDockRegistry() {
 
 void KoDockRegistry::init() {
     KoPluginLoader::PluginsConfig config;
-    config.whiteList = "docker-plugins";
-    config.blacklist = "disabled-docker-plugins";
+    config.whiteList = "DockerPlugins";
+    config.blacklist = "DockerPluginsDisabled";
     config.group = "koffice";
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Dock"), QString(), config);
 }

@@ -28,8 +28,12 @@
 #include <kstaticdeleter.h>
 
 void KoInlineObjectRegistry::init() {
+    KoPluginLoader::PluginsConfig config;
+    config.whiteList = "TextInlinePlugins";
+    config.blacklist = "TextInlinePluginsDisabled";
+    config.group = "koffice";
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Text-InlineObject"),
-                                      QString::fromLatin1("[X-KoText-Version] == 1"));
+                                      QString::fromLatin1("[X-KoText-Version] == 1"), config);
 }
 
 KoInlineObjectRegistry *KoInlineObjectRegistry::s_instance = 0;

@@ -23,13 +23,28 @@ else
         # Alternative! Debian does it this way...
 	KDE_CHECK_HEADER(lcms.h,have_lcms_header='yes',,)
 
+    if test "$have_lcms_header" = 'yes'
+    then
        	AC_DEFINE(LCMS_HEADER, <lcms.h>, [The correct header])
 
-	echo "#include <lcms.h>" > conftest.$ac_ext
-	echo "#if LCMS_VERSION < 115" >> conftest.$ac_ext
-	echo "#error Need lcms >= 1.15" >> conftest.$ac_ext
-	echo "#endif" >> conftest.$ac_ext
-	echo "int main() {}" >> conftest.$ac_ext
+	   echo "#include <lcms.h>" > conftest.$ac_ext
+	   echo "#if LCMS_VERSION < 115" >> conftest.$ac_ext
+	   echo "#error Need lcms >= 1.15" >> conftest.$ac_ext
+	   echo "#endif" >> conftest.$ac_ext
+	   echo "int main() {}" >> conftest.$ac_ext
+    else
+        KDE_CHECK_HEADER(lcms.h,have_lcms_header='yes',,)
+        # and now debian also does it this way... can't they decide for one way of doing stuff ?
+        
+       AC_DEFINE(LCMS_HEADER, <liblcms1/lcms.h>, [The correct header])
+
+       echo "#include <liblcms1/lcms.h>" > conftest.$ac_ext
+       echo "#if LCMS_VERSION < 115" >> conftest.$ac_ext
+       echo "#error Need lcms >= 1.15" >> conftest.$ac_ext
+       echo "#endif" >> conftest.$ac_ext
+       echo "int main() {}" >> conftest.$ac_ext
+
+   fi
 fi
 
 
@@ -47,19 +62,6 @@ else
 fi
 
 AC_SUBST(LCMS_LIBS)
-
-# Check if the 1.14 version of lcms is detected
-if test ! "$LCMS_LIBS" = ""
-then
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-AC_TRY_COMPILE(
-   [#include LCMS_HEADER
-     #if LCMS_VERSION == 114
-     #error lcms 1.14 detected
-     #endif ] , [ ], lcms_version_114='no', lcms_version_114='yes' )
-AC_LANG_RESTORE
-fi
 
 # IM 6.1.3 changed the number of arguments to GetMagickInfoList
 

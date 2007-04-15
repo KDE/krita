@@ -4,19 +4,9 @@ if test -z "$LCMS_LIBS"; then
   echo ""
   echo "If you want to compile Krita you should install:"
   echo "  * lcms 1.15 or newer (http://www.littlecms.com/)"
-  echo "    and avoid 1.14 as it has a major bugs in CMYK"
   echo ""
   all_tests=bad
 else
-  if test "$lcms_version_114" = 'yes'; then
-    echo "=============================================="
-    echo "WARNING: you are using version 1.14 of lcms"
-    echo " this version has a bug that break filling"
-    echo " and select similar colors in at least CMYK"
-    echo " you might want to use a newer version, or"
-    echo " an older"
-    echo "=============================================="
-  fi
   if test -z "$GLLIB"; then
     echo ""
     echo "You're missing OpenGL libraries. krita will"

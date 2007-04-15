@@ -151,4 +151,9 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, double zoom)
     m_view->canvas()->update();
 }
 
+void KisZoomManager::setDocumentResolution( double xResolution, double yResolution )
+{
+    m_zoomController->setDocumentResolution(xResolution, yResolution);
+}
+
 #include "kis_zoom_manager.moc"

@@ -67,7 +67,7 @@ public:
 
     /// setter for the view to set the zoom and level.
     void setZoom(double zoom);
-    void setZoomMode(KoZoomMode mode);
+    void setZoomMode(KoZoomMode::Mode mode);
 
 public slots:
     /// every time the canvas changes content size, tell us.  Note that the size is in pt.
@@ -80,6 +80,15 @@ public slots:
     * @param documentSize the new document size in points
     */
     void setDocumentSize( const QSizeF &documentSize );
+
+    /**
+    * Set the document resolution in pixels per pt. This information is only
+    * required if the application uses the ZOOM_PIXELS ZoomMode.
+    * 
+    * @param xResolution resolution along x in pixels per point.
+    * @param yResolution resolution along y in pixels per point.
+    */
+    void setDocumentResolution( double xResolution, double yResolution );
 
     /**
      * Sets a fitting margin that is used when zooming to page size/width.
@@ -117,6 +126,8 @@ private:
     QSizeF m_pageSize;
     QSizeF m_documentSize;
     int m_fitMargin;
+    double m_documentXResolution;
+    double m_documentYResolution;
 };
 
 #endif

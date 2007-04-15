@@ -1,0 +1,50 @@
+/*
+ * Copyright (C) Adrian Page <adrian@pagenet.plus.com>, (C) 2007
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include <QTest>
+#include <QCoreApplication>
+
+#include <qtest_kde.h>
+#include <kactioncollection.h>
+#include <kdebug.h>
+
+#include "KoCanvasController.h"
+#include "KoZoomHandler.h"
+#include "KoZoomController.h"
+#include "KoGlobal.h"
+#include "KoUnit.h"
+
+#include "zoomcontroller_test.h"
+
+void zoomcontroller_test::testApi()
+{
+    KoZoomHandler zoomHandler;
+    KoZoomController zoomController(new KoCanvasController(), &zoomHandler, new KActionCollection(this));
+
+    zoomHandler.setZoomAndResolution(100, 123, 456);
+    zoomController.setDocumentResolution(50, 60);
+    zoomController.setZoomMode(KoZoomMode::ZOOM_PIXELS);
+
+    QVERIFY( zoomHandler.zoomedResolutionX() == 50);
+    QVERIFY( zoomHandler.zoomedResolutionY() == 60);
+}
+
+QTEST_KDEMAIN(zoomcontroller_test, GUI)
+
+#include "zoomcontroller_test.moc"
+

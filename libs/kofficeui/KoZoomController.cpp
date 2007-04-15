@@ -33,6 +33,8 @@ KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KA
     : m_canvasController(co)
     , m_zoomHandler(zh)
     , m_fitMargin( 0 )
+    , m_documentXResolution( 1 )
+    , m_documentYResolution( 1 )
 {
     m_action = new KoZoomAction(KoZoomMode::ZOOM_PIXELS | KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), 0);
     connect(m_action, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
@@ -56,8 +58,9 @@ void KoZoomController::setZoom(double /*zoom*/)
 {
 }
 
-void KoZoomController::setZoomMode(KoZoomMode /*mode*/)
+void KoZoomController::setZoomMode(KoZoomMode::Mode mode)
 {
+    setZoom(mode, 1);
 }
 
 void KoZoomController::setPageSize(const QSizeF &pageSize)
@@ -76,6 +79,15 @@ void KoZoomController::setDocumentSize( const QSizeF &documentSize )
     m_canvasController->setDocumentSize(
             QSize( int(0.5 + m_zoomHandler->documentToViewX(m_documentSize.width())),
                    int(0.5 + m_zoomHandler->documentToViewY(m_documentSize.height())) ) );
+}
+
+void KoZoomController::setDocumentResolution( double xResolution, double yResolution )
+{
+    m_documentXResolution = xResolution;
+    m_documentYResolution = yResolution;
+
+    if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_PIXELS)
+        setZoom(KoZoomMode::ZOOM_PIXELS, 0);
 }
 
 void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
@@ -102,8 +114,18 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
         m_action->setEffectiveZoom(zoom);
     }
 
-    m_zoomHandler->setZoom(zoom);
-    emit zoomChanged(mode, zoom);
+    if(mode == KoZoomMode::ZOOM_PIXELS)
+    {
+        m_zoomHandler->setZoomedResolution(m_documentXResolution, m_documentYResolution);
+        zoom = m_zoomHandler->zoomFactorX();
+        m_action->setEffectiveZoom(zoom);
+        emit zoomChanged(mode, zoom);
+    }
+    else
+    {
+        m_zoomHandler->setZoom(zoom);
+        emit zoomChanged(mode, zoom);
+    }
 
     // Tell the canvasController that the zoom has changed
     // Actually canvasController doesn't know about zoom, but the document in pixels

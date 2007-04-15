@@ -369,6 +369,8 @@ void KisView2::slotLoadingFinished()
         m_d->statusBar->imageSizeChanged(img->width(), img->height());
     }
 
+    m_d->zoomManager->setDocumentResolution(img->xRes(), img->yRes());
+
     m_d->layerManager->layersUpdated();
     updateGUI();
 

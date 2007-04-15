@@ -171,7 +171,7 @@ public:
      */
     Qt::Orientation orientation() const;
 
-    /// The point in normal space.
+    /// The point in document coordinates.
     const QPointF &point;
 
 protected:

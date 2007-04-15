@@ -19,6 +19,7 @@ find_path(LCMS_INCLUDE_DIR lcms.h
    ${CMAKE_INSTALL_PREFIX}/include
    /usr/include
    /usr/include/lcms
+   /usr/include/liblcms1
    /usr/local/include
    /usr/local/include/lcms
    NO_DEFAULT_PATH

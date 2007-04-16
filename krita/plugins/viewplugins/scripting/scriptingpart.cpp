@@ -48,8 +48,8 @@
 #include <KoScriptingDocker.h>
 // kdelibs/kross
 #include <kross/core/manager.h>
-#include <kross/core/model.h>
-#include <kross/core/guiclient.h>
+#include <kross/ui/model.h>
+#include <kross/ui/guiclient.h>
 // kritacore
 #include "kritacore/krs_module.h"
 #include "kritacore/krs_progress.h"
@@ -85,11 +85,11 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     // Setup the actions Kross provides and Krita likes to have.
     KAction* execaction  = new KAction(i18n("Execute Script File..."), this);
     actionCollection()->addAction("executescriptfile", execaction );
-    connect(execaction, SIGNAL(triggered(bool)), d->guiclient, SLOT(executeFile()));
+    connect(execaction, SIGNAL(triggered(bool)), d->guiclient, SLOT(slotShowExecuteScriptFile()));
 
     KAction* manageraction  = new KAction(i18n("Script Manager..."), this);
     actionCollection()->addAction("configurescripts", manageraction );
-    connect(manageraction, SIGNAL(triggered(bool)), d->guiclient, SLOT(showManager()));
+    connect(manageraction, SIGNAL(triggered(bool)), d->guiclient, SLOT(slotShowScriptManager()));
 
     QAction* scriptmenuaction = d->guiclient->action("scripts");
     actionCollection()->addAction("scripts", scriptmenuaction);

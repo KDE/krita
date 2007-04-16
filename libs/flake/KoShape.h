@@ -467,6 +467,7 @@ public:
     shape-&gt;rotate(45);
     shape-&gt;setAbsolutePosition(QPointF(0,0));</pre>
      * @param newPosition the new absolute center of the shape.
+     * @param anchor The place on the (unaltered) shape that you set the position of.
      */
     void setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor = KoFlake::CenteredPositon);
 
@@ -570,6 +571,7 @@ protected:
         OdfPosition = 4,        ///< Store position of shape
         OdfMandatories = 8,     ///< Id, z-index, layer and style
 
+        /// A mask for all the attributes a 'draw:frame' requires
         FrameAttributes = OdfMandatories | OdfSize | OdfPosition | OdfTransformation
     };
 

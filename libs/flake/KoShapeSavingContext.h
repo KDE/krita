@@ -106,8 +106,10 @@ public:
      */
     void setOptions( KoShapeSavingOptions options );
 
+    /// add an option to the set of options stored on this context, will leave the other options intact.
     void addOption( ShapeSavingOption option);
 
+    /// remove an option, will leave the other options intact.
     void removeOption( ShapeSavingOption option);
 
     /**
@@ -129,15 +131,13 @@ public:
      */
     const QString drawId( const KoShape * shape, bool insert = true );
 
-protected:
+private:
     KoXmlWriter *m_xmlWriter;
-    KoSavingContext &m_context;
-
     KoShapeSavingOptions m_savingOptions;
-
     QMap<const KoShape *, QString> m_drawIds;
     int m_drawId;
-    // TODO handle relative positions
+
+    KoSavingContext &m_context;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( KoShapeSavingContext::KoShapeSavingOptions )

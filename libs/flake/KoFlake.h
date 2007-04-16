@@ -56,11 +56,11 @@ public:
 
     /// position. See KoShape::absolutePosition()
     enum Position {
-        TopLeftCorner,
-        TopRightCorner,
-        BottomLeftCorner,
-        BottomRightCorner,
-        CenteredPositon
+        TopLeftCorner, ///< the top left corner
+        TopRightCorner, ///< the top rigt corner
+        BottomLeftCorner, ///< the bottom left corner
+        BottomRightCorner, ///< the bottom right corner
+        CenteredPositon ///< the centred corner
     };
 
 

@@ -23,18 +23,36 @@
 
 class KoTextLocator;
 
+/**
+ * This variable displays information about a text reference.
+ * A user can insert characters that are called locators.  And are represented by a KoTextLocator
+ * the user can then insert (several) KoTextReference variables that will update the textual description
+ * of the locator whenever text is re-layouted.
+ * This effectively means that the reference will print the page number (for example) of where the
+ * locator is and keep it updated automatically.
+ */
 class KoTextReference : public KoVariable {
 public:
+    /**
+     * Constructor; please don't use directly as the KoInlineTextObjectManager will supply an action
+     * to create one.
+     * @param indexId the index of the inline object that is the locator.  See KoInlineObject::id()
+     */
     KoTextReference( int indexId );
     ~KoTextReference();
 
+    /// reimplemented method from superclass
     virtual void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
 
+    /// reimplemented method from superclass
     virtual void setup();
 
 private:
     KoTextLocator *locator();
     int m_indexId;
+    // TODO store a config of what we actually want to show.  The hardcoded pagenumber is not enough.
+    // we want 'section' / chapter name/number and maybe word.  All in a nice formatted text.
+    // see also the ODF spec.
 };
 
 #endif

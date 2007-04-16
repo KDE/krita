@@ -119,8 +119,10 @@ public:
      */
     KoParagraphStyle *defaultParagraphStyle() const;
 
+    /// return all the characterStyles registered.
     QList<KoCharacterStyle*> characterStyles() const;
 
+    /// return all the paragraphStyles registered.
     QList<KoParagraphStyle*> paragraphStyles() const;
 
 public slots:

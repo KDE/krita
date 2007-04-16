@@ -53,10 +53,16 @@ public:
      */
     void setStyleManager(KoStyleManager *sm);
 
+    /// set the layoutState for this document layout
     void setLayout(LayoutState *layout);
+    /// return if this layoutstate has a proper layoutState object.
     bool hasLayouter() const;
 
+    /**
+     * Register the manager for inline objects which is needed to notify variables of layout changes.
+     */
     void setInlineObjectTextManager(KoInlineTextObjectManager *iom);
+    /// return the currently set manager, or 0 if none is set.
     KoInlineTextObjectManager *inlineObjectTextManager();
 
     /// Returns the bounding rectangle of block.
@@ -113,12 +119,17 @@ public:
         virtual bool start() = 0;
         /// end layouting
         virtual void end() = 0;
+        /// Asks the layout to stop and restart from the beginning.
         virtual void reset() = 0;
         /// returns true if reset has been called.
         virtual bool interrupted() = 0;
+        /// return the width of the line to be layouted
         virtual double width() = 0;
+        /// return the x position of the line to be layouted
         virtual double x() = 0;
+        /// return the y position (top of text) of the line to be layouted
         virtual double y() = 0;
+        /// return the cursor position (in the document) of the last character that has been positioned in the lay-out
         virtual int cursorPosition() const = 0;
         /// return the y offset of the document at start of shape.
         virtual double docOffsetInShape() const = 0;
@@ -126,8 +137,9 @@ public:
         virtual bool addLine(QTextLine &line) = 0;
         /// prepare for next paragraph; return false if there is no next parag.
         virtual bool nextParag() = 0;
-        // revert layout to the previous paragraph. Return false if there is no previous paragraph.
+        /// revert layout to the previous paragraph. Return false if there is no previous paragraph.
         virtual bool previousParag() = 0;
+        /// Return the y position of the offset for the current shape (See KoTextShapeData::documentOffset() )
         virtual double documentOffsetInShape() = 0;
         /// paint the document
         virtual void draw(QPainter *painter, const PaintContext & context ) = 0;
@@ -150,10 +162,18 @@ public:
 
     protected:
         friend class KoTextDocumentLayout;
+        /// see KoTextDocumentLayout::setStyleManager()
         virtual void setStyleManager(KoStyleManager *sm) = 0;
+        /// see KoTextDocumentLayout::styleManager()
         virtual KoStyleManager *styleManager() const = 0;
     };
 
+    /**
+     * We allow a text document to be shown in more then one shape; which brings up the need to figure out
+     * which shape is used for a certain text.
+     * @param position the position of the character in the text document we want to locate.
+     * @return the shape the text is layed-out in.  Or 0 if there is no shape for that text character.
+     */
     KoShape* shapeForPosition(int position) const;
 
     /// reimplemented from QAbstractTextDocumentLayout
@@ -164,6 +184,7 @@ public slots:
     void scheduleLayout();
 
 protected:
+    /// the currently set LayoutState
     LayoutState *m_state;
 
     /// make sure we start a layout run

@@ -37,6 +37,7 @@
  */
 class KOTEXT_EXPORT KoTextBlockBorderData {
 public:
+    /// Enum used to differentiate between the 4 types of borders this class maintains
     enum Side {
         Top = 0, ///< References the border at the top of the paragraph
         Left,   ///< References the border at the left side of the paragraph
@@ -112,6 +113,7 @@ public:
      */
     double inset(Side side) const;
 
+    /// returns true if the borders of param border are the same as this one.
     bool operator==(const KoTextBlockBorderData &border);
     bool equals(const KoTextBlockBorderData &border);
 

@@ -43,11 +43,16 @@ class KoStyleStack;
 class KOTEXT_EXPORT KoCharacterStyle : public QObject {
     Q_OBJECT
 public:
+    /// list of character style properties we can store in a QCharFormat
     enum Property {
-        StyleId = QTextFormat::UserProperty+1,
+        StyleId = QTextFormat::UserProperty+1, ///< The id stored in the charFormat to link the text to this style.
         HasHyphenation
     };
 
+    /**
+     * Constructor. Initializes with standard size/font properties.
+     * @param parent the parent object for memory management purposes.
+     */
     explicit KoCharacterStyle(QObject *parent = 0);
     /// clone constructor
     KoCharacterStyle(const KoCharacterStyle &other);

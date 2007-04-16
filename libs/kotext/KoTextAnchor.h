@@ -36,27 +36,27 @@ class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject {
 public:
     /// the vertical alignment options for the shape this anchor holds.
     enum AnchorVertical {
-        TopOfFrame,
-        TopOfParagraph,
-        AboveCurrentLine,
-        BelowCurrentLine,
-        BottomOfParagraph,
-        BottomOfFrame,
-        VerticalOffset
+        TopOfFrame,         ///< Align the anchors top to the top of the frame it is layed-out in.
+        TopOfParagraph,     ///< Align the anchors top to the top of the paragraph it is anchored in.
+        AboveCurrentLine,   ///< Align the anchors top to the top of the line it is anchord in.
+        BelowCurrentLine,   ///< Align the anchors bottom to the bottom of the line it is anchord in.
+        BottomOfParagraph,  ///< Align the anchors bottom to the bottom of the paragraph it is anchord in.
+        BottomOfFrame,      ///< Align the anchors bottom to the bottom of the frame.
+        VerticalOffset      ///< Move the anchor to be an exact vertical distance from the (baseline) of the anchor.
     };
     /// the horizontal alignment options for the shape this anchor holds.
     enum AnchorHorizontal {
-        Left,
-        Right,
-        Center,
-        ClosestToBinding,
-        FurtherFromBinding,
-        HorizontalOffset
+        Left,               ///< Align the anchors left to the left of the frame it is layed-out in.
+        Right,              ///< Align the anchors rigth to the rigth of the frame it is layed-out in.
+        Center,             ///< Align the anchors center to the center of the frame it is layed-out in.
+        ClosestToBinding,   ///< Like Left when on an odd page, or Right otherwise.
+        FurtherFromBinding, ///< Like Left when on an even page, or Right otherwise.
+        HorizontalOffset    ///< Move the anchor to be an exact horizontal distance from the the anchor.
     };
 
     /**
      * Constructor.
-     * @parm shape the anchored shape that this anchor links to.
+     * @param shape the anchored shape that this anchor links to.
      */
     KoTextAnchor(KoShape *shape);
     ~KoTextAnchor();

@@ -50,6 +50,7 @@ public:
 
     /// returns the text of the paragraph that is the first chapter before the index.
     QString chapter() const;
+    /// Return the block data of the chapter, useful for numbering info etc.  Returns 0 if nothing was found.
     KoTextBlockData *chapterBlockData() const;
     /// return the page number on which the locator is placed.
     int pageNumber() const;
@@ -58,7 +59,9 @@ public:
     /// return the word in which the locator is inserted.
     QString word() const;
 
+    /// Add a text reference that is interrested in knowing when this locator is layed-out in a differen position.
     void addListener(KoTextReference *reference);
+    /// Remove a reference from the listeners.
     void removeListener(KoTextReference *reference);
 
 private:

@@ -58,10 +58,26 @@ public:
     /// return the partial text for this paragraphs counter
     const QString &partialCounterText() const { return m_partialCounterText; }
 
+    /**
+     * The actual position of the counter can be set, in actual (text) document coordinates.
+     * @param position the location of the top/left of the counter text line.
+     */
     void setCounterPosition(QPointF position) { m_counterPos = position; }
+    /**
+     * Return the counter position.
+     * @see setCounterPosition
+     */
     const QPointF &counterPosition() const { return m_counterPos; }
 
+    /**
+     * When a paragraph has a border, it will have a KoTextBlockBorderData instance.
+     * Adding the border will increase the refcount.
+     * @param the border used for this paragraph, or 0 if no border is needed (anymore).
+     */
     void setBorder(KoTextBlockBorderData *border);
+    /**
+     * Return the border associated with this paragraph, or 0 if there is no border set.
+     */
     KoTextBlockBorderData *border() const { return m_border; }
 
 private:

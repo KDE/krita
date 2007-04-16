@@ -58,6 +58,10 @@ public:
      */
     KoInlineObject *inlineTextObject(const QTextCursor &cursor) const;
 
+    /**
+     * Retrieve a formerly added inline object based on the KoInlineObject::id() of the object.
+     * @param id the id assigned to the inline text object when it was added.
+     */
     KoInlineObject *inlineTextObject(int id) const;
 
     /**

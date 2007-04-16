@@ -21,17 +21,16 @@
 
 #include <QStringList>
 
-class KoText {
-public:
-    static QStringList underlineTypeList();
-    static QStringList underlineStyleList();
+/**
+ * Generic namespace of the KOffice Text library for helper methods and data.
+ */
+namespace KoText {
+    QStringList underlineTypeList();
+    QStringList underlineStyleList();
 
     enum Options {
         ShowTextFrames =  278622039
     };
-
-private:
-    KoText() {}
 };
 
 #endif

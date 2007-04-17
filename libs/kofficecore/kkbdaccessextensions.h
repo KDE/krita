@@ -113,10 +113,10 @@ class KOFFICECORE_EXPORT KKbdAccessExtensions : public QObject
 
     public:
         /** Constructor.
-        *   @param parent       KMainWindow of the application.  Required.
-        *   @param name         (optional) Name of this object.
+        *   @param ac the actionCollection this object works on.
+        *   @param parent the parent for memory management puroposes
         */
-        explicit KKbdAccessExtensions(KMainWindow* parent, const char* name = 0);
+        explicit KKbdAccessExtensions(KActionCollection *ac, QObject *parent = 0);
 
         /** Destructor. */
         virtual ~KKbdAccessExtensions();

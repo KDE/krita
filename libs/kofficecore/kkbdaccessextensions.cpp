@@ -161,25 +161,21 @@ class KKbdAccessExtensionsPrivate
 
         // List of the access key QLabels.  If not 0, access keys are onscreen.
         Q3PtrList<QLabel>* accessKeyLabels;
-
-        // Pointer to the KMainWindow.
-        KMainWindow* mainWindow;
 };
 
-KKbdAccessExtensions::KKbdAccessExtensions(KMainWindow* parent, const char* /*name*/)
+KKbdAccessExtensions::KKbdAccessExtensions(KActionCollection *ac, QObject *parent)
     : QObject( parent )
     , d( new KKbdAccessExtensionsPrivate )
 {
     // kDebug() << "KKbdAccessExtensions::KKbdAccessExtensions: running." << endl;
-    d->mainWindow = parent;
     d->fwdAction  = new KAction(i18n("Resize Panel Forward"), this);
-    parent->actionCollection()->addAction("resize_panel_forward", d->fwdAction );
+    ac->addAction("resize_panel_forward", d->fwdAction );
     d->fwdAction->setShortcut(KShortcut("F8"));
     d->revAction  = new KAction(i18n("Resize Panel Reverse"), this);
-    parent->actionCollection()->addAction("resize_panel_reverse", d->revAction );
+    ac->addAction("resize_panel_reverse", d->revAction );
     d->revAction->setShortcut(KShortcut("Shift+F8"));
     d->accessKeysAction  = new KAction(i18n("Access Keys"), this);
-    parent->actionCollection()->addAction("access_keys", d->accessKeysAction );
+    ac->addAction("access_keys", d->accessKeysAction );
     d->accessKeysAction->setShortcut(KShortcut("Alt+F8"));
     // "Disable" the shortcuts so we can see them in eventFilter.
     d->fwdAction->setEnabled(false);

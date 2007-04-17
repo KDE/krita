@@ -271,7 +271,7 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
     d->m_splitter->setObjectName( "mw-splitter" );
     setCentralWidget( d->m_splitter );
     // Keyboard accessibility enhancements.
-    new KKbdAccessExtensions(this, "mw-panelSizer");
+    new KKbdAccessExtensions(actionCollection(), this);
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     QAction *closeAllViews  = new KAction(KIcon("window-close"), i18n("&Close All Views"), this);

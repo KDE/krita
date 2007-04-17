@@ -24,7 +24,7 @@
 // kde
 //#include <kdebug.h>
 //#include <klocale.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 // koffice
 #include <KoMainWindow.h>
 #include <KoApplicationAdaptor.h>

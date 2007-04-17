@@ -53,7 +53,7 @@ class KOKROSS_EXPORT KoScriptingModule : public QObject
         /** Return the \a KoMainWindow object. */
         virtual QObject* shell();
 
-        /** Return the \a KMainWindow object. */
+        /** Return the \a KXmlGuiWindow object. */
         virtual QWidget* mainWindow();
 
         /** Return the \a KoDocumentAdaptor object. */

@@ -34,7 +34,7 @@
 #include <KoFilterManager.h>
 #include <KoTemplates.h>
 #include <KoDocument.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 
 #include <kdebug.h>
 #include <kpushbutton.h>

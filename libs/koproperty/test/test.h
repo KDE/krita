@@ -20,7 +20,7 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 
 #include "set.h"
 
@@ -30,7 +30,7 @@
  * @author Cedric Pasteur <cedric.pasteur@free.fr>
  * @version 0.1
  */
-class Test : public KMainWindow
+class Test : public KXmlGuiWindow
 {
 	Q_OBJECT
 	public:

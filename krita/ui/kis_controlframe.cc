@@ -34,7 +34,7 @@
 #include <QMenu>
 
 #include <ktoolbar.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -87,7 +87,7 @@ void KisPopupFrame::keyPressEvent(QKeyEvent * e)
 }
 
 
-KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView2 * view, const char* name )
+KisControlFrame::KisControlFrame( KXmlGuiWindow * /*window*/, KisView2 * view, const char* name )
     : QObject(view)
     //: KToolBar ( window, Qt::DockTop, false, name, true, true )
     , m_view(view)

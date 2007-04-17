@@ -76,7 +76,7 @@ class KisControlFrame : public QObject  //: public KToolBar
     Q_OBJECT
 
 public:
-    KisControlFrame(KMainWindow * window, KisView2 * view, const char *name = 0 );
+    KisControlFrame(KXmlGuiWindow * window, KisView2 * view, const char *name = 0 );
     virtual ~KisControlFrame() {};
 
 public slots:

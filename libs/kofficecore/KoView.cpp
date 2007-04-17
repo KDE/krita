@@ -742,9 +742,9 @@ KoMainWindow * KoView::shell() const
     return dynamic_cast<KoMainWindow *>( topLevelWidget() );
 }
 
-KMainWindow * KoView::mainWindow() const
+KXmlGuiWindow * KoView::mainWindow() const
 {
-    return dynamic_cast<KMainWindow *>( topLevelWidget() );
+    return dynamic_cast<KXmlGuiWindow *>( topLevelWidget() );
 }
 
 KStatusBar * KoView::statusBar() const

@@ -42,7 +42,7 @@ class KoDockFactory;
 class KStatusBar;
 class KComponentData;
 class KPrinter;
-class KMainWindow;
+class KXmlGuiWindow;
 class KAction;
 class KActionCollection;
 namespace KParts
@@ -325,10 +325,10 @@ public:
   KoMainWindow * shell() const;
 
   /**
-   * @return the KMainWindow in which this view is currently.
+   * @return the KXmlGuiWindow in which this view is currently.
    * This one should never return 0L, in a KDE app.
    */
-  KMainWindow* mainWindow() const;
+  KXmlGuiWindow* mainWindow() const;
 
   /**
    * @return the statusbar of the KoMainWindow in which this view is currently.

@@ -38,8 +38,10 @@
 using namespace KoProperty;
 
 Test::Test()
- : KMainWindow(0,"koproperty_test")
-{
+ : KMainWindow()
+{	
+	setObjectName("koproperty_test");
+
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	const bool flat = args->isSet("flat");
 	const bool readOnly = args->isSet("ro");

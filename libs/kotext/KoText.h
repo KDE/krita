@@ -31,6 +31,6 @@ namespace KoText {
     enum Options {
         ShowTextFrames =  278622039
     };
-};
+}
 
 #endif

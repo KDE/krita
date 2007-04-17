@@ -97,7 +97,7 @@ protected:
     void savePasswordInKWallet( );
 
 private:
-    QSecureArray decryptFile( QSecureArray & encryptedFile, KoEncryptedStore_EncryptionData & encData, QSecureArray & password );
+    QCA::SecureArray decryptFile( QCA::SecureArray & encryptedFile, KoEncryptedStore_EncryptionData & encData, QCA::SecureArray & password );
 
     /** returns true if the file should be encrypted, false otherwise **/
     bool isToBeEncrypted( const QString& fullpath );
@@ -105,7 +105,7 @@ private:
 protected:
     QCA::Initializer m_qcaInit;
     QHash<QString, KoEncryptedStore_EncryptionData> m_encryptionData;
-    QSecureArray m_password;
+    QCA::SecureArray m_password;
     QString m_filename;
     QByteArray m_manifestBuffer;
     KZip *m_pZip;

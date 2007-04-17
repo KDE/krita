@@ -38,7 +38,7 @@
 using namespace KoProperty;
 
 Test::Test()
- : KMainWindow()
+ : KXmlGuiWindow()
 {	
 	setObjectName("koproperty_test");
 

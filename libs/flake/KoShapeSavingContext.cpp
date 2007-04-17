@@ -26,9 +26,9 @@
 
 KoShapeSavingContext::KoShapeSavingContext( KoXmlWriter &xmlWriter, KoSavingContext &context )
 : m_xmlWriter( &xmlWriter )
-, m_context( context )
 , m_savingOptions( 0 )
 , m_drawId( 0 )
+, m_context( context )
 {
 }
 

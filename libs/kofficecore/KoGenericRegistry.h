@@ -110,6 +110,10 @@ public:
         return m_hash.keys();
     }
 
+    int count() const {
+        return m_hash.count();
+    }
+
 private:
     QHash<QString, T> m_hash;
 };

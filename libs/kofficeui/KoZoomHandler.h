@@ -75,12 +75,16 @@ public:
     double zoomFactorY() const { return m_zoomedResolutionY / m_resolutionY; }
 
     /**
-     * Set a resolution for X and Y, when no zoom applies (e.g. when painting an
-     * embedded document. This will set the zoom to 100, and it will set
-     * zoomedResolution[XY] to the resolution[XY] parameters
-     * Helper method, equivalent to setZoomAndResolution(100,...).
+     * Set a resolution for X and Y of the output device.
+     * The zoom factor is not changed.
      */
     void setResolution( double resolutionX, double resolutionY );
+
+    /**
+     * Set the resolution for X and Y to the display values reported by KGlobal.
+     * The zoom factor is not changed.
+     */
+    void setResolutionToStandard( );
 
     /**
      * Set the zoomed resolution for X and Y.

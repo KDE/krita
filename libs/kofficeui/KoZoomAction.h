@@ -48,9 +48,10 @@ public:
    * Creates a new zoom action.
    * @param zoomModes which zoom modes that should be shown
    * @param text The text that will be displayed.
+   * @param doSpecialActionMode Show toggle widget for "pixel aspect" mode.
    * @param parent The action's parent object.
    */
-  KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent);
+  KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bool doSpecialAspectMode, QObject *parent);
 
     /**
      * Reimplemented from @see QActionWidgetFactory.
@@ -116,6 +117,13 @@ Q_SIGNALS:
    */
   void zoomChanged( KoZoomMode::Mode mode, double zoom );
 
+  /**
+   * Signal aspectModeChanged is triggered when the user toggles the widget.
+   * Nothing else happens except that this signal is emitted.
+   * @param status Wether the special aspect mode is on
+   */
+  void aspectModeChanged( bool status );
+
 protected:
 
     /// Regenerates the action's items
@@ -130,6 +138,7 @@ protected:
     QButtonGroup* m_zoomButtonGroup;
 
     double m_effectiveZoom;
+    bool m_doSpecialAspectMode;
 };
 
 class KoZoomAction::ExtLineEdit : public QLineEdit

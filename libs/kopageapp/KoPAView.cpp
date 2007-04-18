@@ -93,7 +93,7 @@ void KoPAView::initGUI()
     KoToolManager::instance()->addController( m_canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
 
-    m_zoomController = new KoZoomController( m_canvasController, &m_zoomHandler, actionCollection() );
+    m_zoomController = new KoZoomController( m_canvasController, &m_zoomHandler, actionCollection(), false );
 
     m_zoomAction = m_zoomController->zoomAction();
     addStatusBarItem( m_zoomAction->createWidget( statusBar() ), 0 );

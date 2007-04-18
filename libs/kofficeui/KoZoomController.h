@@ -55,12 +55,15 @@ class QSize;
  * The canvasController emits the a request to alter zoom (as a factor of current zoom)
  * which the zoomController then acts upon and emits for the application to persist.  It
  * will alter the the mode to percent based.
+ *
+ * The specialAspectMode toggle is only a UI element. It does nothing except emit the
+ * aspectModeChanged signal.
 */
 class KOFFICEUI_EXPORT KoZoomController : public QObject {
 Q_OBJECT
 public:
     /// one KoZoomController per canvasController.  The zoomAction is created in the constructor as a member.
-    KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *ac);
+    KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *ac, bool doSpecialAspectMode);
 
     /// return the zoomAction to be added to the actionCollection and Gui.
     KoZoomAction *zoomAction() const;
@@ -70,7 +73,10 @@ public:
     void setZoomMode(KoZoomMode::Mode mode);
 
 public slots:
-    /// every time the canvas changes content size, tell us.  Note that the size is in pt.
+    /**
+    * Every time the canvas changes content size, tell us.  Note that the size is in pt.
+    * @param pageSize the new page size in points
+    */
     void setPageSize(const QSizeF &pageSize);
 
     /**
@@ -82,15 +88,6 @@ public slots:
     void setDocumentSize( const QSizeF &documentSize );
 
     /**
-    * Set the document resolution in pixels per pt. This information is only
-    * required if the application uses the ZOOM_PIXELS ZoomMode.
-    * 
-    * @param xResolution resolution along x in pixels per point.
-    * @param yResolution resolution along y in pixels per point.
-    */
-    void setDocumentResolution( double xResolution, double yResolution );
-
-    /**
      * Sets a fitting margin that is used when zooming to page size/width.
      * Note that the fit margin is given in pixels.
      * @param margin the new fit margin to use, the default is zero
@@ -98,8 +95,11 @@ public slots:
     void setFitMargin( int margin );
 
 signals:
-    // the document can use the emitted data for persistency purposes.
+    /// the document can use the emitted data for persistency purposes.
     void zoomChanged (KoZoomMode::Mode mode, double zoom);
+
+    /// emitted when the special aspect mode toggle changes.
+    void aspectModeChanged (bool aspectModeActivated);
 
 private slots:
     // should realy be on d pointer..
@@ -126,8 +126,6 @@ private:
     QSizeF m_pageSize;
     QSizeF m_documentSize;
     int m_fitMargin;
-    double m_documentXResolution;
-    double m_documentYResolution;
 };
 
 #endif

@@ -66,7 +66,7 @@ KisZoomManager::~KisZoomManager()
 void KisZoomManager::setup( KActionCollection * actionCollection )
 {
     KisConfig cfg;
-    m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection);
+    m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection, true);
 
     KisImageSP img = m_view->image();
     m_zoomController->setPageSize(QSizeF(img->width() / img->xRes(), img->height() / img->yRes() ));
@@ -113,6 +113,9 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
 
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
             this, SLOT(slotZoomChanged(KoZoomMode::Mode, double)));
+
+    connect(m_zoomController, SIGNAL(aspectModeChanged(bool)),
+            this, SLOT(changeAspectMode(bool)));
 }
 
 void KisZoomManager::mousePositionChanged(const QPoint &pos)
@@ -145,15 +148,27 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, double zoom)
     KisImageSP img = m_view->image();
 
     m_view->canvasBase()->preScale();
-
-    // For smoother zooming in & out, repaint at the right
-    // zoomlevel before changing the size of the viewport
     m_view->canvas()->update();
 }
 
-void KisZoomManager::setDocumentResolution( double xResolution, double yResolution )
+void KisZoomManager::changeAspectMode(bool aspectMode)
 {
-    m_zoomController->setDocumentResolution(xResolution, yResolution);
+    KisImageSP img = m_view->image();
+
+    if(aspectMode)
+        m_zoomHandler->setResolution(img->xRes(), img->yRes());
+    else
+        m_zoomHandler->setResolutionToStandard();
+
+    m_view->canvasBase()->preScale();
+    m_view->canvas()->update();
+
+    m_canvasController->setDocumentSize(
+            QSize( int(0.5 + m_zoomHandler->documentToViewX(img->width() / img->xRes())),
+                   int(0.5 + m_zoomHandler->documentToViewY(img->height() / img->yRes())) ) );
+
+    // Finally ask the canvasController to recenter
+    m_canvasController->recenterPreferred();
 }
 
 #include "kis_zoom_manager.moc"

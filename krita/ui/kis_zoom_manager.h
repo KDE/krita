@@ -53,20 +53,13 @@ public:
     void setup(KActionCollection * actionCollection);
     void updateGUI();
 
-    /**
-    * Set the document resolution in pixels per pt.
-    * 
-    * @param xResolution resolution along x in pixels per point.
-    * @param yResolution resolution along y in pixels per point.
-    */
-    void setDocumentResolution( double xResolution, double yResolution );
-
 private slots:
 
     void slotZoomChanged(KoZoomMode::Mode mode, double zoom);
     void slotActualSize();
     void toggleShowRulers(bool show);
     void mousePositionChanged(const QPoint &pos);
+    void changeAspectMode(bool aspectMode);
 
 private:
 

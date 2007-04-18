@@ -29,16 +29,16 @@
 #include <KoZoomHandler.h>
 #include <KoCanvasController.h>
 
-KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection)
+KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, bool doSpecialAspectMode)
     : m_canvasController(co)
     , m_zoomHandler(zh)
     , m_fitMargin( 0 )
-    , m_documentXResolution( 1 )
-    , m_documentYResolution( 1 )
 {
-    m_action = new KoZoomAction(KoZoomMode::ZOOM_PIXELS | KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), 0);
+    m_action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), doSpecialAspectMode, 0);
     connect(m_action, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
             this, SLOT(setZoom(KoZoomMode::Mode, double)));
+    connect(m_action, SIGNAL(aspectModeChanged(bool)),
+            this, SIGNAL(aspectModeChanged(bool)));
 
     actionCollection->addAction("view_zoom", m_action);
     actionCollection->addAction(KStandardAction::ZoomIn,  "zoom_in", m_action, SLOT(zoomIn()));
@@ -81,15 +81,6 @@ void KoZoomController::setDocumentSize( const QSizeF &documentSize )
                    int(0.5 + m_zoomHandler->documentToViewY(m_documentSize.height())) ) );
 }
 
-void KoZoomController::setDocumentResolution( double xResolution, double yResolution )
-{
-    m_documentXResolution = xResolution;
-    m_documentYResolution = yResolution;
-
-    if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_PIXELS)
-        setZoom(KoZoomMode::ZOOM_PIXELS, 0);
-}
-
 void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
 {
     m_zoomHandler->setZoomMode(mode);
@@ -114,18 +105,8 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
         m_action->setEffectiveZoom(zoom);
     }
 
-    if(mode == KoZoomMode::ZOOM_PIXELS)
-    {
-        m_zoomHandler->setZoomedResolution(m_documentXResolution, m_documentYResolution);
-        zoom = m_zoomHandler->zoomFactorX();
-        m_action->setEffectiveZoom(zoom);
-        emit zoomChanged(mode, zoom);
-    }
-    else
-    {
-        m_zoomHandler->setZoom(zoom);
-        emit zoomChanged(mode, zoom);
-    }
+    m_zoomHandler->setZoom(zoom);
+    emit zoomChanged(mode, zoom);
 
     // Tell the canvasController that the zoom has changed
     // Actually canvasController doesn't know about zoom, but the document in pixels

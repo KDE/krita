@@ -45,13 +45,14 @@
 
 #include <KoZoomMode.h>
 
-KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent)
+KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bool doSpecialAspectMode, QObject *parent)
     : KSelectAction(text, parent),
     m_zoomModes( zoomModes )
 {
     m_slider = 0;
     m_number = 0;
     m_zoomButtonGroup = 0;
+    m_doSpecialAspectMode = doSpecialAspectMode;
 
 /*
     m_actualPixels  = new KAction(i18n("Actual Pixels"), this);
@@ -162,10 +163,6 @@ void KoZoomAction::regenerateItems(const QString& zoomString)
     {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
     }
-    if(m_zoomModes & KoZoomMode::ZOOM_PIXELS)
-    {
-        values << KoZoomMode::toString(KoZoomMode::ZOOM_PIXELS);
-    }
 
     foreach(int value, zoomLevels) {
         values << i18n("%1%", value);
@@ -260,17 +257,6 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     m_zoomButtonGroup = new QButtonGroup(group);
     m_zoomButtonGroup->setExclusive(true);
 
-    if(m_zoomModes & KoZoomMode::ZOOM_PIXELS)
-    {
-        QToolButton * actualButton= new QToolButton(group);
-        m_zoomButtonGroup->addButton(actualButton, KoZoomMode::ZOOM_PIXELS);
-        layout->addWidget(actualButton, 0, radios);
-        actualButton->setIcon(KIcon("zoom-pixels").pixmap(22));
-        actualButton->setCheckable(true);
-        actualButton->setAutoRaise(true);
-        actualButton->setToolTip(i18n("Show actual pixels"));
-        radios++;
-    }
     if(m_zoomModes & KoZoomMode::ZOOM_WIDTH)
     {
         QToolButton * fitWidthButton = new QToolButton(group);
@@ -294,10 +280,23 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
         radios++;
     }
 
+
+    QToolButton * aspectButton = new QToolButton(group);
+    if(m_doSpecialAspectMode)
+    {
+        aspectButton->setIcon(KIcon("zoom-pixels").pixmap(22));
+        aspectButton->setCheckable(true);
+        aspectButton->setAutoRaise(true);
+        aspectButton->setToolTip(i18n("Use same aspect as pixels"));
+        connect(aspectButton, SIGNAL(toggled(bool)), this, SIGNAL(aspectModeChanged(bool)));
+    }
+
     layout->addWidget(m_number, 0, radios);
     layout->addWidget(numLabel, 0, radios);
     layout->addWidget(pctLabel, 0, radios+1);
     layout->addWidget(m_slider, 0, radios+2);
+    if(m_doSpecialAspectMode)
+        layout->addWidget(aspectButton, 0, radios+3);
     layout->setMargin(0);
     layout->setSpacing(0);
 

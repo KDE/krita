@@ -36,12 +36,6 @@ void zoomcontroller_test::testApi()
     KoZoomHandler zoomHandler;
     KoZoomController zoomController(new KoCanvasController(), &zoomHandler, new KActionCollection(this));
 
-    zoomHandler.setZoomAndResolution(100, 123, 456);
-    zoomController.setDocumentResolution(50, 60);
-    zoomController.setZoomMode(KoZoomMode::ZOOM_PIXELS);
-
-    QVERIFY( zoomHandler.zoomedResolutionX() == 50);
-    QVERIFY( zoomHandler.zoomedResolutionY() == 60);
 }
 
 QTEST_KDEMAIN(zoomcontroller_test, GUI)

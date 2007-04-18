@@ -71,8 +71,6 @@ void zoomhandler_test::testApi()
     QVERIFY( zoomHandler.zoomMode() == KoZoomMode::ZOOM_WIDTH );
     zoomHandler.setZoomMode( KoZoomMode::ZOOM_PAGE );
     QVERIFY( zoomHandler.zoomMode() == KoZoomMode::ZOOM_PAGE );
-    zoomHandler.setZoomMode( KoZoomMode::ZOOM_PIXELS );
-    QVERIFY( zoomHandler.zoomMode() == KoZoomMode::ZOOM_PIXELS );
 
 }
 

@@ -213,8 +213,9 @@ public:
 
     virtual void resizeEvent( QResizeEvent * )
     {
-        QWidget *wid = findChild<QWidget *>( "" );
-        wid->setGeometry( 0, 0, width(), height() );
+        QWidget *wid = findChild<QWidget *>();
+        if ( wid )
+            wid->setGeometry( 0, 0, width(), height() );
     }
 
     virtual void childEvent( QChildEvent *ev )

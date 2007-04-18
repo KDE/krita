@@ -281,9 +281,10 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     }
 
 
-    QToolButton * aspectButton = new QToolButton(group);
+    QToolButton * aspectButton = 0;
     if(m_doSpecialAspectMode)
     {
+        aspectButton = new QToolButton(group);
         aspectButton->setIcon(KIcon("zoom-pixels").pixmap(22));
         aspectButton->setCheckable(true);
         aspectButton->setAutoRaise(true);

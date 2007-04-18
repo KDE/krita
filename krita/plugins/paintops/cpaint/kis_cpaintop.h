@@ -43,7 +43,8 @@ public:
     virtual ~KisCPaintOpFactory();
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
-    virtual KoID id() { return KoID("paintCPaint", i18n("Chinese Brush")); }
+    virtual QString id() const { return "paintCPaint"; }
+    virtual QString name() const { return i18n("Chinese Brush"); }
     virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice);
 
 private:

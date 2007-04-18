@@ -27,7 +27,9 @@
 #include <kparts/componentfactory.h>
 #include <kservicetypetrader.h>
 
-#include "KoGenericRegistry.h"
+#include <KoGenericRegistry.h>
+#include <KoPluginLoader.h>
+
 #include "kis_types.h"
 #include "kis_paintop_registry.h"
 #include "kis_paintop.h"
@@ -40,33 +42,6 @@ KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 KisPaintOpRegistry::KisPaintOpRegistry()
 {
     Q_ASSERT(KisPaintOpRegistry::m_singleton == 0);
-    KisPaintOpRegistry::m_singleton = this;
-
-
-    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Paintop"),
-                                                              QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Krita-Version] == 3)"));
-
-    KService::List::ConstIterator iter;
-
-    for(iter = offers.begin(); iter != offers.end(); ++iter)
-    {
-        KService::Ptr service = *iter;
-        int errCode = 0;
-        KParts::Plugin* plugin =
-             KService::createInstance<KParts::Plugin> ( service, this, QStringList(), &errCode);
-        if ( plugin )
-            kDebug(41006) << "found plugin " << service->property("Name").toString() << "\n";
-        else {
-            kDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
-            if( errCode == KLibLoader::ErrNoLibrary)
-            {
-                kWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
-            }
-        }
-
-    }
-
 }
 
 KisPaintOpRegistry::~KisPaintOpRegistry()
@@ -78,6 +53,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
     if(KisPaintOpRegistry::m_singleton == 0)
     {
         KisPaintOpRegistry::m_singleton = new KisPaintOpRegistry();
+        KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 3)");
         Q_CHECK_PTR(KisPaintOpRegistry::m_singleton);
     }
     return KisPaintOpRegistry::m_singleton;
@@ -90,18 +66,14 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KoID & id, const KisPaintOpSettin
 
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettings * settings, KisPainter * painter) const
 {
-    // return paintOp(KoID(id, ""), settings, painter);
     if (painter == 0) {
         kWarning() << " KisPaintOpRegistry::paintOp painter is null";
         return 0;
     }
     KisPaintOpFactorySP f = value(id);
-   if (f) {
+   if (f)
         return f->createOp(settings, painter);
-    }
-    else {
-        return 0;
-    }
+   return 0;
 }
 
 KisPaintOpSettings * KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice) const

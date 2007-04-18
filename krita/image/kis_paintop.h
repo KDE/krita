@@ -127,8 +127,8 @@ public:
      * @param painter the painter used to draw
      */
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter) = 0;
-    virtual QString id() const { return "abstractpaintop"; }
-    virtual QString name() const { return  i18n("Abstract PaintOp"); }
+    virtual QString id() const = 0;
+    virtual QString name() const = 0;
 
     /**
      * The filename of the pixmap we can use to represent this paintop in the ui.

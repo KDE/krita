@@ -35,7 +35,8 @@ public:
     virtual ~KisAirbrushOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
-    virtual KoID id() { return KoID("airbrush", i18n("Pixel Airbrush")); }
+    virtual QString id() const { return "airbrush"; }
+    virtual QString name() const { return i18n("Pixel Airbrush"); }
     virtual QString pixmap() { return "airbrush.png"; }
 };
 

@@ -45,19 +45,12 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QStringList 
 {
     setComponentData(DefaultPaintOpsPluginFactory::componentData());
 
-    // This is not a gui plugin; only load it when the doc is created.
-    if ( parent->inherits("KisPaintOpRegistry") )
-    {
-        KisPaintOpRegistry * r = dynamic_cast<KisPaintOpRegistry*>(parent);
-        // Add hard-coded paint ops. Plugin paintops will add
-        // themselves in the plugin initialization code.
-        r->add (KisPaintOpFactorySP( new KisAirbrushOpFactory ));
-        r->add (KisPaintOpFactorySP( new KisBrushOpFactory ));
-        r->add (KisPaintOpFactorySP( new KisDuplicateOpFactory ));
-        r->add (KisPaintOpFactorySP( new KisEraseOpFactory ));
-        r->add (KisPaintOpFactorySP( new KisPenOpFactory ));
-    }
-
+    KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
+    r->add (KisPaintOpFactorySP( new KisAirbrushOpFactory ));
+    r->add (KisPaintOpFactorySP( new KisBrushOpFactory ));
+    r->add (KisPaintOpFactorySP( new KisDuplicateOpFactory ));
+    r->add (KisPaintOpFactorySP( new KisEraseOpFactory ));
+    r->add (KisPaintOpFactorySP( new KisPenOpFactory ));
 }
 
 DefaultPaintOpsPlugin::~DefaultPaintOpsPlugin()

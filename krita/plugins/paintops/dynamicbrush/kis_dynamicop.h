@@ -34,7 +34,8 @@ class KisDynamicOpFactory : public KisPaintOpFactory  {
         virtual ~KisDynamicOpFactory() {}
     
         virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
-        virtual KoID id() { return KoID("dynamicbrush", i18n("Dynamic Brush")); }
+        virtual QString id() const { return "dynamicbrush"; }
+        virtual QString name()  const{ return i18n("Dynamic Brush"); }
         virtual QString pixmap() { return "dynamicbrush.png"; }
         virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice);
     private:

@@ -36,7 +36,8 @@ public:
     virtual ~KisConvolveOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
-    virtual KoID id() { return KoID("convolve", i18n("Convolve")); }
+    virtual QString id() const { return "convolve"; }
+    virtual QString name() const { return i18n("Convolve"); }
 };
 
 

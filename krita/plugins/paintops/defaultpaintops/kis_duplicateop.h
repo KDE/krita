@@ -35,7 +35,8 @@ public:
     virtual ~KisDuplicateOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
-    virtual KoID id() { return KoID("duplicate", i18n("Duplicate")); }
+    virtual QString id() const { return "duplicate"; }
+    virtual QString name() const { return i18n("Duplicate"); }
     virtual bool userVisible(KoColorSpace *) { return false; }
 
 };

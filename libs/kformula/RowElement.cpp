@@ -106,12 +106,16 @@ BasicElement* RowElement::childAt( int i )
     return m_rowElements[ i ];
 }
 
-void RowElement::readMathML( const KoXmlElement& element )
+int RowElement::readMathMLContent( const KoXmlNode& node )
 {
-    readMathMLAttributes( element );
+    return buildMathMLChildren( m_rowElements, node );
+}
 
+
+int RowElement::buildMathMLChildren( QList<BasicElement*> list, const KoXmlNode& node )
+{
     BasicElement* tmpElement = 0;
-    QDomElement tmp = element.firstChildElement();
+    QDomElement tmp = node.firstChildElement();
     while( !tmp.isNull() )    // for each child element, create a element
     {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
@@ -121,15 +125,10 @@ void RowElement::readMathML( const KoXmlElement& element )
     }
 }
 
-void RowElement::writeMathML( KoXmlWriter* writer, bool oasisFormat ) const
+void RowElement::writeMathMLContent( KoXmlWriter* writer, bool oasisFormat ) const
 {
-    writer->startElement( oasisFormat ? "math:mrow" : "mrow" );
-    writeMathMLAttributes( writer );                            // write the attributes
-
     foreach( BasicElement* tmpChild, m_rowElements )       // just write all
         tmpChild->writeMathML( writer, oasisFormat );           // children elements
-
-    writer->endElement();
 }
 
 } // namespace FormulaShape

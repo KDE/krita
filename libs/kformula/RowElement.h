@@ -100,11 +100,14 @@ public:
      */
     virtual void moveRight( FormulaCursor* cursor, BasicElement* from );
 
-    /// Read the element from MathML
-    virtual void readMathML( const KoXmlElement& element );
+protected:
+    /// Read the element contents from MathML
+    virtual int readMathMLContent( const KoXmlNode& node );
 
-    /// Save the element to MathML
-    virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
+	virtual int buildMathMLChildren( QList<BasicElement*> list, const KoXmlNode& node );
+	
+    /// Save the element contents to MathML
+    virtual void writeMathMLContent( KoXmlWriter* writer, bool oasisFormat = false ) const;
 
 private:
     /// The sorted list of all elements in this row

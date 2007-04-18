@@ -34,7 +34,7 @@
 void zoomcontroller_test::testApi()
 {
     KoZoomHandler zoomHandler;
-    KoZoomController zoomController(new KoCanvasController(), &zoomHandler, new KActionCollection(this));
+    KoZoomController zoomController(new KoCanvasController(), &zoomHandler, new KActionCollection(this), true);
 
 }
 

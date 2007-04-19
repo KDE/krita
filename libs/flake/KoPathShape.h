@@ -315,6 +315,8 @@ public:
     virtual QPointF position() const;
     virtual void resize( const QSizeF &size );
 
+    void saveOdf( KoShapeSavingContext * context ) const;
+
     /// Removes all subpaths and their points from the path
     void clear();
     /**

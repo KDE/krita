@@ -306,7 +306,7 @@ void Viewport::resetLayout()
     if (m_canvas) {
         if( m_parent->canvasMode() == KoCanvasController::Infinite )
             m_canvas->setGeometry( 0, 0, viewW, viewH );
-        else
+        else if ( m_parent->canvasMode() != KoCanvasController::Presentation )
             m_canvas->setGeometry( moveX, moveY, resizeW, resizeH );
     }
 

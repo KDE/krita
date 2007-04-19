@@ -74,7 +74,23 @@ public:
     /// @return the master shape manager used for this view
     KoShapeManager* masterShapeManager() const;
 
+    /// @return the acvive viewMode
     KoPAViewMode* viewMode() const;
+
+    /**
+     * @brief Set the view mode
+     *
+     * @param mode the new view mode
+     */
+    void setViewMode( KoPAViewMode* mode );
+
+    /**
+     * @brief Set the canvas mode
+     *
+     * @param fullscreen if true the canvas mode is set to Presentation
+     *                   if false it is set to Centered
+     */
+    void setCanvasMode( bool fullScreen );
 
 public slots:
     /// Shows/hides the rulers

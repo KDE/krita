@@ -190,6 +190,30 @@ KoPAViewMode* KoPAView::viewMode() const
     return m_viewMode;
 }
 
+void KoPAView::setViewMode( KoPAViewMode* mode )
+{
+    Q_ASSERT( mode );
+    if ( mode != m_viewMode )
+    {
+        KoPAViewMode * previousViewMode = m_viewMode;
+        m_viewMode->deactivate();
+        m_viewMode = mode;
+        m_viewMode->activate( previousViewMode );
+    }
+}
+
+void KoPAView::setCanvasMode( bool fullScreen )
+{
+    if ( fullScreen )
+    {
+        m_canvasController->setCanvasMode( KoCanvasController::Presentation );
+    }
+    else
+    {
+        m_canvasController->setCanvasMode( KoCanvasController::Centered );
+    }
+}
+
 KoShapeManager* KoPAView::masterShapeManager() const
 {
     return m_canvas->masterShapeManager();
@@ -199,7 +223,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
 {
     if ( !page )
         return;
-
+    
     m_activePage = page;
     QList<KoShape*> shapes = page->iterator();
     shapeManager()->setShapes( shapes );

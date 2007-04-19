@@ -50,7 +50,7 @@ class QAbstractButton;
  * is hidden in not-in-focus views.
  *
  * The ToolManager is a singleton and will manage all views in all applications that
- * are loaded in this process.  his means you will have to register and unregister your view.
+ * are loaded in this process. This means you will have to register and unregister your view.
  * When creating your new view you should use a KoCanvasController() and register that
  * with the ToolManager like this:
 @code
@@ -73,7 +73,7 @@ class QAbstractButton;
      per view, because this is a class with scrollbars and a zoomlevel and so on)
    - for every pointing device (determined by the unique id of tablet,
      or 0 for mice -- you may have more than one mouse attached, but
-     Qt cannot distinquish between them, there is an associated too.
+     Qt cannot distinquish between them, there is an associated tool.
    - depending on things like tablet leave/enter proximity, incoming
      mouse or tablet events and a little timer (that gets stopped when
      we know what is what), the active pointing device is determined,

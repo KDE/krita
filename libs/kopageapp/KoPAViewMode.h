@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (  C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -58,6 +58,23 @@ public:
      * @param master if true work on master pages, if false work on normal pages
      */
     virtual void setMasterMode( bool master ) { Q_UNUSED(master); }
+
+    /**
+     * @brief This method is called when the view mode is activated
+     *
+     * The default implementation does nothing.
+     *
+     * @param previousViewMode the view mode which was active before the
+     *        activation of this view mode;
+     */
+    virtual void activate( KoPAViewMode * previousViewMode ) { Q_UNUSED( previousViewMode ); }
+
+    /**
+     * @bried This method is called when the view mode is deactivated
+     *
+     * The default implementation does nothing.
+     */
+    virtual void deactivate() {}
     
 protected:
     KoPACanvas * m_canvas;

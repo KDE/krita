@@ -66,16 +66,8 @@ bool TextElement::isInvisible() const
 }
 
 
-/**
- * Render the element to the given QPainter
- * @param painter The QPainter to paint the element to
- */
-void TextElement::paint( QPainter& painter, const AttributeManager* am )
+void TextElement::setStyle( QPainter& painter, const AttributeManager* am )
 {
-    // Invisible characters
-    if ( character() == applyFunctionChar || character() == invisibleTimes || character() == invisibleComma )
-        return;
-
      // Color handling.
      // TODO: most of this should be handled by AttributeManager
      QVariant color = am->valueOf( "mathcolor" );
@@ -90,7 +82,19 @@ void TextElement::paint( QPainter& painter, const AttributeManager* am )
      // Font style handling
      QFont font = getFont( am );
      painter.setFont( font );
+}
 
+/**
+ * Render the element to the given QPainter
+ * @param painter The QPainter to paint the element to
+ */
+void TextElement::paint( QPainter& painter, const AttributeManager* am )
+{
+    // Invisible characters
+    if ( character() == applyFunctionChar || character() == invisibleTimes || character() == invisibleComma )
+        return;
+
+	setStyle( painter, am );
      // FIXME: get rid of context
      /*
     if ( character() != QChar::Null ) {
@@ -121,6 +125,39 @@ void TextElement::paint( QPainter& painter, const AttributeManager* am )
 
 void TextElement::layout( const AttributeManager* am )
 {
+    QFont font = getFont( am );
+	// TODO: Font size
+	double factor = 1.0;
+
+    QFontMetrics fm( font );
+    if ( character() == applyFunctionChar || character() == invisibleTimes || character() == invisibleComma ) {
+        setWidth( 0 );
+        setHeight( 0 );
+        setBaseLine( height() );
+    }
+    else {
+        QChar ch = character();
+        if ( ch == QChar::null ) {
+		  /*
+            setWidth( qRound( context.getEmptyRectWidth( factor ) * 2./3. ) );
+            setHeight( qRound( context.getEmptyRectHeight( factor ) * 2./3. ) );
+		  */
+            setBaseLine( height() );
+        }
+        else {
+            QRect bound = fm.boundingRect( ch );
+            setWidth( fm.width( ch ) );
+            setHeight( bound.height() );
+            setBaseLine( -bound.top() );
+
+            // There are some glyphs in TeX that have
+            // baseline==0. (\int, \sum, \prod)
+            if ( baseLine() == 0 ) {
+                //setBaseline( getHeight()/2 + context.axisHeight( tstyle ) );
+                setBaseLine( -1 );
+            }
+        }
+    }
 }
 
 #warning "Port and remove obsolete code"

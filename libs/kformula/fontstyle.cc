@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Ulrich Kuettler <ulrich.kuettler@gmx.de>
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
-#include <kio/job.h>
+#include <kio/copyjob.h>
 #include <kmessagebox.h>
 
 #include "fontstyle.h"
@@ -270,16 +270,16 @@ bool Artwork::calcCMDelimiterSize( const ContextStyle& context,
                                      luPt parentSize )
 {
     QFont f( "cmex10" );
-    f.setPointSizeFloat( context.layoutUnitPtToPt( fontSize ) );
+    f.setPointSizeFloat( fontSize );
     QFontMetrics fm( f );
 
     for ( char i=1; c != 0; ++i ) {
         LuPixelRect bound = fm.boundingRect( c );
 
-        luPt height = context.ptToLayoutUnitPt( bound.height() );
+        luPt height = bound.height();
         if ( height >= parentSize ) {
-            luPt width = context.ptToLayoutUnitPt( fm.width( c ) );
-            luPt baseline = context.ptToLayoutUnitPt( -bound.top() );
+            luPt width = fm.width( c );
+            luPt baseline = -bound.top();
 
             cmChar = c;
 
@@ -301,7 +301,7 @@ void Artwork::calcLargest( const ContextStyle& context,
                              uchar c, luPt fontSize )
 {
     QFont f( "cmex10" );
-    f.setPointSizeFloat( context.layoutUnitPtToPt( fontSize ) );
+    f.setPointSizeFloat( fontSize );
     QFontMetrics fm( f );
 
     cmChar = c;
@@ -315,9 +315,9 @@ void Artwork::calcLargest( const ContextStyle& context,
 
     LuPixelRect bound = fm.boundingRect( cmChar );
 
-    luPt height = context.ptToLayoutUnitPt( bound.height() );
-    luPt width = context.ptToLayoutUnitPt( fm.width( cmChar ) );
-    luPt baseline = context.ptToLayoutUnitPt( -bound.top() );
+    luPt height = bound.height();
+    luPt width = fm.width( cmChar );
+    luPt baseline = -bound.top();
 
     setHeight( height );
     setWidth( width );
@@ -330,12 +330,10 @@ void Artwork::drawCMDelimiter( QPainter& painter, const ContextStyle& style,
                                  luPt height )
 {
     QFont f( "cmex10" );
-    f.setPointSizeFloat( style.layoutUnitToFontSize( height, false ) );
+    f.setPointSizeFloat( height );
 
     painter.setFont( f );
-    painter.drawText( style.layoutUnitToPixelX( x ),
-                      style.layoutUnitToPixelY( y + getBaseline() ),
-                      QString( QChar( cmChar ) ) );
+    painter.drawText( x, y + getBaseline(), QString( QChar( cmChar ) ) );
 
     // Debug
 #if 0
@@ -356,7 +354,8 @@ Artwork::Artwork(SymbolType t)
 {
 }
 
-
+#warning "port port port"
+#if 0
 void Artwork::calcSizes( const ContextStyle& style,
                            ContextStyle::TextStyle tstyle,
                            double factor,
@@ -710,13 +709,12 @@ void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style,
 void Artwork::calcCharSize( const ContextStyle& style, QFont f,
                             luPt height, QChar c )
 {
-    f.setPointSizeF( style.layoutUnitPtToPt( height ) );
-    //f.setPointSize( height );
+    f.setPointSizeF( height );
     QFontMetrics fm(f);
-    setWidth( style.ptToLayoutUnitPt( fm.width( c ) ) );
+    setWidth( fm.width( c ) );
     LuPixelRect bound = fm.boundingRect( c );
-    setHeight( style.ptToLayoutUnitPt( bound.height() ) );
-    setBaseline( style.ptToLayoutUnitPt( -bound.top() ) );
+    setHeight( bound.height() );
+    setBaseline( -bound.top() );
 }
 
 
@@ -727,9 +725,7 @@ void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style,
     f.setPointSizeF( style.layoutUnitToFontSize( height, false ) );
 
     painter.setFont( f );
-    painter.drawText( style.layoutUnitToPixelX( x ),
-                      style.layoutUnitToPixelY( y+getBaseline() ), 
-                      QString( c ) );
+    painter.drawText( x, y+getBaseline(), QString( c ) );
 }
 
 
@@ -741,14 +737,14 @@ void Artwork::calcRoundBracket( const ContextStyle& style, const uchar chars[],
     //uchar line = style.symbolTable().character( chars[2] );
 
     QFont f = style.getBracketFont();
-    f.setPointSizeF( style.layoutUnitPtToPt( charHeight ) );
+    f.setPointSizeF( charHeight );
     QFontMetrics fm( f );
     LuPtRect upperBound = fm.boundingRect( uppercorner );
     LuPtRect lowerBound = fm.boundingRect( lowercorner );
     //LuPtRect lineBound = fm.boundingRect( line );
 
-    setWidth( style.ptToLayoutUnitPt( fm.width( QChar ( uppercorner ) ) ) );
-    luPt edgeHeight = style.ptToLayoutUnitPt( upperBound.height()+lowerBound.height() );
+    setWidth( fm.width( QChar ( uppercorner ) ) );
+    luPt edgeHeight = upperBound.height()+lowerBound.height();
     //luPt lineHeight = style.ptToLayoutUnitPt( lineBound.height() );
 
     //setHeight( edgeHeight + ( ( height-edgeHeight-1 ) / lineHeight + 1 ) * lineHeight );
@@ -889,5 +885,6 @@ void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const
         }
     }
 }
+#endif // 0
 
 KFORMULA_NAMESPACE_END

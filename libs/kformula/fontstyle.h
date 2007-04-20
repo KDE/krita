@@ -108,6 +108,8 @@ public:
     Artwork(SymbolType type = EmptyBracket);
     virtual ~Artwork() {}
 
+#warning "Port!"	
+#if 0
     virtual void calcSizes( const ContextStyle& style,
                             ContextStyle::TextStyle tstyle,
                             double factor,
@@ -126,6 +128,7 @@ public:
                        ContextStyle::TextStyle tstyle,
 					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
+#endif // 0
 
     luPixel getWidth() const { return size.width(); }
     luPixel getHeight() const { return size.height(); }

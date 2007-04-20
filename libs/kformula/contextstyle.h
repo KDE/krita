@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>                  
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>                  
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,7 +47,7 @@ class SymbolTable;
  * All distances are stored in point. Most methods return pixel
  * values.
  */
-class ContextStyle : public KoZoomHandler
+class ContextStyle
 {
 public:
 
@@ -102,57 +102,7 @@ public:
 
     const FontStyle& fontStyle() const { return *m_fontStyle; }
 
-    //copied from KoTextZoomHandler.h
-    double pixelToLayoutUnitX( double x ) const;
-    double pixelToLayoutUnitY( double y ) const;
-    double ptToPixelX( double pt ) const
-         { return pt * m_resolutionX; }
-    double ptToPixelY( double pt ) const
-         { return pt * m_resolutionY; }
-    double ptToLayoutUnitPt( double pt ) const
-    {
-	    // taken from KoTextZoomHandler
-	    double m_layoutUnitFactor = 20.0;
-	    return pt *  m_layoutUnitFactor; }
-    double ptToLayoutUnitPixX( double x_pt ) const
-        { return ptToPixelX( ptToLayoutUnitPt( x_pt ) ); }
-    double ptToLayoutUnitPixY( double y_pt ) const
-	    { return ptToPixelY( ptToLayoutUnitPt( y_pt ) ); }
-    double pixelYToPt( double y ) const
-	    { return y / m_resolutionY; }
-    double layoutUnitPtToPt( double lupt ) const
-	    { return lupt / 20.0; }
-    double layoutUnitToPixelX( double lupix ) const;
-    double layoutUnitToPixelY( double lupix ) const;
-    double pixelXToPt( double x ) const
-	    { return x / m_resolutionX; }
-    QPointF pixelToLayoutUnit( const QPointF &p ) const
-        { return QPointF( pixelToLayoutUnitX( p.x() ),
-		          pixelToLayoutUnitY( p.y() ) ); }
-    QRectF pixelToLayoutUnit( const QRectF &r ) const
-        {
-	  double x = pixelToLayoutUnitX( r.x() );
-	  double y = pixelToLayoutUnitY( r.y() );
-	  double width = pixelToLayoutUnitX( r.x() + r.width() ) - x;
-	  double height = pixelToLayoutUnitY( r.y() + r.height() ) - y;
-	return QRectF( x,y,width,height ); }
-    double layoutUnitToFontSize( double luSize, bool /*forPrint*/ ) const;
-    double layoutUnitPtToPt( double lupt )
-	    { return lupt / 20.0; }
-    QPoint layoutUnitToPixel( const QPoint &p ) const
-    { return QPoint( layoutUnitToPixelX( p.x() ),
-	                         layoutUnitToPixelY( p.y() ) ); }	    
-
-    
-    void setZoomAndResolution( int zoom, int dpiX, int dpiY );
-
-    /**
-     * Sets the zoom by hand. This is to be used in <code>paintContent</code>.
-     * @returns whether there was any change.
-     */
-    bool setZoomAndResolution( int zoom, double zoomX, double zoomY, bool updateViews, bool forPrint );
-
-    bool syntaxHighlighting() const { return m_syntaxHighlighting; }
+	bool syntaxHighlighting() const { return m_syntaxHighlighting; }
     void setSyntaxHighlighting( bool highlight ) { m_syntaxHighlighting = highlight; }
 
     QColor getDefaultColor()  const { return defaultColor; }
@@ -372,147 +322,6 @@ private:
     FontStyle* m_fontStyle;
     QString m_fontStyleName;
 };
-
-// Section 3.3.4.2, default values
-const double scriptsizemultiplier   = 0.71;
-const double scriptminsize          = 8;
-const double veryverythinmathspace  = 0.0555556;
-const double verythinmathspace      = 0.111111;
-const double thinmathspace          = 0.166667;
-const double mediummathspace        = 0.222222;
-const double thickmathspace         = 0.277778;
-const double verythickmathspace     = 0.333333;
-const double veryverythickmathspace = 0.388889;
-
-class StyleAttributes {
- public:
-    double sizeFactor() const ;
-    bool customMathVariant() const ;
-    CharStyle charStyle() const ;
-    CharFamily charFamily() const ;
-    QColor color() const ;
-    QColor background() const ;
-    QFont font() const ;
-    bool fontWeight() const ;
-    bool customFontWeight() const ;
-    bool fontStyle() const ;
-    bool customFontStyle() const ;
-    bool customFont() const ;
-
-    int scriptLevel() const ;
-    double scriptSizeMultiplier() const ;
-    double scriptMinSize() const ;
-    double veryVeryThinMathSpace() const ;
-    double veryThinMathSpace() const ;
-    double thinMathSpace() const ;
-    double mediumMathSpace() const ;
-    double thickMathSpace() const ;
-    double veryThickMathSpace() const ;
-    double veryVeryThickMathSpace() const ;
-    bool displayStyle() const ;
-    bool customDisplayStyle() const ;
-
-    double getSpace( SizeType type, double length ) const ;
-
-    void setSizeFactor( double s ) { m_size.push( s ); }
-    void setCustomMathVariant( bool cmv ) { m_customMathVariant.push( cmv ); }
-    void setCharStyle( CharStyle cs ) { m_charStyle.push( cs ); }
-    void setCharFamily( CharFamily cf ) { m_charFamily.push( cf ); }
-    void setColor( const QColor& c ) { m_color.push( c ); }
-    void setBackground( const QColor& bg ) { m_background.push( bg ); }
-    void setFont( const QFont& f ) { m_font.push( f ); }
-    void setCustomFont( bool cf ) { m_customFontFamily.push ( cf ); }
-    void setCustomFontWeight( bool cfw ) { m_customFontWeight.push( cfw ); }
-    void setFontWeight( bool fw ) { m_fontWeight.push( fw ); }
-    void setCustomFontStyle( bool cfs ) { m_customFontStyle.push( cfs ); }
-    void setFontStyle( bool fs ) { m_fontStyle.push( fs ); }
-
-    void setScriptLevel( int s ) { m_scriptLevel.push( s ); }
-    void setScriptSizeMultiplier( double s ) { m_scriptSizeMultiplier.push( s ); }
-    void setScriptMinSize( double s ) { m_scriptMinSize.push( s ); }
-    void setVeryVeryThinMathSpace( double s ) { m_veryVeryThinMathSpace.push( s ); }
-    void setVeryThinMathSpace( double s ) { m_veryThinMathSpace.push( s ); }
-    void setThinMathSpace( double s ) { m_thinMathSpace.push( s ); }
-    void setMediumMathSpace( double s ) { m_mediumMathSpace.push( s ); }
-    void setThickMathSpace( double s ) { m_thickMathSpace.push( s ); }
-    void setVeryThickMathSpace( double s ) { m_veryThickMathSpace.push( s ); }
-    void setVeryVeryThickMathSpace( double s ) { m_veryVeryThickMathSpace.push( s ); }
-    void setDisplayStyle( bool ds ) { m_displayStyle.push( ds ); }
-    void setCustomDisplayStyle( bool cds ) { m_customDisplayStyle.push( cds ); }
-
-    void reset();
-    void resetSize();
-    void resetCharStyle();
-    void resetCharFamily();
-    void resetColor();
-    void resetBackground();
-    void resetFontFamily();
-    void resetFontWeight();
-    void resetFontStyle();
-
-    void resetScriptLevel();
-    void resetScriptSizeMultiplier();
-    void resetScriptMinSize();
-    void resetVeryVeryThinMathSpace();
-    void resetVeryThinMathSpace();
-    void resetThinMathSpace();
-    void resetMediumMathSpace();
-    void resetThickMathSpace();
-    void resetVeryThickMathSpace();
-    void resetVeryVeryThickMathSpace();
-    void resetDisplayStyle();
-
- private:
-    // Size of the font in points (mathsize / fontsize)
-    QStack<double> m_size;
-
-    // Whether a custom mathvariant attribute is in use
-    QStack<bool> m_customMathVariant;
-
-    // Font style (mathvariant, fontweight, fontstyle)
-    QStack<CharStyle> m_charStyle;
-
-    // Font family (mathvariant)
-    QStack<CharFamily> m_charFamily;
-
-    // Foreground color (mathcolor, color)
-    QStack<QColor> m_color;
-
-    // Background color (mathbackground)
-    QStack<QColor> m_background;
-
-    // Font family (fontfamily)
-    QStack<QFont> m_font;
-
-    // Whether a custom fontfamily attribute is in use (instead of CharFamily)
-    QStack<bool> m_customFontFamily;
-
-    // Font Weight (fontweight)
-    QStack<bool> m_fontWeight;
-
-    // Whether a custom fontweight attribute is in use
-    QStack<bool> m_customFontWeight;
-
-    // Font Style (fontstyle)
-    QStack<bool> m_fontStyle;
-
-    // Whether a custom fontstyle attribute is in use
-    QStack<bool> m_customFontStyle;
-
-    QStack<int> m_scriptLevel;
-    QStack<double> m_scriptSizeMultiplier;
-    QStack<double> m_scriptMinSize;
-    QStack<double> m_veryVeryThinMathSpace;
-    QStack<double> m_veryThinMathSpace;
-    QStack<double> m_thinMathSpace;
-    QStack<double> m_mediumMathSpace;
-    QStack<double> m_thickMathSpace;
-    QStack<double> m_veryThickMathSpace;
-    QStack<double> m_veryVeryThickMathSpace;
-    QStack<bool> m_displayStyle;
-    QStack<bool> m_customDisplayStyle;
-};
-
 
 KFORMULA_NAMESPACE_END
 

@@ -59,6 +59,7 @@ editor.h
 editoritem.h
 factory.h
 koproperty_global.h
+koproperty_export.h
 property.h
 set.h
 utils.h

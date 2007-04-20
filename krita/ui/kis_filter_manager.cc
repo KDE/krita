@@ -243,7 +243,7 @@ bool KisFilterManager::apply()
     KisPaintDeviceSP dev = img->activeDevice();
     if (!dev) return false;
 
-    QApplication::setOverrideCursor( Qt::waitCursor );
+    QApplication::setOverrideCursor( KisCursor::waitCursor() );
 
     //Apply the filter
     m_lastFilterConfig = m_lastFilter->configuration(m_lastWidget);
@@ -276,22 +276,22 @@ bool KisFilterManager::apply()
     else
         m_reapplyAction->setText(i18n("Apply Filter Again"));
 
+    m_lastFilter->disableProgress();
+    QApplication::restoreOverrideCursor();
+    
+
     if (m_lastFilter->cancelRequested()) {
         delete m_lastFilterConfig;
         if (cmd) {
             cmd->unexecute();
             delete cmd;
         }
-        m_lastFilter->disableProgress();
-        QApplication::restoreOverrideCursor();
         return false;
 
     } else {
         if (dev->parentLayer()) dev->parentLayer()->setDirty(rect);
         m_doc->setModified(true);
         if (img->undo() && cmd) img->undoAdapter()->addCommand(cmd);
-        m_lastFilter->disableProgress();
-        QApplication::restoreOverrideCursor();
         return true;
     }
 }
@@ -345,6 +345,7 @@ void KisFilterManager::slotApplyFilter(int i)
     Q_CHECK_PTR(m_lastDialog);
     m_lastWidget = m_lastFilter->createConfigurationWidget( (QWidget*)m_lastDialog->container(), dev );
 
+    bool accepted = true;
 
     if( m_lastWidget != 0)
     {
@@ -364,16 +365,14 @@ void KisFilterManager::slotApplyFilter(int i)
 
         if(m_lastDialog->exec() == QDialog::Rejected )
         {
-            delete m_lastDialog;
-            m_lastFilterConfig = oldConfig;
-            m_lastDialog = oldDialog;
-            m_lastFilter = oldFilter;
-            return;
+	    accepted = false;
         }
     }
 
-    if (!apply()) {
-        delete m_lastDialog;
+    delete m_lastDialog;
+
+    if (!accepted || !apply()) {
+	// Override the old configuration
         m_lastFilterConfig = oldConfig;
         m_lastDialog = oldDialog;
         m_lastFilter = oldFilter;

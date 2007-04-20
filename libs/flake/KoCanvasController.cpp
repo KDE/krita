@@ -214,18 +214,31 @@ bool KoCanvasController::eventFilter(QObject* watched, QEvent* event) {
             updateCanvasOffsetX();
             updateCanvasOffsetY();
         }
-        else if ( event->type() == QEvent::MouseMove ) {
-            QMouseEvent * mouseEvent = dynamic_cast<QMouseEvent*>( event );
-            if ( mouseEvent ) {
-                QPoint pixelPos = (mouseEvent->pos() - m_d->canvas->documentOrigin()) + m_d->documentOffset;
-                QPointF documentPos = m_d->canvas->viewConverter()->viewToDocument(pixelPos);
-
-                emit documentMousePositionChanged( documentPos );
-                emit canvasMousePositionChanged( mouseEvent->pos() );
-            }
+        else if ( event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove ) {
+            emitPointerPositionChangedSignals(event);
         }
     }
     return false;
+}
+
+void KoCanvasController::emitPointerPositionChangedSignals(QEvent *event)
+{
+    QPoint pointerPos;
+    QMouseEvent * mouseEvent = dynamic_cast<QMouseEvent*>( event );
+    if ( mouseEvent ) {
+        pointerPos = mouseEvent->pos();
+    } else {
+        QTabletEvent * tabletEvent = dynamic_cast<QTabletEvent*>( event );
+        if ( tabletEvent ) {
+            pointerPos = tabletEvent->pos();
+        }
+    }
+
+    QPoint pixelPos = (pointerPos - m_d->canvas->documentOrigin()) + m_d->documentOffset;
+    QPointF documentPos = m_d->canvas->viewConverter()->viewToDocument(pixelPos);
+
+    emit documentMousePositionChanged( documentPos );
+    emit canvasMousePositionChanged( pointerPos );
 }
 
 void KoCanvasController::ensureVisible( KoShape *shape ) {

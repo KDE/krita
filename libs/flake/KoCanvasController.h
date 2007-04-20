@@ -306,6 +306,7 @@ private:
 
     void resetScrollBars();
     bool canvasIsOpenGL() const;
+    void emitPointerPositionChangedSignals(QEvent *event);
 
 private:
 

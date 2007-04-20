@@ -29,8 +29,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include <koffice_export.h>
-
 #include "symboltable.h"
 #include "contextstyle.h"
 #include "unicodetable.cc"

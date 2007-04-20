@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,58 +21,23 @@
 #include <QPainter>
 
 #include "fontstyle.h"
+#include "AttributeManager.h"
 #include "GlyphElement.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
-GlyphElement::GlyphElement( BasicElement* parent ) : TextElement( ' ', false, parent ) {
-}
-
-/*
-bool GlyphElement::readAttributesFromMathMLDom( const QDomElement& element )
+GlyphElement::GlyphElement( BasicElement* parent ) : TextElement( ' ', false, parent )
 {
-    if ( !BasicElement::readAttributesFromMathMLDom( element ) ) {
-        return false;
-    }
-
-    // MathML Section 3.2.9.2
-    m_fontFamily = element.attribute( "fontfamily" );
-    if ( m_fontFamily.isNull() ) {
-        kWarning( DEBUGID ) << "Required attribute fontfamily not found in glyph element\n";
-        return false;
-    }
-    QString indexStr = element.attribute( "index" );
-    if ( indexStr.isNull() ) {
-        kWarning( DEBUGID ) << "Required attribute index not found in glyph element\n";
-        return false;
-    }
-    bool ok;
-    ushort index = indexStr.toUShort( &ok );
-    if ( ! ok ) {
-        kWarning( DEBUGID ) << "Invalid index value in glyph element\n";
-        return false;
-    }
-    m_char = QChar( index );
-
-    m_alt = element.attribute( "alt" );
-    if ( m_alt.isNull() ) {
-        kWarning( DEBUGID ) << "Required attribute alt not found in glyph element\n";
-        return false;
-    }
-
-    QStringList missing;
-    FontStyle::testFont( missing, m_fontFamily.lower() );
-    m_hasFont = missing.isEmpty();
-
-    return true;
 }
-*/
+
 
 
 /**
  * Calculates our width and height and
  * our children's parentPosition.
  */
+#warning "Port to flake"  
+#if 0
 void GlyphElement::calcSizes( const ContextStyle& context, 
                               ContextStyle::TextStyle tstyle, 
                               ContextStyle::IndexStyle /*istyle*/,
@@ -150,14 +115,42 @@ void GlyphElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                       context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
                       text );
 }
+#endif
 
-/*    
-void GlyphElement::writeMathMLAttributes( QDomElement& element ) const
+bool GlyphElement::hasFont( const AttributeManager *am )
 {
-    element.setAttribute( "fontfamily", m_fontFamily );
-    element.setAttribute( "index", m_char.unicode() );
-    element.setAttribute( "alt", m_alt );
+    QVariant fontFamily = am->valueOf( "fontfamily" );
+    if ( fontFamily.canConvert( QVariant::String ) ) {
+        QStringList missing;
+        FontStyle::testFont( missing, fontFamily.toString() );
+        return missing.isEmpty();
+    }
+    return false;
 }
-*/
 
-} // namespace KFormula
+/**
+ * Render the element to the given QPainter
+ * @param painter The QPainter to paint the element to
+ */
+void GlyphElement::paint( QPainter& painter, const AttributeManager* am )
+{
+    QFont font;
+    QString text;
+
+    if ( hasFont( am ) ) {
+        setStyle( painter, am );
+        QVariant index = am->valueOf( "index" );
+        if ( index.canConvert( QVariant::UInt ) )
+            painter.drawText( 0, 0, QChar( index.toUInt() ) );
+    }
+}
+
+/**
+ * Calculate the size of the element and the positions of its children
+ * @param am The AttributeManager providing information about attributes values
+ */
+void GlyphElement::layout( const AttributeManager* am )
+{
+}
+
+} // namespace FormulaShape

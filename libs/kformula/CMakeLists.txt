@@ -29,7 +29,7 @@ set( formulashape_PART_SRCS
 #   EncloseElement.cpp
 #   ActionElement.cpp
 #   PaddedElement.cpp
-#   GlyphElement.cpp
+   GlyphElement.cpp
 #   ErrorElement.cpp
    TokenStyleElement.cpp
 #   StyleElement.cpp
@@ -41,11 +41,11 @@ set( formulashape_PART_SRCS
    Entities.cpp
    ElementFactory.cpp 
 #   MatrixDialog.cc 
-#   contextstyle.cc 
-#   symboltable.cc 
+   contextstyle.cc 
+   symboltable.cc 
 #   kformulaconfigpage.cc 
 #   symbolaction.cc 
-#   fontstyle.cc 
+   fontstyle.cc 
 )
 
 kde4_automoc(${formulashape_PART_SRCS})

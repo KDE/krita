@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,47 +22,32 @@
 
 #include "TextElement.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
 class GlyphElement : public TextElement {
     typedef TextElement inherited;
 public:
     GlyphElement( BasicElement* parent = 0 );
 
-    /**
-     * Calculates our width and height and
-     * our children's parentPosition.
+	/**
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
      */
-    virtual void calcSizes( const ContextStyle& context,
-						    ContextStyle::TextStyle tstyle,
-						    ContextStyle::IndexStyle istyle,
-							StyleAttributes& style );
+    virtual void paint( QPainter& painter, const AttributeManager* am );
 
     /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
      */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-					   StyleAttributes& style,
-                       const LuPixelPoint& parentOrigin );
-
-protected:
-//    virtual bool readAttributesFromMathMLDom( const QDomElement &element );
-
-private:
+    virtual void layout( const AttributeManager* am );
+    
     virtual QString getElementName() const { return "mglyph"; }
-//    virtual void writeMathMLAttributes( QDomElement& element ) const ;
 
-    QChar m_char;         // Char to be shown
-    QString m_fontFamily; // Font family to use
-    QString m_alt;        // Alternative text if font family not found
-    bool m_hasFont;       // Whether required font is available
+  private:
+
+	bool hasFont( const AttributeManager* am );
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // GLYPHELEMENT_H

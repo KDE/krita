@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,7 +27,7 @@
 #include "FormulaElement.h"
 #include "ElementFactory.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent ) {}
 
@@ -138,70 +138,4 @@ KCommand* IdentifierElement::buildCommand( Container* container, Request* reques
 }
 */
 
-void IdentifierElement::setStyleVariant( StyleAttributes& style )
-{
-    if ( customMathVariant() ) {
-        style.setCustomMathVariant ( true );
-        style.setCustomFontWeight( false );
-        style.setCustomFontStyle( false );
-        style.setCustomFont( false );
-        if ( customMathVariant() ) {
-            style.setCharFamily ( charFamily() );
-            style.setCharStyle( charStyle() );
-        }
-        else {
-            style.setCharFamily( style.charFamily() );
-            style.setCharStyle( style.charStyle() );
-        }
-    }
-    else {
-        style.setCustomMathVariant( false );
-        if ( customFontFamily() ) {
-            style.setCustomFont( true );
-            style.setFont( QFont(fontFamily()) );
-        }
-
-        bool fontweight = false;
-        if ( customFontWeight() || style.customFontWeight() ) {
-            style.setCustomFontWeight( true );
-            if ( customFontWeight() ) {
-                fontweight = fontWeight();
-            }
-            else {
-                fontweight = style.customFontWeight();
-            }
-            style.setFontWeight( fontweight );
-        }
-        else {
-            style.setCustomFontWeight( false );
-        }
-
-        bool fontstyle;
-        if ( customFontStyle() ) {
-            fontstyle = fontStyle();
-        }
-        /* FIXME: SequenceElement should have a method of this kind when ported
-        else if ( countChildren() == 1 ) {
-            fontstyle = true;
-        }
-        */
-        else {
-            fontstyle = false;
-        }
-
-        if ( fontweight && fontstyle ) {
-            style.setCharStyle( boldItalicChar );
-        }
-        else if ( fontweight && ! fontstyle ) {
-            style.setCharStyle( boldChar );
-        }
-        else if ( ! fontweight && fontstyle ) {
-            style.setCharStyle( italicChar );
-        }
-        else {
-            style.setCharStyle( normalChar );
-        }
-    }
-}
-
-} // namespace KFormula
+} // namespace FormulaShape

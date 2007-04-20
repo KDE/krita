@@ -35,7 +35,7 @@ set( formulashape_PART_SRCS
 #   StyleElement.cpp
    TokenElement.cpp
 #   NumberElement.cpp
-#   IdentifierElement.cpp
+   IdentifierElement.cpp
 #   OperatorElement.cpp
    OperatorDictionary.cpp
    Entities.cpp

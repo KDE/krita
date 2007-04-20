@@ -41,7 +41,7 @@ public:
      */
     virtual void layout( const AttributeManager* am );
     
-    virtual QString getElementName() const { return "mglyph"; }
+    virtual QString elementName() const { return "mglyph"; }
 
   private:
 

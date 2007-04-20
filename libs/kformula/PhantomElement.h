@@ -42,7 +42,7 @@ public:
                        const LuPixelPoint& parentOrigin );
 
 private:
-    virtual QString getElementName() const { return "mphantom"; }
+    virtual QString elementName() const { return "mphantom"; }
 
 };
 

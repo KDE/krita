@@ -43,7 +43,7 @@ protected:
     virtual bool readAttributesFromMathMLDom(const QDomElement& element);
 
 private:
-    virtual QString getElementName() const { return "mpadded"; }
+    virtual QString elementName() const { return "mpadded"; }
     virtual void writeMathMLAttributes( QDomElement& element ) const ;
 
     double readSizeAttribute( const QString& str, SizeType* st, bool* relative );

@@ -41,7 +41,7 @@ protected:
     virtual void resetStyle( StyleAttributes& style );
 
 private:
-    virtual QString getElementName() const { return "mstyle"; }
+    virtual QString elementName() const { return "mstyle"; }
     virtual void writeMathMLAttributes( QDomElement& element ) const ;
 
     void readSizeAttribute( const QString& str, SizeType* st, double* s );

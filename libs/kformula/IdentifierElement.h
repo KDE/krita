@@ -39,7 +39,7 @@ public:
      */
 //    virtual KCommand* buildCommand( Container*, Request* );
 
-    virtual QString getElementName() const { return "mi"; }
+    virtual QString elementName() const { return "mi"; }
 
 protected:
 

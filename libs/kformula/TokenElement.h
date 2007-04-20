@@ -42,7 +42,7 @@ public:
      */
     virtual void paint( QPainter& painter, const AttributeManager* am );
 
-	virtual QString getElementName() const { return "mtext"; }
+	virtual QString elementName() const { return "mtext"; }
 protected:
 
 	/// Read contents of the token element. Content should be unicode text strings

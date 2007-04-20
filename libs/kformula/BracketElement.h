@@ -87,7 +87,7 @@ protected:
     
     virtual void writeMathMLContent( KoXmlWriter* writer, bool oasisFormat = false );
 
-    virtual QString getElementName() const { return "mfenced"; }
+    virtual QString elementName() const { return "mfenced"; }
 
     /**
      * Returns the tag name of this element type.

@@ -36,7 +36,7 @@ public:
 
 private:
     virtual void readMathMLAttributes(const QDomElement& element);
-    virtual QString getElementName() const { return "maction"; }
+    virtual QString elementName() const { return "maction"; }
     virtual void writeMathMLAttributes( QDomElement& element ) const ;
 
     QString m_actionType;

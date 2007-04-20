@@ -135,7 +135,7 @@ void UnderOverElement::readMathML( const QDomElement& element )
 void UnderOverElement::writeMathMLAttributes( KoXmlWriter* writer ) const
 {
 /*    
-    QString tag = getElementName();
+    QString tag = elementName();
     if ( tag == "munder" || tag == "munderover" ) {
         if ( m_customAccentUnder ) {
             element.setAttribute( "accentunder", m_accentUnder ? "true" : "false" );

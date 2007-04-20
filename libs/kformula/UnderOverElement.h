@@ -67,7 +67,7 @@ public:
                        const LuPixelPoint& parentOrigin );
     
 private:
-//    virtual QString getElementName() const ;
+//    virtual QString elementName() const ;
     virtual void writeMathMLAttributes( KoXmlWriter* writer ) const ;
 /*
     virtual void writeMathMLContent( QDomDocument& doc, 

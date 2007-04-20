@@ -34,7 +34,7 @@ protected:
     virtual bool readAttributesFromMathMLDom(const QDomElement& element);
 
 private:
-    virtual QString getElementName() const { return "ms"; }
+    virtual QString elementName() const { return "ms"; }
     virtual void writeMathMLAttributes( QDomElement& element ) const ;
     virtual void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const ;
 

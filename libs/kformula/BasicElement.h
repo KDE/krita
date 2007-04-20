@@ -211,7 +211,7 @@ public:
     virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
 
     /// @returns MathML element tag name
-    virtual QString getElementName() const { return "mrow"; }
+    virtual QString elementName() const { return "mrow"; }
 
 protected:
     /// Read all attributes loaded and add them to the m_attributes map 

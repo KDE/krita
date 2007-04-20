@@ -32,7 +32,7 @@ public:
 
 private:
 //    virtual bool readAttributesFromMathMLDom( const QDomElement &element );
-    virtual QString getElementName() const { return "mo"; }
+    virtual QString elementName() const { return "mo"; }
     void writeMathMLAttributes( QDomElement& element ) const ;
     void writeSizeAttribute( QDomElement& element, const QString &attr, SizeType type, double length ) const ;
 

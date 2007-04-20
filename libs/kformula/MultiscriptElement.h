@@ -112,7 +112,7 @@ private:
     BasicElement* m_postSuperscript;
 
 
-    virtual QString getElementName() const { return "mmultiscript"; }
+    virtual QString elementName() const { return "mmultiscript"; }
     virtual void writeMathMLContent( KoXmlWriter* writer, bool oasisFormat = false );
 };
 

@@ -170,7 +170,7 @@ int BasicElement::readMathMLContent( KoXmlNode &node )
 
 void BasicElement::writeMathML( KoXmlWriter* writer, bool oasisFormat ) const
 {
-    QString name = oasisFormat ? "math:"  + getElementName() : getElementName();
+    QString name = oasisFormat ? "math:"  + elementName() : elementName();
     writer->startElement( name.toLatin1() );
     writeMathMLAttributes( writer );
     writeMathMLContent( writer, oasisFormat );

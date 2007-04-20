@@ -39,7 +39,7 @@ public:
      */
 //    virtual KCommand* buildCommand( Container*, Request* );
 
-    virtual QString getElementName() const { return "mn"; }
+    virtual QString elementName() const { return "mn"; }
 };
 
 } // namespace FormulaShape

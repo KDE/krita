@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,41 +31,9 @@ public:
     void setForm( FormType type );
 
 private:
-//    virtual bool readAttributesFromMathMLDom( const QDomElement &element );
     virtual QString elementName() const { return "mo"; }
-    void writeMathMLAttributes( QDomElement& element ) const ;
-    void writeSizeAttribute( QDomElement& element, const QString &attr, SizeType type, double length ) const ;
 
     FormType m_form;
-    SizeType m_lspaceType;
-    double m_lspace;
-    SizeType m_rspaceType;
-    double m_rspace;
-    SizeType m_maxSizeType;
-    double m_maxSize;
-    SizeType m_minSizeType;
-    double m_minSize;
-    bool m_fence;
-    bool m_separator;
-    bool m_stretchy;
-    bool m_symmetric;
-    bool m_largeOp;
-    bool m_movableLimits;
-    bool m_accent;
-
-    bool m_customForm;
-    bool m_customFence;
-    bool m_customSeparator;
-    bool m_customLSpace;
-    bool m_customRSpace;
-    bool m_customStretchy;
-    bool m_customSymmetric;
-    bool m_customMaxSize;
-    bool m_customMinSize;
-    bool m_customLargeOp;
-    bool m_customMovableLimits;
-    bool m_customAccent;
-
 };
 
 KFORMULA_NAMESPACE_END

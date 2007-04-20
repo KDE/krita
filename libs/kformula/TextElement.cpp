@@ -33,6 +33,7 @@
 #include "contextstyle.h"
 #include "fontstyle.h"
 #include "FormulaElement.h"
+#include "TokenElement.h"
 //#include "kformulacommand.h"
 #include "symboltable.h"
 #include "AttributeManager.h"
@@ -66,24 +67,6 @@ bool TextElement::isInvisible() const
 }
 
 
-void TextElement::setStyle( QPainter& painter, const AttributeManager* am )
-{
-     // Color handling.
-     // TODO: most of this should be handled by AttributeManager
-     QVariant color = am->valueOf( "mathcolor" );
-     if ( color.isNull() )
-         color = am->valueOf( "color" );
-     if ( color.canConvert( QVariant::Color ) )
-         painter.setPen( color.value<QColor>() );
-     else
-         painter.setPen( QColor( "black" ) );
-     
-     // TODO: Default fonts should be read from settings
-     // Font style handling
-     QFont font = getFont( am );
-     painter.setFont( font );
-}
-
 /**
  * Render the element to the given QPainter
  * @param painter The QPainter to paint the element to
@@ -94,7 +77,6 @@ void TextElement::paint( QPainter& painter, const AttributeManager* am )
     if ( character() == applyFunctionChar || character() == invisibleTimes || character() == invisibleComma )
         return;
 
-	setStyle( painter, am );
      // FIXME: get rid of context
      /*
     if ( character() != QChar::Null ) {
@@ -125,7 +107,7 @@ void TextElement::paint( QPainter& painter, const AttributeManager* am )
 
 void TextElement::layout( const AttributeManager* am )
 {
-    QFont font = getFont( am );
+    QFont font = static_cast<TokenElement*>(parentElement())->font( am );
 	// TODO: Font size
 	double factor = 1.0;
 
@@ -291,50 +273,6 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 }
 #endif // 0
 
-QFont TextElement::getFont( const AttributeManager* am )
-{
-    QFont font;
-    QVariant mathVariant = am->valueOf( "mathvariant" );
-    if ( mathVariant.canConvert( QVariant::Int ) ) {
-        MathVariant variant = static_cast<MathVariant>(mathVariant.toInt());
-        switch ( variant ) {
-        case Normal:
-            font.setItalic( false );
-            font.setBold( false );
-            break;
-        case Bold:
-            font.setItalic( false );
-            font.setBold( true );
-            break;
-        case Italic:
-            font.setItalic( true );
-            font.setBold( false );
-            break;
-        case BoldItalic:
-            font.setItalic( true );
-            font.setBold( true );
-            break;
-        }
-    }
-    else {
-        QVariant fontFamily = am->valueOf( "fontfamily" );
-        if ( fontFamily.canConvert( QVariant::String ) ) {
-            QString family = fontFamily.toString();
-            font = QFont( family );
-        }
-    }
-
-    /*
-    if ( style.customFont() ) {
-        font = style.font();
-    }
-    else {
-        font = context.getDefaultFont();
-    }
-    */
-//    return fontStyle.symbolTable()->font( character(), font );
-    return font;
-}
 
 /*
 const SymbolTable& TextElement::getSymbolTable() const

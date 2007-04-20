@@ -114,6 +114,7 @@ public:
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
+     * @param am AttributeManager containing style info
      */
     virtual void paint( QPainter& painter, const AttributeManager* am );
 

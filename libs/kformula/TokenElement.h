@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +22,7 @@
 
 #include "FormulaCursor.h"
 #include "TokenStyleElement.h"
-#include "SequenceElement.h"
+#include "RowElement.h"
 #include "contextstyle.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -32,13 +32,23 @@ class TokenElement : public TokenStyleElement {
 public:
     TokenElement( BasicElement* parent = 0 );
 
-	virtual int buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNode n);
-
-    virtual QString getElementName() const { return "mtext"; }
-protected:
-    QString getCharFromEntity( const QString& entity );
-
+	/// @return The font with style properties matching content attributes
+	QFont font( const AttributeManager* am);
+	
     /**
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     * @param am AttributeManager containing style info
+     */
+    virtual void paint( QPainter& painter, const AttributeManager* am );
+
+	virtual QString getElementName() const { return "mtext"; }
+protected:
+
+	/// Read contents of the token element. Content should be unicode text strings
+	virtual int buildMathMLChildren(QList<BasicElement*>& list, QDomNode n);
+
+	/**
      * @returns true if the sequence contains only text.
      */
     virtual bool isTextOnly() const { return m_textOnly; }

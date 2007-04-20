@@ -22,6 +22,7 @@
 
 #include "fontstyle.h"
 #include "AttributeManager.h"
+#include "TokenElement.h"
 #include "GlyphElement.h"
 
 namespace FormulaShape {
@@ -138,8 +139,8 @@ void GlyphElement::paint( QPainter& painter, const AttributeManager* am )
     QString text;
 
     if ( hasFont( am ) ) {
-        setStyle( painter, am );
         QVariant index = am->valueOf( "index" );
+		painter.setFont( am->valueOf( "fontfamily" ).toString() );
         if ( index.canConvert( QVariant::UInt ) )
             painter.drawText( 0, 0, QChar( index.toUInt() ) );
     }
@@ -151,6 +152,35 @@ void GlyphElement::paint( QPainter& painter, const AttributeManager* am )
  */
 void GlyphElement::layout( const AttributeManager* am )
 {
+    QRect bound;
+    if ( hasFont( am ) ) {
+        QFont font( am->valueOf( "fontfamily" ).toString() );
+        QFontMetrics fm ( font );
+        QVariant index = am->valueOf( "index" );
+        if ( index.canConvert( QVariant::UInt ) ) {
+            QChar ch = QChar( index.toUInt() );
+            bound = fm.boundingRect( ch );
+            setWidth( fm.width( ch ) );
+        }
+    }
+    else {
+        QFont font = static_cast<TokenElement*>(parentElement())->font( am );
+        QFontMetrics fm ( font );
+        QVariant alt = am->valueOf( "alt" );
+        if ( alt.canConvert( QVariant::String ) ) {
+            QString alternate = alt.toString();
+            bound = fm.boundingRect( alternate );
+            setWidth( fm.width( alternate ) );
+        }
+    }
+    setHeight( bound.height() );
+    setBaseLine( -bound.top() );
+    
+    // There are some glyphs in TeX that have
+    // baseline==0. (\int, \sum, \prod)
+    if ( baseLine() == 0 ) {
+        setBaseLine( -1 );
+    }
 }
 
 } // namespace FormulaShape

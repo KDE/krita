@@ -46,6 +46,7 @@ public:
   private:
 
 	bool hasFont( const AttributeManager* am );
+
 };
 
 } // namespace FormulaShape

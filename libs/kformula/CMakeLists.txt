@@ -33,7 +33,7 @@ set( formulashape_PART_SRCS
 #   ErrorElement.cpp
    TokenStyleElement.cpp
 #   StyleElement.cpp
-#   TokenElement.cpp
+   TokenElement.cpp
 #   NumberElement.cpp
 #   IdentifierElement.cpp
 #   OperatorElement.cpp

@@ -81,11 +81,6 @@ protected:
 
 	void setStyle( QPainter& painter, const AttributeManager* am );
 
-	/*
-     * @returns the font to be used for the element.
-     */
-	QFont getFont( const AttributeManager* am );
-
     const SymbolTable& getSymbolTable() const;
 
 private:

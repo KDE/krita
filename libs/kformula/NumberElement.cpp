@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,7 +27,7 @@
 #include "FormulaElement.h"
 #include "ElementFactory.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
 NumberElement::NumberElement( BasicElement* parent ) : TokenElement( parent ) {}
 
@@ -149,4 +149,4 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
 }
 */
 
-} // namespace KFormula
+} // namespace FormulaShape

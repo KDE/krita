@@ -39,8 +39,7 @@ public:
 
 class KoTextShapeContainerModel::Private {
 public:
-    Private() : textShape(0) {}
-    KoShapeContainer *textShape;
+    Private() {}
     QHash<KoShape*, Relation*> children;
 };
 

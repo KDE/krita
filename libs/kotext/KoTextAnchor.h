@@ -55,7 +55,7 @@ public:
     };
 
     /**
-     * Constructor.
+     * Constructor for an in-place anchor.
      * @param shape the anchored shape that this anchor links to.
      */
     KoTextAnchor(KoShape *shape);

@@ -38,6 +38,7 @@ public:
         position(-1),
         model(0)
     {
+        Q_ASSERT(shape);
     }
 
     void relayout() {
@@ -48,15 +49,23 @@ public:
         }
     }
 
+    /// as multiple shapes can hold 1 text flow; the anchored shape can be moved between containers and thus models
     void setContainer(KoShapeContainer *container) {
         if(container == 0) {
             model = 0;
+            shape->setParent(0);
             return;
         }
-        bool first = model == 0; // first time
-        model = dynamic_cast<KoTextShapeContainerModel*> (container->model());
-        if(first)
+        KoTextShapeContainerModel *theModel = dynamic_cast<KoTextShapeContainerModel*> (container->model());
+        if(theModel != model) {
+            if(shape->parent() != container) {
+                if(shape->parent())
+                    shape->parent()->removeChild(shape);
+                container->addChild(shape);
+            }
+            model = theModel;
             model->addAnchor(parent);
+        }
     }
 
     KoTextAnchor * const parent;

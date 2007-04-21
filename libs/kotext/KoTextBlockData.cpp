@@ -19,30 +19,84 @@
 #include "KoTextBlockData.h"
 #include "KoTextBlockBorderData.h"
 
+class KoTextBlockData::Private {
+public:
+    Private() : counterWidth(0), counterSpacing(0), border(0) {}
+    ~Private() {
+        if(border && border->removeUser() == 0)
+            delete border;
+    }
+    double counterWidth;
+    double counterSpacing;
+    QString counterText;
+    QString partialCounterText;
+    QPointF counterPos;
+    KoTextBlockBorderData *border;
+};
+
 KoTextBlockData::KoTextBlockData()
-    : m_counterPos(0.0, 0.0),
-    m_border(0)
+    : d(new Private())
 {
-    m_counterWidth = -1.0;
+    d->counterWidth = -1.0;
 }
 
 KoTextBlockData::~KoTextBlockData() {
-    if(m_border && m_border->removeUser() == 0)
-        delete m_border;
+    delete d;
 }
 
 bool KoTextBlockData::hasCounterData() const {
-    return m_counterWidth >= 0 && !m_counterText.isNull();
+    return d->counterWidth >= 0 && !d->counterText.isNull();
 }
 
 double KoTextBlockData::counterWidth() const {
-    return qMax(0., m_counterWidth);
+    return qMax(0., d->counterWidth);
 }
 
 void KoTextBlockData::setBorder(KoTextBlockBorderData *border) {
-    if(m_border && m_border->removeUser() == 0)
-        delete m_border;
-    m_border = border;
-    if(m_border)
-        m_border->addUser();
+    if(d->border && d->border->removeUser() == 0)
+        delete d->border;
+    d->border = border;
+    if(d->border)
+        d->border->addUser();
 }
+
+void KoTextBlockData::setCounterWidth(double width) {
+    d->counterWidth = width;
+}
+
+double KoTextBlockData::counterSpacing() const {
+    return d->counterSpacing;
+}
+
+void KoTextBlockData::setCounterSpacing(double spacing) {
+    d->counterSpacing = spacing;
+}
+
+void KoTextBlockData::setCounterText(const QString &text) {
+    d->counterText = text;
+}
+
+const QString &KoTextBlockData::counterText() const {
+    return d->counterText;
+}
+
+void KoTextBlockData::setPartialCounterText(const QString &text) {
+    d->partialCounterText = text;
+}
+
+const QString &KoTextBlockData::partialCounterText() const {
+    return d->partialCounterText;
+}
+
+void KoTextBlockData::setCounterPosition(QPointF position) {
+    d->counterPos = position;
+}
+
+const QPointF &KoTextBlockData::counterPosition() const {
+    return d->counterPos;
+}
+
+KoTextBlockBorderData *KoTextBlockData::border() const {
+    return d->border;
+}
+

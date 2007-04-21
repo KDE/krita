@@ -39,35 +39,35 @@ public:
     /// return the width (in pt) of the counter.
     double counterWidth() const;
     /// set the width of the counter in pt.
-    void setCounterWidth(double width) { m_counterWidth = width; }
+    void setCounterWidth(double width);
     /// return the spacing (in pt) between the counter and the text
-    double counterSpacing() const { return m_counterSpacing; }
+    double counterSpacing() const;
     /// set the spacing (in pt) between the counter and the text
-    void setCounterSpacing(double spacing) { m_counterSpacing = spacing; }
+    void setCounterSpacing(double spacing);
     /// set the exact text that will be painted as the counter
-    void setCounterText(const QString &text) { m_counterText = text; }
+    void setCounterText(const QString &text);
     /// return the exact text that will be painted as the counter
-    const QString &counterText() const { return m_counterText; }
+    const QString &counterText() const;
 
     /**
      * set the text that is used for the counter at this level.
      * If this represents a parag with counter 3.1 then the text is the '1'
      * since the rest is not dependent on this parag, but only its location in the text
      */
-    void setPartialCounterText(const QString &text) { m_partialCounterText = text; }
+    void setPartialCounterText(const QString &text);
     /// return the partial text for this paragraphs counter
-    const QString &partialCounterText() const { return m_partialCounterText; }
+    const QString &partialCounterText() const;
 
     /**
      * The actual position of the counter can be set, in actual (text) document coordinates.
      * @param position the location of the top/left of the counter text line.
      */
-    void setCounterPosition(QPointF position) { m_counterPos = position; }
+    void setCounterPosition(QPointF position);
     /**
      * Return the counter position.
      * @see setCounterPosition
      */
-    const QPointF &counterPosition() const { return m_counterPos; }
+    const QPointF &counterPosition() const;
 
     /**
      * When a paragraph has a border, it will have a KoTextBlockBorderData instance.
@@ -78,15 +78,11 @@ public:
     /**
      * Return the border associated with this paragraph, or 0 if there is no border set.
      */
-    KoTextBlockBorderData *border() const { return m_border; }
+    KoTextBlockBorderData *border() const;
 
 private:
-    double m_counterWidth;
-    double m_counterSpacing;
-    QString m_counterText;
-    QString m_partialCounterText;
-    QPointF m_counterPos;
-    KoTextBlockBorderData *m_border;
+    class Private;
+    Private * const d;
 };
 
 #endif

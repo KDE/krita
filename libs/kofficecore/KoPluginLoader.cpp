@@ -73,7 +73,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
     if(config.whiteList && config.blacklist && config.group) {
-        kDebug(30003) << "loading " << serviceType << " with checking the config\n";
+        kDebug(30003) << "Loading " << serviceType << " with checking the config\n";
         KConfigGroup configGroup = KGlobal::config()->group(config.group);
         QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
         QList<QString> knownList;
@@ -109,7 +109,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             delete plugin;
         }
         else {
-            kWarning(30003) <<"loading plugin '" << service->name() << "' failed, "<< KLibLoader::errorString( errCode ) << " ("<< errCode << ")\n";
+            kWarning(30003) <<"Loading plugin '" << service->name() << "' failed, "<< KLibLoader::errorString( errCode ) << " ("<< errCode << ")\n";
         }
     }
 

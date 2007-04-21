@@ -91,6 +91,8 @@ public:
 
     /// copies the selection to the clipboard
     void copy();
+    /// Set the new active tool.
+    void setActiveTool(KoTool *tool);
 
 signals:
     /**
@@ -103,8 +105,6 @@ protected:
     friend class KoToolManager;
     /// the toolManager tells us which KoCanvasController this toolProxy is working for.
     void setCanvasController(KoCanvasController *controller);
-    /// Set the new active tool.
-    void setActiveTool(KoTool *tool);
 
 private:
     Q_PRIVATE_SLOT(d, void timeout())

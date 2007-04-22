@@ -70,7 +70,7 @@ target_link_libraries(kofficeui  ${KDE4_KDECORE_LIBS} kofficecore flake )
 set_target_properties(kofficeui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kofficeui  DESTINATION ${LIB_INSTALL_DIR})
 
-install( FILES zoom-width.png zoom-page.png zoom-pixels.png DESTINATION ${DATA_INSTALL_DIR}/koffice/icons/crystalsvg/22x22/actions)
+install( FILES zoom-width.png zoom-page.png zoom-pixels.png DESTINATION ${DATA_INSTALL_DIR}/koffice/icons/hicolor/22x22/actions)
 
 ########### install files ###############
 install(

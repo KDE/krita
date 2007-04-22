@@ -11,7 +11,6 @@ add_subdirectory( modify_selection )
 add_subdirectory( rotateimage )
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
-add_subdirectory( bracketing2hdr )
 add_subdirectory( together )
 add_subdirectory( scripting )
 

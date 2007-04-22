@@ -20,7 +20,7 @@ install(TARGETS kritatoolcrop  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  tool_crop_cursor.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+install( FILES  tool_crop_cursor.png tool_crop.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 install( FILES  kritatoolcrop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 

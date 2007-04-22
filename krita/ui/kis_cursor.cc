@@ -64,7 +64,7 @@ QCursor KisCursor::ibeamCursor()
 
 QCursor KisCursor::sizeVerCursor()
 {
-    return Qt::SizeHorCursor;
+    return Qt::SizeVerCursor;
 }
 
 QCursor KisCursor::sizeHorCursor()

@@ -90,22 +90,11 @@ void KisStatusBar::setZoom( int zoom )
 
 void KisStatusBar::documentMousePositionChanged( const QPointF &pos )
 {
-    QPointF pixelPos = m_view->image()->ptCoordToPixelCoord(pos);
+    QPoint pixelPos = m_view->image()->documentToIntPixel(pos);
 
-    if (pixelPos.x() < 0) {
-        pixelPos.setX(0);
-    }
-    if (pixelPos.y() < 0) {
-        pixelPos.setY(0);
-    }
-    if (pixelPos.x() > m_view->image()->width() - 1) {
-        pixelPos.setX(m_view->image()->width() - 1);
-    }
-    if (pixelPos.y() > m_view->image()->height() - 1) {
-        pixelPos.setY(m_view->image()->height() - 1);
-    }
-
-    m_statusbar->changeItem(QString("%1, %2").arg((int)pixelPos.x()).arg((int)pixelPos.y()), POINTER_POSITION_ID);
+    pixelPos.setX(qBound(0, pixelPos.x(), m_view->image()->width() - 1));
+    pixelPos.setY(qBound(0, pixelPos.y(), m_view->image()->height() - 1));
+    m_statusbar->changeItem(QString("%1, %2").arg(pixelPos.x()).arg(pixelPos.y()), POINTER_POSITION_ID);
 }
 
 void KisStatusBar::imageSizeChanged( qint32 w, qint32 h )

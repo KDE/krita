@@ -230,8 +230,14 @@ void KisOpenGLCanvas2::paintGL()
     //m_gridManager->drawGrid(wr, 0, true);
     QPainter gc ( this );
 
+    gc.setRenderHint( QPainter::Antialiasing );
+    gc.setRenderHint( QPainter::SmoothPixmapTransform );
+
+    // Setup the painter to take care of the offset; all that the
+    // classes that do painting need to keep track of is resolution
     gc.translate(-m_d->documentOffset.x(), -m_d->documentOffset.y());
 
+    //m_d->gridDrawer->draw(&gc, m_d->viewConverter->viewToDocument(ev->rect()));
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
 }
 

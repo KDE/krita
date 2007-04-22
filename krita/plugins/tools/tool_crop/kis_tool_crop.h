@@ -22,7 +22,7 @@
 #define KIS_TOOL_CROP_H_
 
 #include <QPoint>
-#include <qregion.h>
+#include <QPainterPath>
 
 #include <KoToolFactory.h>
 #include "kis_tool.h"
@@ -77,7 +77,8 @@ public slots:
     virtual void deactivate();
 private:
     QRectF boundingRect();
-    QRegion handles(QRectF rect);
+    QRectF borderLineRect();
+    QPainterPath handlesPath();
     void paintOutlineWithHandles(QPainter& gc);
     qint32 mouseOnHandle (const QPointF currentViewPoint);
     void setMoveResizeCursor (qint32 handle);
@@ -87,6 +88,15 @@ private:
     void setOptionWidgetWidth(qint32 x);
     void setOptionWidgetHeight(qint32 y);
     void setOptionWidgetRatio(double ratio);
+    void updateWidgetValues(bool updateratio = true);
+    QRectF lowerRightHandleRect(QRectF cropBorderRect);
+    QRectF upperRightHandleRect(QRectF cropBorderRect);
+    QRectF lowerLeftHandleRect(QRectF cropBorderRect);
+    QRectF upperLeftHandleRect(QRectF cropBorderRect);
+    QRectF lowerHandleRect(QRectF cropBorderRect);
+    QRectF rightHandleRect(QRectF cropBorderRect);
+    QRectF upperHandleRect(QRectF cropBorderRect);
+    QRectF leftHandleRect(QRectF cropBorderRect);
 
 private slots:
 
@@ -97,26 +107,16 @@ private slots:
     void setCropHeight(int y);
     void setRatio(double ratio);
 
-    inline QRect realRectCrop() { QRect r = m_rectCrop; r.setSize(r.size() - QSize(1,1)); return r; }
-
 private:
-    void updateWidgetValues(bool updateratio = true);
-    
-    QRect m_rectCrop; // Is the coordinate of the outline rect and not of the region to crop (to get the region to crop you need to remove 1 to width and height
-//     QPoint m_startPos;
-//     QPoint m_endPos;
+    QRect m_rectCrop; // Is the coordinate of the region to crop.
     bool m_selecting;
-    QPointF m_dragStart;
-    QPointF m_dragStop;
+    QPoint m_dragStart;
 
     WdgToolCrop* m_optWidget;
 
     qint32 m_handleSize;
-    QRegion m_handlesRegion;
     bool m_haveCropSelection;
-    double m_dx, m_dy;
     qint32 m_mouseOnHandleType;
-    QCursor m_cropCursor;
 
     enum handleType
     {

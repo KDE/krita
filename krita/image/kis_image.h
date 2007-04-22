@@ -240,11 +240,33 @@ public:
     void setResolution(double xres, double yres);
 
     /**
-     * Convert a PostScript Pt coordinate to a pixel coordinate.
+     * Convert a document coordinate to a pixel coordinate.
      *
-     * @param ptCoord PostScript Pt coordinate to convert.
+     * @param documentCoord PostScript Pt coordinate to convert.
      */
-    QPointF ptCoordToPixelCoord(const QPointF &ptCoord) const;
+    QPointF documentToPixel(const QPointF &documentCoord) const;
+
+    /**
+     * Convert a document coordinate to an integer pixel coordinate.
+     *
+     * @param documentCoord PostScript Pt coordinate to convert.
+     */
+    QPoint documentToIntPixel(const QPointF &documentCoord) const;
+
+    /**
+     * Convert a pixel coordinate to a document coordinate.
+     *
+     * @param pixelCoord pixel coordinate to convert.
+     */
+    QPointF pixelToDocument(const QPointF &pixelCoord) const;
+
+    /**
+     * Convert an integer pixel coordinate to a document coordinate.
+     * The document coordinate is at the centre of the pixel.
+     *
+     * @param pixelCoord pixel coordinate to convert.
+     */
+    QPointF pixelToDocument(const QPoint &pixelCoord) const;
 
     /**
      * Return the width of the image

@@ -23,6 +23,7 @@
 #include <KoColor.h>
 #include <KoID.h>
 #include <KoPointerEvent.h>
+#include <KoViewConverter.h>
 
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -100,7 +101,12 @@ void KisTool::resourceChanged( int key, const QVariant & v )
 
 QPointF KisTool::convertToPixelCoord( KoPointerEvent *e )
 {
-    return QPointF(e->point.x() * image()->xRes(), e->point.y() * image()->yRes());
+    return image()->documentToPixel(e->point);
+}
+
+QPoint KisTool::convertToIntPixelCoord( KoPointerEvent *e )
+{
+    return image()->documentToIntPixel(e->point);
 }
 
 QRectF KisTool::convertToPt( const QRectF &rect )
@@ -112,6 +118,34 @@ QRectF KisTool::convertToPt( const QRectF &rect )
     return r;
 }
 
+QPointF KisTool::pixelToView(const QPoint &pixelCoord)
+{
+    QPointF documentCoord = image()->pixelToDocument(pixelCoord);
+    return m_canvas->viewConverter()->documentToView(documentCoord);
+}
+
+QPointF KisTool::pixelToView(const QPointF &pixelCoord)
+{
+    QPointF documentCoord = image()->pixelToDocument(pixelCoord);
+    return m_canvas->viewConverter()->documentToView(documentCoord);
+}
+
+QRectF KisTool::pixelToView(const QRectF &pixelRect)
+{
+    QPointF topLeft = pixelToView(pixelRect.topLeft());
+    QPointF bottomRight = pixelToView(pixelRect.bottomRight());
+    return QRectF(topLeft, bottomRight);
+}
+
+void KisTool::updateCanvasPixelRect(const QRectF &pixelRect)
+{
+    m_canvas->updateCanvas(convertToPt(pixelRect));
+}
+
+void KisTool::updateCanvasViewRect(const QRectF &viewRect)
+{
+    m_canvas->updateCanvas(m_canvas->viewConverter()->viewToDocument(viewRect));
+}
 
 KisImageSP KisTool::image() const
 {

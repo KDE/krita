@@ -73,7 +73,29 @@ public:
     /// coordinates.
     QPointF convertToPixelCoord( KoPointerEvent *e );
 
+    /// Convert from native (postscript points) to integer image pixel
+    /// coordinates. This truncates the floating point components and
+    /// should be used in preference to QPointF::toPoint(), which rounds,
+    /// to ensure the cursor acts on the pixel it is visually over.
+    QPoint convertToIntPixelCoord( KoPointerEvent *e );
+
     QRectF convertToPt( const QRectF &rect );
+
+    /// Convert an integer pixel coordinate into a view coordinate.
+    /// The view coordinate is at the centre of the pixel.
+    QPointF pixelToView(const QPoint &pixelCoord);
+
+    /// Convert a floating point pixel coordinate into a view coordinate.
+    QPointF pixelToView(const QPointF &pixelCoord);
+
+    /// Convert a pixel rectangle into a view rectangle.
+    QRectF pixelToView(const QRectF &pixelRect);
+
+    /// Update the canvas for the given rectangle in image pixel coordinates.
+    void updateCanvasPixelRect(const QRectF &pixelRect);
+
+    /// Update the canvas for the given rectangle in view coordinates.
+    void updateCanvasViewRect(const QRectF &viewRect);
 
 protected:
 

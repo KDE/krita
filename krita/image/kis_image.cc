@@ -555,9 +555,25 @@ void KisImage::setResolution(double xres, double yres)
     m_d->yres = yres;
 }
 
-QPointF KisImage::ptCoordToPixelCoord(const QPointF &ptCoord) const
+QPointF KisImage::documentToPixel(const QPointF &documentCoord) const
 {
-    return QPointF(ptCoord.x() * xRes(), ptCoord.y() * yRes());
+    return QPointF(documentCoord.x() * xRes(), documentCoord.y() * yRes());
+}
+
+QPoint KisImage::documentToIntPixel(const QPointF &documentCoord) const
+{
+    QPointF pixelCoord = documentToPixel(documentCoord);
+    return QPoint((int)pixelCoord.x(), (int)pixelCoord.y());
+}
+
+QPointF KisImage::pixelToDocument(const QPointF &pixelCoord) const
+{
+    return QPointF(pixelCoord.x() / xRes(), pixelCoord.y() / yRes());
+}
+
+QPointF KisImage::pixelToDocument(const QPoint &pixelCoord) const
+{
+    return QPointF((pixelCoord.x() + 0.5) / xRes(), (pixelCoord.y() + 0.5) / yRes());
 }
 
 qint32 KisImage::width() const

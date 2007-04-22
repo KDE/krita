@@ -25,8 +25,6 @@
 #include <QWidget>
 #include <QList>
 
-#include <KoID.h>
-
 #include <flake_export.h>
 
 class KoShape;
@@ -119,13 +117,14 @@ public:
      * that will be shown after inserting a new shape.
      * The first item in the list will be shown as the first tab in the list of panels,
      * behind all app specific panels.
+     * This is a separate list as set by setOptionPanels() and fetched by panelFactories()
      */
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels() {
         return QList<KoShapeConfigWidgetBase*>();
     }
 
     /**
-     * Set panel factories to show config options after creating a new shape.
+     * Set app specific panel factories to show config options after creating a new shape.
      * The application that lets the user create shapes is able to set option
      * widgets that will be shown after the user inserted a new shape of the
      * type that this factory presents.
@@ -134,15 +133,16 @@ public:
      *  // Init shape Factories with our frame based configuration panels.
      *  QList<KoShapeConfigFactory *> panels;
      *  panels.append(new AppConfigFactory()); // insert some factory
-     *  foreach(KoID id, KoShapeRegistry::instance()->listKeys())
-     *      KoShapeRegistry::instance()->get(id)->setOptionPanels(panels);
+     *  foreach(QString id, KoShapeRegistry::instance()->keys())
+     *      KoShapeRegistry::instance()->value(id)->setOptionPanels(panels);
      *  @endcode
+     * @see panelFactories()
      */
     void setOptionPanels(QList<KoShapeConfigFactory*> &panelFactories);
 
     /**
      * Return the app-specific panels.
-     * @see setOptionPanels
+     * @see setOptionPanels()
      */
     const QList<KoShapeConfigFactory*> &panelFactories();
 

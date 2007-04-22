@@ -258,7 +258,7 @@ void Viewport::resetLayout()
         resizeW = docW;
         resizeH = docH;
     }
-    else  if ( viewH < docH && viewW > docW ) {
+    else  if ( viewW > docW ) {
         // Center canvas horizontally
         moveX = ( viewW - docW ) / 2;
         resizeW = docW;
@@ -270,7 +270,7 @@ void Viewport::resetLayout()
         if ( marginTop > 0 ) resizeH = viewH - marginTop;
         if ( marginBottom > 0 ) resizeH = viewH - marginBottom;
     }
-    else  if ( viewW < docW && viewH > docH ) {
+    else  if ( viewH > docH ) {
         // Center canvas vertically
         moveY = ( viewH - docH ) / 2;
         resizeH = docH;
@@ -306,7 +306,7 @@ void Viewport::resetLayout()
     if (m_canvas) {
         if( m_parent->canvasMode() == KoCanvasController::Infinite )
             m_canvas->setGeometry( 0, 0, viewW, viewH );
-        else if ( m_parent->canvasMode() != KoCanvasController::Presentation )
+        else
             m_canvas->setGeometry( moveX, moveY, resizeW, resizeH );
     }
 

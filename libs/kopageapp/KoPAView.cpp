@@ -206,11 +206,17 @@ void KoPAView::setCanvasMode( bool fullScreen )
 {
     if ( fullScreen )
     {
+        m_zoomController->setZoomMode(KoZoomMode::ZOOM_PAGE);
         m_canvasController->setCanvasMode( KoCanvasController::Presentation );
+        m_canvasController->setParent( ( QWidget* )0, Qt::Window );
+        m_canvasController->showFullScreen();
     }
     else
     {
         m_canvasController->setCanvasMode( KoCanvasController::Centered );
+        m_canvasController->setParent( this, Qt::Widget );
+        ((QGridLayout *)layout())->addWidget( m_canvasController, 1, 1 );
+        m_canvasController->showNormal();
     }
 }
 

@@ -13,6 +13,7 @@ add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( together )
 add_subdirectory( scripting )
+add_subdirectory( bracketing2hdr )
 
 macro_optional_find_package(GLUT)
 if(HAVE_OPENGL)

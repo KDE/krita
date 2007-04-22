@@ -23,8 +23,6 @@
 
 #include <QPainter>
 #include <QSpinBox>
-//Added by qt3to4:
-#include <QKeyEvent>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -33,42 +31,27 @@
 #include <kdebug.h>
 #include <knuminput.h>
 
-#include "kis_view.h" // XXX: Something that kis view includes is needed here, but I don't know what
+#include <KoPointerEvent.h>
+#include <KoCanvasBase.h>
+
 #include "kis_painter.h"
-#include "kis_canvas_subject.h"
-#include "kis_canvas_controller.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
-#include "kis_canvas.h"
-#include "QPainter"
 #include "kis_cursor.h"
-#include "kis_undo_adapter.h"
 
 #include "kis_tool_polygon.h"
 
-KisToolPolygon::KisToolPolygon()
-        : super(i18n ("Polygon")),
-          m_dragging (false),
-          m_currentImage (0)
+KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
+        : super(canvas, KisCursor::load("tool_polygon_cursor.png", 6, 6)),
+          m_dragging (false)
 {
     setObjectName("tool_polygon");
-    setCursor(KisCursor::load("tool_polygon_cursor.png", 6, 6));
 }
 
 KisToolPolygon::~KisToolPolygon()
 {
 }
 
-void KisToolPolygon::update (KisCanvasSubject *subject)
-{
-        super::update (subject);
-        if (m_subject)
-            m_currentImage = m_subject->currentImg ();
-}
-
-void KisToolPolygon::buttonPress(KoPointerEvent *event)
+void KisToolPolygon::mousePressEvent(KoPointerEvent *event)
 {
     if (m_currentImage) {
         if (event->button() == Qt::LeftButton && event->modifiers() != Qt::ShiftModifier) {
@@ -77,13 +60,12 @@ void KisToolPolygon::buttonPress(KoPointerEvent *event)
 
             if (m_points.isEmpty())
             {
-                m_dragStart = event->pos();
-                m_dragEnd = event->pos();
+                m_dragStart = convertToPixelCoord(event);
+                m_dragEnd = m_dragStart;
                 m_points.append(m_dragStart);
             } else {
                 m_dragStart = m_dragEnd;
-                m_dragEnd = event->pos();
-                draw();
+                m_dragEnd = convertToPixelCoord(event);
             }
         } else if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier) {
             finish();
@@ -91,65 +73,27 @@ void KisToolPolygon::buttonPress(KoPointerEvent *event)
     }
 }
 
-void KisToolPolygon::finish()
-{
-    // erase old lines on canvas
-    draw();
-    m_dragging = false;
-
-    KisPaintDeviceSP device = m_currentImage->activeDevice ();
-    if (!device) return;
-
-    KisPainter painter (device);
-    if (m_currentImage->undo()) painter.beginTransaction (i18n ("Polygon"));
-
-    painter.setPaintColor(m_subject->fgColor());
-    painter.setBackgroundColor(m_subject->bgColor());
-    painter.setFillStyle(fillStyle());
-    painter.setBrush(m_subject->currentBrush());
-    painter.setPattern(m_subject->currentPattern());
-    painter.setOpacity(m_opacity);
-    painter.setCompositeOp(m_compositeOp);
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintOp(), m_subject->currentPaintOpSettings(), &painter);
-    painter.setPaintOp(op); // Painter takes ownership
-
-    painter.paintPolygon(m_points);
-
-    m_points.clear();
-
-    device->setDirty( painter.dirtyRegion() );
-    notifyModified();
-
-    if (m_currentImage->undo()) {
-        m_currentImage->undoAdapter()->addCommandOld(painter.endTransaction());
-    }
-}
-
-void KisToolPolygon::doubleClick( KoPointerEvent * )
-{
-    finish();
-}
-
-void KisToolPolygon::move(KoPointerEvent *event)
+void KisToolPolygon::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
         // erase old lines on canvas
-        draw();
+        QRectF updateRect = dragBoundingRect();
         // get current mouse position
-        m_dragEnd = event->pos();
+        m_dragEnd = convertToPixelCoord(event);
         // draw new lines on canvas
-        draw();
+        updateRect |= dragBoundingRect();
+        updateCanvasViewRect(updateRect);
     }
 }
 
-void KisToolPolygon::buttonRelease(KoPointerEvent *event)
+void KisToolPolygon::mouseReleaseEvent(KoPointerEvent *event)
 {
-        if (!m_subject || !m_currentImage)
-            return;
+    if (!m_canvas || !m_currentImage)
+        return;
 
-        if (m_dragging && event->button() == Qt::LeftButton)  {
-                m_dragging = false;
-                m_points.append (m_dragEnd);
+    if (m_dragging && event->button() == Qt::LeftButton)  {
+            m_dragging = false;
+            m_points.append (m_dragEnd);
     }
 
     if (m_dragging && event->button() == Qt::RightButton) {
@@ -157,97 +101,102 @@ void KisToolPolygon::buttonRelease(KoPointerEvent *event)
         }
 }
 
-void KisToolPolygon::paint(QPainter& gc)
+void KisToolPolygon::mouseDoubleClickEvent( KoPointerEvent * )
 {
-    draw(gc);
+    finish();
 }
 
-void KisToolPolygon::paint(QPainter& gc, const QRect&)
+void KisToolPolygon::keyPressEvent(QKeyEvent *e)
 {
-    draw(gc);
-}
-
-void KisToolPolygon::draw()
-{
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-        KisCanvas *canvas = controller->kiscanvas();
-        QPainter gc(canvas->canvasWidget());
-
-        draw(gc);
+    if (e->key()==Qt::Key_Escape)
+    {
+        m_dragging = false;
+        m_points.clear();
+        // erase old lines on canvas
+        updateCanvasPixelRect(image()->bounds());
     }
 }
 
-void KisToolPolygon::draw(QPainter& gc)
+void KisToolPolygon::finish()
 {
-        if (!m_subject || !m_currentImage)
-            return;
+    m_dragging = false;
 
-        QPen pen(Qt::white, 0, Qt::SolidLine);
+    KisPaintDeviceSP device = m_currentImage->activeDevice ();
+    if (device) {
+        KisPainter painter (device);
+        if (m_currentImage->undo()) painter.beginTransaction (i18n ("Polygon"));
 
+        painter.setPaintColor(m_currentFgColor);
+        painter.setBackgroundColor(m_currentBgColor);
+        painter.setFillStyle(fillStyle());
+        painter.setBrush(m_currentBrush);
+        painter.setPattern(m_currentPattern);
+        painter.setOpacity(m_opacity);
+        painter.setCompositeOp(m_compositeOp);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, 
+                                                                  m_currentPaintOpSettings, 
+                                                                  &painter);
+        painter.setPaintOp(op); // Painter takes ownership
+
+        painter.paintPolygon(m_points);
+        device->setDirty( painter.dirtyRegion() );
+        notifyModified();
+
+        m_canvas->addCommand(painter.endTransaction());
+    }
+
+    m_points.clear();
+
+    // erase old lines on canvas
+    updateCanvasPixelRect(image()->bounds());
+}
+
+#define PREVIEW_LINE_WIDTH 1
+
+void KisToolPolygon::paint(QPainter& gc, KoViewConverter &converter)
+{
+    Q_UNUSED(converter);
+
+    if (!m_canvas || !m_currentImage)
+        return;
+
+    gc.save();
+
+    QPen pen(Qt::SolidLine);
+    pen.setWidth(PREVIEW_LINE_WIDTH);
     gc.setPen(pen);
-    //gc.setRasterOp(Qt::XorROP);
 
-    KisCanvasController *controller = m_subject->canvasController();
     QPointF start, end;
-    QPoint startPos;
-    QPoint endPos;
+    QPointF startPos;
+    QPointF endPos;
 
     if (m_dragging) {
-        startPos = controller->windowToView(m_dragStart.floorQPoint());
-        endPos = controller->windowToView(m_dragEnd.floorQPoint());
+        startPos = pixelToView(m_dragStart);
+        endPos = pixelToView(m_dragEnd);
         gc.drawLine(startPos, endPos);
-    } else {
-        for (KoPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+    }
+    for (vQPointF::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
-            if (it == m_points.begin())
-            {
-                start = (*it);
-            } else {
-                end = (*it);
+        if (it == m_points.begin())
+        {
+            start = (*it);
+        } else {
+            end = (*it);
 
-                startPos = controller->windowToView(start.floorQPoint());
-                endPos = controller->windowToView(end.floorQPoint());
-
-                gc.drawLine(startPos, endPos);
-
-                start = end;
-            }
+            startPos = pixelToView(start);
+            endPos = pixelToView(end);
+            gc.drawLine(startPos, endPos);
+            start = end;
         }
     }
+    gc.restore();
 }
 
-
-
-void KisToolPolygon::setup(KActionCollection *collection)
+QRectF KisToolPolygon::dragBoundingRect()
 {
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(Qt::Key_F9);
-
-        m_action = new KAction(KIcon("tool_polygon"),
-                               i18n("&Polygon"),
-                               collection,
-                               objectName());
-        Q_CHECK_PTR(m_action);
-        m_action->setShortcut(shortcut);
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setActionGroup(actionGroup());
-        m_action->setToolTip(i18n("Draw a polygon. Shift-mouseclick ends the polygon."));
-        m_ownAction = true;
-    }
+    QRectF rect = pixelToView(QRectF(m_dragStart, m_dragEnd).normalized());
+    rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
+    return rect;
 }
-
-void KisToolPolygon::keyPress(QKeyEvent *e)
-{
-    if (e->key()==Qt::Key_Escape);
-    // erase old lines on canvas
-    draw();
-    m_dragging = false;
-    m_points.clear();
-}
-
 
 #include "kis_tool_polygon.moc"

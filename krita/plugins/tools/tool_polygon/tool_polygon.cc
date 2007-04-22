@@ -33,8 +33,8 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <KoToolRegistry.h>
+
 #include "tool_polygon.h"
-#include "tool_polygon.moc"
 #include "kis_tool_polygon.h"
 
 
@@ -47,16 +47,12 @@ ToolPolygon::ToolPolygon(QObject *parent, const QStringList &)
 {
     setComponentData(ToolPolygonFactory::componentData());
 
-    if ( parent->inherits("KoToolRegistry") )
-    {
-        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>( parent );
-        r->add(KoToolFactorySP(new KisToolPolygonFactory()));
-    }
-
+    KoToolRegistry * r = KoToolRegistry::instance();
+    r->add(new KisToolPolygonFactory(r, QStringList()));
 }
 
 ToolPolygon::~ToolPolygon()
 {
 }
 
-//#include "tool_polygon.moc"
+#include "tool_polygon.moc"

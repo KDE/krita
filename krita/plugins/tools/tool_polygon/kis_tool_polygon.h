@@ -21,15 +21,10 @@
 #ifndef KIS_TOOL_POLYGON_H_
 #define KIS_TOOL_POLYGON_H_
 
-#include <q3valuevector.h>
-//Added by qt3to4:
-#include <QKeyEvent>
-
 #include "kis_tool_shape.h"
+#include "kis_layer_shape.h"
 
-class KisCanvas;
-class KisPainter;
-class KisRect;
+class KoCanvasBase;
 
 class KisToolPolygon : public KisToolShape {
 
@@ -37,36 +32,32 @@ class KisToolPolygon : public KisToolShape {
     Q_OBJECT
 
 public:
-    KisToolPolygon();
+    KisToolPolygon(KoCanvasBase *canvas);
     virtual ~KisToolPolygon();
 
-    virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual quint32 priority() { return 4; }
-    virtual void buttonPress(KoPointerEvent *event);
-    virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KoPointerEvent *event);
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
+
+    virtual void paint(QPainter& gc, KoViewConverter &converter);
+
     virtual QString quickHelp() const {
         return i18n("Shift-click will end the polygon.");
     }
-    virtual void doubleClick(KoPointerEvent * event);
 
 protected:
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
-    void draw(QPainter& gc);
-    void draw();
     void finish();
-    virtual void keyPress(QKeyEvent *e);
+    QRectF dragBoundingRect();
+
 protected:
     QPointF m_dragStart;
     QPointF m_dragEnd;
 
     bool m_dragging;
-    KisImageSP m_currentImage;
 private:
-    typedef Q3ValueVector<QPointF> KoPointVector;
-    KoPointVector m_points;
+    vQPointF m_points;
 };
 
 
@@ -79,7 +70,9 @@ public:
         : KoToolFactory(parent, "KisToolPolygon", i18n( "Polygon" ))
         {
             setToolTip( i18n( "Draw a polygon. Shift-mouseclick ends the polygon." ) );
-            setToolType( TOOL_TYPE_SHAPE );
+            //setToolType( TOOL_TYPE_SHAPE );
+            setToolType( dynamicToolType() );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_polygon" );
             setPriority( 0 );
         }

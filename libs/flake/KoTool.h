@@ -169,13 +169,13 @@ public:
     /**
      * Set the identifier code from the KoToolFactory that created this tool.
      * @param id the identifier code
-     * @see KoToolFactory::toolId()
+     * @see KoToolFactory::id()
      */
     void setToolId(const QString &id);
     /**
      * get the identifier code from the KoToolFactory that created this tool.
      * @return the toolId.
-     * @see KoToolFactory::toolId()
+     * @see KoToolFactory::id()
      */
     QString toolId() const;
 
@@ -226,10 +226,9 @@ signals:
 
     /**
      * Emitted when this tool wants itself to be replaced by another tool.
-     * The id it gives is the 'id' part of a KoID instance that is linked to the
-     * specified tool.
      *
      * @param id the identification of the desired tool
+     * @see toolId(), KoToolFactory::id()
      */
     void sigActivateTool(const QString &id );
 

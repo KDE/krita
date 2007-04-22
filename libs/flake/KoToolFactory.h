@@ -22,7 +22,6 @@
 #define KO_TOOL_FACTORY_H
 
 #include "KoTool.h"
-#include <KoID.h>
 #include <flake_export.h>
 
 #include <klocale.h>

@@ -49,6 +49,8 @@ set(kofficeui_LIB_SRCS
     KoToolDockerFactory.cpp
     KoLayoutVisitor.cpp
     KoCopyController.cpp
+    KoImageData.cpp
+    KoImageCollection.cpp
 )
 
 kde4_automoc(${kofficeui_LIB_SRCS})

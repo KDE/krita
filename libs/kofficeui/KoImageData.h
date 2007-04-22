@@ -33,9 +33,9 @@ class KoStoreDevice;
 class KOFFICEUI_EXPORT KoImageData : public KoShapeUserData {
 public:
     enum ImageQuality {
-        LowQuality,
-        MediumQuality,
-        FullQuality
+        LowQuality,     // 50ppi
+        MediumQuality,  // 100ppi
+        FullQuality     // upto 150ppi
     };
 
     enum StorageLocation {
@@ -62,7 +62,7 @@ public:
     /// returns the SaveInStore type url-like location
     QString storeHref() const;
 
-    void setKoStoreDevice(KoStoreDevice *device);
+    bool setKoStoreDevice(KoStoreDevice *device);
 
     bool operator==(const KoImageData &other) {
         return other.d == d;

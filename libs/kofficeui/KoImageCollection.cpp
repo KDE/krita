@@ -53,8 +53,10 @@ bool KoImageCollection::loadFromStore(KoStore *store) {
     foreach(KoImageData *image, d->images) {
         if(! store->open(image->storeHref()))
             return false;
-        image->setKoStoreDevice(new KoStoreDevice(store));
+        bool ok = image->setKoStoreDevice(new KoStoreDevice(store));
         store->close();
+        if(! ok)
+            return false;
     }
     return true;
 }

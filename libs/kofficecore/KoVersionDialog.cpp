@@ -29,7 +29,6 @@
 #include <QToolButton>
 #include <QTreeWidget>
 
-#include <kbuttonbox.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>

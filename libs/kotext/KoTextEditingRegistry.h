@@ -27,13 +27,14 @@
 class KoTextEditingFactory;
 
 /**
- * This singleton class keeps a register of all available flake shapes,
- * or rather, of the factories that applications can use to create flake
- * shape objects.
- * @see KoInlineObjectFactory
- * @see KoInlineTextObjectManager
- * @see KoInlineObject
- * @see KoVariable
+ * This singleton class keeps a register of all available text editing plugins.
+ * The text editing plugins are all about handling user input while (s)he
+ * is editing the text. A plugin can do near everything with the typed text,
+ * including altering it and adding markup. The plugin gives events when a
+ * word and when a paragraph has been finished. Which is ideal for autocorrection
+ * and autoreplacement of text.
+ * @see KoTextEditingFactory
+ * @see KoTextEditingPlugin
  */
 class KOTEXT_EXPORT KoTextEditingRegistry : public QObject,  public KoGenericRegistry<KoTextEditingFactory*>
 {

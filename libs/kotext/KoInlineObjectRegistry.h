@@ -31,9 +31,7 @@ class KoCanvasBase;
 class QAction;
 
 /**
- * This singleton class keeps a register of all available flake shapes,
- * or rather, of the factories that applications can use to create flake
- * shape objects.
+ * This singleton class keeps a register of all available InlineObject factories.
  * @see KoInlineObjectFactory
  * @see KoInlineTextObjectManager
  * @see KoInlineObject

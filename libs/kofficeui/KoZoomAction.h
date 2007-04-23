@@ -65,13 +65,6 @@ public Q_SLOTS:
    * into the list at proper place so that the the values remain sorted.
    * emits zoomChanged
    */
-  void setZoom( const QString& zoom );
-
-  /**
-   * Sets the zoom. If it's not yet on the list of zoom values, it will be inserted
-   * into the list at proper place so that the the values remain sorted.
-   * emits zoomChanged
-   */
   void setZoom( double zoom );
 
   /**
@@ -127,7 +120,7 @@ Q_SIGNALS:
 protected:
 
     /// Regenerates the action's items
-    void regenerateItems( const QString& zoomString );
+    void regenerateItems( const double zoom, bool asCurrent = false );
 
     class ExtLineEdit;
 

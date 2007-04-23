@@ -1,7 +1,7 @@
 /*  This file is part of the KDE libraries
     Copyright (C) 2004 Ariya Hidayat <ariya@kde.org>
     Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
-    Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+    Copyright (C) 2006-2007 Casper Boemann <cbr@boemann.dk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -54,40 +54,36 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bo
     m_zoomButtonGroup = 0;
     m_doSpecialAspectMode = doSpecialAspectMode;
 
-/*
-    m_actualPixels  = new KAction(i18n("Actual Pixels"), this);
-    actionCollection()->addAction("actual_pixels", m_actualPixels );
-    m_actualPixels->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_0));
-    connect(m_actualPixels, SIGNAL(triggered()), this, SLOT(slotActualPixels()));
-
-    m_actualSize = actionCollection()->addAction(KStandardAction::ActualSize,  "actual_size", this, SLOT(slotActualSize()));
-
-    m_fitToCanvas = actionCollection()->addAction(KStandardAction::FitToPage,  "fit_to_canvas", this, SLOT(slotFitToCanvas()));
-*/
-
     setEditable( true );
     setMaxComboViewCount( 15 );
 
     for(int i = 0; i<33; i++)
         m_sliderLookup[i] = pow(1.1892071, i - 16);
 
-    regenerateItems(0);
-
-    setCurrentAction( i18n( "%1%",  100 ) );
     m_effectiveZoom = 1.0;
+    regenerateItems(m_effectiveZoom, true);
 
     connect( this, SIGNAL( triggered( const QString& ) ), SLOT( triggered( const QString& ) ) );
 }
-
+/*
 void KoZoomAction::setZoom( const QString& text )
 {
-    regenerateItems( text );
-    setCurrentAction( text );
-}
+    bool ok = false;
+    double zoom = 0;
+    QRegExp regexp( ".*(\\d+).*" ); // "Captured" non-empty sequence of digits
+    int pos = regexp.indexIn( text );
 
+    if( pos > -1 )
+    {
+        zoom = regexp.cap( 1 ).toDouble( &ok );
+    }
+
+    setZoom(zoom/100.0);
+}
+*/
 void KoZoomAction::setZoom( double zoom )
 {
-    setZoom( i18n( "%1%", zoom ) );
+    regenerateItems( zoom, true );
 }
 
 void KoZoomAction::triggered( const QString& text )
@@ -118,23 +114,13 @@ void KoZoomAction::triggered( const QString& text )
 void KoZoomAction::setZoomModes( KoZoomMode::Modes zoomModes )
 {
     m_zoomModes = zoomModes;
-    regenerateItems( currentText() );
+    regenerateItems( m_effectiveZoom );
 }
 
-void KoZoomAction::regenerateItems(const QString& zoomString)
+void KoZoomAction::regenerateItems(const double zoom, bool asCurrent)
 {
-    bool ok = false;
-    int zoom = 0;
-    QRegExp regexp( ".*(\\d+).*" ); // "Captured" non-empty sequence of digits
-    int pos = regexp.indexIn( zoomString );
-
-    if( pos > -1 )
-    {
-        zoom = regexp.cap( 1 ).toInt( &ok );
-    }
-
     // where we'll store sorted new zoom values
-    QList<int> zoomLevels;
+    QList<double> zoomLevels;
     zoomLevels << 33;
     zoomLevels << 50;
     zoomLevels << 75;
@@ -148,8 +134,8 @@ void KoZoomAction::regenerateItems(const QString& zoomString)
     zoomLevels << 450;
     zoomLevels << 500;
 
-    if( ok && zoom > 10 && !zoomLevels.contains( zoom ) )
-        zoomLevels << zoom;
+    if( !zoomLevels.contains( zoom*100 ) )
+        zoomLevels << zoom*100;
 
     qSort(zoomLevels.begin(), zoomLevels.end());
 
@@ -164,11 +150,22 @@ void KoZoomAction::regenerateItems(const QString& zoomString)
         values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
     }
 
-    foreach(int value, zoomLevels) {
-        values << i18n("%1%", value);
+    foreach(double value, zoomLevels) {
+        if(value>10.0)
+            values << i18n("%1%", KGlobal::locale()->formatNumber(value, 0));
+        else
+            values << i18n("%1%", KGlobal::locale()->formatNumber(value, 1));
     }
 
     setItems( values );
+
+    if(asCurrent)
+    {
+        if(zoom*100>10.0)
+            setCurrentAction(i18n("%1%", KGlobal::locale()->formatNumber(zoom*100, 0)));
+        else
+            setCurrentAction(i18n("%1%", KGlobal::locale()->formatNumber(zoom*100, 1)));
+    }
 }
 
 void KoZoomAction::sliderValueChanged(int value)
@@ -182,8 +179,8 @@ void KoZoomAction::numberValueChanged()
 {
     kDebug(30004) << "number widget has changed to " << m_number->text() << endl;
 
-    setZoom(m_number->text());
     double zoom = m_number->text().toDouble()/100.0;
+    setZoom(zoom);
 
     emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, zoom);
 }

@@ -41,7 +41,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_effect_mask.h"
 #include "kis_transparency_mask.h"
-
+#include "kis_mask.h"
 
 class KisPaintLayer::Private
 {
@@ -64,6 +64,9 @@ public:
             foreach( KisEffectMask * mask, effectMasks ) {
                 delete mask;
             }
+            foreach( KisMask * mask, painterlyOverlays.values() ) {
+                delete mask;
+            }
             effectMasks.clear();
         }
 
@@ -78,6 +81,8 @@ public:
 
     QList<KisEffectMask*> effectMasks; // The first mask is the bottom-one in the
                             // mask stack!
+
+    QHash<QString, KisMask*> painterlyOverlays;
 
     bool renderMask;
     bool editMask;
@@ -155,10 +160,10 @@ QIcon KisPaintLayer::icon() const
 
 KoDocumentSectionModel::PropertyList KisPaintLayer::properties() const
 {
-    PropertyList l = super::properties();
-    l << Property(i18n("Colorspace"), paintDevice()->colorSpace()->name());
+    KoDocumentSectionModel::PropertyList l = super::properties();
+    l << KoDocumentSectionModel::Property(i18n("Colorspace"), paintDevice()->colorSpace()->name());
     if( KoColorProfile *profile = paintDevice()->colorSpace()->profile() )
-        l << Property(i18n("Profile"), profile->productName());
+        l << KoDocumentSectionModel::Property(i18n("Profile"), profile->productName());
     return l;
 }
 
@@ -283,7 +288,7 @@ QRect KisPaintLayer::exactBounds() const {
 
 void KisPaintLayer::slotColorSpaceChanged()
 {
-    notifyPropertyChanged(this);
+    notifyPropertyChanged();
 }
 
 void KisPaintLayer::removeMask() {

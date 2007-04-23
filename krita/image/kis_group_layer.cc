@@ -34,7 +34,7 @@
 #include "kis_fill_painter.h"
 
 KisGroupLayer::KisGroupLayer(KisImageSP img, const QString &name, quint8 opacity) :
-    super(img, name, opacity),
+    KisLayer(img, name, opacity),
     m_x(0),
     m_y(0)
 {
@@ -42,7 +42,7 @@ KisGroupLayer::KisGroupLayer(KisImageSP img, const QString &name, quint8 opacity
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
-    super(rhs),
+    KisLayer(rhs),
     m_x(rhs.m_x),
     m_y(rhs.m_y)
 {
@@ -151,25 +151,18 @@ int KisGroupLayer::index(KisLayerSP layer) const
         return layer->index();
     return -1;
 }
-#if 0
-void KisGroupLayer::setIndex(KisLayerSP layer, int index)
-{
-    if (layer->parent().data() != this)
-        return;
-    //TODO optimize
-    removeLayer(layer);
-    addLayer(layer, index);
-}
-#endif
+
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
 {
+    kDebug() << "KisGroupLayer::addLayer " << name() << ", adding layer " << newLayer->name() << " with parent " << newLayer->parent() << " at pos " << x << endl;
+
     if (x < 0 || qBound(uint(0), uint(x), childCount()) != uint(x) ||
         newLayer->parent() || m_layers.contains(newLayer))
     {
         kWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, int x)!" << endl;
         return false;
     }
-    notifyAboutToAdd(this, x);
+    if ( image() ) image()->sigAboutToAddALayer(this, x);
     uint index(x);
     if (index == 0)
         m_layers.append(newLayer);
@@ -185,13 +178,13 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
     newLayer->setIndexPrivate( index );
     newLayer->setDirty(newLayer->extent());
 
-    notifyAdded(this, x);
+    if ( image() ) image()->sigLayerHasBeenAdded(this, x);
     return true;
 }
 
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
 {
-    kDebug() << "new layer: " << newLayer.data() << endl;
+    kDebug() << "KisGroupLayer::addLayer new layer: " << newLayer.data() << ", aboveThis " << aboveThis << endl;
     if (aboveThis && aboveThis->parent().data() != this)
     {
         kWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)!" << endl;
@@ -213,7 +206,7 @@ bool KisGroupLayer::removeLayer(int x)
 
         removedLayer->setParentPrivate( 0 );
         removedLayer->setIndexPrivate( -1 );
-        notifyAboutToRemove(this, x);
+        if ( image() ) image()->sigAboutToRemoveALayer(this, x);
         m_layers.erase(m_layers.begin() + reverseIndex(index));
         setDirty(removedLayer->extent());
         if (childCount() < 1) {
@@ -221,7 +214,7 @@ bool KisGroupLayer::removeLayer(int x)
             m_projection->clear();
             setDirty();
         }
-        notifyRemoved(this, x);
+        if ( image() ) image()->sigALayerHasBeenRemoved(this, x);
         return true;
     }
     kWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
@@ -241,7 +234,7 @@ bool KisGroupLayer::removeLayer(KisLayerSP layer)
 
 void KisGroupLayer::setImage(KisImageSP image)
 {
-    super::setImage(image);
+    KisLayer::setImage(image);
     for (vKisLayerSP_it it = m_layers.begin(); it != m_layers.end(); ++it)
     {
         (*it)->setImage(image);
@@ -449,34 +442,5 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         child = child->prevSibling();
     }
 }
-
-void KisGroupLayer::notifyAboutToAdd(KisGroupLayer *p, int index)
-{
-    beginInsertRows(indexFromLayer(p), index, index);
-    if (parent())
-        parent()->notifyAboutToAdd(p, index);
-}
-
-void KisGroupLayer::notifyAdded(KisGroupLayer *p, int index)
-{
-    endInsertRows();
-    if (parent())
-        parent()->notifyAdded(p, index);
-}
-
-void KisGroupLayer::notifyAboutToRemove(KisGroupLayer *p, int index)
-{
-    beginRemoveRows(indexFromLayer(p), index, index);
-    if (parent())
-        parent()->notifyAboutToRemove(p, index);
-}
-
-void KisGroupLayer::notifyRemoved(KisGroupLayer *p, int index)
-{
-    endRemoveRows();
-    if (parent())
-        parent()->notifyRemoved(p, index);
-}
-
 
 #include "kis_group_layer.moc"

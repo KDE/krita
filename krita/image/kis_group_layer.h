@@ -36,7 +36,6 @@ class KisMergeVisitor;
  * (Implementation detail: internally, the indices are reversed, for speed.)
  **/
 class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer {
-    typedef KisLayer super;
 
     Q_OBJECT
 
@@ -189,10 +188,7 @@ public:
 private:
 
     friend class KisImage; // Only KisImage is allowed to add layers
-#if 0
-    /// Moves the specified layer to the specified index in the group, if it's already a member of this group.
-    virtual void setIndex(KisLayerSP layer, int index);
-#endif
+
     /** Adds the layer to this group at the specified index. childCount() is a valid index and appends to the end.
         Fails and returns false if the layer is already in this group or any other (remove it first.) */
     virtual bool addLayer(KisLayerSP newLayer, int index);
@@ -206,14 +202,6 @@ private:
 
     /// Removes the layer from this group. Fails if there's no such layer in this group.
     virtual bool removeLayer(KisLayerSP layer);
-
-protected:
-
-    /// these cause QAbstractItemModel::rows{AboutToBe,}{Inserted,Removed} to be emitted and percolated up the tree
-    void notifyAboutToAdd(KisGroupLayer *parent, int index);
-    void notifyAdded(KisGroupLayer *parent, int index);
-    void notifyAboutToRemove(KisGroupLayer *parent, int index);
-    void notifyRemoved(KisGroupLayer *parent, int index);
 
 private:
 

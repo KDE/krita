@@ -28,9 +28,12 @@
 class KoColor::Private {
 public:
     Private() : data(0), colorSpace(0) {}
+
     ~Private() {
-        delete [] data;
+        if ( data )
+            delete [] data;
     }
+
     quint8 * data;
     KoColorSpace * colorSpace;
 };
@@ -43,6 +46,7 @@ KoColor::KoColor()
     memset(d->data, 0, d->colorSpace->pixelSize());
     d->colorSpace->setAlpha(d->data, OPACITY_OPAQUE, 1);
 }
+
 KoColor::KoColor(KoColorSpace * colorSpace)
     : d(new Private())
 {

@@ -23,15 +23,19 @@
 #include <QRect>
 #include <QRegion>
 #include <QMetaType>
+#include <QObject>
 
 #include "krita_export.h"
+
+#include "KoCompositeOp.h"
+#include "KoDocumentSectionModel.h"
 
 #include "kis_shared.h"
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
-#include "KoCompositeOp.h"
-#include "KoDocumentSectionModel.h"
+
 #include "kis_paint_device.h"
+
 
 class QIcon;
 class QPainter;
@@ -47,9 +51,9 @@ class KoColorSpace;
  * is at the top of the group in the layerlist, using next will iterate to the bottom to last,
  * whereas previous will go up to first again.
  **/
-class KRITAIMAGE_EXPORT KisLayer: public KoDocumentSectionModel, public KisShared
+class KRITAIMAGE_EXPORT KisLayer: public QObject, public KisShared
 {
-    typedef KoDocumentSectionModel super;
+
     Q_OBJECT
 
 public:
@@ -67,8 +71,8 @@ public:
 
     virtual QIcon icon() const = 0;
 
-    virtual PropertyList properties() const;
-    virtual void setProperties( const PropertyList &properties  );
+    virtual KoDocumentSectionModel::PropertyList properties() const;
+    virtual void setProperties( const KoDocumentSectionModel::PropertyList &properties  );
 
     virtual void setChannelFlags( QBitArray & channelFlags );
     QBitArray & channelFlags();
@@ -168,9 +172,6 @@ public:
     /// Returns the total number of layers in this layer, its child layers, and their child layers recursively, optionally ones with the specified properties Visible or Locked, which you can OR together.
     virtual int numLayers(int type = 0) const;
 
-    KisLayerSP layerFromIndex(const QModelIndex &index);
-    vKisLayerSP layersFromIndexes(const QModelIndexList &list);
-
 public:
     /**
      * Called when the layer is made active.
@@ -227,8 +228,6 @@ public:
     KisImageSP image() const;
     virtual void setImage(KisImageSP image);
 
-//     KisUndoAdapter *undoAdapter() const;
-
     /// paints a mask where the selection on this layer resides
     virtual void paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
     virtual void paint(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
@@ -243,22 +242,9 @@ public:
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual bool accept(KisLayerVisitor &) = 0;
 
-public: // from QAbstractItemModel
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex &index) const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-
-protected:
-    QModelIndex indexFromLayer(KisLayer *layer) const;
-
-    /// causes QAbstractItemModel::dataChanged() to be emitted and percolated up the tree
-    void notifyPropertyChanged(KisLayer *layer);
 private:
 
+    /// ???
     bool matchesFlags(int flags) const;
 
 private:

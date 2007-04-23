@@ -63,6 +63,7 @@
 #include "kis_cmb_composite.h"
 #include "kis_view2.h"
 #include "kis_layer_manager.h"
+#include "kis_layer_model.h"
 
 KisLayerBox::KisLayerBox()
     : QDockWidget( i18n("Layers" ) )
@@ -138,14 +139,17 @@ KisLayerBox::~KisLayerBox()
 
 void KisLayerBox::setImage(KisImageSP img, KisLayerModel * layerModel)
 {
+    kDebug() << "KisLayerBox::setImage layer model " << layerModel << endl;
+
     if (m_image == img)
         return;
+
+    m_layerModel = layerModel;
 
     if (m_image)
         m_image->disconnect(this);
 
-    if (img)
-    {
+    if (img) {
 
         connect(img.data(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(updateUI()));
         connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(updateUI()));
@@ -157,17 +161,14 @@ void KisLayerBox::setImage(KisImageSP img, KisLayerModel * layerModel)
                 this, SLOT(updateUI()));
         connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(updateUI()));
 
-#if 0
+
         listLayers->setModel( layerModel );
-#else
-        listLayers->setModel(img->rootLayer().data());
-#endif
+
         m_image = img;
 
         updateUI();
     }
-    else
-    {
+    else {
         listLayers->setModel(0);
     }
 }
@@ -176,8 +177,8 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 {
     Q_ASSERT(o == listLayers->viewport());
 
-    if (e->type() == QEvent::MouseButtonDblClick)
-    {
+    if (e->type() == QEvent::MouseButtonDblClick) {
+
         QMouseEvent *me = static_cast<QMouseEvent*>(e);
         QModelIndex mi = listLayers->indexAt(me->pos());
         if (mi.isValid())
@@ -332,14 +333,14 @@ void KisLayerBox::slotRmClicked()
     QModelIndexList l = selectedLayers();
 
     for (int i = 0, n = l.count(); i < n; ++i)
-        m_image->removeLayer(m_image->rootLayer()->layerFromIndex(l.at(i)));
+        m_image->removeLayer(m_layerModel->layerFromIndex(l.at(i)));
 }
 
 void KisLayerBox::slotRaiseClicked()
 {
     QModelIndexList l = selectedLayers();
 
-    KisLayerSP layer = m_image->rootLayer()->layerFromIndex(l.first());
+    KisLayerSP layer = m_layerModel->layerFromIndex(l.first());
     if( l.count() == 1 && layer == layer->parent()->firstChild() && layer->parent() != m_image->rootLayer())
     {
         if (KisGroupLayerSP grandparent = layer->parent()->parent())
@@ -348,7 +349,7 @@ void KisLayerBox::slotRaiseClicked()
     else
     {
         for (int i = 0, n = l.count(); i < n; ++i)
-            if (KisLayerSP li = m_image->rootLayer()->layerFromIndex(l[i]))
+            if (KisLayerSP li = m_layerModel->layerFromIndex(l[i]))
                 if (li->prevSibling())
                     m_image->moveLayer(li, li->parent(), li->prevSibling());
     }
@@ -362,7 +363,7 @@ void KisLayerBox::slotLowerClicked()
     QModelIndexList l = selectedLayers();
 
     for (int i = l.count() - 1; i >= 0; --i)
-        if (KisLayerSP layer = m_image->rootLayer()->layerFromIndex(l[i]))
+        if (KisLayerSP layer = m_layerModel->layerFromIndex(l[i]))
             if (layer->nextSibling())
             {
                 if (layer->nextSibling()->nextSibling())

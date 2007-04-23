@@ -19,13 +19,17 @@
 #define KIS_LAYER_MODEL
 
 #include <KoDocumentSectionModel.h>
-
+#include "krita_export.h"
 #include <kis_types.h>
 /**
  * KisLayerModel offers a Qt model-view compatible view on the layer
  * hierarchy.
+ *
+ *
+ * Note that there's a discrepancy between the krita layer tree model
+ * and the model Qt wants to see: we hide the root layer from Qt.
  */
-class KisLayerModel : KoDocumentSectionModel
+class KRITAUI_EXPORT KisLayerModel : public KoDocumentSectionModel
 {
 
     Q_OBJECT
@@ -35,9 +39,12 @@ public: // from QAbstractItemModel
     KisLayerModel(QObject * parent );
     ~KisLayerModel();
 
-    void setRoot( KisGroupLayerSP layer );
+    void setImage( KisImageSP image );
 
-    QModelIndex indexFromLayer(KisLayer *layer) const;
+
+    KisLayerSP layerFromIndex(const QModelIndex &index);
+    vKisLayerSP layersFromIndexes(const QModelIndexList &list);
+    QModelIndex indexFromLayer(const KisLayer *layer) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
@@ -46,11 +53,14 @@ public: // from QAbstractItemModel
     Qt::ItemFlags flags(const QModelIndex &index) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-private:
+public slots:
 
-    bool isGroupLayer( KisLayer * layer );
-    bool isPaintLayer( KisLayer * layer );
-    bool isAdjustmentLayer( KisLayer * layer );
+    void beginInsertLayers( KisGroupLayer * parent, int index );
+    void endInsertLayers( KisGroupLayer * parent, int index );
+    void beginRemoveLayers( KisGroupLayer * parent, int index );
+    void endRemoveLayers( KisGroupLayer * parent, int index );
+
+private:
 
     class Private;
     Private * const m_d;

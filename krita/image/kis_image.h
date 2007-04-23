@@ -483,8 +483,34 @@ signals:
     void sigSizeChanged(qint32 w, qint32 h);
     void sigProfileChanged(KoColorProfile *  profile);
     void sigColorSpaceChanged(KoColorSpace*  cs);
+
     /// Emitted when any layer's mask info got updated (or when the current layer changes)
     void sigMaskInfoChanged();
+
+    friend class KisGroupLayer; // Allow the group layer to emit these
+                                // signals for us. This is a bit
+                                // dirty. (BSAR)
+
+    /**
+     * Inform the model that we're going to add a layer.
+     */
+    void sigAboutToAddALayer( KisGroupLayer *parent, int index );
+
+    /**
+     * Inform the model we're done adding a layer.
+     */
+    void sigLayerHasBeenAdded( KisGroupLayer *parent, int index );
+
+    /**
+     * Inform the model we're going to remove a layer.
+     */
+    void sigAboutToRemoveALayer( KisGroupLayer *parent, int index );
+
+    /**
+     * Inform the model we're done removing a layer.
+     */
+    void sigALayerHasBeenRemoved( KisGroupLayer *parent, int index );
+
 
 public slots:
     void slotSelectionChanged();

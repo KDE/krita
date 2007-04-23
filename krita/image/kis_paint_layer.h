@@ -50,7 +50,7 @@ public:
     KoColorSpace * colorSpace();
 
     virtual QIcon icon() const;
-    virtual PropertyList properties() const;
+    virtual KoDocumentSectionModel::PropertyList properties() const;
     virtual KisLayerSP clone() const;
 public:
 

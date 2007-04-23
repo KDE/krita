@@ -108,6 +108,7 @@ private:
     KMenu *m_viewModeMenu;
     KMenu *m_newLayerMenu;
     KisImageSP m_image;
+    KisLayerModel * m_layerModel;
 };
 
 class KisLayerBoxFactory : public KoDockFactory

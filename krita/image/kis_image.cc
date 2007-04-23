@@ -625,14 +625,18 @@ KisPaintDeviceSP KisImage::activeDevice()
 
 KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const QString & compositeOp, KoColorSpace * cs)
 {
+    kDebug() << "KisImage::newLayer " << name << ", opacity " << opacity << ", compop " << compositeOp << ", cs " << cs << endl;
+
     KisPaintLayer * layer;
-    if (cs)
+    if (cs) {
         layer = new KisPaintLayer(this, name, opacity, cs);
+        layer->setCompositeOp(cs->compositeOp(compositeOp));
+    }
     else
         layer = new KisPaintLayer(this, name, opacity);
     Q_CHECK_PTR(layer);
 
-    layer->setCompositeOp(cs->compositeOp(compositeOp));
+
     layer->setVisible(true);
 
     KisLayerSP layerSP(layer);
@@ -726,24 +730,22 @@ void KisImage::preparePaintLayerAfterAdding( KisLayerSP layer )
         emit sigLayerAdded(layer);
         activateLayer(layer);
     }
-
-
-    if (!layer->temporary()) {
-        QUndoCommand* cmd = new KisImageLayerAddCommand(KisImageSP(this), layer);
-            cmd->redo();
-    }
 }
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent)
 {
+    kDebug() << "KisImage::addLayer " << layer->name() << ", parent: " << parent << endl;
+
     if ( parent )
-        return addLayer(layer, parent, parent->firstChild());
+        return addLayer( layer, parent, parent->firstChild() );
     else
         return addLayer( layer, rootLayer(), rootLayer()->firstChild() );
 }
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
 {
+    kDebug() << "KisImage::addLayer " << layer->name() << ", parent: " << parent << ", abovethis: " << aboveThis << endl;
+
     if (!parent)
         return false;
 
@@ -755,6 +757,8 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
 
 bool KisImage::addLayer( KisLayerSP layer,  KisGroupLayerSP parent, int index )
 {
+    kDebug() << "KisImage::addLayer " << layer->name() << ", parent: " << parent << ", index: " << index << endl;
+
     if (!parent)
         return false;
 

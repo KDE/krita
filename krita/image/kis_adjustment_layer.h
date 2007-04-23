@@ -41,7 +41,6 @@ class KisFilterConfiguration;
  **/
 class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer, public KisIndirectPaintingSupport
 {
-    typedef KisLayer super;
     Q_OBJECT
 
 public:
@@ -55,7 +54,7 @@ public:
 
 
     virtual QIcon icon() const;
-    virtual PropertyList properties() const;
+    virtual KoDocumentSectionModel::PropertyList properties() const;
 
     /// Return a copy of this layer
     virtual KisLayerSP clone() const;

@@ -62,7 +62,7 @@ public:
 
 
 KisLayer::KisLayer(KisImageSP img, const QString &name, quint8 opacity)
-    : KoDocumentSectionModel(0)
+    : QObject(0)
     , m_d( new Private )
 {
     m_d->id = getID();
@@ -79,7 +79,7 @@ KisLayer::KisLayer(KisImageSP img, const QString &name, quint8 opacity)
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
-    : KoDocumentSectionModel( 0 )
+    : QObject( 0 )
     , KisShared(rhs)
     , m_d( new Private() )
 {
@@ -108,15 +108,15 @@ KoColorSpace * KisLayer::colorSpace()
 
 KoDocumentSectionModel::PropertyList KisLayer::properties() const
 {
-    PropertyList l;
-    l << Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible());
-    l << Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), locked());
-    l << Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
-    l << Property(i18n("Composite Mode"), compositeOp()->id());
+    KoDocumentSectionModel::PropertyList l;
+    l << KoDocumentSectionModel::Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible());
+    l << KoDocumentSectionModel::Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), locked());
+    l << KoDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
+    l << KoDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->id());
     return l;
 }
 
-void KisLayer::setProperties( const PropertyList &properties )
+void KisLayer::setProperties( const KoDocumentSectionModel::PropertyList &properties )
 {
     setVisible( properties.at( 0 ).state.toBool() );
     setLocked( properties.at( 1 ).state.toBool() );
@@ -136,7 +136,7 @@ QBitArray & KisLayer::channelFlags()
 
 void KisLayer::activate()
 {
-    notifyPropertyChanged(this);
+    notifyPropertyChanged();
 }
 
 void KisLayer::deactivate()
@@ -267,26 +267,6 @@ bool KisLayer::matchesFlags(int flags) const
     return true;
 }
 
-KisLayerSP KisLayer::layerFromIndex(const QModelIndex &index)
-{
-    if( !index.isValid() )
-        return KisLayerSP(0);
-
-    Q_ASSERT(index.model() == this);
-    Q_ASSERT(index.internalPointer());
-
-    return KisLayerSP(static_cast<KisLayer*>(index.internalPointer()));
-}
-
-vKisLayerSP KisLayer::layersFromIndexes(const QModelIndexList &in)
-{
-    vKisLayerSP out;
-    for (int i = 0, n = in.count(); i < n; ++i)
-        if (KisLayerSP layer = layerFromIndex(in.at(i)))
-            out << layer;
-    return out;
-}
-
 quint8 KisLayer::opacity() const
 {
     return m_d->opacity;
@@ -407,143 +387,11 @@ void KisLayer::notifyPropertyChanged()
 {
     if(image() && !signalsBlocked())
         image()->notifyPropertyChanged(KisLayerSP(this));
-    notifyPropertyChanged(this);
 }
 
 void KisLayer::notifyCommandExecuted()
 {
-    notifyPropertyChanged(this);
-}
-
-void KisLayer::notifyPropertyChanged(KisLayer *layer)
-{
-    QModelIndex index = indexFromLayer(layer);
-    emit dataChanged(index, index);
-    if (parent())
-        parent()->notifyPropertyChanged(layer); // To make sure the
-                                                // group layers
-                                                // thumbnails are
-                                                // updated, too.
-}
-
-QModelIndex KisLayer::indexFromLayer(KisLayer *layer) const
-{
-    Q_ASSERT(layer);
-    return createIndex(layer->index(), 0, layer);
-}
-
-int KisLayer::rowCount(const QModelIndex &parent) const
-{
-    if (!parent.isValid())
-        return childCount();
-    Q_ASSERT(parent.model() == this);
-    Q_ASSERT(parent.internalPointer());
-
-    return static_cast<KisLayer*>(parent.internalPointer())->childCount();
-}
-
-int KisLayer::columnCount(const QModelIndex&) const
-{
-    return 1;
-}
-
-QModelIndex KisLayer::index(int row, int column, const QModelIndex &parent) const
-{
-    if (!parent.isValid())
-    {
-        if( static_cast<uint>( row ) < childCount() )
-            return createIndex(row, column, at(row).data());
-        else
-            return QModelIndex();
-    }
-
-    Q_ASSERT(parent.model() == this);
-    Q_ASSERT(parent.internalPointer());
-
-    return createIndex(row, column, static_cast<KisLayer*>(parent.internalPointer())->at(row).data());
-}
-
-QModelIndex KisLayer::parent(const QModelIndex &i) const
-{
-    if (!i.isValid())
-        return QModelIndex();
-    Q_ASSERT(i.model() == this);
-    Q_ASSERT(i.internalPointer());
-
-    if (static_cast<KisLayer*>(i.internalPointer())->parent().data() == this)
-        return QModelIndex();
-    else if (KisGroupLayer *p = static_cast<KisLayer*>(i.internalPointer())->parent().data())
-        return createIndex(p->KisLayer::index(), 0, p); //gcc--
-    else
-        return QModelIndex();
-}
-
-QVariant KisLayer::data(const QModelIndex &index, int role) const
-{
-    if (!index.isValid())
-        return QVariant();
-    Q_ASSERT(index.model() == this);
-    Q_ASSERT(index.internalPointer());
-
-    KisLayer *layer = static_cast<KisLayer*>(index.internalPointer());
-
-    switch (role)
-    {
-        case Qt::DisplayRole: return layer->name();
-        case Qt::DecorationRole: return layer->icon();
-        case Qt::EditRole: return layer->name();
-        case Qt::SizeHintRole: return layer->image()->size();
-        case ActiveRole: return layer->isActive();
-        case PropertiesRole: return QVariant::fromValue(layer->properties());
-        case AspectRatioRole: return double(layer->image()->width()) / layer->image()->height();
-        default:
-            if (role >= int(BeginThumbnailRole))
-                return layer->createThumbnail(role - int(BeginThumbnailRole), role - int(BeginThumbnailRole));
-            else
-                return QVariant();
-    }
-}
-
-Qt::ItemFlags KisLayer::flags(const QModelIndex &index) const
-{
-    if (!index.isValid())
-        return Qt::ItemIsEnabled;
-    Q_ASSERT(index.model() == this);
-    Q_ASSERT(index.internalPointer());
-
-    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable;
-    if (qobject_cast<KisGroupLayer*>(static_cast<KisLayer*>(index.internalPointer()))) //gcc--
-        flags |= Qt::ItemIsDropEnabled;
-    return flags;
-}
-
-bool KisLayer::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    if (!index.isValid())
-        return false;
-    Q_ASSERT(index.model() == this);
-    Q_ASSERT(index.internalPointer());
-
-    KisLayer *layer = static_cast<KisLayer*>(index.internalPointer());
-
-    switch (role)
-    {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            layer->setName(value.toString());
-            return true;
-        case PropertiesRole:
-            layer->setProperties(value.value<PropertyList>());
-            return true;
-        case ActiveRole:
-            if (value.toBool())
-            {
-                layer->setActive();
-                return true;
-            }
-    }
-
-    return false;
+    notifyPropertyChanged();
 }
 
 

@@ -990,7 +990,7 @@ void KisDoc2::setCurrentImage(KisImageSP image)
     }
     m_d->image = image;
     m_d->shapeController->setImage( image );
-    m_d->layerModel->setRoot( image->rootLayer() );
+    m_d->layerModel->setImage( image );
     setUndo(true);
 
     emit sigLoadingFinished();

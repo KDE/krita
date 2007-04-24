@@ -43,7 +43,7 @@ KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, co
     QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
     QRectF boundingRect;
     foreach(KoShape *shape, selectedShapes) {
-        if(shape->isLocked())
+        if( ! isEditable( shape ) )
             continue;
         m_selectedShapes << shape;
         m_previousPositions << shape->position();

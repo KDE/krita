@@ -94,6 +94,9 @@ protected:
      */
     void applyGrid(QPointF &point);
 
+    /// checks recursively if the shape or one of its parents is not visible or locked
+    static bool isEditable( KoShape * shape );
+
 protected: // members
     KoTool *m_parent; ///< the KoTool instance that controls this strategy.
     QList<KoShape*> m_selectedShapes; ///< the objects this strategy will act on.

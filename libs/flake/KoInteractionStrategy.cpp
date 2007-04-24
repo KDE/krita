@@ -31,6 +31,7 @@
 #include "KoInteractionTool.h"
 #include "KoCanvasBase.h"
 #include "KoTool.h"
+#include "KoShapeContainer.h"
 
 #include <QUndoCommand>
 
@@ -65,7 +66,7 @@ KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoPointerEvent *eve
     KoFlake::SelectionHandle handle = parent->handleAt(event->point, &insideSelection);
 
     foreach (KoShape* shape, select->selectedShapes()) {
-        if (shape->isVisible() && !shape->isLocked()) {
+        if( isEditable( shape ) ) {
             editableShape = true;
             break;
         }
@@ -123,4 +124,19 @@ void KoInteractionStrategy::applyGrid(QPointF &point) {
     // This is a problem when calling applyGrid twice, we get 1 less than the time before.
     point.setX( static_cast<int>( point.x() / gridX + 1e-10 ) * gridX );
     point.setY( static_cast<int>( point.y() / gridY + 1e-10 ) * gridY );
+}
+
+bool KoInteractionStrategy::isEditable( KoShape * shape ) {
+    if( ! shape->isVisible() || shape->isLocked() )
+        return false;
+
+    KoShapeContainer * parent = shape->parent();
+    while( parent )
+    {
+        if( ! parent->isVisible() || parent->isLocked() )
+            return false;
+        parent = parent->parent();
+    }
+
+    return true;
 }

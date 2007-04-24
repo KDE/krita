@@ -39,7 +39,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
 {
     QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
-        if(shape->isLocked())
+        if( ! isEditable( shape ) )
             continue;
         m_selectedShapes << shape;
         m_startPositions << shape->position();

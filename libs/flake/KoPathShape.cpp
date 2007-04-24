@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -355,7 +355,7 @@ KoPathShape::~KoPathShape()
     //delete d;
 }
 
-void KoPathShape::saveOdf( KoShapeSavingContext * context ) const
+void KoPathShape::saveOdf( KoShapeSavingContext * context )
 {
     context->xmlWriter().startElement( "draw:path" );
     saveOdfAttributes( context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation );
@@ -411,7 +411,7 @@ void KoPathShape::saveOdf( KoShapeSavingContext * context ) const
                                                         .arg( firstPoint->point().x() )    
                                                         .arg( firstPoint->point().y() );
                 }
-                d = QString( "Z" );
+                d += QString( "Z" );
             }
 
             if ( ( *it )->activeControlPoint2() )

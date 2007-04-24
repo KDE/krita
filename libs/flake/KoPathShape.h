@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -315,7 +316,7 @@ public:
     virtual QPointF position() const;
     virtual void resize( const QSizeF &size );
 
-    void saveOdf( KoShapeSavingContext * context ) const;
+    void saveOdf( KoShapeSavingContext * context );
 
     /// Removes all subpaths and their points from the path
     void clear();

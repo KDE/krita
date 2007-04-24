@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
+ * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>, (C)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

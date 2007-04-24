@@ -28,7 +28,11 @@ class kislayermodel_test : public QObject
 private slots:
 
     // tests
-    void testModel();
+    void testRowcount();
+
+    void testModelIndex();
+
+    void testGroupLayers();
 };
 
 #endif

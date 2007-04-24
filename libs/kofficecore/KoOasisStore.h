@@ -83,6 +83,10 @@ public:
     /// A completely unrelated method, for loading a file from an oasis store
     bool loadAndParse( const QString& fileName, KoXmlDocument& doc, QString& errorMessage );
 
+    /// Load a file and parse from a QIODevice
+    // filename argument is just used for debug message
+    static bool loadAndParse( QIODevice* fileDevice, KoXmlDocument& doc, QString& errorMessage, const QString& fileName );
+
     /// Another method for loading: get mimetype from full path, using the manifest
     static QString mimeForPath( const KoXmlDocument& doc, const QString& fullPath );
 

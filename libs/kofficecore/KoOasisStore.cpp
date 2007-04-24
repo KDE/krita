@@ -149,6 +149,13 @@ bool KoOasisStore::loadAndParse( const QString& fileName, KoXmlDocument& doc, QS
         errorMessage = i18n( "Could not find %1", fileName );
         return false;
     }
+    bool ok = loadAndParse( m_store->device(), doc, errorMessage, fileName );
+    m_store->close();
+    return ok;
+}    
+
+bool KoOasisStore::loadAndParse( QIODevice* fileDevice, KoXmlDocument& doc, QString& errorMessage, const QString& fileName )
+{
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
@@ -157,7 +164,7 @@ bool KoOasisStore::loadAndParse( const QString& fileName, KoXmlDocument& doc, QS
     // we activate the "report-whitespace-only-CharData" feature.
     // Unfortunately this leads to lots of whitespace text nodes in between real
     // elements in the rest of the document, watch out for that.
-    QXmlInputSource source( m_store->device() );
+    QXmlInputSource source( fileDevice );
     // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
     QXmlSimpleReader reader;
     KoDocument::setupXmlReader( reader, true /*namespaceProcessing*/ );
@@ -175,7 +182,6 @@ bool KoOasisStore::loadAndParse( const QString& fileName, KoXmlDocument& doc, QS
     {
         kDebug(30003) << "File " << fileName << " loaded and parsed" << endl;
     }
-    m_store->close();
     return ok;
 }
 

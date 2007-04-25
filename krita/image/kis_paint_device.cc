@@ -217,10 +217,10 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KoColorSpace * colorSpace, cons
     m_d->pixelSize = m_d->colorSpace->pixelSize();
     m_d->nChannels = m_d->colorSpace->channelCount();
 
-    quint8* defaultPixel = new quint8[ m_d->pixelSize ];
-    colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, defaultPixel);
+    m_d->defaultPixel = new quint8[ m_d->pixelSize ];
+    colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, m_d->defaultPixel);
 
-    m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
+    m_datamanager = new KisDataManager(m_d->pixelSize, m_d->defaultPixel);
     Q_CHECK_PTR(m_datamanager);
     m_d->extentIsValid = true;
     m_d->paintEngine = new KisPaintEngine();
@@ -251,6 +251,10 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         m_d->hasSelection = false;
         m_d->selection = 0;
         m_d->pixelSize = rhs.m_d->pixelSize;
+
+        m_d->defaultPixel = new quint8[ m_d->pixelSize ];
+        m_d->colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, m_d->defaultPixel);
+
         m_d->nChannels = rhs.m_d->nChannels;
         if(rhs.m_d->exifInfo)
         {
@@ -446,8 +450,8 @@ void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) con
 QRect KisPaintDevice::exactBounds() const
 {
     qint32 x, y, w, h, boundX, boundY, boundW, boundH;
-    extent(x, y, w, h);
 
+    extent(x, y, w, h);
     extent(boundX, boundY, boundW, boundH);
 
     bool found = false;
@@ -469,7 +473,7 @@ QRect KisPaintDevice::exactBounds() const
     found = false;
 
     for (qint32 y2 = y + h; y2 > y ; --y2) {
-        KisHLineConstIterator it = this->createHLineConstIterator(x, y2, w);
+        it = this->createHLineConstIterator(x, y2, w);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), m_d->defaultPixel, m_d->pixelSize) != 0) {
                 boundH = y2 - boundY + 1;
@@ -480,6 +484,7 @@ QRect KisPaintDevice::exactBounds() const
         }
         if (found) break;
     }
+
     found = false;
 
     KisVLineConstIterator vit = createVLineConstIterator(x, y, h);
@@ -500,9 +505,9 @@ QRect KisPaintDevice::exactBounds() const
 
     // Look for right edge )
     for (qint32 x2 = x + w; x2 > x ; --x2) {
-        KisVLineConstIterator it = this->createVLineConstIterator(x2, y, h);
-        while (!it.isDone() && found == false) {
-            if (memcmp(it.rawData(), m_d->defaultPixel, m_d->pixelSize) != 0) {
+        vit = this->createVLineConstIterator(x2, y, h);
+        while (!vit.isDone() && found == false) {
+            if (memcmp(vit.rawData(), m_d->defaultPixel, m_d->pixelSize) != 0) {
                 boundW = x2 - boundX + 1; // XXX: I commented this
                                           // +1 out, but why? It
                                           // should be correct, since
@@ -513,7 +518,7 @@ QRect KisPaintDevice::exactBounds() const
                 found = true;
                 break;
             }
-            ++it;
+            ++vit;
         }
         if (found) break;
     }
@@ -808,7 +813,7 @@ QImage KisPaintDevice::convertToQImage(KoColorProfile *  dstProfile, qint32 x1, 
     return image;
 }
 
-KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h)
+KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
 {
     KisPaintDeviceSP thumbnail = KisPaintDeviceSP(new KisPaintDevice(colorSpace(), "thumbnail"));
     thumbnail->clear();
@@ -845,11 +850,13 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h)
 #warning FIXME: use KisRandomAccessor instead !
 #endif
 #if 1
-    for (qint32 y=0; y < h; ++y) {
+    KisRandomConstAccessorPixel iter = createRandomConstAccessor(0,0);
+    for (qint32 y = 0; y < h; ++y) {
         qint32 iY = (y * srch ) / h;
-        for (qint32 x=0; x < w; ++x) {
+        for (qint32 x = 0; x < w; ++x) {
             qint32 iX = (x * srcw ) / w;
-             thumbnail->setPixel(x, y, colorAt(iX, iY));
+            iter.moveTo(iX, iY);
+            thumbnail->setPixel(x, y, KoColor(iter.rawData(), m_d->colorSpace));
         }
     }
 #endif
@@ -1175,9 +1182,9 @@ bool KisPaintDevice::pixel(qint32 x, qint32 y, KoColor * kc)
     return true;
 }
 
-KoColor KisPaintDevice::colorAt(qint32 x, qint32 y)
+KoColor KisPaintDevice::colorAt(qint32 x, qint32 y) const
 {
-    KisHLineIteratorPixel iter = createHLineIterator(x, y, 1);
+    KisRandomConstAccessorPixel iter = createRandomConstAccessor(x, y);
     return KoColor(iter.rawData(), m_d->colorSpace);
 }
 

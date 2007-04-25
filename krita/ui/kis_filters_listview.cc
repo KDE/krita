@@ -191,7 +191,7 @@ void KisFiltersListView::buildPreviews()
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     m_thumb = m_original->createThumbnailDevice(150, 150);
 
-    QRect bounds = m_thumb->extent();
+    QRect bounds = m_thumb->exactBounds();
 
     foreach(QString id, KisFilterRegistry::instance()->keys()) {
         KisFilterSP filter = KisFilterRegistry::instance()->value(id);

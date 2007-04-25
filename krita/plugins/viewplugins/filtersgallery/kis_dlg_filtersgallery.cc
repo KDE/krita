@@ -133,8 +133,7 @@ void KisDlgFiltersGallery::refreshPreview( )
     if ( m_currentConfigWidget ) {
         KisFilterConfiguration* config = m_currentConfigWidget->configuration();
         KisTransaction cmd("Temporary transaction", layer);
-        QRect rect = layer->extent();
-        kDebug() << "RECT: " << rect << endl;
+        QRect rect = layer->exactBounds();
         m_currentFilter->process(layer, rect, config);
         m_widget->previewWidget->slotUpdate();
         cmd.undo();

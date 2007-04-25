@@ -299,7 +299,7 @@ public:
      * The width and height of the returned device won't exceed \p maxw and \p maxw, but they may be smaller.
      */
 
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h);
+    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h) const;
 
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
@@ -334,7 +334,7 @@ public:
     /**
      * Return the KoColor of the pixel at x,y.
      */
-    KoColor colorAt(qint32 x, qint32 y);
+    KoColor colorAt(qint32 x, qint32 y) const;
 
     /**
      * Set the specified pixel to the specified color. Note that this

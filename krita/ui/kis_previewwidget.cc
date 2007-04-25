@@ -122,7 +122,6 @@ void KisPreviewWidget::slotSetDevice(KisPaintDeviceSP dev)
 
 KisPaintDeviceSP KisPreviewWidget::getDevice()
 {
-    kDebug() << "RECT: " << m_previewDevice->extent() << endl;
     return m_previewDevice;
 }
 
@@ -140,7 +139,6 @@ void KisPreviewWidget::slotUpdate()
     if(m_previewIsDisplayed)
     {
         m_preview->setImage(m_scaledPreview);
-        kDebug() << "IMPOSTATA!" << endl;
     }
 }
 

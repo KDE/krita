@@ -74,9 +74,7 @@ public:
                 return;
             }
             m_item->filter()->disableProgress();
-//             kDebug() << "PRIMA DI process() per " << m_item->filter()->name() << endl;
             m_item->filter()->process(m_dev, m_bounds, m_item->filterConfiguration());
-//             kDebug() << "DOPO process()" << endl;
 
             if (!m_canceled) {
                 kDebug() << "Converting to qimage " << endl;
@@ -160,7 +158,7 @@ void KisFiltersListView::init()
 
     m_weaver = new Weaver();
     KConfigGroup cfg = KGlobal::config()->group("");
-    m_weaver->setMaximumNumberOfThreads( cfg.readEntry("maxthreads_old",  1) );
+    m_weaver->setMaximumNumberOfThreads( cfg.readEntry("maxthreads",  1) );
     connect( m_weaver, SIGNAL( jobDone(Job*) ), this, SLOT( itemDone( Job* ) ) );
 }
 

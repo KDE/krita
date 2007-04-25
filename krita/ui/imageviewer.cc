@@ -36,7 +36,7 @@ ImageViewer::ImageViewer(QWidget *widget, const char * name)
     , m_isDragging(false)
     , m_image(QPixmap())
 {
-    m_label = new QLabel( viewport());
+    m_label = new QLabel(viewport());
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     setCursor(KisCursor::handCursor());
     addChild(m_label);
@@ -46,6 +46,7 @@ void ImageViewer::setImage(QImage & image)
 {
     m_image = QPixmap::fromImage(image);
     m_label->setPixmap(m_image);
+    m_label->setFixedSize(m_image.width(), m_image.height());
     resizeContents( m_image.width(), m_image.height() );
     repaintContents(false);
 }

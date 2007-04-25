@@ -808,7 +808,7 @@ QImage KisPaintDevice::convertToQImage(KoColorProfile *  dstProfile, qint32 x1, 
     return image;
 }
 
-KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
+KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h)
 {
     KisPaintDeviceSP thumbnail = KisPaintDeviceSP(new KisPaintDevice(colorSpace(), "thumbnail"));
     thumbnail->clear();
@@ -844,12 +844,11 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
 #ifdef __GNUC__
 #warning FIXME: use KisRandomAccessor instead !
 #endif
-#if 0
+#if 1
     for (qint32 y=0; y < h; ++y) {
         qint32 iY = (y * srch ) / h;
         for (qint32 x=0; x < w; ++x) {
             qint32 iX = (x * srcw ) / w;
-
              thumbnail->setPixel(x, y, colorAt(iX, iY));
         }
     }

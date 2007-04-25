@@ -2,7 +2,7 @@
 <kpartgui library="kritafiltersgallery" version="7">
 <MenuBar>
 <Menu name="Filter"><text>&amp;Filter</text>
-	<Seperator/>
+	<Separator/>
 	<Action name="krita_filters_gallery"/>
 </Menu>
 </MenuBar>

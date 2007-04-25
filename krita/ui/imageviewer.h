@@ -43,7 +43,7 @@ public:
     ImageViewer(QWidget *widget, const char * name = 0);
 
     void setImage(QImage & image);
-    
+
     void contentsMousePressEvent(QMouseEvent *event);
     void contentsMouseReleaseEvent(QMouseEvent *event);
     void contentsMouseMoveEvent(QMouseEvent *event);

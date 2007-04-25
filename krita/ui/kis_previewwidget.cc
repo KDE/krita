@@ -110,7 +110,7 @@ void KisPreviewWidget::slotSetDevice(KisPaintDeviceSP dev)
     QString monitorProfileName = cfg.monitorProfile();
     m_profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
 
-    QRect r = dev->exactBounds();
+    QRect r = dev->extent();
 
     m_groupBox->setTitle(i18n("Preview: ") + dev->objectName());
     m_previewIsDisplayed = true;
@@ -122,12 +122,13 @@ void KisPreviewWidget::slotSetDevice(KisPaintDeviceSP dev)
 
 KisPaintDeviceSP KisPreviewWidget::getDevice()
 {
+    kDebug() << "RECT: " << m_previewDevice->extent() << endl;
     return m_previewDevice;
 }
 
 void KisPreviewWidget::slotUpdate()
 {
-    QRect r = m_previewDevice->exactBounds();
+    QRect r = m_previewDevice->extent();
     m_scaledPreview = m_previewDevice->convertToQImage(m_profile, 0, 0, r.width(), r.height());
     if(m_zoom > 1.0)
     {
@@ -139,6 +140,7 @@ void KisPreviewWidget::slotUpdate()
     if(m_previewIsDisplayed)
     {
         m_preview->setImage(m_scaledPreview);
+        kDebug() << "IMPOSTATA!" << endl;
     }
 }
 
@@ -187,7 +189,7 @@ bool KisPreviewWidget::zoomChanged()
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     if (!m_origDevice) return false;
 
-    QRect r = m_origDevice->exactBounds();
+    QRect r = m_origDevice->extent();
     int w = (int) ceil(r.width() * m_zoom );
     int h = (int) ceil(r.height() * m_zoom );
 

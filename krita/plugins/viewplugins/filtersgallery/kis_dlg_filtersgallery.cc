@@ -46,14 +46,13 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView2* view, QWidget* parent,const
   : KDialog(parent), m_view(view), m_currentConfigWidget(0), m_currentFilter(0)
 {
     setCaption( i18n("Filters Gallery") );
-    setButtons(  Ok | Cancel);
+    setButtons( Ok | Cancel );
     setDefaultButton( Ok );
-    setObjectName(name);
+    setObjectName( name );
    // Initialize main widget
     m_widget = new KisWdgFiltersGallery(this);
 
     m_widget->filtersList->setProfile(view->canvasBase()->monitorProfile());
-
     setMainWidget(m_widget);
     // Initialize filters list
     connect(m_widget->filtersList , SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectionHasChanged(QListWidgetItem* )));
@@ -66,7 +65,6 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView2* view, QWidget* parent,const
         m_widget->previewWidget->slotSetDevice( m_view->image()->activeDevice() );
         m_widget->filtersList->setPaintDevice( m_view->image()->activeDevice() );
     }
-
     connect( m_widget->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
     resize( minimumSizeHint());
     m_widget->previewWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
@@ -92,8 +90,9 @@ void KisDlgFiltersGallery::selectionHasChanged ( QListWidgetItem * item )
     } else {
         m_labelNoCW->hide();
     }
+
     KisImageSP img = m_view->image();
-    KisPaintLayerSP activeLayer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(img->activeLayer().data()));
+    KisPaintLayer *activeLayer = dynamic_cast<KisPaintLayer*>(img->activeLayer().data());
 
     if (activeLayer)
        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_widget->configWidgetHolder, activeLayer->paintDevice());
@@ -134,7 +133,8 @@ void KisDlgFiltersGallery::refreshPreview( )
     if ( m_currentConfigWidget ) {
         KisFilterConfiguration* config = m_currentConfigWidget->configuration();
         KisTransaction cmd("Temporary transaction", layer);
-        QRect rect = layer->exactBounds();
+        QRect rect = layer->extent();
+        kDebug() << "RECT: " << rect << endl;
         m_currentFilter->process(layer, rect, config);
         m_widget->previewWidget->slotUpdate();
         cmd.undo();

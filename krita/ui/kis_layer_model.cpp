@@ -90,7 +90,7 @@ QModelIndex KisLayerModel::indexFromLayer(const KisLayer *layer) const
     if ( layer->parent() )
         return createIndex(layer->index(), 0, ( void* )layer);
     else {
-        return createIndex(0, 0, ( void* )layer);
+        return QModelIndex();
     }
 }
 
@@ -156,7 +156,7 @@ QModelIndex KisLayerModel::parent(const QModelIndex &index) const
 
 QVariant KisLayerModel::data(const QModelIndex &index, int role) const
 {
-    kDebug(41007) << "KisLayerModel::data(index=" << index << ", role=" << role << endl;
+//     kDebug(41007) << "KisLayerModel::data(index=" << index << ", role=" << role << endl;
     if (!index.isValid())
         return QVariant();
 

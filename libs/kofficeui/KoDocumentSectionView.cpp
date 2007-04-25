@@ -89,6 +89,8 @@ bool KoDocumentSectionView::viewportEvent( QEvent *e )
     {
         switch( e->type() )
         {
+#if 0
+          // i commented this because it was breaking the expanding/unexpanding of items with children, I don't see the need for those, but maybe I miss something ? </cyrille>
             case QEvent::MouseButtonPress:
             {
                 const QPoint pos = static_cast<QMouseEvent*>( e )->pos();
@@ -122,7 +124,8 @@ bool KoDocumentSectionView::viewportEvent( QEvent *e )
                     d->hovered = hovered;
                 }
             } break;
-            case QEvent::ToolTip:
+ #endif
+           case QEvent::ToolTip:
             {
                 const QPoint pos = static_cast<QHelpEvent*>( e )->pos();
                 if( !indexAt( pos ).isValid() )
@@ -137,7 +140,6 @@ bool KoDocumentSectionView::viewportEvent( QEvent *e )
             default: break;
         }
     }
-
     return super::viewportEvent( e );
 }
 

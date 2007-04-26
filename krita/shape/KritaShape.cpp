@@ -48,6 +48,7 @@ KritaShape::KritaShape(const KUrl& url, const QString & profileName)
         importImage( url );
     }
     m_d->displayProfile = KoColorSpaceRegistry::instance()->profileByName(profileName);
+    setKeepAspectRatio(true);
 
 }
 

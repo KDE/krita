@@ -41,7 +41,7 @@ class KritaShapeFactory : public KoShapeFactory
 {
     Q_OBJECT
 public:
-    KritaShapeFactory( QObject* parent, const QStringList& );
+    KritaShapeFactory( QObject* parent);
     ~KritaShapeFactory() {}
 
     KoShape* createDefaultShape() const;

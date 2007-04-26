@@ -34,15 +34,15 @@ K_EXPORT_COMPONENT_FACTORY( kritashape, KGenericFactory<KritaShapePlugin>( "Krit
 
     KritaShapePlugin::KritaShapePlugin( QObject * parent,  const QStringList & list )
 {
-    KoShapeRegistry::instance()->add( new KritaShapeFactory( parent, list ) );
+    KoShapeRegistry::instance()->add( new KritaShapeFactory( parent) );
     KoToolRegistry::instance()->add( new KritaShapeToolFactory( parent, list ) );
 }
 
 
-KritaShapeFactory::KritaShapeFactory( QObject* parent, const QStringList& list )
+KritaShapeFactory::KritaShapeFactory( QObject* parent)
     : KoShapeFactory( parent, KritaShapeId, i18n( "KritaShape Shape" ) )
 {
-    setToolTip( i18n( "A color managed, multi-layererd raster image" ) );
+    setToolTip( i18n( "A color managed, multi-layer raster image" ) );
     setIcon( "kritashape" );
 
 }

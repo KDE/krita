@@ -90,20 +90,20 @@ set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/k
 # Those are included with e.g. <koproperty/set.h>
 set(KOPROPERTY_INCLUDES ${CMAKE_SOURCE_DIR}/libs ${CMAKE_BINARY_DIR}/libs)
 
-set(libkdgantt_SRCS
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttView.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewEventItem.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewItem.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewItemDrag.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewSubwidgets.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewSummaryItem.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewTaskItem.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewTaskLink.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewTaskLinkGroup.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttMinimizeSplitter.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttSemiSizingControl.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttSizingControl.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttXMLTools.cpp
+set(libkdgantt1_SRCS
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttView.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewEventItem.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewItem.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewItemDrag.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewSubwidgets.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewSummaryItem.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewTaskItem.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewTaskLink.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewTaskLinkGroup.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttMinimizeSplitter.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttSemiSizingControl.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttSizingControl.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttXMLTools.cpp
 	)
 
 # check if build krita there to be able to test if we can build filters/krita
@@ -146,7 +146,7 @@ if(SHOULD_BUILD_KSPREAD)
     add_subdirectory(kspread)
 endif(SHOULD_BUILD_KSPREAD)
 
-add_subdirectory(kdgantt)
+add_subdirectory(kdgantt1)
 add_subdirectory(kchart)
 #add_subdirectory(kexi)
 add_subdirectory(kformula)

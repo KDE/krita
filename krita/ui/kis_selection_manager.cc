@@ -1672,7 +1672,7 @@ void KisSelectionManager::paint(QPainter& gc, KoViewConverter &converter)
     t.start();
     gc.setRenderHints(0);
 
-    QPen pen1(Qt::black, 0);
+    QPen pen1(Qt::white, 0);
     QPen pen(brushes[offset], 0);
 
     int i=0;

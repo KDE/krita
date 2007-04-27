@@ -27,25 +27,21 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#include <kactioncollection.h>
-#include <kaction.h>
 #include <klocale.h>
 #include <knuminput.h>
 
 #include <kis_cursor.h>
 #include <kis_selection_manager.h>
-#include <kis_canvas_subject.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
 #include <KoPointerEvent.h>
-#include <kis_canvas_subject.h>
 #include <kis_selection_options.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_iterators_pixel.h>
 #include <kis_selected_transaction.h>
-#include <kis_undo_adapter.h>
+#include <kis_canvas2.h>
 
 #include "kis_tool_selectsimilar.h"
 
@@ -89,14 +85,11 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const quint8 
 
 
 
-KisToolSelectSimilar::KisToolSelectSimilar()
-    : super(i18n("Select Similar Colors"))
+KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
+    : KisTool(canvas, KisCursor::load("tool_similar_selection_plus_cursor.png", 6, 6))
 {
-    setObjectName("tool_select_similar");
     m_addCursor = KisCursor::load("tool_similar_selection_plus_cursor.png", 1, 21);
     m_subtractCursor = KisCursor::load("tool_similar_selection_minus_cursor.png", 1, 21);
-    setCursor(m_addCursor);
-    m_subject = 0;
     m_optWidget = 0;
     m_selectionOptionsWidget = 0;
     m_fuzziness = 20;
@@ -111,9 +104,9 @@ KisToolSelectSimilar::~KisToolSelectSimilar()
 
 void KisToolSelectSimilar::activate()
 {
-    KisToolNonPaint::activate();
-    m_timer->start(50);
-    setPickerCursor(m_currentSelectAction);
+    super::activate();
+//    m_timer->start(50);
+//    setPickerCursor(m_currentSelectAction);
 
     if (m_selectionOptionsWidget) {
         m_selectionOptionsWidget->slotActivated();
@@ -125,14 +118,11 @@ void KisToolSelectSimilar::deactivate()
     m_timer->stop();
 }
 
-void KisToolSelectSimilar::buttonPress(KoPointerEvent *e)
+void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
 {
-
-    if (m_subject) {
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
-        KisImageSP m_currentImage;
-        KisPaintDeviceSP dev;
-        QPoint pos;
+useCursor(m_subtractCursor);
+    if (m_canvas) {
+//         QApplication::setOverrideCursor(KisCursor::waitCursor());
         quint8 opacity = OPACITY_OPAQUE;
 
         if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
@@ -141,14 +131,13 @@ void KisToolSelectSimilar::buttonPress(KoPointerEvent *e)
         if (!(m_currentImage = m_currentImage))
             return;
 
-        dev = m_currentImage->activeDevice();
+        KisPaintDeviceSP dev = m_currentImage->activeDevice();
 
         if (!dev || !m_currentImage->activeLayer()->visible())
             return;
 
-        pos = QPoint(e->pos().floorX(), e->pos().floorY());
-        KisSelectedTransaction *t = 0;
-        if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
+        QPointF pos = convertToPixelCoord(e);
+        KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
 
         KoColor c = dev->colorAt(pos.x(), pos.y());
         opacity = dev->colorSpace()->alpha(c.data());
@@ -160,11 +149,9 @@ void KisToolSelectSimilar::buttonPress(KoPointerEvent *e)
         dev->setDirty();
         dev->emitSelectionChanged();
 
-        if(m_currentImage->undo())
-            m_currentImage->undoAdapter()->addCommandOld(t);
-        m_subject->canvasController()->updateCanvas();
+        m_canvas->addCommand(t);
 
-        QApplication::restoreOverrideCursor();
+//         QApplication::restoreOverrideCursor();
     }
 }
 
@@ -188,31 +175,13 @@ void KisToolSelectSimilar::slotTimer()
 
 void KisToolSelectSimilar::setPickerCursor(enumSelectionMode action)
 {
-    switch (action) {
-        case SELECTION_ADD:
-            m_subject->canvasController()->setCanvasCursor(m_addCursor);
-            break;
-        case SELECTION_SUBTRACT:
-            m_subject->canvasController()->setCanvasCursor(m_subtractCursor);
-    }
-}
-
-void KisToolSelectSimilar::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("tool_similar_selection"),
-                               i18n("&Similar Selection"),
-                               collection,
-                               objectName());
-        Q_CHECK_PTR(m_action);
-        m_action->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Select similar colors"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
+//     switch (action) {
+//         case SELECTION_ADD:
+//             useCursor(m_addCursor);
+//             break;
+//         case SELECTION_SUBTRACT:
+//             useCursor(m_subtractCursor);
+//     }
 }
 
 void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
@@ -227,7 +196,7 @@ void KisToolSelectSimilar::slotSetAction(int action)
 
 QWidget* KisToolSelectSimilar::createOptionWidget()
 {
-    m_optWidget = new QWidget(parent);
+    m_optWidget = new QWidget();
     Q_CHECK_PTR(m_optWidget);
 
     m_optWidget->setWindowTitle(i18n("Similar Selection"));
@@ -237,7 +206,9 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     l->setMargin(0);
     l->setSpacing(6);
 
-    m_selectionOptionsWidget = new KisSelectionOptions(m_optWidget, m_subject);
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    Q_ASSERT(canvas);
+    m_selectionOptionsWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_selectionOptionsWidget);
 
     l->addWidget(m_selectionOptionsWidget);

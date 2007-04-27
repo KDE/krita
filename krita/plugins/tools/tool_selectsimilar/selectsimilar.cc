@@ -45,11 +45,8 @@ SelectSimilar::SelectSimilar(QObject *parent, const QStringList &)
 {
     setComponentData(SelectSimilarFactory::componentData());
 
-    if ( parent->inherits("KoToolRegistry") )
-    {
-        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
-        r->add(KoToolFactorySP(new KisToolSelectSimilarFactory()));
-    }
+    KoToolRegistry * r = KoToolRegistry::instance();
+    r->add(new KisToolSelectSimilarFactory(r, QStringList()));
 }
 
 SelectSimilar::~SelectSimilar()

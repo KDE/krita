@@ -19,6 +19,7 @@
 #define KIS_SELECTION_H_
 
 #include <QRect>
+#include <QPainterPath>
 
 #include "kis_types.h"
 #include "kis_paint_device.h"
@@ -112,6 +113,7 @@ public:
     virtual void setDirty(const QRect & rc);
     virtual void setDirty();
 
+    QVector<QPolygon> outline();
 private:
     void paintUniformSelectionRegion(QImage img, const QRect& imageRect, const QRegion& uniformRegion);
 
@@ -140,6 +142,19 @@ private:
         {
             return KisPaintDevice::region();
         }
+
+    enum EdgeType
+    {
+        TopEdge = 1, LeftEdge = 2, BottomEdge = 3, RightEdge = 0, NoEdge = 4
+    };
+
+    bool isOutlineEdge(EdgeType edge, qint32 row, qint32 col, quint8* buffer, qint32 width, qint32 height);
+
+    EdgeType nextEdge(EdgeType edge) { return edge == NoEdge ? edge : static_cast<EdgeType>((edge + 1) % 4); }
+
+    void nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, quint8* buffer, qint32 bufWidth, qint32 bufHeight);
+
+    void appendCoordinate(QPolygon * path, int x, int y, EdgeType edge);
 
 private:
     KisPaintDeviceWSP m_parentPaintDevice;

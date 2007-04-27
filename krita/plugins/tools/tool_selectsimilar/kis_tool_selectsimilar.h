@@ -18,14 +18,15 @@
 #ifndef KIS_TOOL_SELECT_PICKER_H_
 #define KIS_TOOL_SELECT_PICKER_H_
 
-#include <kis_tool_non_paint.h>
+#include <kis_tool.h>
 #include <KoToolFactory.h>
 #include <kis_selection.h>
+#include "kis_layer_shape.h"
 
-class KisCanvasSubject;
 class QWidget;
 class QCheckBox;
 class KisIntSpinbox;
+class KoCanvasBase;
 
 /**
  * Tool to select colors by pointing at a color on the image.
@@ -36,18 +37,20 @@ class KisIntSpinbox;
 
 class KisSelectionOptions;
 
-class KisToolSelectSimilar : public KisToolNonPaint {
+class KisToolSelectSimilar : public KisTool {
 
     Q_OBJECT
-    typedef KisToolNonPaint super;
+    typedef KisTool super;
 
 public:
-    KisToolSelectSimilar();
+    KisToolSelectSimilar(KoCanvasBase * canvas);
     virtual ~KisToolSelectSimilar();
 
-    virtual void setup(KActionCollection *collection);
-    virtual quint32 priority() { return 8; }
-    virtual enumToolType toolType() { return TOOL_SELECT; }
+//     virtual quint32 priority() { return 8; }
+//     virtual enumToolType toolType() { return TOOL_SELECT; }
+
+    virtual void paint(QPainter& gc, KoViewConverter &converter) {}
+    virtual void mousePressEvent(KoPointerEvent *e);
 
 public slots:
 
@@ -61,10 +64,8 @@ private:
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
-    virtual void buttonPress(KoPointerEvent *e);
     void setPickerCursor(enumSelectionMode);
 
-    
     QWidget *m_optWidget;
     KisSelectionOptions *m_selectionOptionsWidget;
 
@@ -83,12 +84,14 @@ class KisToolSelectSimilarFactory : public KoToolFactory {
 
 public:
     KisToolSelectSimilarFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolSelectSimilar", i18n( "Select similar colors")
+        : KoToolFactory(parent, "KisToolSelectSimilar", i18n( "Select similar colors"))
         {
             setToolTip( i18n( "Select similar colors" ) );
-            setToolType( TOOL_TYPE_SELECTED );
+//             setToolType( TOOL_TYPE_SELECTED );
+            setToolType( dynamicToolType() );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_similar_selection" );
-            setShortcut( Qt::CTRL + Qt::Key_E );
+            setShortcut( KShortcut(Qt::CTRL + Qt::Key_E) );
             setPriority( 0 );
         };
 

@@ -30,6 +30,7 @@
 class KAction;
 class KToggleAction;
 class KActionCollection;
+class KoViewConverter;
 
 class KisView2;
 class KisDoc;
@@ -89,6 +90,8 @@ public slots:
     void save();
     void toggleDisplaySelection();
 
+    void timerEvent();
+
 public:
     void grow (qint32 xradius, qint32 yradius);
     void shrink (qint32 xradius, qint32 yradius, bool edge_lock);
@@ -97,6 +100,8 @@ public:
     // they might be also useful on its own
     void erode();
     void dilate();
+
+    void paint(QPainter& gc, KoViewConverter &converter);
 
 private:
     void fill(const KoColor& color, bool fillWithPattern, const QString& transactionText);
@@ -137,6 +142,11 @@ private:
     KToggleAction *m_toggleDisplaySelection;
 
     QList<QAction*> m_pluginActions;
+
+    QVector<QPolygon> paths;
+    QTimer* timer;
+    int offset;
+    QList<QBrush> brushes;
 
 };
 

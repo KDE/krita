@@ -1,5 +1,9 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *
+ *  The outline algorith uses the limn algorithm of fontutils by
+ *  Karl Berry <karl@cs.umb.edu> and Kathryn Hargreaves <letters@cs.umb.edu>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,6 +41,7 @@
 #include <KoDocument.h>
 #include <KoMainWindow.h>
 #include <KoQueryTrader.h>
+#include <KoViewConverter.h>
 
 #include "kis_adjustment_layer.h"
 #include "kis_canvas2.h"
@@ -93,6 +98,22 @@ KisSelectionManager::KisSelectionManager(KisView2 * parent, KisDoc2 * doc)
       m_fillPattern(0)
 {
     m_clipboard = KisClipboard::instance();
+
+    for(int i=0; i<8; i++){
+        QImage texture( 8, 8, QImage::Format_Mono );
+        for(int y=0; y<8; y++)
+            for(int x=0; x<8; x++)
+                texture.setPixel(x, y, ((x+y+i)%8 < 4)? 1 : 0);
+
+        QBrush brush;
+        brush.setTextureImage(texture);
+        brushes << brush;
+    }
+
+    offset = 0;
+    timer = new QTimer();
+    timer->start ( 300 );
+    connect(timer, SIGNAL(timeout()), this, SLOT(timerEvent()));
 }
 
 KisSelectionManager::~KisSelectionManager()
@@ -322,6 +343,14 @@ void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 {
     if (img == m_parent->image()) {
         updateGUI();
+
+        KisPaintDeviceSP dev = img->activeDevice();
+        if (dev)
+            if (dev->hasSelection()) {
+                KisPaintDeviceSP dev = img->activeDevice();
+                KisSelectionSP selection = dev->selection();
+                paths = selection->outline();
+            }
     }
 }
 
@@ -1618,6 +1647,51 @@ void KisSelectionManager::computeTransition (quint8* transition, quint8** buf, q
     }
     else
         transition[x] = 0;
+}
+
+void KisSelectionManager::timerEvent()
+{
+    offset++;
+    if(offset>7) offset = 0;
+    m_parent->canvasBase()->updateCanvas(QRectF(0.0,0.0,1000.0,1000.0));
+}
+
+void KisSelectionManager::paint(QPainter& gc, KoViewConverter &converter)
+{
+    kDebug(41010) << "Brush count: " << brushes.count() << endl;
+    double sx, sy;
+    converter.zoom(&sx, &sy);
+
+    QMatrix matrix;
+    matrix.scale(sx/m_parent->image()->xRes(), sy/m_parent->image()->yRes());
+
+    QMatrix oldWorldMatrix = gc.worldMatrix();
+    gc.setWorldMatrix( matrix, true);
+
+    QTime t;
+    t.start();
+    gc.setRenderHints(0);
+
+    QPen pen1(Qt::black, 0);
+    QPen pen(brushes[offset], 0);
+
+    int i=0;
+    gc.setPen(pen1);
+    foreach(QPolygon polygon, paths)
+    {
+        gc.drawPolygon(polygon);
+        i++;
+    }
+    gc.setPen(pen);
+    foreach(QPolygon polygon, paths)
+    {
+        gc.drawPolygon(polygon);
+    }
+
+    kDebug(41010) << "Polygons :" << i << endl;
+    kDebug(41010) << "Painting marching ants :" << t.elapsed() << endl;
+
+    gc.setWorldMatrix( oldWorldMatrix);
 }
 
 #include "kis_selection_manager.moc"

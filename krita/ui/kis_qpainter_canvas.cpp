@@ -49,6 +49,7 @@
 #include "scale.h"
 #include "kis_doc2.h"
 #include "kis_grid_drawer.h"
+#include "kis_selection_manager.h"
 
 //#define DEBUG_REPAINT
 //#define USE_QT_SCALING
@@ -160,7 +161,6 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     QColor color = QColor(random()%255, random()%255, random()%255, 150);
     gc.fillRect(ev->rect(), color);
 #endif
-
     // ask the current layer to paint its selection (and potentially
     // other things, like wetness and active-layer outline
 
@@ -170,6 +170,9 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     gc.setRenderHint( QPainter::Antialiasing );
     gc.setRenderHint( QPainter::SmoothPixmapTransform );
     gc.translate( QPoint( -m_d->documentOffset.x(), -m_d->documentOffset.y() ) );
+
+    //Paint marching ants
+    m_d->canvas->view()->selectionManager()->paint(gc, *m_d->viewConverter );
 
     // ask the guides, grids, etc to paint themselves
     t.restart();

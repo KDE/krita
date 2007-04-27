@@ -274,12 +274,24 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
     Q_ASSERT(tool);
     if (d->canvasData == 0)
         return;
-    if (d->canvasData->activeTool) {
+    bool newActiveTool = d->canvasData->activeTool != 0;
+    if (newActiveTool) {
+        d->canvasData->activeTool->repaintDecorations();
+        // check if this tool is inputDeviceAgnostic and used by other devices, in which case we should not deactivate.
+        QList<CanvasData*> items = d->canvasses[d->canvasData->canvas];
+        foreach(CanvasData *cd, items) {
+            if(cd == d->canvasData) continue;
+            if(cd->activeTool == d->canvasData->activeTool) {
+                newActiveTool = false;
+                break;
+            }
+        }
+    }
+    if(newActiveTool) {
         foreach(QAction *action, d->canvasData->activeTool->actions().values())
             action->setEnabled(false);
         // repaint the decorations before we deactivate the tool as it might deleted 
         // data needed for the repaint
-        d->canvasData->activeTool->repaintDecorations();
         d->canvasData->activeTool->deactivate();
         disconnect(d->canvasData->activeTool, SIGNAL(sigCursorChanged(QCursor)),
                 this, SLOT(updateCursor(QCursor)));
@@ -290,19 +302,21 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
         disconnect(d->canvasData->activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
     }
     d->canvasData->activeTool = tool;
-    connect(d->canvasData->activeTool, SIGNAL(sigCursorChanged(QCursor)),
-            this, SLOT(updateCursor(QCursor)));
-    connect(d->canvasData->activeTool, SIGNAL(sigActivateTool(const QString &)),
-            this, SLOT(switchToolRequested(const QString &)));
-    connect(d->canvasData->activeTool, SIGNAL(sigActivateTemporary(const QString &)),
-            this, SLOT(switchToolTemporaryRequested(const QString &)));
-    connect(d->canvasData->activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
+    if(newActiveTool) {
+        connect(d->canvasData->activeTool, SIGNAL(sigCursorChanged(QCursor)),
+                this, SLOT(updateCursor(QCursor)));
+        connect(d->canvasData->activeTool, SIGNAL(sigActivateTool(const QString &)),
+                this, SLOT(switchToolRequested(const QString &)));
+        connect(d->canvasData->activeTool, SIGNAL(sigActivateTemporary(const QString &)),
+                this, SLOT(switchToolTemporaryRequested(const QString &)));
+        connect(d->canvasData->activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
 
-    // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
-    d->canvasData->canvas->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
-    foreach(QAction *action, d->canvasData->activeTool->actions().values())
-        action->setEnabled(true);
-    d->canvasData->activeTool->activate(temporary);
+        // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
+        d->canvasData->canvas->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
+        foreach(QAction *action, d->canvasData->activeTool->actions().values())
+            action->setEnabled(true);
+        d->canvasData->activeTool->activate(temporary);
+    }
 
     postSwitchTool();
 }

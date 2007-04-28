@@ -32,7 +32,6 @@
 class KoZoomController::Private
 {
 public:
-    // should be a d-pointer...
     KoCanvasController *canvasController;
     KoZoomHandler *zoomHandler;
     KoZoomAction *action;

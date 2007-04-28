@@ -60,6 +60,20 @@ public:
     virtual QRectF viewToDocument( const QRectF &viewRect ) const = 0;
 
     /**
+     * Convert a size in pt to pixels.
+     * @param documentSize the size in pt.
+     * @return the size in pixels.
+     */
+    virtual QSizeF documentToView( const QSizeF& documentSize ) const = 0;
+
+    /**
+     * Convert a size in pixels to pt.
+     * @param viewSize the size in pixels.
+     * @return the size in pt.
+     */
+    virtual QSizeF viewToDocument( const QSizeF& viewSize ) const = 0;
+
+    /**
      * Convert a single x coordinate in pt to pixels.
      * @param documentX the x coordinate in pt.
      * @return the x coordinate in pixels.

@@ -116,6 +116,16 @@ QRectF KoZoomHandler::viewToDocument( const QRectF &viewRect )  const{
     return r;
 }
 
+QSizeF KoZoomHandler::documentToView( const QSizeF &documentSize ) const {
+    return QSizeF( zoomItX( documentSize.width() ),
+                   zoomItY( documentSize.height() ) );
+}
+
+QSizeF KoZoomHandler::viewToDocument( const QSizeF &viewSize ) const {
+    return QSizeF( unzoomItX( viewSize.width() ),
+                   unzoomItY( viewSize.height() ) );
+}
+
 double KoZoomHandler::documentToViewX( double documentX ) const
 {
     return zoomItX( documentX );

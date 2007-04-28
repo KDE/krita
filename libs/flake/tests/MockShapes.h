@@ -65,6 +65,8 @@ class MockViewConverter : public KoViewConverter {
     QPointF viewToDocument( const QPointF &viewPoint ) const { return viewPoint; }
     QRectF documentToView( const QRectF &documentRect ) const { return documentRect; }
     QRectF viewToDocument( const QRectF &viewRect ) const { return viewRect; }
+    QSizeF documentToView( const QSizeF& documentSize ) const { return documentSize; }
+    QSizeF viewToDocument( const QSizeF& viewSize ) const { return viewSize; }
     double documentToViewX( double documentX ) const { return documentX; }
     double documentToViewY( double documentY ) const{ return documentY; }
     double viewToDocumentX( double viewX ) const { return viewX; }

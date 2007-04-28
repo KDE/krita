@@ -76,9 +76,7 @@ void KoZoomController::setPageSize(const QSizeF &pageSize)
 void KoZoomController::setDocumentSize( const QSizeF &documentSize )
 {
     m_documentSize = documentSize;
-    m_canvasController->setDocumentSize(
-            QSize( int(0.5 + m_zoomHandler->documentToViewX(m_documentSize.width())),
-                   int(0.5 + m_zoomHandler->documentToViewY(m_documentSize.height())) ) );
+    m_canvasController->setDocumentSize( m_zoomHandler->documentToView(m_documentSize).toSize() );
 }
 
 void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)

@@ -35,13 +35,22 @@ class QSize;
 #include <kofficeui_export.h>
 
 /**
- * This controller class to handle zoom levels for any canvas. (kofficeui)
+ * This controller class handles zoom levels for any canvas. (kofficeui)
  *
- * Workflows;
+ * For each KoCanvasController you instantiate this class once. This class then creates
+ * a KoZoomAction and basically handles all zooming for you.
+ *
+ * All you have to do is connect to zoomChanged so that you can redraw your canvas.
+ * You don't have to concern yourself with fit to width modes or anything.
+*
+ * The specialAspectMode toggle is only a UI element. It does nothing except emit the
+ * aspectModeChanged signal.
+ *
+ * As documentation follows a description of the internal workflow:
  * # the user changes the slider/combo which causes the zoomAction to fire.
- * This will cause the private slot setZoom(mode, int) to be called which will
+ * This will cause the private slot setZoom(mode, double) to be called which will
  * then cause the controller to calculate the effective zoomlevel. In mode
- * percent the zoom is forwarded, in mode pageWidth this is calculated based
+ * constant the zoomlevel is forwarded, in mode pageWidth this is calculated based
  * on the page size and the canvas size (the latter can be fetched from the
  * canvasController)
  * 
@@ -56,21 +65,29 @@ class QSize;
  * which the zoomController then acts upon and emits for the application to persist.  It
  * will alter the the mode to percent based.
  *
- * The specialAspectMode toggle is only a UI element. It does nothing except emit the
- * aspectModeChanged signal.
 */
 class KOFFICEUI_EXPORT KoZoomController : public QObject {
 Q_OBJECT
 public:
-    /// one KoZoomController per canvasController.  The zoomAction is created in the constructor as a member.
+    /**
+    * Constructor. Create oner per canvasController.  The zoomAction is created in the constructor as a member.
+    * @param co the canvasController
+    * @param zh the zoom handler (viewconverter with setter methods)
+    * @param ac the action collection whereto the KoZoomAction is added
+    * @param doSpecialAspectMode wether the KoZoomAction should show a toggle
+    */
     KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *ac, bool doSpecialAspectMode);
+
+    /// destructor
     ~KoZoomController();
 
-    /// return the zoomAction to be added to the actionCollection and Gui.
+    /// returns the zoomAction to be added to the actionCollection and Gui.
     KoZoomAction *zoomAction() const;
 
-    /// setter for the view to set the zoom and level.
+    /// setter for the view to set the zoom level.
     void setZoom(double zoom);
+
+    /// setter for the view to set the zoom mode.
     void setZoomMode(KoZoomMode::Mode mode);
 
 public slots:

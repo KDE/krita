@@ -31,7 +31,7 @@
 #include <QPaintEvent>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-#include <kopainter_export.h>
+#include <kofficeui_export.h>
 
 #include "KoItemToolTip.h"
 
@@ -50,7 +50,7 @@ class KoIconToolTip: public KoItemToolTip
         typedef KoItemToolTip super;
 };
 
-class KOPAINTER_EXPORT KoResourceChooser: public QTableWidget
+class KOFFICEUI_EXPORT KoResourceChooser: public QTableWidget
 {
     Q_OBJECT
 public:
@@ -81,7 +81,7 @@ private:
 // This is a first attempt at a pattern chooser widget abstraction which is at least
 // useful for two applications(karbon and krita). It is really a light version of
 // kis_patternchooser. (Rob)
-class KOPAINTER_EXPORT KoPatternChooser : public QWidget
+class KOFFICEUI_EXPORT KoPatternChooser : public QWidget
 {
   Q_OBJECT
 public:

@@ -22,12 +22,12 @@
 #include <QFrame>
 
 #include <KoColor.h>
-#include "kopainter_export.h"
+#include "kofficeui_export.h"
 
 /**
  *  The small widget showing the selected color
  */
-class KOPAINTER_EXPORT KoColorPatch : public QFrame
+class KOFFICEUI_EXPORT KoColorPatch : public QFrame
 {
   Q_OBJECT
 public:

@@ -21,7 +21,7 @@
 #ifndef KDUALCOLORBUTTON_H
 #define KDUALCOLORBUTTON_H
 
-#include <kopainter_export.h>
+#include <kofficeui_export.h>
 
 #include <QtGui/QWidget>
 
@@ -45,7 +45,7 @@ class KoColor;
  *
  * @author Daniel M. Duley <mosfet@kde.org>
  */
-class KOPAINTER_EXPORT KoDualColorButton : public QWidget
+class KOFFICEUI_EXPORT KoDualColorButton : public QWidget
 {
     Q_OBJECT
     Q_ENUMS( Selection )

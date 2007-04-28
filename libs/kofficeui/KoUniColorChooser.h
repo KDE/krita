@@ -23,7 +23,7 @@
 
 #include "KoColor.h"
 
-#include <kopainter_export.h>
+#include <kofficeui_export.h>
 
 class KoColor;
 class KoXYColorSelector;
@@ -34,7 +34,7 @@ class QLabel;
 class QSpinBox;
 class QRadioButton;
 
-class KOPAINTER_EXPORT KoUniColorChooser
+class KOFFICEUI_EXPORT KoUniColorChooser
      : public QWidget
 {
     Q_OBJECT

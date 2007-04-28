@@ -26,7 +26,7 @@
 #include <QDockWidget>
 
 #include <KoDockFactory.h>
-#include "kopainter_export.h"
+#include "kofficeui_export.h"
 
 class KoUniColorChooser;
 
@@ -36,7 +36,7 @@ class KoUniColorChooser;
    just a band of colors -- and have the unified color selector popup.
    This just takes a tad too much place.
 */
-class KOPAINTER_EXPORT KoColorDocker : public QDockWidget
+class KOFFICEUI_EXPORT KoColorDocker : public QDockWidget
 {
     Q_OBJECT
 
@@ -49,7 +49,7 @@ private:
 };
 
 
-class KOPAINTER_EXPORT KoColorDockerFactory : public KoDockFactory
+class KOFFICEUI_EXPORT KoColorDockerFactory : public KoDockFactory
 {
 public:
     KoColorDockerFactory(bool showOpacitySlider = false)

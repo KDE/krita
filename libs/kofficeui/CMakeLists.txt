@@ -2,7 +2,7 @@
 add_subdirectory( tests )
 
 
-include_directories( ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} )
+include_directories( ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} ${PIGMENT_INCLUDES} )
 
 
 ########### next target ###############
@@ -47,6 +47,14 @@ set(kofficeui_LIB_SRCS
     KoCopyController.cpp
     KoImageData.cpp
     KoImageCollection.cpp
+   KoColorDocker.cpp
+   KoResourceChooser.cpp
+   KoColorSlider.cc
+   KoXYColorSelector.cc
+   KoUniColorChooser.cpp
+   KoUniColorDialog.cpp
+   KoColorPatch.cpp
+   KoDualColorButton.cpp
 )
 
 kde4_automoc(${kofficeui_LIB_SRCS})
@@ -61,7 +69,7 @@ kde4_add_ui_files( kofficeui_LIB_SRCS
 
 kde4_add_library(kofficeui SHARED ${kofficeui_LIB_SRCS})
 
-target_link_libraries(kofficeui  ${KDE4_KDECORE_LIBS} kofficecore flake )
+target_link_libraries(kofficeui  ${KDE4_KDECORE_LIBS} kofficecore flake pigment )
 
 set_target_properties(kofficeui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kofficeui  DESTINATION ${LIB_INSTALL_DIR})

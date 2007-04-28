@@ -641,8 +641,7 @@ bool KoMainWindow::openDocumentInternal( const KUrl & url, KoDocument *newdoc )
     bool openRet = (!isImporting ()) ? newdoc->openURL(url) : newdoc->import(url);
     if(!openRet)
     {
-        newdoc->removeShell(this);
-        delete newdoc;
+        //newdoc->removeShell(this); delete newdoc; // already done by slotLoadCanceled()
         return false;
     }
     updateReloadFileAction(newdoc);

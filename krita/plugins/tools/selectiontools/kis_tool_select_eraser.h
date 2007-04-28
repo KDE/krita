@@ -21,12 +21,12 @@
 #ifndef KIS_TOOL_SELECT_ERASER_H_
 #define KIS_TOOL_SELECT_ERASER_H_
 
-#include <KoToolFactory.h>
-#include <kis_tool_freehand.h>
+#include "KoToolFactory.h"
 
-class QPointF;
+#include "kis_layer_shape.h"
+#include "kis_tool_freehand.h"
+
 class KisSelectionOptions;
-
 
 /**
  * The selection eraser makes a selection smaller by painting with the
@@ -38,12 +38,9 @@ class KisToolSelectEraser : public KisToolFreehand {
     typedef KisToolFreehand super;
 
 public:
-    KisToolSelectEraser();
+    KisToolSelectEraser(KoCanvasBase *canvas);
     virtual ~KisToolSelectEraser();
 
-    virtual void setup(KActionCollection *collection);
-    virtual quint32 priority() { return 2; }
-    virtual enumToolType toolType() { return TOOL_SELECT; }
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
@@ -51,14 +48,11 @@ public slots:
     virtual void activate();
 
 protected:
-
     virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
 private:
     KisSelectionOptions * m_optWidget;
-
 };
-
 
 class KisToolSelectEraserFactory : public KoToolFactory {
     typedef KoToolFactory super;
@@ -69,8 +63,9 @@ public:
             setToolTip( i18n( "Erase parts of a selection with a brush" ) );
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_eraser_selection" );
-            setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
+            setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
             setPriority( 0 );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolSelectEraserFactory(){}

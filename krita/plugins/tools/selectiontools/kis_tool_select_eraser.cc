@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_select_eraser.h"
+
 #include <QEvent>
 #include <QLabel>
 #include <QLayout>
@@ -25,33 +27,27 @@
 #include <QVBoxLayout>
 
 #include <kdebug.h>
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <k3command.h>
 #include <klocale.h>
+
+#include "KoPointerEvent.h"
 
 #include "kis_brush.h"
 #include "kis_layer.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
-#include "kis_cmb_composite.h"
 #include "kis_cursor.h"
-#include "kis_canvas_subject.h"
 #include "kis_doc2.h"
-#include "KoPointerEvent.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
-#include "kis_tool_select_eraser.h"
 #include "kis_types.h"
 #include "kis_selection_options.h"
+#include "kis_undo_adapter.h"
 
-KisToolSelectEraser::KisToolSelectEraser()
-        : super(i18n("SelectEraser"))
+KisToolSelectEraser::KisToolSelectEraser(KoCanvasBase *canvas)
+        : super(canvas, KisCursor::load("tool_eraser_selection_cursor.png", 5, 5),
+                i18n( "Selection Eraser" ))
 {
     setObjectName("tool_select_eraser");
-    setCursor(KisCursor::load("tool_eraser_selection_cursor.png", 5, 5));
     m_optWidget = 0;
     m_paintOnSelection = true;
 }
@@ -91,23 +87,23 @@ void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
     }
     KisSelectionSP selection = dev->selection();
 
-    m_target = selection.data();
-    m_painter = new KisPainter(KisPaintDeviceSP(selection.data()));
+    m_target = selection;
+    m_painter = new KisPainter(selection);
     Q_CHECK_PTR(m_painter);
     m_painter->beginTransaction(i18n("Selection Eraser"));
     m_painter->setPaintColor(KoColor(Qt::white, selection->colorSpace()));
-    m_painter->setBrush(m_subject->currentBrush());
+    m_painter->setBrush(m_currentBrush);
     m_painter->setOpacity(OPACITY_OPAQUE);
-    m_painter->setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_ERASE));
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("eraser", 0, painter());
-    painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
+    m_painter->setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_ERASE));
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("eraser", 0, m_painter);
+    m_painter->setPaintOp(op); // And now the painter owns the op and will destroy it.
 
     // Set the cursor -- ideally. this should be a mask created from the brush,
     // now that X11 can handle colored cursors.
 #if 0
     // Setting cursors has no effect until the tool is selected again; this
     // should be fixed.
-    setCursor(KisCursor::eraserCursor());
+    useCursor(KisCursor::eraserCursor());
 #endif
 }
 
@@ -117,30 +113,13 @@ void KisToolSelectEraser::endPaint() {
         m_currentImage->activeDevice()->emitSelectionChanged();
 }
 
-
-void KisToolSelectEraser::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("tool_eraser_selection"),
-                               i18n("Selection &Eraser"),
-                               collection,
-                               objectName());
-        Q_CHECK_PTR(m_action);
-        m_action->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Erase parts of a selection"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
-}
-
 QWidget* KisToolSelectEraser::createOptionWidget()
 {
     // Commented out due to the fact that this doesn't actually work if you change the action
 #if 0
-    m_optWidget = new KisSelectionOptions(parent, m_subject);
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    Q_ASSERT(canvas);
+    m_optWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setWindowTitle(i18n("Selection Eraser"));
 

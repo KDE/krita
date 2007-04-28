@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_select_brush.h"
+
 #include <QEvent>
 #include <QLabel>
 #include <QLayout>
@@ -28,33 +30,30 @@
 #include <kdebug.h>
 #include <kactioncollection.h>
 #include <kaction.h>
-#include <k3command.h>
 #include <klocale.h>
 
+#include "KoPointerEvent.h"
+
 #include "kis_brush.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
 #include "kis_cmb_composite.h"
 #include "kis_cursor.h"
 #include "kis_doc2.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
-#include "KoPointerEvent.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
-#include "kis_tool_select_brush.h"
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"
-#include "kis_canvas_subject.h"
+#include "kis_undo_adapter.h"
 
-KisToolSelectBrush::KisToolSelectBrush()
-        : super(i18n("SelectBrush"))
+KisToolSelectBrush::KisToolSelectBrush(KoCanvasBase *canvas)
+        : super(canvas, KisCursor::load("tool_brush_selection_cursor.png", 5, 5),
+                i18n( "Selection Brush" ))
 {
     setObjectName("tool_select_brush");
     m_optWidget = 0;
-    setCursor(KisCursor::load("tool_brush_selection_cursor.png", 5, 5));
     m_paintOnSelection = true;
 }
 
@@ -93,21 +92,21 @@ void KisToolSelectBrush::initPaint(KoPointerEvent* /*e*/)
     KisSelectionSP selection = dev->selection();
 
     m_target = selection.data();
-    m_painter = new KisPainter(KisPaintDeviceSP(selection.data()));
+    m_painter = new KisPainter(selection);
     Q_CHECK_PTR(m_painter);
     m_painter->setPaintColor(KoColor(Qt::black, selection->colorSpace()));
-    m_painter->setBrush(m_subject->currentBrush());
-    m_painter->setOpacity(OPACITY_OPAQUE);//m_subject->fgColor().colorSpace()->intensity8(m_subject->fgColor().data()));
-    m_painter->setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, painter());
-    painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
+    m_painter->setBrush(m_currentBrush);
+    m_painter->setOpacity(OPACITY_OPAQUE);//m_currentFgColor.colorSpace()->intensity8(m_currentFgColor));
+    m_painter->setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_OVER));
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, m_painter);
+    m_painter->setPaintOp(op); // And now the painter owns the op and will destroy it.
 
     // Set the cursor -- ideally. this should be a mask created from the brush,
     // now that X11 can handle colored cursors.
 #if 0
     // Setting cursors has no effect until the tool is selected again; this
     // should be fixed.
-    setCursor(KisCursor::brushCursor());
+    useCursor(KisCursor::brushCursor());
 #endif
 }
 
@@ -118,30 +117,13 @@ void KisToolSelectBrush::endPaint()
         if (m_currentImage->undo() && m_painter) {
             // If painting in mouse release, make sure painter
             // is destructed or end()ed
-            m_currentImage->undoAdapter()->addCommandOld(m_transaction);
+            m_currentImage->undoAdapter()->addCommand(m_transaction);
         }
         delete m_painter;
         m_painter = 0;
         if (m_currentImage->activeDevice())
             m_currentImage->activeDevice()->emitSelectionChanged();
-        notifyModified();
-    }
-}
-
-void KisToolSelectBrush::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("tool_brush_selection"), i18n("&Selection Brush"),
-                               collection,
-                               objectName());
-        Q_CHECK_PTR(m_action);
-        m_action->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Paint a selection"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
+        //notifyModified();
     }
 }
 
@@ -149,7 +131,9 @@ QWidget* KisToolSelectBrush::createOptionWidget()
 {
     // Commented out due to the fact that this doesn't actually work if you change the action
 #if 0
-    m_optWidget = new KisSelectionOptions(parent, m_subject);
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    Q_ASSERT(canvas);
+    m_optWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setWindowTitle(i18n("Selection Brush"));
 

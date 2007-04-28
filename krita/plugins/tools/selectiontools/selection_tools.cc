@@ -17,33 +17,26 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <stdlib.h>
-#include <vector>
-
-#include <QPoint>
-
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kdebug.h>
-#include <kgenericfactory.h>
-
-#include <kis_global.h>
-#include <kis_types.h>
-#include <kis_tool.h>
-#include <KoToolRegistry.h>
 
 #include "selection_tools.h"
 
+#include <klocale.h>
+#include <kcomponentdata.h>
+#include <kdebug.h>
+#include <kgenericfactory.h>
+
+#include "KoToolRegistry.h"
+
+#include "kis_global.h"
+#include "kis_types.h"
+
 #include "kis_tool_select_outline.h"
-// #include "kis_tool_select_polygonal.h"
+#include "kis_tool_select_polygonal.h"
 #include "kis_tool_select_rectangular.h"
-// #include "kis_tool_select_contiguous.h"
+#include "kis_tool_select_contiguous.h"
 #include "kis_tool_select_elliptical.h"
-// #include "kis_tool_select_eraser.h"
-// #include "kis_tool_select_brush.h"
+#include "kis_tool_select_eraser.h"
+#include "kis_tool_select_brush.h"
 
 typedef KGenericFactory<SelectionTools> SelectionToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaselectiontools, SelectionToolsFactory( "krita" ) )
@@ -57,12 +50,12 @@ SelectionTools::SelectionTools(QObject *parent, const QStringList &)
     KoToolRegistry * r = KoToolRegistry::instance();
 
     r->add(new KisToolSelectOutlineFactory( r, QStringList()));
-//     r->add(KoToolFactorySP(new KisToolSelectPolygonalFactory()));
+    r->add(new KisToolSelectPolygonalFactory( r, QStringList()));
     r->add(new KisToolSelectRectangularFactory( r, QStringList()));
-//     r->add(KoToolFactorySP(new KisToolSelectBrushFactory()));
-//     r->add(KoToolFactorySP(new KisToolSelectContiguousFactory()));
-     r->add(new KisToolSelectEllipticalFactory( r, QStringList()));
-//     r->add(KoToolFactorySP(new KisToolSelectEraserFactory()));
+    r->add(new KisToolSelectBrushFactory( r, QStringList()));
+    r->add(new KisToolSelectEraserFactory( r, QStringList()));
+    r->add(new KisToolSelectEllipticalFactory( r, QStringList()));
+    r->add(new KisToolSelectContiguousFactory( r, QStringList()));
 }
 
 SelectionTools::~SelectionTools()

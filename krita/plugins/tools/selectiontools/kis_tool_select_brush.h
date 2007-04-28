@@ -21,12 +21,11 @@
 #ifndef KIS_TOOL_SELECT_BRUSH_H_
 #define KIS_TOOL_SELECT_BRUSH_H_
 
-#include <kis_tool.h>
-#include <kis_tool_freehand.h>
-#include <KoToolFactory.h>
+#include "KoToolFactory.h"
 
-class QWidget;
-class QPointF;
+#include "kis_layer_shape.h"
+#include "kis_tool_freehand.h"
+
 class KisSelectedTransaction;
 class KisSelectionOptions;
 
@@ -40,12 +39,9 @@ class KisToolSelectBrush : public KisToolFreehand {
     typedef KisToolFreehand super;
 
 public:
-    KisToolSelectBrush();
+    KisToolSelectBrush(KoCanvasBase *canvas);
     virtual ~KisToolSelectBrush();
 
-    virtual void setup(KActionCollection *collection);
-    virtual quint32 priority() { return 1; }
-    virtual enumToolType toolType() { return TOOL_SELECT; }
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
@@ -71,8 +67,9 @@ public:
             setToolTip( i18n( "Paint a selection with a brush" ) );
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_brush_selection" );
-            setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
+            setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
             setPriority( 0 );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolSelectBrushFactory(){}

@@ -20,6 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_select_contiguous.h"
+
 #include <QPainter>
 #include <QLayout>
 #include <QLabel>
@@ -35,36 +37,31 @@
 #include <knuminput.h>
 #include <kcolorbutton.h>
 
-#include <kis_cursor.h>
-#include <kis_selection_manager.h>
-#include <kis_canvas_subject.h>
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_paint_device.h>
-#include <KoPointerEvent.h>
-#include <kis_canvas_subject.h>
-#include <kis_selection_options.h>
-#include <kis_selection.h>
-#include <kis_paint_device.h>
-#include <kis_iterators_pixel.h>
-#include <kis_selection_options.h>
-//#include <kis_canvas_observer.h>
-#include <kis_fill_painter.h>
-#include <kis_undo_adapter.h>
-#include <kis_selected_transaction.h>
+#include "KoPointerEvent.h"
 
-#include "kis_tool_select_contiguous.h"
+#include "kis_cursor.h"
+#include "kis_selection_manager.h"
+#include "kis_image.h"
+#include "kis_canvas2.h"
+#include "kis_layer.h"
+#include "kis_paint_device.h"
+#include "kis_selection_options.h"
+#include "kis_selection.h"
+#include "kis_paint_device.h"
+#include "kis_iterators_pixel.h"
+#include "kis_selection_options.h"
+#include "kis_fill_painter.h"
+#include "kis_undo_adapter.h"
+#include "kis_selected_transaction.h"
 
-KisToolSelectContiguous::KisToolSelectContiguous() : super(i18n("Contiguous Select"))
+KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas) 
+    : super(canvas, KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6))
 {
     setObjectName("tool_select_contiguous");
-    m_subject = 0;
     m_optWidget = 0;
     m_fuzziness = 20;
     m_sampleMerged = false;
     m_selectAction = SELECTION_ADD;
-
-    setCursor(KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6));
 }
 
 KisToolSelectContiguous::~KisToolSelectContiguous()
@@ -81,28 +78,20 @@ void KisToolSelectContiguous::activate()
     m_optWidget->slotActivated();
 }
 
-void KisToolSelectContiguous::buttonPress(KoPointerEvent * e)
+void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
 {
-    if (m_subject) {
+    if (m_canvas && m_currentImage) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-
-        KisImageSP m_currentImage;
-        KisPaintDeviceSP dev;
-        QPoint pos;
 
         if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
             return;
 
-        if (!(m_currentImage = m_currentImage))
-            return;
-
-        dev = m_currentImage->activeDevice();
+        KisPaintDeviceSP dev = m_currentImage->activeDevice();
 
         if (!dev || !m_currentImage->activeLayer()->visible())
             return;
 
-
-        pos = QPoint(e->pos().floorX(), e->pos().floorY());
+        QPoint pos = convertToIntPixelCoord(e);
 
         KisFillPainter fillpainter(dev);
         fillpainter.setFillThreshold(m_fuzziness);
@@ -128,39 +117,26 @@ void KisToolSelectContiguous::buttonPress(KoPointerEvent * e)
 
         }
 
-        dev->setDirty(selection->extent()); // A bit too wide, but that's not that bad
+        //dev->setDirty(selection->extent()); // A bit too wide, but that's not that bad
         dev->emitSelectionChanged();
 
         if (m_currentImage->undo())
-            m_currentImage->undoAdapter()->addCommandOld(t);
+            m_currentImage->undoAdapter()->addCommand(t);
 
         QApplication::restoreOverrideCursor();
     }
-
 }
 
-void KisToolSelectContiguous::setup(KActionCollection *collection)
+void KisToolSelectContiguous::paint( QPainter &painter, KoViewConverter &converter )
 {
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("tool_contiguous_selection"),
-                               i18n("&Contiguous Area Selection"),
-                               collection,
-                               objectName());
-        Q_CHECK_PTR(m_action);
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Select a contiguous area"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
 {
     m_fuzziness = fuzziness;
 }
-
 
 void KisToolSelectContiguous::slotSetAction(int action)
 {
@@ -176,12 +152,14 @@ void KisToolSelectContiguous::slotSetAction(int action)
 //     };
 }
 
-
 QWidget* KisToolSelectContiguous::createOptionWidget()
 {
-    m_optWidget = new KisSelectionOptions(parent, m_subject);
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    Q_ASSERT(canvas);
+    m_optWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setWindowTitle(i18n("Contiguous Area Selection"));
+    m_optWidget->disableAntiAliasSelectionOption();
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);

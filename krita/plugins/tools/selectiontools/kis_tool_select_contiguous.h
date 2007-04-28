@@ -22,41 +22,35 @@
 #ifndef __KIS_TOOL_SELECT_CONTIGUOUS_H__
 #define __KIS_TOOL_SELECT_CONTIGUOUS_H__
 
-#include <kis_tool.h>
-#include <kis_tool_non_paint.h>
-#include <KoToolFactory.h>
-#include <kis_selection.h>
+#include "KoToolFactory.h"
 
-class QWidget;
+#include "kis_tool.h"
+#include "kis_selection.h"
+#include "kis_layer_shape.h"
+
 class QVBoxLayout;
 class QCheckBox;
 
 class KisSelectionOptions;
-class KisCanvasSubject;
 
 /**
  * The 'magic wand' selection tool -- in fact just
  * a floodfill that only creates a selection.
  */
-class KisToolSelectContiguous : public KisToolNonPaint {
+class KisToolSelectContiguous : public KisTool {
 
-    typedef KisToolNonPaint super;
+    typedef KisTool super;
     Q_OBJECT
 
 public:
-    KisToolSelectContiguous();
+    KisToolSelectContiguous(KoCanvasBase *canvas);
     virtual ~KisToolSelectContiguous();
 
-public:
-
-    virtual void setup(KActionCollection *collection);
-    virtual quint32 priority() { return 7; }
-    virtual enumToolType toolType() { return TOOL_SELECT; }
-
     virtual QWidget* createOptionWidget();
-        virtual QWidget* optionWidget();
+    virtual QWidget* optionWidget();
+    virtual void paint( QPainter &painter, KoViewConverter &converter );
 
-    virtual void buttonPress(KoPointerEvent *event);
+    virtual void mousePressEvent(KoPointerEvent *event);
 
 public slots:
     virtual void slotSetFuzziness(int);
@@ -64,9 +58,7 @@ public slots:
     virtual void slotSetSampleMerged(int);
     virtual void activate();
 
-
 private:
-    
     KisSelectionOptions * m_optWidget;
 
     int m_fuzziness;
@@ -84,6 +76,7 @@ public:
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_contiguous_selection" );
             setPriority( 0 );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolSelectContiguousFactory(){}
@@ -93,7 +86,6 @@ public:
     }
 
 };
-
 
 #endif //__KIS_TOOL_SELECT_CONTIGUOUS_H__
 

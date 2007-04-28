@@ -23,32 +23,32 @@
 #ifndef __selecttoolpolygonal_h__
 #define __selecttoolpolygonal_h__
 
-
-#include "kis_tool_non_paint.h"
 #include "KoToolFactory.h"
+
+#include "kis_layer_shape.h"
 #include "kis_selection.h"
+#include "kis_tool.h"
 
 class KisSelectionOptions;
 
-class KisToolSelectPolygonal : public KisToolNonPaint {
+class KisToolSelectPolygonal : public KisTool {
 
-    typedef KisToolNonPaint super;
+    typedef KisTool super;
     Q_OBJECT
 public:
-    KisToolSelectPolygonal();
+    KisToolSelectPolygonal(KoCanvasBase *canvas);
     virtual ~KisToolSelectPolygonal();
 
-    virtual void setup(KActionCollection *collection);
-    virtual quint32 priority() { return 5; }
-    virtual enumToolType toolType() { return TOOL_SELECT; }
-    virtual void buttonPress(KoPointerEvent *event);
-    virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KoPointerEvent *event);
-    virtual void doubleClick(KoPointerEvent * event);
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    virtual void mouseDoubleClickEvent(KoPointerEvent * event);
+    virtual void keyPressEvent(QKeyEvent *e);
 
-    void finish();
     QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
+
+    virtual void paint( QPainter &painter, KoViewConverter &converter );
 
 public slots:
     virtual void slotSetAction(int);
@@ -56,10 +56,8 @@ public slots:
     void deactivate();
 
 protected:
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
-    void draw(QPainter& gc);
-    void draw();
+    void finish();
+    QRectF dragBoundingRect();
 
 protected:
     QPointF m_dragStart;
@@ -67,9 +65,7 @@ protected:
 
     bool m_dragging;
 private:
-    typedef Q3ValueVector<QPointF> KoPointVector;
-    
-    KoPointVector m_points;
+    vQPointF m_points;
     KisSelectionOptions * m_optWidget;
     enumSelectionMode m_selectAction;
 };
@@ -86,15 +82,15 @@ public:
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_polygonal_selection" );
             setPriority( 0 );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolSelectPolygonalFactory(){}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
-        return =  new KisToolSelectPolygonal(canvas);
+        return new KisToolSelectPolygonal(canvas);
     }
 };
-
 
 #endif //__selecttoolpolygonal_h__
 

@@ -40,10 +40,6 @@ set(kofficeui_LIB_SRCS
    KoZoomController.cpp
    KoZoomHandler.cpp
    KoZoomMode.cpp
-   tkaction.cpp
-   tkcoloractions.cpp 
-   tkcombobox.cpp 
-   tktoolbarbutton.cpp
    KoToolBoxFactory.cpp
     KoToolDocker.cpp
     KoToolDockerFactory.cpp
@@ -103,10 +99,6 @@ install(
     KoZoomController.h
     KoZoomHandler.h
     KoZoomMode.h
-    tkaction.h
-    tkcoloractions.h
-    tkcombobox.h
-    tktoolbarbutton.h
     KoToolBoxFactory.h
     KoToolDocker.h
     KoToolDockerFactory.h

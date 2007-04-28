@@ -8,7 +8,7 @@ set(kritaselectiontools_PART_SRCS
 #     kis_tool_select_polygonal.cc
      kis_tool_select_elliptical.cc
 #     kis_tool_select_contiguous.cc
-#     kis_tool_select_outline.cc
+     kis_tool_select_outline.cc
     )
 
 kde4_automoc(${kritaselectiontools_PART_SRCS})

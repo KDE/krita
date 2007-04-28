@@ -63,4 +63,14 @@ void KisSelectionOptions::slotActivated()
     }
 }
 
+bool KisSelectionOptions::antiAliasSelection()
+{
+    return m_page->chkAntiAliasing->isChecked();
+}
+
+void KisSelectionOptions::disableAntiAliasSelectionOption()
+{
+    m_page->chkAntiAliasing->setDisabled(true);
+}
+
 #include "kis_selection_options.moc"

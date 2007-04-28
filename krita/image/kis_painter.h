@@ -509,6 +509,12 @@ public:
     /// Returns the current fill style
     FillStyle fillStyle() const { return m_fillStyle; }
 
+    /// Set whether a polygon's filled area should be anti-aliased or not. The default is true.
+    void setAntiAliasPolygonFill(bool antiAliasPolygonFill) { m_antiAliasPolygonFill = antiAliasPolygonFill; }
+
+    /// Return whether a polygon's filled area should be anti-aliased or not
+    bool antiAliasPolygonFill() { return m_antiAliasPolygonFill; }
+
     /// The style of the brush stroke around polygons and so
     enum StrokeStyle {
         StrokeStyleNone,
@@ -605,6 +611,7 @@ protected:
     KoColor m_fillColor;
     FillStyle m_fillStyle;
     StrokeStyle m_strokeStyle;
+    bool m_antiAliasPolygonFill;
     KisBrush *m_brush;
     KisPattern *m_pattern;
     QPointF m_duplicateOffset;

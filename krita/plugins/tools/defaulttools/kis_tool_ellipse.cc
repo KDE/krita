@@ -154,6 +154,7 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
         m_painter->setPaintColor(m_currentFgColor);
         m_painter->setBackgroundColor(m_currentBgColor);
         m_painter->setFillStyle(fillStyle());
+        m_painter->setStrokeStyle(strokeStyle());
         m_painter->setBrush(m_currentBrush);
         m_painter->setPattern(m_currentPattern);
         m_painter->setOpacity(m_opacity);

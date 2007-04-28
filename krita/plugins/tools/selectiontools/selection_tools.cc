@@ -37,7 +37,7 @@
 
 #include "selection_tools.h"
 
-// #include "kis_tool_select_outline.h"
+#include "kis_tool_select_outline.h"
 // #include "kis_tool_select_polygonal.h"
 #include "kis_tool_select_rectangular.h"
 // #include "kis_tool_select_contiguous.h"
@@ -56,7 +56,7 @@ SelectionTools::SelectionTools(QObject *parent, const QStringList &)
 
     KoToolRegistry * r = KoToolRegistry::instance();
 
-//     r->add(KoToolFactorySP(new KisToolSelectOutlineFactory()));
+    r->add(new KisToolSelectOutlineFactory( r, QStringList()));
 //     r->add(KoToolFactorySP(new KisToolSelectPolygonalFactory()));
     r->add(new KisToolSelectRectangularFactory( r, QStringList()));
 //     r->add(KoToolFactorySP(new KisToolSelectBrushFactory()));

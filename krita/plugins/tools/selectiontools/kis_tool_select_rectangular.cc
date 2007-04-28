@@ -242,6 +242,7 @@ QWidget* KisToolSelectRectangular::createOptionWidget()
     m_optWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setWindowTitle(i18n("Rectangular Selection"));
+    m_optWidget->disableAntiAliasSelectionOption();
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 

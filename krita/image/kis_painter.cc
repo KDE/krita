@@ -81,7 +81,7 @@ void KisPainter::init()
     m_fillStyle = FillStyleNone;
     m_strokeStyle = StrokeStyleBrush;
     m_pressure = PRESSURE_MIN;
-
+    m_antiAliasPolygonFill = true;
 }
 
 KisPainter::~KisPainter()
@@ -746,146 +746,48 @@ double KisPainter::pointToLineDistance(const QPointF& p, const QPointF& l0, cons
     return distance;
 }
 
-/*
- * Concave Polygon Scan Conversion
- * by Paul Heckbert
- * from "Graphics Gems", Academic Press, 1990
- */
-
-/*
- * concave: scan convert nvert-sided concave non-simple polygon with vertices at
- * (point[i].x, point[i].y) for i in [0..nvert-1] within the window win by
- * calling spanproc for each visible span of pixels.
- * Polygon can be clockwise or counterclockwise.
- * Algorithm does uniform point sampling at pixel centers.
- * Inside-outside test done by Jordan's rule: a point is considered inside if
- * an emanating ray intersects the polygon an odd number of times.
- * drawproc should fill in pixels from xl to xr inclusive on scanline y,
- * e.g:
- *    drawproc(y, xl, xr)
- *    int y, xl, xr;
- *    {
- *        int x;
- *        for (x=xl; x<=xr; x++)
- *        pixel_write(x, y, pixelvalue);
- *    }
- *
- *  Paul Heckbert    30 June 81, 18 Dec 89
- */
-
-typedef struct {    /* a polygon edge */
-    double x;       /* x coordinate of edge's intersection with current scanline */
-    double dx;      /* change in x with respect to y */
-    int i;            /* edge number: edge i goes from pt[i] to pt[i+1] */
-} Edge;
-
-static int n;            /* number of vertices */
-static const QPointF *pt;    /* vertices */
-
-static int nact;        /* number of active edges */
-static Edge *active;        /* active edge list:edges crossing scanline y */
-
-/* comparison routines for qsort */
-static int compare_ind(const void *pu, const void *pv)
-{
-    const int *u = static_cast<const int *>(pu);
-    const int *v = static_cast<const int *>(pv);
-
-    return pt[*u].y() <= pt[*v].y() ? -1 : 1;
-}
-
-static int compare_active(const void *pu, const void *pv)
-{
-    const Edge *u = static_cast<const Edge *>(pu);
-    const Edge *v = static_cast<const Edge *>(pv);
-
-    return u->x <= v->x ? -1 : 1;
-}
-
-static void cdelete(int i)        /* remove edge i from active list */
-{
-    int j;
-
-    for (j=0; j<nact && active[j].i!=i; j++);
-    if (j>=nact) return;        /* edge not in active list; happens at win->y0*/
-    nact--;
-    bcopy(&active[j+1], &active[j], (nact-j)*sizeof active[0]);
-}
-
-static void cinsert(int i, int y)        /* append edge i to end of active list */
-{
-    int j;
-    double dx;
-    const QPointF *p, *q;
-
-    j = i<n-1 ? i+1 : 0;
-    if (pt[i].y() < pt[j].y()) {
-        p = &pt[i]; q = &pt[j];
-    } else {
-        p = &pt[j]; q = &pt[i];
-    }
-    /* initialize x position at intersection of edge with scanline y */
-    active[nact].dx = dx = (q->x()-p->x())/(q->y()-p->y());
-    active[nact].x = dx*(y+.5-p->y())+p->x();
-    active[nact].i = i;
-    nact++;
-}
-
 void KisPainter::fillPolygon(const vQPointF& points, FillStyle fillStyle)
 {
-    int nvert = points.count();
-    int k, y0, y1, y, i, j, xl, xr;
-    int *ind;        /* list of vertex indices, sorted by pt[ind[j]].y */
+    if (points.count() < 3) {
+        return;
+    }
 
-    n = nvert;
-    pt = &(points[0]);
-    if (n<3) return;
     if (fillStyle == FillStyleNone) {
         return;
     }
 
-    ind = new int[n];
-    Q_CHECK_PTR(ind);
-    active = new Edge[n];
-    Q_CHECK_PTR(active);
+    QPainterPath polygonPath;
 
-    /* create y-sorted array of indices ind[k] into vertex list */
-    for (k=0; k<n; k++)
-        ind[k] = k;
-    qsort(ind, n, sizeof ind[0], compare_ind);  /* sort ind by pt[ind[k]].y */
+    polygonPath.moveTo(points.at(0));
 
-    nact = 0;                /* start with empty active list */
-    k = 0;                    /* ind[k] is next vertex to process */
-    y0 = static_cast<int>(ceil(pt[ind[0]].y()-.5));            /* ymin of polygon */
-    y1 = static_cast<int>(floor(pt[ind[n-1]].y()-.5));        /* ymax of polygon */
-
-    int x0 = INT_MAX;
-    int x1 = INT_MIN;
-
-    for (int i = 0; i < nvert; i++) {
-        int pointHighX = static_cast<int>(ceil(points[i].x() - 0.5));
-        int pointLowX = static_cast<int>(floor(points[i].x() - 0.5));
-
-        if (pointLowX < x0) {
-            x0 = pointLowX;
-        }
-        if (pointHighX > x1) {
-            x1 = pointHighX;
-        }
+    for (int pointIndex = 1; pointIndex < points.count(); pointIndex++) {
+        polygonPath.lineTo(points.at(pointIndex));
     }
+
+    polygonPath.closeSubpath();
 
     // Fill the polygon bounding rectangle with the required contents then we'll
     // create a mask for the actual polygon coverage.
 
-    KisPaintDeviceSP polygon = KisPaintDeviceSP(new KisPaintDevice(m_device->colorSpace(), "polygon"));
+    KisPaintDeviceSP polygon = new KisPaintDevice(m_device->colorSpace(), "polygon");
     Q_CHECK_PTR(polygon);
 
     KisFillPainter fillPainter(polygon);
-    QRect boundingRectangle(x0, y0, x1 - x0 + 1, y1 - y0 + 1);
+
+    QRectF boundingRect = polygonPath.boundingRect();
+    QRect fillRect;
+
+    fillRect.setLeft((qint32)floor(boundingRect.left()));
+    fillRect.setRight((qint32)ceil(boundingRect.right()));
+    fillRect.setTop((qint32)floor(boundingRect.top()));
+    fillRect.setBottom((qint32)ceil(boundingRect.bottom()));
+
+    // Expand the rectangle to allow for anti-aliasing.
+    fillRect.adjust(-1, -1, 1, 1);
 
     // Clip to the image bounds.
     if (m_device->image()) {
-        boundingRectangle &= m_device->image()->bounds();
+        fillRect &= m_device->image()->bounds();
     }
 
     switch (fillStyle) {
@@ -897,68 +799,47 @@ void KisPainter::fillPolygon(const vQPointF& points, FillStyle fillStyle)
         // Currently unsupported, fall through
         kWarning(DBG_AREA_CORE) << "Unknown or unsupported fill style in fillPolygon\n";
     case FillStyleForegroundColor:
-        fillPainter.fillRect(boundingRectangle, paintColor(), OPACITY_OPAQUE);
+        fillPainter.fillRect(fillRect, paintColor(), OPACITY_OPAQUE);
         break;
     case FillStyleBackgroundColor:
-        fillPainter.fillRect(boundingRectangle, backgroundColor(), OPACITY_OPAQUE);
+        fillPainter.fillRect(fillRect, backgroundColor(), OPACITY_OPAQUE);
         break;
     case FillStylePattern:
         Q_ASSERT(m_pattern != 0);
-        fillPainter.fillRect(boundingRectangle, m_pattern);
+        fillPainter.fillRect(fillRect, m_pattern);
         break;
     }
 
-    KisSelectionSP polygonMask = KisSelectionSP(new KisSelection(polygon));
+    KisSelectionSP polygonMask = new KisSelection(polygon);
 
-    for (y=y0; y<=y1; y++) {        /* step through scanlines */
-        /* scanline y is at y+.5 in continuous coordinates */
+    const qint32 MASK_IMAGE_WIDTH = 256;
+    const qint32 MASK_IMAGE_HEIGHT = 256;
 
-        /* check vertices between previous scanline and current one, if any */
-        for (; k<n && pt[ind[k]].y()<=y+.5; k++) {
-            /* to simplify, if pt.y=y+.5, pretend it's above */
-            /* invariant: y-.5 < pt[i].y <= y+.5 */
-            i = ind[k];
-            /*
-             * insert or delete edges before and after vertex i (i-1 to i,
-             * and i to i+1) from active list if they cross scanline y
-             */
-            j = i>0 ? i-1 : n-1;        /* vertex previous to i */
-            if (pt[j].y() <= y-.5)        /* old edge, remove from active list */
-                cdelete(j);
-            else if (pt[j].y() > y+.5)    /* new edge, add to active list */
-                cinsert(j, y);
-            j = i<n-1 ? i+1 : 0;        /* vertex next after i */
-            if (pt[j].y() <= y-.5)        /* old edge, remove from active list */
-                cdelete(i);
-            else if (pt[j].y() > y+.5)    /* new edge, add to active list */
-                cinsert(i, y);
-        }
+    QImage polygonMaskImage(MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT, QImage::Format_ARGB32);
+    QPainter maskPainter(&polygonMaskImage);
+    maskPainter.setRenderHint(QPainter::Antialiasing, antiAliasPolygonFill());
 
-        /* sort active edge list by active[j].x */
-        qsort(active, nact, sizeof active[0], compare_active);
+    // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
 
-        /* draw horizontal segments for scanline y */
-        for (j=0; j<nact; j+=2) {    /* draw horizontal segments */
-            /* span 'tween j & j+1 is inside, span tween j+1 & j+2 is outside */
-            xl = static_cast<int>(ceil(active[j].x-.5));        /* left end of span */
-            xr = static_cast<int>(floor(active[j+1].x-.5));        /* right end of span */
+    for (qint32 x = fillRect.x(); x < fillRect.x() + fillRect.width(); x += MASK_IMAGE_WIDTH) {
+        for (qint32 y = fillRect.y(); y < fillRect.y() + fillRect.height(); y += MASK_IMAGE_HEIGHT) {
 
-            if (xl<=xr) {
-                KisHLineIterator it = polygonMask->createHLineIterator(xl, y, xr - xl + 1);
+            maskPainter.fillRect(polygonMaskImage.rect(), QColor(OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, 255));
+            maskPainter.translate(-x, -y);
+            maskPainter.fillPath(polygonPath, QColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255));
+            maskPainter.translate(x, y);
 
-                while (!it.isDone()) {
-                    // We're using a selection here, that means alpha colorspace, that means one byte.
-                    it.rawData()[0] = MAX_SELECTED;
-                    ++it;
-                }
+            qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, MASK_IMAGE_WIDTH);
+            qint32 rectHeight = qMin(fillRect.y() + fillRect.height() - y, MASK_IMAGE_HEIGHT);
+
+            KisRectIterator rectIt = polygonMask->createRectIterator(x, y, rectWidth, rectHeight);
+
+            while (!rectIt.isDone()) {
+                (*rectIt.rawData()) = qRed(polygonMaskImage.pixel(rectIt.x() - x, rectIt.y() - y));
+                ++rectIt;
             }
-
-            active[j].x += active[j].dx;        /* increment edge coords */
-            active[j+1].x += active[j+1].dx;
         }
     }
-    delete [] ind;
-    delete [] active;
 
     polygon->applySelectionMask(polygonMask);
 

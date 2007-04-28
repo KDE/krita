@@ -87,8 +87,8 @@ public:
         : KoToolFactory(parent, "KisToolSelectSimilar", i18n( "Select similar colors"))
         {
             setToolTip( i18n( "Select similar colors" ) );
-//             setToolType( TOOL_TYPE_SELECTED );
-            setToolType( dynamicToolType() );
+            setToolType( TOOL_TYPE_SELECTED );
+//            setToolType( dynamicToolType() );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_similar_selection" );
             setShortcut( KShortcut(Qt::CTRL + Qt::Key_E) );

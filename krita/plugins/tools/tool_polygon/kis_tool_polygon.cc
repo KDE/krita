@@ -129,6 +129,7 @@ void KisToolPolygon::finish()
         painter.setPaintColor(m_currentFgColor);
         painter.setBackgroundColor(m_currentBgColor);
         painter.setFillStyle(fillStyle());
+        painter.setStrokeStyle(strokeStyle());
         painter.setBrush(m_currentBrush);
         painter.setPattern(m_currentPattern);
         painter.setOpacity(m_opacity);

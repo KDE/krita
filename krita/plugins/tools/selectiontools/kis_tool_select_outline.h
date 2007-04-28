@@ -24,30 +24,28 @@
 #define __selecttoolfreehand_h__
 
 #include <QPoint>
-#include <q3pointarray.h>
 
+#include <KoToolFactory.h>
 
-#include "kis_tool_non_paint.h"
-#include "KoToolFactory.h"
+#include "kis_tool.h"
 #include "kis_selection.h"
+#include "kis_layer_shape.h"
 
 class KisSelectionOptions;
 
-class KisToolSelectOutline : public KisToolNonPaint {
+class KisToolSelectOutline : public KisTool {
 
-    typedef KisToolNonPaint super;
+    typedef KisTool super;
     Q_OBJECT
 public:
-    KisToolSelectOutline();
+    KisToolSelectOutline(KoCanvasBase *canvas);
     virtual ~KisToolSelectOutline();
 
-    virtual void setup(KActionCollection *collection);
-    virtual quint32 priority() { return 6; }
-    virtual enumToolType toolType() { return TOOL_SELECT; }
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    virtual void buttonPress(KoPointerEvent *event);
-    virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KoPointerEvent *event);
+    virtual void paint(QPainter& gc, KoViewConverter &converter);
 
     QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
@@ -55,24 +53,13 @@ public:
 public slots:
     virtual void slotSetAction(int);
     virtual void activate();
-    void deactivate();
+    virtual void deactivate();
 
-protected:
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
-    void draw(QPainter& gc);
-    void draw();
-
-
-protected:
-    QPointF m_dragStart;
-    QPointF m_dragEnd;
+private:
+    void updateFeedback();
 
     bool m_dragging;
-private:
-    typedef Q3ValueVector<QPointF> KoPointVector;
-    
-    KoPointVector m_points;
+    vQPointF m_points;
     KisSelectionOptions * m_optWidget;
     enumSelectionMode m_selectAction;
 };
@@ -86,8 +73,10 @@ public:
         {
             setToolTip( i18n( "Select an area by its outline" ) );
             setToolType( TOOL_TYPE_SELECTED );
+            //setToolType( dynamicToolType() );
             setIcon( "tool_outline_selection" );
             setPriority( 0 );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolSelectOutlineFactory(){}
@@ -95,7 +84,6 @@ public:
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolSelectOutline(canvas);
     }
-
 };
 
 

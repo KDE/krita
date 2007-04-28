@@ -19,44 +19,34 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include <kis_tool_select_outline.h>
+
 #include <QApplication>
 #include <QPainter>
-#include <qregion.h>
 #include <QWidget>
 #include <QLayout>
 #include <QVBoxLayout>
 
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
-#include <k3command.h>
 #include <klocale.h>
+
+#include <KoPointerEvent.h>
 
 #include <kis_layer.h>
 #include <kis_selection_options.h>
-#include <kis_canvas_controller.h>
-#include <kis_canvas_subject.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
-#include <kis_tool_select_outline.h>
-#include <kis_vec.h>
-#include <kis_undo_adapter.h>
-#include <KoPointerEvent.h>
-#include <KoPointerEvent.h>
-#include <KoPointerEvent.h>
+
 #include "kis_selected_transaction.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
-#include "kis_canvas.h"
-#include "QPainter"
+#include "kis_canvas2.h"
+#include "kis_undo_adapter.h"
 
-KisToolSelectOutline::KisToolSelectOutline()
-    : super(i18n("Select Outline"))
+KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
+    : KisTool(canvas, KisCursor::load("tool_outline_selection_cursor.png", 5, 5))
 {
-    setObjectName("tool_select_outline");
-    setCursor(KisCursor::load("tool_outline_selection_cursor.png", 5, 5));
-
-    m_subject = 0;
     m_dragging = false;
     m_optWidget = 0;
     m_selectAction = SELECTION_ADD;
@@ -77,39 +67,31 @@ void KisToolSelectOutline::activate()
 }
 
 
-void KisToolSelectOutline::buttonPress(KoPointerEvent *event)
+void KisToolSelectOutline::mousePressEvent(KoPointerEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         m_dragging = true;
-
-        m_dragStart = event->pos();
-        m_dragEnd = event->pos();
         m_points.clear();
-        m_points.append(m_dragStart);
+        m_points.append(convertToPixelCoord(event));
     }
 }
 
-void KisToolSelectOutline::move(KoPointerEvent *event)
+void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
-        m_dragStart = m_dragEnd;
-        m_dragEnd = event->pos();
-        m_points.append (m_dragEnd);
-        // draw new lines on canvas
-        draw();
+        m_points.append(convertToPixelCoord(event));
+        updateFeedback();
     }
 }
 
-void KisToolSelectOutline::buttonRelease(KoPointerEvent *event)
+void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!m_subject)
+    if (!m_canvas)
         return;
 
     if (m_dragging && event->button() == Qt::LeftButton) {
         m_dragging = false;
         deactivate();
-
-        
 
         if (m_currentImage && m_currentImage->activeDevice()) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
@@ -123,22 +105,22 @@ void KisToolSelectOutline::buttonRelease(KoPointerEvent *event)
                 selection->clear();
             }
 
-            KisPainter painter(KisPaintDeviceSP(selection.data()));
+            KisPainter painter(selection);
 
             painter.setPaintColor(KoColor(Qt::black, selection->colorSpace()));
             painter.setFillStyle(KisPainter::FillStyleForegroundColor);
             painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-            painter.setBrush(m_subject->currentBrush());
             painter.setOpacity(OPACITY_OPAQUE);
             KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter);
             painter.setPaintOp(op);    // And now the painter owns the op and will destroy it.
+            painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
 
             switch (m_selectAction) {
             case SELECTION_ADD:
-                painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
+                painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_OVER));
                 break;
             case SELECTION_SUBTRACT:
-                painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
+                painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
                 break;
             default:
                 break;
@@ -146,11 +128,10 @@ void KisToolSelectOutline::buttonRelease(KoPointerEvent *event)
 
             painter.paintPolygon(m_points);
 
-
             if(hasSelection) {
-                QRect dirty(painter.dirtyRegion());
+                QRegion dirty(painter.dirtyRegion());
                 dev->setDirty(dirty);
-                dev->emitSelectionChanged(dirty);
+                dev->emitSelectionChanged(dirty.boundingRect());
             } else {
                 dev->setDirty();
                 dev->emitSelectionChanged();
@@ -166,105 +147,52 @@ void KisToolSelectOutline::buttonRelease(KoPointerEvent *event)
     }
 }
 
-void KisToolSelectOutline::paint(QPainter& gc)
-{
-    draw(gc);
-}
+#define FEEDBACK_LINE_WIDTH 1
 
-void KisToolSelectOutline::paint(QPainter& gc, const QRect&)
+void KisToolSelectOutline::paint(QPainter& gc, KoViewConverter &converter)
 {
-    draw(gc);
-}
+    Q_UNUSED(converter);
 
-void KisToolSelectOutline::draw()
-{
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-        KisCanvas *canvas = controller->kiscanvas();
-        QPainter gc(canvas->canvasWidget());
+    if (m_dragging && m_points.count() > 1) {
 
-        draw(gc);
+        QPen pen(Qt::white, FEEDBACK_LINE_WIDTH, Qt::DotLine);
+        gc.save();
+        gc.setPen(pen);
+
+        for (qint32 pointIndex = 0; pointIndex < m_points.count() - 1; pointIndex++) {
+            QPointF startPos = pixelToView(m_points[pointIndex]);
+            QPointF endPos = pixelToView(m_points[pointIndex + 1]);
+            gc.drawLine(startPos, endPos);
+        }
+
+        gc.restore();
     }
 }
 
-void KisToolSelectOutline::draw(QPainter& gc)
+void KisToolSelectOutline::updateFeedback()
 {
-    if (!m_subject)
-        return;
+    if (m_points.count() > 1) {
+        qint32 lastPointIndex = m_points.count() - 1;
 
-    if (m_dragging && !m_points.empty()) {
-        QPen pen(Qt::white, 0, Qt::DotLine);
+        QRectF updateRect = QRectF(m_points[lastPointIndex - 1], m_points[lastPointIndex]).normalized();
+        updateRect.adjust(-FEEDBACK_LINE_WIDTH, -FEEDBACK_LINE_WIDTH, FEEDBACK_LINE_WIDTH, FEEDBACK_LINE_WIDTH);
 
-        gc.setPen(pen);
-        //gc.setRasterOp(Qt::XorROP);
-
-        KisCanvasController *controller = m_subject->canvasController();
-        QPointF start, end;
-        QPoint startPos;
-        QPoint endPos;
-
-        startPos = controller->windowToView(m_dragStart.floorQPoint());
-        endPos = controller->windowToView(m_dragEnd.floorQPoint());
-        gc.drawLine(startPos, endPos);
+        updateCanvasPixelRect(updateRect);
     }
 }
 
 void KisToolSelectOutline::deactivate()
 {
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-        KisCanvas *canvas = controller->kiscanvas();
-        QPainter gc(canvas->canvasWidget());
-
-        QPen pen(Qt::white, 0, Qt::DotLine);
-
-        gc.setPen(pen);
-        //gc.setRasterOp(Qt::XorROP);
-
-        QPointF start, end;
-        QPoint startPos;
-        QPoint endPos;
-
-        for (KoPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
-
-            if (it == m_points.begin())
-            {
-                start = (*it);
-            } else {
-                end = (*it);
-
-                startPos = controller->windowToView(start.floorQPoint());
-                endPos = controller->windowToView(end.floorQPoint());
-
-                gc.drawLine(startPos, endPos);
-
-                start = end;
-            }
-        }
+    if (m_canvas) {
+        updateCanvasPixelRect(image()->bounds());
     }
 }
-
-void KisToolSelectOutline::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("tool_outline_selection"),
-                               i18n("&Outline Selection"),
-                               collection,
-                               objectName());
-        Q_CHECK_PTR(m_action);
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setActionGroup(actionGroup());
-        m_action->setToolTip(i18n("Select an outline"));
-        m_ownAction = true;
-    }
-}
-
 
 QWidget* KisToolSelectOutline::createOptionWidget()
 {
-    m_optWidget = new KisSelectionOptions(parent, m_subject);
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    Q_ASSERT(canvas);
+    m_optWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setWindowTitle(i18n("Outline Selection"));
 

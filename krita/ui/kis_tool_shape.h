@@ -54,6 +54,7 @@ protected:
     virtual QWidget * createOptionWidget();
 
     KisPainter::FillStyle fillStyle();
+    KisPainter::StrokeStyle strokeStyle();
 
 private:
     QGridLayout *m_optionLayout;

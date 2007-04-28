@@ -210,6 +210,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     Q_ASSERT(canvas);
     m_selectionOptionsWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_selectionOptionsWidget);
+    m_selectionOptionsWidget->disableAntiAliasSelectionOption();
 
     l->addWidget(m_selectionOptionsWidget);
     connect (m_selectionOptionsWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));

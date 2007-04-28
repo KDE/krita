@@ -50,6 +50,9 @@ public:
 
     int action();
 
+    bool antiAliasSelection();
+    void disableAntiAliasSelectionOption();
+
 signals:
     void actionChanged(int);
 

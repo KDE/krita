@@ -50,10 +50,23 @@ QWidget * KisToolShape::createOptionWidget()
     m_shapeOptionsWidget->cmbFill->setParent(optionWidget);
     m_shapeOptionsWidget->cmbFill->move(QPoint(0, 0));
     m_shapeOptionsWidget->cmbFill->show();
-    m_shapeOptionsWidget->textLabel3->setParent(optionWidget);
-    m_shapeOptionsWidget->textLabel3->move(QPoint(0, 0));
-    m_shapeOptionsWidget->textLabel3->show();
-    addOptionWidgetOption(m_shapeOptionsWidget->cmbFill, m_shapeOptionsWidget->textLabel3);
+    m_shapeOptionsWidget->textLabelFill->setParent(optionWidget);
+    m_shapeOptionsWidget->textLabelFill->move(QPoint(0, 0));
+    m_shapeOptionsWidget->textLabelFill->show();
+    addOptionWidgetOption(m_shapeOptionsWidget->cmbFill, m_shapeOptionsWidget->textLabelFill);
+
+    m_shapeOptionsWidget->cmbFill->setCurrentIndex(KisPainter::FillStyleNone);
+
+    m_shapeOptionsWidget->cmbOutline->setParent(optionWidget);
+    m_shapeOptionsWidget->cmbOutline->move(QPoint(0, 0));
+    m_shapeOptionsWidget->cmbOutline->show();
+    m_shapeOptionsWidget->textLabelOutline->setParent(optionWidget);
+    m_shapeOptionsWidget->textLabelOutline->move(QPoint(0, 0));
+    m_shapeOptionsWidget->textLabelOutline->show();
+    addOptionWidgetOption(m_shapeOptionsWidget->cmbOutline, m_shapeOptionsWidget->textLabelOutline);
+
+    m_shapeOptionsWidget->cmbOutline->setCurrentIndex(KisPainter::StrokeStyleBrush);
+
     return optionWidget;
 }
 
@@ -63,6 +76,15 @@ KisPainter::FillStyle KisToolShape::fillStyle(void)
         return static_cast<KisPainter::FillStyle>(m_shapeOptionsWidget->cmbFill->currentIndex());
     } else {
         return KisPainter::FillStyleNone;
+    }
+}
+
+KisPainter::StrokeStyle KisToolShape::strokeStyle(void)
+{
+    if (m_shapeOptionsWidget) {
+        return static_cast<KisPainter::StrokeStyle>(m_shapeOptionsWidget->cmbOutline->currentIndex());
+    } else {
+        return KisPainter::StrokeStyleNone;
     }
 }
 

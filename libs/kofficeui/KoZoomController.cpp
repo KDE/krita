@@ -29,29 +29,47 @@
 #include <KoZoomHandler.h>
 #include <KoCanvasController.h>
 
-KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, bool doSpecialAspectMode)
-    : m_canvasController(co)
-    , m_zoomHandler(zh)
-    , m_fitMargin( 0 )
+class KoZoomController::Private
 {
-    m_action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), doSpecialAspectMode, 0);
-    connect(m_action, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
+public:
+    // should be a d-pointer...
+    KoCanvasController *canvasController;
+    KoZoomHandler *zoomHandler;
+    KoZoomAction *action;
+    QSizeF pageSize;
+    QSizeF documentSize;
+    int fitMargin;
+};
+
+KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, bool doSpecialAspectMode)
+    : d(new Private)
+{
+    d->canvasController = co;
+    d->zoomHandler = zh;
+    d->fitMargin = 0;
+    d->action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), doSpecialAspectMode, 0);
+    connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
             this, SLOT(setZoom(KoZoomMode::Mode, double)));
-    connect(m_action, SIGNAL(aspectModeChanged(bool)),
+    connect(d->action, SIGNAL(aspectModeChanged(bool)),
             this, SIGNAL(aspectModeChanged(bool)));
 
-    actionCollection->addAction("view_zoom", m_action);
-    actionCollection->addAction(KStandardAction::ZoomIn,  "zoom_in", m_action, SLOT(zoomIn()));
-    actionCollection->addAction(KStandardAction::ZoomOut,  "zoom_out", m_action, SLOT(zoomOut()));
+    actionCollection->addAction("view_zoom", d->action);
+    actionCollection->addAction(KStandardAction::ZoomIn,  "zood->in", d->action, SLOT(zoomIn()));
+    actionCollection->addAction(KStandardAction::ZoomOut,  "zood->out", d->action, SLOT(zoomOut()));
 
-    connect(m_canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( setAvailableSize( const QSize & ) ) );
+    connect(d->canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( setAvailableSize( const QSize & ) ) );
 
-    connect(m_canvasController, SIGNAL( zoomBy(const double ) ), this, SLOT( requestZoomBy( const double ) ) );
+    connect(d->canvasController, SIGNAL( zoomBy(const double ) ), this, SLOT( requestZoomBy( const double ) ) );
+}
+
+KoZoomController::~KoZoomController()
+{
+    delete d;
 }
 
 KoZoomAction *KoZoomController::zoomAction() const
 {
-    return m_action;
+    return d->action;
 }
 
 void KoZoomController::setZoom(double /*zoom*/)
@@ -65,23 +83,23 @@ void KoZoomController::setZoomMode(KoZoomMode::Mode mode)
 
 void KoZoomController::setPageSize(const QSizeF &pageSize)
 {
-    m_pageSize = pageSize;
+    d->pageSize = pageSize;
 
-    if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
+    if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
         setZoom(KoZoomMode::ZOOM_WIDTH, 0);
-    if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
+    if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
         setZoom(KoZoomMode::ZOOM_PAGE, 0);
 }
 
 void KoZoomController::setDocumentSize( const QSizeF &documentSize )
 {
-    m_documentSize = documentSize;
-    m_canvasController->setDocumentSize( m_zoomHandler->documentToView(m_documentSize).toSize() );
+    d->documentSize = documentSize;
+    d->canvasController->setDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize() );
 }
 
 void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
 {
-    m_zoomHandler->setZoomMode(mode);
+    d->zoomHandler->setZoomMode(mode);
 
     if(mode == KoZoomMode::ZOOM_CONSTANT)
     {
@@ -89,53 +107,53 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
     }
     else if(mode == KoZoomMode::ZOOM_WIDTH)
     {
-        zoom = (m_canvasController->viewport()->size().width() - 2*m_fitMargin)
-                         / (m_zoomHandler->resolutionX() * m_pageSize.width());
-        m_action->setEffectiveZoom(zoom);
+        zoom = (d->canvasController->viewport()->size().width() - 2*d->fitMargin)
+                         / (d->zoomHandler->resolutionX() * d->pageSize.width());
+        d->action->setEffectiveZoom(zoom);
     }
     else if(mode == KoZoomMode::ZOOM_PAGE)
     {
-        zoom = (m_canvasController->viewport()->size().width() - 2*m_fitMargin)
-                         / (m_zoomHandler->resolutionX() * m_pageSize.width());
-        zoom = qMin(zoom, (m_canvasController->viewport()->size().height() - 2*m_fitMargin)
-                     / (m_zoomHandler->resolutionY() * m_pageSize.height()));
+        zoom = (d->canvasController->viewport()->size().width() - 2*d->fitMargin)
+                         / (d->zoomHandler->resolutionX() * d->pageSize.width());
+        zoom = qMin(zoom, (d->canvasController->viewport()->size().height() - 2*d->fitMargin)
+                     / (d->zoomHandler->resolutionY() * d->pageSize.height()));
 
-        m_action->setEffectiveZoom(zoom);
+        d->action->setEffectiveZoom(zoom);
     }
 
-    m_zoomHandler->setZoom(zoom);
+    d->zoomHandler->setZoom(zoom);
     emit zoomChanged(mode, zoom);
 
     // Tell the canvasController that the zoom has changed
     // Actually canvasController doesn't know about zoom, but the document in pixels
     // has change as a result of the zoom change
-    m_canvasController->setDocumentSize(
-            QSize( int(0.5 + m_zoomHandler->documentToViewX(m_documentSize.width())),
-                   int(0.5 + m_zoomHandler->documentToViewY(m_documentSize.height())) ) );
+    d->canvasController->setDocumentSize(
+            QSize( int(0.5 + d->zoomHandler->documentToViewX(d->documentSize.width())),
+                   int(0.5 + d->zoomHandler->documentToViewY(d->documentSize.height())) ) );
 
     // Finally ask the canvasController to recenter
-    m_canvasController->recenterPreferred();
+    d->canvasController->recenterPreferred();
 }
 
 void KoZoomController::setAvailableSize(const QSize &/*size*/)
 {
-    if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
+    if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
         setZoom(KoZoomMode::ZOOM_WIDTH, 0);
-    if(m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
+    if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
         setZoom(KoZoomMode::ZOOM_PAGE, 0);
 }
 
 void KoZoomController::requestZoomBy(const double factor)
 {
-    double zoom = m_zoomHandler->zoomInPercent() / 100.0;
-    m_action->setZoom(factor*zoom);
+    double zoom = d->zoomHandler->zoomInPercent() / 100.0;
+    d->action->setZoom(factor*zoom);
     setZoom(KoZoomMode::ZOOM_CONSTANT, factor*zoom);
-    m_action->setEffectiveZoom(factor*zoom);
+    d->action->setEffectiveZoom(factor*zoom);
 }
 
 void KoZoomController::setFitMargin( int margin )
 {
-    m_fitMargin = margin;
+    d->fitMargin = margin;
 }
 
 #include "KoZoomController.moc"

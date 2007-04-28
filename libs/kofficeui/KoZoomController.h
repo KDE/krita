@@ -64,6 +64,7 @@ Q_OBJECT
 public:
     /// one KoZoomController per canvasController.  The zoomAction is created in the constructor as a member.
     KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *ac, bool doSpecialAspectMode);
+    ~KoZoomController();
 
     /// return the zoomAction to be added to the actionCollection and Gui.
     KoZoomAction *zoomAction() const;
@@ -119,13 +120,10 @@ private slots:
 // different based on that.
 
 private:
-    // should be a d-pointer...
-    KoCanvasController *m_canvasController;
-    KoZoomHandler *m_zoomHandler;
-    KoZoomAction *m_action;
-    QSizeF m_pageSize;
-    QSizeF m_documentSize;
-    int m_fitMargin;
+    Q_DISABLE_COPY( KoZoomController )
+
+    class Private;
+    Private * const d;
 };
 
 #endif

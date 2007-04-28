@@ -209,6 +209,14 @@ QRectF ShapeSelector::DummyViewConverter::viewToDocument (const QRectF &viewRect
     return viewRect;
 }
 
+QSizeF ShapeSelector::DummyViewConverter::documentToView (const QSizeF &documentSize) const {
+    return documentSize;
+}
+
+QSizeF ShapeSelector::DummyViewConverter::viewToDocument (const QSizeF &viewSize) const {
+    return viewSize;
+}
+
 void ShapeSelector::DummyViewConverter::zoom (double *zoomX, double *zoomY) const {
     *zoomX = 1.0;
     *zoomY = 1.0;

@@ -641,7 +641,8 @@ bool KoMainWindow::openDocumentInternal( const KUrl & url, KoDocument *newdoc )
     bool openRet = (!isImporting ()) ? newdoc->openURL(url) : newdoc->import(url);
     if(!openRet)
     {
-        //newdoc->removeShell(this); delete newdoc; // already done by slotLoadCanceled()
+        newdoc->removeShell(this);
+        delete newdoc;
         return false;
     }
     updateReloadFileAction(newdoc);
@@ -696,9 +697,6 @@ void KoMainWindow::slotLoadCanceled( const QString & errMsg )
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
-
-    newdoc->removeShell(this);
-    delete newdoc;
 }
 
 void KoMainWindow::slotSaveCanceled( const QString &errMsg )

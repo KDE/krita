@@ -99,11 +99,14 @@ KisSelectionManager::KisSelectionManager(KisView2 * parent, KisDoc2 * doc)
 {
     m_clipboard = KisClipboard::instance();
 
+    QRgb white = QColor(Qt::white).rgb();
+    QRgb black = QColor(Qt::black).rgb();
+
     for(int i=0; i<8; i++){
-        QImage texture( 8, 8, QImage::Format_Mono );
+        QImage texture( 8, 8, QImage::Format_RGB32 );
         for(int y=0; y<8; y++)
             for(int x=0; x<8; x++)
-                texture.setPixel(x, y, ((x+y+i)%8 < 4)? 1 : 0);
+                texture.setPixel(x, y, ((x+y+i)%8 < 4)? black : white);
 
         QBrush brush;
         brush.setTextureImage(texture);
@@ -1676,16 +1679,17 @@ void KisSelectionManager::paint(QPainter& gc, KoViewConverter &converter)
     QPen pen(brushes[offset], 0);
 
     int i=0;
-    gc.setPen(pen1);
-    foreach(QPolygon polygon, paths)
-    {
-        gc.drawPolygon(polygon);
-        i++;
-    }
+//     gc.setPen(pen1);
+//     foreach(QPolygon polygon, paths)
+//     {
+//         gc.drawPolygon(polygon);
+//         i++;
+//     }
     gc.setPen(pen);
     foreach(QPolygon polygon, paths)
     {
         gc.drawPolygon(polygon);
+        i++;
     }
 
     kDebug(41010) << "Polygons :" << i << endl;

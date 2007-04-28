@@ -61,6 +61,8 @@ private:
         QPointF viewToDocument (const QPointF &viewPoint) const;
         QRectF documentToView (const QRectF &documentRect) const;
         QRectF viewToDocument (const QRectF &viewRect) const;
+        QSizeF documentToView (const QSizeF &documentSize) const;
+        QSizeF viewToDocument (const QSizeF &viewSize) const;
         void zoom (double *zoomX, double *zoomY) const;
         double documentToViewX (double documentX) const;
         double documentToViewY (double documentY) const;

@@ -386,3 +386,19 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, q
     if ( channelFlags.isEmpty() || channelFlags.testBit(PIXEL_MASK) )
         dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, SCHAR_MAX);
 }
+
+QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
+                                   KoColorProfile *  dstProfile, qint32 renderingIntent,
+                                   float exposure) const
+{
+    QImage img(width, height, QImage::Format_RGB32);
+
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            quint8 c = data[x + y * width];
+            img.setPixel(x, y, qRgb(c, c, c));
+        }
+    }
+    return img;
+}
+

@@ -71,16 +71,7 @@ public:
     virtual KoColorProfile* profile() const { return 0; }
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    KoColorProfile *  dstProfile, qint32 renderingIntent = INTENT_PERCEPTUAL,
-                                   float exposure = 0.0f) const
-    {
-        Q_UNUSED(data);
-        Q_UNUSED(width);
-        Q_UNUSED(height);
-        Q_UNUSED(dstProfile);
-        Q_UNUSED(renderingIntent);
-        Q_UNUSED(exposure);
-        return QImage();
-    }
+                                   float exposure = 0.0f) const;
 
     virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const
     {

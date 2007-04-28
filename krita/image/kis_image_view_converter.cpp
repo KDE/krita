@@ -49,6 +49,16 @@ QRectF KisImageViewConverter::viewToDocument( const QRectF &viewRect ) const
         QSizeF(viewToDocumentX(viewRect.width()), viewToDocumentY(viewRect.height())) );
 }
 
+QSizeF KisImageViewConverter::documentToView( const QSizeF &documentSize ) const
+{
+    return QSizeF(documentToViewX(documentSize.width()), documentToViewY(documentSize.height()));
+}
+
+QSizeF KisImageViewConverter::viewToDocument( const QSizeF &viewSize ) const
+{
+    return QSizeF(viewToDocumentX(viewSize.width()), viewToDocumentY(viewSize.height()));
+}
+
 void KisImageViewConverter::zoom(double *zoomX, double *zoomY) const
 {
     Q_ASSERT(zoomX);

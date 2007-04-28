@@ -46,6 +46,10 @@ public:
     QRectF documentToView( const QRectF &documentRect ) const;
     /// convert from krita to flake units
     QRectF viewToDocument( const QRectF &viewRect ) const;
+    /// convert from krita to flake units
+    QSizeF documentToView( const QSizeF& documentSize ) const;
+    /// convert from krita to flake units
+    QSizeF viewToDocument( const QSizeF& viewSize ) const;
     /// convert from flake to krita units
     inline double documentToViewX( double documentX ) const { return documentX * m_image->xRes(); }
     /// convert from flake to krita units

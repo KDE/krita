@@ -328,24 +328,32 @@ void KisSelectionManager::updateGUI()
 
 void KisSelectionManager::updateStatusBar()
 {
+    if (m_parent && m_parent->statusBar()) {
+        m_parent->statusBar()->setSelection( m_parent->image() );
+    }
+}
+
+bool KisSelectionManager::selectionIsActive()
+{
     KisImageSP img = m_parent->image();
     if (img) {
         KisPaintDeviceSP dev = img->activeDevice();
         if (dev) {
             if (dev->hasSelection()) {
-                QRect r = dev->selection()->selectedExactRect();
-                m_parent->statusBar()->setSelection( img );
-                return;
+                return true;
             }
         }
     }
-}
 
+    return false;
+}
 
 void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 {
     if (img == m_parent->image()) {
+
         updateGUI();
+        paths.clear();
 
         KisPaintDeviceSP dev = img->activeDevice();
         if (dev)
@@ -1654,9 +1662,11 @@ void KisSelectionManager::computeTransition (quint8* transition, quint8** buf, q
 
 void KisSelectionManager::timerEvent()
 {
-    offset++;
-    if(offset>7) offset = 0;
-    m_parent->canvasBase()->updateCanvas(QRectF(0.0,0.0,1000.0,1000.0));
+    if (selectionIsActive()) {
+        offset++;
+        if(offset>7) offset = 0;
+        m_parent->canvasBase()->updateCanvas(QRectF(0.0,0.0,1000.0,1000.0));
+    }
 }
 
 void KisSelectionManager::paint(QPainter& gc, KoViewConverter &converter)

@@ -106,6 +106,7 @@ public:
 private:
     void fill(const KoColor& color, bool fillWithPattern, const QString& transactionText);
     void updateStatusBar();
+    bool selectionIsActive();
 
     void computeBorder (qint32  *circ, qint32  xradius, qint32  yradius);
     inline void rotatePointers (quint8  **p, quint32 n);

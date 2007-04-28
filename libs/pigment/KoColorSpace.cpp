@@ -231,6 +231,8 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           const KoCompositeOp * op,
                           const QBitArray & channelFlags) const
 {
+    Q_ASSERT(op->colorSpace() == this);
+
     if (rows <= 0 || cols <= 0)
         return;
 
@@ -280,6 +282,8 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           qint32 cols,
                           const KoCompositeOp * op) const
 {
+    Q_ASSERT(op->colorSpace() == this);
+
     if (rows <= 0 || cols <= 0)
         return;
 

@@ -39,16 +39,16 @@ KisSelectedTransaction::~KisSelectedTransaction()
 
 void KisSelectedTransaction::redo()
 {
-    super::redo();
-    m_selTransaction->redo();
-
     //QUndoStack calls redo(), so the first call needs to be blocked
     if(m_firstRedo)
     {
         m_firstRedo = false;
+        m_selTransaction->redo();
         return;
     }
 
+    super::redo();
+    m_selTransaction->redo();
     if(m_redoHasSelection)
         m_device->selection();
     else

@@ -1035,6 +1035,8 @@ void KoMainWindow::closeEvent(QCloseEvent *e) {
         setRootDocument(0L);
         KParts::MainWindow::closeEvent(e);
     }
+    else
+        e->setAccepted( false );
 }
 
 void KoMainWindow::saveWindowSettings()

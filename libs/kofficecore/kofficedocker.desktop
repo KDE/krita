@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Docker Plugin
+Name[x-test]=xxKOffice Docker Pluginxx
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Dock
 Comment=A plugin that contains a so called 'dockwidget'
+Comment[x-test]=xxA plugin that contains a so called 'dockwidget'xx

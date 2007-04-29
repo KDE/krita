@@ -111,7 +111,7 @@ namespace {
     public:
 
         CompositeClear(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Copy" ) )
+            : KoCompositeOp(cs, COMPOSITE_CLEAR, i18n("Clear" ) )
         {
         }
 
@@ -251,7 +251,7 @@ namespace {
 
                 for (i = cols; i > 0; i--, d++, s++) {
                     if (d[PIXEL_MASK] <= s[PIXEL_MASK]) {
-                        d[PIXEL_MASK] = OPACITY_OPAQUE;
+                        d[PIXEL_MASK] = OPACITY_TRANSPARENT;
                     } else {
                         d[PIXEL_MASK] -= s[PIXEL_MASK];
                     }

@@ -159,7 +159,7 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
         KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, m_painter);
         m_painter->setPaintOp(op);
 
-        m_painter->paintRect(m_dragStart, m_dragEnd-m_dragStart, PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());
+        m_painter->paintRect(QRectF(m_dragStart, m_dragEnd), PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());
         QRegion bound = m_painter->dirtyRegion();
         device->setDirty( bound );
         notifyModified();

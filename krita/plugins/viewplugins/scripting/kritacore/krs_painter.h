@@ -172,15 +172,15 @@ class Painter : public QObject
         /**
          * This function will paint an ellipse.
          * It takes five arguments :
-         *  - x1
-         *  - y1
-         *  - x2
-         *  - y2
+         *  - x
+         *  - y
+         *  - w
+         *  - h
          *  - pressure
          *
-         * Where (x1,y1) and (x2,y2) are the position of the two centers.
+         * Where x, y, w, and h define the rectangle containing the ellipse.
          */
-        void paintEllipse(double x1, double y1, double x2, double y2, double pressure);
+        void paintEllipse(double x, double y, double w, double h, double pressure);
 
         /**
          * This function will paint a polygon.

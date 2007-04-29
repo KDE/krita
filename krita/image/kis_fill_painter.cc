@@ -45,7 +45,6 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_pattern.h"
-#include "kis_rect.h"
 #include "KoColorSpace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"

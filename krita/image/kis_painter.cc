@@ -42,7 +42,6 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_pattern.h"
-#include "kis_rect.h"
 #include "KoColorSpace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
@@ -661,13 +660,12 @@ double KisPainter::paintBezierCurve(const QPointF &pos1,
     return newDistance;
 }
 
-void KisPainter::paintRect (const QPointF &startPoint,
-                            const QPointF &endPoint,
-                            const double /*pressure*/,
-                            const double /*xTilt*/,
-                            const double /*yTilt*/)
+void KisPainter::paintRect(const QRectF &rect,
+                           const double /*pressure*/,
+                           const double /*xTilt*/,
+                           const double /*yTilt*/)
 {
-    QRectF normalizedRect = KisRect (startPoint.x(),startPoint.y(), endPoint.x(),endPoint.y()).normalized ();
+    QRectF normalizedRect = rect.normalized();
 
     vQPointF points;
 
@@ -679,13 +677,23 @@ void KisPainter::paintRect (const QPointF &startPoint,
     paintPolygon(points);
 }
 
-void KisPainter::paintEllipse (const QPointF &startPoint,
-                               const QPointF &endPoint,
-                               const double /*pressure*/,
-                               const double /*xTilt*/,
-                               const double /*yTilt*/)
+void KisPainter::paintRect(const double x,
+                           const double y,
+                           const double w,
+                           const double h,
+                           const double pressure,
+                           const double xTilt,
+                           const double yTilt)
 {
-    KisRect r = KisRect(startPoint.x(),startPoint.y(), endPoint.x(),endPoint.y()).normalized();
+    paintRect(QRectF(x, y, w, h), pressure, xTilt, yTilt);
+}
+
+void KisPainter::paintEllipse(const QRectF &rect,
+                              const double /*pressure*/,
+                              const double /*xTilt*/,
+                              const double /*yTilt*/)
+{
+    QRectF r = rect.normalized();
 
     // See http://www.whizkidtech.redprince.net/bezier/circle/ for explanation.
     // kappa = (4/3*(sqrt(2)-1))
@@ -722,6 +730,17 @@ void KisPainter::paintEllipse (const QPointF &startPoint,
     getBezierCurvePoints(p9, p10, p11, p0, points);
 
     paintPolygon(points);
+}
+
+void KisPainter::paintEllipse(const double x,
+                              const double y,
+                              const double w,
+                              const double h,
+                              const double pressure,
+                              const double xTilt,
+                              const double yTilt)
+{
+    paintEllipse(QRectF(x, y, w, h), pressure, xTilt, yTilt);
 }
 
 void KisPainter::paintAt(const QPointF & pos,

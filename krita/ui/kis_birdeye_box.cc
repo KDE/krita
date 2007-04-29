@@ -37,7 +37,6 @@
 #include "kis_double_widget.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
-#include "kis_rect.h"
 #include "kis_iterators_pixel.h"
 #include "kis_resource_provider.h"
 #include "kobirdeyepanel.h"

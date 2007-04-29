@@ -113,10 +113,7 @@ void KisToolSelectRectangular::mousePressEvent(KoPointerEvent *e)
 void KisToolSelectRectangular::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_canvas && m_selecting) {
-        QRectF bound;
-        bound.setTopLeft(m_startPos);
-        bound.setBottomRight(m_endPos);
-        m_canvas->updateCanvas(convertToPt(bound.normalized()));
+        QRectF updateRect(m_startPos, m_endPos);
 
         // move (alt) or resize rectangle
         if (e->modifiers() & Qt::AltModifier) {
@@ -142,9 +139,11 @@ void KisToolSelectRectangular::mouseMoveEvent(KoPointerEvent *e)
                 m_endPos = m_startPos + diag;
             }
         }
-        bound.setTopLeft(m_startPos);
-        bound.setBottomRight(m_endPos);
-        m_canvas->updateCanvas(convertToPt(bound.normalized()));
+
+        updateRect |= QRectF(m_startPos, m_endPos);
+        updateRect = updateRect.normalized();
+        updateRect.adjust(-1, -1, 1, 1);
+        m_canvas->updateCanvas(convertToPt(updateRect));
 
         m_centerPos = QPointF((m_startPos.x() + m_endPos.x()) / 2,
                 (m_startPos.y() + m_endPos.y()) / 2);

@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_select_elliptical.h"
+
 #include <QApplication>
 #include <QPainter>
 #include <QPen>
@@ -27,13 +29,13 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_autobrush_resource.h"
+#include "KoPointerEvent.h"
+
 #include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_painter.h"
-#include "kis_tool_select_elliptical.h"
+#include "kis_paintop_registry.h"
 #include "kis_layer.h"
-#include "KoPointerEvent.h"
 #include "kis_selection.h"
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"
@@ -63,24 +65,16 @@ void KisToolSelectElliptical::activate()
 
     m_optWidget->slotActivated();
 }
+
 void KisToolSelectElliptical::paint(QPainter& gc, KoViewConverter &converter)
 {
-    double sx, sy;
-    converter.zoom(&sx, &sy);
+    Q_UNUSED(converter);
 
-    gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
     if (m_selecting) {
-        QPen old = gc.pen();
-        QPen pen(Qt::DotLine);
-        QPoint start;
-        QPoint end;
-
-        gc.setPen(pen);
-
-        start = QPoint(static_cast<int>(m_startPos.x()), static_cast<int>(m_startPos.y()));
-        end = QPoint(static_cast<int>(m_endPos.x()), static_cast<int>(m_endPos.y()));
-        gc.drawEllipse(QRect(start, end));
-        gc.setPen(old);
+        gc.save();
+        gc.setPen(Qt::DotLine);
+        gc.drawEllipse(pixelToView(QRectF(m_startPos, m_endPos)));
+        gc.restore();
     }
 }
 
@@ -114,10 +108,7 @@ void KisToolSelectElliptical::mousePressEvent(KoPointerEvent *e)
 void KisToolSelectElliptical::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_canvas && m_selecting) {
-        QRectF bound;
-        bound.setTopLeft(m_startPos);
-        bound.setBottomRight(m_endPos);
-        m_canvas->updateCanvas(convertToPt(bound.normalized()));
+        QRectF updateRect(m_startPos, m_endPos);
 
         // move (alt) or resize ellipse
         if (e->modifiers() & Qt::AltModifier) {
@@ -143,9 +134,11 @@ void KisToolSelectElliptical::mouseMoveEvent(KoPointerEvent *e)
                 m_endPos = m_startPos + diag;
             }
         }
-        bound.setTopLeft(m_startPos);
-        bound.setBottomRight(m_endPos);
-        m_canvas->updateCanvas(convertToPt(bound.normalized()));
+
+        updateRect |= QRectF(m_startPos, m_endPos);
+        updateRect = updateRect.normalized();
+        updateRect.adjust(-1, -1, 1, 1);
+        m_canvas->updateCanvas(convertToPt(updateRect));
 
         m_centerPos = QPointF((m_startPos.x() + m_endPos.x()) / 2,
                 (m_startPos.y() + m_endPos.y()) / 2);
@@ -164,56 +157,47 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
             if (!m_currentImage)
                 return;
 
-            if (m_endPos.y() < 0)
-                m_endPos.setY(0);
-
-            if (m_endPos.y() > m_currentImage->height())
-                m_endPos.setY(m_currentImage->height());
-
-            if (m_endPos.x() < 0)
-                m_endPos.setX(0);
-
-            if (m_endPos.x() > m_currentImage->width())
-                m_endPos.setX(m_currentImage->width());
-
             if (m_currentImage && m_currentImage->activeDevice()) {
                 KisPaintDeviceSP dev = m_currentImage->activeDevice();
+                KisSelectionSP selection = dev->selection();
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
 
                 bool hasSelection = dev->hasSelection();
-                if(! hasSelection)
+                if (!hasSelection)
                 {
-                    dev->selection()->clear();
-                    if(m_selectAction==SELECTION_SUBTRACT)
-                        dev->selection()->invert();
+                    selection->clear();
+                    if(m_selectAction == SELECTION_SUBTRACT)
+                        selection->invert();
                 }
-                QRect rc( m_startPos.toPoint(), m_endPos.toPoint());
-                rc = rc.normalized();
 
-                KisSelectionSP tmpSel = KisSelectionSP(new KisSelection(dev));
-                KisAutobrushCircleShape shape(rc.width(),rc.height(), 1, 1);
-                quint8 value;
-                for (int y = 0; y <= rc.height(); y++)
-                    for (int x = 0; x <= rc.width(); x++)
-                    {
-                        value = MAX_SELECTED - shape.valueAt(x,y);
-                        tmpSel->setSelected( x+rc.x(), y+rc.y(), value);
-                    }
+                KisPainter painter(selection);
+                painter.setPaintColor(KoColor(Qt::black, selection->colorSpace()));
+                painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+                painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+                painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
+                painter.setOpacity(OPACITY_OPAQUE);
+                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter);
+                painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
+
                 switch(m_selectAction)
                 {
                     case SELECTION_ADD:
-                        dev->addSelection(tmpSel);
+                        painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_OVER));
                         break;
                     case SELECTION_SUBTRACT:
-                        dev->subtractSelection(tmpSel);
+                        painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
+                        break;
+                    default:
                         break;
                 }
 
+                painter.paintEllipse(QRectF(m_startPos, m_endPos), PRESSURE_DEFAULT/*e->pressure()*/,
+                                     e->xTilt(), e->yTilt());
+
                 if(hasSelection) {
-                    dev->setDirty(rc);
-                    dev->emitSelectionChanged(rc);
+                    QRect rect(painter.dirtyRegion().boundingRect());
+                    dev->emitSelectionChanged(rect);
                 } else {
-                    dev->setDirty();
                     dev->emitSelectionChanged();
                 }
 
@@ -238,7 +222,6 @@ QWidget* KisToolSelectElliptical::createOptionWidget()
     m_optWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setWindowTitle(i18n("Elliptical Selection"));
-    m_optWidget->disableAntiAliasSelectionOption();
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 

@@ -412,23 +412,52 @@ public:
 
 
     /**
-     * Paint the rectangle with given begin and end points
+     * Paint a rectangle.
+     * @param rect the rectangle to paint.
      */
-    void paintRect(const QPointF &startPoint,
-               const QPointF &endPoint,
-               const double pressure,
-               const double xTilt,
-               const double yTilt);
-
+    void paintRect(const QRectF &rect,
+                   const double pressure,
+                   const double xTilt,
+                   const double yTilt);
 
     /**
-     * Paint the ellipse with given begin and end points
+    * Paint a rectangle.
+    * @param x x coordinate of the top-left corner
+    * @param y y coordinate of the top-left corner
+    * @param w the rectangle width
+    * @param h the rectangle height
+    */
+    void paintRect(const double x,
+                   const double y,
+                   const double w,
+                   const double h,
+                   const double pressure,
+                   const double xTilt,
+                   const double yTilt);
+
+    /**
+     * Paint the ellipse that fills the given rectangle.
+     * @param rect the rectangle containing the ellipse to paint.
      */
-    void paintEllipse(const QPointF &startPoint,
-                      const QPointF &endPoint,
+    void paintEllipse(const QRectF &rect,
                       const double pressure,
-                      const double /*xTilt*/,
-                      const double /*yTilt*/);
+                      const double xTilt,
+                      const double yTilt);
+
+    /**
+    * Paint the ellipse that fills the given rectangle.
+    * @param x x coordinate of the top-left corner
+    * @param y y coordinate of the top-left corner
+    * @param w the rectangle width
+    * @param h the rectangle height
+    */
+    void paintEllipse(const double x,
+                      const double y,
+                      const double w,
+                      const double h,
+                      const double pressure,
+                      const double xTilt,
+                      const double yTilt);
 
     /**
      * Paint the polygon with the points given in points. It automatically closes the polygon

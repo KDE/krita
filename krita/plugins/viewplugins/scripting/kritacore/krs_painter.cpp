@@ -189,9 +189,9 @@ void Painter::paintBezierCurve(double x1, double y1, double p1, double cx1, doub
     m_painter->paintBezierCurve( QPointF(x1,y1), p1, 0.0, 0.0, QPointF(cx1,cy1), QPointF(cx2,cy2), QPointF(x2,y2), p2, 0.0, 0.0);
 }
 
-void Painter::paintEllipse(double x1, double y1, double x2, double y2, double pressure)
+void Painter::paintEllipse(double x, double y, double w, double h, double pressure)
 {
-    m_painter->paintEllipse( QPointF(x1,y1), QPointF(x2,y2), pressure, 0.0, 0.0 );
+    m_painter->paintEllipse( x, y, w, h, pressure, 0.0, 0.0 );
 }
 
 void Painter::paintPolygon(QVariantList pointsX, QVariantList pointsY)
@@ -205,7 +205,7 @@ void Painter::paintPolygon(QVariantList pointsX, QVariantList pointsY)
 
 void Painter::paintRect(double x, double y, double width, double height, double pressure)
 {
-    m_painter->paintRect( QPointF(x, y), QPointF(width, height), pressure, 0, 0);
+    m_painter->paintRect( x, y, width, height, pressure, 0, 0);
 }
 
 void Painter::paintAt(double x, double y, double pressure)

@@ -29,7 +29,6 @@ class KisCanvas;
 class KisDoc;
 class KisPainter;
 class KisView;
-class KisRect;
 
 class WdgToolStar : public QWidget, public Ui::WdgToolStar
 {

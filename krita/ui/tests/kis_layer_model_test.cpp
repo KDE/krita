@@ -117,6 +117,8 @@ void kislayermodel_test::testModelIndex()
     QVERIFY( childIdx2.internalPointer() == child.data() );
     QVERIFY( childIdx2.parent().internalPointer() == parent.data() );
 
+    idx = model.index( -1, 0 );
+    QVERIFY(!idx.isValid());
 }
 
 void kislayermodel_test::testGroupLayers()

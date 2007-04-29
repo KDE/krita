@@ -117,6 +117,11 @@ QModelIndex KisLayerModel::index(int row, int column, const QModelIndex &parent)
 {
     kDebug(41007) << "KisLayerModel::index(row = " << row << ", column=" << column << ", parent=" << parent << " parent is valid: " << parent.isValid() << endl;
 
+    if (!hasIndex(row, column, parent))
+    {
+        return QModelIndex();
+    }
+
     if (!parent.isValid())
     {
         return indexFromLayer( m_d->image->rootLayer()->at( row ) );

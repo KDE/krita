@@ -60,11 +60,9 @@ set(kritaimage_LIB_SRCS
    kis_painter.cc
    kis_paintop.cc
    kis_paintop_registry.cc
-   kis_palette.cc
    kis_pattern.cc
    kis_random_accessor.cpp
    kis_random_sub_accessor.cpp
-   kis_resource.cc
    kis_rotate_visitor.cc
    kis_selected_transaction.cc
    kis_selection.cc
@@ -105,7 +103,7 @@ kde4_automoc(${kritaimage_LIB_SRCS})
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KDECORE_LIBS} pigment kofficecore kopainter ${KDE4_THREADWEAVER_LIBRARIES} )
+target_link_libraries(kritaimage ${KDE4_KDECORE_LIBS} pigment kofficecore kopainter koresources ${KDE4_THREADWEAVER_LIBRARIES} )
 
 set_target_properties(kritaimage PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kritaimage  DESTINATION ${LIB_INSTALL_DIR})

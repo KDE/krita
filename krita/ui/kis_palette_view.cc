@@ -28,8 +28,8 @@
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_palette_view.h"
-#include "kis_resource.h"
-#include "kis_palette.h"
+#include "KoResource.h"
+#include "KoColorSet.h"
 
 KisPaletteView::KisPaletteView(QWidget *parent, const char* name, int minWidth, int cols)
     : Q3ScrollView( parent, name ), mMinWidth(minWidth), mCols(cols)
@@ -54,12 +54,12 @@ KisPaletteView::~KisPaletteView()
 {
 }
 
-KisPalette* KisPaletteView::palette() const
+KoColorSet* KisPaletteView::palette() const
 {
     return m_currentPalette;
 }
 
-void KisPaletteView::setPalette(KisPalette* palette)
+void KisPaletteView::setPalette(KoColorSet* palette)
 {
     m_currentPalette = palette;
     delete m_cells;

@@ -26,8 +26,8 @@
 #include "ui_wdgcolorpicker.h"
 #include "kis_tool.h"
 #include <kis_layer_shape.h>
-class KisResource;
-class KisPalette;
+class KoResource;
+class KoColorSet;
 
 class ColorPickerOptionsWidget : public QWidget, public Ui::ColorPickerOptionsWidget
 {
@@ -63,7 +63,7 @@ public slots:
     void slotSetNormaliseValues(bool);
     void slotSetAddPalette(bool);
     void slotChangeRadius(int);
-    void slotAddPalette(KisResource* resource);
+    void slotAddPalette(KoResource* resource);
 
 private:
     void displayPickedColor();
@@ -76,7 +76,7 @@ private:
 
     ColorPickerOptionsWidget *m_optionsWidget;
 
-    QList<KisPalette*> m_palettes;
+    QList<KoColorSet*> m_palettes;
 };
 
 class KisToolColorPickerFactory : public KoToolFactory {

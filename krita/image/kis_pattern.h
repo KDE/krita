@@ -24,7 +24,7 @@
 #include <kio/job.h>
 
 #include "kis_debug_areas.h"
-#include "kis_resource.h"
+#include "KoResource.h"
 #include <krita_export.h>
 #include "kis_types.h"
 
@@ -33,8 +33,8 @@ class QImage;
 class KoColorSpace;
 class KisPaintDevice;
 
-class KRITAIMAGE_EXPORT KisPattern : public KisResource {
-    typedef KisResource super;
+class KRITAIMAGE_EXPORT KisPattern : public KoResource {
+    typedef KoResource super;
     Q_OBJECT
 
 public:

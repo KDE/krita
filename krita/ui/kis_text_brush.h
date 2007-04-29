@@ -61,7 +61,7 @@ public:
 	KisTextBrush(QWidget *parent, const char* name, const QString& caption);
 
 signals:
-	void activatedResource(KisResource *r);
+	void activatedResource(KoResource *r);
 
 private slots:
 	void rebuildTextBrush();

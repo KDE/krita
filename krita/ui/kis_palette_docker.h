@@ -30,7 +30,7 @@ class QComboBox;
 class QLineEdit;
 class KListBox;
 class KisPalette;
-class KisResource;
+class KoResource;
 class KoColor;
 class KisView2;
 
@@ -49,7 +49,7 @@ public:
     virtual ~KisPaletteDocker();
 
     QString palette() const;
-    KisPaletteEntry currentEntry() const { return m_paletteView->currentEntry(); }
+    KoColorSetEntry currentEntry() const { return m_paletteView->currentEntry(); }
 
 public slots:
     void setPalette(const QString &paletteName);
@@ -60,15 +60,15 @@ protected slots:
 
 public slots:
     // Called by the resource server whenever a palette is loaded.
-    void slotAddPalette(KisResource * palette);
+    void slotAddPalette(KoResource * palette);
 
 protected:
     void readNamedColor( void );
 
 protected:
     KisPaletteView* m_paletteView;
-    Q3Dict<KisPalette> m_namedPaletteMap;
-    KisPalette * m_currentPalette;
+    Q3Dict<KoColorSet> m_namedPaletteMap;
+    KoColorSet * m_currentPalette;
     QComboBox *combo;
     Q3ScrollView *sv;
     int mMinWidth;

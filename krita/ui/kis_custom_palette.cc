@@ -35,13 +35,13 @@
 #include <kdebug.h>
 
 #include "kis_view2.h"
-#include "kis_palette.h"
+#include "KoColorSet.h"
 #include "kis_palette_view.h"
 #include "kis_custom_palette.h"
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
 
-KisCustomPalette::KisCustomPalette( QList<KisPalette*> &palettes, QWidget *parent, const char* name, const QString& caption, KisView2* view)
+KisCustomPalette::KisCustomPalette( QList<KoColorSet*> &palettes, QWidget *parent, const char* name, const QString& caption, KisView2* view)
     : KisWdgCustomPalette(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
@@ -51,7 +51,7 @@ KisCustomPalette::KisCustomPalette( QList<KisPalette*> &palettes, QWidget *paren
     m_editMode = false;
     setWindowTitle(caption);
 
-    foreach (KisPalette *palette, palettes) {
+    foreach (KoColorSet *palette, palettes) {
         QListWidgetItem* item = new QListWidgetItem(palette->name());
         paletteList->addItem(item);
         m_palettes[item] = palette;
@@ -69,7 +69,7 @@ KisCustomPalette::KisCustomPalette( QList<KisPalette*> &palettes, QWidget *paren
 KisCustomPalette::~KisCustomPalette() {
 }
 
-void KisCustomPalette::setPalette(KisPalette* p) {
+void KisCustomPalette::setPalette(KoColorSet* p) {
     m_palette = p;
     view->setPalette(m_palette);
     palettename->setText(p->name());
@@ -94,7 +94,7 @@ void KisCustomPalette::slotAddNew() {
     if (!ok)
         return;
 
-    KisPaletteEntry entry;
+    KoColorSetEntry entry;
     entry.color = color;
     entry.name = name;
 
@@ -130,7 +130,7 @@ void KisCustomPalette::slotAddPalette() {
     if (!ok)
         return;
 
-    KisPalette* palette = new KisPalette();
+    KoColorSet* palette = new KoColorSet();
     palette->setName(name);
 
     // Save in the directory that is likely to be: ~/.kde/share/apps/krita/palettes

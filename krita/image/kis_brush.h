@@ -27,7 +27,7 @@
 
 #include "kis_types.h"
 
-#include "kis_resource.h"
+#include "KoResource.h"
 #include "kis_paint_information.h"
 #include "kis_qimage_mask.h"
 
@@ -50,8 +50,8 @@ enum enumBrushType {
     AIRBRUSH
 };
 
-class KRITAIMAGE_EXPORT KisBrush : public KisResource {
-    typedef KisResource super;
+class KRITAIMAGE_EXPORT KisBrush : public KoResource {
+    typedef KoResource super;
     Q_OBJECT
 
 public:

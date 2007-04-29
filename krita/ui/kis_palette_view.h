@@ -21,16 +21,16 @@
 #define __KIS_PALETTE_VIEW_H__
 
 #include <q3scrollview.h>
-#include "kis_palette.h"
+#include "KoColorSet.h"
 
 class KListBox;
-class KisPalette;
+class KoColorSet;
 class KColorCells;
 class KisResource;
 class KoColor;
 
 /**
- * A scrolling view that lists a single KisPalette
+ * A scrolling view that lists a single KoColorSet
  */
 class KisPaletteView : public Q3ScrollView
 {
@@ -39,12 +39,12 @@ public:
     KisPaletteView(QWidget *parent, const char* name = 0, int minWidth=210, int cols = 16);
     virtual ~KisPaletteView();
 
-    KisPalette* palette() const;
+    KoColorSet* palette() const;
     /// Might return the default constructed entry...
-    KisPaletteEntry currentEntry() const { return m_currentEntry; }
+    KoColorSetEntry currentEntry() const { return m_currentEntry; }
 
 public slots:
-    void setPalette(KisPalette* p);
+    void setPalette(KoColorSet* p);
 
 signals:
     void colorSelected(const KoColor &);
@@ -56,9 +56,9 @@ protected slots:
     void slotColorCellDoubleClicked( int );
 
 protected:
-    KisPalette* m_currentPalette;
+    KoColorSet* m_currentPalette;
     KColorCells* m_cells;
-    KisPaletteEntry m_currentEntry;
+    KoColorSetEntry m_currentEntry;
     int mMinWidth;
     int mCols;
 

@@ -29,7 +29,7 @@
 #include "KoGenericRegistry.h"
 #include <krita_export.h>
 
-class KisResource;
+class KoResource;
 
 class KRITAUI_EXPORT KisResourceServerBase : public QObject {
     Q_OBJECT
@@ -39,18 +39,18 @@ public:
 
     void loadResources(QStringList filenames);
     /// Adds an already loaded resource to the server
-    void addResource(KisResource* resource);
-    QList<KisResource*> resources();
+    void addResource(KoResource* resource);
+    QList<KoResource*> resources();
     QString type() { return m_type; }
 
 signals:
-    void resourceAdded(KisResource*);
+    void resourceAdded(KoResource*);
 
 protected:
-    virtual KisResource* createResource( const QString & filename ) = 0;
+    virtual KoResource* createResource( const QString & filename ) = 0;
 
 private:
-    QList<KisResource*> m_resources;
+    QList<KoResource*> m_resources;
     QString m_type;
 
     bool m_loaded;
@@ -65,7 +65,7 @@ public:
     virtual ~KisResourceServer() {}
 
 private:
-    KisResource* createResource(const QString & filename) { return new T(filename); }
+    KoResource* createResource(const QString & filename) { return new T(filename); }
 };
 
 class KRITAUI_EXPORT KisResourceServerRegistry : public KoGenericRegistry<KisResourceServerBase*>

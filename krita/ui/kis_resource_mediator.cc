@@ -23,7 +23,7 @@
 #include "kdebug.h"
 
 #include "kis_icon_item.h"
-#include "kis_resource.h"
+#include "KoResource.h"
 #include "kis_itemchooser.h"
 #include "kis_resourceserver.h"
 #include "kis_resource_mediator.h"
@@ -47,17 +47,17 @@ KisResourceMediator::~KisResourceMediator()
 void KisResourceMediator::connectServer(KisResourceServerBase* rServer)
 {
     // Add the initially loaded items
-    QList<KisResource*> resources = rServer->resources();
+    QList<KoResource*> resources = rServer->resources();
 
-    foreach (KisResource *resource, resources)
+    foreach (KoResource *resource, resources)
         rServerAddedResource(resource);
 
     // And connect to the server permanently, so that we may receive updates afterwards
-    connect(rServer, SIGNAL(resourceAdded(KisResource*)),
-            this, SLOT(rServerAddedResource(KisResource*)));
+    connect(rServer, SIGNAL(resourceAdded(KoResource*)),
+            this, SLOT(rServerAddedResource(KoResource*)));
 }
 
-KisResource *KisResourceMediator::currentResource() const
+KoResource *KisResourceMediator::currentResource() const
 {
     if (m_activeItem) {
         Q_ASSERT(dynamic_cast<KisIconItem*>(m_activeItem));
@@ -67,7 +67,7 @@ KisResource *KisResourceMediator::currentResource() const
     return 0;
 }
 
-KisIconItem *KisResourceMediator::itemFor(KisResource *r) const
+KisIconItem *KisResourceMediator::itemFor(KoResource *r) const
 {
     if (m_items.contains(r))
     {
@@ -76,14 +76,14 @@ KisIconItem *KisResourceMediator::itemFor(KisResource *r) const
     return 0;
 }
 
-KisResource *KisResourceMediator::resourceFor(QTableWidgetItem *item) const
+KoResource *KisResourceMediator::resourceFor(QTableWidgetItem *item) const
 {
     KisIconItem *kisitem = dynamic_cast<KisIconItem*>(item);
 
     return kisitem ? kisitem->resource() : 0;
 }
 
-KisResource *KisResourceMediator::resourceFor(KisIconItem *item) const
+KoResource *KisResourceMediator::resourceFor(KisIconItem *item) const
 {
     return item ? item->resource() : 0;
 }
@@ -104,7 +104,7 @@ void KisResourceMediator::setActiveItem(QTableWidgetItem *item)
     }
 }
 
-void KisResourceMediator::rServerAddedResource(KisResource *resource)
+void KisResourceMediator::rServerAddedResource(KoResource *resource)
 {
     if (resource && resource->valid()) {
 

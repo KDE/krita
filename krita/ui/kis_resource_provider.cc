@@ -134,7 +134,7 @@ KisLayerSP KisResourceProvider::currentLayer() const
     return m_resourceProvider->resource( CurrentKritaLayer ).value<KisLayerSP>();
 }
 
-void KisResourceProvider::slotBrushActivated(KisResource *res)
+void KisResourceProvider::slotBrushActivated(KoResource *res)
 {
 
     KisBrush * brush = dynamic_cast<KisBrush*>(res);
@@ -146,7 +146,7 @@ void KisResourceProvider::slotBrushActivated(KisResource *res)
     }
 }
 
-void KisResourceProvider::slotPatternActivated(KisResource * res)
+void KisResourceProvider::slotPatternActivated(KoResource * res)
 {
     KisPattern * pattern = dynamic_cast<KisPattern*>(res);
     QVariant v = qVariantFromValue( ( void * ) pattern );
@@ -156,7 +156,7 @@ void KisResourceProvider::slotPatternActivated(KisResource * res)
     }
 }
 
-void KisResourceProvider::slotGradientActivated(KisResource *res)
+void KisResourceProvider::slotGradientActivated(KoResource *res)
 {
 
     KisGradient * gradient = dynamic_cast<KisGradient*>(res);

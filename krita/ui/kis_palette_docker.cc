@@ -23,8 +23,8 @@
 
 #include "kis_view2.h"
 #include "kis_palette_docker.h"
-#include "kis_resource.h"
-#include "kis_palette.h"
+#include "KoResource.h"
+#include "KoColorSet.h"
 #include "kis_palette_view.h"
 #include "kis_resourceserver.h"
 #include "kis_resource_provider.h"
@@ -58,9 +58,9 @@ KisPaletteDocker::KisPaletteDocker( KisView2 * view )
 
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance()->get("PaletteServer");
-    QList<KisResource*> resources = rServer->resources();
+    QList<KoResource*> resources = rServer->resources();
 
-    foreach (KisResource *resource, resources) {
+    foreach (KoResource *resource, resources) {
         slotAddPalette(resource);
     }
 }
@@ -112,9 +112,9 @@ void KisPaletteDocker::setPalette( const QString &_paletteName )
     m_paletteView->setPalette(m_currentPalette);
 }
 
-void KisPaletteDocker::slotAddPalette(KisResource * palette)
+void KisPaletteDocker::slotAddPalette(KoResource * palette)
 {
-    KisPalette * p = dynamic_cast<KisPalette*>(palette);
+    KoColorSet * p = dynamic_cast<KoColorSet*>(palette);
 
     if (p) {
         m_namedPaletteMap.insert(palette->name(), p);

@@ -41,7 +41,7 @@ public:
     void activate();
 
 signals:
-    void activatedResource(KisResource *r);
+    void activatedResource(KoResource *r);
 
 private slots:
     void paramChanged();

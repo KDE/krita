@@ -25,7 +25,7 @@
 #include "ui_wdgcustompattern.h"
 
 
-class KisResource;
+class KoResource;
 class KisView2;
 class KisResourceServerBase;
 class KisResourceMediator;
@@ -47,7 +47,7 @@ public:
     void setResourceServer(KisResourceServerBase* server) { m_server = server; }
 
 signals:
-    void activatedResource(KisResource *);
+    void activatedResource(KoResource *);
 
 protected:
     virtual void showEvent(QShowEvent *);

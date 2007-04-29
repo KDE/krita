@@ -22,22 +22,22 @@
 #include <QTableWidgetItem>
 #include <QPixmap>
 
-class KisResource;
+class KoResource;
 
 class KisIconItem : public QTableWidgetItem {
 
 public:
-    KisIconItem(KisResource *resource);
+    KisIconItem(KoResource *resource);
     virtual ~KisIconItem();
 
-    KisResource *resource() const;
+    KoResource *resource() const;
 
     virtual int compare(const QTableWidgetItem *other) const;
 
     void updatePixmaps();
 
 private:
-    KisResource *m_resource;
+    KoResource *m_resource;
 };
 
 #endif // KIS_ICON_ITEM_H_

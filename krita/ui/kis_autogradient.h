@@ -22,7 +22,7 @@
 
 #include "ui_wdgautogradient.h"
 
-class KisResource;
+class KoResource;
 class KisGradientSegment;
 class KisAutogradientResource;
 
@@ -34,7 +34,7 @@ class KisAutogradient : public QWidget, public Ui::KisWdgAutogradient
         KisAutogradient(QWidget *parent, const char* name, const QString& caption);
         void activate();
     signals:
-        void activatedResource(KisResource *r);
+        void activatedResource(KoResource *r);
     private:
         KisAutogradientResource* m_autogradientResource;
     private slots:

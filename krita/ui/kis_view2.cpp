@@ -582,11 +582,11 @@ void KisView2::slotEditPalette()
     if (!srv) {
         return;
     }
-    QList<KisResource*> resources = srv->resources();
-    QList<KisPalette*> palettes;
+    QList<KoResource*> resources = srv->resources();
+    QList<KoColorSet*> palettes;
 
-    foreach (KisResource *resource, resources) {
-        KisPalette* palette = dynamic_cast<KisPalette*>(resource);
+    foreach (KoResource *resource, resources) {
+        KoColorSet* palette = dynamic_cast<KoColorSet*>(resource);
         palettes.append(palette);
     }
 

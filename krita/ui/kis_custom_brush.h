@@ -24,7 +24,7 @@
 
 #include "ui_wdgcustombrush.h"
 
-class KisResource;
+class KoResource;
 class KisView2;
 class KisResourceServerBase;
 class KisResourceMediator;
@@ -49,7 +49,7 @@ public slots:
     void slotUseBrush();
 
 signals:
-    void activatedResource(KisResource *);
+    void activatedResource(KoResource *);
 
 protected:
     virtual void showEvent(QShowEvent *);

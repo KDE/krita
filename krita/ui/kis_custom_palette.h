@@ -24,9 +24,9 @@
 #include "ui_wdgcustompalette.h"
 
 
-class KisResource;
+class KoResource;
 class KisView2;
-class KisPalette;
+class KoColorSet;
 class KisResourceServerBase;
 class KisResourceMediator;
 
@@ -42,10 +42,10 @@ class KisCustomPalette : public KisWdgCustomPalette
 {
     Q_OBJECT
 public:
-    KisCustomPalette( QList<KisPalette*> &palettes, QWidget *parent, const char* name, const QString& caption, KisView2* view);
+    KisCustomPalette( QList<KoColorSet*> &palettes, QWidget *parent, const char* name, const QString& caption, KisView2* view);
     virtual ~KisCustomPalette();
     void setResourceServer(KisResourceServerBase* server) { m_server = server; }
-    void setPalette(KisPalette* p);
+    void setPalette(KoColorSet* p);
 
 signals:
     void activatedResource(KisResource *);
@@ -60,10 +60,10 @@ private:
     bool m_ownPalette;
     bool m_editMode;
     KisView2* m_view;
-    KisPalette* m_palette;
+    KoColorSet* m_palette;
     KisResourceMediator* m_mediator;
     KisResourceServerBase* m_server;
-    QMap<QListWidgetItem*, KisPalette*> m_palettes;
+    QMap<QListWidgetItem*, KoColorSet*> m_palettes;
 };
 
 

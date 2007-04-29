@@ -19,7 +19,7 @@
 
 #include <kdebug.h>
 
-#include "kis_resource.h"
+#include "KoResource.h"
 #include "kis_global.h"
 #include "kis_icon_item.h"
 #include "KoResourceChooser.h"
@@ -28,7 +28,7 @@
 
 #define THUMB_SIZE 30
 
-KisIconItem::KisIconItem(KisResource *resource)
+KisIconItem::KisIconItem(KoResource *resource)
 {
     m_resource = resource;
     updatePixmaps();
@@ -88,7 +88,7 @@ void KisIconItem::updatePixmaps()
     }
 }
 
-KisResource *KisIconItem::resource() const
+KoResource *KisIconItem::resource() const
 {
     return m_resource;
 }

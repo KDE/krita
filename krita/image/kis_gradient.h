@@ -29,9 +29,11 @@
 
 #include <kio/job.h>
 
-#include "kis_resource.h"
-#include "kis_global.h"
+#include <KoResource.h>
 #include "KoColor.h"
+
+#include "kis_global.h"
+#include "krita_export.h"
 
 class QImage;
 
@@ -222,8 +224,8 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
         KoColor m_endColor;
 };
 
-class KRITAIMAGE_EXPORT KisGradient : public KisResource {
-    typedef KisResource super;
+class KRITAIMAGE_EXPORT KisGradient : public KoResource {
+    typedef KoResource super;
     Q_OBJECT
 
 public:

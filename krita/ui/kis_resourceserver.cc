@@ -31,7 +31,7 @@
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
-#include "kis_resource.h"
+#include "KoResource.h"
 #include "kis_factory2.h"
 #include "KoGenericRegistry.h"
 #include "kis_resourceserver.h"
@@ -39,7 +39,7 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_gradient.h"
 #include "kis_pattern.h"
-#include "kis_palette.h"
+#include "KoColorSet.h"
 #include <kogradientmanager.h>
 
 KisResourceServerBase::KisResourceServerBase(const QString & type)
@@ -67,7 +67,7 @@ void KisResourceServerBase::loadResources(QStringList filenames)
         //      will prevent the same brush etc. showing up twice.
         if (uniqueFiles.empty() || uniqueFiles.indexOf(fname) == -1) {
             uniqueFiles.append(fname);
-            KisResource *resource;
+            KoResource *resource;
             resource = createResource(front);
             if (resource->load() && resource->valid())
             {
@@ -83,16 +83,16 @@ void KisResourceServerBase::loadResources(QStringList filenames)
     m_loaded = true;
 }
 
-QList<KisResource*> KisResourceServerBase::resources()
+QList<KoResource*> KisResourceServerBase::resources()
 {
     if(!m_loaded) {
-        return QList<KisResource*>();
+        return QList<KoResource*>();
     }
 
     return m_resources;
 }
 
-void KisResourceServerBase::addResource(KisResource* resource)
+void KisResourceServerBase::addResource(KoResource* resource)
 {
     if (!resource->valid()) {
         kWarning(41001) << "Tried to add an invalid resource!" << endl;
@@ -162,7 +162,7 @@ KisResourceServerRegistry::KisResourceServerRegistry()
     t4.start();
 
 
-    KisResourceServer<KisPalette>* paletteServer = new KisResourceServer<KisPalette>("kis_palettes");
+    KisResourceServer<KoColorSet>* paletteServer = new KisResourceServer<KoColorSet>("kis_palettes");
     ResourceLoaderThread t5 (paletteServer, getFileNames("*.gpl:*.pal:*.act", "kis_palettes") );
     t5.start();
 

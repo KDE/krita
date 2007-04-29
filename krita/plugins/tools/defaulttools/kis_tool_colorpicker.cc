@@ -43,7 +43,7 @@
 #include "kis_iterators_pixel.h"
 #include "KoColor.h"
 #include "kis_resourceserver.h"
-#include "kis_palette.h"
+#include "KoColorSet.h"
 
 namespace {
     // The location of the sample all visible layers in the combobox
@@ -169,11 +169,11 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
 
         if (m_addPalette) {
             // Convert to RGB to add to palette, we ought to have our own format :(
-            KisPaletteEntry ent;
+            KoColorSetEntry ent;
             ent.color = m_pickedColor.toQColor();
             // We don't ask for a name, too intrusive here
 
-            KisPalette* palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
+            KoColorSet* palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
             palette->add(ent);
 
             if (!palette->save()) {
@@ -243,10 +243,10 @@ QWidget* KisToolColorPicker::createOptionWidget()
         return m_optionsWidget;
     }
 
-    QList<KisResource*> palettes = srv->resources();
+    QList<KoResource*> palettes = srv->resources();
 
-    foreach (KisResource *resource, palettes) {
-        KisPalette* palette = dynamic_cast<KisPalette*>(resource);
+    foreach (KoResource *resource, palettes) {
+        KoColorSet* palette = dynamic_cast<KoColorSet*>(resource);
         if (palette) {
             m_optionsWidget->cmbPalette->addItem(palette->name());
             m_palettes.append(palette);
@@ -283,8 +283,8 @@ void KisToolColorPicker::slotChangeRadius(int value) {
     m_radius = value;
 }
 
-void KisToolColorPicker::slotAddPalette(KisResource* resource) {
-    KisPalette* palette = dynamic_cast<KisPalette*>(resource);
+void KisToolColorPicker::slotAddPalette(KoResource* resource) {
+    KoColorSet* palette = dynamic_cast<KoColorSet*>(resource);
     if (palette) {
         m_optionsWidget->cmbPalette->addItem(palette->name());
         m_palettes.append(palette);

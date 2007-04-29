@@ -32,7 +32,7 @@ class KisPaintOpSettings;
 class KisBrush;
 class KisGradient;
 class KisPattern;
-class KisResource;
+class KoResource;
 
 /**
    KisResourceProvider contains the per-view current settings that
@@ -89,9 +89,9 @@ public slots:
 
     void slotSetFGColor(const KoColor& c);
     void slotSetBGColor(const KoColor& c);
-    void slotBrushActivated(KisResource *brush);
-    void slotPatternActivated(KisResource *pattern);
-    void slotGradientActivated(KisResource *gradient);
+    void slotBrushActivated(KoResource *brush);
+    void slotPatternActivated(KoResource *pattern);
+    void slotGradientActivated(KoResource *gradient);
     void slotPaintopActivated(const KoID & paintop, const KisPaintOpSettings *paintopSettings);
     void slotLayerActivated( const KisLayerSP layer );
 

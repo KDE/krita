@@ -245,9 +245,9 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
     m_brushesTab->addTab( m_autobrush, i18n("Autobrush"));
 
     connect(m_autobrush,
-            SIGNAL(activatedResource(KisResource*)),
+            SIGNAL(activatedResource(KoResource*)),
             m_view->resourceProvider(),
-            SLOT(slotBrushActivated( KisResource* )));
+            SLOT(slotBrushActivated( KoResource* )));
 
     KisBrushChooser * m_brushChooser = new KisBrushChooser(0, "brush_chooser");
     m_brushesTab->addTab( m_brushChooser, i18n("Predefined Brushes"));
@@ -257,9 +257,9 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
     m_brushesTab->addTab( customBrushes, i18n("Custom Brush"));
 
     connect(customBrushes,
-            SIGNAL(activatedResource(KisResource*)),
+            SIGNAL(activatedResource(KoResource*)),
             m_view->resourceProvider(),
-            SLOT(slotBrushActivated(KisResource*)));
+            SLOT(slotBrushActivated(KoResource*)));
 
 #ifdef HAVE_TEXT_BRUSH
     KisTextBrush* textBrushes = new KisTextBrush(0, "textbrush",
@@ -267,16 +267,16 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
     m_brushesTab->addTab( textBrushes, i18n("Text Brush"));
 
     connect(textBrushes,
-            SIGNAL(activatedResource(KisResource*)),
+            SIGNAL(activatedResource(KoResource*)),
             m_view->resourceProvider(),
-            SLOT(slotBrushActivated(KisResource*)));
+            SLOT(slotBrushActivated(KoResource*)));
 #endif
 
     m_brushChooserPopup->setLayout(l);
     m_brushChooser->setFont(m_font);
     m_brushMediator = new KisResourceMediator( m_brushChooser, this);
-    connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)),
-            m_view->resourceProvider(), SLOT(slotBrushActivated(KisResource*)));
+    connect(m_brushMediator, SIGNAL(activatedResource(KoResource*)),
+            m_view->resourceProvider(), SLOT(slotBrushActivated(KoResource*)));
 
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance()->value("ImagePipeBrushServer");
@@ -322,11 +322,11 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
 
 
     m_patternMediator = new KisResourceMediator( chooser, view);
-    connect( m_patternMediator, SIGNAL(activatedResource(KisResource*)),
-             view->resourceProvider(), SLOT(slotPatternActivated(KisResource*)));
+    connect( m_patternMediator, SIGNAL(activatedResource(KoResource*)),
+             view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
 
-    connect(customPatterns, SIGNAL(activatedResource(KisResource*)),
-            view->resourceProvider(), SLOT(slotPatternActivated(KisResource*)));
+    connect(customPatterns, SIGNAL(activatedResource(KoResource*)),
+            view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
 
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance()->value("PatternServer");
@@ -364,8 +364,8 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     m_gradientTab->addTab( m_gradientChooser, i18n("Gradients"));
 
     m_gradientMediator = new KisResourceMediator( m_gradientChooser, view);
-    connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)),
-            view->resourceProvider(), SLOT(slotGradientActivated(KisResource*)));
+    connect(m_gradientMediator, SIGNAL(activatedResource(KoResource*)),
+            view->resourceProvider(), SLOT(slotGradientActivated(KoResource*)));
 
 
     KisResourceServerBase* rServer;

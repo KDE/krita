@@ -253,7 +253,7 @@ QWidget* KisToolColorPicker::createOptionWidget()
         }
     }
 
-    connect(srv, SIGNAL(resourceAdded(KisResource*)), this, SLOT(slotAddPalette(KisResource*)));
+    connect(srv, SIGNAL(resourceAdded(KoResource*)), this, SLOT(slotAddPalette(KoResource*)));
 
     return m_optionsWidget;
 }

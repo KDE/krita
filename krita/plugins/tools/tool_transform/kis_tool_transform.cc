@@ -230,7 +230,7 @@ void KisToolTransform::paint(QPainter& gc, const QRect& rc)
 }
 
 
-void KisToolTransform::buttonPress(KoPointerEvent *e)
+void KisToolTransform::mousePressEvent(KoPointerEvent *e)
 {
     if (m_subject) {
         
@@ -337,7 +337,7 @@ void KisToolTransform::setFunctionalCursor()
     }
 }
 
-void KisToolTransform::move(KoPointerEvent *e)
+void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
@@ -596,7 +596,7 @@ void KisToolTransform::move(KoPointerEvent *e)
     }
 }
 
-void KisToolTransform::buttonRelease(KoPointerEvent */*e*/)
+void KisToolTransform::mouseReleaseEvent(KoPointerEvent */*e*/)
 {
     if(!m_subject)
         return;

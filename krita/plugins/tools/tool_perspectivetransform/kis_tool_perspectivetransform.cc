@@ -240,7 +240,7 @@ bool KisToolPerspectiveTransform::mouseNear(const QPoint& mousep, const QPoint p
     return (QRect( (point.x() - m_handleHalfSize), (point.y() - m_handleHalfSize), m_handleSize, m_handleSize).contains(mousep) );
 }
 
-void KisToolPerspectiveTransform::buttonPress(KoPointerEvent *event)
+void KisToolPerspectiveTransform::mousePressEvent(KoPointerEvent *event)
 {
     if (m_subject) {
         switch(m_interractionMode)
@@ -316,7 +316,7 @@ void KisToolPerspectiveTransform::buttonPress(KoPointerEvent *event)
     }
 }
 
-void KisToolPerspectiveTransform::move(KoPointerEvent *event)
+void KisToolPerspectiveTransform::mouseMoveEvent(KoPointerEvent *event)
 {
     switch(m_interractionMode)
     {
@@ -416,7 +416,7 @@ void KisToolPerspectiveTransform::move(KoPointerEvent *event)
     };
 }
 
-void KisToolPerspectiveTransform::buttonRelease(KoPointerEvent * event)
+void KisToolPerspectiveTransform::mouseReleaseEvent(KoPointerEvent * event)
 {
     
 

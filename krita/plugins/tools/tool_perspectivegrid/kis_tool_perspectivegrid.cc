@@ -95,7 +95,7 @@ bool KisToolPerspectiveGrid::mouseNear(const QPoint& mousep, const QPoint point)
     return (QRect( (point.x() - m_handleHalfSize), (point.y() - m_handleHalfSize), m_handleSize, m_handleSize).contains(mousep) );
 }
 
-void KisToolPerspectiveGrid::buttonPress(KoPointerEvent *event)
+void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
 {
     KisPerspectiveGrid* pGrid = m_currentImage->perspectiveGrid();
     if(!pGrid->hasSubGrids() && m_mode != MODE_CREATION)
@@ -221,7 +221,7 @@ void KisToolPerspectiveGrid::buttonPress(KoPointerEvent *event)
 }
 
 
-void KisToolPerspectiveGrid::move(KoPointerEvent *event)
+void KisToolPerspectiveGrid::mouseMoveEvent(KoPointerEvent *event)
 {
     if( m_mode == MODE_CREATION )
     {
@@ -253,7 +253,7 @@ void KisToolPerspectiveGrid::move(KoPointerEvent *event)
     }
 }
 
-void KisToolPerspectiveGrid::buttonRelease(KoPointerEvent *event)
+void KisToolPerspectiveGrid::mouseReleaseEvent(KoPointerEvent *event)
 {
     if (!m_subject)
         return;

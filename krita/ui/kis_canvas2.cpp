@@ -197,9 +197,12 @@ void KisCanvas2::addCommand(QUndoCommand *command)
 
 KoShapeManager* KisCanvas2::shapeManager() const
 {
-    KoShape *shape = dynamic_cast<KisShapeController*>(m_d->view->document()->shapeController())->activeLayerShape();
-    if (shape->shapeId() == KIS_SHAPE_LAYER_ID)
-        return dynamic_cast<KisShapeLayer*>(shape)->shapeManager();
+    KisShapeController *controller = dynamic_cast<KisShapeController*>(m_d->view->document()->shapeController());
+
+    Q_ASSERT(controller);
+
+    if (controller->activeLayerShape()->shapeId() == KIS_SHAPE_LAYER_ID)
+        return dynamic_cast<KisShapeLayer*>(controller->activeLayerShape())->shapeManager();
     return m_d->shapeManager;
 }
 

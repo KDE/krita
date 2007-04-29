@@ -87,6 +87,8 @@ public:
     QRect exactBounds() const;
     bool accept(KisLayerVisitor&);
 
+    KoShapeManager *shapeManager() const;
+
 
 private:
 

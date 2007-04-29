@@ -170,3 +170,8 @@ bool KisShapeLayer::accept(KisLayerVisitor& visitor)
 {
     return visitor.visit(this);
 }
+
+KoShapeManager *KisShapeLayer::shapeManager() const
+{
+    return m_d->canvas->shapeManager();
+}

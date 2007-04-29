@@ -50,6 +50,8 @@ public:
 
     void setInitialShapeForView( KisView2 * view );
 
+    KoShape * activeLayerShape();
+
 private slots:
 
     // These slots keep track of changes in the layer stack and make
@@ -60,10 +62,10 @@ private slots:
     void slotLayersChanged( KisGroupLayerSP rootLayer );
     void slotLayerActivated( KisLayerSP layer );
 
-    // XXX: The same is necessary for selections, masks etc.
-private:
-
-    KoShape * activeLayerShape();
+//     // XXX: The same is necessary for selections, masks etc.
+// private:
+//
+//     KoShape * activeLayerShape();
 
 
 private:

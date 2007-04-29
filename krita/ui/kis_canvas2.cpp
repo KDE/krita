@@ -46,6 +46,7 @@
 #include "kis_opengl_canvas2.h"
 #include "kis_group_layer.h"
 #include "kis_opengl_image_context.h"
+#include "kis_shape_controller.h"
 
 #ifdef HAVE_OPENGL
 #include <QGLFormat>
@@ -196,6 +197,9 @@ void KisCanvas2::addCommand(QUndoCommand *command)
 
 KoShapeManager* KisCanvas2::shapeManager() const
 {
+    KoShape *shape = dynamic_cast<KisShapeController*>(m_d->view->document()->shapeController())->activeLayerShape();
+    if (shape->shapeId() == KIS_SHAPE_LAYER_ID)
+        return dynamic_cast<KisShapeLayer*>(shape)->shapeManager();
     return m_d->shapeManager;
 }
 

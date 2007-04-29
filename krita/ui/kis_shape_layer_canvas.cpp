@@ -120,7 +120,7 @@ void KisShapeLayerCanvas::repaint() {
 
 KoToolProxy * KisShapeLayerCanvas::toolProxy()
 {
-    Q_ASSERT(false); // This should never be called as this canvas should have no tools.
+//     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     return 0;
 }
 

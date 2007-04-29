@@ -5,6 +5,7 @@ include_directories( ${KOFFICECORE_INCLUDES} ${KOFFICEUI_INCLUDES} ${PIGMENT_INC
 
 set(koresources_LIB_SRCS
    KoColorSet.cpp
+   KoResource.cpp
 )
 
 kde4_automoc(${koresources_LIB_SRCS})

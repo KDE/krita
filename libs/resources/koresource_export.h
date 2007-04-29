@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOPAINTER_EXPORT_H
-#define KOPAINTER_EXPORT_H
+#ifndef KORESOURCE_EXPORT_H
+#define KORESOURCE_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
@@ -26,19 +26,19 @@
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined _WIN32 || defined _WIN64
 
-#ifndef KOPAINTER_EXPORT
-# if defined(MAKE_KOPAINTER_LIB)
+#ifndef KORESOURCE_EXPORT
+# if defined(MAKE_KORESOURCE_LIB)
    /* We are building this library */ 
-#  define KOPAINTER_EXPORT KDE_EXPORT
+#  define KORESOURCE_EXPORT KDE_EXPORT
 # else
    /* We are using this library */ 
-#  define KOPAINTER_EXPORT KDE_IMPORT
+#  define KORESOURCE_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #else /* UNIX */
 
-#define KOPAINTER_EXPORT KDE_EXPORT
+#define KORESOURCE_EXPORT KDE_EXPORT
 
 #endif
 

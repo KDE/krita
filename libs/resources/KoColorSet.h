@@ -16,8 +16,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
  */
-#ifndef KIS_PALETTE_
-#define KIS_PALETTE_
+#ifndef KOCOLORSET
+#define KOCOLORSET
 
 #include <QImage>
 #include <QColor>
@@ -27,20 +27,14 @@
 #include <kio/job.h>
 #include <kpalette.h>
 
-#include "kis_types.h"
-#include "kis_resource.h"
-#include "kis_global.h"
-#include "kis_gradient.h"
-#include "kis_qimage_mask.h"
+#include "KoResource.h"
 
-class QPoint;
 class QPixmap;
-class KisPaintDevice;
 
-struct KisPaletteEntry {
+struct KoColorSetEntry {
     QColor color;
     QString name;
-    bool operator==(const KisPaletteEntry& rhs) const {
+    bool operator==(const KoColorSetEntry& rhs) const {
         return color == rhs.color && name == rhs.name;
     }
 };
@@ -49,40 +43,30 @@ struct KisPaletteEntry {
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
  * from the Gimp.
  */
-class KRITAIMAGE_EXPORT KisPalette : public KisResource {
-    typedef KisResource super;
+class KORESOURCE_EXPORT KoColorSet : public KoResource {
+    typedef KoResource super;
 
     Q_OBJECT
 
 public:
     /**
-     * Create a palette from the colors in an image
+     * Create a color set from the colors in a gradient
      */
-    KisPalette(const QImage * img, qint32 nColors, const QString & name);
-
+/*    KoColorSet(const KisGradient * gradient, qint32 nColors, const QString & name);
+*/
     /**
-     * Create a palette from the colors in a paint device
-     */
-    KisPalette(const KisPaintDeviceSP device, qint32 nColors, const QString & name);
-
-    /**
-     * Create a palette from the colors in a gradient
-     */
-    KisPalette(const KisGradient * gradient, qint32 nColors, const QString & name);
-
-    /**
-     * Load a palette from a file. This can be a Gimp
+     * Load a color set from a file. This can be a Gimp
      * palette, a RIFF palette or a Photoshop palette.
      */
-    KisPalette(const QString& filename);
+    KoColorSet(const QString& filename);
 
-    /// Create an empty palette
-    KisPalette();
+    /// Create an empty color set
+    KoColorSet();
 
-    /// Explicit copy constructor (KisResource copy constructor is private)
-    KisPalette(const KisPalette& rhs);
+    /// Explicit copy constructor (KoResource copy constructor is private)
+    KoColorSet(const KoColorSet& rhs);
 
-    virtual ~KisPalette();
+    virtual ~KoColorSet();
 
     virtual bool load();
     virtual bool save();
@@ -91,9 +75,9 @@ public:
 
 public:
 
-    void add(const KisPaletteEntry &);
-    void remove(const KisPaletteEntry &);
-    KisPaletteEntry getColor(quint32 index);
+    void add(const KoColorSetEntry &);
+    void remove(const KoColorSetEntry &);
+    KoColorSetEntry getColor(quint32 index);
     qint32 nColors();
 
 private:
@@ -107,8 +91,8 @@ private:
     QString m_name;
     QString m_comment;
     qint32 m_columns;
-    QVector<KisPaletteEntry> m_colors;
+    QVector<KoColorSetEntry> m_colors;
 
 };
-#endif // KIS_PALETTE_
+#endif // KOCOLORSET
 

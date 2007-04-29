@@ -16,48 +16,47 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include "kis_resource.h"
-#include "kis_global.h"
+#include "KoResource.h"
 
-KisResource::KisResource(const QString& filename)
+KoResource::KoResource(const QString& filename)
 {
     m_filename = filename;
     m_valid = false;
 }
 
-KisResource::~KisResource()
+KoResource::~KoResource()
 {
 }
 
-QString KisResource::filename() const
+QString KoResource::filename() const
 {
     return m_filename;
 }
 
-void KisResource::setFilename(const QString& filename)
+void KoResource::setFilename(const QString& filename)
 {
     m_filename = filename;
 }
 
-QString KisResource::name() const
+QString KoResource::name() const
 {
     return m_name;
 }
 
-void KisResource::setName(const QString& name)
+void KoResource::setName(const QString& name)
 {
     m_name = name;
 }
 
-bool KisResource::valid() const
+bool KoResource::valid() const
 {
     return m_valid;
 }
 
-void KisResource::setValid(bool valid)
+void KoResource::setValid(bool valid)
 {
     m_valid = valid;
 }
 
-#include "kis_resource.moc"
+#include "KoResource.moc"
 

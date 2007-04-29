@@ -16,34 +16,34 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#ifndef KIS_RESOURCE_H_
-#define KIS_RESOURCE_H_
+#ifndef KORESOURCE_H
+#define KORESOURCE_H
 
 #include <QImage>
 #include <QObject>
 #include <QString>
-#include <krita_export.h>
+#include <koresource_export.h>
 
 /**
- * The KisResource class provides a representation of Krita image resources.  This
+ * The KoResource class provides a representation of Krita image resources.  This
  * includes, but not limited to, brushes and patterns.
  *
  * This replaces the KisKrayon facility that used to be present in Krayon.
  */
-class KRITAIMAGE_EXPORT KisResource : public QObject {
+class KORESOURCE_EXPORT KoResource : public QObject {
     typedef QObject super;
     Q_OBJECT
 
 public:
 
     /**
-     * Creates a new KisResource object using @p filename.  No file is opened
+     * Creates a new KoResource object using @p filename.  No file is opened
      * in the constructor, you have to call load.
      *
      * @param filename the file name to save and load from.
      */
-    KisResource(const QString& filename);
-    virtual ~KisResource();
+    KoResource(const QString& filename);
+    virtual ~KoResource();
 
 public:
     /**
@@ -71,8 +71,8 @@ public:
     void setValid(bool valid);
 
 private:
-    KisResource(const KisResource&);
-    KisResource& operator=(const KisResource&);
+    KoResource(const KoResource&);
+    KoResource& operator=(const KoResource&);
 
 private:
     QString m_name;
@@ -80,5 +80,5 @@ private:
     bool m_valid;
 };
 
-#endif // KIS_RESOURCE_H_
+#endif // KORESOURCE_H_
 

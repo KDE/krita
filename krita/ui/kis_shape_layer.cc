@@ -85,11 +85,17 @@ void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &con
 
 void KisShapeLayer::addChild(KoShape *object)
 {
-    kDebug(41001) << "KisShapeLayer::addChild {" << endl;
+    kDebug(41001) << "KisShapeLayer::addChild" << endl;
     KoShapeLayer::addChild( object );
     m_d->canvas->shapeManager()->add( object );
 
     setDirty(m_d->converter->documentToView(object->boundingRect()).toRect());
+}
+
+void KisShapeLayer::removeChild(KoShape *object)
+{
+    m_d->canvas->shapeManager()->remove( object );
+    KoShapeLayer::removeChild( object );
 }
 
 QIcon KisShapeLayer::icon() const

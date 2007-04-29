@@ -49,6 +49,7 @@ public:
     KisLayerMap layerShapes; // maps from krita/image layers to shapes
     KisDoc2 * doc;
     KisNameServer * nameServer;
+    bool ignoreActiveLayer;
 };
 
 KisShapeController::KisShapeController( KisDoc2 * doc, KisNameServer *nameServer )
@@ -58,6 +59,7 @@ KisShapeController::KisShapeController( KisDoc2 * doc, KisNameServer *nameServer
     m_d->doc = doc;
     m_d->nameServer = nameServer;
     m_d->image = 0;
+    m_d->ignoreActiveLayer = false;
 }
 
 
@@ -130,16 +132,22 @@ void KisShapeController::removeShape( KoShape* shape )
         }
     }
 
-    foreach( KoView *view, m_d->doc->views() ) {
-        KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
-        canvas->shapeManager()->remove(shape);
-        canvas->canvasWidget()->update();
+    if ( shape->shapeId() == KIS_LAYER_SHAPE_ID
+         || shape->shapeId() == KIS_SHAPE_LAYER_ID
+         || shape->shapeId() == KIS_LAYER_CONTAINER_ID
+         || shape->shapeId() == KIS_MASK_SHAPE_ID )
+    {
+        m_d->ignoreActiveLayer = true;
+        foreach( KoView *view, m_d->doc->views() ) {
+            KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
+            canvas->shapeManager()->remove(shape);
+            canvas->canvasWidget()->update();
+        }
+        m_d->ignoreActiveLayer = false;
     }
 
     m_d->doc->setModified( true );
 }
-
-
 
 
 
@@ -268,11 +276,13 @@ void KisShapeController::slotLayerAdded( KisLayerSP layer )
 
     m_d->layerShapes[layer] = shape;
 
+    m_d->ignoreActiveLayer = true;
     foreach( KoView *view, m_d->doc->views() ) {
         KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
         canvas->shapeManager()->add(shape);
         canvas->canvasWidget()->update();
     }
+    m_d->ignoreActiveLayer = false;
 
 }
 
@@ -325,6 +335,9 @@ void KisShapeController::slotLayerActivated( KisLayerSP layer )
 
 KoShape * KisShapeController::activeLayerShape()
 {
+    if (m_d->ignoreActiveLayer)
+        return 0;
+
     if ( !m_d->image ) {
         kDebug(41007) << "activeLayerShape() current image = " << m_d->image << endl;
         return 0;

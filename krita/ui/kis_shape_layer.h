@@ -65,6 +65,7 @@ public:
 
     // KoShapeContainer overrides
     void addChild(KoShape *object);
+    void removeChild(KoShape *object);
 
     // KisExternalLayer implementation
     QIcon icon() const;

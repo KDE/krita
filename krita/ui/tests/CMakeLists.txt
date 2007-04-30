@@ -13,7 +13,7 @@ kde4_add_executable(kis_layer_model_test RUN_UNINSTALLED ${kis_layer_model_test_
 
 target_link_libraries(kis_layer_model_test  ${KDE4_KDEUI_LIBS} kofficeui kofficecore kritaui ${QT_QTTEST_LIBRARY})
 
-add_test(libs-kofficeui-kis_layer_model_test kis_layer_model_test)
+add_test(krita-ui-kis_layer_model_test kis_layer_model_test)
 
 ########### end ###############
 

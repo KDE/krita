@@ -43,34 +43,28 @@
 
 class KoFileListItem : public QStandardItem
 {
-  public:
+public:
     KoFileListItem(const QPixmap& pixmap, const QString& text)
-      : QStandardItem(pixmap, text)
+        : QStandardItem(pixmap, text)
     {
-      m_fileItem = 0;
     }
 
     ~KoFileListItem()
     {
-      delete m_fileItem;
     }
 
-    void setFileItem(KFileItem* item)
+    void setFileItem(const KFileItem& item)
     {
-      if(m_fileItem) {
-        delete m_fileItem;
-      }
-
-      m_fileItem = item;
+        m_fileItem = item;
     }
 
-    KFileItem* fileItem() const
+    KFileItem fileItem() const
     {
-      return m_fileItem;
+        return m_fileItem;
     }
 
-  private:
-    KFileItem* m_fileItem;
+private:
+    KFileItem m_fileItem;
 };
 
 
@@ -109,11 +103,11 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
 
   int i = 0;
   QString value;
-  KFileItemList fileList;
+  QList<KFileItem> fileList;
   QStandardItem* rootItem = model()->invisibleRootItem();
 
   do {
-    QString key = QString("File%1").arg(i);
+    const QString key = QString("File%1").arg(i);
     value = config.readPathEntry(key);
 
     if(!value.isEmpty()) {
@@ -133,15 +127,15 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
           name = url.fileName();
 
       if(!url.isLocalFile() || QFile::exists(url.path())) {
-        KFileItem* fileItem = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
+        KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
         fileList.append(fileItem);
         //center all icons in 64x64 area
-        QImage icon = fileItem->pixmap(64).toImage();
+        QImage icon = fileItem.pixmap(64).toImage();
         icon.convertToFormat(QImage::Format_ARGB32);
         icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
         KoFileListItem* item = new KoFileListItem(QPixmap::fromImage(icon), name);
         item->setEditable(false);
-        item->setData(fileItem->pixmap(128), Qt::UserRole);
+        item->setData(fileItem.pixmap(128), Qt::UserRole);
         item->setFileItem(fileItem);
         rootItem->appendRow(item);
       }
@@ -175,16 +169,16 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
     m_openButton->setEnabled(true);
     m_titleLabel->setText(item->data(Qt::DisplayRole).toString());
     m_previewLabel->setPixmap(item->data(Qt::UserRole).value<QPixmap>());
-    KFileItem* fileItem = item->fileItem();
+    KFileItem fileItem = item->fileItem();
 
-    if(fileItem) {
+    if(!fileItem.isNull()) {
       QString details = "<center><table border=\"0\">";
       details += i18nc("File modification date and time. %1 is date time",
                         "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
-                        QString(fileItem->timeString(KIO::UDS_MODIFICATION_TIME)));
+                        QString(fileItem.timeString(KIO::UDS_MODIFICATION_TIME)));
       details += i18nc("File access date and time. %1 is date time",
                         "<tr><td><b>Accessed:</b></td><td>%1</td></tr>",
-                        QString(fileItem->timeString(KIO::UDS_ACCESS_TIME)));
+                        QString(fileItem.timeString(KIO::UDS_ACCESS_TIME)));
       details += "</table></center>";
       m_detailsLabel->setHtml(details);
     } else {
@@ -206,30 +200,30 @@ void KoRecentDocumentsPane::openFile(const QModelIndex& index)
   cfgGrp.writeEntry("LastReturnType", "File");
 
   KoFileListItem* item = static_cast<KoFileListItem*>(model()->itemFromIndex(index));
-  KFileItem* fileItem = item->fileItem();
+  KFileItem fileItem = item->fileItem();
 
-  if(fileItem) {
-    emit openUrl(fileItem->url());
+  if(!fileItem.isNull()) {
+    emit openUrl(fileItem.url());
   }
 }
 
 void KoRecentDocumentsPane::previewResult(KJob* job)
 {
-  if(d->m_previewJob == job)
-  d->m_previewJob = 0;
+    if(d->m_previewJob == job)
+        d->m_previewJob = 0;
 }
 
 void KoRecentDocumentsPane::updatePreview(const KFileItem& fileItem, const QPixmap& preview)
 {
     if(preview.isNull()) {
-    return;
-  }
+        return;
+    }
 
   QStandardItem* rootItem = model()->invisibleRootItem();
 
   for(int i = 0; i < rootItem->rowCount(); ++i) {
     KoFileListItem* item = static_cast<KoFileListItem*>(rootItem->child(i));
-    if(item->fileItem()->url() == fileItem.url()) {
+    if(item->fileItem().url() == fileItem.url()) {
       item->setData(preview, Qt::UserRole);
       QImage icon = preview.toImage();
       icon = icon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);

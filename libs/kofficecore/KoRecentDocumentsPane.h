@@ -51,7 +51,7 @@ class KoRecentDocumentsPane : public KoDetailsPane
     void openFile(const QModelIndex& index);
 
     void previewResult(KJob* job);
-    void updatePreview(const KFileItem* fileItem, const QPixmap& preview);
+    void updatePreview(const KFileItem& fileItem, const QPixmap& preview);
 
   private:
     KoRecentDocumentsPanePrivate * const d;

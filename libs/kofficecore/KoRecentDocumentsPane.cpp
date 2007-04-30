@@ -159,8 +159,8 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
   d->m_previewJob = KIO::filePreview(fileList, 200, 200, 0);
 
   connect(d->m_previewJob, SIGNAL(result(KJob*)), this, SLOT(previewResult(KJob*)));
-  connect(d->m_previewJob, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
-          this, SLOT(updatePreview(const KFileItem*, const QPixmap&)));
+  connect(d->m_previewJob, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
+          this, SLOT(updatePreview(const KFileItem&, const QPixmap&)));
 }
 
 KoRecentDocumentsPane::~KoRecentDocumentsPane()
@@ -219,9 +219,9 @@ void KoRecentDocumentsPane::previewResult(KJob* job)
   d->m_previewJob = 0;
 }
 
-void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixmap& preview)
+void KoRecentDocumentsPane::updatePreview(const KFileItem& fileItem, const QPixmap& preview)
 {
-  if(preview.isNull()) {
+    if(preview.isNull()) {
     return;
   }
 
@@ -229,7 +229,7 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixm
 
   for(int i = 0; i < rootItem->rowCount(); ++i) {
     KoFileListItem* item = static_cast<KoFileListItem*>(rootItem->child(i));
-    if(item->fileItem() == fileItem) {
+    if(item->fileItem()->url() == fileItem.url()) {
       item->setData(preview, Qt::UserRole);
       QImage icon = preview.toImage();
       icon = icon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);

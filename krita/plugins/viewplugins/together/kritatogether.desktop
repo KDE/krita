@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Together
+Name[be]=Разам
 Name[x-test]=xxTogetherxx
 Comment=Together
+Comment[be]=Разам
 Comment[x-test]=xxTogetherxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

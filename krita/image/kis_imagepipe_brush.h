@@ -25,7 +25,7 @@
 
 #include <kio/job.h>
 
-#include "kis_resource.h"
+#include "KoResource.h"
 #include "kis_brush.h"
 #include "kis_global.h"
 

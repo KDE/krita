@@ -83,10 +83,10 @@ void KisPaletteView::setPalette(KoColorSet* palette)
         m_cells->setColor( i, c );
     }
 
-    connect(m_cells, SIGNAL(colorSelected(int)),
+    connect(m_cells, SIGNAL(colorSelected(int, const QColor&)),
             SLOT(slotColorCellSelected(int)));
 
-    connect(m_cells, SIGNAL(colorDoubleClicked(int)),
+    connect(m_cells, SIGNAL(colorDoubleClicked(int, const QColor&)),
             SLOT(slotColorCellDoubleClicked(int)) );
 
     addChild( m_cells );

@@ -40,7 +40,7 @@
 #include "kis_layer.h"
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
-    :  KisTool(canvas, KisCursor::load("tool_line_cursor.png", 6, 6))
+    :  KisTool(canvas, KisCursor::moveCursor())
 {
     setObjectName("tool_move");
 
@@ -52,6 +52,8 @@ KisToolMove::~KisToolMove()
 
 void KisToolMove::paint(QPainter& gc, KoViewConverter &converter)
 {
+    Q_UNUSED(gc);
+    Q_UNUSED(converter);
 }
 
 void KisToolMove::mousePressEvent(KoPointerEvent *e)

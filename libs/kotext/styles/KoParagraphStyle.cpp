@@ -297,6 +297,8 @@ double KoParagraphStyle::lineHeightAbsolute() const {
 
 void KoParagraphStyle::setMinimumLineHeight(double height) {
     setProperty(MinimumLineHeight, height);
+    remove(FixedLineHeight);
+    remove(PercentLineHeight);
 }
 
 double KoParagraphStyle::minimumLineHeight() const {

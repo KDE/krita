@@ -21,14 +21,16 @@
 #ifndef __KIS_TOOL_FILTER_H__
 #define __KIS_TOOL_FILTER_H__
 
-#include "kis_tool_freehand.h"
 #include "KoToolFactory.h"
+
+#include "kis_tool_freehand.h"
+#include "kis_layer_shape.h"
+
 
 class QComboBox;
 class QGridLayout;
 class KoPointerEvent;
-class KisFilterConfigurationWidget;
-class KoPointerEvent;
+class KisFilterConfigWidget;
 class KisView;
 class KoID;
 class KisCmbIDList;
@@ -39,12 +41,11 @@ class KisToolFilter : public KisToolFreehand {
     typedef KisToolFreehand super;
 
 public:
-    KisToolFilter();
+    KisToolFilter(KoCanvasBase *canvas);
     virtual ~KisToolFilter();
 
-    virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_FREEHAND; }
     virtual QWidget* createOptionWidget();
+    virtual QWidget* optionWidget();
 
 public slots:
     void changeFilter( const KoID & filter);
@@ -54,9 +55,10 @@ protected:
 
 private:
     KisFilterSP m_filter;
-    QWidget* m_filterConfigurationWidget;
+    KisFilterConfigWidget* m_filterConfigurationWidget;
     QGridLayout* m_optionLayout;
     KisCmbIDList * m_cbFilter;
+    QWidget *m_optionWidget;
 };
 
 
@@ -70,6 +72,7 @@ public:
             setToolType( TOOL_TYPE_FREEHAND );
             setIcon( "tool_filter" );
             setPriority( 0 );
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolFilterFactory(){}

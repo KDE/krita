@@ -20,9 +20,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_filterop.h"
+
 #include <QRect>
 
 #include <kdebug.h>
+
+#include "KoColorSpace.h"
+#include "KoCompositeOp.h"
 
 #include "kis_brush.h"
 #include "kis_global.h"
@@ -31,9 +36,7 @@
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
 #include "kis_paintop.h"
-#include "KoColorSpace.h"
 #include "kis_selection.h"
-#include "kis_filterop.h"
 
 
 KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
@@ -98,7 +101,7 @@ void KisFilterOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     // Copy the layer data onto the new paint device
 
     KisPainter p( tmpDev );
-    p.bitBlt( 0,  0,  COMPOSITE_COPY, m_source, OPACITY_OPAQUE, x, y, maskWidth, maskHeight );
+    p.bitBlt( 0,  0,  colorSpace->compositeOp(COMPOSITE_COPY), m_source, OPACITY_OPAQUE, x, y, maskWidth, maskHeight );
 
     // Filter the paint device
     filter->disableProgress();

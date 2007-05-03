@@ -17,25 +17,19 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <stdlib.h>
-#include <vector>
 
-#include <QPoint>
+#include "tool_filter.h"
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_debug_areas.h>
-#include <kis_types.h>
-#include <KoToolRegistry.h>
-#include <kis_paintop_registry.h>
+#include "KoToolRegistry.h"
 
-#include "tool_filter.h"
+#include "kis_debug_areas.h"
+#include "kis_paintop_registry.h"
+
 #include "kis_filterop.h"
 #include "kis_tool_filter.h"
 
@@ -49,16 +43,13 @@ ToolFilter::ToolFilter(QObject *parent, const QStringList &)
 {
     setComponentData(ToolFilterFactory::componentData());
 
-    if ( parent->inherits("KoToolRegistry") )
-    {
-        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
-        r->add(KoToolFactorySP(new KisToolFilterFactory()));
+    KoToolRegistry * r = KoToolRegistry::instance();
 
-        // XXX: Put this in a separate plugin?
-        KisPaintOpRegistry * pr = KisPaintOpRegistry::instance();
-        pr->add(KisPaintOpFactorySP(new KisFilterOpFactory));
+    r->add(new KisToolFilterFactory( r, QStringList()));
 
-     }
+    // XXX: Put this in a separate plugin?
+    KisPaintOpRegistry * pr = KisPaintOpRegistry::instance();
+    pr->add(KisPaintOpFactorySP(new KisFilterOpFactory));
 }
 
 ToolFilter::~ToolFilter()

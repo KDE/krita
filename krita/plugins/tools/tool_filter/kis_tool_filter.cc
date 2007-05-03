@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_filter.h"
+
 #include <QBitmap>
 #include <QPainter>
 #include <QComboBox>
@@ -30,53 +32,32 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_filter_config_widget.h"
-#include "kis_tool_filter.h"
-#include <kis_brush.h>
-#include <KoPointerEvent.h>
-#include <KoPointerEvent.h>
-#include <kis_canvas_subject.h>
-#include <kis_cmb_idlist.h>
-#include <kis_cursor.h>
-//#include <kis_doc2.h>
-#include <kis_filter.h>
-#include <kis_filterop.h>
-#include <KoID.h>
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <KoPointerEvent.h>
-#include <kis_painter.h>
-#include <kis_paintop.h>
-#include <kis_paintop_registry.h>
-#include <kis_vec.h>
+#include "KoPointerEvent.h"
+#include "KoCanvasBase.h"
 
-KisToolFilter::KisToolFilter()
-    : super(i18n("Filter Brush")), m_filterConfigurationWidget(0)
+#include "kis_filter_config_widget.h"
+#include "kis_brush.h"
+#include "kis_cmb_idlist.h"
+#include "kis_cursor.h"
+#include "kis_filter.h"
+#include "kis_filterop.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_painter.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
+#include "kis_vec.h"
+
+KisToolFilter::KisToolFilter(KoCanvasBase * canvas)
+    : super(canvas, KisCursor::load("tool_filter_cursor.png", 5, 5), i18n("Filter Brush")),
+    m_filterConfigurationWidget(0)
 {
     setObjectName("tool_filter");
-    m_subject = 0;
-    setCursor(KisCursor::load("tool_filter_cursor.png", 5, 5));
+    m_optionWidget = 0;
 }
 
 KisToolFilter::~KisToolFilter()
 {
-}
-
-void KisToolFilter::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("tool_filter"),
-                               i18n("&Filter Brush"),
-                               collection,
-                               objectName());
-        Q_CHECK_PTR(m_action);
-        connect(m_action, SIGNAL(triggered()),this, SLOT(activate()));
-        m_action->setToolTip(i18n("Paint with filters"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
 }
 
 void KisToolFilter::initPaint(KoPointerEvent *e)
@@ -87,26 +68,28 @@ void KisToolFilter::initPaint(KoPointerEvent *e)
     m_paintIncremental = m_filter->supportsIncrementalPainting();
 
     super::initPaint(e);
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("filter", 0, painter());
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("filter", 0, m_painter);
     op->setSource ( m_source );
-    painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
-    painter()->setFilter( m_filter );
+    m_painter->setPaintOp(op); // And now the painter owns the op and will destroy it.
+    m_painter->setFilter( m_filter );
 
     // XXX: Isn't there a better way to set the config? The filter config widget needs to
     // to go into the tool options widget, and just the data carried over to the filter.
     // I've got a bit of a problem with core classes having too much GUI about them.
     // BSAR.
-    dynamic_cast<KisFilterOp *>(op)->setFilterConfiguration( m_filter->configuration( m_filterConfigurationWidget) );
+    if (m_filterConfigurationWidget) {
+        dynamic_cast<KisFilterOp *>(op)->setFilterConfiguration( m_filterConfigurationWidget->configuration() );
+    }
 }
 
 QWidget* KisToolFilter::createOptionWidget()
 {
-    QWidget *widget = super::createOptionWidget(parent);
+    m_optionWidget = super::createOptionWidget();
 
-    m_cbFilter = new KisCmbIDList(widget);
+    m_cbFilter = new KisCmbIDList(m_optionWidget);
     Q_CHECK_PTR(m_cbFilter);
 
-    QLabel* lbFilter = new QLabel(i18n("Filter:"), widget);
+    QLabel* lbFilter = new QLabel(i18n("Filter:"), m_optionWidget);
     Q_CHECK_PTR(lbFilter);
 
     // Check which filters support painting
@@ -114,7 +97,7 @@ QWidget* KisToolFilter::createOptionWidget()
     QList<KoID> l2;
     QList<KoID>::iterator it;
     for (it = l.begin(); it !=  l.end(); ++it) {
-        KisFilterSP f = KisFilterRegistry::instance()->get(*it);
+        KisFilterSP f = KisFilterRegistry::instance()->value((*it).id());
         if (f->supportsPainting()) {
             l2.push_back(*it);
         }
@@ -123,7 +106,7 @@ QWidget* KisToolFilter::createOptionWidget()
 
     addOptionWidgetOption(m_cbFilter, lbFilter);
 
-    m_optionLayout = new QGridLayout(widget);
+    m_optionLayout = new QGridLayout(m_optionWidget);
     Q_CHECK_PTR(m_optionLayout);
     m_optionLayout->setMargin(0);
     m_optionLayout->setSpacing(6);
@@ -132,12 +115,17 @@ QWidget* KisToolFilter::createOptionWidget()
     connect(m_cbFilter, SIGNAL(activated ( const KoID& )), this, SLOT( changeFilter( const KoID& ) ) );
     changeFilter( m_cbFilter->currentItem () );
 
-    return widget;
+    return m_optionWidget;
+}
+
+QWidget* KisToolFilter::optionWidget()
+{
+    return m_optionWidget;
 }
 
 void KisToolFilter::changeFilter( const KoID & id)
 {
-    m_filter =  KisFilterRegistry::instance()->get( id );
+    m_filter =  KisFilterRegistry::instance()->value( id.id() );
     Q_ASSERT(!m_filter.isNull());
     if( m_filterConfigurationWidget != 0 )
     {
@@ -148,7 +136,7 @@ void KisToolFilter::changeFilter( const KoID & id)
     m_source = m_currentImage->activeDevice();
     if (!m_source) return;
 
-    m_filterConfigurationWidget = m_filter->createConfigurationWidget( optionWidget(), m_source );
+    m_filterConfigurationWidget = m_filter->createConfigurationWidget( m_optionWidget, m_source );
     if( m_filterConfigurationWidget != 0 )
     {
         m_optionLayout->addWidget ( m_filterConfigurationWidget, 2, 0, 1, 2 );

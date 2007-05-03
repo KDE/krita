@@ -138,7 +138,7 @@ public:
      * OpenDocument 9.2 Drawing Shapes.
      * @see saveOdfSizePositionAttributes(), saveOdfMandatoryAttributes(), saveOdfTransformationAttributes()
      */
-    virtual void saveOdf( KoShapeSavingContext * context ) { Q_UNUSED(context); } ; // = 0;
+    virtual void saveOdf( KoShapeSavingContext * context ) = 0;
 
     /**
      * When saving this shape to ODF, you may nest it in a 'draw:frame' and shape properties should be

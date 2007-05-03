@@ -116,6 +116,7 @@ private slots:
 private:
     void requestSelectionChangedEvent();
     void selectGroupChilds( KoShapeGroup *group );
+    virtual void saveOdf( KoShapeSavingContext *) {}
 
     class Private;
     Private * const d;

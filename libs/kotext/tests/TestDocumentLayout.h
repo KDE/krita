@@ -49,6 +49,7 @@ class MockTextShape : public KoShape {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }
+    virtual void saveOdf( KoShapeSavingContext *) {}
     KoTextDocumentLayout *layout;
 };
 

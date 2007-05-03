@@ -103,4 +103,8 @@ void KritaShape::setDisplayProfile( const QString & profileName ) {
     repaint();
 }
 
+void KritaShape::saveOdf( KoShapeSavingContext * context ) {
+    // TODO
+}
+
 #include "KritaShape.moc"

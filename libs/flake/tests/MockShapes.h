@@ -16,6 +16,7 @@ public:
         //qDebug() << "Shape" << kBacktrace( 10 );
         paintedCount++;
     }
+    virtual void saveOdf( KoShapeSavingContext *) {}
     int paintedCount;
 };
 
@@ -29,6 +30,7 @@ public:
         paintedCount++;
     }
 
+    virtual void saveOdf( KoShapeSavingContext *) {}
     int paintedCount;
 };
 

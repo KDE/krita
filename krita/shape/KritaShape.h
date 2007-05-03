@@ -61,7 +61,10 @@ public:
     KritaShape(const KUrl& url, const QString & profileName);
     virtual ~KritaShape();
 
+    /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext * context );
 
     void setDisplayProfile( const QString & profileName );
     void importImage( const KUrl & url );

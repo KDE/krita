@@ -51,6 +51,8 @@ public:
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
 
     void addChild( KoShape * shape );
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext * context );
 
 private:
 

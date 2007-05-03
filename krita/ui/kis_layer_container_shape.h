@@ -57,6 +57,9 @@ public:
     // KoShape overrides
     bool isSelectable() const { return false; }
 
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext * context );
+
 private:
 
     class Private;

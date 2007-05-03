@@ -54,12 +54,25 @@ void ConnectionTool::paint( QPainter &painter, KoViewConverter &converter ) {
             painter.fillRect(QRectF(QPointF(point.x() - 2, point.y() -2) , QSizeF(4, 4)), QBrush(Qt::red));
         }
     }
+    
+    if(m_startShape)
+    {
+        double x, y;
+        converter.zoom(&x, &y);
+        QMatrix matrix = m_startShape->transformationMatrix(&converter);
+        matrix.scale(x, y);
+        QPointF startPoint = matrix.map(m_startShape->connectors()[m_gluePointIndex]);
+        QPointF endPoint = converter.documentToView (m_lastMousePos);
+        KoShapeConnection::paintConnection(painter, startPoint, endPoint, QPen (Qt::black),
+                                            KoShapeConnection::StraightConnection);
+    }
 }
 
 void ConnectionTool::mousePressEvent( KoPointerEvent *event ) {
     QRectF region = m_canvas->viewConverter()->viewToDocument(QRectF(0, 0, 20, 20));
     region.moveTo(event->point.x() - region.width() / 2, event->point.y() - region.height() / 2);
-
+    m_lastMousePos = event->point;
+    
     foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(region)) {
         QMatrix matrix = shape->transformationMatrix(0);
         int index = 0;
@@ -73,6 +86,7 @@ void ConnectionTool::mousePressEvent( KoPointerEvent *event ) {
                 }
                 else {
                     createConnection(m_startShape, m_gluePointIndex, shape, index);
+		    m_startShape = 0;
                     m_gluePointIndex = 0;
                 }
                 return;
@@ -99,6 +113,14 @@ void ConnectionTool::mouseMoveEvent( KoPointerEvent *event ) {
         if(! m_shapesPaintedWithConnections.contains(shape))
 // TODO do a for loop to repaint only the actual points.
             shape->repaint(); // because it used to have connections painted, but no longer will.
+    }
+    
+    m_lastMousePos = event->point;
+
+    if(m_startShape)
+    {
+        // TODO Only update the rect that's needed
+        m_canvas->updateCanvas(m_canvas->canvasWidget()->geometry());
     }
 }
 

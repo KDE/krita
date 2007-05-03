@@ -27,6 +27,7 @@
 class KoShape;
 class QPainter;
 class KoViewConverter;
+class QPen;
 
 /**
  * The shapeConnection class represents a connection between two shapes.
@@ -43,13 +44,11 @@ class KoViewConverter;
 class FLAKE_EXPORT KoShapeConnection {
 public:
 
-/* TODO
     enum ConnectionType {
-        TautConnection,
+        StraightConnection,
         MultiLineConnection,
         CurvedConnection
     };
-*/
 
     /**
      * Constructor for the connection between two shapes.
@@ -127,6 +126,15 @@ public:
      * Return a bounding rectangle in which this connection is completely present.
      */
     QRectF boundingRect() const;
+    
+    /**
+     * Paints the connection of specified type
+     * @param startPoint Point in pt to start drawing from
+     * @param endPoint Point in pt to end drawing at
+     * @param type Type of connector to draw
+     */
+    static void paintConnection(QPainter& painter, const QPointF& startPoint,
+				const QPointF& endPoint, const QPen& pen, ConnectionType type);
 
 private:
     class Private;

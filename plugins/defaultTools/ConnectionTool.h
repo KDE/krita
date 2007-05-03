@@ -53,6 +53,7 @@ private:
     KoShape *m_startShape;
     int m_gluePointIndex;
     QList<KoShape*> m_shapesPaintedWithConnections;
+    QPointF m_lastMousePos;
 };
 
 #endif

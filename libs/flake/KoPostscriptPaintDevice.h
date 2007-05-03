@@ -25,7 +25,7 @@
 #include <flake_export.h>
 
 /**
- * helper class to disable any screen convertion as thats done in flake.
+ * helper class to disable any screen conversion as thats done in flake.
  * Flake has the property that all content is always defined in pts. And only when it
  * is displayed is it converted to the proper zoom and resolution.
  * This is in contradiction to the normal behavior of Qt fonts which automatically

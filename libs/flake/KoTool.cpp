@@ -92,8 +92,13 @@ void KoTool::wheelEvent( KoPointerEvent * e ) {
 
 
 void KoTool::useCursor(QCursor cursor, bool force) {
-    if(!force && cursor.shape() == d->previousCursor.shape())
+    if(!force && cursor.shape() != Qt::BitmapCursor && cursor.shape() == d->previousCursor.shape())
         return;
+
+    if(!force && cursor.shape()==Qt::BitmapCursor && d->previousCursor.shape()==Qt::BitmapCursor &&
+                cursor.pixmap().serialNumber() == d->previousCursor.pixmap().serialNumber())
+        return;
+
     d->previousCursor = cursor;
     emit sigCursorChanged(d->previousCursor);
 }

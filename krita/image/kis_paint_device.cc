@@ -253,7 +253,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         m_d->pixelSize = rhs.m_d->pixelSize;
 
         m_d->defaultPixel = new quint8[ m_d->pixelSize ];
-        m_d->colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, m_d->defaultPixel);
+        memcpy(m_d->defaultPixel, rhs.m_d->defaultPixel, m_d->pixelSize * sizeof(quint8));
 
         m_d->nChannels = rhs.m_d->nChannels;
         if(rhs.m_d->exifInfo)
@@ -278,6 +278,7 @@ KisPaintDevice::~KisPaintDevice()
     }
     m_d->longRunningFilters.clear();
     delete m_d->paintEngine;
+    delete m_d->defaultPixel;
     //delete m_d->exifInfo;
     delete m_d;
 }

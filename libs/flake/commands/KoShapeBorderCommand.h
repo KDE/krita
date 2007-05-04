@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,11 +34,20 @@ class FLAKE_EXPORT KoShapeBorderCommand : public QUndoCommand {
 public:
     /**
      * Command to set a new shape border.
-     * @param shapes a set of all the shapes that should get the new background.
-     * @param border the new border
+     * @param shapes a set of all the shapes that should get the new border.
+     * @param border the new border, the same for all given shapes
      * @param parent the parent command used for macro commands
      */
     KoShapeBorderCommand( const QList<KoShape*> &shapes, KoShapeBorderModel *border, QUndoCommand *parent = 0 );
+
+    /**
+     * Command to set new shape borders.
+     * @param shapes a set of all the shapes that should get a new border.
+     * @param borders the new borders, one for each shape
+     * @param parent the parent command used for macro commands
+     */
+    KoShapeBorderCommand( const QList<KoShape*> &shapes, QList<KoShapeBorderModel*> borders, QUndoCommand *parent = 0 );
+
     virtual ~KoShapeBorderCommand();
     /// redo the command
     void redo ();

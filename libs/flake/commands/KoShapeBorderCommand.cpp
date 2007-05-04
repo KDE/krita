@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,19 +26,48 @@
 
 class KoShapeBorderCommand::Private {
 public:
-    Private(KoShapeBorderModel *border) : newBorder(border) {}
+    Private() {}
     QList<KoShape*> shapes;                ///< the shapes to set border for
     QList<KoShapeBorderModel*> oldBorders; ///< the old borders, one for each shape
-    KoShapeBorderModel * newBorder;        ///< the new border to set
+    QList<KoShapeBorderModel*> newBorders; ///< the new borders to set
 
 };
 
 KoShapeBorderCommand::KoShapeBorderCommand( const QList<KoShape*> &shapes, KoShapeBorderModel *border,
                                             QUndoCommand *parent )
 : QUndoCommand( parent )
-, d(new Private( border ))
+, d(new Private())
 {
     d->shapes = shapes;
+    int shapeCount = shapes.count();
+    for( int i = 0; i < shapeCount; ++i )
+        d->newBorders.append( border );
+
+    // save old borders
+    foreach( KoShape *shape, d->shapes )
+        d->oldBorders.append( shape->border() );
+
+    // XXX this command forgets to delete the old border on a shape and assumes someone else is still
+    // using it.  For such cases we should probably create a new border for each shape in the redo method.
+    // and delete the old borders in the destructor
+
+    setText( i18n( "Set border" ) );
+}
+
+KoShapeBorderCommand::KoShapeBorderCommand( const QList<KoShape*> &shapes, QList<KoShapeBorderModel*> borders,
+                                            QUndoCommand *parent )
+: QUndoCommand( parent )
+, d(new Private())
+{
+    Q_ASSERT( shapes.count() == borders.count() );
+
+    d->shapes = shapes;
+    d->newBorders = borders;
+
+    // save old borders
+    foreach( KoShape *shape, d->shapes )
+        d->oldBorders.append( shape->border() );
+
     // XXX this command forgets to delete the old border on a shape and assumes someone else is still
     // using it.  For such cases we should probably create a new border for each shape in the redo method.
     // and delete the old borders in the destructor
@@ -52,10 +81,11 @@ KoShapeBorderCommand::~KoShapeBorderCommand() {
 
 void KoShapeBorderCommand::redo () {
     QUndoCommand::redo();
+    QList<KoShapeBorderModel*>::iterator borderIt = d->newBorders.begin();
     foreach( KoShape *shape, d->shapes ) {
-        d->oldBorders.append( shape->border() ); // TODO this seems buggy. Why append every redo?
-        shape->setBorder( d->newBorder );
+        shape->setBorder( *borderIt );
         shape->repaint();
+        borderIt++;
     }
 }
 

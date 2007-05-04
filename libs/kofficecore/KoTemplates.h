@@ -41,7 +41,7 @@ public:
     ~KoTemplate() {}
 
     QString name() const { return m_name; }
-    QString description() const { return m_descr; };
+    QString description() const { return m_descr; }
     QString file() const { return m_file; }
     QString picture() const { return m_picture; }
     QString fileName() const { return m_fileName; }

@@ -67,7 +67,7 @@ class WinObjBrushHandle: public WinObjHandle
 public:
     virtual void apply( QPainter& p );
     QBrush brush;
-    virtual ~WinObjBrushHandle() {};
+    virtual ~WinObjBrushHandle() {}
 };
 
 class WinObjPenHandle: public WinObjHandle
@@ -75,7 +75,7 @@ class WinObjPenHandle: public WinObjHandle
 public:
     virtual void apply( QPainter& p );
     QPen pen;
-    virtual ~WinObjPenHandle() {};
+    virtual ~WinObjPenHandle() {}
 };
 
 class WinObjPatternBrushHandle: public WinObjHandle
@@ -84,7 +84,7 @@ public:
     virtual void apply( QPainter& p );
     QBrush brush;
     QPixmap image;
-    virtual ~WinObjPatternBrushHandle() {};
+    virtual ~WinObjPatternBrushHandle() {}
 };
 
 class WinObjFontHandle: public WinObjHandle
@@ -93,7 +93,7 @@ public:
     virtual void apply( QPainter& p );
     QFont font;
     int rotation;
-    virtual ~WinObjFontHandle() {};
+    virtual ~WinObjFontHandle() {}
 };
 
 void WinObjBrushHandle::apply( QPainter& p )

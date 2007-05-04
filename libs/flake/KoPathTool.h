@@ -98,7 +98,7 @@ private:
         ActiveHandle( KoPathTool *tool )
         : m_tool( tool )
         {}
-        virtual ~ActiveHandle() {};
+        virtual ~ActiveHandle() {}
         virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0; 
         virtual void repaint() const = 0;
         virtual void mousePressEvent( KoPointerEvent *event ) = 0;

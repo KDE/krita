@@ -39,13 +39,13 @@ class KoRgbU16ColorSpaceFactory : public KoColorSpaceFactory
     /**
          * lcms colorspace type definition.
      */
-        virtual quint32 colorSpaceType() { return TYPE_BGRA_16; };
+        virtual quint32 colorSpaceType() { return TYPE_BGRA_16; }
 
-        virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
+        virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; }
     
-        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoRgbU16ColorSpace(parent, p); };
+        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoRgbU16ColorSpace(parent, p); }
 
-        virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
+        virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; }
 };
 
 

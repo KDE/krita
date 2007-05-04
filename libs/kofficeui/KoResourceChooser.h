@@ -40,8 +40,8 @@ class KoIconToolTip: public KoItemToolTip
     Q_OBJECT
 
     public:
-        KoIconToolTip() {};
-        virtual ~KoIconToolTip() {};
+        KoIconToolTip() {}
+        virtual ~KoIconToolTip() {}
 
     protected:
         virtual QTextDocument *createDocument( const QModelIndex &index );

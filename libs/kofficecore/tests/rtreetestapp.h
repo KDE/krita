@@ -62,7 +62,7 @@ class Canvas : public QWidget
 
 public:
     Canvas();
-    virtual ~Canvas() {};
+    virtual ~Canvas() {}
 
     void updateCanvas();
     void insert( QRectF & rect );

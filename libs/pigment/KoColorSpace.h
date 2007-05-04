@@ -603,7 +603,7 @@ public:
      * threads.
      */
     virtual QList<KisFilter*> createBackgroundFilters() const
-        { return QList<KisFilter*>(); };
+        { return QList<KisFilter*>(); }
 protected:
     /**
      * Use this function in the constructor of your colorspace to add the information about a channel.

@@ -126,7 +126,7 @@ class KKbdAccessExtensionsPrivate
             handleNdx(0),
             icon(0),
             stepSize(10),
-            accessKeyLabels(0) {};
+            accessKeyLabels(0) {}
 
         ~KKbdAccessExtensionsPrivate()
         {

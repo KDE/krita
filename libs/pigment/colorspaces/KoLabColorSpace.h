@@ -50,13 +50,13 @@ class KoLabColorSpaceFactory : public KoColorSpaceFactory
         /**
          * lcms colorspace type definition.
          */
-        virtual quint32 colorSpaceType() { return (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)); };
+        virtual quint32 colorSpaceType() { return (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)); }
 
-        virtual icColorSpaceSignature colorSpaceSignature() { return icSigLabData; };
+        virtual icColorSpaceSignature colorSpaceSignature() { return icSigLabData; }
     
-        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoLabColorSpace(parent, p); };
+        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoLabColorSpace(parent, p); }
 
-        virtual QString defaultProfile() { return "Lab built-in - (lcms internal)"; };
+        virtual QString defaultProfile() { return "Lab built-in - (lcms internal)"; }
 };
 
 

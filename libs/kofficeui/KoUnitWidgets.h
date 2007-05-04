@@ -73,7 +73,7 @@ public:
         changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( value, unit ), m_unit ) );
     }
 
-    void setPrecision( unsigned int precision ) { m_precision = precision; };
+    void setPrecision( unsigned int precision ) { m_precision = precision; }
 
 protected:
     friend class KoUnitDoubleValidator;

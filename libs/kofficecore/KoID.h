@@ -35,10 +35,10 @@ public:
 
     explicit KoID(const QString & id, const QString & name = QString())
         : m_id(id),
-          m_name(name) {};
+          m_name(name) {}
 
-    QString id() const { return m_id; };
-    QString name() const { return m_name; };
+    QString id() const { return m_id; }
+    QString name() const { return m_name; }
 
     friend inline bool operator==(const KoID &, const KoID &);
     friend inline bool operator!=(const KoID &, const KoID &);

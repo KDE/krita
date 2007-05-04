@@ -99,7 +99,7 @@ struct KoLabU16Traits : public KoColorSpaceTrait<quint16, 4,3> {
     inline static channels_type L(quint8* data) {
         channels_type* d = nativeArray(data);
         return d[L_pos];
-    };
+    }
     /// Set the L component
     inline static void setL(quint8* data, channels_type nv)
     {
@@ -110,7 +110,7 @@ struct KoLabU16Traits : public KoColorSpaceTrait<quint16, 4,3> {
     inline static channels_type a(quint8* data) {
         channels_type* d = nativeArray(data);
         return d[a_pos];
-    };
+    }
     /// Set the a component
     inline static void setA(quint8* data, channels_type nv)
     {
@@ -121,7 +121,7 @@ struct KoLabU16Traits : public KoColorSpaceTrait<quint16, 4,3> {
     inline static channels_type b(quint8* data) {
         channels_type* d = nativeArray(data);
         return d[b_pos];
-    };
+    }
     /// Set the a component
     inline static void setB(quint8* data, channels_type nv)
     {
@@ -145,7 +145,7 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
     inline static channels_type red(quint8* data) {
         channels_type* d = parent::nativeArray(data);
         return d[red_pos];
-    };
+    }
     /// Set the red component
     inline static void setRed(quint8* data, channels_type nv)
     {
@@ -156,7 +156,7 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
     inline static channels_type green(quint8* data) {
         channels_type* d = parent::nativeArray(data);
         return d[green_pos];
-    };
+    }
     /// Set the green component
     inline static void setGreen(quint8* data, channels_type nv)
     {
@@ -167,7 +167,7 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
     inline static channels_type blue(quint8* data) {
         channels_type* d = parent::nativeArray(data);
         return d[blue_pos];
-    };
+    }
     /// Set the blue component
     inline static void setBlue(quint8* data, channels_type nv)
     {

@@ -38,7 +38,7 @@ struct KoLcmsColorTransformation : public KoColorTransformation
         profiles[0] = 0;
         profiles[1] = 0;
         profiles[2] = 0;
-    };
+    }
 
     ~KoLcmsColorTransformation() {
 
@@ -187,7 +187,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
     public:
         
         virtual bool hasHighDynamicRange() const { return false; }
-        virtual KoColorProfile * profile() const { return d->profile; };
+        virtual KoColorProfile * profile() const { return d->profile; }
         
         virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile=0) const
         {

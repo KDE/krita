@@ -241,10 +241,10 @@ class KoColorSpaceAbstract : public KoColorSpace {
             KoColorSpace(id, name, parent, new KoMixColorsOpImpl< _CSTraits>(), new KoConvolutionOpImpl< _CSTraits>(), cmType, colorSpaceSignature)
         {
             this->addCompositeOp( new CompositeCopy( this ) );
-        };
+        }
 
         virtual quint32 colorChannelCount() const { return _CSTraits::channels_nb - 1; }
-        virtual quint32 channelCount() const { return _CSTraits::channels_nb; };
+        virtual quint32 channelCount() const { return _CSTraits::channels_nb; }
         virtual quint32 pixelSize() const { return _CSTraits::pixelSize; }
 
         virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const

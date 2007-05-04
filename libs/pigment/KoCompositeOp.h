@@ -70,7 +70,7 @@ class PIGMENT_EXPORT KoCompositeOp {
 public:
 
     KoCompositeOp(KoColorSpace * cs, const QString& id, const QString& description, const bool userVisible = true);
-    virtual ~KoCompositeOp() {};
+    virtual ~KoCompositeOp() {}
 
     QString id() const { return m_id; }
     QString description() const { return m_description; }

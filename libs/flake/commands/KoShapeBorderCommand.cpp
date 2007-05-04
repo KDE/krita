@@ -54,7 +54,8 @@ KoShapeBorderCommand::KoShapeBorderCommand( const QList<KoShape*> &shapes, KoSha
     setText( i18n( "Set border" ) );
 }
 
-KoShapeBorderCommand::KoShapeBorderCommand( const QList<KoShape*> &shapes, QList<KoShapeBorderModel*> borders,
+KoShapeBorderCommand::KoShapeBorderCommand( const QList<KoShape*> &shapes,
+                                            const QList<KoShapeBorderModel*> &borders,
                                             QUndoCommand *parent )
 : QUndoCommand( parent )
 , d(new Private())

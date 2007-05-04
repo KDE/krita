@@ -46,7 +46,7 @@ public:
      * @param borders the new borders, one for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeBorderCommand( const QList<KoShape*> &shapes, QList<KoShapeBorderModel*> borders, QUndoCommand *parent = 0 );
+    KoShapeBorderCommand( const QList<KoShape*> &shapes, const QList<KoShapeBorderModel*> &borders, QUndoCommand *parent = 0 );
 
     virtual ~KoShapeBorderCommand();
     /// redo the command

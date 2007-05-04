@@ -24,6 +24,8 @@
 
 #include "KoInteractionTool.h"
 
+#include <QCursor>
+
 class KoCanvasBase;
 class KoCanvasController;
 
@@ -38,12 +40,17 @@ public:
     virtual void wheelEvent ( KoPointerEvent * event );
     virtual void mouseReleaseEvent( KoPointerEvent *event );
     virtual void mousePressEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void keyPressEvent( QKeyEvent *event );
+    virtual void keyReleaseEvent( QKeyEvent *event );
 
     virtual void paint( QPainter &painter, KoViewConverter &converter );
     void setCanvasController(KoCanvasController *controller) { m_controller = controller; }
 
 private:
     KoCanvasController *m_controller;
+    QCursor m_inCursor;
+    QCursor m_outCursor;
 };
 
 #endif

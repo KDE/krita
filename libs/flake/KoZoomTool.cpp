@@ -25,6 +25,9 @@
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
 
+#include <kstandarddirs.h>
+#include <kdebug.h>
+
 //   #include <QMouseEvent>
 //   #include <QPainter>
 //
@@ -35,6 +38,11 @@
 KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
     : KoInteractionTool( canvas )
 {
+    QPixmap inPixmap, outPixmap;
+    inPixmap.load(KStandardDirs::locate("data", "koffice/icons/zoom_in_cursor.png"));
+    outPixmap.load(KStandardDirs::locate("data", "koffice/icons/zoom_out_cursor.png"));
+    m_inCursor = QCursor(inPixmap);
+    m_outCursor = QCursor(outPixmap);
 }
 
 void KoZoomTool::paint( QPainter &painter, KoViewConverter &converter) {
@@ -63,4 +71,32 @@ void KoZoomTool::mouseReleaseEvent( KoPointerEvent *event ) {
 
 void KoZoomTool::mousePressEvent( KoPointerEvent *event ) {
     m_currentStrategy = new KoZoomStrategy(this, m_controller, event->point);
+}
+
+void KoZoomTool::mouseMoveEvent( KoPointerEvent *event ) {
+    if(event->modifiers() & Qt::ControlModifier)
+        useCursor(m_outCursor);
+    else
+        useCursor(m_inCursor);
+
+    if(m_currentStrategy)
+        m_currentStrategy->handleMouseMove( event->point, event->modifiers() );
+}
+
+void KoZoomTool::keyPressEvent(QKeyEvent *event) {
+    event->ignore();
+
+    if(event->modifiers() & Qt::ControlModifier)
+        useCursor(m_outCursor);
+    else
+        useCursor(m_inCursor);
+}
+
+void KoZoomTool::keyReleaseEvent(QKeyEvent *event) {
+    event->ignore();
+
+    if(event->modifiers() & Qt::ControlModifier)
+        useCursor(m_outCursor);
+    else
+        useCursor(m_inCursor);
 }

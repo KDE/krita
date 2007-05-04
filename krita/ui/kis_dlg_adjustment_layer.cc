@@ -39,6 +39,7 @@
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_filter.h"
+#include "kis_shape_layer.h"
 #include "kis_filter_configuration.h"
 
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
@@ -76,8 +77,17 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
             if (al) {
                 m_dev = al->cachedPaintDevice();
             }
+            else {
+                KisShapeLayer * sl = dynamic_cast<KisShapeLayer*>( activeLayer.data() );
+                if ( sl ) {
+                    m_dev = sl->projection();
+                }
+
+            }
         }
     }
+
+    Q_ASSERT( m_dev );
 
     QWidget * page = new QWidget(this);
     page->setObjectName("page widget");

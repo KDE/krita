@@ -56,6 +56,7 @@
 
 #include "kis_config.h"
 #include "kis_cursor.h"
+#include "kis_shape_layer.h"
 #include "kis_dlg_adj_layer_props.h"
 #include "kis_dlg_adjustment_layer.h"
 #include "kis_dlg_layer_properties.h"
@@ -549,7 +550,13 @@ void KisLayerManager::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP abov
                 dev = al->cachedPaintDevice();
             }
             else {
-                return;
+                KisShapeLayer * sl = dynamic_cast<KisShapeLayer*>( l.data() );
+                if ( sl ) {
+                    dev = sl->projection();
+                }
+                else {
+                    return;
+                }
             }
         }
     }

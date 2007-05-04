@@ -54,12 +54,9 @@
    zooming and determines the selectedness of the pixels of the parent
    layer.
 
- - painterly mask: painterly masks indicate a particular property of the
-   pixel in the parent paint device they are associated with, like
-   wetness, height or gravity.
-
- - channels: a layer can be decomposed into masks that have one color
-   channel.
+ - painterly overlays: painterly overlays indicate a particular
+   property of the pixel in the parent paint device they are associated
+   with, like wetness, height or gravity.
 
    XXX: For now, all masks are 8 bit. Make the channel depth settable.
 

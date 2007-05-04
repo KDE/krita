@@ -150,7 +150,8 @@ public:
      */
     KisLayerSP siblingBelow() const { return nextSibling(); }
 
-    /// Returns how many direct child layers this layer has (not recursive).
+    /// Returns how many direct child layers this layer has (not
+    /// recursive). The childcount can include masks.
     virtual uint childCount() const { return 0; }
 
     virtual KisLayerSP at(int /*index*/) const { return KisLayerSP(0); }

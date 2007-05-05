@@ -446,7 +446,7 @@ private:
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;
-    QVariant const *get(int key) const;
+    QVariant value(int key) const;
 
     class Private;
     Private * const d;

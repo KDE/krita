@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -152,8 +152,8 @@ void KoParagraphStyle::setParent(KoParagraphStyle *parent) {
 
 void KoParagraphStyle::setProperty(int key, const QVariant &value) {
     if(d->parent) {
-        QVariant const *var = d->parent->get(key);
-        if(var && (*var) == value) { // same as parent, so its actually a reset.
+        QVariant var = d->parent->value(key);
+        if(!var.isNull() && var == value) { // same as parent, so its actually a reset.
             d->stylesPrivate->remove(key);
             return;
         }
@@ -165,49 +165,49 @@ void KoParagraphStyle::remove(int key) {
     d->stylesPrivate->remove(key);
 }
 
-QVariant const *KoParagraphStyle::get(int key) const {
-    QVariant const *var = d->stylesPrivate->get(key);
-    if(var == 0 && d->parent)
-        var = d->parent->get(key);
+QVariant KoParagraphStyle::value(int key) const {
+    QVariant var = d->stylesPrivate->value(key);
+    if(var.isNull() && d->parent)
+        var = d->parent->value(key);
     return var;
 }
 
 double KoParagraphStyle::propertyDouble(int key) const {
-    const QVariant *variant = get(key);
-    if(variant == 0)
+    QVariant variant = value(key);
+    if(variant.isNull())
         return 0.0;
-    return variant->toDouble();
+    return variant.toDouble();
 }
 
 int KoParagraphStyle::propertyInt(int key) const {
-    const QVariant *variant = get(key);
-    if(variant == 0)
+    QVariant variant = value(key);
+    if(variant.isNull())
         return 0;
-    return variant->toInt();
+    return variant.toInt();
 }
 
 bool KoParagraphStyle::propertyBoolean(int key) const {
-    const QVariant *variant = get(key);
-    if(variant == 0)
+    QVariant variant = value(key);
+    if(variant.isNull())
         return false;
-    return variant->toBool();
+    return variant.toBool();
 }
 
 QColor KoParagraphStyle::propertyColor(int key) const {
-    const QVariant *variant = get(key);
-    if(variant == 0) {
+    QVariant variant = value(key);
+    if(variant.isNull()) {
         QColor color;
         return color;
     }
-    return qvariant_cast<QColor>(*variant);
+    return qvariant_cast<QColor>(variant);
 }
 
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
     int i=0;
     while(properties[i] != -1) {
-        QVariant const *variant = get(properties[i]);
-        if(variant)
-            format.setProperty(properties[i], *variant);
+        QVariant variant = value(properties[i]);
+        if(! variant.isNull())
+            format.setProperty(properties[i], variant);
         else
             format.clearProperty(properties[i]);
         i++;

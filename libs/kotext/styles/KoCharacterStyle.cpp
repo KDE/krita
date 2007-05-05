@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +25,7 @@
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
 
-#include <kdebug.h>
+//#include <KDebug>
 
 KoCharacterStyle::KoCharacterStyle(QObject *parent)
     : QObject(parent)
@@ -51,42 +51,38 @@ void KoCharacterStyle::setProperty(int key, const QVariant &value) {
     m_stylesPrivate->add(key, value);
 }
 
-const QVariant *KoCharacterStyle::get(int key) const {
-    return m_stylesPrivate->get(key);
-}
-
 double KoCharacterStyle::propertyDouble(int key) const {
-    const QVariant *variant = get(key);
-    if(variant == 0)
+    QVariant variant = m_stylesPrivate->value(key);
+    if(variant.isNull())
         return 0.0;
-    return variant->toDouble();
+    return variant.toDouble();
 }
 
 QPen KoCharacterStyle::textOutline () const {
-    const QVariant *variant = get(QTextFormat::TextOutline);
-    if(variant == 0) {
+    QVariant variant = m_stylesPrivate->value(QTextFormat::TextOutline);
+    if(variant.isNull()) {
         QPen pen(Qt::NoPen);
         return pen;
     }
-    return qvariant_cast<QPen>(*variant);
+    return qvariant_cast<QPen>(variant);
 }
 
 QColor KoCharacterStyle::underlineColor () const {
-    const QVariant *variant = get(QTextFormat::TextUnderlineColor);
-    if(variant == 0) {
+    QVariant variant = m_stylesPrivate->value(QTextFormat::TextUnderlineColor);
+    if(variant.isNull()) {
         QColor color;
         return color;
     }
-    return qvariant_cast<QColor>(*variant);
+    return qvariant_cast<QColor>(variant);
 }
 
 QBrush KoCharacterStyle::background() const {
-    const QVariant *variant = get(QTextFormat::BackgroundBrush);
-    if(variant == 0) {
+    QVariant variant = m_stylesPrivate->value(QTextFormat::BackgroundBrush);
+    if(variant.isNull()) {
         QBrush brush;
         return brush;
     }
-    return qvariant_cast<QBrush>(*variant);
+    return qvariant_cast<QBrush>(variant);
 }
 
 void KoCharacterStyle::clearBackground() {
@@ -94,12 +90,12 @@ void KoCharacterStyle::clearBackground() {
 }
 
 QBrush KoCharacterStyle::foreground() const {
-    const QVariant *variant = get(QTextFormat::ForegroundBrush);
-    if(variant == 0) {
+    QVariant variant = m_stylesPrivate->value(QTextFormat::ForegroundBrush);
+    if(variant.isNull()) {
         QBrush brush;
         return brush;
     }
-    return qvariant_cast<QBrush>(*variant);
+    return qvariant_cast<QBrush>(variant);
 }
 
 void KoCharacterStyle::clearForeground() {
@@ -107,17 +103,17 @@ void KoCharacterStyle::clearForeground() {
 }
 
 int KoCharacterStyle::propertyInt(int key) const {
-    const QVariant *variant = get(key);
-    if(variant == 0)
+    QVariant variant = m_stylesPrivate->value(key);
+    if(variant.isNull())
         return 0;
-    return variant->toInt();
+    return variant.toInt();
 }
 
 bool KoCharacterStyle::propertyBoolean(int key) const {
-    const QVariant *variant = get(key);
-    if(variant == 0)
+    QVariant variant = m_stylesPrivate->value(key);
+    if(variant.isNull())
         return false;
-    return variant->toBool();
+    return variant.toBool();
 }
 
 void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
@@ -144,8 +140,9 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
 
     int i=0;
     while(properties[i] != -1) {
-        QVariant const *variant = get(properties[i]);
-        if(variant) format.setProperty(properties[i], *variant);
+        QVariant variant = m_stylesPrivate->value(properties[i]);
+        if(!variant.isNull())
+            format.setProperty(properties[i], variant);
         i++;
     }
 }
@@ -170,10 +167,10 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const {
 }
 
 QString KoCharacterStyle::propertyString(int key) const {
-    const QVariant *variant = m_stylesPrivate->get(key);
-    if(variant == 0)
+    QVariant variant = m_stylesPrivate->value(key);
+    if(variant.isNull())
         return QString();
-    return qvariant_cast<QString>(*variant);
+    return qvariant_cast<QString>(variant);
 }
 
 // OASIS 14.2.29

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,24 +20,7 @@
 #define KOTEXT_STYLES_PRIVATE_H
 
 #include <QVariant>
-#include <QVector>
-
-struct Property {
-    Property() {}
-    Property(int key, const QVariant &value) {
-        this->key = key;
-        this->value = value;
-    }
-    inline bool operator==(const Property &prop) const {
-        return prop.key == key && prop.value == value;
-    }
-    inline bool operator!=(const Property &prop) const {
-        return prop.key != key || prop.value != value;
-    }
-
-    int key;
-    QVariant value;
-};
+#include <QHash>
 
 class StylePrivate {
 public:
@@ -46,13 +29,13 @@ public:
 
     void add(int key, const QVariant &value);
     void remove(int key);
-    const QVariant *get(int key) const;
+    const QVariant value(int key) const;
     bool contains(int key) const;
     void copyMissing(const StylePrivate *other);
     void removeDuplicates(const StylePrivate *other);
     void clearAll() { m_properties.clear(); }
 
 private:
-    QVector<Property> m_properties;
+    QHash<int, QVariant> m_properties;
 };
 #endif

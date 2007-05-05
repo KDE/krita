@@ -105,35 +105,35 @@ public:
     ~KoListStyle();
 
     /// set the style to be used for this list.
-    void setStyle(Style style) { setProperty(QTextListFormat::ListStyle, (int) style); }
+    void setStyle(Style style);
     /// return the used style
-    Style style() const { return static_cast<Style> (propertyInt(QTextListFormat::ListStyle)); }
-    void setListItemPrefix(const QString &prefix) { setProperty(ListItemPrefix, prefix ); }
-    QString listItemPrefix() const { return propertyString(ListItemPrefix); }
-    void setListItemSuffix(const QString &suffix) { setProperty(ListItemSuffix, suffix  ); }
-    QString listItemSuffix() const { return propertyString(ListItemSuffix); }
-    void setStartValue(int value) { setProperty(StartValue, value  ); }
-    int startValue() const { return propertyInt (StartValue); }
-    void setLevel(int level) { setProperty(Level, level  ); }
-    int level() const { return propertyInt (Level); }
-    void setDisplayLevel(int level) { setProperty(DisplayLevel, level  ); }
-    int displayLevel() const { return propertyInt (DisplayLevel); }
-    void setCharacterStyleId(int id) { setProperty(CharacterStyleId, id  ); }
-    int characterStyleId() const { return propertyInt (CharacterStyleId); }
-    void setBulletCharacter(QChar character) { setProperty(BulletCharacter, (int) character.unicode() ); }
-    QChar bulletCharacter() const { return propertyInt (BulletCharacter); }
-    void setRelativeBulletSize(int percent) { setProperty(BulletSize, percent  ); }
-    int relativeBulletSize() const { return propertyInt (BulletSize); }
-    void setAlignment(Qt::Alignment align) { setProperty(Alignment, static_cast<int> (align) ); }
-    Qt::Alignment alignment() const { return static_cast<Qt::Alignment>(propertyInt(Alignment)); }
-    void setMinimumWidth(double width) { setProperty(MinimumWidth, width); }
-    double minimumWidth() { return propertyDouble(MinimumWidth); }
+    Style style() const;
+    void setListItemPrefix(const QString &prefix);
+    QString listItemPrefix() const;
+    void setListItemSuffix(const QString &suffix);
+    QString listItemSuffix() const;
+    void setStartValue(int value);
+    int startValue() const;
+    void setLevel(int level);
+    int level() const;
+    void setDisplayLevel(int level);
+    int displayLevel() const;
+    void setCharacterStyleId(int id);
+    int characterStyleId() const;
+    void setBulletCharacter(QChar character);
+    QChar bulletCharacter() const;
+    void setRelativeBulletSize(int percent);
+    int relativeBulletSize() const;
+    void setAlignment(Qt::Alignment align);
+    Qt::Alignment alignment() const;
+    void setMinimumWidth(double width);
+    double minimumWidth();
 
     /// return the name of the style.
-    const QString& name() const { return m_name; }
+    QString name() const;
 
     /// set a user-visible name on the style.
-    void setName(const QString &name) { m_name = name; }
+    void setName(const QString &name);
 
     /**
      * Apply this style to a blockFormat by copying all properties from this style
@@ -149,9 +149,9 @@ public:
 
 protected:
     friend class KoParagraphStyle;
-    void addUser() { m_refCount++; }
-    void removeUser() { m_refCount--; }
-    int userCount() const { return m_refCount; }
+    void addUser();
+    void removeUser();
+    int userCount() const;
 
     void apply(const KoListStyle &other);
 
@@ -162,11 +162,8 @@ private:
     double propertyDouble(int key) const;
     QString propertyString(int key) const;
 
-private:
-    QString m_name;
-    StylePrivate *m_stylesPrivate;
-    QMap<const QTextDocument*, QPointer<QTextList> > m_textLists;
-    int m_refCount;
+    class Private;
+    Private * const d;
 };
 
 #endif

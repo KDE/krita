@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,64 +28,29 @@ StylePrivate::~StylePrivate() {
 
 
 void StylePrivate::add(int key, const QVariant &value) {
-    for(int i=m_properties.count()-1; i >= 0; i--) {
-        if(m_properties[i].key == key) {
-            m_properties[i].value = value;
-            return;
-        }
-    }
-    Property prop(key, value);
-    m_properties.append(prop);
+    m_properties.insert(key, value);
 }
 
 void StylePrivate::remove(int key) {
-    for(int i=m_properties.count()-1; i >= 0; i--) {
-        if(m_properties[i].key == key) {
-            m_properties.remove(i);
-            return;
-        }
-    }
+    m_properties.remove(key);
 }
 
-const QVariant *StylePrivate::get(int key) const {
-    for(int i=m_properties.count()-1; i >= 0; i--) {
-        if(m_properties[i].key == key) {
-            return &m_properties[i].value;
-        }
-    }
-    return 0;
+const QVariant StylePrivate::value(int key) const {
+    return m_properties.value(key);
 }
 
 bool StylePrivate::contains(int key) const {
-    for(int i=m_properties.count()-1; i >= 0; i--) {
-        if(m_properties[i].key == key) {
-            return true;
-        }
-    }
-    return false;
+    return m_properties.contains(key);
 }
 
 void StylePrivate::copyMissing(const StylePrivate *other) {
-    for(int i=other->m_properties.count()-1; i >= 0; i--) {
-        bool found = false;
-        for(int x=m_properties.count()-1; x >= 0; x--) {
-            if(other->m_properties[i].key == m_properties[x].key) {
-                found = true;
-                break;
-            }
-        }
-        if(!found) // we don't have that key. Copy it.
-            m_properties.append( other->m_properties[i] );
+    foreach(int key, other->m_properties.keys()) {
+        if(! m_properties.contains(key))
+            m_properties.insert(key, other->value(key));
     }
 }
 
 void StylePrivate::removeDuplicates(const StylePrivate *other) {
-    for(int i=other->m_properties.count()-1; i >= 0; i--) {
-        for(int x=m_properties.count()-1; x >= 0; x--) {
-            if(other->m_properties[i] == m_properties[x]) {
-                m_properties.remove(x);
-                break;
-            }
-        }
-    }
+    foreach(int key, other->m_properties.keys())
+        m_properties.remove(key);
 }

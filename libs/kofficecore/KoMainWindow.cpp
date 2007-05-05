@@ -1786,12 +1786,9 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
     // option
 
     KConfigGroup group( KGlobal::config(), "GUI" );
-    QFont f  = KGlobalSettings::generalFont();
-    double ps = group.readEntry("palettefontsize", f.pointSize());
-    ps = qMax(8.0 , ps);
-    f.setPointSizeF(ps);
-
-    dockWidget->setFont(f);
+    QFont dockWidgetFont  = KGlobalSettings::generalFont();
+    double pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize());
+    dockWidget->setFont(dockWidgetFont);
     
     return dockWidget;
 }

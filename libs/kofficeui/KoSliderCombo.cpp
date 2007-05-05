@@ -79,6 +79,7 @@ public:
     void hidePopup();
 
     void sliderValueChanged(int value);
+    void sliderReleased();
     void lineEditFinished();
 };
 
@@ -115,6 +116,7 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     setEditText(KGlobal::locale()->formatNumber(0, d->decimals));
 
     connect(d->slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
+    connect(d->slider, SIGNAL(sliderReleased()), SLOT(sliderReleased()));
     connect(lineEdit(), SIGNAL(editingFinished()), SLOT(lineEditFinished()));
 }
 
@@ -233,7 +235,7 @@ void KoSliderCombo::KoSliderComboPrivate::lineEditFinished()
     slider->blockSignals(true);
     slider->setValue(int((value - minimum) * 256 / maximum + 0.5));
     slider->blockSignals(false);
-    emit thePublic->valueChanged(value);
+    emit thePublic->valueChanged(value, true);
 }
 
 void KoSliderCombo::KoSliderComboPrivate::sliderValueChanged(int slidervalue)
@@ -241,7 +243,13 @@ void KoSliderCombo::KoSliderComboPrivate::sliderValueChanged(int slidervalue)
     thePublic->setEditText(KGlobal::locale()->formatNumber(minimum + maximum*slidervalue/256, decimals));
 
     double value = thePublic->currentText().toDouble();
-    emit thePublic->valueChanged(value);
+    emit thePublic->valueChanged(value, false);
+}
+
+void KoSliderCombo::KoSliderComboPrivate::sliderReleased()
+{
+    double value = thePublic->currentText().toDouble();
+    emit thePublic->valueChanged(value, true);
 }
 
 double KoSliderCombo::maximum() const

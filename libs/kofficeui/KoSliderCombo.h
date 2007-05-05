@@ -27,9 +27,16 @@
 /**
  * @short A widget for double values with a popup slider
  *
- * KoSliderCombo combines a QLineEdit and a dropdown QSlider
- * to make an easy to use control for setting a double value.
- *
+ * KoSliderCombo combines a numerical input and a dropdown slider in a way that takes up as
+ * little screen space as possible.
+ * 
+ * It allows the user to either enter a floating point value or quickly set the value using a slider
+ * 
+ * One signal is emitted when the value changes. The signal is even emitted when the slider
+ * is moving. The second argument of the signal however tells you if the value is final or not. A
+ * final value is produced by entering a value numerically or by releasing the slider.
+ * 
+ * The input of the numerical line edit is constrained to numbers and decimal signs.
  */
 class KOFFICEUI_EXPORT KoSliderCombo : public QComboBox
 {
@@ -98,8 +105,9 @@ signals:
      * Emitted every time the value changes (by calling setValue() or
      * by user interaction).
      * @param value the new value
+     * @param final if the value is final ie not produced during sliding (on slider release it's final)
      */
-    void valueChanged(double value);
+    void valueChanged(double value, bool final);
 
 protected:
     virtual void paintEvent(QPaintEvent *); ///< reimplemented from QComboBox
@@ -109,6 +117,7 @@ protected:
 
 private:
     Q_PRIVATE_SLOT(d, void sliderValueChanged(int value))
+    Q_PRIVATE_SLOT(d, void sliderReleased())
     Q_PRIVATE_SLOT(d, void lineEditFinished())
 
     class KoSliderComboPrivate;

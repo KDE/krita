@@ -69,8 +69,7 @@ public slots:
     void imgResizeToActiveLayer();
 
     void layerCompositeOp(const KoCompositeOp* compositeOp);
-    void layerOpacity(int opacity, bool dontundo);
-    void layerOpacityFinishedChanging(int previous, int opacity);
+    void layerOpacity(double opacity, bool final);
     void layerToggleVisible();
     void layerToggleLocked();
     void actLayerVisChanged(int show);

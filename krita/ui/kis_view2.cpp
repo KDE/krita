@@ -429,11 +429,8 @@ void KisView2::createGUI()
     connect(m_d->layerBox, SIGNAL(sigRequestLayerProperties(KisLayerSP)),
             m_d->layerManager, SLOT(showLayerProperties(KisLayerSP)));
 
-    connect(m_d->layerBox, SIGNAL(sigOpacityChanged(int, bool)),
-            m_d->layerManager, SLOT(layerOpacity(int, bool)));
-
-    connect(m_d->layerBox, SIGNAL(sigOpacityFinishedChanging(int, int)),
-            m_d->layerManager, SLOT(layerOpacityFinishedChanging(int, int)));
+    connect(m_d->layerBox, SIGNAL(sigOpacityChanged(double, bool)),
+            m_d->layerManager, SLOT(layerOpacity(double, bool)));
 
     connect(m_d->layerBox, SIGNAL(sigItemComposite(const KoCompositeOp*)),
             m_d->layerManager, SLOT(layerCompositeOp(const KoCompositeOp*)));

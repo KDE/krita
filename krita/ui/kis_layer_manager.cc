@@ -268,7 +268,7 @@ void KisLayerManager::layerCompositeOp(const KoCompositeOp* compositeOp)
 }
 
 // range: 0 - 100
-void KisLayerManager::layerOpacity(int opacity, bool dontundo)
+void KisLayerManager::layerOpacity(double opacity, bool final)
 {
     KisImageSP img = m_view->image();
     if (!img) return;
@@ -276,39 +276,18 @@ void KisLayerManager::layerOpacity(int opacity, bool dontundo)
     KisLayerSP layer = img->activeLayer();
     if (!layer) return;
 
-    opacity = int(float(opacity * 255) / 100 + 0.5);
+    opacity = int(opacity * 2.55 + 0.5);
     if (opacity > 255)
         opacity = 255;
 
     if (opacity == layer->opacity()) return;
 
-    if (dontundo)
+    if (!final)
         layer->setOpacity( opacity );
     else
     {
         m_doc->addCommand(new KisLayerOpacityCommand(layer, layer->opacity(), opacity));
     }
-}
-
-void KisLayerManager::layerOpacityFinishedChanging( int previous, int opacity )
-{
-    KisImageSP img = m_view->image();
-    if (!img) return;
-
-    KisLayerSP layer = img->activeLayer();
-    if (!layer) return;
-
-    opacity = int(float(opacity * 255) / 100 + 0.5);
-    if (opacity > 255)
-        opacity = 255;
-
-    previous = int(float(previous * 255) / 100 + 0.5);
-    if (previous > 255)
-        previous = 255;
-
-    if (previous == opacity) return;
-
-    m_doc->addCommand(new KisLayerOpacityCommand(layer, previous, opacity));
 }
 
 void KisLayerManager::layerToggleVisible()

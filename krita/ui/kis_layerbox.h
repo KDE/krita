@@ -76,8 +76,7 @@ signals:
     void sigRequestAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above);
     void sigRequestLayerProperties(KisLayerSP layer);
 
-    void sigOpacityChanged(int opacity, bool withSlider);
-    void sigOpacityFinishedChanging(int previous, int opacity);
+    void sigOpacityChanged(double opacity, bool final);
     void sigItemComposite(const KoCompositeOp*);
 
 private:

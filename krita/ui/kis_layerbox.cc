@@ -129,8 +129,7 @@ KisLayerBox::KisLayerBox()
     connect(bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     connect(bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
     connect(bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
-    connect(doubleOpacity, SIGNAL(valueChanged(int, bool)), SIGNAL(sigOpacityChanged(int, bool)));
-    connect(doubleOpacity, SIGNAL(finishedChanging(int, int)), SIGNAL(sigOpacityFinishedChanging(int, int)));
+    connect(doubleOpacity, SIGNAL(valueChanged(double, bool)), SIGNAL(sigOpacityChanged(double, bool)));
     connect(cmbComposite, SIGNAL(activated(const KoCompositeOp*)), SIGNAL(sigItemComposite(const KoCompositeOp*)));
 }
 

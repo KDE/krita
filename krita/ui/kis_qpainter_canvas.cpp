@@ -219,7 +219,9 @@ void KisQPainterCanvas::keyReleaseEvent (QKeyEvent *e) {
 void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
 {
     kDebug(41010) << "tablet event: " << e->pressure() << endl;
-    m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument(  e->pos() + m_d->documentOffset ) );
+    QPointF pos = e->pos() + (e->hiResGlobalPos() - e->globalPos());
+    pos += m_d->documentOffset;
+    m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument( pos ) );
 }
 
 void KisQPainterCanvas::wheelEvent( QWheelEvent *e )

@@ -93,6 +93,7 @@ public:
             setIcon( "tool_rectangle" );
             //setShortcut( Qt::Key_F6 );
             setPriority( 0 );
+            setInputDeviceAgnostic(false);
         }
 
     virtual ~KisToolRectangleFactory(){}

@@ -99,6 +99,7 @@ public:
             setIcon( "color_fill" );
             //setShortcut( QKeySequence( Qt::Key_F ) );
             setPriority( 0 );
+            setInputDeviceAgnostic(false);
 	}
 
     virtual ~KisToolFillFactory(){}

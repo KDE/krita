@@ -73,6 +73,7 @@ public:
             setIcon( "tool_filter" );
             setPriority( 0 );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            setInputDeviceAgnostic(false);
         }
 
     virtual ~KisToolFilterFactory(){}

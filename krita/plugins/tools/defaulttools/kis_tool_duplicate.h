@@ -82,6 +82,7 @@ public:
             setToolType( dynamicToolType() );
             setIcon( "tool_duplicate" );
             setPriority( 0 );
+            setInputDeviceAgnostic(false);
         }
 
     virtual ~KisToolDuplicateFactory(){}

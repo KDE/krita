@@ -88,6 +88,7 @@ public:
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority(0);
             setIcon("tool_line");
+            setInputDeviceAgnostic(false);
         }
 
     virtual ~KisToolLineFactory(){}

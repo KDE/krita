@@ -110,6 +110,7 @@ public:
             setShortcut( KShortcut( Qt::Key_G ) );
             setPriority( 0 );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            setInputDeviceAgnostic(false);
         }
 
     virtual ~KisToolGradientFactory(){}

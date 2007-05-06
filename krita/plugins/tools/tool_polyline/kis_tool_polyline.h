@@ -89,6 +89,7 @@ public:
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "polyline" );
             setPriority( 0 );
+            setInputDeviceAgnostic(false);
         }
 
     virtual ~KisToolPolylineFactory(){}

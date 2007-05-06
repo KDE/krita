@@ -80,6 +80,7 @@ public:
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_ellipse" );
             setPriority( 0 );
+            setInputDeviceAgnostic(false);
         }
 
     virtual ~KisToolEllipseFactory(){}

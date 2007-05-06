@@ -75,6 +75,7 @@ public:
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_polygon" );
             setPriority( 0 );
+            setInputDeviceAgnostic(false);
         }
 
     virtual ~KisToolPolygonFactory(){}

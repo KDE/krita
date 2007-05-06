@@ -87,6 +87,7 @@ public:
             setPriority(0);
             setIcon("tool_star");
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            setInputDeviceAgnostic(false);
         }
 
     virtual ~KisToolStarFactory(){}

@@ -139,7 +139,7 @@
       <item>
        <widget class="QLabel" name="lblResolution" >
         <property name="text" >
-         <string>&amp;Resolution:</string>
+         <string>Resolution:</string>
         </property>
        </widget>
       </item>

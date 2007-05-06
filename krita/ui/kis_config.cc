@@ -29,7 +29,7 @@
 #include "kis_config.h"
 
 namespace {
-    const double IMG_DEFAULT_RESOLUTION = 100.0;
+    const double IMG_DEFAULT_RESOLUTION = 100.0; // dpi
     const qint32 IMG_DEFAULT_WIDTH = 512;
     const qint32 IMG_DEFAULT_HEIGHT = 512;
     const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
@@ -116,7 +116,7 @@ qint32 KisConfig::defImgHeight() const
 
 double KisConfig::defImgResolution() const
 {
-    return m_cfg.readEntry("imgResolutionDef", IMG_DEFAULT_RESOLUTION);
+    return m_cfg.readEntry("imgResolutionDef", IMG_DEFAULT_RESOLUTION)/72.0;
 }
 
 void KisConfig::defImgWidth(qint32 width)
@@ -131,7 +131,7 @@ void KisConfig::defImgHeight(qint32 height)
 
 void KisConfig::defImgResolution(double res)
 {
-    m_cfg.writeEntry("imgResolutionDef", res);
+    m_cfg.writeEntry("imgResolutionDef", res*72.0);
 }
 
 enumCursorStyle KisConfig::cursorStyle() const

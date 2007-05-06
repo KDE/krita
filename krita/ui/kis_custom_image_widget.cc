@@ -41,7 +41,8 @@
 #include "kis_layer.h"
 
 KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorSpaceName, const QString & imageName)
-    : WdgNewImage(parent) {
+    : WdgNewImage(parent)
+{
     m_doc = doc;
 
     txtName->setText(imageName);
@@ -66,6 +67,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
     cmbColorSpaces->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     cmbColorSpaces->setCurrent(defColorSpaceName);
 
+    connect(doubleResolution, SIGNAL(valueChanged(double)),
+        this, SLOT(resolutionChanged(double)));
     connect(cmbWidthUnit, SIGNAL(activated(int)),
         this, SLOT(widthUnitChanged(int)));
     connect(doubleWidth, SIGNAL(valueChanged(double)),
@@ -83,7 +86,22 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
 
 }
 
-void KisCustomImageWidget::widthUnitChanged(int index) {
+void KisCustomImageWidget::resolutionChanged(double res)
+{
+    if (m_widthUnit.indexInList(false) == KoUnit::Pixel) {
+        m_widthUnit = KoUnit(KoUnit::Pixel, res / 72.0);
+        m_width = KoUnit::fromUserValue(doubleWidth->value(), m_widthUnit);
+    }
+
+    if(m_heightUnit.indexInList(false) == KoUnit::Pixel) {
+        m_heightUnit = KoUnit(KoUnit::Pixel, res / 72.0);
+        m_height = KoUnit::fromUserValue(doubleHeight->value(), m_heightUnit);
+    }
+}
+
+
+void KisCustomImageWidget::widthUnitChanged(int index)
+{
     doubleWidth->blockSignals(true);
 
     if(index == KoUnit::Pixel) {
@@ -100,11 +118,13 @@ void KisCustomImageWidget::widthUnitChanged(int index) {
     doubleWidth->blockSignals(false);
 }
 
-void KisCustomImageWidget::widthChanged(double value) {
+void KisCustomImageWidget::widthChanged(double value)
+{
     m_width = KoUnit::fromUserValue(value, m_widthUnit);
 }
 
-void KisCustomImageWidget::heightUnitChanged(int index) {
+void KisCustomImageWidget::heightUnitChanged(int index)
+{
     doubleHeight->blockSignals(true);
 
     if(index == KoUnit::Pixel) {
@@ -121,11 +141,13 @@ void KisCustomImageWidget::heightUnitChanged(int index) {
     doubleHeight->blockSignals(false);
 }
 
-void KisCustomImageWidget::heightChanged(double value) {
+void KisCustomImageWidget::heightChanged(double value)
+{
     m_height = KoUnit::fromUserValue(value, m_heightUnit);
 }
 
-void KisCustomImageWidget::buttonClicked() {
+void KisCustomImageWidget::buttonClicked()
+{
     KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(cmbColorSpaces->currentItem(), cmbProfile->currentText());
 
     QColor qc(cmbColor->color());

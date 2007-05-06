@@ -48,6 +48,7 @@ private slots:
     void widthChanged(double value);
     void heightUnitChanged(int index);
     void heightChanged(double value);
+    void resolutionChanged(double value);
 
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'

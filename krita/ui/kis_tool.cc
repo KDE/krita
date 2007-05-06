@@ -47,7 +47,7 @@ KisTool::~KisTool()
 
 void KisTool::activate(bool )
 {
-    emit sigCursorChanged( m_cursor );
+    useCursor(m_cursor, true);
 
     m_currentFgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::ForegroundColor ).value<KoColor>();
     m_currentBgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::BackgroundColor ).value<KoColor>();

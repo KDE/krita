@@ -96,7 +96,7 @@ void KoTool::useCursor(QCursor cursor, bool force) {
         return;
 
     if(!force && cursor.shape()==Qt::BitmapCursor && d->previousCursor.shape()==Qt::BitmapCursor &&
-                cursor.pixmap().serialNumber() == d->previousCursor.pixmap().serialNumber())
+                cursor.pixmap().cacheKey() == d->previousCursor.pixmap().cacheKey())
         return;
 
     d->previousCursor = cursor;

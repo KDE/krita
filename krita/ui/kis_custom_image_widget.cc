@@ -150,7 +150,7 @@ void KisCustomImageWidget::buttonClicked()
 {
     KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(cmbColorSpaces->currentItem(), cmbProfile->currentText());
 
-    QColor qc(cmbColor->color());
+    QColor qc(Qt::white);
 
     qint32 width, height;
     double resolution;

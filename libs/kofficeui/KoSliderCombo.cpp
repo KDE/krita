@@ -267,6 +267,11 @@ double KoSliderCombo::decimals() const
     return d->decimals;
 }
 
+double KoSliderCombo::value() const
+{
+    return currentText().toDouble();
+}
+
 void KoSliderCombo::setDecimals(int dec)
 {
     d->decimals = dec;
@@ -280,6 +285,19 @@ void KoSliderCombo::setMinimum(double min)
 void KoSliderCombo::setMaximum(double max)
 {
     d->maximum = max;
+}
+
+void KoSliderCombo::setValue(double value)
+{
+    if(value < d->minimum)
+        value = d->minimum;
+    if(value > d->maximum)
+        value = d->maximum;
+    setEditText(KGlobal::locale()->formatNumber(value));
+    d->slider->blockSignals(true);
+    d->slider->setValue(int((value - d->minimum) * 256 / d->maximum + 0.5));
+    d->slider->blockSignals(false);
+    emit valueChanged(value, true);
 }
 
 #include "KoSliderCombo.moc"

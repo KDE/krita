@@ -94,10 +94,22 @@ public:
      */
     void setMaximum(double max);
 
+     /**
+     * The value shown.
+     */
+    double value() const;
+
     virtual QSize minimumSizeHint() const; ///< reimplemented from QComboBox
     virtual QSize sizeHint() const; ///< reimplemented from QComboBox
 
 public slots:
+
+     /**
+     * Sets the value.
+     * The value actually set is forced to be within the legal range: minimum <= value <= maximum
+     * @param value the new value
+     */
+    void setValue(double value);
 
 signals:
 

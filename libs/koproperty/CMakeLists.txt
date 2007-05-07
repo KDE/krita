@@ -3,7 +3,7 @@
 add_subdirectory( editors )
 add_subdirectory( test )
 
-include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty/editors ${KOFFICECORE_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty/editors ${KOMAIN_INCLUDES} )
 
 
 set(libkopropertyeditors_SRCS

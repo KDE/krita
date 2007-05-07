@@ -16,7 +16,7 @@ kde4_automoc(${kofficedockers_SRCS})
 
 kde4_add_plugin(kofficedockers ${kofficedockers_SRCS})
 
-target_link_libraries(kofficedockers kofficeui kofficecore)
+target_link_libraries(kofficedockers kofficeui komain)
 
 install(TARGETS kofficedockers DESTINATION ${PLUGIN_INSTALL_DIR})
 

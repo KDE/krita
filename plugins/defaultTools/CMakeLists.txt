@@ -1,6 +1,6 @@
 project( defaulttools )
 
-include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOFFICECORE_INCLUDES} )
+include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOMAIN_INCLUDES} )
 
 ########### Flake Plugin library ###############
 

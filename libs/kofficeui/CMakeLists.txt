@@ -2,7 +2,7 @@
 add_subdirectory( tests )
 
 
-include_directories( ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} ${PIGMENT_INCLUDES} )
+include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${PIGMENT_INCLUDES}  ${KOFFICEUI_INCLUDES})
 
 
 ########### next target ###############
@@ -69,7 +69,7 @@ kde4_add_ui_files( kofficeui_LIB_SRCS
 
 kde4_add_library(kofficeui SHARED ${kofficeui_LIB_SRCS})
 
-target_link_libraries(kofficeui  ${KDE4_KDECORE_LIBS} kofficecore flake pigment )
+target_link_libraries(kofficeui  ${KDE4_KDECORE_LIBS} komain flake pigment )
 
 set_target_properties(kofficeui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kofficeui  DESTINATION ${LIB_INSTALL_DIR})

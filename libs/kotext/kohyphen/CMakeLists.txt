@@ -3,7 +3,7 @@
 add_subdirectory( hyphdicts )
 
 if(KDE4_BUILD_TESTS)
-include_directories( ${KOFFICECORE_INCLUDES} )
+include_directories( ${KOMAIN_INCLUDES} )
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 

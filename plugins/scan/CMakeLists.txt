@@ -1,6 +1,6 @@
 
 
-include_directories( ${KOFFICECORE_INCLUDES} )
+include_directories( ${KOMAIN_INCLUDES} )
 
 
 ########### next target ###############
@@ -13,7 +13,7 @@ kde4_add_plugin(kofficescan ${kofficescan_PART_SRCS})
 
 
 
-target_link_libraries(kofficescan  ${KDE4_KPARTS_LIBS} ${KDE4_KIO_LIBS} kofficecore )
+target_link_libraries(kofficescan  ${KDE4_KPARTS_LIBS} ${KDE4_KIO_LIBS} komain )
 
 install(TARGETS kofficescan  DESTINATION ${PLUGIN_INSTALL_DIR})
 

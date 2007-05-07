@@ -1,4 +1,4 @@
-include_directories( ${KOFFICECORE_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LCMS_INCLUDE_DIR} )
+include_directories( ${KOMAIN_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LCMS_INCLUDE_DIR} )
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
@@ -30,7 +30,7 @@ kde4_automoc(${pigment_SRCS})
 
 kde4_add_library(pigment SHARED ${pigment_SRCS})
 
-target_link_libraries(pigment ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB} kofficecore)
+target_link_libraries(pigment ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB} komain)
 
 set_target_properties(pigment PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 

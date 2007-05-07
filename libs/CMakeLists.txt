@@ -1,6 +1,6 @@
 add_subdirectory( store )
 add_subdirectory( kwmf )
-add_subdirectory( kofficecore )
+add_subdirectory( main )
 add_subdirectory( kofficeui )
 add_subdirectory( koproperty )
 add_subdirectory( kotext )

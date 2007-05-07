@@ -1,6 +1,6 @@
 
 
-include_directories( ${KOFFICECORE_INCLUDES} )
+include_directories( ${KOMAIN_INCLUDES} )
 
 
 ########### next target ###############

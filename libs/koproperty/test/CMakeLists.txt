@@ -1,6 +1,6 @@
 if(KDE4_BUILD_TESTS)
 
-include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty ${KOFFICECORE_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty ${KOMAIN_INCLUDES} )
 
 ########### next target ###############
 

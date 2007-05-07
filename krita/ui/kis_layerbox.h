@@ -67,7 +67,7 @@ public:
 
 public slots:
     void slotSetCompositeOp(const KoCompositeOp* compositeOp);
-    void slotSetOpacity(int opacity);
+    void slotSetOpacity(double opacity);
     void slotSetColorSpace(const KoColorSpace * colorSpace);
 
 signals:

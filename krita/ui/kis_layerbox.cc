@@ -207,7 +207,7 @@ void KisLayerBox::updateUI()
             slotSetColorSpace(m_image->activeDevice()->colorSpace());
         else
             slotSetColorSpace(m_image->colorSpace());
-        slotSetOpacity(int(float(active->opacity() * 100) / 255 + 0.5));
+        slotSetOpacity(active->opacity() * 100.0 / 255);
         slotSetCompositeOp(active->compositeOp());
     }
 }
@@ -227,11 +227,11 @@ void KisLayerBox::slotSetColorSpace(const KoColorSpace * colorSpace)
 }
 
 // range: 0-100
-void KisLayerBox::slotSetOpacity(int opacity)
+void KisLayerBox::slotSetOpacity(double opacity)
 {
     Q_ASSERT( opacity >= 0 && opacity <= 100 );
     doubleOpacity->blockSignals(true);
-    //doubleOpacity->setValue(opacity);
+    doubleOpacity->setValue(opacity);
     doubleOpacity->blockSignals(false);
 }
 

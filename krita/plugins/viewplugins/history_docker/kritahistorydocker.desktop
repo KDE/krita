@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=History Docker
+Name[ca]=Amarrador d'història
 Name[cy]=Bachydd Hanes
 Name[da]=Historikdokning
 Name[de]=Verlauf-Docker
@@ -32,7 +33,7 @@ Name[uk]=Швартувальник історії
 Name[zh_TW]=歷史紀錄停駐點
 Comment=Command history docker for Krita
 Comment[bg]=Основната функционалност на Krita
-Comment[ca]=Amarrador d'història de comanda per a Krita
+Comment[ca]=Amarrador d'història d'ordres per a Krita
 Comment[cy]=Bachydd yr hanes gorchmynion ar gyfer Krita
 Comment[da]=Dokning af kommandohistorik for Krita
 Comment[de]=Befehlsverlauf-Docker für Krita

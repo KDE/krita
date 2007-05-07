@@ -1,0 +1,134 @@
+<ui version="4.0" >
+ <class>KoShapeGeometry</class>
+ <widget class="QWidget" name="KoShapeGeometry" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>378</width>
+    <height>276</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string/>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QCheckBox" name="protectSize" >
+     <property name="text" >
+      <string>Protect size and position</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="positionGB" >
+     <property name="title" >
+      <string>Position</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item rowspan="2" row="0" column="4" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Left:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>m_frameLeft</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_3" >
+        <property name="text" >
+         <string>Width:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>m_frameWidth</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QLabel" name="label_4" >
+        <property name="text" >
+         <string>Top:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>m_frameTop</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QLabel" name="label_5" >
+        <property name="text" >
+         <string>Height:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>m_frameHeight</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="KoUnitDoubleSpinBox" name="left" />
+      </item>
+      <item row="0" column="3" >
+       <widget class="KoUnitDoubleSpinBox" name="top" />
+      </item>
+      <item row="1" column="1" >
+       <widget class="KoUnitDoubleSpinBox" name="width" />
+      </item>
+      <item row="1" column="3" >
+       <widget class="KoUnitDoubleSpinBox" name="height" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>360</width>
+       <height>21</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <layoutfunction spacing="KDialog::spacingHint()" margin="KDialog::marginHint()" />
+ <customwidgets>
+  <customwidget>
+   <class>KoUnitDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>KoUnitWidgets.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -54,7 +54,7 @@ class KisPaintopBox : public QWidget {
     Q_OBJECT
 
 public:
-    KisPaintopBox (KisView2 * view,  QWidget * parent, const char * name = 0);
+    KisPaintopBox (KisView2 * view,  QWidget * parent, const char * name );
 
     ~KisPaintopBox();
 

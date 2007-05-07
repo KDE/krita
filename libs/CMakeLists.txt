@@ -1,7 +1,7 @@
 add_subdirectory( store )
 add_subdirectory( kwmf )
 add_subdirectory( main )
-add_subdirectory( kofficeui )
+add_subdirectory( guiutils )
 add_subdirectory( koproperty )
 add_subdirectory( kotext )
 add_subdirectory( kopainter )

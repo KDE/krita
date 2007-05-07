@@ -1,6 +1,6 @@
 
 
-include_directories( ${KOFFICEUI_INCLUDES} )
+include_directories( ${KOGUIUTILS_INCLUDES} )
 
 add_subdirectory( kohyphen ) 
 add_subdirectory( tests ) 
@@ -75,7 +75,7 @@ kde4_add_ui_files(kotext_LIB_SRCS
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
 
-target_link_libraries(kotext flake ${KDE4_KUTILS_LIBS} komain kofficeui )
+target_link_libraries(kotext flake ${KDE4_KUTILS_LIBS} komain koguiutils )
 
 set_target_properties(kotext PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kotext  DESTINATION ${LIB_INSTALL_DIR})

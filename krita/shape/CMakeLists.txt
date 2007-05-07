@@ -1,4 +1,4 @@
-include_directories( ${KOFFICEUI_INCLUDES} )
+include_directories( ${KOGUIUTILS_INCLUDES} )
 add_subdirectory(pics)
 
 
@@ -14,7 +14,7 @@ SET (kritashape_LIB_SRCS
 kde4_automoc(${kritashape_LIB_SRCS})
 kde4_add_plugin(kritashape ${kritashape_LIB_SRCS})
 
-target_link_libraries(kritashape flake kofficeui kritaui)
+target_link_libraries(kritashape flake koguiutils kritaui)
 install(TARGETS kritashape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

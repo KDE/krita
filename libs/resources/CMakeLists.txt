@@ -1,4 +1,4 @@
-include_directories( ${KOMAIN_INCLUDES} ${KOFFICEUI_INCLUDES} ${PIGMENT_INCLUDES} )
+include_directories( ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} ${PIGMENT_INCLUDES} )
 
 
 ########### next target ###############
@@ -12,7 +12,7 @@ kde4_automoc(${koresources_LIB_SRCS})
 
 kde4_add_library(koresources SHARED ${koresources_LIB_SRCS})
 
-target_link_libraries(koresources  ${KDE4_KDECORE_LIBS} kofficeui pigment)
+target_link_libraries(koresources  ${KDE4_KDECORE_LIBS} koguiutils pigment)
 
 set_target_properties(koresources PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS koresources  DESTINATION ${LIB_INSTALL_DIR})

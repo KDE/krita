@@ -1,6 +1,6 @@
 project(kofficedockers)
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOFFICEUI_INCLUDES} )
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
 set(kofficedockers_SRCS
     shapeselector/ShapeSelector.cpp
@@ -16,7 +16,7 @@ kde4_automoc(${kofficedockers_SRCS})
 
 kde4_add_plugin(kofficedockers ${kofficedockers_SRCS})
 
-target_link_libraries(kofficedockers kofficeui komain)
+target_link_libraries(kofficedockers koguiutils komain)
 
 install(TARGETS kofficedockers DESTINATION ${PLUGIN_INSTALL_DIR})
 

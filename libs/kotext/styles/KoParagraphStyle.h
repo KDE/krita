@@ -96,8 +96,9 @@ public:
         BottomBorderColor,      ///< The border Color
 
         // lists
-        ExplicitListValue, ///< Int with the list-value that that parag will have. Ignored if this is not a list.
-        RestartListNumbering    ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
+        ExplicitListValue,      ///< Int with the list-value that that parag will have. Ignored if this is not a list.
+        RestartListNumbering,   ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
+        ListLevel               ///< int with the list-level that the paragraph will get when this is a list
 
 // do 15.5.24
 // continue at 15.5.28
@@ -389,6 +390,9 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     /// return if this paragraph is marked to start the list numbering from the first entry.
     bool restartListNumbering();
 
+    void setListLevel(int value);
+    int listLevel() const;
+
     /**
      * Apply this style to a blockFormat by copying all properties from this, and parent
      * styles to the target block format.  Note that the character format will not be applied
@@ -410,14 +414,7 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
      * @see setListStyle()
      * @see removeListStyle()
      */
-    KoListStyle *listStyle();
-    /**
-     * Returns the list style for this paragraph style, or 0 if there is none.
-     * @see setListStyle()
-     * @see removeListStyle()
-     */
-    const KoListStyle *listStyle() const;
-
+    KoListStyle listStyle() const;
     /**
      * Set a new liststyle on this paragraph style, making all paragraphs that use this style
      *  automatically be part of the list.

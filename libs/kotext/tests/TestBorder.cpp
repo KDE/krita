@@ -1,14 +1,7 @@
 #include "TestBorder.h"
 
 #include "styles/KoParagraphStyle.h"
-//   #include "styles/KoListStyle.h"
-//   #include "styles/KoStyleManager.h"
 #include "KoTextBlockBorderData.h"
-//
-//   #include <QtGui>
-//
-//   #include <kdebug.h>
-//   #include <kcomponentdata.h>
 
 void TestBorder::testBorder() {
     KoParagraphStyle style;

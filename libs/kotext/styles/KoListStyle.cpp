@@ -17,113 +17,154 @@
  */
 
 #include "KoListStyle.h"
-#include "Styles_p.h"
+#include "KoListLevelProperties.h"
+// #include "Styles_p.h"
 #include "KoTextBlockData.h"
 
-#include <QTextBlock>
+// #include <QTextBlock>
 #include <QTextCursor>
-#include <kdebug.h>
+//#include <KDebug>
 
 class KoListStyle::Private {
 public:
-    Private() : stylesPrivate( new StylePrivate()), refCount(0) { }
-    ~Private() {
-        delete stylesPrivate;
-    }
-    QString name;
-    StylePrivate *stylesPrivate;
-    QMap<const QTextDocument*, QPointer<QTextList> > textLists;
-    int refCount;
-};
+    Private() : refCount(1) { }
 
-// all relevant properties.
-static const int properties[] = {
-    QTextListFormat::ListStyle,
-    KoListStyle::ListItemPrefix,
-    KoListStyle::ListItemSuffix,
-    KoListStyle::StartValue,
-    KoListStyle::Level,
-    KoListStyle::DisplayLevel,
-    KoListStyle::CharacterStyleId,
-    KoListStyle::BulletCharacter,
-    KoListStyle::BulletSize,
-    KoListStyle::Alignment,
-    -1
+    QTextList *textList(int level, const QTextDocument *doc) {
+        if(! textLists.contains(level))
+            return 0;
+        QMap<const QTextDocument*, QPointer<QTextList> > map = textLists[level];
+        if(! map.contains(doc))
+            return 0;
+        QPointer<QTextList> pointer = map[doc];
+        if(pointer.isNull())
+            return 0;
+        return pointer;
+    }
+
+    void setTextList(int level, const QTextDocument *doc, QTextList *list) {
+        QMap<const QTextDocument*, QPointer<QTextList> > map = textLists[level];
+        map.insert(doc, QPointer<QTextList>(list));
+        textLists.insert(level, map);
+    }
+
+    QString name;
+    QMap<int, KoListLevelProperties> levels;
+    QMap<int, QMap<const QTextDocument*, QPointer<QTextList> > > textLists;
+    int refCount;
 };
 
 KoListStyle::KoListStyle()
     : d( new Private())
 {
-    setStyle(DiscItem);
-    setStartValue(1);
-    setLevel(1);
 }
 
 KoListStyle::KoListStyle(const KoListStyle &orig)
-    : d( new Private())
+    : d( orig.d )
 {
-    d->stylesPrivate->copyMissing(orig.d->stylesPrivate);
-    d->name = orig.name();
+    d->refCount++;
+}
+
+KoListStyle::KoListStyle(int)
+    : d(0)
+{
 }
 
 KoListStyle::~KoListStyle() {
-    delete d;
+    if(d && --d->refCount == 0)
+        delete d;
 }
 
-void KoListStyle::setProperty(int key, const QVariant &value) {
-    d->stylesPrivate->add(key, value);
+bool KoListStyle::operator==(const KoListStyle &other) const {
+    foreach(int level, d->levels.keys()) {
+        if(! other.hasPropertiesForLevel(level))
+            return false;
+        if(!(other.level(level) == d->levels[level]))
+            return false;
+    }
+    foreach(int level, other.d->levels.keys()) {
+        if(! hasPropertiesForLevel(level))
+            return false;
+    }
+    return true;
 }
 
-int KoListStyle::propertyInt(int key) const {
-    QVariant variant = d->stylesPrivate->value(key);
-    if(variant.isNull())
-        return 0;
-    return variant.toInt();
+QString KoListStyle::name() const {
+    return d->name;
 }
 
-double KoListStyle::propertyDouble(int key) const {
-    QVariant variant = d->stylesPrivate->value(key);
-    if(variant.isNull())
-        return 0.;
-    return variant.toDouble();
+void KoListStyle::setName(const QString &name) {
+    d->name = name;
 }
 
-bool KoListStyle::propertyBoolean(int key) const {
-    QVariant variant = d->stylesPrivate->value(key);
-    if(variant.isNull())
-        return false;
-    return variant.toBool();
+KoListLevelProperties KoListStyle::level(int level) const {
+    if(d->levels.contains(level))
+        return d->levels.value(level);
+    if(d->levels.count()) {
+        KoListLevelProperties llp = d->levels.begin().value();
+        llp.setLevel(level);
+        return llp;
+    }
+    KoListLevelProperties llp;
+    llp.setLevel(level);
+    return llp;
 }
 
-QString KoListStyle::propertyString(int key) const {
-    QVariant variant = d->stylesPrivate->value(key);
-    if(variant.isNull())
-        return QString();
-    return qvariant_cast<QString>(variant);
+void KoListStyle::setLevel(const KoListLevelProperties &properties) {
+    d->levels.insert(properties.level(), properties);
+
+    // find all QTextList objects and apply the changed style on them.
+    if(! d->textLists.contains(properties.level()))
+        return;
+    QMap<const QTextDocument*, QPointer<QTextList> > map = d->textLists.value(properties.level());
+    foreach(QPointer<QTextList> list, map) {
+        if(list.isNull()) continue;
+        QTextListFormat format = list->format();
+        properties.applyStyle(format);
+        list->setFormat(format);
+
+        QTextBlock tb = list->item(0);
+        if(tb.isValid()) { // invalidate the counter part
+            KoTextBlockData *userData = dynamic_cast<KoTextBlockData*> (tb.userData());
+            if(userData)
+                userData->setCounterWidth(-1.0);
+        }
+    }
 }
 
-void KoListStyle::applyStyle(const QTextBlock &block) {
-    QTextList *textList = d->textLists.value(block.document());
+bool KoListStyle::hasPropertiesForLevel(int level) const {
+    return d->levels.contains(level);
+}
+
+void KoListStyle::removePropertiesForLevel(int level) {
+    d->levels.remove(level);
+}
+
+void KoListStyle::applyStyle(const QTextBlock &block, int level) {
+    if(level == 0) { // illegal level; fetch the first proper level we have
+        if(d->levels.count())
+            level = d->levels.keys().first();
+        else // just go for default, then
+            level = 1;
+    }
+
+    const bool contains = hasPropertiesForLevel(level);
+
+    QTextList *textList = d->textList(level, block.document());
     if(textList && block.textList() && block.textList() != textList) // remove old one
         block.textList()->remove(block);
     if(block.textList() == 0 && textList) // add if new
         textList->add(block);
     if(block.textList() && textList == 0) {
         textList = block.textList(); // missed it ?
-        d->textLists.insert(block.document(), QPointer<QTextList>(textList));
+        d->setTextList(level, block.document(), textList);
     }
 
     QTextListFormat format;
     if(block.textList())
         format = block.textList()->format();
 
-    int i=0;
-    while(properties[i] != -1) {
-        QVariant variant = d->stylesPrivate->value(properties[i]);
-        if(! variant.isNull())
-            format.setProperty(properties[i], variant);
-        i++;
-    }
+    KoListLevelProperties llp = this->level(level);
+    llp.applyStyle(format);
 
     if(textList) {
         textList->setFormat(format);
@@ -137,136 +178,21 @@ void KoListStyle::applyStyle(const QTextBlock &block) {
     else { // does not exist yet, this is the first parag that uses it :)
         QTextCursor cursor(block);
         textList = cursor.createList(format);
-        d->textLists.insert(block.document(), QPointer<QTextList>(textList));
+        d->setTextList(level, block.document(), textList);
     }
+
+    if(contains)
+        d->levels.insert(level, llp);
 }
 
-void KoListStyle::apply(const KoListStyle &other) {
-    d->name = other.name();
-    d->stylesPrivate->clearAll();
-    d->stylesPrivate->copyMissing(other.d->stylesPrivate);
+bool KoListStyle::isValid() const {
+    return d != 0;
 }
-
-bool KoListStyle::operator==(const KoListStyle &other) const {
-    int i=0;
-    while(properties[i] != -1) {
-        QVariant variant = d->stylesPrivate->value(properties[i]);
-        if(! variant.isNull()) {
-            if(other.d->stylesPrivate->value(properties[i]) != 0)
-                return false;
-        }
-        else {
-            QVariant otherVariant = d->stylesPrivate->value(properties[i]);
-            if(otherVariant == 0 || otherVariant != variant)
-                return false;
-        }
-        i++;
-    }
-    return true;
-}
-
-QTextList *KoListStyle::textList(const QTextDocument *doc) {
-    return d->textLists[doc];
-}
-
-void KoListStyle::setListItemPrefix(const QString &prefix) {
-    setProperty(ListItemPrefix, prefix );
-}
-
-QString KoListStyle::listItemPrefix() const {
-    return propertyString(ListItemPrefix);
-}
-
-
-void KoListStyle::setStyle(KoListStyle::Style style) {
-    setProperty(QTextListFormat::ListStyle, (int) style);
-}
-KoListStyle::Style KoListStyle::style() const {
-    return static_cast<Style> (propertyInt(QTextListFormat::ListStyle));
-}
-void KoListStyle::setListItemSuffix(const QString &suffix) {
-    setProperty(ListItemSuffix, suffix  );
-}
-QString KoListStyle::listItemSuffix() const {
-    return propertyString(ListItemSuffix);
-}
-void KoListStyle::setStartValue(int value) {
-    setProperty(StartValue, value  );
-}
-int KoListStyle::startValue() const {
-    return propertyInt (StartValue);
-}
-void KoListStyle::setLevel(int level) {
-    setProperty(Level, level  );
-}
-int KoListStyle::level() const {
-    return propertyInt (Level);
-}
-void KoListStyle::setDisplayLevel(int level) {
-    setProperty(DisplayLevel, level  );
-}
-int KoListStyle::displayLevel() const {
-    return propertyInt (DisplayLevel);
-}
-void KoListStyle::setCharacterStyleId(int id) {
-    setProperty(CharacterStyleId, id  );
-}
-int KoListStyle::characterStyleId() const {
-    return propertyInt (CharacterStyleId);
-}
-void KoListStyle::setBulletCharacter(QChar character) {
-    setProperty(BulletCharacter, (int) character.unicode() );
-}
-QChar KoListStyle::bulletCharacter() const {
-    return propertyInt (BulletCharacter);
-}
-void KoListStyle::setRelativeBulletSize(int percent) {
-    setProperty(BulletSize, percent  );
-}
-int KoListStyle::relativeBulletSize() const {
-    return propertyInt (BulletSize);
-}
-void KoListStyle::setAlignment(Qt::Alignment align) {
-    setProperty(Alignment, static_cast<int> (align) );
-}
-Qt::Alignment KoListStyle::alignment() const {
-    return static_cast<Qt::Alignment>(propertyInt(Alignment));
-}
-void KoListStyle::setMinimumWidth(double width) {
-    setProperty(MinimumWidth, width);
-}
-double KoListStyle::minimumWidth() {
-    return propertyDouble(MinimumWidth);
-}
-QString KoListStyle::name() const {
-    return d->name;
-}
-void KoListStyle::setName(const QString &name) {
-    d->name = name;
-}
-void KoListStyle::addUser() {
-    d->refCount++;
-}
-void KoListStyle::removeUser() {
-    d->refCount--;
-}
-int KoListStyle::userCount() const {
-    return d->refCount;
-}
-
 
 // static
 KoListStyle* KoListStyle::fromTextList(QTextList *list) {
     KoListStyle *answer = new KoListStyle();
-
-    QTextListFormat format = list->format();
-    int i=0;
-    while(properties[i] != -1) {
-        int key = properties[i];
-        if(format.hasProperty(key))
-            answer->setProperty(key, format.property(key));
-        i++;
-    }
-
+    KoListLevelProperties llp = KoListLevelProperties::fromTextList(list);
+    answer->setLevel(llp);
     return answer;
 }

@@ -18,13 +18,14 @@
 #ifndef KOLISTSTYLE_H
 #define KOLISTSTYLE_H
 
+#include "kotext_export.h"
+
 #include <QTextFormat>
 #include <QMap>
 #include <QPointer>
 #include <QTextList>
-#include <kotext_export.h>
-class StylePrivate;
 
+class KoListLevelProperties;
 
 /**
  * This class groups all styling-options for lists.
@@ -104,30 +105,10 @@ public:
     // destuctor;
     ~KoListStyle();
 
-    /// set the style to be used for this list.
-    void setStyle(Style style);
-    /// return the used style
-    Style style() const;
-    void setListItemPrefix(const QString &prefix);
-    QString listItemPrefix() const;
-    void setListItemSuffix(const QString &suffix);
-    QString listItemSuffix() const;
-    void setStartValue(int value);
-    int startValue() const;
-    void setLevel(int level);
-    int level() const;
-    void setDisplayLevel(int level);
-    int displayLevel() const;
-    void setCharacterStyleId(int id);
-    int characterStyleId() const;
-    void setBulletCharacter(QChar character);
-    QChar bulletCharacter() const;
-    void setRelativeBulletSize(int percent);
-    int relativeBulletSize() const;
-    void setAlignment(Qt::Alignment align);
-    Qt::Alignment alignment() const;
-    void setMinimumWidth(double width);
-    double minimumWidth();
+    KoListLevelProperties level(int level) const;
+    void setLevel(const KoListLevelProperties &properties);
+    bool hasPropertiesForLevel(int level) const;
+    void removePropertiesForLevel(int level);
 
     /// return the name of the style.
     QString name() const;
@@ -135,33 +116,24 @@ public:
     /// set a user-visible name on the style.
     void setName(const QString &name);
 
+    bool isValid() const;
+
+
     /**
-     * Apply this style to a blockFormat by copying all properties from this style
-     * to the target block format.
+     * Apply this style to a block by adding the block to the proper list.
      */
-    void applyStyle(const QTextBlock &block);
+    void applyStyle(const QTextBlock &block, int level = 0);
 
     bool operator==(const KoListStyle &other) const;
-
-    QTextList *textList(const QTextDocument *doc);
 
     static KoListStyle* fromTextList(QTextList *list);
 
 protected:
     friend class KoParagraphStyle;
-    void addUser();
-    void removeUser();
-    int userCount() const;
-
     void apply(const KoListStyle &other);
+    explicit KoListStyle(int);
 
 private:
-    void setProperty(int key, const QVariant &value);
-    int propertyInt(int key) const;
-    bool propertyBoolean(int key) const;
-    double propertyDouble(int key) const;
-    QString propertyString(int key) const;
-
     class Private;
     Private * const d;
 };

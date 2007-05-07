@@ -1,26 +1,27 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; version 2.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- */
+* Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+*
+* This library is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Library General Public
+* License as published by the Free Software Foundation; version 2.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Library General Public License for more details.
+*
+* You should have received a copy of the GNU Library General Public License
+* along with this library; see the file COPYING.LIB.  If not, write to
+* the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+* Boston, MA 02110-1301, USA.
+*/
 #include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
 #include "KoTextBlockData.h"
 #include "KoTextDocumentLayout.h"
 #include "KoStyleManager.h"
+#include "KoListLevelProperties.h"
 
 #include "Styles_p.h"
 
@@ -40,6 +41,7 @@ public:
         delete stylesPrivate;
         stylesPrivate = 0;
         charStyle = 0; // QObject will delete it.
+        delete listStyle;
     }
 
     QString name;
@@ -52,73 +54,73 @@ public:
 
 // all relevant properties.
 static const int properties[] = {
-    QTextFormat::BlockTopMargin,
-    QTextFormat::BlockBottomMargin,
-    QTextFormat::BlockLeftMargin,
-    QTextFormat::BlockRightMargin,
-    QTextFormat::BlockAlignment,
-    QTextFormat::TextIndent,
-    QTextFormat::BlockIndent,
-    QTextFormat::BlockNonBreakableLines,
-    KoParagraphStyle::StyleId,
-    KoParagraphStyle::FixedLineHeight,
-    KoParagraphStyle::MinimumLineHeight,
-    KoParagraphStyle::LineSpacing,
-    KoParagraphStyle::PercentLineHeight,
-    KoParagraphStyle::LineSpacingFromFont,
-    //      KoParagraphStyle::AlignLastLine,
-    //      KoParagraphStyle::WidowThreshold,
-    //      KoParagraphStyle::OrphanThreshold,
-    //      KoParagraphStyle::DropCaps,
-    //      KoParagraphStyle::DropCapsLength,
-    //      KoParagraphStyle::DropCapsLines,
-    //      KoParagraphStyle::DropCapsDistance,
-    //      KoParagraphStyle::FollowDocBaseline,
-    KoParagraphStyle::BreakBefore,
-    KoParagraphStyle::BreakAfter,
-    //      KoParagraphStyle::HasLeftBorder,
-    //      KoParagraphStyle::HasTopBorder,
-    //      KoParagraphStyle::HasRightBorder,
-    //      KoParagraphStyle::HasBottomBorder,
-    //      KoParagraphStyle::BorderLineWidth,
-    //      KoParagraphStyle::SecondBorderLineWidth,
-    //      KoParagraphStyle::DistanceToSecondBorder,
-    KoParagraphStyle::LeftPadding,
-    KoParagraphStyle::TopPadding,
-    KoParagraphStyle::RightPadding,
-    KoParagraphStyle::BottomPadding,
-    KoParagraphStyle::LeftBorderWidth,
-    KoParagraphStyle::LeftInnerBorderWidth,
-    KoParagraphStyle::LeftBorderSpacing,
-    KoParagraphStyle::LeftBorderStyle,
-    KoParagraphStyle::TopBorderWidth,
-    KoParagraphStyle::TopInnerBorderWidth,
-    KoParagraphStyle::TopBorderSpacing,
-    KoParagraphStyle::TopBorderStyle,
-    KoParagraphStyle::RightBorderWidth,
-    KoParagraphStyle::RightInnerBorderWidth,
-    KoParagraphStyle::RightBorderSpacing,
-    KoParagraphStyle::RightBorderStyle,
-    KoParagraphStyle::BottomBorderWidth,
-    KoParagraphStyle::BottomInnerBorderWidth,
-    KoParagraphStyle::BottomBorderSpacing,
-    KoParagraphStyle::BottomBorderStyle,
-    KoParagraphStyle::LeftBorderColor,
-    KoParagraphStyle::TopBorderColor,
-    KoParagraphStyle::RightBorderColor,
-    KoParagraphStyle::BottomBorderColor,
-    KoParagraphStyle::ExplicitListValue,
-    KoParagraphStyle::RestartListNumbering,
+QTextFormat::BlockTopMargin,
+QTextFormat::BlockBottomMargin,
+QTextFormat::BlockLeftMargin,
+QTextFormat::BlockRightMargin,
+QTextFormat::BlockAlignment,
+QTextFormat::TextIndent,
+QTextFormat::BlockIndent,
+QTextFormat::BlockNonBreakableLines,
+KoParagraphStyle::StyleId,
+KoParagraphStyle::FixedLineHeight,
+KoParagraphStyle::MinimumLineHeight,
+KoParagraphStyle::LineSpacing,
+KoParagraphStyle::PercentLineHeight,
+KoParagraphStyle::LineSpacingFromFont,
+//      KoParagraphStyle::AlignLastLine,
+//      KoParagraphStyle::WidowThreshold,
+//      KoParagraphStyle::OrphanThreshold,
+//      KoParagraphStyle::DropCaps,
+//      KoParagraphStyle::DropCapsLength,
+//      KoParagraphStyle::DropCapsLines,
+//      KoParagraphStyle::DropCapsDistance,
+//      KoParagraphStyle::FollowDocBaseline,
+KoParagraphStyle::BreakBefore,
+KoParagraphStyle::BreakAfter,
+//      KoParagraphStyle::HasLeftBorder,
+//      KoParagraphStyle::HasTopBorder,
+//      KoParagraphStyle::HasRightBorder,
+//      KoParagraphStyle::HasBottomBorder,
+//      KoParagraphStyle::BorderLineWidth,
+//      KoParagraphStyle::SecondBorderLineWidth,
+//      KoParagraphStyle::DistanceToSecondBorder,
+KoParagraphStyle::LeftPadding,
+KoParagraphStyle::TopPadding,
+KoParagraphStyle::RightPadding,
+KoParagraphStyle::BottomPadding,
+KoParagraphStyle::LeftBorderWidth,
+KoParagraphStyle::LeftInnerBorderWidth,
+KoParagraphStyle::LeftBorderSpacing,
+KoParagraphStyle::LeftBorderStyle,
+KoParagraphStyle::TopBorderWidth,
+KoParagraphStyle::TopInnerBorderWidth,
+KoParagraphStyle::TopBorderSpacing,
+KoParagraphStyle::TopBorderStyle,
+KoParagraphStyle::RightBorderWidth,
+KoParagraphStyle::RightInnerBorderWidth,
+KoParagraphStyle::RightBorderSpacing,
+KoParagraphStyle::RightBorderStyle,
+KoParagraphStyle::BottomBorderWidth,
+KoParagraphStyle::BottomInnerBorderWidth,
+KoParagraphStyle::BottomBorderSpacing,
+KoParagraphStyle::BottomBorderStyle,
+KoParagraphStyle::LeftBorderColor,
+KoParagraphStyle::TopBorderColor,
+KoParagraphStyle::RightBorderColor,
+KoParagraphStyle::BottomBorderColor,
+KoParagraphStyle::ExplicitListValue,
+KoParagraphStyle::RestartListNumbering,
 
-    -1
+-1
 };
 
 KoParagraphStyle::KoParagraphStyle()
-    : d(new Private())
+: d(new Private())
 {
-    d->charStyle = new KoCharacterStyle(this),
-    d->stylesPrivate = new StylePrivate();
-    setLineHeightPercent(120);
+d->charStyle = new KoCharacterStyle(this),
+d->stylesPrivate = new StylePrivate();
+setLineHeightPercent(120);
 }
 
 KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
@@ -130,14 +132,11 @@ KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
     d->name = orig.name();
     d->charStyle = orig.d->charStyle;
     d->next = orig.d->next;
-    if(orig.d->listStyle) {
-        d->listStyle = orig.d->listStyle;
-        d->listStyle->addUser();
-    }
+    if(orig.d->listStyle)
+        setListStyle(*orig.d->listStyle);
 }
 
 KoParagraphStyle::~KoParagraphStyle() {
-    removeListStyle();
     delete d;
 }
 
@@ -224,7 +223,7 @@ void KoParagraphStyle::applyStyle(QTextBlock &block) const {
 
     if(d->listStyle) {
         // make sure this block becomes a list if its not one already
-        d->listStyle->applyStyle(block);
+        d->listStyle->applyStyle(block, listLevel());
     } else if(block.textList()) {
         // remove
         block.textList()->remove(block);
@@ -236,19 +235,12 @@ void KoParagraphStyle::applyStyle(QTextBlock &block) const {
 
 void KoParagraphStyle::setListStyle(const KoListStyle &style) {
     if(d->listStyle)
-        d->listStyle->apply(style);
-    else {
-        d->listStyle = new KoListStyle(style);
-        d->listStyle->addUser();
-    }
+        delete d->listStyle;
+    d->listStyle = new KoListStyle(style);
 }
 
 void KoParagraphStyle::removeListStyle() {
-    if(d->listStyle == 0)
-        return;
-    d->listStyle->removeUser();
-    if(d->listStyle->userCount() == 0)
-        delete d->listStyle;
+    delete d->listStyle;
     d->listStyle = 0;
 }
 
@@ -689,6 +681,14 @@ bool KoParagraphStyle::restartListNumbering() {
     return propertyBoolean(RestartListNumbering);
 }
 
+void KoParagraphStyle::setListLevel(int value) {
+    setProperty(ListLevel, value);
+}
+
+int KoParagraphStyle::listLevel() const {
+    return propertyInt(ListLevel);
+}
+
 KoCharacterStyle *KoParagraphStyle::characterStyle() {
     return d->charStyle;
 }
@@ -697,12 +697,10 @@ const KoCharacterStyle *KoParagraphStyle::characterStyle() const {
     return d->charStyle;
 }
 
-KoListStyle *KoParagraphStyle::listStyle() {
-    return d->listStyle;
-}
-
-const KoListStyle *KoParagraphStyle::listStyle() const {
-    return d->listStyle;
+KoListStyle KoParagraphStyle::listStyle() const {
+    if(d->listStyle)
+        return KoListStyle(*d->listStyle);
+    return KoListStyle(0); // an invalid one
 }
 
 void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
@@ -727,7 +725,7 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
         setAlignment(alignment);
     }
 
-//TODO
+    //TODO
 #if 0
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" ) ) { // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
         // LTR is lr-tb. RTL is rl-tb
@@ -791,7 +789,7 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
         setLineSpacing( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "line-spacing" ) ) );
     }
 
-//TODO
+    //TODO
 #if 0
     // Tabulators
     KoTabulatorList tabList;
@@ -846,14 +844,14 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
                 {
                     QChar ch = leaderChar[0];
                     switch (ch.latin1()) {
-                    case '.':
-                        tab.filling = TF_DOTS; break;
-                    case '-':
-                    case '_':  // TODO in KWord: differentiate --- and ___
-                        tab.filling = TF_LINE; break;
-                    default:
-                        // KWord doesn't have support for "any char" as filling.
-                        break;
+                        case '.':
+                            tab.filling = TF_DOTS; break;
+                        case '-':
+                        case '_':  // TODO in KWord: differentiate --- and ___
+                            tab.filling = TF_LINE; break;
+                        default:
+                            // KWord doesn't have support for "any char" as filling.
+                            break;
                     }
                 }
             }
@@ -913,10 +911,10 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
 #if 0
     int pageBreaking = 0;
     if( styleStack.hasAttributeNS( KoXmlNS::fo, "break-before") ||
-        styleStack.hasAttributeNS( KoXmlNS::fo, "break-after") ||
-        styleStack.hasAttributeNS( KoXmlNS::fo, "keep-together") ||
-        styleStack.hasAttributeNS( KoXmlNS::style, "keep-with-next") ||
-        styleStack.hasAttributeNS( KoXmlNS::fo, "keep-with-next") )
+            styleStack.hasAttributeNS( KoXmlNS::fo, "break-after") ||
+            styleStack.hasAttributeNS( KoXmlNS::fo, "keep-together") ||
+            styleStack.hasAttributeNS( KoXmlNS::style, "keep-with-next") ||
+            styleStack.hasAttributeNS( KoXmlNS::fo, "keep-with-next") )
     {
         if ( styleStack.hasAttributeNS( KoXmlNS::fo, "break-before") ) { // 3.11.24
             // TODO in KWord: implement difference between "column" and "page"
@@ -931,7 +929,7 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
 
         if ( styleStack.hasAttributeNS( KoXmlNS::fo, "keep-together" ) ) { // was style:break-inside in OOo-1.1, renamed in OASIS
             if ( styleStack.attributeNS( KoXmlNS::fo, "keep-together" ) != "auto" )
-                 pageBreaking |= KoParagLayout::KeepLinesTogether;
+                pageBreaking |= KoParagLayout::KeepLinesTogether;
         }
         if ( styleStack.hasAttributeNS( KoXmlNS::fo, "keep-with-next" ) ) {
             // OASIS spec says it's "auto"/"always", not a boolean.

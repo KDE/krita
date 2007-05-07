@@ -37,31 +37,57 @@ public:
     void setStyle(KoListStyle::Style style);
     /// return the used style
     KoListStyle::Style style() const;
+    /// set the string that will be shown before the counter in the list label
     void setListItemPrefix(const QString &prefix);
+    /// return the string that will be shown before the counter in the list label
     QString listItemPrefix() const;
+    /// set the string that will be shown after the counter in the list label
     void setListItemSuffix(const QString &suffix);
+    /// return the string that will be shown after the counter in the list label
     QString listItemSuffix() const;
+    /// set the index of the first value of this whole list.
     void setStartValue(int value);
+    /// return the index of the first value of this whole list.
     int startValue() const;
+    /// set the list level which is how deep the counter is nested below other lists
     void setLevel(int level);
+    /// return the list level which is how deep the counter is nested below other lists
     int level() const;
+    /// set the amount of levels that will be shown in list items of this list.
     void setDisplayLevel(int level);
+    /// return the amount of levels that will be shown in list items of this list.
     int displayLevel() const;
+    /// set the styleId of the KoCharacterStyle to be used to layout the listitem
     void setCharacterStyleId(int id);
+    /// return the styleId of the KoCharacterStyle to be used to layout the listitem
     int characterStyleId() const;
+    /// set the character to be used as the counter of the listitem
     void setBulletCharacter(QChar character);
+    /// return the character to be used as the counter of the listitem
     QChar bulletCharacter() const;
+    /// set the size, in percent, of the bullet counter relative to the fontsize of the counter
     void setRelativeBulletSize(int percent);
+    /// return the size, in percent, of the bullet counter relative to the fontsize of the counter
     int relativeBulletSize() const;
+    /// set how the list label should be aligned in the width this list reserves for the listitems
     void setAlignment(Qt::Alignment align);
+    /// return how the list label should be aligned in the width this list reserves for the listitems
     Qt::Alignment alignment() const;
+    /// set the minimum width (in pt) of the list label for all items in this list
     void setMinimumWidth(double width);
+    /// return the minimum width (in pt) of the list label for all items in this list
     double minimumWidth();
+    /// set the listId used by all list-styles that together make 1 user defined list in an ODF file.
+    void setListId(const QString &listId);
+    /// return the listId used by all list-styles that together make 1 user defined list in an ODF file.
+    QString listId() const;
 
     bool operator==(const KoListLevelProperties &other) const;
     KoListLevelProperties & operator=(const KoListLevelProperties &other);
 
-
+    /**
+     * Create a KoListLevelProperties object from a QTextList instance.
+     */
     static KoListLevelProperties fromTextList(QTextList *list);
 
     /**

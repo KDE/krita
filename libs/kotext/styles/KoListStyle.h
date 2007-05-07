@@ -92,7 +92,8 @@ public:
         BulletCharacter,///< an int with the unicode value of the character (for CustomCharItem)
         BulletSize,     ///< size in percent relative to the height of the text
         Alignment,      ///< Alignment of the counter
-        MinimumWidth    ///< The minimum width, in pt, of the listItem including the prefix/suffix.
+        MinimumWidth,   ///< The minimum width, in pt, of the listItem including the prefix/suffix.
+        ListId          ///< A group of lists together are called 1 (user intended) list in ODF. Store the listId here
     };
 
     /**

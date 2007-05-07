@@ -222,6 +222,15 @@ KoListLevelProperties & KoListLevelProperties::operator=(const KoListLevelProper
     return *this;
 }
 
+void KoListLevelProperties::setListId(const QString &listId) {
+    setProperty(KoListStyle::ListId, listId);
+}
+
+QString KoListLevelProperties::listId() const {
+    return propertyString(KoListStyle::ListId);
+}
+
+
 // static
 KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list) {
     KoListLevelProperties llp;

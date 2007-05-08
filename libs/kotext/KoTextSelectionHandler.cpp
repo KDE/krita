@@ -22,7 +22,6 @@
 #include "KoTextDocumentLayout.h"
 #include "KoTextShapeData.h"
 #include "KoInlineTextObjectManager.h"
-// #include "KoInlineObject.h"
 #include "KoTextLocator.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
@@ -151,7 +150,9 @@ void KoTextSelectionHandler::bold(bool bold) {
         bool bold;
     };
     Bolder bolder(bold);
+    emit startMacro(i18n("Bold"));
     CharFormatVisitor::visitSelection(d->caret, bolder);
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::italic(bool italic) {
@@ -165,7 +166,9 @@ void KoTextSelectionHandler::italic(bool italic) {
         bool italic;
     };
     Italic ital(italic);
+    emit startMacro(i18n("Italic"));
     CharFormatVisitor::visitSelection(d->caret, ital);
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::underline(bool underline) {
@@ -179,7 +182,9 @@ void KoTextSelectionHandler::underline(bool underline) {
         bool underline;
     };
     Underliner underliner(underline);
+    emit startMacro(i18n("Underline"));
     CharFormatVisitor::visitSelection(d->caret, underliner);
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::strikeOut(bool strikeout) {
@@ -193,10 +198,13 @@ void KoTextSelectionHandler::strikeOut(bool strikeout) {
         bool strikeout;
     };
     Striker striker(strikeout);
+    emit startMacro(i18n("Strike Out"));
     CharFormatVisitor::visitSelection(d->caret, striker);
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::insertFrameBreak() {
+    emit startMacro(i18n("Insert Break"));
     QTextBlock block = d->caret->block();
 /*
     if(d->caret->position() == block.position() && block.length() > 0) { // start of parag
@@ -212,6 +220,7 @@ void KoTextSelectionHandler::insertFrameBreak() {
         bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
         d->caret->setBlockFormat(bf);
     //}
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::setFontSize(int size) {
@@ -237,7 +246,9 @@ void KoTextSelectionHandler::setHorizontalTextAlignment(Qt::Alignment align) {
         Qt::Alignment alignment;
     };
     Aligner aligner(align);
+    emit startMacro(i18n("Set Horizontal Alignment"));
     BlockFormatVisitor::visitSelection(d->caret, aligner);
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::setVerticalTextAlignment(Qt::Alignment align) {
@@ -258,7 +269,9 @@ void KoTextSelectionHandler::setVerticalTextAlignment(Qt::Alignment align) {
         charAlign = QTextCharFormat::AlignSubScript;
 
     Aligner aligner(charAlign);
+    emit startMacro(i18n("Set Vertical Alignment"));
     CharFormatVisitor::visitSelection(d->caret, aligner);
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::increaseIndent() {
@@ -271,7 +284,9 @@ void KoTextSelectionHandler::increaseIndent() {
         Qt::Alignment alignment;
     };
     Indenter indenter;
+    emit startMacro(i18n("Increase Indent"));
     BlockFormatVisitor::visitSelection(d->caret, indenter);
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::decreaseIndent() {
@@ -284,7 +299,9 @@ void KoTextSelectionHandler::decreaseIndent() {
         Qt::Alignment alignment;
     };
     Indenter indenter;
+    emit startMacro(i18n("Decrease Indent"));
     BlockFormatVisitor::visitSelection(d->caret, indenter);
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::setTextColor(const QColor &color) {
@@ -311,21 +328,27 @@ void KoTextSelectionHandler::selectFont(QWidget *parent) {
 }
 
 void KoTextSelectionHandler::insertInlineObject(KoInlineObject *inliner) {
+    emit startMacro(i18n("Insert"));
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineObjectTextManager());
     layout->inlineObjectTextManager()->insertInlineObject(*d->caret, inliner);
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::setStyle(KoParagraphStyle* style) {
     Q_ASSERT(style);
     QTextBlock block = d->caret->block();
+    emit startMacro(i18n("Set Paragraph Style"));
     style->applyStyle(block);
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::setStyle(KoCharacterStyle* style) {
     Q_ASSERT(style);
+    emit startMacro(i18n("Set Character Style"));
     style->applyStyle(d->caret);
+    emit stopMacro();
 }
 
 QTextCursor KoTextSelectionHandler::caret() const {
@@ -333,6 +356,7 @@ QTextCursor KoTextSelectionHandler::caret() const {
 }
 
 void KoTextSelectionHandler::nextParagraph() {
+    emit startMacro(i18n("Insert Linebreak"));
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
     KoParagraphStyle *nextStyle = 0;
     if(lay && lay->styleManager()) {
@@ -354,6 +378,7 @@ void KoTextSelectionHandler::nextParagraph() {
         QTextBlock block = d->caret->block();
         nextStyle->applyStyle(block);
     }
+    emit stopMacro();
 }
 
 bool KoTextSelectionHandler::insertIndexMarker() {
@@ -363,11 +388,13 @@ bool KoTextSelectionHandler::insertIndexMarker() {
     if(block.text()[ d->caret->position() - block.position() ].isSpace())
         return false; // can't insert one on a whitespace as that does not indicate a word.
 
+    emit startMacro(i18n("Insert Index"));
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineObjectTextManager());
     KoTextLocator *tl = new KoTextLocator();
     layout->inlineObjectTextManager()->insertInlineObject(*d->caret, tl);
+    emit stopMacro();
     return true;
 }
 

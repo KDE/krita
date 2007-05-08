@@ -135,6 +135,12 @@ public slots:
      */
     QTextCursor caret() const;
 
+signals:
+    /// emitted when a series of commands is started that together need to become 1 undo action.
+    void startMacro(const QString &name);
+    /// emitted when a series of commands has ended that together should be 1 undo action.
+    void stopMacro();
+
 protected:
     friend class TextTool;
     void setShape(KoShape *shape);

@@ -19,10 +19,8 @@
 
 #include "KoListStyle.h"
 #include "KoListLevelProperties.h"
-// #include "Styles_p.h"
 #include "KoTextBlockData.h"
 
-// #include <QTextBlock>
 #include <QTextCursor>
 //#include <KDebug>
 
@@ -195,5 +193,6 @@ KoListStyle* KoListStyle::fromTextList(QTextList *list) {
     KoListStyle *answer = new KoListStyle();
     KoListLevelProperties llp = KoListLevelProperties::fromTextList(list);
     answer->setLevel(llp);
+    answer->d->setTextList(llp.level(), list->document(), list);
     return answer;
 }

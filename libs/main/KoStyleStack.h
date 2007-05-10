@@ -101,19 +101,6 @@ public:
      * where detail is e.g. left, right, top or bottom.
      * This allows to also find 'name' alone (e.g. padding implies padding-left, padding-right etc.)
      */
-    bool hasAttribute( const QString& name, const QString& detail = QString() ) const KDE_DEPRECATED;
-
-    /**
-     * Search for the attribute called 'name', starting on top of the stack,
-     * and return it.
-     */
-    QString attribute( const QString& name, const QString& detail = QString() ) const KDE_DEPRECATED;
-
-    /**
-     * Check if any of the styles on the stack has an attribute called 'name'-'detail'
-     * where detail is e.g. left, right, top or bottom.
-     * This allows to also find 'name' alone (e.g. padding implies padding-left, padding-right etc.)
-     */
     bool hasAttributeNS( const char* nsURI, const char* localName, const char* detail = 0 ) const;
 
     /**
@@ -121,17 +108,6 @@ public:
      * and return it.
      */
     QString attributeNS( const char* nsURI, const char* localName, const char* detail = 0 ) const;
-
-    /**
-     * Check if any of the styles on the stack has a child node called 'name'.
-     */
-    bool hasChildNode( const QString & name ) const KDE_DEPRECATED;
-
-    /**
-     * Search for a child node called 'name', starting on top of the stack,
-     * and return it.
-     */
-    KoXmlElement childNode( const QString & name ) const KDE_DEPRECATED;
 
     /**
      * Check if any of the styles on the stack has a child element called 'localName' in the namespace 'nsURI'.

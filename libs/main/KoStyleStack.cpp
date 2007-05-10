@@ -96,47 +96,6 @@ void KoStyleStack::push( const KoXmlElement& style )
 #endif
 }
 
-bool KoStyleStack::hasAttribute( const QString& name, const QString& detail ) const
-{
-    QString fullName( name );
-    if ( !detail.isEmpty() )
-    {
-        fullName += '-';
-        fullName += detail;
-    }
-    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
-    while ( it != m_stack.begin() )
-    {
-        --it;
-        KoXmlElement properties = (*it).namedItem( "style:"+m_propertiesTagName ).toElement();
-        if ( properties.hasAttribute( name ) ||
-             ( !detail.isEmpty() && properties.hasAttribute( fullName ) ) )
-            return true;
-    }
-    return false;
-}
-
-QString KoStyleStack::attribute( const QString& name, const QString& detail ) const
-{
-    QString fullName( name );
-    if ( !detail.isEmpty() )
-    {
-        fullName += '-';
-        fullName += detail;
-    }
-    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
-    while ( it != m_stack.begin() )
-    {
-        --it;
-        KoXmlElement properties = (*it).namedItem( "style:"+m_propertiesTagName ).toElement();
-        if ( properties.hasAttribute( name ) )
-            return properties.attribute( name );
-        if ( !detail.isEmpty() && properties.hasAttribute( fullName ) )
-            return properties.attribute( fullName );
-    }
-    return QString();
-}
-
 QString KoStyleStack::attributeNS( const char* nsURI, const char* name, const char* detail ) const
 {
     QString fullName( name );
@@ -200,35 +159,6 @@ double KoStyleStack::fontSize() const
         }
     }
     return 0;
-}
-
-bool KoStyleStack::hasChildNode(const QString & name) const
-{
-    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
-    while ( it != m_stack.begin() )
-    {
-        --it;
-        KoXmlElement properties = (*it).namedItem( "style:"+m_propertiesTagName ).toElement();
-        if ( !properties.namedItem( name ).isNull() )
-            return true;
-    }
-
-    return false;
-}
-
-KoXmlElement KoStyleStack::childNode(const QString & name) const
-{
-    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
-
-    while ( it != m_stack.begin() )
-    {
-        --it;
-        KoXmlElement properties = (*it).namedItem( "style:"+m_propertiesTagName ).toElement();
-        if ( !properties.namedItem( name ).isNull() )
-            return properties.namedItem( name ).toElement();
-    }
-
-    return KoXmlElement();          // a null element
 }
 
 bool KoStyleStack::hasChildNodeNS( const char* nsURI, const char* localName ) const

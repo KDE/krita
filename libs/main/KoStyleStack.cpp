@@ -96,7 +96,7 @@ void KoStyleStack::push( const KoXmlElement& style )
 #endif
 }
 
-QString KoStyleStack::attributeNS( const char* nsURI, const char* name, const char* detail ) const
+QString KoStyleStack::property( const char* nsURI, const char* name, const char* detail ) const
 {
     QString fullName( name );
     if ( detail )
@@ -117,7 +117,7 @@ QString KoStyleStack::attributeNS( const char* nsURI, const char* name, const ch
     return QString();
 }
 
-bool KoStyleStack::hasAttributeNS( const char* nsURI, const char* name, const char* detail ) const
+bool KoStyleStack::hasProperty( const char* nsURI, const char* name, const char* detail ) const
 {
     QString fullName( name );
     if ( detail )
@@ -138,7 +138,7 @@ bool KoStyleStack::hasAttributeNS( const char* nsURI, const char* name, const ch
 }
 
 // Font size is a bit special. "115%" applies to "the fontsize of the parent style".
-// This can be generalized though (hasAttributeThatCanBePercentOfParent() ? :)
+// This can be generalized though (hasPropertyThatCanBePercentOfParent() ? :)
 // Although, if we also add support for fo:font-size-rel here then it's not general anymore.
 double KoStyleStack::fontSize() const
 {
@@ -161,7 +161,7 @@ double KoStyleStack::fontSize() const
     return 0;
 }
 
-bool KoStyleStack::hasChildNodeNS( const char* nsURI, const char* localName ) const
+bool KoStyleStack::hasChildNode( const char* nsURI, const char* localName ) const
 {
     Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
@@ -175,7 +175,7 @@ bool KoStyleStack::hasChildNodeNS( const char* nsURI, const char* localName ) co
     return false;
 }
 
-KoXmlElement KoStyleStack::childNodeNS( const char* nsURI, const char* localName) const
+KoXmlElement KoStyleStack::childNode( const char* nsURI, const char* localName) const
 {
     Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
 

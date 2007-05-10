@@ -533,8 +533,8 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
 
     // Tabulators
     KoTabulatorList tabList;
-    if ( context.styleStack().hasChildNodeNS( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
-        KoXmlElement tabStops = context.styleStack().childNodeNS( KoXmlNS::style, "tab-stops" );
+    if ( context.styleStack().hasChildNode( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
+        KoXmlElement tabStops = context.styleStack().childNode( KoXmlNS::style, "tab-stops" );
         //kDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
         KoXmlElement tabStop;
         forEachElement( tabStop, tabStops )

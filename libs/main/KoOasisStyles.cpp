@@ -1469,11 +1469,11 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
     if ( fill == "solid" )
     {
         tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
-        if ( styleStack.hasAttributeNS( KoXmlNS::draw, "fill-color" ) )
-            tmpBrush.setColor(styleStack.attributeNS( KoXmlNS::draw, "fill-color" ) );
-        if ( styleStack.hasAttributeNS( KoXmlNS::draw, "transparency" ) )
+        if ( styleStack.hasProperty( KoXmlNS::draw, "fill-color" ) )
+            tmpBrush.setColor(styleStack.property( KoXmlNS::draw, "fill-color" ) );
+        if ( styleStack.hasProperty( KoXmlNS::draw, "transparency" ) )
         {
-            QString transparency = styleStack.attributeNS( KoXmlNS::draw, "transparency" );
+            QString transparency = styleStack.property( KoXmlNS::draw, "transparency" );
             if ( transparency == "94%" )
             {
                 tmpBrush.setStyle(Qt::Dense1Pattern);
@@ -1513,7 +1513,7 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
     }
     else if ( fill == "hatch" )
     {
-        QString style = styleStack.attributeNS( KoXmlNS::draw, "fill-hatch-name" );
+        QString style = styleStack.property( KoXmlNS::draw, "fill-hatch-name" );
         kDebug(30003)<<" hatch style is  : "<<style<<endl;
 
         //type not defined by default

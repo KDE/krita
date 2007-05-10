@@ -101,25 +101,25 @@ public:
      * where detail is e.g. left, right, top or bottom.
      * This allows to also find 'name' alone (e.g. padding implies padding-left, padding-right etc.)
      */
-    bool hasAttributeNS( const char* nsURI, const char* localName, const char* detail = 0 ) const;
+    bool hasProperty( const char* nsURI, const char* localName, const char* detail = 0 ) const;
 
     /**
      * Search for the attribute called 'name', starting on top of the stack,
      * and return it.
      */
-    QString attributeNS( const char* nsURI, const char* localName, const char* detail = 0 ) const;
+    QString property( const char* nsURI, const char* localName, const char* detail = 0 ) const;
 
     /**
      * Check if any of the styles on the stack has a child element called 'localName' in the namespace 'nsURI'.
      */
-    bool hasChildNodeNS( const char* nsURI, const char* localName ) const;
+    bool hasChildNode( const char* nsURI, const char* localName ) const;
 
     /**
      * Search for a child element which has a child element called 'localName'
      * in the namespace 'nsURI' starting on top of the stack,
      * and return it.
      */
-    KoXmlElement childNodeNS( const char* nsURI, const char* localName ) const;
+    KoXmlElement childNode( const char* nsURI, const char* localName ) const;
 
     /**
      * Special case for the current font size, due to special handling of fo:font-size="115%".

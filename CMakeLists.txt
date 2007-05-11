@@ -149,7 +149,7 @@ endif(SHOULD_BUILD_KSPREAD)
 
 add_subdirectory(kdgantt1)
 add_subdirectory(kdgantt)
-add_subdirectory(kchart)
+#add_subdirectory(kchart)
 #add_subdirectory(kexi)
 add_subdirectory(kformula)
 add_subdirectory(kivio)

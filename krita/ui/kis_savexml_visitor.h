@@ -19,119 +19,24 @@
 #ifndef KIS_SAVEXML_VISITOR_H_
 #define KIS_SAVEXML_VISITOR_H_
 
-#include <QRect>
+#include <QDomDocument>
+#include <QDomElement>
 
-#include "kis_adjustment_layer.h"
-#include "kis_exif_info.h"
-#include "kis_group_layer.h"
-#include "kis_image.h"
-#include "kis_layer.h"
 #include "kis_layer_visitor.h"
-#include "kis_paint_layer.h"
 #include "kis_types.h"
+
 
 class KisSaveXmlVisitor : public KisLayerVisitor {
 public:
-    KisSaveXmlVisitor(QDomDocument doc, QDomElement element, quint32 &count, bool root=false) :
-        KisLayerVisitor(),
-        m_doc(doc),
-        m_count(count),
-        m_root(root)
-    {
-        m_elem = element;
-    }
+    KisSaveXmlVisitor(QDomDocument doc, QDomElement element, quint32 &count, bool root=false);
 
 public:
-    bool visit( KisExternalLayer * )
-        {
-            return true;
-        }
+    bool visit( KisExternalLayer * );
 
-    bool visit(KisPaintLayer *layer)
-    {
-        QDomElement layerElement = m_doc.createElement("layer");
+    bool visit(KisPaintLayer *layer);
 
-        layerElement.setAttribute("name", layer->name());
-        layerElement.setAttribute("x", layer->x());
-        layerElement.setAttribute("y", layer->y());
-        layerElement.setAttribute("opacity", layer->opacity());
-        layerElement.setAttribute("compositeop", layer->compositeOp()->id());
-        layerElement.setAttribute("visible", layer->visible());
-        layerElement.setAttribute("locked", layer->locked());
-        layerElement.setAttribute("layertype", "paintlayer");
-        layerElement.setAttribute("filename", QString("layer%1").arg(m_count));
-        layerElement.setAttribute("colorspacename", layer->paintDevice()->colorSpace()->id());
-        layerElement.setAttribute("hasmask", layer->hasMask());
-
-        m_elem.appendChild(layerElement);
-
-        if(layer->paintDevice()->hasExifInfo())
-        {
-            QDomElement exifElmt = layer->paintDevice()->exifInfo()->save(m_doc);
-            layerElement.appendChild(exifElmt);
-        }
-        m_count++;
-        return true;
-    }
-
-    bool visit(KisGroupLayer *layer)
-    {
-        QDomElement layerElement;
-
-        if(m_root) // if this is the root we fake so not to save it
-            layerElement = m_elem;
-        else
-        {
-            layerElement = m_doc.createElement("layer");
-
-            layerElement.setAttribute("name", layer->name());
-            layerElement.setAttribute("x", layer->x());
-            layerElement.setAttribute("y", layer->y());
-            layerElement.setAttribute("opacity", layer->opacity());
-            layerElement.setAttribute("compositeop", layer->compositeOp()->id());
-            layerElement.setAttribute("visible", layer->visible());
-            layerElement.setAttribute("locked", layer->locked());
-            layerElement.setAttribute("layertype", "grouplayer");
-
-            m_elem.appendChild(layerElement);
-       }
-
-        QDomElement elem = m_doc.createElement("LAYERS");
-
-        layerElement.appendChild(elem);
-
-        KisSaveXmlVisitor visitor(m_doc, elem, m_count);
-
-        KisLayerSP child = layer->firstChild();
-
-        while(child)
-        {
-            child->accept(visitor);
-            child = child->nextSibling();
-        }
-        return true;
-    }
-
-    bool visit(KisAdjustmentLayer* layer)
-    {
-        QDomElement layerElement = m_doc.createElement("layer");
-
-        layerElement.setAttribute("name", layer->name());
-        layerElement.setAttribute("filtername", layer->filter()->name());
-        layerElement.setAttribute("filterversion", layer->filter()->version());
-        layerElement.setAttribute("opacity", layer->opacity());
-        layerElement.setAttribute("compositeop", layer->compositeOp()->id());
-        layerElement.setAttribute("visible", layer->visible());
-        layerElement.setAttribute("locked", layer->locked());
-        layerElement.setAttribute("layertype", "adjustmentlayer");
-        layerElement.setAttribute("filename", QString("layer%1").arg(m_count));
-        layerElement.setAttribute("x", layer->x());
-        layerElement.setAttribute("y", layer->y());
-        m_elem.appendChild(layerElement);
-
-        m_count++;
-        return true;
-    }
+    bool visit(KisGroupLayer *layer);
+    bool visit(KisAdjustmentLayer* layer);
 
 private:
     QDomDocument m_doc;

@@ -57,7 +57,9 @@ set(kritaui_LIB_SRCS
     kis_label_progress.cc
     kis_label_zoom.cc
     kis_layer_manager.cc
+    kis_layermap_visitor.cc
     kis_layerbox.cc
+    kis_load_visitor.cc
     kis_matrix_widget.cpp
     kis_multi_bool_filter_widget.cc
     kis_multi_double_filter_widget.cc
@@ -78,6 +80,8 @@ set(kritaui_LIB_SRCS
     kis_resource_mediator.cc
     kis_resource_provider.cc
     kis_resourceserver.cc
+    kis_save_visitor.cc
+    kis_savexml_visitor.cc
     kis_selection_manager.cc
     kis_selection_options.cc
     kis_statusbar.cc

@@ -28,16 +28,18 @@
 #include <KoView.h>
 #include <KoSelection.h>
 
-#include "kis_nameserver.h"
+#include "kis_adjustment_layer.h"
 #include "kis_canvas2.h"
-#include "kis_layer_container_shape.h"
-#include "kis_layer_shape.h"
-#include "kis_shape_layer.h"
-#include "kis_mask_shape.h"
-#include "kis_layermap_visitor.h"
-#include "kis_view2.h"
-#include "kis_image.h"
 #include "kis_doc2.h"
+#include "kis_image.h"
+#include "kis_group_layer.h"
+#include "kis_layer_container_shape.h"
+#include "kis_layermap_visitor.h"
+#include "kis_layer_shape.h"
+#include "kis_mask_shape.h"
+#include "kis_nameserver.h"
+#include "kis_shape_layer.h"
+#include "kis_view2.h"
 
 typedef QMap<KisLayerSP, KoShape*> KisLayerMap;
 

@@ -22,9 +22,8 @@
 #include <QVariant>
 
 #include <KoDocument.h>
-#include <KDChartTable.h>
-
 #include <kochart_export.h>
+
 
 namespace KoChart
 {

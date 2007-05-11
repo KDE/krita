@@ -29,7 +29,7 @@
 #include <flake_export.h>
 
 /// The undo / redo command for inserting path points
-class KoPathPointInsertCommand : public QUndoCommand
+class FLAKE_EXPORT KoPathPointInsertCommand : public QUndoCommand
 {
 public:
     /**

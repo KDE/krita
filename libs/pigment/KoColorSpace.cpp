@@ -37,8 +37,6 @@ struct KoColorSpace::Private {
     KoConvolutionOp* convolutionOp;
     QThreadStorage< QVector<quint8>* > conversionCache;
 
-    DWORD cmType;  // The colorspace type as defined by littlecms
-    icColorSpaceSignature colorSpaceSignature; // The colorspace signature as defined in icm/icc files
 };
 
 KoColorSpace::KoColorSpace()
@@ -46,7 +44,7 @@ KoColorSpace::KoColorSpace()
 {
 }
 
-KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp, DWORD cmType, icColorSpaceSignature colorSpaceSignature )
+KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp )
     : d (new Private())
 {
     d->id = id;
@@ -54,8 +52,6 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceR
     d->parent = parent;
     d->mixColorsOp = mixColorsOp;
     d->convolutionOp = convolutionOp;
-    d->cmType = cmType;
-    d->colorSpaceSignature = colorSpaceSignature;
 }
 
 KoColorSpace::~KoColorSpace()
@@ -68,9 +64,6 @@ KoColorSpace::~KoColorSpace()
 QString KoColorSpace::id() const {return d->id;}
 
 QString KoColorSpace::name() const {return d->name;}
-
-quint32 KoColorSpace::colorSpaceType() const { return d->cmType; }
-icColorSpaceSignature KoColorSpace::colorSpaceSignature() const { return d->colorSpaceSignature; }
 
 QList<KoChannelInfo *> KoColorSpace::channels() const
 {

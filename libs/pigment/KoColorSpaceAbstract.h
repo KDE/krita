@@ -236,9 +236,8 @@ namespace {
 template<class _CSTraits>
 class KoColorSpaceAbstract : public KoColorSpace {
     public:
-        KoColorSpaceAbstract(const QString &id, const QString &name, KoColorSpaceRegistry * parent, DWORD cmType,
-                         icColorSpaceSignature colorSpaceSignature ) :
-            KoColorSpace(id, name, parent, new KoMixColorsOpImpl< _CSTraits>(), new KoConvolutionOpImpl< _CSTraits>(), cmType, colorSpaceSignature)
+        KoColorSpaceAbstract(const QString &id, const QString &name, KoColorSpaceRegistry * parent ) :
+            KoColorSpace(id, name, parent, new KoMixColorsOpImpl< _CSTraits>(), new KoConvolutionOpImpl< _CSTraits>())
         {
             this->addCompositeOp( new CompositeCopy( this ) );
         }

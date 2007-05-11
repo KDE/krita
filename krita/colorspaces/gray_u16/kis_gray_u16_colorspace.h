@@ -33,18 +33,13 @@ class KRITA_GRAY_U16_EXPORT KisGrayU16ColorSpace : public KoLcmsColorSpace<GrayU
         virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
 };
 
-class KisGrayU16ColorSpaceFactory : public KoColorSpaceFactory
+class KisGrayU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
 public:
+    KisGrayU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAY_16, icSigGrayData)
+    {}
     virtual QString id() const { return "GRAY16"; }
     virtual QString name() const { return i18n("Grayscale (16-bit integer/channel)"); }
-
-    /**
-     * lcms colorspace type definition.
-     */
-    virtual quint32 colorSpaceType() { return TYPE_GRAY_16; };
-
-    virtual icColorSpaceSignature colorSpaceSignature() { return icSigGrayData; };
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisGrayU16ColorSpace(parent, p); };
 

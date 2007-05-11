@@ -44,6 +44,10 @@ public:
     virtual QString id() const { return "YCbCrAU16"; }
     virtual QString name() const { return i18n("YCBCR (16-bit integer/channel)"); }
 
+    virtual bool profileIsCompatible(KoColorProfile* /*profile*/) const
+    {
+        return false;
+    }
     /**
      * lcms colorspace type definition.
      */

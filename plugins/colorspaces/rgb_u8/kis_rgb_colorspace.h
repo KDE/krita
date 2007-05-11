@@ -34,18 +34,13 @@ class PIGMENT_RGB_U8_EXPORT KisRgbColorSpace : public KoLcmsColorSpace<RgbU8Trai
         virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
 };
 
-class KisRgbColorSpaceFactory : public KoColorSpaceFactory
+class KisRgbColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
 public:
+    KisRgbColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_BGRA_8,icSigRgbData )
+    {}
     virtual QString id() const { return "RGBA"; }
     virtual QString name() const { return i18n("RGB (8-bit integer/channel)"); }
-
-    /**
-     * lcms colorspace type definition.
-     */
-    virtual quint32 colorSpaceType() { return TYPE_BGRA_8; };
-
-    virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisRgbColorSpace(parent, p); };
 

@@ -33,8 +33,7 @@
 template<class _CSTraits, class _fallback_>
 class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
     protected:
-        KoIncompleteColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, quint32 type,
-                         icColorSpaceSignature colorSpaceSignature) : KoColorSpaceAbstract<_CSTraits>(id, name, parent, type, colorSpaceSignature), m_fallBackColorSpace(_fallback_::createColorSpace())
+        KoIncompleteColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent) : KoColorSpaceAbstract<_CSTraits>(id, name, parent), m_fallBackColorSpace(_fallback_::createColorSpace())
         {
             m_qcolordata = new quint16[4];
             m_convertionCache.resize( m_fallBackColorSpace->pixelSize() );
@@ -104,20 +103,20 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             }
             return img;
         }
-        virtual void toLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
+        virtual void toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
         {
             _fallback_::toLabA16( this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
         }
 
-        virtual void fromLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
+        virtual void fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
         {
             _fallback_::fromLabA16(this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
         }
-        virtual void fromRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
+        virtual void fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
         {
             _fallback_::fromRgbA16(this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
         }
-        virtual void toRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
+        virtual void toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
         {
             _fallback_::toRgbA16(this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
         }

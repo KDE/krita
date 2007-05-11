@@ -34,19 +34,15 @@ class PIGMENT_CMYK_U16_EXPORT KisCmykU16ColorSpace : public KoLcmsColorSpace<Cmy
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
 };
 
-class KisCmykU16ColorSpaceFactory : public KoColorSpaceFactory
+class KisCmykU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
     public:
+        KisCmykU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_CMYK5_16, icSigCmykData)
+        {
+        }
         virtual QString id() const { return "CMYKA16"; }
         virtual QString name() const { return i18n("CMYK (16-bit integer/channel)"); }
 
-    /**
-         * lcms colorspace type definition.
-     */
-        virtual quint32 colorSpaceType() { return TYPE_CMYK5_16; };
-
-        virtual icColorSpaceSignature colorSpaceSignature() { return icSigCmykData; };
-    
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisCmykU16ColorSpace(parent, p); };
 
         virtual QString defaultProfile() { return "Adobe CMYK"; };

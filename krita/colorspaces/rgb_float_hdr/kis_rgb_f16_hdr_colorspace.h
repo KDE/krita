@@ -38,10 +38,10 @@ class KRITA_RGBF16_EXPORT KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpa
           else
             return false;
         }
+        bool profileIsCompatible(KoColorProfile*) const {
+            return false;
+        }
 };
-
-// FIXME: lcms doesn't support 16-bit float
-#define RGBAF16HALF_LCMS_TYPE TYPE_BGRA_16
 
 class KRITA_RGBF16_EXPORT KisRgbF16HDRColorSpaceFactory : public KoColorSpaceFactory
 {
@@ -53,12 +53,10 @@ public:
     virtual QString id() const { return "RGBAF16HALF"; }
     virtual QString name() const { return i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"); }
 
-    /**
-     * lcms colorspace type definition.
-     */
-   virtual quint32 colorSpaceType() { return RGBAF16HALF_LCMS_TYPE; };
-
-    virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
+    virtual bool profileIsCompatible(KoColorProfile* profile) const
+    {
+        return false;
+    }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisRgbF16HDRColorSpace(parent, p); };
 

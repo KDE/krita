@@ -175,7 +175,9 @@ QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoColorSpaceFactory *
     QMap<QString, KoColorProfile * >::Iterator it;
     for (it = d->profileMap.begin(); it != d->profileMap.end(); ++it) {
         KoColorProfile *  profile = it.value();
-        if (profile->colorSpaceSignature() == csf->colorSpaceSignature()) {
+        if(csf->profileIsCompatible(profile))
+        {
+//         if (profile->colorSpaceSignature() == csf->colorSpaceSignature()) {
             profiles.push_back(profile);
         }
     }

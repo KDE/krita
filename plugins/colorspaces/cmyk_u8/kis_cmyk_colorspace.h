@@ -32,19 +32,14 @@ class KisCmykU8ColorSpace : public KoLcmsColorSpace<CmykU8Traits>
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
 };
 
-class KisCmykU8ColorSpaceFactory : public KoColorSpaceFactory
+class KisCmykU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
     public:
+        KisCmykU8ColorSpaceFactory(): KoLcmsColorSpaceFactory(TYPE_CMYK5_8, icSigCmykData)
+        {}
         virtual QString id() const { return "CMYK"; }
         virtual QString name() const { return i18n("CMYK (8-bit integer/channel)"); }
 
-    /**
-         * lcms colorspace type definition.
-     */
-        virtual quint32 colorSpaceType() { return TYPE_CMYK5_8; };
-
-        virtual icColorSpaceSignature colorSpaceSignature() { return icSigCmykData; };
-    
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisCmykU8ColorSpace(parent, p); };
 
         virtual QString defaultProfile() { return "Adobe CMYK"; };

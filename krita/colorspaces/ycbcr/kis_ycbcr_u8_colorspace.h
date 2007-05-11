@@ -30,7 +30,7 @@ class KisYCbCrU8ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU8Traits>
 {
     public:
         KisYCbCrU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence independence) const {
+        virtual bool willDegrade(ColorSpaceIndependence /*independence*/) const {
             return false;
         }
 };
@@ -41,6 +41,10 @@ public:
     virtual QString id() const { return "YCbCrAU8"; }
     virtual QString name() const { return i18n("YCBCR (8-bit integer/channel)"); }
 
+    virtual bool profileIsCompatible(KoColorProfile* /*profile*/) const
+    {
+        return false;
+    }
     /**
      * lcms colorspace type definition.
      */

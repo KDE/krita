@@ -133,7 +133,7 @@ protected:
 
 public:
     /// Should be called by real color spaces
-    KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp, DWORD cmType, icColorSpaceSignature colorSpaceSignature );
+    KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp );
     virtual ~KoColorSpace();
 
     virtual bool operator==(const KoColorSpace& rhs) const {
@@ -237,12 +237,7 @@ public:
      */
     virtual QString name() const;
 
-    /**
-     * lcms colorspace type definition.
-     */
-    virtual quint32 colorSpaceType() const;
-
-    virtual icColorSpaceSignature colorSpaceSignature() const;
+    virtual bool profileIsCompatible(KoColorProfile* profile) const =0;
 
     /**
      * If false, images in this colorspace will degrade considerably by
@@ -368,7 +363,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of source pixels
      */
-    virtual void toLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const = 0;
+    virtual void toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const = 0;
 
     /**
      * Convert the specified data from Lab. to this colorspace. All colorspaces are
@@ -378,7 +373,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of pixels in the array
      */
-    virtual void fromLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const = 0;
+    virtual void fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const = 0;
 
     /**
      * Convert the specified data to Rgb 16 bits. All colorspaces are guaranteed to support this
@@ -387,7 +382,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of source pixels
      */
-    virtual void toRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const =0;
+    virtual void toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const =0;
 
     /**
      * Convert the specified data from Rgb 16 bits. to this colorspace. All colorspaces are
@@ -397,7 +392,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of pixels in the array
      */
-    virtual void fromRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const =0;
+    virtual void fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const =0;
 
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space
@@ -635,13 +630,7 @@ public:
      */
     virtual QString name() const = 0;
 
-    /**
-     * lcms colorspace type definition.
-     */
-    virtual quint32 colorSpaceType() = 0;
-
-    virtual icColorSpaceSignature colorSpaceSignature() = 0;
-
+    virtual bool profileIsCompatible(KoColorProfile* profile) const =0;
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *) = 0;
 
     /**

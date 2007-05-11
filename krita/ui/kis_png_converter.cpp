@@ -307,15 +307,17 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
-
+    //TODO: two fixes : one tell the user about the problem and ask for a solution, and two once the kocolorspace include KoColorTransformation, use that instead of hacking a lcms transformation
     // Create the cmsTransform if needed
     cmsHTRANSFORM transform = 0;
+#if 0
     if(profile && !profile->isSuitableForOutput())
     {
         transform = cmsCreateTransform(profile->profile(), cs->colorSpaceType(),
                                        cs->profile()->profile() , cs->colorSpaceType(),
                                        INTENT_PERCEPTUAL, 0);
     }
+#endif
 
     // Read comments/texts...
     png_text* text_ptr;

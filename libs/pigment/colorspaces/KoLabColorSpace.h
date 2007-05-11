@@ -39,21 +39,16 @@ class KoLabColorSpace : public KoLcmsColorSpace<KoLabU16Traits>
         static const quint32 CHANNEL_AB_ZERO_OFFSET = 0x8000;
 };
 
-class KoLabColorSpaceFactory : public KoColorSpaceFactory
+class KoLabColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
     public:
+        KoLabColorSpaceFactory() : KoLcmsColorSpaceFactory( (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), icSigLabData)
+        {}
         /// reimplemented from KoColorSpaceFactory
         virtual QString id() const { return "LABA"; }
         /// reimplemented from KoColorSpaceFactory
         virtual QString name() const { return i18n("L*a*b* (16-bit integer/channel)"); }
 
-        /**
-         * lcms colorspace type definition.
-         */
-        virtual quint32 colorSpaceType() { return (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)); }
-
-        virtual icColorSpaceSignature colorSpaceSignature() { return icSigLabData; }
-    
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoLabColorSpace(parent, p); }
 
         virtual QString defaultProfile() { return "Lab built-in - (lcms internal)"; }

@@ -31,7 +31,7 @@
 #include "compositeops/KoCompositeOpErase.h"
 
 KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile */*p*/)
-: KisYCbCrBaseColorSpace<YCbCrU16Traits>("YCbCrAU16", i18n("YCbCr (16-bit integer/channel)"), parent, TYPE_YCbCr_16)
+: KisYCbCrBaseColorSpace<YCbCrU16Traits>("YCbCrAU16", i18n("YCbCr (16-bit integer/channel)"), parent)
 {
     addChannel(new KoChannelInfo(i18n("Y"), YCbCrU16Traits::y_pos * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(255,0,0)));
     addChannel(new KoChannelInfo(i18n("Cb"), YCbCrU16Traits::cb_pos * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(0,255,0)));

@@ -45,6 +45,10 @@ public:
             return false;
         }
 
+    virtual bool profileIsCompatible(KoColorProfile* /*profile*/) const {
+        return false;
+    }
+
     virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile = 0) const;
     virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0) const;
 

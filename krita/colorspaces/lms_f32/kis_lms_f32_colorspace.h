@@ -141,13 +141,6 @@ public:
      */
     virtual KoID id() const { return KoID("LMSAF32", i18n("LMS Cone Space (32-bit float/channel)")); };
 
-    /**
-     * lcms colorspace type definition.
-     */
-    virtual quint32 colorSpaceType() { return 0; }; // FIXME: lcms do not support LMS cone space
-
-    virtual icColorSpaceSignature colorSpaceSignature() { return icMaxEnumData; };
-
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisLmsF32ColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };

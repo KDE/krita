@@ -267,7 +267,7 @@ namespace {
 }
 
 KoAlphaColorSpace::KoAlphaColorSpace(KoColorSpaceRegistry * parent) :
-        KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask"),  parent, TYPE_GRAY_8, icSigGrayData )
+        KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask"),  parent )
 {
     addChannel(new KoChannelInfo(i18n("Alpha"), 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
     addCompositeOp( new CompositeOver( this ) );
@@ -388,8 +388,8 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, q
 }
 
 QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   KoColorProfile *  dstProfile, qint32 renderingIntent,
-                                   float exposure) const
+                                   KoColorProfile *  /*dstProfile*/, qint32 /*renderingIntent*/,
+                                   float /*exposure*/) const
 {
     QImage img(width, height, QImage::Format_RGB32);
 

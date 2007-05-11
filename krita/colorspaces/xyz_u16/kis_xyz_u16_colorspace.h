@@ -36,19 +36,15 @@ class PIGMENT_XYZ_U16_EXPORT KisXyzU16ColorSpace : public KoLcmsColorSpace<XyzU1
 
 #define TYPE_XYZA_16 (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1))
 
-class KisXyzU16ColorSpaceFactory : public KoColorSpaceFactory
+class KisXyzU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
     public:
+        KisXyzU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_XYZA_16, icSigXYZData)
+        {
+        }
         virtual QString id() const { return "XYZA16"; }
         virtual QString name() const { return i18n("XYZ (16-bit integer/channel)"); }
 
-    /**
-         * lcms colorspace type definition.
-     */
-        virtual quint32 colorSpaceType() { return TYPE_XYZA_16; };
-
-        virtual icColorSpaceSignature colorSpaceSignature() { return icSigXYZData; };
-    
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisXyzU16ColorSpace(parent, p); };
 
         virtual QString defaultProfile() { return "XYZ built-in - (lcms internal)"; };

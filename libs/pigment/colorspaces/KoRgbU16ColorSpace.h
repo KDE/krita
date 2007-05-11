@@ -30,19 +30,15 @@ class KoRgbU16ColorSpace : public KoLcmsColorSpace<KoRgbU16Traits>
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
 };
 
-class KoRgbU16ColorSpaceFactory : public KoColorSpaceFactory
+class KoRgbU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
     public:
+        KoRgbU16ColorSpaceFactory() : KoLcmsColorSpaceFactory( TYPE_BGRA_16, icSigRgbData )
+        {
+        }
         virtual QString id() const { return "RGBA16"; }
         virtual QString name() const { return i18n("RGB (16-bit integer/channel)"); }
 
-    /**
-         * lcms colorspace type definition.
-     */
-        virtual quint32 colorSpaceType() { return TYPE_BGRA_16; }
-
-        virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; }
-    
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoRgbU16ColorSpace(parent, p); }
 
         virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; }

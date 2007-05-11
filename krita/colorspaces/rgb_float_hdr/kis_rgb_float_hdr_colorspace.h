@@ -33,8 +33,8 @@ template <class _CSTraits>
 class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB16Fallback>
 {
     public:
-        KisRgbFloatHDRColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, qint32 type)
-          : KoIncompleteColorSpace<_CSTraits, KoRGB16Fallback>(id, name, parent, type, icSigRgbData)
+        KisRgbFloatHDRColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent)
+          : KoIncompleteColorSpace<_CSTraits, KoRGB16Fallback>(id, name, parent)
         {
 
         }

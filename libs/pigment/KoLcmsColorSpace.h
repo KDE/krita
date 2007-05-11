@@ -96,38 +96,65 @@ struct KoLcmsDarkenTransformation : public KoColorTransformation
     double m_compensation;
 };
 
+class KoLcmsInfo {
+    struct Private {
+        DWORD cmType;  // The colorspace type as defined by littlecms
+        icColorSpaceSignature colorSpaceSignature; // The colorspace signature as defined in icm/icc files
+    };
+    public:
+        KoLcmsInfo(DWORD cmType, icColorSpaceSignature colorSpaceSignature) : d(new Private)
+        {
+            d->cmType = cmType;
+            d->colorSpaceSignature = colorSpaceSignature;
+        }
+        virtual ~KoLcmsInfo()
+        {
+            delete d;
+        }
+        virtual quint32 colorSpaceType() const
+        {
+            return d->cmType;
+        }
+
+        virtual icColorSpaceSignature colorSpaceSignature() const
+        {
+            return d->colorSpaceSignature;
+        }
+    private:
+        Private* const d;
+};
 /**
  * This is the base class for all colorspaces that are based on the lcms library, for instance
  * RGB 8bits and 16bits, CMYK 8bits and 16bits, LAB...
  */
 template<class _CSTraits>
-class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
+class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo {
         struct Private {
-                mutable quint8 * qcolordata; // A small buffer for conversion from and to qcolor.
-                cmsHTRANSFORM defaultToRGB;    // Default transform to 8 bit sRGB
-                cmsHTRANSFORM defaultFromRGB;  // Default transform from 8 bit sRGB
-                cmsHTRANSFORM defaultToRGB16;    // Default transform to 16 bit sRGB
-                cmsHTRANSFORM defaultFromRGB16;  // Default transform from 16 bit sRGB
-        
-                mutable cmsHPROFILE   lastRGBProfile;  // Last used profile to transform to/from RGB
-                mutable cmsHTRANSFORM lastToRGB;       // Last used transform to transform to RGB
-                mutable cmsHTRANSFORM lastFromRGB;     // Last used transform to transform from RGB
-        
-                cmsHTRANSFORM defaultToLab;
-                cmsHTRANSFORM defaultFromLab;
-        
-                KoColorProfile *  profile;
-                mutable const KoColorSpace *lastUsedDstColorSpace;
-                mutable cmsHTRANSFORM lastUsedTransform;
-                
-            // cmsHTRANSFORM is a void *, so this should work.
-                typedef QMap<const KoColorSpace *, cmsHTRANSFORM>  TransformMap;
-                mutable TransformMap transforms; // Cache for existing transforms
+            mutable quint8 * qcolordata; // A small buffer for conversion from and to qcolor.
+            cmsHTRANSFORM defaultToRGB;    // Default transform to 8 bit sRGB
+            cmsHTRANSFORM defaultFromRGB;  // Default transform from 8 bit sRGB
+            cmsHTRANSFORM defaultToRGB16;    // Default transform to 16 bit sRGB
+            cmsHTRANSFORM defaultFromRGB16;  // Default transform from 16 bit sRGB
+    
+            mutable cmsHPROFILE   lastRGBProfile;  // Last used profile to transform to/from RGB
+            mutable cmsHTRANSFORM lastToRGB;       // Last used transform to transform to RGB
+            mutable cmsHTRANSFORM lastFromRGB;     // Last used transform to transform from RGB
+    
+            cmsHTRANSFORM defaultToLab;
+            cmsHTRANSFORM defaultFromLab;
+    
+            KoColorProfile *  profile;
+            mutable const KoColorSpace *lastUsedDstColorSpace;
+            mutable cmsHTRANSFORM lastUsedTransform;
+            
+        // cmsHTRANSFORM is a void *, so this should work.
+            typedef QMap<const KoColorSpace *, cmsHTRANSFORM>  TransformMap;
+            mutable TransformMap transforms; // Cache for existing transforms
         };
     protected:
         KoLcmsColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, DWORD cmType,
                          icColorSpaceSignature colorSpaceSignature,
-                         KoColorProfile *p) : KoColorSpaceAbstract<_CSTraits>(id, name, parent, cmType, colorSpaceSignature), d( new Private())
+                         KoColorProfile *p) : KoColorSpaceAbstract<_CSTraits>(id, name, parent), KoLcmsInfo( cmType, colorSpaceSignature), d( new Private())
 
         {
             d->profile = p;
@@ -188,6 +215,11 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         
         virtual bool hasHighDynamicRange() const { return false; }
         virtual KoColorProfile * profile() const { return d->profile; }
+        
+        virtual bool profileIsCompatible(KoColorProfile* profile) const
+        {
+            return profile->colorSpaceSignature() == colorSpaceSignature();
+        }
         
         virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile=0) const
         {
@@ -263,7 +295,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
             return img;
         }
-        virtual void toLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
+        virtual void toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
         {
             if ( d->defaultToLab == 0 ) return;
 
@@ -276,7 +308,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             }
         }
 
-        virtual void fromLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
+        virtual void fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
         {
             if ( d->defaultFromLab == 0 ) return;
 
@@ -288,7 +320,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                 dst += this->pixelSize();
             }
         }
-        virtual void fromRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
+        virtual void fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
         {
             if ( d->defaultFromRGB16 == 0 ) return;
 
@@ -300,7 +332,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                 dst += this->pixelSize();
             }
         }
-        virtual void toRgbA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
+        virtual void toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
         {
             if ( d->defaultToRGB16 == 0 ) return;
 
@@ -319,7 +351,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                 quint32 numPixels,
                 qint32 renderingIntent) const
         {
-            if (dstColorSpace->colorSpaceType() == this->colorSpaceType()
+            if (dstColorSpace->id() == this->id()
                 && dstColorSpace->profile() == profile())
             {
                 if (src!= dst)
@@ -334,7 +366,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             qint32 dstPixelSize = dstColorSpace->pixelSize();
 
             if (d->lastUsedTransform != 0 && d->lastUsedDstColorSpace != 0) {
-                if (dstColorSpace->colorSpaceType() == d->lastUsedDstColorSpace->colorSpaceType() &&
+                if (dstColorSpace->id() == d->lastUsedDstColorSpace->id() &&
                     dstColorSpace->profile() == d->lastUsedDstColorSpace->profile()) {
                     tf = d->lastUsedTransform;
                     }
@@ -573,12 +605,13 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             if (bpCompensation) {
                 flags = cmsFLAGS_BLACKPOINTCOMPENSATION;
             }
-
-            if (dstColorSpace && dstProfile && srcProfile ) {
+            const KoLcmsInfo* dstColorSpaceInfo = dynamic_cast<const KoLcmsInfo*>(dstColorSpace);
+            
+            if (dstColorSpaceInfo && dstProfile && srcProfile ) {
                 cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->profile(),
                         this->colorSpaceType(),
                         dstProfile->profile(),
-                        dstColorSpace->colorSpaceType(),
+                        dstColorSpaceInfo->colorSpaceType(),
                         renderingIntent,
                         flags);
 
@@ -589,5 +622,15 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         Private * const d;
 };
 
+class KoLcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo {
+    public:
+        KoLcmsColorSpaceFactory(DWORD cmType, icColorSpaceSignature colorSpaceSignature) : KoLcmsInfo(cmType, colorSpaceSignature)
+        {
+        }
+        virtual bool profileIsCompatible(KoColorProfile* profile) const
+        {
+            return profile->colorSpaceSignature() == colorSpaceSignature();
+        }
+};
 
 #endif

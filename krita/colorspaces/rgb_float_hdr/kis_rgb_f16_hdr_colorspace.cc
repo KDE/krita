@@ -33,7 +33,7 @@
 #include "compositeops/KoCompositeOpErase.h"
 
 KisRgbF16HDRColorSpace::KisRgbF16HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile */*p*/)
-: KisRgbFloatHDRColorSpace<RgbF16Traits>("RGBAF16HALF", i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"), parent, RGBAF16HALF_LCMS_TYPE)
+: KisRgbFloatHDRColorSpace<RgbF16Traits>("RGBAF16HALF", i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"), parent)
 {
     addChannel(new KoChannelInfo(i18n("Red"), 2 * sizeof(half), KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, sizeof(half), QColor(255,0,0)));
     addChannel(new KoChannelInfo(i18n("Green"), 1 * sizeof(half), KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, sizeof(half), QColor(0,255,0)));

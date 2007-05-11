@@ -58,11 +58,11 @@ void KisImportCatcher::slotLoadingFinished()
 
             importedImageLayer->setName(m_url.prettyUrl());
 
-            KisGroupLayerSP parent = KisGroupLayerSP( 0 );
+            KisGroupLayerSP parent = 0;
             KisLayerSP currentActiveLayer = m_image->activeLayer();
 
             if (currentActiveLayer) {
-                parent = currentActiveLayer->parent();
+                parent = currentActiveLayer->parentLayer();
             }
 
             if (parent.isNull()) {

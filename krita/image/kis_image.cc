@@ -291,7 +291,7 @@ void KisImage::notifyLayerUpdated(KisLayerSP layer)
     {
         if( !m_d->dirtyLayers.contains( l ) )
             m_d->dirtyLayers.append( l );
-        l = l->parent().data();
+        l = l->parentLayer().data();
     }
 }
 
@@ -642,7 +642,7 @@ KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const QString
     KisLayerSP layerSP(layer);
 
     if (!m_d->activeLayer.isNull()) {
-        addLayer(layerSP, m_d->activeLayer->parent(), m_d->activeLayer->nextSibling());
+        addLayer(layerSP, m_d->activeLayer->parentLayer(), m_d->activeLayer->nextSibling());
     }
     else {
         addLayer(layerSP, m_d->rootLayer, KisLayerSP(0));
@@ -774,7 +774,7 @@ bool KisImage::removeLayer(KisLayerSP layer)
     if (!layer || layer->image() != this)
         return false;
 
-    if (KisGroupLayerSP parent = layer->parent()) {
+    if (KisGroupLayerSP parent = layer->parentLayer()) {
         // Adjustment layers should mark the layers underneath them, whose rendering
         // they have cached, dirty on removal. Otherwise, the group won't be re-rendered.
         KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(layer.data());
@@ -840,7 +840,7 @@ bool KisImage::raiseLayer(KisLayerSP layer)
 {
     if (!layer)
         return false;
-    return moveLayer(layer, layer->parent(), layer->prevSibling());
+    return moveLayer(layer, layer->parentLayer(), layer->prevSibling());
 }
 
 bool KisImage::lowerLayer(KisLayerSP layer)
@@ -848,7 +848,7 @@ bool KisImage::lowerLayer(KisLayerSP layer)
     if (!layer)
         return false;
     if (KisLayerSP next = layer->nextSibling())
-        return moveLayer(layer, layer->parent(), next->nextSibling());
+        return moveLayer(layer, layer->parentLayer(), next->nextSibling());
     return false;
 }
 
@@ -871,7 +871,7 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
     if (!parent)
         return false;
 
-    KisGroupLayerSP wasParent = layer->parent();
+    KisGroupLayerSP wasParent = layer->parentLayer();
     KisLayerSP wasAbove = layer->nextSibling();
 
     if (wasParent.data() == parent.data() && wasAbove.data() == aboveThis.data())
@@ -968,7 +968,7 @@ void KisImage::mergeLayer(KisLayerSP layer)
     layer->accept(visitor);
 
     removeLayer(layer->nextSibling());
-    addLayer(KisLayerSP(player), layer->parent(), layer);
+    addLayer(KisLayerSP(player), layer->parentLayer(), layer);
     removeLayer(layer);
 
     undoAdapter()->endMacro();

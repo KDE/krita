@@ -57,7 +57,7 @@ class KisProjection : public QObject {
 
 public:
 
-    KisProjection( KisImageSP image, KisGroupLayerSP rootLayer );
+    KisProjection( KisImageWSP image, KisGroupLayerWSP rootLayer );
     virtual ~KisProjection();
 
     /**

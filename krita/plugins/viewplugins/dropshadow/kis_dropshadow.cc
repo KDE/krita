@@ -125,7 +125,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
 
         KisGroupLayerSP parent = image->rootLayer();
         if (image->activeLayer())
-            parent = image->activeLayer()->parent().data();
+            parent = image->activeLayer()->parentLayer().data();
 
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), i18n("Drop Shadow"), opacity, shadowDev));
         image->addLayer( KisLayerSP(l.data()), parent, src->siblingBelow() );

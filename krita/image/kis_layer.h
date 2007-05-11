@@ -57,7 +57,7 @@ class KRITAIMAGE_EXPORT KisLayer: public QObject, public KisShared
     Q_OBJECT
 
 public:
-    KisLayer(KisImageSP img, const QString &name, quint8 opacity);
+    KisLayer(KisImageWSP img, const QString &name, quint8 opacity);
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
@@ -122,7 +122,9 @@ public:
     /**
      * Returns the parent layer of a layer. This is 0 only for a root layer; otherwise
      * this will be an actual GroupLayer */
-    virtual KisGroupLayerSP parent() const;
+    virtual KisGroupLayerSP parentLayer();
+
+    virtual const KisGroupLayerSP parentLayer() const;
 
     /**
      * Returns the previous sibling of this layer in the parent's list. This is the layer

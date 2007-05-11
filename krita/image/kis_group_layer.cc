@@ -33,7 +33,7 @@
 #include "kis_merge_visitor.h"
 #include "kis_fill_painter.h"
 
-KisGroupLayer::KisGroupLayer(KisImageSP img, const QString &name, quint8 opacity) :
+KisGroupLayer::KisGroupLayer(KisImageWSP img, const QString &name, quint8 opacity) :
     KisLayer(img, name, opacity),
     m_x(0),
     m_y(0)
@@ -114,7 +114,7 @@ KisPaintDeviceSP KisGroupLayer::projection()
 {
     // We don't have a parent, and we've got only one child: abuse the child's
     // paint device as the projection if the child is visible
-    if (parent().isNull() && childCount() == 1) {
+    if (parentLayer().isNull() && childCount() == 1) {
         KisPaintLayerSP l = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(firstChild().data()));
         if (paintLayerInducesProjectionOptimization(l)) {
             return l->paintDevice();
@@ -147,7 +147,7 @@ KisLayerSP KisGroupLayer::at(int index) const
 
 int KisGroupLayer::index(KisLayerSP layer) const
 {
-    if (layer->parent().data() == this)
+    if (layer->parentLayer().data() == this)
         return layer->index();
     return -1;
 }
@@ -185,7 +185,7 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
 {
     kDebug() << "KisGroupLayer::addLayer new layer: " << newLayer.data() << ", aboveThis " << aboveThis << endl;
-    if (aboveThis && aboveThis->parent().data() != this)
+    if (aboveThis && aboveThis->parentLayer().data() != this)
     {
         kWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)!" << endl;
         return false;
@@ -223,7 +223,7 @@ bool KisGroupLayer::removeLayer(int x)
 
 bool KisGroupLayer::removeLayer(KisLayerSP layer)
 {
-    if (layer->parent().data() != this)
+    if (layer->parentLayer().data() != this)
     {
         kWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
         return false;

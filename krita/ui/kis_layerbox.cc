@@ -197,7 +197,7 @@ void KisLayerBox::updateUI()
     kDebug(41007)  << "###### KisLayerBox::updateUI " << m_image->activeLayer() << endl;
 
     bnDelete->setEnabled(m_image->activeLayer());
-    bnRaise->setEnabled(m_image->activeLayer() && (m_image->activeLayer()->prevSibling() || m_image->activeLayer()->parent()));
+    bnRaise->setEnabled(m_image->activeLayer() && (m_image->activeLayer()->prevSibling() || m_image->activeLayer()->parentLayer()));
     bnLower->setEnabled(m_image->activeLayer() && m_image->activeLayer()->nextSibling());
     doubleOpacity->setEnabled(m_image->activeLayer());
     cmbComposite->setEnabled(m_image->activeLayer());
@@ -287,8 +287,8 @@ void KisLayerBox::getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above
         {
             parent = root;
             above = active;
-            if (active->parent())
-                parent = active->parent();
+            if (active->parentLayer())
+                parent = active->parentLayer();
         }
     }
     else
@@ -341,17 +341,17 @@ void KisLayerBox::slotRaiseClicked()
     QModelIndexList l = selectedLayers();
 
     KisLayerSP layer = m_layerModel->layerFromIndex(l.first());
-    if( l.count() == 1 && layer == layer->parent()->firstChild() && layer->parent() != m_image->rootLayer())
+    if( l.count() == 1 && layer == layer->parentLayer()->firstChild() && layer->parentLayer() != m_image->rootLayer())
     {
-        if (KisGroupLayerSP grandparent = layer->parent()->parent())
-            m_image->moveLayer(layer, grandparent, KisLayerSP(layer->parent().data()));
+        if (KisGroupLayerSP grandparent = layer->parentLayer()->parentLayer())
+            m_image->moveLayer(layer, grandparent, KisLayerSP(layer->parentLayer().data()));
     }
     else
     {
         for (int i = 0, n = l.count(); i < n; ++i)
             if (KisLayerSP li = m_layerModel->layerFromIndex(l[i]))
                 if (li->prevSibling())
-                    m_image->moveLayer(li, li->parent(), li->prevSibling());
+                    m_image->moveLayer(li, li->parentLayer(), li->prevSibling());
     }
 
     if( !l.isEmpty() )
@@ -367,9 +367,9 @@ void KisLayerBox::slotLowerClicked()
             if (layer->nextSibling())
             {
                 if (layer->nextSibling()->nextSibling())
-                    m_image->moveLayer(layer, layer->parent(), layer->nextSibling()->nextSibling());
+                    m_image->moveLayer(layer, layer->parentLayer(), layer->nextSibling()->nextSibling());
                 else
-                    m_image->moveLayer(layer, layer->parent(), KisLayerSP(0));
+                    m_image->moveLayer(layer, layer->parentLayer(), KisLayerSP(0));
             }
 
     if( !l.isEmpty() )

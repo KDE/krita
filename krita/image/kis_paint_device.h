@@ -92,7 +92,7 @@ public:
      * @param colorSpace the colorspace of this paint device
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisLayer *parentLayer, KoColorSpace * colorSpace, const QString& name = QString());
+    KisPaintDevice(KisLayerWSP parentLayer, KoColorSpace * colorSpace, const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
@@ -405,7 +405,7 @@ public:
      * Returns the KisLayer that contains this paint device, or 0 if this is not
      * part of a layer.
      */
-    KisLayer *parentLayer() const;
+    KisLayerSP parentLayer() const;
 
     /**
      * Set the KisLayer that contains this paint device, or 0 if this is not

@@ -58,7 +58,7 @@ class KisPaintDevice::Private {
 
 public:
 
-    KisLayer * parentLayer;
+    KisLayerWSP parentLayer;
     quint8* defaultPixel;
     bool extentIsValid;
     qint32 x;
@@ -189,7 +189,7 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name)
 
 }
 
-KisPaintDevice::KisPaintDevice(KisLayer *parent, KoColorSpace * colorSpace, const QString& name)
+KisPaintDevice::KisPaintDevice(KisLayerWSP parent, KoColorSpace * colorSpace, const QString& name)
     : QObject(0)
     , m_d( new Private() )
 {
@@ -350,7 +350,7 @@ void KisPaintDevice::startBackgroundFilters()
     }
 }
 
-KisLayer *KisPaintDevice::parentLayer() const
+KisLayerSP KisPaintDevice::parentLayer() const
 {
     return m_d->parentLayer;
 }

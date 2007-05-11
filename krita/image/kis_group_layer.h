@@ -40,7 +40,7 @@ class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer {
     Q_OBJECT
 
 public:
-    KisGroupLayer(KisImageSP img, const QString &name, quint8 opacity);
+    KisGroupLayer(KisImageWSP img, const QString &name, quint8 opacity);
     KisGroupLayer(const KisGroupLayer& rhs);
     virtual ~KisGroupLayer();
 

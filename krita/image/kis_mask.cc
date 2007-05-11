@@ -24,6 +24,7 @@
 
 #include "kis_types.h"
 #include "kis_paint_device.h"
+#include "kis_layer.h"
 
 class KisMask::KisMaskPrivate
 {

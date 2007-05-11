@@ -61,6 +61,7 @@ typedef vKisMaskSP::const_iterator vKisMaskSP_cit;
 
 class KisLayer;
 typedef KisSharedPtr<KisLayer> KisLayerSP;
+typedef KisWeakSharedPtr<KisLayer> KisLayerWSP;
 typedef KisSharedPtrVector<KisLayer> vKisLayerSP;
 typedef vKisLayerSP::iterator vKisLayerSP_it;
 typedef vKisLayerSP::const_iterator vKisLayerSP_cit;
@@ -76,6 +77,7 @@ typedef KisSharedPtr<KisAdjustmentLayer> KisAdjustmentLayerSP;
 
 class KisGroupLayer;
 typedef KisSharedPtr<KisGroupLayer> KisGroupLayerSP;
+typedef KisWeakSharedPtr<KisGroupLayer> KisGroupLayerWSP;
 
 class KisSelection;
 typedef KisSharedPtr<KisSelection> KisSelectionSP;

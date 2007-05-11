@@ -165,12 +165,12 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
                 // projection).
                 KisLayerSP l = layer->layer();
                 KisPaintLayerSP pl = dynamic_cast<KisPaintLayer*>(l.data());
-                if (l->parent() && (l->parent()->parent() == 0)
-                    && (l->parent()->childCount() == 1)
-                    && l->parent()->paintLayerInducesProjectionOptimization(pl)) {
+                if (l->parentLayer() && (l->parentLayer()->parentLayer() == 0)
+                    && (l->parentLayer()->childCount() == 1)
+                    && l->parentLayer()->paintLayerInducesProjectionOptimization(pl)) {
                     // If there's a mask, device could've been the mask. The induce function
                     // should catch this, but better safe than sorry
-                    l->parent()->resetProjection(pl->paintDevice());
+                    l->parentLayer()->resetProjection(pl->paintDevice());
                 }
 
                 m_target = new KisPaintDevice(m_currentImage->activeLayer().data(),
@@ -246,7 +246,7 @@ void KisToolFreehand::endPaint()
                     ++it;
                 }
                 KisIndirectPaintingSupport* layer =
-                    dynamic_cast<KisIndirectPaintingSupport*>(m_source->parentLayer());
+                    dynamic_cast<KisIndirectPaintingSupport*>(m_source->parentLayer().data());
                 layer->setTemporaryTarget(0);
                 m_source->parentLayer()->setDirty(painter.dirtyRegion());
 

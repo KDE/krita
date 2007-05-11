@@ -435,7 +435,7 @@ void KisLayerManager::layerAdd()
 {
     KisImageSP img = m_view->image();
     if (img && img->activeLayer()) {
-        addLayer(img->activeLayer()->parent(), img->activeLayer());
+        addLayer(img->activeLayer()->parentLayer(), img->activeLayer());
     }
     else if (img)
         addLayer(img->rootLayer(), KisLayerSP(0));
@@ -498,7 +498,7 @@ void KisLayerManager::addAdjustmentLayer()
     KisImageSP img = m_view->image();
     if (!img) return;
 
-    addAdjustmentLayer( img->activeLayer()->parent(), img->activeLayer() );
+    addAdjustmentLayer( img->activeLayer()->parentLayer(), img->activeLayer() );
 }
 
 void KisLayerManager::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
@@ -581,8 +581,8 @@ void KisLayerManager::layerRemove()
 
             img->removeLayer(layer);
 
-            if (layer->parent())
-                layer->parent()->setDirty(layer->extent());
+            if (layer->parentLayer())
+                layer->parentLayer()->setDirty(layer->extent());
 
             m_view->canvas()->update();
             m_view->updateGUI();
@@ -604,7 +604,7 @@ void KisLayerManager::layerDuplicate()
 
     KisLayerSP dup = active->clone();
     dup->setName(i18n("Duplicate of '%1'",active->name()));
-    img->addLayer(dup, active->parent(), active);
+    img->addLayer(dup, active->parentLayer(), active);
     if (dup) {
         img->activateLayer( dup );
         m_view->canvas()->update();

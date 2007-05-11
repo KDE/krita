@@ -87,7 +87,7 @@ QModelIndex KisLayerModel::indexFromLayer(const KisLayer *layer) const
 {
     kDebug(41007) << "KisLayer::indexFromLayer " << layer << ", layer index: " << layer->index() << endl;
     Q_ASSERT(layer);
-    if ( layer->parent() )
+    if ( layer->parentLayer() )
         return createIndex(layer->index(), 0, ( void* )layer);
     else {
         return QModelIndex();
@@ -146,12 +146,12 @@ QModelIndex KisLayerModel::parent(const QModelIndex &index) const
     KisLayer * l = static_cast<KisLayer*>( index.internalPointer() );
     kDebug(41007) << " layer: " << l << ", name: " << l->name() << ", parent: " << l->parent() << endl;
 
-    KisGroupLayer *p = l->parent().data();
+    KisGroupLayer *p = l->parentLayer().data();
 
     // If the parent is the root layer, we want to return an invalid
     // parent, because the qt model shouldn't know about our root layer.
-    if ( p && p->parent().data() ) {
-        kDebug(41007) << "parent layer: " << p << ", name: " << p->name() << ", parent: " << p->parent() << endl;
+    if ( p && p->parentLayer().data() ) {
+        kDebug(41007) << "parent layer: " << p << ", name: " << p->name() << ", parent: " << p->parentLayer() << endl;
         return indexFromLayer( p );
     }
     else
@@ -265,6 +265,39 @@ void KisLayerModel::endRemoveLayers( KisGroupLayer *, int )
 {
     kDebug(41007) << "KisLayerModel::endRemoveLayers\n";
     endRemoveRows();
+}
+
+bool KisLayerModel::dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
+{
+    kDebug(41007) << "KisLayerModel::dropMimeData" << endl;
+    kDebug(41007) << "KisLayerModel::dropMimeData " << data->formats() << endl;
+    const QString format = "application/x-qabstractitemmodeldatalist";
+    if(not data->hasFormat( format ))
+    {
+        return false;
+    }
+    QByteArray encoded = data->data(format);
+    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    if(action == Qt::CopyAction)
+    {
+        kDebug(41007) << "KisLayerModel::dropMimeData copy action" << endl;
+        while (!stream.atEnd()) {
+            int r, c;
+            QMap<int, QVariant> v;
+            stream >> r >> c >> v;
+            kDebug(41007) << "KisLayerModel::dropMimeData copy action " << r << " " << c << endl;
+        }
+        return true;
+    } else if(action == Qt::MoveAction) {
+        kDebug(41007) << "KisLayerModel::dropMimeData move action" << endl;
+        return true;
+    }
+    return false;
+}
+
+Qt::DropActions KisLayerModel::supportedDragActions () const
+{
+  return Qt::CopyAction | Qt::MoveAction;
 }
 
 #include "kis_layer_model.moc"

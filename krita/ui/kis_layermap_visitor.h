@@ -70,11 +70,13 @@ public:
     bool visit(KisPaintLayer *layer)
         {
 //             kDebug(41007) << "KisLayerMap visitor adding paint layer: " << layer->name() << endl;
-            Q_ASSERT( m_layerMap.contains( layer->parent() ) );
+            kDebug() << layer << " " << layer->parentLayer().data() << endl;
+            Q_ASSERT( layer->parentLayer() );
+            Q_ASSERT( m_layerMap.contains( layer->parentLayer() ) );
 
-            if ( m_layerMap.contains( layer->parent() ) ) {
+            if ( m_layerMap.contains( layer->parentLayer() ) ) {
 
-                KoShapeContainer * parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parent()] );
+                KoShapeContainer * parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parentLayer()] );
                 KisLayerShape * layerShape = new KisLayerShape( parent, layer );
                 m_layerMap[layer] = layerShape;
 
@@ -88,8 +90,8 @@ public:
 //             kDebug(41007) << "KisLayerMap visitor adding group layer: " << layer->name() << endl;
 
             KoShapeContainer * parent = 0;
-            if ( m_layerMap.contains( layer->parent() ) ) {
-                parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parent()] );
+            if ( m_layerMap.contains( layer->parentLayer() ) ) {
+                parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parentLayer()] );
             }
 
             KisLayerContainerShape * layerContainer = new KisLayerContainerShape(parent, layer);
@@ -97,6 +99,7 @@ public:
 
             KisLayerSP child = layer->firstChild();
             while (child) {
+                kDebug() << layer << " " << child->parentLayer().data() << " " << child.data() << endl;
                 child->accept(*this);
                 child = child->nextSibling();
             }
@@ -108,11 +111,11 @@ public:
         {
 //             kDebug(41007) << "KisLayerMap visitor adding adjustment layer: " << layer->name() << endl;
 
-            Q_ASSERT( m_layerMap.contains( layer->parent() ) );
+            Q_ASSERT( m_layerMap.contains( layer->parentLayer() ) );
 
             KoShapeContainer * parent = 0;
-            if ( m_layerMap.contains( layer->parent() ) ) {
-                parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parent()] );
+            if ( m_layerMap.contains( layer->parentLayer() ) ) {
+                parent = static_cast<KoShapeContainer*>( m_layerMap[layer->parentLayer()] );
                 KisLayerShape * layerShape = new KisLayerShape( parent, layer );
                 m_layerMap[layer] = layerShape;
 

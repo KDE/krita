@@ -68,7 +68,7 @@ void KisTransaction::redo()
     m_private->m_memento->extent(x,y,width,height);
     rc.setRect(x + m_private->m_device->getX(), y + m_private->m_device->getY(), width, height);
 
-    KisLayer *l = m_private->m_device->parentLayer();
+    KisLayerSP l = m_private->m_device->parentLayer();
     if (l) l->setDirty(rc);
 }
 
@@ -82,7 +82,7 @@ void KisTransaction::undo()
     m_private->m_memento->extent(x,y,width,height);
     rc.setRect(x + m_private->m_device->getX(), y + m_private->m_device->getY(), width, height);
 
-    KisLayer *l = m_private->m_device->parentLayer();
+    KisLayerSP l = m_private->m_device->parentLayer();
     if (l) l->setDirty(rc);
 
 }

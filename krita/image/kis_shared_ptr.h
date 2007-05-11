@@ -60,7 +60,7 @@ class KisSharedPtr {
          * Unreferences the object that this pointer points to. If it was
          * the last reference, the object will be deleted.
          */
-        inline ~KisSharedPtr() { if (d && !d->ref.deref()) delete d; }
+        inline ~KisSharedPtr() { if (d && !d->ref.deref()) { delete d; } }
 
         inline KisSharedPtr<T>& operator= ( const KisSharedPtr& o ) { attach(o.d); return *this; }
         inline const KisSharedPtr<T>& operator= ( const KisSharedPtr& o ) const {
@@ -117,8 +117,6 @@ class KisSharedPtr {
         mutable T* d;
 };
 
-
-
 /**
  * XXX!
  */
@@ -143,7 +141,9 @@ class KisWeakSharedPtr {
         }
 
         inline KisWeakSharedPtr<T>( const KisSharedPtr<T>& o )
-            : d(o.d) { if(d) dataPtr = d->dataPtr; }
+            : d(o.d) { 
+            if(d) dataPtr = d->dataPtr;
+        }
         /**
          * Copies a pointer.
          * @param o the pointer to copy
@@ -151,7 +151,10 @@ class KisWeakSharedPtr {
         inline KisWeakSharedPtr<T>( const KisWeakSharedPtr<T>& o )
             : d(o.d) { if(d) dataPtr = d->dataPtr; }
 
-        inline KisWeakSharedPtr<T>& operator= ( const KisWeakSharedPtr& o ) { attach(o.d); return *this; }
+        inline KisWeakSharedPtr<T>& operator= ( const KisWeakSharedPtr& o )
+        {
+            attach(o.d); return *this;
+        }
         inline const KisWeakSharedPtr<T>& operator= ( const KisWeakSharedPtr& o ) const {
             attach(o.d);
             return *this;
@@ -166,7 +169,7 @@ class KisWeakSharedPtr {
             return *this;
         }
 
-        inline operator const T* () const { Q_ASSERT(dataPtr && dataPtr->valid); return d; }
+        inline operator const T* () const { Q_ASSERT(not d or( dataPtr and dataPtr->valid)); return d; }
 
         template< class T2> inline operator KisWeakSharedPtr<T2>() const { return KisWeakSharedPtr<T2>(d); }
 
@@ -175,26 +178,32 @@ class KisWeakSharedPtr {
         * to this pointer are deleted, resulting in a segmentation fault. Use with care.
         * @return the pointer
         */
-        inline T* data() { Q_ASSERT(dataPtr && dataPtr->valid); return d; }
+        inline T* data() { 
+            Q_ASSERT(not d or( dataPtr and dataPtr->valid));
+            return d;
+        }
 
         /**
         * Note that if you use this function, the pointer might be destroyed if KisSharedPtr pointing
         * to this pointer are deleted, resulting in a segmentation fault. Use with care.
         * @return the pointer
         */
-        inline const T* data() const { Q_ASSERT(dataPtr && dataPtr->valid); return d; }
+        inline const T* data() const {
+            Q_ASSERT(not d or( dataPtr and dataPtr->valid));
+            return d;
+        }
 
         /**
         * Note that if you use this function, the pointer might be destroyed if KisSharedPtr pointing
         * to this pointer are deleted, resulting in a segmentation fault. Use with care.
         * @return a const pointer to the shared object.
         */
-        inline const T* constData() const { Q_ASSERT(dataPtr && dataPtr->valid); return d; }
+        inline const T* constData() const { Q_ASSERT(not d or( dataPtr and dataPtr->valid)); return d; }
 
-        inline const T& operator*() const { Q_ASSERT(dataPtr && dataPtr->valid); return *d; }
-        inline T& operator*() { Q_ASSERT(dataPtr && dataPtr->valid); return *d; }
-        inline const T* operator->() const { Q_ASSERT(dataPtr && dataPtr->valid); return d; }
-        inline T* operator->() { Q_ASSERT(dataPtr && dataPtr->valid); return d; }
+        inline const T& operator*() const { Q_ASSERT(d and dataPtr and dataPtr->valid); return *d; }
+        inline T& operator*() { Q_ASSERT(d and dataPtr and dataPtr->valid); return *d; }
+        inline const T* operator->() const { Q_ASSERT(d and dataPtr and dataPtr->valid); return d; }
+        inline T* operator->() { Q_ASSERT(d and dataPtr and dataPtr->valid); return d; }
 
         /**
         * @return true if the pointer is null
@@ -204,7 +213,7 @@ class KisWeakSharedPtr {
     private:
         void attach(T* nd)
         {
-            nd = d;
+            d = nd;
             if(d) dataPtr = d->dataPtr;
             else dataPtr = 0;
         }

@@ -48,8 +48,8 @@ public:
     bool temporary;
 
     QString name;
-    KisGroupLayerSP parent;
-    KisImageSP image;
+    KisGroupLayerWSP parent;
+    KisImageWSP image;
     QBitArray channelFlags;
 
     // Operation used to composite this layer with the projection of
@@ -61,7 +61,7 @@ public:
 };
 
 
-KisLayer::KisLayer(KisImageSP img, const QString &name, quint8 opacity)
+KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
     : QObject(0)
     , m_d( new Private )
 {
@@ -99,6 +99,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
 
 KisLayer::~KisLayer()
 {
+    kDebug() << "~~~~~~~~~~ delete " << this << endl;
 }
 
 KoColorSpace * KisLayer::colorSpace()
@@ -201,23 +202,28 @@ void KisLayer::setClean( QRect rc )
 
 int KisLayer::id() const { return m_d->id; }
 
-KisGroupLayerSP KisLayer::parent() const
+KisGroupLayerSP KisLayer::parentLayer()
+{
+    return m_d->parent;
+}
+
+const KisGroupLayerSP KisLayer::parentLayer() const
 {
     return m_d->parent;
 }
 
 KisLayerSP KisLayer::prevSibling() const
 {
-    if (!parent())
+    if (!parentLayer())
         return KisLayerSP(0);
-    return parent()->at(index() - 1);
+    return parentLayer()->at(index() - 1);
 }
 
 KisLayerSP KisLayer::nextSibling() const
 {
-    if (!parent())
+    if (!parentLayer())
         return KisLayerSP(0);
-    return parent()->at(index() + 1);
+    return parentLayer()->at(index() + 1);
 }
 
 int KisLayer::index() const
@@ -407,7 +413,9 @@ void KisLayer::setCompositeOpPrivate( const KoCompositeOp * op )
 
 void KisLayer::setParentPrivate( KisGroupLayerSP parent )
 {
+    kDebug() << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " << this << " " << parent.data() << endl;
     m_d->parent = parent;
+    kDebug() << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " << this << " " << m_d->parent.data() << endl;
 }
 
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t) {

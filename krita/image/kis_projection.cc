@@ -56,8 +56,8 @@ private:
 
 class KisProjection::Private {
 public:
-    KisImageSP image;
-    KisGroupLayerSP rootLayer;
+    KisImageWSP image;
+    KisGroupLayerWSP rootLayer;
 
     QRegion dirtyRegion; // The Qt manual assures me that QRegion is
                          // threadsafe... Let's hope that's really
@@ -68,7 +68,7 @@ public:
 };
 
 
-KisProjection::KisProjection( KisImageSP image, KisGroupLayerSP rootLayer )
+KisProjection::KisProjection( KisImageWSP image, KisGroupLayerWSP rootLayer )
 {
     m_d = new Private();
     m_d->image = image;

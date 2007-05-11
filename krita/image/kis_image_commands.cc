@@ -191,7 +191,7 @@ KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageSP image, KisLayerSP la
     : super(i18n("Add Layer"), image)
 {
     m_layer = layer;
-    m_parent = layer->parent();
+    m_parent = layer->parentLayer();
     m_aboveThis = layer->nextSibling();
 }
 
@@ -234,7 +234,7 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisLayerSP 
     m_layer = layer;
     m_prevParent = wasParent;
     m_prevAbove = wasAbove;
-    m_newParent = layer->parent();
+    m_newParent = layer->parentLayer();
     m_newAbove = layer->nextSibling();
 }
 

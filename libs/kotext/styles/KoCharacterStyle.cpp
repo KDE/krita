@@ -197,7 +197,7 @@ static void importOasisUnderline( const QString& type, const QString& style,
     else if ( style == "dot-dot-dash" )
         formatstyle = QTextCharFormat::DashDotDotLine;
     else if ( style == "wave" )
-        formatstyle = QTextCharFormat::SingleUnderline; //TODO
+        formatstyle = QTextCharFormat::WaveUnderline;
 
     // TODO bold. But this is another attribute in OASIS (text-underline-width), which makes sense.
     // We should separate them in kotext...

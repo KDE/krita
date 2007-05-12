@@ -311,7 +311,7 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
 
     // Load list of recent files
     KSharedConfigPtr config = componentData.isValid() ? componentData.config() : KGlobal::config();
-    m_recent->loadEntries( config->group( QString() ) );
+    m_recent->loadEntries( config->group( "RecentFiles" ) );
 
     createShellGUI();
     d->bMainWindowGUIBuilt = true;
@@ -512,7 +512,7 @@ void KoMainWindow::saveRecentFiles()
     // Save list of recent files
     KSharedConfigPtr config = componentData().isValid() ? componentData().config() : KGlobal::config();
     kDebug(30003) << this << " Saving recent files list into config. componentData()=" << componentData().componentName() << endl;
-    m_recent->saveEntries( config->group( QString() ) );
+    m_recent->saveEntries( config->group( "RecentFiles" ) );
     config->sync();
 
     // Tell all windows to reload their list, after saving

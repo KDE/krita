@@ -101,25 +101,16 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
 
   KConfigGroup config( componentData().config(), "RecentFiles" );
 
-  int i = 0;
+  int i = 1;
   QString value;
   QList<KFileItem> fileList;
   QStandardItem* rootItem = model()->invisibleRootItem();
 
   do {
-    const QString key = QString("File%1").arg(i);
-    value = config.readPathEntry(key);
+    QString path = config.readPathEntry(QString("File%1").arg(i));
 
-    if(!value.isEmpty()) {
-      QString path = value;
-      QString name;
-
-      // Support for kdelibs-3.5's new RecentFiles format: name[url]
-      if(path.endsWith("]")) {
-        int pos = path.indexOf("[");
-        name = path.mid(0, pos - 1);
-        path = path.mid(pos + 1, path.length() - pos - 2);
-      }
+    if(!path.isEmpty()) {
+      QString name = config.readPathEntry(QString("Name%1").arg(i));
 
       KUrl url(path);
 

@@ -55,7 +55,7 @@ class TorturePainting
     def testColorspace(cs)
         print "Torturing for ", cs, "\n"
         layer = @image.createPaintLayer("torture", 255 * rand, "RGBA")
-        torture(layer)
+        torture(layer.paintDevice())
     end
 
     def torture(layer)

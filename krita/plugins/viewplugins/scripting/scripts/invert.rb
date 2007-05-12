@@ -13,7 +13,7 @@ require "Krita"
 image = Krita.image()
 
 # we like to manipulate the active painting layer.
-layer = image.activePaintLayer()
+layer = image.activePaintLayer().paintDevice()
 
 # get the height and the width the layer has.
 width = layer.width()

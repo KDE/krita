@@ -136,7 +136,7 @@ class Importer:
 
         # evaluate the destination options.
         if self.destination == "ActiveLayer":
-            krtlayer = krtimage.activePaintLayer()
+            krtlayer = krtimage.activePaintLayer().paintDevice()
         elif self.destination == "NewLayer":
             if self.colorspace == "CMYK":
                 cs = "CMYK"

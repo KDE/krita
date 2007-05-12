@@ -254,6 +254,20 @@ public:
     QPoint documentToIntPixel(const QPointF &documentCoord) const;
 
     /**
+     * Convert a document rectangle to a pixel rectangle.
+     *
+     * @param documentCoord PostScript Pt coordinate to convert.
+     */
+    QRectF documentToPixel(const QRectF &documentRect) const;
+
+    /**
+     * Convert a document rectangle to an integer pixel rectangle.
+     *
+     * @param documentCoord PostScript Pt coordinate to convert.
+     */
+    QRect documentToIntPixel(const QRectF &documentRect) const;
+
+    /**
      * Convert a pixel coordinate to a document coordinate.
      *
      * @param pixelCoord pixel coordinate to convert.

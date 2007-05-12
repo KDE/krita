@@ -566,6 +566,16 @@ QPoint KisImage::documentToIntPixel(const QPointF &documentCoord) const
     return QPoint((int)pixelCoord.x(), (int)pixelCoord.y());
 }
 
+QRectF KisImage::documentToPixel(const QRectF &documentRect) const
+{
+    return QRectF(documentToPixel(documentRect.topLeft()), documentToPixel(documentRect.bottomRight()));
+}
+
+QRect KisImage::documentToIntPixel(const QRectF &documentRect) const
+{
+    return documentToPixel(documentRect).toAlignedRect();
+}
+
 QPointF KisImage::pixelToDocument(const QPointF &pixelCoord) const
 {
     return QPointF(pixelCoord.x() / xRes(), pixelCoord.y() / yRes());

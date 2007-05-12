@@ -70,7 +70,6 @@ void KoOasisLoadingContext::fillStyleStack( const KoXmlElement& object, const ch
 
 void KoOasisLoadingContext::addStyles( const KoXmlElement* style, const char* family, bool usingStylesAutoStyles )
 {
-    Q_ASSERT( style );
     if ( !style ) return;
     // this recursive function is necessary as parent styles can have parents themselves
     if ( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) ) {

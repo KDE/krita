@@ -256,14 +256,14 @@ public:
     /**
      * Convert a document rectangle to a pixel rectangle.
      *
-     * @param documentCoord PostScript Pt coordinate to convert.
+     * @param documentRect PostScript Pt rectangle to convert.
      */
     QRectF documentToPixel(const QRectF &documentRect) const;
 
     /**
      * Convert a document rectangle to an integer pixel rectangle.
      *
-     * @param documentCoord PostScript Pt coordinate to convert.
+     * @param documentRect PostScript Pt rectangle to convert.
      */
     QRect documentToIntPixel(const QRectF &documentRect) const;
 

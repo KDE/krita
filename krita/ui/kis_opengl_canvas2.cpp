@@ -105,7 +105,7 @@ void KisOpenGLCanvas2::resizeGL(int w, int h)
 
 void KisOpenGLCanvas2::paintGL()
 {
-    kDebug() << "paintGL\n";
+//    kDebug() << "paintGL\n";
 
     QColor widgetBackgroundColor = palette().color(QPalette::Mid);
 
@@ -115,7 +115,6 @@ void KisOpenGLCanvas2::paintGL()
     KisImageSP img = m_d->canvas->image();
 
     if ( !img ) return;
-    QRect vr = QRect(0, 0, width(), height());
 
     // Zoom factor
     double sx, sy;
@@ -187,7 +186,8 @@ void KisOpenGLCanvas2::paintGL()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    QRect wr = toAlignedRect( m_d->viewConverter->viewToDocument( QRectF( 0, 0, width(), height() ) ) );
+    QRectF documentRect = m_d->viewConverter->viewToDocument( QRectF( m_d->documentOffset.x(), m_d->documentOffset.y(), width(), height() ) );
+    QRect wr = img->documentToIntPixel(documentRect);
     wr &= QRect(0, 0, img->width(), img->height());
 
     m_d->openGLImageContext->setHDRExposure(m_d->canvas->view()->resourceProvider()->HDRExposure());

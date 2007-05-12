@@ -102,12 +102,12 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
   KConfigGroup config( componentData().config(), "RecentFiles" );
 
   int i = 1;
-  QString value;
+  QString path;
   QList<KFileItem> fileList;
   QStandardItem* rootItem = model()->invisibleRootItem();
 
   do {
-    QString path = config.readPathEntry(QString("File%1").arg(i));
+    path = config.readPathEntry(QString("File%1").arg(i));
 
     if(!path.isEmpty()) {
       QString name = config.readPathEntry(QString("Name%1").arg(i));
@@ -133,7 +133,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
     }
 
     i++;
-  } while ( !value.isEmpty() || i<=10 );
+  } while ( !path.isEmpty() || i<=10 );
 
 
   //Select the first file

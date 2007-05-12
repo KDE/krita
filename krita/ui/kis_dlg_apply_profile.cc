@@ -104,7 +104,7 @@ void KisDlgApplyProfile::fillCmbProfiles(const KoID & s)
     QList<KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
     foreach (KoColorProfile *profile, profileList) {
-            m_page->cmbProfile->addSqueezedItem(profile->productName());
+            m_page->cmbProfile->addSqueezedItem(profile->name());
     }
     m_page->cmbProfile->setCurrent(csf->defaultProfile());
 }

@@ -99,7 +99,6 @@ KisLayer::KisLayer(const KisLayer& rhs)
 
 KisLayer::~KisLayer()
 {
-    kDebug() << "~~~~~~~~~~ delete " << this << endl;
 }
 
 KoColorSpace * KisLayer::colorSpace()
@@ -413,9 +412,7 @@ void KisLayer::setCompositeOpPrivate( const KoCompositeOp * op )
 
 void KisLayer::setParentPrivate( KisGroupLayerSP parent )
 {
-    kDebug() << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " << this << " " << parent.data() << endl;
     m_d->parent = parent;
-    kDebug() << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " << this << " " << m_d->parent.data() << endl;
 }
 
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t) {

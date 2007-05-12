@@ -163,7 +163,7 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::properties() const
     KoDocumentSectionModel::PropertyList l = super::properties();
     l << KoDocumentSectionModel::Property(i18n("Colorspace"), paintDevice()->colorSpace()->name());
     if( KoColorProfile *profile = paintDevice()->colorSpace()->profile() )
-        l << KoDocumentSectionModel::Property(i18n("Profile"), profile->productName());
+        l << KoDocumentSectionModel::Property(i18n("Profile"), profile->name());
     return l;
 }
 

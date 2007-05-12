@@ -35,7 +35,7 @@
 
 #include <KoPluginLoader.h>
 #include "KoColorSpace.h"
-#include "KoColorProfile.h"
+#include "colorprofiles/KoLcmsColorProfile.h"
 #include "colorspaces/KoAlphaColorSpace.h"
 #include "colorspaces/KoLabColorSpace.h"
 #include "colorspaces/KoRgbU16ColorSpace.h"
@@ -96,20 +96,20 @@ void KoColorSpaceRegistry::init()
     if (!profileFilenames.empty()) {
         KoColorProfile * profile = 0;
         for ( QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it ) {
-            profile = new KoColorProfile(*it);
+            profile = new KoLcmsColorProfile(*it);
             Q_CHECK_PTR(profile);
 
             profile->load();
             if (profile->valid()) {
-                d->profileMap[profile->productName()] = profile;
+                d->profileMap[profile->name()] = profile;
             }
         }
     }
 
-    KoColorProfile *labProfile = new KoColorProfile(cmsCreateLabProfile(NULL));
+    KoColorProfile *labProfile = new KoLcmsColorProfile(cmsCreateLabProfile(NULL));
     addProfile(labProfile);
     add(new KoLabColorSpaceFactory());
-    KoColorProfile *rgbProfile = new KoColorProfile(cmsCreate_sRGBProfile());
+    KoColorProfile *rgbProfile = new KoLcmsColorProfile(cmsCreate_sRGBProfile());
     addProfile(rgbProfile);
     add(new KoRgbU16ColorSpaceFactory());
 /* XXX where to put this
@@ -122,7 +122,7 @@ void KoColorSpaceRegistry::init()
     LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2); 
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
     cmsFreeGamma(Gamma);
-    KoColorProfile *defProfile = new KoColorProfile(hProfile);
+    KoColorProfile *defProfile = new KoLcmsColorProfile(hProfile);
     addProfile(defProfile);
 
     // Create the built-in colorspaces
@@ -187,7 +187,7 @@ QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoColorSpaceFactory *
 void KoColorSpaceRegistry::addProfile(KoColorProfile *p)
 {
       if (p->valid()) {
-          d->profileMap[p->productName()] = p;
+          d->profileMap[p->name()] = p;
       }
 }
 
@@ -249,7 +249,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoCol
 {
     if( profile )
     {
-        KoColorSpace *cs = colorSpace( csID, profile->productName());
+        KoColorSpace *cs = colorSpace( csID, profile->name());
 
         if(!cs)
         {
@@ -265,7 +265,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoCol
             if(!cs )
                 return 0;
 
-            QString name = csID + "<comb>" + profile->productName();
+            QString name = csID + "<comb>" + profile->name();
             d->csMap[name] = cs;
         }
 

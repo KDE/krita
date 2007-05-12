@@ -19,7 +19,7 @@
 
 #include <kis_save_visitor.h>
 
-#include <KoColorProfile.h>
+#include <colorprofiles/KoIccColorProfile.h>
 #include <KoStore.h>
 
 #include "kis_adjustment_layer.h"
@@ -75,10 +75,9 @@ bool KisSaveVisitor::visit(KisPaintLayer *layer)
         KisAnnotationSP annotation;
         if (profile)
         {
-            // XXX we hardcode icc, this is correct for lcms?
-            // XXX productName(), or just "ICC Profile"?
-            if (!profile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", profile->productName(), profile->rawData());
+            KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
+            if (iccprofile and !iccprofile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
         }
 
         if (annotation) {

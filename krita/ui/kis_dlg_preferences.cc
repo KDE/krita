@@ -38,7 +38,7 @@
 #endif
 
 #include <KoImageResource.h>
-#include <KoColorProfile.h>
+#include <colorprofiles/KoIccColorProfile.h>
 
 #include <kcolorbutton.h>
 #include <kcombobox.h>
@@ -167,10 +167,10 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
 
-    if ( KoColorProfile * profile = KoColorProfile::getScreenProfile() ) {
+    if ( KoIccColorProfile * profile = KoIccColorProfile::getScreenProfile() ) {
         // We've got an X11 profile, don't allow to override
         m_page->cmbMonitorProfile->hide();
-        m_page->lblMonitorProfile->setText( i18n( "Monitor profile: " ) + profile->productName() );
+        m_page->lblMonitorProfile->setText( i18n( "Monitor profile: " ) + profile->name() );
     }
     else {
         m_page->cmbMonitorProfile->show();
@@ -212,8 +212,8 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
     QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
     foreach (KoColorProfile *profile, profileList) {
-        if (profile->deviceClass() == icSigDisplayClass)
-            m_page->cmbMonitorProfile->addSqueezedItem(profile->productName());
+        if (profile->isSuitableForDisplay())
+            m_page->cmbMonitorProfile->addSqueezedItem(profile->name());
     }
 
     m_page->cmbMonitorProfile->setCurrent(csf->defaultProfile());
@@ -231,8 +231,8 @@ void ColorSettingsTab::refillPrintProfiles(const KoID & s)
     QList<KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
     foreach (KoColorProfile *profile, profileList) {
-        if (profile->deviceClass() == icSigOutputClass)
-            m_page->cmbPrintProfile->addSqueezedItem(profile->productName());
+        if (profile->isSuitableForPrinting() )
+            m_page->cmbPrintProfile->addSqueezedItem(profile->name());
     }
 
     m_page->cmbPrintProfile->setCurrent(csf->defaultProfile());

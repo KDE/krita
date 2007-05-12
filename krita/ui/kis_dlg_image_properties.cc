@@ -82,7 +82,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     fillCmbProfiles(KoID(image->colorSpace()->id()));
 
     if (image->profile()) {
-        m_page->cmbProfile->setCurrent(image->profile()->productName());
+        m_page->cmbProfile->setCurrent(image->profile()->name());
     }
     else {
         m_page->cmbProfile->setCurrentIndex(0);
@@ -165,7 +165,7 @@ void KisDlgImageProperties::fillCmbProfiles(const KoID & s)
         QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
         foreach (KoColorProfile *profile, profileList) {
-            m_page->cmbProfile->addSqueezedItem(profile->productName());
+            m_page->cmbProfile->addSqueezedItem(profile->name());
         }
     }
 }

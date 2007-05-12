@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  this program is free software; you can redistribute it and/or modify
  *  it under the terms of the gnu general public license as published by
@@ -265,6 +266,13 @@ void KisLayerModel::endRemoveLayers( KisGroupLayer *, int )
 {
     kDebug(41007) << "KisLayerModel::endRemoveLayers\n";
     endRemoveRows();
+}
+
+QMimeData * KisLayerModel::mimeData ( const QModelIndexList & indexes ) const
+{
+    kDebug(41007) << "KisLayerModel::mimeData" << endl;
+    QMimeData* data = new QMimeData;
+    
 }
 
 bool KisLayerModel::dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )

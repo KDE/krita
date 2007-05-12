@@ -197,7 +197,7 @@ void KisCustomImageWidget::fillCmbProfiles(const KoID & s)
     QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
     foreach (KoColorProfile *profile, profileList) {
-        cmbProfile->addSqueezedItem(profile->productName());
+        cmbProfile->addSqueezedItem(profile->name());
     }
     cmbProfile->setCurrent(csf->defaultProfile());
 }

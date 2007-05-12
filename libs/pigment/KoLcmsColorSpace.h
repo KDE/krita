@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
  *  Copyright (c) 2005-2006 Casper Boemann <cbr@boemann.dk>
- *  Copyright (c) 2004-2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,7 +25,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
-#include <KoColorProfile.h>
+#include <colorprofiles/KoLcmsColorProfile.h>
 #include <KoColorSpaceAbstract.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -143,7 +143,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             cmsHTRANSFORM defaultToLab;
             cmsHTRANSFORM defaultFromLab;
     
-            KoColorProfile *  profile;
+            KoLcmsColorProfile *  profile;
             mutable const KoColorSpace *lastUsedDstColorSpace;
             mutable cmsHTRANSFORM lastUsedTransform;
             
@@ -157,7 +157,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                          KoColorProfile *p) : KoColorSpaceAbstract<_CSTraits>(id, name, parent), KoLcmsInfo( cmType, colorSpaceSignature), d( new Private())
 
         {
-            d->profile = p;
+            d->profile = toLcmsProfile(p);
             d->qcolordata = 0;
             d->lastUsedDstColorSpace = 0;
             d->lastUsedTransform = 0;
@@ -188,46 +188,47 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             d->lastFromRGB = cmsCreate_sRGBProfile();
 
             d->defaultFromRGB = cmsCreateTransform(d->lastFromRGB, TYPE_BGR_8,
-                    d->profile->profile(), this->colorSpaceType(),
+                    d->profile->lcmsProfile(), this->colorSpaceType(),
                     INTENT_PERCEPTUAL, 0);
 
-            d->defaultToRGB =  cmsCreateTransform(d->profile->profile(), this->colorSpaceType(),
+            d->defaultToRGB =  cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
                     d->lastFromRGB, TYPE_BGR_8,
                     INTENT_PERCEPTUAL, 0);
 
             d->defaultFromRGB16 = cmsCreateTransform(d->lastFromRGB, TYPE_BGRA_16,
-                    d->profile->profile(), this->colorSpaceType(),
+                    d->profile->lcmsProfile(), this->colorSpaceType(),
                     INTENT_PERCEPTUAL, 0);
 
-            d->defaultToRGB16 =  cmsCreateTransform(d->profile->profile(), this->colorSpaceType(),
+            d->defaultToRGB16 =  cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
                     d->lastFromRGB, TYPE_BGRA_16,
                     INTENT_PERCEPTUAL, 0);
 
             cmsHPROFILE hLab  = cmsCreateLabProfile(NULL);
 
-            d->defaultFromLab = cmsCreateTransform(hLab,  (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), d->profile->profile(), this->colorSpaceType(),
+            d->defaultFromLab = cmsCreateTransform(hLab,  (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), d->profile->lcmsProfile(), this->colorSpaceType(),
                     INTENT_PERCEPTUAL, 0);
 
-            d->defaultToLab = cmsCreateTransform(d->profile->profile(), this->colorSpaceType(), hLab,  (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)),
+            d->defaultToLab = cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(), hLab,  (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)),
                     INTENT_PERCEPTUAL, 0);
         }
     public:
         
         virtual bool hasHighDynamicRange() const { return false; }
-        virtual KoColorProfile * profile() const { return d->profile; }
+        virtual KoColorProfile * profile() const { return lcmsProfile(); }
         
         virtual bool profileIsCompatible(KoColorProfile* profile) const
         {
-            return profile->colorSpaceSignature() == colorSpaceSignature();
+            KoLcmsColorProfile* p = dynamic_cast<KoLcmsColorProfile*>(profile);
+            return (p and p->colorSpaceSignature() == colorSpaceSignature());
         }
         
-        virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile=0) const
+        virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * koprofile=0) const
         {
             d->qcolordata[2] = color.red();
             d->qcolordata[1] = color.green();
             d->qcolordata[0] = color.blue();
 
-
+            KoLcmsColorProfile* profile = toLcmsProfile(koprofile);
             if (profile == 0) {
 	    // Default sRGB
                 if (!d->defaultFromRGB) return;
@@ -235,11 +236,11 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 cmsDoTransform(d->defaultFromRGB, d->qcolordata, dst, 1);
             }
             else {
-                if (d->lastFromRGB == 0 || (d->lastFromRGB != 0 && d->lastRGBProfile != profile->profile())) {
-                    d->lastFromRGB = cmsCreateTransform(profile->profile(), TYPE_BGR_8,
-                            d->profile->profile(), this->colorSpaceType(),
+                if (d->lastFromRGB == 0 || (d->lastFromRGB != 0 && d->lastRGBProfile != profile->lcmsProfile())) {
+                    d->lastFromRGB = cmsCreateTransform(profile->lcmsProfile(), TYPE_BGR_8,
+                            d->profile->lcmsProfile(), this->colorSpaceType(),
                             INTENT_PERCEPTUAL, 0);
-                    d->lastRGBProfile = profile->profile();
+                    d->lastRGBProfile = profile->lcmsProfile();
 
                 }
                 cmsDoTransform(d->lastFromRGB, d->qcolordata, dst, 1);
@@ -254,19 +255,20 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             this->setAlpha(dst, opacity, 1);
         }
 
-        virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile =0) const
+        virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * koprofile =0) const
         {
+            KoLcmsColorProfile* profile = toLcmsProfile(koprofile);
             if (profile == 0) {
 	// Default sRGB transform
                 if (!d->defaultToRGB) return;
                 cmsDoTransform(d->defaultToRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
             }
             else {
-                if (d->lastToRGB == 0 || (d->lastToRGB != 0 && d->lastRGBProfile != profile->profile())) {
-                    d->lastToRGB = cmsCreateTransform(d->profile->profile(), this->colorSpaceType(),
-                            profile->profile(), TYPE_BGR_8,
+                if (d->lastToRGB == 0 || (d->lastToRGB != 0 && d->lastRGBProfile != profile->lcmsProfile())) {
+                    d->lastToRGB = cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
+                            profile->lcmsProfile(), TYPE_BGR_8,
                             INTENT_PERCEPTUAL, 0);
-                    d->lastRGBProfile = profile->profile();
+                    d->lastRGBProfile = profile->lcmsProfile();
                 }
                 cmsDoTransform(d->lastToRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
             }
@@ -371,13 +373,14 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                     tf = d->lastUsedTransform;
                     }
             }
+            KoLcmsColorProfile* dstprofile = toLcmsProfile(dstColorSpace->profile());
 
-            if (!tf && d->profile && dstColorSpace->profile()) {
+            if (!tf && d->profile && dstprofile) {
 
                 if (!d->transforms.contains(dstColorSpace)) {
                     tf = this->createTransform(dstColorSpace,
                             d->profile,
-                            dstColorSpace->profile(),
+                            dstprofile,
                             renderingIntent);
                     if (tf) {
             // XXX: Should we clear the transform cache if it gets too big?
@@ -431,10 +434,10 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             adj->profiles[1] = cmsCreateLinearizationDeviceLink(icSigLabData, transferFunctions);
             cmsSetDeviceClass(adj->profiles[1], icSigAbstractClass);
 
-            adj->profiles[0] = d->profile->profile();
-            adj->profiles[2] = d->profile->profile();
+            adj->profiles[0] = d->profile->lcmsProfile();
+            adj->profiles[2] = d->profile->lcmsProfile();
             adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(), INTENT_PERCEPTUAL, 0);
-            adj->csProfile = d->profile->profile();
+            adj->csProfile = d->profile->lcmsProfile();
             return adj;
         }
 
@@ -445,9 +448,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
             KoLcmsColorTransformation *adj = new KoLcmsColorTransformation;
 
-            adj->profiles[0] = d->profile->profile();
-            adj->profiles[2] = d->profile->profile();
-            adj->csProfile = d->profile->profile();
+            adj->profiles[0] = d->profile->lcmsProfile();
+            adj->profiles[2] = d->profile->lcmsProfile();
+            adj->csProfile = d->profile->lcmsProfile();
 
             LPLUT Lut;
             BCHSWADJUSTS bchsw;
@@ -514,7 +517,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             adj->profiles[0] = cmsCreateLinearizationDeviceLink(this->colorSpaceSignature(), transferFunctions);
             adj->profiles[1] = NULL;
             adj->profiles[2] = NULL;
-            adj->csProfile = d->profile->profile();
+            adj->csProfile = d->profile->lcmsProfile();
             adj->cmstransform  = cmsCreateTransform(adj->profiles[0], this->colorSpaceType(), NULL, this->colorSpaceType(), INTENT_PERCEPTUAL, 0);
 
             delete [] transferFunctions;
@@ -564,6 +567,17 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         }
 
     private:
+        inline KoLcmsColorProfile* lcmsProfile() const {
+            return d->profile;
+        }
+        inline static KoLcmsColorProfile* toLcmsProfile(KoColorProfile* p)
+        {
+            KoLcmsColorProfile* lp = dynamic_cast<KoLcmsColorProfile*>(p);
+            if(lp) return lp;
+            KoIccColorProfile* iccp = dynamic_cast<KoIccColorProfile*>(p);
+            if(iccp) return new KoLcmsColorProfile(iccp->rawData());
+            return 0;
+        }
         typedef struct {
             double Saturation;
 
@@ -593,8 +607,8 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             return true;
         }
         cmsHTRANSFORM createTransform(const KoColorSpace * dstColorSpace,
-                KoColorProfile *  srcProfile,
-                KoColorProfile *  dstProfile,
+                KoColorProfile *  srcKoProfile,
+                KoColorProfile *  dstKoProfile,
                 qint32 renderingIntent) const
         {
             KConfigGroup cfg = KGlobal::config()->group("");
@@ -607,10 +621,13 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             }
             const KoLcmsInfo* dstColorSpaceInfo = dynamic_cast<const KoLcmsInfo*>(dstColorSpace);
             
+            KoLcmsColorProfile *  srcProfile = dynamic_cast<KoLcmsColorProfile *>(srcKoProfile);
+            KoLcmsColorProfile *  dstProfile = dynamic_cast<KoLcmsColorProfile *>(dstKoProfile);
+            
             if (dstColorSpaceInfo && dstProfile && srcProfile ) {
-                cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->profile(),
+                cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
                         this->colorSpaceType(),
-                        dstProfile->profile(),
+                        dstProfile->lcmsProfile(),
                         dstColorSpaceInfo->colorSpaceType(),
                         renderingIntent,
                         flags);
@@ -629,7 +646,8 @@ class KoLcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo {
         }
         virtual bool profileIsCompatible(KoColorProfile* profile) const
         {
-            return profile->colorSpaceSignature() == colorSpaceSignature();
+            KoLcmsColorProfile* p = dynamic_cast<KoLcmsColorProfile*>(profile);
+            return p and p->colorSpaceSignature() == colorSpaceSignature();
         }
 };
 

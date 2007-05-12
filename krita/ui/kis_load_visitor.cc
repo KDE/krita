@@ -22,7 +22,7 @@
 #include <QRect>
 
 #include <KoColorSpaceRegistry.h>
-#include <KoColorProfile.h>
+#include <colorprofiles/KoIccColorProfile.h>
 #include <KoStore.h>
 
 // kritaimage
@@ -85,7 +85,7 @@ bool KisLoadVisitor::visit(KisPaintLayer *layer)
         data = m_store->read(m_store->size());
         m_store->close();
         // Create a colorspace with the embedded profile
-        KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(layer->paintDevice()->colorSpace()->id(), new KoColorProfile(data));
+        KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(layer->paintDevice()->colorSpace()->id(), new KoIccColorProfile(data));
         // replace the old colorspace
         layer->paintDevice()->setData(layer->paintDevice()->dataManager(), cs);
         QRect rc = layer->paintDevice()->extent();

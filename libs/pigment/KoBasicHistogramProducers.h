@@ -30,8 +30,6 @@
 #include "KoID.h"
 #include <pigment_export.h>
 
-class KoLabColorSpace;
-
 class PIGMENT_EXPORT KoBasicHistogramProducer : public KoHistogramProducer {
 public:
     KoBasicHistogramProducer(const KoID& id, int channels, int nrOfBins, KoColorSpace *colorSpace);
@@ -182,7 +180,7 @@ class  PIGMENT_EXPORT KoGenericLabHistogramProducer : public KoBasicHistogramPro
     protected:
         QList<KoChannelInfo *> m_channelsList;
     private:
-        static KoLabColorSpace* m_labCs;
+        static KoColorSpace* m_labCs;
 };
 
 /** KoGenericLabHistogramProducer his special Factory that isCompatibleWith everything. */

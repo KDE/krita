@@ -45,7 +45,7 @@
 // KOffice
 #include <KoApplication.h>
 #include <KoCanvasBase.h>
-#include <KoColorProfile.h>
+#include <colorprofiles/KoIccColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoFilterManager.h>
@@ -343,7 +343,7 @@ QDomElement KisDoc2::saveImage(QDomDocument& doc, KisImageSP img)
     image.setAttribute("description", img->description());
     // XXX: Save profile as blob inside the image, instead of the product name.
     if (img->profile() && img->profile()-> valid())
-        image.setAttribute("profile", img->profile()->productName());
+        image.setAttribute("profile", img->profile()->name());
     image.setAttribute("x-res", img->xRes());
     image.setAttribute("y-res", img->yRes());
 
@@ -691,10 +691,9 @@ bool KisDoc2::completeSaving(KoStore *store)
         KisAnnotationSP annotation;
         if (profile)
         {
-            // XXX we hardcode icc, this is correct for lcms?
-            // XXX productName(), or just "ICC Profile"?
-            if (!profile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", profile->productName(), profile->rawData());
+            KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
+            if (iccprofile and !iccprofile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
         }
 
         if (annotation) {
@@ -750,7 +749,7 @@ bool KisDoc2::completeLoading(KoStore *store)
         store->open(location);
         data = store->read(store->size());
         store->close();
-        img->setProfile(new KoColorProfile(data));
+        img->setProfile(new KoIccColorProfile(data));
     }
 
     IODone();

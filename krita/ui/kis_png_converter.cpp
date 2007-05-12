@@ -36,13 +36,13 @@
 #include <KoDocumentInfo.h>
 #include <KoID.h>
 #include <KoColorSpaceRegistry.h>
+#include <colorprofiles/KoIccColorProfile.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
-#include <KoColorProfile.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 
@@ -280,10 +280,10 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         if (QString::compare(profile_name, "icc") == 0) {
             profile_rawdata.resize(proflen);
             memcpy(profile_rawdata.data(), profile_data, proflen);
-            profile = new KoColorProfile(profile_rawdata);
+            profile = new KoIccColorProfile(profile_rawdata);
             Q_CHECK_PTR(profile);
             if (profile) {
-                kDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
+//                 kDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
                 if(!profile->isSuitableForOutput())
                 {
                     kDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile" << endl; // TODO: in ko2 popup a selection menu to inform the user
@@ -296,7 +296,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput())
     {
-        kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
+        kDebug(41008) << "image has embedded profile: " << profile -> name() << "\n";
         cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
     }
     else
@@ -383,8 +383,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
             KisAnnotationSP annotation;
             // XXX we hardcode icc, this is correct for lcms?
             // XXX productName(), or just "ICC Profile"?
-            if (!profile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", profile->productName(), profile->rawData());
+            KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
+            if ( iccprofile and !iccprofile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
             m_img -> addAnnotation( annotation );
         }
     }

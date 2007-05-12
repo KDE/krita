@@ -29,8 +29,7 @@
 // #include "Ko_global.h"
 #include "KoIntegerMaths.h"
 #include "KoChannelInfo.h"
-#include "KoColorSpace.h"
-#include "colorspaces/KoLabColorSpace.h"
+#include "KoLcmsColorSpace.h"
 
 // TODO: get ride of this
 const quint8 quint8_MAX = UCHAR_MAX;
@@ -40,7 +39,7 @@ const qint32 qint32_MAX = (2147483647);
 const qint32 qint32_MIN = (-2147483647-1);
 
 
-KoLabColorSpace* KoGenericLabHistogramProducer::m_labCs = 0;
+KoColorSpace* KoGenericLabHistogramProducer::m_labCs = 0;
 
 
 KoBasicHistogramProducer::KoBasicHistogramProducer(const KoID& id, int channels, int nrOfBins, KoColorSpace *cs)
@@ -420,8 +419,7 @@ KoGenericLabHistogramProducer::KoGenericLabHistogramProducer()
     m_channelsList.append(new KoChannelInfo(i18n("b*"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
 
     if (!m_labCs) {
-        KoColorProfile *labProfile = new KoColorProfile(cmsCreateLabProfile(NULL));
-        m_labCs = new KoLabColorSpace(0, labProfile);
+        m_labCs = KoColorSpaceRegistry::instance()->lab16();
     }
     m_colorSpace = m_labCs;
 }

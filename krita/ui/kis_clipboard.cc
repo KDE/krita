@@ -31,7 +31,7 @@
 #include "KoStore.h"
 #include "KoStoreDrag.h"
 #include <KoColorSpaceRegistry.h>
-#include <KoColorProfile.h>
+#include <colorprofiles/KoIccColorProfile.h>
 
 // kritaimage
 #include <kis_types.h>
@@ -114,10 +114,9 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
         KisAnnotationSP annotation;
         if (profile)
         {
-            // XXX we hardcode icc, this is correct for lcms?
-            // XXX productName(), or just "ICC Profile"?
-            if (!profile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", profile->productName(), profile->rawData());
+            KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
+            if (iccprofile and !iccprofile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
         }
         if (annotation) {
             // save layer profile
@@ -171,7 +170,7 @@ KisPaintDeviceSP KisClipboard::clip()
             store->open("profile.icc");
             data = store->read(store->size());
             store->close();
-           profile = new KoColorProfile(data);
+           profile = new KoIccColorProfile(data);
         }
 
         QString csName;
@@ -269,7 +268,7 @@ QSize KisClipboard::clipSize()
             store->open("profile.icc");
             data = store->read(store->size());
             store->close();
-            profile = new KoColorProfile(data);
+            profile = new KoIccColorProfile(data);
         }
 
         QString csName;

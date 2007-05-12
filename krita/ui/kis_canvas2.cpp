@@ -29,7 +29,7 @@
 #include <KoZoomHandler.h>
 #include <KoViewConverter.h>
 #include <KoShapeManager.h>
-#include <KoColorProfile.h>
+#include <colorprofiles/KoIccColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCanvasController.h>
 #include <KoDocument.h>
@@ -321,7 +321,7 @@ KoColorProfile *  KisCanvas2::monitorProfile()
 void KisCanvas2::resetMonitorProfile()
 {
     // XXX: The X11 monitor profile overrides the settings
-    m_d->monitorProfile = KoColorProfile::getScreenProfile();
+    m_d->monitorProfile = KoIccColorProfile::getScreenProfile();
 
     if (m_d->monitorProfile == 0) {
         KisConfig cfg;

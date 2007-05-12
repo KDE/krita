@@ -135,7 +135,7 @@ void KisStatusBar::setProfile( KisImageSP img )
         m_statusBarProfileLabel->setText(i18n("No profile"));
     }
     else {
-        m_statusBarProfileLabel->setText(img->colorSpace()->name() + "  " + img->profile()->productName());
+        m_statusBarProfileLabel->setText(img->colorSpace()->name() + "  " + img->profile()->name());
     }
 
 }

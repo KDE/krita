@@ -39,9 +39,8 @@
 using namespace Scripting;
 
 PaintDevice::PaintDevice(Image* image, KisPaintDeviceSP device, KisDoc2* doc)
-    : QObject(image)
+    : ConstPaintDevice(image, device, doc)
     , m_device(device)
-    , m_doc(doc)
     , m_cmd(0)
 {
     setObjectName("KritaLayer");
@@ -50,27 +49,6 @@ PaintDevice::PaintDevice(Image* image, KisPaintDeviceSP device, KisDoc2* doc)
 
 PaintDevice::~PaintDevice()
 {
-}
-
-int PaintDevice::width()
-{
-    QRect r1 = paintDevice()->extent();
-    QRect r2 = paintDevice()->image()->bounds();
-    QRect rect = r1.intersect(r2);
-    return rect.width();
-}
-
-int PaintDevice::height()
-{
-    QRect r1 = paintDevice()->extent();
-    QRect r2 = paintDevice()->image()->bounds();
-    QRect rect = r1.intersect(r2);
-    return rect.height();
-}
-
-QString PaintDevice::colorSpaceId()
-{
-    return paintDevice()->colorSpace()->id();
 }
 
 bool PaintDevice::convertToColorspace(const QString& colorspacename)
@@ -103,35 +81,6 @@ QObject* PaintDevice::createVLineIterator(uint x, uint y, uint height)
             paintDevice()->createVLineIterator(x, y, height));
 }
 
-QObject* PaintDevice::createHistogram(const QString& histoname, uint typenr)
-{
-    KoHistogramProducerFactory* factory = KoHistogramProducerFactoryRegistry::instance()->value(histoname);
-
-    /*
-    QList<KoID> listID = KisHistogramProducerFactoryRegistry::instance()->listKeys();
-    for(QList<KoID>::iterator it = listID.begin(); it != listID.end(); it++)
-        kDebug(41011) << (*it).name() << " " << (*it).id() << endl;
-    */
-
-    enumHistogramType type ;
-    switch(typenr)
-    {
-        case 1:
-            type = LOGARITHMIC;
-            break;
-        case 0:
-        default:
-            type = LINEAR;
-            break;
-    }
-
-    if(factory && factory->isCompatibleWith( paintDevice()->colorSpace() ))
-        return new Histogram(this, factory->generate() , type);
-
-    kWarning() << QString("An error has occurred in %1\n%2").arg("createHistogram").arg( QString("The histogram %1 is not available").arg(histoname) );
-    return 0;
-}
-
 QObject* PaintDevice::createPainter()
 {
     return new Painter(this);
@@ -160,14 +109,6 @@ void PaintDevice::endPainting()
     }
 }
 
-QObject* PaintDevice::fastWaveletTransformation()
-{
-    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->value( paintDevice()->colorSpace()->mathToolboxId().id() );
-    QRect rect = paintDevice()->exactBounds();
-    KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(paintDevice(), rect);
-    return new Wavelet(wav);
-}
-
 bool PaintDevice::fastWaveletUntransformation(QObject* wavelet)
 {
     Wavelet* wav = dynamic_cast< Wavelet* >(wavelet);
@@ -179,12 +120,6 @@ bool PaintDevice::fastWaveletUntransformation(QObject* wavelet)
     QRect rect = paintDevice()->exactBounds();
     mathToolbox->fastWaveletUntransformation( paintDevice(), rect, wav->wavelet() );
     return true;
-}
-
-QObject* PaintDevice::clone()
-{
-    KisPaintDeviceSP pl = new KisPaintDevice(*paintDevice());
-    return new PaintDevice(0, pl);
 }
 
 #if 0

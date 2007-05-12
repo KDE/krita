@@ -26,7 +26,7 @@
 
 namespace Scripting {
 
-class PaintDevice;
+class ConstPaintDevice;
 
 /**
  * This class allow to access the histogram of a \a PaintDevice object.
@@ -48,7 +48,7 @@ class Histogram : public QObject
 {
         Q_OBJECT
     public:
-        Histogram(PaintDevice* layer, KoHistogramProducerSP producer, const enumHistogramType type);
+        Histogram(ConstPaintDevice* layer, KoHistogramProducerSP producer, const enumHistogramType type);
         ~Histogram();
 
     public slots:

@@ -17,13 +17,13 @@
  */
 
 #include "krs_histogram.h"
-#include "krs_paint_device.h"
+#include "krs_const_paint_device.h"
 
 #include <kis_paint_layer.h>
 
 using namespace Scripting;
 
-Histogram::Histogram(PaintDevice* layer, KoHistogramProducerSP producer, const enumHistogramType type)
+Histogram::Histogram(ConstPaintDevice* layer, KoHistogramProducerSP producer, const enumHistogramType type)
     : QObject(layer)
 {
     setObjectName("KritaHistogram");

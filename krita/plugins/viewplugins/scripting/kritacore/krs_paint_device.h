@@ -19,7 +19,7 @@
 #ifndef KROSS_KRITACOREKRSPAINTDEVICE_H
 #define KROSS_KRITACOREKRSPAINTDEVICE_H
 
-#include <QObject>
+#include "krs_const_paint_device.h"
 
 #include <kis_types.h>
 #include <kis_paint_layer.h>
@@ -35,7 +35,7 @@ class Image;
  * A PaintDevice is a layer within a \a Image where you are able
  * to perform paint-operations on.
  */
-class PaintDevice : public QObject
+class PaintDevice : public ConstPaintDevice
 {
         Q_OBJECT
     public:
@@ -43,21 +43,6 @@ class PaintDevice : public QObject
         virtual ~PaintDevice();
 
     public slots:
-
-        /**
-         * Return the width of the layer.
-         */
-        int width();
-
-        /**
-         * Return the height of the layer.
-         */
-        int height();
-
-        /**
-         * Return the id of the colorspace of this image (e.g. "RGBA" or "CMYK").
-         */
-        QString colorSpaceId();
 
         /**
          * Convert the image to a colorspace.
@@ -107,14 +92,6 @@ class PaintDevice : public QObject
         QObject* createVLineIterator(uint x, uint y, uint height);
 
         /**
-         * This function creates an Histogram for this layer.
-         * It takes two arguments :
-         *  - the type of the histogram ("RGB8HISTO")
-         *  - 0 if the histogram is linear, or 1 if it is logarithmic
-         */
-        QObject* createHistogram(const QString& histoname, uint typenr);
-
-        /**
          * This function create a \a Painter which will allow you to some
          * painting on the layer.
          */
@@ -148,11 +125,6 @@ class PaintDevice : public QObject
         void endPainting();
 
         /**
-         * Return the fast \a Wavelet transformed of the layer.
-         */
-        QObject* fastWaveletTransformation();
-
-        /**
          * Untransform a fast \a Wavelet into this layer.
          * It takes one argument :
          *  - a wavelet object
@@ -167,10 +139,6 @@ class PaintDevice : public QObject
          */
         bool fastWaveletUntransformation(QObject* wavelet);
 
-        /**
-         * clone this paint layer, making a deep copy.
-         */
-        QObject* clone();
 #if 0
 //Disabled yet cause it's not wanted to expose the Krita internals.
 
@@ -206,11 +174,9 @@ class PaintDevice : public QObject
     public:
         inline KisPaintDeviceSP paintDevice() { return m_device; }
         inline const KisPaintDeviceSP paintDevice() const { return m_device; }
-        inline KisDoc2* doc() { return m_doc; }
     private:
         KisPaintDeviceSP m_device;
         KisTransaction* m_cmd;
-        KisDoc2* m_doc;
 };
 
 }

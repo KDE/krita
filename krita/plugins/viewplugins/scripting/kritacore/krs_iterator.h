@@ -27,9 +27,8 @@
 
 #include <KoColorTransformation.h>
 
-#include "krs_paint_layer.h"
+#include "krs_paint_device.h"
 
-#include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_types.h>
 
@@ -141,10 +140,10 @@ template<class _T_It>
 class Iterator : public IteratorBase
 {
     public:
-        Iterator(PaintLayer* layer, _T_It it)
+        Iterator(PaintDevice* layer, _T_It it)
             : IteratorBase(layer)
             , m_it(new _T_It(it))
-            , m_layer(layer->paintLayer())
+            , m_layer(layer->paintDevice())
         {
         }
 
@@ -178,26 +177,26 @@ class Iterator : public IteratorBase
 
         QVariant channel(uint channelnr)
         {
-            QList<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
+            QList<KoChannelInfo*> channels = m_layer->colorSpace()->channels();
             return channelnr < uint(channels.count()) ? channelValue(channels[channelnr]) : QVariant();
         }
 
         void setChannel(uint channelnr, const QVariant& value)
         {
-            QList<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
+            QList<KoChannelInfo*> channels = m_layer->colorSpace()->channels();
             if(channelnr < uint(channels.count()))
                 setChannelValue(channels[channelnr], value);
         }
 
         uint channelCount()
         {
-            return m_layer->paintDevice()->colorSpace()->channels().count();
+            return m_layer->colorSpace()->channels().count();
         }
 
         QVariantList pixel()
         {
             QVariantList pixel;
-            QList<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
+            QList<KoChannelInfo*> channels = m_layer->colorSpace()->channels();
             for(QList<KoChannelInfo*>::iterator itC = channels.begin(); itC != channels.end(); ++itC)
                 pixel.push_back( channelValue(*itC) );
             return pixel;
@@ -205,7 +204,7 @@ class Iterator : public IteratorBase
 
         void setPixel(QVariantList pixel)
         {
-            QList<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
+            QList<KoChannelInfo *> channels = m_layer->colorSpace()->channels();
             uint i = 0;
             const uint size = pixel.size();
             for(QList<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end() && i < size; ++itC, ++i)
@@ -214,14 +213,14 @@ class Iterator : public IteratorBase
 
         void invertColor()
         {
-            KoColorTransformation* invertTransfo = m_layer->paintDevice()->colorSpace()->createInvertTransformation();
+            KoColorTransformation* invertTransfo = m_layer->colorSpace()->createInvertTransformation();
             invertTransfo->transform(m_it->oldRawData(), m_it->rawData(), 1);
             delete invertTransfo; // FIXME don't create an invert transfo each time
         }
 
         void darken(int shade, bool compensate, double compensation)
         {
-            KoColorTransformation* transfo = m_layer->paintDevice()->colorSpace()->createDarkenAdjustement(shade, compensate, compensation);
+            KoColorTransformation* transfo = m_layer->colorSpace()->createDarkenAdjustement(shade, compensate, compensation);
             transfo->transform(m_it->rawData(), m_it->rawData(), 1);
             delete transfo;
         }
@@ -270,7 +269,7 @@ class Iterator : public IteratorBase
 
     private:
         _T_It* m_it;
-        KisPaintLayerSP m_layer;
+        KisPaintDeviceSP m_layer;
 };
 
 }

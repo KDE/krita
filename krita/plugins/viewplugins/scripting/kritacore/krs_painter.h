@@ -32,16 +32,16 @@
 
 namespace Scripting {
 
-class PaintLayer;
+class PaintDevice;
 
 /**
- * The painter enables drawing to a \a PaintLayer object.
+ * The painter enables drawing to a \a PaintDevice object.
  */
 class Painter : public QObject
 {
         Q_OBJECT
     public:
-        Painter(PaintLayer* layer);
+        Painter(PaintDevice* layer);
         virtual ~Painter();
 
     public slots: // Convolution
@@ -250,7 +250,7 @@ class Painter : public QObject
         void setPaintOp(const QString& paintopname);
 
     protected:
-        inline KisPaintLayerSP paintLayer() { return m_layer; }
+        inline KisPaintDeviceSP paintDevice() { return m_layer; }
 
     private:
         inline vQPointF createPointsVector( Q3ValueList<QVariant> xs, Q3ValueList<QVariant> ys)
@@ -277,7 +277,7 @@ class Painter : public QObject
         }
 
     private:
-        KisPaintLayerSP m_layer;
+        KisPaintDeviceSP m_layer;
         KisPainter* m_painter;
         int m_threshold;
 };

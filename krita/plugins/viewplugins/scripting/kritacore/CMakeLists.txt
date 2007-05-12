@@ -4,6 +4,7 @@ set(krossmodulekrita_LIB_SRCS
    krs_module.cpp
    krs_progress.cpp
    krs_paint_layer.cpp
+   krs_paint_device.cpp
    krs_image.cpp
    krs_histogram.cpp
    krs_painter.cpp

@@ -26,16 +26,16 @@
 
 namespace Scripting {
 
-class PaintLayer;
+class PaintDevice;
 
 /**
- * This class allow to access the histogram of a \a PaintLayer object.
+ * This class allow to access the histogram of a \a PaintDevice object.
  *
  * Example (in Ruby) :
  * @code
  * require "Krita"
  * image = Krita.image()
- * layer = image.activePaintLayer()
+ * layer = image.activePaintDevice()
  * histo = layer.createHistogram("RGB8HISTO",0)
  * min = histo.min() * 255
  * max = histo.max() * 255
@@ -48,7 +48,7 @@ class Histogram : public QObject
 {
         Q_OBJECT
     public:
-        Histogram(PaintLayer* layer, KoHistogramProducerSP producer, const enumHistogramType type);
+        Histogram(PaintDevice* layer, KoHistogramProducerSP producer, const enumHistogramType type);
         ~Histogram();
 
     public slots:

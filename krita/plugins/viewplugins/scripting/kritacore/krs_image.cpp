@@ -17,7 +17,7 @@
  */
 
 #include "krs_image.h"
-#include "krs_paint_layer.h"
+#include "krs_paint_device.h"
 #include "krs_module.h"
 
 #include <klocale.h>
@@ -49,7 +49,7 @@ QObject* Image::activePaintLayer()
 {
     KisPaintLayer* activePaintLayer = dynamic_cast< KisPaintLayer* >(m_image->activeLayer().data());
     if(activePaintLayer)
-        return new PaintLayer(this, KisPaintLayerSP(activePaintLayer), m_doc);
+        return new PaintDevice(this, activePaintLayer->paintDevice(), m_doc);
     kWarning() << "The active layer is not paintable." << endl;
     return 0;
 }
@@ -114,7 +114,7 @@ QObject* Image::createPaintLayer(const QString& name, int opacity, const QString
                               : new KisPaintLayer(m_image.data(), name, opacity);
     layer->setVisible(true);
     m_image->addLayer(KisLayerSP(layer), m_image->rootLayer(), KisLayerSP(0));
-    return new PaintLayer(this, KisPaintLayerSP(layer));
+    return new PaintDevice(this, layer->paintDevice() );
 }
 
 #include "krs_image.moc"

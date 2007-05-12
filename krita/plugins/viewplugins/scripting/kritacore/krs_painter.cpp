@@ -17,7 +17,7 @@
  */
 
 #include "krs_painter.h"
-#include "krs_paint_layer.h"
+#include "krs_paint_device.h"
 #include "krs_brush.h"
 #include "krs_color.h"
 #include "krs_pattern.h"
@@ -28,10 +28,10 @@
 
 using namespace Scripting;
 
-Painter::Painter(PaintLayer* layer)
+Painter::Painter(PaintDevice* layer)
     : QObject(layer)
-    , m_layer(layer->paintLayer())
-    , m_painter(new KisPainter(layer->paintLayer()->paintDevice()))
+    , m_layer(layer->paintDevice())
+    , m_painter(new KisPainter(layer->paintDevice()))
     , m_threshold(1)
 {
     setObjectName("KritaPainter");
@@ -65,8 +65,8 @@ void Painter::convolve()
         uint h = Kross::Api::Variant::toUInt(args->item(8));
         rect = QRect(x,y,w,h);
     } else {
-        QRect r1 = paintLayer()->paintDevice()->extent();
-        QRect r2 = paintLayer()->image()->bounds();
+        QRect r1 = PaintDevice()->paintDevice()->extent();
+        QRect r2 = PaintDevice()->image()->bounds();
         rect = r1.intersect(r2);
     }
 
@@ -144,10 +144,10 @@ void Painter::setOpacity(uint opacity)
 
 void Painter::composeWith(qint32 dx, qint32 dy, const QString& compositeOp, const QObject* source, qint32 opacity, qint32 sx, qint32 sy, qint32 sw, qint32 sh)
 {
-    const PaintLayer* sourcePL = dynamic_cast< const PaintLayer* >(source);
+    const PaintDevice* sourcePL = dynamic_cast< const PaintDevice* >(source);
     if(sourcePL)
     {
-        m_painter->bitBlt(dx, dy, compositeOp, sourcePL->paintLayer()->paintDevice(), opacity, sx, sy, sw, sh);
+        m_painter->bitBlt(dx, dy, compositeOp, sourcePL->paintDevice(), opacity, sx, sy, sw, sh);
     }
 }
 
@@ -216,13 +216,13 @@ void Painter::paintAt(double x, double y, double pressure)
 void Painter::setPaintColor(QObject* color)
 {
     Color* c = dynamic_cast< Color* >(color);
-    if(c) m_painter->setPaintColor( KoColor(c->toQColor(), paintLayer()->paintDevice()->colorSpace() ));
+    if(c) m_painter->setPaintColor( KoColor(c->toQColor(), paintDevice()->colorSpace() ));
 }
 
 void Painter::setBackgroundColor(QObject* color)
 {
     Color* c = dynamic_cast< Color* >(color);
-    if(c) m_painter->setBackgroundColor( KoColor(c->toQColor(), paintLayer()->paintDevice()->colorSpace() ));
+    if(c) m_painter->setBackgroundColor( KoColor(c->toQColor(), paintDevice()->colorSpace() ));
 }
 
 void Painter::setPattern(QObject* pattern)

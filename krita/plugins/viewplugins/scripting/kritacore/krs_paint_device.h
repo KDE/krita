@@ -1,7 +1,5 @@
-#if 0
-
 /*
- *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2005,2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published by
@@ -34,15 +32,15 @@ namespace Scripting {
 class Image;
 
 /**
- * A paintlayer is a layer within a \a Image where you are able
+ * A PaintDevice is a layer within a \a Image where you are able
  * to perform paint-operations on.
  */
-class PaintLayer : public QObject
+class PaintDevice : public QObject
 {
         Q_OBJECT
     public:
-        explicit PaintLayer(Image* image, KisPaintLayerSP layer, KisDoc2* doc = 0);
-        virtual ~PaintLayer();
+        explicit PaintDevice(Image* image, KisPaintDeviceSP layer, KisDoc2* doc = 0);
+        virtual ~PaintDevice();
 
     public slots:
 
@@ -130,7 +128,7 @@ class PaintLayer : public QObject
          * For example (in Ruby) :
          * @code
          * require "Krita"
-         * layer = Krita.image().activePaintLayer()
+         * layer = Krita.image().activePaintDevice()
          * layer.beginPainting("invert")
          * iterator = layer.createRectIterator(0, 0, layer.width(), layer.height())
          * while (not iterator.isDone())
@@ -195,7 +193,7 @@ class PaintLayer : public QObject
          * For example (in Python) :
          * @code
          * import Krita, struct, array
-         * layer = Krita.image().activePaintLayer()
+         * layer = Krita.image().activePaintDevice()
          * ba = layer.bytes()
          * a = array.array('B', [ (255 - struct.unpack("B",ba[i])[0]) for i in range(len(ba)) ] )
          * layer.setBytes( a.tostring() )
@@ -206,17 +204,15 @@ class PaintLayer : public QObject
 #endif
 
     public:
-        inline KisPaintLayerSP paintLayer() { return m_layer; }
-        inline const KisPaintLayerSP paintLayer() const { return m_layer; }
+        inline KisPaintDeviceSP paintDevice() { return m_device; }
+        inline const KisPaintDeviceSP paintDevice() const { return m_device; }
         inline KisDoc2* doc() { return m_doc; }
     private:
-        KisPaintLayerSP m_layer;
-        KisDoc2* m_doc;
+        KisPaintDeviceSP m_device;
         KisTransaction* m_cmd;
+        KisDoc2* m_doc;
 };
 
 }
-
-#endif
 
 #endif

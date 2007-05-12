@@ -1,7 +1,5 @@
-#if 0
-
 /*
- *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2005,2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published by
@@ -18,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "krs_paint_layer.h"
+#include "krs_paint_device.h"
 #include "krs_image.h"
 
 #include <QBuffer>
@@ -40,9 +38,9 @@
 
 using namespace Scripting;
 
-PaintLayer::PaintLayer(Image* image, KisPaintLayerSP layer, KisDoc2* doc)
+PaintDevice::PaintDevice(Image* image, KisPaintDeviceSP device, KisDoc2* doc)
     : QObject(image)
-    , m_layer(layer)
+    , m_device(device)
     , m_doc(doc)
     , m_cmd(0)
 {
@@ -50,32 +48,32 @@ PaintLayer::PaintLayer(Image* image, KisPaintLayerSP layer, KisDoc2* doc)
 }
 
 
-PaintLayer::~PaintLayer()
+PaintDevice::~PaintDevice()
 {
 }
 
-int PaintLayer::width()
+int PaintDevice::width()
 {
-    QRect r1 = paintLayer()->extent();
-    QRect r2 = paintLayer()->image()->bounds();
+    QRect r1 = paintDevice()->extent();
+    QRect r2 = paintDevice()->image()->bounds();
     QRect rect = r1.intersect(r2);
     return rect.width();
 }
 
-int PaintLayer::height()
+int PaintDevice::height()
 {
-    QRect r1 = paintLayer()->extent();
-    QRect r2 = paintLayer()->image()->bounds();
+    QRect r1 = paintDevice()->extent();
+    QRect r2 = paintDevice()->image()->bounds();
     QRect rect = r1.intersect(r2);
     return rect.height();
 }
 
-QString PaintLayer::colorSpaceId()
+QString PaintDevice::colorSpaceId()
 {
-    return paintLayer()->paintDevice()->colorSpace()->id();
+    return paintDevice()->colorSpace()->id();
 }
 
-bool PaintLayer::convertToColorspace(const QString& colorspacename)
+bool PaintDevice::convertToColorspace(const QString& colorspacename)
 {
     KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
     if(!dstCS)
@@ -83,29 +81,29 @@ bool PaintLayer::convertToColorspace(const QString& colorspacename)
         kWarning() << QString("Colorspace %1 is not available, please check your installation.").arg(colorspacename) << endl;
         return false;
     }
-    paintLayer()->paintDevice()->convertTo(dstCS);
+    paintDevice()->convertTo(dstCS);
     return true;
 }
 
-QObject* PaintLayer::createRectIterator(uint x, uint y, uint width, uint height)
+QObject* PaintDevice::createRectIterator(uint x, uint y, uint width, uint height)
 {
     return new Iterator<KisRectIteratorPixel>(this,
-            paintLayer()->paintDevice()->createRectIterator(x, y, width, height));
+            paintDevice()->createRectIterator(x, y, width, height));
 }
 
-QObject* PaintLayer::createHLineIterator(uint x, uint y, uint width)
+QObject* PaintDevice::createHLineIterator(uint x, uint y, uint width)
 {
     return new Iterator<KisHLineIteratorPixel>(this,
-            paintLayer()->paintDevice()->createHLineIterator(x, y, width));
+            paintDevice()->createHLineIterator(x, y, width));
 }
 
-QObject* PaintLayer::createVLineIterator(uint x, uint y, uint height)
+QObject* PaintDevice::createVLineIterator(uint x, uint y, uint height)
 {
     return new Iterator<KisVLineIteratorPixel>(this,
-            paintLayer()->paintDevice()->createVLineIterator(x, y, height));
+            paintDevice()->createVLineIterator(x, y, height));
 }
 
-QObject* PaintLayer::createHistogram(const QString& histoname, uint typenr)
+QObject* PaintDevice::createHistogram(const QString& histoname, uint typenr)
 {
     KoHistogramProducerFactory* factory = KoHistogramProducerFactoryRegistry::instance()->value(histoname);
 
@@ -127,29 +125,29 @@ QObject* PaintLayer::createHistogram(const QString& histoname, uint typenr)
             break;
     }
 
-    if(factory && factory->isCompatibleWith( paintLayer()->paintDevice()->colorSpace() ))
+    if(factory && factory->isCompatibleWith( paintDevice()->colorSpace() ))
         return new Histogram(this, factory->generate() , type);
 
     kWarning() << QString("An error has occurred in %1\n%2").arg("createHistogram").arg( QString("The histogram %1 is not available").arg(histoname) );
     return 0;
 }
 
-QObject* PaintLayer::createPainter()
+QObject* PaintDevice::createPainter()
 {
     return new Painter(this);
 }
 
-void PaintLayer::beginPainting(const QString& name)
+void PaintDevice::beginPainting(const QString& name)
 {
     if(m_cmd != 0)
     {
         delete m_cmd;
     }
-    m_cmd = new KisTransaction(name, paintLayer()->paintDevice());
+    m_cmd = new KisTransaction(name, paintDevice());
     Q_CHECK_PTR(m_cmd);
 }
 
-void PaintLayer::endPainting()
+void PaintDevice::endPainting()
 {
     if(doc() !=0)
     {
@@ -158,41 +156,41 @@ void PaintLayer::endPainting()
     }
     if(m_cmd != 0)
     {
-        paintLayer()->image()->undoAdapter()->addCommand(m_cmd);
+        paintDevice()->image()->undoAdapter()->addCommand(m_cmd);
     }
 }
 
-QObject* PaintLayer::fastWaveletTransformation()
+QObject* PaintDevice::fastWaveletTransformation()
 {
-    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->value( paintLayer()->paintDevice()->colorSpace()->mathToolboxId().id() );
-    QRect rect = paintLayer()->exactBounds();
-    KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(paintLayer()->paintDevice(), rect);
+    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->value( paintDevice()->colorSpace()->mathToolboxId().id() );
+    QRect rect = paintDevice()->exactBounds();
+    KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(paintDevice(), rect);
     return new Wavelet(wav);
 }
 
-bool PaintLayer::fastWaveletUntransformation(QObject* wavelet)
+bool PaintDevice::fastWaveletUntransformation(QObject* wavelet)
 {
     Wavelet* wav = dynamic_cast< Wavelet* >(wavelet);
     if(! wav) {
         kWarning() << "The passed argument is not a valid Wavelet-object." << endl;
         return false;
     }
-    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->value( paintLayer()->paintDevice()->colorSpace()->mathToolboxId().id() );
-    QRect rect = paintLayer()->exactBounds();
-    mathToolbox->fastWaveletUntransformation( paintLayer()->paintDevice(), rect, wav->wavelet() );
+    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->value( paintDevice()->colorSpace()->mathToolboxId().id() );
+    QRect rect = paintDevice()->exactBounds();
+    mathToolbox->fastWaveletUntransformation( paintDevice(), rect, wav->wavelet() );
     return true;
 }
 
-QObject* PaintLayer::clone()
+QObject* PaintDevice::clone()
 {
-    KisPaintLayerSP pl = new KisPaintLayer(*paintLayer());
-    return new PaintLayer(0, pl);
+    KisPaintDeviceSP pl = new KisPaintDevice(*paintDevice());
+    return new PaintDevice(0, pl);
 }
 
 #if 0
-QByteArray PaintLayer::bytes()
+QByteArray PaintDevice::bytes()
 {
-    qint32 pixelsize = paintLayer()->paintDevice()->colorSpace()->pixelSize();
+    qint32 pixelsize = paintDevice()->colorSpace()->pixelSize();
     const int w = width();
     const int h = height();
     const int size = w * h * pixelsize;
@@ -205,18 +203,18 @@ QByteArray PaintLayer::bytes()
 
     quint8* data = new quint8[size];
     Q_CHECK_PTR(data);
-    paintLayer()->paintDevice()->readBytes(data, 0, 0, w, h);
+    paintDevice()->readBytes(data, 0, 0, w, h);
     for(int i = 0; i < size; ++i)
         out << data[i];
     delete [] data;
 
-//     kDebug()<<"PaintLayer::bytes width="<<w<<" height="<<h<<" pixelsize="<<pixelsize<<" size="<<size<<endl;
+//     kDebug()<<"PaintDevice::bytes width="<<w<<" height="<<h<<" pixelsize="<<pixelsize<<" size="<<size<<endl;
     return bytearray;
 }
 
-bool PaintLayer::setBytes(const QByteArray& bytearray)
+bool PaintDevice::setBytes(const QByteArray& bytearray)
 {
-    qint32 pixelsize = paintLayer()->paintDevice()->colorSpace()->pixelSize();
+    qint32 pixelsize = paintDevice()->colorSpace()->pixelSize();
     const int w = width();
     const int h = height();
     const int size = w * h * pixelsize;
@@ -232,13 +230,11 @@ bool PaintLayer::setBytes(const QByteArray& bytearray)
     Q_CHECK_PTR(data);
     for(int i = 0; i < size; ++i)
         in >> data[i];
-    paintLayer()->paintDevice()->writeBytes(data, 0, 0, w, h);
+    paintDevice()->writeBytes(data, 0, 0, w, h);
     delete [] data;
 
     return true;
 }
 #endif
 
-#include "krs_paint_layer.moc"
-
-#endif
+#include "krs_paint_device.moc"

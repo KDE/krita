@@ -18,7 +18,7 @@
 
 #include "krs_filter.h"
 #include "krs_module.h"
-#include "krs_paint_layer.h"
+#include "krs_paint_device.h"
 
 #include <kis_filter.h>
 #include <kis_paint_layer.h>
@@ -72,36 +72,36 @@ const QString Filter::toXML()
 
 bool Filter::process(QObject* layer)
 {
-    PaintLayer* paintlayer = dynamic_cast< PaintLayer* >(layer);
-    if(! paintlayer || ! m_filter->workWith( paintlayer->paintLayer()->paintDevice()->colorSpace()))
+    PaintDevice* paintDevice = dynamic_cast< PaintDevice* >(layer);
+    if(! paintDevice || ! m_filter->workWith( paintDevice->paintDevice()->colorSpace()))
     {
         kWarning() << i18n("An error has occurred in %1",QString("process")) << endl;
         return false;
     }
 
-    QRect r1 = paintlayer->paintLayer()->paintDevice()->extent();
+    QRect r1 = paintDevice->paintDevice()->extent();
     QRect rect;
-    if(paintlayer->paintLayer()->image())
+    if(paintDevice->paintDevice()->image())
     {
-        QRect r2 = paintlayer->paintLayer()->image()->bounds();
+        QRect r2 = paintDevice->paintDevice()->image()->bounds();
         rect = r1.intersect(r2);
     } else {
         rect = r1;
     }
-    m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, 0/*m_filter->configuration()*/);
+    m_filter->process(paintDevice->paintDevice(), rect, 0/*m_filter->configuration()*/);
     return true;
 }
 
 bool Filter::process(QObject* layer, int x, int y, int width, int height)
 {
-    PaintLayer* paintlayer = dynamic_cast< PaintLayer* >(layer);
-    if(! paintlayer || ! m_filter->workWith( paintlayer->paintLayer()->paintDevice()->colorSpace()))
+    PaintDevice* paintDevice = dynamic_cast< PaintDevice* >(layer);
+    if(! paintDevice || ! m_filter->workWith( paintDevice->paintDevice()->colorSpace()))
     {
         kWarning() << i18n("An error has occurred in %1",QString("process")) << endl;
         return false;
     }
     QRect rect(x, y, width, height);
-    m_filter->process(paintlayer->paintLayer()->paintDevice(), rect, 0/*m_filter->configuration()*/);
+    m_filter->process(paintDevice->paintDevice(), rect, 0/*m_filter->configuration()*/);
     return true;
 }
 

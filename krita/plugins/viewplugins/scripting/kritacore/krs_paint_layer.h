@@ -1,7 +1,5 @@
-#if 0
-
 /*
- *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published by
@@ -18,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KROSS_KRITACOREKRSLAYER_H
-#define KROSS_KRITACOREKRSLAYER_H
+#ifndef KROSS_KRITACOREKRSPAINTLAYER_H
+#define KROSS_KRITACOREKRSPAINTLAYER_H
 
 #include <QObject>
 
@@ -45,178 +43,19 @@ class PaintLayer : public QObject
         virtual ~PaintLayer();
 
     public slots:
-
-        /**
-         * Return the width of the layer.
-         */
-        int width();
-
-        /**
-         * Return the height of the layer.
-         */
-        int height();
-
-        /**
-         * Return the id of the colorspace of this image (e.g. "RGBA" or "CMYK").
-         */
-        QString colorSpaceId();
-
-        /**
-         * Convert the image to a colorspace.
-         * This function takes one argument :
-         *  - the name of the destination colorspace
-         * This function returns true if convert to the
-         * colorspace was successfully else (e.g. if the
-         * colorspace is not available, please check your
-         * installation in that case) false is returned.
-         *
-         * For example (in Ruby) :
-         * @code
-         * # set the colorspace to "CMYK"
-         * image.convertToColorspace("CMYK")
-         * # following line will print "CMYK" now.
-         * image.colorSpaceId()
-         * @endcode
-         */
-        bool convertToColorspace(const QString& colorspacename);
-
-        /**
-         * Create an iterator over a layer, it will iterate on a rectangle area.
-         * This function takes four arguments :
-         *  - x
-         *  - y
-         *  - width of the rectangle
-         *  - height of the rectangle
-         */
-        QObject* createRectIterator(uint x, uint y, uint width, uint height);
-
-        /**
-         * Create an iterator over a layer, it will iterate on a row.
-         * This function takes three arguments :
-         *  - x start in the row
-         *  - y vertical position of the row
-         *  - width of the row
-         */
-        QObject* createHLineIterator(uint x, uint y, uint width);
-
-        /**
-         * Create an iterator over a layer, it will iterate on a column.
-         * This function takes three arguments :
-         *  - x horizontal position of the column
-         *  - y start in the column
-         *  - height of the column
-         */
-        QObject* createVLineIterator(uint x, uint y, uint height);
-
-        /**
-         * This function creates an Histogram for this layer.
-         * It takes two arguments :
-         *  - the type of the histogram ("RGB8HISTO")
-         *  - 0 if the histogram is linear, or 1 if it is logarithmic
-         */
-        QObject* createHistogram(const QString& histoname, uint typenr);
-
-        /**
-         * This function create a \a Painter which will allow you to some
-         * painting on the layer.
-         */
-        QObject* createPainter();
-
-        /**
-         * Uses this function to create a new undo entry. The \p name
-         * is the displayed undo-name. You should always close the
-         * paint-operation with \a endPainting() .
-         *
-         * For example (in Ruby) :
-         * @code
-         * require "Krita"
-         * layer = Krita.image().activePaintLayer()
-         * layer.beginPainting("invert")
-         * iterator = layer.createRectIterator(0, 0, layer.width(), layer.height())
-         * while (not iterator.isDone())
-         *     iterator.invertColor()
-         *     iterator.next()
-         * end
-         * layer.endPainting()
-         * @endcode
-         */
-        void beginPainting(const QString& name);
-
-        /**
-         * Uses this function to close the current undo entry and add it to
-         * the history. This function closes the with \a beginPainting()
-         * started painting-operation.
-         */
-        void endPainting();
-
-        /**
-         * Return the fast \a Wavelet transformed of the layer.
-         */
-        QObject* fastWaveletTransformation();
-
-        /**
-         * Untransform a fast \a Wavelet into this layer.
-         * It takes one argument :
-         *  - a wavelet object
-         * It returns true on success else (e.g. cause no valid \a Wavelet
-         * object was passed as argument) false is returned.
-         *
-         * For example (in Ruby) :
-         * @code
-         * wavelet = layer.fastWaveletTransformation()
-         * layer.fastWaveletUntransformation(wavelet)
-         * @endcode
-         */
-        bool fastWaveletUntransformation(QObject* wavelet);
-
-        /**
-         * clone this paint layer, making a deep copy.
-         */
-        QObject* clone();
-#if 0
-//Disabled yet cause it's not wanted to expose the Krita internals.
-
-        /**
-         * Returns or sets the raw-bytes the layer has.
-         *
-         * Please note, that it is NOT recommed to use that
-         * functionality since they bypass Krita's undo/redo
-         * mechanism as well as the integrated swapping-technology
-         * and may consume a lot of RAM cause the whole image
-         * is readed into it (what provides us the possibility
-         * to work direct on the mem-data from within
-         * scripting-languages).
-         *
-         * The returned array of bytes has n items where n is
-         * height * width * number of bytes per pixel. Each pixel
-         * is represented by >= 1 bytes depending on the used
-         * colorspace (e.g. for RGBA we have 4 bytes per pixel).
-         *
-         * For example (in Python) :
-         * @code
-         * import Krita, struct, array
-         * layer = Krita.image().activePaintLayer()
-         * ba = layer.bytes()
-         * a = array.array('B', [ (255 - struct.unpack("B",ba[i])[0]) for i in range(len(ba)) ] )
-         * layer.setBytes( a.tostring() )
-         * @endcode
-         */
-        QByteArray bytes();
-        bool setBytes(const QByteArray& bytearray);
-#endif
+        QObject* paintDevice();
 
     public:
         inline KisPaintLayerSP paintLayer() { return m_layer; }
         inline const KisPaintLayerSP paintLayer() const { return m_layer; }
         inline KisDoc2* doc() { return m_doc; }
     private:
+        Image* m_image;
         KisPaintLayerSP m_layer;
         KisDoc2* m_doc;
         KisTransaction* m_cmd;
 };
 
 }
-
-#endif
 
 #endif

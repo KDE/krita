@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KROSS_KRITACOREKRSLAYER_H
-#define KROSS_KRITACOREKRSLAYER_H
+#ifndef KROSS_KRITACOREKRSPAINTDEVICE_H
+#define KROSS_KRITACOREKRSPAINTDEVICE_H
 
 #include <QObject>
 

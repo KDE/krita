@@ -136,7 +136,7 @@ public:
      * @brief store the shape data as ODF XML.
      * This is the method that will be called when saving a shape as a described in¬
      * OpenDocument 9.2 Drawing Shapes.
-     * @see saveOdfSizePositionAttributes(), saveOdfMandatoryAttributes(), saveOdfTransformationAttributes()
+     * @see saveOdfAttributes
      */
     virtual void saveOdf( KoShapeSavingContext * context ) = 0;
 

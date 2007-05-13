@@ -33,12 +33,15 @@
 
 #include <lcms.h>
 
-#include <KoPluginLoader.h>
+#include "KoPluginLoader.h"
 #include "KoColorSpace.h"
+#include "KoBasicHistogramProducers.h"
+
 #include "colorprofiles/KoLcmsColorProfile.h"
 #include "colorspaces/KoAlphaColorSpace.h"
 #include "colorspaces/KoLabColorSpace.h"
 #include "colorspaces/KoRgbU16ColorSpace.h"
+#include "colorspaces/KoRgbU8ColorSpace.h"
 
 struct KoColorSpaceRegistry::Private {
     QMap<QString, KoColorProfile * > profileMap;
@@ -109,14 +112,20 @@ void KoColorSpaceRegistry::init()
     KoColorProfile *labProfile = new KoLcmsColorProfile(cmsCreateLabProfile(NULL));
     addProfile(labProfile);
     add(new KoLabColorSpaceFactory());
+    KoHistogramProducerFactoryRegistry::instance()->add(
+                new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+                (KoID("LABAHISTO", i18n("L*a*b* Histogram")), lab16()));
     KoColorProfile *rgbProfile = new KoLcmsColorProfile(cmsCreate_sRGBProfile());
     addProfile(rgbProfile);
     add(new KoRgbU16ColorSpaceFactory());
-/* XXX where to put this
-    KisHistogramProducerFactoryRegistry::instance()->add(
-                new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KoID("LABAHISTO", i18n("L*a*b* Histogram")), new KoLabColorSpace(this, 0);) );
-*/
+    
+    add(new KoRgbU8ColorSpaceFactory());
+    KoHistogramProducerFactoryRegistry::instance()->add(
+                new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
+                (KoID("RGB8HISTO", i18n("RGB8 Histogram")), rgb8()) );
+
+    
+    
     // Create the default profile for grayscale, probably not the best place to but that, but still better than in a grayscale plugin
     // .22 gamma grayscale or something like that. Taken from the lcms tutorial...
     LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2); 

@@ -2,7 +2,7 @@
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software const; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation const; either version 2 of the License, or
  *  (at your option) any later version.
  *
@@ -11,7 +11,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program const; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
@@ -57,12 +57,12 @@
 /**
  * Ugly class that contains all rgb composite ops
  */
-class KisRgbU8CompositeOp : public KoCompositeOp {
+class KoRgbU8CompositeOp : public KoCompositeOp {
 public:
 
-    KisRgbU8CompositeOp(KoColorSpace * cs, const QString& id, const QString& description, const bool userVisible = true);
+    KoRgbU8CompositeOp(KoColorSpace * cs, const QString& id, const QString& description, const bool userVisible = true);
 
-    virtual ~KisRgbU8CompositeOp() {};
+    virtual ~KoRgbU8CompositeOp() {};
 
     void composite(quint8 *dstRowStart, qint32 dstRowStride,
 			   const quint8 *srcRowStart, qint32 srcRowStride,

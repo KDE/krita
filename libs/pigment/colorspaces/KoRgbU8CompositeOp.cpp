@@ -2,7 +2,7 @@
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
@@ -11,7 +11,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *
  */
@@ -19,8 +19,8 @@
 #include <KoColorSpace.h>
 #include <KoIntegerMaths.h>
 
-#include "kis_rgb_u8_compositeop.h"
-#include "kis_rgb_colorspace.h"
+#include "KoRgbU8CompositeOp.h"
+#include "KoRgbU8ColorSpace.h"
 #include "KoColorConversions.h"
 
 #define PixelIntensity(pixel) ((unsigned int)                           \
@@ -43,14 +43,14 @@
 #define AbsoluteValue(x)  ((x) < 0 ? -(x) : (x))
 
 
-KisRgbU8CompositeOp::KisRgbU8CompositeOp(KoColorSpace * cs, const QString& id, const QString& description, const bool userVisible)
+KoRgbU8CompositeOp::KoRgbU8CompositeOp(KoColorSpace * cs, const QString& id, const QString& description, const bool userVisible)
     : KoCompositeOp(cs, id, description, userVisible)
 {
     m_pixelSize = cs->pixelSize();
 }
 
 
-void KisRgbU8CompositeOp::composite(quint8 *dst, qint32 dstRowStride,
+void KoRgbU8CompositeOp::composite(quint8 *dst, qint32 dstRowStride,
                                     const quint8 *src, qint32 srcRowStride,
                                     const quint8 *mask, qint32 maskRowStride,
                                     qint32 rows, qint32 cols,
@@ -164,7 +164,7 @@ void KisRgbU8CompositeOp::composite(quint8 *dst, qint32 dstRowStride,
 
 
 
-void KisRgbU8CompositeOp::compositeOver(quint8 *dstRowStart, qint32 dstRowStride,
+void KoRgbU8CompositeOp::compositeOver(quint8 *dstRowStart, qint32 dstRowStride,
                                         const quint8 *srcRowStart, qint32 srcRowStride,
                                         const quint8 *maskRowStart, qint32 maskRowStride,
                                         qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
@@ -253,7 +253,7 @@ void KisRgbU8CompositeOp::compositeOver(quint8 *dstRowStart, qint32 dstRowStride
     }
 }
 
-void KisRgbU8CompositeOp::compositeMultiply(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeMultiply(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
 {
     while (rows > 0) {
 
@@ -342,7 +342,7 @@ void KisRgbU8CompositeOp::compositeMultiply(quint8 *dstRowStart, qint32 dstRowSt
     }
 }
 
-void KisRgbU8CompositeOp::compositeDivide(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeDivide(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
 {
     while (rows > 0) {
 
@@ -416,7 +416,7 @@ void KisRgbU8CompositeOp::compositeDivide(quint8 *dstRowStart, qint32 dstRowStri
     }
 }
 
-void KisRgbU8CompositeOp::compositeScreen(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeScreen(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
 {
     while (rows > 0) {
 
@@ -489,7 +489,7 @@ void KisRgbU8CompositeOp::compositeScreen(quint8 *dstRowStart, qint32 dstRowStri
     }
 }
 
-void KisRgbU8CompositeOp::compositeOverlay(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeOverlay(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
 {
     while (rows > 0) {
 
@@ -563,7 +563,7 @@ void KisRgbU8CompositeOp::compositeOverlay(quint8 *dstRowStart, qint32 dstRowStr
     }
 }
 
-void KisRgbU8CompositeOp::compositeDodge(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeDodge(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
 {
     while (rows > 0) {
 
@@ -636,7 +636,7 @@ void KisRgbU8CompositeOp::compositeDodge(quint8 *dstRowStart, qint32 dstRowStrid
     }
 }
 
-void KisRgbU8CompositeOp::compositeBurn(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeBurn(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
 {
     while (rows > 0) {
 
@@ -709,7 +709,7 @@ void KisRgbU8CompositeOp::compositeBurn(quint8 *dstRowStart, qint32 dstRowStride
     }
 }
 
-void KisRgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
 {
     while (rows > 0) {
 
@@ -782,7 +782,7 @@ void KisRgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStri
     }
 }
 
-void KisRgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
 {
     while (rows > 0) {
 
@@ -854,7 +854,7 @@ void KisRgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStr
     }
 }
 
-void KisRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
 {
     while (rows > 0) {
 
@@ -940,7 +940,7 @@ void KisRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride,
     }
 }
 
-void KisRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
 {
     while (rows > 0) {
 
@@ -1025,7 +1025,7 @@ void KisRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRow
     }
 }
 
-void KisRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
 {
     while (rows > 0) {
 
@@ -1110,7 +1110,7 @@ void KisRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStrid
     }
 }
 
-void KisRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity, const QBitArray & channelFlags) const
 {
 
     while (rows > 0) {
@@ -1198,7 +1198,7 @@ void KisRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStrid
 
 }
 
-void KisRgbU8CompositeOp::compositeErase(quint8 *dst,
+void KoRgbU8CompositeOp::compositeErase(quint8 *dst,
                                          qint32 dstRowSize,
                                          const quint8 *src,
                                          qint32 srcRowSize,
@@ -1243,7 +1243,7 @@ void KisRgbU8CompositeOp::compositeErase(quint8 *dst,
 
 
 
-void KisRgbU8CompositeOp::compositeIn(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeIn(qint32 pixelSize,
                                       quint8 *dst,
                                       qint32 dstRowSize,
                                       const quint8 *src,
@@ -1299,7 +1299,7 @@ void KisRgbU8CompositeOp::compositeIn(qint32 pixelSize,
     }
 }
 
-void KisRgbU8CompositeOp::compositeOut(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeOut(qint32 pixelSize,
                                        quint8 *dst,
                                        qint32 dstRowSize,
                                        const quint8 *src,
@@ -1352,7 +1352,7 @@ void KisRgbU8CompositeOp::compositeOut(qint32 pixelSize,
 
 }
 
-void KisRgbU8CompositeOp::compositeAtop(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeAtop(qint32 pixelSize,
                                         quint8 *dst,
                                         qint32 dstRowSize,
                                         const quint8 *src,
@@ -1409,7 +1409,7 @@ void KisRgbU8CompositeOp::compositeAtop(qint32 pixelSize,
 }
 
 
-void KisRgbU8CompositeOp::compositeXor(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeXor(qint32 pixelSize,
                                        quint8 *dst,
                                        qint32 dstRowSize,
                                        const quint8 *src,
@@ -1467,7 +1467,7 @@ void KisRgbU8CompositeOp::compositeXor(qint32 pixelSize,
 }
 
 
-void KisRgbU8CompositeOp::compositePlus(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositePlus(qint32 pixelSize,
                                         quint8 *dst,
                                         qint32 dstRowSize,
                                         const quint8 *src,
@@ -1526,7 +1526,7 @@ void KisRgbU8CompositeOp::compositePlus(qint32 pixelSize,
 
 
 
-void KisRgbU8CompositeOp::compositeMinus(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeMinus(qint32 pixelSize,
                                          quint8 *dst,
                                          qint32 dstRowSize,
                                          const quint8 *src,
@@ -1583,7 +1583,7 @@ void KisRgbU8CompositeOp::compositeMinus(qint32 pixelSize,
 
 }
 
-void KisRgbU8CompositeOp::compositeAdd(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeAdd(qint32 pixelSize,
                                        quint8 *dst,
                                        qint32 dstRowSize,
                                        const quint8 *src,
@@ -1636,7 +1636,7 @@ void KisRgbU8CompositeOp::compositeAdd(qint32 pixelSize,
 
 }
 
-void KisRgbU8CompositeOp::compositeSubtract(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeSubtract(qint32 pixelSize,
                                             quint8 *dst,
                                             qint32 dstRowSize,
                                             const quint8 *src,
@@ -1687,7 +1687,7 @@ void KisRgbU8CompositeOp::compositeSubtract(qint32 pixelSize,
 
 }
 
-void KisRgbU8CompositeOp::compositeDiff(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeDiff(qint32 pixelSize,
                                         quint8 *dst,
                                         qint32 dstRowSize,
                                         const quint8 *src,
@@ -1737,7 +1737,7 @@ void KisRgbU8CompositeOp::compositeDiff(qint32 pixelSize,
     }
 }
 
-void KisRgbU8CompositeOp::compositeBumpmap(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeBumpmap(qint32 pixelSize,
                                            quint8 *dst,
                                            qint32 dstRowSize,
                                            const quint8 *src,
@@ -1794,7 +1794,7 @@ void KisRgbU8CompositeOp::compositeBumpmap(qint32 pixelSize,
 }
 
 
-void KisRgbU8CompositeOp::compositeCopyChannel(quint8 pixel, quint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const
+void KoRgbU8CompositeOp::compositeCopyChannel(quint8 pixel, quint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const
 {
     Q_UNUSED( channelFlags );
     Q_UNUSED( opacity );
@@ -1815,7 +1815,7 @@ void KisRgbU8CompositeOp::compositeCopyChannel(quint8 pixel, quint32 pixelSize, 
     }
 }
 
-void KisRgbU8CompositeOp::compositeCopyRed(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeCopyRed(qint32 pixelSize,
                                            quint8 *dst,
                                            qint32 dstRowSize,
                                            const quint8 *src,
@@ -1827,7 +1827,7 @@ void KisRgbU8CompositeOp::compositeCopyRed(qint32 pixelSize,
     compositeCopyChannel(RgbU8Traits::red_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity, channelFlags);
 }
 
-void KisRgbU8CompositeOp::compositeCopyGreen(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeCopyGreen(qint32 pixelSize,
                                              quint8 *dst,
                                              qint32 dstRowSize,
                                              const quint8 *src,
@@ -1839,7 +1839,7 @@ void KisRgbU8CompositeOp::compositeCopyGreen(qint32 pixelSize,
     compositeCopyChannel(RgbU8Traits::green_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity, channelFlags);
 }
 
-void KisRgbU8CompositeOp::compositeCopyBlue(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeCopyBlue(qint32 pixelSize,
                                             quint8 *dst,
                                             qint32 dstRowSize,
                                             const quint8 *src,
@@ -1852,7 +1852,7 @@ void KisRgbU8CompositeOp::compositeCopyBlue(qint32 pixelSize,
 }
 
 
-void KisRgbU8CompositeOp::compositeCopyOpacity(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeCopyOpacity(qint32 pixelSize,
                                                quint8 *dst,
                                                qint32 dstRowSize,
                                                const quint8 *src,
@@ -1868,7 +1868,7 @@ void KisRgbU8CompositeOp::compositeCopyOpacity(qint32 pixelSize,
 }
 
 
-void KisRgbU8CompositeOp::compositeClear(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeClear(qint32 pixelSize,
                                          quint8 *dst,
                                          qint32 dstRowSize,
                                          const quint8 *src,
@@ -1904,7 +1904,7 @@ void KisRgbU8CompositeOp::compositeClear(qint32 pixelSize,
 }
 
 
-void KisRgbU8CompositeOp::compositeDissolve(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeDissolve(qint32 pixelSize,
                                             quint8 *dst,
                                             qint32 dstRowSize,
                                             const quint8 *src,
@@ -1955,7 +1955,7 @@ void KisRgbU8CompositeOp::compositeDissolve(qint32 pixelSize,
     }
 }
 
-void KisRgbU8CompositeOp::compositeCopy(qint32 pixelSize,
+void KoRgbU8CompositeOp::compositeCopy(qint32 pixelSize,
                                         quint8 *dstRowStart,
                                         qint32 dstRowStride,
                                         const quint8 *srcRowStart,

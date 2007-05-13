@@ -23,6 +23,8 @@ set(pigment_SRCS
    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsColorProfile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoAlphaColorSpace.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoLabColorSpace.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU8CompositeOp.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU8ColorSpace.cc
    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU16ColorSpace.cpp
 )
 

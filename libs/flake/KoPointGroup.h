@@ -23,27 +23,17 @@
 
 #include "KoPathShape.h"
 
-//   #include <QFlags>
-//   #include <QPainterPath>
-//   #include <QSet>
-//   #include <QMap>
-//   #include <QList>
-//
-//   #include "KoShape.h"
-//
-//   #define KoPathShapeId "KoPathShape"
-
 /**
  * @brief A KoPointGroup represents points in a path that should be treated as one
  *
- * In svg it is possible when you use a close and the create a new subpath not using 
- * a moveTo that the new subpath starts at the same point as the last subpath. As 
- * every point can only have 2 control points we have this class to group points 
- * together which should be handled as one in e.g. a move. 
+ * In svg it is possible when you use a close and the create a new subpath not using
+ * a moveTo that the new subpath starts at the same point as the last subpath. As
+ * every point can only have 2 control points we have this class to group points
+ * together which should be handled as one in e.g. a move.
  */
 class KoPointGroup
 {
-public:    
+public:
     KoPointGroup() {}
     ~KoPointGroup() {}
 
@@ -53,9 +43,9 @@ public:
     void add( KoPathPoint * point );
     /**
      * @brief Remove a point from the group
-     * 
+     *
      * This also remove the pointer to the group in the point.
-     * When the second last point is removed from the group, the 
+     * When the second last point is removed from the group, the
      * group removes also the last point and deletes itself.
      */
     void remove( KoPathPoint * point );

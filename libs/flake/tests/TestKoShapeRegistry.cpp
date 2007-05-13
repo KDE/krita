@@ -70,10 +70,10 @@ void TestKoShapeRegistry::testCreateEmptyShape()
     int errorLine = 0;
     int errorColumn = 0;
 
-    QVERIFY( doc.setContent( &xmldevice, true, &errorMsg, &errorLine, &errorColumn ), true );
-    QVERIFY( errorMsg.isEmpty(), true );
-    QVERIFY( errorLine, 0 );
-    QVERIFY( errorColumn, 0 );
+    QCOMPARE( doc.setContent( &xmldevice, true, &errorMsg, &errorLine, &errorColumn ), true );
+    QCOMPARE( errorMsg.isEmpty(), true );
+    QCOMPARE( errorLine, 0 );
+    QCOMPARE( errorColumn, 0 );
 
     KoXmlElement contentElement = doc.documentElement();
     KoXmlElement bodyElement = contentElement.firstChild().toElement();

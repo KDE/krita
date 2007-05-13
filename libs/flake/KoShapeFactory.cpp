@@ -31,10 +31,12 @@ public:
     }
     QList<KoShapeTemplate> templates;
     QList<KoShapeConfigFactory*> configPanels;
-    const QString id, name;
+    const QString id;
+    const QString name;
     QString tooltip;
     QString iconName;
     quint32 loadingPriority;
+    QString odfNameSpace;
     QString odfElementName;
 
 };
@@ -62,7 +64,7 @@ QString KoShapeFactory::name() const {
     return d->name;
 }
 
-int KoShapeFactory::loadingPriority() const
+quint32 KoShapeFactory::loadingPriority() const
 {
     return d->loadingPriority;
 }
@@ -72,10 +74,16 @@ QString KoShapeFactory::odfElementName() const
     return d->odfElementName;
 }
 
-bool KoShapeFactory::supports(KoXmlElement e) const
+const QString & KoShapeFactory::odfNameSpace() const
+{
+    return d->odfNameSpace;
+}
+
+bool KoShapeFactory::supports(const KoXmlElement & e) const
 {
     Q_UNUSED( e );
-    // XXX: Implement
+    // XXX: Remove this and replace with a pure virtual once
+    // everything has implemented it.
     return false;
 }
 
@@ -106,6 +114,17 @@ const QList<KoShapeConfigFactory*> &KoShapeFactory::panelFactories() {
 
 const QList<KoShapeTemplate> KoShapeFactory::templates() const {
     return d->templates;
+}
+
+void KoShapeFactory::setLoadingPriority( quint32 priority )
+{
+    d->loadingPriority = priority;
+}
+
+void KoShapeFactory::setOdfElementName( const QString & nameSpace, const QString & name )
+{
+    d->odfNameSpace = nameSpace;
+    d->odfElementName = name;
 }
 
 #include "KoShapeFactory.moc"

@@ -125,15 +125,28 @@ add_test(libs-flake-TestShapePainting ${EXECUTABLE_OUTPUT_PATH}/TestShapePaintin
 
 ########### next target ###############
 
-set(TestKoShapeRegistry_test_SRCS TestShapePainting.cpp )
+set(TestKoShapeFactory_test_SRCS TestShapePainting.cpp )
 
-kde4_automoc(${TestKoShapeRegistry_test_SRCS})
+kde4_automoc(${TestKoShapeFactory_test_SRCS})
 
-kde4_add_executable(TestKoShapeRegistry RUN_UNINSTALLED ${TestKoShapeRegistry_test_SRCS})
+kde4_add_executable(TestKoShapeFactory RUN_UNINSTALLED ${TestKoShapeFactory_test_SRCS})
 
-target_link_libraries(TestKoShapeRegistry  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestKoShapeFactory  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
 
-add_test(libs-flake-TestKoShapeRegistry ${EXECUTABLE_OUTPUT_PATH}/TestKoShapeRegistry)
+add_test(libs-flake-TestKoShapeFactory ${EXECUTABLE_OUTPUT_PATH}/TestKoShapeFactory)
 
 ########### next target ###############
+
+set(TestKoShapeFactory_test_SRCS TestShapePainting.cpp )
+
+kde4_automoc(${TestKoShapeFactory_test_SRCS})
+
+kde4_add_executable(TestKoShapeFactory RUN_UNINSTALLED ${TestKoShapeFactory_test_SRCS})
+
+target_link_libraries(TestKoShapeFactory  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
+add_test(libs-flake-TestKoShapeFactory ${EXECUTABLE_OUTPUT_PATH}/TestKoShapeFactory)
+
+########### next target ###############
+
 endif(KDE4_BUILD_TESTS)

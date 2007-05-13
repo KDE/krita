@@ -67,7 +67,7 @@ KoShapeRegistry* KoShapeRegistry::instance()
     return KoShapeRegistry::m_singleton;
 }
 
-KoShape * KoShapeRegistry::createShapeFromOdf(KoShapeLoadingContext *context, KoXmlElement e) const
+KoShape * KoShapeRegistry::createShapeFromOdf(KoShapeLoadingContext *context, const KoXmlElement & e) const
 {
     Q_UNUSED( context );
     Q_UNUSED( e );

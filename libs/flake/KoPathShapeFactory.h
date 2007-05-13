@@ -24,6 +24,8 @@
 #include "KoShape.h"
 #include "KoShapeFactory.h"
 
+#include "KoXmlReader.h"
+
 /// Factory for path shapes
 class KoPathShapeFactory : public KoShapeFactory
 {
@@ -33,6 +35,7 @@ public:
     ~KoPathShapeFactory() {}
     KoShape * createDefaultShape() const;
     KoShape * createShape(const KoProperties * params) const;
+    bool supports(const KoXmlElement & e) const;
 };
 
 #endif

@@ -60,7 +60,7 @@ public:
      *
      * @returns the shape or 0 if no shape could be created
      */
-    KoShape * createShapeFromOdf(KoShapeLoadingContext *context, KoXmlElement e) const;
+    KoShape * createShapeFromOdf(KoShapeLoadingContext *context, const KoXmlElement & e) const;
 
 private:
     KoShapeRegistry();

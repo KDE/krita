@@ -175,15 +175,19 @@ public:
     QString name() const;
 
     /// lower prio means the shape is more generic and will be checked later
-    int loadingPriority() const;
+    quint32 loadingPriority() const;
+
+    // The namespace that the elements supported by the shape created
+    // by this factory should be in.
+    const QString & odfNameSpace() const;
 
     /// the name used for quick checking if this shapeFactory is able to
     /// load Odf data identified by the element name.
-    QString odfElementName() const;
+    virtual QString odfElementName() const;
 
     /// returns true if this shapeFactory is able to load the ODF type
     /// started at argument element. ('draw:line' / 'draw:frame' / etc)
-    bool supports(KoXmlElement e) const;
+    bool supports(const KoXmlElement & e) const;
 
 protected:
 
@@ -193,17 +197,39 @@ protected:
      * @param params the new template this factory knows to produce
      */
     void addTemplate(KoShapeTemplate &params);
+
     /**
      * Set the tooltip to be used for a selector of shapes
      * @param tooltip the tooltip
      */
     void setToolTip(const QString & tooltip);
+
     /**
      * Set an icon to be used in a selector of shapes
      * @param iconName the basename (without extension) of the icon
      * @see KIconLoader
      */
     void setIcon(const QString & iconName);
+
+    /**
+     * Set the loading priority for this icon; higher priority means
+     * the shape is more specific which means it will be earlier in
+     * the queue to try loading a particular odf element.
+     */
+    void setLoadingPriority( quint32 priority );
+
+    /**
+     * Set the name used for quick checking whether this shapefactory
+     * is able to create a shape from xml identified by this element
+     * name.
+     *
+     * @param nameSpace the ODF name space (like
+     * urn:oasis:names:tc:opendocument:xmlns:text:1.0,
+     * take it from KoXmlNS.h)
+     * @param elementName the name of the elment itself, like "draw"
+     *
+     */
+    void setOdfElementName( const QString & nameSpace, const QString & elementName );
 
 private:
     class Private;

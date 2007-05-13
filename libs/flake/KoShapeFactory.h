@@ -27,6 +27,8 @@
 
 #include <flake_export.h>
 
+#include <KoXmlReader.h>
+
 class KoShape;
 class KoProperties;
 class KoShapeConfigFactory;
@@ -171,6 +173,17 @@ public:
      * @return the user visible (and translated) name to be seen by the user.
      */
     QString name() const;
+
+    /// lower prio means the shape is more generic and will be checked later
+    int loadingPriority() const;
+
+    /// the name used for quick checking if this shapeFactory is able to
+    /// load Odf data identified by the element name.
+    QString odfElementName() const;
+
+    /// returns true if this shapeFactory is able to load the ODF type
+    /// started at argument element. ('draw:line' / 'draw:frame' / etc)
+    bool supports(KoXmlElement e) const;
 
 protected:
 

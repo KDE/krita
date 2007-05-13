@@ -34,6 +34,9 @@ public:
     const QString id, name;
     QString tooltip;
     QString iconName;
+    quint32 loadingPriority;
+    QString odfElementName;
+
 };
 
 
@@ -57,6 +60,23 @@ QString KoShapeFactory::icon() const {
 
 QString KoShapeFactory::name() const {
     return d->name;
+}
+
+int KoShapeFactory::loadingPriority() const
+{
+    return d->loadingPriority;
+}
+
+QString KoShapeFactory::odfElementName() const
+{
+    return d->odfElementName;
+}
+
+bool KoShapeFactory::supports(KoXmlElement e) const
+{
+    Q_UNUSED( e );
+    // XXX: Implement
+    return false;
 }
 
 void KoShapeFactory::addTemplate(KoShapeTemplate &params) {

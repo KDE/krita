@@ -148,6 +148,10 @@ QWidget * KoPathTool::createOptionWidget() {
     layout->setColumnStretch( 6, 0 );
     layout->setColumnStretch( 7, 1 );
 
+    layout->setRowStretch( 0, 0 );
+    layout->setRowStretch( 1, 0 );
+    layout->setRowStretch( 2, 1 );
+    
     connect( m_pointTypeGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotPointTypeChanged( int ) ) );
     return optionWidget;
 }

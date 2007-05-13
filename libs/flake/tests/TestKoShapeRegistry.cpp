@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "TestKoShapeRegistry.h"
-
+#include <qtest_kde.h>
 #include <QBuffer>
 #include <QFile>
 #include <QDateTime>
@@ -87,5 +87,5 @@ void TestKoShapeRegistry::testCreateEmptyShape()
 }
 
 
-QTEST_MAIN(TestKoShapeRegistry)
+QTEST_KDEMAIN(TestKoShapeRegistry, NoGUI)
 #include "TestKoShapeRegistry.moc"

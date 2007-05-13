@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "TestKoShapeFactory.h"
-
+#include <qtest_kde.h>
 #include <QBuffer>
 #include <QFile>
 #include <QDateTime>
@@ -58,7 +58,6 @@ void TestKoShapeFactory::testCreateDefaultShape()
     KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
     KoShape * shape = factory->createDefaultShape();
     QVERIFY( shape != 0 );
-    QVERIFY( shape->shapeId() == KoPathShapeId );
 }
 
 void TestKoShapeFactory::testCreateShape()
@@ -66,7 +65,6 @@ void TestKoShapeFactory::testCreateShape()
     KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
     KoShape * shape = factory->createShape( 0 );
     QVERIFY( shape != 0 );
-    QVERIFY( shape->shapeId() == KoPathShapeId );
 }
 
 void TestKoShapeFactory::testOdfElement()
@@ -119,7 +117,11 @@ void TestKoShapeFactory::testOdfElement()
 
     KoXmlElement pathElement = bodyElement.firstChild().nextSibling().toElement();
     QCOMPARE( factory->supports( pathElement ), true );
+
+    KoShape * shape = factory->createDefaultShape( );
+    QVERIFY( shape );
+    //XXX: test loading
 }
 
-QTEST_MAIN(TestKoShapeFactory)
+QTEST_KDEMAIN(TestKoShapeFactory, NoGUI)
 #include "TestKoShapeFactory.moc"

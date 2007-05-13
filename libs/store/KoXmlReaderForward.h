@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright (C) 2005-2006 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -14,22 +15,34 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#include "KoShapeLoadingContext.h"
+#ifndef KOXMLREADERFORWARD_H
+#define KOXMLREADERFORWARD_H
 
-KoShapeLoadingContext::KoShapeLoadingContext( KoOasisLoadingContext & context )
-: m_context( context )
-{
-}
+#define KOXML_USE_QDOM
 
-KoOasisLoadingContext & KoShapeLoadingContext::koLoadingContext()
-{
-    return m_context;
-}
+#ifdef KOXML_USE_QDOM
 
-KoShapeLayer * KoShapeLoadingContext::layer( const QString & layerName )
-{
-   return m_layers.value( layerName, 0 ); 
-}
+#include <qdom.h>
+
+typedef QDomNode KoXmlNode;
+typedef QDomElement KoXmlElement;
+typedef QDomText KoXmlText;
+typedef QDomCDATASection KoXmlCDATASection;
+typedef QDomDocumentType KoXmlDocumentType;
+typedef QDomDocument KoXmlDocument;
+
+#else
+
+class KoXmlElement;
+class KoXmlText;
+class KoXmlCDATASection;
+class KoXmlDocumentType;
+class KoXmlDocument;
+class KoXmlNodeData;
+
+#endif
+
+#endif // KOXMLREADERFORWARD_H

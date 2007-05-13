@@ -19,14 +19,34 @@
 
 #ifndef KOSHAPELOADINGCONTEXT_H
 #define KOSHAPELOADINGCONTEXT_H
+
+#include <QMap>
+#include <QString>
+
 #include <flake_export.h>
+
+class KoOasisLoadingContext;
+class KoShapeLayer;
+class KoShape;
+
 /**
  * Context passed to shapes during loading
  */
 class FLAKE_EXPORT KoShapeLoadingContext
 {
 public:
-	KoShapeLoadingContext();
+	KoShapeLoadingContext( KoOasisLoadingContext & context );
+
+    KoOasisLoadingContext & koLoadingContext();
+
+    KoShapeLayer * layer( const QString & layerName );
+
+    void addShapeId( KoShape * shape, const QString & id );
+
+private:    
+    KoOasisLoadingContext &m_context;
+    QMap<QString, KoShapeLayer*> m_layers;
+    QMap<int, KoShape*> m_drawIds; 
 };
 
 #endif /* KOSHAPELOADINGCONTEXT_H */

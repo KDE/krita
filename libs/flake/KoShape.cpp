@@ -32,9 +32,12 @@
 #include "KoShapeUserData.h"
 #include "KoShapeApplicationData.h"
 #include "KoShapeSavingContext.h"
+#include "KoShapeLoadingContext.h"
 #include "KoViewConverter.h"
 
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
 
@@ -646,6 +649,21 @@ QString KoShape::style( KoShapeSavingContext *context ) const
     }
 
     return context->mainStyles().lookup( style, context->isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
+}
+
+bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingContext &context, int attributes )
+{
+    if ( attributes & OdfMandatories ) {
+        if ( element.hasAttributeNS( KoXmlNS::draw, "layer" ) ) {
+            KoShapeLayer * layer = context.layer( element.attributeNS( KoXmlNS::draw, "layer" ) );
+            if ( layer ) {
+                setParent( layer );
+            }
+
+        }
+    }
+
+    return true;
 }
 
 void KoShape::saveOdfFrameAttributes(KoShapeSavingContext *context) {

@@ -33,12 +33,12 @@ class QTextDecoder;
 
 #ifdef KOXML_USE_QDOM
 
-#define KoXmlNode QDomNode
-#define KoXmlElement QDomElement
-#define KoXmlText QDomText
-#define KoXmlCDATASection QDomCDATASection
-#define KoXmlDocumentType QDomDocumentType
-#define KoXmlDocument QDomDocument
+typedef QDomNode KoXmlNode;
+typedef QDomElement KoXmlElement;
+typedef QDomText KoXmlText;
+typedef QDomCDATASection KoXmlCDATASection;
+typedef QDomDocumentType KoXmlDocumentType;
+typedef QDomDocument KoXmlDocument;
 
 #else
 

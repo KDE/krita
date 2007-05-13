@@ -33,6 +33,8 @@
 
 #include <flake_export.h>
 
+#include <KoXmlReaderForward.h>
+
 class QPainter;
 class QRectF;
 class QPainterPath;
@@ -50,6 +52,7 @@ class KoShapeApplicationData;
 class KoShapeSavingContext;
 class KoCanvasBase;
 class KoGenStyle;
+class KoShapeLoadingContext;
 
 /**
  *
@@ -131,6 +134,16 @@ public:
      *      like selection and get a reference to the KoCanvasResourceProvider.
      */
     virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
+
+    /**
+     * Load a shape from odf
+     *
+     * @param context the KoShapeLoadingContext used for loading
+     * @param element element which represents the shape in odf
+     *
+     * TODO make it pure virtual
+     */
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) { Q_UNUSED(element); Q_UNUSED(context); return true; }
 
     /**
      * @brief store the shape data as ODF XML.
@@ -575,6 +588,15 @@ protected:
         FrameAttributes = OdfMandatories | OdfSize | OdfPosition | OdfTransformation
     };
 
+    /**
+     * This method is used during loading of the shape to load common attributes
+     *
+     * @param context the KoShapeLoadingContext used for loading
+     * @param element element which represents the shape in odf
+     * @param attributes a number of OdfAttribute items to state which attributes to load.
+     */
+    bool loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingContext &context, int attributes );
+    
     /**
      * This method can be used while saving the shape as ODF to add the data
      * stored on this shape to the current element.

@@ -55,6 +55,7 @@ set(koguiutils_LIB_SRCS
    KoUniColorDialog.cpp
    KoColorPatch.cpp
    KoDualColorButton.cpp
+   KoLineStyleSelector.cpp
 )
 
 kde4_automoc(${koguiutils_LIB_SRCS})

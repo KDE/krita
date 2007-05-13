@@ -67,3 +67,28 @@ widget.h
 widgetproxy.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty)
 
+install( FILES
+editors/booledit.h
+editors/booledit.h
+editors/coloredit.h
+editors/combobox.h
+editors/cursoredit.h
+editors/dateedit.h
+editors/datetimeedit.h
+editors/dummywidget.h
+editors/fontedit.h
+editors/linestyleedit.h
+editors/pixmapedit.h
+editors/pointedit.h
+editors/rectedit.h
+editors/sizeedit.h
+editors/sizepolicyedit.h
+editors/spinbox.h
+editors/spinbox.h
+editors/stringedit.h
+editors/stringlistedit.h
+editors/symbolcombo.h
+editors/timeedit.h
+editors/urledit.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty/editors)
+

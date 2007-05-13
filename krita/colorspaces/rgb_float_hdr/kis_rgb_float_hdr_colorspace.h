@@ -39,6 +39,8 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB1
 
         }
 
+        virtual bool hasHighDynamicRange() const { return true; }
+
         virtual void fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile * /*profile*/) const
         {
             typename _CSTraits::channels_type* dst = _CSTraits::nativeArray(dstU8);

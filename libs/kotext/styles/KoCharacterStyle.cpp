@@ -253,17 +253,12 @@ void KoCharacterStyle::loadOasis(KoStyleStack& styleStack) {
         setFontWeight( boldness );
     }
 
-    //bool italic = false;
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-style" ) ) { // 3.10.19
         if ( styleStack.property( KoXmlNS::fo, "font-style" ) == "italic" ||
              styleStack.property( KoXmlNS::fo, "font-style" ) == "oblique" ) { // no difference in kotext
             setFontItalic( true );
-            //italic = true;
         }
     }
-    //sebsauer, 2007-03-19, we always call setFontItalic() here since it works
-    //for now in KWOpenDocumentLoader better that way.
-    //setFontItalic( italic );
 
 //TODO
 #if 0

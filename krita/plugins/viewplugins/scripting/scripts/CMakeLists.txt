@@ -1,3 +1,5 @@
+add_subdirectory( filters )
+
 install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/krita/scripts)
 
 install(FILES

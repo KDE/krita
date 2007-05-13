@@ -37,6 +37,16 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 
+// kdelibs/kross
+#include <kross/core/manager.h>
+#include <kross/ui/model.h>
+#include <kross/ui/guiclient.h>
+#include <kross/core/action.h>
+#include <kross/core/actioncollection.h>
+
+// koffice/libs/kokross
+#include <KoScriptingDocker.h>
+
 // krita
 #include <kis_global.h>
 #include <kis_types.h>
@@ -44,15 +54,11 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_doc2.h>
-// koffice/libs/kokross
-#include <KoScriptingDocker.h>
-// kdelibs/kross
-#include <kross/core/manager.h>
-#include <kross/ui/model.h>
-#include <kross/ui/guiclient.h>
 // kritacore
 #include "kritacore/krs_module.h"
 #include "kritacore/krs_progress.h"
+
+#include "kis_script_filter.h"
 
 typedef KGenericFactory<ScriptingPart> KritaScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
@@ -101,6 +107,21 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
     connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
     Kross::Manager::self().addObject(d->module, "Krita");
+
+    // Add filters
+    Kross::ActionCollection* actioncollection = Kross::Manager::self().actionCollection();
+    
+    if( actioncollection && (actioncollection = actioncollection->collection("filters")) ) {
+        foreach(Kross::Action* action, actioncollection->actions()) {
+            Q_ASSERT(action);
+            KisScriptFilter* sf = new KisScriptFilter(action);
+            KisFilterRegistry::instance()->add(sf);
+//             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
+//             if( ! factory ) continue;
+           kDebug(41011) << "Adding scripting filters with id=" << sf->id() << endl;
+        }
+    }
+
 }
 
 ScriptingPart::~ScriptingPart()

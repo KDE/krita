@@ -23,6 +23,7 @@
 
 #include <kis_types.h>
 #include <kis_paint_layer.h>
+#include <krita_export.h>
 
 class KisDoc2;
 class KisTransaction;
@@ -35,7 +36,7 @@ class Image;
  * A PaintDevice is a layer within a \a Image where you are able
  * to perform paint-operations on.
  */
-class PaintDevice : public ConstPaintDevice
+class KROSSKRITACORE_EXPORT PaintDevice : public ConstPaintDevice
 {
         Q_OBJECT
     public:

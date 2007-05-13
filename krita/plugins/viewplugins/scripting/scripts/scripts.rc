@@ -80,5 +80,12 @@
 			file="extensions/torture-filters.rb" />
 
 	</collection>
-
+    <collection name="filters" text="Filters" comment="Scripting filters for Krita" enabled="false">
+        <script
+            name="rbinvert"
+            text="Invert with Ruby"
+            comment="Invert the pixel of an image with Ruby as a filter"
+            interpreter="ruby"
+            file="filters/invert.rb" />
+    </collection>
 </KrossScripting>

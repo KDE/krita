@@ -63,7 +63,7 @@ KisCustomPalette::KisCustomPalette( QList<KoColorSet*> &palettes, QWidget *paren
     connect(paletteList, SIGNAL(currentItemChanged( QListWidgetItem*, QListWidgetItem* )), this, SLOT(slotPaletteChanged( QListWidgetItem*, QListWidgetItem* )));
     connect(addColor, SIGNAL(pressed()), this, SLOT(slotAddNew()));
     connect(removeColor, SIGNAL(pressed()), this, SLOT(slotRemoveCurrent()));
-    connect(addPalette, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
+    //connect(addPalette, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
 }
 
 KisCustomPalette::~KisCustomPalette() {

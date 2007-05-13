@@ -19,11 +19,11 @@
 
 #ifndef KOSHAPELOADINGCONTEXT_H
 #define KOSHAPELOADINGCONTEXT_H
-
+#include <flake_export.h>
 /**
  * Context passed to shapes during loading
  */
-class KoShapeLoadingContext
+class FLAKE_EXPORT KoShapeLoadingContext
 {
 public:
 	KoShapeLoadingContext();

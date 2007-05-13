@@ -26,8 +26,8 @@
 
 #include "KoXmlReader.h"
 
-/// Factory for path shapes
-class KoPathShapeFactory : public KoShapeFactory
+/// Factory for path shapes.
+class FLAKE_EXPORT KoPathShapeFactory : public KoShapeFactory
 {
 public:
     /// constructor

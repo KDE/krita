@@ -16,7 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "TestKoShapeRegistry.h"
+#include "TestKoShapeFactory.h"
 
 #include <QBuffer>
 #include <QFile>
@@ -25,23 +25,56 @@
 #include <QString>
 #include <QTextStream>
 #include <QtXml>
+#include <QStringList>
 
 #include "KoShapeRegistry.h"
+#include "KoPathShapeFactory.h"
 #include "KoShape.h"
+#include "KoShapeFactory.h"
 #include "KoShapeLoadingContext.h"
-
+#include "KoPathShape.h"
 #include <KoXmlReader.h>
-
+#include <KoXmlNS.h>
 #include <kdebug.h>
 
-void TestKoShapeRegistry::testGetKoShapeRegistryInstance()
+void TestKoShapeFactory::testCreateFactory()
 {
-    KoShapeRegistry * registry = KoShapeRegistry::instance();
-    QVERIFY( registry != 0 );
+    KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
+    QVERIFY( factory != 0 );
 }
 
-void TestKoShapeRegistry::testCreateEmptyShape()
+void TestKoShapeFactory::testSupportsKoXmlElement()
 {
+}
+
+void TestKoShapeFactory::testPriority()
+{
+    KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
+    QVERIFY( factory->loadingPriority() == 0 );
+}
+
+void TestKoShapeFactory::testCreateDefaultShape()
+{
+    KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
+    KoShape * shape = factory->createDefaultShape();
+    QVERIFY( shape != 0 );
+    QVERIFY( shape->shapeId() == KoPathShapeId );
+}
+
+void TestKoShapeFactory::testCreateShape()
+{
+    KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
+    KoShape * shape = factory->createShape( 0 );
+    QVERIFY( shape != 0 );
+    QVERIFY( shape->shapeId() == KoPathShapeId );
+}
+
+void TestKoShapeFactory::testOdfElement()
+{
+    KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
+    QVERIFY( factory->odfElementName() == "path" );
+    QVERIFY( factory->odfNameSpace() == KoXmlNS::draw );
+
     QBuffer xmldevice;
     xmldevice.open( QIODevice::WriteOnly );
     QTextStream xmlstream( &xmldevice );
@@ -60,6 +93,7 @@ void TestKoShapeRegistry::testCreateEmptyShape()
     xmlstream << "<office:body>";
     xmlstream << "<office:text>";
     xmlstream << "<text:p text:style-name=\"P1\"><?opendocument cursor-position?></text:p>";
+    xmlstream << "<draw:path svg:d=\"M0,0L100,100\"></draw:path>";
     xmlstream << "</office:text>";
     xmlstream << "</office:body>";
     xmlstream << "</office:document-content>";
@@ -78,14 +112,14 @@ void TestKoShapeRegistry::testCreateEmptyShape()
     KoXmlElement contentElement = doc.documentElement();
     KoXmlElement bodyElement = contentElement.firstChild().toElement();
 
-    KoShapeRegistry * registry = KoShapeRegistry::instance();
-    KoShapeLoadingContext * context = new KoShapeLoadingContext();
+    QTEST( factory->supports( bodyElement ), false );
 
-    KoShape * shape = registry->createShapeFromOdf(bodyElement, context);
-    QVERIFY( shape == 0 );
+    KoXmlElement textElement = bodyElement.firstChild().toElement();
+    QTEST( factory->supports( textElement ), false );
 
+    KoXmlElement pathElement = bodyElement.firstChild().nextSibling().toElement();
+    QCOMPARE( factory->supports( pathElement ), true );
 }
 
-
-QTEST_MAIN(TestKoShapeRegistry)
-#include "TestKoShapeRegistry.moc"
+QTEST_MAIN(TestKoShapeFactory)
+#include "TestKoShapeFactory.moc"

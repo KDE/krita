@@ -41,6 +41,7 @@ void TestKoShapeFactory::testCreateFactory()
 {
     KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
     QVERIFY( factory != 0 );
+    delete factory;
 }
 
 void TestKoShapeFactory::testSupportsKoXmlElement()
@@ -51,6 +52,7 @@ void TestKoShapeFactory::testPriority()
 {
     KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
     QVERIFY( factory->loadingPriority() == 0 );
+    delete factory;
 }
 
 void TestKoShapeFactory::testCreateDefaultShape()
@@ -58,6 +60,8 @@ void TestKoShapeFactory::testCreateDefaultShape()
     KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
     KoShape * shape = factory->createDefaultShape();
     QVERIFY( shape != 0 );
+    delete shape;
+    delete factory;
 }
 
 void TestKoShapeFactory::testCreateShape()
@@ -65,6 +69,8 @@ void TestKoShapeFactory::testCreateShape()
     KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
     KoShape * shape = factory->createShape( 0 );
     QVERIFY( shape != 0 );
+    delete shape;
+    delete factory;
 }
 
 void TestKoShapeFactory::testOdfElement()
@@ -121,6 +127,9 @@ void TestKoShapeFactory::testOdfElement()
     KoShape * shape = factory->createDefaultShape( );
     QVERIFY( shape );
     //XXX: test loading
+
+    delete shape;
+    delete factory;
 }
 
 QTEST_KDEMAIN(TestKoShapeFactory, NoGUI)

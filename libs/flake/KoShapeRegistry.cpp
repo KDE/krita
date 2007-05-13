@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <QString>
+#include <QMultiMap>
 
 #include <kdebug.h>
 #include <kstaticdeleter.h>

@@ -28,7 +28,7 @@
 
 namespace Kross {
     class Action;
-};
+}
 
 class KisScriptFilter : public KisFilter {
     Q_OBJECT

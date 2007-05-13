@@ -114,6 +114,10 @@ public:
         return m_hash.count();
     }
 
+    QList<T> values() const {
+        return m_hash.values();
+    }
+
 private:
     QHash<QString, T> m_hash;
 };

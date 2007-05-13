@@ -183,11 +183,11 @@ public:
 
     /// the name used for quick checking if this shapeFactory is able to
     /// load Odf data identified by the element name.
-    virtual QString odfElementName() const;
+    QString odfElementName() const;
 
     /// returns true if this shapeFactory is able to load the ODF type
     /// started at argument element. ('draw:line' / 'draw:frame' / etc)
-    bool supports(const KoXmlElement & e) const;
+    virtual bool supports(const KoXmlElement & e) const;
 
 protected:
 

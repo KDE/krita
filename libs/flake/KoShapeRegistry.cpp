@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <QString>
+#include <QHash>
 #include <QMultiMap>
 
 #include <kdebug.h>
@@ -30,29 +31,68 @@
 #include "KoShapeLoadingContext.h"
 #include "KoXmlReader.h"
 
+class KoShapeRegistry::Private
+{
+public:
+
+    // Map namespace,tagname to priority:factory
+    QHash<QPair<QString, QString>, QMultiMap<int, KoShapeFactory*> > factoryMap;
+};
+
 KoShapeRegistry::KoShapeRegistry()
 {
 }
 
 void KoShapeRegistry::init() {
+
+    d = new Private();
+
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FlakePlugins";
     config.blacklist = "FlakePluginsDisabled";
     config.group = "koffice";
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Flake"),
-                                      QString::fromLatin1("[X-Flake-Version] == 1"), config);
+                                      QString::fromLatin1("[X-Flake-Version] == 1"),
+                                      config);
     config.whiteList = "ShapePlugins";
     config.blacklist = "ShapePluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Shape"),
-                                     QString::fromLatin1("[X-Flake-Version] == 1"), config);
+                                     QString::fromLatin1("[X-Flake-Version] == 1"),
+                                     config);
 
     // Also add our hard-coded basic shape
     add( new KoPathShapeFactory(this, QStringList()) );
+
+    // Now all shape factories are registered with us, determine their
+    // assocated odf tagname & priority and prepare ourselves for
+    // loading ODF.
+
+    QList<KoShapeFactory*> factories = values();
+    for ( int i = 0; i < factories.size(); ++i ) {
+        KoShapeFactory * factory = factories[i];
+        if ( factory->odfNameSpace().isEmpty() || factory->odfElementName().isEmpty() )
+        {
+            kDebug() << "Booh! Shape factory " << factory->id() << " sucks!" << endl;
+        }
+        else {
+            QPair<QString, QString> p ( factory->odfNameSpace(), factory->odfElementName() );
+
+            QMultiMap<int, KoShapeFactory*> priorityMap = d->factoryMap[p];
+
+            d->factoryMap[p].insert( factory->loadingPriority(), factory );
+
+            kDebug() << "Inserting factory " << factory->id() << " for "
+                     << p << " with priority "
+                     << factory->loadingPriority() << " into factoryMap making "
+                     << d->factoryMap[p].size() << " entries. " << endl;
+        }
+    }
 }
 
 
 KoShapeRegistry::~KoShapeRegistry()
 {
+    delete d;
 }
 
 KoShapeRegistry *KoShapeRegistry::m_singleton = 0;
@@ -68,10 +108,38 @@ KoShapeRegistry* KoShapeRegistry::instance()
     return KoShapeRegistry::m_singleton;
 }
 
-KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoadingContext *context) const
+KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const
 {
-    Q_UNUSED( context );
-    Q_UNUSED( e );
+    kDebug() << "Going to check for " << e.namespaceURI() << ":" << e.tagName() << endl;
+
+    QPair<QString, QString> p = QPair<QString, QString>(e.namespaceURI(), e.tagName());
+    kDebug() << p << endl;
+
+    if ( !d->factoryMap.contains( p ) ) return 0;
+
+    QMultiMap<int,KoShapeFactory*> priorityMap = d->factoryMap[p];
+    QList<KoShapeFactory*> factories = priorityMap.values();
+
+    // Higher numbers are more specific, map is sorted by keys
+    for ( int i = factories.size() - 1; i >= 0; --i ) {
+
+        KoShapeFactory * factory = factories[i];
+        if ( factory->supports( e ) ) {
+
+            KoShape * shape = factory->createDefaultShape();
+
+            if( shape->shapeId().isEmpty() )
+                shape->setShapeId(factory->id());
+
+            if ( shape->loadOdf( e, context ) )
+                return shape;
+
+            // Maybe a shape with a lower priority can load our
+            // element, but this attempt has failed.
+            delete shape;
+        }
+    }
+
     return 0;
 }
 

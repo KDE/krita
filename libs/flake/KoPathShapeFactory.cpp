@@ -51,7 +51,6 @@ KoShape * KoPathShapeFactory::createShape(const KoProperties * params) const {
 
 bool KoPathShapeFactory::supports(const KoXmlElement & e) const
 {
-    Q_UNUSED( e );
-    return false;
+    return ( e.tagName() == "path" );
 }
 

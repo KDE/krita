@@ -141,9 +141,11 @@ public:
      * @param context the KoShapeLoadingContext used for loading
      * @param element element which represents the shape in odf
      *
+     * @return false if loading failed
+     *
      * TODO make it pure virtual
      */
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) { Q_UNUSED(element); Q_UNUSED(context); return true; }
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) { Q_UNUSED(element); Q_UNUSED(context); return false; }
 
     /**
      * @brief store the shape data as ODF XML.
@@ -596,7 +598,7 @@ protected:
      * @param attributes a number of OdfAttribute items to state which attributes to load.
      */
     bool loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingContext &context, int attributes );
-    
+
     /**
      * This method can be used while saving the shape as ODF to add the data
      * stored on this shape to the current element.

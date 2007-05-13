@@ -27,6 +27,10 @@
 #include <QtXml>
 #include <QStringList>
 
+#include <KoOasisLoadingContext.h>
+#include <KoOasisStyles.h>
+
+#include "KoShapeLoadingContext.h"
 #include "KoShapeRegistry.h"
 #include "KoPathShapeFactory.h"
 #include "KoShape.h"
@@ -85,19 +89,10 @@ void TestKoShapeFactory::testOdfElement()
 
     xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     xmlstream << "<office:document-content xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\" xmlns:config=\"urn:oasis:names:tc:opendocument:xmlns:config:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:presentation=\"urn:oasis:names:tc:opendocument:xmlns:presentation:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:koffice=\"http://www.koffice.org/2005/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
-    xmlstream << "<office:font-face-decls>";
-    xmlstream << "<style:font-face style:name=\"Georgia\" svg:font-family=\"Georgia\"/>";
-    xmlstream << "</office:font-face-decls>";
-    xmlstream << "<office:automatic-styles>";
-    xmlstream << "<style:style style:name=\"P1\" style:parent-style-name=\"Standard\" style:family=\"paragraph\" style:master-page-name=\"Standard\">";
-    xmlstream << "<style:paragraph-properties style:page-number=\"1\" style:writing-mode=\"lr-tb\"/>";
-    xmlstream << "<style:text-properties/>";
-    xmlstream << "</style:style>";
-    xmlstream << "</office:automatic-styles>";
     xmlstream << "<office:body>";
     xmlstream << "<office:text>";
     xmlstream << "<text:p text:style-name=\"P1\"><?opendocument cursor-position?></text:p>";
-    xmlstream << "<draw:path svg:d=\"M0,0L100,100\"></draw:path>";
+    xmlstream << "<draw:path svg:d=\"M10,10L100,100\"></draw:path>";
     xmlstream << "</office:text>";
     xmlstream << "</office:body>";
     xmlstream << "</office:document-content>";
@@ -116,17 +111,24 @@ void TestKoShapeFactory::testOdfElement()
     KoXmlElement contentElement = doc.documentElement();
     KoXmlElement bodyElement = contentElement.firstChild().toElement();
 
-    QTEST( factory->supports( bodyElement ), false );
+    KoXmlElement textElement = bodyElement.firstChild().firstChild().toElement();
+    QVERIFY( textElement.tagName() == "p" );
+    QCOMPARE( factory->supports( textElement ), false );
 
-    KoXmlElement textElement = bodyElement.firstChild().toElement();
-    QTEST( factory->supports( textElement ), false );
-
-    KoXmlElement pathElement = bodyElement.firstChild().nextSibling().toElement();
+    KoXmlElement pathElement = bodyElement.firstChild().lastChild().toElement();
+    QVERIFY( pathElement.tagName() == "path" );
     QCOMPARE( factory->supports( pathElement ), true );
 
     KoShape * shape = factory->createDefaultShape( );
     QVERIFY( shape );
-    //XXX: test loading
+
+    // XXX: When loading is implemented, these no doubt have to be
+    // sensibly filled.
+    KoOasisStyles styles;
+    KoOasisLoadingContext oasisContext(0, styles, 0);
+    KoShapeLoadingContext shapeContext( oasisContext );
+
+    QVERIFY( shape->loadOdf( pathElement, shapeContext ) );
 
     delete shape;
     delete factory;

@@ -41,9 +41,10 @@ class KOMAIN_EXPORT KoOasisLoadingContext
 {
 public:
     /**
-     * Stores reference to the KoOasisStyles and stored passed by KoDocument.
-     * Make sure that the KoOasisStyles instance outlives this KoOasisLoadingContext instance.
-     * (This is the case during loading, when using the KoOasisStyles given by KoDocument)
+     * Stores reference to the KoOasisStyles and stored passed by
+     * KoDocument. Make sure that the KoOasisStyles instance outlives
+     * this KoOasisLoadingContext instance. (This is the case during
+     * loading, when using the KoOasisStyles given by KoDocument)
      *
      * @param doc the KoDocument being loaded
      * @param styles reference to the KoOasisStyles parsed by KoDocument

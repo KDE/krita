@@ -142,17 +142,23 @@ bool KoOasisStore::closeManifestWriter()
 bool KoOasisStore::loadAndParse( const QString& fileName, KoXmlDocument& doc, QString& errorMessage )
 {
     //kDebug(30003) << "loadAndParse: Trying to open " << fileName << endl;
+    if ( !m_store ) {
+        kWarning( 30003 ) << "No store backend" << endl;
+        errorMessage = i18n( "No store backend" );
+        return false;
+    }
 
-    if (!m_store->open(fileName))
+    if ( !m_store->open(fileName) )
     {
         kWarning(30003) << "Entry " << fileName << " not found!" << endl;
         errorMessage = i18n( "Could not find %1", fileName );
         return false;
     }
+
     bool ok = loadAndParse( m_store->device(), doc, errorMessage, fileName );
     m_store->close();
     return ok;
-}    
+}
 
 bool KoOasisStore::loadAndParse( QIODevice* fileDevice, KoXmlDocument& doc, QString& errorMessage, const QString& fileName )
 {
@@ -175,7 +181,7 @@ bool KoOasisStore::loadAndParse( QIODevice* fileDevice, KoXmlDocument& doc, QStr
         kError(30003) << "Parsing error in " << fileName << "! Aborting!" << endl
                        << " In line: " << errorLine << ", column: " << errorColumn << endl
                        << " Error message: " << errorMsg << endl;
-        errorMessage = i18n( "Parsing error in the main document at line %1, column %2\nError message: %3" 
+        errorMessage = i18n( "Parsing error in the main document at line %1, column %2\nError message: %3"
                        ,errorLine ,errorColumn ,i18n ( "QXml", errorMsg ) );
     }
     else

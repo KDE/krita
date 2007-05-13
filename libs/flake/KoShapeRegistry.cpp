@@ -18,15 +18,16 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include <QString>
 
 #include <kdebug.h>
 #include <kstaticdeleter.h>
 
-#include <KoPluginLoader.h>
-#include <KoShapeRegistry.h>
-#include <KoPathShapeFactory.h>
-
-#include <QString>
+#include "KoPluginLoader.h"
+#include "KoShapeRegistry.h"
+#include "KoPathShapeFactory.h"
+#include "KoShapeLoadingContext.h"
+#include "KoXmlReader.h"
 
 KoShapeRegistry::KoShapeRegistry()
 {
@@ -64,6 +65,13 @@ KoShapeRegistry* KoShapeRegistry::instance()
         KoShapeRegistry::m_singleton->init();
     }
     return KoShapeRegistry::m_singleton;
+}
+
+KoShape * KoShapeRegistry::createShapeFromOdf(KoShapeLoadingContext *context, KoXmlElement e) const
+{
+    Q_UNUSED( context );
+    Q_UNUSED( e );
+    return 0;
 }
 
 #include "KoShapeRegistry.moc"

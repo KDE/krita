@@ -24,11 +24,14 @@
 #include <QObject>
 
 #include <KoGenericRegistry.h>
+#include <KoXmlReader.h>
 
 #include <flake_export.h>
 
 class KoShape;
 class KoShapeFactory;
+class KoShapeLoadingContext;
+
 
 /**
  * This singleton class keeps a register of all available flake shapes,
@@ -49,6 +52,15 @@ public:
      * Creates an instance if that has never happened before and returns the singleton instance.
      */
     static KoShapeRegistry * instance();
+
+    /**
+     * Use the element to find out which flake plugin can load it, and
+     * returns the loaded shape. The element expected is one of
+     * 'draw:line', 'draw:frame' / etc.
+     *
+     * @returns the shape or 0 if no shape could be created
+     */
+    KoShape * createShapeFromOdf(KoShapeLoadingContext *context, KoXmlElement e) const;
 
 private:
     KoShapeRegistry();

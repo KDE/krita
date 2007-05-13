@@ -1,0 +1,26 @@
+Selections, masks, overlays
+
+selections: 
+ * read protection: only selected pixels can be read
+ * write protection: only selected pixels can be written to 
+ * read-write protection: only selected pixels can be read & written
+to
+
+masks:
+  * associated with any filter
+  * associated with the transparency filter
+
+overlays
+  * various painterly types
+
+
+
+Selections are associated with KisLayer and KisPaintDevices
+Masks are associated with KisLayer
+Overlays are associated with KisPaintLayer
+
+KisLayer has the masks and selections _and_ the final projection.
+Layers also have an internal projection. KisLayer asks the layer for
+the internal projection and then merges it with the effect masks into
+the projection that is used in the final layer merge to deliver the
+root layer projection.

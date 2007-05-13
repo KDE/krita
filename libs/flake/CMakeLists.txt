@@ -60,6 +60,7 @@ set(flake_SRCS
     KoToolRegistry.cpp
     KoToolProxy.cpp
     KoShapeSavingContext.cpp
+    KoShapeLoadingContext.cpp
     KoPanTool.cpp
     KoPanToolFactory.cpp
     KoZoomTool.cpp

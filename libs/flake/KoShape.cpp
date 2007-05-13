@@ -40,6 +40,7 @@
 #include <KoXmlNS.h>
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
+#include <KoUnit.h>
 
 #include <QPainter>
 #include <QVariant>
@@ -659,8 +660,24 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
             if ( layer ) {
                 setParent( layer );
             }
-
         }
+        if ( element.hasAttributeNS( KoXmlNS::draw, "id" ) ) {
+            QString id = element.attributeNS( KoXmlNS::draw, "id" );
+            if ( !id.isNull() ) {
+                context.addShapeId( this, id );
+            }
+        }
+    }
+    if ( attributes & OdfSize ) {
+        QPointF pos;
+        pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) ) );
+        pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
+        setPosition( pos );
+
+        QSizeF size;
+        size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) ) );
+        size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) ) );
+        resize( size );
     }
 
     return true;

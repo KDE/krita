@@ -42,11 +42,12 @@ public:
     KoShapeLayer * layer( const QString & layerName );
 
     void addShapeId( KoShape * shape, const QString & id );
+    KoShape * shapeById( const QString & id );
 
 private:    
     KoOasisLoadingContext &m_context;
     QMap<QString, KoShapeLayer*> m_layers;
-    QMap<int, KoShape*> m_drawIds; 
+    QMap<QString, KoShape*> m_drawIds; 
 };
 
 #endif /* KOSHAPELOADINGCONTEXT_H */

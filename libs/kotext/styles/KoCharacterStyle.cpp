@@ -26,7 +26,7 @@
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
 
-//#include <KDebug>
+#include <KDebug>
 
 KoCharacterStyle::KoCharacterStyle(QObject *parent)
     : QObject(parent)
@@ -79,6 +79,7 @@ QColor KoCharacterStyle::underlineColor () const {
 
 QBrush KoCharacterStyle::background() const {
     QVariant variant = m_stylesPrivate->value(QTextFormat::BackgroundBrush);
+
     if(variant.isNull()) {
         QBrush brush;
         return brush;
@@ -123,7 +124,6 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         StyleId,
         QTextFormat::FontPointSize,
         QTextCharFormat::ForegroundBrush,
-        QTextFormat::BackgroundBrush,
         QTextFormat::FontFamily,
         QTextFormat::FontWeight,
         QTextFormat::FontItalic,
@@ -361,6 +361,8 @@ void KoCharacterStyle::loadOasis(KoStyleStack& styleStack) {
         QString textBackColor = styleStack.property( KoXmlNS::fo, "background-color");
         if (textBackColor != "transparent") {
             QBrush brush = background();
+            if (brush.style() == Qt::NoBrush)
+                brush.setStyle(Qt::SolidPattern);
             brush.setColor( QColor(textBackColor) );
             setBackground(brush);
         }

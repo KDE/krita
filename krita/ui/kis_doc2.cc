@@ -203,10 +203,11 @@ bool KisDoc2::init()
     m_d->nserver = new KisNameServer(1);
     Q_CHECK_PTR(m_d->nserver);
 
-    if (!KoColorSpaceRegistry::instance()->contains("RGBA")) {
-        KMessageBox::sorry(0, i18n("No colorspace modules loaded: cannot run Krita"));
-        return false;
-    }
+//      RGBA is not anymore mandatory, and we might want to test it a little bit more
+//     if (!KoColorSpaceRegistry::instance()->contains("RGBA")) {
+//         KMessageBox::sorry(0, i18n("No colorspace modules loaded: cannot run Krita"));
+//         return false;
+//     }
 
     m_d->shapeController = new KisShapeController( this, m_d->nserver );
     m_d->layerModel = new KisLayerModel( this );

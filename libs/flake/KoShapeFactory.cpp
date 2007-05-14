@@ -44,7 +44,7 @@ public:
     QString iconName;
     quint32 loadingPriority;
     QString odfNameSpace;
-    QString odfElementName;
+    QStringList odfElementNames;
 
 };
 
@@ -76,9 +76,9 @@ quint32 KoShapeFactory::loadingPriority() const
     return d->loadingPriority;
 }
 
-QString KoShapeFactory::odfElementName() const
+QStringList KoShapeFactory::odfElementNames() const
 {
-    return d->odfElementName;
+    return d->odfElementNames;
 }
 
 const QString & KoShapeFactory::odfNameSpace() const
@@ -128,10 +128,10 @@ void KoShapeFactory::setLoadingPriority( quint32 priority )
     d->loadingPriority = priority;
 }
 
-void KoShapeFactory::setOdfElementName( const QString & nameSpace, const QString & name )
+void KoShapeFactory::setOdfElementNames( const QString & nameSpace, const QStringList & names )
 {
     d->odfNameSpace = nameSpace;
-    d->odfElementName = name;
+    d->odfElementNames = names;
 }
 
 #include "KoShapeFactory.moc"

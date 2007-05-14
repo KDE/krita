@@ -30,7 +30,7 @@ KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
 {
     setToolTip("A simple path shape");
     setIcon("pathshape");
-    setOdfElementName(KoXmlNS::draw, "path");
+    setOdfElementNames(KoXmlNS::draw, QStringList( QString( "path") ) );
     setLoadingPriority( 0 );
 }
 

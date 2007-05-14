@@ -70,21 +70,24 @@ void KoShapeRegistry::init() {
     QList<KoShapeFactory*> factories = values();
     for ( int i = 0; i < factories.size(); ++i ) {
         KoShapeFactory * factory = factories[i];
-        if ( factory->odfNameSpace().isEmpty() || factory->odfElementName().isEmpty() )
+        if ( factory->odfNameSpace().isEmpty() || factory->odfElementNames().isEmpty() )
         {
             kDebug() << "Booh! Shape factory " << factory->id() << " sucks!" << endl;
         }
         else {
-            QPair<QString, QString> p ( factory->odfNameSpace(), factory->odfElementName() );
+            foreach( QString elementName, factory->odfElementNames() ) {
 
-            QMultiMap<int, KoShapeFactory*> priorityMap = d->factoryMap[p];
+                QPair<QString, QString> p ( factory->odfNameSpace(), elementName );
 
-            d->factoryMap[p].insert( factory->loadingPriority(), factory );
+                QMultiMap<int, KoShapeFactory*> priorityMap = d->factoryMap[p];
 
-            kDebug() << "Inserting factory " << factory->id() << " for "
-                     << p << " with priority "
-                     << factory->loadingPriority() << " into factoryMap making "
-                     << d->factoryMap[p].size() << " entries. " << endl;
+                d->factoryMap[p].insert( factory->loadingPriority(), factory );
+
+                kDebug() << "Inserting factory " << factory->id() << " for "
+                         << p << " with priority "
+                         << factory->loadingPriority() << " into factoryMap making "
+                         << d->factoryMap[p].size() << " entries. " << endl;
+            }
         }
     }
 }

@@ -21,6 +21,7 @@
 #ifndef _KO_SHAPE_FACTORY_
 #define _KO_SHAPE_FACTORY_
 
+#include <QStringList>
 #include <QString>
 #include <QWidget>
 #include <QList>
@@ -183,7 +184,7 @@ public:
 
     /// the name used for quick checking if this shapeFactory is able to
     /// load Odf data identified by the element name.
-    QString odfElementName() const;
+    QStringList odfElementNames() const;
 
     /// returns true if this shapeFactory is able to load the ODF type
     /// started at argument element. ('draw:line' / 'draw:frame' / etc)
@@ -229,7 +230,7 @@ protected:
      * @param elementName the name of the elment itself, like "draw"
      *
      */
-    void setOdfElementName( const QString & nameSpace, const QString & elementName );
+    void setOdfElementNames( const QString & nameSpace, const QStringList & elementNames );
 
 private:
     class Private;

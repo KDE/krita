@@ -169,7 +169,7 @@ public:
   QString attribute( const QString& name ) const;
   QString attribute( const QString& name, const QString& defaultValue ) const;
   QString attributeNS( const QString& namespaceURI, const QString& localName, 
-    const QString& defaultValue ) const;
+    const QString& defaultValue = QString() ) const;
   bool hasAttribute( const QString& name ) const;
   bool hasAttributeNS( const QString& namespaceURI, const QString& localName ) const;
 

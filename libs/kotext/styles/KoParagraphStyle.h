@@ -288,7 +288,7 @@ public:
     double leftBorderSpacing();
     void setLeftBorderStyle(BorderStyle style);
     BorderStyle leftBorderStyle();
-    void setLeftBorderColor(QColor color);
+    void setLeftBorderColor(const QColor& color);
     QColor leftBorderColor();
     void setTopBorderWidth(double width);
     double topBorderWidth();
@@ -298,7 +298,7 @@ public:
     double topBorderSpacing();
     void setTopBorderStyle(BorderStyle style);
     BorderStyle topBorderStyle();
-    void setTopBorderColor(QColor color);
+    void setTopBorderColor(const QColor& color);
     QColor topBorderColor();
     void setRightBorderWidth(double width);
     double rightBorderWidth();
@@ -308,7 +308,7 @@ public:
     double rightBorderSpacing();
     void setRightBorderStyle(BorderStyle style);
     BorderStyle rightBorderStyle();
-    void setRightBorderColor(QColor color);
+    void setRightBorderColor(const QColor& color);
     QColor rightBorderColor();
     void setBottomBorderWidth(double width);
     double bottomBorderWidth();
@@ -318,7 +318,7 @@ public:
     double bottomBorderSpacing();
     void setBottomBorderStyle(BorderStyle style);
     BorderStyle bottomBorderStyle();
-    void setBottomBorderColor(QColor color);
+    void setBottomBorderColor(const QColor& color);
     QColor bottomBorderColor();
 
 

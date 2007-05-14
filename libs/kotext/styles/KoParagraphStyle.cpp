@@ -460,7 +460,7 @@ KoParagraphStyle::BorderStyle KoParagraphStyle::leftBorderStyle() {
     return static_cast<KoParagraphStyle::BorderStyle> (propertyInt(LeftBorderStyle));
 }
 
-void KoParagraphStyle::setLeftBorderColor(QColor color) {
+void KoParagraphStyle::setLeftBorderColor(const QColor& color) {
     setProperty(LeftBorderColor, color);
 }
 
@@ -500,7 +500,7 @@ KoParagraphStyle::BorderStyle KoParagraphStyle::topBorderStyle() {
     return static_cast<KoParagraphStyle::BorderStyle> (propertyInt(TopBorderStyle));
 }
 
-void KoParagraphStyle::setTopBorderColor(QColor color) {
+void KoParagraphStyle::setTopBorderColor(const QColor& color) {
     setProperty(TopBorderColor, color);
 }
 
@@ -540,7 +540,7 @@ KoParagraphStyle::BorderStyle KoParagraphStyle::rightBorderStyle() {
     return static_cast<KoParagraphStyle::BorderStyle> (propertyInt(RightBorderStyle));
 }
 
-void KoParagraphStyle::setRightBorderColor(QColor color) {
+void KoParagraphStyle::setRightBorderColor(const QColor& color) {
     setProperty(RightBorderColor, color);
 }
 
@@ -580,7 +580,7 @@ KoParagraphStyle::BorderStyle KoParagraphStyle::bottomBorderStyle() {
     return static_cast<KoParagraphStyle::BorderStyle> (propertyInt(BottomBorderStyle));
 }
 
-void KoParagraphStyle::setBottomBorderColor(QColor color) {
+void KoParagraphStyle::setBottomBorderColor(const QColor& color) {
     setProperty(BottomBorderColor, color);
 }
 

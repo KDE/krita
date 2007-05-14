@@ -48,6 +48,10 @@ KoDocumentSectionView::KoDocumentSectionView( QWidget *parent )
     setSelectionMode( SingleSelection );
     setSelectionBehavior( SelectItems );
     header()->hide();
+    setDragEnabled(true);
+    setDragDropMode(QAbstractItemView::DragDrop);
+    setAcceptDrops(true);
+    setDropIndicatorShown(true);
 }
 
 KoDocumentSectionView::~KoDocumentSectionView()

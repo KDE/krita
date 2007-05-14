@@ -1,6 +1,5 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  this program is free software; you can redistribute it and/or modify
  *  it under the terms of the gnu general public license as published by
@@ -194,7 +193,7 @@ Qt::ItemFlags KisLayerModel::flags(const QModelIndex &index) const
 {
     kDebug(41007) << "KisLayerModel::flags " << index << endl;
     if (!index.isValid())
-        return Qt::ItemIsEnabled;
+        return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
@@ -268,33 +267,36 @@ void KisLayerModel::endRemoveLayers( KisGroupLayer *, int )
     endRemoveRows();
 }
 
+#if 0
 QMimeData * KisLayerModel::mimeData ( const QModelIndexList & indexes ) const
 {
     kDebug(41007) << "KisLayerModel::mimeData" << endl;
     QMimeData* data = new QMimeData;
+    // TODO: manage the drag
     
 }
+#endif
 
 bool KisLayerModel::dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
-{
+{ // TODO: manage the drop
     kDebug(41007) << "KisLayerModel::dropMimeData" << endl;
     kDebug(41007) << "KisLayerModel::dropMimeData " << data->formats() << endl;
-    const QString format = "application/x-qabstractitemmodeldatalist";
-    if(not data->hasFormat( format ))
+//     const QString format = "application/x-qabstractitemmodeldatalist";
+/*    if(not data->hasFormat( format ))
     {
         return false;
-    }
-    QByteArray encoded = data->data(format);
-    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    }*/
+/*    QByteArray encoded = data->data(format);
+    QDataStream stream(&encoded, QIODevice::ReadOnly);*/
     if(action == Qt::CopyAction)
     {
         kDebug(41007) << "KisLayerModel::dropMimeData copy action" << endl;
-        while (!stream.atEnd()) {
+/*        while (!stream.atEnd()) {
             int r, c;
             QMap<int, QVariant> v;
             stream >> r >> c >> v;
             kDebug(41007) << "KisLayerModel::dropMimeData copy action " << r << " " << c << endl;
-        }
+        }*/
         return true;
     } else if(action == Qt::MoveAction) {
         kDebug(41007) << "KisLayerModel::dropMimeData move action" << endl;

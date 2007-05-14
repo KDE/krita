@@ -52,7 +52,7 @@ public: // from QAbstractItemModel
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-    QMimeData * mimeData ( const QModelIndexList & indexes ) const;
+//     QMimeData * mimeData ( const QModelIndexList & indexes ) const;
     virtual bool dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );
     virtual Qt::DropActions supportedDragActions () const;
 

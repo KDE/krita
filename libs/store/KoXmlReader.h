@@ -20,8 +20,8 @@
 #ifndef KOFFICE_XMLREADER
 #define KOFFICE_XMLREADER
 
-// use standard QDom, useful to test KoXml classes against Qt's QDom
-#define KOXML_USE_QDOM
+// KOXML_USE_QDOM is defined there
+#include "KoXmlReaderForward.h"
 
 #include <kostore_export.h>
 

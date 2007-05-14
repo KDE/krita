@@ -49,7 +49,7 @@ QRectF KoShapeLayer::boundingRect() const
     return bb;
 }
 
-void KoShapeLayer::saveOdf( KoShapeSavingContext * context ) {
+void KoShapeLayer::saveOdf( KoShapeSavingContext * context ) const {
     // save according to parag 9.1.3
     context->xmlWriter().startElement( "draw:layer" );
     context->xmlWriter().startElement( "svg:title" );
@@ -59,4 +59,8 @@ void KoShapeLayer::saveOdf( KoShapeSavingContext * context ) {
 
     foreach(KoShape* shape, iterator())
         shape->saveOdf(context);
+}
+
+bool KoShapeLayer::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+    return false; // TODO
 }

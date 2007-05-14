@@ -683,7 +683,7 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
     return true;
 }
 
-void KoShape::saveOdfFrameAttributes(KoShapeSavingContext *context) {
+void KoShape::saveOdfFrameAttributes(KoShapeSavingContext *context) const {
     saveOdfAttributes(context, FrameAttributes);
     context->addOption(KoShapeSavingContext::FrameOpened);
 }

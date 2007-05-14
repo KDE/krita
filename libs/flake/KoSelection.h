@@ -116,7 +116,8 @@ private slots:
 private:
     void requestSelectionChangedEvent();
     void selectGroupChilds( KoShapeGroup *group );
-    virtual void saveOdf( KoShapeSavingContext *) {}
+    virtual void saveOdf( KoShapeSavingContext *) const {}
+    virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
 
     class Private;
     Private * const d;

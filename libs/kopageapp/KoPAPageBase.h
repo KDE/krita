@@ -55,7 +55,9 @@ public:
      * @param context the pageapp saving context
      * @return true on success, false otherwise
      */
-    virtual void saveOdf( KoShapeSavingContext * context );
+    virtual void saveOdf( KoShapeSavingContext * context ) const;
+    // reimplemented
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
     bool loadOdf( const KoXmlElement &element, KoOasisLoadingContext & loadingContext );
 

@@ -44,7 +44,7 @@ void KoShapeGroup::childCountChanged() {
     resize( br.size() );
 }
 
-void KoShapeGroup::saveOdf( KoShapeSavingContext * context ) {
+void KoShapeGroup::saveOdf( KoShapeSavingContext * context ) const {
     context->xmlWriter().startElement( "draw:g" );
     saveOdfAttributes(context, OdfMandatories);
     context->xmlWriter().addAttributePt( "svg:y", position().y() );
@@ -54,4 +54,8 @@ void KoShapeGroup::saveOdf( KoShapeSavingContext * context ) {
 
     saveOdfConnections(context);
     context->xmlWriter().endElement();
+}
+
+bool KoShapeGroup::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+    return false; // TODO
 }

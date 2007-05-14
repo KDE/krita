@@ -64,7 +64,9 @@ public:
     /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext * context );
+    virtual void saveOdf( KoShapeSavingContext * context ) const;
+    // reimplemented
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
     void setDisplayProfile( const QString & profileName );
     void importImage( const KUrl & url );

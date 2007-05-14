@@ -145,7 +145,7 @@ public:
      *
      * TODO make it pure virtual
      */
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) { Q_UNUSED(element); Q_UNUSED(context); return false; }
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) = 0;
 
     /**
      * @brief store the shape data as ODF XML.
@@ -153,14 +153,14 @@ public:
      * OpenDocument 9.2 Drawing Shapes.
      * @see saveOdfAttributes
      */
-    virtual void saveOdf( KoShapeSavingContext * context ) = 0;
+    virtual void saveOdf( KoShapeSavingContext * context ) const = 0;
 
     /**
      * When saving this shape to ODF, you may nest it in a 'draw:frame' and shape properties should be
      * saved as attributes on that element instead of on the normal shape.  After starting to write such
      * an element you can call this method to write all relevant properties.
      */
-    void saveOdfFrameAttributes(KoShapeSavingContext *context);
+    void saveOdfFrameAttributes(KoShapeSavingContext *context) const;
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.

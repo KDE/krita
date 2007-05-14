@@ -355,7 +355,7 @@ KoPathShape::~KoPathShape()
     //delete d;
 }
 
-void KoPathShape::saveOdf( KoShapeSavingContext * context )
+void KoPathShape::saveOdf( KoShapeSavingContext * context ) const
 {
     context->xmlWriter().startElement( "draw:path" );
     saveOdfAttributes( context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation );
@@ -428,6 +428,10 @@ void KoPathShape::saveOdf( KoShapeSavingContext * context )
     context->xmlWriter().addAttribute( "svg:d", d );
 
     context->xmlWriter().endElement();
+}
+
+bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+    return false; // TODO
 }
 
 void KoPathShape::clear()

@@ -94,8 +94,11 @@ void KisLayerShape::addChild( KoShape * shape )
     KoShapeContainer::addChild(shape);
 }
 
-void KisLayerShape::saveOdf( KoShapeSavingContext * context )
+void KisLayerShape::saveOdf( KoShapeSavingContext * context ) const
 {
     // TODO
 }
 
+bool KisLayerShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+    return false; // TODO
+}

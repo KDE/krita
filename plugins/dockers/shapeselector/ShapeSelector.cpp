@@ -59,7 +59,8 @@ public:
 
     virtual void visit(KoCreateShapesTool *tool) = 0;
     virtual QString toolTip() = 0;
-    virtual void saveOdf( KoShapeSavingContext *) {}
+    virtual void saveOdf( KoShapeSavingContext *) const {}
+    virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
 
     void paint(QPainter &painter, const KoViewConverter &converter) {
         Q_UNUSED(converter);

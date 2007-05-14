@@ -801,10 +801,10 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
         forEachElement( tabStop, tabStops )
         {
             Q_ASSERT( tabStop.localName() == "tab-stop" );
-            const QString type = tabStop.attributeNS( KoXmlNS::style, "type", QString::null ); // left, right, center or char
+            const QString type = tabStop.attributeNS( KoXmlNS::style, "type", QString() ); // left, right, center or char
 
             KoTabulator tab;
-            tab.ptPos = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "position", QString::null ) );
+            tab.ptPos = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "position", QString() ) );
             // Tab stop positions in the XML are relative to the left-margin
             tab.ptPos += layout.margins[QStyleSheetItem::MarginLeft];
             if ( type == "center" )
@@ -812,7 +812,7 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
             else if ( type == "right" )
                 tab.type = T_RIGHT;
             else if ( type == "char" ) {
-                QString delimiterChar = tabStop.attributeNS( KoXmlNS::style, "char", QString::null ); // single character
+                QString delimiterChar = tabStop.attributeNS( KoXmlNS::style, "char", QString() ); // single character
                 if ( !delimiterChar.isEmpty() )
                     tab.alignChar = delimiterChar[0];
                 tab.type = T_DEC_PNT; // "alignment on decimal point"
@@ -820,12 +820,12 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
             else //if ( type == "left" )
                 tab.type = T_LEFT;
 
-            tab.ptWidth = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "leader-width", QString::null ), 0.5 );
+            tab.ptWidth = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "leader-width", QString() ), 0.5 );
 
             tab.filling = TF_BLANK;
-            if ( tabStop.attributeNS( KoXmlNS::style, "leader-type", QString::null ) == "single" )
+            if ( tabStop.attributeNS( KoXmlNS::style, "leader-type", QString() ) == "single" )
             {
-                QString leaderStyle = tabStop.attributeNS( KoXmlNS::style, "leader-style", QString::null );
+                QString leaderStyle = tabStop.attributeNS( KoXmlNS::style, "leader-style", QString() );
                 if ( leaderStyle == "solid" )
                     tab.filling = TF_LINE;
                 else if ( leaderStyle == "dotted" )
@@ -840,7 +840,7 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
             else
             {
                 // Fallback: convert leaderChar's unicode value
-                QString leaderChar = tabStop.attributeNS( KoXmlNS::style, "leader-text", QString::null );
+                QString leaderChar = tabStop.attributeNS( KoXmlNS::style, "leader-text", QString() );
                 if ( !leaderChar.isEmpty() )
                 {
                     QChar ch = leaderChar[0];

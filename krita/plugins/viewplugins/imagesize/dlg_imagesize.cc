@@ -30,33 +30,59 @@
 
 // XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
-DlgImageSize::DlgImageSize( QWidget *  parent,
-                const char * name)
-    : super (parent)
+DlgImageSize::DlgImageSize(QWidget *parent, int width, int height)
+    : super(parent)
 {
-    setCaption( i18n("Image Size") );
+    setCaption( i18n("Scale To New Size") );
     setButtons( Ok | Cancel);
     setDefaultButton( Ok );
-    setObjectName(name);
 
-    m_lock = false;
+    m_origW = width;
+    m_origH = height;
 
     m_page = new WdgImageSize(this);
     Q_CHECK_PTR(m_page);
     m_page->setObjectName("image_size");
 
+    m_page->intPixelWidth->setValue(width);
+    m_page->intPixelHeight->setValue(height);
+
     m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     m_page->cmbFilterType->setCurrent("Mitchell");
+
+    m_buttonGroup = new QButtonGroup(m_page);
+    m_buttonGroup->addButton(m_page->radioProtectPixel);
+    m_buttonGroup->addButton(m_page->radioProtectPhysical);
+    m_buttonGroup->addButton(m_page->radioProtectResolution);
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    unblockAll();
+    connect(m_page->radioProtectPixel, SIGNAL(toggled(bool)),
+        this, SLOT(slotProtectChanged()));
 
+    connect(m_page->radioProtectPhysical, SIGNAL(toggled(bool)),
+        this, SLOT(slotProtectChanged()));
+
+    connect(m_page->radioProtectResolution, SIGNAL(toggled(bool)),
+        this, SLOT(slotProtectChanged()));
+
+    m_page->radioProtectResolution->setChecked(true);
+
+    connect(m_page->intPixelWidth, SIGNAL(valueChanged(int)),
+        this, SLOT(slotWidthPixelsChanged(int)));
+
+    connect(m_page->intPixelHeight, SIGNAL(valueChanged(int)),
+        this, SLOT(slotHeightPixelsChanged(int)));
+
+    connect(m_page->doublePhysicalWidth, SIGNAL(valueChanged(double)),
+        this, SLOT(slotWidthPhysicalChanged(double)));
+
+    connect(m_page->doublePhysicalHeight, SIGNAL(valueChanged(double)),
+        this, SLOT(slotHeightPhysicalChanged(double)));
 
     connect(this, SIGNAL(okClicked()),
         this, SLOT(okClicked()));
-
 }
 
 DlgImageSize::~DlgImageSize()
@@ -64,92 +90,14 @@ DlgImageSize::~DlgImageSize()
     delete m_page;
 }
 
-void DlgImageSize::hideScaleBox()
-{
-    m_page->grpResizeScale->hide();
-}
-
-void DlgImageSize::setWidth(quint32 w)
-{
-    blockAll();
-
-    m_page->lblWidthOriginal->setNum((int)w);
-    m_page->intWidth->setValue(w);
-    m_oldW = w;
-    m_origW = w;
-
-    unblockAll();
-}
-
-void DlgImageSize::setWidthPercent(quint32 w)
-{
-    blockAll();
-
-    m_page->intWidthPercent->setValue(w);
-    m_oldWPercent = w;
-
-    unblockAll();
-}
-
-
-void DlgImageSize::setMaximumWidth(quint32 w)
-{
-    m_page->intWidth->setMaximum(w);
-    m_maxW = w;
-}
-
 qint32 DlgImageSize::width()
 {
-    //return (qint32)qRound(m_oldW);
-    return (qint32)qRound(m_page->intWidth->value());
+    return (qint32)m_page->intPixelWidth->value();
 }
-
-void DlgImageSize::setHeight(quint32 h)
-{
-    blockAll();
-
-    m_page->lblHeightOriginal->setNum((int)h);
-    m_page->intHeight->setValue(h);
-    m_oldH = h;
-    m_origH = h;
-
-    unblockAll();
-}
-
-
-void DlgImageSize::setHeightPercent(quint32 h)
-{
-    blockAll();
-
-    m_page->intHeightPercent->setValue(h);
-    m_oldHPercent = h;
-
-    unblockAll();
-}
-
-
-
-void DlgImageSize::setMaximumHeight(quint32 h)
-{
-    m_page->intHeight->setMaximum(h);
-    m_maxH = h;
-}
-
 
 qint32 DlgImageSize::height()
 {
-    //return (qint32)qRound(m_oldH);
-    return (qint32)qRound(m_page->intHeight->value());
-}
-
-bool DlgImageSize::scale()
-{
-    return m_page->radioScale->isChecked();
-}
-
-bool DlgImageSize::cropLayers()
-{
-    return m_page->chkCrop->isChecked();
+    return (qint32)m_page->intPixelHeight->value();
 }
 
 KisFilterStrategy *DlgImageSize::filterType()
@@ -170,20 +118,12 @@ void DlgImageSize::slotWidthPixelsChanged(int w)
 {
     blockAll();
 
-    double wPercent = double(w) * 100 / double(m_origW);
-
-    m_page->intWidthPercent->setValue(qRound(wPercent));
-
-    // Set height in pixels and percent of necessary
-    if (m_page->chkConstrain->isChecked()) {
-        m_page->intHeightPercent->setValue(qRound(wPercent));
-
-        m_oldH = qRound(m_origH * wPercent / 100);
-        m_page->intHeight->setValue(qRound(m_oldH));
-
+    if(m_page->radioProtectResolution->isChecked()) {
+        m_page->doublePhysicalHeight->setValue(w*m_page->doubleResolution->value());
     }
-    m_oldW = w;
-
+    else {
+//        m_page->doubleResolution->setValue(w*m_page->doubleResolution->value());
+    }
     unblockAll();
 }
 
@@ -191,78 +131,54 @@ void DlgImageSize::slotHeightPixelsChanged(int h)
 {
     blockAll();
 
-    double hPercent = double(h) * 100 / double(m_origH);
-
-    m_page->intHeightPercent->setValue(qRound(hPercent));
-
     // Set width in pixels and percent of necessary
-    if (m_page->chkConstrain->isChecked()) {
-        m_page->intWidthPercent->setValue(qRound(hPercent));
-
-        m_oldW = qRound(m_origW * hPercent / 100);
+/*    if (m_page->chkConstrain->isChecked()) {
         m_page->intWidth->setValue(qRound(m_oldW));
 
     }
-    m_oldH = h;
-
+*/
     unblockAll();
 }
 
-void DlgImageSize::slotWidthPercentChanged(int w)
+void DlgImageSize::slotWidthPhysicalChanged(double h)
 {
     blockAll();
 
-    m_page->intWidth->setValue(qRound(w * m_origW / 100));
-
-    if (m_page->chkConstrain->isChecked()) {
-        m_page->intHeightPercent->setValue(w);
-        m_page->intHeight->setValue(qRound( w * m_origH / 100));
-    }
-
     unblockAll();
 }
 
-void DlgImageSize::slotHeightPercentChanged(int h)
+void DlgImageSize::slotHeightPhysicalChanged(double h)
 {
     blockAll();
 
-    m_page->intHeight->setValue(qRound(h * m_origH / 100));
-    if (m_page->chkConstrain->isChecked()) {
-        m_page->intWidthPercent->setValue(h);
-        m_page->intWidth->setValue(qRound( h * m_origW / 100));
-    }
-
     unblockAll();
-
 }
 
+void DlgImageSize::slotProtectChanged()
+{
+    m_page->intPixelWidth->setEnabled(!m_page->radioProtectPixel->isChecked());
+    m_page->intPixelHeight->setEnabled(!m_page->radioProtectPixel->isChecked());
+    m_page->doublePhysicalWidth->setEnabled(!m_page->radioProtectPhysical->isChecked());
+    m_page->doublePhysicalHeight->setEnabled(!m_page->radioProtectPhysical->isChecked());
+    m_page->doubleResolution->setEnabled(!m_page->radioProtectResolution->isChecked());
+}
 
 void DlgImageSize::blockAll()
 {
-    // XXX: more efficient to use blockSignals?
-    m_page->intWidth->disconnect();
-    m_page->intHeight->disconnect();
-    m_page->intWidthPercent->disconnect();
-    m_page->intHeightPercent->disconnect();
-
+    m_page->intPixelWidth->blockSignals(true);
+    m_page->intPixelHeight->blockSignals(true);
+    m_page->doublePhysicalWidth->blockSignals(true);
+    m_page->doublePhysicalHeight->blockSignals(true);
+    m_page->doubleResolution->blockSignals(true);
 }
 
 void DlgImageSize::unblockAll()
 {
-    // XXX: more efficient to use blockSignals?
-    connect (m_page->intWidth, SIGNAL(valueChanged(int)),
-         this, SLOT(slotWidthPixelsChanged(int)));
-
-    connect (m_page->intHeight, SIGNAL(valueChanged(int)),
-         this, SLOT(slotHeightPixelsChanged(int)));
-
-    connect (m_page->intWidthPercent, SIGNAL(valueChanged(int)),
-         this, SLOT(slotWidthPercentChanged(int)));
-
-    connect (m_page->intHeightPercent, SIGNAL(valueChanged(int)),
-         this, SLOT(slotHeightPercentChanged(int)));
-
-
+    m_page->intPixelWidth->blockSignals(false);
+    m_page->intPixelHeight->blockSignals(false);
+    m_page->doublePhysicalWidth->blockSignals(false);
+    m_page->doublePhysicalHeight->blockSignals(false);
+    m_page->doubleResolution->blockSignals(false);
 }
 
 #include "dlg_imagesize.moc"

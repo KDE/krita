@@ -68,8 +68,8 @@ ImageSize::ImageSize(QObject *parent, const QStringList &)
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/imagesize.rc"), true);
 
-    KAction *action  = new KAction(i18n("Scale or Resize &Image..."), this);
-    actionCollection()->addAction("imagesize", action );
+        KAction *action  = new KAction(i18n("Scale To New Size..."), this);
+        actionCollection()->addAction("imagesize", action );
         action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_S));
         connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
@@ -99,28 +99,19 @@ void ImageSize::slotImageSize()
 
     if (!image) return;
 
-    DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "ImageSize");
-    Q_CHECK_PTR(dlgImageSize);
-
-    dlgImageSize->setCaption(i18n("Image Size"));
-
     KisConfig cfg;
 
-    dlgImageSize->setWidth(image->width());
-    dlgImageSize->setHeight(image->height());
+    DlgImageSize * dlgImageSize = new DlgImageSize(m_view, image->width(), image->height());
+    dlgImageSize->setObjectName("ImageSize");
+    Q_CHECK_PTR(dlgImageSize);
 
     if (dlgImageSize->exec() == QDialog::Accepted) {
         qint32 w = dlgImageSize->width();
         qint32 h = dlgImageSize->height();
 
-        if (dlgImageSize->scale()) {
+        if(w !=image->width() || h != image->height())
             m_view->imageManager()->scaleCurrentImage((double)w / ((double)(image->width())),
-                            (double)h / ((double)(image->height())),
-                            dlgImageSize->filterType());
-        }
-        else {
-            m_view->imageManager()->resizeCurrentImage(w, h, dlgImageSize->cropLayers());
-        }
+                        (double)h / ((double)(image->height())), dlgImageSize->filterType());
     }
 
     delete dlgImageSize;

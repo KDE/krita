@@ -1,12 +1,12 @@
 <ui version="4.0" >
- <class>Form</class>
- <widget class="QWidget" name="Form" >
+ <class>WdgImageScale</class>
+ <widget class="QWidget" name="WdgImageScale" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>434</width>
-    <height>457</height>
+    <width>400</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -16,16 +16,10 @@
    <item>
     <widget class="QGroupBox" name="groupPixelSize" >
      <property name="title" >
-      <string>Pixel Size</string>
+      <string>Size in Pixels</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="horizontalSpacing" >
-       <number>-1</number>
-      </property>
-      <property name="verticalSpacing" >
-       <number>-1</number>
-      </property>
-      <item row="1" column="0" >
+      <item row="0" column="0" >
        <widget class="QLabel" name="labelPixelProtect" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
@@ -47,14 +41,14 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2" >
-       <widget class="QRadioButton" name="radioButton" >
+      <item row="0" column="1" colspan="2" >
+       <widget class="QRadioButton" name="radioProtectPixel" >
         <property name="text" >
          <string>while editing physical size or resolution</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
+      <item row="1" column="0" >
        <widget class="QLabel" name="labelWidth" >
         <property name="text" >
          <string>Width:</string>
@@ -64,23 +58,14 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleWidth" >
-        <property name="minimumSize" >
-         <size>
-          <width>80</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="decimals" >
-         <number>2</number>
-        </property>
+      <item row="1" column="1" >
+       <widget class="QSpinBox" name="intPixelWidth" >
         <property name="maximum" >
-         <double>100000000.000000000000000</double>
+         <number>1000000</number>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" >
+      <item row="2" column="0" >
        <widget class="QLabel" name="labelHeight" >
         <property name="text" >
          <string>Height:</string>
@@ -90,8 +75,8 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleHeight" >
+      <item row="2" column="1" >
+       <widget class="QSpinBox" name="intPixelHeight" >
         <property name="minimumSize" >
          <size>
           <width>80</width>
@@ -99,22 +84,25 @@
          </size>
         </property>
         <property name="maximum" >
-         <double>100000000.000000000000000</double>
+         <number>1000000</number>
         </property>
        </widget>
       </item>
-      <item row="3" column="2" >
+      <item row="2" column="2" >
        <spacer>
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeHint" >
          <size>
-          <width>0</width>
-          <height>0</height>
+          <width>124</width>
+          <height>16</height>
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="3" column="1" >
+       <widget class="KisCmbIDList" native="1" name="cmbFilterType" />
       </item>
      </layout>
     </widget>
@@ -125,7 +113,7 @@
       <string>Physical Size</string>
      </property>
      <layout class="QGridLayout" >
-      <item row="1" column="0" >
+      <item row="0" column="0" >
        <widget class="QLabel" name="labelPhysicalProtect" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
@@ -147,14 +135,14 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2" >
-       <widget class="QRadioButton" name="radioButton_3" >
+      <item row="0" column="1" colspan="3" >
+       <widget class="QRadioButton" name="radioProtectPhysical" >
         <property name="text" >
-         <string>while editing pixel size or resolution</string>
+         <string>while editing size in pixels or resolution</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
+      <item row="1" column="0" >
        <widget class="QLabel" name="labelPhysicalWidth" >
         <property name="text" >
          <string>Physical Width:</string>
@@ -164,8 +152,8 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleWidth_2" >
+      <item row="1" column="1" >
+       <widget class="QDoubleSpinBox" name="doublePhysicalWidth" >
         <property name="minimumSize" >
          <size>
           <width>80</width>
@@ -180,10 +168,10 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2" >
-       <widget class="QComboBox" name="cmbWidthUnit_2" />
+      <item row="1" column="2" >
+       <widget class="QComboBox" name="cmbWidthUnit" />
       </item>
-      <item row="3" column="0" >
+      <item row="2" column="0" >
        <widget class="QLabel" name="labelPhysicalHeight" >
         <property name="text" >
          <string>Physical Height:</string>
@@ -193,8 +181,8 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleHeight_2" >
+      <item row="2" column="1" >
+       <widget class="QDoubleSpinBox" name="doublePhysicalHeight" >
         <property name="minimumSize" >
          <size>
           <width>80</width>
@@ -206,10 +194,10 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2" >
-       <widget class="QComboBox" name="cmbHeightUnit_2" />
+      <item row="2" column="2" >
+       <widget class="QComboBox" name="cmbHeightUnit" />
       </item>
-      <item row="3" column="3" >
+      <item row="2" column="3" >
        <spacer>
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
@@ -254,12 +242,12 @@
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="QRadioButton" name="radioButton_2" >
+       <widget class="QRadioButton" name="radioProtectResolution" >
         <property name="layoutDirection" >
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="text" >
-         <string>while editing pixel size or physical size</string>
+         <string>while editing size in pixels or physical size</string>
         </property>
        </widget>
       </item>
@@ -274,7 +262,7 @@
        </widget>
       </item>
       <item row="2" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleHeight_3" >
+       <widget class="QDoubleSpinBox" name="doubleResolution" >
         <property name="minimumSize" >
          <size>
           <width>80</width>
@@ -309,7 +297,7 @@
      </property>
      <property name="sizeHint" >
       <size>
-       <width>20</width>
+       <width>0</width>
        <height>0</height>
       </size>
      </property>
@@ -317,6 +305,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisCmbIDList</class>
+   <extends></extends>
+   <header>kis_cmb_idlist.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -24,10 +24,11 @@
 
 class KisFilterStrategy;
 class WdgImageSize;
+class QButtonGroup;
 
-#include "ui_wdg_imagesize.h"
+#include "ui_wdg_imagescale.h"
 
-class WdgImageSize : public QWidget, public Ui::WdgImageSize
+class WdgImageSize : public QWidget, public Ui::WdgImageScale
 {
     Q_OBJECT
 
@@ -45,24 +46,11 @@ class DlgImageSize: public KDialog {
 
 public:
 
-    DlgImageSize(QWidget * parent = 0,
-             const char* name = 0);
+    DlgImageSize(QWidget * parent, int width, int height);
     ~DlgImageSize();
 
-    void hideScaleBox();
-
-    void setWidth(quint32 w);
-    void setWidthPercent(quint32 w);
-    void setMaximumWidth(quint32 w);
     qint32 width();
-
-    void setHeight(quint32 h);
-    void setHeightPercent(quint32 h);
-    void setMaximumHeight(quint32 h);
     qint32 height();
-
-    bool scale();
-    bool cropLayers();
 
     KisFilterStrategy *filterType();
 
@@ -71,8 +59,9 @@ private slots:
     void okClicked();
     void slotWidthPixelsChanged(int w);
     void slotHeightPixelsChanged(int h);
-    void slotWidthPercentChanged(int w);
-    void slotHeightPercentChanged(int h);
+    void slotWidthPhysicalChanged(double w);
+    void slotHeightPhysicalChanged(double h);
+    void slotProtectChanged();
 
 private:
 
@@ -80,13 +69,8 @@ private:
     void unblockAll();
 
     WdgImageSize * m_page;
-    double m_oldW, m_oldH;
-    double m_oldWPercent, m_oldHPercent;
     double m_origW, m_origH;
-    double m_maxW, m_maxH;
-
-    bool m_lock;
-
+    QButtonGroup *m_buttonGroup;
 };
 
 #endif // DLG_IMAGESIZE

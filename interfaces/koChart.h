@@ -19,7 +19,7 @@
 #ifndef __koffice_kchart_h__
 #define __koffice_kchart_h__
 
-#include <QVariant>
+#include <QtCore/QVariant>
 
 #include <KoDocument.h>
 #include <kochart_export.h>

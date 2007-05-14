@@ -670,13 +670,13 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
     }
     if ( attributes & OdfSize ) {
         QPointF pos;
-        pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) ) );
-        pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
+        pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
+        pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
         setPosition( pos );
 
         QSizeF size;
-        size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) ) );
-        size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) ) );
+        size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
+        size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
         resize( size );
     }
 

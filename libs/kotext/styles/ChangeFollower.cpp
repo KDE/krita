@@ -101,3 +101,6 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles) {
         }
     } */
 }
+
+#include "ChangeFollower.moc"
+

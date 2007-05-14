@@ -31,6 +31,9 @@
  * If the stylemanager died before that time, it will not do anything.
  */
 class ChangeFollower : public QObject {
+
+Q_OBJECT 
+
 public:
     /**
      * Create a new ChangeFollower that can update the document with

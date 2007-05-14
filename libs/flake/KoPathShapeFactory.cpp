@@ -51,6 +51,6 @@ KoShape * KoPathShapeFactory::createShape(const KoProperties * params) const {
 
 bool KoPathShapeFactory::supports(const KoXmlElement & e) const
 {
-    return ( e.tagName() == "path" );
+    return ( e.localName() == "path" && e.namespaceURI() == KoXmlNS::draw );
 }
 

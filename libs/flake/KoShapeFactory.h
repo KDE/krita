@@ -178,8 +178,8 @@ public:
     /// lower prio means the shape is more generic and will be checked later
     quint32 loadingPriority() const;
 
-    // The namespace that the elements supported by the shape created
-    // by this factory should be in.
+    /// The namespace that the elements supported by the shape created
+    /// by this factory should be in.
     const QString & odfNameSpace() const;
 
     /// the name used for quick checking if this shapeFactory is able to

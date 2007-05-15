@@ -123,13 +123,11 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
     // "best" of the creatable shapes.
     if ( e.tagName() == "frame" && e.namespaceURI() == KoXmlNS::draw ) {
 
-        KoXmlElement element = e.firstChildElement();
-
-        while ( !element.isNull() ) {
+        KoXmlElement element;
+        forEachElement( element, e ) {
             KoShape * shape = createShapeInternal( element, context );
             if ( shape )
                 return shape;
-            element = element.nextSiblingElement();
         }
     }
     else {

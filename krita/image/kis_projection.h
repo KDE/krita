@@ -115,7 +115,7 @@ private slots:
     void slotAddDirtyRegion( const QRegion & region );
     void slotAddDirtyRect( const QRect & rect );
 
-    void slotUpdateUi( Job* );
+    void slotUpdateUi( ThreadWeaver::Job* );
 
 private:
 

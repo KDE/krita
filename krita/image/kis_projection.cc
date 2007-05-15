@@ -84,7 +84,7 @@ KisProjection::KisProjection( KisImageWSP image, KisGroupLayerWSP rootLayer )
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->weaver->setMaximumNumberOfThreads( cfg.readEntry("maxprojectionthreads",  10) );
     m_d->updateRectSize = cfg.readEntry( "updaterectsize", 512 );
-    connect( m_d->weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( slotUpdateUi( ThreadWeaver::Job* ) ) );
+    connect( m_d->weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( slotUpdateUi(ThreadWeaver::Job*) ) );
 
     connect( this, SIGNAL( sigProjectionUpdated( const QRect & ) ), image.data(), SLOT(slotProjectionUpdated( const QRect &) ) );
 

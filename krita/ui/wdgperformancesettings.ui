@@ -10,10 +10,22 @@
    </rect>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>9</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin" >
+    <number>9</number>
+   </property>
+   <property name="rightMargin" >
+    <number>9</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>9</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>6</number>
+   </property>
+   <property name="verticalSpacing" >
     <number>6</number>
    </property>
    <item row="3" column="0" >
@@ -35,7 +47,10 @@
    <item row="2" column="0" >
     <widget class="QCheckBox" name="m_projection" >
      <property name="toolTip" >
-      <string>If checked, Krita uses more memory but may be faster</string>
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If checked, Krita uses more memory but may be faster.&lt;/p>&lt;/body>&lt;/html></string>
      </property>
      <property name="whatsThis" >
       <string>When Krita uses projections, the results of group layers, effect masks and adjustment layers are cached. This takes a lot of memory but speeds up processing considerably.</string>
@@ -47,11 +62,20 @@
    </item>
    <item row="1" column="0" >
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>6</number>
+     </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
      </property>
      <item>
       <widget class="QLabel" name="textLabel2" >
@@ -83,11 +107,20 @@
    </item>
    <item row="0" column="0" >
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>6</number>
+     </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
      </property>
      <item>
       <widget class="QLabel" name="textLabel1" >
@@ -101,7 +134,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
       </widget>
      </item>
      <item>
-      <widget class="KIntNumInput" native="1" name="m_maxTiles" >
+      <widget class="KIntNumInput" name="m_maxTiles" >
        <property name="whatsThis" >
         <string>The maximum number of "tiles" that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle large images, a greater value here might be useful.
 Note that this number is only a guideline for Krita, and is not guaranteed to be the actual number of tiles in memory.</string>

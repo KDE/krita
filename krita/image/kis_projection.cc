@@ -30,6 +30,9 @@
 
 using namespace ThreadWeaver;
 
+#define HACK_REGIONS_INTO_RECTS 1
+#define USE_REGIONS_OF_INTEREST 0
+
 class ProjectionJob : public Job
 {
 public:
@@ -65,6 +68,7 @@ public:
     bool locked;
     Weaver * weaver;
     int updateRectSize;
+    QRect roi; // Region of interest
 };
 
 
@@ -72,6 +76,7 @@ KisProjection::KisProjection( KisImageWSP image, KisGroupLayerWSP rootLayer )
 {
     m_d = new Private();
     m_d->image = image;
+    m_d->roi = image->bounds();
     m_d->rootLayer = rootLayer;
     m_d->locked = false;
 
@@ -79,7 +84,7 @@ KisProjection::KisProjection( KisImageWSP image, KisGroupLayerWSP rootLayer )
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->weaver->setMaximumNumberOfThreads( cfg.readEntry("maxprojectionthreads",  10) );
     m_d->updateRectSize = cfg.readEntry( "updaterectsize", 512 );
-    connect( m_d->weaver, SIGNAL( jobDone(Job*) ), this, SLOT( slotUpdateUi( Job* ) ) );
+    connect( m_d->weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( slotUpdateUi( ThreadWeaver::Job* ) ) );
 
     connect( this, SIGNAL( sigProjectionUpdated( const QRect & ) ), image.data(), SLOT(slotProjectionUpdated( const QRect &) ) );
 
@@ -131,12 +136,32 @@ bool KisProjection::upToDate(const QRegion & region)
     return m_d->dirtyRegion.intersects( region );
 }
 
+void KisProjection::setRegionOfInterest( const QRect & roi )
+{
+    if ( !m_d->roi.contains( roi ) ) {
+        QRegion region( roi );
+        region -= QRegion( m_d->roi );
+        // Get the overlap between the regoin of interest
+        QVector<QRect> rects = region.intersected( m_d->dirtyRegion ).rects();
+        for ( int i = 0; i < rects.size(); ++i ) {
+            scheduleRect( rects.at( i ) );
+        }
+
+    }
+    m_d->roi = roi;
+}
+
+QRect KisProjection::regionOfInterest()
+{
+    return m_d->roi;
+}
+
 void KisProjection::slotAddDirtyRegion( const QRegion & region )
 {
 
     m_d->dirtyRegion += region;
 
-#if 1
+#if HACK_REGIONS_INTO_RECTS
     if ( !m_d->locked )
         scheduleRect( region.boundingRect() );
 #else
@@ -151,7 +176,6 @@ void KisProjection::slotAddDirtyRegion( const QRegion & region )
         }
     }
 #endif
-
 }
 
 void KisProjection::slotAddDirtyRect( const QRect & rect )
@@ -172,17 +196,22 @@ void KisProjection::slotUpdateUi( Job* job )
 
 void KisProjection::scheduleRect( const QRect & rc )
 {
+#if USE_REGIONS_OF_INTEREST
+    QRect interestingRect = rc.intersected( m_d->roi );
+#else
+    QRect interestingRect = rc;
+#endif
 
-    int h = rc.height();
-    int w = rc.width();
-    int x = rc.x();
-    int y = rc.y();
+    int h = interestingRect.height();
+    int w = interestingRect.width();
+    int x = interestingRect.x();
+    int y = interestingRect.y();
 
-    // Note: we're doing columns first, so when we have small strip left
+    // Note: we're doing columns first, so when we have a small strip left
     // at the bottom, we have as few and as long runs of pixels left
     // as possible.
     if ( w <= m_d->updateRectSize && h <= m_d->updateRectSize ) {
-        ProjectionJob * job = new ProjectionJob( rc, m_d->rootLayer, this );
+        ProjectionJob * job = new ProjectionJob( interestingRect, m_d->rootLayer, this );
         m_d->weaver->enqueue( job );
         return;
     }
@@ -194,8 +223,8 @@ void KisProjection::scheduleRect( const QRect & rc )
         int hleft = h;
         int row = 0;
         while ( hleft > 0 ) {
-            QRect rc( col + x, row + y, qMin( wleft, m_d->updateRectSize ), qMin( hleft, m_d->updateRectSize ) );
-            ProjectionJob * job = new ProjectionJob( rc, m_d->rootLayer, this );
+            QRect rc2( col + x, row + y, qMin( wleft, m_d->updateRectSize ), qMin( hleft, m_d->updateRectSize ) );
+            ProjectionJob * job = new ProjectionJob( rc2, m_d->rootLayer, this );
             m_d->weaver->enqueue( job );
             hleft -= m_d->updateRectSize;
             row += m_d->updateRectSize;

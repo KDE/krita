@@ -50,6 +50,9 @@ using namespace ThreadWeaver;
 
    XXX: Add a way to wait for recomposition for a particular rect to
         completed?
+
+   XXX: Add regions-of-interest so kis_projection will only recomposit
+        the interesting regions
  */
 class KisProjection : public QObject {
 
@@ -88,6 +91,20 @@ public:
      *              for the specified region
      */
     bool upToDate(const QRegion & region);
+
+
+    /**
+     * Set the region of interest. Only rects inside this region will
+     * be recomputed.
+     *
+     * @param roi the region of interest in pixels
+     */
+    void setRegionOfInterest( const QRect & roi );
+
+    /**
+     * Return the region of interest.
+     */
+    QRect regionOfInterest();
 
 signals:
 

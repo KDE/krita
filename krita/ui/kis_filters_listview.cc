@@ -159,7 +159,7 @@ void KisFiltersListView::init()
     m_weaver = new Weaver();
     KConfigGroup cfg = KGlobal::config()->group("");
     m_weaver->setMaximumNumberOfThreads( cfg.readEntry("maxthreads",  1) );
-    connect( m_weaver, SIGNAL( jobDone(Job*) ), this, SLOT( itemDone( Job* ) ) );
+    connect( m_weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( itemDone(ThreadWeaver::Job*) ) );
 }
 
 void KisFiltersListView::setLayer(KisLayerSP layer) {

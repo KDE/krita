@@ -56,7 +56,7 @@ KisThreadedApplicator::KisThreadedApplicator( KisPaintDeviceSP dev, const QRect 
 
     m_d->weaver = new Weaver();
     m_d->weaver->setMaximumNumberOfThreads( m_d->maxThreads );
-    connect( m_d->weaver, SIGNAL( jobDone(Job*) ), this, SLOT( jobDone( Job* ) ) );
+    connect( m_d->weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( jobDone( ThreadWeaver::Job* ) ) );
 }
 
 

@@ -30,6 +30,7 @@
 #include "KoPathShapeFactory.h"
 #include "KoShapeLoadingContext.h"
 #include "KoXmlReader.h"
+#include "KoXmlNS.h"
 
 class KoShapeRegistry::Private
 {
@@ -115,7 +116,32 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
 {
     kDebug() << "Going to check for " << e.namespaceURI() << ":" << e.tagName() << endl;
 
-    QPair<QString, QString> p = QPair<QString, QString>(e.namespaceURI(), e.tagName());
+    // If the element is in a frame, the frame is already added by the
+    // application and we only want to create a shape from the
+    // embedded element. The very first shape we create is accepted.
+    // XXX: we might want to have some code to determine which is the
+    // "best" of the creatable shapes.
+    if ( e.tagName() == "frame" && e.namespaceURI() == KoXmlNS::draw ) {
+
+        KoXmlElement element = e.firstChildElement();
+
+        while ( !element.isNull() ) {
+            KoShape * shape = createShapeInternal( element, context );
+            if ( shape )
+                return shape;
+            element = element.nextSiblingElement();
+        }
+    }
+    else {
+        return createShapeInternal( e, context );
+    }
+
+    return 0;
+}
+
+KoShape * KoShapeRegistry::createShapeInternal( const KoXmlElement & element, KoShapeLoadingContext & context ) const
+{
+    QPair<QString, QString> p = QPair<QString, QString>(element.namespaceURI(), element.tagName());
     kDebug() << p << endl;
 
     if ( !d->factoryMap.contains( p ) ) return 0;
@@ -127,14 +153,14 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
     for ( int i = factories.size() - 1; i >= 0; --i ) {
 
         KoShapeFactory * factory = factories[i];
-        if ( factory->supports( e ) ) {
+        if ( factory->supports( element ) ) {
 
             KoShape * shape = factory->createDefaultShape();
 
             if( shape->shapeId().isEmpty() )
                 shape->setShapeId(factory->id());
 
-            if ( shape->loadOdf( e, context ) )
+            if ( shape->loadOdf( element, context ) )
                 return shape;
 
             // Maybe a shape with a lower priority can load our
@@ -144,6 +170,7 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
     }
 
     return 0;
+
 }
 
 #include "KoShapeRegistry.moc"

@@ -28,7 +28,8 @@ private slots:
 
     // tests
     void testGetKoShapeRegistryInstance();
-    void testCreateEmptyShape();
+    void testCreateShapes();
+    void testCreateFramedShapes();
 
 };
 

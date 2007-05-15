@@ -27,23 +27,26 @@ class KisScriptFilter::Private
 {
     public:
         Kross::Action* action;
+        QString category;
         explicit Private(Kross::Action* a) : action(a) {}
 };
 
 KisScriptFilter::KisScriptFilter(Kross::Action* action) : KisFilter(KoID(action->name(),action->text()), "adjust", action->text()), d(new Private(action))
 {
     kDebug()<<"KisScriptFilter Ctor filter name="<<d->action->name()<<" text="<<d->action->text()<<endl;
-    d->action->addObject(this, "filterobject", Kross::ChildrenInterface::AutoConnectSignals);
-
-    //This is an example that demonstrates how to receive properties from within the
-    //scripts.rc file. Such properties will be accessible from within scripting too.
-    QString category = action->property("category").toString();
-    kDebug()<<"KisScriptFilter ==================> category="<<category<<endl;
+    d->action->addObject(this, "KritaScriptFilter", Kross::ChildrenInterface::AutoConnectSignals);
 }
 
 KisScriptFilter::~KisScriptFilter()
 {
     delete d;
+}
+
+QString KisScriptFilter::category() const
+{
+    //This is an example that demonstrates how to receive properties from within the
+    //scripts.rc file. Such properties will be accessible from within scripting too.
+    return d->action->property("category").toString();
 }
 
 void KisScriptFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)

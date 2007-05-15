@@ -115,7 +115,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
         foreach(Kross::Action* action, actioncollection->actions()) {
             Q_ASSERT(action);
             KisScriptFilter* sf = new KisScriptFilter(action);
-            KisFilterRegistry::instance()->add(sf);
+            KisFilterRegistry::instance()->add( KisFilterSP(sf) );
 //             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
 //             if( ! factory ) continue;
            kDebug(41011) << "Adding scripting filters with id=" << sf->id() << endl;

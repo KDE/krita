@@ -34,9 +34,14 @@ class KisScriptFilter : public KisFilter {
     Q_OBJECT
     public:
         KisScriptFilter(Kross::Action* action);
+        virtual ~KisScriptFilter();
         virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     signals:
+        void scriptTest(const QString& s);
         void scriptProcess( Scripting::PaintDevice* src, const QPoint& srcTopLeft, Scripting::ConstPaintDevice* dst, const QPoint& dstTopLeft, const QSize& size, QObject* config );
+    private:
+        class Private;
+        Private* const d;
 };
 
 

@@ -23,13 +23,32 @@
 // kdelibs/kross
 #include <kross/core/action.h>
 
-KisScriptFilter::KisScriptFilter(Kross::Action* action) : KisFilter(KoID(action->name(),action->text()), "adjust", action->text())
+class KisScriptFilter::Private
 {
-    action->addObject(this, "filterobject", Kross::ChildrenInterface::AutoConnectSignals);
+    public:
+        Kross::Action* action;
+        explicit Private(Kross::Action* a) : action(a) {}
+};
+
+KisScriptFilter::KisScriptFilter(Kross::Action* action) : KisFilter(KoID(action->name(),action->text()), "adjust", action->text()), d(new Private(action))
+{
+    //kDebug()<<"######################## KisScriptFilter::KisScriptFilter"<<endl;
+    kDebug()<<"KisScriptFilter Ctor filter name="<<d->action->name()<<" text="<<d->action->text()<<endl;
+    d->action->addObject(this, "filterobject", Kross::ChildrenInterface::AutoConnectSignals);
+}
+
+KisScriptFilter::~KisScriptFilter()
+{
+    delete d;
 }
 
 void KisScriptFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
+    kDebug()<<"######################## KisScriptFilter::process"<<endl;
+    d->action->trigger();
+
+    emit scriptTest("My Stringgggggggggggggg");
+
     emit scriptProcess(new Scripting::PaintDevice(0, src, 0), srcTopLeft, new Scripting::ConstPaintDevice(0, dst, 0), dstTopLeft, size, 0);
     setProgressDone(); // Must be called even if you don't really support progression
 }

@@ -82,8 +82,8 @@
 	</collection>
     <collection name="filters" text="Filters" comment="Scripting filters for Krita" enabled="false">
         <script
-            name="rbinvert"
-            text="Invert with Ruby"
+            name="rbinvertfilter"
+            text="Invert Filter with Ruby"
             comment="Invert the pixel of an image with Ruby as a filter"
             interpreter="ruby"
             file="filters/invert.rb" />

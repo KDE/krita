@@ -34,7 +34,7 @@ class KisScriptFilter::Private
 KisScriptFilter::KisScriptFilter(Kross::Action* action) : KisFilter(KoID(action->name(),action->text()), "adjust", action->text()), d(new Private(action))
 {
     kDebug()<<"KisScriptFilter Ctor filter name="<<d->action->name()<<" text="<<d->action->text()<<endl;
-    d->action->addObject(this, "KritaScriptFilter", Kross::ChildrenInterface::AutoConnectSignals);
+    d->action->addObject(this, "KritaFilter", Kross::ChildrenInterface::AutoConnectSignals);
 }
 
 KisScriptFilter::~KisScriptFilter()

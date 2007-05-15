@@ -1,9 +1,9 @@
 require 'Krita'
-require 'KritaScriptFilter'
+require 'KritaFilter'
 
 def scriptProcess( src, srcTopLeft, dst, dstTopLeft, size, config )
     puts "LOOOOOOOOOOOOOOOOOOOOOOOL"
-    puts KritaScriptFilter.category()
+    puts KritaFilter.category()
 end
 
 def scriptTest(s)

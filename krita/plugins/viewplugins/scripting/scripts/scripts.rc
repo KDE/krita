@@ -86,6 +86,8 @@
             text="Invert Filter with Ruby"
             comment="Invert the pixel of an image with Ruby as a filter"
             interpreter="ruby"
-            file="filters/invert.rb" />
+            file="filters/invert.rb">
+                <property name="category">adjust</property>
+        </script>
     </collection>
 </KrossScripting>

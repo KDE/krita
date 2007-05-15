@@ -34,6 +34,11 @@ KoShapeLayer * KoShapeLoadingContext::layer( const QString & layerName )
    return m_layers.value( layerName, 0 ); 
 }
 
+void KoShapeLoadingContext::addLayer( KoShapeLayer * layer, const QString & layerName )
+{
+    m_layers[ layerName ] = layer;
+}
+
 void KoShapeLoadingContext::addShapeId( KoShape * shape, const QString & id )
 {
     m_drawIds.insert( id, shape );

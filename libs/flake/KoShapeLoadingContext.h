@@ -35,19 +35,22 @@ class KoShape;
 class FLAKE_EXPORT KoShapeLoadingContext
 {
 public:
-	KoShapeLoadingContext( KoOasisLoadingContext & context );
+    KoShapeLoadingContext( KoOasisLoadingContext & context );
 
     KoOasisLoadingContext & koLoadingContext();
 
+    /// Returns layer referenced by given name
     KoShapeLayer * layer( const QString & layerName );
+    /// Adds a new layer to be referenced by the given name later
+    void addLayer( KoShapeLayer * layer, const QString & layerName );
 
     void addShapeId( KoShape * shape, const QString & id );
     KoShape * shapeById( const QString & id );
 
-private:    
+private:
     KoOasisLoadingContext &m_context;
     QMap<QString, KoShapeLayer*> m_layers;
-    QMap<QString, KoShape*> m_drawIds; 
+    QMap<QString, KoShape*> m_drawIds;
 };
 
 #endif /* KOSHAPELOADINGCONTEXT_H */

@@ -49,6 +49,7 @@ public:
     QHash<QString /*name*/, KoXmlElement*> drawStyles;
 
     KoXmlElement           officeStyle;
+    KoXmlElement           layerSet;
 
     DataFormatsMap         dataFormats;
 };
@@ -107,6 +108,9 @@ void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml 
                 const QString name = master.attributeNS( KoXmlNS::style, "name", QString() );
                 kDebug(30003) << "Master style: '" << name << "' loaded " << endl;
                 d->masterPages.insert( name, new KoXmlElement( master ) );
+            } else if( master.localName() == "layer-set" && master.namespaceURI() == KoXmlNS::draw ) {
+                kDebug(30003) << "Master style: layer-set loaded " << endl;
+                d->layerSet = master;
             } else
                 // OASIS docu mentions style:handout-master and draw:layer-set here
                 kWarning(30003) << "Unknown tag " << master.tagName() << " in office:master-styles" << endl;
@@ -1612,6 +1616,11 @@ const KoXmlElement* KoOasisStyles::defaultStyle( const QString& family ) const
 const KoXmlElement& KoOasisStyles::officeStyle() const
 {
     return d->officeStyle;
+}
+
+const KoXmlElement& KoOasisStyles::layerSet() const
+{
+    return d->layerSet;
 }
 
 const QHash<QString, KoXmlElement*>& KoOasisStyles::listStyles() const

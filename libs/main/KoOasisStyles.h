@@ -89,6 +89,9 @@ public:
     /// @return the office:style element
     const KoXmlElement& officeStyle() const;
 
+    /// @return the draw:layer-set element
+    const KoXmlElement& layerSet() const;
+
     /// @return all list styles ("text:list-style" elements), hashed by name
     const QHash<QString, KoXmlElement*>& listStyles() const;
 

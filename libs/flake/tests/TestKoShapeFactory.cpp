@@ -80,7 +80,7 @@ void TestKoShapeFactory::testCreateShape()
 void TestKoShapeFactory::testOdfElement()
 {
     KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
-    QVERIFY( factory->odfElementName() == "path" );
+    QVERIFY( factory->odfElementNames() == QStringList( QString( "path" ) ) );
     QVERIFY( factory->odfNameSpace() == KoXmlNS::draw );
 
     QBuffer xmldevice;

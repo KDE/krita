@@ -34,6 +34,7 @@ class KoJobsListPolicy : public ThreadWeaver::QueuePolicy {
 public:
     /// constructor
     KoJobsListPolicy();
+    ~KoJobsListPolicy();
     /// add a job that the policy will manage
     void addJob(ThreadWeaver::Job *job);
 

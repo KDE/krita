@@ -24,6 +24,11 @@ using namespace ThreadWeaver;
 KoJobsListPolicy::KoJobsListPolicy() : mutex(QMutex::Recursive) {
 }
 
+KoJobsListPolicy::~KoJobsListPolicy() {
+    foreach(Job *job , m_jobs)
+        job->removeQueuePolicy(this);
+}
+
 bool KoJobsListPolicy::canRun (Job *job) {
     mutex.lock();
     bool rc = m_jobs.isEmpty() || m_jobs[0] == job;
@@ -39,7 +44,7 @@ void KoJobsListPolicy::free (Job *job) {
 void KoJobsListPolicy::release (Job *job) {
     mutex.lock();
     m_jobs.removeAll(job);
-    job->deleteLater();
+    job->removeQueuePolicy(this);
     mutex.unlock();
 }
 

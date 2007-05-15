@@ -38,23 +38,24 @@ void TestAction::test() {
 
     QCOMPARE(m_notifier->count, 1);
 
-    KoExecutePolicy *policies[3] = { KoExecutePolicy::onlyLastPolicy,
+    KoExecutePolicy *policies[4] = { KoExecutePolicy::onlyLastPolicy,
         KoExecutePolicy::queuedPolicy,
+        KoExecutePolicy::directPolicy,
         KoExecutePolicy::simpleQueuedPolicy };
-    for(int i=0; i < 3; i++) {
+    for(int i=0; i < 4; i++) {
         action.setExecutePolicy(policies[i]);
         m_notifier->count = 0;
-        qDebug() << "i:" << i;
+        //qDebug() << " test " << i+1;
         QMutex mutex;
         mutex.lock();
         action.execute();
-        bool success = m_notifier->waiter.wait(&mutex, 250);
+        QTest::qSleep(250); // allow the action to do its job.
+        QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+        bool success = m_notifier->count != 0 || m_notifier->waiter.wait(&mutex, 550);
         mutex.unlock();
         QCOMPARE(success, true);
         QCOMPARE(m_notifier->count, 1);
     }
-
-   //QVERIFY(manager.shapeAt(QPointF(200, 200)) == 0);
 }
 
 QTEST_MAIN(TestAction)

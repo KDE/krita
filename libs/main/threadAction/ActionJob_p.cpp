@@ -57,6 +57,7 @@ void ActionJob::run() {
         QCoreApplication::postEvent(this, new ActionJobEvent());
         m_semaphore.acquire();
     }
+    deleteLater();
 }
 
 bool ActionJob::event(QEvent *e) {

@@ -22,13 +22,15 @@
 #include "KoAction.h"
 #include "ActionJob_p.h"
 #include "KoJobsListPolicy.h"
+
 #include <WeaverInterface.h>
+#include <KDebug>
 
 using namespace ThreadWeaver;
 
 void KoOnlyLastPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params) {
     if(action->weaver() == 0) {
-        qWarning("Action has no weaver set, ignoring scheduling request");
+        kWarning(30003) << "Action has no weaver set, ignoring scheduling request";
         return;
     }
     jobsList->lock();
@@ -53,11 +55,12 @@ void KoDirectPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, QVar
     Q_UNUSED(jobsList);
     ActionJob *job = new ActionJob(action, ActionJob::EnableNoChange, params);
     job->run();
+    // job will delete itself
 }
 
 void KoQueuedPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params) {
     if(action->weaver() == 0) {
-        qWarning("Action has no weaver set, ignoring scheduling request");
+        kWarning(30003) << "Action has no weaver set, ignoring scheduling request";
         return;
     }
     ActionJob *job = new ActionJob(action, action->isEnabled() ? ActionJob::EnableOn :
@@ -70,7 +73,7 @@ void KoQueuedPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, QVar
 
 void KoSimpleQueuedPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params) {
     if(action->weaver() == 0) {
-        qWarning("Action has no weaver set, ignoring scheduling request");
+        kWarning(30003) << "Action has no weaver set, ignoring scheduling request";
         return;
     }
     ActionJob *job = new ActionJob(action, ActionJob::EnableNoChange, params);

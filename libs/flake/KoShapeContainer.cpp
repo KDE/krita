@@ -74,6 +74,10 @@ public:
         return answer;
     }
 
+    bool isChildLocked(const KoShape *child) const {
+        return child->isLocked();
+    }
+
     void containerChanged(KoShapeContainer *) { }
     void childChanged(KoShape *, KoShape::ChangeType ) { }
 
@@ -156,6 +160,12 @@ int  KoShapeContainer::childCount() const {
     if(d->children == 0)
         return 0;
     return d->children->count();
+}
+
+bool KoShapeContainer::isChildLocked(const KoShape *child) const {
+    if(d->children == 0)
+        return false;
+    return d->children->isChildLocked(child);
 }
 
 void KoShapeContainer::setClipping(const KoShape *child, bool clipping) {

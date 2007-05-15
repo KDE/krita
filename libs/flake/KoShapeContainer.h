@@ -118,7 +118,15 @@ public:
      */
     bool childClipped(const KoShape *child) const;
 
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    /**
+     * Return wheather the child has the effective state of being locked for user modifications.
+     * This method is deferred to the model, which should call the KoShape::isLocked() on the child.
+     * @param child the shape that the user wants to move.
+     */
+    bool isChildLocked(const KoShape *child) const;
+
+    /// reimplemented
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     /**
      * @brief Paint the component
@@ -131,7 +139,8 @@ public:
      */
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter) = 0;
 
-    void repaint() const;
+    /// reimplemented
+    virtual void repaint() const;
 
     /**
      * Create and return an iterator over all child shapes.

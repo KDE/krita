@@ -179,3 +179,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move) {
     move.setX(0); // let the text layout move it.
     move.setY(0);
 }
+
+bool KoTextShapeContainerModel::isChildLocked(const KoShape *child) const {
+    return child->isLocked();
+}

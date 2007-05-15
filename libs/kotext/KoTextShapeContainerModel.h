@@ -54,6 +54,8 @@ public:
     virtual void proposeMove(KoShape *child, QPointF &move);
     /// reimplemented from KoShapeContainerModel
     virtual void childChanged(KoShape *child, KoShape::ChangeType type);
+    /// reimplemented from KoShapeContainerModel
+    virtual bool isChildLocked(const KoShape *child) const;
 
     /// each child that is added due to being anchored in the text has an anchor; register it for rules based placement.
     void addAnchor(KoTextAnchor *anchor);

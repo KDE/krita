@@ -126,14 +126,17 @@ void KoInteractionStrategy::applyGrid(QPointF &point) {
     point.setY( static_cast<int>( point.y() / gridY + 1e-10 ) * gridY );
 }
 
+// static
 bool KoInteractionStrategy::isEditable( KoShape * shape ) {
     if( ! shape->isVisible() || shape->isLocked() )
         return false;
 
     KoShapeContainer * parent = shape->parent();
+    if(parent->isChildLocked(shape))
+        return false;
     while( parent )
     {
-        if( ! parent->isVisible() || parent->isLocked() )
+        if( ! parent->isVisible() )
             return false;
         parent = parent->parent();
     }

@@ -73,6 +73,14 @@ public:
     virtual bool childClipped(const KoShape *child) const = 0;
 
     /**
+     * Return wheather the child has the effective state of being locked for user modifications.
+     * The model has to call KoShape::isLocked() and base its return value upon that, it can
+     *  additionally find rules on wheather the child is locked based on the container state.
+     * @param child the shape that the user wants to move.
+     */
+    virtual bool isChildLocked(const KoShape *child) const = 0;
+
+    /**
      * Return the current number of children registered.
      * @return the current number of children registered.
      */

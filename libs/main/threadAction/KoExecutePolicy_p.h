@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,19 +23,19 @@
 #include "KoExecutePolicy.h"
 
 class KoOnlyLastPolicy : public KoExecutePolicy {
-    void schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params);
+    void schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params);
 };
 
 class KoDirectPolicy : public KoExecutePolicy {
-    void schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params);
+    void schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params);
 };
 
 class KoQueuedPolicy : public KoExecutePolicy {
-    void schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params);
+    void schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params);
 };
 
 class KoSimpleQueuedPolicy : public KoExecutePolicy {
-    void schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params);
+    void schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params);
 };
 
 #endif

@@ -42,7 +42,7 @@ public:
      * @param jobsList the list of jobs currently associated with the action.
      * @param params a parameters object that belongs with the current action.
      */
-    virtual void schedule(KoAction *action, KoJobsListPolicy *jobsList, QVariant *params) = 0;
+    virtual void schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params) = 0;
 
     /**
      * This policy will enqueue the action; but will remove others that would call the

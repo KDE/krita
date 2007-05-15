@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -60,29 +60,19 @@ void KoAction::execute() {
     execute(0);
 }
 
-void KoAction::execute(QVariant *params) {
+void KoAction::execute(const QVariant &params) {
     if(!d->enabled)
         return;
     Q_ASSERT(d->weaver);
     d->policy->schedule(this, d->jobsQueue, params);
 }
 
-void KoAction::doAction(QVariant *params) {
-    if(params)
-        emit triggered(*params);
-    else {
-        QVariant variant(0);
-        emit triggered(variant);
-    }
+void KoAction::doAction(const QVariant &params) {
+    emit triggered(params);
 }
 
-void KoAction::doActionUi(QVariant *params) {
-    if(params)
-        emit updateUi(*params);
-    else {
-        QVariant variant(0);
-        emit updateUi(variant);
-    }
+void KoAction::doActionUi(const QVariant &params) {
+    emit updateUi(params);
 }
 
 int KoAction::jobCount() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -131,12 +131,12 @@ public slots:
      * @param params a variant with a parameter that will be emitted in the
      * triggered() and updateUi() signals.
      */
-    void execute(QVariant *params);
+    void execute(const QVariant &params);
 
 private:
     friend class ActionJob;
-    void doAction(QVariant *params); // called from ActionJob
-    void doActionUi(QVariant *params); // called from ActionJob
+    void doAction(const QVariant &params); // called from ActionJob
+    void doActionUi(const QVariant &params); // called from ActionJob
 
     class Private;
     Private * const d;

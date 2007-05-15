@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 #include <Job.h>
 
 #include <QSemaphore>
+#include <QVariant>
 
 class QEvent;
 
@@ -35,7 +36,7 @@ public:
         EnableOff,
         EnableNoChange
     };
-    ActionJob(KoAction *parent, Enable enable, QVariant *params);
+    ActionJob(KoAction *parent, Enable enable, const QVariant &params);
 
     const KoAction *action() const { return m_action; }
     bool started() const { return m_started; }
@@ -49,7 +50,7 @@ private:
     KoAction *m_action;
     Enable m_enable;
     bool m_started;
-    QVariant *m_params;
+    QVariant m_params;
     QSemaphore m_semaphore;
 };
 

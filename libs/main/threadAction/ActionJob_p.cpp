@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +28,7 @@ public:
     ActionJobEvent() : QEvent(QEvent::User) {}
 };
 
-ActionJob::ActionJob(KoAction *parent, Enable enable, QVariant *params)
+ActionJob::ActionJob(KoAction *parent, Enable enable, const QVariant &params)
     : Job(parent),
     m_action(parent),
     m_enable(enable),

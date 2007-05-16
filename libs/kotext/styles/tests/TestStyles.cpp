@@ -78,5 +78,24 @@ void TestStyles::testChangeParent() {
     QCOMPARE(style3.topMargin(), 10.0);
 }
 
+void TestStyles::testTabsStorage() {
+    KoParagraphStyle paragStyle;
+
+    QList<KoText::Tab> tabs;
+    paragStyle.setTabPositions(tabs);
+    QCOMPARE(paragStyle.tabPositions().count(), 0);
+
+    KoText::Tab tab;
+    tabs.append(tab);
+    KoText::Tab tab2;
+    tab2.position = 10;
+    tabs.append(tab2);
+
+    paragStyle.setTabPositions(tabs);
+    QCOMPARE(paragStyle.tabPositions().count(), 2);
+    QCOMPARE(paragStyle.tabPositions()[0], tab);
+    QCOMPARE(paragStyle.tabPositions()[1], tab2);
+}
+
 QTEST_MAIN(TestStyles)
 #include "TestStyles.moc"

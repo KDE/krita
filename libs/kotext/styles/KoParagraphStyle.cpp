@@ -976,6 +976,28 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
 
 }
 
+void KoParagraphStyle::setTabPositions(const QList<KoText::Tab> &tabs) {
+    QList<QVariant> list;
+    foreach(KoText::Tab tab, tabs) {
+        QVariant v;
+        v.setValue(tab);
+        list.append(v);
+    }
+    setProperty(TabPositions, list);
+}
+
+QList<KoText::Tab> KoParagraphStyle::tabPositions() const {
+    QVariant variant = value(TabPositions);
+    if(variant.isNull())
+        return QList<KoText::Tab>();
+    QList<KoText::Tab> answer;
+    foreach(QVariant tab, qvariant_cast<QList<QVariant> >(variant)) {
+        answer.append(tab.value<KoText::Tab>());
+    }
+    return answer;
+}
+
+
 // static
 KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block) {
     QTextBlockFormat format = block.blockFormat();

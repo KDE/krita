@@ -40,3 +40,24 @@ QStringList KoText::underlineStyleList() {
     lst <<"~~~~~~~"; // weavy lines
     return lst;
 }
+
+
+
+KoText::Tab::Tab()
+    : position(0.),
+    type(LeftTab),
+    leaderStyle(QTextCharFormat::NoUnderline),
+    textStyleId(0)
+{
+}
+
+bool KoText::Tab::operator==(const Tab &other) const {
+    return other.position == position &&
+        other.type == type &&
+        other.delimiter == delimiter &&
+        other.leaderStyle == leaderStyle &&
+        other.leaderColor == leaderColor &&
+        other.leaderText == leaderText &&
+        other.textStyleId == textStyleId;
+}
+

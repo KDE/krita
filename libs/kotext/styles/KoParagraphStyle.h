@@ -18,12 +18,14 @@
 #ifndef KOPARAGRAPHSTYLE_H
 #define KOPARAGRAPHSTYLE_H
 
+#include "KoText.h"
+#include "kotext_export.h"
+
 #include <QObject>
 #include <QVector>
 #include <QString>
 #include <QVariant>
 #include <QTextFormat>
-#include <kotext_export.h>
 
 struct Property;
 class KoCharacterStyle;
@@ -98,8 +100,9 @@ public:
         // lists
         ExplicitListValue,      ///< Int with the list-value that that parag will have. Ignored if this is not a list.
         RestartListNumbering,   ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
-        ListLevel               ///< int with the list-level that the paragraph will get when this is a list
+        ListLevel,               ///< int with the list-level that the paragraph will get when this is a list
 
+        TabPositions            ///< A list of tab positions
 // do 15.5.24
 // continue at 15.5.28
     };
@@ -389,6 +392,9 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     void setRestartListNumbering(bool on);
     /// return if this paragraph is marked to start the list numbering from the first entry.
     bool restartListNumbering();
+
+    void setTabPositions(const QList<KoText::Tab> &tabs);
+    QList<KoText::Tab> tabPositions() const;
 
     void setListLevel(int value);
     int listLevel() const;

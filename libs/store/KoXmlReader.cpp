@@ -149,6 +149,8 @@ public:
 #endif
 };
 
+Q_DECLARE_TYPEINFO( KoXmlPackedItem, Q_MOVABLE_TYPE );
+
 #ifdef KOXML_COMPRESS
 static QDataStream& operator<<( QDataStream& s, const KoXmlPackedItem& item )
 {

@@ -46,11 +46,12 @@ class DlgImageSize: public KDialog {
 
 public:
 
-    DlgImageSize(QWidget * parent, int width, int height);
+    DlgImageSize(QWidget * parent, int width, int height, double resolution);
     ~DlgImageSize();
 
     qint32 width();
     qint32 height();
+    double resolution();
 
     KisFilterStrategy *filterType();
 

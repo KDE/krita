@@ -23,6 +23,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <KoUnit.h>
+
 #include <kis_cmb_idlist.h>
 #include <kis_filter_strategy.h>
 
@@ -30,7 +32,7 @@
 
 // XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
-DlgImageSize::DlgImageSize(QWidget *parent, int width, int height)
+DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolution)
     : super(parent)
 {
     setCaption( i18n("Scale To New Size") );
@@ -49,6 +51,13 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height)
 
     m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     m_page->cmbFilterType->setCurrent("Mitchell");
+
+    m_page->cmbWidthUnit->addItems( KoUnit::listOfUnitName(true) );
+    m_page->cmbWidthUnit->setCurrentIndex(KoUnit::Centimeter);
+    m_page->cmbHeightUnit->addItems( KoUnit::listOfUnitName(true) );
+    m_page->cmbHeightUnit->setCurrentIndex(KoUnit::Centimeter);
+
+    m_page->doubleResolution->setValue(72.0 * resolution);
 
     m_buttonGroup = new QButtonGroup(m_page);
     m_buttonGroup->addButton(m_page->radioProtectPixel);
@@ -140,9 +149,19 @@ void DlgImageSize::slotHeightPixelsChanged(int h)
     unblockAll();
 }
 
-void DlgImageSize::slotWidthPhysicalChanged(double h)
+void DlgImageSize::slotWidthPhysicalChanged(double w)
 {
     blockAll();
+
+    if(m_page->radioProtectResolution->isChecked()) {
+        //KoUnit unit = KoUnit((KoUnit::Unit)cmbHeightUnit->currentIndex(), true);
+        //m_width=KoUnit::ptToUnit(m_height, unit)
+        m_page->intPixelWidth->setValue(int(w*m_page->doubleResolution->value()));
+    }
+    else {
+        m_page->doubleResolution->setValue(w*m_page->intPixelWidth->value());
+        m_page->doublePhysicalHeight->setValue(m_page->intPixelWidth->value()*m_page->doubleResolution->value());
+    }
 
     unblockAll();
 }

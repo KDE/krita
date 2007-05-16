@@ -101,7 +101,7 @@ void ImageSize::slotImageSize()
 
     KisConfig cfg;
 
-    DlgImageSize * dlgImageSize = new DlgImageSize(m_view, image->width(), image->height());
+    DlgImageSize * dlgImageSize = new DlgImageSize(m_view, image->width(), image->height(), image->yRes());
     dlgImageSize->setObjectName("ImageSize");
     Q_CHECK_PTR(dlgImageSize);
 

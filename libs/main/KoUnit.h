@@ -186,10 +186,10 @@ public:
 
     /**
      * This method is the one to use to display a value in a dialog
-     * \return the value @p ptValue converted to @p unit and rounded, ready to be displayed
+     * \return the value @p ptValue converted to unit and rounded, ready to be displayed
      * Old name: ptToUnit
      */
-    static double toUserValue( double ptValue, KoUnit unit );
+    double toUserValue( double ptValue );
 
     /**
      * Convert the value @p ptValue to a given unit @p unit
@@ -200,27 +200,21 @@ public:
     static double ptToUnit( const double ptValue, const KoUnit unit );
 
     /// This method is the one to use to display a value in a dialog
-    /// @return the value @p ptValue converted to @p unit and rounded, ready to be displayed
+    /// @return the value @p ptValue converted the unit and rounded, ready to be displayed
     /// Old name: userValue
-    static QString toUserStringValue( double ptValue, KoUnit unit );
+    QString toUserStringValue( double ptValue );
 
     /// This method is the one to use to read a value from a dialog
-    /// @return the value in @p unit, converted to points for internal use
+    /// @return the value converted to points for internal use
     /// Old name: ptFromUnit
-    static double fromUserValue( double value, KoUnit unit );
-
-    /// This method is the one to use to read a value from a dialog
-    /// @return the value in @p unit, converted to points for internal use
-    /// Old name: ptFromUnit
-    static double fromUserValue( double value, Unit unit ) {return fromUserValue( value, KoUnit(unit));}
+    double fromUserValue( double value ) const;
 
     /// This method is the one to use to read a value from a dialog
     /// @param value value entered by the user
-    /// @param unit unit type selected by the user
     /// @param ok if set, the pointed bool is set to true if the value could be
     /// converted to a double, and to false otherwise.
-    /// @return the value in @p unit, converted to points for internal use
-    static double fromUserValue( const QString& value, KoUnit unit, bool* ok = 0 );
+    /// @return the value converted to points for internal use
+    double fromUserValue( const QString& value, bool* ok = 0 );
 
     /// Convert a unit name into a KoUnit
     /// @param _unitName name to convert

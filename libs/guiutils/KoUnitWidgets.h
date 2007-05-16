@@ -70,7 +70,7 @@ public:
 
     void setValueInUnit( double value, KoUnit unit )
     {
-        changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( value, unit ), m_unit ) );
+        changeValue( KoUnit::ptToUnit( unit.fromUserValue( value ), m_unit ) );
     }
 
     void setPrecision( unsigned int precision ) { m_precision = precision; }

@@ -50,14 +50,14 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
     m_widthUnit = KoUnit(KoUnit::Pixel, resolution);
     doubleWidth->setValue(defWidth);
     doubleWidth->setDecimals(0);
-    m_width = KoUnit::fromUserValue(defWidth, m_widthUnit);
+    m_width = m_widthUnit.fromUserValue(defWidth);
     cmbWidthUnit->addItems( KoUnit::listOfUnitName(false) );
     cmbWidthUnit->setCurrentIndex(KoUnit::Pixel);
 
     m_heightUnit = KoUnit(KoUnit::Pixel, resolution);
     doubleHeight->setValue(defHeight);
     doubleHeight->setDecimals(0);
-    m_height = KoUnit::fromUserValue(defHeight, m_heightUnit);
+    m_height = m_heightUnit.fromUserValue(defHeight);
     cmbHeightUnit->addItems( KoUnit::listOfUnitName(false) );
     cmbHeightUnit->setCurrentIndex(KoUnit::Pixel);
 
@@ -90,12 +90,12 @@ void KisCustomImageWidget::resolutionChanged(double res)
 {
     if (m_widthUnit.indexInList(false) == KoUnit::Pixel) {
         m_widthUnit = KoUnit(KoUnit::Pixel, res / 72.0);
-        m_width = KoUnit::fromUserValue(doubleWidth->value(), m_widthUnit);
+        m_width = m_widthUnit.fromUserValue(doubleWidth->value());
     }
 
     if(m_heightUnit.indexInList(false) == KoUnit::Pixel) {
         m_heightUnit = KoUnit(KoUnit::Pixel, res / 72.0);
-        m_height = KoUnit::fromUserValue(doubleHeight->value(), m_heightUnit);
+        m_height = m_heightUnit.fromUserValue(doubleHeight->value());
     }
 }
 
@@ -120,7 +120,7 @@ void KisCustomImageWidget::widthUnitChanged(int index)
 
 void KisCustomImageWidget::widthChanged(double value)
 {
-    m_width = KoUnit::fromUserValue(value, m_widthUnit);
+    m_width = m_widthUnit.fromUserValue(value);
 }
 
 void KisCustomImageWidget::heightUnitChanged(int index)
@@ -143,7 +143,7 @@ void KisCustomImageWidget::heightUnitChanged(int index)
 
 void KisCustomImageWidget::heightChanged(double value)
 {
-    m_height = KoUnit::fromUserValue(value, m_heightUnit);
+    m_height = m_heightUnit.fromUserValue(value);
 }
 
 void KisCustomImageWidget::buttonClicked()

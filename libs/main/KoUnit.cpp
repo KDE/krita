@@ -75,25 +75,25 @@ QString KoUnit::unitDescription( KoUnit _unit )
     }
 }
 
-double KoUnit::toUserValue( double ptValue, KoUnit unit )
+double KoUnit::toUserValue( double ptValue )
 {
-    switch ( unit.m_unit ) {
+    switch ( m_unit ) {
     case Millimeter:
-        return toMM( ptValue );
+        return toMillimeter( ptValue );
     case Centimeter:
-        return toCM( ptValue );
+        return toCentimeter( ptValue );
     case Decimeter:
-        return toDM( ptValue );
+        return toDecimeter( ptValue );
     case Inch:
         return toInch( ptValue );
     case Pica:
-        return toPI( ptValue );
+        return toPica( ptValue );
     case Didot:
-        return toDD( ptValue );
+        return toDidot( ptValue );
     case Cicero:
-        return toCC( ptValue );
+        return toCicero( ptValue );
     case Pixel:
-        return floor( ptValue * unit.m_pixelConversion + 0.5);
+        return floor( ptValue * m_pixelConversion + 0.5);
     case Point:
     default:
         return toPoint( ptValue );
@@ -126,14 +126,14 @@ double KoUnit::ptToUnit( const double ptValue, const KoUnit unit )
     }
 }
 
-QString KoUnit::toUserStringValue( double ptValue, KoUnit unit )
+QString KoUnit::toUserStringValue( double ptValue )
 {
-    return KGlobal::locale()->formatNumber( toUserValue( ptValue, unit ) );
+    return KGlobal::locale()->formatNumber( toUserValue( ptValue ) );
 }
 
-double KoUnit::fromUserValue( double value, KoUnit unit )
+double KoUnit::fromUserValue( double value ) const
 {
-    switch ( unit.m_unit ) {
+    switch ( m_unit ) {
     case Millimeter:
         return MM_TO_POINT( value );
     case Centimeter:
@@ -149,16 +149,16 @@ double KoUnit::fromUserValue( double value, KoUnit unit )
     case Cicero:
         return CC_TO_POINT( value );
     case Pixel:
-        return value / unit.m_pixelConversion;
+        return value / m_pixelConversion;
     case Point:
     default:
         return value;
     }
 }
 
-double KoUnit::fromUserValue( const QString& value, KoUnit unit, bool* ok )
+double KoUnit::fromUserValue( const QString& value, bool* ok )
 {
-    return fromUserValue( KGlobal::locale()->readNumber( value, ok ), unit );
+    return fromUserValue( KGlobal::locale()->readNumber( value, ok ) );
 }
 
 double KoUnit::parseValue( const QString& _value, double defaultVal )
@@ -185,12 +185,12 @@ double KoUnit::parseValue( const QString& _value, double defaultVal )
     bool ok;
     KoUnit u = KoUnit::unit( unit, &ok );
     if( ok )
-        return fromUserValue( val, u );
+        return u.fromUserValue( val );
 
     if( unit == "m" )
-        return fromUserValue( val * 10.0, Decimeter );
+        return DM_TO_POINT( val * 10.0 );
     else if( unit == "km" )
-        return fromUserValue( val * 10000.0, Decimeter );
+        return DM_TO_POINT( val * 10000.0 );
     kWarning() << "KoUnit::parseValue: Unit " << unit << " is not supported, please report." << endl;
 
     // TODO : add support for mi/ft ?

@@ -118,7 +118,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
     if(orientation() == Qt::Horizontal) {
         lengthPixel = d->m_viewConverter->documentToViewX(rulerLength());
         numberStepPixel = qRound(d->m_viewConverter->documentToViewX(
-            KoUnit::fromUserValue(numberStep, d->m_unit)));
+            d->m_unit.fromUserValue(numberStep)));
         rectangle.setX(qMax(0, d->m_offset));
         rectangle.setY(0);
         rectangle.setWidth(qMin((double)width() - 1.0 - rectangle.x(), lengthPixel));
@@ -132,7 +132,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
     } else {
         lengthPixel = d->m_viewConverter->documentToViewY(rulerLength());
         numberStepPixel = qRound(d->m_viewConverter->documentToViewY(
-            KoUnit::fromUserValue(numberStep, d->m_unit)));
+            d->m_unit.fromUserValue(numberStep)));
         rectangle.setX(0);
         rectangle.setY(qMax(0, d->m_offset));
         rectangle.setWidth(width() - 1.0);
@@ -196,11 +196,11 @@ void KoRuler::paintEvent(QPaintEvent* event)
 
         int len = qRound(rectangle.width()) + start;
         int nextStep = qRound(d->m_viewConverter->documentToViewX(
-            KoUnit::fromUserValue(numberStep * stepCount, d->m_unit)));
-        int nextHalfStep = qRound(d->m_viewConverter->documentToViewX(KoUnit::fromUserValue(
-            numberStep * 0.5 * halfStepCount, d->m_unit)));
-        int nextQuarterStep = qRound(d->m_viewConverter->documentToViewX(KoUnit::fromUserValue(
-            numberStep * 0.25 * quarterStepCount, d->m_unit)));
+            d->m_unit.fromUserValue(numberStep * stepCount)));
+        int nextHalfStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
+            numberStep * 0.5 * halfStepCount)));
+        int nextQuarterStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
+            numberStep * 0.25 * quarterStepCount)));
 
         for(int i = start; i < len; ++i) {
             pos = i - start;
@@ -214,32 +214,32 @@ void KoRuler::paintEvent(QPaintEvent* event)
                                   QString::number(stepCount * numberStep));
                 ++stepCount;
                 nextStep = qRound(d->m_viewConverter->documentToViewX(
-                    KoUnit::fromUserValue(numberStep * stepCount, d->m_unit)));
+                    d->m_unit.fromUserValue(numberStep * stepCount)));
                 ++halfStepCount;
-                nextHalfStep = qRound(d->m_viewConverter->documentToViewX(KoUnit::fromUserValue(
-                    numberStep * 0.5 * halfStepCount, d->m_unit)));
+                nextHalfStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
+                    numberStep * 0.5 * halfStepCount)));
                 ++quarterStepCount;
-                nextQuarterStep = qRound(d->m_viewConverter->documentToViewX(KoUnit::fromUserValue(
-                    numberStep * 0.25 * quarterStepCount, d->m_unit)));
+                nextQuarterStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
+                    numberStep * 0.25 * quarterStepCount)));
             } else if(i == nextHalfStep) {
                 if(pos != 0) {
                     painter.drawLine(QPointF(pos, 1), QPointF(pos, height() * 0.25));
                 }
 
                 ++halfStepCount;
-                nextHalfStep = qRound(d->m_viewConverter->documentToViewX(KoUnit::fromUserValue(
-                    numberStep * 0.5 * halfStepCount, d->m_unit)));
+                nextHalfStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
+                    numberStep * 0.5 * halfStepCount)));
                 ++quarterStepCount;
-                nextQuarterStep = qRound(d->m_viewConverter->documentToViewX(KoUnit::fromUserValue(
-                    numberStep * 0.25 * quarterStepCount, d->m_unit)));
+                nextQuarterStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
+                    numberStep * 0.25 * quarterStepCount)));
             } else if(i == nextQuarterStep) {
                 if(pos != 0) {
                     painter.drawLine(QPointF(pos, 1), QPointF(pos, height() * 0.125));
                 }
 
                 ++quarterStepCount;
-                nextQuarterStep = qRound(d->m_viewConverter->documentToViewX(KoUnit::fromUserValue(
-                    numberStep * 0.25 * quarterStepCount, d->m_unit)));
+                nextQuarterStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
+                    numberStep * 0.25 * quarterStepCount)));
             }
         }
 
@@ -270,11 +270,11 @@ void KoRuler::paintEvent(QPaintEvent* event)
 
         int len = qRound(rectangle.height()) + start;
         int nextStep = qRound(d->m_viewConverter->documentToViewY(
-            KoUnit::fromUserValue(numberStep * stepCount, d->m_unit)));
-        int nextHalfStep = qRound(d->m_viewConverter->documentToViewY(KoUnit::fromUserValue(
-            numberStep * 0.5 * halfStepCount, d->m_unit)));
-        int nextQuarterStep = qRound(d->m_viewConverter->documentToViewY(KoUnit::fromUserValue(
-            numberStep * 0.25 * quarterStepCount, d->m_unit)));
+            d->m_unit.fromUserValue(numberStep * stepCount)));
+        int nextHalfStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
+            numberStep * 0.5 * halfStepCount)));
+        int nextQuarterStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
+            numberStep * 0.25 * quarterStepCount)));
 
         for(int i = start; i < len; ++i) {
             pos = i - start;
@@ -298,32 +298,32 @@ void KoRuler::paintEvent(QPaintEvent* event)
 
                 ++stepCount;
                 nextStep = qRound(d->m_viewConverter->documentToViewY(
-                    KoUnit::fromUserValue(numberStep * stepCount, d->m_unit)));
+                    d->m_unit.fromUserValue(numberStep * stepCount)));
                 ++halfStepCount;
-                nextHalfStep = qRound(d->m_viewConverter->documentToViewY(KoUnit::fromUserValue(
-                    numberStep * 0.5 * halfStepCount, d->m_unit)));
+                nextHalfStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
+                    numberStep * 0.5 * halfStepCount)));
                 ++quarterStepCount;
-                nextQuarterStep = qRound(d->m_viewConverter->documentToViewY(KoUnit::fromUserValue(
-                    numberStep * 0.25 * quarterStepCount, d->m_unit)));
+                nextQuarterStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
+                    numberStep * 0.25 * quarterStepCount)));
             } else if(i == nextHalfStep) {
                 if(pos != 0) {
                     painter.drawLine(QPointF(0, pos), QPointF(width() * 0.25, pos));
                 }
 
                 ++halfStepCount;
-                nextHalfStep = qRound(d->m_viewConverter->documentToViewY(KoUnit::fromUserValue(
-                    numberStep * 0.5 * halfStepCount, d->m_unit)));
+                nextHalfStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
+                    numberStep * 0.5 * halfStepCount)));
                 ++quarterStepCount;
-                nextQuarterStep = qRound(d->m_viewConverter->documentToViewY(KoUnit::fromUserValue(
-                    numberStep * 0.25 * quarterStepCount, d->m_unit)));
+                nextQuarterStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
+                    numberStep * 0.25 * quarterStepCount)));
             } else if(i == nextQuarterStep) {
                 if(pos != 0) {
                     painter.drawLine(QPointF(0, pos), QPointF(width() * 0.125, pos));
                 }
 
                 ++quarterStepCount;
-                nextQuarterStep = qRound(d->m_viewConverter->documentToViewY(KoUnit::fromUserValue(
-                    numberStep * 0.25 * quarterStepCount, d->m_unit)));
+                nextQuarterStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
+                    numberStep * 0.25 * quarterStepCount)));
             }
         }
 

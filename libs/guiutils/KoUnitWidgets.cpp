@@ -67,7 +67,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     {
         KoUnit unit = KoUnit::unit( unitName, &ok );
         if ( ok )
-            newVal = KoUnit::fromUserValue( value, unit );
+            newVal = unit.fromUserValue( value );
         else
         {
             // Probably the user is trying to edit the unit
@@ -160,7 +160,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
 void
 KoUnitDoubleSpinBox::changeValue( double val )
 {
-    KDoubleSpinBox::setValue( KoUnit::toUserValue( val, m_unit ) );
+    KDoubleSpinBox::setValue( m_unit.toUserValue( val ) );
     // TODO: emit valueChanged ONLY if the value was out-of-bounds
     // This will allow the 'user' dialog to set a dirty bool and ensure
     // a proper value is getting saved.
@@ -173,10 +173,10 @@ void KoUnitDoubleSpinBox::privateValueChanged() {
 void
 KoUnitDoubleSpinBox::setUnit( KoUnit unit )
 {
-    double oldvalue = KoUnit::fromUserValue( KDoubleSpinBox::value(), m_unit );
-    KDoubleSpinBox::setMinimum( KoUnit::toUserValue( m_lowerInPoints, unit ) );
-    KDoubleSpinBox::setMaximum( KoUnit::toUserValue( m_upperInPoints, unit ) );
-    KDoubleSpinBox::setSingleStep( KoUnit::toUserValue( m_stepInPoints, unit ) );
+    double oldvalue = m_unit.fromUserValue( KDoubleSpinBox::value() );
+    KDoubleSpinBox::setMinimum( unit.toUserValue( m_lowerInPoints ) );
+    KDoubleSpinBox::setMaximum( unit.toUserValue( m_upperInPoints ) );
+    KDoubleSpinBox::setSingleStep( unit.toUserValue( m_stepInPoints ) );
     KDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
     m_unit = unit;
     setSuffix( KoUnit::unitName( unit ).prepend( ' ' ) );
@@ -184,31 +184,31 @@ KoUnitDoubleSpinBox::setUnit( KoUnit unit )
 
 double KoUnitDoubleSpinBox::value( ) const
 {
-    return KoUnit::fromUserValue( KDoubleSpinBox::value(), m_unit );
+    return m_unit.fromUserValue( KDoubleSpinBox::value() );
 }
 
 void KoUnitDoubleSpinBox::setMinimum( double min )
 {
   m_lowerInPoints = min;
-  KDoubleSpinBox::setMinimum( KoUnit::toUserValue( m_lowerInPoints, m_unit ) );
+  KDoubleSpinBox::setMinimum( m_unit.toUserValue( m_lowerInPoints ) );
 }
 
 void KoUnitDoubleSpinBox::setMaximum( double max )
 {
   m_upperInPoints = max;
-  KDoubleSpinBox::setMaximum( KoUnit::toUserValue( m_upperInPoints, m_unit ) );
+  KDoubleSpinBox::setMaximum( m_unit.toUserValue( m_upperInPoints ) );
 }
 
 void KoUnitDoubleSpinBox::setLineStep( double step )
 {
-  m_stepInPoints = KoUnit::toUserValue(step, KoUnit(KoUnit::Point) );
+  m_stepInPoints = KoUnit(KoUnit::Point).toUserValue(step);
   KDoubleSpinBox::setSingleStep( step );
 }
 
 void KoUnitDoubleSpinBox::setLineStepPt( double step )
 {
   m_stepInPoints = step;
-  KDoubleSpinBox::setSingleStep( KoUnit::toUserValue( m_stepInPoints, m_unit ) );
+  KDoubleSpinBox::setSingleStep( m_unit.toUserValue( m_stepInPoints ) );
 }
 
 void KoUnitDoubleSpinBox::setMinMaxStep( double min, double max, double step )
@@ -258,7 +258,7 @@ KoUnitDoubleLineEdit::setUnit( KoUnit unit )
     m_unit = unit;
     m_lower = KoUnit::ptToUnit( m_lowerInPoints, unit );
     m_upper = KoUnit::ptToUnit( m_upperInPoints, unit );
-    changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( m_value, old ), unit ) );
+    changeValue( KoUnit::ptToUnit( old.fromUserValue( m_value ), unit ) );
 }
 
 bool
@@ -279,7 +279,7 @@ KoUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 
 double KoUnitDoubleLineEdit::value( ) const
 {
-    return KoUnit::fromUserValue( m_value, m_unit );
+    return m_unit.fromUserValue( m_value );
 }
 
 
@@ -350,7 +350,7 @@ KoUnitDoubleComboBox::setUnit( KoUnit unit )
     m_unit = unit;
     m_lower = KoUnit::ptToUnit( m_lowerInPoints, unit );
     m_upper = KoUnit::ptToUnit( m_upperInPoints, unit );
-    changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( m_value, old ), unit ) );
+    changeValue( KoUnit::ptToUnit( old.fromUserValue( m_value ), unit ) );
 }
 
 bool
@@ -371,7 +371,7 @@ KoUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
 
 double KoUnitDoubleComboBox::value( ) const
 {
-    return KoUnit::fromUserValue( m_value, m_unit );
+    return m_unit.fromUserValue( m_value );
 }
 
 

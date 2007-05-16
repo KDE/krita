@@ -62,6 +62,8 @@ private slots:
     void slotHeightPixelsChanged(int h);
     void slotWidthPhysicalChanged(double w);
     void slotHeightPhysicalChanged(double h);
+    void slotWidthUnitChanged(int index);
+    void slotHeightUnitChanged(int index);
     void slotProtectChanged();
 
 private:
@@ -71,6 +73,7 @@ private:
 
     WdgImageSize * m_page;
     double m_origW, m_origH;
+    double m_width, m_height;  // in points
     QButtonGroup *m_buttonGroup;
 };
 

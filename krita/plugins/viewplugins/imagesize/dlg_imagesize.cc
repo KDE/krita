@@ -42,6 +42,9 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_origW = width;
     m_origH = height;
 
+    m_width = width / resolution;
+    m_height = height / resolution;
+
     m_page = new WdgImageSize(this);
     Q_CHECK_PTR(m_page);
     m_page->setObjectName("image_size");
@@ -52,10 +55,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     m_page->cmbFilterType->setCurrent("Mitchell");
 
-    m_page->cmbWidthUnit->addItems( KoUnit::listOfUnitName(true) );
-    m_page->cmbWidthUnit->setCurrentIndex(KoUnit::Centimeter);
-    m_page->cmbHeightUnit->addItems( KoUnit::listOfUnitName(true) );
-    m_page->cmbHeightUnit->setCurrentIndex(KoUnit::Centimeter);
+    m_page->cmbWidthUnit->addItems( KoUnit::listOfUnitName() );
+    m_page->cmbHeightUnit->addItems( KoUnit::listOfUnitName() );
 
     m_page->doubleResolution->setValue(72.0 * resolution);
 
@@ -89,6 +90,16 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     connect(m_page->doublePhysicalHeight, SIGNAL(valueChanged(double)),
         this, SLOT(slotHeightPhysicalChanged(double)));
+
+    connect(m_page->cmbWidthUnit, SIGNAL(currentIndexChanged(int)),
+        this, SLOT(slotWidthUnitChanged(int)));
+
+    connect(m_page->cmbHeightUnit, SIGNAL(currentIndexChanged(int)),
+        this, SLOT(slotHeightUnitChanged(int)));
+
+    // FIXME should take it from some application wide setting
+    m_page->cmbWidthUnit->setCurrentIndex(KoUnit::Centimeter);
+    m_page->cmbHeightUnit->setCurrentIndex(KoUnit::Centimeter);
 
     connect(this, SIGNAL(okClicked()),
         this, SLOT(okClicked()));
@@ -127,11 +138,16 @@ void DlgImageSize::slotWidthPixelsChanged(int w)
 {
     blockAll();
 
-    if(m_page->radioProtectResolution->isChecked()) {
-        m_page->doublePhysicalHeight->setValue(w*m_page->doubleResolution->value());
+   if(m_page->radioProtectResolution->isChecked()) {
+        m_width = 72 * w / m_page->doubleResolution->value();
+
+        KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbWidthUnit->currentIndex());
+        m_page->doublePhysicalWidth->setValue(unit.toUserValue(m_width));
     }
     else {
-//        m_page->doubleResolution->setValue(w*m_page->doubleResolution->value());
+        m_page->doubleResolution->setValue(72 * w / m_width);
+        // since we only have one resolution parameter we need to recalculate the height in pixels
+        m_page->intPixelHeight->setValue(int(m_height * m_page->doubleResolution->value() / 72.0));
     }
     unblockAll();
 }
@@ -140,12 +156,18 @@ void DlgImageSize::slotHeightPixelsChanged(int h)
 {
     blockAll();
 
-    // Set width in pixels and percent of necessary
-/*    if (m_page->chkConstrain->isChecked()) {
-        m_page->intWidth->setValue(qRound(m_oldW));
+    if(m_page->radioProtectResolution->isChecked()) {
+        m_height = 72 * h / m_page->doubleResolution->value();
 
+        KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbHeightUnit->currentIndex());
+        m_page->doublePhysicalHeight->setValue(unit.toUserValue(m_height));
     }
-*/
+    else {
+        m_page->doubleResolution->setValue(72 * h / m_height);
+        // since we only have one resolution parameter we need to recalculate the width in pixels
+        m_page->intPixelWidth->setValue(int(m_width * m_page->doubleResolution->value() / 72.0));
+    }
+
     unblockAll();
 }
 
@@ -153,14 +175,19 @@ void DlgImageSize::slotWidthPhysicalChanged(double w)
 {
     blockAll();
 
+    KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbWidthUnit->currentIndex());
+    m_width = unit.fromUserValue(w);
+
     if(m_page->radioProtectResolution->isChecked()) {
-        //KoUnit unit = KoUnit((KoUnit::Unit)cmbHeightUnit->currentIndex(), true);
-        //m_width=KoUnit::ptToUnit(m_height, unit)
-        m_page->intPixelWidth->setValue(int(w*m_page->doubleResolution->value()));
+        m_page->intPixelWidth->setValue(int(m_width*m_page->doubleResolution->value()/72.0));
     }
     else {
-        m_page->doubleResolution->setValue(w*m_page->intPixelWidth->value());
-        m_page->doublePhysicalHeight->setValue(m_page->intPixelWidth->value()*m_page->doubleResolution->value());
+        m_page->doubleResolution->setValue(72*m_page->intPixelWidth->value()/m_width);
+        // since we only have one resolution parameter we need to recalculate the physical height
+        m_height = 72 * m_page->intPixelHeight->value()/m_page->doubleResolution->value();
+
+        unit = KoUnit((KoUnit::Unit)m_page->cmbHeightUnit->currentIndex());
+        m_page->doublePhysicalHeight->setValue(unit.toUserValue(m_height));
     }
 
     unblockAll();
@@ -169,6 +196,41 @@ void DlgImageSize::slotWidthPhysicalChanged(double w)
 void DlgImageSize::slotHeightPhysicalChanged(double h)
 {
     blockAll();
+
+    KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbHeightUnit->currentIndex());
+    m_height = unit.fromUserValue(h);
+
+    if(m_page->radioProtectResolution->isChecked()) {
+        m_page->intPixelHeight->setValue(int(m_height*m_page->doubleResolution->value()/72.0));
+    }
+    else {
+        m_page->doubleResolution->setValue(72*m_page->intPixelHeight->value()/m_height);
+        // since we only have one resolution parameter we need to recalculate the physical width
+        m_width = 72 * m_page->intPixelWidth->value()/m_page->doubleResolution->value();
+
+        unit = KoUnit((KoUnit::Unit)m_page->cmbWidthUnit->currentIndex());
+        m_page->doublePhysicalWidth->setValue(unit.toUserValue(m_width));
+    }
+
+    unblockAll();
+}
+
+void DlgImageSize::slotWidthUnitChanged(int index)
+{
+    blockAll();
+
+    KoUnit unit = KoUnit((KoUnit::Unit)index);
+    m_page->doublePhysicalWidth->setValue(unit.toUserValue(m_width));
+
+    unblockAll();
+}
+
+void DlgImageSize::slotHeightUnitChanged(int index)
+{
+    blockAll();
+
+    KoUnit unit = KoUnit((KoUnit::Unit)index);
+    m_page->doublePhysicalHeight->setValue(unit.toUserValue(m_height));
 
     unblockAll();
 }

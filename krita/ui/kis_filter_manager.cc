@@ -369,13 +369,14 @@ void KisFilterManager::slotApplyFilter(int i)
         }
     }
 
-    delete m_lastDialog;
-
     if (!accepted || !apply()) {
 	// Override the old configuration
         m_lastFilterConfig = oldConfig;
         m_lastDialog = oldDialog;
         m_lastFilter = oldFilter;
+    } else {
+        delete oldDialog;
+        delete oldConfig;
     }
 
 }

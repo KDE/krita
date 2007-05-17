@@ -61,17 +61,6 @@
    XXX: For now, all masks are 8 bit. Make the channel depth settable.
 
  */
-
-
-enum EnumKisMaskRenderMoment {
-    MergeWithLayerBeforeComposition,  ///< The mask will be painted before the parent is composited with in the layer stack. Eg: traditional masks or filter masks.
-    RenderAfterLayerComposition, ///< The mask will be painted onto
-                                 ///the layer stack right after the parent is merged
-                                 ///with the layers below it.
-    RenderAfterMerge, ///< The mask will painted on top of the finished projection before scaling,
-    RenderOnTop ///< the mask will be painted on top of the finished projection after scaling. Example: selection.
-};
-
 class KRITAIMAGE_EXPORT KisMask : public KisPaintDevice {
 
 public:
@@ -93,8 +82,6 @@ public:
     KisPaintDeviceSP parent();
 
     bool active();
-
-    EnumKisMaskRenderMoment renderWhen();
 
 private:
 

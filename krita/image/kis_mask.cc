@@ -31,7 +31,6 @@ class KisMask::KisMaskPrivate
 
 public:
     KisPaintDeviceSP parent;
-    EnumKisMaskRenderMoment renderWhen;
     bool active;
 };
 
@@ -45,7 +44,6 @@ KisMask::KisMask(KisPaintDeviceSP dev,  const QString & name)
     Q_ASSERT(dev);
     m_d->parent = dev;
     m_d->active = true;
-    m_d->renderWhen = RenderOnTop;
 }
 
 KisMask::KisMask(const QString & name)
@@ -54,7 +52,6 @@ KisMask::KisMask(const QString & name)
     m_d = new KisMaskPrivate();
     m_d->parent = 0;
     m_d->active = false;
-    m_d->renderWhen = RenderOnTop;
 
 }
 
@@ -79,7 +76,3 @@ bool KisMask::active()
     return m_d->active;
 }
 
-EnumKisMaskRenderMoment KisMask::renderWhen()
-{
-    return m_d->renderWhen;
-}

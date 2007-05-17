@@ -75,7 +75,8 @@ public:
     QTimer * longRunningFilterTimer;
     QPaintEngine * paintEngine;
 
-    QList<KisMaskSP> painterlyChannels;
+    // XXX: Use shared pointers here?
+    QList<KisMask*> painterlyChannels;
 
 };
 

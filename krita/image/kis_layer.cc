@@ -29,6 +29,9 @@
 #include "kis_layer.h"
 #include "kis_painter.h"
 
+#include "kis_mask.h"
+#include "kis_effect_mask.h"
+#include "kis_transparency_mask.h"
 
 static int getID()
 {
@@ -51,6 +54,10 @@ public:
     KisGroupLayerWSP parent;
     KisImageWSP image;
     QBitArray channelFlags;
+
+    // XXX: Make these (weak) shared pointers?
+    KisTransparencyMask* transparencyMask;
+    QList<KisEffectMask*> effectMasks;
 
     // Operation used to composite this layer with the projection of
     // the layers _under_ this layer

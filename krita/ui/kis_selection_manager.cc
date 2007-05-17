@@ -353,15 +353,52 @@ void KisSelectionManager::imgSelectionChanged(KisImageSP img)
     if (img == m_parent->image()) {
 
         updateGUI();
-        paths.clear();
+        outline.clear();
 
         KisPaintDeviceSP dev = img->activeDevice();
         if (dev)
             if (dev->hasSelection()) {
                 KisPaintDeviceSP dev = img->activeDevice();
                 KisSelectionSP selection = dev->selection();
-                paths = selection->outline();
+                outline = selection->outline();
+                updateSimpleOutline();
             }
+    }
+}
+
+void KisSelectionManager::updateSimpleOutline()
+{
+    simpleOutline.clear();
+    foreach(QPolygon polygon, outline) {
+        QPolygon simplePolygon;
+
+        simplePolygon << polygon.at(0);
+        QPoint previousDelta = polygon.at(1) - polygon.at(0);
+        QPoint currentDelta;
+        int pointsSinceLastRemoval = 3;
+        for (int i = 1; i < polygon.size()-1; ++i) {
+
+            //check for left turns and turn them into diagonals
+            currentDelta = polygon.at(i+1) - polygon.at(i);
+            if( (previousDelta.y() == 1 && currentDelta.x() == 1) || (previousDelta.x() == -1 && currentDelta.y() == 1) ||
+                (previousDelta.y() == -1 && currentDelta.x() == -1) || (previousDelta.x() == 1 && currentDelta.y() == -1) )
+            {
+                //Turning point found. The point at position i won't be in the simple outline.
+                //If there is a staircase, the points in between will be removed.
+                if(pointsSinceLastRemoval == 2)
+                    simplePolygon.pop_back();
+                pointsSinceLastRemoval = 0;
+
+            }
+            else
+                simplePolygon << polygon.at(i);
+
+            previousDelta = currentDelta;
+            pointsSinceLastRemoval++;
+        }
+        simplePolygon << polygon.at(polygon.size()-1);
+
+        simpleOutline.push_back(simplePolygon);
     }
 }
 
@@ -1671,7 +1708,6 @@ void KisSelectionManager::timerEvent()
 
 void KisSelectionManager::paint(QPainter& gc, KoViewConverter &converter)
 {
-    kDebug(41010) << "Brush count: " << brushes.count() << endl;
     double sx, sy;
     converter.zoom(&sx, &sy);
 
@@ -1685,22 +1721,22 @@ void KisSelectionManager::paint(QPainter& gc, KoViewConverter &converter)
     t.start();
     gc.setRenderHints(0);
 
-    QPen pen1(Qt::white, 0);
     QPen pen(brushes[offset], 0);
 
     int i=0;
-//     gc.setPen(pen1);
-//     foreach(QPolygon polygon, paths)
-//     {
-//         gc.drawPolygon(polygon);
-//         i++;
-//     }
     gc.setPen(pen);
-    foreach(QPolygon polygon, paths)
-    {
-        gc.drawPolygon(polygon);
-        i++;
-    }
+    if(1/m_parent->image()->xRes()*sx<3)
+        foreach(QPolygon polygon, simpleOutline)
+        {
+            gc.drawPolygon(polygon);
+            i++;
+        }
+    else
+        foreach(QPolygon polygon, outline)
+        {
+            gc.drawPolygon(polygon);
+            i++;
+        }
 
     kDebug(41010) << "Polygons :" << i << endl;
     kDebug(41010) << "Painting marching ants :" << t.elapsed() << endl;

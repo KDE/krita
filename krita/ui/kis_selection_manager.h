@@ -112,6 +112,8 @@ private:
     inline void rotatePointers (quint8  **p, quint32 n);
     void computeTransition (quint8* transition, quint8** buf, qint32 width);
 
+    void updateSimpleOutline();
+
     KisView2 * m_parent;
     KisDoc2 * m_doc;
 
@@ -144,7 +146,8 @@ private:
 
     QList<QAction*> m_pluginActions;
 
-    QVector<QPolygon> paths;
+    QVector<QPolygon> outline;
+    QVector<QPolygon> simpleOutline;
     QTimer* timer;
     int offset;
     QList<QBrush> brushes;

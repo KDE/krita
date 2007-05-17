@@ -24,6 +24,7 @@
 #include <QTextCursor>
 
 #include <KoStyleStack.h>
+#include <KoOasisLoadingContext.h>
 #include <KoXmlNS.h>
 
 #include <KDebug>
@@ -203,7 +204,8 @@ static void importOasisUnderline( const QString& type, const QString& style,
     // We should separate them in kotext...
 }
 
-void KoCharacterStyle::loadOasis(KoStyleStack& styleStack) {
+void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
+    KoStyleStack &styleStack = context.styleStack();
     //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
 
     if ( styleStack.hasProperty( KoXmlNS::fo, "color" ) ) { // 3.10.3
@@ -220,6 +222,7 @@ void KoCharacterStyle::loadOasis(KoStyleStack& styleStack) {
         fontName = styleStack.property( KoXmlNS::fo, "font-family" );
     if ( styleStack.hasProperty( KoXmlNS::style, "font-family" ) )
         fontName = styleStack.property( KoXmlNS::style, "font-family" );
+
     if ( ! fontName.isNull() ) {
         // Hmm, the remove "'" could break it's in the middle of the fontname...
         fontName = fontName.remove( "'" );

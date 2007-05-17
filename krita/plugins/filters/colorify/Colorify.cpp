@@ -101,8 +101,8 @@ void KisColorify::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterC
     int pixelsProcessed = 0;
     setProgressTotalSteps(rect.width() * rect.height());
 
-    Q_INT32 pixelsize = cs->pixelSize();
-    
+    //Q_INT32 pixelsize = cs->pixelSize();
+
     while( ! srcIt.isDone() )
     {
         if(srcIt.isSelected())
@@ -115,7 +115,7 @@ void KisColorify::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterC
         ++srcIt;
         ++dstIt;
     }
-    delete colorpixel;
+    delete[] colorpixel;
     setProgressDone(); // Must be called even if you don't really support progression
 }
 

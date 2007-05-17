@@ -69,10 +69,14 @@ public:
     mutable bool hasSelection;
     mutable bool selectionDeselected;
     mutable KisSelectionSP selection;
+
     KisExifInfo* exifInfo;
     QList<KisFilter*> longRunningFilters;
     QTimer * longRunningFilterTimer;
     QPaintEngine * paintEngine;
+
+    QList<KisMaskSP> painterlyChannels;
+
 };
 
 

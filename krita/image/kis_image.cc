@@ -39,34 +39,33 @@
 #include "KoColor.h"
 #include "colorprofiles/KoIccColorProfile.h"
 
+#include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
-#include "kis_types.h"
+#include "kis_change_profile_visitor.h"
+#include "kis_colorspace_convert_visitor.h"
+#include "kis_crop_visitor.h"
+#include "kis_extent_visitor.h"
+#include "kis_filter_strategy.h"
+#include "kis_group_layer.h"
+#include "kis_group_layer.h"
+#include "kis_image_commands.h"
+#include "kis_iterators_pixel.h"
+#include "kis_layer.h"
+#include "kis_merge_visitor.h"
 #include "kis_meta_registry.h"
+#include "kis_nameserver.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_action.h"
-#include "kis_selection.h"
+#include "kis_paint_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_painter.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
-#include "kis_adjustment_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_colorspace_convert_visitor.h"
-#include "kis_nameserver.h"
-#include "kis_merge_visitor.h"
-#include "kis_transaction.h"
-#include "kis_crop_visitor.h"
-#include "kis_transform_visitor.h"
-#include "kis_filter_strategy.h"
-#include "kis_paint_layer.h"
-#include "kis_change_profile_visitor.h"
-#include "kis_group_layer.h"
-#include "kis_iterators_pixel.h"
-#include "kis_shear_visitor.h"
 #include "kis_perspective_grid.h"
-#include "kis_extent_visitor.h"
 #include "kis_projection.h"
-#include "kis_image_commands.h"
-
+#include "kis_selection.h"
+#include "kis_shear_visitor.h"
+#include "kis_transaction.h"
+#include "kis_transform_visitor.h"
+#include "kis_types.h"
 
 class KisImage::KisImagePrivate {
 public:
@@ -104,6 +103,8 @@ public:
 
     vKisAnnotationSP annotations;
 
+    KisSelectionSP globalSelection;
+
 };
 
 
@@ -132,7 +133,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisShared(rhs)
         m_d->colorSpace = rhs.m_d->colorSpace;
         m_d->dirty = rhs.m_d->dirty;
         m_d->adapter = rhs.m_d->adapter;
-
+        m_d->globalSelection = 0;
 
         m_d->rootLayer = static_cast<KisGroupLayer*>(rhs.m_d->rootLayer->clone().data());
 
@@ -176,6 +177,19 @@ void KisImage::setDescription(const QString& description)
 {
     if (!description.isEmpty())
         m_d->description = description;
+}
+
+KisSelectionSP KisImage::globalSelection() const
+{
+    return m_d->globalSelection;
+}
+
+void KisImage::setGlobalSelection( KisSelectionSP globalSelection )
+{
+    if ( globalSelection == 0 )
+        m_d->globalSelection = new KisSelection( m_d->rootLayer->projection() );
+    else
+        m_d->globalSelection = globalSelection;
 }
 
 

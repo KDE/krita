@@ -127,6 +127,19 @@ public:
     void setDescription(const QString& description);
 
     /**
+     * @return the global selection object or 0 if there is none. The
+     * global selection is always read-write.
+     */
+    KisSelectionSP globalSelection() const;
+
+    /**
+     * Replaces the current global selection with globalSelection. If
+     * globalSelection is empty, a new selection object will be
+     * created that is by default completely deselected.
+     */
+    void setGlobalSelection( KisSelectionSP globalSelection = 0 );
+
+    /**
      * Retrieve the next automatic layername.
      */
     QString nextLayerName() const;

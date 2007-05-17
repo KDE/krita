@@ -430,17 +430,18 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         {
             Q_UINT8 *data;
 
-                data = srcIt.rawData();
-                memcpy(&tmpLine[i*pixelSize], data, pixelSize);
+            data = srcIt.rawData();
+            memcpy(&tmpLine[i*pixelSize], data, pixelSize);
 
-                // XXX: Should set alpha = alpha*(1-selectedness)
-                cs->setAlpha(data, 0, 1);
             if(srcIt.isSelected())
             {
+                // XXX: Should set alpha = alpha*(1-selectedness)
+                cs->setAlpha(data, 0, 1);
                 tmpSel[i] = 255;
             }
-            else
+            else {
                 tmpSel[i] = 0;
+            }
             ++srcIt;
             i++;
         }

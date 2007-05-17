@@ -96,7 +96,7 @@ set(kritaui_LIB_SRCS
     kobirdeyepanel.cpp
     squeezedcombobox.cpp
     kis_image_manager.cc
-    kis_mask_manager.cc
+#    kis_mask_manager.cc
     kis_shape_layer.cc
     kis_shape_layer_canvas.cpp
     kis_layer_shape.cc

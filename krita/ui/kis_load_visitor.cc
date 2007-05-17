@@ -92,25 +92,25 @@ bool KisLoadVisitor::visit(KisPaintLayer *layer)
         layer->setDirty(rc);
     }
 
-    // mask
-    if (layer->hasMask()) { // We set this in KisDoc::loadPaintLayer
-        KisPaintDeviceSP mask = layer->getMask();
-        location = m_external ? QString::null : m_uri;
-        location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".mask";
+//     // mask
+//     if (layer->hasMask()) { // We set this in KisDoc::loadPaintLayer
+//         KisPaintDeviceSP mask = layer->getMask();
+//         location = m_external ? QString::null : m_uri;
+//         location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".mask";
 
-        // Layer data
-        if (m_store->open(location)) {
-            if (!mask->read(m_store)) {
-                mask->disconnect();
-                m_store->close();
-                //IODone();
-                return false;
-            }
+//         // Layer data
+//         if (m_store->open(location)) {
+//             if (!mask->read(m_store)) {
+//                 mask->disconnect();
+//                 m_store->close();
+//                 //IODone();
+//                 return false;
+//             }
 
-            m_store->close();
-        }
-        layer->setDirty(); // Update the entire layer
-    }
+//             m_store->close();
+//         }
+//         layer->setDirty(); // Update the entire layer
+//     }
 
     return true;
 

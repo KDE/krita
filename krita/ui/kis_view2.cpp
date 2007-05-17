@@ -111,7 +111,7 @@ public:
         , layerManager( 0 )
         , zoomManager( 0 )
         , imageManager( 0 )
-        , maskManager( 0 )
+//        , maskManager( 0 )
         , gridManager( 0 )
         , perspectiveGridManager( 0 )
         {
@@ -126,7 +126,7 @@ public:
             delete layerManager;
             delete zoomManager;
             delete imageManager;
-            delete maskManager;
+//            delete maskManager;
             delete gridManager;
             delete perspectiveGridManager;
         }
@@ -148,7 +148,7 @@ public:
     KisLayerManager * layerManager;
     KisZoomManager * zoomManager;
     KisImageManager * imageManager;
-    KisMaskManager * maskManager;
+//    KisMaskManager * maskManager;
     KisGridManager * gridManager;
     KisPerspectiveGridManager * perspectiveGridManager;
 };
@@ -410,7 +410,7 @@ void KisView2::createGUI()
     m_d->layerBox = qobject_cast<KisLayerBox*>( createDockWidget( &layerboxFactory ) );
 
     m_d->statusBar = KoView::statusBar() ? new KisStatusBar( KoView::statusBar(), this ) : 0;
-    connect(m_d->canvasController, SIGNAL( documentMousePositionChanged(const QPointF & )), 
+    connect(m_d->canvasController, SIGNAL( documentMousePositionChanged(const QPointF & )),
             m_d->statusBar, SLOT( documentMousePositionChanged( const QPointF & ) ) );
 
     m_d->controlFrame = new KisControlFrame( mainWindow(), this );
@@ -471,8 +471,8 @@ void KisView2::createManagers()
     m_d->imageManager = new KisImageManager( this );
     m_d->imageManager->setup( actionCollection() );
 
-    m_d->maskManager = new KisMaskManager( this );
-    m_d->maskManager->setup( actionCollection() );
+//     m_d->maskManager = new KisMaskManager( this );
+//     m_d->maskManager->setup( actionCollection() );
 
     m_d->gridManager = new KisGridManager( this );
     m_d->gridManager->setup( actionCollection() );
@@ -490,7 +490,7 @@ void KisView2::updateGUI()
     m_d->filterManager->updateGUI();
     m_d->zoomManager->updateGUI();
     m_d->imageManager->updateGUI();
-    m_d->maskManager->updateGUI();
+//     m_d->maskManager->updateGUI();
     m_d->gridManager->updateGUI();
     m_d->perspectiveGridManager->updateGUI();
 
@@ -512,7 +512,7 @@ void KisView2::connectCurrentImage()
         }
 
         connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
-        connect(img.data(), SIGNAL(sigMaskInfoChanged()), m_d->maskManager, SLOT(maskUpdated()));
+//         connect(img.data(), SIGNAL(sigMaskInfoChanged()), m_d->maskManager, SLOT(maskUpdated()));
         connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
         connect(img.data(), SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
         connect(img.data(), SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
@@ -520,7 +520,7 @@ void KisView2::connectCurrentImage()
         connect(img.data(), SIGNAL(sigLayerActivated(KisLayerSP)), m_d->canvas, SLOT(updateCanvas()));
         connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
 
-        m_d->maskManager->maskUpdated();
+//         m_d->maskManager->maskUpdated();
     }
     m_d->canvas->connectCurrentImage();
     if( m_d->layerBox )

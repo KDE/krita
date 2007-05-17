@@ -42,11 +42,11 @@ class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer {
 public:
     KisGroupLayer(KisImageWSP img, const QString &name, quint8 opacity);
     KisGroupLayer(const KisGroupLayer& rhs);
-    virtual ~KisGroupLayer();
+    ~KisGroupLayer();
 
-    virtual QIcon icon() const;
+    QIcon icon() const;
 
-    virtual KisLayerSP clone() const;
+    KisLayerSP clone() const;
 
 signals:
 
@@ -62,58 +62,58 @@ signals:
 
 public:
 
-    virtual KoColorSpace * colorSpace();
+    KoColorSpace * colorSpace();
 
     /**
      * Set the entire layer extent dirty; this percolates up to parent layers all the
      * way to the root layer.
      */
-    virtual void setDirty();
+    void setDirty();
 
     /**
      * Add the given rect to the set of dirty rects for this layer;
      * this percolates up to parent layers all the way to the root
      * layer.
      */
-    virtual void setDirty(const QRect & rect);
+    void setDirty(const QRect & rect);
 
     /**
      * Add the given region to the set of dirty rects for this layer;
      * this percolates up to parent layers all the way to the root
      * layer.
      */
-    virtual void setDirty( const QRegion & region);
+    void setDirty( const QRegion & region);
 
-    virtual qint32 x() const;
-    virtual void setX(qint32);
+    qint32 x() const;
+    void setX(qint32);
 
-    virtual qint32 y() const;
-    virtual void setY(qint32);
+    qint32 y() const;
+    void setY(qint32);
 
     /**
        Sets this layer and all its descendants' owner image to the
        given image.
     */
-    virtual void setImage(KisImageSP image);
+    void setImage(KisImageSP image);
 
     /**
        Return the united extents of all layers in this group layer;
        this function is _recursive_.
      */
-    virtual QRect extent() const;
+    QRect extent() const;
 
     /**
        Return the exact bounding rect of all layers in this group
        layer; this function is _recursive_ and can therefore be really
        slow.
      */
-    virtual QRect exactBounds() const;
+    QRect exactBounds() const;
 
     /**
        Accect the specified visitor.
        @return true if the operation succeeded, false if it failed.
     */
-    virtual bool accept(KisLayerVisitor &v)
+    bool accept(KisLayerVisitor &v)
         {
             return v.visit(this);
         };
@@ -126,7 +126,7 @@ public:
 
        Note for hackers: implement CoW!
      */
-    virtual void resetProjection(KisPaintDeviceSP to = 0);
+    void resetProjection(KisPaintDeviceSP to = 0);
 
     /**
        Retrieve the projection for this group layer. Note that
@@ -137,7 +137,7 @@ public:
        Note the second: this _may_ return the paint device of a paint
        layer if that paint layer is the only child of this group layer.
     */
-    virtual KisPaintDeviceSP projection();
+    KisPaintDeviceSP projection();
 
     /**
        Update the given rect of the projection paint device.
@@ -151,7 +151,7 @@ public:
        count is _not_ recursive, i.e., a child grouplayer that
        contains ten other layers counts for one.
     */
-    virtual uint childCount() const;
+    uint childCount() const;
 
     /**
      @return the bottom-most layer of the layers contained in this
@@ -159,7 +159,7 @@ public:
      grouplayer, the grouplayer is returned, not the first child of
      that group layer.
     */
-    virtual KisLayerSP firstChild() const;
+    KisLayerSP firstChild() const;
 
     /**
      @return the top-most layer of the layers contained in this
@@ -167,23 +167,23 @@ public:
      grouplayer, the grouplayer is returned, not the last child
      of that group layer.
     */
-    virtual KisLayerSP lastChild() const;
+    KisLayerSP lastChild() const;
 
     /**
        @returns the layer at the specified index.
     */
-    virtual KisLayerSP at(int index) const;
+    KisLayerSP at(int index) const;
 
     /**
        @returns the index of the specified layer if it's in this
        group, or -1 otherwise.
     */
-    virtual int index(KisLayerSP layer) const;
+    int index(KisLayerSP layer) const;
 
-    virtual QImage createThumbnail(qint32 w, qint32 h);
+    QImage createThumbnail(qint32 w, qint32 h);
 
     /// Returns if the layer will induce the projection hack (if the only layer in this group)
-    virtual bool paintLayerInducesProjectionOptimization(KisPaintLayerSP l);
+    bool paintLayerInducesProjectionOptimization(KisPaintLayerSP l);
 
 private:
 
@@ -191,17 +191,17 @@ private:
 
     /** Adds the layer to this group at the specified index. childCount() is a valid index and appends to the end.
         Fails and returns false if the layer is already in this group or any other (remove it first.) */
-    virtual bool addLayer(KisLayerSP newLayer, int index);
+    bool addLayer(KisLayerSP newLayer, int index);
 
     /**
      * Add the specified layer above the specified layer (if aboveThis == 0, the bottom is used) */
-    virtual bool addLayer(KisLayerSP newLayer, KisLayerSP aboveThis);
+    bool addLayer(KisLayerSP newLayer, KisLayerSP aboveThis);
 
     /// Removes the layer at the specified index from the group.
-    virtual bool removeLayer(int index);
+    bool removeLayer(int index);
 
     /// Removes the layer from this group. Fails if there's no such layer in this group.
-    virtual bool removeLayer(KisLayerSP layer);
+    bool removeLayer(KisLayerSP layer);
 
 private:
 

@@ -107,7 +107,7 @@ void KisGroupLayer::resetProjection(KisPaintDeviceSP to)
 
 bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) {
     return l && l->paintDevice()->colorSpace() == image()->colorSpace() && l->visible()
-             && l->opacity() == OPACITY_OPAQUE && !l->temporaryTarget() && !l->hasMask();
+        && l->opacity() == OPACITY_OPAQUE && !l->temporaryTarget();// && !l->hasMask();
 }
 
 KisPaintDeviceSP KisGroupLayer::projection()
@@ -424,9 +424,9 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             // to make a difference between a paintlayer with a mask, and one without
             KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(child.data());
 
-            if (l && l->hasMask())
-                child->setCompositeOpPrivate( cop->colorSpace()->compositeOp( COMPOSITE_OVER ) );
-            else
+//             if (l && l->hasMask())
+//                 child->setCompositeOpPrivate( cop->colorSpace()->compositeOp( COMPOSITE_OVER ) );
+//             else
                 child->setCompositeOpPrivate( cop->colorSpace()->compositeOp( COMPOSITE_COPY ) );
 
             child->blockSignals(block);

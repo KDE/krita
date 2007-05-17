@@ -71,7 +71,7 @@ public:
     QIcon icon() const;
 
     // Keep the projection up to date
-    void prepareProjection(const QRect& r);
+    void updateProjection(const QRect& r);
 
     // Retrieve the projection for
     KisPaintDeviceSP projection();

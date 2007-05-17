@@ -625,7 +625,7 @@ QRegion KisImage::dirtyRegion() const
 KisPaintDeviceSP KisImage::activeDevice()
 {
     if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_d->activeLayer.data())) {
-        return layer->paintDeviceOrMask();
+        return layer->paintDevice();//OrMask();
     }
     else if (KisAdjustmentLayer* layer = dynamic_cast<KisAdjustmentLayer*>(m_d->activeLayer.data())) {
         if (layer->selection()) {
@@ -638,7 +638,7 @@ KisPaintDeviceSP KisImage::activeDevice()
         while(child)
         {
             if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_d->activeLayer.data())) {
-                return layer->paintDeviceOrMask();
+                return layer->paintDevice();//OrMask();
             }
             child = child->prevSibling();
         }

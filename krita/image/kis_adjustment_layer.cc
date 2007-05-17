@@ -66,6 +66,22 @@ KisAdjustmentLayer::~KisAdjustmentLayer()
     delete m_filterConfig;
 }
 
+void KisAdjustmentLayer::updateProjection(const QRect& r)
+{
+}
+
+void KisAdjustmentLayer::resetProjection(KisPaintDeviceSP to)
+{
+    resetCache();
+}
+
+KisPaintDeviceSP KisAdjustmentLayer::projection()
+{
+    return m_cachedPaintDev;
+}
+
+
+
 
 QIcon KisAdjustmentLayer::icon() const
 {

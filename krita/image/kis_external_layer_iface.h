@@ -47,8 +47,6 @@ public:
     KisExternalLayer(KisImageSP img, const QString &name, quint8 opacity)
         : KisLayer(img, name, opacity) {}
     virtual QIcon icon() const { return KIcon("gear"); }
-    virtual void prepareProjection(const QRect& r) = 0;
-    virtual KisPaintDeviceSP projection() = 0;
     virtual bool saveToXML(QDomDocument doc, QDomElement elem) = 0;
 
 };

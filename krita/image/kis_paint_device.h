@@ -520,6 +520,7 @@ public:
     /**
      * @return the current selection or create one if this paintdevice hasn't got a selection yet. */
     KisSelectionSP selection();
+
     /** @return the current selection or create one if this paintdevice hasn't got a selection yet. */
     const KisSelectionSP selection() const;
 

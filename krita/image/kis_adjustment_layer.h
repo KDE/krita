@@ -52,12 +52,15 @@ public:
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
 
+    void updateProjection(const QRect& r);
+    void resetProjection( KisPaintDeviceSP to);
+    KisPaintDeviceSP projection();
 
-    virtual QIcon icon() const;
-    virtual KoDocumentSectionModel::PropertyList properties() const;
+    QIcon icon() const;
+    KoDocumentSectionModel::PropertyList properties() const;
 
     /// Return a copy of this layer
-    virtual KisLayerSP clone() const;
+    KisLayerSP clone() const;
 
 public:
 
@@ -69,35 +72,35 @@ public:
     /// Set the selection of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
 
-    virtual void paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
-    virtual void paint(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
+    void paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
+    void paint(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 
 public:
 
-    virtual qint32 x() const;
-    virtual void setX(qint32);
+    qint32 x() const;
+    void setX(qint32);
 
-    virtual qint32 y() const;
-    virtual void setY(qint32);
+    qint32 y() const;
+    void setY(qint32);
 
     /// Returns an approximation of where the bounds on actual data are in this layer
-    virtual QRect extent() const;
+    QRect extent() const;
 
     /// Returns the exact bounds of where the actual data resides in this layer
-    virtual QRect exactBounds() const;
+    QRect exactBounds() const;
 
-    virtual bool accept(KisLayerVisitor &);
+    bool accept(KisLayerVisitor &);
 
-    virtual void resetCache();
-    virtual KisPaintDeviceSP cachedPaintDevice() { return m_cachedPaintDev; }
+    void resetCache();
+    KisPaintDeviceSP cachedPaintDevice() { return m_cachedPaintDev; }
 
     bool showSelection() const { return m_showSelection; }
     void setSelection(bool b) { m_showSelection = b; }
 
-    virtual QImage createThumbnail(qint32 w, qint32 h);
+    QImage createThumbnail(qint32 w, qint32 h);
 
     // KisIndirectPaintingSupport
-    virtual KisLayer* layer() { return this; }
+    KisLayer* layer() { return this; }
 
 private:
     bool m_showSelection;

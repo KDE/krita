@@ -103,9 +103,9 @@ QIcon KisShapeLayer::icon() const
     return KIcon("gear");
 }
 
-void KisShapeLayer::prepareProjection(const QRect& r)
+void KisShapeLayer::updateProjection(const QRect& r)
 {
-    kDebug(41001) << "KisShapeLayer::prepareProjection()" << r << endl;
+    kDebug(41001) << "KisShapeLayer::updateProjection()" << r << endl;
 
     // XXX: Is r in document, widget or pixel coordinates? I hope in
     // document coordinates. Note: see dox for updateCanvas.

@@ -63,6 +63,11 @@ public:
 
     virtual KoColorSpace * colorSpace();
 
+    virtual void updateProjection(const QRect& r) = 0;
+
+    virtual KisPaintDeviceSP projection() = 0;
+
+
     /// Whether this layer is the active one in its image
     bool isActive() const;
 

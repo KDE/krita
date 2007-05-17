@@ -49,23 +49,27 @@ public:
 
     KoColorSpace * colorSpace();
 
-    virtual QIcon icon() const;
-    virtual KoDocumentSectionModel::PropertyList properties() const;
-    virtual KisLayerSP clone() const;
+    void updateProjection(const QRect& r);
+    void resetProjection(KisPaintDeviceSP to);
+    KisPaintDeviceSP projection();
+
+    QIcon icon() const;
+    KoDocumentSectionModel::PropertyList properties() const;
+    KisLayerSP clone() const;
 public:
 
-    virtual qint32 x() const;
-    virtual void setX(qint32 x);
+    qint32 x() const;
+    void setX(qint32 x);
 
-    virtual qint32 y() const;
-    virtual void setY(qint32 y);
+    qint32 y() const;
+    void setY(qint32 y);
 
-    virtual QRect extent() const;
-    virtual QRect exactBounds() const;
+    QRect extent() const;
+    QRect exactBounds() const;
 
-    virtual QImage createThumbnail(qint32 w, qint32 h);
+    QImage createThumbnail(qint32 w, qint32 h);
 
-    virtual bool accept(KisLayerVisitor &v)
+    bool accept(KisLayerVisitor &v)
         {
             return v.visit(this);
         }
@@ -74,113 +78,84 @@ public:
     /// Returns the paintDevice that accompanies this layer
     KisPaintDeviceSP paintDevice() const;
 
-    /// Returns the paintDevice that accompanies this layer (or mask, see editMask)
-    KisPaintDeviceSP paintDeviceOrMask() const;
+//     /// Returns the paintDevice that accompanies this layer (or mask, see editMask)
+//     KisPaintDeviceSP paintDeviceOrMask() const;
 
-    // Mask Layer
+//     // Mask Layer
 
-    /// Does this layer have a layer mask?
-    bool hasMask() const;
+//     /// Does this layer have a layer mask?
+//     bool hasMask() const;
 
-    // XXX TODO: Make these undo-able!
-    /// Create a mask if it does not yet exist, and return it
-    KisPaintDeviceSP createMask();
+//     // XXX TODO: Make these undo-able!
+//     /// Create a mask if it does not yet exist, and return it
+//     KisPaintDeviceSP createMask();
 
-    /// Convert the from argument to the mask
-    void createMaskFromPaintDevice(KisPaintDeviceSP from);
+//     /// Convert the from argument to the mask
+//     void createMaskFromPaintDevice(KisPaintDeviceSP from);
 
-    /**
-     * Convert the from selection to a paint device (should convert the getMaskAsSelection
-     * result back to the mask). Overwrites the current mask, if any. Also removes the selection
-     */
-    void createMaskFromSelection(KisSelectionSP from);
+//     /**
+//      * Convert the from selection to a paint device (should convert the getMaskAsSelection
+//      * result back to the mask). Overwrites the current mask, if any. Also removes the selection
+//      */
+//     void createMaskFromSelection(KisSelectionSP from);
 
-    /// Remove the layer mask
-    void removeMask();
+//     /// Remove the layer mask
+//     void removeMask();
 
-    /// Apply the layer mask to the paint device, this removes the mask afterwards
-    void applyMask();
+//     /// Apply the layer mask to the paint device, this removes the mask afterwards
+//     void applyMask();
 
-    /// Returns the layer mask's device. Creates one if there is currently none
-    KisPaintDeviceSP getMask();
+//     /// Returns the layer mask's device. Creates one if there is currently none
+//     KisPaintDeviceSP getMask();
 
-    /// Returns the layer mask's device, converted to a selection. Creates one if there is currently none
-    KisSelectionSP getMaskAsSelection();
+//     /// Returns the layer mask's device, converted to a selection. Creates one if there is currently none
+//     KisSelectionSP getMaskAsSelection();
 
-    /// Undoable version of createMask
-    QUndoCommand* createMaskCommand();
-    /// Undoable version of createMaskFromSelection
-    QUndoCommand* maskFromSelectionCommand();
-    /// Undoable, removes the current mask, but converts it to the current selection
-    QUndoCommand* maskToSelectionCommand();
-    /// Undoable version of removeMask
-    QUndoCommand* removeMaskCommand();
-    /// Undoable version of applyMask
-    QUndoCommand* applyMaskCommand();
+//     /// Undoable version of createMask
+//     QUndoCommand* createMaskCommand();
+//     /// Undoable version of createMaskFromSelection
+//     QUndoCommand* maskFromSelectionCommand();
+//     /// Undoable, removes the current mask, but converts it to the current selection
+//     QUndoCommand* maskToSelectionCommand();
+//     /// Undoable version of removeMask
+//     QUndoCommand* removeMaskCommand();
+//     /// Undoable version of applyMask
+//     QUndoCommand* applyMaskCommand();
 
-    /// Returns true if the masked part of the mask will be rendered instead of being transparent
-    bool renderMask() const;
-    /// Set the renderMask property
-    void setRenderMask(bool b);
+//     /// Returns true if the masked part of the mask will be rendered instead of being transparent
+//     bool renderMask() const;
+//     /// Set the renderMask property
+//     void setRenderMask(bool b);
 
-    /**
-     * When this returns true, the KisPaintDevice returned in paintDevice will actually
-     * be the layer mask (if there is one). This is so that tools can draw on the mask
-     * without needing to know its existence.
-     */
-    bool editMask() const;
+//     /**
+//      * When this returns true, the KisPaintDevice returned in paintDevice will actually
+//      * be the layer mask (if there is one). This is so that tools can draw on the mask
+//      * without needing to know its existence.
+//      */
+//     bool editMask() const;
 
-    /// Sets the editMask property
-    void setEditMask(bool b);
+//     /// Sets the editMask property
+//     void setEditMask(bool b);
 
     /// Overridden to call the private convertMaskToSelection
-    virtual void setDirty();
-    virtual void setDirty(const QRect & rect);
-    virtual void setDirty(const QRegion & region);
+    void setDirty();
+    void setDirty(const QRect & rect);
+    void setDirty(const QRegion & region);
 
     // KisIndirectPaintingSupport
-    virtual KisLayer* layer() { return this; }
+    KisLayer* layer() { return this; }
 
-    /**
-       Clear the projection or create a projection from the specified
-       paint devide.
-
-       Warning: will copy from to, if !0,
-
-       Note for hackers: implement CoW!
-     */
-    virtual void resetProjection(KisPaintDeviceSP to = 0);
-
-    /**
-       Retrieve the projection for this group layer. Note that
-       The projection is _not_ guaranteed to be up to date with
-       the latest actions, and that you cannot discover whether it
-       is!
-
-       Note the second: this _may_ return the paint device of a paint
-       layer if that paint layer is the only child of this group layer.
-    */
-    virtual KisPaintDeviceSP projection();
-
-    /**
-       Update the given rect of the projection paint device.
-
-       Note for hackers: keep this method thread-safe!
-    */
-    void updateProjection(const QRect & rc);
-
-
-signals:
-    /// When the mask is created/destroyed or the editmask or rendermask is changed
-    void sigMaskInfoChanged();
+// signals:
+//     /// When the mask is created/destroyed or the editmask or rendermask is changed
+//     void sigMaskInfoChanged();
 
 private slots:
     void slotColorSpaceChanged();
 
 private:
     void init();
-    void convertMaskToSelection(const QRect& r);
-    void genericMaskCreationHelper();
+//     void convertMaskToSelection(const QRect& r);
+//     void genericMaskCreationHelper();
 
     class Private;
     Private * m_d;

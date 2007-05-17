@@ -47,45 +47,7 @@ class KisPaintLayer::Private
 {
 public:
 
-    Private()
-        {
-            transparencyMask = 0;
-            protectionMask = 0;
-            mask = 0;
-            maskAsSelection = 0;
-            renderMask = false;
-            editMask = true;
-        }
-
-    ~Private()
-        {
-            delete transparencyMask;
-            delete protectionMask;
-            foreach( KisEffectMask * mask, effectMasks ) {
-                delete mask;
-            }
-            foreach( KisMask * mask, painterlyOverlays.values() ) {
-                delete mask;
-            }
-            effectMasks.clear();
-        }
-
     KisPaintDeviceSP paintdev;
-    KisPaintDeviceSP mask; // The mask that we can edit and display easily
-    KisSelectionSP maskAsSelection; // The mask as selection, to apply and render easily
-
-    KisPaintDeviceSP projection;
-
-    KisTransparencyMask * transparencyMask;
-    KisMask * protectionMask;
-
-    QList<KisEffectMask*> effectMasks; // The first mask is the bottom-one in the
-                            // mask stack!
-
-    QHash<QString, KisMask*> painterlyOverlays;
-
-    bool renderMask;
-    bool editMask;
 };
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
@@ -125,12 +87,6 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) :
     m_d->paintdev = new KisPaintDevice( *rhs.m_d->paintdev.data() );
     m_d->paintdev->setParentLayer(this);
     init();
-    if (rhs.hasMask()) {
-        m_d->mask = new KisPaintDevice(*rhs.m_d->mask.data());
-        m_d->mask->setParentLayer(this);
-    }
-    m_d->renderMask = rhs.m_d->renderMask;
-    m_d->editMask = rhs.m_d->editMask;
 }
 
 KisPaintLayer::~KisPaintLayer()
@@ -153,6 +109,21 @@ void KisPaintLayer::init()
 
 }
 
+
+void KisPaintLayer::resetProjection(KisPaintDeviceSP to)
+{
+}
+
+KisPaintDeviceSP KisPaintLayer::projection()
+{
+    return m_d->paintdev;
+}
+
+void KisPaintLayer::updateProjection(const QRect & rc)
+{
+}
+
+
 QIcon KisPaintLayer::icon() const
 {
     return QIcon();
@@ -169,7 +140,6 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::properties() const
 
 KisLayerSP KisPaintLayer::clone() const
 {
-    // ### porting 1.6->2.0 lost here an if (m_d->mask != 0) m_d->mask->setParentLayer(0); ???
     return KisLayerSP(new KisPaintLayer(*this));
 }
 
@@ -193,24 +163,19 @@ KisPaintDeviceSP KisPaintLayer::paintDevice() const
     return m_d->paintdev;
 }
 
-/// Returns the paintDevice that accompanies this layer (or mask, see editMask)
-KisPaintDeviceSP KisPaintLayer::paintDeviceOrMask() const
-{
-    if (hasMask() && editMask())
-        return m_d->mask;
-    return m_d->paintdev;
-}
+// /// Returns the paintDevice that accompanies this layer (or mask, see editMask)
+// KisPaintDeviceSP KisPaintLayer::paintDeviceOrMask() const
+// {
+//     return m_d->paintdev;
+// }
 
-bool KisPaintLayer::hasMask() const
+qint32 KisPaintLayer::x() const
 {
-    return !m_d->mask.isNull();
+    if (m_d->paintdev)
+        return m_d->paintdev->getX();
+    else
+        return 0;
 }
-
-bool KisPaintLayer::renderMask() const
-{
-    return m_d->renderMask;
-}
-qint32 KisPaintLayer::x() const { if (m_d->paintdev) return m_d->paintdev->getX(); else return 0; }
 
 void KisPaintLayer::setX(qint32 x)
 {
@@ -248,243 +213,198 @@ void KisPaintLayer::slotColorSpaceChanged()
     notifyPropertyChanged();
 }
 
-void KisPaintLayer::removeMask() {
-    if (!hasMask())
-        return;
+// void KisPaintLayer::removeMask() {
+//     if (!hasMask())
+//         return;
 
-    m_d->mask->setParentLayer(0);
-    m_d->mask = 0;
-    m_d->maskAsSelection = 0;
-    setDirty();
+//     m_d->mask->setParentLayer(0);
+//     m_d->mask = 0;
+//     m_d->maskAsSelection = 0;
+//     setDirty();
 
-    emit sigMaskInfoChanged();
-}
+//     emit sigMaskInfoChanged();
+// }
 
-// ### XXX Do we apply the mask outside the image boundaries too? I'd say no, but I'm not sure
-void KisPaintLayer::applyMask() {
-    if (!hasMask())
-        return;
+// // ### XXX Do we apply the mask outside the image boundaries too? I'd say no, but I'm not sure
+// void KisPaintLayer::applyMask() {
+//     if (!hasMask())
+//         return;
 
-    int x, y, w, h;
-    m_d->paintdev->extent(x, y, w, h);
+//     int x, y, w, h;
+//     m_d->paintdev->extent(x, y, w, h);
 
-    // A bit slow; but it works
-    KisPaintDeviceSP temp = new KisPaintDevice(m_d->paintdev->colorSpace());
-    KisPainter gc(temp);
-    gc.bltSelection(x, y, COMPOSITE_OVER, m_d->paintdev, m_d->maskAsSelection, OPACITY_OPAQUE, x, y, w, h);
-    gc.end();
-    gc.begin(m_d->paintdev);
-    gc.bitBlt(x, y, COMPOSITE_COPY, temp, OPACITY_OPAQUE, x, y, w, h);
-    gc.end();
+//     // A bit slow; but it works
+//     KisPaintDeviceSP temp = new KisPaintDevice(m_d->paintdev->colorSpace());
+//     KisPainter gc(temp);
+//     gc.bltSelection(x, y, COMPOSITE_OVER, m_d->paintdev, m_d->maskAsSelection, OPACITY_OPAQUE, x, y, w, h);
+//     gc.end();
+//     gc.begin(m_d->paintdev);
+//     gc.bitBlt(x, y, COMPOSITE_COPY, temp, OPACITY_OPAQUE, x, y, w, h);
+//     gc.end();
 
-    removeMask();
-}
+//     removeMask();
+// }
 
-KisPaintDeviceSP KisPaintLayer::createMask() {
-    if (hasMask())
-        return m_d->mask;
+// KisPaintDeviceSP KisPaintLayer::createMask() {
+//     if (hasMask())
+//         return m_d->mask;
 
-    // Grey8 nicely fits our needs of being intuitively comparable to other apps'
-    // mask layer interfaces. It does have an alpha component though, which is a bit
-    // less appropriate in this context.
-    // Bart: why not use ALPHA -- that is a single channel 8-bit
-    // colorspace, which is best suited for this purpose (BSAR).
-    m_d->mask = new KisPaintDevice(KoColorSpaceRegistry::instance()
-            ->colorSpace(KoID("GRAYA"), 0));
+//     // Grey8 nicely fits our needs of being intuitively comparable to other apps'
+//     // mask layer interfaces. It does have an alpha component though, which is a bit
+//     // less appropriate in this context.
+//     // Bart: why not use ALPHA -- that is a single channel 8-bit
+//     // colorspace, which is best suited for this purpose (BSAR).
+//     m_d->mask = new KisPaintDevice(KoColorSpaceRegistry::instance()
+//             ->colorSpace(KoID("GRAYA"), 0));
 
-    genericMaskCreationHelper();
+//     genericMaskCreationHelper();
 
-    return m_d->mask;
-}
+//     return m_d->mask;
+// }
 
-// FIXME If from is a paint device is not grey8!!
-void KisPaintLayer::createMaskFromPaintDevice(KisPaintDeviceSP from) {
-    if (hasMask())
-        return; // Or overwrite? XXX
+// // FIXME If from is a paint device is not grey8!!
+// void KisPaintLayer::createMaskFromPaintDevice(KisPaintDeviceSP from) {
+//     if (hasMask())
+//         return; // Or overwrite? XXX
 
-    m_d->mask = from; // KisPaintDevice(*from); XXX
+//     m_d->mask = from; // KisPaintDevice(*from); XXX
 
-    genericMaskCreationHelper();
-}
+//     genericMaskCreationHelper();
+// }
 
-void KisPaintLayer::createMaskFromSelection(KisSelectionSP from) {
-    m_d->mask = new KisPaintDevice(KoColorSpaceRegistry::instance()
-            ->colorSpace(KoID("GRAYA"), 0));
-    m_d->mask->setParentLayer(this);
+// void KisPaintLayer::createMaskFromSelection(KisSelectionSP from) {
+//     m_d->mask = new KisPaintDevice(KoColorSpaceRegistry::instance()
+//             ->colorSpace(KoID("GRAYA"), 0));
+//     m_d->mask->setParentLayer(this);
 
-    m_d->maskAsSelection = new KisSelection(); // Anonymous selection is good enough
+//     m_d->maskAsSelection = new KisSelection(); // Anonymous selection is good enough
 
-    // Default pixel is opaque white == don't mask?
-    quint8 const defPixel[] = { 255, 255 };
-    m_d->mask->dataManager()->setDefaultPixel(defPixel);
+//     // Default pixel is opaque white == don't mask?
+//     quint8 const defPixel[] = { 255, 255 };
+//     m_d->mask->dataManager()->setDefaultPixel(defPixel);
 
-    if (from) {
-        QRect r(extent());
+//     if (from) {
+//         QRect r(extent());
 
-        int w = r.width();
-        int h = r.height();
+//         int w = r.width();
+//         int h = r.height();
 
-        KisHLineConstIteratorPixel srcIt = from->createHLineIterator(r.x(), r.y(), w);
-        KisHLineIteratorPixel dstIt = m_d->mask->createHLineIterator(r.x(), r.y(), w);
+//         KisHLineConstIteratorPixel srcIt = from->createHLineIterator(r.x(), r.y(), w);
+//         KisHLineIteratorPixel dstIt = m_d->mask->createHLineIterator(r.x(), r.y(), w);
 
-        for (int y = r.y(); y < h; y++) {
+//         for (int y = r.y(); y < h; y++) {
 
-            while(!dstIt.isDone()) {
-                // XXX same remark as in convertMaskToSelection
-                *dstIt.rawData() = *srcIt.rawData();
-                ++srcIt;
-                ++dstIt;
-            }
-            srcIt.nextRow();
-            dstIt.nextRow();
-        }
-    }
+//             while(!dstIt.isDone()) {
+//                 // XXX same remark as in convertMaskToSelection
+//                 *dstIt.rawData() = *srcIt.rawData();
+//                 ++srcIt;
+//                 ++dstIt;
+//             }
+//             srcIt.nextRow();
+//             dstIt.nextRow();
+//         }
+//     }
 
-    convertMaskToSelection(extent());
-    m_d->paintdev->deselect();
+//     convertMaskToSelection(extent());
+//     m_d->paintdev->deselect();
 
-    setDirty();
-    emit sigMaskInfoChanged();
-}
+//     setDirty();
+//     emit sigMaskInfoChanged();
+// }
 
-KisPaintDeviceSP KisPaintLayer::getMask() {
-    createMask();
-    return m_d->mask;
-}
+// KisPaintDeviceSP KisPaintLayer::getMask() {
+//     createMask();
+//     return m_d->mask;
+// }
 
-KisSelectionSP KisPaintLayer::getMaskAsSelection() {
-    createMask();
-    return m_d->maskAsSelection;
-}
+// KisSelectionSP KisPaintLayer::getMaskAsSelection() {
+//     createMask();
+//     return m_d->maskAsSelection;
+// }
 
-bool KisPaintLayer::editMask() const
-{
-    return m_d->editMask;
-}
+// bool KisPaintLayer::editMask() const
+// {
+//     return m_d->editMask;
+// }
 
-void KisPaintLayer::setEditMask(bool b)
-{
-    m_d->editMask = b;
-    emit sigMaskInfoChanged();
-}
+// void KisPaintLayer::setEditMask(bool b)
+// {
+//     m_d->editMask = b;
+//     emit sigMaskInfoChanged();
+// }
 
-void KisPaintLayer::setRenderMask(bool b)
-{
-    m_d->renderMask = b;
+// void KisPaintLayer::setRenderMask(bool b)
+// {
+//     m_d->renderMask = b;
 
-    if (hasMask())
-        setDirty();
+//     if (hasMask())
+//         setDirty();
 
-    emit sigMaskInfoChanged();
-}
+//     emit sigMaskInfoChanged();
+// }
 
-void KisPaintLayer::convertMaskToSelection(const QRect& r)
-{
-    KisRectConstIteratorPixel srcIt = m_d->mask->createRectConstIterator(r.x(), r.y(),
-            r.width(), r.height());
-    KisRectIteratorPixel dstIt = m_d->maskAsSelection->createRectIterator(r.x(), r.y(),
-            r.width(), r.height());
+// void KisPaintLayer::convertMaskToSelection(const QRect& r)
+// {
+//     KisRectConstIteratorPixel srcIt = m_d->mask->createRectConstIterator(r.x(), r.y(),
+//             r.width(), r.height());
+//     KisRectIteratorPixel dstIt = m_d->maskAsSelection->createRectIterator(r.x(), r.y(),
+//             r.width(), r.height());
 
-    while(!dstIt.isDone()) {
-        // src is grey8 (grey + alpha), dst is alpha8. We convert the grey value to
-        // alpha8 manually and ignore the alpha (that's why we don't convert using default
-        // functions, and interpret the data raw!) [ XXX ]
-        *dstIt.rawData() = *srcIt.rawData();
-        ++srcIt;
-        ++dstIt;
-    }
-}
+//     while(!dstIt.isDone()) {
+//         // src is grey8 (grey + alpha), dst is alpha8. We convert the grey value to
+//         // alpha8 manually and ignore the alpha (that's why we don't convert using default
+//         // functions, and interpret the data raw!) [ XXX ]
+//         *dstIt.rawData() = *srcIt.rawData();
+//         ++srcIt;
+//         ++dstIt;
+//     }
+// }
 
-void KisPaintLayer::genericMaskCreationHelper() {
-    m_d->mask->setParentLayer(this);
+// void KisPaintLayer::genericMaskCreationHelper() {
+//     m_d->mask->setParentLayer(this);
 
-    m_d->maskAsSelection = new KisSelection(); // Anonymous selection is good enough
+//     m_d->maskAsSelection = new KisSelection(); // Anonymous selection is good enough
 
-    // Default pixel is opaque white == don't mask?
-    quint8 const defPixel[] = { 255, 255 };
-    m_d->mask->dataManager()->setDefaultPixel(defPixel);
+//     // Default pixel is opaque white == don't mask?
+//     quint8 const defPixel[] = { 255, 255 };
+//     m_d->mask->dataManager()->setDefaultPixel(defPixel);
 
-    setDirty();
-    emit sigMaskInfoChanged();
-}
+//     setDirty();
+//     emit sigMaskInfoChanged();
+// }
 
 void KisPaintLayer::setDirty() {
     QRect rc = extent();
-    if (hasMask())
-        convertMaskToSelection(rc);
+//     if (hasMask())
+//         convertMaskToSelection(rc);
     super::setDirty(rc);
 }
 
 void KisPaintLayer::setDirty(const QRect & rect) {
-    if (hasMask())
-        convertMaskToSelection(rect);
+//     if (hasMask())
+//         convertMaskToSelection(rect);
     super::setDirty(rect);
 }
 
 void KisPaintLayer::setDirty(const QRegion & region) {
-    if (hasMask()) {
-        QVector<QRect> regionRects = region.rects();
-        QVector<QRect>::iterator it = regionRects.begin();
-        QVector<QRect>::iterator end = regionRects.end();
-        while ( it != end ) {
-            convertMaskToSelection(*it);
-            ++it;
-        }
-    }
+//     if (hasMask()) {
+//         QVector<QRect> regionRects = region.rects();
+//         QVector<QRect>::iterator it = regionRects.begin();
+//         QVector<QRect>::iterator end = regionRects.end();
+//         while ( it != end ) {
+//             convertMaskToSelection(*it);
+//             ++it;
+//         }
+//     }
     super::setDirty(region);
 }
 
-void KisPaintLayer::resetProjection(KisPaintDeviceSP to)
-{
-    if (to)
-        m_d->projection = new KisPaintDevice(*to); /// XXX ### look into Copy on Write here (CoW)
-    else
-        m_d->projection = new KisPaintDevice(this, image()->colorSpace(), name().toLatin1());
 
-}
-
-KisPaintDeviceSP KisPaintLayer::projection()
-{
-    // There are masks about that change the rendering, and there's no
-    // projection yet.
-    if ( !m_d->projection && ( m_d->transparencyMask || !m_d->effectMasks.isEmpty() ) ) {
-        updateProjection( m_d->paintdev->extent() );
-    }
-
-    if ( m_d->projection )
-        return m_d->projection;
-    else
-        return m_d->paintdev;
-}
-
-void KisPaintLayer::updateProjection(const QRect & rc)
-{
-    // Nothing that changes the rendering, get rid of the projection
-    if ( !m_d->transparencyMask && m_d->effectMasks.isEmpty() ) {
-        m_d->projection = 0;
-    }
-
-    KisPainter gc( m_d->projection );
-    gc.setCompositeOp( m_d->paintdev->colorSpace()->compositeOp( COMPOSITE_COPY ) );
-    gc.bitBlt( rc.topLeft(), m_d->paintdev, rc );
-
-    foreach( KisEffectMask * mask, m_d->effectMasks ) {
-        // XXX: Filter the projection (once the effect mask class is
-        // done
-        Q_UNUSED( mask );
-    }
-
-    // XXX: Filter the alpha with the transparency mask (once the apha
-    // filter is done)
-
-    // Done.
-}
-
-
-
+/*
 // Undoable versions code
 namespace {
-    class KisCreateMaskCommand : public QUndoCommand {
+
+  class KisCreateMaskCommand : public QUndoCommand {
         typedef QUndoCommand super;
         KisPaintLayerSP m_layer;
         KisPaintDeviceSP m_mask;
@@ -634,7 +554,7 @@ QUndoCommand* KisPaintLayer::removeMaskCommand() {
 QUndoCommand* KisPaintLayer::applyMaskCommand() {
     return new KisApplyMaskCommand(this);
 }
-
+*/
 
 
 #include "kis_paint_layer.moc"

@@ -125,80 +125,80 @@ public:
             gc.setChannelFlags( layer->channelFlags() );
             KisPaintDeviceSP source = layer->projection();
 
-            if (!layer->hasMask()) {
+//             if (!layer->hasMask()) {
                 if (tempTarget) {
                     KisPaintDeviceSP temp = new KisPaintDevice(source->colorSpace());
                     source = paintIndirect(source, temp, layer, sx, sy, dx, dy, w, h);
                 }
 
                 gc.bitBlt(dx, dy, layer->compositeOp(), source, layer->opacity(), sx, sy, w, h);
-            } else {
-                if (layer->renderMask()) {
-                    // To display the mask, we don't do things with composite op and opacity
-                    // This is like the gimp does it, I guess that's ok?
+//             } else {
+//                 if (layer->renderMask()) {
+//                     // To display the mask, we don't do things with composite op and opacity
+//                     // This is like the gimp does it, I guess that's ok?
 
-                    // Note that here we'll use m_rc, because even if the extent of the device is
-                    // empty, we want a full mask to be drawn!
-                    // This is because KisPainter::bitBlt &'s with
-                    // the source device's extent. This is ok in normal circumstances, but
-                    // we changed the default tile. Fixing this properly would mean fixing it there.
-                    sx = m_rc.left();
-                    sy = m_rc.top();
-                    w  = m_rc.width();
-                    h  = m_rc.height();
-                    dx = sx;
-                    dy = sy;
+//                     // Note that here we'll use m_rc, because even if the extent of the device is
+//                     // empty, we want a full mask to be drawn!
+//                     // This is because KisPainter::bitBlt &'s with
+//                     // the source device's extent. This is ok in normal circumstances, but
+//                     // we changed the default tile. Fixing this properly would mean fixing it there.
+//                     sx = m_rc.left();
+//                     sy = m_rc.top();
+//                     w  = m_rc.width();
+//                     h  = m_rc.height();
+//                     dx = sx;
+//                     dy = sy;
 
-                    // The problem is that the extent of the layer mask might not be extended
-                    // enough. Check if that is the case
-                    KisPaintDeviceSP mask = layer->getMask();
-                    QRect mextent = mask->extent();
-                    if ((mextent & m_rc) != m_rc) {
-                        // Iterate over all pixels in the m_rc area. With just accessing the
-                        // tiles in read-write mode, we ensure that the tiles get created if they
-                        // do not exist. If they do, they'll remain untouched since we don't
-                        // actually write data to it.
-                        // XXX Admission: this is actually kind of a hack :-(
-                        KisRectIteratorPixel it = mask->createRectIterator(sx, sy, w, h);
-                        while (!it.isDone())
-                            ++it;
-                    }
-                    if (tempTarget) {
-                        KisPaintDeviceSP temp = new KisPaintDevice(source->colorSpace());
-                        mask = paintIndirect(mask, temp, layer, sx, sy, dx, dy, w, h);
-                    }
+//                     // The problem is that the extent of the layer mask might not be extended
+//                     // enough. Check if that is the case
+//                     KisPaintDeviceSP mask = layer->getMask();
+//                     QRect mextent = mask->extent();
+//                     if ((mextent & m_rc) != m_rc) {
+//                         // Iterate over all pixels in the m_rc area. With just accessing the
+//                         // tiles in read-write mode, we ensure that the tiles get created if they
+//                         // do not exist. If they do, they'll remain untouched since we don't
+//                         // actually write data to it.
+//                         // XXX Admission: this is actually kind of a hack :-(
+//                         KisRectIteratorPixel it = mask->createRectIterator(sx, sy, w, h);
+//                         while (!it.isDone())
+//                             ++it;
+//                     }
+//                     if (tempTarget) {
+//                         KisPaintDeviceSP temp = new KisPaintDevice(source->colorSpace());
+//                         mask = paintIndirect(mask, temp, layer, sx, sy, dx, dy, w, h);
+//                     }
 
-                    gc.bitBlt(dx, dy, COMPOSITE_OVER, mask, OPACITY_OPAQUE, sx, sy, w, h);
-                } else {
-                    KisSelectionSP mask = layer->getMaskAsSelection();
-                    // The indirect painting happens on the mask
-                    if (tempTarget && layer->editMask()) {
-                        KisPaintDeviceSP maskSrc = layer->getMask();
-                        KisPaintDeviceSP temp = new KisPaintDevice(maskSrc->colorSpace());
-                        temp = paintIndirect(maskSrc, temp, layer, sx, sy, dx, dy, w, h);
-                        // Blegh
-                        KisRectConstIteratorPixel srcIt = temp->createRectConstIterator(sx, sy, w, h);
-                        KisRectIteratorPixel dstIt = mask->createRectIterator(sx, sy, w, h);
+//                     gc.bitBlt(dx, dy, COMPOSITE_OVER, mask, OPACITY_OPAQUE, sx, sy, w, h);
+//                 } else {
+//                     KisSelectionSP mask = layer->getMaskAsSelection();
+//                     // The indirect painting happens on the mask
+//                     if (tempTarget && layer->editMask()) {
+//                         KisPaintDeviceSP maskSrc = layer->getMask();
+//                         KisPaintDeviceSP temp = new KisPaintDevice(maskSrc->colorSpace());
+//                         temp = paintIndirect(maskSrc, temp, layer, sx, sy, dx, dy, w, h);
+//                         // Blegh
+//                         KisRectConstIteratorPixel srcIt = temp->createRectConstIterator(sx, sy, w, h);
+//                         KisRectIteratorPixel dstIt = mask->createRectIterator(sx, sy, w, h);
 
-                        while(!dstIt.isDone()) {
-                            // Same as in convertMaskToSelection
-                            *dstIt.rawData() = *srcIt.rawData();
-                            ++srcIt;
-                            ++dstIt;
-                        }
-                    } else if (tempTarget) {
-                        // We have a mask, and paint indirect, but not on the mask
-                        KisPaintDeviceSP temp = new KisPaintDevice(source->colorSpace());
-                        source = paintIndirect(source, temp, layer, sx, sy, dx, dy, w, h);
-                    }
+//                         while(!dstIt.isDone()) {
+//                             // Same as in convertMaskToSelection
+//                             *dstIt.rawData() = *srcIt.rawData();
+//                             ++srcIt;
+//                             ++dstIt;
+//                         }
+//                     } else if (tempTarget) {
+//                         // We have a mask, and paint indirect, but not on the mask
+//                         KisPaintDeviceSP temp = new KisPaintDevice(source->colorSpace());
+//                         source = paintIndirect(source, temp, layer, sx, sy, dx, dy, w, h);
+//                     }
 
-                    gc.bltSelection(dx, dy,
-                                    layer->compositeOp(),
-                                    source,
-                                    mask,
-                                    layer->opacity(), sx, sy, w, h);
-                }
-            }
+//                     gc.bltSelection(dx, dy,
+//                                     layer->compositeOp(),
+//                                     source,
+//                                     mask,
+//                                     layer->opacity(), sx, sy, w, h);
+//                 }
+//             }
 #ifdef DIRTY_AND_PROJECTION
             layer->setClean( rc );
 #endif

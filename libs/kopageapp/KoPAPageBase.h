@@ -55,9 +55,10 @@ public:
      * @param context the pageapp saving context
      * @return true on success, false otherwise
      */
-    virtual void saveOdf( KoShapeSavingContext * context ) const;
+    virtual void saveOdf( KoShapeSavingContext & context ) const;
+
     // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
 
     bool loadOdf( const KoXmlElement &element, KoOasisLoadingContext & loadingContext );
 
@@ -87,7 +88,7 @@ protected:
      *
      * @param paContext the pageapp saving context
      */
-    virtual void createOdfPageTag( KoPASavingContext *paContext ) const = 0;
+    virtual void createOdfPageTag( KoPASavingContext & paContext ) const = 0;
 
     /**
      * @brief Save the shapes of a page
@@ -97,7 +98,7 @@ protected:
      * @param paContext the pageapp saving context
      * @return true on success, false otherwise
      */
-    void saveOdfShapes( KoPASavingContext *paContext ) const;
+    void saveOdfShapes( KoShapeSavingContext & context ) const;
 
     /**
      * @brief Save animations
@@ -107,7 +108,7 @@ protected:
      * @param paContext the pageapp saving context
      * @return true on success, false otherwise
      */
-    virtual bool saveOdfAnimations( KoPASavingContext *paContext ) const { Q_UNUSED( paContext ); return true; }
+    virtual bool saveOdfAnimations( KoPASavingContext & paContext ) const { Q_UNUSED( paContext ); return true; }
     
     /**
      * @brief Save presentation notes
@@ -125,7 +126,7 @@ protected:
      *
      * @return name of the page style
      */
-    QString saveOdfPageStyle( KoPASavingContext *paContext ) const;
+    QString saveOdfPageStyle( KoPASavingContext & paContext ) const;
 
     /**
      * @brief Save special data of a style
@@ -135,7 +136,7 @@ protected:
      *
      * @see saveOdfPageStyle
      */
-    virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext *paContext ) const;
+    virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
 
 private:    
     QString m_pageTitle;

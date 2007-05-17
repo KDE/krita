@@ -48,7 +48,7 @@ public:
     /// always returns false since the group itself can't be selected or hit
     bool hitTest( const QPointF &position ) const;
     /// reimplemented from KoShape
-    virtual void saveOdf( KoShapeSavingContext * context ) const;
+    virtual void saveOdf( KoShapeSavingContext & context ) const;
     // reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 

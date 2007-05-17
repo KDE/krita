@@ -614,14 +614,14 @@ void KoShape::setName( const QString & name ) {
 }
 
 // loading & saving methods
-void KoShape::saveOdfConnections(KoShapeSavingContext *context) const {
+void KoShape::saveOdfConnections(KoShapeSavingContext &context) const {
     // TODO  save "draw-glue-point" elements (9.2.19)
 }
 
-QString KoShape::style( KoShapeSavingContext *context ) const
+QString KoShape::style( KoShapeSavingContext &context ) const
 {
     KoGenStyle style;
-    if ( context->isSet( KoShapeSavingContext::PresentationShape ) ) {
+    if ( context.isSet( KoShapeSavingContext::PresentationShape ) ) {
         style = KoGenStyle( KoGenStyle::STYLE_PRESENTATIONAUTO, "presentation" );
     }
     else {
@@ -641,15 +641,15 @@ QString KoShape::style( KoShapeSavingContext *context ) const
             style.addProperty( "draw:fill","none" );
             break;
         default:    // TODO all the other ones.
-            //KoOasisStyles::saveOasisFillStyle( style, context->mainStyles(), bg );
+            //KoOasisStyles::saveOasisFillStyle( style, context.mainStyles(), bg );
             break;
     }
 
-    if ( context->isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
+    if ( context.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
         style.setAutoStyleInStylesDotXml( true );
     }
 
-    return context->mainStyles().lookup( style, context->isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
+    return context.mainStyles().lookup( style, context.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
 }
 
 bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingContext &context, int attributes )
@@ -667,7 +667,15 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
                 context.addShapeId( this, id );
             }
         }
+        if ( element.hasAttributeNS( KoXmlNS::draw, "z-index" ) ) {
+            // what do we do in case of copy/paste
+        }
+        else {
+            // TODO what do we do in the case the z-index is not there then the order in the doc
+            // is the the order of the z-index
+        }
     }
+
     if ( attributes & OdfSize ) {
         QPointF pos;
         pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
@@ -683,44 +691,44 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
     return true;
 }
 
-void KoShape::saveOdfFrameAttributes(KoShapeSavingContext *context) const {
+void KoShape::saveOdfFrameAttributes(KoShapeSavingContext &context) const {
     saveOdfAttributes(context, FrameAttributes);
-    context->addOption(KoShapeSavingContext::FrameOpened);
+    context.addOption(KoShapeSavingContext::FrameOpened);
 }
 
-void KoShape::saveOdfAttributes(KoShapeSavingContext *context, int attributes) const {
+void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) const {
     if(attributes & OdfMandatories) {
         // all items that should be written to 'draw:frame' and any other 'draw:' object that inherits this shape
-        context->xmlWriter().addAttribute( context->isSet( KoShapeSavingContext::PresentationShape ) ?
+        context.xmlWriter().addAttribute( context.isSet( KoShapeSavingContext::PresentationShape ) ?
                                           "presentation:style-name": "draw:style-name",
                                           style( context ) );
 
-        if ( context->isSet( KoShapeSavingContext::DrawId ) )
+        if ( context.isSet( KoShapeSavingContext::DrawId ) )
         {
-            context->xmlWriter().addAttribute( "draw:id", context->drawId( this ) );
+            context.xmlWriter().addAttribute( "draw:id", context.drawId( this ) );
         }
 
         if(d->parent && dynamic_cast<KoShapeLayer*> (d->parent))
-            context->xmlWriter().addAttribute("draw:layer", d->parent->name());
+            context.xmlWriter().addAttribute("draw:layer", d->parent->name());
     }
 
     // all items after this should not be written out when they have already be written in
     // a 'draw:frame' attribute.
-    if(context->isSet(KoShapeSavingContext::FrameOpened)) {
-        context->removeOption(KoShapeSavingContext::FrameOpened);
+    if(context.isSet(KoShapeSavingContext::FrameOpened)) {
+        context.removeOption(KoShapeSavingContext::FrameOpened);
         return;
     }
 
     if(attributes & OdfSize) {
         QSizeF s( size() );
-        context->xmlWriter().addAttributePt( "svg:width", s.width() );
-        context->xmlWriter().addAttributePt( "svg:height", s.height() );
-        context->xmlWriter().addAttributePt( "svg:x", d->pos.x() );
-        context->xmlWriter().addAttributePt( "svg:y", d->pos.y() );
+        context.xmlWriter().addAttributePt( "svg:width", s.width() );
+        context.xmlWriter().addAttributePt( "svg:height", s.height() );
+        context.xmlWriter().addAttributePt( "svg:x", d->pos.x() );
+        context.xmlWriter().addAttributePt( "svg:y", d->pos.y() );
     }
 
     if(attributes & OdfMandatories) {
-        context->xmlWriter().addAttribute("draw:z-index", zIndex());
+        context.xmlWriter().addAttribute("draw:z-index", zIndex());
     }
 
     if(attributes & OdfTransformation) {
@@ -747,7 +755,7 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext *context, int attributes) c
             QString m = QString( "matrix(0 0 %3 %4 %5pt %6pt)" ).arg( matrix.m11() ).arg( matrix.m12() )
                 .arg( matrix.m21() ).arg( matrix.m22() )
                 .arg( matrix.dx() ) .arg( matrix.dy() );
-            context->xmlWriter().addAttribute( "draw:transform", m );
+            context.xmlWriter().addAttribute( "draw:transform", m );
         }
         else if(rotate || skew || scale) {
             QString transform;
@@ -762,7 +770,7 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext *context, int attributes) c
                 transform += ')';
             }
 
-            context->xmlWriter().addAttribute( "draw:transform", transform );
+            context.xmlWriter().addAttribute( "draw:transform", transform );
         }
     }
 }

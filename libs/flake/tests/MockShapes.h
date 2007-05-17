@@ -16,7 +16,7 @@ public:
         //qDebug() << "Shape" << kBacktrace( 10 );
         paintedCount++;
     }
-    virtual void saveOdf( KoShapeSavingContext *) const {}
+    virtual void saveOdf( KoShapeSavingContext & ) const {}
     virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
     int paintedCount;
 };
@@ -31,7 +31,7 @@ public:
         paintedCount++;
     }
 
-    virtual void saveOdf( KoShapeSavingContext *) const {}
+    virtual void saveOdf( KoShapeSavingContext & ) const {}
     virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
     int paintedCount;
 };

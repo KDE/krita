@@ -153,14 +153,14 @@ public:
      * OpenDocument 9.2 Drawing Shapes.
      * @see saveOdfAttributes
      */
-    virtual void saveOdf( KoShapeSavingContext * context ) const = 0;
+    virtual void saveOdf( KoShapeSavingContext & context ) const = 0;
 
     /**
      * When saving this shape to ODF, you may nest it in a 'draw:frame' and shape properties should be
      * saved as attributes on that element instead of on the normal shape.  After starting to write such
      * an element you can call this method to write all relevant properties.
      */
-    void saveOdfFrameAttributes(KoShapeSavingContext *context) const;
+    void saveOdfFrameAttributes( KoShapeSavingContext & context ) const;
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -607,12 +607,12 @@ protected:
      * @param attributes a number of OdfAttribute items to state which attributes to save.
      * @see saveOdf
      */
-    void saveOdfAttributes(KoShapeSavingContext *context, int attributes) const;
+    void saveOdfAttributes( KoShapeSavingContext &context, int attributes ) const;
 
     /**
      * Add a new draw-glue-point element for each connections() present on this shape.
      */
-    void saveOdfConnections(KoShapeSavingContext *context) const;
+    void saveOdfConnections( KoShapeSavingContext &context ) const;
 
     /**
      * @brief Get the style used for the shape
@@ -623,7 +623,7 @@ protected:
      * @return the name of the style
      * @see saveOdf
      */
-    QString style( KoShapeSavingContext *context ) const;
+    QString style( KoShapeSavingContext &context ) const;
 
 /* ** end loading saving */
 

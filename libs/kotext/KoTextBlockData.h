@@ -31,6 +31,24 @@ class KoTextBlockBorderData;
  */
 class KOTEXT_EXPORT KoTextBlockData : public QTextBlockUserData {
 public:
+    /**
+     * Supplemental data to allow advanced tabs to be used for layout and painting.
+     * Qt-Scribe knows only left-tabs and it also only knows tab-positions per paragraph
+     * which is not enough for our needs.
+     * Using the tabs list we calculated in the layout step, we can emulate
+     * all tabs by setting these as left-tabs on scribe prior to the re-layout of the text in the
+     * line which is redone at painting time.
+     * The tabLength list holds a length for each tab in the line and thus corresponds to the tab
+     * positions in the tabs list.  We can then calculate the tab to have started the position
+     * minus the length and use that to paint special tab attributes.
+     */
+    struct TabLineData {
+        /// the tab positions as set on the QTextOption.setTabArray()
+        QList<double> tabs;
+        /// the lenght of each tab so we know which area to paint when we want to decorate it.
+        QList<double> tabLength;
+    };
+
     KoTextBlockData();
     ~KoTextBlockData();
 
@@ -47,7 +65,12 @@ public:
     /// set the exact text that will be painted as the counter
     void setCounterText(const QString &text);
     /// return the exact text that will be painted as the counter
-    const QString &counterText() const;
+    QString counterText() const;
+
+    /// set a list of tab-data objects for this block.  One item per line.
+    void setTabLineData(const QList<TabLineData> &lines);
+    /// return the tabLineData
+    QList<TabLineData> tabLineData() const;
 
     /**
      * set the text that is used for the counter at this level.

@@ -92,24 +92,24 @@ bool KisSaveVisitor::visit(KisPaintLayer *layer)
         }
     }
 
-    if (layer->hasMask()) {
-        KisPaintDeviceSP mask = layer->getMask();
+//     if (layer->hasMask()) {
+//         KisPaintDeviceSP mask = layer->getMask();
 
-        if (mask) {
-            // save layer profile
-            location = m_external ? QString::null : m_uri;
-            location += m_img->name() + QString("/layers/layer%1").arg(m_count) + ".mask";
+//         if (mask) {
+//             // save layer profile
+//             location = m_external ? QString::null : m_uri;
+//             location += m_img->name() + QString("/layers/layer%1").arg(m_count) + ".mask";
 
-            if (m_store->open(location)) {
-                if (!mask->write(m_store)) {
-                    mask->disconnect();
-                    m_store->close();
-                    return false;
-                }
+//             if (m_store->open(location)) {
+//                 if (!mask->write(m_store)) {
+//                     mask->disconnect();
+//                     m_store->close();
+//                     return false;
+//                 }
 
-                m_store->close();
-            }
-        }
+//                 m_store->close();
+//             }
+//         }
     }
 
     m_count++;

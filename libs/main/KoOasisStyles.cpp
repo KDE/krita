@@ -43,7 +43,7 @@ public:
     QHash<QString /*family*/, QHash<QString /*name*/, KoXmlElement*> > stylesAutoStyles;
     QHash<QString /*family*/, KoXmlElement*> defaultStyles;
 
-    QHash<QString /*name*/, KoXmlElement*> styles; // page-layout, font-decl etc.
+    QHash<QString /*name*/, KoXmlElement*> styles; // page-layout, font-face etc.
     QHash<QString /*name*/, KoXmlElement*> masterPages;
     QHash<QString /*name*/, KoXmlElement*> listStyles;
     QHash<QString /*name*/, KoXmlElement*> drawStyles;
@@ -79,10 +79,10 @@ void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml 
 {
    const KoXmlElement docElement  = doc.documentElement();
     // We used to have the office:version check here, but better let the apps do that
-    KoXmlElement fontStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "font-decls" );
+    KoXmlElement fontStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "font-face-decls" );
 
     if ( !fontStyles.isNull() ) {
-        //kDebug(30003) << "Starting reading in font-decl..." << endl;
+        //kDebug(30003) << "Starting reading in font-face-decls..." << endl;
         insertStyles( fontStyles, stylesDotXml ? AutomaticInStyles : AutomaticInContent );
     }// else
     //   kDebug(30003) << "No items found" << endl;
@@ -225,7 +225,7 @@ void KoOasisStyles::insertStyle( const KoXmlElement& e, TypeAndLocation typeAndL
         }
     } else if ( ns == KoXmlNS::style && (
                 localName == "page-layout"
-             || localName == "font-decl"
+             || localName == "font-face"
              || localName == "presentation-page-layout" ) )
     {
         if ( d->styles.contains( name ) )

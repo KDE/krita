@@ -48,7 +48,7 @@ public:
     /**
      * Look up a style by name.
      *  This method can find styles defined by the tags "style:page-layout",
-     *   "style:presentation-page-layout", or "style:font-decl".
+     *   "style:presentation-page-layout", or "style:font-face".
      * Do NOT use this method for style:style styles.
      *
      * @param name the style name

@@ -128,12 +128,15 @@ void KoInteractionStrategy::applyGrid(QPointF &point) {
 
 // static
 bool KoInteractionStrategy::isEditable( KoShape * shape ) {
-    if( ! shape->isVisible() || shape->isLocked() )
+
+    if( !shape || !shape->isVisible() || shape->isLocked() )
         return false;
 
     KoShapeContainer * parent = shape->parent();
-    if(parent->isChildLocked(shape))
+
+    if(parent && parent->isChildLocked(shape))
         return false;
+
     while( parent )
     {
         if( ! parent->isVisible() )

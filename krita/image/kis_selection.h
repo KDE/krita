@@ -27,6 +27,11 @@
 
 #include <krita_export.h>
 
+enum selectionType {
+    READ_SELECTION,
+    WRITE_PROTECTION,
+    READ_WRITE
+};
 
 enum enumSelectionMode {
     SELECTION_ADD,

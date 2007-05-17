@@ -22,12 +22,11 @@
 
 #include "kis_iterator.h"
 #include "kis_global.h"
-// #include <kis_paint_device.h>
 
 class KisPaintDevice;
 
 /**
- * This class provided access to information about the selection through the iterators.
+ * This class provides access to information about the selections through the iterators.
  */
 template< typename _iTp, typename TSelect>
 class KisIteratorPixelTrait
@@ -48,7 +47,7 @@ public:
     {
         if (this == &rhs)
             return;
-//         m_device = rhs.m_device;
+
         m_underlyingIterator = rhs.m_underlyingIterator;
 
         if (rhs.m_selectionIterator) {
@@ -62,7 +61,7 @@ public:
     {
         if (this == &rhs)
             return *this;
-//         m_device = rhs.m_device;
+
         m_underlyingIterator = rhs.m_underlyingIterator;
 
         delete m_selectionIterator;
@@ -121,7 +120,9 @@ public:
         }
 
         const _iTp* selectionIterator() const { return m_selectionIterator; }
+
 protected:
+
     inline void advance(int n){if (m_selectionIterator) for(int i=0; i< n; i++) ++(*m_selectionIterator);};
     inline void retreat(){if (m_selectionIterator) --(*m_selectionIterator);};
 

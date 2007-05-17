@@ -33,33 +33,55 @@ class KisTiledDataManager;
  * Gives a random access to the pixel of an image. Use the moveTo function, to select the pixel. And then rawData to
  * access the value of a pixel.
  */
- class KRITAIMAGE_EXPORT KisRandomConstAccessor{
-        friend class KisRandomAccessor;
-        KisRandomConstAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, bool writable);
-    public:
-        KisRandomConstAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety);
-        KisRandomConstAccessor(const KisRandomConstAccessor& rhs);
-        ~KisRandomConstAccessor();
-    public:
-        /// Move to a given x,y position, fetch tiles and data
-        void moveTo(qint32 x, qint32 y);
-        /// @return a pointer to the pixel value
-        const quint8* rawData() const;
-        /// @return a pointer to the old pixel value
-        const quint8* oldRawData() const;
-    private:
-        KisTiledRandomAccessorSP m_accessor;
-        qint32 m_offsetx, m_offsety;
+class KRITAIMAGE_EXPORT KisRandomConstAccessor
+{
+
+    friend class KisRandomAccessor;
+
+    KisRandomConstAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, bool writable);
+
+public:
+
+    KisRandomConstAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety);
+
+    KisRandomConstAccessor(const KisRandomConstAccessor& rhs);
+
+    ~KisRandomConstAccessor();
+
+public:
+
+    /// Move to a given x,y position, fetch tiles and data
+    void moveTo(qint32 x, qint32 y);
+
+    /// @return a pointer to the pixel value
+    const quint8* rawData() const;
+
+    /// @return a pointer to the old pixel value
+    const quint8* oldRawData() const;
+
+private:
+
+    KisTiledRandomAccessorSP m_accessor;
+    qint32 m_offsetx, m_offsety;
+
 };
 
 /**
  * Gives a random access to the pixel of an image. Use the moveTo function, to select the pixel. And then rawData to
  * access the value of a pixel.
  */
-class KisRandomAccessor : public KisRandomConstAccessor {
-    public:
-        KisRandomAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety) : KisRandomConstAccessor(ktm,x,y,offsetx, offsety, false) { }
-        quint8* rawData() const;
+class KisRandomAccessor : public KisRandomConstAccessor
+{
+
+public:
+
+    KisRandomAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety)
+        : KisRandomConstAccessor(ktm,x,y,offsetx, offsety, false)
+        {
+        }
+
+    quint8* rawData() const;
+
 };
 
 
@@ -68,44 +90,69 @@ class KisRandomAccessor : public KisRandomConstAccessor {
  */
 template< typename _iTp, typename TSelect>
 class KisRandomAccessorPixelTrait {
-    public:
-        inline KisRandomAccessorPixelTrait(_iTp* underlyingAccessor, _iTp* selectionAccessor) : m_underlyingAccessor(underlyingAccessor), m_selectionAccessor(selectionAccessor)
-        {
-        }
-        ~KisRandomAccessorPixelTrait() {
-            if(m_selectionAccessor)
-                delete m_selectionAccessor;
-        }
-        /// @return true if the pixel is selected
-        inline bool isSelected() const
-        {
-            return (m_selectionAccessor) ? *(m_selectionAccessor->rawData()) > SELECTION_THRESHOLD : true;
-        };
-        inline quint8 operator[](int index) const
-        { return m_underlyingAccessor->rawData()[index]; };
-        /**
-         * Returns the degree of selectedness of the pixel.
-         */
-        inline quint8 selectedness() const
-        {
-            return (m_selectionAccessor) ? *(m_selectionAccessor->rawData()) : MAX_SELECTED;
-        };
 
-        /**
-         * Returns the selectionmask from the current point; this is guaranteed
-         * to have the same number of consecutive pixels that the iterator has
-         * at a given point. It return a 0 if there is no selection.
-         */
-        inline quint8 * selectionMask() const
+public:
+
+    inline KisRandomAccessorPixelTrait(_iTp* underlyingAccessor,
+                                       _iTp* readSelectionAccessor,
+                                       _iTp* writeSelectionAccessor)
+        : m_underlyingAccessor( underlyingAccessor )
+        , m_readSelectionAccessor( readSelectionAccessor )
+        , m_writeSelectionAccessor( writeSelectionAccessor )
         {
-            return ( m_selectionAccessor ) ? m_selectionAccessor->rawData() : 0;
         }
 
-        inline void moveTo(qint32 x, qint32 y) { if(m_selectionAccessor) m_selectionAccessor->moveTo(x,y); }
-        inline const _iTp* selectionAccessor() const { return m_selectionAccessor; }
-    private:
-        _iTp* m_underlyingAccessor;
-        _iTp* m_selectionAccessor;
+    ~KisRandomAccessorPixelTrait() {
+
+        if( m_readSelectionAccessor )
+            delete m_readSelectionAccessor;
+
+        if ( m_writeSelectionAccessor )
+            delete m_writeSelectionAccessor;
+    }
+
+    /// @return true if the pixel is selected
+    inline bool isSelected() const
+        {
+            return (m_readSelectionAccessor) ? *(m_readSelectionAccessor->rawData()) > SELECTION_THRESHOLD : true;
+        };
+
+    inline quint8 operator[](int index) const
+        {
+	    return m_underlyingAccessor->rawData()[index];
+	};
+
+    /**
+     * Returns the degree of selectedness of the pixel.
+     */
+    inline quint8 selectedness() const
+        {
+            return (m_readSelectionAccessor) ? *(m_readSelectionAccessor->rawData()) : MAX_SELECTED;
+        };
+
+    /**
+     * Returns the selectionmask from the current point; this is guaranteed
+     * to have the same number of consecutive pixels that the iterator has
+     * at a given point. It return a 0 if there is no selection.
+     */
+    inline quint8 * selectionMask() const
+        {
+            return ( m_readSelectionAccessor ) ? m_readSelectionAccessor->rawData() : 0;
+        }
+
+    inline void moveTo(qint32 x, qint32 y)
+	{
+	    if(m_readSelectionAccessor) m_readSelectionAccessor->moveTo(x,y);
+	}
+
+    inline const _iTp* selectionAccessor() const
+	{
+	    return m_readSelectionAccessor;
+	}
+private:
+    _iTp* m_underlyingAccessor;
+    _iTp* m_readSelectionAccessor;
+    _iTp* m_writeSelectionAccessor;
 };
 
 
@@ -115,19 +162,25 @@ class KisRandomAccessorPixelTrait {
  * The function isSelected() and selectedness() gives you access to the selection of the current pixel.
  * Note, that you should use this class only if you need random access to a pixel. It is best to use iterators as much as possible.
  */
-template<class T, typename TSelect> 
+template<class T, typename TSelect>
 class KisRandomAccessorPixelBase : public T, public KisRandomAccessorPixelTrait<T, TSelect> {
-    public:
-        KisRandomAccessorPixelBase(KisTiledDataManager *ktm, KisTiledDataManager *ktmselect, qint32 x, qint32 y, qint32 offsetx, qint32 offsety) : T( ktm, x, y, offsetx, offsety), KisRandomAccessorPixelTrait<T, TSelect>( this, (ktmselect) ? new T(ktm, x, y, offsetx, offsety) : 0 )
+
+public:
+
+    KisRandomAccessorPixelBase(KisTiledDataManager *ktm,
+                               KisTiledDataManager *ktmReadSelect,
+                               KisTiledDataManager *ktmWriteSelect,
+                               qint32 x, qint32 y, qint32 offsetx, qint32 offsety)
+        : T( ktm, x, y, offsetx, offsety)
+        , KisRandomAccessorPixelTrait<T, TSelect>( this,
+                                                   (ktmReadSelect) ? new T(ktm, x, y, offsetx, offsety) : 0,
+                                                   (ktmWriteSelect) ? new T(ktm, x, y, offsetx, offsety) : 0 )
         {
         }
-/*        template<class T2, typename TSelect2>
-        KisRandomAccessorPixelBase(const KisRandomAccessorPixelBase<T2,TSelect2>& rhs) :
-                T(rhs), KisRandomAccessorPixelTrait <T, TSelect> (this, (rhs.selectionAccessor()) ? new T(*rhs.selectionAccessor()) : 0)
-        {
-        }*/
-    public:
-        inline void moveTo(qint32 x, qint32 y) { T::moveTo(x,y); KisRandomAccessorPixelTrait<T, TSelect>::moveTo(x,y); }
+
+public:
+
+    inline void moveTo(qint32 x, qint32 y) { T::moveTo(x,y); KisRandomAccessorPixelTrait<T, TSelect>::moveTo(x,y); }
 };
 
 

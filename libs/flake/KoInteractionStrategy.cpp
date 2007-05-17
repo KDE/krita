@@ -128,6 +128,7 @@ void KoInteractionStrategy::applyGrid(QPointF &point) {
 
 // static
 bool KoInteractionStrategy::isEditable( KoShape * shape ) {
+    Q_ASSERT(shape);
 
     if( !shape || !shape->isVisible() || shape->isLocked() )
         return false;

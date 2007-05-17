@@ -23,6 +23,7 @@
 #include <kcombobox.h>
 #include <kiconloader.h>
 
+#include <QSet>
 #include <QStringList>
 
 #include "KoLanguageTab.moc"
@@ -34,24 +35,33 @@ KoLanguageTab::KoLanguageTab( KSpell2::Loader::Ptr loader, QWidget* parent, cons
     Q_UNUSED( name );
     Q_UNUSED( fl );
 
+    languageListSearchLine->setListWidget(languageList);
+
     //TODO use fl
     const QStringList langNames = KoGlobal::listOfLanguages();
     const QStringList langTags = KoGlobal::listTagOfLanguages();
-    QStringList spellCheckLanguages;
+    QSet<QString> spellCheckLanguages;
 
     if ( loader )
-        spellCheckLanguages = loader->languages();
+        spellCheckLanguages = QSet<QString>::fromList(loader->languages());
 
     QStringList::ConstIterator itName = langNames.begin();
     QStringList::ConstIterator itTag = langTags.begin();
     for ( ; itName != langNames.end() && itTag != langTags.end(); ++itName, ++itTag )
     {
-        if ( spellCheckLanguages.find( *itTag ) != spellCheckLanguages.end() )
-            languageKComboBox->addItem( SmallIcon( "tools-check-spelling" ), *itName );
+        if ( spellCheckLanguages.contains( *itTag ) )
+        {
+            QListWidgetItem* item = new QListWidgetItem();
+            item->setText( *itName );
+            item->setIcon( SmallIcon("tools-check-spelling") );
+
+            languageList->addItem(item); 
+        }
         else
-            languageKComboBox->addItem( *itName );
+            languageList->addItem( *itName );
     }
-    connect( languageKComboBox, SIGNAL( activated( int ) ), this, SIGNAL( languageChanged() ) );
+    connect( languageList, SIGNAL( currentItemChanged( QListWidgetItem*,QListWidgetItem* ) ), 
+            this, SIGNAL( languageChanged() ) );
 }
 
 KoLanguageTab::~KoLanguageTab()
@@ -60,10 +70,20 @@ KoLanguageTab::~KoLanguageTab()
 
 QString KoLanguageTab::getLanguage() const
 {
-    return KoGlobal::tagOfLanguage( languageKComboBox->currentText() );
+    Q_ASSERT( languageList->currentItem() );
+
+    return KoGlobal::tagOfLanguage( languageList->currentItem()->text() );
 }
 
 void KoLanguageTab::setLanguage( const QString &item )
 {
-    languageKComboBox->setCurrentText( KoGlobal::languageFromTag( item ) );
+    const QString& name = KoGlobal::languageFromTag(item);
+
+    QList<QListWidgetItem*> items = languageList->findItems(name,
+                                                            Qt::MatchFixedString);
+    if ( !items.isEmpty() )
+    {
+        languageList->setCurrentItem(items.first());
+        languageList->scrollToItem(items.first());
+    }
 }

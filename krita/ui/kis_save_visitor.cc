@@ -110,7 +110,7 @@ bool KisSaveVisitor::visit(KisPaintLayer *layer)
 //                 m_store->close();
 //             }
 //         }
-    }
+//    }
 
     m_count++;
     return true;

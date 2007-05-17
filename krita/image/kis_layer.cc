@@ -378,10 +378,6 @@ void KisLayer::setImage(KisImageSP image)
     m_d->image = image;
 }
 
-void KisLayer::paintMaskInactiveLayers(QImage &, qint32, qint32, qint32, qint32)
-{
-}
-
 void KisLayer::paint(QImage &, qint32, qint32, qint32, qint32)
 {
 }

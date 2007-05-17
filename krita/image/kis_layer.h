@@ -235,9 +235,6 @@ public:
     virtual void paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
     virtual void paint(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 
-    /// paints where no data is on this layer. Useful when it is a transparent layer stacked on top of another one
-    virtual void paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
-
     /// Returns a thumbnail in requested size. The QImage may have transparent parts.
     /// May also return 0
     virtual QImage createThumbnail(qint32 w, qint32 h);

@@ -179,49 +179,6 @@ KoColorSpace * KisPaintLayer::colorSpace()
     return m_d->paintdev->colorSpace();
 }
 
-void KisPaintLayer::paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h)
-{
-    if (m_d->paintdev && m_d->paintdev->hasSelection()) {
-        m_d->paintdev->selection()->paint(img, x, y, w, h);
-    } else if (m_d->mask && m_d->editMask && m_d->mask->hasSelection()) {
-        m_d->mask->selection()->paint(img, x, y, w, h);
-    }
-}
-
-void KisPaintLayer::paint(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize)
-{
-    if (m_d->paintdev && m_d->paintdev->hasSelection()) {
-        m_d->paintdev->selection()->paint(img, scaledImageRect, scaledImageSize, imageSize);
-    } else if (m_d->mask && m_d->editMask && m_d->mask->hasSelection()) {
-        m_d->mask->selection()->paint(img, scaledImageRect, scaledImageSize, imageSize);
-    }
-}
-
-void KisPaintLayer::paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h)
-{
-    uchar *j = img.bits();
-
-    KoColorSpace *cs = m_d->paintdev->colorSpace();
-    KisHLineConstIteratorPixel it = m_d->paintdev->createHLineIterator(x, y, w);
-    for (qint32 y2 = y; y2 < h + y; ++y2) {
-
-        while ( ! it.isDone()) {
-            quint8 s = cs->alpha(it.rawData());
-            if(s==0)
-            {
-                quint8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
-
-                *(j+0) = 128+g ;
-                *(j+1) = 165+g;
-                *(j+2) = 128+g;
-            }
-            j+=4;
-            ++it;
-        }
-        it.nextRow();
-    }
-}
-
 QImage KisPaintLayer::createThumbnail(qint32 w, qint32 h)
 {
     if (m_d->paintdev)

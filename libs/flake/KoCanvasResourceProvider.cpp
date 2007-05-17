@@ -82,8 +82,6 @@ KoColor KoCanvasResourceProvider::koColorResource( int key )
 
 void KoCanvasResourceProvider::setForegroundColor( const KoColor & color )
 {
-    //QVariant v;
-    //v.setValue( color );
     setResource( KoCanvasResource::ForegroundColor, color );
 }
 

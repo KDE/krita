@@ -24,7 +24,7 @@
 
 #include <QPoint>
 
-#include <kis_tool_non_paint.h>
+#include <kis_tool.h>
 #include <KoToolFactory.h>
 #include <kis_undo_adapter.h>
 
@@ -46,23 +46,21 @@ class WdgToolTransform : public QWidget, public Ui::WdgToolTransform
  * Transform tool
  *
  */
-class KisToolTransform : public KisToolNonPaint, KisCommandHistoryListener {
+class KisToolTransform : public KisTool, KisCommandHistoryListener {
 
-    typedef KisToolNonPaint super;
+    typedef KisTool super;
     Q_OBJECT
 
 public:
-    KisToolTransform();
+    KisToolTransform(KoCanvasBase * canvas);
     virtual ~KisToolTransform();
 
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
     virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_TRANSFORM; }
+    //virtual enumToolType toolType() { return TOOL_TRANSFORM; }
     virtual quint32 priority() { return 0; }
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
@@ -71,19 +69,18 @@ public:
     void setTranslateX(double tx) { m_translateX = tx; }
     void setTranslateY(double ty) { m_translateY = ty; }
     void setAngle(double a) { m_a = a; }
-    void paintOutline();
+    void paint(QPainter& gc, KoViewConverter &converter);
 
 public:
 
-    void notifyCommandAdded(K3Command *);
-    void notifyCommandExecuted(K3Command *);
+    void notifyCommandAdded(QUndoCommand *);
+    void notifyCommandExecuted(QUndoCommand *);
 
 public:
     virtual void deactivate();
 
 private:
 
-    void paintOutline(QPainter& gc, const QRect& rc);
     void transform();
     void recalcOutline();
     double rotX(double x, double y) { return m_cosa*x - m_sina*y;};
@@ -135,7 +132,7 @@ private:
 
     KisPaintDeviceSP m_origDevice;
     KisSelectionSP m_origSelection;
-
+    KoCanvasBase *m_canvas;
 };
 
 class KisToolTransformFactory : public KoToolFactory {

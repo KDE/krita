@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QLabel>
 #include <QComboBox>
-#include <QApplication
+#include <QApplication>
 
 #include <kdebug.h>
 #include <kactioncollection.h>
@@ -59,8 +59,8 @@ namespace {
         virtual ~TransformCmd();
 
     public:
-        virtual void execute();
-        virtual void unexecute();
+        virtual void redo();
+        virtual void undo();
         void transformArgs(double &sx, double &sy, double &tx, double &ty, double &a);
         KisSelectionSP origSelection(QPoint &startPos, QPoint &endPos);
 
@@ -110,22 +110,22 @@ namespace {
         return m_origSelection;
     }
 
-    void TransformCmd::execute()
+    void TransformCmd::redo()
     {
-        super::execute();
+        super::redo();
     }
 
-    void TransformCmd::unexecute()
+    void TransformCmd::undo()
     {
-        super::unexecute();
+        super::undo();
     }
 }
 
-KisToolTransform::KisToolTransform()
-    : super(i18n("Transform"))
+KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
+    : super(canvas, KisCursor::selectCursor())
+    , m_canvas(canvas)
 {
     setObjectName("tool_transform");
-    setCursor(KisCursor::selectCursor());
     m_selecting = false;
     m_startPos = QPoint(0, 0);
     m_endPos = QPoint(0, 0);
@@ -154,15 +154,15 @@ void KisToolTransform::deactivate()
 
     if (m_currentImage) return;
 
-    paintOutline();
+    m_canvas->updateCanvas(convertToPt(QRect(m_startPos, m_endPos)));
 }
 
 void KisToolTransform::activate()
 {
-    if(m_subject && m_currentImage && m_currentImage->activeDevice())
+    if(m_currentImage && m_currentImage->activeDevice())
     {
         //connect(m_subject, commandExecuted(K3Command *c), this, notifyCommandAdded( KCommand * c));
-        m_subject->undoAdapter()->setCommandHistoryListener( this );
+        //m_subject->undoAdapter()->setCommandHistoryListener( this );
 
         TransformCmd * cmd=0;
 
@@ -178,7 +178,7 @@ void KisToolTransform::activate()
             // We should ask for tool args and orig selection
             cmd->transformArgs(m_scaleX, m_scaleY, m_translateX, m_translateY, m_a);
             m_origSelection = cmd->origSelection(m_startPos, m_endPos);
-            paintOutline();
+            m_canvas->updateCanvas(convertToPt(QRect(m_startPos, m_endPos)));
         }
     }
 }
@@ -216,69 +216,54 @@ void KisToolTransform::initHandles()
     m_translateX = m_org_cenX;
     m_translateY = m_org_cenY;
 
-    m_subject->canvasController() ->updateCanvas();
+    m_canvas->updateCanvas(convertToPt(QRect(m_startPos, m_endPos)));
 }
-
-void KisToolTransform::paint(QPainter& gc)
-{
-    paintOutline(gc, QRect());
-}
-
-void KisToolTransform::paint(QPainter& gc, const QRect& rc)
-{
-    paintOutline(gc, rc);
-}
-
 
 void KisToolTransform::mousePressEvent(KoPointerEvent *e)
 {
-    if (m_subject) {
-        
-
-        if (m_currentImage && m_currentImage->activeDevice() && e->button() == Qt::LeftButton) {
-            switch(m_function)
-            {
-                case ROTATE:
-                    m_clickoffset = e->pos().floorQPoint()
-                        - QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
-                    m_clickangle = -m_a - atan2(m_clickoffset.x(),m_clickoffset.y());
-                    m_clickoffset = QPoint(0, 0);
-                    break;
-                case MOVE:
-                    m_clickoffset = e->pos().floorQPoint()
-                        - QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
-                    break;
-                case TOPSCALE:
-                    m_clickoffset = e->pos().floorQPoint()
-                            - QPoint((m_topleft + m_topright)/2.0);
-                    break;
-                case TOPRIGHTSCALE:
-                    m_clickoffset = e->pos().floorQPoint() - m_topright;
-                    break;
-                case RIGHTSCALE:
-                    m_clickoffset = e->pos().floorQPoint()
-                            - QPoint((m_topright + m_bottomright)/2.0);
-                    break;
-                case BOTTOMRIGHTSCALE:
-                    m_clickoffset = e->pos().floorQPoint() - m_bottomright;
-                    break;
-                case BOTTOMSCALE:
-                    m_clickoffset = e->pos().floorQPoint()
-                            - QPoint((m_bottomleft + m_bottomright)/2.0);
-                    break;
-                case BOTTOMLEFTSCALE:
-                    m_clickoffset = e->pos().floorQPoint() - m_bottomleft;
-                    break;
-                case LEFTSCALE:
-                    m_clickoffset = e->pos().floorQPoint()
-                            - QPoint((m_topleft + m_bottomleft)/2.0);
-                    break;
-                case TOPLEFTSCALE:
-                    m_clickoffset = e->pos().floorQPoint() - m_topleft;
-                    break;
-            }
-            m_selecting = true;
+    if (m_currentImage && m_currentImage->activeDevice() && e->button() == Qt::LeftButton) {
+        switch(m_function)
+        {
+            case ROTATE:
+                m_clickoffset = e->pos().floorQPoint()
+                    - QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
+                m_clickangle = -m_a - atan2(m_clickoffset.x(),m_clickoffset.y());
+                m_clickoffset = QPoint(0, 0);
+                break;
+            case MOVE:
+                m_clickoffset = e->pos().floorQPoint()
+                    - QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
+                break;
+            case TOPSCALE:
+                m_clickoffset = e->pos().floorQPoint()
+                        - QPoint((m_topleft + m_topright)/2.0);
+                break;
+            case TOPRIGHTSCALE:
+                m_clickoffset = e->pos().floorQPoint() - m_topright;
+                break;
+            case RIGHTSCALE:
+                m_clickoffset = e->pos().floorQPoint()
+                        - QPoint((m_topright + m_bottomright)/2.0);
+                break;
+            case BOTTOMRIGHTSCALE:
+                m_clickoffset = e->pos().floorQPoint() - m_bottomright;
+                break;
+            case BOTTOMSCALE:
+                m_clickoffset = e->pos().floorQPoint()
+                        - QPoint((m_bottomleft + m_bottomright)/2.0);
+                break;
+            case BOTTOMLEFTSCALE:
+                m_clickoffset = e->pos().floorQPoint() - m_bottomleft;
+                break;
+            case LEFTSCALE:
+                m_clickoffset = e->pos().floorQPoint()
+                        - QPoint((m_topleft + m_bottomleft)/2.0);
+                break;
+            case TOPLEFTSCALE:
+                m_clickoffset = e->pos().floorQPoint() - m_topleft;
+                break;
         }
+        m_selecting = true;
     }
 }
 
@@ -305,34 +290,34 @@ void KisToolTransform::setFunctionalCursor()
     switch(m_function)
     {
         case MOVE:
-            setCursor(KisCursor::moveCursor());
+            useCursor(KisCursor::moveCursor());
             break;
         case ROTATE:
-            setCursor(KisCursor::rotateCursor());
+            useCursor(KisCursor::rotateCursor());
             break;
         case TOPSCALE:
-            setCursor(m_sizeCursors[(0*s +rotOctant)%8]);
+            useCursor(m_sizeCursors[(0*s +rotOctant)%8]);
             break;
         case TOPRIGHTSCALE:
-            setCursor(m_sizeCursors[(1*s +rotOctant)%8]);
+            useCursor(m_sizeCursors[(1*s +rotOctant)%8]);
             break;
         case RIGHTSCALE:
-            setCursor(m_sizeCursors[(2*s +rotOctant)%8]);
+            useCursor(m_sizeCursors[(2*s +rotOctant)%8]);
             break;
         case BOTTOMRIGHTSCALE:
-            setCursor(m_sizeCursors[(3*s +rotOctant)%8]);
+            useCursor(m_sizeCursors[(3*s +rotOctant)%8]);
             break;
         case BOTTOMSCALE:
-            setCursor(m_sizeCursors[(4*s +rotOctant)%8]);
+            useCursor(m_sizeCursors[(4*s +rotOctant)%8]);
             break;
         case BOTTOMLEFTSCALE:
-            setCursor(m_sizeCursors[(5*s +rotOctant)%8]);
+            useCursor(m_sizeCursors[(5*s +rotOctant)%8]);
             break;
         case LEFTSCALE:
-            setCursor(m_sizeCursors[(6*s +rotOctant)%8]);
+            useCursor(m_sizeCursors[(6*s +rotOctant)%8]);
             break;
         case TOPLEFTSCALE:
-            setCursor(m_sizeCursors[(7*s +rotOctant)%8]);
+            useCursor(m_sizeCursors[(7*s +rotOctant)%8]);
             break;
     }
 }
@@ -598,10 +583,6 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
 
 void KisToolTransform::mouseReleaseEvent(KoPointerEvent */*e*/)
 {
-    if(!m_subject)
-        return;
-    
-
     if (!m_currentImage)
         return;
 
@@ -609,21 +590,9 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent */*e*/)
         m_selecting = false;
     }
     QApplication::setOverrideCursor(KisCursor::waitCursor());
-    paintOutline();
+    m_canvas->updateCanvas(convertToPt(QRect(m_startPos, m_endPos)));
     transform();
     QApplication::restoreOverrideCursor();
-}
-
-void KisToolTransform::paintOutline()
-{
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-        KisCanvas *canvas = controller->kiscanvas();
-        QPainter gc(canvas->canvasWidget());
-        QRect rc;
-
-        paintOutline(gc, rc);
-    }
 }
 
 void KisToolTransform::recalcOutline()
@@ -650,43 +619,38 @@ void KisToolTransform::recalcOutline()
     m_bottomright = QPoint(int(rotX(x,y) + m_translateX+0.5), int(rotY(x,y) + m_translateY+0.5));
 }
 
-void KisToolTransform::paintOutline(QPainter& gc, const QRect&)
+void KisToolTransform::paint(QPainter& gc, KoViewConverter &converter)
 {
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-        //RasterOp op = gc.rasterOp();
-        QPen old = gc.pen();
-        QPen pen(Qt::SolidLine);
-        pen.setWidth(1);
-        Q_ASSERT(controller);
+    QPen old = gc.pen();
+    QPen pen(Qt::SolidLine);
+    pen.setWidth(1);
 
-        recalcOutline();
-        QPoint topleft = controller->windowToView(m_topleft);
-        QPoint topright = controller->windowToView(m_topright);
-        QPoint bottomleft = controller->windowToView(m_bottomleft);
-        QPoint bottomright = controller->windowToView(m_bottomright);
+    recalcOutline();
+    QPoint topleft = controller->windowToView(m_topleft);
+    QPoint topright = controller->windowToView(m_topright);
+    QPoint bottomleft = controller->windowToView(m_bottomleft);
+    QPoint bottomright = controller->windowToView(m_bottomright);
 
-        //gc.setRasterOp(Qt::NotROP);
-        gc.setPen(pen);
-        gc.drawRect(topleft.x()-4, topleft.y()-4, 8, 8);
-        gc.drawLine(topleft.x(), topleft.y(), (topleft.x()+topright.x())/2, (topleft.y()+topright.y())/2);
-        gc.drawRect((topleft.x()+topright.x())/2-4, (topleft.y()+topright.y())/2-4, 8, 8);
-        gc.drawLine((topleft.x()+topright.x())/2, (topleft.y()+topright.y())/2, topright.x(), topright.y());
-        gc.drawRect(topright.x()-4, topright.y()-4, 8, 8);
-        gc.drawLine(topright.x(), topright.y(), (topright.x()+bottomright.x())/2, (topright.y()+bottomright.y())/2);
-        gc.drawRect((topright.x()+bottomright.x())/2-4, (topright.y()+bottomright.y())/2-4, 8, 8);
-        gc.drawLine((topright.x()+bottomright.x())/2, (topright.y()+bottomright.y())/2,bottomright.x(), bottomright.y());
-        gc.drawRect(bottomright.x()-4, bottomright.y()-4, 8, 8);
-        gc.drawLine(bottomright.x(), bottomright.y(), (bottomleft.x()+bottomright.x())/2, (bottomleft.y()+bottomright.y())/2);
-        gc.drawRect((bottomleft.x()+bottomright.x())/2-4, (bottomleft.y()+bottomright.y())/2-4, 8, 8);
-        gc.drawLine((bottomleft.x()+bottomright.x())/2, (bottomleft.y()+bottomright.y())/2, bottomleft.x(), bottomleft.y());
-        gc.drawRect(bottomleft.x()-4, bottomleft.y()-4, 8, 8);
-        gc.drawLine(bottomleft.x(), bottomleft.y(), (topleft.x()+bottomleft.x())/2, (topleft.y()+bottomleft.y())/2);
-        gc.drawRect((topleft.x()+bottomleft.x())/2-4, (topleft.y()+bottomleft.y())/2-4, 8, 8);
-        gc.drawLine((topleft.x()+bottomleft.x())/2, (topleft.y()+bottomleft.y())/2, topleft.x(), topleft.y());
-        //gc.setRasterOp(op);
-        gc.setPen(old);
-    }
+    //gc.setRasterOp(Qt::NotROP);
+    gc.setPen(pen);
+    gc.drawRect(topleft.x()-4, topleft.y()-4, 8, 8);
+    gc.drawLine(topleft.x(), topleft.y(), (topleft.x()+topright.x())/2, (topleft.y()+topright.y())/2);
+    gc.drawRect((topleft.x()+topright.x())/2-4, (topleft.y()+topright.y())/2-4, 8, 8);
+    gc.drawLine((topleft.x()+topright.x())/2, (topleft.y()+topright.y())/2, topright.x(), topright.y());
+    gc.drawRect(topright.x()-4, topright.y()-4, 8, 8);
+    gc.drawLine(topright.x(), topright.y(), (topright.x()+bottomright.x())/2, (topright.y()+bottomright.y())/2);
+    gc.drawRect((topright.x()+bottomright.x())/2-4, (topright.y()+bottomright.y())/2-4, 8, 8);
+    gc.drawLine((topright.x()+bottomright.x())/2, (topright.y()+bottomright.y())/2,bottomright.x(), bottomright.y());
+    gc.drawRect(bottomright.x()-4, bottomright.y()-4, 8, 8);
+    gc.drawLine(bottomright.x(), bottomright.y(), (bottomleft.x()+bottomright.x())/2, (bottomleft.y()+bottomright.y())/2);
+    gc.drawRect((bottomleft.x()+bottomright.x())/2-4, (bottomleft.y()+bottomright.y())/2-4, 8, 8);
+    gc.drawLine((bottomleft.x()+bottomright.x())/2, (bottomleft.y()+bottomright.y())/2, bottomleft.x(), bottomleft.y());
+    gc.drawRect(bottomleft.x()-4, bottomleft.y()-4, 8, 8);
+    gc.drawLine(bottomleft.x(), bottomleft.y(), (topleft.x()+bottomleft.x())/2, (topleft.y()+bottomleft.y())/2);
+    gc.drawRect((topleft.x()+bottomleft.x())/2-4, (topleft.y()+bottomleft.y())/2-4, 8, 8);
+    gc.drawLine((topleft.x()+bottomleft.x())/2, (topleft.y()+bottomleft.y())/2, topleft.x(), topleft.y());
+    //gc.setRasterOp(op);
+    gc.setPen(old);
 }
 
 void KisToolTransform::transform()
@@ -736,7 +700,7 @@ void KisToolTransform::transform()
     // If canceled, go back to the memento
     if(t.isCanceled())
     {
-        transaction->unexecute();
+        transaction->undo();
         delete transaction;
         return;
     }
@@ -754,7 +718,7 @@ void KisToolTransform::transform()
     }
 }
 
-void KisToolTransform::notifyCommandAdded( K3Command * command)
+void KisToolTransform::notifyCommandAdded( QUndoCommand * command)
 {
     TransformCmd * cmd = dynamic_cast<TransformCmd*>(command);
     if (cmd == 0) {
@@ -765,7 +729,7 @@ void KisToolTransform::notifyCommandAdded( K3Command * command)
     }
 }
 
-void KisToolTransform::notifyCommandExecuted( K3Command * command)
+void KisToolTransform::notifyCommandExecuted( QUndoCommand * command)
 {
     Q_UNUSED(command);
     TransformCmd * cmd=0;
@@ -784,7 +748,7 @@ void KisToolTransform::notifyCommandExecuted( K3Command * command)
         // We should ask for tool args and orig selection
         cmd->transformArgs(m_scaleX, m_scaleY, m_translateX, m_translateY, m_a);
         m_origSelection = cmd->origSelection(m_startPos, m_endPos);
-        m_subject->canvasController() ->updateCanvas();
+        m_canvas->updateCanvas(convertToPt(QRect(m_startPos, m_endPos)));
     }
 }
 
@@ -795,8 +759,7 @@ void KisToolTransform::slotSetFilter(const KoID &filterID)
 
 QWidget* KisToolTransform::createOptionWidget()
 {
-
-    m_optWidget = new WdgToolTransform(parent);
+    m_optWidget = new WdgToolTransform(0);
     Q_CHECK_PTR(m_optWidget);
 
     m_optWidget->cmbFilter->clear();
@@ -807,7 +770,7 @@ QWidget* KisToolTransform::createOptionWidget()
         this, SLOT(slotSetFilter(const KoID &)));
 
     KoID filterID = m_optWidget->cmbFilter->currentItem();
-    m_filter = KisFilterStrategyRegistry::instance()->get(filterID);
+    m_filter = KisFilterStrategyRegistry::instance()->get(filterID.id());
 
 /*
     connect(m_optWidget->intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));

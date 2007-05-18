@@ -539,7 +539,9 @@ void KisSelectionManager::pasteNew()
 
     const QByteArray mimetype = KoDocument::readNativeFormatMimeType();
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( mimetype );
-    KisDoc2 * doc = (KisDoc2*) entry.createDoc();
+
+    KisDoc2 * doc = dynamic_cast<KisDoc2*>(  entry.createDoc() );
+    if ( !doc ) return;
 
     Q_ASSERT(doc->undoAdapter() != 0);
     doc->undoAdapter()->setUndo(false);

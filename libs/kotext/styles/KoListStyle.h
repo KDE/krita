@@ -27,6 +27,7 @@
 #include <QTextList>
 
 class KoListLevelProperties;
+class KoStyleStack;
 
 /**
  * This class groups all styling-options for lists.
@@ -127,6 +128,12 @@ public:
     void applyStyle(const QTextBlock &block, int level = 0);
 
     bool operator==(const KoListStyle &other) const;
+
+    /**
+     * Load the style from the \a KoStyleStack style stack using the
+     * OpenDocument format.
+     */
+    void loadOasis(KoStyleStack& styleStack);
 
     static KoListStyle* fromTextList(QTextList *list);
 

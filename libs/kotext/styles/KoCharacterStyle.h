@@ -48,7 +48,8 @@ public:
     /// list of character style properties we can store in a QCharFormat
     enum Property {
         StyleId = QTextFormat::UserProperty+1, ///< The id stored in the charFormat to link the text to this style.
-        HasHyphenation
+        HasHyphenation,
+        FontId
     };
 
     /**
@@ -59,12 +60,10 @@ public:
     /// clone constructor
     KoCharacterStyle(const KoCharacterStyle &other);
     ~KoCharacterStyle();
-/*
-    void setFont (const QFont &font) { setProperty(QTextFormat::FOO, font); }
-    QFont font () const {
-        return static_cast<QFont> (propertyObject(QTextFormat::FOO));
-    }
-*/
+
+    //void setFont(const QFont &font) { setProperty(QTextFormat::FontId, font); }
+    //QFont font() const { return property(QTextFormat::FontId).toFont(); }
+
     /// See similar named method on QTextCharFormat
     void setFontFamily (const QString &family) { setProperty(QTextFormat::FontFamily, family); }
     /// See similar named method on QTextCharFormat
@@ -168,6 +167,7 @@ public:
 
 private:
     void setProperty(int key, const QVariant &value);
+    QVariant property(int key) const;
     double propertyDouble(int key) const;
     int propertyInt(int key) const;
     QString propertyString(int key) const;

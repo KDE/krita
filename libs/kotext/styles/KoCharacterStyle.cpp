@@ -53,6 +53,10 @@ void KoCharacterStyle::setProperty(int key, const QVariant &value) {
     m_stylesPrivate->add(key, value);
 }
 
+QVariant KoCharacterStyle::property(int key) const {
+    return m_stylesPrivate->value(key);
+}
+
 double KoCharacterStyle::propertyDouble(int key) const {
     QVariant variant = m_stylesPrivate->value(key);
     if(variant.isNull())
@@ -222,7 +226,6 @@ void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
         fontName = styleStack.property( KoXmlNS::fo, "font-family" );
     if ( styleStack.hasProperty( KoXmlNS::style, "font-family" ) )
         fontName = styleStack.property( KoXmlNS::style, "font-family" );
-
     if ( ! fontName.isNull() ) {
         // Hmm, the remove "'" could break it's in the middle of the fontname...
         fontName = fontName.remove( "'" );
@@ -356,12 +359,12 @@ void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
 #endif
 
     if ( styleStack.hasProperty( KoXmlNS::fo, "background-color") ) {
-        QString textBackColor = styleStack.property( KoXmlNS::fo, "background-color");
-        if (textBackColor != "transparent") {
+        QColor textBackColor( styleStack.property( KoXmlNS::fo, "background-color") ); // #rrggbb format
+        if (textBackColor.isValid()) {
             QBrush brush = background();
             if (brush.style() == Qt::NoBrush)
                 brush.setStyle(Qt::SolidPattern);
-            brush.setColor( QColor(textBackColor) );
+            brush.setColor(textBackColor);
             setBackground(brush);
         }
     }

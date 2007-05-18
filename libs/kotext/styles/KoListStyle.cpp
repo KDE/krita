@@ -21,8 +21,10 @@
 #include "KoListLevelProperties.h"
 #include "KoTextBlockData.h"
 
+#include <KoStyleStack.h>
+#include <KoXmlNS.h>
+#include <kdebug.h>
 #include <QTextCursor>
-//#include <KDebug>
 
 class KoListStyle::Private {
 public:
@@ -195,4 +197,22 @@ KoListStyle* KoListStyle::fromTextList(QTextList *list) {
     answer->setLevel(llp);
     answer->d->setTextList(llp.level(), list->document(), list);
     return answer;
+}
+
+void KoListStyle::loadOasis(KoStyleStack& styleStack)
+{
+    //TODO
+
+    //1.6: KoParagCounter::loadOasisListStyle and KoParagStyle::loadStyle
+    kDebug()<<"========================> KoListStyle::loadOasis"<<endl;
+
+    //m_style = static_cast<Style>( importCounterType( listStyle.attributeNS( KoXmlNS::style, "num-format", QString::null)[0] ) );
+    kDebug()<<"num-format="<<styleStack.property(KoXmlNS::style, "num-format")<<endl;
+    kDebug()<<"display-levels="<<styleStack.property(KoXmlNS::text, "display-levels")<<endl;
+    kDebug()<<"bullet-char="<<styleStack.property(KoXmlNS::text, "bullet-char")<<endl;
+
+    KoListLevelProperties llp;
+    llp.setStyle(KoListStyle::DiscItem); //KoListStyle::DecimalItem);
+    setLevel(llp);
+    //liststyle->setLevel( element.attribute("depth").toInt() + 1);
 }

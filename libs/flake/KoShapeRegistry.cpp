@@ -73,7 +73,7 @@ void KoShapeRegistry::init() {
         KoShapeFactory * factory = factories[i];
         if ( factory->odfNameSpace().isEmpty() || factory->odfElementNames().isEmpty() )
         {
-            kDebug() << "Booh! Shape factory " << factory->id() << " sucks!" << endl;
+            kDebug(30006) << "Shape factory " << factory->id() << " does not have OdfNamespace defined, ignoring" << endl;
         }
         else {
             foreach( QString elementName, factory->odfElementNames() ) {
@@ -84,7 +84,7 @@ void KoShapeRegistry::init() {
 
                 d->factoryMap[p].insert( factory->loadingPriority(), factory );
 
-                kDebug() << "Inserting factory " << factory->id() << " for "
+                kDebug(30006) << "Inserting factory " << factory->id() << " for "
                          << p << " with priority "
                          << factory->loadingPriority() << " into factoryMap making "
                          << d->factoryMap[p].size() << " entries. " << endl;
@@ -114,7 +114,7 @@ KoShapeRegistry* KoShapeRegistry::instance()
 
 KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const
 {
-    kDebug() << "Going to check for " << e.namespaceURI() << ":" << e.tagName() << endl;
+    kDebug(30006) << "Going to check for " << e.namespaceURI() << ":" << e.tagName() << endl;
 
     // If the element is in a frame, the frame is already added by the
     // application and we only want to create a shape from the
@@ -140,7 +140,7 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
 KoShape * KoShapeRegistry::createShapeInternal( const KoXmlElement & element, KoShapeLoadingContext & context ) const
 {
     QPair<QString, QString> p = QPair<QString, QString>(element.namespaceURI(), element.tagName());
-    kDebug() << p << endl;
+    kDebug(30006) << p << endl;
 
     if ( !d->factoryMap.contains( p ) ) return 0;
 

@@ -57,6 +57,9 @@ public:
     // KoShape overrides
     bool isSelectable() const { return false; }
 
+    QSizeF size() const;
+    QRectF boundingRect() const;
+
     /// reimplemented
     virtual void saveOdf( KoShapeSavingContext & context ) const;
     // reimplemented

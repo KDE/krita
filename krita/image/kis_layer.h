@@ -249,11 +249,13 @@ public:
 
 protected:
 
+    bool hasEffectMasks();
+
     /**
      * Apply the effect masks to the given paint device, producing
      * finally the dst paint device.
      */
-    void applyEffectMasks( const KisPaintDeviceSP src,  KisPaintDeviceSP dst );
+    void applyEffectMasks( const KisPaintDeviceSP src,  KisPaintDeviceSP dst, const QRect & rc );
 
 private:
 

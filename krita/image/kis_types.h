@@ -58,12 +58,19 @@ typedef KisSharedPtrVector<KisMask> vKisMaskSP;
 typedef vKisMaskSP::iterator vKisMaskSP_it;
 typedef vKisMaskSP::const_iterator vKisMaskSP_cit;
 
-class KisTransparency;
-typedef KisSharedPtr<KisTransparency> KisTransparencySP;
-typedef KisWeakSharedPtr<KisTransparency> KisTransparencyWSP;
-typedef KisSharedPtrVector<KisTransparency> vKisTransparencySP;
-typedef vKisTransparencySP::iterator vKisTransparencySP_it;
-typedef vKisTransparencySP::const_iterator vKisTransparencySP_cit;
+class KisEffectMask;
+typedef KisSharedPtr<KisEffectMask> KisEffectMaskSP;
+typedef KisWeakSharedPtr<KisEffectMask> KisEffectMaskWSP;
+typedef KisSharedPtrVector<KisEffectMask> vKisEffectMaskSP;
+typedef vKisEffectMaskSP::iterator vKisEffectMaskSP_it;
+typedef vKisEffectMaskSP::const_iterator vKisEffectMaskSP_cit;
+
+class KisTransparencyMask;
+typedef KisSharedPtr<KisTransparencyMask> KisTransparencyMaskSP;
+typedef KisWeakSharedPtr<KisTransparencyMask> KisTransparencyMaskWSP;
+typedef KisSharedPtrVector<KisTransparencyMask> vKisTransparencyMaskSP;
+typedef vKisTransparencyMaskSP::iterator vKisTransparencyMaskSP_it;
+typedef vKisTransparencyMaskSP::const_iterator vKisTransparencyMaskSP_cit;
 
 
 class KisLayer;

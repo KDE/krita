@@ -53,6 +53,27 @@ KisLayerSP KisLayerContainerShape::groupLayer()
     return m_d->groupLayer;
 }
 
+
+QSizeF KisLayerContainerShape::size() const
+{
+    KisImageSP image = m_d->groupLayer->image();
+    if ( !image ) return QSize( 0, 0 );
+
+    QSize br = image->size();
+    return QSizeF( br.width() / image->xRes(), br.height() / image->yRes() );
+}
+
+QRectF KisLayerContainerShape::boundingRect() const
+{
+    KisImageSP image = m_d->groupLayer->image();
+    if ( !image ) return QRect();
+
+    QRect br = QRect( 0, 0, image->size().width(),image->size().height() );
+    return QRectF(int(br.left()) / image->xRes(), int(br.top()) / image->yRes(),
+                  int(1 + br.right()) / image->xRes(), int(1 + br.bottom()) / image->yRes());
+
+}
+
 void KisLayerContainerShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED( painter );

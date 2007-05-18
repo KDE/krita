@@ -57,6 +57,7 @@ public:
 
     // XXX: Make these (weak) shared pointers?
     KisTransparencyMask* transparencyMask;
+    KisEffectMaskSP previewMask;
     QList<KisEffectMask*> effectMasks;
 
     // Operation used to composite this layer with the projection of
@@ -418,10 +419,27 @@ void KisLayer::setParentPrivate( KisGroupLayerSP parent )
     m_d->parent = parent;
 }
 
-void KisLayer::applyEffectMasks( const KisPaintDeviceSP src,  KisPaintDeviceSP dst )
+bool KisLayer::hasEffectMasks()
+{
+    // If all these things don't exist, we have no effectMasks.
+    return !( m_d->transparencyMask == 0 && m_d->previewMask == 0 && m_d->effectMasks.isEmpty() );
+}
+
+void KisLayer::applyEffectMasks( const KisPaintDeviceSP src,  KisPaintDeviceSP dst, const QRect & rc )
 {
     Q_ASSERT( src != dst );
+
+
+    // First copy the src onto the dst
     KisPainter gc( dst );
+    gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+    gc.bitBlt( rc.topLeft(), src, rc );
+
+    // Then loop through the effect masks and apply them
+
+    // Then apply the preview mask
+
+    // Then apply the transparency mask
 }
 
 

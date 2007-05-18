@@ -24,9 +24,19 @@
 #include <KoID.h>
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
+#include <KoSelection.h>
+
+#include "kis_layer_shape.h"
+#include "kis_layer_container_shape.h"
+#include "kis_mask_shape.h"
+#include "kis_shape_layer.h"
 
 #include <kis_image.h>
 #include <kis_layer.h>
+#include <kis_group_layer.h>
+#include <kis_adjustment_layer.h>
+#include <kis_mask.h>
+#include <kis_paint_layer.h>
 #include <kis_brush.h>
 #include <kis_pattern.h>
 #include <kis_gradient.h>
@@ -149,6 +159,7 @@ void KisTool::updateCanvasViewRect(const QRectF &viewRect)
 
 KisImageSP KisTool::image() const
 {
+#if 0
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
     if ( !kisCanvas ) {
         kDebug(41007) << "The current canvas is not a kis canvas!\n";
@@ -158,6 +169,25 @@ KisImageSP KisTool::image() const
     KisImageSP img = kisCanvas->currentImage();
 
     return img;
+#endif
+
+    KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+
+    if ( !shape ) return 0;
+
+    if ( shape->shapeId() == KIS_LAYER_CONTAINER_ID ) {
+        return static_cast<KisLayerContainerShape*>( shape )->groupLayer()->image();
+    } else if ( shape->shapeId() ==  KIS_LAYER_SHAPE_ID) {
+        return static_cast<KisLayerShape*>( shape )->layer()->image();
+    } else if ( shape->shapeId() == KIS_MASK_SHAPE_ID ) {
+        // XXX
+        return 0;
+    } else if ( shape->shapeId() == KIS_SHAPE_LAYER_ID ) {
+        return static_cast<KisShapeLayer*>( shape )->image();
+    } else {
+        // First selected shape is not a krita layer type shape
+        return 0;
+    }
 
 }
 

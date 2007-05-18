@@ -33,7 +33,7 @@
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-
+#include <KoShapeManager.h>
 #include <KoZoomHandler.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
@@ -120,6 +120,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     setAutoFillBackground(false);
 
     QPainter gc( &pm );
+
     gc.translate( -ev->rect().topLeft() );
 
     gc.setCompositionMode( QPainter::CompositionMode_Source );
@@ -170,6 +171,13 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     gc.setRenderHint( QPainter::Antialiasing );
     gc.setRenderHint( QPainter::SmoothPixmapTransform );
     gc.translate( QPoint( -m_d->documentOffset.x(), -m_d->documentOffset.y() ) );
+
+
+    // Paint the shapes (other than the layers)
+    gc.save();
+    gc.setClipRect( ev->rect() );
+    m_d->canvas->shapeManager()->paint( gc, *m_d->viewConverter, false );
+    gc.restore();
 
     //Paint marching ants
     m_d->canvas->view()->selectionManager()->paint(gc, *m_d->viewConverter );

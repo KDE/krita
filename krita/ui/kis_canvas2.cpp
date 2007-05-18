@@ -204,6 +204,7 @@ KoShapeManager* KisCanvas2::shapeManager() const
 
     if (shape && shape->shapeId() == KIS_SHAPE_LAYER_ID)
         return dynamic_cast<KisShapeLayer*>(controller->activeLayerShape())->shapeManager();
+
     return m_d->shapeManager;
 }
 

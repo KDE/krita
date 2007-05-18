@@ -77,7 +77,7 @@ KoCanvasController::KoCanvasController(QWidget *parent)
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->margin = cfg.readEntry("canvasmargin",  0);
 
-    connect( this, SIGNAL( moveDocumentOffset( QPoint ) ), m_d->viewportWidget, SLOT( documentOffsetMoved( QPoint ) ) );
+    connect( this, SIGNAL( moveDocumentOffset(const QPoint&) ), m_d->viewportWidget, SLOT( documentOffsetMoved(const QPoint& ) ) );
 }
 
 KoCanvasController::~KoCanvasController()
@@ -444,7 +444,7 @@ void KoCanvasController::resetScrollBars()
 
 }
 
-void KoCanvasController::pan(const QPoint distance) {
+void KoCanvasController::pan(const QPoint &distance) {
     QScrollBar *hBar = horizontalScrollBar();
     if( hBar && hBar->isVisible() )
         hBar->setValue( hBar->value() + distance.x());

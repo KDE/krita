@@ -682,7 +682,7 @@ void KoDocument::removeView( KoView *view )
     d->m_views.removeAll( view );
 }
 
-const QList<KoView*>& KoDocument::views() const
+QList<KoView*> KoDocument::views() const
 {
     return d->m_views;
 }
@@ -2259,7 +2259,7 @@ int KoDocument::queryCloseExternalChildren()
     return KMessageBox::Ok;
 }
 
-void KoDocument::setTitleModified( const QString caption, bool mod )
+void KoDocument::setTitleModified( const QString &caption, bool mod )
 {
     //kDebug(30003)<<k_funcinfo<<" url: "<<url().url()<<" caption: "<<caption<<" mod: "<<mod<<endl;
     KoDocument *doc = dynamic_cast<KoDocument *>( parent() );

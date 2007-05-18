@@ -28,7 +28,7 @@ class KoPADocument;
 class KoPAPageBase;
 
 /**
- * Command for deleteing a page from a document
+ * Command for deleting a page from a document
  */
 class KOPAGEAPP_TEST_EXPORT KoPAPageDeleteCommand : public QUndoCommand
 {

@@ -35,10 +35,10 @@ public:
 
     void setCanvas( QWidget *canvas );
     QWidget *canvas() { return m_canvas; }
-    void setDocumentSize( QSize size );
+    void setDocumentSize( const QSize &size );
 
 public slots:
-    void documentOffsetMoved( QPoint );
+    void documentOffsetMoved( const QPoint &);
 
 public:
 

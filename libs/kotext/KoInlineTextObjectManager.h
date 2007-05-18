@@ -82,7 +82,7 @@ public:
      * The property will be stored to allow it to be retrieved via the intProperty() and friends.
      * @see KoInlineObject::propertyChangeListener()
      */
-    void setProperty(KoInlineObject::Property key, QVariant value);
+    void setProperty(KoInlineObject::Property key, const QVariant &value);
     /// retrieve a propery
     QVariant property(KoInlineObject::Property key) const;
     /// retrieve an int property

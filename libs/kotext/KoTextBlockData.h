@@ -45,7 +45,7 @@ public:
     struct TabLineData {
         /// the tab positions as set on the QTextOption.setTabArray()
         QList<double> tabs;
-        /// the lenght of each tab so we know which area to paint when we want to decorate it.
+        /// the length of each tab so we know which area to paint when we want to decorate it.
         QList<double> tabLength;
     };
 

@@ -71,13 +71,13 @@ void Viewport::setCanvas(QWidget *canvas)
     resetLayout();
 }
 
-void Viewport::setDocumentSize( QSize size )
+void Viewport::setDocumentSize( const QSize &size )
 {
     m_documentSize = size;
     resetLayout();
 }
 
-void Viewport::documentOffsetMoved( QPoint pt )
+void Viewport::documentOffsetMoved( const QPoint &pt )
 {
     m_documentOffset = pt;
     resetLayout();

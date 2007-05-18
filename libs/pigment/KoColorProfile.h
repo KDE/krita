@@ -66,7 +66,7 @@ class PIGMENT_EXPORT KoColorProfile {
         /**
          * @param f new filename
          */
-        void setFileName(QString f);
+        void setFileName(const QString &filename);
         
         /**
          * @return true if you can use this profile can be used to convert color from a different
@@ -82,8 +82,8 @@ class PIGMENT_EXPORT KoColorProfile {
          */
         virtual bool isSuitableForDisplay() const =0;
     protected:
-        void setName(QString name);
-        void setInfo(QString info);
+        void setName(const QString &name);
+        void setInfo(const QString &info);
     private:
         Private* const d;
 };

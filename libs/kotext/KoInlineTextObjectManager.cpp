@@ -61,7 +61,7 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
         m_listeners.append(object);
 }
 
-void KoInlineTextObjectManager::setProperty(KoInlineObject::Property key, QVariant value) {
+void KoInlineTextObjectManager::setProperty(KoInlineObject::Property key, const QVariant &value) {
     if(m_properties.contains(key)) {
         if(value == m_properties.value(key))
             return;

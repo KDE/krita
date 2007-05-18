@@ -47,7 +47,7 @@ KoLineBorder::KoLineBorder( const KoLineBorder & other )
     d->pen = other.d->pen;
 }
 
-KoLineBorder::KoLineBorder(double lineWidth, QColor color)
+KoLineBorder::KoLineBorder(double lineWidth, const QColor &color)
     : d(new Private())
 {
     d->pen.setWidthF( qMax(0.0,lineWidth) );

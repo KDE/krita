@@ -61,16 +61,16 @@ QString KoColorProfile::fileName() const
     return d->fileName;
 }
 
-void KoColorProfile::setFileName(QString f)
+void KoColorProfile::setFileName(const QString &f)
 {
     d->fileName = f;
 }
 
-void KoColorProfile::setName(QString name)
+void KoColorProfile::setName(const QString &name)
 {
     d->name = name;
 }
-void KoColorProfile::setInfo(QString info)
+void KoColorProfile::setInfo(const QString &info)
 {
     d->info = info;
 }

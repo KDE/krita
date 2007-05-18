@@ -92,7 +92,7 @@ void KoFontDia::slotApply()
 void KoFontDia::slotOk()
 {
     slotApply();
-    QDialog::accept();
+    KDialog::accept();
 }
 
 void KoFontDia::slotReset()

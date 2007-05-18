@@ -359,7 +359,7 @@ public:
     /**
      * @return a list of views this document is displayed in
      */
-    const QList<KoView*> & views() const;
+    QList<KoView*> views() const;
 
     /**
      * @return number of views this document is displayed in
@@ -781,7 +781,7 @@ public:
     void forceCurrent( bool on );
     bool isCurrent() const;
 
-    void setTitleModified( const QString caption, bool mod );
+    void setTitleModified( const QString &caption, bool mod );
 
     /**
      * Sets the document URL to empty URL

@@ -201,7 +201,7 @@ public:
      * Move the canvas over the x and y distance of the parameter distance
      * @param distance the distance in pixels.  A positive distance means moving the canvas up/left.
      */
-    void pan(const QPoint distance);
+    void pan(const QPoint &distance);
 
 signals:
     /**

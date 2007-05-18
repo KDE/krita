@@ -141,7 +141,7 @@ int KoTextLocator::indexPosition() const {
 }
 
 QString KoTextLocator::word() const {
-    if(d->document == 0) // never layed out.
+    if(d->document == 0) // layout never started
         return QString();
     QTextCursor cursor(const_cast<QTextDocument*> (d->document));
     cursor.setPosition(d->cursorPosition);

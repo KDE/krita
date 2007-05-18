@@ -65,7 +65,7 @@ class KPanelKbdSizerIcon : public QCursor
             hide();
         }
 
-        void show(const QPoint p) {
+        void show(const QPoint &p) {
             if (!isActive) {
                 originalPos = QCursor::pos();
                 qApp->setOverrideCursor(*this);
@@ -95,7 +95,7 @@ class KPanelKbdSizerIcon : public QCursor
         }
 
         // Return the difference between a position and where icon is supposed to be.
-        QSize delta(const QPoint p)
+        QSize delta(const QPoint &p)
         {
             QPoint d = p - currentPos;
             return QSize(d.x(), d.y());

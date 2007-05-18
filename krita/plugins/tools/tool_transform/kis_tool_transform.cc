@@ -37,6 +37,8 @@
 #include <KoPointerEvent.h>
 #include <KoID.h>
 #include <KoCanvasBase.h>
+#include <KoViewConverter.h>
+#include <KoCompositeOp.h>
 
 #include <kis_global.h>
 #include <kis_painter.h>
@@ -225,42 +227,36 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *e)
         switch(m_function)
         {
             case ROTATE:
-                m_clickoffset = e->pos().floorQPoint()
-                    - QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
+                m_clickoffset = e->pos() - QPoint(int(m_translateX), int(m_translateY));
                 m_clickangle = -m_a - atan2(m_clickoffset.x(),m_clickoffset.y());
                 m_clickoffset = QPoint(0, 0);
                 break;
             case MOVE:
-                m_clickoffset = e->pos().floorQPoint()
-                    - QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
+                m_clickoffset = e->pos() - QPoint(int(m_translateX), int(m_translateY));
                 break;
             case TOPSCALE:
-                m_clickoffset = e->pos().floorQPoint()
-                        - QPoint((m_topleft + m_topright)/2.0);
+                m_clickoffset = e->pos() - QPoint((m_topleft + m_topright)/2.0);
                 break;
             case TOPRIGHTSCALE:
-                m_clickoffset = e->pos().floorQPoint() - m_topright;
+                m_clickoffset = e->pos() - m_topright;
                 break;
             case RIGHTSCALE:
-                m_clickoffset = e->pos().floorQPoint()
-                        - QPoint((m_topright + m_bottomright)/2.0);
+                m_clickoffset = e->pos() - QPoint((m_topright + m_bottomright)/2.0);
                 break;
             case BOTTOMRIGHTSCALE:
-                m_clickoffset = e->pos().floorQPoint() - m_bottomright;
+                m_clickoffset = e->pos() - m_bottomright;
                 break;
             case BOTTOMSCALE:
-                m_clickoffset = e->pos().floorQPoint()
-                        - QPoint((m_bottomleft + m_bottomright)/2.0);
+                m_clickoffset = e->pos() - QPoint((m_bottomleft + m_bottomright)/2.0);
                 break;
             case BOTTOMLEFTSCALE:
-                m_clickoffset = e->pos().floorQPoint() - m_bottomleft;
+                m_clickoffset = e->pos() - m_bottomleft;
                 break;
             case LEFTSCALE:
-                m_clickoffset = e->pos().floorQPoint()
-                        - QPoint((m_topleft + m_bottomleft)/2.0);
+                m_clickoffset = e->pos() - QPoint((m_topleft + m_bottomleft)/2.0);
                 break;
             case TOPLEFTSCALE:
-                m_clickoffset = e->pos().floorQPoint() - m_topleft;
+                m_clickoffset = e->pos() - m_topleft;
                 break;
         }
         m_selecting = true;
@@ -324,260 +320,255 @@ void KisToolTransform::setFunctionalCursor()
 
 void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
 {
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
+    QPoint topleft = m_topleft;
+    QPoint topright = m_topright;
+    QPoint bottomleft = m_bottomleft;
+    QPoint bottomright = m_bottomright;
 
-        Q_ASSERT(controller);
-        QPoint topleft = m_topleft;
-        QPoint topright = m_topright;
-        QPoint bottomleft = m_bottomleft;
-        QPoint bottomright = m_bottomright;
+    QPoint mousePos = e->pos();
 
-        QPoint mousePos = e->pos().floorQPoint();
+    if (m_selecting) {
+        m_canvas->updateCanvas(convertToPt(QRect(m_startPos, m_endPos)));
 
-        if (m_subject && m_selecting) {
-            paintOutline();
+        mousePos -= m_clickoffset;
 
-            mousePos -= m_clickoffset;
+        // transform mousePos coords, so it seems like it isn't rotated and centered at 0,0
+        double newX = invrotX(mousePos.x() - m_translateX, mousePos.y() - m_translateY);
+        double newY = invrotY(mousePos.x() - m_translateX, mousePos.y() - m_translateY);
+        double dx=0, dy=0;
+        double oldScaleX = m_scaleX;
+        double oldScaleY = m_scaleY;
 
-            // transform mousePos coords, so it seems like it isn't rotated and centered at 0,0
-            double newX = invrotX(mousePos.x() - m_translateX, mousePos.y() - m_translateY);
-            double newY = invrotY(mousePos.x() - m_translateX, mousePos.y() - m_translateY);
-            double dx=0, dy=0;
-            double oldScaleX = m_scaleX;
-            double oldScaleY = m_scaleY;
-
-            if(m_function == MOVE)
-            {
-                m_translateX += mousePos.x() - m_translateX;
-                m_translateY += mousePos.y() - m_translateY;
-            }
-
-            if(m_function == ROTATE)
-            {
-                m_a = -atan2(mousePos.x() - m_translateX, mousePos.y() - m_translateY)
-                    - m_clickangle;
-            }
-
-            if(m_function == TOPSCALE)
-            {
-                dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
-                m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
-
-                // enforce same acpect if shift button is pressed
-                if(e->modifiers() & Qt::ShiftModifier)
-                {
-                    if(m_scaleX>0) // handle the mirrored cases
-                        m_scaleX = fabs(m_scaleY);
-                    else
-                        m_scaleX = -fabs(m_scaleY);
-                }
-            }
-
-            if(m_function == TOPRIGHTSCALE)
-            {
-                dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
-                m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
-
-                dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
-                m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
-
-                // enforce same aspect if shift button is pressed
-                if(e->modifiers() & Qt::ShiftModifier)
-                {
-                    if(m_scaleX < m_scaleY)
-                    {
-                        if(m_scaleX>0) // handle the mirrored cases
-                            m_scaleX = fabs(m_scaleY);
-                        else
-                            m_scaleX = -fabs(m_scaleY);
-                        dx = (m_scaleX - oldScaleX) * (m_endPos.x() - m_org_cenX);
-                    }
-                    else
-                    {
-                        if(m_scaleY>0) // handle the mirrored cases
-                            m_scaleY = fabs(m_scaleX);
-                        else
-                            m_scaleY = -fabs(m_scaleX);
-                        dy = (m_scaleY - oldScaleY) * (m_startPos.y() - m_org_cenY);
-                    }
-                }
-            }
-
-            if(m_function == RIGHTSCALE)
-            {
-                dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
-                m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
-
-                // enforce same acpect if shift button is pressed
-                if(e->modifiers() & Qt::ShiftModifier)
-                {
-                    if(m_scaleY>0) // handle the mirrored cases
-                        m_scaleY = fabs(m_scaleX);
-                    else
-                        m_scaleY = -fabs(m_scaleX);
-                }
-            }
-
-            if(m_function == BOTTOMRIGHTSCALE)
-            {
-                dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
-                m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
-
-                dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
-                m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
-
-                // enforce same acpect if shift button is pressed
-                if(e->modifiers() & Qt::ShiftModifier)
-                {
-                    if(m_scaleX < m_scaleY)
-                    {
-                        if(m_scaleX>0) // handle the mirrored cases
-                            m_scaleX = fabs(m_scaleY);
-                        else
-                            m_scaleX = -fabs(m_scaleY);
-                        dx = (m_scaleX - oldScaleX) * (m_endPos.x() - m_org_cenX);
-                    }
-                    else
-                    {
-                        if(m_scaleY>0) // handle the mirrored cases
-                            m_scaleY = fabs(m_scaleX);
-                        else
-                            m_scaleY = -fabs(m_scaleX);
-                        dy = (m_scaleY - oldScaleY) * (m_endPos.y() - m_org_cenY);
-                    }
-                }
-            }
-
-            if(m_function == BOTTOMSCALE)
-            {
-                dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
-                m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
-
-                // enforce same acpect if shift button is pressed
-                if(e->modifiers() & Qt::ShiftModifier)
-                {
-                    if(m_scaleX>0) // handle the mirrored cases
-                        m_scaleX = fabs(m_scaleY);
-                    else
-                        m_scaleX = -fabs(m_scaleY);
-                }
-            }
-
-            if(m_function == BOTTOMLEFTSCALE)
-            {
-                dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
-                m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
-
-                dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
-                m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
-
-                // enforce same acpect if shift button is pressed
-                if(e->modifiers() & Qt::ShiftModifier)
-                {
-                    if(m_scaleX < m_scaleY)
-                    {
-                        if(m_scaleX>0) // handle the mirrored cases
-                            m_scaleX = fabs(m_scaleY);
-                        else
-                            m_scaleX = -fabs(m_scaleY);
-                        dx = (m_scaleX - oldScaleX) * (m_startPos.x() - m_org_cenX);
-                    }
-                    else
-                    {
-                        if(m_scaleY>0) // handle the mirrored cases
-                            m_scaleY = fabs(m_scaleX);
-                        else
-                            m_scaleY = -fabs(m_scaleX);
-                        dy = (m_scaleY - oldScaleY) * (m_endPos.y() - m_org_cenY);
-                    }
-                }
-            }
-
-            if(m_function == LEFTSCALE)
-            {
-                dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
-                m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
-
-                // enforce same acpect if shift button is pressed
-                if(e->modifiers() & Qt::ShiftModifier)
-                {
-                    if(m_scaleY>0) // handle the mirrored cases
-                        m_scaleY = fabs(m_scaleX);
-                    else
-                        m_scaleY = -fabs(m_scaleX);
-                }
-            }
-
-            if(m_function == TOPLEFTSCALE)
-            {
-                dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
-                m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
-
-                dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
-                m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
-
-                // enforce same acpect if shift button is pressed
-                if(e->modifiers() & Qt::ShiftModifier)
-                {
-                    if(m_scaleX < m_scaleY)
-                    {
-                        if(m_scaleX>0) // handle the mirrored cases
-                            m_scaleX = fabs(m_scaleY);
-                        else
-                            m_scaleX = -fabs(m_scaleY);
-                        dx = (m_scaleX - oldScaleX) * (m_startPos.x() - m_org_cenX);
-                    }
-                    else
-                    {
-                        if(m_scaleY>0) // handle the mirrored cases
-                            m_scaleY = fabs(m_scaleX);
-                        else
-                            m_scaleY = -fabs(m_scaleX);
-                        dy = (m_scaleY - oldScaleY) * (m_startPos.y() - m_org_cenY);
-                    }
-                }
-            }
-
-            m_translateX += rotX(dx, dy);
-            m_translateY += rotY(dx, dy);
-
-            paintOutline();
-        }
-        else
+        if(m_function == MOVE)
         {
-            if(det(mousePos - topleft, topright - topleft)>0)
-                m_function = ROTATE;
-            else if(det(mousePos - topright, bottomright - topright)>0)
-                m_function = ROTATE;
-            else if(det(mousePos - bottomright, bottomleft - bottomright)>0)
-                m_function = ROTATE;
-            else if(det(mousePos - bottomleft, topleft - bottomleft)>0)
-                m_function = ROTATE;
-            else
-                m_function = MOVE;
-
-            int handleradius = int( 25 / (m_subject->zoomFactor() * m_subject->zoomFactor()) );
-
-            if(distsq(mousePos, (m_topleft + m_topright)/2.0)<=handleradius)
-                m_function = TOPSCALE;
-            if(distsq(mousePos, m_topright)<=handleradius)
-                m_function = TOPRIGHTSCALE;
-            if(distsq(mousePos, (m_topright + m_bottomright)/2.0)<=handleradius)
-                m_function = RIGHTSCALE;
-            if(distsq(mousePos, m_bottomright)<=handleradius)
-                m_function = BOTTOMRIGHTSCALE;
-            if(distsq(mousePos, (m_bottomleft + m_bottomright)/2.0)<=handleradius)
-                m_function = BOTTOMSCALE;
-            if(distsq(mousePos, m_bottomleft)<=handleradius)
-                m_function = BOTTOMLEFTSCALE;
-            if(distsq(mousePos, (m_topleft + m_bottomleft)/2.0)<=handleradius)
-                m_function = LEFTSCALE;
-            if(distsq(mousePos, m_topleft)<=handleradius)
-                m_function = TOPLEFTSCALE;
-
-            setFunctionalCursor();
+            m_translateX += mousePos.x() - m_translateX;
+            m_translateY += mousePos.y() - m_translateY;
         }
+
+        if(m_function == ROTATE)
+        {
+            m_a = -atan2(mousePos.x() - m_translateX, mousePos.y() - m_translateY)
+                - m_clickangle;
+        }
+
+        if(m_function == TOPSCALE)
+        {
+            dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
+            m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
+
+            // enforce same acpect if shift button is pressed
+            if(e->modifiers() & Qt::ShiftModifier)
+            {
+                if(m_scaleX>0) // handle the mirrored cases
+                    m_scaleX = fabs(m_scaleY);
+                else
+                    m_scaleX = -fabs(m_scaleY);
+            }
+        }
+
+        if(m_function == TOPRIGHTSCALE)
+        {
+            dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
+            m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
+
+            dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
+            m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
+
+            // enforce same aspect if shift button is pressed
+            if(e->modifiers() & Qt::ShiftModifier)
+            {
+                if(m_scaleX < m_scaleY)
+                {
+                    if(m_scaleX>0) // handle the mirrored cases
+                        m_scaleX = fabs(m_scaleY);
+                    else
+                        m_scaleX = -fabs(m_scaleY);
+                    dx = (m_scaleX - oldScaleX) * (m_endPos.x() - m_org_cenX);
+                }
+                else
+                {
+                    if(m_scaleY>0) // handle the mirrored cases
+                        m_scaleY = fabs(m_scaleX);
+                    else
+                        m_scaleY = -fabs(m_scaleX);
+                    dy = (m_scaleY - oldScaleY) * (m_startPos.y() - m_org_cenY);
+                }
+            }
+        }
+
+        if(m_function == RIGHTSCALE)
+        {
+            dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
+            m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
+
+            // enforce same acpect if shift button is pressed
+            if(e->modifiers() & Qt::ShiftModifier)
+            {
+                if(m_scaleY>0) // handle the mirrored cases
+                    m_scaleY = fabs(m_scaleX);
+                else
+                    m_scaleY = -fabs(m_scaleX);
+            }
+        }
+
+        if(m_function == BOTTOMRIGHTSCALE)
+        {
+            dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
+            m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
+
+            dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
+            m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
+
+            // enforce same acpect if shift button is pressed
+            if(e->modifiers() & Qt::ShiftModifier)
+            {
+                if(m_scaleX < m_scaleY)
+                {
+                    if(m_scaleX>0) // handle the mirrored cases
+                        m_scaleX = fabs(m_scaleY);
+                    else
+                        m_scaleX = -fabs(m_scaleY);
+                    dx = (m_scaleX - oldScaleX) * (m_endPos.x() - m_org_cenX);
+                }
+                else
+                {
+                    if(m_scaleY>0) // handle the mirrored cases
+                        m_scaleY = fabs(m_scaleX);
+                    else
+                        m_scaleY = -fabs(m_scaleX);
+                    dy = (m_scaleY - oldScaleY) * (m_endPos.y() - m_org_cenY);
+                }
+            }
+        }
+
+        if(m_function == BOTTOMSCALE)
+        {
+            dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
+            m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
+
+            // enforce same acpect if shift button is pressed
+            if(e->modifiers() & Qt::ShiftModifier)
+            {
+                if(m_scaleX>0) // handle the mirrored cases
+                    m_scaleX = fabs(m_scaleY);
+                else
+                    m_scaleX = -fabs(m_scaleY);
+            }
+        }
+
+        if(m_function == BOTTOMLEFTSCALE)
+        {
+            dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
+            m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
+
+            dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
+            m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
+
+            // enforce same acpect if shift button is pressed
+            if(e->modifiers() & Qt::ShiftModifier)
+            {
+                if(m_scaleX < m_scaleY)
+                {
+                    if(m_scaleX>0) // handle the mirrored cases
+                        m_scaleX = fabs(m_scaleY);
+                    else
+                        m_scaleX = -fabs(m_scaleY);
+                    dx = (m_scaleX - oldScaleX) * (m_startPos.x() - m_org_cenX);
+                }
+                else
+                {
+                    if(m_scaleY>0) // handle the mirrored cases
+                        m_scaleY = fabs(m_scaleX);
+                    else
+                        m_scaleY = -fabs(m_scaleX);
+                    dy = (m_scaleY - oldScaleY) * (m_endPos.y() - m_org_cenY);
+                }
+            }
+        }
+
+        if(m_function == LEFTSCALE)
+        {
+            dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
+            m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
+
+            // enforce same acpect if shift button is pressed
+            if(e->modifiers() & Qt::ShiftModifier)
+            {
+                if(m_scaleY>0) // handle the mirrored cases
+                    m_scaleY = fabs(m_scaleX);
+                else
+                    m_scaleY = -fabs(m_scaleX);
+            }
+        }
+
+        if(m_function == TOPLEFTSCALE)
+        {
+            dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
+            m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
+
+            dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
+            m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
+
+            // enforce same acpect if shift button is pressed
+            if(e->modifiers() & Qt::ShiftModifier)
+            {
+                if(m_scaleX < m_scaleY)
+                {
+                    if(m_scaleX>0) // handle the mirrored cases
+                        m_scaleX = fabs(m_scaleY);
+                    else
+                        m_scaleX = -fabs(m_scaleY);
+                    dx = (m_scaleX - oldScaleX) * (m_startPos.x() - m_org_cenX);
+                }
+                else
+                {
+                    if(m_scaleY>0) // handle the mirrored cases
+                        m_scaleY = fabs(m_scaleX);
+                    else
+                        m_scaleY = -fabs(m_scaleX);
+                    dy = (m_scaleY - oldScaleY) * (m_startPos.y() - m_org_cenY);
+                }
+            }
+        }
+
+        m_translateX += rotX(dx, dy);
+        m_translateY += rotY(dx, dy);
+
+        m_canvas->updateCanvas(convertToPt(QRect(m_startPos, m_endPos)));
+    }
+    else
+    {
+        if(det(mousePos - topleft, topright - topleft)>0)
+            m_function = ROTATE;
+        else if(det(mousePos - topright, bottomright - topright)>0)
+            m_function = ROTATE;
+        else if(det(mousePos - bottomright, bottomleft - bottomright)>0)
+            m_function = ROTATE;
+        else if(det(mousePos - bottomleft, topleft - bottomleft)>0)
+            m_function = ROTATE;
+        else
+            m_function = MOVE;
+
+        int handleradius ;//= int( 25 / (m_canvas->viewConverter()->zoomFactor() * m_canvas->viewConverter()->zoomFactor()) );
+
+        if(distsq(mousePos, (m_topleft + m_topright)/2.0)<=handleradius)
+            m_function = TOPSCALE;
+        if(distsq(mousePos, m_topright)<=handleradius)
+            m_function = TOPRIGHTSCALE;
+        if(distsq(mousePos, (m_topright + m_bottomright)/2.0)<=handleradius)
+            m_function = RIGHTSCALE;
+        if(distsq(mousePos, m_bottomright)<=handleradius)
+            m_function = BOTTOMRIGHTSCALE;
+        if(distsq(mousePos, (m_bottomleft + m_bottomright)/2.0)<=handleradius)
+            m_function = BOTTOMSCALE;
+        if(distsq(mousePos, m_bottomleft)<=handleradius)
+            m_function = BOTTOMLEFTSCALE;
+        if(distsq(mousePos, (m_topleft + m_bottomleft)/2.0)<=handleradius)
+            m_function = LEFTSCALE;
+        if(distsq(mousePos, m_topleft)<=handleradius)
+            m_function = TOPLEFTSCALE;
+
+        setFunctionalCursor();
     }
 }
 
@@ -626,12 +617,11 @@ void KisToolTransform::paint(QPainter& gc, KoViewConverter &converter)
     pen.setWidth(1);
 
     recalcOutline();
-    QPoint topleft = controller->windowToView(m_topleft);
-    QPoint topright = controller->windowToView(m_topright);
-    QPoint bottomleft = controller->windowToView(m_bottomleft);
-    QPoint bottomright = controller->windowToView(m_bottomright);
+    QPoint topleft = converter.documentToView(m_topleft).toPoint();
+    QPoint topright = converter.documentToView(m_topright).toPoint();
+    QPoint bottomleft = converter.documentToView(m_bottomleft).toPoint();
+    QPoint bottomright = converter.documentToView(m_bottomright).toPoint();
 
-    //gc.setRasterOp(Qt::NotROP);
     gc.setPen(pen);
     gc.drawRect(topleft.x()-4, topleft.y()-4, 8, 8);
     gc.drawLine(topleft.x(), topleft.y(), (topleft.x()+topright.x())/2, (topleft.y()+topright.y())/2);
@@ -655,15 +645,12 @@ void KisToolTransform::paint(QPainter& gc, KoViewConverter &converter)
 
 void KisToolTransform::transform()
 {
-
-    
-
     if (!m_currentImage || !m_currentImage->activeDevice())
         return;
 
     double tx = m_translateX - rotX(m_org_cenX * m_scaleX, m_org_cenY * m_scaleY);
     double ty = m_translateY - rotY(m_org_cenX * m_scaleX, m_org_cenY * m_scaleY);
-    KisProgressDisplayInterface *progress = m_subject->progressDisplay();
+    //KisProgressDisplayInterface *progress = m_subject->progressDisplay();
 
     // This mementoes the current state of the active device.
     TransformCmd * transaction = new TransformCmd(this, m_currentImage->activeDevice(), m_scaleX,
@@ -680,7 +667,7 @@ void KisToolTransform::transform()
     // Also restore the original selection.
     if(m_origSelection)
     {
-        QRect rc = m_origSelection->extent();
+        QRect rc = m_origSelection->selectedRect();
         rc = rc.normalized();
         m_currentImage->activeDevice()->selection()->clear();
         KisPainter sgc(KisPaintDeviceSP(m_currentImage->activeDevice()->selection().data()));
@@ -694,7 +681,7 @@ void KisToolTransform::transform()
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
     // has the previous state.
-    KisTransformWorker t(m_currentImage->activeDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(tx), int(ty), progress, m_filter);
+    KisTransformWorker t(m_currentImage->activeDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(tx), int(ty), 0/*progress*/, m_filter);
     t.run();
 
     // If canceled, go back to the memento
@@ -712,7 +699,7 @@ void KisToolTransform::transform()
     // method.
     if (transaction) {
         if (m_currentImage->undo())
-            m_currentImage->undoAdapter()->addCommandOld(transaction);
+            m_currentImage->undoAdapter()->addCommand(transaction);
         else
             delete transaction;
     }
@@ -754,7 +741,7 @@ void KisToolTransform::notifyCommandExecuted( QUndoCommand * command)
 
 void KisToolTransform::slotSetFilter(const KoID &filterID)
 {
-    m_filter = KisFilterStrategyRegistry::instance()->get(filterID);
+    m_filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
 }
 
 QWidget* KisToolTransform::createOptionWidget()
@@ -770,7 +757,7 @@ QWidget* KisToolTransform::createOptionWidget()
         this, SLOT(slotSetFilter(const KoID &)));
 
     KoID filterID = m_optWidget->cmbFilter->currentItem();
-    m_filter = KisFilterStrategyRegistry::instance()->get(filterID.id());
+    m_filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
 
 /*
     connect(m_optWidget->intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));
@@ -792,23 +779,6 @@ QWidget* KisToolTransform::createOptionWidget()
 QWidget* KisToolTransform::optionWidget()
 {
     return m_optWidget;
-}
-
-void KisToolTransform::setup(KActionCollection *collection)
-{
-    m_action = collection->action(objectName());
-
-    if (m_action == 0) {
-        m_action = new KAction(KIcon("transform"),
-                               i18n("&Transform"),
-                               collection,
-                               objectName());
-        Q_CHECK_PTR(m_action);
-        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Transform a layer or a selection"));
-        m_action->setActionGroup(actionGroup());
-        m_ownAction = true;
-    }
 }
 
 #include "kis_tool_transform.moc"

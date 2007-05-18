@@ -58,7 +58,6 @@ public:
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
-    virtual void setup(KActionCollection *collection);
     //virtual enumToolType toolType() { return TOOL_TRANSFORM; }
     virtual quint32 priority() { return 0; }
     virtual void mousePressEvent(KoPointerEvent *e);

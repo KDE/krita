@@ -192,6 +192,9 @@ void KisImage::setGlobalSelection( KisSelectionSP globalSelection )
         m_d->globalSelection = globalSelection;
 }
 
+void KisImage::removeGlobalSelection() {
+    m_d->globalSelection = 0;
+}
 
 KoColor KisImage::backgroundColor() const
 {

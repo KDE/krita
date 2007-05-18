@@ -418,6 +418,13 @@ void KisLayer::setParentPrivate( KisGroupLayerSP parent )
     m_d->parent = parent;
 }
 
+void KisLayer::applyEffectMasks( const KisPaintDeviceSP src,  KisPaintDeviceSP dst )
+{
+    Q_ASSERT( src != dst );
+    KisPainter gc( dst );
+}
+
+
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t) {
     m_temporaryTarget = t;
 }

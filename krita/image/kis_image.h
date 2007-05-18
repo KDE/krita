@@ -140,6 +140,11 @@ public:
     void setGlobalSelection( KisSelectionSP globalSelection = 0 );
 
     /**
+     * Removes the global selection.
+     */
+    void removeGlobalSelection();
+
+    /**
      * Retrieve the next automatic layername.
      */
     QString nextLayerName() const;

@@ -70,6 +70,10 @@ KoShapeManager *KisShapeLayerCanvas::shapeManager() const
     return m_shapeManager;
 }
 
+#ifdef DEBUG_REPAINT
+# include <stdlib.h>
+#endif
+
 void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 {
     kDebug(41001) << "KisShapeLayerCanvas::updateCanvas()" << endl;
@@ -96,6 +100,10 @@ void KisShapeLayerCanvas::repaint() {
         p.setRenderHint(QPainter::Antialiasing);
     p.translate(-r.x(), -r.y());
     p.setClipRect(r);
+#ifdef DEBUG_REPAINT
+    QColor color = QColor(random()%255, random()%255, random()%255);
+    p.fillRect(r, color);
+#endif
 
     m_shapeManager->paint(p, *m_viewConverter, false);
     p.end();

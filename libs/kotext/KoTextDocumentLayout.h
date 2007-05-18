@@ -55,7 +55,7 @@ public:
 
     /// set the layoutState for this document layout
     void setLayout(LayoutState *layout);
-    /// return if this layoutstate has a proper layoutState object.
+    /// return if this document layout has a proper layoutState object.
     bool hasLayouter() const;
 
     /**

@@ -19,10 +19,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KODEF_H
-#define KODEF_H
+#ifndef KOINTERACTIONSTRATEGY_H
+#define KOINTERACTIONSTRATEGY_H
 
-#include <Qt>
+#include <QList>
 
 #include <KoSelection.h>
 
@@ -103,4 +103,4 @@ protected: // members
     KoCanvasBase *m_canvas; ///< the canvas which contains getters for document-data
 };
 
-#endif /* KODEF_H */
+#endif

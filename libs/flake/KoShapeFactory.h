@@ -227,7 +227,7 @@ protected:
      * @param nameSpace the ODF name space (like
      * urn:oasis:names:tc:opendocument:xmlns:text:1.0,
      * take it from KoXmlNS.h)
-     * @param elementName the name of the elment itself, like "draw"
+     * @param elementNames the name of the element itself, like "draw"
      *
      */
     void setOdfElementNames( const QString & nameSpace, const QStringList & elementNames );

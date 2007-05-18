@@ -35,8 +35,37 @@
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))
 
+
+class KoRgbU8InvertColorTransformation : public KoColorTransformation {
+
+public:
+
+    KoRgbU8InvertColorTransformation(const KoColorSpace* cs) : m_colorSpace(cs), m_psize(cs->pixelSize())
+        {
+        }
+
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+        {
+            while(nPixels--)
+            {
+                dst[0] = KoColorSpaceMathsTraits<quint8>::max - src[0];
+                dst[1] = KoColorSpaceMathsTraits<quint8>::max - src[1];
+                dst[2] = KoColorSpaceMathsTraits<quint8>::max - src[2];
+
+                src += m_psize;
+                dst += m_psize;
+            }
+
+        }
+
+private:
+
+    const KoColorSpace* m_colorSpace;
+    quint32 m_psize;
+};
+
 KoRgbU8ColorSpace::KoRgbU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-            KoLcmsColorSpace<RgbU8Traits>("RGBA", i18n("RGB 8-bit integer/channel)"), parent, TYPE_BGRA_8, icSigRgbData, p)
+    KoLcmsColorSpace<RgbU8Traits>("RGBA", i18n("RGB 8-bit integer/channel)"), parent, TYPE_BGRA_8, icSigRgbData, p)
 {
     addChannel(new KoChannelInfo(i18n("Red"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255,0,0)));
     addChannel(new KoChannelInfo(i18n("Green"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0,255,0)));
@@ -52,4 +81,10 @@ KoRgbU8ColorSpace::KoRgbU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfi
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_SATURATION,  i18n( "Saturation" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_VALUE,  i18n( "Value" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_COLOR,  i18n( "Color" )));
+}
+
+
+KoColorTransformation* KoRgbU8ColorSpace::createInvertTransformation() const
+{
+    return new KoRgbU8InvertColorTransformation(this);
 }

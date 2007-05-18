@@ -28,14 +28,19 @@ const qint32 MAX_CHANNEL_RGB = 3;
 
 class KoRgbU8ColorSpace : public KoLcmsColorSpace<RgbU8Traits>
 {
-    public:
-        KoRgbU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
+
+public:
+
+    KoRgbU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+    virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
+    virtual KoColorTransformation* createInvertTransformation() const;
 };
 
 class KoRgbU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
+
 public:
+
     KoRgbU8ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_BGRA_8,icSigRgbData )
     {}
     virtual QString id() const { return "RGBA"; }
@@ -44,6 +49,10 @@ public:
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KoRgbU8ColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
+
+
+
+
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_H_

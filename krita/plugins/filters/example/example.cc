@@ -72,8 +72,6 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
 
     int pixelsProcessed = 0;
     setProgressTotalSteps(size.width() * size.height());
@@ -82,11 +80,17 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
 
     KoColorTransformation* inverter = cs->createInvertTransformation();
 
+    QTime t;
+    t.start();
+
 // Method one: iterate and check every pixel for selectedness. It is
 // only slightly slower than the next method and the code is very
 // clear. Note that using nextRow() instead of recreating the iterators
 // for every row makes a huge difference.
-#if 0
+
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
+
     for ( int row = 0; row < size.height(); ++row ) {
         while ( !srcIt.isDone() ) {
             if ( srcIt.isSelected() ) {
@@ -99,17 +103,21 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
         srcIt.nextRow();
         dstIt.nextRow();
     }
+    kDebug() << "Per-pixel isSelected(): " << t.elapsed() << " ms\n";
+    t.restart();
 
-
-#endif
 
     bool hasSelection = src->hasSelection();
 
 // Method two: check the number of consecutive pixels the iterators
 // points to. Take as large stretches of unselected pixels as possible
-// and pass those to the color space transform object in one go. The
-// speed advantage in this case is slight: littlecms takes most of the
-// time, not the iteration.
+// and pass those to the color space transform object in one go. It's
+// quite a bit speedier, with the speed improvement more noticeable
+// the less happens inside the color transformation.
+
+    srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
+    dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
+
     for (int row = 0; row < size.height(); ++row) {
         while( ! srcIt.isDone() )
         {
@@ -145,42 +153,14 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
         srcIt.nextRow();
         dstIt.nextRow();
     }
+    kDebug() << "Consecutive pixels: " << t.elapsed() << " ms\n";
 
-// Method three (incomplete, the case where there's a selection still
-// needs to be handled). It should be the fastest one because we cache
-// whole scanlines. In fact, it isn't faster than method 2 at all.
-#if 0
-    quint32 w = size.width();
-    quint32 h = size.height();
-    quint32 length = w * src->pixelSize();
-
-    // Allocate the buffers for the scanlines
-    quint8 * srcPixels = new quint8[length];
-    quint8 * selPixels = 0;
-    if ( hasSelection )
-         selPixels = new quint8[w * src->selection()->pixelSize()];
-    quint8 * dstPixels = new quint8[length];
-
-    for ( int row = 0; row < h; ++row ) {
-        // Prepare the scanlines
-        const_cast<KisPaintDevice*>( src.data() )->readBytes( srcPixels, dstTopLeft.x(), dstTopLeft.y() + row, w, 1 );
-        memset( dstPixels, 0, length );
-
-        // If there's a selection, iterate over the selection to find
-        // the stretches of non selected pixels and selected pixels.
-        if ( hasSelection ) {
-            const_cast<KisSelection*>( src->selection().data() )->readBytes( selPixels, dstTopLeft.x(), dstTopLeft.y() + row, size.width(), 1 );
-            // XXX: iterate over the selection bytes to determine
-            // the selected stretches
-        }
-        else {
-            inverter->transform( srcPixels, dstPixels, w );
-        }
-        dst->writeBytes( dstPixels, dstTopLeft.x(), dstTopLeft.y() + row, w, 1 );
-
-    }
-#endif
 
     delete inverter;
     setProgressDone(); // Must be called even if you don't really support progression
+
+
+    // Two inversions make no inversion? No -- because we're reading
+    // from the oldData in both loops without saving the transaction
+    // in between, both inversion loops invert the original image.
 }

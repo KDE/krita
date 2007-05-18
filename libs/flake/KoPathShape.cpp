@@ -23,6 +23,7 @@
 #include "KoPointGroup.h"
 #include "KoShapeBorderModel.h"
 #include "KoViewConverter.h"
+#include "KoPathShapeLoader.h"
 
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
@@ -478,6 +479,8 @@ bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
     }
     else // path loading
     {
+        KoPathShapeLoader loader( this );
+        loader.parseSvg( element.attributeNS( KoXmlNS::svg, "d" ), true );
     }
 
     QPointF pos;

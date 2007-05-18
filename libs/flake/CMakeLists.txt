@@ -67,6 +67,7 @@ set(flake_SRCS
     KoZoomToolFactory.cpp
     KoZoomStrategy.cpp
     KoSvgPathParser.cpp
+    KoPathShapeLoader.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp

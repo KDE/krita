@@ -71,6 +71,7 @@ class KisQPainterCanvas::Private {
 public:
     KoToolProxy * toolProxy;
     KisCanvas2 * canvas;
+    KoShapeManager * shapeManager;
     KoViewConverter * viewConverter;
     QBrush checkBrush;
     QImage prescaledImage;
@@ -88,6 +89,7 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
 
     m_d = new Private();
     m_d->canvas =  canvas;
+    m_d->shapeManager = canvas->shapeManager();
     m_d->viewConverter = canvas->viewConverter();
     m_d->gridDrawer = new QPainterGridDrawer(canvas->view()->document(), canvas->viewConverter());
     m_d->toolProxy = KoToolManager::instance()->createToolProxy(m_d->canvas);
@@ -176,7 +178,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     // Paint the shapes (other than the layers)
     gc.save();
     gc.setClipRect( ev->rect() );
-    m_d->canvas->shapeManager()->paint( gc, *m_d->viewConverter, false );
+    m_d->shapeManager->paint( gc, *m_d->viewConverter, false );
     gc.restore();
 
     //Paint marching ants

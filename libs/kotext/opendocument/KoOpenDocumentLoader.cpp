@@ -173,12 +173,14 @@ void KoOpenDocumentLoader::loadAllStyles(KoOasisLoadingContext& context)
 
 void KoOpenDocumentLoader::loadSettings(KoOasisLoadingContext& context, const QDomDocument& settings)
 {
+    kDebug(32001)<<"KoOpenDocumentLoader::loadSettings"<<endl;
     Q_UNUSED(context);
     Q_UNUSED(settings);
 }
 
 bool KoOpenDocumentLoader::loadPageLayout(KoOasisLoadingContext& context, const QString& masterPageName)
 {
+    kDebug(32001)<<"KoOpenDocumentLoader::loadPageLayout"<<endl;
     Q_UNUSED(context);
     Q_UNUSED(masterPageName);
     return true;
@@ -186,17 +188,10 @@ bool KoOpenDocumentLoader::loadPageLayout(KoOasisLoadingContext& context, const 
 
 bool KoOpenDocumentLoader::loadMasterPageStyle(KoOasisLoadingContext& context, const QString& masterPageName)
 {
+    kDebug(32001)<<"KoOpenDocumentLoader::loadMasterPageStyle"<<endl;
     Q_UNUSED(context);
     Q_UNUSED(masterPageName);
     return true;
-}
-
-void KoOpenDocumentLoader::loadHeaderFooter(KoOasisLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader)
-{
-    Q_UNUSED(context);
-    Q_UNUSED(masterPage);
-    Q_UNUSED(masterPageStyle);
-    Q_UNUSED(isHeader);
 }
 
 //1.6: KoTextDocument::loadOasisText

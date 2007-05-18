@@ -87,10 +87,20 @@ class KOTEXT_EXPORT KoOpenDocumentLoader : public QObject
         */
         virtual void loadAllStyles(KoOasisLoadingContext& context);
 
+        /**
+        * Load the settings.
+        */
         virtual void loadSettings(KoOasisLoadingContext& context, const QDomDocument& settings);
+
+        /**
+        * Load the page layout.
+        */
         virtual bool loadPageLayout(KoOasisLoadingContext& context, const QString& masterPageName);
+
+        /**
+        * Load the style of the masterpage.
+        */
         virtual bool loadMasterPageStyle(KoOasisLoadingContext& context, const QString& masterPageName);
-        virtual void loadHeaderFooter(KoOasisLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
 
         /**
         * Load the body from the \p bodyElem into the \p cursor .

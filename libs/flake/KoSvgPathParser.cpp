@@ -1,5 +1,9 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, Rob Buis <buis@kde.org>
+   Copyright (C) 2003-2005 Rob Buis <buis@kde.org>
+   Copyright (C) 2005,2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2007 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

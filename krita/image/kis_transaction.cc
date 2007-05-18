@@ -18,8 +18,6 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_tile.h"
-#include "kis_tileddatamanager.h"
-#include "kis_image.h"
 #include "kis_transaction.h"
 #include "kis_memento.h"
 #include "kis_paint_device.h"

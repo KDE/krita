@@ -25,7 +25,9 @@
 
 #include <KoStyleStack.h>
 #include <KoOasisLoadingContext.h>
+#include <KoOasisStyles.h>
 #include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
 #include <KDebug>
 
@@ -226,6 +228,15 @@ void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
         fontName = styleStack.property( KoXmlNS::fo, "font-family" );
     if ( styleStack.hasProperty( KoXmlNS::style, "font-family" ) )
         fontName = styleStack.property( KoXmlNS::style, "font-family" );
+    if ( styleStack.hasProperty( KoXmlNS::style, "font-name" ) ) {
+        // This font name is a reference to a font face declaration.
+        KoOasisStyles &styles = context.oasisStyles();
+        const KoXmlElement *fontFace = styles.findStyle(styleStack.property( KoXmlNS::style, "font-name" ));
+        if (fontFace != 0) {
+            fontName = fontFace->attributeNS(KoXmlNS::svg, "font-family", "");
+        }
+    }
+
     if ( ! fontName.isNull() ) {
         // Hmm, the remove "'" could break it's in the middle of the fontname...
         fontName = fontName.remove( "'" );

@@ -27,7 +27,7 @@ class QString;
 
 #include <flake_export.h>
 /**
- * Parser for svg path data, contained in the d attribute.
+ * Parser for svg path data, passed by argument in the parseSvg() method
  *
  * The parser delivers encountered commands and parameters by calling
  * methods that correspond to those commands. Clients have to derive
@@ -40,8 +40,9 @@ class QString;
 class FLAKE_EXPORT KoSvgPathParser
 {
 public:
+    KoSvgPathParser() {}
     virtual ~KoSvgPathParser(){}
-    void parseSVG( const QString &d, bool process = false );
+    void parseSvg( const QString &svgInputData, bool process = false );
 
 protected:
     virtual void svgMoveTo( double x1, double y1, bool abs = true ) = 0;

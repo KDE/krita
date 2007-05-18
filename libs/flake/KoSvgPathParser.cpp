@@ -90,7 +90,7 @@ const char * KoSvgPathParser::getCoord( const char *ptr, double &number )
     return ptr;
 }
 
-void KoSvgPathParser::parseSVG( const QString &s, bool process )
+void KoSvgPathParser::parseSvg( const QString &s, bool process )
 {
     if( !s.isEmpty() )
     {

@@ -63,7 +63,7 @@ void Stroke::draw (QPainter & gc)
     int y = 0;
 
     double tiltx, tilty;
-    double pre;
+    double pre = 0.0;
 
     numBristles = brush->numberOfBristles();
 
@@ -75,6 +75,9 @@ void Stroke::draw (QPainter & gc)
         y = sampleV[i]->y();
         tiltx = sampleV[i]->tiltX();
         tilty = sampleV[i]->tiltY();
+    }
+    else {
+        return; // There was no sample to initialize from
     }
 
     // using pressure info to reposition bristles

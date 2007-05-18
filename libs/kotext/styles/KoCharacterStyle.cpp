@@ -253,7 +253,8 @@ void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) { // 3.10.14
         double pointSize = styleStack.fontSize();
         //fn.setPointSizeFloat( pointSize );
-        setFontPointSize(pointSize);
+        if (pointSize > 0)
+            setFontPointSize(pointSize);
     }
 
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-weight" ) ) { // 3.10.24

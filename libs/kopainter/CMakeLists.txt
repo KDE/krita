@@ -4,7 +4,6 @@ include_directories( ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} ${PIGMENT_INCLUDE
 ########### next target ###############
 
 set(kopainter_LIB_SRCS
-   svgpathparser.cc
    kogradientmanager.cc
 )
 

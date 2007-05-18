@@ -59,7 +59,9 @@ void Stroke::storeOldPath ( double x1, double y1 )
 void Stroke::draw (QPainter & gc)
 {
     int i;
-    int x, y;
+    int x = 0;
+    int y = 0;
+
     double tiltx, tilty;
     double pre;
 

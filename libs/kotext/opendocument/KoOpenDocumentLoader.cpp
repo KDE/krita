@@ -347,28 +347,56 @@ void KoOpenDocumentLoader::loadHeading(KoOasisLoadingContext& context, const KoX
         context.listStyleStack().pop();
     }
 #else
+    int level = parent.attributeNS( KoXmlNS::text, "outline-level", QString::null ).toInt();
+    //1.6: KoOasisContext::pushOutlineListLevelStyle
+    //KoXmlElement outlineStyle = KoDom::namedItemNS( oasisStyles().officeStyle(), KoXmlNS::text, "outline-style" );
+    KoListStyle* listStyle = 0;
+    if( level > 0 ) {
+        listStyle = new KoListStyle();
+        KoListLevelProperties props;
+        //props.setListItemPrefix("ABC");
+        //props.setStyle( KoListStyle::NoItem );
+        props.setStyle( KoListStyle::DecimalItem );
+        props.setDisplayLevel(level);
+        listStyle->setLevel(props);
+    }
+
     //1.6: KWTextParag::loadOasis
-    const QString styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
-    kDebug()<<"==> HEADING styleName="<<styleName<<endl;
+    QString styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
+    kDebug()<<"==> HEADING style-name="<<styleName<<" outline-level="<<level<<endl;
     if ( !styleName.isEmpty() ) {
         const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
         //QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
         //if ( masterPageName.isEmpty() ) masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
-        kDebug(32001) << "KoOpenDocumentLoader::loadBody styleName=" << styleName << endl;
-        context.styleStack().save();
+        kDebug() << "KoOpenDocumentLoader::loadBody styleName=" << styleName << endl;
+        //context.styleStack().save();
         context.styleStack().setTypeProperties( "paragraph" );
         if( paragraphStyle )
             context.addStyles( paragraphStyle, "paragraph" );
-        context.styleStack().restore();
+        //context.styleStack().restore();
         //loadPageLayout( masterPageName, context ); // page layout
-
-        KoParagraphStyle *style = d->stylemanager->paragraphStyle(styleName);
-        if ( style ) {
-            style->loadOasis( context.styleStack() );
-            QTextBlock block = cursor.block();
-            style->applyStyle(block);
-        }
     }
+    else if( level > 0 ) //FIXME: this should work (as in add a new style to the Paragraph Style list of KWord
+        styleName = QString("Heading%1").arg(level);
+
+    KoParagraphStyle *paragStyle = d->stylemanager->paragraphStyle(styleName);
+    if( ! paragStyle ) {
+        paragStyle = new KoParagraphStyle();
+        paragStyle->setName(styleName);
+        d->stylemanager->add(paragStyle);
+        //paragStyle->loadOasis(context.styleStack());
+        //KoCharacterStyle *charstyle = paragStyle->characterStyle();
+        //charstyle->loadOasis(context);
+    }
+
+    if( listStyle ) {
+        kDebug()<<"KoOpenDocumentLoader::loadHeading with listStyle !"<<endl;
+        paragStyle->setListStyle(*listStyle);
+        delete listStyle;
+    }
+
+    QTextBlock block = cursor.block();
+    paragStyle->applyStyle(block);
 #endif
 
     //1.6: KoTextParag::loadOasisSpan

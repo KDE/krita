@@ -30,7 +30,9 @@ KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
 {
     setToolTip("A simple path shape");
     setIcon("pathshape");
-    setOdfElementNames(KoXmlNS::draw, QStringList( QString( "path") ) );
+    QStringList elementNames;
+    elementNames << "path" << "line" << "polyline" << "polygon";
+    setOdfElementNames(KoXmlNS::draw, elementNames );
     setLoadingPriority( 0 );
 }
 
@@ -51,6 +53,15 @@ KoShape * KoPathShapeFactory::createShape(const KoProperties * params) const {
 
 bool KoPathShapeFactory::supports(const KoXmlElement & e) const
 {
-    return ( e.localName() == "path" && e.namespaceURI() == KoXmlNS::draw );
+    if( e.localName() == "path" && e.namespaceURI() == KoXmlNS::draw )
+        return true;
+    if( e.localName() == "line" && e.namespaceURI() == KoXmlNS::draw )
+        return true;
+    if( e.localName() == "polyline" && e.namespaceURI() == KoXmlNS::draw )
+        return true;
+    if( e.localName() == "polygon" && e.namespaceURI() == KoXmlNS::draw )
+        return true;
+
+    return false;
 }
 

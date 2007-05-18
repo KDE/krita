@@ -678,6 +678,11 @@ protected:
      */
     int arcToCurve( double rx, double ry, double startAngle, double sweepAngle, const QPointF & offset, QPointF * curvePoints ) const;
 
+    /// Returns the viewbox from the given xml element.
+    QRectF loadOdfViewbox( const KoXmlElement & element ) const;
+    /// Applies the viewbox transformation defined in the given element
+    void applyViewboxTransformation( const KoXmlElement & element );
+
     friend class KoParameterToPathCommand;
 
     KoSubpathList m_subpaths;

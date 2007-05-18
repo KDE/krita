@@ -24,11 +24,14 @@
 #include "KoShapeBorderModel.h"
 #include "KoViewConverter.h"
 
-#include <QDebug>
-#include <QPainter>
-#include <QPainterPath>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
+#include <KoUnit.h>
+
+#include <QDebug>
+#include <QtGui/QPainter>
+#include <QtGui/QPainterPath>
 #include <math.h>
 
 class KoPathPoint::Private {
@@ -430,8 +433,109 @@ void KoPathShape::saveOdf( KoShapeSavingContext & context ) const
     context.xmlWriter().endElement();
 }
 
-bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    return false; // TODO
+bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) 
+{
+    loadOdfAttributes( element, context, OdfMandatories );
+
+    // first clear the path data from the default path
+    clear();
+
+    if( element.localName() == "line" )
+    {
+        QPointF start;
+        start.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x1", "" ) ) );
+        start.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y1", "" ) ) );
+        QPointF end;
+        end.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x2", "" ) ) );
+        end.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y2", "" ) ) );
+        moveTo( start );
+        lineTo( end );
+    }
+    else if( element.localName() == "polyline" || element.localName() == "polygon" )
+    {
+        QString points = element.attributeNS( KoXmlNS::draw, "points" ).simplified();
+        points.replace( ',', ' ' );
+        points.remove( '\r' );
+        points.remove( '\n' );
+        bool firstPoint = true;
+        QStringList coordinateList = points.split( ' ' );
+        for( QStringList::Iterator it = coordinateList.begin(); it != coordinateList.end(); ++it)
+        {
+            QPointF point;
+            point.setX( (*it).toDouble() );
+            ++it;
+            point.setY( (*it).toDouble() );
+            if( firstPoint )
+            {
+                moveTo( point );
+                firstPoint = false;
+            }
+            else
+                lineTo( point );
+        }
+        if( element.localName() == "polygon" ) 
+            close();
+    }
+    else // path loading
+    {
+    }
+
+    QPointF pos;
+    pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
+    pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
+    setPosition( pos );
+
+    applyViewboxTransformation( element );
+
+    normalize();
+
+    return true;
+}
+
+QRectF KoPathShape::loadOdfViewbox( const KoXmlElement & element ) const
+{
+    QRectF viewbox;
+
+    QString data = element.attributeNS( KoXmlNS::svg, "viewBox" );
+    if( ! data.isEmpty() )
+    {
+        data.replace( ',', ' ' );
+        QStringList coordinates = data.simplified().split( ' ', QString::SkipEmptyParts );
+        if( coordinates.count() == 4 )
+        {
+            viewbox.setRect( coordinates[0].toDouble(), coordinates[1].toDouble(),
+                             coordinates[2].toDouble(), coordinates[3].toDouble() );
+        }
+    }
+
+    return viewbox;
+}
+
+void KoPathShape::applyViewboxTransformation( const KoXmlElement & element )
+{
+    // apply viewbox transformation
+    QRectF viewBox = loadOdfViewbox( element );
+    if( ! viewBox.isEmpty() )
+    {
+        // load the desired size
+        QSizeF size;
+        size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
+        size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
+
+        // load the desired position
+        QPointF pos;
+        pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
+        pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
+
+        // creating matrix to tranform original path data into desired size and position
+        QMatrix viewMatrix;
+        viewMatrix.translate( -viewBox.left(), -viewBox.top() );
+        viewMatrix.scale( size.width()/viewBox.width(), size.height()/viewBox.height() );
+        viewMatrix.translate( pos.x(), pos.y() );
+
+        // transform the path data
+        map( viewMatrix );
+    }
 }
 
 void KoPathShape::clear()

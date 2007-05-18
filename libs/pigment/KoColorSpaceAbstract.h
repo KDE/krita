@@ -212,6 +212,7 @@ namespace {
                     m_rgba[2] = KoColorSpaceMathsTraits<quint16>::max - m_rgba[2];
                     m_colorSpace->fromRgbA16(reinterpret_cast<quint8 *>(m_rgba), dst, 1);
                     src += m_psize;
+                    dst += m_psize;
                 }
 
             }

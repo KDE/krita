@@ -192,6 +192,11 @@ void KisCPaintOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     else {
         if ( m_stroke )
             m_stroke->sampleV.push_back( newSample );
+        else {
+            delete newSample;
+            sampleCount--;
+            return;
+        }
     }
 
     if ( m_stroke ) {

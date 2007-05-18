@@ -295,34 +295,33 @@ bool KoDocumentInfo::saveOasisAboutInfo( KoXmlWriter &xmlWriter )
 
 bool KoDocumentInfo::loadOasisAboutInfo( const KoXmlNode& metaDoc )
 {
+    QStringList keywords;
     KoXmlElement e;
+    forEachElement(e, metaDoc) {
+        QString tag( e.localName() );
+        if( ! m_aboutTags.contains(tag) )
+            continue;
 
-    foreach( QString tag, m_aboutTags )
-    {
-        if( tag == "keyword" )
-        {
-            // this aren't all tags -> FIXME
-            e  = KoDom::namedItemNS( metaDoc, KoXmlNS::meta, tag.toLatin1().constData() );
-
-            if ( !e.isNull() && !e.text().isEmpty() )
-                setAboutInfo( tag, e.text() );
+        //kDebug()<<"localName="<<e.localName()<<endl;
+        if( tag == "keyword" ) {
+            if ( !e.text().isEmpty() )
+                keywords << e.text();
         }
-        else if( tag == "title" || tag == "description" || tag == "subject" ||
-                tag == "date" )
+        else if( tag == "title" || tag == "description" || tag == "subject" || tag == "date" )
         {
-            e  = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, tag.toLatin1().constData() );
-
+            KoXmlElement e  = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, tag.toLatin1().constData() );
             if ( !e.isNull() && !e.text().isEmpty() )
                 setAboutInfo( tag, e.text() );
         }
         else
         {
-            e  = KoDom::namedItemNS( metaDoc, KoXmlNS::meta, tag.toLatin1().constData() );
-
+            KoXmlElement e  = KoDom::namedItemNS( metaDoc, KoXmlNS::meta, tag.toLatin1().constData() );
             if ( !e.isNull() && !e.text().isEmpty() )
                 setAboutInfo( tag, e.text() );
         }
     }
+    if( keywords.count() > 0 )
+        setAboutInfo( "keyword", keywords.join(", ") );
 
     return true;
 }

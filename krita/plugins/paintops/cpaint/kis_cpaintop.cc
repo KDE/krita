@@ -81,7 +81,9 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
     const KisCPaintOpSettings * cpaintOpSettings =
         dynamic_cast<const KisCPaintOpSettings*>( settings );
 
-    Q_ASSERT( settings == 0 || cpaintOpSettings != 0 );
+    Q_ASSERT( cpaintOpSettings );
+    if ( !cpaintOpSettings ) return 0;
+
     int curBrush = cpaintOpSettings->brush();
     if ( curBrush > 5 ) {
         curBrush = 5;

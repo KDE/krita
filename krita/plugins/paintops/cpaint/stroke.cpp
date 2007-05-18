@@ -41,6 +41,12 @@ Stroke::Stroke (Brush * br )
 Stroke::~Stroke()
 {
     sampleV.erase ( sampleV.begin(), sampleV.end() );
+    oldPathx->erase( oldPathx->begin(), oldPathx->end() );
+    oldPathy->erase( oldPathy->begin(), oldPathy->end() );
+    valid->erase( valid->begin(), valid->end() );
+    delete valid;
+    delete oldPathx;
+    delete oldPathy;
 }
 
 

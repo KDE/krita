@@ -527,7 +527,7 @@ void KoPathShape::applyViewboxTransformation( const KoXmlElement & element )
         pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
         pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
 
-        // creating matrix to tranform original path data into desired size and position
+        // create matrix to transform original path data into desired size and position
         QMatrix viewMatrix;
         viewMatrix.translate( -viewBox.left(), -viewBox.top() );
         viewMatrix.scale( size.width()/viewBox.width(), size.height()/viewBox.height() );

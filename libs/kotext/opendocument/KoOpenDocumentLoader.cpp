@@ -492,7 +492,8 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
     // The paragraph style has a list style
     KoListStyle prevliststyle = paragStyle->listStyle();
     KoListStyle* listStyle = prevliststyle.isValid() ? new KoListStyle(prevliststyle) : new KoListStyle();
-    listStyle->loadOasis(context.styleStack());
+    listStyle->setName(styleName);
+    listStyle->loadOasis(context);
     paragStyle->setListStyle(*listStyle);
 
     // Set the style and create the textlist

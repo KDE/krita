@@ -22,6 +22,8 @@
 #include "KoTextBlockData.h"
 
 #include <KoStyleStack.h>
+#include <KoOasisStyles.h>
+#include <KoOasisLoadingContext.h>
 #include <KoXmlNS.h>
 #include <kdebug.h>
 #include <QTextCursor>
@@ -199,20 +201,74 @@ KoListStyle* KoListStyle::fromTextList(QTextList *list) {
     return answer;
 }
 
-void KoListStyle::loadOasis(KoStyleStack& styleStack)
+void KoListStyle::loadOasis(KoOasisLoadingContext& context)
 {
-    //TODO
+    KoStyleStack &styleStack = context.styleStack();
+    kDebug()<<"KoListStyle::loadOasis"<<endl;
 
-    //1.6: KoParagCounter::loadOasisListStyle and KoParagStyle::loadStyle
-    kDebug()<<"========================> KoListStyle::loadOasis"<<endl;
+    Style style = KoListStyle::NoItem;
 
-    //m_style = static_cast<Style>( importCounterType( listStyle.attributeNS( KoXmlNS::style, "num-format", QString::null)[0] ) );
-    kDebug()<<"num-format="<<styleStack.property(KoXmlNS::style, "num-format")<<endl;
-    kDebug()<<"display-levels="<<styleStack.property(KoXmlNS::text, "display-levels")<<endl;
-    kDebug()<<"bullet-char="<<styleStack.property(KoXmlNS::text, "bullet-char")<<endl;
+    KoXmlElement* listElem = context.oasisStyles().listStyles()[ name() ];
+    if( listElem ) {
+        KoXmlElement listStyle = listElem->firstChildElement("list-level-style-bullet");
+        if( ! listStyle.isNull() ) {
+            //e.attributeNS(KoXmlNS::text, "level", QString::null);
+
+            //1.6: KoParagCounter::loadOasisListStyle
+            QString bulletChar = listStyle.attributeNS( KoXmlNS::text, "bullet-char", QString::null );
+            if( ! bulletChar.isEmpty() ) {
+                // Reverse engineering, I found those codes:
+                switch( bulletChar[0].unicode() ) {
+                    case 0x2022: // small disc -> circle
+                        style = KoListStyle::CircleItem;
+                        break;
+                    case 0x25CF: // large disc -> disc
+                    case 0xF0B7: // #113361
+                        style = KoListStyle::DiscItem;
+                        break;
+                    case 0xE00C: // losange - TODO in kotext. Not in OASIS either (reserved Unicode area!)
+                        style = KoListStyle::BoxItem;
+                        break;
+                    case 0xE00A: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
+                        style = KoListStyle::SquareItem;
+                        break;
+                    case 0x27A2: // two-colors right-pointing triangle
+                                // mapping (both ways) to box for now.
+                        style = KoListStyle::BoxItem;
+                        break;
+                    case 0x2794: // arrow
+                    case 0x2717: // cross
+                    case 0x2714: // checkmark
+                        // fall through
+                    default:
+                        QChar customBulletChar = bulletChar[0];
+                        kDebug() << "Unhandled bullet code 0x" << QString::number( (uint)customBulletChar.unicode(), 16 ) << endl;
+                        /*
+                        QString customBulletFont;
+                        // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
+                        if ( listStyleProperties.hasAttributeNS( KoXmlNS::style, "font-name" ) )
+                        {
+                            customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null );
+                            kDebug() << "customBulletFont style:font-name = " << listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null ) << endl;
+                        }
+                        else if ( listStyleTextProperties.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
+                        {
+                            customBulletFont = listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString::null );
+                            kDebug() << "customBulletFont fo:font-family = " << listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString::null ) << endl;
+                        }
+                        // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
+                        */
+                        break;
+                }
+            }
+        }
+        else {
+            style = KoListStyle::DecimalItem;
+        }
+    }
 
     KoListLevelProperties llp;
-    llp.setStyle(KoListStyle::DiscItem); //KoListStyle::DecimalItem);
+    llp.setStyle(style); //KoListStyle::DecimalItem);
     llp.setLevel(0);
     setLevel(llp);
     //liststyle->setLevel( element.attribute("depth").toInt() + 1);

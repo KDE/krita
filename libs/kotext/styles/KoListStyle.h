@@ -27,7 +27,7 @@
 #include <QTextList>
 
 class KoListLevelProperties;
-class KoStyleStack;
+class KoOasisLoadingContext;
 
 /**
  * This class groups all styling-options for lists.
@@ -133,7 +133,7 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOasis(KoStyleStack& styleStack);
+    void loadOasis(KoOasisLoadingContext& context);
 
     static KoListStyle* fromTextList(QTextList *list);
 

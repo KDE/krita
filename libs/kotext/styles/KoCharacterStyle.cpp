@@ -210,9 +210,9 @@ static void importOasisUnderline( const QString& type, const QString& style,
     // We should separate them in kotext...
 }
 
+//in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
 void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
     KoStyleStack &styleStack = context.styleStack();
-    //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
 
     if ( styleStack.hasProperty( KoXmlNS::fo, "color" ) ) { // 3.10.3
         QColor color(styleStack.property( KoXmlNS::fo, "color" )); // #rrggbb format

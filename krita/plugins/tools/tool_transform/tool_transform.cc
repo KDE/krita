@@ -47,13 +47,8 @@ ToolTransform::ToolTransform(QObject *parent, const QStringList &)
 {
     setComponentData(ToolTransformFactory::componentData());
 
-    if ( parent->inherits("KoToolRegistry") )
-    {
-        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
-        KisToolTransformFactory * f = new KisToolTransformFactory(r, QStringList());
-        Q_CHECK_PTR(f);
-        r->add(f);
-    }
+    KoToolRegistry * r = KoToolRegistry::instance();
+    r->add(new KisToolTransformFactory(r, QStringList()));
 
 }
 

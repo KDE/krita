@@ -23,10 +23,13 @@
 #define KIS_TOOL_TRANSFORM_H_
 
 #include <QPoint>
+#include <QPointF>
 
-#include <kis_tool.h>
+#include <KoInteractionTool.h>
 #include <KoToolFactory.h>
+
 #include <kis_undo_adapter.h>
+#include <kis_types.h>
 
 #include "ui_wdg_tool_transform.h"
 
@@ -46,9 +49,9 @@ class WdgToolTransform : public QWidget, public Ui::WdgToolTransform
  * Transform tool
  *
  */
-class KisToolTransform : public KisTool, KisCommandHistoryListener {
+class KisToolTransform : public KoInteractionTool, KisCommandHistoryListener {
 
-    typedef KisTool super;
+    typedef KoInteractionTool super;
     Q_OBJECT
 
 public:
@@ -58,69 +61,55 @@ public:
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
-    //virtual enumToolType toolType() { return TOOL_TRANSFORM; }
     virtual quint32 priority() { return 0; }
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
-    void setScaleX(double sx) { m_scaleX = sx; }
-    void setScaleY(double sy) { m_scaleY = sy; }
-    void setTranslateX(double tx) { m_translateX = tx; }
-    void setTranslateY(double ty) { m_translateY = ty; }
-    void setAngle(double a) { m_a = a; }
     void paint(QPainter& gc, KoViewConverter &converter);
+    KisImageSP image() const;
 
 public:
 
     void notifyCommandAdded(QUndoCommand *);
     void notifyCommandExecuted(QUndoCommand *);
 
-public:
+public slots:
+    virtual void activate(bool temporary);
     virtual void deactivate();
 
 private:
 
     void transform();
     void recalcOutline();
-    double rotX(double x, double y) { return m_cosa*x - m_sina*y;};
-    double rotY(double x, double y) { return m_sina*x + m_cosa*y;};
-    double invrotX(double x, double y) { return m_cosa*x + m_sina*y;};
-    double invrotY(double x, double y) { return -m_sina*x + m_cosa*y;};
-    int det(QPoint v,QPoint w);
-    int distsq(QPoint v,QPoint w);
+    QPointF rot(double x, double y) { return QPointF(m_cosa*x - m_sina*y, m_sina*x + m_cosa*y);};
+    QPointF invrot(double x, double y) { return QPointF(m_cosa*x + m_sina*y, -m_sina*x + m_cosa*y);};
+    int det(QPointF v,QPointF w);
+    double distsq(QPointF v,QPointF w);
     void setFunctionalCursor();
     void initHandles();
 
 private slots:
 
     void slotSetFilter(const KoID &);
-    void setStartX(int x) { m_startPos.setX(x); }
-    void setStartY(int y) { m_startPos.setY(y); }
-    void setEndX(int x) { m_endPos.setX(x); }
-    void setEndY(int y) { m_endPos.setY(y); }
-
-protected slots:
-    virtual void activate();
 
 private:
     enum function {ROTATE,MOVE,TOPLEFTSCALE,TOPSCALE,TOPRIGHTSCALE,RIGHTSCALE,
                 BOTTOMRIGHTSCALE, BOTTOMSCALE,BOTTOMLEFTSCALE, LEFTSCALE};
     QCursor m_sizeCursors[8];
     function m_function;
-    QPoint m_startPos;
-    QPoint m_endPos;
+    QPoint m_originalTopLeft;  //in image coords
+    QPoint m_originalBottomRight;  //in image coords
+    QPointF m_originalCenter;   //in image coords
+    QPointF m_translate;   //in image coords
     bool m_selecting;
-    QPoint m_topleft;
-    QPoint m_topright;
-    QPoint m_bottomleft;
-    QPoint m_bottomright;
+    bool m_actualyMoveWhileSelected;
+    QPointF m_topleft;  //in image coords
+    QPointF m_topright;  //in image coords
+    QPointF m_bottomleft;  //in image coords
+    QPointF m_bottomright;  //in image coords
     double m_scaleX;
     double m_scaleY;
-    double m_translateX;
-    double m_translateY;
-    QPoint m_clickoffset;
-    double m_org_cenX;
-    double m_org_cenY;
+    QPointF m_clickoffset;
     double m_cosa;
     double m_sina;
     double m_a;
@@ -143,7 +132,7 @@ public:
         : KoToolFactory(parent, "KisToolTransform", i18n( "Transform" ))
         {
             setToolTip( i18n( "Transform a layer or a selection" ) );
-            setToolType( TOOL_TYPE_TRANSFORM );
+            //setToolType( TOOL_TYPE_TRANSFORM );
             setIcon( "transform" );
             setPriority( 0 );
         };

@@ -71,7 +71,7 @@ public:
     mutable bool selectionDeselected;
     mutable KisSelectionSP selection;
 
-    // The protection mask is a second way to affect writing. If not "selected",
+    // The protection mask is a second way to affect writing. Where "selected",
     // then the paint device pixel should not be written to.
     mutable bool hasProtectionMask;
     mutable KisSelectionSP protectionMask;

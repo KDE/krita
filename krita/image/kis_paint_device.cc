@@ -514,7 +514,7 @@ QRect KisPaintDevice::exactBounds() const
     KisVLineConstIterator vit = createVLineConstIterator(x, boundY, boundH);
     for (qint32 x2 = x; x2 < x + w ; ++x2) {
         while (!vit.isDone() && found == false) {
-            if (memcmp(it.rawData(), defaultPixel, m_d->pixelSize) != 0) {
+            if (memcmp(vit.rawData(), defaultPixel, m_d->pixelSize) != 0) {
                 boundX = x2;
                 found = true;
                 break;

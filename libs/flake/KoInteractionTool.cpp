@@ -25,6 +25,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QBitmap>
+#include <QTransform>
 
 #include "KoPointerEvent.h"
 #include "KoToolManager.h"
@@ -502,14 +503,22 @@ void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
     QPolygonF outline;
 
     painter.save();
-    painter.setRenderHint( QPainter::Antialiasing, false );
+
     painter.setPen( pen );
     bool editable=false;
     foreach(KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
+        
+        
         QMatrix matrix = shape->transformationMatrix(0);
         outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), shape->size())));
         for(int i =0; i<outline.count(); i++)
             outline[i] = converter.documentToView(outline.value(i));
+
+        // position the points in the middle of the pixels
+        // for sharper on-screen rendering
+        outline = outline.toPolygon();
+        outline.translate(0.5,0.5);
+        
         painter.drawPolygon(outline);
         if(!shape->isLocked())
             editable = true;
@@ -545,7 +554,7 @@ void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
     painter.setBrush(Qt::yellow);
 
     // the 8 move rects
-    QRectF rect( QPointF(0,0), QSizeF(2*m_handleRadius,2*m_handleRadius) );
+    QRectF rect( QPointF(0.5,0.5), QSizeF(2*m_handleRadius,2*m_handleRadius) );
     pen.setWidthF(0);
     painter.setPen(pen);
     rect.moveCenter(outline.value(0));

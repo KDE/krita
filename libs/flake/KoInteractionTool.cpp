@@ -537,8 +537,10 @@ void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
     if( !editable)
         return;
 
+    painter.setRenderHint( QPainter::Antialiasing, false );
+    
     pen = QPen( Qt::black );
-    pen.setWidthF(1.2);
+    pen.setWidth(1);
     painter.setPen(pen);
     painter.setBrush(Qt::yellow);
 
@@ -562,6 +564,7 @@ void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
     painter.drawRect(rect);
     rect.moveCenter((outline.value(3)+outline.value(0))/2);
     painter.drawRect(rect);
+
 
 #if 0
     // draw the move arrow(s)

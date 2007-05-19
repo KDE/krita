@@ -213,6 +213,7 @@ void KoListStyle::loadOasis(KoStyleStack& styleStack)
 
     KoListLevelProperties llp;
     llp.setStyle(KoListStyle::DiscItem); //KoListStyle::DecimalItem);
+    llp.setLevel(0);
     setLevel(llp);
     //liststyle->setLevel( element.attribute("depth").toInt() + 1);
 }

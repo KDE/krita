@@ -460,43 +460,47 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
     context.setCurrentListStyleName( oldListStyleName );
     return lastParagraph;
 #else
-    context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
 
+    // Get the name of the used style
     QString styleName;
-    if( parent.hasAttributeNS( KoXmlNS::text, "style-name" ) )
-        styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
+    if ( parent.hasAttributeNS( KoXmlNS::text, "style-name" ) ) {
+        styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
+        KoXmlElement* listElem = context.oasisStyles().listStyles()[ styleName ];
+        if(listElem) {
+            context.addStyles( listElem, "paragraph" );
+        }
+    }
 
+    kDebug()<<"KoOpenDocumentLoader::loadList styleName="<<styleName<<endl;
+
+    // Get the matching paragraph style
     //QString userStyleName = context.styleStack().userStyleName( "paragraph" );
-    KoParagraphStyle *paragstyle = d->stylemanager->paragraphStyle(styleName);
-    if( ! paragstyle ) {
-        //paragstyle = d->stylemanager->defaultParagraphStyle();
-        paragstyle = new KoParagraphStyle();
-        paragstyle->setName(styleName);
-        d->stylemanager->add(paragstyle);
+    KoParagraphStyle *paragStyle = d->stylemanager->paragraphStyle(styleName);
+    if( ! paragStyle ) {
+        //paragStyle = d->stylemanager->defaultParagraphStyle();
+        paragStyle = new KoParagraphStyle();
+        paragStyle->setName(styleName);
+        d->stylemanager->add(paragStyle);
         context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
-        paragstyle->loadOasis(context.styleStack()); // load the KoParagraphStyle from the stylestack
-        KoCharacterStyle *charstyle = paragstyle->characterStyle();
+        paragStyle->loadOasis(context.styleStack()); // load the KoParagraphStyle from the stylestack
+        KoCharacterStyle *charstyle = paragStyle->characterStyle();
         context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
         charstyle->loadOasis(context); // load the KoCharacterStyle from the stylestack
     }
-    //context.styleStack().setTypeProperties( "paragraph" );
-    //style->loadOasis( context.styleStack() );
+    //context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
 
-    KoListStyle *liststyle =  new KoListStyle();
-    liststyle->loadOasis(context.styleStack());
-    paragstyle->setListStyle(*liststyle);
+    // The paragraph style has a list style
+    KoListStyle prevliststyle = paragStyle->listStyle();
+    KoListStyle* listStyle = prevliststyle.isValid() ? new KoListStyle(prevliststyle) : new KoListStyle();
+    listStyle->loadOasis(context.styleStack());
+    paragStyle->setListStyle(*listStyle);
 
-    //QTextBlockFormat emptyTbf1;
-    //QTextCharFormat emptyCf1;
-    //cursor.insertBlock(emptyTbf1, emptyCf1);
-
-    //TESTCASE
+    // Set the style and create the textlist
     QTextListFormat listformat;
-    //listformat.setIndent(2);
-    listformat.setStyle( QTextListFormat::ListDisc );
+    listStyle->level(0).applyStyle(listformat);
     QTextList* list = cursor.insertList(listformat);
 
-    // Iterate over list items
+    // Iterate over list items and add them to the textlist
     for(QDomNode n = parent.firstChild(); !n.isNull(); n = n.nextSibling()) {
         QDomElement e = n.toElement();
         if( e.isNull() ) continue;
@@ -505,11 +509,15 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
         loadBody(context, e, cursor);
         QTextBlock current = cursor.block();
         //TODO merge all blocks added by the item to apply the style on all of them
-        for(QTextBlock b = prev; b.isValid() && b != current; b = b.next())
+        for(QTextBlock b = prev; b.isValid() && b != current; b = b.next()) {
+            //paragStyle->applyStyle(b);
+            //listStyle->applyStyle(b);
             list->add(b);
+        }
         //list->add( cursor.block() );
     }
-    //delete liststyle;
+
+    delete listStyle;
 
     QTextBlockFormat emptyTbf;
     QTextCharFormat emptyCf;

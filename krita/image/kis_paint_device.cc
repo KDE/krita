@@ -59,7 +59,6 @@ class KisPaintDevice::Private {
 public:
 
     KisLayerWSP parentLayer;
-    quint8* defaultPixel;
     bool extentIsValid;
     qint32 x;
     qint32 y;
@@ -180,10 +179,11 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name)
     m_d->pixelSize = colorSpace->pixelSize();
     m_d->nChannels = colorSpace->channelCount();
 
-    m_d->defaultPixel = new quint8 [ m_d->pixelSize ];
-    colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, m_d->defaultPixel);
+    quint8 *defaultPixel = new quint8 [ m_d->pixelSize ];
+    colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, defaultPixel);
 
-    m_datamanager = new KisDataManager(m_d->pixelSize, m_d->defaultPixel);
+    m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
+    delete [] defaultPixel;
 
     Q_CHECK_PTR(m_datamanager);
     m_d->extentIsValid = true;
@@ -232,10 +232,11 @@ KisPaintDevice::KisPaintDevice(KisLayerWSP parent, KoColorSpace * colorSpace, co
     m_d->pixelSize = m_d->colorSpace->pixelSize();
     m_d->nChannels = m_d->colorSpace->channelCount();
 
-    m_d->defaultPixel = new quint8[ m_d->pixelSize ];
-    colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, m_d->defaultPixel);
+    quint8 *defaultPixel = new quint8[ m_d->pixelSize ];
+    colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, defaultPixel);
 
-    m_datamanager = new KisDataManager(m_d->pixelSize, m_d->defaultPixel);
+    m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
+    delete [] defaultPixel;
     Q_CHECK_PTR(m_datamanager);
     m_d->extentIsValid = true;
     m_d->paintEngine = new KisPaintEngine();
@@ -269,8 +270,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         m_d->protectionMask = 0;
 
         m_d->pixelSize = rhs.m_d->pixelSize;
-        m_d->defaultPixel = new quint8[ m_d->pixelSize ];
-        memcpy(m_d->defaultPixel, rhs.m_d->defaultPixel, m_d->pixelSize * sizeof(quint8));
 
         m_d->nChannels = rhs.m_d->nChannels;
         if(rhs.m_d->exifInfo)
@@ -295,7 +294,6 @@ KisPaintDevice::~KisPaintDevice()
     }
     m_d->longRunningFilters.clear();
     delete m_d->paintEngine;
-    delete m_d->defaultPixel;
     //delete m_d->exifInfo;
     delete m_d;
 }
@@ -478,12 +476,14 @@ QRect KisPaintDevice::exactBounds() const
     extent(x, y, w, h);
     extent(boundX, boundY, boundW, boundH);
 
+    const quint8* defaultPixel = m_datamanager->defaultPixel();
+
     bool found = false;
 
     KisHLineConstIterator it = this->createHLineConstIterator(x, y, w);
     for (qint32 y2 = y; y2 < y + h ; ++y2) {
         while (!it.isDone() && found == false) {
-            if (memcmp(it.rawData(), m_d->defaultPixel, m_d->pixelSize) != 0) {
+            if (memcmp(it.rawData(), defaultPixel, m_d->pixelSize) != 0) {
                 boundY = y2;
                 found = true;
                 break;
@@ -499,7 +499,7 @@ QRect KisPaintDevice::exactBounds() const
     for (qint32 y2 = y + h; y2 > y ; --y2) {
         it = this->createHLineConstIterator(x, y2, w);
         while (!it.isDone() && found == false) {
-            if (memcmp(it.rawData(), m_d->defaultPixel, m_d->pixelSize) != 0) {
+            if (memcmp(it.rawData(), defaultPixel, m_d->pixelSize) != 0) {
                 boundH = y2 - boundY + 1;
                 found = true;
                 break;
@@ -511,10 +511,10 @@ QRect KisPaintDevice::exactBounds() const
 
     found = false;
 
-    KisVLineConstIterator vit = createVLineConstIterator(x, y, h);
+    KisVLineConstIterator vit = createVLineConstIterator(x, boundY, boundH);
     for (qint32 x2 = x; x2 < x + w ; ++x2) {
         while (!vit.isDone() && found == false) {
-            if (memcmp(it.rawData(), m_d->defaultPixel, m_d->pixelSize) != 0) {
+            if (memcmp(it.rawData(), defaultPixel, m_d->pixelSize) != 0) {
                 boundX = x2;
                 found = true;
                 break;
@@ -531,7 +531,7 @@ QRect KisPaintDevice::exactBounds() const
     for (qint32 x2 = x + w; x2 > x ; --x2) {
         vit = this->createVLineConstIterator(x2, y, h);
         while (!vit.isDone() && found == false) {
-            if (memcmp(vit.rawData(), m_d->defaultPixel, m_d->pixelSize) != 0) {
+            if (memcmp(vit.rawData(), defaultPixel, m_d->pixelSize) != 0) {
                 boundW = x2 - boundX + 1; // XXX: I commented this
                                           // +1 out, but why? It
                                           // should be correct, since
@@ -575,7 +575,7 @@ void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *
 
 void KisPaintDevice::clear( const QRect & rc )
 {
-    m_datamanager->clear( rc.x(), rc.y(), rc.width(), rc.height(), m_d->defaultPixel );
+    m_datamanager->clear( rc.x(), rc.y(), rc.width(), rc.height(), m_datamanager->defaultPixel() );
 }
 
 void KisPaintDevice::mirrorX()

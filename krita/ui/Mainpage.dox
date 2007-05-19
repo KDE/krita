@@ -1,3 +1,4 @@
 /*
  * \mainpage Krita User Interface Library: kritaui
 */
+PREDEFINED=HAVE_OPENGL HAVE_GLEW

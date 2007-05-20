@@ -122,6 +122,9 @@ void KisLayerTest::testCreation()
     channels.fill( true );
     layer->setChannelFlags( channels );
     QCOMPARE( layer->channelFlags().at( 0 ), true );
+    QCOMPARE( layer->channelFlags().at( 1 ), true );
+    QCOMPARE( layer->channelFlags().at( 2 ), true );
+    QCOMPARE( layer->channelFlags().at( 3 ), true );
 
     layer->setOpacity( OPACITY_TRANSPARENT );
     QCOMPARE( layer->opacity(), OPACITY_TRANSPARENT );
@@ -135,6 +138,82 @@ void KisLayerTest::testCreation()
 
 void KisLayerTest::testOrdering()
 {
+    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace( "RGBA", 0 );
+    KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "merge test" );
+
+    KisLayerSP layer1 = new TestLayer( image, "test", OPACITY_OPAQUE );
+    KisLayerSP layer2 = new TestLayer( image, "test", OPACITY_OPAQUE );
+    KisLayerSP layer3 = new TestLayer( image, "test", OPACITY_OPAQUE );
+
+
+    /*
+      +---------+
+      | layer 2 |
+      | layer 3 |
+      | layer 1 |
+      |root     |
+      +---------+
+     */
+
+    image->addLayer( layer1, image->rootLayer() );
+    image->addLayer( layer2, image->rootLayer() );
+    image->addLayer( layer3, image->rootLayer(), layer1 );
+
+    QVERIFY( image->nlayers() == 3 );
+
+    QVERIFY( layer1->parentLayer() == image->rootLayer() );
+    QVERIFY( layer2->parentLayer() == image->rootLayer() );
+    QVERIFY( layer3->parentLayer() == image->rootLayer() );
+
+    QVERIFY( image->rootLayer()->firstChild() == layer2 );
+    QVERIFY( image->rootLayer()->lastChild() == layer1 );
+
+    QVERIFY( image->rootLayer()->at( 0 ) == layer2 );
+    QVERIFY( image->rootLayer()->at( 1 ) == layer3 );
+    QVERIFY( image->rootLayer()->at( 2 ) == layer1 );
+
+    QVERIFY( image->rootLayer()->index( layer1 ) == 2 );
+    QVERIFY( image->rootLayer()->index( layer3 ) == 1 );
+    QVERIFY( image->rootLayer()->index( layer2 ) == 0 );
+
+    QVERIFY( layer3->prevSibling() == layer2 );
+    QVERIFY( layer2->prevSibling() == 0 );
+    QVERIFY( layer1->prevSibling() == layer3 );
+
+    QVERIFY( layer3->nextSibling() == layer1 );
+    QVERIFY( layer2->nextSibling() == layer3 );
+    QVERIFY( layer1->nextSibling() == 0 );
+
+
+    /*
+      +---------+
+      | layer 3 |
+      | layer 2 |
+      | layer 1 |
+      |root     |
+      +---------+
+     */
+    image->moveLayer( layer2, image->rootLayer(), layer1 );
+
+    QVERIFY( image->rootLayer()->firstChild() == layer3 );
+    QVERIFY( image->rootLayer()->lastChild() == layer1 );
+
+    QVERIFY( image->rootLayer()->at( 0 ) == layer3 );
+    QVERIFY( image->rootLayer()->at( 1 ) == layer2 );
+    QVERIFY( image->rootLayer()->at( 2 ) == layer1 );
+
+    QVERIFY( image->rootLayer()->index( layer1 ) == 2 );
+    QVERIFY( image->rootLayer()->index( layer2 ) == 1 );
+    QVERIFY( image->rootLayer()->index( layer3 ) == 0 );
+
+    QVERIFY( layer3->prevSibling() == 0 );
+    QVERIFY( layer2->prevSibling() == layer3 );
+    QVERIFY( layer1->prevSibling() == layer2 );
+
+    QVERIFY( layer3->nextSibling() == layer2 );
+    QVERIFY( layer2->nextSibling() == layer1 );
+    QVERIFY( layer1->nextSibling() == 0 );
+
 }
 
 void KisLayerTest::testEffectMasks()

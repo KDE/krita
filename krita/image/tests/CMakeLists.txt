@@ -52,4 +52,17 @@ add_test(krita-image-KisFilterConfigurationTester KisFilterConfigurationTester)
 
 ########### next target ###############
 
+set(kis_effect_mask_test_SRCS kis_effect_mask_test.cpp )
+
+kde4_automoc(${kis_effect_mask_test_SRCS})
+
+kde4_add_executable(KisEffectMaskTest RUN_UNINSTALLED ${kis_effect_mask_test_SRCS})
+
+target_link_libraries(KisEffectMaskTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
+
+add_test(krita-image-KisEffectMaskTest KisEffectMaskTest)
+
+########### next target ###############
+
+
 endif(KDE4_BUILD_TESTS)

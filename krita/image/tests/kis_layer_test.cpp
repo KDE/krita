@@ -28,6 +28,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_paint_device.h"
+#include "kis_effect_mask.h"
 
 #include "kis_types.h"
 #include "kis_layer.h"
@@ -219,6 +220,11 @@ void KisLayerTest::testOrdering()
 
 void KisLayerTest::testEffectMasks()
 {
+    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace( "RGBA", 0 );
+    KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "merge test" );
+
+    KisLayerSP layer1 = new TestLayer( image, "test", OPACITY_OPAQUE );
+
 }
 
 

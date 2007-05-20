@@ -18,8 +18,9 @@
 */
 
 #ifdef QCA2
+#include "KoEncryptedStore.h"
+#include "KoXmlReader.h"
 
-#include <KoXmlReader.h>
 #include <QString>
 #include <QByteArray>
 #include <QIODevice>
@@ -28,7 +29,6 @@
 #include <QBuffer>
 #include <kpassworddialog.h>
 #include <knewpassworddialog.h>
-#include "KoEncryptedStore.h"
 #include <kwallet.h>
 #include <klocale.h>
 #include <kfilterdev.h>

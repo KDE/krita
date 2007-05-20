@@ -18,19 +18,19 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "KoShapeRegistry.h"
+#include "KoPluginLoader.h"
+#include "KoPathShapeFactory.h"
+#include "KoShapeLoadingContext.h"
+#include "KoXmlReader.h"
+#include "KoXmlNS.h"
+
 #include <QString>
 #include <QHash>
 #include <QMultiMap>
 
 #include <kdebug.h>
 #include <kstaticdeleter.h>
-
-#include "KoPluginLoader.h"
-#include "KoShapeRegistry.h"
-#include "KoPathShapeFactory.h"
-#include "KoShapeLoadingContext.h"
-#include "KoXmlReader.h"
-#include "KoXmlNS.h"
 
 class KoShapeRegistry::Private
 {

@@ -16,12 +16,11 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#include "KoColorSlider.h"
+#include "KoColorSpace.h"
 
 #include <QColor>
 #include <QPainter>
-
-#include "KoColorSlider.h"
-#include "KoColorSpace.h"
 
 KoColorSlider::KoColorSlider(QWidget* parent)
   : KSelector(parent)

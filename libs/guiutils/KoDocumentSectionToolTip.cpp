@@ -16,14 +16,14 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   Boston, MA 02110-1301, USA.
 */
+#include "KoDocumentSectionToolTip.h"
+#include "KoDocumentSectionModel.h"
 
 #include <QImage>
 #include <QModelIndex>
 #include <QTextDocument>
 #include <QUrl>
 #include <klocale.h>
-#include "KoDocumentSectionModel.h"
-#include "KoDocumentSectionToolTip.h"
 
 KoDocumentSectionToolTip::KoDocumentSectionToolTip()
 {

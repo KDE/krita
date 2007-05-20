@@ -20,9 +20,11 @@
 #ifndef KO_DOCUMENT_SECTION_PROPERTY_ACTION_P_H
 #define KO_DOCUMENT_SECTION_PROPERTY_ACTION_P_H
 
-#include <QPersistentModelIndex>
 #include "KoDocumentSectionModel.h"
 #include "KoDocumentSectionView.h"
+
+#include <QPersistentModelIndex>
+#include <QAction>
 
 /**
  * Internal class for the KoDocumentSectionView widget. Provides a

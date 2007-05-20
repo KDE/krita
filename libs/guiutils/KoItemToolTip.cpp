@@ -16,6 +16,7 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   Boston, MA 02110-1301, USA.
 */
+#include "KoItemToolTip.h"
 
 #include <QApplication>
 #include <QBasicTimer>
@@ -28,7 +29,6 @@
 #include <QTextDocument>
 #include <QTimerEvent>
 #include <QToolTip>
-#include "KoItemToolTip.h"
 
 class KoItemToolTip::Private
 {

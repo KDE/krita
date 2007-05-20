@@ -16,6 +16,10 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   Boston, MA 02110-1301, USA.
 */
+#include "KoDocumentSectionView.h"
+#include "KoDocumentSectionPropertyAction_p.h"
+#include "KoDocumentSectionDelegate.h"
+#include "KoDocumentSectionModel.h"
 
 #include <QtDebug>
 #include <QContextMenuEvent>
@@ -24,10 +28,6 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QPersistentModelIndex>
-#include "KoDocumentSectionPropertyAction_p.h"
-#include "KoDocumentSectionDelegate.h"
-#include "KoDocumentSectionModel.h"
-#include "KoDocumentSectionView.h"
 
 class KoDocumentSectionView::Private
 {

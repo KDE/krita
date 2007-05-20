@@ -49,8 +49,8 @@ set(koguiutils_LIB_SRCS
     KoImageCollection.cpp
    KoColorDocker.cpp
    KoResourceChooser.cpp
-   KoColorSlider.cc
-   KoXYColorSelector.cc
+   KoColorSlider.cpp
+   KoXYColorSelector.cpp
    KoUniColorChooser.cpp
    KoUniColorDialog.cpp
    KoColorPatch.cpp

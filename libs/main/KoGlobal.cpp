@@ -18,7 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "config-prefix.h"
+#include "KoGlobal.h"
+
+#include <config-prefix.h>
 
 #include <QPaintDevice>
 #include <QFont>
@@ -27,7 +29,6 @@
 #include <QX11Info>
 #endif
 
-#include <KoGlobal.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>

@@ -18,35 +18,23 @@
 */
 
 // local directory
+#include "KoView.h"
 #include "KoDockRegistry.h"
-
-#include <KoView.h>
-#include <KoDocument.h>
-#include <KoMainWindow.h>
-#include <KoFrame.h>
-// #include <KoViewIface.h>
+#include "KoDocument.h"
+#include "KoMainWindow.h"
+#include "KoFrame.h"
 #include "KoViewAdaptor.h"
-#include <KoDocumentChild.h>
-#include <KoDockFactory.h>
+#include "KoDocumentChild.h"
+#include "KoDockFactory.h"
+
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kglobal.h>
-#include <kdebug.h>
 #include <kparts/partmanager.h>
 #include <kparts/event.h>
-#include <kcursor.h>
-#include <assert.h>
 #include <kstatusbar.h>
 #include <QTimer>
 #include <QtGui/QDockWidget>
-//Added by qt3to4:
-#include <Q3PtrList>
-#include <QEvent>
-#include <Q3ValueList>
-#include <QMouseEvent>
-#include <QCustomEvent>
-#include <kicon.h>
 #include <QToolBar>
 #include <QApplication>
 
@@ -377,7 +365,7 @@ void KoView::partActivateEvent( KParts::PartActivateEvent *event )
 {
   if ( event->part() != (KParts::Part *)koDocument() )
   {
-    assert( event->part()->inherits( "KoDocument" ) );
+    Q_ASSERT( event->part()->inherits( "KoDocument" ) );
 
     KoDocumentChild *child = koDocument()->child( (KoDocument *)event->part() );
     if ( child && event->activated() )
@@ -417,7 +405,7 @@ void KoView::partSelectEvent( KParts::PartSelectEvent *event )
 {
   if ( event->part() != (KParts::Part *)koDocument() )
   {
-    assert( event->part()->inherits( "KoDocument" ) );
+    Q_ASSERT( event->part()->inherits( "KoDocument" ) );
 
     KoDocumentChild *child = koDocument()->child( (KoDocument *)event->part() );
 
@@ -710,7 +698,7 @@ void KoView::print( KPrinter & )
 }
 
 void KoView::newView() {
-    assert( ( d!=0L && d->m_doc ) );
+    Q_ASSERT( ( d!=0L && d->m_doc ) );
 
     KoDocument *thisDocument = d->m_doc;
     KoMainWindow *shell = new KoMainWindow( thisDocument->componentData() );

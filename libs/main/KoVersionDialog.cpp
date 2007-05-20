@@ -17,7 +17,10 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#include "KoVersionDialog.h"
 
+#include "KoMainWindow.h"
+#include "KoQueryTrader.h"
 
 #include <QFile>
 #include <QGridLayout>
@@ -36,11 +39,6 @@
 #include <ktemporaryfile.h>
 
 #include <q3multilineedit.h>
-
-#include "KoMainWindow.h"
-#include "KoQueryTrader.h"
-
-#include "KoVersionDialog.h"
 
 
 KoVersionDialog::KoVersionDialog( QWidget* parent, KoDocument *doc  )

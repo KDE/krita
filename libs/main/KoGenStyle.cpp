@@ -15,18 +15,15 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#include "KoGenStyle.h"
+#include "KoGenStyles.h"
+
+#include <KoXmlWriter.h>
 
 #include <float.h>
 
 #include <Q3ValueList>
-
 #include <kdebug.h>
-
-#include <KoXmlWriter.h>
-#include "KoGenStyles.h"
-
-#include "KoGenStyle.h"
-
 
 // Returns -1, 0 (equal) or 1
 static int compareMap( const QMap<QString, QString>& map1, const QMap<QString, QString>& map2 )

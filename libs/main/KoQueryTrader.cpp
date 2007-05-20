@@ -17,11 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoQueryTrader.h"
+#include "KoDocument.h"
+#include "KoFilter.h"
+
 #include <kparts/factory.h>
 
-#include <KoQueryTrader.h>
-#include <KoDocument.h>
-#include <KoFilter.h>
 #include <kservicetype.h>
 #include <kdebug.h>
 #include <kservicetypetrader.h>

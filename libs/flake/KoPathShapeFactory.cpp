@@ -16,14 +16,15 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "KoPathShapeFactory.h"
+#include "KoPathShape.h"
+#include "KoLineBorder.h"
+
 #include <klocale.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
-#include "KoPathShapeFactory.h"
-#include "KoPathShape.h"
-#include "KoLineBorder.h"
 
 KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
     : KoShapeFactory(parent, KoPathShapeId, i18n("A simple path shape"))

@@ -16,6 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#include "KoTooluButton.h"
 
 #include <QApplication>
 #include <QToolTip>
@@ -35,7 +36,6 @@
 
 #include <kglobalsettings.h>
 #include <ktoolbar.h>
-#include <KoTooluButton.h>
 #include <k3colordrag.h>
 #include <klocale.h>
 #include <kcolordialog.h>

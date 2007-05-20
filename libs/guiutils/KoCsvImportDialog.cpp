@@ -17,6 +17,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#include "KoCsvImportDialog.h"
 
 // Qt
 #include <q3table.h>
@@ -39,9 +40,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kcharsets.h>
-
-// local
-#include "KoCsvImportDialog.h"
 
 KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     : KDialog(parent),

@@ -19,10 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
-
 #include "KoStore.h"
 #include "KoTarStore.h"
 #include "KoZipStore.h"

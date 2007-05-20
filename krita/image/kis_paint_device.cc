@@ -1381,4 +1381,18 @@ qint32 KisPaintDevice::getY() const
     return m_d->y;
 }
 
+void KisPaintDevice::addPainterlyChannel( KisMask * painterlyChannel )
+{
+    m_d->painterlyChannels.append( painterlyChannel );
+}
+
+
+void KisPaintDevice::removePainterlyChannel( KisMask * painterlyChannel )
+{
+    int i = m_d->painterlyChannels.indexOf( painterlyChannel );
+    if ( i > -1 && i < m_d->painterlyChannels.size() )
+        m_d->painterlyChannels.removeAt( i );
+}
+
+
 #include "kis_paint_device.moc"

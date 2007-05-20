@@ -551,6 +551,7 @@ public:
      */
     void applySelectionMask(KisSelectionSP mask);
 
+
     /**
      * Sets the selection of this paint device to the new selection,
      * returns the old selection, if there was an old selection,
@@ -564,6 +565,9 @@ public:
     void emitSelectionChanged();
 
 
+    /**
+     * XXX
+     */
     KisUndoAdapter *undoAdapter() const;
 
     /**
@@ -582,6 +586,23 @@ public:
      * This function return true if the layer has exif info associated with it.
      */
     bool hasExifInfo();
+
+
+    /**
+     * Add a painterly channel to the paint device. The paint device
+     * assumes ownership of the channel
+     *
+     * XXX: is the order of painterly channels important?
+     */
+    void addPainterlyChannel( KisMask * painterlyChannel );
+
+    /**
+     * Removes the specified painterly channel from the list of
+     * painterly channels owned by this paint device. The channel is
+     * not deleted.
+     */
+    void removePainterlyChannel( KisMask * painterlyChannel );
+
 signals:
     void positionChanged(KisPaintDeviceSP device);
     void ioProgress(qint8 percentage);

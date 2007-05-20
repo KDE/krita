@@ -501,15 +501,15 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
     listStyle->level(0).applyStyle(listformat);
     QTextList* list = cursor.insertList(listformat);
 
-    // Iterate over list items and add them to the textlist
+    // we need at least one item, so add a dummy-item we remove later again
     cursor.insertBlock();
     QTextBlock prev = cursor.block();
+
+    // Iterate over list items and add them to the textlist
     for(QDomNode n = parent.firstChild(); !n.isNull(); n = n.nextSibling()) {
         QDomElement e = n.toElement();
         if( e.isNull() ) continue;
         loadBody(context, e, cursor);
-        //list->add( cursor.block() );
-        //cursor.insertBlock();
     }
 
     QTextBlock current = cursor.block();
@@ -518,7 +518,7 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
         //listStyle->applyStyle(b);
         list->add(b);
     }
-
+    list->removeItem(0);
     delete listStyle;
 
     QTextBlockFormat emptyTbf;

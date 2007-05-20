@@ -1,8 +1,4 @@
-
-
-if(KUNITTEST_FOUND)
-    add_subdirectory(tests)
-endif(KUNITTEST_FOUND)
+add_subdirectory(tests)
 
 ########### next target ###############
 

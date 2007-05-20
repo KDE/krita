@@ -16,21 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kunittest/runner.h>
-#include <kunittest/module.h>
+#include <qtest_kde.h>
 
 #include "kis_tiled_data_tester.h"
 #include "kis_datamanager.h"
 #include "kis_global.h"
 
-using namespace KUnitTest;
-
-KUNITTEST_MODULE( kunittest_kis_tiled_data_tester, "Tiled Data Tester" );
-KUNITTEST_MODULE_REGISTER_TESTER( KisTiledDataTester );
-
 #define TEST_PIXEL_SIZE 4
 
-static quint8 defaultPixel[TEST_PIXEL_SIZE] = {0, 0, 0, OPACITY_TRANSPARENT};
+static quint8 defaultPixel[TEST_PIXEL_SIZE] = {0, 0, 0, 0};
 
 void KisTiledDataTester::allTests()
 {
@@ -42,33 +36,37 @@ void KisTiledDataTester::allTests()
     qint32 extentHeight;
 
     dm->extent(extentX, extentY, extentWidth, extentHeight);
-    CHECK(extentWidth, 0);
-    CHECK(extentHeight, 0);
+    QCOMPARE(extentWidth, 0);
+    QCOMPARE(extentHeight, 0);
 
 //     const quint8 *readOnlyPixel = dm->pixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
 //     dm->extent(extentX, extentY, extentWidth, extentHeight);
-//     CHECK(extentWidth, 0);
-//     CHECK(extentHeight, 0);
+//     QCOMPARE(extentWidth, 0);
+//     QCOMPARE(extentHeight, 0);
 
 //     quint8 *writablePixel = dm->writablePixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
 //     dm->extent(extentX, extentY, extentWidth, extentHeight);
-//     CHECK(extentX, 0);
-//     CHECK(extentY, 0);
-//     CHECK(extentWidth, KisTile::WIDTH);
-//     CHECK(extentHeight, KisTile::HEIGHT);
+//     QCOMPARE(extentX, 0);
+//     QCOMPARE(extentY, 0);
+//     QCOMPARE(extentWidth, KisTile::WIDTH);
+//     QCOMPARE(extentHeight, KisTile::HEIGHT);
 
 //     writablePixel = dm->writablePixel(-KisTile::WIDTH, -KisTile::HEIGHT);
 //     dm->extent(extentX, extentY, extentWidth, extentHeight);
-//     CHECK(extentX, -KisTile::WIDTH);
-//     CHECK(extentY, -KisTile::HEIGHT);
-//     CHECK(extentWidth, 2*KisTile::WIDTH);
-//     CHECK(extentHeight, 2*KisTile::HEIGHT);
+//     QCOMPARE(extentX, -KisTile::WIDTH);
+//     QCOMPARE(extentY, -KisTile::HEIGHT);
+//     QCOMPARE(extentWidth, 2*KisTile::WIDTH);
+//     QCOMPARE(extentHeight, 2*KisTile::HEIGHT);
 
     dm->clear();
     dm->extent(extentX, extentY, extentWidth, extentHeight);
-    CHECK(extentWidth, 0);
-    CHECK(extentHeight, 0);
+    QCOMPARE(extentWidth, 0);
+    QCOMPARE(extentHeight, 0);
 
     delete dm;
 }
+QTEST_KDEMAIN(KisTiledDataTester, NoGUI)
+#include "kis_tiled_data_tester.moc"
+
+
 

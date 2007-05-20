@@ -15,16 +15,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-
 #ifndef KIS_TILED_DATA_TESTER_H
 #define KIS_TILED_DATA_TESTER_H
 
-#include <kunittest/tester.h>
 
-class KisTiledDataTester : public KUnitTest::Tester
+#include <QtTest/QtTest>
+
+
+class KisTiledDataTester : public QObject
 {
-public:
+    Q_OBJECT
+
+private slots:
         void allTests();
 };
 

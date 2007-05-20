@@ -24,6 +24,7 @@
 #include <koguiutils_export.h>
 class QLineEdit;
 class KUrlRequester;
+class QComboBox;
 
 namespace KOfficePrivate {
 /**

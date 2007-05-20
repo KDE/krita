@@ -17,9 +17,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#include <math.h>
-
 #include "KoZoomAction.h"
+#include "KoZoomMode.h"
 
 #include <QString>
 #include <QLocale>
@@ -43,7 +42,7 @@
 #include <kactioncollection.h>
 #include <kdebug.h>
 
-#include <KoZoomMode.h>
+#include <math.h>
 
 class KoZoomAction::Private
 {

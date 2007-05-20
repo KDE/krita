@@ -17,22 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KoPageLayoutDia.h>
-#include <KoPageLayoutSize.h>
+#include "KoPageLayoutSize.h"
+#include "KoPageLayoutDia.h"
+#include "KoUnitWidgets.h"
 #include <KoUnit.h>
-#include <KoUnitWidgets.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 #include <khbox.h>
 
 #include <QLabel>
 #include <QRadioButton>
 #include <QGroupBox>
 #include <QButtonGroup>
-#include <QGroupBox>
 #include <QPixmap>
 #include <QHBoxLayout>
 #include <QGridLayout>

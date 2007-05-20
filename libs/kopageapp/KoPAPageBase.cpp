@@ -19,6 +19,7 @@
 
 #include "KoPAPageBase.h"
 #include "KoPASavingContext.h"
+#include "KoPAStyles.h"
 
 #include <QDebug>
 
@@ -29,9 +30,6 @@
 #include <KoOasisStyles.h>
 #include <KoXmlWriter.h>
 #include <KoViewConverter.h>
-
-#include "KoPASavingContext.h"
-#include "KoPAStyles.h"
 
 KoPAPageBase::KoPAPageBase()
 : KoShapeContainer()

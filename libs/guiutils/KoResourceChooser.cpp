@@ -17,6 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#include "KoResourceChooser.h"
+#include "KoItemToolTip.h"
 
 #include <QPainter>
 #include <QCursor>
@@ -33,10 +35,7 @@
 #include <QUrl>
 
 #include <kglobal.h>
-#include <kdebug.h>
-
-#include "KoResourceChooser.h"
-#include "KoItemToolTip.h"
+// #include <kdebug.h>
 
 
 QTextDocument *KoIconToolTip::createDocument( const QModelIndex &index )

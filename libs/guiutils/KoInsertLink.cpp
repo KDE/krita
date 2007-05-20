@@ -16,6 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#include "KoInsertLink.h"
 
 #include <klocale.h>
 
@@ -30,7 +31,6 @@
 #include <kurlrequester.h>
 #include <kseparator.h>
 #include <kiconloader.h>
-#include "KoInsertLink.h"
 #include <kdesktopfile.h>
 #include <krecentdocument.h>
 #include <kpagewidgetmodel.h>

@@ -16,22 +16,19 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "KoDualColorButton.h"
+#include "KoUniColorDialog.h"
+#include "KoColor.h"
+#include "kcolormimedata.h"
 
+#include "dcolorarrow.xbm"
+#include "dcolorreset.xpm"
+
+#include <kglobalsettings.h>
 #include <QtGui/QBitmap>
 #include <QtGui/QBrush>
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QPainter>
-
-#include <kglobalsettings.h>
-
-#include "kcolormimedata.h"
-
-#include "KoDualColorButton.h"
-#include "KoUniColorDialog.h"
-#include "KoColor.h"
-
-#include "dcolorarrow.xbm"
-#include "dcolorreset.xpm"
 
 class KoDualColorButton::Private
 {

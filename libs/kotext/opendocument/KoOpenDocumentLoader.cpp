@@ -531,7 +531,8 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
 
     // Set the style and create the textlist
     QTextListFormat listformat;
-    listStyle->level(0).applyStyle(listformat);
+    KoListLevelProperties listProperties = listStyle->level(0);
+    listProperties.applyStyle(listformat);
     QTextList* list = cursor.insertList(listformat);
 
     // we need at least one item, so add a dummy-item we remove later again
@@ -542,10 +543,15 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
     KoXmlElement e;
     forEachElement(e, parent) {
         if( e.isNull() ) continue;
-        //TODO handle the item's properties
+        //TODO handle also the other item properties
         if( e.hasAttributeNS( KoXmlNS::text, "start-value" ) ) {
             int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString::null).toInt();
             kDebug()<<"startValue=>"<<startValue<<endl;
+            KoListLevelProperties p = KoListLevelProperties::fromTextList(list);
+            p.setStartValue(startValue);
+            QTextListFormat f = list->format();
+            p.applyStyle(f);
+            list->setFormat(f);
         }
         loadBody(context, e, cursor);
     }

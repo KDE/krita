@@ -223,40 +223,43 @@ void KisToolTransform::initHandles()
 
 void KisToolTransform::mousePressEvent(KoPointerEvent *e)
 {
-    if (image() && image()->activeDevice() && e->button() == Qt::LeftButton) {
+    KisImageSP img = image();
+
+    if (img && img->activeDevice() && e->button() == Qt::LeftButton) {
+        QPointF mousePos = QPointF(e->point.x() * img->xRes(), e->point.y() * img->yRes());
         switch(m_function)
         {
             case ROTATE:
-                m_clickoffset = e->point - m_translate;
+                m_clickoffset = mousePos - m_translate;
                 m_clickangle = -m_a - atan2(m_clickoffset.x(),m_clickoffset.y());
                 m_clickoffset = QPoint(0, 0);
                 break;
             case MOVE:
-                m_clickoffset = e->point - m_translate;
+                m_clickoffset = mousePos - m_translate;
                 break;
             case TOPSCALE:
-                m_clickoffset = e->point - (m_topleft + m_topright)/2.0;
+                m_clickoffset = mousePos - (m_topleft + m_topright)/2.0;
                 break;
             case TOPRIGHTSCALE:
-                m_clickoffset = e->point - m_topright;
+                m_clickoffset = mousePos - m_topright;
                 break;
             case RIGHTSCALE:
-                m_clickoffset = e->point - (m_topright + m_bottomright)/2.0;
+                m_clickoffset = mousePos - (m_topright + m_bottomright)/2.0;
                 break;
             case BOTTOMRIGHTSCALE:
-                m_clickoffset = e->point - m_bottomright;
+                m_clickoffset = mousePos - m_bottomright;
                 break;
             case BOTTOMSCALE:
-                m_clickoffset = e->point - (m_bottomleft + m_bottomright)/2.0;
+                m_clickoffset = mousePos - (m_bottomleft + m_bottomright)/2.0;
                 break;
             case BOTTOMLEFTSCALE:
-                m_clickoffset = e->point - m_bottomleft;
+                m_clickoffset = mousePos - m_bottomleft;
                 break;
             case LEFTSCALE:
-                m_clickoffset = e->point - (m_topleft + m_bottomleft)/2.0;
+                m_clickoffset = mousePos - (m_topleft + m_bottomleft)/2.0;
                 break;
             case TOPLEFTSCALE:
-                m_clickoffset = e->point - m_topleft;
+                m_clickoffset = mousePos - m_topleft;
                 break; 
         }
         m_selecting = true;
@@ -327,7 +330,8 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
     QPointF bottomleft = m_bottomleft;
     QPointF bottomright = m_bottomright;
 
-    QPointF mousePos = e->point;
+    KisImageSP img = image();
+    QPointF mousePos = QPointF(e->point.x() * img->xRes(), e->point.y() * img->yRes());
 
     if (m_selecting) {
         m_canvas->updateCanvas(QRect(m_originalTopLeft, m_originalBottomRight));
@@ -617,10 +621,11 @@ void KisToolTransform::paint(QPainter& gc, KoViewConverter &converter)
     pen.setWidth(0);
 
     recalcOutline();
-    QPointF topleft = converter.documentToView(m_topleft);
-    QPointF topright = converter.documentToView(m_topright);
-    QPointF bottomleft = converter.documentToView(m_bottomleft);
-    QPointF bottomright = converter.documentToView(m_bottomright);
+    KisImageSP img = image();
+    QPointF topleft = converter.documentToView(QPointF(m_topleft.x() / img->xRes(), m_topleft.y()/img->yRes()));
+    QPointF topright = converter.documentToView(QPointF(m_topright.x() / img->xRes(), m_topright.y()/img->yRes()));
+    QPointF bottomleft = converter.documentToView(QPointF(m_bottomleft.x() / img->xRes(), m_bottomleft.y()/img->yRes()));
+    QPointF bottomright = converter.documentToView(QPointF(m_bottomright.x() / img->xRes(), m_bottomright.y()/img->yRes()));
 
     QRectF handleRect(-4, -4, 8, 8);
 

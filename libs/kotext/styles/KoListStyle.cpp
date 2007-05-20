@@ -206,13 +206,23 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
     //kDebug()<<"KoListStyle::loadOasis"<<endl;
     //KoStyleStack &styleStack = context.styleStack();
 
-    Style style = KoListStyle::NoItem;
+    KoListLevelProperties properties;
 
     KoXmlElement* listElem = context.oasisStyles().listStyles()[ name() ];
+    Style style = KoListStyle::NoItem;
     if( listElem ) {
         KoXmlElement listStyle = listElem->firstChildElement("list-level-style-bullet");
         if( ! listStyle.isNull() ) {
             //e.attributeNS(KoXmlNS::text, "level", QString::null);
+
+            /*
+            QString prefix = listStyle.attributeNS(KoXmlNS::style, "num-prefix", QString::null);
+            if( ! prefix.isNull() )
+                properties.setListItemPrefix(prefix);
+            QString suffix = listStyle.attributeNS(KoXmlNS::style, "num-suffix", QString::null);
+            if( ! suffix.isNull() )
+                properties.setListItemSuffix(suffix);
+            */
 
             //1.6: KoParagCounter::loadOasisListStyle
             QString bulletChar = listStyle.attributeNS( KoXmlNS::text, "bullet-char", QString::null );
@@ -267,9 +277,8 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
         }
     }
 
-    KoListLevelProperties llp;
-    llp.setStyle(style); //KoListStyle::DecimalItem);
-    llp.setLevel(0);
-    setLevel(llp);
+    properties.setStyle(style);
+    properties.setLevel(0);
+    setLevel(properties);
     //liststyle->setLevel( element.attribute("depth").toInt() + 1);
 }

@@ -539,9 +539,14 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
     QTextBlock prev = cursor.block();
 
     // Iterate over list items and add them to the textlist
-    for(QDomNode n = parent.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        QDomElement e = n.toElement();
+    KoXmlElement e;
+    forEachElement(e, parent) {
         if( e.isNull() ) continue;
+        //TODO handle the item's properties
+        if( e.hasAttributeNS( KoXmlNS::text, "start-value" ) ) {
+            int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString::null).toInt();
+            kDebug()<<"startValue=>"<<startValue<<endl;
+        }
         loadBody(context, e, cursor);
     }
 

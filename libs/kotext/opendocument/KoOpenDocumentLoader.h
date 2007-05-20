@@ -135,9 +135,21 @@ class KOTEXT_EXPORT KoOpenDocumentLoader : public QObject
         //virtual void loadFrame(KoOasisLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
 
     protected:
+
+        /**
+        * This is called in loadBody before reading the body starts.
+        */
         virtual void startBody(int total) { Q_UNUSED(total); }
+
+        /**
+        * This is called in loadBody on each item that is readed within the body.
+        */
         virtual void processBody() {}
-        virtual void endBody(int total) { Q_UNUSED(total); }
+
+        /**
+        * This is called in loadBody once the body was readed.
+        */
+        virtual void endBody() {}
 
     private:
         /// \internal d-pointer class.

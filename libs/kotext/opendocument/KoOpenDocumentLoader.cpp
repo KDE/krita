@@ -214,8 +214,7 @@ void KoOpenDocumentLoader::loadBody(KoOasisLoadingContext& context, const KoXmlE
         kDebug()<<"KoOpenDocumentLoader::loadBody"<<endl;
     #endif
 
-    const int count = bodyElem.childNodes().count();
-    startBody(count);
+    startBody( bodyElem.childNodes().count() );
     for(KoXmlNode node = bodyElem.firstChild(); ! node.isNull(); node = node.nextSibling()) {
         KoXmlElement tag = node.toElement();
         if( ! tag.isNull() ) {
@@ -247,7 +246,7 @@ void KoOpenDocumentLoader::loadBody(KoOasisLoadingContext& context, const KoXmlE
         }
         processBody();
     }
-    endBody(count);
+    endBody();
 }
 
 //1.6: KoTextDocument::loadOasisText

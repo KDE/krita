@@ -30,7 +30,7 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 
-#include <QDebug>
+#include <KDebug>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
 #include <math.h>
@@ -606,7 +606,7 @@ void KoPathShape::paintDebug( QPainter &painter )
         }
     }
     painter.restore();
-    qDebug() << "nop = " << i;
+    kDebug(30006) << "nop = " << i << endl;
 }
 
 void KoPathShape::debugPath()
@@ -617,7 +617,7 @@ void KoPathShape::debugPath()
         KoSubpath::const_iterator it( ( *pathIt )->begin() );
         for ( ; it != ( *pathIt )->end(); ++it )
         {
-            qDebug() << "p:" << ( *pathIt ) << "," << *it << "," << ( *it )->point() << "," << ( *it )->properties() << "," << ( *it )->group();
+            kDebug(30006) << "p:" << ( *pathIt ) << "," << *it << "," << ( *it )->point() << "," << ( *it )->properties() << "," << ( *it )->group() << endl;
         }
     }
 }
@@ -766,7 +766,7 @@ void KoPathShape::resize( const QSizeF &newSize )
     double zoomY = newSize.height() / oldSize.height(); 
     QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
 
-    qDebug() << "resize" << zoomX << "," << zoomY << "," << newSize;
+    //qDebug() << "resize" << zoomX << "," << zoomY << "," << newSize;
     map( matrix );
     KoShape::resize( newSize );
 }
@@ -868,7 +868,7 @@ int KoPathShape::arcToCurve( double rx, double ry, double startAngle, double swe
     //center berechnen
     QPointF center( startpoint - QPointF( cossa * rx, -sinsa * ry ) );
 
-    qDebug() << "kappa" << kappa << "parts" << parts;
+    kDebug(30006) << "kappa" << kappa << "parts" << parts << endl;;
     
     for ( int part = 0; part < parts; ++part )
     {

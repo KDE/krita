@@ -20,13 +20,6 @@
 */
 
 #include "KoPointGroup.h"
-//#include "KoInsets.h"
-//#include "KoShapeBorderModel.h"
-//#include "KoViewConverter.h"
-
-//#include <QDebug>
-//#include <QPainter>
-//#include <math.h>
 
 void KoPointGroup::add( KoPathPoint * point )
 { 

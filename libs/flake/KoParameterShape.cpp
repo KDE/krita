@@ -20,8 +20,8 @@
 
 #include "KoParameterShape.h"
 
-#include <QDebug>
 #include <QPainter>
+#include <KDebug>
 
 class KoParameterShape::Private {
 public:
@@ -42,7 +42,7 @@ void KoParameterShape::moveHandle( int handleId, const QPointF & point, Qt::Keyb
 {
     if ( handleId >= m_handles.size() )
     {
-        qWarning() << "handleId out of bounds";
+        kWarning(30006) << "handleId out of bounds" << endl;
         return;
     }
 

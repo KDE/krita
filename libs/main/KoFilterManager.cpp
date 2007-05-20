@@ -20,8 +20,8 @@
 */
 
 
-#include <KoFilterManager.h>
-#include <KoFilterManager_p.h>
+#include "KoFilterManager_p.h"
+#include "KoFilterManager.h"
 
 #include <QFile>
 #include <QLabel>

@@ -20,6 +20,8 @@
 #ifndef __koPictureWmf_h__
 #define __koPictureWmf_h__
 
+#include "KoPictureBase.h"
+
 #include <QString>
 #include <qpicture.h>
 //Added by qt3to4:

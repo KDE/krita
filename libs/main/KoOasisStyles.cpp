@@ -16,6 +16,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoOasisStyles.h"
+
+#include "KoDom.h"
+#include "KoGenStyles.h"
+#include "KoXmlNS.h"
+
 #include <QBrush>
 #include <QBuffer>
 
@@ -26,12 +32,6 @@
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-
-#include "KoDom.h"
-#include "KoGenStyles.h"
-#include "KoXmlNS.h"
-
-#include "KoOasisStyles.h"
 
 class KoOasisStyles::Private
 {

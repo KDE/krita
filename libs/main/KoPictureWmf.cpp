@@ -19,6 +19,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoPictureWmf.h"
+#include <kowmfpaint.h>
+#include "KoPictureKey.h"
+
 #include <QBuffer>
 #include <QPainter>
 #include <q3picture.h>
@@ -26,11 +30,6 @@
 
 #include <kdebug.h>
 #include <kdeversion.h>
-
-#include <kowmfpaint.h>
-#include "KoPictureKey.h"
-#include "KoPictureBase.h"
-#include "KoPictureWmf.h"
 
 KoPictureWmf::KoPictureWmf(void) : m_clipart(KoPictureType::formatVersionQPicture)
 {

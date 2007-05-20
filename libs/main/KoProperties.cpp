@@ -17,10 +17,10 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "KoProperties.h"
+
 #include <qdom.h>
 #include <QString>
-
-#include "KoProperties.h"
 
 class KoProperties::Private {
 public:

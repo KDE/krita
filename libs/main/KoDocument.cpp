@@ -18,10 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoDocument_p.h"
 #include "KoDocument.h"
 
 #include "KoDom.h"
-#include "KoDocument_p.h"
 #include "KoDocumentAdaptor.h"
 #include <QtDBus/QtDBus>
 #include "KoDocumentChild.h"

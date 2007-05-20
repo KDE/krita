@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoUnit.h"
 #include "KoGridData.h"
+#include "KoUnit.h"
 
 KoGridData::KoGridData()
  :m_snapToGrid(false),

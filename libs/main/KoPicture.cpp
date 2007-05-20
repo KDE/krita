@@ -18,6 +18,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoPicture.h"
+#include "KoPictureKey.h"
+#include "KoPictureShared.h"
+#include "KoPictureBase.h"
+
 #include <QPainter>
 #include <QFile>
 //Added by qt3to4:
@@ -26,11 +31,6 @@
 #include <kdebug.h>
 #include <kurl.h>
 #include <kio/netaccess.h>
-
-#include "KoPictureKey.h"
-#include "KoPictureBase.h"
-#include "KoPictureShared.h"
-#include "KoPicture.h"
 
 uint KoPicture::uniqueValue = 0;
 

@@ -16,21 +16,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QMetaObject>
+#include "KoFilterChain.h"
+#include "KoFilterManager.h"  // KoFilterManager::filterAvailable, private API
+#include "KoQueryTrader.h"
+#include "KoDocument.h"
+#include "priorityqueue.h"
+
 #include <QMetaMethod>
-//Added by qt3to4:
-#include <Q3StrList>
-#include <Q3ValueList>
-#include <QByteArray>
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
-#include <KoFilterChain.h>
-#include <KoQueryTrader.h>
-#include <KoFilterManager.h>  // KoFilterManager::filterAvailable, private API
-#include <KoDocument.h>
-#include <kdebug.h>
-
-#include <priorityqueue.h>
 
 #include <limits.h> // UINT_MAX
 

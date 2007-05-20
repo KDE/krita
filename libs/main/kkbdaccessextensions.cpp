@@ -17,6 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "kkbdaccessextensions.h"
+
 // Qt includes
 #include <QSplitter>
 #include <q3dockwindow.h>
@@ -30,11 +32,8 @@
 #include <kxmlguifactory.h>
 //Added by qt3to4:
 #include <Q3PtrList>
-#include <QKeyEvent>
-#include <QFrame>
 #include <Q3ValueList>
 #include <QApplication>
-#include <QMouseEvent>
 
 // KDE includes
 #include <klocale.h>
@@ -44,11 +43,6 @@
 #include <kdebug.h>
 #include <q3tl.h>
 #include <kactioncollection.h>
-
-// KKbdAccessExtensions includes
-#include "kkbdaccessextensions.h"
-// TODO: See eventFilter method.
-//#include "kkbdaccessextensions.moc"
 
 class KPanelKbdSizerIcon : public QCursor
 {

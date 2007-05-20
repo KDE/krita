@@ -27,11 +27,9 @@
 #include <QKeyEvent>
 #include <QEvent>
 
-// KOffice includes.
-#include <kofficecore_export.h>
-
 class KKbdAccessExtensionsPrivate;
 class KMainWindow;
+class KActionCollection;
 
 /** KKbdAccessExtensions is an object that improves accessibility for motor impaired users
 *   who may not be able to easily use a mouse.  It adds two new capabilities using the keyboard:
@@ -106,7 +104,7 @@ class KMainWindow;
 *   F8/Shift+F8 are the default shortcuts because these are the keys used for similar
 *   functionality in GNOME and Java SWT.
 */
-class KOMAIN_EXPORT KKbdAccessExtensions : public QObject
+class KKbdAccessExtensions : public QObject
 {
     // TODO: A .moc isn't really needed right now, but see TODO in eventFilter method.
     // Q_PROPERTY(int stepSize READ stepSize WRITE setStepSize)

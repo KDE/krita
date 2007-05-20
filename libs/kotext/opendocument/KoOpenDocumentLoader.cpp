@@ -51,7 +51,7 @@
 #include <klocale.h>
 
 // if defined then debugging is enabled
-#define KOOPENDOCUMENTLOADER_DEBUG
+//#define KOOPENDOCUMENTLOADER_DEBUG
 
 /// \internal d-pointer class.
 class KoOpenDocumentLoader::Private
@@ -213,34 +213,41 @@ void KoOpenDocumentLoader::loadBody(KoOasisLoadingContext& context, const KoXmlE
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug()<<"KoOpenDocumentLoader::loadBody"<<endl;
     #endif
-    KoXmlElement tag;
-    forEachElement(tag, bodyElem) {
-        context.styleStack().save();
-        const QString localName = tag.localName();
-        const bool isTextNS = ( tag.namespaceURI() == KoXmlNS::text );
 
-        if ( isTextNS && localName == "p" ) {  // text paragraph
-            loadParagraph(context, tag, cursor);
-        }
-        else if ( isTextNS && localName == "h" ) { // heading
-            loadHeading(context, tag, cursor);
-        }
-        else if ( isTextNS &&
-                  ( localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
-                    || localName == "list" || localName == "numbered-paragraph" ) ) { // OASIS
-            loadList(context, tag, cursor);
-        }
-        else if ( isTextNS && localName == "section" ) { // Temporary support (###TODO)
-            loadSection(context, tag, cursor);
-        }
-        else {
-            #ifdef KOOPENDOCUMENTLOADER_DEBUG
-                kDebug()<<"Unhandled localName="<<localName<<endl;
-            #endif
-        }
+    const int count = bodyElem.childNodes().count();
+    startBody(count);
+    for(KoXmlNode node = bodyElem.firstChild(); ! node.isNull(); node = node.nextSibling()) {
+        KoXmlElement tag = node.toElement();
+        if( ! tag.isNull() ) {
+            context.styleStack().save();
+            const QString localName = tag.localName();
+            const bool isTextNS = ( tag.namespaceURI() == KoXmlNS::text );
 
-        context.styleStack().restore(); // remove the styles added by the paragraph or list
+            if ( isTextNS && localName == "p" ) {  // text paragraph
+                loadParagraph(context, tag, cursor);
+            }
+            else if ( isTextNS && localName == "h" ) { // heading
+                loadHeading(context, tag, cursor);
+            }
+            else if ( isTextNS &&
+                    ( localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
+                        || localName == "list" || localName == "numbered-paragraph" ) ) { // OASIS
+                loadList(context, tag, cursor);
+            }
+            else if ( isTextNS && localName == "section" ) { // Temporary support (###TODO)
+                loadSection(context, tag, cursor);
+            }
+            else {
+                #ifdef KOOPENDOCUMENTLOADER_DEBUG
+                    kDebug()<<"Unhandled localName="<<localName<<endl;
+                #endif
+            }
+
+            context.styleStack().restore(); // remove the styles added by the paragraph or list
+        }
+        processBody();
     }
+    endBody(count);
 }
 
 //1.6: KoTextDocument::loadOasisText
@@ -546,7 +553,6 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
         //TODO handle also the other item properties
         if( e.hasAttributeNS( KoXmlNS::text, "start-value" ) ) {
             int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString::null).toInt();
-            kDebug()<<"startValue=>"<<startValue<<endl;
             KoListLevelProperties p = KoListLevelProperties::fromTextList(list);
             p.setStartValue(startValue);
             QTextListFormat f = list->format();

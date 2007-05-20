@@ -134,13 +134,10 @@ class KOTEXT_EXPORT KoOpenDocumentLoader : public QObject
 
         //virtual void loadFrame(KoOasisLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
 
-    signals:
-
-        /**
-        * This signal is emitted during loading with a percentage within 1-100 range
-        * \param percent the progress as a percentage
-        */
-        void sigProgress(int percent);
+    protected:
+        virtual void startBody(int total) { Q_UNUSED(total); }
+        virtual void processBody() {}
+        virtual void endBody(int total) { Q_UNUSED(total); }
 
     private:
         /// \internal d-pointer class.

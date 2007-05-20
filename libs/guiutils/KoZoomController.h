@@ -35,9 +35,9 @@ class QSize;
 #include <koguiutils_export.h>
 
 /**
- * This controller class handles zoom levels for any canvas. (koguiutils)
+ * This controller class handles zoom levels for any canvas.
  *
- * For each KoCanvasController you instantiate this class once. This class then creates
+ * For each KoCanvasController you should have one instance of this class to go with it. This class then creates
  * a KoZoomAction and basically handles all zooming for you.
  *
  * All you have to do is connect to zoomChanged so that you can redraw your canvas.
@@ -71,36 +71,37 @@ Q_OBJECT
 public:
     /**
     * Constructor. Create oner per canvasController.  The zoomAction is created in the constructor as a member.
-    * @param co the canvasController
-    * @param zh the zoom handler (viewconverter with setter methods)
-    * @param ac the action collection whereto the KoZoomAction is added
-    * @param doSpecialAspectMode wether the KoZoomAction should show a toggle
+    * @param controller the canvasController
+    * @param zoomHandler the zoom handler (viewconverter with setter methods)
+    * @param actionCollection the action collection where the KoZoomAction is added to
+    * @param doSpecialAspectMode if the KoZoomAction should show a toggle
     */
-    KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *ac, bool doSpecialAspectMode);
+    KoZoomController(KoCanvasController *controller, KoZoomHandler *zoomHandler, KActionCollection *actionCollection, bool doSpecialAspectMode);
 
     /// destructor
     ~KoZoomController();
 
-    /// returns the zoomAction to be added to the actionCollection and Gui.
+    /// returns the zoomAction that is maintained by this controller
     KoZoomAction *zoomAction() const;
 
-    /// setter for the view to set the zoom level.
-    void setZoom(double zoom);
-
-    /// setter for the view to set the zoom mode.
+    /**
+     * Alter the current zoom mode which updates the Gui.
+     * @param mode the new mode that will be used to auto-calculate a new zoom-level if needed.
+     */
     void setZoomMode(KoZoomMode::Mode mode);
 
 public slots:
     /**
-    * Every time the canvas changes content size, tell us.  Note that the size is in pt.
+    * Set the size of the current page in document coordinates which allows zoom modes that use the pageSize
+    * to update.
     * @param pageSize the new page size in points
     */
     void setPageSize(const QSizeF &pageSize);
 
     /**
-    * Every time the document changes size, tell us.
-    * For most applictaions the document size equals the page size.
-    * Note that the size is in pt.
+    * Set the size of the whole document curretly being shown on the cavas.
+    * The document size will be used together with the current zoom level to calculate the size of the
+    * canvas in the canvasController.
     * @param documentSize the new document size in points
     */
     void setDocumentSize( const QSizeF &documentSize );
@@ -113,31 +114,26 @@ public slots:
     void setFitMargin( int margin );
 
 signals:
-    /// the document can use the emitted data for persistency purposes.
+    /**
+     * This signal is emitted whenever either the zoommode or the zoom level is changed by the user.
+     * the application can use the emitted data for persistency purposes.
+     */
     void zoomChanged (KoZoomMode::Mode mode, double zoom);
 
-    /// emitted when the special aspect mode toggle changes.
+    /**
+     * emitted when the special aspect mode toggle changes.
+     * @see KoZoomAction::aspectModeChanged()
+     */
     void aspectModeChanged (bool aspectModeActivated);
 
-private slots:
-    // should realy be on d pointer..
-    /// slot for the zoomAction to connect to.
-    void setZoom(KoZoomMode::Mode mode, double zoom);
-
-    /// so we know when the canvasController changes size
-    void setAvailableSize(const QSize &Size);
-
-    /// when the canvas controller wants us to change zoom
-    void requestZoomBy(const double factor);
-
-
-// important note;
-// it may look like we are duplicating setZoom like methods and they should be merged. This is not the case.
-// the idea behind the different methods is that a different unit connects to them and we may act slightly
-// different based on that.
 
 private:
+    Q_PRIVATE_SLOT(d, void setAvailableSize())
+    Q_PRIVATE_SLOT(d, void requestZoomBy(const double))
+    Q_PRIVATE_SLOT(d, void setZoom(KoZoomMode::Mode, double))
     Q_DISABLE_COPY( KoZoomController )
+
+    void setZoom(KoZoomMode::Mode mode, double zoom);
 
     class Private;
     Private * const d;

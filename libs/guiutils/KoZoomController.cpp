@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -32,21 +33,49 @@
 class KoZoomController::Private
 {
 public:
+    Private(KoZoomController *p, bool doSpecialAspectMode)
+        : canvasController(0), zoomHandler(0), fitMargin(0), parent(p)
+    {
+        action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), doSpecialAspectMode, 0);
+    }
+
+    /// so we know when the canvasController changes size
+    void setAvailableSize()
+    {
+        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
+            setZoom(KoZoomMode::ZOOM_WIDTH, 0);
+        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
+            setZoom(KoZoomMode::ZOOM_PAGE, 0);
+    }
+
+    /// when the canvas controller wants us to change zoom
+    void requestZoomBy(const double factor)
+    {
+        double zoom = zoomHandler->zoomInPercent() / 100.0;
+        action->setZoom(factor*zoom);
+        setZoom(KoZoomMode::ZOOM_CONSTANT, factor*zoom);
+        action->setEffectiveZoom(factor*zoom);
+    }
+
+    void setZoom(KoZoomMode::Mode mode, double zoom)
+    {
+        parent->setZoom(mode, zoom);
+    }
+
     KoCanvasController *canvasController;
     KoZoomHandler *zoomHandler;
     KoZoomAction *action;
     QSizeF pageSize;
     QSizeF documentSize;
     int fitMargin;
+    KoZoomController *parent;
 };
 
 KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, bool doSpecialAspectMode)
-    : d(new Private)
+    : d(new Private(this, doSpecialAspectMode))
 {
     d->canvasController = co;
     d->zoomHandler = zh;
-    d->fitMargin = 0;
-    d->action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), doSpecialAspectMode, 0);
     connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
             this, SLOT(setZoom(KoZoomMode::Mode, double)));
     connect(d->action, SIGNAL(aspectModeChanged(bool)),
@@ -56,7 +85,7 @@ KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KA
     actionCollection->addAction(KStandardAction::ZoomIn,  "zood->in", d->action, SLOT(zoomIn()));
     actionCollection->addAction(KStandardAction::ZoomOut,  "zood->out", d->action, SLOT(zoomOut()));
 
-    connect(d->canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( setAvailableSize( const QSize & ) ) );
+    connect(d->canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( setAvailableSize() ) );
 
     connect(d->canvasController, SIGNAL( zoomBy(const double ) ), this, SLOT( requestZoomBy( const double ) ) );
 }
@@ -69,10 +98,6 @@ KoZoomController::~KoZoomController()
 KoZoomAction *KoZoomController::zoomAction() const
 {
     return d->action;
-}
-
-void KoZoomController::setZoom(double /*zoom*/)
-{
 }
 
 void KoZoomController::setZoomMode(KoZoomMode::Mode mode)
@@ -132,22 +157,6 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
 
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();
-}
-
-void KoZoomController::setAvailableSize(const QSize &/*size*/)
-{
-    if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
-        setZoom(KoZoomMode::ZOOM_WIDTH, 0);
-    if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
-        setZoom(KoZoomMode::ZOOM_PAGE, 0);
-}
-
-void KoZoomController::requestZoomBy(const double factor)
-{
-    double zoom = d->zoomHandler->zoomInPercent() / 100.0;
-    d->action->setZoom(factor*zoom);
-    setZoom(KoZoomMode::ZOOM_CONSTANT, factor*zoom);
-    d->action->setEffectiveZoom(factor*zoom);
 }
 
 void KoZoomController::setFitMargin( int margin )

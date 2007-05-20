@@ -27,7 +27,7 @@
 class KisLayerModel::Private
 {
 public:
-    KisImageSP image;
+    KisImageWSP image;
 };
 
 KisLayerModel::KisLayerModel( QObject * parent )
@@ -273,7 +273,7 @@ QMimeData * KisLayerModel::mimeData ( const QModelIndexList & indexes ) const
     kDebug(41007) << "KisLayerModel::mimeData" << endl;
     QMimeData* data = new QMimeData;
     // TODO: manage the drag
-    
+
 }
 #endif
 

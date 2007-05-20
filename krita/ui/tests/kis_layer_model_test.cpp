@@ -36,24 +36,24 @@
 
 void kislayermodel_test::testRowcount()
 {
-    KisImage img( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
+    KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
 
     KisLayerModel model(0);
-    model.setImage( &img );
+    model.setImage( img );
 
-    KisLayerSP l1 = img.newLayer("first", 200, COMPOSITE_OVER, img.colorSpace());
+    KisLayerSP l1 = img->newLayer("first", 200, COMPOSITE_OVER, img->colorSpace());
     QVERIFY( model.rowCount() == 1 );
 
-    KisLayerSP l2 = img.newLayer("second", 200, COMPOSITE_OVER, img.colorSpace());
+    KisLayerSP l2 = img->newLayer("second", 200, COMPOSITE_OVER, img->colorSpace());
     QVERIFY( model.rowCount() == 2 );
 
-    KisGroupLayerSP parent = new KisGroupLayer(&img, "group 1", 200);
-    img.addLayer( parent, img.rootLayer() );
+    KisGroupLayerSP parent = new KisGroupLayer(img, "group 1", 200);
+    img->addLayer( parent, img->rootLayer() );
 
     QVERIFY( model.rowCount() == 3 );
 
-    KisPaintLayerSP child = new KisPaintLayer(&img, "child", 200);
-    img.addLayer( child, parent );
+    KisPaintLayerSP child = new KisPaintLayer(img, "child", 200);
+    img->addLayer( child, parent );
 
     QVERIFY( model.rowCount() == 3 );
 
@@ -67,12 +67,12 @@ void kislayermodel_test::testRowcount()
 
 void kislayermodel_test::testModelIndex()
 {
-    KisImage img( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
+    KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
 
     KisLayerModel model(0);
-    model.setImage( &img );
+    model.setImage( img );
 
-    KisLayerSP first = img.newLayer("first", 200, COMPOSITE_OVER, img.colorSpace());
+    KisLayerSP first = img->newLayer("first", 200, COMPOSITE_OVER, img->colorSpace());
     QModelIndex idx = model.index( 0, 0 );
 
     QVERIFY( idx.isValid() );
@@ -80,7 +80,7 @@ void kislayermodel_test::testModelIndex()
     QVERIFY( idx.internalPointer() == first.data() );
     QVERIFY( model.hasChildren( idx ) == false );
 
-    KisLayerSP second = img.newLayer( "second", 200, COMPOSITE_OVER, img.colorSpace() );
+    KisLayerSP second = img->newLayer( "second", 200, COMPOSITE_OVER, img->colorSpace() );
     QModelIndex idx2 = model.index( 1, 0 );
 
     QVERIFY( idx2.isValid() );
@@ -90,11 +90,11 @@ void kislayermodel_test::testModelIndex()
     QVERIFY( idx.sibling(1, 0) == idx2 );
     QVERIFY( idx.model() == &model );
 
-    KisGroupLayerSP parent = new KisGroupLayer (&img, "group 1", 200);
-    img.addLayer( parent, img.rootLayer() );
+    KisGroupLayerSP parent = new KisGroupLayer (img, "group 1", 200);
+    img->addLayer( parent, img->rootLayer() );
 
-    KisPaintLayerSP child = new KisPaintLayer(&img, "child", 200);
-    img.addLayer( child, parent );
+    KisPaintLayerSP child = new KisPaintLayer(img, "child", 200);
+    img->addLayer( child, parent );
 
     QModelIndex parentIdx = model.index( 0, 0 );
 
@@ -123,20 +123,20 @@ void kislayermodel_test::testModelIndex()
 
 void kislayermodel_test::testGroupLayers()
 {
-    KisImage img( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
+    KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
 
     KisLayerModel model(0);
-    model.setImage( &img );
+    model.setImage( img );
 
-    KisLayerSP first = img.newLayer("first", 200, COMPOSITE_OVER, img.colorSpace());
-    KisLayerSP second = img.newLayer( "second", 200, COMPOSITE_OVER, img.colorSpace() );
+    KisLayerSP first = img->newLayer("first", 200, COMPOSITE_OVER, img->colorSpace());
+    KisLayerSP second = img->newLayer( "second", 200, COMPOSITE_OVER, img->colorSpace() );
 
 
-    KisGroupLayerSP parent = new KisGroupLayer (&img, "group 1", 200);
-    img.addLayer( parent, img.rootLayer() );
+    KisGroupLayerSP parent = new KisGroupLayer (img, "group 1", 200);
+    img->addLayer( parent, img->rootLayer() );
 
-    KisPaintLayerSP child = new KisPaintLayer(&img, "child", 200);
-    img.addLayer( child, parent );
+    KisPaintLayerSP child = new KisPaintLayer(img, "child", 200);
+    img->addLayer( child, parent );
 
     QModelIndex parentIdx = model.index( 0, 0 );
     QVERIFY( model.hasChildren( parentIdx ) );

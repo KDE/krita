@@ -227,36 +227,36 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *e)
         switch(m_function)
         {
             case ROTATE:
-                m_clickoffset = e->pos() - m_translate.toPoint();
+                m_clickoffset = e->point - m_translate;
                 m_clickangle = -m_a - atan2(m_clickoffset.x(),m_clickoffset.y());
                 m_clickoffset = QPoint(0, 0);
                 break;
             case MOVE:
-                m_clickoffset = e->pos() - m_translate.toPoint();
+                m_clickoffset = e->point - m_translate;
                 break;
             case TOPSCALE:
-                m_clickoffset = e->pos() - (m_topleft + m_topright)/2.0;
+                m_clickoffset = e->point - (m_topleft + m_topright)/2.0;
                 break;
             case TOPRIGHTSCALE:
-                m_clickoffset = e->pos() - m_topright;
+                m_clickoffset = e->point - m_topright;
                 break;
             case RIGHTSCALE:
-                m_clickoffset = e->pos() - (m_topright + m_bottomright)/2.0;
+                m_clickoffset = e->point - (m_topright + m_bottomright)/2.0;
                 break;
             case BOTTOMRIGHTSCALE:
-                m_clickoffset = e->pos() - m_bottomright;
+                m_clickoffset = e->point - m_bottomright;
                 break;
             case BOTTOMSCALE:
-                m_clickoffset = e->pos() - (m_bottomleft + m_bottomright)/2.0;
+                m_clickoffset = e->point - (m_bottomleft + m_bottomright)/2.0;
                 break;
             case BOTTOMLEFTSCALE:
-                m_clickoffset = e->pos() - m_bottomleft;
+                m_clickoffset = e->point - m_bottomleft;
                 break;
             case LEFTSCALE:
-                m_clickoffset = e->pos() - (m_topleft + m_bottomleft)/2.0;
+                m_clickoffset = e->point - (m_topleft + m_bottomleft)/2.0;
                 break;
             case TOPLEFTSCALE:
-                m_clickoffset = e->pos() - m_topleft;
+                m_clickoffset = e->point - m_topleft;
                 break; 
         }
         m_selecting = true;
@@ -539,8 +539,6 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
     }
     else
     {
-kDebug() << "moving no select " <<mousePos << endl;
-kDebug() << "topleft is " << topleft << endl;
         if(det(mousePos - topleft, topright - topleft)>0)
             m_function = ROTATE;
         else if(det(mousePos - topright, bottomright - topright)>0)

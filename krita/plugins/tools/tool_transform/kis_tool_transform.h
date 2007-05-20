@@ -49,9 +49,9 @@ class WdgToolTransform : public QWidget, public Ui::WdgToolTransform
  * Transform tool
  *
  */
-class KisToolTransform : public KoInteractionTool, KisCommandHistoryListener {
+class KisToolTransform : public KoTool, KisCommandHistoryListener {
 
-    typedef KoInteractionTool super;
+    typedef KoTool super;
     Q_OBJECT
 
 public:

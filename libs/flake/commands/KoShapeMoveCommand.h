@@ -51,11 +51,11 @@ public:
     void undo ();
 
     /// update newPositions list with new postions.
-    void setNewPositions(QList<QPointF> newPositions) { m_newPositions = newPositions; }
+    void setNewPositions(QList<QPointF> newPositions);
 
 private:
-    QList<KoShape*> m_shapes;
-    QList<QPointF> m_previousPositions, m_newPositions;
+    class Private;
+    Private * const d;
 };
 
 #endif

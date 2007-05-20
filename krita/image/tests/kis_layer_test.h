@@ -27,6 +27,10 @@ class KisLayerTest : public QObject
 
 private slots:
 
+    void testCreation();
+    void testOrdering();
+    void testEffectMasks();
+
 };
 
 #endif

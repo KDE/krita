@@ -33,7 +33,10 @@
 
 void KisImageTester::mergeTests()
 {
-    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    KoColorSpaceRegistry * reg = KoColorSpaceRegistry::instance();
+    QVERIFY2( reg, "Could not get colorspace registry" );
+
+    KoColorSpace * colorSpace = reg->colorSpace("RGBA", 0);
 
     KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, colorSpace, "merge test");
 
@@ -72,7 +75,6 @@ void KisImageTester::mergeTests()
     QCOMPARE(color.green(), 128 + ((255 - 128) / 2));
     QCOMPARE(color.blue(), 64 + ((255 - 64) / 2));
 }
-
 
 
 QTEST_KDEMAIN(KisImageTester, NoGUI)

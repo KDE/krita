@@ -145,7 +145,6 @@ void KisLayerTest::testOrdering()
     KisLayerSP layer2 = new TestLayer( image, "test", OPACITY_OPAQUE );
     KisLayerSP layer3 = new TestLayer( image, "test", OPACITY_OPAQUE );
 
-
     /*
       +---------+
       | layer 2 |

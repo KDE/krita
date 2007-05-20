@@ -119,43 +119,36 @@ public:
     /// Returns the ID of the layer, which is guaranteed to be unique among all KisLayers.
     int id() const;
 
-    /* Returns the index of the layer in its parent's list of child layers. Indices
-     * increase from 0, which is the topmost layer in the list, to the bottommost.
+    /**
+     * Returns the index of the layer in its parent's list of child
+     * layers. Indices increase from 0, which is the topmost layer in
+     * the list, to the bottommost.
      */
     virtual int index() const;
 
     /**
-     * Returns the parent layer of a layer. This is 0 only for a root layer; otherwise
-     * this will be an actual GroupLayer */
+     * Returns the parent layer of a layer. This is 0 only for a root
+     * layer; otherwise this will be an actual GroupLayer
+     */
     virtual KisGroupLayerSP parentLayer();
 
     virtual const KisGroupLayerSP parentLayer() const;
 
     /**
-     * Returns the previous sibling of this layer in the parent's list. This is the layer
-     * *above* this layer. 0 is returned if there is no parent, or if this child has no more
-     * previous siblings (== firstChild())
+     * Returns the previous sibling of this layer in the parent's
+     * list. This is the layer *above* this layer. 0 is returned if
+     * there is no parent, or if this child has no more previous
+     * siblings (== firstChild())
      */
     virtual KisLayerSP prevSibling() const;
 
     /**
-     * Returns the next sibling of this layer in the parent's list. This is the layer *below*
-     * this layer. 0 is returned if there is no parent, or if this child has no more next
-     * siblings (== lastChild())
+     * Returns the next sibling of this layer in the parent's list.
+     * This is the layer *below* this layer. 0 is returned if there is
+     * no parent, or if this child has no more next siblings (==
+     * lastChild())
      */
     virtual KisLayerSP nextSibling() const;
-
-    /**
-     * Returns the sibling above this layer in its parent's list. 0 is returned if there is no parent,
-     * or if this layer is the topmost layer in its group. This is the same as calling prevSibling().
-     */
-    KisLayerSP siblingAbove() const { return prevSibling(); }
-
-    /**
-     * Returns the sibling below this layer in its parent's list. 0 is returned if there is no parent,
-     * or if this layer is the bottommost layer in its group.  This is the same as calling nextSibling().
-     */
-    KisLayerSP siblingBelow() const { return nextSibling(); }
 
     /// Returns how many direct child layers this layer has (not
     /// recursive). The childcount can include masks.

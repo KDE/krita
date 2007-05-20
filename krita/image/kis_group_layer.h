@@ -170,8 +170,8 @@ public:
     KisLayerSP lastChild() const;
 
     /**
-       @returns the layer at the specified index.
-    */
+     *  @returns the layer at the specified index.
+     */
     KisLayerSP at(int index) const;
 
     /**

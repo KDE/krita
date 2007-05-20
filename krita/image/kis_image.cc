@@ -652,8 +652,6 @@ KisPaintDeviceSP KisImage::activeDevice()
 
 KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const QString & compositeOp, KoColorSpace * cs)
 {
-    kDebug() << "KisImage::newLayer " << name << ", opacity " << opacity << ", compop " << compositeOp << ", cs " << cs << endl;
-
     KisPaintLayer * layer;
     if (cs) {
         layer = new KisPaintLayer(this, name, opacity, cs);
@@ -761,8 +759,6 @@ void KisImage::preparePaintLayerAfterAdding( KisLayerSP layer )
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent)
 {
-    kDebug() << "KisImage::addLayer " << layer->name() << ", parent: " << parent << endl;
-
     if ( parent )
         return addLayer( layer, parent, parent->firstChild() );
     else
@@ -771,8 +767,6 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent)
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
 {
-    kDebug() << "KisImage::addLayer " << layer->name() << ", parent: " << parent << ", abovethis: " << aboveThis << endl;
-
     if (!parent)
         return false;
 
@@ -784,8 +778,6 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
 
 bool KisImage::addLayer( KisLayerSP layer,  KisGroupLayerSP parent, int index )
 {
-    kDebug() << "KisImage::addLayer " << layer->name() << ", parent: " << parent << ", index: " << index << endl;
-
     if (!parent)
         return false;
 

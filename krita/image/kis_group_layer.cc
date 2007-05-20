@@ -154,8 +154,6 @@ int KisGroupLayer::index(KisLayerSP layer) const
 
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
 {
-    kDebug() << "KisGroupLayer::addLayer " << name() << ", adding layer " << newLayer->name() << " with parent " << newLayer->parent() << " at pos " << x << endl;
-
     if (x < 0 || qBound(uint(0), uint(x), childCount()) != uint(x) ||
         newLayer->parent() || m_layers.contains(newLayer))
     {
@@ -184,7 +182,6 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
 
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
 {
-    kDebug() << "KisGroupLayer::addLayer new layer: " << newLayer.data() << ", aboveThis " << aboveThis << endl;
     if (aboveThis && aboveThis->parentLayer().data() != this)
     {
         kWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)!" << endl;

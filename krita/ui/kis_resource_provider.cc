@@ -92,7 +92,6 @@ float KisResourceProvider::HDRExposure() const
 }
 
 void KisResourceProvider::setHDRExposure(float exposure)
-
 {
     m_resourceProvider->setResource( HdrExposure, static_cast<double>( exposure ) );
     m_view->canvasBase()->updateCanvas();

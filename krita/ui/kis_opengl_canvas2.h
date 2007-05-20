@@ -21,15 +21,20 @@
 
 #include "config-krita.h"
 #include "config-opengl.h"
+#include "config-glew.h"
 
 #ifdef HAVE_OPENGL
+
+#ifdef HAVE_GLEW
+#include <GL/glew.h>
+#endif
 
 #include <QGLWidget>
 
 #include <KoCanvasBase.h>
 
 #include "kis_abstract_canvas_widget.h"
-#include "kis_opengl_image_context.h"
+#include "kis_opengl_image_textures.h"
 
 class QWidget;
 class QGLContext;
@@ -50,7 +55,7 @@ class KisOpenGLCanvas2 : public QGLWidget, public KisAbstractCanvasWidget
 
 public:
 
-    KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageContextSP context);
+    KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures);
 
     virtual ~KisOpenGLCanvas2();
 

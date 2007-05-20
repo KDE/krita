@@ -133,6 +133,8 @@ const KComponentData &KisFactory2::componentData()
         s_instance->dirs()->addResourceDir("kis_palettes", "/usr/share/create/swatches");
         s_instance->dirs()->addResourceDir("kis_palettes", QDir::homePath() + QString("/.create/swatches"));
 
+        s_instance->dirs()->addResourceType("kis_shaders", KStandardDirs::kde_default("data") + "krita/shaders/");
+
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
 

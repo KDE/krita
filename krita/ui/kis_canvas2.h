@@ -114,7 +114,7 @@ public: // KisCanvas2 methods
     KisImageSP image();
     KisView2* view();
 
-    bool isOpenGLCanvas() { return false; }
+    bool usingHDRExposureProgram();
 
 public slots:
 

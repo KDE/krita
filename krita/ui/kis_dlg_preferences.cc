@@ -20,6 +20,7 @@
 
 #include <config-krita.h>
 #include <config-opengl.h>
+#include <config-glew.h>
 
 #include <QBitmap>
 #include <QCheckBox>
@@ -66,6 +67,10 @@
 
 #ifdef EXTENDED_X11_TABLET_SUPPORT
 #include "kis_canvas2.h"
+#endif
+
+#if HAVE_OPENGL
+#include "kis_opengl.h"
 #endif
 
 // for the performance update
@@ -680,18 +685,27 @@ DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
     KisConfig cfg;
 
 #ifdef HAVE_OPENGL
-
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
-        //cbUseOpenGLShaders->setEnabled(false);
+        cbUseOpenGLShaders->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
-        //cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
-        //cbUseOpenGLShaders->setEnabled(cfg.useOpenGL());
+#ifdef HAVE_GLEW
+        if (KisOpenGL::hasShadingLanguage()) {
+            cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
+            cbUseOpenGLShaders->setEnabled(cfg.useOpenGL());
+        } else {
+            cbUseOpenGLShaders->setChecked(false);
+            cbUseOpenGLShaders->setEnabled(false);
+        }
+#else
+        cbUseOpenGLShaders->setChecked(false);
+        cbUseOpenGLShaders->setEnabled(false);
+#endif
     }
 #else
     grpOpenGL->setEnabled(false);
-    //cbUseOpenGLShaders->setEnabled(false);
+    cbUseOpenGLShaders->setEnabled(false);
 #endif
     intCheckSize->setValue( cfg.checkSize() );
     chkMoving->setChecked( cfg.scrollCheckers() );
@@ -703,16 +717,20 @@ DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
 void DisplaySettingsTab::setDefault()
 {
     cbUseOpenGL->setChecked(false);
-    //cbUseOpenGLShaders->setChecked(false);
-    //cbUseOpenGLShaders->setEnabled(false);
+    cbUseOpenGLShaders->setChecked(false);
+    cbUseOpenGLShaders->setEnabled(false);
     chkMoving->setChecked( true );
     intCheckSize->setValue( 32 );
     colorChecks->setColor( QColor( 220, 220, 220 ) );
 }
 
-void DisplaySettingsTab::slotUseOpenGLToggled(bool /*isChecked*/)
+void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
-    //cbUseOpenGLShaders->setEnabled(isChecked);
+#ifdef HAVE_GLEW
+    if (KisOpenGL::hasShadingLanguage()) {
+        cbUseOpenGLShaders->setEnabled(isChecked);
+    }
+#endif
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -808,9 +826,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Display" ));
     page->setHeader( i18n( "Display" ) );
-    page->setIcon(  KIcon(BarIcon( "kscreensaver", K3Icon::SizeMedium
-))
-);
+    page->setIcon(  KIcon(BarIcon( "screen", K3Icon::SizeMedium)));
     addPage( page );
 
     m_displaySettings = new DisplaySettingsTab( vbox );
@@ -897,7 +913,7 @@ bool PreferencesDialog::editPreferences()
 
 #ifdef HAVE_OPENGL
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
-        //cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
+        cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
 #endif
         cfg.setCheckSize( dialog->m_displaySettings->intCheckSize->value() );
         cfg.setScrollingCheckers( dialog->m_displaySettings->chkMoving->isChecked() );

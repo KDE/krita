@@ -304,12 +304,14 @@ void KisBirdEyeBox::slotImageColorSpaceChanged(KoColorSpace *cs)
 
 void KisBirdEyeBox::exposureValueChanged(double exposure)
 {
-    if (!m_draggingExposureSlider) {
+    if (!m_draggingExposureSlider || m_view->canvasBase()->usingHDRExposureProgram()) {
         m_view->resourceProvider()->setHDRExposure(exposure);
 
+#if 0 // XXX: Redo when zooming is implemented again (BSAR)
         if (m_image && m_image->colorSpace()->hasHighDynamicRange()) {
             m_birdEyePanel->slotUpdate(m_image->bounds());
         }
+#endif
     }
 }
 

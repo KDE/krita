@@ -13,26 +13,55 @@
    <string>Display</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="grpOpenGL" >
+     <property name="title" >
+      <string>OpenGL</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <item>
+       <widget class="QCheckBox" name="cbUseOpenGL" >
+        <property name="text" >
+         <string>Enable OpenGL</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbUseOpenGLShaders" >
+        <property name="text" >
+         <string>Enable OpenGL shaders</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="1" column="0" >
     <widget class="QGroupBox" name="grpCheckers" >
      <property name="title" >
       <string>Transparency Checks</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
+      <property name="leftMargin" >
        <number>9</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin" >
+       <number>9</number>
+      </property>
+      <property name="rightMargin" >
+       <number>9</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>9</number>
+      </property>
+      <property name="horizontalSpacing" >
+       <number>6</number>
+      </property>
+      <property name="verticalSpacing" >
        <number>6</number>
       </property>
       <item row="2" column="1" >
-       <widget class="KColorButton" native="1" name="colorChecks" />
+       <widget class="KColorButton" name="colorChecks" />
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="lblColor" >
@@ -90,59 +119,11 @@
      </property>
      <property name="sizeHint" >
       <size>
-       <width>20</width>
-       <height>16</height>
+       <width>356</width>
+       <height>41</height>
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="0" column="0" >
-    <widget class="QGroupBox" name="grpOpenGL" >
-     <property name="title" >
-      <string>OpenGL</string>
-     </property>
-     <layout class="QHBoxLayout" >
-      <property name="margin" >
-       <number>11</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <layout class="QVBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <item>
-         <widget class="QCheckBox" name="cbUseOpenGL" >
-          <property name="text" >
-           <string>Enable OpenGL</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>121</width>
-          <height>31</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
    </item>
   </layout>
  </widget>
@@ -150,7 +131,7 @@
  <customwidgets>
   <customwidget>
    <class>KColorButton</class>
-   <extends>QWidget</extends>
+   <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
    <container>1</container>
   </customwidget>

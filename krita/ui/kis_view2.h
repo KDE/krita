@@ -154,7 +154,6 @@ private:
 
     void loadPlugins();
 
-
 private:
     class KisView2Private;
     KisView2Private * m_d;

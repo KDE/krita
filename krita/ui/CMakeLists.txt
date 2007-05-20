@@ -67,8 +67,9 @@ set(kritaui_LIB_SRCS
     kis_oasis_load_visitor.cc
     kis_oasis_save_data_visitor.cc
     kis_oasis_save_visitor.cc
+    kis_opengl.cpp
     kis_opengl_canvas2.cpp
-    kis_opengl_image_context.cc
+    kis_opengl_image_textures.cpp
     kis_paintop_box.cc 
     kis_palette_view.cc
     kis_palette_docker.cc
@@ -107,6 +108,17 @@ set(kritaui_LIB_SRCS
     kis_channelflags_widget.cpp
     kis_abstract_canvas_widget.cpp
 )
+
+if(HAVE_OPENGL AND HAVE_GLEW)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        kis_opengl_shader.cpp
+        kis_opengl_fragment_shader.cpp
+        kis_opengl_vertex_shader.cpp
+        kis_opengl_program.cpp
+        kis_opengl_hdr_exposure_program.cpp
+        )
+endif(HAVE_OPENGL AND HAVE_GLEW)
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 

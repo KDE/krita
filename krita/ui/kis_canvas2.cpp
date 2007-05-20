@@ -25,17 +25,18 @@
 
 #include <kdebug.h>
 
-#include <KoUnit.h>
-#include <KoZoomHandler.h>
-#include <KoViewConverter.h>
-#include <KoShapeManager.h>
-#include <colorprofiles/KoIccColorProfile.h>
-#include <KoColorSpaceRegistry.h>
-#include <KoCanvasController.h>
-#include <KoDocument.h>
-#include <KoZoomAction.h>
+#include "KoUnit.h"
+#include "KoZoomHandler.h"
+#include "KoViewConverter.h"
+#include "KoShapeManager.h"
+#include "colorprofiles/KoIccColorProfile.h"
+#include "KoColorSpaceRegistry.h"
+#include "KoCanvasController.h"
+#include "KoDocument.h"
+#include "KoZoomAction.h"
+#include "KoToolProxy.h"
 
-#include <kis_image.h>
+#include "kis_image.h"
 #include "kis_doc2.h"
 #include "kis_shape_layer.h"
 #include "kis_resource_provider.h"
@@ -45,7 +46,7 @@
 #include "kis_qpainter_canvas.h"
 #include "kis_opengl_canvas2.h"
 #include "kis_group_layer.h"
-#include "kis_opengl_image_context.h"
+#include "kis_opengl_image_textures.h"
 #include "kis_shape_controller.h"
 
 #ifdef HAVE_OPENGL
@@ -76,6 +77,8 @@ public:
         , shapeManager( new KoShapeManager(parent) )
         , monitorProfile( 0 )
         , currentCanvasIsOpenGL( false )
+        , currentCanvasUsesOpenGLShaders( false )
+        , toolProxy( new KoToolProxy(parent) )
         {
         }
 
@@ -83,6 +86,7 @@ public:
         {
             delete shapeManager;
             delete monitorProfile;
+            delete toolProxy;
         }
 
     KoViewConverter * viewConverter;
@@ -91,13 +95,15 @@ public:
     KoShapeManager * shapeManager;
     KoColorProfile * monitorProfile;
     bool currentCanvasIsOpenGL;
+    bool currentCanvasUsesOpenGLShaders;
+    KoToolProxy * toolProxy;
     QImage canvasCache; // XXX: use KisQPainterImageContext to share
                         //
                         // cache data between views. Finish that class.
     QPoint documentOffset;
 
 #ifdef HAVE_OPENGL
-    KisOpenGLImageContextSP openGLImageContext;
+    KisOpenGLImageTexturesSP openGLImageTextures;
 #endif
 };
 
@@ -111,11 +117,15 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
              this, SLOT( documentOffsetMoved( const QPoint& ) ) );
 }
 
+KisCanvas2::~KisCanvas2()
+{
+    delete m_d;
+}
+
 void KisCanvas2::createQPainterCanvas()
 {
 #ifdef HAVE_OPENGL
-    if ( m_d->openGLImageContext ) delete m_d->openGLImageContext;
-    m_d->openGLImageContext = 0;
+    m_d->openGLImageTextures = 0;
 #endif
     setCanvasWidget( new KisQPainterCanvas( this, m_d->view ) );
     m_d->currentCanvasIsOpenGL = false;
@@ -126,10 +136,10 @@ void KisCanvas2::createOpenGLCanvas()
 #ifdef HAVE_OPENGL
     if ( QGLFormat::hasOpenGL() ) {
         // XXX: The image isn't done loading here!
-        if ( m_d->openGLImageContext ) delete m_d->openGLImageContext;
-        m_d->openGLImageContext = KisOpenGLImageContext::getImageContext(m_d->view->image(), m_d->monitorProfile);
-        setCanvasWidget( new KisOpenGLCanvas2( this, m_d->view, m_d->openGLImageContext ) );
+        m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile);
+        setCanvasWidget( new KisOpenGLCanvas2( this, m_d->view, m_d->openGLImageTextures ) );
         m_d->currentCanvasIsOpenGL = true;
+        m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
     }
     else {
         kWarning() << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
@@ -164,12 +174,11 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     widget->setAttribute( Qt::WA_OpaquePaintEvent );
     widget->setMouseTracking( true );
     widget->setAcceptDrops( true );
-
-}
-
-KisCanvas2::~KisCanvas2()
-{
-    delete m_d;
+    KoCanvasController *controller = canvasController();
+    if (controller) {
+        Q_ASSERT(controller->canvas() == this);
+        controller->changeCanvasWidget(widget);
+    }
 }
 
 KisView2* KisCanvas2::view()
@@ -251,7 +260,7 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
 #ifdef HAVE_OPENGL
     // Should never have an OpenGL image context and get here as that connects
     // to the image directly.
-    Q_ASSERT( m_d->openGLImageContext.isNull() );
+    Q_ASSERT( m_d->openGLImageTextures.isNull() );
 #endif
     // XXX: Use the KisQPainterImageContext here
     QPainter p( &m_d->canvasCache );
@@ -296,7 +305,7 @@ KoUnit KisCanvas2::unit()
 }
 
 KoToolProxy * KisCanvas2::toolProxy() {
-    return m_d->canvasWidget->toolProxy();
+    return m_d->toolProxy;
 }
 
 KisImageSP KisCanvas2::image()
@@ -349,9 +358,9 @@ void KisCanvas2::setImageSize( qint32 w, qint32 h )
 void KisCanvas2::connectCurrentImage()
 {
 #ifdef HAVE_OPENGL
-    if (m_d->openGLImageContext) {
-        connect(m_d->openGLImageContext, SIGNAL(sigImageUpdated(const QRect &)), SLOT(updateCanvas()));
-        connect(m_d->openGLImageContext, SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize(qint32, qint32)));
+    if (m_d->openGLImageTextures) {
+        connect(m_d->openGLImageTextures, SIGNAL(sigImageUpdated(const QRect &)), SLOT(updateCanvas()));
+        connect(m_d->openGLImageTextures, SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize(qint32, qint32)));
     } else {
 #endif
     connect(m_d->view->image(), SIGNAL(sigImageUpdated(const QRect &)), SLOT(updateCanvasProjection(const QRect &)));
@@ -364,8 +373,8 @@ void KisCanvas2::connectCurrentImage()
 void KisCanvas2::disconnectCurrentImage()
 {
 #ifdef HAVE_OPENGL
-    if (m_d->openGLImageContext) {
-        m_d->openGLImageContext->disconnect(this);
+    if (m_d->openGLImageTextures) {
+        m_d->openGLImageTextures->disconnect(this);
     }
 #endif
     m_d->view->image()->disconnect( this );
@@ -378,24 +387,24 @@ void KisCanvas2::resetCanvas()
 #if HAVE_OPENGL
     KisConfig cfg;
 
-    if (cfg.useOpenGL() != m_d->currentCanvasIsOpenGL) {
+    if ((cfg.useOpenGL() != m_d->currentCanvasIsOpenGL) ||
+        (m_d->currentCanvasIsOpenGL && (cfg.useOpenGLShaders() != m_d->currentCanvasUsesOpenGLShaders))) {
 
-        m_d->view->disconnectCurrentImage(); // Calls the local
-                                           // disConnectCurrentImg, too.
-
+        disconnectCurrentImage();
         createCanvas();
-        m_d->view->connectCurrentImage();
+        connectCurrentImage();
     }
 
     if (cfg.useOpenGL()) {
-        m_d->openGLImageContext->setMonitorProfile(monitorProfile());
+        m_d->openGLImageTextures->setMonitorProfile(monitorProfile());
+    } else {
+        if (image()) {
+            updateCanvasProjection(image()->bounds());
+        }
     }
 #endif
     m_d->canvasWidget->widget()->update();
-
-
 }
-
 
 void KisCanvas2::documentOffsetMoved( const QPoint &documentOffset )
 {
@@ -406,6 +415,18 @@ void KisCanvas2::documentOffsetMoved( const QPoint &documentOffset )
 void KisCanvas2::preScale()
 {
     m_d->canvasWidget->preScale();
+}
+
+bool KisCanvas2::usingHDRExposureProgram()
+{
+#ifdef HAVE_OPENGL
+    if (m_d->currentCanvasIsOpenGL) {
+        if (m_d->openGLImageTextures->usingHDRExposureProgram()) {
+            return true;
+        }
+    }
+#endif
+    return false;
 }
 
 #include "kis_canvas2.moc"

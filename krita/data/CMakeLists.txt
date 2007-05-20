@@ -7,6 +7,7 @@ add_subdirectory( profiles )
 add_subdirectory( palettes )
 add_subdirectory( images )
 add_subdirectory( templates )
+add_subdirectory( shaders )
 
 
 

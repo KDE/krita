@@ -51,6 +51,9 @@ inline uint UINT8_SCALEBY(uint a, uint b)
     return (c >> 8) + c;
 }
 
+/// multiplication of two scale values
+/// A scale value is interpreted as 255 equaling 1.0 (such as seen in rgb8 triplets)
+/// thus "255*255=255" because 1.0*1.0=1.0
 inline uint UINT8_MULT(uint a, uint b)
 {
     uint c = a * b + 0x80u;
@@ -63,14 +66,18 @@ inline uint UINT8_DIVIDE(uint a, uint b)
     return c;
 }
 
+/// Blending of two scale values as described by the alpha scale value
+/// A scale value is interpreted as 255 equaling 1.0 (such as seen in rgb8 triplets)
+/// Basically we do: a*alpha + b*(1-alpha)
 inline uint UINT8_BLEND(uint a, uint b, uint alpha)
 {
-    // Basically we do a*alpha + b*(1-alpha)
-    // However refactored to (a-b)*alpha + b  since that saves a multiplication
+    // However the formula is refactored to (a-b)*alpha + b  since that saves a multiplication
     // Signed arithmetic is needed since a-b might be negative
-    int c = ((int(a) - int(b)) * int(alpha)) >> 8;
+    // +b above becomes + (b<<8) - b  because we multiply it with 255 to fit the first part
+    //  That way we can do a normal rounding
+    uint c = uint(((int(a) - int(b)) * int(alpha)) + (b<<8) - b) + 0x80u;
 
-    return uint(c + b);
+    return ((c >> 8) + c) >> 8;
 }
 
 inline uint UINT16_MULT(uint a, uint b)

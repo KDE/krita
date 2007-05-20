@@ -118,17 +118,17 @@ void KoColorSpaceRegistry::init()
     KoColorProfile *rgbProfile = new KoLcmsColorProfile(cmsCreate_sRGBProfile());
     addProfile(rgbProfile);
     add(new KoRgbU16ColorSpaceFactory());
-    
+
     add(new KoRgbU8ColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
                 new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
                 (KoID("RGB8HISTO", i18n("RGB8 Histogram")), rgb8()) );
 
-    
-    
+
+
     // Create the default profile for grayscale, probably not the best place to but that, but still better than in a grayscale plugin
     // .22 gamma grayscale or something like that. Taken from the lcms tutorial...
-    LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2); 
+    LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
     cmsFreeGamma(Gamma);
     KoColorProfile *defProfile = new KoLcmsColorProfile(hProfile);
@@ -136,16 +136,6 @@ void KoColorSpaceRegistry::init()
 
     // Create the built-in colorspaces
     d->alphaCs = new KoAlphaColorSpace(this);
-
-    // Load all colorspace modules
-    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/ColorSpace"),
-                                                         QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-Pigment-Version] == 1)"));
-
-    if (offers.empty()) {
-        KMessageBox::sorry(0, i18n("Cannot start: No color spaces available. For now you need to install Krita to get colorspaces"));
-        abort();
-    }
 
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "ColorSpacePlugins";

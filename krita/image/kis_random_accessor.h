@@ -94,27 +94,22 @@ class KisRandomAccessorPixelTrait {
 public:
 
     inline KisRandomAccessorPixelTrait(_iTp* underlyingAccessor,
-                                       _iTp* readSelectionAccessor,
-                                       _iTp* writeSelectionAccessor)
+                                       _iTp* selectionAccessor)
         : m_underlyingAccessor( underlyingAccessor )
-        , m_readSelectionAccessor( readSelectionAccessor )
-        , m_writeSelectionAccessor( writeSelectionAccessor )
+        , m_selectionAccessor( selectionAccessor )
         {
         }
 
     ~KisRandomAccessorPixelTrait() {
 
-        if( m_readSelectionAccessor )
-            delete m_readSelectionAccessor;
-
-        if ( m_writeSelectionAccessor )
-            delete m_writeSelectionAccessor;
+        if( m_selectionAccessor )
+            delete m_selectionAccessor;
     }
 
     /// @return true if the pixel is selected
     inline bool isSelected() const
         {
-            return (m_readSelectionAccessor) ? *(m_readSelectionAccessor->rawData()) > SELECTION_THRESHOLD : true;
+            return (m_selectionAccessor) ? *(m_selectionAccessor->rawData()) > SELECTION_THRESHOLD : true;
         };
 
     inline quint8 operator[](int index) const
@@ -127,7 +122,7 @@ public:
      */
     inline quint8 selectedness() const
         {
-            return (m_readSelectionAccessor) ? *(m_readSelectionAccessor->rawData()) : MAX_SELECTED;
+            return (m_selectionAccessor) ? *(m_selectionAccessor->rawData()) : MAX_SELECTED;
         };
 
     /**
@@ -137,22 +132,21 @@ public:
      */
     inline quint8 * selectionMask() const
         {
-            return ( m_readSelectionAccessor ) ? m_readSelectionAccessor->rawData() : 0;
+            return ( m_selectionAccessor ) ? m_selectionAccessor->rawData() : 0;
         }
 
     inline void moveTo(qint32 x, qint32 y)
 	{
-	    if(m_readSelectionAccessor) m_readSelectionAccessor->moveTo(x,y);
+	    if(m_selectionAccessor) m_selectionAccessor->moveTo(x,y);
 	}
 
     inline const _iTp* selectionAccessor() const
 	{
-	    return m_readSelectionAccessor;
+	    return m_selectionAccessor;
 	}
 private:
     _iTp* m_underlyingAccessor;
-    _iTp* m_readSelectionAccessor;
-    _iTp* m_writeSelectionAccessor;
+    _iTp* m_selectionAccessor;
 };
 
 
@@ -168,13 +162,11 @@ class KisRandomAccessorPixelBase : public T, public KisRandomAccessorPixelTrait<
 public:
 
     KisRandomAccessorPixelBase(KisTiledDataManager *ktm,
-                               KisTiledDataManager *ktmReadSelect,
-                               KisTiledDataManager *ktmWriteSelect,
+                               KisTiledDataManager *ktmSelect,
                                qint32 x, qint32 y, qint32 offsetx, qint32 offsety)
         : T( ktm, x, y, offsetx, offsety)
         , KisRandomAccessorPixelTrait<T, TSelect>( this,
-                                                   (ktmReadSelect) ? new T(ktm, x, y, offsetx, offsety) : 0,
-                                                   (ktmWriteSelect) ? new T(ktm, x, y, offsetx, offsety) : 0 )
+                                                   (ktmSelect) ? new T(ktm, x, y, offsetx, offsety) : 0 )
         {
         }
 

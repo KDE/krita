@@ -34,14 +34,13 @@ class KisLineIteratorPixelBase : public T, public KisIteratorPixelTrait<T, TSele
 
 public:
 
-    KisLineIteratorPixelBase( KisDataManager *dm, KisDataManager *sel_dm_read, KisDataManager *sel_dm_write, qint32 x, qint32 y, qint32 s, qint32 offsetx, qint32 offsety)
+    KisLineIteratorPixelBase( KisDataManager *dm, KisDataManager *sel_dm, qint32 x, qint32 y, qint32 s, qint32 offsetx, qint32 offsety)
 	: T(dm, x - offsetx, y - offsety, s)
         , KisIteratorPixelTrait <T, TSelect> ( this )
         , m_offsetx(offsetx), m_offsety(offsety)
         {
-// XXX: Fix!
-            if(sel_dm_read) {
-                T * i = new T(sel_dm_read, x - offsetx, y - offsety, s);
+            if(sel_dm) {
+                T * i = new T(sel_dm, x - offsetx, y - offsety, s);
                 Q_CHECK_PTR(i);
                 KisIteratorPixelTrait <T, TSelect>::setSelectionIterator(i);
             }
@@ -96,13 +95,13 @@ class KisRectIteratorPixelBase : public T, public KisIteratorPixelTrait<T, TSele
 
 public:
 
-    KisRectIteratorPixelBase( KisDataManager *dm, KisDataManager *sel_dm_read, KisDataManager *sel_dm_write, qint32 x, qint32 y, qint32 w, qint32 h, qint32 offsetx, qint32 offsety) :
+    KisRectIteratorPixelBase( KisDataManager *dm, KisDataManager *sel_dm, qint32 x, qint32 y, qint32 w, qint32 h, qint32 offsetx, qint32 offsety) :
         T(dm, x - offsetx, y - offsety, w, h),
         KisIteratorPixelTrait <T, TSelect> ( this ),
         m_offsetx(offsetx), m_offsety(offsety)
         {
-            if(sel_dm_read) {
-                T * i = new T(sel_dm_read, x - offsetx, y - offsety, w, h);
+            if(sel_dm) {
+                T * i = new T(sel_dm, x - offsetx, y - offsety, w, h);
                 Q_CHECK_PTR(i);
                 KisIteratorPixelTrait <T, TSelect>::setSelectionIterator(i);
             }

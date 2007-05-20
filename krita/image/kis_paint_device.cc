@@ -70,11 +70,6 @@ public:
     mutable bool selectionDeselected;
     mutable KisSelectionSP selection;
 
-    // The protection mask is a second way to affect writing. Where "selected",
-    // then the paint device pixel should not be written to.
-    mutable bool hasProtectionMask;
-    mutable KisSelectionSP protectionMask;
-
     KisExifInfo* exifInfo;
     QList<KisFilter*> longRunningFilters;
     QTimer * longRunningFilterTimer;
@@ -193,12 +188,9 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name)
     m_d->colorSpace = colorSpace;
 
     m_d->hasSelection = false;
-    m_d->hasProtectionMask = false;
     m_d->selectionDeselected = false;
     m_d->selection = 0;
-    m_d->protectionMask = 0;
     m_d->paintEngine = new KisPaintEngine();
-
 
 }
 
@@ -217,8 +209,6 @@ KisPaintDevice::KisPaintDevice(KisLayerWSP parent, KoColorSpace * colorSpace, co
     m_d->hasSelection = false;
     m_d->selectionDeselected = false;
     m_d->selection = 0;
-    m_d->hasProtectionMask = false;
-    m_d->protectionMask = 0;
 
     m_d->parentLayer = parent;
 
@@ -266,8 +256,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         m_d->colorSpace = rhs.m_d->colorSpace;
         m_d->hasSelection = false;
         m_d->selection = 0;
-        m_d->hasProtectionMask = false;
-        m_d->protectionMask = 0;
 
         m_d->pixelSize = rhs.m_d->pixelSize;
 
@@ -413,12 +401,6 @@ void KisPaintDevice::move(qint32 x, qint32 y)
     {
         m_d->selection->setX(x);
         m_d->selection->setY(y);
-    }
-
-    if ( m_d->protectionMask )
-    {
-        m_d->protectionMask->setX( x );
-        m_d->protectionMask->setY( y );
     }
 
     setDirty(dirtyRegion);
@@ -940,118 +922,85 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h)
 KisRectIteratorPixel KisPaintDevice::createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h)
 {
     KisDataManager* selectionDm = 0;
-    KisDataManager* protectionMaskDm = 0;
 
     if(hasSelection())
         selectionDm = m_d->selection->m_datamanager.data();
 
-    if(m_d->hasProtectionMask)
-        protectionMaskDm = m_d->protectionMask->m_datamanager.data();
 
-    return KisRectIteratorPixel( m_datamanager.data(), selectionDm, protectionMaskDm,
-                             left, top, w, h, m_d->x, m_d->y);
+    return KisRectIteratorPixel(m_datamanager.data(), selectionDm, left, top, w, h, m_d->x, m_d->y);
 }
 
 KisRectConstIteratorPixel KisPaintDevice::createRectConstIterator(qint32 left, qint32 top, qint32 w, qint32 h) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
-    KisDataManager* protectionMaskDm = 0;
 
     if(hasSelection())
         selectionDm = const_cast< KisDataManager*>(m_d->selection->m_datamanager.data());
 
-    if(m_d->hasProtectionMask)
-        protectionMaskDm = const_cast<KisDataManager*>(m_d->protectionMask->m_datamanager.data());
-
-    return KisRectConstIteratorPixel( dm, selectionDm, protectionMaskDm,
-                             left, top, w, h, m_d->x, m_d->y);
+    return KisRectConstIteratorPixel(dm, selectionDm, left, top, w, h, m_d->x, m_d->y);
 }
 
 KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(qint32 x, qint32 y, qint32 w)
 {
     KisDataManager* selectionDm = 0;
-    KisDataManager* protectionMaskDm = 0;
 
     if(hasSelection())
         selectionDm = m_d->selection->m_datamanager.data();
 
-    if(m_d->hasProtectionMask)
-        protectionMaskDm = m_d->protectionMask->m_datamanager.data();
-
-    return KisHLineIteratorPixel( m_datamanager.data(), selectionDm, protectionMaskDm, x, y, w, m_d->x, m_d->y);
+    return KisHLineIteratorPixel(m_datamanager.data(), selectionDm, x, y, w, m_d->x, m_d->y);
 }
 
 KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, qint32 y, qint32 w) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
-    KisDataManager* protectionMaskDm = 0;
 
     if(hasSelection())
         selectionDm = const_cast< KisDataManager*>(m_d->selection->m_datamanager.data());
 
-    if(m_d->hasProtectionMask)
-        protectionMaskDm = const_cast<KisDataManager*>(m_d->protectionMask->m_datamanager.data());
-
-    return KisHLineConstIteratorPixel( dm, selectionDm, protectionMaskDm, x, y, w, m_d->x, m_d->y);
+    return KisHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y);
 }
 
 KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, qint32 h)
 {
     KisDataManager* selectionDm = 0;
-    KisDataManager* protectionMaskDm = 0;
 
     if(hasSelection())
         selectionDm = m_d->selection->m_datamanager.data();
 
-    if(m_d->hasProtectionMask)
-        protectionMaskDm = m_d->protectionMask->m_datamanager.data();
-
-    return KisVLineIteratorPixel( m_datamanager.data(), selectionDm, protectionMaskDm, x, y, h, m_d->x, m_d->y);
+    return KisVLineIteratorPixel(m_datamanager.data(), selectionDm, x, y, h, m_d->x, m_d->y);
 }
 
 KisVLineConstIteratorPixel  KisPaintDevice::createVLineConstIterator(qint32 x, qint32 y, qint32 h) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
-    KisDataManager* protectionMaskDm = 0;
 
     if(hasSelection())
         selectionDm = const_cast< KisDataManager*>(m_d->selection->m_datamanager.data());
 
-    if(m_d->hasProtectionMask)
-        protectionMaskDm = const_cast<KisDataManager*>(m_d->protectionMask->m_datamanager.data());
-
-    return KisVLineConstIteratorPixel( dm, selectionDm, protectionMaskDm, x, y, h, m_d->x, m_d->y);
+    return KisVLineConstIteratorPixel(dm, selectionDm, x, y, h, m_d->x, m_d->y);
 }
 
 KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(qint32 x, qint32 y)
 {
     KisDataManager* selectionDm = 0;
-    KisDataManager* protectionMaskDm = 0;
 
     if(hasSelection())
         selectionDm = m_d->selection->m_datamanager.data();
 
-    if(m_d->hasProtectionMask)
-        protectionMaskDm = m_d->protectionMask->m_datamanager.data();
-
-    return KisRandomAccessorPixel(m_datamanager.data(), selectionDm, protectionMaskDm, x, y, m_d->x, m_d->y);
+    return KisRandomAccessorPixel(m_datamanager.data(), selectionDm, x, y, m_d->x, m_d->y);
 }
 
 KisRandomConstAccessorPixel KisPaintDevice::createRandomConstAccessor(qint32 x, qint32 y) const {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
-    KisDataManager* protectionMaskDm = 0;
 
     if(hasSelection())
         selectionDm = const_cast< KisDataManager*>(m_d->selection->m_datamanager.data());
 
-    if(m_d->hasProtectionMask)
-        protectionMaskDm = const_cast<KisDataManager*>(m_d->protectionMask->m_datamanager.data());
-
-    return KisRandomConstAccessorPixel(dm, selectionDm, protectionMaskDm, x, y, m_d->x, m_d->y);
+    return KisRandomConstAccessorPixel(dm, selectionDm, x, y, m_d->x, m_d->y);
 }
 
 KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor() const
@@ -1298,8 +1247,6 @@ void KisPaintDevice::setX(qint32 x)
     m_d->x = x;
     if(m_d->selection && m_d->selection.data() != this)
         m_d->selection->setX(x);
-    if(m_d->protectionMask && m_d->protectionMask.data() != this)
-        m_d->protectionMask->setX(x);
 }
 
 void KisPaintDevice::setY(qint32 y)
@@ -1307,8 +1254,6 @@ void KisPaintDevice::setY(qint32 y)
     m_d->y = y;
     if(m_d->selection && m_d->selection.data() != this)
         m_d->selection->setY(y);
-    if(m_d->protectionMask && m_d->protectionMask.data() != this)
-        m_d->protectionMask->setY(y);
 }
 
 

@@ -45,6 +45,7 @@ public:
      */
     KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions,
                         QUndoCommand *parent = 0);
+    ~KoShapeMoveCommand();
     /// redo the command
     void redo ();
     /// revert the actions done in redo

@@ -22,24 +22,35 @@
 
 #include <klocale.h>
 
+class KoShapeSizeCommand::Private {
+public:
+    QList<KoShape*> shapes;
+    QList<QSizeF> previousSizes, newSizes;
+};
+
 KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes, QUndoCommand *parent)
-: QUndoCommand(parent)
-, m_previousSizes(previousSizes)
-, m_newSizes(newSizes)
+: QUndoCommand(parent),
+    d(new Private())
 {
-    m_shapes = shapes;
-    Q_ASSERT(m_shapes.count() == m_previousSizes.count());
-    Q_ASSERT(m_shapes.count() == m_newSizes.count());
+    d->previousSizes = previousSizes;
+    d->newSizes = newSizes;
+    d->shapes = shapes;
+    Q_ASSERT(d->shapes.count() == d->previousSizes.count());
+    Q_ASSERT(d->shapes.count() == d->newSizes.count());
 
     setText(i18n( "Resize shapes" ));
+}
+
+KoShapeSizeCommand::~KoShapeSizeCommand() {
+    delete d;
 }
 
 void KoShapeSizeCommand::redo () {
     QUndoCommand::redo();
     int i=0;
-    foreach(KoShape *shape, m_shapes) {
+    foreach(KoShape *shape, d->shapes) {
         shape->repaint();
-        shape->resize(m_newSizes[i++]);
+        shape->resize(d->newSizes[i++]);
         shape->repaint();
     }
 }
@@ -47,9 +58,9 @@ void KoShapeSizeCommand::redo () {
 void KoShapeSizeCommand::undo () {
     QUndoCommand::undo();
     int i=0;
-    foreach(KoShape *shape, m_shapes) {
+    foreach(KoShape *shape, d->shapes) {
         shape->repaint();
-        shape->resize(m_previousSizes[i++]);
+        shape->resize(d->previousSizes[i++]);
         shape->repaint();
     }
 }

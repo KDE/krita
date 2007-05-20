@@ -42,13 +42,16 @@ public:
      */
     KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes,
                         QUndoCommand *parent = 0);
+    ~KoShapeSizeCommand();
+
     /// redo the command
     void redo ();
     /// revert the actions done in redo
     void undo ();
+
 private:
-    QList<KoShape*> m_shapes;
-    QList<QSizeF> m_previousSizes, m_newSizes;
+    class Private;
+    Private * const d;
 };
 
 #endif

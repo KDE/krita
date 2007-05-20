@@ -41,6 +41,10 @@ KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPoi
     setText( i18n( "Move shapes" ) );
 }
 
+KoShapeMoveCommand::~KoShapeMoveCommand() {
+    delete d;
+}
+
 void KoShapeMoveCommand::redo() {
     QUndoCommand::redo();
     for(int i=0; i < d->shapes.count(); i++) {

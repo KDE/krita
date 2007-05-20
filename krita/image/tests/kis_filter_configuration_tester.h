@@ -19,12 +19,15 @@
 #ifndef KIS_FILTER_CONFIGURATION_TESTER_H
 #define KIS_FILTER_CONFIGURATION_TESTER_H
 
-#include <kunittest/tester.h>
+#include <QtTest/QtTest>
 
-class KisFilterConfigurationTester : public KUnitTest::Tester
+class KisFilterConfigurationTester : public QObject
 {
-public:
-    void allTests();
+
+    Q_OBJECT
+
+private slots:
+
     void testCreation();
     void testRoundTrip();
     void testSetGetProperty();

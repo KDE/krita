@@ -17,7 +17,7 @@
  */
 
 #include <QApplication>
-
+#include <qtest_kde.h>
 #include <kdebug.h>
 #include <kunittest/runner.h>
 #include <kunittest/module.h>
@@ -25,43 +25,34 @@
 #include "kis_filter_configuration_tester.h"
 #include "../kis_filter_configuration.h"
 
-using namespace KUnitTest;
-
-KUNITTEST_MODULE(kunittest_kis_filter_configuration_tester, "KisFilterConfiguration Tester");
-KUNITTEST_MODULE_REGISTER_TESTER(KisFilterConfigurationTester);
-
-void KisFilterConfigurationTester::allTests()
-{
-    testCreation();
-    testSetGetProperty();
-    testRoundTrip();
-}
-
 void KisFilterConfigurationTester::testCreation()
 {
     KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
-    if ( kfc == 0 ) failure("Could not create test filter configuration");
-    CHECK(kfc->version(), 1);
-    CHECK(kfc->name(), QString("test"));
+    QVERIFY2( kfc == 0,  "Could not create test filter configuration");
+    QCOMPARE(kfc->version(), 1);
+    QCOMPARE(kfc->name(), QString("test"));
 
     delete kfc;
-    success("testCreation success");
 }
 
 void KisFilterConfigurationTester::testRoundTrip()
 {
     KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
-    CHECK(kfc->version(), 1);
-    CHECK(kfc->name(), QString("test"));
+    QCOMPARE(kfc->version(), 1);
+    QCOMPARE(kfc->name(), QString("test"));
     QString s = kfc->toString();
     delete kfc;
-    kfc = new KisFilterConfiguration(s);
-    CHECK(kfc->version(), 1);
-    CHECK(kfc->name(), QString("test"));
+    kfc = new KisFilterConfiguration("test2", 2);
+    kfc->fromXML( s );
+    QCOMPARE(kfc->version(), 1);
+    QCOMPARE(kfc->name(), QString("test"));
     delete kfc;
-    success("testDeserializaton success");
 }
 
 void KisFilterConfigurationTester::testSetGetProperty()
 {
 }
+
+
+QTEST_KDEMAIN(KisFilterConfigurationTester, NoGUI)
+#include "kis_filter_configuration_tester.moc"

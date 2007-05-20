@@ -1,5 +1,4 @@
-
-
+add_subdirectory( tests )
 add_subdirectory( tiles )
 
 if(KUNITTEST_FOUND)

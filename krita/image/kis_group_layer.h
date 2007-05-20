@@ -189,12 +189,18 @@ private:
 
     friend class KisImage; // Only KisImage is allowed to add layers
 
-    /** Adds the layer to this group at the specified index. childCount() is a valid index and appends to the end.
-        Fails and returns false if the layer is already in this group or any other (remove it first.) */
+    /**
+     * Adds the layer to this group at the specified index.
+     * childCount() is a valid index and appends to the end. Fails and
+     * returns false if the layer is already in this group or any
+     * other (remove it first.)
+    */
     bool addLayer(KisLayerSP newLayer, int index);
 
     /**
-     * Add the specified layer above the specified layer (if aboveThis == 0, the bottom is used) */
+     * Add the specified layer above the specified layer (if aboveThis
+     * == 0, the bottom is used)
+     */
     bool addLayer(KisLayerSP newLayer, KisLayerSP aboveThis);
 
     /// Removes the layer at the specified index from the group.

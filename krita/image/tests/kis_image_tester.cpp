@@ -18,27 +18,15 @@
 
 #include <QApplication>
 
-#include <kunittest/runner.h>
-#include <kunittest/module.h>
+#include <qtest_kde.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
 
 #include "kis_image_tester.h"
 #include "kis_image.h"
-#include "kis_meta_registry.h"
-#include "kis_rgb_colorspace.h"
-#include "kis_colorspace_factory_registry.h"
-#include "kis_color.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
-
-using namespace KUnitTest;
-
-KUNITTEST_MODULE(kunittest_kis_image_tester, "KisImage Tester");
-KUNITTEST_MODULE_REGISTER_TESTER(KisImageTester);
-
-void KisImageTester::allTests()
-{
-    mergeTests();
-}
 
 #define IMAGE_WIDTH 1
 #define IMAGE_HEIGHT 1
@@ -56,7 +44,7 @@ void KisImageTester::mergeTests()
 
     mergedPixel.toQColor(&color, &opacity);
 
-    CHECK(opacity, OPACITY_TRANSPARENT);
+    QCOMPARE(opacity, OPACITY_TRANSPARENT);
 
     KisPaintLayer * layer = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE);
     image->addLayer(layer, image->rootLayer(), 0);
@@ -66,10 +54,10 @@ void KisImageTester::mergeTests()
     mergedPixel = image->mergedPixel(0, 0);
     mergedPixel.toQColor(&color, &opacity);
 
-    CHECK(opacity, OPACITY_OPAQUE);
-    CHECK(color.red(), 255);
-    CHECK(color.green(), 128);
-    CHECK(color.blue(), 64);
+    QCOMPARE(opacity, OPACITY_OPAQUE);
+    QCOMPARE(color.red(), 255);
+    QCOMPARE(color.green(), 128);
+    QCOMPARE(color.blue(), 64);
 
     KisPaintLayer * layer2 = new KisPaintLayer(image, "layer 2", OPACITY_OPAQUE / 2);
     image->addLayer(layer2, image->rootLayer(), layer);
@@ -79,10 +67,13 @@ void KisImageTester::mergeTests()
     mergedPixel = image->mergedPixel(0, 0);
     mergedPixel.toQColor(&color, &opacity);
 
-    CHECK(opacity, OPACITY_OPAQUE);
-    CHECK(color.red(), 255);
-    CHECK(color.green(), 128 + ((255 - 128) / 2));
-    CHECK(color.blue(), 64 + ((255 - 64) / 2));
+    QCOMPARE(opacity, OPACITY_OPAQUE);
+    QCOMPARE(color.red(), 255);
+    QCOMPARE(color.green(), 128 + ((255 - 128) / 2));
+    QCOMPARE(color.blue(), 64 + ((255 - 64) / 2));
 }
 
 
+
+QTEST_KDEMAIN(KisImageTester, NoGUI)
+#include "kis_image_tester.moc"

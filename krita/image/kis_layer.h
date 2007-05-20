@@ -247,6 +247,22 @@ public:
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual bool accept(KisLayerVisitor &) = 0;
 
+
+    /// Returns the list of effect masks
+    QList<KisEffectMask*> effectMasks();
+
+    /// Add an effect mask at the specified position
+    void addEffectMask( KisEffectMask* mask, int index );
+
+    /// Add an effect mask on top of the specified mask
+    void addEffectMask( KisEffectMask * mask,  KisEffectMask * aboveThis );
+
+    /// Remove the given effect mask
+    void removeEffectMask( KisEffectMask* mask );
+
+    /// Remove the mask at the speficied index
+    void removeEffectMask( int index );
+
 protected:
 
     bool hasEffectMasks();

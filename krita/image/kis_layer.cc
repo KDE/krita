@@ -443,6 +443,39 @@ void KisLayer::applyEffectMasks( const KisPaintDeviceSP src,  KisPaintDeviceSP d
 }
 
 
+QList<KisEffectMask*> KisLayer::effectMasks()
+{
+    return m_d->effectMasks;
+}
+
+void KisLayer::addEffectMask( KisEffectMask* mask, int i )
+{
+    if ( i > m_d->effectMasks.size() ) i = m_d->effectMasks.size();
+    if ( i < 0 ) i = 0;
+
+    m_d->effectMasks.insert( i, mask );
+}
+
+void KisLayer::addEffectMask( KisEffectMask * mask,  KisEffectMask * aboveThis )
+{
+    int i = m_d->effectMasks.indexOf( aboveThis );
+    addEffectMask( mask, i );
+}
+
+void KisLayer::removeEffectMask( KisEffectMask* mask )
+{
+    int i = m_d->effectMasks.indexOf( mask );
+    if ( i > -1 && i < m_d->effectMasks.size() )
+        m_d->effectMasks.removeAt( i );
+
+}
+
+void KisLayer::removeEffectMask( int index )
+{
+    m_d->effectMasks.removeAt( index );
+}
+
+
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t) {
     m_temporaryTarget = t;
 }
@@ -466,6 +499,7 @@ const KoCompositeOp* KisIndirectPaintingSupport::temporaryCompositeOp() const {
 quint8 KisIndirectPaintingSupport::temporaryOpacity() const {
     return m_compositeOpacity;
 }
+
 
 
 #include "kis_layer.moc"

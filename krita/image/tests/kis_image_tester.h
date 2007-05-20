@@ -19,12 +19,14 @@
 #ifndef KIS_IMAGE_TESTER_H
 #define KIS_IMAGE_TESTER_H
 
-#include <kunittest/tester.h>
+#include <QtTest/QtTest>
 
-class KisImageTester : public KUnitTest::Tester
+class KisImageTester : public QObject
 {
-public:
-    void allTests();
+    Q_OBJECT
+
+private slots:
+
     void mergeTests();
 };
 

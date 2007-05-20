@@ -502,20 +502,21 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
     QTextList* list = cursor.insertList(listformat);
 
     // Iterate over list items and add them to the textlist
+    cursor.insertBlock();
+    QTextBlock prev = cursor.block();
     for(QDomNode n = parent.firstChild(); !n.isNull(); n = n.nextSibling()) {
         QDomElement e = n.toElement();
         if( e.isNull() ) continue;
-        cursor.insertBlock();
-        QTextBlock prev = cursor.block();
         loadBody(context, e, cursor);
-        QTextBlock current = cursor.block();
-        //TODO merge all blocks added by the item to apply the style on all of them
-        for(QTextBlock b = prev; b.isValid() && b != current; b = b.next()) {
-            //paragStyle->applyStyle(b);
-            //listStyle->applyStyle(b);
-            list->add(b);
-        }
         //list->add( cursor.block() );
+        //cursor.insertBlock();
+    }
+
+    QTextBlock current = cursor.block();
+    for(QTextBlock b = prev; b.isValid() && b != current; b = b.next()) {
+        //paragStyle->applyStyle(b);
+        //listStyle->applyStyle(b);
+        list->add(b);
     }
 
     delete listStyle;
@@ -694,9 +695,10 @@ void KoOpenDocumentLoader::loadSpan(KoOasisLoadingContext& context, const KoXmlE
         else if ( isTextNS && localName == "line-break" ) // text:line-break
         {
             kDebug() << "  <line-break> Node localName=" << localName << endl;
-            QTextBlockFormat emptyTbf;
-            QTextCharFormat emptyCf;
-            cursor.insertBlock(emptyTbf, emptyCf);
+            //QTextBlockFormat emptyTbf;
+            //QTextCharFormat emptyCf;
+            //cursor.insertBlock(emptyTbf, emptyCf);
+            cursor.insertText( "\n" );
         }
         else if ( isTextNS && localName == "number" ) // text:number
         {

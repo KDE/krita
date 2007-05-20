@@ -28,7 +28,7 @@
 void KisFilterConfigurationTester::testCreation()
 {
     KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
-    QVERIFY2( kfc == 0,  "Could not create test filter configuration");
+    QVERIFY2( kfc != 0,  "Could not create test filter configuration");
     QCOMPARE(kfc->version(), 1);
     QCOMPARE(kfc->name(), QString("test"));
 

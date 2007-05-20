@@ -124,14 +124,11 @@ protected:
 
     class ExtLineEdit;
 
-    KoZoomMode::Modes m_zoomModes;
-    ExtLineEdit *m_number;
-    QSlider *m_slider;
-    double m_sliderLookup[33];
-    QButtonGroup* m_zoomButtonGroup;
+private:
+    Q_DISABLE_COPY( KoZoomAction )
 
-    double m_effectiveZoom;
-    bool m_doSpecialAspectMode;
+    class Private;
+    Private * const d;
 };
 
 class KoZoomAction::ExtLineEdit : public QLineEdit

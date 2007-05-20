@@ -67,7 +67,10 @@ void Viewport::setCanvas(QWidget *canvas)
     m_canvas = canvas;
     if ( !canvas ) return;
     m_canvas->setParent( this );
-    m_documentSize = m_canvas->minimumSize();
+    m_canvas->show();
+    if (!m_canvas->minimumSize().isNull()) {
+        m_documentSize = m_canvas->minimumSize();
+    }
     resetLayout();
 }
 

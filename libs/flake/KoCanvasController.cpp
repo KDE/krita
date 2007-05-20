@@ -108,6 +108,7 @@ void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
     if(m_d->canvas) {
         emit canvasRemoved(this);
         canvas->setCanvasController(0);
+        m_d->canvas->canvasWidget()->removeEventFilter(this);
     }
     m_d->viewportWidget->setCanvas(canvas->canvasWidget());
     m_d->canvas = canvas;
@@ -120,6 +121,16 @@ void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
 
 KoCanvasBase* KoCanvasController::canvas() const {
     return m_d->canvas;
+}
+
+void KoCanvasController::changeCanvasWidget(QWidget *widget)
+{
+    Q_ASSERT(m_d->viewportWidget->canvas());
+    widget->setCursor(m_d->viewportWidget->canvas()->cursor());
+    m_d->viewportWidget->canvas()->removeEventFilter(this);
+    m_d->viewportWidget->setCanvas(widget);
+    widget->installEventFilter(this);
+    widget->setMouseTracking(true);
 }
 
 int KoCanvasController::visibleHeight() const {

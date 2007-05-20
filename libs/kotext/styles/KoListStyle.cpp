@@ -203,8 +203,8 @@ KoListStyle* KoListStyle::fromTextList(QTextList *list) {
 
 void KoListStyle::loadOasis(KoOasisLoadingContext& context)
 {
-    KoStyleStack &styleStack = context.styleStack();
-    kDebug()<<"KoListStyle::loadOasis"<<endl;
+    //kDebug()<<"KoListStyle::loadOasis"<<endl;
+    //KoStyleStack &styleStack = context.styleStack();
 
     Style style = KoListStyle::NoItem;
 

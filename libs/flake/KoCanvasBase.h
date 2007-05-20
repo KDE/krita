@@ -160,6 +160,11 @@ public:
     KoShapeController * shapeController() const;
 
     /**
+     * Return the canvas controller for this canvas.
+     */
+    KoCanvasController * canvasController() const;
+
+    /**
      * @brief Scrolls the content of the canvas so that the given rect is visible.
      *
      * The rect is to be specified in document coordinates.

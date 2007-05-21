@@ -58,6 +58,8 @@ class KoOpenDocumentLoader::Private
 {
     public:
         KoStyleManager* stylemanager;
+        QHash<QString, KoParagraphStyle*> userStyles;
+        QHash<QString, KoParagraphStyle*> styles;
 };
 
 KoOpenDocumentLoader::KoOpenDocumentLoader(KoStyleManager* stylemanager)
@@ -257,12 +259,22 @@ void KoOpenDocumentLoader::loadParagraph(KoOasisLoadingContext& context, const K
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug()<<"KoOpenDocumentLoader::loadParagraph userStyleName="<<userStyleName<<endl;
     #endif
-    KoParagraphStyle *userStyle = d->stylemanager->paragraphStyle(userStyleName);
+    KoParagraphStyle *userStyle;
+    bool styleLoaded = false;
+    if (d->userStyles.contains(userStyleName)) {
+        userStyle = d->userStyles[userStyleName];
+        styleLoaded = true;
+    } else {
+        userStyle = d->stylemanager->paragraphStyle(userStyleName);
+    }
     //if( ! userStyle ) userStyle = d->stylemanager->defaultParagraphStyle();
     if( userStyle ) {
         context.styleStack().setTypeProperties( "paragraph" );
         //1.6: KoTextParag::loadOasis( tag, context, styleColl, pos )
-        userStyle->loadOasis( context.styleStack() ); //FIXME don't reload each time
+        if (!styleLoaded) {
+            userStyle->loadOasis( context.styleStack() );
+            d->userStyles.insert(userStyleName, userStyle);
+        }
         QTextBlock block = cursor.block();
         userStyle->applyStyle(block);
     }
@@ -297,7 +309,14 @@ void KoOpenDocumentLoader::loadParagraph(KoOasisLoadingContext& context, const K
             context.addStyles( paragraphStyle, "paragraph" );
         //context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
 
-        KoParagraphStyle *style = d->stylemanager->paragraphStyle(styleName);
+        KoParagraphStyle *style;
+        styleLoaded = false;
+        if (d->styles.contains(styleName)) {
+            style = d->styles[styleName];
+            styleLoaded = true;
+        } else {
+            style = d->stylemanager->paragraphStyle(styleName);
+        }
         if( ! style ) {
             style = d->stylemanager->defaultParagraphStyle();
             #ifdef KOOPENDOCUMENTLOADER_DEBUG
@@ -305,7 +324,10 @@ void KoOpenDocumentLoader::loadParagraph(KoOasisLoadingContext& context, const K
             #endif
         }
         if ( style ) {
-            style->loadOasis( context.styleStack() );
+            if (!styleLoaded) {
+                style->loadOasis( context.styleStack() );
+                d->styles.insert(styleName, style);
+            }
             QTextBlock block = cursor.block();
             style->applyStyle(block);
         }

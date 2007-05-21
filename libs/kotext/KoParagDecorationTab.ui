@@ -17,7 +17,7 @@
         <number>0</number>
       </property>
       <item>
-        <widget class="Q3GroupBox" name="backgroundColorGroupBox" >
+        <widget class="QGroupBox" name="backgroundColorGroupBox" >
           <property name="title" >
             <string>Paragraph Background Color</string>
           </property>
@@ -63,7 +63,7 @@ the end of the text and the margin).&lt;/p></string>
         </widget>
       </item>
       <item>
-        <widget class="Q3GroupBox" name="bordersGroupBox" >
+        <widget class="QGroupBox" name="bordersGroupBox" >
           <property name="sizePolicy" >
             <sizepolicy>
               <hsizetype>3</hsizetype>

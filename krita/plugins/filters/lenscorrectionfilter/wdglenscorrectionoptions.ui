@@ -49,12 +49,9 @@
     </spacer>
    </item>
    <item row="0" column="0" colspan="2" >
-    <widget class="Q3GroupBox" name="groupBox1" >
+    <widget class="QGroupBox" name="groupBox1" >
      <property name="title" >
       <string>Distortion Correction</string>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
@@ -186,12 +183,6 @@
   <customwidget>
    <class>QSpinBox</class>
    <extends>QWidget</extends>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

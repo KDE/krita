@@ -91,7 +91,7 @@
         </widget>
       </item>
       <item>
-        <widget class="Q3GroupBox" name="completionBox" >
+        <widget class="QGroupBox" name="completionBox" >
           <property name="title" >
             <string>Completion Options</string>
           </property>

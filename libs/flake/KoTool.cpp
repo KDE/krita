@@ -20,6 +20,7 @@
 #include "KoTool.h"
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
+#include "KoCanvasResourceProvider.h"
 
 #include <kactioncollection.h>
 #include <QWidget>

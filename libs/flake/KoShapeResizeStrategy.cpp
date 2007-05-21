@@ -21,6 +21,7 @@
 #include "KoShapeManager.h"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
+#include "KoCanvasResourceProvider.h"
 #include "commands/KoShapeMoveCommand.h"
 #include "commands/KoShapeSizeCommand.h"
 

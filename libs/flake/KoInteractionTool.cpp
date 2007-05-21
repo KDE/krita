@@ -35,6 +35,7 @@
 #include "KoInteractionStrategy.h"
 #include "KoCanvasBase.h"
 #include "KoPanTool.h"
+#include "KoCanvasResourceProvider.h"
 #include "commands/KoShapeMoveCommand.h"
 
 #include <QUndoCommand>

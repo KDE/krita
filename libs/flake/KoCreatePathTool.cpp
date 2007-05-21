@@ -27,6 +27,7 @@
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "KoShapeController.h"
+#include "KoCanvasResourceProvider.h"
 
 #include <QPainter>
 

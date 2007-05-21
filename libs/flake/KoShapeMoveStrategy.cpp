@@ -27,8 +27,9 @@
 #include "KoShapeContainerModel.h"
 #include "KoSelection.h"
 #include "KoPointerEvent.h"
-#include "commands/KoShapeMoveCommand.h"
+#include "KoCanvasResourceProvider.h"
 #include "KoInteractionTool.h"
+#include "commands/KoShapeMoveCommand.h"
 
 #include <kdebug.h>
 #include <QPainter>

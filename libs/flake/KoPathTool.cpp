@@ -22,6 +22,7 @@
 #include "KoCanvasBase.h"
 #include "KoSelection.h"
 #include "KoShapeManager.h"
+#include "KoCanvasResourceProvider.h"
 #include "KoPointerEvent.h"
 #include "commands/KoPathPointTypeCommand.h"
 #include "commands/KoPathPointInsertCommand.h"

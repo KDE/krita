@@ -25,8 +25,6 @@
 
 #include <flake_export.h>
 
-#include <KoCanvasResourceProvider.h>
-
 class KoCanvasBase;
 class KoPointerEvent;
 class KoViewConverter;

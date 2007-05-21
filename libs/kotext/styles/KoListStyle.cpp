@@ -237,7 +237,7 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
                         style = KoListStyle::DiscItem;
                         break;
                     case 0xE00C: // losange - TODO in kotext. Not in OASIS either (reserved Unicode area!)
-                        style = KoListStyle::BoxItem;
+                        style = KoListStyle::SquareItem;
                         break;
                     case 0xE00A: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
                         style = KoListStyle::SquareItem;
@@ -246,10 +246,23 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
                                 // mapping (both ways) to box for now.
                         style = KoListStyle::BoxItem;
                         break;
-                    case 0x2794: // arrow
-                    case 0x2717: // cross
+
+                    case 0x2794: // arrow to right
+                        style = KoListStyle::CustomCharItem;
+                        properties.setBulletCharacter('>');
+                        break;
                     case 0x2714: // checkmark
-                        // fall through
+                        style = KoListStyle::CustomCharItem;
+                        properties.setBulletCharacter('v');
+                        break;
+                    case 0x2d: // minus
+                        style = KoListStyle::CustomCharItem;
+                        properties.setBulletCharacter('-');
+                        break;
+                    case 0x2717: // cross
+                        style = KoListStyle::CustomCharItem;
+                        properties.setBulletCharacter('x');
+                        break;
                     default:
                         QChar customBulletChar = bulletChar[0];
                         kDebug() << "Unhandled bullet code 0x" << QString::number( (uint)customBulletChar.unicode(), 16 ) << endl;

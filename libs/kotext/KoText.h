@@ -42,7 +42,7 @@ namespace KoText {
         LeftTab,        ///< A left-tab
         RightTab,       ///< A right-tab
         CenterTab,      ///< A centered-tab
-        DelimitorTab    ///< A tab stopping at a certain delimiter-character
+        DelimiterTab    ///< A tab stopping at a certain delimiter-character
     };
 
     /// For paragraphs each tab definition is represented by this struct.

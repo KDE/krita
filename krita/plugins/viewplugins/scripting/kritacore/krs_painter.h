@@ -53,10 +53,10 @@ class Painter : public QObject
          *  - a list of a list with the kernel (all lists need to have the same size)
          *  - factor
          *  - offset
-         * 
+         *
          * The value of a pixel will be given by the following function K*P/factor + offset,
          * where K is the kernel and P is the neighbourhood.
-         * 
+         *
          * It can takes the following optional arguments :
          *  - borderOp control how to convolve the pixels on the border of an image ( 0 use the default color
          * 1 use the pixel on the opposite side of the image 2 use the border pixel 3 avoid border pixels)
@@ -80,26 +80,26 @@ class Painter : public QObject
 
         /**
          * Start filling color.
-         * It takes two argument :
+         * It takes four arguments :
          *  - x
          *  - y
          */
-        void fillColor(uint x, uint y);
+        void fillColor(uint x, uint y, uint w, uint h);
 
         /**
          * Start filling a pattern.
-         * It takes two argument :
+         * It takes four arguments :
          *  - x
          *  - y
          */
-        void fillPattern(uint x, uint y);
+        void fillPattern(uint x, uint y, uint w, uint h);
 
     public slots: // Style operation
 
         /**
          * This function set the fill style of the Painter.
          * It takes one argument :
-         *  - 0 for none 1 for fill with foreground color 2 for fill with 
+         *  - 0 for none 1 for fill with foreground color 2 for fill with
          *    background color 3 for fill with a pattern.
          */
         void setFillStyle(uint style);

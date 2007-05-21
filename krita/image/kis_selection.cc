@@ -81,7 +81,7 @@ void KisSelection::setSelected(qint32 x, qint32 y, quint8 s)
     *pix = s;
 }
 
-QImage KisSelection::maskImage() const
+QImage KisSelection::maskImage( KisImageSP image ) const
 {
     // If part of a KisAdjustmentLayer, there may be no parent device.
     QImage img;
@@ -89,11 +89,11 @@ QImage KisSelection::maskImage() const
     if (m_parentPaintDevice) {
 
         bounds = m_parentPaintDevice->exactBounds();
-        bounds = bounds.intersect( m_parentPaintDevice->image()->bounds() );
+        bounds = bounds.intersect( image->bounds() );
         img = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
     }
     else {
-        bounds = QRect( 0, 0, image()->width(), image()->height());
+        bounds = QRect( 0, 0, image->width(), image->height());
         img = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
     }
 

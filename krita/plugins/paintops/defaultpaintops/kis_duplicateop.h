@@ -34,7 +34,7 @@ public:
     KisDuplicateOpFactory() {}
     virtual ~KisDuplicateOpFactory() {}
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
+    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "duplicate"; }
     virtual QString name() const { return i18n("Duplicate"); }
     virtual bool userVisible(KoColorSpace *) { return false; }
@@ -46,19 +46,20 @@ class KisDuplicateOp : public KisPaintOp {
     typedef KisPaintOp super;
 
 
-    public:
+public:
 
-        KisDuplicateOp(KisPainter * painter);
-        virtual ~KisDuplicateOp();
+    KisDuplicateOp(KisPainter * painter, KisImageSP image);
+    virtual ~KisDuplicateOp();
 
 
-        void paintAt(const QPointF &pos, const KisPaintInformation& info);
-    private:
-        double minimizeEnergy(const double* m, double* sol, int w, int h);
-    private:
+    void paintAt(const QPointF &pos, const KisPaintInformation& info);
+private:
+    double minimizeEnergy(const double* m, double* sol, int w, int h);
+private:
 
     KisPaintDeviceSP m_srcdev;
     KisPaintDeviceSP m_target;
+    KisImageSP m_image;
 
 };
 

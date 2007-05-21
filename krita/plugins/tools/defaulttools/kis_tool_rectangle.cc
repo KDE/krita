@@ -147,7 +147,7 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
         Q_CHECK_PTR(m_painter);
 
         m_painter->beginTransaction (i18n ("Rectangle"));
-
+        m_painter->setBounds( m_currentImage->bounds() );
         m_painter->setPaintColor(m_currentFgColor);
         m_painter->setBackgroundColor(m_currentBgColor);
         m_painter->setFillStyle(fillStyle());
@@ -156,7 +156,7 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
         m_painter->setPattern(m_currentPattern);
         m_painter->setOpacity(m_opacity);
         m_painter->setCompositeOp(m_compositeOp);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, m_painter);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, m_painter, m_currentImage);
         m_painter->setPaintOp(op);
 
         m_painter->paintRect(QRectF(m_dragStart, m_dragEnd), PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());

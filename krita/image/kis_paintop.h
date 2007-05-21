@@ -126,7 +126,7 @@ public:
      * @param settings the settings associated with the input device
      * @param painter the painter used to draw
      */
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter) = 0;
+    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image) = 0;
     virtual QString id() const = 0;
     virtual QString name() const = 0;
 

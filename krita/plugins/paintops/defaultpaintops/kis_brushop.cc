@@ -48,7 +48,7 @@
 #include "ui_kis_dlgbrushcurvecontrol.h"
 
 KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettings *settings,
-                                         KisPainter * painter)
+                                         KisPainter * painter, KisImageSP image)
 {
     const KisBrushOpSettings *brushopSettings = dynamic_cast<const KisBrushOpSettings *>(settings);
     Q_ASSERT(settings == 0 || brushopSettings != 0);
@@ -261,10 +261,9 @@ void KisBrushOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
                           brush->maskHeight(adjustedInfo));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    KisImageSP image = device->image();
 
-    if (image != 0) {
-        dstRect &= image->bounds();
+    if ( m_painter->bounds().isValid() ) {
+        dstRect &= m_painter->bounds();
     }
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;

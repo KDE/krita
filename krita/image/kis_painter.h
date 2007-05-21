@@ -591,6 +591,12 @@ public:
     /// Returns the current pressure
     double pressure() { return m_pressure; }
 
+    /// Sets the bounds of the painter area; if not set, the painter
+    /// will happily paint where you ask it, making the paint device
+    /// larger as it goes
+    void setBounds( const QRect & bounds ) { m_bounds = bounds;  }
+    QRect bounds() { return m_bounds;  }
+
     /**
      * Set the current paint operation. This is used for all drawing functions.
      * The painter will DELETE the paint op itself!!
@@ -634,7 +640,7 @@ protected:
     KisTransaction  *m_transaction;
 
     QRegion m_dirtyRegion;
-
+    QRect m_bounds;
     KoColor m_paintColor;
     KoColor m_backgroundColor;
     KoColor m_fillColor;

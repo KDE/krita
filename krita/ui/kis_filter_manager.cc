@@ -376,7 +376,7 @@ bool KisFilterManager::apply()
         return false;
 
     } else {
-        if (dev->parentLayer()) dev->parentLayer()->setDirty(rect);
+        dev->setDirty(rect);
         m_d->doc->setModified(true);
         if (cmd) m_d->doc->addCommand(cmd);
         m_d->lastFilter->disableProgress();

@@ -103,10 +103,9 @@ public: // KoCanvasBase implementation
 
     void resetCanvas();
 
-    // Temporary!
-#ifdef __GNUC__
-#warning: "Make the tools get the current paint device from the shape selection instead of directly from the canvas!"
-#endif
+    // Temporary! Either get the current layer and image from the
+    // resource provider, or use this, which gets them from the
+    // current shape selection.
     KisImageSP currentImage();
 
 public: // KisCanvas2 methods

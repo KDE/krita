@@ -51,7 +51,7 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
         m_layers.push_back( it->data()->clone() );
     }
     m_projection = new KisPaintDevice(*rhs.m_projection.data());
-    m_projection->setParentLayer(this);
+//    m_projection->setParentLayer(this);
 }
 
 KisLayerSP KisGroupLayer::clone() const

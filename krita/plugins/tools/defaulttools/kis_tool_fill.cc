@@ -85,11 +85,16 @@ bool KisToolFill::flood(int startX, int startY)
         //KisFillPainter painter(filled);
         // really filled.
         if (m_usePattern)
-            m_fillPainter->fillRect(0, 0, m_currentImage->width(), m_currentImage->height(),
+            m_fillPainter->fillRect(0, 0,
+                                    m_currentImage->width(),
+                                    m_currentImage->height(),
                                     m_currentPattern);
         else
-            m_fillPainter->fillRect(0, 0, m_currentImage->width(), m_currentImage->height(),
-                                    m_currentFgColor, m_opacity);
+            m_fillPainter->fillRect(0, 0,
+                                    m_currentImage->width(),
+                                    m_currentImage->height(),
+                                    m_currentFgColor,
+                                    m_opacity);
 
         QRegion dirty = m_fillPainter->dirtyRegion();
 
@@ -134,7 +139,8 @@ bool KisToolFill::flood(int startX, int startY)
         m_fillPainter->setPattern(m_currentPattern);
         m_fillPainter->setSampleMerged(!m_unmerged);
         m_fillPainter->setCareForSelection(true);
-
+        m_fillPainter->setWidth( m_currentImage->width() );
+        m_fillPainter->setHeight( m_currentImage->height() );
         // Enable this code again when I know how progress works
         //  KisProgressDisplayInterface *progress = ??
 //     if (progress) {
@@ -142,9 +148,9 @@ bool KisToolFill::flood(int startX, int startY)
 //     }
 
         if (m_usePattern)
-            m_fillPainter->fillPattern(startX, startY);
+            m_fillPainter->fillPattern( startX, startY, m_currentImage->mergedImage() );
         else
-            m_fillPainter->fillColor(startX, startY);
+            m_fillPainter->fillColor( startX, startY, m_currentImage->mergedImage() );
 
         QRegion dirtyRegion = m_fillPainter->dirtyRegion();
         device->setDirty(dirtyRegion);

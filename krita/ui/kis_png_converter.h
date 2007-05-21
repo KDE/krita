@@ -92,8 +92,8 @@ class KRITAIMAGE_EXPORT KisPNGConverter : public KisProgressSubject {
          * @param interlace set to true if you want to generate an interlaced png
          * @param alpha set to true if you want to save the alpha channel
          */
-        KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha);
-        KisImageBuilder_Result buildFile(QIODevice*, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha);
+        KisImageBuilder_Result buildFile(const KUrl& uri, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha);
+        KisImageBuilder_Result buildFile(QIODevice*, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha);
         /**
          * Retrieve the constructed image
          */

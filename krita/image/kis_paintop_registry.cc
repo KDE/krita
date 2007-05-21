@@ -33,6 +33,7 @@
 #include "kis_types.h"
 #include "kis_paintop_registry.h"
 #include "kis_paintop.h"
+#include "kis_painter.h"
 #include "KoID.h"
 #include "kis_debug_areas.h"
 #include "KoColorSpace.h"
@@ -59,21 +60,25 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
     return KisPaintOpRegistry::m_singleton;
 }
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const KoID & id, const KisPaintOpSettings * settings, KisPainter * painter) const
+KisPaintOp * KisPaintOpRegistry::paintOp(const KoID & id, const KisPaintOpSettings * settings, KisPainter * painter, KisImageSP image) const
 {
-    return paintOp(id.id(), settings, painter);
+    return paintOp(id.id(), settings, painter, image);
 }
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettings * settings, KisPainter * painter) const
+KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettings * settings, KisPainter * painter, KisImageSP image) const
 {
     if (painter == 0) {
         kWarning() << " KisPaintOpRegistry::paintOp painter is null";
         return 0;
     }
+
+    if ( !painter->bounds().isValid() )
+        painter->setBounds( image->bounds() );
+
     KisPaintOpFactorySP f = value(id);
-   if (f)
-        return f->createOp(settings, painter);
-   return 0;
+    if (f)
+        return f->createOp(settings, painter, image);
+    return 0;
 }
 
 KisPaintOpSettings * KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice) const

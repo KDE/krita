@@ -56,6 +56,7 @@ public:
     QIcon icon() const;
     KoDocumentSectionModel::PropertyList properties() const;
     KisLayerSP clone() const;
+
 public:
 
     qint32 x() const;
@@ -136,6 +137,9 @@ public:
 
 //     /// Sets the editMask property
 //     void setEditMask(bool b);
+
+
+public slots:
 
     /// Overridden to call the private convertMaskToSelection
     void setDirty();

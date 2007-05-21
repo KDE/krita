@@ -206,6 +206,9 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     const KisPaintDevice * bumpmap;
 
     QString bumpmapname = config->getString("bumpmap", "");
+
+#if 0
+    //XXX: Get a better way to get at the layer stack instead of through the paint device
     if (!bumpmapname.isNull() && src->image()) {
         KisLayerSP l = src->image()->findLayer(bumpmapname);
         KisPaintDeviceSP bumplayer = KisPaintDeviceSP(0);
@@ -241,7 +244,7 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
         bmRect = QRect(srcTopLeft, size);
         bumpmap = src;
     }
-
+#endif
 
     qint32 sel_h = size.height();
     qint32 sel_w = size.width();

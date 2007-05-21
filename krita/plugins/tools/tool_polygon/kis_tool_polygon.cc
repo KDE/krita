@@ -125,7 +125,7 @@ void KisToolPolygon::finish()
     if (device) {
         KisPainter painter (device);
         if (m_currentImage->undo()) painter.beginTransaction (i18n ("Polygon"));
-
+        painter.setBounds( m_currentImage->bounds() );
         painter.setPaintColor(m_currentFgColor);
         painter.setBackgroundColor(m_currentBgColor);
         painter.setFillStyle(fillStyle());
@@ -134,9 +134,9 @@ void KisToolPolygon::finish()
         painter.setPattern(m_currentPattern);
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, 
-                                                                  m_currentPaintOpSettings, 
-                                                                  &painter);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp,
+                                                                  m_currentPaintOpSettings,
+                                                                  &painter, m_currentImage);
         painter.setPaintOp(op); // Painter takes ownership
 
         painter.paintPolygon(m_points);

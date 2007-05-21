@@ -57,7 +57,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     Q_ASSERT(img);
     Q_ASSERT(dev);
     m_d->paintdev = dev;
-    m_d->paintdev->setParentLayer(this);
+//    m_d->paintdev->setParentLayer(this);
     init();
 }
 
@@ -85,17 +85,17 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) :
     KisLayer(rhs), KisIndirectPaintingSupport(rhs)
 {
     m_d->paintdev = new KisPaintDevice( *rhs.m_d->paintdev.data() );
-    m_d->paintdev->setParentLayer(this);
+
+
+//    m_d->paintdev->setParentLayer(this);
     init();
 }
 
 KisPaintLayer::~KisPaintLayer()
 {
-
-
-    if (!m_d->paintdev.isNull()) {
-        m_d->paintdev->setParentLayer(0);
-    }
+//     if (!m_d->paintdev.isNull()) {
+//         m_d->paintdev->setParentLayer(0);
+//     }
     delete m_d;
 }
 
@@ -103,10 +103,11 @@ KisPaintLayer::~KisPaintLayer()
 void KisPaintLayer::init()
 {
     m_d->paintdev->startBackgroundFilters();
-    connect(m_d->paintdev.data(), SIGNAL(colorSpaceChanged(KoColorSpace*)), this, SLOT(slotColorSpaceChanged()));
-    connect(m_d->paintdev.data(), SIGNAL(profileChanged(KoColorProfile*)), this, SLOT(slotColorSpaceChanged()));
-
-
+    connect( m_d->paintdev.data(), SIGNAL( colorSpaceChanged( KoColorSpace* ) ), this, SLOT( slotColorSpaceChanged() ) );
+    connect( m_d->paintdev.data(), SIGNAL( profileChanged( KoColorProfile* ) ), this, SLOT( slotColorSpaceChanged() ) );
+    connect( m_d->paintdev.data(), SIGNAL( dirtied() ), this, SLOT( setDirty() ) );
+    connect( m_d->paintdev.data(), SIGNAL( dirtied( const QRect & ) ), this, SLOT( setDirty( const QRect &) ) );
+    connect( m_d->paintdev.data(), SIGNAL( dirtied( const QRegion & ) ), this, SLOT( setDirty( const QRegion & ) ) );
 }
 
 

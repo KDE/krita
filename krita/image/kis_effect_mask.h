@@ -20,7 +20,6 @@
 #define _KIS_EFFECT_MASK_
 
 #include "kis_types.h"
-
 #include "kis_mask.h"
 /**
    An effect mask is a single channel mask that applies a particular
@@ -33,7 +32,12 @@ class KisEffectMask : public KisMask
 {
 public:
 
-    KisEffectMask( KisPaintDeviceSP device );
+    /**
+     * Create an empty effect mask. There is filter and no layer
+     * associated with this mask.
+     */
+    KisEffectMask();
+
     ~KisEffectMask();
     KisEffectMask( const KisEffectMask& rhs );
 };

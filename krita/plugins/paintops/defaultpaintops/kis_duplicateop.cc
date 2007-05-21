@@ -41,16 +41,16 @@
 #include "kis_perspective_grid.h"
 #include "kis_random_sub_accessor.h"
 
-KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
+KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
 {
-    KisPaintOp * op = new KisDuplicateOp(painter);
+    KisPaintOp * op = new KisDuplicateOp(painter, image);
     Q_CHECK_PTR(op);
     return op;
 }
 
 
-KisDuplicateOp::KisDuplicateOp(KisPainter * painter)
-    : super(painter), m_srcdev(0), m_target(0)
+KisDuplicateOp::KisDuplicateOp(KisPainter * painter, KisImageSP image)
+    : super(painter), m_srcdev(0), m_target(0), m_image( image )
 {
 }
 
@@ -168,8 +168,8 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
             endM[i][i] = 1.;
         }
         // First look for the grid corresponding to the start point
-        KisSubPerspectiveGrid* subGridStart = *device->image()->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(QPointF(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
-        QRect r = QRect(0,0, device->image()->width(), device->image()->height());
+        KisSubPerspectiveGrid* subGridStart = *m_image->perspectiveGrid()->begin();
+        QRect r = QRect(0,0, m_image->width(), m_image->height());
 
 #if 1
         if(subGridStart)
@@ -190,7 +190,7 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
 #endif
 #if 1
         // Second look for the grid corresponding to the end point
-        KisSubPerspectiveGrid* subGridEnd = *device->image()->perspectiveGrid()->begin();// device->image()->perspectiveGrid()->gridAt(pos);
+        KisSubPerspectiveGrid* subGridEnd = *m_image->perspectiveGrid()->begin();
         if(subGridEnd)
         {
 //             kDebug() << "second grid" << endl;
@@ -317,10 +317,9 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
     QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    KisImageSP image = device->image();
 
-    if (image != 0) {
-        dstRect &= image->bounds();
+    if ( m_painter->bounds().isValid() ) {
+        dstRect &= m_painter->bounds();
     }
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;

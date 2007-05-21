@@ -34,25 +34,25 @@
 #include "kis_convolveop.h"
 
 
-KisPaintOp * KisConvolveOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
-{ 
-    KisPaintOp * op = new KisConvolveOp(painter); 
+KisPaintOp * KisConvolveOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
+{
+    KisPaintOp * op = new KisConvolveOp(painter);
     Q_CHECK_PTR(op);
-    return op; 
+    return op;
 }
 
 
 KisConvolveOp::KisConvolveOp(KisPainter * painter)
-    : super(painter) 
+    : super(painter)
 {
 }
 
-KisConvolveOp::~KisConvolveOp() 
+KisConvolveOp::~KisConvolveOp()
 {
 }
 
 void KisConvolveOp::paintAt(const QPointF &/*pos*/, const KisPaintInformation& /*info*/)
 {
     // XXX: use convolve painter here.
-    
+
 }

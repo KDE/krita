@@ -425,7 +425,7 @@ void KisToolCurve::paintCurve()
 
     KisPainter painter (device);
     if (m_currentImage->undo()) painter.beginTransaction (m_transactionMessage);
-
+    painter.setBounds( m_currentImage->bounds() );
     painter.setPaintColor(m_subject->fgColor());
     painter.setBrush(m_subject->currentBrush());
     painter.setOpacity(m_opacity);

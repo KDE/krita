@@ -528,7 +528,7 @@ KisImageSP KisPNGConverter::image()
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
+KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
 {
     kDebug(41008) << "Start writing PNG File" << endl;
     if (uri.isEmpty())
@@ -538,12 +538,12 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintDevic
         return KisImageBuilder_RESULT_NOT_LOCAL;
     // Open a QIODevice for writting
     QFile *fp = new QFile(QFile::encodeName(uri.path()) );
-    return buildFile(fp, device, annotationsStart, annotationsEnd, compression, interlace, alpha);
+    return buildFile(fp, img, device, annotationsStart, annotationsEnd, compression, interlace, alpha);
 // TODO: if failure do            KIO::del(uri); // async
 
 }
 
-KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
+KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
 {
     if(not iodevice->open(QIODevice::WriteOnly))
     {
@@ -554,7 +554,6 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisPaintD
     if (!device)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageSP img = device -> image();
     if (!img)
         return KisImageBuilder_RESULT_EMPTY;
 

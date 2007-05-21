@@ -32,16 +32,22 @@
 #include "kis_selection.h"
 #include "kis_painter.h"
 
-void KisRotateVisitor::rotate(double angle, bool rotateAboutImageCenter, KisProgressDisplayInterface *progress)
-{
-    QPointF centerOfRotation;
 
-    if (rotateAboutImageCenter) {
-        centerOfRotation = QPointF(m_dev->image()->width() / 2.0,  m_dev->image()->height() / 2.0);
-    } else {
-        QRect r = m_dev->exactBounds();
-        centerOfRotation = QPointF(r.x() + (r.width() / 2.0), r.y() + (r.height() / 2.0));
-    }
+void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *progress)
+{
+    QRect r = m_dev->exactBounds();
+    QPointF centerOfRotation = QPointF(r.x() + (r.width() / 2.0), r.y() + (r.height() / 2.0));
+    rotate( angle, centerOfRotation, progress );
+}
+
+void KisRotateVisitor::rotate(double angle, qint32 width, qint32 height, KisProgressDisplayInterface *progress)
+{
+    QPointF centerOfRotation = QPointF(width / 2.0,  height / 2.0);
+    rotate( angle, centerOfRotation, progress );
+}
+
+void KisRotateVisitor::rotate(double angle, QPointF centerOfRotation, KisProgressDisplayInterface *progress)
+{
 
     m_progress = progress;
 

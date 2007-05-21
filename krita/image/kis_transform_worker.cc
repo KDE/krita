@@ -665,9 +665,8 @@ bool KisTransformWorker::run()
          rotateNone(tmpdev3, m_dev);
      }
 
-    if (m_dev->parentLayer()) {
-        m_dev->parentLayer()->setDirty();
-    }
+    m_dev->setDirty();
+
     //progress info
     emit notifyProgressDone();
     m_dev->emitSelectionChanged();

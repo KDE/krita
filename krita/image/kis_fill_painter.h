@@ -76,6 +76,7 @@ public:
      * Fill a rectangle with a certain color and opacity.
      */
     void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c, quint8 opacity);
+
     /**
      * Overloaded version of the above function.
      */
@@ -93,21 +94,46 @@ public:
     void fillRect(const QRect& rc, KisPattern * pattern);
 
     /**
-     * Fills the enclosed area around the point with the set color. If there is a
-     * selection, the whole selection is filled
-     **/
-    void fillColor(int startX, int startY);
+     * Fills the enclosed area around the point with the set color. If
+     * there is a selection, the whole selection is filled. Note that
+     * you must have set the width and height on the painter if you
+     * don't have a selection.
+     *
+     * @param startX the X position where the floodfill starts
+     * @param startY the Y position where the floodfill starts
+     * @param projection the projection that determines the area that
+     * is floodfilled if sampleMerged is on (XXX: fix this API to
+     * always use the the projection param and deprecated the
+     * sampleMerged setting)
+     */
+    void fillColor(int startX, int startY, KisPaintDeviceSP projection);
 
     /**
-     * Fills the enclosed area around the point with the set pattern. If there is a
-     * selection, the whole selection is filled
-     **/
-    void fillPattern(int startX, int startY);
+     * Fills the enclosed area around the point with the set pattern.
+     * If there is a selection, the whole selection is filled. Note
+     * that you must have set the width and height on the painter if
+     * you don't have a selection.
+     *
+     * @param startX the X position where the floodfill starts
+     * @param startY the Y position where the floodfill starts
+     * @param projection the projection that determines the area that
+     * is floodfilled if sampleMerged is on (XXX: fix this API to
+     * always use the the projection param and deprecated the
+     * sampleMerged setting)
+     */
+    void fillPattern(int startX, int startY, KisPaintDeviceSP projection);
 
     /**
      * Returns a selection mask for the floodfill starting at the specified position.
-     **/
-    KisSelectionSP createFloodSelection(int startX, int startY);
+     *
+     * @param startX the X position where the floodfill starts
+     * @param startY the Y position where the floodfill starts
+     * @param projection the projection that determines the area that
+     * is floodfilled if sampleMerged is on (XXX: fix this API to
+     * always use the the projection param and deprecated the
+     * sampleMerged setting)
+     */
+    KisSelectionSP createFloodSelection(int startX, int startY, KisPaintDeviceSP projection);
 
     /**
      * Set the threshold for floodfill. The range is 0-255: 0 means the fill will only
@@ -149,7 +175,7 @@ public:
 
 private:
     // for floodfill
-    void genericFillStart(int startX, int startY);
+    void genericFillStart(int startX, int startY, KisPaintDeviceSP projection);
     void genericFillEnd(KisPaintDeviceSP filled);
 
     KisSelectionSP m_selection;

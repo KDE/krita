@@ -36,9 +36,8 @@ public:
 
 
 KisMask::KisMask(KisPaintDeviceSP dev,  const QString & name)
-    : KisPaintDevice(dev->parentLayer(),
-            KoColorSpaceRegistry::instance()->alpha8(),
-            name)
+    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(),
+                     name)
     , m_d( new KisMaskPrivate() )
 {
     Q_ASSERT(dev);

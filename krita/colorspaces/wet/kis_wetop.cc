@@ -56,7 +56,7 @@ bool KisWetOpSettings::varyStrength() const
     return m_options->checkStrength->isChecked();
 }
 
-KisPaintOp * KisWetOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter)
+KisPaintOp * KisWetOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
 {
     const KisWetOpSettings *wetopSettings = dynamic_cast<const KisWetOpSettings *>(settings);
     Q_ASSERT(settings == 0 || wetopSettings != 0);

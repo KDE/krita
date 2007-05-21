@@ -45,7 +45,7 @@ const QVariant Filter::property(const QString& name)
 {
     QVariant value;
 //     return m_filter->configuration()->getProperty(name, value) ? value : QVariant();
-    return value;     
+    return value;
 }
 
 void Filter::setProperty(const QString& name, const QVariant& value)
@@ -81,13 +81,14 @@ bool Filter::process(QObject* layer)
 
     QRect r1 = paintDevice->paintDevice()->extent();
     QRect rect;
-    if(paintDevice->paintDevice()->image())
-    {
-        QRect r2 = paintDevice->paintDevice()->image()->bounds();
-        rect = r1.intersect(r2);
-    } else {
+// XXX: Don't get the image from the device anymore
+//     if(paintDevice->paintDevice()->image())
+//     {
+//         QRect r2 = paintDevice->paintDevice()->image()->bounds();
+//         rect = r1.intersect(r2);
+//     } else {
         rect = r1;
-    }
+//     }
     m_filter->process(paintDevice->paintDevice(), rect, 0/*m_filter->configuration()*/);
     return true;
 }

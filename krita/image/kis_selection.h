@@ -76,7 +76,7 @@ public:
 
     void setSelected(qint32 x, qint32 y, quint8 s);
 
-    QImage maskImage() const;
+    QImage maskImage( KisImageSP image ) const;
 
     void select(QRect r);
 

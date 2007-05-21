@@ -156,12 +156,13 @@ void KisToolSelectPolygonal::finish()
         }
 
         KisPainter painter(selection);
+        painter.setBounds( m_currentImage->bounds() );
         painter.setPaintColor(KoColor(Qt::black, selection->colorSpace()));
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
         painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
         painter.setOpacity(OPACITY_OPAQUE);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, m_currentImage);
         painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
 
         switch(m_selectAction)

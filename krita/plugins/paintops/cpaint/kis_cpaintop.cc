@@ -76,7 +76,8 @@ KisCPaintOpFactory::~KisCPaintOpFactory()
 }
 
 KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
-                                          KisPainter * painter)
+                                          KisPainter * painter,
+                                          KisImageSP image)
 {
     const KisCPaintOpSettings * cpaintOpSettings =
         dynamic_cast<const KisCPaintOpSettings*>( settings );

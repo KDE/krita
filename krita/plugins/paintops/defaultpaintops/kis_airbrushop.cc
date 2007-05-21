@@ -35,7 +35,7 @@
 #include "kis_selection.h"
 #include "kis_airbrushop.h"
 
-KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
+KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
 {
     KisPaintOp * op = new KisAirbrushOp(painter);
     Q_CHECK_PTR(op);
@@ -125,10 +125,8 @@ void KisAirbrushOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    KisImageSP image = device->image();
-
-    if (image != 0) {
-        dstRect &= image->bounds();
+    if ( m_painter->bounds().isValid() ) {
+        dstRect &= m_painter->bounds();
     }
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;

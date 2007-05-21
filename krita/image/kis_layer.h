@@ -82,6 +82,7 @@ public:
     virtual void setChannelFlags( QBitArray & channelFlags );
     QBitArray & channelFlags();
 
+public slots:
     /**
      * Set the entire layer extent dirty; this percolates up to parent layers all the
      * way to the root layer.
@@ -101,6 +102,9 @@ public:
       layer, if propagate is true;
     */
     virtual void setDirty( const QRegion & region);
+
+public:
+
 #ifdef DIRTY_AND_PROJECTION
     /**
        @return true if the given rect overlapts with the dirty region
@@ -245,7 +249,7 @@ public:
     QList<KisEffectMask*> effectMasks();
 
     /// Add an effect mask at the specified position
-    void addEffectMask( KisEffectMask* mask, int index );
+    void addEffectMask( KisEffectMask* mask, int index = 0 );
 
     /// Add an effect mask on top of the specified mask
     void addEffectMask( KisEffectMask * mask,  KisEffectMask * aboveThis );

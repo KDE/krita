@@ -91,7 +91,7 @@ void KisToolDuplicate::initPaint(KoPointerEvent *e)
         m_paintIncremental = false;
         super::initPaint(e);
         m_painter->setDuplicateOffset( m_offset );
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("duplicate", 0, m_painter);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("duplicate", 0, m_painter, m_currentImage);
         if (op && m_source) {
             op->setSource(m_source);
             m_painter->setPaintOp(op);
@@ -126,11 +126,11 @@ void KisToolDuplicate::mouseMoveEvent(KoPointerEvent *e)
                 startM[i][i] = 1.;
                 endM[i][i] = 1.;
             }
-        
+
         // First look for the grid corresponding to the start point
             KisSubPerspectiveGrid* subGridStart = *m_currentImage->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(QPointF(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
             QRect r = QRect(0,0, m_currentImage->width(), m_currentImage->height());
-        
+
             if(subGridStart)
             {
                 double* b = KisPerspectiveMath::computeMatrixTransfoFromPerspective( r, *subGridStart->topLeft(), *subGridStart->topRight(), *subGridStart->bottomLeft(), *subGridStart->bottomRight());
@@ -225,7 +225,7 @@ QWidget* KisToolDuplicate::createOptionWidget()
     {
         healingradius = 2 * qMax(m_currentBrush->width(),m_currentBrush->height());
     }
-    
+
     m_healingRadius->setValue( healingradius );
     addOptionWidgetOption(m_healingRadius, new QLabel(i18n("Healing radius"), widget ));
     m_perspectiveCorrection =  new QCheckBox(widget);

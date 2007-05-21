@@ -191,7 +191,7 @@ DlgColorRange::DlgColorRange( KisView2 * view, KisPaintDeviceSP dev, QWidget *  
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    if (m_dev->image()->undo()) m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev);
+    if (m_view->image()->undo()) m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev);
 
     if(! m_dev->hasSelection())
         m_dev->selection()->clear();
@@ -241,20 +241,20 @@ void DlgColorRange::updatePreview()
 
     qint32 x, y, w, h;
     m_dev->exactBounds(x, y, w, h);
-    QPixmap pix = QPixmap::fromImage(m_selection->maskImage().scaled(350, 350, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    QPixmap pix = QPixmap::fromImage(m_selection->maskImage( m_view->image() ).scaled(350, 350, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     m_view->canvas()->update();
     m_page->pixSelection->setPixmap(pix);
 }
 
 void DlgColorRange::okClicked()
 {
-    if (m_dev->image()->undo()) m_view->undoAdapter()->addCommand(m_transaction);
+    if (m_view->image()->undo()) m_view->undoAdapter()->addCommand(m_transaction);
     accept();
 }
 
 void DlgColorRange::cancelClicked()
 {
-    if (m_dev->image()->undo()) m_transaction->undo();
+    if (m_view->image()->undo()) m_transaction->undo();
 
     m_view->canvas()->update();
     reject();

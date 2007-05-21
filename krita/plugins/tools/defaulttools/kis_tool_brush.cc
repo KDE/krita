@@ -84,7 +84,8 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
 
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp,
                                                               m_currentPaintOpSettings,
-                                                              m_painter);
+                                                              m_painter,
+                                                              m_currentImage);
     if (!op) return;
 
 #if 0

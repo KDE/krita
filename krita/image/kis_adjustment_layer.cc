@@ -49,7 +49,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
     m_filterConfig = new KisFilterConfiguration(*rhs.m_filterConfig);
     if (rhs.m_selection) {
         m_selection = new KisSelection( *rhs.m_selection.data() );
-        m_selection->setParentLayer(this);
+//        m_selection->setParentLayer(this);
         m_selection->setInterestedInDirtyness(true);
         if (!m_selection->hasSelection())
             m_selection->setSelection(m_selection);
@@ -141,7 +141,7 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 
     gc.end();
 
-    m_selection->setParentLayer(this);
+//    m_selection->setParentLayer(this);
     m_selection->setInterestedInDirtyness(true);
 
     if (!m_selection->hasSelection())

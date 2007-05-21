@@ -35,7 +35,7 @@ public:
     KisConvolveOpFactory() {}
     virtual ~KisConvolveOpFactory() {}
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
+    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "convolve"; }
     virtual QString name() const { return i18n("Convolve"); }
 };

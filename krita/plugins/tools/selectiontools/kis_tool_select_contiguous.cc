@@ -54,7 +54,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_selected_transaction.h"
 
-KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas) 
+KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
     : super(canvas, KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6))
 {
     setObjectName("tool_select_contiguous");
@@ -96,7 +96,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         KisFillPainter fillpainter(dev);
         fillpainter.setFillThreshold(m_fuzziness);
         fillpainter.setSampleMerged(m_sampleMerged);
-        KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y());
+        KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), m_currentImage->mergedImage() );
         KisSelectedTransaction *t = 0;
         if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
 

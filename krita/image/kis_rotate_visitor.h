@@ -37,10 +37,23 @@ public:
 
     void visitKisPaintDevice(KisPaintDevice* dev);
 
-    void rotate(double angle, bool rotateAboutImageCenter, KisProgressDisplayInterface *progress);
+    /**
+     * Rotate the paint device with the specified angle around the
+     * center of the paint device
+     */
+    void rotate(double angle, KisProgressDisplayInterface *progress);
+
+    /**
+     * rotate the paintdevice with the specified angle around the
+     * middle of width and height.
+     */
+    void rotate(double angle, qint32 width, qint32 height, KisProgressDisplayInterface *progress);
     void shear(double angleX, double angleY, KisProgressDisplayInterface *progress);
 
 private:
+
+    void rotate( double angle, QPointF center, KisProgressDisplayInterface *progress);
+
     KisPaintDeviceSP m_dev;
 
     // Implement KisProgressSubject

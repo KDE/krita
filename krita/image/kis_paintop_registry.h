@@ -45,12 +45,12 @@ public:
     /**
      * Return a newly created paintop
      */
-    KisPaintOp * paintOp(const KoID& id, const KisPaintOpSettings * settings, KisPainter * painter) const;
+    KisPaintOp * paintOp(const KoID& id, const KisPaintOpSettings * settings, KisPainter * painter, KisImageSP image) const;
 
     /**
      * Return a newly created paintop
      */
-    KisPaintOp * paintOp(const QString& id, const KisPaintOpSettings * settings, KisPainter * painter) const;
+    KisPaintOp * paintOp(const QString& id, const KisPaintOpSettings * settings, KisPainter * painter, KisImageSP image) const;
 
     /**
      * Create and return an (abstracted) configuration widget

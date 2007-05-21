@@ -18,8 +18,8 @@
  */
 #include "kis_effect_mask.h"
 
-KisEffectMask::KisEffectMask( KisPaintDeviceSP device )
-    : KisMask( device, "effect" )
+KisEffectMask::KisEffectMask()
+    : KisMask( 0, "effect" )
 {
 }
 

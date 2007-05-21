@@ -246,9 +246,9 @@ void KisToolFreehand::endPaint()
                     ++it;
                 }
                 KisIndirectPaintingSupport* layer =
-                    dynamic_cast<KisIndirectPaintingSupport*>(m_source->parentLayer().data());
+                    dynamic_cast<KisIndirectPaintingSupport*>(m_currentImage->activeLayer().data());
                 layer->setTemporaryTarget(0);
-                m_source->parentLayer()->setDirty(painter.dirtyRegion());
+                m_source->setDirty(painter.dirtyRegion());
 
                 m_canvas->addCommand(painter.endTransaction());
             } else {

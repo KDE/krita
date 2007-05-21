@@ -353,29 +353,19 @@ void KisPaintDevice::startBackgroundFilters()
     }
 }
 
-KisLayerSP KisPaintDevice::parentLayer() const
-{
-    return m_d->parentLayer;
-}
-
-void KisPaintDevice::setParentLayer(KisLayer *parentLayer)
-{
-    m_d->parentLayer = parentLayer;
-}
-
 void KisPaintDevice::setDirty(const QRect & rc)
 {
-    if (m_d->parentLayer) m_d->parentLayer->setDirty(rc);
+    emit dirtied( rc );
 }
 
 void KisPaintDevice::setDirty( const QRegion & region )
 {
-    if ( m_d->parentLayer ) m_d->parentLayer->setDirty( region );
+    emit dirtied( region );
 }
 
 void KisPaintDevice::setDirty()
 {
-    if (m_d->parentLayer) m_d->parentLayer->setDirty();
+    emit dirtied();
 }
 
 KisImageSP KisPaintDevice::image() const

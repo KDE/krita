@@ -106,16 +106,22 @@ void Painter::setFillThreshold(int threshold)
     m_threshold = threshold;
 }
 
-void Painter::fillColor(uint x, uint y)
+void Painter::fillColor(uint x, uint y, uint w, uint h)
 {
     KisFillPainter* fp = createFillPainter();
-    fp->fillColor(x, y);
+    fp->setWidth( w );
+    fp->setHeight( h );
+    fp->fillColor(x, y, 0);
+    // XXX: Shouldn't we delete the painter?
 }
 
-void Painter::fillPattern(uint x, uint y)
+void Painter::fillPattern(uint x, uint y, uint w, uint h )
 {
     KisFillPainter* fp = createFillPainter();
-    fp->fillPattern(x, y);
+    fp->setWidth( w );
+    fp->setHeight( h );
+    fp->fillPattern(x, y, 0);
+    // XXX: Shouldn't we delete the painter?
 }
 
 void Painter::setFillStyle(uint style)
@@ -239,7 +245,9 @@ void Painter::setBrush(QObject* brush)
 
 void Painter::setPaintOp(const QString& paintopname)
 {
-    KisPaintOp* op = KisPaintOpRegistry::instance()->paintOp( paintopname, 0, m_painter );
+    // XXX: Find a good way to pass the image to the paint registry:
+    // some paintops need to know about the image.
+    KisPaintOp* op = KisPaintOpRegistry::instance()->paintOp( paintopname, 0, m_painter, 0 );
     if(op) m_painter->setPaintOp( op );
 }
 

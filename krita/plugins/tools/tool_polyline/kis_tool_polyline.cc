@@ -100,7 +100,7 @@ void KisToolPolyline::finish()
     painter.setBrush(m_currentBrush);
     painter.setOpacity(m_opacity);
     painter.setCompositeOp(m_compositeOp);
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, &painter);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, &painter, m_currentImage);
     painter.setPaintOp(op); // Painter takes ownership
 
     QPointF start,end;

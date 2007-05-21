@@ -36,6 +36,7 @@
 #include "kis_group_layer.h"
 
 class TestLayer : public KisLayer {
+
 public:
 
     TestLayer( KisImageWSP image, const QString & name, quint8 opacity )
@@ -223,7 +224,10 @@ void KisLayerTest::testEffectMasks()
     KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace( "RGBA", 0 );
     KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "merge test" );
 
-    KisLayerSP layer1 = new TestLayer( image, "test", OPACITY_OPAQUE );
+    KisPaintLayerSP layer1 = new KisPaintLayer( image, "test", OPACITY_OPAQUE );
+//     KisEffectMask * mask1 = new KisEffectMask();
+//     layer1->addEffectMask( mask1 );
+//     QVERIFY( layer1->effectMasks().size() == 1 );
 
 }
 

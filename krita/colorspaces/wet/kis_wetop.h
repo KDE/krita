@@ -41,7 +41,7 @@ public:
     KisWetOpFactory() {}
     virtual ~KisWetOpFactory() {}
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
+    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual KoID id() { return KoID("wetbrush", i18n("Watercolor Brush")); }
     virtual bool userVisible(KoColorSpace* cs) { return cs->id() == KoID("WET", ""); }
     virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice);

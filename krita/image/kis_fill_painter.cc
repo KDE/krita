@@ -139,8 +139,8 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPatte
 
 // flood filling
 
-void KisFillPainter::fillColor(int startX, int startY) {
-    genericFillStart(startX, startY);
+void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP projection) {
+    genericFillStart(startX, startY, projection);
 
     // Now create a layer and fill it
     KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(m_device->colorSpace(), "filled_fillcolor"));
@@ -152,8 +152,8 @@ void KisFillPainter::fillColor(int startX, int startY) {
     genericFillEnd(filled);
 }
 
-void KisFillPainter::fillPattern(int startX, int startY) {
-    genericFillStart(startX, startY);
+void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP projection) {
+    genericFillStart(startX, startY, projection);
 
     // Now create a layer and fill it
     KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(m_device->colorSpace(), "filled_fillpattern"));
@@ -165,22 +165,13 @@ void KisFillPainter::fillPattern(int startX, int startY) {
     genericFillEnd(filled);
 }
 
-void KisFillPainter::genericFillStart(int startX, int startY) {
+void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP projection) {
     m_cancelRequested = false;
-
-    if (m_width < 0 || m_height < 0) {
-        if (m_device->image()) {
-            m_width = m_device->image()->width();
-            m_height = m_device->image()->height();
-        } else {
-            m_width = m_height = 500;
-        }
-    }
 
     m_size = m_width * m_height;
 
     // Create a selection from the surrounding area
-    m_selection = createFloodSelection(startX, startY);
+    m_selection = createFloodSelection(startX, startY, projection);
 }
 
 void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
@@ -209,7 +200,7 @@ struct FillSegment {
 
 typedef enum { None = 0, Added = 1, Checked = 2 } Status;
 
-KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
+KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP projection) {
 
 // XXX: This always returns a rect with x = 0, it seems. That can't be
 // correct! (BSAR)
@@ -219,13 +210,10 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
             QRect rc = m_device->selection()->selectedExactRect();
             m_width = rc.width() - (startX - rc.x());
             m_height = rc.height() - (startY - rc.y());
-        } else if (m_device->image()) {
-            m_width = m_device->image()->width();
-            m_height = m_device->image()->height();
-        } else {
-            m_width = m_height = 500;
         }
     }
+    // Otherwise the width and height should have been set
+    Q_ASSERT( m_width >= 0 && m_height >= 0 );
 
     // Don't try to fill if we start outside the borders, just return an empty 'fill'
     if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
@@ -235,10 +223,10 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 
     // sample merged?
     if (m_sampleMerged) {
-        if (!m_device->image()) {
+        if (!projection) {
             return KisSelectionSP(new KisSelection(m_device));
         }
-        sourceDevice = m_device->image()->mergedImage();
+        sourceDevice = projection;
     } else {
         sourceDevice = m_device;
     }

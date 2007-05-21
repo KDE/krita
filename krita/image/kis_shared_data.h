@@ -22,6 +22,9 @@
 #include <QAtomic>
 #include <kis_shared_ptr.h>
 
+/**
+ * XXX: Add documentation!
+ */
 class KisSharedData  {
     public:
         KisSharedData() : valid(true) { }

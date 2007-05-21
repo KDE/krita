@@ -395,24 +395,9 @@ public:
      */
     virtual qint32 channelCount() const;
 
-    /**
-     * Return the image that contains this paint device, or 0 if it is not
-     * part of an image. This is the same as calling parentLayer()->image().
-     */
-    KisImageSP image() const;
 
-    /**
-     * Returns the KisLayer that contains this paint device, or 0 if this is not
-     * part of a layer.
-     */
-    KisLayerSP parentLayer() const;
 
-    /**
-     * Set the KisLayer that contains this paint device, or 0 if this is not
-     * part of a layer.
-     */
-    void setParentLayer(KisLayer *parentLayer);
-
+public:
 
     /**
        Add the specified rect to the parent layer's set of dirty rects
@@ -609,6 +594,15 @@ signals:
     void profileChanged(KoColorProfile *  profile);
     void colorSpaceChanged(KoColorSpace *colorspace);
 
+    /// Emitted whenever the whole paint device is set dirty
+    void dirtied();
+
+    /// Emitted when the specified rect is marked dirty
+    void dirtied( const QRect & rc );
+
+    /// Emitted when the specified region is marked dirty
+    void dirtied( const QRegion & region );
+
 private slots:
 
     void runBackgroundFilters();
@@ -618,6 +612,10 @@ private:
 
 protected:
     KisDataManagerSP m_datamanager;
+
+private:
+
+    KisImageSP image() const;
 
 private:
 

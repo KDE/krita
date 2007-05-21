@@ -81,6 +81,7 @@ void KisPainter::init()
     m_strokeStyle = StrokeStyleBrush;
     m_pressure = PRESSURE_MIN;
     m_antiAliasPolygonFill = true;
+    m_bounds = QRect();
 }
 
 KisPainter::~KisPainter()
@@ -805,8 +806,8 @@ void KisPainter::fillPolygon(const vQPointF& points, FillStyle fillStyle)
     fillRect.adjust(-1, -1, 1, 1);
 
     // Clip to the image bounds.
-    if (m_device->image()) {
-        fillRect &= m_device->image()->bounds();
+    if ( m_bounds.isValid() ) {
+        fillRect &= m_bounds;
     }
 
     switch (fillStyle) {

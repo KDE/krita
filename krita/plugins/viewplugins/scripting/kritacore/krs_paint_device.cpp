@@ -105,7 +105,7 @@ void PaintDevice::endPainting()
     }
     if(m_cmd != 0)
     {
-        paintDevice()->image()->undoAdapter()->addCommand(m_cmd);
+        doc()->image()->undoAdapter()->addCommand(m_cmd);
     }
 }
 

@@ -52,18 +52,20 @@ ConstPaintDevice::~ConstPaintDevice()
 
 int ConstPaintDevice::width()
 {
+    // XXX: Don't try to get the image from the paint device anymore
     QRect r1 = paintDevice()->extent();
-    QRect r2 = paintDevice()->image()->bounds();
-    QRect rect = r1.intersect(r2);
-    return rect.width();
+//     QRect r2 = paintDevice()->image()->bounds();
+//     QRect rect = r1.intersect(r2);
+    return r1.width();
 }
 
 int ConstPaintDevice::height()
 {
+    // XXX: Don't try to get the image from the paint device anymore
     QRect r1 = paintDevice()->extent();
-    QRect r2 = paintDevice()->image()->bounds();
-    QRect rect = r1.intersect(r2);
-    return rect.height();
+//     QRect r2 = paintDevice()->image()->bounds();
+//     QRect rect = r1.intersect(r2);
+    return r1.height();
 }
 
 QString ConstPaintDevice::colorSpaceId()

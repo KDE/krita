@@ -28,7 +28,7 @@ template<class T>
 class KisWeakSharedPtr;
 
 /**
- * XXX!
+ * XXX! Add documentation!
  */
 template<class T>
 class KisSharedPtr {
@@ -118,7 +118,7 @@ class KisSharedPtr {
 };
 
 /**
- * XXX!
+ * XXX! Tell us what's the difference between weak and normal shared ptr
  */
 template<class T>
 class KisWeakSharedPtr {
@@ -141,7 +141,7 @@ class KisWeakSharedPtr {
         }
 
         inline KisWeakSharedPtr<T>( const KisSharedPtr<T>& o )
-            : d(o.d) { 
+            : d(o.d) {
             if(d) dataPtr = d->dataPtr;
         }
         /**
@@ -178,7 +178,7 @@ class KisWeakSharedPtr {
         * to this pointer are deleted, resulting in a segmentation fault. Use with care.
         * @return the pointer
         */
-        inline T* data() { 
+        inline T* data() {
             Q_ASSERT(not d or( dataPtr and dataPtr->valid));
             return d;
         }

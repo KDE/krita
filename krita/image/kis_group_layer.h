@@ -64,6 +64,8 @@ public:
 
     KoColorSpace * colorSpace();
 
+
+public slots:
     /**
      * Set the entire layer extent dirty; this percolates up to parent layers all the
      * way to the root layer.
@@ -83,6 +85,8 @@ public:
      * layer.
      */
     void setDirty( const QRegion & region);
+
+public:
 
     qint32 x() const;
     void setX(qint32);

@@ -95,7 +95,7 @@ void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
     m_painter->setBrush(m_currentBrush);
     m_painter->setOpacity(OPACITY_OPAQUE);
     m_painter->setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_ERASE));
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("eraser", 0, m_painter);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("eraser", 0, m_painter, m_currentImage);
     m_painter->setPaintOp(op); // And now the painter owns the op and will destroy it.
 
     // Set the cursor -- ideally. this should be a mask created from the brush,

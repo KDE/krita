@@ -33,7 +33,7 @@ public:
     KisSmearyOpFactory() {}
     virtual ~KisSmearyOpFactory() {}
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
+    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "paintSmeary"; }
     virtual QString name() const { return i18n("Smeary Brush"); }
     virtual bool userVisible(KoColorSpace * ) { return false; }
@@ -69,7 +69,7 @@ public:
 
 private:
     class SmearyTuft;
-    
+
     Q3PtrList<SmearyTuft> m_rightTufts;
     Q3PtrList<SmearyTuft> m_leftTufts;
 

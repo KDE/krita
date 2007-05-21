@@ -108,6 +108,9 @@ void ImageSize::slotImageSize()
     if (dlgImageSize->exec() == QDialog::Accepted) {
         qint32 w = dlgImageSize->width();
         qint32 h = dlgImageSize->height();
+        double res = dlgImageSize->resolution();
+
+        image->setResolution(res, res);
 
         if(w !=image->width() || h != image->height())
             m_view->imageManager()->scaleCurrentImage((double)w / ((double)(image->width())),

@@ -120,6 +120,11 @@ qint32 DlgImageSize::height()
     return (qint32)m_page->intPixelHeight->value();
 }
 
+double DlgImageSize::resolution()
+{
+    return m_page->doubleResolution->value() / 72.0;
+}
+
 KisFilterStrategy *DlgImageSize::filterType()
 {
     KoID filterID = m_page->cmbFilterType->currentItem();

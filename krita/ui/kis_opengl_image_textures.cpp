@@ -25,6 +25,12 @@
 
 #include <QGLWidget>
 
+#include "config-krita.h"
+
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
+
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoIntegerMaths.h"
@@ -159,27 +165,9 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 
     setImageTextureFormat();
 
+    // Fill with transparent black
     const int NUM_RGBA_COMPONENTS = 4;
-    int bytesPerPixel;
-
-    switch (m_imageTextureType) {
-    default:
-        kDebug(DBG_AREA_UI) << "Unexpected image texture type " << m_imageTextureType << endl;
-        // Fall through
-    case GL_UNSIGNED_BYTE:
-        bytesPerPixel = 1 * NUM_RGBA_COMPONENTS;
-        break;
-#ifdef HAVE_GLEW
-    case GL_HALF_FLOAT_ARB:
-        bytesPerPixel = 2 * NUM_RGBA_COMPONENTS;
-        break;
-    case GL_FLOAT:
-        bytesPerPixel = 4 * NUM_RGBA_COMPONENTS;
-        break;
-#endif
-    }
-
-    QByteArray emptyTilePixelData(m_imageTextureTileWidth * m_imageTextureTileHeight * bytesPerPixel, 0);
+    QByteArray emptyTilePixelData(m_imageTextureTileWidth * m_imageTextureTileHeight * NUM_RGBA_COMPONENTS, 0);
 
     for (int tileIndex = 0; tileIndex < numImageTextureTiles; ++tileIndex) {
 
@@ -192,7 +180,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
         glTexImage2D(GL_TEXTURE_2D, 0, m_imageTextureInternalFormat, m_imageTextureTileWidth, m_imageTextureTileHeight, 0,
-              GL_BGRA, m_imageTextureType, emptyTilePixelData.data());
+              GL_BGRA, GL_UNSIGNED_BYTE, emptyTilePixelData.data());
     }
 }
 
@@ -262,6 +250,32 @@ void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
 
                     m_image->mergedImage()->readBytes(pixels, tileUpdateRect.x(), tileUpdateRect.y(),
                                                       tileUpdateRect.width(), tileUpdateRect.height());
+
+#if defined(HAVE_GLEW) && defined(HAVE_OPENEXR)
+                    // XXX: generalise
+                    if (m_image->colorSpace()->id() == "RGBAF16HALF") {
+                        if (m_imageTextureType == GL_FLOAT) {
+
+                            // Convert half to float as we don't have ARB_half_float_pixel
+                            const int NUM_RGBA_COMPONENTS = 4;
+                            qint32 halfCount = tileUpdateRect.width() * tileUpdateRect.height() * NUM_RGBA_COMPONENTS;
+                            GLfloat *pixels_as_floats = new GLfloat[halfCount];
+                            const half *half_pixel = reinterpret_cast<const half *>(pixels);
+                            GLfloat *float_pixel = pixels_as_floats;
+
+                            while (halfCount > 0) {
+                                *float_pixel = *half_pixel;
+                                ++float_pixel;
+                                ++half_pixel;
+                                --halfCount;
+                            }
+                            delete [] pixels;
+                            pixels = reinterpret_cast<Q_UINT8 *>(pixels_as_floats);
+                        } else {
+                            Q_ASSERT(m_imageTextureType == GL_HALF_FLOAT_ARB);
+                        }
+                    }
+#endif
                 }
 
                 if (tileUpdateRect.width() == m_imageTextureTileWidth && tileUpdateRect.height() == m_imageTextureTileHeight) {
@@ -438,16 +452,20 @@ bool KisOpenGLImageTextures::haveHDRTextureFormat(KoColorSpace *colorSpace)
     QString colorSpaceId = colorSpace->id();
 
     if (colorSpaceId == "RGBAF16HALF") {
-        if (GLEW_ARB_half_float_pixel) {
+        if (GLEW_ARB_texture_float) {
             return true;
         }
-        // ATI_texture_float?
+        if (GLEW_ATI_texture_float) {
+            return true;
+        }
     }
     if (colorSpaceId == "RGBAF32") {
         if (GLEW_ARB_texture_float) {
             return true;
         }
-        // ATI_texture_float?
+        if (GLEW_ATI_texture_float) {
+            return true;
+        }
     }
 #endif
     return false;
@@ -462,29 +480,47 @@ void KisOpenGLImageTextures::setImageTextureFormat()
     QString colorSpaceId = m_image->colorSpace()->id();
     m_usingHDRExposureProgram = false;
 
-    kDebug(DBG_AREA_UI) << "Choosing texture format, default to 8-bit\n";
+    kDebug(DBG_AREA_UI) << "Choosing texture format:\n";
 
     if (imageCanUseHDRExposureProgram(m_image)) {
+
         if (colorSpaceId == "RGBAF16HALF") {
 
-            Q_ASSERT(GLEW_ARB_half_float_pixel);
+            if (GLEW_ARB_texture_float) {
+                m_imageTextureInternalFormat = GL_RGBA16F_ARB;
+                kDebug(DBG_AREA_UI) << "Using ARB half\n";
+            } else {
+                Q_ASSERT(GLEW_ATI_texture_float);
+                m_imageTextureInternalFormat = GL_RGBA_FLOAT16_ATI;
+                kDebug(DBG_AREA_UI) << "Using ATI half\n";
+            }
 
-            m_imageTextureInternalFormat = GL_RGBA16F_ARB;
-            m_imageTextureType = GL_HALF_FLOAT_ARB;
+            if (GLEW_ARB_half_float_pixel) {
+                kDebug(DBG_AREA_UI) << "Pixel type half\n";
+                m_imageTextureType = GL_HALF_FLOAT_ARB;
+            } else {
+                kDebug(DBG_AREA_UI) << "Pixel type float\n";
+                m_imageTextureType = GL_FLOAT;
+            }
+
             m_usingHDRExposureProgram = true;
-
-            kDebug(DBG_AREA_UI) << "Using half\n";
 
         } else if (colorSpaceId == "RGBAF32") {
 
-            Q_ASSERT(GLEW_ARB_texture_float);
+            if (GLEW_ARB_texture_float) {
+                m_imageTextureInternalFormat = GL_RGBA32F_ARB;
+                kDebug(DBG_AREA_UI) << "Using ARB float\n";
+            } else {
+                Q_ASSERT(GLEW_ATI_texture_float);
+                m_imageTextureInternalFormat = GL_RGBA_FLOAT32_ATI;
+                kDebug(DBG_AREA_UI) << "Using ATI float\n";
+            }
 
-            m_imageTextureInternalFormat = GL_RGBA32F_ARB;
             m_imageTextureType = GL_FLOAT;
             m_usingHDRExposureProgram = true;
-
-            kDebug(DBG_AREA_UI) << "Using float\n";
         }
+    } else {
+        kDebug(DBG_AREA_UI) << "Using unsigned byte\n";
     }
 #endif
 }

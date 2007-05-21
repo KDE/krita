@@ -29,7 +29,7 @@
 
 class KoImageData::Private {
 public:
-    Private(KoImageCollection *c) : refCount(0), quality(LowQuality), collection(c), tempImageFile(0) { }
+    Private(KoImageCollection *c) : refCount(0), quality(MediumQuality), collection(c), tempImageFile(0) { }
     ~Private() {
         delete tempImageFile;
     }
@@ -168,8 +168,11 @@ bool KoImageData::setKoStoreDevice(KoStoreDevice *device) {
         }
         d->tempImageFile->close();
     }
-    else // small image; just load it in memory.
+    else { // small image; just load it in memory.
         d->image.load(device, 0);
+        d->imageSize.setWidth( DM_TO_POINT(d->image.width() / (double) d->image.dotsPerMeterX() * 10.0) );
+        d->imageSize.setHeight( DM_TO_POINT(d->image.height() / (double) d->image.dotsPerMeterY() * 10.0) );
+    }
     return true;
 }
 

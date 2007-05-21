@@ -46,9 +46,9 @@ public:
     virtual QString id() const { return "RGBA"; }
     virtual QString name() const { return i18n("RGB (8-bit integer/channel)"); }
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KoRgbU8ColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KoRgbU8ColorSpace(parent, p); }
 
-    virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
+    virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; }
 
 
 

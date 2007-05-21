@@ -62,7 +62,7 @@ public:
 
     KoRgbU8CompositeOp(KoColorSpace * cs, const QString& id, const QString& description, const bool userVisible = true);
 
-    virtual ~KoRgbU8CompositeOp() {};
+    virtual ~KoRgbU8CompositeOp() {}
 
     void composite(quint8 *dstRowStart, qint32 dstRowStride,
 			   const quint8 *srcRowStart, qint32 srcRowStride,

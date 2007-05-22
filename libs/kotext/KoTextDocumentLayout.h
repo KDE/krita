@@ -152,6 +152,8 @@ public:
         virtual bool setFollowupShape(KoShape *shape) = 0;
         /// remove layout information from the current layout position to the end of the document.
         virtual void clearTillEnd() = 0;
+        /// called by the KoTextDocumentLayout to notify the LayoutState of a successfully resized inline object
+        virtual void registerInlineObject(const QTextInlineObject &inlineObject) = 0;
 
         /// the index in the list of shapes (or frameset) of the shape we are currently layouting.
         int shapeNumber;

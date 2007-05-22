@@ -57,6 +57,7 @@ public:
     bool setFollowupShape(KoShape *) { return false; }
     void clearTillEnd() {}
     int cursorPosition() const { return 0; }
+    void registerInlineObject(const QTextInlineObject &) {}
 
     KoStyleManager *m_styleManager;
 };
@@ -256,8 +257,10 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
         return;
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
-    if(obj)
+    if(obj) {
         obj->resize(document(), item, position, cf, paintDevice());
+        m_state->registerInlineObject(item);
+    }
 }
 
 void KoTextDocumentLayout::scheduleLayout() {

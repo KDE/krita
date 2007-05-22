@@ -48,6 +48,13 @@
 
 #include "ui_wdgbracketing2hdr.h"
 
+#include "config-powf.h"
+
+#ifndef HAVE_POWF
+#undef powf
+#define powf pow
+#endif
+
 const double epsilon = 1e-3;
 
 typedef KGenericFactory<Bracketing2HDRPlugin> Bracketing2HDRPluginFactory;

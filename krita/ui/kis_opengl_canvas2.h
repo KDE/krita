@@ -19,7 +19,6 @@
 #ifndef KIS_OPENGL_CANVAS_2_H
 #define KIS_OPENGL_CANVAS_2_H
 
-#include "config-krita.h"
 #include "config-opengl.h"
 #include "config-glew.h"
 

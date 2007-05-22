@@ -18,8 +18,6 @@
 #ifndef KIS_QPAINTER_IMAGE_CONTEXT_H_
 #define KIS_QPAINTER_IMAGE_CONTEXT_H_
 
-#include <config-krita.h>
-
 #include <map>
 
 #include <QObject>

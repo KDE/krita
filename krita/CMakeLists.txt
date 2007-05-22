@@ -35,7 +35,7 @@ if (SHOULD_BUILD_KRITA)
 
     check_function_exists(powf HAVE_POWF)
 
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-krita.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krita.h)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
 
     set(LINK_OPENEXR_LIB)
     if(OPENEXR_FOUND)
@@ -45,7 +45,7 @@ if (SHOULD_BUILD_KRITA)
 
 
     set(KRITA_INCLUDES
-        # For config-krita.h
+        # For config-*.h
         ${CMAKE_CURRENT_BINARY_DIR}
 
         ${CMAKE_SOURCE_DIR}/krita/image

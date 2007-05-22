@@ -42,7 +42,7 @@ void KisOpenGLHDRExposureProgram::setExposureUniformVariable()
 {
     Q_ASSERT(active());
 
-    float exposure = powf(2, m_exposure + 2.47393);
+    float exposure = pow(2, m_exposure + 2.47393);
 
     setUniformVariable("exposure", exposure, exposure, exposure, 1.0);
 }

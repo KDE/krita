@@ -25,7 +25,7 @@
 
 #include <QGLWidget>
 
-#include "config-krita.h"
+#include "config-openexr.h"
 
 #ifdef HAVE_OPENEXR
 #include <half.h>

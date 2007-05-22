@@ -19,7 +19,7 @@
  */
 #include "rgb_float_hdr.h"
 
-#include <config-krita.h>
+#include "config-openexr.h"
 
 #include <stdlib.h>
 #include <vector>

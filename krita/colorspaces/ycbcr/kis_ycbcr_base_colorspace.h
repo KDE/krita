@@ -17,7 +17,6 @@
  */
 #ifndef _KIS_YCBCR_BASE_COLORSPACE_H_
 #define _KIS_YCBCR_BASE_COLORSPACE_H_
-#include "config-krita.h"
 
 #include "klocale.h"
 #include <KoIncompleteColorSpace.h>

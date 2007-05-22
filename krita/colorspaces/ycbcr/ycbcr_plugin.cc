@@ -17,8 +17,6 @@
  */
 #include "ycbcr_plugin.h"
 
-#include <config-krita.h>
-
 #include <stdlib.h>
 #include <vector>
 

@@ -209,7 +209,6 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
     KoListLevelProperties properties;
 
     KoXmlElement* listElem = context.oasisStyles().listStyles()[ name() ];
-    Style style = KoListStyle::NoItem;
     if( listElem ) {
         KoXmlElement listStyle = listElem->firstChildElement("list-level-style-bullet");
         if( ! listStyle.isNull() ) {
@@ -226,42 +225,39 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
 
             //1.6: KoParagCounter::loadOasisListStyle
             QString bulletChar = listStyle.attributeNS( KoXmlNS::text, "bullet-char", QString::null );
-            if( ! bulletChar.isEmpty() ) {
-                // Reverse engineering, I found those codes:
+            if( bulletChar.isEmpty() ) {
+                properties.setStyle(KoListStyle::NoItem);
+            }
+            else {
                 switch( bulletChar[0].unicode() ) {
-                    case 0x2022: // small disc -> circle
-                        style = KoListStyle::CircleItem;
+                    case 0x2022: // bullet, a small disc -> circle
+                        //TODO use BulletSize to differ between small and large discs
+                        properties.setStyle(KoListStyle::CircleItem);
                         break;
-                    case 0x25CF: // large disc -> disc
+                    case 0x25CF: // black circle, large disc -> disc
                     case 0xF0B7: // #113361
-                        style = KoListStyle::DiscItem;
+                        properties.setStyle(KoListStyle::DiscItem);
                         break;
-                    case 0xE00C: // losange - TODO in kotext. Not in OASIS either (reserved Unicode area!)
-                        style = KoListStyle::SquareItem;
+                    case 0xE00C: // losange
+                        properties.setStyle(KoListStyle::SquareItem);
                         break;
                     case 0xE00A: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
-                        style = KoListStyle::SquareItem;
+                        properties.setStyle(KoListStyle::SquareItem);
                         break;
                     case 0x27A2: // two-colors right-pointing triangle
-                                // mapping (both ways) to box for now.
-                        style = KoListStyle::BoxItem;
+                        properties.setStyle(KoListStyle::RightArrowHeadItem);
                         break;
-
                     case 0x2794: // arrow to right
-                        style = KoListStyle::CustomCharItem;
-                        properties.setBulletCharacter('>');
+                        properties.setStyle(KoListStyle::RightArrowItem);
                         break;
                     case 0x2714: // checkmark
-                        style = KoListStyle::CustomCharItem;
-                        properties.setBulletCharacter('v');
+                        properties.setStyle(KoListStyle::HeavyCheckMarkItem);
                         break;
                     case 0x2d: // minus
-                        style = KoListStyle::CustomCharItem;
-                        properties.setBulletCharacter('-');
+                        properties.setStyle(KoListStyle::MinusItem);
                         break;
                     case 0x2717: // cross
-                        style = KoListStyle::CustomCharItem;
-                        properties.setBulletCharacter('x');
+                        properties.setStyle(KoListStyle::BallotXItem);
                         break;
                     default:
                         QChar customBulletChar = bulletChar[0];
@@ -281,17 +277,17 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
                         }
                         // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
                         */
+                        properties.setStyle(KoListStyle::BoxItem); //fallback
                         break;
                 }
             }
         }
         else {
-            style = KoListStyle::DecimalItem;
+            properties.setStyle(KoListStyle::DecimalItem);
         }
     }
 
-    properties.setStyle(style);
+    //element.attribute("depth").toInt() + 1;
     properties.setLevel(0);
     setLevel(properties);
-    //liststyle->setLevel( element.attribute("depth").toInt() + 1);
 }

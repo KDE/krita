@@ -60,6 +60,16 @@ public:
         UpperRomanItem,
         /// draw a box
         BoxItem,
+        /// minus
+        MinusItem,
+        /// a check mark
+        HeavyCheckMarkItem,
+        /// a ballot x
+        BallotXItem,
+        /// heavy wide-headed rightwards arrow
+        RightArrowItem,
+        /// three-d top-lighted rightwards arrowhead
+        RightArrowHeadItem,
         /// use an unicode char for the numbering
         CustomCharItem,
         Bengali,    ///< Bengali characters for normal 10-base counting

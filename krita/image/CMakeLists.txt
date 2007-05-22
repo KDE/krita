@@ -95,6 +95,7 @@ set(kritaimage_LIB_SRCS
    kis_layer_commands.cc
    kis_undo_adapter.cc
    kis_reflectivity_mask.cpp
+   kis_transformation_mask.cpp
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})

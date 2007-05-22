@@ -37,6 +37,7 @@
 #include "kis_datamanager.h"
 #include "kis_fill_painter.h"
 #include "kis_selection.h"
+#include "kis_mask.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
     : super(dev,
@@ -47,9 +48,19 @@ KisSelection::KisSelection(KisPaintDeviceSP dev)
     Q_ASSERT(dev);
 }
 
+
+KisSelection::KisSelection( KisPaintDeviceSP parent, KisMaskSP mask )
+    : super( parent, "selection from mask" )
+    , m_parentPaintDevice( parent )
+    , m_dirty( false )
+{
+    m_datamanager = mask->dataManager();
+}
+
 KisSelection::KisSelection()
     : super("anonymous selection")
-    , m_parentPaintDevice(0), m_dirty(false)
+    , m_parentPaintDevice(0)
+    , m_dirty(false)
 {
 }
 

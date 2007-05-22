@@ -56,7 +56,7 @@ public:
     QBitArray channelFlags;
 
     // XXX: Make these (weak) shared pointers?
-    KisTransparencyMask* transparencyMask;
+    KisTransparencyMaskSP transparencyMask;
     KisEffectMaskSP previewMask;
     QList<KisEffectMask*> effectMasks;
 
@@ -425,21 +425,25 @@ bool KisLayer::hasEffectMasks()
     return !( m_d->transparencyMask == 0 && m_d->previewMask == 0 && m_d->effectMasks.isEmpty() );
 }
 
-void KisLayer::applyEffectMasks( const KisPaintDeviceSP src,  KisPaintDeviceSP dst, const QRect & rc )
+void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect & rc )
 {
-    Q_ASSERT( src != dst );
-
-
-    // First copy the src onto the dst
-    KisPainter gc( dst );
-    gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt( rc.topLeft(), src, rc );
-
     // Then loop through the effect masks and apply them
+    for ( int i = 0; i < m_d->effectMasks.size(); ++i ) {
+
+        KisEffectMask * mask = m_d->effectMasks.at( i );
+        mask->apply( projection, rc );
+
+    }
 
     // Then apply the preview mask
+    if ( m_d->previewMask )
+        m_d->previewMask->apply( projection, rc );
 
     // Then apply the transparency mask
+    if ( m_d->transparencyMask ) {
+        m_d->transparencyMask->apply( projection, rc );
+    }
+
 }
 
 
@@ -474,6 +478,37 @@ void KisLayer::removeEffectMask( int index )
 {
     m_d->effectMasks.removeAt( index );
 }
+
+void KisLayer::setPreviewMask( KisEffectMaskSP mask )
+{
+    m_d->previewMask = mask;
+}
+
+KisEffectMaskSP KisLayer::previewMask()
+{
+    return m_d->previewMask;
+}
+
+void KisLayer::removePreviewMask()
+{
+    m_d->previewMask = 0;
+}
+
+void KisLayer::setTransparencyMask( KisTransparencyMaskSP mask )
+{
+    m_d->transparencyMask = mask;
+}
+
+KisTransparencyMaskSP KisLayer::transparencyMask()
+{
+    return m_d->transparencyMask;
+}
+
+void KisLayer::removeTransparencyMask()
+{
+    m_d->transparencyMask = 0;
+}
+
 
 
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t) {

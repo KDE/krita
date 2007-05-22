@@ -17,9 +17,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_transparency_mask.h"
+#include "kis_paint_device.h"
+#include "kis_iterators_pixel.h"
+#include "KoColorSpace.h"
 
-KisTransparencyMask::KisTransparencyMask( KisPaintDeviceSP device )
-    : KisMask( device, "transparency mask")
+KisTransparencyMask::KisTransparencyMask()
+    : KisEffectMask()
 {
 }
 
@@ -28,6 +31,29 @@ KisTransparencyMask::~KisTransparencyMask()
 }
 
 KisTransparencyMask::KisTransparencyMask( const KisTransparencyMask& rhs )
-    : KisMask( rhs )
+    : KisEffectMask( rhs )
 {
+}
+
+void KisTransparencyMask::apply( KisPaintDeviceSP projection, const QRect & rc )
+{
+    KoColorSpace * cs = projection->colorSpace();
+
+    KisHLineIteratorPixel projectionIt = projection->createHLineIterator( rc.x(), rc.y(), rc.width() );
+    KisHLineConstIteratorPixel maskIt = createHLineConstIterator( rc.x(), rc.y(), rc.width() );
+
+    for ( int row = rc.y(); row < rc.height(); ++row ) {
+        while ( !projectionIt.isDone() ) {
+
+            int pixels = qMin( projectionIt.nConseqHPixels(), maskIt.nConseqHPixels() );
+            cs->applyAlphaU8Mask(projectionIt.rawData(), maskIt.rawData(), pixels);
+
+            projectionIt += pixels;
+            maskIt += pixels;
+        }
+        projectionIt.nextRow();
+        maskIt.nextRow();
+    }
+
+
 }

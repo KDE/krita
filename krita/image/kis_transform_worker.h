@@ -31,10 +31,12 @@ class KRITAIMAGE_EXPORT KisTransformWorker : public KisProgressSubject {
     typedef KisProgressSubject super;
 
 public:
-    KisTransformWorker(KisPaintDeviceSP dev, double  xscale, double  yscale,
-        double  xshear, double  yshear, double rotation,
-        qint32  xtranslate, qint32  ytranslate,
-        KisProgressDisplayInterface *progress, KisFilterStrategy *filter);
+    KisTransformWorker(KisPaintDeviceSP dev,
+                       double  xscale, double  yscale,
+                       double  xshear, double  yshear, double rotation,
+                       qint32  xtranslate, qint32  ytranslate,
+                       KisProgressDisplayInterface *progress,
+                       KisFilterStrategy *filter);
     ~KisTransformWorker();
 
 public:
@@ -46,7 +48,7 @@ private:
     // XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
     template <class T> void transformPass(KisPaintDevice *src, KisPaintDevice *dst, double xscale, double  shear, qint32 dx,   KisFilterStrategy *filterStrategy);
 
-     void rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+    void rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst);
     void rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
     void rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
     void rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst);

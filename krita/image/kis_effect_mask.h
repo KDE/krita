@@ -23,9 +23,11 @@
 #include "kis_mask.h"
 /**
    An effect mask is a single channel mask that applies a particular
-   filter to the layer the mask belongs to. It differs from an
+   effect to the layer the mask belongs to. It differs from an
    adjustment layer in that it only works on its parent layer, while
    adjustment layers work on all layers below it in its layer group.
+   The effect could be a filter, a transformation or anything else
+   that messes up pixels.
 */
 
 class KisEffectMask : public KisMask
@@ -40,6 +42,13 @@ public:
 
     ~KisEffectMask();
     KisEffectMask( const KisEffectMask& rhs );
+
+
+    /**
+     * Apply the effect the projection using the mask as a selection.
+     */
+    virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) = 0;
+
 };
 
 #endif //_KIS_EFFECT_MASK_

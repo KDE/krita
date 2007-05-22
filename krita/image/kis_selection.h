@@ -59,6 +59,13 @@ public:
      */
     KisSelection(KisPaintDeviceSP dev);
 
+
+    /**
+     * Create a new KisSelection from the given mask. The selection
+     * will share its pixel data with the mask
+     */
+    KisSelection( KisPaintDeviceSP parent, KisMaskSP mask );
+
     /**
      * Create a new KisSelection. This selection will not have a parent paint device.
      */
@@ -119,7 +126,9 @@ public:
     virtual void setDirty();
 
     QVector<QPolygon> outline();
+
 private:
+
     void paintUniformSelectionRegion(QImage img, const QRect& imageRect, const QRegion& uniformRegion);
 
 

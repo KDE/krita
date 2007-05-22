@@ -355,8 +355,14 @@ public:
 
     bool setPixel(qint32 x, qint32 y, const KoColor& kc);
 
+    /**
+     * @return the colorspace of the pixels in this paint device
+     */
     KoColorSpace * colorSpace() const;
 
+    /**
+     * @return the internal datamanager that keeps the pixels.
+     */
     KisDataManagerSP dataManager() const;
 
     /**

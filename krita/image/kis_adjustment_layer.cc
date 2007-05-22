@@ -81,8 +81,6 @@ KisPaintDeviceSP KisAdjustmentLayer::projection()
 }
 
 
-
-
 QIcon KisAdjustmentLayer::icon() const
 {
     return KIcon("tool_filter");

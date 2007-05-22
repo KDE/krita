@@ -208,8 +208,10 @@ public:
 
     quint8 opacity() const; //0-255
     void setOpacity(quint8 val); //0-255
+
     quint8 percentOpacity() const; //0-100
     void setPercentOpacity(quint8 val); //0-100
+
     QUndoCommand *setOpacityCommand(quint8 val);
     QUndoCommand *setOpacityCommand(quint8 prevOpacity, quint8 newOpacity);
 
@@ -244,7 +246,6 @@ public:
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual bool accept(KisLayerVisitor &) = 0;
 
-
     /// Returns the list of effect masks
     QList<KisEffectMask*> effectMasks();
 
@@ -260,15 +261,23 @@ public:
     /// Remove the mask at the speficied index
     void removeEffectMask( int index );
 
+    void setPreviewMask( KisEffectMaskSP mask );
+    KisEffectMaskSP previewMask();
+    void removePreviewMask();
+
+    void setTransparencyMask( KisTransparencyMaskSP mask );
+    KisTransparencyMaskSP transparencyMask();
+    void removeTransparencyMask();
+
 protected:
 
     bool hasEffectMasks();
 
     /**
-     * Apply the effect masks to the given paint device, producing
+     * Apply the effect masks to the given projection, producing
      * finally the dst paint device.
      */
-    void applyEffectMasks( const KisPaintDeviceSP src,  KisPaintDeviceSP dst, const QRect & rc );
+    void applyEffectMasks( KisPaintDeviceSP projection, const QRect & rc );
 
 private:
 

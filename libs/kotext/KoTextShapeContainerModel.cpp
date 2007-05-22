@@ -150,6 +150,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move) {
         QTextLayout *layout = block.layout();
         if(layout->lineCount() > 0) {
             KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (child->parent()->userData());
+            Q_ASSERT(data);
             QTextLine tl = layout->lineAt(0);
             double y = tl.y() - data->documentOffset() - newPosition.y();
             if(y >= 0 && y < 10)

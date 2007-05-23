@@ -21,18 +21,18 @@
 #include <kdialog.h>
 
 #include <kis_types.h>
-#include "ui_wdgnewimage.h"
+#include "ui_wdgimageproperties.h"
 
 class KoID;
 class KoColorSpace;
 class KoColorProfile;
 
-class WdgNewImage : public QWidget, public Ui::WdgNewImage
+class WdgImageProperties : public QWidget, public Ui::WdgImageProperties
 {
     Q_OBJECT
 
     public:
-        WdgNewImage(QWidget *parent) : QWidget(parent) { setupUi(this); }
+        WdgImageProperties(QWidget *parent) : QWidget(parent) { setupUi(this); }
 };
 
 class KisDlgImageProperties : public KDialog {
@@ -45,11 +45,8 @@ public:
                           const char *name = 0);
     virtual ~KisDlgImageProperties();
 
-    int imageWidth();
-    int imageHeight();
     int opacity();
     QString imageName();
-    double resolution();
     QString description();
     KoColorSpace * colorSpace();
     KoColorProfile * profile();
@@ -60,7 +57,7 @@ private slots:
 
 private:
 
-    WdgNewImage * m_page;
+    WdgImageProperties * m_page;
     KisImageSP m_image;
 };
 

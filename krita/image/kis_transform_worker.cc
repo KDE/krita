@@ -444,8 +444,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
                 cs->setAlpha(data, 0, 1);
                 tmpSel[i] = 255;
             }
-            else
-            {
+            else {
                 tmpSel[i] = 0;
             }
             ++srcIt;

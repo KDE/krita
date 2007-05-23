@@ -20,11 +20,21 @@
 #define KIS_CUSTOM_IMAGE_WIDGET_H
 
 #include "kis_global.h"
-#include "kis_dlg_image_properties.h"
+//#include "kis_dlg_image_properties.h"
 #include "KoUnit.h"
+
+#include "ui_wdgnewimage.h"
 
 class KisDoc2;
 class KoID;
+
+class WdgNewImage : public QWidget, public Ui::WdgNewImage
+{
+    Q_OBJECT
+
+    public:
+        WdgNewImage(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 /**
  * The 'Custom Document' widget in the Krita startup widget.

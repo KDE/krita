@@ -130,7 +130,7 @@ public:
      * @param newResolution the new image resolution which will be used for xRes and yRes
      */
     KisImagePropsCommand(KisImageSP image, const QString& newName, const QString& newDescription,
-                      KoColorSpace* newColorSpace, KoColorProfile* newProfile, double newResolution);
+                      KoColorSpace* newColorSpace, KoColorProfile* newProfile);
     virtual ~KisImagePropsCommand() {}
 
     virtual void redo();
@@ -145,9 +145,6 @@ private:
     KoColorSpace * m_oldColorSpace;
     KoColorProfile* m_newProfile;
     KoColorProfile* m_oldProfile;
-    double m_newResolution;
-    double m_oldXRes;
-    double m_oldYRes;
 };
 
 

@@ -51,7 +51,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     setDefaultButton( Ok );
     setObjectName(name);
     setCaption(i18n("Image Properties"));
-    m_page = new WdgNewImage(this);
+    m_page = new WdgImageProperties(this);
 
     m_image = image;
 
@@ -62,10 +62,10 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     m_page->m_createButton->hide();
     KisConfig cfg;
 
-    m_page->doubleWidth->setValue(image->width());
-    m_page->doubleHeight->setValue(image->height());
+    m_page->lblWidthValue->setText(QString::number(image->width()));
+    m_page->lblHeightValue->setText(QString::number(image->height()));
 
-    m_page->doubleResolution->setValue(image->xRes()*72); // XXX: separate values for x & y?
+    m_page->lblResolutionValue->setText(KGlobal::locale()->formatNumber(image->xRes()*72, 2)); // XXX: separate values for x & y?
 
     m_page->txtDescription->setText( m_image->description() );
 
@@ -107,18 +107,6 @@ KisDlgImageProperties::~KisDlgImageProperties()
     delete m_page;
 }
 
-int KisDlgImageProperties::imageWidth()
-{
-    // XXX: adding explict cast
-    return static_cast<int>(m_page->doubleWidth->value());
-}
-
-int KisDlgImageProperties::imageHeight()
-{
-    // XXX: adding explicit cast
-    return static_cast<int>(m_page->doubleHeight->value());
-}
-
 int KisDlgImageProperties::opacity()
 {
     return m_page->sliderOpacity->value();
@@ -127,11 +115,6 @@ int KisDlgImageProperties::opacity()
 QString KisDlgImageProperties::imageName()
 {
     return m_page->txtName->text();
-}
-
-double KisDlgImageProperties::resolution()
-{
-    return m_page->doubleResolution->value() / 72;
 }
 
 QString KisDlgImageProperties::description()
@@ -159,7 +142,7 @@ KoColorProfile * KisDlgImageProperties::profile()
 // XXX: Copy & paste from kis_dlg_create_img -- refactor to separate class
 void KisDlgImageProperties::fillCmbProfiles(const KoID & s)
 {
-    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->get(s.id());
+    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());
     m_page->cmbProfile->clear();
     if (csf) {
         QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );

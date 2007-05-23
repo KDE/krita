@@ -149,6 +149,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgcustompalette.ui
     wdgtextbrush.ui
     wdgnewimage.ui
+    wdgimageproperties.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/asm_scale.o )

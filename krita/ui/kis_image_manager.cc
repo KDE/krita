@@ -55,7 +55,7 @@ void KisImageManager::setup( KActionCollection * actionCollection )
     actionCollection->addAction("insert_image_as_layer", action );
     connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
 
-    action  = new KAction(i18n("Image Properties..."), this);
+    action  = new KAction(i18n("Properties..."), this);
     actionCollection->addAction("img_properties", action );
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 }
@@ -147,16 +147,10 @@ void KisImageManager::slotImageProperties()
     KisDlgImageProperties dlg(img, m_view);
 
     if (dlg.exec() == QDialog::Accepted) {
-        if (dlg.imageWidth() != img->width() ||
-            dlg.imageHeight() != img->height()) {
-
-            resizeCurrentImage(dlg.imageWidth(),
-                               dlg.imageHeight());
-        }
         qint32 opacity = dlg.opacity();
         opacity = opacity * 255 / 100;
         QUndoCommand* cmd = new KisImagePropsCommand(img, dlg.imageName(), dlg.description(),
-                                                     dlg.colorSpace(), dlg.profile(), dlg.resolution());
+                                                     dlg.colorSpace(), dlg.profile());
         m_view->document()->addCommand(cmd);
     }
 }

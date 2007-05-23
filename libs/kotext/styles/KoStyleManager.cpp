@@ -25,7 +25,6 @@
 #include <QTimer>
 #include <kdebug.h>
 #include <klocale.h>
-#include <QHash>
 
 class KoStyleManager::Private
 {
@@ -35,8 +34,6 @@ public:
 
     QList<KoCharacterStyle*> charStyles;
     QList<KoParagraphStyle*> paragStyles;
-    QHash<QString, KoParagraphStyle*> paragStylesHash;
-    QHash<QString, KoCharacterStyle*> charStylesHash;
     QList<ChangeFollower*> documentUpdaterProxies;
 
     bool updateTriggered;
@@ -179,28 +176,18 @@ KoParagraphStyle *KoStyleManager::paragraphStyle(int id) const {
 }
 
 KoCharacterStyle *KoStyleManager::characterStyle(const QString &name) const {
-    if (d->charStylesHash.contains(name))
-        return d->charStylesHash[name];
     foreach(KoCharacterStyle *style, d->charStyles) {
-        if(style->name() == name) {
-            d->charStylesHash.insert(name, style);
+        if(style->name() == name)
             return style;
-        }
     }
-    d->charStylesHash.insert(name, 0);
     return 0;
 }
 
 KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const {
-    if (d->paragStylesHash.contains(name))
-        return d->paragStylesHash[name];
     foreach(KoParagraphStyle *style, d->paragStyles) {
-        if(style->name() == name) {
-            d->paragStylesHash.insert(name, style);
+        if(style->name() == name)
             return style;
-        }
     }
-    d->paragStylesHash.insert(name, 0);
     return 0;
 }
 

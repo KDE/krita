@@ -31,13 +31,14 @@
 #include "kis_paint_layer.h"
 #include "kis_selection.h"
 
-KisSaveVisitor::KisSaveVisitor(KisImageSP img, KoStore *store, quint32 &count) :
+KisSaveVisitor::KisSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, QString name) :
     KisLayerVisitor(),
     m_count(count)
 {
     m_external = false;
     m_img = img;
     m_store = store;
+    m_name = name;
 }
 
 void KisSaveVisitor::setExternalUri(QString &uri)
@@ -56,7 +57,7 @@ bool KisSaveVisitor::visit(KisPaintLayer *layer)
     //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 
     QString location = m_external ? QString::null : m_uri;
-    location += m_img->name() + QString("/layers/layer%1").arg(m_count);
+    location += m_name + QString("/layers/layer%1").arg(m_count);
 
     // Layer data
     if (m_store->open(location)) {
@@ -83,7 +84,7 @@ bool KisSaveVisitor::visit(KisPaintLayer *layer)
         if (annotation) {
             // save layer profile
             location = m_external ? QString::null : m_uri;
-            location += m_img->name() + QString("/layers/layer%1").arg(m_count) + ".icc";
+            location += m_name + QString("/layers/layer%1").arg(m_count) + ".icc";
 
             if (m_store->open(location)) {
                 m_store->write(annotation->annotation());
@@ -118,7 +119,7 @@ bool KisSaveVisitor::visit(KisPaintLayer *layer)
 
 bool KisSaveVisitor::visit(KisGroupLayer *layer)
 {
-    KisSaveVisitor visitor(m_img, m_store, m_count);
+    KisSaveVisitor visitor(m_img, m_store, m_count, m_name);
 
     if(m_external)
         visitor.setExternalUri(m_uri);
@@ -138,7 +139,7 @@ bool KisSaveVisitor::visit(KisAdjustmentLayer* layer)
 
     if (layer->selection()) {
         QString location = m_external ? QString::null : m_uri;
-        location += m_img->name() + QString("/layers/layer%1").arg(m_count) + ".selection";
+        location += m_name + QString("/layers/layer%1").arg(m_count) + ".selection";
 
         // Layer data
         if (m_store->open(location)) {
@@ -155,7 +156,7 @@ bool KisSaveVisitor::visit(KisAdjustmentLayer* layer)
     if (layer->filter()) {
         QString location = m_external ? QString::null : m_uri;
         location = m_external ? QString::null : m_uri;
-        location += m_img->name() + QString("/layers/layer%1").arg(m_count) + ".filterconfig";
+        location += m_name + QString("/layers/layer%1").arg(m_count) + ".filterconfig";
 
         if (m_store->open(location)) {
             QString s = layer->filter()->toString();

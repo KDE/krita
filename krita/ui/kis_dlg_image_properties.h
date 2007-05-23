@@ -45,9 +45,6 @@ public:
                           const char *name = 0);
     virtual ~KisDlgImageProperties();
 
-    int opacity();
-    QString imageName();
-    QString description();
     KoColorSpace * colorSpace();
     KoColorProfile * profile();
     

@@ -6,30 +6,13 @@
     <x>0</x>
     <y>0</y>
     <width>590</width>
-    <height>706</height>
+    <height>227</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>New Image</string>
   </property>
   <layout class="QVBoxLayout" >
-   <item>
-    <widget class="QLabel" name="lblName" >
-     <property name="text" >
-      <string>&amp;Name:</string>
-     </property>
-     <property name="buddy" >
-      <cstring>txtName</cstring>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLineEdit" name="txtName" >
-     <property name="text" >
-      <string>untitled-1</string>
-     </property>
-    </widget>
-   </item>
    <item>
     <widget class="QGroupBox" name="grpImage" >
      <property name="title" >
@@ -170,180 +153,6 @@
      </layout>
     </widget>
    </item>
-   <item>
-    <widget class="QGroupBox" name="grpContents" >
-     <property name="title" >
-      <string>Contents</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="leftMargin" >
-       <number>11</number>
-      </property>
-      <property name="topMargin" >
-       <number>11</number>
-      </property>
-      <property name="rightMargin" >
-       <number>11</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>11</number>
-      </property>
-      <property name="horizontalSpacing" >
-       <number>6</number>
-      </property>
-      <property name="verticalSpacing" >
-       <number>6</number>
-      </property>
-      <item row="2" column="1" >
-       <widget class="QTextEdit" name="txtDescription" />
-      </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="lblColor" >
-        <property name="text" >
-         <string>Canvas color:</string>
-        </property>
-        <property name="buddy" >
-         <cstring>cmbColor</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" >
-       <widget class="KColorCombo" native="1" name="cmbColor" />
-      </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="lblDescription" >
-        <property name="text" >
-         <string>Description:</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignTop</set>
-        </property>
-        <property name="buddy" >
-         <cstring>txtDescription</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="lblOpacity" >
-        <property name="text" >
-         <string>Opacity:</string>
-        </property>
-        <property name="buddy" >
-         <cstring>sliderOpacity</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QFrame" name="opacityPanel" >
-        <property name="frameShape" >
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow" >
-         <enum>QFrame::Plain</enum>
-        </property>
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="textLabel1" >
-           <property name="text" >
-            <string>Transparent</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSlider" name="sliderOpacity" >
-           <property name="toolTip" >
-            <string>Opacity of the background color</string>
-           </property>
-           <property name="whatsThis" >
-            <string>Opacity of the background color.</string>
-           </property>
-           <property name="maximum" >
-            <number>100</number>
-           </property>
-           <property name="pageStep" >
-            <number>10</number>
-           </property>
-           <property name="value" >
-            <number>100</number>
-           </property>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="tickInterval" >
-            <number>20</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="textLabel2" >
-           <property name="text" >
-            <string>Opaque</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>0</number>
-     </property>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType" >
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>480</width>
-         <height>21</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_createButton" >
-       <property name="text" >
-        <string>Create</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
@@ -358,20 +167,10 @@
    <extends>QComboBox</extends>
    <header>squeezedcombobox.h</header>
   </customwidget>
-  <customwidget>
-   <class>KColorCombo</class>
-   <extends>QWidget</extends>
-   <header>kcolorcombo.h</header>
-   <container>1</container>
-  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>txtName</tabstop>
   <tabstop>cmbColorSpaces</tabstop>
   <tabstop>cmbProfile</tabstop>
-  <tabstop>cmbColor</tabstop>
-  <tabstop>sliderOpacity</tabstop>
-  <tabstop>txtDescription</tabstop>
  </tabstops>
  <resources/>
  <connections/>

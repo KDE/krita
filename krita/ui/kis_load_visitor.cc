@@ -37,13 +37,14 @@
 #include "kis_filter_configuration.h"
 #include "kis_datamanager.h"
 
-KisLoadVisitor::KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames) :
+KisLoadVisitor::KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, QString name) :
     KisLayerVisitor(),
     m_layerFilenames(layerFilenames)
 {
     m_external = false;
     m_img = img;
     m_store = store;
+    m_name = name;
 }
 
 void KisLoadVisitor::setExternalUri(QString &uri)
@@ -61,7 +62,7 @@ bool KisLoadVisitor::visit(KisPaintLayer *layer)
 {        //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 
     QString location = m_external ? QString::null : m_uri;
-    location += m_img->name() + "/layers/" + m_layerFilenames[layer];
+    location += m_name + "/layers/" + m_layerFilenames[layer];
 
     // Layer data
     if (m_store->open(location)) {
@@ -77,7 +78,7 @@ bool KisLoadVisitor::visit(KisPaintLayer *layer)
 
     // icc profile
     location = m_external ? QString::null : m_uri;
-    location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".icc";
+    location += m_name + "/layers/" + m_layerFilenames[layer] + ".icc";
 
     if (m_store->hasFile(location)) {
         QByteArray data;
@@ -118,7 +119,7 @@ bool KisLoadVisitor::visit(KisPaintLayer *layer)
 
 bool KisLoadVisitor::visit(KisGroupLayer *layer)
 {
-    KisLoadVisitor visitor(m_img, m_store, m_layerFilenames);
+    KisLoadVisitor visitor(m_img, m_store, m_layerFilenames, m_name);
 
     if(m_external)
         visitor.setExternalUri(m_uri);
@@ -141,7 +142,7 @@ bool KisLoadVisitor::visit(KisAdjustmentLayer* layer)
 
     // The selection -- if present. If not, we simply cannot open the dratted thing.
     QString location = m_external ? QString::null : m_uri;
-    location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".selection";
+    location += m_name + "/layers/" + m_layerFilenames[layer] + ".selection";
     if (m_store->hasFile(location)) {
         m_store->open(location);
         KisSelectionSP selection = KisSelectionSP(new KisSelection());
@@ -157,7 +158,7 @@ bool KisLoadVisitor::visit(KisAdjustmentLayer* layer)
 
     // filter configuration
     location = m_external ? QString::null : m_uri;
-    location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".filterconfig";
+    location += m_name + "/layers/" + m_layerFilenames[layer] + ".filterconfig";
 
     if (m_store->hasFile(location) && layer->filter()) {
         QByteArray data;

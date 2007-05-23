@@ -120,12 +120,6 @@ public:
     KoColor backgroundColor() const;
     void setBackgroundColor(const KoColor & color);
 
-    QString name() const;
-    void setName(const QString& name);
-
-    QString description() const;
-    void setDescription(const QString& description);
-
     /**
      * @return the global selection object or 0 if there is none. The
      * global selection is always read-write.
@@ -559,7 +553,7 @@ public slots:
 
 private:
     KisImage& operator=(const KisImage& rhs);
-    void init(KisUndoAdapter * adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace, const QString& name);
+    void init(KisUndoAdapter * adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace);
     void emitSizeChanged();
     void preparePaintLayerAfterAdding( KisLayerSP layer );
 

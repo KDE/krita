@@ -124,13 +124,10 @@ void KisImageConvertTypeCommand::undo()
 
 
 
-KisImagePropsCommand::KisImagePropsCommand(KisImageSP image, const QString& newName, const QString& newDescription,
-                                           KoColorSpace* newColorSpace, KoColorProfile* newProfile)
+KisImagePropsCommand::KisImagePropsCommand(KisImageSP image,                                          KoColorSpace* newColorSpace, KoColorProfile* newProfile)
     : super(i18n("Property Changes"), image)
-    , m_newName(newName), m_newDescription(newDescription), m_newColorSpace(newColorSpace), m_newProfile(newProfile)
+    ,  m_newProfile(newProfile)
 {
-    m_oldName = m_image->name();
-    m_oldDescription = m_image->description();
     m_oldColorSpace = m_image->colorSpace();
     m_oldProfile = m_image->profile();
 }
@@ -138,9 +135,7 @@ KisImagePropsCommand::KisImagePropsCommand(KisImageSP image, const QString& newN
 void KisImagePropsCommand::redo()
 {
     setUndo(false);
-    m_image->setName(m_newName);
     m_image->setColorSpace(m_newColorSpace);
-    m_image->setDescription(m_newDescription);
     m_image->setProfile(m_newProfile);
     setUndo(true);
 }
@@ -148,9 +143,7 @@ void KisImagePropsCommand::redo()
 void KisImagePropsCommand::undo()
 {
     setUndo(false);
-    m_image->setName(m_oldName);
     m_image->setColorSpace(m_oldColorSpace);
-    m_image->setDescription(m_oldDescription);
     m_image->setProfile(m_oldProfile);
     setUndo(true);
 }

@@ -28,7 +28,7 @@ class KoStore;
 
 class KisSaveVisitor : public KisLayerVisitor {
 public:
-    KisSaveVisitor(KisImageSP img, KoStore *store, quint32 &count);
+    KisSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, QString name);
 
 public:
     void setExternalUri(QString &uri);
@@ -47,6 +47,7 @@ private:
     bool m_external;
     QString m_uri;
     quint32 &m_count;
+    QString m_name;
 };
 
 #endif // KIS_SAVE_VISITOR_H_

@@ -147,10 +147,7 @@ void KisImageManager::slotImageProperties()
     KisDlgImageProperties dlg(img, m_view);
 
     if (dlg.exec() == QDialog::Accepted) {
-        qint32 opacity = dlg.opacity();
-        opacity = opacity * 255 / 100;
-        QUndoCommand* cmd = new KisImagePropsCommand(img, dlg.imageName(), dlg.description(),
-                                                     dlg.colorSpace(), dlg.profile());
+        QUndoCommand* cmd = new KisImagePropsCommand(img, dlg.colorSpace(), dlg.profile());
         m_view->document()->addCommand(cmd);
     }
 }

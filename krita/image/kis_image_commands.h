@@ -123,24 +123,17 @@ public:
      * This command stores the current image properties and set the new propertys.
      *
      * @param image the image
-     * @param newName the new image name
-     * @param newDescription the new image description
      * @param newColorSpace the new image color space
      * @param newProfile the new image profile
      * @param newResolution the new image resolution which will be used for xRes and yRes
      */
-    KisImagePropsCommand(KisImageSP image, const QString& newName, const QString& newDescription,
-                      KoColorSpace* newColorSpace, KoColorProfile* newProfile);
+    KisImagePropsCommand(KisImageSP image, KoColorSpace* newColorSpace, KoColorProfile* newProfile);
     virtual ~KisImagePropsCommand() {}
 
     virtual void redo();
     virtual void undo();
 
 private:
-    QString m_newName;
-    QString m_oldName;
-    QString m_newDescription;
-    QString m_oldDescription;
     KoColorSpace * m_newColorSpace;
     KoColorSpace * m_oldColorSpace;
     KoColorProfile* m_newProfile;

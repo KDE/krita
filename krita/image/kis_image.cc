@@ -76,8 +76,6 @@ public:
     KisPerspectiveGrid* perspectiveGrid;
 
     KUrl uri;
-    QString name;
-    QString description;
 
     qint32 width;
     qint32 height;
@@ -114,8 +112,7 @@ KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoColo
     : QObject(0), KisShared()
 {
     setObjectName(name);
-    init(adapter, width, height, colorSpace, name);
-    setName(name);
+    init(adapter, width, height, colorSpace);
 }
 
 KisImage::KisImage(const KisImage& rhs) : QObject(), KisShared(rhs)
@@ -124,7 +121,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisShared(rhs)
         m_d = new KisImagePrivate(*rhs.m_d);
         m_d->perspectiveGrid = new KisPerspectiveGrid(*rhs.m_d->perspectiveGrid);
         m_d->uri = rhs.m_d->uri;
-        m_d->name.clear();
         m_d->width = rhs.m_d->width;
         m_d->height = rhs.m_d->height;
         m_d->xres = rhs.m_d->xres;
@@ -155,28 +151,6 @@ KisImage::~KisImage()
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
     delete m_d;
-}
-
-QString KisImage::name() const
-{
-    return m_d->name;
-}
-
-void KisImage::setName(const QString& name)
-{
-    if (!name.isEmpty())
-        m_d->name = name;
-}
-
-QString KisImage::description() const
-{
-    return m_d->description;
-}
-
-void KisImage::setDescription(const QString& description)
-{
-    if (!description.isEmpty())
-        m_d->description = description;
 }
 
 KisSelectionSP KisImage::globalSelection() const
@@ -222,7 +196,7 @@ void KisImage::rollBackLayerName()
     m_d->nserver->rollback();
 }
 
-void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace, const QString& name)
+void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace)
 {
     Q_ASSERT(colorSpace);
 
@@ -241,7 +215,6 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
     m_d->adapter = adapter;
 
     m_d->nserver = new KisNameServer(1);
-    m_d->name = name;
 
     m_d->colorSpace = colorSpace;
 

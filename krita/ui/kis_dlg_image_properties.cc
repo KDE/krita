@@ -58,16 +58,12 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    m_page->txtName->setText(image->name());
-    m_page->m_createButton->hide();
     KisConfig cfg;
 
     m_page->lblWidthValue->setText(QString::number(image->width()));
     m_page->lblHeightValue->setText(QString::number(image->height()));
 
     m_page->lblResolutionValue->setText(KGlobal::locale()->formatNumber(image->xRes()*72, 2)); // XXX: separate values for x & y?
-
-    m_page->txtDescription->setText( m_image->description() );
 
     //m_page->cmbColorSpaces->hide();
     //m_page->lblColorSpaces->setText(image->colorSpace()->id().name());
@@ -88,38 +84,13 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
         m_page->cmbProfile->setCurrentIndex(0);
     }
 
-    m_page->sliderOpacity->setEnabled(false); // XXX re-enable when figured out a way to do this
-    m_page->opacityPanel->hide();
-    m_page->lblOpacity->hide();
-
-    m_page->cmbColor->setEnabled(false); // XXX re-enable when figured out a way to do this
-    m_page->cmbColor->hide();
-    m_page->lblColor->hide();
-
     connect(m_page->cmbColorSpaces, SIGNAL(activated(const KoID &)),
         this, SLOT(fillCmbProfiles(const KoID &)));
-
-
 }
 
 KisDlgImageProperties::~KisDlgImageProperties()
 {
     delete m_page;
-}
-
-int KisDlgImageProperties::opacity()
-{
-    return m_page->sliderOpacity->value();
-}
-
-QString KisDlgImageProperties::imageName()
-{
-    return m_page->txtName->text();
-}
-
-QString KisDlgImageProperties::description()
-{
-    return m_page->txtDescription->toPlainText();
 }
 
 KoColorSpace * KisDlgImageProperties::colorSpace()

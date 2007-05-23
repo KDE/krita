@@ -29,7 +29,7 @@ class KoStore;
 
 class KisLoadVisitor : public KisLayerVisitor {
 public:
-    KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames);
+    KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, QString name);
 
 public:
     void setExternalUri(QString &uri);
@@ -47,6 +47,7 @@ private:
     bool m_external;
     QString m_uri;
     QMap<KisLayer *, QString> m_layerFilenames;
+    QString m_name;
 };
 
 #endif // KIS_LOAD_VISITOR_H_

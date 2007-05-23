@@ -57,6 +57,7 @@
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 #include <KoSelection.h>
+#include <KoDocumentInfo.h>
 
 // Krita Image
 #include "kis_adjustment_layer.h"
@@ -336,12 +337,12 @@ QDomElement KisDoc2::saveImage(QDomDocument& doc, KisImageSP img)
     QDomElement image = doc.createElement("IMAGE");
 
     Q_ASSERT(img);
-    image.setAttribute("name", img->name());
+    image.setAttribute("name", documentInfo()->aboutInfo("title"));
     image.setAttribute("mime", "application/x-kra");
     image.setAttribute("width", img->width());
     image.setAttribute("height", img->height());
     image.setAttribute("colorspacename", img->colorSpace()->id());
-    image.setAttribute("description", img->description());
+    image.setAttribute("description", documentInfo()->aboutInfo("comment"));
     // XXX: Save profile as blob inside the image, instead of the product name.
     if (img->profile() && img->profile()-> valid())
         image.setAttribute("profile", img->profile()->name());
@@ -424,7 +425,8 @@ KisImageSP KisDoc2::loadImage(const QDomElement& element)
         img = new KisImage(m_d->undoAdapter, width, height, cs, name);
         Q_CHECK_PTR(img);
         connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
-        img->setDescription(description);
+        documentInfo()->setAboutInfo("title", name);
+        documentInfo()->setAboutInfo("comment", description);
         img->setResolution(xres, yres);
 
         loadLayers(element, img, img->rootLayer());
@@ -668,7 +670,7 @@ bool KisDoc2::completeSaving(KoStore *store)
 
     // Save the layers data
     quint32 count=0;
-    KisSaveVisitor visitor( img, store, count);
+    KisSaveVisitor visitor( img, store, count, documentInfo()->aboutInfo("title"));
 
     if(external)
         visitor.setExternalUri(uri);
@@ -681,7 +683,7 @@ bool KisDoc2::completeSaving(KoStore *store)
     KisAnnotationSP annotation = img->annotation("exif");
     if (annotation) {
         location = external ? QString::null : uri;
-        location += (m_d->image)->name() + "/annotations/exif";
+        location += documentInfo()->aboutInfo("title") + "/annotations/exif";
         if (store->open(location)) {
             store->write(annotation->annotation());
             store->close();
@@ -699,7 +701,7 @@ bool KisDoc2::completeSaving(KoStore *store)
 
         if (annotation) {
             location = external ? QString::null : uri;
-            location += img->name() + "/annotations/icc";
+            location += documentInfo()->aboutInfo("title") + "/annotations/icc";
             if (store->open(location)) {
                 store->write(annotation->annotation());
                 store->close();
@@ -725,7 +727,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     setIOSteps(totalSteps);
 
     // Load the layers data
-    KisLoadVisitor visitor(img, store, m_d->layerFilenames);
+    KisLoadVisitor visitor(img, store, m_d->layerFilenames, documentInfo()->aboutInfo("title"));
 
     if(external)
         visitor.setExternalUri(uri);
@@ -734,7 +736,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     // annotations
     // exif
     location = external ? QString::null : uri;
-    location += (img)->name() + "/annotations/exif";
+    location += documentInfo()->aboutInfo("title") + "/annotations/exif";
     if (store->hasFile(location)) {
         QByteArray data;
         store->open(location);
@@ -744,7 +746,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     }
     // icc profile
     location = external ? QString::null : uri;
-    location += (img)->name() + "/annotations/icc";
+    location += documentInfo()->aboutInfo("title") + "/annotations/icc";
     if (store->hasFile(location)) {
         QByteArray data;
         store->open(location);
@@ -814,7 +816,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
     return img;
 }
 
-bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * cs, const KoColor &bgColor, const QString &imgDescription, const double imgResolution)
+bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * cs, const KoColor &bgColor, const QString &description, const double imgResolution)
 {
     if (!init())
         return false;
@@ -833,8 +835,10 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColor
     Q_CHECK_PTR(img);
     connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
     img->setResolution(imgResolution, imgResolution);
-    img->setDescription(imgDescription);
     img->setProfile(cs->profile());
+    documentInfo()->setAboutInfo("title", name);
+    documentInfo()->setAboutInfo("comments", description);
+
 
     layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, cs);
     Q_CHECK_PTR(layer);
@@ -984,7 +988,7 @@ KisImageSP KisDoc2::image()
 void KisDoc2::setCurrentImage(KisImageSP image)
 {
 
-    kDebug(41007) << "KisDoc2::setCurrentImage: " << image->name() << ", active layer: " << image->activeLayer() << endl;
+    kDebug(41007) << "KisDoc2::setCurrentImage with active layer: " << image->activeLayer() << endl;
 
     if ( m_d->image ) {
         // Disconnect existing sig/slot connections

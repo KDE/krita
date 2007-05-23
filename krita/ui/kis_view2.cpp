@@ -22,6 +22,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <kprinter.h>
 #include "kis_view2.h"
 
 #include <QGridLayout>
@@ -59,6 +60,7 @@
 #include <KoView.h>
 #include <KoToolDockerFactory.h>
 #include <KoColorDocker.h>
+#include "KoColorSpaceRegistry.h"
 
 #include <kactioncollection.h>
 
@@ -548,6 +550,35 @@ void KisView2::disconnectCurrentImage()
             m_d->birdEyeBox->setImage(KisImageSP(0));
         m_d->canvas->disconnectCurrentImage();
     }
+}
+
+void KisView2::setupPrinter(KPrinter &p)
+{
+    p.setMinMax(1, 1);
+}
+
+void KisView2::print(KPrinter& printer)
+{
+    QPainter gc(&printer);
+
+    KisImageSP img = image();
+    if (!img) return;
+
+    gc.setClipping(false);
+
+    KisConfig cfg;
+    QString printerProfileName = cfg.printerProfile();
+    KoColorProfile *printerProfile = KoColorSpaceRegistry::instance()->profileByName(printerProfileName);
+
+    double exposure = m_d->canvas->resourceProvider()->resource(KisResourceProvider::HdrExposure ).toDouble();
+
+    double scaleX = printer.resolution() / (72.0 * img->xRes());
+    double scaleY = printer.resolution() / (72.0 * img->yRes());
+
+    QRect r = img->bounds();
+    
+    gc.scale(scaleX, scaleY);
+    img->renderToPainter(0, 0, r.x(), r.y(), r.width(), r.height(), gc, printerProfile, exposure);
 }
 
 void KisView2::slotUpdateFullScreen(bool toggle)

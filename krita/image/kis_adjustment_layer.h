@@ -36,9 +36,8 @@ class KisFilterConfiguration;
  * is used by to influence the rendering of the layers under this layer in the
  * layerstack.
  *
- * AdjustmentLayers also function as a kind of "fixating layers" == as
- * long as they
- **/
+ * AdjustmentLayers also function as a kind of "fixating layers".
+ */
 class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer, public KisIndirectPaintingSupport
 {
     Q_OBJECT
@@ -53,8 +52,7 @@ public:
     virtual ~KisAdjustmentLayer();
 
     void updateProjection(const QRect& r);
-    void resetProjection( KisPaintDeviceSP to);
-    KisPaintDeviceSP projection();
+    KisPaintDeviceSP projection() const;
 
     QIcon icon() const;
     KoDocumentSectionModel::PropertyList properties() const;

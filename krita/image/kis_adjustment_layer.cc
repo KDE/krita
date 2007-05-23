@@ -70,12 +70,7 @@ void KisAdjustmentLayer::updateProjection(const QRect& r)
 {
 }
 
-void KisAdjustmentLayer::resetProjection(KisPaintDeviceSP to)
-{
-    resetCache();
-}
-
-KisPaintDeviceSP KisAdjustmentLayer::projection()
+KisPaintDeviceSP KisAdjustmentLayer::projection() const
 {
     return m_cachedPaintDev;
 }

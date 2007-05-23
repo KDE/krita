@@ -113,7 +113,7 @@ void KisShapeLayer::updateProjection(const QRect& r)
     setDirty( r ); // Convert to right coordinates
 }
 
-KisPaintDeviceSP KisShapeLayer::projection()
+KisPaintDeviceSP KisShapeLayer::projection() const
 {
     return m_d->projection;
 }

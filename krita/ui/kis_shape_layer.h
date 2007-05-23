@@ -74,7 +74,7 @@ public:
     void updateProjection(const QRect& r);
 
     // Retrieve the projection for
-    KisPaintDeviceSP projection();
+    KisPaintDeviceSP projection() const;
 
     bool saveToXML(QDomDocument doc, QDomElement elem);
 

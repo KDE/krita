@@ -50,8 +50,7 @@ public:
     KoColorSpace * colorSpace();
 
     void updateProjection(const QRect& r);
-    void resetProjection(KisPaintDeviceSP to);
-    KisPaintDeviceSP projection();
+    KisPaintDeviceSP projection() const;
 
     QIcon icon() const;
     KoDocumentSectionModel::PropertyList properties() const;
@@ -78,6 +77,11 @@ public:
 
     /// Returns the paintDevice that accompanies this layer
     KisPaintDeviceSP paintDevice() const;
+
+    KisPaintDeviceSP orignal() const
+        {
+            return paintDevice();
+        }
 
 //     /// Returns the paintDevice that accompanies this layer (or mask, see editMask)
 //     KisPaintDeviceSP paintDeviceOrMask() const;

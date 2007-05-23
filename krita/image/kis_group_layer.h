@@ -141,7 +141,7 @@ public:
        Note the second: this _may_ return the paint device of a paint
        layer if that paint layer is the only child of this group layer.
     */
-    KisPaintDeviceSP projection();
+    KisPaintDeviceSP projection() const;
 
     /**
        Update the given rect of the projection paint device.
@@ -187,7 +187,7 @@ public:
     QImage createThumbnail(qint32 w, qint32 h);
 
     /// Returns if the layer will induce the projection hack (if the only layer in this group)
-    bool paintLayerInducesProjectionOptimization(KisPaintLayerSP l);
+    bool paintLayerInducesProjectionOptimization(KisPaintLayerSP l) const;
 
 private:
 

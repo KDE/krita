@@ -111,11 +111,7 @@ void KisPaintLayer::init()
 }
 
 
-void KisPaintLayer::resetProjection(KisPaintDeviceSP to)
-{
-}
-
-KisPaintDeviceSP KisPaintLayer::projection()
+KisPaintDeviceSP KisPaintLayer::projection() const
 {
     return m_d->paintdev;
 }

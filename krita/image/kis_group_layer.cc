@@ -105,12 +105,12 @@ void KisGroupLayer::resetProjection(KisPaintDeviceSP to)
         m_projection = new KisPaintDevice(this, image()->colorSpace(), name().toLatin1());
 }
 
-bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) {
+bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) const {
     return l && l->paintDevice()->colorSpace() == image()->colorSpace() && l->visible()
         && l->opacity() == OPACITY_OPAQUE && !l->temporaryTarget();// && !l->hasMask();
 }
 
-KisPaintDeviceSP KisGroupLayer::projection()
+KisPaintDeviceSP KisGroupLayer::projection() const
 {
     // We don't have a parent, and we've got only one child: abuse the child's
     // paint device as the projection if the child is visible

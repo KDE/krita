@@ -25,6 +25,7 @@ class KisPaintLayer;
 class KisGroupLayer;
 class KisAdjustmentLayer;
 class KisExternalLayer;
+class KisCloneLayer;
 
 class KisLayerVisitor {
 public:
@@ -36,6 +37,7 @@ public:
     virtual bool visit(KisGroupLayer *layer) = 0;
     virtual bool visit(KisAdjustmentLayer *layer) = 0;
     virtual bool visit(KisExternalLayer *layer) = 0;
+    virtual bool visit(KisCloneLayer *layer) { return false; }
 };
 
 

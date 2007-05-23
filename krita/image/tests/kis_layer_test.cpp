@@ -48,7 +48,7 @@ public:
         {
         }
 
-    KisPaintDeviceSP projection()
+    KisPaintDeviceSP projection() const
         {
             return 0;
         }

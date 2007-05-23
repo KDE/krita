@@ -170,6 +170,8 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
                     && l->parentLayer()->paintLayerInducesProjectionOptimization(pl)) {
                     // If there's a mask, device could've been the mask. The induce function
                     // should catch this, but better safe than sorry
+
+                    // XXX: What does this and why? (BSAR)
                     l->parentLayer()->resetProjection(pl->paintDevice());
                 }
 

@@ -63,10 +63,26 @@ public:
 
     virtual KoColorSpace * colorSpace();
 
+
+    /**
+     * Ask the layer to assemble its data & apply all the effect masks
+     * to it.
+     */
     virtual void updateProjection(const QRect& r) = 0;
 
-    virtual KisPaintDeviceSP projection() = 0;
+    /**
+     * Return the fully rendered representation of this layer: its
+     * data and its effect masks
+     */
+    virtual KisPaintDeviceSP projection() const = 0;
 
+    /**
+     * Return the layer data before the effect masks have had their go
+     * at it.
+     */
+    virtual KisPaintDeviceSP original() const {
+        return projection();
+    }
 
     /// Whether this layer is the active one in its image
     bool isActive() const;

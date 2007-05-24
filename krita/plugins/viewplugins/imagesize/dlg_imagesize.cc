@@ -46,6 +46,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_height = height / resolution;
 
     m_page = new WdgImageSize(this);
+    m_page->layout()->setMargin(0);
     Q_CHECK_PTR(m_page);
     m_page->setObjectName("image_size");
 

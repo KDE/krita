@@ -28,15 +28,9 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-//   #include <QMouseEvent>
-//   #include <QPainter>
-//
-//   #include "KoInteractionStrategy.h"
-//
-//   #include <kcommand.h>
-
 KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
-    : KoInteractionTool( canvas )
+    : KoInteractionTool( canvas ),
+    m_temporary(false)
 {
     QPixmap inPixmap, outPixmap;
     inPixmap.load(KStandardDirs::locate("data", "koffice/icons/zoom_in_cursor.png"));
@@ -66,7 +60,8 @@ void KoZoomTool::wheelEvent ( KoPointerEvent * event )
 
 void KoZoomTool::mouseReleaseEvent( KoPointerEvent *event ) {
     KoInteractionTool::mouseReleaseEvent(event);
-    //emit KoTool::sigDone();
+    if(m_temporary)
+        emit KoTool::sigDone();
 }
 
 void KoZoomTool::mousePressEvent( KoPointerEvent *event ) {
@@ -100,3 +95,8 @@ void KoZoomTool::keyReleaseEvent(QKeyEvent *event) {
     else
         useCursor(m_inCursor);
 }
+
+void KoZoomTool::activate(bool temporary) {
+    m_temporary = temporary;
+}
+

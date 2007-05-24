@@ -37,13 +37,22 @@ public:
      * @param canvas the canvas this tool works for.
      */
     explicit KoZoomTool( KoCanvasBase *canvas );
+    /// reimplemented method
     virtual void wheelEvent ( KoPointerEvent * event );
+    /// reimplemented method
     virtual void mouseReleaseEvent( KoPointerEvent *event );
+    /// reimplemented method
     virtual void mousePressEvent( KoPointerEvent *event );
+    /// reimplemented method
     virtual void mouseMoveEvent( KoPointerEvent *event );
+    /// reimplemented method
     virtual void keyPressEvent( QKeyEvent *event );
+    /// reimplemented method
     virtual void keyReleaseEvent( QKeyEvent *event );
+    /// reimplemented method
+    virtual void activate(bool temporary = false);
 
+    /// reimplemented method
     virtual void paint( QPainter &painter, KoViewConverter &converter );
     void setCanvasController(KoCanvasController *controller) { m_controller = controller; }
 
@@ -51,6 +60,7 @@ private:
     KoCanvasController *m_controller;
     QCursor m_inCursor;
     QCursor m_outCursor;
+    bool m_temporary;
 };
 
 #endif

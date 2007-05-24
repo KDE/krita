@@ -94,6 +94,7 @@ void KisPainter::init()
     m_duplicateHealing = false;
     m_duplicateHealingRadius = 10;
     m_duplicatePerspectiveCorrection = false;
+    m_varyBrushSpacingWithPressureWhenDrawingALine = true;
 }
 
 KisPainter::~KisPainter()
@@ -408,10 +409,20 @@ double KisPainter::paintLine(const KisPoint & pos1,
         savedDist = 0;
     }
 
-    // XXX: The spacing should vary as the pressure changes along the line.
-    // This is a quick simplification.
-    double xSpacing = m_brush->xSpacing((pressure1 + pressure2) / 2);
-    double ySpacing = m_brush->ySpacing((pressure1 + pressure2) / 2);
+    double xSpacing = 0;
+    double ySpacing = 0;
+
+     if ( m_varyBrushSpacingWithPressureWhenDrawingALine ) {
+        // XXX: The spacing should vary as the pressure changes along the
+        // line.
+        // This is a quick simplification.
+        xSpacing = m_brush->xSpacing((pressure1 + pressure2) / 2);
+        ySpacing = m_brush->ySpacing((pressure1 + pressure2) / 2);
+     }
+     else {
+         xSpacing = m_brush->xSpacing( PRESSURE_DEFAULT );
+         ySpacing = m_brush->ySpacing( PRESSURE_DEFAULT );
+     }
 
     if (xSpacing < 0.5) {
         xSpacing = 0.5;

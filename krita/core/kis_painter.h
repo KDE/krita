@@ -49,7 +49,7 @@ class KisPattern;
  *
  * KisPainter supports transactions that can group various paint operations
  * in one undoable step.
- * 
+ *
  * For more complex operations, you might want to have a look at the subclasses
  * of KisPainter: KisConvolutionPainter, KisFillPainter and KisGradientPainter
  */
@@ -263,6 +263,12 @@ public:
     // ------------------------------------------------------------------------
     // Set the parameters for the higher level graphics primitives.
 
+    /// Determines whether the brush spacing should vary when drawing
+    /// lines with the pressure
+    void setVaryBrushSpacingWithPressureWhenDrawingALine( bool varyBrushSpacingWithPressureWhenDrawingALine )
+        { m_varyBrushSpacingWithPressureWhenDrawingALine = varyBrushSpacingWithPressureWhenDrawingALine; }
+    bool varyBrushSpacingWithPressureWhenDrawingALine() {  return m_varyBrushSpacingWithPressureWhenDrawingALine;  }
+
     /// Set the current brush
     void setBrush(KisBrush* brush) { m_brush = brush; }
     /// Returns the currently set brush
@@ -275,7 +281,7 @@ public:
 
     /// Set the color that will be used to paint with
     void setPaintColor(const KisColor& color) { m_paintColor = color;}
-    
+
     /// Returns the color that will be used to paint with
     KisColor paintColor() const { return m_paintColor; }
 
@@ -345,16 +351,16 @@ public:
 
     inline void setDuplicateHealing(bool v) { m_duplicateHealing = v; }
     inline bool duplicateHealing() { return m_duplicateHealing; }
-    
+
     inline void setDuplicateHealingRadius(int r) { m_duplicateHealingRadius = r; }
     inline int duplicateHealingRadius() { return m_duplicateHealingRadius; }
-    
+
     inline void setDuplicatePerspectiveCorrection(bool v) { m_duplicatePerspectiveCorrection = v; }
     inline bool duplicatePerspectiveCorrection() { return m_duplicatePerspectiveCorrection; }
-    
+
     void setDuplicateStart(const KisPoint start) { m_duplicateStart = start;}
     KisPoint duplicateStart() { return m_duplicateStart;}
-    
+
     /// Sets the current pressure for things that like to use this
     void setPressure(double pressure) { m_pressure = pressure; }
     /// Returns the current pressure
@@ -417,6 +423,7 @@ protected:
     KisColorSpace * m_colorSpace;
     KisProfile *  m_profile;
     KisPaintDeviceSP m_dab;
+    bool m_varyBrushSpacingWithPressureWhenDrawingALine;
 
 };
 

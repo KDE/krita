@@ -146,6 +146,8 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
 {
     if (settings != 0) {
         m_pressureSize = settings->varySize();
+        painter->setVaryBrushSpacingWithPressureWhenDrawingALine( m_pressureSize );
+
         m_pressureOpacity = settings->varyOpacity();
         m_pressureDarken = settings->varyDarken();
         m_customSize = settings->customSize();
@@ -165,6 +167,7 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
 
 KisBrushOp::~KisBrushOp()
 {
+    m_painter->setVaryBrushSpacingWithPressureWhenDrawingALine( true );
 }
 
 void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
@@ -190,12 +193,12 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (!m_painter->device()) return;
 
     KisBrush *brush = m_painter->brush();
-    
+
     Q_ASSERT(brush);
     if (!brush) return;
     if (! brush->canPaintFor(adjustedInfo) )
         return;
-    
+
     KisPaintDeviceSP device = m_painter->device();
 
     KisPoint hotSpot = brush->hotSpot(adjustedInfo);
@@ -253,18 +256,18 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     KisImage * image = device->image();
-    
+
     if (image != 0) {
         dstRect &= image->bounds();
     }
-    
+
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
     Q_INT32 sx = dstRect.x() - x;
     Q_INT32 sy = dstRect.y() - y;
     Q_INT32 sw = dstRect.width();
     Q_INT32 sh = dstRect.height();
-    
+
     if (m_source->hasSelection()) {
         m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(),
                                 m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);

@@ -30,6 +30,7 @@
 
 #include <kis_undo_adapter.h>
 #include <kis_types.h>
+#include <kis_layer_shape.h>
 
 #include "ui_wdg_tool_transform.h"
 
@@ -135,6 +136,8 @@ public:
             //setToolType( TOOL_TYPE_TRANSFORM );
             setIcon( "transform" );
             setPriority( 0 );
+
+            setActivationShapeId( KIS_LAYER_SHAPE_ID );
         };
 
     virtual ~KisToolTransformFactory(){}

@@ -41,10 +41,12 @@ class KisFilterStrategy;
 class KisView2;
 class KisFilterConfiguration;
 
+
 /**
-   KisLayerManager takes care of the gui around working with layers:
-   adding, removing, editing.
-*/
+ * KisLayerManager takes care of the gui around working with layers:
+ * adding, removing, editing. It also keeps track of the active layer
+ * for this view.
+ */
 class KRITAUI_EXPORT KisLayerManager : public QObject {
 
     Q_OBJECT
@@ -59,10 +61,16 @@ public:
 
     void updateGUI();
 
+    KisLayerSP activeLayer();
+    KisPaintDeviceSP activeDevice();
+    void activateLayer( KisLayerSP layer );
+
 signals:
 
     /// XXX: Move this to kisview or to kisresourceprovider? (BSAR)
     void currentColorSpaceChanged(KoColorSpace * cs);
+
+    void sigLayerActivated( KisLayerSP layer );
 
 public slots:
 
@@ -130,6 +138,8 @@ private:
     QAction *m_layerTop;
     bool m_actLayerVis;
     QAction *m_imgResizeToLayer;
+
+    KisLayerSP m_activeLayer;
 };
 
 #endif

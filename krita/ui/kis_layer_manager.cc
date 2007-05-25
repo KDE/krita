@@ -46,6 +46,7 @@
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>
+#include <kis_paint_device.h>
 #include <kis_meta_registry.h>
 #include <kis_paint_layer.h>
 #include <kis_selected_transaction.h>
@@ -90,12 +91,30 @@ KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
     , m_layerTop( 0 )
     , m_actLayerVis( false )
     , m_imgResizeToLayer( 0 )
+    , m_activeLayer( 0 )
 {
 }
 
 KisLayerManager::~KisLayerManager()
 {
 }
+
+KisLayerSP KisLayerManager::activeLayer()
+{
+    return m_activeLayer;
+}
+
+KisPaintDeviceSP KisLayerManager::activeDevice()
+{
+    return m_activeLayer->paintDevice();
+}
+
+void KisLayerManager::activateLayer( KisLayerSP layer )
+{
+    m_view->image()->activateLayer( layer );
+    m_activeLayer = layer;
+}
+
 
 void KisLayerManager::setup(KActionCollection * actionCollection)
 {

@@ -276,8 +276,9 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
         }
         else { // bulletStyle.isNull() is true, so no bullet style defined
             KoXmlElement numberStyle = listElem->firstChildElement("list-level-style-number");
-            if( numberStyle.isNull() ) { // if not defined, we have to use decimals
+            if( numberStyle.isNull() ) { // if not defined, we have to use decimals with a "." suffix
                 properties.setStyle(KoListStyle::DecimalItem);
+                properties.setListItemSuffix(".");
             }
             else { // it's a numbered list
                 const QString format = numberStyle.attributeNS( KoXmlNS::style, "num-format", QString() );

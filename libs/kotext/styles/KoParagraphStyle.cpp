@@ -429,6 +429,13 @@ double KoParagraphStyle::bottomPadding() {
     return propertyDouble(BottomPadding);
 }
 
+void KoParagraphStyle::setPadding(double padding) {
+    setBottomPadding(padding);
+    setTopPadding(padding);
+    setRightPadding(padding);
+    setLeftPadding(padding);
+}
+
 void KoParagraphStyle::setLeftBorderWidth(double width) {
     setProperty(LeftBorderWidth, width);
 }
@@ -752,6 +759,8 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
         setTopPadding( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding-top" ) ) );
     if ( styleStack.hasProperty( KoXmlNS::fo, "padding-bottom" ) )
         setBottomPadding( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding-bottom" ) ) );
+    if ( styleStack.hasProperty( KoXmlNS::fo, "padding" ) )
+        setPadding( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding" ) ) );
 
     // Indentation (margin)
     bool hasMarginLeft = styleStack.hasProperty( KoXmlNS::fo, "margin-left" );

@@ -282,6 +282,7 @@ public:
     double rightPadding();
     void setBottomPadding(double padding);
     double bottomPadding();
+    void setPadding(double padding);
 
     void setLeftBorderWidth(double width);
     double leftBorderWidth();

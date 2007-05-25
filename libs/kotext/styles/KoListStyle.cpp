@@ -210,38 +210,8 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
 
     KoXmlElement* listElem = context.oasisStyles().listStyles()[ name() ];
     if( listElem ) {
-        KoXmlElement numberStyle = listElem->firstChildElement("list-level-style-number");
-        if( ! numberStyle.isNull() ) { // it's a numbered list
-            const QString prefix = numberStyle.attributeNS( KoXmlNS::style, "num-prefix", QString() );
-            if( ! prefix.isNull() )
-                properties.setListItemPrefix(prefix);
-
-            const QString suffix = numberStyle.attributeNS( KoXmlNS::style, "num-suffix", QString() );
-            if( ! suffix.isNull() )
-                properties.setListItemSuffix(suffix);
-
-            const QString format = numberStyle.attributeNS( KoXmlNS::style, "num-format", QString() );
-            if( format.isEmpty() )
-                properties.setStyle(KoListStyle::NoItem);
-            else {
-                if( format[0] == '1' )
-                    properties.setStyle(KoListStyle::DecimalItem);
-                else if( format[0] == 'a' )
-                    properties.setStyle(KoListStyle::AlphaLowerItem);
-                else if( format[0] == 'A' )
-                    properties.setStyle(KoListStyle::UpperAlphaItem);
-                else if( format[0] == 'i' )
-                    properties.setStyle(KoListStyle::RomanLowerItem);
-                else if( format[0] == 'I' )
-                    properties.setStyle(KoListStyle::UpperRomanItem);
-                else
-                    properties.setStyle(KoListStyle::DecimalItem); // fallback
-            }
-
-            //bulletStyle.attributeNS( KoXmlNS::text, "level", QString() );
-        }
-        else { // list with bullets
-            KoXmlElement bulletStyle = listElem->firstChildElement("list-level-style-bullet");
+        KoXmlElement bulletStyle = listElem->firstChildElement("list-level-style-bullet");
+        if( ! bulletStyle.isNull() ) { // list with bullets
 
             //1.6: KoParagCounter::loadOasisListStyle
             QString bulletChar = bulletStyle.isNull() ? QString() : bulletStyle.attributeNS( KoXmlNS::text, "bullet-char", QString() );
@@ -302,6 +272,42 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
                         break;
                 }
             }
+
+        }
+        else { // bulletStyle.isNull() is true, so no bullet style defined
+            KoXmlElement numberStyle = listElem->firstChildElement("list-level-style-number");
+            if( numberStyle.isNull() ) { // if not defined, we have to use decimals
+                properties.setStyle(KoListStyle::DecimalItem);
+            }
+            else { // it's a numbered list
+                const QString format = numberStyle.attributeNS( KoXmlNS::style, "num-format", QString() );
+                if( format.isEmpty() )
+                    properties.setStyle(KoListStyle::NoItem);
+                else {
+                    if( format[0] == '1' )
+                        properties.setStyle(KoListStyle::DecimalItem);
+                    else if( format[0] == 'a' )
+                        properties.setStyle(KoListStyle::AlphaLowerItem);
+                    else if( format[0] == 'A' )
+                        properties.setStyle(KoListStyle::UpperAlphaItem);
+                    else if( format[0] == 'i' )
+                        properties.setStyle(KoListStyle::RomanLowerItem);
+                    else if( format[0] == 'I' )
+                        properties.setStyle(KoListStyle::UpperRomanItem);
+                    else
+                        properties.setStyle(KoListStyle::DecimalItem); // fallback
+                }
+
+                //bulletStyle.attributeNS( KoXmlNS::text, "level", QString() );
+            }
+
+            const QString prefix = numberStyle.attributeNS( KoXmlNS::style, "num-prefix", QString() );
+            if( ! prefix.isNull() )
+                properties.setListItemPrefix(prefix);
+
+            const QString suffix = numberStyle.attributeNS( KoXmlNS::style, "num-suffix", QString() );
+            if( ! suffix.isNull() )
+                properties.setListItemSuffix(suffix);
         }
     }
 

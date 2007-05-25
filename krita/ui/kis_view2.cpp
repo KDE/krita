@@ -369,8 +369,8 @@ void KisView2::slotLoadingFinished()
 
     if(m_d->statusBar) {
         m_d->statusBar->imageSizeChanged(img->width(), img->height());
-        m_d->resourceProvider->slotSetImageSize( img->width(), img->height() );
     }
+    m_d->resourceProvider->slotSetImageSize( img->width(), img->height() );
 
     m_d->layerManager->layersUpdated();
     updateGUI();

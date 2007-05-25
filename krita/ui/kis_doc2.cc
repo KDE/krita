@@ -988,8 +988,6 @@ KisImageSP KisDoc2::image()
 void KisDoc2::setCurrentImage(KisImageSP image)
 {
 
-    kDebug(41007) << "KisDoc2::setCurrentImage with active layer: " << image->activeLayer() << endl;
-
     if ( m_d->image ) {
         // Disconnect existing sig/slot connections
         m_d->image->disconnect( this );

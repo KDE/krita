@@ -48,6 +48,7 @@
 #include "kis_group_layer.h"
 #include "kis_opengl_image_textures.h"
 #include "kis_shape_controller.h"
+#include "kis_layer_manager.h"
 
 #ifdef HAVE_OPENGL
 #include <QGLFormat>
@@ -206,15 +207,12 @@ void KisCanvas2::addCommand(QUndoCommand *command)
 
 KoShapeManager* KisCanvas2::shapeManager() const
 {
-    KisShapeController *controller = dynamic_cast<KisShapeController*>(m_d->view->document()->shapeController());
-    Q_ASSERT(controller);
-
-    KoShape *shape = controller->activeLayerShape();
-
-    if (shape && shape->shapeId() == KIS_SHAPE_LAYER_ID)
-        return dynamic_cast<KisShapeLayer*>(controller->activeLayerShape())->shapeManager();
-
-    return m_d->shapeManager;
+    KisLayerSP activeLayer = m_d->view->layerManager()->activeLayer();
+    if ( activeLayer ) {
+        KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( activeLayer.data() );
+        if ( shapeLayer )
+            return shapeLayer->shapeManager();
+    }
 }
 
 QRect KisCanvas2::viewRectFromDoc( const QRectF & rc )

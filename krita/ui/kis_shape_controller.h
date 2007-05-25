@@ -62,12 +62,6 @@ private slots:
     void slotLayersChanged( KisGroupLayerSP rootLayer );
     void slotLayerActivated( KisLayerSP layer );
 
-//     // XXX: The same is necessary for selections, masks etc.
-// private:
-//
-//     KoShape * activeLayerShape();
-
-
 private:
 
     class Private;

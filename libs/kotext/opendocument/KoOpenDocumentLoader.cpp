@@ -58,7 +58,44 @@ class KoOpenDocumentLoader::Private
 {
     public:
         KoStyleManager* stylemanager;
+        KoParagraphStyle *paragraphStyle(const QString &name);
+        KoCharacterStyle *characterStyle(const QString &name);
+        void addStyle (KoParagraphStyle *style);
+        void addStyle (KoCharacterStyle *style);
+    private:
+        QHash<QString, KoParagraphStyle *>paragraphStyles;
+        QHash<QString, KoCharacterStyle *>characterStyles;
 };
+
+KoParagraphStyle *KoOpenDocumentLoader::Private::paragraphStyle (const QString &name) {
+    if (paragraphStyles.contains(name)) {
+        return paragraphStyles[name];
+    }
+    KoParagraphStyle *style = stylemanager->paragraphStyle(name);
+    if (style)
+        paragraphStyles[name] = style;
+    return style;
+}
+
+KoCharacterStyle *KoOpenDocumentLoader::Private::characterStyle (const QString &name) {
+    if (characterStyles.contains(name)) {
+        return characterStyles[name];
+    }
+    KoCharacterStyle *style = stylemanager->characterStyle(name);
+    if (style)
+        characterStyles[name] = style;
+    return style;
+}
+
+void KoOpenDocumentLoader::Private::addStyle (KoParagraphStyle *style) {
+    stylemanager->add(style);
+    paragraphStyles[style->name()] = style;
+}
+
+void KoOpenDocumentLoader::Private::addStyle (KoCharacterStyle *style) {
+    stylemanager->add(style);
+    characterStyles[style->name()] = style;
+}
 
 KoOpenDocumentLoader::KoOpenDocumentLoader(KoStyleManager* stylemanager)
     : QObject(), d(new Private())
@@ -150,7 +187,7 @@ void KoOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context, QList<KoXm
         KoParagraphStyle *parastyle = new KoParagraphStyle();
         parastyle->setName(name);
         //parastyle->setParent( d->stylemanager->defaultParagraphStyle() );
-        d->stylemanager->add(parastyle);
+        d->addStyle(parastyle);
 
         //1.6: KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
         context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
@@ -257,7 +294,7 @@ void KoOpenDocumentLoader::loadParagraph(KoOasisLoadingContext& context, const K
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug()<<"KoOpenDocumentLoader::loadParagraph userStyleName="<<userStyleName<<endl;
     #endif
-    KoParagraphStyle *userStyle = d->stylemanager->paragraphStyle(userStyleName);
+    KoParagraphStyle *userStyle = d->paragraphStyle(userStyleName);
     //if( ! userStyle ) userStyle = d->stylemanager->defaultParagraphStyle();
     if( userStyle ) {
         context.styleStack().setTypeProperties( "paragraph" );
@@ -295,7 +332,7 @@ void KoOpenDocumentLoader::loadParagraph(KoOasisLoadingContext& context, const K
             context.addStyles( paragraphStyle, "paragraph" );
         //context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
 
-        KoParagraphStyle *style = d->stylemanager->paragraphStyle(styleName);
+        KoParagraphStyle *style = d->paragraphStyle(styleName);
         if( ! style ) {
             style = d->stylemanager->defaultParagraphStyle();
             #ifdef KOOPENDOCUMENTLOADER_DEBUG
@@ -328,12 +365,12 @@ void KoOpenDocumentLoader::loadParagraph(KoOasisLoadingContext& context, const K
     KoCharacterStyle *charstyle = 0;
     if( textStyleElem ) {
         context.addStyles( textStyleElem, "paragraph" );
-        charstyle = d->stylemanager->characterStyle(textStyleName);
+        charstyle = d->characterStyle(textStyleName);
         if( ! charstyle ) {
             charstyle = new KoCharacterStyle();
             charstyle->setName(textStyleName);
             charstyle->loadOasis(context);
-            d->stylemanager->add(charstyle);
+            d->addStyle(charstyle);
         }
         charstyle->applyStyle(&cursor);
     }
@@ -412,11 +449,11 @@ void KoOpenDocumentLoader::loadHeading(KoOasisLoadingContext& context, const KoX
     else if( level > 0 ) //FIXME: this should work (as in add a new style to the Paragraph Style list of KWord
         styleName = QString("Heading%1").arg(level);
 
-    KoParagraphStyle *paragStyle = d->stylemanager->paragraphStyle(styleName);
+    KoParagraphStyle *paragStyle = d->paragraphStyle(styleName);
     if( ! paragStyle ) {
         paragStyle = new KoParagraphStyle();
         paragStyle->setName(styleName);
-        d->stylemanager->add(paragStyle);
+        d->addStyle(paragStyle);
         //paragStyle->loadOasis(context.styleStack());
         //KoCharacterStyle *charstyle = paragStyle->characterStyle();
         //charstyle->loadOasis(context);
@@ -511,12 +548,12 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
 
     // Get the matching paragraph style
     //QString userStyleName = context.styleStack().userStyleName( "paragraph" );
-    KoParagraphStyle *paragStyle = d->stylemanager->paragraphStyle(styleName);
+    KoParagraphStyle *paragStyle = d->paragraphStyle(styleName);
     if( ! paragStyle ) {
         //paragStyle = d->stylemanager->defaultParagraphStyle();
         paragStyle = new KoParagraphStyle();
         paragStyle->setName(styleName);
-        d->stylemanager->add(paragStyle);
+        d->addStyle(paragStyle);
         context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
         paragStyle->loadOasis(context.styleStack()); // load the KoParagraphStyle from the stylestack
         KoCharacterStyle *charstyle = paragStyle->characterStyle();
@@ -723,12 +760,12 @@ void KoOpenDocumentLoader::loadSpan(KoOasisLoadingContext& context, const KoXmlE
                     kDebug()<<"textStyleName="<<textStyleName<<endl;
                 #endif
                 context.addStyles( textStyleElem, "text" );
-                charstyle = d->stylemanager->characterStyle(textStyleName);
+                charstyle = d->characterStyle(textStyleName);
                 if( ! charstyle ) {
                     charstyle = new KoCharacterStyle();
                     charstyle->setName(textStyleName);
                     charstyle->loadOasis(context);
-                    d->stylemanager->add(charstyle);
+                    d->addStyle(charstyle);
                 }
                 charstyle->applyStyle(&cursor);
             }

@@ -95,6 +95,13 @@ public slots:
     void slotPaintopActivated(const KoID & paintop, const KisPaintOpSettings *paintopSettings);
     void slotLayerActivated( const KisLayerSP layer );
 
+    /**
+     * Set the image size in pixels. The resource provider will store
+     * the image size in postscript points.
+     */
+    void slotSetImageSize( qint32 w, qint32 h );
+
+
 private slots:
 
     // TODO:  this method is not called or connected. (TZ)

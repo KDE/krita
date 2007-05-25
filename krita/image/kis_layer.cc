@@ -482,6 +482,7 @@ void KisLayer::removeEffectMask( int index )
 void KisLayer::setPreviewMask( KisEffectMaskSP mask )
 {
     m_d->previewMask = mask;
+    setDirty( mask->extent() );
 }
 
 KisEffectMaskSP KisLayer::previewMask()
@@ -492,6 +493,7 @@ KisEffectMaskSP KisLayer::previewMask()
 void KisLayer::removePreviewMask()
 {
     m_d->previewMask = 0;
+    if ( m_d->previewMask ) setDirty( m_d->previewMask->extent() );
 }
 
 void KisLayer::setTransparencyMask( KisTransparencyMaskSP mask )

@@ -1153,7 +1153,6 @@ void KisImage::slotSelectionChanged(const QRect& r)
 
     if (!locked()) {
         emit sigActiveSelectionChanged(KisImageSP(this));
-        emit sigSelectionChanged(KisImageSP(this));
     } else {
         m_d->selectionChangedWhileLocked = true;
     }

@@ -334,18 +334,23 @@ public:
     KisLayerSP newLayer(const QString& name, quint8 opacity, const QString & compositeOp, KoColorSpace * colorspace);
 
     /// Get the active painting device. Returns 0 if the active layer does not have a paint device.
-    KisPaintDeviceSP activeDevice();
+    /// @deprecated: Use KisView2::activePaintDevice() instead
+    KisPaintDeviceSP activeDevice() KDE_DEPRECATED;
 
     void setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp * compositeOp, const QString& name, QBitArray channelFlags);
 
     KisGroupLayerSP rootLayer() const;
-    KisLayerSP activeLayer() const;
+
+    /// @deprecated: use KisView2::activeLayer() or the active layer property from KoCanvasResourceProvider instead
+    KisLayerSP activeLayer() const KDE_DEPRECATED;
 
     /// Return the projection; that is, the complete, composited representation
     /// of this image.
     KisPaintDeviceSP projection();
 
-    KisLayerSP activateLayer(KisLayerSP layer);
+    /// @deprecated: Use the activateLayer method on KisView2 instead
+    KisLayerSP activateLayer(KisLayerSP layer) KDE_DEPRECATED;
+
     KisLayerSP findLayer(const QString& name) const;
     KisLayerSP findLayer(int id) const;
 
@@ -458,10 +463,8 @@ public:
 signals:
 
     void sigActiveSelectionChanged(KisImageSP image);
-    void sigSelectionChanged(KisImageSP image);
-    void sigSelectionChanged(KisImageSP image, const QRect& rect);
 
-    /// Emitted after a different layer is made active.
+    /// Emitted after a different layer is made active. Deprecated: use the same signal on KisView2 instead.
     void sigLayerActivated(KisLayerSP layer);
 
     /// Emitted after a layer is added: you can find out where by asking it for its parent(), et al.

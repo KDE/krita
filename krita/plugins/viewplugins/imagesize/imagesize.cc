@@ -106,7 +106,7 @@ void ImageSize::slotImageSize()
         if (dlgImageSize->scale()) {
             m_view->scaleCurrentImage((double)w / ((double)(image->width())),
                             (double)h / ((double)(image->height())),
-                            dlgImageSize->filterType());
+                            dlgImageSize->filterType(), true);
         }
         else {
             m_view->resizeCurrentImage(w, h, dlgImageSize->cropLayers());

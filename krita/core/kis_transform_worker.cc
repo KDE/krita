@@ -299,7 +299,7 @@ struct FilterValues
     ~FilterValues() {delete [] weight;}
 };
 
-template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, double shear, Q_INT32 dx, KisFilterStrategy *filterStrategy)
+template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, double shear, Q_INT32 dx, KisFilterStrategy *filterStrategy, bool fixBorderAlpha)
 {
     Q_INT32 lineNum,srcStart,firstLine,srcLen,numLines;
     Q_INT32 center, begin, end;    /* filter calculation variables */
@@ -484,6 +484,11 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
                 }
                 data = dstIt.rawData();
                 cs->mixColors(colors, filterWeights[center&255].weight, filterWeights[center&255].numWeights, data);
+
+                //possibly fix the alpha of the border if user wants it
+                if(fixBorderAlpha && (i==0 || i==dstLen-1))
+                    cs->setAlpha(data, cs->alpha(&tmpLine[(center>>8)*pixelSize]), 1);
+
                 data = dstSelIt.rawData();
                 *data = selectedness;
             }
@@ -630,7 +635,7 @@ bool KisTransformWorker::run()
         return false;
     }
 
-    transformPass <KisHLineIteratorPixel>(srcdev, tmpdev2, xscale, yscale*xshear, 0, m_filter);
+    transformPass <KisHLineIteratorPixel>(srcdev, tmpdev2, xscale, yscale*xshear, 0, m_filter, m_fixBorderAlpha);
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
 
@@ -640,7 +645,7 @@ bool KisTransformWorker::run()
     }
 
     // Now do the second pass
-    transformPass <KisVLineIteratorPixel>(tmpdev2.data(), tmpdev3.data(), yscale, yshear, ytranslate, m_filter);
+    transformPass <KisVLineIteratorPixel>(tmpdev2.data(), tmpdev3.data(), yscale, yshear, ytranslate, m_filter, m_fixBorderAlpha);
 
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
@@ -651,7 +656,7 @@ bool KisTransformWorker::run()
     }
 
     if (xshear != 0.0)
-        transformPass <KisHLineIteratorPixel>(tmpdev3, m_dev, 1.0, xshear, xtranslate, m_filter);
+        transformPass <KisHLineIteratorPixel>(tmpdev3, m_dev, 1.0, xshear, xtranslate, m_filter, m_fixBorderAlpha);
     else
     {
         // No need to filter again when we are only scaling

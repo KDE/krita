@@ -107,9 +107,6 @@ private:
     KisPaintDeviceSP m_cachedPaintDev;
     QRegion m_dirtyRegion;
 
-private slots:
-
-    void slotSelectionChanged(KisImageSP image);
 
 };
 

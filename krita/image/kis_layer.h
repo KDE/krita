@@ -84,6 +84,18 @@ public:
         return projection();
     }
 
+    /**
+     * Return the paintdevice you can use to change pixels on. For a
+     * paint layer these will be paint pixels, for an adjustment layer
+     * the selection paint device.
+     *
+     * @return the paint device to paint on. Can be 0 if the actual
+     * layer type does not support painting.
+     */
+    virtual KisPainterDeviceSP paintDevice() {
+        return 0;
+    }
+
     /// Whether this layer is the active one in its image
     bool isActive() const;
 

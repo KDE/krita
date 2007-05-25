@@ -330,7 +330,6 @@ public:
     void setTopMargin(double topMargin);
     /// duplicated property from QTextBlockFormat
     double topMargin() const;
-
     /// duplicated property from QTextBlockFormat
     void setBottomMargin (double margin);
     /// duplicated property from QTextBlockFormat
@@ -343,6 +342,9 @@ public:
     void setRightMargin (double margin);
     /// duplicated property from QTextBlockFormat
     double rightMargin () const;
+    
+    void setMargin (double margin);
+    
 
     /// duplicated property from QTextBlockFormat
     void setAlignment (Qt::Alignment alignment);

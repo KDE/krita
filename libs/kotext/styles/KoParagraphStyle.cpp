@@ -621,6 +621,13 @@ double KoParagraphStyle::rightMargin () const {
     return propertyDouble(QTextFormat::BlockRightMargin);
 }
 
+void KoParagraphStyle::setMargin (double margin) {
+    setTopMargin(margin);
+    setBottomMargin(margin);
+    setLeftMargin(margin);
+    setRightMargin(margin);
+}
+
 void KoParagraphStyle::setAlignment (Qt::Alignment alignment) {
 
     setProperty(QTextFormat::BlockAlignment, (int) alignment);
@@ -757,7 +764,12 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
         setTopMargin( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-top" ) ) );
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-bottom" ) )
         setBottomMargin( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-bottom" ) ) );
-
+    if ( styleStack.hasProperty( KoXmlNS::fo, "margin" ) ) {
+        setMargin( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin" ) ) );
+        hasMarginLeft = true;
+        hasMarginRight = true;
+    }
+    
     // Automatic Text indent
     if ( hasMarginLeft || hasMarginRight ) {
         if ( styleStack.hasProperty(KoXmlNS::fo, "auto-text-indent") ) { // style:auto-text-indent takes precedence

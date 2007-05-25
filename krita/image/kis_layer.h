@@ -92,7 +92,7 @@ public:
      * @return the paint device to paint on. Can be 0 if the actual
      * layer type does not support painting.
      */
-    virtual KisPainterDeviceSP paintDevice() {
+    virtual KisPaintDeviceSP paintDevice() {
         return 0;
     }
 

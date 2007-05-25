@@ -114,7 +114,7 @@ void ImageSize::slotImageSize()
 
         if(w !=image->width() || h != image->height())
             m_view->imageManager()->scaleCurrentImage((double)w / ((double)(image->width())),
-                        (double)h / ((double)(image->height())), dlgImageSize->filterType());
+                        (double)h / ((double)(image->height())), dlgImageSize->filterType(), true);
     }
 
     delete dlgImageSize;

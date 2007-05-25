@@ -221,8 +221,8 @@ void KisResourceProvider::slotLayerActivated( const KisLayerSP l )
 void KisResourceProvider::slotSetImageSize( qint32 w, qint32 h )
 {
     if ( KisImageSP image = m_view->image() ) {
-        float fw = w + 0.5 / image->xRes();
-        float fh = h + 0.5 / image->yRes();
+        float fw = w / image->xRes();
+        float fh = h / image->yRes();
 
         QSizeF postscriptSize( fw, fh );
         m_resourceProvider->setResource( KoCanvasResource::PageSize, postscriptSize );

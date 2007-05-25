@@ -527,10 +527,10 @@ void KisView2::connectCurrentImage()
 
         // Temporary forwarding of signals until these deprecated
         // signals are gone from KisImage
-        connect( img.data(), SIGNAL( currentColorSpaceChanged( KoColorSpace * cs ) ),
-                 m_d->layerManager, SIGNAL( currentColorSpaceChanged( KoColorSpace *cs ) ) );
-        connect( img.data(), SIGNAL( sigLayerActivated( KisLayerSP layer ) ),
-                 m_d->layerManager, SIGNAL( sigLayerActivated( KisLayerSP layer ) ) );
+        connect( img.data(), SIGNAL( sigColorSpaceChanged( KoColorSpace * ) ),
+                 m_d->layerManager, SIGNAL( currentColorSpaceChanged( KoColorSpace * ) ) );
+        connect( img.data(), SIGNAL( sigLayerActivated( KisLayerSP ) ),
+                 m_d->layerManager, SIGNAL( sigLayerActivated( KisLayerSP  ) ) );
 
         connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
         connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), m_d->canvas, SLOT(updateCanvas()));
@@ -538,8 +538,10 @@ void KisView2::connectCurrentImage()
     }
     m_d->canvas->connectCurrentImage();
 
-    if( m_d->layerBox )
+    if( m_d->layerBox ) {
         m_d->layerBox->setImage( img, m_d->doc->layerModel() );
+        connect( m_d->doc->layerModel(), SIGNAL( layerActivated( KisLayerSP ) ), m_d->layerManager, SLOT( activateLayer( KisLayerSP ) ) );
+    }
 
     if( m_d->birdEyeBox )
         m_d->birdEyeBox->setImage( img );

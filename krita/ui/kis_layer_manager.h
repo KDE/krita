@@ -63,7 +63,6 @@ public:
 
     KisLayerSP activeLayer();
     KisPaintDeviceSP activeDevice();
-    void activateLayer( KisLayerSP layer );
 
 signals:
 
@@ -73,6 +72,8 @@ signals:
     void sigLayerActivated( KisLayerSP layer );
 
 public slots:
+
+    void activateLayer( KisLayerSP layer );
 
     void imgResizeToActiveLayer();
 

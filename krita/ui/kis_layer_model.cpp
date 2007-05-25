@@ -34,7 +34,6 @@ KisLayerModel::KisLayerModel( QObject * parent )
     : KoDocumentSectionModel( parent )
     , m_d( new Private )
 {
-
 }
 
 KisLayerModel::~KisLayerModel()
@@ -233,7 +232,7 @@ bool KisLayerModel::setData(const QModelIndex &index, const QVariant &value, int
         case ActiveRole:
             if (value.toBool())
             {
-                layer->setActive();
+                emit layerActivated( layer );
                 emit dataChanged( index, index );
                 return true;
             }

@@ -56,7 +56,10 @@ public: // from QAbstractItemModel
     virtual bool dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );
     virtual Qt::DropActions supportedDragActions () const;
 
-    
+signals:
+
+    void layerActivated( KisLayerSP );
+
 public slots:
 
     void beginInsertLayers( KisGroupLayer * parent, int index );

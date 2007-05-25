@@ -110,15 +110,11 @@ void KisLayerTest::testCreation()
     QCOMPARE( layer->opacity(), OPACITY_OPAQUE );
     QCOMPARE( layer->image(), image );
     QCOMPARE( layer->colorSpace(), image->colorSpace() );
-    QCOMPARE( layer->isActive(), false );
     QCOMPARE( layer->visible(), true );
     QCOMPARE( layer->locked(), false );
     QCOMPARE( layer->temporary(), false );
 
     image->addLayer( layer, image->rootLayer() );
-    QCOMPARE( layer->isActive(), true );
-    image->activateLayer( layer );
-    QCOMPARE( layer->isActive(), true );
 
     QBitArray channels( 4 );
     channels.fill( true );

@@ -521,18 +521,28 @@ void KisView2::connectCurrentImage()
         connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
         connect(img.data(), SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
         connect(img.data(), SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
-        connect(img.data(), SIGNAL(sigLayerActivated(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
-        connect(img.data(), SIGNAL(sigLayerActivated(KisLayerSP)), m_d->canvas, SLOT(updateCanvas()));
         connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
 
 //         m_d->maskManager->maskUpdated();
+
+        // Temporary forwarding of signals until these deprecated
+        // signals are gone from KisImage
+        connect( img.data(), SIGNAL( currentColorSpaceChanged( KoColorSpace * cs ) ),
+                 m_d->layerManager, SIGNAL( currentColorSpaceChanged( KoColorSpace *cs ) ) );
+        connect( img.data(), SIGNAL( sigLayerActivated( KisLayerSP layer ) ),
+                 m_d->layerManager, SIGNAL( sigLayerActivated( KisLayerSP layer ) ) );
+
+        connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
+        connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), m_d->canvas, SLOT(updateCanvas()));
+
     }
     m_d->canvas->connectCurrentImage();
+
     if( m_d->layerBox )
         m_d->layerBox->setImage( img, m_d->doc->layerModel() );
+
     if( m_d->birdEyeBox )
         m_d->birdEyeBox->setImage( img );
-
 }
 
 void KisView2::disconnectCurrentImage()

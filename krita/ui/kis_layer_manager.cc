@@ -106,12 +106,16 @@ KisLayerSP KisLayerManager::activeLayer()
 
 KisPaintDeviceSP KisLayerManager::activeDevice()
 {
-    return m_activeLayer->paintDevice();
+    if ( m_activeLayer )
+        return m_activeLayer->paintDevice();
+    else
+        return 0;
 }
 
 void KisLayerManager::activateLayer( KisLayerSP layer )
 {
-    m_view->image()->activateLayer( layer );
+    if ( m_view && m_view->image() )
+        m_view->image()->activateLayer( layer );
     m_activeLayer = layer;
 }
 
@@ -209,7 +213,7 @@ void KisLayerManager::updateGUI()
 
 
     if (img) {
-        layer = img->activeLayer();
+        layer = m_activeLayer;
         nlayers = img->nlayers();
         nvisible = nlayers - img->nHiddenLayers();
     }
@@ -241,10 +245,10 @@ void KisLayerManager::updateGUI()
     m_imgMergeLayer->setEnabled(nlayers > 1 && layer && layer->nextSibling());
 
 
-    if (img && img->activeDevice())
-        emit currentColorSpaceChanged(img->activeDevice()->colorSpace());
+    if (activeDevice())
+        emit currentColorSpaceChanged(activeDevice()->colorSpace());
 
-    m_imgResizeToLayer->setEnabled(img && img->activeLayer());
+    m_imgResizeToLayer->setEnabled(activeLayer());
 
     if( m_view->statusBar() )
         m_view->statusBar()->setProfile(img);
@@ -252,11 +256,12 @@ void KisLayerManager::updateGUI()
 
 void KisLayerManager::imgResizeToActiveLayer()
 {
-    KisImageSP img = m_view->image();
     KisLayerSP layer;
     KisUndoAdapter * undoAdapter = m_view->undoAdapter();
 
-    if (img && (layer = img->activeLayer())) {
+    KisImageSP img = m_view->image();
+
+    if (img && (layer = activeLayer())) {
 
         if (undoAdapter && undoAdapter->undo()) {
             undoAdapter->beginMacro(i18n("Resize Image to Size of Current Layer"));
@@ -277,10 +282,7 @@ void KisLayerManager::imgResizeToActiveLayer()
 
 void KisLayerManager::layerCompositeOp(const KoCompositeOp* compositeOp)
 {
-    KisImageSP img = m_view->image();
-    if (!img) return;
-
-    KisLayerSP layer = img->activeLayer();
+    KisLayerSP layer = activeLayer();
     if (!layer) return;
 
     m_doc->addCommand(new KisLayerCompositeOpCommand(layer, layer->compositeOp(), compositeOp));
@@ -289,10 +291,7 @@ void KisLayerManager::layerCompositeOp(const KoCompositeOp* compositeOp)
 // range: 0 - 100
 void KisLayerManager::layerOpacity(double opacity, bool final)
 {
-    KisImageSP img = m_view->image();
-    if (!img) return;
-
-    KisLayerSP layer = img->activeLayer();
+    KisLayerSP layer = activeLayer();
     if (!layer) return;
 
     opacity = int(opacity * 2.55 + 0.5);
@@ -302,19 +301,16 @@ void KisLayerManager::layerOpacity(double opacity, bool final)
     if (opacity == layer->opacity()) return;
 
     if (!final)
-        layer->setOpacity( opacity );
+        layer->setOpacity( static_cast<int>( opacity ) );
     else
     {
-        m_doc->addCommand(new KisLayerOpacityCommand(layer, layer->opacity(), opacity));
+        m_doc->addCommand(new KisLayerOpacityCommand(layer, layer->opacity(), static_cast<int>( opacity )));
     }
 }
 
 void KisLayerManager::layerToggleVisible()
 {
-    KisImageSP img = m_view->image();
-    if (!img) return;
-
-    KisLayerSP layer = img->activeLayer();
+    KisLayerSP layer = activeLayer();
     if (!layer) return;
 
     layer->setVisible(!layer->visible());
@@ -322,10 +318,7 @@ void KisLayerManager::layerToggleVisible()
 
 void KisLayerManager::layerToggleLocked()
 {
-    KisImageSP img = m_view->image();
-    if (!img) return;
-
-    KisLayerSP layer = img->activeLayer();
+    KisLayerSP layer = activeLayer();
     if (!layer) return;
 
     layer->setLocked(!layer->locked());
@@ -338,8 +331,8 @@ void KisLayerManager::actLayerVisChanged(int show)
 
 void KisLayerManager::layerProperties()
 {
-    if (m_view->image() && m_view->image()->activeLayer())
-        showLayerProperties(m_view->image()->activeLayer());
+    if ( activeLayer() )
+        showLayerProperties( activeLayer() );
 }
 
 namespace {
@@ -453,8 +446,8 @@ void KisLayerManager::showLayerProperties(KisLayerSP layer)
 void KisLayerManager::layerAdd()
 {
     KisImageSP img = m_view->image();
-    if (img && img->activeLayer()) {
-        addLayer(img->activeLayer()->parentLayer(), img->activeLayer());
+    if (img && activeLayer()) {
+        addLayer(activeLayer()->parentLayer(), activeLayer());
     }
     else if (img)
         addLayer(img->rootLayer(), KisLayerSP(0));
@@ -514,10 +507,7 @@ void KisLayerManager::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
 
 void KisLayerManager::addAdjustmentLayer()
 {
-    KisImageSP img = m_view->image();
-    if (!img) return;
-
-    addAdjustmentLayer( img->activeLayer()->parentLayer(), img->activeLayer() );
+    addAdjustmentLayer( activeLayer()->parentLayer(), activeLayer() );
 }
 
 void KisLayerManager::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
@@ -528,7 +518,7 @@ void KisLayerManager::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP abov
     KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisLayerSP l = img->activeLayer();
+    KisLayerSP l = activeLayer();
 
     KisPaintDeviceSP dev;
 
@@ -593,7 +583,7 @@ void KisLayerManager::layerRemove()
     KisImageSP img = m_view->image();
 
     if (img) {
-        KisLayerSP layer = img->activeLayer();
+        KisLayerSP layer = activeLayer();
 
         if (layer) {
 
@@ -616,7 +606,7 @@ void KisLayerManager::layerDuplicate()
     if (!img)
         return;
 
-    KisLayerSP active = img->activeLayer();
+    KisLayerSP active = activeLayer();
 
     if (!active)
         return;
@@ -625,7 +615,7 @@ void KisLayerManager::layerDuplicate()
     dup->setName(i18n("Duplicate of '%1'",active->name()));
     img->addLayer(dup, active->parentLayer(), active);
     if (dup) {
-        img->activateLayer( dup );
+        activateLayer( dup );
         m_view->canvas()->update();
     } else {
         KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
@@ -640,7 +630,7 @@ void KisLayerManager::layerRaise()
     if (!img)
         return;
 
-    layer = img->activeLayer();
+    layer = activeLayer();
 
     img->raiseLayer(layer);
 }
@@ -653,7 +643,7 @@ void KisLayerManager::layerLower()
     if (!img)
         return;
 
-    layer = img->activeLayer();
+    layer = activeLayer();
 
     img->lowerLayer(layer);
 }
@@ -666,7 +656,7 @@ void KisLayerManager::layerFront()
     if (!img)
         return;
 
-    layer = img->activeLayer();
+    layer = activeLayer();
     img->toTop(layer);
 }
 
@@ -677,7 +667,7 @@ void KisLayerManager::layerBack()
 
     KisLayerSP layer;
 
-    layer = img->activeLayer();
+    layer = activeLayer();
     img->toBottom(layer);
 }
 
@@ -698,8 +688,7 @@ void KisLayerManager::rotateLayerRight90()
 
 void KisLayerManager::mirrorLayerX()
 {
-    if (!m_view->image()) return;
-    KisPaintDeviceSP dev = m_view->image()->activeDevice();
+    KisPaintDeviceSP dev = activeDevice();
     if (!dev) return;
 
     KisTransaction * t = 0;
@@ -719,8 +708,7 @@ void KisLayerManager::mirrorLayerX()
 
 void KisLayerManager::mirrorLayerY()
 {
-    if (!m_view->image()) return;
-    KisPaintDeviceSP dev = m_view->image()->activeDevice();
+    KisPaintDeviceSP dev = activeDevice();
     if (!dev) return;
 
     KisTransaction * t = 0;
@@ -742,7 +730,7 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
 {
     if (!m_view->image()) return;
 
-    KisPaintDeviceSP dev = m_view->image()->activeDevice();
+    KisPaintDeviceSP dev = activeDevice();
     if (!dev) return;
 
     KisSelectedTransaction * t = 0;
@@ -764,7 +752,7 @@ void KisLayerManager::rotateLayer(double radians)
 {
     if (!m_view->image()) return;
 
-    KisPaintDeviceSP dev = m_view->image()->activeDevice();
+    KisPaintDeviceSP dev = activeDevice();
     if (!dev) return;
 
     KisSelectedTransaction * t = 0;
@@ -797,7 +785,7 @@ void KisLayerManager::shearLayer(double angleX, double angleY)
 {
     if (!m_view->image()) return;
 
-    KisLayerSP layer = m_view->image()->activeLayer();
+    KisLayerSP layer = activeLayer();
     if (!layer) return;
 
     KisUndoAdapter * undo = 0;
@@ -846,7 +834,7 @@ void KisLayerManager::mergeLayer()
     KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisLayerSP layer = img->activeLayer();
+    KisLayerSP layer = activeLayer();
     if (!layer) return;
 
     img->mergeLayer(layer);
@@ -856,10 +844,8 @@ void KisLayerManager::mergeLayer()
 
 void KisLayerManager::layersUpdated()
 {
-    KisImageSP img = m_view->image();
-    if (!img) return;
 
-    KisLayerSP layer = img->activeLayer();
+    KisLayerSP layer = activeLayer();
     if (!layer) return;
 
     m_view->updateGUI();
@@ -890,7 +876,7 @@ void KisLayerManager::saveLayerAsImage()
     KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisLayerSP l = img->activeLayer();
+    KisLayerSP l = activeLayer();
     if (!l) return;
 
     QRect r = l->exactBounds();
@@ -910,7 +896,7 @@ void KisLayerManager::saveLayerAsImage()
 
 bool KisLayerManager::activeLayerHasSelection()
 {
-    return m_view->image() && m_view->image()->activeDevice() && m_view->image()->activeDevice()->hasSelection();
+    return ( activeDevice() && activeDevice()->hasSelection() );
 }
 
 

@@ -97,10 +97,10 @@ public:
     }
 
     /// Whether this layer is the active one in its image
-    bool isActive() const;
+    bool isActive() const KDE_DEPRECATED;
 
     /// Sets this layer as the active one
-    void setActive();
+    void setActive() KDE_DEPRECATED;
 
     virtual QIcon icon() const = 0;
 
@@ -210,13 +210,13 @@ public:
      * Called when the layer is made active.
      * Be sure to call the superclass's implementation when reimplementing.
      */
-    virtual void activate();
+    virtual void activate() KDE_DEPRECATED;
 
     /**
      * Called when the layer is made active.
      * Be sure to call the superclass's implementation when reimplementing.
      */
-    virtual void deactivate();
+    virtual void deactivate() KDE_DEPRECATED;
 
 public:
     virtual qint32 x() const = 0;

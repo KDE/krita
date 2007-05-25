@@ -210,25 +210,45 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
 
     KoXmlElement* listElem = context.oasisStyles().listStyles()[ name() ];
     if( listElem ) {
-        KoXmlElement listStyle = listElem->firstChildElement("list-level-style-bullet");
-        if( ! listStyle.isNull() ) {
-            //e.attributeNS(KoXmlNS::text, "level", QString::null);
-
-            /*
-            QString prefix = listStyle.attributeNS(KoXmlNS::style, "num-prefix", QString::null);
+        KoXmlElement numberStyle = listElem->firstChildElement("list-level-style-number");
+        if( ! numberStyle.isNull() ) { // it's a numbered list
+            const QString prefix = numberStyle.attributeNS( KoXmlNS::style, "num-prefix", QString() );
             if( ! prefix.isNull() )
                 properties.setListItemPrefix(prefix);
-            QString suffix = listStyle.attributeNS(KoXmlNS::style, "num-suffix", QString::null);
+
+            const QString suffix = numberStyle.attributeNS( KoXmlNS::style, "num-suffix", QString() );
             if( ! suffix.isNull() )
                 properties.setListItemSuffix(suffix);
-            */
+
+            const QString format = numberStyle.attributeNS( KoXmlNS::style, "num-format", QString() );
+            if( format.isEmpty() )
+                properties.setStyle(KoListStyle::NoItem);
+            else {
+                if( format[0] == '1' )
+                    properties.setStyle(KoListStyle::DecimalItem);
+                else if( format[0] == 'a' )
+                    properties.setStyle(KoListStyle::AlphaLowerItem);
+                else if( format[0] == 'A' )
+                    properties.setStyle(KoListStyle::UpperAlphaItem);
+                else if( format[0] == 'i' )
+                    properties.setStyle(KoListStyle::RomanLowerItem);
+                else if( format[0] == 'I' )
+                    properties.setStyle(KoListStyle::UpperRomanItem);
+                else
+                    properties.setStyle(KoListStyle::DecimalItem); // fallback
+            }
+
+            //bulletStyle.attributeNS( KoXmlNS::text, "level", QString() );
+        }
+        else { // list with bullets
+            KoXmlElement bulletStyle = listElem->firstChildElement("list-level-style-bullet");
 
             //1.6: KoParagCounter::loadOasisListStyle
-            QString bulletChar = listStyle.attributeNS( KoXmlNS::text, "bullet-char", QString::null );
-            if( bulletChar.isEmpty() ) {
+            QString bulletChar = bulletStyle.isNull() ? QString() : bulletStyle.attributeNS( KoXmlNS::text, "bullet-char", QString() );
+            if( bulletChar.isEmpty() ) { // list without any visible bullets
                 properties.setStyle(KoListStyle::NoItem);
             }
-            else {
+            else { // try to determinate the bullet we should use
                 switch( bulletChar[0].unicode() ) {
                     case 0x2022: // bullet, a small disc -> circle
                         //TODO use BulletSize to differ between small and large discs
@@ -238,8 +258,8 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
                     case 0xF0B7: // #113361
                         properties.setStyle(KoListStyle::DiscItem);
                         break;
-                    case 0xE00C: // losange
-                        properties.setStyle(KoListStyle::SquareItem);
+                    case 0xE00C: // losange => rhombus
+                        properties.setStyle(KoListStyle::RhombusItem);
                         break;
                     case 0xE00A: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
                         properties.setStyle(KoListStyle::SquareItem);
@@ -254,7 +274,8 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
                         properties.setStyle(KoListStyle::HeavyCheckMarkItem);
                         break;
                     case 0x2d: // minus
-                        properties.setStyle(KoListStyle::MinusItem);
+                        properties.setStyle(KoListStyle::CustomCharItem);
+                        properties.setBulletCharacter('-');
                         break;
                     case 0x2717: // cross
                         properties.setStyle(KoListStyle::BallotXItem);
@@ -281,9 +302,6 @@ void KoListStyle::loadOasis(KoOasisLoadingContext& context)
                         break;
                 }
             }
-        }
-        else {
-            properties.setStyle(KoListStyle::DecimalItem);
         }
     }
 

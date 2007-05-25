@@ -60,8 +60,8 @@ public:
         UpperRomanItem,
         /// draw a box
         BoxItem,
-        /// minus
-        MinusItem,
+        /// rhombus, like a SquareItem but rotated by 45 degree
+        RhombusItem,
         /// a check mark
         HeavyCheckMarkItem,
         /// a ballot x

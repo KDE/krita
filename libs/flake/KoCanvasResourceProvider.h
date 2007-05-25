@@ -1,5 +1,6 @@
 /*
    Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +23,7 @@
 #include <QObject>
 #include <QHash>
 #include <QVariant>
+#include <QSizeF>
 
 #include <KoID.h>
 #include <flake_export.h>
@@ -43,6 +45,7 @@ namespace KoCanvasResource {
         CompositeOperation,
         CompositeOpacity,
         HandleRadius,       ///< The handle radius used for drawing handles of any kind
+        PageSize,           ///< The size of the (current) page in postscript points.
         KarbonStart = 1000,      ///< Base number for karbon specific values.
         KexiStart = 2000,        ///< Base number for kexi specific values.
         KivioStart = 3000,       ///< Base number for kivio specific values.
@@ -164,6 +167,12 @@ public:
      * @param key the indentifying key for the resource.
      */
     QString stringResource(int key);
+
+    /**
+     * Return the resource determined by param key as a QSizeF.
+     * @param key the indentifying key for the resource.
+     */
+    QSizeF sizeResource(int key);
 
 signals:
     /**

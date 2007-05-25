@@ -141,33 +141,6 @@ QBitArray & KisLayer::channelFlags()
     return m_d->channelFlags;
 }
 
-
-void KisLayer::activate()
-{
-    notifyPropertyChanged();
-}
-
-void KisLayer::deactivate()
-{
-    /*notifyPropertyChanged(this); not necessary, and causes scrolling issues */
-}
-
-bool KisLayer::isActive() const
-{
-    if (image())
-        return this == image()->activeLayer().data();
-    else
-        return false;
-}
-
-void KisLayer::setActive()
-{
-    if (image())
-        image()->activateLayer(KisLayerSP(this));
-}
-
-
-
 void KisLayer::setDirty()
 {
     QRect rc = extent();

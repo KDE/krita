@@ -96,12 +96,6 @@ public:
         return 0;
     }
 
-    /// Whether this layer is the active one in its image
-    bool isActive() const KDE_DEPRECATED;
-
-    /// Sets this layer as the active one
-    void setActive() KDE_DEPRECATED;
-
     virtual QIcon icon() const = 0;
 
     virtual KoDocumentSectionModel::PropertyList properties() const;
@@ -204,19 +198,6 @@ public:
 
     /// Returns the total number of layers in this layer, its child layers, and their child layers recursively, optionally ones with the specified properties Visible or Locked, which you can OR together.
     virtual int numLayers(int type = 0) const;
-
-public:
-    /**
-     * Called when the layer is made active.
-     * Be sure to call the superclass's implementation when reimplementing.
-     */
-    virtual void activate() KDE_DEPRECATED;
-
-    /**
-     * Called when the layer is made active.
-     * Be sure to call the superclass's implementation when reimplementing.
-     */
-    virtual void deactivate() KDE_DEPRECATED;
 
 public:
     virtual qint32 x() const = 0;

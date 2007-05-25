@@ -676,21 +676,9 @@ KisPaintDeviceSP KisImage::projection()
 KisLayerSP KisImage::activateLayer(KisLayerSP layer)
 {
 
-//    if (layer != m_d->activeLayer) {
-
-        if (m_d->activeLayer)
-            m_d->activeLayer->deactivate();
-
-        m_d->activeLayer = layer;
-
-        if (m_d->activeLayer) {
-            m_d->activeLayer->activate();
-
-            emit sigLayerActivated(m_d->activeLayer);
-        }
-
-        emit sigMaskInfoChanged();
-//    }
+    m_d->activeLayer = layer;
+    emit sigLayerActivated(m_d->activeLayer);
+    emit sigMaskInfoChanged();
 
     return layer;
 }

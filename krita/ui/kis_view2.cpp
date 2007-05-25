@@ -275,18 +275,6 @@ void KisView2::dropEvent(QDropEvent *event)
 
 void KisView2::slotChildActivated(bool a) {
 
-    // It should be so that the only part (child) we can activate, is
-    // the current layer:
-    KisImageSP img = image();
-    if ( img && img->activeLayer())
-    {
-        if (a) {
-            img->activeLayer()->activate();
-        } else {
-            img->activeLayer()->deactivate();
-        }
-    }
-
     KoView::slotChildActivated(a);
 }
 

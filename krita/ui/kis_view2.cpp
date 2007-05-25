@@ -369,6 +369,7 @@ void KisView2::slotLoadingFinished()
 
     if(m_d->statusBar) {
         m_d->statusBar->imageSizeChanged(img->width(), img->height());
+        m_d->resourceProvider->slotSetImageSize( img->width(), img->height() );
     }
 
     m_d->layerManager->layersUpdated();
@@ -384,6 +385,7 @@ void KisView2::slotLoadingFinished()
     connectCurrentImage();
     img->blockSignals( false );
     img->unlock();
+
 
 //     kDebug(41007) << "image finished loading, active layer: " << img->activeLayer() << ", root layer: " << img->rootLayer() << endl;
 
@@ -511,9 +513,9 @@ void KisView2::connectCurrentImage()
             connect(img.data(), SIGNAL(sigColorSpaceChanged(KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
             connect(img.data(), SIGNAL(sigProfileChanged(KoColorProfile * )), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
             connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->statusBar, SLOT(imageSizeChanged(qint32, qint32)));
-            connect(img.data(), SIGNAL( sigSizeChanged( qint32, qint32 ) ), m_d->resourceProvider, SLOT( slotSetImageSize( qint32, qint32 ) ) );
-        }
 
+        }
+        connect(img.data(), SIGNAL( sigSizeChanged( qint32, qint32 ) ), m_d->resourceProvider, SLOT( slotSetImageSize( qint32, qint32 ) ) );
         connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
 //         connect(img.data(), SIGNAL(sigMaskInfoChanged()), m_d->maskManager, SLOT(maskUpdated()));
         connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));

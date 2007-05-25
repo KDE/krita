@@ -99,9 +99,6 @@ public:
 
     ~KisFilterManagerPrivate()
         {
-            //delete m_d->reapplyAction;
-            //delete m_d->lastFilterConfig;
-            //delete m_d->filterMapper;
             delete timer;
         }
 };

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,6 +19,8 @@
 
 #ifndef KOSHAPECONFIGWIDGETBASE_H
 #define KOSHAPECONFIGWIDGETBASE_H
+
+#include "KoCanvasResourceProvider.h"
 
 #include <QWidget>
 
@@ -74,6 +76,14 @@ public:
      * @param unit the new unit to show data in.
      */
     virtual void setUnit(KoUnit unit) { Q_UNUSED(unit); }
+
+    /// called to set the canvas resource provider of the canvas the user used to insert the new shape.
+    void setResourceProvider(KoCanvasResourceProvider* provider) {
+        m_resourceProvider = provider;
+    }
+
+protected:
+    KoCanvasResourceProvider *m_resourceProvider;
 };
 
 

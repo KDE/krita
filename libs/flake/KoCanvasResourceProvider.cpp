@@ -158,4 +158,8 @@ QSizeF KoCanvasResourceProvider::sizeResource(int key) {
     return qvariant_cast<QSizeF>(resource(key));
 }
 
+bool KoCanvasResourceProvider::hasResource(int key) {
+    return d->resources.contains(key);
+}
+
 #include "KoCanvasResourceProvider.moc"

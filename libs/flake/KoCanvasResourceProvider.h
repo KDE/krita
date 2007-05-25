@@ -174,6 +174,12 @@ public:
      */
     QSizeF sizeResource(int key);
 
+    /**
+     * Returns true if there is a resource set with the requested key.
+     * @param key the indentifying key for the resource.
+     */
+    bool hasResource(int key);
+
 signals:
     /**
      * This signal is emitted every time a resource is set that is either

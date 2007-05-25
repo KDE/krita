@@ -49,7 +49,7 @@ KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase * canvas)
     m_startPos = QPointF(0, 0);
     m_endPos = QPointF(0, 0);
     m_optWidget = 0;
-    m_selectAction = SELECTION_ADD;
+    m_selectAction = SELECTION_REPLACE;
 }
 
 KisToolSelectElliptical::~KisToolSelectElliptical()
@@ -159,11 +159,12 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 
             if (m_currentImage && m_currentImage->activeDevice()) {
                 KisPaintDeviceSP dev = m_currentImage->activeDevice();
+
+                bool hasSelection = dev->hasSelection();
                 KisSelectionSP selection = dev->selection();
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
 
-                bool hasSelection = dev->hasSelection();
-                if (!hasSelection)
+                if (!hasSelection || m_selectAction == SELECTION_REPLACE)
                 {
                     selection->clear();
                     if(m_selectAction == SELECTION_SUBTRACT)
@@ -182,6 +183,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 
                 switch(m_selectAction)
                 {
+                    case SELECTION_REPLACE:
                     case SELECTION_ADD:
                         painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_OVER));
                         break;
@@ -195,10 +197,12 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 painter.paintEllipse(QRectF(m_startPos, m_endPos), PRESSURE_DEFAULT/*e->pressure()*/,
                                      e->xTilt(), e->yTilt());
 
-                if(hasSelection) {
+                if(hasSelection && m_selectAction != SELECTION_REPLACE) {
                     QRect rect(painter.dirtyRegion().boundingRect());
+                    dev->setDirty(rect);
                     dev->emitSelectionChanged(rect);
                 } else {
+                    dev->setDirty();
                     dev->emitSelectionChanged();
                 }
 

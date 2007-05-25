@@ -52,7 +52,7 @@ KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas)
     setObjectName("tool_select_polygonal");
     m_dragging = false;
     m_optWidget = 0;
-    m_selectAction = SELECTION_ADD;
+    m_selectAction = SELECTION_REPLACE;
 }
 
 KisToolSelectPolygonal::~KisToolSelectPolygonal()
@@ -150,9 +150,11 @@ void KisToolSelectPolygonal::finish()
         if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Polygonal Selection"), dev);
         KisSelectionSP selection = dev->selection();
 
-        if (!hasSelection)
+        if (!hasSelection || m_selectAction == SELECTION_REPLACE)
         {
             selection->clear();
+            if(m_selectAction == SELECTION_SUBTRACT)
+                selection->invert();
         }
 
         KisPainter painter(selection);
@@ -165,8 +167,9 @@ void KisToolSelectPolygonal::finish()
         KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, m_currentImage);
         painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
 
-        switch(m_selectAction)
+        switch(m_selectAction || m_selectAction == SELECTION_REPLACE)
         {
+            case SELECTION_REPLACE:
             case SELECTION_ADD:
                 painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_OVER));
                 break;
@@ -179,14 +182,16 @@ void KisToolSelectPolygonal::finish()
 
         painter.paintPolygon(m_points);
 
-        if(hasSelection) {
+        if(hasSelection && m_selectAction != SELECTION_REPLACE) {
             QRect rect(painter.dirtyRegion().boundingRect());
+            dev->setDirty(rect);
             dev->emitSelectionChanged(rect);
         } else {
+            dev->setDirty();
             dev->emitSelectionChanged();
         }
 
-        if (m_currentImage->undo()) m_currentImage->undoAdapter()->addCommand(t);
+        m_canvas->addCommand(t);
 
         QApplication::restoreOverrideCursor();
     }

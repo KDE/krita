@@ -64,7 +64,7 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const quint8 
 
             quint8 match = cs->difference(c, hiter.rawData());
 
-            if (mode == SELECTION_ADD) {
+            if (mode == SELECTION_ADD || mode == SELECTION_REPLACE) {
                 if (match <= fuzziness) {
                     *(selIter.rawData()) = MAX_SELECTED;
                 }
@@ -93,7 +93,7 @@ KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
     m_optWidget = 0;
     m_selectionOptionsWidget = 0;
     m_fuzziness = 20;
-    m_currentSelectAction = m_defaultSelectAction = SELECTION_ADD;
+    m_currentSelectAction = m_defaultSelectAction = SELECTION_REPLACE;
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), SLOT(slotTimer()) );
 }
@@ -137,7 +137,17 @@ useCursor(m_subtractCursor);
             return;
 
         QPointF pos = convertToPixelCoord(e);
+
+        bool hasSelection = dev->hasSelection();
+        KisSelectionSP selection = dev->selection();
         KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
+
+        if (!hasSelection || m_defaultSelectAction == SELECTION_REPLACE)
+        {
+            selection->clear();
+            if(m_defaultSelectAction == SELECTION_SUBTRACT)
+                selection->invert();
+        }
 
         KoColor c = dev->colorAt(pos.x(), pos.y());
         opacity = dev->colorSpace()->alpha(c.data());
@@ -155,6 +165,7 @@ useCursor(m_subtractCursor);
     }
 }
 
+#if 0
 void KisToolSelectSimilar::slotTimer()
 {
     int state = QApplication::keyboardModifiers() & (Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier);
@@ -183,6 +194,7 @@ void KisToolSelectSimilar::setPickerCursor(enumSelectionMode action)
 //             useCursor(m_subtractCursor);
 //     }
 }
+#endif
 
 void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
 {

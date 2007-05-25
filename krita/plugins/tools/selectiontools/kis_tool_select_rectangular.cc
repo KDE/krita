@@ -49,7 +49,7 @@ KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
     m_startPos = QPointF(0, 0);
     m_endPos = QPointF(0, 0);
     m_optWidget = 0;
-    m_selectAction = SELECTION_ADD;
+    m_selectAction = SELECTION_REPLACE;
 }
 
 KisToolSelectRectangular::~KisToolSelectRectangular()
@@ -191,7 +191,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                 // We don't want the border of the 'rectangle' to be included in our selection
                 rc.setSize(rc.size() - QSize(1,1));
 
-                if(! hasSelection)
+                if(! hasSelection || m_selectAction == SELECTION_REPLACE)
                 {
                     selection->clear();
                     if(m_selectAction==SELECTION_SUBTRACT)
@@ -202,6 +202,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                 tmpSel->select(rc);
                 switch(m_selectAction)
                 {
+                    case SELECTION_REPLACE:
                     case SELECTION_ADD:
                         dev->addSelection(tmpSel);
                         break;
@@ -213,7 +214,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                 }
 
 
-                if(hasSelection) {
+                if(hasSelection && m_selectAction != SELECTION_REPLACE) {
                     dev->setDirty(rc);
                     dev->emitSelectionChanged(rc);
                 } else {

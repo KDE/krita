@@ -70,9 +70,6 @@ public:
     /// Set the selection of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
 
-    void paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
-    void paint(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
-
 public:
 
     qint32 x() const;

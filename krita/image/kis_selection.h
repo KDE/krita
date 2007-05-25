@@ -34,6 +34,7 @@ enum selectionType {
 };
 
 enum enumSelectionMode {
+    SELECTION_REPLACE,
     SELECTION_ADD,
     SELECTION_SUBTRACT
 };
@@ -114,8 +115,7 @@ public:
      */
     QRect selectedExactRect() const;
 
-    void paint(QImage img, qint32 x, qint32 y, qint32 w, qint32 h);
-    void paint(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
+    void paint(QImage* img);
 
     // if the parent layer is interested in keeping up to date with the dirtyness
     // of this layer, set to true
@@ -126,11 +126,6 @@ public:
     virtual void setDirty();
 
     QVector<QPolygon> outline();
-
-private:
-
-    void paintUniformSelectionRegion(QImage img, const QRect& imageRect, const QRegion& uniformRegion);
-
 
 private:
 

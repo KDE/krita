@@ -49,7 +49,7 @@ KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
 {
     m_dragging = false;
     m_optWidget = 0;
-    m_selectAction = SELECTION_ADD;
+    m_selectAction = SELECTION_REPLACE;
 }
 
 KisToolSelectOutline::~KisToolSelectOutline()
@@ -97,12 +97,14 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
             QApplication::setOverrideCursor(KisCursor::waitCursor());
             KisPaintDeviceSP dev = m_currentImage->activeDevice();
             bool hasSelection = dev->hasSelection();
-            KisSelectedTransaction *t = 0;
-            if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Outline Selection"), dev);
+            KisSelectedTransaction *t =  t = new KisSelectedTransaction(i18n("Outline Selection"), dev);
             KisSelectionSP selection = dev->selection();
 
-            if (!hasSelection) {
+            if (!hasSelection || m_selectAction == SELECTION_REPLACE)
+            {
                 selection->clear();
+                if(m_selectAction == SELECTION_SUBTRACT)
+                    selection->invert();
             }
 
             KisPainter painter(selection);
@@ -116,19 +118,20 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
             painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
 
             switch (m_selectAction) {
-            case SELECTION_ADD:
-                painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_OVER));
-                break;
-            case SELECTION_SUBTRACT:
-                painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
-                break;
-            default:
-                break;
+                case SELECTION_REPLACE:
+                case SELECTION_ADD:
+                    painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_OVER));
+                    break;
+                case SELECTION_SUBTRACT:
+                    painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
+                    break;
+                default:
+                    break;
             }
 
             painter.paintPolygon(m_points);
 
-            if(hasSelection) {
+            if(hasSelection && m_selectAction != SELECTION_REPLACE) {
                 QRegion dirty(painter.dirtyRegion());
                 dev->setDirty(dirty);
                 dev->emitSelectionChanged(dirty.boundingRect());
@@ -137,8 +140,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 dev->emitSelectionChanged();
             }
 
-            if (m_currentImage->undo())
-                m_currentImage->undoAdapter()->addCommand(t);
+            m_canvas->addCommand(t);
 
             QApplication::restoreOverrideCursor();
         }

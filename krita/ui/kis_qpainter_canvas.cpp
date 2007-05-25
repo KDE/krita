@@ -51,6 +51,7 @@
 #include "kis_doc2.h"
 #include "kis_grid_drawer.h"
 #include "kis_selection_manager.h"
+#include "kis_selection.h"
 
 //#define DEBUG_REPAINT
 //#define USE_QT_SCALING
@@ -326,7 +327,17 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
     if (img == 0) return;
     QRect rc = r;
 
-    const QImage canvasImage = m_d->canvas->canvasCache();
+    QImage canvasImage = m_d->canvas->canvasCache();
+
+    KisPaintDeviceSP dev = img->activeDevice();
+    if (!dev) return;
+
+    if (dev->hasSelection()){
+        KisSelectionSP selection = dev->selection();
+
+        selection->paint(&canvasImage);
+    }
+
     //canvasImage.fill( 0 );
 
     double sx, sy;

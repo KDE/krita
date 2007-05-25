@@ -73,6 +73,7 @@ public:
     double minimum;
     double maximum;
     int decimals;
+    bool firstShowOfSlider;
 
     void showPopup();
     void hidePopup();
@@ -101,13 +102,14 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     d->slider->setMaximum(256);
     d->slider->setPageStep(10);
     d->slider->setValue(0);
-    d->container->resize(200, 30);
+    d->firstShowOfSlider = true;
 
     QHBoxLayout * l = new QHBoxLayout();
     l->setMargin(2);
     l->setSpacing(2);
     l->addWidget(d->slider);
     d->container->setLayout(l);
+    d->container->resize(200, 30);
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
@@ -150,6 +152,11 @@ QSize KoSliderCombo::minimumSizeHint() const
 
 void KoSliderCombo::KoSliderComboPrivate::showPopup()
 {
+    if(firstShowOfSlider) {
+        container->show(); //show container a bit early so the slider can be layout'ed
+        firstShowOfSlider = false;
+    }
+
     QStyleOptionSlider opt;
     opt.init(slider);
     opt.maximum=256;

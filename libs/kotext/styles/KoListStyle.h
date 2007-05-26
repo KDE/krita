@@ -139,13 +139,13 @@ public:
 
     bool operator==(const KoListStyle &other) const;
 
+    static KoListStyle* fromTextList(QTextList *list);
+
     /**
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
     void loadOasis(KoOasisLoadingContext& context);
-
-    static KoListStyle* fromTextList(QTextList *list);
 
 protected:
     friend class KoParagraphStyle;

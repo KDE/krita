@@ -23,6 +23,7 @@
 
 //#include <QTextCursor>
 //#include <QSharedData>
+#include <kdebug.h>
 
 class KoListLevelProperties::Private {
 public:
@@ -230,7 +231,6 @@ QString KoListLevelProperties::listId() const {
     return propertyString(KoListStyle::ListId);
 }
 
-
 // static
 KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list) {
     KoListLevelProperties llp;
@@ -243,4 +243,111 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list) {
         i++;
     }
     return llp;
+}
+
+void KoListLevelProperties::loadOasis(KoOasisLoadingContext& context, KoXmlElement& style) {
+    if( style.localName() == "list-level-style-bullet" ) { // list with bullets
+
+        //1.6: KoParagCounter::loadOasisListStyle
+        QString bulletChar = style.isNull() ? QString() : style.attributeNS( KoXmlNS::text, "bullet-char", QString() );
+        if( bulletChar.isEmpty() ) { // list without any visible bullets
+            setStyle(KoListStyle::NoItem);
+        }
+        else { // try to determinate the bullet we should use
+            switch( bulletChar[0].unicode() ) {
+                case 0x2022: // bullet, a small disc -> circle
+                    //TODO use BulletSize to differ between small and large discs
+                    setStyle(KoListStyle::CircleItem);
+                    break;
+                case 0x25CF: // black circle, large disc -> disc
+                case 0xF0B7: // #113361
+                    setStyle(KoListStyle::DiscItem);
+                    break;
+                case 0xE00C: // losange => rhombus
+                    setStyle(KoListStyle::RhombusItem);
+                    break;
+                case 0xE00A: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
+                    setStyle(KoListStyle::SquareItem);
+                    break;
+                case 0x27A2: // two-colors right-pointing triangle
+                    setStyle(KoListStyle::RightArrowHeadItem);
+                    break;
+                case 0x2794: // arrow to right
+                    setStyle(KoListStyle::RightArrowItem);
+                    break;
+                case 0x2714: // checkmark
+                    setStyle(KoListStyle::HeavyCheckMarkItem);
+                    break;
+                case 0x2d: // minus
+                    setStyle(KoListStyle::CustomCharItem);
+                    setBulletCharacter('-');
+                    break;
+                case 0x2717: // cross
+                    setStyle(KoListStyle::BallotXItem);
+                    break;
+                default:
+                    QChar customBulletChar = bulletChar[0];
+                    kDebug() << "Unhandled bullet code 0x" << QString::number( (uint)customBulletChar.unicode(), 16 ) << endl;
+                    /*
+                    QString customBulletFont;
+                    // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
+                    if ( listStyleProperties.hasAttributeNS( KoXmlNS::style, "font-name" ) )
+                    {
+                        customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null );
+                        kDebug() << "customBulletFont style:font-name = " << listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null ) << endl;
+                    }
+                    else if ( listStyleTextProperties.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
+                    {
+                        customBulletFont = listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString::null );
+                        kDebug() << "customBulletFont fo:font-family = " << listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString::null ) << endl;
+                    }
+                    // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
+                    */
+                    setStyle(KoListStyle::BoxItem); //fallback
+                    break;
+            }
+        }
+
+    }
+    else if( style.localName() == "list-level-style-number" ) { // it's a numbered list
+
+        const QString format = style.attributeNS( KoXmlNS::style, "num-format", QString() );
+        if( format.isEmpty() ) {
+            setStyle(KoListStyle::NoItem);
+        }
+        else {
+            if( format[0] == '1' )
+                setStyle(KoListStyle::DecimalItem);
+            else if( format[0] == 'a' )
+                setStyle(KoListStyle::AlphaLowerItem);
+            else if( format[0] == 'A' )
+                setStyle(KoListStyle::UpperAlphaItem);
+            else if( format[0] == 'i' )
+                setStyle(KoListStyle::RomanLowerItem);
+            else if( format[0] == 'I' )
+                setStyle(KoListStyle::UpperRomanItem);
+            else
+                setStyle(KoListStyle::DecimalItem); // fallback
+        }
+
+    }
+    else { // if not defined, we have to use decimals
+        setStyle(KoListStyle::DecimalItem);
+        //setListItemSuffix(".");
+    }
+
+    const QString prefix = style.attributeNS( KoXmlNS::style, "num-prefix", QString() );
+    if( ! prefix.isNull() )
+        setListItemPrefix(prefix);
+
+    const QString suffix = style.attributeNS( KoXmlNS::style, "num-suffix", QString() );
+    if( ! suffix.isNull() )
+        setListItemSuffix(suffix);
+
+    const QString level = style.attributeNS( KoXmlNS::text, "level", QString() );
+    if( ! level.isNull() ) {
+        const int i = level.toInt();
+        setLevel(i);
+        setDisplayLevel(i);
+    }
 }

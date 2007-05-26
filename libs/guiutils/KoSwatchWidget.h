@@ -29,10 +29,10 @@ class KoColor;
 /**
  * @short A colormanaged widget for chooosing a color from a swatch
  *
- * KoSwatchWidget is an icon for choosing colormanaged (via pigment) color. Normally it show an icon
- * and above a small rect of the current color. When the user moves the pointer on top then a larger
- * widget is popped up. This larger widget provides lots of functionallity to choose the color from a
- * swatch.
+ * KoSwatchWidget is a widget for choosing a color (colormanaged via pigment). Normally it shows an
+ * icon and above a small rect of the current color. When the user moves the pointer on top of the widget
+ * a larger widget is popped up. This larger widget provides lots of functionallity to choose the color from
+ * a swatch.
  */
 class KOGUIUTILS_EXPORT KoSwatchWidget : public QPushButton
 {

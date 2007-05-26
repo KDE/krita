@@ -38,6 +38,11 @@ public:
     KoSwatchContainer(KoSwatchWidget *parent) : QFrame(parent, Qt::Popup ), m_parent(parent) {}
 
 protected:
+    virtual void leaveEvent(QEvent *)
+    {
+        hide();
+    }
+
 private:
     KoSwatchWidget *m_parent;
 };
@@ -69,8 +74,9 @@ KoSwatchWidget::KoSwatchWidget(QWidget *parent)
     l->setSpacing(2);
     l->addWidget(d->slider);
     d->container->setLayout(l);
-*/    d->container->resize(200, 20);
+*/    d->container->resize(200, 200);
 
+    resize(20, 20);
 /*
     connect(d->slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
     connect(d->slider, SIGNAL(sliderReleased()), SLOT(sliderReleased()));
@@ -90,7 +96,7 @@ void KoSwatchWidget::KoSwatchWidgetPrivate::showPopup()
         firstShowOfContainer = false;
     }
 
-    container->move(thePublic->pos());
+    container->move(thePublic->mapToGlobal(QPoint(0,0)));
 
     container->raise();
     container->show();

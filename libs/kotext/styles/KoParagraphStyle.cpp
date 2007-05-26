@@ -780,7 +780,9 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
     }
     
     // Automatic Text indent
-    if ( hasMarginLeft || hasMarginRight ) {
+    // OOo is not assuming this. Commenting this line thus allow more OpenDocuments to be supported, including a 
+    // testcase from the ODF test suite. See §15.5.18 in the spec.
+    //if ( hasMarginLeft || hasMarginRight ) {
         if ( styleStack.hasProperty(KoXmlNS::fo, "auto-text-indent") ) { // style:auto-text-indent takes precedence
             // "indented by a value that is based on the current font size"
             const QString autotextindent = styleStack.property(KoXmlNS::style, "auto-text-indent");
@@ -792,7 +794,7 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
         else if ( styleStack.hasProperty(KoXmlNS::fo, "text-indent") ) {
             setTextIndent( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "text-indent") ) );
         }
-    }
+    //}
 
     // Line spacing
     if( styleStack.hasProperty( KoXmlNS::fo, "line-height") ) {  // 3.11.1

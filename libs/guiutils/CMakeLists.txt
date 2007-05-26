@@ -53,6 +53,7 @@ set(koguiutils_LIB_SRCS
    KoXYColorSelector.cpp
    KoUniColorChooser.cpp
    KoUniColorDialog.cpp
+   KoSwatchWidget.cpp
    KoColorPatch.cpp
    KoDualColorButton.cpp
    KoLineStyleSelector.cpp

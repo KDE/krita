@@ -112,6 +112,12 @@ public:  // Krita specific interfaces
     /// layers
     KisLayerManager * layerManager();
 
+    /// Convenience method to get at the active layer
+    KisLayerSP activeLayer();
+
+    /// Convenience method to get at the active paint device
+    KisPaintDeviceSP activeDevice();
+
     /// The zoommanager handles everything action-related to zooming
     KisZoomManager * zoomManager();
 

@@ -326,6 +326,22 @@ KisLayerManager * KisView2::layerManager()
     return m_d->layerManager;
 }
 
+KisLayerSP KisView2::activeLayer()
+{
+    if ( m_d->layerManager )
+        return m_d->layerManager->activeLayer();
+    else
+        return 0;
+}
+
+KisPaintDeviceSP KisView2::activeDevice()
+{
+    if ( m_d->layerManager && m_d->layerManager->activeLayer() )
+        return m_d->layerManager->activeLayer()->paintDevice();
+    else
+        return 0;
+}
+
 KisZoomManager * KisView2::zoomManager()
 {
     return m_d->zoomManager;

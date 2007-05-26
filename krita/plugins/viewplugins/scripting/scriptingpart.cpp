@@ -57,6 +57,7 @@
 // kritacore
 #include "kritacore/krs_module.h"
 #include "kritacore/krs_progress.h"
+#include "kis_layer_manager.h"
 
 #include "kis_script_filter.h"
 
@@ -110,7 +111,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
 
     // Add filters
     Kross::ActionCollection* actioncollection = Kross::Manager::self().actionCollection();
-    
+
     if( actioncollection && (actioncollection = actioncollection->collection("filters")) ) {
         foreach(Kross::Action* action, actioncollection->actions()) {
             Q_ASSERT(action);
@@ -139,7 +140,7 @@ void ScriptingPart::finished(Kross::Action*)
 {
 //     kDebug() << "ScriptingPart::executionFinished" << endl;
     d->view->document()->setModified(true);
-    d->view->image()->activeLayer()->setDirty();
+    d->view->layerManager()->activeLayer()->setDirty();
     static_cast< Scripting::Progress* >( d->module->progress() )->progressDone();
     QApplication::restoreOverrideCursor();
     //d->module->deleteLater();

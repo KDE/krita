@@ -45,6 +45,7 @@
 #include "kis_paint_layer.h"
 #include "kis_types.h"
 #include "kis_view2.h"
+#include "kis_layer_manager.h"
 
 #include "ui_wdgbracketing2hdr.h"
 
@@ -179,7 +180,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
     addImage( "~/tmp/hdr/cambredaze/HPIM3069.JPG" );
     addImage( "~/tmp/hdr/cambredaze/HPIM3070.JPG" );
     #endif
-    
+
     if(dialog->exec()==QDialog::Accepted)
     {
         kDebug() << "Start creating the HDR layer" << endl;
@@ -198,7 +199,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
         Q_ASSERT(layer);
         KisGroupLayerSP parent;
         KisLayerSP above;
-        if (KisGroupLayer* pactive = qobject_cast<KisGroupLayer*>(m_view->image()->activeLayer().data()))
+        if (KisGroupLayer* pactive = qobject_cast<KisGroupLayer*>(m_view->layerManager()->activeLayer().data()))
         {
             parent = pactive;
         }
@@ -482,7 +483,7 @@ void Bracketing2HDRPlugin::computeCameraResponse()
             break;
     }
 #endif
-    
+
     // plot the curve
 //     m_wdgBracketing2HDR->plotWidget;
 //     QVector<double> m_intensityR, m_intensityG, m_intensityB, m_weights;

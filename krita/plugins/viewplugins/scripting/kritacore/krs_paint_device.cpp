@@ -101,7 +101,7 @@ void PaintDevice::endPainting()
     if(doc() !=0)
     {
         doc()->setModified(true);
-        doc()->image()->activeLayer()->setDirty();
+        m_device->setDirty();
     }
     if(m_cmd != 0)
     {

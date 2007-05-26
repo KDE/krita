@@ -45,15 +45,6 @@ Image::~Image()
 {
 }
 
-QObject* Image::activePaintLayer()
-{
-    KisPaintLayer* activePaintLayer = dynamic_cast< KisPaintLayer* >(m_image->activeLayer().data());
-    if(activePaintLayer)
-        return new PaintLayer(this, activePaintLayer, m_doc);
-    kWarning() << "The active layer is not paintable." << endl;
-    return 0;
-}
-
 int Image::width() const
 {
     return m_image->width();

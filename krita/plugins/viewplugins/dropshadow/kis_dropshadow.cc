@@ -55,7 +55,7 @@
 #include <KoChannelInfo.h>
 #include <kis_convolution_painter.h>
 #include <kis_layer_commands.h>
-
+#include <kis_layer_manager.h>
 #include "kis_dropshadow.h"
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
@@ -71,7 +71,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
     KisImageSP image = m_view->image();
     if (!image) return;
 
-    KisLayerSP src = image->activeLayer();
+    KisLayerSP src = m_view->layerManager()->activeLayer();
     if (!src) return;
 
     KisPaintDeviceSP dev = image->activeDevice();

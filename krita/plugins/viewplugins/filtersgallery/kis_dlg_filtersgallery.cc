@@ -34,6 +34,7 @@
 #include <kis_types.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
+#include <kis_layer_manager.h>
 
 #include <kis_filter_config_widget.h>
 
@@ -60,10 +61,10 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView2* view, QWidget* parent,const
     //m_widget->configWidgetHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     // Initialize preview widget
 
-    if (m_view->image() && m_view->image()->activeDevice())
+    if ( m_view->layerManager()->activeLayer() )
     {
-        m_widget->previewWidget->slotSetDevice( m_view->image()->activeDevice() );
-        m_widget->filtersList->setPaintDevice( m_view->image()->activeDevice() );
+        m_widget->previewWidget->slotSetDevice( m_view->layerManager()->activeLayer()->paintDevice() );
+        m_widget->filtersList->setPaintDevice( m_view->layerManager()->activeLayer()->paintDevice() );
     }
     connect( m_widget->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
     resize( minimumSizeHint());
@@ -92,7 +93,7 @@ void KisDlgFiltersGallery::selectionHasChanged ( QListWidgetItem * item )
     }
 
     KisImageSP img = m_view->image();
-    KisPaintLayer *activeLayer = dynamic_cast<KisPaintLayer*>(img->activeLayer().data());
+    KisPaintLayer *activeLayer = dynamic_cast<KisPaintLayer*>(m_view->layerManager()->activeLayer().data());
 
     if (activeLayer)
        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_widget->configWidgetHolder, activeLayer->paintDevice());

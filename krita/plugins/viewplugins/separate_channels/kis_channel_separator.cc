@@ -55,6 +55,7 @@
 #include <kis_view2.h>
 #include <kis_paint_device.h>
 #include <KoChannelInfo.h>
+#include <kis_layer_manager.h>
 
 #include "kis_channel_separator.h"
 
@@ -66,12 +67,9 @@ KisChannelSeparator::KisChannelSeparator(KisView2 * view)
 void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor)
 {
     KisImageSP image = m_view->image();
-    if (!image) return;
+    if ( !image ) return;
 
-    KisLayerSP layer = image->activeLayer();
-    if (!layer) return;
-
-    KisPaintDeviceSP src = image->activeDevice();
+    KisPaintDeviceSP src = m_view->layerManager()->activeDevice();
     if (!src) return;
 
     m_cancelRequested = false;

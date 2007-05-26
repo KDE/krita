@@ -47,6 +47,7 @@
 #include "dlg_histogram.h"
 #include "KoColorSpace.h"
 #include "kis_histogram.h"
+#include "kis_layer_manager.h"
 
 typedef KGenericFactory<Histogram> HistogramFactory;
 K_EXPORT_COMPONENT_FACTORY( kritahistogram, HistogramFactory( "krita" ) )
@@ -85,7 +86,7 @@ Histogram::~Histogram()
 }
 
 void Histogram::slotLayersChanged() {
-    m_action->setEnabled(m_img && m_img->activeLayer() && m_img->activeLayer()->visible());
+    m_action->setEnabled(m_img && m_view->layerManager()->activeLayer() && m_view->layerManager()->activeLayer()->visible());
 }
 
 void Histogram::slotActivated()
@@ -93,12 +94,18 @@ void Histogram::slotActivated()
     DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
     Q_CHECK_PTR(dlgHistogram);
 
-    KisPaintDeviceSP dev = m_view->image()->activeDevice();
-    if (dev)
-        dlgHistogram->setPaintDevice(dev);
+    KisLayerSP layer = m_view->layerManager()->activeLayer();
+    if ( layer ) {
+        KisPaintDeviceSP dev = layer->paintDevice();
 
-    if (dlgHistogram->exec() == QDialog::Accepted) {
-        // Do nothing; this is an informational dialog
+        if (dev)
+            dlgHistogram->setPaintDevice(dev);
+
+        if (dlgHistogram->exec() == QDialog::Accepted) {
+            // Do nothing; this is an informational dialog
+        }
+
+
     }
     delete dlgHistogram;
 }

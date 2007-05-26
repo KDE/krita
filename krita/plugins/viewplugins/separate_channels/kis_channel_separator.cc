@@ -69,7 +69,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     KisImageSP image = m_view->image();
     if ( !image ) return;
 
-    KisPaintDeviceSP src = m_view->layerManager()->activeDevice();
+    KisPaintDeviceSP src = m_view->activeDevice();
     if (!src) return;
 
     m_cancelRequested = false;

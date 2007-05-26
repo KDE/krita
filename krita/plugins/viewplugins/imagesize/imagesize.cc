@@ -133,7 +133,7 @@ void ImageSize::slotLayerSize()
 
     KisConfig cfg;
 
-    KisPaintDeviceSP dev = image->activeDevice();
+    KisPaintDeviceSP dev = m_view->activeDevice();
     QRect rc = dev->exactBounds();
 
     dlgLayerSize->setWidth(rc.width());
@@ -156,7 +156,7 @@ void ImageSize::slotSelectionScale()
 
     if (!image) return;
 
-    KisPaintDeviceSP layer = image->activeDevice();
+    KisPaintDeviceSP layer = m_view->activeDevice();
 
     if (!layer) return;
 
@@ -178,10 +178,10 @@ void ImageSize::slotSelectionScale()
     if (dlgSize->exec() == QDialog::Accepted) {
         qint32 w = dlgSize->width();
         qint32 h = dlgSize->height();
-        KisTransformWorker worker(layer->selection().data(), 
+        KisTransformWorker worker(layer->selection().data(),
                 (double)w / ((double)(rc.width())),
                 (double)h / ((double)(rc.height())),
-                0, 0, 0.0, 0, 0, m_view->statusBar()->progress(), 
+                0, 0, 0.0, 0, 0, m_view->statusBar()->progress(),
                 dlgSize->filterType()
                 );
         worker.run();

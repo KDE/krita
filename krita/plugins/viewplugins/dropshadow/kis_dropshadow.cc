@@ -71,10 +71,10 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
     KisImageSP image = m_view->image();
     if (!image) return;
 
-    KisLayerSP src = m_view->layerManager()->activeLayer();
+    KisLayerSP src = m_view->activeLayer();
     if (!src) return;
 
-    KisPaintDeviceSP dev = image->activeDevice();
+    KisPaintDeviceSP dev = m_view->activeDevice();
     if (!dev) return;
 
     m_cancelRequested = false;
@@ -124,8 +124,8 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
         shadowDev->move (xoffset,yoffset);
 
         KisGroupLayerSP parent = image->rootLayer();
-        if (image->activeLayer())
-            parent = image->activeLayer()->parentLayer().data();
+        if (m_view->activeLayer())
+            parent = m_view->activeLayer()->parentLayer().data();
 
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), i18n("Drop Shadow"), opacity, shadowDev));
         image->addLayer( KisLayerSP(l.data()), parent, src->nextSibling() );

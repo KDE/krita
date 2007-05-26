@@ -96,7 +96,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
             KisImageSP img = m_view->image();
             if (!img) return;
 
-            KisPaintDeviceSP dev = img->activeDevice();
+            KisPaintDeviceSP dev = m_view->activeDevice();
             if (!dev) return;
             QRect r1 = dev->exactBounds();
             QRect r2 = img->bounds();

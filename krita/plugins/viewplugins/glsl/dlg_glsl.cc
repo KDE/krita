@@ -100,7 +100,7 @@ DlgGlsl::DlgGlsl( KisView2 *  parent,
     m_d->imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     m_d->imageLabel->setScaledContents(true);
 
-    if ( m_d->dev = m_d->view->image()->activeDevice() )
+    if ( m_d->dev = m_d->view->activeDevice() )
         m_d->imageLabel->setPixmap( QPixmap::fromImage( m_d->dev->convertToQImage( 0 ) ) );
 
     m_d->scrollArea->setWidget(m_d->imageLabel);

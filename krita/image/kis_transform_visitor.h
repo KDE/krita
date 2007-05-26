@@ -79,7 +79,7 @@ public:
             Q_CHECK_PTR(t);
 	}
 
-        KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter);
+        KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter, true);
         tw.run();
 
         if (m_img->undo()) {

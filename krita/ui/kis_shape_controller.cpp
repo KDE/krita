@@ -220,9 +220,13 @@ void KisShapeController::setInitialShapeForView( KisView2 * view )
 {
     if(! m_d->layerShapes.isEmpty()) {
         Q_ASSERT(view->canvasBase());
+        Q_ASSERT(view->canvasBase()->shapeManager());
         KoSelection *selection = view->canvasBase()->shapeManager()->selection();
-        selection->select(m_d->layerShapes.values().first());
-        KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
+        if ( selection ) {
+            selection->select(m_d->layerShapes.values().first());
+            KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
+        }
+
     }
 
 }

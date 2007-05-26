@@ -420,7 +420,7 @@ void KisToolCurve::commitCurve()
 
 void KisToolCurve::paintCurve()
 {
-    KisPaintDeviceSP device = m_currentImage->activeDevice ();
+    KisPaintDeviceSP device = m_currentLayer->paintDevice();
     if (!device) return;
 
     KisPainter painter (device);
@@ -483,7 +483,7 @@ Q3ValueVector<QPointF> KisToolCurve::convertCurve()
 void KisToolCurve::selectCurve()
 {
     QApplication::setOverrideCursor(KisCursor::waitCursor());
-    KisPaintDeviceSP dev = m_currentImage->activeDevice();
+    KisPaintDeviceSP dev = m_currentLayer->paintDevice();
     bool hasSelection = dev->hasSelection();
     KisSelectedTransaction *t = 0;
     if (m_currentImage->undo()) t = new KisSelectedTransaction(m_transactionMessage, dev);

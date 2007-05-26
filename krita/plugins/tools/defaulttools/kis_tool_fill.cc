@@ -68,7 +68,7 @@ KisToolFill::~KisToolFill()
 bool KisToolFill::flood(int startX, int startY)
 {
 
-    KisPaintDeviceSP device = m_currentImage->activeDevice();
+    KisPaintDeviceSP device = m_currentLayer->paintDevice();
     if (!device) return false;
 
     if (m_fillOnlySelection) {
@@ -173,7 +173,7 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *e)
 {
 
     if (!m_canvas) return;
-    if (!m_currentImage || !m_currentImage->activeDevice()) return;
+    if (!m_currentImage || !m_currentLayer->paintDevice()) return;
     if (e->button() != Qt::LeftButton) return;
     int x, y;
 

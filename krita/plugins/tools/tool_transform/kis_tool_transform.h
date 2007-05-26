@@ -122,6 +122,7 @@ private:
     KisPaintDeviceSP m_origDevice;
     KisSelectionSP m_origSelection;
     KoCanvasBase *m_canvas;
+    KisLayerSP m_currentLayer;
 };
 
 class KisToolTransformFactory : public KoToolFactory {

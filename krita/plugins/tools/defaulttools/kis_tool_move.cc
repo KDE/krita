@@ -63,7 +63,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
 
         KisLayerSP dev;
 
-        if (!m_currentImage || !(dev = m_currentImage->activeLayer()))
+        if (!m_currentImage || !(dev = m_currentLayer))
             return;
 
         m_strategy.setImage(m_currentImage);

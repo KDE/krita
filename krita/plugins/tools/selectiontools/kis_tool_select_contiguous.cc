@@ -86,9 +86,9 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
             return;
 
-        KisPaintDeviceSP dev = m_currentImage->activeDevice();
+        KisPaintDeviceSP dev = m_currentLayer->paintDevice();
 
-        if (!dev || !m_currentImage->activeLayer()->visible())
+        if (!dev || !m_currentLayer->visible())
             return;
 
         QPoint pos = convertToIntPixelCoord(e);

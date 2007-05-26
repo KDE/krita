@@ -93,9 +93,9 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
         m_dragging = false;
         deactivate();
 
-        if (m_currentImage && m_currentImage->activeDevice()) {
+        if (m_currentImage && m_currentLayer->paintDevice()) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
-            KisPaintDeviceSP dev = m_currentImage->activeDevice();
+            KisPaintDeviceSP dev = m_currentLayer->paintDevice();
             bool hasSelection = dev->hasSelection();
             KisSelectedTransaction *t =  t = new KisSelectedTransaction(i18n("Outline Selection"), dev);
             KisSelectionSP selection = dev->selection();

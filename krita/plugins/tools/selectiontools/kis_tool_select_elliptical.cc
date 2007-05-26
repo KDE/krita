@@ -97,7 +97,7 @@ void KisToolSelectElliptical::mousePressEvent(KoPointerEvent *e)
 {
     if (m_canvas) {
 
-        if (m_currentImage && m_currentImage->activeDevice() && e->button() == Qt::LeftButton) {
+        if (m_currentImage && m_currentLayer->paintDevice() && e->button() == Qt::LeftButton) {
             clearSelection();
             m_startPos = m_endPos = m_centerPos = convertToPixelCoord(e);
             m_selecting = true;
@@ -157,8 +157,8 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
             if (!m_currentImage)
                 return;
 
-            if (m_currentImage && m_currentImage->activeDevice()) {
-                KisPaintDeviceSP dev = m_currentImage->activeDevice();
+            if (m_currentImage && m_currentLayer->paintDevice()) {
+                KisPaintDeviceSP dev = m_currentLayer->paintDevice();
 
                 bool hasSelection = dev->hasSelection();
                 KisSelectionSP selection = dev->selection();

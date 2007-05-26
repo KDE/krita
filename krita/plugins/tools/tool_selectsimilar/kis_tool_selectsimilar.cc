@@ -131,9 +131,9 @@ useCursor(m_subtractCursor);
         if (!(m_currentImage = m_currentImage))
             return;
 
-        KisPaintDeviceSP dev = m_currentImage->activeDevice();
+        KisPaintDeviceSP dev = m_currentLayer->paintDevice();
 
-        if (!dev || !m_currentImage->activeLayer()->visible())
+        if (!dev || !m_currentLayer->visible())
             return;
 
         QPointF pos = convertToPixelCoord(e);

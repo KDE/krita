@@ -90,7 +90,7 @@ void KisToolPolyline::finish()
 {
     m_dragging = false;
 
-    KisPaintDeviceSP device = m_currentImage->activeDevice ();
+    KisPaintDeviceSP device = m_currentLayer->paintDevice();
     if (!device) return;
 
     KisPainter painter (device);

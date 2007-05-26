@@ -97,10 +97,10 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
         if (!m_currentImage)
             return;
 
-        if (!m_currentImage->activeDevice())
+        if (!m_currentLayer->paintDevice())
             return;
 
-        KisPaintDeviceSP device = m_currentImage->activeDevice ();
+        KisPaintDeviceSP device = m_currentLayer->paintDevice();
         KisPainter painter (device);
         painter.beginTransaction (i18n("Star"));
         painter.setBounds( m_currentImage->bounds() );

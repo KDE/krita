@@ -133,7 +133,7 @@ void KisToolFilter::changeFilter( const KoID & id)
         delete m_filterConfigurationWidget;
     }
 
-    m_source = m_currentImage->activeDevice();
+    m_source = m_currentLayer->paintDevice();
     if (!m_source) return;
 
     m_filterConfigurationWidget = m_filter->createConfigurationWidget( m_optionWidget, m_source );

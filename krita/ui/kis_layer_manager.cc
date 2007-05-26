@@ -117,6 +117,7 @@ void KisLayerManager::activateLayer( KisLayerSP layer )
     if ( m_view && m_view->image() )
         m_view->image()->activateLayer( layer );
     m_activeLayer = layer;
+    layersUpdated();
 }
 
 

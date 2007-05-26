@@ -133,7 +133,7 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
     if (!m_currentImage)
         return;
 
-    KisPaintDeviceSP device = m_currentImage->activeDevice ();
+    KisPaintDeviceSP device = m_currentLayer->paintDevice();
     if (!device) return;
 
     if (m_dragging && m_currentBrush && event->button() == Qt::LeftButton) {

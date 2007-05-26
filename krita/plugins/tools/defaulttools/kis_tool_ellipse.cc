@@ -32,7 +32,7 @@
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
 #include "KoCanvasBase.h"
-
+#include "kis_layer.h"
 
 KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
     : KisToolShape(canvas, KisCursor::load("tool_ellipse_cursor.png", 6, 6)),
@@ -141,10 +141,10 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
         if (!m_currentImage)
             return;
 
-        if (!m_currentImage->activeDevice())
+        if (!m_currentLayer->paintDevice())
             return;
 
-        KisPaintDeviceSP device = m_currentImage->activeDevice ();
+        KisPaintDeviceSP device = m_currentLayer->paintDevice();
 	delete m_painter;
 	m_painter = new KisPainter( device );
 	Q_CHECK_PTR(m_painter);

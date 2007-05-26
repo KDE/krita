@@ -42,6 +42,7 @@
 #include "kis_progress_display_interface.h"
 #include "kis_tool_gradient.h"
 #include "kis_resource_provider.h"
+#include "kis_layer.h"
 
 KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
     : super(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6)),
@@ -134,7 +135,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
         KisPaintDeviceSP device;
 
-        if (m_currentImage && (device = m_currentImage->activeDevice())) {
+        if (m_currentImage && (device = m_currentLayer->paintDevice())) {
 
             KisGradientPainter painter(device);
 

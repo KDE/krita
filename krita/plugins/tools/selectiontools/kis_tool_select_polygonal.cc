@@ -141,9 +141,9 @@ void KisToolSelectPolygonal::keyPressEvent(QKeyEvent *e)
 
 void KisToolSelectPolygonal::finish()
 {
-    if (m_currentImage && m_currentImage->activeDevice()) {
+    if (m_currentImage && m_currentLayer->paintDevice()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        KisPaintDeviceSP dev = m_currentImage->activeDevice();
+        KisPaintDeviceSP dev = m_currentLayer->paintDevice();
 
         bool hasSelection = dev->hasSelection();
         KisSelectedTransaction *t = 0;

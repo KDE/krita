@@ -125,7 +125,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 
             KisPaintDeviceSP device;
             if (m_currentImage &&
-                (device = m_currentImage->activeDevice()) &&
+                (device = m_currentLayer->paintDevice()) &&
                 m_currentBrush) {
                 delete m_painter;
                 m_painter = new KisPainter( device );

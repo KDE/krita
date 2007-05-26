@@ -71,8 +71,8 @@ void KisToolCrop::activate()
 
 #if 0
     // No current crop rectangle, try to use the selection of the device to make a rectangle
-    if (m_subject && m_currentImage && m_currentImage->activeDevice()) {
-        KisPaintDeviceSP device = m_currentImage->activeDevice();
+    if (m_subject && m_currentImage && m_currentLayer->paintDevice()) {
+        KisPaintDeviceSP device = m_currentLayer->paintDevice();
         if (!device->hasSelection())
             return;
 
@@ -102,7 +102,7 @@ void KisToolCrop::mousePressEvent(KoPointerEvent *e)
 {
     if (m_canvas) {
 
-        if (m_currentImage && m_currentImage->activeDevice() && e->button() == Qt::LeftButton) {
+        if (m_currentImage && m_currentLayer->paintDevice() && e->button() == Qt::LeftButton) {
 
             QPoint pos = convertToIntPixelCoord(e);
 
@@ -438,7 +438,7 @@ void KisToolCrop::crop() {
             m_currentImage->undoAdapter()->beginMacro(i18n("Crop"));
 
         KisCropVisitor v(cropRect, false);
-        KisLayerSP layer = m_currentImage->activeLayer();
+        KisLayerSP layer = m_currentLayer;
         layer->accept(v);
 
         if (m_currentImage->undo())

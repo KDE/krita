@@ -102,7 +102,7 @@ void KisToolSelectRectangular::mousePressEvent(KoPointerEvent *e)
 {
     if (m_canvas) {
 
-        if (m_currentImage && m_currentImage->activeDevice() && e->button() == Qt::LeftButton) {
+        if (m_currentImage && m_currentLayer->paintDevice() && e->button() == Qt::LeftButton) {
             clearSelection();
             m_startPos = m_endPos = m_centerPos = convertToPixelCoord(e);
             m_selecting = true;
@@ -177,10 +177,10 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
 
             if (m_endPos.x() > m_currentImage->width())
                 m_endPos.setX(m_currentImage->width());
-            if (m_currentImage && m_currentImage->activeDevice()) {
+            if (m_currentImage && m_currentLayer->paintDevice()) {
 
 //                 QApplication::setOverrideCursor(KisCursor::waitCursor());
-                KisPaintDeviceSP dev = m_currentImage->activeDevice();
+                KisPaintDeviceSP dev = m_currentLayer->paintDevice();
                 bool hasSelection = dev->hasSelection();
 
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);

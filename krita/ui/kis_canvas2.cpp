@@ -213,6 +213,7 @@ KoShapeManager* KisCanvas2::shapeManager() const
         if ( shapeLayer )
             return shapeLayer->shapeManager();
     }
+    return m_d->shapeManager;
 }
 
 QRect KisCanvas2::viewRectFromDoc( const QRectF & rc )

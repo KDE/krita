@@ -29,6 +29,7 @@
 #include "kis_selection.h"
 #include "kis_paint_device.h"
 #include "kis_canvas2.h"
+#include "kis_view2.h"
 
 KisSelectionOptions::KisSelectionOptions(KisCanvas2 * canvas)
     : m_canvas(canvas)
@@ -54,9 +55,8 @@ int KisSelectionOptions::action()
 void KisSelectionOptions::slotActivated()
 {
     if (!m_canvas) return;
-     KisImageSP img = m_canvas->currentImage();
-    if (!img) return;
-    KisPaintDeviceSP dev = img->activeDevice();
+
+    KisPaintDeviceSP dev = m_canvas->view()->activeDevice();
     if (!dev) return;
 
     if (dev->hasSelection()) {

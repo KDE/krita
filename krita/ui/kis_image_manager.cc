@@ -96,7 +96,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg)
         return 0;
 
     for (KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it) {
-        new KisImportCatcher( *it, currentImage );
+        new KisImportCatcher( *it, m_view );
     }
 
     m_view->canvas()->update();

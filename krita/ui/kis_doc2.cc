@@ -807,7 +807,6 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
     painter.end();
 
     img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
-    img->activateLayer(KisLayerSP(layer));
 
     setCurrentImage(img );
 
@@ -855,7 +854,6 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColor
 
     img->setBackgroundColor(bgColor);
     img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
-    img->activateLayer(KisLayerSP(layer));
 
     setCurrentImage( img );
 

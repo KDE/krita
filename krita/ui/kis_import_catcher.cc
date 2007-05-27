@@ -26,9 +26,9 @@
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 
-KisImportCatcher::KisImportCatcher(const KUrl & url, KisImageSP image)
+KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
     : m_doc( new KisDoc2() )
-    , m_image( image )
+    , m_view( view )
     , m_url( url )
 {
     m_doc->openURL(url);
@@ -59,17 +59,17 @@ void KisImportCatcher::slotLoadingFinished()
             importedImageLayer->setName(m_url.prettyUrl());
 
             KisGroupLayerSP parent = 0;
-            KisLayerSP currentActiveLayer = m_image->activeLayer();
+            KisLayerSP currentActiveLayer = m_view->activeLayer();
 
             if (currentActiveLayer) {
                 parent = currentActiveLayer->parentLayer();
             }
 
             if (parent.isNull()) {
-                parent = m_image->rootLayer();
+                parent = m_view->image()->rootLayer();
             }
 
-            m_image->addLayer(importedImageLayer, parent, currentActiveLayer);
+            m_view->image()->addLayer(importedImageLayer, parent, currentActiveLayer);
         }
     }
     m_doc->deleteLater();

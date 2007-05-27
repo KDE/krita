@@ -143,6 +143,10 @@ public:
     */
     KisPaintDeviceSP projection() const;
 
+    KisPaintDeviceSP paintDevice() {
+        return 0;
+    }
+
     /**
        Update the given rect of the projection paint device.
 

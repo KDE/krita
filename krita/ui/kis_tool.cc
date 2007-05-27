@@ -103,6 +103,8 @@ void KisTool::resourceChanged( int key, const QVariant & v )
         break;
     case ( KisResourceProvider::HdrExposure ):
         m_currentExposure = static_cast<float>( v.toDouble() );
+    case ( KisResourceProvider::CurrentKritaLayer ):
+        m_currentLayer = v.value<KisLayerSP>();
     default:
         ;
         // Do nothing

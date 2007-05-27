@@ -39,6 +39,7 @@
 #include "squeezedcombobox.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_group_layer.h"
 
 KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorSpaceName, const QString & imageName)
     : WdgNewImage(parent)
@@ -164,7 +165,7 @@ void KisCustomImageWidget::buttonClicked()
 
     KisImageSP img = m_doc->image();
     if (img) {
-        KisLayerSP layer = img->activeLayer();
+        KisLayerSP layer = img->rootLayer()->firstChild();
         if (layer) {
             layer->setOpacity(backgroundOpacity());
         }

@@ -53,6 +53,11 @@ public:
             return 0;
         }
 
+    KisPaintDeviceSP paintDevice()
+        {
+            return 0;
+        }
+
     QIcon icon() const
         {
             return QIcon();

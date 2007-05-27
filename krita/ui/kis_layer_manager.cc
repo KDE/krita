@@ -550,7 +550,7 @@ void KisLayerManager::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP abov
         }
     }
 
-    KisDlgAdjustmentLayer dlg(img.data(), img->nextLayerName(), i18n("New Adjustment Layer"), m_view, "dlgadjustmentlayer");
+    KisDlgAdjustmentLayer dlg(m_activeLayer, img->nextLayerName(), i18n("New Adjustment Layer"), m_view, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {
         KisSelectionSP selection = KisSelectionSP(0);
         if (dev->hasSelection()) {

@@ -235,6 +235,8 @@ void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
                                                                tileUpdateRect.width(), tileUpdateRect.height(),
                                                                m_monitorProfile, m_exposure);
 
+#if 0 // This is the old method of painting selections -- should be
+      // ported to whatever Sven Langkamp is doing.
                     if (m_displaySelection) {
                         if (!m_image->activeLayer().isNull()) {
                             m_image->activeLayer()->paint(tileUpdateImage,
@@ -242,6 +244,7 @@ void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
                                                           tileUpdateRect.width(), tileUpdateRect.height());
                         }
                     }
+#endif
                     pixels = tileUpdateImage.bits();
                 } else {
                     pixels = new Q_UINT8[tileUpdateRect.width() * tileUpdateRect.height() * m_image->colorSpace()->pixelSize()];

@@ -76,12 +76,9 @@ public:
 
 
     /// Returns the paintDevice that accompanies this layer
-    KisPaintDeviceSP paintDevice() const;
+    KisPaintDeviceSP paintDevice();
 
-    KisPaintDeviceSP orignal() const
-        {
-            return paintDevice();
-        }
+    KisPaintDeviceSP orignal() const;
 
 //     /// Returns the paintDevice that accompanies this layer (or mask, see editMask)
 //     KisPaintDeviceSP paintDeviceOrMask() const;

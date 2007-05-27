@@ -86,7 +86,6 @@ set(kritaui_LIB_SRCS
     kis_selection_manager.cc
     kis_selection_options.cc
     kis_statusbar.cc
-    kis_strategy_move.cc
     kis_text_brush.cc
     kis_tool.cc
     kis_tool_freehand.cc
@@ -103,10 +102,10 @@ set(kritaui_LIB_SRCS
     kis_layer_shape.cc
     kis_mask_shape.cc
     kis_layer_container_shape.cc
-    kis_shape_controller.cpp
     kis_png_converter.cpp
     kis_channelflags_widget.cpp
     kis_abstract_canvas_widget.cpp
+    kis_shape_controller.cpp
 )
 
 if(HAVE_OPENGL AND HAVE_GLEW)

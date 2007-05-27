@@ -543,7 +543,7 @@ void KisView2::connectCurrentImage()
     m_d->canvas->connectCurrentImage();
 
     if( m_d->layerBox ) {
-        m_d->layerBox->setImage( img, m_d->doc->layerModel() );
+        m_d->layerBox->setImage( m_d->layerManager, img, m_d->doc->layerModel() );
         connect( m_d->doc->layerModel(), SIGNAL( layerActivated( KisLayerSP ) ), m_d->layerManager, SLOT( activateLayer( KisLayerSP ) ) );
     }
 
@@ -564,7 +564,7 @@ void KisView2::disconnectCurrentImage()
             img->disconnect( m_d->statusBar );
 
         if( m_d->layerBox )
-            m_d->layerBox->setImage(KisImageSP(0), 0);
+            m_d->layerBox->setImage(0, KisImageSP(0), 0);
         if( m_d->birdEyeBox )
             m_d->birdEyeBox->setImage(KisImageSP(0));
         m_d->canvas->disconnectCurrentImage();

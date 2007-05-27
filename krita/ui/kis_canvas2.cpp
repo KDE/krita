@@ -99,7 +99,6 @@ public:
     bool currentCanvasUsesOpenGLShaders;
     KoToolProxy * toolProxy;
     QImage canvasCache; // XXX: use KisQPainterImageContext to share
-                        //
                         // cache data between views. Finish that class.
     QPoint documentOffset;
 

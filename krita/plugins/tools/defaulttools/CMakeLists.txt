@@ -1,7 +1,6 @@
 set(kritadefaulttools_PART_SRCS
     default_tools.cc
     kis_tool_colorpicker.cc
-    kis_tool_move.cc
     kis_tool_brush.cc
     kis_tool_line.cc
     kis_tool_duplicate.cc

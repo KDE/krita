@@ -65,11 +65,17 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
+    kDebug() << "KisToolFreehand::mousePressEvent "
+             << ", current image: " << m_currentImage
+             << ", current layer: " << m_currentLayer
+             << ", current paint device: " << m_currentLayer->paintDevice()
+             << endl;
+
     if (!m_currentImage) return;
 
     if (!m_currentBrush) return;
 
-    if (!m_currentImage->activeDevice()) return;
+    if (!m_currentLayer->paintDevice()) return;
 
     if (e->button() == Qt::LeftButton) {
 
@@ -85,10 +91,10 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         QRegion r = m_painter->dirtyRegion();
 
         if (!m_paintOnSelection) {
-                m_currentImage->activeLayer()->setDirty(r);
+                m_currentLayer->setDirty(r);
         }
         else {
-            m_target->setDirty( r);
+            m_target->setDirty( r );
         }
         if (!m_paintIncremental) {
             m_incrementalDirtyRegion = r;
@@ -111,7 +117,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         QRegion region = m_painter->dirtyRegion();
 
         if (!m_paintOnSelection) {
-            m_currentImage->activeLayer()->setDirty(region);
+            m_currentLayer->setDirty(region);
         }
         else {
             // Just update the canvas
@@ -127,6 +133,8 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
+    kDebug() << "KisToolFreehand::mouseReleaseEvent " << m_currentLayer << endl;
+
     if (e->button() == Qt::LeftButton && m_mode == PAINT) {
         endPaint();
     }
@@ -136,10 +144,15 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 
 void KisToolFreehand::initPaint(KoPointerEvent *)
 {
-    if (!m_currentImage || !m_currentImage->activeDevice()) return;
+    kDebug() << "KisToolFreehand::initPaint "
+             << ", current layer: " << m_currentLayer
+             << ", current paint device: " << m_currentLayer->paintDevice()
+             << endl;
+
+    if (!m_currentLayer || !m_currentLayer->paintDevice()) return;
 
     if (m_compositeOp == 0 ) {
-        KisPaintDeviceSP device = m_currentImage->activeDevice();
+        KisPaintDeviceSP device = m_currentLayer->paintDevice();
         if (device) {
             m_compositeOp = device->colorSpace()->compositeOp( COMPOSITE_OVER );
         }
@@ -149,49 +162,48 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_dragDist = 0;
 
     // Create painter
-    KisPaintDeviceSP device;
-    if (m_currentImage && (device = m_currentImage->activeDevice())) {
-        if (m_painter)
-            delete m_painter;
+    KisPaintDeviceSP device = m_currentLayer->paintDevice();
 
-        if (!m_paintIncremental) {
+    if (m_painter)
+        delete m_painter;
 
-            KisIndirectPaintingSupport* layer;
-            if ((layer = dynamic_cast<KisIndirectPaintingSupport*>(
-                    m_currentImage->activeLayer().data()))) {
-                // Hack for the painting of single-layered layers using indirect painting,
-                // because the group layer would not have a correctly synched cache (
-                // because of an optimization that would happen, having this layer as
-                // projection).
-                KisLayerSP l = layer->layer();
-                KisPaintLayerSP pl = dynamic_cast<KisPaintLayer*>(l.data());
-                if (l->parentLayer() && (l->parentLayer()->parentLayer() == 0)
-                    && (l->parentLayer()->childCount() == 1)
-                    && l->parentLayer()->paintLayerInducesProjectionOptimization(pl)) {
-                    // If there's a mask, device could've been the mask. The induce function
-                    // should catch this, but better safe than sorry
+    if (!m_paintIncremental) {
 
-                    // XXX: What does this and why? (BSAR)
-                    l->parentLayer()->resetProjection(pl->paintDevice());
-                }
+        KisIndirectPaintingSupport* layer;
+        if ((layer = dynamic_cast<KisIndirectPaintingSupport*>(
+                 m_currentLayer.data()))) {
+            // Hack for the painting of single-layered layers using indirect painting,
+            // because the group layer would not have a correctly synched cache (
+            // because of an optimization that would happen, having this layer as
+            // projection).
+            KisLayerSP l = layer->layer();
+            KisPaintLayerSP pl = dynamic_cast<KisPaintLayer*>(l.data());
+            if (l->parentLayer() && (l->parentLayer()->parentLayer() == 0)
+                && (l->parentLayer()->childCount() == 1)
+                && l->parentLayer()->paintLayerInducesProjectionOptimization(pl)) {
+                // If there's a mask, device could've been the mask. The induce function
+                // should catch this, but better safe than sorry
 
-                m_target = new KisPaintDevice(m_currentImage->activeLayer().data(),
-                                              device->colorSpace());
-                layer->setTemporaryTarget(m_target);
-                layer->setTemporaryCompositeOp(m_compositeOp);
-                layer->setTemporaryOpacity(m_opacity);
-
-                if (device->hasSelection())
-                    m_target->setSelection(device->selection());
+                // XXX: What does this and why? (BSAR)
+                l->parentLayer()->resetProjection(pl->paintDevice());
             }
-        } else {
-            m_target = device;
-        }
-        m_painter = new KisPainter( m_target );
-        Q_CHECK_PTR(m_painter);
-        m_source = device;
-        m_painter->beginTransaction(m_transactionText);
+
+            m_target = new KisPaintDevice(m_currentLayer.data(),
+                                          device->colorSpace());
+            layer->setTemporaryTarget(m_target);
+            layer->setTemporaryCompositeOp(m_compositeOp);
+            layer->setTemporaryOpacity(m_opacity);
+
+            if (device->hasSelection())
+                m_target->setSelection(device->selection());
+            }
+    } else {
+        m_target = device;
     }
+    m_painter = new KisPainter( m_target );
+    Q_CHECK_PTR(m_painter);
+    m_source = device;
+    m_painter->beginTransaction(m_transactionText);
 
     m_painter->setPaintColor(m_currentFgColor);
     m_painter->setBackgroundColor(m_currentBgColor);
@@ -209,12 +221,12 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     }
 
 /*    kDebug(41007) << "target: " << m_target << "( " << m_target->name() << " )"
-            << " source: " << m_source << "( " << m_source->name() << " )"
-            << ", incremental " << m_paintIncremental
-            << ", paint on selection: " << m_paintOnSelection
-            << ", active device has selection: " << device->hasSelection()
-            << ", target has selection: " << m_target->hasSelection()
-            << endl;
+      << " source: " << m_source << "( " << m_source->name() << " )"
+      << ", incremental " << m_paintIncremental
+      << ", paint on selection: " << m_paintOnSelection
+      << ", active device has selection: " << device->hasSelection()
+      << ", target has selection: " << m_target->hasSelection()
+      << endl;
 */
 }
 
@@ -248,7 +260,7 @@ void KisToolFreehand::endPaint()
                     ++it;
                 }
                 KisIndirectPaintingSupport* layer =
-                    dynamic_cast<KisIndirectPaintingSupport*>(m_currentImage->activeLayer().data());
+                    dynamic_cast<KisIndirectPaintingSupport*>(m_currentLayer.data());
                 layer->setTemporaryTarget(0);
                 m_source->setDirty(painter.dirtyRegion());
 

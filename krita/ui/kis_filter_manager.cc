@@ -266,7 +266,7 @@ void KisFilterManager::updateGUI()
     KisImageSP img = m_d->view->image();
     if (!img) return;
 
-    KisLayerSP layer = img->activeLayer();
+    KisLayerSP layer = m_d->view->activeLayer();
     if (!layer) return;
 
     bool enable =  !(layer->locked() || !layer->visible());
@@ -311,7 +311,7 @@ bool KisFilterManager::apply()
     KisImageSP img = m_d->view->image();
     if (!img) return false;
 
-    KisPaintDeviceSP dev = img->activeDevice();
+    KisPaintDeviceSP dev = m_d->view->activeDevice();
     if (!dev) return false;
 
     QApplication::setOverrideCursor( Qt::WaitCursor );
@@ -399,7 +399,7 @@ void KisFilterManager::slotApplyFilter(int i)
     KisImageSP img = m_d->view->image();
     if (!img) return;
 
-    KisPaintDeviceSP dev = img->activeDevice();
+    KisPaintDeviceSP dev = m_d->view->activeDevice();
     if (!dev) return;
 
     if (dev->colorSpace()->willDegrade(m_d->lastFilter->colorSpaceIndependence())) {

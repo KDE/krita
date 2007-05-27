@@ -46,7 +46,6 @@
 #include "kis_config.h"
 #include "kis_canvas2.h"
 #include "kis_resource_provider.h"
-#include "kis_view2.h"
 #include "scale.h"
 #include "kis_doc2.h"
 #include "kis_grid_drawer.h"
@@ -126,7 +125,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     KisImageSP img = m_d->canvas->image();
     if (img == 0) return;
 
-    if (img->colorSpace()->hasHighDynamicRange() && 
+    if (img->colorSpace()->hasHighDynamicRange() &&
         (m_d->currentExposure != m_d->canvas->view()->resourceProvider()->HDRExposure())) {
         // XXX: If we had a dirty region we could just update areas as they become visible.
         QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -329,6 +328,8 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
 
     QImage canvasImage = m_d->canvas->canvasCache();
 
+#if 0 // This is the old-fashioned way of painting the selection mask.
+      // Port to whatever Sven Langkamp is doing now
     KisPaintDeviceSP dev = img->activeDevice();
     if (!dev) return;
 
@@ -337,7 +338,7 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
 
         selection->paint(&canvasImage);
     }
-
+#endif
     //canvasImage.fill( 0 );
 
     double sx, sy;

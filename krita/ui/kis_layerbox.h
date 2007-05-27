@@ -48,6 +48,7 @@ class KMenu;
 class KoDocumentEntry;
 class KoCompositeOp;
 class KisLayerModel;
+class KisLayerManager;
 
 /**
  * A widget that visualized the layer structure.
@@ -61,7 +62,7 @@ public:
     virtual ~KisLayerBox();
 
     void setUpdatesAndSignalsEnabled(bool enable);
-    void setImage(KisImageSP image, KisLayerModel * layerModel);
+    void setImage(KisLayerManager * layerManager, KisImageSP image, KisLayerModel * layerModel);
 
     virtual bool eventFilter(QObject *object, QEvent *event);
 
@@ -108,6 +109,7 @@ private:
     KMenu *m_newLayerMenu;
     KisImageSP m_image;
     KisLayerModel * m_layerModel;
+    KisLayerManager * m_layerManager;
 };
 
 class KisLayerBoxFactory : public KoDockFactory

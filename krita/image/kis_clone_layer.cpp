@@ -116,6 +116,11 @@ KisPaintDeviceSP KisCloneLayer::projection() const
     return m_d->projection;
 }
 
+KisPaintDeviceSP KisCloneLayer::paintDevice()
+{
+    return 0;
+}
+
 QIcon KisCloneLayer::icon() const
 {
     return KIcon("edit_copy");

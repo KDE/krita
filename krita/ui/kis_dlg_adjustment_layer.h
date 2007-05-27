@@ -51,7 +51,7 @@ public:
      * @param parent the widget parent of this dialog
      * @param name the QObject name, if any
      */
-    KisDlgAdjustmentLayer(KisImage * img,
+    KisDlgAdjustmentLayer(KisLayerSP layer,
                           const QString & layerName,
                           const QString & caption,
                           QWidget *parent = 0,
@@ -68,7 +68,7 @@ protected slots:
     void selectionHasChanged ( QListWidgetItem * item );
 
 private:
-    KisImage * m_image;
+    KisLayerSP m_activeLayer;
     KisPaintDeviceSP m_dev;
     KisFiltersListView * m_filtersList;
     KisPreviewWidget * m_preview;

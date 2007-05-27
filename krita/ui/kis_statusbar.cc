@@ -104,18 +104,18 @@ void KisStatusBar::imageSizeChanged( qint32 w, qint32 h )
 
 void KisStatusBar::setSelection( KisImageSP img )
 {
+    Q_UNUSED( img );
+
     if (m_statusBarSelectionLabel == 0) {
         return;
     }
 
-    if (img) {
-        KisPaintDeviceSP dev = img->activeDevice();
-        if (dev) {
-            if (dev->hasSelection()) {
-                QRect r = dev->selection()->selectedExactRect();
-                m_statusBarSelectionLabel->setText( i18n("Selection Active: x = %1 y = %2 width = %3 height = %4",r.x(),r.y(), r.width(), r.height()));
-                return;
-            }
+    KisPaintDeviceSP dev = m_view->activeDevice();
+    if (dev) {
+        if (dev->hasSelection()) {
+            QRect r = dev->selection()->selectedExactRect();
+            m_statusBarSelectionLabel->setText( i18n("Selection Active: x = %1 y = %2 width = %3 height = %4",r.x(),r.y(), r.width(), r.height()));
+            return;
         }
     }
 

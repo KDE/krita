@@ -70,6 +70,7 @@ KisLayerBox::KisLayerBox()
     : QDockWidget( i18n("Layers" ) )
     , Ui::WdgLayerBox()
     , m_image( 0 )
+    , m_layerManager( 0 )
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
@@ -137,7 +138,7 @@ KisLayerBox::~KisLayerBox()
 {
 }
 
-void KisLayerBox::setImage(KisImageSP img, KisLayerModel * layerModel)
+void KisLayerBox::setImage(KisLayerManager * layerManager, KisImageSP img, KisLayerModel * layerModel)
 {
     kDebug() << "KisLayerBox::setImage layer model " << layerModel << endl;
 
@@ -145,6 +146,7 @@ void KisLayerBox::setImage(KisImageSP img, KisLayerModel * layerModel)
         return;
 
     m_layerModel = layerModel;
+    m_layerManager = layerManager;
 
     if (m_image)
         m_image->disconnect(this);
@@ -194,17 +196,17 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 void KisLayerBox::updateUI()
 {
     Q_ASSERT(! m_image.isNull());
-    kDebug(41007)  << "###### KisLayerBox::updateUI " << m_image->activeLayer() << endl;
+    kDebug(41007)  << "###### KisLayerBox::updateUI " << m_layerManager->activeLayer() << endl;
 
-    bnDelete->setEnabled(m_image->activeLayer());
-    bnRaise->setEnabled(m_image->activeLayer() && (m_image->activeLayer()->prevSibling() || m_image->activeLayer()->parentLayer()));
-    bnLower->setEnabled(m_image->activeLayer() && m_image->activeLayer()->nextSibling());
-    doubleOpacity->setEnabled(m_image->activeLayer());
-    cmbComposite->setEnabled(m_image->activeLayer());
-    if (KisLayerSP active = m_image->activeLayer())
+    bnDelete->setEnabled(m_layerManager->activeLayer());
+    bnRaise->setEnabled(m_layerManager->activeLayer() && (m_layerManager->activeLayer()->prevSibling() || m_layerManager->activeLayer()->parentLayer()));
+    bnLower->setEnabled(m_layerManager->activeLayer() && m_layerManager->activeLayer()->nextSibling());
+    doubleOpacity->setEnabled(m_layerManager->activeLayer());
+    cmbComposite->setEnabled(m_layerManager->activeLayer());
+    if (KisLayerSP active = m_layerManager->activeLayer())
     {
-        if (m_image->activeDevice())
-            slotSetColorSpace(m_image->activeDevice()->colorSpace());
+        if (m_layerManager->activeLayer()->paintDevice())
+            slotSetColorSpace(m_layerManager->activeLayer()->paintDevice()->colorSpace());
         else
             slotSetColorSpace(m_image->colorSpace());
         slotSetOpacity(active->opacity() * 100.0 / 255);
@@ -276,7 +278,7 @@ void KisLayerBox::slotThumbnailView()
 void KisLayerBox::getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above)
 {
     KisGroupLayerSP root = m_image->rootLayer();
-    if (KisLayerSP active = m_image->activeLayer())
+    if (KisLayerSP active = m_layerManager->activeLayer())
     {
         if (KisGroupLayer* pactive = qobject_cast<KisGroupLayer*>(active.data()))
         {
@@ -378,7 +380,7 @@ void KisLayerBox::slotLowerClicked()
 
 void KisLayerBox::slotPropertiesClicked()
 {
-    if (KisLayerSP active = m_image->activeLayer())
+    if (KisLayerSP active = m_layerManager->activeLayer())
         emit sigRequestLayerProperties(active);
 }
 
@@ -395,7 +397,7 @@ void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
 QModelIndexList KisLayerBox::selectedLayers() const
 {
     QModelIndexList l = listLayers->selectionModel()->selectedIndexes();
-    if (l.count() < 2 && m_image->activeLayer() && !l.contains(listLayers->currentIndex()))
+    if (l.count() < 2 && m_layerManager->activeLayer() && !l.contains(listLayers->currentIndex()))
     {
         l.clear();
         l.append(listLayers->currentIndex());

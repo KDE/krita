@@ -31,7 +31,6 @@
 #include "kis_filter_configuration.h"
 #include "kis_dlg_adjustment_layer.h"
 #include "kis_filters_listview.h"
-#include "kis_image.h"
 #include "kis_previewwidget.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
@@ -42,13 +41,13 @@
 #include "kis_shape_layer.h"
 #include "kis_filter_configuration.h"
 
-KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
+KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisLayerSP layer,
                                              const QString & /*layerName*/,
                                              const QString & caption,
                                              QWidget *parent,
                                              const char *name)
     : KDialog(parent)
-    , m_image(img)
+    , m_activeLayer(layer)
     , m_currentFilter(0)
     , m_customName(false)
     , m_freezeName(false)
@@ -58,27 +57,26 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     setDefaultButton( Ok );
     setObjectName(name);
 
-    Q_ASSERT(img);
+    Q_ASSERT(layer);
 
-    KisLayerSP activeLayer = img->activeLayer();
     m_dev = 0;
 
-    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(activeLayer.data());
+    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(m_activeLayer.data());
     if (pl) {
         m_dev = pl->paintDevice();
     }
     else {
-        KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(activeLayer.data());
+        KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(m_activeLayer.data());
         if (gl) {
             m_dev = gl->projection();
         }
         else {
-            KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(activeLayer.data());
+            KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(m_activeLayer.data());
             if (al) {
                 m_dev = al->cachedPaintDevice();
             }
             else {
-                KisShapeLayer * sl = dynamic_cast<KisShapeLayer*>( activeLayer.data() );
+                KisShapeLayer * sl = dynamic_cast<KisShapeLayer*>( m_activeLayer.data() );
                 if ( sl ) {
                     m_dev = sl->projection();
                 }

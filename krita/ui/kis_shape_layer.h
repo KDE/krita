@@ -75,6 +75,9 @@ public:
 
     // Retrieve the projection for
     KisPaintDeviceSP projection() const;
+    KisPaintDeviceSP paintDevice() {
+        return 0;
+    }
 
     bool saveToXML(QDomDocument doc, QDomElement elem);
 

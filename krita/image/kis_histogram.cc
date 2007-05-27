@@ -32,7 +32,7 @@ KisHistogram::KisHistogram(const KisPaintLayerSP layer,
                            KoHistogramProducerSP producer,
                            const enumHistogramType type)
 {
-    KisPaintDeviceSP pd = layer->paintDevice();
+    KisPaintDeviceSP pd = layer->projection();
     m_dev = pd;
     m_type = type;
     m_producer = producer;

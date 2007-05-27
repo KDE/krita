@@ -129,8 +129,8 @@ QIcon KisPaintLayer::icon() const
 KoDocumentSectionModel::PropertyList KisPaintLayer::properties() const
 {
     KoDocumentSectionModel::PropertyList l = super::properties();
-    l << KoDocumentSectionModel::Property(i18n("Colorspace"), paintDevice()->colorSpace()->name());
-    if( KoColorProfile *profile = paintDevice()->colorSpace()->profile() )
+    l << KoDocumentSectionModel::Property(i18n("Colorspace"), m_d->paintdev->colorSpace()->name());
+    if( KoColorProfile *profile = m_d->paintdev->colorSpace()->profile() )
         l << KoDocumentSectionModel::Property(i18n("Profile"), profile->name());
     return l;
 }
@@ -155,7 +155,14 @@ QImage KisPaintLayer::createThumbnail(qint32 w, qint32 h)
 }
 
 /// Returns the paintDevice that accompanies this layer
-KisPaintDeviceSP KisPaintLayer::paintDevice() const
+KisPaintDeviceSP KisPaintLayer::paintDevice()
+{
+    kDebug() << "KisPaintLayer::paintDevice will return " << m_d->paintdev << endl;
+
+    return m_d->paintdev;
+}
+
+KisPaintDeviceSP KisPaintLayer::orignal() const
 {
     return m_d->paintdev;
 }

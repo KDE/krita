@@ -25,7 +25,7 @@
 
 #include <kis_types.h>
 
-class KisView;
+class KisView2;
 class KisDoc2;
 
 /**
@@ -42,7 +42,7 @@ class KisImportCatcher : QObject {
 
 public:
 
-    KisImportCatcher(const KUrl & url, KisImageSP image);
+    KisImportCatcher(const KUrl & url, KisView2* view);
 
 public slots:
 
@@ -50,7 +50,7 @@ public slots:
 
 private:
     KisDoc2 * m_doc;
-    KisImageSP m_image;
+    KisView2 * m_view;
     KUrl m_url;
 };
 

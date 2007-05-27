@@ -98,6 +98,7 @@ void KisToolPaint::paint(QPainter&, KoViewConverter &)
 
 void KisToolPaint::mouseReleaseEvent( KoPointerEvent *e )
 {
+    kDebug() << "KisToolPaint::mouseReleaseEvent. Current layer is " << m_currentLayer << endl;
     if(e->button() == Qt::MidButton)
     {
         KoCanvasResourceProvider * resourceProvider = 0;
@@ -190,9 +191,8 @@ void KisToolPaint::slotSetCompositeMode(const KoCompositeOp* compositeOp)
 
 void KisToolPaint::updateCompositeOpComboBox()
 {
-    KisImageSP img = image();
-    if (m_cmbComposite && img) {
-        KisPaintDeviceSP device = img->activeDevice();
+    if (m_cmbComposite && m_currentLayer) {
+        KisPaintDeviceSP device = m_currentLayer->paintDevice();
 
         if (device) {
             QList<KoCompositeOp*> compositeOps = device->colorSpace()->userVisiblecompositeOps();

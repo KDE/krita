@@ -57,45 +57,50 @@
 class KoOpenDocumentLoader::Private
 {
     public:
+        explicit Private() {}
+        ~Private() {
+            qDeleteAll(listStyles);
+        }
+
         KoStyleManager* stylemanager;
-        KoParagraphStyle *paragraphStyle(const QString &name);
-        KoCharacterStyle *characterStyle(const QString &name);
-        void addStyle (KoParagraphStyle *style);
-        void addStyle (KoCharacterStyle *style);
+
+        KoParagraphStyle *paragraphStyle(const QString &name) {
+            if (paragraphStyles.contains(name))
+                return paragraphStyles[name];
+            KoParagraphStyle *style = stylemanager->paragraphStyle(name);
+            if (style)
+                paragraphStyles[name] = style;
+            return style;
+        }
+        KoCharacterStyle *characterStyle(const QString &name) {
+            if (characterStyles.contains(name))
+                return characterStyles[name];
+            KoCharacterStyle *style = stylemanager->characterStyle(name);
+            if (style)
+                characterStyles[name] = style;
+            return style;
+        }
+        KoListStyle *listStyle(const QString &name) {
+            return listStyles.contains(name) ? listStyles[name] : 0;
+        }
+
+        void addStyle (KoParagraphStyle *style) {
+            stylemanager->add(style);
+            paragraphStyles[style->name()] = style;
+        }
+        void addStyle (KoCharacterStyle *style) {
+            stylemanager->add(style);
+            characterStyles[style->name()] = style;
+        }
+        void addStyle (KoListStyle *style) {
+            listStyles[style->name()] = style;
+        }
+
     private:
         QHash<QString, KoParagraphStyle *>paragraphStyles;
         QHash<QString, KoCharacterStyle *>characterStyles;
+        QHash<QString, KoListStyle *>listStyles;
 };
-
-KoParagraphStyle *KoOpenDocumentLoader::Private::paragraphStyle (const QString &name) {
-    if (paragraphStyles.contains(name)) {
-        return paragraphStyles[name];
-    }
-    KoParagraphStyle *style = stylemanager->paragraphStyle(name);
-    if (style)
-        paragraphStyles[name] = style;
-    return style;
-}
-
-KoCharacterStyle *KoOpenDocumentLoader::Private::characterStyle (const QString &name) {
-    if (characterStyles.contains(name)) {
-        return characterStyles[name];
-    }
-    KoCharacterStyle *style = stylemanager->characterStyle(name);
-    if (style)
-        characterStyles[name] = style;
-    return style;
-}
-
-void KoOpenDocumentLoader::Private::addStyle (KoParagraphStyle *style) {
-    stylemanager->add(style);
-    paragraphStyles[style->name()] = style;
-}
-
-void KoOpenDocumentLoader::Private::addStyle (KoCharacterStyle *style) {
-    stylemanager->add(style);
-    characterStyles[style->name()] = style;
-}
 
 KoOpenDocumentLoader::KoOpenDocumentLoader(KoStyleManager* stylemanager)
     : QObject(), d(new Private())
@@ -213,6 +218,19 @@ void KoOpenDocumentLoader::loadAllStyles(KoOasisLoadingContext& context)
     // except how we present them to the user.
     loadStyles(context, context.oasisStyles().autoStyles("paragraph").values());
     loadStyles(context, context.oasisStyles().customStyles("paragraph").values());
+
+    // handle the list styles
+    QHash<QString, KoXmlElement*> listStyles = context.oasisStyles().listStyles();
+    for(QHash<QString, KoXmlElement*>::Iterator it = listStyles.begin(); it != listStyles.end(); ++it) {
+        #ifdef KOOPENDOCUMENTLOADER_DEBUG
+            kDebug()<<"KoOpenDocumentLoader::loadAllStyles listStyle="<<it.key()<<endl;
+        #endif
+        KoListStyle* style = new KoListStyle();
+        style->setName(it.key());
+        style->loadOasis(context, *it.value());
+        d->addStyle(style);
+    }
+
 }
 
 void KoOpenDocumentLoader::loadSettings(KoOasisLoadingContext& context, const QDomDocument& settings)
@@ -536,16 +554,57 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
     QString styleName;
     if ( parent.hasAttributeNS( KoXmlNS::text, "style-name" ) ) {
         styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
+        /*
         KoXmlElement* listElem = context.oasisStyles().listStyles()[ styleName ];
-        if(listElem) {
-            context.addStyles( listElem, "paragraph" );
-        }
+        if(listElem) context.addStyles( listElem, "paragraph" );
+        */
     }
 
+    // Get the KoListStyle the name may reference to
+    KoListStyle* listStyle = d->listStyle(styleName);
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug()<<"KoOpenDocumentLoader::loadList styleName="<<styleName<<endl;
+        kDebug()<<"KoOpenDocumentLoader::loadList styleName="<<styleName<<" listStyle="<<(listStyle ? listStyle->name() : "NULL")<<endl;
     #endif
+    if( ! listStyle ) {
+        listStyle = new KoListStyle();
+        listStyle->setName(styleName);
+        d->addStyle(listStyle);
+    }
 
+    // Set the style and create the textlist
+    QTextListFormat listformat;
+    QTextList* list = cursor.insertList(listformat);
+
+    // we need at least one item, so add a dummy-item we remove later again
+    cursor.insertBlock();
+    QTextBlock prev = cursor.block();
+
+    // Iterate over list items and add them to the textlist
+    KoXmlElement e;
+    forEachElement(e, parent) {
+        if( e.isNull() ) continue;
+        /*
+        //TODO handle also the other item properties
+        if( e.hasAttributeNS( KoXmlNS::text, "start-value" ) ) {
+            int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString::null).toInt();
+            KoListLevelProperties p = KoListLevelProperties::fromTextList(list);
+            p.setStartValue(startValue);
+            QTextListFormat f = list->format();
+            p.applyStyle(f);
+            list->setFormat(f);
+        }
+        */
+        listStyle->applyStyle(cursor.block());
+        loadBody(context, e, cursor);
+    }
+
+    // add the new blocks to the list
+    QTextBlock current = cursor.block();
+    for(QTextBlock b = prev; b.isValid() && b != current; b = b.next())
+        list->add(b);
+    list->removeItem(0); // remove the first dummy item again
+
+    /*
     // Get the matching paragraph style
     //QString userStyleName = context.styleStack().userStyleName( "paragraph" );
     KoParagraphStyle *paragStyle = d->paragraphStyle(styleName);
@@ -568,41 +627,7 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
     listStyle->setName(styleName);
     listStyle->loadOasis(context);
     paragStyle->setListStyle(*listStyle);
-
-    // Set the style and create the textlist
-    QTextListFormat listformat;
-    KoListLevelProperties listProperties = listStyle->level(0);
-    listProperties.applyStyle(listformat);
-    QTextList* list = cursor.insertList(listformat);
-
-    // we need at least one item, so add a dummy-item we remove later again
-    cursor.insertBlock();
-    QTextBlock prev = cursor.block();
-
-    // Iterate over list items and add them to the textlist
-    KoXmlElement e;
-    forEachElement(e, parent) {
-        if( e.isNull() ) continue;
-        //TODO handle also the other item properties
-        if( e.hasAttributeNS( KoXmlNS::text, "start-value" ) ) {
-            int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString::null).toInt();
-            KoListLevelProperties p = KoListLevelProperties::fromTextList(list);
-            p.setStartValue(startValue);
-            QTextListFormat f = list->format();
-            p.applyStyle(f);
-            list->setFormat(f);
-        }
-        loadBody(context, e, cursor);
-    }
-
-    QTextBlock current = cursor.block();
-    for(QTextBlock b = prev; b.isValid() && b != current; b = b.next()) {
-        //paragStyle->applyStyle(b);
-        //listStyle->applyStyle(b);
-        list->add(b);
-    }
-    list->removeItem(0);
-    delete listStyle;
+    */
 
     QTextBlockFormat emptyTbf;
     QTextCharFormat emptyCf;

@@ -245,11 +245,12 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list) {
     return llp;
 }
 
-void KoListLevelProperties::loadOasis(KoOasisLoadingContext& context, KoXmlElement& style) {
-    if( style.localName() == "list-level-style-bullet" ) { // list with bullets
+void KoListLevelProperties::loadOasis(KoOasisLoadingContext& context, const KoXmlElement& style) {
 
+    if( style.localName() == "list-level-style-bullet" ) { // list with bullets
         //1.6: KoParagCounter::loadOasisListStyle
         QString bulletChar = style.isNull() ? QString() : style.attributeNS( KoXmlNS::text, "bullet-char", QString() );
+        //kDebug()<<"KoListLevelProperties::loadOasis list-level-style-bullet bulletChar="<<bulletChar<<endl;
         if( bulletChar.isEmpty() ) { // list without any visible bullets
             setStyle(KoListStyle::NoItem);
         }
@@ -312,6 +313,7 @@ void KoListLevelProperties::loadOasis(KoOasisLoadingContext& context, KoXmlEleme
     else if( style.localName() == "list-level-style-number" ) { // it's a numbered list
 
         const QString format = style.attributeNS( KoXmlNS::style, "num-format", QString() );
+        //kDebug()<<"KoListLevelProperties::loadOasis list-level-style-number format="<<format<<endl;
         if( format.isEmpty() ) {
             setStyle(KoListStyle::NoItem);
         }
@@ -346,6 +348,7 @@ void KoListLevelProperties::loadOasis(KoOasisLoadingContext& context, KoXmlEleme
 
     const QString level = style.attributeNS( KoXmlNS::text, "level", QString() );
     if( ! level.isNull() ) {
+        //kDebug()<<"KoListLevelProperties::loadOasis "<<style.localName()<<" LEVEL="<<level<<endl;
         const int i = level.toInt();
         setLevel(i);
         setDisplayLevel(i);

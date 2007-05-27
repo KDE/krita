@@ -201,23 +201,14 @@ KoListStyle* KoListStyle::fromTextList(QTextList *list) {
     return answer;
 }
 
-void KoListStyle::loadOasis(KoOasisLoadingContext& context)
+void KoListStyle::loadOasis(KoOasisLoadingContext& context, const KoXmlElement& style)
 {
-    //kDebug()<<"KoListStyle::loadOasis"<<endl;
+    //kDebug()<<"KoListStyle::loadOasis style.localName="<<style.localName()<<endl;
     //KoStyleStack &styleStack = context.styleStack();
-
-    KoListLevelProperties properties;
-    properties.setLevel(0);
-    KoXmlElement* listElem = context.oasisStyles().listStyles()[ name() ];
-    if( listElem ) {
-        KoXmlElement style = listElem->firstChildElement("list-level-style-bullet");
-        if( ! style.isNull() )
-            properties.loadOasis(context, style);
-        else {
-            style = listElem->firstChildElement("list-level-style-number");
-            properties.loadOasis(context, style);
-        }
+    KoXmlElement styleElem;
+    forEachElement(styleElem, style) {
+        KoListLevelProperties properties;
+        properties.loadOasis(context, styleElem);
+        setLevel(properties);
     }
-
-    setLevel(properties);
 }

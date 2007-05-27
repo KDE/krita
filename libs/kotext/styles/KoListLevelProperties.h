@@ -103,7 +103,7 @@ public:
     /**
      * Load the properties from the \p style using the OpenDocument format.
      */
-    void loadOasis(KoOasisLoadingContext& context, KoXmlElement& style);
+    void loadOasis(KoOasisLoadingContext& context, const KoXmlElement& style);
 
 private:
     void setProperty(int key, const QVariant &value);

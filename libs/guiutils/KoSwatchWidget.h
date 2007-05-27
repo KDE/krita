@@ -20,7 +20,7 @@
 #ifndef KOSWATCHWIDGET_H_
 #define KOSWATCHWIDGET_H_
 
-#include <QPushButton>
+#include <QToolButton>
 
 #include <koguiutils_export.h>
 
@@ -34,7 +34,7 @@ class KoColor;
  * a larger widget is popped up. This larger widget provides lots of functionallity to choose the color from
  * a swatch.
  */
-class KOGUIUTILS_EXPORT KoSwatchWidget : public QPushButton
+class KOGUIUTILS_EXPORT KoSwatchWidget : public QToolButton
 {
 
     Q_OBJECT
@@ -66,12 +66,12 @@ signals:
     void colorChanged(KoColor &color, bool final);
 
 protected:
-    virtual void enterEvent(QEvent *); ///< reimplemented from QComboBox
     virtual void hideEvent(QHideEvent *); ///< reimplemented from QComboBox
+    virtual void mousePressEvent(QMouseEvent *e); ///< reimplemented from QComboBox
     virtual void changeEvent(QEvent *e); ///< reimplemented from QComboBox
 
 private:
-//    Q_PRIVATE_SLOT(d, void sliderValueChanged(int value))
+//    Q_PRIVATE_SLOT(d, void showPopup())
 
     class KoSwatchWidgetPrivate;
     KoSwatchWidgetPrivate * const d;

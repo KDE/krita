@@ -29,6 +29,11 @@ KoColorPatch::~KoColorPatch()
 {
 }
 
+QSize KoColorPatch::sizeHint() const
+{
+    return QSize(22,22);
+}
+
 void KoColorPatch::setColor(const KoColor c)
 {
     m_color = c;

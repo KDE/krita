@@ -21,16 +21,20 @@
 #include <QTimer>
 #include <QApplication>
 #include <QSize>
-#include <QSlider>
+#include <QPushButton>
 #include <QHBoxLayout>
 #include <QFrame>
-#include <QMenu>
+//#include <QMenu>
+#include <QLabel>
 #include <QMouseEvent>
-#include <QDoubleSpinBox>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kicon.h>
+
+#include <KoColorPatch.h>
+#include "KoColorSpaceRegistry.h"
 
 class KoSwatchContainer : public QFrame
 {
@@ -38,10 +42,6 @@ public:
     KoSwatchContainer(KoSwatchWidget *parent) : QFrame(parent, Qt::Popup ), m_parent(parent) {}
 
 protected:
-    virtual void leaveEvent(QEvent *)
-    {
-        hide();
-    }
 
 private:
     KoSwatchWidget *m_parent;
@@ -53,13 +53,36 @@ public:
     QTimer m_timer;
     KoSwatchContainer *container;
     bool firstShowOfContainer;
+    QHBoxLayout *recentsLayout;
+    KoColorPatch *recentPathces[6];
+    int numRecents;
 
     void showPopup();
     void hidePopup();
+    void addRecent(KoColor &);
 };
 
+void KoSwatchWidget::KoSwatchWidgetPrivate::addRecent(KoColor &color)
+{
+    if(numRecents<6) {
+        recentPathces[numRecents] = new KoColorPatch(container);
+        recentPathces[numRecents]->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+        recentPathces[numRecents]->resize(22,22);
+        recentPathces[numRecents]->setFrameShape(QFrame::Box);
+        recentsLayout->insertWidget(numRecents, recentPathces[numRecents]);
+        numRecents++;
+    }
+    // shift colors to the right 
+    for (int i = numRecents- 1; i >1; i--) {
+        kDebug() << "set " << i << " to value of " << i-1 << endl;
+    }
+
+    //Finally set the recent color
+    recentPathces[0]->setColor(color);
+}
+
 KoSwatchWidget::KoSwatchWidget(QWidget *parent)
-   : QPushButton(parent)
+   : QToolButton(parent)
     ,d(new KoSwatchWidgetPrivate())
 {
     d->thePublic = this;
@@ -68,18 +91,48 @@ KoSwatchWidget::KoSwatchWidget(QWidget *parent)
 
     d->firstShowOfContainer = true;
 
-/*
-    QHBoxLayout * l = new QHBoxLayout();
+    QVBoxLayout * l = new QVBoxLayout();
     l->setMargin(2);
     l->setSpacing(2);
-    l->addWidget(d->slider);
-    d->container->setLayout(l);
-*/    d->container->resize(200, 200);
 
-    resize(20, 20);
-/*
-    connect(d->slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
-    connect(d->slider, SIGNAL(sliderReleased()), SLOT(sliderReleased()));
+    l->addWidget(new QLabel("Recent:"));
+
+    d->numRecents = 0;
+    d->recentsLayout = new QHBoxLayout();
+    l->addLayout(d->recentsLayout);
+    d->recentsLayout->setMargin(2);
+    d->recentsLayout->setSpacing(2);
+    d->recentsLayout->addStretch(1);
+
+    for(int i = 0; i<5; i++)
+    {
+        KoColor color(KoColorSpaceRegistry::instance()->rgb8());
+        color.fromQColor(QColor(128+15*i,0,0));
+        d->addRecent(color);
+    }
+
+    l->addWidget(new QLabel("Suggestions:"));
+        QHBoxLayout *hl = new QHBoxLayout();
+        hl->setMargin(2);
+        hl->setSpacing(2);
+        l->addLayout(hl);
+
+        for(int i = 0; i<6; i++)
+        {
+            KoColorPatch *patch = new KoColorPatch(d->container);
+            KoColor color(KoColorSpaceRegistry::instance()->rgb8());
+            color.fromQColor(QColor(0,128+15*i,0));
+            patch->setColor(color);
+            patch->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+            patch->resize(22,22);
+            patch->setFrameShape(QFrame::Box);
+            hl->addWidget(patch);
+        }
+    d->container->setLayout(l);
+
+    setIcon(KIcon("textcolor"));
+
+/*    connect(d->slider, SIGNAL(sliderReleased()), SLOT(sliderReleased()));
     connect(lineEdit(), SIGNAL(editingFinished()), SLOT(lineEditFinished()));
 */
 }
@@ -96,7 +149,7 @@ void KoSwatchWidget::KoSwatchWidgetPrivate::showPopup()
         firstShowOfContainer = false;
     }
 
-    container->move(thePublic->mapToGlobal(QPoint(0,0)));
+    container->move(thePublic->mapToGlobal(QPoint(0,-25)));
 
     container->raise();
     container->show();
@@ -112,10 +165,11 @@ void KoSwatchWidget::hideEvent(QHideEvent *)
     d->hidePopup();
 }
 
-void KoSwatchWidget::enterEvent(QEvent *)
+void KoSwatchWidget::mousePressEvent(QMouseEvent *)
 {
     d->showPopup();
 }
+
 
 void KoSwatchWidget::changeEvent(QEvent *e)
 {
@@ -131,7 +185,7 @@ void KoSwatchWidget::changeEvent(QEvent *e)
         default:
             break;
     }
-    QPushButton::changeEvent(e);
+    QToolButton::changeEvent(e);
 }
 
 #include "KoSwatchWidget.moc"

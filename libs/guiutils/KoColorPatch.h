@@ -31,13 +31,14 @@ class KOGUIUTILS_EXPORT KoColorPatch : public QFrame
 {
   Q_OBJECT
 public:
-  explicit KoColorPatch( QWidget *parent );
-  virtual ~KoColorPatch();
+    explicit KoColorPatch( QWidget *parent );
+    virtual ~KoColorPatch();
 
-  void setColor( const KoColor c );
+    void setColor( const KoColor c );
 
 protected:
-  virtual void paintEvent    ( QPaintEvent * pe );
+    virtual void paintEvent    ( QPaintEvent * pe );
+    virtual QSize sizeHint() const; ///< reimplemented from QComboBox
 
 private:
   KoColor m_color;

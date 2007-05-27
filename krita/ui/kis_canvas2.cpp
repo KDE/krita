@@ -427,4 +427,8 @@ bool KisCanvas2::usingHDRExposureProgram()
     return false;
 }
 
+void KisCanvas2::updateInputMethodInfo() {
+    // TODO call (the protected) QWidget::updateMicroFocus() on the proper canvas widget...
+}
+
 #include "kis_canvas2.moc"

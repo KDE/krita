@@ -36,6 +36,7 @@ class KoToolSelection;
 class KoTool;
 class KoCanvasBase;
 class KoCanvasController;
+class QInputMethodEvent;
 
 /**
  * Simple proxy interface that provides a point d'appui for canvas
@@ -77,6 +78,10 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
     /// Forwarded to the current KoTool
     void wheelEvent ( QWheelEvent * event, const QPointF &point  );
+    /// Forwarded to the current KoTool
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    /// Forwarded to the current KoTool
+    void inputMethodEvent(QInputMethodEvent *event);
 
     /**
      * Retrieves the entire collection of actions for the active tool

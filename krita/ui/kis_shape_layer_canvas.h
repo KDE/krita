@@ -59,6 +59,7 @@ public:
     KoViewConverter *viewConverter();
     QWidget* canvasWidget();
     KoUnit unit();
+    virtual void updateInputMethodInfo() {}
 
 private slots:
     void repaint();

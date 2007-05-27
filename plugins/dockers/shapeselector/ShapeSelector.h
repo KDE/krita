@@ -89,6 +89,7 @@ private:
             KoViewConverter * viewConverter() { return &m_converter; }
             QWidget *canvasWidget () { return m_parent; }
             KoUnit unit() { return KoUnit(KoUnit::Millimeter); }
+            void updateInputMethodInfo() {}
 
         protected: // event handlers
             void mouseMoveEvent(QMouseEvent *e);

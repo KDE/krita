@@ -36,12 +36,19 @@ public:
     explicit KoPACanvas( KoPAView * view, KoPADocument * doc );
     ~KoPACanvas();
 
-    void gridSize( double *horizontal, double *vertical ) const;
-    bool snapToGrid() const;
-    void addCommand( QUndoCommand *command );
-    KoShapeManager * shapeManager() const;
+    /// reimplemented method
+    virtual void gridSize( double *horizontal, double *vertical ) const;
+    /// reimplemented method
+    virtual bool snapToGrid() const;
+    /// reimplemented method
+    virtual void addCommand( QUndoCommand *command );
+    /// reimplemented method
+    virtual KoShapeManager * shapeManager() const;
     KoShapeManager * masterShapeManager() const;
-    void updateCanvas( const QRectF& rc );
+    /// reimplemented method
+    virtual void updateCanvas( const QRectF& rc );
+    /// reimplemented method
+    virtual void updateInputMethodInfo();
 
     KoToolProxy * toolProxy() { return m_toolProxy; }
     KoViewConverter *viewConverter();

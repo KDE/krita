@@ -91,6 +91,26 @@ void KoTool::wheelEvent( KoPointerEvent * e ) {
     e->ignore();
 }
 
+QVariant KoTool::inputMethodQuery(Qt::InputMethodQuery query) const {
+    if(m_canvas->canvasWidget() == 0)
+        return QVariant();
+
+    switch(query) {
+    case Qt::ImMicroFocus:
+        return QRect(m_canvas->canvasWidget()->width()/2, 0, 1, m_canvas->canvasWidget()->height());
+    case Qt::ImFont:
+        return m_canvas->canvasWidget()->font();
+    default:
+        return QVariant();
+    }
+}
+
+void KoTool::inputMethodEvent (QInputMethodEvent * event) {
+    if(! event->commitString().isEmpty()) {
+        QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
+        keyPressEvent(&ke);
+    }
+}
 
 void KoTool::useCursor(QCursor cursor, bool force) {
     if(!force && cursor.shape() != Qt::BitmapCursor && cursor.shape() == d->previousCursor.shape())

@@ -35,6 +35,7 @@ class QAction;
 class QKeyEvent;
 class QWidget;
 class QPainter;
+class QInputMethodEvent;
 
 /**
  * Abstract base class for all tools. Tools can create or manipulate
@@ -163,6 +164,24 @@ public:
      * @param event state of this wheel event
      */
     virtual void wheelEvent ( KoPointerEvent * event );
+
+    /**
+     * This method is used to query a set of properties of the tool to be
+     * able to support complex input method operations as support for surrounding
+     * text and reconversions.
+     * Default implementation returns simple defaults, for tools that support keyboard
+     * entry it would be good to reimplement it.
+     * @param query specifies which property is queried.
+     */
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+
+    /**
+     * This method is called whenever the user types any type of complex text. This is defined as any text
+     * that takes more than one keystroke to enter.
+     * Any tool that accepts text should consider reimplementing this.
+     */
+    virtual void inputMethodEvent (QInputMethodEvent * event);
+
 
     /**
      * Set the identifier code from the KoToolFactory that created this tool.

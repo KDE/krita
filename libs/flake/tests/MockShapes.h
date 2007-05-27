@@ -62,6 +62,7 @@ public:
     KoViewConverter *viewConverter() { return 0; }
     QWidget* canvasWidget() { return 0; }
     KoUnit unit() { return KoUnit(KoUnit::Millimeter); }
+    void updateInputMethodInfo() {}
 };
 
 class MockViewConverter : public KoViewConverter {

@@ -147,6 +147,11 @@ public:
     virtual QPoint documentOrigin() { return QPoint(0,0); }
 
     /**
+     * This method should somehow call QWidget::updateMicroFocus() on the canvas widget.
+     */
+    virtual void updateInputMethodInfo() = 0;
+
+    /**
      * Return a pointer to the resource provider associated with this
      * canvas. The resource provider contains per-canvas settings such
      * as current foreground and background color.

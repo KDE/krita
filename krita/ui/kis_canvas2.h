@@ -79,6 +79,8 @@ public: // KoCanvasBase implementation
 
     void updateCanvas(const QRectF& rc);
 
+    virtual void updateInputMethodInfo();
+
     KoViewConverter *viewConverter();
 
     QWidget* canvasWidget();

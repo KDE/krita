@@ -374,11 +374,14 @@ void KoInteractionTool::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void KoInteractionTool::repaintDecorations() {
+    Q_ASSERT(koSelection());
     if ( koSelection()->count() > 0 )
         m_canvas->updateCanvas(handlesSize());
 }
 
 KoSelection *KoInteractionTool::koSelection() {
+    Q_ASSERT(m_canvas);
+    Q_ASSERT(m_canvas->shapeManager());
     return m_canvas->shapeManager()->selection();
 }
 

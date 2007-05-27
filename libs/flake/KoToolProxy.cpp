@@ -237,6 +237,16 @@ void KoToolProxy::wheelEvent ( QWheelEvent * event, const QPointF &point )
     if (d->activeTool) d->activeTool->wheelEvent( &ev );
 }
 
+QVariant KoToolProxy::inputMethodQuery(Qt::InputMethodQuery query) const {
+    if (d->activeTool)
+        return d->activeTool->inputMethodQuery( query );
+    return QVariant();
+}
+
+void KoToolProxy::inputMethodEvent(QInputMethodEvent *event) {
+    if (d->activeTool) d->activeTool->inputMethodEvent( event );
+}
+
 KoToolSelection* KoToolProxy::selection() {
     if (d->activeTool)
         return d->activeTool->selection();

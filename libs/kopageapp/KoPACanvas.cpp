@@ -181,4 +181,8 @@ bool KoPACanvas::event (QEvent *event) {
     return QWidget::event(event);
 }
 
+void KoPACanvas::updateInputMethodInfo() {
+    updateMicroFocus();
+}
+
 #include "KoPACanvas.moc"

@@ -340,9 +340,11 @@ void KoToolManager::postSwitchTool() {
     }
 #endif
     if(d->canvasData->canvas->canvas()) {
-        KoToolProxy *tp = d->proxies.value(d->canvasData->canvas->canvas());
+        KoCanvasBase *canvas = d->canvasData->canvas->canvas();
+        KoToolProxy *tp = d->proxies.value(canvas);
         if(tp)
             tp->setActiveTool(d->canvasData->activeTool);
+        canvas->updateInputMethodInfo();
     }
 
     QWidget *toolWidget = d->canvasData->activeTool->optionWidget();

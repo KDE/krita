@@ -131,6 +131,7 @@ public:
 //            delete maskManager;
             delete gridManager;
             delete perspectiveGridManager;
+            delete viewConverter;
         }
 
 public:
@@ -157,7 +158,8 @@ public:
 
 
 KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
-    : KoView(doc, parent)
+    : KoView(doc, parent),
+    m_d(new KisView2Private())
 {
 
     setComponentData(KisFactory2::componentData(), false);
@@ -170,17 +172,16 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     if( mainWindow() )
         actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT( configureShortcuts() ));
 
-    m_d = new KisView2Private();
-
     m_d->doc = doc;
     m_d->viewConverter = new KoZoomHandler();
     m_d->canvasController = new KoCanvasController( this );
+
+    createManagers();
     m_d->canvas = new KisCanvas2( m_d->viewConverter, this, doc->shapeController() );
     m_d->canvasController->setCanvas( m_d->canvas );
     m_d->resourceProvider = new KisResourceProvider( this );
 
     createActions();
-    createManagers();
     createGUI();
 
     loadPlugins();
@@ -199,7 +200,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
-    delete m_d->viewConverter;
     delete m_d;
 }
 

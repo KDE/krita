@@ -164,7 +164,7 @@ private:
 
 private:
     class KisView2Private;
-    KisView2Private * m_d;
+    KisView2Private * const m_d;
 };
 
 #endif

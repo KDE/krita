@@ -201,8 +201,6 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     //Paint marching ants
     m_d->canvas->view()->selectionManager()->paint(gc, *m_d->viewConverter );
 
-    m_d->canvas->view()->selectionManager()->paint(gc, *m_d->viewConverter );
-
     // ask the guides, grids, etc to paint themselves
     t.restart();
     m_d->gridDrawer->draw(&gc, m_d->viewConverter->viewToDocument(ev->rect()));

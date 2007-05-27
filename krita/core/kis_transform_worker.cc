@@ -33,7 +33,7 @@
 KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, double yscale,
                     double xshear, double yshear, double rotation,
                     Q_INT32 xtranslate, Q_INT32 ytranslate,
-                    KisProgressDisplayInterface *progress, KisFilterStrategy *filter)
+                    KisProgressDisplayInterface *progress, KisFilterStrategy *filter, bool fixBorderAlpha)
 {
     m_dev= dev;
     m_xscale = xscale;
@@ -45,6 +45,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, doub
     m_ytranslate = ytranslate;
     m_progress = progress;
     m_filter = filter;
+    m_fixBorderAlpha = fixBorderAlpha;
 }
 
 void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)

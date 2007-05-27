@@ -487,7 +487,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
 
                 //possibly fix the alpha of the border if user wants it
                 if(fixBorderAlpha && (i==0 || i==dstLen-1))
-                    cs->setAlpha(data, cs->alpha(&tmpLine[(center>>8)*pixelSize]), 1);
+                    cs->setAlpha(data, cs->getAlpha(&tmpLine[(center>>8)*pixelSize]), 1);
 
                 data = dstSelIt.rawData();
                 *data = selectedness;

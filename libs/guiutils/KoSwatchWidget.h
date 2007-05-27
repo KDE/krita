@@ -71,7 +71,7 @@ protected:
     virtual void changeEvent(QEvent *e); ///< reimplemented from QComboBox
 
 private:
-//    Q_PRIVATE_SLOT(d, void showPopup())
+    Q_PRIVATE_SLOT(d, void colorTriggered(KoColorPatch *))
 
     class KoSwatchWidgetPrivate;
     KoSwatchWidgetPrivate * const d;

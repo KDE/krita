@@ -37,8 +37,17 @@ public:
     void setColor( const KoColor c );
 
 protected:
-    virtual void paintEvent    ( QPaintEvent * pe );
-    virtual QSize sizeHint() const; ///< reimplemented from QComboBox
+    virtual void mousePressEvent(QMouseEvent *e ); ///< reimplemented from QFrame
+    virtual void paintEvent(QPaintEvent *e); ///< reimplemented from QFrame
+    virtual QSize sizeHint() const; ///< reimplemented from QFrame
+
+signals:
+
+    /**
+     * Emitted when the mouse is released.
+     * @param widget a pointer to this widget
+     */
+    void triggered(KoColorPatch *widget);
 
 private:
   KoColor m_color;

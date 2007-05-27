@@ -54,9 +54,11 @@ public:
     KoSwatchContainer *container;
     bool firstShowOfContainer;
     QHBoxLayout *recentsLayout;
-    KoColorPatch *recentPathces[6];
+    KoColorPatch *recentPatches[6];
     int numRecents;
+    KoColorPatch *lastSelected;
 
+    void colorTriggered(KoColorPatch *patch);
     void showPopup();
     void hidePopup();
     void addRecent(KoColor &);
@@ -65,11 +67,12 @@ public:
 void KoSwatchWidget::KoSwatchWidgetPrivate::addRecent(KoColor &color)
 {
     if(numRecents<6) {
-        recentPathces[numRecents] = new KoColorPatch(container);
-        recentPathces[numRecents]->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-        recentPathces[numRecents]->resize(22,22);
-        recentPathces[numRecents]->setFrameShape(QFrame::Box);
-        recentsLayout->insertWidget(numRecents, recentPathces[numRecents]);
+        recentPatches[numRecents] = new KoColorPatch(container);
+        recentPatches[numRecents]->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+        recentPatches[numRecents]->resize(22,22);
+        recentPatches[numRecents]->setFrameShape(QFrame::Box);
+        recentsLayout->insertWidget(numRecents, recentPatches[numRecents]);
+        connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
         numRecents++;
     }
     // shift colors to the right 
@@ -78,7 +81,7 @@ void KoSwatchWidget::KoSwatchWidgetPrivate::addRecent(KoColor &color)
     }
 
     //Finally set the recent color
-    recentPathces[0]->setColor(color);
+    recentPatches[0]->setColor(color);
 }
 
 KoSwatchWidget::KoSwatchWidget(QWidget *parent)
@@ -104,12 +107,10 @@ KoSwatchWidget::KoSwatchWidget(QWidget *parent)
     d->recentsLayout->setSpacing(2);
     d->recentsLayout->addStretch(1);
 
-    for(int i = 0; i<5; i++)
-    {
-        KoColor color(KoColorSpaceRegistry::instance()->rgb8());
-        color.fromQColor(QColor(128+15*i,0,0));
-        d->addRecent(color);
-    }
+    KoColor color(KoColorSpaceRegistry::instance()->rgb8());
+    color.fromQColor(QColor(128,0,0));
+    d->addRecent(color);
+    d->lastSelected = d->recentPatches[0];
 
     l->addWidget(new QLabel("Suggestions:"));
         QHBoxLayout *hl = new QHBoxLayout();
@@ -126,6 +127,7 @@ KoSwatchWidget::KoSwatchWidget(QWidget *parent)
             patch->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
             patch->resize(22,22);
             patch->setFrameShape(QFrame::Box);
+            connect(patch, SIGNAL(triggered(KoColorPatch *)), SLOT(colorTriggered(KoColorPatch *)));
             hl->addWidget(patch);
         }
     d->container->setLayout(l);
@@ -142,6 +144,12 @@ KoSwatchWidget::~KoSwatchWidget()
     delete d;
 }
 
+void KoSwatchWidget::KoSwatchWidgetPrivate::colorTriggered(KoColorPatch *patch)
+{
+    hidePopup();
+    lastSelected = patch;
+}
+
 void KoSwatchWidget::KoSwatchWidgetPrivate::showPopup()
 {
     if(firstShowOfContainer) {
@@ -149,7 +157,9 @@ void KoSwatchWidget::KoSwatchWidgetPrivate::showPopup()
         firstShowOfContainer = false;
     }
 
-    container->move(thePublic->mapToGlobal(QPoint(0,-25)));
+    
+
+    container->move(thePublic->mapToGlobal( QPoint(0,0) - lastSelected->pos()));
 
     container->raise();
     container->show();

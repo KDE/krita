@@ -41,7 +41,12 @@ void KoColorPatch::setColor(const KoColor c)
     update();
 }
 
-void KoColorPatch::paintEvent ( QPaintEvent* pe )
+void KoColorPatch::mousePressEvent (QMouseEvent *e )
+{
+    emit triggered(this);
+}
+
+void KoColorPatch::paintEvent(QPaintEvent *pe)
 {
     QColor qc;
     m_color.toQColor(&qc);

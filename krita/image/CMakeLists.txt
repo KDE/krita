@@ -1,12 +1,6 @@
 add_subdirectory( tests )
 add_subdirectory( tiles )
 
-if(KUNITTEST_FOUND)
-	add_subdirectory(tests)
-endif(KUNITTEST_FOUND)
-
-
-
 ########### next target ###############
 
 set(libkritatile_SRCS

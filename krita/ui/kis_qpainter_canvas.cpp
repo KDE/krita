@@ -201,6 +201,8 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     //Paint marching ants
     m_d->canvas->view()->selectionManager()->paint(gc, *m_d->viewConverter );
 
+    m_d->canvas->view()->selectionManager()->paint(gc, *m_d->viewConverter );
+
     // ask the guides, grids, etc to paint themselves
     t.restart();
     m_d->gridDrawer->draw(&gc, m_d->viewConverter->viewToDocument(ev->rect()));
@@ -328,9 +330,10 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
 
     QImage canvasImage = m_d->canvas->canvasCache();
 
-#if 0 // This is the old-fashioned way of painting the selection mask.
-      // Port to whatever Sven Langkamp is doing now
-    KisPaintDeviceSP dev = img->activeDevice();
+    KisLayerSP layer = m_d->canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    if (!layer) return;
+
+    KisPaintDeviceSP dev = layer->paintDevice();
     if (!dev) return;
 
     if (dev->hasSelection()){
@@ -338,7 +341,6 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
 
         selection->paint(&canvasImage);
     }
-#endif
     //canvasImage.fill( 0 );
 
     double sx, sy;

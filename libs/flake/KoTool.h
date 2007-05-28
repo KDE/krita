@@ -169,16 +169,18 @@ public:
      * This method is used to query a set of properties of the tool to be
      * able to support complex input method operations as support for surrounding
      * text and reconversions.
-     * Default implementation returns simple defaults, for tools that support keyboard
-     * entry it would be good to reimplement it.
+     * Default implementation returns simple defaults, for tools that want to provide
+     * a more responsive text entry experience for CJK languages it would be good to reimplemnt.
      * @param query specifies which property is queried.
      */
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
     /**
-     * This method is called whenever the user types any type of complex text. This is defined as any text
-     * that takes more than one keystroke to enter.
-     * Any tool that accepts text should consider reimplementing this.
+     * Text entry of complex text, like CJK, can be made more interactive if a tool
+     * implements this and the InputMethodQuery() methods.
+     * Reimplementing this only provides the user with a more responsive text experience, since the
+     * default implementation forwards the typed text as key pressed events.
+     * @param event the input method event.
      */
     virtual void inputMethodEvent (QInputMethodEvent * event);
 

@@ -251,6 +251,8 @@ void KisImage::lock()
 
 void KisImage::unlock()
 {
+    Q_ASSERT(locked());
+
     if (locked()) {
         m_d->lockCount--;
 

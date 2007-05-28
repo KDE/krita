@@ -154,7 +154,7 @@ void KisToolPolygon::finish()
 
 #define PREVIEW_LINE_WIDTH 1
 
-void KisToolPolygon::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolPolygon::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 

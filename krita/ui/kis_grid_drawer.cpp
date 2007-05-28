@@ -35,6 +35,12 @@
 #include "kis_perspective_grid_manager.h"
 
 
+GridDrawer::GridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter)
+    : m_doc( doc ),
+      m_viewConverter( viewConverter )
+{
+}
+
 Qt::PenStyle GridDrawer::gs2style(quint32 s)
 {
     switch(s)
@@ -157,7 +163,7 @@ void GridDrawer::drawGrid(const QRectF& area)
     }
 }
 
-QPainterGridDrawer::QPainterGridDrawer(KisDoc2* doc, KoViewConverter * viewConverter): GridDrawer(doc, viewConverter),
+QPainterGridDrawer::QPainterGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter): GridDrawer(doc, viewConverter),
  m_painter(0)
 {
 }
@@ -168,7 +174,7 @@ void QPainterGridDrawer::draw(QPainter *p, const QRectF &area)
     drawGrid(area);
 }
 
-OpenGLGridDrawer::OpenGLGridDrawer(KisDoc2* doc, KoViewConverter * viewConverter): GridDrawer(doc, viewConverter)
+OpenGLGridDrawer::OpenGLGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter): GridDrawer(doc, viewConverter)
 {
 #ifdef HAVE_OPENGL
     glPushAttrib(GL_ALL_ATTRIB_BITS);

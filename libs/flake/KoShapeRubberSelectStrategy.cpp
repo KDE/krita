@@ -42,7 +42,7 @@ KoShapeRubberSelectStrategy::~KoShapeRubberSelectStrategy()
 {
 }
 
-void KoShapeRubberSelectStrategy::paint( QPainter &painter, KoViewConverter &converter)
+void KoShapeRubberSelectStrategy::paint( QPainter &painter, const KoViewConverter &converter)
 {
     painter.setRenderHint( QPainter::Antialiasing, false );
 

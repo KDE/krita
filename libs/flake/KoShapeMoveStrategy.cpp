@@ -96,7 +96,7 @@ QUndoCommand* KoShapeMoveStrategy::createCommand() {
     return new KoShapeMoveCommand(m_selectedShapes, m_previousPositions, m_newPositions);
 }
 
-void KoShapeMoveStrategy::paint( QPainter &painter, KoViewConverter &converter) {
+void KoShapeMoveStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
     SelectionDecorator decorator (KoFlake::NoHandle, false, false);
     decorator.setSelection(m_canvas->shapeManager()->selection());
     decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );

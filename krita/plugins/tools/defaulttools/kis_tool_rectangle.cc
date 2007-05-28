@@ -50,7 +50,7 @@ KisToolRectangle::~KisToolRectangle()
 {
 }
 
-void KisToolRectangle::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolRectangle::paint(QPainter& gc, const KoViewConverter &converter)
 {
     double sx, sy;
     converter.zoom(&sx, &sy);

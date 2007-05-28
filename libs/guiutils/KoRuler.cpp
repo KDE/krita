@@ -32,10 +32,10 @@
 
 class KoRulerPrivate {
     public:
-    KoRulerPrivate() : m_mouseCoordinate(-1) {}
+    KoRulerPrivate(const KoViewConverter *vc) : m_viewConverter(vc), m_mouseCoordinate(-1) {}
         KoUnit m_unit;
         Qt::Orientation m_orientation;
-        KoViewConverter* m_viewConverter;
+        const KoViewConverter* m_viewConverter;
 
         int m_offset;
         double m_rulerLength;
@@ -51,12 +51,11 @@ class KoRulerPrivate {
 };
 
 
-KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, KoViewConverter* viewConverter)
+KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter)
   : QWidget(parent)
-  , d( new KoRulerPrivate )
+  , d( new KoRulerPrivate( viewConverter) )
 {
     d->m_orientation = orientation;
-    d->m_viewConverter = viewConverter;
 
     setUnit(KoUnit(KoUnit::Point));
     setRulerLength(0);

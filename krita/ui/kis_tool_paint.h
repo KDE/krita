@@ -83,7 +83,7 @@ public:
 
     virtual void resourceChanged( int key, const QVariant & v );
 
-    virtual void paint(QPainter& gc, KoViewConverter &converter);
+    virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual void mouseReleaseEvent( KoPointerEvent *event );
 

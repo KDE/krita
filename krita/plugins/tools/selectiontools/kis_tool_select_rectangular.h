@@ -44,7 +44,7 @@ public:
     virtual QWidget * createOptionWidget();
         virtual QWidget* optionWidget();
 
-    virtual void paint(QPainter& gc, KoViewConverter &converter);
+    virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);

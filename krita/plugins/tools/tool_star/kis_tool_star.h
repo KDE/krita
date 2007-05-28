@@ -53,7 +53,7 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    virtual void paint(QPainter& gc, KoViewConverter &converter);
+    virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 protected:
     int m_lineThickness;

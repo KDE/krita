@@ -50,7 +50,7 @@ KisToolEllipse::~KisToolEllipse()
 {
 }
 
-void KisToolEllipse::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolEllipse::paint(QPainter& gc, const KoViewConverter &converter)
 {
     double sx, sy;
     converter.zoom(&sx, &sy);

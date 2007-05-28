@@ -119,13 +119,13 @@ void KisShapeLayerCanvas::repaint() {
     m_repaintTriggered = false;
 }
 
-KoToolProxy * KisShapeLayerCanvas::toolProxy()
+KoToolProxy * KisShapeLayerCanvas::toolProxy() const
 {
 //     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     return 0;
 }
 
-KoViewConverter *KisShapeLayerCanvas::viewConverter()
+const KoViewConverter *KisShapeLayerCanvas::viewConverter() const
 {
     return m_viewConverter;
 }
@@ -135,7 +135,7 @@ QWidget* KisShapeLayerCanvas::canvasWidget()
     return 0;
 }
 
-KoUnit KisShapeLayerCanvas::unit()
+KoUnit KisShapeLayerCanvas::unit() const
 {
     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     return KoUnit(KoUnit::Point);

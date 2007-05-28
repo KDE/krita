@@ -101,7 +101,7 @@ public:
     void erode();
     void dilate();
 
-    void paint(QPainter& gc, KoViewConverter &converter);
+    void paint(QPainter& gc, const KoViewConverter &converter);
 
 private:
     void fill(const KoColor& color, bool fillWithPattern, const QString& transactionText);

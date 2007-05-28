@@ -1708,7 +1708,7 @@ void KisSelectionManager::timerEvent()
     }
 }
 
-void KisSelectionManager::paint(QPainter& gc, KoViewConverter &converter)
+void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
 {
     double sx, sy;
     converter.zoom(&sx, &sy);

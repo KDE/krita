@@ -161,7 +161,7 @@ void KisToolPolyline::mouseDoubleClickEvent(KoPointerEvent *)
     finish();
 }
 
-void KisToolPolyline::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
 {
     if (!m_canvas || !m_currentImage)
         return;

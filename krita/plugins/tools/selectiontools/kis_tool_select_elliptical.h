@@ -46,7 +46,7 @@ public:
         virtual QWidget* optionWidget();
 //     virtual enumToolType toolType() { return TOOL_SELECT; }
 
-    virtual void paint(QPainter& gc, KoViewConverter &converter);
+    virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);

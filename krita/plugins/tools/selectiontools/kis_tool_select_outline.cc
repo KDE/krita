@@ -151,7 +151,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
 
 #define FEEDBACK_LINE_WIDTH 1
 
-void KisToolSelectOutline::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 

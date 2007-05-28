@@ -63,7 +63,7 @@ KisToolGradient::~KisToolGradient()
 {
 }
 
-void KisToolGradient::paint( QPainter &painter, KoViewConverter &converter )
+void KisToolGradient::paint( QPainter &painter, const KoViewConverter &converter )
 {
     double sx, sy;
     converter.zoom(&sx, &sy);

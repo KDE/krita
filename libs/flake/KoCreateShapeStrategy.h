@@ -45,7 +45,7 @@ public:
 
     void finishInteraction( Qt::KeyboardModifiers modifiers );
     QUndoCommand* createCommand();
-    void paint( QPainter &painter, KoViewConverter &converter);
+    void paint( QPainter &painter, const KoViewConverter &converter);
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
 
 private:

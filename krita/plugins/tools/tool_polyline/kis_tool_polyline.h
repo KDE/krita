@@ -56,7 +56,7 @@ public:
 
     virtual QString quickHelp() const;
 
-    virtual void paint(QPainter& gc, KoViewConverter &converter);
+    virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 public slots:
     void finish();

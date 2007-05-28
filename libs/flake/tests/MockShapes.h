@@ -58,10 +58,10 @@ public:
     void addCommand(QUndoCommand*) { }
     KoShapeManager *shapeManager() const  { return 0; }
     void updateCanvas(const QRectF& )  {}
-    KoToolProxy * toolProxy() { return 0; }
-    KoViewConverter *viewConverter() { return 0; }
+    KoToolProxy * toolProxy() const { return 0; }
+    KoViewConverter *viewConverter() const { return 0; }
     QWidget* canvasWidget() { return 0; }
-    KoUnit unit() { return KoUnit(KoUnit::Millimeter); }
+    KoUnit unit() const { return KoUnit(KoUnit::Millimeter); }
     void updateInputMethodInfo() {}
 };
 

@@ -67,7 +67,7 @@ KisToolColorPicker::~KisToolColorPicker()
 }
 
 
-void KisToolColorPicker::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolColorPicker::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(gc);
     Q_UNUSED(converter);

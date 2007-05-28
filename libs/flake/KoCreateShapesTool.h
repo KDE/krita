@@ -48,7 +48,7 @@ public:
     virtual ~KoCreateShapesTool() {}
     void mouseReleaseEvent( KoPointerEvent *event );
 
-    void paint( QPainter &painter, KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter );
 
     /**
      * Each shape-type has an Id; as found in KoShapeFactory::id().id(), to choose which

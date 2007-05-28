@@ -89,7 +89,7 @@ void KoCreateShapeStrategy::finishInteraction( Qt::KeyboardModifiers modifiers )
     m_canvas->updateCanvas(selectRect());
 }
 
-void KoCreateShapeStrategy::paint( QPainter &painter, KoViewConverter &converter)
+void KoCreateShapeStrategy::paint( QPainter &painter, const KoViewConverter &converter)
 {
     if( m_outline.isEmpty() )
         KoShapeRubberSelectStrategy::paint( painter, converter );

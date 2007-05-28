@@ -49,21 +49,21 @@
 class KisOpenGLCanvas2::Private
 {
 public:
+    Private(const KoViewConverter *vc) : viewConverter(vc), canvas(0), toolProxy(0) {}
     KisCanvas2 * canvas;
     KoToolProxy * toolProxy;
     KisOpenGLImageTexturesSP openGLImageTextures;
-    KoViewConverter * viewConverter;
+    const KoViewConverter * viewConverter;
     QPoint documentOffset;
- };
+};
 
 KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures )
     : QGLWidget( QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget() )
 {
-    m_d = new Private();
+    m_d = new Private(canvas->viewConverter());
     m_d->canvas = canvas;
     m_d->toolProxy = canvas->toolProxy();
     m_d->openGLImageTextures = imageTextures;
-    m_d->viewConverter = canvas->viewConverter();
     setAcceptDrops( true );
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground);
@@ -296,7 +296,7 @@ void KisOpenGLCanvas2::wheelEvent( QWheelEvent *e )
 
 QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    return m_d->toolProxy->inputMethodQuery(query);
+    return m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter);
 }
 
 void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)

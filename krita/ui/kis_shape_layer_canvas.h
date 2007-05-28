@@ -55,10 +55,10 @@ public:
     void addCommand(QUndoCommand *command);
     KoShapeManager *shapeManager() const;
     void updateCanvas(const QRectF& rc);
-    KoToolProxy * toolProxy();
-    KoViewConverter *viewConverter();
+    KoToolProxy * toolProxy() const;
+    const KoViewConverter *viewConverter() const;
     QWidget* canvasWidget();
-    KoUnit unit();
+    KoUnit unit() const;
     virtual void updateInputMethodInfo() {}
 
 private slots:

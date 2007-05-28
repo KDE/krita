@@ -293,7 +293,7 @@ void KoPathTool::breakAtSegment()
     }
 }
 
-void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
+void KoPathTool::paint( QPainter &painter, const KoViewConverter &converter) {
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
 
     painter.save();
@@ -702,7 +702,7 @@ QPointF KoPathTool::snapToGrid( const QPointF &p, Qt::KeyboardModifiers modifier
                     static_cast<int>( p.y() / gridY + 1e-10 ) * gridY );
 }
 
-void KoPathTool::ActivePointHandle::paint( QPainter &painter, KoViewConverter &converter )
+void KoPathTool::ActivePointHandle::paint( QPainter &painter, const KoViewConverter &converter )
 { 
     painter.save();
     painter.setMatrix( m_activePoint->parent()->transformationMatrix(&converter) * painter.matrix() );
@@ -783,7 +783,7 @@ bool KoPathTool::ActivePointHandle::check()
     return false;
 }
 
-void KoPathTool::ActiveParameterHandle::paint( QPainter &painter, KoViewConverter &converter )
+void KoPathTool::ActiveParameterHandle::paint( QPainter &painter, const KoViewConverter &converter )
 {
     painter.save();
     painter.setMatrix( m_parameterShape->transformationMatrix(&converter) * painter.matrix() );
@@ -811,7 +811,7 @@ bool KoPathTool::ActiveParameterHandle::check()
     return m_tool->m_canvas->shapeManager()->selection()->isSelected( m_parameterShape );
 }
 
-void KoPathTool::KoPathPointSelection::paint( QPainter &painter, KoViewConverter &converter )
+void KoPathTool::KoPathPointSelection::paint( QPainter &painter, const KoViewConverter &converter )
 {
     KoPathShapePointMap::iterator it( m_shapePointMap.begin() );
     for ( ; it != m_shapePointMap.end(); ++it )

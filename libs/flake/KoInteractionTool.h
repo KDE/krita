@@ -59,7 +59,7 @@ public:
 public:
 
     virtual bool wantsAutoScroll();
-    virtual void paint( QPainter &painter, KoViewConverter &converter );
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
     void repaintDecorations();
     /**
@@ -123,7 +123,7 @@ public:
      * @param painter the painter to paint to.
      * @param converter to convert between internal and view coordinates.
      */
-    void paint(QPainter &painter, KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter);
 
     /**
      * set the selection that is to be painted.

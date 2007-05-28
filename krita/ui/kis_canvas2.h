@@ -81,15 +81,15 @@ public: // KoCanvasBase implementation
 
     virtual void updateInputMethodInfo();
 
-    KoViewConverter *viewConverter();
+    virtual const KoViewConverter *viewConverter() const;
 
     QWidget* canvasWidget();
 
     QImage canvasCache();
 
-    KoUnit unit();
+    virtual KoUnit unit() const;
 
-    KoToolProxy* toolProxy();
+    virtual KoToolProxy* toolProxy() const;
 
     KoColorProfile * monitorProfile();
 

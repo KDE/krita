@@ -108,13 +108,13 @@ public:
      * is really, really active is hard when tablets are involved,
      * so leave that to others.
      */
-    virtual KoToolProxy * toolProxy() = 0;
+    virtual KoToolProxy * toolProxy() const = 0;
 
     /**
      * Return the viewConverter for this view.
      * @return the viewConverter for this view.
      */
-    virtual KoViewConverter *viewConverter() = 0;
+    virtual const KoViewConverter *viewConverter() const = 0;
 
     /**
      * Return the widget that will be added to the scrollArea.
@@ -126,7 +126,7 @@ public:
      * by the flake framework.
      * @see KoDocument::unit()
      */
-    virtual KoUnit unit() = 0;
+    virtual KoUnit unit() const = 0;
 
     /**
      * Called when the user tries to move the argument shape to allow the application to limit the
@@ -144,7 +144,7 @@ public:
      * By default the origin of the canvas widget and the position of the
      * document origin are coincident, thus an empty point is returned.
      */
-    virtual QPoint documentOrigin() { return QPoint(0,0); }
+    virtual QPoint documentOrigin() const { return QPoint(0,0); }
 
     /**
      * This method should somehow call QWidget::updateMicroFocus() on the canvas widget.

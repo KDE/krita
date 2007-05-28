@@ -617,7 +617,7 @@ void KisToolTransform::recalcOutline()
     m_bottomright = rot(x,y) + m_translate;
 }
 
-void KisToolTransform::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 {
     QPen old = gc.pen();
     QPen pen(Qt::SolidLine);

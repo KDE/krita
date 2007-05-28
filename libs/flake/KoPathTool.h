@@ -42,7 +42,7 @@ public:
     explicit KoPathTool(KoCanvasBase *canvas);
     ~KoPathTool();
 
-    void paint( QPainter &painter, KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter );
 
     void repaintDecorations();
 
@@ -99,7 +99,7 @@ private:
         : m_tool( tool )
         {}
         virtual ~ActiveHandle() {}
-        virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0; 
+        virtual void paint( QPainter &painter, const KoViewConverter &converter ) = 0; 
         virtual void repaint() const = 0;
         virtual void mousePressEvent( KoPointerEvent *event ) = 0;
         // test if handle is still valid 
@@ -116,7 +116,7 @@ private:
         , m_activePoint( activePoint )
         , m_activePointType( activePointType )
         {}
-        void paint( QPainter &painter, KoViewConverter &converter );
+        void paint( QPainter &painter, const KoViewConverter &converter );
         void repaint() const;
         void mousePressEvent( KoPointerEvent *event );
         bool check();
@@ -133,7 +133,7 @@ private:
         , m_parameterShape( parameterShape )
         , m_handleId( handleId )
         {}
-        void paint( QPainter &painter, KoViewConverter &converter );
+        void paint( QPainter &painter, const KoViewConverter &converter );
         void repaint() const;
         void mousePressEvent( KoPointerEvent *event );
         bool check();
@@ -157,7 +157,7 @@ private:
         ~KoPathPointSelection() {}
 
         /// @brief Draw the selected points
-        void paint( QPainter &painter, KoViewConverter &converter ); 
+        void paint( QPainter &painter, const KoViewConverter &converter ); 
         
         /**
          * @brief Add a point to the selection

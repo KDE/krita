@@ -45,7 +45,7 @@ KoCreatePathTool::~KoCreatePathTool()
 {
 }
 
-void KoCreatePathTool::paint( QPainter &painter, KoViewConverter &converter )
+void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
     if ( m_shape )
     {

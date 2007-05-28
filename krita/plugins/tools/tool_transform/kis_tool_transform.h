@@ -66,7 +66,7 @@ public:
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
-    void paint(QPainter& gc, KoViewConverter &converter);
+    void paint(QPainter& gc, const KoViewConverter &converter);
     KisImageSP image() const;
 
 public:

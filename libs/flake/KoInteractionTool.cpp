@@ -210,7 +210,7 @@ void KoInteractionTool::updateCursor() {
     useCursor(cursor);
 }
 
-void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
+void KoInteractionTool::paint( QPainter &painter, const KoViewConverter &converter) {
     if ( m_currentStrategy )
         m_currentStrategy->paint( painter, converter);
     else if(koSelection()->count() > 0) {
@@ -403,7 +403,7 @@ KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool 
         return KoFlake::NoHandle;
 
     recalcSelectionBox();
-    KoViewConverter *converter = m_canvas->viewConverter();
+    const KoViewConverter *converter = m_canvas->viewConverter();
 
     if(innerHandleMeaning != 0)
     {
@@ -502,7 +502,7 @@ void SelectionDecorator::setHandleRadius( int radius ) {
     m_handleRadius = radius;
 }
 
-void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
+void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter) {
     QPen pen( Qt::green );
     QPolygonF outline;
 

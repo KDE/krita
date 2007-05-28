@@ -286,7 +286,7 @@ void KisCanvas2::updateCanvas()
 }
 
 
-KoViewConverter* KisCanvas2::viewConverter()
+const KoViewConverter* KisCanvas2::viewConverter() const
 {
     return m_d->viewConverter;
 }
@@ -297,12 +297,12 @@ QWidget* KisCanvas2::canvasWidget()
 }
 
 
-KoUnit KisCanvas2::unit()
+KoUnit KisCanvas2::unit() const
 {
     return KoUnit(KoUnit::Pixel);
 }
 
-KoToolProxy * KisCanvas2::toolProxy() {
+KoToolProxy * KisCanvas2::toolProxy() const {
     return m_d->toolProxy;
 }
 

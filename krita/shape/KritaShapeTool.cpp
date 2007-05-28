@@ -69,7 +69,7 @@ void KritaShapeTool::deactivate()
     m_kritaShapeshape = 0;
 }
 
-void KritaShapeTool::paint( QPainter& painter, KoViewConverter& viewConverter )
+void KritaShapeTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
 {
     Q_UNUSED( painter );
     Q_UNUSED( viewConverter );

@@ -32,7 +32,7 @@ public:
     ~ConnectionTool();
 
     /// reimplemented from superclass
-    void paint( QPainter &painter, KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter );
 
     /// reimplemented from superclass
     void mousePressEvent( KoPointerEvent *event ) ;

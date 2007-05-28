@@ -39,7 +39,7 @@ KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
     m_outCursor = QCursor(outPixmap);
 }
 
-void KoZoomTool::paint( QPainter &painter, KoViewConverter &converter) {
+void KoZoomTool::paint( QPainter &painter, const KoViewConverter &converter) {
     if ( m_currentStrategy )
         m_currentStrategy->paint( painter, converter);
 }

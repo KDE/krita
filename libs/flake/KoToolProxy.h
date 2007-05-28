@@ -59,7 +59,7 @@ public:
     ~KoToolProxy();
 
     /// Forwarded to the current KoTool
-    void paint( QPainter &painter, KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter );
     /// Forwarded to the current KoTool
     void repaintDecorations();
     /// Forwarded to the current KoTool
@@ -79,7 +79,7 @@ public:
     /// Forwarded to the current KoTool
     void wheelEvent ( QWheelEvent * event, const QPointF &point  );
     /// Forwarded to the current KoTool
-    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
     /// Forwarded to the current KoTool
     void inputMethodEvent(QInputMethodEvent *event);
 

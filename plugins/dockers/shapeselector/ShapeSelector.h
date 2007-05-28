@@ -85,10 +85,10 @@ private:
             void addCommand (QUndoCommand *command);
             KoShapeManager * shapeManager () const { return m_parent->m_shapeManager; }
             void updateCanvas (const QRectF &rc);
-            KoToolProxy *toolProxy () { return 0; }
-            KoViewConverter * viewConverter() { return &m_converter; }
+            KoToolProxy *toolProxy () const { return 0; }
+            const KoViewConverter * viewConverter() const { return &m_converter; }
             QWidget *canvasWidget () { return m_parent; }
-            KoUnit unit() { return KoUnit(KoUnit::Millimeter); }
+            KoUnit unit() const { return KoUnit(KoUnit::Millimeter); }
             void updateInputMethodInfo() {}
 
         protected: // event handlers

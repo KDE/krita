@@ -47,7 +47,7 @@ KisToolMeasure::~KisToolMeasure()
 {
 }
 
-void KisToolMeasure::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 {
     double sx, sy;
     converter.zoom(&sx, &sy);

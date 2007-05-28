@@ -106,12 +106,12 @@ void KoPACanvas::updateCanvas( const QRectF& rc )
     update( clipRect );
 }
 
-KoViewConverter * KoPACanvas::viewConverter()
+const KoViewConverter * KoPACanvas::viewConverter() const
 {
     return m_view->viewConverter();
 }
 
-KoUnit KoPACanvas::unit()
+KoUnit KoPACanvas::unit() const
 {
     return m_doc->unit();
 }
@@ -189,7 +189,7 @@ void KoPACanvas::updateInputMethodInfo()
 
 QVariant KoPACanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    return m_toolProxy->inputMethodQuery(query);
+    return m_toolProxy->inputMethodQuery(query, *(viewConverter()) );
 }
 
 void KoPACanvas::inputMethodEvent(QInputMethodEvent *event)

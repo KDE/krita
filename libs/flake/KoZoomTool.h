@@ -53,7 +53,7 @@ public:
     virtual void activate(bool temporary = false);
 
     /// reimplemented method
-    virtual void paint( QPainter &painter, KoViewConverter &converter );
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
     void setCanvasController(KoCanvasController *controller) { m_controller = controller; }
 
 private:

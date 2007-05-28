@@ -48,7 +48,7 @@ public:
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     QUndoCommand* createCommand();
     void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED( modifiers ); }
-    virtual void paint( QPainter &painter, KoViewConverter &converter);
+    virtual void paint( QPainter &painter, const KoViewConverter &converter);
 
 private:
     QRectF m_initialBoundingRect;

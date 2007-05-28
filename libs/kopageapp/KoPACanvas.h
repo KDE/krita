@@ -50,10 +50,10 @@ public:
     /// reimplemented method
     virtual void updateInputMethodInfo();
 
-    KoToolProxy * toolProxy() { return m_toolProxy; }
-    KoViewConverter *viewConverter();
+    KoToolProxy * toolProxy() const { return m_toolProxy; }
+    const KoViewConverter *viewConverter() const;
     QWidget* canvasWidget() { return this; }
-    KoUnit unit();
+    KoUnit unit() const;
     const QPoint & documentOffset() const;
 
 public slots:

@@ -39,7 +39,7 @@ ConnectionTool::~ConnectionTool() {
 }
 
 
-void ConnectionTool::paint( QPainter &painter, KoViewConverter &converter ) {
+void ConnectionTool::paint( QPainter &painter, const KoViewConverter &converter ) {
     QList<KoShape*> repaints = m_shapesPaintedWithConnections;
     if(m_startShape)
         repaints.append(m_startShape);

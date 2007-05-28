@@ -136,7 +136,7 @@ KoToolProxy::~KoToolProxy() {
     delete d;
 }
 
-void KoToolProxy::paint( QPainter &painter, KoViewConverter &converter ) {
+void KoToolProxy::paint( QPainter &painter, const KoViewConverter &converter ) {
     if (d->activeTool) d->activeTool->paint(painter, converter);
 }
 
@@ -237,9 +237,9 @@ void KoToolProxy::wheelEvent ( QWheelEvent * event, const QPointF &point )
     if (d->activeTool) d->activeTool->wheelEvent( &ev );
 }
 
-QVariant KoToolProxy::inputMethodQuery(Qt::InputMethodQuery query) const {
+QVariant KoToolProxy::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const {
     if (d->activeTool)
-        return d->activeTool->inputMethodQuery( query );
+        return d->activeTool->inputMethodQuery(query, converter);
     return QVariant();
 }
 

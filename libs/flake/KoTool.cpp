@@ -91,7 +91,7 @@ void KoTool::wheelEvent( KoPointerEvent * e ) {
     e->ignore();
 }
 
-QVariant KoTool::inputMethodQuery(Qt::InputMethodQuery query) const {
+QVariant KoTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const {
     if(m_canvas->canvasWidget() == 0)
         return QVariant();
 

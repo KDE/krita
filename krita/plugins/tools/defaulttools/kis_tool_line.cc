@@ -54,7 +54,7 @@ KisToolLine::~KisToolLine()
 {
 }
 
-void KisToolLine::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 {
     double sx, sy;
     converter.zoom(&sx, &sy);

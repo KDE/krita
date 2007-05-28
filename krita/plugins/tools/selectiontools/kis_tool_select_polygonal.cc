@@ -201,7 +201,7 @@ void KisToolSelectPolygonal::finish()
 
 #define FEEDBACK_LINE_WIDTH 1
 
-void KisToolSelectPolygonal::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolSelectPolygonal::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 

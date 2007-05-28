@@ -49,7 +49,7 @@ public:
 //     virtual quint32 priority() { return 8; }
 //     virtual enumToolType toolType() { return TOOL_SELECT; }
 
-    virtual void paint(QPainter& gc, KoViewConverter &converter) {}
+    virtual void paint(QPainter& gc, const KoViewConverter &converter) {}
     virtual void mousePressEvent(KoPointerEvent *e);
 
 public slots:

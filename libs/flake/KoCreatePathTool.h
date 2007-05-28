@@ -42,7 +42,7 @@ public:
     explicit KoCreatePathTool( KoCanvasBase * canvas );
     virtual ~KoCreatePathTool();
 
-    void paint( QPainter &painter, KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter );
 
     void mousePressEvent( KoPointerEvent *event );
     void mouseDoubleClickEvent( KoPointerEvent *event );

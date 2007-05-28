@@ -66,7 +66,7 @@ void KisToolSelectElliptical::activate()
     m_optWidget->slotActivated();
 }
 
-void KisToolSelectElliptical::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolSelectElliptical::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 

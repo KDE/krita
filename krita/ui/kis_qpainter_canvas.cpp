@@ -71,15 +71,20 @@ namespace {
 
 class KisQPainterCanvas::Private {
 public:
-    Private()
-        : currentExposure( NOT_DEFAULT_EXPOSURE )
+    Private(const KoViewConverter *vc)
+        : toolProxy(0),
+        canvas(0),
+        shapeManager(0),
+        viewConverter(vc),
+        gridDrawer(0),
+        currentExposure( NOT_DEFAULT_EXPOSURE )
         {
         }
 
     KoToolProxy * toolProxy;
     KisCanvas2 * canvas;
     KoShapeManager * shapeManager;
-    KoViewConverter * viewConverter;
+    const KoViewConverter * viewConverter;
     QBrush checkBrush;
     QImage prescaledImage;
     QPoint documentOffset;
@@ -95,10 +100,9 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
 
     KisConfig cfg;
 
-    m_d = new Private();
+    m_d = new Private(canvas->viewConverter());
     m_d->canvas =  canvas;
     m_d->shapeManager = canvas->shapeManager();
-    m_d->viewConverter = canvas->viewConverter();
     m_d->gridDrawer = new QPainterGridDrawer(canvas->view()->document(), canvas->viewConverter());
     m_d->toolProxy = canvas->toolProxy();
     setAutoFillBackground(true);
@@ -246,7 +250,7 @@ void KisQPainterCanvas::keyReleaseEvent (QKeyEvent *e) {
 
 QVariant KisQPainterCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    return m_d->toolProxy->inputMethodQuery(query);
+    return m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter);
 }
 
 void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)

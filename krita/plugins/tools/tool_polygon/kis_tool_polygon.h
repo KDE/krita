@@ -41,7 +41,7 @@ public:
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     virtual void keyPressEvent(QKeyEvent *event);
 
-    virtual void paint(QPainter& gc, KoViewConverter &converter);
+    virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual QString quickHelp() const {
         return i18n("Shift-click will end the polygon.");

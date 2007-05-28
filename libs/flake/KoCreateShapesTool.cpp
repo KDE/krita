@@ -41,7 +41,7 @@ KoCreateShapesTool::KoCreateShapesTool(KoCanvasBase *canvas)
 {
 }
 
-void KoCreateShapesTool::paint( QPainter &painter, KoViewConverter &converter) {
+void KoCreateShapesTool::paint( QPainter &painter, const KoViewConverter &converter) {
     if ( m_currentStrategy )
         m_currentStrategy->paint( painter, converter);
 }

@@ -36,7 +36,7 @@ class KisDoc2;
 
 class GridDrawer {
     public:
-        GridDrawer(KisDoc2* doc, KoViewConverter * viewConverter) { m_doc = doc; m_viewConverter = viewConverter; }
+        GridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter);
         virtual ~GridDrawer() {}
     
     public:
@@ -52,12 +52,12 @@ class GridDrawer {
     protected:
         Qt::PenStyle gs2style(quint32 s);
         KisDoc2* m_doc;
-        KoViewConverter * m_viewConverter;
+        const KoViewConverter * m_viewConverter;
 };
 
 class QPainterGridDrawer : public GridDrawer {
     public:
-        QPainterGridDrawer(KisDoc2* doc, KoViewConverter * viewConverter);
+        QPainterGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter);
 
         virtual void draw(QPainter* p, const QRectF& area);
         virtual void setPen(const QPen& pen) { m_painter->setPen(pen); }
@@ -69,7 +69,7 @@ class QPainterGridDrawer : public GridDrawer {
 
 class OpenGLGridDrawer : public GridDrawer {
     public:
-        OpenGLGridDrawer(KisDoc2* doc, KoViewConverter * viewConverter);
+        OpenGLGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter);
         virtual ~OpenGLGridDrawer();
     
         virtual void setPen(const QPen& pen);

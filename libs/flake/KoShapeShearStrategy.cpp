@@ -132,7 +132,7 @@ kDebug(30006) << " px=" << p.x() << " py=" << p.y() <<endl;
     // The selection updates it's own position and size
 }
 
-void KoShapeShearStrategy::paint( QPainter &painter, KoViewConverter &converter) {
+void KoShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
     SelectionDecorator decorator(KoFlake::NoHandle, true, false);
     decorator.setSelection(m_canvas->shapeManager()->selection());
     decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );

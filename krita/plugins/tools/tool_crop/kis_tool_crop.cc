@@ -92,7 +92,7 @@ void KisToolCrop::deactivate()
     updateCanvasPixelRect(image()->bounds());
 }
 
-void KisToolCrop::paint( QPainter &painter, KoViewConverter &converter )
+void KisToolCrop::paint( QPainter &painter, const KoViewConverter &converter )
 {
     Q_UNUSED(converter);
     paintOutlineWithHandles(painter);

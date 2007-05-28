@@ -69,7 +69,7 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     virtual void mouseDoubleClickEvent( KoPointerEvent *e );
 
-    virtual void paint( QPainter &painter, KoViewConverter &converter );
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
 public slots:
 

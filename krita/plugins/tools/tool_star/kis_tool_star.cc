@@ -127,7 +127,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
     }
 }
 
-void KisToolStar::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
 {
     if (!m_dragging)
         return;

@@ -66,7 +66,7 @@ void KisToolSelectRectangular::activate()
     m_optWidget->slotActivated();
 }
 
-void KisToolSelectRectangular::paint(QPainter& gc, KoViewConverter &converter)
+void KisToolSelectRectangular::paint(QPainter& gc, const KoViewConverter &converter)
 {
     double sx, sy;
     converter.zoom(&sx, &sy);

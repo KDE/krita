@@ -194,7 +194,7 @@ QUndoCommand* KoShapeResizeStrategy::createCommand() {
     return cmd;
 }
 
-void KoShapeResizeStrategy::paint( QPainter &painter, KoViewConverter &converter) {
+void KoShapeResizeStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
     SelectionDecorator decorator (KoFlake::NoHandle, false, false);
     decorator.setSelection(m_canvas->shapeManager()->selection());
     decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );

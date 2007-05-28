@@ -80,7 +80,7 @@ void KoShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
 
 }
 
-void KoShapeRotateStrategy::paint( QPainter &painter, KoViewConverter &converter) {
+void KoShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
     SelectionDecorator decorator(KoFlake::NoHandle, true, false);
     decorator.setSelection(m_canvas->shapeManager()->selection());
     decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );

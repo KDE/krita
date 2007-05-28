@@ -77,7 +77,7 @@ public:
      * @param painter used for painting the shape
      * @param converter to convert between internal and view coordinates.
      */
-    virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0;
+    virtual void paint( QPainter &painter, const KoViewConverter &converter ) = 0;
 
     /**
      * Return the option widget for this tool. Create it if it
@@ -173,7 +173,7 @@ public:
      * a more responsive text entry experience for CJK languages it would be good to reimplemnt.
      * @param query specifies which property is queried.
      */
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
 
     /**
      * Text entry of complex text, like CJK, can be made more interactive if a tool

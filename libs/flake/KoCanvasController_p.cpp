@@ -209,7 +209,7 @@ void Viewport::handlePaintEvent(QPainter & painter, QPaintEvent *event)
         painter.drawLine(rect.left()+2, rect.bottom()+2, rect.right()+2, rect.bottom()+2);
     }
     if(m_draggedShape) {
-        KoViewConverter *vc = m_parent->canvas()->viewConverter();
+        const KoViewConverter *vc = m_parent->canvas()->viewConverter();
 
         painter.save();
         QWidget *canvasWidget = m_parent->canvas()->canvasWidget();

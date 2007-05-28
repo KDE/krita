@@ -54,7 +54,7 @@ public:
      * Reimplement this if the action needs to draw a "blob" on the canvas;
      * that is, a transient decoration like a rubber band.
      */
-    virtual void paint( QPainter &painter, KoViewConverter &converter) {
+    virtual void paint( QPainter &painter, const KoViewConverter &converter) {
         Q_UNUSED(painter); Q_UNUSED(converter); }
     /**
      * Extending classes should implement this method to update the selectedShapes

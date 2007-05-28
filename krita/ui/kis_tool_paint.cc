@@ -92,7 +92,7 @@ void KisToolPaint::resourceChanged( int key, const QVariant & v )
 }
 
 
-void KisToolPaint::paint(QPainter&, KoViewConverter &)
+void KisToolPaint::paint(QPainter&, const KoViewConverter &)
 {
 }
 

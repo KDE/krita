@@ -52,7 +52,7 @@ public:
     KoShapeRubberSelectStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, bool useSnapToGrid = false );
     virtual ~KoShapeRubberSelectStrategy();
 
-    void paint( QPainter &painter, KoViewConverter &converter);
+    void paint( QPainter &painter, const KoViewConverter &converter);
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual QUndoCommand* createCommand() { return 0; }
     virtual void finishInteraction( Qt::KeyboardModifiers modifiers );

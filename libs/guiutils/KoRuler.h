@@ -50,7 +50,7 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
          * @param orientation the orientation of the ruler
          * @param viewConverter the view converter used to convert from point to pixel
          */
-        KoRuler(QWidget* parent, Qt::Orientation orientation, KoViewConverter* viewConverter);
+        KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter);
         ~KoRuler();
 
         /// The ruler's unit

@@ -50,7 +50,7 @@ public:
     /// reimplemented from superclass
     virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented from superclass
-    virtual void paint(QPainter &, KoViewConverter &) {}
+    virtual void paint(QPainter &, const KoViewConverter &) {}
     /// reimplemented from superclass
     virtual void activate(bool temporary = false);
 

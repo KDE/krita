@@ -35,6 +35,7 @@ public:
     virtual ~KoColorPatch();
 
     void setColor( const KoColor c );
+    KoColor color() const;
 
 protected:
     virtual void mousePressEvent(QMouseEvent *e ); ///< reimplemented from QFrame

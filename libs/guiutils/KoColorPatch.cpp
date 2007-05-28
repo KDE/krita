@@ -41,6 +41,11 @@ void KoColorPatch::setColor(const KoColor c)
     update();
 }
 
+KoColor KoColorPatch::color() const
+{
+    return m_color;
+}
+
 void KoColorPatch::mousePressEvent (QMouseEvent *e )
 {
     emit triggered(this);

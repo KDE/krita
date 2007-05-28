@@ -24,7 +24,6 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QFrame>
-//#include <QMenu>
 #include <QLabel>
 #include <QMouseEvent>
 
@@ -61,10 +60,10 @@ public:
     void colorTriggered(KoColorPatch *patch);
     void showPopup();
     void hidePopup();
-    void addRecent(KoColor &);
+    void addRecent(const KoColor &);
 };
 
-void KoSwatchWidget::KoSwatchWidgetPrivate::addRecent(KoColor &color)
+void KoSwatchWidget::KoSwatchWidgetPrivate::addRecent(const KoColor &color)
 {
     if(numRecents<6) {
         recentPatches[numRecents] = new KoColorPatch(container);
@@ -76,8 +75,9 @@ void KoSwatchWidget::KoSwatchWidgetPrivate::addRecent(KoColor &color)
         numRecents++;
     }
     // shift colors to the right 
-    for (int i = numRecents- 1; i >1; i--) {
+    for (int i = numRecents- 1; i >0; i--) {
         kDebug() << "set " << i << " to value of " << i-1 << endl;
+        recentPatches[i]->setColor(recentPatches[i-1]->color());
     }
 
     //Finally set the recent color
@@ -148,6 +148,7 @@ void KoSwatchWidget::KoSwatchWidgetPrivate::colorTriggered(KoColorPatch *patch)
 {
     hidePopup();
     lastSelected = patch;
+    addRecent(patch->color());
 }
 
 void KoSwatchWidget::KoSwatchWidgetPrivate::showPopup()

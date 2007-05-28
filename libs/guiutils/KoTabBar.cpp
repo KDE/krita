@@ -663,10 +663,9 @@ void KoTabBar::paintEvent( QPaintEvent* )
         return;
     }
 
-    QPainter painter;
-    QPixmap pm( size() );
-    pm.fill( palette().color( QPalette::Window ) );
-    painter.begin( &pm );
+    QPainter painter(this);
+    if( !d->reverseLayout )
+         painter.translate( d->offset, 0 );
 
     painter.setPen( palette().color(QPalette::Dark) );
     painter.drawLine( 0, 0, width(), 0 );
@@ -676,7 +675,7 @@ void KoTabBar::paintEvent( QPaintEvent* )
 
     d->layoutTabs();
     d->updateButtons();
-    
+
     // draw first all non-active, visible tabs
     for( int c = d->tabRects.count()-1; c>=0; c-- )
     {
@@ -710,16 +709,6 @@ void KoTabBar::paintEvent( QPaintEvent* )
             d->drawMoveMarker( painter, x, rect.y() );
         }
     }
-    painter.end();
-      
-    painter.begin( this );
-    
-    if( !d->reverseLayout )
-         painter.drawPixmap( d->offset, 0, pm );
-    else
-         painter.drawPixmap( 0, 0, pm );
-    
-    painter.end();
 }
 
 void KoTabBar::resizeEvent( QResizeEvent* )

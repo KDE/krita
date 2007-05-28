@@ -35,6 +35,8 @@
 #include "kis_abstract_canvas_widget.h"
 #include "kis_opengl_image_textures.h"
 
+#include "krita_export.h"
+
 class QWidget;
 class QGLContext;
 class QPaintEvent;
@@ -47,7 +49,7 @@ class KisCanvas2;
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
  *
  */
-class KisOpenGLCanvas2 : public QGLWidget, public KisAbstractCanvasWidget
+class KRITAUI_EXPORT KisOpenGLCanvas2 : public QGLWidget, public KisAbstractCanvasWidget
 {
 
     Q_OBJECT
@@ -57,6 +59,13 @@ public:
     KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures);
 
     virtual ~KisOpenGLCanvas2();
+
+    /**
+     * Set the projection and model view matrices so that primitives can be
+     * rendered using image pixel coordinates. This handles zooming and scrolling
+     * of the canvas.
+     */
+    void setPixelToViewTransformation(void);
 
 public: // QWidget
 

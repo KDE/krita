@@ -171,7 +171,9 @@ void KisGradient::colorAt(KoColor& dst, double t) const
     const KisGradientSegment *segment = segmentAt(t);
     Q_ASSERT(segment != 0);
 
-    segment->colorAt(dst, t);
+    if (segment) {
+        segment->colorAt(dst, t);
+    }
 }
 
 QImage KisGradient::generatePreview(int width, int height) const

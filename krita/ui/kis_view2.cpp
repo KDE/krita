@@ -69,6 +69,7 @@
 #include <kis_layer.h>
 
 #include "kis_config.h"
+#include "kis_config_notifier.h"
 #include "kis_statusbar.h"
 #include "kis_canvas2.h"
 #include "kis_doc2.h"
@@ -387,9 +388,13 @@ void KisView2::slotLoadingFinished()
         kWarning(41007) << "Could not create tool docker: " << d << endl;
 
     connectCurrentImage();
-    img->blockSignals( false );
-    img->unlock();
 
+    if (img->locked()) {
+        // If this is the first view on the image, the image will have been locked
+        // so unlock it.
+        img->blockSignals( false );
+        img->unlock();
+    }
 
 //     kDebug(41007) << "image finished loading, active layer: " << img->activeLayer() << ", root layer: " << img->rootLayer() << endl;
 
@@ -620,7 +625,7 @@ void KisView2::slotUpdateFullScreen(bool toggle)
 void KisView2::slotPreferences()
 {
     if (PreferencesDialog::editPreferences()) {
-        m_d->canvas->resetCanvas();
+        KisConfigNotifier::instance()->notifyConfigChanged();
     }
 }
 

@@ -109,6 +109,8 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
             imageTexturesMap.erase(m_image);
         }
     }
+    destroyImageTextureTiles();
+    glDeleteTextures(1, &m_backgroundTexture);
 }
 
 KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageSP image, KoColorProfile *monitorProfile)

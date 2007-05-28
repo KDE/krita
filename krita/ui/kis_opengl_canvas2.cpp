@@ -96,7 +96,6 @@ void KisOpenGLCanvas2::resizeGL(int w, int h)
     updateGL();
 }
 
-
 void KisOpenGLCanvas2::paintGL()
 {
     QColor widgetBackgroundColor = palette().color(QPalette::Mid);
@@ -244,6 +243,36 @@ void KisOpenGLCanvas2::paintGL()
 
     //m_d->gridDrawer->draw(&gc, m_d->viewConverter->viewToDocument(ev->rect()));
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
+}
+
+void KisOpenGLCanvas2::setPixelToViewTransformation(void)
+{
+    KisImageSP img = m_d->canvas->image();
+
+    if ( !img ) return;
+
+    // Zoom factor
+    double sx, sy;
+    m_d->viewConverter->zoom(&sx, &sy);
+
+    // Resolution
+    double pppx,pppy;
+    pppx = img->xRes();
+    pppy = img->yRes();
+
+    // Compute the scale factors
+    double scaleX = sx / pppx;
+    double scaleY = sy / pppy;
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glViewport(0, 0, width(), height());
+    glOrtho(0, width(), height(), 0, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(-m_d->documentOffset.x(), -m_d->documentOffset.y(), 0.0);
+    glScalef(scaleX, scaleY, 1.0);
 }
 
 KoToolProxy * KisOpenGLCanvas2::toolProxy() {

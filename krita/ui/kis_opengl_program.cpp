@@ -20,6 +20,7 @@
 
 #include <QtOpenGL>
 #include <QWidget>
+#include <QPointF>
 
 #include <kdebug.h>
 
@@ -79,6 +80,37 @@ void KisOpenGLProgram::setUniformVariable(const GLchar *variableName, GLfloat v0
         if (location != -1) {
             KIS_OPENGL_CLEAR_ERROR();
             glUniform4fARB(location, v0, v1, v2, v3);
+            KIS_OPENGL_PRINT_ERROR();
+        }
+    }
+}
+
+void KisOpenGLProgram::setUniformVariable(const GLchar *variableName, GLfloat v0, GLfloat v1) const
+{
+    if (m_program != 0) {
+        GLint location = uniformVariableLocation(variableName);
+
+        if (location != -1) {
+            KIS_OPENGL_CLEAR_ERROR();
+            glUniform2fARB(location, v0, v1);
+            KIS_OPENGL_PRINT_ERROR();
+        }
+    }
+}
+
+void KisOpenGLProgram::setUniformVariable(const GLchar *variableName, const QPointF &value) const
+{
+    setUniformVariable(variableName, value.x(), value.y());
+}
+
+void KisOpenGLProgram::setUniformVariable(const GLchar *variableName, GLfloat value) const
+{
+    if (m_program != 0) {
+        GLint location = uniformVariableLocation(variableName);
+
+        if (location != -1) {
+            KIS_OPENGL_CLEAR_ERROR();
+            glUniform1fARB(location, value);
             KIS_OPENGL_PRINT_ERROR();
         }
     }

@@ -22,6 +22,7 @@
 
 #include "krita_export.h"
 
+class QPointF;
 class KisOpenGLShader;
 
 /**
@@ -114,12 +115,37 @@ public:
     void setUniformVariable(const GLchar *variableName, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) const;
 
     /**
+     * Set a vec2 uniform variable value. The program must be activated before 
+     * variables can be set.
+     * @param variableName The name of the variable
+     * @param v0 The value to set the first component to
+     * @param v1 The value to set the second component to
+     */
+    void setUniformVariable(const GLchar *variableName, GLfloat v0, GLfloat v1) const;
+
+    /**
+     * Set a vec2 uniform variable value. The program must be activated before 
+     * variables can be set.
+     * @param variableName The name of the variable
+     * @param value The value to set the variable to
+     */
+    void setUniformVariable(const GLchar *variableName, const QPointF &value) const;
+
+    /**
      * Set an integer scalar uniform variable value. The program must be activated before 
      * variables can be set.
      * @param variableName The name of the variable
      * @param i The value to set the variable to
      */
     void setUniformVariable(const GLchar *variableName, GLint i) const;
+
+    /**
+     * Set a float scalar uniform variable value. The program must be activated before 
+     * variables can be set.
+     * @param variableName The name of the variable
+     * @param value The value to set the variable to
+     */
+    void setUniformVariable(const GLchar *variableName, GLfloat value) const;
 
     /**
      * Return the location of a uniform variable.

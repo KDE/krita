@@ -32,8 +32,12 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_gradient_painter.h"
+#include "kis_layer_shape.h"
 
-#include <kis_layer_shape.h>
+#include "config-opengl.h"
+#include "config-glew.h"
+
+class KisOpenGLGradientProgram;
 
 class KIntNumInput;
 class KDoubleNumInput;
@@ -72,6 +76,11 @@ public slots:
     void slotSetReverse(bool);
     void slotSetAntiAliasThreshold(double);
 
+#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+    void slotSetPreviewOpacity(int value);
+    void slotConfigChanged();
+#endif
+
 private:
     void paintLine(QPainter& gc);
 
@@ -95,6 +104,13 @@ private:
     QComboBox *m_cmbRepeat;
     QLabel *m_lbAntiAliasThreshold;
     KDoubleNumInput *m_slAntiAliasThreshold;
+
+#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+    KisOpenGLGradientProgram *m_gradientProgram;
+    int m_previewOpacityPercent;
+    QLabel *m_lbPreviewOpacity;
+    KisIntSpinbox *m_slPreviewOpacity;
+#endif
 };
 
 class KisToolGradientFactory : public KoToolFactory {

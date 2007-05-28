@@ -150,6 +150,11 @@ private slots:
      */
     void documentOffsetMoved( const QPoint &documentOffset );
 
+    /**
+     * Called whenever the configuration settings change.
+     */
+    void slotConfigChanged();
+
 private:
 
     void resetMonitorProfile();

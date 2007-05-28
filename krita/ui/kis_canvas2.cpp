@@ -42,6 +42,7 @@
 #include "kis_resource_provider.h"
 #include "kis_view2.h"
 #include "kis_config.h"
+#include "kis_config_notifier.h"
 #include "kis_abstract_canvas_widget.h"
 #include "kis_qpainter_canvas.h"
 #include "kis_opengl_canvas2.h"
@@ -116,6 +117,7 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
     createCanvas();
     connect( view->canvasController(), SIGNAL( moveDocumentOffset( const QPoint& ) ),
              this, SLOT( documentOffsetMoved( const QPoint& ) ) );
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 }
 
 KisCanvas2::~KisCanvas2()
@@ -431,6 +433,11 @@ bool KisCanvas2::usingHDRExposureProgram()
     }
 #endif
     return false;
+}
+
+void KisCanvas2::slotConfigChanged()
+{
+    resetCanvas();
 }
 
 void KisCanvas2::updateInputMethodInfo() {

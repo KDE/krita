@@ -24,6 +24,7 @@ set(kritaui_LIB_SRCS
     kis_cmb_composite.cc
     kis_cmb_idlist.cc
     kis_config.cc
+    kis_config_notifier.cpp
     kis_controlframe.cc
     kis_layer_model.cpp
     kis_cursor.cc
@@ -116,6 +117,7 @@ if(HAVE_OPENGL AND HAVE_GLEW)
         kis_opengl_vertex_shader.cpp
         kis_opengl_program.cpp
         kis_opengl_hdr_exposure_program.cpp
+        kis_opengl_gradient_program.cpp
         )
 endif(HAVE_OPENGL AND HAVE_GLEW)
 

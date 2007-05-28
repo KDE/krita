@@ -110,6 +110,7 @@ void KoTool::inputMethodEvent (QInputMethodEvent * event) {
         QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
         keyPressEvent(&ke);
     }
+    event->accept();
 }
 
 void KoTool::useCursor(QCursor cursor, bool force) {

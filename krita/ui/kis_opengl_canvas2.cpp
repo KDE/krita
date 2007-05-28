@@ -68,6 +68,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOp
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground);
     imageTextures->generateBackgroundTexture(checkImage(KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE));
+    setAttribute(Qt::WA_InputMethodEnabled, true);
 
     if (isSharing()) {
         kDebug(DBG_AREA_UI) << "Created QGLWidget with sharing\n";
@@ -291,6 +292,16 @@ void KisOpenGLCanvas2::tabletEvent( QTabletEvent *e )
 void KisOpenGLCanvas2::wheelEvent( QWheelEvent *e )
 {
     m_d->toolProxy->wheelEvent( e, m_d->viewConverter->viewToDocument( e->pos() + m_d->documentOffset ) );
+}
+
+QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
+{
+    return m_d->toolProxy->inputMethodQuery(query);
+}
+
+void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
+{
+    m_d->toolProxy->inputMethodEvent(event);
 }
 
 bool KisOpenGLCanvas2::event (QEvent *event) {

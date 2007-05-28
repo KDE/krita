@@ -44,6 +44,7 @@ KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
     setBackgroundRole( QPalette::Base );
     setAutoFillBackground( true );
     updateSize();
+    setAttribute(Qt::WA_InputMethodEnabled, true);
 }
 
 KoPACanvas::~KoPACanvas()
@@ -181,8 +182,19 @@ bool KoPACanvas::event (QEvent *event) {
     return QWidget::event(event);
 }
 
-void KoPACanvas::updateInputMethodInfo() {
+void KoPACanvas::updateInputMethodInfo()
+{
     updateMicroFocus();
+}
+
+QVariant KoPACanvas::inputMethodQuery(Qt::InputMethodQuery query) const
+{
+    return m_toolProxy->inputMethodQuery(query);
+}
+
+void KoPACanvas::inputMethodEvent(QInputMethodEvent *event)
+{
+    m_toolProxy->inputMethodEvent(event);
 }
 
 #include "KoPACanvas.moc"

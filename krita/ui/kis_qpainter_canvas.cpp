@@ -106,6 +106,7 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     m_d->checkBrush = QBrush(checkImage(cfg.checkSize()));
     setAcceptDrops( true );
     setFocusPolicy(Qt::StrongFocus);
+    setAttribute(Qt::WA_InputMethodEnabled, true);
 }
 
 KisQPainterCanvas::~KisQPainterCanvas()
@@ -241,6 +242,16 @@ void KisQPainterCanvas::keyPressEvent( QKeyEvent *e ) {
 
 void KisQPainterCanvas::keyReleaseEvent (QKeyEvent *e) {
     m_d->toolProxy->keyReleaseEvent(e);
+}
+
+QVariant KisQPainterCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
+{
+    return m_d->toolProxy->inputMethodQuery(query);
+}
+
+void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
+{
+    m_d->toolProxy->inputMethodEvent(event);
 }
 
 void KisQPainterCanvas::tabletEvent( QTabletEvent *e )

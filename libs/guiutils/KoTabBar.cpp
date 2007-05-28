@@ -287,9 +287,11 @@ void KoTabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& te
 
     // draw the lines
     painter.setPen( tabbar->palette().color( QPalette::Dark) );
-    if( !active )
-      painter.drawLine( rect.x()-25, rect.y(), rect.right()+25, rect.top() );
     painter.setRenderHint( QPainter::Antialiasing );
+    if( !active )
+      painter.drawLine( rect.x() - (reverseLayout ? 5 : 0), rect.y(),
+                                     rect.right() + (reverseLayout ? 0 : 5), rect.top() );
+
     painter.drawPolyline( polygon );
 
     painter.setPen( tabbar->palette().color( QPalette::ButtonText ) );
@@ -666,9 +668,6 @@ void KoTabBar::paintEvent( QPaintEvent* )
     QPainter painter(this);
     if( !d->reverseLayout )
          painter.translate( d->offset, 0 );
-
-    painter.setPen( palette().color(QPalette::Dark) );
-    painter.drawLine( 0, 0, width(), 0 );
 
     if( !d->reverseLayout )
         painter.translate( 5, 0 );

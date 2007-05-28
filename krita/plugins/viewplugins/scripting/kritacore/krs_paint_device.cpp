@@ -143,7 +143,6 @@ QByteArray PaintDevice::bytes()
         out << data[i];
     delete [] data;
 
-//     kDebug()<<"PaintDevice::bytes width="<<w<<" height="<<h<<" pixelsize="<<pixelsize<<" size="<<size<<endl;
     return bytearray;
 }
 

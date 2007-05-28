@@ -21,7 +21,7 @@
 
 #include <QString>
 
-#include <KoShapeContainer.h>
+#include <KoShapeLayer.h>
 #include <kis_types.h>
 #include <krita_export.h>
 
@@ -39,7 +39,7 @@ const QString KIS_LAYER_CONTAINER_ID = "KisLayerContainerShapeID";
    Can a LayerContainer, i.e. a KisGroupLayer have masks and
    selections, and if so, what does it mean? (BSAR)
  */
-class KRITAUI_EXPORT KisLayerContainerShape : public KoShapeContainer
+class KRITAUI_EXPORT KisLayerContainerShape : public KoShapeLayer
 {
 
 public:

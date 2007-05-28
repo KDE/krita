@@ -155,7 +155,6 @@ QByteArray ConstPaintDevice::bytes()
         out << data[i];
     delete [] data;
 
-//     kDebug()<<"ConstPaintDevice::bytes width="<<w<<" height="<<h<<" pixelsize="<<pixelsize<<" size="<<size<<endl;
     return bytearray;
 }
 

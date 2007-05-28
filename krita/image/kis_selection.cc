@@ -279,7 +279,6 @@ QVector<QPolygon> KisSelection::outline()
     for (int i = 0; i < width*height; i++) {
             marks[i] = 0;
     }
-    kDebug() << "Loading data: " << t.elapsed() << endl;
     QVector<QPolygon> paths;
 
     readBytes(buffer, xOffset, yOffset, width, height);
@@ -328,10 +327,6 @@ QVector<QPolygon> KisSelection::outline()
             }
         }
     }
-    kDebug() << "Nodes: " << nodes << endl;
-
-    kDebug() << "Generating outline: " << t.elapsed() << endl;
-
     delete[] buffer;
     delete[] marks;
 

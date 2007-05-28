@@ -39,6 +39,9 @@
 #include <KoPointerEvent.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
+#include <KoSelection.h>
+#include <KoShapeManager.h>
+
 
 #include <kis_adjustment_layer.h>
 #include <kis_filter.h>
@@ -72,6 +75,7 @@
 #include "kis_statusbar.h"
 #include "kis_view2.h"
 #include "kis_zoom_manager.h"
+#include "kis_canvas2.h"
 
 KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
     : m_view( view )
@@ -114,9 +118,39 @@ KisPaintDeviceSP KisLayerManager::activeDevice()
 
 void KisLayerManager::activateLayer( KisLayerSP layer )
 {
-    if ( m_view && m_view->image() )
-        m_view->image()->activateLayer( layer );
+
+    Q_ASSERT( layer );
+
+    // XXX: Set the selection on the shape manager to the active layer
+    // and set call KoSelection::setActiveLayer( KoShapeLayer* layer )
+    // with the parent of the active layer.
+
+    Q_ASSERT( m_view );
+    Q_ASSERT( m_view->canvasBase() );
+    Q_ASSERT( m_view->canvasBase()->globalShapeManager() );
+
+    KoSelection * selection = m_view->canvasBase()->globalShapeManager()->selection();
+    Q_ASSERT( selection );
+
+    KoShape * shape = m_view->document()->shapeForLayer( layer );
+    Q_ASSERT( shape );
+
+    selection->deselectAll();
+    selection->select(shape);
+
+    Q_ASSERT( layer->parentLayer() );
+    KoShape * parentShape = m_view->document()->shapeForLayer( static_cast<KisLayer*>( layer->parentLayer().data() ) );
+    Q_ASSERT( parentShape );
+
+    KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>( parentShape );
+    Q_ASSERT( shapeLayer );
+
+    // So the KoShapeController class can set the right parent on
+    // layers we add.
+    selection->setActiveLayer( shapeLayer );
+
     m_activeLayer = layer;
+    emit sigLayerActivated( layer );
     layersUpdated();
 }
 

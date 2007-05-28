@@ -70,7 +70,7 @@ true);
         if (KisImageSP img = m_view->image()) {
             connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged()));
             connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(slotLayersChanged()));
-            connect(img.data(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayersChanged()));
+            connect(m_view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayersChanged()));
             connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), this, SLOT(slotLayersChanged()));
             connect(img.data(), SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                     this, SLOT(slotLayersChanged()));

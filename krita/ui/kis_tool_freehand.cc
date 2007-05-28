@@ -65,12 +65,6 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-    kDebug() << "KisToolFreehand::mousePressEvent "
-             << ", current image: " << m_currentImage
-             << ", current layer: " << m_currentLayer
-             << ", current paint device: " << m_currentLayer->paintDevice()
-             << endl;
-
     if (!m_currentImage) return;
 
     if (!m_currentBrush) return;
@@ -133,8 +127,6 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
-    kDebug() << "KisToolFreehand::mouseReleaseEvent " << m_currentLayer << endl;
-
     if (e->button() == Qt::LeftButton && m_mode == PAINT) {
         endPaint();
     }
@@ -144,11 +136,6 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 
 void KisToolFreehand::initPaint(KoPointerEvent *)
 {
-    kDebug() << "KisToolFreehand::initPaint "
-             << ", current layer: " << m_currentLayer
-             << ", current paint device: " << m_currentLayer->paintDevice()
-             << endl;
-
     if (!m_currentLayer || !m_currentLayer->paintDevice()) return;
 
     if (m_compositeOp == 0 ) {

@@ -27,6 +27,7 @@
 #include <KoToolManager.h>
 #include <KoView.h>
 #include <KoSelection.h>
+#include <KoShapeLayer.h>
 
 #include "kis_adjustment_layer.h"
 #include "kis_canvas2.h"
@@ -51,7 +52,6 @@ public:
     KisLayerMap layerShapes; // maps from krita/image layers to shapes
     KisDoc2 * doc;
     KisNameServer * nameServer;
-    bool ignoreActiveLayer;
 };
 
 KisShapeController::KisShapeController( KisDoc2 * doc, KisNameServer *nameServer )
@@ -61,7 +61,6 @@ KisShapeController::KisShapeController( KisDoc2 * doc, KisNameServer *nameServer
     m_d->doc = doc;
     m_d->nameServer = nameServer;
     m_d->image = 0;
-    m_d->ignoreActiveLayer = false;
 }
 
 
@@ -107,19 +106,16 @@ void KisShapeController::setImage( KisImageSP image )
         canvas->canvasWidget()->update();
     }
 
-    connect( m_d->image.data(), SIGNAL(sigLayerActivated(KisLayerSP) ), this, SLOT( slotLayerActivated( KisLayerSP ) ) );
     connect( m_d->image.data(), SIGNAL(sigLayerAdded( KisLayerSP )), this, SLOT(slotLayerAdded( KisLayerSP )) );
     connect( m_d->image.data(), SIGNAL(sigLayerRemoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )), this, SLOT(slotLayerRemoved( KisLayerSP, KisGroupLayerSP, KisLayerSP) ));
     connect( m_d->image.data(), SIGNAL(sigLayerMoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )), this, SLOT(slotLayerMoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )) );
     connect( m_d->image.data(), SIGNAL(sigLayersChanged( KisGroupLayerSP )), this, SLOT(slotLayersChanged( KisGroupLayerSP )) );
-    m_d->image->activateLayer( m_d->image->rootLayer()->firstChild() );
+
 }
 
 void KisShapeController::removeShape( KoShape* shape )
 {
     if ( !shape ) return;
-
-    kDebug(41007) << ">>>>> KisDoc2::removeShape: " << shape->shapeId()  << ", active layer: " << activeLayerShape() << endl;
 
     KoShapeContainer * container = shape->parent();
     kDebug(41007) << "parent is " << container << endl;
@@ -139,55 +135,48 @@ void KisShapeController::removeShape( KoShape* shape )
          || shape->shapeId() == KIS_LAYER_CONTAINER_ID
          || shape->shapeId() == KIS_MASK_SHAPE_ID )
     {
-        m_d->ignoreActiveLayer = true;
         foreach( KoView *view, m_d->doc->views() ) {
             KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
             canvas->shapeManager()->remove(shape);
             canvas->canvasWidget()->update();
         }
-        m_d->ignoreActiveLayer = false;
     }
 
     m_d->doc->setModified( true );
 }
 
-
-
 void KisShapeController::addShape( KoShape* shape )
 {
-    kDebug(41007) << ">>>>> KisShapeController::addShape: " << shape->shapeId()  << ", active layer: " << activeLayerShape() << endl;
-    if ( activeLayerShape() ) kDebug(41007) << "active layer shape id: " << activeLayerShape()->shapeId() << endl;
 
-    if (   shape->shapeId() != KIS_LAYER_SHAPE_ID
-           && shape->shapeId() != KIS_SHAPE_LAYER_ID
-           && shape->shapeId() != KIS_LAYER_CONTAINER_ID
-           && shape->shapeId() != KIS_MASK_SHAPE_ID )
-    {
+    // Only non-krita shapes get added through this method; krita
+    // layer shapes are added to kisimage and then end up in
+    // slotLayerAdded
+
+    if ( shape->shapeId() != KIS_LAYER_SHAPE_ID  ||
+         shape->shapeId() != KIS_SHAPE_LAYER_ID  ||
+         shape->shapeId() != KIS_LAYER_CONTAINER_ID ||
+         shape->shapeId() != KIS_MASK_SHAPE_ID ) {
+
         // An ordinary shape, if the active layer is a KisShapeLayer,
         // add it there, otherwise, create a new KisShapeLayer on top
         // of the active layer.
-        KoShape * activeShape = activeLayerShape();
 
-        kDebug(41007) << "Active shape = " << ( activeShape ? activeShape->shapeId() : "0" )  << endl;
+        // Check whether the shape is part of a layer -- that would be our
+        // shape layers. The parent is set KoShapeController using the
+        // KoSelection object returned by the KoShapeManager that is
+        // returned by KoCanvasBase -- and the shape manager in the
+        // KisShapeLayer always sets the layer as parent using
+        // KoSelection::setActiveLayer. The inheritance is:
+        // KisShapeLayer::KoShapeLayer::KoShapeContainer::KoShape.
 
-        KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( activeShape );
+        KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( shape->parent() );
+
         if ( !shapeLayer ) {
+            // There is no parent layer set, which means that when
+            // dropping, there was no shape layer active. Create one
+            // and add it on top of the image stack.
 
-            kDebug(41007) << "creating a new shape layer for shape " << shape << endl;
-            KoShape * currentLayer = activeLayerShape();
-
-            kDebug(41007) << "Active layer shape: " << currentLayer << endl;
-            KisLayerContainerShape * container = 0;
-
-            while ( container == 0 && currentLayer != 0 ) {
-                kDebug(41007) << currentLayer->shapeId() << endl;
-                container = dynamic_cast<KisLayerContainerShape *>( currentLayer );
-                if ( currentLayer->parent() )
-                    currentLayer = currentLayer->parent();
-                else
-                    break;
-            }
-
+            KisLayerContainerShape * container = dynamic_cast<KisLayerContainerShape*>( m_d->image->rootLayer().data() );
             shapeLayer = new KisShapeLayer(container,
                                            m_d->image,
                                            i18n( "Flake shapes %1", m_d->nameServer->number() ),
@@ -198,18 +187,12 @@ void KisShapeController::addShape( KoShape* shape )
             // layerbox and makes sure the new layer is in the
             // layer-shape map and in the layerbox
 
-            // XXX: This casting around of layers is a blight and
-            // a blot on the landscape. Especially when I have to
-            // wriggle the pointer out of the shared pointer.
-
-            if ( container )
-                m_d->image->addLayer( shapeLayer,
-                                        qobject_cast<KisGroupLayer*>( container->groupLayer().data() ) );
-            else
-                m_d->image->addLayer( shapeLayer, 0 );
-
+            m_d->image->addLayer( shapeLayer, m_d->image->rootLayer());
         }
         shapeLayer->addChild( shape );
+    }
+    else {
+        kDebug() << "Eeek -- we tried to add a krita layer shape without going through KisImage" << endl;
     }
 
     m_d->doc->setModified( true );
@@ -226,34 +209,20 @@ void KisShapeController::setInitialShapeForView( KisView2 * view )
             selection->select(m_d->layerShapes.values().first());
             KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
         }
-
     }
-
 }
 
 void KisShapeController::slotLayerAdded( KisLayerSP layer )
 {
-    kDebug(41007) << ">>>>> KisShapeController::slotLayerAdded "
-                  << ( layer ? layer->name() : "empty layer" ) << ", active layer type: "
-                  << activeLayerShape()  << endl;
-
     // Check whether the layer is already in the map
     if ( m_d->layerShapes.contains( layer ) ) {
         kDebug(41007) << "The document already contains layer " << layer->name() << endl;
         return;
     }
 
-    // Get the parent -- there is always one
-    KoShapeContainer * parent = 0;
-    if ( activeLayerShape() && activeLayerShape()->shapeId() == KIS_LAYER_CONTAINER_ID ) {
-        parent = dynamic_cast<KoShapeContainer*>( activeLayerShape() );
-        Q_ASSERT( parent );
-    }
-    else {
-        parent = activeLayerShape()->parent();
-    }
-
-    kDebug(41007) << "We found the parent: " << parent << endl;
+    // Get the parent -- there is always one, and it should be in the layermap already
+    KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>( shapeForLayer( static_cast<KisLayer*>( layer->parentLayer().data() ) ) );
+    Q_ASSERT( parent );
 
     KoShape * shape = 0;
 
@@ -278,89 +247,52 @@ void KisShapeController::slotLayerAdded( KisLayerSP layer )
 
     // Put the layer in the right place in the hierarchy
     shape->setParent( parent );
-    parent->addChild(shape);
+    parent->addChild( shape );
 
     m_d->layerShapes[layer] = shape;
 
-    m_d->ignoreActiveLayer = true;
     foreach( KoView *view, m_d->doc->views() ) {
         KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
         canvas->shapeManager()->add(shape);
         canvas->canvasWidget()->update();
     }
-    m_d->ignoreActiveLayer = false;
 
 }
 
 void KisShapeController::slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis )
 {
-//    kDebug(41007) << ">>>>> KisShapeController::slotLayerRemoved " << layer->name() << ", wasParent: " << wasParent->name() << ", wasAboveThis: " << wasAboveThis->name() << ", active layer: " << activeLayerShape()  << endl;
+    Q_UNUSED( wasParent );
+    Q_UNUSED( wasAboveThis );
+
+    removeShape( shapeForLayer( layer ) );
 }
 
 void KisShapeController::slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis )
 {
-//    kDebug(41007) << ">>>>> KisShapeController::slotLayerMmoved " << layer->name() << ", previousParent: " << previousParent->name() << ", wasAboveThis: " << wasAboveThis->name()  << ", active layer: " << activeLayerShape() << endl;
+    Q_UNUSED( previousParent );
+    Q_UNUSED( wasAboveThis );
+
+    KoShape * shape = shapeForLayer( layer );
+    removeShape( shape );
+    slotLayerAdded( layer );
 }
 
 void KisShapeController::slotLayersChanged( KisGroupLayerSP rootLayer )
 {
-//    kDebug(41007) << ">>>>> KisShapeController::slotLayersChanged " << rootLayer->name()  << ", active layer: " << activeLayerShape() << endl;
+    Q_UNUSED( rootLayer );
+
+    setImage( m_d->image );
 }
 
-void KisShapeController::slotLayerActivated( KisLayerSP layer )
+KoShape * KisShapeController::shapeForLayer( KisLayerSP layer )
 {
-    if ( layer )
-        kDebug(41007) << ">>>>> KisShapeController::slotLayerActivated. Activating layer " << layer->name() << ", active layer: " << activeLayerShape()  << endl;
+
+    if ( m_d->layerShapes.contains( layer ) )
+        return m_d->layerShapes[layer];
     else {
-        kDebug(41007) << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> layer is 0";
-        return;
-    }
-    if (!m_d->layerShapes.contains( layer ) ) {
-        kDebug(41007) << "A layer activated that is _not_ in the layer-shapes map!\n";
-        return;
-    }
-
-    if ( activeLayerShape() )
-        kDebug(41007) << "Active layer shape has id: " << activeLayerShape()->shapeId() << endl;
-    else
-        kDebug( 41007 ) << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> no active layer shape\n";
-
-    if ( activeLayerShape()->shapeId() == KIS_SHAPE_LAYER_ID ) {
-        // Automatically select all shapes in this newly selected shape layer?
-    }
-
-    foreach( KoView *view, m_d->doc->views() ) {
-        KisCanvas2 * canvas = static_cast<KisView2*>( view )->canvasBase();
-        KoSelection * selection = canvas->shapeManager()->selection();
-        selection->deselectAll();
-        selection->select( activeLayerShape() );
-    }
-
-}
-
-
-KoShape * KisShapeController::activeLayerShape()
-{
-    if (m_d->ignoreActiveLayer)
-        return 0;
-
-    if ( !m_d->image ) {
-        kDebug(41007) << "activeLayerShape() current image = " << m_d->image << endl;
-        return 0;
-    }
-
-    KisLayerSP activeLayer = m_d->image->activeLayer();
-    if ( activeLayer ) kDebug(41007) << "Active layer is not 0 and has name: " << activeLayer->name() << endl;
-
-    if ( m_d->layerShapes.contains( m_d->image->activeLayer() ) ) {
-
-        return m_d->layerShapes[m_d->image->activeLayer()];
-    }
-    else {
-        kDebug(41007) << "Could not find layer " << m_d->image->activeLayer() << " in the layer-shape map\n";
+        kDebug() << "KisShapeController::shapeForLayer does not find a shape for layer " << layer << ", this should never happen!" << endl;
         return 0;
     }
 }
-
 
 #include "kis_shape_controller.moc"

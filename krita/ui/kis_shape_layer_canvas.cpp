@@ -26,6 +26,7 @@
 #include <kis_painter.h>
 #include <kis_shape_layer.h>
 #include <KoCompositeOp.h>
+#include <KoSelection.h>
 
 #include <kdebug.h>
 
@@ -41,6 +42,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter 
     , m_repaintTriggered(false)
     , m_antialias(false)
 {
+    m_shapeManager->selection()->setActiveLayer( parent );
 }
 
 KisShapeLayerCanvas::~KisShapeLayerCanvas()

@@ -99,7 +99,6 @@ void KisOpenGLCanvas2::resizeGL(int w, int h)
 
 void KisOpenGLCanvas2::paintGL()
 {
-//    kDebug() << "paintGL\n";
     QColor widgetBackgroundColor = palette().color(QPalette::Mid);
 
     glClearColor(widgetBackgroundColor.red() / 255.0, widgetBackgroundColor.green() / 255.0, widgetBackgroundColor.blue() / 255.0, 1.0);
@@ -136,8 +135,8 @@ void KisOpenGLCanvas2::paintGL()
     glScalef(checkSizeScale, checkSizeScale, 1.0);
 
     if ( cfg.scrollCheckers() ) {
-        glTranslatef(static_cast<GLfloat>(m_d->documentOffset.x()) / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE, 
-                     static_cast<GLfloat>(m_d->documentOffset.y()) / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE, 
+        glTranslatef(static_cast<GLfloat>(m_d->documentOffset.x()) / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
+                     static_cast<GLfloat>(m_d->documentOffset.y()) / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
                      0.0);
     }
 

@@ -98,7 +98,6 @@ void KisToolPaint::paint(QPainter&, const KoViewConverter &)
 
 void KisToolPaint::mouseReleaseEvent( KoPointerEvent *e )
 {
-    kDebug() << "KisToolPaint::mouseReleaseEvent. Current layer is " << m_currentLayer << endl;
     if(e->button() == Qt::MidButton)
     {
         KoCanvasResourceProvider * resourceProvider = 0;

@@ -157,8 +157,6 @@ QImage KisPaintLayer::createThumbnail(qint32 w, qint32 h)
 /// Returns the paintDevice that accompanies this layer
 KisPaintDeviceSP KisPaintLayer::paintDevice()
 {
-    kDebug() << "KisPaintLayer::paintDevice will return " << m_d->paintdev << endl;
-
     return m_d->paintdev;
 }
 

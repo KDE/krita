@@ -146,16 +146,12 @@ void KisWetOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
     double strength = 2.0 * static_cast<double>(paint.h) / (double)(0xffff);
 
-    kDebug() << "Before strength: " << strength << endl;
-
     if (m_strength)
         strength = strength * (strength + info.pressure) * 0.5;
     else
         strength = strength * (strength + PRESSURE_DEFAULT) * 0.5;
 
     double pressure = 0.75 + 0.25 * info.pressure;
-
-    kDebug() << "info.pressure " << info.pressure << ", local pressure: " << pressure << ", strength: " << strength << endl;
 
     WetPack currentPack;
     WetPix currentPix;
@@ -184,7 +180,6 @@ void KisWetOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
                 press = pressure * 0.25;
             else
                 press = -1;
-            //kDebug() << "After mysterious line, press becomes: " << press << ", this is the same as in the original. Good" << endl;
             // XXX - 192 is probably only useful for paper with a texture...
             eff_height = (currentData.h + currentData.w - 192.0) * (1.0 / 255.0);
             contact = (press + eff_height) * 0.2;
@@ -192,14 +187,12 @@ void KisWetOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
             if (contact > 0.5)
                 contact = 1.0 - 0.5 * exp(-2.0 * contact - 1.0);
 
-            //kDebug() << "Contact was " << old_contact << " and has become: " << contact << endl;
             if (contact > 0.0001) {
                 int v;
                 double rnd = rand() * (1.0 / RAND_MAX);
 
                 v = currentPix.rd;
                 currentPix.rd = (quint16)floor(v + (paint.rd * strength - v) * contact + rnd);
-                //kDebug() << "Rd was " << v << " and has become " << currentPix.rd << endl;
                 v = currentPix.rw;
                 currentPix.rw = (quint16)floor(v + (paint.rw * strength - v) * contact + rnd);
                 v = currentPix.gd;

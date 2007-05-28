@@ -557,16 +557,16 @@ public:
 
 
     /**
-     * XXX
-     */
-    KisUndoAdapter *undoAdapter() const;
-
-    /**
      * Notify the owning image that the current selection has changed.
      *
      * @param r the area for which the selection has changed
      */
     void emitSelectionChanged(const QRect& r);
+
+    /**
+     * XXX
+     */
+    KisUndoAdapter *undoAdapter() const;
 
     /**
      * Return the exifInfo associated with this layer. If no exif infos are

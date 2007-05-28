@@ -47,7 +47,8 @@ class KisToolPerspectiveTransform : public KisToolNonPaint, KisCommandHistoryLis
     typedef KisToolNonPaint super;
     Q_OBJECT
     enum InterractionMode { DRAWRECTINTERRACTION, EDITRECTINTERRACTION };
-    enum HandleSelected { NOHANDLE, TOPHANDLE, BOTTOMHANDLE, RIGHTHANDLE, LEFTHANDLE, MIDDLEHANDLE };
+    enum HandleSelected { NOHAND
+                          LE, TOPHANDLE, BOTTOMHANDLE, RIGHTHANDLE, LEFTHANDLE, MIDDLEHANDLE };
 public:
     KisToolPerspectiveTransform();
     virtual ~KisToolPerspectiveTransform();
@@ -79,9 +80,6 @@ private:
     void paintOutline(QPainter& gc, const QRect& rc);
     void transform();
     void initHandles();
-
-private slots:
-    void slotLayerActivated(KisLayerSP);
 
 protected slots:
     virtual void activate();

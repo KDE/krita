@@ -91,7 +91,6 @@ public:
     QRect dirtyRegion;
 
     KisGroupLayerSP rootLayer; // The layers are contained in here
-    KisLayerSP activeLayer;
     QList<KisLayer*> dirtyLayers; // for thumbnails
 
     KisProjection * projection;
@@ -493,8 +492,6 @@ void KisImage::convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent)
 
     unlock();
 
-    emit sigLayerPropertiesChanged( m_d->activeLayer );
-
     if (undo()) {
 
         m_d->adapter->addCommand(new KisImageConvertTypeCommand(KisImageSP(this), oldCs, dstColorSpace));
@@ -598,31 +595,6 @@ QRegion KisImage::dirtyRegion() const
     return QRegion(m_d->dirtyRegion);
 }
 
-KisPaintDeviceSP KisImage::activeDevice()
-{
-    if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_d->activeLayer.data())) {
-        return layer->paintDevice();//OrMask();
-    }
-    else if (KisAdjustmentLayer* layer = dynamic_cast<KisAdjustmentLayer*>(m_d->activeLayer.data())) {
-        if (layer->selection()) {
-            return KisPaintDeviceSP(layer->selection().data());
-        }
-    }
-    else if (KisGroupLayer * layer = dynamic_cast<KisGroupLayer*>(m_d->activeLayer.data())) {
-        // Find first child
-        KisLayerSP child = layer->lastChild();
-        while(child)
-        {
-            if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_d->activeLayer.data())) {
-                return layer->paintDevice();//OrMask();
-            }
-            child = child->prevSibling();
-        }
-    }
-    // XXX: We're buggered!
-    return KisPaintDeviceSP(0);
-}
-
 KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const QString & compositeOp, KoColorSpace * cs)
 {
     KisPaintLayer * layer;
@@ -639,13 +611,7 @@ KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const QString
 
     KisLayerSP layerSP(layer);
 
-    if (!m_d->activeLayer.isNull()) {
-        addLayer(layerSP, m_d->activeLayer->parentLayer(), m_d->activeLayer->nextSibling());
-    }
-    else {
-        addLayer(layerSP, m_d->rootLayer, KisLayerSP(0));
-    }
-    activateLayer(layerSP);
+    addLayer(layerSP, m_d->rootLayer, KisLayerSP(0));
 
     return layerSP;
 }
@@ -663,24 +629,9 @@ KisGroupLayerSP KisImage::rootLayer() const
     return m_d->rootLayer;
 }
 
-KisLayerSP KisImage::activeLayer() const
-{
-    return m_d->activeLayer;
-}
-
 KisPaintDeviceSP KisImage::projection()
 {
     return m_d->rootLayer->projection();
-}
-
-KisLayerSP KisImage::activateLayer(KisLayerSP layer)
-{
-
-    m_d->activeLayer = layer;
-    emit sigLayerActivated(m_d->activeLayer);
-    emit sigMaskInfoChanged();
-
-    return layer;
 }
 
 KisLayerSP KisImage::findLayer(const QString& name) const
@@ -714,7 +665,6 @@ void KisImage::preparePaintLayerAfterAdding( KisLayerSP layer )
 
     if (!layer->temporary()) {
         emit sigLayerAdded(layer);
-        activateLayer(layer);
     }
 }
 
@@ -783,9 +733,6 @@ bool KisImage::removeLayer(KisLayerSP layer)
 
         KisLayerSP wasAbove = layer->nextSibling();
         KisLayerSP wasBelow = layer->prevSibling();
-        const bool wasActive = layer == activeLayer();
-        // sigLayerRemoved can set it to 0, we don't want that in the else of wasActive!
-        KisLayerSP actLayer = activeLayer();
 
         const bool success = parent->removeLayer(layer);
 
@@ -796,18 +743,6 @@ bool KisImage::removeLayer(KisLayerSP layer)
             }
             if (!layer->temporary()) {
                 emit sigLayerRemoved(layer, parent, wasAbove);
-                if (wasActive) {
-                    if (wasBelow)
-                        activateLayer(wasBelow);
-                    else if (wasAbove)
-                        activateLayer(wasAbove);
-                    else if (parent != rootLayer())
-                        activateLayer(KisLayerSP(parent.data()));
-                    else
-                        activateLayer(rootLayer()->firstChild());
-                } else {
-                    activateLayer(actLayer);
-                }
             }
         }
         return success;
@@ -920,7 +855,6 @@ void KisImage::flatten()
     lock();
 
     addLayer(KisLayerSP(dst), m_d->rootLayer, KisLayerSP(0));
-    activateLayer(KisLayerSP(dst));
 
     unlock();
 
@@ -1169,7 +1103,6 @@ void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
     m_d->rootLayer = rootLayer;
     m_d->projection->setRootLayer( rootLayer );
-    activateLayer(m_d->rootLayer->firstChild());
 }
 
 void KisImage::addAnnotation(KisAnnotationSP annotation)

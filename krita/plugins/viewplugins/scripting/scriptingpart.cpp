@@ -133,7 +133,6 @@ ScriptingPart::~ScriptingPart()
 
 void ScriptingPart::started(Kross::Action*)
 {
-//     kDebug() << "ScriptingPart::executionStarted" << endl;
 }
 
 void ScriptingPart::finished(Kross::Action*)

@@ -140,7 +140,6 @@ KisLayerBox::~KisLayerBox()
 
 void KisLayerBox::setImage(KisLayerManager * layerManager, KisImageSP img, KisLayerModel * layerModel)
 {
-    kDebug() << "KisLayerBox::setImage layer model " << layerModel << endl;
 
     if (m_image == img)
         return;
@@ -153,7 +152,7 @@ void KisLayerBox::setImage(KisLayerManager * layerManager, KisImageSP img, KisLa
 
     if (img) {
 
-        connect(img.data(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(updateUI()));
+        connect(m_layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(updateUI()));
         connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(updateUI()));
         connect(img.data(), SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                 this, SLOT(updateUI()));

@@ -342,24 +342,6 @@ public:
     /// of this image.
     KisPaintDeviceSP projection();
 
-private:
-public:
-    /// Get the active painting device. Returns 0 if the active layer
-    /// does not have a paint device. @deprecated: Use
-    /// KisView2::layerManager::activePaintDevice() instead
-    KisPaintDeviceSP activeDevice() KDE_DEPRECATED;
-
-    /// @deprecated: use KisView2::layerManager::activeLayer() or the
-    /// active layer property from KoCanvasResourceProvider instead
-    KisLayerSP activeLayer() const KDE_DEPRECATED;
-
-
-    /// @deprecated: Use the activateLayer method on
-    /// KisView2::layerManager instead
-    KisLayerSP activateLayer(KisLayerSP layer) KDE_DEPRECATED;
-
-public:
-
     KisLayerSP findLayer(const QString& name) const;
 
     KisLayerSP findLayer(int id) const;
@@ -419,7 +401,6 @@ public:
 
     /**
      * Merge all visible layers and discard hidden ones.
-     * The resulting layer will be activated.
      */
     void flatten();
 
@@ -473,9 +454,6 @@ public:
 signals:
 
     void sigActiveSelectionChanged(KisImageSP image);
-
-    /// Emitted after a different layer is made active. Deprecated: use the same signal on KisView2 instead.
-    void sigLayerActivated(KisLayerSP layer);
 
     /// Emitted after a layer is added: you can find out where by asking it for its parent(), et al.
     void sigLayerAdded(KisLayerSP layer);

@@ -527,14 +527,15 @@ void KisView2::connectCurrentImage()
         connect(img.data(), SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
         connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
 
+        connect( m_d->layerManager, SIGNAL( sigLayerActivated( KisLayerSP ) ),
+                 m_d->resourceProvider, SLOT( slotLayerActivated( layer ) ) );
+
 //         m_d->maskManager->maskUpdated();
 
         // Temporary forwarding of signals until these deprecated
         // signals are gone from KisImage
         connect( img.data(), SIGNAL( sigColorSpaceChanged( KoColorSpace * ) ),
                  m_d->layerManager, SIGNAL( currentColorSpaceChanged( KoColorSpace * ) ) );
-        connect( img.data(), SIGNAL( sigLayerActivated( KisLayerSP ) ),
-                 m_d->layerManager, SIGNAL( sigLayerActivated( KisLayerSP  ) ) );
 
         connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
         connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), m_d->canvas, SLOT(updateCanvas()));

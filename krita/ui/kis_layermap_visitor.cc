@@ -58,7 +58,6 @@ bool KisLayerMapVisitor::visit( KisExternalLayer * layer)
 bool KisLayerMapVisitor::visit(KisPaintLayer *layer)
 {
 //             kDebug(41007) << "KisLayerMap visitor adding paint layer: " << layer->name() << endl;
-    kDebug() << layer << " " << layer->parentLayer().data() << endl;
     Q_ASSERT( layer->parentLayer() );
     Q_ASSERT( m_layerMap.contains( layer->parentLayer() ) );
 
@@ -87,7 +86,6 @@ bool KisLayerMapVisitor::visit(KisGroupLayer *layer)
 
     KisLayerSP child = layer->firstChild();
     while (child) {
-        kDebug() << layer << " " << child->parentLayer().data() << " " << child.data() << endl;
         child->accept(*this);
         child = child->nextSibling();
     }

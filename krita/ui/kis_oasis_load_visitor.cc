@@ -149,14 +149,11 @@ void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerS
 
                 QString filterType = subelem.attribute("type");
                 QStringList filterTypeSplit = filterType.split(":");
-                kDebug() << filterType << endl;
                 KisFilterSP f = 0;
-                kDebug() << filterTypeSplit[0] << " | " <<  filterTypeSplit[1] << " | " << filterTypeSplit[2] << endl;
                 if(filterTypeSplit[0] == "applications" and filterTypeSplit[1] == "krita")
                 {
                     f = KisFilterRegistry::instance()->value(filterTypeSplit[2]);
                 }
-                kDebug() << f << endl;
                 KisFilterConfiguration * kfc = f->defaultConfiguration(0);
                 KisAdjustmentLayerSP layer = new KisAdjustmentLayer( gL->image() , "", kfc, KisSelectionSP(0));
                 m_image->addLayer(layer, gL, gL->childCount() );

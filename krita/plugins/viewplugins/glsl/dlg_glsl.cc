@@ -157,7 +157,6 @@ bool DlgGlsl::setupGL()
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_d->fb);
 
     glGetIntegerv(GL_MAX_TEXTURE_SIZE,&m_d->maxTextureSize);
-    kDebug() << "GL_MAX_TEXTURE_SIZE: " << m_d->maxTextureSize << endl;
 
     return true;
 }

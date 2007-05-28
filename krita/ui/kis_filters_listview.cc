@@ -77,18 +77,15 @@ public:
             m_item->filter()->process(m_dev, m_bounds, m_item->filterConfiguration());
 
             if (!m_canceled) {
-                kDebug() << "Converting to qimage " << endl;
                 m_image = m_dev->convertToQImage(m_profile);
 
             }
 
             setFinished( true );
-            kDebug() << "done " << m_item->filter()->name() << endl;
         }
 
     KisFiltersIconViewItem * item()
         {
-            kDebug() << "getting item " << m_item->filter()->name() << endl;
             m_item->setIcon( QPixmap::fromImage( m_image ) );
             return m_item;
         }

@@ -101,6 +101,7 @@ public:
     QImage canvasCache; // XXX: use KisQPainterImageContext to share
                         // cache data between views. Finish that class.
     QPoint documentOffset;
+    KoShapeControllerBase * sc;
 
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
@@ -212,6 +213,11 @@ KoShapeManager* KisCanvas2::shapeManager() const
         if ( shapeLayer )
             return shapeLayer->shapeManager();
     }
+    return m_d->shapeManager;
+}
+
+KoShapeManager * KisCanvas2::globalShapeManager() const
+{
     return m_d->shapeManager;
 }
 

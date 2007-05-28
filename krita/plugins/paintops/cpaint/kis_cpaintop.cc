@@ -66,7 +66,6 @@ KisCPaintOpFactory::KisCPaintOpFactory()
 
 KisCPaintOpFactory::~KisCPaintOpFactory()
 {
-    kDebug() << "KisCPaintOpFactory::~KisCPaintOpFactory()\n";
 /*
     for (uint i = 0; i < m_brushes.count(); i++) {
         delete m_brushes[i];

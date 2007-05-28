@@ -35,6 +35,7 @@ class QString;
 class KoColorProfile;
 class KoColorSpace;
 class KoColor;
+class KoShape;
 
 class KoShapeControllerBase;
 class KisView2;
@@ -136,6 +137,8 @@ public:
      * the flake shape hierarchy.
      */
     KoShapeControllerBase * shapeController();
+
+    KoShape * shapeForLayer( KisLayerSP layer );
 
     /**
      * The layer model provides a light-weight Qt model-view

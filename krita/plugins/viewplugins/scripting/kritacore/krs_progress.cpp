@@ -30,12 +30,10 @@ Progress::Progress(KisView2* view)
     , m_view(view)
     , m_progressTotalSteps(0)
 {
-    //kDebug() << "Progress::Progress" << endl;
 }
 
 Progress::~Progress()
 {
-    //kDebug() << "Progress::~Progress" << endl;
 }
 
 void Progress::activateAsSubject()

@@ -44,7 +44,6 @@ K_EXPORT_COMPONENT_FACTORY( kritatogether, TogetherPluginFactory( "krita" ) )
 TogetherPlugin::TogetherPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent), m_recorder (new KisEventsRecorder)
 {
-    kDebug() << "Load together plugin" << endl;
     if ( parent->inherits("KisView2") )
     {
         m_view = (KisView2*) parent;

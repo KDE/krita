@@ -58,6 +58,7 @@
 #include <KoXmlWriter.h>
 #include <KoSelection.h>
 #include <KoDocumentInfo.h>
+#include <KoShape.h>
 
 // Krita Image
 #include "kis_adjustment_layer.h"
@@ -922,6 +923,12 @@ KoShapeControllerBase * KisDoc2::shapeController()
 {
     return m_d->shapeController;
 }
+
+KoShape * KisDoc2::shapeForLayer( KisLayerSP layer )
+{
+    return m_d->shapeController->shapeForLayer( layer );
+}
+
 
 KisLayerModel * KisDoc2::layerModel()
 {

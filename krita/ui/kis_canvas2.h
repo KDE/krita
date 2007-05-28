@@ -75,7 +75,19 @@ public: // KoCanvasBase implementation
 
     void addCommand(QUndoCommand *command);
 
-    KoShapeManager *shapeManager() const;
+    /**
+     * Return the right shape manager for the current layer. That is
+     * to say, if the current layer is a shape layer, return the shape
+     * layer's canvas' shapemanager, else the shapemanager associated
+     * with the global krita canvas.
+     */
+    KoShapeManager * shapeManager() const;
+
+
+    /**
+     * Return the shape manager associated with this canvas
+     */
+    KoShapeManager * globalShapeManager() const;
 
     void updateCanvas(const QRectF& rc);
 

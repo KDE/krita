@@ -33,7 +33,6 @@ class KisScriptFilter::Private
 
 KisScriptFilter::KisScriptFilter(Kross::Action* action) : KisFilter(KoID(action->name(),action->text()), "adjust", action->text()), d(new Private(action))
 {
-    kDebug()<<"KisScriptFilter Ctor filter name="<<d->action->name()<<" text="<<d->action->text()<<endl;
     d->action->addObject(this, "KritaFilter", Kross::ChildrenInterface::AutoConnectSignals);
 }
 
@@ -51,7 +50,6 @@ QString KisScriptFilter::category() const
 
 void KisScriptFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
 {
-    kDebug()<<"######################## KisScriptFilter::process"<<endl;
     d->action->trigger();
 
     emit scriptTest("My Stringgggggggggggggg");

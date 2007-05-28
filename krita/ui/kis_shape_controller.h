@@ -44,13 +44,12 @@ public:
     ~KisShapeController();
 
     void setImage( KisImageSP image );
-
     void addShape( KoShape* shape );
     void removeShape( KoShape* shape );
 
     void setInitialShapeForView( KisView2 * view );
 
-    KoShape * activeLayerShape();
+    KoShape * shapeForLayer( KisLayerSP layer );
 
 private slots:
 
@@ -60,7 +59,6 @@ private slots:
     void slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis );
     void slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis );
     void slotLayersChanged( KisGroupLayerSP rootLayer );
-    void slotLayerActivated( KisLayerSP layer );
 
 private:
 

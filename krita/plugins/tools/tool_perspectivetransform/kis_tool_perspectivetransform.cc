@@ -152,12 +152,11 @@ void KisToolPerspectiveTransform::deactivate()
 
     if (m_subject->undoAdapter()) m_subject->undoAdapter()->removeCommandHistoryListener( this );
 
-    
+
     if (!m_currentImage) return;
 
     paintOutline();
 
-   disconnect(m_currentImage.data(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayerActivated(KisLayerSP)));
 }
 
 void KisToolPerspectiveTransform::activate()
@@ -192,14 +191,12 @@ void KisToolPerspectiveTransform::activate()
             initHandles();
         }
     }
-    if (m_subject)
-        connect(m_currentImage, SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayerActivated(KisLayerSP)));
 }
 
 void KisToolPerspectiveTransform::initHandles()
 {
 //     qint32 x,y,w,h;
-    
+
 
     KisPaintDeviceSP dev = m_currentLayer->paintDevice();
     if (!dev ) return;
@@ -263,7 +260,7 @@ void KisToolPerspectiveTransform::mousePressEvent(KoPointerEvent *event)
             }
             case EDITRECTINTERRACTION:
             {
-                
+
 
                 if (m_currentImage && m_currentLayer->paintDevice() && event->button() == Qt::LeftButton) {
                     m_actualyMoveWhileSelected = false;
@@ -418,7 +415,7 @@ void KisToolPerspectiveTransform::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolPerspectiveTransform::mouseReleaseEvent(KoPointerEvent * event)
 {
-    
+
 
     if (!m_currentImage)
         return;
@@ -575,7 +572,7 @@ void KisToolPerspectiveTransform::paintOutline(QPainter& gc, const QRect&)
 
 void KisToolPerspectiveTransform::transform()
 {
-    
+
 
     if (!m_currentImage || !m_currentLayer->paintDevice())
         return;
@@ -668,12 +665,6 @@ void KisToolPerspectiveTransform::notifyCommandExecuted( K3Command * command)
         m_subject->canvasController() ->updateCanvas();
     }
 }
-
-void KisToolPerspectiveTransform::slotLayerActivated(KisLayerSP)
-{
-    activate();
-}
-
 
 QWidget* KisToolPerspectiveTransform::createOptionWidget()
 {

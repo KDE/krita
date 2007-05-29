@@ -153,9 +153,9 @@ void KisShapeController::addShape( KoShape* shape )
     // layer shapes are added to kisimage and then end up in
     // slotLayerAdded
 
-    if ( shape->shapeId() != KIS_LAYER_SHAPE_ID  ||
-         shape->shapeId() != KIS_SHAPE_LAYER_ID  ||
-         shape->shapeId() != KIS_LAYER_CONTAINER_ID ||
+    if ( shape->shapeId() != KIS_LAYER_SHAPE_ID  &&
+         shape->shapeId() != KIS_SHAPE_LAYER_ID  &&
+         shape->shapeId() != KIS_LAYER_CONTAINER_ID &&
          shape->shapeId() != KIS_MASK_SHAPE_ID ) {
 
         // An ordinary shape, if the active layer is a KisShapeLayer,

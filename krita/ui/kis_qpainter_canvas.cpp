@@ -74,7 +74,6 @@ public:
     Private(const KoViewConverter *vc)
         : toolProxy(0),
         canvas(0),
-        shapeManager(0),
         viewConverter(vc),
         gridDrawer(0),
         currentExposure( NOT_DEFAULT_EXPOSURE )
@@ -83,7 +82,6 @@ public:
 
     KoToolProxy * toolProxy;
     KisCanvas2 * canvas;
-    KoShapeManager * shapeManager;
     const KoViewConverter * viewConverter;
     QBrush checkBrush;
     QImage prescaledImage;
@@ -102,7 +100,6 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
 
     m_d = new Private(canvas->viewConverter());
     m_d->canvas =  canvas;
-    m_d->shapeManager = canvas->shapeManager();
     m_d->gridDrawer = new QPainterGridDrawer(canvas->view()->document(), canvas->viewConverter());
     m_d->toolProxy = canvas->toolProxy();
     setAutoFillBackground(true);
@@ -200,7 +197,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     // Paint the shapes (other than the layers)
     gc.save();
     gc.setClipRect( ev->rect() );
-    m_d->shapeManager->paint( gc, *m_d->viewConverter, false );
+    m_d->canvas->globalShapeManager()->paint( gc, *m_d->viewConverter, false );
     gc.restore();
 
     //Paint marching ants

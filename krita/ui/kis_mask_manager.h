@@ -45,7 +45,6 @@ public slots:
     void slotMaskToSelection();
     void slotApplyMask();
     void slotRemoveMask();
-    void slotEditMask();
     void slotShowMask();
     void maskUpdated();
 
@@ -57,7 +56,6 @@ private:
     KAction *m_maskToSelection;
     KAction *m_applyMask;
     KAction *m_removeMask;
-    KToggleAction *m_editMask;
     KToggleAction *m_showMask;
 
 };

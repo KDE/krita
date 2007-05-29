@@ -35,7 +35,6 @@ KisMaskManager::KisMaskManager( KisView2 * view)
     , m_maskToSelection( 0 )
     , m_applyMask( 0 )
     , m_removeMask( 0 )
-    , m_editMask( 0 )
     , m_showMask( 0 )
 {
 }
@@ -47,11 +46,11 @@ void KisMaskManager::setup( KActionCollection * actionCollection )
     connect(m_createMask, SIGNAL(triggered()), this, SLOT(slotCreateMask()));
 
     m_maskFromSelection  = new KAction(i18n("Mask From Selection"), this);
-    actionCollection->addAction("mask_fromsel", m_maskFromSelection );
+    actionCollection->addAction("create_mask_from_selection", m_maskFromSelection );
     connect(m_maskFromSelection, SIGNAL(triggered()), this, SLOT(slotMaskFromSelection()));
 
     m_maskToSelection  = new KAction(i18n("Mask To Selection"), this);
-    actionCollection->addAction("mask_tosel", m_maskToSelection );
+    actionCollection->addAction("create_selection_from_mask", m_maskToSelection );
     connect(m_maskToSelection, SIGNAL(triggered()), this, SLOT(slotMaskToSelection()));
 
     m_applyMask  = new KAction(i18n("Apply Mask"), this);
@@ -61,10 +60,6 @@ void KisMaskManager::setup( KActionCollection * actionCollection )
     m_removeMask  = new KAction(i18n("Remove Mask"), this);
     actionCollection->addAction("remove_mask", m_removeMask );
     connect(m_removeMask, SIGNAL(triggered()), this, SLOT(slotRemoveMask()));
-
-    m_editMask  = new KToggleAction(i18n("Edit Mask"), this);
-    actionCollection->addAction("edit_mask", m_editMask );
-    connect(m_editMask, SIGNAL(triggered()), this, SLOT(slotEditMask()));
 
     m_showMask  = new KToggleAction(i18n("Show Mask"), this);
     actionCollection->addAction("show_mask", m_showMask );
@@ -79,85 +74,75 @@ void KisMaskManager::updateGUI()
 
 
 void KisMaskManager::slotCreateMask() {
-    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
-    if (!layer)
-        return;
-    QUndoCommand *cmd = layer->createMaskCommand();
-    m_view->document()->addCommand(cmd);
+//     KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
+//     if (!layer)
+//         return;
+//     QUndoCommand *cmd = layer->createMaskCommand();
+//     m_view->document()->addCommand(cmd);
 }
 void KisMaskManager::slotMaskFromSelection() {
-    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
-    if (!layer)
-        return;
+//     KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
+//     if (!layer)
+//         return;
 
-    QUndoCommand *cmd = layer->maskFromSelectionCommand();
-    m_view->document()->addCommand(cmd);
+//     QUndoCommand *cmd = layer->maskFromSelectionCommand();
+//     m_view->document()->addCommand(cmd);
 }
 
 
 void KisMaskManager::slotMaskToSelection() {
-    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
-    if (!layer)
-        return;
+//     KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
+//     if (!layer)
+//         return;
 
-    QUndoCommand *cmd = layer->maskToSelectionCommand();
-    m_view->document()->addCommand(cmd);
+//     QUndoCommand *cmd = layer->maskToSelectionCommand();
+//     m_view->document()->addCommand(cmd);
 }
 
 void KisMaskManager::slotApplyMask() {
-    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
-    if (!layer)
-        return;
+//     KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
+//     if (!layer)
+//         return;
 
-    QUndoCommand *cmd = layer->applyMaskCommand();
-    m_view->document()->addCommand(cmd);
+//     QUndoCommand *cmd = layer->applyMaskCommand();
+//     m_view->document()->addCommand(cmd);
 }
 
 void KisMaskManager::slotRemoveMask() {
-    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
-    if (!layer)
-        return;
+//     KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
+//     if (!layer)
+//         return;
 
-    QUndoCommand *cmd = layer->removeMaskCommand();
-    m_view->document()->addCommand(cmd);
-}
-
-void KisMaskManager::slotEditMask() {
-    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
-    if (!layer)
-        return;
-
-    layer->setEditMask(m_editMask->isChecked());
+//     QUndoCommand *cmd = layer->removeMaskCommand();
+//     m_view->document()->addCommand(cmd);
 }
 
 void KisMaskManager::slotShowMask() {
-    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
-    if (!layer)
-        return;
+//     KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
+//     if (!layer)
+//         return;
 
-    layer->setRenderMask(m_showMask->isChecked());
+//     layer->setRenderMask(m_showMask->isChecked());
 }
 
 void KisMaskManager::maskUpdated() {
-    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
-    if (!layer) {
-        m_createMask->setEnabled(false);
-        m_applyMask->setEnabled(false);
-        m_removeMask->setEnabled(false);
-        m_editMask->setEnabled(false);
-        m_showMask->setEnabled(false);
-        return;
-    }
-    m_createMask->setEnabled(!layer->hasMask());
-    m_maskFromSelection->setEnabled(true); // Perhaps also update this to false when no selection?
-    m_maskToSelection->setEnabled(layer->hasMask());
-    m_applyMask->setEnabled(layer->hasMask());
-    m_removeMask->setEnabled(layer->hasMask());
+//     KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_view->image()->activeLayer().data());
+//     if (!layer) {
+//         m_createMask->setEnabled(false);
+//         m_applyMask->setEnabled(false);
+//         m_removeMask->setEnabled(false);
+//         m_showMask->setEnabled(false);
+//         return;
+//     }
+//     m_createMask->setEnabled(!layer->hasMask());
+//     m_maskFromSelection->setEnabled(true); // Perhaps also update this to false when no selection?
+//     m_maskToSelection->setEnabled(layer->hasMask());
+//     m_applyMask->setEnabled(layer->hasMask());
+//     m_removeMask->setEnabled(layer->hasMask());
 
-    m_editMask->setEnabled(layer->hasMask());
-    m_editMask->setChecked(layer->editMask());
-    m_showMask->setEnabled(layer->hasMask());
-    m_showMask->setChecked(layer->renderMask());
+//     m_editMask->setChecked(layer->editMask());
+//     m_showMask->setEnabled(layer->hasMask());
+//     m_showMask->setChecked(layer->renderMask());
 }
 
 #include "kis_mask_manager.moc"

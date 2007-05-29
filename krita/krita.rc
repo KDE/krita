@@ -79,7 +79,6 @@
   <Action name="remove_layer"/>
   <Action name="duplicate_layer"/>
   <Action name="hide_layer"/>
-  <Action name="link_layer"/>
   <Separator/>
   <Action name="raiselayer"/>
   <Action name="lowerlayer"/>
@@ -107,14 +106,14 @@
         <Action name="create_transparency_mask"/>
         <Action name="create_filter_mask"/>
         <Action name="create_transformation_mask"/>
-    </Menu>
-    <Action name="mask_fromsel"/>
+	<Action name="create_mask_from_selection"/>
+        <Action name="create_mask_from_layer"/>
+        <Action name="create_clone_mask_from_layer"/>
     </Menu>
     <Action name="mask_tosel"/>
     <Action name="apply_mask"/>
     <Action name="remove_mask"/>
     <Seperator/>
-    <Action name="edit_mask"/>
     <Action name="show_mask"/>
 </Menu>
 

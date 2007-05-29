@@ -51,7 +51,6 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
         m_layers.push_back( it->data()->clone() );
     }
     m_projection = new KisPaintDevice(*rhs.m_projection.data());
-//    m_projection->setParentLayer(this);
 }
 
 KisLayerSP KisGroupLayer::clone() const
@@ -154,12 +153,14 @@ int KisGroupLayer::index(KisLayerSP layer) const
 
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
 {
-    if (x < 0 || qBound(uint(0), uint(x), childCount()) != uint(x) ||
-        newLayer->parent() || m_layers.contains(newLayer))
-    {
-        kWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, int x)!" << endl;
-        return false;
-    }
+    Q_ASSERT( newLayer );
+
+    if ( !newLayer ) return false;
+    if ( x < 0 ) return false;
+    if ( qBound(uint(0), uint(x), childCount()) != uint(x) ) return false;
+    if ( newLayer->parentLayer() ) return false;
+    if ( m_layers.contains(newLayer) ) return false;
+
     if ( image() ) image()->sigAboutToAddALayer(this, x);
     uint index(x);
     if (index == 0)
@@ -323,7 +324,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     // If this is the rootlayer, don't do anything with adj. layers that are below the
     // first paintlayer
-    bool gotPaintLayer = (!parent().isNull());
+    bool gotPaintLayer = (!parentLayer().isNull());
 
     // Look through all the child layers, searching for the first dirty layer
     // if it's found, and if we have found an adj. layer before the the dirty layer,

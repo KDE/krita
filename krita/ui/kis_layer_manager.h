@@ -87,8 +87,13 @@ public slots:
 
     void layerAdd();
     void addLayer(KisGroupLayerSP parent, KisLayerSP above);
-
     void addGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
+
+    void addCloneLayer();
+    void addCloneLayer( KisGroupLayerSP parent, KisLayerSP above );
+
+    void addShapeLayer();
+    void addShapeLayer( KisGroupLayerSP parent, KisLayerSP above );
 
     void addAdjustmentLayer();
     void addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above);
@@ -128,6 +133,8 @@ private:
     QAction *m_imgMergeLayer;
     QAction * m_actionAdjustmentLayer;
     QAction *m_layerAdd;
+    QAction *m_layerAddCloneLayer;
+    QAction *m_layerAddShapeLayer;
     QAction *m_layerBottom;
     QAction *m_layerDup;
     KToggleAction *m_layerHide;

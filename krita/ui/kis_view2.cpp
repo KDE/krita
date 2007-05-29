@@ -396,6 +396,7 @@ void KisView2::slotLoadingFinished()
         img->unlock();
     }
 
+
 //     kDebug(41007) << "image finished loading, active layer: " << img->activeLayer() << ", root layer: " << img->rootLayer() << endl;
 
 }
@@ -435,6 +436,12 @@ void KisView2::createGUI()
 
     connect(m_d->layerBox, SIGNAL(sigRequestGroupLayer(KisGroupLayerSP, KisLayerSP)),
             m_d->layerManager, SLOT(addGroupLayer(KisGroupLayerSP, KisLayerSP)));
+
+    connect(m_d->layerBox, SIGNAL(sigRequestCloneLayer(KisGroupLayerSP, KisLayerSP)),
+            m_d->layerManager, SLOT(addCloneLayer(KisGroupLayerSP, KisLayerSP)));
+
+    connect(m_d->layerBox, SIGNAL(sigRequestShapeLayer(KisGroupLayerSP, KisLayerSP)),
+            m_d->layerManager, SLOT(addShapeLayer(KisGroupLayerSP, KisLayerSP)));
 
     connect(m_d->layerBox, SIGNAL(sigRequestAdjustmentLayer(KisGroupLayerSP, KisLayerSP)),
             m_d->layerManager, SLOT(addAdjustmentLayer(KisGroupLayerSP, KisLayerSP)));
@@ -546,6 +553,7 @@ void KisView2::connectCurrentImage()
         connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), m_d->canvas, SLOT(updateCanvas()));
 
     }
+
     m_d->canvas->connectCurrentImage();
 
     if( m_d->layerBox ) {

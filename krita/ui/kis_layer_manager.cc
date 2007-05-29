@@ -43,6 +43,8 @@
 #include <KoShapeManager.h>
 
 
+#include <kis_clone_layer.h>
+#include <kis_shape_layer.h>
 #include <kis_adjustment_layer.h>
 #include <kis_filter.h>
 #include <kis_filter_strategy.h>
@@ -84,6 +86,8 @@ KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
     , m_imgMergeLayer( 0 )
     , m_actionAdjustmentLayer( 0 )
     , m_layerAdd( 0 )
+    , m_layerAddCloneLayer( 0 )
+    , m_layerAddShapeLayer( 0 )
     , m_layerBottom( 0 )
     , m_layerDup( 0 )
     , m_layerHide( 0 )
@@ -175,6 +179,14 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_actionAdjustmentLayer  = new KAction(i18n("&Adjustment Layer"), this);
     actionCollection->addAction("insert_adjustment_layer", m_actionAdjustmentLayer );
     connect(m_actionAdjustmentLayer, SIGNAL(triggered()), this, SLOT(addAdjustmentLayer()));
+
+    m_layerAddCloneLayer  = new KAction(i18n("&Clone Layer"), this);
+    actionCollection->addAction("insert_clone_layer", m_layerAddCloneLayer );
+    connect(m_layerAddCloneLayer, SIGNAL(triggered()), this, SLOT(addCloneLayer()));
+
+    m_layerAddShapeLayer  = new KAction(i18n("&Shape Layer"), this);
+    actionCollection->addAction("insert_shape_layer", m_layerAddShapeLayer );
+    connect(m_layerAddShapeLayer, SIGNAL(triggered()), this, SLOT(addShapeLayer()));
 
     m_layerRm  = new KAction(i18n("&Remove"), this);
     actionCollection->addAction("remove_layer", m_layerRm );
@@ -494,12 +506,6 @@ void KisLayerManager::addLayer(KisGroupLayerSP parent, KisLayerSP above)
     if (img) {
         KisConfig cfg;
         QString profilename;
-//         if(img->colorSpace()->profile())
-//             profilename = img->colorSpace()->profile()->name();
-
-//         NewLayerDialog dlg(KoID(img->colorSpace()->id()), profilename, img->nextLayerName(), m_view);
-
-//         if (dlg.exec() == QDialog::Accepted) {
         KisLayerSP layer = KisLayerSP(new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, img->colorSpace()));
         if (layer) {
             layer->setCompositeOp(img->colorSpace()->compositeOp( COMPOSITE_OVER ));
@@ -509,10 +515,6 @@ void KisLayerManager::addLayer(KisGroupLayerSP parent, KisLayerSP above)
         } else {
             KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
         }
-//         }
-//         else {
-//             img->rollBackLayerName();
-//         }
     }
 }
 
@@ -520,22 +522,86 @@ void KisLayerManager::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
 {
     KisImageSP img = m_view->image();
     if (img) {
-//         QString profilename;
-//         if(img->colorSpace()->profile())
-//             profilename = img->colorSpace()->profile()->name();
-//         KisConfig cfg;
-//         NewLayerDialog dlg(KoID(img->colorSpace()->id()), profilename, img->nextLayerName(), m_view);
-//         dlg.setColorSpaceEnabled(false);
+        KisLayerSP layer = KisLayerSP(new KisGroupLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE));
+        if (layer) {
+            layer->setCompositeOp(img->colorSpace()->compositeOp( COMPOSITE_OVER ));
+            img->addLayer(layer, parent, above);
+            m_view->canvas()->update();
+        } else {
+            KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
+        }
+    }
+}
 
-//         if (dlg.exec() == QDialog::Accepted) {
-            KisLayerSP layer = KisLayerSP(new KisGroupLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE));
-            if (layer) {
-                layer->setCompositeOp(img->colorSpace()->compositeOp( COMPOSITE_OVER ));
-                img->addLayer(layer, parent, above);
-                m_view->canvas()->update();
-//             } else {
-//                 KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
-//             }
+
+void KisLayerManager::addCloneLayer()
+{
+    KisImageSP img = m_view->image();
+    if (img && activeLayer()) {
+        addCloneLayer(activeLayer()->parentLayer(), activeLayer());
+    }
+    else if (img)
+        addCloneLayer(img->rootLayer(), KisLayerSP(0));
+}
+
+void KisLayerManager::addCloneLayer( KisGroupLayerSP parent, KisLayerSP above )
+{
+    KisImageSP img = m_view->image();
+    if ( img ) {
+        // Check whether we are not cloning a parent layer
+        if ( KisGroupLayer * from = dynamic_cast<KisGroupLayer*>( m_activeLayer.data() ) ) {
+            KisGroupLayerSP parentLayer = parent;
+            while ( parentLayer && parentLayer != img->rootLayer() ) {
+                if ( parentLayer.data() == from ) {
+                    // The chosen layer is one of our own parents -- this will
+                    // lead to cyclic behaviour when updating. Don't do that!
+                    return;
+                }
+                parentLayer = parentLayer->parentLayer();
+            }
+        }
+
+        KisLayerSP layer = new KisCloneLayer( m_activeLayer, img.data(), img->nextLayerName(), OPACITY_OPAQUE );
+
+        if ( layer ) {
+
+            layer->setCompositeOp( img->colorSpace()->compositeOp( COMPOSITE_OVER ) );
+            img->addLayer( layer, parent, above );
+
+            m_view->canvas()->update();
+
+        } else {
+            KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
+        }
+    }
+}
+
+
+void KisLayerManager::addShapeLayer()
+{
+    KisImageSP img = m_view->image();
+    if (img && activeLayer()) {
+        addShapeLayer(activeLayer()->parentLayer(), activeLayer());
+    }
+    else if (img)
+        addShapeLayer(img->rootLayer(), KisLayerSP(0));
+}
+
+
+void KisLayerManager::addShapeLayer( KisGroupLayerSP parent, KisLayerSP above )
+{
+    KisImageSP img = m_view->image();
+    if ( img ) {
+        KoShapeContainer * parentContainer = dynamic_cast<KoShapeContainer*>( m_doc->shapeForLayer( parent ) );
+        if ( !parentContainer ) return;
+
+        KisLayerSP layer = KisLayerSP( new KisShapeLayer(parentContainer, img.data(), img->nextLayerName(), OPACITY_OPAQUE ) );
+        if ( layer ) {
+            layer->setCompositeOp( img->colorSpace()->compositeOp( COMPOSITE_OVER ) );
+            img->addLayer( layer, parent, above );
+            m_view->canvas()->update();
+        } else {
+            KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
         }
     }
 }

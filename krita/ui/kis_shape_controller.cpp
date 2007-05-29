@@ -30,6 +30,7 @@
 #include <KoShapeLayer.h>
 
 #include "kis_adjustment_layer.h"
+#include "kis_clone_layer.h"
 #include "kis_canvas2.h"
 #include "kis_doc2.h"
 #include "kis_image.h"
@@ -237,12 +238,15 @@ void KisShapeController::slotLayerAdded( KisLayerSP layer )
     if ( dynamic_cast<KisGroupLayer*>( layer.data() ) ) {
         shape = new KisLayerContainerShape(parent, layer);
     }
-    else if ( dynamic_cast<KisPaintLayer*>( layer.data() )  || dynamic_cast<KisAdjustmentLayer*>( layer.data() ) ) {
+    else if ( dynamic_cast<KisPaintLayer*>( layer.data() )  ||
+              dynamic_cast<KisAdjustmentLayer*>( layer.data() ) ||
+              dynamic_cast<KisCloneLayer*>( layer.data() ) ) {
         shape = new KisLayerShape( parent, layer );
     }
     else if ( dynamic_cast<KisShapeLayer*>( layer.data() ) ) {
         shape = dynamic_cast<KisShapeLayer*>( layer.data() );
     }
+
     Q_ASSERT( shape );
 
     // Put the layer in the right place in the hierarchy

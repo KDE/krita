@@ -69,7 +69,8 @@
 <Menu name="Layer"><text>&amp;Layer</text>
   <Menu name="LayerNew"><text>New</text>
   	<Action name="insert_layer"/>
-	<Action name="insert_part_layer"/>
+  	<Action name="insert_clone_layer"/>
+  	<Action name="insert_shape_layer"/>
         <Action name="insert_adjustment_layer"/>
   	<Action name="insert_image_as_layer"/>
   	<Action name="cut_selection_to_new_layer"/>
@@ -79,17 +80,6 @@
   <Action name="duplicate_layer"/>
   <Action name="hide_layer"/>
   <Action name="link_layer"/>
-  <Separator/>
-  <Menu name="LayerNew"><text>Mask</text>
-    <Action name="create_mask"/>
-    <Action name="mask_fromsel"/>
-    <Action name="mask_tosel"/>
-    <Action name="apply_mask"/>
-    <Action name="remove_mask"/>
-    <Seperator/>
-    <Action name="edit_mask"/>
-    <Action name="show_mask"/>
-  </Menu>
   <Separator/>
   <Action name="raiselayer"/>
   <Action name="lowerlayer"/>
@@ -110,6 +100,23 @@
   <Action name="flatten_image"/>
 </Menu>
 
+
+<Menu name="Mask"><text>&Mask</text>
+    <Menu name="MaskNew"><text>New</text>
+        <Action name="create_protection_mask"/>
+        <Action name="create_transparency_mask"/>
+        <Action name="create_filter_mask"/>
+        <Action name="create_transformation_mask"/>
+    </Menu>
+    <Action name="mask_fromsel"/>
+    </Menu>
+    <Action name="mask_tosel"/>
+    <Action name="apply_mask"/>
+    <Action name="remove_mask"/>
+    <Seperator/>
+    <Action name="edit_mask"/>
+    <Action name="show_mask"/>
+</Menu>
 
 <Menu name="Select"><text>&amp;Select</text>
     <Action name="select_all"/>

@@ -38,6 +38,7 @@ KisLayerShape::KisLayerShape( KoShapeContainer * parent, KisLayerSP layer)
 {
     m_d = new Private();
     m_d->layer = layer;
+    Q_ASSERT( layer->image() );
 
     setShapeId( KIS_LAYER_SHAPE_ID );
     setParent( parent );
@@ -69,8 +70,14 @@ void KisLayerShape::paintComponent(QPainter &painter, const KoViewConverter &con
 
 QSizeF KisLayerShape::size() const
 {
+    Q_ASSERT( m_d );
+    Q_ASSERT( m_d->layer );
+
     QRect br = m_d->layer->extent();
     KisImageSP image = m_d->layer->image();
+
+    if ( !image ) return QSizeF( 0.0, 0.0 );
+
     kDebug(41007) << "KisLayerShape::size extent: " << br << ", x res: " << image->xRes() << ", y res: " << image->yRes() << endl;
 
     return QSizeF( br.width() / image->xRes(), br.height() / image->yRes() );

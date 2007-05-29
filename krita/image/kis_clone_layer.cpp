@@ -43,12 +43,12 @@ public:
     qint32 y;
 };
 
-KisCloneLayer::KisCloneLayer(KisImageSP img, const QString &name, quint8 opacity)
+KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageSP img, const QString &name, quint8 opacity)
     : KisLayer( img, name, opacity )
 {
     m_d = new Private();
     m_d->projection = 0;
-    m_d->copyFrom = 0;
+    m_d->copyFrom = from;
     m_d->type = COPY_PROJECTION;
     m_d->x = 0;
     m_d->y = 0;
@@ -129,7 +129,8 @@ QIcon KisCloneLayer::icon() const
 KoDocumentSectionModel::PropertyList KisCloneLayer::properties() const
 {
     KoDocumentSectionModel::PropertyList l = KisLayer::properties();
-    l << KoDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
+    if ( m_d->copyFrom )
+        l << KoDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
     return l;
 }
 
@@ -202,19 +203,6 @@ QImage KisCloneLayer::createThumbnail(qint32 w, qint32 h)
 
 void KisCloneLayer::setCopyFrom( KisLayerSP fromLayer, CopyLayerType type )
 {
-    // We cannot copy a layer if we're not in a layer stack in an image
-    if ( !image() ) return;
-
-    // Check whether the copy layer is a parent of this layer
-    KisGroupLayerSP parent = parentLayer();
-    while ( parent != image()->rootLayer() ) {
-        if ( parent.data() == fromLayer.data() ) {
-            // The chosen layer is one of our own parents -- this will
-            // lead to cyclic behaviour when updating. Don't do that!
-            return;
-        }
-        parent = parent->parentLayer();
-    }
     m_d->type = type;
     m_d->copyFrom = fromLayer;
     setDirty();

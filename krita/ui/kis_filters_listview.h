@@ -95,7 +95,7 @@ public:
 
 private slots:
 
-    void itemDone( Job * );
+    void itemDone( ThreadWeaver::Job * );
 
 private:
 

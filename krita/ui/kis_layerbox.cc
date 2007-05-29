@@ -88,12 +88,14 @@ KisLayerBox::KisLayerBox()
     m_viewModeMenu = new KMenu( this );
     QActionGroup *group = new QActionGroup( this );
     QList<QAction*> actions;
+
     actions << m_viewModeMenu->addAction(KIcon("fileview-text"),
                i18n("Minimal View"), this, SLOT(slotMinimalView()));
     actions << m_viewModeMenu->addAction(KIcon("fileview-detailed"),
                i18n("Detailed View"), this, SLOT(slotDetailedView()));
     actions << m_viewModeMenu->addAction(KIcon("view_icon"),
                i18n("Thumbnail View"), this, SLOT(slotThumbnailView()));
+
     for( int i = 0, n = actions.count(); i < n; ++i )
     {
         actions[i]->setCheckable( true );
@@ -122,8 +124,10 @@ KisLayerBox::KisLayerBox()
     bnAdd->setMenu(m_newLayerMenu);
     bnAdd->setPopupMode(QToolButton::InstantPopup);
 
-    m_newLayerMenu->addAction(KIcon("document-new"), i18n("&New Layer..."), this, SLOT(slotNewLayer()));
-    m_newLayerMenu->addAction(KIcon("folder"), i18n("New &Group Layer..."), this, SLOT(slotNewGroupLayer()));
+    m_newLayerMenu->addAction(KIcon("document-new"), i18n("&New Layer"), this, SLOT(slotNewLayer()));
+    m_newLayerMenu->addAction(KIcon("folder"), i18n("New &Group Layer"), this, SLOT(slotNewGroupLayer()));
+    m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("New &Clone Layer"), this, SLOT(slotNewCloneLayer()));
+    m_newLayerMenu->addAction(KIcon("bookmark"), i18n("New &Shape Layer"), this, SLOT(slotNewShapeLayer()));
     m_newLayerMenu->addAction(KIcon("tool_filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
 
     connect(bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
@@ -246,14 +250,18 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addSeparator();
         menu.addAction(KIcon("edit-delete"), i18n("&Remove Layer"), this, SLOT(slotRmClicked()));
         QMenu *sub = menu.addMenu(KIcon("document-new"), i18n("&New"));
-        sub->addAction(KIcon("file"), i18n("&Layer..."), this, SLOT(slotNewLayer()));
-        sub->addAction(KIcon("folder"), i18n("&Group Layer..."), this, SLOT(slotNewGroupLayer()));
+        sub->addAction(KIcon("document-new"), i18n("&Paint Layer"), this, SLOT(slotNewLayer()));
+        sub->addAction(KIcon("folder"), i18n("&Group Layer"), this, SLOT(slotNewGroupLayer()));
+        sub->addAction(KIcon("edit-copy"), i18n("&Clone Layer"), this, SLOT(slotNewCloneLayer()));
+        sub->addAction(KIcon("bookmark"), i18n("&Shape Layer"), this, SLOT(slotNewShapeLayer()));
         sub->addAction(KIcon("tool_filter"), i18n("&Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
     }
     else
     {
-        menu.addAction(KIcon("document-new"), i18n("&New Layer..."), this, SLOT(slotNewLayer()));
-        menu.addAction(KIcon("folder"), i18n("New &Group Layer..."), this, SLOT(slotNewGroupLayer()));
+        menu.addAction(KIcon("document-new"), i18n("&New Layer"), this, SLOT(slotNewLayer()));
+        menu.addAction(KIcon("folder"), i18n("New &Group Layer"), this, SLOT(slotNewGroupLayer()));
+        menu.addAction(KIcon("edit-copy"), i18n("New &Clone Layer"), this, SLOT(slotNewCloneLayer()));
+        menu.addAction(KIcon("bookmark"), i18n("New &Shape Layer"), this, SLOT(slotNewShapeLayer()));
         menu.addAction(KIcon("tool_filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
     }
     menu.exec(pos);
@@ -318,6 +326,28 @@ void KisLayerBox::slotNewGroupLayer()
 
     emit sigRequestGroupLayer(parent, above);
 }
+
+void KisLayerBox::slotNewCloneLayer()
+{
+    KisGroupLayerSP parent;
+    KisLayerSP above;
+
+    getNewLayerLocation( parent, above );
+
+    emit sigRequestCloneLayer( parent, above );
+}
+
+
+void KisLayerBox::slotNewShapeLayer()
+{
+    KisGroupLayerSP parent;
+    KisLayerSP above;
+
+    getNewLayerLocation( parent, above );
+
+    emit sigRequestShapeLayer( parent, above );
+}
+
 
 void KisLayerBox::slotNewAdjustmentLayer()
 {

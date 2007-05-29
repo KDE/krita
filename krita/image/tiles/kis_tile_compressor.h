@@ -24,7 +24,17 @@
 #include <QMutex>
 
 class KisTile;
+/**
 
+The goal is to have a three-stage caching system: uncompressed tiles that are currently in use,
+compressed tiles that have been recently used and compressed tiles in the swapfile that aren't 
+used a lot.
+
+It is beneficial to separate at least the alpha channel before compression: it may be beneficial
+to separate all channels before compressing because compression works better with long stretches
+of the same pixels.
+
+ */
 class KisTileCompressor : public QThread
 {
 

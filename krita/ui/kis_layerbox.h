@@ -75,6 +75,9 @@ signals:
     void sigRequestLayer(KisGroupLayerSP parent, KisLayerSP above);
     void sigRequestGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
     void sigRequestAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above);
+    void sigRequestCloneLayer( KisGroupLayerSP parent, KisLayerSP above );
+    void sigRequestShapeLayer( KisGroupLayerSP parent, KisLayerSP above );
+
     void sigRequestLayerProperties(KisLayerSP layer);
 
     void sigOpacityChanged(double opacity, bool final);
@@ -98,6 +101,8 @@ private slots:
     void slotNewLayer();
     void slotNewGroupLayer();
     void slotNewAdjustmentLayer();
+    void slotNewCloneLayer();
+    void slotNewShapeLayer();
 
     void updateUI();
 

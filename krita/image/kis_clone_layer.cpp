@@ -123,7 +123,7 @@ KisPaintDeviceSP KisCloneLayer::paintDevice()
 
 QIcon KisCloneLayer::icon() const
 {
-    return KIcon("edit_copy");
+    return KIcon("edit-copy");
 }
 
 KoDocumentSectionModel::PropertyList KisCloneLayer::properties() const

@@ -4,12 +4,12 @@
   Krita is an advanced and modular paint and image manipulation
   application.
 
-  Krita is built around two core libraries: kritacolor and kritaimage.
+  Krita is built around two core libraries: pigment and kritaimage.
 
-  The kritacolor library abstracts colorspaces and color
+  The pigment library abstracts colorspaces and color
   transformations. Colorspaces provide functions to manipulate pixels. The
   kritcolor library loads colorspace plugins to extend the range of
-  available colorspaces.
+  available colorspaces. Pigment is part of the KOffice libraries.
 
   The kritaimage library abstracts the storage, creation, inspection
   and manipulation of pixels stored in a rectangular area. It provides

@@ -1,6 +1,7 @@
 include_directories(${CMAKE_SOURCE_DIR}/krita/ui/obsolete/)
 
-add_subdirectory( bumpmap )
+#add_subdirectory( bumpmap )
+MESSAGE(STATUS "Remember to fix the bumpmap filter")
 MESSAGE(STATUS "Remember to port cimg and fix it")
 #add_subdirectory( cimg )
 add_subdirectory( convolutionfilters )

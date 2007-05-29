@@ -494,47 +494,48 @@ void KisLayerManager::addLayer(KisGroupLayerSP parent, KisLayerSP above)
     if (img) {
         KisConfig cfg;
         QString profilename;
-        if(img->colorSpace()->profile())
-            profilename = img->colorSpace()->profile()->name();
-        NewLayerDialog dlg(KoID(img->colorSpace()->id()), profilename, img->nextLayerName(), m_view);
+//         if(img->colorSpace()->profile())
+//             profilename = img->colorSpace()->profile()->name();
 
-        if (dlg.exec() == QDialog::Accepted) {
-            KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(dlg.colorSpaceID(),dlg.profileName());
-            KisLayerSP layer = KisLayerSP(new KisPaintLayer(img.data(), dlg.layerName(), dlg.opacity(), cs));
-            if (layer) {
-                layer->setCompositeOp(dlg.compositeOp());
-                img->addLayer(layer, parent, above);
+//         NewLayerDialog dlg(KoID(img->colorSpace()->id()), profilename, img->nextLayerName(), m_view);
 
-                m_view->canvas()->update();
-            } else {
-                KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
-            }
+//         if (dlg.exec() == QDialog::Accepted) {
+        KisLayerSP layer = KisLayerSP(new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, img->colorSpace()));
+        if (layer) {
+            layer->setCompositeOp(img->colorSpace()->compositeOp( COMPOSITE_OVER ));
+            img->addLayer(layer, parent, above);
+
+            m_view->canvas()->update();
+        } else {
+            KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
         }
-        else {
-            img->rollBackLayerName();
-        }
+//         }
+//         else {
+//             img->rollBackLayerName();
+//         }
     }
 }
+
 void KisLayerManager::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
 {
     KisImageSP img = m_view->image();
     if (img) {
-        QString profilename;
-        if(img->colorSpace()->profile())
-            profilename = img->colorSpace()->profile()->name();
-        KisConfig cfg;
-        NewLayerDialog dlg(KoID(img->colorSpace()->id()), profilename, img->nextLayerName(), m_view);
-        dlg.setColorSpaceEnabled(false);
+//         QString profilename;
+//         if(img->colorSpace()->profile())
+//             profilename = img->colorSpace()->profile()->name();
+//         KisConfig cfg;
+//         NewLayerDialog dlg(KoID(img->colorSpace()->id()), profilename, img->nextLayerName(), m_view);
+//         dlg.setColorSpaceEnabled(false);
 
-        if (dlg.exec() == QDialog::Accepted) {
-            KisLayerSP layer = KisLayerSP(new KisGroupLayer(img.data(), dlg.layerName(), dlg.opacity()));
+//         if (dlg.exec() == QDialog::Accepted) {
+            KisLayerSP layer = KisLayerSP(new KisGroupLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE));
             if (layer) {
-                layer->setCompositeOp(dlg.compositeOp());
+                layer->setCompositeOp(img->colorSpace()->compositeOp( COMPOSITE_OVER ));
                 img->addLayer(layer, parent, above);
                 m_view->canvas()->update();
-            } else {
-                KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
-            }
+//             } else {
+//                 KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
+//             }
         }
     }
 }

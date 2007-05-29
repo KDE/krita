@@ -533,7 +533,7 @@ void KisView2::connectCurrentImage()
         connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
 
         connect( m_d->layerManager, SIGNAL( sigLayerActivated( KisLayerSP ) ),
-                 m_d->resourceProvider, SLOT( slotLayerActivated( layer ) ) );
+                 m_d->resourceProvider, SLOT( slotLayerActivated( const KisLayerSP ) ) );
 
 //         m_d->maskManager->maskUpdated();
 

@@ -100,7 +100,10 @@ public:
     bool currentCanvasUsesOpenGLShaders;
     KoToolProxy * toolProxy;
     QImage canvasCache; // XXX: use KisQPainterImageContext to share
-                        // cache data between views. Finish that class.
+                        // cache data between views. Finish that
+                        // class. Or another way to tile the canvas
+                        // cache instead of having a QImage as big as
+                        // the image in pixels.
     QPoint documentOffset;
     KoShapeControllerBase * sc;
 

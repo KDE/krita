@@ -354,7 +354,6 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
 
         selection->paint(&canvasImage);
     }
-    //canvasImage.fill( 0 );
 
     double sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);

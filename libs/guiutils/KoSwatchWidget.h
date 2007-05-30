@@ -55,6 +55,13 @@ public:
 
 public slots:
 
+    /**
+     * Sets the color of the opposite color. Typically this is the background if this widget controls the
+     * text color. Or vice versa. The color is used to calculate the suggestions.
+     * @param color the opposite color
+     */
+    void setOppositeColor(const KoColor &color);
+
 signals:
 
     /**
@@ -72,6 +79,7 @@ protected:
 
 private:
     Q_PRIVATE_SLOT(d, void colorTriggered(KoColorPatch *))
+    Q_PRIVATE_SLOT(d, void filter(int))
 
     class KoSwatchWidgetPrivate;
     KoSwatchWidgetPrivate * const d;

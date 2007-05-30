@@ -23,6 +23,7 @@
 #include <QSize>
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QCheckBox>
 #include <QFrame>
 #include <QLabel>
 #include <QMouseEvent>
@@ -51,36 +52,81 @@ public:
     KoSwatchWidget *thePublic;
     QTimer m_timer;
     KoSwatchContainer *container;
+    QVBoxLayout *mainLayout;
     bool firstShowOfContainer;
+    QCheckBox *filterCheckBox;
+    QWidget *swatchContainer;
+    QGridLayout *swatchLayout;
     QHBoxLayout *recentsLayout;
     KoColorPatch *recentPatches[6];
     int numRecents;
-    KoColorPatch *lastSelected;
 
     void colorTriggered(KoColorPatch *patch);
     void showPopup();
     void hidePopup();
     void addRecent(const KoColor &);
+    void activateRecent(int i);
+    void filter(int state);
 };
+
+void KoSwatchWidget::KoSwatchWidgetPrivate::filter(int state)
+{
+    bool hide = (state ==QCheckBox::On);
+
+    if (swatchContainer)
+        delete swatchContainer;
+    swatchContainer = new QWidget();
+    swatchLayout = new QGridLayout();
+    swatchLayout->setMargin(0);
+    swatchLayout->setSpacing(1);
+    for(int i = 0; i<16; i++) {
+        swatchLayout->setColumnMinimumWidth(i, 16);
+    }
+    swatchContainer->setLayout(swatchLayout);
+
+    for(int i = 0; i<75; i++) {
+        if(!hide || i%3!=0 && i%16!=5) {
+            KoColorPatch *patch = new KoColorPatch(swatchContainer);
+            KoColor color(KoColorSpaceRegistry::instance()->rgb8());
+            color.fromQColor(QColor(0,3*i,250-3*i));
+            patch->setColor(color);
+            patch->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+            patch->setFrameShape(QFrame::Box);
+            connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+            swatchLayout->addWidget(patch, i/16, i%16);
+        }
+    }
+    mainLayout->insertWidget(2, swatchContainer);
+}
+
 
 void KoSwatchWidget::KoSwatchWidgetPrivate::addRecent(const KoColor &color)
 {
     if(numRecents<6) {
         recentPatches[numRecents] = new KoColorPatch(container);
         recentPatches[numRecents]->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-        recentPatches[numRecents]->resize(22,22);
         recentPatches[numRecents]->setFrameShape(QFrame::Box);
-        recentsLayout->insertWidget(numRecents, recentPatches[numRecents]);
+        recentsLayout->insertWidget(numRecents+1, recentPatches[numRecents]);
         connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
         numRecents++;
     }
     // shift colors to the right 
     for (int i = numRecents- 1; i >0; i--) {
-        kDebug() << "set " << i << " to value of " << i-1 << endl;
         recentPatches[i]->setColor(recentPatches[i-1]->color());
     }
 
     //Finally set the recent color
+    recentPatches[0]->setColor(color);
+}
+
+void KoSwatchWidget::KoSwatchWidgetPrivate::activateRecent(int i)
+{
+    KoColor color = recentPatches[i]->color();
+
+    while (i >0) {
+        recentPatches[i]->setColor(recentPatches[i-1]->color());
+        i--;
+    }
     recentPatches[0]->setColor(color);
 }
 
@@ -91,46 +137,37 @@ KoSwatchWidget::KoSwatchWidget(QWidget *parent)
     d->thePublic = this;
     d->container = new KoSwatchContainer(this);
     d->container->setAttribute(Qt::WA_WindowPropagation);
+    d->container->setFrameShape(QFrame::Box);
 
     d->firstShowOfContainer = true;
 
-    QVBoxLayout * l = new QVBoxLayout();
-    l->setMargin(2);
-    l->setSpacing(2);
+    d->mainLayout = new QVBoxLayout();
+    d->mainLayout->setMargin(4);
+    d->mainLayout->setSpacing(2);
 
-    l->addWidget(new QLabel("Recent:"));
+    d->swatchContainer = 0;
 
     d->numRecents = 0;
     d->recentsLayout = new QHBoxLayout();
-    l->addLayout(d->recentsLayout);
-    d->recentsLayout->setMargin(2);
+    d->mainLayout->addLayout(d->recentsLayout);
+    d->recentsLayout->setMargin(0);
     d->recentsLayout->setSpacing(2);
+    d->recentsLayout->addWidget(new QLabel("Recent:"));
     d->recentsLayout->addStretch(1);
+    d->recentsLayout->addWidget(new QPushButton("Add / Remove Colors..."));
 
     KoColor color(KoColorSpaceRegistry::instance()->rgb8());
     color.fromQColor(QColor(128,0,0));
     d->addRecent(color);
-    d->lastSelected = d->recentPatches[0];
 
-    l->addWidget(new QLabel("Suggestions:"));
-        QHBoxLayout *hl = new QHBoxLayout();
-        hl->setMargin(2);
-        hl->setSpacing(2);
-        l->addLayout(hl);
+    d->filterCheckBox = new QCheckBox("Hide colors with bad contrast");
+    d->filterCheckBox->setChecked(true);
+    d->mainLayout->addWidget(d->filterCheckBox);
+    connect(d->filterCheckBox, SIGNAL(stateChanged(int)), SLOT(filter(int)));
 
-        for(int i = 0; i<6; i++)
-        {
-            KoColorPatch *patch = new KoColorPatch(d->container);
-            KoColor color(KoColorSpaceRegistry::instance()->rgb8());
-            color.fromQColor(QColor(0,128+15*i,0));
-            patch->setColor(color);
-            patch->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-            patch->resize(22,22);
-            patch->setFrameShape(QFrame::Box);
-            connect(patch, SIGNAL(triggered(KoColorPatch *)), SLOT(colorTriggered(KoColorPatch *)));
-            hl->addWidget(patch);
-        }
-    d->container->setLayout(l);
+    d->filter(QCheckBox::On);
+
+    d->container->setLayout(d->mainLayout);
 
     setIcon(KIcon("textcolor"));
 
@@ -147,8 +184,16 @@ KoSwatchWidget::~KoSwatchWidget()
 void KoSwatchWidget::KoSwatchWidgetPrivate::colorTriggered(KoColorPatch *patch)
 {
     hidePopup();
-    lastSelected = patch;
-    addRecent(patch->color());
+    int i;
+
+    for(i = 0; i <numRecents; i++)
+        if(patch == recentPatches[i]) {
+            activateRecent(i);
+            break;
+        }
+
+    if(i == numRecents) // we didn't find it above
+        addRecent(patch->color());
 }
 
 void KoSwatchWidget::KoSwatchWidgetPrivate::showPopup()
@@ -160,7 +205,7 @@ void KoSwatchWidget::KoSwatchWidgetPrivate::showPopup()
 
     
 
-    container->move(thePublic->mapToGlobal( QPoint(0,0) - lastSelected->pos()));
+    container->move(thePublic->mapToGlobal( QPoint(6 - recentPatches[0]->pos().x(), 24)));
 
     container->raise();
     container->show();
@@ -169,6 +214,10 @@ void KoSwatchWidget::KoSwatchWidgetPrivate::showPopup()
 void KoSwatchWidget::KoSwatchWidgetPrivate::hidePopup()
 {
     container->hide();
+}
+
+void KoSwatchWidget::setOppositeColor(const KoColor &color)
+{
 }
 
 void KoSwatchWidget::hideEvent(QHideEvent *)

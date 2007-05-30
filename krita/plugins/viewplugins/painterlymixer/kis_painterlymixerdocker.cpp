@@ -56,4 +56,4 @@ QDockWidget* KisPainterlyMixerDockerFactory::createDockWidget()
 }
 
 
-#include "painterlymixerdock.moc"
+#include "kis_painterlymixerdocker.moc"

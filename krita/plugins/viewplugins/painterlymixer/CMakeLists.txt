@@ -4,7 +4,9 @@ set(kritapainterlymixer_PART_SRCS
     kis_painterlymixerdocker.cpp
     )
 
-kde4_automoc(${kritapainterlymixer_PART_SRCS})
+kde4_automoc(${kritapainterlymixer_PART_SRCS}
+             kis_painterlymixer.moc
+             painterlymixer.moc)
 
 # XXX: Thrain, for the layout of buttons, use Qt Designer, don't do it
 #      by hand. Then add your ui files here

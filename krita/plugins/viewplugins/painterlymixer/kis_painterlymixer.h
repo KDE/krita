@@ -27,7 +27,7 @@ class KisPainterlyMixer : public QWidget {
     Q_OBJECT
 
 public:
-    KisPainterlyMixer() {}
+    KisPainterlyMixer(QWidget* parent) : QWidget(parent) {}
     ~KisPainterlyMixer() {}
 
 };

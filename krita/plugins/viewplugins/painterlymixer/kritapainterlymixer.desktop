@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Paint Mixing Palette
+Name[x-test]=xxPaint Mixing Palettexx
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritapainterlymixer
+X-Krita-Version=3

@@ -18,3 +18,38 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifndef __KIS_PAINTERLY_MIXER_DOCKER_H__
+#define __KIS_PAINTERLY_MIXER_DOCKER_H__
+
+#include <QDockWidget>
+
+#include <KoDockFactory.h>
+#include "koguiutils_export.h"
+
+class KisPainterlyMixer;
+
+class KOGUIUTILS_EXPORT KisPainterlyMixerDocker : public QDockWidget
+{
+    Q_OBJECT
+
+public:
+    KisPainterlyMixerDocker();
+    virtual ~KisPainterlyMixerDocker();
+
+private:
+    KisPainterlyMixer *m_painterlyMixer;
+};
+
+
+class KOGUIUTILS_EXPORT KisPainterlyMixerDockerFactory : public KoDockFactory
+{
+public:
+    KisPainterlyMixerDockerFactory() {}
+    ~KisPainterlyMixerDockerFactory() {}
+
+    QString id() const;
+    Qt::DockWidgetArea defaultDockWidgetArea() const;
+    QDockWidget* createDockWidget();
+};
+
+#endif

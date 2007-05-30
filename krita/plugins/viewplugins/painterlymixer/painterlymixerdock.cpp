@@ -18,9 +18,41 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_PAINTERLY_MIXER_DOCKER_H_
-#define KIS_PAINTERLY_MIXER_DOCKER_H_
+#include "painterlymixerdock.h"
+
+#include <klocale.h>
+#include <kdebug.h>
+
+KisPainterlyMixerDocker::KisPainterlyMixerDocker ()
+    : QDockWidget()
+{
+    setWindowTitle( i18n( "Painterly Color Mixer" ) );
+
+//     m_painterlyMixer = new KisPainterlyMixer(this);
+//     setWidget( m_painterlyMixer );
+}
+
+KisPainterlyMixerDocker::~KisPainterlyMixerDocker()
+{
+}
+
+QString KisPainterlyMixerDockerFactory::id() const
+{
+    return QString("KisPainterlyMixerDocker");
+}
+
+Qt::DockWidgetArea KisPainterlyMixerDockerFactory::defaultDockWidgetArea() const
+{
+    return Qt::RightDockWidgetArea;
+}
+
+QDockWidget* KisPainterlyMixerDockerFactory::createDockWidget()
+{
+    KisPainterlyMixerDocker* widget = new KisPainterlyMixerDocker;
+    widget->setObjectName(id());
+
+    return widget;
+}
 
 
-
-#endif // KIS_PAINTERLY_MIXER_DOCKER_H_
+#include "painterlymixerdock.moc"

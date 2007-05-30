@@ -17,25 +17,25 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef PAINTERLYMIXER_H
-#define PAINTERLYMIXER_H
+
+#ifndef PAINTERLY_MIXER_H
+#define PAINTERLY_MIXER_H
 
 #include <kparts/plugin.h>
 
 class KisView2;
 class KisPainterlyMixerDockerFactory;
 
-class PainterlyMixer : public KParts::Plugin
-{
+class PainterlyMixer : public KParts::Plugin {
     Q_OBJECT
+
 public:
     PainterlyMixer(QObject *parent, const QStringList &);
     virtual ~PainterlyMixer();
 
 private:
-
-    KisView2 * m_view;
-    KisPainterlyMixerDockerFactory * m_factory;
+    KisView2* m_view;
+    KisPainterlyMixerDockerFactory* m_factory;
 };
 
-#endif // PAINTERLYMIXER_H
+#endif // PAINTERLY_MIXER_H

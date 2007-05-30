@@ -18,7 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "painterlymixerdock.h"
+#include "kis_painterlymixerdocker.h"
+#include "kis_painterlymixer.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -28,8 +29,8 @@ KisPainterlyMixerDocker::KisPainterlyMixerDocker ()
 {
     setWindowTitle( i18n( "Painterly Color Mixer" ) );
 
-//     m_painterlyMixer = new KisPainterlyMixer(this);
-//     setWidget( m_painterlyMixer );
+    m_painterlyMixer = new KisPainterlyMixer(this);
+    setWidget( m_painterlyMixer );
 }
 
 KisPainterlyMixerDocker::~KisPainterlyMixerDocker()

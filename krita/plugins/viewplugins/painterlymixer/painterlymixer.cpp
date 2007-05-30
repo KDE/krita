@@ -25,7 +25,7 @@
 
 #include "kis_view2.h"
 #include "painterlymixer.h"
-#include "painterlymixerdock.h"
+#include "kis_painterlymixerdocker.h"
 
 typedef KGenericFactory<PainterlyMixer> PainterlyMixerFactory;
 K_EXPORT_COMPONENT_FACTORY( kritapainterlymixer, PainterlyMixerFactory( "krita" ) )

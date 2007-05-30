@@ -25,13 +25,15 @@
 
 #include <KoDockFactory.h>
 
+#include "kis_view2.h"
+
 class KisPainterlyMixer;
 
 class KisPainterlyMixerDocker : public QDockWidget {
     Q_OBJECT
 
 public:
-    KisPainterlyMixerDocker();
+    KisPainterlyMixerDocker(KisView2 *view);
     virtual ~KisPainterlyMixerDocker();
 
 private:
@@ -41,12 +43,15 @@ private:
 
 class KisPainterlyMixerDockerFactory : public KoDockFactory {
 public:
-    KisPainterlyMixerDockerFactory() {}
+    KisPainterlyMixerDockerFactory(KisView2 *view) : m_view(view) {}
     ~KisPainterlyMixerDockerFactory() {}
 
     QString id() const;
     Qt::DockWidgetArea defaultDockWidgetArea() const;
-    QDockWidget* createDockWidget();
+    QDockWidget *createDockWidget();
+
+private:
+    KisView2 *m_view;
 };
 
 #endif // KIS_PAINTERLY_MIXER_DOCKER_H_

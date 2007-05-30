@@ -24,13 +24,13 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-KisPainterlyMixerDocker::KisPainterlyMixerDocker ()
+KisPainterlyMixerDocker::KisPainterlyMixerDocker (KisView2 *view)
     : QDockWidget()
 {
     setWindowTitle( i18n( "Painterly Color Mixer" ) );
 
-    m_painterlyMixer = new KisPainterlyMixer(this);
-    setWidget( m_painterlyMixer );
+    m_painterlyMixer = new KisPainterlyMixer(this, view);
+    setWidget(m_painterlyMixer);
 }
 
 KisPainterlyMixerDocker::~KisPainterlyMixerDocker()
@@ -49,7 +49,7 @@ Qt::DockWidgetArea KisPainterlyMixerDockerFactory::defaultDockWidgetArea() const
 
 QDockWidget* KisPainterlyMixerDockerFactory::createDockWidget()
 {
-    KisPainterlyMixerDocker* widget = new KisPainterlyMixerDocker;
+    KisPainterlyMixerDocker* widget = new KisPainterlyMixerDocker(m_view);
     widget->setObjectName(id());
 
     return widget;

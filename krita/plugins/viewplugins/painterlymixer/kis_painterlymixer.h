@@ -23,12 +23,19 @@
 
 #include <QtGui>
 
-class KisPainterlyMixer : public QWidget {
+#include "ui_kis_painterlymixer.h"
+
+class KisView2;
+
+class KisPainterlyMixer : public QWidget, private Ui::KisPainterlyMixer {
     Q_OBJECT
 
 public:
-    KisPainterlyMixer(QWidget* parent) : QWidget(parent) {}
-    ~KisPainterlyMixer() {}
+    KisPainterlyMixer(QWidget* parent, KisView2 *view);
+    ~KisPainterlyMixer();
+
+private:
+    KisView2 *m_view;
 
 };
 

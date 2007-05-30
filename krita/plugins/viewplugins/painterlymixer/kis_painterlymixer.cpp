@@ -18,7 +18,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kis_view2.h"
+
 #include "kis_painterlymixer.h"
 
+KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
+    : QWidget(parent), m_view(view)
+{
+    setupUi(this);
+}
+
+KisPainterlyMixer::~KisPainterlyMixer()
+{
+}
 
 #include "kis_painterlymixer.moc"

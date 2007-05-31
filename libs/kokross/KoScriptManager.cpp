@@ -1,5 +1,5 @@
 /***************************************************************************
- * scriptmanager.cpp
+ * KoScriptManager.cpp
  * This file is part of the KDE project
  * copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
  * copyright (C) 2006-2007 Sebastian Sauer <mail@dipe.org>
@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#include "scriptmanager.h"
-#include "scriptmanageradd.h"
+#include "KoScriptManager.h"
+#include "KoScriptManagerAdd.h"
 
 #include <kross/core/manager.h>
 #include <kross/core/action.h>
@@ -55,65 +55,50 @@
 //#include <knewstuff/downloaddialog.h>
 //#include <knewstuff/knewstuffsecure.h>
 
-extern "C"
-{
-    KDE_EXPORT QObject* krossmodule()
-    {
-        return new Kross::ScriptManagerModule();
-    }
-}
-
-using namespace Kross;
-
 /******************************************************************************
- * ScriptManagerCollection
+ * KoScriptManagerCollection
  */
 
-namespace Kross {
+/*
+/// \internal class that inherits \a KNewStuffSecure to implement the GHNS-functionality.
+class KoScriptManagerNewStuff : public KNewStuffSecure
+{
+    public:
+        KoScriptManagerNewStuff(KoScriptManagerCollection* collection, const QString& type, QWidget *parentWidget = 0)
+            : KNewStuffSecure(type, parentWidget)
+            , m_collection(collection) {}
+        virtual ~KoScriptManagerNewStuff() {}
+    private:
+        KoScriptManagerCollection* m_collection;
+        virtual void installResource() { m_collection->module()->installPackage( m_tarName ); }
+};
+*/
 
-    /*
-    /// \internal class that inherits \a KNewStuffSecure to implement the GHNS-functionality.
-    class ScriptManagerNewStuff : public KNewStuffSecure
-    {
-        public:
-            ScriptManagerNewStuff(ScriptManagerCollection* collection, const QString& type, QWidget *parentWidget = 0)
-                : KNewStuffSecure(type, parentWidget)
-                , m_collection(collection) {}
-            virtual ~ScriptManagerNewStuff() {}
-        private:
-            ScriptManagerCollection* m_collection;
-            virtual void installResource() { m_collection->module()->installPackage( m_tarName ); }
-    };
-    */
+/// \internal d-pointer class.
+class KoScriptManagerCollection::Private
+{
+    public:
+        KoScriptManagerModule* module;
+        bool modified;
+        Kross::ActionCollectionView* view;
+        Private(KoScriptManagerModule* m) : module(m), modified(false) {}
+};
 
-    /// \internal d-pointer class.
-    class ScriptManagerCollection::Private
-    {
-        public:
-            ScriptManagerModule* module;
-            bool modified;
-            ActionCollectionView* view;
-            Private(ScriptManagerModule* m) : module(m), modified(false) {}
-    };
-
-}
-
-ScriptManagerCollection::ScriptManagerCollection(ScriptManagerModule* module, QWidget* parent)
-    : QWidget(parent)
-    , d(new Private(module))
+KoScriptManagerCollection::KoScriptManagerCollection(KoScriptManagerModule* module, QWidget* parent)
+    : QWidget(parent), d(new Private(module))
 {
     QHBoxLayout* mainlayout = new QHBoxLayout();
     mainlayout->setMargin(0);
     setLayout(mainlayout);
 
-    d->view = new ActionCollectionView(this);
+    d->view = new Kross::ActionCollectionView(this);
     d->view->setDragEnabled(true);
     d->view->setAcceptDrops(true);
 
     mainlayout->addWidget(d->view);
 
-    ActionCollectionModel::Mode modelmode = ActionCollectionModel::Mode( ActionCollectionModel::Icons | ActionCollectionModel::ToolTips | ActionCollectionModel::UserCheckable );
-    ActionCollectionModel* model = new ActionCollectionModel(d->view, Kross::Manager::self().actionCollection(), modelmode);
+    Kross::ActionCollectionModel::Mode modelmode = Kross::ActionCollectionModel::Mode( Kross::ActionCollectionModel::Icons | Kross::ActionCollectionModel::ToolTips | Kross::ActionCollectionModel::UserCheckable );
+    Kross::ActionCollectionModel* model = new Kross::ActionCollectionModel(d->view, Kross::Manager::self().actionCollection(), modelmode);
     d->view->setModel(model);
 
     //d->view->selectionModel();
@@ -141,25 +126,25 @@ ScriptManagerCollection::ScriptManagerCollection(ScriptManagerModule* module, QW
     d->view->expandAll();
 }
 
-ScriptManagerCollection::~ScriptManagerCollection()
+KoScriptManagerCollection::~KoScriptManagerCollection()
 {
     delete d;
 }
 
-ScriptManagerModule* ScriptManagerCollection::module() const
+KoScriptManagerModule* KoScriptManagerCollection::module() const
 {
     return d->module;
 }
 
 /*
-bool ScriptManagerCollection::isModified() const
+bool KoScriptManagerCollection::isModified() const
 {
     return d->modified;
 }
 */
 
 #if 0
-bool ScriptManagerCollection::slotInstall() {
+bool KoScriptManagerCollection::slotInstall() {
     KFileDialog* filedialog = new KFileDialog(
         KUrl("kfiledialog:///KrossInstallPackage"), // startdir
         "*.tar.gz *.tgz *.bz2", // filter
@@ -169,18 +154,18 @@ bool ScriptManagerCollection::slotInstall() {
     filedialog->setCaption(i18n("Install Script Package"));
     return filedialog->exec() ? module()->installPackage(filedialog->selectedUrl().path()) : false;
 }
-void ScriptManagerView::slotUninstall() {
+void KoScriptManagerView::slotUninstall() {
     foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
         if(index.isValid())
             if(! uninstallPackage( static_cast< Action* >(index.internalPointer()) ))
                 break;
 }
-void ScriptManagerView::slotNewScripts() {
+void KoScriptManagerView::slotNewScripts() {
     const QString appname = KApplication::kApplication()->objectName();
     const QString type = QString("%1/script").arg(appname);
     krossdebug( QString("ScriptManagerView::slotNewScripts %1").arg(type) );
     if(! d->newstuff) {
-        d->newstuff = new ScriptManagerNewStuff(this, type);
+        d->newstuff = new KoScriptManagerNewStuff(this, type);
         connect(d->newstuff, SIGNAL(installFinished()), this, SLOT(slotNewScriptsInstallFinished()));
     }
     KNS::Engine *engine = new KNS::Engine(d->newstuff, type, this);
@@ -191,7 +176,7 @@ void ScriptManagerView::slotNewScripts() {
     p->load(type, QString("http://download.kde.org/khotnewstuff/%1scripts-providers.xml").arg(appname));
     d->exec();
 }
-void ScriptManagerView::slotNewScriptsInstallFinished() {
+void KoScriptManagerView::slotNewScriptsInstallFinished() {
     // Delete KNewStuff's configuration entries. These entries reflect what has
     // already been installed. As we cannot yet keep them in sync after uninstalling
     // scripts, we deactivate the check marks entirely.
@@ -200,32 +185,27 @@ void ScriptManagerView::slotNewScriptsInstallFinished() {
 #endif
 
 /******************************************************************************
- * ScriptManagerModule
+ * KoScriptManagerModule
  */
 
-namespace Kross {
+/// \internal d-pointer class.
+class KoScriptManagerModule::Private
+{
+    public:
+};
 
-    /// \internal d-pointer class.
-    class ScriptManagerModule::Private
-    {
-        public:
-    };
-
-}
-
-ScriptManagerModule::ScriptManagerModule()
-    : QObject()
-    , d(new Private())
+KoScriptManagerModule::KoScriptManagerModule()
+    : QObject(), d(new Private())
 {
 }
 
-ScriptManagerModule::~ScriptManagerModule()
+KoScriptManagerModule::~KoScriptManagerModule()
 {
     delete d;
 }
 
 #if 0
-bool ScriptManagerModule::installPackage(const QString& scriptpackagefile)
+bool KoScriptManagerModule::installPackage(const QString& scriptpackagefile)
 {
     KTar archive( scriptpackagefile );
     if(! archive.open(QIODevice::ReadOnly)) {
@@ -287,7 +267,7 @@ bool ScriptManagerModule::installPackage(const QString& scriptpackagefile)
     return true;
 }
 
-bool ScriptManagerModule::uninstallPackage(Action* action)
+bool KoScriptManagerModule::uninstallPackage(Action* action)
 {
     const QString name = action->objectName();
     QString file = action->file();
@@ -308,12 +288,12 @@ bool ScriptManagerModule::uninstallPackage(Action* action)
 }
 #endif
 
-QWidget* ScriptManagerModule::createManagerWidget(QWidget* parent)
+QWidget* KoScriptManagerModule::createManagerWidget(QWidget* parent)
 {
-    return new ScriptManagerCollection(this, parent);
+    return new KoScriptManagerCollection(this, parent);
 }
 
-void ScriptManagerModule::showManagerDialog()
+void KoScriptManagerModule::showManagerDialog()
 {
     KDialog* dialog = new KDialog();
     dialog->setCaption( i18n("Script Manager") );
@@ -339,4 +319,4 @@ void ScriptManagerModule::showManagerDialog()
     dialog->delayedDestruct();
 }
 
-#include "scriptmanager.moc"
+#include "KoScriptManager.moc"

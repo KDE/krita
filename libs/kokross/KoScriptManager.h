@@ -1,5 +1,5 @@
 /***************************************************************************
- * scriptmanager.h
+ * KoScriptManager.h
  * This file is part of the KDE project
  * copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
  * copyright (C) 2006-2007 Sebastian Sauer <mail@dipe.org>
@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_SCRIPTMANAGER_H
-#define KROSS_SCRIPTMANAGER_H
+#ifndef KOKROSS_KOSCRIPTMANAGER_H
+#define KOKROSS_KOSCRIPTMANAGER_H
 
 #include <QtCore/QObject>
 #include <QtGui/QWidget>
@@ -30,43 +30,44 @@
 #include <kdialog.h>
 
 namespace Kross {
-
     class GUIClient;
-    class ScriptManagerModule;
+}
 
-    /**
-    * The ScriptManagerCollection class shows a QListView where the content of a
-    * \a ActionCollection is displayed and some buttons to run, stop, add, edit
-    * and remove scripts.
-    */
-    class ScriptManagerCollection : public QWidget
-    {
-            Q_OBJECT
-        public:
+class KoScriptManagerModule;
 
-            /**
-            * Constructor.
-            * \param module The \a ScriptManagerModule that was used
-            * to create this \a ScriptManagerCollection instance.
-            * \param parent The parent widget this widget is child of.
-            */
-            explicit ScriptManagerCollection(ScriptManagerModule* module, QWidget* parent = 0);
+/**
+* The KoScriptManagerCollection class shows a QListView where the content of a
+* \a ActionCollection is displayed and some buttons to run, stop, add, edit
+* and remove scripts.
+*/
+class KoScriptManagerCollection : public QWidget
+{
+        Q_OBJECT
+    public:
 
-            /**
-            * Destructor.
-            */
-            virtual ~ScriptManagerCollection();
+        /**
+        * Constructor.
+        * \param module The \a KoScriptManagerModule that was used
+        * to create this \a KoScriptManagerCollection instance.
+        * \param parent The parent widget this widget is child of.
+        */
+        explicit KoScriptManagerCollection(KoScriptManagerModule* module, QWidget* parent = 0);
 
-            /**
-            * \return the \a ScriptManagerModule that was used to
-            * create this \a ScriptManagerCollection instance.
-            */
-            ScriptManagerModule* module() const;
+        /**
+        * Destructor.
+        */
+        virtual ~KoScriptManagerCollection();
 
-            /**
-            * \return true if the collection was modified.
-            */
-            //bool isModified() const;
+        /**
+        * \return the \a KoScriptManagerModule that was used to
+        * create this \a KoScriptManagerCollection instance.
+        */
+        KoScriptManagerModule* module() const;
+
+        /**
+        * \return true if the collection was modified.
+        */
+        //bool isModified() const;
 
 #if 0
         public Q_SLOTS:
@@ -103,42 +104,41 @@ namespace Kross {
             void slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 #endif
 
-        private:
-            /// \internal d-pointer class.
-            class Private;
-            /// \internal d-pointer instance.
-            Private* const d;
-    };
+    private:
+        /// \internal d-pointer class.
+        class Private;
+        /// \internal d-pointer instance.
+        Private* const d;
+};
 
-    /**
-    * The ScriptManagerModule provides access to the Script Manager
-    * functionality like the "Script Manager" KDialog.
-    */
-    class ScriptManagerModule : public QObject
-    {
-            Q_OBJECT
-        public:
-            explicit ScriptManagerModule();
-            virtual ~ScriptManagerModule();
+/**
+* The KoScriptManagerModule provides access to the Script Manager
+* functionality like the "Script Manager" KDialog.
+*/
+class KoScriptManagerModule : public QObject
+{
+        Q_OBJECT
+    public:
+        explicit KoScriptManagerModule();
+        virtual ~KoScriptManagerModule();
 
-        public Q_SLOTS:
+    public Q_SLOTS:
 
-            /**
-            * Create and return the "Script Manager" widget.
-            */
-            QWidget* createManagerWidget(QWidget* parent = 0);
+        /**
+        * Create and return the "Script Manager" widget.
+        */
+        QWidget* createManagerWidget(QWidget* parent = 0);
 
-            /**
-            * Display the modal "Script Manager" dialog.
-            */
-            void showManagerDialog();
+        /**
+        * Display the modal "Script Manager" dialog.
+        */
+        void showManagerDialog();
 
-        private:
-            /// \internal d-pointer class.
-            class Private;
-            /// \internal d-pointer instance.
-            Private* const d;
-    };
-}
+    private:
+        /// \internal d-pointer class.
+        class Private;
+        /// \internal d-pointer instance.
+        Private* const d;
+};
 
 #endif

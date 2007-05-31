@@ -1,7 +1,7 @@
-/*
- * This file is part of the KOffice project
- *
- * Copyright (C) 2006-2007 by Sebastian Sauer (mail@dipe.org)
+/***************************************************************************
+ * KoScriptingDocker.h
+ * This file is part of the KDE project
+ * copyright (C) 2006-2007 Sebastian Sauer <mail@dipe.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -15,10 +15,10 @@
  * along with this program; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- */
+ ***************************************************************************/
 
-#ifndef KOSCRIPTINGDOCKER_H
-#define KOSCRIPTINGDOCKER_H
+#ifndef KOKROSS_KOSCRIPTINGDOCKER_H
+#define KOKROSS_KOSCRIPTINGDOCKER_H
 
 #include <QDockWidget>
 #include <KoDockFactory.h>

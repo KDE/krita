@@ -1,5 +1,5 @@
 /***************************************************************************
- * scriptmanageradd.h
+ * KoScriptManagerAdd.h
  * This file is part of the KDE project
  * copyright (C) 2006-2007 Sebastian Sauer <mail@dipe.org>
  *
@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#include "scriptmanageradd.h"
-#include "scriptmanager.h"
+#include "KoScriptManagerAdd.h"
+#include "KoScriptManager.h"
 
 #include <kross/core/manager.h>
 #include <kross/core/interpreter.h>
@@ -36,13 +36,11 @@
 #include <kmimetype.h>
 #include <kfilewidget.h>
 
-using namespace Kross;
-
 /********************************************************************
- * ScriptManagerAddTypeWidget
+ * KoScriptManagerAddTypeWidget
  */
 
-ScriptManagerAddTypeWidget::ScriptManagerAddTypeWidget(ScriptManagerAddWizard* wizard)
+KoScriptManagerAddTypeWidget::KoScriptManagerAddTypeWidget(KoScriptManagerAddWizard* wizard)
     : QWidget(wizard), m_wizard(wizard)
 {
     setObjectName("ScriptManagerAddTypeWidget");
@@ -72,11 +70,11 @@ ScriptManagerAddTypeWidget::ScriptManagerAddTypeWidget(ScriptManagerAddWizard* w
     layout->addStretch(1);
 }
 
-ScriptManagerAddTypeWidget::~ScriptManagerAddTypeWidget()
+KoScriptManagerAddTypeWidget::~KoScriptManagerAddTypeWidget()
 {
 }
 
-void ScriptManagerAddTypeWidget::slotUpdate()
+void KoScriptManagerAddTypeWidget::slotUpdate()
 {
     m_wizard->setAppropriate(m_wizard->m_fileItem, m_scriptCheckbox->isChecked());
     m_wizard->setAppropriate(m_wizard->m_scriptItem, m_scriptCheckbox->isChecked());
@@ -86,21 +84,19 @@ void ScriptManagerAddTypeWidget::slotUpdate()
 }
 
 /********************************************************************
- * ScriptManagerAddFileWidget
+ * KoScriptManagerAddFileWidget
  */
 
-namespace Kross {
-    /// \internal d-pointer class.
-    class ScriptManagerAddFileWidget::Private
-    {
-        public:
-            ScriptManagerAddWizard* const wizard;
-            KFileWidget* filewidget;
-            explicit Private(ScriptManagerAddWizard* const w): wizard(w) {}
-    };
-}
+/// \internal d-pointer class.
+class KoScriptManagerAddFileWidget::Private
+{
+    public:
+        KoScriptManagerAddWizard* const wizard;
+        KFileWidget* filewidget;
+        explicit Private(KoScriptManagerAddWizard* const w): wizard(w) {}
+};
 
-ScriptManagerAddFileWidget::ScriptManagerAddFileWidget(ScriptManagerAddWizard* wizard, const QString& startDirOrVariable)
+KoScriptManagerAddFileWidget::KoScriptManagerAddFileWidget(KoScriptManagerAddWizard* wizard, const QString& startDirOrVariable)
     : QWidget(wizard), d(new Private(wizard))
 {
     setObjectName("ScriptManagerAddFileWidget");
@@ -110,8 +106,8 @@ ScriptManagerAddFileWidget::ScriptManagerAddFileWidget(ScriptManagerAddWizard* w
     d->filewidget = new KFileWidget(KUrl(startDirOrVariable), this);
 
     QStringList mimetypes;
-    foreach(QString interpretername, Manager::self().interpreters()) {
-        InterpreterInfo* info = Manager::self().interpreterInfo(interpretername);
+    foreach(QString interpretername, Kross::Manager::self().interpreters()) {
+        Kross::InterpreterInfo* info = Kross::Manager::self().interpreterInfo(interpretername);
         Q_ASSERT( info );
         mimetypes.append( info->mimeTypes().join(" ").trimmed() );
     }
@@ -122,37 +118,35 @@ ScriptManagerAddFileWidget::ScriptManagerAddFileWidget(ScriptManagerAddWizard* w
     connect(d->filewidget, SIGNAL(fileSelected(const QString&)), this, SLOT(slotUpdate()));
 }
 
-ScriptManagerAddFileWidget::~ScriptManagerAddFileWidget()
+KoScriptManagerAddFileWidget::~KoScriptManagerAddFileWidget()
 {
     delete d;
 }
 
-QString ScriptManagerAddFileWidget::selectedFile() const
+QString KoScriptManagerAddFileWidget::selectedFile() const
 {
     return d->filewidget->selectedFile();
 }
 
-void ScriptManagerAddFileWidget::slotUpdate()
+void KoScriptManagerAddFileWidget::slotUpdate()
 {
     d->wizard->setValid(d->wizard->m_fileItem, ! d->filewidget->selectedFile().isEmpty());
 }
 
 /********************************************************************
- * ScriptManagerAddScriptWidget
+ * KoScriptManagerAddScriptWidget
  */
 
-namespace Kross {
-    /// \internal d-pointer class.
-    class ScriptManagerAddScriptWidget::Private
-    {
-        public:
-            ScriptManagerAddWizard* const wizard;
-            ActionCollectionEditor* editor;
-            explicit Private(ScriptManagerAddWizard* const w): wizard(w), editor(0) {}
-    };
-}
+/// \internal d-pointer class.
+class KoScriptManagerAddScriptWidget::Private
+{
+    public:
+        KoScriptManagerAddWizard* const wizard;
+        Kross::ActionCollectionEditor* editor;
+        explicit Private(KoScriptManagerAddWizard* const w): wizard(w), editor(0) {}
+};
 
-ScriptManagerAddScriptWidget::ScriptManagerAddScriptWidget(ScriptManagerAddWizard* wizard)
+KoScriptManagerAddScriptWidget::KoScriptManagerAddScriptWidget(KoScriptManagerAddWizard* wizard)
     : QWidget(wizard), d(new Private(wizard))
 {
     setObjectName("ScriptManagerAddScriptWidget");
@@ -160,25 +154,25 @@ ScriptManagerAddScriptWidget::ScriptManagerAddScriptWidget(ScriptManagerAddWizar
     setLayout(layout);
 }
 
-ScriptManagerAddScriptWidget::~ScriptManagerAddScriptWidget()
+KoScriptManagerAddScriptWidget::~KoScriptManagerAddScriptWidget()
 {
     delete d;
 }
 
-void ScriptManagerAddScriptWidget::slotUpdate()
+void KoScriptManagerAddScriptWidget::slotUpdate()
 {
     d->wizard->setValid(d->wizard->m_scriptItem, d->editor && d->editor->isValid());
 }
 
-void ScriptManagerAddScriptWidget::showEvent(QShowEvent* event)
+void KoScriptManagerAddScriptWidget::showEvent(QShowEvent* event)
 {
-    Action* action = 0;
+    Kross::Action* action = 0;
     if( d->editor ) {
         action = d->editor->action();
         delete d->editor;
     }
     if( ! action )
-        action = new Action(0, "");
+        action = new Kross::Action(0, "");
 
     const QString file = d->wizard->m_filewidget->selectedFile();
     QFileInfo fi( file );
@@ -191,14 +185,14 @@ void ScriptManagerAddScriptWidget::showEvent(QShowEvent* event)
     }
     action->setFile( file );
 
-    d->editor = new ActionCollectionEditor(action, this);
+    d->editor = new Kross::ActionCollectionEditor(action, this);
     layout()->addWidget(d->editor);
 
     QWidget::showEvent(event);
     slotUpdate();
 }
 
-bool ScriptManagerAddScriptWidget::accept()
+bool KoScriptManagerAddScriptWidget::accept()
 {
     kDebug()<<"ScriptManagerAddScriptWidget::accept()"<<endl;
     Q_ASSERT( d->editor );
@@ -212,51 +206,51 @@ bool ScriptManagerAddScriptWidget::accept()
 }
 
 /********************************************************************
- * ScriptManagerAddCollectionWidget
+ * KoScriptManagerAddCollectionWidget
  */
 
-ScriptManagerAddCollectionWidget::ScriptManagerAddCollectionWidget(ScriptManagerAddWizard* wizard)
+KoScriptManagerAddCollectionWidget::KoScriptManagerAddCollectionWidget(KoScriptManagerAddWizard* wizard)
     : QWidget(wizard), m_wizard(wizard)
 {
     setObjectName("ScriptManagerAddCollectionWidget");
     QVBoxLayout* layout = new QVBoxLayout(this);
     setLayout(layout);
-    ActionCollection* collection = new ActionCollection("");
-    m_editor = new ActionCollectionEditor(collection, this);
+    Kross::ActionCollection* collection = new Kross::ActionCollection("");
+    m_editor = new Kross::ActionCollectionEditor(collection, this);
     layout->addWidget(m_editor);
 }
 
-ScriptManagerAddCollectionWidget::~ScriptManagerAddCollectionWidget()
+KoScriptManagerAddCollectionWidget::~KoScriptManagerAddCollectionWidget()
 {
 }
 
-void ScriptManagerAddCollectionWidget::slotUpdate()
+void KoScriptManagerAddCollectionWidget::slotUpdate()
 {
     m_wizard->setValid(m_wizard->m_collectionItem, m_editor->isValid());
 }
 
 /********************************************************************
- * ScriptManagerAddWizard
+ * KoScriptManagerAddWizard
  */
 
-ScriptManagerAddWizard::ScriptManagerAddWizard(QWidget* parent, ActionCollection* collection)
-    : KAssistantDialog(parent), m_collection(collection ? collection : Manager::self().actionCollection())
+KoScriptManagerAddWizard::KoScriptManagerAddWizard(QWidget* parent, Kross::ActionCollection* collection)
+    : KAssistantDialog(parent), m_collection(collection ? collection : Kross::Manager::self().actionCollection())
 {
     Q_ASSERT(m_collection);
     setObjectName("ScriptManagerAddWizard");
     setCaption( i18n("Add") );
 
-    m_typewidget = new ScriptManagerAddTypeWidget(this);
+    m_typewidget = new KoScriptManagerAddTypeWidget(this);
     m_typeItem = addPage(m_typewidget, i18n("Add"));
 
     const QString startDirOrVariable = "kfiledialog:///scriptmanageraddfile";
-    m_filewidget = new ScriptManagerAddFileWidget(this, startDirOrVariable);
+    m_filewidget = new KoScriptManagerAddFileWidget(this, startDirOrVariable);
     m_fileItem = addPage(m_filewidget, i18n("Script File"));
 
-    m_scriptwidget = new ScriptManagerAddScriptWidget(this);
+    m_scriptwidget = new KoScriptManagerAddScriptWidget(this);
     m_scriptItem = addPage(m_scriptwidget, i18n("Script"));
 
-    m_collectionwidget = new ScriptManagerAddCollectionWidget(this);
+    m_collectionwidget = new KoScriptManagerAddCollectionWidget(this);
     m_collectionItem = addPage(m_collectionwidget, i18n("Collection"));
 
     resize( QSize(620, 460).expandedTo( minimumSizeHint() ) );
@@ -268,16 +262,16 @@ ScriptManagerAddWizard::ScriptManagerAddWizard(QWidget* parent, ActionCollection
     m_collectionwidget->slotUpdate();
 }
 
-ScriptManagerAddWizard::~ScriptManagerAddWizard()
+KoScriptManagerAddWizard::~KoScriptManagerAddWizard()
 {
 }
 
-int ScriptManagerAddWizard::exec()
+int KoScriptManagerAddWizard::exec()
 {
     return KAssistantDialog::exec();
 }
 
-bool ScriptManagerAddWizard::invokeWidgetMethod(const char* member)
+bool KoScriptManagerAddWizard::invokeWidgetMethod(const char* member)
 {
     KPageWidget* pagewidget = pageWidget();
     Q_ASSERT( pagewidget );
@@ -289,22 +283,22 @@ bool ScriptManagerAddWizard::invokeWidgetMethod(const char* member)
     return ok;
 }
 
-void ScriptManagerAddWizard::back()
+void KoScriptManagerAddWizard::back()
 {
     if( invokeWidgetMethod("back") )
         KAssistantDialog::back();
 }
 
-void ScriptManagerAddWizard::next()
+void KoScriptManagerAddWizard::next()
 {
     if( invokeWidgetMethod("next") )
         KAssistantDialog::next();
 }
 
-void ScriptManagerAddWizard::accept()
+void KoScriptManagerAddWizard::accept()
 {
     if( invokeWidgetMethod("accept") )
         KAssistantDialog::accept();
 }
 
-#include "scriptmanageradd.moc"
+#include "KoScriptManagerAdd.moc"

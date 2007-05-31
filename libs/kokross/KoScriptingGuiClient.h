@@ -31,16 +31,36 @@
 #define KOKROSS_EXPORT KDE_EXPORT
 
 /**
- *
- */
+* The KoScriptingGuiClient class implements the top-level guiclient
+* functionality to integrate scripting using Kross into a KOffice
+* application.
+*/
 class KOKROSS_EXPORT KoScriptingGuiClient : public Kross::GUIClient
 {
         Q_OBJECT
     public:
+
+        /**
+        * Constructor.
+        *
+        * \param guiclient The parent KXMLGUIClient instance this
+        * guiclient is child of. This will be normaly a KParts::Plugin
+        * instance that provides an application plugin using the KParts
+        * technology.
+        * \param parent The parent QObject.
+        */
         explicit KoScriptingGuiClient(KXMLGUIClient* guiclient, QObject* parent = 0);
+
+        /**
+        * Destructor.
+        */
         virtual ~KoScriptingGuiClient();
 
     public Q_SLOTS:
+
+        /**
+        * Show the modal "Script Manager" dialog.
+        */
         void slotShowScriptManager();
 
     private:

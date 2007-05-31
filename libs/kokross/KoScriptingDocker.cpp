@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "KoScriptingDocker.h"
+#include "KoScriptingGuiClient.h"
 
 #include <QToolBar>
 #include <QBoxLayout>
@@ -43,10 +44,10 @@ class KoScriptingDockerFactory::Private
 {
     public:
         QWidget* parent;
-        Kross::GUIClient* guiclient;
+        KoScriptingGuiClient* guiclient;
 };
 
-KoScriptingDockerFactory::KoScriptingDockerFactory(QWidget* parent, Kross::GUIClient* guiclient)
+KoScriptingDockerFactory::KoScriptingDockerFactory(QWidget* parent, KoScriptingGuiClient* guiclient)
     : KoDockFactory()
     , d(new Private())
 {
@@ -59,7 +60,7 @@ KoScriptingDockerFactory::~KoScriptingDockerFactory()
     delete d;
 }
 
-Kross::GUIClient* KoScriptingDockerFactory::guiClient() const
+KoScriptingGuiClient* KoScriptingDockerFactory::guiClient() const
 {
     return d->guiclient;
 }
@@ -88,13 +89,13 @@ QDockWidget* KoScriptingDockerFactory::createDockWidget()
 class KoScriptingDocker::Private
 {
     public:
-        Kross::GUIClient* guiclient;
+        KoScriptingGuiClient* guiclient;
         //Kross::ActionCollectionProxyModel* model;
         Kross::ActionCollectionView* view;
         QMap<QString, QAction* > actions;
 };
 
-KoScriptingDocker::KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
+KoScriptingDocker::KoScriptingDocker(QWidget* parent, KoScriptingGuiClient* guiclient)
     : QDockWidget(i18n("Scripts"), parent)
     , d(new Private())
 {
@@ -154,7 +155,7 @@ KoScriptingDocker::~KoScriptingDocker()
     delete d;
 }
 
-Kross::GUIClient* KoScriptingDocker::guiClient() const
+KoScriptingGuiClient* KoScriptingDocker::guiClient() const
 {
     return d->guiclient;
 }

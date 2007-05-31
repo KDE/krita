@@ -23,36 +23,91 @@
 #include <QDockWidget>
 #include <KoDockFactory.h>
 
-namespace Kross {
-    class GUIClient;
-}
+class KoScriptingGuiClient;
 
 #define KOKROSS_EXPORT KDE_EXPORT
 
+/**
+* The KoScriptingDockerFactory class implements a factory to
+* create \a KoScriptingDocker instances.
+*/
 class KOKROSS_EXPORT KoScriptingDockerFactory : public KoDockFactory
 {
     public:
-        KoScriptingDockerFactory(QWidget* parent, Kross::GUIClient* guiclient);
+
+        /**
+        * Constructor.
+        *
+        * \param parent The parent QWidget of the \a KoScriptingDocker .
+        * \param guiclient The \a KoScriptingGuiClient instance the
+        * docker belongs to.
+        */
+        KoScriptingDockerFactory(QWidget* parent, KoScriptingGuiClient* guiclient);
+
+        /**
+        * Destructor.
+        */
         virtual ~KoScriptingDockerFactory();
-        Kross::GUIClient* guiClient() const;
+
+        /**
+        * \return the \a KoScriptingGuiClient instance the docker
+        * belongs to.
+        */
+        KoScriptingGuiClient* guiClient() const;
+
+        /**
+        * \return the id the docker has.
+        */
         virtual QString id() const;
+
+        /**
+        * \return the default docking area.
+        */
         virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
+
+        /**
+        * \return a newly created \a KoScriptingDocker instance.
+        */
         virtual QDockWidget* createDockWidget();
+
     private:
         class Private;
         Private* const d;
 };
 
+/**
+* The KoScriptingDocker class implements a docking widget that displays
+* the scripts using the \a Kross::ActionCollectionView widget.
+*/
 class KOKROSS_EXPORT KoScriptingDocker : public QDockWidget
 {
         Q_OBJECT
     public:
-        KoScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient);
+
+        /**
+        * Constructor.
+        *
+        * \param parent The parent QWidget of the \a KoScriptingDocker .
+        * \param guiclient The \a KoScriptingGuiClient instance this
+        * docker belongs to.
+        */
+        KoScriptingDocker(QWidget* parent, KoScriptingGuiClient* guiclient);
+
+        /**
+        * Destructor.
+        */
         virtual ~KoScriptingDocker();
-        Kross::GUIClient* guiClient() const;
+
+        /**
+        * \return the \a KoScriptingGuiClient instance this docker
+        * belongs to.
+        */
+        KoScriptingGuiClient* guiClient() const;
+
     private Q_SLOTS:
         void slotEnabledChanged(const QString&);
         void slotDoubleClicked();
+
     private:
         class Private;
         Private* const d;

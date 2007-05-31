@@ -71,11 +71,13 @@
   	<Action name="insert_layer"/>
   	<Action name="insert_clone_layer"/>
   	<Action name="insert_shape_layer"/>
-        <Action name="insert_adjustment_layer"/>
+    <Action name="insert_adjustment_layer"/>
   	<Action name="insert_image_as_layer"/>
   	<Action name="cut_selection_to_new_layer"/>
   	<Action name="copy_selection_to_new_layer"/>
-  </Menu>	
+	<Action name="create_layer_from_mask"/>
+  </Menu>
+	
   <Action name="remove_layer"/>
   <Action name="duplicate_layer"/>
   <Action name="hide_layer"/>
@@ -96,32 +98,43 @@
   <Action name="layer_properties"/>
   <Separator/>
   <Action name="merge_layer"/>
+  <Action name="merge_all_shape_layers"/>
   <Action name="flatten_image"/>
 </Menu>
 
-
-<Menu name="Mask"><text>&Mask</text>
+<Menu name="Mask"><text>&amp;Mask</text>
     <Menu name="MaskNew"><text>New</text>
-        <Action name="create_protection_mask"/>
         <Action name="create_transparency_mask"/>
         <Action name="create_filter_mask"/>
         <Action name="create_transformation_mask"/>
-	<Action name="create_mask_from_selection"/>
+    	<Action name="create_mask_from_mask"/>
+	    <Action name="create_mask_from_selection"/>
         <Action name="create_mask_from_layer"/>
-        <Action name="create_clone_mask_from_layer"/>
+	<Action name="duplicate_mask"/>
     </Menu>
-    <Action name="create_selection_from_mask"/>
-    <Action name="apply_mask"/>
-    <Action name="remove_mask"/>
-    <Seperator/>
+    <Action name="enable_mask"/>
     <Action name="show_mask"/>
+    <Separator/>
+    <Action name="remove_mask"/>
+    <Action name="raise_mask"/>
+    <Action name="lower_mask"/>
+    <Action name="mask_to_top"/>
+    <Action name="mask_to_bottom"/>
+    <Separator/>
+    <Action name="mirror_mask_x"/>
+    <Action name="mirror_mask_y"/>
+    <Separator/>
+    <Action name="mask_properties"/>
 </Menu>
+
 
 <Menu name="Select"><text>&amp;Select</text>
     <Action name="select_all"/>
     <Action name="deselect"/>
     <Action name="reselect"/>
     <Action name="invert"/>
+    <Action name="create_selection_from_mask"/>
+
     <Separator/>
     <Action name="feather"/>
    <Action name = "grow"/>
@@ -151,6 +164,7 @@
   <Separator group="settings_show"/>
   <Action name="preferences" group="settings_configure"/>
 </Menu>
+
 
 </MenuBar>
 

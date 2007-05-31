@@ -126,29 +126,37 @@ vKisMaskSP KisLayerModel::masksFromIndexes(const QModelIndexList &indexes)
 
 QModelIndex KisLayerModel::indexFromMask(const KisMask *mask) const
 {
+    // XXX: keep track of all the different types of masks here
     Q_ASSERT(mask);
 
-    const KisLayerSP parentLayer = mask->parentLayer();
+    KisLayerSP parentLayer = mask->parentLayer();
+    Q_ASSERT( parentLayer );
 
-    if ( parentLayer && parentLayer->hasEffectMasks() ) {
-        int maskIndex = -1;
+//     int maskIndex = -1;
 
-        if ( mask == parentLayer->selection() ) {
-            maskIndex = 0;
-        }
+//     if ( mask == parentLayer->selection() ) {
+//         maskIndex = 0;
+//     }
+//     else if ( parentLayer && parentLayer->hasEffectMasks() ) {
 
-        // Transparency mask is on top of all effect masks
-        if ( mask == parentLayer->transparencyMask() )
-            maskIndex = 1;
+//         KisMask * m = const_cast<KisMask*>( mask );
+//         KisEffectMask * effectMask = dynamic_cast<KisEffectMask*>( m );
 
-        kDebug(41007) << "KisMask::indexFromMask " << mask << ", mask index: " << maskIndex << endl;
+//         if ( effectMask ) {
+//             maskIndex = parentLayer->effectMasks().indexOf( effectMask );
+//         }
 
+//         if ( parentLayer->selection() )
+//             maskIndex++;
 
-        return createIndex(maskIndex, 0, ( void* )mask);
-    } else {
+//         kDebug(41007) << "KisMask::indexFromMask " << mask << ", mask index: " << maskIndex << endl;
+
+//         return createIndex(maskIndex, 0, ( void* )mask);
+//     } else {
         return QModelIndex();
-    }
+//     }
 }
+
 int KisLayerModel::rowCount(const QModelIndex &parent) const
 {
     kDebug(41007) << "KisLayerModel::rowCount " << parent << endl;

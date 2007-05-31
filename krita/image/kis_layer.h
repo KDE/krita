@@ -50,6 +50,10 @@ class KoColorSpace;
  * Regarding the previous-, first-, next- and lastChild() calls, first means that it the layer
  * is at the top of the group in the layerlist, using next will iterate to the bottom to last,
  * whereas previous will go up to first again.
+ *
+ *
+ * TODO: Add a layer mode whereby the projection of the layer is used
+ * as a clipping path?
  **/
 class KRITAIMAGE_EXPORT KisLayer: public QObject, public KisShared
 {
@@ -277,10 +281,6 @@ public:
     void setPreviewMask( KisEffectMaskSP mask );
     KisEffectMaskSP previewMask() const;
     void removePreviewMask();
-
-    void setTransparencyMask( KisTransparencyMaskSP mask );
-    KisTransparencyMaskSP transparencyMask() const;
-    void removeTransparencyMask();
 
     /**
      * Returns true if there are any effect masks present

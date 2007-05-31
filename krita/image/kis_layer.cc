@@ -56,7 +56,6 @@ public:
     QBitArray channelFlags;
 
     // XXX: Make these (weak) shared pointers?
-    KisTransparencyMaskSP transparencyMask;
     KisEffectMaskSP previewMask;
     QList<KisEffectMask*> effectMasks;
 
@@ -395,7 +394,7 @@ void KisLayer::setParentPrivate( KisGroupLayerSP parent )
 bool KisLayer::hasEffectMasks() const
 {
     // If all these things don't exist, we have no effectMasks.
-    return !( m_d->transparencyMask == 0 && m_d->previewMask == 0 && m_d->effectMasks.isEmpty() );
+    return !(  m_d->previewMask == 0 && m_d->effectMasks.isEmpty() );
 }
 
 void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect & rc )
@@ -411,11 +410,6 @@ void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect 
     // Then apply the preview mask
     if ( m_d->previewMask )
         m_d->previewMask->apply( projection, rc );
-
-    // Then apply the transparency mask
-    if ( m_d->transparencyMask ) {
-        m_d->transparencyMask->apply( projection, rc );
-    }
 
 }
 
@@ -468,23 +462,6 @@ void KisLayer::removePreviewMask()
     m_d->previewMask = 0;
     if ( m_d->previewMask ) setDirty( m_d->previewMask->extent() );
 }
-
-void KisLayer::setTransparencyMask( KisTransparencyMaskSP mask )
-{
-    m_d->transparencyMask = mask;
-}
-
-KisTransparencyMaskSP KisLayer::transparencyMask() const
-{
-    return m_d->transparencyMask;
-}
-
-void KisLayer::removeTransparencyMask()
-{
-    m_d->transparencyMask = 0;
-}
-
-
 
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t) {
     m_temporaryTarget = t;

@@ -78,6 +78,10 @@ signals:
     void sigRequestCloneLayer( KisGroupLayerSP parent, KisLayerSP above );
     void sigRequestShapeLayer( KisGroupLayerSP parent, KisLayerSP above );
 
+    void sigRequestTransparencyMask( KisLayerSP parent, KisMaskSP above );
+    void sigRequestFilterMask( KisLayerSP parent, KisMaskSP above );
+    void sigRequestTransformationMask( KisLayerSP parent, KisMaskSP above );
+
     void sigRequestLayerProperties(KisLayerSP layer);
 
     void sigOpacityChanged(double opacity, bool final);

@@ -40,14 +40,14 @@ public:
      */
     KisEffectMask();
 
-    ~KisEffectMask();
+    virtual ~KisEffectMask();
     KisEffectMask( const KisEffectMask& rhs );
 
 
     /**
      * Apply the effect the projection using the mask as a selection.
      */
-    virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) = 0;
+    virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) {};
 
 };
 

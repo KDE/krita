@@ -46,6 +46,7 @@
 
 // koffice/libs/kokross
 #include <KoScriptingDocker.h>
+#include <KoScriptingGuiClient.h>
 
 // krita
 #include <kis_global.h>
@@ -68,7 +69,7 @@ class ScriptingPart::Private
 {
     public:
         KisView2* view;
-        Kross::GUIClient* guiclient;
+        KoScriptingGuiClient* guiclient;
         QPointer< Scripting::Module > module;
 };
 
@@ -81,7 +82,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     d->view = dynamic_cast< KisView2* >(parent);
     Q_ASSERT(d->view);
 
-    d->guiclient = new Kross::GUIClient( d->view, d->view );
+    d->guiclient = new KoScriptingGuiClient( d->view, d->view );
 
     //d->guiclient ->setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
     //BEGIN TODO: understand why the ScriptGUIClient doesn't "link" its actions to the menu

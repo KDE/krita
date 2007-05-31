@@ -27,14 +27,14 @@
 class KoColor;
 
 /**
- * @short A colormanaged widget for chooosing a color from a swatch
+ * @short A colormanaged widget for chooosing a color from a colorset
  *
- * KoSwatchWidget is a widget for choosing a color (colormanaged via pigment). Normally it shows an
+ * KoColorSetWidget is a widget for choosing a color (colormanaged via pigment). Normally it shows an
  * icon and above a small rect of the current color. When the user moves the pointer on top of the widget
  * a larger widget is popped up. This larger widget provides lots of functionallity to choose the color from
- * a swatch.
+ * a colorset.
  */
-class KOGUIUTILS_EXPORT KoSwatchWidget : public QToolButton
+class KOGUIUTILS_EXPORT KoColorSetWidget : public QToolButton
 {
 
     Q_OBJECT
@@ -46,12 +46,12 @@ public:
      *
      * @param parent parent QWidget
      */
-    KoSwatchWidget(QWidget *parent=0);
+    KoColorSetWidget(QWidget *parent=0);
 
     /**
      * Destructor
      */
-    virtual ~KoSwatchWidget();
+    virtual ~KoColorSetWidget();
 
 public slots:
 
@@ -81,8 +81,8 @@ private:
     Q_PRIVATE_SLOT(d, void colorTriggered(KoColorPatch *))
     Q_PRIVATE_SLOT(d, void filter(int))
 
-    class KoSwatchWidgetPrivate;
-    KoSwatchWidgetPrivate * const d;
+    class KoColorSetWidgetPrivate;
+    KoColorSetWidgetPrivate * const d;
 };
 
 #endif

@@ -28,14 +28,16 @@
 #include <kpalette.h>
 
 #include "KoResource.h"
+#include "KoColor.h"
 
 class QPixmap;
 
 struct KoColorSetEntry {
-    QColor color;
+    KoColor color;
     QString name;
     bool operator==(const KoColorSetEntry& rhs) const {
-        return color == rhs.color && name == rhs.name;
+        //FIXME return color == rhs.color && name == rhs.name;
+        return name == rhs.name;
     }
 };
 
@@ -49,11 +51,6 @@ class KORESOURCE_EXPORT KoColorSet : public KoResource {
     Q_OBJECT
 
 public:
-    /**
-     * Create a color set from the colors in a gradient
-     */
-/*    KoColorSet(const KisGradient * gradient, qint32 nColors, const QString & name);
-*/
     /**
      * Load a color set from a file. This can be a Gimp
      * palette, a RIFF palette or a Photoshop palette.
@@ -70,8 +67,6 @@ public:
 
     virtual bool load();
     virtual bool save();
-    virtual QImage img();
-
 
 public:
 
@@ -87,7 +82,6 @@ private:
 
     QByteArray m_data;
     bool m_ownData;
-    QImage m_img;
     QString m_name;
     QString m_comment;
     qint32 m_columns;

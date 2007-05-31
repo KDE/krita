@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "KoSwatchWidget.h"
+#include "KoColorSetWidget.h"
 
 #include <QTimer>
 #include <QApplication>
@@ -36,27 +36,27 @@
 #include <KoColorPatch.h>
 #include "KoColorSpaceRegistry.h"
 
-class KoSwatchContainer : public QFrame
+class KoColorSetContainer : public QFrame
 {
 public:
-    KoSwatchContainer(KoSwatchWidget *parent) : QFrame(parent, Qt::Popup ), m_parent(parent) {}
+    KoColorSetContainer(KoColorSetWidget *parent) : QFrame(parent, Qt::Popup ), m_parent(parent) {}
 
 protected:
 
 private:
-    KoSwatchWidget *m_parent;
+    KoColorSetWidget *m_parent;
 };
 
-class KoSwatchWidget::KoSwatchWidgetPrivate {
+class KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
-    KoSwatchWidget *thePublic;
+    KoColorSetWidget *thePublic;
     QTimer m_timer;
-    KoSwatchContainer *container;
+    KoColorSetContainer *container;
     QVBoxLayout *mainLayout;
     bool firstShowOfContainer;
     QCheckBox *filterCheckBox;
-    QWidget *swatchContainer;
-    QGridLayout *swatchLayout;
+    QWidget *colorSetContainer;
+    QGridLayout *colorSetLayout;
     QHBoxLayout *recentsLayout;
     KoColorPatch *recentPatches[6];
     int numRecents;
@@ -69,38 +69,38 @@ public:
     void filter(int state);
 };
 
-void KoSwatchWidget::KoSwatchWidgetPrivate::filter(int state)
+void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
 {
     bool hide = (state ==QCheckBox::On);
 
-    if (swatchContainer)
-        delete swatchContainer;
-    swatchContainer = new QWidget();
-    swatchLayout = new QGridLayout();
-    swatchLayout->setMargin(0);
-    swatchLayout->setSpacing(1);
+    if (colorSetContainer)
+        delete colorSetContainer;
+    colorSetContainer = new QWidget();
+    colorSetLayout = new QGridLayout();
+    colorSetLayout->setMargin(0);
+    colorSetLayout->setSpacing(1);
     for(int i = 0; i<16; i++) {
-        swatchLayout->setColumnMinimumWidth(i, 16);
+        colorSetLayout->setColumnMinimumWidth(i, 16);
     }
-    swatchContainer->setLayout(swatchLayout);
+    colorSetContainer->setLayout(colorSetLayout);
 
     for(int i = 0; i<75; i++) {
         if(!hide || i%3!=0 && i%16!=5) {
-            KoColorPatch *patch = new KoColorPatch(swatchContainer);
+            KoColorPatch *patch = new KoColorPatch(colorSetContainer);
             KoColor color(KoColorSpaceRegistry::instance()->rgb8());
             color.fromQColor(QColor(0,3*i,250-3*i));
             patch->setColor(color);
             patch->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
             patch->setFrameShape(QFrame::Box);
             connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
-            swatchLayout->addWidget(patch, i/16, i%16);
+            colorSetLayout->addWidget(patch, i/16, i%16);
         }
     }
-    mainLayout->insertWidget(2, swatchContainer);
+    mainLayout->insertWidget(2, colorSetContainer);
 }
 
 
-void KoSwatchWidget::KoSwatchWidgetPrivate::addRecent(const KoColor &color)
+void KoColorSetWidget::KoColorSetWidgetPrivate::addRecent(const KoColor &color)
 {
     if(numRecents<6) {
         recentPatches[numRecents] = new KoColorPatch(container);
@@ -119,7 +119,7 @@ void KoSwatchWidget::KoSwatchWidgetPrivate::addRecent(const KoColor &color)
     recentPatches[0]->setColor(color);
 }
 
-void KoSwatchWidget::KoSwatchWidgetPrivate::activateRecent(int i)
+void KoColorSetWidget::KoColorSetWidgetPrivate::activateRecent(int i)
 {
     KoColor color = recentPatches[i]->color();
 
@@ -130,12 +130,12 @@ void KoSwatchWidget::KoSwatchWidgetPrivate::activateRecent(int i)
     recentPatches[0]->setColor(color);
 }
 
-KoSwatchWidget::KoSwatchWidget(QWidget *parent)
+KoColorSetWidget::KoColorSetWidget(QWidget *parent)
    : QToolButton(parent)
-    ,d(new KoSwatchWidgetPrivate())
+    ,d(new KoColorSetWidgetPrivate())
 {
     d->thePublic = this;
-    d->container = new KoSwatchContainer(this);
+    d->container = new KoColorSetContainer(this);
     d->container->setAttribute(Qt::WA_WindowPropagation);
     d->container->setFrameShape(QFrame::Box);
 
@@ -145,7 +145,7 @@ KoSwatchWidget::KoSwatchWidget(QWidget *parent)
     d->mainLayout->setMargin(4);
     d->mainLayout->setSpacing(2);
 
-    d->swatchContainer = 0;
+    d->colorSetContainer = 0;
 
     d->numRecents = 0;
     d->recentsLayout = new QHBoxLayout();
@@ -176,12 +176,12 @@ KoSwatchWidget::KoSwatchWidget(QWidget *parent)
 */
 }
 
-KoSwatchWidget::~KoSwatchWidget()
+KoColorSetWidget::~KoColorSetWidget()
 {
     delete d;
 }
 
-void KoSwatchWidget::KoSwatchWidgetPrivate::colorTriggered(KoColorPatch *patch)
+void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *patch)
 {
     hidePopup();
     int i;
@@ -196,7 +196,7 @@ void KoSwatchWidget::KoSwatchWidgetPrivate::colorTriggered(KoColorPatch *patch)
         addRecent(patch->color());
 }
 
-void KoSwatchWidget::KoSwatchWidgetPrivate::showPopup()
+void KoColorSetWidget::KoColorSetWidgetPrivate::showPopup()
 {
     if(firstShowOfContainer) {
         container->show(); //show container a bit early so the slider can be layout'ed
@@ -211,27 +211,27 @@ void KoSwatchWidget::KoSwatchWidgetPrivate::showPopup()
     container->show();
 }
 
-void KoSwatchWidget::KoSwatchWidgetPrivate::hidePopup()
+void KoColorSetWidget::KoColorSetWidgetPrivate::hidePopup()
 {
     container->hide();
 }
 
-void KoSwatchWidget::setOppositeColor(const KoColor &color)
+void KoColorSetWidget::setOppositeColor(const KoColor &color)
 {
 }
 
-void KoSwatchWidget::hideEvent(QHideEvent *)
+void KoColorSetWidget::hideEvent(QHideEvent *)
 {
     d->hidePopup();
 }
 
-void KoSwatchWidget::mousePressEvent(QMouseEvent *)
+void KoColorSetWidget::mousePressEvent(QMouseEvent *)
 {
     d->showPopup();
 }
 
 
-void KoSwatchWidget::changeEvent(QEvent *e)
+void KoColorSetWidget::changeEvent(QEvent *e)
 {
     switch (e->type())
     {
@@ -248,4 +248,4 @@ void KoSwatchWidget::changeEvent(QEvent *e)
     QToolButton::changeEvent(e);
 }
 
-#include "KoSwatchWidget.moc"
+#include "KoColorSetWidget.moc"

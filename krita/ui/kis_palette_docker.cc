@@ -30,10 +30,9 @@
 #include "kis_resource_provider.h"
 
 KisPaletteDocker::KisPaletteDocker( KisView2 * view )
-    : QDockWidget( i18n("Palettes") ), mMinWidth(210), mCols(16)
+    : QDockWidget(i18n("Palettes"))
 {
     m_view = view;
-    init = false;
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -42,91 +41,21 @@ KisPaletteDocker::KisPaletteDocker( KisView2 * view )
 
     QVBoxLayout *layout = new QVBoxLayout( mainWidget );
 
-    combo = new QComboBox( this );
-    combo->setFocusPolicy( Qt::ClickFocus );
-    layout->addWidget(combo);
-
-    m_paletteView = new KisPaletteView(this, 0, mMinWidth, mCols);
-    layout->addWidget( m_paletteView );
+    //m_paletteView = new KisPaletteView(this, 0, mMinWidth, mCols);
+    //layout->addWidget( m_paletteView );
 
     //setFixedSize(sizeHint());
-
-    connect(combo, SIGNAL(activated(const QString &)),
-            this, SLOT(slotSetPalette(const QString &)));
+/*
     connect(m_paletteView, SIGNAL(colorSelected(const KoColor &)),
             this, SLOT(colorSelected(const KoColor &)));
-
+*/
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance()->get("PaletteServer");
     QList<KoResource*> resources = rServer->resources();
-
-    foreach (KoResource *resource, resources) {
-        slotAddPalette(resource);
-    }
 }
 
 KisPaletteDocker::~KisPaletteDocker()
 {
-}
-
-QString KisPaletteDocker::palette() const
-{
-    return combo->currentText();
-}
-
-
-// 2000-02-12 Espen Sand
-// Set the color in two steps. The setPalette() slot will not emit a signal
-// with the current color setting. The reason is that setPalette() is used
-// by the color selector dialog on startup. In the color selector dialog
-// we normally want to display a startup color which we specify
-// when the dialog is started. The slotSetPalette() slot below will
-// set the palette and then use the information to emit a signal with the
-// new color setting. It is only used by the combobox widget.
-//
-void KisPaletteDocker::slotSetPalette( const QString &_paletteName )
-{
-    setPalette( _paletteName );
-    m_paletteView->slotColorCellSelected(0); // FIXME: We need to save the current value!!
-}
-
-
-void KisPaletteDocker::setPalette( const QString &_paletteName )
-{
-    QString paletteName( _paletteName);
-
-    m_currentPalette = m_namedPaletteMap[paletteName];
-
-    if (combo->currentText() != paletteName)
-    {
-        int i = combo->findText(paletteName);
-
-        if (i >= 0) {
-            combo->setCurrentIndex(i);
-        } else {
-            combo->addItem(paletteName);
-            combo->setCurrentIndex(combo->count() - 1);
-        }
-    }
-
-    m_paletteView->setPalette(m_currentPalette);
-}
-
-void KisPaletteDocker::slotAddPalette(KoResource * palette)
-{
-    KoColorSet * p = dynamic_cast<KoColorSet*>(palette);
-
-    if (p) {
-        m_namedPaletteMap.insert(palette->name(), p);
-
-        combo->addItem(palette->name());
-
-        if (!init) {
-            combo->setCurrentIndex(0);
-            setPalette(combo ->currentText());
-            init = true;
-        }
-    }
 }
 
 void KisPaletteDocker::colorSelected( const KoColor& color )

@@ -168,9 +168,8 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
         }
 
         if (m_addPalette) {
-            // Convert to RGB to add to palette, we ought to have our own format :(
             KoColorSetEntry ent;
-            ent.color = m_pickedColor.toQColor();
+            ent.color = m_pickedColor;
             // We don't ask for a name, too intrusive here
 
             KoColorSet* palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());

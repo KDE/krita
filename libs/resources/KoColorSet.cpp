@@ -27,6 +27,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "KoColorSpaceRegistry.h"
+
 namespace {
     enum enumPaletteType {
         FORMAT_UNKNOWN,
@@ -54,7 +56,7 @@ KoColorSet::KoColorSet(const KisGradient * gradient, qint32 nColors, const QStri
     KoColor c;
     for (i = 0, cur_x = 0; i < nColors; i++, cur_x += dx) {
         gradient->colorAt(c,cur_x);
-        e.color = c.toQColor();
+        e.color = c;
         e.name = "Untitled";
         add(e);
     }
@@ -81,7 +83,6 @@ KoColorSet::KoColorSet(const KoColorSet& rhs)
 {
     setFilename(rhs.filename());
     m_ownData = false;
-    m_img = rhs.m_img;
     m_name = rhs.m_name;
     m_comment = rhs.m_comment;
     m_columns = rhs.m_columns;
@@ -117,7 +118,7 @@ bool KoColorSet::save()
 
     for (int i = 0; i < m_colors.size(); i++) {
         const KoColorSetEntry& entry = m_colors.at(i);
-        QColor c = entry.color;
+        QColor c = entry.color.toQColor();
         stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
         if (entry.name.isEmpty())
             stream << "Untitled\n";
@@ -127,11 +128,6 @@ bool KoColorSet::save()
 
     file.close();
     return true;
-}
-
-QImage KoColorSet::img()
-{
-    return m_img;
 }
 
 qint32 KoColorSet::nColors()
@@ -218,8 +214,8 @@ bool KoColorSet::init()
                     break;
                 }
 
-                color = QColor(r, g, b);
-                e.color = color;
+                e.color = KoColor(KoColorSpaceRegistry::instance()->rgb8());
+                e.color.fromQColor(QColor(r, g, b));
 
                 QString name = a.join(" ");
                 e.name = name.isEmpty() ? i18n("Untitled") : name;

@@ -48,7 +48,7 @@ public:
     void setPalette(KoColorSet* p);
 
 signals:
-    void activatedResource(KisResource *);
+    void activatedResource(KoResource *);
 
 private slots:
     void slotAddPalette();

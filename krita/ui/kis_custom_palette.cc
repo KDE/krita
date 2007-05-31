@@ -36,7 +36,6 @@
 
 #include "kis_view2.h"
 #include "KoColorSet.h"
-#include "kis_palette_view.h"
 #include "kis_custom_palette.h"
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
@@ -45,7 +44,6 @@ KisCustomPalette::KisCustomPalette( QList<KoColorSet*> &palettes, QWidget *paren
     : KisWdgCustomPalette(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
-    m_mediator = 0;
     m_server = 0;
     m_palette = 0;
     m_editMode = false;
@@ -71,7 +69,7 @@ KisCustomPalette::~KisCustomPalette() {
 
 void KisCustomPalette::setPalette(KoColorSet* p) {
     m_palette = p;
-    view->setPalette(m_palette);
+    //view->setPalette(m_palette);
     palettename->setText(p->name());
 }
 
@@ -79,24 +77,8 @@ void KisCustomPalette::slotAddNew() {
     // Let the user select a new color
     // FIXME also let him add the current paint color to the palette
     // or even better, let the color picker have an option 'Add to palette'!
-
-    QColor color;
-    int result = KColorDialog::getColor(color);
-    if (result != KColorDialog::Accepted)
-        return;
-
-    bool ok;
-    QRegExpValidator validator(QRegExp(".*"), this);
-    QString name = KInputDialog::getText(i18n("Add Color to Palette"),
-                                         i18n("Color name (optional):"),
-                                         QString::null, &ok,
-                                         0, &validator);
-    if (!ok)
-        return;
-
+/*
     KoColorSetEntry entry;
-    entry.color = color;
-    entry.name = name;
 
     m_palette->add(entry);
 
@@ -105,13 +87,13 @@ void KisCustomPalette::slotAddNew() {
 
     if (!m_palette->save())
         KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.",m_palette->filename()), i18n("Palette"));
+*/
 }
 
 void KisCustomPalette::slotRemoveCurrent() {
     if(m_palette) {
-        m_palette->remove(view->currentEntry());
         // Just reload the palette completely for the view updating
-        view->setPalette(m_palette);
+//        view->setPalette(m_palette);
 
         if (!m_palette->save())
            KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.",m_palette->filename()), i18n("Palette"));

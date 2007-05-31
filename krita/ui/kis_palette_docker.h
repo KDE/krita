@@ -19,17 +19,13 @@
 #ifndef __KIS_PALETTE_WIDGET_H__
 #define __KIS_PALETTE_WIDGET_H__
 
-#include <q3dict.h>
 #include <QDockWidget>
 #include <klocale.h>
 
 #include <KoDockFactory.h>
-#include "kis_palette_view.h"
+#include <KoColorSet.h>
 
 class QComboBox;
-class QLineEdit;
-class KListBox;
-class KisPalette;
 class KoResource;
 class KoColor;
 class KisView2;
@@ -49,31 +45,16 @@ public:
     virtual ~KisPaletteDocker();
 
     QString palette() const;
-    KoColorSetEntry currentEntry() const { return m_paletteView->currentEntry(); }
-
-public slots:
-    void setPalette(const QString &paletteName);
 
 protected slots:
-    void slotSetPalette( const QString &_paletteName );
     void colorSelected( const KoColor& color );
-
-public slots:
-    // Called by the resource server whenever a palette is loaded.
-    void slotAddPalette(KoResource * palette);
 
 protected:
     void readNamedColor( void );
 
 protected:
-    KisPaletteView* m_paletteView;
-    Q3Dict<KoColorSet> m_namedPaletteMap;
-    KoColorSet * m_currentPalette;
-    QComboBox *combo;
-    Q3ScrollView *sv;
-    int mMinWidth;
-    int mCols;
-    bool init;
+    //KisPaletteView* m_paletteView;
+    KoColorSet *m_currentPalette;
     KisView2 * m_view;
 };
 

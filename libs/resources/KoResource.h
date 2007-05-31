@@ -60,7 +60,7 @@ public:
     /**
      * Returns a QImage representing this resource.  This image could be null.
      */
-    virtual QImage img() = 0;
+    virtual QImage img() {return QImage(); }
 
 public:
     QString filename() const;

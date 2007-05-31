@@ -305,8 +305,8 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
     sep->setSeparator(true);
     d->m_splitViewActionList.append(sep);
 
-    d->m_dockWidgetMenu  = new KActionMenu(i18n("Palettes"), this);
-    actionCollection()->addAction("settings_palette_menu", d->m_dockWidgetMenu );
+    d->m_dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
+    actionCollection()->addAction("settings_dockers_menu", d->m_dockWidgetMenu );
     d->m_dockWidgetMenu->setVisible( false );
 
     // Load list of recent files

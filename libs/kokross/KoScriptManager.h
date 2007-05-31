@@ -57,12 +57,6 @@ class KoScriptManagerCollection : public QWidget
         virtual ~KoScriptManagerCollection();
 
         /**
-        * \return the \a KoScriptManagerModule that was used to
-        * create this \a KoScriptManagerCollection instance.
-        */
-        KoScriptManagerModule* module() const;
-
-        /**
         * \return true if the collection was modified.
         */
         //bool isModified() const;

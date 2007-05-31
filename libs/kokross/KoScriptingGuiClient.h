@@ -40,6 +40,9 @@ class KOKROSS_EXPORT KoScriptingGuiClient : public Kross::GUIClient
         explicit KoScriptingGuiClient(KXMLGUIClient* guiclient, QObject* parent = 0);
         virtual ~KoScriptingGuiClient();
 
+    public Q_SLOTS:
+        void slotShowScriptManager();
+
     private:
         /// \internal d-pointer class.
         class Private;

@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "KoScriptingGuiClient.h"
+#include "KoScriptManager.h"
 
 // qt
 //#include <QApplication>
@@ -61,6 +62,32 @@ KoScriptingGuiClient::KoScriptingGuiClient(KXMLGUIClient* guiclient, QObject* pa
 KoScriptingGuiClient::~KoScriptingGuiClient()
 {
     delete d;
+}
+
+void KoScriptingGuiClient::slotShowScriptManager()
+{
+    KDialog* dialog = new KDialog();
+    dialog->setCaption( i18n("Script Manager") );
+    dialog->setButtons( KDialog::Ok | KDialog::Cancel );
+    dialog->setMainWidget( new KoScriptManagerCollection(dialog->mainWidget()) );
+    dialog->resize( QSize(520, 380).expandedTo( dialog->minimumSizeHint() ) );
+    int result = dialog->exec();
+#if 0
+    if ( view->isModified() ) {
+        if( result == QDialog::Accepted /*&& dialog->result() == KDialog::Ok*/ ) {
+            // save new config
+            Manager::self().writeConfig();
+        }
+        else {
+            // restore old config
+            Manager::self().readConfig();
+        }
+        QMetaObject::invokeMethod(&Manager::self(), "configChanged");
+    }
+#else
+    Q_UNUSED(result);
+#endif
+    dialog->delayedDestruct();
 }
 
 #include "KoScriptingGuiClient.moc"

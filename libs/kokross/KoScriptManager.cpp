@@ -78,14 +78,13 @@ class KoScriptManagerNewStuff : public KNewStuffSecure
 class KoScriptManagerCollection::Private
 {
     public:
-        KoScriptManagerModule* module;
         bool modified;
         Kross::ActionCollectionView* view;
-        Private(KoScriptManagerModule* m) : module(m), modified(false) {}
+        Private() : modified(false) {}
 };
 
-KoScriptManagerCollection::KoScriptManagerCollection(KoScriptManagerModule* module, QWidget* parent)
-    : QWidget(parent), d(new Private(module))
+KoScriptManagerCollection::KoScriptManagerCollection(QWidget* parent)
+    : QWidget(parent), d(new Private())
 {
     QHBoxLayout* mainlayout = new QHBoxLayout();
     mainlayout->setMargin(0);
@@ -129,11 +128,6 @@ KoScriptManagerCollection::KoScriptManagerCollection(KoScriptManagerModule* modu
 KoScriptManagerCollection::~KoScriptManagerCollection()
 {
     delete d;
-}
-
-KoScriptManagerModule* KoScriptManagerCollection::module() const
-{
-    return d->module;
 }
 
 /*
@@ -183,26 +177,6 @@ void KoScriptManagerView::slotNewScriptsInstallFinished() {
     KGlobal::config()->deleteGroup("KNewStuffStatus");
 }
 #endif
-
-/******************************************************************************
- * KoScriptManagerModule
- */
-
-/// \internal d-pointer class.
-class KoScriptManagerModule::Private
-{
-    public:
-};
-
-KoScriptManagerModule::KoScriptManagerModule()
-    : QObject(), d(new Private())
-{
-}
-
-KoScriptManagerModule::~KoScriptManagerModule()
-{
-    delete d;
-}
 
 #if 0
 bool KoScriptManagerModule::installPackage(const QString& scriptpackagefile)
@@ -287,36 +261,5 @@ bool KoScriptManagerModule::uninstallPackage(Action* action)
     return true;
 }
 #endif
-
-QWidget* KoScriptManagerModule::createManagerWidget(QWidget* parent)
-{
-    return new KoScriptManagerCollection(this, parent);
-}
-
-void KoScriptManagerModule::showManagerDialog()
-{
-    KDialog* dialog = new KDialog();
-    dialog->setCaption( i18n("Script Manager") );
-    dialog->setButtons( KDialog::Ok | KDialog::Cancel );
-    dialog->setMainWidget( createManagerWidget( dialog->mainWidget() ) );
-    dialog->resize( QSize(520, 380).expandedTo( dialog->minimumSizeHint() ) );
-    int result = dialog->exec();
-#if 0
-    if ( view->isModified() ) {
-        if( result == QDialog::Accepted /*&& dialog->result() == KDialog::Ok*/ ) {
-            // save new config
-            Manager::self().writeConfig();
-        }
-        else {
-            // restore old config
-            Manager::self().readConfig();
-        }
-        QMetaObject::invokeMethod(&Manager::self(), "configChanged");
-    }
-#else
-    Q_UNUSED(result);
-#endif
-    dialog->delayedDestruct();
-}
 
 #include "KoScriptManager.moc"

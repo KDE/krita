@@ -47,11 +47,9 @@ class KoScriptManagerCollection : public QWidget
 
         /**
         * Constructor.
-        * \param module The \a KoScriptManagerModule that was used
-        * to create this \a KoScriptManagerCollection instance.
         * \param parent The parent widget this widget is child of.
         */
-        explicit KoScriptManagerCollection(KoScriptManagerModule* module, QWidget* parent = 0);
+        explicit KoScriptManagerCollection(QWidget* parent);
 
         /**
         * Destructor.
@@ -103,36 +101,6 @@ class KoScriptManagerCollection : public QWidget
             /// The data changed.
             void slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 #endif
-
-    private:
-        /// \internal d-pointer class.
-        class Private;
-        /// \internal d-pointer instance.
-        Private* const d;
-};
-
-/**
-* The KoScriptManagerModule provides access to the Script Manager
-* functionality like the "Script Manager" KDialog.
-*/
-class KoScriptManagerModule : public QObject
-{
-        Q_OBJECT
-    public:
-        explicit KoScriptManagerModule();
-        virtual ~KoScriptManagerModule();
-
-    public Q_SLOTS:
-
-        /**
-        * Create and return the "Script Manager" widget.
-        */
-        QWidget* createManagerWidget(QWidget* parent = 0);
-
-        /**
-        * Display the modal "Script Manager" dialog.
-        */
-        void showManagerDialog();
 
     private:
         /// \internal d-pointer class.

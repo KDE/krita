@@ -51,7 +51,7 @@
 #include <klocale.h>
 
 // if defined then debugging is enabled
-#define KOOPENDOCUMENTLOADER_DEBUG
+//#define KOOPENDOCUMENTLOADER_DEBUG
 
 /// \internal d-pointer class.
 class KoOpenDocumentLoader::Private
@@ -121,6 +121,52 @@ KoStyleManager* KoOpenDocumentLoader::styleManager() const
 //1.6: KoStyleCollection::loadOasisStyles
 void KoOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context, QList<KoXmlElement*> styleElements)
 {
+#if 0 //1.6:
+    QStringList followingStyles;
+    QList<KoXmlElement*> userStyles = context.oasisStyles().customStyles( "paragraph" ).values();
+    bool defaultStyleDeleted = false;
+    int stylesLoaded = 0;
+    const unsigned int nStyles = userStyles.count();
+    for (unsigned int item = 0; item < nStyles; item++) {
+        KoXmlElement* styleElem = userStyles[item];
+        if ( !styleElem ) continue;
+        Q_ASSERT( !styleElem->isNull() );
+        if( !defaultStyleDeleted ) { // we are going to import at least one style.
+            KoParagStyle *s = defaultStyle();
+            //kDebug() << "loadOasisStyles looking for Standard, to delete it. Found " << s << endl;
+            if(s) removeStyle(s); // delete the standard style.
+            defaultStyleDeleted = true;
+        }
+        KoParagStyle *sty = new KoParagStyle( QString::null );
+        // Load the style
+        sty->loadStyle( *styleElem, context );
+        // Style created, now let's try to add it
+        const int oldStyleCount = count();
+        sty = addStyle( sty );
+        // the real value of followingStyle is set below after loading all styles
+        sty->setFollowingStyle( sty );
+        kDebug() << " Loaded style " << sty->name() << endl;
+        if ( count() > oldStyleCount ) {
+            const QString following = styleElem->attributeNS( KoXmlNS::style, "next-style-name", QString::null );
+            followingStyles.append( following );
+            ++stylesLoaded;
+        }
+        else kWarning() << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+    }
+    if( followingStyles.count() != styleList().count() ) kDebug() << "Ouch, " << followingStyles.count() << " following-styles, but " << styleList().count() << " styles in styleList" << endl;
+    unsigned int i = 0;
+    QString tmpString;
+    foreach( tmpString, followingStyles ) {
+        const QString followingStyleName = tmpString;
+        if ( !followingStyleName.isEmpty() ) {
+            KoParagStyle * style = findStyle( followingStyleName );
+            if ( style ) styleAt(i)->setFollowingStyle( style );
+        }
+    }
+    // TODO the same thing for style inheritance (style:parent-style-name) and setParentStyle()
+    Q_ASSERT( defaultStyle() );
+    return stylesLoaded;
+#endif
     foreach(KoXmlElement* styleElem, styleElements) {
         Q_ASSERT( styleElem );
         Q_ASSERT( !styleElem->isNull() );
@@ -184,6 +230,7 @@ void KoOpenDocumentLoader::loadAllStyles(KoOasisLoadingContext& context)
         style->loadOasis(context, *it.value());
         d->addStyle(style);
     }
+
 }
 
 void KoOpenDocumentLoader::loadSettings(KoOasisLoadingContext& context, const QDomDocument& settings)
@@ -287,9 +334,14 @@ void KoOpenDocumentLoader::loadParagraph(KoOasisLoadingContext& context, const K
             kDebug() << "KoOpenDocumentLoader::loadParagraph paragraphStyle.localName=" << (paragraphStyle ? paragraphStyle->localName() : "NULL") << " masterPageName=" << masterPageName << endl;
         #endif
 
-        //QString styleName = context.styleStack().userStyleName( "paragraph" );
-        //KoParagraphStyle *style = d->stylemanager->paragraphStyle(styleName);
-        //if ( !style ) style = d->stylemanager->defaultParagraphStyle();
+        /*
+        QString styleName = context.styleStack().userStyleName( "paragraph" );
+        KoParagraphStyle *style = d->stylemanager->paragraphStyle(styleName);
+        if ( !style ) {
+            kDebug() << "KoOpenDocumentLoader::loadSpan: Unknown style. Using default!" << endl;
+            style = d->stylemanager->defaultParagraphStyle();
+        }
+        */
 
         //d->currentMasterPage = masterPageName; // do this first to avoid recursion
         context.styleStack().save();
@@ -310,7 +362,7 @@ void KoOpenDocumentLoader::loadParagraph(KoOasisLoadingContext& context, const K
             style->applyStyle(block);
         }
 
-#if 0 //1.6:
+#if 0
         // This is quite ugly... OOo stores the starting page-number in the first paragraph style...
         QString pageNumber = context.styleStack().attributeNS( KoXmlNS::style, "page-number" );
         if ( !pageNumber.isEmpty() ) doc->variableCollection()->variableSetting()->setStartingPageNumber( pageNumber.toInt() );
@@ -386,6 +438,8 @@ void KoOpenDocumentLoader::loadHeading(KoOasisLoadingContext& context, const KoX
     if( level > 0 ) {
         listStyle = new KoListStyle();
         KoListLevelProperties props;
+        //props.setListItemPrefix("ABC");
+        //props.setStyle( KoListStyle::NoItem );
         props.setStyle( KoListStyle::DecimalItem );
         props.setDisplayLevel(level);
         listStyle->setLevel(props);
@@ -500,8 +554,10 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
     QString styleName;
     if ( parent.hasAttributeNS( KoXmlNS::text, "style-name" ) ) {
         styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
-        //KoXmlElement* listElem = context.oasisStyles().listStyles()[ styleName ];
-        //if(listElem) context.addStyles( listElem, "paragraph" );
+        /*
+        KoXmlElement* listElem = context.oasisStyles().listStyles()[ styleName ];
+        if(listElem) context.addStyles( listElem, "paragraph" );
+        */
     }
 
     // Get the KoListStyle the name may reference to
@@ -509,20 +565,11 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug()<<"KoOpenDocumentLoader::loadList styleName="<<styleName<<" listStyle="<<(listStyle ? listStyle->name() : "NULL")<<endl;
     #endif
-    if( ! listStyle ) { // even if wellformed documents shouldn't reference a style we don't know about yet, we handle that case...
+    if( ! listStyle ) {
         listStyle = new KoListStyle();
         listStyle->setName(styleName);
         d->addStyle(listStyle);
     }
-
-
-KoParagraphStyle* paragStyle = new KoParagraphStyle();
-paragStyle->setName(styleName);
-paragStyle->setListStyle(*listStyle);
-
-
-
-
 
     // Set the style and create the textlist
     QTextListFormat listformat;
@@ -531,7 +578,7 @@ paragStyle->setListStyle(*listStyle);
     // we need at least one item, so add a dummy-item we remove later again
     cursor.insertBlock();
     QTextBlock prev = cursor.block();
-static int level = 1;
+
     // Iterate over list items and add them to the textlist
     KoXmlElement e;
     forEachElement(e, parent) {
@@ -547,18 +594,8 @@ static int level = 1;
             list->setFormat(f);
         }
         */
-
-//KoListLevelProperties properties = listStyle->level(level);
-//QTextListFormat lf;
-//properties.applyStyle(lf);
-//list->setFormat(lf);
-
-QTextBlock bl = cursor.block();
-paragStyle->applyStyle(bl);
-paragStyle->setListLevel(level);
-        //listStyle->applyStyle(cursor.block(), level);
+        listStyle->applyStyle(cursor.block());
         loadBody(context, e, cursor);
-level++;
     }
 
     // add the new blocks to the list
@@ -566,9 +603,6 @@ level++;
     for(QTextBlock b = prev; b.isValid() && b != current; b = b.next())
         list->add(b);
     list->removeItem(0); // remove the first dummy item again
-
-
-
 
     /*
     // Get the matching paragraph style
@@ -780,6 +814,9 @@ void KoOpenDocumentLoader::loadSpan(KoOasisLoadingContext& context, const KoXmlE
             #ifdef KOOPENDOCUMENTLOADER_DEBUG
                 kDebug() << "  <line-break> Node localName=" << localName << endl;
             #endif
+            //QTextBlockFormat emptyTbf;
+            //QTextCharFormat emptyCf;
+            //cursor.insertBlock(emptyTbf, emptyCf);
             cursor.insertText( "\n" );
         }
         else if ( isTextNS && localName == "number" ) // text:number
@@ -824,5 +861,6 @@ void KoOpenDocumentLoader::loadSpan(KoOasisLoadingContext& context, const KoXmlE
         context.styleStack().restore();
     }
 }
+//#endif
 
 #include "KoOpenDocumentLoader.moc"

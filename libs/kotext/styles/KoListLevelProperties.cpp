@@ -348,14 +348,9 @@ void KoListLevelProperties::loadOasis(KoOasisLoadingContext& context, const KoXm
 
     const QString level = style.attributeNS( KoXmlNS::text, "level", QString() );
     if( ! level.isNull() ) {
-        kDebug()<<"KoListLevelProperties::loadOasis "<<style.localName()<<" LEVEL="<<level<<endl;
+        //kDebug()<<"KoListLevelProperties::loadOasis "<<style.localName()<<" LEVEL="<<level<<endl;
         const int i = level.toInt();
         setLevel(i);
         setDisplayLevel(i);
     }
-
-    //KoXmlElement props = style.firstChildElement("list-level-properties");
-    //const QString spaceBefore = props.attributeNS( KoXmlNS::style, "space-before", QString() );
-    //const QString minLabelWidth = props.attributeNS( KoXmlNS::style, "min-label-width", QString() );
-
 }

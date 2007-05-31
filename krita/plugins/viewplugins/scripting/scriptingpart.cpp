@@ -69,7 +69,7 @@ class ScriptingPart::Private
 {
     public:
         KisView2* view;
-        KoScriptingGuiClient* guiclient;
+        QPointer< KoScriptingGuiClient > guiclient;
         QPointer< Scripting::Module > module;
 };
 
@@ -82,25 +82,13 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     d->view = dynamic_cast< KisView2* >(parent);
     Q_ASSERT(d->view);
 
-    d->guiclient = new KoScriptingGuiClient( d->view, d->view );
+    d->guiclient = new KoScriptingGuiClient( this, d->view );
 
     //d->guiclient ->setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
     //BEGIN TODO: understand why the ScriptGUIClient doesn't "link" its actions to the menu
     setXMLFile(KStandardDirs::locate("data","kritaplugins/scripting.rc"), true);
 
     d->module = new Scripting::Module(d->view);
-
-    // Setup the actions Kross provides and Krita likes to have.
-    KAction* execaction  = new KAction(i18n("Execute Script File..."), this);
-    actionCollection()->addAction("executescriptfile", execaction );
-    connect(execaction, SIGNAL(triggered(bool)), d->guiclient, SLOT(slotShowExecuteScriptFile()));
-
-    KAction* manageraction  = new KAction(i18n("Script Manager..."), this);
-    actionCollection()->addAction("configurescripts", manageraction );
-    connect(manageraction, SIGNAL(triggered(bool)), d->guiclient, SLOT(slotShowScriptManager()));
-
-    QAction* scriptmenuaction = d->guiclient->action("scripts");
-    actionCollection()->addAction("scripts", scriptmenuaction);
 
     KoScriptingDockerFactory factory(d->view, d->guiclient);
     QDockWidget* dock = d->view->createDockWidget(&factory);
@@ -140,7 +128,10 @@ void ScriptingPart::finished(Kross::Action*)
 {
 //     kDebug() << "ScriptingPart::executionFinished" << endl;
     d->view->document()->setModified(true);
-    d->view->layerManager()->activeLayer()->setDirty();
+
+//FIXME sebsauer, 20070601, who did remove it without providing an replacment?
+//d->view->layerManager()->activeLayer()->setDirty();
+
     static_cast< Scripting::Progress* >( d->module->progress() )->progressDone();
     QApplication::restoreOverrideCursor();
     //d->module->deleteLater();

@@ -22,9 +22,10 @@
 // qt
 //#include <QApplication>
 // kde
+#include <kaction.h>
+#include <kactioncollection.h>
 //#include <kdebug.h>
 //#include <klocale.h>
-//#include <kxmlguiwindow.h>
 // koffice
 //#include <KoMainWindow.h>
 //#include <KoApplicationAdaptor.h>
@@ -44,6 +45,17 @@ class KoScriptingGuiClient::Private
 KoScriptingGuiClient::KoScriptingGuiClient(KXMLGUIClient* guiclient, QObject* parent)
     : Kross::GUIClient(guiclient, parent), d(new Private())
 {
+    KAction* execaction  = new KAction(i18n("Execute Script File..."), this);
+    guiclient->actionCollection()->addAction("executescriptfile", execaction);
+    connect(execaction, SIGNAL(triggered(bool)), this, SLOT(slotShowExecuteScriptFile()));
+
+    KAction* manageraction  = new KAction(i18n("Script Manager..."), this);
+    guiclient->actionCollection()->addAction("scriptmanager", manageraction);
+    connect(manageraction, SIGNAL(triggered(bool)), this, SLOT(slotShowScriptManager()));
+
+    QAction* scriptmenuaction = this->action("scripts");
+    if( scriptmenuaction )
+        guiclient->actionCollection()->addAction("scripts", scriptmenuaction);
 }
 
 KoScriptingGuiClient::~KoScriptingGuiClient()

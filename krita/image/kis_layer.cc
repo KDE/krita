@@ -392,7 +392,7 @@ void KisLayer::setParentPrivate( KisGroupLayerSP parent )
     m_d->parent = parent;
 }
 
-bool KisLayer::hasEffectMasks()
+bool KisLayer::hasEffectMasks() const
 {
     // If all these things don't exist, we have no effectMasks.
     return !( m_d->transparencyMask == 0 && m_d->previewMask == 0 && m_d->effectMasks.isEmpty() );
@@ -420,7 +420,7 @@ void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect 
 }
 
 
-QList<KisEffectMask*> KisLayer::effectMasks()
+QList<KisEffectMask*> KisLayer::effectMasks() const
 {
     return m_d->effectMasks;
 }
@@ -458,7 +458,7 @@ void KisLayer::setPreviewMask( KisEffectMaskSP mask )
     setDirty( mask->extent() );
 }
 
-KisEffectMaskSP KisLayer::previewMask()
+KisEffectMaskSP KisLayer::previewMask() const
 {
     return m_d->previewMask;
 }
@@ -474,7 +474,7 @@ void KisLayer::setTransparencyMask( KisTransparencyMaskSP mask )
     m_d->transparencyMask = mask;
 }
 
-KisTransparencyMaskSP KisLayer::transparencyMask()
+KisTransparencyMaskSP KisLayer::transparencyMask() const
 {
     return m_d->transparencyMask;
 }

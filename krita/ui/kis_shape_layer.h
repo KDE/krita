@@ -75,7 +75,7 @@ public:
 
     // Retrieve the projection for
     KisPaintDeviceSP projection() const;
-    KisPaintDeviceSP paintDevice() {
+    KisPaintDeviceSP paintDevice() const {
         return 0;
     }
 
@@ -83,12 +83,17 @@ public:
 
     // KisLayer implementation
     KisLayerSP clone() const;
+
     qint32 x() const;
     void setX(qint32);
+
     qint32 y() const;
     void setY(qint32);
+
     QRect extent() const;
+
     QRect exactBounds() const;
+
     bool accept(KisLayerVisitor&);
 
     KoShapeManager *shapeManager() const;

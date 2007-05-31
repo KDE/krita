@@ -79,7 +79,10 @@ public:
 
     virtual ~KisMask();
 
-    KisPaintDeviceSP parent();
+    KisPaintDeviceSP parentPaintDevice() const;
+
+    void setParentLayer( KisLayerSP parent );
+    KisLayerSP parentLayer() const;
 
     bool active();
 

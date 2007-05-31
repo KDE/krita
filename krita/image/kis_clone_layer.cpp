@@ -116,7 +116,7 @@ KisPaintDeviceSP KisCloneLayer::projection() const
     return m_d->projection;
 }
 
-KisPaintDeviceSP KisCloneLayer::paintDevice()
+KisPaintDeviceSP KisCloneLayer::paintDevice() const
 {
     return 0;
 }

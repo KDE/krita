@@ -31,6 +31,7 @@ class KisMask::KisMaskPrivate
 
 public:
     KisPaintDeviceSP parent;
+    KisLayerSP parentLayer;
     bool active;
 };
 
@@ -65,9 +66,19 @@ KisMask::~KisMask()
 {
 }
 
-KisPaintDeviceSP KisMask::parent()
+KisPaintDeviceSP KisMask::parentPaintDevice() const
 {
     return m_d->parent;
+}
+
+void KisMask::setParentLayer( KisLayerSP parentLayer )
+{
+    m_d->parentLayer = parentLayer;
+}
+
+KisLayerSP KisMask::parentLayer() const
+{
+    return m_d->parentLayer;
 }
 
 bool KisMask::active()

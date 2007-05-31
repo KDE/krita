@@ -53,7 +53,7 @@ public:
             return 0;
         }
 
-    KisPaintDeviceSP paintDevice()
+    KisPaintDeviceSP paintDevice() const
         {
             return 0;
         }

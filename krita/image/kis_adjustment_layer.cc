@@ -71,7 +71,7 @@ KisPaintDeviceSP KisAdjustmentLayer::projection() const
     return m_cachedPaintDev;
 }
 
-KisPaintDeviceSP KisAdjustmentLayer::paintDevice()
+KisPaintDeviceSP KisAdjustmentLayer::paintDevice() const
 {
     return m_selection;
 }

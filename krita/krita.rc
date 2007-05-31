@@ -89,7 +89,7 @@
   <Separator/>
   <Action name="save_layer_as_image"/>
   <Action name="layer_to_image"/>
-<Separator/>
+  <Separator/>
   <Action name="mirrorLayerX"/>
   <Action name="mirrorLayerY"/>
   <Separator/>
@@ -110,7 +110,7 @@
         <Action name="create_mask_from_layer"/>
         <Action name="create_clone_mask_from_layer"/>
     </Menu>
-    <Action name="mask_tosel"/>
+    <Action name="create_selection_from_mask"/>
     <Action name="apply_mask"/>
     <Action name="remove_mask"/>
     <Seperator/>

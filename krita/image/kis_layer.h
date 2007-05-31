@@ -35,7 +35,7 @@
 #include "kis_layer_visitor.h"
 
 #include "kis_paint_device.h"
-
+#include "kis_selection.h"
 
 class QIcon;
 class QPainter;
@@ -92,7 +92,13 @@ public:
      * @return the paint device to paint on. Can be 0 if the actual
      * layer type does not support painting.
      */
-    virtual KisPaintDeviceSP paintDevice() = 0;
+    virtual KisPaintDeviceSP paintDevice() const = 0;
+
+    /**
+     * @return the selection associated with this layer, if there is
+     * one. Otherwise, return 0;
+     */
+    virtual KisSelectionSP selection() const { return 0; }
 
     virtual QIcon icon() const = 0;
 
@@ -254,7 +260,7 @@ public:
     virtual bool accept(KisLayerVisitor &) = 0;
 
     /// Returns the list of effect masks
-    QList<KisEffectMask*> effectMasks();
+    QList<KisEffectMask*> effectMasks() const;
 
     /// Add an effect mask at the specified position
     void addEffectMask( KisEffectMask* mask, int index = 0 );
@@ -269,17 +275,19 @@ public:
     void removeEffectMask( int index );
 
     void setPreviewMask( KisEffectMaskSP mask );
-    KisEffectMaskSP previewMask();
+    KisEffectMaskSP previewMask() const;
     void removePreviewMask();
 
     void setTransparencyMask( KisTransparencyMaskSP mask );
-    KisTransparencyMaskSP transparencyMask();
+    KisTransparencyMaskSP transparencyMask() const;
     void removeTransparencyMask();
 
+    /**
+     * Returns true if there are any effect masks present
+     */
+    bool hasEffectMasks() const;
+
 protected:
-
-    bool hasEffectMasks();
-
     /**
      * Apply the effect masks to the given projection, producing
      * finally the dst paint device.

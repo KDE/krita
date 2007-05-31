@@ -76,7 +76,7 @@ public:
 
 
     /// Returns the paintDevice that accompanies this layer
-    KisPaintDeviceSP paintDevice();
+    KisPaintDeviceSP paintDevice() const;
 
     KisPaintDeviceSP orignal() const;
 

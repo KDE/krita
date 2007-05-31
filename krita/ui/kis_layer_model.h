@@ -41,10 +41,14 @@ public: // from QAbstractItemModel
 
     void setImage( KisImageSP image );
 
-
     KisLayerSP layerFromIndex(const QModelIndex &index);
     vKisLayerSP layersFromIndexes(const QModelIndexList &list);
     virtual QModelIndex indexFromLayer(const KisLayer *layer) const;
+
+    KisMaskSP maskFromIndex( const QModelIndex &index );
+    vKisMaskSP masksFromIndexes( const QModelIndexList &list );
+    virtual QModelIndex indexFromMask( const KisMask *mask ) const;
+
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
@@ -59,6 +63,7 @@ public: // from QAbstractItemModel
 signals:
 
     void layerActivated( KisLayerSP );
+    void maskActivated( KisMaskSP );
 
 public slots:
 
@@ -66,6 +71,11 @@ public slots:
     void endInsertLayers( KisGroupLayer * parent, int index );
     void beginRemoveLayers( KisGroupLayer * parent, int index );
     void endRemoveLayers( KisGroupLayer * parent, int index );
+
+    void beginInsertMasks( KisLayer * parent,  int index );
+    void endInsertMasks( KisLayer * parent, int index );
+    void beginRemoveMasks( KisLayer * parent, int index );
+    void endRemoveMasks( KisLayer * parent, int index );
 
 private:
 

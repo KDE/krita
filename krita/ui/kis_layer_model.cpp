@@ -23,6 +23,9 @@
 #include "kis_adjustment_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
+#include "kis_selection.h"
+#include "kis_transparency_mask.h"
+#include "kis_effect_mask.h"
 
 class KisLayerModel::Private
 {
@@ -93,6 +96,59 @@ QModelIndex KisLayerModel::indexFromLayer(const KisLayer *layer) const
     }
 }
 
+
+KisMaskSP KisLayerModel::maskFromIndex(const QModelIndex &index)
+{
+    kDebug(41007) << "KisLayerModel::maskFromIndex " << index << endl;
+
+    if( !index.isValid() )
+        return KisMaskSP(0);
+
+    Q_ASSERT(index.model() == this);
+    Q_ASSERT(index.internalPointer());
+
+    // XXX: Or does static_cast also return 0 when cast fails. Check
+    // when home (bsar)
+    return KisMaskSP( static_cast<KisMask*>(index.internalPointer()) ) ;
+
+
+}
+
+vKisMaskSP KisLayerModel::masksFromIndexes(const QModelIndexList &indexes)
+{
+    kDebug(41007) << "KisLayerModel::masksFromIndexes " << indexes.count() << endl;
+    vKisMaskSP out;
+    for (int i = 0, n = indexes.count(); i < n; ++i)
+        if (KisMaskSP mask = maskFromIndex(indexes.at(i)))
+            out << mask;
+    return out;
+}
+
+QModelIndex KisLayerModel::indexFromMask(const KisMask *mask) const
+{
+    Q_ASSERT(mask);
+
+    const KisLayerSP parentLayer = mask->parentLayer();
+
+    if ( parentLayer && parentLayer->hasEffectMasks() ) {
+        int maskIndex = -1;
+
+        if ( mask == parentLayer->selection() ) {
+            maskIndex = 0;
+        }
+
+        // Transparency mask is on top of all effect masks
+        if ( mask == parentLayer->transparencyMask() )
+            maskIndex = 1;
+
+        kDebug(41007) << "KisMask::indexFromMask " << mask << ", mask index: " << maskIndex << endl;
+
+
+        return createIndex(maskIndex, 0, ( void* )mask);
+    } else {
+        return QModelIndex();
+    }
+}
 int KisLayerModel::rowCount(const QModelIndex &parent) const
 {
     kDebug(41007) << "KisLayerModel::rowCount " << parent << endl;
@@ -264,6 +320,31 @@ void KisLayerModel::endRemoveLayers( KisGroupLayer *, int )
     kDebug(41007) << "KisLayerModel::endRemoveLayers\n";
     endRemoveRows();
 }
+
+
+void KisLayerModel::beginInsertMasks( KisLayer * parent,  int index )
+{
+    beginInsertRows( indexFromLayer( parent ), index, index );
+}
+
+void KisLayerModel::endInsertMasks( KisLayer *, int )
+{
+    endInsertRows();
+}
+
+
+void KisLayerModel::beginRemoveMasks( KisLayer * parent, int index )
+{
+    beginRemoveRows( indexFromLayer( parent ), index, index );
+}
+
+
+void KisLayerModel::endRemoveMasks( KisLayer * , int )
+{
+    endRemoveRows();
+}
+
+
 
 #if 0
 QMimeData * KisLayerModel::mimeData ( const QModelIndexList & indexes ) const

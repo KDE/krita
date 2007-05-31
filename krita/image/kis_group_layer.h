@@ -143,7 +143,7 @@ public:
     */
     KisPaintDeviceSP projection() const;
 
-    KisPaintDeviceSP paintDevice() {
+    KisPaintDeviceSP paintDevice() const {
         return 0;
     }
 

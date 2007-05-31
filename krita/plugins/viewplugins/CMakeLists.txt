@@ -1,3 +1,4 @@
+add_subdirectory( painterlymixer )
 #add_subdirectory( performancetest )
 add_subdirectory( colorrange )
 add_subdirectory( colorspaceconversion )

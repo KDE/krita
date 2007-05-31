@@ -53,7 +53,7 @@ public:
 
     void updateProjection(const QRect& r);
     KisPaintDeviceSP projection() const;
-    KisPaintDeviceSP paintDevice();
+    KisPaintDeviceSP paintDevice() const;
 
     QIcon icon() const;
     KoDocumentSectionModel::PropertyList properties() const;

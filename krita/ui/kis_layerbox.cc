@@ -217,6 +217,14 @@ void KisLayerBox::updateUI()
     }
 }
 
+void KisLayerBox::setCurrentLayer( KisLayerSP layer )
+{
+    if ( layer && m_layerModel ) {
+        listLayers->setCurrentIndex( m_layerModel->indexFromLayer( layer ) );
+    }
+
+}
+
 void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
     cmbComposite->blockSignals(true);

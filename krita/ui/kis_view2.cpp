@@ -397,7 +397,11 @@ void KisView2::slotLoadingFinished()
     }
 
 
-    m_d->layerManager->activateLayer( img->rootLayer()->firstChild() );
+    if ( KisLayerSP layer = img->rootLayer()->firstChild() ) {
+        m_d->layerBox->setCurrentLayer( layer );
+        m_d->layerManager->activateLayer( layer );
+    }
+
     updateGUI();
 //     kDebug(41007) << "image finished loading, active layer: " << img->activeLayer() << ", root layer: " << img->rootLayer() << endl;
 

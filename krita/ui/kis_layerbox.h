@@ -71,6 +71,7 @@ public slots:
     void slotSetOpacity(double opacity);
     void slotSetColorSpace(const KoColorSpace * colorSpace);
     void updateUI();
+    void setCurrentLayer( KisLayerSP layer );
 signals:
     void sigRequestLayer(KisGroupLayerSP parent, KisLayerSP above);
     void sigRequestGroupLayer(KisGroupLayerSP parent, KisLayerSP above);

@@ -21,14 +21,16 @@
 #ifndef KIS_PAINTERLY_MIXER_H_
 #define KIS_PAINTERLY_MIXER_H_
 
-#include <QtGui>
-
 #include "ui_kis_painterlymixer.h"
 
+class QWidget;
 class KisView2;
 
 class KisPainterlyMixer : public QWidget, private Ui::KisPainterlyMixer {
     Q_OBJECT
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
 
 public:
     KisPainterlyMixer(QWidget* parent, KisView2 *view);
@@ -36,6 +38,7 @@ public:
 
 private:
     KisView2 *m_view;
+    bool m_pressed;
 
 };
 

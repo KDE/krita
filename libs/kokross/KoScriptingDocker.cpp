@@ -133,8 +133,8 @@ KoScriptingDocker::KoScriptingDocker(QWidget* parent, KoScriptingGuiClient* guic
         a->setEnabled(false);
         d->actions.insert( "stop",  a );
     }
-    if( QAction* a = collection->action("manager") )
-        tb->addAction(a->icon(), a->text(), a, SLOT(trigger()));
+
+    tb->addAction(KIcon("configure"), i18n("Script Manager"), guiclient, SLOT(slotShowScriptManager()));
 
     /*
     d->tb->addSeparator();

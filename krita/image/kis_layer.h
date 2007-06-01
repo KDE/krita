@@ -264,16 +264,16 @@ public:
     virtual bool accept(KisLayerVisitor &) = 0;
 
     /// Returns the list of effect masks
-    QList<KisEffectMask*> effectMasks() const;
+    QList<KisMaskSP> effectMasks() const;
 
     /// Add an effect mask at the specified position
-    void addEffectMask( KisEffectMask* mask, int index = 0 );
+    void addEffectMask( KisMaskSP mask, int index = 0 );
 
     /// Add an effect mask on top of the specified mask
-    void addEffectMask( KisEffectMask * mask,  KisEffectMask * aboveThis );
+    void addEffectMask( KisMaskSP mask,  KisMaskSP aboveThis );
 
     /// Remove the given effect mask
-    void removeEffectMask( KisEffectMask* mask );
+    void removeEffectMask( KisMaskSP mask );
 
     /// Remove the mask at the speficied index
     void removeEffectMask( int index );

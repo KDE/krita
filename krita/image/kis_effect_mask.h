@@ -30,7 +30,7 @@
    that messes up pixels.
 */
 
-class KisEffectMask : public KisMask
+class KRITAIMAGE_EXPORT KisEffectMask : public KisMask
 {
 public:
 
@@ -47,7 +47,7 @@ public:
     /**
      * Apply the effect the projection using the mask as a selection.
      */
-    virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) {};
+    virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) = 0;
 
 };
 

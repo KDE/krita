@@ -30,17 +30,17 @@ class KisFilterConfiguration;
    adjustment layers work on all layers below it in its layer group.
 */
 
-class KisFilterMask : public KisEffectMask
+class KRITAIMAGE_EXPORT KisFilterMask : public KisEffectMask
 {
 public:
 
     /**
      * Create an empty filter mask.
      */
-    KisEffectMask();
+    KisFilterMask();
 
-    ~KisEffectMask();
-    KisEffectMask( const KisEffectMask& rhs );
+    virtual ~KisFilterMask();
+    KisFilterMask( const KisFilterMask& rhs );
 
     KisFilterConfiguration * filter() const;
     void setFilter(KisFilterConfiguration * filterConfig);

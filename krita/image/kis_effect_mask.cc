@@ -19,7 +19,7 @@
 #include "kis_effect_mask.h"
 
 KisEffectMask::KisEffectMask()
-    : KisMask( 0, "effect" )
+    : KisMask( "effect" )
 {
 }
 

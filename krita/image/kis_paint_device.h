@@ -22,7 +22,6 @@
 #include <QColor>
 #include <QObject>
 #include <QPixmap>
-#include <QRect>
 #include <QList>
 #include <QString>
 #include <QPaintDevice>
@@ -37,6 +36,7 @@
 #include <krita_export.h>
 #include <kis_shared.h>
 
+class QRect;
 class QImage;
 class QSize;
 class QPoint;
@@ -196,7 +196,7 @@ public:
     void crop(qint32 x, qint32 y, qint32 w, qint32 h);
 
     /// Convience method for the above
-    void crop(QRect r);
+    void crop(const QRect & r);
 
     /**
      * Complete erase the current paint device. Its size will become 0.

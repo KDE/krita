@@ -43,6 +43,9 @@ class KoResource;
    note: we should have a koffice-wide provider of brushes, patterns
    and gradients.
 
+   XXX: CurrentKritaLayer should be accompanied by
+   CurrentKritaPaintDevice and CurrentKritaMask, because masks are also important for tools
+
  */
 class KisResourceProvider : public QObject {
 

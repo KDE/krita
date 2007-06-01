@@ -57,7 +57,7 @@ public:
 
     // XXX: Make these (weak) shared pointers?
     KisEffectMaskSP previewMask;
-    QList<KisEffectMask*> effectMasks;
+    QList<KisMaskSP> effectMasks;
 
     // Operation used to composite this layer with the projection of
     // the layers _under_ this layer
@@ -402,8 +402,11 @@ void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect 
     // Then loop through the effect masks and apply them
     for ( int i = 0; i < m_d->effectMasks.size(); ++i ) {
 
-        KisEffectMask * mask = m_d->effectMasks.at( i );
-        mask->apply( projection, rc );
+        KisMaskSP mask = m_d->effectMasks.at( i );
+        KisEffectMask * effectMask = dynamic_cast<KisEffectMask*>( mask.data() );
+
+        if ( effectMask )
+            effectMask->apply( projection, rc );
 
     }
 
@@ -414,12 +417,12 @@ void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect 
 }
 
 
-QList<KisEffectMask*> KisLayer::effectMasks() const
+QList<KisMaskSP> KisLayer::effectMasks() const
 {
     return m_d->effectMasks;
 }
 
-void KisLayer::addEffectMask( KisEffectMask* mask, int i )
+void KisLayer::addEffectMask( KisMaskSP mask, int i )
 {
     if ( i > m_d->effectMasks.size() ) i = m_d->effectMasks.size();
     if ( i < 0 ) i = 0;
@@ -427,13 +430,13 @@ void KisLayer::addEffectMask( KisEffectMask* mask, int i )
     m_d->effectMasks.insert( i, mask );
 }
 
-void KisLayer::addEffectMask( KisEffectMask * mask,  KisEffectMask * aboveThis )
+void KisLayer::addEffectMask( KisMaskSP mask,  KisMaskSP aboveThis )
 {
     int i = m_d->effectMasks.indexOf( aboveThis );
     addEffectMask( mask, i );
 }
 
-void KisLayer::removeEffectMask( KisEffectMask* mask )
+void KisLayer::removeEffectMask( KisMaskSP mask )
 {
     int i = m_d->effectMasks.indexOf( mask );
     if ( i > -1 && i < m_d->effectMasks.size() )

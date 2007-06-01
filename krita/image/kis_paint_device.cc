@@ -528,10 +528,11 @@ void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
 }
 
 
-void KisPaintDevice::crop(QRect r)
+void KisPaintDevice::crop(const QRect & r)
 {
-    r.translate(-m_d->x, -m_d->y);
-    m_datamanager->setExtent(r);
+    QRect rc( r );
+    rc.translate(-m_d->x, -m_d->y);
+    m_datamanager->setExtent(rc);
 }
 
 void KisPaintDevice::clear()

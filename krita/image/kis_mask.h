@@ -68,7 +68,7 @@ public:
     KisMask(KisPaintDeviceSP dev, const QString & name);
 
     /**
-     * Create a new KisMask. This selection will not have a parent paint device.
+     * Create a new KisMask.
      */
     KisMask(const QString & name);
 

@@ -21,10 +21,13 @@
 #include "kis_iterators_pixel.h"
 #include "KoColorSpace.h"
 
+#include "kdebug.h"
+
 KisTransparencyMask::KisTransparencyMask()
     : KisEffectMask()
 {
-}
+    kDebug() << "Creating a transparency mask\n";
+};
 
 KisTransparencyMask::~KisTransparencyMask()
 {

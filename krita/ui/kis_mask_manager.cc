@@ -27,6 +27,13 @@
 #include <kis_paint_layer.h>
 #include "kis_doc2.h"
 #include "kis_view2.h"
+#include "kis_layer.h"
+#include "kis_group_layer.h"
+#include "kis_transformation_mask.h"
+#include "kis_filter_mask.h"
+#include "kis_transparency_mask.h"
+#include "kis_mask.h"
+#include "kis_effect_mask.h"
 
 KisMaskManager::KisMaskManager( KisView2 * view)
     : m_view( view )
@@ -141,11 +148,28 @@ void KisMaskManager::updateGUI()
 
 }
 
-KisMaskSP KisMaskManager::activeMask() {}
+KisMaskSP KisMaskManager::activeMask()
+{
+    return m_activeMask;
+}
 
-void KisMaskManager::activateMask( KisMaskSP mask ) {}
+void KisMaskManager::activateMask( KisMaskSP mask )
+{
+    m_activeMask = mask;
+    emit sigMaskActivated( mask );
+}
 
-void KisMaskManager::createTransparencyMask() {}
+void KisMaskManager::createTransparencyMask()
+{
+    KisLayerSP activeLayer = m_view->activeLayer();
+    if ( activeLayer ) {
+        KisMaskSP mask = new KisTransparencyMask();
+        mask->setParentLayer( activeLayer );
+        if ( m_activeMask )
+            activeLayer->addEffectMask( mask, m_activeMask );
+        activateMask( mask );
+    }
+}
 
 void KisMaskManager::createFilterMask() {}
 

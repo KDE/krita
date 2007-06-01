@@ -29,7 +29,7 @@ class KisFilterStrategy;
  * device.
  */
 
-class KisTransformationMask : public KisEffectMask
+class KRITAIMAGE_EXPORT KisTransformationMask : public KisEffectMask
 {
 public:
 

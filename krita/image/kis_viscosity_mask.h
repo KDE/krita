@@ -31,7 +31,7 @@
    for a scholarly discussion.
 */
 
-class KisViscosityMask : public KisMask
+class KRITAIMAGE_EXPORT KisViscosityMask : public KisMask
 {
     KisViscosityMask( KisPaintDeviceSP device );
     ~KisViscosityMask();

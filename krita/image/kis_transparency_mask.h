@@ -20,25 +20,26 @@
 #define _KIS_TRANSPARENCY_MASK_
 
 #include "kis_types.h"
-
+#include "kis_mask.h"
 #include "kis_effect_mask.h"
 
+class QRect;
 /**
    A transparency mask is a single channel mask that applies a particular
    transparency to the layer the mask belongs to. It differs from an
    adjustment layer in that it only works on its parent layer, while
    adjustment layers work on all layers below it in its layer group.
 */
-
-class KisTransparencyMask : public KisEffectMask
+class KRITAIMAGE_EXPORT KisTransparencyMask : public KisEffectMask
 {
 public:
 
     KisTransparencyMask();
-    ~KisTransparencyMask();
+
+    virtual ~KisTransparencyMask();
     KisTransparencyMask( const KisTransparencyMask& rhs );
 
-    void apply( KisPaintDeviceSP projection, const QRect & rc );
+    virtual void apply( KisPaintDeviceSP projection, const QRect & rc );
 };
 
 #endif //_KIS_TRANSPARENCY_MASK_

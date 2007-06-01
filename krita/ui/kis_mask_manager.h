@@ -181,7 +181,7 @@ public slots:
 private:
     KisView2 * m_view;
 
-    KisMask * m_activeMask;
+    KisMaskSP m_activeMask;
 
     KAction *m_createTransparencyMask;
     KAction *m_createFilterMask;

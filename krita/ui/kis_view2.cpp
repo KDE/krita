@@ -378,7 +378,7 @@ void KisView2::slotLoadingFinished()
     m_d->resourceProvider->slotSetImageSize( img->width(), img->height() );
 
     m_d->layerManager->layersUpdated();
-    updateGUI();
+
 
     KoToolDockerFactory toolDockerFactory;
     KoToolDocker * d =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
@@ -397,6 +397,8 @@ void KisView2::slotLoadingFinished()
     }
 
 
+    m_d->layerManager->activateLayer( img->rootLayer()->firstChild() );
+    updateGUI();
 //     kDebug(41007) << "image finished loading, active layer: " << img->activeLayer() << ", root layer: " << img->rootLayer() << endl;
 
 }
@@ -516,7 +518,7 @@ void KisView2::updateGUI()
     m_d->maskManager->updateGUI();
     m_d->gridManager->updateGUI();
     m_d->perspectiveGridManager->updateGUI();
-
+    m_d->layerBox->updateUI();
 }
 
 

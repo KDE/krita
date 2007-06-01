@@ -35,6 +35,7 @@
 #include "KoDocument.h"
 #include "KoZoomAction.h"
 #include "KoToolProxy.h"
+#include "KoSelection.h"
 
 #include "kis_image.h"
 #include "kis_doc2.h"
@@ -121,6 +122,7 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
     connect( view->canvasController(), SIGNAL( moveDocumentOffset( const QPoint& ) ),
              this, SLOT( documentOffsetMoved( const QPoint& ) ) );
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+
 }
 
 KisCanvas2::~KisCanvas2()

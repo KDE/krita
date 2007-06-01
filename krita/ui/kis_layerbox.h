@@ -70,7 +70,7 @@ public slots:
     void slotSetCompositeOp(const KoCompositeOp* compositeOp);
     void slotSetOpacity(double opacity);
     void slotSetColorSpace(const KoColorSpace * colorSpace);
-
+    void updateUI();
 signals:
     void sigRequestLayer(KisGroupLayerSP parent, KisLayerSP above);
     void sigRequestGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
@@ -108,7 +108,7 @@ private slots:
     void slotNewCloneLayer();
     void slotNewShapeLayer();
 
-    void updateUI();
+
 
 private:
     void getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above);

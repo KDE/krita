@@ -15,6 +15,7 @@ add_subdirectory( shearimage )
 add_subdirectory( together )
 add_subdirectory( scripting )
 add_subdirectory( bracketing2hdr )
+add_subdirectory( panorama )
 
 macro_optional_find_package(GLUT)
 if(HAVE_OPENGL)

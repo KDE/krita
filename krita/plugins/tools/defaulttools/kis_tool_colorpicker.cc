@@ -99,7 +99,7 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
             }
         }
 
-        QPoint pos = convertToPixelCoord(event).toPoint();
+        QPoint pos = convertToIntPixelCoord(event);
 
         if (!m_currentImage->bounds().contains(pos)) {
             return;

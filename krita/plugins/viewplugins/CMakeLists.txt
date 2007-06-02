@@ -1,4 +1,3 @@
-add_subdirectory( painterlymixer )
 #add_subdirectory( performancetest )
 add_subdirectory( colorrange )
 add_subdirectory( colorspaceconversion )
@@ -15,7 +14,12 @@ add_subdirectory( shearimage )
 add_subdirectory( together )
 add_subdirectory( scripting )
 add_subdirectory( bracketing2hdr )
-add_subdirectory( panorama )
+
+if(EIGEN_FOUND)
+    add_subdirectory( panorama )
+else(EIGEN_FOUND)
+    message(STATUS "Could not find the Eigen library. The panorama plugin will not be built.")
+endif(EIGEN_FOUND)
 
 macro_optional_find_package(GLUT)
 if(HAVE_OPENGL)

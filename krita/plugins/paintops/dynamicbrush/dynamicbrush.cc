@@ -50,33 +50,30 @@ DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
     setComponentData(DynamicBrushFactory::componentData());
 
     // This is not a gui plugin; only load it when the doc is created.
-    if ( parent->inherits("KisPaintOpRegistry") )
+    KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
+    r->add (new KisDynamicOpFactory);
+    
     {
-        KisPaintOpRegistry * r = dynamic_cast<KisPaintOpRegistry*>(parent);
-        r->add (new KisDynamicOpFactory);
-        
+        // TODO: remove this, temp stuff for testing only
         {
-            // TODO: remove this, temp stuff for testing only
-            {
-                KisFiltersListDynamicProgram* programSpeed = new KisFiltersListDynamicProgram("speed");
-                programSpeed->appendTransformation( new KisSizeTransformation(KisDynamicSensor::id2Sensor("speed"), KisDynamicSensor::id2Sensor("speed") ) );
-                KisDynamicProgramRegistry::instance()->add( programSpeed);
-            }
-            {
-                KisFiltersListDynamicProgram* programPressure = new KisFiltersListDynamicProgram("pressure");
-                programPressure->appendTransformation( new KisSizeTransformation( KisDynamicSensor::id2Sensor("pressure"), KisDynamicSensor::id2Sensor("pressure") ) );
-                KisDynamicProgramRegistry::instance()->add(  programPressure);
-            }
-            {
-                KisFiltersListDynamicProgram* programRotation = new KisFiltersListDynamicProgram("rotation");
-                programRotation->appendTransformation( new KisRotationTransformation( KisDynamicSensor::id2Sensor("drawingangle") ) );
-                KisDynamicProgramRegistry::instance()->add(  programRotation);
-            }
-            {
-                KisFiltersListDynamicProgram* programTime = new KisFiltersListDynamicProgram("time");
-                programTime->appendTransformation( new KisRotationTransformation( KisDynamicSensor::id2Sensor("time") ) );
-                KisDynamicProgramRegistry::instance()->add( programTime);
-            }
+            KisFiltersListDynamicProgram* programSpeed = new KisFiltersListDynamicProgram("speed");
+            programSpeed->appendTransformation( new KisSizeTransformation(KisDynamicSensor::id2Sensor("speed"), KisDynamicSensor::id2Sensor("speed") ) );
+            KisDynamicProgramRegistry::instance()->add( programSpeed);
+        }
+        {
+            KisFiltersListDynamicProgram* programPressure = new KisFiltersListDynamicProgram("pressure");
+            programPressure->appendTransformation( new KisSizeTransformation( KisDynamicSensor::id2Sensor("pressure"), KisDynamicSensor::id2Sensor("pressure") ) );
+            KisDynamicProgramRegistry::instance()->add(  programPressure);
+        }
+        {
+            KisFiltersListDynamicProgram* programRotation = new KisFiltersListDynamicProgram("rotation");
+            programRotation->appendTransformation( new KisRotationTransformation( KisDynamicSensor::id2Sensor("drawingangle") ) );
+            KisDynamicProgramRegistry::instance()->add(  programRotation);
+        }
+        {
+            KisFiltersListDynamicProgram* programTime = new KisFiltersListDynamicProgram("time");
+            programTime->appendTransformation( new KisRotationTransformation( KisDynamicSensor::id2Sensor("time") ) );
+            KisDynamicProgramRegistry::instance()->add( programTime);
         }
     }
     if ( parent->inherits("KisView2") )

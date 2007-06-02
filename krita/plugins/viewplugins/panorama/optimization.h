@@ -223,7 +223,7 @@ namespace Optimization {
       // Update
       return X;
     }
-  };
+  }
   namespace Methods {
     template< class _TFunction_, typename _TType_ >
     void GaussNewton< _TFunction_, _TType_ >::computeM(const gmm::row_matrix< gmm::rsvector<_TType_> >& jacobian, const _TFunction_* f, std::vector<_TType_>& parameters, std::vector<_TType_>& values, gmm::row_matrix< gmm::rsvector<_TType_> > &M)
@@ -394,6 +394,6 @@ namespace Optimization {
       return Details::computeRemain(f->values(parameters));
     }
   }
-};
+}
 
 #endif

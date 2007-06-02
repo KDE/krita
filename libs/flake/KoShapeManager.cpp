@@ -69,24 +69,24 @@ KoShapeManager::~KoShapeManager()
 }
 
 
-void KoShapeManager::setShapes( const QList<KoShape *> &shapes )
+void KoShapeManager::setShapes( const QList<KoShape *> &shapes, bool repaint )
 {
     //clear selection
     d->selection->deselectAll();
     foreach(KoShape *shape, d->shapes)
     {
-        d->aggregate4update.remove( shape );
-        d->tree.remove( shape );
         shape->removeShapeManager( this );
     }
+    d->aggregate4update.clear();
+    d->tree.clear();
     d->shapes.clear();
     foreach(KoShape *shape, shapes)
     {
-        add( shape );
+        add( shape, repaint );
     }
 }
 
-void KoShapeManager::add( KoShape *shape )
+void KoShapeManager::add( KoShape *shape, bool repaint )
 {
     if(d->shapes.contains(shape))
         return;
@@ -97,7 +97,9 @@ void KoShapeManager::add( KoShape *shape )
         QRectF br( shape->boundingRect() );
         d->tree.insert( br, shape );
     }
-    shape->repaint();
+    if ( repaint ) {
+        shape->repaint();
+    }
 
     // add the children of a KoShapeContainer
     KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(shape);

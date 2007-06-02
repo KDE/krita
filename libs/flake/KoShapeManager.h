@@ -66,8 +66,9 @@ public:
      * Remove all previously owned shapes and make the argument list the new shapes
      * to be managed by this manager.
      * @param shapes the new shapes to manage.
+     * @param repaint if true it will trigger a repaint of the shapes
      */
-    void setShapes( const QList<KoShape *> &shapes );
+    void setShapes( const QList<KoShape *> &shapes, bool repaint = true  );
 
     /// returns the list of maintained shapes
     const QList<KoShape *> & shapes() const;
@@ -75,8 +76,9 @@ public:
     /**
      * Add a KoShape to be displayed and managed by this manager.
      * @param shape the shape to add
+     * @param repaint if true it will tigger a repaint of the shape
      */
-    void add(KoShape *shape);
+    void add(KoShape *shape, bool repaint = true );
 
     /**
      * Remove a KoShape from this manager

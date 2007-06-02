@@ -226,6 +226,20 @@ public:
     virtual void readBytes(quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h);
 
     /**
+     * Read the bytes representing the rectangle rect into
+     * data. If data is not big enough, Krita will gladly overwrite the rest
+     * of your precious memory.
+     *
+     * Since this is a copy, you need to make sure you have enough memory.
+     *
+     * Reading from areas not previously initialized will read the default
+     * pixel value into data but not initialize that region.
+     * @param data The address of the memory to receive the bytes read
+     * @param rect The rectangle in the paint device to read from
+     */
+    virtual void readBytes(quint8 * data, const QRect &rect);
+
+    /**
      * Copy the bytes in data into the rect specified by x, y, w, h. If the
      * data is too small or uninitialized, Krita will happily read parts of
      * memory you never wanted to be read.
@@ -234,6 +248,18 @@ public:
      * the paint device will grow.
      */
     virtual void writeBytes(const quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h);
+
+    /**
+     * Copy the bytes in data into the rectangle rect. If the
+     * data is too small or uninitialized, Krita will happily read parts of
+     * memory you never wanted to be read.
+     *
+     * If the data is written to areas of the paint device not previously initialized,
+     * the paint device will grow.
+     * @param data The address of the memory to write bytes from
+     * @param rect The rectangle in the paint device to write to
+     */
+    virtual void writeBytes(const quint8 * data, const QRect &rect);
 
     /**
      * Get the number of contiguous columns starting at x, valid for all values

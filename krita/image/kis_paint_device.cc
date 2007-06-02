@@ -1253,11 +1253,20 @@ void KisPaintDevice::readBytes(quint8 * data, qint32 x, qint32 y, qint32 w, qint
     m_datamanager->readBytes(data, x - m_d->x, y - m_d->y, w, h);
 }
 
+void KisPaintDevice::readBytes(quint8 * data, const QRect &rect)
+{
+    readBytes(data, rect.x(), rect.y(), rect.width(), rect.height());
+}
+
 void KisPaintDevice::writeBytes(const quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h)
 {
     m_datamanager->writeBytes( data, x - m_d->x, y - m_d->y, w, h);
 }
 
+void KisPaintDevice::writeBytes(const quint8 * data, const QRect &rect)
+{
+    writeBytes(data, rect.x(), rect.y(), rect.width(), rect.height());
+}
 
 KisDataManagerSP KisPaintDevice::dataManager() const
 {

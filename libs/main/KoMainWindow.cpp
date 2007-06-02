@@ -404,10 +404,6 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 
   if ( doc )
   {
-    foreach( QDockWidget* dockWidget, d->m_dockWidgetMap.values() ) {
-        dockWidget->setVisible( d->m_dockWidgetVisibilityMap[dockWidget] );
-    }
-
     d->m_dockWidgetMenu->setVisible( true );
     doc->setSelectable( false );
     //d->m_manager->addPart( doc, false ); // done by KoView::setPartManager
@@ -444,6 +440,13 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     //kDebug(30003) << "No more views, deleting old doc " << oldRootDoc << endl;
     delete oldRootDoc;
   }
+
+    if(doc) {
+        foreach( QDockWidget* dockWidget, d->m_dockWidgetMap.values() ) {
+            dockWidget->setVisible( !d->m_dockWidgetVisibilityMap.contains(dockWidget) ||
+                    d->m_dockWidgetVisibilityMap.value(dockWidget) );
+        }
+    }
 }
 
 void KoMainWindow::updateReloadFileAction(KoDocument *doc)

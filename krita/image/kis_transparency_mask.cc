@@ -27,7 +27,7 @@ KisTransparencyMask::KisTransparencyMask()
     : KisEffectMask()
 {
     kDebug() << "Creating a transparency mask\n";
-};
+}
 
 KisTransparencyMask::~KisTransparencyMask()
 {

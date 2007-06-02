@@ -16,6 +16,7 @@ add_subdirectory( scripting )
 add_subdirectory( bracketing2hdr )
 
 if(EIGEN_FOUND)
+    message(STATUS "FIXME: check if gmm is installed.")
     add_subdirectory( panorama )
 else(EIGEN_FOUND)
     message(STATUS "Could not find the Eigen library. The panorama plugin will not be built.")

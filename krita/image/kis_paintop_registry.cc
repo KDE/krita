@@ -72,7 +72,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
         return 0;
     }
 
-    if ( !painter->bounds().isValid() )
+    if ( !painter->bounds().isValid() and image )
         painter->setBounds( image->bounds() );
 
     KisPaintOpFactorySP f = value(id);

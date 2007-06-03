@@ -28,6 +28,7 @@
 class KisAutobrushShape;
 class KisDynamicColoring;
 class KisPaintInformation;
+class KisPainter;
 
 class DYNAMIC_BRUSH_EXPORT KisDynamicShape {
     public:
@@ -43,12 +44,7 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicShape {
          * @param ys vertical scaling
          */
         virtual void resize(double xs, double ys) = 0;
-        /**
-         * Call this function to create the stamp to apply on the paint device
-         * @param stamp the temporary paint device on which the shape will draw the stamp
-         * @param coloringsrc the color source to use for the stamp
-         */
-        virtual void createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* coloringsrc, const QPointF &pos, const KisPaintInformation& info) =0;
+        virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc, KisPainter* m_painter) = 0;
 };
 
 #endif

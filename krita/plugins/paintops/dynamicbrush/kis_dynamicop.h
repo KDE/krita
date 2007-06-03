@@ -68,7 +68,6 @@ public:
 private:
     KisDynamicBrush* m_brush;
     const KisDynamicOpSettings *m_settings;
-    KisPaintDeviceSP m_dab;
 };
 
 #endif // KIS_DYNAMICOP_H_

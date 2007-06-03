@@ -30,6 +30,7 @@
 
 // TODO: for debug purpose only
 #include "shapes/kis_bristle_shape.h"
+// #include "shapes/kis_dab_shape.h"
 
 KisDynamicBrush::KisDynamicBrush(const QString& name)
     : m_name(name), m_shape(0), m_coloring(0)
@@ -39,8 +40,8 @@ KisDynamicBrush::KisDynamicBrush(const QString& name)
     m_coloring = coloringsrc;
     
 #if 0
-    KisAutoMaskBrush* dabsrc = new KisAutoMaskBrush;
-    dabsrc->autoDab.shape = KisAutoDab::ShapeCircle;
+    KisAutoMaskShape* dabsrc = new KisAutoMaskShape;
+    dabsrc->autoDab.shape = KisAutoMaskShape::KisAutoDab::ShapeCircle;
     dabsrc->autoDab.width = 10;
     dabsrc->autoDab.height = 10;
     dabsrc->autoDab.hfade = 2;

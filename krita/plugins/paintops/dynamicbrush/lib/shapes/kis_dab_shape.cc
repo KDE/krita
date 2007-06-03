@@ -21,6 +21,7 @@
 #include <kis_autobrush_resource.h>
 #include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
+#include <kis_painter.h>
 #include <kis_qimage_mask.h>
 
 #include "kis_dynamic_coloring.h"
@@ -38,8 +39,72 @@ quint8 KisAutoMaskShape::alphaAt(int x, int y)
 KisAutoMaskShape::~KisAutoMaskShape() { if(m_shape) delete m_shape; }
 
 KisDabShape::~KisDabShape() { }
-KisDabShape::KisDabShape() { }
+KisDabShape::KisDabShape() : m_dab(0) { }
 
+KisAlphaMaskShape::KisAlphaMaskShape() {}
+
+inline void splitCoordinate(double coordinate, qint32 *whole, double *fraction)
+{
+    qint32 i = static_cast<qint32>(coordinate);
+
+    if (coordinate < 0) {
+        // We always want the fractional part to be positive.
+        // E.g. -1.25 becomes -2 and +0.75
+        i--;
+    }
+
+    double f = coordinate - i;
+
+    *whole = i;
+    *fraction = f;
+}
+
+void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc, KisPainter* m_painter)
+{
+  
+    if(not m_dab)
+    {
+      m_dab = new KisPaintDevice(m_painter->device()->colorSpace());
+    }
+  
+  
+    // Split the coordinates into integer plus fractional parts. The integer
+    // is where the dab will be positioned and the fractional part determines
+    // the sub-pixel positioning.
+    qint32 x;
+    double xFraction;
+    qint32 y;
+    double yFraction;
+
+    splitCoordinate(pos.x(), &x, &xFraction);
+    splitCoordinate(pos.y(), &y, &yFraction);
+
+    createStamp(m_dab, coloringsrc, pos, info);
+
+    // paint the dab
+    QRect dabRect = rect();
+    QRect dstRect = QRect(x + dabRect.x(), y + dabRect.y(), dabRect.width(), dabRect.height());
+
+    if ( m_painter->bounds().isValid() ) {
+        dstRect &= m_painter->bounds();
+    }
+
+    if (dstRect.isNull() or dstRect.isEmpty() or not dstRect.isValid()) return;
+
+    qint32 sx = dabRect.x() ;//dstRect.x() - x;
+    qint32 sy = dabRect.y();//dstRect.y() - y;
+    qint32 sw = dstRect.width();
+    qint32 sh = dstRect.height();
+//     kDebug() << sx << " " << sy << " " << sw << " " << sh << endl;
+    if (m_painter->device()->hasSelection()) {
+        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), m_dab,
+                                m_painter->device()->selection(), m_painter->opacity(), sx, sy, sw, sh);
+    }
+    else {
+        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), m_dab, m_painter->opacity(), sx, sy, sw, sh);
+    }
+
+}
 
 void KisAlphaMaskShape::resize(double xs, double ys)
 {
@@ -95,4 +160,8 @@ void KisAutoMaskShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* c
         }
         hiter.nextRow();
     }
+}
+
+KisAlphaMaskShape::~KisAlphaMaskShape()
+{
 }

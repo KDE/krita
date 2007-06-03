@@ -97,7 +97,7 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush() const
 }
 
 KisDynamicOp::KisDynamicOp(const KisDynamicOpSettings *settings, KisPainter *painter)
-    : super(painter), m_settings(settings), m_dab(0)
+    : super(painter), m_settings(settings)
 {
     Q_ASSERT(settings);
     m_brush = m_settings->createBrush();
@@ -131,23 +131,6 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
     KisPaintDeviceSP device = m_painter->device();
 
-    QPointF pt = pos;
-
-    // Split the coordinates into integer plus fractional parts. The integer
-    // is where the dab will be positioned and the fractional part determines
-    // the sub-pixel positioning.
-    qint32 x;
-    double xFraction;
-    qint32 y;
-    double yFraction;
-
-    splitCoordinate(pt.x(), &x, &xFraction);
-    splitCoordinate(pt.y(), &y, &yFraction);
-
-    if(not m_dab)
-    {
-      m_dab = new KisPaintDevice(device->colorSpace());
-    }
 
     quint8 origOpacity = m_painter->opacity();
     KoColor origColor = m_painter->paintColor();
@@ -157,31 +140,11 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
     m_brush->program()->apply(dabsrc, coloringsrc, adjustedInfo);
     
-    dabsrc->createStamp(m_dab, coloringsrc, pos, adjustedInfo);
 
-    // paint the dab
-    QRect dabRect = dabsrc->rect();
-    QRect dstRect = QRect(x + dabRect.x(), y + dabRect.y(), dabRect.width(), dabRect.height());
-
-    if ( m_painter->bounds().isValid() ) {
-        dstRect &= m_painter->bounds();
-    }
-
-    if (dstRect.isNull() or dstRect.isEmpty() or not dstRect.isValid()) return;
-
-    qint32 sx = dabRect.x() ;//dstRect.x() - x;
-    qint32 sy = dabRect.y();//dstRect.y() - y;
-    qint32 sw = dstRect.width();
-    qint32 sh = dstRect.height();
-//     kDebug() << sx << " " << sy << " " << sw << " " << sh << endl;
-    if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), m_dab,
-                                m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
-    }
-    else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), m_dab, m_painter->opacity(), sx, sy, sw, sh);
-    }
-
+    
+    dabsrc->paintAt(pos, adjustedInfo, coloringsrc, m_painter );
+    
+    
     m_painter->setOpacity(origOpacity);
     m_painter->setPaintColor(origColor);
 }

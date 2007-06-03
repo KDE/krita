@@ -30,13 +30,14 @@
 struct KisBristle {
     KisBristle(double x, double y) : m_x(x), m_y(y), m_lastX(0.0), m_lastY(0.0)
     {
-        color = QColor( (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX );
+        color = KoColor( QColor( (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX ), KoColorSpaceRegistry::instance()->rgb8());
     }
     // Position in the paintbrush
     double m_x, m_y;
     // Last drawn position
     double m_lastX, m_lastY;
-    QColor color;
+    KoColor color;
+
 };
 
 struct KisPaintBrush : public KisShared {
@@ -94,6 +95,40 @@ void KisBristleShape::rotate(double r)
     m_angle = r;
 }
 
+void KisBristleShape::paintAt(const QPointF &brushPos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc, KisPainter* painter)
+{
+    double angleCos = cos(m_angle);
+    double angleSin = sin(m_angle);
+    KisAutobrushCircleShape cs(1, 1, 1.0, 1.0);
+    QImage img;
+    cs.createBrush(&img);
+    KisPainter p( painter->device() );
+    p.setBrush( new KisAutobrushResource(img) );
+    p.setPaintOp( KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, &p, 0) );
+    for( QList< KisBristle >::iterator it = m_paintBrush->m_bristles.begin();
+        it != m_paintBrush->m_bristles.end(); ++it)
+    {
+        p.setPaintColor( it->color );
+        double x = it->m_x * m_radius;
+        double y = it->m_y * m_radius;
+        QPointF pos( angleCos*x - angleSin*y , angleSin*x + angleCos*y );
+//         kDebug() << pos << endl;
+        pos += brushPos;
+//         kDebug() << m_radius << " " << pos << " " << brushPos << endl;
+        if( m_paintBrush->m_firstStroke)
+        {
+            p.paintLine( pos, 0.5, 1.0, 1.0, pos, 0.5, 1.0, 1.0);
+        } else {
+            p.paintLine( QPointF(it->m_lastX, it->m_lastY), 0.5, 1.0, 1.0, pos, .5, 1.0, 1.0);
+        }
+        it->m_lastX = pos.x();
+        it->m_lastY = pos.y();
+    }
+    m_paintBrush->m_firstStroke = false;
+    painter->device()->setDirty( p.dirtyRegion() );
+}
+
+#if 0
 void KisBristleShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* coloringsrc,const QPointF &brushPos, const KisPaintInformation& info)
 {
     
@@ -108,12 +143,14 @@ void KisBristleShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* co
     QImage img;
     cs.createBrush(&img);
     p.setBrush( new KisAutobrushResource(img) );
+    kDebug() << KisPaintOpRegistry::instance() << endl;
+    kDebug() << KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, &p, 0) << endl;
     p.setPaintOp( KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, &p, 0) );
     m_rect = QRect(0,0,0,0);
     for( QList< KisBristle >::iterator it = m_paintBrush->m_bristles.begin();
         it != m_paintBrush->m_bristles.end(); ++it)
     {
-        p.setPaintColor( KoColor( it->color, KoColorSpaceRegistry::instance()->rgb8() ) );
+        p.setPaintColor( it->color );
         double x = it->m_x * m_radius;
         double y = it->m_y * m_radius;
         QPointF pos( angleCos*x - angleSin*y , angleSin*x + angleCos*y );
@@ -128,7 +165,8 @@ void KisBristleShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* co
         it->m_lastY = pos.y() + brushPos.y();
     }
     m_paintBrush->m_firstStroke = false;
-    m_rect = p.dirtyRegion().boundingRect();
+    m_rect = p.dirtyRegion() /*.boundingRect()*/;
 //     m_rect = QRect( m_radius, m_radius, 2.0 * m_radius, 2.0 * m_radius );
     kDebug() << "Bristle shape rect: " << m_rect << endl;
 }
+#endif

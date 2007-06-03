@@ -1,9 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Dynamic Brush
-Name[x-test]=xxDynamic Brushxx
+Name[uk]=Динамічний пензель
 Comment=Dynamic brush
-Comment[x-test]=xxDynamic brushxx
+Comment[uk]=Динамічний пензель
 ServiceTypes=Krita/Paintop,Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritadynamicbrushpaintop

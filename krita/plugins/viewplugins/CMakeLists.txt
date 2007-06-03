@@ -21,7 +21,7 @@ if(EIGEN_FOUND AND GMM_FOUND)
     add_subdirectory( panorama )
 else(EIGEN_FOUND AND GMM_FOUND)
     message(STATUS "Could not find the Eigen and/or GMM library. The panorama plugin will not be built.")
-endif(EIGEN_FOUND)
+endif(EIGEN_FOUND AND GMM_FOUND)
 
 macro_optional_find_package(GLUT)
 if(HAVE_OPENGL)

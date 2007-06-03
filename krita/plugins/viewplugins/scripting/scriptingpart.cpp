@@ -90,9 +90,9 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
 
     d->module = new Scripting::Module(d->view);
 
-    KoScriptingDockerFactory factory(d->view, d->guiclient);
-    QDockWidget* dock = d->view->createDockWidget(&factory);
-    Q_UNUSED(dock);
+    //KoScriptingDockerFactory factory(d->view, d->guiclient);
+    //QDockWidget* dock = d->view->createDockWidget(&factory);
+    //Q_UNUSED(dock);
 
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
     connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));

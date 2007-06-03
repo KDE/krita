@@ -441,10 +441,9 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     delete oldRootDoc;
   }
 
-    if(doc) {
+    if(doc && !d->m_dockWidgetVisibilityMap.isEmpty()) {
         foreach( QDockWidget* dockWidget, d->m_dockWidgetMap.values() ) {
-            dockWidget->setVisible( !d->m_dockWidgetVisibilityMap.contains(dockWidget) ||
-                    d->m_dockWidgetVisibilityMap.value(dockWidget) );
+            dockWidget->setVisible( d->m_dockWidgetVisibilityMap.value(dockWidget) );
         }
     }
 }

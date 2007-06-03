@@ -986,7 +986,16 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
             layout.backgroundColor.setNamedColor( bgColor );
     }
 #endif
-
+    if ( styleStack.hasProperty( KoXmlNS::fo, "background-color") ) {
+        QColor textBackColor( styleStack.property( KoXmlNS::fo, "background-color") ); // #rrggbb format
+        if (textBackColor.isValid()) {
+            QBrush brush = d->charStyle->background();
+            if (brush.style() == Qt::NoBrush)
+                brush.setStyle(Qt::SolidPattern);
+            brush.setColor(textBackColor);
+            d->charStyle->setBackground(brush);
+        }
+    }
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,
     // AlignLastLine,

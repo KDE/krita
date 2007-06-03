@@ -606,10 +606,14 @@ public:
 
 
     /**
+     * @return the painterly channel with the specified id or 0 if
+     * this paint device does not have such a channel
+     */
+    KisMask * painterlyChannel( const QString & channelId );
+
+    /**
      * Add a painterly channel to the paint device. The paint device
      * assumes ownership of the channel
-     *
-     * XXX: is the order of painterly channels important?
      */
     void addPainterlyChannel( KisMask * painterlyChannel );
 
@@ -618,7 +622,7 @@ public:
      * painterly channels owned by this paint device. The channel is
      * not deleted.
      */
-    void removePainterlyChannel( KisMask * painterlyChannel );
+    KisMask * removePainterlyChannel( const QString & channelId );
 
 signals:
     void positionChanged(KisPaintDeviceSP device);

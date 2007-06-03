@@ -24,6 +24,7 @@
 #include <QList>
 #include <QTimer>
 #include <QUndoCommand>
+#include <QHash>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -76,7 +77,7 @@ public:
     QPaintEngine * paintEngine;
 
     // XXX: Use shared pointers here?
-    QList<KisMask*> painterlyChannels;
+    QHash<QString, KisMask*> painterlyChannels;
 
 };
 
@@ -1326,17 +1327,26 @@ qint32 KisPaintDevice::getY() const
     return m_d->y;
 }
 
+KisMask * KisPaintDevice::painterlyChannel( const QString & channelId )
+{
+    if ( m_d->painterlyChannels.contains( channelId ) ) {
+        return m_d->painterlyChannels.value( channelId );
+    }
+    return 0;
+}
+
 void KisPaintDevice::addPainterlyChannel( KisMask * painterlyChannel )
 {
-    m_d->painterlyChannels.append( painterlyChannel );
+    m_d->painterlyChannels[painterlyChannel->id()] = painterlyChannel;
 }
 
 
-void KisPaintDevice::removePainterlyChannel( KisMask * painterlyChannel )
+KisMask * KisPaintDevice::removePainterlyChannel( const QString & channelId )
 {
-    int i = m_d->painterlyChannels.indexOf( painterlyChannel );
-    if ( i > -1 && i < m_d->painterlyChannels.size() )
-        m_d->painterlyChannels.removeAt( i );
+    if ( m_d->painterlyChannels.contains( channelId ) ) {
+        return m_d->painterlyChannels.take( channelId );
+    }
+    return 0;
 }
 
 

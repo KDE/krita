@@ -86,6 +86,10 @@ public:
 
     bool active();
 
+    QString id() {
+        return "Kismask";
+    };
+
 private:
 
     class KisMaskPrivate;

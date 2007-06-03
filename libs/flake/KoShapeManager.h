@@ -68,17 +68,17 @@ public:
      * @param shapes the new shapes to manage.
      * @param repaint if true it will trigger a repaint of the shapes
      */
-    void setShapes( const QList<KoShape *> &shapes, bool repaint = true  );
+    void setShapes( const QList<KoShape *> &shapes, bool repaint = true );
 
     /// returns the list of maintained shapes
     const QList<KoShape *> & shapes() const;
 
     /**
      * Add a KoShape to be displayed and managed by this manager.
+     * This will trigger a repaint of the shape.
      * @param shape the shape to add
-     * @param repaint if true it will tigger a repaint of the shape
      */
-    void add(KoShape *shape, bool repaint = true );
+    void add(KoShape *shape);
 
     /**
      * Remove a KoShape from this manager
@@ -144,6 +144,13 @@ public:
     void addShapeConnection(KoShapeConnection *connection);
 
 private:
+    /**
+     * Add a KoShape to be displayed and managed by this manager.
+     * @param shape the shape to add
+     * @param repaint if true it will tigger a repaint of the shape
+     */
+    void add(KoShape *shape, bool repaint );
+
     /**
      * Update the tree when there are shapes in m_aggregate4update. This is done so not all
      * updates to the tree are done when they are asked for but when they are needed.

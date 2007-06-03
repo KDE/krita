@@ -17,12 +17,6 @@
  */
 
 #include "krs_module.h"
-#include "krs_progress.h"
-#include "krs_brush.h"
-#include "krs_color.h"
-#include "krs_filter.h"
-#include "krs_image.h"
-#include "krs_pattern.h"
 
 #include <kdebug.h>
 
@@ -34,17 +28,28 @@
 #include <KoColorSpaceRegistry.h>
 
 // krita
-#include <kis_view2.h>
-#include <kis_doc2.h>
-#include <kis_image.h>
 #include <kis_autobrush_resource.h>
-#include <kis_resourceserver.h>
 #include <kis_brush.h>
-#include <kis_pattern.h>
+#include <kis_doc2.h>
 #include <kis_filter.h>
 #include <kis_filter_registry.h>
-//#include <kis_image.h>
+#include <kis_image.h>
+#include <kis_layer.h>
 #include <kis_meta_registry.h>
+#include <kis_paint_layer.h>
+#include <kis_pattern.h>
+#include <kis_resourceserver.h>
+#include <kis_view2.h>
+
+// kritacore
+#include "krs_brush.h"
+#include "krs_color.h"
+#include "krs_filter.h"
+#include "krs_image.h"
+#include "krs_pattern.h"
+#include "krs_paint_layer.h"
+#include "krs_progress.h"
+
 
 extern "C"
 {
@@ -112,6 +117,17 @@ QObject* Module::image()
 {
     ::KisDoc2* document = d->view->document();
     return document ? new Image(this, d->view->image(), document) : 0;
+}
+
+QObject* Module::activeLayer()
+{
+  KisLayerSP aL = d->view->activeLayer();
+  KisPaintLayerSP aPL = dynamic_cast<KisPaintLayer*>( aL.data() );
+  if(aPL)
+  {
+    return new PaintLayer(aPL, d->view->document() );
+  }
+  return 0;
 }
 
 QObject* Module::createRGBColor(int r, int g, int b)

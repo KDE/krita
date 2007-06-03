@@ -11,7 +11,7 @@ class TortureFilters
 
     def initialize()
         image = Krita.image()
-        @layer = image.activePaintLayer().paintDevice()
+        @layer = Krita.activeLayer().paintDevice()
 
         @progress = Krita.progress()
         @progress.setProgressTotalSteps(10 * 17)

@@ -27,10 +27,8 @@
 
 using namespace Scripting;
 
-PaintLayer::PaintLayer(Image* image, KisPaintLayerSP layer, KisDoc2* doc)
-    : QObject(image)
-    , m_image(image)
-    , m_layer(layer)
+PaintLayer::PaintLayer(KisPaintLayerSP layer, KisDoc2* doc)
+    : m_layer(layer)
     , m_doc(doc)
     , m_cmd(0)
 {
@@ -44,7 +42,7 @@ PaintLayer::~PaintLayer()
 
 QObject* PaintLayer::paintDevice()
 {
-    return new PaintDevice(m_image, paintLayer()->paintDevice(), m_doc);
+    return new PaintDevice(paintLayer()->paintDevice(), m_doc);
 }
 
 #include "krs_paint_layer.moc"

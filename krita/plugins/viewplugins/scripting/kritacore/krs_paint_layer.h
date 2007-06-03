@@ -39,7 +39,7 @@ class PaintLayer : public QObject
 {
         Q_OBJECT
     public:
-        explicit PaintLayer(Image* image, KisPaintLayerSP layer, KisDoc2* doc = 0);
+        explicit PaintLayer(KisPaintLayerSP layer, KisDoc2* doc = 0);
         virtual ~PaintLayer();
 
     public slots:
@@ -50,7 +50,6 @@ class PaintLayer : public QObject
         inline const KisPaintLayerSP paintLayer() const { return m_layer; }
         inline KisDoc2* doc() { return m_doc; }
     private:
-        Image* m_image;
         KisPaintLayerSP m_layer;
         KisDoc2* m_doc;
         KisTransaction* m_cmd;

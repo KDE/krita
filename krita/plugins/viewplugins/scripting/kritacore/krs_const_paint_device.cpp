@@ -37,9 +37,8 @@
 
 using namespace Scripting;
 
-ConstPaintDevice::ConstPaintDevice(Image* image, KisPaintDeviceSP device, KisDoc2* doc)
-    : QObject(image)
-    , m_device(device)
+ConstPaintDevice::ConstPaintDevice(KisPaintDeviceSP device, KisDoc2* doc)
+    : m_device(device)
     , m_doc(doc)
 {
     setObjectName("KritaLayer");
@@ -52,19 +51,13 @@ ConstPaintDevice::~ConstPaintDevice()
 
 int ConstPaintDevice::width()
 {
-    // XXX: Don't try to get the image from the paint device anymore
     QRect r1 = paintDevice()->extent();
-//     QRect r2 = paintDevice()->image()->bounds();
-//     QRect rect = r1.intersect(r2);
     return r1.width();
 }
 
 int ConstPaintDevice::height()
 {
-    // XXX: Don't try to get the image from the paint device anymore
     QRect r1 = paintDevice()->extent();
-//     QRect r2 = paintDevice()->image()->bounds();
-//     QRect rect = r1.intersect(r2);
     return r1.height();
 }
 
@@ -131,7 +124,7 @@ QObject* ConstPaintDevice::fastWaveletTransformation()
 QObject* ConstPaintDevice::clone()
 {
     KisPaintDeviceSP pl = new KisPaintDevice(*paintDevice());
-    return new ConstPaintDevice(0, pl);
+    return new ConstPaintDevice( pl);
 }
 
 #if 0

@@ -38,8 +38,8 @@
 
 using namespace Scripting;
 
-PaintDevice::PaintDevice(Image* image, KisPaintDeviceSP device, KisDoc2* doc)
-    : ConstPaintDevice(image, device, doc)
+PaintDevice::PaintDevice( KisPaintDeviceSP device, KisDoc2* doc)
+    : ConstPaintDevice(device, doc)
     , m_device(device)
     , m_cmd(0)
 {

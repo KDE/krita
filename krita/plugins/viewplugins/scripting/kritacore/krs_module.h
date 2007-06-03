@@ -58,6 +58,15 @@ namespace Scripting {
             * for i in range(100):
             *     progress.incProgress()
             * @endcode
+            * Example (in Ruby) :
+            * @code
+            * require 'Krita'
+            * progress = Krita.progress()
+            * progress.setProgressTotalSteps(100)
+            * for i in 0..100
+            *   progress.incProgress()
+            * end
+            * @endcode
             */
             QObject* progress();
 
@@ -73,6 +82,17 @@ namespace Scripting {
             */
             QObject* image();
 
+            /**
+            * This function returns the current active layer.
+            *
+            * Example (in Ruby) :
+            * @code
+            * require 'Krita'
+            * layer = Krita.activeLayer()
+            * @endcode
+            */
+            QObject* activeLayer();
+            
             /**
              * This function returns a new \a Image object.
              * It takes four arguments :

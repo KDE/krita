@@ -105,7 +105,7 @@ QObject* Image::createPaintLayer(const QString& name, int opacity, const QString
                               : new KisPaintLayer(m_image.data(), name, opacity);
     layer->setVisible(true);
     m_image->addLayer(layer, m_image->rootLayer(), 0);
-    return new PaintLayer(this, layer, m_doc);
+    return new PaintLayer( layer, m_doc);
 }
 
 #include "krs_image.moc"

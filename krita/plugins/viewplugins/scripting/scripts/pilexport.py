@@ -79,7 +79,7 @@ class Exporter:
         import Krita, Image, ImageFile
 
         krtimage = Krita.image()
-        krtlayer = krtimage.activePaintLayer().paintDevice()
+        krtlayer = Krita.activeLayer().paintDevice()
         #krtcolorspaceid = krtlayer.colorSpaceId()
         height = krtlayer.height()
         width = krtlayer.width()

@@ -40,7 +40,7 @@ class KROSSKRITACORE_EXPORT ConstPaintDevice : public QObject
 {
         Q_OBJECT
     public:
-        explicit ConstPaintDevice(Image* image, const KisPaintDeviceSP layer, KisDoc2* doc = 0);
+        explicit ConstPaintDevice(const KisPaintDeviceSP layer, KisDoc2* doc = 0);
         virtual ~ConstPaintDevice();
 
     public slots:

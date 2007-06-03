@@ -12,7 +12,7 @@ Published under the GNU GPL v2 or higher
 var image = Krita.image();
 
 // we like to manipulate the active painting layer.
-var layer = image.activePaintLayer().paintDevice();
+var layer = Krita.activeLayer().paintDevice();
 
 // get the height and the width the layer has.
 var width = layer.width();

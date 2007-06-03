@@ -24,6 +24,7 @@
 #include <QBoxLayout>
 #include <QModelIndex>
 #include <QLineEdit>
+#include <QPointer>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -43,8 +44,8 @@
 class KoScriptingDockerFactory::Private
 {
     public:
-        QWidget* parent;
-        KoScriptingGuiClient* guiclient;
+        QPointer<QWidget> parent;
+        QPointer<KoScriptingGuiClient> guiclient;
 };
 
 KoScriptingDockerFactory::KoScriptingDockerFactory(QWidget* parent, KoScriptingGuiClient* guiclient)
@@ -89,8 +90,7 @@ QDockWidget* KoScriptingDockerFactory::createDockWidget()
 class KoScriptingDocker::Private
 {
     public:
-        KoScriptingGuiClient* guiclient;
-        //Kross::ActionCollectionProxyModel* model;
+        QPointer<KoScriptingGuiClient> guiclient;
         Kross::ActionCollectionView* view;
         QMap<QString, QAction* > actions;
 };

@@ -215,7 +215,7 @@ void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
     KoStyleStack &styleStack = context.styleStack();
 
     if ( styleStack.hasProperty( KoXmlNS::fo, "color" ) ) { // 3.10.3
-        if (styleStack.property( KoXmlNS::style, "use-window-font-color") != "true")) {
+        if (styleStack.property( KoXmlNS::style, "use-window-font-color") != "true") {
             QColor color(styleStack.property( KoXmlNS::fo, "color" )); // #rrggbb format
             if ( color.isValid() ) {
                 QBrush brush = foreground();

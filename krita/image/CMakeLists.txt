@@ -36,6 +36,7 @@ set(kritaimage_LIB_SRCS
    kis_fill_painter.cc
    kis_filter.cc
    kis_filter_registry.cc
+   kis_filter_mask.cpp
    kis_filter_strategy.cc
    kis_filter_configuration.cc
    kis_filter_config_widget.cc

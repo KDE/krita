@@ -71,6 +71,11 @@ KisPaintDeviceSP KisMask::parentPaintDevice() const
     return m_d->parent;
 }
 
+void KisMask::setName( const QString & name )
+{
+    setObjectName( name );
+}
+
 void KisMask::setParentLayer( KisLayerSP parentLayer )
 {
     m_d->parentLayer = parentLayer;
@@ -86,3 +91,7 @@ bool KisMask::active()
     return m_d->active;
 }
 
+void KisMask::setActive( bool active )
+{
+    m_d->active = active;
+}

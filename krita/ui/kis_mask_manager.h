@@ -27,6 +27,9 @@ class KActionCollection;
 class KAction;
 class KToggleAction;
 
+/**
+ * Handle the gui for manipulating masks.
+ */
 class KisMaskManager : public QObject {
 
     Q_OBJECT

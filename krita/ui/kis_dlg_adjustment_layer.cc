@@ -25,29 +25,22 @@
 #include <klineedit.h>
 #include <klocale.h>
 
-#include "kis_filter_config_widget.h"
-#include "kis_transaction.h"
-#include "kis_filter.h"
-#include "kis_filter_configuration.h"
 #include "kis_dlg_adjustment_layer.h"
-#include "kis_filters_listview.h"
-#include "kis_previewwidget.h"
-#include "kis_layer.h"
-#include "kis_paint_device.h"
-#include "kis_paint_layer.h"
-#include "kis_group_layer.h"
-#include "kis_adjustment_layer.h"
 #include "kis_filter.h"
-#include "kis_shape_layer.h"
+#include "kis_filter_config_widget.h"
 #include "kis_filter_configuration.h"
+#include "kis_filters_listview.h"
+#include "kis_paint_device.h"
+#include "kis_previewwidget.h"
+#include "kis_transaction.h"
 
-KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisLayerSP layer,
+KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisPaintDeviceSP device,
                                              const QString & /*layerName*/,
                                              const QString & caption,
                                              QWidget *parent,
                                              const char *name)
     : KDialog(parent)
-    , m_activeLayer(layer)
+    , m_dev(device)
     , m_currentFilter(0)
     , m_customName(false)
     , m_freezeName(false)
@@ -57,34 +50,6 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisLayerSP layer,
     setDefaultButton( Ok );
     setObjectName(name);
 
-    Q_ASSERT(layer);
-
-    m_dev = 0;
-
-    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(m_activeLayer.data());
-    if (pl) {
-        m_dev = pl->paintDevice();
-    }
-    else {
-        KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(m_activeLayer.data());
-        if (gl) {
-            m_dev = gl->projection();
-        }
-        else {
-            KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(m_activeLayer.data());
-            if (al) {
-                m_dev = al->cachedPaintDevice();
-            }
-            else {
-                KisShapeLayer * sl = dynamic_cast<KisShapeLayer*>( m_activeLayer.data() );
-                if ( sl ) {
-                    m_dev = sl->projection();
-                }
-
-            }
-        }
-    }
-
     Q_ASSERT( m_dev );
 
     QWidget * page = new QWidget(this);
@@ -93,7 +58,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisLayerSP layer,
     grid->setSpacing(6);
     setMainWidget(page);
 
-    QLabel * lblName = new QLabel(i18n("Layer name:"), page);
+    QLabel * lblName = new QLabel(i18n("Name:"), page);
     lblName->setObjectName("lblName");
     grid->addWidget(lblName, 0, 0);
 

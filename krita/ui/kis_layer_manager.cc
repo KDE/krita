@@ -624,7 +624,10 @@ void KisLayerManager::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP abov
 
     KisPaintDeviceSP dev;
 
-    //  Argh! I hate having to cast, cast and cast again to see what kind of a layer I've got!
+    //  Argh! I hate having to cast, cast and cast again to see what
+    //  kind of a layer I've got!
+
+    // XXX: When the layer projection refactor is done, fix this!
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(l.data());
     if (pl) {
         dev = pl->paintDevice();
@@ -651,7 +654,7 @@ void KisLayerManager::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP abov
         }
     }
 
-    KisDlgAdjustmentLayer dlg(m_activeLayer, img->nextLayerName(), i18n("New Adjustment Layer"), m_view, "dlgadjustmentlayer");
+    KisDlgAdjustmentLayer dlg(dev, img->nextLayerName(), i18n("New Adjustment Layer"), m_view, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {
         KisSelectionSP selection = KisSelectionSP(0);
         if (dev->hasSelection()) {

@@ -84,7 +84,14 @@ public:
     void setParentLayer( KisLayerSP parent );
     KisLayerSP parentLayer() const;
 
+    void setName( const QString & name );
+
+    /**
+     * @return true if the mask is active, i.e. should be applied on
+     * its parent layer.
+     */
     bool active();
+    void setActive( bool active );
 
     QString id() {
         return "Kismask";

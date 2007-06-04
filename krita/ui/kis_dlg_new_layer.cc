@@ -77,12 +77,6 @@ NewLayerDialog::NewLayerDialog(const KoID colorSpaceID,
 
     // Init composite op
     fillCmbComposite(m_page->cmbColorSpaces->currentItem());
-
-/*
-    connect( m_page->editName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
-
-    slotNameChanged( m_page->editName->text() );
-*/
 }
 
 void NewLayerDialog::setColorSpaceEnabled(bool enabled)

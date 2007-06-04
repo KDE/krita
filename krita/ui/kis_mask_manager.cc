@@ -23,6 +23,9 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 
+#include <KoID.h>
+
+#include "kis_dlg_transformation_effect.h"
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>
 #include "kis_doc2.h"
@@ -34,6 +37,7 @@
 #include "kis_transparency_mask.h"
 #include "kis_mask.h"
 #include "kis_effect_mask.h"
+#include "kis_dlg_adjustment_layer.h"
 
 KisMaskManager::KisMaskManager( KisView2 * view)
     : m_view( view )
@@ -164,16 +168,79 @@ void KisMaskManager::createTransparencyMask()
     KisLayerSP activeLayer = m_view->activeLayer();
     if ( activeLayer ) {
         KisMaskSP mask = new KisTransparencyMask();
+        mask->setName( i18n( "Transparency Mask" ) ); // XXX:Auto-increment a number here, like with layers
         mask->setParentLayer( activeLayer );
         if ( m_activeMask )
             activeLayer->addEffectMask( mask, m_activeMask );
+        else
+            activeLayer->addEffectMask( mask );
         activateMask( mask );
     }
 }
 
-void KisMaskManager::createFilterMask() {}
+void KisMaskManager::createFilterMask()
+{
+    KisLayerSP activeLayer = m_view->activeLayer();
 
-void KisMaskManager::createTransformationMask() {}
+    if ( activeLayer && m_view ) {
+
+        KisPaintDeviceSP dev = activeLayer->projection();
+
+        KisDlgAdjustmentLayer dlg(dev, m_view->image()->nextLayerName(), i18n("New Filter Effect"), m_view, "dlgadjustmentlayer");
+
+        if (dlg.exec() == QDialog::Accepted) {
+            KisSelectionSP selection = KisSelectionSP(0);
+            if (dev->hasSelection()) {
+                selection = dev->selection();
+            }
+            KisFilterConfiguration * filter = dlg.filterConfiguration();
+            QString name = dlg.layerName();
+
+            KisFilterMask * mask = new KisFilterMask();
+
+            mask->setParentLayer( activeLayer );
+            mask->setActive( true );
+            mask->setFilter( filter );
+            mask->setName( name );
+
+            if ( m_activeMask )
+                activeLayer->addEffectMask( mask, m_activeMask );
+            else
+                activeLayer->addEffectMask( mask );
+
+            activateMask( mask );
+        }
+    }
+}
+
+void KisMaskManager::createTransformationMask()
+{
+    KisLayerSP activeLayer = m_view->activeLayer();
+
+    if ( activeLayer ) {
+        KisDlgTransformationEffect dlg(QString(), 1.0, 1.0, 0.0, 0.0, 0.0, 0, 0, KoID( "Mitchell" ), m_view);
+        if ( dlg.exec() == QDialog::Accepted ) {
+            KisTransformationMask * mask = new KisTransformationMask();
+            mask->setParentLayer( activeLayer );
+            mask->setName( dlg.maskName() );
+            mask->setXScale( dlg.xScale() );
+            mask->setYScale( dlg.yScale() );
+            mask->setXShear( dlg.xShear() );
+            mask->setYShear( dlg.yShear() );
+            mask->setRotation( dlg.rotation() );
+            mask->setXTranslation( dlg.moveX() );
+            mask->setYTranslation( dlg.moveY() );
+            mask->setFilterStrategy( dlg.filterStrategy() );
+            mask->setActive( true );
+            if ( m_activeMask )
+                activeLayer->addEffectMask( mask, m_activeMask );
+            else
+                activeLayer->addEffectMask( mask );
+            activateMask( mask );
+        }
+
+    }
+}
 
 void KisMaskManager::createMaskFromMask() {}
 

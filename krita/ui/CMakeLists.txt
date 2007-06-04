@@ -106,6 +106,7 @@ set(kritaui_LIB_SRCS
     kis_channelflags_widget.cpp
     kis_abstract_canvas_widget.cpp
     kis_shape_controller.cpp
+    kis_dlg_transformation_effect.cpp
 )
 
 if(HAVE_OPENGL AND HAVE_GLEW)
@@ -150,6 +151,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgtextbrush.ui
     wdgnewimage.ui
     wdgimageproperties.ui
+    wdgtransformationeffect.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/asm_scale.o )

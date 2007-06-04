@@ -31,6 +31,9 @@ class KisFilterConfiguration;
 class KisImage;
 class QGroupBox;
 class KisFilterConfigWidget;
+class KLineEdit;
+
+#include "kis_types.h"
 
 /**
  * Create a new adjustment layer.
@@ -51,7 +54,7 @@ public:
      * @param parent the widget parent of this dialog
      * @param name the QObject name, if any
      */
-    KisDlgAdjustmentLayer(KisLayerSP layer,
+    KisDlgAdjustmentLayer(KisPaintDeviceSP layer,
                           const QString & layerName,
                           const QString & caption,
                           QWidget *parent = 0,
@@ -68,7 +71,7 @@ protected slots:
     void selectionHasChanged ( QListWidgetItem * item );
 
 private:
-    KisLayerSP m_activeLayer;
+
     KisPaintDeviceSP m_dev;
     KisFiltersListView * m_filtersList;
     KisPreviewWidget * m_preview;

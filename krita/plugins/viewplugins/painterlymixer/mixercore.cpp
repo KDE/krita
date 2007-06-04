@@ -23,25 +23,38 @@
 #include <kdebug.h>
 
 #include <KoCanvasBase.h>
+#include <KoColorSpace.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
 #include <KoToolProxy.h>
 #include <KoUnit.h>
 #include <KoViewConverter.h>
 
+#include "kis_paint_device.h"
+
 #include "mixercore.h"
 
 MixerCanvas::MixerCanvas(QWidget *parent)
-    : QFrame(parent), KoCanvasBase(0)
+    : QFrame(parent), KoCanvasBase(0), m_tool(0), m_toolProxy(0)
 {
-    m_tool = new MixerTool(this);
-    m_toolProxy = new KoToolProxy(this);
-    m_toolProxy->setActiveTool(m_tool);
+
 }
 
 MixerCanvas::~MixerCanvas()
 {
+    if (m_toolProxy)
+        delete m_toolProxy;
+    if (m_tool)
+        delete m_tool;
+}
 
+void MixerCanvas::initDevice(KoColorSpace *cs)
+{
+    m_canvasDev = new KisPaintDevice(cs);
+
+    m_tool = new MixerTool(this, m_canvasDev.data());
+    m_toolProxy = new KoToolProxy(this);
+    m_toolProxy->setActiveTool(m_tool);
 }
 
 void MixerCanvas::mouseDoubleClickEvent(QMouseEvent *event)
@@ -79,8 +92,8 @@ void MixerCanvas::updateCanvas(const QRectF& rc)
 // THE MIXER TOOL
 /////////////////
 
-MixerTool::MixerTool(KoCanvasBase *canvas)
-    : KoTool(canvas)
+MixerTool::MixerTool(KoCanvasBase *canvas, KisPaintDevice *device)
+    : KoTool(canvas), m_canvasDev(device)
 {
 }
 

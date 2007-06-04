@@ -29,78 +29,12 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
 {
     setupUi(this);
 
-//     m_canvas->installEventFilter(this);
+    m_canvas->initDevice(m_view->image()->colorSpace());
 }
 
 KisPainterlyMixer::~KisPainterlyMixer()
 {
 }
 
-/*
-bool KisPainterlyMixer::eventFilter(QObject *obj, QEvent *event)
-{
-    if (event->type() == QEvent::TabletPress) {
-        m_pressed = true;
-        return true;
-    }
-    if (event->type() == QEvent::TabletRelease) {
-        m_pressed = false;
-        return true;
-    }
-
-    // The main loop!
-    if (event->type() == QEvent::TabletMove && m_pressed) {
-        QTabletEvent *e = static_cast<QTabletEvent*>(event);
-        int x = e->x(), y = e->y();
-        int xTilt = e->xTilt(), yTilt = e->yTilt();
-        int currentPointer = e->pointerType();
-        qreal pressure = e->pressure(), rotation = e->rotation();
-
-        switch (e->device()) {
-        case QTabletEvent::Stylus:
-            kDebug() << "You're using a Stylus" << endl;
-            break;
-        default:
-            kDebug() << "We handle only Stylus for now" << endl;
-        }
-
-        // TODO: the pen draws, the eraser erases...
-        switch (currentPointer) {
-        case QTabletEvent::Cursor:
-            kDebug() << "QTabletEvent::Cursor" << endl;
-            break;
-        case QTabletEvent::Pen:
-            kDebug() << "QTabletEvent::Pen" << endl;
-            break;
-        case QTabletEvent::Eraser:
-            kDebug() << "QTabletEvent::Eraser" << endl;
-            break;
-        default:
-            kDebug() << "Pointer type not handled" << endl;
-        }
-
-        kDebug() << "Information about the event:" << endl;
-        kDebug() << "\tX: " << x << ", Y: " << y << endl;
-        kDebug() << "\txTilt: " << xTilt << ", yTilt: " << yTilt << endl;
-        kDebug() << "\tPressure: " << pressure << ", Rotation: " << rotation << endl;
-
-        // TODO an extendible way to retrieve the wetness of the paintop.
-        KoID opID = m_view->canvasBase()->resourceProvider()->resource(KisResourceProvider::CurrentPaintop).value<KoID>();
-        kDebug() << opID.id() << endl;
-
-        // TODO get the remaining paintop settings
-        // TODO draw the footprint
-        // TODO resize the footprint to the size set in the mixer
-        // TODO mix the colors in the footprint with these in the mixer canvas
-            // TODO check the papers for this part of the painting process
-        // TODO draw the colors on the canvas (what to do with gamut, colorspaces etc?)
-        // TODO set the color(s) of the paintop (what about the paintop redesign?)
-
-        return true;
-    }
-
-    return false;
-}
-*/
 
 #include "kis_painterlymixer.moc"

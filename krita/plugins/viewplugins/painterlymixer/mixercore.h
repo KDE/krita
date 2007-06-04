@@ -23,6 +23,8 @@
 
 #include <KoCanvasBase.h>
 
+#include "kis_paint_device.h"
+
 class QFrame;
 class MixerTool;
 
@@ -32,6 +34,8 @@ class MixerCanvas : public QFrame, public KoCanvasBase {
 public:
     MixerCanvas(QWidget *parent);
     ~MixerCanvas();
+
+    void initDevice(KoColorSpace *cs);
 
 // Events to be redirected to the MixerTool
 protected:
@@ -61,6 +65,8 @@ private:
     MixerTool *m_tool;
     KoToolProxy *m_toolProxy;
 
+    KisPaintDeviceSP m_canvasDev;
+
 };
 
 
@@ -70,7 +76,7 @@ class MixerTool : public KoTool {
     Q_OBJECT
 
 public:
-    MixerTool(KoCanvasBase *canvas);
+    MixerTool(KoCanvasBase *canvas, KisPaintDevice *device);
     ~MixerTool();
 
 // Implement KoTool
@@ -81,6 +87,9 @@ public:
     void mousePressEvent(KoPointerEvent *event);
     void mouseMoveEvent(KoPointerEvent *event);
     void mouseReleaseEvent(KoPointerEvent *event);
+
+private:
+    KisPaintDevice *m_canvasDev;
 
 };
 

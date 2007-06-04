@@ -30,9 +30,6 @@ class KisView2;
 class KisPainterlyMixer : public QWidget, private Ui::KisPainterlyMixer {
     Q_OBJECT
 
-// protected:
-//     bool eventFilter(QObject *obj, QEvent *event);
-
 public:
     KisPainterlyMixer(QWidget* parent, KisView2 *view);
     ~KisPainterlyMixer();

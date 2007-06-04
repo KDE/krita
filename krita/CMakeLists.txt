@@ -117,7 +117,7 @@ install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(TARGETS kdeinit_krita DESTINATION ${LIB_INSTALL_DIR})
 
-    target_link_libraries(krita kdeinit_krita)
+    target_link_libraries(krita ${QT_QTCORE_LIBRARY} kdeinit_krita)
 
 install(TARGETS krita DESTINATION ${BIN_INSTALL_DIR})
 

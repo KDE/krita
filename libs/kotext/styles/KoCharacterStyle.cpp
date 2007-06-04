@@ -215,14 +215,13 @@ void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
     KoStyleStack &styleStack = context.styleStack();
 
     if ( styleStack.hasProperty( KoXmlNS::fo, "color" ) ) { // 3.10.3
-        if (styleStack.hasProperty( KoXmlNS::style, "use-window-font-color")) {
-            if (styleStack.property( KoXmlNS::style, "use-window-font-color") != "true") {
-                QColor color(styleStack.property( KoXmlNS::fo, "color" )); // #rrggbb format
-                if ( color.isValid() ) {
-                    QBrush brush = foreground();
-                    brush.setColor(color);
-                    setForeground(brush);
-                }
+        if (!((styleStack.hasProperty( KoXmlNS::style, "use-window-font-color"))
+                    && (styleStack.property( KoXmlNS::style, "use-window-font-color") == "true")) {
+            QColor color(styleStack.property( KoXmlNS::fo, "color" )); // #rrggbb format
+            if ( color.isValid() ) {
+                QBrush brush = foreground();
+                brush.setColor(color);
+                setForeground(brush);
             }
         }
     }

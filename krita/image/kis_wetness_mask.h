@@ -43,6 +43,8 @@ class KRITAIMAGE_EXPORT KisWetnessMask : public KisMask
     void setDryingRate( float rate );
     float dryingRate();
 
+    QString id() { return "KisWetnessMask"; }
+
 private:
 
     float m_dryingRate;

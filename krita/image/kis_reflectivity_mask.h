@@ -32,6 +32,7 @@ class KRITAIMAGE_EXPORT KisReflectivityMask : public KisMask
     KisReflectivityMask( KisPaintDeviceSP device );
     virtual ~KisReflectivityMask();
     KisReflectivityMask( const KisReflectivityMask& rhs );
+    QString id() { return "KisReflectivityMask"; }
 };
 
 #endif //_KIS_REFLECTIVITY_MASK_

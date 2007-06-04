@@ -40,6 +40,7 @@ public:
     KisTransparencyMask( const KisTransparencyMask& rhs );
 
     virtual void apply( KisPaintDeviceSP projection, const QRect & rc );
+    QString id() { return "KisTransparencyMask"; }
 };
 
 #endif //_KIS_TRANSPARENCY_MASK_

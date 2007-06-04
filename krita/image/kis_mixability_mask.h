@@ -23,9 +23,7 @@
 
 #include "kis_mask.h"
 /**
-   Mixability affects both the spreading of paint through gravity
-   and wetness and the and transfer of paint from the canvas to the
-   brush.
+   Mixability defines how easy paint travels from the canvas to the brush.
 
    See http://gamma.cs.unc.edu/viscous/Baxter-ViscousPaint-CASA04.pdf
    for a scholarly discussion.
@@ -36,6 +34,7 @@ class KRITAIMAGE_EXPORT KisMixabilityMask : public KisMask
     KisMixabilityMask( KisPaintDeviceSP device );
     virtual ~KisMixabilityMask();
     KisMixabilityMask( const KisMixabilityMask& rhs );
+    QString id() { return "KisMixabilityMask"; }
 };
 
 #endif // _KIS_MIXABILITY_MASK_

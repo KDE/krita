@@ -44,6 +44,8 @@ public:
 
     KisTransformationMask( const KisTransformationMask& rhs );
 
+    QString id() { return "KisTransformationMask"; }
+
     void setXScale( double xscale )
         {
             m_xscale = xscale;

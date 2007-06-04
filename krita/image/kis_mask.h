@@ -93,9 +93,7 @@ public:
     bool active();
     void setActive( bool active );
 
-    QString id() {
-        return "Kismask";
-    };
+    QString id() { return "Kismask"; }
 
 private:
 

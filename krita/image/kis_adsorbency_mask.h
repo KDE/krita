@@ -24,9 +24,9 @@
 #include "kis_mask.h"
 /**
    A adsorbency mask is a single channel mask that applies a particular
-   adsorbency to the layer the mask belongs to. It differs from an
-   adjustment layer in that it only works on its parent layer, while
-   adjustment layers work on all layers below it in its layer group.
+   adsorbency to the layer the mask belongs to. Adsorbency influences
+   the drying rate of wet material through adsorbing wetness into the
+   canvas material.
 */
 
 class KRITAIMAGE_EXPORT KisAdsorbencyMask : public KisMask
@@ -34,6 +34,7 @@ class KRITAIMAGE_EXPORT KisAdsorbencyMask : public KisMask
     KisAdsorbencyMask( KisPaintDeviceSP device );
     virtual ~KisAdsorbencyMask();
     KisAdsorbencyMask( const KisAdsorbencyMask& rhs );
+    QString id() { return "KisAdsorbencyMask"; }
 };
 
 #endif //_KIS_ADSORBENCY_MASK_

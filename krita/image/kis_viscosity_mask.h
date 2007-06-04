@@ -23,9 +23,9 @@
 
 #include "kis_mask.h"
 /**
-   Viscosity affects both the spreading of paint through gravity
-   and wetness and the and transfer of paint from the canvas to the
-   brush.
+   Viscosity affects both the spreading of paint. If paint is very
+   viscous, it will not travel easily with gravity or dry very fast to
+   the air.
 
    See http://gamma.cs.unc.edu/viscous/Baxter-ViscousPaint-CASA04.pdf
    for a scholarly discussion.
@@ -36,6 +36,7 @@ class KRITAIMAGE_EXPORT KisViscosityMask : public KisMask
     KisViscosityMask( KisPaintDeviceSP device );
     virtual ~KisViscosityMask();
     KisViscosityMask( const KisViscosityMask& rhs );
+    QString id() { return "KisViscosityMask"; }
 };
 
 #endif //_KIS_VISCOSITY_MASK_

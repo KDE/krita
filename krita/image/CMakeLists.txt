@@ -80,7 +80,6 @@ set(kritaimage_LIB_SRCS
    kis_height_mask.cc
    kis_viscosity_mask.cc
    kis_wetness_mask.cc
-   kis_channel_mask.cc
    kis_volume_mask.cc
    kis_mixability_mask.cc
    kis_progress_updater.cpp

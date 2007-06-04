@@ -24,9 +24,10 @@
 #include "kis_mask.h"
 /**
    A gravity mask is a single channel mask that applies a particular
-   gravity to the layer the mask belongs to. It differs from an
-   adjustment layer in that it only works on its parent layer, while
-   adjustment layers work on all layers below it in its layer group.
+   gravity to the layer the mask belongs to. The exact meaning of the
+   value in a cell is to be determined: gravity both has strength and
+   direction, so we could have 8 direction with 8 degrees of
+   gravitational strength stored in a byte.
 */
 
 class KRITAIMAGE_EXPORT KisGravityMask : public KisMask
@@ -34,6 +35,7 @@ class KRITAIMAGE_EXPORT KisGravityMask : public KisMask
     KisGravityMask( KisPaintDeviceSP device );
     virtual ~KisGravityMask();
     KisGravityMask( const KisGravityMask& rhs );
+    QString id() { return "KisGravityMask"; }
 };
 
 #endif //_KIS_GRAVITY_MASK_

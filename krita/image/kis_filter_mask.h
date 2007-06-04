@@ -41,6 +41,7 @@ public:
 
     virtual ~KisFilterMask();
     KisFilterMask( const KisFilterMask& rhs );
+    QString id() { return "KisFilterMask"; }
 
     KisFilterConfiguration * filter() const;
     void setFilter(KisFilterConfiguration * filterConfig);

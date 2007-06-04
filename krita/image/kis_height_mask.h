@@ -24,9 +24,10 @@
 #include "kis_mask.h"
 /**
    A height mask is a single channel mask that applies a particular
-   height to the layer the mask belongs to. It differs from an
-   adjustment layer in that it only works on its parent layer, while
-   adjustment layers work on all layers below it in its layer group.
+   height to the layer the mask belongs to. Height represents the
+   structure of the canvas; the height of the paint at a certain
+   location is represented by the volume mask.
+
 */
 
 class KRITAIMAGE_EXPORT KisHeightMask : public KisMask
@@ -34,6 +35,7 @@ class KRITAIMAGE_EXPORT KisHeightMask : public KisMask
     KisHeightMask( KisPaintDeviceSP device );
     virtual ~KisHeightMask();
     KisHeightMask( const KisHeightMask& rhs );
+    QString id() { return "KisHeightMask"; }
 };
 
 #endif //_KIS_HEIGHT_MASK_

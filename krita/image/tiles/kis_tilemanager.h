@@ -43,7 +43,7 @@ class KisTiledDataManager;
  *  * tries to preallocate and recycle some tiles to make future allocations faster
  *    (not done yet)
  *
- *    XXX: Use QReadWriteLock, QReadLocker and QWriteLocker to make sure everyone can 
+ *    XXX: Use QReadWriteLock, QReadLocker and QWriteLocker to make sure everyone can
  *    read any tile, as long as nobody is writing to it. (bsar)
  *    See: http://doc.trolltech.com/qq/qq14-threading.html
  */
@@ -89,9 +89,19 @@ private:
     // filePos is the position inside the file; size is the actual size, fsize is the size
     // being used in the swap for this tile (may be larger!)
     // The file points to 0 if it is not swapped, and to the relevant TempFile otherwise
-    struct TileInfo { KisTile *tile; KTemporaryFile* file; off_t filePos; int size; int fsize;
+    struct TileInfo {
+        KisTile *tile;
+        KTemporaryFile* file;
+        off_t filePos;
+        int size;
+        int fsize;
         Q3ValueList<TileInfo*>::iterator node;
-        bool inMem; bool onFile; bool mmapped; bool validNode; };
+        bool inMem;
+        bool onFile;
+        bool mmapped;
+        bool validNode;
+    };
+
     typedef struct { KTemporaryFile* file; off_t filePos; int size; } FreeInfo;
     typedef QHash<const KisTile*, TileInfo*> TileMap;
     typedef Q3ValueList<TileInfo*> TileList;
@@ -116,9 +126,8 @@ private:
     qint32 *m_poolPixelSizes;
     qint32 m_tilesPerPool;
     PoolFreeList *m_poolFreeList;
-    QMutex * m_poolMutex;
-    QMutex * m_swapMutex;
-    QMutex * m_bigKritaLock; // The 'BKL' ;)
+
+    QMutex m_bigKritaLock; // The 'BKL' ;)
 
     // This is the constant that we will use to see if we want to add a new tempfile
     // We use 1<<30 (one gigabyte) because apparently 32bit systems don't really like very

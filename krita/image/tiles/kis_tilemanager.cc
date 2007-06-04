@@ -48,7 +48,9 @@ static KStaticDeleter<KisTileManager> staticDeleter;
 
 // ### use QMutexLocker for the all mutexes
 
-KisTileManager::KisTileManager() {
+KisTileManager::KisTileManager()
+    : m_bigKritaLock( QMutex::Recursive )
+{
 
     Q_ASSERT(KisTileManager::m_singleton == 0);
     KisTileManager::m_singleton = this;
@@ -79,13 +81,6 @@ KisTileManager::KisTileManager() {
     }
 
     counter = 0;
-
-    // XXX Why pointers to mutexes, and not as member objects?
-    m_poolMutex = new QMutex(QMutex::Recursive);
-    m_swapMutex = new QMutex(QMutex::Recursive);
-    // Catchall until this is code is audited for threading.
-    // Actually, why have more than one lock at all here? Much safer with less locks
-    m_bigKritaLock = new QMutex(QMutex::Recursive);
 }
 
 KisTileManager::~KisTileManager() {
@@ -117,10 +112,6 @@ KisTileManager::~KisTileManager() {
 
     delete [] m_poolPixelSizes;
     delete [] m_pools;
-
-    delete m_poolMutex;
-    delete m_swapMutex;
-    delete m_bigKritaLock;
     // Where did this go to? delete [] m_poolFreeList;
 }
 
@@ -135,8 +126,7 @@ KisTileManager* KisTileManager::instance()
 
 void KisTileManager::registerTile(KisTile* tile)
 {
-    QMutexLocker lock(m_bigKritaLock);
-    m_swapMutex->lock();
+    QMutexLocker lock(&m_bigKritaLock);
 
     TileInfo* info = new TileInfo();
     info->tile = tile;
@@ -162,15 +152,13 @@ void KisTileManager::registerTile(KisTile* tile)
     if (++counter % 50 == 0)
         printInfo();
 
-    m_swapMutex->unlock();
 }
 
 void KisTileManager::deregisterTile(KisTile* tile) {
-    QMutexLocker lock(m_bigKritaLock);
-    m_swapMutex->lock();
+    QMutexLocker lock(&m_bigKritaLock);
+
 
     if (!m_tileMap.contains(tile)) {
-        m_swapMutex->unlock();
         return;
     }
     // Q_ASSERT(m_tileMap.contains(tile));
@@ -217,13 +205,11 @@ void KisTileManager::deregisterTile(KisTile* tile) {
 
     doSwapping();
 
-    m_swapMutex->unlock();
 }
 
 void KisTileManager::ensureTileLoaded(const KisTile* tile)
 {
-    QMutexLocker lock(m_bigKritaLock);
-    m_swapMutex->lock();
+    QMutexLocker lock(&m_bigKritaLock);
 
     TileInfo* info = m_tileMap[tile];
     if (info->validNode) {
@@ -235,13 +221,11 @@ void KisTileManager::ensureTileLoaded(const KisTile* tile)
         fromSwap(info);
     }
 
-    m_swapMutex->unlock();
 }
 
 void KisTileManager::maySwapTile(const KisTile* tile)
 {
-    QMutexLocker lock(m_bigKritaLock);
-    m_swapMutex->lock();
+    QMutexLocker lock(&m_bigKritaLock);
 
     TileInfo* info = m_tileMap[tile];
     m_swappableList.push_back(info);
@@ -250,16 +234,13 @@ void KisTileManager::maySwapTile(const KisTile* tile)
 
     doSwapping();
 
-    m_swapMutex->unlock();
 }
 
 void KisTileManager::fromSwap(TileInfo* info)
 {
-    QMutexLocker lock(m_bigKritaLock);
-    m_swapMutex->lock();
+    QMutexLocker lock(&m_bigKritaLock);
 
     if (info->inMem) {
-        m_swapMutex->unlock();
         return;
     }
 
@@ -272,7 +253,6 @@ void KisTileManager::fromSwap(TileInfo* info)
     if (!kritaMmap(info->tile->m_data, 0, info->size, PROT_READ | PROT_WRITE, MAP_SHARED,
                    info->file->handle(), info->filePos)) {
         kWarning() << "fromSwap failed!" << endl;
-        m_swapMutex->unlock();
         return;
     }
 
@@ -282,16 +262,13 @@ void KisTileManager::fromSwap(TileInfo* info)
     m_currentInMem++;
     m_bytesInMem += info->size;
 
-    m_swapMutex->unlock();
 }
 
 void KisTileManager::toSwap(TileInfo* info) {
-    QMutexLocker lock(m_bigKritaLock);
-    m_swapMutex->lock();
+    QMutexLocker lock(&m_bigKritaLock);
 
     //Q_ASSERT(info->inMem);
     if (!info || !info->inMem) {
-        m_swapMutex->unlock();
         return;
     }
 
@@ -357,7 +334,6 @@ void KisTileManager::toSwap(TileInfo* info) {
                 printInfo();
 
                 m_swapForbidden = true;
-                m_swapMutex->unlock();
                 return;
             }
 
@@ -372,7 +348,6 @@ void KisTileManager::toSwap(TileInfo* info) {
         if(!file) {
             kWarning() << "Opening the file as QFile failed" << endl;
             m_swapForbidden = true;
-            m_swapMutex->unlock();
             return;
         }
 
@@ -382,19 +357,16 @@ void KisTileManager::toSwap(TileInfo* info) {
              fd, info->filePos)) {
             kWarning() << "Initial mmap failed" << endl;
             m_swapForbidden = true;
-            m_swapMutex->unlock();
             return;
         }
 
         memcpy(data, info->tile->m_data, info->size);
         munmap(data, info->size);
 
-        m_poolMutex->lock();
         if (isPoolTile(tile->m_data, tile->m_pixelSize))
             reclaimTileToPool(tile->m_data, tile->m_pixelSize);
         else
             delete[] tile->m_data;
-        m_poolMutex->unlock();
 
         tile->m_data = 0;
     } else {
@@ -413,16 +385,13 @@ void KisTileManager::toSwap(TileInfo* info) {
     m_currentInMem--;
     m_bytesInMem -= info->size;
 
-    m_swapMutex->unlock();
 }
 
 void KisTileManager::doSwapping()
 {
-    QMutexLocker lock(m_bigKritaLock);
-    m_swapMutex->lock();
+    QMutexLocker lock(&m_bigKritaLock);
 
     if (m_swapForbidden || m_currentInMem <= m_maxInMem) {
-        m_swapMutex->unlock();
         return;
     }
 
@@ -438,12 +407,11 @@ void KisTileManager::doSwapping()
 
 #endif
 
-    m_swapMutex->unlock();
 }
 
 void KisTileManager::printInfo()
 {
-    QMutexLocker lock(m_bigKritaLock);
+    QMutexLocker lock(&m_bigKritaLock);
     kDebug(DBG_AREA_TILES) << m_bytesInMem << " out of " << m_bytesTotal << " bytes in memory\n";
     kDebug(DBG_AREA_TILES) << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
     kDebug(DBG_AREA_TILES) << m_files.size() << " swap files in use" << endl;
@@ -469,40 +437,34 @@ void KisTileManager::printInfo()
 
 quint8* KisTileManager::requestTileData(qint32 pixelSize)
 {
-    QMutexLocker lock(m_bigKritaLock);
-    m_swapMutex->lock();
+    QMutexLocker lock(&m_bigKritaLock);
 
     quint8* data = findTileFor(pixelSize);
     if ( data ) {
-        m_swapMutex->unlock();
         return data;
     }
-    m_swapMutex->unlock();
+
     return new quint8[m_tileSize * pixelSize];
 }
 
 void KisTileManager::dontNeedTileData(quint8* data, qint32 pixelSize)
 {
-    QMutexLocker lock(m_bigKritaLock);
-    m_poolMutex->lock();
+    QMutexLocker lock(&m_bigKritaLock);
     if (isPoolTile(data, pixelSize)) {
         reclaimTileToPool(data, pixelSize);
     } else
         delete[] data;
-    m_poolMutex->unlock();
 }
 
 quint8* KisTileManager::findTileFor(qint32 pixelSize)
 {
-    QMutexLocker lock(m_bigKritaLock);
-    m_poolMutex->lock();
+    QMutexLocker lock(&m_bigKritaLock);
 
     for (int i = 0; i < 4; i++) {
         if (m_poolPixelSizes[i] == pixelSize) {
             if (!m_poolFreeList[i].isEmpty()) {
                 quint8* data = m_poolFreeList[i].front();
                 m_poolFreeList[i].pop_front();
-                m_poolMutex->unlock();
                 return data;
             }
         }
@@ -513,56 +475,48 @@ quint8* KisTileManager::findTileFor(qint32 pixelSize)
             // j = 1 because we return the first element, so no need to add it to the freelist
             for (int j = 1; j < m_tilesPerPool; j++)
                 m_poolFreeList[i].append(&m_pools[i][j * pixelSize * m_tileSize]);
-            m_poolMutex->unlock();
             return m_pools[i];
         }
     }
 
-    m_poolMutex->unlock();
     return 0;
 }
 
 bool KisTileManager::isPoolTile(quint8* data, qint32 pixelSize) {
-    QMutexLocker lock(m_bigKritaLock);
+    QMutexLocker lock(&m_bigKritaLock);
     if (data == 0)
         return false;
 
-    m_poolMutex->lock();
     for (int i = 0; i < 4; i++) {
         if (m_poolPixelSizes[i] == pixelSize) {
             bool b = data >= m_pools[i]
                      && data < m_pools[i] + pixelSize * m_tileSize * m_tilesPerPool;
             if (b) {
-                m_poolMutex->unlock();
                 return true;
             }
         }
     }
-    m_poolMutex->unlock();
     return false;
 }
 
 void KisTileManager::reclaimTileToPool(quint8* data, qint32 pixelSize) {
-    QMutexLocker lock(m_bigKritaLock);
-    m_poolMutex->lock();
+    QMutexLocker lock(&m_bigKritaLock);
+
     for (int i = 0; i < 4; i++) {
         if (m_poolPixelSizes[i] == pixelSize)
             if (data >= m_pools[i] && data < m_pools[i] + pixelSize * m_tileSize * m_tilesPerPool) {
                 m_poolFreeList[i].append(data);
             }
     }
-    m_poolMutex->unlock();
 }
 
 void KisTileManager::configChanged() {
-    QMutexLocker lock(m_bigKritaLock);
+    QMutexLocker lock(&m_bigKritaLock);
     KConfigGroup cfg = KGlobal::config()->group("");
     m_maxInMem = cfg.readEntry("maxtilesinmem",  4000);
     m_swappiness = cfg.readEntry("swappiness", 100);
 
-    m_swapMutex->lock();
     doSwapping();
-    m_swapMutex->unlock();
 }
 
 bool KisTileManager::kritaMmap(quint8*& result, void *start, size_t length,

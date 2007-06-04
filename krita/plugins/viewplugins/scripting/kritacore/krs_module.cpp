@@ -146,7 +146,7 @@ QObject* Module::pattern(const QString& patternname)
     foreach(KoResource* res, rServer->resources())
         if(res->name() == patternname)
             return new Pattern(this, dynamic_cast<KisPattern*>(res), true);
-    kWarning() << QString("Unknown pattern \"%1\"").arg(patternname) << endl;
+    kWarning(41011) << QString("Unknown pattern \"%1\"").arg(patternname) << endl;
     return 0;
 }
 
@@ -156,7 +156,7 @@ QObject* Module::brush(const QString& brushname)
     foreach(KoResource* res, rServer->resources())
         if(res->name() == brushname)
             return new Brush(this, dynamic_cast<KisBrush*>(res), true);
-    kWarning() << QString("Unknown brush \"%1\"").arg(brushname) << endl;
+    kWarning(41011) << QString("Unknown brush \"%1\"").arg(brushname) << endl;
     return 0;
 }
 
@@ -186,7 +186,7 @@ QObject* Module::loadPattern(const QString& filename)
     if(pattern->load())
         return new Pattern(this, pattern, false);
     delete pattern;
-    kWarning() << i18n("Unknown pattern \"%1\"", filename) << endl;
+    kWarning(41011) << i18n("Unknown pattern \"%1\"", filename) << endl;
     return 0;
 }
 
@@ -196,7 +196,7 @@ QObject* Module::loadBrush(const QString& filename)
     if(brush->load())
         return new Brush(this, brush, false);
     delete brush;
-    kWarning() << i18n("Unknown brush \"%1\"", filename) << endl;
+    kWarning(41011) << i18n("Unknown brush \"%1\"", filename) << endl;
     return 0;
 }
 
@@ -215,13 +215,13 @@ QObject* Module::createImage(int width, int height, const QString& colorspace, c
 {
     if( width < 0 || height < 0)
     {
-        kWarning() << i18n("Invalid image size") << endl;
+        kWarning(41011) << i18n("Invalid image size") << endl;
         return 0;
     }
     KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorspace, 0);
     if(!cs)
     {
-        kWarning() << i18n("Colorspace %1 is not available, please check your installation.", colorspace ) << endl;
+        kWarning(41011) << i18n("Colorspace %1 is not available, please check your installation.", colorspace ) << endl;
         return 0;
     }
     return new Image(this, KisImageSP(new KisImage(0, width, height, cs, name)));

@@ -77,6 +77,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
     , d(new Private())
 {
+    kDebug(41011) << "ScriptingPart Ctor" << endl;
     setComponentData(ScriptingPart::componentData());
 
     d->view = dynamic_cast< KisView2* >(parent);
@@ -116,6 +117,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
 
 ScriptingPart::~ScriptingPart()
 {
+    kDebug(41011) << "ScriptingPart Dtor" << endl;
     delete d->module;
     delete d;
 }

@@ -109,7 +109,7 @@ QObject* ConstPaintDevice::createHistogram(const QString& histoname, uint typenr
     if(factory && factory->isCompatibleWith( paintDevice()->colorSpace() ))
         return new Histogram(this, factory->generate() , type);
 
-    kWarning() << QString("An error has occurred in %1\n%2").arg("createHistogram").arg( QString("The histogram %1 is not available").arg(histoname) );
+    kWarning(41011) << QString("An error has occurred in %1\n%2").arg("createHistogram").arg( QString("The histogram %1 is not available").arg(histoname) );
     return 0;
 }
 

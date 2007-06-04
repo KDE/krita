@@ -179,7 +179,7 @@ void Painter::setDuplicateOffset(double x1, double y1)
 void Painter::paintPolyline(QVariantList pointsX, QVariantList pointsY)
 {
     if(pointsX.size() != pointsY.size()) {
-        kWarning() << QString("The two lists of points should have the same size.") << endl;
+        kWarning(41011) << QString("The two lists of points should have the same size.") << endl;
         return;
     }
     m_painter->paintPolyline( createPointsVector( pointsX, pointsY));
@@ -203,7 +203,7 @@ void Painter::paintEllipse(double x, double y, double w, double h, double pressu
 void Painter::paintPolygon(QVariantList pointsX, QVariantList pointsY)
 {
     if(pointsX.size() != pointsY.size()) {
-        kWarning() << "The two lists of points should have the same size." << endl;
+        kWarning(41011) << "The two lists of points should have the same size." << endl;
         return;
     }
     m_painter->paintPolygon( createPointsVector(pointsX, pointsY) );

@@ -87,7 +87,6 @@ void Progress::setProgressStage(const QString& stage, uint progress)
 
 void Progress::progressDone()
 {
-//     kDebug() << "Progress::progressDone" << endl;
     m_progressTotalSteps = 0;
     emit notifyProgressDone();
 }

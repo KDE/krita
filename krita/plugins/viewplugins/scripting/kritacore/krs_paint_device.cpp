@@ -56,7 +56,7 @@ bool PaintDevice::convertToColorspace(const QString& colorspacename)
     KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
     if(!dstCS)
     {
-        kWarning() << QString("Colorspace %1 is not available, please check your installation.").arg(colorspacename) << endl;
+        kWarning(41011) << QString("Colorspace %1 is not available, please check your installation.").arg(colorspacename) << endl;
         return false;
     }
     paintDevice()->convertTo(dstCS);
@@ -113,7 +113,7 @@ bool PaintDevice::fastWaveletUntransformation(QObject* wavelet)
 {
     Wavelet* wav = dynamic_cast< Wavelet* >(wavelet);
     if(! wav) {
-        kWarning() << "The passed argument is not a valid Wavelet-object." << endl;
+        kWarning(41011) << "The passed argument is not a valid Wavelet-object." << endl;
         return false;
     }
     KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->value( paintDevice()->colorSpace()->mathToolboxId().id() );

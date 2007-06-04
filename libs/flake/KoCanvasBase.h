@@ -29,7 +29,6 @@
 #include <QPoint>
 #include <QRectF>
 #include <QRect>
-#include <QRegion>
 #include <QWidget>
 
 #include "flake_export.h"

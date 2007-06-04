@@ -26,9 +26,9 @@
  * Example;  I select a text shape and the toolbox will show a icon to activate the
  * text tool.
  *
- * The way that a shape is kept separete from the application and from the Flake
- * layer is similar to how a Widget in a GUI is kept separate from the application.
- * The shape inherits from the abstract KoShape class and all the logic embeddd in
+ * The way that a shape is kept separate from the application and from the Flake
+ * layer is similar to how a widget in a GUI is kept separate from the application.
+ * The shape inherits from the abstract KoShape class and all the logic embedded in
  * the KoShape class is enough for the flake layer to do all things with it like
  * positioning and moving as well as rotating and deleting it.
  * Just like a widget does not know the difference between painting on one app, or

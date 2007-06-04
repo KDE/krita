@@ -346,11 +346,7 @@ void KoListLevelProperties::loadOasis(KoOasisLoadingContext& context, const KoXm
     if( ! suffix.isNull() )
         setListItemSuffix(suffix);
 
-    const QString level = style.attributeNS( KoXmlNS::text, "level", QString() );
-    if( ! level.isNull() ) {
-        //kDebug()<<"KoListLevelProperties::loadOasis "<<style.localName()<<" LEVEL="<<level<<endl;
-        const int i = level.toInt();
-        setLevel(i);
-        setDisplayLevel(i);
-    }
+    const int level = qMax(1, style.attributeNS( KoXmlNS::text, "level", QString() ).toInt() );
+    setLevel(level);
+    setDisplayLevel(level);
 }

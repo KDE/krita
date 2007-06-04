@@ -52,9 +52,7 @@ void KisScriptFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
 {
     d->action->trigger();
 
-    emit scriptTest("My Stringgggggggggggggg");
-
-    emit scriptProcess(new Scripting::PaintDevice(0, src, 0), srcTopLeft, new Scripting::ConstPaintDevice(0, dst, 0), dstTopLeft, size, 0);
+    emit scriptProcess(new Scripting::ConstPaintDevice(src, 0), srcTopLeft, new Scripting::PaintDevice(dst, 0), dstTopLeft, size, 0);
     setProgressDone(); // Must be called even if you don't really support progression
 }
 

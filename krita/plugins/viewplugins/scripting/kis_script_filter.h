@@ -39,8 +39,8 @@ class KisScriptFilter : public KisFilter {
     public Q_SLOTS:
         QString category() const;
     signals:
-        void scriptTest(const QString& s);
-        void scriptProcess( Scripting::PaintDevice* src, const QPoint& srcTopLeft, Scripting::ConstPaintDevice* dst, const QPoint& dstTopLeft, const QSize& size, QObject* config );
+        void scriptTest(int s, int s2);
+        void scriptProcess( QObject* src, const QPoint& srcTopLeft, QObject* dst, const QPoint& dstTopLeft, const QSize& size, QObject* config );
     private:
         class Private;
         Private* const d;

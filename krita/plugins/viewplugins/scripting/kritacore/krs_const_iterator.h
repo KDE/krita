@@ -1,6 +1,5 @@
-
 /*
- *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published by
@@ -17,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KROSS_KRITACOREKRS_ITERATOR_H
-#define KROSS_KRITACOREKRS_ITERATOR_H
+#ifndef KROSS_KRITACOREKRS_CONST_ITERATOR_H
+#define KROSS_KRITACOREKRS_CONST_ITERATOR_H
 
 #include <QObject>
 #include <QList>
@@ -102,6 +101,9 @@ class ConstIteratorBase : public QObject
          * the forth is the alpha-channel.
          */
         virtual QVariantList pixel() = 0;
+        
+    public:
+        virtual const quint8* oldRawData() = 0;
 
     private slots:
         virtual void invalidateIterator() = 0;
@@ -126,7 +128,11 @@ class ConstIterator : public ConstIteratorBase
         {
             invalidateIterator();
         }
-
+    public:
+        virtual const quint8* oldRawData()
+        {
+            return m_it->oldRawData();
+        }
     private:
 
         bool isDone()

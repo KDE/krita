@@ -28,6 +28,7 @@
 #include <KoColorTransformation.h>
 
 #include "krs_paint_device.h"
+#include "krs_const_iterator.h"
 
 #include <kis_paint_device.h>
 #include <kis_types.h>
@@ -113,6 +114,7 @@ class IteratorBase : public QObject
          * Set the current pixel.
          */
         virtual void setPixel(QVariantList pixel) = 0;
+        virtual void copyFrom(QObject* obj) = 0;
 
         /**
          * Invert the color of the current pixel.
@@ -210,7 +212,20 @@ class Iterator : public IteratorBase
             for(QList<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end() && i < size; ++itC, ++i)
                 setChannelValue(*itC, pixel[i]);
         }
-
+        void copyFrom(QObject* obj)
+        {
+            Iterator<_T_It>* iter = dynamic_cast< Iterator<_T_It>* >(obj);
+            if(iter)
+            {
+                memcpy(m_it->rawData(), iter->m_it->oldRawData(), m_layer->colorSpace()->pixelSize());
+            } else {
+                ConstIteratorBase* citer = dynamic_cast< ConstIteratorBase* >(obj);
+                if(iter)
+                {
+                    memcpy(m_it->rawData(), citer->oldRawData(), m_layer->colorSpace()->pixelSize());
+                }
+            }
+        }
         void invertColor()
         {
             KoColorTransformation* invertTransfo = m_layer->colorSpace()->createInvertTransformation();

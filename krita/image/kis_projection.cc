@@ -30,8 +30,6 @@
 
 using namespace ThreadWeaver;
 
-#define HACK_REGIONS_INTO_RECTS 1
-#define USE_REGIONS_OF_INTEREST 0
 
 class ProjectionJob : public Job
 {
@@ -69,6 +67,9 @@ public:
     Weaver * weaver;
     int updateRectSize;
     QRect roi; // Region of interest
+    bool useRegionOfInterest; // If false, update all dirty bits, if
+                              // true, update only region of interest.
+    bool useBoundingRectOfDirtyRegion;
 };
 
 
@@ -84,6 +85,9 @@ KisProjection::KisProjection( KisImageWSP image, KisGroupLayerWSP rootLayer )
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->weaver->setMaximumNumberOfThreads( cfg.readEntry("maxprojectionthreads",  10) );
     m_d->updateRectSize = cfg.readEntry( "updaterectsize", 512 );
+    m_d->useBoundingRectOfDirtyRegion = cfg.readEntry( "use_bounding_rect_of_dirty_region", true );
+    m_d->useRegionOfInterest = cfg.readEntry( "use_region_of_interest", false );
+
     connect( m_d->weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( slotUpdateUi(ThreadWeaver::Job*) ) );
 
     connect( this, SIGNAL( sigProjectionUpdated( const QRect & ) ), image.data(), SLOT(slotProjectionUpdated( const QRect &) ) );
@@ -161,21 +165,22 @@ void KisProjection::slotAddDirtyRegion( const QRegion & region )
 
     m_d->dirtyRegion += region;
 
-#if HACK_REGIONS_INTO_RECTS
-    if ( !m_d->locked )
-        scheduleRect( region.boundingRect() );
-#else
-    if ( !m_d->locked ) {
-        QVector<QRect> regionRects = region.rects();
+    if ( m_d->useBoundingRectOfDirtyRegion ) {
+        if ( !m_d->locked )
+            scheduleRect( region.boundingRect() );
+    }
+    else {
+        if ( !m_d->locked ) {
+            QVector<QRect> regionRects = region.rects();
 
-        QVector<QRect>::iterator it = regionRects.begin();
-        QVector<QRect>::iterator end = regionRects.end();
-        while ( it != end ) {
-            scheduleRect( *it );
-            ++it;
+            QVector<QRect>::iterator it = regionRects.begin();
+            QVector<QRect>::iterator end = regionRects.end();
+            while ( it != end ) {
+                scheduleRect( *it );
+                ++it;
+            }
         }
     }
-#endif
 }
 
 void KisProjection::slotAddDirtyRect( const QRect & rect )
@@ -196,11 +201,14 @@ void KisProjection::slotUpdateUi( Job* job )
 
 void KisProjection::scheduleRect( const QRect & rc )
 {
-#if USE_REGIONS_OF_INTEREST
-    QRect interestingRect = rc.intersected( m_d->roi );
-#else
-    QRect interestingRect = rc;
-#endif
+    QRect interestingRect;
+
+    if ( m_d->useRegionOfInterest ) {
+        interestingRect = rc.intersected( m_d->roi );
+    }
+    else {
+        interestingRect = rc;
+    }
 
     int h = interestingRect.height();
     int w = interestingRect.width();
@@ -215,7 +223,6 @@ void KisProjection::scheduleRect( const QRect & rc )
         m_d->weaver->enqueue( job );
         return;
     }
-
 
     int wleft = w;
     int col = 0;

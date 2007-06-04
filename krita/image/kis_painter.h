@@ -640,6 +640,8 @@ protected:
     KisTransaction  *m_transaction;
 
     QRegion m_dirtyRegion;
+    QRect m_dirtyRect;
+
     QRect m_bounds;
     KoColor m_paintColor;
     KoColor m_backgroundColor;
@@ -665,6 +667,7 @@ protected:
     KisPaintDeviceSP m_dab;
     const KoCompositeOp * m_compositeOp;
     QBitArray m_channelFlags;
+    bool m_useBoundingDirtyRect;
 
 };
 

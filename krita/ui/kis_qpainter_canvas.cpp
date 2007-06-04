@@ -129,7 +129,11 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     if (img->colorSpace()->hasHighDynamicRange() &&
         (m_d->currentExposure != m_d->canvas->view()->resourceProvider()->HDRExposure())) {
-        // XXX: If we had a dirty region we could just update areas as they become visible.
+        // XXX: If we had a dirty region we could just update areas as
+        // they become visible.
+        // YYY: As soon as we start using
+        // KisProjection::setRegionOfInterest(), only the visible
+        // areas will be updated. (Boud)
         QApplication::setOverrideCursor(Qt::WaitCursor);
         m_d->canvas->updateCanvasProjection(img->bounds());
         QApplication::restoreOverrideCursor();

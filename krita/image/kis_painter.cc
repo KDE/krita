@@ -82,6 +82,9 @@ void KisPainter::init()
     m_pressure = PRESSURE_MIN;
     m_antiAliasPolygonFill = true;
     m_bounds = QRect();
+
+    KConfigGroup cfg = KGlobal::config()->group("");
+    m_useBoundingDirtyRect = cfg.readEntry( "use_bounding_rect_of_dirty_region", true );
 }
 
 KisPainter::~KisPainter()
@@ -134,18 +137,27 @@ QUndoCommand *KisPainter::endTransaction()
 
 QRegion KisPainter::dirtyRegion()
 {
-    QRegion r = m_dirtyRegion;
-
-    m_dirtyRegion = QRegion();
-
-    return r;
+    if ( m_useBoundingDirtyRect ) {
+        return QRegion( m_dirtyRect );
+    }
+    else {
+        QRegion r = m_dirtyRegion;
+        m_dirtyRegion = QRegion();
+        return r;
+    }
 }
 
 
 QRegion KisPainter::addDirtyRect(QRect r)
 {
-    m_dirtyRegion += QRegion( r );
-    return m_dirtyRegion;
+    if ( m_useBoundingDirtyRect ) {
+        m_dirtyRect = m_dirtyRect.united( r );
+        return QRegion( m_dirtyRect );
+    }
+    else {
+        m_dirtyRegion += QRegion( r );
+        return m_dirtyRegion;
+    }
 }
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,

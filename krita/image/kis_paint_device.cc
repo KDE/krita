@@ -19,12 +19,13 @@
 #include <QRect>
 #include <QMatrix>
 #include <QImage>
-#include <QDateTime>
 #include <QApplication>
 #include <QList>
+#include <QTime>
 #include <QTimer>
 #include <QUndoCommand>
 #include <QHash>
+
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -55,6 +56,8 @@
 
 #include "kis_exif_info.h"
 
+//#define CACHE_EXACT_BOUNDS
+
 class KisPaintDevice::Private {
 
 public:
@@ -78,6 +81,9 @@ public:
 
     // XXX: Use shared pointers here?
     QHash<QString, KisMask*> painterlyChannels;
+#ifdef CACHE_EXACT_BOUNDS
+    QRect exactBounds;
+#endif
 
 };
 
@@ -356,11 +362,18 @@ void KisPaintDevice::startBackgroundFilters()
 
 void KisPaintDevice::setDirty(const QRect & rc)
 {
+
+#ifdef CACHE_EXACT_BOUNDS
+    m_d->exactBounds |= rc;
+#endif
     emit dirtied( rc );
 }
 
 void KisPaintDevice::setDirty( const QRegion & region )
 {
+#ifdef CACHE_EXACT_BOUNDS
+    m_d->exactBounds |= region.boundingRect();
+#endif
     emit dirtied( region );
 }
 
@@ -444,6 +457,12 @@ void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) con
 
 QRect KisPaintDevice::exactBounds() const
 {
+#ifdef CACHE_EXACT_BOUNDS
+    return m_d->exactBounds;
+#else
+//    QTime t;
+//    t.start();
+
     qint32 x, y, w, h, boundX, boundY, boundW, boundH;
 
     extent(x, y, w, h);
@@ -519,36 +538,54 @@ QRect KisPaintDevice::exactBounds() const
         }
         if (found) break;
     }
-
+//    kDebug() << "Exactbounds " << boundX << ", " << boundY << ", " << boundW << ", " << boundH << " took " << t.elapsed() << endl;
     return QRect(boundX, boundY, boundW, boundH);
+
+
+#endif
 }
 
 void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
 {
-     m_datamanager->setExtent(x - m_d->x, y - m_d->y, w, h);
+#ifdef CACHE_EXACT_BOUNDS
+    m_d->exactBounds = QRect( x, y, w, h );
+#endif
+    m_datamanager->setExtent(x - m_d->x, y - m_d->y, w, h);
 }
 
 
 void KisPaintDevice::crop(const QRect & r)
 {
     QRect rc( r );
+#ifdef CACHE_EXACT_BOUNDS
+    m_d->exactBounds = rc;
+#endif
     rc.translate(-m_d->x, -m_d->y);
     m_datamanager->setExtent(rc);
 }
 
 void KisPaintDevice::clear()
 {
+#ifdef CACHE_EXACT_BOUNDS
+    m_d->exactBounds = QRect( 0, 0, 0, 0 );
+#endif
     m_datamanager->clear();
 }
 
 void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel)
 {
+#ifdef CACHE_EXACT_BOUNDS
+    m_d->exactBounds &= QRect( x, y, w, h );
+#endif
     m_datamanager->clear(x, y, w, h, fillPixel);
 }
 
 
 void KisPaintDevice::clear( const QRect & rc )
 {
+#ifdef CACHE_EXACT_BOUNDS
+    m_d->exactBounds &= rc;
+#endif
     m_datamanager->clear( rc.x(), rc.y(), rc.width(), rc.height(), m_datamanager->defaultPixel() );
 }
 
@@ -714,6 +751,10 @@ void KisPaintDevice::setData(KisDataManagerSP data, KoColorSpace * colorSpace)
         m_d->parentLayer->setDirty(extent());
         m_d->parentLayer->notifyPropertyChanged();
     }
+#ifdef CACHE_EXACT_BOUNDS
+    m_d->exactBounds = extent();
+#endif
+
 }
 
 KisUndoAdapter *KisPaintDevice::undoAdapter() const
@@ -757,7 +798,9 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
                  &image, OPACITY_OPAQUE,
                  0, 0, image.width(), image.height());
         p.end();
-
+#ifdef CACHE_EXACT_BOUNDS
+        m_d->exactBounds = image.rect();
+#endif
 //    }
 }
 
@@ -917,7 +960,6 @@ KisRectIteratorPixel KisPaintDevice::createRectIterator(qint32 left, qint32 top,
 
     if(hasSelection())
         selectionDm = m_d->selection->m_datamanager.data();
-
 
     return KisRectIteratorPixel(m_datamanager.data(), selectionDm, left, top, w, h, m_d->x, m_d->y);
 }
@@ -1261,6 +1303,9 @@ void KisPaintDevice::readBytes(quint8 * data, const QRect &rect)
 
 void KisPaintDevice::writeBytes(const quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h)
 {
+#ifdef CACHE_EXACT_BOUNDS
+    m_d->exactBounds &= QRect( x, y, w, h );
+#endif
     m_datamanager->writeBytes( data, x - m_d->x, y - m_d->y, w, h);
 }
 

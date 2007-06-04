@@ -84,9 +84,16 @@ KisProjection::KisProjection( KisImageWSP image, KisGroupLayerWSP rootLayer )
     m_d->weaver = new Weaver();
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->weaver->setMaximumNumberOfThreads( cfg.readEntry("maxprojectionthreads",  10) );
+    kDebug() << "maximum number of threads: " << m_d->weaver->maximumNumberOfThreads() << endl;
+
     m_d->updateRectSize = cfg.readEntry( "updaterectsize", 512 );
+    kDebug() << "Update rect size: " << m_d->updateRectSize << endl;
+
     m_d->useBoundingRectOfDirtyRegion = cfg.readEntry( "use_bounding_rect_of_dirty_region", true );
+    kDebug() << "Use bounding rect of dirty region: " << m_d->useBoundingRectOfDirtyRegion << endl;
+
     m_d->useRegionOfInterest = cfg.readEntry( "use_region_of_interest", false );
+    kDebug() << "Use region of interest: " << m_d->useRegionOfInterest << endl;
 
     connect( m_d->weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( slotUpdateUi(ThreadWeaver::Job*) ) );
 

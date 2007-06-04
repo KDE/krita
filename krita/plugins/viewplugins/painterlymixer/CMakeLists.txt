@@ -1,7 +1,8 @@
 set(kritapainterlymixer_PART_SRCS
+    mixercore.cpp
     kis_painterlymixer.cpp
-    painterlymixer.cpp
     kis_painterlymixerdocker.cpp
+    painterlymixer.cpp
     )
 
 kde4_automoc(${kritapainterlymixer_PART_SRCS})

@@ -181,7 +181,7 @@
     </spacer>
    </item>
    <item row="1" column="0" colspan="9" >
-    <widget class="QFrame" name="m_canvas" >
+    <widget class="MixerCanvas" name="m_canvas" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
        <horstretch>0</horstretch>
@@ -481,6 +481,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MixerCanvas</class>
+   <extends>QFrame</extends>
+   <header>mixercore.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

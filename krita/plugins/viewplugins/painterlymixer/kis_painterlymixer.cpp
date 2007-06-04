@@ -20,12 +20,6 @@
 
 #include <QtGui>
 
-#include <kdebug.h>
-
-#include "kis_canvas2.h"
-#include "kis_paintop.h"
-#include "kis_paintop_registry.h"
-#include "kis_resource_provider.h"
 #include "kis_view2.h"
 
 #include "kis_painterlymixer.h"
@@ -35,14 +29,15 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
 {
     setupUi(this);
 
-    m_canvas->installEventFilter(this);
+//     m_canvas->installEventFilter(this);
 }
 
 KisPainterlyMixer::~KisPainterlyMixer()
 {
 }
 
-bool KisPainterlyMixer::eventFilter(QObject * /*obj*/, QEvent *event)
+/*
+bool KisPainterlyMixer::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::TabletPress) {
         m_pressed = true;
@@ -58,6 +53,7 @@ bool KisPainterlyMixer::eventFilter(QObject * /*obj*/, QEvent *event)
         QTabletEvent *e = static_cast<QTabletEvent*>(event);
         int x = e->x(), y = e->y();
         int xTilt = e->xTilt(), yTilt = e->yTilt();
+        int currentPointer = e->pointerType();
         qreal pressure = e->pressure(), rotation = e->rotation();
 
         switch (e->device()) {
@@ -69,7 +65,7 @@ bool KisPainterlyMixer::eventFilter(QObject * /*obj*/, QEvent *event)
         }
 
         // TODO: the pen draws, the eraser erases...
-        switch (e->pointerType()) {
+        switch (currentPointer) {
         case QTabletEvent::Cursor:
             kDebug() << "QTabletEvent::Cursor" << endl;
             break;
@@ -96,6 +92,7 @@ bool KisPainterlyMixer::eventFilter(QObject * /*obj*/, QEvent *event)
         // TODO draw the footprint
         // TODO resize the footprint to the size set in the mixer
         // TODO mix the colors in the footprint with these in the mixer canvas
+            // TODO check the papers for this part of the painting process
         // TODO draw the colors on the canvas (what to do with gamut, colorspaces etc?)
         // TODO set the color(s) of the paintop (what about the paintop redesign?)
 
@@ -104,6 +101,6 @@ bool KisPainterlyMixer::eventFilter(QObject * /*obj*/, QEvent *event)
 
     return false;
 }
-
+*/
 
 #include "kis_painterlymixer.moc"

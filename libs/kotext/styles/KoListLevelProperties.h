@@ -53,7 +53,7 @@ public:
     void setStartValue(int value);
     /// return the index of the first value of this whole list.
     int startValue() const;
-    /// set the list level which is how deep the counter is nested below other lists
+    /// set the list level which is how deep the counter is nested below other lists (should be >=1)
     void setLevel(int level);
     /// return the list level which is how deep the counter is nested below other lists
     int level() const;

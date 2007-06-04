@@ -29,10 +29,10 @@
    adjustment layers work on all layers below it in its layer group.
 */
 
-class KisChannelMask : public KisMask
+class KRITAIMAGE_EXPORT KisChannelMask : public KisMask
 {
     KisChannelMask( KisPaintDeviceSP device );
-    ~KisChannelMask();
+    virtual ~KisChannelMask();
     KisChannelMask( const KisChannelMask& rhs );
 };
 

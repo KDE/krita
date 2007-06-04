@@ -40,7 +40,8 @@ public:
      */
     KisTransformationMask();
 
-    ~KisTransformationMask();
+    virtual ~KisTransformationMask();
+
     KisTransformationMask( const KisTransformationMask& rhs );
 
     void setXScale( double xscale )

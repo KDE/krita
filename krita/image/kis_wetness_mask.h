@@ -34,10 +34,10 @@
    cannot reflect the user's face and hands in our paint.
 */
 
-class KisWetnessMask : public KisMask
+class KRITAIMAGE_EXPORT KisWetnessMask : public KisMask
 {
     KisWetnessMask( KisPaintDeviceSP device );
-    ~KisWetnessMask();
+    virtual ~KisWetnessMask();
     KisWetnessMask( const KisWetnessMask& rhs );
 
     void setDryingRate( float rate );

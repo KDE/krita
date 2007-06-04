@@ -29,10 +29,10 @@
    adjustment layers work on all layers below it in its layer group.
 */
 
-class KisGravityMask : public KisMask
+class KRITAIMAGE_EXPORT KisGravityMask : public KisMask
 {
     KisGravityMask( KisPaintDeviceSP device );
-    ~KisGravityMask();
+    virtual ~KisGravityMask();
     KisGravityMask( const KisGravityMask& rhs );
 };
 

@@ -27,10 +27,10 @@
    Reflectivity affects the measure in which paint allows the light to
    pass through or be reflected by the layer.
 */
-class KisReflectivityMask : public KisMask
+class KRITAIMAGE_EXPORT KisReflectivityMask : public KisMask
 {
     KisReflectivityMask( KisPaintDeviceSP device );
-    ~KisReflectivityMask();
+    virtual ~KisReflectivityMask();
     KisReflectivityMask( const KisReflectivityMask& rhs );
 };
 

@@ -29,10 +29,10 @@
    adjustment layers work on all layers below it in its layer group.
 */
 
-class KisAdsorbencyMask : public KisMask
+class KRITAIMAGE_EXPORT KisAdsorbencyMask : public KisMask
 {
     KisAdsorbencyMask( KisPaintDeviceSP device );
-    ~KisAdsorbencyMask();
+    virtual ~KisAdsorbencyMask();
     KisAdsorbencyMask( const KisAdsorbencyMask& rhs );
 };
 

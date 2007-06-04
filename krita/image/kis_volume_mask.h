@@ -31,10 +31,10 @@
    for a scholarly discussion.
 */
 
-class KisVolumeMask : public KisMask
+class KRITAIMAGE_EXPORT KisVolumeMask : public KisMask
 {
     KisVolumeMask( KisPaintDeviceSP device );
-    ~KisVolumeMask();
+    virtual ~KisVolumeMask();
     KisVolumeMask( const KisVolumeMask& rhs );
 };
 

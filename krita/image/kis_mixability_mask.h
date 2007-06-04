@@ -31,10 +31,10 @@
    for a scholarly discussion.
 */
 
-class KisMixabilityMask : public KisMask
+class KRITAIMAGE_EXPORT KisMixabilityMask : public KisMask
 {
     KisMixabilityMask( KisPaintDeviceSP device );
-    ~KisMixabilityMask();
+    virtual ~KisMixabilityMask();
     KisMixabilityMask( const KisMixabilityMask& rhs );
 };
 

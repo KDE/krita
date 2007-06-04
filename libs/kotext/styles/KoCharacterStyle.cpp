@@ -215,11 +215,15 @@ void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
     KoStyleStack &styleStack = context.styleStack();
 
     if ( styleStack.hasProperty( KoXmlNS::fo, "color" ) ) { // 3.10.3
-        QColor color(styleStack.property( KoXmlNS::fo, "color" )); // #rrggbb format
-        if ( color.isValid() ) {
-            QBrush brush = foreground();
-            brush.setColor(color);
-            setForeground(brush);
+        if (styleStack.hasProperty( KoXmlNS::style, "use-window-font-color")) {
+            if (styleStack.property( KoXmlNS::style, "use-window-font-color") != "true") {
+                QColor color(styleStack.property( KoXmlNS::fo, "color" )); // #rrggbb format
+                if ( color.isValid() ) {
+                    QBrush brush = foreground();
+                    brush.setColor(color);
+                    setForeground(brush);
+                }
+            }
         }
     }
 
@@ -380,6 +384,22 @@ void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
             setBackground(brush);
         }
     }
+    
+    if ( styleStack.hasProperty( KoXmlNS::style, "use-window-font-color" ) ) { // 3.10.4
+        if (styleStack.property( KoXmlNS::style, "use-window-font-color") == "true") {
+            // Do like OpenOffice.org : change the foreground font if its color is too close to the background color...
+            QColor back = background().color();
+            QColor front = foreground().color();
+            if ((abs(qGray(back.rgb()) - qGray(front.rgb())) < 10) && (background().style() != Qt::NoBrush) && (foreground().style() != Qt::NoBrush)) {
+                front.setRed(255 - front.red());
+                front.setGreen(255 - front.green());
+                front.setBlue(255 - front.blue());
+                QBrush frontBrush = foreground();
+                frontBrush.setColor(front);
+                setForeground(frontBrush);
+            }
+        }
+    }
 
 //TODO
 #if 0
@@ -393,9 +413,6 @@ void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
 
     /*
       Missing properties:
-      style:use-window-font-color, 3.10.4 - this is what KWord uses by default (fg color from the color style)
-         OO also switches to another color when necessary to avoid dark-on-dark and light-on-light cases.
-         (that is TODO in KWord)
       style:text-outline, 3.10.5 - not implemented in kotext
       style:font-family-generic, 3.10.10 - roman, swiss, modern -> map to a font?
       style:font-style-name, 3.10.11 - can be ignored, says DV, the other ways to specify a font are more precise

@@ -31,6 +31,6 @@ namespace KisMetaData {
             Store();
             void insert(const Entry& entry);
     };
-};
+}
 
 #endif

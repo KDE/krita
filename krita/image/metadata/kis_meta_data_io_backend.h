@@ -73,7 +73,7 @@ namespace KisMetaData {
              */
             virtual bool loadFrom(Store* store, QIODevice* ioDevice) = 0;
     };
-};
+}
 
 
 #endif

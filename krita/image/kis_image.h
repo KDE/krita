@@ -48,6 +48,7 @@ class KoColorProfile;
 class KisProgressDisplayInterface;
 class KisPaintLayer;
 class KisPerspectiveGrid;
+class KisProjection;
 
 /**
  * This is the image class, it contains a tree of KisLayer stack and meta information about the image. And it also provides some functions
@@ -341,6 +342,8 @@ public:
     /// Return the projection; that is, the complete, composited representation
     /// of this image.
     KisPaintDeviceSP projection();
+
+    KisProjection * projectionManager();
 
     KisLayerSP findLayer(const QString& name) const;
 

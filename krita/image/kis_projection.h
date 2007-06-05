@@ -22,6 +22,7 @@
 
 #include "kis_types.h"
 #include <threadweaver/Job.h>
+#include "krita_export.h"
 
 class QRegion;
 class QRect;
@@ -54,7 +55,7 @@ using namespace ThreadWeaver;
    XXX: Add regions-of-interest so kis_projection will only recomposit
         the interesting regions
  */
-class KisProjection : public QObject {
+class KRITAIMAGE_EXPORT KisProjection : public QObject {
 
     Q_OBJECT
 
@@ -109,6 +110,10 @@ public:
 signals:
 
     void sigProjectionUpdated( const QRect & );
+
+public slots:
+
+    void updateSettings();
 
 private slots:
 

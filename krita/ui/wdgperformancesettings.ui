@@ -5,107 +5,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>373</width>
-    <height>220</height>
+    <width>513</width>
+    <height>383</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
-   <property name="leftMargin" >
-    <number>9</number>
-   </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>9</number>
-   </property>
-   <property name="horizontalSpacing" >
-    <number>6</number>
-   </property>
-   <property name="verticalSpacing" >
-    <number>6</number>
-   </property>
-   <item row="3" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType" >
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>351</width>
-       <height>91</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="0" >
-    <widget class="QCheckBox" name="m_projection" >
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If checked, Krita uses more memory but may be faster.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="whatsThis" >
-      <string>When Krita uses projections, the results of group layers, effect masks and adjustment layers are cached. This takes a lot of memory but speeds up processing considerably.</string>
-     </property>
-     <property name="text" >
-      <string>Use projections for groups and effects</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="textLabel2" >
-       <property name="whatsThis" >
-        <string>This configures how much Krita will use the swap file. If you move the slider all the way to the left, Krita will not use the swap file at all. If you move it all the way to the right, Krita will make maximum use of the swap file.</string>
-       </property>
-       <property name="text" >
-        <string>Swappiness:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSlider" name="m_swappiness" >
-       <property name="whatsThis" >
-        <string>This configures how much Krita likes to swap. Move the slider to the left, and there is no swapping at all. Move it to the right there is a lot of swapping going on.</string>
-       </property>
-       <property name="maximum" >
-        <number>6</number>
-       </property>
-       <property name="value" >
-        <number>3</number>
-       </property>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="0" >
+   <item row="0" column="0" colspan="2" >
     <layout class="QHBoxLayout" >
      <property name="spacing" >
       <number>6</number>
@@ -158,6 +63,144 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
       </spacer>
      </item>
     </layout>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <layout class="QHBoxLayout" >
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="textLabel2" >
+       <property name="whatsThis" >
+        <string>This configures how much Krita will use the swap file. If you move the slider all the way to the left, Krita will not use the swap file at all. If you move it all the way to the right, Krita will make maximum use of the swap file.</string>
+       </property>
+       <property name="text" >
+        <string>Swappiness:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="m_swappiness" >
+       <property name="whatsThis" >
+        <string>This configures how much Krita likes to swap. Move the slider to the left, and there is no swapping at all. Move it to the right there is a lot of swapping going on.</string>
+       </property>
+       <property name="maximum" >
+        <number>6</number>
+       </property>
+       <property name="value" >
+        <number>3</number>
+       </property>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="QCheckBox" name="m_projection" >
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If checked, Krita uses more memory but may be faster.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="whatsThis" >
+      <string>When Krita uses projections, the results of group layers, effect masks and adjustment layers are cached. This takes a lot of memory but speeds up processing considerably.</string>
+     </property>
+     <property name="text" >
+      <string>Use projections for groups and effects</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2" >
+    <widget class="QCheckBox" name="chkUseBoundingRect" >
+     <property name="text" >
+      <string>Use Bounding Rect of Dirty Area in Projection</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2" >
+    <widget class="QCheckBox" name="chkAggregateDirtyRegions" >
+     <property name="text" >
+      <string>Aggregate Dirty Regions</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" >
+    <widget class="QLabel" name="lblChunkSize" >
+     <property name="text" >
+      <string>Projection Update Chunk Size:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>intChunkSize</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" >
+    <widget class="KIntNumInput" name="intChunkSize" >
+     <property name="whatsThis" >
+      <string>The maximum number of "tiles" that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle large images, a greater value here might be useful.
+Note that this number is only a guideline for Krita, and is not guaranteed to be the actual number of tiles in memory.</string>
+     </property>
+     <widget class="KIntNumInput" name="intChunkSize_2" >
+      <property name="geometry" >
+       <rect>
+        <x>270</x>
+        <y>190</y>
+        <width>129</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="whatsThis" >
+       <string>The maximum number of "tiles" that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle large images, a greater value here might be useful.
+Note that this number is only a guideline for Krita, and is not guaranteed to be the actual number of tiles in memory.</string>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <item row="6" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Projection Thread Number:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" >
+    <widget class="KIntNumInput" name="intNumThreads" >
+     <property name="whatsThis" >
+      <string>The maximum number of "tiles" that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle large images, a greater value here might be useful.
+Note that this number is only a guideline for Krita, and is not guaranteed to be the actual number of tiles in memory.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>355</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

@@ -634,6 +634,11 @@ KisPaintDeviceSP KisImage::projection()
     return m_d->rootLayer->projection();
 }
 
+KisProjection * KisImage::projectionManager()
+{
+    return m_d->projection;
+}
+
 KisLayerSP KisImage::findLayer(const QString& name) const
 {
     return rootLayer()->findLayer(name);

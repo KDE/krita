@@ -34,6 +34,8 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kglobal.h>
+#include <ksharedconfig.h>
 
 #include "kis_brush.h"
 #include "kis_debug_areas.h"
@@ -51,6 +53,7 @@
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "KoColor.h"
+
 
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
@@ -84,7 +87,7 @@ void KisPainter::init()
     m_bounds = QRect();
 
     KConfigGroup cfg = KGlobal::config()->group("");
-    m_useBoundingDirtyRect = cfg.readEntry( "use_bounding_rect_of_dirty_region", true );
+    m_useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", false);
 }
 
 KisPainter::~KisPainter()

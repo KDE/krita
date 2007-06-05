@@ -571,6 +571,9 @@ void KisView2::connectCurrentImage()
 
     if( m_d->birdEyeBox )
         m_d->birdEyeBox->setImage( img );
+
+// XXX: Why doesn't this compile?
+//    connect( KisConfigNotifier::instance(), SIGNAL( configChanged() ), img->projectionManager(), SLOT( updateSettings() ) );
 }
 
 void KisView2::disconnectCurrentImage()
@@ -640,7 +643,7 @@ void KisView2::slotUpdateFullScreen(bool toggle)
 
 void KisView2::slotPreferences()
 {
-    if (PreferencesDialog::editPreferences()) {
+    if ( PreferencesDialog::editPreferences() ) {
         KisConfigNotifier::instance()->notifyConfigChanged();
     }
 }

@@ -486,3 +486,53 @@ void KisConfig::setCheckersColor(QColor v)
 {
     m_cfg.writeEntry("checkerscolor", v);
 }
+
+
+int KisConfig::numProjectionThreads()
+{
+    return m_cfg.readEntry( "maxprojectionthreads", 5 );
+}
+
+void KisConfig::setNumProjectThreads( int num )
+{
+    m_cfg.writeEntry( "maxprojectionthreads", num );
+}
+
+int KisConfig::projectionChunkSize()
+{
+    return m_cfg.readEntry( "updaterectsize", 512 );
+}
+
+void KisConfig::setProjectionChunkSize( int num )
+{
+    m_cfg.writeEntry( "updaterectsize", num );
+}
+
+bool KisConfig::aggregateDirtyRegionsInPainter()
+{
+    return m_cfg.readEntry( "aggregate_dirty_regions", false );
+}
+
+void KisConfig::setAggregateDirtyRegionsInPainter( bool aggregate )
+{
+    m_cfg.writeEntry( "aggregate_dirty_regions", aggregate );
+}
+
+bool KisConfig::useBoundingRectInProjection()
+{
+    return m_cfg.readEntry( "use_bounding_rect_of_dirty_region", false );
+}
+
+void KisConfig::setUseBoundingRectInProjection( bool use )
+{
+    m_cfg.writeEntry( "use_bounding_rect_of_dirty_region", use );
+}
+
+bool KisConfig::useRegionOfInterestInProjection()
+{
+    return m_cfg.readEntry( "use_region_of_interest", false);
+}
+void KisConfig::setUseRegionOfInterestInProjection( bool use )
+{
+    m_cfg.writeEntry( "use_region_of_interest", use );
+}

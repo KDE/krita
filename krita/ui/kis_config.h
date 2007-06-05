@@ -151,6 +151,20 @@ public:
     QColor checkersColor();
     void setCheckersColor(QColor v);
 
+    int numProjectionThreads();
+    void setNumProjectThreads( int num );
+
+    int projectionChunkSize();
+    void setProjectionChunkSize( int num );
+
+    bool aggregateDirtyRegionsInPainter();
+    void setAggregateDirtyRegionsInPainter( bool aggregate );
+
+    bool useBoundingRectInProjection();
+    void setUseBoundingRectInProjection( bool use );
+
+    bool useRegionOfInterestInProjection();
+    void setUseRegionOfInterestInProjection( bool use );
 
 private:
     KisConfig(const KisConfig&);

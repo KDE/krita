@@ -53,17 +53,24 @@ public:
     static KisTileManager* instance();
 
 public: // Tile management
+
     void registerTile(KisTile* tile);
+
     void deregisterTile(KisTile* tile);
+
     // these can change the tile indirectly, though, through the actual swapping!
     void ensureTileLoaded(const KisTile* tile);
+
     void maySwapTile(const KisTile* tile);
 
 public: // Pool management
+
     quint8* requestTileData(qint32 pixelSize);
+
     void dontNeedTileData(quint8* data, qint32 pixelSize);
 
 public: // Configuration
+
     void configChanged();
 
 private:

@@ -144,11 +144,13 @@ KoParagraphStyle::~KoParagraphStyle() {
 
 void KoParagraphStyle::setParent(KoParagraphStyle *parent) {
     Q_ASSERT(parent != this);
+    const int id = styleId();
     if(d->parent)
         d->stylesPrivate->copyMissing(d->parent->d->stylesPrivate);
     d->parent = parent;
     if(d->parent)
         d->stylesPrivate->removeDuplicates(d->parent->d->stylesPrivate);
+    setStyleId(id);
 }
 
 void KoParagraphStyle::setProperty(int key, const QVariant &value) {

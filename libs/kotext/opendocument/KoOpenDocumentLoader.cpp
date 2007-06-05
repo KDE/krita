@@ -21,12 +21,12 @@
  */
 
 #include "KoOpenDocumentLoader.h"
+#include "KoOpenDocumentLoadingContext.h"
 //#include "KWDocument.h"
 //#include "frames/KWTextFrameSet.h"
 //#include "frames/KWTextFrame.h"
 
 // koffice
-#include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
 #include <KoOasisSettings.h>
 #include <KoXmlNS.h>
@@ -118,7 +118,7 @@ KoStyleManager* KoOpenDocumentLoader::styleManager() const
 }
 
 //1.6: KoStyleCollection::loadOasisStyles
-void KoOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context, QList<KoXmlElement*> styleElements)
+void KoOpenDocumentLoader::loadStyles(KoOpenDocumentLoadingContext& context, QList<KoXmlElement*> styleElements)
 {
 #if 0 //1.6:
     QStringList followingStyles;
@@ -207,7 +207,7 @@ void KoOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context, QList<KoXm
 }
 
 //1.6: KoStyleCollection::loadOasisStyles
-void KoOpenDocumentLoader::loadAllStyles(KoOasisLoadingContext& context)
+void KoOpenDocumentLoader::loadAllStyles(KoOpenDocumentLoadingContext& context)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug()<<"KoOpenDocumentLoader::loadAllStyles"<<endl;
@@ -232,7 +232,7 @@ void KoOpenDocumentLoader::loadAllStyles(KoOasisLoadingContext& context)
 
 }
 
-void KoOpenDocumentLoader::loadSettings(KoOasisLoadingContext& context, const QDomDocument& settings)
+void KoOpenDocumentLoader::loadSettings(KoOpenDocumentLoadingContext& context, const QDomDocument& settings)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug()<<"KoOpenDocumentLoader::loadSettings"<<endl;
@@ -241,7 +241,7 @@ void KoOpenDocumentLoader::loadSettings(KoOasisLoadingContext& context, const QD
     Q_UNUSED(settings);
 }
 
-bool KoOpenDocumentLoader::loadPageLayout(KoOasisLoadingContext& context, const QString& masterPageName)
+bool KoOpenDocumentLoader::loadPageLayout(KoOpenDocumentLoadingContext& context, const QString& masterPageName)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug()<<"KoOpenDocumentLoader::loadPageLayout"<<endl;
@@ -251,7 +251,7 @@ bool KoOpenDocumentLoader::loadPageLayout(KoOasisLoadingContext& context, const 
     return true;
 }
 
-bool KoOpenDocumentLoader::loadMasterPageStyle(KoOasisLoadingContext& context, const QString& masterPageName)
+bool KoOpenDocumentLoader::loadMasterPageStyle(KoOpenDocumentLoadingContext& context, const QString& masterPageName)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug()<<"KoOpenDocumentLoader::loadMasterPageStyle"<<endl;
@@ -262,7 +262,7 @@ bool KoOpenDocumentLoader::loadMasterPageStyle(KoOasisLoadingContext& context, c
 }
 
 //1.6: KoTextDocument::loadOasisText
-void KoOpenDocumentLoader::loadBody(KoOasisLoadingContext& context, const KoXmlElement& bodyElem, QTextCursor& cursor)
+void KoOpenDocumentLoader::loadBody(KoOpenDocumentLoadingContext& context, const KoXmlElement& bodyElem, QTextCursor& cursor)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug()<<"KoOpenDocumentLoader::loadBody"<<endl;
@@ -304,7 +304,7 @@ void KoOpenDocumentLoader::loadBody(KoOasisLoadingContext& context, const KoXmlE
 }
 
 //1.6: KoTextDocument::loadOasisText
-void KoOpenDocumentLoader::loadParagraph(KoOasisLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
+void KoOpenDocumentLoader::loadParagraph(KoOpenDocumentLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
 {
     context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
     QString userStyleName = context.styleStack().userStyleName( "paragraph" );
@@ -401,7 +401,7 @@ void KoOpenDocumentLoader::loadParagraph(KoOasisLoadingContext& context, const K
 }
 
 //1.6: KoTextDocument::loadOasisText
-void KoOpenDocumentLoader::loadHeading(KoOasisLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
+void KoOpenDocumentLoader::loadHeading(KoOpenDocumentLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
 {
     context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
 #if 0 //1.6:
@@ -498,7 +498,7 @@ void KoOpenDocumentLoader::loadHeading(KoOasisLoadingContext& context, const KoX
 }
 
 //1.6: KoTextDocument::loadList
-void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
+void KoOpenDocumentLoader::loadList(KoOpenDocumentLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
 {
 #if 0 //1.6:
     const QString oldListStyleName = context.currentListStyleName();
@@ -635,7 +635,7 @@ void KoOpenDocumentLoader::loadList(KoOasisLoadingContext& context, const KoXmlE
 }
 
 //1.6: KoTextDocument::loadOasisText
-void KoOpenDocumentLoader::loadSection(KoOasisLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
+void KoOpenDocumentLoader::loadSection(KoOpenDocumentLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug()<<"KoOpenDocumentLoader::loadSection"<<endl;
@@ -685,7 +685,7 @@ static QString normalizeWhitespace( const QString& in, bool leadingSpace )
 
 #if 0
 // First loadFrame test
-void KoOpenDocumentLoader::loadFrame(KoOasisLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
+void KoOpenDocumentLoader::loadFrame(KoOpenDocumentLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
 {
     float width, height;
     QDomNamedNodeMap attrs = parent.attributes();
@@ -739,7 +739,7 @@ void KoOpenDocumentLoader::loadFrame(KoOasisLoadingContext& context, const KoXml
 #endif
 
 //1.6: KoTextParag::loadOasisSpan
-void KoOpenDocumentLoader::loadSpan(KoOasisLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor, bool* stripLeadingSpace)
+void KoOpenDocumentLoader::loadSpan(KoOpenDocumentLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor, bool* stripLeadingSpace)
 {
     Q_ASSERT( stripLeadingSpace );
     for (KoXmlNode node = parent.firstChild(); !node.isNull(); node = node.nextSibling() )

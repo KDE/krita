@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoCharacterStyle.h"
+#include "opendocument/KoOpenDocumentLoadingContext.h"
 
 #include "Styles_p.h"
 
@@ -24,7 +25,6 @@
 #include <QTextCursor>
 
 #include <KoStyleStack.h>
-#include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
@@ -211,7 +211,7 @@ static void importOasisUnderline( const QString& type, const QString& style,
 }
 
 //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
-void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
+void KoCharacterStyle::loadOasis(KoOpenDocumentLoadingContext& context) {
     KoStyleStack &styleStack = context.styleStack();
 
     if ( styleStack.hasProperty( KoXmlNS::fo, "color" ) ) { // 3.10.3

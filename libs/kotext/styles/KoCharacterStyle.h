@@ -29,7 +29,7 @@
 class StylePrivate;
 class QTextBlock;
 class KoStyleStack;
-class KoOasisLoadingContext;
+class KoOpenDocumentLoadingContext;
 
 /**
  * A container for all properties for a character style.
@@ -57,8 +57,9 @@ public:
      * @param parent the parent object for memory management purposes.
      */
     explicit KoCharacterStyle(QObject *parent = 0);
-    /// clone constructor
+    /// Copy constructor
     KoCharacterStyle(const KoCharacterStyle &other);
+    /// Destructor
     ~KoCharacterStyle();
 
     //void setFont(const QFont &font) { setProperty(QTextFormat::FontId, font); }
@@ -163,7 +164,7 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOasis(KoOasisLoadingContext& context);
+    void loadOasis(KoOpenDocumentLoadingContext& context);
 
 private:
     void setProperty(int key, const QVariant &value);

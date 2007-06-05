@@ -122,10 +122,11 @@ public:
         BorderDashDotDotPattern
     };
 
-
-    KoParagraphStyle();
+    /// Constructor
+    explicit KoParagraphStyle();
     /// Copy constructor
     KoParagraphStyle(const KoParagraphStyle &orig);
+    /// Destructor
     ~KoParagraphStyle();
 
     //  ***** Linespacing

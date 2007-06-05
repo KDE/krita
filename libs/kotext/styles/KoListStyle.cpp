@@ -20,10 +20,10 @@
 #include "KoListStyle.h"
 #include "KoListLevelProperties.h"
 #include "KoTextBlockData.h"
+#include "opendocument/KoOpenDocumentLoadingContext.h"
 
 #include <KoStyleStack.h>
 #include <KoOasisStyles.h>
-#include <KoOasisLoadingContext.h>
 #include <KoXmlNS.h>
 #include <kdebug.h>
 #include <QTextCursor>
@@ -201,7 +201,7 @@ KoListStyle* KoListStyle::fromTextList(QTextList *list) {
     return answer;
 }
 
-void KoListStyle::loadOasis(KoOasisLoadingContext& context, const KoXmlElement& style)
+void KoListStyle::loadOasis(KoOpenDocumentLoadingContext& context, const KoXmlElement& style)
 {
     //kDebug()<<"KoListStyle::loadOasis style.localName="<<style.localName()<<endl;
     //KoStyleStack &styleStack = context.styleStack();

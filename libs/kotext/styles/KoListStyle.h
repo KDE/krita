@@ -26,11 +26,10 @@
 #include <QPointer>
 #include <QTextList>
 
-#include <KoOasisLoadingContext.h>
-#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
 class KoListLevelProperties;
-//class KoOasisLoadingContext;
+class KoOpenDocumentLoadingContext;
 
 /**
  * This class groups all styling-options for lists.
@@ -114,11 +113,11 @@ public:
      * Constructor
      * Create a new list style which uses bulletted listitems.
      */
-    KoListStyle();
-    /// copy constructor
+    explicit KoListStyle();
+    /// Copy constructor
     KoListStyle(const KoListStyle &orig);
 
-    // destuctor;
+    /// Destructor
     ~KoListStyle();
 
     KoListLevelProperties level(int level) const;
@@ -148,7 +147,7 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOasis(KoOasisLoadingContext& context, const KoXmlElement& style = KoXmlElement());
+    void loadOasis(KoOpenDocumentLoadingContext& context, const KoXmlElement& style = KoXmlElement());
 
 protected:
     friend class KoParagraphStyle;

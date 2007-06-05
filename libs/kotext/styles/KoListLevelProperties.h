@@ -25,16 +25,18 @@
 #include <QChar>
 #include <QSharedData>
 
-#include <KoOasisLoadingContext.h>
-#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
 class KoListStyle;
-//class KoOasisLoadingContext;
+class KoOpenDocumentLoadingContext;
 
 class KOTEXT_EXPORT KoListLevelProperties {
 public:
-    KoListLevelProperties();
+    /// Constructor
+    explicit KoListLevelProperties();
+    /// Copy constructor
     KoListLevelProperties(const KoListLevelProperties &other);
+    /// Destructor
     ~KoListLevelProperties();
 
     /// set the style to be used for this list-level.
@@ -103,7 +105,7 @@ public:
     /**
      * Load the properties from the \p style using the OpenDocument format.
      */
-    void loadOasis(KoOasisLoadingContext& context, const KoXmlElement& style);
+    void loadOasis(KoOpenDocumentLoadingContext& context, const KoXmlElement& style);
 
 private:
     void setProperty(int key, const QVariant &value);

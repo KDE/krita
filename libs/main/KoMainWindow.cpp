@@ -1438,7 +1438,7 @@ void KoMainWindow::slotCloseAllViews() {
                 it.current()->hide();
                 delete it.current(); // this updates the lists' current pointer and thus
                                      // the iterator (the shell dtor calls removeShell)
-            d->m_rootDoc=0;
+                d->m_rootDoc=0;
             }
         }
         // not embedded -> destroy the document and all shells/views ;)
@@ -1713,7 +1713,7 @@ void KoMainWindow::slotReloadFile()
         return;
 
     bool bOk = KMessageBox::questionYesNo( this,
-                                      i18n("You will lose all your changes!\n"
+                                      i18n("You will lose all changes made since your save\n"
                                            "Do you want to continue?"),
                                       i18n("Warning") ) == KMessageBox::Yes;
     if ( !bOk )

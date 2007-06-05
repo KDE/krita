@@ -15,10 +15,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_transaction.h"
+
 #include "kis_types.h"
 #include "kis_global.h"
-#include "kis_tile.h"
-#include "kis_transaction.h"
 #include "kis_memento.h"
 #include "kis_paint_device.h"
 

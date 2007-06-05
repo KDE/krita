@@ -144,7 +144,7 @@ void KisTile::setData(const quint8 *pixel)
 
 void KisTile::addReader() const
 {
-    //m_lock.lock();
+    m_lock.lock();
     if (m_nReadlock++ == 0)
         KisTileManager::instance()->ensureTileLoaded(this);
     else if (m_nReadlock < 0) {
@@ -152,13 +152,13 @@ void KisTile::addReader() const
         assert(0);
     }
     assert(m_data);
-    //m_lock.unlock();
+    m_lock.unlock();
 }
 
 void KisTile::removeReader() const
 {
-    //m_lock.lock();
+    m_lock.lock();
     if (--m_nReadlock == 0)
         KisTileManager::instance()->maySwapTile(this);
-    //m_lock.unlock();
+    m_lock.unlock();
 }

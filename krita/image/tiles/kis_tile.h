@@ -89,7 +89,7 @@ private:
     qint32 m_col;
     qint32 m_pixelSize;
     KisTile *m_nextTile;
-    QMutex m_lock;
+    mutable QMutex m_lock;
 public:
     static const qint32 WIDTH;
     static const qint32 HEIGHT;

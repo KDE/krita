@@ -27,6 +27,7 @@
 
 #include "kis_view2.h"
 #include "kis_image.h"
+#include "krita_export.h"
 
 class KisPaintOpSettings;
 class KisBrush;
@@ -47,7 +48,7 @@ class KoResource;
    CurrentKritaPaintDevice and CurrentKritaMask, because masks are also important for tools
 
  */
-class KisResourceProvider : public QObject {
+class KRITAUI_EXPORT KisResourceProvider : public QObject {
 
     Q_OBJECT
 

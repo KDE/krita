@@ -30,7 +30,6 @@
 class KoPAPage;
 class KoPAPageBase;
 class KoPAMasterPage;
-class KoPAView;
 
 /// Document class that stores KoPAPage and KoPAMasterPage objects
 class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeControllerBase

@@ -29,7 +29,6 @@ class KoColor;
 class KoXYColorSelector;
 class KoColorSlider;
 class KoColorPatch;
-class QFrame;
 class QLabel;
 class QSpinBox;
 class QRadioButton;

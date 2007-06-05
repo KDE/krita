@@ -25,7 +25,6 @@
 
 #include <koguiutils_export.h>
 
-class QStackedWidget;
 class QWidget;
 
 /**

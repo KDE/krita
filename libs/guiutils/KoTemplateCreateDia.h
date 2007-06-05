@@ -32,8 +32,6 @@ class QString;
 class QPixmap;
 class QWidget;
 class KComponentData;
-class KLineEdit;
-class Q3ListViewItem;
 class KoTemplateCreateDiaPrivate;
 
 /****************************************************************************

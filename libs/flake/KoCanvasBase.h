@@ -34,7 +34,6 @@
 #include "flake_export.h"
 
 class KoCanvasResourceProvider;
-class KoSelection;
 class QUndoCommand;
 class KoShapeManager;
 class KoToolProxy;

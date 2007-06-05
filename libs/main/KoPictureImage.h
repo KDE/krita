@@ -24,7 +24,6 @@
 #include <QString>
 #include <QPixmap>
 
-class KoPictureImagePrivate;
 // TODO: fix documentation
 
 /**

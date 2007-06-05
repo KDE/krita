@@ -26,9 +26,6 @@
 #include <kselectaction.h>
 #include <KoZoomMode.h>
 
-class QSlider;
-class QButtonGroup;
-class KActionCollection;
 
 /**
  * Class KoZoomAction implements an action to provide zoom values.

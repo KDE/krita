@@ -29,7 +29,6 @@
 
 #include <KoGenericRegistry.h>
 
-class QStringList;
 class KisPaintDeviceAction;
 class KoColorSpace;
 class KoColorSpaceFactory;

@@ -26,7 +26,6 @@
 #include "KoDocument.h"
 
 class QPushButton;
-class QToolButton;
 class QTreeWidget;
 class Q3MultiLineEdit;
 

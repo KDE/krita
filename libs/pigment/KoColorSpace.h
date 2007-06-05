@@ -39,7 +39,6 @@ class KoCompositeOp;
 class KoColorProfile;
 class KoColorSpaceRegistry;
 class KoColorTransformation;
-class KisMathToolbox;
 class KisFilter;
 class QBitArray;
 

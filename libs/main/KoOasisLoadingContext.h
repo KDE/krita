@@ -19,11 +19,8 @@
 #ifndef KOOASISLOADINGCONTEXT_H
 #define KOOASISLOADINGCONTEXT_H
 
-class KoXmlWriter;
-class QDomElement;
 class KoDocument;
 class KoOasisStyles;
-class KoPictureCollection;
 class KoStore;
 
 #include <QMap>

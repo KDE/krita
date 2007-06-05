@@ -42,7 +42,6 @@ class KoXmlText;
 class KoXmlCDATASection;
 class KoXmlDocumentType;
 class KoXmlDocument;
-class KoXmlNodeData;
 
 #endif
 

@@ -30,7 +30,6 @@
 struct Property;
 class KoCharacterStyle;
 class KoListStyle;
-class StylePrivate;
 class QTextBlock;
 class KoStyleStack;
 

@@ -27,7 +27,6 @@
 #include "koguiutils_export.h"
 
 class KoUnitDoubleSpinBox;
-class KoPagePreview;
 
 /**
  * This class is a widget that shows the KoKWHeaderFooter data structure and allows the user to change it.

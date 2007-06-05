@@ -25,7 +25,6 @@
 #include <kotext_export.h>
 
 class QTextDocument;
-class QTextCursor;
 class KoXmlWriter;
 
 /**

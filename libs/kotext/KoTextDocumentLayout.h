@@ -31,7 +31,6 @@ class KoTextDocumentLayout;
 class KoShape;
 class KoStyleManager;
 class QTextLayout;
-class QTextList;
 class KoInlineTextObjectManager;
 
 /**

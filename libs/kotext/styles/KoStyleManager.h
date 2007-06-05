@@ -28,7 +28,6 @@
 class KoCharacterStyle;
 class KoParagraphStyle;
 class ChangeFollower;
-class KoStyleManagerPrivate;
 
 /**
  * Manages all character and pargraph styles for any number of documents.

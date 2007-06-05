@@ -33,7 +33,6 @@
 
 class QDomDocument;
 class QDomElement;
-class QDomNode;
 class KoStore;
 class KoXmlWriter;
 

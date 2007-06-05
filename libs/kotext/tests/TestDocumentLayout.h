@@ -10,10 +10,8 @@
 
 class QPainter;
 class KoViewConverter;
-class KoStyleManager;
 class MockTextShape;
 class QTextDocument;
-class QTextLayout;
 
 class TestDocumentLayout : public QObject {
     Q_OBJECT

@@ -37,7 +37,6 @@ class KoView;
 class KoMainWindowPrivate;
 class KUrl;
 class KRecentFilesAction;
-class KoFilterManager;
 // class DCOPObject;
 class QDockWidget;
 class KoDockFactory;

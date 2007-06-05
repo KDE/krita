@@ -31,7 +31,6 @@
 
 #include <koguiutils_export.h>
 
-class QPaintDevice;
 class KoView;
 class KoZoomHandler;
 

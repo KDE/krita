@@ -40,7 +40,6 @@
 //class KoParagraphStyle;
 //class KoCharacterStyle;
 //class KoStore;
-class KoOasisStyles;
 class KoOasisLoadingContext;
 class KoStyleManager;
 

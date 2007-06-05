@@ -35,7 +35,6 @@ namespace Kross {
     //class FormFileWidget;
 }
 
-class KoScriptManagerCollection;
 class KoScriptManagerAddWizard;
 
 /**

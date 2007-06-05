@@ -27,8 +27,6 @@
 #include <QUndoCommand>
 #include <QList>
 
-class QString;
-class KoShapeMoveCommand;
 class KoShape;
 
 /// The undo / redo command for aligning shapes

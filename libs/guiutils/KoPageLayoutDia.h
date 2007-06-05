@@ -29,10 +29,7 @@
 #include <kpagedialog.h>
 #include "koguiutils_export.h"
 
-class QComboBox;
 class QLineEdit;
-class QCheckBox;
-class KoUnitDoubleSpinBox;
 class KoPageLayoutColumns;
 class KoPageLayoutSize;
 class KoPageLayoutHeader;

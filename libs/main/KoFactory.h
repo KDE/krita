@@ -22,7 +22,6 @@
 
 #include <kparts/factory.h>
 #include <kofficecore_export.h>
-class KComponentData;
 
 class KOMAIN_EXPORT KoFactory : public KParts::Factory
 {

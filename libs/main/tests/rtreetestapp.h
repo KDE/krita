@@ -30,9 +30,7 @@
 
 class QAction;
 class QActionGroup;
-class QListWidget;
 class QMenu;
-class QTextEdit;
 
 class Data
 {

@@ -32,8 +32,6 @@ class QBuffer;
 class QString;
 class WmfCmd;
 class WinObjHandle;
-class WinObjPenHandle;
-class WinObjBrushHandle;
 struct WmfPlaceableHeader;
 
 /**

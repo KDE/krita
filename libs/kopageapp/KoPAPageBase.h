@@ -32,7 +32,7 @@
 class KoPageLayout;
 class KoOasisLoadingContext;
 class KoPASavingContext;
-
+class KoGenStyle;
 class KoShape;
 
 /**

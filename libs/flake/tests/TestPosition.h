@@ -3,8 +3,6 @@
 
 #include <QtTest/QtTest>
 
-class QPainter;
-class KoViewConverter;
 class KoShape;
 class KoShapeContainer;
 

@@ -30,7 +30,6 @@
 #include <koguiutils_export.h>
 #include <KoUnit.h>
 
-class QPainter;
 class QPaintEvent;
 
 class KoViewConverter;

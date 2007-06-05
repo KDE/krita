@@ -33,7 +33,6 @@ class KUrl;
 class KZip;
 class KArchiveDirectory;
 class KTemporaryFile;
-class KoZipStore;
 struct KoEncryptedStore_EncryptionData;
 
 class KoEncryptedStore : public KoStoreBase

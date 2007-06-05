@@ -43,7 +43,6 @@ class MockGroup : public KoShapeGroup {
     }
 };
 
-class KCommand;
 class KoToolProxy;
 
 class MockCanvas : public KoCanvasBase {

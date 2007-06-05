@@ -32,8 +32,6 @@ class KoCharacterStyle;
 class KoTextShapeData;
 class KoInlineObject;
 class QTextCursor;
-class QStackedWidget;
-class KoTextLocator;
 
 /**
  * The public class that is able to manipulate selected text.

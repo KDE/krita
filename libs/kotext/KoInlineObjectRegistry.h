@@ -25,7 +25,6 @@
 #include <QObject>
 #include <QList>
 
-class KoShape;
 class KoInlineObjectFactory;
 class KoCanvasBase;
 class QAction;

@@ -31,7 +31,6 @@ class KoXmlWriter;
 class QPainter;
 class QSize;
 
-class KUrl;
 
 class KoPictureBase;
 

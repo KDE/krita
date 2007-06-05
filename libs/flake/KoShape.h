@@ -38,10 +38,7 @@
 class QPainter;
 class QRectF;
 class QPainterPath;
-class QVariant;
 
-class KoSelection;
-class KoPointerEvent;
 class KoShapeContainer;
 class KoShapeConnection;
 class KoShapeBorderModel;
@@ -51,7 +48,6 @@ class KoViewConverter;
 class KoShapeApplicationData;
 class KoShapeSavingContext;
 class KoCanvasBase;
-class KoGenStyle;
 class KoShapeLoadingContext;
 
 /**

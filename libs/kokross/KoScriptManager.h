@@ -29,11 +29,6 @@
 
 #include <kdialog.h>
 
-namespace Kross {
-    class GUIClient;
-}
-
-class KoScriptManagerModule;
 
 /**
 * The KoScriptManagerCollection class shows a QListView where the content of a

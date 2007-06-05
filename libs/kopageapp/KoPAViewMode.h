@@ -30,7 +30,6 @@ class QTabletEvent;
 class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
-class QEvent;
 class QPointF;
 
 class KOPAGEAPP_EXPORT KoPAViewMode

@@ -24,9 +24,7 @@
 #include <koguiutils_export.h>
 #include "KoDocumentSectionView.h"
 
-class QTreeView;
 class KoDocumentSectionModel;
-class KoDocumentSectionToolTip;
 
 /**
  * The KoDocumentSectionDelegate is the gui pendant of a

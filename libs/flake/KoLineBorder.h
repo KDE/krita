@@ -30,7 +30,6 @@
 class KoShape;
 class QPainter;
 class QColor;
-class QPen;
 class KoViewConverter;
 
 /**

@@ -27,7 +27,6 @@
 #include <kofficecore_export.h>
 #include "KoGenStyle.h"
 
-class KoXmlWriter;
 
 /**
  * @brief Repository of styles used during saving of OASIS/OOo file.

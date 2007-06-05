@@ -23,9 +23,7 @@
 #include <QPixmap>
 #include <QList>
 
-class KoCustomDocumentCreator;
 class KConfig;
-class KoTemplateGroup;
 class KoOpenPanePrivate;
 class KComponentData;
 class QPixmap;

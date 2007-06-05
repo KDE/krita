@@ -24,8 +24,6 @@
 #include <kofficecore_export.h>
 
 class KoExecutePolicy;
-class DirectPolicy;
-class KoJobsListPolicy;
 
 /**
  * This class represent the glue between a user event and a piece of controlling logic.

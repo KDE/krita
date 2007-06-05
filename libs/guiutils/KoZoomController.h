@@ -28,7 +28,6 @@ class KoCanvasController;
 class KoZoomAction;
 class KoZoomHandler;
 class KActionCollection;
-class QAction;
 class QSize;
 
 #include <KoZoomMode.h>

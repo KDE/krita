@@ -30,7 +30,6 @@
 
 class QPixmap;
 class QByteArray;
-class KoTemplateTree;
 class KoTemplateGroup;
 class QGridLayout;
 class KComponentData;

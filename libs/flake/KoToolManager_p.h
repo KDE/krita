@@ -26,7 +26,6 @@
 #include <kshortcut.h>
 
 class KoToolFactory;
-class KoToolBox;
 class KoShapeManager;
 class KoCanvasBase;
 class KoTool;

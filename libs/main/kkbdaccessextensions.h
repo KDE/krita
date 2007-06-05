@@ -28,7 +28,6 @@
 #include <QEvent>
 
 class KKbdAccessExtensionsPrivate;
-class KMainWindow;
 class KActionCollection;
 
 /** KKbdAccessExtensions is an object that improves accessibility for motor impaired users

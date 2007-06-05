@@ -40,7 +40,6 @@ class KoDockFactory;
 
 // KDE classes
 class KStatusBar;
-class KComponentData;
 class KPrinter;
 class KXmlGuiWindow;
 class KAction;

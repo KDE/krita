@@ -30,7 +30,6 @@ class QGroupBox;
 class QButtonGroup;
 class QComboBox;
 class KoUnitDoubleSpinBox;
-class KoPageLayoutColumns;
 
 /**
  * This class is a widget that shows the KoPageLayout data structure and allows the user to change it.

@@ -26,7 +26,6 @@
 
 class QPainter;
 class QSize;
-class KoPictureEpsPrivate;
 
 // TODO: fix documentation
 

@@ -26,7 +26,6 @@
 #include <kofficecore_export.h>
 
 class KoXmlWriter;
-class QDomElement;
 
 // 1 inch ^= 72 pt
 // 1 inch ^= 25.399956 mm (-pedantic ;p)

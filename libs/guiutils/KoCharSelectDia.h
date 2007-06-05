@@ -25,10 +25,6 @@
 #include <koguiutils_export.h>
 
 class QWidget;
-class QGridLayout;
-class QPushButton;
-class KCharSelect;
-class KButtonBox;
 
 /**
  * A dialog for selecting a character.

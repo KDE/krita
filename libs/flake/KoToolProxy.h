@@ -27,7 +27,6 @@
 #include <QPainter>
 
 class QAction;
-class QPaintEvent;
 class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;

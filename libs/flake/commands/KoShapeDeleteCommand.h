@@ -26,7 +26,6 @@
 #include <QList>
 
 class KoShape;
-class KoShapeContainer;
 class KoShapeControllerBase;
 
 /// The undo / redo command for deleting shapes

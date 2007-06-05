@@ -37,7 +37,6 @@ class EditorItemPrivate;
 class Property;
 class Editor;
 class GroupWidget;
-class QListViewItem;
 
 /*! \brief Item for a single property displayed within Editor object.
    \author Cedric Pasteur <cedric.pasteur@free.fr>

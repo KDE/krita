@@ -33,7 +33,6 @@
 #include <QTime>
 
 class KoInteractionStrategy;
-class KoShapeMoveCommand;
 
 #define KoInteractionTool_ID "InteractionTool"
 

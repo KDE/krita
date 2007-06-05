@@ -24,7 +24,6 @@
 #include <QUndoCommand>
 
 class KoShape;
-class KoShapeContainer;
 class KoShapeControllerBase;
 
 /// The undo / redo command for creating shapes

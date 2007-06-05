@@ -28,7 +28,6 @@
 
 class Q3ListView;
 class Q3ListViewItem;
-class QPushButton;
 
 /**
  *  This dialog presents the user all available

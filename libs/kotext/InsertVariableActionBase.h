@@ -24,7 +24,6 @@
 #include <QString>
 
 class KoCanvasBase;
-class KoInlineTextObjectManager;
 class KoVariable;
 
 /**

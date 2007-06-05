@@ -21,7 +21,6 @@
 #include <KoXmlReader.h>
 
 class QString;
-class QDomDocument;
 class KTemporaryFile;
 class KoXmlWriter;
 class KoStore;

@@ -30,7 +30,6 @@ class KUrl;
 class KoStore;
 class KoDocument;
 class KoDocumentChildPrivate;
-class KoDocumentEntry;
 class KoXmlWriter;
 
 /**

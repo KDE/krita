@@ -27,8 +27,6 @@
 #include "KoPathPointData.h"
 #include <flake_export.h>
 
-class KoParameterShape;
-class KoShapeController;
 
 /// The undo / redo command for path point moving.
 class FLAKE_TEST_EXPORT KoPathControlPointMoveCommand : public QUndoCommand

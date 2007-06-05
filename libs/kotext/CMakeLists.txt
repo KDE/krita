@@ -60,6 +60,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     styles/ChangeFollower.cpp
 
     opendocument/KoOpenDocumentLoader.cpp
+    opendocument/KoOpenDocumentLoadingContext.cpp
  )
 
 kde4_automoc(${kotext_LIB_SRCS})

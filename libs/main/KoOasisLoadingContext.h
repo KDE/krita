@@ -48,7 +48,7 @@ public:
      * @param store pointer to store, if available, for e.g. loading images.
      */
     KoOasisLoadingContext( KoDocument* doc, KoOasisStyles& styles, KoStore* store );
-    ~KoOasisLoadingContext();
+    virtual ~KoOasisLoadingContext();
 
     KoDocument* koDocument() { return m_doc; }
     KoStore* store() { return m_store; }

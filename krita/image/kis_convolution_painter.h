@@ -48,9 +48,9 @@ public:
     qint32 factor;
     qint32 * data;
 
-    KisKernel() : width(0), height(0), offset(0), factor(0), data(0) {};
+    KisKernel() : width(0), height(0), offset(0), factor(0), data(0) {}
 
-    virtual ~KisKernel() { delete [] data; };
+    virtual ~KisKernel() { delete [] data; }
 
     static KisKernelSP fromQImage(const QImage& img);
 

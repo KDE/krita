@@ -29,8 +29,8 @@ class KisCloneLayer;
 
 class KisLayerVisitor {
 public:
-    KisLayerVisitor() {};
-    virtual ~KisLayerVisitor() {};
+    KisLayerVisitor() {}
+    virtual ~KisLayerVisitor() {}
 
 public:
     virtual bool visit(KisPaintLayer *layer) = 0;

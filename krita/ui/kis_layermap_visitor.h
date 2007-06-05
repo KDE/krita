@@ -37,7 +37,7 @@ public:
      * @param layerMap: the map that maps layers to layer shapes
      */
     KisLayerMapVisitor(QMap<KisLayerSP, KoShape*> & layerMap);
-    virtual ~KisLayerMapVisitor() {};
+    virtual ~KisLayerMapVisitor() {}
 
     QMap<KisLayerSP, KoShape*> & layerMap();
 

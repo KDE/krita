@@ -46,8 +46,8 @@ public:
         , m_region(rc)
         , m_exact(exact)
     {
-    };
-    virtual ~KisExtentVisitor() {};
+    }
+    virtual ~KisExtentVisitor() {}
 
     QRegion region() { return m_region; }
 

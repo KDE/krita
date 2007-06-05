@@ -120,7 +120,7 @@ public:
     bool accept(KisLayerVisitor &v)
         {
             return v.visit(this);
-        };
+        }
 
     /**
        Clear the projection or create a projection from the specified
@@ -219,7 +219,7 @@ private:
 
 private:
 
-    inline int reverseIndex(int index) const { return childCount() - 1 - index; };
+    inline int reverseIndex(int index) const { return childCount() - 1 - index; }
     vKisLayerSP m_layers; // Contains the list of all layers
     KisPaintDeviceSP m_projection; // The cached composition of all layers in this group
 

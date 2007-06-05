@@ -33,7 +33,7 @@ class KisPaintLayer;
 class KisOasisSaveVisitor : public KisLayerVisitor {
 public:
     KisOasisSaveVisitor(KoOasisStore* os);
-    virtual ~KisOasisSaveVisitor() {};
+    virtual ~KisOasisSaveVisitor() {}
 
 public:
     bool visit(KisPaintLayer *layer);

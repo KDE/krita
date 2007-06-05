@@ -87,7 +87,7 @@ private:
 public:
 
     void setLayer(KisLayerSP layer);
-    void setProfile(KoColorProfile * profile) { m_profile = profile; };
+    void setProfile(KoColorProfile * profile) { m_profile = profile; }
     void setPaintDevice(KisPaintDeviceSP pd);
     void buildPreviews();
     void setCurrentFilter(KoID filter);

@@ -68,7 +68,7 @@ public:
 
 public:
     // Overide KoDocument
-    virtual bool wantExportConfirmation() const { return false; };
+    virtual bool wantExportConfirmation() const { return false; }
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
     virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );

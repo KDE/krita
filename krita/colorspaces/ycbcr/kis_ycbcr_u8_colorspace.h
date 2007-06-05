@@ -48,13 +48,13 @@ public:
     /**
      * lcms colorspace type definition.
      */
-   virtual quint32 colorSpaceType() { return TYPE_YCbCr_8; };
+   virtual quint32 colorSpaceType() { return TYPE_YCbCr_8; }
 
-    virtual icColorSpaceSignature colorSpaceSignature() { return icSigYCbCrData; };
+    virtual icColorSpaceSignature colorSpaceSignature() { return icSigYCbCrData; }
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisYCbCrU8ColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisYCbCrU8ColorSpace(parent, p); }
 
-    virtual QString defaultProfile() { return ""; };
+    virtual QString defaultProfile() { return ""; }
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_H_

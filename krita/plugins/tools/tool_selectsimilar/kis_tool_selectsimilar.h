@@ -93,7 +93,7 @@ public:
             setIcon( "tool_similar_selection" );
             setShortcut( KShortcut(Qt::CTRL + Qt::Key_E) );
             setPriority( 0 );
-        };
+        }
 
     virtual ~KisToolSelectSimilarFactory(){}
 

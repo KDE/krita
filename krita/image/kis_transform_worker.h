@@ -40,7 +40,7 @@ public:
     ~KisTransformWorker();
 
 public:
-    bool isCanceled() { return m_cancelRequested;};
+    bool isCanceled() { return m_cancelRequested;}
 
     bool run();
 

@@ -243,7 +243,7 @@ public:
     KisGradientSegment *segmentAt(double t) const;
 
 protected:
-    inline void pushSegment( KisGradientSegment* segment ) { m_segments.push_back(segment); };
+    inline void pushSegment( KisGradientSegment* segment ) { m_segments.push_back(segment); }
     void setImage(const QImage& img);
 
     QList<KisGradientSegment *> m_segments;

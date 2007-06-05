@@ -125,7 +125,7 @@ protected:
     void setWidth(qint32 w);
     void setHeight(qint32 h);
     void setImage(const QImage& img);
-    void setBrushType(enumBrushType type) { m_brushType = type; };
+    void setBrushType(enumBrushType type) { m_brushType = type; }
     static double scaleForPressure(double pressure);
 
 private:

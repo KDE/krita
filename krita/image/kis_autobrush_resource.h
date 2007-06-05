@@ -35,7 +35,7 @@ class KRITAIMAGE_EXPORT KisAutobrushShape {
          * @param fv vertical fade (fv \< h / 2 )
          */
         KisAutobrushShape(qint32 w, qint32 h, double fh, double fv) : m_w(w), m_h(h), m_fh(fh), m_fv(fv)
-        { };
+        { }
         void createBrush( QImage* img);
         /**
          * @return the alpha value at the position (x,y)
@@ -85,8 +85,8 @@ class KRITAIMAGE_EXPORT KisAutobrushResource : public KisBrush
         {
             setImage(img);
             setBrushType(MASK);
-        };
+        }
     public:
-        virtual bool load() { return false; };
+        virtual bool load() { return false; }
 };
 #endif // _KIS_AUTOBRUSH_RESOURCE_H_

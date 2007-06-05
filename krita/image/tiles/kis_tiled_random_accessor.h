@@ -41,8 +41,8 @@ class KisTiledRandomAccessor : public KShared {
 
 
     private:
-        inline quint32 xToCol(quint32 x) const { if (m_ktm) return m_ktm->xToCol(x); else return 0; };
-        inline quint32 yToRow(quint32 y) const { if (m_ktm) return m_ktm->yToRow(y); else return 0; };
+        inline quint32 xToCol(quint32 x) const { if (m_ktm) return m_ktm->xToCol(x); else return 0; }
+        inline quint32 yToRow(quint32 y) const { if (m_ktm) return m_ktm->yToRow(y); else return 0; }
         KisTileInfo* fetchTileData(qint32 col, qint32 row);
 
     public:

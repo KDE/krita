@@ -65,8 +65,8 @@ public:
     virtual void setConfiguration(KisFilterConfiguration * cfg);
     virtual KisFilterConfiguration* configuration() const;
 public:
-    inline qint32 nbValues() const { return m_nbdoubleWidgets; };
-    inline double valueAt( qint32 i ) { return m_doubleWidgets[i]->value(); };
+    inline qint32 nbValues() const { return m_nbdoubleWidgets; }
+    inline double valueAt( qint32 i ) { return m_doubleWidgets[i]->value(); }
 private:
     KisDelayedActionDoubleInput** m_doubleWidgets;
     qint32 m_nbdoubleWidgets;

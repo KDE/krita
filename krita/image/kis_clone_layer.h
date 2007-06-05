@@ -86,7 +86,7 @@ public:
     // KisIndirectPaintingSupport
     KisLayer* layer() {
         return this;
-    };
+    }
 
     void setCopyFrom( KisLayerSP layer, CopyLayerType type );
     KisLayerSP copyFrom() const;

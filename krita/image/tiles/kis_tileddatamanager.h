@@ -84,7 +84,7 @@ protected:
 protected:
 
     void setDefaultPixel(const quint8 *defPixel);
-    const quint8 * defaultPixel() const { return m_defPixel;};
+    const quint8 * defaultPixel() const { return m_defPixel;}
 
     KisMementoSP getMemento();
     void rollback(KisMementoSP memento);

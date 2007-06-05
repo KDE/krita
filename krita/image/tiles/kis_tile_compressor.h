@@ -47,7 +47,7 @@ public:
     void dequeue( KisTile * tile );
 
     virtual void run();
-    void stop() { m_stopped = true; };
+    void stop() { m_stopped = true; }
 
     static void decompress( KisTile * tile );
 

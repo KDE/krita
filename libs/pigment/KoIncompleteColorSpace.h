@@ -45,7 +45,7 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
     public:
         
         virtual bool hasHighDynamicRange() const { return false; }
-        virtual KoColorProfile * profile() const { return 0; };
+        virtual KoColorProfile * profile() const { return 0; }
         
         virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile=0) const
         {

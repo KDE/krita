@@ -32,8 +32,8 @@ class DYNAMIC_BRUSH_EXPORT KisSizeTransformation : public KisDynamicTransformati
         KisSizeTransformation(KisDynamicSensor* hTransfoParameter, KisDynamicSensor* vTransfoParameter);
         virtual ~KisSizeTransformation();
     public:
-        virtual QString id() { return "size="; };
-        virtual QString name() { return i18n("size"); };
+        virtual QString id() { return "size="; }
+        virtual QString name() { return i18n("size"); }
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
         virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
         virtual QWidget* createConfigWidget(QWidget* parent);

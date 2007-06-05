@@ -110,12 +110,12 @@ public:
     inline bool isSelected() const
         {
             return (m_selectionAccessor) ? *(m_selectionAccessor->rawData()) > SELECTION_THRESHOLD : true;
-        };
+        }
 
     inline quint8 operator[](int index) const
         {
 	    return m_underlyingAccessor->rawData()[index];
-	};
+	}
 
     /**
      * Returns the degree of selectedness of the pixel.
@@ -123,7 +123,7 @@ public:
     inline quint8 selectedness() const
         {
             return (m_selectionAccessor) ? *(m_selectionAccessor->rawData()) : MAX_SELECTED;
-        };
+        }
 
     /**
      * Returns the selectionmask from the current point; this is guaranteed

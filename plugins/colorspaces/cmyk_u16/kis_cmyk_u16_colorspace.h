@@ -43,9 +43,9 @@ class KisCmykU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual QString id() const { return "CMYKA16"; }
         virtual QString name() const { return i18n("CMYK (16-bit integer/channel)"); }
 
-        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisCmykU16ColorSpace(parent, p); };
+        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisCmykU16ColorSpace(parent, p); }
 
-        virtual QString defaultProfile() { return "Adobe CMYK"; };
+        virtual QString defaultProfile() { return "Adobe CMYK"; }
 };
 
 

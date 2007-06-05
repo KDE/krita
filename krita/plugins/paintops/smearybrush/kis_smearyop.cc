@@ -53,7 +53,7 @@ public:
     SmearyTuft(qint32 distanceFromCenter, qint32 paintload, KoColor color)
         : m_distanceFromCenter(distanceFromCenter)
         , m_paintload(paintload)
-        , m_color(color) {};
+        , m_color(color) {}
 
     /**
      * Mix the current paint color with the color found
@@ -67,7 +67,7 @@ public:
         // else mix the color; the harder the pressure, the more mixed the color will be
         // if the pressure is really hard, take the color from all layers under this layer
         // if there's little paint on the brush, pick up some from the canvas
-    };
+    }
 
     /**
      * Paint the tuft footprint (calculated from the pressure) at the given position
@@ -75,7 +75,7 @@ public:
     void paintAt(const QPointF & /*pos*/, double /*pressure*/, KisPaintDeviceSP /*dev*/)
     {
         //
-    };
+    }
 
 public:
     qint32 m_distanceFromCenter;

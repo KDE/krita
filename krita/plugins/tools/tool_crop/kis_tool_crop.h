@@ -145,7 +145,7 @@ public:
             setToolType( dynamicToolType() );
             setPriority(0);
             setIcon("tool_crop");
-        };
+        }
 
     virtual ~KisToolCropFactory(){}
 

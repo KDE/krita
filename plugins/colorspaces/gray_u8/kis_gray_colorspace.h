@@ -42,9 +42,9 @@ public:
     virtual QString id() const { return "GRAYA"; }
     virtual QString name() const { return i18n("Grayscale (8-bit integer/channel)"); }
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisGrayAU8ColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisGrayAU8ColorSpace(parent, p); }
 
-    virtual QString defaultProfile() { return "gray built-in - (lcms internal)"; };
+    virtual QString defaultProfile() { return "gray built-in - (lcms internal)"; }
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_

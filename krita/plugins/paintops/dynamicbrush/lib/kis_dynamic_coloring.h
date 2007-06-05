@@ -44,7 +44,7 @@ class KisPlainColoring : public KisDynamicColoring {
         virtual void darken(qint32 v);
         virtual void resize(double , double ) {
             // Do nothing as plain color doesn't have size
-        };
+        }
         virtual void colorAt(int x, int y, KoColor*);
     private:
         KoColor m_color;

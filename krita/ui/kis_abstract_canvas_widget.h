@@ -43,7 +43,7 @@ public:
      * Prescale the canvas represention of the image (if necessary, it
      * is for QPainter, not for OpenGL).
      */
-    virtual void preScale() {};
+    virtual void preScale() {}
 
     /**
      * Prescale the canvas represetation of the image.

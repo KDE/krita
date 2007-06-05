@@ -40,8 +40,8 @@ class KisSubPerspectiveGrid {
     public:
         KisSubPerspectiveGrid(KisPerspectiveGridNodeSP topLeft, KisPerspectiveGridNodeSP topRight, KisPerspectiveGridNodeSP bottomRight, KisPerspectiveGridNodeSP bottomLeft);
         
-        inline QPointF topBottomVanishingPoint() { return computeVanishingPoint( topLeft(), topRight(), bottomLeft(), bottomRight() ); };
-        inline QPointF leftRightVanishingPoint() { return computeVanishingPoint( topLeft(), bottomLeft(), topRight(), bottomRight() ); };
+        inline QPointF topBottomVanishingPoint() { return computeVanishingPoint( topLeft(), topRight(), bottomLeft(), bottomRight() ); }
+        inline QPointF leftRightVanishingPoint() { return computeVanishingPoint( topLeft(), bottomLeft(), topRight(), bottomRight() ); }
         
         inline KisSubPerspectiveGrid* leftGrid() { return m_leftGrid; }
         inline void setLeftGrid(KisSubPerspectiveGrid* g) { Q_ASSERT(m_leftGrid==0); m_leftGrid = g; }

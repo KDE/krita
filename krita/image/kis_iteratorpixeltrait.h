@@ -36,12 +36,12 @@ public:
     : m_underlyingIterator(underlyingIterator)
     {
         m_selectionIterator = NULL;
-    };
+    }
 
     ~KisIteratorPixelTrait()
     {
         delete m_selectionIterator;
-    };
+    }
 
     KisIteratorPixelTrait(const KisIteratorPixelTrait& rhs)
     {
@@ -81,7 +81,7 @@ public:
      * channel index actually exists in this colorspace.
      */
     inline quint8 operator[](int index) const
-            { return m_underlyingIterator->rawData()[index]; };
+            { return m_underlyingIterator->rawData()[index]; }
 
     /**
      * Returns if the pixel is selected or not. This is much faster than first building a KisPixel
@@ -92,7 +92,7 @@ public:
                 return *(m_selectionIterator->rawData()) > SELECTION_THRESHOLD;
             else
                 return true;
-        };
+        }
 
     /**
       * Returns the degree of selectedness of the pixel.
@@ -104,7 +104,7 @@ public:
             else {
                 return MAX_SELECTED;
             }
-        };
+        }
 
     /**
      * Returns the selectionmask from the current point; this is guaranteed
@@ -123,10 +123,10 @@ public:
 
 protected:
 
-    inline void advance(int n){if (m_selectionIterator) for(int i=0; i< n; i++) ++(*m_selectionIterator);};
-    inline void retreat(){if (m_selectionIterator) --(*m_selectionIterator);};
+    inline void advance(int n){if (m_selectionIterator) for(int i=0; i< n; i++) ++(*m_selectionIterator);}
+    inline void retreat(){if (m_selectionIterator) --(*m_selectionIterator);}
 
-    void setSelectionIterator(_iTp *si){m_selectionIterator = si;};
+    void setSelectionIterator(_iTp *si){m_selectionIterator = si;}
 
     _iTp *m_underlyingIterator;
     _iTp *m_selectionIterator;

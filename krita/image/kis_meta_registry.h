@@ -29,7 +29,7 @@ public:
     virtual ~KisMetaRegistry();
     static KisMetaRegistry* instance();
 
-    KisMathToolboxFactoryRegistry* mtRegistry() { return m_mtRegistry; };
+    KisMathToolboxFactoryRegistry* mtRegistry() { return m_mtRegistry; }
 
 private:
 

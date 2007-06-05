@@ -108,7 +108,7 @@ public:
     QBitArray channelFlags()
         {
             return m_channelFlags;
-        };
+        }
 
     /**
      * Set the channel flags. An empty array is allowed; that means

@@ -40,9 +40,9 @@ class KisCmykU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual QString id() const { return "CMYK"; }
         virtual QString name() const { return i18n("CMYK (8-bit integer/channel)"); }
 
-        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisCmykU8ColorSpace(parent, p); };
+        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisCmykU8ColorSpace(parent, p); }
 
-        virtual QString defaultProfile() { return "Adobe CMYK"; };
+        virtual QString defaultProfile() { return "Adobe CMYK"; }
 };
 
 

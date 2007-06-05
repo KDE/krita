@@ -45,8 +45,8 @@ protected:
     bool m_writable;
 
 protected:
-    inline quint32 xToCol(quint32 x) const { if (m_ktm) return m_ktm->xToCol(x); else return 0; };
-    inline quint32 yToRow(quint32 y) const { if (m_ktm) return m_ktm->yToRow(y); else return 0; };
+    inline quint32 xToCol(quint32 x) const { if (m_ktm) return m_ktm->xToCol(x); else return 0; }
+    inline quint32 yToRow(quint32 y) const { if (m_ktm) return m_ktm->yToRow(y); else return 0; }
     void fetchTileData(qint32 col, qint32 row);
 
 public:
@@ -57,10 +57,10 @@ public:
 
 public:
     // current x position
-    qint32 x() const { return m_x; };
+    qint32 x() const { return m_x; }
 
     // cirrent y position
-    qint32 y() const { return m_y; };
+    qint32 y() const { return m_y; }
 
     /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
     quint8 *rawData() const;

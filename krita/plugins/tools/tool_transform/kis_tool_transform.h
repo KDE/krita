@@ -82,8 +82,8 @@ private:
 
     void transform();
     void recalcOutline();
-    QPointF rot(double x, double y) { return QPointF(m_cosa*x - m_sina*y, m_sina*x + m_cosa*y);};
-    QPointF invrot(double x, double y) { return QPointF(m_cosa*x + m_sina*y, -m_sina*x + m_cosa*y);};
+    QPointF rot(double x, double y) { return QPointF(m_cosa*x - m_sina*y, m_sina*x + m_cosa*y);}
+    QPointF invrot(double x, double y) { return QPointF(m_cosa*x + m_sina*y, -m_sina*x + m_cosa*y);}
     int det(QPointF v,QPointF w);
     double distsq(QPointF v,QPointF w);
     void setFunctionalCursor();
@@ -139,7 +139,7 @@ public:
             setPriority( 0 );
 
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
-        };
+        }
 
     virtual ~KisToolTransformFactory(){}
 

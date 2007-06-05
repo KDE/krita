@@ -59,8 +59,8 @@ public:
 
 public:
 
-    void setChooser(KisItemChooser * chooser) { m_chooser = chooser; };
-    KisItemChooser * chooser() { return m_chooser; };
+    void setChooser(KisItemChooser * chooser) { m_chooser = chooser; }
+    KisItemChooser * chooser() { return m_chooser; }
 
 private:
     KisItemChooser * m_chooser;
@@ -77,7 +77,7 @@ class KisControlFrame : public QObject  //: public KToolBar
 
 public:
     KisControlFrame(KXmlGuiWindow * window, KisView2 * view, const char *name = 0 );
-    virtual ~KisControlFrame() {};
+    virtual ~KisControlFrame() {}
 
 public slots:
 

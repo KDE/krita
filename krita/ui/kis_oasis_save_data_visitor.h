@@ -33,7 +33,7 @@ class KisPaintLayer;
 class KisOasisSaveDataVisitor : public KisLayerVisitor {
 public:
     KisOasisSaveDataVisitor(KoOasisStore* os, KoXmlWriter* manifestWriter);
-    virtual ~KisOasisSaveDataVisitor() {};
+    virtual ~KisOasisSaveDataVisitor() {}
 
 public:
     bool visit(KisPaintLayer *layer);

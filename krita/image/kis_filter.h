@@ -107,13 +107,13 @@ public:
     /**
      * If true, this filter can be used in painting tools as a paint operation
      */
-    virtual bool supportsPainting() { return false; };
+    virtual bool supportsPainting() { return false; }
 
     /// This filter can be displayed in a preview dialog
-    virtual bool supportsPreview() { return false; };
+    virtual bool supportsPreview() { return false; }
 
     /// This filter can be used in adjustment layers
-    virtual bool supportsAdjustmentLayers() { return supportsPreview(); };
+    virtual bool supportsAdjustmentLayers() { return supportsPreview(); }
 
     /**
      * Return a list of default configuration to demonstrates the use of the filter
@@ -144,14 +144,14 @@ public:
      * Can this filter work incrementally when painting, or do we need to work
      * on the state as it was before painting started. The former is faster.
      */
-    virtual bool supportsIncrementalPainting() { return true; };
+    virtual bool supportsIncrementalPainting() { return true; }
 
     /**
      * This filter supports cutting up the work area and filtering
      * each chunk in a separate thread. Filters that need access to the
      * whole area for correct computations should return false.
      */
-    virtual bool supportsThreading() { return true; };
+    virtual bool supportsThreading() { return true; }
 
     /**
      * Used when threading is used -- the overlap margin is passed to the
@@ -176,7 +176,7 @@ public:
      *
      * @return the degree of independence
      */
-    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_RGBA8; };
+    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_RGBA8; }
 
     /**
      * Determine if this filter can work with this colorSpace. For instance, some
@@ -200,10 +200,10 @@ public:
     inline QString name() const { return m_id.name(); }
 
     /// @return the submenu in the filters menu does filter want to go?
-    inline QString menuCategory() const { return m_category; };
+    inline QString menuCategory() const { return m_category; }
 
     /// @return the i18n'ed string this filter wants to show itself in the menu
-    inline QString menuEntry() const { return m_entry; };
+    inline QString menuEntry() const { return m_entry; }
 
     /**
      * Create the configuration widget for this filter.

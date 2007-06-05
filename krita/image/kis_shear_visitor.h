@@ -35,7 +35,7 @@
 class KisShearVisitor : public KisLayerVisitor {
 public:
     KisShearVisitor(double xshear, double yshear, KisProgressDisplayInterface *progress)
-        : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {};
+        : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {}
 
     void setStrategy(KisFilterStrategy* strategy) { m_strategy = strategy; }
     void setUndoAdapter(KisUndoAdapter* undo) { m_undo = undo; }

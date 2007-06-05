@@ -55,23 +55,23 @@ public:
     KisAnnotation(const QString & type, const QString & description, const QByteArray & data)
         : m_type(type),
           m_description(description),
-          m_annotation(data) {};
+          m_annotation(data) {}
 
     /**
      * @return a non-localized string identifiying the type of the annotation
      */
-    QString & type() {return m_type;};
+    QString & type() {return m_type;}
 
     /**
      * @return a localized string describing the type of the annotations
      *         for user interface purposes.
      */
-    QString & description() {return m_description;};
+    QString & description() {return m_description;}
 
     /**
      * @return a binary blob representation of this annotation
      */
-    QByteArray & annotation() { return m_annotation;};
+    QByteArray & annotation() { return m_annotation;}
 
 private:
 

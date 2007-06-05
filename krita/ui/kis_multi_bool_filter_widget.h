@@ -47,8 +47,8 @@ public:
     virtual void setConfiguration(KisFilterConfiguration * cfg);
     virtual KisFilterConfiguration* configuration() const;
 public:
-    inline qint32 nbValues() const { return m_boolWidgets.count(); };
-    inline bool valueAt( qint32 i ) const { return m_boolWidgets[i]->isChecked(); };
+    inline qint32 nbValues() const { return m_boolWidgets.count(); }
+    inline bool valueAt( qint32 i ) const { return m_boolWidgets[i]->isChecked(); }
 private:
     QVector<QCheckBox*> m_boolWidgets;
     QString m_filterid;

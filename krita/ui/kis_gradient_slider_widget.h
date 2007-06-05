@@ -39,7 +39,7 @@ public:
 public:
     virtual void paintEvent ( QPaintEvent * );
     void setGradientResource( KisAutogradientResource* agr);
-    KisGradientSegment* selectedSegment() { return m_selectedSegment; };
+    KisGradientSegment* selectedSegment() { return m_selectedSegment; }
 
 signals:
     void sigSelectedSegment(KisGradientSegment*);

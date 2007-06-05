@@ -30,8 +30,8 @@ class KisDoc2;
 
 class KisOasisLoadVisitor {
 public:
-    KisOasisLoadVisitor(KisDoc2* doc, KoOasisStore* os) : m_doc(doc), m_oasisStore(os) {};
-    virtual ~KisOasisLoadVisitor() {};
+    KisOasisLoadVisitor(KisDoc2* doc, KoOasisStore* os) : m_doc(doc), m_oasisStore(os) {}
+    virtual ~KisOasisLoadVisitor() {}
 
 public:
     void loadImage(const QDomElement& elem);

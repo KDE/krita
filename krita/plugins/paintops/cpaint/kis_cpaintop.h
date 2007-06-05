@@ -66,7 +66,7 @@ public:
     int ink() const;
     int water() const;
 
-    QWidget * widget() const { return m_optionsWidget; };
+    QWidget * widget() const { return m_optionsWidget; }
 
 private slots:
 

@@ -35,11 +35,11 @@ class KRITAIMAGE_EXPORT KisFilterStrategy
 
         QString id() {return m_id.id();}
         QString name() {return m_id.name();}
-        virtual double valueAt(double /*t*/) const {return 0;};
-        virtual quint32 intValueAt(qint32 t) const {return quint32(255*valueAt(t/256.0));};
-        double support() { return supportVal;};
-        quint32 intSupport() { return intSupportVal;};
-        virtual bool boxSpecial() { return false;};
+        virtual double valueAt(double /*t*/) const {return 0;}
+        virtual quint32 intValueAt(qint32 t) const {return quint32(255*valueAt(t/256.0));}
+        double support() { return supportVal;}
+        quint32 intSupport() { return intSupportVal;}
+        virtual bool boxSpecial() { return false;}
     protected:
         double supportVal;
         quint32 intSupportVal;
@@ -66,7 +66,7 @@ class KRITAIMAGE_EXPORT KisBoxFilterStrategy : public KisFilterStrategy
 
         virtual quint32 intValueAt(qint32 t) const;
         virtual double valueAt(double t) const;
-        virtual bool boxSpecial() { return true;};
+        virtual bool boxSpecial() { return true;}
 };
 
 class KRITAIMAGE_EXPORT KisTriangleFilterStrategy : public KisFilterStrategy

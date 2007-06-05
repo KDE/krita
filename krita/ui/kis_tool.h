@@ -64,11 +64,11 @@ public slots:
 
 public:
 
-    virtual void mousePressEvent( KoPointerEvent * ) {};
-    virtual void mouseDoubleClickEvent( KoPointerEvent * ) {};
-    virtual void mouseMoveEvent( KoPointerEvent * ) {};
-    virtual void mouseReleaseEvent( KoPointerEvent * ) {};
-    virtual void wheelEvent( KoPointerEvent * ) {};
+    virtual void mousePressEvent( KoPointerEvent * ) {}
+    virtual void mouseDoubleClickEvent( KoPointerEvent * ) {}
+    virtual void mouseMoveEvent( KoPointerEvent * ) {}
+    virtual void mouseReleaseEvent( KoPointerEvent * ) {}
+    virtual void wheelEvent( KoPointerEvent * ) {}
 
     /// Convert from native (postscript points) to image pixel
     /// coordinates.

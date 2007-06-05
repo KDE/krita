@@ -71,8 +71,8 @@ public:
     virtual KisFilterConfiguration* configuration() const;
 
 public:
-    inline qint32 nbValues() const { return m_nbintegerWidgets; };
-    inline qint32 valueAt( qint32 i ) { return m_integerWidgets[i]->value(); };
+    inline qint32 nbValues() const { return m_nbintegerWidgets; }
+    inline qint32 valueAt( qint32 i ) { return m_integerWidgets[i]->value(); }
 
 private:
     qint32 m_nbintegerWidgets;

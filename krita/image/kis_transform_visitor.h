@@ -87,7 +87,7 @@ public:
 	}
         layer->setDirty();
         return true;
-    };
+    }
 
     bool visit(KisGroupLayer *layer)
     {
@@ -100,7 +100,7 @@ public:
         }
         layer->setDirty();
         return true;
-    };
+    }
 
     virtual bool visit(KisAdjustmentLayer* layer)
     {

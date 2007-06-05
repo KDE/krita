@@ -57,9 +57,9 @@ public:
         return false;
     }
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisRgbF32HDRColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisRgbF32HDRColorSpace(parent, p); }
 
-    virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
+    virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; }
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_H_

@@ -61,7 +61,7 @@ public:
     inline KisLineIteratorPixelBase<T, TSelect> & operator ++() { T::operator++(); KisIteratorPixelTrait<T, TSelect>::advance(1); return *this;}
 
     /// Advances a number of pixels until it reaches the end of the line
-    KisLineIteratorPixelBase<T, TSelect> & operator+=(int n) { T::operator+=(n); KisIteratorPixelTrait<T, TSelect>::advance(n); return *this; };
+    KisLineIteratorPixelBase<T, TSelect> & operator+=(int n) { T::operator+=(n); KisIteratorPixelTrait<T, TSelect>::advance(n); return *this; }
 
     /// @return the x coordinate in the image referential
     qint32 x() const { return T::x() + m_offsetx; }
@@ -111,7 +111,7 @@ public:
     inline KisRectIteratorPixelBase<T, TSelect> & operator ++() { T::operator++(); KisIteratorPixelTrait<T, TSelect>::advance(1); return *this;}
 
     /// Advances a number of pixels until it reaches the end of the line
-    KisRectIteratorPixelBase<T, TSelect> & operator+=(int n) { T::operator+=(n); KisIteratorPixelTrait<T, TSelect>::advance(n); return *this; };
+    KisRectIteratorPixelBase<T, TSelect> & operator+=(int n) { T::operator+=(n); KisIteratorPixelTrait<T, TSelect>::advance(n); return *this; }
 
     /// @return the x coordinate in the image referential
     qint32 x() const { return T::x() + m_offsetx; }

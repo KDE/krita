@@ -26,7 +26,7 @@ class KRITAIMAGE_EXPORT KisProgressSubject : public QObject {
     Q_OBJECT
 
 protected:
-    KisProgressSubject() {};
+    KisProgressSubject() {}
     KisProgressSubject(QObject * parent, const char * name) : QObject(parent) { setObjectName(name); }
     virtual ~KisProgressSubject();
 

@@ -91,6 +91,9 @@ set(kritaimage_LIB_SRCS
    kis_reflectivity_mask.cpp
    kis_transformation_mask.cpp
    kis_clone_layer.cpp
+   metadata/kis_meta_data_entry.cc
+   metadata/kis_meta_data_store.cc
+   metadata/kis_meta_data_value.cc
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})

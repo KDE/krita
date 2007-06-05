@@ -23,7 +23,9 @@
 #include <kdebug.h>
 
 #include <KoCanvasBase.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoColorSpace.h>
+#include <KoID.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
 #include <KoToolProxy.h>
@@ -31,6 +33,10 @@
 #include <KoViewConverter.h>
 
 #include "kis_paint_device.h"
+#include "kis_painter.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
+#include "kis_resource_provider.h"
 
 #include "mixercore.h"
 
@@ -48,11 +54,13 @@ MixerCanvas::~MixerCanvas()
         delete m_tool;
 }
 
-void MixerCanvas::initDevice(KoColorSpace *cs)
+void MixerCanvas::initDevice(KoColorSpace *cs, KisResourceProvider *rp)
 {
     m_canvasDev = new KisPaintDevice(cs);
 
-    m_tool = new MixerTool(this, m_canvasDev.data());
+    // TODO Add painterly masks
+
+    m_tool = new MixerTool(this, m_canvasDev.data(), rp);
     m_toolProxy = new KoToolProxy(this);
     m_toolProxy->setActiveTool(m_tool);
 }
@@ -85,6 +93,7 @@ void MixerCanvas::tabletEvent(QTabletEvent *event)
 void MixerCanvas::updateCanvas(const QRectF& rc)
 {
     // TODO Implement updateCanvas
+
 }
 
 
@@ -92,9 +101,10 @@ void MixerCanvas::updateCanvas(const QRectF& rc)
 // THE MIXER TOOL
 /////////////////
 
-MixerTool::MixerTool(KoCanvasBase *canvas, KisPaintDevice *device)
-    : KoTool(canvas), m_canvasDev(device)
+MixerTool::MixerTool(KoCanvasBase *canvas, KisPaintDevice *device, KisResourceProvider *rp)
+    : KoTool(canvas), m_canvasDev(device), m_resources(rp)
 {
+
 }
 
 MixerTool::~MixerTool()
@@ -109,6 +119,23 @@ void MixerTool::mousePressEvent(KoPointerEvent *event)
 void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 {
     kDebug() << "MOUSE MOVED!! " << event->pos() << endl;
+
+    // TODO Add painterly masks to the stroke.
+    KisPaintDeviceSP stroke = new KisPaintDevice(m_canvasDev->colorSpace());
+
+    KisPainter painter(stroke);
+
+    KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(m_resources->currentPaintop(),
+                                                                  m_resources->currentPaintopSettings(),
+                                                                  &painter, 0);
+
+    painter.setPaintOp(current);
+    painter.paintAt(event->pos(), event->pressure(), event->xTilt(), event->yTilt());
+
+    // TODO Retrieve current paintop and check if it is bidirectional.
+    // TODO If it is, copy the interested rect onto the m_stroke device
+    // TODO and let the paintop do the mixing for us.
+    // TODO If it is not, then mix the colors guessing the paintop properties.
 }
 
 void MixerTool::mouseReleaseEvent(KoPointerEvent *event)

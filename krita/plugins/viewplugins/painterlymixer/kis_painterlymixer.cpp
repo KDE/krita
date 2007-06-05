@@ -20,6 +20,8 @@
 
 #include <QtGui>
 
+#include "kis_canvas2.h"
+#include "kis_resource_provider.h"
 #include "kis_view2.h"
 
 #include "kis_painterlymixer.h"
@@ -29,7 +31,7 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
 {
     setupUi(this);
 
-    m_canvas->initDevice(m_view->image()->colorSpace());
+    m_canvas->initDevice(m_view->image()->colorSpace(), m_view->resourceProvider());
 }
 
 KisPainterlyMixer::~KisPainterlyMixer()

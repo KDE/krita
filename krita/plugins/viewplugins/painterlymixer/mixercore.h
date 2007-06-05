@@ -35,7 +35,7 @@ public:
     MixerCanvas(QWidget *parent);
     ~MixerCanvas();
 
-    void initDevice(KoColorSpace *cs);
+    void initDevice(KoColorSpace *cs, KisResourceProvider *rp);
 
 // Events to be redirected to the MixerTool
 protected:
@@ -76,7 +76,7 @@ class MixerTool : public KoTool {
     Q_OBJECT
 
 public:
-    MixerTool(KoCanvasBase *canvas, KisPaintDevice *device);
+    MixerTool(KoCanvasBase *canvas, KisPaintDevice *device, KisResourceProvider *rp);
     ~MixerTool();
 
 // Implement KoTool
@@ -90,6 +90,7 @@ public:
 
 private:
     KisPaintDevice *m_canvasDev;
+    KisResourceProvider *m_resources;
 
 };
 

@@ -27,11 +27,10 @@ class KisScriptFilter::Private
 {
     public:
         Kross::Action* action;
-        QString category;
         explicit Private(Kross::Action* a) : action(a) {}
 };
 
-KisScriptFilter::KisScriptFilter(Kross::Action* action) : KisFilter(KoID(action->name(),action->text()), "adjust", action->text()), d(new Private(action))
+KisScriptFilter::KisScriptFilter(Kross::Action* action) : KisFilter(KoID(action->name(),action->text()), action->property("category").toString(), action->text()), d(new Private(action))
 {
     d->action->addObject(this, "KritaFilter", Kross::ChildrenInterface::AutoConnectSignals);
 }
@@ -54,6 +53,28 @@ void KisScriptFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
 
     emit scriptProcess(new Scripting::ConstPaintDevice(src, 0), srcTopLeft, new Scripting::PaintDevice(dst, 0), dstTopLeft, size, 0);
     setProgressDone(); // Must be called even if you don't really support progression
+}
+
+bool KisScriptFilter::supportsPainting()
+{
+    return d->action->property("supportsPainting").toBool();
+}
+bool KisScriptFilter::supportsPreview()
+{
+    return d->action->property("supportsPreview").toBool();
+}
+bool KisScriptFilter::supportsAdjustmentLayers()
+{
+    return d->action->property("supportsAdjustmentLayers").toBool();
+}
+
+bool KisScriptFilter::supportsIncrementalPainting()
+{
+    return d->action->property("supportsIncrementalPainting").toBool();
+}
+bool KisScriptFilter::supportsThreading()
+{
+    return d->action->property("supportsThreading").toBool();
 }
 
 #include "kis_script_filter.moc"

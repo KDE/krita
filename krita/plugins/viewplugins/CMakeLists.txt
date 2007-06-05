@@ -14,6 +14,7 @@ add_subdirectory( shearimage )
 add_subdirectory( together )
 add_subdirectory( scripting )
 add_subdirectory( bracketing2hdr )
+add_subdirectory( metadataeditor )
 
 find_package(GMM)
 

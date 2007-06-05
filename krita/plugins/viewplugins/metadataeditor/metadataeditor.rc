@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritametadataeditor" version="1">
+<MenuBar>
+    <Menu name="Test"><text>&amp;Test</text>
+		<Action name="metadataeditor"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

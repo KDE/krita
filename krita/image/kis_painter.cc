@@ -49,6 +49,7 @@
 #include "kis_types.h"
 #include "kis_vec.h"
 #include "kis_iterators_pixel.h"
+#include "kis_random_accessor.h"
 #include "kis_paintop.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
@@ -270,6 +271,9 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     qint32 srcY = sy;
     qint32 rowsRemaining = sh;
 
+    KisRandomConstAccessorPixel srcIt = srcdev->createRandomConstAccessor(sx,sy);
+    KisRandomAccessorPixel dstIt = m_device->createRandomAccessor(dx,dy);
+
     while (rowsRemaining > 0) {
 
         qint32 dstX = dx;
@@ -290,11 +294,11 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
             columns = qMin(columns, columnsRemaining);
 
             qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
-            KisHLineConstIteratorPixel srcIt = srcdev->createHLineConstIterator(srcX, srcY, columns);
+            srcIt.moveTo(srcX, srcY);
             const quint8 *srcData = srcIt.rawData();
 
             qint32 dstRowStride = m_device->rowStride(dstX, dstY);
-            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns);
+            dstIt.moveTo(dstX, dstY);
             quint8 *dstData = dstIt.rawData();
 
             m_colorSpace->bitBlt(dstData,

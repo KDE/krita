@@ -1713,7 +1713,7 @@ void KoMainWindow::slotReloadFile()
         return;
 
     bool bOk = KMessageBox::questionYesNo( this,
-                                      i18n("You will lose all changes made since your save\n"
+                                      i18n("You will lose all changes made since your last save\n"
                                            "Do you want to continue?"),
                                       i18n("Warning") ) == KMessageBox::Yes;
     if ( !bOk )

@@ -47,9 +47,6 @@ KisTileManager* KisTileManager::m_singleton = 0;
 
 static KStaticDeleter<KisTileManager> staticDeleter;
 
-// ### Don't use QMutexLocker for the all mutexes -- the creation of
-// the object is too costly.
-
 KisTileManager::KisTileManager()
     : m_bigKritaLock( QMutex::Recursive )
 {
@@ -274,7 +271,7 @@ void KisTileManager::configChanged() {
     KConfigGroup cfg = KGlobal::config()->group("");
     m_maxInMem = cfg.readEntry("maxtilesinmem",  4000);
     m_swappiness = cfg.readEntry("swappiness", 100);
-    m_bigKritaLock.unlock();
+
     doSwapping();
     m_bigKritaLock.unlock();
 }

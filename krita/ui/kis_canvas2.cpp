@@ -111,6 +111,7 @@ public:
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
 #endif
+    bool updateAllOfQPainterCanvas;
 };
 
 KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc)
@@ -169,6 +170,7 @@ void KisCanvas2::createCanvas()
     }
     else {
         createQPainterCanvas();
+        m_d->updateAllOfQPainterCanvas = cfg.updateAllOfQPainterCanvas();
     }
 
 }
@@ -260,9 +262,14 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     // updates, so no need to prescale!
 
     // First convert from document coordinated to widget coordinates
-    QRect vRect = viewRectFromDoc( rc );
-    if ( !vRect.isEmpty() ) {
-        m_d->canvasWidget->widget()->update( vRect );
+    if ( m_d->updateAllOfQPainterCanvas ) {
+        m_d->canvasWidget->widget()->update();
+    }
+    else {
+        QRect vRect = viewRectFromDoc( rc );
+        if ( !vRect.isEmpty() ) {
+            m_d->canvasWidget->widget()->update( vRect );
+        }
     }
 }
 
@@ -288,7 +295,13 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
 
     if ( !vRect.isEmpty() ) {
         m_d->canvasWidget->preScale( vRect );
-        m_d->canvasWidget->widget()->update( vRect );
+
+        if ( m_d->updateAllOfQPainterCanvas ) {
+            m_d->canvasWidget->widget()->update();
+        }
+        else {
+            m_d->canvasWidget->widget()->update( vRect );
+        }
     }
 }
 
@@ -414,6 +427,7 @@ void KisCanvas2::resetCanvas()
         }
     }
 #endif
+    m_d->updateAllOfQPainterCanvas = cfg.updateAllOfQPainterCanvas();
     m_d->canvasWidget->widget()->update();
 }
 

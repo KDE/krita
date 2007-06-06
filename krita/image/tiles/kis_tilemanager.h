@@ -90,6 +90,7 @@ private:
         KTemporaryFile* tempFile;
         off_t fileSize;
     };
+
     // validNode says if you can swap it (true) or not (false) mmapped, if this tile
     // currently is memory mapped. If it is false, but onFile, it is on disk,
     // but not mmapped, and should be mapped!

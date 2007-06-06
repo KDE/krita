@@ -532,7 +532,18 @@ bool KisConfig::useRegionOfInterestInProjection()
 {
     return m_cfg.readEntry( "use_region_of_interest", false);
 }
+
 void KisConfig::setUseRegionOfInterestInProjection( bool use )
 {
     m_cfg.writeEntry( "use_region_of_interest", use );
+}
+
+bool KisConfig::updateAllOfQPainterCanvas()
+{
+    return m_cfg.readEntry( "update_all_of_qpainter_canvas", true );
+}
+
+void KisConfig::setUpdateAllOfQpainterCanvas( bool all )
+{
+    m_cfg.writeEntry( "update_all_of_qpainter_canvas", all );
 }

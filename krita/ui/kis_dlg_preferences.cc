@@ -261,6 +261,7 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name  )
     chkAggregateDirtyRegions->setChecked( cfg.aggregateDirtyRegionsInPainter() );
     intChunkSize->setValue( cfg.projectionChunkSize() );
     intNumThreads->setValue( cfg.numProjectionThreads() );
+    chkUpdateAllOfQPainterCanvas->setChecked( cfg.updateAllOfQPainterCanvas() );
 }
 
 void PerformanceTab::setDefault()
@@ -272,6 +273,7 @@ void PerformanceTab::setDefault()
     chkAggregateDirtyRegions->setChecked( true );
     intChunkSize->setValue( 512 );
     intNumThreads->setValue( QThread::idealThreadCount()  );
+    chkUpdateAllOfQPainterCanvas->setChecked( true );
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -918,6 +920,8 @@ bool PreferencesDialog::editPreferences()
         cfg.setProjectionChunkSize( dialog->m_performanceSettings->intChunkSize->value() );
         cfg.setAggregateDirtyRegionsInPainter( dialog->m_performanceSettings->chkAggregateDirtyRegions->isChecked() );
         cfg.setUseBoundingRectInProjection( dialog->m_performanceSettings->chkUseBoundingRect->isChecked() );
+        cfg.setUpdateAllOfQpainterCanvas( dialog->m_performanceSettings->chkUpdateAllOfQPainterCanvas->isChecked() );
+
         // let the tile manager know
         KisTileManager::instance()->configChanged();
 

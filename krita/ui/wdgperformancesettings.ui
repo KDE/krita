@@ -187,6 +187,19 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
     </widget>
    </item>
    <item row="7" column="0" colspan="2" >
+    <widget class="QCheckBox" name="chkUpdateAllOfQPainterCanvas" >
+     <property name="toolTip" >
+      <string>If checked, the whole canvas is repainted for every change. This is slower, but the bugs in the scaling code don't show up.</string>
+     </property>
+     <property name="text" >
+      <string>Update Whole Canvas</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -196,8 +209,8 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
      </property>
      <property name="sizeHint" >
       <size>
-       <width>355</width>
-       <height>20</height>
+       <width>495</width>
+       <height>101</height>
       </size>
      </property>
     </spacer>

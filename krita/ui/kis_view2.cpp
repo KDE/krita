@@ -573,7 +573,8 @@ void KisView2::connectCurrentImage()
         m_d->birdEyeBox->setImage( img );
 
 // XXX: Why doesn't this compile?
-//    connect( KisConfigNotifier::instance(), SIGNAL( configChanged() ), img->projectionManager(), SLOT( updateSettings() ) );
+//    connect( KisConfigNotifier::instance(), SIGNAL( configChanged()
+//    ), img->projectionManager(), SLOT( updateSettings() ) );
 }
 
 void KisView2::disconnectCurrentImage()

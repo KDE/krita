@@ -166,6 +166,9 @@ public:
     bool useRegionOfInterestInProjection();
     void setUseRegionOfInterestInProjection( bool use );
 
+    bool updateAllOfQPainterCanvas();
+    void setUpdateAllOfQpainterCanvas(bool all);
+
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

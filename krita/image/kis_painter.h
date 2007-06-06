@@ -96,12 +96,6 @@ public:
     /// Returns the current paint device.
     KisPaintDeviceSP device() const { return m_device; }
 
-
-    // -----------------------------------------------------------------
-    //  Native paint methods that are undo/redo-able,
-    // use the color strategies and the composite operations.
-
-
     /**
      * Paint the given QImage onto the current paint device.
      * If necessary, the QImage is first converted to the right

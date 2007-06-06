@@ -25,7 +25,7 @@ class KisView2;
 
 namespace KisMetaData {
     class Store;
-};
+}
 
 /**
  * Template of view plugin

@@ -25,7 +25,7 @@ class QString;
 
 namespace KisMetaData {
     class Value;
-};
+}
 
 class KisEntryEditor : public QObject {
         Q_OBJECT

@@ -64,7 +64,6 @@
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
 #include "kis_debug_areas.h"
-#include "kis_exif_info.h"
 #include "kis_fill_painter.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"

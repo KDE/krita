@@ -45,7 +45,7 @@ class KoColorSpace;
 
 namespace KisMetaData {
     class Store;
-};
+}
 
 /**
  * Abstract class that represents the concept of a Layer in Krita. This is not related

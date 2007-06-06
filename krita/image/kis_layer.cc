@@ -22,6 +22,7 @@
 #include <QIcon>
 #include <QImage>
 #include <QBitArray>
+#include <QMutex>
 
 #include "kis_debug_areas.h"
 #include "kis_group_layer.h"
@@ -42,6 +43,11 @@ static int getID()
 class KisLayer::Private {
 
 public:
+
+    Private()
+        : regionLock( QMutex::Recursive )
+        {
+        }
 
     int id;
     int index;
@@ -64,6 +70,8 @@ public:
     const KoCompositeOp * compositeOp;
 
     QRegion dirtyRegion;
+
+    QMutex regionLock;
 
 };
 
@@ -175,7 +183,9 @@ bool KisLayer::isDirty( const QRect & rect )
 
 void KisLayer::setClean( QRect rc )
 {
+    m_d->regionLock.lock();
     m_d->dirtyRegion -= QRegion( rc );
+    m_d->regionLock.unlock();
 }
 
 int KisLayer::id() const { return m_d->id; }

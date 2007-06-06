@@ -68,8 +68,6 @@ set(kritaimage_LIB_SRCS
    kis_paint_device.cc
    kis_basic_math_toolbox.cpp
    kis_math_toolbox.cpp
-   kis_exif_info.cc
-   kis_exif_value.cc
    kis_filter_strategy.h
    kis_perspective_grid.cpp
    kis_perspective_math.cpp

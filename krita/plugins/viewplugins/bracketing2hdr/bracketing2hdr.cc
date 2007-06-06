@@ -87,6 +87,8 @@ Bracketing2HDRPlugin::~Bracketing2HDRPlugin()
 
 void Bracketing2HDRPlugin::addImage(const QString& filename)
 {
+    // TODO: port to KisMetaData
+#if 0
     KisDoc2 d;
     d.import(filename);
     KisImageSP importedImage = d.image();
@@ -135,6 +137,7 @@ void Bracketing2HDRPlugin::addImage(const QString& filename)
     m_wdgBracketing2HDR->tableWidgetImages->setItem(index, 1, new QTableWidgetItem(QString::number(exposure)));
     m_wdgBracketing2HDR->tableWidgetImages->setItem(index, 2, new QTableWidgetItem(QString::number(aperture)));
     m_wdgBracketing2HDR->tableWidgetImages->setItem(index, 3, new QTableWidgetItem(QString::number(iso)));
+#endif
 }
 
 void Bracketing2HDRPlugin::slotAddImages()

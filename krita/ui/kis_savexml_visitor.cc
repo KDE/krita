@@ -59,11 +59,11 @@ bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
 
     m_elem.appendChild(layerElement);
 
-    if(layer->paintDevice()->hasExifInfo())
+/*    if(layer->paintDevice()->hasExifInfo())
     {
         QDomElement exifElmt = layer->paintDevice()->exifInfo()->save(m_doc);
         layerElement.appendChild(exifElmt);
-    }
+    } TODO: save the metadata*/
     m_count++;
     return true;
 }

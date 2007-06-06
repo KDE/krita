@@ -559,14 +559,16 @@ KisLayerSP KisDoc2::loadPaintLayer(const QDomElement& element, KisImageSP img,
         m_d->layerFilenames[layer.data()] = QString(element.attribute("filename"));
 
     // Load exif info
-    for( QDomNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() )
+/*TODO: write and use the legacy stuff to load that exif tag
+        for( QDomNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() )
     {
         QDomElement e = node.toElement();
         if ( !e.isNull() && e.tagName() == "ExifInfo" )
         {
             layer->paintDevice()->exifInfo()->load(e);
         }
-    }
+    }*/
+    // TODO load metadata
     return KisLayerSP(layer.data());
 }
 

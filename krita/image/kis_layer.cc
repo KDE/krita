@@ -34,6 +34,8 @@
 #include "kis_effect_mask.h"
 #include "kis_transparency_mask.h"
 
+#include "kis_meta_data_store.h"
+
 static int getID()
 {
     static int id = 1;
@@ -68,11 +70,12 @@ public:
     // Operation used to composite this layer with the projection of
     // the layers _under_ this layer
     const KoCompositeOp * compositeOp;
+    
+    KisMetaData::Store* metaDataStore;
 
     QRegion dirtyRegion;
 
     QMutex regionLock;
-
 };
 
 
@@ -91,6 +94,7 @@ KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
     m_d->image = img;
     m_d->compositeOp = const_cast<KoCompositeOp*>( img->colorSpace()->compositeOp( COMPOSITE_OVER ) );
     setObjectName(name);
+    m_d->metaDataStore = new KisMetaData::Store();
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
@@ -109,11 +113,14 @@ KisLayer::KisLayer(const KisLayer& rhs)
         m_d->image = rhs.m_d->image;
         m_d->parent = 0;
         m_d->compositeOp = rhs.m_d->compositeOp;
+        m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
     }
 }
 
 KisLayer::~KisLayer()
 {
+    delete m_d->metaDataStore;
+    delete m_d;
 }
 
 KoColorSpace * KisLayer::colorSpace()
@@ -478,6 +485,11 @@ void KisLayer::removePreviewMask()
     if ( m_d->previewMask ) setDirty( m_d->previewMask->extent() );
 }
 
+KisMetaData::Store* KisLayer::metaData()
+{
+    return m_d->metaDataStore;
+}
+
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t) {
     m_temporaryTarget = t;
 }
@@ -501,7 +513,6 @@ const KoCompositeOp* KisIndirectPaintingSupport::temporaryCompositeOp() const {
 quint8 KisIndirectPaintingSupport::temporaryOpacity() const {
     return m_compositeOpacity;
 }
-
 
 
 #include "kis_layer.moc"

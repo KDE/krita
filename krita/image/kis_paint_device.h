@@ -48,7 +48,6 @@ class QUndoCommand;
 
 class KoStore;
 
-class KisExifInfo;
 class KisImage;
 class KisRandomSubAccessorPixel;
 class KisFilter;
@@ -593,17 +592,6 @@ public:
      * XXX
      */
     KisUndoAdapter *undoAdapter() const;
-
-    /**
-     * Return the exifInfo associated with this layer. If no exif infos are
-     * available, the function will create it.
-     */
-    KisExifInfo* exifInfo();
-    /**
-     * This function return true if the layer has exif info associated with it.
-     */
-    bool hasExifInfo();
-
 
     /**
      * @return the painterly channel with the specified id or 0 if

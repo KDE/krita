@@ -43,6 +43,10 @@ class QBitArray;
 class KisGroupLayer;
 class KoColorSpace;
 
+namespace KisMetaData {
+    class Store;
+};
+
 /**
  * Abstract class that represents the concept of a Layer in Krita. This is not related
  * to the paint devices: this is merely an abstraction of how layers can be stacked and
@@ -289,6 +293,12 @@ public:
      */
     bool hasEffectMasks() const;
 
+    
+    /**
+     * @return the metadata object associated with this object.
+     */
+    KisMetaData::Store* metaData();
+    
 protected:
     /**
      * Apply the effect masks to the given projection, producing

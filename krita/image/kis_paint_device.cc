@@ -54,8 +54,6 @@
 #include "kis_memento.h"
 #include "kis_undo_adapter.h"
 
-#include "kis_exif_info.h"
-
 //#define CACHE_EXACT_BOUNDS
 
 class KisPaintDevice::Private {
@@ -74,7 +72,6 @@ public:
     mutable bool selectionDeselected;
     mutable KisSelectionSP selection;
 
-    KisExifInfo* exifInfo;
     QList<KisFilter*> longRunningFilters;
     QTimer * longRunningFilterTimer;
     QPaintEngine * paintEngine;
@@ -170,9 +167,6 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name)
         return;
     }
 
-    m_d->exifInfo = 0;
-
-
     m_d->longRunningFilterTimer = 0;
 
     m_d->x = 0;
@@ -208,7 +202,6 @@ KisPaintDevice::KisPaintDevice(KisLayerWSP parent, KoColorSpace * colorSpace, co
     setObjectName(name);
     Q_ASSERT( colorSpace );
     m_d->longRunningFilterTimer = 0;
-    m_d->exifInfo = 0;
 
     m_d->x = 0;
     m_d->y = 0;
@@ -267,13 +260,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         m_d->pixelSize = rhs.m_d->pixelSize;
 
         m_d->nChannels = rhs.m_d->nChannels;
-        if(rhs.m_d->exifInfo)
-        {
-            m_d->exifInfo = new KisExifInfo(*rhs.m_d->exifInfo);
-        }
-        else {
-            m_d->exifInfo = 0;
-        }
         m_d->paintEngine = rhs.m_d->paintEngine;
     }
 }
@@ -289,7 +275,6 @@ KisPaintDevice::~KisPaintDevice()
     }
     m_d->longRunningFilters.clear();
     delete m_d->paintEngine;
-    //delete m_d->exifInfo;
     delete m_d;
 }
 
@@ -1272,15 +1257,6 @@ KisDataManagerSP KisPaintDevice::dataManager() const
 {
     return m_datamanager;
 }
-
-KisExifInfo* KisPaintDevice::exifInfo()
-{
-    if(!m_d->exifInfo)
-        m_d->exifInfo = new KisExifInfo();
-    return m_d->exifInfo;
-}
-
-bool KisPaintDevice::hasExifInfo() { return m_d->exifInfo != 0; }
 
 void KisPaintDevice::runBackgroundFilters()
 {

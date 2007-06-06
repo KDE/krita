@@ -307,6 +307,7 @@ QImage KisGroupLayer::createThumbnail(qint32 w, qint32 h)
 void KisGroupLayer::updateProjection(const QRect & rc)
 {
     if ( !rc.isValid() ) return ;
+    if ( !isDirty( rc ) ) return;
 
     // Get the first layer in this group to start compositing with
     KisLayerSP child = lastChild();
@@ -318,7 +319,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         m_projection->clear( rc );
 
     KisLayerSP startWith = KisLayerSP(0);
-#ifdef DIRTY_AND_PROJECTION
+
     KisAdjustmentLayerSP adjLayer = KisAdjustmentLayerSP(0);
     KisLayerSP tmpPaintLayer = KisLayerSP(0);
 
@@ -376,7 +377,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     if (adjLayer.isNull()) {
         startWith = lastChild();
     }
-#endif
+
 
     startWith = lastChild();
 
@@ -386,7 +387,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     m_projection->clear( rc );
 
     bool first = true; // The first layer in a stack needs special compositing
-#ifdef DIRTY_AND_PROJECTION
+
     // Fill the projection either the cached data, if it's there
     KisFillPainter gc(m_projection);
 
@@ -400,7 +401,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         first = true;
     }
     gc.end();
-#endif
+
 
     KisMergeVisitor visitor(m_projection, rc);
 

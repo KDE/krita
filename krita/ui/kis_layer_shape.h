@@ -47,6 +47,7 @@ public:
     bool isSelectable() const { return false; }
     QSizeF size() const;
     QRectF boundingRect() const;
+    void setPosition( const QPointF & position );
 
     // KoShapeContainer implementation
     void paintComponent(QPainter &painter, const KoViewConverter &converter);

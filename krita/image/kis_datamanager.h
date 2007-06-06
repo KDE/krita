@@ -56,6 +56,8 @@ public:
      */
     inline void setDefaultPixel(const quint8 *defPixel) { return ACTUAL_DATAMGR::setDefaultPixel(defPixel); }
 
+//     inline void setSwappable( bool swappable ) { ACTUAL_DATAMGR::setSwappable( swappable );  }
+
     /**
      * Gets the default pixel.
      */

@@ -46,8 +46,8 @@
 class KisPaintLayer::Private
 {
 public:
-
     KisPaintDeviceSP paintdev;
+    KisPaintDeviceSP projection;
 };
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
@@ -57,6 +57,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     Q_ASSERT(img);
     Q_ASSERT(dev);
     m_d->paintdev = dev;
+    m_d->projection = 0;
 //    m_d->paintdev->setParentLayer(this);
     init();
 }
@@ -68,6 +69,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
 {
     Q_ASSERT(img);
     m_d->paintdev = new KisPaintDevice(this, img->colorSpace(), name);
+    m_d->projection = 0;
     init();
 }
 
@@ -78,6 +80,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     Q_ASSERT(img);
     Q_ASSERT(colorSpace);
     m_d->paintdev = new KisPaintDevice(this, colorSpace, name);
+    m_d->projection = 0;
     init();
 }
 
@@ -85,6 +88,7 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) :
     KisLayer(rhs), KisIndirectPaintingSupport(rhs)
 {
     m_d->paintdev = new KisPaintDevice( *rhs.m_d->paintdev.data() );
+    m_d->projection = 0;
 
 
 //    m_d->paintdev->setParentLayer(this);
@@ -113,11 +117,35 @@ void KisPaintLayer::init()
 
 KisPaintDeviceSP KisPaintLayer::projection() const
 {
-    return m_d->paintdev;
+    if ( !hasEffectMasks() )
+        return m_d->paintdev;
+    else {
+        Q_ASSERT( m_d->projection );
+        return m_d->projection;
+    }
 }
 
 void KisPaintLayer::updateProjection(const QRect & rc)
 {
+
+    if ( !rc.isValid() ) return ;
+    if ( !isDirty( rc ) ) return;
+    if ( !hasEffectMasks() ) return;
+    if ( !m_d->paintdev ) return;
+
+    if ( !m_d->projection ) {
+        // Copy of original data
+        m_d->projection = new KisPaintDevice( *m_d->paintdev );
+    }
+    else {
+        // Clean up the area before we re-apply the masks.
+        KisPainter gc( m_d->projection );
+        gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
+        gc.bitBlt( rc.topLeft(), m_d->paintdev, rc );
+
+    }
+
+    applyEffectMasks( m_d->projection, rc );
 }
 
 

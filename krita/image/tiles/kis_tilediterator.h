@@ -28,7 +28,7 @@
 /**
  * The KisIterator class iterates through the pixels of a KisPaintDevice hiding the tile structure
  */
-class KRITAIMAGE_EXPORT KisTiledIterator : public KisShared {
+class KisTiledIterator : public KisShared {
 
 protected:
     KisTiledDataManager *m_ktm;
@@ -85,10 +85,10 @@ public:
 
 public:
     qint32 nConseqPixels() const;
-    
+
     /// Advances a number of pixels until it reaches the end of the rect
     KisTiledRectIterator & operator+=(int n);
-    
+
     /// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
     KisTiledRectIterator & operator++();
 

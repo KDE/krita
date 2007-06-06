@@ -76,12 +76,7 @@ qint32 KisQImagemask::height() const
     return m_height;
 }
 
-void KisQImagemask::setAlphaAt(qint32 x, qint32 y, quint8 alpha)
-{
-    if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
-        m_data[(y * m_width) + x] = alpha;
-    }
-}
+
 
 void KisQImagemask::copyAlpha(const QImage& img)
 {

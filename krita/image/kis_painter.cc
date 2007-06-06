@@ -88,7 +88,7 @@ void KisPainter::init()
     m_bounds = QRect();
 
     KConfigGroup cfg = KGlobal::config()->group("");
-    m_useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", false);
+    m_useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", true);
 }
 
 KisPainter::~KisPainter()
@@ -142,7 +142,10 @@ QUndoCommand *KisPainter::endTransaction()
 QRegion KisPainter::dirtyRegion()
 {
     if ( m_useBoundingDirtyRect ) {
-        return QRegion( m_dirtyRect );
+        QRegion r ( m_dirtyRect );
+        m_dirtyRegion = QRegion();
+        m_dirtyRect = QRect();
+        return r;
     }
     else {
         QRegion r = m_dirtyRegion;

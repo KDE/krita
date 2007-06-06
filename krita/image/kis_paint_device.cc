@@ -825,7 +825,6 @@ QImage KisPaintDevice::convertToQImage(KoColorProfile *  dstProfile, float expos
     return convertToQImage(dstProfile, x1, y1, w, h, exposure);
 }
 
-// XXX: is this faster than building the QImage ourselves? It makes
 QImage KisPaintDevice::convertToQImage(KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, float exposure)
 {
     if (w < 0)
@@ -887,10 +886,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
         h = qint32(double(srch) / srcw * w);
     else if (srch > srcw)
         w = qint32(double(srcw) / srch * h);
-#ifdef __GNUC__
-#warning FIXME: use KisRandomAccessor instead !
-#endif
-#if 1
+
     KisRandomConstAccessorPixel iter = createRandomConstAccessor(0,0);
     for (qint32 y = 0; y < h; ++y) {
         qint32 iY = (y * srch ) / h;
@@ -900,7 +896,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
             thumbnail->setPixel(x, y, KoColor(iter.rawData(), m_d->colorSpace));
         }
     }
-#endif
+
     return thumbnail;
 
 }
@@ -908,50 +904,8 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
 
 QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h)
 {
-    int srcw, srch;
-    if( image() )
-    {
-        srcw = image()->width();
-        srch = image()->height();
-    }
-    else
-    {
-        const QRect e = extent();
-        srcw = e.width();
-        srch = e.height();
-    }
-
-    if (w > srcw)
-    {
-        w = srcw;
-        h = qint32(double(srcw) / w * h);
-    }
-    if (h > srch)
-    {
-        h = srch;
-        w = qint32(double(srch) / h * w);
-    }
-
-    if (srcw > srch)
-        h = qint32(double(srch) / srcw * w);
-    else if (srch > srcw)
-        w = qint32(double(srcw) / srch * h);
-
-    QColor c;
-    quint8 opacity;
-    QImage img(w, h, QImage::Format_ARGB32);
-
-    for (qint32 y=0; y < h; ++y) {
-        qint32 iY = (y * srch ) / h;
-        for (qint32 x=0; x < w; ++x) {
-            qint32 iX = (x * srcw ) / w;
-            pixel(iX, iY, &c, &opacity);
-            const QRgb rgb = c.rgb();
-            img.setPixel(x, y, qRgba(qRed(rgb), qGreen(rgb), qBlue(rgb), opacity));
-        }
-    }
-
-    return img;
+    KisPaintDeviceSP dev = createThumbnailDevice( w, h );
+    return dev->convertToQImage( KoColorSpaceRegistry::instance()->rgb8()->profile() );
 }
 
 KisRectIteratorPixel KisPaintDevice::createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h)

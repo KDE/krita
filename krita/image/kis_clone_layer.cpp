@@ -75,6 +75,10 @@ KisCloneLayer::~KisCloneLayer()
 void KisCloneLayer::updateProjection(const QRect& r)
 {
     if ( !m_d->copyFrom ) return;
+    if ( !r.isValid() ) return ;
+    if ( !isDirty( r ) ) return;
+
+    // XXX: update only the overlap of r and the rects in the dirty region
 
     // if there are effect masks, apply them to the either original or
     // to the original's projection.

@@ -21,8 +21,10 @@
 
 #include "kis_paint_device.h"
 
-KisRandomSubAccessorPixel::KisRandomSubAccessorPixel(const KisPaintDeviceSP device) :
-    m_device(device), m_currentPoint( 0, 0 ), m_randomAccessor(device->createRandomConstAccessor(0,0))
+KisRandomSubAccessorPixel::KisRandomSubAccessorPixel(const KisPaintDeviceSP device)
+    : m_device(device)
+    , m_currentPoint( 0, 0 )
+    , m_randomAccessor( device->createRandomConstAccessor(0,0) )
 {
 }
 

@@ -166,7 +166,7 @@ void KisToolTransform::activate(bool temporary)
 {
     Q_UNUSED(temporary);
 
-    if( m_currentLayer->paintDevice() )
+    if( m_currentLayer && m_currentLayer->paintDevice() )
     {
         //connect(m_subject, commandExecuted(K3Command *c), this, notifyCommandAdded( KCommand * c));
         //m_subject->undoAdapter()->setCommandHistoryListener( this );

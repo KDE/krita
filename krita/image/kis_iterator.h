@@ -74,11 +74,11 @@ public:
     /// returns true when iterators has reached the end
     bool isDone()  const;
 
-     // current x position
-     qint32 x() const;
+    // current x position
+    qint32 x() const;
 
-     // current y position
-     qint32 y() const;
+    // current y position
+    qint32 y() const;
 
 private:
 
@@ -86,15 +86,19 @@ private:
 };
 
 class KRITAIMAGE_EXPORT KisRectIterator : public KisRectConstIterator {
-    public:
-        inline KisRectIterator ( KisDataManager *dm, qint32  x, qint32  y, qint32  w, qint32  h) : KisRectConstIterator(dm, x, y, w, h, true) { }
-        /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
-        quint8 * rawData() const;
-        /// Advances a number of pixels until it reaches the end of the rect
-        KisRectIterator & operator+=(int n) { KisRectConstIterator::operator+=(n); return *this; }
 
-        /// Advances one pixel going to the beginning of the next line when it reaches the end of a line
-        KisRectIterator & operator++() { KisRectConstIterator::operator++(); return *this; }
+public:
+
+    inline KisRectIterator ( KisDataManager *dm, qint32  x, qint32  y, qint32  w, qint32  h) : KisRectConstIterator(dm, x, y, w, h, true) { }
+
+    /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
+    quint8 * rawData() const;
+
+    /// Advances a number of pixels until it reaches the end of the rect
+    KisRectIterator & operator+=(int n) { KisRectConstIterator::operator+=(n); return *this; }
+
+    /// Advances one pixel going to the beginning of the next line when it reaches the end of a line
+    KisRectIterator & operator++() { KisRectConstIterator::operator++(); return *this; }
 
 };
 
@@ -153,20 +157,20 @@ private:
 };
 
 class KRITAIMAGE_EXPORT KisHLineIterator : public KisHLineConstIterator {
-    public:
-        inline KisHLineIterator ( KisDataManager *dm, qint32  x, qint32 y, qint32 w) : KisHLineConstIterator(dm, x, y, w, true) { }
-    public:
-        /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
-        quint8 *rawData() const;
-        
-        /// Advances one pixel until it reaches the end of the line
-        KisHLineIterator & operator++() { KisHLineConstIterator::operator++(); return *this; }
+public:
+    inline KisHLineIterator ( KisDataManager *dm, qint32  x, qint32 y, qint32 w) : KisHLineConstIterator(dm, x, y, w, true) { }
+public:
+    /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
+    quint8 *rawData() const;
 
-        /// Advances a number of pixels until it reaches the end of the line
-        KisHLineConstIterator & operator+=(int n) { KisHLineConstIterator::operator+=(n); return *this; }
+    /// Advances one pixel until it reaches the end of the line
+    KisHLineIterator & operator++() { KisHLineConstIterator::operator++(); return *this; }
 
-        /// Goes back one pixel until it reaches the beginning of the line
-        KisHLineConstIterator & operator--() { KisHLineConstIterator::operator--(); return *this; }
+    /// Advances a number of pixels until it reaches the end of the line
+    KisHLineConstIterator & operator+=(int n) { KisHLineConstIterator::operator+=(n); return *this; }
+
+    /// Goes back one pixel until it reaches the beginning of the line
+    KisHLineConstIterator & operator--() { KisHLineConstIterator::operator--(); return *this; }
 
 };
 
@@ -212,12 +216,12 @@ private:
 };
 
 class KRITAIMAGE_EXPORT KisVLineIterator : public KisVLineConstIterator {
-    public:
-        inline KisVLineIterator ( KisDataManager *dm, qint32  x, qint32 y, qint32 h) : KisVLineConstIterator(dm, x, y, h, true) { }
-        /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
-        quint8 *rawData() const;
-        /// Advances one pixel until it reaches the end of the line
-        KisVLineIterator & operator++() { KisVLineConstIterator::operator++(); return *this; }
+public:
+    inline KisVLineIterator ( KisDataManager *dm, qint32  x, qint32 y, qint32 h) : KisVLineConstIterator(dm, x, y, h, true) { }
+    /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
+    quint8 *rawData() const;
+    /// Advances one pixel until it reaches the end of the line
+    KisVLineIterator & operator++() { KisVLineConstIterator::operator++(); return *this; }
 
 };
 

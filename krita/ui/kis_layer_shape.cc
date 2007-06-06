@@ -92,6 +92,21 @@ QRectF KisLayerShape::boundingRect() const
 
 }
 
+void KisLayerShape::setPosition( const QPointF & position )
+{
+    Q_ASSERT( m_d );
+    Q_ASSERT( m_d->layer );
+
+    KisImageSP image = m_d->layer->image();
+    if ( image ) {
+        // XXX: Does flake handle undo for us?
+        QPoint p( position.x() / image->xRes(), position.y() / image->yRes() );
+        m_d->layer->setX( p.x() );
+        m_d->layer->setY( p.y() );
+    }
+}
+
+
 void KisLayerShape::addChild( KoShape * shape )
 {
     if ( shape->shapeId() != KIS_MASK_SHAPE_ID ) {

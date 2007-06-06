@@ -135,7 +135,6 @@ public slots:
 
 public:
 
-#ifdef DIRTY_AND_PROJECTION
     /**
        @return true if the given rect overlapts with the dirty region
        of this adjustement layer
@@ -146,7 +145,7 @@ public:
        Mark the specified area as clean
     */
     void setClean( QRect rc );
-#endif
+
     /// Return a copy of this layer
     virtual KisLayerSP clone() const = 0;
 
@@ -204,7 +203,10 @@ public:
 
     enum { Visible = 1, Hidden = 2, Locked = 4, Unlocked = 8 };
 
-    /// Returns the total number of layers in this layer, its child layers, and their child layers recursively, optionally ones with the specified properties Visible or Locked, which you can OR together.
+    /// Returns the total number of layers in this layer, its child
+    /// layers, and their child layers recursively, optionally ones
+    /// with the specified properties Visible or Locked, which you can
+    /// OR together.
     virtual int numLayers(int type = 0) const;
 
 public:

@@ -80,65 +80,6 @@ public:
 
     KisPaintDeviceSP orignal() const;
 
-//     /// Returns the paintDevice that accompanies this layer (or mask, see editMask)
-//     KisPaintDeviceSP paintDeviceOrMask() const;
-
-//     // Mask Layer
-
-//     /// Does this layer have a layer mask?
-//     bool hasMask() const;
-
-//     // XXX TODO: Make these undo-able!
-//     /// Create a mask if it does not yet exist, and return it
-//     KisPaintDeviceSP createMask();
-
-//     /// Convert the from argument to the mask
-//     void createMaskFromPaintDevice(KisPaintDeviceSP from);
-
-//     /**
-//      * Convert the from selection to a paint device (should convert the getMaskAsSelection
-//      * result back to the mask). Overwrites the current mask, if any. Also removes the selection
-//      */
-//     void createMaskFromSelection(KisSelectionSP from);
-
-//     /// Remove the layer mask
-//     void removeMask();
-
-//     /// Apply the layer mask to the paint device, this removes the mask afterwards
-//     void applyMask();
-
-//     /// Returns the layer mask's device. Creates one if there is currently none
-//     KisPaintDeviceSP getMask();
-
-//     /// Returns the layer mask's device, converted to a selection. Creates one if there is currently none
-//     KisSelectionSP getMaskAsSelection();
-
-//     /// Undoable version of createMask
-//     QUndoCommand* createMaskCommand();
-//     /// Undoable version of createMaskFromSelection
-//     QUndoCommand* maskFromSelectionCommand();
-//     /// Undoable, removes the current mask, but converts it to the current selection
-//     QUndoCommand* maskToSelectionCommand();
-//     /// Undoable version of removeMask
-//     QUndoCommand* removeMaskCommand();
-//     /// Undoable version of applyMask
-//     QUndoCommand* applyMaskCommand();
-
-//     /// Returns true if the masked part of the mask will be rendered instead of being transparent
-//     bool renderMask() const;
-//     /// Set the renderMask property
-//     void setRenderMask(bool b);
-
-//     /**
-//      * When this returns true, the KisPaintDevice returned in paintDevice will actually
-//      * be the layer mask (if there is one). This is so that tools can draw on the mask
-//      * without needing to know its existence.
-//      */
-//     bool editMask() const;
-
-//     /// Sets the editMask property
-//     void setEditMask(bool b);
-
 
 public slots:
 

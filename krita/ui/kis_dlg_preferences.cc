@@ -31,6 +31,7 @@
 #include <QPushButton>
 #include <QSlider>
 #include <QToolButton>
+#include <QThread>
 #include <QGridLayout>
 
 #ifdef HAVE_OPENGL
@@ -270,7 +271,7 @@ void PerformanceTab::setDefault()
     chkUseBoundingRect->setChecked( false );
     chkAggregateDirtyRegions->setChecked( true );
     intChunkSize->setValue( 512 );
-    intNumThreads->setValue( 5 );
+    intNumThreads->setValue( QThread::idealThreadCount()  );
 }
 
 //---------------------------------------------------------------------------------------------------

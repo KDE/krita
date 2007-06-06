@@ -48,7 +48,7 @@ namespace KisMetaData {
              */
             QString namespacePrefix() const;
             /**
-             * @return the qualified name of this entry, which is the contaneation of the
+             * @return the qualified name of this entry, which is the concatenation of the
              * namespace and of the name
              */
             QString qualifiedName() const;

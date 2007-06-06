@@ -25,6 +25,11 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
+/**
+ * Gives a random access to the sampled subpixels of an image. Use the
+ * moveTo function to select the pixel. And then rawData to access the
+ * value of a pixel.
+ */
 class  KRITAIMAGE_EXPORT KisRandomSubAccessorPixel{
     public:
         KisRandomSubAccessorPixel(const KisPaintDeviceSP device);

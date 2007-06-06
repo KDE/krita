@@ -22,6 +22,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <QFont>
+#include <QThread>
 
 #include <lcms.h>
 
@@ -33,7 +34,6 @@ namespace {
     const qint32 IMG_DEFAULT_WIDTH = 512;
     const qint32 IMG_DEFAULT_HEIGHT = 512;
     const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
-    const qint32 DEFAULT_MAX_THREADS = 4;
     const qint32 DEFAULT_MAX_TILES_MEM = 5000;
     const qint32 DEFAULT_SWAPPINESS = 100;
     const qint32 DEFAULT_PRESSURE_CORRECTION = 50;
@@ -259,7 +259,7 @@ void KisConfig::setUseOpenGLShaders(bool useOpenGLShaders)
 
 qint32 KisConfig::maxNumberOfThreads()
 {
-    return m_cfg.readEntry("maxthreads", DEFAULT_MAX_THREADS);
+    return m_cfg.readEntry("maxthreads", QThread::idealThreadCount() );
 }
 
 void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)

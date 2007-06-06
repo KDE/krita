@@ -155,7 +155,7 @@ void KisFiltersListView::init()
 
     m_weaver = new Weaver();
     KConfigGroup cfg = KGlobal::config()->group("");
-    m_weaver->setMaximumNumberOfThreads( cfg.readEntry("maxthreads",  1) );
+    m_weaver->setMaximumNumberOfThreads( cfg.readEntry("maxthreads",  QThread::idealThreadCount() ) );
     connect( m_weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( itemDone(ThreadWeaver::Job*) ) );
 }
 

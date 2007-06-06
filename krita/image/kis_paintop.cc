@@ -31,6 +31,7 @@
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"
 #include "KoColor.h"
+#include "kis_datamanager.h"
 
 KisPaintOp::KisPaintOp(KisPainter * painter) : m_dab(0)
 {
@@ -53,35 +54,34 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, KoColorSpace *cs)
     // on. This layer is cleared between painting actions. Our
     // temporary layer, dab, is for every paintAt, composited with
     // the target layer. We only use a real temporary layer for things
-    // like filter tools.
+    // like filter tools -- and for indirect painting, it turns out.
 
-
-    if(!m_dab || m_dab->colorSpace() != cs)
-        m_dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
-    Q_CHECK_PTR(m_dab);
-
+    // Convert the kiscolor to the right colorspace.
     KoColor kc = m_painter->paintColor();
-
-    KoColorSpace * colorSpace = m_dab->colorSpace();
-
-    qint32 pixelSize = colorSpace->pixelSize();
+    kc.convertTo(cs);
 
     qint32 maskWidth = mask->width();
     qint32 maskHeight = mask->height();
 
-    // Convert the kiscolor to the right colorspace.
-    kc.convertTo(colorSpace);
+    if( !m_dab || m_dab->colorSpace() != cs) {
+        m_dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
+        m_dab->dataManager()->setDefaultPixel( kc.data() );
+    }
+    Q_CHECK_PTR(m_dab);
 
+    quint8 * maskData = mask->data();
+
+    // Apply the alpha mask
     KisHLineIteratorPixel hiter = m_dab->createHLineIterator(0, 0, maskWidth);
     for (int y = 0; y < maskHeight; y++)
     {
-        int x=0;
         while(! hiter.isDone())
         {
-            // XXX: Set mask
-            colorSpace->setAlpha(kc.data(), mask->alphaAt(x++, y), 1);
-            memcpy(hiter.rawData(), kc.data(), pixelSize);
-            ++hiter;
+            int hiterConseq = hiter.nConseqHPixels();
+            cs->setAlpha( hiter.rawData(), OPACITY_OPAQUE, hiterConseq );
+            cs->applyAlphaU8Mask( hiter.rawData(), maskData, hiterConseq);
+            hiter += hiterConseq;
+            maskData += hiterConseq;
         }
         hiter.nextRow();
     }

@@ -19,6 +19,7 @@
 
 #include <QRegion>
 #include <QRect>
+#include <QThread>
 
 #include <threadweaver/ThreadWeaver.h>
 
@@ -243,7 +244,7 @@ void KisProjection::scheduleRect( const QRect & rc )
 void KisProjection::updateSettings()
 {
     KConfigGroup cfg = KGlobal::config()->group("");
-    m_d->weaver->setMaximumNumberOfThreads( cfg.readEntry("maxprojectionthreads",  10) );
+    m_d->weaver->setMaximumNumberOfThreads( cfg.readEntry("maxprojectionthreads",  QThread::idealThreadCount() ) );
     kDebug() << "maximum number of threads: " << m_d->weaver->maximumNumberOfThreads() << endl;
 
     m_d->updateRectSize = cfg.readEntry( "updaterectsize", 512 );

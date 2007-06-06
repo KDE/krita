@@ -39,6 +39,8 @@
 #include "kis_tile.h"
 #include "kis_tilemanager.h"
 
+#define DO_NOT_PRINT_INFO
+
 // Note: the cache file doesn't get deleted when we crash and so :(
 
 KisTileManager* KisTileManager::m_singleton = 0;
@@ -149,9 +151,10 @@ void KisTileManager::registerTile(KisTile* tile)
 
     doSwapping();
 
+#ifndef DO_NOT_PRINT_INFO
     if (++counter % 50 == 0)
         printInfo();
-
+#endif
     m_bigKritaLock.unlock();
 
 }
@@ -242,15 +245,16 @@ void KisTileManager::maySwapTile(const KisTile* tile)
 quint8* KisTileManager::requestTileData(qint32 pixelSize)
 {
     m_bigKritaLock.lock();
-
     quint8* data = findTileFor(pixelSize);
-    if ( data ) {
-        m_bigKritaLock.unlock();
-        return data;
+    m_bigKritaLock.unlock();
+
+    if ( !data ) {
+        data = new quint8[m_tileSize * pixelSize];
     }
 
-    return new quint8[m_tileSize * pixelSize];
-    m_bigKritaLock.unlock();
+
+    return data;
+
 
 }
 
@@ -345,8 +349,9 @@ void KisTileManager::toSwap(TileInfo* info)
                         << "tried adding " << info->size << " bytes "
                         << "(rounded to pagesize: " << newsize << ") "
                         << "from a " << tfile->fileSize << " bytes file" << endl;
+#ifndef DO_NOT_PRINT_INFO
                 printInfo();
-
+#endif
                 m_swapForbidden = true;
                 return;
             }
@@ -423,7 +428,7 @@ void KisTileManager::doSwapping()
 
 void KisTileManager::printInfo()
 {
-
+#ifndef DO_NOT_PRINT_INFO
     kDebug(DBG_AREA_TILES) << m_bytesInMem << " out of " << m_bytesTotal << " bytes in memory\n";
     kDebug(DBG_AREA_TILES) << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
     kDebug(DBG_AREA_TILES) << m_files.size() << " swap files in use" << endl;
@@ -445,7 +450,7 @@ void KisTileManager::printInfo()
     if (m_swapForbidden)
         kDebug(DBG_AREA_TILES) << "Something was wrong with the swap, see above for details" << endl;
     kDebug(DBG_AREA_TILES) << endl;
-
+#endif
 }
 
 

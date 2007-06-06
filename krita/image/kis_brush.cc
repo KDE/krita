@@ -425,7 +425,7 @@ KisPaintDeviceSP KisBrush::image(KoColorSpace * /*colorSpace*/, const KisPaintIn
     const ScaledBrush *aboveBrush = 0;
     const ScaledBrush *belowBrush = 0;
 
-    findScaledBrushes(scale, &aboveBrush,  &belowBrush);
+    findScaledBrushes(scale, &aboveBrush, &belowBrush);
     Q_ASSERT(aboveBrush != 0);
 
     QImage outputImage;

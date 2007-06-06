@@ -62,9 +62,9 @@ public:
     // Operation used to composite this layer with the projection of
     // the layers _under_ this layer
     const KoCompositeOp * compositeOp;
-#ifdef DIRTY_AND_PROJECTION
-    QRegion dirtyRegion; // XXX: this should be part of the data manager!
-#endif
+
+    QRegion dirtyRegion;
+
 };
 
 
@@ -162,12 +162,12 @@ void KisLayer::setDirty( const QRegion & region)
     if (m_d->image.data()) {
         m_d->image->notifyLayerUpdated(KisLayerSP(this));
     }
-#ifdef DIRTY_AND_PROJECTION
+
     m_d->dirtyRegion += region;
-#endif
+
 }
 
-#ifdef DIRTY_AND_PROJECTION
+
 bool KisLayer::isDirty( const QRect & rect )
 {
     return m_d->dirtyRegion.intersects( rect );
@@ -177,7 +177,6 @@ void KisLayer::setClean( QRect rc )
 {
     m_d->dirtyRegion -= QRegion( rc );
 }
-#endif
 
 int KisLayer::id() const { return m_d->id; }
 
@@ -399,21 +398,24 @@ bool KisLayer::hasEffectMasks() const
 
 void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect & rc )
 {
-    // Then loop through the effect masks and apply them
-    for ( int i = 0; i < m_d->effectMasks.size(); ++i ) {
+    if ( isDirty(rc) ) {
 
-        KisMaskSP mask = m_d->effectMasks.at( i );
-        KisEffectMask * effectMask = dynamic_cast<KisEffectMask*>( mask.data() );
+        // Then loop through the effect masks and apply them
+        for ( int i = 0; i < m_d->effectMasks.size(); ++i ) {
 
-        if ( effectMask )
-            effectMask->apply( projection, rc );
+            KisMaskSP mask = m_d->effectMasks.at( i );
+            KisEffectMask * effectMask = dynamic_cast<KisEffectMask*>( mask.data() );
+
+            if ( effectMask )
+                effectMask->apply( projection, rc );
+
+        }
+
+        // Then apply the preview mask
+        if ( m_d->previewMask )
+            m_d->previewMask->apply( projection, rc );
 
     }
-
-    // Then apply the preview mask
-    if ( m_d->previewMask )
-        m_d->previewMask->apply( projection, rc );
-
 }
 
 

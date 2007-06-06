@@ -69,6 +69,14 @@ class KRITAIMAGE_EXPORT KisQImagemask : public KisShared {
        qint32 width() const;
 
     /**
+     * Return the alpha mask bytes
+     */
+    inline quint8 * data()
+        {
+            return m_data.data();
+        }
+
+    /**
        @return the alpha value at the specified position.
 
        Returns quint8 OPACITY_TRANSPARENT if the value is
@@ -82,16 +90,22 @@ class KRITAIMAGE_EXPORT KisQImagemask : public KisShared {
        provide an iterator over the mask, that would be nice, too.
     */
     inline quint8 alphaAt(qint32 x, qint32 y) const
-    {
-	if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
-	    return m_data[(y * m_width) + x];
-	}
-	else {
-	    return OPACITY_TRANSPARENT;
-	}
-    }
+        {
+            if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
+                return m_data[(y * m_width) + x];
+            }
+            else {
+                return OPACITY_TRANSPARENT;
+            }
+        }
 
-    void setAlphaAt(qint32 x, qint32 y, quint8 alpha);
+    inline void setAlphaAt(qint32 x, qint32 y, quint8 alpha)
+        {
+            if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
+                m_data[(y * m_width) + x] = alpha;
+            }
+        }
+
 
     // Create a new mask by interpolating between mask1 and mask2 as t
     // goes from 0 to 1.

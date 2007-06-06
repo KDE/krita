@@ -803,9 +803,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
     KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFillPainter painter;
 
-    painter.begin(layer->paintDevice());
-    painter.fillRect(0, 0, width, height, KoColor(Qt::white, cs), OPACITY_OPAQUE);
-    painter.end();
+    layer->paintDevice()->fill( 0, 0, width, height, KoColor(Qt::white, cs), OPACITY_OPAQUE);
 
     img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
 

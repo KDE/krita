@@ -20,7 +20,6 @@
 #include <kis_savexml_visitor.h>
 
 #include "kis_adjustment_layer.h"
-#include "kis_exif_info.h"
 #include "kis_filter_configuration.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"

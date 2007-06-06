@@ -23,12 +23,13 @@
 #include <kdebug.h>
 
 #include "kis_meta_data_value.h"
+#include "kis_meta_data_schema.h"
 
 using namespace KisMetaData;
 
 struct Entry::Private {
     QString name;
-    QString namespacePrefix;
+    const Schema* schema;
     Value value;
 };
 
@@ -38,11 +39,11 @@ Entry::Entry() :
     
 }
 
-Entry::Entry(QString name, QString namespacePrefix, const Value& value) :
+Entry::Entry(QString name, const Schema* schema, const Value& value) :
         d(new Private)
 {
     d->name = name;
-    d->namespacePrefix = namespacePrefix;
+    d->schema = schema;
     d->value = value;
 }
 
@@ -61,14 +62,19 @@ QString Entry::name() const
     return d->name;
 }
 
-QString Entry::namespacePrefix() const
+const Schema* Entry::schema() const
 {
-    return d->namespacePrefix;
+    return d->schema;
+}
+
+void Entry::setSchema(const KisMetaData::Schema* schema)
+{
+    d->schema = schema;
 }
 
 QString Entry::qualifiedName() const
 {
-    return d->namespacePrefix + ":" + d->name;
+    return d->schema->prefix() + ":" + d->name;
 }
 
 const Value& Entry::value() const
@@ -89,7 +95,13 @@ bool Entry::operator==(const Entry& e)
 Entry& Entry::operator=(const Entry& e)
 {
     d->name = e.d->name;
-    d->namespacePrefix = e.d->namespacePrefix;
+    d->schema = e.d->schema;
     d->value = e.d->value;
     return *this;
+}
+
+QDebug operator<<(QDebug dbg, const Entry &c)
+{
+    dbg.nospace() << "Name: " << c.name() << " Qualified name: " << c.qualifiedName() << " Value" << c.value();
+    return dbg.space();
 }

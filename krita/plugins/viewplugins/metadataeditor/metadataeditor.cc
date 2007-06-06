@@ -62,10 +62,13 @@ metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QStringList &)
         connect(action, SIGNAL(triggered()), this, SLOT(slotMyAction()));
     }
     m_metaDataStore = new KisMetaData::Store();
-    m_metaDataStore->insert( KisMetaData::Entry("name", "dc", KisMetaData::Value("tester")));
-    m_metaDataStore->insert( KisMetaData::Entry("description", "dc", KisMetaData::Value("Test of metadata editing")) );
-    m_metaDataStore->insert( KisMetaData::Entry("when", "history", KisMetaData::Value(QDate())) );
-    m_metaDataStore->insert( KisMetaData::Entry("many", "how", KisMetaData::Value(42)) );
+    const KisMetaData::Schema* dcSchema = m_metaDataStore->createSchema( KisMetaData::Schema::UriDublinCore, "dc");
+    const KisMetaData::Schema* dcHistory = m_metaDataStore->createSchema( "http://history/", "history");
+    const KisMetaData::Schema* dcHow =m_metaDataStore->createSchema( "http://how/", "how");
+    m_metaDataStore->addEntry( KisMetaData::Entry("name", dcSchema, KisMetaData::Value("tester")));
+    m_metaDataStore->addEntry( KisMetaData::Entry("description", dcSchema, KisMetaData::Value("Test of metadata editing")) );
+    m_metaDataStore->addEntry( KisMetaData::Entry("when", dcHistory, KisMetaData::Value(QDate())) );
+    m_metaDataStore->addEntry( KisMetaData::Entry("many", dcHow, KisMetaData::Value(42)) );
 }
 
 metadataeditorPlugin::~metadataeditorPlugin()
@@ -125,7 +128,7 @@ void metadataeditorPlugin::slotMyAction()
     foreach(ConnectionInfo ci, connectionInfos)
     {
         QWidget* obj = dialog->findChild<QWidget*>(ci.editorName);
-        KisMetaData::Value& value = m_metaDataStore->find(ci.qualifiedName)->value();
+        KisMetaData::Value& value = m_metaDataStore->getEntry(ci.qualifiedName).value();
         KisEntryEditor* ee = new KisEntryEditor( obj, &value, ci.propertyName);
         connect( obj, ci.editorSignal.toAscii(), ee, SLOT(valueChanged()) );
     }

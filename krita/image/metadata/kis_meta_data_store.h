@@ -22,14 +22,79 @@
 
 #include <krita_export.h>
 #include "kis_meta_data_entry.h"
+#include "kis_meta_data_schema.h"
 
 #include <QHash>
 
 namespace KisMetaData {
-    class KRITAIMAGE_EXPORT Store : public QHash<QString, Entry> {
+    /**
+     * This class holds the list of metadata entries and schemas.
+     */
+    class KRITAIMAGE_EXPORT Store {
+        struct Private;
         public:
             Store();
-            void insert(const Entry& entry);
+        public:
+            /**
+             * @return true if there is no metadata in this store.
+             */
+            bool empty() const;
+            /**
+             * Insert a new entry.
+             * @param entry the new entry to insert in the metadata store, it must be a key which doesn't allready exist
+             * @return false if the entry couldn't be included wether because the key allready
+             *  exist
+             */
+            bool addEntry(const Entry& entry);
+            /**
+             * Give access to a metadata entry
+             * @param entryKey the entryKey as the qualified name of the entry
+             */
+            Entry& getEntry(QString entryKey);
+            /**
+             * Give access to a metadata entry
+             * @param uri the uri of the schema
+             * @param entryName the name of the entry
+             */
+            Entry& getEntry(QString uri, QString entryName);
+            
+            QHash<QString, Entry>::const_iterator begin() const;
+            QHash<QString, Entry>::const_iterator end() const;
+            
+            /**
+             * @param entryKey the entryKey as the qualified name of the entry
+             * @return true if an entry with the given key exist in the store
+             */
+            bool containsEntry(QString entryKey) const;
+            /**
+             * @param uri
+             * @param entryName
+             * @return true if an entry with the given uri and entry name exist in the store
+             */
+            bool containsEntry(QString uri, QString entryName) const;
+            /**
+             * @return the schema for this uri
+             */
+            const Schema* schemaFromUri(QString uri) const;
+            /**
+             * @return the schema for this prefix
+             */
+            const Schema* schemaFromPrefix(QString prefix) const;
+            /**
+             * Creates a new schema.
+             * @param uri the name of the schema
+             * @param prefix the namespace prefix used for this schema
+             * @return the schema associated with the uri (it can return 0, if no schema exist
+             * for the uri, but the prefix was allready used, and it can be an allready existing
+             * schema if the uri was allready included)
+             */
+            const KisMetaData::Schema* createSchema(QString uri, QString prefix);
+            /**
+             * Dump on kdDebug the metadata store.
+             */
+            void debugDump() const;
+        private:
+            Private* const d;
     };
 }
 

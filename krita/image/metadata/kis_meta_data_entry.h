@@ -26,8 +26,11 @@ class QString;
 
 namespace KisMetaData {
     class Value;
+    class Store;
+    class Schema;
     class KRITAIMAGE_EXPORT Entry {
         struct Private;
+        friend class Store;
         public:
             Entry();
             /**
@@ -36,7 +39,7 @@ namespace KisMetaData {
              * @param namespacePrefix
              * @param value
              */
-            Entry(QString name, QString namespacePrefix, const KisMetaData::Value& value);
+            Entry(QString name, const KisMetaData::Schema* schema, const KisMetaData::Value& value);
             Entry(const Entry&);
             ~Entry();
             /**
@@ -46,7 +49,7 @@ namespace KisMetaData {
             /**
              * @return the namespace of this entry
              */
-            QString namespacePrefix() const;
+            const KisMetaData::Schema* schema() const;
             /**
              * @return the qualified name of this entry, which is the concatenation of the
              * namespace and of the name
@@ -63,8 +66,12 @@ namespace KisMetaData {
             Entry& operator=(const Entry&);
             bool operator==(const Entry&);
         private:
+            void setSchema(const KisMetaData::Schema* schema);
+        private:
             Private* const d;
     };
 }
+
+QDebug operator<<(QDebug dbg, const KisMetaData::Entry &c);
 
 #endif

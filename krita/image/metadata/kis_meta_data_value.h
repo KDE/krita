@@ -70,4 +70,6 @@ namespace KisMetaData {
 }
 
 
+QDebug operator<<(QDebug dbg, const KisMetaData::Value &v);
+
 #endif

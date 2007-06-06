@@ -18,6 +18,10 @@
 
 #include "kis_meta_data_store.h"
 
+#include <kdebug.h>
+
+#include "kis_meta_data_schema.h"
+
 using namespace KisMetaData;
 
 uint qHash(const Entry& e)
@@ -25,12 +29,110 @@ uint qHash(const Entry& e)
     return qHash(e.qualifiedName());
 }
 
-Store::Store()
+struct Store::Private {
+    QHash<QString, Entry> entries;
+    QHash<QString, Schema*> uri2Schema;
+    QHash<QString, Schema*> prefix2Schema;
+};
+
+Store::Store() : d(new Private)
 {
     
 }
 
-void Store::insert(const Entry& entry)
+bool Store::addEntry(const Entry& entry)
 {
-    QHash<QString, Entry>::insert(entry.qualifiedName(), entry);
+    if(d->entries.contains(entry.qualifiedName()))
+    {
+        return false;
+    }
+    const Schema* schema = schemaFromUri(entry.schema()->uri());
+    if(schema == 0)
+    {
+        schema = createSchema(entry.schema()->uri(), entry.schema()->prefix());
+        if(schema == 0)
+        {
+            return false;
+        }
+    }
+    QHash<QString, Entry>::iterator insertedIt = d->entries.insert(entry.qualifiedName(), entry);
+    insertedIt->setSchema( schema);
+}
+
+bool Store::empty() const
+{
+    return d->entries.empty();
+}
+
+bool Store::containsEntry(QString uri, QString entryName) const
+{
+    const Schema* schema = schemaFromUri(uri);
+    return d->entries.contains(schema->prefix() + ":" + entryName);
+}
+
+Entry& Store::getEntry(QString entryKey)
+{
+    return d->entries[entryKey];
+}
+
+Entry& Store::getEntry(QString uri, QString entryName)
+{
+    const Schema* schema = schemaFromUri(uri);
+    return d->entries[schema->prefix() + ":" + entryName];
+}
+
+QHash<QString, Entry>::const_iterator Store::begin() const
+{
+    return d->entries.begin();
+}
+
+QHash<QString, Entry>::const_iterator Store::end() const
+{
+    return d->entries.end();
+}
+
+const Schema* Store::schemaFromUri(QString uri) const
+{
+    return d->uri2Schema[uri];
+}
+
+const Schema* Store::schemaFromPrefix(QString prefix) const
+{
+    return d->prefix2Schema[prefix];
+}
+
+const Schema* Store::createSchema(QString uri, QString prefix)
+{
+    // First search for the schema
+    const Schema* schema = schemaFromUri(uri);
+    if(schema)
+    {
+        return schema;
+    }
+    // Second search for the prefix
+    schema = schemaFromPrefix(prefix);
+    if(schema)
+    {
+        return 0; // A schema with the same prefix allready exist
+    }
+    // The schema doesn't exist yet, create it
+    Schema* nschema = new Schema(uri, prefix);
+    d->uri2Schema[uri] = nschema;
+    d->prefix2Schema[prefix] = nschema;
+    return nschema;
+}
+
+void Store::debugDump() const
+{
+    kDebug() << "=== Dumping MetaData Store ===" << endl;
+    kDebug() << " - Schemas " << endl;
+    foreach(Schema* s, d->uri2Schema)
+    {
+//         kDebug() << *s << endl;
+    }
+    kDebug() << " - Metadata " << endl;
+    foreach(const Entry& e, d->entries)
+    {
+//         kDebug() << *e << endl;
+    }
 }

@@ -17,6 +17,7 @@ set(libkritatile_SRCS
 )
 
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
+                     ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
 )
 
@@ -94,6 +95,7 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_store.cc
    metadata/kis_meta_data_value.cc
+   metadata/kis_meta_data_schema.cc
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})

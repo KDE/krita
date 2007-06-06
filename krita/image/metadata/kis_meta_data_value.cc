@@ -102,6 +102,11 @@ Value::~Value()
     delete d;
 }
 
+Value::ValueType Value::type() const
+{
+    return d->type;
+}
+
 QVariant Value::asVariant() const
 {
     if(d->type == Variant)
@@ -117,4 +122,28 @@ void Value::setVariant(const QVariant& variant)
     {
         *d->value.variant = variant;
     }
+}
+
+
+QDebug operator<<(QDebug dbg, const Value &v)
+{
+    switch(v.type())
+    {
+        case Value::Invalid:
+            dbg.nospace() << "invalid value";
+            break;
+        case Value::Variant:
+            dbg.nospace() << v.asVariant();
+            break;
+        case Value::OrderedArray:
+        case Value::UnorderedArray:
+        case Value::AlternativeArray:
+        case Value::LangArray:
+//             d->value.array = new QList<Value>(*v.d->value.array);
+            break;
+        case Value::Structure:
+//             d->value.structure = new QMap<QString, Value>(*v.d->value.structure);
+            break;
+    }
+    return dbg.space();
 }

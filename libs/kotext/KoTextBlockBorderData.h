@@ -59,12 +59,14 @@ public:
      */
     explicit KoTextBlockBorderData(const KoTextBlockBorderData &other);
 
+    ~KoTextBlockBorderData();
+
     /// refcounting
-    void addUser() { m_refCount++; }
+    void addUser();
     /// refcounting
-    int removeUser() { return --m_refCount; }
+    int removeUser();
     /// refcounting
-    int useCount() const { return m_refCount; }
+    int useCount() const;
 
     /**
      * Set the properties of an edge based on a paragraph-format.
@@ -105,7 +107,7 @@ public:
     /**
      * Return the rectangle in which the border is drawn.  The border is drawn on the insides of the rect
      */
-    const QRectF &rect() const { return m_bounds; }
+    QRectF rect() const;
 
     /**
      * Find the inset that a border causes for a specific side.
@@ -123,16 +125,8 @@ public:
     void paint(QPainter &painter) const;
 
 private:
-    struct Edge {
-        Edge() : distance(0.0) { }
-        QPen innerPen;
-        QPen outerPen;
-        double distance;
-    };
-    Edge m_edges[4];
-
-    QRectF m_bounds;
-    int m_refCount;
+    class Private;
+    Private * const d;
 };
 
 #endif

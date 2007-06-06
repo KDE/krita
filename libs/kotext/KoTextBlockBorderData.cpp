@@ -21,23 +21,43 @@
 
 #include <kdebug.h>
 
+    struct Edge {
+        Edge() : distance(0.0) { }
+        QPen innerPen;
+        QPen outerPen;
+        double distance;
+    };
+
+class KoTextBlockBorderData::Private {
+public:
+    Private() : refCount(0) {}
+    Edge edges[4];
+
+    QRectF bounds;
+    int refCount;
+};
+
 KoTextBlockBorderData::KoTextBlockBorderData(const QRectF &paragRect)
-    : m_refCount(0)
+    : d(new Private())
 {
-    m_bounds = paragRect;
+    d->bounds = paragRect;
+}
+
+KoTextBlockBorderData::~KoTextBlockBorderData() {
+    delete d;
 }
 
 KoTextBlockBorderData::KoTextBlockBorderData(const KoTextBlockBorderData &other)
-    : m_refCount(0)
+    : d(new Private())
 {
     for(int i=Top; i <= Right; i++)
-        m_edges[i] = other.m_edges[i];
-    m_bounds = other.m_bounds;
+        d->edges[i] = other.d->edges[i];
+    d->bounds = other.d->bounds;
 }
 
 bool KoTextBlockBorderData::hasBorders() const {
     for(int i=Top; i <= Right; i++)
-        if(m_edges[i].outerPen.widthF() > 0.0)
+        if(d->edges[i].outerPen.widthF() > 0.0)
             return true;
     return false;
 }
@@ -47,11 +67,11 @@ bool KoTextBlockBorderData::operator==(const KoTextBlockBorderData &border) {
 }
 bool KoTextBlockBorderData::equals(const KoTextBlockBorderData &border) {
     for(int i=Top; i <= Right; i++) {
-        if(m_edges[i].outerPen != border.m_edges[i].outerPen)
+        if(d->edges[i].outerPen != border.d->edges[i].outerPen)
             return false;
-        if(m_edges[i].innerPen != border.m_edges[i].innerPen)
+        if(d->edges[i].innerPen != border.d->edges[i].innerPen)
             return false;
-        if(qAbs(m_edges[i].distance - border.m_edges[i].distance) > 1E-10)
+        if(qAbs(d->edges[i].distance - border.d->edges[i].distance) > 1E-10)
             return false;
     }
     return true;
@@ -63,67 +83,67 @@ void KoTextBlockBorderData::applyInsets(KoInsets &insets, double paragStart, boo
 
     // only apply top when the parag is the top parag in the border-set
     double insetTop = startUnderBorder ? inset(Top): 0;
-    if(qAbs(m_bounds.top() + insetTop - paragStart) < 1E-10)
+    if(qAbs(d->bounds.top() + insetTop - paragStart) < 1E-10)
         insets.top += startUnderBorder ? insetTop : inset(Top);
 }
 
 void KoTextBlockBorderData::setParagraphBottom(double bottom) {
-    m_bounds.setBottom(bottom + inset(Bottom));
+    d->bounds.setBottom(bottom + inset(Bottom));
 }
 
 void KoTextBlockBorderData::paint(QPainter &painter) const {
-    QRectF bounds = m_bounds;
-    QRectF innerBounds = m_bounds;
-    if(m_edges[Top].outerPen.widthF() > 0) {
-        QPen pen = m_edges[Top].outerPen;
+    QRectF bounds = d->bounds;
+    QRectF innerBounds = d->bounds;
+    if(d->edges[Top].outerPen.widthF() > 0) {
+        QPen pen = d->edges[Top].outerPen;
 
         painter.setPen(pen);
-        const double t = m_bounds.top() + pen.widthF() / 2.0;
-        painter.drawLine(QLineF(m_bounds.left(), t, m_bounds.right(), t));
-        innerBounds.setTop(m_bounds.top() + m_edges[Top].distance + pen.widthF());
+        const double t = d->bounds.top() + pen.widthF() / 2.0;
+        painter.drawLine(QLineF(d->bounds.left(), t, d->bounds.right(), t));
+        innerBounds.setTop(d->bounds.top() + d->edges[Top].distance + pen.widthF());
     }
-    if(m_edges[Bottom].outerPen.widthF() > 0) {
-        QPen pen = m_edges[Bottom].outerPen;
+    if(d->edges[Bottom].outerPen.widthF() > 0) {
+        QPen pen = d->edges[Bottom].outerPen;
         painter.setPen(pen);
-        const double b = m_bounds.bottom() - pen.widthF() / 2.0;
-        innerBounds.setBottom(m_bounds.bottom() - m_edges[Bottom].distance - pen.widthF());
-        painter.drawLine(QLineF(m_bounds.left(), b, m_bounds.right(), b));
+        const double b = d->bounds.bottom() - pen.widthF() / 2.0;
+        innerBounds.setBottom(d->bounds.bottom() - d->edges[Bottom].distance - pen.widthF());
+        painter.drawLine(QLineF(d->bounds.left(), b, d->bounds.right(), b));
     }
-    if(m_edges[Left].outerPen.widthF() > 0) {
-        QPen pen = m_edges[Left].outerPen;
+    if(d->edges[Left].outerPen.widthF() > 0) {
+        QPen pen = d->edges[Left].outerPen;
         painter.setPen(pen);
-        const double l = m_bounds.left() + pen.widthF() / 2.0;
-        innerBounds.setLeft(m_bounds.left() + m_edges[Left].distance + pen.widthF());
-        painter.drawLine(QLineF(l, m_bounds.top(), l, m_bounds.bottom()));
+        const double l = d->bounds.left() + pen.widthF() / 2.0;
+        innerBounds.setLeft(d->bounds.left() + d->edges[Left].distance + pen.widthF());
+        painter.drawLine(QLineF(l, d->bounds.top(), l, d->bounds.bottom()));
     }
-    if(m_edges[Right].outerPen.widthF() > 0) {
-        QPen pen = m_edges[Right].outerPen;
+    if(d->edges[Right].outerPen.widthF() > 0) {
+        QPen pen = d->edges[Right].outerPen;
         painter.setPen(pen);
-        const double r = m_bounds.right() - pen.widthF() / 2.0;
-        innerBounds.setRight(m_bounds.right() - m_edges[Right].distance - pen.widthF());
-        painter.drawLine(QLineF(r, m_bounds.top(), r, m_bounds.bottom()));
+        const double r = d->bounds.right() - pen.widthF() / 2.0;
+        innerBounds.setRight(d->bounds.right() - d->edges[Right].distance - pen.widthF());
+        painter.drawLine(QLineF(r, d->bounds.top(), r, d->bounds.bottom()));
     }
     // inner lines
-    if(m_edges[Top].innerPen.widthF() > 0) {
-        QPen pen = m_edges[Top].innerPen;
+    if(d->edges[Top].innerPen.widthF() > 0) {
+        QPen pen = d->edges[Top].innerPen;
         painter.setPen(pen);
         const double t = innerBounds.top() + pen.widthF() / 2.0;
         painter.drawLine(QLineF(innerBounds.left(), t, innerBounds.right(), t));
     }
-    if(m_edges[Bottom].innerPen.widthF() > 0) {
-        QPen pen = m_edges[Bottom].innerPen;
+    if(d->edges[Bottom].innerPen.widthF() > 0) {
+        QPen pen = d->edges[Bottom].innerPen;
         painter.setPen(pen);
         const double b = innerBounds.bottom() - pen.widthF() / 2.0;
         painter.drawLine(QLineF(innerBounds.left(), b, innerBounds.right(), b));
     }
-    if(m_edges[Left].innerPen.widthF() > 0) {
-        QPen pen = m_edges[Left].innerPen;
+    if(d->edges[Left].innerPen.widthF() > 0) {
+        QPen pen = d->edges[Left].innerPen;
         painter.setPen(pen);
         const double l = innerBounds.left() + pen.widthF() / 2.0;
         painter.drawLine(QLineF(l, innerBounds.top(), l, innerBounds.bottom()));
     }
-    if(m_edges[Right].innerPen.widthF() > 0) {
-        QPen pen = m_edges[Right].innerPen;
+    if(d->edges[Right].innerPen.widthF() > 0) {
+        QPen pen = d->edges[Right].innerPen;
         painter.setPen(pen);
         const double r = innerBounds.right() - pen.widthF() / 2.0;
         painter.drawLine(QLineF(r, innerBounds.top(), r, innerBounds.bottom()));
@@ -131,7 +151,7 @@ void KoTextBlockBorderData::paint(QPainter &painter) const {
 }
 
 double KoTextBlockBorderData::inset(Side side) const {
-    return m_edges[side].outerPen.widthF() + m_edges[side].distance + m_edges[side].innerPen.widthF();
+    return d->edges[side].outerPen.widthF() + d->edges[side].distance + d->edges[side].innerPen.widthF();
 }
 
 void KoTextBlockBorderData::setEdge(Side side, const QTextBlockFormat &bf,
@@ -163,5 +183,22 @@ void KoTextBlockBorderData::setEdge(Side side, const QTextBlockFormat &bf,
     edge.distance = bf.doubleProperty(space);
     edge.innerPen.setWidthF( bf.doubleProperty(innerWidth) );
 
-    m_edges[side] = edge;
+    d->edges[side] = edge;
 }
+
+void KoTextBlockBorderData::addUser() {
+    d->refCount++;
+}
+
+int KoTextBlockBorderData::removeUser() {
+    return --d->refCount;
+}
+
+int KoTextBlockBorderData::useCount() const {
+    return d->refCount;
+}
+
+QRectF KoTextBlockBorderData::rect() const {
+    return d->bounds;
+}
+

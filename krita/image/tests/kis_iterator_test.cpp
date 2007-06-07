@@ -24,6 +24,9 @@
 #include <KoColorSpace.h>
 
 #include "kis_iterators_pixel.h"
+#include "kis_random_accessor.h"
+#include "kis_random_sub_accessor.h"
+
 #include "kis_iterator_test.h"
 #include "kis_paint_device.h"
 
@@ -182,6 +185,8 @@ void KisIteratorTest::vLineIter()
 {
     KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisPaintDevice dev( colorSpace, "test");
+    quint8 * bytes = new quint8( colorSpace->pixelSize() );
+    memset( bytes, 128, colorSpace->pixelSize() );
 
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
 
@@ -190,8 +195,6 @@ void KisIteratorTest::vLineIter()
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
     QVERIFY( dev.exactBounds() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
 
-    quint8 * bytes = new quint8( colorSpace->pixelSize() );
-    memset( bytes, 128, colorSpace->pixelSize() );
 
     KisVLineIteratorPixel it = dev.createVLineIterator(0, 0, 128);
     while ( !it.isDone() ) {
@@ -218,8 +221,33 @@ void KisIteratorTest::vLineIter()
 
 void KisIteratorTest::randomAccessor()
 {
-//     dev.createRandomConstAccessor();
-//     dev.createRandomAccessor();
+
+    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    KisPaintDevice dev( colorSpace, "test");
+    quint8 * bytes = new quint8( colorSpace->pixelSize() );
+    memset( bytes, 128, colorSpace->pixelSize() );
+
+    QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
+
+    KisRandomConstAccessorPixel acc = dev.createRandomConstAccessor(0, 0);
+    for ( int y = 0; y < 128; ++y ) {
+        for ( int x = 0; x < 128; ++x ) {
+            acc.moveTo( x, y );
+        }
+    }
+    QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
+
+    KisRandomAccessorPixel ac = dev.createRandomAccessor(0, 0);
+    for ( int y = 0; y < 128; ++y ) {
+        for ( int x = 0; x < 128; ++x ) {
+            ac.moveTo( x, y );
+            //memcpy( ac.rawData(), bytes, colorSpace->pixelSize() );
+        }
+    }
+    kDebug() << dev.extent() << endl;
+    QVERIFY( dev.extent() == QRect(0, 0, 128, 128 ) );
+    QVERIFY( dev.exactBounds() == QRect(0, 0, 128, 128 ) );
+
 //     dev.createRandomSubAccessor();
 }
 

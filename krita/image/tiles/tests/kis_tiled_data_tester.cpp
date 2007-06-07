@@ -39,25 +39,6 @@ void KisTiledDataTester::allTests()
     QCOMPARE(extentWidth, 0);
     QCOMPARE(extentHeight, 0);
 
-//     const quint8 *readOnlyPixel = dm->pixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
-//     dm->extent(extentX, extentY, extentWidth, extentHeight);
-//     QCOMPARE(extentWidth, 0);
-//     QCOMPARE(extentHeight, 0);
-
-//     quint8 *writablePixel = dm->writablePixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
-//     dm->extent(extentX, extentY, extentWidth, extentHeight);
-//     QCOMPARE(extentX, 0);
-//     QCOMPARE(extentY, 0);
-//     QCOMPARE(extentWidth, KisTile::WIDTH);
-//     QCOMPARE(extentHeight, KisTile::HEIGHT);
-
-//     writablePixel = dm->writablePixel(-KisTile::WIDTH, -KisTile::HEIGHT);
-//     dm->extent(extentX, extentY, extentWidth, extentHeight);
-//     QCOMPARE(extentX, -KisTile::WIDTH);
-//     QCOMPARE(extentY, -KisTile::HEIGHT);
-//     QCOMPARE(extentWidth, 2*KisTile::WIDTH);
-//     QCOMPARE(extentHeight, 2*KisTile::HEIGHT);
-
     dm->clear();
     dm->extent(extentX, extentY, extentWidth, extentHeight);
     QCOMPARE(extentWidth, 0);

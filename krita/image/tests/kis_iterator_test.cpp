@@ -109,15 +109,15 @@ void KisIteratorTest::rectIter()
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
     QVERIFY( dev.exactBounds() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
 
-//     KisRectIteratorPixel it = dev.createRectIterator(0, 0, 128, 128);
-//     while ( !it.isDone() ) {
-//         memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
-//         ++it;
-//     }
-//     QVERIFY( dev.extent() == QRect( 0, 0, 128, 128 ) );
-//     QVERIFY( dev.exactBounds() == QRect( 0, 0, 128, 128 ) );
+    KisRectIteratorPixel it = dev.createRectIterator(0, 0, 128, 128);
+    while ( !it.isDone() ) {
+        memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
+        ++it;
+    }
+    QVERIFY( dev.extent() == QRect( 0, 0, 128, 128 ) );
+    QVERIFY( dev.exactBounds() == QRect( 0, 0, 128, 128 ) );
 
-//     dev.clear();
+//     dev.clear(); // This causes an assert: BUG!
 
 //     it = dev.createRectIterator(10, 10, 128, 128);
 //     while ( !it.isDone() ) {
@@ -241,14 +241,13 @@ void KisIteratorTest::randomAccessor()
     for ( int y = 0; y < 128; ++y ) {
         for ( int x = 0; x < 128; ++x ) {
             ac.moveTo( x, y );
-            //memcpy( ac.rawData(), bytes, colorSpace->pixelSize() );
+            memcpy( ac.rawData(), bytes, colorSpace->pixelSize() );
         }
     }
     kDebug() << dev.extent() << endl;
     QVERIFY( dev.extent() == QRect(0, 0, 128, 128 ) );
     QVERIFY( dev.exactBounds() == QRect(0, 0, 128, 128 ) );
 
-//     dev.createRandomSubAccessor();
 }
 
 

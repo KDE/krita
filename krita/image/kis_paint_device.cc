@@ -555,7 +555,8 @@ void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *
 void KisPaintDevice::clear( const QRect & rc )
 {
 #ifdef CACHE_EXACT_BOUNDS
-    m_d->exactBounds &= rc;
+    if ( rc.contains( m_d->exactBounds) )
+         m_d->exactBounds = QRect();
 #endif
     m_datamanager->clear( rc.x(), rc.y(), rc.width(), rc.height(), m_datamanager->defaultPixel() );
 }
@@ -881,6 +882,9 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h)
 
 KisRectIteratorPixel KisPaintDevice::createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h)
 {
+#ifdef CACHE_EXACT_BOUNDS
+    m_d->exactBounds &= QRect( left, top, w, h );
+#endif
     KisDataManager* selectionDm = 0;
 
     if(hasSelection())
@@ -902,6 +906,10 @@ KisRectConstIteratorPixel KisPaintDevice::createRectConstIterator(qint32 left, q
 
 KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(qint32 x, qint32 y, qint32 w)
 {
+#ifdef CACHE_EXACT_BOUNDS
+    m_d->exactBounds &= QRect( x, y, w, 1 );
+#endif
+
     KisDataManager* selectionDm = 0;
 
     if(hasSelection())
@@ -923,6 +931,10 @@ KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, q
 
 KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, qint32 h)
 {
+#ifdef CACHE_EXACT_BOUNDS
+    m_d->exactBounds &= QRect( x, y, 1, h );
+#endif
+
     KisDataManager* selectionDm = 0;
 
     if(hasSelection())

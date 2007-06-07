@@ -71,7 +71,7 @@ private:
  * Gives a random access to the pixel of an image. Use the moveTo function, to select the pixel. And then rawData to
  * access the value of a pixel.
  */
-class KisRandomAccessor : public KisRandomConstAccessor
+class KRITAIMAGE_EXPORT KisRandomAccessor : public KisRandomConstAccessor
 {
 
 public:

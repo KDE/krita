@@ -201,8 +201,9 @@ void KisTiledRectIterator::nextTile()
     if(m_col >= m_rightCol)
     {
         // needs to switch row
-        if(m_row >= m_bottomRow)
+        if(m_row >= m_bottomRow) {
             m_beyondEnd = true;
+        }
         else
         {
             m_col = m_leftCol;

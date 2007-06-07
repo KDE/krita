@@ -39,6 +39,6 @@ namespace KisMetaData {
         private:
             Private* const d;
     };
-};
+}
 
 #endif

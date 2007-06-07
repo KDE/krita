@@ -40,6 +40,7 @@
 #include "kis_meta_data_store.h"
 #include "kis_meta_data_entry.h"
 #include "kis_meta_data_value.h"
+#include "kis_meta_data_schema.h"
 
 #include "kis_entry_editor.h"
 
@@ -63,7 +64,7 @@ metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QStringList &)
     }
 /*
     m_metaDataStore = new KisMetaData::Store();
-    const KisMetaData::Schema* dcSchema = m_metaDataStore->createSchema( KisMetaData::Schema::UriDublinCore, "dc");
+    const KisMetaData::Schema* dcSchema = m_metaDataStore->createSchema( KisMetaData::Schema::DublinCoreSchema);
     const KisMetaData::Schema* dcHistory = m_metaDataStore->createSchema( "http://history/", "history");
     const KisMetaData::Schema* dcHow =m_metaDataStore->createSchema( "http://how/", "how");
     m_metaDataStore->addEntry( KisMetaData::Entry("name", dcSchema, KisMetaData::Value("tester")));

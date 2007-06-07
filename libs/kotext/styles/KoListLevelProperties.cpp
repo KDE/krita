@@ -341,17 +341,19 @@ void KoListLevelProperties::loadOasis(KoOpenDocumentLoadingContext& context, con
         //setListItemSuffix(".");
     }
 
+    //The style:num-prefix and style:num-suffix attributes specify what to display before and after the number.
     const QString prefix = style.attributeNS( KoXmlNS::style, "num-prefix", QString() );
     if( ! prefix.isNull() )
         setListItemPrefix(prefix);
-
     const QString suffix = style.attributeNS( KoXmlNS::style, "num-suffix", QString() );
     if( ! suffix.isNull() )
         setListItemSuffix(suffix);
 
+    // The text:level attribute specifies the level of the number list style. It can be used on all list-level styles.
     const int level = qMax(1, style.attributeNS( KoXmlNS::text, "level", QString() ).toInt() );
     setLevel(level);
 
+    // The text:display-levels attribute specifies the number of levels whose numbers are displayed at the current level.
     const QString displayLevel = style.attributeNS( KoXmlNS::text, "display-levels", QString() );
     if( ! displayLevel.isNull() )
         setDisplayLevel(displayLevel.toInt());

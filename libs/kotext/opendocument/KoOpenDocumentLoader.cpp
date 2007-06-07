@@ -520,20 +520,21 @@ void KoOpenDocumentLoader::loadList(KoOpenDocumentLoadingContext& context, const
         listStyle = new KoListStyle();
         listStyle->setName(styleName);
         d->addStyle(listStyle);
+        context.setCurrentListStyleName(styleName);
     }
 
+    // The level specifies the level of the list style.
     int level = context.currentListLevel();
 
     // Set the style and create the textlist
     QTextListFormat listformat;
-    KoListLevelProperties props = listStyle->level(level);
-//props.applyStyle(listformat);
     QTextList* list = cursor.insertList(listformat);
 
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug()<<"KoOpenDocumentLoader::loadList styleName="<<styleName<<" listStyle="<<(listStyle ? listStyle->name() : "NULL")
             <<" level="<<level<<" hasPropertiesForLevel="<<listStyle->hasPropertiesForLevel(level)
-            <<" style="<<props.style()<<" prefix="<<props.listItemPrefix()<<" suffix="<<props.listItemSuffix()<<endl;
+            //<<" style="<<props.style()<<" prefix="<<props.listItemPrefix()<<" suffix="<<props.listItemSuffix()
+            <<endl;
     #endif
 
     // we need at least one item, so add a dummy-item we remove later again
@@ -567,19 +568,25 @@ void KoOpenDocumentLoader::loadList(KoOpenDocumentLoadingContext& context, const
 
         loadBody(context, e, cursor);
 
+        if( ! listStyle->hasPropertiesForLevel(level) ) { // set default style
+            KoListLevelProperties props;
+            props.setStyle(KoListStyle::DecimalItem);
+            props.setLevel(0);
+            listStyle->setLevel(props);
+        }
         listStyle->applyStyle(current, level);
     }
 
     // set the list level back to the previous value
     context.setCurrentListLevel(level);
-/*
+    /*
     // add the new blocks to the list
     QTextBlock current = cursor.block();
     for(QTextBlock b = prev; b.isValid() && b != current; b = b.next()) {
         list->add(b);
         listStyle->applyStyle(b, level);
     }
-*/
+    */
     list->removeItem(0); // remove the first dummy item again
 
     /*

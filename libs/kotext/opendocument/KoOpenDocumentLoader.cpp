@@ -50,7 +50,7 @@
 #include <klocale.h>
 
 // if defined then debugging is enabled
-//#define KOOPENDOCUMENTLOADER_DEBUG
+#define KOOPENDOCUMENTLOADER_DEBUG
 
 /// \internal d-pointer class.
 class KoOpenDocumentLoader::Private
@@ -500,83 +500,48 @@ void KoOpenDocumentLoader::loadHeading(KoOpenDocumentLoadingContext& context, co
 //1.6: KoTextDocument::loadList
 void KoOpenDocumentLoader::loadList(KoOpenDocumentLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
 {
-#if 0 //1.6:
-    const QString oldListStyleName = context.currentListStyleName();
-    if ( list.hasAttributeNS( KoXmlNS::text, "style-name" ) ) context.setCurrentListStyleName( list.attributeNS( KoXmlNS::text, "style-name", QString::null ) );
-    bool listOK = !context.currentListStyleName().isEmpty();
-    int level = ( list.localName() == "numbered-paragraph" ) ? list.attributeNS( KoXmlNS::text, "level", "1" ).toInt() : context.listStyleStack().level() + 1;
-    if ( listOK ) listOK = context.pushListLevelStyle( context.currentListStyleName(), level );
-    const QDomElement listStyle = context.listStyleStack().currentListStyle();
-    // The tag is either list-level-style-number or list-level-style-bullet
-    const bool orderedList = listStyle.localName() == "list-level-style-number";
-    if ( list.localName() == "numbered-paragraph" ) {
-        // A numbered-paragraph contains paragraphs directly (it's both a list and a list-item)
-        int restartNumbering = -1;
-        if ( list.hasAttributeNS( KoXmlNS::text, "start-value" ) ) restartNumbering = list.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
-        KoTextParag* oldLast = lastParagraph;
-        lastParagraph = loadOasisText( list, context, lastParagraph, styleColl, nextParagraph );
-        KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
-        // Apply list style to first paragraph inside numbered-parag - there's only one anyway
-        // Keep the "is outline" property though
-        bool isOutline = firstListItem->counter() && firstListItem->counter()->numbering() == KoParagCounter::NUM_CHAPTER;
-        firstListItem->applyListStyle( context, restartNumbering, orderedList, isOutline, level );
-    } else {
-        for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() ) {
-            QDomElement listItem = n.toElement();
-            int restartNumbering = -1;
-            if ( listItem.hasAttributeNS( KoXmlNS::text, "start-value" ) ) restartNumbering = listItem.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
-            bool isListHeader = listItem.localName() == "list-header" || listItem.attributeNS( KoXmlNS::text, "is-list-header", QString::null ) == "is-list-header";
-            KoTextParag* oldLast = lastParagraph;
-            lastParagraph = loadOasisText( listItem, context, lastParagraph, styleColl, nextParagraph );
-            KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
-            KoTextParag* p = firstListItem;
-            // It's either list-header (normal text on top of list) or list-item
-            if ( !isListHeader && firstListItem ) {
-                // Apply list style to first paragraph inside list-item
-                bool isOutline = firstListItem->counter() && firstListItem->counter()->numbering() == KoParagCounter::NUM_CHAPTER;
-                firstListItem->applyListStyle( context, restartNumbering, orderedList, isOutline, level );
-                p = p->next();
-            }
-            // Make text:h inside list-item (as non first child) unnumbered.
-            while ( p && p != lastParagraph->next() ) {
-                if ( p->counter() ) p->counter()->setNumbering( KoParagCounter::NUM_NONE );
-                p = p->next();
-            }
-        }
-    }
-    if ( listOK ) context.listStyleStack().pop();
-    context.setCurrentListStyleName( oldListStyleName );
-    return lastParagraph;
-#else
-
-    // Get the name of the used style
+    // The optional text:style-name attribute specifies the name of the list style that is applied to the list.
     QString styleName;
     if ( parent.hasAttributeNS( KoXmlNS::text, "style-name" ) ) {
         styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
-        /*
-        KoXmlElement* listElem = context.oasisStyles().listStyles()[ styleName ];
-        if(listElem) context.addStyles( listElem, "paragraph" );
-        */
+        context.setCurrentListStyleName(styleName);
+    }
+    else {
+        // If this attribute is not included and therefore no list style is specified, one of the following actions is taken:
+        // * If the list is contained within another list, the list style defaults to the style of the surrounding list.
+        // * If there is no list style specified for the surrounding list, but the list contains paragraphs that have paragraph styles attached specifying a list style, this list style is used for any of these paragraphs.
+        // * An application specific default list style is applied to any other paragraphs.
+        styleName = context.currentListStyleName();
     }
 
     // Get the KoListStyle the name may reference to
     KoListStyle* listStyle = d->listStyle(styleName);
-    #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug()<<"KoOpenDocumentLoader::loadList styleName="<<styleName<<" listStyle="<<(listStyle ? listStyle->name() : "NULL")<<endl;
-    #endif
-    if( ! listStyle ) {
+    if( ! listStyle ) { // no such list means we define a default one
         listStyle = new KoListStyle();
         listStyle->setName(styleName);
         d->addStyle(listStyle);
     }
 
+    int level = context.currentListLevel();
+
     // Set the style and create the textlist
     QTextListFormat listformat;
+    KoListLevelProperties props = listStyle->level(level);
+//props.applyStyle(listformat);
     QTextList* list = cursor.insertList(listformat);
+
+    #ifdef KOOPENDOCUMENTLOADER_DEBUG
+        kDebug()<<"KoOpenDocumentLoader::loadList styleName="<<styleName<<" listStyle="<<(listStyle ? listStyle->name() : "NULL")
+            <<" level="<<level<<" hasPropertiesForLevel="<<listStyle->hasPropertiesForLevel(level)
+            <<" style="<<props.style()<<" prefix="<<props.listItemPrefix()<<" suffix="<<props.listItemSuffix()<<endl;
+    #endif
 
     // we need at least one item, so add a dummy-item we remove later again
     cursor.insertBlock();
     QTextBlock prev = cursor.block();
+
+    // increment list level by one for nested lists.
+    context.setCurrentListLevel(level + 1);
 
     // Iterate over list items and add them to the textlist
     KoXmlElement e;
@@ -593,14 +558,28 @@ void KoOpenDocumentLoader::loadList(KoOpenDocumentLoadingContext& context, const
             list->setFormat(f);
         }
         */
-        listStyle->applyStyle(cursor.block());
+
+        //listStyle->applyStyle(cursor.block(), level + 1);
+        //listStyle->applyStyle(cursor.block());
+
+        QTextBlock current = cursor.block();
+        list->add(current);
+
         loadBody(context, e, cursor);
+
+        listStyle->applyStyle(current, level);
     }
 
+    // set the list level back to the previous value
+    context.setCurrentListLevel(level);
+/*
     // add the new blocks to the list
     QTextBlock current = cursor.block();
-    for(QTextBlock b = prev; b.isValid() && b != current; b = b.next())
+    for(QTextBlock b = prev; b.isValid() && b != current; b = b.next()) {
         list->add(b);
+        listStyle->applyStyle(b, level);
+    }
+*/
     list->removeItem(0); // remove the first dummy item again
 
     /*
@@ -631,7 +610,6 @@ void KoOpenDocumentLoader::loadList(KoOpenDocumentLoadingContext& context, const
     QTextBlockFormat emptyTbf;
     QTextCharFormat emptyCf;
     cursor.insertBlock(emptyTbf, emptyCf);
-#endif
 }
 
 //1.6: KoTextDocument::loadOasisText

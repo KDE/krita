@@ -36,6 +36,12 @@ public:
     KoOpenDocumentLoadingContext( KoDocument* doc, KoOasisStyles& styles, KoStore* store );
     virtual ~KoOpenDocumentLoadingContext();
 
+    QString currentListStyleName() const;
+    void setCurrentListStyleName(const QString& stylename);
+
+    int currentListLevel() const;
+    void setCurrentListLevel(int level);
+
 #if 0
     KoVariableCollection& variableCollection() { return m_varColl; }
 

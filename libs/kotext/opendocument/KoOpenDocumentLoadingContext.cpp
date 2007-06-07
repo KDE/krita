@@ -24,16 +24,40 @@
 
 class KoOpenDocumentLoadingContext::Private
 {
+    public:
+        QString currentListStyleName;
+        int currentListLevel;
 };
 
 KoOpenDocumentLoadingContext::KoOpenDocumentLoadingContext( KoDocument* doc, KoOasisStyles& styles, KoStore* store )
     : KoOasisLoadingContext( doc, styles, store ), d(new Private())
 {
+    d->currentListLevel = 1; // default list level is always 1
 }
 
 KoOpenDocumentLoadingContext::~KoOpenDocumentLoadingContext()
 {
     delete d;
+}
+
+QString KoOpenDocumentLoadingContext::currentListStyleName() const
+{
+    return d->currentListStyleName;
+}
+
+void KoOpenDocumentLoadingContext::setCurrentListStyleName(const QString& stylename)
+{
+    d->currentListStyleName = stylename;
+}
+
+int KoOpenDocumentLoadingContext::currentListLevel() const
+{
+    return d->currentListLevel;
+}
+
+void KoOpenDocumentLoadingContext::setCurrentListLevel(int level)
+{
+    d->currentListLevel = level;
 }
 
 #if 0

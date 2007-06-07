@@ -176,6 +176,8 @@ public:
      */
     void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
     virtual QRect exactBounds() const;
+    virtual QRect exactBoundsOldMethod() const;
+    virtual QRect exactBoundsImprovedOldMethod() const;
 
     /**
      * Cut the paint device down to the specified rect

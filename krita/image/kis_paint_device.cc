@@ -426,11 +426,91 @@ void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) con
     h = r.height();
 }
 
-QRect KisPaintDevice::exactBounds() const
+QRect KisPaintDevice::exactBoundsImprovedOldMethod() const
 {
-#ifdef CACHE_EXACT_BOUNDS
-    return m_d->exactBounds;
-#else
+    // Solution n°2
+    Q_INT32  x, y, w, h, boundX2, boundY2, boundW2, boundH2;
+    extent(x, y, w, h);
+    extent(boundX2, boundY2, boundW2, boundH2);
+
+    const Q_UINT8* defaultPixel = m_datamanager->defaultPixel();
+    bool found = false;
+    {
+        KisHLineConstIterator it = const_cast<KisPaintDevice *>(this)->createHLineConstIterator(x, y, w);
+        for (Q_INT32 y2 = y; y2 < y + h ; ++y2) {
+            while (!it.isDone() && found == false) {
+                if (memcmp(it.rawData(), defaultPixel, m_d->pixelSize) != 0) {
+                    boundY2 = y2;
+                    found = true;
+                    break;
+                }
+                ++it;
+            }
+            if (found) break;
+            it.nextRow();
+        }
+    }
+
+    found = false;
+
+    for (Q_INT32 y2 = y + h; y2 > y ; --y2) {
+        KisHLineConstIterator it = const_cast<KisPaintDevice *>(this)->createHLineConstIterator(x, y2, w);
+        while (!it.isDone() && found == false) {
+            if (memcmp(it.rawData(), defaultPixel, m_d->pixelSize) != 0) {
+                boundH2 = y2 - boundY2 + 1;
+                found = true;
+                break;
+            }
+            ++it;
+        }
+        if (found) break;
+    }
+    found = false;
+
+    {
+        KisVLineConstIterator it = const_cast<KisPaintDevice *>(this)->createVLineConstIterator(x, boundY2, boundH2);
+        for (Q_INT32 x2 = x; x2 < x + w ; ++x2) {
+            while (!it.isDone() && found == false) {
+                if (memcmp(it.rawData(), defaultPixel, m_d->pixelSize) != 0) {
+                    boundX2 = x2;
+                    found = true;
+                    break;
+                }
+                ++it;
+            }
+            if (found) break;
+            it.nextCol();
+        }
+    }
+
+    found = false;
+
+    // Look for right edge )
+    {
+        for (Q_INT32 x2 = x + w; x2 > x ; --x2) {
+            KisVLineConstIterator it = const_cast<KisPaintDevice *>(this)->createVLineConstIterator(/*x + w*/ x2, boundY2, boundH2);
+            while (!it.isDone() && found == false) {
+                if (memcmp(it.rawData(), defaultPixel, m_d->pixelSize) != 0) {
+                    boundW2 = x2 - boundX2 + 1; // XXX: I commented this
+                                            // +1 out, but why? It
+                                            // should be correct, since
+                                            // we've found the first
+                                            // pixel that should be
+                                            // included, and it should
+                                            // be added to the width.
+                    found = true;
+                    break;
+                }
+                ++it;
+            }
+            if (found) break;
+        }
+    }
+    return QRect(boundX2, boundY2, boundW2, boundH2);
+}
+
+QRect KisPaintDevice::exactBoundsOldMethod() const
+{
 //    QTime t;
 //    t.start();
 
@@ -513,8 +593,17 @@ QRect KisPaintDevice::exactBounds() const
     return QRect(boundX, boundY, boundW, boundH);
 
 
+}
+
+QRect KisPaintDevice::exactBounds() const
+{
+#ifdef CACHE_EXACT_BOUNDS
+    return m_d->exactBounds;
+#else
+    return exactBoundsImprovedOldMethod();
 #endif
 }
+
 
 void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
 {

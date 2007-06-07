@@ -295,6 +295,18 @@ int KoCharacterStyle::styleId() const {
 void KoCharacterStyle::setStyleId(int id) {
     setProperty(StyleId, id);
 }
+QFont KoCharacterStyle::font() const {
+    QFont font;
+    if(d->stylesPrivate->contains(QTextFormat::FontFamily))
+        font.setFamily(fontFamily());
+    if(d->stylesPrivate->contains(QTextFormat::FontPointSize))
+        font.setPointSizeF(fontPointSize());
+    if(d->stylesPrivate->contains(QTextFormat::FontWeight))
+        font.setWeight(fontWeight());
+    if(d->stylesPrivate->contains(QTextFormat::FontItalic))
+        font.setItalic(fontItalic());
+    return font;
+}
 
 //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
 void KoCharacterStyle::loadOasis(KoOpenDocumentLoadingContext& context) {

@@ -63,7 +63,7 @@ public:
     ~KoCharacterStyle();
 
     //void setFont(const QFont &font) { setProperty(QTextFormat::FontId, font); }
-    //QFont font() const { return property(QTextFormat::FontId).toFont(); }
+    QFont font() const;
 
     /// See similar named method on QTextCharFormat
     void setFontFamily (const QString &family);

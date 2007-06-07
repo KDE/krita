@@ -62,7 +62,7 @@ public:
     /// Destructor
     ~KoCharacterStyle();
 
-    //void setFont(const QFont &font) { setProperty(QTextFormat::FontId, font); }
+    /// return the effective font for this style
     QFont font() const;
 
     /// See similar named method on QTextCharFormat
@@ -124,6 +124,9 @@ public:
     /// See similar named method on QTextCharFormat
     void clearForeground ();
 
+    void setHasHyphenation(bool on);
+    bool hasHyphenation() const;
+
 
     /// return the name of the style.
     QString name() const;
@@ -158,13 +161,8 @@ public:
      */
     void loadOasis(KoOpenDocumentLoadingContext& context);
 
-private:
-    void setProperty(int key, const QVariant &value);
-    QVariant property(int key) const;
-    double propertyDouble(int key) const;
-    int propertyInt(int key) const;
-    QString propertyString(int key) const;
-    bool propertyBoolean(int key) const;
+    /// return true if this style has a non-default value set for the Property
+    bool hasProperty(int key) const;
 
 private:
     class Private;

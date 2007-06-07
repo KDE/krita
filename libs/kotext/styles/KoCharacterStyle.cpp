@@ -34,6 +34,37 @@
 class KoCharacterStyle::Private {
 public:
     Private() : stylesPrivate( new StylePrivate()) {}
+    ~Private() {
+        delete stylesPrivate;
+    }
+
+    void setProperty(int key, const QVariant &value) {
+        stylesPrivate->add(key, value);
+    }
+    double propertyDouble(int key) const {
+        QVariant variant = stylesPrivate->value(key);
+        if(variant.isNull())
+            return 0.0;
+        return variant.toDouble();
+    }
+    int propertyInt(int key) const {
+        QVariant variant = stylesPrivate->value(key);
+        if(variant.isNull())
+            return 0;
+        return variant.toInt();
+    }
+    QString propertyString(int key) const {
+        QVariant variant = stylesPrivate->value(key);
+        if(variant.isNull())
+            return QString();
+        return qvariant_cast<QString>(variant);
+    }
+    bool propertyBoolean(int key) const {
+        QVariant variant = stylesPrivate->value(key);
+        if(variant.isNull())
+            return false;
+        return variant.toBool();
+    }
 
     QString name;
     StylePrivate *stylesPrivate;
@@ -55,21 +86,7 @@ KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style)
 }
 
 KoCharacterStyle::~KoCharacterStyle() {
-}
-
-void KoCharacterStyle::setProperty(int key, const QVariant &value) {
-    d->stylesPrivate->add(key, value);
-}
-
-QVariant KoCharacterStyle::property(int key) const {
-    return d->stylesPrivate->value(key);
-}
-
-double KoCharacterStyle::propertyDouble(int key) const {
-    QVariant variant = d->stylesPrivate->value(key);
-    if(variant.isNull())
-        return 0.0;
-    return variant.toDouble();
+    delete d;
 }
 
 QPen KoCharacterStyle::textOutline () const {
@@ -117,19 +134,7 @@ void KoCharacterStyle::clearForeground() {
     d->stylesPrivate->remove(QTextCharFormat::ForegroundBrush);
 }
 
-int KoCharacterStyle::propertyInt(int key) const {
-    QVariant variant = d->stylesPrivate->value(key);
-    if(variant.isNull())
-        return 0;
-    return variant.toInt();
-}
 
-bool KoCharacterStyle::propertyBoolean(int key) const {
-    QVariant variant = d->stylesPrivate->value(key);
-    if(variant.isNull())
-        return false;
-    return variant.toBool();
-}
 
 void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
     // copy all relevant properties.
@@ -180,13 +185,6 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const {
     selection->mergeCharFormat(cf);
 }
 
-QString KoCharacterStyle::propertyString(int key) const {
-    QVariant variant = d->stylesPrivate->value(key);
-    if(variant.isNull())
-        return QString();
-    return qvariant_cast<QString>(variant);
-}
-
 // OASIS 14.2.29
 static void importOasisUnderline( const QString& type, const QString& style,
                                   QTextCharFormat::UnderlineStyle& formatstyle )
@@ -217,71 +215,71 @@ static void importOasisUnderline( const QString& type, const QString& style,
 }
 
 void KoCharacterStyle::setFontFamily (const QString &family) {
-    setProperty(QTextFormat::FontFamily, family);
+    d->setProperty(QTextFormat::FontFamily, family);
 }
 QString KoCharacterStyle::fontFamily () const {
-    return propertyString(QTextFormat::FontFamily);
+    return d->propertyString(QTextFormat::FontFamily);
 }
 void KoCharacterStyle::setFontPointSize (qreal size) {
-    setProperty(QTextFormat::FontPointSize, size);
+    d->setProperty(QTextFormat::FontPointSize, size);
 }
 double KoCharacterStyle::fontPointSize () const {
-    return propertyDouble(QTextFormat::FontPointSize);
+    return d->propertyDouble(QTextFormat::FontPointSize);
 }
 void KoCharacterStyle::setFontWeight (int weight) {
-    setProperty(QTextFormat::FontWeight, weight);
+    d->setProperty(QTextFormat::FontWeight, weight);
 }
 int KoCharacterStyle::fontWeight () const {
-    return propertyInt(QTextFormat::FontWeight);
+    return d->propertyInt(QTextFormat::FontWeight);
 }
 void KoCharacterStyle::setFontItalic (bool italic) {
-    setProperty(QTextFormat::FontItalic, italic);
+    d->setProperty(QTextFormat::FontItalic, italic);
 }
 bool KoCharacterStyle::fontItalic () const {
-    return propertyBoolean(QTextFormat::FontItalic);
+    return d->propertyBoolean(QTextFormat::FontItalic);
 }
 void KoCharacterStyle::setFontOverline (bool overline) {
-    setProperty(QTextFormat::FontOverline, overline);
+    d->setProperty(QTextFormat::FontOverline, overline);
 }
 bool KoCharacterStyle::fontOverline () const {
-    return propertyBoolean(QTextFormat::FontOverline);
+    return d->propertyBoolean(QTextFormat::FontOverline);
 }
 void KoCharacterStyle::setFontStrikeOut (bool strikeOut) {
-    setProperty(QTextFormat::FontStrikeOut, strikeOut);
+    d->setProperty(QTextFormat::FontStrikeOut, strikeOut);
 }
 bool KoCharacterStyle::fontStrikeOut () const {
-    return propertyBoolean(QTextFormat::FontStrikeOut);
+    return d->propertyBoolean(QTextFormat::FontStrikeOut);
 }
 void KoCharacterStyle::setUnderlineColor (const QColor &color) {
-    setProperty(QTextFormat::TextUnderlineColor, color);
+    d->setProperty(QTextFormat::TextUnderlineColor, color);
 }
 void KoCharacterStyle::setFontFixedPitch (bool fixedPitch) {
-    setProperty(QTextFormat::FontFixedPitch, fixedPitch);
+    d->setProperty(QTextFormat::FontFixedPitch, fixedPitch);
 }
 bool KoCharacterStyle::fontFixedPitch () const {
-    return propertyBoolean(QTextFormat::FontFixedPitch);
+    return d->propertyBoolean(QTextFormat::FontFixedPitch);
 }
 void KoCharacterStyle::setUnderlineStyle (QTextCharFormat::UnderlineStyle style) {
-    setProperty(QTextFormat::TextUnderlineStyle, style);
+    d->setProperty(QTextFormat::TextUnderlineStyle, style);
 }
 QTextCharFormat::UnderlineStyle KoCharacterStyle::underlineStyle () const {
-    return static_cast<QTextCharFormat::UnderlineStyle> (propertyInt(QTextFormat::TextUnderlineStyle));
+    return static_cast<QTextCharFormat::UnderlineStyle> (d->propertyInt(QTextFormat::TextUnderlineStyle));
 
 }
 void KoCharacterStyle::setVerticalAlignment (QTextCharFormat::VerticalAlignment alignment) {
-    setProperty(QTextFormat::TextVerticalAlignment, alignment);
+    d->setProperty(QTextFormat::TextVerticalAlignment, alignment);
 }
 QTextCharFormat::VerticalAlignment KoCharacterStyle::verticalAlignment () const {
-    return static_cast<QTextCharFormat::VerticalAlignment> (propertyInt(QTextFormat::TextVerticalAlignment));
+    return static_cast<QTextCharFormat::VerticalAlignment> (d->propertyInt(QTextFormat::TextVerticalAlignment));
 }
 void KoCharacterStyle::setTextOutline (const QPen &pen) {
-    setProperty(QTextFormat::TextOutline, pen);
+    d->setProperty(QTextFormat::TextOutline, pen);
 }
 void KoCharacterStyle::setBackground (const QBrush &brush) {
-    setProperty(QTextFormat::BackgroundBrush, brush);
+    d->setProperty(QTextFormat::BackgroundBrush, brush);
 }
 void KoCharacterStyle::setForeground (const QBrush &brush) {
-    setProperty(QTextFormat::ForegroundBrush, brush);
+    d->setProperty(QTextFormat::ForegroundBrush, brush);
 }
 QString KoCharacterStyle::name() const {
     return d->name;
@@ -290,10 +288,10 @@ void KoCharacterStyle::setName(const QString &name) {
     d->name = name;
 }
 int KoCharacterStyle::styleId() const {
-    return propertyInt(StyleId);
+    return d->propertyInt(StyleId);
 }
 void KoCharacterStyle::setStyleId(int id) {
-    setProperty(StyleId, id);
+    d->setProperty(StyleId, id);
 }
 QFont KoCharacterStyle::font() const {
     QFont font;
@@ -306,6 +304,16 @@ QFont KoCharacterStyle::font() const {
     if(d->stylesPrivate->contains(QTextFormat::FontItalic))
         font.setItalic(fontItalic());
     return font;
+}
+void KoCharacterStyle::setHasHyphenation(bool on) {
+    d->setProperty(HasHyphenation, on);
+}
+bool KoCharacterStyle::hasHyphenation() const {
+    return d->propertyBoolean(HasHyphenation);
+}
+
+bool KoCharacterStyle::hasProperty(int key) const {
+    return d->stylesPrivate->contains(key);
 }
 
 //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)

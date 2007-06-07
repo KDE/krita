@@ -1035,6 +1035,10 @@ void KoMainWindow::closeEvent(QCloseEvent *e) {
     if(queryClose()) {
         saveWindowSettings();
         setRootDocument(0L);
+        if(!d->m_dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
+            foreach( QDockWidget* dockWidget, d->m_dockWidgetMap.values() )
+                dockWidget->setVisible( d->m_dockWidgetVisibilityMap.value(dockWidget) );
+        }
         KParts::MainWindow::closeEvent(e);
     }
     else

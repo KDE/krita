@@ -80,7 +80,12 @@ public:
 
 private:
 
+    friend class KisTiledIterator;
+    friend class KisTiledDataManager;
+    friend class KisMemento;
     friend class KisTileManager;
+    friend class KisTileCompressor;
+    friend class KisTiledRandomAccessor;
 
     KisTile& operator=(const KisTile&);
 

@@ -70,7 +70,7 @@ public:
     // Operation used to composite this layer with the projection of
     // the layers _under_ this layer
     const KoCompositeOp * compositeOp;
-    
+
     KisMetaData::Store* metaDataStore;
 
     QRegion dirtyRegion;
@@ -157,17 +157,22 @@ QBitArray & KisLayer::channelFlags()
 
 void KisLayer::setDirty()
 {
+
     QRect rc = extent();
+//    kDebug() << "setDirty " << name() << ", " << rc << endl;
     setDirty( QRegion( rc ) );
 }
 
 void KisLayer::setDirty(const QRect & rc)
 {
+//    kDebug() << "setDirty rc " << name() << ", " << rc << endl;
     setDirty( QRegion( rc ) );
 }
 
 void KisLayer::setDirty( const QRegion & region)
 {
+//    kDebug() << "setDirty region " << name() << ", " << region.boundingRect() << endl;
+
     // If we're dirty, our parent is dirty, if we've got a parent
     if ( region.isEmpty() ) return;
 
@@ -177,20 +182,23 @@ void KisLayer::setDirty( const QRegion & region)
     if (m_d->image.data()) {
         m_d->image->notifyLayerUpdated(KisLayerSP(this));
     }
-
+    m_d->regionLock.lock();
     m_d->dirtyRegion += region;
+    m_d->regionLock.unlock();
 
 }
 
 
 bool KisLayer::isDirty( const QRect & rect )
 {
+//    kDebug() << "isDirty " << name() << ", " << rect << ", " << m_d->dirtyRegion.intersects( rect ) << endl;
     return m_d->dirtyRegion.intersects( rect );
 }
 
 void KisLayer::setClean( QRect rc )
 {
     m_d->regionLock.lock();
+//    kDebug() << "setClean " << name() << ", " <<  rc << endl;
     m_d->dirtyRegion -= QRegion( rc );
     m_d->regionLock.unlock();
 }

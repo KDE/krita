@@ -17,10 +17,16 @@
  */
 #include "kis_tiled_random_accessor.h"
 
+#include <kdebug.h>
 
 const quint32 KisTiledRandomAccessor::CACHESIZE = 4; // Define the number of tiles we keep in cache
 
-KisTiledRandomAccessor::KisTiledRandomAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, bool writable) : m_ktm(ktm), m_tilesCache(new KisTileInfo*[4]), m_tilesCacheSize(0), m_pixelSize (m_ktm->pixelSize()), m_writable(writable)
+KisTiledRandomAccessor::KisTiledRandomAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, bool writable) :
+    m_ktm(ktm),
+    m_tilesCache(new KisTileInfo*[4]),
+    m_tilesCacheSize(0),
+    m_pixelSize (m_ktm->pixelSize()),
+    m_writable(writable)
 {
     Q_ASSERT(ktm != 0);
     moveTo(x, y);
@@ -34,7 +40,7 @@ KisTiledRandomAccessor::~KisTiledRandomAccessor()
         m_tilesCache[i]->oldtile->removeReader();
         delete m_tilesCache[i];
     }
-    delete m_tilesCache;
+    delete [] m_tilesCache;
 }
 
 void KisTiledRandomAccessor::moveTo(qint32 x, qint32 y)
@@ -97,11 +103,11 @@ KisTiledRandomAccessor::KisTileInfo* KisTiledRandomAccessor::fetchTileData(qint3
 {
     KisTileInfo* kti = new KisTileInfo;
     kti->tile = m_ktm->getTile(col, row, m_writable);
-    
+
     kti->tile->addReader();
 
-    kti->data = kti->tile->data();
-    
+    kti->data = kti->tile->m_data;
+
     kti->area_x1 = col * KisTile::HEIGHT;
     kti->area_y1 = row * KisTile::WIDTH;
     kti->area_x2 = kti->area_x1 + KisTile::HEIGHT - 2;
@@ -110,6 +116,6 @@ KisTiledRandomAccessor::KisTileInfo* KisTiledRandomAccessor::fetchTileData(qint3
     // set old data
     kti->oldtile = m_ktm->getOldTile(col, row, kti->tile);
     kti->oldtile->addReader();
-    kti->oldData = kti->oldtile->data();
+    kti->oldData = kti->oldtile->m_data;
     return kti;
 }

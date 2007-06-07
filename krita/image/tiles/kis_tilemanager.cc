@@ -152,6 +152,7 @@ void KisTileManager::registerTile(KisTile* tile)
     if (++counter % 50 == 0)
         printInfo();
 #endif
+
     m_bigKritaLock.unlock();
 
 }
@@ -249,9 +250,7 @@ quint8* KisTileManager::requestTileData(qint32 pixelSize)
         data = new quint8[m_tileSize * pixelSize];
     }
 
-
     return data;
-
 
 }
 

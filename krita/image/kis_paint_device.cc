@@ -61,7 +61,6 @@ class KisPaintDevice::Private {
 public:
 
     KisLayerWSP parentLayer;
-    bool extentIsValid;
     qint32 x;
     qint32 y;
     KoColorSpace * colorSpace;
@@ -182,7 +181,6 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name)
     delete [] defaultPixel;
 
     Q_CHECK_PTR(m_datamanager);
-    m_d->extentIsValid = true;
 
     m_d->parentLayer = 0;
 
@@ -228,7 +226,6 @@ KisPaintDevice::KisPaintDevice(KisLayerWSP parent, KoColorSpace * colorSpace, co
     m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
     delete [] defaultPixel;
     Q_CHECK_PTR(m_datamanager);
-    m_d->extentIsValid = true;
     m_d->paintEngine = new KisPaintEngine();
 
 }
@@ -250,7 +247,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         else {
             kWarning() << "rhs " << rhs.objectName() << " has no datamanager\n";
         }
-        m_d->extentIsValid = rhs.m_d->extentIsValid;
         m_d->x = rhs.m_d->x;
         m_d->y = rhs.m_d->y;
         m_d->colorSpace = rhs.m_d->colorSpace;
@@ -419,16 +415,6 @@ QRect KisPaintDevice::extent() const
 QRegion KisPaintDevice::region() const
 {
     return m_datamanager->region();
-}
-
-bool KisPaintDevice::extentIsValid() const
-{
-    return m_d->extentIsValid;
-}
-
-void KisPaintDevice::setExtentIsValid(bool isValid)
-{
-    m_d->extentIsValid = isValid;
 }
 
 void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const

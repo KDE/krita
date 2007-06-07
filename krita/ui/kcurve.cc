@@ -27,7 +27,6 @@
 #include <QPoint>
 #include <QPen>
 #include <QEvent>
-#include <QTimer>
 #include <QRect>
 #include <QFont>
 #include <QFontMetrics>

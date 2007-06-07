@@ -93,8 +93,6 @@ KisTile::KisTile(const KisTile& rhs)
         KisTileManager::instance()->registerTile(this);
     }
     else {
-        //m_data = 0;
-        //m_nextTile = 0;
         m_nReadlock = 0;
     }
 }
@@ -130,7 +128,6 @@ void KisTile::setNext(KisTile *n)
 
 void KisTile::setData(const quint8 *pixel)
 {
-    m_lock.lock();
     addReader();
     quint8 *dst = m_data;
     for(int i=0; i <WIDTH * HEIGHT;i++)
@@ -139,7 +136,6 @@ void KisTile::setData(const quint8 *pixel)
         dst+=m_pixelSize;
     }
     removeReader();
-    m_lock.unlock();
 }
 
 void KisTile::addReader() const

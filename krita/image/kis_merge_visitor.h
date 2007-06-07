@@ -38,6 +38,7 @@
 #include "kis_selection.h"
 #include "kis_transaction.h"
 #include "kis_iterators_pixel.h"
+#include "kis_clone_layer.h"
 
 class KisMergeVisitor : public KisLayerVisitor {
 public:
@@ -124,7 +125,8 @@ public:
 
             KisPainter gc(m_projection);
             gc.setChannelFlags( layer->channelFlags() );
-            KisPaintDeviceSP source = layer->projection();
+
+            KisPaintDeviceSP source = layer->paintDevice();//projection();
 
             if (tempTarget) {
                 KisPaintDeviceSP temp = new KisPaintDevice(source->colorSpace());
@@ -278,45 +280,45 @@ public:
         }
 
 
-//     bool visit( KisCloneLayerSP layer )
-//         {
-// //             kDebug(41010) << "Visiting on clone layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
-// //                           << layer->extent() << ", paint rect: " << m_rc << endl;
+    bool visit( KisCloneLayer * layer )
+        {
+//             kDebug(41010) << "Visiting on clone layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+//                           << layer->extent() << ", paint rect: " << m_rc << endl;
 
 
-//             if (m_projection.isNull()) {
-//                 return false;
-//             }
+            if (m_projection.isNull()) {
+                return false;
+            }
 
-//             if (!layer->visible())
-//                 return true;
+            if (!layer->visible())
+                return true;
 
-//             qint32 sx, sy, dx, dy, w, h;
+            qint32 sx, sy, dx, dy, w, h;
 
-//             layer->updateProjection( m_rc );
-//             KisPaintDeviceSP dev = layer->projection();
+            layer->updateProjection( m_rc );
+            KisPaintDeviceSP dev = layer->projection();
 
-//             QRect rc = dev->extent() & m_rc;
+            QRect rc = dev->extent() & m_rc;
 
-//             sx = rc.left();
-//             sy = rc.top();
-//             w  = rc.width();
-//             h  = rc.height();
-//             dx = sx;
-//             dy = sy;
+            sx = rc.left();
+            sy = rc.top();
+            w  = rc.width();
+            h  = rc.height();
+            dx = sx;
+            dy = sy;
 
-//             KisPainter gc(m_projection);
-//             gc.setCompositeOp( layer->compositeOp() );
-//             gc.setOpacity( layer->opacity() );
-//             gc.setChannelFlags( layer->channelFlags() );
+            KisPainter gc(m_projection);
+            gc.setCompositeOp( layer->compositeOp() );
+            gc.setOpacity( layer->opacity() );
+            gc.setChannelFlags( layer->channelFlags() );
 
-//             gc.bitBlt(rc.topLeft(), dev, rc);
+            gc.bitBlt(rc.topLeft(), dev, rc);
 
-//             layer->setClean( rc );
+            layer->setClean( rc );
 
-//             return true;
+            return true;
 
-//         }
+        }
 
 private:
     // Helper for the indirect painting

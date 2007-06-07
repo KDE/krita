@@ -78,7 +78,7 @@ public:
     /// Returns the paintDevice that accompanies this layer
     KisPaintDeviceSP paintDevice() const;
 
-    KisPaintDeviceSP orignal() const;
+    KisPaintDeviceSP original() const;
 
 
 public slots:
@@ -91,17 +91,11 @@ public slots:
     // KisIndirectPaintingSupport
     KisLayer* layer() { return this; }
 
-// signals:
-//     /// When the mask is created/destroyed or the editmask or rendermask is changed
-//     void sigMaskInfoChanged();
-
 private slots:
     void slotColorSpaceChanged();
 
 private:
     void init();
-//     void convertMaskToSelection(const QRect& r);
-//     void genericMaskCreationHelper();
 
     class Private;
     Private * m_d;

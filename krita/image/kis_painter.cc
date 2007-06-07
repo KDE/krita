@@ -251,7 +251,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
-    if (srcdev->extentIsValid() && op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
+    if (op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
         srcRect &= srcdev->extent();
     }
 
@@ -275,8 +275,11 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     qint32 srcY = sy;
     qint32 rowsRemaining = sh;
 
-    KisRandomConstAccessorPixel srcIt = srcdev->createRandomConstAccessor(sx,sy);
-    KisRandomAccessorPixel dstIt = m_device->createRandomAccessor(dx,dy);
+// XXX: Const accessors don't create tiles where they don't exist but
+// somehow always use the default tile. Or something like that.
+
+//    KisRandomConstAccessorPixel srcIt = srcdev->createRandomConstAccessor(sx,sy);
+//    KisRandomAccessorPixel dstIt = m_device->createRandomAccessor(dx,dy);
 
     while (rowsRemaining > 0) {
 
@@ -298,11 +301,13 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
             columns = qMin(columns, columnsRemaining);
 
             qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
-            srcIt.moveTo(srcX, srcY);
+            //srcIt.moveTo(srcX, srcY);
+            KisHLineConstIteratorPixel srcIt = srcdev->createHLineConstIterator(srcX, srcY, columns);
             const quint8 *srcData = srcIt.rawData();
 
             qint32 dstRowStride = m_device->rowStride(dstX, dstY);
-            dstIt.moveTo(dstX, dstY);
+            //dstIt.moveTo(dstX, dstY);
+            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns);
             quint8 *dstData = dstIt.rawData();
 
             m_colorSpace->bitBlt(dstData,
@@ -351,7 +356,7 @@ void KisPainter::bltMask(qint32 dx, qint32 dy,
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
-    if (srcdev->extentIsValid() && op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
+    if (op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
         srcRect &= srcdev->extent();
     }
 

@@ -116,7 +116,11 @@ KisSelectionManager::KisSelectionManager(KisView2 * parent, KisDoc2 * doc)
     offset = 0;
     timer = new QTimer();
     timer->start ( 300 );
-    connect(timer, SIGNAL(timeout()), this, SLOT(timerEvent()));
+
+    // XXX: Make sure no timers are running all the time! We need to
+    // provide a signal to tell the selection manager that we've got a
+    // current selection now (global or local).
+    // connect(timer, SIGNAL(timeout()), this, SLOT(timerEvent()));
 }
 
 KisSelectionManager::~KisSelectionManager()

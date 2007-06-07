@@ -30,8 +30,8 @@
  * Generic namespace of the KOffice Text library for helper methods and data.
  */
 namespace KoText {
-    QStringList underlineTypeList();
-    QStringList underlineStyleList();
+    KOTEXT_EXPORT QStringList underlineTypeList();
+    KOTEXT_EXPORT QStringList underlineStyleList();
 
     enum Options {
         ShowTextFrames =  278622039

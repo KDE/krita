@@ -351,5 +351,8 @@ void KoListLevelProperties::loadOasis(KoOpenDocumentLoadingContext& context, con
 
     const int level = qMax(1, style.attributeNS( KoXmlNS::text, "level", QString() ).toInt() );
     setLevel(level);
-    setDisplayLevel(level);
+
+    const QString displayLevel = style.attributeNS( KoXmlNS::text, "display-levels", QString() );
+    if( ! displayLevel.isNull() )
+        setDisplayLevel(displayLevel.toInt());
 }

@@ -63,6 +63,17 @@ target_link_libraries(KisEffectMaskTest  ${KDE4_KDEUI_LIBS} koguiutils komain kr
 add_test(krita-image-KisEffectMaskTest KisEffectMaskTest)
 
 ########### next target ###############
+set(kis_iterator_test_SRCS kis_iterator_test.cpp )
+
+kde4_automoc(${kis_iterator_test_SRCS})
+
+kde4_add_executable(KisIteratorTest RUN_UNINSTALLED ${kis_iterator_test_SRCS})
+
+target_link_libraries(KisIteratorTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
+
+add_test(krita-image-KisIteratorTest KisIteratorTest)
+
+########### next target ###############
 
 
 endif(KDE4_BUILD_TESTS)

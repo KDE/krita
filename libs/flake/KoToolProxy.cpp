@@ -74,6 +74,7 @@ class KoToolProxy::Private {
 public:
     Private(KoToolProxy *p) : activeTool(0), tabletPressed(false), hasSelection(false), controller(0), parent(p) {
         scrollTimer.setInterval(100);
+        mouseLeaveWorkaround = false;
     }
 
     void timeout() { // Auto scroll the canvas
@@ -121,6 +122,8 @@ public:
     QPointF scrollEdgePoint;
     KoCanvasController *controller;
     KoToolProxy *parent;
+
+    bool mouseLeaveWorkaround; // up until at least 4.3.0 we get a mouse move event when the tablet leaves the canvas.
 };
 
 KoToolProxy::KoToolProxy(KoCanvasBase *canvas, QObject *parent)
@@ -175,6 +178,7 @@ void KoToolProxy::tabletEvent( QTabletEvent *event, const QPointF &point )
     // Always accept tablet events as they are useless to parent widgets and they will
     // get re-send as mouseevents if we don't accept them.
     event->accept();
+    d->mouseLeaveWorkaround = true;
 }
 
 void KoToolProxy::mousePressEvent( QMouseEvent *event, const QPointF &point )
@@ -200,6 +204,10 @@ void KoToolProxy::mouseDoubleClickEvent( QMouseEvent *event, const QPointF &poin
 
 void KoToolProxy::mouseMoveEvent( QMouseEvent *event, const QPointF &point )
 {
+    if(d->mouseLeaveWorkaround) {
+        d->mouseLeaveWorkaround = false;
+        return;
+    }
     KoInputDevice id;
     KoToolManager::instance()->switchInputDevice(id);
     if(d->activeTool == 0)

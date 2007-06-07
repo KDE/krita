@@ -19,6 +19,7 @@
  */
 
 #include "KoPathPointMoveCommand.h"
+#include "KoPathPoint.h"
 #include <klocale.h>
 
 KoPathPointMoveCommand::KoPathPointMoveCommand( const KoPathShapePointMap &pointMap, const QPointF &offset, QUndoCommand *parent )

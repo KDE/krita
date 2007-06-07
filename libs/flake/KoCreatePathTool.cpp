@@ -21,6 +21,7 @@
 #include "KoCreatePathTool.h"
 
 #include "KoPathShape.h"
+#include "KoPathPoint.h"
 #include "KoPointerEvent.h"
 #include "KoLineBorder.h"
 #include "KoCanvasBase.h"
@@ -35,9 +36,9 @@
 KoCreatePathTool::KoCreatePathTool( KoCanvasBase * canvas )
 : KoTool( canvas )
 , m_shape( 0 )
-, m_activePoint( 0 )    
+, m_activePoint( 0 )
 , m_firstPoint( 0 )
-, m_handleRadius( 3 )    
+, m_handleRadius( 3 )
 {
 }
 

@@ -21,7 +21,7 @@
 #ifndef KOPATHTOOL_H
 #define KOPATHTOOL_H
 
-#include "KoPathShape.h"
+#include "KoPathPoint.h"
 #include "KoPathPointData.h"
 
 #include <KoTool.h>
@@ -110,7 +110,7 @@ private:
 
     class ActivePointHandle : public ActiveHandle
     {
-    public:    
+    public:
         ActivePointHandle( KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::KoPointType activePointType )
         : ActiveHandle( tool )
         , m_activePoint( activePoint )

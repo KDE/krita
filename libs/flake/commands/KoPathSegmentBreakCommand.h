@@ -22,7 +22,7 @@
 #define KOPATHSEGMENTBREAKCOMMAND_H
 
 #include <QUndoCommand>
-#include "KoPathShape.h"
+#include "KoPathPoint.h"
 #include "KoPathPointData.h"
 
 /// The undo / redo command for breaking a subpath by removing the segment

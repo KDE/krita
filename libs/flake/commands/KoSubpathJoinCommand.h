@@ -23,7 +23,7 @@
 
 #include <QUndoCommand>
 #include <QPointF>
-#include "KoPathShape.h"
+#include "KoPathPoint.h"
 #include "KoPathPointData.h"
 
 /// The undo / redo command for joining two subpath end points
@@ -41,7 +41,7 @@ public:
      */
     KoSubpathJoinCommand( const KoPathPointData &pointData1, const KoPathPointData &pointData2, QUndoCommand *parent = 0 );
     ~KoSubpathJoinCommand();
-    
+
     /// redo the command
     void redo();
     /// revert the actions done in redo

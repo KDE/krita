@@ -20,6 +20,7 @@
 */
 
 #include "KoPointGroup.h"
+#include "KoPathPoint.h"
 
 void KoPointGroup::add( KoPathPoint * point )
 { 

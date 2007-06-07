@@ -16,6 +16,7 @@ set(flake_SRCS
     KoInteractionTool.cpp
     KoLineBorder.cpp
     KoPathShape.cpp
+    KoPathPoint.cpp
     KoSelection.cpp
     KoShape.cpp
     KoShapeContainer.cpp

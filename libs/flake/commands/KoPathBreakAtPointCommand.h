@@ -23,7 +23,7 @@
 
 #include <QUndoCommand>
 #include <QList>
-#include "KoPathShape.h"
+#include "KoPathPoint.h"
 #include "KoPathPointData.h"
 
 /// Command to break a subpath at points.

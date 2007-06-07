@@ -24,6 +24,7 @@
 #include <QUndoCommand>
 #include <QList>
 #include "KoPathShape.h"
+#include "KoPathPoint.h"
 
 class KoParameterShape;
 

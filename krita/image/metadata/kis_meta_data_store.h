@@ -21,12 +21,12 @@
 #define _KIS_META_DATA_STORE_H_
 
 #include <krita_export.h>
-#include "kis_meta_data_entry.h"
-#include "kis_meta_data_schema.h"
 
 #include <QHash>
 
 namespace KisMetaData {
+    class Schema;
+    class Entry;
     /**
      * This class holds the list of metadata entries and schemas.
      */
@@ -89,6 +89,7 @@ namespace KisMetaData {
              * schema if the uri was allready included)
              */
             const KisMetaData::Schema* createSchema(QString uri, QString prefix);
+            const KisMetaData::Schema* createSchema(const KisMetaData::Schema*);
             /**
              * Dump on kdDebug the metadata store.
              */

@@ -20,6 +20,7 @@
 
 #include <kdebug.h>
 
+#include "kis_meta_data_entry.h"
 #include "kis_meta_data_schema.h"
 
 using namespace KisMetaData;
@@ -44,6 +45,7 @@ bool Store::addEntry(const Entry& entry)
 {
     if(d->entries.contains(entry.qualifiedName()))
     {
+        kDebug() << "Entry " << entry.qualifiedName() << " allready exist in the store, can't be included twice" << endl;
         return false;
     }
     const Schema* schema = schemaFromUri(entry.schema()->uri());
@@ -52,11 +54,13 @@ bool Store::addEntry(const Entry& entry)
         schema = createSchema(entry.schema()->uri(), entry.schema()->prefix());
         if(schema == 0)
         {
+            kDebug() << "Schema (" << entry.schema() << ") couldn't be added to the store" << endl;
             return false;
         }
     }
     QHash<QString, Entry>::iterator insertedIt = d->entries.insert(entry.qualifiedName(), entry);
     insertedIt->setSchema( schema);
+    return true;
 }
 
 bool Store::empty() const
@@ -101,6 +105,11 @@ const Schema* Store::schemaFromPrefix(QString prefix) const
     return d->prefix2Schema[prefix];
 }
 
+const KisMetaData::Schema* Store::createSchema(const KisMetaData::Schema* schema)
+{
+    return createSchema(schema->uri(), schema->prefix());
+}
+
 const Schema* Store::createSchema(QString uri, QString prefix)
 {
     // First search for the schema
@@ -128,11 +137,11 @@ void Store::debugDump() const
     kDebug() << " - Schemas " << endl;
     foreach(Schema* s, d->uri2Schema)
     {
-//         kDebug() << *s << endl;
+        kDebug() << *s << endl;
     }
-    kDebug() << " - Metadata " << endl;
+    kDebug() << " - Metadata (there are " << d->entries.size() << " entries)" << endl;
     foreach(const Entry& e, d->entries)
     {
-//         kDebug() << *e << endl;
+        kDebug() << e << endl;
     }
 }

@@ -28,6 +28,19 @@
 class QVariant;
 
 namespace KisMetaData {
+    struct UnsignedRational {
+        explicit UnsignedRational(quint32 n = 0, quint32 d = 1) : numerator(n), denominator(d)
+        {}
+        quint32 numerator;
+        quint32 denominator;
+    };
+    
+    struct SignedRational {
+        explicit SignedRational(qint32 n = 0, qint32 d = 1) : numerator(n), denominator(d)
+        {}
+        qint32 numerator;
+        qint32 denominator;
+    };
     /**
      * Value is build on top of QVariant to extend it to support the various type,
      * and extension throught properties qualifier.
@@ -43,7 +56,9 @@ namespace KisMetaData {
                 UnorderedArray,
                 AlternativeArray,
                 LangArray,
-                Structure
+                Structure,
+                SignedRational,
+                UnsignedRational
             };
         public:
             Value();
@@ -54,6 +69,8 @@ namespace KisMetaData {
              */
             Value(const QList<Value>& array, ValueType type = OrderedArray);
             Value(const QMap<QString, Value>& structure);
+            Value(const KisMetaData::SignedRational& signedRational);
+            Value(const KisMetaData::UnsignedRational& unsignedRational);
             Value(const Value& v);
             Value& operator=(const Value& v);
             ~Value();
@@ -61,15 +78,46 @@ namespace KisMetaData {
             void setPropertyQualifier(const Value&);
             bool hasPropertyQualifier() const;
         public:
+            /// @return the type of this Value
             ValueType type() const;
+            /**
+             * @return the Variant hold by this Value, or an empty QVariant if this Value is not a Variant
+             */
             QVariant asVariant() const;
-            void setVariant(const QVariant& variant);
+            /**
+             * Set this Value to the given variant, or does nothing if this Value is not a Variant.
+             * @return true if the value was changed
+             */
+            bool setVariant(const QVariant& variant);
+            /**
+             * @return the UnsignedRational hold by this Value, or a null rational if this Value is not
+             * an UnsignedRational
+             */
+            KisMetaData::UnsignedRational asUnsignedRational() const;
+            /**
+             * @return the SignedRational hold by this Value, or a null rational if this Value is not
+             * a SignedRational
+             */
+            KisMetaData::SignedRational asSignedRational() const;
+            /**
+             * @return the array hold by this Value, or an empty array if this Value is not either
+             * an OrderedArray, UnorderedArray or AlternativeArray
+             */
+            QList<KisMetaData::Value> asArray() const;
+            /**
+             * @return true if this Value is either an OrderedArray, UnorderedArray or AlternativeArray
+             */
+            bool isArray() const;
+            /**
+             * @return the structure hold by this Value, or an empty structure if this Value is not a Structure
+             */
+            QMap<QString, KisMetaData::Value> asStructure() const;
         private:
             Private* const d;
     };
 }
 
 
-QDebug operator<<(QDebug dbg, const KisMetaData::Value &v);
+KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisMetaData::Value &v);
 
 #endif

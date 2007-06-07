@@ -72,6 +72,6 @@ namespace KisMetaData {
     };
 }
 
-QDebug operator<<(QDebug dbg, const KisMetaData::Entry &c);
+KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisMetaData::Entry &c);
 
 #endif

@@ -27,10 +27,11 @@ namespace KisMetaData {
     class KRITAIMAGE_EXPORT Schema {
             struct Private;
         public:
-            static QString UriTIFF;
-            static QString UriEXIF;
-            static QString UriDublinCore;
-            static QString UriXMP;
+            static const Schema* TIFFSchema;
+            static const Schema* EXIFSchema;
+            static const Schema* DublinCoreSchema;
+            static const Schema* XMPSchema;
+            static const Schema* MakerNoteSchema;
         public:
             Schema(QString _uri, QString _ns);
         public:
@@ -40,5 +41,7 @@ namespace KisMetaData {
             Private* const d;
     };
 }
+
+KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisMetaData::Schema &c);
 
 #endif

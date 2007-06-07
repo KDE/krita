@@ -102,6 +102,6 @@ Entry& Entry::operator=(const Entry& e)
 
 QDebug operator<<(QDebug dbg, const Entry &c)
 {
-    dbg.nospace() << "Name: " << c.name() << " Qualified name: " << c.qualifiedName() << " Value" << c.value();
+    dbg.nospace() << "Name: " << c.name() << " Qualified name: " << c.qualifiedName() << " Value: " << c.value();
     return dbg.space();
 }

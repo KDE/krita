@@ -18,15 +18,16 @@
 
 #include "kis_meta_data_schema.h"
 
+#include <QDebug>
 #include <QString>
 
 using namespace KisMetaData;
 
-QString Schema::UriTIFF = "http://ns.adobe.com/tiff/1.0/";
-QString Schema::UriEXIF = "http://ns.adobe.com/exif/1.0/";
-QString Schema::UriDublinCore = "http://purl.org/dc/elements/1.1/";
-QString Schema::UriXMP = "http://ns.adobe.com/xap/1.0/";
-
+const Schema* Schema::TIFFSchema = new Schema("http://ns.adobe.com/tiff/1.0/", "tiff");
+const Schema* Schema::EXIFSchema = new Schema("http://ns.adobe.com/exif/1.0/", "exif");
+const Schema* Schema::DublinCoreSchema = new Schema("http://purl.org/dc/elements/1.1/", "dc");
+const Schema* Schema::XMPSchema = new Schema("http://ns.adobe.com/xap/1.0/", "xmp");
+const Schema* Schema::MakerNoteSchema = new Schema("http://create.freedesktop.org/xmp/MakerNote/1.0","mkn"); // TODO: make it a Create standard
 
 struct Schema::Private {
     QString uri;
@@ -47,4 +48,10 @@ QString Schema::uri() const
 QString Schema::prefix() const
 {
     return d->prefix;
+}
+
+QDebug operator<<(QDebug dbg, const KisMetaData::Schema &c)
+{
+    dbg.nospace() << "Uri = " << c.uri() << " Prefix = " << c.prefix();
+    return dbg.space();
 }

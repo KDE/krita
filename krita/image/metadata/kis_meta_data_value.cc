@@ -30,6 +30,8 @@ struct Value::Private {
         QVariant* variant;
         QList<Value>* array;
         QMap<QString, Value>* structure;
+        KisMetaData::SignedRational* signedRational;
+        KisMetaData::UnsignedRational* unsignedRational;
     } value;
     ValueType type;
     Value* propertyQualifier;
@@ -60,13 +62,27 @@ Value::Value(const QMap<QString, Value>& structure) : d(new Private)
     d->value.structure = new QMap<QString, Value>( structure );
 }
 
+Value::Value(const KisMetaData::SignedRational& signedRational) : d(new Private)
+{
+    d->type = Value::SignedRational;
+    d->value.signedRational = new KisMetaData::SignedRational(signedRational);
+}
+Value::Value(const KisMetaData::UnsignedRational& unsignedRational) : d(new Private)
+{
+    d->type = Value::UnsignedRational;
+    d->value.unsignedRational = new KisMetaData::UnsignedRational(unsignedRational);
+}
+
+
 Value::Value(const Value& v) : d(new Private)
 {
+    d->type = Invalid;
     *this = v;
 }
 
 Value& Value::operator=(const Value& v)
 {
+    Q_ASSERT(d->type == Invalid or d->type == v.d->type);
     d->type = v.d->type;
     switch(d->type)
     {
@@ -84,12 +100,15 @@ Value& Value::operator=(const Value& v)
         case Structure:
             d->value.structure = new QMap<QString, Value>(*v.d->value.structure);
             break;
+        case SignedRational:
+            d->value.signedRational = new KisMetaData::SignedRational( *v.d->value.signedRational );
+        case UnsignedRational:
+            d->value.unsignedRational = new KisMetaData::UnsignedRational( *v.d->value.unsignedRational );
     }
     delete d->propertyQualifier;
     if(v.d->propertyQualifier)
     {
-        d->propertyQualifier = new Value();
-        *d->propertyQualifier = *v.d->propertyQualifier;
+        d->propertyQualifier = new Value(*v.d->propertyQualifier);
     } else {
         d->propertyQualifier = 0;
     }
@@ -116,14 +135,57 @@ QVariant Value::asVariant() const
     return QVariant();
 }
 
-void Value::setVariant(const QVariant& variant)
+bool Value::setVariant(const QVariant& variant)
 {
     if(d->type == Variant and d->value.variant->type() == variant.type())
     {
         *d->value.variant = variant;
+        return true;
     }
+    return false;
 }
 
+KisMetaData::UnsignedRational Value::asUnsignedRational() const
+{
+   if(d->type == UnsignedRational )
+   {
+       return *d->value.unsignedRational;
+   }
+   return KisMetaData::UnsignedRational();
+}
+
+KisMetaData::SignedRational Value::asSignedRational() const
+{
+   if(d->type == SignedRational )
+   {
+       return *d->value.signedRational;
+   }
+   return KisMetaData::SignedRational();
+}
+
+QList<Value> Value::asArray() const
+{
+    if(isArray())
+    {
+       return *d->value.array;
+    }
+    return QList<Value>();
+}
+
+
+bool Value::isArray() const
+{
+    return type() == OrderedArray or type() == UnorderedArray or type() == AlternativeArray;
+}
+
+QMap<QString, KisMetaData::Value> Value::asStructure() const
+{
+    if(type() == Structure)
+    {
+        return *d->value.structure;
+    }
+    return QMap<QString, KisMetaData::Value>();
+}
 
 QDebug operator<<(QDebug dbg, const Value &v)
 {
@@ -139,10 +201,16 @@ QDebug operator<<(QDebug dbg, const Value &v)
         case Value::UnorderedArray:
         case Value::AlternativeArray:
         case Value::LangArray:
-//             d->value.array = new QList<Value>(*v.d->value.array);
+            dbg.nospace() << v.asArray();
             break;
         case Value::Structure:
-//             d->value.structure = new QMap<QString, Value>(*v.d->value.structure);
+            dbg.nospace() << v.asStructure();
+            break;
+        case Value::SignedRational:
+            dbg.nospace() << v.asSignedRational().numerator << " / " << v.asSignedRational().denominator;
+            break;
+        case Value::UnsignedRational:
+            dbg.nospace() << v.asUnsignedRational().numerator << " / " << v.asUnsignedRational().denominator;
             break;
     }
     return dbg.space();

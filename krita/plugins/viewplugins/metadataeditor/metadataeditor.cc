@@ -62,7 +62,7 @@ metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QStringList &)
         actionCollection()->addAction("metadataeditor", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotMyAction()));
     }
-/*
+
     m_metaDataStore = new KisMetaData::Store();
     const KisMetaData::Schema* dcSchema = m_metaDataStore->createSchema( KisMetaData::Schema::DublinCoreSchema);
     const KisMetaData::Schema* dcHistory = m_metaDataStore->createSchema( "http://history/", "history");
@@ -71,7 +71,6 @@ metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QStringList &)
     m_metaDataStore->addEntry( KisMetaData::Entry("description", dcSchema, KisMetaData::Value("Test of metadata editing")) );
     m_metaDataStore->addEntry( KisMetaData::Entry("when", dcHistory, KisMetaData::Value(QDate())) );
     m_metaDataStore->addEntry( KisMetaData::Entry("many", dcHow, KisMetaData::Value(42)) );
-*/
 }
 
 metadataeditorPlugin::~metadataeditorPlugin()

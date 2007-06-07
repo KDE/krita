@@ -31,10 +31,17 @@
 
 #include <KDebug>
 
+class KoCharacterStyle::Private {
+public:
+    Private() : stylesPrivate( new StylePrivate()) {}
+
+    QString name;
+    StylePrivate *stylesPrivate;
+};
+
 KoCharacterStyle::KoCharacterStyle(QObject *parent)
-    : QObject(parent)
+    : QObject(parent), d( new Private() )
 {
-    m_stylesPrivate = new StylePrivate();
     setFontPointSize(12.0);
     setFontWeight(QFont::Normal);
     setVerticalAlignment(QTextCharFormat::AlignNormal);
@@ -42,32 +49,31 @@ KoCharacterStyle::KoCharacterStyle(QObject *parent)
 }
 
 KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style)
-    : QObject(0)
+    : QObject(0), d( new Private() )
 {
-    m_stylesPrivate = new StylePrivate();
-    m_stylesPrivate->copyMissing(style.m_stylesPrivate);
+    d->stylesPrivate->copyMissing(style.d->stylesPrivate);
 }
 
 KoCharacterStyle::~KoCharacterStyle() {
 }
 
 void KoCharacterStyle::setProperty(int key, const QVariant &value) {
-    m_stylesPrivate->add(key, value);
+    d->stylesPrivate->add(key, value);
 }
 
 QVariant KoCharacterStyle::property(int key) const {
-    return m_stylesPrivate->value(key);
+    return d->stylesPrivate->value(key);
 }
 
 double KoCharacterStyle::propertyDouble(int key) const {
-    QVariant variant = m_stylesPrivate->value(key);
+    QVariant variant = d->stylesPrivate->value(key);
     if(variant.isNull())
         return 0.0;
     return variant.toDouble();
 }
 
 QPen KoCharacterStyle::textOutline () const {
-    QVariant variant = m_stylesPrivate->value(QTextFormat::TextOutline);
+    QVariant variant = d->stylesPrivate->value(QTextFormat::TextOutline);
     if(variant.isNull()) {
         QPen pen(Qt::NoPen);
         return pen;
@@ -76,7 +82,7 @@ QPen KoCharacterStyle::textOutline () const {
 }
 
 QColor KoCharacterStyle::underlineColor () const {
-    QVariant variant = m_stylesPrivate->value(QTextFormat::TextUnderlineColor);
+    QVariant variant = d->stylesPrivate->value(QTextFormat::TextUnderlineColor);
     if(variant.isNull()) {
         QColor color;
         return color;
@@ -85,7 +91,7 @@ QColor KoCharacterStyle::underlineColor () const {
 }
 
 QBrush KoCharacterStyle::background() const {
-    QVariant variant = m_stylesPrivate->value(QTextFormat::BackgroundBrush);
+    QVariant variant = d->stylesPrivate->value(QTextFormat::BackgroundBrush);
 
     if(variant.isNull()) {
         QBrush brush;
@@ -95,11 +101,11 @@ QBrush KoCharacterStyle::background() const {
 }
 
 void KoCharacterStyle::clearBackground() {
-    m_stylesPrivate->remove(QTextCharFormat::BackgroundBrush);
+    d->stylesPrivate->remove(QTextCharFormat::BackgroundBrush);
 }
 
 QBrush KoCharacterStyle::foreground() const {
-    QVariant variant = m_stylesPrivate->value(QTextFormat::ForegroundBrush);
+    QVariant variant = d->stylesPrivate->value(QTextFormat::ForegroundBrush);
     if(variant.isNull()) {
         QBrush brush;
         return brush;
@@ -108,18 +114,18 @@ QBrush KoCharacterStyle::foreground() const {
 }
 
 void KoCharacterStyle::clearForeground() {
-    m_stylesPrivate->remove(QTextCharFormat::ForegroundBrush);
+    d->stylesPrivate->remove(QTextCharFormat::ForegroundBrush);
 }
 
 int KoCharacterStyle::propertyInt(int key) const {
-    QVariant variant = m_stylesPrivate->value(key);
+    QVariant variant = d->stylesPrivate->value(key);
     if(variant.isNull())
         return 0;
     return variant.toInt();
 }
 
 bool KoCharacterStyle::propertyBoolean(int key) const {
-    QVariant variant = m_stylesPrivate->value(key);
+    QVariant variant = d->stylesPrivate->value(key);
     if(variant.isNull())
         return false;
     return variant.toBool();
@@ -148,7 +154,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
 
     int i=0;
     while(properties[i] != -1) {
-        QVariant variant = m_stylesPrivate->value(properties[i]);
+        QVariant variant = d->stylesPrivate->value(properties[i]);
         if(!variant.isNull())
             format.setProperty(properties[i], variant);
         i++;
@@ -175,7 +181,7 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const {
 }
 
 QString KoCharacterStyle::propertyString(int key) const {
-    QVariant variant = m_stylesPrivate->value(key);
+    QVariant variant = d->stylesPrivate->value(key);
     if(variant.isNull())
         return QString();
     return qvariant_cast<QString>(variant);
@@ -208,6 +214,86 @@ static void importOasisUnderline( const QString& type, const QString& style,
 
     // TODO bold. But this is another attribute in OASIS (text-underline-width), which makes sense.
     // We should separate them in kotext...
+}
+
+void KoCharacterStyle::setFontFamily (const QString &family) {
+    setProperty(QTextFormat::FontFamily, family);
+}
+QString KoCharacterStyle::fontFamily () const {
+    return propertyString(QTextFormat::FontFamily);
+}
+void KoCharacterStyle::setFontPointSize (qreal size) {
+    setProperty(QTextFormat::FontPointSize, size);
+}
+double KoCharacterStyle::fontPointSize () const {
+    return propertyDouble(QTextFormat::FontPointSize);
+}
+void KoCharacterStyle::setFontWeight (int weight) {
+    setProperty(QTextFormat::FontWeight, weight);
+}
+int KoCharacterStyle::fontWeight () const {
+    return propertyInt(QTextFormat::FontWeight);
+}
+void KoCharacterStyle::setFontItalic (bool italic) {
+    setProperty(QTextFormat::FontItalic, italic);
+}
+bool KoCharacterStyle::fontItalic () const {
+    return propertyBoolean(QTextFormat::FontItalic);
+}
+void KoCharacterStyle::setFontOverline (bool overline) {
+    setProperty(QTextFormat::FontOverline, overline);
+}
+bool KoCharacterStyle::fontOverline () const {
+    return propertyBoolean(QTextFormat::FontOverline);
+}
+void KoCharacterStyle::setFontStrikeOut (bool strikeOut) {
+    setProperty(QTextFormat::FontStrikeOut, strikeOut);
+}
+bool KoCharacterStyle::fontStrikeOut () const {
+    return propertyBoolean(QTextFormat::FontStrikeOut);
+}
+void KoCharacterStyle::setUnderlineColor (const QColor &color) {
+    setProperty(QTextFormat::TextUnderlineColor, color);
+}
+void KoCharacterStyle::setFontFixedPitch (bool fixedPitch) {
+    setProperty(QTextFormat::FontFixedPitch, fixedPitch);
+}
+bool KoCharacterStyle::fontFixedPitch () const {
+    return propertyBoolean(QTextFormat::FontFixedPitch);
+}
+void KoCharacterStyle::setUnderlineStyle (QTextCharFormat::UnderlineStyle style) {
+    setProperty(QTextFormat::TextUnderlineStyle, style);
+}
+QTextCharFormat::UnderlineStyle KoCharacterStyle::underlineStyle () const {
+    return static_cast<QTextCharFormat::UnderlineStyle> (propertyInt(QTextFormat::TextUnderlineStyle));
+
+}
+void KoCharacterStyle::setVerticalAlignment (QTextCharFormat::VerticalAlignment alignment) {
+    setProperty(QTextFormat::TextVerticalAlignment, alignment);
+}
+QTextCharFormat::VerticalAlignment KoCharacterStyle::verticalAlignment () const {
+    return static_cast<QTextCharFormat::VerticalAlignment> (propertyInt(QTextFormat::TextVerticalAlignment));
+}
+void KoCharacterStyle::setTextOutline (const QPen &pen) {
+    setProperty(QTextFormat::TextOutline, pen);
+}
+void KoCharacterStyle::setBackground (const QBrush &brush) {
+    setProperty(QTextFormat::BackgroundBrush, brush);
+}
+void KoCharacterStyle::setForeground (const QBrush &brush) {
+    setProperty(QTextFormat::ForegroundBrush, brush);
+}
+QString KoCharacterStyle::name() const {
+    return d->name;
+}
+void KoCharacterStyle::setName(const QString &name) {
+    d->name = name;
+}
+int KoCharacterStyle::styleId() const {
+    return propertyInt(StyleId);
+}
+void KoCharacterStyle::setStyleId(int id) {
+    setProperty(StyleId, id);
 }
 
 //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
@@ -382,7 +468,7 @@ void KoCharacterStyle::loadOasis(KoOpenDocumentLoadingContext& context) {
             setBackground(brush);
         }
     }
-    
+
     if ( styleStack.hasProperty( KoXmlNS::style, "use-window-font-color" ) ) { // 3.10.4
         if (styleStack.property( KoXmlNS::style, "use-window-font-color") == "true") {
             // Do like OpenOffice.org : change the foreground font if its color is too close to the background color...

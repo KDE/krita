@@ -66,67 +66,59 @@ public:
     //QFont font() const { return property(QTextFormat::FontId).toFont(); }
 
     /// See similar named method on QTextCharFormat
-    void setFontFamily (const QString &family) { setProperty(QTextFormat::FontFamily, family); }
+    void setFontFamily (const QString &family);
     /// See similar named method on QTextCharFormat
-    QString fontFamily () const { return propertyString(QTextFormat::FontFamily); }
+    QString fontFamily () const;
     /// See similar named method on QTextCharFormat
-    void setFontPointSize (qreal size) { setProperty(QTextFormat::FontPointSize, size); }
+    void setFontPointSize (qreal size);
     /// See similar named method on QTextCharFormat
-    double fontPointSize () const { return propertyDouble(QTextFormat::FontPointSize); }
+    double fontPointSize () const;
     /// See similar named method on QTextCharFormat
-    void setFontWeight (int weight) { setProperty(QTextFormat::FontWeight, weight); }
+    void setFontWeight (int weight);
     /// See similar named method on QTextCharFormat
-    int fontWeight () const { return propertyInt(QTextFormat::FontWeight); }
+    int fontWeight () const;
     /// See similar named method on QTextCharFormat
-    void setFontItalic (bool italic) { setProperty(QTextFormat::FontItalic, italic); }
+    void setFontItalic (bool italic);
     /// See similar named method on QTextCharFormat
-    bool fontItalic () const { return propertyBoolean(QTextFormat::FontItalic); }
+    bool fontItalic () const;
     /// See similar named method on QTextCharFormat
-    void setFontOverline (bool overline) { setProperty(QTextFormat::FontOverline, overline); }
+    void setFontOverline (bool overline);
     /// See similar named method on QTextCharFormat
-    bool fontOverline () const { return propertyBoolean(QTextFormat::FontOverline); }
+    bool fontOverline () const;
     /// See similar named method on QTextCharFormat
-    void setFontStrikeOut (bool strikeOut) { setProperty(QTextFormat::FontStrikeOut, strikeOut); }
+    void setFontStrikeOut (bool strikeOut);
     /// See similar named method on QTextCharFormat
-    bool fontStrikeOut () const { return propertyBoolean(QTextFormat::FontStrikeOut); }
+    bool fontStrikeOut () const;
     /// See similar named method on QTextCharFormat
-    void setUnderlineColor (const QColor &color) { setProperty(QTextFormat::TextUnderlineColor, color); }
+    void setUnderlineColor (const QColor &color);
     /// See similar named method on QTextCharFormat
     QColor underlineColor () const;
     /// See similar named method on QTextCharFormat
-    void setFontFixedPitch (bool fixedPitch) { setProperty(QTextFormat::FontFixedPitch, fixedPitch); }
+    void setFontFixedPitch (bool fixedPitch);
     /// See similar named method on QTextCharFormat
-    bool fontFixedPitch () const { return propertyBoolean(QTextFormat::FontFixedPitch); }
+    bool fontFixedPitch () const;
     /// See similar named method on QTextCharFormat
-    void setUnderlineStyle (QTextCharFormat::UnderlineStyle style) {
-        setProperty(QTextFormat::TextUnderlineStyle, style);
-    }
+    void setUnderlineStyle (QTextCharFormat::UnderlineStyle style);
     /// See similar named method on QTextCharFormat
-    QTextCharFormat::UnderlineStyle underlineStyle () const {
-        return static_cast<QTextCharFormat::UnderlineStyle> (propertyInt(QTextFormat::TextUnderlineStyle));
-    }
+    QTextCharFormat::UnderlineStyle underlineStyle () const;
     /// See similar named method on QTextCharFormat
-    void setVerticalAlignment (QTextCharFormat::VerticalAlignment alignment) {
-        setProperty(QTextFormat::TextVerticalAlignment, alignment);
-    }
+    void setVerticalAlignment (QTextCharFormat::VerticalAlignment alignment);
     /// See similar named method on QTextCharFormat
-    QTextCharFormat::VerticalAlignment verticalAlignment () const {
-        return static_cast<QTextCharFormat::VerticalAlignment> (propertyInt(QTextFormat::TextVerticalAlignment));
-    }
+    QTextCharFormat::VerticalAlignment verticalAlignment () const;
     /// See similar named method on QTextCharFormat
-    void setTextOutline (const QPen &pen) { setProperty(QTextFormat::TextOutline, pen); }
+    void setTextOutline (const QPen &pen);
     /// See similar named method on QTextCharFormat
     QPen textOutline () const;
 
     /// See similar named method on QTextCharFormat
-    void setBackground (const QBrush &brush) { setProperty(QTextFormat::BackgroundBrush, brush); }
+    void setBackground (const QBrush &brush);
     /// See similar named method on QTextCharFormat
     QBrush background () const;
     /// See similar named method on QTextCharFormat
     void clearBackground ();
 
     /// See similar named method on QTextCharFormat
-    void setForeground (const QBrush &brush) { setProperty(QTextFormat::ForegroundBrush, brush); }
+    void setForeground (const QBrush &brush);
     /// See similar named method on QTextCharFormat
     QBrush foreground () const;
     /// See similar named method on QTextCharFormat
@@ -134,16 +126,16 @@ public:
 
 
     /// return the name of the style.
-    const QString& name() const { return m_name; }
+    QString name() const;
 
     /// set a user-visible name on the style.
-    void setName(const QString &name) { m_name = name; }
+    void setName(const QString &name);
 
     /// each style has a unique ID (non persistent) given out by the styleManager
-    int styleId() const { return propertyInt(StyleId); }
+    int styleId() const;
 
     /// each style has a unique ID (non persistent) given out by the styleManager
-    void setStyleId(int id) { setProperty(StyleId, id); }
+    void setStyleId(int id);
 
     /**
      * Apply this style to a blockFormat by copying all properties from this
@@ -175,8 +167,8 @@ private:
     bool propertyBoolean(int key) const;
 
 private:
-    QString m_name;
-    StylePrivate *m_stylesPrivate;
+    class Private;
+    Private * const d;
 };
 
 #endif

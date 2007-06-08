@@ -31,6 +31,7 @@ class KoParagraphStyle;
 class KoCharacterStyle;
 class KoTextShapeData;
 class KoInlineObject;
+class KoBookmark;
 class QTextCursor;
 
 /**
@@ -50,6 +51,11 @@ public:
      *  at the cursor position or there already is an index marker available.
      */
     bool insertIndexMarker();
+
+    /// add a bookmark on current cursor location or current selection
+    KoBookmark *addBookmark(KoShape *shape);
+    /// select previousle bookmarked cursor location or selection
+    bool selectBookmark(KoBookmark *bookmark);
 
     /// reimplemented from KoToolSelection
     virtual bool hasSelection();

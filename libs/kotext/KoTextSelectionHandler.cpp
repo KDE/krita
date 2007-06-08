@@ -23,6 +23,8 @@
 #include "KoTextShapeData.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoTextLocator.h"
+#include "KoBookmark.h"
+#include "KoBookmarkManager.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoStyleManager.h"
@@ -396,6 +398,54 @@ bool KoTextSelectionHandler::insertIndexMarker() {
     layout->inlineObjectTextManager()->insertInlineObject(*d->caret, tl);
     emit stopMacro();
     return true;
+}
+
+KoBookmark *KoTextSelectionHandler::addBookmark(KoShape *m_textShape) {
+    KoBookmark *bookmark = new KoBookmark(m_textShape);
+    int startPos = -1, endPos = -1, caretPos;
+
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
+    Q_ASSERT(layout);
+    Q_ASSERT(layout->inlineObjectTextManager());
+    if(d->caret->hasSelection()) {
+        startPos = d->caret->selectionStart();
+        endPos = d->caret->selectionEnd();
+        caretPos = d->caret->position();
+
+        d->caret->setPosition(endPos);
+        KoBookmark *endBookmark = new KoBookmark(m_textShape);
+        layout->inlineObjectTextManager()->insertInlineObject(*d->caret, endBookmark);
+        bookmark->setEndBookmark(endBookmark);
+        d->caret->setPosition(startPos);
+    }
+    // TODO the macro & undo things
+    emit startMacro(i18n("Add Bookmark"));
+    layout->inlineObjectTextManager()->insertInlineObject(*d->caret, bookmark);
+    emit stopMacro();
+    if (startPos != -1) {
+        // TODO repaint selection properly
+        if (caretPos == startPos) {
+            startPos = endPos + 1;
+            endPos = caretPos;
+        }
+        else
+            endPos += 2;
+        d->caret->setPosition(startPos);
+        d->caret->setPosition(endPos, QTextCursor::KeepAnchor);
+    }
+    return bookmark;
+}
+
+bool KoTextSelectionHandler::selectBookmark(KoBookmark *bookmark) {
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
+
+    if (bookmark->hasSelection()) {
+        d->caret->setPosition(bookmark->position());
+        d->caret->setPosition(bookmark->endBookmark()->position() + 1, QTextCursor::KeepAnchor);
+        return true;
+    }
+    d->caret->setPosition(bookmark->position() + 1);
+    return false;
 }
 
 void KoTextSelectionHandler::setShape(KoShape *shape) {

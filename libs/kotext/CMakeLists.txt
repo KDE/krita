@@ -50,6 +50,8 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoTextReference.cpp
     KoTextAnchor.cpp
     KoTextShapeContainerModel.cpp
+    KoBookmark.cpp
+    KoBookmarkManager.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp

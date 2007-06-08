@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOOPENDOCUMENTLOADINGCONTEXT_H
-#define KOOPENDOCUMENTLOADINGCONTEXT_H
+#ifndef KOTEXTLOADINGCONTEXT_H
+#define KOTEXTLOADINGCONTEXT_H
 
 #include "kotext_export.h"
 
@@ -29,20 +29,51 @@
 
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).
+ *
+ * This class extends the \a KoOasisLoadingContext class with KoText specific
+ * functionality like for example handling of lists.
  */
-class KOTEXT_EXPORT KoOpenDocumentLoadingContext : public KoOasisLoadingContext
+class KOTEXT_EXPORT KoTextLoadingContext : public KoOasisLoadingContext
 {
 public:
-    KoOpenDocumentLoadingContext( KoDocument* doc, KoOasisStyles& styles, KoStore* store );
-    virtual ~KoOpenDocumentLoadingContext();
 
+    /**
+    * Constructor.
+    *
+    * \param doc The document we are loading the content into.
+    * \param styles The styles used for loading.
+    * \param store The storage backend we are reading from.
+    */
+    KoTextLoadingContext( KoDocument* doc, KoOasisStyles& styles, KoStore* store );
+
+    /**
+    * Destructor.
+    */
+    virtual ~KoTextLoadingContext();
+
+    /**
+    * \return the name of the current list-style. This will return QString::null if
+    * there was no current list-style defined or the name of a list-style which
+    * should be known within our \a KoStyleManager .
+    */
     QString currentListStyleName() const;
+
+    /**
+    * Set the name of the current list-style to \p stylename .
+    */
     void setCurrentListStyleName(const QString& stylename);
 
+    /**
+    * \return the current list-level. This should return >=1.
+    */
     int currentListLevel() const;
+
+    /**
+    * Set the current list-level to \p level .
+    */
     void setCurrentListLevel(int level);
 
-#if 0
+#if 0 //1.6:
     KoVariableCollection& variableCollection() { return m_varColl; }
 
     ///// List handling
@@ -77,7 +108,9 @@ private:
 #endif
 
 private:
+    /// \internal d-pointer class.
     class Private;
+    /// \internal d-pointer instance.
     Private* const d;
 };
 

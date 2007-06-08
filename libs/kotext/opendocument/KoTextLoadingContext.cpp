@@ -20,47 +20,48 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoOpenDocumentLoadingContext.h"
+#include "KoTextLoadingContext.h"
 
-class KoOpenDocumentLoadingContext::Private
+/// \internal d-pointer class.
+class KoTextLoadingContext::Private
 {
     public:
         QString currentListStyleName;
         int currentListLevel;
 };
 
-KoOpenDocumentLoadingContext::KoOpenDocumentLoadingContext( KoDocument* doc, KoOasisStyles& styles, KoStore* store )
+KoTextLoadingContext::KoTextLoadingContext( KoDocument* doc, KoOasisStyles& styles, KoStore* store )
     : KoOasisLoadingContext( doc, styles, store ), d(new Private())
 {
     d->currentListLevel = 1; // default list level is always 1
 }
 
-KoOpenDocumentLoadingContext::~KoOpenDocumentLoadingContext()
+KoTextLoadingContext::~KoTextLoadingContext()
 {
     delete d;
 }
 
-QString KoOpenDocumentLoadingContext::currentListStyleName() const
+QString KoTextLoadingContext::currentListStyleName() const
 {
     return d->currentListStyleName;
 }
 
-void KoOpenDocumentLoadingContext::setCurrentListStyleName(const QString& stylename)
+void KoTextLoadingContext::setCurrentListStyleName(const QString& stylename)
 {
     d->currentListStyleName = stylename;
 }
 
-int KoOpenDocumentLoadingContext::currentListLevel() const
+int KoTextLoadingContext::currentListLevel() const
 {
     return d->currentListLevel;
 }
 
-void KoOpenDocumentLoadingContext::setCurrentListLevel(int level)
+void KoTextLoadingContext::setCurrentListLevel(int level)
 {
     d->currentListLevel = level;
 }
 
-#if 0
+#if 0 //1.6:
 static KoXmlElement findListLevelStyle( const KoXmlElement& fullListStyle, int level )
 {
     for ( KoXmlNode n = fullListStyle.firstChild(); !n.isNull(); n = n.nextSibling() )

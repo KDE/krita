@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOOPENDOCUMENTLOADER_H
-#define KOOPENDOCUMENTLOADER_H
+#ifndef KOTEXTLOADER_H
+#define KOTEXTLOADER_H
 
 #include <QObject>
 #include <KoStore.h>
@@ -41,7 +41,7 @@
 //class KoParagraphStyle;
 //class KoCharacterStyle;
 //class KoStore;
-class KoOpenDocumentLoadingContext;
+class KoTextLoadingContext;
 class KoStyleManager;
 
 //class QDomDocument;
@@ -49,13 +49,13 @@ class QTextCursor;
 //class QColor;
 
 /**
- * The KoOpenDocumentLoader loads content from OpenDocument XML to the
+ * The KoTextLoader loads content from OpenDocument XML to the
  * scribe text-engine using QTextCursor objects.
  *
  * This class that has a lot of the OpenDocument (ODF) loading code
  * for e.g. KWord.
  */
-class KOTEXT_EXPORT KoOpenDocumentLoader : public QObject
+class KOTEXT_EXPORT KoTextLoader : public QObject
 {
         Q_OBJECT
     public:
@@ -65,12 +65,12 @@ class KOTEXT_EXPORT KoOpenDocumentLoader : public QObject
         * \param stylemanager the \a KoStyleManager instance the loader
         * should use.
         */
-        explicit KoOpenDocumentLoader(KoStyleManager* stylemanager);
+        explicit KoTextLoader(KoStyleManager* stylemanager);
 
         /**
         * Destructor.
         */
-        virtual ~KoOpenDocumentLoader();
+        virtual ~KoTextLoader();
 
         /**
         * \return the \a KoStyleManager instance this loader uses.
@@ -80,59 +80,59 @@ class KOTEXT_EXPORT KoOpenDocumentLoader : public QObject
         /**
         * Load the list of styles.
         */
-        virtual void loadStyles(KoOpenDocumentLoadingContext& context, QList<KoXmlElement*> styleElements);
+        virtual void loadStyles(KoTextLoadingContext& context, QList<KoXmlElement*> styleElements);
 
         /**
         * Load all styles. This includes the auto-styles and the custom-styles.
         */
-        virtual void loadAllStyles(KoOpenDocumentLoadingContext& context);
+        virtual void loadAllStyles(KoTextLoadingContext& context);
 
         /**
         * Load the settings.
         */
-        virtual void loadSettings(KoOpenDocumentLoadingContext& context, const QDomDocument& settings);
+        virtual void loadSettings(KoTextLoadingContext& context, const QDomDocument& settings);
 
         /**
         * Load the page layout.
         */
-        virtual bool loadPageLayout(KoOpenDocumentLoadingContext& context, const QString& masterPageName);
+        virtual bool loadPageLayout(KoTextLoadingContext& context, const QString& masterPageName);
 
         /**
         * Load the style of the masterpage.
         */
-        virtual bool loadMasterPageStyle(KoOpenDocumentLoadingContext& context, const QString& masterPageName);
+        virtual bool loadMasterPageStyle(KoTextLoadingContext& context, const QString& masterPageName);
 
         /**
         * Load the body from the \p bodyElem into the \p cursor .
         */
-        virtual void loadBody(KoOpenDocumentLoadingContext& context, const KoXmlElement& bodyElem, QTextCursor& cursor);
+        virtual void loadBody(KoTextLoadingContext& context, const KoXmlElement& bodyElem, QTextCursor& cursor);
 
         /**
         * Load the paragraph from the \p paragraphElem into the \p cursor .
         */
-        virtual void loadParagraph(KoOpenDocumentLoadingContext& context, const KoXmlElement& paragraphElem, QTextCursor& cursor);
+        virtual void loadParagraph(KoTextLoadingContext& context, const KoXmlElement& paragraphElem, QTextCursor& cursor);
 
         /**
         * Load the heading from the \p headingElem into the \p cursor .
         */
-        virtual void loadHeading(KoOpenDocumentLoadingContext& context, const KoXmlElement& headingElem, QTextCursor& cursor);
+        virtual void loadHeading(KoTextLoadingContext& context, const KoXmlElement& headingElem, QTextCursor& cursor);
 
         /**
         * Load the list from the \p listElem into the \p cursor .
         */
-        virtual void loadList(KoOpenDocumentLoadingContext& context, const KoXmlElement& listElem, QTextCursor& cursor);
+        virtual void loadList(KoTextLoadingContext& context, const KoXmlElement& listElem, QTextCursor& cursor);
 
         /**
         * Load the section from the \p sectionElem into the \p cursor .
         */
-        virtual void loadSection(KoOpenDocumentLoadingContext& context, const KoXmlElement& sectionElem, QTextCursor& cursor);
+        virtual void loadSection(KoTextLoadingContext& context, const KoXmlElement& sectionElem, QTextCursor& cursor);
 
         /**
         * Load the span from the \p spanElem into the \p cursor .
         */
-        virtual void loadSpan(KoOpenDocumentLoadingContext& context, const KoXmlElement& spanElem, QTextCursor& cursor, bool* stripLeadingSpace);
+        virtual void loadSpan(KoTextLoadingContext& context, const KoXmlElement& spanElem, QTextCursor& cursor, bool* stripLeadingSpace);
 
-        //virtual void loadFrame(KoOpenDocumentLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
+        //virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
 
     protected:
 

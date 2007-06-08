@@ -29,7 +29,7 @@
 class StylePrivate;
 class QTextBlock;
 class KoStyleStack;
-class KoOpenDocumentLoadingContext;
+class KoTextLoadingContext;
 
 /**
  * A container for all properties for a character style.
@@ -159,7 +159,7 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOasis(KoOpenDocumentLoadingContext& context);
+    void loadOasis(KoTextLoadingContext& context);
 
     /// return true if this style has a non-default value set for the Property
     bool hasProperty(int key) const;

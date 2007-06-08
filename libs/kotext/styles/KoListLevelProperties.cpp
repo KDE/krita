@@ -19,7 +19,7 @@
 
 #include "KoListLevelProperties.h"
 #include "Styles_p.h"
-#include "opendocument/KoOpenDocumentLoadingContext.h"
+#include "opendocument/KoTextLoadingContext.h"
 //#include "KoTextBlockData.h"
 
 //#include <QTextCursor>
@@ -248,7 +248,7 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list) {
     return llp;
 }
 
-void KoListLevelProperties::loadOasis(KoOpenDocumentLoadingContext& context, const KoXmlElement& style) {
+void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXmlElement& style) {
 
     if( style.localName() == "list-level-style-bullet" ) { // list with bullets
         //1.6: KoParagCounter::loadOasisListStyle

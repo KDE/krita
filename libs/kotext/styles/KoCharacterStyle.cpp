@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoCharacterStyle.h"
-#include "opendocument/KoOpenDocumentLoadingContext.h"
+#include "opendocument/KoTextLoadingContext.h"
 
 #include "Styles_p.h"
 
@@ -317,7 +317,7 @@ bool KoCharacterStyle::hasProperty(int key) const {
 }
 
 //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
-void KoCharacterStyle::loadOasis(KoOpenDocumentLoadingContext& context) {
+void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     KoStyleStack &styleStack = context.styleStack();
 
     if ( styleStack.hasProperty( KoXmlNS::fo, "color" ) ) { // 3.10.3

@@ -26,7 +26,6 @@
 #include <krita_export.h>
 
 class QWidget;
-class QStringList;
 
 class KisPaintOp;
 class KisPaintOpSettings;

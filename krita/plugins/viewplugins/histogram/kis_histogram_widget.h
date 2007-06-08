@@ -21,7 +21,6 @@
 #include "kis_types.h"
 #include "ui_wdghistogram.h"
 
-class KoColorSpace;
 
 class WdgHistogram : public QWidget, public Ui::WdgHistogram
 {

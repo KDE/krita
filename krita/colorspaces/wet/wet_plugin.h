@@ -24,7 +24,6 @@
 #include "kis_types.h"
 
 class KisView;
-class KisWetColorSpace;
 
 /**
  * A plugin wrapper around the WET color space strategy.

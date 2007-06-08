@@ -39,10 +39,6 @@
 #include "ui_wdgperformancesettings.h"
 #include "ui_wdggeneralsettings.h"
 
-class QLineEdit;
-class QCheckBox;
-class KUrlRequester;
-class KisCmbIDList;
 class KoID;
 
 /**

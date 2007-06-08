@@ -30,7 +30,6 @@
 #include <krita_export.h>
 
 class KisTile;
-class KisTiledDataManager;
 
 /**
  * This class keeps has the intention to make certain tile-related operations faster or more

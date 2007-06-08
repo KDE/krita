@@ -33,10 +33,7 @@
 #include <kis_undo_adapter.h>
 #include <kis_perspective_math.h>
 
-class KisTransaction;
 class WdgToolPerspectiveTransform;
-class KoID;
-class KisFilterStrategy;
 
 /**
  * PerspectiveTransform tool

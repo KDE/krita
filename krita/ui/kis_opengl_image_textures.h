@@ -38,7 +38,6 @@
 #include "kis_shared.h"
 #include "kis_types.h"
 
-class QRegion;
 
 #ifdef HAVE_GLEW
 class KisOpenGLHDRExposureProgram;

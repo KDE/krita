@@ -22,15 +22,12 @@
 
 #include "kis_abstract_canvas_widget.h"
 
-class QBrush;
 class QImage;
 class QPaintEvent;
-class QMoveEvent;
 class QPoint;
 class QRect;
 class QPainter;
 class KisCanvas2;
-class KoViewConverter;
 class KoToolProxy;
 
 /**

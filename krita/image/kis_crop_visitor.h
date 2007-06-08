@@ -34,8 +34,6 @@
 #include "kis_undo_adapter.h"
 #include "kis_layer_commands.h"
 
-class KisProgressDisplayInterface;
-class KisFilterStrategy;
 
 class KisCropVisitor : public KisLayerVisitor {
 

@@ -24,7 +24,6 @@
 #include "kis_paint_device.h"
 
 class KoColorSpace;
-class QUndoCommand;
 
 /**
  * This layer is of a type that can be painted on. A paint layer can

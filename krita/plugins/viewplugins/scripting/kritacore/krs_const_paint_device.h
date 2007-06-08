@@ -26,7 +26,6 @@
 #include <krita_export.h>
 
 class KisDoc2;
-class KisTransaction;
 
 namespace Scripting {
 

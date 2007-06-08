@@ -25,13 +25,8 @@
 #include "kis_tool_curve.h"
 
 
-class CurvePoint;
 class QPointF;
-class KisCanvas;
-class KisCurve;
-class KisPainter;
 class QPointF;
-class WdgToolExample;
 
 class KisToolExample : public KisToolCurve {
 

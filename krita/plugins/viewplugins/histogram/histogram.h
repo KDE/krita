@@ -24,9 +24,8 @@
 #include <kparts/plugin.h>
 
 class KisView2;
-class KAction;
 class KisImage;
-
+class KisPainter;
 class Histogram : public KParts::Plugin
 {
         Q_OBJECT

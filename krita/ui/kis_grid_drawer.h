@@ -27,10 +27,6 @@
 #include "kis_types.h"
 
 class KoViewConverter;
-class KisView;
-class KActionCollection;
-class KToggleAction;
-class KAction;
 class KisSubPerspectiveGrid;
 class KisDoc2;
 

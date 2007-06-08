@@ -23,10 +23,8 @@
 #include <q3scrollview.h>
 #include "KoColorSet.h"
 
-class KListBox;
 class KoColorSet;
 class KColorCells;
-class KisResource;
 class KoColor;
 
 /**

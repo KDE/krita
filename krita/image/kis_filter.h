@@ -35,7 +35,6 @@
 #include "krita_export.h"
 
 class KoColorSpace;
-class KisPreviewDialog;
 class KisProgressDisplayInterface;
 class KisFilterConfigWidget;
 class QWidget;

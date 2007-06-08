@@ -23,7 +23,6 @@
 #include "kis_iterator.h"
 #include "kis_global.h"
 
-class KisPaintDevice;
 
 /**
  * This class provides access to information about the selections through the iterators.

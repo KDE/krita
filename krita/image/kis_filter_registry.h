@@ -28,7 +28,6 @@
 #include <krita_export.h>
 
 class QString;
-class QStringList;
 
 class KRITAIMAGE_EXPORT KisFilterRegistry : public QObject, public KoGenericRegistry<KisFilterSP>
 {

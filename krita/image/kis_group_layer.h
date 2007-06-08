@@ -27,7 +27,6 @@
 #include "kis_paint_layer.h"
 
 class KoColorSpace;
-class KisMergeVisitor;
 
 /**
  * A KisLayer that bundles child layers into a single layer.

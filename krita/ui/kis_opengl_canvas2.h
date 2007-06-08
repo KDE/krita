@@ -38,10 +38,7 @@
 #include "krita_export.h"
 
 class QWidget;
-class QGLContext;
 class QPaintEvent;
-class QImage;
-class QBrush;
 class KisCanvas2;
 
 

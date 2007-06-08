@@ -25,7 +25,6 @@
 #include <kis_types.h>
 #include <QRect>
 
-class KisAutobrushShape;
 class KisDynamicColoring;
 class KisPaintInformation;
 class KisPainter;

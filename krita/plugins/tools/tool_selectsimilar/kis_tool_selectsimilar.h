@@ -24,8 +24,6 @@
 #include "kis_layer_shape.h"
 
 class QWidget;
-class QCheckBox;
-class KisIntSpinbox;
 class KoCanvasBase;
 
 /**

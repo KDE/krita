@@ -26,7 +26,6 @@
 
 class KisDynamicColoring;
 class KisDynamicShape;
-class KisDynamicTransformation;
 class KisDynamicProgram;
 
 class DYNAMIC_BRUSH_EXPORT KisDynamicBrush {

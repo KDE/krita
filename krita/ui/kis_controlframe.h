@@ -34,10 +34,8 @@ class KToolBar;
 
 class QTableWidgetItem;
 class KisIconWidget;
-class KisGradientWidget;
 
 class KisAutobrush;
-class KisAutogradient;
 class KisBrush;
 class KisBrushChooser;
 class KisGradient;

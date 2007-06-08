@@ -30,7 +30,6 @@
 
 class KoToolProxy;
 class KoColorProfile;
-class KoZoomAction;
 
 class KisView2;
 

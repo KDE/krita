@@ -33,8 +33,6 @@ class KisPainter;
 class Brush;
 class Stroke;
 
-class KisBrush;
-class KoCompositeOp;
 
 class KisCPaintOpFactory : public KisPaintOpFactory  {
 

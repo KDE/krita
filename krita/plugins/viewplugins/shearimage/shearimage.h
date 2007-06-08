@@ -23,7 +23,7 @@
 #include <kparts/plugin.h>
 
 class KisView2;
-
+class KisPainter;
 class ShearImage : public KParts::Plugin
 {
     Q_OBJECT

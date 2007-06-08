@@ -29,10 +29,8 @@
 
 #include <krita_export.h>
 
-class QImage;
 class QString;
 
-class KoColorProfile;
 class KoColorSpace;
 class KoColor;
 class KoShape;

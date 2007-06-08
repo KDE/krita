@@ -25,7 +25,7 @@
 class QLabel;
 class QPushButton;
 class KisView2;
-
+class KisAutogradient;
 class KisCustomGradientDialog : public KDialog {
 
     Q_OBJECT

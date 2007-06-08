@@ -24,16 +24,13 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
-class QRect;
 
 class KAction;
 class QAction;
 class KToggleAction;
 class KActionCollection;
 
-class KoPartSelectAction;
 class KoCompositeOp;
-class KoDocumentEntry;
 class KoColorSpace;
 
 class KisDoc2;

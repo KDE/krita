@@ -30,8 +30,6 @@
 #include "kis_global.h"
 
 class QImage;
-class QPoint;
-class QSize;
 
 /**
  * The parasite info that gets loaded from the terribly documented gimp pipe brush parasite.

@@ -43,22 +43,17 @@
 #include "kis_tool.h"
 #include "KoCompositeOp.h"
 
-class QCheckBox;
 class QEvent;
 class QKeyEvent;
-class QComboBox;
 class QPaintEvent;
-class QRect;
 class QGridLayout;
 class QLabel;
 
-class KDialog;
 
 class KoCanvasBase;
 
 class KisCmbComposite;
 class KisIntSpinbox;
-class KisPaintOpSettings;
 
 enum enumBrushMode {
     PAINT,

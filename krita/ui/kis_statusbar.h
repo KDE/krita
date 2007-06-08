@@ -28,7 +28,6 @@ class QLabel;
 class KStatusBar;
 class KSqueezedTextLabel;
 
-class KoColorProfile;
 
 class KisLabelProgress;
 class KisView2;

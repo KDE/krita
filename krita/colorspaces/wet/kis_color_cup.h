@@ -27,7 +27,6 @@
 #include <krita_export.h>
 
 class QSize;
-class QPainter;
 class QWidget;
 class KHueSaturationSelector;
 class KColorValueSelector;

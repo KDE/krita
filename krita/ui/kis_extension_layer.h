@@ -22,17 +22,11 @@
 
 #include "kis_external_layer_iface.h"
 
-class QRect;
 class QString;
-class QIcon;
 class QDomDocument;
 class QDomElement;
-class QRegion;
 
-class KoColorSpace;
 
-class KisFilterStrategy;
-class KisProgressDisplayInterface;
 
 /**
    This interface extends the KisExternalLayer interface with the

@@ -37,10 +37,8 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 
-class KisView;
 class KisFilter;
 class KisFilterConfiguration;
-class KisPreviewView;
 class KisFiltersIconViewItem;
 class KisFiltersListView;
 

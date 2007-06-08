@@ -39,17 +39,14 @@
 
 class KisOpenGLGradientProgram;
 
-class KIntNumInput;
 class KDoubleNumInput;
 
-class KisCmbComposite;
-class KisPainter;
 
 class QLabel;
 class QPoint;
 class QWidget;
 class QCheckBox;
-
+class QComboBox;
 class KisToolGradient : public KisToolPaint {
 
     Q_OBJECT

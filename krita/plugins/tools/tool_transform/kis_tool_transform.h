@@ -34,7 +34,6 @@
 
 #include "ui_wdg_tool_transform.h"
 
-class KisTransaction;
 class KoID;
 class KisFilterStrategy;
 

@@ -26,7 +26,6 @@
 class Brush;
 class Sample;
 class KoColor;
-class QImage;
 
 class Stroke {
 

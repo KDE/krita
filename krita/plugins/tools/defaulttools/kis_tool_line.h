@@ -30,11 +30,9 @@
 #include "KoToolFactory.h"
 #include "kis_layer_shape.h"
 
-class KisBrush;
 class KisPainter;
 
 class QPoint;
-class QWidget;
 
 class KoCanvasBase;
 

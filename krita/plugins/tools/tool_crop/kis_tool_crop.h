@@ -31,7 +31,6 @@
 #include "ui_wdg_tool_crop.h"
 
 class QRect;
-class QCursor;
 
 class WdgToolCrop : public QWidget, public Ui::WdgToolCrop
 {

@@ -24,7 +24,6 @@ class KLineEdit;
 
 class KisFilter;
 class KisPreviewWidget;
-class KisFiltersListView;
 class KisFilterConfiguration;
 class KisFilterConfigWidget;
 class KisImage;

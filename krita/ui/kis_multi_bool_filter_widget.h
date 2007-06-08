@@ -27,7 +27,6 @@
 #include "krita_export.h"
 #include <kis_filter_config_widget.h>
 
-class KIntNumInput;
 
 struct KisBoolWidgetParam {
     KRITAUI_EXPORT KisBoolWidgetParam(  bool ninitvalue, const QString & label, const QString & name);

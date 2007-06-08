@@ -25,11 +25,8 @@
 
 #include "kis_tool_curve.h"
 
-class CurvePoint;
 class QPointF;
-class KisCanvas;
 class KisCurve;
-class KisPainter;
 
 const int BEZIERENDHINT = 0x0010;
 const int BEZIERPREVCONTROLHINT = 0x0020;

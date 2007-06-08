@@ -38,11 +38,10 @@
 #include "kis_selection.h"
 
 class QIcon;
-class QPainter;
 class QBitArray;
 class KisGroupLayer;
 class KoColorSpace;
-
+class QUndoCommand;
 namespace KisMetaData {
     class Store;
 }

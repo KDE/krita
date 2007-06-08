@@ -24,7 +24,7 @@
 #include <kparts/plugin.h>
 
 class KisView2;
-
+class KisPainter;
 class ColorRange : public KParts::Plugin
 {
         Q_OBJECT

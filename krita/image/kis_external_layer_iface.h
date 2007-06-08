@@ -25,17 +25,12 @@
 
 #include "kis_layer.h"
 
-class QRect;
 class QString;
 class QIcon;
 class QDomDocument;
 class QDomElement;
-class QRegion;
 
-class KoColorSpace;
 
-class KisFilterStrategy;
-class KisProgressDisplayInterface;
 
 /**
    A base interface for layers that are implemented outside the Krita

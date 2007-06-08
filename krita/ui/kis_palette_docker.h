@@ -25,8 +25,6 @@
 #include <KoDockFactory.h>
 #include <KoColorSet.h>
 
-class QComboBox;
-class KoResource;
 class KoColor;
 class KisView2;
 

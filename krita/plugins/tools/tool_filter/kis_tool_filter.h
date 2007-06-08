@@ -27,11 +27,9 @@
 #include "kis_layer_shape.h"
 
 
-class QComboBox;
 class QGridLayout;
 class KoPointerEvent;
 class KisFilterConfigWidget;
-class KisView;
 class KoID;
 class KisCmbIDList;
 

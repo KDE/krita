@@ -41,11 +41,7 @@ class QModelIndex;
 
 typedef QList<QModelIndex> QModelIndexList;
 
-class QPainter;
-class QWidget;
-class KIconLoader;
 class KMenu;
-class KoDocumentEntry;
 class KoCompositeOp;
 class KisLayerModel;
 class KisLayerManager;

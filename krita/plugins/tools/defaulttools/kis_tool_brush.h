@@ -26,9 +26,6 @@
 #include <kis_layer_shape.h>
 
 class QTimer;
-class QPointF;
-class QPainter;
-class QRect;
 class QCheckBox;
 class QGridLayout;
 

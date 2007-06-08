@@ -39,14 +39,10 @@ class KoColorSpace;
 class KoCompositeOp;
 class KoColor;
 
-class KisNameServer;
 class KisUndoAdapter;
-class KisPainter;
 class KisFilterStrategy;
-class KisImageIface;
 class KoColorProfile;
 class KisProgressDisplayInterface;
-class KisPaintLayer;
 class KisPerspectiveGrid;
 class KisProjection;
 

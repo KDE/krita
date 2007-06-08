@@ -24,7 +24,6 @@
 #include <kis_paintop.h>
 #include <KoID.h>
 
-class QListString;
 
 class DYNAMIC_BRUSH_EXPORT KisDynamicSensor {
     public:

@@ -38,19 +38,13 @@
 
 class QRect;
 class QImage;
-class QSize;
 class QPoint;
-class QMatrix;
-class QTimer;
 class QPaintEngine;
-class K3NamedCommand;
-class QUndoCommand;
 
 class KoStore;
 
 class KisImage;
 class KisRandomSubAccessorPixel;
-class KisFilter;
 class KisDataManager;
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 

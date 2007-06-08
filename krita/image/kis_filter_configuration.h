@@ -25,10 +25,6 @@
 #include <kdebug.h>
 #include "krita_export.h"
 
-class KisPreviewDialog;
-class KisProgressDisplayInterface;
-class KisFilterConfigWidget;
-class QWidget;
 
 /**
  * A KisFilterConfiguration is the serializable representation of

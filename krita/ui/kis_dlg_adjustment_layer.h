@@ -24,11 +24,9 @@
 class KisFilter;
 class QListWidgetItem;
 class QLabel;
-class QHBoxLayout;
 class KisPreviewWidget;
 class KisFiltersListView;
 class KisFilterConfiguration;
-class KisImage;
 class QGroupBox;
 class KisFilterConfigWidget;
 class KLineEdit;

@@ -33,7 +33,6 @@
 #include "ui_wdg_colorrange.h"
 
 class KisView2;
-class KisCanvasSubject;
 class DlgColorRange;
 class KisSelectedTransaction;
 

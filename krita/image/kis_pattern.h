@@ -28,7 +28,6 @@
 #include <krita_export.h>
 #include "kis_types.h"
 
-class QPoint;
 class QImage;
 class KoColorSpace;
 class KisPaintDevice;

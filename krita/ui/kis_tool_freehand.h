@@ -30,8 +30,6 @@ class KoPointerEvent;
 class KoCanvasBase;
 
 class KisPainter;
-class KisBrush;
-class KisPaintLayer;
 
 
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint

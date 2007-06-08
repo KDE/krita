@@ -24,7 +24,7 @@
 #include <kparts/plugin.h>
 
 class KisView2;
-
+class KisPainter;
 /**
  * Dialog for converting between color models.
  */

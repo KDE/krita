@@ -26,7 +26,6 @@
 #include <kis_global.h>
 
 class QWidget;
-class KisPaintDevice;
 class WdgLayerProperties;
 
 class NewLayerDialog : public KDialog {

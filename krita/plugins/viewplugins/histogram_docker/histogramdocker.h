@@ -58,7 +58,6 @@ private:
     int m_currentProducerPos;
 };
 
-class KisGenericRGBHistogramProducerFactory;
 
 class HistogramDockerUpdater : public QObject {
 Q_OBJECT

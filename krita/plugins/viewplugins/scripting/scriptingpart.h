@@ -23,8 +23,6 @@
 
 #include <kparts/plugin.h>
 
-class KisView2;
-class KisScript;
 
 namespace Kross {
     class Action;

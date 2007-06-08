@@ -28,8 +28,6 @@
 #include "kis_selection.h"
 #include "kis_layer_shape.h"
 
-class QVBoxLayout;
-class QCheckBox;
 
 class KisSelectionOptions;
 

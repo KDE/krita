@@ -25,7 +25,6 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
-class QRect;
 class KisTransactionPrivate;
 
 class KRITAIMAGE_EXPORT KisTransaction : public QUndoCommand {

@@ -30,7 +30,6 @@ class QPainterPath;
 class QPoint;
 class QPointF;
 class QPixmap;
-class QTextTiem;
 class QImage;
 
 /**

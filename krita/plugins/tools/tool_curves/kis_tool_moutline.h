@@ -27,7 +27,6 @@
 
 class QSlider;
 class KisToolMagnetic;
-class KisVector2D;
 class Node;
 
 typedef Q3ValueVector<Node> NodeCol;

@@ -22,7 +22,6 @@
 #include "kis_types.h"
 #include "kis_progress_subject.h"
 
-class QRect;
 class KisPaintDevice;
 class KisProgressDisplayInterface;
 

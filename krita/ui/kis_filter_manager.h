@@ -28,15 +28,11 @@
 
 #include <krita_export.h>
 
-class KActionMenu;
 class KAction;
 class KisView2;
 class KisDoc;
 class KisFilter;
-class KisFilterConfiguration;
-class KisFilterConfigWidget;
 class KActionCollection;
-class KisPreviewDialog;
 
 /**
  * Create all the filter actions for the specified view and implement re-apply filter

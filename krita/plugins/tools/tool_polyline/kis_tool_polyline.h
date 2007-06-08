@@ -30,10 +30,6 @@
 #include "kis_layer_shape.h"
 
 
-class KisCanvas;
-class KisDoc;
-class KisPainter;
-class KisView;
 
 
 class KisToolPolyline : public KisToolPaint {

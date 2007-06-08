@@ -29,10 +29,7 @@
 
 class QDragEnterEvent;
 class QDropEvent;
-class QPoint;
 
-class KoViewChield;
-class KoViewConverter;
 class KoCanvasController;
 
 class KisCanvas2;
@@ -40,7 +37,6 @@ class KisDoc2;
 class KisFilterManager;
 class KisImage;
 class KisLayerManager;
-class KisQPainterCanvas;
 class KisResourceProvider;
 class KisSelectionManager;
 class KisStatusBar;

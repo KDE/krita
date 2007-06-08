@@ -26,7 +26,6 @@
 
 class QRegion;
 class QRect;
-class QVariant;
 
 using namespace ThreadWeaver;
 

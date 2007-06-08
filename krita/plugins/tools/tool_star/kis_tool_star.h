@@ -25,10 +25,6 @@
 #include "ui_wdg_tool_star.h"
 #include "kis_layer_shape.h"
 
-class KisCanvas;
-class KisDoc;
-class KisPainter;
-class KisView;
 
 class WdgToolStar : public QWidget, public Ui::WdgToolStar
 {

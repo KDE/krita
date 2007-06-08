@@ -81,6 +81,14 @@ namespace KisMetaData {
             /// @return the type of this Value
             ValueType type() const;
             /**
+             * @return the value as a double, or null if it's not possible, rationals are evaluated
+             */
+            double asDouble() const;
+            /**
+             * @return the value as a double, or null if it's not possible, rationals are evaluated
+             */
+            int asInteger() const;
+            /**
              * @return the Variant hold by this Value, or an empty QVariant if this Value is not a Variant
              */
             QVariant asVariant() const;

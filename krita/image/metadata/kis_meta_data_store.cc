@@ -32,8 +32,6 @@ uint qHash(const Entry& e)
 
 struct Store::Private {
     QHash<QString, Entry> entries;
-    QHash<QString, Schema*> uri2Schema;
-    QHash<QString, Schema*> prefix2Schema;
 };
 
 Store::Store() : d(new Private)
@@ -41,25 +39,35 @@ Store::Store() : d(new Private)
     
 }
 
+Store::Store(const Store& s) : d(new Private(*s.d)) {
+    // TODO: reaffect all schemas
+}
+
+Store::~Store()
+{
+    delete d;
+}
+
+void Store::copyFrom(const Store* store)
+{
+//     const Entry& entry;
+//     foreach(entry, store->entries)
+    {
+//         if(entry.value()->type() != KisMetaData::Value::Invalid)
+        {
+//             Entry& thisEntry = getEntry(  );
+        }
+    }
+}
+
 bool Store::addEntry(const Entry& entry)
 {
-    if(d->entries.contains(entry.qualifiedName()))
+    if(d->entries.contains(entry.qualifiedName()) and d->entries[entry.qualifiedName()].isValid() )
     {
         kDebug() << "Entry " << entry.qualifiedName() << " allready exist in the store, can't be included twice" << endl;
         return false;
     }
-    const Schema* schema = schemaFromUri(entry.schema()->uri());
-    if(schema == 0)
-    {
-        schema = createSchema(entry.schema()->uri(), entry.schema()->prefix());
-        if(schema == 0)
-        {
-            kDebug() << "Schema (" << entry.schema() << ") couldn't be added to the store" << endl;
-            return false;
-        }
-    }
-    QHash<QString, Entry>::iterator insertedIt = d->entries.insert(entry.qualifiedName(), entry);
-    insertedIt->setSchema( schema);
+    d->entries.insert(entry.qualifiedName(), entry);
     return true;
 }
 
@@ -70,7 +78,7 @@ bool Store::empty() const
 
 bool Store::containsEntry(QString uri, QString entryName) const
 {
-    const Schema* schema = schemaFromUri(uri);
+    const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
     return d->entries.contains(schema->prefix() + ":" + entryName);
 }
 
@@ -81,8 +89,13 @@ Entry& Store::getEntry(QString entryKey)
 
 Entry& Store::getEntry(QString uri, QString entryName)
 {
-    const Schema* schema = schemaFromUri(uri);
+    const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
     return d->entries[schema->prefix() + ":" + entryName];
+}
+
+const Value& Store::getValue(QString uri, QString entryName)
+{
+    return getEntry(uri, entryName).value();
 }
 
 QHash<QString, Entry>::const_iterator Store::begin() const
@@ -95,53 +108,22 @@ QHash<QString, Entry>::const_iterator Store::end() const
     return d->entries.end();
 }
 
-const Schema* Store::schemaFromUri(QString uri) const
-{
-    return d->uri2Schema[uri];
-}
-
-const Schema* Store::schemaFromPrefix(QString prefix) const
-{
-    return d->prefix2Schema[prefix];
-}
-
-const KisMetaData::Schema* Store::createSchema(const KisMetaData::Schema* schema)
-{
-    return createSchema(schema->uri(), schema->prefix());
-}
-
-const Schema* Store::createSchema(QString uri, QString prefix)
-{
-    // First search for the schema
-    const Schema* schema = schemaFromUri(uri);
-    if(schema)
-    {
-        return schema;
-    }
-    // Second search for the prefix
-    schema = schemaFromPrefix(prefix);
-    if(schema)
-    {
-        return 0; // A schema with the same prefix allready exist
-    }
-    // The schema doesn't exist yet, create it
-    Schema* nschema = new Schema(uri, prefix);
-    d->uri2Schema[uri] = nschema;
-    d->prefix2Schema[prefix] = nschema;
-    return nschema;
-}
-
 void Store::debugDump() const
 {
     kDebug() << "=== Dumping MetaData Store ===" << endl;
-    kDebug() << " - Schemas " << endl;
+/*    kDebug() << " - Schemas " << endl;
     foreach(Schema* s, d->uri2Schema)
     {
         kDebug() << *s << endl;
-    }
+    }*/
     kDebug() << " - Metadata (there are " << d->entries.size() << " entries)" << endl;
     foreach(const Entry& e, d->entries)
     {
-        kDebug() << e << endl;
+        if(e.isValid())
+        {
+            kDebug() << e << endl;
+        } else {
+            kDebug() << "Invalid entry" << endl;
+        }
     }
 }

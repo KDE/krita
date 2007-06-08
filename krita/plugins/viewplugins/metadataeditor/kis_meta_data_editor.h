@@ -16,28 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_ENTRY_EDITOR_H_
-#define _KIS_ENTRY_EDITOR_H_
+#ifndef _KIS_META_DATA_EDITOR_H_
+#define _KIS_META_DATA_EDITOR_H_
 
-#include <QObject>
-
-class QString;
+#include <kpagedialog.h>
 
 namespace KisMetaData {
-    class Value;
+    class Store;
 }
 
-class KisEntryEditor : public QObject {
-        Q_OBJECT
+class KisMetaDataEditor : public KPageDialog {
         struct Private;
     public:
-        KisEntryEditor(QObject*, KisMetaData::Value*, QString propertyName);
-        ~KisEntryEditor();
+        KisMetaDataEditor(QWidget* parent, KisMetaData::Store* store);
+        ~KisMetaDataEditor();
     public slots:
-        void valueEdited();
-        void valueChanged();
-    signals:
-        void valueHasBeenEdited();
+        virtual void accept ();
     private:
         Private* const d;
 };

@@ -34,13 +34,25 @@ KisEntryEditor::KisEntryEditor(QObject* obj, KisMetaData::Value* v, QString prop
     d->object = obj;
     d->propertyName = propertyName;
     d->value = v;
-    
-    d->object->setProperty(d->propertyName.toAscii(), d->value->asVariant());
+    valueChanged();
+}
+
+KisEntryEditor::~KisEntryEditor()
+{
+    delete d;
 }
 
 void KisEntryEditor::valueChanged()
 {
+    bool blocked = d->object->blockSignals(true);
+    d->object->setProperty(d->propertyName.toAscii(), d->value->asVariant());
+    d->object->blockSignals(blocked);
+}
+        
+void KisEntryEditor::valueEdited()
+{
     d->value->setVariant( d->object->property(d->propertyName.toAscii()) );
+    emit valueHasBeenEdited();
 }
 
 #include "kis_entry_editor.moc"

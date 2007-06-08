@@ -126,6 +126,38 @@ Value::ValueType Value::type() const
     return d->type;
 }
 
+double Value::asDouble() const
+{
+    switch(type())
+    {
+        case Variant:
+            return d->value.variant->toDouble(0);
+        case UnsignedRational:
+            return d->value.unsignedRational->numerator / (double)d->value.unsignedRational->denominator;
+        case SignedRational:
+            return d->value.signedRational->numerator / (double)d->value.signedRational->denominator;
+        default:
+            return 0.0;
+    }
+    return 0.0;
+}
+
+int Value::asInteger() const 
+{
+    switch(type())
+    {
+        case Variant:
+            return d->value.variant->toInt(0);
+        case UnsignedRational:
+            return d->value.unsignedRational->numerator / d->value.unsignedRational->denominator;
+        case SignedRational:
+            return d->value.signedRational->numerator / d->value.signedRational->denominator;
+        default:
+            return 0;
+    }
+    return 0;
+}
+
 QVariant Value::asVariant() const
 {
     if(d->type == Variant)
@@ -137,10 +169,22 @@ QVariant Value::asVariant() const
 
 bool Value::setVariant(const QVariant& variant)
 {
-    if(d->type == Variant and d->value.variant->type() == variant.type())
+    switch(type())
     {
-        *d->value.variant = variant;
-        return true;
+        case KisMetaData::Value::Invalid:
+            *this = KisMetaData::Value( variant );
+            return true;
+        case KisMetaData::Value::Variant:
+        {
+            if(d->value.variant->type() == variant.type())
+            {
+                *d->value.variant = variant;
+                return true;
+            }
+        }
+            return true;
+        default:
+            break;
     }
     return false;
 }

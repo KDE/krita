@@ -1,0 +1,22 @@
+<MetaDataEditor name="test" uiFile="testeditor.ui" icon="file">
+    <EntryEditor editorName = "editName"
+                 schemaUri = "http://purl.org/dc/elements/1.1/"
+                 entryName = "name"
+                 editorSignal = "textEdited(const QString&amp;)"
+                 propertyName = "text" />
+    <EntryEditor editorName = "editDescription"
+                 schemaUri = "http://purl.org/dc/elements/1.1/"
+                 entryName = "description"
+                 editorSignal = "textChanged()"
+                 propertyName = "plainText" />
+    <EntryEditor editorName = "editDate"
+                 schemaUri = "http://history/"
+                 entryName = "when"
+                 editorSignal = "editingFinished()"
+                 propertyName = "date" />
+    <EntryEditor editorName = "editNumber"
+                 schemaUri = "http://how/"
+                 entryName = "many"
+                 editorSignal = "editingFinished()"
+                 propertyName = "value" />
+</MetaDataEditor>

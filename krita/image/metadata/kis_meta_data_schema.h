@@ -24,19 +24,52 @@
 class QString;
 
 namespace KisMetaData {
+    class SchemaRegistry;
     class KRITAIMAGE_EXPORT Schema {
             struct Private;
+            friend class SchemaRegistry;
         public:
-            static const Schema* TIFFSchema;
-            static const Schema* EXIFSchema;
-            static const Schema* DublinCoreSchema;
-            static const Schema* XMPSchema;
-            static const Schema* MakerNoteSchema;
-        public:
+            static const QString TIFFSchemaUri;
+            static const QString EXIFSchemaUri;
+            static const QString DublinCoreSchemaUri;
+            static const QString XMPSchemaUri;
+            static const QString MakerNoteSchemaUri;
+        private:
             Schema(QString _uri, QString _ns);
         public:
             QString uri() const;
             QString prefix() const;
+        private:
+            Private* const d;
+    };
+    class KRITAIMAGE_EXPORT SchemaRegistry {
+            struct Private;
+            SchemaRegistry();
+        public:
+            /**
+             * Creates a new schema.
+             * @param uri the name of the schema
+             * @param prefix the namespace prefix used for this schema
+             * @return the schema associated with the uri (it can return 0, if no schema exist
+             * for the uri, but the prefix was allready used, and it can be an allready existing
+             * schema if the uri was allready included)
+             */
+            const KisMetaData::Schema* create(QString uri, QString prefix);
+            /**
+             * @return the schema for this uri
+             */
+            const Schema* schemaFromUri(QString uri) const;
+            /**
+             * @return the schema for this prefix
+             */
+            const Schema* schemaFromPrefix(QString prefix) const;
+            /**
+             * Return an instance of the SchemaRegistry.
+             * Creates an instance if that has never happened before and returns
+             * the singleton instance.
+             * Intialize it with default schemas.
+             */
+            static KisMetaData::SchemaRegistry* instance();
         private:
             Private* const d;
     };

@@ -27,6 +27,7 @@
 namespace KisMetaData {
     class Schema;
     class Entry;
+    class Value;
     /**
      * This class holds the list of metadata entries and schemas.
      */
@@ -34,7 +35,13 @@ namespace KisMetaData {
         struct Private;
         public:
             Store();
+            Store(const Store&);
+            ~Store();
         public:
+            /**
+             * Copy the entries from store inside this store
+             */
+            void copyFrom(const Store* store);
             /**
              * @return true if there is no metadata in this store.
              */
@@ -58,6 +65,14 @@ namespace KisMetaData {
              */
             Entry& getEntry(QString uri, QString entryName);
             
+            /**
+             * Return the value associated with this entry name and uri.
+             * @param uri
+             * @param entryName
+             * @return the value
+             */
+            const Value& getValue(QString uri, QString entryName);
+            
             QHash<QString, Entry>::const_iterator begin() const;
             QHash<QString, Entry>::const_iterator end() const;
             
@@ -72,24 +87,6 @@ namespace KisMetaData {
              * @return true if an entry with the given uri and entry name exist in the store
              */
             bool containsEntry(QString uri, QString entryName) const;
-            /**
-             * @return the schema for this uri
-             */
-            const Schema* schemaFromUri(QString uri) const;
-            /**
-             * @return the schema for this prefix
-             */
-            const Schema* schemaFromPrefix(QString prefix) const;
-            /**
-             * Creates a new schema.
-             * @param uri the name of the schema
-             * @param prefix the namespace prefix used for this schema
-             * @return the schema associated with the uri (it can return 0, if no schema exist
-             * for the uri, but the prefix was allready used, and it can be an allready existing
-             * schema if the uri was allready included)
-             */
-            const KisMetaData::Schema* createSchema(QString uri, QString prefix);
-            const KisMetaData::Schema* createSchema(const KisMetaData::Schema*);
             /**
              * Dump on kdDebug the metadata store.
              */

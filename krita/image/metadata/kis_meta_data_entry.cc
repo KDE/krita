@@ -31,12 +31,14 @@ struct Entry::Private {
     QString name;
     const Schema* schema;
     Value value;
+    bool valid;
 };
 
 Entry::Entry() :
         d(new Private)
 {
-    
+    d->schema = 0;
+    d->valid = false;
 }
 
 Entry::Entry(QString name, const Schema* schema, const Value& value) :
@@ -45,10 +47,12 @@ Entry::Entry(QString name, const Schema* schema, const Value& value) :
     d->name = name;
     d->schema = schema;
     d->value = value;
+    d->valid = true;
 }
 
 Entry::Entry(const Entry& e) : d(new Private())
 {
+    d->valid = false;
     *this = e;
 }
 
@@ -87,6 +91,11 @@ Value& Entry::value()
     return d->value;
 }
 
+bool Entry::isValid() const {
+    return d->valid;
+}
+
+
 bool Entry::operator==(const Entry& e)
 {
     return qualifiedName() == e.qualifiedName();
@@ -94,9 +103,14 @@ bool Entry::operator==(const Entry& e)
 
 Entry& Entry::operator=(const Entry& e)
 {
-    d->name = e.d->name;
-    d->schema = e.d->schema;
-    d->value = e.d->value;
+    if(e.isValid())
+    {
+        Q_ASSERT( not isValid() or *this == e);
+        d->name = e.d->name;
+        d->schema = e.d->schema;
+        d->value = e.d->value;
+        d->valid = true;
+    }
     return *this;
 }
 

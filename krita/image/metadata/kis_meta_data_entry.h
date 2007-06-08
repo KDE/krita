@@ -32,6 +32,9 @@ namespace KisMetaData {
         struct Private;
         friend class Store;
         public:
+            /**
+             * Create an invalid entry
+             */
             Entry();
             /**
              * Create a new entry.
@@ -60,10 +63,17 @@ namespace KisMetaData {
              */
             const KisMetaData::Value& value() const;
             /**
+             * @return true if this entry is valid
+             */
+            bool isValid() const;
+            /**
              * @return the value of this entry
              */
             KisMetaData::Value& value();
-            Entry& operator=(const Entry&);
+            /**
+             * Affect the content of entry to this entry if entry is valid
+             */
+            Entry& operator=(const Entry& entry);
             bool operator==(const Entry&);
         private:
             void setSchema(const KisMetaData::Schema* schema);

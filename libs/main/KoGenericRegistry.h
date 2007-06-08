@@ -32,6 +32,13 @@
  * Base class for registry objects.
  *
  * Items are mapped by QString as a unique Id.
+ * 
+ * Exemple of use:
+ * @code
+ * class KoMyClassRegistry : public KoGenericRegistry\<MyClass*\> {
+ * 
+ * };
+ * @endcode
  */
 template<typename T>
 class KoGenericRegistry {

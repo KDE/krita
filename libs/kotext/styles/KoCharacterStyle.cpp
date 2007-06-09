@@ -321,6 +321,7 @@ bool KoCharacterStyle::hasProperty(int key) const {
 void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     KoStyleStack &styleStack = context.styleStack();
 
+    // The fo:color attribute specifies the foreground color of text.
     if ( styleStack.hasProperty( KoXmlNS::fo, "color" ) ) { // 3.10.3
         if (styleStack.property( KoXmlNS::style, "use-window-font-color") != "true") {
             QColor color(styleStack.property( KoXmlNS::fo, "color" )); // #rrggbb format
@@ -359,18 +360,21 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
         setFontFamily( fontName );
     }
 
-    if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) { // 3.10.14
+    // Specify the size of a font. The value of these attribute is either an absolute length or a percentage
+    if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) {
         double pointSize = styleStack.fontSize();
         if (pointSize > 0)
             setFontPointSize(pointSize);
     }
 
+    // These attributes specify a relative font size change as a length such as +1pt, -3pt. It changes the font size based on the font size of the parent style.
     if ( styleStack.hasProperty( KoXmlNS::style, "font-size-rel" ) ) {
         double pointSize = fontPointSize() + KoUnit::parseValue( styleStack.property( KoXmlNS::style, "font-size-rel" ) );
         if (pointSize > 0)
             setFontPointSize(pointSize);
     }
 
+    // Specify the weight of a font. The permitted values are normal, bold, and numeric values 100-900, in steps of 100. Unsupported numerical values are rounded off to the next supported value.
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-weight" ) ) { // 3.10.24
         QString fontWeight = styleStack.property( KoXmlNS::fo, "font-weight" );
         int boldness;
@@ -385,6 +389,7 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
         setFontWeight( boldness );
     }
 
+    // Specify whether to use normal or italic font face.
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-style" ) ) { // 3.10.19
         if ( styleStack.property( KoXmlNS::fo, "font-style" ) == "italic" ||
              styleStack.property( KoXmlNS::fo, "font-style" ) == "oblique" ) { // no difference in kotext
@@ -415,6 +420,7 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     */
 #endif
 
+    // Specifies whether text is underlined, and if so, whether a single or double line will be used for underlining.
     if ( styleStack.hasProperty( KoXmlNS::style, "text-underline-type" )
         || styleStack.hasProperty( KoXmlNS::style, "text-underline-style" ) ) { // OASIS 14.4.28
         QTextCharFormat::UnderlineStyle underlineStyle;
@@ -423,13 +429,8 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
                               underlineStyle );
         setUnderlineStyle(underlineStyle);
     }
-#if 0
-    else if ( styleStack.hasProperty( KoXmlNS::style, "text-underline" ) ) { // OO compat (3.10.22), to be moved out
-        importUnderline( styleStack.property( KoXmlNS::style, "text-underline" ),
-                         m_underlineType, m_underlineStyle );
-    }
-#endif
 
+    // Specifies the color that is used to underline text. The value of this attribute is either font-color or a color. If the value is font-color, the current text color is used for underlining.
     QString underLineColor = styleStack.property( KoXmlNS::style, "text-underline-color" ); // OO 3.10.23, OASIS 14.4.31
     if ( !underLineColor.isEmpty() && underLineColor != "font-color" )
         setUnderlineColor( QColor(underLineColor) );
@@ -484,13 +485,12 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     }
 #endif
 
+    // The fo:background-color attribute specifies the background color of a paragraph.
     if ( styleStack.hasProperty( KoXmlNS::fo, "background-color") ) {
         const QString bgcolor = styleStack.property( KoXmlNS::fo, "background-color");
         QBrush brush = background();
-        if (bgcolor == "transparent") {
-            if (brush.style() != Qt::NoBrush)
-                brush.setStyle(Qt::NoBrush);
-        }
+        if (bgcolor == "transparent")
+            brush.setStyle(Qt::NoBrush);
         else {
             if (brush.style() == Qt::NoBrush)
                 brush.setStyle(Qt::SolidPattern);
@@ -499,7 +499,8 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
         setBackground(brush);
     }
 
-    if ( styleStack.hasProperty( KoXmlNS::style, "use-window-font-color" ) ) { // 3.10.4
+    // The style:use-window-font-color attribute specifies whether or not the window foreground color should be as used as the foreground color for a light background color and white for a dark background color.
+    if ( styleStack.hasProperty( KoXmlNS::style, "use-window-font-color" ) ) {
         if (styleStack.property( KoXmlNS::style, "use-window-font-color") == "true") {
             // Do like OpenOffice.org : change the foreground font if its color is too close to the background color...
             QColor back = background().color();

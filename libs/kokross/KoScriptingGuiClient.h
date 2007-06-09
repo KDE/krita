@@ -28,6 +28,8 @@
 
 #include <kross/ui/guiclient.h>
 
+class KDialog;
+
 #define KOKROSS_EXPORT KDE_EXPORT
 
 /**
@@ -56,7 +58,9 @@ class KOKROSS_EXPORT KoScriptingGuiClient : public Kross::GUIClient
         */
         virtual ~KoScriptingGuiClient();
 
-    public Q_SLOTS:
+        static KDialog* showScriptManager();
+
+    protected Q_SLOTS:
 
         /**
         * Show the modal "Script Manager" dialog.

@@ -780,7 +780,7 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
         hasMarginLeft = true;
         hasMarginRight = true;
     }
-    
+
     // Automatic Text indent
     // OOo is not assuming this. Commenting this line thus allow more OpenDocuments to be supported, including a 
     // testcase from the ODF test suite. See §15.5.18 in the spec.
@@ -967,16 +967,17 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
     }
     layout.pageBreaking = pageBreaking;
 #else
+
+    // The fo:break-before and fo:break-after attributes insert a page or column break before or after a paragraph.
     if( styleStack.hasProperty( KoXmlNS::fo, "break-before") ) {
-        // TODO in KWord: implement difference between "column" and "page"
         if ( styleStack.property( KoXmlNS::fo, "break-before" ) != "auto" )
             setBreakBefore(true);
     }
     if( styleStack.hasProperty( KoXmlNS::fo, "break-after") ) {
-        // TODO in KWord: implement difference between "column" and "page"
         if ( styleStack.property( KoXmlNS::fo, "break-after" ) != "auto" )
             setBreakAfter(true);
     }
+
 #endif
 
 #if 0
@@ -988,13 +989,13 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
             layout.backgroundColor.setNamedColor( bgColor );
     }
 #endif
+
+    // The fo:background-color attribute specifies the background color of a paragraph.
     if ( styleStack.hasProperty( KoXmlNS::fo, "background-color") ) {
         const QString bgcolor = styleStack.property( KoXmlNS::fo, "background-color");
         QBrush brush = d->charStyle->background();
-        if (bgcolor == "transparent") {
-            if (brush.style() != Qt::NoBrush)
-                brush.setStyle(Qt::NoBrush);
-        }
+        if (bgcolor == "transparent")
+            brush.setStyle(Qt::NoBrush);
         else {
             if (brush.style() == Qt::NoBrush)
                 brush.setStyle(Qt::SolidPattern);

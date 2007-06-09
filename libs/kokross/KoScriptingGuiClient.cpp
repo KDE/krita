@@ -64,13 +64,19 @@ KoScriptingGuiClient::~KoScriptingGuiClient()
     delete d;
 }
 
-void KoScriptingGuiClient::slotShowScriptManager()
+KDialog* KoScriptingGuiClient::showScriptManager()
 {
     KDialog* dialog = new KDialog();
     dialog->setCaption( i18n("Script Manager") );
     dialog->setButtons( KDialog::Ok | KDialog::Cancel );
     dialog->setMainWidget( new KoScriptManagerCollection(dialog->mainWidget()) );
     dialog->resize( QSize(520, 380).expandedTo( dialog->minimumSizeHint() ) );
+    return dialog;
+}
+
+void KoScriptingGuiClient::slotShowScriptManager()
+{
+    KDialog* dialog = showScriptManager();
     int result = dialog->exec();
 #if 0
     if ( view->isModified() ) {

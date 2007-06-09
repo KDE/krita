@@ -45,25 +45,18 @@ class KoScriptingDockerFactory::Private
 {
     public:
         QPointer<QWidget> parent;
-        QPointer<KoScriptingGuiClient> guiclient;
 };
 
-KoScriptingDockerFactory::KoScriptingDockerFactory(QWidget* parent, KoScriptingGuiClient* guiclient)
+KoScriptingDockerFactory::KoScriptingDockerFactory(QWidget* parent)
     : KoDockFactory()
     , d(new Private())
 {
     d->parent = parent;
-    d->guiclient = guiclient;
 }
 
 KoScriptingDockerFactory::~KoScriptingDockerFactory()
 {
     delete d;
-}
-
-KoScriptingGuiClient* KoScriptingDockerFactory::guiClient() const
-{
-    return d->guiclient;
 }
 
 QString KoScriptingDockerFactory::id() const
@@ -78,7 +71,7 @@ Qt::DockWidgetArea KoScriptingDockerFactory::defaultDockWidgetArea() const
 
 QDockWidget* KoScriptingDockerFactory::createDockWidget()
 {
-    QDockWidget *dw =  new KoScriptingDocker(d->parent, d->guiclient);
+    QDockWidget *dw =  new KoScriptingDocker(d->parent);
     dw->setObjectName(id());
     return dw;
 }
@@ -90,17 +83,14 @@ QDockWidget* KoScriptingDockerFactory::createDockWidget()
 class KoScriptingDocker::Private
 {
     public:
-        QPointer<KoScriptingGuiClient> guiclient;
         Kross::ActionCollectionView* view;
         QMap<QString, QAction* > actions;
 };
 
-KoScriptingDocker::KoScriptingDocker(QWidget* parent, KoScriptingGuiClient* guiclient)
+KoScriptingDocker::KoScriptingDocker(QWidget* parent)
     : QDockWidget(i18n("Scripts"), parent)
     , d(new Private())
 {
-    d->guiclient = guiclient;
-
     QWidget* widget = new QWidget(this);
     QBoxLayout* layout = new QVBoxLayout(widget);
     layout->setMargin(0);
@@ -134,7 +124,7 @@ KoScriptingDocker::KoScriptingDocker(QWidget* parent, KoScriptingGuiClient* guic
         d->actions.insert( "stop",  a );
     }
 
-    tb->addAction(KIcon("configure"), i18n("Script Manager"), guiclient, SLOT(slotShowScriptManager()));
+    tb->addAction(KIcon("configure"), i18n("Script Manager"), this, SLOT(slotShowScriptManager()));
 
     /*
     d->tb->addSeparator();
@@ -155,9 +145,11 @@ KoScriptingDocker::~KoScriptingDocker()
     delete d;
 }
 
-KoScriptingGuiClient* KoScriptingDocker::guiClient() const
+void KoScriptingDocker::slotShowScriptManager()
 {
-    return d->guiclient;
+    KDialog* dialog = KoScriptingGuiClient::showScriptManager();
+    dialog->exec();
+    dialog->delayedDestruct();
 }
 
 void KoScriptingDocker::slotEnabledChanged(const QString& actionname)

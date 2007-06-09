@@ -42,18 +42,12 @@ class KOKROSS_EXPORT KoScriptingDockerFactory : public KoDockFactory
         * \param guiclient The \a KoScriptingGuiClient instance the
         * docker belongs to.
         */
-        KoScriptingDockerFactory(QWidget* parent, KoScriptingGuiClient* guiclient);
+        KoScriptingDockerFactory(QWidget* parent);
 
         /**
         * Destructor.
         */
         virtual ~KoScriptingDockerFactory();
-
-        /**
-        * \return the \a KoScriptingGuiClient instance the docker
-        * belongs to.
-        */
-        KoScriptingGuiClient* guiClient() const;
 
         /**
         * \return the id the docker has.
@@ -91,20 +85,15 @@ class KOKROSS_EXPORT KoScriptingDocker : public QDockWidget
         * \param guiclient The \a KoScriptingGuiClient instance this
         * docker belongs to.
         */
-        KoScriptingDocker(QWidget* parent, KoScriptingGuiClient* guiclient);
+        KoScriptingDocker(QWidget* parent);
 
         /**
         * Destructor.
         */
         virtual ~KoScriptingDocker();
 
-        /**
-        * \return the \a KoScriptingGuiClient instance this docker
-        * belongs to.
-        */
-        KoScriptingGuiClient* guiClient() const;
-
-    private Q_SLOTS:
+    protected Q_SLOTS:
+        void slotShowScriptManager();
         void slotEnabledChanged(const QString&);
         void slotDoubleClicked();
 

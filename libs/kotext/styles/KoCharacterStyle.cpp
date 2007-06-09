@@ -401,6 +401,7 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     if ( styleStack.hasProperty( KoXmlNS::style, "font-pitch" ) ) {
         if ( styleStack.property( KoXmlNS::style, "font-pitch" ) == "fixed" ) {
             setFontFixedPitch( true );
+            setFontFamily( "Courier 10 Pitch" ); //hardcode to a fixed font.
         }
     }
 

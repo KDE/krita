@@ -989,14 +989,18 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
     }
 #endif
     if ( styleStack.hasProperty( KoXmlNS::fo, "background-color") ) {
-        QColor textBackColor( styleStack.property( KoXmlNS::fo, "background-color") ); // #rrggbb format
-        if (textBackColor.isValid()) {
-            QBrush brush = d->charStyle->background();
+        const QString bgcolor = styleStack.property( KoXmlNS::fo, "background-color");
+        QBrush brush = d->charStyle->background();
+        if (bgcolor == "transparent") {
+            if (brush.style() != Qt::NoBrush)
+                brush.setStyle(Qt::NoBrush);
+        }
+        else {
             if (brush.style() == Qt::NoBrush)
                 brush.setStyle(Qt::SolidPattern);
-            brush.setColor(textBackColor);
-            d->charStyle->setBackground(brush);
+            brush.setColor(bgcolor); // #rrggbb format
         }
+        d->charStyle->setBackground(brush);
     }
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,

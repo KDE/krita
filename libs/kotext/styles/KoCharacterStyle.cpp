@@ -479,14 +479,18 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
 #endif
 
     if ( styleStack.hasProperty( KoXmlNS::fo, "background-color") ) {
-        QColor textBackColor( styleStack.property( KoXmlNS::fo, "background-color") ); // #rrggbb format
-        if (textBackColor.isValid()) {
-            QBrush brush = background();
+        const QString bgcolor = styleStack.property( KoXmlNS::fo, "background-color");
+        QBrush brush = background();
+        if (bgcolor == "transparent") {
+            if (brush.style() != Qt::NoBrush)
+                brush.setStyle(Qt::NoBrush);
+        }
+        else {
             if (brush.style() == Qt::NoBrush)
                 brush.setStyle(Qt::SolidPattern);
-            brush.setColor(textBackColor);
-            setBackground(brush);
+            brush.setColor(bgcolor); // #rrggbb format
         }
+        setBackground(brush);
     }
 
     if ( styleStack.hasProperty( KoXmlNS::style, "use-window-font-color" ) ) { // 3.10.4

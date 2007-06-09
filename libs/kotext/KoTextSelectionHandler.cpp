@@ -400,8 +400,8 @@ bool KoTextSelectionHandler::insertIndexMarker() {
     return true;
 }
 
-KoBookmark *KoTextSelectionHandler::addBookmark(KoShape *m_textShape) {
-    KoBookmark *bookmark = new KoBookmark(m_textShape);
+KoBookmark *KoTextSelectionHandler::addBookmark(KoShape *shape) {
+    KoBookmark *bookmark = new KoBookmark(shape);
     int startPos = -1, endPos = -1, caretPos;
 
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
@@ -413,7 +413,7 @@ KoBookmark *KoTextSelectionHandler::addBookmark(KoShape *m_textShape) {
         caretPos = d->caret->position();
 
         d->caret->setPosition(endPos);
-        KoBookmark *endBookmark = new KoBookmark(m_textShape);
+        KoBookmark *endBookmark = new KoBookmark(shape);
         layout->inlineObjectTextManager()->insertInlineObject(*d->caret, endBookmark);
         bookmark->setEndBookmark(endBookmark);
         d->caret->setPosition(startPos);
@@ -437,8 +437,6 @@ KoBookmark *KoTextSelectionHandler::addBookmark(KoShape *m_textShape) {
 }
 
 bool KoTextSelectionHandler::selectBookmark(KoBookmark *bookmark) {
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
-
     if (bookmark->hasSelection()) {
         d->caret->setPosition(bookmark->position());
         d->caret->setPosition(bookmark->endBookmark()->position() + 1, QTextCursor::KeepAnchor);

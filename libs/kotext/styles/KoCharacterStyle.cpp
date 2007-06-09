@@ -397,6 +397,13 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
         }
     }
 
+    // Specify whether a font has a fixed or variable width.
+    if ( styleStack.hasProperty( KoXmlNS::style, "font-pitch" ) ) {
+        if ( styleStack.property( KoXmlNS::style, "font-pitch" ) == "fixed" ) {
+            setFontFixedPitch( true );
+        }
+    }
+
 //TODO
 #if 0
     d->m_bWordByWord = styleStack.property( KoXmlNS::style, "text-underline-mode" ) == "skip-white-space";
@@ -531,7 +538,6 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
       style:text-outline, 3.10.5 - not implemented in kotext
       style:font-family-generic, 3.10.10 - roman, swiss, modern -> map to a font?
       style:font-style-name, 3.10.11 - can be ignored, says DV, the other ways to specify a font are more precise
-      style:font-pitch, 3.10.12 - fixed or variable -> map to a font?
       style:font-charset, 3.10.14 - not necessary with Qt
       fo:letter-spacing, 3.10.16 - not implemented in kotext
       style:text-relief, 3.10.20 - not implemented in kotext

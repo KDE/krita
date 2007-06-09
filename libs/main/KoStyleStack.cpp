@@ -152,6 +152,9 @@ double KoStyleStack::fontSize(const double defaultFontPointSize) const
         if ( properties.hasAttributeNS( m_foNSURI, name ) ) {
             const QString value = properties.attributeNS( m_foNSURI, name, QString() );
             if ( value.endsWith( "%" ) ) {
+                //sebsauer, 20070609, the specs don't say that we have to calc them together but
+                //just that we are looking for a valid parent fontsize. So, let's only take the
+                //first percent definition into account and keep on to seek for a valid parent,
                 //percent *= value.left( value.length() - 1 ).toDouble() / 100.0;
                 if (percent == 1)
                     percent = value.left( value.length() - 1 ).toDouble() / 100.0;
@@ -161,6 +164,7 @@ double KoStyleStack::fontSize(const double defaultFontPointSize) const
         }
     }
 
+    //if there was no valid parent, we return the default fontsize together with an optional calculated percent-value.
     return percent * defaultFontPointSize;
 }
 

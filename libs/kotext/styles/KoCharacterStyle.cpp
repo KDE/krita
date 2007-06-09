@@ -28,6 +28,7 @@
 #include <KoOasisStyles.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
+#include <KoUnit.h>
 
 #include <KDebug>
 
@@ -360,7 +361,12 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
 
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) { // 3.10.14
         double pointSize = styleStack.fontSize();
-        //fn.setPointSizeFloat( pointSize );
+        if (pointSize > 0)
+            setFontPointSize(pointSize);
+    }
+
+    if ( styleStack.hasProperty( KoXmlNS::style, "font-size-rel" ) ) {
+        double pointSize = fontPointSize() + KoUnit::parseValue( styleStack.property( KoXmlNS::style, "font-size-rel" ) );
         if (pointSize > 0)
             setFontPointSize(pointSize);
     }

@@ -48,7 +48,7 @@ ComboBox::ComboBox(Property *property, QWidget *parent)
 	m_edit->setInsertPolicy(QComboBox::NoInsert);
 	m_edit->setMinimumSize(10, 0); // to allow the combo to be resized to a small size
 	m_edit->setAutoCompletion(true);
-	m_edit->setContextMenuEnabled(false);
+	m_edit->setContextMenuPolicy(Qt::NoContextMenu);
 
 	if (this->property()->listData()) {
 		fillBox();

@@ -139,8 +139,7 @@ bool KoStyleStack::hasProperty( const char* nsURI, const char* name, const char*
 
 // Font size is a bit special. "115%" applies to "the fontsize of the parent style".
 // This can be generalized though (hasPropertyThatCanBePercentOfParent() ? :)
-// Although, if we also add support for fo:font-size-rel here then it's not general anymore.
-double KoStyleStack::fontSize() const
+double KoStyleStack::fontSize(const double defaultFontPointSize) const
 {
     const QString name = "font-size";
     double percent = 1;
@@ -152,13 +151,17 @@ double KoStyleStack::fontSize() const
         KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName ).toElement();
         if ( properties.hasAttributeNS( m_foNSURI, name ) ) {
             const QString value = properties.attributeNS( m_foNSURI, name, QString() );
-            if ( value.endsWith( "%" ) )
-                percent *= value.left( value.length() - 1 ).toDouble() / 100.0;
+            if ( value.endsWith( "%" ) ) {
+                //percent *= value.left( value.length() - 1 ).toDouble() / 100.0;
+                if (percent == 1)
+                    percent = value.left( value.length() - 1 ).toDouble() / 100.0;
+            }
             else
                 return percent * KoUnit::parseValue( value ); // e.g. 12pt
         }
     }
-    return 0;
+
+    return percent * defaultFontPointSize;
 }
 
 bool KoStyleStack::hasChildNode( const char* nsURI, const char* localName ) const

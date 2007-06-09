@@ -124,7 +124,7 @@ public:
     /**
      * Special case for the current font size, due to special handling of fo:font-size="115%".
      */
-    double fontSize() const;
+    double fontSize(const double defaultFontPointSize = 12.0) const;
 
     /**
      * Return the name of the style specified by the user,

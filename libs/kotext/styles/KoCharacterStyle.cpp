@@ -362,7 +362,7 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
 
     // Specify the size of a font. The value of these attribute is either an absolute length or a percentage
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) {
-        double pointSize = styleStack.fontSize();
+        double pointSize = styleStack.fontSize( fontPointSize() );
         if (pointSize > 0)
             setFontPointSize(pointSize);
     }

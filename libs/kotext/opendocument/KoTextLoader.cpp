@@ -218,6 +218,13 @@ void KoTextLoader::loadAllStyles(KoTextLoadingContext& context)
     loadStyles(context, context.oasisStyles().autoStyles("paragraph").values());
     loadStyles(context, context.oasisStyles().customStyles("paragraph").values());
 
+    // we always need the default style
+    if( ! d->paragraphStyle("Standard") ) {
+        KoParagraphStyle *parastyle = new KoParagraphStyle();
+        parastyle->setName("Standard");
+        d->addStyle(parastyle);
+    }
+
     // handle the list styles
     QHash<QString, KoXmlElement*> listStyles = context.oasisStyles().listStyles();
     for(QHash<QString, KoXmlElement*>::Iterator it = listStyles.begin(); it != listStyles.end(); ++it) {

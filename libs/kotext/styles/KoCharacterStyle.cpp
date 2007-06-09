@@ -532,7 +532,6 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
       style:font-style-name, 3.10.11 - can be ignored, says DV, the other ways to specify a font are more precise
       style:font-pitch, 3.10.12 - fixed or variable -> map to a font?
       style:font-charset, 3.10.14 - not necessary with Qt
-      style:font-size-rel, 3.10.15 - TODO in StyleStack::fontSize()
       fo:letter-spacing, 3.10.16 - not implemented in kotext
       style:text-relief, 3.10.20 - not implemented in kotext
       style:letter-kerning, 3.10.20 - not implemented in kotext

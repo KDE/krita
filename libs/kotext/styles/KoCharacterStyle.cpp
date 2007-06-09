@@ -334,17 +334,24 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     }
 
     QString fontName;
-    if ( styleStack.hasProperty( KoXmlNS::fo, "font-family" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "font-family" ) ) {
         fontName = styleStack.property( KoXmlNS::fo, "font-family" );
+
+        // Specify whether a font has a fixed or variable width.
+        // These attributes are ignored if there is no corresponding fo:font-family attribute attached to the same formatting properties element.
+        if ( styleStack.hasProperty( KoXmlNS::style, "font-pitch" ) ) {
+            if ( styleStack.property( KoXmlNS::style, "font-pitch" ) == "fixed" )
+                setFontFixedPitch( true );
+        }
+    }
     if ( styleStack.hasProperty( KoXmlNS::style, "font-family" ) )
         fontName = styleStack.property( KoXmlNS::style, "font-family" );
     if ( styleStack.hasProperty( KoXmlNS::style, "font-name" ) ) {
         // This font name is a reference to a font face declaration.
         KoOasisStyles &styles = context.oasisStyles();
         const KoXmlElement *fontFace = styles.findStyle(styleStack.property( KoXmlNS::style, "font-name" ));
-        if (fontFace != 0) {
+        if (fontFace != 0)
             fontName = fontFace->attributeNS(KoXmlNS::svg, "font-family", "");
-        }
     }
 
     if ( ! fontName.isNull() ) {
@@ -394,14 +401,6 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
         if ( styleStack.property( KoXmlNS::fo, "font-style" ) == "italic" ||
              styleStack.property( KoXmlNS::fo, "font-style" ) == "oblique" ) { // no difference in kotext
             setFontItalic( true );
-        }
-    }
-
-    // Specify whether a font has a fixed or variable width.
-    if ( styleStack.hasProperty( KoXmlNS::style, "font-pitch" ) ) {
-        if ( styleStack.property( KoXmlNS::style, "font-pitch" ) == "fixed" ) {
-            setFontFixedPitch( true );
-            setFontFamily( "Courier 10 Pitch" ); //hardcode to a fixed font.
         }
     }
 

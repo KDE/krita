@@ -92,13 +92,13 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             quint32 i = 0;
             uchar *j = img.bits();
 
-            while ( i < width * height * this->channelCount()) {
+            while ( i < width * height * this->pixelSize()) {
                 this->toRgbA16( ( data + i), (quint8*)m_qcolordata, 1);
                 *( j + 3)  = this->alpha(data + i);
                 *( j + 2 ) = KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[2]);
                 *( j + 1 ) = KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[1]);
                 *( j + 0 ) = KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[0]);
-                i += this->channelCount();
+                i += this->pixelSize();
                 j += 4;
             }
             return img;

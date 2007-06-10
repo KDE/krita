@@ -74,12 +74,36 @@ class KoScriptManagerNewStuff : public KNewStuffSecure
 };
 */
 
+class KoScriptManagerView : public Kross::ActionCollectionView
+{
+    public:
+        KoScriptManagerView(KoScriptManagerCollection* collection) : Kross::ActionCollectionView(collection)
+        {
+            setDragEnabled(true);
+            setAcceptDrops(true);
+
+            Kross::ActionCollectionModel::Mode modelmode = Kross::ActionCollectionModel::Mode( Kross::ActionCollectionModel::Icons | Kross::ActionCollectionModel::ToolTips | Kross::ActionCollectionModel::UserCheckable );
+            Kross::ActionCollectionModel* model = new Kross::ActionCollectionModel(this, Kross::Manager::self().actionCollection(), modelmode);
+            setModel(model);
+            //selectionModel();
+        }
+
+        virtual ~KoScriptManagerView() {}
+
+        virtual void slotAdd()
+        {
+            KoScriptManagerAddWizard wizard(this);
+            int result = wizard.exec();
+            Q_UNUSED(result);
+        }
+};
+
 /// \internal d-pointer class.
 class KoScriptManagerCollection::Private
 {
     public:
         bool modified;
-        Kross::ActionCollectionView* view;
+        KoScriptManagerView* view;
         Private() : modified(false) {}
 };
 
@@ -90,17 +114,8 @@ KoScriptManagerCollection::KoScriptManagerCollection(QWidget* parent)
     mainlayout->setMargin(0);
     setLayout(mainlayout);
 
-    d->view = new Kross::ActionCollectionView(this);
-    d->view->setDragEnabled(true);
-    d->view->setAcceptDrops(true);
-
+    d->view = new KoScriptManagerView(this);
     mainlayout->addWidget(d->view);
-
-    Kross::ActionCollectionModel::Mode modelmode = Kross::ActionCollectionModel::Mode( Kross::ActionCollectionModel::Icons | Kross::ActionCollectionModel::ToolTips | Kross::ActionCollectionModel::UserCheckable );
-    Kross::ActionCollectionModel* model = new Kross::ActionCollectionModel(d->view, Kross::Manager::self().actionCollection(), modelmode);
-    d->view->setModel(model);
-
-    //d->view->selectionModel();
 
     QWidget* btnwidget = new QWidget(this);
     QVBoxLayout* btnlayout = new QVBoxLayout();

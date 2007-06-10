@@ -21,9 +21,12 @@
 #include <QRect>
 #include <QPainterPath>
 
+#include <KoShape.h>
+
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_mask.h"
+#include "kis_shape_selection_canvas.h"
 
 #include <krita_export.h>
 
@@ -127,6 +130,9 @@ public:
 
     QVector<QPolygon> outline();
 
+    void addShape(KoShape *object);
+    KisSelectionShapeManager *shapeManager() const;
+
 private:
 
     // We don't want these methods to be used on selections:
@@ -167,6 +173,8 @@ private:
 
 private:
     KisPaintDeviceWSP m_parentPaintDevice;
+    KoViewConverter * m_converter;
+    KisShapeSelectionCanvas * m_canvas;
     bool m_dirty;
 };
 

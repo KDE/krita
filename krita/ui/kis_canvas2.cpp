@@ -221,6 +221,9 @@ KoShapeManager* KisCanvas2::shapeManager() const
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( activeLayer.data() );
         if ( shapeLayer )
             return shapeLayer->shapeManager();
+        else
+            if(m_d->view->activeDevice()->hasSelection())
+                return m_d->view->activeDevice()->selection()->shapeManager();
     }
     return m_d->shapeManager;
 }

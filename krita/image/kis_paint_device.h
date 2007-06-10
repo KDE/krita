@@ -621,7 +621,7 @@ private:
 protected:
     KisDataManagerSP m_datamanager;
 
-private:
+public:
 
     KisImageSP image() const;
 

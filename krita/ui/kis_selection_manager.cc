@@ -65,6 +65,7 @@
 #include "kis_types.h"
 #include "kis_resource_provider.h"
 #include "kis_undo_adapter.h"
+#include "kis_selection_shape_manager.h"
 
 #include "kis_clipboard.h"
 #include "kis_view2.h"
@@ -115,12 +116,11 @@ KisSelectionManager::KisSelectionManager(KisView2 * parent, KisDoc2 * doc)
 
     offset = 0;
     timer = new QTimer();
-    timer->start ( 300 );
 
     // XXX: Make sure no timers are running all the time! We need to
     // provide a signal to tell the selection manager that we've got a
     // current selection now (global or local).
-    // connect(timer, SIGNAL(timeout()), this, SLOT(timerEvent()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(timerEvent()));
 }
 
 KisSelectionManager::~KisSelectionManager()
@@ -362,11 +362,15 @@ void KisSelectionManager::imgSelectionChanged(KisImageSP img)
         KisPaintDeviceSP dev = m_parent->activeDevice();
         if (dev)
             if (dev->hasSelection()) {
-                KisPaintDeviceSP dev = m_parent->activeDevice();
+                if(!timer->isActive())
+                    timer->start ( 300 );
+
                 KisSelectionSP selection = dev->selection();
                 outline = selection->outline();
                 updateSimpleOutline();
             }
+            else
+                timer->stop();
     }
 }
 
@@ -1714,40 +1718,50 @@ void KisSelectionManager::timerEvent()
 
 void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    double sx, sy;
-    converter.zoom(&sx, &sy);
+    KisPaintDeviceSP dev = m_parent->activeDevice();
+    if (dev && dev->hasSelection()) {
 
-    QMatrix matrix;
-    matrix.scale(sx/m_parent->image()->xRes(), sy/m_parent->image()->yRes());
+        double sx, sy;
+        converter.zoom(&sx, &sy);
 
-    QMatrix oldWorldMatrix = gc.worldMatrix();
-    gc.setWorldMatrix( matrix, true);
+        QMatrix matrix;
+        matrix.scale(sx/m_parent->image()->xRes(), sy/m_parent->image()->yRes());
 
-    QTime t;
-    t.start();
-    gc.setRenderHints(0);
+        QMatrix oldWorldMatrix = gc.worldMatrix();
+        gc.setWorldMatrix( matrix, true);
 
-    QPen pen(brushes[offset], 0);
+        QTime t;
+        t.start();
+        gc.setRenderHints(0);
 
-    int i=0;
-    gc.setPen(pen);
-    if(1/m_parent->image()->xRes()*sx<3)
-        foreach(QPolygon polygon, simpleOutline)
-        {
-            gc.drawPolygon(polygon);
-            i++;
-        }
-    else
-        foreach(QPolygon polygon, outline)
-        {
-            gc.drawPolygon(polygon);
-            i++;
-        }
+        QPen pen(brushes[offset], 0);
 
-    kDebug(41010) << "Polygons :" << i << endl;
-    kDebug(41010) << "Painting marching ants :" << t.elapsed() << endl;
+        int i=0;
+        gc.setPen(pen);
+        if(1/m_parent->image()->xRes()*sx<3)
+            foreach(QPolygon polygon, simpleOutline)
+            {
+                gc.drawPolygon(polygon);
+                i++;
+            }
+        else
+            foreach(QPolygon polygon, outline)
+            {
+                gc.drawPolygon(polygon);
+                i++;
+            }
 
-    gc.setWorldMatrix( oldWorldMatrix);
+        kDebug(41010) << "Polygons :" << i << endl;
+        kDebug(41010) << "Painting marching ants :" << t.elapsed() << endl;
+
+        gc.setWorldMatrix( oldWorldMatrix);
+
+        //Painting selection shapes
+        KisSelectionSP selection = dev->selection();
+        KisSelectionShapeManager* shapeManager = selection->shapeManager();
+        if(shapeManager)
+            shapeManager->paintShapeSelection(gc, converter, offset );
+    }
 }
 
 #include "kis_selection_manager.moc"

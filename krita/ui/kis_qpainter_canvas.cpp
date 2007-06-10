@@ -204,8 +204,10 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     m_d->canvas->globalShapeManager()->paint( gc, *m_d->viewConverter, false );
     gc.restore();
 
-    //Paint marching ants
+    //Paint marching ants and selection shapes
+    gc.save();
     m_d->canvas->view()->selectionManager()->paint(gc, *m_d->viewConverter );
+    gc.restore();
 
     // ask the guides, grids, etc to paint themselves
     t.restart();

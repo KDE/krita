@@ -30,6 +30,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <KoShapeController.h>
+#include <KoPathShape.h>
+
 #include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_painter.h"
@@ -159,6 +162,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
         bound.setBottomRight(m_endPos);
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
 
+#if 0
         if (m_startPos == m_endPos) {
             clearSelection();
         } else {
@@ -225,6 +229,20 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                 m_canvas->addCommand(t);
             }
         }
+#endif
+        KoPathShape* path = new KoPathShape();
+        path->setShapeId( KoPathShapeId );
+        QRectF bound2 = convertToPt(bound);
+        path->moveTo( bound2.topLeft() );
+        path->lineTo( bound2.topLeft() + QPointF(bound2.width(), 0) );
+        path->lineTo( bound2.bottomRight() );
+        path->lineTo( bound2.topLeft() + QPointF(0, bound2.height()) );
+        path->close();
+        path->normalize();
+        KisPaintDeviceSP dev = m_currentLayer->paintDevice();
+        KisSelectionSP selection = dev->selection();
+        selection->addShape(path);
+        dev->emitSelectionChanged();
 
         m_selecting = false;
     }

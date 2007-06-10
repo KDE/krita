@@ -161,19 +161,19 @@ void KisTool::updateCanvasViewRect(const QRectF &viewRect)
 
 KisImageSP KisTool::image() const
 {
-#if 0
+
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
     if ( !kisCanvas ) {
         kDebug(41007) << "The current canvas is not a kis canvas!\n";
         return 0;
     }
-
+#if 0
     KisImageSP img = kisCanvas->currentImage();
 
     return img;
 #endif
 
-    KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    KoShape * shape = kisCanvas->globalShapeManager()->selection()->firstSelectedShape();
 
     if ( !shape ) return 0;
 

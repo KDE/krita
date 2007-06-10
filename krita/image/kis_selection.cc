@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,13 +27,16 @@
 #include <QPoint>
 #include <QPolygon>
 
+#include <KoShapeManager.h>
+#include "KoColorSpaceRegistry.h"
+#include "KoIntegerMaths.h"
+
+#include "kis_image_view_converter.h"
 #include "kis_layer.h"
 #include "kis_debug_areas.h"
 #include "kis_types.h"
-#include "KoColorSpaceRegistry.h"
 #include "kis_fill_painter.h"
 #include "kis_iterators_pixel.h"
-#include "KoIntegerMaths.h"
 #include "kis_image.h"
 #include "kis_datamanager.h"
 #include "kis_fill_painter.h"
@@ -45,6 +49,9 @@ KisSelection::KisSelection(KisPaintDeviceSP dev)
     , m_parentPaintDevice(dev)
     , m_dirty(false)
 {
+
+    m_converter = new KisImageViewConverter(m_parentPaintDevice->image());
+    m_canvas = new KisShapeSelectionCanvas( this, m_converter );
     Q_ASSERT(dev);
 }
 
@@ -402,8 +409,7 @@ void KisSelection::nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, qui
     *edge = nextEdge (*edge);
 }
 
-void
-KisSelection::appendCoordinate(QPolygon * path, int x, int y, EdgeType edge)
+void KisSelection::appendCoordinate(QPolygon * path, int x, int y, EdgeType edge)
 {
   switch (edge)
     {
@@ -422,4 +428,17 @@ KisSelection::appendCoordinate(QPolygon * path, int x, int y, EdgeType edge)
 
     }
     *path << QPoint(x, y);
+}
+
+void KisSelection::addShape(KoShape *object)
+{
+    m_canvas->shapeManager()->add( object );
+
+    setDirty(m_converter->documentToView(object->boundingRect()).toRect());
+}
+
+KisSelectionShapeManager* KisSelection::shapeManager() const
+{
+    KisSelectionShapeManager* shapeManager = dynamic_cast<KisSelectionShapeManager*>(m_canvas->shapeManager());
+    return shapeManager;
 }

@@ -145,7 +145,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="6" colspan="2" >
+   <item row="0" column="6" >
     <widget class="QFrame" name="frame_6" >
      <property name="minimumSize" >
       <size>
@@ -167,7 +167,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="8" colspan="2" >
+   <item row="0" column="7" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
@@ -180,20 +180,8 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0" colspan="9" >
+   <item row="1" column="0" colspan="8" >
     <widget class="MixerCanvas" name="m_canvas" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize" >
-      <size>
-       <width>0</width>
-       <height>150</height>
-      </size>
-     </property>
      <property name="palette" >
       <palette>
        <active>
@@ -472,7 +460,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="7" colspan="2" >
+   <item row="2" column="7" >
     <widget class="QToolButton" name="toolButton_3" >
      <property name="text" >
       <string>...</string>

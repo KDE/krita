@@ -44,6 +44,7 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void tabletEvent(QTabletEvent *event);
+    void paintEvent(QPaintEvent *event);
 
 // Implement KoCanvasBase
 public:
@@ -91,7 +92,6 @@ public:
 private:
     KisPaintDevice *m_canvasDev;
     KisResourceProvider *m_resources;
-
 };
 
 #endif // MIXER_CANVAS_H_

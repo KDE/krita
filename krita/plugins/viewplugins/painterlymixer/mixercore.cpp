@@ -24,6 +24,7 @@
 
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
+#include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoID.h>
 #include <KoPointerEvent.h>
@@ -90,12 +91,21 @@ void MixerCanvas::tabletEvent(QTabletEvent *event)
     m_toolProxy->tabletEvent(event, event->pos());
 }
 
-void MixerCanvas::updateCanvas(const QRectF& rc)
+void MixerCanvas::paintEvent(QPaintEvent *event)
 {
-    // TODO Implement updateCanvas
+    QFrame::paintEvent(event);
 
+    QRect r = rect();
+    QPainter p(this);
+    p.drawImage(r, m_canvasDev->convertToQImage(0, r.x(), r.y(), r.width(), r.height()), r);
+    p.end();
 }
 
+void MixerCanvas::updateCanvas(const QRectF& rc)
+{
+    update(rc.toRect());
+    // TODO Don't resize while moving!
+}
 
 /////////////////
 // THE MIXER TOOL
@@ -113,34 +123,45 @@ MixerTool::~MixerTool()
 
 void MixerTool::mousePressEvent(KoPointerEvent *event)
 {
-    kDebug() << "MOUSE PRESSED!! " << event->pos() << endl;
+//     kDebug() << "MOUSE PRESSED!! " << event->pos() << endl;
 }
 
 void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    kDebug() << "MOUSE MOVED!! " << event->pos() << endl;
+//     kDebug() << "MOUSE MOVED!! " << event->pos() << endl;
 
     // TODO Add painterly masks to the stroke.
     KisPaintDeviceSP stroke = new KisPaintDevice(m_canvasDev->colorSpace());
 
     KisPainter painter(stroke);
-
     KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(m_resources->currentPaintop(),
                                                                   m_resources->currentPaintopSettings(),
                                                                   &painter, 0);
-
     painter.setPaintOp(current);
-    painter.paintAt(event->pos(), event->pressure(), event->xTilt(), event->yTilt());
-
+    painter.setPaintColor(m_resources->fgColor());
+    painter.setBackgroundColor(m_resources->bgColor());
+    painter.setBrush(m_resources->currentBrush());
     // TODO Retrieve current paintop and check if it is bidirectional.
     // TODO If it is, copy the interested rect onto the m_stroke device
     // TODO and let the paintop do the mixing for us.
+    painter.paintAt(event->pos(), event->pressure(), event->xTilt(), event->yTilt());
+    painter.end();
     // TODO If it is not, then mix the colors guessing the paintop properties.
+
+    QRect rc = stroke->exactBounds();
+
+    // My idea: do all the strange things in the stroke, and then bitBlt it to the m_canvasDev
+    // so if something goes wrong we still have the canvas device without flaws
+    painter.begin(m_canvasDev);
+    painter.bitBlt(rc.topLeft(), stroke, rc);
+    painter.end();
+
+    m_canvas->updateCanvas(rc);
 }
 
 void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    kDebug() << "MOUSE RELEASED!! " << event->pos() << endl;
+//     kDebug() << "MOUSE RELEASED!! " << event->pos() << endl;
 }
 
 #include "mixercore.moc"

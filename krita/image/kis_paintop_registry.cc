@@ -68,7 +68,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KoID & id, const KisPaintOpSettin
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettings * settings, KisPainter * painter, KisImageSP image) const
 {
     if (painter == 0) {
-        kWarning() << " KisPaintOpRegistry::paintOp painter is null";
+        kWarning() << " KisPaintOpRegistry::paintOp painter is null" << endl;
         return 0;
     }
 

@@ -64,9 +64,6 @@ K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
 class ScriptingPart::Private
 {
     public:
-        //KisView2* view;
-        //QPointer< KoScriptingGuiClient > guiclient;
-        //QPointer< Scripting::Module > module;
 };
 
 ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
@@ -76,19 +73,6 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
     kDebug(41011) << "ScriptingPart Ctor" << endl;
     setComponentData(ScriptingPart::componentData());
     setXMLFile(KStandardDirs::locate("data","kritaplugins/scripting.rc"), true);
-
-    //d->view = dynamic_cast< KisView2* >(parent);
-    //Q_ASSERT(d->view);
-    //d->guiclient = new KoScriptingGuiClient( this, d->view );
-    //d->module = new Scripting::Module(d->view);
-
-    //KoScriptingDockerFactory factory(d->view, d->guiclient);
-    //QDockWidget* dock = d->view->createDockWidget(&factory);
-    //Q_UNUSED(dock);
-
-    //connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
-    //connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
-    //Kross::Manager::self().addObject(d->module, "Krita");
 
     // Add filters
     Kross::ActionCollection* actioncollection = Kross::Manager::self().actionCollection();
@@ -108,7 +92,6 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
 ScriptingPart::~ScriptingPart()
 {
     kDebug(41011) << "ScriptingPart Dtor" << endl;
-    //delete d->module;
     delete d;
 }
 

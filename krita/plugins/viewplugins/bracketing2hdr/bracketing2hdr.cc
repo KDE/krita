@@ -46,6 +46,10 @@
 #include "kis_view2.h"
 #include "kis_layer_manager.h"
 
+#include "kis_meta_data_schema.h"
+#include "kis_meta_data_store.h"
+#include "kis_meta_data_value.h"
+
 #include "ui_wdgbracketing2hdr.h"
 
 #include "config-powf.h"
@@ -86,50 +90,41 @@ Bracketing2HDRPlugin::~Bracketing2HDRPlugin()
 
 void Bracketing2HDRPlugin::addImage(const QString& filename)
 {
-    // TODO: port to KisMetaData
-#if 0
+#if 1
     KisDoc2 d;
     d.import(filename);
     KisImageSP importedImage = d.image();
-    KisPaintDeviceSP projection = 0;
+    KisPaintLayerSP projection = 0;
     if(importedImage)
     {
-        projection = importedImage->projection();
+        projection = dynamic_cast<KisPaintLayer*>(importedImage->rootLayer()->firstChild().data());
     }
     if(!projection)
     {
 //         kDebug() << "Image " << filename << " has fail to load." << endl;
         return;
     }
-    KisExifInfo* exifInfo = projection->exifInfo();
-    ExifValue v;
-    bool found = exifInfo->getValue("ExposureTime", v); // type = 5
-//     kDebug() << " Exposure Time : " << found << " " << v.toString() << " " << v.type() << endl;
+    KisMetaData::Store* exifInfo = projection->metaData();
     double exposure = 0.;
-    if(found)
+    if(exifInfo->containsEntry( KisMetaData::Schema::EXIFSchemaUri, "ExposureTime" ))
     {
-        KisExifRational r = v.asRational(0);
-        exposure = r.numerator / (double) r.denominator;
-//         kDebug() << exposure << " = " <<  r.numerator << " / " << r.denominator << endl;
+        exposure = exifInfo->getValue(KisMetaData::Schema::EXIFSchemaUri, "ExposureTime" ).asDouble();
     }
-    found = exifInfo->getValue("ApertureValue", v); // type = 5
-//     kDebug() << " Aperture : " << found << " " << v.toString() << " " << v.type() << endl;
+//     kDebug() << " Exposure Time : " << found << " " << v.toString() << " " << v.type() << endl;
     double aperture = 0.;
-    if(found)
+    if(exifInfo->containsEntry( KisMetaData::Schema::EXIFSchemaUri, "ApertureValue" ))
     {
-        KisExifRational r = v.asRational(0);
-        aperture = r.numerator / (double) r.denominator;
+        aperture = exifInfo->getValue(KisMetaData::Schema::EXIFSchemaUri, "ApertureValue" ).asDouble();
         aperture = pow(2.0, aperture * 0.5 );
-//         kDebug() << aperture << " = " << r.numerator << " / " << r.denominator << endl;
     }
-    found = exifInfo->getValue("ISOSpeedRatings", v); // type = 3
-//     kDebug() << " ISO : " << found << " " << v.toString() << " " << v.type() << endl;
+//     kDebug() << " Aperture : " << found << " " << v.toString() << " " << v.type() << endl;
     qint32 iso = 100;
-    if(found)
+    if(exifInfo->containsEntry( KisMetaData::Schema::EXIFSchemaUri, "ISOSpeedRatings" ))
     {
-        iso = v.asShort(0);
+        iso = exifInfo->getValue(KisMetaData::Schema::EXIFSchemaUri, "ISOSpeedRatings" ).asInteger();
 //         kDebug() << iso << endl;
     }
+//     kDebug() << " ISO : " << found << " " << v.toString() << " " << v.type() << endl;
     int index = m_wdgBracketing2HDR->tableWidgetImages->rowCount();
     m_wdgBracketing2HDR->tableWidgetImages->insertRow( index );
     m_wdgBracketing2HDR->tableWidgetImages->setItem(index, 0, new QTableWidgetItem(filename)); // TODO: generate a preview
@@ -177,7 +172,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
     addImage( "~/tmp/hdr/exposures/img12.jpg" );
     addImage( "~/tmp/hdr/exposures/img13.jpg" );
     #endif
-    #if 1
+    #if 0
     addImage( "~/tmp/hdr/cambredaze/HPIM3068.JPG" );
     addImage( "~/tmp/hdr/cambredaze/HPIM3069.JPG" );
     addImage( "~/tmp/hdr/cambredaze/HPIM3070.JPG" );

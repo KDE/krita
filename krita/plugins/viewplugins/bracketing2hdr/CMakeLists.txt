@@ -1,3 +1,4 @@
+include_directories(${CMAKE_SOURCE_DIR}/krita/image/metadata)
 
 set(kritabracketing2hdr_PART_SRCS bracketing2hdr.cc )
 

@@ -83,12 +83,11 @@ namespace Scripting {
 }
 
 Module::Module(KisView2* view)
-	: KoScriptingModule("Krita")
+	: KoScriptingModule(view, "Krita")
 	, d(new Private())
 {
     d->view = view;
     d->progress = 0;
-    setView(view);
     /*
     Kross::Manager::self().addObject(d->view->canvasSubject()->document(), "KritaDocument");
     Kross::Manager::self().addObject(d->view, "KritaView");

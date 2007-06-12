@@ -21,40 +21,58 @@
 
 // qt
 #include <QApplication>
+#include <QPointer>
 // kde
 //#include <kdebug.h>
 //#include <klocale.h>
-#include <kxmlguiwindow.h>
+//#include <kxmlguiwindow.h>
 // koffice
 #include <KoMainWindow.h>
 #include <KoApplicationAdaptor.h>
 #include <KoDocumentAdaptor.h>
 #include <KoView.h>
 
-//#include <kross/core/manager.h>
+#include <kross/core/manager.h>
+//#include <kross/core/interpreter.h>
+#include <kross/core/action.h>
 //#include <kross/core/model.h>
 //#include <kross/core/guiclient.h>
 //#include <core/actioncollection.h>
 
-KoScriptingModule::KoScriptingModule(const QString& name)
-    : QObject()
+/// \internal d-pointer class.
+class KoScriptingModule::Private
+{
+    public:
+        KoScriptingModule* module;
+        KoView* view;
+};
+
+KoScriptingModule::KoScriptingModule(QObject* parent, const QString& name)
+    : QObject(parent)
+    , d(new Private())
 {
     setObjectName(name);
+
+    d->view = dynamic_cast< KoView* >(parent);
+    //if( d->view ) KoMainWindow* mainwindow = d->view->shell();
 }
 
 KoScriptingModule::~KoScriptingModule()
 {
+    delete d;
 }
 
 KoView* KoScriptingModule::view() const
 {
-    return m_view;
+    return d->view;
 }
 
+/*
 void KoScriptingModule::setView(KoView* view)
 {
-    m_view = view;
+    d->view = view;
 }
+*/
 
 QObject* KoScriptingModule::application()
 {
@@ -63,17 +81,18 @@ QObject* KoScriptingModule::application()
 
 QObject* KoScriptingModule::shell()
 {
-    return m_view ? m_view->shell() : 0;
+    return d->view ? d->view->shell() : 0;
 }
 
 QWidget* KoScriptingModule::mainWindow()
 {
-    return m_view ? m_view->mainWindow() : 0;
+    return d->view ? d->view->mainWindow() : 0;
 }
 
 QObject* KoScriptingModule::document()
 {
-    return doc()->findChild< KoDocumentAdaptor* >();
+    KoDocument* kdoc = doc();
+    return kdoc ? kdoc->findChild< KoDocumentAdaptor* >() : 0;
 }
 
 #include "KoScriptingModule.moc"

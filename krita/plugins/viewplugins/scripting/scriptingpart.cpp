@@ -40,13 +40,9 @@
 // kdelibs/kross
 #include <kross/core/manager.h>
 #include <kross/ui/model.h>
-#include <kross/ui/guiclient.h>
+//#include <kross/ui/guiclient.h>
 #include <kross/core/action.h>
 #include <kross/core/actioncollection.h>
-
-// koffice/libs/kokross
-#include <KoScriptingDocker.h>
-#include <KoScriptingGuiClient.h>
 
 // krita
 #include <kis_global.h>
@@ -68,40 +64,34 @@ K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
 class ScriptingPart::Private
 {
     public:
-        KisView2* view;
-        QPointer< KoScriptingGuiClient > guiclient;
-        QPointer< Scripting::Module > module;
+        //KisView2* view;
+        //QPointer< KoScriptingGuiClient > guiclient;
+        //QPointer< Scripting::Module > module;
 };
 
-ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
+    : KoScriptingPart(new Scripting::Module( dynamic_cast<KisView2*>(parent) ), list)
     , d(new Private())
 {
     kDebug(41011) << "ScriptingPart Ctor" << endl;
     setComponentData(ScriptingPart::componentData());
-
-    d->view = dynamic_cast< KisView2* >(parent);
-    Q_ASSERT(d->view);
-
-    d->guiclient = new KoScriptingGuiClient( this, d->view );
-
-    //d->guiclient ->setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
-    //BEGIN TODO: understand why the ScriptGUIClient doesn't "link" its actions to the menu
     setXMLFile(KStandardDirs::locate("data","kritaplugins/scripting.rc"), true);
 
-    d->module = new Scripting::Module(d->view);
+    //d->view = dynamic_cast< KisView2* >(parent);
+    //Q_ASSERT(d->view);
+    //d->guiclient = new KoScriptingGuiClient( this, d->view );
+    //d->module = new Scripting::Module(d->view);
 
     //KoScriptingDockerFactory factory(d->view, d->guiclient);
     //QDockWidget* dock = d->view->createDockWidget(&factory);
     //Q_UNUSED(dock);
 
-    connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
-    connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
-    Kross::Manager::self().addObject(d->module, "Krita");
+    //connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
+    //connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
+    //Kross::Manager::self().addObject(d->module, "Krita");
 
     // Add filters
     Kross::ActionCollection* actioncollection = Kross::Manager::self().actionCollection();
-
     if( actioncollection && (actioncollection = actioncollection->collection("filters")) ) {
         foreach(Kross::Action* action, actioncollection->actions()) {
             Q_ASSERT(action);
@@ -118,7 +108,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
 ScriptingPart::~ScriptingPart()
 {
     kDebug(41011) << "ScriptingPart Dtor" << endl;
-    delete d->module;
+    //delete d->module;
     delete d;
 }
 
@@ -128,6 +118,7 @@ void ScriptingPart::started(Kross::Action*)
 
 void ScriptingPart::finished(Kross::Action*)
 {
+#if 0
 //     kDebug() << "ScriptingPart::executionFinished" << endl;
     d->view->document()->setModified(true);
 
@@ -137,6 +128,7 @@ void ScriptingPart::finished(Kross::Action*)
     static_cast< Scripting::Progress* >( d->module->progress() )->progressDone();
     QApplication::restoreOverrideCursor();
     //d->module->deleteLater();
+#endif
 }
 
 #include "scriptingpart.moc"

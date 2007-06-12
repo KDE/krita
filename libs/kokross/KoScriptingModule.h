@@ -22,7 +22,6 @@
 
 #include <QObject>
 #include <QWidget>
-#include <QPointer>
 
 #include <KoView.h>
 #include <KoDocument.h>
@@ -37,12 +36,11 @@ class KOKROSS_EXPORT KoScriptingModule : public QObject
 {
         Q_OBJECT
     public:
-        explicit KoScriptingModule(const QString& name);
+        KoScriptingModule(QObject* parent, const QString& name);
         virtual ~KoScriptingModule();
 
         KoView* view() const;
-        void setView(KoView* view = 0);
-
+        //void setView(KoView* view = 0);
         virtual KoDocument* doc() = 0;
 
     public Q_SLOTS:
@@ -60,7 +58,10 @@ class KOKROSS_EXPORT KoScriptingModule : public QObject
         virtual QObject* document();
 
     private:
-        QPointer<KoView> m_view;
+        /// \internal d-pointer class.
+        class Private;
+        /// \internal d-pointer instance.
+        Private* const d;
 };
 
 #endif

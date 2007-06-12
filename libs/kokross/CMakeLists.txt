@@ -1,5 +1,5 @@
 include_directories(${KDE4_KDECORE_INCLUDES} ${KOMAIN_INCLUDES})
-set(kokross_LIB_SRCS KoScriptingModule.cpp KoScriptingDocker.cpp KoScriptManager.cpp KoScriptManagerAdd.cpp KoScriptingGuiClient.cpp)
+set(kokross_LIB_SRCS KoScriptingModule.cpp KoScriptingDocker.cpp KoScriptManager.cpp KoScriptManagerAdd.cpp KoScriptingPart.cpp)
 kde4_automoc(kokross ${kokross_LIB_SRCS})
 kde4_add_library(kokross SHARED ${kokross_LIB_SRCS})
 

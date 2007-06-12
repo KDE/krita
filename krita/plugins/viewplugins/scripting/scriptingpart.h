@@ -21,14 +21,13 @@
 #ifndef SCRIPTINGPART_H
 #define SCRIPTINGPART_H
 
-#include <kparts/plugin.h>
-
+#include <KoScriptingPart.h>
 
 namespace Kross {
     class Action;
 }
 
-class ScriptingPart : public KParts::Plugin
+class ScriptingPart : public KoScriptingPart
 {
         Q_OBJECT
     public:

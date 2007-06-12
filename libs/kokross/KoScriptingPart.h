@@ -1,5 +1,5 @@
 /***************************************************************************
- * KoScriptingGuiClient.h
+ * KoScriptingPart.h
  * This file is part of the KDE project
  * copyright (C) 2006-2007 Sebastian Sauer <mail@dipe.org>
  *
@@ -17,27 +17,32 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KOKROSS_KOSCRIPTINGGUICLIENT_H
-#define KOKROSS_KOSCRIPTINGGUICLIENT_H
+#ifndef KOKROSS_KOSCRIPTINGPART_H
+#define KOKROSS_KOSCRIPTINGPART_H
 
-//#include <QObject>
+#include <QObject>
 //#include <QWidget>
+#include <QStringList>
 //#include <QPointer>
 //#include <KoView.h>
 //#include <KoDocument.h>
-
-#include <kross/ui/guiclient.h>
+//#include <kross/ui/guiclient.h>
+#include <kparts/plugin.h>
 
 class KDialog;
+class KoScriptingModule;
+namespace Kross {
+    class Action;
+}
 
 #define KOKROSS_EXPORT KDE_EXPORT
 
 /**
-* The KoScriptingGuiClient class implements the top-level guiclient
+* The KoScriptingPart class implements the top-level guiclient
 * functionality to integrate scripting using Kross into a KOffice
 * application.
 */
-class KOKROSS_EXPORT KoScriptingGuiClient : public Kross::GUIClient
+class KOKROSS_EXPORT KoScriptingPart : public KParts::Plugin
 {
         Q_OBJECT
     public:
@@ -45,27 +50,56 @@ class KOKROSS_EXPORT KoScriptingGuiClient : public Kross::GUIClient
         /**
         * Constructor.
         *
-        * \param guiclient The parent KXMLGUIClient instance this
-        * guiclient is child of. This will be normaly a KParts::Plugin
-        * instance that provides an application plugin using the KParts
-        * technology.
         * \param parent The parent QObject.
+        * \param args the optional list of arguments.
         */
-        explicit KoScriptingGuiClient(KXMLGUIClient* guiclient, QObject* parent = 0);
+        explicit KoScriptingPart(KoScriptingModule* module, const QStringList& args);
 
         /**
         * Destructor.
         */
-        virtual ~KoScriptingGuiClient();
+        virtual ~KoScriptingPart();
 
+        /**
+        * \return the \a KoScriptingModule instance that is the top-level module for
+        * the scripting backends.
+        */
+        KoScriptingModule* module() const;
+
+        static bool showExecuteScriptFile();
         static KDialog* showScriptManager();
 
     protected Q_SLOTS:
 
         /**
+        * Show the modal "Execute Script File" dialog.
+        */
+        virtual void slotShowExecuteScriptFile();
+
+        /**
+        * The scripts-menu is about to show, update the content.
+        */
+        virtual void slotMenuAboutToShow();
+
+        /**
         * Show the modal "Script Manager" dialog.
         */
-        void slotShowScriptManager();
+        virtual void slotShowScriptManager();
+
+        /**
+        * Called if a script got executed.
+        */
+        virtual void slotStarted(Kross::Action*);
+
+        /**
+        * Called if execution of a script finished.
+        */
+        virtual void slotFinished(Kross::Action*);
+
+        /**
+        * Called if the script finalized.
+        */
+        virtual void slotFinalized(Kross::Action*);
 
     private:
         /// \internal d-pointer class.

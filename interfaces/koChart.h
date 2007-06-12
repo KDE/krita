@@ -25,6 +25,8 @@
 #include <kochart_export.h>
 
 
+class QAbstractItemModel;
+
 namespace KoChart
 {
     class Part;
@@ -80,6 +82,15 @@ namespace KoChart
     private:
         class PartPrivate;
         PartPrivate *d;
+    };
+
+    class KOCHART_EXPORT ChartInterface
+    {
+    public:
+        ChartInterface();
+        virtual ~ChartInterface();
+
+        virtual void setModel( QAbstractItemModel* model ) = 0;
     };
 }
 

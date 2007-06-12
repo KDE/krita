@@ -56,15 +56,15 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, KoColorSpace *cs)
     // the target layer. We only use a real temporary layer for things
     // like filter tools -- and for indirect painting, it turns out.
 
-    // Convert the kiscolor to the right colorspace.
-    KoColor kc = m_painter->paintColor();
-    kc.convertTo(cs);
 
     qint32 maskWidth = mask->width();
     qint32 maskHeight = mask->height();
 
     if( !m_dab || m_dab->colorSpace() != cs) {
         m_dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
+        // Convert the kiscolor to the right colorspace.
+        KoColor kc = m_painter->paintColor();
+        kc.convertTo(cs);
         m_dab->dataManager()->setDefaultPixel( kc.data() );
     }
     Q_CHECK_PTR(m_dab);

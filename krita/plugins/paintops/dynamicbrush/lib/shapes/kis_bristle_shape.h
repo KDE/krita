@@ -34,7 +34,9 @@ class DYNAMIC_BRUSH_EXPORT KisBristleShape : public KisDynamicShape {
         virtual KisDynamicShape* clone() const;
         virtual void resize(double xs, double ys);
         virtual void rotate(double r);
-        virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc, KisPainter* m_painter);
+        virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc);
+        virtual void startPainting(KisPainter* m_painter);
+        virtual void endPainting();
     private:
         KisPaintBrushSP m_paintBrush;
         double m_radius;

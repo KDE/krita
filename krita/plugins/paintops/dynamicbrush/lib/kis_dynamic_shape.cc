@@ -17,3 +17,13 @@
  */
 
 #include "kis_dynamic_shape.h"
+
+void KisDynamicShape::startPainting(KisPainter* painter)
+{
+    m_painter = painter;
+}
+
+void KisDynamicShape::endPainting()
+{
+    m_painter = 0;
+}

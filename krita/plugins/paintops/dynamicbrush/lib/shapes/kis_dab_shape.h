@@ -35,7 +35,7 @@ struct KisDabShape : public KisDynamicShape {
     KisDabShape();
     virtual ~KisDabShape();
     virtual quint8 alphaAt(int x, int y) = 0;
-    virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc, KisPainter* m_painter);
+    virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc);
     /**
       * Call this function to create the stamp to apply on the paint device
       * @param stamp the temporary paint device on which the shape will draw the stamp

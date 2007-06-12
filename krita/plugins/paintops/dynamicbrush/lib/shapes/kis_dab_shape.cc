@@ -59,12 +59,12 @@ inline void splitCoordinate(double coordinate, qint32 *whole, double *fraction)
     *fraction = f;
 }
 
-void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc, KisPainter* m_painter)
+void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc)
 {
   
     if(not m_dab)
     {
-      m_dab = new KisPaintDevice(m_painter->device()->colorSpace());
+      m_dab = new KisPaintDevice(painter()->device()->colorSpace());
     }
   
   
@@ -85,8 +85,8 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
     QRect dabRect = rect();
     QRect dstRect = QRect(x + dabRect.x(), y + dabRect.y(), dabRect.width(), dabRect.height());
 
-    if ( m_painter->bounds().isValid() ) {
-        dstRect &= m_painter->bounds();
+    if ( painter()->bounds().isValid() ) {
+        dstRect &= painter()->bounds();
     }
 
     if (dstRect.isNull() or dstRect.isEmpty() or not dstRect.isValid()) return;
@@ -96,12 +96,12 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 //     kDebug() << sx << " " << sy << " " << sw << " " << sh << endl;
-    if (m_painter->device()->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), m_dab,
-                                m_painter->device()->selection(), m_painter->opacity(), sx, sy, sw, sh);
+    if (painter()->device()->hasSelection()) {
+        painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_dab,
+                                painter()->device()->selection(), painter()->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), m_dab, m_painter->opacity(), sx, sy, sw, sh);
+        painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_dab, painter()->opacity(), sx, sy, sw, sh);
     }
 
 }

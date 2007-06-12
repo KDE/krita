@@ -27,6 +27,7 @@
 class KisDynamicColoring;
 class KisDynamicShape;
 class KisDynamicProgram;
+class KisPainter;
 
 class DYNAMIC_BRUSH_EXPORT KisDynamicBrush {
     public:
@@ -38,6 +39,8 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicBrush {
         inline const KisDynamicColoring* coloring() const { return m_coloring; }
         inline KisDynamicProgram* program() const { return m_program; }
         inline void setProgram(KisDynamicProgram* p) { m_program = p; }
+        void startPainting(KisPainter* _painter);
+        void endPainting();
     private:
         QString m_name;
         KisDynamicShape* m_shape;

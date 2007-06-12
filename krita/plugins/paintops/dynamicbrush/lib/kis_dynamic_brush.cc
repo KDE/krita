@@ -60,3 +60,13 @@ KisDynamicBrush::~KisDynamicBrush()
     if(m_shape) delete m_shape;
     if(m_coloring) delete m_coloring;
 }
+
+void KisDynamicBrush::startPainting(KisPainter* _painter)
+{
+    m_shape->startPainting(_painter);
+}
+
+void KisDynamicBrush::endPainting()
+{
+    m_shape->endPainting();
+}

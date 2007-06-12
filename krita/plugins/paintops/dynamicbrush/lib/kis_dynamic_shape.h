@@ -37,13 +37,20 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicShape {
         virtual QRect rect() =0;
         virtual KisDynamicShape* clone() const = 0;
         virtual void rotate(double r) = 0;
+        virtual void startPainting(KisPainter* m_painter);
+        virtual void endPainting();
         /**
          * Call this function to resize the shape.
          * @param xs horizontal scaling
          * @param ys vertical scaling
          */
         virtual void resize(double xs, double ys) = 0;
-        virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc, KisPainter* m_painter) = 0;
+        virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc) = 0;
+    protected:
+        KisPainter* painter() { return m_painter;}
+    private:
+        KisPainter* m_painter;
+
 };
 
 #endif

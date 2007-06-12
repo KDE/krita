@@ -77,7 +77,7 @@ class KRITAIMAGE_EXPORT KisRandomAccessor : public KisRandomConstAccessor
 public:
 
     KisRandomAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety)
-        : KisRandomConstAccessor(ktm,x,y,offsetx, offsety, false)
+        : KisRandomConstAccessor(ktm,x,y,offsetx, offsety, true)
         {
         }
 

@@ -183,6 +183,7 @@ void KoToolProxy::tabletEvent( QTabletEvent *event, const QPointF &point )
 
 void KoToolProxy::mousePressEvent( QMouseEvent *event, const QPointF &point )
 {
+    d->mouseLeaveWorkaround = false;
     KoInputDevice id;
     KoToolManager::instance()->switchInputDevice(id);
 
@@ -195,6 +196,7 @@ void KoToolProxy::mousePressEvent( QMouseEvent *event, const QPointF &point )
 
 void KoToolProxy::mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point )
 {
+    d->mouseLeaveWorkaround = false;
     KoInputDevice id;
     KoToolManager::instance()->switchInputDevice(id);
 
@@ -221,6 +223,7 @@ void KoToolProxy::mouseMoveEvent( QMouseEvent *event, const QPointF &point )
 
 void KoToolProxy::mouseReleaseEvent( QMouseEvent *event, const QPointF &point )
 {
+    d->mouseLeaveWorkaround = false;
     KoInputDevice id;
     KoToolManager::instance()->switchInputDevice(id);
     d->scrollTimer.stop();

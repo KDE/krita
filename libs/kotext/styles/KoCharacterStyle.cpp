@@ -135,8 +135,6 @@ void KoCharacterStyle::clearForeground() {
     d->stylesPrivate->remove(QTextCharFormat::ForegroundBrush);
 }
 
-
-
 void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
     // copy all relevant properties.
     static const int properties[] = {
@@ -155,6 +153,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         QTextFormat::BackgroundBrush,
         QTextFormat::ForegroundBrush,
         QTextFormat::TextUnderlineColor,
+        KoCharacterStyle::FontStrikeOutStyle,
         -1
     };
 
@@ -245,12 +244,6 @@ void KoCharacterStyle::setFontOverline (bool overline) {
 bool KoCharacterStyle::fontOverline () const {
     return d->propertyBoolean(QTextFormat::FontOverline);
 }
-void KoCharacterStyle::setFontStrikeOut (bool strikeOut) {
-    d->setProperty(QTextFormat::FontStrikeOut, strikeOut);
-}
-bool KoCharacterStyle::fontStrikeOut () const {
-    return d->propertyBoolean(QTextFormat::FontStrikeOut);
-}
 void KoCharacterStyle::setUnderlineColor (const QColor &color) {
     d->setProperty(QTextFormat::TextUnderlineColor, color);
 }
@@ -311,6 +304,14 @@ void KoCharacterStyle::setHasHyphenation(bool on) {
 }
 bool KoCharacterStyle::hasHyphenation() const {
     return d->propertyBoolean(HasHyphenation);
+}
+
+void KoCharacterStyle::setFontStrikeOutStyle (Qt::PenStyle strikeOut) {
+    d->setProperty(FontStrikeOutStyle, strikeOut);
+}
+
+Qt::PenStyle KoCharacterStyle::fontStrikeOutStyle () const {
+    return (Qt::PenStyle) d->propertyInt(FontStrikeOutStyle);
 }
 
 bool KoCharacterStyle::hasProperty(int key) const {
@@ -442,6 +443,13 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     if ( !underLineColor.isEmpty() && underLineColor != "font-color" )
         setUnderlineColor( QColor(underLineColor) );
 
+    if (( styleStack.hasProperty( KoXmlNS::style, "text-line-through-type" ) ) ||  ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-style" ))) { // OASIS 14.4.7
+        QTextCharFormat::UnderlineStyle underlineStyle;
+        importOasisUnderline( styleStack.property( KoXmlNS::style, "text-line-through-type" ),
+                              styleStack.property( KoXmlNS::style, "text-line-through-style" ),
+                                      underlineStyle );
+        setFontStrikeOutStyle((Qt::PenStyle) underlineStyle);
+    }
 //TODO
 #if 0
     if ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-type" ) ) { // OASIS 14.4.7

@@ -49,7 +49,8 @@ public:
     enum Property {
         StyleId = QTextFormat::UserProperty+1, ///< The id stored in the charFormat to link the text to this style.
         HasHyphenation,
-        FontId
+        FontId,
+        FontStrikeOutStyle
     };
 
     /**
@@ -86,10 +87,6 @@ public:
     /// See similar named method on QTextCharFormat
     bool fontOverline () const;
     /// See similar named method on QTextCharFormat
-    void setFontStrikeOut (bool strikeOut);
-    /// See similar named method on QTextCharFormat
-    bool fontStrikeOut () const;
-    /// See similar named method on QTextCharFormat
     void setUnderlineColor (const QColor &color);
     /// See similar named method on QTextCharFormat
     QColor underlineColor () const;
@@ -123,6 +120,12 @@ public:
     QBrush foreground () const;
     /// See similar named method on QTextCharFormat
     void clearForeground ();
+
+    /// Apply a font strike out style to this KoCharacterStyle
+    void setFontStrikeOutStyle (Qt::PenStyle style);
+    /// Get the current font strike out style of this KoCharacterStyle
+    Qt::PenStyle fontStrikeOutStyle () const;
+    
 
     void setHasHyphenation(bool on);
     bool hasHyphenation() const;

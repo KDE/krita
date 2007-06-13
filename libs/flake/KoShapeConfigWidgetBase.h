@@ -52,7 +52,7 @@ public:
     /**
      * Default constructor
      */
-    KoShapeConfigWidgetBase() {}
+    KoShapeConfigWidgetBase() : m_resourceProvider( 0 ) {}
     virtual ~KoShapeConfigWidgetBase() {}
 
     /**

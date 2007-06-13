@@ -52,7 +52,8 @@
 
 class FreehandPaintJob : public ThreadWeaver::Job {
     public:
-        FreehandPaintJob(KisPainter* painter,
+        FreehandPaintJob(KisToolFreehand* freeHand, 
+                 KisPainter* painter,
                  const QPointF & pos1,
                  const double pressure1,
                  const double xtilt1,
@@ -61,9 +62,10 @@ class FreehandPaintJob : public ThreadWeaver::Job {
                  const double pressure2,
                  const double xtilt2,
                  const double ytilt2, FreehandPaintJob* previousPaintJob);
-    public: // protected:
+    protected:
         virtual void run();
     private:
+        KisToolFreehand* m_toolFreeHand;
         KisPainter* m_painter;
         double m_dragDist;
         QPointF m_pos1;
@@ -77,7 +79,7 @@ class FreehandPaintJob : public ThreadWeaver::Job {
         FreehandPaintJob* m_previousPaintJob;
 };
 
-FreehandPaintJob::FreehandPaintJob(KisPainter* painter,
+FreehandPaintJob::FreehandPaintJob(KisToolFreehand* toolFreeHand, KisPainter* painter,
             const QPointF & pos1,
             const double pressure1,
             const double xtilt1,
@@ -86,6 +88,7 @@ FreehandPaintJob::FreehandPaintJob(KisPainter* painter,
             const double pressure2,
             const double xtilt2,
             const double ytilt2, FreehandPaintJob* previousPaintJob) :
+        m_toolFreeHand(toolFreeHand),
         m_painter(painter),
         m_pos1(pos1),
         m_pressure1(pressure1),
@@ -101,11 +104,9 @@ FreehandPaintJob::FreehandPaintJob(KisPainter* painter,
 
 void FreehandPaintJob::run()
 {
-    kdDebug() << "Start running" << endl;
     m_dragDist = (m_previousPaintJob) ? m_dragDist = m_previousPaintJob->m_dragDist : 0.0;
     m_dragDist = m_painter->paintLine(m_pos1, m_pressure1, m_xtilt1, m_ytilt1, m_pos2, m_pressure2, m_xtilt2, m_ytilt2, m_dragDist);
-    m_painter->device()->setDirty( m_painter->dirtyRegion() );
-    kdDebug() << "End running" << endl;
+    m_toolFreeHand->setDirty( m_painter->dirtyRegion() );
 }
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
@@ -120,6 +121,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_paintOnSelection = false;
     m_paintedOutline = false;
     m_weaver = new ThreadWeaver::Weaver();
+    m_weaver->setMaximumNumberOfThreads(1); // anyway only one paint job can be executed at a time
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -160,20 +162,6 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         m_prevXTilt = e->xTilt();
         m_prevYTilt = e->yTilt();
 
-        QRegion region = m_painter->dirtyRegion();
-
-/*        if (!m_paintOnSelection) {
-            m_currentLayer->setDirty(region);
-        }
-        else {
-            // Just update the canvas
-            // XXX: How to do this hack with regions?
-            // r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
-            m_target->setDirty(region);
-        }
-        if (!m_paintIncremental) {
-          m_incrementalDirtyRegion += region;
-        }*/
     }
 }
 
@@ -272,6 +260,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 void KisToolFreehand::endPaint()
 {
     m_mode = HOVER;
+    m_weaver->finish (); // Wait for all painting jobs to be finished
     if (m_currentImage) {
 
         if (m_painter) {
@@ -285,8 +274,7 @@ void KisToolFreehand::endPaint()
 
                 painter.beginTransaction(m_transactionText);
 
-//                 QRegion r = m_incrementalDirtyRegion;
-                QRegion r = m_painter->dirtyRegion();
+                QRegion r = m_incrementalDirtyRegion;
                 QVector<QRect> dirtyRects = r.rects();
                 QVector<QRect>::iterator it = dirtyRects.begin();
                 QVector<QRect>::iterator end = dirtyRects.end();
@@ -306,8 +294,6 @@ void KisToolFreehand::endPaint()
 
                 m_canvas->addCommand(painter.endTransaction());
             } else {
-                m_currentLayer->setDirty(m_painter->dirtyRegion());
-                m_target->setDirty(m_painter->dirtyRegion());
                 m_canvas->addCommand(m_painter->endTransaction());
             }
         }
@@ -319,7 +305,7 @@ void KisToolFreehand::endPaint()
     {
         foreach(FreehandPaintJob* job , m_paintJobs)
         {
-//             delete job;
+            delete job;
         }
         m_paintJobs.clear();
     }
@@ -343,15 +329,29 @@ void KisToolFreehand::paintLine(const QPointF & pos1,
                  const double ytilt2)
 {
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
-    FreehandPaintJob* job = new FreehandPaintJob(m_painter, pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, previousJob);
-//     job->run();
+    FreehandPaintJob* job = new FreehandPaintJob(this, m_painter, pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, previousJob);
     m_paintJobs.append(job);
     if(previousJob and not previousJob->isFinished())
     {
-//         ThreadWeaver::DependencyPolicy::instance().addDependency(previousJob, job );
         ThreadWeaver::DependencyPolicy::instance().addDependency(job, previousJob );
     }
     m_weaver->enqueue(job);
+}
+
+void KisToolFreehand::setDirty(const QRegion& region)
+{
+    if (!m_paintOnSelection) {
+        m_currentLayer->setDirty(region);
+    }
+    else {
+        // Just update the canvas
+        // XXX: How to do this hack with regions?
+        // r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
+        m_target->setDirty(region);
+    }
+    if (!m_paintIncremental) {
+        m_incrementalDirtyRegion += region;
+    }
 }
 
 

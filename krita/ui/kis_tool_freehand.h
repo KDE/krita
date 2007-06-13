@@ -51,6 +51,8 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
 
+    virtual void setDirty(const QRegion& region);
+    
 protected:
 
     /// Paint a single brush footprint on the current layer

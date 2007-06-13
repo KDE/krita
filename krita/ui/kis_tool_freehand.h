@@ -31,6 +31,7 @@ class KoCanvasBase;
 
 class KisPainter;
 
+class FreehandPaintJob;
 
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 {

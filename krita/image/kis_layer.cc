@@ -23,6 +23,7 @@
 #include <QImage>
 #include <QBitArray>
 #include <QMutex>
+#include <QMutexLocker>
 
 #include "kis_debug_areas.h"
 #include "kis_group_layer.h"
@@ -192,6 +193,7 @@ void KisLayer::setDirty( const QRegion & region)
 bool KisLayer::isDirty( const QRect & rect )
 {
 //    kDebug() << "isDirty " << name() << ", " << rect << ", " << m_d->dirtyRegion.intersects( rect ) << endl;
+    QMutexLocker(&m_d->regionLock);
     return m_d->dirtyRegion.intersects( rect );
 }
 

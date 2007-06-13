@@ -101,9 +101,11 @@ FreehandPaintJob::FreehandPaintJob(KisPainter* painter,
 
 void FreehandPaintJob::run()
 {
+    kdDebug() << "Start running" << endl;
     m_dragDist = (m_previousPaintJob) ? m_dragDist = m_previousPaintJob->m_dragDist : 0.0;
     m_dragDist = m_painter->paintLine(m_pos1, m_pressure1, m_xtilt1, m_ytilt1, m_pos2, m_pressure2, m_xtilt2, m_ytilt2, m_dragDist);
     m_painter->device()->setDirty( m_painter->dirtyRegion() );
+    kdDebug() << "End running" << endl;
 }
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
@@ -344,10 +346,10 @@ void KisToolFreehand::paintLine(const QPointF & pos1,
     FreehandPaintJob* job = new FreehandPaintJob(m_painter, pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, previousJob);
 //     job->run();
     m_paintJobs.append(job);
-    if(previousJob)
+    if(previousJob and not previousJob->isFinished())
     {
-//         ThreadWeaver::DependencyPolicy::instance().addDependency(job, previousJob);
-        ThreadWeaver::DependencyPolicy::instance().addDependency(previousJob, job );
+//         ThreadWeaver::DependencyPolicy::instance().addDependency(previousJob, job );
+        ThreadWeaver::DependencyPolicy::instance().addDependency(job, previousJob );
     }
     m_weaver->enqueue(job);
 }

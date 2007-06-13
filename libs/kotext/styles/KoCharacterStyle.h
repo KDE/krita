@@ -50,7 +50,8 @@ public:
         StyleId = QTextFormat::UserProperty+1, ///< The id stored in the charFormat to link the text to this style.
         HasHyphenation,
         FontId,
-        FontStrikeOutStyle
+        FontStrikeOutStyle,
+        FontStrikeOutColor
     };
 
     /**
@@ -125,7 +126,10 @@ public:
     void setFontStrikeOutStyle (Qt::PenStyle style);
     /// Get the current font strike out style of this KoCharacterStyle
     Qt::PenStyle fontStrikeOutStyle () const;
-    
+    /// Apply a font strike out color to this KoCharacterStyle
+    void setFontStrikeOutColor (QColor color);
+    /// Get the current font strike out color of this KoCharacterStyle
+    QColor fontStrikeOutColor () const;
 
     void setHasHyphenation(bool on);
     bool hasHyphenation() const;

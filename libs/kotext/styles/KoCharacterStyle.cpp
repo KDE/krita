@@ -66,6 +66,12 @@ public:
             return false;
         return variant.toBool();
     }
+    QColor propertyColor(int key) const {
+        QVariant variant = stylesPrivate->value(key);
+        if(variant.isNull())
+            return QColor();
+        return variant.value<QColor>();
+    }
 
     QString name;
     StylePrivate *stylesPrivate;
@@ -78,6 +84,7 @@ KoCharacterStyle::KoCharacterStyle(QObject *parent)
     setFontWeight(QFont::Normal);
     setVerticalAlignment(QTextCharFormat::AlignNormal);
     setForeground(Qt::black);
+    setFontStrikeOutColor(Qt::black);
 }
 
 KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style)
@@ -154,6 +161,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         QTextFormat::ForegroundBrush,
         QTextFormat::TextUnderlineColor,
         KoCharacterStyle::FontStrikeOutStyle,
+        KoCharacterStyle::FontStrikeOutColor,
         -1
     };
 
@@ -314,6 +322,14 @@ Qt::PenStyle KoCharacterStyle::fontStrikeOutStyle () const {
     return (Qt::PenStyle) d->propertyInt(FontStrikeOutStyle);
 }
 
+void KoCharacterStyle::setFontStrikeOutColor (QColor color) {
+    d->setProperty(FontStrikeOutColor, color);
+}
+
+QColor KoCharacterStyle::fontStrikeOutColor () const {
+    return d->propertyColor(FontStrikeOutColor);
+}
+
 bool KoCharacterStyle::hasProperty(int key) const {
     return d->stylesPrivate->contains(key);
 }
@@ -442,7 +458,8 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     QString underLineColor = styleStack.property( KoXmlNS::style, "text-underline-color" ); // OO 3.10.23, OASIS 14.4.31
     if ( !underLineColor.isEmpty() && underLineColor != "font-color" )
         setUnderlineColor( QColor(underLineColor) );
-
+    
+    
     if (( styleStack.hasProperty( KoXmlNS::style, "text-line-through-type" ) ) ||  ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-style" ))) { // OASIS 14.4.7
         QTextCharFormat::UnderlineStyle underlineStyle;
         importOasisUnderline( styleStack.property( KoXmlNS::style, "text-line-through-type" ),
@@ -450,6 +467,10 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
                                       underlineStyle );
         setFontStrikeOutStyle((Qt::PenStyle) underlineStyle);
     }
+    
+    QString lineThroughColor = styleStack.property( KoXmlNS::style, "text-line-through-color" ); // OO 3.10.23, OASIS 14.4.31
+    if ( !lineThroughColor.isEmpty() && lineThroughColor != "font-color" )
+        setFontStrikeOutColor( QColor(lineThroughColor) );
 //TODO
 #if 0
     if ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-type" ) ) { // OASIS 14.4.7

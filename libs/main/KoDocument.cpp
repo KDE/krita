@@ -1817,7 +1817,6 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
 bool KoDocument::loadNativeFormatFromStore( const QString& file )
 {
-  bool succes;
   KoStore::Backend backend = (d->m_specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
   KoStore * store = KoStore::createStore( file, KoStore::Read, "", backend );
 
@@ -1833,15 +1832,15 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
   if( d->m_specialOutputFlag == 0 && store->isEncrypted( ) && !d->m_isImporting )
     d->m_specialOutputFlag = SaveEncrypted;
 
-  succes = loadNativeFormatFromStoreInternal( store );
+  const bool success = loadNativeFormatFromStoreInternal( store );
 
   // Retrieve the password after loading the file, only then is it guaranteed to exist
-  if( succes && store->isEncrypted( ) && !d->m_isImporting )
+  if( success && store->isEncrypted( ) && !d->m_isImporting )
     d->m_password = store->password( );
 
   delete store;
 
-  return succes;
+  return success;
 }
 
 bool KoDocument::loadNativeFormatFromStore( QByteArray &data )

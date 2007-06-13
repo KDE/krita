@@ -126,9 +126,10 @@ public:
 
     /// Text in this paragraph will be positioned according to the direction.
     enum Direction {
+        AutoDirection,      ///< Take the direction from the text.
         LeftRightTopBottom, ///< Text layout for most western languages
         RightLeftTopBottom, ///< Text layout for langauges like Hebrew
-        TopBottomLeftRight  ///< Vertical text layout.
+        TopBottomRightLeft  ///< Vertical text layout.
     };
 
     /// Constructor

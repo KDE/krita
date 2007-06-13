@@ -733,18 +733,31 @@ void KoParagraphStyle::setTextProgressionDirection(KoParagraphStyle::Direction d
 void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
     // in 1.6 this was defined at KoParagLayout::loadOasisParagLayout(KoParagLayout&, KoOasisContext&)
 
+    if ( styleStack.hasProperty( KoXmlNS::style, "writing-mode" ) ) { // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode
+        // LTR is lr-tb. RTL is rl-tb
+        QString writingMode = styleStack.property( KoXmlNS::style, "writing-mode" );
+        if(writingMode == "lr" || writingMode == "lr-tb")
+            setTextProgressionDirection(LeftRightTopBottom);
+        else if(writingMode == "rl" || writingMode == "rl-tb")
+            setTextProgressionDirection(RightLeftTopBottom);
+        else if(writingMode == "tb" || writingMode == "tb-rl")
+            setTextProgressionDirection(TopBottomRightLeft);
+        else
+            setTextProgressionDirection(AutoDirection);
+    }
+
     // Alignment
     if ( styleStack.hasProperty( KoXmlNS::fo, "text-align" ) ) {
         QString align = styleStack.property( KoXmlNS::fo, "text-align" );
         Qt::Alignment alignment = Qt::AlignAuto;
         if ( align == "left" )
-            alignment = Qt::AlignLeft;
+            alignment = Qt::AlignLeft | Qt::AlignAbsolute;
         else if ( align == "right" )
-            alignment = Qt::AlignRight;
+            alignment = Qt::AlignRight | Qt::AlignAbsolute;
         else if ( align == "start" )
-            alignment = Qt::AlignLeft;
+            alignment = Qt::AlignLeading;
         else if ( align == "end" )
-            alignment = Qt::AlignRight;
+            alignment = Qt::AlignTrailing;
         else if ( align == "center" )
             alignment = Qt::AlignHCenter;
         else if ( align == "justify" )
@@ -752,14 +765,6 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
         setAlignment(alignment);
     }
 
-    //TODO
-#if 0
-    if ( styleStack.hasProperty( KoXmlNS::style, "writing-mode" ) ) { // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
-        // LTR is lr-tb. RTL is rl-tb
-        QString writingMode = styleStack.property( KoXmlNS::style, "writing-mode" );
-        layout.direction = ( writingMode=="rl-tb" || writingMode=="rl" ) ? QChar::DirR : QChar::DirL;
-    }
-#endif
 
     // Spacing (padding)
     if ( styleStack.hasProperty( KoXmlNS::fo, "padding-left" ) )

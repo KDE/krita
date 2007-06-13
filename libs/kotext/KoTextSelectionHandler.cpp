@@ -195,7 +195,7 @@ void KoTextSelectionHandler::strikeOut(bool strikeout) {
     public:
         Striker(bool on) : strikeout(on) {}
         void visit(QTextCharFormat &format) const {
-            format.setFontStrikeOut(strikeout);
+            format.setFontStrikeOut(strikeout ? Qt::SolidLine : Qt::NoPen);
         }
         bool strikeout;
     };

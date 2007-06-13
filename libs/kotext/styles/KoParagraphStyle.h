@@ -101,11 +101,13 @@ public:
         RestartListNumbering,   ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
         ListLevel,               ///< int with the list-level that the paragraph will get when this is a list
 
-        TabPositions            ///< A list of tab positions
+        TabPositions,            ///< A list of tab positions
+        TextProgressionDirection
 // do 15.5.24
 // continue at 15.5.28
     };
 
+    /// The type of paragraph border
     enum BorderStyle {
         BorderNone,   ///< no border. This value forces the computed value of 'border-width' to be '0'.
         BorderDotted,   ///< The border is a series of dots.
@@ -120,6 +122,13 @@ public:
         // kword legacy
         BorderDashDotPattern,
         BorderDashDotDotPattern
+    };
+
+    /// Text in this paragraph will be positioned according to the direction.
+    enum Direction {
+        LeftRightTopBottom, ///< Text layout for most western languages
+        RightLeftTopBottom, ///< Text layout for langauges like Hebrew
+        TopBottomLeftRight  ///< Vertical text layout.
     };
 
     /// Constructor
@@ -325,6 +334,8 @@ public:
     void setBottomBorderColor(const QColor& color);
     QColor bottomBorderColor();
 
+    Direction textProgressionDirection() const;
+    void setTextProgressionDirection(Direction dir);
 
     // ************ properties from QTextBlockFormat
     /// duplicated property from QTextBlockFormat

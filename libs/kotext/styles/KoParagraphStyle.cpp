@@ -113,6 +113,7 @@ static const int properties[] = {
     KoParagraphStyle::ExplicitListValue,
     KoParagraphStyle::RestartListNumbering,
     KoParagraphStyle::TabPositions,
+    KoParagraphStyle::TextProgressionDirection,
 
     -1
 };
@@ -719,6 +720,14 @@ KoListStyle KoParagraphStyle::listStyle() const {
     if(d->listStyle)
         return KoListStyle(*d->listStyle);
     return KoListStyle(0); // an invalid one
+}
+
+KoParagraphStyle::Direction KoParagraphStyle::textProgressionDirection() const {
+    return static_cast<Direction> (propertyInt(TextProgressionDirection));
+}
+
+void KoParagraphStyle::setTextProgressionDirection(KoParagraphStyle::Direction dir) {
+    setProperty(TextProgressionDirection, dir);
 }
 
 void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {

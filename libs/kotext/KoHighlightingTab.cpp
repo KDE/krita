@@ -95,7 +95,7 @@ void KoHighlightingTab::save(QTextCharFormat &format) const {
             kWarning() << "Unknown items in the underlineStyle combobox!\n";
     }
 
-    format.setFontStrikeOut(widget.strikethrough->isChecked());
+    format.setFontStrikeOut(widget.strikethrough->isChecked() ? Qt::SolidLine : Qt::NoPen);
 }
 
 #include "KoHighlightingTab.moc"

@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
+ *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +29,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <threadweaver/DependencyPolicy.h>
+#include <threadweaver/Job.h>
+#include <threadweaver/ThreadWeaver.h>
+
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
@@ -45,6 +50,62 @@
 #include "kis_cursor.h"
 #include "kis_tool_freehand.h"
 
+class FreehandPaintJob : public ThreadWeaver::Job {
+    public:
+        FreehandPaintJob(KisPainter* painter,
+                 const QPointF & pos1,
+                 const double pressure1,
+                 const double xtilt1,
+                 const double ytilt1,
+                 const QPointF & pos2,
+                 const double pressure2,
+                 const double xtilt2,
+                 const double ytilt2, FreehandPaintJob* previousPaintJob);
+    public: // protected:
+        virtual void run();
+    private:
+        KisPainter* m_painter;
+        double m_dragDist;
+        QPointF m_pos1;
+        double m_pressure1;
+        double m_xtilt1;
+        double m_ytilt1;
+        QPointF  m_pos2;
+        double m_pressure2;
+        double m_xtilt2;
+        double m_ytilt2;
+        FreehandPaintJob* m_previousPaintJob;
+};
+
+FreehandPaintJob::FreehandPaintJob(KisPainter* painter,
+            const QPointF & pos1,
+            const double pressure1,
+            const double xtilt1,
+            const double ytilt1,
+            const QPointF & pos2,
+            const double pressure2,
+            const double xtilt2,
+            const double ytilt2, FreehandPaintJob* previousPaintJob) :
+        m_painter(painter),
+        m_pos1(pos1),
+        m_pressure1(pressure1),
+        m_xtilt1(xtilt1),
+        m_ytilt1(ytilt1),
+        m_pos2(pos2),
+        m_pressure2(pressure2),
+        m_xtilt2(xtilt2),
+        m_ytilt2(ytilt2),
+        m_previousPaintJob(previousPaintJob)
+{
+}
+
+void FreehandPaintJob::run()
+{
+    m_dragDist = (m_previousPaintJob) ? m_dragDist = m_previousPaintJob->m_dragDist : 0.0;
+    m_dragDist = m_painter->paintLine(m_pos1, m_pressure1, m_xtilt1, m_ytilt1, m_pos2, m_pressure2, m_xtilt2, m_ytilt2, m_dragDist);
+    m_painter->device()->setDirty( m_painter->dirtyRegion() );
+}
+
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
         : KisToolPaint(canvas, cursor)
         , m_dragDist ( 0 )
@@ -56,6 +117,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_paintIncremental = true;
     m_paintOnSelection = false;
     m_paintedOutline = false;
+    m_weaver = new ThreadWeaver::Weaver();
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -96,9 +158,9 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         m_prevXTilt = e->xTilt();
         m_prevYTilt = e->yTilt();
 
-/*        QRegion region = m_painter->dirtyRegion();
+        QRegion region = m_painter->dirtyRegion();
 
-        if (!m_paintOnSelection) {
+/*        if (!m_paintOnSelection) {
             m_currentLayer->setDirty(region);
         }
         else {
@@ -242,6 +304,7 @@ void KisToolFreehand::endPaint()
 
                 m_canvas->addCommand(painter.endTransaction());
             } else {
+                m_currentLayer->setDirty(m_painter->dirtyRegion());
                 m_target->setDirty(m_painter->dirtyRegion());
                 m_canvas->addCommand(m_painter->endTransaction());
             }
@@ -249,6 +312,14 @@ void KisToolFreehand::endPaint()
         delete m_painter;
         m_painter = 0;
         notifyModified();
+    }
+    if(not m_paintJobs.empty())
+    {
+        foreach(FreehandPaintJob* job , m_paintJobs)
+        {
+//             delete job;
+        }
+        m_paintJobs.clear();
     }
 }
 
@@ -269,7 +340,16 @@ void KisToolFreehand::paintLine(const QPointF & pos1,
                  const double xtilt2,
                  const double ytilt2)
 {
-    m_dragDist = m_painter->paintLine(pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
+    FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
+    FreehandPaintJob* job = new FreehandPaintJob(m_painter, pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, previousJob);
+//     job->run();
+    m_paintJobs.append(job);
+    if(previousJob)
+    {
+//         ThreadWeaver::DependencyPolicy::instance().addDependency(job, previousJob);
+        ThreadWeaver::DependencyPolicy::instance().addDependency(previousJob, job );
+    }
+    m_weaver->enqueue(job);
 }
 
 

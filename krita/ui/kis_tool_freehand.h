@@ -33,6 +33,10 @@ class KisPainter;
 
 class FreehandPaintJob;
 
+namespace ThreadWeaver {
+    class Weaver;
+}
+
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 {
 
@@ -93,6 +97,8 @@ private:
 
     bool m_paintedOutline;
     QRegion m_incrementalDirtyRegion;
+    ThreadWeaver::Weaver * m_weaver;
+    QList<FreehandPaintJob*> m_paintJobs;
 };
 
 

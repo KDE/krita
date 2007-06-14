@@ -34,6 +34,8 @@ namespace KisMetaData {
             static const QString DublinCoreSchemaUri;
             static const QString XMPSchemaUri;
             static const QString MakerNoteSchemaUri;
+            static const QString IPTCSchemaUri;
+            static const QString PhotoshopSchemaUri;
         private:
             Schema(QString _uri, QString _ns);
         public:

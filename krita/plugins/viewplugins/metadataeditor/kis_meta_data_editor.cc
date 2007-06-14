@@ -132,3 +132,4 @@ void KisMetaDataEditor::accept ()
     KPageDialog::accept();
     d->store->debugDump();
 }
+

@@ -21,6 +21,8 @@
 
 #include <krita_export.h>
 
+#include <KoGenericRegistry.h>
+
 class QIODevice;
 
 namespace KisMetaData {
@@ -42,37 +44,50 @@ namespace KisMetaData {
             };
         public:
             virtual ~IOBackend() {}
+            virtual QString id() const = 0;
+            virtual QString name() const = 0;
             /**
              * @return the type of the backend
              */
-            virtual BackendType type() = 0;
+            virtual BackendType type() const = 0;
             /**
              * @return tell if this backend support saving
              */
-            virtual bool supportSaving() = 0;
+            virtual bool supportSaving() const = 0;
             /**
              * @param store the list of metadata to save
              * @param ioDevice the device to where the metadata will be saved
              * @return true if the save was successfull
              */
-            virtual bool saveTo(Store* store, QIODevice* ioDevice) = 0;
+            virtual bool saveTo(Store* store, QIODevice* ioDevice) const = 0;
             /**
              * @param store the list of metadata
              * @return true if this backend is capable of saving all the metadata
              * of the store
              */
-            virtual bool canSaveAllEntries(Store* store) = 0;
+            virtual bool canSaveAllEntries(Store* store) const = 0;
             /**
              * @return true if this backend support loading
              */
-            virtual bool supportLoading() = 0;
+            virtual bool supportLoading() const = 0;
             /**
              * @param store the list of metadata to load
              * @param ioDevice the device from where the metadata will be loaded
              * @return true if the load was successfull
              */
-            virtual bool loadFrom(Store* store, QIODevice* ioDevice) = 0;
+            virtual bool loadFrom(Store* store, QIODevice* ioDevice) const = 0;
     };
+
+    class KRITAIMAGE_EXPORT IOBackendRegistry : public KoGenericRegistry<IOBackend*> {
+        struct Private;
+        private:
+            IOBackendRegistry();
+        public:
+            static IOBackendRegistry* instance();
+        private:
+            Private* const d;
+    };
+ 
 }
 
 

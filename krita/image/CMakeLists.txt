@@ -96,6 +96,7 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_store.cc
    metadata/kis_meta_data_value.cc
    metadata/kis_meta_data_schema.cc
+   metadata/kis_meta_data_io_backend.cc
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})

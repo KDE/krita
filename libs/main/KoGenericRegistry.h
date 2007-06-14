@@ -45,7 +45,7 @@
  * KoMyClassRegistry *KoMyClassRegistry::s_instance = 0;
  * KoMyClassRegistry * KoMyClassRegistry::instance()
  * {
- *    if(not s_instance)
+ *    if(s_instance == 0)
  *    {
  *      s_instance = new KoMyClassRegistry;
  *    }

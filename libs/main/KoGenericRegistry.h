@@ -36,8 +36,22 @@
  * Exemple of use:
  * @code
  * class KoMyClassRegistry : public KoGenericRegistry\<MyClass*\> {
- * 
+ * public:
+ *   static KoMyClassRegistry * instance();
+ * private:
+ *  static KoMyClassRegistry* s_instance;
  * };
+ *
+ * KoMyClassRegistry *KoMyClassRegistry::s_instance = 0;
+ * KoMyClassRegistry * KoMyClassRegistry::instance()
+ * {
+ *    if(not s_instance)
+ *    {
+ *      s_instance = new KoMyClassRegistry;
+ *    }
+ *    return s_instance;
+ * }
+ *
  * @endcode
  */
 template<typename T>

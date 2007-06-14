@@ -27,6 +27,7 @@ const QString Schema::TIFFSchemaUri = "http://ns.adobe.com/tiff/1.0/";
 const QString Schema::EXIFSchemaUri = "http://ns.adobe.com/exif/1.0/";
 const QString Schema::DublinCoreSchemaUri = "http://purl.org/dc/elements/1.1/";
 const QString Schema::XMPSchemaUri = "http://ns.adobe.com/xap/1.0/";
+const QString Schema::XMPRightsSchemaUri = "http://ns.adobe.com/xap/1.0/rights/";
 const QString Schema::MakerNoteSchemaUri = "http://www.koffice.org/krita/xmp/MakerNote/1.0"; 
 const QString Schema::IPTCSchemaUri = "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/";
 const QString Schema::PhotoshopSchemaUri = "http://ns.adobe.com/photoshop/1.0/";
@@ -84,6 +85,7 @@ SchemaRegistry::SchemaRegistry() : d(new Private)
     create( Schema::EXIFSchemaUri, "exif");
     create( Schema::DublinCoreSchemaUri, "dc");
     create( Schema::XMPSchemaUri, "xmp");
+    create( Schema::XMPRightsSchemaUri, "xmpRights");
     create( Schema::MakerNoteSchemaUri, "mkn");
     create( Schema::IPTCSchemaUri, "Iptc4xmpCore");
     create( Schema::PhotoshopSchemaUri, "photoshop");

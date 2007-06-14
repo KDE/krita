@@ -33,6 +33,7 @@ namespace KisMetaData {
             static const QString EXIFSchemaUri;
             static const QString DublinCoreSchemaUri;
             static const QString XMPSchemaUri;
+            static const QString XMPRightsSchemaUri;
             static const QString MakerNoteSchemaUri;
             static const QString IPTCSchemaUri;
             static const QString PhotoshopSchemaUri;

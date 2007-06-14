@@ -51,7 +51,17 @@ public:
         HasHyphenation,
         FontId,
         FontStrikeOutStyle,
-        FontStrikeOutColor
+        FontStrikeOutColor,
+        TransformText
+    };
+
+    /// Text transformation
+    enum Transform {
+        NoneTransform = 0, ///< No text-transformation. This is the default value.
+        SmallCaps, ///< Small capitalized letters.
+        Uppercase, ///< Uppercase characters. E.g. "My teXT"=>"MY TEXT"
+        Lowercase, ///< Lowercase characters. E.g. "My teXT"=>"my text"
+        Capitalize ///< Capatialize characters. E.g. "my text"=>"My Text"
     };
 
     /**
@@ -130,6 +140,11 @@ public:
     void setFontStrikeOutColor (QColor color);
     /// Get the current font strike out color of this KoCharacterStyle
     QColor fontStrikeOutColor () const;
+
+    /// Set the text tranformation.
+    void setTransform(Transform transformtext);
+    /// Return how the text should be transformed.
+    Transform transform() const;
 
     void setHasHyphenation(bool on);
     bool hasHyphenation() const;

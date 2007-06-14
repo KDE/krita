@@ -162,6 +162,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         QTextFormat::TextUnderlineColor,
         KoCharacterStyle::FontStrikeOutStyle,
         KoCharacterStyle::FontStrikeOutColor,
+        KoCharacterStyle::TransformText,
         -1
     };
 
@@ -330,6 +331,14 @@ QColor KoCharacterStyle::fontStrikeOutColor () const {
     return d->propertyColor(FontStrikeOutColor);
 }
 
+void KoCharacterStyle::setTransform(KoCharacterStyle::Transform transformtext) {
+    d->setProperty(KoCharacterStyle::TransformText, transformtext);
+}
+
+KoCharacterStyle::Transform KoCharacterStyle::transform() const {
+    return (KoCharacterStyle::Transform) d->propertyInt(KoCharacterStyle::TransformText);
+}
+
 bool KoCharacterStyle::hasProperty(int key) const {
     return d->stylesPrivate->contains(key);
 }
@@ -493,24 +502,25 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
         importTextPosition( styleStack.property( KoXmlNS::style, "text-position"), fn.pointSizeFloat(),
                             va, d->m_relativeTextSize, d->m_offsetFromBaseLine, context );
     }
+#endif
 
-    // Small caps, lowercase, uppercase
-    m_attributeFont = ATT_NONE;
-    if ( styleStack.hasProperty( KoXmlNS::fo, "font-variant" ) // 3.10.1
-         || styleStack.hasProperty( KoXmlNS::fo, "text-transform" ) ) { // 3.10.2
-        bool smallCaps = styleStack.property( KoXmlNS::fo, "font-variant" ) == "small-caps";
-        if ( smallCaps ) {
-            m_attributeFont = ATT_SMALL_CAPS;
-        } else {
-            QString textTransform = styleStack.property( KoXmlNS::fo, "text-transform" );
-            if ( textTransform == "uppercase" )
-                m_attributeFont = ATT_UPPER;
-            else if ( textTransform == "lowercase" )
-                m_attributeFont = ATT_LOWER;
-            // TODO in KWord: "capitalize".
-        }
+    // The fo:font-variant attribute provides the option to display text as small capitalized letters.
+    if ( styleStack.hasProperty( KoXmlNS::fo, "font-variant" ) ) {
+        if ( styleStack.property( KoXmlNS::fo, "font-variant" ) == "small-caps" )
+            setTransform( SmallCaps );
+    }
+    // The fo:text-transform attribute specifies text transformations to uppercase, lowercase, and capitalization.
+    else if ( styleStack.hasProperty( KoXmlNS::fo, "text-transform" ) ) {
+        QString textTransform = styleStack.property( KoXmlNS::fo, "text-transform" );
+        if ( textTransform == "uppercase" )
+            setTransform( Uppercase );
+        else if ( textTransform == "lowercase" )
+            setTransform( Lowercase );
+        else if ( textTransform == "capitalize" )
+            setTransform( Capitalize );
     }
 
+#if 0
     if ( styleStack.hasProperty( KoXmlNS::fo, "language") ) { // 3.10.17
         m_language = styleStack.property( KoXmlNS::fo, "language");
         const QString country = styleStack.property( KoXmlNS::fo, "country" );

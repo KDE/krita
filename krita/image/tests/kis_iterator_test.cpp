@@ -117,9 +117,9 @@ void KisIteratorTest::rectIter()
     QVERIFY( dev.extent() == QRect( 0, 0, 128, 128 ) );
     QVERIFY( dev.exactBounds() == QRect( 0, 0, 128, 128 ) );
 
-//     dev.clear(); // This causes an assert: BUG!
+     //dev.clear(); // This causes an assert: BUG! - naturally as we still have iterators accessing the data
 
-//     it = dev.createRectIterator(10, 10, 128, 128);
+     //it = dev.createRectIterator(10, 10, 128, 128);
 //     while ( !it.isDone() ) {
 //         memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
 //         ++it;

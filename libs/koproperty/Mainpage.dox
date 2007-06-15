@@ -11,16 +11,17 @@
   - Widget class provides editing feature for EditorItem objects if a user selects 
     a given item.
 
- KoProperty framework also supports adding custom property types 
+ %KoProperty framework also supports adding custom property types 
  and custom property editor types using Custom Property and
  CustomPropertyFactory.
   If you cannot store your value type in a QVariant, consider using composed
   properties (see FactoryManager for more information) or storing it in CustomProperty yourself with handleValue() set to true.
 
  Take a look at the test application, available in /koproperty/test to see how
- to use KoProperty.
+ to use %KoProperty.
 
  \author Cedric Pasteur <cedric.pasteur@free.fr>
  \author Alexander Dymo <cloudtemple@mskat.net>
  \author Jaroslaw Staniek <js@iidea.pl>
 */
+// DOXYGEN_SET_PROJECT_NAME = KoProperty

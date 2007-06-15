@@ -32,16 +32,18 @@ class KRITAIMAGE_EXPORT KisPaintInformation {
 
 public:
 
-    KisPaintInformation(double pressure = PRESSURE_DEFAULT,
+    KisPaintInformation(const QPointF & pos = QPointF(), double pressure = PRESSURE_DEFAULT,
                         double xTilt = 0.0, double yTilt = 0.0,
                         KisVector2D movement = KisVector2D())
-        : pressure(pressure)
+        : pos(pos), pressure(pressure)
         , xTilt(xTilt)
         , yTilt(yTilt)
         , movement(movement)
         {
         }
 
+    QPointF pos;
+        
     /// The pressure of the value (from 0.0 to 1.0)
     double pressure;
 

@@ -365,15 +365,9 @@ public:
      * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
      * because the currenlty set brush has a spacing greater than that distance.
      */
-    double paintLine(const QPointF &pos1,
-             const double pressure1,
-             const double xTilt1,
-             const double yTilt1,
-             const QPointF &pos2,
-             const double pressure2,
-             const double xTilt2,
-             const double yTilt2,
-             const double savedDist = -1);
+    double paintLine(const KisPaintInformation &pi1,
+                     const KisPaintInformation &pi2,
+                     double savedDist = -1);
 
     /**
      * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.

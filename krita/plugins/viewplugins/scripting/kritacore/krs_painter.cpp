@@ -187,7 +187,7 @@ void Painter::paintPolyline(QVariantList pointsX, QVariantList pointsY)
 
 void Painter::paintLine(double x1, double y1, double p1, double x2, double y2, double p2)
 {
-    m_painter->paintLine(QPointF( x1, y1), p1, 0.0, 0.0, QPointF( x2, y2 ), p2, 0.0, 0.0 );
+    m_painter->paintLine( KisPaintInformation( QPointF( x1, y1), p1), KisPaintInformation( QPointF( x2, y2 ), p2) );
 }
 
 void Painter::paintBezierCurve(double x1, double y1, double p1, double cx1, double cy1, double cx2, double cy2, double x2, double y2, double p2)

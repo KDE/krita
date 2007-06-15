@@ -129,9 +129,9 @@ void KisBristleShape::paintAt(const QPointF &brushPos, const KisPaintInformation
 //         kDebug() << m_radius << " " << pos << " " << brushPos << endl;
         if( m_paintBrush->m_firstStroke)
         {
-            m_paintBrush->bristlesPainter->paintLine( pos, 0.5, 1.0, 1.0, pos, 0.5, 1.0, 1.0);
+            m_paintBrush->bristlesPainter->paintLine( pos, pos );
         } else {
-            m_paintBrush->bristlesPainter->paintLine( QPointF(it->m_lastX, it->m_lastY), 0.5, 1.0, 1.0, pos, .5, 1.0, 1.0);
+            m_paintBrush->bristlesPainter->paintLine( QPointF(it->m_lastX, it->m_lastY), pos );
         }
         it->m_lastX = pos.x();
         it->m_lastY = pos.y();

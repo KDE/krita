@@ -479,36 +479,29 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
         bltSelection(dx,dy,op,srcdev, m_device->selection(),opacity,sx,sy,sw,sh);
 }
 
-double KisPainter::paintLine(const QPointF & pos1,
-                             const double pressure1,
-                             const double xTilt1,
-                             const double yTilt1,
-                             const QPointF & pos2,
-                             const double pressure2,
-                             const double xTilt2,
-                             const double yTilt2,
-                             const double inSavedDist)
+double KisPainter::paintLine(const KisPaintInformation &pi1,
+                     const KisPaintInformation &pi2,
+                     double savedDist)
 {
     if (!m_device) return 0;
     if (!m_paintOp) return 0;
     if (!m_brush) return 0;
 
-    double savedDist = inSavedDist;
-    KisVector2D end(pos2);
-    KisVector2D start(pos1);
+    KisVector2D end(pi2.pos);
+    KisVector2D start(pi1.pos);
 
     KisVector2D dragVec = end - start;
     KisVector2D movement = dragVec;
 
     if (savedDist < 0) {
-        m_paintOp->paintAt(pos1, KisPaintInformation(pressure1, xTilt1, yTilt1, movement));
+        m_paintOp->paintAt(pi1.pos, pi1);
         savedDist = 0;
     }
 
     // XXX: The spacing should vary as the pressure changes along the line.
     // This is a quick simplification.
-    double xSpacing = m_brush->xSpacing((pressure1 + pressure2) / 2);
-    double ySpacing = m_brush->ySpacing((pressure1 + pressure2) / 2);
+    double xSpacing = m_brush->xSpacing((pi1.pressure + pi2.pressure) / 2);
+    double ySpacing = m_brush->ySpacing((pi1.pressure + pi2.pressure) / 2);
 
     if (xSpacing < 0.5) {
         xSpacing = 0.5;
@@ -565,15 +558,15 @@ double KisPainter::paintLine(const QPointF & pos1,
             t = distanceMoved / newDist;
         }
 
-        double pressure = (1 - t) * pressure1 + t * pressure2;
-        double xTilt = (1 - t) * xTilt1 + t * xTilt2;
-        double yTilt = (1 - t) * yTilt1 + t * yTilt2;
+        double pressure = (1 - t) * pi1.pressure + t * pi2.pressure;
+        double xTilt = (1 - t) * pi1.xTilt + t * pi2.xTilt;
+        double yTilt = (1 - t) * pi1.yTilt + t * pi2.yTilt;
 
-        m_paintOp->paintAt(p, KisPaintInformation(pressure, xTilt, yTilt, movement));
+        m_paintOp->paintAt(p, KisPaintInformation(p, pressure, xTilt, yTilt, movement));
         dist -= spacing;
     }
 
-    addDirtyRect( QRect( pos1.toPoint(), pos2.toPoint() ) );
+    addDirtyRect( QRect( pi1.pos.toPoint(), pi2.pos.toPoint() ) );
 
     if (dist > 0)
         return dist;
@@ -596,8 +589,7 @@ void KisPainter::paintPolyline (const vQPointF &points,
 
     for (int i = index; i < index + numPoints - 1; i++)
     {
-        paintLine (points [index], 0/*pressure*/, 0, 0, points [index + 1],
-                   0/*pressure*/, 0, 0);
+        paintLine (points [index], points [index + 1]);
     }
 }
 
@@ -651,7 +643,7 @@ double KisPainter::paintBezierCurve(const QPointF &pos1,
     double d2 = pointToLineDistance(control2, pos1, pos2);
 
     if (d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD) {
-        newDistance = paintLine(pos1, pressure1, xTilt1, yTilt1, pos2, pressure2, xTilt2, yTilt2, savedDist);
+        newDistance = paintLine(KisPaintInformation(pos1, pressure1, xTilt1, yTilt1), KisPaintInformation(pos2, pressure2, xTilt2, yTilt2), savedDist);
     } else {
         // Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508
         KisVector2D p1 = pos1;
@@ -775,7 +767,7 @@ void KisPainter::paintAt(const QPointF & pos,
                          const double yTilt)
 {
     if (!m_paintOp) return;
-    m_paintOp->paintAt(pos, KisPaintInformation(pressure, xTilt, yTilt, KisVector2D()));
+    m_paintOp->paintAt(pos, KisPaintInformation(pos, pressure, xTilt, yTilt, KisVector2D()));
 }
 
 double KisPainter::pointToLineDistance(const QPointF& p, const QPointF& l0, const QPointF& l1)
@@ -907,9 +899,9 @@ void KisPainter::paintPolygon(const vQPointF& points)
             double distance = -1;
 
             for (int i = 0; i < points.count() - 1; i++) {
-                distance = paintLine(points[i], PRESSURE_DEFAULT, 0, 0, points[i + 1], PRESSURE_DEFAULT, 0, 0, distance);
+                distance = paintLine(KisPaintInformation(points[i]), KisPaintInformation(points[i + 1]), distance);
             }
-            paintLine(points[points.count() - 1], PRESSURE_DEFAULT, 0, 0, points[0], PRESSURE_DEFAULT, 0, 0, distance);
+            paintLine(points[points.count() - 1], points[0], distance);
         }
     }
 }

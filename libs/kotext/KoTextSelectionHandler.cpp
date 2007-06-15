@@ -44,61 +44,6 @@ public:
     QTextCursor *caret;
 };
 
-class CharFormatVisitor {
-public:
-    CharFormatVisitor() {}
-    virtual ~CharFormatVisitor() {}
-
-    virtual void visit(QTextCharFormat &format) const = 0;
-
-    static void visitSelection(QTextCursor *caret, const CharFormatVisitor &visitor) {
-        int start = caret->position();
-        int end = caret->anchor();
-        if(start > end) { // swap
-            int tmp = start;
-            start = end;
-            end = tmp;
-        }
-        else if(start == end) { // just set a new one.
-            QTextCharFormat format = caret->charFormat();
-            visitor.visit(format);
-            caret->setCharFormat(format);
-            return;
-        }
-
-        QTextBlock block = caret->block();
-        if(block.position() > start)
-            block = block.document()->findBlock(start);
-
-        // now loop over all blocks that the selection contains and alter the text fragments where applicable.
-        while(block.isValid() && block.position() < end) {
-            QTextBlock::iterator iter = block.begin();
-            while(! iter.atEnd()) {
-                QTextFragment fragment = iter.fragment();
-                if(fragment.position() > end)
-                    break;
-                if(fragment.position() + fragment.length() <= start) {
-                    iter++;
-                    continue;
-                }
-
-                QTextCursor cursor(block);
-                cursor.setPosition(fragment.position() +1);
-                QTextCharFormat format = cursor.charFormat(); // this gets the format one char before the postion.
-                visitor.visit(format);
-
-                cursor.setPosition(qMax(start, fragment.position()));
-                int to = qMin(end, fragment.position() + fragment.length()) -1;
-                cursor.setPosition(to, QTextCursor::KeepAnchor);
-                cursor.mergeCharFormat(format);
-
-                iter++;
-            }
-            block = block.next();
-        }
-    }
-};
-
 class BlockFormatVisitor {
 public:
     BlockFormatVisitor() {}
@@ -143,65 +88,37 @@ KoTextSelectionHandler::~KoTextSelectionHandler()
 
 void KoTextSelectionHandler::bold(bool bold) {
     Q_ASSERT(d->caret);
-    class Bolder : public CharFormatVisitor {
-    public:
-        Bolder(bool on) : bold(on) {}
-        void visit(QTextCharFormat &format) const {
-            format.setFontWeight( bold ? QFont::Bold : QFont::Normal );
-        }
-        bool bold;
-    };
-    Bolder bolder(bold);
     emit startMacro(i18n("Bold"));
-    CharFormatVisitor::visitSelection(d->caret, bolder);
+    QTextCharFormat format;
+    format.setFontWeight( bold ? QFont::Bold : QFont::Normal );
+    d->caret->mergeCharFormat(format);
     emit stopMacro();
 }
 
 void KoTextSelectionHandler::italic(bool italic) {
     Q_ASSERT(d->caret);
-    class Italic : public CharFormatVisitor {
-    public:
-        Italic(bool on) : italic(on) {}
-        void visit(QTextCharFormat &format) const {
-            format.setFontItalic(italic);
-        }
-        bool italic;
-    };
-    Italic ital(italic);
     emit startMacro(i18n("Italic"));
-    CharFormatVisitor::visitSelection(d->caret, ital);
+    QTextCharFormat format;
+    format.setFontItalic(italic);
+    d->caret->mergeCharFormat(format);
     emit stopMacro();
 }
 
 void KoTextSelectionHandler::underline(bool underline) {
     Q_ASSERT(d->caret);
-    class Underliner : public CharFormatVisitor {
-    public:
-        Underliner(bool on) : underline(on) {}
-        void visit(QTextCharFormat &format) const {
-            format.setFontUnderline(underline);
-        }
-        bool underline;
-    };
-    Underliner underliner(underline);
     emit startMacro(i18n("Underline"));
-    CharFormatVisitor::visitSelection(d->caret, underliner);
+    QTextCharFormat format;
+    format.setFontUnderline(underline);
+    d->caret->mergeCharFormat(format);
     emit stopMacro();
 }
 
 void KoTextSelectionHandler::strikeOut(bool strikeout) {
     Q_ASSERT(d->caret);
-    class Striker : public CharFormatVisitor {
-    public:
-        Striker(bool on) : strikeout(on) {}
-        void visit(QTextCharFormat &format) const {
-            format.setFontStrikeOut(strikeout ? Qt::SolidLine : Qt::NoPen);
-        }
-        bool strikeout;
-    };
-    Striker striker(strikeout);
     emit startMacro(i18n("Strike Out"));
-    CharFormatVisitor::visitSelection(d->caret, striker);
+    QTextCharFormat format;
+    format.setFontStrikeOut(strikeout ? Qt::SolidLine : Qt::NoPen);
+    d->caret->mergeCharFormat(format);
     emit stopMacro();
 }
 
@@ -255,24 +172,16 @@ void KoTextSelectionHandler::setHorizontalTextAlignment(Qt::Alignment align) {
 
 void KoTextSelectionHandler::setVerticalTextAlignment(Qt::Alignment align) {
     Q_ASSERT(d->caret);
-    class Aligner : public CharFormatVisitor {
-    public:
-        Aligner(QTextCharFormat::VerticalAlignment align) : alignment(align) {}
-        void visit(QTextCharFormat &format) const {
-            format.setVerticalAlignment(alignment);
-        }
-        QTextCharFormat::VerticalAlignment alignment;
-    };
-
     QTextCharFormat::VerticalAlignment charAlign = QTextCharFormat::AlignNormal;
     if(align == Qt::AlignTop)
         charAlign = QTextCharFormat::AlignSuperScript;
     else if(align == Qt::AlignBottom)
         charAlign = QTextCharFormat::AlignSubScript;
 
-    Aligner aligner(charAlign);
     emit startMacro(i18n("Set Vertical Alignment"));
-    CharFormatVisitor::visitSelection(d->caret, aligner);
+    QTextCharFormat format;
+    format.setVerticalAlignment(charAlign);
+    d->caret->mergeCharFormat(format);
     emit stopMacro();
 }
 
@@ -340,9 +249,18 @@ void KoTextSelectionHandler::insertInlineObject(KoInlineObject *inliner) {
 
 void KoTextSelectionHandler::setStyle(KoParagraphStyle* style) {
     Q_ASSERT(style);
-    QTextBlock block = d->caret->block();
     emit startMacro(i18n("Set Paragraph Style"));
-    style->applyStyle(block);
+    int from = d->caret->position();
+    int to = d->caret->anchor();
+    if(to < from)
+        qSwap(to, from);
+    QTextBlock block = d->caret->block().document()->findBlock(from);
+    Q_ASSERT(block.isValid());
+
+    while(block.isValid() && block.position() <= to) {
+        style->applyStyle(block);
+        block = block.next();
+    }
     emit stopMacro();
 }
 

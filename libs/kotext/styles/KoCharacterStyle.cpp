@@ -161,6 +161,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         QTextFormat::ForegroundBrush,
         QTextFormat::TextUnderlineColor,
         KoCharacterStyle::FontStrikeOutStyle,
+        KoCharacterStyle::FontStrikeOutType,
         KoCharacterStyle::FontStrikeOutColor,
         KoCharacterStyle::TransformText,
         -1
@@ -323,6 +324,14 @@ Qt::PenStyle KoCharacterStyle::fontStrikeOutStyle () const {
     return (Qt::PenStyle) d->propertyInt(FontStrikeOutStyle);
 }
 
+void KoCharacterStyle::setFontStrikeOutType (LineType lineType) {
+    d->setProperty(FontStrikeOutType, lineType);
+}
+
+KoCharacterStyle::LineType KoCharacterStyle::fontStrikeOutType () const {
+    return (KoCharacterStyle::LineType) d->propertyInt(FontStrikeOutType);
+}
+
 void KoCharacterStyle::setFontStrikeOutColor (QColor color) {
     d->setProperty(FontStrikeOutColor, color);
 }
@@ -470,11 +479,38 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     
     
     if (( styleStack.hasProperty( KoXmlNS::style, "text-line-through-type" ) ) ||  ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-style" ))) { // OASIS 14.4.7
-        QTextCharFormat::UnderlineStyle underlineStyle;
-        importOasisUnderline( styleStack.property( KoXmlNS::style, "text-line-through-type" ),
-                              styleStack.property( KoXmlNS::style, "text-line-through-style" ),
-                                      underlineStyle );
-        setFontStrikeOutStyle((Qt::PenStyle) underlineStyle);
+        Qt::PenStyle throughStyle = Qt::NoPen;
+        LineType throughType = None;
+        
+        QString type = styleStack.property( KoXmlNS::style, "text-line-through-type" );
+        QString style = styleStack.property( KoXmlNS::style, "text-line-through-style" );
+        if (type.isEmpty() && !style.isEmpty())
+            type = "single";
+        else if (!type.isEmpty() && style.isEmpty())
+            style = "solid";
+        
+        if (type == "single")
+            throughType = Single;
+        else if (type == "double")
+            throughType = Double;
+        
+        
+        //TODO: fix that mess a bit, using custom LineStyle...
+        if ( style == "solid" )
+            throughStyle = Qt::SolidLine;
+        else if ( style == "dotted" )
+            throughStyle = Qt::DotLine;
+        else if ( style == "dash" || style == "long-dash" ) // not in kotext
+            throughStyle = Qt::DashLine;
+        else if ( style == "dot-dash" )
+            throughStyle = Qt::DashDotLine;
+        else if ( style == "dot-dot-dash" )
+            throughStyle = Qt::DashDotDotLine;
+        else if ( style == "wave" )
+            throughStyle = Qt::CustomDashLine;
+        
+        setFontStrikeOutStyle(throughStyle);
+        setFontStrikeOutType(throughType);
     }
     
     QString lineThroughColor = styleStack.property( KoXmlNS::style, "text-line-through-color" ); // OO 3.10.23, OASIS 14.4.31

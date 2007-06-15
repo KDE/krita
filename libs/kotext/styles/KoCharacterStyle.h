@@ -51,10 +51,18 @@ public:
         HasHyphenation,
         FontId,
         FontStrikeOutStyle,
+        FontStrikeOutType,
         FontStrikeOutColor,
         TransformText
     };
 
+    /// list of possible line type : no line, single line, double line
+    enum LineType {
+        None,
+        Single,
+        Double
+    };
+    
     /// Text transformation
     enum Transform {
         NoneTransform = 0, ///< No text-transformation. This is the default value.
@@ -140,6 +148,10 @@ public:
     void setFontStrikeOutColor (QColor color);
     /// Get the current font strike out color of this KoCharacterStyle
     QColor fontStrikeOutColor () const;
+    /// Apply a font strike out color to this KoCharacterStyle
+    void setFontStrikeOutType (LineType lineType);
+    /// Get the current font strike out color of this KoCharacterStyle
+    LineType fontStrikeOutType () const;
 
     /// Set the text tranformation.
     void setTransform(Transform transformtext);

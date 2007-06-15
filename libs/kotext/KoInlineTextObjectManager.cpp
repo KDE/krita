@@ -102,6 +102,10 @@ KoVariableManager *KoInlineTextObjectManager::variableManager() {
     return &m_variableManager;
 }
 
+KoBookmarkManager *KoInlineTextObjectManager::bookmarkManager() {
+    return &m_bookmarkManager;
+}
+
 void KoInlineTextObjectManager::removeProperty(KoInlineObject::Property key) {
     m_properties.remove(key);
 }

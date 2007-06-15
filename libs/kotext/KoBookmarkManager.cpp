@@ -36,16 +36,33 @@ KoBookmarkManager::KoBookmarkManager()
 {
 }
 
-void KoBookmarkManager::insert(QString name, KoBookmark *bookmark) {
-    kDebug() << "KoBookmarkManager::insert " << name << endl;
+void KoBookmarkManager::insert(const QString &name, KoBookmark *bookmark) {
     d->bookmarkHash[name] = bookmark;
     d->bookmarkNameList.append(name);
 }
 
-void KoBookmarkManager::remove(QString) {
+void KoBookmarkManager::remove(const QString &name) {
+    d->bookmarkHash.remove(name);
+    d->bookmarkNameList.removeAt(d->bookmarkNameList.indexOf(name));
 }
 
-KoBookmark *KoBookmarkManager::retrieveBookmark(QString name) {
+void KoBookmarkManager::rename(const QString &oldName, const QString &newName)
+{
+    QHash<QString, KoBookmark*>::iterator i = d->bookmarkHash.begin();
+
+    while (i != d->bookmarkHash.end()) {
+        if (i.key() == oldName) {
+            KoBookmark *bookmark = d->bookmarkHash.take(i.key());
+            d->bookmarkHash.insert(newName, bookmark);
+            int listPos = d->bookmarkNameList.indexOf(oldName);
+            d->bookmarkNameList.replace(listPos, newName);
+            return;
+        }
+        i++;
+    }
+}
+
+KoBookmark *KoBookmarkManager::retrieveBookmark(const QString &name) {
     KoBookmark *bookmark = d->bookmarkHash.value(name);
     return bookmark;
 }
@@ -53,4 +70,6 @@ KoBookmark *KoBookmarkManager::retrieveBookmark(QString name) {
 QList<QString> KoBookmarkManager::bookmarkNameList() {
     return d->bookmarkNameList;
 }
+
+#include "KoBookmarkManager.moc"
 

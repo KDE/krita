@@ -22,18 +22,23 @@
 
 #include "kotext_export.h"
 
+#include <QObject>
 #include <QList>
 
 class KoBookmark;
 class KoBookmarkManagerPrivate;
 
-class KOTEXT_EXPORT KoBookmarkManager {
+class KOTEXT_EXPORT KoBookmarkManager : public QObject {
+    Q_OBJECT
 public:
     KoBookmarkManager();
-    void insert(QString name, KoBookmark *bookmark);
-    void remove(QString name);
-    KoBookmark *retrieveBookmark(QString name);
+    KoBookmark *retrieveBookmark(const QString &name);
     QList<QString> bookmarkNameList();
+     
+public slots:
+    void insert(const QString &name, KoBookmark *bookmark);
+    void remove(const QString &name);
+    void rename(const QString &oldName, const QString &newName);
 
 private:
     KoBookmarkManagerPrivate * const d;

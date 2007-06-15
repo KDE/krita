@@ -21,6 +21,7 @@
 
 #include "KoInlineObject.h"
 #include "KoInlineObjectFactory.h"
+#include "KoBookmarkManager.h"
 #include "KoVariableManager.h"
 
 #include <kotext_export.h>
@@ -102,6 +103,10 @@ public:
      * Return the variableManager.
      */
     KoVariableManager *variableManager();
+    /**
+     * Return the bookmarkManager.
+     */
+    KoBookmarkManager *bookmarkManager();
 
     /**
      * Create a list of actions that can be used to plug into a menu, for example.
@@ -134,6 +139,7 @@ private:
     QHash<int, QVariant> m_properties;
 
     KoVariableManager m_variableManager;
+    KoBookmarkManager m_bookmarkManager;
 };
 
 #endif

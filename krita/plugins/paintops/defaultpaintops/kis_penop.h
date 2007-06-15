@@ -52,7 +52,7 @@ public:
     KisPenOp(KisPainter * painter);
     virtual ~KisPenOp();
 
-    void paintAt(const QPointF &pos, const KisPaintInformation& info);
+    void paintAt(const KisPaintInformation& info);
 
 };
 

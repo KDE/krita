@@ -64,7 +64,7 @@ public:
     KisSmearyOp(KisPainter * painter);
     virtual ~KisSmearyOp();
 
-    void paintAt(const QPointF &pos, const KisPaintInformation& info);
+    void paintAt(const KisPaintInformation& info);
 
 
 private:

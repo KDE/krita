@@ -144,7 +144,7 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *event)
     // TODO Retrieve current paintop and check if it is bidirectional.
     // TODO If it is, copy the interested rect onto the m_stroke device
     // TODO and let the paintop do the mixing for us.
-    painter.paintAt(event->pos(), event->pressure(), event->xTilt(), event->yTilt());
+    painter.paintAt(KisPaintInformation(event->pos(), event->pressure(), event->xTilt(), event->yTilt()));
     painter.end();
     // TODO If it is not, then mix the colors guessing the paintop properties.
 

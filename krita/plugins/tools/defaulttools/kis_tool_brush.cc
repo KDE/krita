@@ -65,7 +65,7 @@ KisToolBrush::~KisToolBrush()
 void KisToolBrush::timeoutPaint()
 {
     if (m_currentImage && m_painter) {
-        m_painter->paintAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
+        m_painter->paintAt(KisPaintInformation(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt));
         QRegion r = m_painter->dirtyRegion();
         kDebug() << "Timeout paint dirty region: " << r << endl;
         m_currentLayer->setDirty(r);

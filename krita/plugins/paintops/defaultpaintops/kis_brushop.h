@@ -94,7 +94,7 @@ public:
     KisBrushOp(const KisBrushOpSettings *settings, KisPainter * painter);
     virtual ~KisBrushOp();
 
-    void paintAt(const QPointF &pos, const KisPaintInformation& info);
+    void paintAt(const KisPaintInformation& info);
 
 private:
     inline double scaleToCurve(double pressure, double* curve) const {

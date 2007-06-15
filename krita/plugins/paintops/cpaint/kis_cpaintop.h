@@ -88,7 +88,7 @@ public:
     KisCPaintOp(Brush * brush, const KisCPaintOpSettings * settings, KisPainter * painter);
     virtual ~KisCPaintOp();
 
-    void paintAt(const QPointF &pos, const KisPaintInformation& info);
+    void paintAt(const KisPaintInformation& info);
 
 private:
 

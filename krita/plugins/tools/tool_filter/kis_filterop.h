@@ -52,7 +52,7 @@ public:
     KisFilterOp(KisPainter * painter);
     virtual ~KisFilterOp();
 
-    void paintAt(const QPointF &pos, const KisPaintInformation& info);
+    void paintAt(const KisPaintInformation& info);
 public:
     void setFilterConfiguration(KisFilterConfiguration*);
 private:

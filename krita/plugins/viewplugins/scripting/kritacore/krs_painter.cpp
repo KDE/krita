@@ -216,7 +216,7 @@ void Painter::paintRect(double x, double y, double width, double height, double 
 
 void Painter::paintAt(double x, double y, double pressure)
 {
-    m_painter->paintAt( QPointF( x, y ), pressure, 0.0, 0.0);
+    m_painter->paintAt( KisPaintInformation(QPointF( x, y ), pressure));
 }
 
 void Painter::setPaintColor(QObject* color)

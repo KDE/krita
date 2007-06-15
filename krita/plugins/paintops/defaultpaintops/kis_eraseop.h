@@ -50,7 +50,7 @@ public:
     KisEraseOp(KisPainter * painter);
     virtual ~KisEraseOp();
 
-    void paintAt(const QPointF &pos, const KisPaintInformation& info);
+    void paintAt(const KisPaintInformation& info);
 
 };
 

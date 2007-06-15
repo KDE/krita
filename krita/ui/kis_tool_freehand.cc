@@ -316,7 +316,7 @@ void KisToolFreehand::paintAt(const QPointF &pos,
                const double xTilt,
                const double yTilt)
 {
-    m_painter->paintAt(pos, pressure, xTilt, yTilt);
+    m_painter->paintAt(KisPaintInformation(pos, pressure, xTilt, yTilt));
 }
 
 void KisToolFreehand::paintLine(const QPointF & pos1,

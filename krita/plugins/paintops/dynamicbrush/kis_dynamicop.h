@@ -63,7 +63,7 @@ public:
     KisDynamicOp(const KisDynamicOpSettings *settings, KisPainter * painter);
     virtual ~KisDynamicOp();
 
-    void paintAt(const QPointF &pos, const KisPaintInformation& info);
+    void paintAt(const KisPaintInformation& info);
 
 private:
     KisDynamicBrush* m_brush;

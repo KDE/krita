@@ -65,7 +65,7 @@ public:
      * Paint at the subpixel point pos using the specified paint
      * information..
      */
-    virtual void paintAt(const QPointF &pos, const KisPaintInformation& info) = 0;
+    virtual void paintAt(const KisPaintInformation& info) = 0;
     void setSource(KisPaintDeviceSP p);
 
     /**

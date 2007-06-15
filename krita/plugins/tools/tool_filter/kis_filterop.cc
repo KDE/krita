@@ -57,7 +57,7 @@ KisFilterOp::~KisFilterOp()
     delete m_filterConfiguration;
 }
 
-void KisFilterOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
+void KisFilterOp::paintAt(const KisPaintInformation& info)
 {
     if (!m_painter) return;
 
@@ -72,7 +72,7 @@ void KisFilterOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     KoColorSpace * colorSpace = m_source->colorSpace();
 
     QPointF hotSpot = brush->hotSpot(info);
-    QPointF pt = pos - hotSpot;
+    QPointF pt = info.pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines

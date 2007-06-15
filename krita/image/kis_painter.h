@@ -454,10 +454,7 @@ public:
     void paintPolygon(const vQPointF& points);
 
     /** Draw a spot at pos using the currently set paint op, brush and color */
-    void paintAt(const QPointF &pos,
-                 const double pressure,
-                 const double /*xTilt*/,
-                 const double /*yTilt*/);
+    void paintAt(const KisPaintInformation &pos);
 
 
     // ------------------------------------------------------------------------

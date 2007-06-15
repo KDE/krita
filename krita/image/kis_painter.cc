@@ -494,7 +494,7 @@ double KisPainter::paintLine(const KisPaintInformation &pi1,
     KisVector2D movement = dragVec;
 
     if (savedDist < 0) {
-        m_paintOp->paintAt(pi1.pos, pi1);
+        m_paintOp->paintAt(pi1);
         savedDist = 0;
     }
 
@@ -562,7 +562,7 @@ double KisPainter::paintLine(const KisPaintInformation &pi1,
         double xTilt = (1 - t) * pi1.xTilt + t * pi2.xTilt;
         double yTilt = (1 - t) * pi1.yTilt + t * pi2.yTilt;
 
-        m_paintOp->paintAt(p, KisPaintInformation(p, pressure, xTilt, yTilt, movement));
+        m_paintOp->paintAt(KisPaintInformation(p, pressure, xTilt, yTilt, movement));
         dist -= spacing;
     }
 
@@ -761,13 +761,10 @@ void KisPainter::paintEllipse(const double x,
     paintEllipse(QRectF(x, y, w, h), pressure, xTilt, yTilt);
 }
 
-void KisPainter::paintAt(const QPointF & pos,
-                         const double pressure,
-                         const double xTilt,
-                         const double yTilt)
+void KisPainter::paintAt(const KisPaintInformation& pi)
 {
     if (!m_paintOp) return;
-    m_paintOp->paintAt(pos, KisPaintInformation(pos, pressure, xTilt, yTilt, KisVector2D()));
+    m_paintOp->paintAt(pi);
 }
 
 double KisPainter::pointToLineDistance(const QPointF& p, const QPointF& l0, const QPointF& l1)

@@ -110,7 +110,7 @@ KisDynamicOp::~KisDynamicOp()
     delete m_brush;
 }
 
-void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
+void KisDynamicOp::paintAt(const KisPaintInformation& info)
 {
     KisPaintInformation adjustedInfo(info);
 
@@ -144,7 +144,7 @@ void KisDynamicOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     
 
     
-    dabsrc->paintAt(pos, adjustedInfo, coloringsrc );
+    dabsrc->paintAt(info.pos, adjustedInfo, coloringsrc );
     
     
     m_painter->setOpacity(origOpacity);

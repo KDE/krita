@@ -52,7 +52,7 @@ public:
     virtual ~KisDuplicateOp();
 
 
-    void paintAt(const QPointF &pos, const KisPaintInformation& info);
+    void paintAt(const KisPaintInformation& info);
 private:
     double minimizeEnergy(const double* m, double* sol, int w, int h);
 private:

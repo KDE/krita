@@ -100,7 +100,7 @@ KisSmearyOp::~KisSmearyOp()
 {
 }
 
-void KisSmearyOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
+void KisSmearyOp::paintAt(const KisPaintInformation& info)
 {
     if (!m_painter->device()) return;
 
@@ -119,7 +119,7 @@ void KisSmearyOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
     kc.convertTo(colorSpace);
 
     QPointF hotSpot = brush->hotSpot(info);
-    QPointF pt = pos - hotSpot;
+    QPointF pt = info.pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
@@ -142,7 +142,7 @@ void KisSmearyOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
 
     QPointF previousPoint = info.movement.toKoPoint();
     KisVector2D brushVector(-previousPoint.y(), previousPoint.x());
-    KisVector2D currentPointVector = KisVector2D(pos);
+    KisVector2D currentPointVector = KisVector2D(info.pos);
     brushVector.normalize();
 
     KisVector2D vl, vr;

@@ -86,7 +86,7 @@ double KisDuplicateOp::minimizeEnergy(const double* m, double* sol, int w, int h
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info)
+void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
     if (!m_painter) return;
 
@@ -103,7 +103,7 @@ void KisDuplicateOp::paintAt(const QPointF &pos, const KisPaintInformation& info
         return;
 
     QPointF hotSpot = brush->hotSpot(info);
-    QPointF pt = pos - hotSpot;
+    QPointF pt = info.pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines

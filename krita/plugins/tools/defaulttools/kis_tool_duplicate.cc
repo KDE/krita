@@ -204,7 +204,7 @@ void KisToolDuplicate::paintAt(const QPointF &pos,
         m_painter->setDuplicateHealing( m_healing->isChecked() );
         m_painter->setDuplicateHealingRadius( m_healingRadius->value() );
         m_painter->setDuplicatePerspectiveCorrection( m_perspectiveCorrection->isChecked() );
-        m_painter->paintAt( pos, pressure, xtilt, ytilt);
+        m_painter->paintAt( KisPaintInformation(pos, pressure, xtilt, ytilt));
     }
 }
 

@@ -61,12 +61,18 @@ protected:
     /// Paint a line between the specified positions on the current layer
     virtual void paintLine(const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
+    virtual void paintBezierCurve(const KisPaintInformation &pi1,
+                   const QPointF &control1,
+                   const QPointF &control2,
+                   const KisPaintInformation &pi2);
 
     virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
 
     void paintOutline(const QPointF& point);
 
+private:
+    void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
 protected:
 
     KisPaintInformation m_previousPaintInformation;
@@ -74,8 +80,6 @@ protected:
     QPointF m_previousDrag;
     double m_dragDist;
     
-    double m_savedDist; //TODO: remove
-
     bool m_paintIncremental;
     bool m_paintOnSelection;
 

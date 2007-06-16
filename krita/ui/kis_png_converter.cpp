@@ -289,7 +289,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     kDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile" << endl; // TODO: in ko2 popup a selection menu to inform the user
                 }
             }
+        } else {
+            kDebug(41008) << "Profile isn't ICC, skiped." << endl;
         }
+    } else {
+        kDebug(41008) << "no embedded profile, will use the default profile" << endl;
     }
 
     // Retrieve a pointer to the colorspace

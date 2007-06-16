@@ -70,7 +70,11 @@ protected:
 protected:
 
     KisPaintInformation m_previousPaintInformation;
+    QPointF m_previousTangent;
+    QPointF m_previousDrag;
     double m_dragDist;
+    
+    double m_savedDist; //TODO: remove
 
     bool m_paintIncremental;
     bool m_paintOnSelection;
@@ -82,7 +86,7 @@ protected:
     QString m_transactionText;
     enumBrushMode m_mode;
     KisPainter *m_painter;
-
+    bool m_smooth;
 private:
 
     bool m_paintedOutline;

@@ -100,6 +100,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_paintedOutline = false;
     m_weaver = new ThreadWeaver::Weaver();
     m_weaver->setMaximumNumberOfThreads(1); // anyway only one paint job can be executed at a time
+    m_smooth = true;
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -115,15 +116,18 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 
     if (!m_currentLayer->paintDevice()) return;
 
-    if (e->button() == Qt::LeftButton) {
-
-       initPaint(e);
-
+    if (e->button() == Qt::LeftButton)
+    {
+        initPaint(e);
         m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(e),
             e->pressure(), e->xTilt(), e->yTilt());
         paintAt(m_previousPaintInformation);
-
     }
+}
+
+inline double norm(const QPointF& p)
+{
+    return sqrt(p.x()*p.x() + p.y()*p.y());
 }
 
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
@@ -133,7 +137,43 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
         KisPaintInformation info = KisPaintInformation(convertToPixelCoord(e),
             e->pressure(), e->xTilt(), e->yTilt());
-        paintLine(m_previousPaintInformation, info);
+        if(m_smooth)
+        {
+            QPointF dragVec = info.pos - m_previousPaintInformation.pos;
+            QPointF newTangeant;
+            if( m_previousDrag.y() == 0.0 and m_previousDrag.x() == 0.0 )
+            {
+                newTangeant = dragVec;
+            } else {
+                double angleTangeant = atan2( dragVec.y(), dragVec.x()) - atan2(m_previousDrag.y(), m_previousDrag.x());
+                double cosTangeant = cos(angleTangeant);
+                double sinTangeant = sin(angleTangeant);
+                newTangeant = QPointF(
+                                cosTangeant * dragVec.x() - sinTangeant * dragVec.y(),
+                                sinTangeant * dragVec.x() + cosTangeant * dragVec.y() );
+            }
+            newTangeant += m_previousTangent;
+            newTangeant *= 0.5 / norm( newTangeant ) ;
+            double normVec = 0.5 * norm(dragVec);
+//             if(normVec < 1.0) normVec = 0.0;
+//             kDebug() << m_previousPaintInformation.pos << (m_previousPaintInformation.pos + m_previousTangent* normVec) << info.pos << (info.pos - newTangeant * normVec) << endl;
+            m_savedDist = m_painter->paintBezierCurve(m_previousPaintInformation.pos,
+                                        m_previousPaintInformation.pressure,
+                                        m_previousPaintInformation.xTilt,
+                                        m_previousPaintInformation.yTilt,
+                                        m_previousPaintInformation.pos + m_previousTangent * normVec,
+                                        info.pos - newTangeant * normVec,
+                                        info.pos,
+                                        info.pressure,
+                                        info.xTilt,
+                                        info.yTilt,
+                                        m_savedDist);
+            m_previousTangent = newTangeant;
+            m_previousDrag = dragVec;
+            setDirty( m_painter->dirtyRegion() );
+        } else {
+            paintLine(m_previousPaintInformation, info);
+        }
 
         m_previousPaintInformation = info;
     }
@@ -172,7 +212,8 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
         KisIndirectPaintingSupport* layer;
         if ((layer = dynamic_cast<KisIndirectPaintingSupport*>(
-                 m_currentLayer.data()))) {
+                 m_currentLayer.data()))) 
+        {
             // Hack for the painting of single-layered layers using indirect painting,
             // because the group layer would not have a correctly synched cache (
             // because of an optimization that would happen, having this layer as
@@ -181,7 +222,8 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             KisPaintLayerSP pl = dynamic_cast<KisPaintLayer*>(l.data());
             if (l->parentLayer() && (l->parentLayer()->parentLayer() == 0)
                 && (l->parentLayer()->childCount() == 1)
-                && l->parentLayer()->paintLayerInducesProjectionOptimization(pl)) {
+                && l->parentLayer()->paintLayerInducesProjectionOptimization(pl))
+            {
                 // If there's a mask, device could've been the mask. The induce function
                 // should catch this, but better safe than sorry
 
@@ -197,7 +239,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
             if (device->hasSelection())
                 m_target->setSelection(device->selection());
-            }
+        }
     } else {
         m_target = device;
     }
@@ -220,7 +262,9 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
         m_painter->setOpacity( OPACITY_OPAQUE );
 
     }
-
+    m_previousTangent = QPointF(0,0);
+    m_previousDrag = QPointF(0,0);
+    m_savedDist = -1;
 /*    kDebug(41007) << "target: " << m_target << "( " << m_target->name() << " )"
       << " source: " << m_source << "( " << m_source->name() << " )"
       << ", incremental " << m_paintIncremental

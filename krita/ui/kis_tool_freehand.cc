@@ -152,7 +152,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_paintedOutline = false;
     m_weaver = new ThreadWeaver::Weaver();
     m_weaver->setMaximumNumberOfThreads(1); // anyway only one paint job can be executed at a time
-    m_smooth = true;
+    m_smooth = false;
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -419,6 +419,11 @@ void KisToolFreehand::setDirty(const QRegion& region)
     if (!m_paintIncremental) {
         m_incrementalDirtyRegion += region;
     }
+}
+
+void KisToolFreehand::setSmooth(bool smooth)
+{
+    m_smooth = smooth;
 }
 
 

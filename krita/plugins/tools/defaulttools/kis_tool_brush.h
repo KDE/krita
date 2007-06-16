@@ -59,6 +59,7 @@ private:
     QTimer * m_timer;
     QGridLayout* m_optionLayout;
     QCheckBox * m_chkDirect;
+    QCheckBox * m_chkSmooth;
 
 };
 

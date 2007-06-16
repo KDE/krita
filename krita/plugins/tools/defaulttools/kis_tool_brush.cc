@@ -135,7 +135,6 @@ void KisToolBrush::slotSetPaintingMode( int mode )
     }
 }
 
-
 QWidget * KisToolBrush::createOptionWidget()
 {
 
@@ -146,6 +145,11 @@ QWidget * KisToolBrush::createOptionWidget()
     m_chkDirect->setChecked(true);
     connect(m_chkDirect, SIGNAL(stateChanged(int)), this, SLOT(slotSetPaintingMode(int)));
 
+    m_chkSmooth = new QCheckBox(i18n("Smooth"), optionWidget);
+    m_chkSmooth->setObjectName("chkSmooth");
+    m_chkSmooth->setChecked(false);
+    connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
+
     m_optionLayout = new QGridLayout(optionWidget);
     Q_CHECK_PTR(m_optionLayout);
 
@@ -154,6 +158,7 @@ QWidget * KisToolBrush::createOptionWidget()
 
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
     m_optionLayout->addWidget(m_chkDirect, 0, 0);
+    m_optionLayout->addWidget(m_chkSmooth, 1, 0);
 
     return optionWidget;
 }

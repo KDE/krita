@@ -70,7 +70,8 @@ protected:
     virtual void endPaint();
 
     void paintOutline(const QPointF& point);
-
+protected slots:
+    void setSmooth(bool smooth);
 private:
     void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
 protected:

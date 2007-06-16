@@ -54,50 +54,28 @@ class FreehandPaintJob : public ThreadWeaver::Job {
     public:
         FreehandPaintJob(KisToolFreehand* freeHand, 
                  KisPainter* painter,
-                 const QPointF & pos1,
-                 const double pressure1,
-                 const double xtilt1,
-                 const double ytilt1,
-                 const QPointF & pos2,
-                 const double pressure2,
-                 const double xtilt2,
-                 const double ytilt2, FreehandPaintJob* previousPaintJob);
+                 const KisPaintInformation & pi1,
+                 const KisPaintInformation & pi2,
+                 FreehandPaintJob* previousPaintJob);
     protected:
         virtual void run();
     private:
         KisToolFreehand* m_toolFreeHand;
         KisPainter* m_painter;
         double m_dragDist;
-        QPointF m_pos1;
-        double m_pressure1;
-        double m_xtilt1;
-        double m_ytilt1;
-        QPointF  m_pos2;
-        double m_pressure2;
-        double m_xtilt2;
-        double m_ytilt2;
+        KisPaintInformation m_pi1;
+        KisPaintInformation m_pi2;
         FreehandPaintJob* m_previousPaintJob;
 };
 
 FreehandPaintJob::FreehandPaintJob(KisToolFreehand* toolFreeHand, KisPainter* painter,
-            const QPointF & pos1,
-            const double pressure1,
-            const double xtilt1,
-            const double ytilt1,
-            const QPointF & pos2,
-            const double pressure2,
-            const double xtilt2,
-            const double ytilt2, FreehandPaintJob* previousPaintJob) :
+            const KisPaintInformation & pi1,
+            const KisPaintInformation & pi2,
+            FreehandPaintJob* previousPaintJob) :
         m_toolFreeHand(toolFreeHand),
         m_painter(painter),
-        m_pos1(pos1),
-        m_pressure1(pressure1),
-        m_xtilt1(xtilt1),
-        m_ytilt1(ytilt1),
-        m_pos2(pos2),
-        m_pressure2(pressure2),
-        m_xtilt2(xtilt2),
-        m_ytilt2(ytilt2),
+        m_pi1(pi1),
+        m_pi2(pi2),
         m_previousPaintJob(previousPaintJob)
 {
 }
@@ -105,7 +83,7 @@ FreehandPaintJob::FreehandPaintJob(KisToolFreehand* toolFreeHand, KisPainter* pa
 void FreehandPaintJob::run()
 {
     m_dragDist = (m_previousPaintJob) ? m_dragDist = m_previousPaintJob->m_dragDist : 0.0;
-    m_dragDist = m_painter->paintLine(KisPaintInformation(m_pos1, m_pressure1, m_xtilt1, m_ytilt1), KisPaintInformation(m_pos2, m_pressure2, m_xtilt2, m_ytilt2), m_dragDist);
+    m_dragDist = m_painter->paintLine(m_pi1, m_pi2, m_dragDist);
     m_toolFreeHand->setDirty( m_painter->dirtyRegion() );
 }
 
@@ -141,12 +119,10 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 
        initPaint(e);
 
-        m_prevPos = convertToPixelCoord(e);
-        paintAt(m_prevPos, e->pressure(), e->xTilt(), e->yTilt());
+        m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(e),
+            e->pressure(), e->xTilt(), e->yTilt());
+        paintAt(m_previousPaintInformation);
 
-        m_prevPressure = e->pressure();
-        m_prevXTilt = e->xTilt();
-        m_prevYTilt = e->yTilt();
     }
 }
 
@@ -155,13 +131,11 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     if (m_mode == PAINT) {
         QPointF pos = convertToPixelCoord(e);
 
-        paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, pos, e->pressure(), e->xTilt(), e->yTilt());
+        KisPaintInformation info = KisPaintInformation(convertToPixelCoord(e),
+            e->pressure(), e->xTilt(), e->yTilt());
+        paintLine(m_previousPaintInformation, info);
 
-        m_prevPos = pos;
-        m_prevPressure = e->pressure();
-        m_prevXTilt = e->xTilt();
-        m_prevYTilt = e->yTilt();
-
+        m_previousPaintInformation = info;
     }
 }
 
@@ -311,25 +285,16 @@ void KisToolFreehand::endPaint()
     }
 }
 
-void KisToolFreehand::paintAt(const QPointF &pos,
-               const double pressure,
-               const double xTilt,
-               const double yTilt)
+void KisToolFreehand::paintAt(const KisPaintInformation &pi)
 {
-    m_painter->paintAt(KisPaintInformation(pos, pressure, xTilt, yTilt));
+    m_painter->paintAt(KisPaintInformation(pi));
 }
 
-void KisToolFreehand::paintLine(const QPointF & pos1,
-                 const double pressure1,
-                 const double xtilt1,
-                 const double ytilt1,
-                 const QPointF & pos2,
-                 const double pressure2,
-                 const double xtilt2,
-                 const double ytilt2)
+void KisToolFreehand::paintLine(const KisPaintInformation &pi1,
+                 const KisPaintInformation &pi2)
 {
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
-    FreehandPaintJob* job = new FreehandPaintJob(this, m_painter, pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, previousJob);
+    FreehandPaintJob* job = new FreehandPaintJob(this, m_painter, pi1, pi2, previousJob);
     m_paintJobs.append(job);
     kDebug() << "Queue length: " << m_weaver->queueLength() << endl;
     if(previousJob and not previousJob->isFinished())

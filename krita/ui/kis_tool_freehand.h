@@ -56,20 +56,11 @@ public:
 protected:
 
     /// Paint a single brush footprint on the current layer
-    virtual void paintAt(const QPointF &pos,
-                 const double pressure,
-                 const double xTilt,
-                 const double yTilt);
+    virtual void paintAt(const KisPaintInformation &pi);
 
     /// Paint a line between the specified positions on the current layer
-    virtual void paintLine(const QPointF & pos1,
-                   const double pressure1,
-                   const double xtilt1,
-                   const double ytilt1,
-                   const QPointF & pos2,
-                   const double pressure2,
-                   const double xtilt2,
-                   const double ytilt2);
+    virtual void paintLine(const KisPaintInformation &pi1,
+                   const KisPaintInformation &pi2);
 
     virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
@@ -78,10 +69,7 @@ protected:
 
 protected:
 
-    QPointF m_prevPos;
-    double m_prevPressure;
-    double m_prevXTilt;
-    double m_prevYTilt;
+    KisPaintInformation m_previousPaintInformation;
     double m_dragDist;
 
     bool m_paintIncremental;

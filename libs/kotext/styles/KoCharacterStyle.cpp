@@ -480,7 +480,7 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     
     if (( styleStack.hasProperty( KoXmlNS::style, "text-line-through-type" ) ) ||  ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-style" ))) { // OASIS 14.4.7
         Qt::PenStyle throughStyle = Qt::NoPen;
-        LineType throughType = None;
+        LineType throughType = NoLine;
         
         QString type = styleStack.property( KoXmlNS::style, "text-line-through-type" );
         QString style = styleStack.property( KoXmlNS::style, "text-line-through-style" );
@@ -490,9 +490,9 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
             style = "solid";
         
         if (type == "single")
-            throughType = Single;
+            throughType = SingleLine;
         else if (type == "double")
-            throughType = Double;
+            throughType = DoubleLine;
         
         
         //TODO: fix that mess a bit, using custom LineStyle...

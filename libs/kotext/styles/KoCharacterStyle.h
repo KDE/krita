@@ -58,9 +58,9 @@ public:
 
     /// list of possible line type : no line, single line, double line
     enum LineType {
-        None,
-        Single,
-        Double
+        NoLine,
+        SingleLine,
+        DoubleLine
     };
     
     /// Text transformation

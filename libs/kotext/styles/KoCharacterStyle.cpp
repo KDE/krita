@@ -84,7 +84,7 @@ KoCharacterStyle::KoCharacterStyle(QObject *parent)
     setFontWeight(QFont::Normal);
     setVerticalAlignment(QTextCharFormat::AlignNormal);
     setForeground(Qt::black);
-    setFontStrikeOutColor(Qt::black);
+    setStrikeOutColor(Qt::black);
 }
 
 KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style)
@@ -104,15 +104,6 @@ QPen KoCharacterStyle::textOutline () const {
         return pen;
     }
     return qvariant_cast<QPen>(variant);
-}
-
-QColor KoCharacterStyle::underlineColor () const {
-    QVariant variant = d->stylesPrivate->value(QTextFormat::TextUnderlineColor);
-    if(variant.isNull()) {
-        QColor color;
-        return color;
-    }
-    return qvariant_cast<QColor>(variant);
 }
 
 QBrush KoCharacterStyle::background() const {
@@ -152,17 +143,17 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         QTextFormat::FontWeight,
         QTextFormat::FontItalic,
         QTextFormat::FontOverline,
-        QTextFormat::FontStrikeOut,
         QTextFormat::FontFixedPitch,
-        QTextFormat::TextUnderlineStyle,
         QTextFormat::TextVerticalAlignment,
         QTextFormat::TextOutline,
         QTextFormat::BackgroundBrush,
         QTextFormat::ForegroundBrush,
-        QTextFormat::TextUnderlineColor,
-        KoCharacterStyle::FontStrikeOutStyle,
-        KoCharacterStyle::FontStrikeOutType,
-        KoCharacterStyle::FontStrikeOutColor,
+        KoCharacterStyle::StrikeOutStyle,
+        KoCharacterStyle::StrikeOutType,
+        KoCharacterStyle::StrikeOutColor,
+        KoCharacterStyle::UnderlineStyle,
+        KoCharacterStyle::UnderlineType,
+        KoCharacterStyle::UnderlineColor,
         KoCharacterStyle::TransformText,
         -1
     };
@@ -196,30 +187,37 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const {
 }
 
 // OASIS 14.2.29
-static void importOasisUnderline( const QString& type, const QString& style,
-                                  QTextCharFormat::UnderlineStyle& formatstyle )
+static void importOasisLine( const QString& type, const QString& style,
+                             Qt::PenStyle& lineStyle, KoCharacterStyle::LineType& lineType )
 {
-    formatstyle = QTextCharFormat::NoUnderline;
-
-    //TODO needs to be supported via Qt::PenStyle/Qt::CustomDashLine
-    if ( type == "single" )
-        formatstyle = QTextCharFormat::SingleUnderline;
-    else if ( type == "double" )
-        formatstyle = QTextCharFormat::SingleUnderline;
-
-    if ( style == "solid" )
-        formatstyle = QTextCharFormat::SingleUnderline;
-    else if ( style == "dotted" )
-        formatstyle = QTextCharFormat::DotLine;
-    else if ( style == "dash" || style == "long-dash" ) // not in kotext
-        formatstyle = QTextCharFormat::DashUnderline;
-    else if ( style == "dot-dash" )
-        formatstyle = QTextCharFormat::DashDotLine;
-    else if ( style == "dot-dot-dash" )
-        formatstyle = QTextCharFormat::DashDotDotLine;
-    else if ( style == "wave" )
-        formatstyle = QTextCharFormat::WaveUnderline;
-
+    lineStyle = Qt::NoPen;
+    lineType = KoCharacterStyle::NoLine;
+    
+    QString fixedType = type;
+    QString fixedStyle = style;
+    if (fixedType.isEmpty() && !fixedStyle.isEmpty())
+        fixedType = "single";
+    else if (!fixedType.isEmpty() && fixedStyle.isEmpty())
+        fixedStyle = "solid";
+    
+    if (fixedType == "single")
+        lineType = KoCharacterStyle::SingleLine;
+    else if (fixedType == "double")
+        lineType = KoCharacterStyle::DoubleLine;
+    
+    //TODO: fix that mess a bit, using custom LineStyle...
+    if ( fixedStyle == "solid" )
+        lineStyle = Qt::SolidLine;
+    else if ( fixedStyle == "dotted" )
+        lineStyle = Qt::DotLine;
+    else if ( fixedStyle == "dash" || fixedStyle == "long-dash" ) // not in kotext
+        lineStyle = Qt::DashLine;
+    else if ( fixedStyle == "dot-dash" )
+        lineStyle = Qt::DashDotLine;
+    else if ( fixedStyle == "dot-dot-dash" )
+        lineStyle = Qt::DashDotDotLine;
+    else if ( fixedStyle == "wave" )
+        lineStyle = Qt::CustomDashLine;
     // TODO bold. But this is another attribute in OASIS (text-underline-width), which makes sense.
     // We should separate them in kotext...
 }
@@ -254,21 +252,11 @@ void KoCharacterStyle::setFontOverline (bool overline) {
 bool KoCharacterStyle::fontOverline () const {
     return d->propertyBoolean(QTextFormat::FontOverline);
 }
-void KoCharacterStyle::setUnderlineColor (const QColor &color) {
-    d->setProperty(QTextFormat::TextUnderlineColor, color);
-}
 void KoCharacterStyle::setFontFixedPitch (bool fixedPitch) {
     d->setProperty(QTextFormat::FontFixedPitch, fixedPitch);
 }
 bool KoCharacterStyle::fontFixedPitch () const {
     return d->propertyBoolean(QTextFormat::FontFixedPitch);
-}
-void KoCharacterStyle::setUnderlineStyle (QTextCharFormat::UnderlineStyle style) {
-    d->setProperty(QTextFormat::TextUnderlineStyle, style);
-}
-QTextCharFormat::UnderlineStyle KoCharacterStyle::underlineStyle () const {
-    return static_cast<QTextCharFormat::UnderlineStyle> (d->propertyInt(QTextFormat::TextUnderlineStyle));
-
 }
 void KoCharacterStyle::setVerticalAlignment (QTextCharFormat::VerticalAlignment alignment) {
     d->setProperty(QTextFormat::TextVerticalAlignment, alignment);
@@ -316,29 +304,55 @@ bool KoCharacterStyle::hasHyphenation() const {
     return d->propertyBoolean(HasHyphenation);
 }
 
-void KoCharacterStyle::setFontStrikeOutStyle (Qt::PenStyle strikeOut) {
-    d->setProperty(FontStrikeOutStyle, strikeOut);
+void KoCharacterStyle::setStrikeOutStyle (Qt::PenStyle strikeOut) {
+    d->setProperty(StrikeOutStyle, strikeOut);
 }
 
-Qt::PenStyle KoCharacterStyle::fontStrikeOutStyle () const {
-    return (Qt::PenStyle) d->propertyInt(FontStrikeOutStyle);
+Qt::PenStyle KoCharacterStyle::strikeOutStyle () const {
+    return (Qt::PenStyle) d->propertyInt(StrikeOutStyle);
 }
 
-void KoCharacterStyle::setFontStrikeOutType (LineType lineType) {
-    d->setProperty(FontStrikeOutType, lineType);
+void KoCharacterStyle::setStrikeOutType (LineType lineType) {
+    d->setProperty(StrikeOutType, lineType);
 }
 
-KoCharacterStyle::LineType KoCharacterStyle::fontStrikeOutType () const {
-    return (KoCharacterStyle::LineType) d->propertyInt(FontStrikeOutType);
+KoCharacterStyle::LineType KoCharacterStyle::strikeOutType () const {
+    return (KoCharacterStyle::LineType) d->propertyInt(StrikeOutType);
 }
 
-void KoCharacterStyle::setFontStrikeOutColor (QColor color) {
-    d->setProperty(FontStrikeOutColor, color);
+void KoCharacterStyle::setStrikeOutColor (QColor color) {
+    d->setProperty(StrikeOutColor, color);
 }
 
-QColor KoCharacterStyle::fontStrikeOutColor () const {
-    return d->propertyColor(FontStrikeOutColor);
+QColor KoCharacterStyle::strikeOutColor () const {
+    return d->propertyColor(StrikeOutColor);
 }
+
+
+void KoCharacterStyle::setUnderlineStyle (Qt::PenStyle underline) {
+    d->setProperty(UnderlineStyle, underline);
+}
+
+Qt::PenStyle KoCharacterStyle::underlineStyle () const {
+    return (Qt::PenStyle) d->propertyInt(UnderlineStyle);
+}
+
+void KoCharacterStyle::setUnderlineType (LineType lineType) {
+    d->setProperty(UnderlineType, lineType);
+}
+
+KoCharacterStyle::LineType KoCharacterStyle::underlineType () const {
+    return (KoCharacterStyle::LineType) d->propertyInt(UnderlineType);
+}
+
+void KoCharacterStyle::setUnderlineColor (QColor color) {
+    d->setProperty(UnderlineColor, color);
+}
+
+QColor KoCharacterStyle::underlineColor () const {
+    return d->propertyColor(UnderlineColor);
+}
+
 
 void KoCharacterStyle::setTransform(KoCharacterStyle::Transform transformtext) {
     d->setProperty(KoCharacterStyle::TransformText, transformtext);
@@ -465,11 +479,14 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     // Specifies whether text is underlined, and if so, whether a single or double line will be used for underlining.
     if ( styleStack.hasProperty( KoXmlNS::style, "text-underline-type" )
         || styleStack.hasProperty( KoXmlNS::style, "text-underline-style" ) ) { // OASIS 14.4.28
-        QTextCharFormat::UnderlineStyle underlineStyle;
-        importOasisUnderline( styleStack.property( KoXmlNS::style, "text-underline-type" ),
-                              styleStack.property( KoXmlNS::style, "text-underline-style" ),
-                              underlineStyle );
+        Qt::PenStyle underlineStyle = Qt::NoPen;
+        LineType underlineType = NoLine;
+    
+        importOasisLine(styleStack.property( KoXmlNS::style, "text-underline-type" ),
+                        styleStack.property( KoXmlNS::style, "text-underline-style" ),
+                        underlineStyle, underlineType);
         setUnderlineStyle(underlineStyle);
+        setUnderlineType(underlineType);
     }
 
     // Specifies the color that is used to underline text. The value of this attribute is either font-color or a color. If the value is font-color, the current text color is used for underlining.
@@ -482,40 +499,17 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
         Qt::PenStyle throughStyle = Qt::NoPen;
         LineType throughType = NoLine;
         
-        QString type = styleStack.property( KoXmlNS::style, "text-line-through-type" );
-        QString style = styleStack.property( KoXmlNS::style, "text-line-through-style" );
-        if (type.isEmpty() && !style.isEmpty())
-            type = "single";
-        else if (!type.isEmpty() && style.isEmpty())
-            style = "solid";
+        importOasisLine(styleStack.property( KoXmlNS::style, "text-line-through-type" ),
+                        styleStack.property( KoXmlNS::style, "text-line-through-style" ),
+                        throughStyle, throughType);
         
-        if (type == "single")
-            throughType = SingleLine;
-        else if (type == "double")
-            throughType = DoubleLine;
-        
-        
-        //TODO: fix that mess a bit, using custom LineStyle...
-        if ( style == "solid" )
-            throughStyle = Qt::SolidLine;
-        else if ( style == "dotted" )
-            throughStyle = Qt::DotLine;
-        else if ( style == "dash" || style == "long-dash" ) // not in kotext
-            throughStyle = Qt::DashLine;
-        else if ( style == "dot-dash" )
-            throughStyle = Qt::DashDotLine;
-        else if ( style == "dot-dot-dash" )
-            throughStyle = Qt::DashDotDotLine;
-        else if ( style == "wave" )
-            throughStyle = Qt::CustomDashLine;
-        
-        setFontStrikeOutStyle(throughStyle);
-        setFontStrikeOutType(throughType);
+        setStrikeOutStyle(throughStyle);
+        setStrikeOutType(throughType);
     }
     
     QString lineThroughColor = styleStack.property( KoXmlNS::style, "text-line-through-color" ); // OO 3.10.23, OASIS 14.4.31
     if ( !lineThroughColor.isEmpty() && lineThroughColor != "font-color" )
-        setFontStrikeOutColor( QColor(lineThroughColor) );
+        setStrikeOutColor( QColor(lineThroughColor) );
 //TODO
 #if 0
     if ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-type" ) ) { // OASIS 14.4.7

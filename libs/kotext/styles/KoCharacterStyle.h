@@ -50,9 +50,12 @@ public:
         StyleId = QTextFormat::UserProperty+1, ///< The id stored in the charFormat to link the text to this style.
         HasHyphenation,
         FontId,
-        FontStrikeOutStyle,
-        FontStrikeOutType,
-        FontStrikeOutColor,
+        StrikeOutStyle,
+        StrikeOutType,
+        StrikeOutColor,
+        UnderlineStyle,
+        UnderlineType,
+        UnderlineColor,
         TransformText
     };
 
@@ -106,17 +109,9 @@ public:
     /// See similar named method on QTextCharFormat
     bool fontOverline () const;
     /// See similar named method on QTextCharFormat
-    void setUnderlineColor (const QColor &color);
-    /// See similar named method on QTextCharFormat
-    QColor underlineColor () const;
-    /// See similar named method on QTextCharFormat
     void setFontFixedPitch (bool fixedPitch);
     /// See similar named method on QTextCharFormat
     bool fontFixedPitch () const;
-    /// See similar named method on QTextCharFormat
-    void setUnderlineStyle (QTextCharFormat::UnderlineStyle style);
-    /// See similar named method on QTextCharFormat
-    QTextCharFormat::UnderlineStyle underlineStyle () const;
     /// See similar named method on QTextCharFormat
     void setVerticalAlignment (QTextCharFormat::VerticalAlignment alignment);
     /// See similar named method on QTextCharFormat
@@ -141,17 +136,30 @@ public:
     void clearForeground ();
 
     /// Apply a font strike out style to this KoCharacterStyle
-    void setFontStrikeOutStyle (Qt::PenStyle style);
+    void setStrikeOutStyle (Qt::PenStyle style);
     /// Get the current font strike out style of this KoCharacterStyle
-    Qt::PenStyle fontStrikeOutStyle () const;
+    Qt::PenStyle strikeOutStyle () const;
     /// Apply a font strike out color to this KoCharacterStyle
-    void setFontStrikeOutColor (QColor color);
+    void setStrikeOutColor (QColor color);
     /// Get the current font strike out color of this KoCharacterStyle
-    QColor fontStrikeOutColor () const;
+    QColor strikeOutColor () const;
     /// Apply a font strike out color to this KoCharacterStyle
-    void setFontStrikeOutType (LineType lineType);
+    void setStrikeOutType (LineType lineType);
     /// Get the current font strike out color of this KoCharacterStyle
-    LineType fontStrikeOutType () const;
+    LineType strikeOutType () const;
+
+    /// Apply a font underline style to this KoCharacterStyle
+    void setUnderlineStyle (Qt::PenStyle style);
+    /// Get the current font underline style of this KoCharacterStyle
+    Qt::PenStyle underlineStyle () const;
+    /// Apply a font underline color to this KoCharacterStyle
+    void setUnderlineColor (QColor color);
+    /// Get the current font underline color of this KoCharacterStyle
+    QColor underlineColor () const;
+    /// Apply a font underline color to this KoCharacterStyle
+    void setUnderlineType (LineType lineType);
+    /// Get the current font underline color of this KoCharacterStyle
+    LineType underlineType () const;
 
     /// Set the text tranformation.
     void setTransform(Transform transformtext);

@@ -157,17 +157,10 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
             double normVec = 0.5 * norm(dragVec);
 //             if(normVec < 1.0) normVec = 0.0;
 //             kDebug() << m_previousPaintInformation.pos << (m_previousPaintInformation.pos + m_previousTangent* normVec) << info.pos << (info.pos - newTangeant * normVec) << endl;
-            m_savedDist = m_painter->paintBezierCurve(m_previousPaintInformation.pos,
-                                        m_previousPaintInformation.pressure,
-                                        m_previousPaintInformation.xTilt,
-                                        m_previousPaintInformation.yTilt,
+            m_savedDist = m_painter->paintBezierCurve(m_previousPaintInformation,
                                         m_previousPaintInformation.pos + m_previousTangent * normVec,
                                         info.pos - newTangeant * normVec,
-                                        info.pos,
-                                        info.pressure,
-                                        info.xTilt,
-                                        info.yTilt,
-                                        m_savedDist);
+                                        info, m_savedDist);
             m_previousTangent = newTangeant;
             m_previousDrag = dragVec;
             setDirty( m_painter->dirtyRegion() );

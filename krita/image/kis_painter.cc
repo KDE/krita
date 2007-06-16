@@ -626,30 +626,24 @@ void KisPainter::getBezierCurvePoints(const QPointF &pos1,
     }
 }
 
-double KisPainter::paintBezierCurve(const QPointF &pos1,
-                                    const double pressure1,
-                                    const double xTilt1,
-                                    const double yTilt1,
+double KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
                                     const QPointF &control1,
                                     const QPointF &control2,
-                                    const QPointF &pos2,
-                                    const double pressure2,
-                                    const double xTilt2,
-                                    const double yTilt2,
+                                    const KisPaintInformation &pi2,
                                     const double savedDist)
 {
     double newDistance;
-    double d1 = pointToLineDistance(control1, pos1, pos2);
-    double d2 = pointToLineDistance(control2, pos1, pos2);
+    double d1 = pointToLineDistance(control1, pi1.pos, pi2.pos);
+    double d2 = pointToLineDistance(control2, pi1.pos, pi2.pos);
 
     if (d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD) {
-        newDistance = paintLine(KisPaintInformation(pos1, pressure1, xTilt1, yTilt1), KisPaintInformation(pos2, pressure2, xTilt2, yTilt2), savedDist);
+        newDistance = paintLine(pi1, pi2, savedDist);
     } else {
         // Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508
-        KisVector2D p1 = pos1;
+        KisVector2D p1 = pi1.pos;
         KisVector2D p2 = control1;
         KisVector2D p3 = control2;
-        KisVector2D p4 = pos2;
+        KisVector2D p4 = pi2.pos;
 
         KisVector2D l2 = (p1 + p2) / 2;
         KisVector2D h = (p2 + p3) / 2;
@@ -657,22 +651,19 @@ double KisPainter::paintBezierCurve(const QPointF &pos1,
         KisVector2D r3 = (p3 + p4) / 2;
         KisVector2D r2 = (h + r3) / 2;
         KisVector2D l4 = (l3 + r2) / 2;
-        KisVector2D r1 = l4;
-        KisVector2D l1 = p1;
-        KisVector2D r4 = p4;
 
-        double midPressure = (pressure1 + pressure2) / 2;
-        double midXTilt = (xTilt1 + xTilt2) / 2;
-        double midYTilt = (yTilt1 + yTilt2) / 2;
+        double midPressure = (pi1.pressure + pi2.pressure) / 2;
+        double midXTilt = (pi1.xTilt + pi2.xTilt) / 2;
+        double midYTilt = (pi1.yTilt + pi2.yTilt) / 2;
 
-        newDistance = paintBezierCurve(l1.toKoPoint(), pressure1, xTilt1, yTilt1,
+        KisPaintInformation middlePI( l4.toKoPoint(), midPressure, midXTilt, midYTilt );
+        newDistance = paintBezierCurve( pi1,
                                        l2.toKoPoint(), l3.toKoPoint(),
-                                       l4.toKoPoint(), midPressure, midXTilt, midYTilt,
-                                       savedDist);
-        newDistance = paintBezierCurve(r1.toKoPoint(), midPressure, midXTilt, midYTilt,
+                                       middlePI, savedDist);
+        newDistance = paintBezierCurve(middlePI,
                                        r2.toKoPoint(),
                                        r3.toKoPoint(),
-                                       r4.toKoPoint(), pressure2, xTilt2, yTilt2, newDistance);
+                                       pi2, newDistance);
     }
 
     return newDistance;

@@ -192,7 +192,7 @@ void Painter::paintLine(double x1, double y1, double p1, double x2, double y2, d
 
 void Painter::paintBezierCurve(double x1, double y1, double p1, double cx1, double cy1, double cx2, double cy2, double x2, double y2, double p2)
 {
-    m_painter->paintBezierCurve( QPointF(x1,y1), p1, 0.0, 0.0, QPointF(cx1,cy1), QPointF(cx2,cy2), QPointF(x2,y2), p2, 0.0, 0.0);
+    m_painter->paintBezierCurve( KisPaintInformation(QPointF(x1,y1), p1), QPointF(cx1,cy1), QPointF(cx2,cy2), KisPaintInformation(QPointF(x2,y2), p2));
 }
 
 void Painter::paintEllipse(double x, double y, double w, double h, double pressure)

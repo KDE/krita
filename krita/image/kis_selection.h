@@ -26,7 +26,6 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_mask.h"
-#include "kis_shape_selection_canvas.h"
 
 #include <krita_export.h>
 
@@ -41,6 +40,9 @@ enum enumSelectionMode {
     SELECTION_ADD,
     SELECTION_SUBTRACT
 };
+
+class KisShapeSelectionCanvas;
+class KisSelectionShapeManager;
 
 /**
  * KisSelection contains a byte-map representation of a layer, where

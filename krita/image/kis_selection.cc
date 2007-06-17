@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_selection.h"
 
 #include <QImage>
 #include <QVector>
@@ -40,7 +41,7 @@
 #include "kis_image.h"
 #include "kis_datamanager.h"
 #include "kis_fill_painter.h"
-#include "kis_selection.h"
+#include "kis_shape_selection_canvas.h"
 #include "kis_mask.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)

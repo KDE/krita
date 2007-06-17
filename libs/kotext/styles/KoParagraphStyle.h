@@ -408,11 +408,18 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     /// return if this paragraph is marked to start the list numbering from the first entry.
     bool restartListNumbering();
 
+    /// Set the tab data for this paragraph style.
     void setTabPositions(const QList<KoText::Tab> &tabs);
+    /// return the tabs data for this paragraph style
     QList<KoText::Tab> tabPositions() const;
 
+    /// If this style is a list, then this sets the nested-ness (aka level) of this paragraph.  A H2 has level 2.
     void setListLevel(int value);
+    /// return the list level.
     int listLevel() const;
+
+    /// copy all the properties from the other style to this style, effectively duplicating it.
+    void copyProperties(const KoParagraphStyle *style);
 
     /**
      * Apply this style to a blockFormat by copying all properties from this, and parent
@@ -427,8 +434,12 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
      */
     void applyStyle(QTextBlock &block) const;
 
+    /// return the character style for this paragraph style
     KoCharacterStyle *characterStyle();
+    /// return the character style for this paragraph style
     const KoCharacterStyle *characterStyle() const;
+    /// set the character style for this paragraph style
+    void setCharacterStyle(KoCharacterStyle *style);
 
     /**
      * Returns the list style for this paragraph style, or 0 if there is none.

@@ -91,6 +91,13 @@ KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style)
     : QObject(0), d( new Private() )
 {
     d->stylesPrivate->copyMissing(style.d->stylesPrivate);
+    d->name = style.name();
+}
+
+void KoCharacterStyle::copyProperties(const KoCharacterStyle *style) {
+    d->stylesPrivate->clearAll();
+    d->stylesPrivate->copyMissing(style->d->stylesPrivate);
+    d->name = style->name();
 }
 
 KoCharacterStyle::~KoCharacterStyle() {

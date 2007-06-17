@@ -65,7 +65,7 @@ public:
         SingleLine,
         DoubleLine
     };
-    
+
     /// Text transformation
     enum Transform {
         NoneTransform = 0, ///< No text-transformation. This is the default value.
@@ -168,6 +168,8 @@ public:
 
     void setHasHyphenation(bool on);
     bool hasHyphenation() const;
+
+    void copyProperties(const KoCharacterStyle *style);
 
 
     /// return the name of the style.

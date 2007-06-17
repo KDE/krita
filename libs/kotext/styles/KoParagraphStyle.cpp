@@ -121,9 +121,9 @@ static const int properties[] = {
 KoParagraphStyle::KoParagraphStyle()
 : d(new Private())
 {
-d->charStyle = new KoCharacterStyle(this),
-d->stylesPrivate = new StylePrivate();
-setLineHeightPercent(120);
+    d->charStyle = new KoCharacterStyle(this);
+    d->stylesPrivate = new StylePrivate();
+    setLineHeightPercent(120);
 }
 
 KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
@@ -716,6 +716,10 @@ const KoCharacterStyle *KoParagraphStyle::characterStyle() const {
     return d->charStyle;
 }
 
+void KoParagraphStyle::setCharacterStyle(KoCharacterStyle *style) {
+    d->charStyle = style;
+}
+
 KoListStyle KoParagraphStyle::listStyle() const {
     if(d->listStyle)
         return KoListStyle(*d->listStyle);
@@ -1052,6 +1056,15 @@ QList<KoText::Tab> KoParagraphStyle::tabPositions() const {
     return answer;
 }
 
+void KoParagraphStyle::copyProperties(const KoParagraphStyle *style) {
+    d->stylesPrivate->clearAll();
+    d->stylesPrivate->copyMissing(style->d->stylesPrivate);
+    d->name = style->name();
+    d->charStyle = style->d->charStyle;
+    d->next = style->d->next;
+    if(style->d->listStyle)
+        setListStyle(*style->d->listStyle);
+}
 
 // static
 KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block) {

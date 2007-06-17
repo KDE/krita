@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Grayscale Color Model with Alpha Channel (16-bit integer)
+Name[de]=Graustufen-Farbmodell mit Alphakanal (16-bit Ganzzahl)
+Name[ja]=アルファチャンネル付きグレースケールカラーモデル (16 ビット整数)
 Name[x-test]=xxGrayscale Color Model with Alpha Channel (16-bit integer)xx
 Comment=Color model for 16-bit integer per channel Grayscale images
 Comment[bg]=Цветови модел за 16 битови изображения в сива гама
@@ -19,7 +21,7 @@ Comment[he]=מודל צבעים עבור תמונות של 16 סיביות בג�
 Comment[hu]=Színmodell 16 bit/csatorna szürkeárnyalatos képekhez
 Comment[is]=Litategund fyrir 16-bita heiltölu á rás gráskala myndir
 Comment[it]=Modello di colore per immagini in scala di grigio a canale di 16 bit
-Comment[ja]=16 ビット整数/チャンネル グレースケール画像のためのカラーモデル
+Comment[ja]=16 ビット整数/チャンネルのグレースケール画像のためのカラーモデル
 Comment[km]=គំរូ​ពណ៌​សម្រាប់​រូបភាព​មាត្រដ្ឋាន​ប្រផេះ​ចំនួន​គត់ ១៦ ប៊ីត​ក្នុង​មួយ​ឆានែល
 Comment[nb]=Fargemodell for gråtonebilde med 16 bit per kanal
 Comment[nds]=Klöörmodell för Griestöön-Biller mit 16-Bit Heeltall per Kanaal

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=metadataeditor
+Name[de]=Metadateneditor
 Comment=metadataeditor
+Comment[de]=Metadateneditor
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritametadataeditor

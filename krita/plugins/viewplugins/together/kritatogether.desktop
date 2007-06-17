@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Together
 Name[be]=Разам
+Name[de]=Zusammen
 Name[x-test]=xxTogetherxx
 Comment=Together
 Comment[be]=Разам
+Comment[de]=Zusammen
 Comment[x-test]=xxTogetherxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

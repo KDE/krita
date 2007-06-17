@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Grayscale Color Model with Alpha
+Name[de]=Graustufen-Farbmodell mit Alphakanal
+Name[ja]=アルファチャンネル付きグレースケールカラーモデル
 Name[uk]=Модель кольору "відтінки сірого" з альфа
 Name[x-test]=xxGrayscale Color Model with Alphaxx
 Comment=Color model for 8-bit grayscale images
@@ -22,7 +24,7 @@ Comment[he]=מודל צבעים עבור תמונות של 8 סיביות בגו
 Comment[hu]=Színmodell 8 bites szürkeárnyalatos képekhez
 Comment[is]=Litategund fyrir 8-bita gráskala myndir
 Comment[it]=Modello di colore per immagini a 8 bit in scala di grigio
-Comment[ja]=8 ビット グレースケール画像のためのカラーモデル
+Comment[ja]=8 ビットのグレースケール画像のためのカラーモデル
 Comment[km]=គំរូ​ពណ៌​សម្រាប់​រូបភាព​មាត្រដ្ឋាន​ប្រផេះ ៨ ប៊ីត
 Comment[ms]=Model warna bagi imej skala kelabu 8-bit
 Comment[nb]=Fargemodell for 8-bits gråtonebilder

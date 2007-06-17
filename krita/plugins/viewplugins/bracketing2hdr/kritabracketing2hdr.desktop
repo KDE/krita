@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Bracketing2HDR
+Name[de]=BracketingZuHDR
 Name[x-test]=xxBracketing2HDRxx
 Comment=Bracketing2HDR
+Comment[de]=BracketingZuHDR
 Comment[x-test]=xxBracketing2HDRxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

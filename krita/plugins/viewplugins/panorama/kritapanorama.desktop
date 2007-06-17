@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=panorama
+Name[de]=Panorama
 Comment=panorama
+Comment[de]=Panorama
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritapanorama

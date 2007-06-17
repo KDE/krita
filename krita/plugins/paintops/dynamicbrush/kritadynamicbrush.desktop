@@ -1,8 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Dynamic Brush
+Name[de]=Dynamischer Pinsel
+Name[ja]=ダイナミックブラシ
 Name[uk]=Динамічний пензель
 Comment=Dynamic brush
+Comment[de]=Dynamischer Pinsel
+Comment[ja]=ダイナミックブラシ
 Comment[uk]=Динамічний пензель
 ServiceTypes=Krita/Paintop,Krita/ViewPlugin
 Type=Service

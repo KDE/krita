@@ -1,9 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Chinese Brush
+Name[de]=Chinesischer Pinsel
+Name[ja]=書道の筆
 Name[uk]=Китайський пензель
 Name[x-test]=xxChinese Brushxx
 Comment=Chinese Brush
+Comment[de]=Chinesischer Pinsel
+Comment[ja]=書道の筆
 Comment[uk]=Китайський пензель
 Comment[x-test]=xxChinese Brushxx
 ServiceTypes=Krita/Paintop

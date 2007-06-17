@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Inline Text Object Plugin
+Name[de]=Mitfließendes-Textobjekt-Modul
 Name[x-test]=xxInline Text Object Pluginxx
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-InlineObject
 Comment=Definition of a text object
+Comment[de]=Definition eines Textobjektes
 Comment[x-test]=xxDefinition of a text objectxx
 [PropertyDef::X-KoText-Version]
 Type=int

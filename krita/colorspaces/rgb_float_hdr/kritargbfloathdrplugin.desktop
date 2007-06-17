@@ -1,8 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB (float 16-bit and 32-bit HDR) Color Model
+Name[de]=RGB-Farbmodell (16-bit und 32-bit Fließkomma HDR)
+Name[ja]=RGB (16 ビットおよび 32 ビット浮動小数点数 HDR) カラーモデル
 Name[x-test]=xxRGB (float 16-bit and 32-bit HDR) Color Modelxx
 Comment=Color model for 16-bit and 32-bit per channel in floating point for High-Dynamic Range RGB images
+Comment[de]=Farbmodell für 16-bit und 32-bit pro Kanal in Fließkomma für High-Dynamic Range RGB-Bilder
+Comment[ja]=16 ビットおよび 32 ビット浮動小数点数/チャンネルのハイダイナミックレンジ RGB 画像のためのカラーモデル
 Comment[x-test]=xxColor model for 16-bit and 32-bit per channel in floating point for High-Dynamic Range RGB imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service

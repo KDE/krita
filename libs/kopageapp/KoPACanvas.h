@@ -64,6 +64,12 @@ public slots:
 signals:
     void documentSize(const QSize &size);
 
+    /**
+     * Emitted when the entire controller size changes
+     * @param size the size in widget pixels.
+     */
+    void sizeChanged( const QSize & size );
+
 protected:
     /// reimplemented method from superclass
     void paintEvent( QPaintEvent* event );
@@ -89,6 +95,8 @@ protected:
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
+
+    void resizeEvent( QResizeEvent * event );
 
     KoPAView * m_view;
     KoPADocument * m_doc;

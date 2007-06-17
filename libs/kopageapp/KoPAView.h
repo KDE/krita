@@ -60,8 +60,12 @@ public:
     KoPACanvas * kopaCanvas() { return m_canvas; }
     KoPACanvas * kopaCanvas() const { return m_canvas; }
 
+    KoPADocument * kopaDocument() { return m_doc; }
     /// @return Page that is shown in the canvas
     KoPAPageBase* activePage() const;
+
+    /// Set the active page and updates the UI
+    void updateActivePage( KoPAPageBase * page );
 
     /// Set page shown in the canvas to @p page
     void setActivePage( KoPAPageBase * page );
@@ -83,14 +87,6 @@ public:
      * @param mode the new view mode
      */
     void setViewMode( KoPAViewMode* mode );
-
-    /**
-     * @brief Set the canvas mode
-     *
-     * @param fullscreen if true the canvas mode is set to Presentation
-     *                   if false it is set to Centered
-     */
-    void setCanvasMode( bool fullScreen );
 
 public slots:
     /// Shows/hides the rulers

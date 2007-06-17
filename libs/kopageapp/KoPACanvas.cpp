@@ -28,8 +28,6 @@
 #include "KoPAViewMode.h"
 #include "KoPAPage.h"
 
-#include <QDebug>
-
 KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
 : QWidget( view )
 , KoCanvasBase( doc )
@@ -195,6 +193,11 @@ QVariant KoPACanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 void KoPACanvas::inputMethodEvent(QInputMethodEvent *event)
 {
     m_toolProxy->inputMethodEvent(event);
+}
+
+void KoPACanvas::resizeEvent( QResizeEvent * event )
+{
+    emit sizeChanged( event->size() );
 }
 
 #include "KoPACanvas.moc"

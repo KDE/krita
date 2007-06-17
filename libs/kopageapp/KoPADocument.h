@@ -99,6 +99,8 @@ public:
     void addShape( KoShape *shape );
     void removeShape( KoShape* shape );
 
+    QList<KoPAPageBase*> pages() const;
+
 protected:
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
     virtual const char *odfTagName() = 0;

@@ -46,6 +46,20 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
     KoPAMasterPage * masterPage = new KoPAMasterPage();
     m_masterPages.append( masterPage );
     insertPage( new KoPAPage( masterPage ), 0 /*add first*/ );
+#ifndef NDEBUG
+    //TODO This produces some pages to be used for testing remove when we have loading support
+    KoPathShape *pathShape = new KoPathShape();
+    pathShape->lineTo( QPointF( 100, 100 ) );
+    pathShape->setPosition( QPointF( 100, 100 ) );
+    pathShape->setBorder( new KoLineBorder( 1.0 ) );
+    KoShapeLayer * parentShape = dynamic_cast<KoShapeLayer *>( masterPage->iterator()[0] );
+    if ( parentShape )
+    {
+        parentShape->addChild( pathShape );
+    }
+    insertPage( new KoPAPage(  masterPage ), 1 );
+    insertPage(  new KoPAPage(  masterPage ), 2 );
+#endif
 }
 
 KoPADocument::~KoPADocument()
@@ -375,6 +389,11 @@ int KoPADocument::takePage( KoPAPageBase *page )
         pages.removeAt( index );
     }
     return index;
+}
+
+QList<KoPAPageBase*> KoPADocument::pages() const
+{
+    return m_pages;
 }
 
 #include "KoPADocument.moc"

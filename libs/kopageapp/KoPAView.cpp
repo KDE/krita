@@ -61,7 +61,7 @@ KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
     initActions();
 
     if ( m_doc->pageCount() > 0 )
-        setActivePage( m_doc->pageByIndex( 0, false ) );
+        updateActivePage( m_doc->pageByIndex( 0, false ) );
 }
 
 KoPAView::~KoPAView()
@@ -202,27 +202,27 @@ void KoPAView::setViewMode( KoPAViewMode* mode )
     }
 }
 
-void KoPAView::setCanvasMode( bool fullScreen )
-{
-    if ( fullScreen )
-    {
-        m_zoomController->setZoomMode(KoZoomMode::ZOOM_PAGE);
-        m_canvasController->setCanvasMode( KoCanvasController::Presentation );
-        m_canvasController->setParent( ( QWidget* )0, Qt::Window );
-        m_canvasController->showFullScreen();
-    }
-    else
-    {
-        m_canvasController->setCanvasMode( KoCanvasController::Centered );
-        m_canvasController->setParent( this, Qt::Widget );
-        ((QGridLayout *)layout())->addWidget( m_canvasController, 1, 1 );
-        m_canvasController->showNormal();
-    }
-}
-
 KoShapeManager* KoPAView::masterShapeManager() const
 {
     return m_canvas->masterShapeManager();
+}
+
+void KoPAView::updateActivePage( KoPAPageBase * page )
+{
+    setActivePage( page );
+
+    m_canvas->updateSize();
+    KoPageLayout &layout = m_activePage->pageLayout();
+    m_horizontalRuler->setRulerLength(layout.width);
+    m_verticalRuler->setRulerLength(layout.height);
+    m_horizontalRuler->setActiveRange(layout.left, layout.width - layout.right);
+    m_verticalRuler->setActiveRange(layout.top, layout.height - layout.bottom);
+
+    QSizeF pageSize( layout.width, layout.height );
+    m_zoomController->setPageSize( pageSize );
+    m_zoomController->setDocumentSize( pageSize );
+
+    m_canvas->update();
 }
 
 void KoPAView::setActivePage( KoPAPageBase* page )
@@ -255,19 +255,6 @@ void KoPAView::setActivePage( KoPAPageBase* page )
         // if the page is a master page no shapes are in the masterShapeManager
         masterShapeManager()->setShapes( QList<KoShape*>() );
     }
-
-    m_canvas->updateSize();
-    KoPageLayout &layout = m_activePage->pageLayout();
-    m_horizontalRuler->setRulerLength(layout.width);
-    m_verticalRuler->setRulerLength(layout.height);
-    m_horizontalRuler->setActiveRange(layout.left, layout.width - layout.right);
-    m_verticalRuler->setActiveRange(layout.top, layout.height - layout.bottom);
-
-    QSizeF pageSize( layout.width, layout.height );
-    m_zoomController->setPageSize( pageSize );
-    m_zoomController->setDocumentSize( pageSize );
-
-    m_canvas->update();
 }
 
 void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
@@ -275,7 +262,7 @@ void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
     KoPAPageBase * newPage = m_doc->pageByNavigation( m_activePage, pageNavigation );
 
     if ( newPage != m_activePage ) {
-        setActivePage( newPage );
+        updateActivePage( newPage );
     }
 }
 

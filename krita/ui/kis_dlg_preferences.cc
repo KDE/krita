@@ -740,6 +740,8 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
     if (KisOpenGL::hasShadingLanguage()) {
         cbUseOpenGLShaders->setEnabled(isChecked);
     }
+#else
+    Q_UNUSED(isChecked);
 #endif
 }
 
@@ -829,7 +831,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     KVBox *vbox = new KVBox();
     KPageWidgetItem *page = new KPageWidgetItem( vbox, i18n( "General"));
     page->setHeader( i18n( "General") );
-    page->setIcon(  KIcon(BarIcon( "misc", K3Icon::SizeMedium )) );
+    page->setIcon(  KIcon(BarIcon( "configure", K3Icon::SizeMedium )) );
     addPage( page );
     m_general = new GeneralTab( vbox );
 
@@ -844,7 +846,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Color Management"));
     page->setHeader( i18n( "Color") );
-    page->setIcon( KIcon( BarIcon( "colorize", K3Icon::SizeMedium )));
+    page->setIcon( KIcon( BarIcon( "color-fill", K3Icon::SizeMedium )));
     addPage( page );
     m_colorSettings = new ColorSettingsTab( vbox );
 

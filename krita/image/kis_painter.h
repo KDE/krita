@@ -381,17 +381,15 @@ public:
                 const QPointF &control2,
                 const KisPaintInformation &pi2,
                 const double savedDist = -1);
-
     /**
      * Fill the given vector points with the points needed to draw the Bezier curve between
      * pos1 and pos2 using control points 1 and 2, excluding the final pos2.
      */
     void getBezierCurvePoints(const QPointF &pos1,
-                  const QPointF &control1,
-                  const QPointF &control2,
-                  const QPointF &pos2,
-                  vQPointF& points);
-
+                const QPointF &control1,
+                const QPointF &control2,
+                const QPointF &pos2,
+                vQPointF& points) const;
 
     /**
      * Paint a rectangle.
@@ -597,22 +595,22 @@ public:
     void setCompositeOp(const KoCompositeOp * op) { m_compositeOp = op; }
     const KoCompositeOp * compositeOp() { return m_compositeOp; }
 
+    /// Calculate the distance that point p is from the line made by connecting l0 and l1
+    static double pointToLineDistance(const QPointF& p, const QPointF& l0, const QPointF& l1);
+
+    /**
+     * Add the r to the current dirty rect, and return the dirtyRegion after adding r to it.
+     */
+    QRegion addDirtyRect(QRect r);
+
 protected:
     /// Initialize, set everything to '0' or defaults
     void init();
     KisPainter(const KisPainter&);
     KisPainter& operator=(const KisPainter&);
 
-    /// Calculate the distance that point p is from the line made by connecting l0 and l1
-    static double pointToLineDistance(const QPointF& p, const QPointF& l0, const QPointF& l1);
-
     /// Fill the polygon defined by points with the fillStyle
     void fillPolygon(const vQPointF& points, FillStyle fillStyle);
-
-    /**
-     * Add the r to the current dirty rect, and return the dirtyRegion after adding r to it.
-     */
-    QRegion addDirtyRect(QRect r);
 
 protected:
     KisPaintDeviceSP m_device;

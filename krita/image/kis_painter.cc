@@ -486,92 +486,7 @@ double KisPainter::paintLine(const KisPaintInformation &pi1,
     if (!m_device) return 0;
     if (!m_paintOp) return 0;
     if (!m_brush) return 0;
-
-    KisVector2D end(pi2.pos);
-    KisVector2D start(pi1.pos);
-
-    KisVector2D dragVec = end - start;
-    KisVector2D movement = dragVec;
-
-    if (savedDist < 0) {
-        m_paintOp->paintAt(pi1);
-        savedDist = 0;
-    }
-
-    // XXX: The spacing should vary as the pressure changes along the line.
-    // This is a quick simplification.
-    double xSpacing = m_brush->xSpacing((pi1.pressure + pi2.pressure) / 2);
-    double ySpacing = m_brush->ySpacing((pi1.pressure + pi2.pressure) / 2);
-
-    if (xSpacing < 0.5) {
-        xSpacing = 0.5;
-    }
-    if (ySpacing < 0.5) {
-        ySpacing = 0.5;
-    }
-
-    double xScale = 1;
-    double yScale = 1;
-    double spacing;
-    // Scale x or y so that we effectively have a square brush
-    // and calculate distance in that coordinate space. We reverse this scaling
-    // before drawing the brush. This produces the correct spacing in both
-    // x and y directions, even if the brush's aspect ratio is not 1:1.
-    if (xSpacing > ySpacing) {
-        yScale = xSpacing / ySpacing;
-        spacing = xSpacing;
-    }
-    else {
-        xScale = ySpacing / xSpacing;
-        spacing = ySpacing;
-    }
-
-    dragVec.setX(dragVec.x() * xScale);
-    dragVec.setY(dragVec.y() * yScale);
-
-    double newDist = dragVec.length();
-    double dist = savedDist + newDist;
-    double l_savedDist = savedDist;
-
-    if (dist < spacing) {
-        return dist;
-    }
-
-    dragVec.normalize();
-    KisVector2D step(0, 0);
-
-    while (dist >= spacing) {
-        if (l_savedDist > 0) {
-            step += dragVec * (spacing - l_savedDist);
-            l_savedDist -= spacing;
-        }
-        else {
-            step += dragVec * spacing;
-        }
-
-        QPointF p(start.x() + (step.x() / xScale), start.y() + (step.y() / yScale));
-
-        double distanceMoved = step.length();
-        double t = 0;
-
-        if (newDist > DBL_EPSILON) {
-            t = distanceMoved / newDist;
-        }
-
-        double pressure = (1 - t) * pi1.pressure + t * pi2.pressure;
-        double xTilt = (1 - t) * pi1.xTilt + t * pi2.xTilt;
-        double yTilt = (1 - t) * pi1.yTilt + t * pi2.yTilt;
-
-        m_paintOp->paintAt(KisPaintInformation(p, pressure, xTilt, yTilt, movement));
-        dist -= spacing;
-    }
-
-    addDirtyRect( QRect( pi1.pos.toPoint(), pi2.pos.toPoint() ) );
-
-    if (dist > 0)
-        return dist;
-    else
-        return 0;
+    return m_paintOp->paintLine(pi1, pi2, savedDist);
 }
 
 void KisPainter::paintPolyline (const vQPointF &points,
@@ -597,7 +512,7 @@ void KisPainter::getBezierCurvePoints(const QPointF &pos1,
                                       const QPointF &control1,
                                       const QPointF &control2,
                                       const QPointF &pos2,
-                                      vQPointF& points)
+                                      vQPointF& points) const
 {
     double d1 = pointToLineDistance(control1, pos1, pos2);
     double d2 = pointToLineDistance(control2, pos1, pos2);
@@ -632,41 +547,7 @@ double KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
                                     const KisPaintInformation &pi2,
                                     const double savedDist)
 {
-    double newDistance;
-    double d1 = pointToLineDistance(control1, pi1.pos, pi2.pos);
-    double d2 = pointToLineDistance(control2, pi1.pos, pi2.pos);
-
-    if (d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD) {
-        newDistance = paintLine(pi1, pi2, savedDist);
-    } else {
-        // Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508
-        KisVector2D p1 = pi1.pos;
-        KisVector2D p2 = control1;
-        KisVector2D p3 = control2;
-        KisVector2D p4 = pi2.pos;
-
-        KisVector2D l2 = (p1 + p2) / 2;
-        KisVector2D h = (p2 + p3) / 2;
-        KisVector2D l3 = (l2 + h) / 2;
-        KisVector2D r3 = (p3 + p4) / 2;
-        KisVector2D r2 = (h + r3) / 2;
-        KisVector2D l4 = (l3 + r2) / 2;
-
-        double midPressure = (pi1.pressure + pi2.pressure) / 2;
-        double midXTilt = (pi1.xTilt + pi2.xTilt) / 2;
-        double midYTilt = (pi1.yTilt + pi2.yTilt) / 2;
-
-        KisPaintInformation middlePI( l4.toKoPoint(), midPressure, midXTilt, midYTilt );
-        newDistance = paintBezierCurve( pi1,
-                                       l2.toKoPoint(), l3.toKoPoint(),
-                                       middlePI, savedDist);
-        newDistance = paintBezierCurve(middlePI,
-                                       r2.toKoPoint(),
-                                       r3.toKoPoint(),
-                                       pi2, newDistance);
-    }
-
-    return newDistance;
+    return m_paintOp->paintBezierCurve(pi1, control1, control2, pi2, savedDist);
 }
 
 void KisPainter::paintRect(const QRectF &rect,

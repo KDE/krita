@@ -56,40 +56,62 @@ class KisPainter;
 class KRITAIMAGE_EXPORT KisPaintOp : public KisShared
 {
 
-public:
+    public:
+    
+        KisPaintOp(KisPainter * painter);
+        virtual ~KisPaintOp();
+    
+        /**
+         * Paint at the subpixel point pos using the specified paint
+         * information..
+         */
+        virtual void paintAt(const KisPaintInformation& info) = 0;
+        void setSource(KisPaintDeviceSP p);
+    
+        /**
+         * Draw a line between pos1 and pos2 using the currently set brush and color.
+         * If savedDist is less than zero, the brush is painted at pos1 before being
+         * painted along the line using the spacing setting.
+         * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
+         * because the currenlty set brush has a spacing greater than that distance.
+         */
+        virtual double paintLine(const KisPaintInformation &pi1,
+                        const KisPaintInformation &pi2,
+                        double savedDist = -1);
+        /**
+         * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.
+         * If savedDist is less than zero, the brush is painted at pos1 before being
+         * painted along the curve using the spacing setting.
+         * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
+         * because the currenlty set brush has a spacing greater than that distance.
+         */
+        virtual double paintBezierCurve(const KisPaintInformation &pi1,
+                    const QPointF &control1,
+                    const QPointF &control2,
+                    const KisPaintInformation &pi2,
+                    const double savedDist = -1);
+    
+        /**
+         * Whether this paintop wants to deposit paint even when not moving, i.e. the
+         * tool needs to activate its timer.
+         */
+        virtual bool incremental() { return false; }
 
-    KisPaintOp(KisPainter * painter);
-    virtual ~KisPaintOp();
-
-    /**
-     * Paint at the subpixel point pos using the specified paint
-     * information..
-     */
-    virtual void paintAt(const KisPaintInformation& info) = 0;
-    void setSource(KisPaintDeviceSP p);
-
-    /**
-     * Whether this paintop wants to deposit paint even when not moving, i.e. the
-     * tool needs to activate its timer.
-     */
-    virtual bool incremental() { return false; }
-
-
-protected:
-
-    virtual KisPaintDeviceSP computeDab(KisQImagemaskSP mask);
-    virtual KisPaintDeviceSP computeDab(KisQImagemaskSP mask, KoColorSpace *cs);
-
-
-    /**
-     * Split the coordinate into whole + fraction, where fraction is always >= 0.
-     */
-    virtual void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
-
-    KisPainter * m_painter;
-    KisPaintDeviceSP m_source; // use this layer as source layer for the operation
-private:
-    KisPaintDeviceSP m_dab;
+    protected:
+    
+        virtual KisPaintDeviceSP computeDab(KisQImagemaskSP mask);
+        virtual KisPaintDeviceSP computeDab(KisQImagemaskSP mask, KoColorSpace *cs);
+    
+    
+        /**
+         * Split the coordinate into whole + fraction, where fraction is always >= 0.
+         */
+        virtual void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
+    
+        KisPainter * m_painter;
+        KisPaintDeviceSP m_source; // use this layer as source layer for the operation
+    private:
+        KisPaintDeviceSP m_dab;
 };
 
 /**

@@ -223,7 +223,6 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
                             info);
             m_previousTangent = newTangent;
             m_previousDrag = dragVec;
-            setDirty( m_painter->dirtyRegion() );
         } else {
             paintLine(m_previousPaintInformation, info);
         }

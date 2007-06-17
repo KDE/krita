@@ -92,6 +92,7 @@ protected:
     enumBrushMode m_mode;
     KisPainter *m_painter;
     bool m_smooth;
+    double m_smoothness;
 private:
 
     bool m_paintedOutline;

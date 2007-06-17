@@ -27,6 +27,7 @@
 #include <QRect>
 #include <QCheckBox>
 #include <QGridLayout>
+#include <QSlider>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -43,6 +44,8 @@
 #include "kis_tool_brush.h"
 #include "kis_boundary.h"
 #include "kis_layer.h"
+
+#define MAXIMUM_SMOOTHNESS 1000
 
 KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
         : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18n("Brush"))
@@ -135,6 +138,11 @@ void KisToolBrush::slotSetPaintingMode( int mode )
     }
 }
 
+void KisToolBrush::slotSetSmoothness( int smoothness )
+{
+    m_smoothness = smoothness / (double)MAXIMUM_SMOOTHNESS;
+}
+
 QWidget * KisToolBrush::createOptionWidget()
 {
 
@@ -150,6 +158,17 @@ QWidget * KisToolBrush::createOptionWidget()
     m_chkSmooth->setChecked(false);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
 
+    QLabel* labelSmoothness = new QLabel(i18n("Smoothness:"), optionWidget);
+    labelSmoothness->setEnabled(false);
+    connect(m_chkSmooth, SIGNAL(toggled(bool)), labelSmoothness, SLOT(setEnabled(bool)));
+    
+    m_sliderSmoothness = new QSlider(Qt::Horizontal, optionWidget);
+    m_sliderSmoothness->setMinimum(0);
+    m_sliderSmoothness->setMaximum(MAXIMUM_SMOOTHNESS);
+    m_sliderSmoothness->setEnabled(false);
+    connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
+    m_sliderSmoothness->setValue( m_smoothness * MAXIMUM_SMOOTHNESS );
+    
     m_optionLayout = new QGridLayout(optionWidget);
     Q_CHECK_PTR(m_optionLayout);
 
@@ -159,6 +178,8 @@ QWidget * KisToolBrush::createOptionWidget()
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
     m_optionLayout->addWidget(m_chkDirect, 0, 0);
     m_optionLayout->addWidget(m_chkSmooth, 1, 0);
+    m_optionLayout->addWidget(labelSmoothness, 2, 0);
+    m_optionLayout->addWidget(m_sliderSmoothness, 2, 1);
 
     return optionWidget;
 }

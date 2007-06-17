@@ -28,6 +28,7 @@
 class QTimer;
 class QCheckBox;
 class QGridLayout;
+class QSlider;
 
 class KoCanvasBase;
 
@@ -52,6 +53,7 @@ private slots:
 
     void timeoutPaint();
     void slotSetPaintingMode( int mode );
+    void slotSetSmoothness( int smoothness );
 
 private:
 
@@ -60,7 +62,7 @@ private:
     QGridLayout* m_optionLayout;
     QCheckBox * m_chkDirect;
     QCheckBox * m_chkSmooth;
-
+    QSlider * m_sliderSmoothness;
 };
 
 

@@ -153,6 +153,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_weaver = new ThreadWeaver::Weaver();
     m_weaver->setMaximumNumberOfThreads(1); // anyway only one paint job can be executed at a time
     m_smooth = false;
+    m_smoothness = 0.5;
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -182,6 +183,11 @@ inline double norm(const QPointF& p)
     return sqrt(p.x()*p.x() + p.y()*p.y());
 }
 
+inline double angle(const QPointF& p1, const QPointF& p2)
+{
+    return atan2(p1.y(), p1.x()) - atan2(p2.y(), p2.x());
+}
+
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_mode == PAINT) {
@@ -192,28 +198,30 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         if(m_smooth)
         {
             QPointF dragVec = info.pos - m_previousPaintInformation.pos;
-            QPointF newTangeant;
+            QPointF newTangent;
             if( m_previousDrag.y() == 0.0 and m_previousDrag.x() == 0.0 )
             {
-                newTangeant = dragVec;
+                newTangent = dragVec;
             } else {
-                double angleTangeant = atan2( dragVec.y(), dragVec.x()) - atan2(m_previousDrag.y(), m_previousDrag.x());
-                double cosTangeant = cos(angleTangeant);
-                double sinTangeant = sin(angleTangeant);
-                newTangeant = QPointF(
-                                cosTangeant * dragVec.x() - sinTangeant * dragVec.y(),
-                                sinTangeant * dragVec.x() + cosTangeant * dragVec.y() );
+                double angleTangent = angle( dragVec, m_previousDrag);
+                double cosTangent = cos(angleTangent);
+                double sinTangent = sin(angleTangent);
+                newTangent = QPointF(
+                                cosTangent * dragVec.x() - sinTangent * dragVec.y(),
+                                sinTangent * dragVec.x() + cosTangent * dragVec.y() );
             }
-            newTangeant += m_previousTangent;
-            newTangeant *= 0.5 / norm( newTangeant ) ;
+            newTangent /= norm( newTangent ) ;
+            double cosPreviousNewTangent = cos(angle(newTangent,m_previousTangent ));
+            newTangent += m_previousTangent;
+            newTangent *= 0.5 * cosPreviousNewTangent;
+            newTangent += (1.0 - cosPreviousNewTangent ) * dragVec / norm(dragVec);
+            newTangent *= m_smoothness / norm( newTangent ) ;
             double normVec = 0.5 * norm(dragVec);
-//             if(normVec < 1.0) normVec = 0.0;
-//             kDebug() << m_previousPaintInformation.pos << (m_previousPaintInformation.pos + m_previousTangent* normVec) << info.pos << (info.pos - newTangeant * normVec) << endl;
             paintBezierCurve(m_previousPaintInformation,
                             m_previousPaintInformation.pos + m_previousTangent * normVec,
-                            info.pos - newTangeant * normVec,
+                            info.pos - newTangent * normVec,
                             info);
-            m_previousTangent = newTangeant;
+            m_previousTangent = newTangent;
             m_previousDrag = dragVec;
             setDirty( m_painter->dirtyRegion() );
         } else {

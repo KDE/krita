@@ -45,7 +45,7 @@ class Exporter:
         dialog = forms.createDialog("Python Imaging Library Export")
         try:
             dialog.setButtons("Ok|Cancel")
-            page = dialog.addPage("File","Export Image to File","filesave")
+            page = dialog.addPage("File","Export Image to File","document-save")
             widget = forms.createFileWidget(page, "kfiledialog:///kritapilexport")
             widget.setMode("Saving")
             widget.setFilter(self.getFilters())

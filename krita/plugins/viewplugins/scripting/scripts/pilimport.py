@@ -47,7 +47,7 @@ class Importer:
             dialog.setFaceType("List")
             dialog.setButtons("Ok|Cancel")
 
-            filepage = dialog.addPage("File","Import Image From File","fileopen")
+            filepage = dialog.addPage("File","Import Image From File","document-open")
             filewidget = forms.createFileWidget(filepage, "kfiledialog:///kritapilimport")
             filewidget.setMode("Opening")
             filewidget.setFilter(self.getFilters())

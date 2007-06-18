@@ -37,14 +37,17 @@ public:
     KoShape *shape;
     KoBookmark *endBookmark;
     bool selection;
+    QString name;
+    BookmarkType type;
 };
 
-KoBookmark::KoBookmark(KoShape *shape)
+KoBookmark::KoBookmark(const QString &name, KoShape *shape)
     : KoInlineObject(false),
     d(new Private(shape))
 {
     d->selection = false;
     d->endBookmark = 0;
+    d->name = name;
 }
 
 KoBookmark::~KoBookmark()
@@ -69,6 +72,32 @@ void KoBookmark::resize(const QTextDocument *document, QTextInlineObject object,
 
 void KoBookmark::paint (QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, QTextInlineObject , int , const QTextCharFormat &) {
     // nothing to paint.
+}
+
+void KoBookmark::setName(const QString &name)
+{
+    d->name = name;
+    if (d->selection)
+        d->endBookmark->setName(name);
+}
+
+QString KoBookmark::name() const
+{
+    return d->name;
+}
+
+void KoBookmark::setType(BookmarkType type)
+{
+    if (type == SinglePosition) {
+        d->selection = false;
+        d->endBookmark = 0;
+    }
+    d->type = type;
+}
+
+KoBookmark::BookmarkType KoBookmark::type()
+{
+    return d->type;
 }
 
 void KoBookmark::setEndBookmark(KoBookmark *bookmark) {

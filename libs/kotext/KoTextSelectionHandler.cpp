@@ -318,8 +318,8 @@ bool KoTextSelectionHandler::insertIndexMarker() {
     return true;
 }
 
-KoBookmark *KoTextSelectionHandler::addBookmark(KoShape *shape) {
-    KoBookmark *bookmark = new KoBookmark(shape);
+void KoTextSelectionHandler::addBookmark(const QString &name, KoShape *shape) {
+    KoBookmark *bookmark = new KoBookmark(name, shape);
     int startPos = -1, endPos = -1, caretPos;
 
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
@@ -331,11 +331,15 @@ KoBookmark *KoTextSelectionHandler::addBookmark(KoShape *shape) {
         caretPos = d->caret->position();
 
         d->caret->setPosition(endPos);
-        KoBookmark *endBookmark = new KoBookmark(shape);
+        KoBookmark *endBookmark = new KoBookmark(name, shape);
+        bookmark->setType(KoBookmark::StartBookmark);
+        endBookmark->setType(KoBookmark::EndBookmark);
         layout->inlineObjectTextManager()->insertInlineObject(*d->caret, endBookmark);
         bookmark->setEndBookmark(endBookmark);
         d->caret->setPosition(startPos);
     }
+    else
+        bookmark->setType(KoBookmark::SinglePosition);
     // TODO the macro & undo things
     emit startMacro(i18n("Add Bookmark"));
     layout->inlineObjectTextManager()->insertInlineObject(*d->caret, bookmark);
@@ -351,17 +355,48 @@ KoBookmark *KoTextSelectionHandler::addBookmark(KoShape *shape) {
         d->caret->setPosition(startPos);
         d->caret->setPosition(endPos, QTextCursor::KeepAnchor);
     }
-    return bookmark;
 }
 
-bool KoTextSelectionHandler::selectBookmark(KoBookmark *bookmark) {
-    if (bookmark->hasSelection()) {
-        d->caret->setPosition(bookmark->position());
-        d->caret->setPosition(bookmark->endBookmark()->position() + 1, QTextCursor::KeepAnchor);
-        return true;
+bool KoTextSelectionHandler::deleteInlineObjects(bool backward) {
+    QTextCursor cursor(*d->caret);
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
+    KoInlineTextObjectManager *manager = layout->inlineObjectTextManager();
+    KoInlineObject *object;
+    bool found = false;
+
+    if (d->caret->hasSelection()) {
+        QString selected = cursor.selectedText();
+        cursor.setPosition(cursor.selectionStart() + 1);
+        int position = cursor.position();
+        int counter = 0;
+        const QChar *data = selected.constData();
+        for (int i = 0; i < selected.length(); i++) {
+            if (data->unicode() == 0xFFFC) {
+                found = true;
+                cursor.setPosition(position);
+                object = manager->inlineTextObject(cursor);
+                
+                if (object)
+                    manager->removeInlineObject(cursor);
+            }
+            // if there is an inline object, the InlineTextObjectManager will also delete the char
+            // so only need to update position if inline object not found
+            else
+                position++;
+            data++;
+        }
     }
-    d->caret->setPosition(bookmark->position() + 1);
-    return false;
+    else {
+        if (!backward)
+            cursor.movePosition(QTextCursor::Right);
+        object = manager->inlineTextObject(cursor);
+
+        if (object) {
+            manager->removeInlineObject(cursor);
+            found = true;
+        }
+    }
+    return found;
 }
 
 void KoTextSelectionHandler::setShape(KoShape *shape) {

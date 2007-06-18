@@ -28,8 +28,14 @@ class KoShape;
 class KOTEXT_EXPORT KoBookmark : public KoInlineObject
 {
 public:
+    enum BookmarkType {
+        SinglePosition,
+        StartBookmark,
+        EndBookmark
+    };
+
     /// constructor
-    KoBookmark(KoShape *s);
+    KoBookmark(const QString &name, KoShape *s);
     virtual ~KoBookmark();
 
     /// reimplemented from super
@@ -42,11 +48,16 @@ public:
     virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
            const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
+    void setName(const QString &name);
+    QString name() const;
+    void setType(BookmarkType type);
+    BookmarkType type();
     void setEndBookmark(KoBookmark *bookmark);
     KoBookmark *endBookmark();
     KoShape *shape();
     int position();
     bool hasSelection();
+
 private:
     class Private;
     Private *const d;

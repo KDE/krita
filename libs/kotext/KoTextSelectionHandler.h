@@ -53,9 +53,9 @@ public:
     bool insertIndexMarker();
 
     /// add a bookmark on current cursor location or current selection
-    KoBookmark *addBookmark(KoShape *shape);
-    /// select previousle bookmarked cursor location or selection
-    bool selectBookmark(KoBookmark *bookmark);
+    void addBookmark(const QString &name, KoShape *shape);
+    /// delete all inline objects in current cursor position or selection
+    bool deleteInlineObjects(bool backward = false);
 
     /// reimplemented from KoToolSelection
     virtual bool hasSelection();

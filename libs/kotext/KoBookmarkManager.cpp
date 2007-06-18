@@ -53,6 +53,7 @@ void KoBookmarkManager::rename(const QString &oldName, const QString &newName)
     while (i != d->bookmarkHash.end()) {
         if (i.key() == oldName) {
             KoBookmark *bookmark = d->bookmarkHash.take(i.key());
+            bookmark->setName(newName);
             d->bookmarkHash.insert(newName, bookmark);
             int listPos = d->bookmarkNameList.indexOf(oldName);
             d->bookmarkNameList.replace(listPos, newName);

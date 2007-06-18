@@ -77,6 +77,16 @@ public:
     void insertInlineObject(QTextCursor &cursor, KoInlineObject *object);
 
     /**
+     * Remove an inline object from this manager (as well as the document).
+     * This method will also remove the placeholder for the inline object.
+     * @param cursor the cursor which indicated the document and the position in that document
+     *      where the inline object will be deleted
+     * @return returns true if the inline object in the cursor position has been successfully
+     *      deleted
+     */
+    bool removeInlineObject(QTextCursor &cursor);
+
+    /**
      * Set a property that may have changed which will be forwarded to all registered textObjects.
      * If the key has changed then all registered InlineObject instances that have stated to want
      * updates will get called with the change.

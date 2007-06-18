@@ -230,11 +230,11 @@ void Viewport::resetLayout()
     // Determine the area we have to show
     QRect viewRect( m_documentOffset, size() );
 
-    int viewH = viewRect.height();
-    int viewW = viewRect.width();
+    const int viewH = viewRect.height();
+    const int viewW = viewRect.width();
 
-    int docH = m_documentSize.height();
-    int docW = m_documentSize.width();
+    const int docH = m_documentSize.height();
+    const int docW = m_documentSize.width();
 
     int moveX = 0;
     int moveY = 0;
@@ -303,7 +303,6 @@ void Viewport::resetLayout()
 
     }
     if( m_parent->canvasMode() == KoCanvasController::AlignTop ) {
-        resizeH -= moveY;
         moveY = 0;
     }
     if (m_canvas) {

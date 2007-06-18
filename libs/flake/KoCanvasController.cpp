@@ -471,9 +471,6 @@ void KoCanvasController::setPreferredCenter( const QPoint &viewPoint )
     recenterPreferred();
 }
 
-// XXX: Apparently events are not propagated to the viewport widget by
-// QAbstractScrollArea
-
 void KoCanvasController::paintEvent( QPaintEvent * event )
 {
     QPainter gc( viewport() );

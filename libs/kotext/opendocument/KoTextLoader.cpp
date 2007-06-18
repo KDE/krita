@@ -578,6 +578,7 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
         if( ! listStyle->hasPropertiesForLevel(level) ) { // set default style
             KoListLevelProperties props;
             props.setStyle(KoListStyle::DecimalItem);
+            props.setListItemSuffix(".");
             props.setLevel(0);
             listStyle->setLevel(props);
         }

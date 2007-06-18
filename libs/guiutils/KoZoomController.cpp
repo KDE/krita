@@ -151,9 +151,12 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
     // Tell the canvasController that the zoom has changed
     // Actually canvasController doesn't know about zoom, but the document in pixels
     // has change as a result of the zoom change
-    d->canvasController->setDocumentSize(
-            QSize( int(0.5 + d->zoomHandler->documentToViewX(d->documentSize.width())),
-                   int(0.5 + d->zoomHandler->documentToViewY(d->documentSize.height())) ) );
+    if(! d->documentSize.isValid())
+        kWarning(30004) << "Setting zoom while there is no document size set, this will fail\n";
+    else if(d->pageSize.width() > d->documentSize.width() || d->pageSize.height() > d->documentSize.height())
+        kWarning(30004) << "ZoomController; Your page size is larger than your document size (" << 
+            d->pageSize << " > " << d->documentSize << ")\n";
+    d->canvasController->setDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize() );
 
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();

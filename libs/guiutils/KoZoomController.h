@@ -39,37 +39,24 @@ class QSize;
  * For each KoCanvasController you should have one instance of this class to go with it. This class then creates
  * a KoZoomAction and basically handles all zooming for you.
  *
- * All you have to do is connect to zoomChanged so that you can redraw your canvas.
- * You don't have to concern yourself with fit to width modes or anything.
-*
+ * All you need to do is connect to the setDocumentSize() slot and keep the controller up-to-date
+ * if your on-screen document ever changes (note that this is in document units, so this is a
+ * zoom independent size).
+ * If you choose to have zoom modes of 'page' and 'width' you are required to set the page size
+ * using the setPageSize() method.
+ * Addiotionally you can connect to the zoomChanged() signal if you want to store the latest
+ * zoom level and mode, for example to restore the last used one at next restart.
+ * 
  * The specialAspectMode toggle is only a UI element. It does nothing except emit the
  * aspectModeChanged signal.
  *
- * As documentation follows a description of the internal workflow:
- * # the user changes the slider/combo which causes the zoomAction to fire.
- * This will cause the private slot setZoom(mode, double) to be called which will
- * then cause the controller to calculate the effective zoomlevel. In mode
- * constant the zoomlevel is forwarded, in mode pageWidth this is calculated based
- * on the page size and the canvas size (the latter can be fetched from the
- * canvasController)
- * 
- * # KoView or decendent calls setZoom(double) / setZoomMode(mode)
- * Mostly used just one time for the initialisation.
- * uses the same code as the previous case to determine the effective zoomlevel.
- * Will set the effective zoom on the CanvasController.
- * 
- * # The user uses the zoomTool to zoom to a specific rect.
- * The zoom tool acts on the CanvasController to adjust the zoom level.
- * The canvasController emits the a request to alter zoom (as a factor of current zoom)
- * which the zoomController then acts upon and emits for the application to persist.  It
- * will alter the the mode to percent based.
- *
-*/
+ */
 class KOGUIUTILS_EXPORT KoZoomController : public QObject {
 Q_OBJECT
 public:
     /**
-    * Constructor. Create oner per canvasController.  The zoomAction is created in the constructor as a member.
+    * Constructor. Create one per canvasController.  The zoomAction is created in the constructor and will
+    * be available to the passed actionCollection for usage by XMLGui.
     * @param controller the canvasController
     * @param zoomHandler the zoom handler (viewconverter with setter methods)
     * @param actionCollection the action collection where the KoZoomAction is added to
@@ -88,6 +75,12 @@ public:
      * @param mode the new mode that will be used to auto-calculate a new zoom-level if needed.
      */
     void setZoomMode(KoZoomMode::Mode mode);
+
+    /**
+     * Set the zoom and the zoom mode for this zoom Controller.  Typically for use just after construction
+     * to restore the persistent data.
+     */
+    void setZoom(KoZoomMode::Mode mode, double zoom);
 
 public slots:
     /**
@@ -125,14 +118,11 @@ signals:
      */
     void aspectModeChanged (bool aspectModeActivated);
 
-
 private:
     Q_PRIVATE_SLOT(d, void setAvailableSize())
     Q_PRIVATE_SLOT(d, void requestZoomBy(const double))
     Q_PRIVATE_SLOT(d, void setZoom(KoZoomMode::Mode, double))
     Q_DISABLE_COPY( KoZoomController )
-
-    void setZoom(KoZoomMode::Mode mode, double zoom);
 
     class Private;
     Private * const d;

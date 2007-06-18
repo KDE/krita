@@ -78,22 +78,7 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bo
 
     connect( this, SIGNAL( triggered( const QString& ) ), SLOT( triggered( const QString& ) ) );
 }
-/*
-void KoZoomAction::setZoom( const QString& text )
-{
-    bool ok = false;
-    double zoom = 0;
-    QRegExp regexp( ".*(\\d+).*" ); // "Captured" non-empty sequence of digits
-    int pos = regexp.indexIn( text );
 
-    if( pos > -1 )
-    {
-        zoom = regexp.cap( 1 ).toDouble( &ok );
-    }
-
-    setZoom(zoom/100.0);
-}
-*/
 void KoZoomAction::setZoom( double zoom )
 {
     regenerateItems( zoom, true );

@@ -55,7 +55,7 @@ public:
      */
     virtual QWidget* createWidget(QWidget* parent);
 
-public Q_SLOTS:
+public slots:
 
   /**
    * Sets the zoom. If it's not yet on the list of zoom values, it will be inserted
@@ -89,7 +89,7 @@ public Q_SLOTS:
    */
   void setEffectiveZoom(double zoom);
 
-protected Q_SLOTS:
+protected slots:
 
   void triggered( const QString& text );
   void sliderValueChanged(int value);
@@ -97,7 +97,7 @@ protected Q_SLOTS:
   void zoomModeButtonClicked(int id);
   void updateWidgets(KoZoomMode::Mode mode, double zoom);
 
-Q_SIGNALS:
+signals:
 
   /**
    * Signal zoomChanged is triggered when user changes the zoom value, either by

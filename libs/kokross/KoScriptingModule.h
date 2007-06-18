@@ -29,9 +29,12 @@
 #define KOKROSS_EXPORT KDE_EXPORT
 
 /**
- * The KoScriptingModule provides the base class for Kross
- * module functionality for KOffice applications.
- */
+* The KoScriptingModule provides the base class for Kross
+* module functionality for KOffice applications.
+*
+* Each KOffice-application does provide an own implementation for
+* this one to extend those module with additional own functionality.
+*/
 class KOKROSS_EXPORT KoScriptingModule : public QObject
 {
         Q_OBJECT

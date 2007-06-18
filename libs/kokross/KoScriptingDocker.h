@@ -50,7 +50,7 @@ class KOKROSS_EXPORT KoScriptingDockerFactory : public KoDockFactory
         virtual ~KoScriptingDockerFactory();
 
         /**
-        * \return the id the docker has.
+        * \return the id the docker has. This will be always "Scripting".
         */
         virtual QString id() const;
 
@@ -65,7 +65,9 @@ class KOKROSS_EXPORT KoScriptingDockerFactory : public KoDockFactory
         virtual QDockWidget* createDockWidget();
 
     private:
+        /// \internal d-pointer class.
         class Private;
+        /// \internal d-pointer instance.
         Private* const d;
 };
 
@@ -93,12 +95,31 @@ class KOKROSS_EXPORT KoScriptingDocker : public QDockWidget
         virtual ~KoScriptingDocker();
 
     protected Q_SLOTS:
+
+        /**
+        * This slow got called if the "Script Manager" toolbar-button
+        * got activated.
+        */
         void slotShowScriptManager();
+
+        /**
+        * This slot got called if the enabled-state of the run or stop
+        * actions the used \a Kross::ActionCollectionView provides us
+        * changed.
+        */
         void slotEnabledChanged(const QString&);
+
+        /**
+        * This slot got called on doubleclick on the used
+        * \a Kross::ActionCollectionView instance and executes the
+        * selected action.
+        */
         void slotDoubleClicked();
 
     private:
+        /// \internal d-pointer class.
         class Private;
+        /// \internal d-pointer instance.
         Private* const d;
 };
 

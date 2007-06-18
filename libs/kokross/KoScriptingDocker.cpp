@@ -42,9 +42,11 @@
  * KoScriptingDockerFactory
  */
 
+/// \internal d-pointer class.
 class KoScriptingDockerFactory::Private
 {
     public:
+        /// The parent QWidget instance.
         QPointer<QWidget> parent;
 };
 
@@ -81,10 +83,13 @@ QDockWidget* KoScriptingDockerFactory::createDockWidget()
  * KoScriptingDocker
  */
 
+/// \internal d-pointer class.
 class KoScriptingDocker::Private
 {
     public:
+        /// The view we are using to display the collections and there actions.
         Kross::ActionCollectionView* view;
+        /// The map of actions we are using to display toolbar-buttons like "run" and "stop".
         QMap<QString, QAction* > actions;
 };
 
@@ -162,8 +167,7 @@ void KoScriptingDocker::slotEnabledChanged(const QString& actionname)
 
 void KoScriptingDocker::slotDoubleClicked()
 {
-    //TODO why does this not got called since 4.3?
-    kDebug()<<"KoScriptingDocker::slotDoubleClicked()"<<endl;
+    //kDebug()<<"KoScriptingDocker::slotDoubleClicked()"<<endl;
     d->view->slotRun();
 }
 

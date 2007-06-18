@@ -33,19 +33,12 @@
 #include <kmessagebox.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
-// #include <kmimetype.h>
-// #include <kmessagebox.h>
-// #include <kurl.h>
 #include <kdebug.h>
 // koffice
 #include <KoMainWindow.h>
 #include <KoScriptingDocker.h>
-//#include <KoApplicationAdaptor.h>
-//#include <KoDocumentAdaptor.h>
-//#include <KoView.h>
 #include <kross/core/manager.h>
 #include <kross/core/interpreter.h>
-//#include <kross/core/model.h>
 #include <kross/core/actioncollection.h>
 #include <kross/ui/view.h>
 
@@ -53,18 +46,34 @@
 class KoScriptingPart::Private
 {
     public:
-        KoScriptingModule* module;
+
+        /**
+        * The \a KoScriptingModule instance that provides the base class for
+        * Kross module functionality for KOffice applications.
+        */
+        KoScriptingModule* const module;
+
+        /**
+        * The \a KActionMenu instance that provides a menu of all enabled
+        * collections and there actions as tree.
+        */
         KActionMenu* scriptsmenu;
+
+        /**
+        * The list of \a Kross::Action instances this \a KoScriptingPart instance
+        * owns. Each action is executed within a specific part instance where
+        * each part has exactly one \a KoView instance. That way we are able to bind
+        * a script explicit to a specific view.
+        */
         QList< Kross::Action* > actions;
+
+        explicit Private(KoScriptingModule* const m) : module(m) { Q_ASSERT(module); }
 };
 
-KoScriptingPart::KoScriptingPart(KoScriptingModule* module, const QStringList&)
-    : KParts::Plugin(module)
-    , d(new Private())
+KoScriptingPart::KoScriptingPart(KoScriptingModule* const module, const QStringList&)
+    : KParts::Plugin()
+    , d(new Private(module))
 {
-    d->module = module;
-    Q_ASSERT(d->module);
-
     KAction* execaction  = new KAction(i18n("Execute Script File..."), this);
     actionCollection()->addAction("executescriptfile", execaction);
     connect(execaction, SIGNAL(triggered(bool)), this, SLOT(slotShowExecuteScriptFile()));
@@ -87,12 +96,12 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule* module, const QStringList&)
     }
 
     KoView* view = d->module->view();
-    Q_ASSERT( view );
-    KoMainWindow* mainwindow = view->shell();
-    Q_ASSERT( mainwindow );
-    KoScriptingDockerFactory factory( mainwindow );
-    QDockWidget* docker = mainwindow->createDockWidget(&factory);
-    Q_UNUSED(docker);
+    KoMainWindow* mainwindow = view ? view->shell() : 0;
+    if( mainwindow ) {
+        KoScriptingDockerFactory factory( mainwindow );
+        QDockWidget* docker = mainwindow->createDockWidget(&factory);
+        Q_UNUSED(docker);
+    }
 }
 
 KoScriptingPart::~KoScriptingPart()

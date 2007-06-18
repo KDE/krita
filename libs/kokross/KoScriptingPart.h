@@ -21,12 +21,8 @@
 #define KOKROSS_KOSCRIPTINGPART_H
 
 #include <QObject>
-//#include <QWidget>
 #include <QStringList>
-//#include <QPointer>
-//#include <KoView.h>
-//#include <KoDocument.h>
-//#include <kross/ui/guiclient.h>
+
 #include <kparts/plugin.h>
 
 class KDialog;
@@ -53,7 +49,7 @@ class KOKROSS_EXPORT KoScriptingPart : public KParts::Plugin
         * \param parent The parent QObject.
         * \param args the optional list of arguments.
         */
-        explicit KoScriptingPart(KoScriptingModule* module, const QStringList& args);
+        KoScriptingPart(KoScriptingModule* const module, const QStringList& args);
 
         /**
         * Destructor.
@@ -66,7 +62,17 @@ class KOKROSS_EXPORT KoScriptingPart : public KParts::Plugin
         */
         KoScriptingModule* module() const;
 
+        /**
+        * Show the "Execute Script File" filedialog that allows the user to pick
+        * a scripting file and execute it.
+        * \return true if the user did choose a file and the file got executed successful.
+        */
         static bool showExecuteScriptFile();
+
+        /**
+        * \return a \a KDialog instance that can be used to show the "Script Manager" dialog
+        * that allows to manage the collection of all scripts the application knows about.
+        */
         static KDialog* showScriptManager();
 
     protected Q_SLOTS:

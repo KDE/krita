@@ -25,7 +25,6 @@
 #include <kross/core/action.h>
 #include <kross/core/actioncollection.h>
 #include <kross/ui/model.h>
-#include <kross/ui/guiclient.h>
 #include <kross/ui/view.h>
 
 #include <QtCore/QFileInfo>

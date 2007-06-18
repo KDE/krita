@@ -23,8 +23,6 @@
 #include <QDockWidget>
 #include <KoDockFactory.h>
 
-class KoScriptingGuiClient;
-
 #define KOKROSS_EXPORT KDE_EXPORT
 
 /**
@@ -39,10 +37,8 @@ class KOKROSS_EXPORT KoScriptingDockerFactory : public KoDockFactory
         * Constructor.
         *
         * \param parent The parent QWidget of the \a KoScriptingDocker .
-        * \param guiclient The \a KoScriptingGuiClient instance the
-        * docker belongs to.
         */
-        KoScriptingDockerFactory(QWidget* parent);
+        explicit KoScriptingDockerFactory(QWidget* parent);
 
         /**
         * Destructor.
@@ -84,10 +80,8 @@ class KOKROSS_EXPORT KoScriptingDocker : public QDockWidget
         * Constructor.
         *
         * \param parent The parent QWidget of the \a KoScriptingDocker .
-        * \param guiclient The \a KoScriptingGuiClient instance this
-        * docker belongs to.
         */
-        KoScriptingDocker(QWidget* parent);
+        explicit KoScriptingDocker(QWidget* parent);
 
         /**
         * Destructor.

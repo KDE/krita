@@ -40,7 +40,6 @@
 // kdelibs/kross
 #include <kross/core/manager.h>
 #include <kross/ui/model.h>
-//#include <kross/ui/guiclient.h>
 #include <kross/core/action.h>
 #include <kross/core/actioncollection.h>
 

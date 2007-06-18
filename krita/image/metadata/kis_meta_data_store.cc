@@ -79,7 +79,7 @@ bool Store::empty() const
 bool Store::containsEntry(QString uri, QString entryName) const
 {
     const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
-    return d->entries.contains(schema->prefix() + ":" + entryName);
+    return d->entries.contains(schema->generateQualifiedName(entryName));
 }
 
 Entry& Store::getEntry(QString entryKey)
@@ -90,7 +90,7 @@ Entry& Store::getEntry(QString entryKey)
 Entry& Store::getEntry(QString uri, QString entryName)
 {
     const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
-    return d->entries[schema->prefix() + ":" + entryName];
+    return d->entries[schema->generateQualifiedName( entryName )];
 }
 
 const Value& Store::getValue(QString uri, QString entryName)

@@ -78,7 +78,7 @@ void Entry::setSchema(const KisMetaData::Schema* schema)
 
 QString Entry::qualifiedName() const
 {
-    return d->schema->prefix() + ":" + d->name;
+    return d->schema->generateQualifiedName( d->name);
 }
 
 const Value& Entry::value() const

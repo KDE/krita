@@ -42,6 +42,7 @@ namespace KisMetaData {
         public:
             QString uri() const;
             QString prefix() const;
+            QString generateQualifiedName(QString) const;
         private:
             Private* const d;
     };

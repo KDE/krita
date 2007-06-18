@@ -54,6 +54,11 @@ QString Schema::prefix() const
     return d->prefix;
 }
 
+QString Schema::generateQualifiedName(QString name) const
+{
+    return prefix() + ":" + name;
+}
+
 QDebug operator<<(QDebug dbg, const KisMetaData::Schema &c)
 {
     dbg.nospace() << "Uri = " << c.uri() << " Prefix = " << c.prefix();

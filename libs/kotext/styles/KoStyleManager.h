@@ -125,6 +125,12 @@ public:
     /// return all the paragraphStyles registered.
     QList<KoParagraphStyle*> paragraphStyles() const;
 
+signals:
+    void styleAdded(KoParagraphStyle*);
+    void styleAdded(KoCharacterStyle*);
+    void styleRemoved(KoParagraphStyle*);
+    void styleRemoved(KoCharacterStyle*);
+
 public slots:
     /**
      * Slot that should be called whenever a style is changed. This will update

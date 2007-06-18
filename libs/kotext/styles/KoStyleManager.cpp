@@ -69,6 +69,8 @@ void KoStyleManager::add(KoCharacterStyle *style) {
         return;
     style->setStyleId( d->s_stylesNumber++ );
     d->charStyles.append(style);
+
+    emit styleAdded(style);
 }
 
 void KoStyleManager::add(KoParagraphStyle *style) {
@@ -81,14 +83,18 @@ void KoStyleManager::add(KoParagraphStyle *style) {
         if(style->characterStyle()->name().isEmpty())
             style->characterStyle()->setName(style->name());
     }
+
+    emit styleAdded(style);
 }
 
 void KoStyleManager::remove(KoCharacterStyle *style) {
-    d->charStyles.removeAll(style);
+    if(d->charStyles.removeAll(style))
+        emit styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoParagraphStyle *style) {
-    d->paragStyles.removeAll(style);
+    if(d->paragStyles.removeAll(style))
+        emit styleRemoved(style);
 }
 
 void KoStyleManager::remove(ChangeFollower *cf) {

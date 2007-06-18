@@ -72,8 +72,8 @@ class KoScriptManagerAddTypeWidget : public QWidget
     public Q_SLOTS:
         void slotUpdate();
     private:
-        KoScriptManagerAddWizard* m_wizard;
-        QRadioButton *m_scriptCheckbox, *m_collectionCheckbox, *m_installCheckBox, *m_onlineCheckbox;
+        class Private;
+        Private* const d;
 };
 
 /**

@@ -51,7 +51,7 @@ class KoScriptingPart::Private
         * The \a KoScriptingModule instance that provides the base class for
         * Kross module functionality for KOffice applications.
         */
-        KoScriptingModule* const module;
+        QPointer<KoScriptingModule> module;
 
         /**
         * The \a KActionMenu instance that provides a menu of all enabled
@@ -66,14 +66,15 @@ class KoScriptingPart::Private
         * a script explicit to a specific view.
         */
         QList< Kross::Action* > actions;
-
-        explicit Private(KoScriptingModule* const m) : module(m) { Q_ASSERT(module); }
 };
 
 KoScriptingPart::KoScriptingPart(KoScriptingModule* const module, const QStringList&)
     : KParts::Plugin()
-    , d(new Private(module))
+    , d(new Private())
 {
+    d->module = module;
+    Q_ASSERT(d->module);
+
     KAction* execaction  = new KAction(i18n("Execute Script File..."), this);
     actionCollection()->addAction("executescriptfile", execaction);
     connect(execaction, SIGNAL(triggered(bool)), this, SLOT(slotShowExecuteScriptFile()));
@@ -87,7 +88,7 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule* const module, const QStringL
     connect(manageraction, SIGNAL(triggered(bool)), this, SLOT(slotShowScriptManager()));
 
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(slotStarted(Kross::Action*)));
-    connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
+    //connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
 
     if( Kross::Manager::self().actionCollection()->actions().size() <= 0) {
         QByteArray partname = componentData().componentName(); //KApplication::kApplication()->objectName()
@@ -194,9 +195,9 @@ void KoScriptingPart::slotStarted(Kross::Action* action)
 {
     kDebug(32010) << "KoScriptingPart::slotStarted action=" << action->objectName() << endl;
     KoMainWindow* mainwin = dynamic_cast< KoMainWindow* >( qApp->activeWindow() );
-    KoView* view = d->module->view();
+    KoView* view = d->module ? d->module->view() : 0;
     if( view && mainwin && view->shell() == mainwin && view == mainwin->rootView() ) {
-        action->addObject(d->module);
+        action->addObject( d->module );
         d->actions.append( action );
         connect(action, SIGNAL(finalized(Kross::Action*)), this, SLOT(slotFinalized(Kross::Action*)));
     }
@@ -205,16 +206,6 @@ void KoScriptingPart::slotStarted(Kross::Action* action)
 void KoScriptingPart::slotFinished(Kross::Action* action)
 {
     kDebug(32010) << "KoScriptingPart::slotFinished action=" << action->objectName() << endl;
-    KoView* view = d->module->view();
-    KoMainWindow* mainwindow = view->shell();
-    if( view && mainwindow && view == mainwindow->rootView() ) {
-        if( action->hadError() ) {
-            if( action->errorTrace().isNull() )
-                KMessageBox::error(0, action->errorMessage());
-            else
-                KMessageBox::detailedError(0, action->errorMessage(), action->errorTrace());
-        }
-    }
     //d->view->document()->setModified(true);
     //QApplication::restoreOverrideCursor();
 }
@@ -222,7 +213,19 @@ void KoScriptingPart::slotFinished(Kross::Action* action)
 void KoScriptingPart::slotFinalized(Kross::Action* action)
 {
     kDebug(32010) << "KoScriptingPart::slotFinalized action=" << action->objectName() << endl;
+    disconnect(action, SIGNAL(finalized(Kross::Action*)), this, SLOT(slotFinalized(Kross::Action*)));
     d->actions.removeAll(action);
+    if( d->module && d->module == action->object( d->module->objectName() ) ) {
+        KoView* view = d->module ? d->module->view() : 0;
+        if( view && view->shell() /* && view == view->shell()->rootView() */ ) {
+            if( action->hadError() ) {
+                if( action->errorTrace().isNull() )
+                    KMessageBox::error(view, action->errorMessage());
+                else
+                    KMessageBox::detailedError(view, action->errorMessage(), action->errorTrace());
+            }
+        }
+    }
 }
 
 #include "KoScriptingPart.moc"

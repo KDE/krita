@@ -52,7 +52,6 @@ KoScriptingModule::KoScriptingModule(QObject* parent, const QString& name)
     , d(new Private())
 {
     setObjectName(name);
-
     d->view = dynamic_cast< KoView* >(parent);
     //if( d->view ) KoMainWindow* mainwindow = d->view->shell();
 }

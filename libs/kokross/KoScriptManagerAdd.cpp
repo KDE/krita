@@ -40,9 +40,18 @@
  * KoScriptManagerAddTypeWidget
  */
 
-KoScriptManagerAddTypeWidget::KoScriptManagerAddTypeWidget(KoScriptManagerAddWizard* wizard)
-    : QWidget(wizard), m_wizard(wizard)
+/// \internal d-pointer class.
+class KoScriptManagerAddTypeWidget::Private
 {
+    public:
+        KoScriptManagerAddWizard* wizard;
+        QRadioButton *scriptCheckbox, *collectionCheckbox, *installCheckBox, *onlineCheckbox;
+};
+
+KoScriptManagerAddTypeWidget::KoScriptManagerAddTypeWidget(KoScriptManagerAddWizard* wizard)
+    : QWidget(wizard), d(new Private())
+{
+    d->wizard = wizard;
     setObjectName("ScriptManagerAddTypeWidget");
     QVBoxLayout* layout = new QVBoxLayout(this);
     setLayout(layout);
@@ -51,36 +60,37 @@ KoScriptManagerAddTypeWidget::KoScriptManagerAddTypeWidget(KoScriptManagerAddWiz
     layout->addWidget(label);
     layout->addSpacing(10);
 
-    m_scriptCheckbox = new QRadioButton(i18n("Add script file"), this);
-    m_scriptCheckbox->setChecked(true);
-    connect(m_scriptCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotUpdate()));
-    layout->addWidget(m_scriptCheckbox);
+    d->scriptCheckbox = new QRadioButton(i18n("Add script file"), this);
+    d->scriptCheckbox->setChecked(true);
+    connect(d->scriptCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotUpdate()));
+    layout->addWidget(d->scriptCheckbox);
 
-    m_collectionCheckbox = new QRadioButton(i18n("Add collection folder"), this);
-    layout->addWidget(m_collectionCheckbox);
+    d->collectionCheckbox = new QRadioButton(i18n("Add collection folder"), this);
+    layout->addWidget(d->collectionCheckbox);
 
-    m_installCheckBox = new QRadioButton(i18n("Install script package file"), this);
-    m_installCheckBox->setEnabled(false);
-    layout->addWidget(m_installCheckBox);
+    d->installCheckBox = new QRadioButton(i18n("Install script package file"), this);
+    d->installCheckBox->setEnabled(false);
+    layout->addWidget(d->installCheckBox);
 
-    m_onlineCheckbox = new QRadioButton(i18n("Install online script package"), this);
-    m_onlineCheckbox->setEnabled(false);
-    layout->addWidget(m_onlineCheckbox);
+    d->onlineCheckbox = new QRadioButton(i18n("Install online script package"), this);
+    d->onlineCheckbox->setEnabled(false);
+    layout->addWidget(d->onlineCheckbox);
 
     layout->addStretch(1);
 }
 
 KoScriptManagerAddTypeWidget::~KoScriptManagerAddTypeWidget()
 {
+    delete d;
 }
 
 void KoScriptManagerAddTypeWidget::slotUpdate()
 {
-    m_wizard->setAppropriate(m_wizard->m_fileItem, m_scriptCheckbox->isChecked());
-    m_wizard->setAppropriate(m_wizard->m_scriptItem, m_scriptCheckbox->isChecked());
-    m_wizard->setAppropriate(m_wizard->m_collectionItem, m_collectionCheckbox->isChecked());
-    //m_installCheckBox->isChecked()
-    //m_onlineCheckbox->isChecked()
+    d->wizard->setAppropriate(d->wizard->m_fileItem, d->scriptCheckbox->isChecked());
+    d->wizard->setAppropriate(d->wizard->m_scriptItem, d->scriptCheckbox->isChecked());
+    d->wizard->setAppropriate(d->wizard->m_collectionItem, d->collectionCheckbox->isChecked());
+    //d->installCheckBox->isChecked()
+    //d->onlineCheckbox->isChecked()
 }
 
 /********************************************************************

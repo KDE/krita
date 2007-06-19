@@ -60,7 +60,7 @@ KisCloneLayer::KisCloneLayer(const KisCloneLayer& rhs)
 {
     m_d = new Private();
     // XXX: Yah, booh!
-    m_d->projection = const_cast<KisPaintDevice*>( rhs.projection().data() );
+    m_d->projection = new KisPaintDevice( *rhs.projection().data() );
     m_d->copyFrom = rhs.copyFrom();
     m_d->type = rhs.copyType();
     m_d->x = rhs.x();
@@ -112,8 +112,23 @@ KisPaintDeviceSP KisCloneLayer::projection() const
     // if there are no effect masks and x & y are the same, return
     // either the original data or the projection of the original
     // layer.
+    // XXX: if the original is an adjustment layer -- should we copy
+    // the the projection or apply the filter here again? This is
+    // potentially very difficult to do!
+    if ( !hasEffectMasks() && m_d->x == 0 && m_d->y == 0 ) {
+        switch( m_d->type ) {
+        case COPY_PROJECTION:
+            return m_d->copyFrom->projection();
+            break;
+        case COPY_ORIGINAL:
+        default:
+            return m_d->copyFrom->original();
+        }
 
-    // if there are no effect masks but x & y are different, create a
+    }
+
+
+    // XXX: if there are no effect masks but x & y are different, create a
     // kispaintdevice that shares the data manager with the original
     // and set x and y different, return that
 
@@ -209,6 +224,7 @@ void KisCloneLayer::setCopyFrom( KisLayerSP fromLayer, CopyLayerType type )
 {
     m_d->type = type;
     m_d->copyFrom = fromLayer;
+
     setDirty();
 }
 

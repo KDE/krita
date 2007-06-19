@@ -78,30 +78,9 @@ public slots:
     void createTransformationMask();
 
     /**
-     * Create a new mask from the active mask and allow the user to
-     * choose mask type.
-     */
-    void createMaskFromMask();
-
-    /**
-     * Create a mask from the selection. The user can choose whether
-     * he or she wants a union, intersection or the inverse union of
-     * global and local selections and the type of mask that is to be
-     * created.
-     */
-    void maskFromSelection();
-
-    /**
      * Create a new local selection from the active mask.
      */
     void maskToSelection();
-
-    /**
-     * Create a new mask from the active layer. The user can choose
-     * the type of mask and which channel or channels to use from the
-     * active layer.
-     */
-    void maskFromLayer();
 
     /**
      * Create a new layer from the current mask. The user can choose
@@ -189,10 +168,7 @@ private:
     KAction *m_createTransparencyMask;
     KAction *m_createFilterMask;
     KAction *m_createTransformationMask;
-    KAction *m_maskFromMask;
-    KAction *m_maskFromSelection;
     KAction *m_maskToSelection;
-    KAction *m_maskFromLayer;
     KAction *m_maskToLayer;
     KAction *m_duplicateMask;
 

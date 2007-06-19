@@ -135,7 +135,6 @@ void KisPaintLayer::updateProjection(const QRect & rc)
     if ( !m_d->paintDevice ) return;
 
     if ( !m_d->projection ) {
-        // Copy of original data
         m_d->projection = new KisPaintDevice( *m_d->paintDevice );
     }
     else {
@@ -143,7 +142,6 @@ void KisPaintLayer::updateProjection(const QRect & rc)
         KisPainter gc( m_d->projection );
         gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
         gc.bitBlt( rc.topLeft(), m_d->paintDevice, rc );
-
     }
 
     applyEffectMasks( m_d->projection, rc );

@@ -107,9 +107,6 @@
         <Action name="create_transparency_mask"/>
         <Action name="create_filter_mask"/>
         <Action name="create_transformation_mask"/>
-    	<Action name="create_mask_from_mask"/>
-	    <Action name="create_mask_from_selection"/>
-        <Action name="create_mask_from_layer"/>
 	<Action name="duplicate_mask"/>
     </Menu>
     <Action name="enable_mask"/>

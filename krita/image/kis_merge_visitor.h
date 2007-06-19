@@ -113,7 +113,7 @@ public:
             // Indirect painting?
             KisPaintDeviceSP tempTarget = layer->temporaryTarget();
             if (tempTarget) {
-                rc = (layer->paintDevice()->extent() | tempTarget->extent()) & m_rc;
+                rc = (layer->projection()->extent() | tempTarget->extent()) & m_rc;
             }
 
             sx = rc.left();
@@ -216,7 +216,7 @@ public:
 
             // If there's a selection, only keep the selected bits
             if (!selection.isNull()) {
-                tmp = new KisPaintDevice(m_projection->colorSpace());
+                tmp = new KisPaintDevice( m_projection->colorSpace() );
 
                 KisPainter gc(tmp);
                 QRect selectedRect = selection->selectedRect();
@@ -297,6 +297,8 @@ public:
 
             layer->updateProjection( m_rc );
             KisPaintDeviceSP dev = layer->projection();
+
+            if ( !dev ) return false;
 
             QRect rc = dev->extent() & m_rc;
 

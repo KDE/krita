@@ -99,6 +99,7 @@ private:
     bool m_showSelection;
     KisFilterConfiguration * m_filterConfig;
     KisSelectionSP m_selection;
+    KisSelectionSP m_selectionProjection;
     KisPaintDeviceSP m_cachedPaintDev;
     QRegion m_dirtyRegion;
 

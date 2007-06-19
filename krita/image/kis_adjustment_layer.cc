@@ -36,6 +36,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
 {
     m_filterConfig = kfc;
     setSelection( selection );
+
     m_cachedPaintDev = new KisPaintDevice( img->colorSpace(), name.toLatin1());
     m_showSelection = true;
     Q_ASSERT(m_cachedPaintDev);
@@ -64,6 +65,7 @@ KisAdjustmentLayer::~KisAdjustmentLayer()
 
 void KisAdjustmentLayer::updateProjection(const QRect& r)
 {
+
 }
 
 KisPaintDeviceSP KisAdjustmentLayer::projection() const

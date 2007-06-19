@@ -45,10 +45,7 @@ KisMaskManager::KisMaskManager( KisView2 * view)
     , m_createTransparencyMask( 0 )
     , m_createFilterMask( 0 )
     , m_createTransformationMask( 0 )
-    , m_maskFromMask( 0 )
-    , m_maskFromSelection( 0 )
     , m_maskToSelection( 0 )
-    , m_maskFromLayer( 0 )
     , m_maskToLayer( 0 )
     , m_duplicateMask( 0 )
     , m_showMask( 0 )
@@ -80,21 +77,9 @@ void KisMaskManager::setup( KActionCollection * actionCollection )
     actionCollection->addAction("create_transformation_mask", m_createTransformationMask );
     connect(m_createTransformationMask, SIGNAL(triggered()), this, SLOT(createTransformationMask()));
 
-    m_maskFromMask = new KAction( i18n( "Mask from Current Mask..." ), this );
-    actionCollection->addAction( "create_mask_from_mask", m_maskFromMask );
-    connect( m_maskFromMask, SIGNAL( triggered() ), this, SLOT( createMaskFromMask() ) );
-
-    m_maskFromSelection  = new KAction(i18n("Mask From Selection..."), this);
-    actionCollection->addAction("create_mask_from_selection", m_maskFromSelection );
-    connect(m_maskFromSelection, SIGNAL(triggered()), this, SLOT(maskFromSelection()));
-
     m_maskToSelection  = new KAction(i18n("Mask To Selection"), this);
     actionCollection->addAction("create_selection_from_mask", m_maskToSelection );
     connect(m_maskToSelection, SIGNAL(triggered()), this, SLOT(maskToSelection()));
-
-    m_maskFromLayer = new KAction( i18n( "Mask from Layer..." ), this );
-    actionCollection->addAction( "create_mask_from_layer", m_maskFromLayer );
-    connect( m_maskFromLayer, SIGNAL( triggered() ), this, SLOT( maskToLayer() ) );
 
     m_maskToLayer = new KAction( i18n( "Create Layer from Mask..." ), this );
     actionCollection->addAction( "create_layer_from_mask", m_maskToLayer );
@@ -242,13 +227,7 @@ void KisMaskManager::createTransformationMask()
     }
 }
 
-void KisMaskManager::createMaskFromMask() {}
-
-void KisMaskManager::maskFromSelection() {}
-
 void KisMaskManager::maskToSelection() {}
-
-void KisMaskManager::maskFromLayer() {}
 
 void KisMaskManager::maskToLayer() {}
 

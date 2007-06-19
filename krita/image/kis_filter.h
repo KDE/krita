@@ -163,7 +163,7 @@ public:
      * Similar to overlapMarginNeeded: some filters will alter a lot of pixels that are
      * near to each other at the same time. So when you changed a single rectangle
      * in a device, the actual rectangle that will feel the influence of this change
-     * might be bigger. Use this function to detirmine that rect.
+     * might be bigger. Use this function to determine that rect.
      * The default implementation makes a guess using overlapMarginNeeded.
       */
     virtual QRect enlargeRect(QRect rect, KisFilterConfiguration* = 0) const;

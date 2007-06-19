@@ -66,7 +66,7 @@ QList<KoID> KisDynamicSensor::sensorsIds()
     return ids;
 }
 
-KisDynamicSensorSpeed::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
+KisDynamicSensorFuzzy::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
 {
     
 }

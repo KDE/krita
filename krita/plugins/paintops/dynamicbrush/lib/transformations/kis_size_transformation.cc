@@ -40,9 +40,8 @@ KisSizeTransformation::~KisSizeTransformation()
 
 void KisSizeTransformation::transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info)
 {
-    dabsrc->resize(
-        CLAMP(m_horizTransfoParameter->parameter(info), m_hmin, m_hmax),
-        CLAMP( m_vertiTransfoParameter->parameter(info), m_vmin, m_vmax) );
+    dabsrc->resize( m_horizTransfoParameter->parameter(info) *(  m_hmax - m_hmin ) + m_hmin,
+        m_vertiTransfoParameter->parameter(info) * ( m_vmax - m_vmin) + m_vmin);
 }
 
 void KisSizeTransformation::transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info)

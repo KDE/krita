@@ -87,6 +87,7 @@ KisDynamicShape* KisBristleShape::clone() const
 
 void KisBristleShape::resize(double xs, double ys)
 {
+    kDebug() << xs << " " << ys << endl;
     m_radius *= (xs + ys) * 0.5;
 }
 

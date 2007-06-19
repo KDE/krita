@@ -43,7 +43,7 @@ class KisDynamicSensorFuzzy : public KisDynamicSensor {
         KisDynamicSensorFuzzy();
         virtual ~KisDynamicSensorFuzzy() { }
         virtual double parameter(const KisPaintInformation& )
-        { return rand(); }
+        { return rand() / (double)RAND_MAX; }
 };
 
 class KisDynamicSensorSpeed : public KisDynamicSensor {

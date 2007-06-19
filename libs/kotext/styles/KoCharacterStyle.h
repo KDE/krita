@@ -61,9 +61,21 @@ public:
 
     /// list of possible line type : no line, single line, double line
     enum LineType {
-        NoLine,
+        NoLineType,
         SingleLine,
         DoubleLine
+    };
+
+    /// list of possible line style. 
+    enum LineStyle {
+        NoLineStyle = Qt::NoPen,
+        SolidLine = Qt::SolidLine,
+        DottedLine = Qt::DotLine,
+        DashLine = Qt::DashLine,
+        DotDashLine = Qt::DashDotLine,
+        DotDotDashLine = Qt::DashDotDotLine,
+        LongDashLine,
+        WaveLine
     };
 
     /// Text transformation
@@ -136,9 +148,9 @@ public:
     void clearForeground ();
 
     /// Apply a font strike out style to this KoCharacterStyle
-    void setStrikeOutStyle (Qt::PenStyle style);
+    void setStrikeOutStyle (LineStyle style);
     /// Get the current font strike out style of this KoCharacterStyle
-    Qt::PenStyle strikeOutStyle () const;
+    LineStyle strikeOutStyle () const;
     /// Apply a font strike out color to this KoCharacterStyle
     void setStrikeOutColor (QColor color);
     /// Get the current font strike out color of this KoCharacterStyle
@@ -149,9 +161,9 @@ public:
     LineType strikeOutType () const;
 
     /// Apply a font underline style to this KoCharacterStyle
-    void setUnderlineStyle (Qt::PenStyle style);
+    void setUnderlineStyle (LineStyle style);
     /// Get the current font underline style of this KoCharacterStyle
-    Qt::PenStyle underlineStyle () const;
+    LineStyle underlineStyle () const;
     /// Apply a font underline color to this KoCharacterStyle
     void setUnderlineColor (QColor color);
     /// Get the current font underline color of this KoCharacterStyle

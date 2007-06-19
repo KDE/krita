@@ -195,10 +195,10 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const {
 
 // OASIS 14.2.29
 static void importOasisLine( const QString& type, const QString& style,
-                             Qt::PenStyle& lineStyle, KoCharacterStyle::LineType& lineType )
+                             KoCharacterStyle::LineStyle& lineStyle, KoCharacterStyle::LineType& lineType )
 {
-    lineStyle = Qt::NoPen;
-    lineType = KoCharacterStyle::NoLine;
+    lineStyle = KoCharacterStyle::NoLineStyle;
+    lineType = KoCharacterStyle::NoLineType;
     
     QString fixedType = type;
     QString fixedStyle = style;
@@ -214,17 +214,19 @@ static void importOasisLine( const QString& type, const QString& style,
     
     //TODO: fix that mess a bit, using custom LineStyle...
     if ( fixedStyle == "solid" )
-        lineStyle = Qt::SolidLine;
+        lineStyle = KoCharacterStyle::SolidLine;
     else if ( fixedStyle == "dotted" )
-        lineStyle = Qt::DotLine;
-    else if ( fixedStyle == "dash" || fixedStyle == "long-dash" ) // not in kotext
-        lineStyle = Qt::DashLine;
+        lineStyle = KoCharacterStyle::DottedLine;
+    else if ( fixedStyle == "dash")
+        lineStyle = KoCharacterStyle::DashLine;
+    else if ( fixedStyle == "long-dash" )
+        lineStyle = KoCharacterStyle::LongDashLine;
     else if ( fixedStyle == "dot-dash" )
-        lineStyle = Qt::DashDotLine;
+        lineStyle = KoCharacterStyle::DotDashLine;
     else if ( fixedStyle == "dot-dot-dash" )
-        lineStyle = Qt::DashDotDotLine;
+        lineStyle = KoCharacterStyle::DotDotDashLine;
     else if ( fixedStyle == "wave" )
-        lineStyle = Qt::CustomDashLine;
+        lineStyle = KoCharacterStyle::WaveLine;
     // TODO bold. But this is another attribute in OASIS (text-underline-width), which makes sense.
     // We should separate them in kotext...
 }
@@ -311,12 +313,12 @@ bool KoCharacterStyle::hasHyphenation() const {
     return d->propertyBoolean(HasHyphenation);
 }
 
-void KoCharacterStyle::setStrikeOutStyle (Qt::PenStyle strikeOut) {
+void KoCharacterStyle::setStrikeOutStyle (KoCharacterStyle::LineStyle strikeOut) {
     d->setProperty(StrikeOutStyle, strikeOut);
 }
 
-Qt::PenStyle KoCharacterStyle::strikeOutStyle () const {
-    return (Qt::PenStyle) d->propertyInt(StrikeOutStyle);
+KoCharacterStyle::LineStyle KoCharacterStyle::strikeOutStyle () const {
+    return (KoCharacterStyle::LineStyle) d->propertyInt(StrikeOutStyle);
 }
 
 void KoCharacterStyle::setStrikeOutType (LineType lineType) {
@@ -336,12 +338,12 @@ QColor KoCharacterStyle::strikeOutColor () const {
 }
 
 
-void KoCharacterStyle::setUnderlineStyle (Qt::PenStyle underline) {
+void KoCharacterStyle::setUnderlineStyle (KoCharacterStyle::LineStyle underline) {
     d->setProperty(UnderlineStyle, underline);
 }
 
-Qt::PenStyle KoCharacterStyle::underlineStyle () const {
-    return (Qt::PenStyle) d->propertyInt(UnderlineStyle);
+KoCharacterStyle::LineStyle KoCharacterStyle::underlineStyle () const {
+    return (KoCharacterStyle::LineStyle) d->propertyInt(UnderlineStyle);
 }
 
 void KoCharacterStyle::setUnderlineType (LineType lineType) {
@@ -486,8 +488,8 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     // Specifies whether text is underlined, and if so, whether a single or double line will be used for underlining.
     if ( styleStack.hasProperty( KoXmlNS::style, "text-underline-type" )
         || styleStack.hasProperty( KoXmlNS::style, "text-underline-style" ) ) { // OASIS 14.4.28
-        Qt::PenStyle underlineStyle = Qt::NoPen;
-        LineType underlineType = NoLine;
+        LineStyle underlineStyle;
+        LineType underlineType;
     
         importOasisLine(styleStack.property( KoXmlNS::style, "text-underline-type" ),
                         styleStack.property( KoXmlNS::style, "text-underline-style" ),
@@ -503,8 +505,8 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     
     
     if (( styleStack.hasProperty( KoXmlNS::style, "text-line-through-type" ) ) ||  ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-style" ))) { // OASIS 14.4.7
-        Qt::PenStyle throughStyle = Qt::NoPen;
-        LineType throughType = NoLine;
+        KoCharacterStyle::LineStyle throughStyle;
+        LineType throughType;
         
         importOasisLine(styleStack.property( KoXmlNS::style, "text-line-through-type" ),
                         styleStack.property( KoXmlNS::style, "text-line-through-style" ),

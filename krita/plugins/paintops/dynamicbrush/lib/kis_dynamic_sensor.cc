@@ -18,6 +18,7 @@
 
 #include "kis_dynamic_sensor.h"
 
+const KoID FuzzyId("fuzzy", i18n("Fuzzy"));
 const KoID SpeedId("speed", i18n("Speed"));
 const KoID TimeId("time", i18n("Time"));
 const KoID DrawingAngleId("drawingangle", i18n("Drawing angle"));
@@ -49,6 +50,9 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
     } else if( id.id() == TimeId.id())
     {
         return new KisDynamicSensorTime();
+    } else if( id.id() == FuzzyId.id())
+    {
+        return new KisDynamicSensorFuzzy();
     }
     
     kDebug() << "Unknown transform parameter : " << id.id() << endl;
@@ -58,8 +62,13 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
 QList<KoID> KisDynamicSensor::sensorsIds()
 {
     QList<KoID> ids;
-    ids << PressureId << XTiltId << YTiltId << SpeedId << DrawingAngleId << TimeId;
+    ids << PressureId << XTiltId << YTiltId << SpeedId << DrawingAngleId << TimeId << FuzzyId;
     return ids;
+}
+
+KisDynamicSensorSpeed::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
+{
+    
 }
 
 KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
@@ -89,7 +98,7 @@ double KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
         m_angle -= 0.01;
     }
     m_angle = modulo(m_angle, 2.0 * M_PI);
-    return m_angle;
+    return m_angle / (2.0 * M_PI);
 }
 
 KisDynamicSensorPressure::KisDynamicSensorPressure() : KisDynamicSensor(PressureId)

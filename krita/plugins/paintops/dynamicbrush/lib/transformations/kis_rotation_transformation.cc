@@ -34,7 +34,7 @@ KisRotationTransformation::~KisRotationTransformation()
 
 void KisRotationTransformation::transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info)
 {
-    dabsrc->rotate(m_transfoParameter->parameter(info));
+    dabsrc->rotate(m_transfoParameter->parameter(info) * 2.0 * M_PI);
 }
 
 void KisRotationTransformation::transformColoring(KisDynamicColoring* , const KisPaintInformation& )

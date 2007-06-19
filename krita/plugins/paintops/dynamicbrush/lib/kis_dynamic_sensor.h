@@ -38,6 +38,14 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicSensor {
         const KoID& m_id;
 };
 
+class KisDynamicSensorFuzzy : public KisDynamicSensor {
+    public:
+        KisDynamicSensorFuzzy();
+        virtual ~KisDynamicSensorFuzzy() { }
+        virtual double parameter(const KisPaintInformation& )
+        { return rand(); }
+};
+
 class KisDynamicSensorSpeed : public KisDynamicSensor {
     public:
         KisDynamicSensorSpeed();
@@ -84,7 +92,7 @@ class KisDynamicSensorXTilt : public KisDynamicSensor {
         KisDynamicSensorXTilt();
         virtual ~KisDynamicSensorXTilt() { }
         virtual double parameter(const KisPaintInformation& info)
-        { return 1.0 - info.xTilt; }
+        { return 1.0 - abs( info.xTilt ); }
 };
 
 class KisDynamicSensorYTilt : public KisDynamicSensor {
@@ -92,7 +100,7 @@ class KisDynamicSensorYTilt : public KisDynamicSensor {
         KisDynamicSensorYTilt();
         virtual ~KisDynamicSensorYTilt() { }
         virtual double parameter(const KisPaintInformation& info)
-        { return 1.0 - info.yTilt; }
+        { return 1.0 - abs( info.yTilt); }
 };
 
 #endif

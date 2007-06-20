@@ -126,7 +126,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
     if(mode == KoZoomMode::ZOOM_CONSTANT)
     {
         if(zoom == 0.0) return;
-        d->action->setEffectiveZoom(zoom);
+        d->action->setZoom(zoom);
     }
     else if(mode == KoZoomMode::ZOOM_WIDTH)
     {
@@ -152,11 +152,13 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
     // Tell the canvasController that the zoom has changed
     // Actually canvasController doesn't know about zoom, but the document in pixels
     // has change as a result of the zoom change
+#ifdef DEBUG
     if(! d->documentSize.isValid())
         kWarning(30004) << "Setting zoom while there is no document size set, this will fail\n";
     else if(d->pageSize.width() > d->documentSize.width() || d->pageSize.height() > d->documentSize.height())
         kWarning(30004) << "ZoomController; Your page size is larger than your document size (" << 
             d->pageSize << " > " << d->documentSize << ")\n";
+#endif
     d->canvasController->setDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize() );
 
     // Finally ask the canvasController to recenter

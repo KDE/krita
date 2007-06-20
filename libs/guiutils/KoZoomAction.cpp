@@ -81,6 +81,7 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bo
 
 void KoZoomAction::setZoom( double zoom )
 {
+    setEffectiveZoom(zoom);
     regenerateItems( zoom, true );
 }
 
@@ -342,12 +343,8 @@ void KoZoomAction::setEffectiveZoom(double zoom)
 {
     d->effectiveZoom = zoom;
 
-    if(d->number) {
-        if(zoom>0.1)
-            d->number->setText(KGlobal::locale()->formatNumber(zoom*100, 0));
-        else
-            d->number->setText(KGlobal::locale()->formatNumber(zoom*100, 1));
-    }
+    if(d->number)
+        d->number->setText(KGlobal::locale()->formatNumber(zoom*100, 0));
 
     if(d->slider) {
         int i = 0;
@@ -359,7 +356,6 @@ void KoZoomAction::setEffectiveZoom(double zoom)
         d->slider->blockSignals(false);
     }
 }
-
 
 KoZoomAction::ExtLineEdit::ExtLineEdit ( const QString & contents, QWidget * parent) :
    QLineEdit(contents, parent)

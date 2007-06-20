@@ -383,6 +383,7 @@ void KisToolFreehand::endPaint()
 void KisToolFreehand::paintAt(const KisPaintInformation &pi)
 {
     m_painter->paintAt(KisPaintInformation(pi));
+    setDirty( m_painter->dirtyRegion() );
 }
 
 void KisToolFreehand::paintLine(const KisPaintInformation &pi1,

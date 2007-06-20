@@ -74,6 +74,10 @@ public:
      * The default implementation does nothing.
      */
     virtual void deactivate() {}
+
+    KoPACanvas * canvas() const;
+
+    KoPAView * view() const;
     
 protected:
     KoPACanvas * m_canvas;

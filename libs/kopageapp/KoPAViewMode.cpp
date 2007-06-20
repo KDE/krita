@@ -31,3 +31,13 @@ KoPAViewMode::KoPAViewMode( KoPAView * view, KoPACanvas * canvas )
 KoPAViewMode::~KoPAViewMode()
 {
 }
+
+KoPACanvas * KoPAViewMode::canvas() const
+{
+    return m_canvas;
+}
+
+KoPAView * KoPAViewMode::view() const
+{
+    return m_view;
+}

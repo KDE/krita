@@ -47,7 +47,7 @@ public:
     bool snapToGrid() const;
     void addCommand(QUndoCommand *command);
     KoShapeManager *shapeManager() const;
-    void updateCanvas(const QRectF& rc) {};
+    void updateCanvas(const QRectF& rc) {}
     KoToolProxy * toolProxy() const;
     const KoViewConverter *viewConverter() const;
     QWidget* canvasWidget();

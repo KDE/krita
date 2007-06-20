@@ -87,7 +87,17 @@
             comment="Invert the pixel of an image with Ruby as a filter"
             interpreter="ruby"
             file="filters/invert.rb">
-                <property name="category">adjust</property>
+            <property name="category">adjust</property>
+            <property name="supportsPainting">false</property>
+        </script>
+        <script
+            name="rbrandomfilter"
+            text="Random"
+            comment="Generate a completely random image"
+            interpreter="ruby"
+            file="filters/random.rb">
+            <property name="category">misc</property>
+            <property name="supportsPainting">true</property>
         </script>
     </collection>
 </KrossScripting>

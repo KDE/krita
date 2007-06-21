@@ -133,6 +133,12 @@ KoColor & KoColor::operator=(const KoColor & rhs)
     return * this;
 }
 
+bool KoColor::operator==(const KoColor &other)
+{
+    if(colorSpace() != other.colorSpace()) return false;
+    return memcmp(d->data, other.d->data, d->colorSpace->pixelSize()) == 0;
+}
+
 void KoColor::convertTo(KoColorSpace * cs)
 {
     //kDebug(DBG_AREA_CMS) << "Our colormodel: " << d->colorSpace->id().name()

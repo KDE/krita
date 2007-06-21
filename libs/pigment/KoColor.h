@@ -64,6 +64,8 @@ public:
      * @return this color
      */
     KoColor &operator=(const KoColor &other);
+    
+    bool operator==(const KoColor &other);
 
     /// return the current colorSpace
     KoColorSpace * colorSpace() const;

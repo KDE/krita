@@ -122,6 +122,7 @@ void KisBristleShape::paintAt(const QPointF &brushPos, const KisPaintInformation
         it != m_paintBrush->m_bristles.end(); ++it)
     {
         m_paintBrush->bristlesPainter->setPaintColor( it->color );
+//         kDebug() << it->color.toQColor() << endl;
         double x = it->m_x * m_radius;
         double y = it->m_y * m_radius;
         QPointF pos( angleCos*x - angleSin*y , angleSin*x + angleCos*y );

@@ -55,7 +55,7 @@ class KisPainter;
  */
 class KRITAIMAGE_EXPORT KisPaintOp : public KisShared
 {
-
+        struct Private;
     public:
     
         KisPaintOp(KisPainter * painter);
@@ -111,7 +111,7 @@ class KRITAIMAGE_EXPORT KisPaintOp : public KisShared
         KisPainter * m_painter;
         KisPaintDeviceSP m_source; // use this layer as source layer for the operation
     private:
-        KisPaintDeviceSP m_dab;
+        Private* const d;
 };
 
 /**

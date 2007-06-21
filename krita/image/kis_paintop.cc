@@ -36,7 +36,16 @@
 
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 
-KisPaintOp::KisPaintOp(KisPainter * painter) : m_dab(0)
+struct KisPaintOp::Private
+{
+    Private() : dab(0) {}
+    KisPaintDeviceSP dab;
+    KoColor color;
+    KoColor previousPaintColor;
+};
+
+
+KisPaintOp::KisPaintOp(KisPainter * painter) : d(new Private)
 {
     m_painter = painter;
     setSource(painter->device());
@@ -44,6 +53,7 @@ KisPaintOp::KisPaintOp(KisPainter * painter) : m_dab(0)
 
 KisPaintOp::~KisPaintOp()
 {
+    delete d;
 }
 
 KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask) {
@@ -63,19 +73,21 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, KoColorSpace *cs)
     qint32 maskWidth = mask->width();
     qint32 maskHeight = mask->height();
 
-    if( !m_dab || m_dab->colorSpace() != cs) {
-        m_dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
-        // Convert the kiscolor to the right colorspace.
-        KoColor kc = m_painter->paintColor();
-        kc.convertTo(cs);
-        m_dab->dataManager()->setDefaultPixel( kc.data() );
+    if( !d->dab or d->dab->colorSpace() != cs or not( d->previousPaintColor == m_painter->paintColor() ) ) {
+        d->dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
+        d->color = m_painter->paintColor();
+        d->previousPaintColor = m_painter->paintColor();
+        d->color.convertTo(cs);
+        d->color.fromKoColor( m_painter->paintColor());
+        d->dab->dataManager()->setDefaultPixel( d->color.data() );
     }
-    Q_CHECK_PTR(m_dab);
+    // Convert the kiscolor to the right colorspace. TODO: check if the paintColor has change
+    Q_CHECK_PTR(d->dab);
 
     quint8 * maskData = mask->data();
 
     // Apply the alpha mask
-    KisHLineIteratorPixel hiter = m_dab->createHLineIterator(0, 0, maskWidth);
+    KisHLineIteratorPixel hiter = d->dab->createHLineIterator(0, 0, maskWidth);
     for (int y = 0; y < maskHeight; y++)
     {
         while(! hiter.isDone())
@@ -89,7 +101,7 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, KoColorSpace *cs)
         hiter.nextRow();
     }
 
-    return m_dab;
+    return d->dab;
 }
 
 void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fraction)

@@ -27,7 +27,9 @@
    In contrast with applications like Corel Painter, all layers can be
    wet. It depends on the material of the pixel which effect the
    wetness has. A layer with a wetness mask will dry at a particular
-   rate through simulated air contact and adsorbency.
+   rate through simulated air contact and adsorbency. Drying also may mean
+   spreading paint to other pixels, possibly creating borders of deeper color.
+   See Salesin et. all.
 
    XXX: think of a good way to visualize wetness. With real paint,
    wetness means deeper colors and reflections, but we obviously

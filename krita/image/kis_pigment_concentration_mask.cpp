@@ -16,27 +16,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _KIS_VISCOSITY_MASK_
-#define _KIS_VISCOSITY_MASK_
+#include "kis_pigment_concentration_mask.h"
 
-#include "kis_types.h"
-
-#include "kis_mask.h"
-/**
-   Viscosity affects both the drying and spreading of paint. If paint is very
-   viscous, it will not travel easily with gravity or dry very fast to
-   the air.
-
-   See http://gamma.cs.unc.edu/viscous/Baxter-ViscousPaint-CASA04.pdf
-   for a scholarly discussion.
-*/
-
-class KRITAIMAGE_EXPORT KisViscosityMask : public KisMask
+KisPigmentConcentrationMask::KisPigmentConcentrationMask( KisPaintDeviceSP device )
+    : KisMask( device, "pigmentConcentration" )
 {
-    KisViscosityMask( KisPaintDeviceSP device );
-    virtual ~KisViscosityMask();
-    KisViscosityMask( const KisViscosityMask& rhs );
-    QString id() { return "KisViscosityMask"; }
-};
+}
 
-#endif //_KIS_VISCOSITY_MASK_
+KisPigmentConcentrationMask::~KisPigmentConcentrationMask()
+{
+}
+
+KisPigmentConcentrationMask::KisPigmentConcentrationMask( const KisPigmentConcentrationMask& rhs )
+    : KisMask( rhs )
+{
+}

@@ -16,27 +16,23 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _KIS_VISCOSITY_MASK_
-#define _KIS_VISCOSITY_MASK_
+#ifndef _KIS_PIGMENTCONCENTRATION_MASK_
+#define _KIS_PIGMENTCONCENTRATION_MASK_
 
 #include "kis_types.h"
 
 #include "kis_mask.h"
 /**
-   Viscosity affects both the drying and spreading of paint. If paint is very
-   viscous, it will not travel easily with gravity or dry very fast to
-   the air.
-
-   See http://gamma.cs.unc.edu/viscous/Baxter-ViscousPaint-CASA04.pdf
-   for a scholarly discussion.
+   PigmentConcentration determines the concentration of pigment in the
+   paint layer. This determines the translucency, i.e, the alpha cannel.
 */
 
-class KRITAIMAGE_EXPORT KisViscosityMask : public KisMask
+class KRITAIMAGE_EXPORT KisPigmentConcentrationMask : public KisMask
 {
-    KisViscosityMask( KisPaintDeviceSP device );
-    virtual ~KisViscosityMask();
-    KisViscosityMask( const KisViscosityMask& rhs );
-    QString id() { return "KisViscosityMask"; }
+    KisPigmentConcentrationMask( KisPaintDeviceSP device );
+    virtual ~KisPigmentConcentrationMask();
+    KisPigmentConcentrationMask( const KisPigmentConcentrationMask& rhs );
+    QString id() { return "KisPigmentConcentrationMask"; }
 };
 
-#endif //_KIS_VISCOSITY_MASK_
+#endif //_KIS_PIGMENTCONCENTRATION_MASK_

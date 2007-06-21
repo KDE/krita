@@ -19,24 +19,15 @@
 #define KIS_DLG_TRANSFORMATION_EFFECT_H_
 
 #include <kdialog.h>
+#include <KoID.h>
 
 class QString;
-class QWidget;
+class QGridLayout;
 class KisFilterStrategy;
 
-#include "ui_wdgtransformationeffect.h"
-
-class WdgTransformationEffect : public QWidget, public Ui::WdgTransformationEffect
-{
-    Q_OBJECT
-
-    public:
-        WdgTransformationEffect(QWidget *parent)
-            : QWidget(parent)
-        {
-            setupUi(this);
-        }
-};
+class WdgTransformationEffect;
+class WdgMaskSource;
+class WdgMaskFromSelection;
 
 class KisDlgTransformationEffect : public KDialog {
 
@@ -56,19 +47,27 @@ public:
                                QWidget *parent = 0,
                                const char *name = 0);
 
-    QString maskName() const;
-    double xScale() const;
-    double yScale() const;
-    double xShear() const;
-    double yShear() const;
-    double rotation() const;
-    int moveX() const;
-    int moveY() const;
-    KisFilterStrategy * filterStrategy();
+    WdgTransformationEffect * transformationEffect()
+        {
+            return m_transformEffectWidget;
+        }
+
+    WdgMaskSource * maskSource()
+        {
+            return m_maskSource;
+        }
+
+    WdgMaskFromSelection * maskFromSelection()
+        {
+            return m_maskFromSelection;
+        }
+
 
 private:
-    WdgTransformationEffect * m_page;
+    WdgTransformationEffect * m_transformEffectWidget;
+    WdgMaskSource * m_maskSource;
+    WdgMaskFromSelection * m_maskFromSelection;
+    QGridLayout * m_grid;
 };
 
 #endif // KIS_DLG_TRANSFORMATION_EFFECT_H_
-

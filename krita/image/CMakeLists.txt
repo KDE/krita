@@ -25,6 +25,7 @@ set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
    kis_threaded_applicator.cpp
    kis_projection.cc
+   kis_pigment_concentration_mask.cpp
    kis_adjustment_layer.cc
    kis_paint_engine.cc
    kis_progress_subject.cc

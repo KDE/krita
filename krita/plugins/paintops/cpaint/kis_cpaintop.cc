@@ -203,15 +203,15 @@ void KisCPaintOp::paintAt(const KisPaintInformation& info)
 
     if ( m_stroke ) {
         int brushSize = m_currentBrush->size();
-        QPainter gc( device.data() );
-        gc.setRenderHint(QPainter::Antialiasing);
-        m_stroke->draw( gc );
-        gc.end();
+//         QPainter gc( device.data() );
+//         gc.setRenderHint(QPainter::Antialiasing);
+//         m_stroke->draw( gc );
+//         gc.end();
 
-//        KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace());
-//        dab->convertFromQImage( m_tempImage, "" ); // Use monitor profile?
+        KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace());
+        dab->convertFromQImage( m_tempImage, "" ); // Use monitor profile?
 
-//        m_painter->bitBlt( QPoint( 0, 0 ), dab, m_tempImage.rect() );
+        m_painter->bitBlt( QPoint( 0, 0 ), dab, m_tempImage.rect() );
 
     }
     m_lastPoint = info.pos;

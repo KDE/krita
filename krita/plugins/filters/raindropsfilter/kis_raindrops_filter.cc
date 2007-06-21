@@ -112,6 +112,9 @@ void KisRainDropsFilter::process(const KisPaintDeviceSP src, const QPoint& srcTo
 
     KoColorSpace * cs = src->colorSpace();
 
+
+    // XXX: move the seed to the config, so the filter can be used as
+    // and adjustment filter (boud).
     QDateTime dt = QDateTime::currentDateTime();
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
 

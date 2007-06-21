@@ -17,8 +17,9 @@
  */
 #include "kis_dlg_transformation_effect.h"
 
+#include <QGridLayout>
+#include "kis_mask_widgets.h"
 #include "kis_filter_strategy.h"
-#include <knuminput.h>
 
 KisDlgTransformationEffect::KisDlgTransformationEffect(const QString & maskName,
                                                        double xScale,
@@ -37,70 +38,37 @@ KisDlgTransformationEffect::KisDlgTransformationEffect(const QString & maskName,
     setButtons( Ok| Cancel );
     setDefaultButton( Ok );
     setObjectName(name);
-    m_page = new WdgTransformationEffect(this);
-    m_page->layout()->setMargin(0);
-    setMainWidget(m_page);
 
-    m_page->maskName->setText( maskName );
-    m_page->dblScaleX->setValue( xScale );
-    m_page->dblScaleY->setValue( yScale );
-    m_page->dblShearX->setValue( xShear );
-    m_page->dblShearY->setValue( yShear );
-    m_page->dblRotation->setValue( angle );
-    m_page->intMoveX->setValue( moveX );
-    m_page->intMoveY->setValue( moveY );
+    QWidget * page = new QWidget( this );
+    m_grid = new QGridLayout( page );
 
-    m_page->cmbFilter->clear();
-    m_page->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
-    m_page->cmbFilter->setCurrent(filterId);
+    m_maskSource = new WdgMaskSource( page );
+    m_grid->addWidget( m_maskSource, 0, 0 );
 
+    m_maskFromSelection = new WdgMaskFromSelection( page );
+    m_grid->addWidget( m_maskFromSelection, 1, 0 );
+
+    m_transformEffectWidget = new WdgTransformationEffect( page );
+    m_transformEffectWidget->layout()->setMargin(0);
+    m_grid->addWidget( m_transformEffectWidget, 0, 1, 2, 1 );
+
+    setMainWidget( page );
+
+    m_transformEffectWidget->Ui::WdgTransformationEffect::maskName->setText( maskName );
+    m_transformEffectWidget->dblScaleX->setValue( xScale );
+    m_transformEffectWidget->dblScaleY->setValue( yScale );
+    m_transformEffectWidget->dblShearX->setValue( xShear );
+    m_transformEffectWidget->dblShearY->setValue( yShear );
+    m_transformEffectWidget->dblRotation->setValue( angle );
+    m_transformEffectWidget->intMoveX->setValue( moveX );
+    m_transformEffectWidget->intMoveY->setValue( moveY );
+
+    m_transformEffectWidget->cmbFilter->clear();
+    m_transformEffectWidget->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
+    m_transformEffectWidget->cmbFilter->setCurrent(filterId);
 
 }
 
-QString KisDlgTransformationEffect::maskName() const
-{
-    return m_page->maskName->text();
-}
-
-double KisDlgTransformationEffect::xScale() const
-{
-    return m_page->dblScaleX->value();
-}
-
-double KisDlgTransformationEffect::yScale() const
-{
-    return m_page->dblScaleY->value();
-}
-
-double KisDlgTransformationEffect::xShear() const
-{
-    return m_page->dblShearX->value();
-}
-
-double KisDlgTransformationEffect::yShear() const
-{
-    return m_page->dblShearY->value();
-}
-
-double KisDlgTransformationEffect::rotation() const
-{
-    return m_page->dblRotation->value();
-}
-int KisDlgTransformationEffect::moveX() const
-{
-    return m_page->intMoveX->value();
-}
-
-int KisDlgTransformationEffect::moveY() const
-{
-    return m_page->intMoveY->value();
-}
-
-KisFilterStrategy * KisDlgTransformationEffect::filterStrategy()
-{
-    KoID filterID = m_page->cmbFilter->currentItem();
-    return KisFilterStrategyRegistry::instance()->value(filterID.id());
-}
 
 
 #include "kis_dlg_transformation_effect.moc"

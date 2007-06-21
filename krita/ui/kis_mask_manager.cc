@@ -38,6 +38,7 @@
 #include "kis_mask.h"
 #include "kis_effect_mask.h"
 #include "kis_dlg_adjustment_layer.h"
+#include "kis_mask_widgets.h"
 
 KisMaskManager::KisMaskManager( KisView2 * view)
     : m_view( view )
@@ -207,15 +208,15 @@ void KisMaskManager::createTransformationMask()
         if ( dlg.exec() == QDialog::Accepted ) {
             KisTransformationMask * mask = new KisTransformationMask();
             mask->setParentLayer( activeLayer );
-            mask->setName( dlg.maskName() );
-            mask->setXScale( dlg.xScale() );
-            mask->setYScale( dlg.yScale() );
-            mask->setXShear( dlg.xShear() );
-            mask->setYShear( dlg.yShear() );
-            mask->setRotation( dlg.rotation() );
-            mask->setXTranslation( dlg.moveX() );
-            mask->setYTranslation( dlg.moveY() );
-            mask->setFilterStrategy( dlg.filterStrategy() );
+            mask->setName( dlg.transformationEffect()->maskName() );
+            mask->setXScale( dlg.transformationEffect()->xScale() );
+            mask->setYScale( dlg.transformationEffect()->yScale() );
+            mask->setXShear( dlg.transformationEffect()->xShear() );
+            mask->setYShear( dlg.transformationEffect()->yShear() );
+            mask->setRotation( dlg.transformationEffect()->rotation() );
+            mask->setXTranslation( dlg.transformationEffect()->moveX() );
+            mask->setYTranslation( dlg.transformationEffect()->moveY() );
+            mask->setFilterStrategy( dlg.transformationEffect()->filterStrategy() );
             mask->setActive( true );
             if ( m_activeMask )
                 activeLayer->addEffectMask( mask, m_activeMask );

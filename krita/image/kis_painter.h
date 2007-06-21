@@ -29,7 +29,6 @@
 
 #include "kis_filter.h"
 #include "kis_progress_subject.h"
-#include "kis_paintop.h"
 #include "KoColorSpace.h"
 #include "kis_selection.h"
 
@@ -40,6 +39,8 @@ class QRect;
 class KisTransaction;
 class KisBrush;
 class KisPattern;
+class KisPaintOp;
+class KisPaintInformation;
 
 /**
  * KisPainter contains the graphics primitives necessary to draw on a
@@ -579,7 +580,7 @@ public:
      * The painter will DELETE the paint op itself!!
      * That means no that you should not delete it yourself (or put it on the stack)
      */
-    void setPaintOp(KisPaintOp * paintOp) { delete m_paintOp; m_paintOp = paintOp; }
+    void setPaintOp(KisPaintOp * paintOp);
     /// Returns the current paint operation
     KisPaintOp * paintOp() const { return m_paintOp; }
 

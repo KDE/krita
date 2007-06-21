@@ -25,6 +25,7 @@
 #include <kis_convolution_painter.h>
 #include <kis_paint_layer.h>
 #include <kis_paintop_registry.h>
+#include <kis_paint_information.h>
 
 using namespace Scripting;
 

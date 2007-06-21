@@ -168,6 +168,12 @@ QRegion KisPainter::addDirtyRect(QRect r)
 }
 
 
+void KisPainter::setPaintOp(KisPaintOp * paintOp)
+{
+    delete m_paintOp;
+    m_paintOp = paintOp;
+}
+
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         const KoCompositeOp* op,
                         const QImage * src,

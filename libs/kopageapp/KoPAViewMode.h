@@ -75,8 +75,18 @@ public:
      */
     virtual void deactivate() {}
 
+    /**
+     * @brief Get the canvas
+     *
+     * @return canvas canvas used by the view mode
+     */
     KoPACanvas * canvas() const;
 
+    /**
+     * @brief Get the view
+     *
+     * @return view view used by the view mode
+     */
     KoPAView * view() const;
     
 protected:

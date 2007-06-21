@@ -134,7 +134,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         KPageWidgetItem *page = new KPageWidgetItem( widget, pageName );
         if(iconName != "")
         {
-            page->setIcon( KIcon( "file" ) );
+            page->setIcon( KIcon( iconName ) );
         }
         addPage( page );
     }

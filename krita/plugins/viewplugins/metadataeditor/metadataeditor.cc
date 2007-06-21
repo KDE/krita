@@ -34,6 +34,8 @@
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_global.h"
+#include "kis_layer.h"
+#include "kis_layer_manager.h"
 #include "kis_types.h"
 #include "kis_view2.h"
 
@@ -59,19 +61,11 @@ metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QStringList &)
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/metadataeditor.rc"), true);
 
-        KAction *action  = new KAction(i18n("&Edit metadata"), this);
-        actionCollection()->addAction("metadataeditor", action );
-        connect(action, SIGNAL(triggered()), this, SLOT(slotMyAction()));
+        KAction *action  = new KAction(i18n("&Edit metadata..."), this);
+        actionCollection()->addAction("EditLayerMetaData", action );
+        connect(action, SIGNAL(triggered()), this, SLOT(slotEditLayerMetaData()));
     }
 
-    m_metaDataStore = new KisMetaData::Store();
-    const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::DublinCoreSchemaUri);
-    const KisMetaData::Schema* dcHistory = KisMetaData::SchemaRegistry::instance()->create( "http://history/", "history");
-    const KisMetaData::Schema* dcHow =KisMetaData::SchemaRegistry::instance()->create( "http://how/", "how");
-    m_metaDataStore->addEntry( KisMetaData::Entry("name", dcSchema, KisMetaData::Value("tester")));
-    m_metaDataStore->addEntry( KisMetaData::Entry("description", dcSchema, KisMetaData::Value("Test of metadata editing")) );
-    m_metaDataStore->addEntry( KisMetaData::Entry("when", dcHistory, KisMetaData::Value(QDate())) );
-    m_metaDataStore->addEntry( KisMetaData::Entry("many", dcHow, KisMetaData::Value(42)) );
 }
 
 metadataeditorPlugin::~metadataeditorPlugin()
@@ -79,9 +73,12 @@ metadataeditorPlugin::~metadataeditorPlugin()
     m_view = 0;
 }
 
-void metadataeditorPlugin::slotMyAction()
+void metadataeditorPlugin::slotEditLayerMetaData()
 {
-    KisMetaDataEditor editor(m_view, m_metaDataStore);
+    KisImageSP image = m_view->image();
+    if (!image) return;
+    
+    KisMetaDataEditor editor(m_view, m_view->layerManager()->activeLayer()->metaData());
     editor.exec();
 }
 

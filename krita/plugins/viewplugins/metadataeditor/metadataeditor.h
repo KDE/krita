@@ -39,12 +39,11 @@ public:
 
 private slots:
 
-    void slotMyAction();
+    void slotEditLayerMetaData();
 
 private:
 
     KisView2 * m_view;
-    KisMetaData::Store* m_metaDataStore;
 };
 
 #endif // metadataeditorPlugin_H

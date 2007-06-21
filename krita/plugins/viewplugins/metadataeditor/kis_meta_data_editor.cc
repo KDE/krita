@@ -95,16 +95,22 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
             const QString propertyName = elem.attribute("propertyName");
             
             QWidget* obj = widget->findChild<QWidget*>(editorName);
-            KisMetaData::Value& value = d->store->getEntry(schemaUri, entryName).value();
-            KisEntryEditor* ee = new KisEntryEditor( obj, &value, propertyName);
-            connect( obj, editorSignal.toAscii(), ee, SLOT(valueEdited()) );
-            QList<KisEntryEditor*> otherEditors = d->entryEditors.values(&value);
-            foreach(KisEntryEditor* oe, otherEditors)
+            const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(schemaUri);
+            if(schema)
             {
-                connect(ee, SIGNAL(valueHasBeenEdited()), oe, SLOT(valueChanged()));
-                connect(oe, SIGNAL(valueHasBeenEdited()), ee, SLOT(valueChanged()));
+                KisMetaData::Value& value = d->store->getEntry(schema, entryName).value();
+                KisEntryEditor* ee = new KisEntryEditor( obj, &value, propertyName);
+                connect( obj, editorSignal.toAscii(), ee, SLOT(valueEdited()) );
+                QList<KisEntryEditor*> otherEditors = d->entryEditors.values(&value);
+                foreach(KisEntryEditor* oe, otherEditors)
+                {
+                    connect(ee, SIGNAL(valueHasBeenEdited()), oe, SLOT(valueChanged()));
+                    connect(oe, SIGNAL(valueHasBeenEdited()), ee, SLOT(valueChanged()));
+                }
+                d->entryEditors.insert(&value, ee);
+            } else {
+                kDebug() << "Unknown schema : " << schemaUri << endl;
             }
-            d->entryEditors.insert(&value, ee);
         }
         xmlFile.close();
 

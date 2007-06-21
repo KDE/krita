@@ -93,6 +93,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
             const QString entryName = elem.attribute("entryName");
             const QString editorSignal = "2"+elem.attribute("editorSignal");
             const QString propertyName = elem.attribute("propertyName");
+            const QString structureField = elem.attribute("structureField");
             
             QWidget* obj = widget->findChild<QWidget*>(editorName);
             if(obj)
@@ -105,7 +106,14 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                         kDebug() << " Store doesn't have yet entry : " << entryName << " in " << schemaUri  << " == " << schema->generateQualifiedName(entryName) << endl;
                     }
                     KisMetaData::Value& value = d->store->getEntry(schema, entryName).value();
-                    KisEntryEditor* ee = new KisEntryEditor( obj, &value, propertyName);
+                    KisEntryEditor* ee = 0;
+                    if( value.type() == KisMetaData::Value::Structure and not structureField.isEmpty())
+                    {
+                        QMap<QString, KisMetaData::Value>* structure = value.asStructure();
+                        ee = new KisEntryEditor( obj, &(*structure)[ structureField ], propertyName);
+                    } else {
+                        ee = new KisEntryEditor( obj, &value, propertyName);
+                    }
                     connect( obj, editorSignal.toAscii(), ee, SLOT(valueEdited()) );
                     QList<KisEntryEditor*> otherEditors = d->entryEditors.values(&value);
                     foreach(KisEntryEditor* oe, otherEditors)

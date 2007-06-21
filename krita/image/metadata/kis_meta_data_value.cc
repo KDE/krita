@@ -18,7 +18,9 @@
 
 #include "kis_meta_data_value.h"
 
+#include <QRegExp>
 #include <QVariant>
+#include <QStringList>
 
 #include <kdebug.h>
 
@@ -160,9 +162,15 @@ int Value::asInteger() const
 
 QVariant Value::asVariant() const
 {
-    if(d->type == Variant)
+    switch(type())
     {
-        return *d->value.variant;
+        case Variant:
+            return *d->value.variant;
+        case UnsignedRational:
+            return QVariant( QString("%1 / %2").arg( d->value.unsignedRational->numerator ).arg( d->value.unsignedRational->denominator ) );
+        case SignedRational:
+            return QVariant( QString("%1 / %2").arg( d->value.signedRational->numerator ).arg( d->value.signedRational->denominator ) );
+        default: break;
     }
     return QVariant();
 }
@@ -174,6 +182,13 @@ bool Value::setVariant(const QVariant& variant)
         case KisMetaData::Value::Invalid:
             *this = KisMetaData::Value( variant );
             return true;
+        case UnsignedRational:
+        case SignedRational:
+        {
+            QRegExp rx("([^\\/]*)\\/([^\\/]*)");
+            rx.indexIn(variant.toString());
+            kDebug() << rx.capturedTexts() << endl;
+        }
         case KisMetaData::Value::Variant:
         {
             if(d->value.variant->type() == variant.type())
@@ -229,6 +244,15 @@ QMap<QString, KisMetaData::Value> Value::asStructure() const
         return *d->value.structure;
     }
     return QMap<QString, KisMetaData::Value>();
+}
+
+QMap<QString, KisMetaData::Value>* Value::asStructure()
+{
+    if(type() == Structure)
+    {
+        return d->value.structure;
+    }
+    return 0;
 }
 
 QDebug operator<<(QDebug dbg, const Value &v)

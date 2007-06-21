@@ -120,6 +120,7 @@ namespace KisMetaData {
              * @return the structure hold by this Value, or an empty structure if this Value is not a Structure
              */
             QMap<QString, KisMetaData::Value> asStructure() const;
+            QMap<QString, KisMetaData::Value>* asStructure();
         private:
             Private* const d;
     };

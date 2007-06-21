@@ -58,6 +58,11 @@ KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), "map", i18n("&R
 
 void KisRoundCornersFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
+    if (!src || !dst || !configuration || !rect.isValid()) {
+        setProgressDone();
+        return;
+    }
+    
     //read the filter configuration values from the KisFilterConfiguration object
     Q_INT32 radius = (Q_INT32)((KisRoundCornersFilterConfiguration*)configuration)->radius();
     Q_UINT32 pixelSize = src->pixelSize();

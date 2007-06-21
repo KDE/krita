@@ -65,7 +65,7 @@ public:
      */
     KoColor &operator=(const KoColor &other);
     
-    bool operator==(const KoColor &other);
+    bool operator==(const KoColor &other) const;
 
     /// return the current colorSpace
     KoColorSpace * colorSpace() const;

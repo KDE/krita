@@ -1,4 +1,4 @@
-include_directories(transformations)
+include_directories(transformations sensors ui)
 
 set(kritadynamicbrushlib_LIB_SRCS
     kis_dynamic_shape.cc
@@ -13,11 +13,14 @@ set(kritadynamicbrushlib_LIB_SRCS
     transformations/kis_darken_transformation.cc
     shapes/kis_bristle_shape.cc
     shapes/kis_dab_shape.cc
+    sensors/kis_dynamic_sensors.cc
+    sensors/kis_dynamic_sensor_time.cc
+    ui/kis_sensor_selector.cc
 )
 
 kde4_automoc(${kritadynamicbrushlib_LIB_SRCS})
 
-kde4_add_ui_files(kritadynamicbrushlib_LIB_SRCS transformations/SizeTransformationEditor.ui )
+kde4_add_ui_files(kritadynamicbrushlib_LIB_SRCS transformations/SizeTransformationEditor.ui ui/SensorSelector.ui sensors/SensorTimeConfiguration.ui)
 
 kde4_add_library(kritadynamicbrush SHARED ${kritadynamicbrushlib_LIB_SRCS})
 

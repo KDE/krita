@@ -51,24 +51,16 @@ void KisSizeTransformation::transformColoring(KisDynamicColoring* coloringsrc, c
     // TODO: implement it
 }
 
-void KisSizeTransformation::setHSensor(const KoID& id)
+void KisSizeTransformation::setHSensor(KisDynamicSensor* sensor)
 {
-    kDebug() << "H: " << id.id() << endl;
-    if(id != m_horizTransfoParameter->id() )
-    {
-        delete m_horizTransfoParameter;
-        m_horizTransfoParameter = KisDynamicSensor::id2Sensor(id);
-    }
+    delete m_horizTransfoParameter;
+    m_horizTransfoParameter = sensor;
 }
 
-void KisSizeTransformation::setVSensor(const KoID& id)
+void KisSizeTransformation::setVSensor(KisDynamicSensor* sensor)
 {
-    kDebug() << "V: " << id.id() << endl;
-    if(id != m_vertiTransfoParameter->id() )
-    {
-        delete m_vertiTransfoParameter;
-        m_vertiTransfoParameter = KisDynamicSensor::id2Sensor(id);
-    }
+    delete m_vertiTransfoParameter;
+    m_vertiTransfoParameter = sensor;
 }
 
 QWidget* KisSizeTransformation::createConfigWidget(QWidget* parent)
@@ -78,9 +70,8 @@ QWidget* KisSizeTransformation::createConfigWidget(QWidget* parent)
     ste.setupUi(editorWidget);
     // Setup the horizontal parameter
     // horizontal sensor
-    ste.comboBoxHorizontalSensor->setIDList( KisDynamicSensor::sensorsIds() );
-    connect(ste.comboBoxHorizontalSensor, SIGNAL(activated(const KoID &)), this, SLOT(setHSensor(const KoID& )));
-    ste.comboBoxHorizontalSensor->setCurrent( m_horizTransfoParameter->id() );
+    connect(ste.comboBoxHorizontalSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), this, SLOT(setHSensor(KisDynamicSensor* )));
+    ste.comboBoxHorizontalSensor->setCurrent(m_horizTransfoParameter);
     // horizontal maximum
     ste.spinBoxHorizontalMaximum->setValue( m_hmax);
     connect(ste.spinBoxHorizontalMaximum, SIGNAL(valueChanged(double)), this, SLOT(setHMaximum(double)));
@@ -89,9 +80,8 @@ QWidget* KisSizeTransformation::createConfigWidget(QWidget* parent)
     connect(ste.spinBoxHorizontalMinimum, SIGNAL(valueChanged(double)), this, SLOT(setHMinimum(double)));
     // Setup the vertical parameter
     // vertical sensor
-    ste.comboBoxVerticalSensor->setIDList( KisDynamicSensor::sensorsIds() );
-    connect(ste.comboBoxVerticalSensor, SIGNAL(activated(const KoID &)), this, SLOT(setVSensor(const KoID& )));
-    ste.comboBoxVerticalSensor->setCurrent( m_vertiTransfoParameter->id() );
+    connect(ste.comboBoxVerticalSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), this, SLOT(setVSensor(KisDynamicSensor* )));
+    ste.comboBoxVerticalSensor->setCurrent(m_vertiTransfoParameter);
     // vertical maximum
     ste.spinBoxVerticalMaximum->setValue( m_hmax);
     connect(ste.spinBoxVerticalMaximum, SIGNAL(valueChanged(double)), this, SLOT(setHMaximum(double)));

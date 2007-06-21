@@ -18,16 +18,17 @@
 
 #include "kis_dynamic_sensor.h"
 
-const KoID FuzzyId("fuzzy", i18n("Fuzzy"));
-const KoID SpeedId("speed", i18n("Speed"));
-const KoID TimeId("time", i18n("Time"));
-const KoID DrawingAngleId("drawingangle", i18n("Drawing angle"));
-const KoID PressureId("pressure", i18n("Pressure"));
-const KoID XTiltId ("xtilt", i18n("X-Tilt"));
-const KoID YTiltId ("ytilt", i18n("Y-Tilt"));
+#include "sensors/kis_dynamic_sensors.h"
+#include "sensors/kis_dynamic_sensor_time.h"
 
 KisDynamicSensor::KisDynamicSensor(const KoID& id) : m_id(id)
 {
+}
+
+QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent)
+{
+    Q_UNUSED(parent);
+    return 0;
 }
 
 KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
@@ -65,54 +66,3 @@ QList<KoID> KisDynamicSensor::sensorsIds()
     ids << PressureId << XTiltId << YTiltId << SpeedId << DrawingAngleId << TimeId << FuzzyId;
     return ids;
 }
-
-KisDynamicSensorFuzzy::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
-{
-    
-}
-
-KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
-{
-    
-}
-
-KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0)
-{
-    
-}
-
-KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle() : KisDynamicSensor(SpeedId), m_angle(0.0)
-{
-    
-}
-
-double KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
-{
-    double angle = atan2(info.movement.y() , info.movement.x());
-    double v = modulo(m_angle - angle + M_PI, 2.0 * M_PI) - M_PI;
-    if(v < 0)
-    {
-        m_angle += 0.01;
-    } else if( v > 0)
-    {
-        m_angle -= 0.01;
-    }
-    m_angle = modulo(m_angle, 2.0 * M_PI);
-    return m_angle / (2.0 * M_PI);
-}
-
-KisDynamicSensorPressure::KisDynamicSensorPressure() : KisDynamicSensor(PressureId)
-{
-    
-}
-
-KisDynamicSensorXTilt::KisDynamicSensorXTilt() : KisDynamicSensor(XTiltId)
-{
-    
-}
-
-KisDynamicSensorYTilt::KisDynamicSensorYTilt() : KisDynamicSensor(YTiltId)
-{
-    
-}
-

@@ -1,0 +1,33 @@
+<ui version="4.0" >
+ <class>SensorSelector</class>
+ <widget class="QWidget" name="SensorSelector" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>47</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" >
+   <item>
+    <widget class="KisCmbIDList" name="comboBoxSensor" />
+   </item>
+   <item>
+    <widget class="QWidget" native="1" name="widgetConfiguration" />
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisCmbIDList</class>
+   <extends>QComboBox</extends>
+   <header>kis_cmb_idlist.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

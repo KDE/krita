@@ -21,86 +21,56 @@
 
 #include "dynamicbrush_export.h"
 
+#include <QObject>
+
 #include <kis_paintop.h>
 #include <KoID.h>
 
+class QWidget;
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicSensor {
+const KoID FuzzyId("fuzzy", i18n("Fuzzy"));
+const KoID SpeedId("speed", i18n("Speed"));
+const KoID TimeId("time", i18n("Time"));
+const KoID DrawingAngleId("drawingangle", i18n("Drawing angle"));
+const KoID PressureId("pressure", i18n("Pressure"));
+const KoID XTiltId ("xtilt", i18n("X-Tilt"));
+const KoID YTiltId ("ytilt", i18n("Y-Tilt"));
+
+/**
+ * Sensor are used to extract from KisPaintInformation a single
+ * double value which can be used to control 
+ */
+class DYNAMIC_BRUSH_EXPORT KisDynamicSensor : public QObject {
     public:
+        enum ParameterSign {
+            NegativeParameter = -1,
+            UnSignedParameter = 0,
+            PositiveParameter = 1
+        };
+    protected:
         KisDynamicSensor(const KoID& id);
+    public:
         virtual ~KisDynamicSensor() { }
+        /**
+         * @return the value of this sensor for the given KisPaintInformation
+         */
         virtual double parameter(const KisPaintInformation& info) = 0;
+        virtual QWidget* createConfigurationWidget(QWidget* parent);
+        /**
+         * Creates a sensor from its identifiant.
+         */
         static KisDynamicSensor* id2Sensor(const KoID&);
         static KisDynamicSensor* id2Sensor(const QString& s) { return id2Sensor(KoID(s)); }
+        /**
+         * @return the list of sensors
+         */
         static QList<KoID> sensorsIds();
+        /**
+         * @return the identifiant of this sensor
+         */
         inline const KoID& id() { return m_id; }
     private:
         const KoID& m_id;
-};
-
-class KisDynamicSensorFuzzy : public KisDynamicSensor {
-    public:
-        KisDynamicSensorFuzzy();
-        virtual ~KisDynamicSensorFuzzy() { }
-        virtual double parameter(const KisPaintInformation& )
-        { return rand() / (double)RAND_MAX; }
-};
-
-class KisDynamicSensorSpeed : public KisDynamicSensor {
-    public:
-        KisDynamicSensorSpeed();
-        virtual ~KisDynamicSensorSpeed() { }
-        virtual double parameter(const KisPaintInformation& info)
-        { return 1.0 + info.movement.length() * 0.1; }
-};
-
-class KisDynamicSensorTime : public KisDynamicSensor {
-    public:
-        KisDynamicSensorTime();
-        virtual ~KisDynamicSensorTime() { }
-        virtual double parameter(const KisPaintInformation& )
-        {
-            return ( m_time += 0.1 ); // TODO use 1.0
-        }
-    private:
-        double m_time;
-};
-
-class KisDynamicSensorDrawingAngle : public KisDynamicSensor {
-    public:
-        KisDynamicSensorDrawingAngle();
-        virtual ~KisDynamicSensorDrawingAngle() { }
-        virtual double parameter(const KisPaintInformation& info);
-    private:
-        inline double modulo(double x, double r)
-        {
-            return x-floor(x/r)*r;
-        }
-        double m_angle;
-};
-
-class KisDynamicSensorPressure : public KisDynamicSensor {
-    public:
-        KisDynamicSensorPressure();
-        virtual ~KisDynamicSensorPressure() { }
-        virtual double parameter(const KisPaintInformation& info)
-        { return info.pressure; }
-};
-
-class KisDynamicSensorXTilt : public KisDynamicSensor {
-    public:
-        KisDynamicSensorXTilt();
-        virtual ~KisDynamicSensorXTilt() { }
-        virtual double parameter(const KisPaintInformation& info)
-        { return 1.0 - abs( info.xTilt ); }
-};
-
-class KisDynamicSensorYTilt : public KisDynamicSensor {
-    public:
-        KisDynamicSensorYTilt();
-        virtual ~KisDynamicSensorYTilt() { }
-        virtual double parameter(const KisPaintInformation& info)
-        { return 1.0 - abs( info.yTilt); }
 };
 
 #endif

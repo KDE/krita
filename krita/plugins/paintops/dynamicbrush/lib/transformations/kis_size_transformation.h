@@ -38,8 +38,8 @@ class DYNAMIC_BRUSH_EXPORT KisSizeTransformation : public KisDynamicTransformati
         virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
         virtual QWidget* createConfigWidget(QWidget* parent);
     public slots:
-        void setHSensor(const KoID& id);
-        void setVSensor(const KoID& id);
+        void setHSensor(KisDynamicSensor*);
+        void setVSensor(KisDynamicSensor*);
         void setHMaximum(double v);
         void setVMaximum(double v);
         void setHMinimum(double v);

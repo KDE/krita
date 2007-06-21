@@ -39,7 +39,27 @@
 #include "kis_paintop_registry.h"
 #include "kis_resource_provider.h"
 
+#include "kis_adsorbency_mask.h"
+#include "kis_pigment_concentration_mask.h"
+#include "kis_reflectivity_mask.h"
+#include "kis_volume_mask.h"
+#include "kis_viscosity_mask.h"
+#include "kis_wetness_mask.h"
+
 #include "mixercore.h"
+
+/*
+Just add all the painterly overlays that we need in only one call
+*/
+void addPainterlyOverlays(KisPaintDeviceSP dev)
+{
+    dev->addPainterlyChannel(new KisAdsorbencyMask(dev));
+    dev->addPainterlyChannel(new KisPigmentConcentrationMask(dev));
+    dev->addPainterlyChannel(new KisReflectivityMask(dev));
+    dev->addPainterlyChannel(new KisVolumeMask(dev));
+    dev->addPainterlyChannel(new KisViscosityMask(dev));
+    dev->addPainterlyChannel(new KisWetnessMask(dev));
+}
 
 MixerCanvas::MixerCanvas(QWidget *parent)
     : QFrame(parent), KoCanvasBase(0), m_tool(0), m_toolProxy(0)
@@ -58,12 +78,16 @@ MixerCanvas::~MixerCanvas()
 void MixerCanvas::initDevice(KoColorSpace *cs, KisResourceProvider *rp)
 {
     m_canvasDev = new KisPaintDevice(cs);
-
-    // TODO Add painterly masks
+    addPainterlyOverlays(m_canvasDev);
 
     m_tool = new MixerTool(this, m_canvasDev.data(), rp);
     m_toolProxy = new KoToolProxy(this);
     m_toolProxy->setActiveTool(m_tool);
+}
+
+void MixerCanvas::initWells(QFrame *wf)
+{
+    // TODO Initialize wells for paintop initial color
 }
 
 void MixerCanvas::mouseDoubleClickEvent(QMouseEvent *event)
@@ -104,7 +128,6 @@ void MixerCanvas::paintEvent(QPaintEvent *event)
 void MixerCanvas::updateCanvas(const QRectF& rc)
 {
     update(rc.toRect());
-    // TODO Don't resize while moving!
 }
 
 /////////////////
@@ -126,32 +149,45 @@ void MixerTool::mousePressEvent(KoPointerEvent *event)
 //     kDebug() << "MOUSE PRESSED!! " << event->pos() << endl;
 }
 
+void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
+{
+//     kDebug() << "MOUSE RELEASED!! " << event->pos() << endl;
+}
+
 void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 {
 //     kDebug() << "MOUSE MOVED!! " << event->pos() << endl;
 
-    // TODO Add painterly masks to the stroke.
     KisPaintDeviceSP stroke = new KisPaintDevice(m_canvasDev->colorSpace());
+    addPainterlyOverlays(stroke);
 
     KisPainter painter(stroke);
     KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(m_resources->currentPaintop(),
                                                                   m_resources->currentPaintopSettings(),
                                                                   &painter, 0);
+
     painter.setPaintOp(current);
     painter.setPaintColor(m_resources->fgColor());
     painter.setBackgroundColor(m_resources->bgColor());
     painter.setBrush(m_resources->currentBrush());
+
     // TODO Retrieve current paintop and check if it is bidirectional.
     // TODO If it is, copy the interested rect onto the m_stroke device
     // TODO and let the paintop do the mixing for us.
+    // (Currently, there are only non-bidirectional paintops so don't do the check).
     painter.paintAt(KisPaintInformation(event->pos(), event->pressure(), event->xTilt(), event->yTilt()));
     painter.end();
     // TODO If it is not, then mix the colors guessing the paintop properties.
+
+    initPainterlyProperties(stroke, current, event);
+    mergeCanvasOnStroke(stroke);
+    updateResources(stroke);
 
     QRect rc = stroke->exactBounds();
 
     // My idea: do all the strange things in the stroke, and then bitBlt it to the m_canvasDev
     // so if something goes wrong we still have the canvas device without flaws
+    // TODO bitBlt painterly overlays too
     painter.begin(m_canvasDev);
     painter.bitBlt(rc.topLeft(), stroke, rc);
     painter.end();
@@ -159,9 +195,20 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *event)
     m_canvas->updateCanvas(rc);
 }
 
-void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
+void MixerTool::initPainterlyProperties(KisPaintDeviceSP stroke, KisPaintOp *current, KoPointerEvent *event)
 {
-//     kDebug() << "MOUSE RELEASED!! " << event->pos() << endl;
+
 }
+
+void MixerTool::mergeCanvasOnStroke(KisPaintDeviceSP stroke)
+{
+
+}
+
+void MixerTool::updateResources(KisPaintDeviceSP stroke)
+{
+
+}
+
 
 #include "mixercore.moc"

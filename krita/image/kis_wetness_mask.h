@@ -38,6 +38,7 @@
 
 class KRITAIMAGE_EXPORT KisWetnessMask : public KisMask
 {
+public:
     KisWetnessMask( KisPaintDeviceSP device );
     virtual ~KisWetnessMask();
     KisWetnessMask( const KisWetnessMask& rhs );

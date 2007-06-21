@@ -33,6 +33,7 @@
 
 class KRITAIMAGE_EXPORT KisVolumeMask : public KisMask
 {
+public:
     KisVolumeMask( KisPaintDeviceSP device );
     virtual ~KisVolumeMask();
     KisVolumeMask( const KisVolumeMask& rhs );

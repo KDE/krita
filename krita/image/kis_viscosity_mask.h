@@ -33,6 +33,7 @@
 
 class KRITAIMAGE_EXPORT KisViscosityMask : public KisMask
 {
+public:
     KisViscosityMask( KisPaintDeviceSP device );
     virtual ~KisViscosityMask();
     KisViscosityMask( const KisViscosityMask& rhs );

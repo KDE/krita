@@ -29,6 +29,7 @@
 
 class KRITAIMAGE_EXPORT KisPigmentConcentrationMask : public KisMask
 {
+public:
     KisPigmentConcentrationMask( KisPaintDeviceSP device );
     virtual ~KisPigmentConcentrationMask();
     KisPigmentConcentrationMask( const KisPigmentConcentrationMask& rhs );

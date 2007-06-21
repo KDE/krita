@@ -29,6 +29,7 @@
 */
 class KRITAIMAGE_EXPORT KisReflectivityMask : public KisMask
 {
+public:
     KisReflectivityMask( KisPaintDeviceSP device );
     virtual ~KisReflectivityMask();
     KisReflectivityMask( const KisReflectivityMask& rhs );

@@ -31,6 +31,7 @@
 
 class KRITAIMAGE_EXPORT KisAdsorbencyMask : public KisMask
 {
+public:
     KisAdsorbencyMask( KisPaintDeviceSP device );
     virtual ~KisAdsorbencyMask();
     KisAdsorbencyMask( const KisAdsorbencyMask& rhs );

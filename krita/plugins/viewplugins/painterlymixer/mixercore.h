@@ -26,6 +26,7 @@
 #include "kis_paint_device.h"
 
 class QFrame;
+class KisPaintOp;
 class MixerTool;
 
 class MixerCanvas : public QFrame, public KoCanvasBase {
@@ -35,7 +36,10 @@ public:
     MixerCanvas(QWidget *parent);
     ~MixerCanvas();
 
+    // Initializes the canvas KisPaintDevice, and add overlays to it.
     void initDevice(KoColorSpace *cs, KisResourceProvider *rp);
+    // Initializes the color wells in the Wells Frame.
+    void initWells(QFrame *wf);
 
 // Events to be redirected to the MixerTool
 protected:
@@ -88,6 +92,24 @@ public:
     void mousePressEvent(KoPointerEvent *event);
     void mouseMoveEvent(KoPointerEvent *event);
     void mouseReleaseEvent(KoPointerEvent *event);
+
+private:
+    /*
+    Initialize all the properties that cannot be stored in the KisPaintOp, storing
+    them in the mixer. Initialize the properties that the stroke would have in order to mix
+    colors on it in a painterly way. It's called inside mouseMoveEvent.
+    */
+    void initPainterlyProperties(KisPaintDeviceSP stroke, KisPaintOp *current, KoPointerEvent *event);
+
+    /*
+    Merge the canvas contents with the stroke contents, actually mixing the colors.
+    */
+    void mergeCanvasOnStroke(KisPaintDeviceSP stroke);
+
+    /*
+    Updates the information of the paintop (color, painterly information for next iteration and such)
+    */
+    void updateResources(KisPaintDeviceSP stroke);
 
 private:
     KisPaintDevice *m_canvasDev;

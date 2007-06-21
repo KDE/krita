@@ -32,6 +32,7 @@
 
 class KRITAIMAGE_EXPORT KisHeightMask : public KisMask
 {
+public:
     KisHeightMask( KisPaintDeviceSP device );
     virtual ~KisHeightMask();
     KisHeightMask( const KisHeightMask& rhs );

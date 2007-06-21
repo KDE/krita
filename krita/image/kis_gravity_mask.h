@@ -32,6 +32,7 @@
 
 class KRITAIMAGE_EXPORT KisGravityMask : public KisMask
 {
+public:
     KisGravityMask( KisPaintDeviceSP device );
     virtual ~KisGravityMask();
     KisGravityMask( const KisGravityMask& rhs );

@@ -1,4 +1,4 @@
-<MetaDataEditor name="Dublin Core" uiFile="dublincore.ui" >
+<MetaDataEditor name="Dublin Core" uiFile="dublincore.ui" icon="user.png">
     <EntryEditor editorName = "editCreator"
                 schemaUri = "http://purl.org/dc/elements/1.1/"
                 entryName = "creator"

@@ -66,6 +66,25 @@ namespace KisMetaData {
             Entry& getEntry(QString uri, QString entryName);
             
             /**
+             * Give access to a metadata entry
+             * @param schema the schema
+             * @param entryName the name of the entry
+             */
+            Entry& getEntry(const KisMetaData::Schema* schema, QString entryName);
+            
+            /**
+             * @return true if the store contains this entry
+             */
+            bool hasEntry(QString entryKey);
+            /**
+             * @return true if the store contains this entry
+             */
+            bool hasEntry(const KisMetaData::Schema* schema, QString entryName);
+            /**
+             * @return true if the store contains this entry
+             */
+            bool hasEntry(QString uri, QString entryName);
+            /**
              * Return the value associated with this entry name and uri.
              * @param uri
              * @param entryName

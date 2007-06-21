@@ -90,7 +90,30 @@ Entry& Store::getEntry(QString entryKey)
 Entry& Store::getEntry(QString uri, QString entryName)
 {
     const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
-    return d->entries[schema->generateQualifiedName( entryName )];
+    Q_ASSERT(schema);
+    return getEntry(schema, entryName );
+}
+
+Entry& Store::getEntry(const KisMetaData::Schema* schema, QString entryName)
+{
+    return getEntry(schema->generateQualifiedName( entryName ));
+}
+
+bool Store::hasEntry(QString uri, QString entryName)
+{
+    const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
+    Q_ASSERT(schema);
+    return hasEntry(schema, entryName );
+}
+
+bool Store::hasEntry(const KisMetaData::Schema* schema, QString entryName)
+{
+    return hasEntry(schema->generateQualifiedName(entryName ));
+}
+
+bool Store::hasEntry(QString entryKey)
+{
+    return d->entries.keys().contains( entryKey );
 }
 
 const Value& Store::getValue(QString uri, QString entryName)

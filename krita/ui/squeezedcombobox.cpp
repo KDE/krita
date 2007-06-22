@@ -62,6 +62,9 @@ SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
 {
     setMinimumWidth(100);
     m_timer = new QTimer(this);
+
+    if (!listBox()) return;
+
     m_tooltip = new SqueezedComboBoxTip( listBox()->viewport(), this );
 
     connect(m_timer, SIGNAL(timeout()),

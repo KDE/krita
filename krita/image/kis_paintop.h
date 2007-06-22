@@ -57,17 +57,26 @@ class KRITAIMAGE_EXPORT KisPaintOp : public KisShared
 {
         struct Private;
     public:
-    
+
         KisPaintOp(KisPainter * painter);
         virtual ~KisPaintOp();
-    
+
         /**
          * Paint at the subpixel point pos using the specified paint
          * information..
          */
         virtual void paintAt(const KisPaintInformation& info) = 0;
         void setSource(KisPaintDeviceSP p);
-    
+
+        /**
+         * A painterly paintop must have a PainterlyInformation structure,
+         * handle the painterly overlays by its own and implement bidirectionality,
+         * that is, it will pick up colors from the canvas and change its own color
+         * while drawing.
+         * @return if the current paintop is painterly.
+         */
+        virtual bool painterly() const {return false;}
+
         /**
          * Draw a line between pos1 and pos2 using the currently set brush and color.
          * If savedDist is less than zero, the brush is painted at pos1 before being
@@ -90,7 +99,7 @@ class KRITAIMAGE_EXPORT KisPaintOp : public KisShared
                     const QPointF &control2,
                     const KisPaintInformation &pi2,
                     const double savedDist = -1);
-    
+
         /**
          * Whether this paintop wants to deposit paint even when not moving, i.e. the
          * tool needs to activate its timer.
@@ -98,16 +107,16 @@ class KRITAIMAGE_EXPORT KisPaintOp : public KisShared
         virtual bool incremental() { return false; }
 
     protected:
-    
+
         virtual KisPaintDeviceSP computeDab(KisQImagemaskSP mask);
         virtual KisPaintDeviceSP computeDab(KisQImagemaskSP mask, KoColorSpace *cs);
-    
-    
+
+
         /**
          * Split the coordinate into whole + fraction, where fraction is always >= 0.
          */
         virtual void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
-    
+
         KisPainter * m_painter;
         KisPaintDeviceSP m_source; // use this layer as source layer for the operation
     private:

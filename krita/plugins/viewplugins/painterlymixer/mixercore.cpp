@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <cmath>
+
 #include <QtGui>
 
 #include <kdebug.h>
@@ -33,6 +35,7 @@
 #include <KoUnit.h>
 #include <KoViewConverter.h>
 
+#include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_paintop.h"
@@ -85,9 +88,9 @@ void MixerCanvas::initDevice(KoColorSpace *cs, KisResourceProvider *rp)
     m_toolProxy->setActiveTool(m_tool);
 }
 
-void MixerCanvas::initWells(QFrame *wf)
+void MixerCanvas::initSpots(QFrame *sf)
 {
-    // TODO Initialize wells for paintop initial color
+    // TODO Initialize spots
 }
 
 void MixerCanvas::mouseDoubleClickEvent(QMouseEvent *event)
@@ -134,7 +137,7 @@ void MixerCanvas::updateCanvas(const QRectF& rc)
 // THE MIXER TOOL
 /////////////////
 
-MixerTool::MixerTool(KoCanvasBase *canvas, KisPaintDevice *device, KisResourceProvider *rp)
+MixerTool::MixerTool(MixerCanvas *canvas, KisPaintDevice *device, KisResourceProvider *rp)
     : KoTool(canvas), m_canvasDev(device), m_resources(rp)
 {
 
@@ -156,8 +159,6 @@ void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 {
-//     kDebug() << "MOUSE MOVED!! " << event->pos() << endl;
-
     KisPaintDeviceSP stroke = new KisPaintDevice(m_canvasDev->colorSpace());
     addPainterlyOverlays(stroke);
 
@@ -179,7 +180,7 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *event)
     painter.end();
     // TODO If it is not, then mix the colors guessing the paintop properties.
 
-    initPainterlyProperties(stroke, current, event);
+    initPainterlyProperties(stroke, event);
     mergeCanvasOnStroke(stroke);
     updateResources(stroke);
 
@@ -195,9 +196,28 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *event)
     m_canvas->updateCanvas(rc);
 }
 
-void MixerTool::initPainterlyProperties(KisPaintDeviceSP stroke, KisPaintOp *current, KoPointerEvent *event)
+void MixerTool::initPainterlyProperties(KisPaintDeviceSP stroke, KoPointerEvent *e)
 {
+    int x0, y0, rho;
+    int area;
+    float pression, force;
+    float w, p;
+    float W_tot, P_tot;
+    QRect rc = stroke->exactBounds();
+    QColor c; quint8 opacity;
 
+    area = rc.width() * rc.height();
+
+    KisRectIteratorPixel it_main = stroke->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height());
+    KisRectIteratorPixel it_pigm = stroke->painterlyChannel("KisPigmentConcentrationMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height());
+
+    while (!it_main.isDone()) {
+        stroke->colorSpace()->toQColor(it_main.rawData(), &c, &opacity);
+//         stroke->painterlyChannel("KisPigmentConcentrationMask")->colorSpace()->setAlpha(it_pigm.rawData(),opacity, 1);
+        *it_pigm.rawData() = opacity;
+        ++it_main;
+        ++it_pigm;
+    }
 }
 
 void MixerTool::mergeCanvasOnStroke(KisPaintDeviceSP stroke)

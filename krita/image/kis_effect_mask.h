@@ -42,7 +42,7 @@ public:
 
     virtual ~KisEffectMask();
     KisEffectMask( const KisEffectMask& rhs );
-    QString id() { return "KisEffectMask"; }
+    virtual QString id() { return "KisEffectMask"; }
 
     /**
      * Apply the effect the projection using the mask as a selection.

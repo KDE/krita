@@ -38,8 +38,8 @@ public:
 
     // Initializes the canvas KisPaintDevice, and add overlays to it.
     void initDevice(KoColorSpace *cs, KisResourceProvider *rp);
-    // Initializes the color wells in the Wells Frame.
-    void initWells(QFrame *wf);
+    // Initializes the color wells and various spots in the Spots Frame.
+    void initSpots(QFrame *sf);
 
 // Events to be redirected to the MixerTool
 protected:
@@ -81,7 +81,7 @@ class MixerTool : public KoTool {
     Q_OBJECT
 
 public:
-    MixerTool(KoCanvasBase *canvas, KisPaintDevice *device, KisResourceProvider *rp);
+    MixerTool(MixerCanvas *canvas, KisPaintDevice *device, KisResourceProvider *rp);
     ~MixerTool();
 
 // Implement KoTool
@@ -99,7 +99,7 @@ private:
     them in the mixer. Initialize the properties that the stroke would have in order to mix
     colors on it in a painterly way. It's called inside mouseMoveEvent.
     */
-    void initPainterlyProperties(KisPaintDeviceSP stroke, KisPaintOp *current, KoPointerEvent *event);
+    void initPainterlyProperties(KisPaintDeviceSP stroke, KoPointerEvent *e);
 
     /*
     Merge the canvas contents with the stroke contents, actually mixing the colors.
@@ -110,6 +110,8 @@ private:
     Updates the information of the paintop (color, painterly information for next iteration and such)
     */
     void updateResources(KisPaintDeviceSP stroke);
+
+
 
 private:
     KisPaintDevice *m_canvasDev;

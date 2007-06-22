@@ -32,7 +32,7 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
     setupUi(this);
 
     m_canvas->initDevice(m_view->image()->colorSpace(), m_view->resourceProvider());
-    m_canvas->initWells(m_wellsFrame);
+    m_canvas->initSpots(m_spotsFrame);
 }
 
 KisPainterlyMixer::~KisPainterlyMixer()

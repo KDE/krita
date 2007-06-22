@@ -93,7 +93,7 @@ public:
     bool active();
     void setActive( bool active );
 
-    QString id() { return "Kismask"; }
+    virtual QString id() { return "KisMask"; }
 
 private:
 

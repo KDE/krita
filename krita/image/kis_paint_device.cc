@@ -1391,17 +1391,13 @@ qint32 KisPaintDevice::getY() const
 
 KisMask * KisPaintDevice::painterlyChannel( const QString & channelId )
 {
-    if ( m_d->painterlyChannels.contains( channelId ) ) {
-        return m_d->painterlyChannels.value( channelId );
-    }
-    return 0;
+    return m_d->painterlyChannels.value( channelId, 0 );
 }
 
 void KisPaintDevice::addPainterlyChannel( KisMask * painterlyChannel )
 {
     m_d->painterlyChannels[painterlyChannel->id()] = painterlyChannel;
 }
-
 
 KisMask * KisPaintDevice::removePainterlyChannel( const QString & channelId )
 {

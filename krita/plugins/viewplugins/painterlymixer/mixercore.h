@@ -81,7 +81,7 @@ class MixerTool : public KoTool {
     Q_OBJECT
 
 public:
-    MixerTool(MixerCanvas *canvas, KisPaintDevice *device, KisResourceProvider *rp);
+    MixerTool(MixerCanvas *canvas, KisPaintDeviceSP device, KisResourceProvider *rp);
     ~MixerTool();
 
 // Implement KoTool
@@ -89,32 +89,30 @@ public:
     // This is not needed
     void paint(QPainter &, const KoViewConverter &) {}
 
-    void mousePressEvent(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
-    void mouseReleaseEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *e);
+    void mouseReleaseEvent(KoPointerEvent *e);
+    void mouseMoveEvent(KoPointerEvent *e);
 
 private:
     /*
-    Initialize all the properties that cannot be stored in the KisPaintOp, storing
+    Update all the properties that cannot be stored in the KisPaintOp, storing
     them in the mixer. Initialize the properties that the stroke would have in order to mix
     colors on it in a painterly way. It's called inside mouseMoveEvent.
     */
-    void initPainterlyProperties(KisPaintDeviceSP stroke, KoPointerEvent *e);
+    void updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent *e);
 
     /*
     Merge the canvas contents with the stroke contents, actually mixing the colors.
     */
-    void mergeCanvasOnStroke(KisPaintDeviceSP stroke);
+    void mixColors(KisPaintDeviceSP stroke);
 
     /*
     Updates the information of the paintop (color, painterly information for next iteration and such)
     */
     void updateResources(KisPaintDeviceSP stroke);
 
-
-
 private:
-    KisPaintDevice *m_canvasDev;
+    KisPaintDeviceSP m_canvasDev;
     KisResourceProvider *m_resources;
 };
 

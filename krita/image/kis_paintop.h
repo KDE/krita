@@ -73,7 +73,7 @@ class KRITAIMAGE_EXPORT KisPaintOp : public KisShared
          * handle the painterly overlays by its own and implement bidirectionality,
          * that is, it will pick up colors from the canvas and change its own color
          * while drawing.
-         * @return if the current paintop is painterly.
+         * @return true if the current paintop is painterly.
          */
         virtual bool painterly() const {return false;}
 

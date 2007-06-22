@@ -83,7 +83,7 @@ void MixerCanvas::initDevice(KoColorSpace *cs, KisResourceProvider *rp)
     m_canvasDev = new KisPaintDevice(cs);
     addPainterlyOverlays(m_canvasDev);
 
-    m_tool = new MixerTool(this, m_canvasDev.data(), rp);
+    m_tool = new MixerTool(this, m_canvasDev, rp);
     m_toolProxy = new KoToolProxy(this);
     m_toolProxy->setActiveTool(m_tool);
 }
@@ -137,7 +137,7 @@ void MixerCanvas::updateCanvas(const QRectF& rc)
 // THE MIXER TOOL
 /////////////////
 
-MixerTool::MixerTool(MixerCanvas *canvas, KisPaintDevice *device, KisResourceProvider *rp)
+MixerTool::MixerTool(MixerCanvas *canvas, KisPaintDeviceSP device, KisResourceProvider *rp)
     : KoTool(canvas), m_canvasDev(device), m_resources(rp)
 {
 
@@ -147,17 +147,17 @@ MixerTool::~MixerTool()
 {
 }
 
-void MixerTool::mousePressEvent(KoPointerEvent *event)
+void MixerTool::mousePressEvent(KoPointerEvent *e)
 {
 //     kDebug() << "MOUSE PRESSED!! " << event->pos() << endl;
 }
 
-void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
+void MixerTool::mouseReleaseEvent(KoPointerEvent *e)
 {
 //     kDebug() << "MOUSE RELEASED!! " << event->pos() << endl;
 }
 
-void MixerTool::mouseMoveEvent(KoPointerEvent *event)
+void MixerTool::mouseMoveEvent(KoPointerEvent *e)
 {
     KisPaintDeviceSP stroke = new KisPaintDevice(m_canvasDev->colorSpace());
     addPainterlyOverlays(stroke);
@@ -166,61 +166,62 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *event)
     KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(m_resources->currentPaintop(),
                                                                   m_resources->currentPaintopSettings(),
                                                                   &painter, 0);
-
-    painter.setPaintOp(current);
-    painter.setPaintColor(m_resources->fgColor());
-    painter.setBackgroundColor(m_resources->bgColor());
+    painter.setPaintOp(current); // The painter now has the paintop and will destroy it.
+    painter.setPaintColor(m_resources->fgColor()); // TODO I am not sure about this
+    painter.setBackgroundColor(m_resources->bgColor()); // TODO I am not sure about this
     painter.setBrush(m_resources->currentBrush());
 
-    // TODO Retrieve current paintop and check if it is bidirectional.
-    // TODO If it is, copy the interested rect onto the m_stroke device
-    // TODO and let the paintop do the mixing for us.
-    // (Currently, there are only non-bidirectional paintops so don't do the check).
-    painter.paintAt(KisPaintInformation(event->pos(), event->pressure(), event->xTilt(), event->yTilt()));
-    painter.end();
-    // TODO If it is not, then mix the colors guessing the paintop properties.
+    if (current->painterly()) {
+        QRect rc = m_canvasDev->exactBounds();
+        painter.bitBlt(rc.topLeft(), m_canvasDev, rc);
+        painter.end();
+    }
 
-    initPainterlyProperties(stroke, event);
-    mergeCanvasOnStroke(stroke);
-    updateResources(stroke);
+    painter.paintAt(KisPaintInformation(e->pos(), e->pressure(), e->xTilt(), e->yTilt()));
+    painter.end();
+
+    if (!current->painterly()) {
+        updatePainterlyOverlays(stroke, e);
+        mixColors(stroke);
+        updateResources(stroke);
+    }
 
     QRect rc = stroke->exactBounds();
-
-    // My idea: do all the strange things in the stroke, and then bitBlt it to the m_canvasDev
-    // so if something goes wrong we still have the canvas device without flaws
-    // TODO bitBlt painterly overlays too
     painter.begin(m_canvasDev);
     painter.bitBlt(rc.topLeft(), stroke, rc);
+    painter.copyMasks(rc.topLeft(), stroke, rc);
     painter.end();
 
     m_canvas->updateCanvas(rc);
 }
 
-void MixerTool::initPainterlyProperties(KisPaintDeviceSP stroke, KoPointerEvent *e)
+void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent *e)
 {
-    int x0, y0, rho;
-    int area;
     float pression, force;
-    float w, p;
-    float W_tot, P_tot;
     QRect rc = stroke->exactBounds();
     QColor c; quint8 opacity;
 
-    area = rc.width() * rc.height();
-
-    KisRectIteratorPixel it_main = stroke->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height());
-    KisRectIteratorPixel it_pigm = stroke->painterlyChannel("KisPigmentConcentrationMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height());
+    KisRectIteratorPixel            // Give a more or less clear name to each iterator.
+        it_main = stroke->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
+        it_adso = stroke->painterlyChannel("KisAdsorbencyMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
+        it_pigm = stroke->painterlyChannel("KisPigmentConcentrationMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
+        it_refl = stroke->painterlyChannel("KisReflectivityMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
+        it_volu = stroke->painterlyChannel("KisVolumeMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
+        it_visc = stroke->painterlyChannel("KisViscosityMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
+        it_wetn = stroke->painterlyChannel("KisWetnessMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height());
+    KisRectIteratorPixel *iters[6] = // Used only to cleanly increase the iterators.
+        {&it_adso, &it_pigm, &it_refl, &it_volu, &it_visc, &it_wetn};
 
     while (!it_main.isDone()) {
         stroke->colorSpace()->toQColor(it_main.rawData(), &c, &opacity);
-//         stroke->painterlyChannel("KisPigmentConcentrationMask")->colorSpace()->setAlpha(it_pigm.rawData(),opacity, 1);
         *it_pigm.rawData() = opacity;
+
+        for (int _i=0;_i<6;_i++) ++(*iters[_i]);
         ++it_main;
-        ++it_pigm;
     }
 }
 
-void MixerTool::mergeCanvasOnStroke(KisPaintDeviceSP stroke)
+void MixerTool::mixColors(KisPaintDeviceSP stroke)
 {
 
 }

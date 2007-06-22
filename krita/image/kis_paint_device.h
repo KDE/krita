@@ -20,6 +20,7 @@
 #define KIS_PAINT_DEVICE_IMPL_H_
 
 #include <QColor>
+#include <QHash>
 #include <QObject>
 #include <QPixmap>
 #include <QList>
@@ -581,20 +582,25 @@ public:
      * @return the painterly channel with the specified id or 0 if
      * this paint device does not have such a channel
      */
-    KisMask * painterlyChannel( const QString & channelId );
+    KisMaskSP painterlyChannel( const QString & channelId );
+
+    /**
+    * @return the reference to the hash that contains the painterly channels.
+    */
+    const QHash<QString,KisMaskSP> painterlyChannels();
 
     /**
      * Add a painterly channel to the paint device. The paint device
-     * assumes ownership of the channel
+     * assumes ownership of the channel.
      */
-    void addPainterlyChannel( KisMask * painterlyChannel );
+    void addPainterlyChannel( KisMaskSP painterlyChannel );
 
     /**
      * Removes the specified painterly channel from the list of
      * painterly channels owned by this paint device. The channel is
      * not deleted.
      */
-    KisMask * removePainterlyChannel( const QString & channelId );
+    KisMaskSP removePainterlyChannel( const QString & channelId );
 
 signals:
     void positionChanged(KisPaintDeviceSP device);

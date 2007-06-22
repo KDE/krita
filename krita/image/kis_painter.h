@@ -36,6 +36,7 @@
 
 class QUndoCommand;
 class QRect;
+class QStringList;
 class KisTransaction;
 class KisBrush;
 class KisPattern;
@@ -216,6 +217,24 @@ public:
     {
         bitBlt(dx, dy, op, src, OPACITY_OPAQUE, sx, sy, sw, sh);
     }
+
+    /**
+    * Copies the mask with the given id from the source device to the homonym mask in the current device.
+    * @param tl the top left point in the destination device
+    * @param src the parent device of the source mask (from which we take the mask that will be copied)
+    * @param rc the rect of the source mask to copy.
+    * @param id the id of the source mask.
+    */
+    void copyMask(const QPoint &tl, KisPaintDeviceSP src, QRect rc, const QString &id);
+
+    /**
+    * Iterates copyMask on every mask in the QStringList. It iterates on all masks if none is specified.
+    * @param tl the top left point in the destination device
+    * @param src the parent device of the source masks (from which we take the masks that will be copied)
+    * @param rc the rect of the source masks to copy.
+    * @param ids the ids of the source masks.
+    */
+    void copyMasks(QPoint tl, KisPaintDeviceSP src, QRect rc, QStringList ids = QStringList());
 
     /**
      * A version of bitBlt that renders using an external mask, ignoring

@@ -76,7 +76,7 @@ public:
     QPaintEngine * paintEngine;
 
     // XXX: Use shared pointers here?
-    QHash<QString, KisMask*> painterlyChannels;
+    QHash<QString, KisMaskSP> painterlyChannels;
 #ifdef CACHE_EXACT_BOUNDS
     QRect exactBounds;
 #endif
@@ -1389,17 +1389,25 @@ qint32 KisPaintDevice::getY() const
     return m_d->y;
 }
 
-KisMask * KisPaintDevice::painterlyChannel( const QString & channelId )
+KisMaskSP KisPaintDevice::painterlyChannel( const QString & channelId )
 {
-    return m_d->painterlyChannels.value( channelId, 0 );
+    if (m_d->painterlyChannels.contains(channelId))
+        return m_d->painterlyChannels.value(channelId);
+
+    return 0;
 }
 
-void KisPaintDevice::addPainterlyChannel( KisMask * painterlyChannel )
+const QHash<QString,KisMaskSP> KisPaintDevice::painterlyChannels()
+{
+    return m_d->painterlyChannels;
+}
+
+void KisPaintDevice::addPainterlyChannel( KisMaskSP painterlyChannel )
 {
     m_d->painterlyChannels[painterlyChannel->id()] = painterlyChannel;
 }
 
-KisMask * KisPaintDevice::removePainterlyChannel( const QString & channelId )
+KisMaskSP KisPaintDevice::removePainterlyChannel( const QString & channelId )
 {
     if ( m_d->painterlyChannels.contains( channelId ) ) {
         return m_d->painterlyChannels.take( channelId );

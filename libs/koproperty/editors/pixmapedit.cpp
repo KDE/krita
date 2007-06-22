@@ -46,10 +46,11 @@
 #include <kdebug.h>
 #include <kimageio.h>
 
+/* KDE4:
 #ifdef Q_WS_WIN
 #include <win32_utils.h>
 #include <krecentdirs.h>
-#endif
+#endif*/
 
 #ifndef PURE_QT
 #include <kfiledialog.h>
@@ -162,19 +163,20 @@ PixmapEdit::selectPixmapFileName()
 	}
 #endif*/
 	QString caption( i18n("Insert Image From File (for \"%1\" property)", property()->caption()) );
+/*KDE4:
 #ifdef Q_WS_WIN
 	QString recentDir;
 	QString fileName = Q3FileDialog::getOpenFileName(
 		KFileDialog::getStartURL(":lastVisitedImagePath", recentDir).path(),
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)),
 		this, 0, caption);
-#else
+#else*/
 	KUrl url( KFileDialog::getImageOpenUrl(
 		KUrl(":lastVisitedImagePath"), this, caption) );
 	QString fileName = url.isLocalFile() ? url.path() : url.prettyUrl();
 
 	//! @todo download the file if remote, then set fileName properly
-#endif
+//#endif
 	return fileName;
 }
 
@@ -192,12 +194,14 @@ PixmapEdit::selectPixmap()
 	}
 	setValue(pm);
 
+/* KDE4:
 #ifdef Q_WS_WIN
 	//save last visited path
 	KUrl url(fileName);
 	if (url.isLocalFile())
 		KRecentDirs::add(":lastVisitedImagePath", url.directory());
 #endif
+*/
 }
 
 void

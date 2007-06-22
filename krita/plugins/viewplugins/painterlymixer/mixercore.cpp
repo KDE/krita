@@ -20,7 +20,8 @@
 
 #include <cmath>
 
-#include <QtGui>
+#include <QCursor>
+#include <QFrame>
 
 #include <kdebug.h>
 
@@ -78,7 +79,7 @@ MixerCanvas::~MixerCanvas()
         delete m_tool;
 }
 
-void MixerCanvas::initDevice(KoColorSpace *cs, KisResourceProvider *rp)
+void MixerCanvas::initDevice(KoColorSpace *cs, KoCanvasResourceProvider *rp)
 {
     m_canvasDev = new KisPaintDevice(cs);
     addPainterlyOverlays(m_canvasDev);
@@ -137,7 +138,7 @@ void MixerCanvas::updateCanvas(const QRectF& rc)
 // THE MIXER TOOL
 /////////////////
 
-MixerTool::MixerTool(MixerCanvas *canvas, KisPaintDeviceSP device, KisResourceProvider *rp)
+MixerTool::MixerTool(MixerCanvas *canvas, KisPaintDeviceSP device, KoCanvasResourceProvider *rp)
     : KoTool(canvas), m_canvasDev(device), m_resources(rp)
 {
 
@@ -163,13 +164,14 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
     addPainterlyOverlays(stroke);
 
     KisPainter painter(stroke);
-    KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(m_resources->currentPaintop(),
-                                                                  m_resources->currentPaintopSettings(),
-                                                                  &painter, 0);
+    KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(
+                          m_resources->resource(KisResourceProvider::CurrentPaintop).value<KoID>(),
+                          static_cast<KisPaintOpSettings*>(m_resources->resource(KisResourceProvider::CurrentPaintopSettings).value<void*>()),
+                          &painter, 0);
     painter.setPaintOp(current); // The painter now has the paintop and will destroy it.
-    painter.setPaintColor(m_resources->fgColor()); // TODO I am not sure about this
-    painter.setBackgroundColor(m_resources->bgColor()); // TODO I am not sure about this
-    painter.setBrush(m_resources->currentBrush());
+    painter.setPaintColor(m_resources->resource(KoCanvasResource::ForegroundColor).value<KoColor>());
+    painter.setBackgroundColor(m_resources->resource(KoCanvasResource::ForegroundColor).value<KoColor>()); // TODO I am not sure about this
+    painter.setBrush(static_cast<KisBrush*>(m_resources->resource(KisResourceProvider::CurrentBrush).value<void*>()));
 
     if (current->painterly()) {
         QRect rc = m_canvasDev->exactBounds();

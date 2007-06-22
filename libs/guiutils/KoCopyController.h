@@ -26,9 +26,22 @@
 class QAction;
 class KoCanvasBase;
 
+/**
+ * This class takes care of the copy actions integration into flake.
+ * Whenever the copy (KStandardAction::Copy) action is triggered the controller
+ * will use the currently selected tool and try to paste the clipboard using that tool.
+ * Additionally; when the tool does not allow pasting (KoTool::hasSelection() returns false)
+ * the signal copyRequested will be emitted for applications to connect to.
+ */
 class KOGUIUTILS_EXPORT KoCopyController : public QObject {
     Q_OBJECT
 public:
+    /**
+     * Constructor
+     * @param canvas the canvas this controller will work on.
+     * @param copyAction the action that we will listen to and respond to when it is activated.  Additionally, the
+     *     action is used as a parent for the QObject for memory management purposes.
+     */
     KoCopyController(KoCanvasBase *canvas, QAction *copyAction);
     ~KoCopyController();
 
@@ -37,6 +50,12 @@ signals:
     void copyRequested();
 
 public slots:
+    /**
+     * Notify weather the application has a selection.
+     * The copy-action will only be enabled when either the current tool or the application has a selection.
+     * @param selection if true the application is marked to allow copying.
+     * @see copyRequested()
+     */
     void hasSelection(bool selection);
 
 private:

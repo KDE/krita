@@ -100,6 +100,7 @@ public:
         ExplicitListValue,      ///< Int with the list-value that that parag will have. Ignored if this is not a list.
         RestartListNumbering,   ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
         ListLevel,               ///< int with the list-level that the paragraph will get when this is a list
+        IsListHeader,           ///< bool, if true the paragraph shows up as a list item, but w/o a list label.
 
         TabPositions,            ///< A list of tab positions
         TextProgressionDirection
@@ -133,7 +134,7 @@ public:
     };
 
     /// Constructor
-    explicit KoParagraphStyle();
+    KoParagraphStyle();
     /// Copy constructor
     KoParagraphStyle(const KoParagraphStyle &orig);
     /// Destructor
@@ -355,9 +356,11 @@ public:
     void setRightMargin (double margin);
     /// duplicated property from QTextBlockFormat
     double rightMargin () const;
-    
+    /// set the margin around the paragraph, making the margin on all sides equal.
     void setMargin (double margin);
-    
+
+    void setIsListHeader(bool on);
+    bool isListHeader() const;
 
     /// duplicated property from QTextBlockFormat
     void setAlignment (Qt::Alignment alignment);

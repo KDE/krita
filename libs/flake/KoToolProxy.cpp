@@ -281,9 +281,15 @@ QHash<QString, QAction*> KoToolProxy::actions() const {
     return d->activeTool ? d->activeTool->actions() : QHash<QString, QAction*>();
 }
 
-void KoToolProxy::copy() {
+void KoToolProxy::copy() const {
     if (d->activeTool)
         d->activeTool->copy();
+}
+
+bool KoToolProxy::paste() {
+    if (d->activeTool)
+        return d->activeTool->paste();
+    return false;
 }
 
 #include <KoToolProxy.moc>

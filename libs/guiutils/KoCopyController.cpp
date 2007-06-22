@@ -52,7 +52,8 @@ public:
 };
 
 KoCopyController::KoCopyController(KoCanvasBase *canvas, QAction *copyAction)
-    : d(new Private(this, canvas, copyAction))
+    : QObject(copyAction),
+    d(new Private(this, canvas, copyAction))
 {
     connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
     connect(copyAction, SIGNAL(triggered()), this, SLOT(copy()));

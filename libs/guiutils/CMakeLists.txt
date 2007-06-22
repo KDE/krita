@@ -45,6 +45,7 @@ set(koguiutils_LIB_SRCS
     KoToolDockerFactory.cpp
     KoLayoutVisitor.cpp
     KoCopyController.cpp
+    KoPasteController.cpp
     KoImageData.cpp
     KoImageCollection.cpp
    KoColorDocker.cpp

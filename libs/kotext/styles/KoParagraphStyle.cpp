@@ -708,6 +708,14 @@ int KoParagraphStyle::listLevel() const {
     return propertyInt(ListLevel);
 }
 
+void KoParagraphStyle::setIsListHeader(bool on) {
+    setProperty(IsListHeader, on);
+}
+
+bool KoParagraphStyle::isListHeader() const {
+    return propertyBoolean(IsListHeader);
+}
+
 KoCharacterStyle *KoParagraphStyle::characterStyle() {
     return d->charStyle;
 }

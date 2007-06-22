@@ -206,7 +206,9 @@ public:
      * The default implementation is empty to aid tools that don't have any selection.
      * @see selection()
      */
-    virtual void copy() {}
+    virtual void copy() const { }
+
+    virtual bool paste() { return false; }
 
 public slots:
     /**

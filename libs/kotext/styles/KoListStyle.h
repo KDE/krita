@@ -106,7 +106,8 @@ public:
         BulletSize,     ///< size in percent relative to the height of the text
         Alignment,      ///< Alignment of the counter
         MinimumWidth,   ///< The minimum width, in pt, of the listItem including the prefix/suffix.
-        ListId          ///< A group of lists together are called 1 (user intended) list in ODF. Store the listId here
+        ListId,         ///< A group of lists together are called 1 (user intended) list in ODF. Store the listId here
+        IsOutline       ///< If true then this list is an outline list (for header paragraphs)
     };
 
     /**
@@ -120,9 +121,38 @@ public:
     /// Destructor
     ~KoListStyle();
 
+    /**
+     * Return the properties for the specified list level.
+     * A list style can contain properties for more than one level, when a paragraph is added to this list
+     * it will be added at a certain level and it will then be using the properties of that level.
+     * The gain from using one list style for multiple levels is in allowing a way to format the list label.
+     * A list item which is of level '4' will be able to have a display level of up to 4, which means that not
+     * only is the counter of the current level displayed, the counters of the higher levels can be displayed as
+     * well.
+     * Adding level properties for lower levels will have the effect that the counter of that level will be displayed
+     * in the specified format instead of being inherited from the list style at the higher level.
+     */
     KoListLevelProperties level(int level) const;
+
+    /**
+     * Set the properties for a level.
+     * @param properties the new properties for the level, including the level number.
+     * @see level()
+     */
     void setLevel(const KoListLevelProperties &properties);
+
+    /**
+     * @return if there are the properties for a level set.
+     * @param level the level for which to check
+     * @see level()
+     */
     bool hasPropertiesForLevel(int level) const;
+
+    /**
+     * Remove any properties that were set for a level.
+     * @param level the level for which to remove
+     * @see level()
+     */
     void removePropertiesForLevel(int level);
 
     /// return the name of the style.
@@ -141,6 +171,7 @@ public:
 
     bool operator==(const KoListStyle &other) const;
 
+    /// create a new KoListStyle with the properties from the param list.
     static KoListStyle* fromTextList(QTextList *list);
 
     /**

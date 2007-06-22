@@ -93,8 +93,10 @@ public:
      */
     KoToolSelection* selection();
 
-    /// copies the selection to the clipboard
-    void copy();
+    /// Forwarded to the current KoTool
+    void copy() const;
+    /// Forwarded to the current KoTool
+    bool paste();
     /// Set the new active tool.
     void setActiveTool(KoTool *tool);
 

@@ -80,46 +80,75 @@ namespace {
     template<class _CSTraits>
     class KoMixColorsOpImpl : public KoMixColorsOp {
         public:
-            KoMixColorsOpImpl() { }
+            KoMixColorsOpImpl()
+            { 
+            }
             virtual ~KoMixColorsOpImpl() { }
             virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
             {
                 // Create and initialize to 0 the array of totals
                 typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype totals[_CSTraits::channels_nb];
                 typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype totalAlpha = 0;
-                memset(totals, 0, sizeof(typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype) * _CSTraits::channels_nb);
+
+                memset(totals, 0, sizeof(totals));
+
                 // Compute the total for each channel by summing each colors multiplied by the weight
+
                 while(nColors--)
                 {
                     const typename _CSTraits::channels_type* color = _CSTraits::nativeArray(*colors);
-                    quint8 alphaTimesWeight =  KoColorSpaceMaths<quint8>::multiply(_CSTraits::alpha(*colors), *weights);
+                    typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype alphaTimesWeight;
+
+                    if (_CSTraits::alpha_pos != -1) {
+                        alphaTimesWeight = color[_CSTraits::alpha_pos];
+                    } else {
+                        alphaTimesWeight = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue;
+                    }
+
+                    alphaTimesWeight *= *weights;
+
                     for(uint i = 0; i < _CSTraits::channels_nb; i++)
                     {
-                        totals[i] += color[i] * alphaTimesWeight;
+                        if (i != _CSTraits::alpha_pos) {
+                            totals[i] += color[i] * alphaTimesWeight;
+                        }
                     }
+
                     totalAlpha += alphaTimesWeight;
                     colors++;
                     weights++;
                 }
-                // set totalAlpha to the minimum between its value and the maximum value of the channels
-                if (totalAlpha > KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max) {
-                    totalAlpha = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max;
+
+                // set totalAlpha to the minimum between its value and the unit value of the channels
+                const int sumOfWeights = 255;
+
+                if (totalAlpha > KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue * sumOfWeights) {
+                    totalAlpha = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue * sumOfWeights;
                 }
+
                 typename _CSTraits::channels_type* dstColor = _CSTraits::nativeArray(dst);
+
                 if (totalAlpha > 0) {
+
                     for(uint i = 0; i < _CSTraits::channels_nb; i++)
                     {
-                        typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype v = totals[i] / totalAlpha;
-                        if(v > KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max) {
-                            v = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max;
+                        if (i != _CSTraits::alpha_pos) {
+
+                            typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype v = totals[i] / totalAlpha;
+
+                            if(v > KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max) {
+                                v = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max;
+                            }
+                            dstColor[ i ] = v;
                         }
-                        dstColor[ i ] = v;
                     }
-                    dstColor[ _CSTraits::alpha_pos ] = totalAlpha;
+
+                    if (_CSTraits::alpha_pos != -1) {
+                        dstColor[ _CSTraits::alpha_pos ] = totalAlpha / sumOfWeights;
+                    }
                 } else {
                     memset(dst, 0, sizeof(typename _CSTraits::channels_type) * _CSTraits::channels_nb);
                 }
-
             }
     };
 
@@ -258,7 +287,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
         {
             if(channelIndex > _CSTraits::channels_nb) return QString("Error");
             typename _CSTraits::channels_type c = _CSTraits::nativeArray(pixel)[channelIndex];
-            return QString().setNum( 100. * ((double)c ) / KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max);
+            return QString().setNum( 100. * ((double)c ) / KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue);
         }
 
         virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const {

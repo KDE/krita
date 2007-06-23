@@ -17,15 +17,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <cfloat>
+
 #include <qglobal.h>
 
 #include <KoColorSpaceMaths.h>
 
 #ifdef HAVE_OPENEXR
-const half KoColorSpaceMathsTraits<half>::max = 1.0;
-const half KoColorSpaceMathsTraits<half>::min = 0.0;
+const half KoColorSpaceMathsTraits<half>::zeroValue = 0.0;
+const half KoColorSpaceMathsTraits<half>::unitValue = 1.0;
+const half KoColorSpaceMathsTraits<half>::max = HALF_MAX;
+const half KoColorSpaceMathsTraits<half>::min = -HALF_MAX;
+const half KoColorSpaceMathsTraits<half>::epsilon = HALF_EPSILON;
 #endif
 
-const float KoColorSpaceMathsTraits<float>::max = 1.0;
-const float KoColorSpaceMathsTraits<float>::min = 0.0;
+const float KoColorSpaceMathsTraits<float>::zeroValue = 0.0;
+const float KoColorSpaceMathsTraits<float>::unitValue = 1.0;
+const float KoColorSpaceMathsTraits<float>::max = FLT_MAX;
+const float KoColorSpaceMathsTraits<float>::min = -FLT_MAX;
+const float KoColorSpaceMathsTraits<float>::epsilon = FLT_EPSILON;
 

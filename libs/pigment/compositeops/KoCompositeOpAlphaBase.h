@@ -27,8 +27,8 @@
 
 
 #define NATIVE_MAX_VALUE KoColorSpaceMathsTraits<channels_type>::max
-#define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::max
-#define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::min
+#define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::unitValue
+#define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::zeroValue
 
 /**
  * A template base class for all composite op that compose color channels values.

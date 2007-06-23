@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -187,14 +187,6 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
     foreach ( KoShape * shape, sortedShapes ) {
         if(shape->parent() != 0 && shape->parent()->childClipped(shape))
             continue;
-        if(painter.hasClipping()) {
-            QRectF shapeBox = shape->boundingRect();
-            shapeBox = converter.documentToView(shapeBox);
-            QRegion shapeRegion = QRegion(shapeBox.toRect());
-
-            if(clipRegion.intersect(shapeRegion).isEmpty())
-                continue;
-        }
 
         while(connectionIterator != sortedConnections.end() && (*connectionIterator)->zIndex() < shape->zIndex()) {
             painter.save();

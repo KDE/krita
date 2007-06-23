@@ -96,7 +96,7 @@ public:
     void mouseMoveEvent(KoPointerEvent *e);
 
 public:
-    KisPainterlyInformation information() {return m_info;}
+    KisPainterlyBristleInformation bristleInformation() {return m_info;}
 
 private:
     /*
@@ -109,7 +109,7 @@ private:
     /*
     Merge the canvas contents with the stroke contents, actually mixing the colors.
     */
-    void mixColors(KisPaintDeviceSP stroke);
+    void mixColors(KisPaintDeviceSP stroke, KoPointerEvent *e);
 
     /*
     Updates the information of the paintop (color, painterly information for next iteration and such)
@@ -122,7 +122,7 @@ private:
 
     // We keep a KisPainterlyInformation structure so we store painterly information
     // when we mix with non-painterly paintops.
-    KisPainterlyInformation m_info;
+    KisPainterlyBristleInformation m_info;
 };
 
 #endif // MIXER_CORE_H_

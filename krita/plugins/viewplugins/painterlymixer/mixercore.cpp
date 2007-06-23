@@ -195,7 +195,7 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
 
     if (!current->painterly()) {
         updatePainterlyOverlays(stroke, e);
-        mixColors(stroke);
+        mixColors(stroke, e);
         updateResources(stroke);
     }
 

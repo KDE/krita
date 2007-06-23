@@ -51,8 +51,13 @@ KisSelection::KisSelection(KisPaintDeviceSP dev)
     , m_dirty(false)
 {
 
-    m_converter = new KisImageViewConverter(m_parentPaintDevice->image());
-    m_canvas = new KisShapeSelectionCanvas( this, m_converter );
+    if (m_parentPaintDevice->image()) {
+        m_converter = new KisImageViewConverter(m_parentPaintDevice->image());
+        m_canvas = new KisShapeSelectionCanvas( this, m_converter );
+    } else {
+        m_converter = 0;
+        m_canvas = 0;
+    }
     Q_ASSERT(dev);
 }
 
@@ -433,13 +438,22 @@ void KisSelection::appendCoordinate(QPolygon * path, int x, int y, EdgeType edge
 
 void KisSelection::addShape(KoShape *object)
 {
-    m_canvas->shapeManager()->add( object );
+    Q_ASSERT(m_canvas);
+    Q_ASSERT(m_converter);
 
-    setDirty(m_converter->documentToView(object->boundingRect()).toRect());
+    if (m_canvas && m_converter) {
+        m_canvas->shapeManager()->add( object );
+
+        setDirty(m_converter->documentToView(object->boundingRect()).toRect());
+    }
 }
 
 KisSelectionShapeManager* KisSelection::shapeManager() const
 {
-    KisSelectionShapeManager* shapeManager = dynamic_cast<KisSelectionShapeManager*>(m_canvas->shapeManager());
-    return shapeManager;
+    Q_ASSERT(m_canvas);
+    if (m_canvas) {
+        KisSelectionShapeManager* shapeManager = dynamic_cast<KisSelectionShapeManager*>(m_canvas->shapeManager());
+        return shapeManager;
+    }
+    return 0;
 }

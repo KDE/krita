@@ -38,7 +38,7 @@ ELSE (WV2_LIBRARIES AND WV2_INCLUDE_DIR)
     endif (NOT WV2_FIND_QUIETLY)
   else (WV2_FOUND)
     if (WV2_FIND_REQUIRED)
-      message(FATAL_ERROR "Could NOT find OPENEXR")
+      message(FATAL_ERROR "Could NOT find WV2")
     endif (WV2_FIND_REQUIRED)
   endif (WV2_FOUND)
 

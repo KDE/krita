@@ -36,6 +36,7 @@
 #include "KoColor.h"
 #include <krita_export.h>
 #include <kis_shared.h>
+#include "kis_iterators_pixel.h"
 
 class QRect;
 class QImage;

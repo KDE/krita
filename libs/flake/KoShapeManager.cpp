@@ -21,6 +21,8 @@
 
 #include "KoShapeManager.h"
 #include "KoSelection.h"
+#include "KoToolManager.h"
+#include "KoPointerEvent.h"
 #include "KoShape.h"
 #include "KoShapeConnection.h"
 #include "KoCanvasBase.h"
@@ -402,6 +404,21 @@ KoSelection * KoShapeManager::selection() const {
 
 void KoShapeManager::addShapeConnection(KoShapeConnection *connection) {
     d->connectionTree.insert(connection->boundingRect(), connection);
+}
+
+void KoShapeManager::suggestChangeTool(KoPointerEvent *event) {
+    QList<KoShape*> shapes;
+
+    KoShape *clicked = shapeAt(event->point);
+    if(clicked) {
+        if(! selection()->isSelected(clicked)) {
+            selection()->deselectAll();
+            selection()->select(clicked);
+        }
+        shapes.append(clicked);
+    }
+    KoToolManager::instance()->switchToolRequested(
+            KoToolManager::instance()->preferredToolForSelection(shapes));
 }
 
 #include "KoShapeManager.moc"

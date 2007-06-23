@@ -396,9 +396,6 @@ void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
     }
 }
 
-void KoPathTool::mouseDoubleClickEvent( KoPointerEvent * ) {
-}
-
 void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
     if( event->button() & Qt::RightButton )
         return;

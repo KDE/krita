@@ -34,6 +34,7 @@ class KoSelection;
 class KoViewConverter;
 class KoCanvasBase;
 class KoShapeConnection;
+class KoPointerEvent;
 
 class QPainter;
 class QPointF;
@@ -142,6 +143,8 @@ public:
      * Note that this is typically called by the shape instance only.
      */
     void addShapeConnection(KoShapeConnection *connection);
+
+    void suggestChangeTool(KoPointerEvent *event);
 
 private:
     /**

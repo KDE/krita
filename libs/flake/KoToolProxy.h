@@ -81,6 +81,8 @@ public:
     QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
     /// Forwarded to the current KoTool
     void inputMethodEvent(QInputMethodEvent *event);
+    /// Forwarded to the current KoTool
+    QList<QAction*> popupActionList() const;
 
     /**
      * Retrieves the entire collection of actions for the active tool

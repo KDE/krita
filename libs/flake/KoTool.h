@@ -210,6 +210,11 @@ public:
 
     virtual bool paste() { return false; }
 
+    /**
+     * @return A list of actions to be used for a popup.
+     */
+    QList<QAction*> popupActionList() const;
+
 public slots:
     /**
      * This method is called when this tool instance is activated.
@@ -308,8 +313,16 @@ protected:
      */
     void addAction(const QString &name, QAction *action);
 
+    /**
+     * Set the list of actions to be used as popup menu.
+     * @param list the list of actions.
+     * @see popupActionList
+     */
+    void setPopupActionList(const QList<QAction*> &list);
+
 protected:
     KoCanvasBase * const m_canvas; ///< the canvas interface this tool will work for.
+    friend class KoToolProxy;
 
 private:
     KoTool();

@@ -35,6 +35,7 @@ public:
     QCursor previousCursor;
     QHash<QString, QAction*> actionCollection;
     QString toolId;
+    QList<QAction*> popupActionList;
 };
 
 KoTool::KoTool(KoCanvasBase *canvas )
@@ -159,6 +160,14 @@ QString KoTool::toolId() const {
 
 QCursor KoTool::cursor() const {
     return d->previousCursor;
+}
+
+QList<QAction*> KoTool::popupActionList() const {
+    return d->popupActionList;
+}
+
+void KoTool::setPopupActionList(const QList<QAction*> &list) {
+    d->popupActionList = list;
 }
 
 #include "KoTool.moc"

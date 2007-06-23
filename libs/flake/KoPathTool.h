@@ -47,7 +47,6 @@ public:
     void repaintDecorations();
 
     void mousePressEvent( KoPointerEvent *event );
-    void mouseDoubleClickEvent( KoPointerEvent *event );
     void mouseMoveEvent( KoPointerEvent *event );
     void mouseReleaseEvent( KoPointerEvent *event );
     void keyPressEvent(QKeyEvent *event);

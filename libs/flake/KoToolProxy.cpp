@@ -26,6 +26,7 @@
 #include "KoToolSelection.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
+#include "KoShapeManager.h"
 
 #include <kdebug.h>
 #include <QTimer>
@@ -199,9 +200,12 @@ void KoToolProxy::mouseDoubleClickEvent( QMouseEvent *event, const QPointF &poin
     d->mouseLeaveWorkaround = false;
     KoInputDevice id;
     KoToolManager::instance()->switchInputDevice(id);
+    if( d->activeTool == 0)  return;
 
     KoPointerEvent ev( event, point );
-    if (d->activeTool) d->activeTool->mouseDoubleClickEvent( &ev );
+    d->activeTool->mouseDoubleClickEvent( &ev );
+    if(! event->isAccepted())
+        d->activeTool->m_canvas->shapeManager()->suggestChangeTool(&ev);
 }
 
 void KoToolProxy::mouseMoveEvent( QMouseEvent *event, const QPointF &point )
@@ -290,6 +294,12 @@ bool KoToolProxy::paste() {
     if (d->activeTool)
         return d->activeTool->paste();
     return false;
+}
+
+QList<QAction*> KoToolProxy::popupActionList() const {
+    if (d->activeTool)
+        return d->activeTool->popupActionList();
+    return QList<QAction*>();
 }
 
 #include <KoToolProxy.moc>

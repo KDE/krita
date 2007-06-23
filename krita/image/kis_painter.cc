@@ -509,8 +509,8 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
 }
 
 double KisPainter::paintLine(const KisPaintInformation &pi1,
-                     const KisPaintInformation &pi2,
-                     double savedDist)
+                             const KisPaintInformation &pi2,
+                             double savedDist)
 {
     if (!m_device) return 0;
     if (!m_paintOp) return 0;

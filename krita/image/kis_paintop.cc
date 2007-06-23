@@ -126,9 +126,6 @@ void KisPaintOp::setSource(KisPaintDeviceSP p) {
 }
 
 
-KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/) { return 0; }
-
-
 double KisPaintOp::paintBezierCurve(const KisPaintInformation &pi1,
                                     const QPointF &control1,
                                     const QPointF &control2,
@@ -263,3 +260,7 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
     else
         return 0;
 }
+
+
+KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/) { return 0; }
+

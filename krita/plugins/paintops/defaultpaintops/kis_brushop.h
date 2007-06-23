@@ -64,6 +64,7 @@ public:
     const double* darkenCurve() const { return m_darkenCurve; }
 
     virtual QWidget *widget() const { return m_optionsWidget; }
+
 private slots:
     void slotCustomCurves();
 
@@ -95,6 +96,9 @@ public:
     virtual ~KisBrushOp();
 
     void paintAt(const KisPaintInformation& info);
+    virtual double paintLine(const KisPaintInformation &pi1,
+                             const KisPaintInformation &pi2,
+                             double savedDist = -1);
 
 private:
     inline double scaleToCurve(double pressure, double* curve) const {

@@ -1,7 +1,7 @@
 /*
  *  kis_tool_brush.cc - part of Krita
  *
- *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2003-2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
@@ -51,51 +51,51 @@
 #include "kis_tool_freehand.h"
 
 class FreehandPaintJob : public ThreadWeaver::Job {
-    public:
-        FreehandPaintJob(KisToolFreehand* freeHand, 
-                 KisPainter* painter,
-                 const KisPaintInformation & pi1,
-                 const KisPaintInformation & pi2,
-                 const FreehandPaintJob* previousPaintJob);
-    public:
-        double dragDist() const { return m_dragDist; }
-    protected:
-        KisToolFreehand* m_toolFreeHand;
-        KisPainter* m_painter;
-        double m_dragDist;
-        KisPaintInformation m_pi1;
-        KisPaintInformation m_pi2;
-        const FreehandPaintJob* m_previousPaintJob;
+public:
+    FreehandPaintJob(KisToolFreehand* freeHand,
+                     KisPainter* painter,
+                     const KisPaintInformation & pi1,
+                     const KisPaintInformation & pi2,
+                     const FreehandPaintJob* previousPaintJob);
+public:
+    double dragDist() const { return m_dragDist; }
+protected:
+    KisToolFreehand* m_toolFreeHand;
+    KisPainter* m_painter;
+    double m_dragDist;
+    KisPaintInformation m_pi1;
+    KisPaintInformation m_pi2;
+    const FreehandPaintJob* m_previousPaintJob;
 };
 
 FreehandPaintJob::FreehandPaintJob(KisToolFreehand* toolFreeHand, KisPainter* painter,
-            const KisPaintInformation & pi1,
-            const KisPaintInformation & pi2,
-            const FreehandPaintJob* previousPaintJob) :
-        m_toolFreeHand(toolFreeHand),
-        m_painter(painter),
-        m_pi1(pi1),
-        m_pi2(pi2),
-        m_previousPaintJob(previousPaintJob)
+                                   const KisPaintInformation & pi1,
+                                   const KisPaintInformation & pi2,
+                                   const FreehandPaintJob* previousPaintJob) :
+    m_toolFreeHand(toolFreeHand),
+    m_painter(painter),
+    m_pi1(pi1),
+    m_pi2(pi2),
+    m_previousPaintJob(previousPaintJob)
 {
 }
 
 class FreehandPaintLineJob : public FreehandPaintJob {
-    public:
-        FreehandPaintLineJob(KisToolFreehand* freeHand, 
-                 KisPainter* painter,
-                 const KisPaintInformation & pi1,
-                 const KisPaintInformation & pi2,
-                 const FreehandPaintJob* previousPaintJob);
-    protected:
-        virtual void run();
+public:
+    FreehandPaintLineJob(KisToolFreehand* freeHand,
+                         KisPainter* painter,
+                         const KisPaintInformation & pi1,
+                         const KisPaintInformation & pi2,
+                         const FreehandPaintJob* previousPaintJob);
+protected:
+    virtual void run();
 };
 
 
 FreehandPaintLineJob::FreehandPaintLineJob(KisToolFreehand* toolFreeHand, KisPainter* painter,
-            const KisPaintInformation & pi1,
-            const KisPaintInformation & pi2,
-            const FreehandPaintJob* previousPaintJob) : FreehandPaintJob(toolFreeHand, painter, pi1, pi2, previousPaintJob)
+                                           const KisPaintInformation & pi1,
+                                           const KisPaintInformation & pi2,
+                                           const FreehandPaintJob* previousPaintJob) : FreehandPaintJob(toolFreeHand, painter, pi1, pi2, previousPaintJob)
 {
 }
 
@@ -107,28 +107,28 @@ void FreehandPaintLineJob::run()
 }
 
 class FreehandPaintBezierJob : public FreehandPaintJob {
-    public:
-        FreehandPaintBezierJob(KisToolFreehand* freeHand, 
-                 KisPainter* painter,
-                 const KisPaintInformation & pi1,
-                 const QPointF& control1,
-                 const QPointF& control2,
-                 const KisPaintInformation & pi2,
-                 const FreehandPaintJob* previousPaintJob);
-    protected:
-        virtual void run();
-    private:
-        QPointF m_control1;
-        QPointF m_control2;
+public:
+    FreehandPaintBezierJob(KisToolFreehand* freeHand,
+                           KisPainter* painter,
+                           const KisPaintInformation & pi1,
+                           const QPointF& control1,
+                           const QPointF& control2,
+                           const KisPaintInformation & pi2,
+                           const FreehandPaintJob* previousPaintJob);
+protected:
+    virtual void run();
+private:
+    QPointF m_control1;
+    QPointF m_control2;
 };
 
 
 FreehandPaintBezierJob::FreehandPaintBezierJob(KisToolFreehand* toolFreeHand, KisPainter* painter,
-            const KisPaintInformation & pi1,
-            const QPointF& control1,
-            const QPointF& control2,
-            const KisPaintInformation & pi2,
-            const FreehandPaintJob* previousPaintJob) : FreehandPaintJob(toolFreeHand, painter, pi1, pi2, previousPaintJob), m_control1(control1),m_control2(control2)
+                                               const KisPaintInformation & pi1,
+                                               const QPointF& control1,
+                                               const QPointF& control2,
+                                               const KisPaintInformation & pi2,
+                                               const FreehandPaintJob* previousPaintJob) : FreehandPaintJob(toolFreeHand, painter, pi1, pi2, previousPaintJob), m_control1(control1),m_control2(control2)
 {
 }
 
@@ -140,10 +140,10 @@ void FreehandPaintBezierJob::run()
 }
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
-        : KisToolPaint(canvas, cursor)
-        , m_dragDist ( 0 )
-        , m_transactionText(transactionText)
-        , m_mode( HOVER )
+    : KisToolPaint(canvas, cursor)
+    , m_dragDist ( 0 )
+    , m_transactionText(transactionText)
+    , m_mode( HOVER )
 {
     m_painter = 0;
     m_tempLayer = 0;
@@ -173,7 +173,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     {
         initPaint(e);
         m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(e),
-            e->pressure(), e->xTilt(), e->yTilt());
+                                                         e->pressure(), e->xTilt(), e->yTilt());
         paintAt(m_previousPaintInformation);
     }
 }
@@ -194,7 +194,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         QPointF pos = convertToPixelCoord(e);
 
         KisPaintInformation info = KisPaintInformation(convertToPixelCoord(e),
-            e->pressure(), e->xTilt(), e->yTilt());
+                                                       e->pressure(), e->xTilt(), e->yTilt());
         if(m_smooth)
         {
             QPointF dragVec = info.pos - m_previousPaintInformation.pos;
@@ -207,8 +207,8 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
                 double cosTangent = cos(angleTangent);
                 double sinTangent = sin(angleTangent);
                 newTangent = QPointF(
-                                cosTangent * dragVec.x() - sinTangent * dragVec.y(),
-                                sinTangent * dragVec.x() + cosTangent * dragVec.y() );
+                    cosTangent * dragVec.x() - sinTangent * dragVec.y(),
+                    sinTangent * dragVec.x() + cosTangent * dragVec.y() );
             }
             newTangent /= norm( newTangent ) ;
             double cosPreviousNewTangent = cos(angle(newTangent,m_previousTangent ));
@@ -218,9 +218,9 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
             newTangent *= m_smoothness / norm( newTangent ) ;
             double normVec = 0.5 * norm(dragVec);
             paintBezierCurve(m_previousPaintInformation,
-                            m_previousPaintInformation.pos + m_previousTangent * normVec,
-                            info.pos - newTangent * normVec,
-                            info);
+                             m_previousPaintInformation.pos + m_previousTangent * normVec,
+                             info.pos - newTangent * normVec,
+                             info);
             m_previousTangent = newTangent;
             m_previousDrag = dragVec;
         } else {
@@ -264,7 +264,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
         KisIndirectPaintingSupport* layer;
         if ((layer = dynamic_cast<KisIndirectPaintingSupport*>(
-                 m_currentLayer.data()))) 
+                 m_currentLayer.data())))
         {
             // Hack for the painting of single-layered layers using indirect painting,
             // because the group layer would not have a correctly synched cache (
@@ -387,16 +387,16 @@ void KisToolFreehand::paintAt(const KisPaintInformation &pi)
 }
 
 void KisToolFreehand::paintLine(const KisPaintInformation &pi1,
-                 const KisPaintInformation &pi2)
+                                const KisPaintInformation &pi2)
 {
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
     queuePaintJob( new FreehandPaintLineJob(this, m_painter, pi1, pi2, previousJob), previousJob );
 }
 
 void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
-                   const QPointF &control1,
-                   const QPointF &control2,
-                   const KisPaintInformation &pi2)
+                                       const QPointF &control1,
+                                       const QPointF &control2,
+                                       const KisPaintInformation &pi2)
 {
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
     queuePaintJob( new FreehandPaintBezierJob(this, m_painter, pi1, control1, control2, pi2, previousJob), previousJob );
@@ -450,8 +450,8 @@ void KisToolFreehand::paintOutline(const QPointF& point) {
     if (m_currentImage && !m_currentImage->bounds().contains(point.floorQPoint())) {
         if (m_paintedOutline) {
             m_canvas->updateCanvas(); // Huh? The _whole_ canvas needs to be
-                                // repainted for this outline cursor?
-                                // It was this way in 1.6, btw.
+            // repainted for this outline cursor?
+            // It was this way in 1.6, btw.
             m_paintedOutline = false;
         }
         return;
@@ -473,7 +473,7 @@ void KisToolFreehand::paintOutline(const QPointF& point) {
         gc.setViewport(0, 0, static_cast<qint32>(canvas->width() * m_subject->zoomFactor()),
                        static_cast<qint32>(canvas->height() * m_subject->zoomFactor()));
         gc.translate((- controller->horzValue()) / m_subject->zoomFactor(),
-                        (- controller->vertValue()) / m_subject->zoomFactor());
+                     (- controller->vertValue()) / m_subject->zoomFactor());
 
         QPointF topLeft = point - hotSpot;
 

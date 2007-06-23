@@ -50,6 +50,7 @@
 KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettings *settings,
                                          KisPainter * painter, KisImageSP image)
 {
+    Q_UNUSED( image );
     const KisBrushOpSettings *brushopSettings = dynamic_cast<const KisBrushOpSettings *>(settings);
     Q_ASSERT(settings == 0 || brushopSettings != 0);
 
@@ -63,19 +64,26 @@ KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
 {
     m_optionsWidget = new QWidget(parent);
     m_optionsWidget->setObjectName("brush option widget");
+
     QHBoxLayout * l = new QHBoxLayout(m_optionsWidget);
+
     m_pressureVariation = new QLabel(i18n("Pressure variation: "), m_optionsWidget);
     l->addWidget(m_pressureVariation);
+
     m_size =  new QCheckBox(i18n("size"), m_optionsWidget);
     m_size->setChecked(true);
     l->addWidget(m_size);
+
     m_opacity = new QCheckBox(i18n("opacity"), m_optionsWidget);
     l->addWidget(m_opacity);
+
     m_darken = new QCheckBox(i18n("darken"), m_optionsWidget);
     l->addWidget(m_darken);
+
     m_curveControl = new Ui::WdgBrushCurveControl();
     m_curveControlWidget = new QDialog(m_optionsWidget);
     m_curveControl->setupUi(m_curveControlWidget);
+
     QToolButton* moreButton = new QToolButton(m_optionsWidget);
     moreButton->setArrowType(Qt::UpArrow);
     moreButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -284,6 +292,19 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     m_painter->setOpacity(origOpacity);
     m_painter->setPaintColor(origColor);
 
+}
+
+double KisBrushOp::paintLine(const KisPaintInformation &pi1,
+                             const KisPaintInformation &pi2,
+                             double savedDist )
+{
+    KisPaintInformation adjustedInfo1(pi1);
+    KisPaintInformation adjustedInfo2(pi2);
+    if ( !m_pressureSize ) {
+        adjustedInfo1.pressure = PRESSURE_DEFAULT;
+        adjustedInfo2.pressure = PRESSURE_DEFAULT;
+    }
+    super::paintLine( adjustedInfo1, adjustedInfo2, savedDist );
 }
 
 #include "kis_brushop.moc"

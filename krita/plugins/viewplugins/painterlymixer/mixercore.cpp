@@ -51,6 +51,7 @@
 #include "kis_wetness_mask.h"
 
 #include "mixercore.h"
+#include "kis_painterly_information.h"
 
 /*
 Just add all the painterly overlays that we need in only one call
@@ -141,19 +142,27 @@ void MixerCanvas::updateCanvas(const QRectF& rc)
 MixerTool::MixerTool(MixerCanvas *canvas, KisPaintDeviceSP device, KoCanvasResourceProvider *rp)
     : KoTool(canvas), m_canvasDev(device), m_resources(rp)
 {
-
+    //{{ - Just for testing!
+    m_info.PaintType = "Test";
+    m_info.Mixability = 0.4f;
+    m_info.PigmentConcentration = 0.9f;
+    m_info.PaintVolume = 200.0f;
+    m_info.Reflectivity = 0.1f;
+    m_info.Viscosity = 0.6f;
+    m_info.Wetness = 0.5f;
+    //}}
 }
 
 MixerTool::~MixerTool()
 {
 }
 
-void MixerTool::mousePressEvent(KoPointerEvent *e)
+void MixerTool::mousePressEvent(KoPointerEvent */*e*/)
 {
 //     kDebug() << "MOUSE PRESSED!! " << event->pos() << endl;
 }
 
-void MixerTool::mouseReleaseEvent(KoPointerEvent *e)
+void MixerTool::mouseReleaseEvent(KoPointerEvent */*e*/)
 {
 //     kDebug() << "MOUSE RELEASED!! " << event->pos() << endl;
 }
@@ -163,6 +172,7 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
     KisPaintDeviceSP stroke = new KisPaintDevice(m_canvasDev->colorSpace());
     addPainterlyOverlays(stroke);
 
+    //{{ KisPainter initialization - Put it in another function?
     KisPainter painter(stroke);
     KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(
                           m_resources->resource(KisResourceProvider::CurrentPaintop).value<KoID>(),
@@ -170,8 +180,9 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
                           &painter, 0);
     painter.setPaintOp(current); // The painter now has the paintop and will destroy it.
     painter.setPaintColor(m_resources->resource(KoCanvasResource::ForegroundColor).value<KoColor>());
-    painter.setBackgroundColor(m_resources->resource(KoCanvasResource::ForegroundColor).value<KoColor>()); // TODO I am not sure about this
+    painter.setBackgroundColor(m_resources->resource(KoCanvasResource::ForegroundColor).value<KoColor>());
     painter.setBrush(static_cast<KisBrush*>(m_resources->resource(KisResourceProvider::CurrentBrush).value<void*>()));
+    //}}
 
     if (current->painterly()) {
         QRect rc = m_canvasDev->exactBounds();
@@ -197,13 +208,20 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
     m_canvas->updateCanvas(rc);
 }
 
+#define RHO2(x,y) x*x + y*y
+
 void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent *e)
 {
-    float pression, force;
+    float p, f; // Pressure and force
+    float rho2; // Square of the distance from the event point
+    int x, y; // Actual point
+    float wetness; // Actual point wetness
+    float p0 = e->pressure();
+    int x0 = e->x(), y0 = e->y();
     QRect rc = stroke->exactBounds();
     QColor c; quint8 opacity;
 
-    KisRectIteratorPixel            // Give a more or less clear name to each iterator.
+    KisRectIteratorPixel             // Give a more or less clear name to each iterator.
         it_main = stroke->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
         it_adso = stroke->painterlyChannel("KisAdsorbencyMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
         it_pigm = stroke->painterlyChannel("KisPigmentConcentrationMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
@@ -211,26 +229,42 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
         it_volu = stroke->painterlyChannel("KisVolumeMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
         it_visc = stroke->painterlyChannel("KisViscosityMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
         it_wetn = stroke->painterlyChannel("KisWetnessMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height());
-    KisRectIteratorPixel *iters[6] = // Used only to cleanly increase the iterators.
+    KisRectIteratorPixel *iters[6] = // Used only to cleanly increase the iterators in the next cycle
         {&it_adso, &it_pigm, &it_refl, &it_volu, &it_visc, &it_wetn};
 
     while (!it_main.isDone()) {
-        stroke->colorSpace()->toQColor(it_main.rawData(), &c, &opacity);
-        *it_pigm.rawData() = opacity;
+        stroke->colorSpace()->toQColor(it_main.rawData(), &c, &opacity); // Is this too expensive?
+
+        // Do something if there is actually some paint
+        if (opacity > 0.0) {
+            x = it_main.x();
+            y = it_main.y();
+            rho2 = RHO2(x-x0,y-y0);
+            p = p0*exp(-rho2);
+            // TODO Make the friction coefficient user configurable! (And find a good and complete meaning for it)
+            f = p + 0.2f*pow(p,2);
+            wetness = p*m_info.Wetness; // Wetness doesn't depend on friction.
+
+            *it_wetn.rawData() = (quint8)(wetness*256.0f);
+            *it_volu.rawData() = (quint8)(f*m_info.PaintVolume);
+            *it_visc.rawData() = (quint8)(f*m_info.Viscosity/wetness*256.0f);
+            *it_refl.rawData() = (quint8)(wetness*m_info.Reflectivity*256.0f);
+            *it_pigm.rawData() = (quint8)(f*m_info.PigmentConcentration*((float)opacity));
+        }
 
         for (int _i=0;_i<6;_i++) ++(*iters[_i]);
         ++it_main;
     }
 }
 
-void MixerTool::mixColors(KisPaintDeviceSP stroke)
+void MixerTool::mixColors(KisPaintDeviceSP stroke, KoPointerEvent *e)
 {
 
 }
 
 void MixerTool::updateResources(KisPaintDeviceSP stroke)
 {
-
+    // TODO Update the color and the tool's own KisPainterlyInformation structure.
 }
 
 

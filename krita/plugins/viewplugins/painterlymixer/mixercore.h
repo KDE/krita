@@ -18,13 +18,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef MIXER_CANVAS_H_
-#define MIXER_CANVAS_H_
+#ifndef MIXER_CORE_H_
+#define MIXER_CORE_H_
 
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
 
 #include "kis_paint_device.h"
+
+#include "kis_painterly_information.h"
 
 class QFrame;
 class KisPaintOp;
@@ -87,12 +89,14 @@ public:
 
 // Implement KoTool
 public:
-    // This is not needed
-    void paint(QPainter &, const KoViewConverter &) {}
+    void paint(QPainter &, const KoViewConverter &) {} // This is not needed
 
     void mousePressEvent(KoPointerEvent *e);
     void mouseReleaseEvent(KoPointerEvent *e);
     void mouseMoveEvent(KoPointerEvent *e);
+
+public:
+    KisPainterlyInformation information() {return m_info;}
 
 private:
     /*
@@ -115,6 +119,10 @@ private:
 private:
     KisPaintDeviceSP m_canvasDev;
     KoCanvasResourceProvider *m_resources;
+
+    // We keep a KisPainterlyInformation structure so we store painterly information
+    // when we mix with non-painterly paintops.
+    KisPainterlyInformation m_info;
 };
 
-#endif // MIXER_CANVAS_H_
+#endif // MIXER_CORE_H_

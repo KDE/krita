@@ -33,6 +33,7 @@
 #include <kmessagebox.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
 // koffice
 #include <KoMainWindow.h>
@@ -90,10 +91,12 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule* const module, const QStringL
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(slotStarted(Kross::Action*)));
     //connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
 
-    if( Kross::Manager::self().actionCollection()->actions().size() <= 0) {
-        QByteArray partname = componentData().componentName(); //KApplication::kApplication()->objectName()
-        if( ! partname.isNull() )
-            Kross::Manager::self().actionCollection()->readXmlResources("data", partname + "/scripts/*.rc");
+    QByteArray partname = componentData().componentName(); //KApplication::kApplication()->objectName()
+    if( ! partname.isNull() && Kross::Manager::self().property(partname) == QVariant::Invalid ) {
+        QStringList files = KGlobal::dirs()->findAllResources("data", partname + "/scripts/*.rc");
+        Kross::Manager::self().setProperty(partname, files);
+        foreach(QString file, files)
+            Kross::Manager::self().actionCollection()->readXmlFile(file);
     }
 
     KoView* view = d->module->view();
@@ -103,6 +106,7 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule* const module, const QStringL
         QDockWidget* docker = mainwindow->createDockWidget(&factory);
         Q_UNUSED(docker);
     }
+
 }
 
 KoScriptingPart::~KoScriptingPart()

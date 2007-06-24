@@ -59,15 +59,22 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
 void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc )
 {
     Q_ASSERT( m_d->filterConfig );
+/*
+    KisSelectionSP oldSelection = 0;
+    if (projection->hasSelection())
+        oldSelection = projection->selection();
 
+    
+    projection->setSelection    
+*/
     KisFilterSP filter = KisFilterRegistry::instance()->value( m_d->filterConfig->name() );
     if (!filter) {
         kWarning() << "Could not retrieve filter with name " <<  m_d->filterConfig->name() << endl;
         return;
     }
 
-//     filter->process( projection, rc, cfg );
-
-//     projection->setSelection( oldSelection );
-
+    filter->process( projection, rc, m_d->filterConfig);
+/*
+    projection->setSelection( oldSelection );
+*/
 }

@@ -97,15 +97,12 @@ void KoSelection::select(KoShape * object)
     }
 
     if(d->selectedShapes.count() == 1)
-    {
-        rotate(object->rotation());
-        shear(object->shearX(), object->shearY());
-    }
+        setTransformation( object->transformationMatrix(0) );
     else
-    {
-        rotate(0);
-        shear(0, 0);
-    }
+        setTransformation( QMatrix() );
+
+    updateSizeAndPosition();
+
     requestSelectionChangedEvent();
 }
 
@@ -123,15 +120,16 @@ void KoSelection::deselect(KoShape * object)
         d->selectedShapes.removeAll( object );
 
     if(d->selectedShapes.count() == 1)
-    {
-        rotate(firstSelectedShape()->rotation());
-        shear(firstSelectedShape()->shearX(), firstSelectedShape()->shearY());
-    }
+        setTransformation( firstSelectedShape()->transformationMatrix(0) );
+
     requestSelectionChangedEvent();
 }
 
 void KoSelection::deselectAll()
 {
+    // reset the transformation matrix of the selection
+    setTransformation( QMatrix() );
+
     if(d->selectedShapes.isEmpty())
         return;
     d->selectedShapes.clear();
@@ -148,7 +146,8 @@ void KoSelection::requestSelectionChangedEvent() {
 void KoSelection::selectionChangedEvent() {
     d->eventTriggered = false;
     scale(1,1);
-    boundingRect(); //has the side effect of updating the size and position
+    //just as well use the oppertunity to update the size and position
+    updateSizeAndPosition();
     emit selectionChanged();
 }
 
@@ -169,14 +168,21 @@ bool KoSelection::hitTest( const QPointF &position ) const
     else // count == 0
         return false;
 }
+void KoSelection::updateSizeAndPosition()
+{
+    QRectF bb = sizeRect();
+    QMatrix matrix = transformationMatrix(0);
+    resize( bb.size() );
+    QPointF p = matrix.map(bb.topLeft() + matrix.inverted().map( position()) );
+    setPosition( p );
+}
 
-QRectF KoSelection::boundingRect() const
+QRectF KoSelection::sizeRect() const
 {
     bool first=true;
     QRectF bb;
 
-    QMatrix tmat = transformationMatrix(0);
-    QMatrix itmat = tmat.inverted();
+    QMatrix itmat = transformationMatrix(0).inverted();
 
     if ( !d->selectedShapes.isEmpty() )
     {
@@ -189,17 +195,16 @@ QRectF KoSelection::boundingRect() const
                 first = false;
             }
             else
-                bb = bb.unite(
-                 ((*it)->transformationMatrix(0) * itmat).mapRect(QRectF(QPointF(),(*it)->size())) );
+                bb = bb.unite( ((*it)->transformationMatrix(0) * itmat).mapRect(QRectF(QPointF(),(*it)->size())) );
         }
     }
 
-    //just as well use the oppertunity to update the size and position
-    (const_cast <KoSelection *>(this))->resize( bb.size() );
-    QPointF p = tmat.map(bb.topLeft() + itmat.map(position()));
-    (const_cast <KoSelection *>(this))->setPosition( p );
+    return bb;
+}
 
-    return tmat.mapRect(bb);
+QRectF KoSelection::boundingRect() const
+{
+    return transformationMatrix(0).mapRect( sizeRect() );
 }
 
 const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) const {

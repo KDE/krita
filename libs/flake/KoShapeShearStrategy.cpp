@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 #include "KoCanvasResourceProvider.h"
 #include "commands/KoShapeShearCommand.h"
 #include "commands/KoShapeMoveCommand.h"
+#include "commands/KoShapeTransformCommand.h"
 
 #include <QPointF>
 
@@ -35,7 +37,6 @@
 
 KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool, canvas)
-, m_initialBoundingRect()
 , m_start(clicked)
 {
     QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
@@ -43,14 +44,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
         if( ! isEditable( shape ) )
             continue;
         m_selectedShapes << shape;
-        m_startPositions << shape->position();
-        m_startMatrices << shape->transformationMatrix(0);
-        m_startRotationMatrices << QMatrix().rotate(shape->rotation());
-        m_startShearXs << shape->shearX();
-        m_startShearYs << shape->shearY();
-        m_initialBoundingRect = m_initialBoundingRect.unite( shape->boundingRect() );
     }
-    m_initialSelectionAngle = canvas->shapeManager()->selection()->rotation();
 
     // Eventhoug we aren't currently activated by the corner handles we might as well code like it
     switch(direction) {
@@ -85,19 +79,44 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
     else if(m_right)
         m_solidPoint -= QPointF(m_initialSize.width() / 2, 0);
 
-kDebug(30006) << " PREsol.x=" << m_solidPoint.x() << " sol.y=" << m_solidPoint.y() <<endl;
-        QMatrix matrix = canvas->shapeManager()->selection()->transformationMatrix(0);
-        m_solidPoint = matrix.map(m_solidPoint);
+    KoSelection * sel = canvas->shapeManager()->selection();
+    QPointF edge;
+    double angle = 0.0;
+    if( m_top )
+    {
+        edge = sel->absolutePosition( KoFlake::BottomLeftCorner ) - sel->absolutePosition( KoFlake::BottomRightCorner );
+        angle = 180.0;
+    }
+    else if( m_bottom )
+    {
+        edge = sel->absolutePosition( KoFlake::TopRightCorner ) - sel->absolutePosition( KoFlake::TopLeftCorner );
+        angle = 0.0;
+    }
+    else if( m_left )
+    {
+        edge = sel->absolutePosition( KoFlake::BottomLeftCorner ) - sel->absolutePosition( KoFlake::TopLeftCorner );
+        angle = 90.0;
+    }
+    else if( m_right )
+    {
+        edge = sel->absolutePosition( KoFlake::TopRightCorner ) - sel->absolutePosition( KoFlake::BottomRightCorner );
+        angle = 270.0;
+    }
+    double currentAngle = atan2( edge.y(), edge.x() ) / M_PI * 180;
+    m_initialSelectionAngle = currentAngle - angle;
+
+    kDebug(30006) << " PREsol.x=" << m_solidPoint.x() << " sol.y=" << m_solidPoint.y() <<endl;
+    m_solidPoint = canvas->shapeManager()->selection()->transformationMatrix(0).map( m_solidPoint );
 }
 
 void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
-    QPointF shearVector = point - m_solidPoint;
+    QPointF shearVector = point - m_start;
 
-    QMatrix matrix;
-    matrix.rotate(-m_initialSelectionAngle);
-    shearVector = matrix.map(shearVector);
+    QMatrix m;
+    m.rotate(-m_initialSelectionAngle);
+    shearVector = m.map(shearVector);
 
     double shearX=0, shearY=0;
 
@@ -108,28 +127,23 @@ void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMod
     if(m_left || m_right)
         shearY = shearVector.y() / m_initialSize.width();
 
-    QMatrix applyMatrix;
-    applyMatrix.translate(m_solidPoint.x(), m_solidPoint.y());
-    applyMatrix.rotate(m_initialSelectionAngle);
-    applyMatrix.shear(shearX, shearY);
-    applyMatrix.rotate(-m_initialSelectionAngle);
-    applyMatrix.translate(-m_solidPoint.x(), -m_solidPoint.y());
+    QMatrix matrix;
+    matrix.translate(m_solidPoint.x(), m_solidPoint.y());
+    matrix.rotate(m_initialSelectionAngle);
+    matrix.shear(shearX, shearY);
+    matrix.rotate(-m_initialSelectionAngle);
+    matrix.translate(-m_solidPoint.x(), -m_solidPoint.y());
 
-kDebug(30006) << "Begin retransform" <<endl;
-    int counter=0;
-    foreach(KoShape *shape, m_selectedShapes) {
+    QMatrix applyMatrix = matrix * m_shearMatrix.inverted();
+
+    foreach( KoShape *shape, m_selectedShapes )
+    {
         shape->repaint();
-        QMatrix m = m_startMatrices[counter] * applyMatrix;
-        QMatrix orm = m_startRotationMatrices[counter];
-        shape->shear((m.m21() - orm.m21()) / orm.m11(), (m.m12() - orm.m12()) / orm.m22());
-        QPointF p = applyMatrix.map(m_startPositions[counter]);
-kDebug(30006) << " px=" << p.x() << " py=" << p.y() <<endl;
-        shape->setPosition(p);
+        shape->applyTransformation( applyMatrix );
         shape->repaint();
-        counter++;
     }
-    m_canvas->shapeManager()->selection()->shear(shearX, shearY);
-    // The selection updates it's own position and size
+    m_canvas->shapeManager()->selection()->applyTransformation( applyMatrix );
+    m_shearMatrix = matrix;
 }
 
 void KoShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
@@ -140,16 +154,8 @@ void KoShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &conv
 }
 
 QUndoCommand* KoShapeShearStrategy::createCommand() {
-    QUndoCommand *cmd = new QUndoCommand(i18n("Shear"));
-    QList<QPointF> newPositions;
-    QList<double> newShearX;
-    QList<double> newShearY;
-    foreach(KoShape *shape, m_selectedShapes) {
-        newPositions << shape->position();
-        newShearX << shape->shearX();
-        newShearY << shape->shearY();
-    }
-    new KoShapeMoveCommand(m_selectedShapes, m_startPositions, newPositions, cmd);
-    new KoShapeShearCommand(m_selectedShapes, m_startShearXs, m_startShearYs, newShearX, newShearY, cmd);
+    KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_shearMatrix );
+    cmd->setText( i18n("Shear") );
+    cmd->undo();
     return cmd;
 }

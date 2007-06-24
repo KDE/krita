@@ -136,9 +136,9 @@ void KoInteractionTool::updateCursor() {
         }
 
         if(koSelection()->count()>1)
-            d->angle = koSelection()->rotation();
+            d->angle = 0.0; //koSelection()->rotation();
         else
-            d->angle = koSelection()->firstSelectedShape()->rotation();
+            d->angle = 0.0; //koSelection()->firstSelectedShape()->rotation();
 
         int rotOctant = 8 + int(8.5 + d->angle / 45);
 
@@ -437,13 +437,13 @@ void KoInteractionTool::recalcSelectionBox() {
     {
         QMatrix matrix = koSelection()->transformationMatrix(0);
         d->selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->size())));
-        d->angle = koSelection()->rotation();
+        d->angle = 0.0; //koSelection()->rotation();
     }
     else
     {
         QMatrix matrix = koSelection()->firstSelectedShape()->transformationMatrix(0);
         d->selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->firstSelectedShape()->size())));
-        d->angle = koSelection()->firstSelectedShape()->rotation();
+        d->angle = 0.0; //koSelection()->firstSelectedShape()->rotation();
     }
     QPolygonF outline = d->selectionOutline; //shorter name in the following :)
     d->selectionBox[KoFlake::TopMiddleHandle] = (outline.value(0)+outline.value(1))/2;
@@ -456,6 +456,8 @@ void KoInteractionTool::recalcSelectionBox() {
     d->selectionBox[KoFlake::TopLeftHandle] = outline.value(0);
     if(koSelection()->count() == 1) {
         KoShape *s = koSelection()->firstSelectedShape();
+        // TODO detect mirroring
+        /*
         if(s->scaleX() < 0) { // vertically mirrored: swap left / right
             qSwap(d->selectionBox[KoFlake::TopLeftHandle], d->selectionBox[KoFlake::TopRightHandle]);
             qSwap(d->selectionBox[KoFlake::LeftMiddleHandle], d->selectionBox[KoFlake::RightMiddleHandle]);
@@ -466,6 +468,7 @@ void KoInteractionTool::recalcSelectionBox() {
             qSwap(d->selectionBox[KoFlake::TopMiddleHandle], d->selectionBox[KoFlake::BottomMiddleHandle]);
             qSwap(d->selectionBox[KoFlake::TopRightHandle], d->selectionBox[KoFlake::BottomRightHandle]);
         }
+        */
     }
 }
 

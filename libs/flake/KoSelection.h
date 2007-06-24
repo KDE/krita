@@ -3,7 +3,7 @@
    Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
-   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006,2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -106,6 +106,9 @@ public:
      */
     KoShapeLayer* activeLayer() const;
 
+    /// Updates the size and position of the selection
+    void updateSizeAndPosition();
+
 signals:
     /// emitted when the selection is changed
     void selectionChanged();
@@ -118,6 +121,8 @@ private:
     void selectGroupChilds( KoShapeGroup *group );
     virtual void saveOdf( KoShapeSavingContext & ) const {}
     virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
+
+    QRectF sizeRect() const;
 
     class Private;
     Private * const d;

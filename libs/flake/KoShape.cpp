@@ -52,12 +52,7 @@
 class KoShape::Private {
 public:
     Private(KoShape *shape)
-        : scaleX( 1 ),
-        scaleY( 1 ),
-        angle( 0 ),
-        shearX( 0 ),
-        shearY( 0 ),
-        size( 50, 50 ),
+        : size( 50, 50 ),
         pos( 0, 0 ),
         zIndex( 0 ),
         parent( 0 ),
@@ -85,18 +80,12 @@ public:
         me->shapeChanged(type);
     }
 
-    double scaleX;
-    double scaleY;
-    double angle; // degrees
-    double shearX;
-    double shearY;
-
     QSizeF size; // size in pt
     QPointF pos; // position (top left) in pt
     QString shapeId;
     QString name; ///< the shapes names
 
-    QMatrix matrix;
+    QMatrix localMatrix; ///< the shapes local transformation matrix
 
     QVector<QPointF> connectors; // in pt
 
@@ -152,31 +141,39 @@ void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &convert
 
 void KoShape::scale( double sx, double sy )
 {
-    if(d->scaleX == sx && d->scaleY == sy)
-        return;
-    d->scaleX = sx;
-    d->scaleY = sy;
+    QPointF pos = position();
+    QMatrix scaleMatrix;
+    scaleMatrix.translate( pos.x(), pos.y() );
+    scaleMatrix.scale( sx, sy );
+    scaleMatrix.translate( -pos.x(), -pos.y() );
+    applyTransformation( scaleMatrix );
+
     recalcMatrix();
     d->shapeChanged(ScaleChanged);
 }
 
 void KoShape::rotate( double angle )
 {
-    if(d->angle == angle)
-        return;
-    d->angle = angle;
-    while(d->angle >= 360) d->angle -= 360;
-    while(d->angle <= -360) d->angle += 360;
+    QPointF center = d->localMatrix.map( QPointF( 0.5*size().width(), 0.5*size().height() ) );
+    QMatrix rotateMatrix;
+    rotateMatrix.translate( center.x(), center.y() );
+    rotateMatrix.rotate( angle );
+    rotateMatrix.translate( -center.x(), -center.y() );
+    d->localMatrix = rotateMatrix * d->localMatrix;
+
     recalcMatrix();
     d->shapeChanged(RotationChanged);
 }
 
 void KoShape::shear( double sx, double sy )
 {
-    if(d->shearX == sx && d->shearY == sy)
-        return;
-    d->shearX = sx;
-    d->shearY = sy;
+    QPointF pos = position();
+    QMatrix shearMatrix;
+    shearMatrix.translate( pos.x(), pos.y() );
+    shearMatrix.shear( sx, sy );
+    shearMatrix.translate( -pos.x(), -pos.y() );
+    d->localMatrix = shearMatrix * d->localMatrix;
+
     recalcMatrix();
     d->shapeChanged(ShearChanged);
 }
@@ -204,9 +201,10 @@ void KoShape::resize( const QSizeF &newSize )
 
 void KoShape::setPosition( const QPointF &position )
 {
-    if(d->pos == position)
+    QPointF currentPos = d->localMatrix.map( QPointF(0,0) );
+    if( position == currentPos )
         return;
-    d->pos = position;
+    d->localMatrix.translate( position.x()-currentPos.x(), position.y()-currentPos.y() );
     recalcMatrix();
     d->shapeChanged(PositionChanged);
 }
@@ -216,14 +214,14 @@ bool KoShape::hitTest( const QPointF &position ) const
     if(d->parent && d->parent->childClipped(this) && !d->parent->hitTest(position))
         return false;
 
-    QPointF point( position * d->matrix.inverted() );
+    QPointF point = transformationMatrix(0).inverted().map( position );
     KoInsets insets(0, 0, 0, 0);
     if(d->border)
         d->border->borderInsets(this, insets);
 
     QSizeF s( size() );
     return point.x() >= -insets.left && point.x() <= s.width() + insets.right &&
-             point.y() >= -insets.top && point.y() <= s.height() + insets.bottom;
+           point.y() >= -insets.top && point.y() <= s.height() + insets.bottom;
 }
 
 QRectF KoShape::boundingRect() const
@@ -234,51 +232,55 @@ QRectF KoShape::boundingRect() const
         d->border->borderInsets(this, insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
-    return d->matrix.mapRect( bb );
+    return transformationMatrix(0).mapRect( bb );
 }
 
 void KoShape::recalcMatrix()
 {
-    d->matrix = transformationMatrix(0);
     notifyChanged();
 }
 
 QMatrix KoShape::transformationMatrix(const KoViewConverter *converter) const {
     QMatrix matrix;
-    QRectF zoomedRect = QRectF(position(), size());
-    if(converter)
-        zoomedRect = converter->documentToView(zoomedRect);
-    matrix.translate( zoomedRect.x(), zoomedRect.y() );
-
     // apply parents matrix to inherit any transformations done there.
-    KoShapeContainer *container = d->parent;
-    KoShape const *child = this;
-    while(container) {
-        if(container->childClipped(child))
-            matrix *= container->transformationMatrix(0);
+    KoShapeContainer * container = d->parent;
+    if( container ) {
+        if( container->childClipped(this) )
+            matrix = container->transformationMatrix(0);
         else {
-            QPointF containerPos =container->position();
+            QSizeF containerSize = container->size();
+            QPointF containerPos = container->absolutePosition() - QPointF( 0.5*containerSize.width(), 0.5*containerSize.height() );
             if(converter)
                 containerPos = converter->documentToView(containerPos);
-            matrix.translate(containerPos.x(), containerPos.y());
+            matrix.translate( containerPos.x(), containerPos.y() );
         }
-        container = container->parent();
-        child = child->parent();
     }
 
-    if ( d->angle != 0 )
-    {
-        matrix.translate( zoomedRect.width() / 2.0 * d->scaleX, zoomedRect.height() / 2.0 * d->scaleY );
-        matrix.translate( zoomedRect.height() / 2.0 * d->shearX, zoomedRect.width() / 2.0 * d->shearY );
-        matrix.rotate( d->angle );
-        matrix.translate( -zoomedRect.width() / 2.0 * d->scaleX, -zoomedRect.height() / 2.0 * d->scaleY );
-        matrix.translate( -zoomedRect.height() / 2.0 * d->shearX, -zoomedRect.width() / 2.0 * d->shearY );
+    if(converter) {
+        QPointF pos = position();
+        QPointF trans = converter->documentToView( pos ) - pos;
+        matrix.translate( trans.x(), trans.y() );
     }
-    matrix.shear( d->shearX, d->shearY );
-    matrix.scale( d->scaleX, d->scaleY );
-    return matrix;
+
+    return d->localMatrix * matrix;
 }
 
+void KoShape::applyTransformation( const QMatrix &matrix )
+{
+    QMatrix globalMatrix = transformationMatrix(0);
+    // the transformation is relative to the global coordinate system
+    // but we want to change the local matrix, so convert the matrix
+    // to relate to the local coordinate system
+    QMatrix transformMatrix = globalMatrix * matrix * globalMatrix.inverted();
+    d->localMatrix = transformMatrix * d->localMatrix;
+    notifyChanged();
+}
+
+void KoShape::setTransformation( const QMatrix &matrix )
+{
+    d->localMatrix = matrix;
+    notifyChanged();
+}
 
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2) {
     int diff = s1->zIndex() - s2->zIndex();
@@ -327,7 +329,7 @@ void KoShape::repaint() const {
             d->border->borderInsets(this, insets);
             rect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
         }
-        rect = d->matrix.mapRect(rect);
+        rect = transformationMatrix(0).mapRect(rect);
         foreach( KoShapeManager * manager, d->shapeManagers )
             manager->repaint( rect, this, true );
     }
@@ -336,7 +338,7 @@ void KoShape::repaint() const {
 void KoShape::repaint(const QRectF &shape) const {
     if ( !d->shapeManagers.empty() && isVisible() )
     {
-        QRectF rect(d->matrix.mapRect(shape));
+        QRectF rect(transformationMatrix(0).mapRect(shape));
         foreach( KoShapeManager * manager, d->shapeManagers )
         {
             manager->repaint(rect);
@@ -359,63 +361,19 @@ QPointF KoShape::absolutePosition(KoFlake::Position anchor) const {
         case KoFlake::BottomRightCorner: point = QPointF(size().width(), size().height()); break;
         case KoFlake::CenteredPositon: point = QPointF(size().width() / 2.0, size().height() / 2.0); break;
     }
-    return d->matrix.map(point);
+    return transformationMatrix(0).map(point);
 }
 
 void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor) {
-    QPointF zero(0, 0);
-    QMatrix matrix;
-    // apply parents matrix to inherit any transformations done there.
-    KoShapeContainer *container = d->parent;
-    KoShape const *child = this;
-    while(container) {
-        if(container->childClipped(child)) {
-            matrix *= container->transformationMatrix(0);
-            break;
-        }
-        else {
-            QPointF containerPos =container->position();
-            matrix.translate(containerPos.x(), containerPos.y());
-        }
-        container = dynamic_cast<KoShapeContainer*>(container->parent());
-        child = child->parent();
-    }
-    QPointF vector1 = matrix.inverted().map(zero);
-
-    matrix = QMatrix();
-    if ( d->angle != 0 )
-    {
-        matrix.translate( size().width() / 2.0 * d->scaleX, size().height() / 2.0 * d->scaleY );
-        matrix.translate( size().height() / 2.0 * d->shearX, size().width() / 2.0 * d->shearY );
-        matrix.rotate( d->angle );
-        matrix.translate( -size().width() / 2.0 * d->scaleX, -size().height() / 2.0 * d->scaleY );
-        matrix.translate( -size().height() / 2.0 * d->shearX, -size().width() / 2.0 * d->shearY );
-    }
-    matrix.shear( d->shearX, d->shearY );
-    matrix.scale( d->scaleX, d->scaleY );
-
-    QPointF point;
-    switch(anchor) {
-        case KoFlake::TopLeftCorner: break;
-        case KoFlake::TopRightCorner: point = QPointF(size().width(), 0.0); break;
-        case KoFlake::BottomLeftCorner: point = QPointF(0.0, size().height()); break;
-        case KoFlake::BottomRightCorner: point = QPointF(size().width(), size().height()); break;
-        case KoFlake::CenteredPositon: point = QPointF(size().width() / 2.0, size().height() / 2.0); break;
-    }
-
-    QPointF vector2 = matrix.map( point );
-    //kDebug(30006) << "vector1: " << vector1 << ", vector2: " << vector2 << endl;
-
-    setPosition(newPosition + vector1 - vector2);
+    QPointF currentAbsPosition = absolutePosition( anchor );
+    QPointF translate = newPosition - currentAbsPosition;
+    d->localMatrix.translate( translate.x(), translate.y() );
+    recalcMatrix();
+    d->shapeChanged(PositionChanged);
 }
 
 void KoShape::copySettings(const KoShape *shape) {
     d->pos = shape->position();
-    d->scaleX = shape->scaleX();
-    d->scaleY = shape->scaleY();
-    d->angle = shape->rotation();
-    d->shearX = shape->shearX();
-    d->shearY = shape->shearY();
     d->size = shape->size();
     d->connectors.clear();
     foreach(QPointF point, shape->connectors())
@@ -424,6 +382,7 @@ void KoShape::copySettings(const KoShape *shape) {
     d->visible = shape->isVisible();
     d->locked = shape->isLocked();
     d->keepAspect = shape->keepAspectRatio();
+    d->localMatrix = shape->d->localMatrix;
 }
 
 void KoShape::moveBy(double distanceX, double distanceY) {
@@ -472,22 +431,22 @@ KoInsets KoShape::borderInsets() const {
 }
 
 double KoShape::scaleX() const {
-    return d->scaleX;
+    return 0.0;
 }
 double KoShape::scaleY() const {
-    return d->scaleY;
+    return 0.0;
 }
 
 double KoShape::rotation() const {
-    return d->angle;
+    return 0.0;
 }
 
 double KoShape::shearX() const {
-    return d->shearX;
+    return 0.0;
 }
 
 double KoShape::shearY() const {
-    return d->shearY;
+    return 0.0;
 }
 
 QSizeF KoShape::size () const {
@@ -495,7 +454,7 @@ QSizeF KoShape::size () const {
 }
 
 QPointF KoShape::position() const {
-    return d->pos;
+    return d->localMatrix.map( QPointF(0,0) );
 }
 
 void KoShape::addConnectionPoint( const QPointF &point ) {
@@ -588,7 +547,7 @@ void KoShape::setBorder(KoShapeBorderModel *border) {
 }
 
 const QMatrix& KoShape::matrix() const {
-    return d->matrix;
+    return d->localMatrix;
 }
 
 void KoShape::addConnection(KoShapeConnection *connection) {
@@ -734,6 +693,7 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     if(attributes & OdfTransformation) {
         // just like in shapes; ODF allows you to manipulate the 'matrix' after setting an
         // ofset on the shape (using the x and y positions).   Lets save them here.
+        /*
         bool rotate = qAbs(d->angle) > 1E-6;
         bool skew = qAbs(d->shearX) > 1E-6 || qAbs(d->shearY) > 1E-6;
         bool scale = qAbs(d->scaleX - 1) > 1E-6 || qAbs(d->scaleY -1) > 1E-6;
@@ -771,6 +731,16 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
             }
 
             context.xmlWriter().addAttribute( "draw:transform", transform );
+        }
+        */
+        if( ! d->localMatrix.isIdentity() )
+        {
+            QString m = QString( "matrix(0 0 %3 %4 %5pt %6pt)" )
+                    .arg( d->localMatrix.m11() )
+                    .arg( d->localMatrix.m12() )
+                    .arg( d->localMatrix.m21() ).arg( d->localMatrix.m22() )
+                    .arg( d->localMatrix.dx() ) .arg( d->localMatrix.dy() );
+            context.xmlWriter().addAttribute( "draw:transform", m );
         }
     }
 }

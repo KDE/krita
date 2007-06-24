@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,6 +19,7 @@
  */
 #include "KoShapeContainer.h"
 #include "KoShapeContainerModel.h"
+#include "KoShapeBorderModel.h"
 
 #include <QPointF>
 #include <QPainter>
@@ -181,7 +183,8 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 
     QList<KoShape*> sortedObjects = d->children->iterator();
     qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
-    QMatrix baseMatrix = matrix().inverted() * painter.matrix();
+
+    QMatrix baseMatrix = transformationMatrix(0).inverted() * painter.matrix();
 
     // clip the children to the parent outline.
     QMatrix m;
@@ -208,6 +211,12 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
         painter.setMatrix( shape->transformationMatrix(&converter) * baseMatrix );
         shape->paint(painter, converter);
         painter.restore();
+        if(shape->border()) {
+            painter.save();
+            painter.setMatrix( shape->transformationMatrix(&converter) * baseMatrix );
+            shape->border()->paintBorder(shape, painter, converter);
+            painter.restore();
+        }
     }
 }
 

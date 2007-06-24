@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,8 +24,7 @@
 #include "KoPointerEvent.h"
 #include "KoShapeManager.h"
 #include "KoCanvasResourceProvider.h"
-#include "commands/KoShapeMoveCommand.h"
-#include "commands/KoShapeRotateCommand.h"
+#include "commands/KoShapeTransformCommand.h"
 
 #include <QPointF>
 #include <math.h>
@@ -40,12 +40,11 @@ KoShapeRotateStrategy::KoShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas
         if( ! isEditable( shape ) )
             continue;
         m_selectedShapes << shape;
-        m_startPositions << shape->position();
-        m_startAbsolutePositions << shape->absolutePosition();
-        m_initialAngles << shape->rotation();
-        m_initialBoundingRect = m_initialBoundingRect.unite( shape->boundingRect() );
+        if( m_selectedShapes.count() == 1 )
+            m_initialBoundingRect = shape->boundingRect();
+        else
+            m_initialBoundingRect = m_initialBoundingRect.united( shape->boundingRect() );
     }
-    m_initialSelectionAngle = canvas->shapeManager()->selection()->rotation();
 }
 
 void KoShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
@@ -68,16 +67,14 @@ void KoShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     matrix.rotate(angle);
     matrix.translate(-center.x(), -center.y());
 
-    int counter=0;
-    foreach(KoShape *shape, m_selectedShapes) {
+    QMatrix applyMatrix = matrix * m_rotationMatrix.inverted();
+    m_rotationMatrix = matrix;
+    foreach( KoShape * shape, m_selectedShapes ) {
         shape->repaint();
-        shape->setAbsolutePosition(matrix.map(m_startAbsolutePositions[counter]));
-        shape->rotate(m_initialAngles[counter] + angle);
+        shape->applyTransformation( applyMatrix );
         shape->repaint();
-        counter++;
     }
-    m_canvas->shapeManager()->selection()->rotate(m_initialSelectionAngle + angle);
-
+    m_canvas->shapeManager()->selection()->applyTransformation( applyMatrix );
 }
 
 void KoShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
@@ -85,17 +82,19 @@ void KoShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &con
     decorator.setSelection(m_canvas->shapeManager()->selection());
     decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
     decorator.paint(painter, converter);
+
+    // paint the rotation center
+    painter.setPen( QPen(Qt::red));
+    painter.setBrush( QBrush(Qt::red));
+    painter.setRenderHint( QPainter::Antialiasing, true );
+    QRectF circle( 0, 0, 5, 5 );
+    circle.moveCenter( converter.documentToView( m_initialBoundingRect.center() ) );
+    painter.drawEllipse( circle );
 }
 
 QUndoCommand* KoShapeRotateStrategy::createCommand() {
-    QUndoCommand *cmd = new QUndoCommand(i18n("Rotate"));
-    QList<QPointF> newPositions;
-    QList<double> newAngles;
-    foreach(KoShape *shape, m_selectedShapes) {
-        newPositions << shape->position();
-        newAngles << shape->rotation();
-    }
-    new KoShapeMoveCommand(m_selectedShapes, m_startPositions, newPositions, cmd);
-    new KoShapeRotateCommand(m_selectedShapes, m_initialAngles, newAngles, cmd);
+    KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_rotationMatrix );
+    cmd->setText( i18n("Rotate") );
+    cmd->undo();
     return cmd;
 }

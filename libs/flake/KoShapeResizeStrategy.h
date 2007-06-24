@@ -50,16 +50,13 @@ public:
 private:
     QPointF m_start;
     QList<QPointF> m_startPositions;
-    QList<QPointF> m_startAbsolutePositions;
     QList<QSizeF> m_startSizes;
-    QList<double> m_startShearXs;
-    QList<double> m_startShearYs;
-    QList<double> m_startScaleXs;
-    QList<double> m_startScaleYs;
     bool m_top, m_left, m_bottom, m_right;
     QMatrix m_unwindMatrix, m_windMatrix;
     QSizeF m_initialSize;
     QPointF m_initialPosition;
+    QMatrix m_scaleMatrix;
+    QList<QMatrix> m_lastTransforms;
 };
 
 #endif /* KOSHAPESCALETRATEGY_H */

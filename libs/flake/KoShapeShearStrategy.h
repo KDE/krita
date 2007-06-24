@@ -51,17 +51,12 @@ public:
     virtual void paint( QPainter &painter, const KoViewConverter &converter);
 
 private:
-    QRectF m_initialBoundingRect;
     QPointF m_start;
     QPointF m_solidPoint;
     QSizeF m_initialSize;
-    QList<QMatrix> m_startMatrices;
-    QList<QMatrix> m_startRotationMatrices;
-    QList<QPointF> m_startPositions;
-    QList<double> m_startShearXs;
-    QList<double> m_startShearYs;
     bool m_top, m_left, m_bottom, m_right;
     double m_initialSelectionAngle;
+    QMatrix m_shearMatrix;
 };
 
 #endif /* KOSHAPESHEARSTRATEGY_H */

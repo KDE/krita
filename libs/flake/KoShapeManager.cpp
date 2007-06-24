@@ -392,6 +392,8 @@ void KoShapeManager::updateTree()
     d->shapeIndexesBeforeUpdate.clear();
 
     detector.fireSignals();
+
+    d->selection->updateSizeAndPosition();
 }
 
 const QList<KoShape *> & KoShapeManager::shapes() const {

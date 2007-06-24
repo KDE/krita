@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,8 +23,8 @@
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasResourceProvider.h"
-#include "commands/KoShapeMoveCommand.h"
 #include "commands/KoShapeSizeCommand.h"
+#include "commands/KoShapeTransformCommand.h"
 
 #include <klocale.h>
 
@@ -38,12 +39,8 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
             continue;
         m_selectedShapes << shape;
         m_startPositions << shape->position();
-        m_startAbsolutePositions << shape->absolutePosition();
+        m_lastTransforms << QMatrix();
         m_startSizes << shape->size();
-        m_startShearXs << shape->shearX();
-        m_startShearYs << shape->shearY();
-        m_startScaleXs << shape->scaleX();
-        m_startScaleYs << shape->scaleY();
     }
     m_start = clicked;
 
@@ -53,16 +50,13 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
     if(canvas->shapeManager()->selection()->count()==1)
         shp = canvas->shapeManager()->selection()->firstSelectedShape();
 
-    m_unwindMatrix = QMatrix();
-    if (shp)
-        m_unwindMatrix.rotate( - shp->rotation());
-    m_windMatrix = QMatrix();
-    if (shp)
-        m_windMatrix.rotate(shp->rotation());
-    if (shp)
+    if( shp )
+    {
+        m_windMatrix = shp->transformationMatrix(0);
+        m_unwindMatrix = m_windMatrix.inverted();
         m_initialSize = shp->size();
-    if (shp)
-        m_initialPosition = shp->transformationMatrix(0).map(QPointF());
+        m_initialPosition = m_windMatrix.map(QPointF());
+    }
 
     switch(direction) {
         case KoFlake::TopMiddleHandle:
@@ -90,7 +84,6 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     QPointF newPos = point;
     if(m_canvas->snapToGrid() && (modifiers & Qt::ShiftModifier) == 0)
         applyGrid(newPos);
-    QPointF distance = newPos - m_start;
 
     bool keepAspect = modifiers & Qt::AltModifier;
     foreach(KoShape *shape, m_selectedShapes)
@@ -98,7 +91,8 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
 
     double startWidth = m_initialSize.width();
     double startHeight = m_initialSize.height();
-    distance = m_unwindMatrix.map(distance);
+
+    QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map( m_start );
 
     double zoomX=1, zoomY=1;
     if(keepAspect) {
@@ -147,50 +141,86 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     matrix.scale(zoomX, zoomY);
     matrix.translate(-move.x(), -move.y()); // and back
 
+    // that is the transformation we want to apply to the shapes
     matrix = m_unwindMatrix * matrix * m_windMatrix;
-    int i=0;
-    foreach(KoShape *shape, m_selectedShapes) {
-        QPointF pos(m_startAbsolutePositions[i] - m_initialPosition);
-        pos = matrix.map(pos);
 
-        // construct the matrix tranformation we apply to the shape
-        QMatrix m = (QMatrix().rotate(shape->rotation())) * matrix  * (QMatrix().rotate(-shape->rotation()));
-        QSizeF size(m.m11() * m_startSizes[i].width(), m.m22() * m_startSizes[i].height());
-        bool mirrorX = size.width() < 0;
-        bool mirrorY = size.height() < 0;
-        size.setWidth(qMax(4.0, qAbs(size.width())));
-        size.setHeight(qMax(4.0, qAbs(size.height())));
+    // the resizing transformation without the mirroring part
+    QMatrix resizeMatrix;
+    resizeMatrix.translate(move.x(), move.y()); // translate to 
+    resizeMatrix.scale( qAbs(zoomX), qAbs(zoomY) );
+    resizeMatrix.translate(-move.x(), -move.y()); // and back
 
+    // the mirroring part of the resizing transformation
+    QMatrix mirrorMatrix;
+    mirrorMatrix.translate(move.x(), move.y()); // translate to 
+    mirrorMatrix.scale( zoomX < 0 ? -1 : 1, zoomY < 0 ? -1 : 1 );
+    mirrorMatrix.translate(-move.x(), -move.y()); // and back
+
+    int i = 0;
+    foreach(KoShape *shape, m_selectedShapes)
+    {
         shape->repaint();
-        // the position has to be set after the size as we set the center of the shape
 
-        // possibly mirror the shape
-        double x = m_startScaleXs[i];
-        double y = m_startScaleYs[i];
-        if(mirrorX)
-            x = x * -1;
-        if(mirrorY)
-            y = y * -1;
-        shape->scale(x, y);
+        // this uses resize for the zooming part
+        shape->applyTransformation( m_unwindMatrix );
 
+        /*
+         normally we would just apply the resizeMatrix now and be done with it, but
+         we want to resize instead of scale, so we have to separate the scaling part
+         of that transformation which can then be used to resize
+        */
+
+        // undo the last resize transformation
+        shape->applyTransformation( m_lastTransforms[i].inverted() );
+
+        // save the shapes transformation matrix
+        QMatrix shapeMatrix = shape->transformationMatrix(0);
+
+        // calculate the matrix we would apply to the local shape matrix
+        // that tells us the effective scale values we have to use for the resizing
+        QMatrix localMatrix = shapeMatrix * resizeMatrix * shapeMatrix.inverted();
+        // save the effective scale values
+        double scaleX = localMatrix.m11();
+        double scaleY = localMatrix.m22();
+
+        // calculate the scale matrix which is equivalent to our resizing above
+        QMatrix scaleMatrix = (QMatrix().scale( scaleX, scaleY ));
+        scaleMatrix =  shapeMatrix.inverted() * scaleMatrix * shapeMatrix;
+
+        // calculate the new size of the shape, using the effective scale values
+        QSizeF size( scaleX * m_startSizes[i].width(), scaleY * m_startSizes[i].height() );
+
+        // apply the transformation
         shape->resize( size );
-        shape->shear(m_startShearXs[i] + m.m12() / m.m22(), m_startShearYs[i] + m.m21() / m.m11());
-        shape->setAbsolutePosition( pos + m_initialPosition );
+        // apply the rest of the transformation without the resizing part
+        shape->applyTransformation( scaleMatrix.inverted() * resizeMatrix );
+        shape->applyTransformation( mirrorMatrix );
+
+        // and remember the applied transformation later for later undoing
+        m_lastTransforms[i] = shapeMatrix.inverted() * shape->transformationMatrix(0);
+
+        shape->applyTransformation( m_windMatrix );
+
         shape->repaint();
         i++;
     }
+    m_canvas->shapeManager()->selection()->applyTransformation( matrix * m_scaleMatrix.inverted() );
+    m_scaleMatrix = matrix;
 }
 
 QUndoCommand* KoShapeResizeStrategy::createCommand() {
-    QUndoCommand *cmd = new QUndoCommand(i18n("Resize"));
-    QList<QPointF> newPositions;
     QList<QSizeF> newSizes;
-    foreach(KoShape *shape, m_selectedShapes) {
-        newPositions << shape->position();
-        newSizes << shape->size();
+    QList<QMatrix> transformations;
+    uint shapeCount = m_selectedShapes.count();
+    for( uint i = 0; i < shapeCount; ++i )
+    {
+        newSizes << m_selectedShapes[i]->size();
+        transformations << m_unwindMatrix * m_lastTransforms[i] * m_windMatrix;
     }
-    new KoShapeMoveCommand(m_selectedShapes, m_startPositions, newPositions, cmd);
-    new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd);
+    QUndoCommand * cmd = new QUndoCommand(i18n("Resize"));
+    new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd );
+    new KoShapeTransformCommand( m_selectedShapes, transformations, cmd );
+    cmd->undo();
     return cmd;
 }
 

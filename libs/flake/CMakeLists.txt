@@ -99,6 +99,7 @@ set(flake_SRCS
     commands/KoSubpathJoinCommand.cpp
     commands/KoParameterHandleMoveCommand.cpp
     commands/KoParameterToPathCommand.cpp
+    commands/KoShapeTransformCommand.cpp
 )
 
 kde4_automoc(${flake_SRCS})

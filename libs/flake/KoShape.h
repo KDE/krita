@@ -170,12 +170,12 @@ public:
     /**
      * Return the current scaling adjustment over the X axis.
      */
-    double scaleX() const;
+    KDE_DEPRECATED double scaleX() const;
 
     /**
      * Return the current scaling adjustment over the Y axis.
      */
-    double scaleY() const;
+    KDE_DEPRECATED double scaleY() const;
 
     /**
      * @brief Rotate the shape
@@ -189,7 +189,7 @@ public:
     /**
      * Return the current rotation in degrees.
      */
-    double rotation() const;
+    KDE_DEPRECATED double rotation() const;
 
     /**
      * @brief Shear the shape
@@ -205,13 +205,13 @@ public:
      * Return the current horizontal shearing angle for this shape.
      * @return the current horizontal shearing angle for this shape.
      */
-    double shearX() const;
+    KDE_DEPRECATED double shearX() const;
 
     /**
      * Return the current vertical shearing angle for this shape.
      * @return the current vertical shearing angle for this shape.
      */
-    double shearY() const;
+    KDE_DEPRECATED double shearY() const;
 
     /**
      * @brief Resize the shape
@@ -536,6 +536,21 @@ public:
      *        offsets in the current view.
      */
     QMatrix transformationMatrix(const KoViewConverter *converter) const;
+
+    /**
+     * Applies a transformation to this shape.
+     *
+     * The transformation given is relative to the global coordinate system, i.e. the document.
+     *
+     * @param matrix the transformation matrix to apply
+     */
+    void applyTransformation(const QMatrix &matrix );
+
+    /**
+     * Sets a new transformation matrix describing the local transformations on this shape.
+     * @param matrix the new transformation matrix
+     */
+    void setTransformation( const QMatrix &matrix );
 
     /**
      * Copy all the settings from the parameter shape and apply them to this shape.

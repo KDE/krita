@@ -52,10 +52,7 @@ public:
 private:
     QRectF m_initialBoundingRect;
     QPointF m_start;
-    QList<QPointF> m_startPositions;
-    QList<QPointF> m_startAbsolutePositions;
-    QList<double> m_initialAngles;
-    double m_initialSelectionAngle;
+    QMatrix m_rotationMatrix;
 };
 
 #endif /* KOSHAPEROTATESTRATEGY_H */

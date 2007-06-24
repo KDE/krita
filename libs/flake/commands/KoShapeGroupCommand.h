@@ -24,6 +24,7 @@
 
 #include <QList>
 #include <QUndoCommand>
+#include <QtGui/QMatrix>
 
 class KoShape;
 class KoShapeGroup;

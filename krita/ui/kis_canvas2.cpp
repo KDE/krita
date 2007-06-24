@@ -51,7 +51,6 @@
 #include "kis_opengl_image_textures.h"
 #include "kis_shape_controller.h"
 #include "kis_layer_manager.h"
-#include "kis_shape_selection_canvas.h"
 
 #ifdef HAVE_OPENGL
 #include <QGLFormat>

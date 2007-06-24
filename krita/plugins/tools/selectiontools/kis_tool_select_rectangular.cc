@@ -32,6 +32,8 @@
 
 #include <KoShapeController.h>
 #include <KoPathShape.h>
+#include <KoShapeManager.h>
+#include <KoLineBorder.h>
 
 #include "kis_cursor.h"
 #include "kis_image.h"
@@ -43,6 +45,7 @@
 #include "kis_selection_options.h"
 #include <kis_selected_transaction.h>
 #include "kis_canvas2.h"
+#include "kis_shape_selection.h"
 
 KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6))
@@ -239,9 +242,28 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
         path->lineTo( bound2.topLeft() + QPointF(0, bound2.height()) );
         path->close();
         path->normalize();
+        path->setBorder( new KoLineBorder( 0, Qt::lightGray ) );
         KisPaintDeviceSP dev = m_currentLayer->paintDevice();
+
+        KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
+        Q_ASSERT(canvas);
         KisSelectionSP selection = dev->selection();
-        selection->addShape(path);
+
+        KisShapeSelection* shapeSelection;
+        if(!selection->hasShapeSelection()) {
+            shapeSelection = new KisShapeSelection(m_currentImage);
+            canvas->globalShapeManager()->add(shapeSelection);
+            selection->setShapeSelection(shapeSelection);
+        }
+        else {
+            shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+        }
+
+//         QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
+//                 m_canvas->addCommand(cmd);
+        shapeSelection->addChild(path);
+        canvas->globalShapeManager()->add(path);
+
         dev->emitSelectionChanged();
 
         m_selecting = false;

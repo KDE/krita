@@ -152,7 +152,6 @@ void KisShapeController::addShape( KoShape* shape )
     // Only non-krita shapes get added through this method; krita
     // layer shapes are added to kisimage and then end up in
     // slotLayerAdded
-
     if ( shape->shapeId() != KIS_LAYER_SHAPE_ID  &&
          shape->shapeId() != KIS_SHAPE_LAYER_ID  &&
          shape->shapeId() != KIS_LAYER_CONTAINER_ID &&
@@ -172,6 +171,8 @@ void KisShapeController::addShape( KoShape* shape )
 
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( shape->parent() );
 
+//TODO this needs to be checked
+#if 0
         if ( !shapeLayer ) {
             // There is no parent layer set, which means that when
             // dropping, there was no shape layer active. Create one
@@ -190,7 +191,9 @@ void KisShapeController::addShape( KoShape* shape )
 
             m_d->image->addLayer( shapeLayer, m_d->image->rootLayer());
         }
-        shapeLayer->addChild( shape );
+#endif
+        if ( shapeLayer )
+            shapeLayer->addChild( shape );
     }
     else {
         kDebug() << "Eeek -- we tried to add a krita layer shape without going through KisImage" << endl;

@@ -701,6 +701,37 @@ void KisPainter::fillPolygon(const vQPointF& points, FillStyle fillStyle)
 
     polygonPath.closeSubpath();
 
+    FillStyle m_fillStyle = fillStyle;
+    fillPainterPath(polygonPath);
+}
+
+void KisPainter::paintPolygon(const vQPointF& points)
+{
+    if (m_fillStyle != FillStyleNone) {
+        fillPolygon(points, m_fillStyle);
+    }
+
+    if (m_strokeStyle != StrokeStyleNone) {
+        if (points.count() > 1) {
+            double distance = -1;
+
+            for (int i = 0; i < points.count() - 1; i++) {
+                distance = paintLine(KisPaintInformation(points[i]), KisPaintInformation(points[i + 1]), distance);
+            }
+            paintLine(points[points.count() - 1], points[0], distance);
+        }
+    }
+}
+
+
+void KisPainter::fillPainterPath(const QPainterPath& path)
+{
+    FillStyle fillStyle = m_fillStyle;
+
+    if (fillStyle == FillStyleNone) {
+        return;
+    }
+
     // Fill the polygon bounding rectangle with the required contents then we'll
     // create a mask for the actual polygon coverage.
 
@@ -709,7 +740,7 @@ void KisPainter::fillPolygon(const vQPointF& points, FillStyle fillStyle)
 
     KisFillPainter fillPainter(polygon);
 
-    QRectF boundingRect = polygonPath.boundingRect();
+    QRectF boundingRect = path.boundingRect();
     QRect fillRect;
 
     fillRect.setLeft((qint32)floor(boundingRect.left()));
@@ -761,7 +792,7 @@ void KisPainter::fillPolygon(const vQPointF& points, FillStyle fillStyle)
 
             maskPainter.fillRect(polygonMaskImage.rect(), QColor(OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, 255));
             maskPainter.translate(-x, -y);
-            maskPainter.fillPath(polygonPath, QColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255));
+            maskPainter.fillPath(path, QColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255));
             maskPainter.translate(x, y);
 
             qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, MASK_IMAGE_WIDTH);
@@ -786,21 +817,4 @@ void KisPainter::fillPolygon(const vQPointF& points, FillStyle fillStyle)
     bltSelection(r.x(), r.y(), m_compositeOp, polygon, opacity(), r.x(), r.y(), r.width(), r.height());
 }
 
-void KisPainter::paintPolygon(const vQPointF& points)
-{
-    if (m_fillStyle != FillStyleNone) {
-        fillPolygon(points, m_fillStyle);
-    }
-
-    if (m_strokeStyle != StrokeStyleNone) {
-        if (points.count() > 1) {
-            double distance = -1;
-
-            for (int i = 0; i < points.count() - 1; i++) {
-                distance = paintLine(KisPaintInformation(points[i]), KisPaintInformation(points[i + 1]), distance);
-            }
-            paintLine(points[points.count() - 1], points[0], distance);
-        }
-    }
-}
 

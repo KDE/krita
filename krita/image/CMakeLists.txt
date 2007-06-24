@@ -91,8 +91,7 @@ set(kritaimage_LIB_SRCS
    kis_reflectivity_mask.cpp
    kis_transformation_mask.cpp
    kis_clone_layer.cpp
-   kis_shape_selection_canvas.cpp
-   kis_selection_shape_manager.cpp
+   kis_pixel_selection.cpp
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_store.cc
    metadata/kis_meta_data_value.cc

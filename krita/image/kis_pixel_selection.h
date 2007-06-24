@@ -15,73 +15,58 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_SELECTION_H_
-#define KIS_SELECTION_H_
+#ifndef KIS_PIXEL_SELECTION_H_
+#define KIS_PIXEL_SELECTION_H_
 
 #include <QRect>
 #include <QPainterPath>
 
+#include <KoShape.h>
+
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_mask.h"
+#include "kis_selection_component.h"
 
 #include <krita_export.h>
 
-enum selectionType {
-    READ_SELECTION,
-    WRITE_PROTECTION,
-    READ_WRITE
-};
-
-enum enumSelectionMode {
-    SELECTION_REPLACE,
-    SELECTION_ADD,
-    SELECTION_SUBTRACT
-};
-
-class KisSelectionComponent;
-
 /**
- * KisSelection contains a byte-map representation of a layer, where
+ * KisPixelSelection contains a byte-map representation of a layer, where
  * the value of a byte signifies whether a corresponding pixel is selected, or not.
  *
  * NOTE: If you need to manually call emitSelectionChanged on the owner paint device
- *       of a selection. KisSelection does not emit any signals by itself because
+ *       of a selection. KisPixelSelection does not emit any signals by itself because
  *       often you want to combine several actions in to perfom one operation and you
  *       do not want recomposition to happen all the time.
  */
-class KRITAIMAGE_EXPORT KisSelection : public KisMask {
-
-    typedef KisMask super;
+class KRITAIMAGE_EXPORT KisPixelSelection : public KisMask, public KisSelectionComponent {
 
 public:
     /**
-     * Create a new KisSelection
+     * Create a new KisPixelSelection
     * @param dev the parent paint device. The selection will never be bigger than the parent
      *              paint device.
      */
-    KisSelection(KisPaintDeviceSP dev);
+    KisPixelSelection(KisPaintDeviceSP dev);
 
 
     /**
-     * Create a new KisSelection from the given mask. The selection
+     * Create a new KisPixelSelection from the given mask. The selection
      * will share its pixel data with the mask
      */
-    KisSelection( KisPaintDeviceSP parent, KisMaskSP mask );
+    KisPixelSelection( KisPaintDeviceSP parent, KisMaskSP mask );
 
     /**
-     * Create a new KisSelection. This selection will not have a parent paint device.
+     * Create a new KisPixelSelection. This selection will not have a parent paint device.
      */
-    KisSelection();
+    KisPixelSelection();
 
     /**
      * Copy the selection
      */
-    KisSelection(const KisSelection& rhs);
+    KisPixelSelection(const KisPixelSelection& rhs);
 
-    virtual ~KisSelection();
-
-    //TODO this methods are now in KisPixelSelection, remove when the tools are ported
+    virtual ~KisPixelSelection();
 
     // Returns selectedness, or 0 if invalid coordinates
     quint8 selected(qint32 x, qint32 y) const;
@@ -129,13 +114,10 @@ public:
     virtual void setDirty(const QRect & rc);
     virtual void setDirty();
 
-    bool hasPixelSelection() const;
-    bool hasShapeSelection() const;
-    KisSelectionComponent* pixelSelection();
-    KisSelectionComponent* shapeSelection();
-    void setPixelSelection(KisSelectionComponent* pixelSelection);
-    void setShapeSelection(KisSelectionComponent* shapeSelection);
-    void updateProjection();
+    QVector<QPolygon> outline();
+
+    virtual void renderToProjection(KisSelection* projection);
+
 
 private:
 
@@ -162,13 +144,23 @@ private:
             return KisPaintDevice::region();
         }
 
+    enum EdgeType
+    {
+        TopEdge = 1, LeftEdge = 2, BottomEdge = 3, RightEdge = 0, NoEdge = 4
+    };
+
+    bool isOutlineEdge(EdgeType edge, qint32 row, qint32 col, quint8* buffer, qint32 width, qint32 height);
+
+    EdgeType nextEdge(EdgeType edge) { return edge == NoEdge ? edge : static_cast<EdgeType>((edge + 1) % 4); }
+
+    void nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, quint8* buffer, qint32 bufWidth, qint32 bufHeight);
+
+    void appendCoordinate(QPolygon * path, int x, int y, EdgeType edge);
+
 private:
     KisPaintDeviceWSP m_parentPaintDevice;
+    KoViewConverter * m_converter;
     bool m_dirty;
-    bool m_hasPixelSelection;
-    bool m_hasShapeSelection;
-    KisSelectionComponent* m_pixelSelection;
-    KisSelectionComponent* m_shapeSelection;
 };
 
-#endif // KIS_SELECTION_H_
+#endif // KIS_PIXEL_SELECTION_H_

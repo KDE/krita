@@ -1098,6 +1098,8 @@ KisSelectionSP KisPaintDevice::selection()
     }
     m_d->hasSelection = true;
 
+    //TODO find a better place for this call
+    m_d->selection->updateProjection();
     return m_d->selection;
 }
 

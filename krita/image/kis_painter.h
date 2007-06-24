@@ -623,6 +623,13 @@ public:
      */
     QRegion addDirtyRect(QRect r);
 
+    //TODO expand to paint PainterPath
+    /**
+     * Paints a painterpath. The points are in pixel coordinates.
+     */
+    void fillPainterPath(const QPainterPath& path);
+
+
 protected:
     /// Initialize, set everything to '0' or defaults
     void init();

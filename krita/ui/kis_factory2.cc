@@ -35,9 +35,11 @@
 
 
 #include <KoPluginLoader.h>
+#include <KoShapeRegistry.h>
 
 #include "kis_aboutdata.h"
 
+#include "kis_shape_selection.h"
 #include "kis_doc2.h"
 #include "kis_factory2.h"
 
@@ -97,6 +99,9 @@ const KComponentData &KisFactory2::componentData()
         else
             s_instance = new KComponentData( newKritaAboutData() );
         Q_CHECK_PTR(s_instance);
+
+        KoShapeRegistry* r = KoShapeRegistry::instance();
+        r->add( new KisShapeSelectionFactory(r) );
 
         // Load the krita-specific tools
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),

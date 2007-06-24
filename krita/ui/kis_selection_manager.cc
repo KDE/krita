@@ -65,7 +65,7 @@
 #include "kis_types.h"
 #include "kis_resource_provider.h"
 #include "kis_undo_adapter.h"
-#include "kis_selection_shape_manager.h"
+#include "kis_pixel_selection.h"
 
 #include "kis_clipboard.h"
 #include "kis_view2.h"
@@ -362,12 +362,16 @@ void KisSelectionManager::imgSelectionChanged(KisImageSP img)
         KisPaintDeviceSP dev = m_parent->activeDevice();
         if (dev)
             if (dev->hasSelection()) {
-                if(!timer->isActive())
-                    timer->start ( 300 );
-
                 KisSelectionSP selection = dev->selection();
-                outline = selection->outline();
-                updateSimpleOutline();
+                if(selection->hasPixelSelection()) {
+
+                    if(!timer->isActive())
+                        timer->start ( 300 );
+
+                    KisPixelSelection* pixelSelection = dynamic_cast<KisPixelSelection*>(selection->pixelSelection());
+                    outline = pixelSelection->outline();
+                    updateSimpleOutline();
+                }
             }
             else
                 timer->stop();
@@ -1719,7 +1723,7 @@ void KisSelectionManager::timerEvent()
 void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
 {
     KisPaintDeviceSP dev = m_parent->activeDevice();
-    if (dev && dev->hasSelection()) {
+    if (dev && dev->hasSelection() && dev->selection()->hasPixelSelection()) {
 
         double sx, sy;
         converter.zoom(&sx, &sy);
@@ -1755,12 +1759,6 @@ void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
         kDebug(41010) << "Painting marching ants :" << t.elapsed() << endl;
 
         gc.setWorldMatrix( oldWorldMatrix);
-
-        //Painting selection shapes
-        KisSelectionSP selection = dev->selection();
-        KisSelectionShapeManager* shapeManager = selection->shapeManager();
-        if(shapeManager)
-            shapeManager->paintShapeSelection(gc, converter, offset );
     }
 }
 

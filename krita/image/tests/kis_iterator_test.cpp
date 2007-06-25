@@ -156,6 +156,7 @@ void KisIteratorTest::hLineIter()
         ++it;
     }
 
+    kDebug() << "XXXXXXXXXXXXXX BUG: 147191" << endl;
     QVERIFY( dev.extent() == QRect( 0, 0, 128, 64) );
     kDebug () << dev.exactBounds() << endl;
     QVERIFY( dev.exactBounds() == QRect( 0, 0, 128, 1 ) );

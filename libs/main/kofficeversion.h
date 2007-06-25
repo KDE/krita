@@ -22,17 +22,10 @@
 #ifndef _KOFFICE_VERSION_H_
 #define _KOFFICE_VERSION_H_
 
-// Remmber to synchronize the version number with the file(s):
-// - koffice/configure.in.in
-//
-// NOT synchronized are:
-// - karbon/karbon_aboutdata.h
-//
-
-#define KOFFICE_VERSION_STRING "2.0 alpha"
+#define KOFFICE_VERSION_STRING "2.0 alpha-1"
 #define KOFFICE_VERSION_MAJOR 1
 #define KOFFICE_VERSION_MINOR 9
-#define KOFFICE_VERSION_RELEASE 90
+#define KOFFICE_VERSION_RELEASE 91
 #define KOFFICE_MAKE_VERSION( a,b,c ) (((a) << 16) | ((b) << 8) | (c))
 
 #define KOFFICE_VERSION \

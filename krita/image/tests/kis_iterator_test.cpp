@@ -117,7 +117,11 @@ void KisIteratorTest::rectIter()
     QVERIFY( dev.extent() == QRect( 0, 0, 128, 128 ) );
     QVERIFY( dev.exactBounds() == QRect( 0, 0, 128, 128 ) );
 
-     //dev.clear(); // This causes an assert: BUG! - naturally as we still have iterators accessing the data
+     // BSAR: This causes an assert: BUG!
+     // CBR - naturally as we still have iterators accessing the data
+     // BSAR: of course not, isDone() has returned true, we're done
+     // accessing the data.
+     //dev.clear();
 
      //it = dev.createRectIterator(10, 10, 128, 128);
 //     while ( !it.isDone() ) {

@@ -75,5 +75,17 @@ add_test(krita-image-KisIteratorTest KisIteratorTest)
 
 ########### next target ###############
 
+set(kis_image_view_converter_test_SRCS kis_image_view_converter_test.cpp )
+
+kde4_automoc(${kis_image_view_converter_test_SRCS})
+
+kde4_add_executable(KisImage_View_ConverterTest RUN_UNINSTALLED ${kis_image_view_converter_test_SRCS})
+
+target_link_libraries(KisImage_View_ConverterTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
+
+add_test(krita-image-KisImage_View_ConverterTest KisImage_View_ConverterTest)
+
+########### next target ###############
+
 
 endif(KDE4_BUILD_TESTS)

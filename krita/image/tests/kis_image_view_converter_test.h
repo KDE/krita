@@ -16,23 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ITERATOR_TEST_H
-#define KIS_ITERATOR_TEST_H
+#ifndef KIS_IMAGEVIEWCONVERTER_TEST_H
+#define KIS_IMAGEVIEWCONVERTER_TEST_H
 
 #include <QtTest/QtTest>
 
-class KisIteratorTest : public QObject
+class KisImageViewConverterTest : public QObject
 {
     Q_OBJECT
 
 private slots:
 
-    void writeBytes();
-    void fill();
-    void rectIter();
-    void hLineIter();
-    void vLineIter();
-    void randomAccessor();
+    void testDocumentToView();
+    void testViewToDocument();
+    void testZoom();
 };
 
 #endif

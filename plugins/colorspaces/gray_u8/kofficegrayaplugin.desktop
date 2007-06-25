@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Grayscale Color Model with Alpha
 Name[de]=Graustufen-Farbmodell mit Alphakanal
 Name[ja]=アルファチャンネル付きグレースケールカラーモデル
+Name[sv]=Gråskalefärgmodell med alfa
 Name[uk]=Модель кольору "відтінки сірого" з альфа
 Name[x-test]=xxGrayscale Color Model with Alphaxx
 Comment=Color model for 8-bit grayscale images

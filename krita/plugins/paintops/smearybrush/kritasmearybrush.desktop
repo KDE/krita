@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Smeary Brush
 Name[de]=Schmieriger Pinsel
+Name[sv]=Smetig pensel
 Name[x-test]=xxSmeary Brushxx
 Comment=Smeary brush
 Comment[de]=Schmieriger Pinsel
+Comment[sv]=Smetig pensel
 Comment[x-test]=xxSmeary brushxx
 ServiceTypes=Krita/Paintop
 Type=Service

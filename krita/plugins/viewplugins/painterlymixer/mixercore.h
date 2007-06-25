@@ -22,7 +22,7 @@
 #define MIXER_CORE_H_
 
 #include <KoCanvasBase.h>
-// #include <KoCanvasResourceProvider.h>
+#include <KoCanvasResourceProvider.h>
 
 #include "kis_paint_device.h"
 
@@ -40,7 +40,7 @@ public:
     ~MixerCanvas();
 
     // Initializes the canvas KisPaintDevice, and add overlays to it.
-    void initDevice(KoColorSpace *cs, KisResourceProvider *rp);
+    void initDevice(KoColorSpace *cs, KoCanvasResourceProvider *rp);
     // Initializes the color wells and various spots in the Spots Frame.
     void initSpots(QFrame *sf);
 
@@ -84,7 +84,7 @@ class MixerTool : public KoTool {
     Q_OBJECT
 
 public:
-    MixerTool(MixerCanvas *canvas, KisPaintDevice* device, KisResourceProvider *rp);
+    MixerTool(MixerCanvas *canvas, KisPaintDevice* device, KoCanvasResourceProvider *rp);
     ~MixerTool();
 
 // Implement KoTool
@@ -118,7 +118,7 @@ private:
 
 private:
     KisPaintDevice* m_canvasDev;
-    KisResourceProvider *m_resources;
+    KoCanvasResourceProvider *m_resources;
 
     // We keep a KisPainterlyInformation structure so we store painterly information
     // when we mix with non-painterly paintops.

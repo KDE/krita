@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceProvider.h>
+// #include <KoCanvasResourceProvider.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoID.h>
@@ -82,7 +82,7 @@ MixerCanvas::~MixerCanvas()
         delete m_tool;
 }
 
-void MixerCanvas::initDevice(KoColorSpace *cs, KoCanvasResourceProvider *rp)
+void MixerCanvas::initDevice(KoColorSpace *cs, KisResourceProvider *rp)
 {
     m_canvasDev = new KisPaintDevice(cs);
     addPainterlyOverlays(m_canvasDev.data());
@@ -141,7 +141,7 @@ void MixerCanvas::updateCanvas(const QRectF& rc)
 // THE MIXER TOOL
 /////////////////
 
-MixerTool::MixerTool(MixerCanvas *canvas, KisPaintDevice* device, KoCanvasResourceProvider *rp)
+MixerTool::MixerTool(MixerCanvas *canvas, KisPaintDevice* device, KisResourceProvider *rp)
     : KoTool(canvas), m_canvasDev(device), m_resources(rp)
 {
     //{{ - Just for testing!
@@ -178,13 +178,13 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
     //{{ KisPainter initialization - Put it in another function?
     KisPainter painter(stroke);
     KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(
-                          m_resources->resource(KisResourceProvider::CurrentPaintop).value<KoID>(),
-                          static_cast<KisPaintOpSettings*>(m_resources->resource(KisResourceProvider::CurrentPaintopSettings).value<void*>()),
+                          m_resources->currentPaintop(),
+                          m_resources->currentPaintopSettings(),
                           &painter, 0);
     painter.setPaintOp(current); // The painter now has the paintop and will destroy it.
-    painter.setPaintColor(m_resources->resource(KoCanvasResource::BackgroundColor).value<KoColor>());
-    painter.setBackgroundColor(m_resources->resource(KoCanvasResource::ForegroundColor).value<KoColor>());
-    painter.setBrush(static_cast<KisBrush*>(m_resources->resource(KisResourceProvider::CurrentBrush).value<void*>()));
+    painter.setPaintColor(m_resources->fgColor());
+    painter.setBackgroundColor(m_resources->bgColor());
+    painter.setBrush(m_resources->currentBrush());
     //}}
 
     if (current->painterly()) {
@@ -394,7 +394,7 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
         qreal pre_hue, pre_sat, pre_val;
         QColor pre_color;
 
-        pre_color = m_resources->resource(KoCanvasResource::ForegroundColor).value<KoColor>().toQColor();
+        pre_color = m_resources->fgColor().toQColor();
         pre_color.getHsvF(&pre_hue, &pre_sat, &pre_val);
 
         ave_hue = ave_hue/total;
@@ -409,7 +409,7 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
 
         ave_color.setHsvF(ave_hue, ave_sat, ave_val);
 
-        m_resources->setResource(KoCanvasResource::ForegroundColor, KoColor(ave_color, stroke->colorSpace()));
+        m_resources->setFGColor(KoColor(ave_color, stroke->colorSpace()));
     }
 }
 

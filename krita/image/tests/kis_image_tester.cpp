@@ -27,6 +27,7 @@
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include <kdebug.h>
 
 #define IMAGE_WIDTH 1
 #define IMAGE_HEIGHT 1
@@ -53,6 +54,7 @@ void KisImageTester::mergeTests()
     image->addLayer(layer, image->rootLayer(), 0);
 
     layer->paintDevice()->setPixel(0, 0, QColor(255, 128, 64), OPACITY_OPAQUE);
+    layer->setDirty();
 
     mergedPixel = image->mergedPixel(0, 0);
     mergedPixel.toQColor(&color, &opacity);
@@ -64,16 +66,19 @@ void KisImageTester::mergeTests()
 
     KisPaintLayer * layer2 = new KisPaintLayer(image, "layer 2", OPACITY_OPAQUE / 2);
     image->addLayer(layer2, image->rootLayer(), layer);
+    layer2->setDirty();
 
     layer2->paintDevice()->setPixel(0, 0, QColor(255, 255, 255), OPACITY_OPAQUE);
 
     mergedPixel = image->mergedPixel(0, 0);
     mergedPixel.toQColor(&color, &opacity);
 
-    QCOMPARE(opacity, OPACITY_OPAQUE);
-    QCOMPARE(color.red(), 255);
-    QCOMPARE(color.green(), 128 + ((255 - 128) / 2));
-    QCOMPARE(color.blue(), 64 + ((255 - 64) / 2));
+    // Does not work. See BUG: 147193
+    kDebug() << "XXXXXXXXXXXXXXXX: BUG: 147193" << endl;
+    QCOMPARE(( uint ) opacity, ( uint ) OPACITY_OPAQUE);
+    QCOMPARE(( uint ) color.red(), ( uint )255);
+    QCOMPARE(( uint ) color.green(), ( uint )( 128 + ((255 - 128) / 2) ) );
+    QCOMPARE(( uint ) color.blue(), ( uint ) ( 64 + ((255 - 64) / 2) ) );
 }
 
 

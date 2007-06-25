@@ -182,7 +182,7 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
                           static_cast<KisPaintOpSettings*>(m_resources->resource(KisResourceProvider::CurrentPaintopSettings).value<void*>()),
                           &painter, 0);
     painter.setPaintOp(current); // The painter now has the paintop and will destroy it.
-    painter.setPaintColor(m_resources->resource(KoCanvasResource::ForegroundColor).value<KoColor>());
+    painter.setPaintColor(m_resources->resource(KoCanvasResource::BackgroundColor).value<KoColor>());
     painter.setBackgroundColor(m_resources->resource(KoCanvasResource::ForegroundColor).value<KoColor>());
     painter.setBrush(static_cast<KisBrush*>(m_resources->resource(KisResourceProvider::CurrentBrush).value<void*>()));
     //}}
@@ -233,10 +233,10 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
         y0 = e->y();
     QRect rc = stroke->exactBounds();
     QColor color, can_color, fin_color, ave_color;
-    qreal red, gre, blu;
-    qreal can_red, can_gre, can_blu;
-    qreal fin_red, fin_gre, fin_blu;
-    qreal ave_red = 0, ave_gre = 0, ave_blu = 0;
+    qreal hue, sat, val;
+    qreal can_hue, can_sat, can_val;
+    qreal fin_hue, fin_sat, fin_val;
+    qreal ave_hue = 0, ave_sat = 0, ave_val = 0;
     quint8 opacity, can_opacity, fin_opacity;
     int total = 0;
 
@@ -334,27 +334,27 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
 //             kDebug() << "\tACTV: " << act_pvolume << endl;
 
 //             red = (float)color.red();   can_red = (float)can_color.red();
-//             gre = (float)color.green(); can_gre = (float)can_color.green();
-//             blu = (float)color.blue();  can_blu = (float)can_color.blue();
+//             sat = (float)color.saten(); can_sat = (float)can_color.saten();
+//             val = (float)color.vale();  can_val = (float)can_color.vale();
 
-            color.getHsvF(&red, &gre, &blu);
-            can_color.getHsvF(&can_red, &can_gre, &can_blu);
+            color.getHsvF(&hue, &sat, &val);
+            can_color.getHsvF(&can_hue, &can_sat, &can_val);
 
-//             kDebug() << "STROKE - RED: " << red << " GRE: " << gre << " BLU: " << blu << endl;
-//             kDebug() << "CANVAS - RED: " << can_red << " GRE: " << can_gre << " BLU: " << can_blu << endl;
+//             kDebug() << "STROKE - hue: " << red << " sat: " << sat << " val: " << val << endl;
+//             kDebug() << "CANVAS - RED: " << can_red << " sat: " << can_sat << " val: " << can_val << endl;
 
-            fin_red = (pvolume*red + act_pvolume*can_red) / (act_pvolume + pvolume);
-            fin_gre = (pvolume*gre + act_pvolume*can_gre) / (act_pvolume + pvolume);
-            fin_blu = (pvolume*blu + act_pvolume*can_blu) / (act_pvolume + pvolume);
+            fin_hue = (pvolume*hue + act_pvolume*can_hue) / (act_pvolume + pvolume);
+            fin_sat = (pvolume*sat + act_pvolume*can_sat) / (act_pvolume + pvolume);
+            fin_val = (pvolume*val + act_pvolume*can_val) / (act_pvolume + pvolume);
 
-            ave_red += fin_red;
-            ave_gre += fin_gre;
-            ave_blu += fin_blu;
+            ave_hue += fin_hue;
+            ave_sat += fin_sat;
+            ave_val += fin_val;
             ave_pvolume += pvolume;
             ave_act_pvolume += act_pvolume;
             total += 1;
 
-//             kDebug() << "FINAL  - RED: " << fin_red << " GRE: " << fin_gre << " BLU: " << fin_blu << endl;
+//             kDebug() << "FINAL  - hue: " << fin_hue << " sat: " << fin_sat << " val: " << fin_val << endl;
 
             fin_wetness = (wetness + can_wetness)/2.0f;
             fin_pig_con = (pig_con + can_pig_con)/2.0f;
@@ -364,7 +364,7 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
             fin_mixabil = (mixabil + can_mixabil)/2.0f;
 
             fin_opacity = (opacity + can_opacity)/2;
-            fin_color.setHsvF(fin_red, fin_gre, fin_blu);
+            fin_color.setHsvF(fin_hue, fin_sat, fin_val);
 
 //             kDebug() << "FINAL COLOR: " << fin_color << " OPACITY: " << (int)fin_opacity << endl;
 
@@ -391,23 +391,23 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
     }
 
     if (total) {
-        qreal pre_red, pre_gre, pre_blu;
+        qreal pre_hue, pre_sat, pre_val;
         QColor pre_color;
 
         pre_color = m_resources->resource(KoCanvasResource::ForegroundColor).value<KoColor>().toQColor();
-        pre_color.getHsvF(&pre_red, &pre_gre, &pre_blu);
+        pre_color.getHsvF(&pre_hue, &pre_sat, &pre_val);
 
-        ave_red = ave_red/total;
-        ave_gre = ave_gre/total;
-        ave_blu = ave_blu/total;
+        ave_hue = ave_hue/total;
+        ave_sat = ave_sat/total;
+        ave_val = ave_val/total;
         ave_pvolume = ave_pvolume/total;
         ave_act_pvolume = ave_act_pvolume/total;
 
-        ave_red = (ave_pvolume*pre_red + ave_act_pvolume*ave_red) / (ave_act_pvolume + ave_pvolume);
-        ave_gre = (ave_pvolume*pre_gre + ave_act_pvolume*ave_gre) / (ave_act_pvolume + ave_pvolume);
-        ave_blu = (ave_pvolume*pre_blu + ave_act_pvolume*ave_blu) / (ave_act_pvolume + ave_pvolume);
+        ave_hue = (ave_pvolume*pre_hue + ave_act_pvolume*ave_hue) / (ave_act_pvolume + ave_pvolume);
+        ave_sat = (ave_pvolume*pre_sat + ave_act_pvolume*ave_sat) / (ave_act_pvolume + ave_pvolume);
+        ave_val = (ave_pvolume*pre_val + ave_act_pvolume*ave_val) / (ave_act_pvolume + ave_pvolume);
 
-        ave_color.setHsvF(ave_red, ave_gre, ave_blu);
+        ave_color.setHsvF(ave_hue, ave_sat, ave_val);
 
         m_resources->setResource(KoCanvasResource::ForegroundColor, KoColor(ave_color, stroke->colorSpace()));
     }

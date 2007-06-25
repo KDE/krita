@@ -84,7 +84,7 @@ class MixerTool : public KoTool {
     Q_OBJECT
 
 public:
-    MixerTool(MixerCanvas *canvas, KisPaintDeviceSP device, KoCanvasResourceProvider *rp);
+    MixerTool(MixerCanvas *canvas, KisPaintDevice* device, KoCanvasResourceProvider *rp);
     ~MixerTool();
 
 // Implement KoTool
@@ -117,7 +117,7 @@ private:
     void updateResources(KisPaintDeviceSP stroke);
 
 private:
-    KisPaintDeviceSP m_canvasDev;
+    KisPaintDevice* m_canvasDev;
     KoCanvasResourceProvider *m_resources;
 
     // We keep a KisPainterlyInformation structure so we store painterly information

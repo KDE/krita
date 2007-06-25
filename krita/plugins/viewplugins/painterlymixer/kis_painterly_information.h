@@ -46,12 +46,4 @@ struct KisPainterlyBristleInformation {
     float Wetness; ///< how wet is the paint. This behaves on almost all other information.
 };
 
-struct KisPainterlyCanvasInformation {
-
-};
-
-struct KisPainterlyEventInformation {
-
-};
-
 #endif // KIS_PAINTERLY_INFORMATION_H_

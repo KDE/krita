@@ -31,6 +31,7 @@
 
 class KRITAIMAGE_EXPORT KisMixabilityMask : public KisMask
 {
+public:
     KisMixabilityMask( KisPaintDeviceSP device );
     virtual ~KisMixabilityMask();
     KisMixabilityMask( const KisMixabilityMask& rhs );

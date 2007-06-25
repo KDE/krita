@@ -78,12 +78,12 @@ KoCanvasBase * KisResourceProvider::canvas() const
 
 KoColor KisResourceProvider::bgColor() const
 {
-    return m_resourceProvider->resource( KoCanvasResource::ForegroundColor ).value<KoColor>();
+    return m_resourceProvider->resource( KoCanvasResource::BackgroundColor ).value<KoColor>();
 }
 
 KoColor KisResourceProvider::fgColor() const
 {
-    return m_resourceProvider->resource( KoCanvasResource::BackgroundColor ).value<KoColor>();
+    return m_resourceProvider->resource( KoCanvasResource::ForegroundColor ).value<KoColor>();
 }
 
 float KisResourceProvider::HDRExposure() const

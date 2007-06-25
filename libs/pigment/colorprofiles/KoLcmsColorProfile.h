@@ -95,6 +95,10 @@ public:
 
     virtual bool isSuitableForDisplay() const;
 
+protected:
+    KoLcmsColorProfile();
+    void setProfile(const cmsHPROFILE profile);
+
 private:
     bool init();
 

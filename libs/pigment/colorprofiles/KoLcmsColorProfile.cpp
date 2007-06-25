@@ -47,6 +47,11 @@ public:
     bool suitableForOutput;
 };
 
+KoLcmsColorProfile::KoLcmsColorProfile()
+    : d(new Private())
+{
+}
+
 KoLcmsColorProfile::KoLcmsColorProfile(const QByteArray& rawData)
     : KoIccColorProfile(rawData), d(new Private())
 {
@@ -61,6 +66,17 @@ KoLcmsColorProfile::KoLcmsColorProfile(const QString& file)
 
 KoLcmsColorProfile::KoLcmsColorProfile(const cmsHPROFILE profile)
     : d(new Private())
+{
+    setProfile(profile);
+}
+
+KoLcmsColorProfile::~KoLcmsColorProfile()
+{
+    cmsCloseProfile(d->profile);
+    delete d;
+}
+
+void KoLcmsColorProfile::setProfile(const cmsHPROFILE profile)
 {
     d->profile = profile;
     d->valid = true;
@@ -83,13 +99,6 @@ KoLcmsColorProfile::KoLcmsColorProfile(const cmsHPROFILE profile)
     setRawData(rawData);
     init();
 }
-
-KoLcmsColorProfile::~KoLcmsColorProfile()
-{
-    cmsCloseProfile(d->profile);
-    delete d;
-}
-
 
 bool KoLcmsColorProfile::load()
 {

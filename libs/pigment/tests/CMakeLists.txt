@@ -26,6 +26,18 @@ target_link_libraries(TestKoColorSpaceAbstract  ${KDE4_KDECORE_LIBS} pigment ${Q
 
 add_test(libs-pigment-TestKoColorSpaceAbstract ${EXECUTABLE_OUTPUT_PATH}/TestKoColorSpaceAbstract)
 
+########### next target ###############
+
+set(TestKoLcmsColorProfile_test_SRCS TestKoLcmsColorProfile.cpp )
+
+kde4_automoc(${TestKoLcmsColorProfile_test_SRCS})
+
+kde4_add_executable(TestKoLcmsColorProfile RUN_UNINSTALLED ${TestKoLcmsColorProfile_test_SRCS})
+
+target_link_libraries(TestKoLcmsColorProfile  ${KDE4_KDECORE_LIBS} pigment ${QT_QTTEST_LIBRARY})
+
+add_test(libs-pigment-TestKoLcmsColorProfile ${EXECUTABLE_OUTPUT_PATH}/TestKoLcmsColorProfile)
+
 ########### install files ###############
 
 endif(KDE4_BUILD_TESTS)

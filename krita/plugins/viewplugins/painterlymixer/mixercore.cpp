@@ -290,12 +290,12 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
             pig_con = f * m_info.PigmentConcentration;
             mixabil = m_info.Mixability;
 
-            *it_wetn.rawData() = (quint8)(wetness*256.0f);
+            *it_wetn.rawData() = (quint8)(wetness*255.0f);
             *it_volu.rawData() = (quint8)(pvolume);
-            *it_visc.rawData() = (quint8)(pviscos*256.0f);
-            *it_refl.rawData() = (quint8)(reflect*256.0f);
-            *it_pigm.rawData() = (quint8)(pig_con*256.0f);
-            *it_mixa.rawData() = (quint8)(mixabil*256.0f);
+            *it_visc.rawData() = (quint8)(pviscos*255.0f);
+            *it_refl.rawData() = (quint8)(reflect*255.0f);
+            *it_pigm.rawData() = (quint8)(pig_con*255.0f);
+            *it_mixa.rawData() = (quint8)(mixabil*255.0f);
 
 //             kDebug() << "STROKE: " << endl;
 //             kDebug() << "\tWETN: " << (int)*it_wetn.rawData() << endl
@@ -322,12 +322,12 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
 //                      << "\tPIGM: " << (int)*can_it_pigm.rawData() << endl
 //                      << "\tMIXA: " << (int)*can_it_mixa.rawData() << endl;
 
-            can_wetness = (float)*can_it_wetn.rawData()/256.0f;
+            can_wetness = (float)*can_it_wetn.rawData()/255.0f;
             can_pvolume = (float)*can_it_volu.rawData();
-            can_pviscos = (float)*can_it_visc.rawData()/256.0f;
-            can_reflect = (float)*can_it_refl.rawData()/256.0f;
-            can_pig_con = (float)*can_it_pigm.rawData()/256.0f;
-            can_mixabil = (float)*can_it_mixa.rawData()/256.0f;
+            can_pviscos = (float)*can_it_visc.rawData()/255.0f;
+            can_reflect = (float)*can_it_refl.rawData()/255.0f;
+            can_pig_con = (float)*can_it_pigm.rawData()/255.0f;
+            can_mixabil = (float)*can_it_mixa.rawData()/255.0f;
 
             act_pvolume = can_pvolume;
 
@@ -370,12 +370,12 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
 
             stroke->colorSpace()->fromQColor(fin_color, fin_opacity, it_main.rawData());
 
-            *it_wetn.rawData() = (quint8)(fin_wetness*256.0f);
+            *it_wetn.rawData() = (quint8)(fin_wetness*255.0f);
             *it_volu.rawData() = (quint8)(fin_pvolume);
-            *it_visc.rawData() = (quint8)(fin_pviscos*256.0f);
-            *it_refl.rawData() = (quint8)(fin_reflect*256.0f);
-            *it_pigm.rawData() = (quint8)(fin_pig_con*256.0f);
-            *it_mixa.rawData() = (quint8)(fin_mixabil*256.0f);
+            *it_visc.rawData() = (quint8)(fin_pviscos*255.0f);
+            *it_refl.rawData() = (quint8)(fin_reflect*255.0f);
+            *it_pigm.rawData() = (quint8)(fin_pig_con*255.0f);
+            *it_mixa.rawData() = (quint8)(fin_mixabil*255.0f);
 
 //             kDebug() << "FINAL: " << endl;
 //             kDebug() << "\tWETN: " << (int)*it_wetn.rawData() << endl

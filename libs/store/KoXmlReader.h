@@ -413,7 +413,7 @@ namespace KoXml {
 
 #define forEachElement( elem, parent ) \
       for ( KoXmlNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
-        if ( !( elem = _node.toElement() ).isNull() )
+        if ( ( elem = _node.toElement() ).isNull() ) {} else
 
 
 #endif // KOFFICE_XMLREADER

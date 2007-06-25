@@ -611,6 +611,13 @@ protected:
     bool loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingContext &context, int attributes );
 
     /**
+     * Parses the transformation attribute from the given string
+     * @param transform the transform attribute string
+     * @return the resulting transformation matrix
+     */
+    QMatrix parseOdfTransform( const QString &transform );
+
+    /**
      * This method can be used while saving the shape as ODF to add the data
      * stored on this shape to the current element.
      *

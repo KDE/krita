@@ -180,6 +180,8 @@ bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
 
     normalize();
 
+    loadOdfAttributes( element, context, OdfTransformation );
+
     return true;
 }
 

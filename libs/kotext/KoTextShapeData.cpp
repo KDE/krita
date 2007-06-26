@@ -56,7 +56,8 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
     d->document = document;
     // The following avoids the normal case where the glyph metrices are rounded to integers and
     // hinted to the screen by freetype, which you of course don't want for WYSIWYG
-    d->document->setUseDesignMetrics(true);
+    if(! d->document->useDesignMetrics())
+        d->document->setUseDesignMetrics(true);
     d->ownsDocument = transferOwnership;
 }
 

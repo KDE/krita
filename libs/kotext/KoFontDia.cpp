@@ -26,7 +26,7 @@
 
 #include <QWidget>
 
-KoFontDia::KoFontDia( const QTextCharFormat &format, KSpell2::Loader::Ptr loader, QWidget* parent)
+KoFontDia::KoFontDia( const QTextCharFormat &format, /*KSpell2::Loader::Ptr loader,*/ QWidget* parent)
     : KDialog(parent),
     m_format(format)
 {
@@ -63,7 +63,7 @@ KoFontDia::KoFontDia( const QTextCharFormat &format, KSpell2::Loader::Ptr loader
     fontTabWidget->addTab( m_layoutTab, i18n( "Layout" ) );
 
     //Language tab
-    languageTab = new KoLanguageTab( loader, this );
+    languageTab = new KoLanguageTab( /*loader,*/ this );
     fontTabWidget->addTab( languageTab, i18n( "Language" ) );
     connect( languageTab, SIGNAL( languageChanged() ), this, SLOT( slotLanguageChanged() ) );
 

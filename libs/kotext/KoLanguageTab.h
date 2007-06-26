@@ -22,7 +22,6 @@
 
 #include <ui_kolanguagetabbase.h>
 
-#include <sonnet/loader.h>
 
 class KoLanguageTabBase : public QWidget, public Ui::KoLanguageTabBase
 {
@@ -38,7 +37,7 @@ class KoLanguageTab : public KoLanguageTabBase
     Q_OBJECT
 
 public:
-    explicit KoLanguageTab( KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr(), QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
+    explicit KoLanguageTab( /*KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr()*/ QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
     ~KoLanguageTab();
 
     QString getLanguage() const;

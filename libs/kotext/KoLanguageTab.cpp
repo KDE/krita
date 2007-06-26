@@ -29,7 +29,7 @@
 #include "KoLanguageTab.moc"
 
 
-KoLanguageTab::KoLanguageTab( KSpell2::Loader::Ptr loader, QWidget* parent, const char* name, Qt::WFlags fl ) 
+KoLanguageTab::KoLanguageTab( /*KSpell2::Loader::Ptr loader,*/ QWidget* parent, const char* name, Qt::WFlags fl ) 
         : KoLanguageTabBase( parent )
 {
     Q_UNUSED( name );
@@ -41,10 +41,10 @@ KoLanguageTab::KoLanguageTab( KSpell2::Loader::Ptr loader, QWidget* parent, cons
     const QStringList langNames = KoGlobal::listOfLanguages();
     const QStringList langTags = KoGlobal::listTagOfLanguages();
     QSet<QString> spellCheckLanguages;
-
+#if 0 //Port it
     if ( loader )
         spellCheckLanguages = QSet<QString>::fromList(loader->languages());
-
+#endif
     QStringList::ConstIterator itName = langNames.begin();
     QStringList::ConstIterator itTag = langTags.begin();
     for ( ; itName != langNames.end() && itTag != langTags.end(); ++itName, ++itTag )

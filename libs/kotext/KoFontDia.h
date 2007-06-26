@@ -31,7 +31,6 @@
 // kde + Qt
 #include <QTabWidget>
 #include <kdialog.h>
-#include <sonnet/loader.h>
 
 #include <QTextCharFormat>
 
@@ -42,7 +41,7 @@ public:
 
     /// If your application supports spell-checking, pass here the KSpell2 Loader
     /// so that the font dialog can show which languages are supported for spellchecking.
-    explicit KoFontDia( const QTextCharFormat &format, KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr(), QWidget* parent = 0);
+    explicit KoFontDia( const QTextCharFormat &format/* KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr()*/, QWidget* parent = 0);
 
     QTextCharFormat format() { return m_format; }
 

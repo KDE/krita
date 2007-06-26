@@ -106,11 +106,6 @@ QIcon KisShapeLayer::icon() const
 void KisShapeLayer::updateProjection(const QRect& r)
 {
     kDebug(41001) << "KisShapeLayer::updateProjection()" << r << endl;
-
-    // XXX: Is r in document, widget or pixel coordinates? I hope in
-    // document coordinates. Note: see dox for updateCanvas.
-
-    setDirty( r ); // Convert to right coordinates
 }
 
 KisPaintDeviceSP KisShapeLayer::projection() const

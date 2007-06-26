@@ -70,7 +70,11 @@ public:
     // KisExternalLayer implementation
     QIcon icon() const;
 
-    // Keep the projection up to date
+    /**
+     * Keep the projection up to date.
+     *
+     * @param r the rect that needs to be updated in pixel coordinates
+     */
     void updateProjection(const QRect& r);
 
     // Retrieve the projection for

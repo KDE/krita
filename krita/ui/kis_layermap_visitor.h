@@ -34,12 +34,14 @@ class KisLayerMapVisitor : public KisLayerVisitor {
 public:
 
     /**
-     * @param layerMap: the map that maps layers to layer shapes
+     * @param layerMap: the map that maps layers to layer shapes and
+     * masks to mask shapes.
      */
-    KisLayerMapVisitor(QMap<KisLayerSP, KoShape*> & layerMap);
+    KisLayerMapVisitor(QMap<KisLayerSP, KoShape*> & layerMap, QMap<KisMaskSP, KoShape*> & maskMap);
     virtual ~KisLayerMapVisitor() {}
 
     QMap<KisLayerSP, KoShape*> & layerMap();
+    QMap<KisMaskSP, KoShape*> & maskMap();
 
 public:
 
@@ -50,9 +52,15 @@ public:
     bool visit(KisGroupLayer *layer);
 
     bool visit(KisAdjustmentLayer *layer);
+
+private:
+
+    void fillMaskMap( KisLayerSP layer, KoShapeContainer * container );
+
 private:
 
     QMap<KisLayerSP, KoShape*> m_layerMap;
+    QMap<KisMaskSP, KoShape*> m_maskMap;
 };
 
 

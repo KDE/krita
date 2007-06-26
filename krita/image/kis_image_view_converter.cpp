@@ -19,8 +19,8 @@
 
 // #include <kdebug.h>
 
-KisImageViewConverter::KisImageViewConverter(const KisImage *image)
-: m_image(image)
+KisImageViewConverter::KisImageViewConverter(const KisImageSP image)
+    : m_image(image)
 {
     Q_ASSERT(image);
 }

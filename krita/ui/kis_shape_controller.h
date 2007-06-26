@@ -23,18 +23,20 @@
 #include <KoShapeControllerBase.h>
 
 #include "kis_types.h"
+#include <krita_export.h>
 
 class KoShape;
 
 class KisView2;
 class KisDoc2;
 class KisNameServer;
+
 /**
  * KisShapeController keeps track of new layers, shapes, masks and
  * selections -- everything that needs to be wrapped as a shape for
  * the tools to work on.
  */
-class KisShapeController : public QObject, public KoShapeControllerBase {
+class KRITAUI_EXPORT KisShapeController : public QObject, public KoShapeControllerBase {
 
     Q_OBJECT
 
@@ -59,6 +61,11 @@ private slots:
     void slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis );
     void slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis );
     void slotLayersChanged( KisGroupLayerSP rootLayer );
+
+    void slotMaskAdded( KisMaskSP mask );
+    void slotMaskRemoved( KisMaskSP mask, KisLayerSP wasParent,  KisMaskSP wasAboveThis );
+    void slotMaskMoved( KisMaskSP mask, KisLayerSP previousParent, KisMaskSP wasAboveThis );
+    void slotMasksChanged( KisLayerSP layer );
 
 private:
 

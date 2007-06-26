@@ -16,23 +16,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISLAYERMODEL_TEST_H
-#define KISLAYERMODEL_TEST_H
+#ifndef KISSHAPECONTROLLER_TEST_H
+#define KISSHAPECONTROLLER_TEST_H
 
 #include <QtTest/QtTest>
 
-class kislayermodel_test : public QObject
+class KisDoc2;
+class KisNameServer;
+class KisImage;
+class KisShapeController;
+
+class KisShapeControllerTest : public QObject
 {
     Q_OBJECT
 
 private slots:
 
+    void initTestCase();
+    void cleanupTestCase();
+
     // tests
-    void testRowcount();
+    void testSetImage();
+    void testAddShape();
+    void testRemoveShape();
+    void testSetInitialShapeForView();
+    void testShapeForLayer();
 
-    void testModelIndex();
+private:
 
-    void testGroupLayers();
+    KisDoc2 * m_doc;
+    KisNameServer * m_nameServer;
+    KisImage * m_image;
+    KisShapeController * m_shapeController;
+
 };
 
 #endif

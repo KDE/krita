@@ -22,6 +22,7 @@
 #include <krita_export.h>
 
 #include "kis_image.h"
+#include "kis_types.h"
 #include <KoViewConverter.h>
 
 /**
@@ -37,32 +38,43 @@ public:
      * constructor
      * @param image the image this viewConver works for.
      */
-    KisImageViewConverter( const KisImage *image );
+    KisImageViewConverter( const KisImageSP image );
+
     /// convert from flake to krita units
     QPointF documentToView( const QPointF &documentPoint ) const;
+
     /// convert from krita to flake units
     QPointF viewToDocument( const QPointF &viewPoint ) const;
+
     /// convert from flake to krita units
     QRectF documentToView( const QRectF &documentRect ) const;
+
     /// convert from krita to flake units
     QRectF viewToDocument( const QRectF &viewRect ) const;
+
     /// convert from krita to flake units
     QSizeF documentToView( const QSizeF& documentSize ) const;
+
     /// convert from krita to flake units
     QSizeF viewToDocument( const QSizeF& viewSize ) const;
+
     /// convert from flake to krita units
     inline double documentToViewX( double documentX ) const { return documentX * m_image->xRes(); }
+
     /// convert from flake to krita units
     inline double documentToViewY( double documentY ) const { return documentY * m_image->yRes(); }
+
     /// convert from krita to flake units
     inline double viewToDocumentX( double viewX ) const { return viewX / m_image->xRes(); }
+
     /// convert from krita to flake units
     inline double viewToDocumentY( double viewY ) const { return viewY / m_image->yRes(); }
+
     /// reimplemented from superclass
     void zoom(double *zoomX, double *zoomY) const;
 
 private:
-    const KisImage *m_image;
+    const KisImageSP m_image;
 };
 
 #endif

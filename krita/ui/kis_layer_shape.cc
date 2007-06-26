@@ -18,8 +18,6 @@
 
 #include "kis_layer_shape.h"
 
-
-
 #include <kis_types.h>
 #include <kis_layer.h>
 #include <kis_image.h>
@@ -121,6 +119,7 @@ void KisLayerShape::saveOdf( KoShapeSavingContext & context ) const
     // TODO
 }
 
-bool KisLayerShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+bool KisLayerShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+{
     return false; // TODO
 }

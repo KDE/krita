@@ -56,6 +56,15 @@ public:
         }
     bool isSelectable() const { return false; }
 
+    bool loadOdf( const KoXmlElement&, KoShapeLoadingContext&)
+        {
+            return false;
+        }
+
+    void saveOdf( KoShapeSavingContext& ) const
+        {
+        }
+
 
 private:
 

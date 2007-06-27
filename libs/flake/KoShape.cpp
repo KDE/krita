@@ -438,7 +438,22 @@ double KoShape::scaleY() const {
 }
 
 double KoShape::rotation() const {
-    return 0.0;
+    // try to extract the rotation angle out of the local matrix 
+    // if it is a pure rotation matrix
+
+    // check if the matrix has shearing mixed in
+    if( fabs( fabs(d->localMatrix.m12()) - fabs(d->localMatrix.m21()) ) > 1e-10 )
+        return nan("");
+    // check if the matrix has scaling mixed in
+    if( fabs( d->localMatrix.m11() - d->localMatrix.m22() ) > 1e-10 )
+        return nan("");
+
+    // calculate the angle from the matrix elements
+    double angle = atan2( d->localMatrix.m21(), d->localMatrix.m11() ) * 180.0 / M_PI;
+    if( angle < 0.0 )
+        angle += 360.0;
+
+    return angle;
 }
 
 double KoShape::shearX() const {

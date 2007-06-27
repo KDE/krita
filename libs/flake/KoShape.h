@@ -188,8 +188,9 @@ public:
 
     /**
      * Return the current rotation in degrees.
+     * It returns NaN if the shape has a shearing or scaling transformation applied.
      */
-    KDE_DEPRECATED double rotation() const;
+    double rotation() const;
 
     /**
      * @brief Shear the shape

@@ -43,11 +43,9 @@
 #include "urledit.h"
 
 #include <kdebug.h>
+#include <kglobal.h>
 
 #include <QHash>
-
-static KStaticDeleter<KoProperty::FactoryManager> m_managerDeleter;
-static KoProperty::FactoryManager* m_manager = 0;
 
 namespace KoProperty {
 
@@ -60,25 +58,36 @@ CustomPropertyFactory::~CustomPropertyFactory()
 {
 }
 
-
 //! @internal
-class FactoryManagerPrivate
+class FactoryManager::Private
 {
 	public:
-		FactoryManagerPrivate() {}
-		~FactoryManagerPrivate() {}
+		Private() {}
+		~Private() {}
 
 		//registered widgets for property types
 		QHash<int, CustomPropertyFactory*> registeredWidgets;
 		QHash<int, CustomPropertyFactory*> registeredCustomProperties;
 };
+
+//! @internal
+class FactoryManagerInternal
+{
+	public:
+		FactoryManagerInternal() : manager( new FactoryManager() ) {}
+		~FactoryManagerInternal() { delete manager; }
+		FactoryManager* manager;
+};
+
 }
+
+K_GLOBAL_STATIC(KoProperty::FactoryManagerInternal, _int)
 
 using namespace KoProperty;
 
 FactoryManager::FactoryManager()
 : QObject(0)
-, d( new FactoryManagerPrivate )
+, d( new Private )
 {
 	setObjectName("KoProperty::FactoryManager");
 }
@@ -91,9 +100,7 @@ FactoryManager::~FactoryManager()
 FactoryManager*
 FactoryManager::self()
 {
-	if(!m_manager)
-		m_managerDeleter.setObject( m_manager, new FactoryManager() );
-	return m_manager;
+	return _int->manager;
 }
 
 ///////////////////  Functions related to widgets /////////////////////////////////////

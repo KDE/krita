@@ -23,7 +23,6 @@
 #define KPROPERTY_FACTORY_H
 
 #include "koproperty_global.h"
-#include <kstaticdeleter.h>
 #include <QObject>
 
 namespace KoProperty {
@@ -31,7 +30,7 @@ namespace KoProperty {
 class Widget;
 class CustomProperty;
 class Property;
-class FactoryManagerPrivate;
+class FactoryManagerInternal;
 
 ///*! A pointer to factory function which creates and returns widget for a given property type.*/
 //typedef Widget *(*createWidget) (Property*);
@@ -153,12 +152,13 @@ class KOPROPERTY_EXPORT FactoryManager : public QObject
 		/*! \return a pointer to a property factory instance.*/
 		static FactoryManager* self();
 
-	private:
+	protected:
 		FactoryManager();
 		~FactoryManager();
 
-		FactoryManagerPrivate * const d;
-		friend class KStaticDeleter<KoProperty::FactoryManager>;
+		class Private;
+		Private * const d;
+		friend class FactoryManagerInternal;
 };
 
 }

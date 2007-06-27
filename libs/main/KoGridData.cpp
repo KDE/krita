@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,59 +21,72 @@
 #include "KoGridData.h"
 #include "KoUnit.h"
 
+class KoGridData::Private {
+public:
+    Private()
+     :snapToGrid(false),
+      showGrid(true),
+      gridX(MM_TO_POINT(5.0)),
+      gridY(MM_TO_POINT(5.0)),
+      gridColor(Qt::lightGray)
+    {
+    }
+
+    bool snapToGrid;
+    bool showGrid;
+    double gridX, gridY;
+    QColor gridColor;
+};
+
 KoGridData::KoGridData()
- :m_snapToGrid(false),
-  m_showGrid(true),
-  m_gridX(MM_TO_POINT(5.0)),
-  m_gridY(MM_TO_POINT(5.0)),
-  m_gridColor(Qt::lightGray)
+    : d(new Private())
 {
 }
 
-double KoGridData::gridX() const 
-{ 
-   return m_gridX; 
-}
-   
-double KoGridData::gridY() const 
+double KoGridData::gridX() const
 {
-  return m_gridY; 
+   return d->gridX;
 }
 
-void KoGridData::setGrid(double x, double y) 
-{ 
-   m_gridX = x; 
-   m_gridY = y; 
+double KoGridData::gridY() const
+{
+  return d->gridY;
 }
 
-bool KoGridData::snapToGrid() const 
-{ 
-   return m_snapToGrid; 
+void KoGridData::setGrid(double x, double y)
+{
+   d->gridX = x;
+   d->gridY = y;
 }
 
-void KoGridData::setSnapToGrid(bool on) 
-{ 
-   m_snapToGrid = on; 
+bool KoGridData::snapToGrid() const
+{
+   return d->snapToGrid;
+}
+
+void KoGridData::setSnapToGrid(bool on)
+{
+   d->snapToGrid = on;
 }
 
 QColor KoGridData::gridColor() const
 {
-  return m_gridColor;
+  return d->gridColor;
 }
 
 void KoGridData::setGridColor( const QColor & color)
 {
-  m_gridColor=color;
+  d->gridColor=color;
 }
 
-bool KoGridData::showGrid() const 
-{ 
-  return m_showGrid; 
+bool KoGridData::showGrid() const
+{
+  return d->showGrid;
 }
 
-void KoGridData::setShowGrid ( bool showGrid ) 
-{ 
-  m_showGrid = showGrid; 
+void KoGridData::setShowGrid ( bool showGrid )
+{
+  d->showGrid = showGrid;
 }
 
 

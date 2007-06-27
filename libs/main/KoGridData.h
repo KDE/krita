@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,11 +24,15 @@
 #include <kofficecore_export.h>
 #include <QColor>
 
+/**
+ * This class stores application-data for display-grids.
+ * Things like grid colors, distances and snap to grid are saved here.
+ */
 class KOMAIN_EXPORT KoGridData
 {
 public:
     KoGridData();
-  
+
     /// return the grid width
     double gridX() const;
     /// return the grid height
@@ -54,14 +59,14 @@ public:
      * @see setGrid()
      */
     void setSnapToGrid(bool on);
- 
+
     /**
      * return color of grid.
      * @return color of grid.
      * @see setGridColor()
      */
     QColor gridColor() const;
-   
+
     /**
      * Set the color of grid.
      * @param color the color of grid.
@@ -83,16 +88,14 @@ public:
      */
      void setShowGrid ( bool showGrid );
 
-#if 0 //TODO look at if we save or not into odf file    
+#if 0 //TODO look at if we save or not into odf file
      void saveOasisSettings( KoXmlWriter &settingsWriter );
      void loadOasisSettings(const QDomDocument&settingsDoc);
-#endif     
+#endif
 
 private:
-    bool m_snapToGrid;
-    bool m_showGrid;
-    double m_gridX, m_gridY;   
-    QColor m_gridColor;
+    class Private;
+    Private * const d;
 };
 
 

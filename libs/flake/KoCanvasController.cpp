@@ -373,6 +373,12 @@ void KoCanvasController::setDocumentSize( const QSize & sz )
     m_d->viewportWidget->setDocumentSize( sz );
     resetScrollBars();
     m_d->ignoreScrollSignals = false;
+
+    // in case the document got so small a slider dissapeared; emit the new offset.
+    if(!horizontalScrollBar()->isVisible())
+        updateCanvasOffsetX();
+    if(!verticalScrollBar()->isVisible())
+        updateCanvasOffsetY();
 }
 
 void KoCanvasController::setDocumentOffset()

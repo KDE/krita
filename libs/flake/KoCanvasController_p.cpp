@@ -28,7 +28,6 @@
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "KoCanvasBase.h"
-#include "KoCanvasResourceProvider.h"
 
 #include <KoProperties.h>
 
@@ -151,11 +150,8 @@ void Viewport::handleDropEvent(QDropEvent *event) {
         KoSelection *selection = m_parent->canvas()->shapeManager()->selection();
 
         // repaint selection before selecting newly create shape
-        QRectF selectionBound = selection->boundingRect();
-        double handleRadius = m_parent->canvas()->resourceProvider()->handleRadius();
-        QPointF border = m_parent->canvas()->viewConverter()->viewToDocument(QPointF(handleRadius, handleRadius));
-        selectionBound.adjust( -border.x(), -border.y(), border.x(), border.y() );
-        m_parent->canvas()->updateCanvas( selectionBound );
+        foreach( KoShape * shape, selection->selectedShapes() )
+            shape->repaint();
 
         selection->deselectAll();
         selection->select(m_draggedShape);

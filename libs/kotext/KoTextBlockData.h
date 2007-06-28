@@ -95,7 +95,7 @@ public:
     /**
      * When a paragraph has a border, it will have a KoTextBlockBorderData instance.
      * Adding the border will increase the refcount.
-     * @param the border used for this paragraph, or 0 if no border is needed (anymore).
+     * @param border the border used for this paragraph, or 0 if no border is needed (anymore).
      */
     void setBorder(KoTextBlockBorderData *border);
     /**

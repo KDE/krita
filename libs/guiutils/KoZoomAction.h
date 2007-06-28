@@ -45,7 +45,7 @@ public:
    * Creates a new zoom action.
    * @param zoomModes which zoom modes that should be shown
    * @param text The text that will be displayed.
-   * @param doSpecialActionMode Show toggle widget for "pixel aspect" mode.
+   * @param doSpecialAspectMode Show toggle widget for "pixel aspect" mode.
    * @param parent The action's parent object.
    */
   KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bool doSpecialAspectMode, QObject *parent);

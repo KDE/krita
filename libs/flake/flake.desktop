@@ -3,12 +3,14 @@ Encoding=UTF-8
 Name=Flake Plugin
 Name[de]=Flake-Modul
 Name[ja]=Flake プラグイン
+Name[sv]=Flake-insticksprogram
 Name[uk]=Втулок Flake
 Name[x-test]=xxFlake Pluginxx
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Flake
 Comment=A plugin that contains a set of a shape and a tool
 Comment[de]=Ein Modul, dass einen Satz an Formen und ein Werkzeug enthält
+Comment[sv]=Ett insticksprogram som innehåller en formmängd och ett verktyg
 Comment[x-test]=xxA plugin that contains a set of a shape and a toolxx
 [PropertyDef::X-Flake-Version]
 Type=int

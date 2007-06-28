@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=KOffice Docker Plugin
 Name[de]=KOffice Docker-Modul
+Name[sv]=Koffice dockningsinsticksprogram
 Name[x-test]=xxKOffice Docker Pluginxx
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Dock
 Comment=A plugin that contains a so called 'dockwidget'
 Comment[de]=Ein Modul, das ein sogenanntes 'dockwidget' enthält
+Comment[sv]=Ett insticksprogram som innehåller en så kallad 'grafisk dockningskomponent'
 Comment[x-test]=xxA plugin that contains a so called 'dockwidget'xx

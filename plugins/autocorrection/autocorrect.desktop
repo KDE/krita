@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Autocorrection plugin
 Name[de]=Skripting-Modul
+Name[sv]=Insticksprogram för automatisk korrigering
 Name[uk]=Втулок автокоректування
 Name[x-test]=xxAutocorrection pluginxx
 ServiceTypes=KOffice/Text-EditingPlugin

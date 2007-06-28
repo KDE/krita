@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KOffice Dockers plugin
 Name[de]=KOffice Docker-Modul
+Name[sv]=Koffice dockningsinsticksprogram
 Name[x-test]=xxKOffice Dockers pluginxx
 ServiceTypes=KOffice/Dock
 Type=Service

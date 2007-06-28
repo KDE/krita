@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Name=panorama
 Name[de]=Panorama
+Name[sv]=Panorama
 Comment=panorama
 Comment[de]=Panorama
+Comment[sv]=Panorama
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritapanorama

@@ -31,16 +31,18 @@
 #include <KoOasisSettings.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
+#include <KoUnit.h>
+#include <KoPageLayout.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
+#include <KoShape.h>
+#include <KoShapeLoadingContext.h>
 
 #include "../styles/KoStyleManager.h"
 #include "../styles/KoParagraphStyle.h"
 #include "../styles/KoCharacterStyle.h"
 #include "../styles/KoListStyle.h"
 #include "../styles/KoListLevelProperties.h"
-#include <KoPageLayout.h>
-#include <KoUnit.h>
 
 // KDE + Qt includes
 #include <QDomDocument>
@@ -694,7 +696,7 @@ void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& 
     {
         KoXmlElement ts = node.toElement();
         const QString localName( ts.localName() );
-        const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
+        //const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
         if (isDrawNS && localName == "image") {
             attrs = ts.attributes();
@@ -711,17 +713,15 @@ void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& 
                     kDebug(32500) << "Ok, I can handle it" << endl;
                     if (context.store()->open(href)) {
                         kDebug(32500) << "Great, it's opened now" << endl;
-                        QImage img;
-                        if (img.load(context.store()->device(), "png")) {
-                            kDebug(32500) << "Image1 : " << img.size() << endl;
-//d->document->mainFrameSet()->document()->addResource(QTextDocument::ImageResource, href, img);
-                            /*kDebug(32500) << d->document->mainFrameSet()->document()->resource(QTextDocument::ImageResource, href) << endl;
-                            QImage test = d->document->mainFrameSet()->document()->resource(QTextDocument::ImageResource, href).value<QImage>();
-                            kDebug(32500) << "Image2 : " << test.size() << endl;*/
-//cursor.insertImage(href);
-                        } else {
-                            kDebug(32500) << "SHIT" << endl;
-                        }
+                        KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape"); //PICTURESHAPEID
+                        KoShape *shape = factory ? factory->createDefaultShape() : 0;
+                        if (shape) {
+                            KoShapeLoadingContext shapecontext(context);
+                            if( shape->loadOdf(ts, shapecontext) ) {
+                                kDebug(32500) << "Successful loaded picture shape" << endl;
+                                //TODO cursor.insertFrame( ... )
+                            } else kDebug(32500) << "Failed to load picture shape..." << endl;
+                        } else kDebug(32500) << "Failed to create picture shape..." << endl;
                         context.store()->close();
                     }
                 }

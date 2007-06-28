@@ -29,6 +29,7 @@
 class KoCanvasBase;
 class KoCanvasController;
 
+/// \internal
 class KoZoomTool : public KoInteractionTool
 {
 public:

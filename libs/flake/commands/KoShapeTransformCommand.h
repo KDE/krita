@@ -27,6 +27,9 @@
 
 class KoShape;
 
+/**
+ * A command to transform a selection of shapes with the same transformation.
+ */
 class FLAKE_EXPORT KoShapeTransformCommand : public QUndoCommand
 {
 public:

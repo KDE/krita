@@ -77,14 +77,8 @@ void KoShapeConnection::paint(QPainter &painter, const KoViewConverter &converte
         b = converter.documentToView(d->endPoint);
 
     QPen pen(Qt::black);
-    paintConnection (painter, a, b, pen, StraightConnection);
-}
-
-void KoShapeConnection::paintConnection(QPainter& painter, const QPointF& startPoint,
-					       const QPointF& endPoint, const QPen& pen,
-					       ConnectionType type) {    
     painter.setPen(pen);
-    painter.drawLine(startPoint, endPoint);
+    painter.drawLine(a, b);
 }
 
 KoShape *KoShapeConnection::shape1() const {

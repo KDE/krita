@@ -19,33 +19,41 @@
 
 #include "KoShapeLoadingContext.h"
 
+class KoShapeLoadingContext::Private {
+public:
+    Private(KoOasisLoadingContext &c) : context(c) {}
+    KoOasisLoadingContext &context;
+    QMap<QString, KoShapeLayer*> layers;
+    QMap<QString, KoShape*> drawIds;
+};
+
 KoShapeLoadingContext::KoShapeLoadingContext( KoOasisLoadingContext & context )
-: m_context( context )
+: d( new Private(context))
 {
 }
 
 KoOasisLoadingContext & KoShapeLoadingContext::koLoadingContext()
 {
-    return m_context;
+    return d->context;
 }
 
 KoShapeLayer * KoShapeLoadingContext::layer( const QString & layerName )
 {
-   return m_layers.value( layerName, 0 ); 
+   return d->layers.value( layerName, 0 );
 }
 
 void KoShapeLoadingContext::addLayer( KoShapeLayer * layer, const QString & layerName )
 {
-    m_layers[ layerName ] = layer;
+    d->layers[ layerName ] = layer;
 }
 
 void KoShapeLoadingContext::addShapeId( KoShape * shape, const QString & id )
 {
-    m_drawIds.insert( id, shape );
+    d->drawIds.insert( id, shape );
 }
 
 KoShape * KoShapeLoadingContext::shapeById( const QString & id )
 {
-   return m_drawIds.value( id, 0 ); 
+   return d->drawIds.value( id, 0 );
 }
 

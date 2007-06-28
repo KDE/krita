@@ -54,7 +54,7 @@ void ConnectionTool::paint( QPainter &painter, const KoViewConverter &converter 
             painter.fillRect(QRectF(QPointF(point.x() - 2, point.y() -2) , QSizeF(4, 4)), QBrush(Qt::red));
         }
     }
-    
+
     if(m_startShape)
     {
         double x, y;
@@ -63,8 +63,8 @@ void ConnectionTool::paint( QPainter &painter, const KoViewConverter &converter 
         matrix.scale(x, y);
         QPointF startPoint = matrix.map(m_startShape->connectors()[m_gluePointIndex]);
         QPointF endPoint = converter.documentToView (m_lastMousePos);
-        KoShapeConnection::paintConnection(painter, startPoint, endPoint, QPen (Qt::black),
-                                            KoShapeConnection::StraightConnection);
+        painter.setPen(QPen(Qt::black)); // TODO make color configurable
+        painter.drawLine(startPoint, endPoint);
     }
 }
 

@@ -30,13 +30,20 @@ class KoShapeLayer;
 class KoShape;
 
 /**
- * Context passed to shapes during loading
+ * Context passed to shapes during loading.
+ * This class holds various variables as well as a context full of variables which all together
+ * form the context of a loading operation.
  */
 class FLAKE_EXPORT KoShapeLoadingContext
 {
 public:
+    /**
+     * constructor
+     * @param context the context created for generic ODF loading.
+     */
     KoShapeLoadingContext( KoOasisLoadingContext & context );
 
+    /// return the embedded loading context
     KoOasisLoadingContext & koLoadingContext();
 
     /// Returns layer referenced by given name
@@ -44,13 +51,14 @@ public:
     /// Adds a new layer to be referenced by the given name later
     void addLayer( KoShapeLayer * layer, const QString & layerName );
 
+    /// register the id for a specific shape
     void addShapeId( KoShape * shape, const QString & id );
+    /// return the shape formerly registered using addShapeId()
     KoShape * shapeById( const QString & id );
 
 private:
-    KoOasisLoadingContext &m_context;
-    QMap<QString, KoShapeLayer*> m_layers;
-    QMap<QString, KoShape*> m_drawIds;
+    class Private;
+    Private * const d;
 };
 
 #endif /* KOSHAPELOADINGCONTEXT_H */

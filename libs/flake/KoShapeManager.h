@@ -144,6 +144,12 @@ public:
      */
     void addShapeConnection(KoShapeConnection *connection);
 
+    /**
+     * Switch to editing the shape that is at the position of the event.
+     * This method will check select a shape at the event position and switch to the default tool
+     * for that shape, or switch to the default tool if there is no shape at the position.
+     * @param event the event that holds the point where to look for a shape.
+     */
     void suggestChangeTool(KoPointerEvent *event);
 
 private:

@@ -83,7 +83,7 @@ public:
     }
 
 protected:
-    KoCanvasResourceProvider *m_resourceProvider;
+    KoCanvasResourceProvider *m_resourceProvider; ///< the resource provider with data for this canvas
 };
 
 

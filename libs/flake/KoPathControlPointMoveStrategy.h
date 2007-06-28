@@ -30,6 +30,7 @@ class KoCanvasBase;
 class KoPathTool;
 
 /**
+ * /internal
  * @brief Strategy for moving points of a path shape.
  */
 class KoPathControlPointMoveStrategy : public KoInteractionStrategy

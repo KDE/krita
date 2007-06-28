@@ -44,10 +44,11 @@ class QPen;
 class FLAKE_EXPORT KoShapeConnection {
 public:
 
+    /// the visual type of connection
     enum ConnectionType {
-        StraightConnection,
-        MultiLineConnection,
-        CurvedConnection
+        StraightConnection,     ///< The connection is one straight (taut) line.
+        MultiLineConnection,    ///< The connection is build up of multiple straight lines.
+        CurvedConnection        ///< The connection is build using bezier curves.
     };
 
     /**
@@ -126,15 +127,6 @@ public:
      * Return a bounding rectangle in which this connection is completely present.
      */
     QRectF boundingRect() const;
-    
-    /**
-     * Paints the connection of specified type
-     * @param startPoint Point in pt to start drawing from
-     * @param endPoint Point in pt to end drawing at
-     * @param type Type of connector to draw
-     */
-    static void paintConnection(QPainter& painter, const QPointF& startPoint,
-				const QPointF& endPoint, const QPen& pen, ConnectionType type);
 
 private:
     class Private;

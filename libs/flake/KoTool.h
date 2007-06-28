@@ -172,6 +172,7 @@ public:
      * Default implementation returns simple defaults, for tools that want to provide
      * a more responsive text entry experience for CJK languages it would be good to reimplemnt.
      * @param query specifies which property is queried.
+     * @param converter the view converter for the current canvas.
      */
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
 
@@ -208,6 +209,12 @@ public:
      */
     virtual void copy() const { }
 
+    /**
+     * Paste the clipboard selection.
+     * A tool typically has one or more shapes selected and pasting should do something meaningful
+     * for this specific shape and tool combination.  Inserting text in a text tool, for example.
+     * @return will return true if pasting succeeded. False if nothing happened.
+     */
     virtual bool paste() { return false; }
 
     /**

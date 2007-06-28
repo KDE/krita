@@ -5,6 +5,11 @@ include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 set(kofficedockers_SRCS
     shapeselector/ShapeSelector.cpp
     shapeselector/ShapeSelectorFactory.cpp
+    shapeselector/GroupShape.cpp
+    shapeselector/IconShape.cpp
+    shapeselector/TemplateShape.cpp
+    shapeselector/ZoomHandler.cpp
+    shapeselector/Canvas.cpp
 
     Plugin.cpp
 )

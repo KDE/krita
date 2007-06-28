@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,40 +16,25 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef TEMPLATESHAPE_H
+#define TEMPLATESHAPE_H
 
-#ifndef SHAPESELECTOR_H
-#define SHAPESELECTOR_H
+#include "IconShape.h"
 
-#include "ZoomHandler.h"
+#include <KoShapeFactory.h>
 
-#include <QDockWidget>
-
-class Canvas;
-class KoShape;
-class KoShapeManager;
-
-/**
- * The shape selector shows a widget that holds templates and clipboard data
- * for the user to easilly move that between apps and maintain functionality.
- */
-class ShapeSelector : public QDockWidget {
-    Q_OBJECT
+class TemplateShape : public IconShape {
 public:
-    explicit ShapeSelector(QWidget *parent = 0);
-    ~ShapeSelector();
+    TemplateShape(KoShapeTemplate shapeTemplate);
 
-private slots:
-    void loadShapeTypes();
+    virtual void visit(KoCreateShapesTool *tool);
 
-private:
-    void itemSelected();
-    void add(KoShape *item);
+    virtual QString toolTip();
+
+    const KoShapeTemplate &shapeTemplate() const { return m_shapeTemplate; }
 
 private:
-    friend class Canvas;
-
-    KoShapeManager *m_shapeManager;
-    Canvas *m_canvas;
+    KoShapeTemplate m_shapeTemplate;
 };
 
 #endif

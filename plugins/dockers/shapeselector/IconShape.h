@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,40 +16,30 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef ICONSHAPE_H
+#define ICONSHAPE_H
 
-#ifndef SHAPESELECTOR_H
-#define SHAPESELECTOR_H
+#include <KoShape.h>
 
-#include "ZoomHandler.h"
+class KoCreateShapesTool;
 
-#include <QDockWidget>
-
-class Canvas;
-class KoShape;
-class KoShapeManager;
-
-/**
- * The shape selector shows a widget that holds templates and clipboard data
- * for the user to easilly move that between apps and maintain functionality.
- */
-class ShapeSelector : public QDockWidget {
-    Q_OBJECT
+class IconShape : public KoShape {
 public:
-    explicit ShapeSelector(QWidget *parent = 0);
-    ~ShapeSelector();
+    IconShape(const QString &icon);
 
-private slots:
-    void loadShapeTypes();
+    virtual void visit(KoCreateShapesTool *tool) = 0;
+    virtual QString toolTip() = 0;
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext & ) const {}
+    /// reimplemented
+    virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
+
+    void paint(QPainter &painter, const KoViewConverter &converter);
+
+    QPixmap pixmap() const { return m_icon; }
 
 private:
-    void itemSelected();
-    void add(KoShape *item);
-
-private:
-    friend class Canvas;
-
-    KoShapeManager *m_shapeManager;
-    Canvas *m_canvas;
+    QPixmap m_icon;
 };
 
 #endif

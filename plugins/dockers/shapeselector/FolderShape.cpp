@@ -29,6 +29,4 @@ FolderShape::FolderShape()
 }
 
 void FolderShape::paintComponent(QPainter &painter, const KoViewConverter &converter) {
-    painter.setPen(QPen(Qt::red));
-    painter.drawRect( converter.documentToView(QRectF(QPointF(0, 0), size())) );
 }

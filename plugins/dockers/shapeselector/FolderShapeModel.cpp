@@ -20,6 +20,7 @@
 #include "FolderShape.h"
 
 #include <KoShapeContainer.h>
+#include <KDebug>
 
 FolderShapeModel::FolderShapeModel(FolderShape *parent)
     : m_parent(parent)
@@ -50,6 +51,20 @@ QList<KoShape *> FolderShapeModel::iterator() const {
 }
 
 void FolderShapeModel::containerChanged(KoShapeContainer *container) {
+    int x=5, y=5; // 5 = gap
+    const double width = m_parent->size().width();
+    int rowHeight=0;
+    foreach(KoShape *shape, m_icons) {
+        const QSizeF size = shape->size();
+        if(x + size.width() > width) { // next row
+            y += rowHeight + 5; // 5 = gap
+            x = 5;
+        }
+        shape->setPosition(QPointF(x, y));
+
+        rowHeight = qMax(rowHeight, qRound(size.height()));
+        x += size.width() + 5;
+    }
 }
 
 void FolderShapeModel::childChanged(KoShape *child, KoShape::ChangeType type) {
@@ -63,7 +78,7 @@ void FolderShapeModel::add(KoShape *shape) {
     do {
         int rowHeight=0;
         ok=true;
-        foreach(const KoShape *shape, iterator()) {
+        foreach(const KoShape *shape, m_icons) {
             if(shape->position().y() > y || shape->position().y() + shape->size().height() < y)
                 continue; // other row.
             rowHeight = qMax(rowHeight, qRound(shape->size().height()));

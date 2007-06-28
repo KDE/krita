@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -37,6 +37,7 @@ public:
 };
 
 class Canvas : public QWidget, public KoCanvasBase {
+    Q_OBJECT
 public:
     explicit Canvas(ShapeSelector *parent);
     void gridSize (double *horizontal, double *vertical) const;
@@ -50,15 +51,19 @@ public:
     KoUnit unit() const { return KoUnit(KoUnit::Millimeter); }
     void updateInputMethodInfo() {}
 
+signals:
+    void resized(const QSize &newSize);
+
 protected: // event handlers
-    void mouseMoveEvent(QMouseEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    void tabletEvent(QTabletEvent *e);
-    void paintEvent(QPaintEvent * e);
-    void dragEnterEvent(QDragEnterEvent *e);
-    void dropEvent(QDropEvent *e);
-    bool event(QEvent *e);
+    virtual void mouseMoveEvent(QMouseEvent *e);
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseReleaseEvent(QMouseEvent *e);
+    virtual void tabletEvent(QTabletEvent *e);
+    virtual void paintEvent(QPaintEvent * e);
+    virtual void dragEnterEvent(QDragEnterEvent *e);
+    virtual void dropEvent(QDropEvent *e);
+    virtual bool event(QEvent *e);
+    virtual void resizeEvent (QResizeEvent *e);
 
 private:
     DummyShapeController m_shapeController;

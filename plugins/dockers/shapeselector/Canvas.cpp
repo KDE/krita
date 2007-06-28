@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -242,6 +242,10 @@ bool Canvas::event(QEvent *e) {
     return QWidget::event(e);
 }
 
+void Canvas::resizeEvent (QResizeEvent *event) {
+    emit resized(event->size());
+}
+
 // getters
 KoShapeManager * Canvas::shapeManager() const {
     return m_parent->m_shapeManager;
@@ -250,3 +254,5 @@ KoShapeManager * Canvas::shapeManager() const {
 QWidget *Canvas::canvasWidget () {
     return m_parent;
 }
+
+#include <Canvas.moc>

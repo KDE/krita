@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -47,13 +47,10 @@ ShapeSelector::ShapeSelector(QWidget *parent)
     setWidget(m_canvas);
     m_shapeManager = new KoShapeManager(m_canvas);
     setMinimumSize(30, 30);
-
-FolderShape *folder = new FolderShape();
-folder->resize(QSizeF(200, 200));
-folder->setPosition(QPointF(210, 0));
-m_shapeManager->add(folder);
+    m_mainFolder = new FolderShape();
 
     QTimer::singleShot(0, this, SLOT(loadShapeTypes()));
+    connect(m_canvas, SIGNAL(resized(const QSize&)), this, SLOT(setSize(const QSize &)));
 }
 
 ShapeSelector::~ShapeSelector() {
@@ -62,8 +59,7 @@ ShapeSelector::~ShapeSelector() {
 }
 
 void ShapeSelector::loadShapeTypes() {
-    FolderShape *folder = new FolderShape();
-    folder->resize(QSizeF(200, 200));
+    m_mainFolder->resize(m_canvas->size());
 
     foreach(QString id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
@@ -71,12 +67,12 @@ void ShapeSelector::loadShapeTypes() {
         foreach(KoShapeTemplate shapeTemplate, factory->templates()) {
             oneAdded=true;
             TemplateShape *shape = new TemplateShape(shapeTemplate);
-            folder->addChild(shape);
+            m_mainFolder->addChild(shape);
         }
         if(!oneAdded)
-            folder->addChild(new GroupShape(factory));
+            m_mainFolder->addChild(new GroupShape(factory));
     }
-    m_shapeManager->add(folder);
+    m_shapeManager->add(m_mainFolder);
 }
 
 void ShapeSelector::itemSelected() {
@@ -118,6 +114,10 @@ void ShapeSelector::add(KoShape *shape) {
     shape->setPosition(QPointF(x, y));
 
     m_shapeManager->add(shape);
+}
+
+void ShapeSelector::setSize(const QSize &size) {
+    m_mainFolder->resize(QSizeF(size));
 }
 
 #include "ShapeSelector.moc"

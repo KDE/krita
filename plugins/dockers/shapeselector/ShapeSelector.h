@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -28,6 +28,7 @@
 class Canvas;
 class KoShape;
 class KoShapeManager;
+class FolderShape;
 
 /**
  * The shape selector shows a widget that holds templates and clipboard data
@@ -41,6 +42,7 @@ public:
 
 private slots:
     void loadShapeTypes();
+    void setSize(const QSize &size);
 
 private:
     void itemSelected();
@@ -51,6 +53,7 @@ private:
 
     KoShapeManager *m_shapeManager;
     Canvas *m_canvas;
+    FolderShape *m_mainFolder;
 };
 
 #endif

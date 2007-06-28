@@ -132,7 +132,10 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
         */
         virtual void loadSpan(KoTextLoadingContext& context, const KoXmlElement& spanElem, QTextCursor& cursor, bool* stripLeadingSpace);
 
-        //virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
+        /**
+        * Load the frame element \p frameElem into the \p cursor .
+        */
+        virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
 
     protected:
 

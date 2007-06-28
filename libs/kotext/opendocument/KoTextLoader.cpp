@@ -40,6 +40,7 @@
 #include "../styles/KoListStyle.h"
 #include "../styles/KoListLevelProperties.h"
 #include <KoPageLayout.h>
+#include <KoUnit.h>
 
 // KDE + Qt includes
 #include <QDomDocument>
@@ -676,11 +677,10 @@ static QString normalizeWhitespace( const QString& in, bool leadingSpace )
     return text;
 }
 
-#if 0
 // First loadFrame test
 void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
 {
-    float width, height;
+    double width = 0.0, height = 0.0;
     QDomNamedNodeMap attrs = parent.attributes();
     for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++) {
         kDebug(32500) << "Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
@@ -714,11 +714,11 @@ void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& 
                         QImage img;
                         if (img.load(context.store()->device(), "png")) {
                             kDebug(32500) << "Image1 : " << img.size() << endl;
-                            d->document->mainFrameSet()->document()->addResource(QTextDocument::ImageResource, href, img);
+//d->document->mainFrameSet()->document()->addResource(QTextDocument::ImageResource, href, img);
                             /*kDebug(32500) << d->document->mainFrameSet()->document()->resource(QTextDocument::ImageResource, href) << endl;
                             QImage test = d->document->mainFrameSet()->document()->resource(QTextDocument::ImageResource, href).value<QImage>();
                             kDebug(32500) << "Image2 : " << test.size() << endl;*/
-                            cursor.insertImage(href);
+//cursor.insertImage(href);
                         } else {
                             kDebug(32500) << "SHIT" << endl;
                         }
@@ -729,7 +729,7 @@ void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& 
         } else kDebug(32500) << "Sorry kid, this isn't handled currently" << endl;
     }
 }
-#endif
+
 
 //1.6: KoTextParag::loadOasisSpan
 void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor, bool* stripLeadingSpace)
@@ -740,7 +740,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
         KoXmlElement ts = node.toElement();
         const QString localName( ts.localName() );
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
-        //const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
+        const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
 
         // allow loadSpanTag to modify the stylestack
         context.styleStack().save();
@@ -816,13 +816,10 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
             // This is the number in front of a numbered paragraph,
             // written out to help export filters. We can ignore it.
         }
-#if 0 // Load Frame test disabled
         else if ( isDrawNS && localName == "frame" ) // draw:frame
         {
-            // We are opening a new frame...
-            loadFrame(ts, cursor, stripLeadingSpace);
+            loadFrame(context, ts, cursor);
         }
-#endif
         else
         {
 #if 0 //1.6:

@@ -285,7 +285,6 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
             context.styleStack().save();
             const QString localName = tag.localName();
             const bool isTextNS = ( tag.namespaceURI() == KoXmlNS::text );
-
             if ( isTextNS && localName == "p" ) {  // text paragraph
                 loadParagraph(context, tag, cursor);
             }
@@ -627,7 +626,9 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
 
     QTextBlockFormat emptyTbf;
     QTextCharFormat emptyCf;
-    cursor.insertBlock(emptyTbf, emptyCf);
+    cursor.setBlockFormat(emptyTbf);
+    cursor.setCharFormat(emptyCf);
+    //cursor.insertBlock(emptyTbf, emptyCf);
 }
 
 //1.6: KoTextDocument::loadOasisText

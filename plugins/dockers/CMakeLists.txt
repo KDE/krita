@@ -10,6 +10,8 @@ set(kofficedockers_SRCS
     shapeselector/TemplateShape.cpp
     shapeselector/ZoomHandler.cpp
     shapeselector/Canvas.cpp
+    shapeselector/FolderShape.cpp
+    shapeselector/FolderShapeModel.cpp
 
     Plugin.cpp
 )

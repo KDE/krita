@@ -22,6 +22,7 @@
 #include "ShapeSelector.h"
 #include "GroupShape.h"
 #include "TemplateShape.h"
+#include "FolderShape.h"
 
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -44,9 +45,7 @@ Canvas::Canvas(ShapeSelector *parent)
     setAcceptDrops(true);
 }
 
-void Canvas::gridSize (double *horizontal, double *vertical) const {
-    Q_UNUSED(horizontal);
-    Q_UNUSED(vertical);
+void Canvas::gridSize (double *, double *) const {
 }
 
 void Canvas::updateCanvas (const QRectF &rc) {
@@ -118,20 +117,26 @@ void Canvas::mouseMoveEvent(QMouseEvent *event) {
             dataStream << group->groupId();
             mimeType = SHAPEID_MIMETYPE;
         }
-        else {
+        else if(dynamic_cast<FolderShape*> (clickedShape)) {
+            dataStream << QString();
+            mimeType = FOLDERSHAPE_MIMETYPE;
+        } else {
             kWarning() << "Unimplemented drag for this type!\n";
             return;
         }
     }
-    dataStream << QPointF(event->pos() - clickedShape->position());
+    QPointF offset(event->pos() - clickedShape->absolutePosition(KoFlake::TopLeftCorner));
+    dataStream << offset;
 
     QMimeData *mimeData = new QMimeData;
     mimeData->setData(mimeType, itemData);
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
-    drag->setPixmap(static_cast<IconShape*>(clickedShape)->pixmap());
-    drag->setHotSpot(event->pos() - clickedShape->position().toPoint());
+    IconShape *iconShape = dynamic_cast<IconShape*> (clickedShape);
+    if(iconShape)
+        drag->setPixmap(iconShape->pixmap());
+    drag->setHotSpot(offset.toPoint());
 
     if(drag->start(Qt::CopyAction | Qt::MoveAction) != Qt::MoveAction)
         m_emitItemSelected = false;
@@ -139,7 +144,8 @@ void Canvas::mouseMoveEvent(QMouseEvent *event) {
 
 void  Canvas::dragEnterEvent(QDragEnterEvent *event) {
     if (event->source() == this && (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
-                event->mimeData()->hasFormat(SHAPEID_MIMETYPE))) {
+                event->mimeData()->hasFormat(SHAPEID_MIMETYPE) ||
+                event->mimeData()->hasFormat(FOLDERSHAPE_MIMETYPE))) {
         event->setDropAction(Qt::MoveAction);
         event->accept();
     }
@@ -156,9 +162,13 @@ void  Canvas::dropEvent(QDropEvent *event) {
     bool isTemplate = true;
     if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE))
         itemData = event->mimeData()->data(SHAPETEMPLATE_MIMETYPE);
-    else {
+    else if(event->mimeData()->hasFormat(SHAPEID_MIMETYPE)) {
         isTemplate = false;
         itemData = event->mimeData()->data(SHAPEID_MIMETYPE);
+    }
+    else { // FOLDERSHAPE_MIMETYPE
+        isTemplate = false;
+        itemData = event->mimeData()->data(FOLDERSHAPE_MIMETYPE);
     }
     QDataStream dataStream(&itemData, QIODevice::ReadOnly);
     QString dummy;
@@ -177,7 +187,26 @@ void  Canvas::dropEvent(QDropEvent *event) {
     event->accept();
     foreach(KoShape *shape, shapeManager()->selection()->selectedShapes()) {
         shape->repaint();
-        shape->setPosition(event->pos() - offset);
+        if(dynamic_cast<FolderShape*>(shape)) { // is a folder
+            shape->setPosition(event->pos() - offset);
+        }
+        else { // is an icon.
+            QList<KoShape*> shapes = shapeManager()->shapesAt(QRectF(event->pos() - offset, QSizeF(0.1, 0.1)));
+            foreach(KoShape *s, shapes) {
+                FolderShape *folder = dynamic_cast<FolderShape*>(s);
+                if(folder) {
+                    if(folder != shape->parent())
+                        shape->setParent(folder);
+                    break;
+                }
+            }
+            if(shapes.count())
+                shape->setPosition(event->pos() - offset - shape->parent()->position());
+            else {
+                shape->setParent(0);
+                shape->setPosition(event->pos() - offset);
+            }
+        }
         shape->repaint();
     }
 }
@@ -204,17 +233,16 @@ bool Canvas::event(QEvent *e) {
         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
 
         const QPointF pos(helpEvent->x(), helpEvent->y());
-        KoShape *shape = m_parent->m_shapeManager->shapeAt(pos);
-        if(shape) {
-            IconShape *is = static_cast<IconShape*> (shape);
+        IconShape *is = dynamic_cast<IconShape*> (m_parent->m_shapeManager->shapeAt(pos));
+        if(is)
             QToolTip::showText(helpEvent->globalPos(), is->toolTip());
-        }
         else
             QToolTip::showText(helpEvent->globalPos(), "");
     }
     return QWidget::event(e);
 }
 
+// getters
 KoShapeManager * Canvas::shapeManager() const {
     return m_parent->m_shapeManager;
 }

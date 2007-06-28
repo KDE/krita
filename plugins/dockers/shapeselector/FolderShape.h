@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,27 +16,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef FOLDERSHAPE_H
+#define FOLDERSHAPE_H
 
-#include "GroupShape.h"
+#include <KoShapeContainer.h>
 
-#include <KoShapeFactory.h>
-#include <KoCreateShapesTool.h>
+#define FOLDERSHAPE_MIMETYPE "application/x-flake-shapeSelector-folder"
 
-GroupShape::GroupShape(KoShapeFactory *shapeFactory)
-    : IconShape(shapeFactory->icon())
-{
-    m_shapeFactory = shapeFactory;
-}
+class FolderShape : public KoShapeContainer {
+public:
+    FolderShape();
 
-void GroupShape::visit(KoCreateShapesTool *tool) {
-    tool->setShapeId(m_shapeFactory->id());
-    tool->setShapeProperties(0);
-}
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
 
-QString GroupShape::toolTip() {
-    return m_shapeFactory->toolTip();
-}
+    virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) { return true; }
+    virtual void saveOdf(KoShapeSavingContext&) const {}
+};
 
-QString GroupShape::groupId() const {
-    return m_shapeFactory->id();
-}
+#endif

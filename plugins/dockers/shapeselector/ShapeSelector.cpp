@@ -23,6 +23,7 @@
 #include "IconShape.h"
 #include "TemplateShape.h"
 #include "Canvas.h"
+#include "FolderShape.h"
 
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
@@ -47,6 +48,11 @@ ShapeSelector::ShapeSelector(QWidget *parent)
     m_shapeManager = new KoShapeManager(m_canvas);
     setMinimumSize(30, 30);
 
+FolderShape *folder = new FolderShape();
+folder->resize(QSizeF(200, 200));
+folder->setPosition(QPointF(210, 0));
+m_shapeManager->add(folder);
+
     QTimer::singleShot(0, this, SLOT(loadShapeTypes()));
 }
 
@@ -56,24 +62,30 @@ ShapeSelector::~ShapeSelector() {
 }
 
 void ShapeSelector::loadShapeTypes() {
+    FolderShape *folder = new FolderShape();
+    folder->resize(QSizeF(200, 200));
+
     foreach(QString id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
         bool oneAdded=false;
         foreach(KoShapeTemplate shapeTemplate, factory->templates()) {
             oneAdded=true;
             TemplateShape *shape = new TemplateShape(shapeTemplate);
-            add(shape);
+            folder->addChild(shape);
         }
         if(!oneAdded)
-            add(new GroupShape(factory));
+            folder->addChild(new GroupShape(factory));
     }
+    m_shapeManager->add(folder);
 }
 
 void ShapeSelector::itemSelected() {
     KoShape *koShape = m_shapeManager->selection()->firstSelectedShape();
     if(koShape == 0)
         return;
-    IconShape *shape= static_cast<IconShape*> (koShape);
+    IconShape *shape= dynamic_cast<IconShape*> (koShape);
+    if(shape == 0)
+        return;
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 
     if(canvasController) {

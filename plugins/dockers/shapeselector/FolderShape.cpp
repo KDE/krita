@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,27 +16,19 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "FolderShape.h"
+#include "FolderShapeModel.h"
 
-#include "GroupShape.h"
+#include <KoViewConverter.h>
 
-#include <KoShapeFactory.h>
-#include <KoCreateShapesTool.h>
+#include <QPainter>
 
-GroupShape::GroupShape(KoShapeFactory *shapeFactory)
-    : IconShape(shapeFactory->icon())
+FolderShape::FolderShape()
+    : KoShapeContainer(new FolderShapeModel(this))
 {
-    m_shapeFactory = shapeFactory;
 }
 
-void GroupShape::visit(KoCreateShapesTool *tool) {
-    tool->setShapeId(m_shapeFactory->id());
-    tool->setShapeProperties(0);
-}
-
-QString GroupShape::toolTip() {
-    return m_shapeFactory->toolTip();
-}
-
-QString GroupShape::groupId() const {
-    return m_shapeFactory->id();
+void FolderShape::paintComponent(QPainter &painter, const KoViewConverter &converter) {
+    painter.setPen(QPen(Qt::red));
+    painter.drawRect( converter.documentToView(QRectF(QPointF(0, 0), size())) );
 }

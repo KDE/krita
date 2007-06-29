@@ -329,7 +329,7 @@ KoCharacterStyle::LineType KoCharacterStyle::strikeOutType () const {
     return (KoCharacterStyle::LineType) d->propertyInt(StrikeOutType);
 }
 
-void KoCharacterStyle::setStrikeOutColor (QColor color) {
+void KoCharacterStyle::setStrikeOutColor (const QColor &color) {
     d->setProperty(StrikeOutColor, color);
 }
 
@@ -354,7 +354,7 @@ KoCharacterStyle::LineType KoCharacterStyle::underlineType () const {
     return (KoCharacterStyle::LineType) d->propertyInt(UnderlineType);
 }
 
-void KoCharacterStyle::setUnderlineColor (QColor color) {
+void KoCharacterStyle::setUnderlineColor (const QColor &color) {
     d->setProperty(UnderlineColor, color);
 }
 

@@ -152,7 +152,7 @@ public:
     /// Get the current font strike out style of this KoCharacterStyle
     LineStyle strikeOutStyle () const;
     /// Apply a font strike out color to this KoCharacterStyle
-    void setStrikeOutColor (QColor color);
+    void setStrikeOutColor (const QColor &color);
     /// Get the current font strike out color of this KoCharacterStyle
     QColor strikeOutColor () const;
     /// Apply a font strike out color to this KoCharacterStyle
@@ -165,7 +165,7 @@ public:
     /// Get the current font underline style of this KoCharacterStyle
     LineStyle underlineStyle () const;
     /// Apply a font underline color to this KoCharacterStyle
-    void setUnderlineColor (QColor color);
+    void setUnderlineColor (const QColor &color);
     /// Get the current font underline color of this KoCharacterStyle
     QColor underlineColor () const;
     /// Apply a font underline color to this KoCharacterStyle

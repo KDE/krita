@@ -163,7 +163,8 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
     KFileItem fileItem = item->fileItem();
 
     if(!fileItem.isNull()) {
-      QString details = "<center><table border=\"0\">";
+      QString details = QString("<center>%1<br>").arg(fileItem.url().path());
+      details += "<table border=\"0\">";
       details += i18nc("File modification date and time. %1 is date time",
                         "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
                         QString(fileItem.timeString(KIO::UDS_MODIFICATION_TIME)));

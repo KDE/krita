@@ -24,11 +24,19 @@
 class KoImageData;
 class KoStore;
 
+/**
+ * An collection of KoImageData objects to allow loading and saving them all together to the KoStore.
+ */
 class KOGUIUTILS_EXPORT KoImageCollection {
 public:
+    /// constructor
     KoImageCollection();
     ~KoImageCollection();
 
+    /**
+     * Load all images from the store which have a recognized KoImageData::storeHref().
+     * @return returns true if load was successful (no images failed).
+     */
     bool loadFromStore(KoStore *store);
 
 protected:

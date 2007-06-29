@@ -21,11 +21,12 @@
 #include "KoImageCollection.h"
 
 #include <KoUnit.h>
-#include <KoStoreDevice.h>
+#include <KoStore.h>
 
 #include <KTemporaryFile>
 #include <KDebug>
 #include <QSizeF>
+#include <QIODevice>
 
 class KoImageData::Private {
 public:
@@ -125,14 +126,14 @@ QString KoImageData::storeHref() const {
     return d->storeHref;
 }
 
-bool KoImageData::setKoStoreDevice(KoStoreDevice *device) {
+bool KoImageData::loadFromStore(QIODevice *device) {
     struct Finally {
-        Finally(KoStoreDevice *d) : device (d), bytes(0) {}
+        Finally(QIODevice *d) : device (d), bytes(0) {}
         ~Finally() {
             delete device;
             delete[] bytes;
         }
-        KoStoreDevice *device;
+        QIODevice *device;
         char *bytes;
     };
     Finally finally(device);

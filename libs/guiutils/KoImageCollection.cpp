@@ -19,6 +19,8 @@
 #include "KoImageCollection.h"
 #include "KoImageData.h"
 
+#include <KoStoreDevice.h>
+
 #include <QList>
 #include <KDebug>
 
@@ -53,7 +55,7 @@ bool KoImageCollection::loadFromStore(KoStore *store) {
     foreach(KoImageData *image, d->images) {
         if(! store->open(image->storeHref()))
             return false;
-        bool ok = image->setKoStoreDevice(new KoStoreDevice(store));
+        bool ok = image->loadFromStore(new KoStoreDevice(store));
         store->close();
         if(! ok)
             return false;

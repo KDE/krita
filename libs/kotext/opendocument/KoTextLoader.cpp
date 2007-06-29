@@ -683,6 +683,8 @@ static QString normalizeWhitespace( const QString& in, bool leadingSpace )
 // First loadFrame test
 void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
 {
+    Q_UNUSED(cursor);
+
     double width = 0.0, height = 0.0;
     QDomNamedNodeMap attrs = parent.attributes();
     for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++) {
@@ -717,10 +719,15 @@ void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& 
                         KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape"); //PICTURESHAPEID
                         KoShape *shape = factory ? factory->createDefaultShape() : 0;
                         if (shape) {
+                            //TODO
+                            //shape->setPosition( QPointF(200,200) );
+                            shape->resize( QSizeF(height,width) );
+                            //shape->setZIndex(64);
+
                             KoShapeLoadingContext shapecontext(context);
                             if( shape->loadOdf(ts, shapecontext) ) {
-                                kDebug(32500) << "Successful loaded picture shape" << endl;
-                                //TODO cursor.insertFrame( ... )
+                                kDebug(32500)<<"Successful loaded picture shape. width="<<width<<" height="<<height<<endl;
+                                addShape(shape);
                             } else kDebug(32500) << "Failed to load picture shape..." << endl;
                         } else kDebug(32500) << "Failed to create picture shape..." << endl;
                         context.store()->close();

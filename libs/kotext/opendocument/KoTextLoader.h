@@ -43,6 +43,7 @@
 //class KoStore;
 class KoTextLoadingContext;
 class KoStyleManager;
+class KoShape;
 
 //class QDomDocument;
 class QTextCursor;
@@ -153,6 +154,11 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
         * This is called in loadBody once the body was readed.
         */
         virtual void endBody() {}
+
+        /**
+        * This is called if a new shape was added.
+        */
+        virtual void addShape(KoShape* shape) = 0;
 
     private:
         /// \internal d-pointer class.

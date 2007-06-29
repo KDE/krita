@@ -65,7 +65,7 @@ public:
             block = block.document()->findBlock(start);
 
         // now loop over all blocks that the selection contains and alter the text fragments where applicable.
-        while(block.isValid() && block.position() < end) {
+        while(block.isValid() && block.position() <= end) {
             QTextBlockFormat format = block.blockFormat();
             visitor.visit(format);
             QTextCursor cursor(block);

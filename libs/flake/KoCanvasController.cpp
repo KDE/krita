@@ -505,4 +505,16 @@ void KoCanvasController::dragLeaveEvent( QDragLeaveEvent *event )
     m_d->viewportWidget->handleDragLeaveEvent( event );
 }
 
+void KoCanvasController::wheelEvent( QWheelEvent *event ) {
+    if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
+        if(event->delta() > 0)
+            zoomIn(event->pos());
+        else
+            zoomOut(event->pos());
+        event->accept();
+    }
+    else
+        QAbstractScrollArea::wheelEvent(event);
+}
+
 #include "KoCanvasController.moc"

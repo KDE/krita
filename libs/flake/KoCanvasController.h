@@ -296,17 +296,19 @@ protected slots:
 
 protected:
     /// reimplemented from QWidget
-    void paintEvent( QPaintEvent * event );
+    virtual void paintEvent( QPaintEvent * event );
     /// reimplemented from QWidget
-    void resizeEvent(QResizeEvent * resizeEvent);
+    virtual void resizeEvent(QResizeEvent * resizeEvent);
     /// reimplemented from QWidget
-    void dragEnterEvent( QDragEnterEvent * event );
+    virtual void dragEnterEvent( QDragEnterEvent * event );
     /// reimplemented from QWidget
-    void dropEvent( QDropEvent *event );
+    virtual void dropEvent( QDropEvent *event );
     /// reimplemented from QWidget
-    void dragMoveEvent ( QDragMoveEvent *event );
+    virtual void dragMoveEvent ( QDragMoveEvent *event );
     /// reimplemented from QWidget
-    void dragLeaveEvent( QDragLeaveEvent *event );
+    virtual void dragLeaveEvent( QDragLeaveEvent *event );
+    /// reimplemented from QWidget
+    virtual void wheelEvent( QWheelEvent *event );
 
 private:
 

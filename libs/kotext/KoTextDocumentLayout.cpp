@@ -192,6 +192,10 @@ int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accu
             if(accuracy == Qt::ExactHit && // left or right of line
                     (point.x() < line.x() || point.x() > line.x() + line.width()))
                 return -1;
+            if(point.x() > line.width() && layout->textOption().textDirection() == Qt::RightToLeft) {
+                // totally right of RTL text means the position is the start of the text.
+                return block.position() + line.textStart();
+            }
             return block.position() + line.xToCursor(point.x());
         }
         block = block.next();

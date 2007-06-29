@@ -70,6 +70,8 @@ public:
     }
 
     ~Private() {
+        foreach(KoShapeManager *manager, shapeManagers)
+            manager->remove(me);
         delete userData;
         delete appData;
     }

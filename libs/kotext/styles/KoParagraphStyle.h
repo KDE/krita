@@ -130,7 +130,9 @@ public:
         AutoDirection,      ///< Take the direction from the text.
         LeftRightTopBottom, ///< Text layout for most western languages
         RightLeftTopBottom, ///< Text layout for langauges like Hebrew
-        TopBottomRightLeft  ///< Vertical text layout.
+        TopBottomRightLeft,  ///< Vertical text layout.
+        PerhapsLeftRightTopBottom,
+        PerhapsRightLeftTopBottom
     };
 
     /// Constructor

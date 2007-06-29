@@ -238,11 +238,11 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
     actionCollection()->addAction("file_versions_file", d->m_versionsfile );
     connect( d->m_versionsfile, SIGNAL( triggered(bool) ), this, SLOT( slotVersionsFile() ) );
 
-    d->m_importFile  = new KAction(i18n("I&mport..."), this);
+    d->m_importFile  = new KAction(KIcon("file-import"), i18n("I&mport..."), this);
     actionCollection()->addAction("file_import_file", d->m_importFile );
     connect( d->m_importFile, SIGNAL( triggered(bool) ), this, SLOT( slotImportFile() ) );
 
-    d->m_exportFile  = new KAction(i18n("E&xport..."), this);
+    d->m_exportFile  = new KAction(KIcon("file-export"), i18n("E&xport..."), this);
     actionCollection()->addAction("file_export_file", d->m_exportFile );
     connect( d->m_exportFile, SIGNAL( triggered(bool) ), this, SLOT( slotExportFile() ) );
 

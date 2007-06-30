@@ -36,6 +36,7 @@ KisShapeSelection::KisShapeSelection(KisImageSP image)
     connect(m_timer, SIGNAL(timeout()), this, SLOT(repaintTimerEvent()));
     m_timer->start(300);
     setShapeId("KisShapeSelection");
+    setSelectable(false);
 }
 
 KisShapeSelection::~KisShapeSelection()

@@ -40,6 +40,7 @@
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"
 #include "kis_canvas2.h"
+#include "kis_pixel_selection.h"
 
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6))
@@ -162,16 +163,19 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 
                 bool hasSelection = dev->hasSelection();
                 KisSelectionSP selection = dev->selection();
+
+                KisPixelSelectionSP pixelSelection = dev->pixelSelection();
+
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
 
                 if (!hasSelection || m_selectAction == SELECTION_REPLACE)
                 {
-                    selection->clear();
+                    pixelSelection->clear();
                     if(m_selectAction == SELECTION_SUBTRACT)
-                        selection->invert();
+                        pixelSelection->invert();
                 }
 
-                KisPainter painter(selection);
+                KisPainter painter(pixelSelection);
                 painter.setBounds( m_currentImage->bounds() );
                 painter.setPaintColor(KoColor(Qt::black, selection->colorSpace()));
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);

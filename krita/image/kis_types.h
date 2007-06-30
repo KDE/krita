@@ -96,6 +96,9 @@ typedef KisWeakSharedPtr<KisGroupLayer> KisGroupLayerWSP;
 class KisSelection;
 typedef KisSharedPtr<KisSelection> KisSelectionSP;
 
+class KisPixelSelection;
+typedef KisSharedPtr<KisPixelSelection> KisPixelSelectionSP;
+
 class KisHistogram;
 typedef KisSharedPtr<KisHistogram> KisHistogramSP;
 

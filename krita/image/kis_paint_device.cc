@@ -53,6 +53,8 @@
 #include "kis_datamanager.h"
 #include "kis_memento.h"
 #include "kis_undo_adapter.h"
+#include "kis_selection_component.h"
+#include "kis_pixel_selection.h"
 
 //#define CACHE_EXACT_BOUNDS
 
@@ -1119,6 +1121,15 @@ const KisSelectionSP KisPaintDevice::selection() const
     return m_d->selection;
 }
 
+KisPixelSelectionSP KisPaintDevice::pixelSelection()
+{
+    selection();
+    if(!m_d->selection->hasPixelSelection())
+        m_d->selection->setPixelSelection(KisPixelSelectionSP(new KisPixelSelection(KisPaintDeviceSP(this))));
+
+    return m_d->selection->pixelSelection();
+}
+
 
 bool KisPaintDevice::hasSelection() const
 {
@@ -1147,20 +1158,20 @@ void KisPaintDevice::reselect()
 
 void KisPaintDevice::addSelection(KisSelectionSP selection) {
 
-    KisPainter painter(this->selection());
+    KisPainter painter(pixelSelection());
     QRect r = selection->selectedExactRect();
     painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, KisPaintDeviceSP(selection.data()), r.x(), r.y(), r.width(), r.height());
     painter.end();
 }
 
 void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
-    KisPainter painter(KisPaintDeviceSP(this->selection().data()));
-    selection->invert();
+    KisPainter painter(pixelSelection());
+    pixelSelection()->invert();
 
     QRect r = selection->selectedExactRect();
     painter.bitBlt(r.x(), r.y(), COMPOSITE_ERASE, KisPaintDeviceSP(selection.data()), r.x(), r.y(), r.width(), r.height());
 
-    selection->invert();
+    pixelSelection()->invert();
     painter.end();
 }
 

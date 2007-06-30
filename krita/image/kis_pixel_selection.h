@@ -21,8 +21,6 @@
 #include <QRect>
 #include <QPainterPath>
 
-#include <KoShape.h>
-
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_mask.h"
@@ -104,8 +102,6 @@ public:
      */
     QRect selectedExactRect() const;
 
-    void paint(QImage* img);
-
     // if the parent layer is interested in keeping up to date with the dirtyness
     // of this layer, set to true
     void setInterestedInDirtyness(bool b) { m_dirty = b; }
@@ -159,7 +155,6 @@ private:
 
 private:
     KisPaintDeviceWSP m_parentPaintDevice;
-    KoViewConverter * m_converter;
     bool m_dirty;
 };
 

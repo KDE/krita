@@ -23,8 +23,6 @@
 #include <QVector>
 
 #include <kdebug.h>
-#include <klocale.h>
-#include <QColor>
 #include <QPoint>
 #include <QPolygon>
 
@@ -182,7 +180,6 @@ bool KisPixelSelection::isProbablyTotallyUnselected(QRect r) const
 }
 
 
-
 QRect KisPixelSelection::selectedRect() const
 {
     if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
@@ -197,60 +194,6 @@ QRect KisPixelSelection::selectedExactRect() const
         return exactBounds();
     else
         return exactBounds().unite(m_parentPaintDevice->exactBounds());
-}
-
-void KisPixelSelection::paint(QImage* img)
-{
-    if (img->isNull()) {
-        return;
-    }
-
-    qint32 width = img->width();
-    qint32 height = img->height();
-
-    quint8* buffer = new quint8[width*height];
-    readBytes(buffer, 0, 0, width, height);
-
-    for (qint32 y = 0; y < height; y++) {
-
-        QRgb *imagePixel = reinterpret_cast<QRgb *>(img->scanLine(y));
-        for (qint32 x = 0; x < width; x++) {
-
-                quint8 selectedness = buffer[y*width+x];
-
-                if (selectedness != MAX_SELECTED) {
-
-                    // this is where we come if the pixels should be blue or bluish
-
-                    QRgb srcPixel = *imagePixel;
-                    quint8 srcGrey = (qRed(srcPixel) + qGreen(srcPixel) + qBlue(srcPixel)) / 9;
-                    quint8 srcAlpha = qAlpha(srcPixel);
-
-                    // Color influence is proportional to alphaPixel.
-                    srcGrey = UINT8_MULT(srcGrey, srcAlpha);
-
-                    QRgb dstPixel;
-
-                    if (selectedness == MIN_SELECTED) {
-
-                        // Stop unselected transparent areas from appearing the same
-                        // as selected transparent areas.
-                        quint8 dstAlpha = qMax(srcAlpha, quint8(192));
-                        dstPixel = qRgba(128 + srcGrey, 128 + srcGrey, 165 + srcGrey, dstAlpha);
-
-                    } else {
-                        dstPixel = qRgba(UINT8_BLEND(qRed(srcPixel), srcGrey + 128, selectedness),
-                                         UINT8_BLEND(qGreen(srcPixel), srcGrey + 128, selectedness),
-                                         UINT8_BLEND(qBlue(srcPixel), srcGrey + 165, selectedness),
-                                         srcAlpha);
-                    }
-
-                    *imagePixel = dstPixel;
-                }
-
-                imagePixel++;
-        }
-    }
 }
 
 void KisPixelSelection::setDirty(const QRect& rc)

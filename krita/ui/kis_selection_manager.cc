@@ -368,7 +368,7 @@ void KisSelectionManager::imgSelectionChanged(KisImageSP img)
                     if(!timer->isActive())
                         timer->start ( 300 );
 
-                    KisPixelSelection* pixelSelection = dynamic_cast<KisPixelSelection*>(selection->pixelSelection());
+                    KisPixelSelectionSP pixelSelection = selection->pixelSelection();
                     outline = pixelSelection->outline();
                     updateSimpleOutline();
                 }

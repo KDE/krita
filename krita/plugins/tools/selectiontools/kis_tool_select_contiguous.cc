@@ -53,6 +53,7 @@
 #include "kis_fill_painter.h"
 #include "kis_undo_adapter.h"
 #include "kis_selected_transaction.h"
+#include "kis_pixel_selection.h"
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
     : super(canvas, KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6))
@@ -101,7 +102,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
 
         if (!dev->hasSelection()) {
-            dev->selection()->clear();
+            dev->pixelSelection()->clear();
             if(m_selectAction==SELECTION_SUBTRACT)
                 selection->invert();
         }

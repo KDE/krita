@@ -48,6 +48,7 @@ class KoStore;
 class KisImage;
 class KisRandomSubAccessorPixel;
 class KisDataManager;
+class KisSelectionComponent;
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
 class KisMemento;
@@ -525,6 +526,9 @@ public:
 
     /** @return the current selection or create one if this paintdevice hasn't got a selection yet. */
     const KisSelectionSP selection() const;
+
+    /** @return the current pixel selection of the selection. It will create a new pixel selection and selection if missing.*/
+    KisPixelSelectionSP pixelSelection();
 
     /** Adds the specified selection to the currently active selection for this paintdevice */
     void addSelection(KisSelectionSP selection);

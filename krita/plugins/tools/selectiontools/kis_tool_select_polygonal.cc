@@ -45,6 +45,7 @@
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 #include "kis_canvas2.h"
+#include "kis_pixel_selection.h"
 
 KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas)
     : super(canvas, KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6))
@@ -148,18 +149,18 @@ void KisToolSelectPolygonal::finish()
         bool hasSelection = dev->hasSelection();
         KisSelectedTransaction *t = 0;
         if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Polygonal Selection"), dev);
-        KisSelectionSP selection = dev->selection();
+        KisPixelSelectionSP pixelSelection = dev->pixelSelection();
 
         if (!hasSelection || m_selectAction == SELECTION_REPLACE)
         {
-            selection->clear();
+            pixelSelection->clear();
             if(m_selectAction == SELECTION_SUBTRACT)
-                selection->invert();
+                pixelSelection->invert();
         }
 
-        KisPainter painter(selection);
+        KisPainter painter(pixelSelection);
         painter.setBounds( m_currentImage->bounds() );
-        painter.setPaintColor(KoColor(Qt::black, selection->colorSpace()));
+        painter.setPaintColor(KoColor(Qt::black, pixelSelection->colorSpace()));
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
         painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
@@ -171,10 +172,10 @@ void KisToolSelectPolygonal::finish()
         {
             case SELECTION_REPLACE:
             case SELECTION_ADD:
-                painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_OVER));
+                painter.setCompositeOp(pixelSelection->colorSpace()->compositeOp(COMPOSITE_OVER));
                 break;
             case SELECTION_SUBTRACT:
-                painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
+                painter.setCompositeOp(pixelSelection->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
                 break;
             default:
                 break;

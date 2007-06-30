@@ -23,24 +23,19 @@
 #include <QVector>
 
 #include <kdebug.h>
-#include <klocale.h>
-#include <QColor>
-#include <QPoint>
-#include <QPolygon>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoIntegerMaths.h"
 
-#include "kis_layer.h"
 #include "kis_debug_areas.h"
 #include "kis_types.h"
-#include "kis_fill_painter.h"
 #include "kis_iterators_pixel.h"
 #include "kis_image.h"
 #include "kis_datamanager.h"
-#include "kis_fill_painter.h"
 #include "kis_selection_component.h"
 #include "kis_mask.h"
+#include "kis_pixel_selection.h"
+
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
     : super(dev,
@@ -93,63 +88,6 @@ quint8 KisSelection::selected(qint32 x, qint32 y) const
     const quint8 *pix = iter.rawData();
 
     return *pix;
-}
-
-void KisSelection::setSelected(qint32 x, qint32 y, quint8 s)
-{
-    KisHLineIteratorPixel iter = createHLineIterator(x, y, 1);
-
-    quint8 *pix = iter.rawData();
-
-    *pix = s;
-}
-
-QImage KisSelection::maskImage( KisImageSP image ) const
-{
-    // If part of a KisAdjustmentLayer, there may be no parent device.
-    QImage img;
-    QRect bounds;
-    if (m_parentPaintDevice) {
-
-        bounds = m_parentPaintDevice->exactBounds();
-        bounds = bounds.intersect( image->bounds() );
-        img = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
-    }
-    else {
-        bounds = QRect( 0, 0, image->width(), image->height());
-        img = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
-    }
-
-    KisHLineConstIteratorPixel it = createHLineConstIterator(bounds.x(), bounds.y(), bounds.width());
-    for (int y2 = bounds.y(); y2 < bounds.height() - bounds.y(); ++y2) {
-        int x2 = 0;
-        while (!it.isDone()) {
-            quint8 s = MAX_SELECTED - *(it.rawData());
-            qint32 c = qRgb(s, s, s);
-            img.setPixel(x2, y2, c);
-            ++x2;
-            ++it;
-        }
-        it.nextRow(); // XXX: Why wasn't this line here? Used to be
-                      // present in 1.6.
-    }
-    return img;
-}
-
-void KisSelection::select(QRect r)
-{
-    KisFillPainter painter(KisPaintDeviceSP(this));
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    painter.fillRect(r, KoColor(Qt::white, cs), MAX_SELECTED);
-    qint32 x, y, w, h;
-    extent(x, y, w, h);
-}
-
-void KisSelection::clear(QRect r)
-{
-    KisFillPainter painter(KisPaintDeviceSP(this));
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    painter.fillRect(r, KoColor(Qt::white, cs), MIN_SELECTED);
 }
 
 void KisSelection::clear()
@@ -288,7 +226,7 @@ bool KisSelection::hasShapeSelection() const
 }
 
 
-KisSelectionComponent* KisSelection::pixelSelection()
+KisPixelSelectionSP KisSelection::pixelSelection()
 {
     return m_pixelSelection;
 }
@@ -299,10 +237,10 @@ KisSelectionComponent* KisSelection::shapeSelection()
    return m_shapeSelection;
 }
 
-void KisSelection::setPixelSelection(KisSelectionComponent* pixelSelection)
+void KisSelection::setPixelSelection(KisPixelSelectionSP pixelSelection)
 {
-    m_pixelSelection = pixelSelection;
-    m_hasPixelSelection = true;
+     m_pixelSelection = pixelSelection;
+     m_hasPixelSelection = true;
 }
 
 void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
@@ -313,6 +251,7 @@ void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
 
 void KisSelection::updateProjection()
 {
+    clear();
     if(m_hasPixelSelection) {
         m_pixelSelection->renderToProjection(this);
     }

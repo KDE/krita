@@ -19,7 +19,6 @@
 #define KIS_SELECTION_H_
 
 #include <QRect>
-#include <QPainterPath>
 
 #include "kis_types.h"
 #include "kis_paint_device.h"
@@ -62,7 +61,6 @@ public:
      */
     KisSelection(KisPaintDeviceSP dev);
 
-
     /**
      * Create a new KisSelection from the given mask. The selection
      * will share its pixel data with the mask
@@ -81,20 +79,10 @@ public:
 
     virtual ~KisSelection();
 
-    //TODO this methods are now in KisPixelSelection, remove when the tools are ported
-
-    // Returns selectedness, or 0 if invalid coordinates
+    /// Returns selectedness, or 0 if invalid coordinates
     quint8 selected(qint32 x, qint32 y) const;
 
-    void setSelected(qint32 x, qint32 y, quint8 s);
-
-    QImage maskImage( KisImageSP image ) const;
-
-    void select(QRect r);
-
     void invert();
-
-    void clear(QRect r);
 
     void clear();
 
@@ -131,9 +119,9 @@ public:
 
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
-    KisSelectionComponent* pixelSelection();
+    KisPixelSelectionSP pixelSelection();
     KisSelectionComponent* shapeSelection();
-    void setPixelSelection(KisSelectionComponent* pixelSelection);
+    void setPixelSelection(KisPixelSelectionSP pixelSelection);
     void setShapeSelection(KisSelectionComponent* shapeSelection);
     void updateProjection();
 
@@ -167,7 +155,7 @@ private:
     bool m_dirty;
     bool m_hasPixelSelection;
     bool m_hasShapeSelection;
-    KisSelectionComponent* m_pixelSelection;
+    KisPixelSelectionSP m_pixelSelection;
     KisSelectionComponent* m_shapeSelection;
 };
 

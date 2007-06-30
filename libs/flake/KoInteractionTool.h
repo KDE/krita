@@ -91,7 +91,7 @@ private:
     void recalcSelectionBox();
     void updateCursor();
     /// Returns rotation angle of given handle of the current selection
-    double rotationOfHandle( KoFlake::SelectionHandle handle );
+    double rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation );
 
     KoInteractionTool(const KoInteractionTool&);
     KoInteractionTool& operator=(const KoInteractionTool&);

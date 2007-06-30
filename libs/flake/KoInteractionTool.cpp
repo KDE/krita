@@ -125,70 +125,118 @@ bool KoInteractionTool::wantsAutoScroll()
     return true;
 }
 
-double KoInteractionTool::rotationOfHandle( KoFlake::SelectionHandle handle )
+double KoInteractionTool::rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation )
 {
-    QPointF handlePosition;
+    QPointF selectionCenter = koSelection()->absolutePosition();
+    QPointF direction;
 
     switch( handle )
     {
         case KoFlake::TopMiddleHandle:
-            handlePosition = koSelection()->absolutePosition( KoFlake::TopLeftCorner );
-            handlePosition += 0.5 * ( koSelection()->absolutePosition( KoFlake::TopRightCorner ) - handlePosition );
+            if( useEdgeRotation )
+            {
+                direction = koSelection()->absolutePosition( KoFlake::TopRightCorner ) 
+                    - koSelection()->absolutePosition( KoFlake::TopLeftCorner );
+            }
+            else
+            {
+                QPointF handlePosition = koSelection()->absolutePosition( KoFlake::TopLeftCorner );
+                handlePosition += 0.5 * ( koSelection()->absolutePosition( KoFlake::TopRightCorner ) - handlePosition );
+                direction = handlePosition - selectionCenter;
+            }
             break;
         case KoFlake::TopRightHandle:
-            handlePosition = koSelection()->absolutePosition( KoFlake::TopRightCorner );
+            direction = koSelection()->absolutePosition( KoFlake::TopRightCorner ) - selectionCenter;
             break;
         case KoFlake::RightMiddleHandle:
-            handlePosition = koSelection()->absolutePosition( KoFlake::TopRightCorner );
-            handlePosition += 0.5 * ( koSelection()->absolutePosition( KoFlake::BottomRightCorner ) - handlePosition );
+            if( useEdgeRotation )
+            {
+                direction = koSelection()->absolutePosition( KoFlake::BottomRightCorner ) 
+                        - koSelection()->absolutePosition( KoFlake::TopRightCorner );
+            }
+            else
+            {
+                QPointF handlePosition = koSelection()->absolutePosition( KoFlake::TopRightCorner );
+                handlePosition += 0.5 * ( koSelection()->absolutePosition( KoFlake::BottomRightCorner ) - handlePosition );
+                direction = handlePosition - selectionCenter;
+            }
             break;
         case KoFlake::BottomRightHandle:
-            handlePosition = koSelection()->absolutePosition( KoFlake::BottomRightCorner );
+            direction = koSelection()->absolutePosition( KoFlake::BottomRightCorner ) - selectionCenter;
             break;
         case KoFlake::BottomMiddleHandle:
-            handlePosition = koSelection()->absolutePosition( KoFlake::BottomLeftCorner );
-            handlePosition += 0.5 * ( koSelection()->absolutePosition( KoFlake::BottomRightCorner ) - handlePosition );
+            if( useEdgeRotation )
+            {
+                direction = koSelection()->absolutePosition( KoFlake::BottomLeftCorner )
+                        - koSelection()->absolutePosition( KoFlake::BottomRightCorner );
+            }
+            else
+            {
+                QPointF handlePosition = koSelection()->absolutePosition( KoFlake::BottomLeftCorner );
+                handlePosition += 0.5 * ( koSelection()->absolutePosition( KoFlake::BottomRightCorner ) - handlePosition );
+                direction = handlePosition - selectionCenter;
+            }
             break;
         case KoFlake::BottomLeftHandle:
-            handlePosition = koSelection()->absolutePosition( KoFlake::BottomLeftCorner );
+            direction = koSelection()->absolutePosition( KoFlake::BottomLeftCorner ) - selectionCenter;
             break;
         case KoFlake::LeftMiddleHandle:
-            handlePosition = koSelection()->absolutePosition( KoFlake::TopLeftCorner );
-            handlePosition += 0.5 * ( koSelection()->absolutePosition( KoFlake::BottomLeftCorner ) - handlePosition );
+            if( useEdgeRotation )
+            {
+                direction = koSelection()->absolutePosition( KoFlake::TopLeftCorner )
+                        - koSelection()->absolutePosition( KoFlake::BottomLeftCorner );
+            }
+            else
+            {
+                QPointF handlePosition = koSelection()->absolutePosition( KoFlake::TopLeftCorner );
+                handlePosition += 0.5 * ( koSelection()->absolutePosition( KoFlake::BottomLeftCorner ) - handlePosition );
+                direction = handlePosition - selectionCenter;
+            }
             break;
         case KoFlake::TopLeftHandle:
-            handlePosition = koSelection()->absolutePosition( KoFlake::TopLeftCorner );
+            direction = koSelection()->absolutePosition( KoFlake::TopLeftCorner ) - selectionCenter;
             break;
         case KoFlake::NoHandle:
             return 0.0;
             break;
     }
 
-    QPointF direction = handlePosition - koSelection()->absolutePosition();
     double rotation = atan2( direction.y(), direction.x() ) * 180.0 / M_PI;
 
     switch( handle )
     {
         case KoFlake::TopMiddleHandle:
-            rotation -= 270.0;
+            if( useEdgeRotation )
+                rotation -= 0.0;
+            else 
+                rotation -= 270.0;
             break;
         case KoFlake::TopRightHandle:
             rotation -= 315.0;
             break;
         case KoFlake::RightMiddleHandle:
-            rotation -= 0.0;
+            if( useEdgeRotation )
+                rotation -= 90.0;
+            else
+                rotation -= 0.0;
             break;
         case KoFlake::BottomRightHandle:
             rotation -= 45.0;
             break;
         case KoFlake::BottomMiddleHandle:
-            rotation -= 90.0;
+            if( useEdgeRotation )
+                rotation -= 180.0;
+            else
+                rotation -= 90.0;
             break;
         case KoFlake::BottomLeftHandle:
             rotation -= 135.0;
             break;
         case KoFlake::LeftMiddleHandle:
-            rotation -= 180.0;
+            if( useEdgeRotation )
+                rotation -= 270.0;
+            else
+                rotation -= 180.0;
             break;
         case KoFlake::TopLeftHandle:
             rotation -= 225.0;
@@ -213,10 +261,10 @@ void KoInteractionTool::updateCursor() {
                 editable = true;
         }
 
-        d->angle = rotationOfHandle( d->lastHandle );
-        int rotOctant = 8 + int(8.5 + d->angle / 45);
-
         if(!d->mouseWasInsideHandles) {
+            d->angle = rotationOfHandle( d->lastHandle, true );
+            int rotOctant = 8 + int(8.5 + d->angle / 45);
+
             switch(d->lastHandle) {
                 case KoFlake::TopMiddleHandle:
                     cursor = d->shearCursors[(0 +rotOctant)%8];
@@ -248,6 +296,8 @@ void KoInteractionTool::updateCursor() {
              }
         }
         else {
+            d->angle = rotationOfHandle( d->lastHandle, false );
+            int rotOctant = 8 + int(8.5 + d->angle / 45);
             switch(d->lastHandle) {
                 case KoFlake::TopMiddleHandle:
                     cursor = d->sizeCursors[(0 +rotOctant)%8];

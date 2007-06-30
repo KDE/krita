@@ -19,11 +19,13 @@
 #ifndef KOTEXTEDITINGPLUGIN_H
 #define KOTEXTEDITINGPLUGIN_H
 
+#include <QObject>
 #include <QString>
 #include <kotext_export.h>
 
 class QTextDocument;
 class QTextCursor;
+class QUndoCommand;
 
 /**
  * This is a base class for a text editing plugin as used by the text tool.
@@ -36,7 +38,8 @@ class QTextCursor;
  * a word and then moves the cursor out of the word, a similar approach happens with the
  * finishedParagraph(), it will only be called after the cursor has been moved out of the paragraph.
  */
-class KOTEXT_EXPORT KoTextEditingPlugin {
+class KOTEXT_EXPORT KoTextEditingPlugin : public QObject {
+    Q_OBJECT
 public:
     /// constructor
     KoTextEditingPlugin();
@@ -73,6 +76,9 @@ public:
      * @param endPosition the position at the end of the selection
      */
     virtual void checkSection(QTextDocument *document, int startPosition, int endPosition);
+
+signals:
+    void commandAvailable(QUndoCommand *command);
 
 protected:
     /**

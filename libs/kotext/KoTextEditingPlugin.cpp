@@ -90,3 +90,6 @@ void KoTextEditingPlugin::checkSection(QTextDocument *document, int startPositio
         block = block.next();
     }
 }
+
+#include "KoTextEditingPlugin.moc"
+

@@ -138,6 +138,11 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
         */
         virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
 
+        /**
+        * Load the image frame into the \p cursor .
+        */
+        virtual void loadImage(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
+
     protected:
 
         /**

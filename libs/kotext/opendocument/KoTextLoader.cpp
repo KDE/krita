@@ -680,64 +680,87 @@ static QString normalizeWhitespace( const QString& in, bool leadingSpace )
     return text;
 }
 
-// First loadFrame test
 void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
 {
-    Q_UNUSED(cursor);
-
-    double width = 0.0, height = 0.0;
-    QDomNamedNodeMap attrs = parent.attributes();
-    for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++) {
-        kDebug(32500) << "Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
-        if (attrs.item(iAttr).nodeName() == "svg:width") {
-            width = KoUnit::parseValue(attrs.item(iAttr).nodeValue());
-        } else if (attrs.item(iAttr).nodeName() == "svg:height") {
-            height = KoUnit::parseValue(attrs.item(iAttr).nodeValue());
-        }
-    }
-    for (KoXmlNode node = parent.firstChild(); !node.isNull(); node = node.nextSibling() )
-    {
+    for(KoXmlNode node = parent.firstChild(); !node.isNull(); node = node.nextSibling()) {
         KoXmlElement ts = node.toElement();
+        if( ts.isNull() ) continue;
         const QString localName( ts.localName() );
         //const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
         if (isDrawNS && localName == "image") {
-            attrs = ts.attributes();
-            QString href;
-            for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++) {
-                kDebug(32500) << "Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
-                if (attrs.item(iAttr).localName() == "href") href = attrs.item(iAttr).nodeValue();
-            }
-            if (context.store()->hasFile(href)) {
-                kDebug(32500) << "Ok, picture available in the store" << endl;
-                if (context.store()->isOpen()) {
-                    kDebug(32500) << "Shit, store already reading something" << endl;
-                } else {
-                    kDebug(32500) << "Ok, I can handle it" << endl;
-                    if (context.store()->open(href)) {
-                        kDebug(32500) << "Great, it's opened now" << endl;
-                        KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape"); //PICTURESHAPEID
-                        KoShape *shape = factory ? factory->createDefaultShape() : 0;
-                        if (shape) {
-                            //TODO
-                            //shape->setPosition( QPointF(200,200) );
-                            shape->resize( QSizeF(height,width) );
-                            //shape->setZIndex(64);
-
-                            KoShapeLoadingContext shapecontext(context);
-                            if( shape->loadOdf(ts, shapecontext) ) {
-                                kDebug(32500)<<"Successful loaded picture shape. width="<<width<<" height="<<height<<endl;
-                                addShape(shape);
-                            } else kDebug(32500) << "Failed to load picture shape..." << endl;
-                        } else kDebug(32500) << "Failed to create picture shape..." << endl;
-                        context.store()->close();
-                    }
-                }
-            } else kDebug(32500) << "Sad, picture not available..." << endl;
-        } else kDebug(32500) << "Sorry kid, this isn't handled currently" << endl;
+            loadImage(context, parent, ts, cursor);
+        }
+        else {
+            kDebug(32500) << "KoTextLoader::loadFrame Unhandled frame: " << localName << endl;
+        }
     }
 }
 
+void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor)
+{
+    Q_UNUSED(cursor);
+
+    /*
+    //context.fillStyleStack( parent, KoXmlNS::text, "style-name", "graphic-properties" );
+    //double width = 0.0, height = 0.0;
+    QDomNamedNodeMap attrs = parent.attributes();
+    for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++) {
+        kDebug(32500) << "KoTextLoader::loadImage Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
+        //if (attrs.item(iAttr).nodeName() == "svg:width") width = KoUnit::parseValue(attrs.item(iAttr).nodeValue());
+        //else if (attrs.item(iAttr).nodeName() == "svg:height") height = KoUnit::parseValue(attrs.item(iAttr).nodeValue());
+    }
+    attrs = ts.attributes();
+    QString href;
+    for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++) {
+        kDebug(32500) << "KoTextLoader::loadImage Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
+        if (attrs.item(iAttr).localName() == "href") href = attrs.item(iAttr).nodeValue();
+    }
+    */
+
+    double width = KoUnit::parseValue( frameElem.attribute("width") );
+    double height = KoUnit::parseValue( frameElem.attribute("height") );
+    int zindex = qMax(0, QVariant( frameElem.attribute("z-index") ).toInt() );
+    QString href = imageElem.attribute("href");
+    kDebug(32500)<<"KoTextLoader::loadImage href="<<href<<" width="<<width<<" height="<<height<<" zindex="<<zindex<<endl;
+
+    if( ! context.store()->hasFile(href) ) {
+        kWarning(32500) << "KoTextLoader::loadImage Picture '" << href << "' not available..." << endl;
+        return;
+    }
+    if( context.store()->isOpen() ) {
+        kWarning(32500) << "KoTextLoader::loadImage Store already reading something" << endl;
+        return;
+    }
+    if( ! context.store()->open(href) ) {
+        kWarning(32500) << "KoTextLoader::loadImage Failed to open the store" << endl;
+        return;
+    }
+
+    KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape"); //PICTURESHAPEID
+    KoShape *shape = factory ? factory->createDefaultShape() : 0;
+    if( ! shape ) {
+        kWarning(32500) << "KoTextLoader::loadImage Failed to create picture shape" << endl;
+    }
+    else {
+
+        //TODO
+        //shape->setPosition( QPointF(200,200) );
+        shape->resize( QSizeF(height,width) );
+        shape->setZIndex(zindex);
+
+        KoShapeLoadingContext shapecontext(context);
+        if( ! shape->loadOdf(imageElem, shapecontext) ) {
+            kWarning(32500) << "Failed to load picture shape" << endl;
+        }
+        else {
+            kDebug(32500)<<"Successful loaded picture shape."<<endl;
+            addShape(shape);
+        }
+    }
+
+    context.store()->close();
+}
 
 //1.6: KoTextParag::loadOasisSpan
 void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor, bool* stripLeadingSpace)

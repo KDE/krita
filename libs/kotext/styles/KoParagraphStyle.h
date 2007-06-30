@@ -125,16 +125,6 @@ public:
         BorderDashDotDotPattern
     };
 
-    /// Text in this paragraph will be positioned according to the direction.
-    enum Direction {
-        AutoDirection,      ///< Take the direction from the text.
-        LeftRightTopBottom, ///< Text layout for most western languages
-        RightLeftTopBottom, ///< Text layout for langauges like Hebrew
-        TopBottomRightLeft,  ///< Vertical text layout.
-        PerhapsLeftRightTopBottom,
-        PerhapsRightLeftTopBottom
-    };
-
     /// Constructor
     KoParagraphStyle();
     /// Copy constructor
@@ -338,8 +328,8 @@ public:
     void setBottomBorderColor(const QColor& color);
     QColor bottomBorderColor();
 
-    Direction textProgressionDirection() const;
-    void setTextProgressionDirection(Direction dir);
+    KoText::Direction textProgressionDirection() const;
+    void setTextProgressionDirection(KoText::Direction dir);
 
     // ************ properties from QTextBlockFormat
     /// duplicated property from QTextBlockFormat

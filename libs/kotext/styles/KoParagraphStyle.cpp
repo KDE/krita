@@ -734,11 +734,11 @@ KoListStyle KoParagraphStyle::listStyle() const {
     return KoListStyle(0); // an invalid one
 }
 
-KoParagraphStyle::Direction KoParagraphStyle::textProgressionDirection() const {
-    return static_cast<Direction> (propertyInt(TextProgressionDirection));
+KoText::Direction KoParagraphStyle::textProgressionDirection() const {
+    return static_cast<KoText::Direction> (propertyInt(TextProgressionDirection));
 }
 
-void KoParagraphStyle::setTextProgressionDirection(KoParagraphStyle::Direction dir) {
+void KoParagraphStyle::setTextProgressionDirection(KoText::Direction dir) {
     setProperty(TextProgressionDirection, dir);
 }
 
@@ -749,13 +749,13 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
         // LTR is lr-tb. RTL is rl-tb
         QString writingMode = styleStack.property( KoXmlNS::style, "writing-mode" );
         if(writingMode == "lr" || writingMode == "lr-tb")
-            setTextProgressionDirection(LeftRightTopBottom);
+            setTextProgressionDirection(KoText::LeftRightTopBottom);
         else if(writingMode == "rl" || writingMode == "rl-tb")
-            setTextProgressionDirection(RightLeftTopBottom);
+            setTextProgressionDirection(KoText::RightLeftTopBottom);
         else if(writingMode == "tb" || writingMode == "tb-rl")
-            setTextProgressionDirection(TopBottomRightLeft);
+            setTextProgressionDirection(KoText::TopBottomRightLeft);
         else
-            setTextProgressionDirection(AutoDirection);
+            setTextProgressionDirection(KoText::AutoDirection);
     }
 
     // Alignment

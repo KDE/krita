@@ -59,6 +59,17 @@ namespace KoText {
 
         bool operator==(const Tab &tab) const;
     };
+
+    /// Text in this object will be positioned according to the direction.
+    enum Direction {
+        AutoDirection,      ///< Take the direction from the text.
+        LeftRightTopBottom, ///< Text layout for most western languages
+        RightLeftTopBottom, ///< Text layout for langauges like Hebrew
+        TopBottomRightLeft,  ///< Vertical text layout.
+        PerhapsLeftRightTopBottom,
+        PerhapsRightLeftTopBottom
+    };
+
 }
 
 Q_DECLARE_METATYPE( KoText::Tab )

@@ -32,10 +32,16 @@ enum selectionType {
     READ_WRITE
 };
 
+enum selectionMode {
+    PIXEL_SELECTION,
+    SHAPE_PROTECTION
+};
+
 enum enumSelectionMode {
     SELECTION_REPLACE,
     SELECTION_ADD,
-    SELECTION_SUBTRACT
+    SELECTION_SUBTRACT,
+    SELECTION_INTERSECT
 };
 
 class KisSelectionComponent;

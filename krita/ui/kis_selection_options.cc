@@ -40,6 +40,7 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * canvas)
     QVBoxLayout * l = new QVBoxLayout(this);
     l->addWidget(m_page);
 
+    connect(m_page->cmbMode, SIGNAL(activated(int)), this, SIGNAL(modeChanged(int)));
     connect(m_page->cmbAction, SIGNAL(activated(int)), this, SIGNAL(actionChanged(int)));
 }
 

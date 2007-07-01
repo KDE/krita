@@ -1156,7 +1156,7 @@ void KisPaintDevice::reselect()
     m_d->selectionDeselected = false;
 }
 
-void KisPaintDevice::addSelection(KisSelectionSP selection) {
+void KisPaintDevice::addSelection(KisPixelSelectionSP selection) {
 
     KisPainter painter(pixelSelection());
     QRect r = selection->selectedExactRect();
@@ -1164,15 +1164,28 @@ void KisPaintDevice::addSelection(KisSelectionSP selection) {
     painter.end();
 }
 
-void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
+void KisPaintDevice::subtractSelection(KisPixelSelectionSP selection) {
     KisPainter painter(pixelSelection());
-    pixelSelection()->invert();
+    selection->invert();
 
     QRect r = selection->selectedExactRect();
     painter.bitBlt(r.x(), r.y(), COMPOSITE_ERASE, KisPaintDeviceSP(selection.data()), r.x(), r.y(), r.width(), r.height());
 
-    pixelSelection()->invert();
+    selection->invert();
     painter.end();
+}
+
+void KisPaintDevice::intersectSelection(KisPixelSelectionSP selection) {
+    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(this));
+
+    KisPainter painter(tmpSel);
+    QRect r = selection->selectedExactRect();
+    painter.bltMask(r.x(), r.y(),  selection->colorSpace()->compositeOp(COMPOSITE_OVER), KisPaintDeviceSP(pixelSelection().data()),
+                    KisPaintDeviceSP(selection.data()), OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+    painter.end();
+
+    pixelSelection()->clear();
+    addSelection(tmpSel);
 }
 
 void KisPaintDevice::clearSelection()

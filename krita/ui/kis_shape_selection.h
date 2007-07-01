@@ -47,6 +47,8 @@ public:
      */
     virtual void renderToProjection(KisSelection* projection);
 
+    virtual void addChild(KoShape* shape);
+
 protected:
     virtual QPainterPath selectionOutline();
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);

@@ -5,25 +5,28 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>224</width>
-    <height>86</height>
+    <width>222</width>
+    <height>105</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>11</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="lblAction" >
+   <item row="2" column="0" colspan="2" >
+    <widget class="QCheckBox" name="chkAntiAliasing" >
      <property name="text" >
-      <string>Action:</string>
+      <string>Anti-aliasing</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
+   <item row="1" column="1" >
     <widget class="QComboBox" name="cmbAction" >
      <item>
       <property name="text" >
@@ -40,16 +43,50 @@
        <string>Subtract</string>
       </property>
      </item>
+     <item>
+      <property name="text" >
+       <string>Intersect</string>
+      </property>
+     </item>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2" >
-    <widget class="QCheckBox" name="chkAntiAliasing" >
+   <item row="1" column="0" >
+    <widget class="QLabel" name="lblAction" >
      <property name="text" >
-      <string>Anti-aliasing</string>
+      <string>Action:</string>
      </property>
-     <property name="checked" >
-      <bool>true</bool>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="lblMode" >
+     <property name="cursor" >
+      <cursor>2</cursor>
      </property>
+     <property name="text" >
+      <string>Mode:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QComboBox" name="cmbMode" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <item>
+      <property name="text" >
+       <string>Pixel Selection</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Vector Selection</string>
+      </property>
+     </item>
     </widget>
    </item>
   </layout>

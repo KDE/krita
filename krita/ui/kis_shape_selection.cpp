@@ -21,6 +21,7 @@
 #include <QPainter>
 #include <QTimer>
 
+#include <KoLineBorder.h>
 #include <KoPathShape.h>
 #include <KoCompositeOp.h>
 #include "kis_painter.h"
@@ -113,6 +114,13 @@ void KisShapeSelection::renderToProjection(KisSelection* projection)
     QMatrix resolutionMatrix;
     resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
     painter.fillPainterPath(resolutionMatrix.map(selectionOutline()));
+}
+
+void KisShapeSelection::addChild(KoShape* shape)
+{
+    shape->setBorder(new KoLineBorder( 0, Qt::lightGray ));
+    shape->setBackground(Qt::NoBrush);
+    KoShapeContainer::addChild(shape);
 }
 
 

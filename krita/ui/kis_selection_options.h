@@ -55,6 +55,7 @@ public:
 
 signals:
     void actionChanged(int);
+    void modeChanged(int);
 
 public slots:
     void slotActivated();

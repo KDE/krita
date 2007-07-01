@@ -49,7 +49,7 @@
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
-#include "kis_selection.h"
+#include "kis_pixel_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterator.h"
@@ -183,8 +183,8 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
     QRect rc = m_selection->selectedExactRect();
 
     // Sets dirty!
-    bltSelection(rc.x(), rc.y(), m_compositeOp, filled, m_selection, m_opacity,
-                 rc.x(), rc.y(), rc.width(), rc.height());
+//     bltSelection(rc.x(), rc.y(), m_compositeOp, filled, m_selection, m_opacity,
+//                  rc.x(), rc.y(), rc.width(), rc.height());
 
     emit notifyProgressDone();
 
@@ -200,7 +200,7 @@ struct FillSegment {
 
 typedef enum { None = 0, Added = 1, Checked = 2 } Status;
 
-KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP projection) {
+KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP projection) {
 
 // XXX: This always returns a rect with x = 0, it seems. That can't be
 // correct! (BSAR)
@@ -217,14 +217,14 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
     // Don't try to fill if we start outside the borders, just return an empty 'fill'
     if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
-        return KisSelectionSP(new KisSelection(m_device));
+        return KisPixelSelectionSP(new KisPixelSelection(m_device));
 
     KisPaintDeviceSP sourceDevice = KisPaintDeviceSP(0);
 
     // sample merged?
     if (m_sampleMerged) {
         if (!projection) {
-            return KisSelectionSP(new KisSelection(m_device));
+            return KisPixelSelectionSP(new KisPixelSelection(m_device));
         }
         sourceDevice = projection;
     } else {
@@ -233,7 +233,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
     m_size = m_width * m_height;
 
-    KisSelectionSP selection = KisSelectionSP(new KisSelection(m_device));
+    KisPixelSelectionSP selection = KisPixelSelectionSP(new KisPixelSelection(m_device));
     KoColorSpace * colorSpace = selection->colorSpace();
     KoColorSpace * devColorSpace = sourceDevice->colorSpace();
 
@@ -254,9 +254,9 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     emit notifyProgressStage(i18n("Making fill outline..."), 0);
 
     bool hasSelection = m_careForSelection && sourceDevice->hasSelection();
-    KisSelectionSP srcSel = KisSelectionSP(0);
+    KisPixelSelectionSP srcSel = KisPixelSelectionSP(0);
     if (hasSelection)
-        srcSel = sourceDevice->selection();
+        srcSel = sourceDevice->pixelSelection();
 
     while(!stack.empty()) {
         FillSegment* segment = stack.top();

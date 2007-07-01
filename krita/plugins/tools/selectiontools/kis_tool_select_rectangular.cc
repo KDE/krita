@@ -33,7 +33,7 @@
 #include <KoShapeController.h>
 #include <KoPathShape.h>
 #include <KoShapeManager.h>
-#include <KoLineBorder.h>
+#include <KoShapeRegistry.h>
 
 #include "kis_cursor.h"
 #include "kis_image.h"
@@ -46,6 +46,7 @@
 #include <kis_selected_transaction.h>
 #include "kis_canvas2.h"
 #include "kis_shape_selection.h"
+#include "kis_pixel_selection.h"
 
 KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6))
@@ -56,6 +57,7 @@ KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
     m_endPos = QPointF(0, 0);
     m_optWidget = 0;
     m_selectAction = SELECTION_REPLACE;
+    m_selectionMode = PIXEL_SELECTION;
 }
 
 KisToolSelectRectangular::~KisToolSelectRectangular()
@@ -80,17 +82,12 @@ void KisToolSelectRectangular::paint(QPainter& gc, const KoViewConverter &conver
     gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
     if (m_selecting) {
         QPen old = gc.pen();
-        QPen pen(Qt::DashLine);
-        QPoint start;
-        QPoint end;
+        gc.setPen(Qt::DashLine);
 
-        gc.setPen(pen);
+        QRectF rectangle(m_startPos.x(), m_startPos.y(), m_endPos.x() - m_startPos.x(), m_endPos.y() - m_startPos.y());
+        gc.drawRect(rectangle);
 
-        start = QPoint(static_cast<int>(m_startPos.x()), static_cast<int>(m_startPos.y()));
-        end = QPoint(static_cast<int>(m_endPos.x()), static_cast<int>(m_endPos.y()));
-        gc.drawRect(QRect(start, end));
         gc.setPen(old);
-
     }
 }
 
@@ -165,47 +162,51 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
         bound.setBottomRight(m_endPos);
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
 
-#if 0
         if (m_startPos == m_endPos) {
             clearSelection();
-        } else {
+            m_selecting = false;
+            return;
+        }
 
-            if (!m_currentImage)
-                return;
+    //                 QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-            if (m_endPos.y() < 0)
-                m_endPos.setY(0);
+        if (!m_currentImage)
+            return;
 
-            if (m_endPos.y() > m_currentImage->height())
-                m_endPos.setY(m_currentImage->height());
+        if (m_endPos.y() < 0)
+            m_endPos.setY(0);
 
-            if (m_endPos.x() < 0)
-                m_endPos.setX(0);
+        if (m_endPos.y() > m_currentImage->height())
+            m_endPos.setY(m_currentImage->height());
 
-            if (m_endPos.x() > m_currentImage->width())
-                m_endPos.setX(m_currentImage->width());
-            if (m_currentImage && m_currentLayer->paintDevice()) {
+        if (m_endPos.x() < 0)
+            m_endPos.setX(0);
 
-//                 QApplication::setOverrideCursor(KisCursor::waitCursor());
-                KisPaintDeviceSP dev = m_currentLayer->paintDevice();
-                bool hasSelection = dev->hasSelection();
+        if (m_endPos.x() > m_currentImage->width())
+            m_endPos.setX(m_currentImage->width());
 
+        if (m_currentImage && m_currentLayer->paintDevice()) {
+
+            KisPaintDeviceSP dev = m_currentLayer->paintDevice();
+            bool hasSelection = dev->hasSelection();
+            QRect rc(m_startPos.toPoint(), m_endPos.toPoint());
+            rc = rc.normalized();
+
+            if(m_selectionMode == PIXEL_SELECTION){
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);
-                KisSelectionSP selection = dev->selection();
-                QRect rc(m_startPos.toPoint(), m_endPos.toPoint());
-                rc = rc.normalized();
+                KisPixelSelectionSP pixelSelection = dev->pixelSelection();
 
                 // We don't want the border of the 'rectangle' to be included in our selection
                 rc.setSize(rc.size() - QSize(1,1));
 
                 if(! hasSelection || m_selectAction == SELECTION_REPLACE)
                 {
-                    selection->clear();
+                    pixelSelection->clear();
                     if(m_selectAction==SELECTION_SUBTRACT)
-                        selection->invert();
+                        pixelSelection->invert();
                 }
 
-                KisSelectionSP tmpSel = KisSelectionSP(new KisSelection(dev));
+                KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
                 tmpSel->select(rc);
                 switch(m_selectAction)
                 {
@@ -216,56 +217,65 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                     case SELECTION_SUBTRACT:
                         dev->subtractSelection(tmpSel);
                         break;
+                    case SELECTION_INTERSECT:
+                        dev->intersectSelection(tmpSel);
+                        break;
                     default:
                         break;
                 }
-
-
-                if(hasSelection && m_selectAction != SELECTION_REPLACE) {
-                    dev->setDirty(rc);
-                    dev->emitSelectionChanged(rc);
-                } else {
-                    dev->setDirty();
-                    dev->emitSelectionChanged();
-                }
-
                 m_canvas->addCommand(t);
             }
+            else {
+                QRectF documentRect = convertToPt(bound);
+
+                KoShape* shape;
+                KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoRectangleShape");
+                if(rectFactory) {
+                    shape = rectFactory->createDefaultShape();
+                    shape->resize(documentRect.size());
+                    shape->setPosition(documentRect.topLeft());
+                }
+                else {
+                    //Fallback if the plugin wasn't found
+                    KoPathShape* path = new KoPathShape();
+                    path->setShapeId( KoPathShapeId );
+                    path->moveTo( documentRect.topLeft() );
+                    path->lineTo( documentRect.topLeft() + QPointF(documentRect.width(), 0) );
+                    path->lineTo( documentRect.bottomRight() );
+                    path->lineTo( documentRect.topLeft() + QPointF(0, documentRect.height()) );
+                    path->close();
+                    path->normalize();
+                    shape = path;
+                }
+
+                KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
+                Q_ASSERT(canvas);
+                KisSelectionSP selection = dev->selection();
+
+                KisShapeSelection* shapeSelection;
+                if(!selection->hasShapeSelection()) {
+                    shapeSelection = new KisShapeSelection(m_currentImage);
+                    canvas->globalShapeManager()->add(shapeSelection);
+                    selection->setShapeSelection(shapeSelection);
+                }
+                else {
+                    shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+                }
+
+        //         QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
+        //                 m_canvas->addCommand(cmd);
+                shapeSelection->addChild(shape);
+                canvas->globalShapeManager()->add(shape);
+            }
+
+            if(hasSelection && m_selectAction != SELECTION_REPLACE) {
+                dev->setDirty(rc);
+                dev->emitSelectionChanged(rc);
+            } else {
+                dev->setDirty();
+                dev->emitSelectionChanged();
+            }
         }
-#endif
-        KoPathShape* path = new KoPathShape();
-        path->setShapeId( KoPathShapeId );
-        QRectF bound2 = convertToPt(bound);
-        path->moveTo( bound2.topLeft() );
-        path->lineTo( bound2.topLeft() + QPointF(bound2.width(), 0) );
-        path->lineTo( bound2.bottomRight() );
-        path->lineTo( bound2.topLeft() + QPointF(0, bound2.height()) );
-        path->close();
-        path->normalize();
-        path->setBorder( new KoLineBorder( 0, Qt::lightGray ) );
-        KisPaintDeviceSP dev = m_currentLayer->paintDevice();
-
-        KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
-        Q_ASSERT(canvas);
-        KisSelectionSP selection = dev->selection();
-
-        KisShapeSelection* shapeSelection;
-        if(!selection->hasShapeSelection()) {
-            shapeSelection = new KisShapeSelection(m_currentImage);
-            canvas->globalShapeManager()->add(shapeSelection);
-            selection->setShapeSelection(shapeSelection);
-        }
-        else {
-            shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
-        }
-
-//         QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
-//                 m_canvas->addCommand(cmd);
-        shapeSelection->addChild(path);
-        canvas->globalShapeManager()->add(path);
-
-        dev->emitSelectionChanged();
-
         m_selecting = false;
     }
 }
@@ -273,6 +283,10 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
 void KisToolSelectRectangular::slotSetAction(int action) {
     if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
         m_selectAction =(enumSelectionMode)action;
+}
+
+void KisToolSelectRectangular::slotSetSelectionMode(int mode) {
+    m_selectionMode = (selectionMode)mode;
 }
 
 QWidget* KisToolSelectRectangular::createOptionWidget()
@@ -284,7 +298,9 @@ QWidget* KisToolSelectRectangular::createOptionWidget()
     m_optWidget->setWindowTitle(i18n("Rectangular Selection"));
     m_optWidget->disableAntiAliasSelectionOption();
 
-    connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+    connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+    connect(m_optWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
+
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);

@@ -52,6 +52,7 @@ public:
 
 public slots:
     virtual void slotSetAction(int);
+    virtual void slotSetSelectionMode(int);
     virtual void activate();
 
 private:
@@ -64,6 +65,7 @@ private:
     bool m_selecting;
     KisSelectionOptions * m_optWidget;
     enumSelectionMode m_selectAction;
+    selectionMode m_selectionMode;
 
 };
 

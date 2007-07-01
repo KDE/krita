@@ -97,7 +97,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         KisFillPainter fillpainter(dev);
         fillpainter.setFillThreshold(m_fuzziness);
         fillpainter.setSampleMerged(m_sampleMerged);
-        KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), m_currentImage->mergedImage() );
+        KisPixelSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), m_currentImage->mergedImage() );
         KisSelectedTransaction *t = 0;
         if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
 

@@ -46,7 +46,7 @@ class IteratorBase : public QObject
         IteratorBase(QObject* parent) : QObject(parent) {
             setObjectName("KritaIterator");
             // Connect the Monitor to know when the invalidating of iterator is needed
-            connect(Monitor::instance(), SIGNAL(signalExecutionFinished()), this, SLOT(invalidate()));
+            connect(Monitor::instance(), SIGNAL(signalExecutionFinished()), this, SLOT(invalidateIterator()));
         }
         virtual ~IteratorBase() {}
 
@@ -129,12 +129,8 @@ class IteratorBase : public QObject
          */
         virtual void darken(int shade, bool compensate, double compensation) = 0;
 
-    private slots:
+    protected slots:
         virtual void invalidateIterator() = 0;
-        void invalidate() {
-            kDebug()<<"########################################################## INVALID ITERATOR"<<endl;
-            invalidateIterator();
-        }
 };
 
 /**

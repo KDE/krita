@@ -97,15 +97,11 @@ ScriptingPart::~ScriptingPart()
 
 void ScriptingPart::myStarted(Kross::Action*)
 {
-    kDebug(41011) << "1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    kDebug(41011) << "ScriptingPart::myStarted" << endl;
     Scripting::Monitor::instance()->started();
 }
 
 void ScriptingPart::myFinished(Kross::Action*)
 {
-    kDebug(41011) << "222 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    kDebug(41011) << "ScriptingPart::myFinished" << endl;
 #if 0
 //     kDebug() << "ScriptingPart::executionFinished" << endl;
     d->view->document()->setModified(true);

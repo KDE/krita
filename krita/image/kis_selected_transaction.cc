@@ -19,13 +19,14 @@
 #include "kis_global.h"
 #include "kis_selected_transaction.h"
 #include "kis_selection.h"
+#include "kis_pixel_selection.h"
 
 KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent) :
     KisTransaction(name, device, parent),
     m_device(device),
     m_hadSelection(device->hasSelection())
 {
-    m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(device->selection().data()));
+    m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(device->pixelSelection().data()));
     if(! m_hadSelection) {
         m_device->deselect(); // let us not be the cause of select
     }

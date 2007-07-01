@@ -255,17 +255,17 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                 KisShapeSelection* shapeSelection;
                 if(!selection->hasShapeSelection()) {
                     shapeSelection = new KisShapeSelection(m_currentImage);
-                    canvas->globalShapeManager()->add(shapeSelection);
+                    QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
+                    cmd->redo();
                     selection->setShapeSelection(shapeSelection);
                 }
                 else {
                     shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
                 }
-
-        //         QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
-        //                 m_canvas->addCommand(cmd);
+                shape->setParent(shapeSelection);
+                QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
+                m_canvas->addCommand(cmd);
                 shapeSelection->addChild(shape);
-                canvas->globalShapeManager()->add(shape);
             }
 
             if(hasSelection && m_selectAction != SELECTION_REPLACE) {

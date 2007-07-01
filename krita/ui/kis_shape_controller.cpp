@@ -28,6 +28,7 @@
 #include <KoView.h>
 #include <KoSelection.h>
 #include <KoShapeLayer.h>
+#include <KoPathShape.h>
 
 #include "kis_adjustment_layer.h"
 #include "kis_clone_layer.h"
@@ -150,7 +151,8 @@ void KisShapeController::removeShape( KoShape* shape )
     if ( shape->shapeId() == KIS_LAYER_SHAPE_ID
          || shape->shapeId() == KIS_SHAPE_LAYER_ID
          || shape->shapeId() == KIS_LAYER_CONTAINER_ID
-         || shape->shapeId() == KIS_MASK_SHAPE_ID )
+         || shape->shapeId() == KIS_MASK_SHAPE_ID
+         || shape->shapeId() == KoPathShapeId)  // selection shapes
     {
         foreach( KoView *view, m_d->doc->views() ) {
             KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
@@ -164,7 +166,6 @@ void KisShapeController::removeShape( KoShape* shape )
 
 void KisShapeController::addShape( KoShape* shape )
 {
-
     // Only non-krita shapes get added through this method; krita
     // layer shapes are added to kisimage and then end up in
     // slotLayerAdded
@@ -190,6 +191,8 @@ void KisShapeController::addShape( KoShape* shape )
         kDebug() << "shape parent: " << shape->parent() << endl;
         kDebug() << "shape layer: " << shapeLayer << endl;
 
+//TODO this doesn't work with shape selections
+#if 0
         if ( !shapeLayer ) {
             // There is no parent layer set, which means that when
             // dropping, there was no shape layer active. Create one
@@ -209,10 +212,16 @@ void KisShapeController::addShape( KoShape* shape )
 
             m_d->image->addLayer( shapeLayer, m_d->image->rootLayer());
         }
+#endif
         // XXX: What happens if the shape is added embedded in another
         // shape?
         if ( shapeLayer )
             shapeLayer->addChild( shape );
+
+        foreach( KoView *view, m_d->doc->views() ) {
+            KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();
+            canvas->globalShapeManager()->add(shape);
+        }
     }
     else {
         kWarning() << "Eeek -- we tried to add a krita layer shape without going through KisImage" << endl;

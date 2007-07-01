@@ -720,6 +720,8 @@ void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& 
     }
     */
 
+    double x = KoUnit::parseValue( frameElem.attribute("x") );
+    double y = KoUnit::parseValue( frameElem.attribute("y") );
     double width = KoUnit::parseValue( frameElem.attribute("width") );
     double height = KoUnit::parseValue( frameElem.attribute("height") );
     int zindex = qMax(0, QVariant( frameElem.attribute("z-index") ).toInt() );
@@ -739,16 +741,16 @@ void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& 
         return;
     }
 
+    //TODO we are on the wrong frame
+
     KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape"); //PICTURESHAPEID
     KoShape *shape = factory ? factory->createDefaultShape() : 0;
     if( ! shape ) {
         kWarning(32500) << "KoTextLoader::loadImage Failed to create picture shape" << endl;
     }
     else {
-
-        //TODO
-        //shape->setPosition( QPointF(200,200) );
-        shape->resize( QSizeF(height,width) );
+        shape->setPosition( QPointF(x,y) );
+        shape->resize( QSizeF(width,height) );
         shape->setZIndex(zindex);
 
         KoShapeLoadingContext shapecontext(context);

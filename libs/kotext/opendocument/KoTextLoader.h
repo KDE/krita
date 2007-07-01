@@ -44,6 +44,8 @@
 class KoTextLoadingContext;
 class KoStyleManager;
 class KoShape;
+class KoImageCollection;
+class KoImageData;
 
 //class QDomDocument;
 class QTextCursor;
@@ -143,6 +145,11 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
         */
         virtual void loadImage(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
 
+        /**
+        * Load the image and return a KoShape instance for it.
+        */
+        virtual KoShape* loadImage(KoTextLoadingContext& context, const QString& href);
+
     protected:
 
         /**
@@ -159,11 +166,6 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
         * This is called in loadBody once the body was readed.
         */
         virtual void endBody() {}
-
-        /**
-        * This is called if a new shape was added.
-        */
-        virtual void addShape(KoShape* shape) = 0;
 
     private:
         /// \internal d-pointer class.

@@ -37,6 +37,7 @@
 #include <KoShapeFactory.h>
 #include <KoShape.h>
 #include <KoShapeLoadingContext.h>
+#include <KoImageData.h>
 
 #include "../styles/KoStyleManager.h"
 #include "../styles/KoParagraphStyle.h"
@@ -720,13 +721,9 @@ void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& 
     }
     */
 
-    double x = KoUnit::parseValue( frameElem.attribute("x") );
-    double y = KoUnit::parseValue( frameElem.attribute("y") );
-    double width = KoUnit::parseValue( frameElem.attribute("width") );
-    double height = KoUnit::parseValue( frameElem.attribute("height") );
-    int zindex = qMax(0, QVariant( frameElem.attribute("z-index") ).toInt() );
+    const KoXmlElement elem = frameElem;
     QString href = imageElem.attribute("href");
-    kDebug(32500)<<"KoTextLoader::loadImage href="<<href<<" width="<<width<<" height="<<height<<" zindex="<<zindex<<endl;
+    kDebug(32500)<<"KoTextLoader::loadImage href="<<href<<endl;
 
     if( ! context.store()->hasFile(href) ) {
         kWarning(32500) << "KoTextLoader::loadImage Picture '" << href << "' not available..." << endl;
@@ -741,29 +738,26 @@ void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& 
         return;
     }
 
-    //TODO we are on the wrong frame
-
-    KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape"); //PICTURESHAPEID
-    KoShape *shape = factory ? factory->createDefaultShape() : 0;
+    KoShape* shape = loadImage(context, href);
     if( ! shape ) {
         kWarning(32500) << "KoTextLoader::loadImage Failed to create picture shape" << endl;
     }
     else {
-        shape->setPosition( QPointF(x,y) );
-        shape->resize( QSizeF(width,height) );
-        shape->setZIndex(zindex);
-
         KoShapeLoadingContext shapecontext(context);
-        if( ! shape->loadOdf(imageElem, shapecontext) ) {
+        if( ! shape->loadOdf(elem, shapecontext) ) {
             kWarning(32500) << "Failed to load picture shape" << endl;
         }
         else {
             kDebug(32500)<<"Successful loaded picture shape."<<endl;
-            addShape(shape);
         }
     }
 
     context.store()->close();
+}
+
+KoShape* KoTextLoader::loadImage(KoTextLoadingContext&, const QString&)
+{
+    return 0;
 }
 
 //1.6: KoTextParag::loadOasisSpan

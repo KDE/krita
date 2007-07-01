@@ -114,7 +114,7 @@ protected:
      * @param shape The shape for which the page should be found
      * @return The page on which the shape is located
      */
-    KoPAPageBase * getPage( KoShape * shape ) const;
+    KoPAPageBase * pageByShape( KoShape * shape ) const;
 
 private:
     QList<KoPAPageBase*> m_pages;

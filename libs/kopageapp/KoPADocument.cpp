@@ -287,7 +287,7 @@ void KoPADocument::addShape( KoShape * shape )
     if(!shape)
         return;
 
-    KoPAPageBase * page( getPage( shape ) );
+    KoPAPageBase * page( pageByShape( shape ) );
 
     bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0; 
 
@@ -312,7 +312,7 @@ void KoPADocument::removeShape( KoShape *shape )
     if(!shape)
         return;
 
-    KoPAPageBase * page( getPage( shape ) );
+    KoPAPageBase * page( pageByShape( shape ) );
 
     bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0; 
 
@@ -331,7 +331,7 @@ void KoPADocument::removeShape( KoShape *shape )
     }
 }
 
-KoPAPageBase * KoPADocument::getPage( KoShape * shape ) const
+KoPAPageBase * KoPADocument::pageByShape( KoShape * shape ) const
 {
     KoShape * parent = shape;
     KoPAPageBase * page = 0;

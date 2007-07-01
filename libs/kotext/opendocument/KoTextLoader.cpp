@@ -598,7 +598,7 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
     }
     */
     int endPosition = cursor.position();
-    cursor.setPosition(prev.previous().position());
+    cursor.setPosition(list->item(0).position());
     cursor.deleteChar();
     cursor.setPosition(endPosition - 1);
     /*

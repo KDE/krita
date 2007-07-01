@@ -57,6 +57,7 @@ private:
     bool m_top, m_left, m_bottom, m_right;
     double m_initialSelectionAngle;
     QMatrix m_shearMatrix;
+    bool m_isMirrored;
 };
 
 #endif /* KOSHAPESHEARSTRATEGY_H */

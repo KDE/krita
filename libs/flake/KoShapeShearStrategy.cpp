@@ -39,7 +39,8 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
 : KoInteractionStrategy(tool, canvas)
 , m_start(clicked)
 {
-    QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
+    KoSelection * sel = canvas->shapeManager()->selection();
+    QList<KoShape*> selectedShapes = sel->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
         if( ! isEditable( shape ) )
             continue;
@@ -67,7 +68,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
         default:
             ;// throw exception ?  TODO
     }
-    m_initialSize = canvas->shapeManager()->selection()->size();
+    m_initialSize = sel->size();
     m_solidPoint = QPointF( m_initialSize.width() / 2, m_initialSize.height() / 2);
 
     if(m_top)
@@ -79,7 +80,6 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
     else if(m_right)
         m_solidPoint -= QPointF(m_initialSize.width() / 2, 0);
 
-    KoSelection * sel = canvas->shapeManager()->selection();
     QPointF edge;
     double angle = 0.0;
     if( m_top )
@@ -107,6 +107,12 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
 
     kDebug(30006) << " PREsol.x=" << m_solidPoint.x() << " sol.y=" << m_solidPoint.y() <<endl;
     m_solidPoint = canvas->shapeManager()->selection()->transformationMatrix(0).map( m_solidPoint );
+
+    // use crossproduct of top edge and left edge of selection bounding rect
+    // to determine if the selection is mirrored
+    QPointF top = sel->absolutePosition( KoFlake::TopRightCorner ) - sel->absolutePosition( KoFlake::TopLeftCorner );
+    QPointF left = sel->absolutePosition( KoFlake::BottomLeftCorner ) - sel->absolutePosition( KoFlake::TopLeftCorner );
+    m_isMirrored = (top.x()*left.y() - top.y()*left.x() ) < 0.0;
 }
 
 void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
@@ -126,6 +132,13 @@ void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMod
         shearX = shearVector.x() / m_initialSize.height();
     if(m_left || m_right)
         shearY = shearVector.y() / m_initialSize.width();
+
+    // if selection is mirrored invert the shear values
+    if( m_isMirrored )
+    {
+        shearX *= -1.0;
+        shearY *= -1.0;
+    }
 
     QMatrix matrix;
     matrix.translate(m_solidPoint.x(), m_solidPoint.y());

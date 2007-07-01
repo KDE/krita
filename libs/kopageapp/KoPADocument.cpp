@@ -287,12 +287,7 @@ void KoPADocument::addShape( KoShape * shape )
     if(!shape)
         return;
 
-    KoShape * parent = shape;
-    KoPAPageBase * page = 0;
-    while ( !page && ( parent = parent->parent() ) )
-    {
-        page = dynamic_cast<KoPAPageBase*>( parent );
-    }
+    KoPAPageBase * page( getPage( shape ) );
 
     bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0; 
 
@@ -317,12 +312,7 @@ void KoPADocument::removeShape( KoShape *shape )
     if(!shape)
         return;
 
-    KoShape * parent = shape;
-    KoPAPageBase * page = 0;
-    while ( !page && ( parent = parent->parent() ) )
-    {
-        page = dynamic_cast<KoPAPageBase*>( parent );
-    }
+    KoPAPageBase * page( getPage( shape ) );
 
     bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0; 
 
@@ -339,6 +329,17 @@ void KoPADocument::removeShape( KoShape *shape )
             }
         }
     }
+}
+
+KoPAPageBase * KoPADocument::getPage( KoShape * shape ) const
+{
+    KoShape * parent = shape;
+    KoPAPageBase * page = 0;
+    while ( !page && ( parent = parent->parent() ) )
+    {
+        page = dynamic_cast<KoPAPageBase*>( parent );
+    }
+    return page;
 }
 
 void KoPADocument::insertPage( KoPAPageBase* page, int index )

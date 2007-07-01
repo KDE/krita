@@ -108,6 +108,14 @@ protected:
     void saveOdfAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, bool stylesDotXml );
     void saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyles, QFile *masterStyles );
 
+    /**
+     * Get the page on which the shape is located
+     *
+     * @param shape The shape for which the page should be found
+     * @return The page on which the shape is located
+     */
+    KoPAPageBase * getPage( KoShape * shape ) const;
+
 private:
     QList<KoPAPageBase*> m_pages;
     QList<KoPAPageBase*> m_masterPages;

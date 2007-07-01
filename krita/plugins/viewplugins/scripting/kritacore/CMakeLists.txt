@@ -7,13 +7,14 @@ set(krossmodulekrita_LIB_SRCS
    krs_filter.cpp
    krs_histogram.cpp
    krs_image.cpp
-   krs_module.cpp
    krs_paint_device.cpp
    krs_paint_layer.cpp
    krs_pattern.cpp
    krs_painter.cpp
-   krs_progress.cpp
    krs_wavelet.cpp
+   krs_module.cpp
+   krs_progress.cpp
+   krs_monitor.cpp
    )
 
 kde4_automoc(${krossmodulekrita_LIB_SRCS})

@@ -52,6 +52,7 @@
 #include <kis_doc2.h>
 // kritacore
 #include "kritacore/krs_module.h"
+#include "kritacore/krs_monitor.h"
 #include "kritacore/krs_progress.h"
 #include "kis_layer_manager.h"
 
@@ -94,12 +95,17 @@ ScriptingPart::~ScriptingPart()
     delete d;
 }
 
-void ScriptingPart::started(Kross::Action*)
+void ScriptingPart::myStarted(Kross::Action*)
 {
+    kDebug(41011) << "1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    kDebug(41011) << "ScriptingPart::myStarted" << endl;
+    Scripting::Monitor::instance()->started();
 }
 
-void ScriptingPart::finished(Kross::Action*)
+void ScriptingPart::myFinished(Kross::Action*)
 {
+    kDebug(41011) << "222 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    kDebug(41011) << "ScriptingPart::myFinished" << endl;
 #if 0
 //     kDebug() << "ScriptingPart::executionFinished" << endl;
     d->view->document()->setModified(true);
@@ -111,6 +117,8 @@ void ScriptingPart::finished(Kross::Action*)
     QApplication::restoreOverrideCursor();
     //d->module->deleteLater();
 #endif
+
+    Scripting::Monitor::instance()->finished();
 }
 
 #include "scriptingpart.moc"

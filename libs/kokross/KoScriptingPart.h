@@ -107,6 +107,11 @@ class KOKROSS_EXPORT KoScriptingPart : public KParts::Plugin
         */
         virtual void slotFinalized(Kross::Action*);
 
+    protected:
+        virtual void myStarted(Kross::Action*) {}
+        virtual void myFinished(Kross::Action*) {}
+        virtual void myFinalized(Kross::Action*) {}
+
     private:
         /// \internal d-pointer class.
         class Private;

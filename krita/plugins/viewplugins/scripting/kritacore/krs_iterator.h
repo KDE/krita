@@ -29,11 +29,10 @@
 
 #include "krs_paint_device.h"
 #include "krs_const_iterator.h"
+#include "krs_monitor.h"
 
 #include <kis_paint_device.h>
 #include <kis_types.h>
-
-//#include "../scriptingmonitor.h"
 
 namespace Scripting {
 
@@ -47,7 +46,7 @@ class IteratorBase : public QObject
         IteratorBase(QObject* parent) : QObject(parent) {
             setObjectName("KritaIterator");
             // Connect the Monitor to know when the invalidating of iterator is needed
-            //connect(ScriptingMonitor::instance(), SIGNAL(executionFinished(const Kross::Api::ScriptAction* )), this, SLOT(invalidate()));
+            connect(Monitor::instance(), SIGNAL(signalExecutionFinished()), this, SLOT(invalidate()));
         }
         virtual ~IteratorBase() {}
 
@@ -132,6 +131,10 @@ class IteratorBase : public QObject
 
     private slots:
         virtual void invalidateIterator() = 0;
+        void invalidate() {
+            kDebug()<<"########################################################## INVALID ITERATOR"<<endl;
+            invalidateIterator();
+        }
 };
 
 /**

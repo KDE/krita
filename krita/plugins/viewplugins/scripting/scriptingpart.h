@@ -33,9 +33,9 @@ class ScriptingPart : public KoScriptingPart
     public:
         ScriptingPart(QObject *parent, const QStringList &);
         virtual ~ScriptingPart();
-    private slots:
-        void started(Kross::Action*);
-        void finished(Kross::Action*);
+    private:
+        virtual void myStarted(Kross::Action*);
+        virtual void myFinished(Kross::Action*);
     private:
         class Private;
         Private* const d;

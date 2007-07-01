@@ -203,15 +203,21 @@ void KoScriptingPart::slotStarted(Kross::Action* action)
     if( view && mainwin && view->shell() == mainwin && view == mainwin->rootView() ) {
         action->addObject( d->module );
         d->actions.append( action );
+        connect(action, SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
         connect(action, SIGNAL(finalized(Kross::Action*)), this, SLOT(slotFinalized(Kross::Action*)));
+        myStarted(action);
     }
 }
 
 void KoScriptingPart::slotFinished(Kross::Action* action)
 {
     kDebug(32010) << "KoScriptingPart::slotFinished action=" << action->objectName() << endl;
-    //d->view->document()->setModified(true);
-    //QApplication::restoreOverrideCursor();
+    disconnect(action, SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
+    if( d->module && d->module == action->object( d->module->objectName() ) ) {
+        //d->view->document()->setModified(true);
+        //QApplication::restoreOverrideCursor();
+        myFinished(action);
+    }
 }
 
 void KoScriptingPart::slotFinalized(Kross::Action* action)
@@ -229,6 +235,7 @@ void KoScriptingPart::slotFinalized(Kross::Action* action)
                     KMessageBox::detailedError(view, action->errorMessage(), action->errorTrace());
             }
         }
+        myFinalized(action);
     }
 }
 

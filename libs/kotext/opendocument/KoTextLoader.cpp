@@ -537,7 +537,7 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
 
     // Set the style and create the textlist
     QTextListFormat listformat;
-    QTextList* list = cursor.insertList(listformat);
+    QTextList* list = cursor.createList(listformat);
 
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug(32500)<<"KoTextLoader::loadList styleName="<<styleName<<" listStyle="<<(listStyle ? listStyle->name() : "NULL")
@@ -557,6 +557,7 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
     KoXmlElement e;
     forEachElement(e, parent) {
         if( e.isNull() ) continue;
+        if( ( e.tagName() != "list-item" ) || ( e.namespaceURI() != KoXmlNS::text ) ) continue;
         /*
         //TODO handle also the other item properties
         if( e.hasAttributeNS( KoXmlNS::text, "start-value" ) ) {
@@ -571,12 +572,11 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
 
         //listStyle->applyStyle(cursor.block(), level + 1);
         //listStyle->applyStyle(cursor.block());
-
         QTextBlock current = cursor.block();
         list->add(current);
-
+        
         loadBody(context, e, cursor);
-
+        
         if( ! listStyle->hasPropertiesForLevel(level) ) { // set default style
             KoListLevelProperties props;
             props.setStyle(KoListStyle::DecimalItem);
@@ -597,8 +597,10 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
         listStyle->applyStyle(b, level);
     }
     */
-    list->removeItem(0); // remove the first dummy item again
-
+    int endPosition = cursor.position();
+    cursor.setPosition(prev.previous().position());
+    cursor.deleteChar();
+    cursor.setPosition(endPosition - 1);
     /*
     // Get the matching paragraph style
     //QString userStyleName = context.styleStack().userStyleName( "paragraph" );

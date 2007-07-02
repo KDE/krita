@@ -7,8 +7,9 @@ include_directories( ${QCA2_INCLUDE_DIR} )
 add_definitions( -DQCA2 )
 endif( QCA2_FOUND )
 
-
-add_subdirectory( tests )
+if(KDE4_BUILD_TESTS)
+    add_subdirectory( tests )
+endif(KDE4_BUILD_TESTS)
 
 ########### next target ###############
 

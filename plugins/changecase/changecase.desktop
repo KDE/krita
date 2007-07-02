@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Change case plugin
-Name[x-test]=xxChange case pluginxx
 ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service
 X-KoText-Version=1

@@ -23,13 +23,11 @@
 
 #include <WeaverInterface.h>
 
-#include <QVariant>
-
 class KoAction::Private {
 public:
     Private()
         :policy(KoExecutePolicy::simpleQueuedPolicy),
-        weaver(0),
+        weaver(ThreadWeaver::Weaver::instance()),
         enabled(true)
     {
         jobsQueue = new KoJobsListPolicy();
@@ -54,10 +52,6 @@ KoAction::KoAction(QObject *parent)
 
 KoAction::~KoAction() {
     delete d;
-}
-
-void KoAction::execute() {
-    execute(0);
 }
 
 void KoAction::execute(const QVariant &params) {

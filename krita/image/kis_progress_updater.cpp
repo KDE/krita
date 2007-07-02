@@ -34,7 +34,6 @@ KisProgressUpdater::KisProgressUpdater(QProgressBar *progressBar)
 
     m_action = new KoAction(this);
     m_action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
-    m_action->setWeaver(ThreadWeaver::Weaver::instance());
     connect(m_action, SIGNAL(triggered(const QVariant &)), SLOT(update()));
     connect(m_action, SIGNAL(updateUi(const QVariant &)), SLOT(updateUi()));
 }

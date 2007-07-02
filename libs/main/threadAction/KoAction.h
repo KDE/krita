@@ -16,12 +16,14 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef TW_ACTION_H
-#define TW_ACTION_H
+#ifndef KO_ACTION_H
+#define KO_ACTION_H
 
 #include <ThreadWeaver.h>
 
-#include <kofficecore_export.h>
+#include "kofficecore_export.h"
+
+#include <QVariant>
 
 class KoExecutePolicy;
 
@@ -120,16 +122,10 @@ public slots:
     /**
      * Call this to request the action to be executed. The request will be handled
      * according to the current ExecutePolicy
-     */
-    void execute();
-
-    /**
-     * Call this to request the action to be executed. The request will be handled
-     * according to the current ExecutePolicy
      * @param params a variant with a parameter that will be emitted in the
      * triggered() and updateUi() signals.
      */
-    void execute(const QVariant &params);
+    void execute(const QVariant &params = QVariant());
 
 private:
     friend class ActionJob;

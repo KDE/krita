@@ -34,7 +34,8 @@ namespace KoText {
     KOTEXT_EXPORT QStringList underlineStyleList();
 
     enum Options {
-        ShowTextFrames =  278622039
+        ShowTextFrames =  278622039,
+        BidiDocument = 493038196
     };
 
     /// enum for a type of tabulator used

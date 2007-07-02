@@ -832,6 +832,17 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
         {
             cursor.insertText( "\t" );
         }
+        else if ( isTextNS && localName == "a" ) // text:a
+        {
+            QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
+            QTextCharFormat linkCf = cursor.charFormat(); // and copy it to alter it
+            linkCf.setAnchor(true);
+            linkCf.setAnchorHref(ts.attributeNS(KoXmlNS::xlink, "href"));
+            linkCf.setFontItalic(true);
+            cursor.setCharFormat(linkCf);
+            loadSpan(context, ts, cursor, stripLeadingSpace); // recurse
+            cursor.setCharFormat(cf); // restore the cursor char format
+        }
         else if ( isTextNS && localName == "line-break" ) // text:line-break
         {
             #ifdef KOOPENDOCUMENTLOADER_DEBUG

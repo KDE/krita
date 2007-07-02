@@ -127,7 +127,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
 
 int main( int argc, char **argv )
 {
-    KCmdLineArgs::init( argc, argv, "storage_test2", "Storage Test 2", "A test for the KoStore classes, in particular a Krita-induced bug testcase", "1" );
+    KCmdLineArgs::init( argc, argv, "storage_test2", 0, ki18n("Storage Test 2"), "1" , ki18n("A test for the KoStore classes, in particular a Krita-induced bug testcase"));
     //KApplication::disableAutoDcopRegistration();
     KApplication app(false);
 

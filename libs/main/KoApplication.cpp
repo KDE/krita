@@ -36,14 +36,6 @@
 
 void qt_generate_epsf( bool b );
 
-static const KCmdLineOptions options[]=
-{
-	{"print", I18N_NOOP("Only print and exit"),0},
-	{"template", I18N_NOOP("Open a new document with a template"), 0},
-	{"dpi <dpiX,dpiY>", I18N_NOOP("Override display DPI"), 0},
-	KCmdLineLastOption
-};
-
 bool KoApplication::m_starting = true;
 
 class KoApplicationPrivate
@@ -78,7 +70,12 @@ KoApplication::KoApplication()
 // This gets called before entering KApplication::KApplication
 bool KoApplication::initHack()
 {
-    KCmdLineArgs::addCmdLineOptions( options, I18N_NOOP("KOffice"), "koffice", "kde" );
+
+    KCmdLineOptions options;
+    options.add("print", ki18n("Only print and exit"));
+    options.add("template", ki18n("Open a new document with a template"));
+    options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
+    KCmdLineArgs::addCmdLineOptions( options, ki18n("KOffice"), "koffice", "kde" );
     return true;
 }
 
@@ -111,7 +108,7 @@ bool KoApplication::start()
     int argsCount = args->count();
 
     KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("koffice");
-    QString dpiValues = QString::fromLatin1( koargs->getOption( "dpi" ) );
+    QString dpiValues = koargs->getOption( "dpi" );
     if ( !dpiValues.isEmpty() ) {
         int sep = dpiValues.indexOf( QRegExp( "[x, ]" ) );
         int dpiX;

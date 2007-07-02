@@ -31,7 +31,7 @@ private:
 int main( int argc, char** argv )
 {
     //KApplication::disableAutoDcopRegistration();
-    KCmdLineArgs::init(argc, argv, "storedroptest", 0, 0, 0, 0);
+    KCmdLineArgs::init(argc, argv, "storedroptest", 0, KLocalizedString(), 0, KLocalizedString());
     KApplication app;
 
     StoreDropTest* window = new StoreDropTest( 0 );

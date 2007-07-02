@@ -217,7 +217,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
 
 int main( int argc, char **argv )
 {
-    KCmdLineArgs::init( argc, argv, "storage_test", "Storage Test", "A test for the KoStore classes", "1" );
+    KCmdLineArgs::init( argc, argv, "storage_test", 0, ki18n("Storage Test"), "1" , ki18n("A test for the KoStore classes"));
     //KApplication::disableAutoDcopRegistration();
     KApplication app(false);
 

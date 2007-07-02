@@ -1354,7 +1354,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
         // Never saved? Use a temp file in $HOME then
         // Yes, two open unnamed docs will overwrite each other's autosave file,
         // but hmm, we can only do something if that's in the same process anyway...
-        QString ret = QDir::homePath() + "/." + QString::fromLatin1(componentData().componentName()) + ".autosave" + extension;
+        QString ret = QDir::homePath() + "/." + componentData().componentName() + ".autosave" + extension;
         return ret;
     }
     else

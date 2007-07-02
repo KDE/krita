@@ -67,7 +67,7 @@ private:
 
 int main (int argc, char ** argv)
 {
-    KCmdLineArgs::init(argc,argv,"kobordertest", 0, 0, 0, 0);
+    KCmdLineArgs::init(argc,argv,"kobordertest", 0, KLocalizedString(), 0, KLocalizedString());
     KApplication app;
 
     KoZoomHandler* zh = new KoZoomHandler();

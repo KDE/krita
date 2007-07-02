@@ -20,9 +20,11 @@
 #ifndef KOTEXTSHAPEDATA_H
 #define KOTEXTSHAPEDATA_H
 
+#include "KoText.h"
+#include "kotext_export.h"
+
 #include <KoShapeUserData.h>
 #include <KoInsets.h>
-#include <kotext_export.h>
 
 class QTextDocument;
 class KoXmlWriter;
@@ -108,10 +110,29 @@ public:
     /// returns the currently set margins for the shape.
     KoInsets shapeMargins() const;
 
+    /**
+     * Set the page number this shape will appear on.
+     */
     void setPageNumber(int page);
+    /**
+     * return the page number this shape will appear on.
+     */
     int pageNumber() const;
 
     void saveOdf(KoXmlWriter *writer, int from = 0, int to = -1) const;
+
+    /**
+     * Set the page direction.
+     * The page direction will determine behavior on the insertion of new text and those
+     * new paragraphs default direction.
+     */
+    void setPageDirection(KoText::Direction direction);
+    /**
+     * Return the direction set on the page.
+     * The page direction will determine behavior on the insertion of new text and those
+     * new paragraphs default direction.
+     */
+    KoText::Direction pageDirection() const;
 
 signals:
     /**

@@ -26,12 +26,21 @@
 
 class KoTextShapeData::Private {
 public:
-    Private() : ownsDocument(true), dirty(true), offset(0.0), position(-1), endPosition(-1) {}
+    Private()
+        : ownsDocument(true),
+        dirty(true),
+        offset(0.0),
+        position(-1),
+        endPosition(-1),
+        direction(KoText::AutoDirection)
+    {
+    }
     QTextDocument *document;
     bool ownsDocument, dirty;
     double offset;
     int position, endPosition, pageNumber;
     KoInsets margins;
+    KoText::Direction direction;
 };
 
 
@@ -120,6 +129,15 @@ void KoTextShapeData::setPageNumber(int page) {
 int KoTextShapeData::pageNumber() const {
     return d->pageNumber;
 }
+
+void KoTextShapeData::setPageDirection(KoText::Direction direction) {
+    d->direction = direction;
+}
+
+KoText::Direction KoTextShapeData::pageDirection() const {
+    return d->direction;
+}
+
 
 void KoTextShapeData::saveOdf(KoXmlWriter *writer, int from, int to) const {
     QTextBlock block = d->document->findBlock(from);

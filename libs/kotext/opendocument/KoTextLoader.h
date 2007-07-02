@@ -145,12 +145,12 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
         */
         virtual void loadImage(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
 
+    protected:
+
         /**
         * Load the image and return a KoShape instance for it.
         */
-        virtual KoShape* loadImage(KoTextLoadingContext& context, const QString& href);
-
-    protected:
+        virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
 
         /**
         * This is called in loadBody before reading the body starts.

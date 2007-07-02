@@ -700,9 +700,12 @@ void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& 
     }
 }
 
-void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor)
+void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& _frameElem, const KoXmlElement& _imageElem, QTextCursor& cursor)
 {
     Q_UNUSED(cursor);
+    const KoXmlElement frameElem = _frameElem;
+    const KoXmlElement imageElem = _imageElem;
+
 
     /*
     //context.fillStyleStack( parent, KoXmlNS::text, "style-name", "graphic-properties" );
@@ -721,7 +724,6 @@ void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& 
     }
     */
 
-    const KoXmlElement elem = frameElem;
     QString href = imageElem.attribute("href");
     kDebug(32500)<<"KoTextLoader::loadImage href="<<href<<endl;
 
@@ -738,13 +740,13 @@ void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& 
         return;
     }
 
-    KoShape* shape = loadImage(context, href);
+    KoShape* shape = loadImageShape(context, frameElem, imageElem, cursor);
     if( ! shape ) {
         kWarning(32500) << "KoTextLoader::loadImage Failed to create picture shape" << endl;
     }
     else {
         KoShapeLoadingContext shapecontext(context);
-        if( ! shape->loadOdf(elem, shapecontext) ) {
+        if( ! shape->loadOdf(frameElem, shapecontext) ) {
             kWarning(32500) << "Failed to load picture shape" << endl;
         }
         else {
@@ -755,7 +757,7 @@ void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& 
     context.store()->close();
 }
 
-KoShape* KoTextLoader::loadImage(KoTextLoadingContext&, const QString&)
+KoShape* KoTextLoader::loadImageShape(KoTextLoadingContext&, const KoXmlElement&, const KoXmlElement&, QTextCursor&)
 {
     return 0;
 }

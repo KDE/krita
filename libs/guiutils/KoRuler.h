@@ -158,6 +158,9 @@ signals:
 
     protected:
         virtual void paintEvent(QPaintEvent* event);
+        virtual void mousePressEvent ( QMouseEvent* ev );
+        virtual void mouseReleaseEvent ( QMouseEvent* ev );
+        virtual void mouseMoveEvent ( QMouseEvent* ev );
 
         /// @return The step in unit between numbers on the ruler
         double numberStepForUnit() const;

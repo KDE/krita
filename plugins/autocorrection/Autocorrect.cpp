@@ -44,6 +44,8 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
     selectWord(m_cursor, cursorPosition);
     m_word = m_cursor.selectedText();
 
+    emit startMacro("Autocorrection");
+
     bool done = autoFormatURLs();
     if(!done) done = singleSpaces();
     if(!done) done = autoBoldUnderline();
@@ -59,6 +61,8 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
 
     if(m_cursor.selectedText() != m_word)
         m_cursor.insertText(m_word);
+
+    emit stopMacro();
 }
 
 void Autocorrect::finishedParagraph(QTextDocument *document, int cursorPosition) {
@@ -70,12 +74,50 @@ void Autocorrect::finishedParagraph(QTextDocument *document, int cursorPosition)
 
 void Autocorrect::uppercaseFirstCharOfSentence() {
     if(! m_uppercaseFirstCharOfSentence) return;
-    // TODO
+
+    int startPos = m_cursor.selectionStart();
+    QTextBlock block = m_cursor.block();
+
+    m_cursor.setPosition(block.position());
+    m_cursor.setPosition(startPos, QTextCursor::KeepAnchor);
+
+    QString text = m_cursor.selectedText();
+
+    if (text.isEmpty()) // start of a paragraph
+        m_word.replace(0, 1, m_word.at(0).toUpper());
+    else {
+        QString::ConstIterator constIter = text.constEnd();
+        constIter--;
+
+        while (constIter != text.constBegin()) {
+            while (constIter != text.begin() && constIter->isSpace())
+                constIter--;
+
+            if (constIter != text.constBegin() && (*constIter == QChar('.') || *constIter == QChar('!') || *constIter == QChar('?'))) {
+                m_word.replace(0, 1, m_word.at(0).toUpper());
+                break;
+            }
+            else
+                break;
+        }
+    }
+
+    m_cursor.setPosition(startPos);
+    m_cursor.setPosition(startPos + m_word.length(), QTextCursor::KeepAnchor);
 }
 
 void Autocorrect::fixTwoUppercaseChars() {
     if(! m_fixTwoUppercaseChars) return;
-    // TODO
+    if (m_word.length() <= 2) return;
+
+    QChar secondChar = m_word.at(1);
+
+    if (secondChar.isUpper()) {
+        QChar thirdChar = m_word.at(2);
+
+        if (thirdChar.isLower()) // TODO: fix two uppercase chars exceptions
+            m_word.replace(1, 1, secondChar.toLower());
+    }
 }
 
 bool Autocorrect::autoFormatURLs() {
@@ -106,7 +148,18 @@ bool Autocorrect::autoBoldUnderline() {
 
 bool Autocorrect::autoFractions() {
     if(! m_autoFractions) return false;
-    // TODO
+
+    QString trimmed = m_word.trimmed();
+
+    if (trimmed == QString("1/2"))
+        m_word.replace(0, 3, QString("½"));
+    else if (trimmed == QString("1/4"))
+        m_word.replace(0, 3, QString("¼"));
+    else if (trimmed == QString("3/4"))
+        m_word.replace(0, 3, QString("¾"));
+    else
+        return false;
+
     return true;
 }
 

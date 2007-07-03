@@ -48,8 +48,6 @@ private:
     void initialCaps();
     void toggleCase();
 
-    void restoreSelection();
-
     QRadioButton *m_sentenceCaseRadio;
     QRadioButton *m_lowerCaseRadio;
     QRadioButton *m_upperCaseRadio;

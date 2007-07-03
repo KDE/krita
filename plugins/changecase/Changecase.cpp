@@ -100,10 +100,11 @@ void Changecase::sentenceCase()
     QTextBlock block = m_document->findBlock(m_startPosition);
     QTextCursor backCursor(m_cursor);
     int pos = block.position() + block.length() - 1;
-    QChar replacedChar;
-    
+
     // TODO
     // * Exception?
+    emit startMacro("Change case");
+
     while (true) {
         QString text = block.text();
         int prevLetterIndex = -1;
@@ -133,6 +134,7 @@ void Changecase::sentenceCase()
                 pos--;
             }
 
+            // found end of sentence, go back to last found letter (indicating start of a word)
             if (iter != text.begin() && (*iter == QChar('.') || *iter == QChar('!') || *iter == QChar('?'))) {
                 if (prevLetterIndex >= m_startPosition && prevLetterIndex <= m_endPosition) {
                     // kDebug() << "Found end of sentence " << *iter << " : " << currentWord << endl;
@@ -165,40 +167,87 @@ void Changecase::sentenceCase()
         block = block.next();
     }
 
-    restoreSelection();
+    emit stopMacro();
 }
 
 void Changecase::lowerCase()
 {
-    // TODO: do for each text block instead of whole selection? clean up the code
-    QString text = m_cursor.selectedText();
-    QString result;
+    QTextBlock block = m_document->findBlock(m_startPosition);
+    int pos = block.position();
+    bool finished = false;
 
-    QString::ConstIterator constIter = text.constBegin();
+    emit startMacro("Change case");
 
-    while (constIter != text.constEnd())
-        result.append(constIter++->toLower());
+    while (true) {
+        QString text = block.text();
+        QString result;
 
-    if(text != result)
-        m_cursor.insertText(result);
+        QString::ConstIterator constIter = text.constBegin();
+        while (pos < m_endPosition && constIter != text.constEnd()) {
+            if (pos >= m_startPosition)
+                result.append(constIter->toLower());
 
-    restoreSelection();
+            pos++;
+            constIter++;
+        }
+
+        if (!(block.isValid() && block.position() + block.length() < m_endPosition))
+            finished = true;
+
+        if (result != text) {
+            m_cursor.setPosition(qMax(m_startPosition, block.position()));
+            m_cursor.setPosition(qMin(pos, m_endPosition), QTextCursor::KeepAnchor);
+            m_cursor.insertText(result);
+        }
+
+        if (finished)
+            break;
+
+        block = block.next();
+        pos = block.position();
+    }
+
+    emit stopMacro();
 }
 
 void Changecase::upperCase()
 {
-    QString text = m_cursor.selectedText();
-    QString result;
+    QTextBlock block = m_document->findBlock(m_startPosition);
+    int pos = block.position();
+    bool finished = false;
 
-    QString::ConstIterator constIter = text.constBegin();
+    emit startMacro("Change case");
 
-    while (constIter != text.constEnd())
-        result.append(constIter++->toUpper());
+    while (true) {
+        QString text = block.text();
+        QString result;
 
-    if(text != result)
-        m_cursor.insertText(result);
+        QString::ConstIterator constIter = text.constBegin();
+        while (pos < m_endPosition && constIter != text.constEnd()) {
+            if (pos >= m_startPosition)
+                result.append(constIter->toUpper());
 
-    restoreSelection();
+            pos++;
+            constIter++;
+        }
+
+        if (!(block.isValid() && block.position() + block.length() < m_endPosition))
+            finished = true;
+
+        if (result != text) {
+            m_cursor.setPosition(qMax(m_startPosition, block.position()));
+            m_cursor.setPosition(qMin(pos, m_endPosition), QTextCursor::KeepAnchor);
+            m_cursor.insertText(result);
+        }
+
+        if (finished)
+            break;
+
+        block = block.next();
+        pos = block.position();
+    }
+
+    emit stopMacro();
 }
 
 void Changecase::initialCaps()
@@ -206,6 +255,8 @@ void Changecase::initialCaps()
     QTextBlock block = m_document->findBlock(m_startPosition);
     int pos = block.position();
     bool finished = false;
+
+    emit startMacro("Change case");
 
     while (true) {
         QString text = block.text();
@@ -242,36 +293,53 @@ void Changecase::initialCaps()
         pos = block.position();
     }
 
-    restoreSelection();
+    emit stopMacro();
 }
 
 void Changecase::toggleCase()
 {
-    QString text = m_cursor.selectedText();
-    QString result;
+    QTextBlock block = m_document->findBlock(m_startPosition);
+    int pos = block.position();
+    bool finished = false;
 
-    QString::ConstIterator constIter = text.constBegin();
+    emit startMacro("Change case");
 
-    while (constIter != text.constEnd()) {
-        if (constIter->isLower())
-            result.append(constIter->toUpper());
-        else if (constIter->isUpper())
-            result.append(constIter->toLower());
-        else
-            result.append(*constIter);
-        constIter++;
+    while (true) {
+        QString text = block.text();
+        QString result;
+
+        QString::ConstIterator constIter = text.constBegin();
+        while (pos < m_endPosition && constIter != text.constEnd()) {
+            if (pos >= m_startPosition) {
+                if (constIter->isLower())
+                    result.append(constIter->toUpper());
+                else if (constIter->isUpper())
+                    result.append(constIter->toLower());
+                else
+                    result.append(*constIter);
+            }
+
+            pos++;
+            constIter++;
+        }
+
+        if (!(block.isValid() && block.position() + block.length() < m_endPosition))
+            finished = true;
+
+        if (result != text) {
+            m_cursor.setPosition(qMax(m_startPosition, block.position()));
+            m_cursor.setPosition(qMin(pos, m_endPosition), QTextCursor::KeepAnchor);
+            m_cursor.insertText(result);
+        }
+
+        if (finished)
+            break;
+
+        block = block.next();
+        pos = block.position();
     }
 
-    if(text != result)
-        m_cursor.insertText(result);
-
-    restoreSelection();
-}
-
-void Changecase::restoreSelection()
-{
-    m_cursor.setPosition(m_startPosition);
-    m_cursor.setPosition(m_endPosition, QTextCursor::KeepAnchor);
+    emit stopMacro();
 }
 
 #include "Changecase.moc"

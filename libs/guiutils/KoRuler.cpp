@@ -30,6 +30,12 @@
 
 #include <KoViewConverter.h>
 
+class Mark {
+    public:
+        Mark() {};
+        virtual ~Mark() {};
+};
+
 class KoRulerPrivate {
     public:
     KoRulerPrivate(const KoViewConverter *vc) : m_viewConverter(vc), m_mouseCoordinate(-1) {}
@@ -48,6 +54,11 @@ class KoRulerPrivate {
         bool m_showSelectionBorders;
         double m_firstSelectionBorder;
         double m_secondSelectionBorder;
+
+        bool m_showMargins;
+        double m_firstStartMargin;
+        double m_restStartMargin;
+        double m_endMargin;
 };
 
 
@@ -63,6 +74,9 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     setActiveRange(0, 0);
     setShowMousePosition(false);
     setShowSelectionBorders(false);
+    setShowMargins(false); 
+    d->m_firstStartMargin = d->m_restStartMargin = 0;
+    d->m_endMargin = 0;
     updateMouseCoordinate(-1);
 }
 
@@ -161,7 +175,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
             QString::number((i / numberStepPixel) * numberStep)));
     }
 
-    textLength += 4;  // Add some padding
+    textLength += 8;  // Add some padding
 
     // Change number step so all digits fits
     while(textLength > numberStepPixel) {
@@ -206,11 +220,12 @@ void KoRuler::paintEvent(QPaintEvent* event)
 
             if(i == nextStep) {
                 if(pos != 0) {
-                    painter.drawLine(QPointF(pos, 1), QPointF(pos, height() * 0.5));
+                    painter.drawLine(QPointF(pos, height()-1), QPointF(pos, height() * 0.7));
                 }
 
-                painter.drawText(QPoint(pos + 2, fontHeight + 2),
-                                  QString::number(stepCount * numberStep));
+                QString numberText = QString::number(stepCount * numberStep);
+                painter.drawText(QPoint(pos - 0.5*fontMetrics.width(numberText), height()*0.6), numberText);
+
                 ++stepCount;
                 nextStep = qRound(d->m_viewConverter->documentToViewX(
                     d->m_unit.fromUserValue(numberStep * stepCount)));
@@ -222,7 +237,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
                     numberStep * 0.25 * quarterStepCount)));
             } else if(i == nextHalfStep) {
                 if(pos != 0) {
-                    painter.drawLine(QPointF(pos, 1), QPointF(pos, height() * 0.25));
+                    painter.drawLine(QPointF(pos, height()-1), QPointF(pos, height() * 0.8));
                 }
 
                 ++halfStepCount;
@@ -233,7 +248,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
                     numberStep * 0.25 * quarterStepCount)));
             } else if(i == nextQuarterStep) {
                 if(pos != 0) {
-                    painter.drawLine(QPointF(pos, 1), QPointF(pos, height() * 0.125));
+                    painter.drawLine(QPointF(pos, height()-1), QPointF(pos, height() * 0.875));
                 }
 
                 ++quarterStepCount;
@@ -259,6 +274,30 @@ void KoRuler::paintEvent(QPaintEvent* event)
                 double border = d->m_viewConverter->documentToViewX(d->m_secondSelectionBorder);
                 painter.drawLine(QPointF(border, rectangle.y() + 1), QPointF(border, rectangle.bottom() - 1));
             }
+        }
+
+        if (d->m_showMargins) {
+            // Draw first line start margin
+            double x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart
+                        + d->m_firstStartMargin) + d->m_offset;
+            painter.drawLine(QPointF(x-4, 1), QPointF(x+4, 1));
+            painter.drawLine(QPointF(x-4, 1), QPointF(x, height() * 0.3));
+            painter.drawLine(QPointF(x+4, 1), QPointF(x, height() * 0.3));
+
+            // Draw rest of the lines start margin
+            x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_restStartMargin)
+                        + d->m_offset;
+            painter.drawLine(QPointF(x-4, 5), QPointF(x+4, 5));
+            painter.drawLine(QPointF(x-4, 5), QPointF(x, 5+height() * 0.3));
+            painter.drawLine(QPointF(x+4, 5), QPointF(x, 5+height() * 0.3));
+
+            // Draw rend margin
+            x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_endMargin)
+                        + d->m_offset;
+            painter.drawLine(QPointF(x-4, 1), QPointF(x+4, 1));
+            painter.drawLine(QPointF(x-4, 1), QPointF(x, height() * 0.3));
+            painter.drawLine(QPointF(x+4, 1), QPointF(x, height() * 0.3));
+
         }
     } else {
         //int textOffset = 0;
@@ -384,6 +423,41 @@ void KoRuler::updateMouseCoordinate(int coordinate)
 void KoRuler::setShowMousePosition(bool show)
 {
     d->m_showMousePosition = show;
+}
+
+void KoRuler::setShowMargins(bool show)
+{
+    d->m_showMargins = show;
+}
+
+void KoRuler::setFirstStartMargin(double margin)
+{
+    d->m_firstStartMargin = margin;
+}
+
+void KoRuler::setRestStartMargin(double margin)
+{
+    d->m_restStartMargin = margin;
+}
+
+void KoRuler::setEndMargin(double margin)
+{
+    d->m_endMargin = margin;
+}
+
+double KoRuler::firstStartMargin() const
+{
+    return d->m_firstStartMargin;
+}
+
+double KoRuler::restStartMargin() const
+{
+    return d->m_restStartMargin;
+}
+
+double KoRuler::endMargin() const
+{
+    return d->m_endMargin;
 }
 
 double KoRuler::numberStepForUnit() const

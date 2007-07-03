@@ -61,6 +61,15 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
         /// The orientation of the ruler
         Qt::Orientation orientation() const;
 
+        /// The start margin of the first line
+        double firstStartMargin() const;
+
+        /// The start margin of the rest of the lines
+        double restStartMargin() const;
+
+        /// The end margin of all lines
+        double endMargin() const;
+
         virtual QSize minimumSizeHint() const;
         virtual QSize sizeHint() const;
 
@@ -83,6 +92,30 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
           * @param end the end of the range in pt
           */
         void setActiveRange(double start, double end);
+
+        /** Set if the ruler should show margins as used in textditors.
+          * Set the margins with setFirstStartMargin(), setRestStartMargin(), setEndMargin() .
+          * @param show show margins if true. Default is false.
+          */
+        void setShowMargins(bool show);
+
+        /** Set the position of the first line start margin relative to the active region.
+          * If Right To left is set the margin is relative to the right side of the active region .
+          * @param margin the value relative to the active region.
+          */
+        void setFirstStartMargin(double margin);
+
+        /** Set the position of the rest of the lines start margin relative to the active region.
+          * If Right To left is set the margin is relative to the right side of the active region .
+          * @param margin the value relative to the active region.
+          */
+        void setRestStartMargin(double margin);
+
+        /** Set the position of the end margin relative to the active region.
+          * If Right To left is set the margin is relative to the left side of the active region .
+          * @param margin the value relative to the active region.
+          */
+        void setEndMargin(double margin);
 
         /** Set wether the ruler should show the current mouse position.
           * Update the position with updateMouseCoordinate().
@@ -109,6 +142,13 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
          * @param second the other selection border in points
          */
         void updateSelectionBorders(double first, double second);
+
+signals:
+        /**
+         * emitted when any of the margins is moved by the user.
+         * @param final false until the user releases the mouse. So you can implement live update.
+         */
+        void marginsChanged(bool final);
 
     protected:
         virtual void paintEvent(QPaintEvent* event);

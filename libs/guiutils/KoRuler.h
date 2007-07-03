@@ -61,14 +61,14 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
         /// The orientation of the ruler
         Qt::Orientation orientation() const;
 
-        /// The start margin of the first line
-        double firstStartMargin() const;
+        /// The start indent of the first line
+        double firstStartIndent() const;
 
-        /// The start margin of the rest of the lines
-        double restStartMargin() const;
+        /// The start indent of the rest of the lines
+        double restStartIndent() const;
 
-        /// The end margin of all lines
-        double endMargin() const;
+        /// The end indent of all lines
+        double endIndent() const;
 
         virtual QSize minimumSizeHint() const;
         virtual QSize sizeHint() const;
@@ -93,29 +93,29 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
           */
         void setActiveRange(double start, double end);
 
-        /** Set if the ruler should show margins as used in textditors.
-          * Set the margins with setFirstStartMargin(), setRestStartMargin(), setEndMargin() .
-          * @param show show margins if true. Default is false.
+        /** Set if the ruler should show indents as used in textditors.
+          * Set the indents with setFirstStartIndent(), setRestStartIndent(), setEndIndent() .
+          * @param show show indents if true. Default is false.
           */
-        void setShowMargins(bool show);
+        void setShowIndents(bool show);
 
-        /** Set the position of the first line start margin relative to the active region.
-          * If Right To left is set the margin is relative to the right side of the active region .
-          * @param margin the value relative to the active region.
+        /** Set the position of the first line start indent relative to the active region.
+          * If Right To left is set the indent is relative to the right side of the active region .
+          * @param indent the value relative to the active region.
           */
-        void setFirstStartMargin(double margin);
+        void setFirstStartIndent(double indent);
 
-        /** Set the position of the rest of the lines start margin relative to the active region.
-          * If Right To left is set the margin is relative to the right side of the active region .
-          * @param margin the value relative to the active region.
+        /** Set the position of the rest of the lines start indent relative to the active region.
+          * If Right To left is set the indent is relative to the right side of the active region .
+          * @param indent the value relative to the active region.
           */
-        void setRestStartMargin(double margin);
+        void setRestStartIndent(double indent);
 
-        /** Set the position of the end margin relative to the active region.
-          * If Right To left is set the margin is relative to the left side of the active region .
-          * @param margin the value relative to the active region.
+        /** Set the position of the end indent relative to the active region.
+          * If Right To left is set the indent is relative to the left side of the active region .
+          * @param indent the value relative to the active region.
           */
-        void setEndMargin(double margin);
+        void setEndIndent(double indent);
 
         /** Set wether the ruler should show the current mouse position.
           * Update the position with updateMouseCoordinate().
@@ -145,10 +145,10 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
 
 signals:
         /**
-         * emitted when any of the margins is moved by the user.
+         * emitted when any of the indents is moved by the user.
          * @param final false until the user releases the mouse. So you can implement live update.
          */
-        void marginsChanged(bool final);
+        void indentsChanged(bool final);
 
     protected:
         virtual void paintEvent(QPaintEvent* event);

@@ -55,10 +55,10 @@ class KoRulerPrivate {
         double m_firstSelectionBorder;
         double m_secondSelectionBorder;
 
-        bool m_showMargins;
-        double m_firstStartMargin;
-        double m_restStartMargin;
-        double m_endMargin;
+        bool m_showIndents;
+        double m_firstStartIndent;
+        double m_restStartIndent;
+        double m_endIndent;
 };
 
 
@@ -74,9 +74,9 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     setActiveRange(0, 0);
     setShowMousePosition(false);
     setShowSelectionBorders(false);
-    setShowMargins(false); 
-    d->m_firstStartMargin = d->m_restStartMargin = 0;
-    d->m_endMargin = 0;
+    setShowIndents(true); 
+    d->m_firstStartIndent = d->m_restStartIndent = 0;
+    d->m_endIndent = 0;
     updateMouseCoordinate(-1);
 }
 
@@ -276,28 +276,44 @@ void KoRuler::paintEvent(QPaintEvent* event)
             }
         }
 
-        if (d->m_showMargins) {
-            // Draw first line start margin
+        if (d->m_showIndents) {
+            QPolygonF polygon;
+
+            painter.setBrush(palette().brush(QPalette::Base));
+            painter.setRenderHint( QPainter::Antialiasing );
+
+            // Draw first line start indent
             double x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart
-                        + d->m_firstStartMargin) + d->m_offset;
+                        + d->m_firstStartIndent) + d->m_offset;
+            polygon << QPointF(x, 0.5)
+                        << QPointF(x+10.5, 0.5)
+                        << QPointF(x+10.5, 2.5)
+                        << QPointF(x+3.5, 2.5)
+                        << QPointF(x+0.5, 5.5)
+                        << QPointF(x+0.5, 0.5);
+            painter.drawPolygon(polygon);
+
+            // Draw rest of the lines start indent
+            polygon.clear();
+            x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_restStartIndent)
+                        + d->m_offset;
+            polygon << QPointF(x-2.5, height() - 10.5)
+                        << QPointF(x+10.5, height() - 10.5)
+                        << QPointF(x+10.5, height() - 3.5)
+                        << QPointF(x+3.5, height() - 3.5)
+                        << QPointF(x+0.5, height() - 0.5)
+                        << QPointF(x-2.5, height() - 3.5)
+                        << QPointF(x-2.5, height() - 10.5);
+            painter.drawPolygon(polygon);
+
+            // Draw rend indent
+            x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_endIndent)
+                        + d->m_offset;
             painter.drawLine(QPointF(x-4, 1), QPointF(x+4, 1));
             painter.drawLine(QPointF(x-4, 1), QPointF(x, height() * 0.3));
             painter.drawLine(QPointF(x+4, 1), QPointF(x, height() * 0.3));
 
-            // Draw rest of the lines start margin
-            x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_restStartMargin)
-                        + d->m_offset;
-            painter.drawLine(QPointF(x-4, 5), QPointF(x+4, 5));
-            painter.drawLine(QPointF(x-4, 5), QPointF(x, 5+height() * 0.3));
-            painter.drawLine(QPointF(x+4, 5), QPointF(x, 5+height() * 0.3));
-
-            // Draw rend margin
-            x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_endMargin)
-                        + d->m_offset;
-            painter.drawLine(QPointF(x-4, 1), QPointF(x+4, 1));
-            painter.drawLine(QPointF(x-4, 1), QPointF(x, height() * 0.3));
-            painter.drawLine(QPointF(x+4, 1), QPointF(x, height() * 0.3));
-
+            painter.setRenderHint( QPainter::Antialiasing, false );
         }
     } else {
         //int textOffset = 0;
@@ -425,39 +441,39 @@ void KoRuler::setShowMousePosition(bool show)
     d->m_showMousePosition = show;
 }
 
-void KoRuler::setShowMargins(bool show)
+void KoRuler::setShowIndents(bool show)
 {
-    d->m_showMargins = show;
+    d->m_showIndents = show;
 }
 
-void KoRuler::setFirstStartMargin(double margin)
+void KoRuler::setFirstStartIndent(double indent)
 {
-    d->m_firstStartMargin = margin;
+    d->m_firstStartIndent = indent;
 }
 
-void KoRuler::setRestStartMargin(double margin)
+void KoRuler::setRestStartIndent(double indent)
 {
-    d->m_restStartMargin = margin;
+    d->m_restStartIndent = indent;
 }
 
-void KoRuler::setEndMargin(double margin)
+void KoRuler::setEndIndent(double indent)
 {
-    d->m_endMargin = margin;
+    d->m_endIndent = indent;
 }
 
-double KoRuler::firstStartMargin() const
+double KoRuler::firstStartIndent() const
 {
-    return d->m_firstStartMargin;
+    return d->m_firstStartIndent;
 }
 
-double KoRuler::restStartMargin() const
+double KoRuler::restStartIndent() const
 {
-    return d->m_restStartMargin;
+    return d->m_restStartIndent;
 }
 
-double KoRuler::endMargin() const
+double KoRuler::endIndent() const
 {
-    return d->m_endMargin;
+    return d->m_endIndent;
 }
 
 double KoRuler::numberStepForUnit() const

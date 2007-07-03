@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
+   Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -62,10 +63,10 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
         Qt::Orientation orientation() const;
 
         /// The start indent of the first line
-        double firstStartIndent() const;
+        double firstLineIndent() const;
 
         /// The start indent of the rest of the lines
-        double restStartIndent() const;
+        double rParagraphIndent() const;
 
         /// The end indent of all lines
         double endIndent() const;
@@ -94,26 +95,26 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
         void setActiveRange(double start, double end);
 
         /** Set if the ruler should show indents as used in textditors.
-          * Set the indents with setFirstStartIndent(), setRestStartIndent(), setEndIndent() .
+          * Set the indents with setFirstLineIndent(), setParagraphIndent(), setEndIndent() .
           * @param show show indents if true. Default is false.
           */
         void setShowIndents(bool show);
 
-        /** Set the position of the first line start indent relative to the active region.
-          * If Right To left is set the indent is relative to the right side of the active region .
-          * @param indent the value relative to the active region.
+        /** Set the position of the first line start indent relative to the active range.
+          * If Right To left is set the indent is relative to the right side of the active range .
+          * @param indent the value relative to the active range.
           */
-        void setFirstStartIndent(double indent);
+        void setFirstLineIndent(double indent);
 
-        /** Set the position of the rest of the lines start indent relative to the active region.
-          * If Right To left is set the indent is relative to the right side of the active region .
-          * @param indent the value relative to the active region.
+        /** Set the position of the rest of the lines start indent relative to the active range.
+          * If Right To left is set the indent is relative to the right side of the active range .
+          * @param indent the value relative to the active range.
           */
-        void setRestStartIndent(double indent);
+        void setParagraphIndent(double indent);
 
-        /** Set the position of the end indent relative to the active region.
-          * If Right To left is set the indent is relative to the left side of the active region .
-          * @param indent the value relative to the active region.
+        /** Set the position of the end indent relative to the active range.
+          * If Right To left is set the indent is relative to the left side of the active range .
+          * @param indent the value relative to the active range.
           */
         void setEndIndent(double indent);
 

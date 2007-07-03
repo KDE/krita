@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
+   Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -56,8 +57,8 @@ class KoRulerPrivate {
         double m_secondSelectionBorder;
 
         bool m_showIndents;
-        double m_firstStartIndent;
-        double m_restStartIndent;
+        double m_firstLineIndent;
+        double m_rParagraphIndent;
         double m_endIndent;
 };
 
@@ -75,7 +76,7 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     setShowMousePosition(false);
     setShowSelectionBorders(false);
     setShowIndents(true); 
-    d->m_firstStartIndent = d->m_restStartIndent = 0;
+    d->m_firstLineIndent = d->m_rParagraphIndent = 0;
     d->m_endIndent = 0;
     updateMouseCoordinate(-1);
 }
@@ -284,7 +285,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
 
             // Draw first line start indent
             double x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart
-                        + d->m_firstStartIndent) + d->m_offset;
+                        + d->m_firstLineIndent) + d->m_offset;
             polygon << QPointF(x, 0.5)
                         << QPointF(x+10.5, 0.5)
                         << QPointF(x+10.5, 2.5)
@@ -295,7 +296,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
 
             // Draw rest of the lines start indent
             polygon.clear();
-            x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_restStartIndent)
+            x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_rParagraphIndent)
                         + d->m_offset;
             polygon << QPointF(x-2.5, height() - 10.5)
                         << QPointF(x+10.5, height() - 10.5)
@@ -446,14 +447,14 @@ void KoRuler::setShowIndents(bool show)
     d->m_showIndents = show;
 }
 
-void KoRuler::setFirstStartIndent(double indent)
+void KoRuler::setFirstLineIndent(double indent)
 {
-    d->m_firstStartIndent = indent;
+    d->m_firstLineIndent = indent;
 }
 
-void KoRuler::setRestStartIndent(double indent)
+void KoRuler::setParagraphIndent(double indent)
 {
-    d->m_restStartIndent = indent;
+    d->m_rParagraphIndent = indent;
 }
 
 void KoRuler::setEndIndent(double indent)
@@ -461,14 +462,14 @@ void KoRuler::setEndIndent(double indent)
     d->m_endIndent = indent;
 }
 
-double KoRuler::firstStartIndent() const
+double KoRuler::firstLineIndent() const
 {
-    return d->m_firstStartIndent;
+    return d->m_firstLineIndent;
 }
 
-double KoRuler::restStartIndent() const
+double KoRuler::rParagraphIndent() const
 {
-    return d->m_restStartIndent;
+    return d->m_rParagraphIndent;
 }
 
 double KoRuler::endIndent() const

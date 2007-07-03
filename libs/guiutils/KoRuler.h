@@ -66,7 +66,7 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
         double firstLineIndent() const;
 
         /// The start indent of the rest of the lines
-        double rParagraphIndent() const;
+        double paragraphIndent() const;
 
         /// The end indent of all lines
         double endIndent() const;
@@ -93,6 +93,11 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
           * @param end the end of the range in pt
           */
         void setActiveRange(double start, double end);
+
+        /** Set the state of the ruler so that it shows everything in right to left mode.
+          * @param isRightToLeft state of right to left mode. Default is false.
+          */
+        void setRightToLeft(bool isRightToLeft);
 
         /** Set if the ruler should show indents as used in textditors.
           * Set the indents with setFirstLineIndent(), setParagraphIndent(), setEndIndent() .

@@ -58,8 +58,10 @@ class KoRulerPrivate {
 
         bool m_showIndents;
         double m_firstLineIndent;
-        double m_rParagraphIndent;
+        double m_paragraphIndent;
         double m_endIndent;
+
+        bool m_rightToLeft;
 };
 
 
@@ -76,7 +78,8 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     setShowMousePosition(false);
     setShowSelectionBorders(false);
     setShowIndents(true); 
-    d->m_firstLineIndent = d->m_rParagraphIndent = 0;
+    setRightToLeft(false);
+    d->m_firstLineIndent = d->m_paragraphIndent = 0;
     d->m_endIndent = 0;
     updateMouseCoordinate(-1);
 }
@@ -134,9 +137,9 @@ void KoRuler::paintEvent(QPaintEvent* event)
         numberStepPixel = qRound(d->m_viewConverter->documentToViewX(
             d->m_unit.fromUserValue(numberStep)));
         rectangle.setX(qMax(0, d->m_offset));
-        rectangle.setY(0);
+        rectangle.setY(5);
         rectangle.setWidth(qMin((double)width() - 1.0 - rectangle.x(), lengthPixel));
-        rectangle.setHeight(height() - 1.0);
+        rectangle.setHeight(height() - 10.0);
         activeRangeRectangle.setX(qMax(rectangle.x() + 1,
               d->m_viewConverter->documentToViewX(d->m_activeRangeStart) + d->m_offset));
         activeRangeRectangle.setY(rectangle.y() + 1);
@@ -221,11 +224,11 @@ void KoRuler::paintEvent(QPaintEvent* event)
 
             if(i == nextStep) {
                 if(pos != 0) {
-                    painter.drawLine(QPointF(pos, height()-1), QPointF(pos, height() * 0.7));
+                    painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() -10));
                 }
 
                 QString numberText = QString::number(stepCount * numberStep);
-                painter.drawText(QPoint(pos - 0.5*fontMetrics.width(numberText), height()*0.6), numberText);
+                painter.drawText(QPoint(pos - 0.5*fontMetrics.width(numberText), rectangle.bottom() -12), numberText);
 
                 ++stepCount;
                 nextStep = qRound(d->m_viewConverter->documentToViewX(
@@ -238,7 +241,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
                     numberStep * 0.25 * quarterStepCount)));
             } else if(i == nextHalfStep) {
                 if(pos != 0) {
-                    painter.drawLine(QPointF(pos, height()-1), QPointF(pos, height() * 0.8));
+                    painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 8));
                 }
 
                 ++halfStepCount;
@@ -249,7 +252,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
                     numberStep * 0.25 * quarterStepCount)));
             } else if(i == nextQuarterStep) {
                 if(pos != 0) {
-                    painter.drawLine(QPointF(pos, height()-1), QPointF(pos, height() * 0.875));
+                    painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 4));
                 }
 
                 ++quarterStepCount;
@@ -286,25 +289,22 @@ void KoRuler::paintEvent(QPaintEvent* event)
             // Draw first line start indent
             double x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart
                         + d->m_firstLineIndent) + d->m_offset;
-            polygon << QPointF(x, 0.5)
-                        << QPointF(x+10.5, 0.5)
-                        << QPointF(x+10.5, 2.5)
-                        << QPointF(x+3.5, 2.5)
-                        << QPointF(x+0.5, 5.5)
+            x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
+            polygon << QPointF(x+0.5, 0.5)
+                        << QPointF(x+10.5, 5.5)
+                        << QPointF(x+0.5, 10.5)
                         << QPointF(x+0.5, 0.5);
             painter.drawPolygon(polygon);
 
             // Draw rest of the lines start indent
             polygon.clear();
-            x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_rParagraphIndent)
+            x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_paragraphIndent)
                         + d->m_offset;
-            polygon << QPointF(x-2.5, height() - 10.5)
-                        << QPointF(x+10.5, height() - 10.5)
-                        << QPointF(x+10.5, height() - 3.5)
-                        << QPointF(x+3.5, height() - 3.5)
+            x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
+            polygon << QPointF(x+0.5, height() - 10.5)
+                        << QPointF(x+10.5, height() - 5.5)
                         << QPointF(x+0.5, height() - 0.5)
-                        << QPointF(x-2.5, height() - 3.5)
-                        << QPointF(x-2.5, height() - 10.5);
+                        << QPointF(x+0.5, height() - 10.5);
             painter.drawPolygon(polygon);
 
             // Draw rend indent
@@ -409,7 +409,7 @@ QSize KoRuler::minimumSizeHint() const
     QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm(font);
 
-    int minimum = qMax(fm.height() + 4, 20);
+    int minimum = fm.height() + 14;
 
     size.setWidth( minimum );
     size.setHeight( minimum );
@@ -442,6 +442,11 @@ void KoRuler::setShowMousePosition(bool show)
     d->m_showMousePosition = show;
 }
 
+void KoRuler::setRightToLeft(bool isRightToLeft)
+{
+    d->m_rightToLeft = isRightToLeft;
+}
+
 void KoRuler::setShowIndents(bool show)
 {
     d->m_showIndents = show;
@@ -454,7 +459,7 @@ void KoRuler::setFirstLineIndent(double indent)
 
 void KoRuler::setParagraphIndent(double indent)
 {
-    d->m_rParagraphIndent = indent;
+    d->m_paragraphIndent = indent;
 }
 
 void KoRuler::setEndIndent(double indent)
@@ -467,9 +472,9 @@ double KoRuler::firstLineIndent() const
     return d->m_firstLineIndent;
 }
 
-double KoRuler::rParagraphIndent() const
+double KoRuler::paragraphIndent() const
 {
-    return d->m_rParagraphIndent;
+    return d->m_paragraphIndent;
 }
 
 double KoRuler::endIndent() const

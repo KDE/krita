@@ -25,6 +25,7 @@
 #include <koguiutils_export.h>
 
 class KoColor;
+class KoColorSet;
 
 /**
  * @short A colormanaged widget for chooosing a color from a colorset
@@ -61,6 +62,12 @@ public slots:
      * @param color the opposite color
      */
     void setOppositeColor(const KoColor &color);
+
+    /**
+     * Sets the color set that this widget shows.
+     * @param colorSet pointer to the color set
+     */
+    void setColorSet(KoColorSet *colorSet);
 
 signals:
 

@@ -24,9 +24,6 @@
 #include <QVector>
 #include <QPixmap>
 
-#include <kio/job.h>
-#include <kpalette.h>
-
 #include "KoResource.h"
 #include "KoColor.h"
 

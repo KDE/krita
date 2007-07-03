@@ -33,8 +33,9 @@
 #include <kdebug.h>
 #include <kicon.h>
 
+#include <KoColorSet.h>
 #include <KoColorPatch.h>
-#include "KoColorSpaceRegistry.h"
+#include <KoColorSpaceRegistry.h>
 
 class KoColorSetContainer : public QFrame
 {
@@ -50,6 +51,7 @@ private:
 class KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
     KoColorSetWidget *thePublic;
+    KoColorSet *colorSet;
     QTimer m_timer;
     KoColorSetContainer *container;
     QVBoxLayout *mainLayout;
@@ -84,16 +86,16 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
     }
     colorSetContainer->setLayout(colorSetLayout);
 
-    for(int i = 0; i<75; i++) {
-        if(!hide || i%3!=0 && i%16!=5) {
-            KoColorPatch *patch = new KoColorPatch(colorSetContainer);
-            KoColor color(KoColorSpaceRegistry::instance()->rgb8());
-            color.fromQColor(QColor(0,3*i,250-3*i));
-            patch->setColor(color);
-            patch->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-            patch->setFrameShape(QFrame::Box);
-            connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
-            colorSetLayout->addWidget(patch, i/16, i%16);
+    if (colorSet) {
+        for( int i = 0; i < colorSet->nColors(); i++) {
+            if(!hide || i%3!=0 && i%16!=5) {
+                KoColorPatch *patch = new KoColorPatch(colorSetContainer);
+                patch->setColor(colorSet->getColor(i).color);
+                patch->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+                patch->setFrameShape(QFrame::Box);
+                connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+                colorSetLayout->addWidget(patch, i/16, i%16);
+            }
         }
     }
     mainLayout->insertWidget(2, colorSetContainer);
@@ -135,6 +137,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     ,d(new KoColorSetWidgetPrivate())
 {
     d->thePublic = this;
+    d->colorSet = 0;
     d->container = new KoColorSetContainer(this);
     d->container->setAttribute(Qt::WA_WindowPropagation);
     d->container->setFrameShape(QFrame::Box);
@@ -218,6 +221,12 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::hidePopup()
 
 void KoColorSetWidget::setOppositeColor(const KoColor &color)
 {
+}
+
+void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
+{
+    d->colorSet = colorSet;
+    d->filter(d->filterCheckBox->checkState());
 }
 
 void KoColorSetWidget::hideEvent(QHideEvent *)

@@ -231,6 +231,8 @@ void KoRuler::paintEvent(QPaintEvent* event)
                 }
 
                 QString numberText = QString::number(stepCount * numberStep);
+                if (d->m_rightToLeft)
+                    numberText = QString::number(stepCount * numberStep);
                 painter.drawText(QPoint(pos - 0.5*fontMetrics.width(numberText), rectangle.bottom() -12), numberText);
 
                 ++stepCount;

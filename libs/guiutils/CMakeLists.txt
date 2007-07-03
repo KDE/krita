@@ -72,7 +72,7 @@ kde4_add_ui_files( koguiutils_LIB_SRCS
 
 kde4_add_library(koguiutils SHARED ${koguiutils_LIB_SRCS})
 
-target_link_libraries(koguiutils  ${KDE4_KDECORE_LIBS} komain flake pigment )
+target_link_libraries(koguiutils  ${KDE4_KDECORE_LIBS} komain flake pigment koresources)
 
 set_target_properties(koguiutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS koguiutils  DESTINATION ${LIB_INSTALL_DIR})

@@ -28,6 +28,7 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoColor.h>
+#include <KoColorConversions.h>
 #include <KoColorSpace.h>
 #include <KoID.h>
 #include <KoPointerEvent.h>
@@ -145,10 +146,9 @@ MixerTool::MixerTool(MixerCanvas *canvas, KisPaintDevice* device, KoCanvasResour
     : KoTool(canvas), m_canvasDev(device), m_resources(rp)
 {
     //{{ - Just for testing!
-    m_info.PaintType = "Test";
     m_info.Mixability = 0.9f;
     m_info.PigmentConcentration = 0.9f;
-    m_info.PaintVolume = 200.0f;
+    m_info.PaintVolume = 0.8f;
     m_info.Reflectivity = 0.1f;
     m_info.Viscosity = 0.2f;
     m_info.Wetness = 0.8f;
@@ -199,7 +199,6 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
 
     if (!current->painterly()) {
         updatePainterlyOverlays(stroke, e);
-//         mixColors(stroke, e);
         updateResources(stroke);
     }
 
@@ -212,34 +211,206 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
     m_canvas->updateCanvas(rc);
 }
 
-#define RHO2(x,x0,y,y0) (x-x0)*(x-x0) + (y-y0)*(y-y0)
-#define C_EXP 0.0001f
-#define C_FRICTION 0.1f
-#define MIN_ALPHA 1
+
+void transmittance_to_density(int T, int *D)
+{
+    double d;
+    if (T == 0)
+        d = 3.0;
+    else
+        d = -log10((double)T/255.0);
+    d = d * 1024.0/3.0;
+    *D = (int)(d + 0.5);
+}
+
+void density_to_transmittance(int D, int *T)
+{
+    double d;
+    d = 255.0 * pow(10.0, - (double)D * 3.0/1024.0);
+    if (d < 0.0)
+        d = 0.0;
+    if (d > 255.0)
+        d = 255.0;
+    *T = (int)(d + 0.5);
+}
+
+void rgb_to_cmy(int red, int green, int blue, int *cyan, int *magenta, int *yellow)
+{
+    transmittance_to_density(red, cyan);
+    transmittance_to_density(green, magenta);
+    transmittance_to_density(blue, yellow);
+}
+
+void cmy_to_rgb(int cyan, int magenta, int yellow, int *red, int *green, int *blue)
+{
+    density_to_transmittance(cyan, red);
+    density_to_transmittance(magenta, green);
+    density_to_transmittance(yellow, blue);
+}
+
+class Cell {
+public:
+    Cell()
+        {
+            cadsorb = 0;
+            mixabil = 0;
+            pig_con = 0;
+            reflect = 0;
+            pviscos = 0;
+            pvolume = 0;
+            wetness = 0;
+            set_rgb(0, 0, 0);
+        }
+
+    Cell(const Cell &c)
+        {
+            cadsorb = c.cadsorb;
+            mixabil = c.mixabil;
+            pig_con = c.pig_con;
+            reflect = c.reflect;
+            pvolume = c.pvolume;
+            wetness = c.wetness;
+            set_rgb(c.r, c.g, c.b);
+        }
+
+    // Painterly properties
+    float cadsorb;
+    float mixabil;
+    float pig_con;
+    float reflect;
+    float pviscos;
+    float pvolume;
+    float wetness;
+
+    // Color
+    int r, g, b;
+    float h, l, s;
+    int c, m, y;
+
+    quint8 opacity;
+
+    void set_rgb(int red, int green, int blue)
+        {
+            r = red;
+            g = green;
+            b = blue;
+            update_hls_cmy();
+        }
+    void set_hls(float hue, float lightness, float saturation)
+        {
+            h = hue;
+            l = lightness;
+            s = saturation;
+            update_rgb_cmy();
+        }
+
+    void set_cmy(int cyan, int magenta, int yellow)
+        {
+            c = cyan;
+            m = magenta;
+            y = yellow;
+            update_rgb_hls();
+        }
+
+    void update_hls_cmy()
+        {
+            rgb_to_hls(r, g, b, &h, &l, &s);
+            rgb_to_cmy(r, g, b, &c, &m, &y);
+        }
+
+    void update_rgb_cmy()
+        {
+            quint8 red, green, blue;
+            hls_to_rgb(h, l, s, &red, &green, &blue);
+            r = (int)red;
+            g = (int)green;
+            b = (int)blue;
+            rgb_to_cmy(r, g, b, &c, &m, &y);
+        }
+
+    void update_rgb_hls()
+        {
+            cmy_to_rgb(c, m, y, &r, &g, &b);
+            rgb_to_hls(r, g, b, &h, &l, &s);
+        }
+
+    void mix_using_rgb(const Cell &canvas_cell)
+        {
+
+            float ratio;
+            int delta;
+
+            ratio = pvolume / canvas_cell.pvolume;
+            delta = r - canvas_cell.r;
+            r = canvas_cell.r + (int)(ratio * delta);
+
+            delta = g - canvas_cell.g;
+            g = canvas_cell.g + (int)(ratio * delta);
+
+            delta = b - canvas_cell.b;
+            b = canvas_cell.b + (int)(ratio * delta);
+
+            update_hls_cmy();
+        }
+
+    void mix_using_hls(const Cell &canvas_cell)
+        {
+
+            float ratio, delta;
+            ratio = pvolume / canvas_cell.pvolume;
+            delta = h - canvas_cell.h;
+            if ((int)delta != 0) {
+                h = canvas_cell.h + (int)(ratio * delta);
+                if (h >= 360)
+                    h -= 360;
+            }
+
+            delta = l - canvas_cell.l;
+            l = canvas_cell.l + ratio * delta;
+
+            delta = s - canvas_cell.s;
+            s = canvas_cell.s + ratio * delta;
+/*
+            h += canvas_cell.h; h /= 2;
+            l += canvas_cell.l; l /= 2;
+            s += canvas_cell.s; s /= 2;
+*/
+            update_rgb_cmy();
+        }
+
+    void mix_using_cmy(const Cell &canvas_cell)
+        {
+
+            float ratio;
+            int delta;
+
+            ratio = pvolume / canvas_cell.pvolume;
+            delta = c - canvas_cell.c;
+            c = canvas_cell.c + (int)(ratio * delta);
+
+            delta = m - canvas_cell.m;
+            m = canvas_cell.m + (int)(ratio * delta);
+
+            delta = y - canvas_cell.y;
+            y = canvas_cell.y + (int)(ratio * delta);
+/*
+            c += canvas_cell.c; c /= 2;
+            m += canvas_cell.m; m /= 2;
+            y += canvas_cell.y; y /= 2;
+*/
+            update_rgb_hls();
+        }
+};
+
+#define FORCE_COEFF 0.01
 
 void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent *e)
 {
-    float p, f; // Pressure and force
-    float rho2; // Square of the distance from the event point
-    int x, y; // Actual point
-    float pig_con, can_pig_con, fin_pig_con;
-    float wetness, can_wetness, fin_wetness; // Actual point wetness
-    float pvolume, can_pvolume, fin_pvolume, act_pvolume, ave_pvolume = 0, ave_act_pvolume = 0;
-    float reflect, can_reflect, fin_reflect;
-    float pviscos, can_pviscos, fin_pviscos;
-    float mixabil, can_mixabil, fin_mixabil;
-    float p0 = e->pressure();
-    int x0 = e->x(),
-        y0 = e->y();
-    QRect rc = stroke->exactBounds();
-    QColor color, can_color, fin_color, ave_color;
-    int hue, sat, val;
-    int can_hue, can_sat, can_val;
-    int fin_hue, fin_sat, fin_val;
-    int ave_hue = 0, ave_sat = 0, ave_val = 0;
-    quint8 opacity, can_opacity, fin_opacity;
-    int total = 0;
+    float pressure, force;
+    Cell stroke_cell, canvas_cell;
+    QColor stroke_color, canvas_color;
 
+    QRect rc = stroke->exactBounds();
     KisRectIteratorPixel             // Give a more or less clear name to each iterator.
         it_main = stroke->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
         it_adso = stroke->painterlyChannel("KisAdsorbencyMask")->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height()),
@@ -264,168 +435,88 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
     KisRectConstIteratorPixel *can_iters[7] = // Used only to cleanly increase the iterators in the next cycle
         {&can_it_adso, &can_it_mixa, &can_it_pigm, &can_it_refl, &can_it_volu, &can_it_visc, &can_it_wetn};
 
+    pressure = e->pressure();
+    force = pressure + FORCE_COEFF * pow(pressure, 2);
     while (!it_main.isDone()) {
-        stroke->colorSpace()->toQColor(it_main.rawData(), &color, &opacity); // Is this too expensive?
-        m_canvasDev->colorSpace()->toQColor(can_it_main.rawData(), &can_color, &can_opacity);
+        stroke->colorSpace()->toQColor(it_main.rawData(), &stroke_color, &stroke_cell.opacity);
+        m_canvasDev->colorSpace()->toQColor(can_it_main.rawData(), &canvas_color, &canvas_cell.opacity);
 
-        // Do something if there is actually some paint
-        if (opacity > 0) {
-//             kDebug() << "---------- STARTING!! --------" << endl;
-//             kDebug() << "STROKE COLOR: " << color << " OPACITY: " << (int)opacity << endl;
-//             kDebug() << "CANVAS COLOR: " << can_color <<  " OPACITY: " << (int)can_opacity << endl;
+        if (stroke_cell.opacity) {
+            stroke_cell.wetness = force * m_info.Wetness;
+            stroke_cell.mixabil = force * m_info.Mixability * stroke_cell.wetness;
+            stroke_cell.pig_con = force * m_info.PigmentConcentration;
+            stroke_cell.reflect = force * m_info.Reflectivity * stroke_cell.wetness;
+            stroke_cell.pviscos = force * m_info.Viscosity / stroke_cell.wetness;
+            stroke_cell.pvolume = force * m_info.PaintVolume;
+            stroke_cell.set_rgb(stroke_color.red(),
+                                stroke_color.green(),
+                                stroke_color.blue());
+            if (canvas_cell.opacity) {
+//                 canvas_cell.cadsorb = (float)*can_it_adso.rawData() / 255.0;
+                canvas_cell.mixabil = (float)*can_it_mixa.rawData() / 255.0;
+                canvas_cell.pig_con = (float)*can_it_pigm.rawData() / 255.0;
+                canvas_cell.reflect = (float)*can_it_refl.rawData() / 255.0;
+                canvas_cell.pviscos = (float)*can_it_visc.rawData() / 255.0;
+                canvas_cell.pvolume = (float)*can_it_volu.rawData() / 255.0;
+                canvas_cell.wetness = (float)*can_it_wetn.rawData() / 255.0;
+                canvas_cell.set_rgb(canvas_color.red(),
+                                    canvas_color.green(),
+                                    canvas_color.blue());
 
-            x = it_main.x();
-            y = it_main.y();
-            rho2 = RHO2(x,x0,y,y0);
-            p = p0*exp(-rho2*C_EXP);
-            // TODO Make the friction coefficient user configurable! (And find a good and complete meaning for it)
-            f = p + C_FRICTION*pow(p,2);
+                stroke_cell.mix_using_rgb(canvas_cell);
+//                 stroke_cell.mix_using_hls(canvas_cell);
+//                 stroke_cell.mix_using_cmy(canvas_cell);
 
-//             kDebug() << "PRESSURE: " << p << " - FORCE: " << f << endl;
+                stroke_color.setRgb(stroke_cell.r, stroke_cell.g, stroke_cell.b);
+            }
+            stroke->colorSpace()->fromQColor(stroke_color, stroke_cell.opacity, it_main.rawData());
 
-            wetness = p * m_info.Wetness; // Wetness doesn't depend on friction.
-            pvolume = f * m_info.PaintVolume;
-            pviscos = f * m_info.Viscosity / wetness;
-            reflect = wetness * m_info.Reflectivity;
-            pig_con = f * m_info.PigmentConcentration;
-            mixabil = m_info.Mixability;
-
-            *it_wetn.rawData() = (quint8)(wetness*255.0f);
-            *it_volu.rawData() = (quint8)(pvolume);
-            *it_visc.rawData() = (quint8)(pviscos*255.0f);
-            *it_refl.rawData() = (quint8)(reflect*255.0f);
-            *it_pigm.rawData() = (quint8)(pig_con*255.0f);
-            *it_mixa.rawData() = (quint8)(mixabil*255.0f);
-
-//             kDebug() << "STROKE: " << endl;
-//             kDebug() << "\tWETN: " << (int)*it_wetn.rawData() << endl
-//                      << "\tVOLU: " << (int)*it_volu.rawData() << endl
-//                      << "\tVISC: " << (int)*it_visc.rawData() << endl
-//                      << "\tREFL: " << (int)*it_refl.rawData() << endl
-//                      << "\tPIGM: " << (int)*it_pigm.rawData() << endl
-//                      << "\tMIXA: " << (int)*it_mixa.rawData() << endl;
-
-            /*
-            * The Active Volume is directly proportional to pressure and to the wetness.
-            * We mix colors taking only the active volume of the canvas. The volume in the
-            * stroke is obviously already the active volume.
-            * Here we came to the question: what color we pick up in the paintop?
-            * My current idea is to take the average color in the stroke after the mixing
-            * and set it as the current color. More in the updateResources() method.
-            */
-
-//             kDebug() << "CANVAS: " << endl;
-//             kDebug() << "\tWETN: " << (int)*can_it_wetn.rawData() << endl
-//                      << "\tVOLU: " << (int)*can_it_volu.rawData() << endl
-//                      << "\tVISC: " << (int)*can_it_visc.rawData() << endl
-//                      << "\tREFL: " << (int)*can_it_refl.rawData() << endl
-//                      << "\tPIGM: " << (int)*can_it_pigm.rawData() << endl
-//                      << "\tMIXA: " << (int)*can_it_mixa.rawData() << endl;
-
-            can_wetness = (float)*can_it_wetn.rawData()/255.0f;
-            can_pvolume = (float)*can_it_volu.rawData();
-            can_pviscos = (float)*can_it_visc.rawData()/255.0f;
-            can_reflect = (float)*can_it_refl.rawData()/255.0f;
-            can_pig_con = (float)*can_it_pigm.rawData()/255.0f;
-            can_mixabil = (float)*can_it_mixa.rawData()/255.0f;
-
-            act_pvolume = can_pvolume;
-
-//             kDebug() << "\tACTV: " << act_pvolume << endl;
-
-//             red = (float)color.red();   can_red = (float)can_color.red();
-//             sat = (float)color.saten(); can_sat = (float)can_color.saten();
-//             val = (float)color.vale();  can_val = (float)can_color.vale();
-
-            color.getHsv(&hue, &sat, &val);
-            can_color.getHsv(&can_hue, &can_sat, &can_val);
-
-//             kDebug() << "STROKE - hue: " << red << " sat: " << sat << " val: " << val << endl;
-//             kDebug() << "CANVAS - RED: " << can_red << " sat: " << can_sat << " val: " << can_val << endl;
-
-            fin_hue = (pvolume*hue + act_pvolume*can_hue) / (act_pvolume + pvolume);
-            fin_sat = (pvolume*sat + act_pvolume*can_sat) / (act_pvolume + pvolume);
-            fin_val = (pvolume*val + act_pvolume*can_val) / (act_pvolume + pvolume);
-
-            ave_hue += fin_hue;
-            ave_sat += fin_sat;
-            ave_val += fin_val;
-            ave_pvolume += pvolume;
-            ave_act_pvolume += act_pvolume;
-            total += 1;
-
-            fin_wetness = (wetness + can_wetness)/2.0f;
-            fin_pig_con = (pig_con + can_pig_con)/2.0f;
-            fin_pvolume = (pvolume + act_pvolume)/2.0f;
-            fin_pviscos = (pviscos + can_pviscos)/2.0f;
-            fin_reflect = (reflect + can_reflect)/2.0f;
-            fin_mixabil = (mixabil + can_mixabil)/2.0f;
-
-            fin_opacity = (opacity + can_opacity)/2;
-
-//             kDebug() << "FIN_COLOR" << endl;
-//             kDebug() << "FINAL  - hue: " << fin_hue << " sat: " << fin_sat << " val: " << fin_val << endl;
-            fin_color.setHsv(fin_hue, fin_sat, fin_val);
-//             kDebug() << "FIN_COLOR_END" << endl;
-
-//             kDebug() << "FINAL COLOR: " << fin_color << " OPACITY: " << (int)fin_opacity << endl;
-
-            stroke->colorSpace()->fromQColor(fin_color, fin_opacity, it_main.rawData());
-
-            *it_wetn.rawData() = (quint8)(fin_wetness*255.0f);
-            *it_volu.rawData() = (quint8)(fin_pvolume);
-            *it_visc.rawData() = (quint8)(fin_pviscos*255.0f);
-            *it_refl.rawData() = (quint8)(fin_reflect*255.0f);
-            *it_pigm.rawData() = (quint8)(fin_pig_con*255.0f);
-            *it_mixa.rawData() = (quint8)(fin_mixabil*255.0f);
-
-//             kDebug() << "FINAL: " << endl;
-//             kDebug() << "\tWETN: " << (int)*it_wetn.rawData() << endl
-//                      << "\tVOLU: " << (int)*it_volu.rawData() << endl
-//                      << "\tVISC: " << (int)*it_visc.rawData() << endl
-//                      << "\tREFL: " << (int)*it_refl.rawData() << endl
-//                      << "\tPIGM: " << (int)*it_pigm.rawData() << endl
-//                      << "\tMIXA: " << (int)*it_mixa.rawData() << endl;
+            *it_wetn.rawData() = (quint8)(stroke_cell.wetness*255.0);
+            *it_volu.rawData() = (quint8)(stroke_cell.pvolume*255.0);
+            *it_visc.rawData() = (quint8)(stroke_cell.pviscos*255.0);
+            *it_refl.rawData() = (quint8)(stroke_cell.reflect*255.0);
+            *it_pigm.rawData() = (quint8)(stroke_cell.pig_con*255.0);
+            *it_mixa.rawData() = (quint8)(stroke_cell.mixabil*255.0);
         }
 
-        for (int _i=0;_i<7;_i++) {++(*iters[_i]); ++(*can_iters[_i]);}
         ++it_main; ++can_it_main;
+        for (int _i = 0; _i < 7; _i++) {++(*iters[_i]); ++(*can_iters[_i]); }
     }
-
-    if (total) {
-        int pre_hue, pre_sat, pre_val;
-        QColor pre_color;
-
-        pre_color = m_resources->resource(KoCanvasResource::ForegroundColor).value<KoColor>().toQColor();
-        pre_color.getHsv(&pre_hue, &pre_sat, &pre_val);
-
-        ave_hue = ave_hue/total;
-        ave_sat = ave_sat/total;
-        ave_val = ave_val/total;
-        ave_pvolume = ave_pvolume/total;
-        ave_act_pvolume = ave_act_pvolume/total;
-
-        ave_hue = (ave_pvolume*pre_hue + ave_act_pvolume*ave_hue) / (ave_act_pvolume + ave_pvolume);
-        ave_sat = (ave_pvolume*pre_sat + ave_act_pvolume*ave_sat) / (ave_act_pvolume + ave_pvolume);
-        ave_val = (ave_pvolume*pre_val + ave_act_pvolume*ave_val) / (ave_act_pvolume + ave_pvolume);
-
-//         kDebug() << "AVE_COLOR" << endl;
-//         kDebug() << "AVERAGE  - hue: " << ave_hue << " sat: " << ave_sat << " val: " << ave_val << endl;
-        ave_color.setHsv(ave_hue, ave_sat, ave_val);
-//         kDebug() << "AVE_COLOR_END" << endl;
-
-        m_resources->setResource(KoCanvasResource::ForegroundColor, KoColor(ave_color, stroke->colorSpace()));
-    }
-}
-
-void MixerTool::mixColors(KisPaintDeviceSP stroke, KoPointerEvent *e)
-{
-
 }
 
 void MixerTool::updateResources(KisPaintDeviceSP stroke)
 {
     // TODO Update the color and the tool's own KisPainterlyInformation structure.
+    QColor current, final;
+    int c_r, c_g, c_b;
+    long r = 0, g = 0, b = 0;
+    int total = 0;
+    quint8 opacity;
+
+    QRect rc = stroke->exactBounds();
+    KisRectIteratorPixel
+        it_main = stroke->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height());
+
+    while (!it_main.isDone()) {
+        stroke->colorSpace()->toQColor(it_main.rawData(), &current, &opacity);
+        if (opacity) {
+            current.getRgb(&c_r, &c_g, &c_b);
+            r += c_r;
+            g += c_g;
+            b += c_b;
+            ++total;
+        }
+        ++it_main;
+    }
+
+    if (total) {
+        r /= total;
+        g /= total;
+        b /= total;
+        final.setRgb(r, g, b);
+
+        m_resources->setResource(KoCanvasResource::ForegroundColor, KoColor(final, stroke->colorSpace()));
+    }
 }
 
 

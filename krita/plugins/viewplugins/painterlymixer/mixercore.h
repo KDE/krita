@@ -107,11 +107,6 @@ private:
     void updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent *e);
 
     /*
-    Merge the canvas contents with the stroke contents, actually mixing the colors.
-    */
-    void mixColors(KisPaintDeviceSP stroke, KoPointerEvent *e);
-
-    /*
     Updates the information of the paintop (color, painterly information for next iteration and such)
     */
     void updateResources(KisPaintDeviceSP stroke);

@@ -37,7 +37,6 @@
 * painterly overlays of the painted device.
 */
 struct KisPainterlyBristleInformation {
-    QString PaintType; ///< paint type. It could be Oil, Acrylics, Watercolor, Pencil.
     float Mixability; ///< how easily the paint mixes with the underlying color and returns to the bristle.
     float PigmentConcentration; ///< how much "pigment" is contained in the bristle (i.e., opacity)
     float PaintVolume; ///< how thick will be the track stroked by the bristle.

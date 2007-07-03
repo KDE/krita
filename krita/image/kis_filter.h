@@ -22,21 +22,20 @@
 
 #include <QString>
 
-#include <ksharedptr.h>
+#include <kis_shared.h>
 #include <klocale.h>
 
+#include <KoColorSpace.h>
+
 #include "kis_types.h"
-#include "kis_filter_registry.h"
 #include "KoID.h"
-#include "kis_paint_device.h"
 #include "kis_progress_subject.h"
-#include "kis_filter_configuration.h"
-#include "KoColorSpace.h"
 #include "krita_export.h"
 
 class KoColorSpace;
 class KisProgressDisplayInterface;
 class KisFilterConfigWidget;
+class KisFilterConfiguration;
 class QWidget;
 
 /**
@@ -48,12 +47,22 @@ public:
     static const KoID ConfigDefault;
     static const KoID ConfigDesigner;
     static const KoID ConfigLastUsed;
+    static const KoID CategoryAdjust;
+    static const KoID CategoryArtistic;
+    static const KoID CategoryBlur;
+    static const KoID CategoryColors;
+    static const KoID CategoryEdgeDetection;
+    static const KoID CategoryEmboss;
+    static const KoID CategoryEnhance;
+    static const KoID CategoryMap;
+    static const KoID CategoryNonPhotorealistic;
+    static const KoID CategoryOther;
 public:
 
     /**
      * Construct a Krita filter
      */
-    KisFilter(const KoID& id, const QString & category, const QString & entry);
+    KisFilter(const KoID& id, const KoID & category, const QString & entry);
     virtual ~KisFilter() {}
 
 public:
@@ -87,11 +96,7 @@ public:
     /**
      * Provided for convenience only when source and destination are the same
      */
-    inline void process(KisPaintDeviceSP device, const QRect& rect, KisFilterConfiguration* config)
-        {
-            process(device, rect.topLeft(), device, rect.topLeft(), rect.size(), config);
-        }
-
+    void process(KisPaintDeviceSP device, const QRect& rect, KisFilterConfiguration* config);
 
 public:
     /**
@@ -199,7 +204,7 @@ public:
     inline QString name() const { return m_id.name(); }
 
     /// @return the submenu in the filters menu does filter want to go?
-    inline QString menuCategory() const { return m_category; }
+    inline KoID menuCategory() const { return m_category; }
 
     /// @return the i18n'ed string this filter wants to show itself in the menu
     inline QString menuEntry() const { return m_entry; }
@@ -253,7 +258,7 @@ protected:
 
     KoID m_id;
     KisProgressDisplayInterface * m_progressDisplay;
-    QString m_category; // The category in the filter menu this filter fits
+    KoID m_category; // The category in the filter menu this filter fits
     QString m_entry; // the i18n'ed accelerated menu text
 };
 

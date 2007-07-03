@@ -19,6 +19,7 @@
 #include "kis_filter_mask.h"
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
+#include "kis_filter_registry.h"
 
 class KisFilterMask::Private {
 public:

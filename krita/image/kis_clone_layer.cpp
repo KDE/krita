@@ -23,6 +23,7 @@
 
 #include <kicon.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <KoColorSpace.h>
 

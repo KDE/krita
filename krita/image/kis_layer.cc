@@ -19,6 +19,7 @@
 
 #include <kdebug.h>
 #include <kicon.h>
+#include <klocale.h>
 #include <QIcon>
 #include <QImage>
 #include <QBitArray>
@@ -172,6 +173,7 @@ void KisLayer::setDirty(const QRect & rc)
 
 void KisLayer::setDirty( const QRegion & region)
 {
+    QMutexLocker(&m_d->regionLock);
 //    kDebug() << "setDirty region " << name() << ", " << region.boundingRect() << endl;
 
     // If we're dirty, our parent is dirty, if we've got a parent
@@ -183,10 +185,7 @@ void KisLayer::setDirty( const QRegion & region)
     if (m_d->image.data()) {
         m_d->image->notifyLayerUpdated(KisLayerSP(this));
     }
-    m_d->regionLock.lock();
     m_d->dirtyRegion += region;
-    m_d->regionLock.unlock();
-
 }
 
 
@@ -199,10 +198,9 @@ bool KisLayer::isDirty( const QRect & rect )
 
 void KisLayer::setClean( QRect rc )
 {
-    m_d->regionLock.lock();
+    QMutexLocker(&m_d->regionLock);
 //    kDebug() << "setClean " << name() << ", " <<  rc << endl;
     m_d->dirtyRegion -= QRegion( rc );
-    m_d->regionLock.unlock();
 }
 
 int KisLayer::id() const { return m_d->id; }

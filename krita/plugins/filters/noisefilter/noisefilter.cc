@@ -63,7 +63,7 @@ KritaNoiseFilter::~KritaNoiseFilter()
 {
 }
 
-KisFilterNoise::KisFilterNoise() : KisFilter(id(), "other", i18n("&Random Noise..."))
+KisFilterNoise::KisFilterNoise() : KisFilter(id(), CategoryOther, i18n("&Random Noise..."))
 {
 }
 

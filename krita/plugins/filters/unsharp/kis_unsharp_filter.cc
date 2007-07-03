@@ -31,7 +31,7 @@
 #include "kis_wdg_unsharp.h"
 #include "ui_wdgunsharp.h"
 
-KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), "enhance", i18n("&Unsharp Mask..."))
+KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), CategoryEnhance, i18n("&Unsharp Mask..."))
 {
 }
 

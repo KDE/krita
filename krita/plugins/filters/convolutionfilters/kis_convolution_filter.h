@@ -22,13 +22,14 @@
 #define _KIS_CONVOLUTION_FILTER_H_
 
 #include "kis_filter.h"
+#include "kis_filter_registry.h"
 #include "kis_filter_configuration.h"
 #include "kis_convolution_painter.h"
 
 class KisConvolutionFilter : public KisFilter {
     Q_OBJECT
 public:
-    KisConvolutionFilter(const KoID& id, const QString & category, const QString & entry)
+    KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry)
         : KisFilter( id, category, entry )
         {}
 public:

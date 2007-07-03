@@ -68,7 +68,7 @@
 //     return KisFilterConfiguration::toString();
 // }
 
-KisSobelFilter::KisSobelFilter() : KisFilter(id(), "edge", i18n("&Sobel..."))
+KisSobelFilter::KisSobelFilter() : KisFilter(id(), CategoryEdgeDetection, i18n("&Sobel..."))
 {
 }
 

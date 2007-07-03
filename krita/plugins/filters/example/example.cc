@@ -63,7 +63,7 @@ KritaExample::~KritaExample()
 {
 }
 
-KisFilterInvert::KisFilterInvert() : KisFilter(id(), "adjust", i18n("&Invert"))
+KisFilterInvert::KisFilterInvert() : KisFilter(id(), CategoryAdjust, i18n("&Invert"))
 {
 }
 

@@ -28,6 +28,7 @@
 #include "kis_transaction.h"
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
+#include "kis_filter_registry.h"
 #include "kis_filters_listview.h"
 #include "kis_image.h"
 #include "kis_previewwidget.h"

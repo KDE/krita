@@ -41,6 +41,7 @@
 #include "kis_brush.h"
 #include "kis_debug_areas.h"
 #include "kis_image.h"
+#include "kis_filter.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
@@ -817,4 +818,12 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     bltSelection(r.x(), r.y(), m_compositeOp, polygon, opacity(), r.x(), r.y(), r.width(), r.height());
 }
 
+KisFilterSP KisPainter::filter()
+{
+    return m_filter;
+}
 
+void KisPainter::setFilter(KisFilterSP filter)
+{
+    m_filter = filter;
+}

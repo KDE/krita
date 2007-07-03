@@ -21,6 +21,8 @@
 #include <kicon.h>
 #include <QImage>
 
+#include <klocale.h>
+
 #include "kis_debug_areas.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
@@ -30,6 +32,9 @@
 #include "kis_undo_adapter.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
+#include "kis_filter_configuration.h"
+#include "kis_filter_registry.h"
+#include "kis_filter.h"
 
 KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection)
     : KisLayer (img.data(), name, OPACITY_OPAQUE)

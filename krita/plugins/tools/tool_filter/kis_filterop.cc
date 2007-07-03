@@ -33,6 +33,8 @@
 #include "kis_global.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
+#include "kis_filter.h"
+#include "kis_filter_configuration.h"
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
 #include "kis_paintop.h"

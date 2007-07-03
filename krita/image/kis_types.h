@@ -65,6 +65,10 @@ typedef KisSharedPtrVector<KisEffectMask> vKisEffectMaskSP;
 typedef vKisEffectMaskSP::iterator vKisEffectMaskSP_it;
 typedef vKisEffectMaskSP::const_iterator vKisEffectMaskSP_cit;
 
+class KisFilterMask;
+typedef KisSharedPtr<KisFilterMask> KisFilterMaskSP;
+typedef KisWeakSharedPtr<KisFilterMask> KisFilterMaskWSP;
+
 class KisTransparencyMask;
 typedef KisSharedPtr<KisTransparencyMask> KisTransparencyMaskSP;
 typedef KisWeakSharedPtr<KisTransparencyMask> KisTransparencyMaskWSP;

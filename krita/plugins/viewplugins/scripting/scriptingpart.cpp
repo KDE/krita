@@ -55,6 +55,7 @@
 #include "kritacore/krs_monitor.h"
 #include "kritacore/krs_progress.h"
 #include "kis_layer_manager.h"
+#include "kis_filter_registry.h"
 
 #include "kis_script_filter.h"
 

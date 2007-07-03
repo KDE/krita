@@ -43,6 +43,8 @@ set(kritaui_LIB_SRCS
     kis_double_widget.cc
     kis_factory2.cc
     kis_filter_manager.cc
+    kis_filter_dialog.cc
+    kis_filter_handler.cc
     kis_gradient_chooser.cc
     kis_gradient_slider_widget.cc
     kis_grid_drawer.cpp
@@ -156,6 +158,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgtransformationeffect.ui
     wdgmaskfromselection.ui
     wdgmasksource.ui
+    wdgfilterdialog.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/asm_scale.o )

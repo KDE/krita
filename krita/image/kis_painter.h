@@ -27,7 +27,6 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 
-#include "kis_filter.h"
 #include "kis_progress_subject.h"
 #include "KoColorSpace.h"
 #include "kis_selection.h"
@@ -558,9 +557,9 @@ public:
     quint8 opacity() const { return m_opacity; }
 
     /// Sets the current KisFilter, used by the paintops that support it (like KisFilterOp)
-    void setFilter(KisFilterSP filter) { m_filter = filter; }
+    void setFilter(KisFilterSP filter);
     /// Returns the current KisFilter
-    KisFilterSP filter() { return m_filter; }
+    KisFilterSP filter();
 
     /**
      * The offset for paint operations that use it (like KisDuplicateOp). It will use as source

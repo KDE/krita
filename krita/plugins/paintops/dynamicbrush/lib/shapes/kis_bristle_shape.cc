@@ -105,6 +105,8 @@ void KisBristleShape::startPainting(KisPainter* _painter)
     m_paintBrush->bristlesPainter = new KisPainter(painter()->device() );
     m_paintBrush->bristlesPainter->setBrush( new KisAutobrushResource(img) );
     m_paintBrush->bristlesPainter->setPaintOp( KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, m_paintBrush->bristlesPainter, 0) );
+    m_paintBrush->bristlesPainter->setPaintColor( KoColor( QColor( (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX ), KoColorSpaceRegistry::instance()->rgb8()) );
+ 
 }
 
 void KisBristleShape::endPainting()
@@ -121,7 +123,7 @@ void KisBristleShape::paintAt(const QPointF &brushPos, const KisPaintInformation
     for( QList< KisBristle >::iterator it = m_paintBrush->m_bristles.begin();
         it != m_paintBrush->m_bristles.end(); ++it)
     {
-        m_paintBrush->bristlesPainter->setPaintColor( it->color );
+//         m_paintBrush->bristlesPainter->setPaintColor( it->color );
 //         kDebug() << it->color.toQColor() << endl;
         double x = it->m_x * m_radius;
         double y = it->m_y * m_radius;

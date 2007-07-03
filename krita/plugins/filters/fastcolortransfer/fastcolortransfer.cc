@@ -28,6 +28,7 @@
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
+#include <kis_filter_registry.h>
 #include <kis_meta_registry.h>
 #include <kis_paint_device.h>
 
@@ -53,7 +54,7 @@ FastColorTransferPlugin::~FastColorTransferPlugin()
 {
 }
 
-KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), "colors", i18n("&Color Transfer..."))
+KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), CategoryColors, i18n("&Color Transfer..."))
 {
 }
 

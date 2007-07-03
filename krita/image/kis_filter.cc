@@ -21,14 +21,26 @@
 
 #include <kconfig.h>
 
-#include "kis_types.h"
 #include "kis_filter_configuration.h"
+#include "kis_paint_device.h"
+#include "kis_types.h"
 
 const KoID KisFilter::ConfigDefault = KoID("Default", i18n("Default"));
 const KoID KisFilter::ConfigDesigner = KoID("Designer", i18n("Designer"));
 const KoID KisFilter::ConfigLastUsed = KoID("Last Used", i18n("Last used"));
 
-KisFilter::KisFilter(const KoID& id, const QString & category, const QString & entry)
+const KoID KisFilter::CategoryAdjust = KoID("adjust_filters", i18n("Adjust"));
+const KoID KisFilter::CategoryArtistic = KoID("artistic_filters", i18n("Artistic"));
+const KoID KisFilter::CategoryBlur = KoID("blur_filters", i18n("Blur"));
+const KoID KisFilter::CategoryColors = KoID("colors_filters", i18n("Colors"));
+const KoID KisFilter::CategoryEdgeDetection = KoID("edge_filters", i18n("Edge Detection"));
+const KoID KisFilter::CategoryEmboss = KoID("emboss_filters", i18n("Emboss"));
+const KoID KisFilter::CategoryEnhance = KoID("enhance_filters", i18n("Enhance"));
+const KoID KisFilter::CategoryMap = KoID("map_filters", i18n("Map"));
+const KoID KisFilter::CategoryNonPhotorealistic = KoID("nonphotorealistic_filters", i18n("Non-photorealistic"));
+const KoID KisFilter::CategoryOther = KoID("other_filters", i18n("Other"));
+
+KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entry)
     : KisProgressSubject(0, id.id().toLatin1())
     , m_id(id)
     , m_progressDisplay(0)
@@ -176,6 +188,11 @@ QRect KisFilter::enlargeRect(QRect rect, KisFilterConfiguration* c) const {
     rect.setRight(rect.right() + margin);
     rect.setBottom(rect.bottom() + margin);
     return rect;
+}
+
+void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, KisFilterConfiguration* config)
+{
+    process(device, rect.topLeft(), device, rect.topLeft(), rect.size(), config);
 }
 
 #include "kis_filter.moc"

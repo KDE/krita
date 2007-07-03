@@ -51,7 +51,7 @@
 //     return k;
 // }
 
-KisBlurFilter::KisBlurFilter() : KisFilter(id(), "blur", i18n("&Blur..."))
+KisBlurFilter::KisBlurFilter() : KisFilter(id(), CategoryBlur, i18n("&Blur..."))
 {
 }
 

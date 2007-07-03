@@ -69,7 +69,7 @@ template<typename _TYPE>
     }
 }
 
-KisFilterMax::KisFilterMax() : KisFilter(id(), "colors", i18n("M&aximize Channel"))
+KisFilterMax::KisFilterMax() : KisFilter(id(), CategoryColors, i18n("M&aximize Channel"))
 {
 }
 
@@ -115,7 +115,7 @@ void KisFilterMax::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
     setProgressDone(); // Must be called even if you don't really support progression
 }
 
-KisFilterMin::KisFilterMin() : KisFilter(id(), "colors", i18n("M&inimize Channel"))
+KisFilterMin::KisFilterMin() : KisFilter(id(), CategoryColors, i18n("M&inimize Channel"))
 {
 }
 

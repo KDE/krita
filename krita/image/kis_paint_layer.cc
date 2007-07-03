@@ -24,7 +24,9 @@
 #include <QUndoCommand>
 #include <QList>
 
-#include "KoColorSpace.h"
+#include <klocale.h>
+
+#include <KoColorSpace.h>
 #include <KoColorProfile.h>
 
 #include "kis_debug_areas.h"

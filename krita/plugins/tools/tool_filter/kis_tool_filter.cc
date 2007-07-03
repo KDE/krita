@@ -40,6 +40,7 @@
 #include "kis_cmb_idlist.h"
 #include "kis_cursor.h"
 #include "kis_filter.h"
+#include "kis_filter_registry.h"
 #include "kis_filterop.h"
 #include "kis_image.h"
 #include "kis_layer.h"

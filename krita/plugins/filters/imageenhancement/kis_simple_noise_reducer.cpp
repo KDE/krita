@@ -29,7 +29,7 @@
 #include <kis_paint_device.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
-    : KisFilter(id(), "enhance", i18n("&Gaussian Noise Reduction"))
+    : KisFilter(id(), CategoryEnhance, i18n("&Gaussian Noise Reduction"))
 {
 }
 

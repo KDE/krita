@@ -42,6 +42,7 @@ struct KisPaintOp::Private
     KisPaintDeviceSP dab;
     KoColor color;
     KoColor previousPaintColor;
+    KisQImagemaskSP previousMask;
 };
 
 
@@ -80,7 +81,11 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, KoColorSpace *cs)
         d->color.convertTo(cs);
         d->color.fromKoColor( m_painter->paintColor());
         d->dab->dataManager()->setDefaultPixel( d->color.data() );
+    } else if(d->previousMask == mask) {
+        return d->dab;
     }
+    d->previousMask = mask;
+    
     // Convert the kiscolor to the right colorspace. TODO: check if the paintColor has change
     Q_CHECK_PTR(d->dab);
 

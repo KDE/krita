@@ -153,7 +153,7 @@
 	<Action name="emboss_filters"/>
     <Action name="map_filters"/>
     <Action name="nonphotorealistic_filters"/>
-	<Action name="misc_filters"/>
+	<Action name="other_filters"/>
 </Menu>
 
 

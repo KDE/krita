@@ -10,4 +10,5 @@ install(FILES
     changecs.rb
     reshapehisto.py
     torture-painting.rb torture-filters.rb
+    sky.rb
     DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/extensions)

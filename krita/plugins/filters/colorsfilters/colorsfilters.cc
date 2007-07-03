@@ -51,6 +51,7 @@
 #include "kis_histogram.h"
 #include "kis_brightness_contrast_filter.h"
 #include "kis_perchannel_filter.h"
+#include "kis_filter_registry.h"
 
 typedef KGenericFactory<ColorsFilters> ColorsFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorsfilters, ColorsFiltersFactory( "krita" ) )
@@ -77,7 +78,7 @@ ColorsFilters::~ColorsFilters()
 //==================================================================
 
 
-KisAutoContrast::KisAutoContrast() : KisFilter(id(), "adjust", i18n("&Auto Contrast"))
+KisAutoContrast::KisAutoContrast() : KisFilter(id(), CategoryAdjust, i18n("&Auto Contrast"))
 {
 }
 
@@ -231,7 +232,7 @@ void KisAutoContrast::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
 //==================================================================
 
 KisDesaturateFilter::KisDesaturateFilter()
-    : KisFilter(id(), "adjust", i18n("&Desaturate"))
+    : KisFilter(id(), CategoryAdjust, i18n("&Desaturate"))
 {
     m_lastCS = 0;
     m_adj = 0;

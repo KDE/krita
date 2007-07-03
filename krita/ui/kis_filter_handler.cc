@@ -1,7 +1,5 @@
 /*
- * This file is part of Krita
- *
- * Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,28 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "unsharp.h"
+#include "kis_filter_handler.h"
 
-#include <kgenericfactory.h>
+struct KisFilterHandler::Private {
+    const KisFilter* filter;
+};
 
-#include "kis_unsharp_filter.h"
-
-#include <kis_filter_registry.h>
-
-typedef KGenericFactory<UnsharpPlugin> UnsharpPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaunsharpfilter, UnsharpPluginFactory( "krita" ) )
-
-UnsharpPlugin::UnsharpPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+KisFilterHandler::KisFilterHandler(const KisFilter* f) : d(new Private)
 {
-    setComponentData(UnsharpPluginFactory::componentData());
-
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisUnsharpFilter()));
-    }
+    d->filter = f;
 }
 
-UnsharpPlugin::~UnsharpPlugin()
+void KisFilterHandler::showDialog()
 {
 }
+
+void KisFilterHandler::reapply()
+{
+}
+
+void KisFilterHandler::apply(KisFilterConfiguration*)
+{
+}
+
+#include "kis_filter_handler.moc"

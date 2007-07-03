@@ -67,7 +67,7 @@ KritaLensCorrectionFilter::~KritaLensCorrectionFilter()
 {
 }
 
-KisFilterLensCorrection::KisFilterLensCorrection() : KisFilter(id(), "other", i18n("&Lens Correction..."))
+KisFilterLensCorrection::KisFilterLensCorrection() : KisFilter(id(), CategoryOther, i18n("&Lens Correction..."))
 {
 }
 

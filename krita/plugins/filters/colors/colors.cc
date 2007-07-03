@@ -24,6 +24,7 @@
 
 #include "kis_minmax_filters.h"
 #include "kis_color_to_alpha.h"
+#include <kis_filter_registry.h>
 
 typedef KGenericFactory<KritaExtensionsColors> KritaExtensionsColorsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaextensioncolorsfilters, KritaExtensionsColorsFactory( "krita" ) )

@@ -42,6 +42,7 @@
 #include "kis_types.h"
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
+#include "kis_filter.h"
 #include "kis_iterator.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iteratorpixeltrait.h"

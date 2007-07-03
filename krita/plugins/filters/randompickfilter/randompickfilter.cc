@@ -64,7 +64,7 @@ KritaRandomPickFilter::~KritaRandomPickFilter()
 {
 }
 
-KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), "other", i18n("&Random Pick..."))
+KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), CategoryOther, i18n("&Random Pick..."))
 {
 }
 

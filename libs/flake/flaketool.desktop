@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Flake tool definition
 Name[de]=Flake-Werkzeugdefinition
+Name[fa]=تعریف ابزار Flake
 Name[sv]=Verktygsdefinition i Flake
 Name[x-test]=xxFlake tool definitionxx
 Type=ServiceType

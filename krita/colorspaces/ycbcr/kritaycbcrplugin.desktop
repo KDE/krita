@@ -7,6 +7,7 @@ Name[sv]=YCbCr-färgmodell (8-bitars och 16-bitars heltal)
 Name[x-test]=xxYCbCr (integer 8-bit and 16-bit) Color Modelxx
 Comment=Color model for 8-bit and 16-bit per channel for YCbCr images
 Comment[de]=Farbmodell für 8-bit und 16-bit pro Kanal YCbCr-Bilder
+Comment[fa]=مدل رنگ برای عدد صحیح ۸ بیتی و ۱۶ بیتی برای هر تصویر YCbCr مجرا
 Comment[ja]=8 ビットおよび 16 ビット/チャンネルの YCbCr 画像のためのカラーモデル
 Comment[sv]=Färgmodell för YCbCr-bilder med 8-bitars och 16-bitars heltal per kanal
 Comment[x-test]=xxColor model for 8-bit and 16-bit per channel for YCbCr imagesxx

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Change case plugin
+Name[fa]=تغییر وصلۀ حالت
+Name[sv]=Insticksprogram för skiftlägesändring
 ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service
 X-KoText-Version=1

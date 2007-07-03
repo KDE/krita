@@ -3,6 +3,7 @@ Encoding=UTF-8
 Icon=
 Name=Text Variables
 Name[de]=Textvariablen
+Name[fa]=متغیرهای متن
 Name[sv]=Textvariabler
 Name[x-test]=xxText Variablesxx
 ServiceTypes=KOffice/Text-InlineObject

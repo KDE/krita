@@ -112,7 +112,7 @@ public:
 KoShape::KoShape()
     : d(new Private(this))
 {
-    recalcMatrix();
+    notifyChanged();
 }
 
 KoShape::~KoShape()
@@ -150,7 +150,7 @@ void KoShape::scale( double sx, double sy )
     scaleMatrix.translate( -pos.x(), -pos.y() );
     applyTransformation( scaleMatrix );
 
-    recalcMatrix();
+    notifyChanged();
     d->shapeChanged(ScaleChanged);
 }
 
@@ -163,7 +163,7 @@ void KoShape::rotate( double angle )
     rotateMatrix.translate( -center.x(), -center.y() );
     d->localMatrix = rotateMatrix * d->localMatrix;
 
-    recalcMatrix();
+    notifyChanged();
     d->shapeChanged(RotationChanged);
 }
 
@@ -176,7 +176,7 @@ void KoShape::shear( double sx, double sy )
     shearMatrix.translate( -pos.x(), -pos.y() );
     d->localMatrix = shearMatrix * d->localMatrix;
 
-    recalcMatrix();
+    notifyChanged();
     d->shapeChanged(ShearChanged);
 }
 
@@ -197,7 +197,7 @@ void KoShape::resize( const QSizeF &newSize )
         point.setX(point.x() * fx);
         point.setY(point.y() * fy);
     }
-    recalcMatrix();
+    notifyChanged();
     d->shapeChanged(SizeChanged);
 }
 
@@ -206,8 +206,11 @@ void KoShape::setPosition( const QPointF &position )
     QPointF currentPos = d->localMatrix.map( QPointF(0,0) );
     if( position == currentPos )
         return;
-    d->localMatrix.translate( position.x()-currentPos.x(), position.y()-currentPos.y() );
-    recalcMatrix();
+    QMatrix translateMatrix;
+    translateMatrix.translate( position.x()-currentPos.x(), position.y()-currentPos.y() );
+    d->localMatrix = d->localMatrix * translateMatrix;
+
+    notifyChanged();
     d->shapeChanged(PositionChanged);
 }
 
@@ -235,11 +238,6 @@ QRectF KoShape::boundingRect() const
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
     return transformationMatrix(0).mapRect( bb );
-}
-
-void KoShape::recalcMatrix()
-{
-    notifyChanged();
 }
 
 QMatrix KoShape::transformationMatrix(const KoViewConverter *converter) const {
@@ -312,7 +310,7 @@ void KoShape::setParent(KoShapeContainer *parent) {
     }
     else
         d->parent = 0;
-    recalcMatrix();
+    notifyChanged();
     d->shapeChanged(ParentChanged);
 }
 
@@ -370,7 +368,7 @@ void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor)
     QPointF currentAbsPosition = absolutePosition( anchor );
     QPointF translate = newPosition - currentAbsPosition;
     d->localMatrix.translate( translate.x(), translate.y() );
-    recalcMatrix();
+    notifyChanged();
     d->shapeChanged(PositionChanged);
 }
 

@@ -45,7 +45,7 @@ public:
             return;
         relation->m_inside = clipping;
         relation->child()->repaint();
-        relation->child()->recalcMatrix();
+        relation->child()->notifyChanged();
         relation->child()->repaint();
     }
 
@@ -228,7 +228,7 @@ void KoShapeContainer::shapeChanged(ChangeType type) {
         return;
     d->children->containerChanged(this);
     foreach (KoShape *shape, d->children->iterator())
-        shape->recalcMatrix();
+        shape->notifyChanged();
 }
 
 bool KoShapeContainer::childClipped(const KoShape *child) const {

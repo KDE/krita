@@ -412,11 +412,6 @@ public:
     static bool compareShapeZIndex(KoShape *s1, KoShape *s2);
 
     /**
-     * Called internally whenever a property is changed that requires the matrix to be recalculated.
-     */
-    void recalcMatrix();
-
-    /**
      * returns the outline of the shape in the form of a path.
      * The outline returned will always have the position() of the shape as the origin, so
      * moving the shape will not alter the result.  The outline is used to draw the border
@@ -587,6 +582,11 @@ public:
      */
     void setName( const QString & name );
 
+    /**
+     * Update the position of the shape in the tree of the KoShapeManager.
+     */
+    void notifyChanged();
+
 
 protected:
 
@@ -646,11 +646,6 @@ protected:
 
 /* ** end loading saving */
 
-
-    /**
-     * Update the position of the shape in the tree of the KoShapeManager.
-     */
-    void notifyChanged();
 
     /**
      * A hook that allows inheriting classes to do something after a KoShape property changed

@@ -367,7 +367,9 @@ QPointF KoShape::absolutePosition(KoFlake::Position anchor) const {
 void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor) {
     QPointF currentAbsPosition = absolutePosition( anchor );
     QPointF translate = newPosition - currentAbsPosition;
-    d->localMatrix.translate( translate.x(), translate.y() );
+    QMatrix translateMatrix;
+    translateMatrix.translate( translate.x(), translate.y() );
+    d->localMatrix = d->localMatrix * translateMatrix;
     notifyChanged();
     d->shapeChanged(PositionChanged);
 }

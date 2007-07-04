@@ -5,6 +5,7 @@
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *                2001 John Califf <jcaliff@compuzone.net>
  *                2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

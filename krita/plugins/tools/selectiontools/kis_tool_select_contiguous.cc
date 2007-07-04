@@ -161,6 +161,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setWindowTitle(i18n("Contiguous Area Selection"));
     m_optWidget->disableAntiAliasSelectionOption();
+    m_optWidget->disableSelectionModeOption();
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);

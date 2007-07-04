@@ -52,6 +52,7 @@ public:
 
     bool antiAliasSelection();
     void disableAntiAliasSelectionOption();
+    void disableSelectionModeOption();
 
 signals:
     void actionChanged(int);

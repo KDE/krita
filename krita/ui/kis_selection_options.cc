@@ -74,4 +74,9 @@ void KisSelectionOptions::disableAntiAliasSelectionOption()
     m_page->chkAntiAliasing->setDisabled(true);
 }
 
+void KisSelectionOptions::disableSelectionModeOption()
+{
+    m_page->cmbMode->setDisabled(true);
+}
+
 #include "kis_selection_options.moc"

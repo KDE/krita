@@ -278,7 +278,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
         }
 
         // Draw the mouse indicator
-        if(d->m_showMousePosition && (mouseCoord > 0)) {
+        if(d->m_showMousePosition && (mouseCoord > 0) && (mouseCoord < rectangle.width()) ) {
             painter.drawLine(QPointF(mouseCoord, rectangle.y() + 1),
                               QPointF(mouseCoord, rectangle.bottom() - 1));
         }
@@ -460,7 +460,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
         }
 
         // Draw the mouse indicator
-        if(d->m_showMousePosition && (mouseCoord > 0)) {
+        if(d->m_showMousePosition && (mouseCoord > 0) && (mouseCoord < rectangle.height()) ) {
             painter.drawLine(QPointF(rectangle.x() + 1, mouseCoord),
                               QPointF(rectangle.right() - 1, mouseCoord));
         }

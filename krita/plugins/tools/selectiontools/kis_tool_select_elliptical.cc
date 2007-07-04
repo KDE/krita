@@ -29,7 +29,11 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "KoPointerEvent.h"
+#include <KoPointerEvent.h>
+#include <KoShapeController.h>
+#include <KoPathShape.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeFactory.h>
 
 #include "kis_cursor.h"
 #include "kis_image.h"
@@ -41,6 +45,7 @@
 #include "kis_selected_transaction.h"
 #include "kis_canvas2.h"
 #include "kis_pixel_selection.h"
+#include "kis_shape_selection.h"
 
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6))
@@ -51,6 +56,7 @@ KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase * canvas)
     m_endPos = QPointF(0, 0);
     m_optWidget = 0;
     m_selectAction = SELECTION_REPLACE;
+    m_selectionMode = PIXEL_SELECTION;
 }
 
 KisToolSelectElliptical::~KisToolSelectElliptical()
@@ -164,6 +170,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 bool hasSelection = dev->hasSelection();
                 KisSelectionSP selection = dev->selection();
 
+            if(m_selectionMode == PIXEL_SELECTION){
                 KisPixelSelectionSP pixelSelection = dev->pixelSelection();
 
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
@@ -211,6 +218,49 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 }
 
                 m_canvas->addCommand(t);
+            }
+            else {
+                QRectF documentRect = convertToPt(QRectF(m_startPos, m_endPos));
+
+                KoShape* shape;
+                KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoEllipseShape");
+                if(rectFactory) {
+                    shape = rectFactory->createDefaultShape();
+                    shape->resize(documentRect.size());
+                    shape->setPosition(documentRect.topLeft());
+                }
+                else {
+                    //Fallback if the plugin wasn't found
+                    KoPathShape* path = new KoPathShape();
+                    path->setShapeId( KoPathShapeId );
+
+                    QPointF rightMiddle = QPointF(documentRect.left() + documentRect.width(), documentRect.top() + documentRect.height()/2);
+                    path->moveTo( rightMiddle );
+                    path->arcTo( documentRect.width()/2, documentRect.height()/2, 0, 360.0 );
+                    path->close();
+                    path->normalize();
+                    shape = path;
+                }
+
+                KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
+                Q_ASSERT(canvas);
+                KisSelectionSP selection = dev->selection();
+
+                KisShapeSelection* shapeSelection;
+                if(!selection->hasShapeSelection()) {
+                    shapeSelection = new KisShapeSelection(m_currentImage);
+                    QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
+                    cmd->redo();
+                    selection->setShapeSelection(shapeSelection);
+                }
+                else {
+                    shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+                }
+                shape->setParent(shapeSelection);
+                QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
+                m_canvas->addCommand(cmd);
+                shapeSelection->addChild(shape);
+            }
 
 //                 QApplication::restoreOverrideCursor();
             }
@@ -224,6 +274,10 @@ void KisToolSelectElliptical::slotSetAction(int action) {
         m_selectAction =(enumSelectionMode)action;
 }
 
+void KisToolSelectElliptical::slotSetSelectionMode(int mode) {
+    m_selectionMode = (selectionMode)mode;
+}
+
 QWidget* KisToolSelectElliptical::createOptionWidget()
 {
     KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
@@ -233,6 +287,8 @@ QWidget* KisToolSelectElliptical::createOptionWidget()
     m_optWidget->setWindowTitle(i18n("Elliptical Selection"));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+    connect(m_optWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
+
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);

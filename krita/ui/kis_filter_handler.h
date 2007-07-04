@@ -31,6 +31,7 @@ class KisFilterHandler : public QObject {
         Q_OBJECT
     public:
         KisFilterHandler(KisFilterSP f, KisView2* view);
+        ~KisFilterHandler();
     public slots:
         void showDialog();
         void reapply();

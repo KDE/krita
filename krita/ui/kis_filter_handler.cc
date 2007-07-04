@@ -28,8 +28,11 @@
 #include "kis_view2.h"
 
 struct KisFilterHandler::Private {
+    Private() : view(0), dialog(0) {}
+    ~Private() { delete dialog; }
     KisFilterSP filter;
     KisView2* view;
+    KisFilterDialog* dialog;
 };
 
 KisFilterHandler::KisFilterHandler(KisFilterSP f, KisView2* view) : d(new Private)
@@ -38,13 +41,19 @@ KisFilterHandler::KisFilterHandler(KisFilterSP f, KisView2* view) : d(new Privat
     d->view = view;
 }
 
+KisFilterHandler::~KisFilterHandler()
+{
+    delete d->dialog;
+}
+
 void KisFilterHandler::showDialog()
 {
-    KisFilterDialog dialog( d->view , d->view->activeLayer());
-    dialog.setFilter( d->filter );
-    connect(&dialog, SIGNAL(sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*)),
+    delete d->dialog;
+    KisFilterDialog* dialog = new KisFilterDialog( d->view , d->view->activeLayer());
+    dialog->setFilter( d->filter );
+    connect(dialog, SIGNAL(sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*)),
             SLOT(apply(KisLayerSP, KisFilterConfiguration*)));
-    dialog.exec();
+    dialog->setVisible(true);
 }
 
 void KisFilterHandler::reapply()
@@ -78,8 +87,6 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         // Chop up in rects.
         d->filter->process(dev, rect, config);
     }
-    kDebug() << d->filter->cancelRequested() << endl;
-    kDebug() << cmd << endl;
     if (d->filter->cancelRequested()) {
     } else {
         dev->setDirty(rect);

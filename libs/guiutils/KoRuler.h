@@ -53,6 +53,20 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
         KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter);
         ~KoRuler();
 
+        /// enum for a type of tabulator used
+        enum TabType {
+            LeftTab,        ///< A left-tab
+            RightTab,       ///< A right-tab
+            CenterTab,      ///< A centered-tab
+            DelimiterTab    ///< A tab stopping at a certain delimiter-character
+        };
+
+        /// For paragraphs each tab definition is represented by this struct.
+        struct Tab {
+            double position;    ///< distance in point from the start of the text-shape
+            TabType type;       ///< Determine which type is used.
+        };
+
         /// The ruler's unit
         KoUnit unit() const;
 
@@ -74,7 +88,7 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
         virtual QSize minimumSizeHint() const;
         virtual QSize sizeHint() const;
 
-    public Q_SLOTS:
+    public slots:
         /// Set the unit of the ruler
         void setUnit(KoUnit unit);
 
@@ -149,12 +163,30 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
          */
         void updateSelectionBorders(double first, double second);
 
+        /**
+         * Set whether the ruler should show tabs
+         * @param show show selection borders if true, default is false.
+         */
+        void setShowTabs(bool show);
+
+        /**
+         * Update the tabs
+         * @param tabs a list of tabs that is shown on the ruler the first selection border in points
+         */
+        void updateTabs(const QList<Tab> &tabs);
+
 signals:
         /**
          * emitted when any of the indents is moved by the user.
          * @param final false until the user releases the mouse. So you can implement live update.
          */
         void indentsChanged(bool final);
+
+        /**
+         * emitted when any of the tabs is moved, deleted or inserted by the user.
+         * @param final false until the user releases the mouse. So you can implement live update.
+         */
+        void tabsChanged(bool final);
 
     protected:
         virtual void paintEvent(QPaintEvent* event);

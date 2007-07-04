@@ -61,6 +61,8 @@ class KoRulerPrivate {
         double m_paragraphIndent;
         double m_endIndent;
 
+        bool m_showTabs;
+
         bool m_rightToLeft;
         int m_selected;
         int m_selectOffset;
@@ -80,6 +82,8 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     setShowMousePosition(false);
     setShowSelectionBorders(false);
     setShowIndents(true); 
+    setShowTabs(true);
+
     setRightToLeft(true);
     d->m_firstLineIndent = d->m_paragraphIndent = 0;
     d->m_endIndent = 0;
@@ -301,7 +305,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
             // Draw first line start indent
             if (d->m_rightToLeft) {
                 x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd
-                        - d->m_firstLineIndent) + qMin(0, d->m_offset);
+                        - d->m_firstLineIndent - d->m_paragraphIndent) + qMin(0, d->m_offset);
                 x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
                 polygon << QPointF(x+0.5, 0.5)
                         << QPointF(x-9.5, 5.5)
@@ -310,7 +314,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
                 painter.drawPolygon(polygon);
             } else {
                 x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart
-                        + d->m_firstLineIndent) + qMin(0, d->m_offset);
+                        + d->m_firstLineIndent + d->m_paragraphIndent) + qMin(0, d->m_offset);
                 x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
                 polygon << QPointF(x+0.5, 0.5)
                         << QPointF(x+10.5, 5.5)
@@ -549,6 +553,16 @@ void KoRuler::updateSelectionBorders(double first, double second)
     update();
 }
 
+void KoRuler::setShowTabs(bool show)
+{
+    d->m_showTabs = show;
+}
+
+void KoRuler::updateTabs(const QList<Tab> &tabs)
+{
+    Q_UNUSED(tabs);
+}
+
 void KoRuler::mousePressEvent ( QMouseEvent* ev )
 {
     QPoint pos = ev->pos();
@@ -556,8 +570,8 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
     d->m_selected = 0;
 
     if (d->m_rightToLeft) {
-        int x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_firstLineIndent)
-                            + d->m_offset);
+        int x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_firstLineIndent
+                - d->m_paragraphIndent) + d->m_offset);
         if (pos.x() >= x-10 && pos.x() <= x && pos.y() <10) {
             d->m_selectOffset = x - pos.x();
             d->m_selected = 1;
@@ -577,8 +591,8 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
             d->m_selected = 3;
         }
     } else {
-        int x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_firstLineIndent)
-                            + d->m_offset);
+        int x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart
+             + d->m_firstLineIndent + d->m_paragraphIndent) + d->m_offset);
         if (pos.x() >= x && pos.x() <= x+10 && pos.y() <10) {
             d->m_selectOffset = x - pos.x();
             d->m_selected = 1;
@@ -611,6 +625,7 @@ void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
 void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
 {
     QPoint pos = ev->pos();
+    double activeLength = d->m_activeRangeEnd - d->m_activeRangeStart;
 
     switch(d->m_selected) {
     case 0:
@@ -618,14 +633,11 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         break;
     case 1:
         if (d->m_rightToLeft)
-            d->m_firstLineIndent = d->m_activeRangeEnd -
+            d->m_firstLineIndent = d->m_activeRangeEnd - d->m_paragraphIndent -
                 d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset - d->m_offset);
         else
             d->m_firstLineIndent = d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset
-                - d->m_offset) - d->m_activeRangeStart;
-
-        if (d->m_firstLineIndent < 0)
-            d->m_firstLineIndent = 0;
+                - d->m_offset) - d->m_activeRangeStart - d->m_paragraphIndent;
 
         emit indentsChanged(false);
         break;
@@ -638,6 +650,8 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
                 - d->m_offset) - d->m_activeRangeStart;
         if (d->m_paragraphIndent < 0)
             d->m_paragraphIndent = 0;
+        if (d->m_paragraphIndent + d->m_endIndent > activeLength)
+            d->m_paragraphIndent = activeLength - d->m_endIndent;;
         emit indentsChanged(false);
         break;
     case 3:
@@ -649,6 +663,8 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
                  + d->m_selectOffset - d->m_offset);
         if (d->m_endIndent < 0)
             d->m_endIndent = 0;
+        if (d->m_paragraphIndent + d->m_endIndent > activeLength)
+            d->m_endIndent = activeLength - d->m_paragraphIndent;;
         emit indentsChanged(false);
         break;
     }

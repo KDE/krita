@@ -60,7 +60,7 @@ void transmittanceToDensity(int T, int *D)
 }
 
 /*
-This implementations use
+This implementation uses
 Zimmer, System and method for digital rendering of images and printed articulation, 1994
 */
 void densityToTransmittance(int D, int *T)
@@ -111,7 +111,6 @@ This implementation use Tunde Cockshott Wet&Sticky code.
 */
 void Cell::mixUsingHls(const Cell &cell)
 {
-
     float ratio, delta;
     ratio = volume / cell.volume;
     delta = hue - cell.hue;
@@ -132,7 +131,6 @@ void Cell::mixUsingHls(const Cell &cell)
 
 void Cell::mixUsingCmy(const Cell &cell)
 {
-
     float ratio;
     int delta;
 

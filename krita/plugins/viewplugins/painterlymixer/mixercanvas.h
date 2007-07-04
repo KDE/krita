@@ -40,9 +40,11 @@ public:
     ~MixerCanvas();
 
     // Initializes the canvas KisPaintDevice, and add overlays to it.
-    void initDevice(KoColorSpace *cs, KoCanvasResourceProvider *rp);
-    // Initializes the color wells and various spots in the Spots Frame.
-    void initSpots(QFrame *sf);
+    void setDevice(KoColorSpace *cs);
+    KisPaintDevice *device() {return m_device.data();}
+
+    void setToolProxy(KoToolProxy *proxy) {m_toolProxy = proxy;}
+    KoToolProxy* toolProxy() {return m_toolProxy;}
 
 // Events to be redirected to the MixerTool
 protected:
@@ -70,10 +72,9 @@ public:
 
 private:
     bool m_tabletPressed;
-    MixerTool *m_tool;
     KoToolProxy *m_toolProxy;
 
-    KisPaintDeviceSP m_canvasDev;
+    KisPaintDeviceSP m_device;
 
 };
 

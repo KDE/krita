@@ -27,6 +27,8 @@ class QWidget;
 
 class KisView2;
 
+class MixerTool;
+
 class KisPainterlyMixer : public QWidget, private Ui::KisPainterlyMixer {
     Q_OBJECT
 
@@ -35,7 +37,15 @@ public:
     ~KisPainterlyMixer();
 
 private:
+
+    void initTool();
+    void initSpots();
+
+private:
     KisView2 *m_view;
+    MixerTool *m_tool;
+
+    KoCanvasResourceProvider *m_resources;
 
 };
 

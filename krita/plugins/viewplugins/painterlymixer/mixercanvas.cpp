@@ -56,7 +56,7 @@
 #include "utilities.h"
 
 MixerCanvas::MixerCanvas(QWidget *parent)
-    : QFrame(parent), KoCanvasBase(0), m_tool(0), m_toolProxy(0)
+    : QFrame(parent), KoCanvasBase(0), m_toolProxy(0)
 {
 
 }
@@ -65,23 +65,12 @@ MixerCanvas::~MixerCanvas()
 {
     if (m_toolProxy)
         delete m_toolProxy;
-    if (m_tool)
-        delete m_tool;
 }
 
-void MixerCanvas::initDevice(KoColorSpace *cs, KoCanvasResourceProvider *rp)
+void MixerCanvas::setDevice(KoColorSpace *cs)
 {
-    m_canvasDev = new KisPaintDevice(cs);
-    addPainterlyOverlays(m_canvasDev.data());
-
-    m_tool = new MixerTool(this, m_canvasDev.data(), rp);
-    m_toolProxy = new KoToolProxy(this);
-    m_toolProxy->setActiveTool(m_tool);
-}
-
-void MixerCanvas::initSpots(QFrame *sf)
-{
-    // TODO Initialize spots
+    m_device = new KisPaintDevice(cs);
+    addPainterlyOverlays(m_device.data());
 }
 
 void MixerCanvas::mouseDoubleClickEvent(QMouseEvent *event)
@@ -115,7 +104,7 @@ void MixerCanvas::paintEvent(QPaintEvent *event)
 
     QRect r = rect();
     QPainter p(this);
-    p.drawImage(r, m_canvasDev->convertToQImage(0, r.x(), r.y(), r.width(), r.height()), r);
+    p.drawImage(r, m_device->convertToQImage(0, r.x(), r.y(), r.width(), r.height()), r);
     p.end();
 }
 

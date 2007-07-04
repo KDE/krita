@@ -20,23 +20,43 @@
 
 #include <QtGui>
 
+#include <KoCanvasResourceProvider.h>
+#include <KoToolProxy.h>
+
 #include "kis_canvas2.h"
 #include "kis_resource_provider.h"
 #include "kis_view2.h"
 
 #include "kis_painterlymixer.h"
+#include "mixertool.h"
 
 KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
-    : QWidget(parent), m_view(view)
+    : QWidget(parent), m_view(view), m_resources(view->canvasBase()->resourceProvider())
 {
     setupUi(this);
 
-    m_canvas->initDevice(m_view->image()->colorSpace(), m_view->canvasBase()->resourceProvider());
-    m_canvas->initSpots(m_spotsFrame);
+    m_canvas->setDevice(m_view->image()->colorSpace());
+    initTool();
+    initSpots();
 }
 
 KisPainterlyMixer::~KisPainterlyMixer()
 {
+    if (m_tool)
+        delete m_tool;
+}
+
+void KisPainterlyMixer::initTool()
+{
+    m_tool = new MixerTool(m_canvas, m_canvas->device(), m_resources);
+
+    m_canvas->setToolProxy(new KoToolProxy(m_canvas));
+    m_canvas->toolProxy()->setActiveTool(m_tool);
+}
+
+void KisPainterlyMixer::initSpots()
+{
+
 }
 
 

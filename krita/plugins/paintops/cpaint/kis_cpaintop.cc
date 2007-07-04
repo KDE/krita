@@ -153,7 +153,7 @@ KisCPaintOp::KisCPaintOp(Brush * brush, const KisCPaintOpSettings * settings, Ki
     m_ink = settings->ink();
     m_water = settings->water();
     newStrokeFlag = true;
-    m_color = m_painter->paintColor();
+    m_color = this->painter()->paintColor();
     m_stroke = 0;
     KisPaintDeviceSP dev = painter->device();
 
@@ -170,9 +170,9 @@ KisCPaintOp::~KisCPaintOp()
 
 void KisCPaintOp::paintAt(const KisPaintInformation& info)
 {
-    if (!m_painter->device()) return;
+    if (!painter()->device()) return;
 
-    KisPaintDeviceSP device = m_painter->device();
+    KisPaintDeviceSP device = painter()->device();
 
     sampleCount++;
     Sample * newSample = new Sample;
@@ -211,7 +211,7 @@ void KisCPaintOp::paintAt(const KisPaintInformation& info)
         KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace());
         dab->convertFromQImage( m_tempImage, "" ); // Use monitor profile?
 
-        m_painter->bitBlt( QPoint( 0, 0 ), dab, m_tempImage.rect() );
+        painter()->bitBlt( QPoint( 0, 0 ), dab, m_tempImage.rect() );
 
     }
     m_lastPoint = info.pos;

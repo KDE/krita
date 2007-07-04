@@ -75,12 +75,12 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
 // in one layer and your pencil in another is not the same as really working
 // with the combination.
 
-    if (!m_painter) return;
+    if (!painter()) return;
 
-    KisPaintDeviceSP device = m_painter->device();
+    KisPaintDeviceSP device = painter()->device();
     if (!device) return;
 
-    KisBrush *brush = m_painter->brush();
+    KisBrush *brush = painter()->brush();
     if (! brush->canPaintFor(info) )
         return;
     QPointF hotSpot = brush->hotSpot(info);
@@ -115,8 +115,8 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
 
 
-    if ( m_painter->bounds().isValid() ) {
-        dstRect &= m_painter->bounds();
+    if ( painter()->bounds().isValid() ) {
+        dstRect &= painter()->bounds();
     }
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
@@ -126,12 +126,12 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab,
-                                m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
+    if (source()->hasSelection()) {
+        painter()->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab,
+                                source()->selection(), painter()->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab, m_painter->opacity(), sx, sy, sw, sh);
+        painter()->bitBlt(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab, painter()->opacity(), sx, sy, sw, sh);
     }
 
 }

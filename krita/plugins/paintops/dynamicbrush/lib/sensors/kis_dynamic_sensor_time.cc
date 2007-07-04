@@ -20,6 +20,8 @@
 
 #include "ui_SensorTimeConfiguration.h"
 
+#include "kis_paint_information.h"
+
 KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0), m_length(30), m_periodic(true)
 {
     

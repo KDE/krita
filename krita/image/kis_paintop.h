@@ -23,21 +23,8 @@
 #ifndef KIS_PAINTOP_H_
 #define KIS_PAINTOP_H_
 
-#include <QString>
-#include <QMetaType>
-#include <QRegion>
-
-#include <ksharedptr.h>
-#include <klocale.h>
-
-#include "KoID.h"
-#include "KoColorSpace.h"
-
 #include "kis_shared.h"
-#include "kis_global.h"
 #include "kis_types.h"
-#include "kis_vec.h"
-#include "kis_paint_information.h"
 
 #include <krita_export.h>
 
@@ -49,6 +36,7 @@ class KoInputDevice;
 
 class KisQImagemask;
 class KisPainter;
+class KisPaintInformation;
 
 /**
  * KisPaintOp are use by tools to draw on a paint device.
@@ -116,9 +104,8 @@ protected:
      * Split the coordinate into whole + fraction, where fraction is always >= 0.
      */
     virtual void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
-
-    KisPainter * m_painter;
-    KisPaintDeviceSP m_source; // use this layer as source layer for the operation
+    KisPainter* painter();
+    KisPaintDeviceSP source();
 private:
     Private* const d;
 };
@@ -164,14 +151,14 @@ public:
     /**
      * The filename of the pixmap we can use to represent this paintop in the ui.
      */
-    virtual QString pixmap() { return ""; }
+    virtual QString pixmap();
 
     /**
      * Whether this paintop is internal to a certain tool or can be used
      * in various tools. If false, it won't show up in the toolchest.
      * The KoColorSpace argument can be used when certain paintops only support a specific cs
      */
-    virtual bool userVisible(KoColorSpace * cs = 0) { return cs && cs->id() != "WET"; }
+    virtual bool userVisible(KoColorSpace * cs = 0);
 
     /**
      * Create and return an (abstracted) widget with options for this paintop when used with the

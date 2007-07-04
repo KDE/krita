@@ -22,6 +22,7 @@
 
 #include <QApplication>
 
+#include <kaction.h>
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
@@ -29,20 +30,21 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
+#include <kis_action_recorder.h>
 #include <kis_config.h>
 #include <kis_cursor.h>
 #include <kis_global.h>
+#include <kis_image.h>
+#include <kis_recorded_action.h>
 #include <kis_types.h>
 #include <kis_view2.h>
-
-#include "kis_events_recorder.h"
 
 typedef KGenericFactory<TogetherPlugin> TogetherPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatogether, TogetherPluginFactory( "krita" ) )
 
 
 TogetherPlugin::TogetherPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent), m_recorder (new KisEventsRecorder)
+    : KParts::Plugin(parent)
 {
     if ( parent->inherits("KisView2") )
     {
@@ -52,20 +54,11 @@ TogetherPlugin::TogetherPlugin(QObject *parent, const QStringList &)
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/together.rc"), true);
 
-        // Start recording action
-        KAction *action  = new KAction(i18n("Start"), this);
-        actionCollection()->addAction("Recording_Start", action );
-        connect(action, SIGNAL(triggered()), this, SLOT(slotStart()));
-        // Stop recording action
-        action  = new KAction(i18n("Stop"), this);
-        actionCollection()->addAction("Recording_Stop", action );
-        connect(action, SIGNAL(triggered()), this, SLOT(slotStop()));
         // Replay recording action
-        action  = new KAction(i18n("Replay"), this);
+        KAction* action  = new KAction(i18n("Replay"), this);
         actionCollection()->addAction("Recording_Replay", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotReplay()));
     }
-    QApplication::instance()->installEventFilter(m_recorder);
 }
 
 TogetherPlugin::~TogetherPlugin()
@@ -73,17 +66,15 @@ TogetherPlugin::~TogetherPlugin()
     m_view = 0;
 }
 
-void TogetherPlugin::slotStart()
-{
-    m_recorder->start();
-}
-void TogetherPlugin::slotStop()
-{
-    m_recorder->stop();
-}
 void TogetherPlugin::slotReplay()
 {
-    m_recorder->replay();
+    KisActionRecorder* actionRecorder = m_view->image()->actionRecorder();
+    QList<KisRecordedAction*> actions = actionRecorder->actions();
+    for( QList<KisRecordedAction*>::iterator it = actions.begin();
+         it != actions.end(); ++it)
+    {
+        (*it)->play();
+    }
 }
 
 #include "together.moc"

@@ -88,16 +88,16 @@ double KisDuplicateOp::minimizeEnergy(const double* m, double* sol, int w, int h
 
 void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
-    if (!m_painter) return;
+    if (!painter()) return;
 
-    bool heal = m_painter->duplicateHealing();
-//     int healradius = m_painter->duplicateHealingRadius();
+    bool heal = painter()->duplicateHealing();
+//     int healradius = painter()->duplicateHealingRadius();
 
-    KisPaintDeviceSP device = m_painter->device();
-    if (m_source) device = m_source;
+    KisPaintDeviceSP device = painter()->device();
+    if (source()) device = source();
     if (!device) return;
 
-    KisBrush * brush = m_painter->brush();
+    KisBrush * brush = painter()->brush();
     if (!brush) return;
     if (! brush->canPaintFor(info) )
         return;
@@ -129,11 +129,11 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
         dab = computeDab(mask, KoColorSpaceRegistry::instance()->alpha8());
     }
 
-    m_painter->setPressure(info.pressure);
+    painter()->setPressure(info.pressure);
 
-    QPointF srcPointF = pt - m_painter->duplicateOffset();
-    QPoint srcPoint = QPoint(x - static_cast<qint32>(m_painter->duplicateOffset().x()),
-                             y - static_cast<qint32>(m_painter->duplicateOffset().y()));
+    QPointF srcPointF = pt - painter()->duplicateOffset();
+    QPoint srcPoint = QPoint(x - static_cast<qint32>(painter()->duplicateOffset().x()),
+                             y - static_cast<qint32>(painter()->duplicateOffset().y()));
 
 
     qint32 sw = dab->extent().width();
@@ -153,7 +153,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     // Perspective correction ?
     KisPainter copyPainter(m_srcdev);
-    if(m_painter->duplicatePerspectiveCorrection())
+    if(painter()->duplicatePerspectiveCorrection())
     {
         double startM[3][3];
         double endM[3][3];
@@ -202,8 +202,8 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 #endif
 
         // Compute the translation in the perspective transformation space:
-        QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_painter->duplicateStart()) );
-        QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, QPointF(m_painter->duplicateStart()) - QPointF(m_painter->duplicateOffset()) );
+        QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(painter()->duplicateStart()) );
+        QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, QPointF(painter()->duplicateStart()) - QPointF(painter()->duplicateOffset()) );
         QPointF translat = duplicateStartPoisitionT - positionStartPaintingT;
         KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh);
         KisRandomSubAccessorPixel srcAcc = device->createRandomSubAccessor();
@@ -312,8 +312,8 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
 
-    if ( m_painter->bounds().isValid() ) {
-        dstRect &= m_painter->bounds();
+    if ( painter()->bounds().isValid() ) {
+        dstRect &= painter()->bounds();
     }
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
@@ -323,12 +323,12 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     sw = dstRect.width();
     sh = dstRect.height();
 
-    if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), m_target,
-                                m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
+    if (source()->hasSelection()) {
+        painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_target,
+                                source()->selection(), painter()->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), m_target, m_painter->opacity(), sx, sy, sw, sh);
+        painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_target, painter()->opacity(), sx, sy, sw, sh);
     }
 
 

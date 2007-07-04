@@ -102,9 +102,9 @@ KisSmearyOp::~KisSmearyOp()
 
 void KisSmearyOp::paintAt(const KisPaintInformation& info)
 {
-    if (!m_painter->device()) return;
+    if (!painter()->device()) return;
 
-    KisBrush *brush = m_painter->brush();
+    KisBrush *brush = painter()->brush();
 
     Q_ASSERT(brush);
 
@@ -113,9 +113,9 @@ void KisSmearyOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info) )
         return;
 
-    KisPaintDeviceSP device = m_painter->device();
+    KisPaintDeviceSP device = painter()->device();
     KoColorSpace * colorSpace = device->colorSpace();
-    KoColor kc = m_painter->paintColor();
+    KoColor kc = painter()->paintColor();
     kc.convertTo(colorSpace);
 
     QPointF hotSpot = brush->hotSpot(info);
@@ -133,7 +133,7 @@ void KisSmearyOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP dab = KisPaintDeviceSP(new KisPaintDevice(colorSpace, "smeary dab"));
     Q_CHECK_PTR(dab);
 
-    m_painter->setPressure(info.pressure);
+    painter()->setPressure(info.pressure);
 
     // Compute the position of the tufts. The tufts are arranged in a line
     // perpendicular to the motion of the brush, i.e, the straight line between
@@ -161,12 +161,12 @@ void KisSmearyOp::paintAt(const KisPaintInformation& info)
     vr = vr - vl;
     vr.normalize();
 
-    if (m_source->hasSelection()) {
-        m_painter->bltSelection(x - 32, y - 32, m_painter->compositeOp(), dab,
-                                m_source->selection(), m_painter->opacity(), x - 32, y -32, 64, 64);
+    if (source()->hasSelection()) {
+        painter()->bltSelection(x - 32, y - 32, painter()->compositeOp(), dab,
+                                source()->selection(), painter()->opacity(), x - 32, y -32, 64, 64);
     }
     else {
-        m_painter->bitBlt(x - 32, y - 32, m_painter->compositeOp(), dab, m_painter->opacity(), x - 32, y -32, 64, 64);
+        painter()->bitBlt(x - 32, y - 32, painter()->compositeOp(), dab, painter()->opacity(), x - 32, y -32, 64, 64);
     }
 
 }

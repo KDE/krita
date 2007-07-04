@@ -18,6 +18,7 @@
 
 #include "kis_rotation_transformation.h"
 
+#include <math.h>
 #include "kis_dynamic_shape.h"
 #include "kis_dynamic_sensor.h"
 

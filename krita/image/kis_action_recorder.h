@@ -21,13 +21,16 @@
 
 #include <QObject>
 
+#include <krita_export.h>
+
 class KisRecordedAction;
 
-class KisActionRecorder : public QObject {
+class KRITAIMAGE_EXPORT KisActionRecorder : public QObject {
     Q_OBJECT
     public:
         KisActionRecorder();
         ~KisActionRecorder();
+        QList<KisRecordedAction*> actions() const;
     public slots:
         void addAction(KisRecordedAction* action);
     signals:

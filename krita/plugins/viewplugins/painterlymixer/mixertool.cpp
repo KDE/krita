@@ -38,6 +38,7 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_paintop.h"
+#include "kis_paint_information.h"
 #include "kis_paintop_registry.h"
 #include "kis_resource_provider.h"
 
@@ -90,7 +91,7 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
     //{{ KisPainter initialization - Put it in another function?
     KisPainter painter(stroke);
     KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(
-                          m_resources->resource(KisResourceProvider::CurrentPaintop).value<KoID>(),
+                          m_resources->resource(KisResourceProvider::CurrentPaintop).value<KoID>().id(),
                           static_cast<KisPaintOpSettings*>(m_resources->resource(KisResourceProvider::CurrentPaintopSettings).value<void*>()),
                           &painter, 0);
     painter.setPaintOp(current); // The painter now has the paintop and will destroy it.

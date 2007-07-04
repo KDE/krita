@@ -20,6 +20,8 @@
 #define KIS_DYNAMICOP_H_
 
 #include "kis_paintop.h"
+#include <QString>
+#include <klocale.h>
 
 class QWidget;
 class QPointF;

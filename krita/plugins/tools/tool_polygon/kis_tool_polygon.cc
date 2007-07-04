@@ -134,7 +134,7 @@ void KisToolPolygon::finish()
         painter.setPattern(m_currentPattern);
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp,
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp.id(),
                                                                   m_currentPaintOpSettings,
                                                                   &painter, m_currentImage);
         painter.setPaintOp(op); // Painter takes ownership

@@ -60,11 +60,6 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
     return KisPaintOpRegistry::m_singleton;
 }
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const KoID & id, const KisPaintOpSettings * settings, KisPainter * painter, KisImageSP image) const
-{
-    return paintOp(id.id(), settings, painter, image);
-}
-
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettings * settings, KisPainter * painter, KisImageSP image) const
 {
     if (painter == 0) {

@@ -44,11 +44,6 @@ public:
     /**
      * Return a newly created paintop
      */
-    KisPaintOp * paintOp(const KoID& id, const KisPaintOpSettings * settings, KisPainter * painter, KisImageSP image) const;
-
-    /**
-     * Return a newly created paintop
-     */
     KisPaintOp * paintOp(const QString& id, const KisPaintOpSettings * settings, KisPainter * painter, KisImageSP image) const;
 
     /**

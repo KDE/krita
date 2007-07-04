@@ -24,6 +24,8 @@
 #include <kis_paintop.h>
 #include <KoID.h>
 
+#include "kis_paint_information.h"
+
 class KisDynamicSensorFuzzy : public KisDynamicSensor {
     public:
         KisDynamicSensorFuzzy();

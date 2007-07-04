@@ -129,13 +129,13 @@ void KisDynamicOp::paintAt(const KisPaintInformation& info)
     // composite temporary layer into target layer
     // @see: doc/brush.txt
 
-    if (not m_painter->device()) return;
+    if (not painter()->device()) return;
 
-    KisPaintDeviceSP device = m_painter->device();
+    KisPaintDeviceSP device = painter()->device();
 
 
-    quint8 origOpacity = m_painter->opacity();
-    KoColor origColor = m_painter->paintColor();
+    quint8 origOpacity = painter()->opacity();
+    KoColor origColor = painter()->paintColor();
 
     KisDynamicShape* dabsrc = m_brush->shape()->clone();
     KisDynamicColoring* coloringsrc = m_brush->coloring()->clone();
@@ -147,8 +147,8 @@ void KisDynamicOp::paintAt(const KisPaintInformation& info)
     dabsrc->paintAt(info.pos, adjustedInfo, coloringsrc );
     
     
-    m_painter->setOpacity(origOpacity);
-    m_painter->setPaintColor(origColor);
+    painter()->setOpacity(origOpacity);
+    painter()->setPaintColor(origColor);
 }
 
 #include "kis_dynamicop.moc"

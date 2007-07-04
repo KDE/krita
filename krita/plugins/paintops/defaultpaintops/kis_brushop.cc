@@ -203,16 +203,16 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     // composite temporary layer into target layer
     // @see: doc/brush.txt
 
-    if (!m_painter->device()) return;
+    if (!painter()->device()) return;
 
-    KisBrush *brush = m_painter->brush();
+    KisBrush *brush = painter()->brush();
 
     Q_ASSERT(brush);
     if (!brush) return;
     if (! brush->canPaintFor(adjustedInfo) )
         return;
 
-    KisPaintDeviceSP device = m_painter->device();
+    KisPaintDeviceSP device = painter()->device();
 
     QPointF hotSpot = brush->hotSpot(adjustedInfo);
     QPointF pt = info.pos - hotSpot;
@@ -230,14 +230,14 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
     KisPaintDeviceSP dab = KisPaintDeviceSP(0);
 
-    quint8 origOpacity = m_painter->opacity();
-    KoColor origColor = m_painter->paintColor();
+    quint8 origOpacity = painter()->opacity();
+    KoColor origColor = painter()->paintColor();
 
     if (m_pressureOpacity) {
         if (!m_customOpacity)
-            m_painter->setOpacity((qint8)(origOpacity * info.pressure));
+            painter()->setOpacity((qint8)(origOpacity * info.pressure));
         else
-            m_painter->setOpacity((qint8)(origOpacity * scaleToCurve(info.pressure, m_opacityCurve)));
+            painter()->setOpacity((qint8)(origOpacity * scaleToCurve(info.pressure, m_opacityCurve)));
     }
 
     if (m_pressureDarken) {
@@ -251,7 +251,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
         KoColorTransformation* transfo = darkened.colorSpace()->createDarkenAdjustement(darkenAmount, false, 0.0);
         transfo->transform(origColor.data(), darkened.data(), 1);
-        m_painter->setPaintColor(darkened);
+        painter()->setPaintColor(darkened);
         delete transfo;
     }
 
@@ -263,15 +263,15 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
         dab = computeDab(mask);
     }
 
-    m_painter->setPressure(adjustedInfo.pressure);
+    painter()->setPressure(adjustedInfo.pressure);
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(adjustedInfo),
                           brush->maskHeight(adjustedInfo));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
 
-    if ( m_painter->bounds().isValid() ) {
-        dstRect &= m_painter->bounds();
+    if ( painter()->bounds().isValid() ) {
+        dstRect &= painter()->bounds();
     }
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
@@ -281,16 +281,16 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab,
-                                m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
+    if (source()->hasSelection()) {
+        painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab,
+                                source()->selection(), painter()->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab, m_painter->opacity(), sx, sy, sw, sh);
+        painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
     }
 
-    m_painter->setOpacity(origOpacity);
-    m_painter->setPaintColor(origColor);
+    painter()->setOpacity(origOpacity);
+    painter()->setPaintColor(origColor);
 
 }
 

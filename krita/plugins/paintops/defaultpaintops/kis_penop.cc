@@ -59,10 +59,10 @@ KisPenOp::~KisPenOp()
 
 void KisPenOp::paintAt(const KisPaintInformation& info)
 {
-    if (!m_painter) return;
-    KisPaintDeviceSP device = m_painter->device();
+    if (!painter()) return;
+    KisPaintDeviceSP device = painter()->device();
     if (!device) return;
-    KisBrush * brush = m_painter->brush();
+    KisBrush * brush = painter()->brush();
     if (!brush) return;
     if (! brush->canPaintFor(info) )
         return;
@@ -84,13 +84,13 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
         dab = computeDab(mask);
     }
 
-    m_painter->setPressure(info.pressure);
+    painter()->setPressure(info.pressure);
     QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
 
-    if ( m_painter->bounds().isValid() ) {
-        dstRect &= m_painter->bounds();
+    if ( painter()->bounds().isValid() ) {
+        dstRect &= painter()->bounds();
     }
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
@@ -119,12 +119,12 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab,
-                                m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
+    if (source()->hasSelection()) {
+        painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab,
+                                source()->selection(), painter()->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab, m_painter->opacity(), sx, sy, sw, sh);
+        painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
     }
 
 }

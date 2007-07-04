@@ -16,33 +16,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_action_recorder.h"
+#ifndef _KIS_RECORDED_PAINT_ACTIONS_H_
+#define _KIS_RECORDED_PAINT_ACTIONS_H_
 
 #include "kis_recorded_action.h"
 
-struct KisActionRecorder::Private {
-    QList<KisRecordedAction*> actions;
+#include "kis_types.h"
+
+class KisPaintInformation;
+class KisBrush;
+
+#include <krita_export.h>
+
+class KisRecordedPaintAction : public KisRecordedAction {
+    public:
+        KisRecordedPaintAction(QString name, QString id);
 };
 
-KisActionRecorder::KisActionRecorder() : d(new Private)
-{
-    
-}
+class KRITAIMAGE_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAction {
+    public:
+        KisRecordedPolyLinePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId);
+        ~KisRecordedPolyLinePaintAction();
+        void addPoint(const KisPaintInformation& info);
+        virtual void play();
+    private:
+        struct Private;
+        Private* const d;
+};
 
-KisActionRecorder::~KisActionRecorder()
-{
-    delete d;
-}
-
-QList<KisRecordedAction*> KisActionRecorder::actions() const
-{
-    return d->actions;
-}
-
-void KisActionRecorder::addAction(KisRecordedAction* action)
-{
-    d->actions.append(action);
-    emit(addedAction(action));
-}
-
-#include "kis_action_recorder.moc"
+#endif

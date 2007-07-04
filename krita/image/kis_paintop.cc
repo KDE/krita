@@ -19,7 +19,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_paintop.h"
+
 #include <QWidget>
+
+#include <QString>
 
 #include "kis_painter.h"
 #include "kis_layer.h"
@@ -43,12 +48,14 @@ struct KisPaintOp::Private
     KoColor color;
     KoColor previousPaintColor;
     KisQImagemaskSP previousMask;
+    KisPainter * painter;
+    KisPaintDeviceSP source; // use this layer as source layer for the operation
 };
 
 
-KisPaintOp::KisPaintOp(KisPainter * painter) : d(new Private)
+KisPaintOp::KisPaintOp( KisPainter * painter) : d(new Private)
 {
-    m_painter = painter;
+    d->painter = painter;
     setSource(painter->device());
 }
 
@@ -58,7 +65,7 @@ KisPaintOp::~KisPaintOp()
 }
 
 KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask) {
-    return computeDab(mask, m_painter->device()->colorSpace());
+    return computeDab(mask, d->painter->device()->colorSpace());
 }
 
 KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, KoColorSpace *cs)
@@ -74,12 +81,12 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, KoColorSpace *cs)
     qint32 maskWidth = mask->width();
     qint32 maskHeight = mask->height();
 
-    if( !d->dab or d->dab->colorSpace() != cs or not( d->previousPaintColor == m_painter->paintColor() ) ) {
+    if( !d->dab or d->dab->colorSpace() != cs or not( d->previousPaintColor == d->painter->paintColor() ) ) {
         d->dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
-        d->color = m_painter->paintColor();
-        d->previousPaintColor = m_painter->paintColor();
+        d->color = d->painter->paintColor();
+        d->previousPaintColor = d->painter->paintColor();
         d->color.convertTo(cs);
-        d->color.fromKoColor( m_painter->paintColor());
+        d->color.fromKoColor( d->painter->paintColor());
         d->dab->dataManager()->setDefaultPixel( d->color.data() );
     } else if(d->previousMask == mask) {
         return d->dab;
@@ -127,7 +134,7 @@ void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fract
 
 void KisPaintOp::setSource(KisPaintDeviceSP p) {
     Q_ASSERT(p);
-    m_source = p;
+    d->source = p;
 }
 
 
@@ -192,8 +199,8 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
 
     // XXX: The spacing should vary as the pressure changes along the line.
     // This is a quick simplification.
-    double xSpacing = m_painter->brush()->xSpacing((pi1.pressure + pi2.pressure) / 2);
-    double ySpacing = m_painter->brush()->ySpacing((pi1.pressure + pi2.pressure) / 2);
+    double xSpacing = d->painter->brush()->xSpacing((pi1.pressure + pi2.pressure) / 2);
+    double ySpacing = d->painter->brush()->ySpacing((pi1.pressure + pi2.pressure) / 2);
 
     if (xSpacing < 0.5) {
         xSpacing = 0.5;
@@ -258,7 +265,7 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
         dist -= spacing;
     }
 
-    m_painter->addDirtyRect( QRect( pi1.pos.toPoint(), pi2.pos.toPoint() ) );
+    d->painter->addDirtyRect( QRect( pi1.pos.toPoint(), pi2.pos.toPoint() ) );
 
     if (dist > 0)
         return dist;
@@ -266,6 +273,25 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
         return 0;
 }
 
+KisPainter* KisPaintOp::painter()
+{
+    return d->painter;
+}
+
+KisPaintDeviceSP KisPaintOp::source()
+{
+    return d->source;
+}
+
 
 KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/) { return 0; }
 
+QString KisPaintOpFactory::pixmap()
+{
+    return "";
+}
+
+bool KisPaintOpFactory::userVisible(KoColorSpace * cs )
+{
+    return cs && cs->id() != "WET";
+}

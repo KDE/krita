@@ -21,11 +21,13 @@
 
 class QString;
 
-class KisRecordedAction {
+#include <krita_export.h>
+
+class KRITAIMAGE_EXPORT KisRecordedAction {
     struct Private;
     public:
         KisRecordedAction(QString name, QString id);
-        ~KisRecordedAction();
+        virtual ~KisRecordedAction();
         virtual void play() = 0;
     private:
         Private* const d;

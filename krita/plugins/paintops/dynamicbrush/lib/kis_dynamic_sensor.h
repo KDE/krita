@@ -23,10 +23,12 @@
 
 #include <QObject>
 
-#include <kis_paintop.h>
 #include <KoID.h>
 
+#include <klocale.h>
+
 class QWidget;
+class KisPaintInformation;
 
 const KoID FuzzyId("fuzzy", i18n("Fuzzy"));
 const KoID SpeedId("speed", i18n("Speed"));

@@ -24,6 +24,8 @@
 #define KIS_DUPLICATEOP_H_
 
 #include "kis_paintop.h"
+#include <QString>
+#include <klocale.h>
 
 class QPointF;
 class KisPainter;
@@ -50,7 +52,6 @@ public:
 
     KisDuplicateOp(KisPainter * painter, KisImageSP image);
     virtual ~KisDuplicateOp();
-
 
     void paintAt(const KisPaintInformation& info);
 private:

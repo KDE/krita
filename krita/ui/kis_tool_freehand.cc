@@ -37,18 +37,24 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
 
-#include "kis_brush.h"
-#include "kis_fill_painter.h"
-#include "kis_group_layer.h"
-#include "kis_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_painter.h"
-#include "kis_selection.h"
+// Krita/image
+#include <kis_action_recorder.h>
+#include <kis_brush.h>
+#include <kis_fill_painter.h>
+#include <kis_group_layer.h>
+#include <kis_layer.h>
+#include <kis_paint_layer.h>
+#include <kis_painter.h>
+#include <kis_paintop.h>
+#include <kis_recorded_paint_actions.h>
+#include <kis_selection.h>
 
+// Krita/ui
 #include "kis_boundary_painter.h"
 #include "kis_canvas2.h"
 #include "kis_cursor.h"
 #include "kis_tool_freehand.h"
+
 
 class FreehandPaintJob : public ThreadWeaver::Job {
 public:
@@ -225,6 +231,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
             m_previousDrag = dragVec;
         } else {
             paintLine(m_previousPaintInformation, info);
+            m_polyLinePaintAction->addPoint(info);
         }
 
         m_previousPaintInformation = info;
@@ -324,6 +331,11 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
       << ", target has selection: " << m_target->hasSelection()
       << endl;
 */
+    if(m_smooth)
+    {
+    } else {
+        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"), m_currentLayer, m_currentBrush, m_currentPaintOp.id() );
+    }
 }
 
 void KisToolFreehand::endPaint()
@@ -377,6 +389,12 @@ void KisToolFreehand::endPaint()
             delete job;
         }
         m_paintJobs.clear();
+    }
+    if(m_smooth)
+    {
+    } else {
+        m_currentLayer->image()->actionRecorder()->addAction(m_polyLinePaintAction);
+        m_polyLinePaintAction = 0;
     }
 }
 

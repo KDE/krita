@@ -136,7 +136,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 m_painter->setBrush(m_currentBrush);
                 m_painter->setOpacity(m_opacity);
                 m_painter->setCompositeOp(m_compositeOp);
-                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, m_painter, m_currentImage);
+                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp.id(), m_currentPaintOpSettings, m_painter, m_currentImage);
                 m_painter->setPaintOp(op); // Painter takes ownership
                 m_painter->paintLine(m_startPos, m_endPos );
                 QRegion dirtyRegion = m_painter->dirtyRegion();

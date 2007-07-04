@@ -61,17 +61,17 @@ KisFilterOp::~KisFilterOp()
 
 void KisFilterOp::paintAt(const KisPaintInformation& info)
 {
-    if (!m_painter) return;
+    if (!painter()) return;
 
-    KisFilterSP filter = m_painter->filter();
+    KisFilterSP filter = painter()->filter();
     if (!filter) return;
 
-    if ( ! m_source ) return;
+    if ( ! source() ) return;
 
-    KisBrush * brush = m_painter->brush();
+    KisBrush * brush = painter()->brush();
     if (!brush) return;
 
-    KoColorSpace * colorSpace = m_source->colorSpace();
+    KoColorSpace * colorSpace = source()->colorSpace();
 
     QPointF hotSpot = brush->hotSpot(info);
     QPointF pt = info.pos - hotSpot;
@@ -91,7 +91,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     // wouldn't be useful at all.
     KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
 
-    m_painter->setPressure(info.pressure);
+    painter()->setPressure(info.pressure);
 
     qint32 maskWidth = mask->width();
     qint32 maskHeight = mask->height();
@@ -103,7 +103,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     // Copy the layer data onto the new paint device
 
     KisPainter p( tmpDev );
-    p.bitBlt( 0,  0,  colorSpace->compositeOp(COMPOSITE_COPY), m_source, OPACITY_OPAQUE, x, y, maskWidth, maskHeight );
+    p.bitBlt( 0,  0,  colorSpace->compositeOp(COMPOSITE_COPY), source(), OPACITY_OPAQUE, x, y, maskWidth, maskHeight );
 
     // Filter the paint device
     filter->disableProgress();
@@ -133,8 +133,8 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    if (m_painter->bounds().isValid()) {
-        dstRect &= m_painter->bounds();
+    if (painter()->bounds().isValid()) {
+        dstRect &= painter()->bounds();
     }
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
@@ -144,12 +144,12 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev,
-                                m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
+    if (source()->hasSelection()) {
+        painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), tmpDev,
+                                source()->selection(), painter()->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev, m_painter->opacity(), sx, sy, sw, sh);
+        painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), tmpDev, painter()->opacity(), sx, sy, sw, sh);
     }
 
 }

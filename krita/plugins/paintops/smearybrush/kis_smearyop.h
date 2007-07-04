@@ -19,6 +19,7 @@
 #ifndef KIS_SMEARYOP_H_
 #define KIS_SMEARYOP_H_
 
+#include <klocale.h>
 #include "kis_paintop.h"
 //Added by qt3to4:
 #include <Q3PtrList>

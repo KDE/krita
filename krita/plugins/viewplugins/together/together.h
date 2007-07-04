@@ -22,11 +22,7 @@
 #include <kparts/plugin.h>
 
 class KisView2;
-class KisEventsRecorder;
 
-/**
- * Template of view plugin
- */
 class TogetherPlugin : public KParts::Plugin
 {
     Q_OBJECT
@@ -36,14 +32,11 @@ public:
 
 private slots:
 
-    void slotStart();
-    void slotStop();
     void slotReplay();
 
 private:
 
     KisView2 * m_view;
-    KisEventsRecorder* m_recorder;
 };
 
 #endif // TogetherPlugin_H

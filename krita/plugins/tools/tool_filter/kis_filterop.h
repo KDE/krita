@@ -24,6 +24,8 @@
 #define KIS_FILTEROP_H_
 
 #include "kis_paintop.h"
+#include <QString>
+#include <klocale.h>
 
 class QPointF;
 class KisPainter;

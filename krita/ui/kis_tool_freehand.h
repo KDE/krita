@@ -32,6 +32,7 @@ class KoCanvasBase;
 class KisPainter;
 
 class FreehandPaintJob;
+class KisRecordedPolyLinePaintAction;
 
 namespace ThreadWeaver {
     class Weaver;
@@ -99,6 +100,7 @@ private:
     QRegion m_incrementalDirtyRegion;
     ThreadWeaver::Weaver * m_weaver;
     QList<FreehandPaintJob*> m_paintJobs;
+    KisRecordedPolyLinePaintAction* m_polyLinePaintAction;
 };
 
 

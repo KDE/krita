@@ -112,7 +112,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
         painter.setPattern(m_currentPattern);
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp, m_currentPaintOpSettings, &painter, m_currentImage);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp.id(), m_currentPaintOpSettings, &painter, m_currentImage);
         painter.setPaintOp(op); // Painter takes ownership
 
         vQPointF coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());

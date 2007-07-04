@@ -24,6 +24,7 @@
 #define KIS_BRUSHOP_H_
 
 #include "kis_paintop.h"
+#include <klocale.h>
 
 class QWidget;
 class QCheckBox;

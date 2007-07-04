@@ -1,5 +1,5 @@
 
-set(kritatogether_PART_SRCS together.cc kis_events_recorder.cc)
+set(kritatogether_PART_SRCS together.cc )
 
 kde4_automoc(${kritatogether_PART_SRCS})
 

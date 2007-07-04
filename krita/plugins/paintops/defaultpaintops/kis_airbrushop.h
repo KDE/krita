@@ -23,6 +23,7 @@
 #ifndef KIS_AIRBRUSHOP_H_
 #define KIS_AIRBRUSHOP_H_
 
+#include <klocale.h>
 #include "kis_paintop.h"
 
 class QPointF;

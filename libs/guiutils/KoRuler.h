@@ -176,6 +176,8 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
          */
         void updateTabs(const QList<Tab> &tabs);
 
+    QList<Tab> tabs() const;
+
 signals:
         /**
          * emitted when any of the indents is moved by the user.

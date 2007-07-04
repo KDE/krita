@@ -607,9 +607,13 @@ void KoRuler::setShowTabs(bool show)
     d->m_showTabs = show;
 }
 
-void KoRuler::updateTabs(const QList<Tab> &tabs)
+void KoRuler::updateTabs(const QList<KoRuler::Tab> &tabs)
 {
     d->m_tabs = tabs;
+}
+
+QList<KoRuler::Tab> KoRuler::tabs() const {
+    return d->m_tabs;
 }
 
 void KoRuler::mousePressEvent ( QMouseEvent* ev )

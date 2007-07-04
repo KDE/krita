@@ -52,16 +52,21 @@ public:
 
 private:
     /*
-    Update all the properties that cannot be stored in the KisPaintOp, storing
-    them in the mixer. Initialize the properties that the stroke would have in order to mix
-    colors on it in a painterly way. It's called inside mouseMoveEvent.
+    Update all painterly overlays, and to the mixing. It's called when a non-painterly paintop is used.
     */
-    void updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent *e);
+    void mixPaint(KisPaintDeviceSP stroke, KoPointerEvent *e);
 
     /*
     Updates the information of the paintop (color, painterly information for next iteration and such)
     */
     void updateResources(KisPaintDeviceSP stroke);
+
+    /*
+    If a painterly paintop is used, it will change the painterly properties of the paint device. We want
+    to "restore" the status of the canvas to the better one possible in order to keep the paint in perfect
+    shape.
+    */
+    void preserveProperties(KisPaintDeviceSP stroke);
 
 private:
     KisPaintDevice* m_canvasDev;

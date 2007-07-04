@@ -113,9 +113,10 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
     lastPos = e->pos();
 
     if (!current->painterly()) {
-        updatePainterlyOverlays(stroke, e);
+        mixPaint(stroke, e);
         updateResources(stroke);
-    }
+    } else
+        preserveProperties(stroke);
 
     QRect rc = stroke->exactBounds();
     painter.begin(m_canvasDev);
@@ -129,7 +130,7 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
 
 #define FORCE_COEFF 0.01
 
-void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent *e)
+void MixerTool::mixPaint(KisPaintDeviceSP stroke, KoPointerEvent *e)
 {
     float pressure, force;
     Cell strokeCell, canvasCell;
@@ -244,6 +245,11 @@ void MixerTool::updateResources(KisPaintDeviceSP stroke)
 
         m_resources->setResource(KoCanvasResource::ForegroundColor, KoColor(final, stroke->colorSpace()));
     }
+}
+
+void MixerTool::preserveProperties(KisPaintDeviceSP /*stroke*/)
+{
+
 }
 
 

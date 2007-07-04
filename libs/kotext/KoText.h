@@ -33,9 +33,13 @@ namespace KoText {
     KOTEXT_EXPORT QStringList underlineTypeList();
     KOTEXT_EXPORT QStringList underlineStyleList();
 
+    /// This enum contains values to be used as keys in the KoCanvasResourceProvider
     enum Options {
         ShowTextFrames =  278622039,
-        BidiDocument = 493038196
+        BidiDocument = 493038196,
+        CurrentTextDocument = 382490375,
+        CurrentTextPosition = 183523,
+        CurrentTextAnchor = 341899485
     };
 
     /// enum for a type of tabulator used

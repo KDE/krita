@@ -38,7 +38,11 @@ public:
     virtual ~KisFilterRegistry();
 
     static KisFilterRegistry* instance();
+    void add(KisFilterSP item);
+    void add(const QString &id, KisFilterSP item);
 
+signals:
+    void filterAdded(QString id);
 private:
     KisFilterRegistry();
     KisFilterRegistry(const KisFilterRegistry&);

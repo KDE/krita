@@ -74,7 +74,7 @@ void KisFilterManager::setup(KActionCollection * ac)
     for ( QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it ) {
         insertFilter(*it);
     }
-
+    connect(KisFilterRegistry::instance(), SIGNAL(filterAdded(QString)), SLOT(insertFilter(QString)));
 }
 
 void KisFilterManager::insertFilter(QString name)

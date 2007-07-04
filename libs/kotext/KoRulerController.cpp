@@ -44,16 +44,37 @@ public:
            return;
 
         QTextBlock block = currentBlock();
-        if(block.isValid()) {
-            QTextBlockFormat format = block.blockFormat();
-            ruler->setShowIndents(true);
-            ruler->setParagraphIndent(format.leftMargin());
-            ruler->setFirstLineIndent(format.textIndent());
-            ruler->setEndIndent(format.rightMargin());
-            ruler->setRightToLeft(block.layout()->textOption().textDirection() == Qt::RightToLeft);
-        }
-        else
+        if(! block.isValid()) {
             ruler->setShowIndents(false);
+            ruler->setShowTabs(false);
+            return;
+        }
+        QTextBlockFormat format = block.blockFormat();
+        ruler->setShowIndents(true);
+        ruler->setParagraphIndent(format.leftMargin());
+        ruler->setFirstLineIndent(format.textIndent());
+        ruler->setEndIndent(format.rightMargin());
+        ruler->setRightToLeft(block.layout()->textOption().textDirection() == Qt::RightToLeft);
+        ruler->setShowTabs(true);
+
+        QList<KoRuler::Tab> tabs;
+        QVariant variant = format.property(KoParagraphStyle::TabPositions);
+        if(! variant.isNull()) {
+            foreach(QVariant var, qvariant_cast<QList<QVariant> >(variant)) {
+                KoText::Tab textTab = var.value<KoText::Tab>();
+                KoRuler::Tab tab;
+                tab.position = textTab.position;
+                tab.type = static_cast<KoRuler::TabType> (textTab.type);
+                tabs.append(tab);
+            }
+        }
+else { // for demo purposes.
+    KoRuler::Tab tab;
+    tab.position = 60;
+    tab.type = KoRuler::LeftTab;
+    tabs.append(tab);
+}
+        ruler->updateTabs(tabs);
     }
 
     void indentsChanged() {

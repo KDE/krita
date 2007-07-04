@@ -25,9 +25,22 @@
 class KoRuler;
 class KoCanvasResourceProvider;
 
+/**
+ * This class combines text options with the KoRuler object.
+ * Any usage of a horizontal ruler should consider using this class to show the
+ * text indent and tabs on the ruler, and allow to edit them.
+ * The code to do this is pretty trivial; just instantiate this class and you can
+ * forget about it.  It'll do what you want.
+ */
 class KOTEXT_EXPORT KoRulerController : public QObject {
     Q_OBJECT
 public:
+    /**
+     * Constructor.
+     * @param horizontalRuler the ruler to monitor and update.
+     *  Will also be used as QObject parent for memory management purposes.
+     * @param crp the resource provider for the canvas this ruler and the text tool belong to.
+     */
     KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceProvider *crp);
 
 private:

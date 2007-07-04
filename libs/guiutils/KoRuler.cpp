@@ -205,6 +205,8 @@ void KoRuler::paintEvent(QPaintEvent* event)
         start = qAbs(d->m_offset);
     }
 
+    int mouseCoord = d->m_mouseCoordinate - start;
+
     // make a little hack so rulers shows correctly inversed number aligned
     double lengthInUnit = d->m_unit.toUserValue(rulerLength());
     double hackyLength = lengthInUnit - fmod(lengthInUnit, numberStep);
@@ -216,7 +218,6 @@ void KoRuler::paintEvent(QPaintEvent* event)
     int stepCount = (start / numberStepPixel) + 1;
     int halfStepCount = (start / qRound(numberStepPixel * 0.5)) + 1;
     int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
-    int mouseCoord = d->m_mouseCoordinate - start;
 
     int pos = 0;
     painter.setPen(palette().color(QPalette::Text));

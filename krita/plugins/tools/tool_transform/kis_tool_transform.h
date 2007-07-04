@@ -134,8 +134,9 @@ public:
         {
             setToolTip( i18n( "Transform a layer or a selection" ) );
             //setToolType( TOOL_TYPE_TRANSFORM );
+            setToolType( dynamicToolType() );
             setIcon( "transform" );
-            setPriority( 0 );
+            setPriority( 11 );
 
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }

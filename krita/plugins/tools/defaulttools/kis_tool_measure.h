@@ -79,7 +79,7 @@ public:
         {
             setToolType( dynamicToolType() );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setPriority(0);
+            setPriority( 15 );
         }
 
     virtual ~KisToolMeasureFactory(){}

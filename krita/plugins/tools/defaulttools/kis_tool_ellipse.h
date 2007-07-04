@@ -79,7 +79,7 @@ public:
             setToolType( dynamicToolType() );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_ellipse" );
-            setPriority( 0 );
+            setPriority( 3 );
             setInputDeviceAgnostic(false);
         }
 

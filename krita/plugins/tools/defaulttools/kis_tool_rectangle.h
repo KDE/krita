@@ -92,7 +92,7 @@ public:
             setToolType( dynamicToolType() );
             setIcon( "tool_rectangle" );
             //setShortcut( Qt::Key_F6 );
-            setPriority( 0 );
+            setPriority( 2 );
             setInputDeviceAgnostic(false);
         }
 

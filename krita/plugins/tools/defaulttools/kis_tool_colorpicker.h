@@ -89,7 +89,7 @@ public:
             //setToolType(TOOL_TYPE_SELECTED);
             setToolType( dynamicToolType() );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setPriority(0);
+            setPriority( 14 );
             setIcon("color-picker");
             setShortcut( KShortcut( Qt::Key_P ) );
         }

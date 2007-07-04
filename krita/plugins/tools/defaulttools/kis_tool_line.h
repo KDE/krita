@@ -84,7 +84,7 @@ public:
             //setToolType(TOOL_TYPE_SHAPE);
             setToolType( dynamicToolType() );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setPriority(0);
+            setPriority( 1 );
             setIcon("tool_line");
             setInputDeviceAgnostic(false);
         }

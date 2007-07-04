@@ -81,7 +81,7 @@ public:
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_elliptical_selection" );
             setShortcut( KShortcut(Qt::Key_J) );
-            setPriority( 0 );
+            setPriority( 3 );
         }
 
     virtual ~KisToolSelectEllipticalFactory(){}

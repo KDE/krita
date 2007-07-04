@@ -80,7 +80,7 @@ public:
             setToolTip(i18n("Draw a star with the current brush"));
             //setToolType(TOOL_TYPE_SHAPE);
             setToolType( dynamicToolType() );
-            setPriority(0);
+            setPriority( 6 );
             setIcon("tool_star");
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setInputDeviceAgnostic(false);

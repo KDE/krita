@@ -81,7 +81,7 @@ public:
             setToolTip( i18n( "Select a polygonal region" ) );
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_polygonal_selection" );
-            setPriority( 0 );
+            setPriority( 4 );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 

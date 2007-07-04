@@ -98,7 +98,7 @@ public:
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "color_fill" );
             //setShortcut( QKeySequence( Qt::Key_F ) );
-            setPriority( 0 );
+            setPriority( 12 );
             setInputDeviceAgnostic(false);
 	}
 

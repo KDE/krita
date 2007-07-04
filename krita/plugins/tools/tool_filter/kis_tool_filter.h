@@ -67,9 +67,10 @@ public:
         : KoToolFactory(parent, "KisToolFilter", i18n( "Filter Brush" ) )
         {
             setToolTip( i18n( "Paint with a filter and the the current brush" ) );
-            setToolType( TOOL_TYPE_FREEHAND );
+            //setToolType( TOOL_TYPE_FREEHAND );
+            setToolType( dynamicToolType() );
             setIcon( "tool_filter" );
-            setPriority( 0 );
+            setPriority( 9 );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setInputDeviceAgnostic(false);
         }

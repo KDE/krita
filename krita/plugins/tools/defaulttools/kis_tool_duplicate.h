@@ -81,7 +81,7 @@ public:
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setToolType( dynamicToolType() );
             setIcon( "tool_duplicate" );
-            setPriority( 0 );
+            setPriority( 8 );
             setInputDeviceAgnostic(false);
         }
 

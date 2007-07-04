@@ -81,7 +81,7 @@ void KoToolBox::setup() {
     sections.removeAll(KoToolFactory::mainToolType());
     sections.insert(0, KoToolFactory::mainToolType());
     sections.removeAll(KoToolFactory::dynamicToolType());
-    sections.append(KoToolFactory::dynamicToolType());
+    sections.insert(1, KoToolFactory::dynamicToolType());
     foreach(QString section, sections) {
         ToolArea *ta = m_toolAreas.value(section);
         if(ta == 0) {

@@ -84,7 +84,7 @@ public:
             setToolType( dynamicToolType() );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "polyline" );
-            setPriority( 0 );
+            setPriority( 5 );
             setInputDeviceAgnostic(false);
         }
 

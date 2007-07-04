@@ -64,7 +64,7 @@ public:
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_eraser_selection" );
             setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
-            setPriority( 0 );
+            setPriority( 1 );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 

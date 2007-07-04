@@ -524,9 +524,9 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes) 
             types.append(shape->shapeId());
 
     QString toolType = KoInteractionTool_ID;
-    int prio = INT_MIN;
+    int prio = INT_MAX;
     foreach(ToolHelper *helper, d->tools) {
-        if(helper->priority() <= prio)
+        if(helper->priority() >= prio)
             continue;
         if(helper->toolType() == KoToolFactory::mainToolType())
             continue;

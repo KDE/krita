@@ -142,7 +142,7 @@ public:
      //       setToolType(TOOL_TYPE_TRANSFORM);
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setToolType( dynamicToolType() );
-            setPriority(0);
+            setPriority( 10 );
             setIcon("tool_crop");
         }
 

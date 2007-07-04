@@ -121,7 +121,7 @@ public:
             setToolType( dynamicToolType() );
             setIcon( "tool_gradient" );
             setShortcut( KShortcut( Qt::Key_G ) );
-            setPriority( 0 );
+            setPriority( 13 );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setInputDeviceAgnostic(false);
         }

@@ -47,6 +47,9 @@ private:
     void replaceDoubleQuotes();
     void replaceSingleQuotes();
 
+    /// @returns the actual link that will be set as anchor href
+    QString autoDetectURL(QString word) const;
+
 private:
     bool m_uppercaseFirstCharOfSentence; // convert first letter of a sentence automaticall to uppercase
     bool m_fixTwoUppercaseChars;  // convert two uppercase characters to one upper and one lowercase.

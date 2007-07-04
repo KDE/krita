@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -122,7 +123,22 @@ void Autocorrect::fixTwoUppercaseChars() {
 
 bool Autocorrect::autoFormatURLs() {
     if(! m_autoFormatURLs) return false;
-    // TODO
+
+    QString link = autoDetectURL(m_word);
+    if (link.isNull()) return false;
+
+    QString trimmed = m_word.trimmed();
+    int startPos = m_cursor.selectionStart();
+    m_cursor.setPosition(startPos);
+    m_cursor.setPosition(startPos + trimmed.length(), QTextCursor::KeepAnchor);
+    
+    QTextCharFormat format;
+    format.setAnchor(true);
+    format.setAnchorHref(link);
+    format.setFontItalic(true); // TODO: formatting
+    m_cursor.mergeCharFormat(format);
+
+    m_word = m_cursor.selectedText();
     return true;
 }
 
@@ -142,7 +158,49 @@ bool Autocorrect::singleSpaces() {
 
 bool Autocorrect::autoBoldUnderline() {
     if(! m_autoBoldUnderline) return false;
-    // TODO
+
+    QString trimmed = m_word.trimmed();
+
+    if (trimmed.length() < 3) return false;
+
+    bool underline = (trimmed.at(0) == '_' && trimmed.at(trimmed.length() - 1) == '_');
+    bool bold = (trimmed.at(0) == '*' && trimmed.at(trimmed.length() - 1) == '*');
+
+    if (underline || bold) {
+        int startPos = m_cursor.selectionStart();
+        QString replacement = trimmed.mid(1, trimmed.length() - 2);
+        bool foundLetterNumber = false;
+
+        QString::ConstIterator constIter = replacement.constBegin();
+        while (constIter != replacement.constEnd()) {
+            if (constIter->isLetterOrNumber()) {
+                foundLetterNumber = true;
+                break;
+            }
+            constIter++;
+        }
+
+        // if no letter/number found, don't apply autocorrection like in OOo 2.x
+        if (!foundLetterNumber)
+            return false;
+
+        m_cursor.setPosition(startPos);
+        m_cursor.setPosition(startPos + trimmed.length(), QTextCursor::KeepAnchor);
+        m_cursor.insertText(replacement);
+        m_cursor.setPosition(startPos);
+        m_cursor.setPosition(startPos + replacement.length(), QTextCursor::KeepAnchor);
+
+        QTextCharFormat format;
+        format.setFontUnderline(underline);
+        format.setFontWeight(bold ? QFont::Bold : QFont::Normal);
+        m_cursor.mergeCharFormat(format);
+
+        // to avoid the selection being replaced by m_word
+        m_word = m_cursor.selectedText();
+    }
+    else
+        return false;
+
     return true;
 }
 
@@ -193,3 +251,74 @@ void Autocorrect::replaceSingleQuotes() {
     // TODO
 }
 
+QString Autocorrect::autoDetectURL(QString word) const
+{
+    /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doAutoDetectUrl
+     * from KOffice 1.x branch */
+    // kDebug() << "link:" << word << endl;
+
+    char link_type = 0;
+    int pos = word.indexOf("http://");
+    int tmp_pos = word.indexOf("https://");
+
+    if (tmp_pos < pos && tmp_pos != -1)
+          pos = tmp_pos;
+    tmp_pos = word.indexOf("mailto:/");
+    if ((tmp_pos < pos || pos == -1) && tmp_pos != -1)
+          pos = tmp_pos;
+    tmp_pos = word.indexOf("ftp://");
+    if ((tmp_pos < pos || pos == -1) && tmp_pos != -1)
+          pos = tmp_pos;
+    tmp_pos = word.indexOf("ftp.");
+    if ((tmp_pos < pos || pos == -1) && tmp_pos != -1) {
+          pos = tmp_pos;
+          link_type = 3;
+    }
+    tmp_pos = word.indexOf("file:/");
+    if ((tmp_pos < pos || pos == -1) && tmp_pos != -1)
+          pos = tmp_pos;
+    tmp_pos = word.indexOf("news:");
+    if ((tmp_pos < pos || pos == -1) && tmp_pos != -1)
+          pos = tmp_pos;
+    tmp_pos = word.indexOf("www.");
+    if ((tmp_pos < pos || pos == -1) && tmp_pos != -1 && word.indexOf('.', tmp_pos+4) != -1 ) {
+          pos = tmp_pos;
+          link_type = 2;
+    }
+    tmp_pos = word.indexOf('@');
+    if (pos == -1 && tmp_pos != -1) {
+        pos = tmp_pos-1;
+        QChar c;
+
+        while (pos >= 0) {
+            c = word.at(pos);
+            if (c.isPunct() && c != '.' && c != '_') break;
+            else --pos;
+        }
+        if (pos == tmp_pos - 1) // not a valid address
+            pos = -1;
+        else
+            ++pos;
+        link_type = 1;
+    }
+
+    if (pos != -1) {
+        // A URL inside e.g. quotes (like "http://www.koffice.org" with the quotes) shouldn't include the quote in the URL.
+	    while (!word.at(word.length()-1).isLetter() &&  !word.at(word.length()-1).isDigit() && word.at(word.length()-1) != '/')
+            word.truncate(word.length() - 1);
+        word.remove(0, pos);
+        QString newWord = word;
+
+        if (link_type == 1)
+            newWord = QString("mailto:") + word;
+        else if (link_type == 2)
+            newWord = QString("http://") + word;
+        else if (link_type == 3)
+            newWord = QString("ftp://") + word;
+
+        kDebug() << "newWord: " << newWord << endl;
+        return newWord;
+    }
+
+    return QString();
+}

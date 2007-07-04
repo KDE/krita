@@ -145,13 +145,11 @@ void KoRuler::paintEvent(QPaintEvent* event)
 
     if(orientation() == Qt::Horizontal) {
         lengthPixel = d->m_viewConverter->documentToViewX(rulerLength());
-        if( d->m_offset < 0 )
-            lengthPixel += d->m_offset;
         numberStepPixel = qRound(d->m_viewConverter->documentToViewX(
             d->m_unit.fromUserValue(numberStep)));
         rectangle.setX(qMax(0, d->m_offset));
         rectangle.setY(5);
-        rectangle.setWidth(qMin((double)width() - 1.0 - rectangle.x(), lengthPixel));
+        rectangle.setWidth(qMin((double)width() - 1.0 - rectangle.x(), (d->m_offset >= 0 ) ? lengthPixel : lengthPixel + d->m_offset ));
         rectangle.setHeight(height() - 10.0);
         activeRangeRectangle.setX(qMax(rectangle.x() + 1,
               d->m_viewConverter->documentToViewX(d->m_activeRangeStart) + d->m_offset));
@@ -161,14 +159,12 @@ void KoRuler::paintEvent(QPaintEvent* event)
         activeRangeRectangle.setHeight(rectangle.height() - 2);
     } else {
         lengthPixel = d->m_viewConverter->documentToViewY(rulerLength());
-        if( d->m_offset < 0 )
-            lengthPixel += d->m_offset;
         numberStepPixel = qRound(d->m_viewConverter->documentToViewY(
             d->m_unit.fromUserValue(numberStep)));
         rectangle.setX(0);
         rectangle.setY(qMax(0, d->m_offset));
         rectangle.setWidth(width() - 1.0);
-        rectangle.setHeight(qMin((double)height() - 1.0 - rectangle.y(), lengthPixel));
+        rectangle.setHeight(qMin((double)height() - 1.0 - rectangle.y(), (d->m_offset >= 0 ) ? lengthPixel : lengthPixel + d->m_offset ));
         activeRangeRectangle.setX(rectangle.x() + 1);
         activeRangeRectangle.setY(qMax(rectangle.y() + 1,
             d->m_viewConverter->documentToViewY(d->m_activeRangeStart) + d->m_offset));

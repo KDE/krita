@@ -39,6 +39,7 @@ class KoColorSpace;
 class KoCompositeOp;
 class KoColor;
 
+class KisActionRecorder;
 class KisUndoAdapter;
 class KisFilterStrategy;
 class KoColorProfile;
@@ -216,6 +217,10 @@ public:
      */
     KisUndoAdapter *undoAdapter() const;
 
+    /**
+     * @return the action recorder associated with this image
+     */
+    KisActionRecorder* actionRecorder() const;
     /**
      * Returns true if this image wants undo information, false otherwise
      */

@@ -39,6 +39,7 @@
 #include "KoColor.h"
 #include "colorprofiles/KoIccColorProfile.h"
 
+#include "kis_action_recorder.h"
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
 #include "kis_change_profile_visitor.h"
@@ -97,6 +98,7 @@ public:
 
     KisNameServer *nserver;
     KisUndoAdapter *adapter;
+    KisActionRecorder *recorder;
 
     vKisAnnotationSP annotations;
 
@@ -230,6 +232,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
     blockSignals( this );
     lock();
 
+    m_d->recorder = new KisActionRecorder;
 }
 
 bool KisImage::locked() const
@@ -1061,6 +1064,11 @@ void KisImage::setUndoAdapter(KisUndoAdapter * adapter)
 KisUndoAdapter* KisImage::undoAdapter() const
 {
     return m_d->adapter;
+}
+
+KisActionRecorder* KisImage::actionRecorder() const
+{
+    return m_d->recorder;
 }
 
 bool KisImage::undo() const

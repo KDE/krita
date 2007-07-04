@@ -23,6 +23,8 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   kis_action_recorder.cc
+   kis_recorded_action.cc
    kis_threaded_applicator.cpp
    kis_projection.cc
    kis_pigment_concentration_mask.cpp

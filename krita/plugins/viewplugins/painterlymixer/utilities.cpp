@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
    Made by Emanuele Tamponi (emanuele@valinor.it)
    Copyright (C) 2007 Emanuele Tamponi
-   Copyright (C) 2007 Mark A. Zimmer
-   Copyright (C) 2007 Tunde Cockshott
+   Copyright (C) 1994 Mark A. Zimmer
+   Copyright (C) 1991 Tunde Cockshott
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

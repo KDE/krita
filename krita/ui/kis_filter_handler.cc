@@ -20,6 +20,9 @@
 
 #include <QApplication>
 
+#include <kmessagebox.h>
+#include <kguiitem.h>
+
 #include "kis_doc2.h"
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
@@ -30,11 +33,10 @@
 #include "kis_view2.h"
 
 struct KisFilterHandler::Private {
-    Private() : view(0), dialog(0), manager(0), lastConfiguration(0) {}
-    ~Private() { delete dialog; }
+    Private() : view(0), manager(0), lastConfiguration(0) {}
+    ~Private() {  }
     KisFilterSP filter;
     KisView2* view;
-    KisFilterDialog* dialog;
     KisFilterManager* manager;
     KisFilterConfiguration* lastConfiguration;
 };
@@ -48,17 +50,40 @@ KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisV
 
 KisFilterHandler::~KisFilterHandler()
 {
-    delete d->dialog;
 }
 
 void KisFilterHandler::showDialog()
 {
-    delete d->dialog;
+    KisPaintDeviceSP dev = d->view->activeDevice();
+    if (dev->colorSpace()->willDegrade(d->filter->colorSpaceIndependence())) {
+    // Warning bells!
+        if (d->filter->colorSpaceIndependence() == TO_LAB16) {
+            if (KMessageBox::warningContinueCancel(d->view,
+                    i18n("The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. ",
+                    d->filter->name(),
+                    dev->colorSpace()->name()),
+                    i18n("Filter Will Convert Your Layer Data"),
+                    KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
+                    "lab16degradation") != KMessageBox::Continue) return;
+    
+        }
+        else if (d->filter->colorSpaceIndependence() == TO_RGBA16) {
+            if (KMessageBox::warningContinueCancel(d->view,
+                    i18n("The %1 filter will convert your %2 data to 16-bit RGBA and vice versa. ",
+                    d->filter->name() , dev->colorSpace()->name()),
+                    i18n("Filter Will Convert Your Layer Data"),
+                    KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
+                    "rgba16degradation") != KMessageBox::Continue) return;
+        }
+    }
+
+    
     KisFilterDialog* dialog = new KisFilterDialog( d->view , d->view->activeLayer());
     dialog->setFilter( d->filter );
     connect(dialog, SIGNAL(sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*)),
             SLOT(apply(KisLayerSP, KisFilterConfiguration*)));
     dialog->setVisible(true);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void KisFilterHandler::reapply()

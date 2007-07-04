@@ -1,22 +1,24 @@
-/*
- * painterlymixer.h -- Part of Krita
- *
- * Copyright (c) 2007 Boudewijn Rempt (boud@valdyas.org)
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+/* This file is part of the KDE project
+   Made by Emanuele Tamponi (emanuele@valinor.it)
+   Copyright (C) 2007 Emanuele Tamponi
+   Copyright (C) 2007 Mark A. Zimmer
+   Copyright (C) 2007 Tunde Cockshott
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+*/
 
 #include <cmath>
 
@@ -42,6 +44,10 @@ void addPainterlyOverlays(KisPaintDevice* dev)
     dev->addPainterlyChannel(new KisWetnessMask(dev));
 }
 
+/*
+This implementation uses
+Zimmer, System and method for digital rendering of images and printed articulation, 1994
+*/
 void transmittanceToDensity(int T, int *D)
 {
     double d;
@@ -53,6 +59,10 @@ void transmittanceToDensity(int T, int *D)
     *D = (int)(d + 0.5);
 }
 
+/*
+This implementations use
+Zimmer, System and method for digital rendering of images and printed articulation, 1994
+*/
 void densityToTransmittance(int D, int *T)
 {
     double d;
@@ -76,4 +86,65 @@ void cmyToRgb(int cyan, int magenta, int yellow, int *red, int *green, int *blue
     densityToTransmittance(cyan, red);
     densityToTransmittance(magenta, green);
     densityToTransmittance(yellow, blue);
+}
+
+void Cell::mixUsingRgb(const Cell &cell)
+{
+    float ratio;
+    int delta;
+
+    ratio = wetness*volume / cell.wetness*cell.volume;
+    delta = red - cell.red;
+    red = cell.red + (int)(ratio * delta);
+
+    delta = green - cell.green;
+    green = cell.green + (int)(ratio * delta);
+
+    delta = blue - cell.blue;
+    blue = cell.blue + (int)(ratio * delta);
+
+    updateHlsCmy();
+}
+
+/*
+This implementation use Tunde Cockshott Wet&Sticky code.
+*/
+void Cell::mixUsingHls(const Cell &cell)
+{
+
+    float ratio, delta;
+    ratio = volume / cell.volume;
+    delta = hue - cell.hue;
+    if ((int)delta != 0) {
+        hue = cell.hue + (int)(ratio * delta);
+        if (hue >= 360)
+            hue -= 360;
+    }
+
+    delta = lightness - cell.lightness;
+    lightness = cell.lightness + ratio * delta;
+
+    delta = saturation - cell.saturation;
+    saturation = cell.saturation + ratio * delta;
+
+    updateRgbCmy();
+}
+
+void Cell::mixUsingCmy(const Cell &cell)
+{
+
+    float ratio;
+    int delta;
+
+    ratio = wetness*volume / cell.wetness*cell.volume;
+    delta = cyan - cell.cyan;
+    cyan = cell.cyan + (int)(ratio * delta);
+
+    delta = magenta - cell.magenta;
+    magenta = cell.magenta + (int)(ratio * delta);
+
+    delta = yellow - cell.yellow;
+    yellow = cell.yellow + (int)(ratio * delta);
+
+    updateRgbHls();
 }

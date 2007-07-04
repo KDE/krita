@@ -117,63 +117,11 @@ public:
             rgb_to_hls(red, green, blue, &hue, &lightness, &saturation);
         }
 
-    void mixUsingRgb(const Cell &cell)
-        {
-            float ratio;
-            int delta;
+    void mixUsingRgb(const Cell &cell);
 
-            ratio = wetness*volume / cell.wetness*cell.volume;
-            delta = red - cell.red;
-            red = cell.red + (int)(ratio * delta);
+    void mixUsingHls(const Cell &cell);
 
-            delta = green - cell.green;
-            green = cell.green + (int)(ratio * delta);
-
-            delta = blue - cell.blue;
-            blue = cell.blue + (int)(ratio * delta);
-
-            updateHlsCmy();
-        }
-
-    void mixUsingHls(const Cell &cell)
-        {
-
-            float ratio, delta;
-            ratio = volume / cell.volume;
-            delta = hue - cell.hue;
-            if ((int)delta != 0) {
-                hue = cell.hue + (int)(ratio * delta);
-                if (hue >= 360)
-                    hue -= 360;
-            }
-
-            delta = lightness - cell.lightness;
-            lightness = cell.lightness + ratio * delta;
-
-            delta = saturation - cell.saturation;
-            saturation = cell.saturation + ratio * delta;
-
-            updateRgbCmy();
-        }
-
-    void mixUsingCmy(const Cell &cell)
-        {
-
-            float ratio;
-            int delta;
-
-            ratio = wetness*volume / cell.wetness*cell.volume;
-            delta = cyan - cell.cyan;
-            cyan = cell.cyan + (int)(ratio * delta);
-
-            delta = magenta - cell.magenta;
-            magenta = cell.magenta + (int)(ratio * delta);
-
-            delta = yellow - cell.yellow;
-            yellow = cell.yellow + (int)(ratio * delta);
-
-            updateRgbHls();
-        }
+    void mixUsingCmy(const Cell &cell);
 };
 
 #endif // UTILITIES_H_

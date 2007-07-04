@@ -2,6 +2,7 @@
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
    Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -144,6 +145,8 @@ void KoRuler::paintEvent(QPaintEvent* event)
 
     if(orientation() == Qt::Horizontal) {
         lengthPixel = d->m_viewConverter->documentToViewX(rulerLength());
+        if( d->m_offset < 0 )
+            lengthPixel += d->m_offset;
         numberStepPixel = qRound(d->m_viewConverter->documentToViewX(
             d->m_unit.fromUserValue(numberStep)));
         rectangle.setX(qMax(0, d->m_offset));
@@ -158,6 +161,8 @@ void KoRuler::paintEvent(QPaintEvent* event)
         activeRangeRectangle.setHeight(rectangle.height() - 2);
     } else {
         lengthPixel = d->m_viewConverter->documentToViewY(rulerLength());
+        if( d->m_offset < 0 )
+            lengthPixel += d->m_offset;
         numberStepPixel = qRound(d->m_viewConverter->documentToViewY(
             d->m_unit.fromUserValue(numberStep)));
         rectangle.setX(0);

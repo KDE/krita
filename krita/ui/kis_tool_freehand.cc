@@ -32,10 +32,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <threadweaver/DependencyPolicy.h>
-#include <threadweaver/Job.h>
-#include <threadweaver/ThreadWeaver.h>
-
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
@@ -162,7 +158,7 @@ class FreehandPaintJobExecutor : public QThread {
                     QMutexLocker lock(&m_mutex_queue);
                     if(m_queue.size() > 0)
                     {
-                        nextJob = m_queue.pop();
+                        nextJob = m_queue.dequeue();
                     }
                 }
                 kDebug() << "nextJob = " << nextJob << endl;
@@ -178,7 +174,8 @@ class FreehandPaintJobExecutor : public QThread {
         void postJob(FreehandPaintJob* job)
         {
             QMutexLocker lock(&m_mutex_queue);
-            m_queue.push(job);
+            kDebug() << "push job = " << job << endl;
+            m_queue.enqueue(job);
         }
         void finish() {
             m_finish = true;
@@ -196,7 +193,7 @@ class FreehandPaintJobExecutor : public QThread {
             QThread::start();
         }
     private:
-        QStack<FreehandPaintJob* > m_queue;
+        QQueue<FreehandPaintJob* > m_queue;
         QMutex m_mutex_queue;
         bool m_finish;
 };

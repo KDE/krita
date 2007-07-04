@@ -31,9 +31,10 @@
 #include "kis_filter_registry.h"
 
 struct KisFilterManager::Private {
-    Private() : actionCollection(0) {
+    Private() : reapplyAction(0), actionCollection(0) {
         
     }
+    QAction* reapplyAction;
     QHash<QString, KActionMenu*> filterActionMenus;
     QHash<QString, KisFilterHandler*> filterHandlers;
     KActionCollection * actionCollection;
@@ -54,6 +55,14 @@ KisFilterManager::~KisFilterManager()
 void KisFilterManager::setup(KActionCollection * ac)
 {
     d->actionCollection = ac;
+    
+    // Setup reapply action
+    d->reapplyAction = new KAction(i18n("Apply Filter Again"), this);
+    d->actionCollection->addAction("filter_apply_again", d->reapplyAction );
+    d->reapplyAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
+    d->reapplyAction->setEnabled(false);
+    
+    // Setup list of filters
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
     for ( QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it ) {
         insertFilter(*it);
@@ -76,7 +85,7 @@ void KisFilterManager::insertFilter(QString name)
         kDebug() << "Creating entry menu for " << category.id() << " with name " << category.name() << endl;
     }
     
-    KisFilterHandler* handler = new KisFilterHandler( f, d->view);
+    KisFilterHandler* handler = new KisFilterHandler( this, f, d->view);
     
     KAction * a = new KAction(f->menuEntry(), this);
     d->actionCollection->addAction(QString("krita_filter_%1").arg(name), a);
@@ -87,4 +96,12 @@ void KisFilterManager::insertFilter(QString name)
 void KisFilterManager::updateGUI()
 {
     
+}
+
+void KisFilterManager::setLastFilterHandler(KisFilterHandler* handler)
+{
+    disconnect(d->reapplyAction, SIGNAL(triggered()),0 ,0);
+    connect(d->reapplyAction, SIGNAL(triggered()), handler, SLOT(reapply()) );
+    d->reapplyAction->setEnabled(true);
+    d->reapplyAction->setText(i18n("Apply Filter Again: %1", handler->filter()->name() ));
 }

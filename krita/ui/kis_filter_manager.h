@@ -28,6 +28,7 @@ class KisView2;
 class KisDoc2;
 class KisFilter;
 class KActionCollection;
+class KisFilterHandler;
 
 /**
  * Create all the filter actions for the specified view and implement re-apply filter
@@ -41,6 +42,7 @@ public:
 
     void setup(KActionCollection * ac);
     void updateGUI();
+    void setLastFilterHandler(KisFilterHandler* handler);
 public slots:
     void insertFilter(QString name);
 private:

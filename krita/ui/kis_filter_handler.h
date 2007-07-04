@@ -24,14 +24,16 @@
 #include <kis_types.h>
 
 class KisFilterConfiguration;
+class KisFilterManager;
 class KisLayer;
 class KisView2;
 
 class KisFilterHandler : public QObject {
         Q_OBJECT
     public:
-        KisFilterHandler(KisFilterSP f, KisView2* view);
+        KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view);
         ~KisFilterHandler();
+        const KisFilterSP filter() const;
     public slots:
         void showDialog();
         void reapply();

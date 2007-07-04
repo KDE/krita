@@ -22,23 +22,28 @@
 
 #include "kis_doc2.h"
 #include "kis_filter.h"
+#include "kis_filter_configuration.h"
 #include "kis_filter_dialog.h"
+#include "kis_filter_manager.h"
 #include "kis_layer.h"
 #include "kis_transaction.h"
 #include "kis_view2.h"
 
 struct KisFilterHandler::Private {
-    Private() : view(0), dialog(0) {}
+    Private() : view(0), dialog(0), manager(0), lastConfiguration(0) {}
     ~Private() { delete dialog; }
     KisFilterSP filter;
     KisView2* view;
     KisFilterDialog* dialog;
+    KisFilterManager* manager;
+    KisFilterConfiguration* lastConfiguration;
 };
 
-KisFilterHandler::KisFilterHandler(KisFilterSP f, KisView2* view) : d(new Private)
+KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view) : QObject(parent), d(new Private)
 {
     d->filter = f;
     d->view = view;
+    d->manager = parent;
 }
 
 KisFilterHandler::~KisFilterHandler()
@@ -58,10 +63,12 @@ void KisFilterHandler::showDialog()
 
 void KisFilterHandler::reapply()
 {
+    apply(d->view->activeLayer(), d->lastConfiguration);
 }
 
 void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
 {
+    kDebug() << "Applying a filter" << endl;
     if( not layer ) return;
     
     KisPaintDeviceSP dev = layer->paintDevice();
@@ -88,14 +95,30 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         d->filter->process(dev, rect, config);
     }
     if (d->filter->cancelRequested()) {
+        delete config;
+        if (cmd) {
+            cmd->undo();
+            delete cmd;
+        }
     } else {
         dev->setDirty(rect);
         d->view->document()->setModified(true);
         if (cmd) d->view->document()->addCommand(cmd);
-        d->filter->disableProgress();
-        QApplication::restoreOverrideCursor();
         d->filter->saveToBookmark(KisFilter::ConfigLastUsed.id(), config);
+        if(d->lastConfiguration != config)
+        {
+            delete d->lastConfiguration;
+        }
+        d->lastConfiguration = config;
+        d->manager->setLastFilterHandler(this);
     }
+    d->filter->disableProgress();
+    QApplication::restoreOverrideCursor();
+}
+
+const KisFilterSP KisFilterHandler::filter() const
+{
+    return d->filter;
 }
 
 

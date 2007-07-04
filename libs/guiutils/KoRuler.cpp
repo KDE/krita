@@ -62,6 +62,7 @@ class KoRulerPrivate {
         double m_endIndent;
 
         bool m_showTabs;
+        QList<KoRuler::Tab> m_tabs;
 
         bool m_rightToLeft;
         int m_selected;
@@ -81,8 +82,8 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     setActiveRange(0, 0);
     setShowMousePosition(false);
     setShowSelectionBorders(false);
-    setShowIndents(true); 
-    setShowTabs(true);
+    setShowIndents(false); 
+    setShowTabs(false);
 
     setRightToLeft(true);
     d->m_firstLineIndent = d->m_paragraphIndent = 0;
@@ -348,10 +349,58 @@ void KoRuler::paintEvent(QPaintEvent* event)
             x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
             polygon << QPointF(x+0.5, height() - 10.5)
                         << QPointF(x-9.5, height() - 5.5)
-                        << QPointF(x-0.5, height() - 0.5)
-                        << QPointF(x-0.5, height() - 10.5);
+                        << QPointF(x+0.5, height() - 0.5)
+                        << QPointF(x+0.5, height() - 10.5);
             painter.drawPolygon(polygon);
 
+            painter.setRenderHint( QPainter::Antialiasing, false );
+        }
+
+        if (d->m_showTabs) {
+            QPolygonF polygon;
+
+            painter.setBrush(palette().color(QPalette::Text));
+            painter.setRenderHint( QPainter::Antialiasing );
+
+            foreach (Tab t, d->m_tabs) {
+                double x;
+                if (d->m_rightToLeft)
+                    x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + t.position)
+                            + qMin(0, d->m_offset);
+                else
+                    x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + t.position)
+                            + qMin(0, d->m_offset);
+
+                polygon.clear();
+                switch (t.type) {
+                case LeftTab:
+                    polygon << QPointF(x+0.5, height() - 8.5)
+                        << QPointF(x-5.5, height() - 2.5)
+                        << QPointF(x+0.5, height() - 2.5);
+                    painter.drawPolygon(polygon);
+                    break;
+                case RightTab:
+                    polygon << QPointF(x+0.5, height() - 8.5)
+                        << QPointF(x+6.5, height() - 2.5)
+                        << QPointF(x+0.5, height() - 2.5);
+                    painter.drawPolygon(polygon);
+                    break;
+                case CenterTab:
+                    polygon << QPointF(x+0.5, height() - 8.5)
+                        << QPointF(x-5.5, height() - 2.5)
+                        << QPointF(x+6.5, height() - 2.5);
+                    painter.drawPolygon(polygon);
+                    break;
+                case DelimiterTab:
+                    polygon << QPointF(x-5.5, height() - 2.5)
+                        << QPointF(x+0.5, height() - 8.5)
+                        << QPointF(x+6.5, height() - 2.5);
+                    painter.drawPolyline(polygon);
+                    break;
+                default:
+                    break;
+                }
+            }
             painter.setRenderHint( QPainter::Antialiasing, false );
         }
     } else {
@@ -560,7 +609,7 @@ void KoRuler::setShowTabs(bool show)
 
 void KoRuler::updateTabs(const QList<Tab> &tabs)
 {
-    Q_UNUSED(tabs);
+    d->m_tabs = tabs;
 }
 
 void KoRuler::mousePressEvent ( QMouseEvent* ev )

@@ -52,6 +52,7 @@ public:
 
 public slots:
     virtual void slotSetAction(int);
+    virtual void slotSetSelectionMode(int);
     virtual void activate();
     void deactivate();
 
@@ -68,6 +69,7 @@ private:
     vQPointF m_points;
     KisSelectionOptions * m_optWidget;
     enumSelectionMode m_selectAction;
+    selectionMode m_selectionMode;
 };
 
 

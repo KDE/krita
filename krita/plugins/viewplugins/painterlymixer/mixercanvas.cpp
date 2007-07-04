@@ -51,21 +51,9 @@
 #include "kis_wetness_mask.h"
 
 #include "mixercanvas.h"
+#include "mixertool.h"
 #include "kis_painterly_information.h"
-
-/*
-Just add all the painterly overlays that we need in only one call
-*/
-void addPainterlyOverlays(KisPaintDevice* dev)
-{
-    dev->addPainterlyChannel(new KisAdsorbencyMask(dev));
-    dev->addPainterlyChannel(new KisMixabilityMask(dev));
-    dev->addPainterlyChannel(new KisPigmentConcentrationMask(dev));
-    dev->addPainterlyChannel(new KisReflectivityMask(dev));
-    dev->addPainterlyChannel(new KisVolumeMask(dev));
-    dev->addPainterlyChannel(new KisViscosityMask(dev));
-    dev->addPainterlyChannel(new KisWetnessMask(dev));
-}
+#include "utilities.h"
 
 MixerCanvas::MixerCanvas(QWidget *parent)
     : QFrame(parent), KoCanvasBase(0), m_tool(0), m_toolProxy(0)
@@ -137,4 +125,4 @@ void MixerCanvas::updateCanvas(const QRectF& rc)
 }
 
 
-#include "mixercore.moc"
+#include "mixercanvas.moc"

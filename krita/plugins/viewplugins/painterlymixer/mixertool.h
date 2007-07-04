@@ -27,7 +27,8 @@
 #include "kis_paint_device.h"
 
 #include "kis_painterly_information.h"
-#include "mixercanvas.h"
+
+class MixerCanvas;
 
 class MixerTool : public KoTool {
     Q_OBJECT

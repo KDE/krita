@@ -162,4 +162,12 @@ bool KoCanvasResourceProvider::hasResource(int key) {
     return d->resources.contains(key);
 }
 
+void KoCanvasResourceProvider::clearResource(int key) {
+    if(! d->resources.contains(key))
+        return;
+    d->resources.remove(key);
+    QVariant empty;
+    emit sigResourceChanged( key, empty );
+}
+
 #include "KoCanvasResourceProvider.moc"

@@ -180,6 +180,13 @@ public:
      */
     bool hasResource(int key);
 
+    /**
+     * Remove the resource with @p key from the provider.
+     * @param key the key that will be used to remove the resource.
+     * There will be a signal emitted with a variable that will return true on QVariable::isNull();
+     */
+    void clearResource(int key);
+
 signals:
     /**
      * This signal is emitted every time a resource is set that is either

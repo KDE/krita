@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,6 +39,7 @@
 #include <KoToolDockerFactory.h>
 #include <KoToolDocker.h>
 #include <KoShapeLayer.h>
+#include <KoRulerController.h>
 
 #include "KoPACanvas.h"
 #include "KoPADocument.h"
@@ -110,6 +112,8 @@ void KoPAView::initGUI()
     m_verticalRuler = new KoRuler(this, Qt::Vertical, viewConverter());
     m_verticalRuler->setUnit(m_doc->unit());
     m_verticalRuler->setShowMousePosition(true);
+
+    new KoRulerController(m_horizontalRuler, m_canvas->resourceProvider());
 
     connect(m_doc, SIGNAL(unitChanged(KoUnit)), m_horizontalRuler, SLOT(setUnit(KoUnit)));
     connect(m_doc, SIGNAL(unitChanged(KoUnit)), m_verticalRuler, SLOT(setUnit(KoUnit)));

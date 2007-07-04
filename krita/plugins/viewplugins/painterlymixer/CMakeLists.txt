@@ -1,5 +1,6 @@
 set(kritapainterlymixer_PART_SRCS
-    mixercore.cpp
+    mixercanvas.cpp
+    mixertool.hpp
     kis_painterlymixer.cpp
     kis_painterlymixerdocker.cpp
     painterlymixer.cpp

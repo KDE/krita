@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef MIXER_CORE_H_
-#define MIXER_CORE_H_
+#ifndef MIXERCANVAS_H_
+#define MIXERCANVAS_H_
 
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
@@ -77,47 +77,4 @@ private:
 
 };
 
-
-#include <KoTool.h>
-
-class MixerTool : public KoTool {
-    Q_OBJECT
-
-public:
-    MixerTool(MixerCanvas *canvas, KisPaintDevice* device, KoCanvasResourceProvider *rp);
-    ~MixerTool();
-
-// Implement KoTool
-public:
-    void paint(QPainter &, const KoViewConverter &) {} // This is not needed
-
-    void mousePressEvent(KoPointerEvent *e);
-    void mouseReleaseEvent(KoPointerEvent *e);
-    void mouseMoveEvent(KoPointerEvent *e);
-
-public:
-    KisPainterlyBristleInformation bristleInformation() {return m_info;}
-
-private:
-    /*
-    Update all the properties that cannot be stored in the KisPaintOp, storing
-    them in the mixer. Initialize the properties that the stroke would have in order to mix
-    colors on it in a painterly way. It's called inside mouseMoveEvent.
-    */
-    void updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent *e);
-
-    /*
-    Updates the information of the paintop (color, painterly information for next iteration and such)
-    */
-    void updateResources(KisPaintDeviceSP stroke);
-
-private:
-    KisPaintDevice* m_canvasDev;
-    KoCanvasResourceProvider *m_resources;
-
-    // We keep a KisPainterlyInformation structure so we store painterly information
-    // when we mix with non-painterly paintops.
-    KisPainterlyBristleInformation m_info;
-};
-
-#endif // MIXER_CORE_H_
+#endif // MIXERCANVAS_H_

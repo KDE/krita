@@ -25,6 +25,7 @@
 #include <kis_types.h>
 
 class KisFilter;
+class KisFilterConfiguration;
 
 class KisFilterDialog : public QDialog {
     Q_OBJECT
@@ -32,10 +33,13 @@ class KisFilterDialog : public QDialog {
     public:
         KisFilterDialog(QWidget* parent, KisLayerSP device);
         ~KisFilterDialog();
-        void setFilter(KisFilter*);
+        void setFilter(KisFilterSP f);
     public slots:
         void updatePreview();
-        void applyFilter();
+    protected slots:
+        void apply();
+    signals:
+        void sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*);
     private:
         KisFilterDialog::Private* const d;
 };

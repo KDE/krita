@@ -147,6 +147,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="pushButtonCreateMaskEffect" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
          <property name="text" >
           <string>Create mask effect</string>
          </property>

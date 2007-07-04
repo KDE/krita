@@ -21,17 +21,20 @@
 
 #include <QObject>
 
-class KisFilter;
+#include <kis_types.h>
+
 class KisFilterConfiguration;
+class KisLayer;
+class KisView2;
 
 class KisFilterHandler : public QObject {
         Q_OBJECT
     public:
-        KisFilterHandler(const KisFilter* f);
+        KisFilterHandler(KisFilterSP f, KisView2* view);
     public slots:
         void showDialog();
         void reapply();
-        void apply(KisFilterConfiguration*);
+        void apply(KisLayerSP, KisFilterConfiguration*);
     private:
         struct Private;
         Private* const d;

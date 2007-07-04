@@ -27,6 +27,7 @@
 #include <KoID.h>
 
 #include "kis_filter.h"
+#include "kis_filter_handler.h"
 #include "kis_filter_registry.h"
 
 struct KisFilterManager::Private {
@@ -34,13 +35,15 @@ struct KisFilterManager::Private {
         
     }
     QHash<QString, KActionMenu*> filterActionMenus;
+    QHash<QString, KisFilterHandler*> filterHandlers;
     KActionCollection * actionCollection;
+    KisView2* view;
 };
 
 KisFilterManager::KisFilterManager(KisView2 * parent, KisDoc2 * doc) : d(new Private)
 {
-    Q_UNUSED(parent);
     Q_UNUSED(doc);
+    d->view = parent;
 }
 
 KisFilterManager::~KisFilterManager()
@@ -61,7 +64,7 @@ void KisFilterManager::setup(KActionCollection * ac)
 void KisFilterManager::insertFilter(QString name)
 {
     Q_ASSERT(d->actionCollection);
-    const KisFilter* f = KisFilterRegistry::instance()->get( name );
+    KisFilterSP f = KisFilterRegistry::instance()->value( name );
     Q_ASSERT(f);
     KoID category = f->menuCategory();
     KActionMenu* actionMenu = d->filterActionMenus[category.id()];
@@ -72,6 +75,13 @@ void KisFilterManager::insertFilter(QString name)
         d->filterActionMenus[category.id()] = actionMenu;
         kDebug() << "Creating entry menu for " << category.id() << " with name " << category.name() << endl;
     }
+    
+    KisFilterHandler* handler = new KisFilterHandler( f, d->view);
+    
+    KAction * a = new KAction(f->menuEntry(), this);
+    d->actionCollection->addAction(QString("krita_filter_%1").arg(name), a);
+    connect(a, SIGNAL(triggered()), handler, SLOT(showDialog()));
+    actionMenu->addAction( a );
 }
 
 void KisFilterManager::updateGUI()

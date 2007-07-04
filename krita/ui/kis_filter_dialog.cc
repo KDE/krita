@@ -33,16 +33,16 @@ struct KisFilterDialog::Private {
     }
     ~Private()
     {
-        delete currentFilterConfigurationWidget;
-        delete currentFilter;
+        delete currentCentralWidget;
+        delete widgetLayout;
     }
     QWidget* currentCentralWidget;
     KisFilterConfigWidget* currentFilterConfigurationWidget;
-    KisFilter* currentFilter;
+    KisFilterSP currentFilter;
     KisLayerSP layer;
     Ui_FilterDialog uiFilterDialog;
     KisFilterMaskSP mask;
-    QGridLayout *widgetLayout ;
+    QGridLayout *widgetLayout;
 };
 
 KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
@@ -55,6 +55,10 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     d->layer = layer;
     d->mask = new KisFilterMask();
     d->layer->setPreviewMask( d->mask );
+    connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed ()), SLOT(accept()));
+    connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed ()), SLOT(apply()));
+    connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed ()), SLOT(apply()));
+    connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed ()), SLOT(reject()));
 }
 
 KisFilterDialog::~KisFilterDialog()
@@ -62,7 +66,7 @@ KisFilterDialog::~KisFilterDialog()
     delete d;
 }
 
-void KisFilterDialog::setFilter(KisFilter* f)
+void KisFilterDialog::setFilter(KisFilterSP f)
 {
     d->currentFilter = f;
     delete d->currentCentralWidget;
@@ -75,6 +79,7 @@ void KisFilterDialog::setFilter(KisFilter* f)
         d->currentFilterConfigurationWidget = widget;
         d->currentCentralWidget = widget;
         d->currentFilterConfigurationWidget->setConfiguration( d->currentFilter->defaultConfiguration( d->layer->paintDevice() ) );
+        connect(d->currentFilterConfigurationWidget, SIGNAL(sigPleaseUpdatePreview()), SLOT(updatePreview()));
     }
     d->widgetLayout->addWidget( d->currentCentralWidget, 0 , 0);
     d->uiFilterDialog.centralWidgetHolder->setMinimumSize( d->currentCentralWidget->minimumSize() );
@@ -94,7 +99,7 @@ void KisFilterDialog::updatePreview()
     d->mask->setDirty();
 }
 
-void KisFilterDialog::applyFilter()
+void KisFilterDialog::apply()
 {
     if( not d->currentFilter ) return;
     KisFilterConfiguration* config = 0;
@@ -102,27 +107,7 @@ void KisFilterDialog::applyFilter()
     {
         config = d->currentFilterConfigurationWidget->configuration();
     }
-    
-    KisPaintDeviceSP dev = d->layer->paintDevice();
-    
-    QRect r1 = dev->extent();
-    QRect r2 = d->layer->image()->bounds();
-
-    // Filters should work only on the visible part of an image.
-    QRect rect = r1.intersect(r2);
-
-    if (dev->hasSelection()) {
-        QRect r3 = dev->selection()->selectedExactRect();
-        rect = rect.intersect(r3);
-    }
-    
-    if ( !d->currentFilter->supportsThreading() ) {
-        d->currentFilter->process(dev, rect, config);
-    }
-    else {
-        // Chop up in rects.
-        d->currentFilter->process(dev, rect, config);
-    }
+    emit(sigPleaseApplyFilter(d->layer, config));
 }
 
 #include "kis_filter_dialog.moc"

@@ -1,8 +1,6 @@
 if (GMM_INCLUDE_DIR)
-
   # in cache already
   set(GMM_FOUND TRUE)
-
 else (GMM_INCLUDE_DIR)
 
 find_path(GMM_INCLUDE_DIR NAMES gmm/gmm.h

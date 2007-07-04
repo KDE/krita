@@ -45,10 +45,32 @@
 #include "kis_canvas2.h"
 #include "kis_tool.h"
 
+struct KisTool::Private {
+    Private() : currentBrush(0),
+            currentPattern(0),
+            currentGradient(0),
+            currentPaintOpSettings(0)
+    { }
+    QCursor cursor; // the cursor that should be shown on tool activation.
+
+    // From the canvas resources
+    KisBrush * currentBrush;
+    KisPattern * currentPattern;
+    KisGradient * currentGradient;
+    KoColor currentFgColor;
+    KoColor currentBgColor;
+    QString currentPaintOp;
+    KisPaintOpSettings * currentPaintOpSettings;
+    KisLayerSP currentLayer;
+    float currentExposure;
+    KisImageSP currentImage;
+};
+
 KisTool::KisTool( KoCanvasBase * canvas, const QCursor & cursor )
     : KoTool( canvas )
-    , m_cursor( cursor )
+    , d(new Private)
 {
+    d->cursor = cursor;
 }
 
 KisTool::~KisTool()
@@ -57,18 +79,18 @@ KisTool::~KisTool()
 
 void KisTool::activate(bool )
 {
-    useCursor(m_cursor, true);
+    useCursor(d->cursor, true);
 
-    m_currentFgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::ForegroundColor ).value<KoColor>();
-    m_currentBgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::BackgroundColor ).value<KoColor>();
-    m_currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentBrush ).value<void *>() );
-    m_currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPattern).value<void *>() );
-    m_currentGradient = static_cast<KisGradient *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentGradient ).value<void *>() );
-    m_currentPaintOp = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintop ).value<KoID >();
-    m_currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintopSettings ).value<void *>() );
-    m_currentLayer = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
-    m_currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( KisResourceProvider::HdrExposure ).toDouble() );
-    m_currentImage = image();
+    d->currentFgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::ForegroundColor ).value<KoColor>();
+    d->currentBgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::BackgroundColor ).value<KoColor>();
+    d->currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentBrush ).value<void *>() );
+    d->currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPattern).value<void *>() );
+    d->currentGradient = static_cast<KisGradient *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentGradient ).value<void *>() );
+    d->currentPaintOp = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintop ).value<KoID >().id();
+    d->currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintopSettings ).value<void *>() );
+    d->currentLayer = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    d->currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( KisResourceProvider::HdrExposure ).toDouble() );
+    d->currentImage = image();
 }
 
 
@@ -81,30 +103,30 @@ void KisTool::resourceChanged( int key, const QVariant & v )
 {
     switch ( key ) {
     case ( KoCanvasResource::ForegroundColor ):
-        m_currentFgColor = v.value<KoColor>();
+        d->currentFgColor = v.value<KoColor>();
         break;
     case ( KoCanvasResource::BackgroundColor ):
-        m_currentBgColor = v.value<KoColor>();
+        d->currentBgColor = v.value<KoColor>();
         break;
     case ( KisResourceProvider::CurrentBrush ):
-        m_currentBrush = static_cast<KisBrush *>( v.value<void *>() );
+        d->currentBrush = static_cast<KisBrush *>( v.value<void *>() );
         break;
     case ( KisResourceProvider::CurrentPattern ):
-        m_currentPattern = static_cast<KisPattern *>( v.value<void *>() );
+        d->currentPattern = static_cast<KisPattern *>( v.value<void *>() );
         break;
     case ( KisResourceProvider::CurrentGradient ):
-        m_currentGradient = static_cast<KisGradient *>( v.value<void *>() );
+        d->currentGradient = static_cast<KisGradient *>( v.value<void *>() );
         break;
     case ( KisResourceProvider::CurrentPaintop ):
-        m_currentPaintOp = v.value<KoID >();
+        d->currentPaintOp = v.value<KoID >().id();
         break;
     case ( KisResourceProvider::CurrentPaintopSettings ):
-        m_currentPaintOpSettings = static_cast<KisPaintOpSettings*>( v.value<void *>() );
+        d->currentPaintOpSettings = static_cast<KisPaintOpSettings*>( v.value<void *>() );
         break;
     case ( KisResourceProvider::HdrExposure ):
-        m_currentExposure = static_cast<float>( v.toDouble() );
+        d->currentExposure = static_cast<float>( v.toDouble() );
     case ( KisResourceProvider::CurrentKritaLayer ):
-        m_currentLayer = v.value<KisLayerSP>();
+        d->currentLayer = v.value<KisLayerSP>();
     default:
         ;
         // Do nothing
@@ -199,6 +221,51 @@ void KisTool::notifyModified() const
     if ( img ) {
         img->setModified();
     }
+}
+
+KisPattern * KisTool::currentPattern()
+{
+    return d->currentPattern;
+}
+
+KisGradient * KisTool::currentGradient()
+{
+    return d->currentGradient;
+}
+
+KisPaintOpSettings * KisTool::currentPaintOpSettings()
+{
+    return d->currentPaintOpSettings;
+}
+
+QString KisTool::currentPaintOp()
+{
+    return d->currentPaintOp;
+}
+
+KisBrush* KisTool::currentBrush()
+{
+    return d->currentBrush;
+}
+
+KisLayerSP KisTool::currentLayer()
+{
+    return d->currentLayer;
+}
+
+KoColor KisTool::currentFgColor()
+{
+    return d->currentFgColor;
+}
+
+KoColor KisTool::currentBgColor()
+{
+    return d->currentBgColor;
+}
+
+KisImageSP KisTool::currentImage()
+{
+    return d->currentImage;
 }
 
 #include "kis_tool.moc"

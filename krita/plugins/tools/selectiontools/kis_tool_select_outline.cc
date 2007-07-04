@@ -98,9 +98,9 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
         m_dragging = false;
         deactivate();
 
-        if (m_currentImage && m_currentLayer->paintDevice()) {
+        if (currentImage() && currentLayer()->paintDevice()) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
-            KisPaintDeviceSP dev = m_currentLayer->paintDevice();
+            KisPaintDeviceSP dev = currentLayer()->paintDevice();
             bool hasSelection = dev->hasSelection();
 
             if(m_selectionMode == PIXEL_SELECTION){
@@ -115,12 +115,12 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 }
 
                 KisPainter painter(pixelSelection);
-                painter.setBounds( m_currentImage->bounds() );
+                painter.setBounds( currentImage()->bounds() );
                 painter.setPaintColor(KoColor(Qt::black, pixelSelection->colorSpace()));
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
                 painter.setOpacity(OPACITY_OPAQUE);
-                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, m_currentImage);
+                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, currentImage());
                 painter.setPaintOp(op);    // And now the painter owns the op and will destroy it.
                 painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
 
@@ -157,7 +157,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                     path->setShapeId( KoPathShapeId );
 
                     QMatrix resolutionMatrix;
-                    resolutionMatrix.scale(1/m_currentImage->xRes(), 1/m_currentImage->yRes());
+                    resolutionMatrix.scale(1/currentImage()->xRes(), 1/currentImage()->yRes());
                     path->moveTo( resolutionMatrix.map(m_points[0]) );
                     for(int i = 1; i < m_points.count(); i++)
                         path->lineTo( resolutionMatrix.map(m_points[i]) );
@@ -170,7 +170,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
 
                     KisShapeSelection* shapeSelection;
                     if(!selection->hasShapeSelection()) {
-                        shapeSelection = new KisShapeSelection(m_currentImage);
+                        shapeSelection = new KisShapeSelection(currentImage());
                         QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
                         cmd->redo();
                         selection->setShapeSelection(shapeSelection);

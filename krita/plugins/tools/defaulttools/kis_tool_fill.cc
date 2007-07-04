@@ -54,7 +54,6 @@ KisToolFill::KisToolFill(KoCanvasBase * canvas)
     m_painter = 0;
     m_oldColor = 0;
     m_threshold = 15;
-    m_currentImage = 0;
     m_usePattern = false;
     m_unmerged = false;
     m_fillOnlySelection = false;
@@ -68,7 +67,7 @@ KisToolFill::~KisToolFill()
 bool KisToolFill::flood(int startX, int startY)
 {
 
-    KisPaintDeviceSP device = m_currentLayer->paintDevice();
+    KisPaintDeviceSP device = currentLayer()->paintDevice();
     if (!device) return false;
 
     if (m_fillOnlySelection) {
@@ -86,14 +85,14 @@ bool KisToolFill::flood(int startX, int startY)
         // really filled.
         if (m_usePattern)
             m_fillPainter->fillRect(0, 0,
-                                    m_currentImage->width(),
-                                    m_currentImage->height(),
-                                    m_currentPattern);
+                                    currentImage()->width(),
+                                    currentImage()->height(),
+                                    currentPattern());
         else
             m_fillPainter->fillRect(0, 0,
-                                    m_currentImage->width(),
-                                    m_currentImage->height(),
-                                    m_currentFgColor,
+                                    currentImage()->width(),
+                                    currentImage()->height(),
+                                    currentFgColor(),
                                     m_opacity);
 
         QRegion dirty = m_fillPainter->dirtyRegion();
@@ -132,15 +131,15 @@ bool KisToolFill::flood(int startX, int startY)
 
         m_fillPainter->beginTransaction(i18n("Flood Fill"));
 
-        m_fillPainter->setPaintColor(m_currentFgColor);
+        m_fillPainter->setPaintColor(currentFgColor());
         m_fillPainter->setOpacity(m_opacity);
         m_fillPainter->setFillThreshold(m_threshold);
         m_fillPainter->setCompositeOp(m_compositeOp);
-        m_fillPainter->setPattern(m_currentPattern);
+        m_fillPainter->setPattern(currentPattern());
         m_fillPainter->setSampleMerged(!m_unmerged);
         m_fillPainter->setCareForSelection(true);
-        m_fillPainter->setWidth( m_currentImage->width() );
-        m_fillPainter->setHeight( m_currentImage->height() );
+        m_fillPainter->setWidth( currentImage()->width() );
+        m_fillPainter->setHeight( currentImage()->height() );
         // Enable this code again when I know how progress works
         //  KisProgressDisplayInterface *progress = ??
 //     if (progress) {
@@ -148,9 +147,9 @@ bool KisToolFill::flood(int startX, int startY)
 //     }
 
         if (m_usePattern)
-            m_fillPainter->fillPattern( startX, startY, m_currentImage->mergedImage() );
+            m_fillPainter->fillPattern( startX, startY, currentImage()->mergedImage() );
         else
-            m_fillPainter->fillColor( startX, startY, m_currentImage->mergedImage() );
+            m_fillPainter->fillColor( startX, startY, currentImage()->mergedImage() );
 
         QRegion dirtyRegion = m_fillPainter->dirtyRegion();
         device->setDirty(dirtyRegion);
@@ -173,14 +172,14 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *e)
 {
 
     if (!m_canvas) return;
-    if (!m_currentImage || !m_currentLayer->paintDevice()) return;
+    if (!currentImage() || !currentLayer()->paintDevice()) return;
     if (e->button() != Qt::LeftButton) return;
     int x, y;
 
     x = static_cast<int>(m_startPos.x());
     y = static_cast<int>(m_startPos.y());
 
-    if (!m_currentImage->bounds().contains(x, y)) {
+    if (!currentImage()->bounds().contains(x, y)) {
 	return;
     }
 

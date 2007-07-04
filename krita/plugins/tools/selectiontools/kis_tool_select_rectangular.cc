@@ -80,7 +80,7 @@ void KisToolSelectRectangular::paint(QPainter& gc, const KoViewConverter &conver
     double sx, sy;
     converter.zoom(&sx, &sy);
 
-    gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
+    gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
     if (m_selecting) {
         QPen old = gc.pen();
         gc.setPen(Qt::DashLine);
@@ -106,7 +106,7 @@ void KisToolSelectRectangular::mousePressEvent(KoPointerEvent *e)
 {
     if (m_canvas) {
 
-        if (m_currentImage && m_currentLayer->paintDevice() && e->button() == Qt::LeftButton) {
+        if (currentImage() && currentLayer()->paintDevice() && e->button() == Qt::LeftButton) {
             clearSelection();
             m_startPos = m_endPos = m_centerPos = convertToPixelCoord(e);
             m_selecting = true;
@@ -171,24 +171,24 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
 
     //                 QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-        if (!m_currentImage)
+        if (!currentImage())
             return;
 
         if (m_endPos.y() < 0)
             m_endPos.setY(0);
 
-        if (m_endPos.y() > m_currentImage->height())
-            m_endPos.setY(m_currentImage->height());
+        if (m_endPos.y() > currentImage()->height())
+            m_endPos.setY(currentImage()->height());
 
         if (m_endPos.x() < 0)
             m_endPos.setX(0);
 
-        if (m_endPos.x() > m_currentImage->width())
-            m_endPos.setX(m_currentImage->width());
+        if (m_endPos.x() > currentImage()->width())
+            m_endPos.setX(currentImage()->width());
 
-        if (m_currentImage && m_currentLayer->paintDevice()) {
+        if (currentImage() && currentLayer()->paintDevice()) {
 
-            KisPaintDeviceSP dev = m_currentLayer->paintDevice();
+            KisPaintDeviceSP dev = currentLayer()->paintDevice();
             bool hasSelection = dev->hasSelection();
             QRect rc(m_startPos.toPoint(), m_endPos.toPoint());
             rc = rc.normalized();
@@ -255,7 +255,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
 
                 KisShapeSelection* shapeSelection;
                 if(!selection->hasShapeSelection()) {
-                    shapeSelection = new KisShapeSelection(m_currentImage);
+                    shapeSelection = new KisShapeSelection(currentImage());
                     QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
                     cmd->redo();
                     selection->setShapeSelection(shapeSelection);

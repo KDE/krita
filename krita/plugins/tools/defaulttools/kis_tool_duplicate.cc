@@ -58,7 +58,7 @@ void KisToolDuplicate::activate()
 {
     m_position = QPoint(-1,-1);
     super::activate();
-    if( m_currentImage->perspectiveGrid()->countSubGrids() != 1 )
+    if( currentImage()->perspectiveGrid()->countSubGrids() != 1 )
     {
         m_perspectiveCorrection->setEnabled( false );
         m_perspectiveCorrection->setChecked( false );
@@ -91,7 +91,7 @@ void KisToolDuplicate::initPaint(KoPointerEvent *e)
         m_paintIncremental = false;
         super::initPaint(e);
         m_painter->setDuplicateOffset( m_offset );
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("duplicate", 0, m_painter, m_currentImage);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("duplicate", 0, m_painter, currentImage());
         if (op && m_source) {
             op->setSource(m_source);
             m_painter->setPaintOp(op);
@@ -128,8 +128,8 @@ void KisToolDuplicate::mouseMoveEvent(KoPointerEvent *e)
             }
 
         // First look for the grid corresponding to the start point
-            KisSubPerspectiveGrid* subGridStart = *m_currentImage->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(QPointF(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
-            QRect r = QRect(0,0, m_currentImage->width(), m_currentImage->height());
+            KisSubPerspectiveGrid* subGridStart = *currentImage()->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(QPointF(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
+            QRect r = QRect(0,0, currentImage()->width(), currentImage()->height());
 
             if(subGridStart)
             {
@@ -144,7 +144,7 @@ void KisToolDuplicate::mouseMoveEvent(KoPointerEvent *e)
 
             }
         // Second look for the grid corresponding to the end point
-            KisSubPerspectiveGrid* subGridEnd = *m_currentImage->perspectiveGrid()->begin();// device->image()->perspectiveGrid()->gridAt(pos);
+            KisSubPerspectiveGrid* subGridEnd = *currentImage()->perspectiveGrid()->begin();// device->image()->perspectiveGrid()->gridAt(pos);
             if(subGridEnd)
             {
                 double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
@@ -221,9 +221,9 @@ QWidget* KisToolDuplicate::createOptionWidget()
     m_healingRadius = new QSpinBox(widget);
 
     int healingradius = 20;
-    if( m_currentBrush )
+    if( currentBrush() )
     {
-        healingradius = 2 * qMax(m_currentBrush->width(),m_currentBrush->height());
+        healingradius = 2 * qMax(currentBrush()->width(),currentBrush()->height());
     }
 
     m_healingRadius->setValue( healingradius );

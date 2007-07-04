@@ -67,11 +67,11 @@ KisToolBrush::~KisToolBrush()
 
 void KisToolBrush::timeoutPaint()
 {
-    if (m_currentImage && m_painter) {
+    if (currentImage() && m_painter) {
         m_painter->paintAt( m_previousPaintInformation );
         QRegion r = m_painter->dirtyRegion();
         kDebug() << "Timeout paint dirty region: " << r << endl;
-        m_currentLayer->setDirty(r);
+        currentLayer()->setDirty(r);
     }
 }
 
@@ -85,10 +85,10 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
         return;
     }
 
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp.id(),
-                                                              m_currentPaintOpSettings,
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(),
+                                                              currentPaintOpSettings(),
                                                               m_painter,
-                                                              m_currentImage);
+                                                              currentImage());
     if (!op) return;
 
 #if 0

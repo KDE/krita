@@ -128,12 +128,12 @@ useCursor(m_subtractCursor);
         if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
             return;
 
-        if (!(m_currentImage = m_currentImage))
+        if (not (currentImage() ))
             return;
 
-        KisPaintDeviceSP dev = m_currentLayer->paintDevice();
+        KisPaintDeviceSP dev = currentLayer()->paintDevice();
 
-        if (!dev || !m_currentLayer->visible())
+        if (!dev || !currentLayer()->visible())
             return;
 
         QPointF pos = convertToPixelCoord(e);

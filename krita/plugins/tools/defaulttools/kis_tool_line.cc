@@ -45,7 +45,7 @@ KisToolLine::KisToolLine(KoCanvasBase * canvas)
 
 
     m_painter = 0;
-    m_currentImage = 0;
+    currentImage() = 0;
     m_startPos = QPointF(0, 0);
     m_endPos = QPointF(0, 0);
 }
@@ -59,16 +59,16 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
     double sx, sy;
     converter.zoom(&sx, &sy);
 
-    gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
+    gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
     if (m_dragging)
         paintLine(gc, QRect());
 }
 
 void KisToolLine::mousePressEvent(KoPointerEvent *e)
 {
-    if (!m_canvas || !m_currentImage) return;
+    if (!m_canvas || !currentImage()) return;
 
-    if (!m_currentBrush) return;
+    if (!currentBrush()) return;
 
     QPointF pos = convertToPixelCoord(e);
 
@@ -125,18 +125,18 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 
             KisPaintDeviceSP device;
 
-            if (m_currentLayer &&  ( device = m_currentLayer->paintDevice()) &&  m_currentBrush) {
+            if (currentLayer() &&  ( device = currentLayer()->paintDevice()) &&  currentBrush()) {
                 delete m_painter;
                 m_painter = new KisPainter( device );
                 Q_CHECK_PTR(m_painter);
 
                 m_painter->beginTransaction(i18n("Line"));
 
-                m_painter->setPaintColor(m_currentFgColor);
-                m_painter->setBrush(m_currentBrush);
+                m_painter->setPaintColor(currentFgColor());
+                m_painter->setBrush(currentBrush());
                 m_painter->setOpacity(m_opacity);
                 m_painter->setCompositeOp(m_compositeOp);
-                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp.id(), m_currentPaintOpSettings, m_painter, m_currentImage);
+                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(), currentPaintOpSettings(), m_painter, currentImage());
                 m_painter->setPaintOp(op); // Painter takes ownership
                 m_painter->paintLine(m_startPos, m_endPos );
                 QRegion dirtyRegion = m_painter->dirtyRegion();

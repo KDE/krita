@@ -106,23 +106,19 @@ protected:
 
     /// Call this to set the document modified
     void notifyModified() const;
+    KisImageSP currentImage();
+    KisBrush* currentBrush();
+    KisPattern* currentPattern();
+    KisGradient * currentGradient();
+    KisLayerSP currentLayer();
+    KoColor currentFgColor();
+    KoColor currentBgColor();
+    QString currentPaintOp();
+    KisPaintOpSettings * currentPaintOpSettings();
 
-
-protected:
-
-    QCursor m_cursor; // the cursor that should be shown on tool activation.
-
-    // From the canvas resources
-    KisBrush * m_currentBrush;
-    KisPattern * m_currentPattern;
-    KisGradient * m_currentGradient;
-    KoColor m_currentFgColor;
-    KoColor m_currentBgColor;
-    KoID m_currentPaintOp;
-    KisPaintOpSettings * m_currentPaintOpSettings;
-    KisLayerSP m_currentLayer;
-    float m_currentExposure;
-    KisImageSP m_currentImage;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif // KIS_TOOL_H_

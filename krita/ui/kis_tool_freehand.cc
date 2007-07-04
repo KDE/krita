@@ -22,9 +22,12 @@
 #include <QEvent>
 #include <QLabel>
 #include <QLayout>
-#include <QWidget>
-#include <QRect>
+#include <QMutex>
+#include <QMutexLocker>
 #include "QPainter"
+#include <QRect>
+#include <QThread>
+#include <QWidget>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -56,7 +59,7 @@
 #include "kis_tool_freehand.h"
 
 
-class FreehandPaintJob : public ThreadWeaver::Job {
+class FreehandPaintJob {
 public:
     FreehandPaintJob(KisToolFreehand* freeHand,
                      KisPainter* painter,
@@ -65,6 +68,8 @@ public:
                      const FreehandPaintJob* previousPaintJob);
 public:
     double dragDist() const { return m_dragDist; }
+public:
+    virtual void run() =0;
 protected:
     KisToolFreehand* m_toolFreeHand;
     KisPainter* m_painter;
@@ -93,7 +98,6 @@ public:
                          const KisPaintInformation & pi1,
                          const KisPaintInformation & pi2,
                          const FreehandPaintJob* previousPaintJob);
-protected:
     virtual void run();
 };
 
@@ -121,7 +125,6 @@ public:
                            const QPointF& control2,
                            const KisPaintInformation & pi2,
                            const FreehandPaintJob* previousPaintJob);
-protected:
     virtual void run();
 private:
     QPointF m_control1;
@@ -145,6 +148,60 @@ void FreehandPaintBezierJob::run()
     m_toolFreeHand->setDirty( m_painter->dirtyRegion() );
 }
 
+class FreehandPaintJobExecutor : public QThread {
+    public:
+        FreehandPaintJobExecutor() : m_finish(false) {
+        }
+        virtual void run()
+        {
+            kDebug() << "run" << endl;
+            while(not m_finish or not empty() )
+            {
+                FreehandPaintJob* nextJob = 0;
+                {
+                    QMutexLocker lock(&m_mutex_queue);
+                    if(m_queue.size() > 0)
+                    {
+                        nextJob = m_queue.pop();
+                    }
+                }
+                kDebug() << "nextJob = " << nextJob << endl;
+                if(nextJob)
+                {
+                    nextJob->run();
+                } else {
+                    msleep(1);
+                }
+            }
+            kDebug() << "finish running" << endl;
+        }
+        void postJob(FreehandPaintJob* job)
+        {
+            QMutexLocker lock(&m_mutex_queue);
+            m_queue.push(job);
+        }
+        void finish() {
+            m_finish = true;
+        }
+        bool empty() {
+            QMutexLocker lock(&m_mutex_queue);
+            return m_queue.size() == 0;
+        }
+        int queueLength() {
+            QMutexLocker lock(&m_mutex_queue);
+            return m_queue.size();
+        }
+        void start() {
+            m_finish = false;
+            QThread::start();
+        }
+    private:
+        QStack<FreehandPaintJob* > m_queue;
+        QMutex m_mutex_queue;
+        bool m_finish;
+};
+
+
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
     : KisToolPaint(canvas, cursor)
     , m_dragDist ( 0 )
@@ -156,8 +213,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_paintIncremental = true;
     m_paintOnSelection = false;
     m_paintedOutline = false;
-    m_weaver = new ThreadWeaver::Weaver();
-    m_weaver->setMaximumNumberOfThreads(1); // anyway only one paint job can be executed at a time
+    m_executor = new FreehandPaintJobExecutor();
     m_smooth = false;
     m_smoothness = 0.5;
 }
@@ -169,11 +225,11 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-    if (!m_currentImage) return;
+    if (!currentImage()) return;
 
-    if (!m_currentBrush) return;
+    if (!currentBrush()) return;
 
-    if (!m_currentLayer->paintDevice()) return;
+    if (!currentLayer()->paintDevice()) return;
 
     if (e->button() == Qt::LeftButton)
     {
@@ -249,10 +305,10 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 
 void KisToolFreehand::initPaint(KoPointerEvent *)
 {
-    if (!m_currentLayer || !m_currentLayer->paintDevice()) return;
+    if (!currentLayer() || !currentLayer()->paintDevice()) return;
 
     if (m_compositeOp == 0 ) {
-        KisPaintDeviceSP device = m_currentLayer->paintDevice();
+        KisPaintDeviceSP device = currentLayer()->paintDevice();
         if (device) {
             m_compositeOp = device->colorSpace()->compositeOp( COMPOSITE_OVER );
         }
@@ -262,7 +318,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_dragDist = 0;
 
     // Create painter
-    KisPaintDeviceSP device = m_currentLayer->paintDevice();
+    KisPaintDeviceSP device = currentLayer()->paintDevice();
 
     if (m_painter)
         delete m_painter;
@@ -271,7 +327,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
         KisIndirectPaintingSupport* layer;
         if ((layer = dynamic_cast<KisIndirectPaintingSupport*>(
-                 m_currentLayer.data())))
+                 currentLayer().data())))
         {
             // Hack for the painting of single-layered layers using indirect painting,
             // because the group layer would not have a correctly synched cache (
@@ -290,7 +346,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
                 l->parentLayer()->resetProjection(pl->paintDevice());
             }
 
-            m_target = new KisPaintDevice(m_currentLayer.data(),
+            m_target = new KisPaintDevice(currentLayer().data(),
                                           device->colorSpace());
             layer->setTemporaryTarget(m_target);
             layer->setTemporaryCompositeOp(m_compositeOp);
@@ -307,9 +363,9 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_source = device;
     m_painter->beginTransaction(m_transactionText);
 
-    m_painter->setPaintColor(m_currentFgColor);
-    m_painter->setBackgroundColor(m_currentBgColor);
-    m_painter->setBrush(m_currentBrush);
+    m_painter->setPaintColor(currentFgColor());
+    m_painter->setBackgroundColor(currentBgColor());
+    m_painter->setBrush(currentBrush());
 
 
     // if you're drawing on a temporary layer, the layer already sets this
@@ -334,15 +390,17 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     if(m_smooth)
     {
     } else {
-        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"), m_currentLayer, m_currentBrush, m_currentPaintOp.id() );
+        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"), currentLayer(), currentBrush(), currentPaintOp() );
     }
+    m_executor->start();
 }
 
 void KisToolFreehand::endPaint()
 {
     m_mode = HOVER;
-    m_weaver->finish (); // Wait for all painting jobs to be finished
-    if (m_currentImage) {
+    m_executor->finish();
+    while(m_executor->isRunning()) sleep(1); // Wait for all painting jobs to be finished
+    if (currentImage()) {
 
         if (m_painter) {
             // If painting in mouse release, make sure painter
@@ -369,7 +427,7 @@ void KisToolFreehand::endPaint()
                     ++it;
                 }
                 KisIndirectPaintingSupport* layer =
-                    dynamic_cast<KisIndirectPaintingSupport*>(m_currentLayer.data());
+                    dynamic_cast<KisIndirectPaintingSupport*>(currentLayer().data());
                 layer->setTemporaryTarget(0);
                 m_source->setDirty(painter.dirtyRegion());
 
@@ -393,7 +451,7 @@ void KisToolFreehand::endPaint()
     if(m_smooth)
     {
     } else {
-        m_currentLayer->image()->actionRecorder()->addAction(m_polyLinePaintAction);
+        currentLayer()->image()->actionRecorder()->addAction(m_polyLinePaintAction);
         m_polyLinePaintAction = 0;
     }
 }
@@ -420,21 +478,17 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
     queuePaintJob( new FreehandPaintBezierJob(this, m_painter, pi1, control1, control2, pi2, previousJob), previousJob );
 }
 
-void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob)
+void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*previousJob*/)
 {
     m_paintJobs.append(job);
-    kDebug() << "Queue length: " << m_weaver->queueLength() << endl;
-    if(previousJob and not previousJob->isFinished())
-    {
-        ThreadWeaver::DependencyPolicy::instance().addDependency(job, previousJob );
-    }
-    m_weaver->enqueue(job);
+    kDebug() << "Queue length: " << m_executor->queueLength() << endl;
+    m_executor->postJob(job);
 }
 
 void KisToolFreehand::setDirty(const QRegion& region)
 {
     if (!m_paintOnSelection) {
-        m_currentLayer->setDirty(region);
+        currentLayer()->setDirty(region);
     }
     else {
         // Just update the canvas
@@ -465,7 +519,7 @@ void KisToolFreehand::paintOutline(const QPointF& point) {
         return;
     }
 
-    if (m_currentImage && !m_currentImage->bounds().contains(point.floorQPoint())) {
+    if (currentImage() && !currentImage()->bounds().contains(point.floorQPoint())) {
         if (m_paintedOutline) {
             m_canvas->updateCanvas(); // Huh? The _whole_ canvas needs to be
             // repainted for this outline cursor?

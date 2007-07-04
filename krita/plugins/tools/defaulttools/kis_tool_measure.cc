@@ -38,7 +38,6 @@ KisToolMeasure::KisToolMeasure(KoCanvasBase * canvas)
     : KisTool(canvas, QCursor(Qt::CrossCursor)),
       m_dragging( false )
 {
-    m_currentImage = 0;
     m_startPos = QPointF(0, 0);
     m_endPos = QPointF(0, 0);
 }
@@ -52,7 +51,7 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
     double sx, sy;
     converter.zoom(&sx, &sy);
 
-    gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
+    gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
 
     QPen old = gc.pen();
     QPen pen(Qt::SolidLine);
@@ -89,7 +88,7 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolMeasure::mousePressEvent(KoPointerEvent *e)
 {
-    if (!m_currentImage) return;
+    if (!currentImage()) return;
 
     // Erase old temporary lines
     m_canvas->updateCanvas(convertToPt(boundingRect()));

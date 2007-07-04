@@ -135,14 +135,14 @@ void KisToolGradient::paint( QPainter &painter, const KoViewConverter &converter
                     glTexCoord2f(0.0, 0.0);
                     glVertex2f(0.0, 0.0);
 
-                    glTexCoord2f(m_currentImage->width(), 0.0);
-                    glVertex2f(m_currentImage->width(), 0.0);
+                    glTexCoord2f(currentImage()->width(), 0.0);
+                    glVertex2f(currentImage()->width(), 0.0);
 
-                    glTexCoord2f(m_currentImage->width(), m_currentImage->height());
-                    glVertex2f(m_currentImage->width(), m_currentImage->height());
+                    glTexCoord2f(currentImage()->width(), currentImage()->height());
+                    glVertex2f(currentImage()->width(), currentImage()->height());
 
-                    glTexCoord2f(0.0, m_currentImage->height());
-                    glVertex2f(0.0, m_currentImage->height());
+                    glTexCoord2f(0.0, currentImage()->height());
+                    glVertex2f(0.0, currentImage()->height());
 
                     glEnd();
 
@@ -160,7 +160,7 @@ void KisToolGradient::paint( QPainter &painter, const KoViewConverter &converter
         {
             double sx, sy;
             converter.zoom(&sx, &sy);
-            painter.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
+            painter.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
             paintLine(painter);
         }
     }
@@ -168,7 +168,7 @@ void KisToolGradient::paint( QPainter &painter, const KoViewConverter &converter
 
 void KisToolGradient::mousePressEvent(KoPointerEvent *e)
 {
-    if (!m_currentImage) {
+    if (!currentImage()) {
         return;
     }
 
@@ -194,11 +194,11 @@ void KisToolGradient::mousePressEvent(KoPointerEvent *e)
             }
 
             KisOpenGL::makeContextCurrent();
-            m_gradientProgram = new KisOpenGLGradientProgram(m_currentGradient, 
+            m_gradientProgram = new KisOpenGLGradientProgram(currentGradient(), 
                                                              m_shape, 
                                                              m_repeat, 
                                                              m_reverse,
-                                                             m_currentImage->colorSpace(),
+                                                             currentImage()->colorSpace(),
                                                              monitorProfile,
                                                              m_previewOpacityPercent / 100.0);
         }
@@ -258,14 +258,14 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
         KisPaintDeviceSP device;
 
-        if (m_currentImage && (device = m_currentLayer->paintDevice())) {
+        if (currentImage() && (device = currentLayer()->paintDevice())) {
 
             KisGradientPainter painter(device);
 
             painter.beginTransaction(i18n("Gradient"));
 
-            painter.setPaintColor(m_currentFgColor);
-            painter.setGradient(m_currentGradient);
+            painter.setPaintColor(currentFgColor());
+            painter.setGradient(currentGradient());
             painter.setOpacity(m_opacity);
             painter.setCompositeOp(m_compositeOp);
 
@@ -276,7 +276,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
                 progress->setSubject(&painter, true, true);
             }*/
 
-            bool painted = painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, m_currentImage->width(), m_currentImage->height());
+            bool painted = painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
 
             if (painted) {
                 // does whole thing at moment

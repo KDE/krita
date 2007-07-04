@@ -81,15 +81,15 @@ void KisToolSelectContiguous::activate()
 
 void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
 {
-    if (m_canvas && m_currentImage) {
+    if (m_canvas && currentImage()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
             return;
 
-        KisPaintDeviceSP dev = m_currentLayer->paintDevice();
+        KisPaintDeviceSP dev = currentLayer()->paintDevice();
 
-        if (!dev || !m_currentLayer->visible())
+        if (!dev || !currentLayer()->visible())
             return;
 
         QPoint pos = convertToIntPixelCoord(e);
@@ -97,9 +97,9 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         KisFillPainter fillpainter(dev);
         fillpainter.setFillThreshold(m_fuzziness);
         fillpainter.setSampleMerged(m_sampleMerged);
-        KisPixelSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), m_currentImage->mergedImage() );
+        KisPixelSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage() );
         KisSelectedTransaction *t = 0;
-        if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
+        if (currentImage()->undo()) t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
 
         if (!dev->hasSelection()) {
             dev->pixelSelection()->clear();
@@ -121,8 +121,8 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         //dev->setDirty(selection->extent()); // A bit too wide, but that's not that bad
         dev->emitSelectionChanged();
 
-        if (m_currentImage->undo())
-            m_currentImage->undoAdapter()->addCommand(t);
+        if (currentImage()->undo())
+            currentImage()->undoAdapter()->addCommand(t);
 
         QApplication::restoreOverrideCursor();
     }

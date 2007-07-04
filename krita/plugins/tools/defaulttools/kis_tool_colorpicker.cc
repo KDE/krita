@@ -79,21 +79,21 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
         if (event->button() != Qt::LeftButton && event->button() != Qt::RightButton)
             return;
 
-        if (!m_currentImage)
+        if (!currentImage())
             return;
 
-        KisPaintDeviceSP dev = m_currentLayer->paintDevice();
+        KisPaintDeviceSP dev = currentLayer()->paintDevice();
 
         if (!dev) return;
 
         bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
         if (!sampleMerged) {
-            if (!m_currentLayer)
+            if (!currentLayer())
             {
                 KMessageBox::information(0, i18n("Cannot pick a color as no layer is active."));
                 return;
             }
-            if (!m_currentLayer-> visible()) {
+            if (!currentLayer()-> visible()) {
                 KMessageBox::information(0, i18n("Cannot pick a color as the active layer is not visible."));
                 return;
             }
@@ -101,12 +101,12 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
 
         QPoint pos = convertToIntPixelCoord(event);
 
-        if (!m_currentImage->bounds().contains(pos)) {
+        if (!currentImage()->bounds().contains(pos)) {
             return;
         }
 
         if (sampleMerged) {
-            dev = m_currentImage->mergedImage();
+            dev = currentImage()->mergedImage();
         }
 
         if (m_radius == 1) {

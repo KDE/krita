@@ -53,7 +53,7 @@ KisToolPolyline::~KisToolPolyline()
 
 void KisToolPolyline::mousePressEvent(KoPointerEvent *event)
 {
-    if (m_currentImage) {
+    if (currentImage()) {
         if (event->button() == Qt::LeftButton && event->modifiers() != Qt::ShiftModifier ) {
 
             m_dragging = true;
@@ -90,17 +90,17 @@ void KisToolPolyline::finish()
 {
     m_dragging = false;
 
-    KisPaintDeviceSP device = m_currentLayer->paintDevice();
+    KisPaintDeviceSP device = currentLayer()->paintDevice();
     if (!device) return;
 
     KisPainter painter (device);
     painter.beginTransaction (i18n ("Polyline"));
 
-    painter.setPaintColor(m_currentFgColor);
-    painter.setBrush(m_currentBrush);
+    painter.setPaintColor(currentFgColor());
+    painter.setBrush(currentBrush());
     painter.setOpacity(m_opacity);
     painter.setCompositeOp(m_compositeOp);
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp.id(), m_currentPaintOpSettings, &painter, m_currentImage);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(), currentPaintOpSettings(), &painter, currentImage());
     painter.setPaintOp(op); // Painter takes ownership
 
     QPointF start,end;
@@ -144,7 +144,7 @@ void KisToolPolyline::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolPolyline::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!m_canvas || !m_currentImage)
+    if (!m_canvas || !currentImage())
             return;
 
     if (m_dragging && event->button() == Qt::LeftButton)  {
@@ -163,13 +163,13 @@ void KisToolPolyline::mouseDoubleClickEvent(KoPointerEvent *)
 
 void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    if (!m_canvas || !m_currentImage)
+    if (!m_canvas || !currentImage())
         return;
 
     double sx, sy;
     converter.zoom(&sx, &sy);
 
-    gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
+    gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
 
 
     QPen pen( Qt::SolidLine);

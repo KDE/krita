@@ -71,8 +71,8 @@ void KisToolCrop::activate()
 
 #if 0
     // No current crop rectangle, try to use the selection of the device to make a rectangle
-    if (m_subject && m_currentImage && m_currentLayer->paintDevice()) {
-        KisPaintDeviceSP device = m_currentLayer->paintDevice();
+    if (m_subject && currentImage() && currentLayer()->paintDevice()) {
+        KisPaintDeviceSP device = currentLayer()->paintDevice();
         if (!device->hasSelection())
             return;
 
@@ -102,7 +102,7 @@ void KisToolCrop::mousePressEvent(KoPointerEvent *e)
 {
     if (m_canvas) {
 
-        if (m_currentImage && m_currentLayer->paintDevice() && e->button() == Qt::LeftButton) {
+        if (currentImage() && currentLayer()->paintDevice() && e->button() == Qt::LeftButton) {
 
             QPoint pos = convertToIntPixelCoord(e);
 
@@ -127,7 +127,7 @@ void KisToolCrop::mousePressEvent(KoPointerEvent *e)
 
 void KisToolCrop::mouseMoveEvent(KoPointerEvent *e)
 {
-    if ( m_canvas && m_currentImage)
+    if ( m_canvas && currentImage())
     {
         if( m_selecting ) //if the user selects
         {
@@ -152,8 +152,8 @@ void KisToolCrop::mouseMoveEvent(KoPointerEvent *e)
 
                 if (m_mouseOnHandleType != None && m_dragStart != dragStop ) {
 
-                    qint32 imageWidth = m_currentImage->width();
-                    qint32 imageHeight = m_currentImage->height();
+                    qint32 imageWidth = currentImage()->width();
+                    qint32 imageHeight = currentImage()->height();
 
                     QRectF updateRect = boundingRect();
 
@@ -313,7 +313,7 @@ void KisToolCrop::updateWidgetValues(bool updateratio)
 
 void KisToolCrop::mouseReleaseEvent(KoPointerEvent *e)
 {
-    if (m_canvas && m_currentImage && m_selecting && e->button() == Qt::LeftButton) {
+    if (m_canvas && currentImage() && m_selecting && e->button() == Qt::LeftButton) {
 
         m_selecting = false;
         m_haveCropSelection = true;
@@ -423,9 +423,9 @@ void KisToolCrop::crop() {
     // XXX: Should cropping be part of KisImage/KisPaintDevice's API?
 
     m_haveCropSelection = false;
-    useCursor(m_cursor);
+    useCursor(cursor());
 
-    if (!m_currentImage)
+    if (!currentImage())
         return;
 
     QRect cropRect = m_rectCrop.normalized();
@@ -434,20 +434,20 @@ void KisToolCrop::crop() {
     if (m_optWidget->cmbType->currentIndex() == 0) {
         // The layer(s) under the current layer will take care of adding
         // undo information to the Crop macro.
-        if (m_currentImage->undo())
-            m_currentImage->undoAdapter()->beginMacro(i18n("Crop"));
+        if (currentImage()->undo())
+            currentImage()->undoAdapter()->beginMacro(i18n("Crop"));
 
         KisCropVisitor v(cropRect, false);
-        KisLayerSP layer = m_currentLayer;
+        KisLayerSP layer = currentLayer();
         layer->accept(v);
 
-        if (m_currentImage->undo())
-            m_currentImage->undoAdapter()->endMacro();
+        if (currentImage()->undo())
+            currentImage()->undoAdapter()->endMacro();
 
     }
     else {
         // Resize creates the undo macro itself
-        m_currentImage->resize(cropRect, true);
+        currentImage()->resize(cropRect, true);
     }
 
     m_rectCrop = QRect(0,0,0,0);

@@ -41,7 +41,7 @@ KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
     setObjectName("tool_ellipse");
 
     m_painter = 0;
-    m_currentImage = 0;
+    currentImage() = 0;
     m_dragStart = QPointF(0, 0);
     m_dragEnd = QPointF(0, 0);
 }
@@ -55,7 +55,7 @@ void KisToolEllipse::paint(QPainter& gc, const KoViewConverter &converter)
     double sx, sy;
     converter.zoom(&sx, &sy);
 
-    gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
+    gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
     if (m_dragging)
         paintEllipse(gc, QRect());
 }
@@ -63,9 +63,9 @@ void KisToolEllipse::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolEllipse::mousePressEvent(KoPointerEvent *event)
 {
-     if (!m_canvas || !m_currentImage) return;
+     if (!m_canvas || !currentImage()) return;
 
-    if (!m_currentBrush) return;
+    if (!currentBrush()) return;
 
     if (event->button() == Qt::LeftButton) {
 	QPointF pos = convertToPixelCoord(event);
@@ -127,7 +127,7 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
 {
     QPointF pos = convertToPixelCoord(event);
 
-    if (!m_canvas || !m_currentImage)
+    if (!m_canvas || !currentImage())
         return;
 
     if (m_dragging && event->button() == Qt::LeftButton) {
@@ -138,28 +138,28 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
         if (m_dragStart == m_dragEnd)
             return;
 
-        if (!m_currentImage)
+        if (!currentImage())
             return;
 
-        if (!m_currentLayer->paintDevice())
+        if (!currentLayer()->paintDevice())
             return;
 
-        KisPaintDeviceSP device = m_currentLayer->paintDevice();
+        KisPaintDeviceSP device = currentLayer()->paintDevice();
 	delete m_painter;
 	m_painter = new KisPainter( device );
 	Q_CHECK_PTR(m_painter);
 
         m_painter->beginTransaction (i18n ("Ellipse"));
-        m_painter->setBounds( m_currentImage->bounds() );
-        m_painter->setPaintColor(m_currentFgColor);
-        m_painter->setBackgroundColor(m_currentBgColor);
+        m_painter->setBounds( currentImage()->bounds() );
+        m_painter->setPaintColor(currentFgColor());
+        m_painter->setBackgroundColor(currentBgColor());
         m_painter->setFillStyle(fillStyle());
         m_painter->setStrokeStyle(strokeStyle());
-        m_painter->setBrush(m_currentBrush);
-        m_painter->setPattern(m_currentPattern);
+        m_painter->setBrush(currentBrush());
+        m_painter->setPattern(currentPattern());
         m_painter->setOpacity(m_opacity);
         m_painter->setCompositeOp(m_compositeOp);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp.id(), m_currentPaintOpSettings, m_painter, m_currentImage);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(), currentPaintOpSettings(), m_painter, currentImage());
         m_painter->setPaintOp(op); // Painter takes ownership
 
         m_painter->paintEllipse(QRectF(m_dragStart, m_dragEnd), PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());

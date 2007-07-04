@@ -68,13 +68,13 @@ void KisToolSelectEraser::activate()
 
 void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
 {
-    if (!m_currentImage || !m_currentLayer->paintDevice()) return;
+    if (!currentImage() || !currentLayer()->paintDevice()) return;
 
     m_mode = PAINT;
     m_dragDist = 0;
 
     // Create painter
-    KisPaintDeviceSP dev = m_currentLayer->paintDevice();
+    KisPaintDeviceSP dev = currentLayer()->paintDevice();
 
     if (dev.isNull()) return;
 
@@ -92,10 +92,10 @@ void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
     Q_CHECK_PTR(m_painter);
     m_painter->beginTransaction(i18n("Selection Eraser"));
     m_painter->setPaintColor(KoColor(Qt::white, selection->colorSpace()));
-    m_painter->setBrush(m_currentBrush);
+    m_painter->setBrush(currentBrush());
     m_painter->setOpacity(OPACITY_OPAQUE);
     m_painter->setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_ERASE));
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("eraser", 0, m_painter, m_currentImage);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("eraser", 0, m_painter, currentImage());
     m_painter->setPaintOp(op); // And now the painter owns the op and will destroy it.
 
     // Set the cursor -- ideally. this should be a mask created from the brush,
@@ -109,8 +109,8 @@ void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
 
 void KisToolSelectEraser::endPaint() {
     super::endPaint();
-    if (m_currentImage && m_currentLayer->paintDevice())
-        m_currentLayer->paintDevice()->emitSelectionChanged();
+    if (currentImage() && currentLayer()->paintDevice())
+        currentLayer()->paintDevice()->emitSelectionChanged();
 }
 
 QWidget* KisToolSelectEraser::createOptionWidget()

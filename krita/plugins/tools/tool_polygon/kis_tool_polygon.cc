@@ -53,7 +53,7 @@ KisToolPolygon::~KisToolPolygon()
 
 void KisToolPolygon::mousePressEvent(KoPointerEvent *event)
 {
-    if (m_currentImage) {
+    if (currentImage()) {
         if (event->button() == Qt::LeftButton && event->modifiers() != Qt::ShiftModifier) {
 
             m_dragging = true;
@@ -88,7 +88,7 @@ void KisToolPolygon::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolPolygon::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!m_canvas || !m_currentImage)
+    if (!m_canvas || !currentImage())
         return;
 
     if (m_dragging && event->button() == Qt::LeftButton)  {
@@ -121,22 +121,22 @@ void KisToolPolygon::finish()
 {
     m_dragging = false;
 
-    KisPaintDeviceSP device = m_currentLayer->paintDevice();
+    KisPaintDeviceSP device = currentLayer()->paintDevice();
     if (device) {
         KisPainter painter (device);
-        if (m_currentImage->undo()) painter.beginTransaction (i18n ("Polygon"));
-        painter.setBounds( m_currentImage->bounds() );
-        painter.setPaintColor(m_currentFgColor);
-        painter.setBackgroundColor(m_currentBgColor);
+        if (currentImage()->undo()) painter.beginTransaction (i18n ("Polygon"));
+        painter.setBounds( currentImage()->bounds() );
+        painter.setPaintColor(currentFgColor());
+        painter.setBackgroundColor(currentBgColor());
         painter.setFillStyle(fillStyle());
         painter.setStrokeStyle(strokeStyle());
-        painter.setBrush(m_currentBrush);
-        painter.setPattern(m_currentPattern);
+        painter.setBrush(currentBrush());
+        painter.setPattern(currentPattern());
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp.id(),
-                                                                  m_currentPaintOpSettings,
-                                                                  &painter, m_currentImage);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(),
+                                                                  currentPaintOpSettings(),
+                                                                  &painter, currentImage());
         painter.setPaintOp(op); // Painter takes ownership
 
         painter.paintPolygon(m_points);
@@ -158,7 +158,7 @@ void KisToolPolygon::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    if (!m_canvas || !m_currentImage)
+    if (!m_canvas || !currentImage())
         return;
 
     gc.save();

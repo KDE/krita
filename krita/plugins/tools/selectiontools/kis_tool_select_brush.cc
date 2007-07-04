@@ -73,17 +73,17 @@ void KisToolSelectBrush::activate()
 
 void KisToolSelectBrush::initPaint(KoPointerEvent* /*e*/)
 {
-    if (!m_currentImage || !m_currentLayer->paintDevice()) return;
+    if (!currentImage() || !currentLayer()->paintDevice()) return;
 
     m_mode = PAINT;
     m_dragDist = 0;
 
     // Create painter
-    KisPaintDeviceSP dev = m_currentLayer->paintDevice();
+    KisPaintDeviceSP dev = currentLayer()->paintDevice();
     if (m_painter)
         delete m_painter;
     bool hasSelection = dev->hasSelection();
-    if (m_currentImage->undo()) m_transaction = new KisSelectedTransaction(i18n("Selection Brush"), dev);
+    if (currentImage()->undo()) m_transaction = new KisSelectedTransaction(i18n("Selection Brush"), dev);
     if(! hasSelection)
     {
         dev->selection()->clear();
@@ -95,10 +95,10 @@ void KisToolSelectBrush::initPaint(KoPointerEvent* /*e*/)
     m_painter = new KisPainter(selection);
     Q_CHECK_PTR(m_painter);
     m_painter->setPaintColor(KoColor(Qt::black, selection->colorSpace()));
-    m_painter->setBrush(m_currentBrush);
+    m_painter->setBrush(currentBrush());
     m_painter->setOpacity(OPACITY_OPAQUE);//m_currentFgColor.colorSpace()->intensity8(m_currentFgColor));
     m_painter->setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_OVER));
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, m_painter, m_currentImage);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, m_painter, currentImage());
     m_painter->setPaintOp(op); // And now the painter owns the op and will destroy it.
 
     // Set the cursor -- ideally. this should be a mask created from the brush,
@@ -113,16 +113,16 @@ void KisToolSelectBrush::initPaint(KoPointerEvent* /*e*/)
 void KisToolSelectBrush::endPaint()
 {
     m_mode = HOVER;
-    if (m_currentImage && m_currentLayer) {
-        if (m_currentImage->undo() && m_painter) {
+    if (currentImage() && currentLayer()) {
+        if (currentImage()->undo() && m_painter) {
             // If painting in mouse release, make sure painter
             // is destructed or end()ed
-            m_currentImage->undoAdapter()->addCommand(m_transaction);
+            currentImage()->undoAdapter()->addCommand(m_transaction);
         }
         delete m_painter;
         m_painter = 0;
-        if (m_currentLayer->paintDevice())
-            m_currentLayer->paintDevice()->emitSelectionChanged();
+        if (currentLayer()->paintDevice())
+            currentLayer()->paintDevice()->emitSelectionChanged();
         //notifyModified();
     }
 }

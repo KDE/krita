@@ -41,7 +41,7 @@ KisToolRectangle::KisToolRectangle(KoCanvasBase * canvas)
     setObjectName("tool_rectangle");
 
     m_painter = 0;
-    m_currentImage = 0;
+    currentImage() = 0;
     m_dragStart = QPointF(0, 0);
     m_dragEnd = QPointF(0, 0);
  }
@@ -55,7 +55,7 @@ void KisToolRectangle::paint(QPainter& gc, const KoViewConverter &converter)
     double sx, sy;
     converter.zoom(&sx, &sy);
 
-    gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
+    gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
     if (m_dragging)
         paintRectangle(gc, QRect());
 }
@@ -63,9 +63,9 @@ void KisToolRectangle::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolRectangle::mousePressEvent(KoPointerEvent *e)
 {
-    if (!m_canvas || !m_currentImage) return;
+    if (!m_canvas || !currentImage()) return;
 
-    if (!m_currentBrush) return;
+    if (!currentBrush()) return;
 
     if (e->button() == Qt::LeftButton) {
 	QPointF pos = convertToPixelCoord(e);
@@ -130,13 +130,13 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
     if (!m_canvas)
         return;
 
-    if (!m_currentImage)
+    if (!currentImage())
         return;
 
-    KisPaintDeviceSP device = m_currentLayer->paintDevice();
+    KisPaintDeviceSP device = currentLayer()->paintDevice();
     if (!device) return;
 
-    if (m_dragging && m_currentBrush && event->button() == Qt::LeftButton) {
+    if (m_dragging && currentBrush() && event->button() == Qt::LeftButton) {
         m_dragging = false;
 
         if (m_dragStart == m_dragEnd)
@@ -147,16 +147,16 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
         Q_CHECK_PTR(m_painter);
 
         m_painter->beginTransaction (i18n ("Rectangle"));
-        m_painter->setBounds( m_currentImage->bounds() );
-        m_painter->setPaintColor(m_currentFgColor);
-        m_painter->setBackgroundColor(m_currentBgColor);
+        m_painter->setBounds( currentImage()->bounds() );
+        m_painter->setPaintColor(currentFgColor());
+        m_painter->setBackgroundColor(currentBgColor());
         m_painter->setFillStyle(fillStyle());
         m_painter->setStrokeStyle(strokeStyle());
-        m_painter->setBrush(m_currentBrush);
-        m_painter->setPattern(m_currentPattern);
+        m_painter->setBrush(currentBrush());
+        m_painter->setPattern(currentPattern());
         m_painter->setOpacity(m_opacity);
         m_painter->setCompositeOp(m_compositeOp);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp.id(), m_currentPaintOpSettings, m_painter, m_currentImage);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(), currentPaintOpSettings(), m_painter, currentImage());
         m_painter->setPaintOp(op);
 
         m_painter->paintRect(QRectF(m_dragStart, m_dragEnd), PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());

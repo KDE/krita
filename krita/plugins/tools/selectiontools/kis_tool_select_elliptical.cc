@@ -90,8 +90,8 @@ void KisToolSelectElliptical::clearSelection()
 {
     if (m_canvas) {
 
-//         if (m_currentImage && m_currentImage->floatingSelection().data() != 0) {
-//             m_currentImage->unsetFloatingSelection();
+//         if (currentImage() && currentImage()->floatingSelection().data() != 0) {
+//             currentImage()->unsetFloatingSelection();
 //                         controller->canvas()->update();
 //         }
 
@@ -105,7 +105,7 @@ void KisToolSelectElliptical::mousePressEvent(KoPointerEvent *e)
 {
     if (m_canvas) {
 
-        if (m_currentImage && m_currentLayer->paintDevice() && e->button() == Qt::LeftButton) {
+        if (currentImage() && currentLayer()->paintDevice() && e->button() == Qt::LeftButton) {
             clearSelection();
             m_startPos = m_endPos = m_centerPos = convertToPixelCoord(e);
             m_selecting = true;
@@ -162,11 +162,11 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
         } else {
 //             QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-            if (!m_currentImage)
+            if (!currentImage())
                 return;
 
-            if (m_currentImage && m_currentLayer->paintDevice()) {
-                KisPaintDeviceSP dev = m_currentLayer->paintDevice();
+            if (currentImage() && currentLayer()->paintDevice()) {
+                KisPaintDeviceSP dev = currentLayer()->paintDevice();
 
                 bool hasSelection = dev->hasSelection();
                 KisSelectionSP selection = dev->selection();
@@ -184,13 +184,13 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 }
 
                 KisPainter painter(pixelSelection);
-                painter.setBounds( m_currentImage->bounds() );
+                painter.setBounds( currentImage()->bounds() );
                 painter.setPaintColor(KoColor(Qt::black, selection->colorSpace()));
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
                 painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
                 painter.setOpacity(OPACITY_OPAQUE);
-                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, m_currentImage);
+                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, currentImage());
                 painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
 
                 switch(m_selectAction)
@@ -249,7 +249,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 
                 KisShapeSelection* shapeSelection;
                 if(!selection->hasShapeSelection()) {
-                    shapeSelection = new KisShapeSelection(m_currentImage);
+                    shapeSelection = new KisShapeSelection(currentImage());
                     QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
                     cmd->redo();
                     selection->setShapeSelection(shapeSelection);

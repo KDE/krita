@@ -94,25 +94,25 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
         if (m_dragStart == m_dragEnd)
             return;
 
-        if (!m_currentImage)
+        if (!currentImage())
             return;
 
-        if (!m_currentLayer->paintDevice())
+        if (!currentLayer()->paintDevice())
             return;
 
-        KisPaintDeviceSP device = m_currentLayer->paintDevice();
+        KisPaintDeviceSP device = currentLayer()->paintDevice();
         KisPainter painter (device);
         painter.beginTransaction (i18n("Star"));
-        painter.setBounds( m_currentImage->bounds() );
-        painter.setPaintColor(m_currentFgColor);
-        painter.setBackgroundColor(m_currentBgColor);
+        painter.setBounds( currentImage()->bounds() );
+        painter.setPaintColor(currentFgColor());
+        painter.setBackgroundColor(currentBgColor());
         painter.setFillStyle(fillStyle());
         painter.setStrokeStyle(strokeStyle());
-        painter.setBrush(m_currentBrush);
-        painter.setPattern(m_currentPattern);
+        painter.setBrush(currentBrush());
+        painter.setPattern(currentPattern());
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_currentPaintOp.id(), m_currentPaintOpSettings, &painter, m_currentImage);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(), currentPaintOpSettings(), &painter, currentImage());
         painter.setPaintOp(op); // Painter takes ownership
 
         vQPointF coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
@@ -135,7 +135,7 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
     double sx, sy;
     converter.zoom(&sx, &sy);
 
-    gc.scale( sx/m_currentImage->xRes(), sy/m_currentImage->yRes() );
+    gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
 
     if (!m_canvas)
         return;

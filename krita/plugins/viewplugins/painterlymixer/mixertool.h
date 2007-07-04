@@ -21,6 +21,8 @@
 #ifndef MIXERTOOL_H_
 #define MIXERTOOL_H_
 
+#include <QPointF>
+
 #include <KoCanvasResourceProvider.h>
 #include <KoTool.h>
 
@@ -64,6 +66,8 @@ private:
 private:
     KisPaintDevice* m_canvasDev;
     KoCanvasResourceProvider *m_resources;
+
+    QPointF lastPos;
 
     // We keep a KisPainterlyInformation structure so we store painterly information
     // when we mix with non-painterly paintops.

@@ -74,13 +74,12 @@ MixerTool::~MixerTool()
 
 void MixerTool::mousePressEvent(KoPointerEvent *e)
 {
-//     kDebug() << "MOUSE PRESSED!! " << event->pos() << endl;
+    lastPos = e->pos();
     mouseMoveEvent(e);
 }
 
 void MixerTool::mouseReleaseEvent(KoPointerEvent */*e*/)
 {
-//     kDebug() << "MOUSE RELEASED!! " << event->pos() << endl;
 }
 
 void MixerTool::mouseMoveEvent(KoPointerEvent *e)
@@ -107,8 +106,11 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
         painter.end();
     }
 
-    painter.paintAt(KisPaintInformation(e->pos(), e->pressure(), e->xTilt(), e->yTilt()));
+    painter.paintLine(KisPaintInformation(lastPos, e->pressure(), e->xTilt(), e->yTilt()),
+                      KisPaintInformation(e->pos(), e->pressure(), e->xTilt(), e->yTilt()));
     painter.end();
+
+    lastPos = e->pos();
 
     if (!current->painterly()) {
         updatePainterlyOverlays(stroke, e);
@@ -130,8 +132,8 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
 void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent *e)
 {
     float pressure, force;
-    Cell stroke_cell, canvas_cell;
-    QColor stroke_color, canvas_color;
+    Cell strokeCell, canvasCell;
+    QColor strokeColor, canvasColor;
 
     QRect rc = stroke->exactBounds();
     KisRectIteratorPixel             // Give a more or less clear name to each iterator.
@@ -161,45 +163,45 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
     pressure = e->pressure();
     force = pressure + FORCE_COEFF * pow(pressure, 2);
     while (!it_main.isDone()) {
-        stroke->colorSpace()->toQColor(it_main.rawData(), &stroke_color, &stroke_cell.opacity);
-        m_canvasDev->colorSpace()->toQColor(can_it_main.rawData(), &canvas_color, &canvas_cell.opacity);
+        stroke->colorSpace()->toQColor(it_main.rawData(), &strokeColor, &strokeCell.opacity);
+        m_canvasDev->colorSpace()->toQColor(can_it_main.rawData(), &canvasColor, &canvasCell.opacity);
 
-        if (stroke_cell.opacity) {
-            stroke_cell.wetness = force * m_info.Wetness;
-            stroke_cell.mixability = force * m_info.Mixability * stroke_cell.wetness;
-            stroke_cell.pigmentConcentration = force * m_info.PigmentConcentration;
-            stroke_cell.reflectivity = force * m_info.Reflectivity * stroke_cell.wetness;
-            stroke_cell.viscosity = force * m_info.Viscosity / stroke_cell.wetness;
-            stroke_cell.volume = force * m_info.PaintVolume;
-            stroke_cell.setRgb(stroke_color.red(),
-                               stroke_color.green(),
-                               stroke_color.blue());
-            if (canvas_cell.opacity) {
-//                 canvas_cell.cadsorb = (float)*can_it_adso.rawData() / 255.0;
-                canvas_cell.mixability = (float)*can_it_mixa.rawData() / 255.0;
-                canvas_cell.pigmentConcentration = (float)*can_it_pigm.rawData() / 255.0;
-                canvas_cell.reflectivity = (float)*can_it_refl.rawData() / 255.0;
-                canvas_cell.viscosity = (float)*can_it_visc.rawData() / 255.0;
-                canvas_cell.volume = (float)*can_it_volu.rawData() / 255.0;
-                canvas_cell.wetness = (float)*can_it_wetn.rawData() / 255.0;
-                canvas_cell.setRgb(canvas_color.red(),
-                                   canvas_color.green(),
-                                   canvas_color.blue());
+        if (strokeCell.opacity) {
+            strokeCell.wetness = force * m_info.Wetness;
+            strokeCell.mixability = force * m_info.Mixability * strokeCell.wetness;
+            strokeCell.pigmentConcentration = force * m_info.PigmentConcentration;
+            strokeCell.reflectivity = force * m_info.Reflectivity * strokeCell.wetness;
+            strokeCell.viscosity = force * m_info.Viscosity / strokeCell.wetness;
+            strokeCell.volume = force * m_info.PaintVolume;
+            strokeCell.setRgb(strokeColor.red(),
+                               strokeColor.green(),
+                               strokeColor.blue());
+            if (canvasCell.opacity) {
+//                 canvasCell.cadsorb = (float)*can_it_adso.rawData() / 255.0;
+                canvasCell.mixability = (float)*can_it_mixa.rawData() / 255.0;
+                canvasCell.pigmentConcentration = (float)*can_it_pigm.rawData() / 255.0;
+                canvasCell.reflectivity = (float)*can_it_refl.rawData() / 255.0;
+                canvasCell.viscosity = (float)*can_it_visc.rawData() / 255.0;
+                canvasCell.volume = (float)*can_it_volu.rawData() / 255.0;
+                canvasCell.wetness = (float)*can_it_wetn.rawData() / 255.0;
+                canvasCell.setRgb(canvasColor.red(),
+                                   canvasColor.green(),
+                                   canvasColor.blue());
 
-                stroke_cell.mixUsingRgb(canvas_cell);
-//                 stroke_cell.mixUsingHls(canvas_cell);
-//                 stroke_cell.mixUsingCmy(canvas_cell);
+                strokeCell.mixUsingRgb(canvasCell);
+//                 strokeCell.mixUsingHls(canvasCell);
+//                 strokeCell.mixUsingCmy(canvasCell);
 
-                stroke_color.setRgb(stroke_cell.red, stroke_cell.green, stroke_cell.blue);
+                strokeColor.setRgb(strokeCell.red, strokeCell.green, strokeCell.blue);
             }
-            stroke->colorSpace()->fromQColor(stroke_color, stroke_cell.opacity, it_main.rawData());
+            stroke->colorSpace()->fromQColor(strokeColor, strokeCell.opacity, it_main.rawData());
 
-            *it_wetn.rawData() = (quint8)(stroke_cell.wetness*255.0);
-            *it_volu.rawData() = (quint8)(stroke_cell.volume*255.0);
-            *it_visc.rawData() = (quint8)(stroke_cell.viscosity*255.0);
-            *it_refl.rawData() = (quint8)(stroke_cell.reflectivity*255.0);
-            *it_pigm.rawData() = (quint8)(stroke_cell.pigmentConcentration*255.0);
-            *it_mixa.rawData() = (quint8)(stroke_cell.mixability*255.0);
+            *it_wetn.rawData() = (quint8)(strokeCell.wetness*255.0);
+            *it_volu.rawData() = (quint8)(strokeCell.volume*255.0);
+            *it_visc.rawData() = (quint8)(strokeCell.viscosity*255.0);
+            *it_refl.rawData() = (quint8)(strokeCell.reflectivity*255.0);
+            *it_pigm.rawData() = (quint8)(strokeCell.pigmentConcentration*255.0);
+            *it_mixa.rawData() = (quint8)(strokeCell.mixability*255.0);
         }
 
         ++it_main; ++can_it_main;
@@ -210,7 +212,7 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
 void MixerTool::updateResources(KisPaintDeviceSP stroke)
 {
     // TODO Update tool's own KisPainterlyInformation structure.
-    QColor current, final;
+    QColor current;
     int c_r, c_g, c_b;
     long r = 0, g = 0, b = 0;
     int total = 0;
@@ -233,6 +235,8 @@ void MixerTool::updateResources(KisPaintDeviceSP stroke)
     }
 
     if (total) {
+        QColor final;
+
         r /= total;
         g /= total;
         b /= total;

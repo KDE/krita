@@ -24,159 +24,155 @@
 #include <KoColorConversions.h>
 
 void addPainterlyOverlays(KisPaintDevice* dev);
-void transmittance_to_density(int T, int *D);
-void density_to_transmittance(int D, int *T);
-void rgb_to_cmy(int red, int green, int blue, int *cyan, int *magenta, int *yellow);
-void cmy_to_rgb(int cyan, int magenta, int yellow, int *red, int *green, int *blue);
+void transmittanceToDensity(int T, int *D);
+void densityToTransmittance(int D, int *T);
+void rgbToCmy(int red, int green, int blue, int *cyan, int *magenta, int *yellow);
+void cmyToRgb(int cyan, int magenta, int yellow, int *red, int *green, int *blue);
 
 
 class Cell {
 public:
     Cell()
         {
-            cadsorb = 0;
-            mixabil = 0;
-            pig_con = 0;
-            reflect = 0;
-            pviscos = 0;
-            pvolume = 0;
+            canvasAdsorbency = 0;
+            mixability = 0;
+            pigmentConcentration = 0;
+            reflectivity = 0;
+            viscosity = 0;
+            volume = 0;
             wetness = 0;
-            set_rgb(0, 0, 0);
+            setRgb(0, 0, 0);
         }
 
     Cell(const Cell &c)
         {
-            cadsorb = c.cadsorb;
-            mixabil = c.mixabil;
-            pig_con = c.pig_con;
-            reflect = c.reflect;
-            pvolume = c.pvolume;
+            canvasAdsorbency = c.canvasAdsorbency;
+            mixability = c.mixability;
+            pigmentConcentration = c.pigmentConcentration;
+            reflectivity = c.reflectivity;
+            viscosity = c.viscosity;
+            volume = c.volume;
             wetness = c.wetness;
-            set_rgb(c.r, c.g, c.b);
+            setRgb(c.red, c.green, c.blue);
         }
 
     // Painterly properties
-    float cadsorb;
-    float mixabil;
-    float pig_con;
-    float reflect;
-    float pviscos;
-    float pvolume;
+    float canvasAdsorbency;
+    float mixability;
+    float pigmentConcentration;
+    float reflectivity;
+    float viscosity;
+    float volume;
     float wetness;
 
     // Color
-    int r, g, b;
-    float h, l, s;
-    int c, m, y;
+    int red, green, blue;
+    float hue, lightness, saturation;
+    int cyan, magenta, yellow;
 
     quint8 opacity;
 
-    void set_rgb(int red, int green, int blue)
+    void setRgb(int r, int g, int b)
         {
-            r = red;
-            g = green;
-            b = blue;
-            update_hls_cmy();
+            red = r;
+            green = g;
+            blue = b;
+            updateHlsCmy();
         }
-    void set_hls(float hue, float lightness, float saturation)
+    void setHls(float h, float l, float s)
         {
-            h = hue;
-            l = lightness;
-            s = saturation;
-            update_rgb_cmy();
-        }
-
-    void set_cmy(int cyan, int magenta, int yellow)
-        {
-            c = cyan;
-            m = magenta;
-            y = yellow;
-            update_rgb_hls();
+            hue = h;
+            lightness = l;
+            saturation = s;
+            updateRgbCmy();
         }
 
-    void update_hls_cmy()
+    void setCmy(int c, int m, int y)
         {
-            rgb_to_hls(r, g, b, &h, &l, &s);
-            rgb_to_cmy(r, g, b, &c, &m, &y);
+            cyan = c;
+            magenta = m;
+            yellow = y;
+            updateRgbHls();
         }
 
-    void update_rgb_cmy()
+    void updateHlsCmy()
         {
-            quint8 red, green, blue;
-            hls_to_rgb(h, l, s, &red, &green, &blue);
-            r = (int)red;
-            g = (int)green;
-            b = (int)blue;
-            rgb_to_cmy(r, g, b, &c, &m, &y);
+            rgb_to_hls(red, green, blue, &hue, &lightness, &saturation);
+            rgbToCmy(red, green, blue, &cyan, &magenta, &yellow);
         }
 
-    void update_rgb_hls()
+    void updateRgbCmy()
         {
-            cmy_to_rgb(c, m, y, &r, &g, &b);
-            rgb_to_hls(r, g, b, &h, &l, &s);
+            quint8 r, g, b;
+            hls_to_rgb(hue, lightness, saturation, &r, &g, &b);
+            red = (int)r;
+            green = (int)g;
+            blue = (int)b;
+            rgbToCmy(red, green, blue, &cyan, &magenta, &yellow);
         }
 
-    void mix_using_rgb(const Cell &canvas_cell)
+    void updateRgbHls()
         {
+            cmyToRgb(cyan, magenta, yellow, &red, &green, &blue);
+            rgb_to_hls(red, green, blue, &hue, &lightness, &saturation);
+        }
 
+    void mixUsingRgb(const Cell &cell)
+        {
             float ratio;
             int delta;
 
-            ratio = wetness*pvolume / canvas_cell.wetness*canvas_cell.pvolume;
-            delta = r - canvas_cell.r;
-            r = canvas_cell.r + (int)(ratio * delta);
+            ratio = wetness*volume / cell.wetness*cell.volume;
+            delta = red - cell.red;
+            red = cell.red + (int)(ratio * delta);
 
-            delta = g - canvas_cell.g;
-            g = canvas_cell.g + (int)(ratio * delta);
+            delta = green - cell.green;
+            green = cell.green + (int)(ratio * delta);
 
-            delta = b - canvas_cell.b;
-            b = canvas_cell.b + (int)(ratio * delta);
+            delta = blue - cell.blue;
+            blue = cell.blue + (int)(ratio * delta);
 
-            update_hls_cmy();
+            updateHlsCmy();
         }
 
-    void mix_using_hls(const Cell &canvas_cell)
+    void mixUsingHls(const Cell &cell)
         {
 
             float ratio, delta;
-            ratio = pvolume / canvas_cell.pvolume;
-            delta = h - canvas_cell.h;
+            ratio = volume / cell.volume;
+            delta = hue - cell.hue;
             if ((int)delta != 0) {
-                h = canvas_cell.h + (int)(ratio * delta);
-                if (h >= 360)
-                    h -= 360;
+                hue = cell.hue + (int)(ratio * delta);
+                if (hue >= 360)
+                    hue -= 360;
             }
 
-            delta = l - canvas_cell.l;
-            l = canvas_cell.l + ratio * delta;
+            delta = lightness - cell.lightness;
+            lightness = cell.lightness + ratio * delta;
 
-            delta = s - canvas_cell.s;
-            s = canvas_cell.s + ratio * delta;
+            delta = saturation - cell.saturation;
+            saturation = cell.saturation + ratio * delta;
 
-            update_rgb_cmy();
+            updateRgbCmy();
         }
 
-    void mix_using_cmy(const Cell &canvas_cell)
+    void mixUsingCmy(const Cell &cell)
         {
 
             float ratio;
             int delta;
 
-            ratio = pvolume / canvas_cell.pvolume;
-            delta = c - canvas_cell.c;
-            c = canvas_cell.c + (int)(ratio * delta);
+            ratio = wetness*volume / cell.wetness*cell.volume;
+            delta = cyan - cell.cyan;
+            cyan = cell.cyan + (int)(ratio * delta);
 
-            delta = m - canvas_cell.m;
-            m = canvas_cell.m + (int)(ratio * delta);
+            delta = magenta - cell.magenta;
+            magenta = cell.magenta + (int)(ratio * delta);
 
-            delta = y - canvas_cell.y;
-            y = canvas_cell.y + (int)(ratio * delta);
-/*
-            c += canvas_cell.c; c /= 2;
-            m += canvas_cell.m; m /= 2;
-            y += canvas_cell.y; y /= 2;
-*/
-            update_rgb_hls();
+            delta = yellow - cell.yellow;
+            yellow = cell.yellow + (int)(ratio * delta);
+
+            updateRgbHls();
         }
 };
 

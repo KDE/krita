@@ -42,7 +42,7 @@ void addPainterlyOverlays(KisPaintDevice* dev)
     dev->addPainterlyChannel(new KisWetnessMask(dev));
 }
 
-void transmittance_to_density(int T, int *D)
+void transmittanceToDensity(int T, int *D)
 {
     double d;
     if (T == 0)
@@ -53,7 +53,7 @@ void transmittance_to_density(int T, int *D)
     *D = (int)(d + 0.5);
 }
 
-void density_to_transmittance(int D, int *T)
+void densityToTransmittance(int D, int *T)
 {
     double d;
     d = 255.0 * pow(10.0, - (double)D * 3.0/1024.0);
@@ -64,16 +64,16 @@ void density_to_transmittance(int D, int *T)
     *T = (int)(d + 0.5);
 }
 
-void rgb_to_cmy(int red, int green, int blue, int *cyan, int *magenta, int *yellow)
+void rgbToCmy(int red, int green, int blue, int *cyan, int *magenta, int *yellow)
 {
-    transmittance_to_density(red, cyan);
-    transmittance_to_density(green, magenta);
-    transmittance_to_density(blue, yellow);
+    transmittanceToDensity(red, cyan);
+    transmittanceToDensity(green, magenta);
+    transmittanceToDensity(blue, yellow);
 }
 
-void cmy_to_rgb(int cyan, int magenta, int yellow, int *red, int *green, int *blue)
+void cmyToRgb(int cyan, int magenta, int yellow, int *red, int *green, int *blue)
 {
-    density_to_transmittance(cyan, red);
-    density_to_transmittance(magenta, green);
-    density_to_transmittance(yellow, blue);
+    densityToTransmittance(cyan, red);
+    densityToTransmittance(magenta, green);
+    densityToTransmittance(yellow, blue);
 }

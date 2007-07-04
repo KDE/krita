@@ -166,40 +166,40 @@ void MixerTool::updatePainterlyOverlays(KisPaintDeviceSP stroke, KoPointerEvent 
 
         if (stroke_cell.opacity) {
             stroke_cell.wetness = force * m_info.Wetness;
-            stroke_cell.mixabil = force * m_info.Mixability * stroke_cell.wetness;
-            stroke_cell.pig_con = force * m_info.PigmentConcentration;
-            stroke_cell.reflect = force * m_info.Reflectivity * stroke_cell.wetness;
-            stroke_cell.pviscos = force * m_info.Viscosity / stroke_cell.wetness;
-            stroke_cell.pvolume = force * m_info.PaintVolume;
-            stroke_cell.set_rgb(stroke_color.red(),
-                                stroke_color.green(),
-                                stroke_color.blue());
+            stroke_cell.mixability = force * m_info.Mixability * stroke_cell.wetness;
+            stroke_cell.pigmentConcentration = force * m_info.PigmentConcentration;
+            stroke_cell.reflectivity = force * m_info.Reflectivity * stroke_cell.wetness;
+            stroke_cell.viscosity = force * m_info.Viscosity / stroke_cell.wetness;
+            stroke_cell.volume = force * m_info.PaintVolume;
+            stroke_cell.setRgb(stroke_color.red(),
+                               stroke_color.green(),
+                               stroke_color.blue());
             if (canvas_cell.opacity) {
 //                 canvas_cell.cadsorb = (float)*can_it_adso.rawData() / 255.0;
-                canvas_cell.mixabil = (float)*can_it_mixa.rawData() / 255.0;
-                canvas_cell.pig_con = (float)*can_it_pigm.rawData() / 255.0;
-                canvas_cell.reflect = (float)*can_it_refl.rawData() / 255.0;
-                canvas_cell.pviscos = (float)*can_it_visc.rawData() / 255.0;
-                canvas_cell.pvolume = (float)*can_it_volu.rawData() / 255.0;
+                canvas_cell.mixability = (float)*can_it_mixa.rawData() / 255.0;
+                canvas_cell.pigmentConcentration = (float)*can_it_pigm.rawData() / 255.0;
+                canvas_cell.reflectivity = (float)*can_it_refl.rawData() / 255.0;
+                canvas_cell.viscosity = (float)*can_it_visc.rawData() / 255.0;
+                canvas_cell.volume = (float)*can_it_volu.rawData() / 255.0;
                 canvas_cell.wetness = (float)*can_it_wetn.rawData() / 255.0;
-                canvas_cell.set_rgb(canvas_color.red(),
-                                    canvas_color.green(),
-                                    canvas_color.blue());
+                canvas_cell.setRgb(canvas_color.red(),
+                                   canvas_color.green(),
+                                   canvas_color.blue());
 
-                stroke_cell.mix_using_rgb(canvas_cell);
-//                 stroke_cell.mix_using_hls(canvas_cell);
-//                 stroke_cell.mix_using_cmy(canvas_cell);
+                stroke_cell.mixUsingRgb(canvas_cell);
+//                 stroke_cell.mixUsingHls(canvas_cell);
+//                 stroke_cell.mixUsingCmy(canvas_cell);
 
-                stroke_color.setRgb(stroke_cell.r, stroke_cell.g, stroke_cell.b);
+                stroke_color.setRgb(stroke_cell.red, stroke_cell.green, stroke_cell.blue);
             }
             stroke->colorSpace()->fromQColor(stroke_color, stroke_cell.opacity, it_main.rawData());
 
             *it_wetn.rawData() = (quint8)(stroke_cell.wetness*255.0);
-            *it_volu.rawData() = (quint8)(stroke_cell.pvolume*255.0);
-            *it_visc.rawData() = (quint8)(stroke_cell.pviscos*255.0);
-            *it_refl.rawData() = (quint8)(stroke_cell.reflect*255.0);
-            *it_pigm.rawData() = (quint8)(stroke_cell.pig_con*255.0);
-            *it_mixa.rawData() = (quint8)(stroke_cell.mixabil*255.0);
+            *it_volu.rawData() = (quint8)(stroke_cell.volume*255.0);
+            *it_visc.rawData() = (quint8)(stroke_cell.viscosity*255.0);
+            *it_refl.rawData() = (quint8)(stroke_cell.reflectivity*255.0);
+            *it_pigm.rawData() = (quint8)(stroke_cell.pigmentConcentration*255.0);
+            *it_mixa.rawData() = (quint8)(stroke_cell.mixability*255.0);
         }
 
         ++it_main; ++can_it_main;

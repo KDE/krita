@@ -79,7 +79,7 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     setActiveRange(0, 0);
     setShowMousePosition(false);
     setShowSelectionBorders(false);
-    setShowIndents(false); 
+    setShowIndents(true); 
     setRightToLeft(true);
     d->m_firstLineIndent = d->m_paragraphIndent = 0;
     d->m_endIndent = 0;
@@ -203,8 +203,8 @@ void KoRuler::paintEvent(QPaintEvent* event)
     double lengthInUnit = d->m_unit.toUserValue(rulerLength());
     double hackyLength = lengthInUnit - fmod(lengthInUnit, numberStep);
     if(d->m_rightToLeft && orientation() == Qt::Horizontal) {
-        start -= d->m_viewConverter->documentToViewX(fmod(rulerLength(),
-                    d->m_unit.fromUserValue(numberStep)));
+        start -= int(d->m_viewConverter->documentToViewX(fmod(rulerLength(),
+                    d->m_unit.fromUserValue(numberStep))));
     }
 
     int stepCount = (start / numberStepPixel) + 1;
@@ -212,7 +212,6 @@ void KoRuler::paintEvent(QPaintEvent* event)
     int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
     int mouseCoord = d->m_mouseCoordinate - start;
 
-    int fontHeight = fontMetrics.height();
     int pos = 0;
     painter.setPen(palette().color(QPalette::Text));
 
@@ -240,7 +239,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
                 QString numberText = QString::number(stepCount * numberStep);
                 if (d->m_rightToLeft) // this is done in a hacky way with the fine tuning done above 
                     numberText = QString::number(hackyLength - stepCount * numberStep);
-                painter.drawText(QPoint(pos - 0.5*fontMetrics.width(numberText), rectangle.bottom() -12), numberText);
+                painter.drawText(QPointF(pos - 0.5*fontMetrics.width(numberText), rectangle.bottom() -12), numberText);
 
                 ++stepCount;
                 nextStep = qRound(d->m_viewConverter->documentToViewX(
@@ -298,20 +297,35 @@ void KoRuler::paintEvent(QPaintEvent* event)
             painter.setBrush(palette().brush(QPalette::Base));
             painter.setRenderHint( QPainter::Antialiasing );
 
+            double x;
             // Draw first line start indent
-            double x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart
+            if (d->m_rightToLeft) {
+                x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd
+                        - d->m_firstLineIndent) + qMin(0, d->m_offset);
+                x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
+                polygon << QPointF(x+0.5, 0.5)
+                        << QPointF(x-9.5, 5.5)
+                        << QPointF(x+0.5, 10.5)
+                        << QPointF(x+0.5, 0.5);
+                painter.drawPolygon(polygon);
+            } else {
+                x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart
                         + d->m_firstLineIndent) + qMin(0, d->m_offset);
-            x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
-            polygon << QPointF(x+0.5, 0.5)
+                x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
+                polygon << QPointF(x+0.5, 0.5)
                         << QPointF(x+10.5, 5.5)
                         << QPointF(x+0.5, 10.5)
                         << QPointF(x+0.5, 0.5);
-            painter.drawPolygon(polygon);
-
-            // Draw rest of the lines start indent
+                painter.drawPolygon(polygon);
+            }
+            // Draw rest of the lines start indent or end indent if mode is rightToLeft
             polygon.clear();
-            x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_paragraphIndent)
+            if (d->m_rightToLeft)
+                x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_endIndent)
                         + qMin(0, d->m_offset);
+            else
+                x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart
+                             + d->m_paragraphIndent) + qMin(0, d->m_offset);
             x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
             polygon << QPointF(x+0.5, height() - 10.5)
                         << QPointF(x+10.5, height() - 5.5)
@@ -319,9 +333,13 @@ void KoRuler::paintEvent(QPaintEvent* event)
                         << QPointF(x+0.5, height() - 10.5);
             painter.drawPolygon(polygon);
 
-            // Draw end indent
+            // Draw end indent or paragraph indent if mode is rightToLeft
             polygon.clear();
-            x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_endIndent)
+            if (d->m_rightToLeft)
+                x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd
+                             - d->m_paragraphIndent) + qMin(0, d->m_offset);
+            else
+                x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_endIndent)
                         + qMin(0, d->m_offset);
             x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
             polygon << QPointF(x+0.5, height() - 10.5)
@@ -354,7 +372,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
                 }
 
                 QString numberText = QString::number(stepCount * numberStep);
-                painter.drawText(QPoint(rectangle.right() - 12 -fontMetrics.width(numberText),
+                painter.drawText(QPointF(rectangle.right() - 12 -fontMetrics.width(numberText),
                          pos + 4), numberText);
 
                 ++stepCount;
@@ -537,25 +555,48 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
 
     d->m_selected = 0;
 
-    int x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_firstLineIndent)
-                        + d->m_offset);
-    if (pos.x() >= x && pos.x() <= x+10 && pos.y() <10) {
-        d->m_selectOffset = x - pos.x();
-        d->m_selected = 1;
-    }
-
-    x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_paragraphIndent)
-                        + d->m_offset);
-    if (pos.x() >= x && pos.x() <= x+10 && pos.y() > height()-10) {
-        d->m_selectOffset = x - pos.x();
-        d->m_selected = 2;
-    }
-
-    x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_endIndent)
-                        + d->m_offset);
-    if (pos.x() >= x-10 && pos.x() <= x && pos.y() > height()-10) {
-        d->m_selectOffset = x - pos.x();
-        d->m_selected = 3;
+    if (d->m_rightToLeft) {
+        int x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_firstLineIndent)
+                            + d->m_offset);
+        if (pos.x() >= x-10 && pos.x() <= x && pos.y() <10) {
+            d->m_selectOffset = x - pos.x();
+            d->m_selected = 1;
+        }
+    
+        x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_paragraphIndent)
+                            + d->m_offset);
+        if (pos.x() >= x-10 && pos.x() <= x && pos.y() > height()-10) {
+            d->m_selectOffset = x - pos.x();
+            d->m_selected = 2;
+        }
+    
+        x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_endIndent)
+                            + d->m_offset);
+        if (pos.x() >= x && pos.x() <= x+10 && pos.y() > height()-10) {
+            d->m_selectOffset = x - pos.x();
+            d->m_selected = 3;
+        }
+    } else {
+        int x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_firstLineIndent)
+                            + d->m_offset);
+        if (pos.x() >= x && pos.x() <= x+10 && pos.y() <10) {
+            d->m_selectOffset = x - pos.x();
+            d->m_selected = 1;
+        }
+    
+        x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_paragraphIndent)
+                            + d->m_offset);
+        if (pos.x() >= x && pos.x() <= x+10 && pos.y() > height()-10) {
+            d->m_selectOffset = x - pos.x();
+            d->m_selected = 2;
+        }
+    
+        x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_endIndent)
+                            + d->m_offset);
+        if (pos.x() >= x-10 && pos.x() <= x && pos.y() > height()-10) {
+            d->m_selectOffset = x - pos.x();
+            d->m_selected = 3;
+        }
     }
 }
 
@@ -576,22 +617,35 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
     default:
         break;
     case 1:
-        d->m_firstLineIndent = d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset
+        if (d->m_rightToLeft)
+            d->m_firstLineIndent = d->m_activeRangeEnd -
+                d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset - d->m_offset);
+        else
+            d->m_firstLineIndent = d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset
                 - d->m_offset) - d->m_activeRangeStart;
+
         if (d->m_firstLineIndent < 0)
             d->m_firstLineIndent = 0;
 
         emit indentsChanged(false);
         break;
     case 2:
-        d->m_paragraphIndent = d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset
+        if (d->m_rightToLeft)
+            d->m_paragraphIndent = d->m_activeRangeEnd -
+                d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset - d->m_offset);
+        else
+            d->m_paragraphIndent = d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset
                 - d->m_offset) - d->m_activeRangeStart;
         if (d->m_paragraphIndent < 0)
             d->m_paragraphIndent = 0;
         emit indentsChanged(false);
         break;
     case 3:
-        d->m_endIndent = d->m_activeRangeEnd - d->m_viewConverter->viewToDocumentX(pos.x()
+        if (d->m_rightToLeft)
+            d->m_endIndent = d->m_viewConverter->viewToDocumentX(pos.x()
+                 + d->m_selectOffset - d->m_offset) - d->m_activeRangeStart;
+        else
+            d->m_endIndent = d->m_activeRangeEnd - d->m_viewConverter->viewToDocumentX(pos.x()
                  + d->m_selectOffset - d->m_offset);
         if (d->m_endIndent < 0)
             d->m_endIndent = 0;

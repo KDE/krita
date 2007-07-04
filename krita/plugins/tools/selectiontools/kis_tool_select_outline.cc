@@ -4,6 +4,7 @@
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,6 +33,8 @@
 #include <klocale.h>
 
 #include <KoPointerEvent.h>
+#include <KoShapeController.h>
+#include <KoPathShape.h>
 
 #include <kis_layer.h>
 #include <kis_selection_options.h>
@@ -42,8 +45,8 @@
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 #include "kis_canvas2.h"
-#include "kis_undo_adapter.h"
 #include "kis_pixel_selection.h"
+#include "kis_shape_selection.h"
 
 KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::load("tool_outline_selection_cursor.png", 5, 5))
@@ -51,6 +54,7 @@ KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
     m_dragging = false;
     m_optWidget = 0;
     m_selectAction = SELECTION_REPLACE;
+    m_selectionMode = PIXEL_SELECTION;
 }
 
 KisToolSelectOutline::~KisToolSelectOutline()
@@ -98,51 +102,88 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
             QApplication::setOverrideCursor(KisCursor::waitCursor());
             KisPaintDeviceSP dev = m_currentLayer->paintDevice();
             bool hasSelection = dev->hasSelection();
-            KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Outline Selection"), dev);
-            KisPixelSelectionSP pixelSelection = dev->pixelSelection();
 
-            if (!hasSelection || m_selectAction == SELECTION_REPLACE)
-            {
-                pixelSelection->clear();
-                if(m_selectAction == SELECTION_SUBTRACT)
-                    pixelSelection->invert();
+            if(m_selectionMode == PIXEL_SELECTION){
+                KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Outline Selection"), dev);
+                KisPixelSelectionSP pixelSelection = dev->pixelSelection();
+
+                if (!hasSelection || m_selectAction == SELECTION_REPLACE)
+                {
+                    pixelSelection->clear();
+                    if(m_selectAction == SELECTION_SUBTRACT)
+                        pixelSelection->invert();
+                }
+
+                KisPainter painter(pixelSelection);
+                painter.setBounds( m_currentImage->bounds() );
+                painter.setPaintColor(KoColor(Qt::black, pixelSelection->colorSpace()));
+                painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+                painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+                painter.setOpacity(OPACITY_OPAQUE);
+                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, m_currentImage);
+                painter.setPaintOp(op);    // And now the painter owns the op and will destroy it.
+                painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
+
+                switch (m_selectAction) {
+                    case SELECTION_REPLACE:
+                    case SELECTION_ADD:
+                        painter.setCompositeOp(pixelSelection->colorSpace()->compositeOp(COMPOSITE_OVER));
+                        break;
+                    case SELECTION_SUBTRACT:
+                        painter.setCompositeOp(pixelSelection->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
+                        break;
+                    default:
+                        break;
+                }
+
+                painter.paintPolygon(m_points);
+
+                if(hasSelection && m_selectAction != SELECTION_REPLACE) {
+                    QRegion dirty(painter.dirtyRegion());
+                    dev->setDirty(dirty);
+                    dev->emitSelectionChanged(dirty.boundingRect());
+                } else {
+                    dev->setDirty();
+                    dev->emitSelectionChanged();
+                }
+
+                m_canvas->addCommand(t);
+
             }
+            else {
 
-            KisPainter painter(pixelSelection);
-            painter.setBounds( m_currentImage->bounds() );
-            painter.setPaintColor(KoColor(Qt::black, pixelSelection->colorSpace()));
-            painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-            painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-            painter.setOpacity(OPACITY_OPAQUE);
-            KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, m_currentImage);
-            painter.setPaintOp(op);    // And now the painter owns the op and will destroy it.
-            painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
+                if(m_points.count() > 1) {
+                    KoPathShape* path = new KoPathShape();
+                    path->setShapeId( KoPathShapeId );
 
-            switch (m_selectAction) {
-                case SELECTION_REPLACE:
-                case SELECTION_ADD:
-                    painter.setCompositeOp(pixelSelection->colorSpace()->compositeOp(COMPOSITE_OVER));
-                    break;
-                case SELECTION_SUBTRACT:
-                    painter.setCompositeOp(pixelSelection->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
-                    break;
-                default:
-                    break;
+                    QMatrix resolutionMatrix;
+                    resolutionMatrix.scale(1/m_currentImage->xRes(), 1/m_currentImage->yRes());
+                    path->moveTo( resolutionMatrix.map(m_points[0]) );
+                    for(int i = 1; i < m_points.count(); i++)
+                        path->lineTo( resolutionMatrix.map(m_points[i]) );
+                    path->close();
+                    path->normalize();
+
+                    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
+                    Q_ASSERT(canvas);
+                    KisSelectionSP selection = dev->selection();
+
+                    KisShapeSelection* shapeSelection;
+                    if(!selection->hasShapeSelection()) {
+                        shapeSelection = new KisShapeSelection(m_currentImage);
+                        QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
+                        cmd->redo();
+                        selection->setShapeSelection(shapeSelection);
+                    }
+                    else {
+                        shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+                    }
+                    path->setParent(shapeSelection);
+                    QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
+                    m_canvas->addCommand(cmd);
+                    shapeSelection->addChild(path);
+                }
             }
-
-            painter.paintPolygon(m_points);
-
-            if(hasSelection && m_selectAction != SELECTION_REPLACE) {
-                QRegion dirty(painter.dirtyRegion());
-                dev->setDirty(dirty);
-                dev->emitSelectionChanged(dirty.boundingRect());
-            } else {
-                dev->setDirty();
-                dev->emitSelectionChanged();
-            }
-
-            m_canvas->addCommand(t);
-
             QApplication::restoreOverrideCursor();
         }
 
@@ -200,6 +241,7 @@ QWidget* KisToolSelectOutline::createOptionWidget()
     m_optWidget->setWindowTitle(i18n("Outline Selection"));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+    connect(m_optWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);
@@ -218,6 +260,10 @@ QWidget* KisToolSelectOutline::optionWidget()
 void KisToolSelectOutline::slotSetAction(int action) {
     if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
         m_selectAction =(enumSelectionMode)action;
+}
+
+void KisToolSelectOutline::slotSetSelectionMode(int mode) {
+    m_selectionMode = (selectionMode)mode;
 }
 
 #include "kis_tool_select_outline.moc"

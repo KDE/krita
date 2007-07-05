@@ -63,34 +63,26 @@ void KisPainterlyMixer::initTool()
 
 #define ROWS 2
 #define COLS 4
-// TODO We need to handle save/load of user-defined colors (and colors number) in the spots.
 // TODO User should be able to add/remove spots. Should he? ... Ok, perhaps not...
-QRgb colors[ROWS*COLS] = {
-                            0xFFFF0000, // Red
-                            0xFF00FF00, // Green
-                            0xFF0000FF, // Blue
-                            0xFF0FF00F, // Whatever :)
-                            0xFFFFFF00, // Yellow
-                            0xFFFF00FF, // Violet
-                            0xFFFFFFFF, // White
-                            0xFF000000 // Black
-                         };
 
 void KisPainterlyMixer::initSpots()
 {
     int row, col;
     QGridLayout *l = new QGridLayout(m_spotsFrame);
 
-    l->setSpacing(5);
-
     m_bgColors = new QButtonGroup(m_spotsFrame);
+    loadColors();
 
+    l->setSpacing(5);
     for (row = 0; row < ROWS; row++) {
         for (col = 0; col < COLS; col++) {
+            int index = row*COLS + col;
             QToolButton *curr = new QToolButton(m_spotsFrame);
             l->addWidget(curr, row, col);
-            setupButton(curr, colors[row*COLS + col]);
-            m_bgColors->addButton(curr, row*COLS + col);
+
+            setupButton(curr, index);
+
+            m_bgColors->addButton(curr, index);
         }
     }
 
@@ -109,17 +101,29 @@ void KisPainterlyMixer::initSpots()
     connect(m_bgColors, SIGNAL(buttonClicked(int)), this, SLOT(changeColor(int)));
 }
 
-void KisPainterlyMixer::setupButton(QToolButton *button, QRgb color)
+void KisPainterlyMixer::setupButton(QToolButton *button, int index)
 {
 //     button->setFixedSize(15, 15);
-    button->setPalette(QPalette(color, color));
+    button->setPalette(QPalette(m_vColors[index].rgba(), m_vColors[index].rgba()));
     button->setAutoFillBackground(true);
+}
+
+void KisPainterlyMixer::loadColors()
+{
+// TODO We need to handle save/load of user-defined colors in the spots.
+    m_vColors.append(QColor(0xFFFF0000)); // Red
+    m_vColors.append(QColor(0xFF00FF00)); // Green
+    m_vColors.append(QColor(0xFF0000FF)); // Blue
+    m_vColors.append(QColor(0xFF0FA311)); // Whatever :)
+    m_vColors.append(QColor(0xFFFFFF00)); // Yellow
+    m_vColors.append(QColor(0xFFFF00FF)); // Violet
+    m_vColors.append(QColor(0xFFFFFFFF)); // White
+    m_vColors.append(QColor(0xFF000000)); // Black
 }
 
 void KisPainterlyMixer::changeColor(int index)
 {
-    QRgb color = colors[index];
-    m_resources->setResource(KoCanvasResource::ForegroundColor, KoColor(QColor(color), m_canvas->device()->colorSpace()));
+    m_resources->setResource(KoCanvasResource::ForegroundColor, KoColor(m_vColors[index], m_canvas->device()->colorSpace()));
 }
 
 

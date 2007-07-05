@@ -59,7 +59,8 @@
 #define powf pow
 #endif
 
-const double epsilon = 1e-3;
+const double epsilonOptimization = 1e-5;
+const double epsilonGaussian = 1e-6;
 
 typedef KGenericFactory<Bracketing2HDRPlugin> Bracketing2HDRPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritabracketing2hdr, Bracketing2HDRPluginFactory( "krita" ) )
@@ -476,7 +477,7 @@ void Bracketing2HDRPlugin::computeCameraResponse()
         }
         #undef DIFF
         kDebug() << "Optimization delta = " << (sumdiff/count) << " = " << sumdiff << " / " << count << endl;
-        if( sumdiff/count < epsilon)
+        if( sumdiff/count < epsilonOptimization)
             break;
     }
 #endif
@@ -576,7 +577,7 @@ void Bracketing2HDRPlugin::computePseudoGaussianWeights()
     {
         double v = (i - pseudosigma) / pseudosigma;
         m_weights[i] = exp( -8.0 * v * v );
-        if( m_weights[i] < epsilon)
+        if( m_weights[i] < epsilonGaussian)
             m_weights[i] = 0.;
 //         kDebug() << " Gaussian weights [" << i << "] = " << m_weights[i] << endl;
     }

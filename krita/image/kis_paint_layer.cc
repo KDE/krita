@@ -87,7 +87,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) :
-    KisLayer(rhs), KisIndirectPaintingSupport(rhs)
+    KisLayer(rhs), m_d (new Private), KisIndirectPaintingSupport(rhs)
 {
     m_d->paintDevice = new KisPaintDevice( *rhs.m_d->paintDevice.data() );
     m_d->projection = 0;

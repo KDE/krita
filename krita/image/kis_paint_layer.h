@@ -97,7 +97,7 @@ private:
     void init();
 
     class Private;
-    Private * m_d;
+    Private * const m_d;
 };
 
 typedef KisSharedPtr<KisPaintLayer> KisPaintLayerSP;

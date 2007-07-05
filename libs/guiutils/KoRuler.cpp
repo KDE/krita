@@ -32,10 +32,15 @@
 
 #include <KoViewConverter.h>
 
-class Mark {
+class KoTabChooser : public QWidget {
     public:
-        Mark() {};
-        virtual ~Mark() {};
+        KoTabChooser() {}
+        virtual ~KoTabChooser() {}
+        KoRuler::TabType type() {return m_type;}
+        void mousePressEvent( QMouseEvent *e ) {}
+
+    private:
+        KoRuler::TabType m_type;
 };
 
 class KoRulerPrivate {
@@ -69,6 +74,8 @@ class KoRulerPrivate {
         bool m_rightToLeft;
         int m_selected;
         int m_selectOffset;
+
+        KoTabChooser *m_tabChooser;
 };
 
 
@@ -92,6 +99,12 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     d->m_endIndent = 0;
     updateMouseCoordinate(-1);
     d->m_selected = 0;
+
+    if(orientation == Qt::Horizontal) {
+        d->m_tabChooser = new KoTabChooser;
+    } else {
+        d->m_tabChooser = 0;
+    }
 }
 
 KoRuler::~KoRuler()
@@ -568,6 +581,11 @@ double KoRuler::endIndent() const
     return d->m_endIndent;
 }
 
+QWidget *KoRuler::tabChooser()
+{
+    return d->m_tabChooser;
+}
+
 double KoRuler::numberStepForUnit() const
 {
     double numberStep;
@@ -731,6 +749,8 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
 
 void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
 {
+    mouseMoveEvent(ev); // handle any last movement
+
     if( d->m_selected >0 && d->m_selected < 4)
         emit indentsChanged(true);
 

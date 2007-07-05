@@ -86,6 +86,10 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
         /// The end indent of all lines
         double endIndent() const;
 
+        /// The tab chooser widget, which you must put into a layout along with the ruler.
+        /// Returns 0 for vertical rulers,
+        QWidget *tabChooser();
+
         virtual QSize minimumSizeHint() const;
         virtual QSize sizeHint() const;
 

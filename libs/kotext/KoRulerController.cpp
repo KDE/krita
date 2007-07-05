@@ -37,7 +37,7 @@
 
 class KoRulerController::Private {
 public:
-    Private(KoRuler *r, KoCanvasResourceProvider *crp) : ruler(r), resourceProvider(crp) {}
+    Private(KoRuler *r, KoCanvasResourceProvider *crp) : ruler(r), resourceProvider(crp), lastPosition(-1) {}
 
     void canvasResourceChanged(int key) {
         if(key != KoText::CurrentTextPosition && key != KoText::CurrentTextDocument)
@@ -49,6 +49,10 @@ public:
             ruler->setShowTabs(false);
             return;
         }
+        if(block.position() <= lastPosition && block.position() + block.length() > lastPosition)
+            return; // nothing changed.
+        lastPosition = block.position();
+
         QTextBlockFormat format = block.blockFormat();
         ruler->setShowIndents(true);
         ruler->setParagraphIndent(format.leftMargin());
@@ -125,6 +129,7 @@ kDebug() << "tabsChanged\n";
 private:
     KoRuler *ruler;
     KoCanvasResourceProvider *resourceProvider;
+    int lastPosition;
 };
 
 KoRulerController::KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceProvider *crp)

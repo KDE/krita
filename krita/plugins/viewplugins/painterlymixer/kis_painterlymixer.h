@@ -21,8 +21,12 @@
 #ifndef KIS_PAINTERLY_MIXER_H_
 #define KIS_PAINTERLY_MIXER_H_
 
+#include <QColor>
+
 #include "ui_kis_painterlymixer.h"
 
+class QButtonGroup;
+class QToolButton;
 class QWidget;
 
 class KisView2;
@@ -41,9 +45,19 @@ private:
     void initTool();
     void initSpots();
 
+    void setupButton(QToolButton *button, QRgb color);
+
+private slots:
+    void changeColor(int index);
+
 private:
     KisView2 *m_view;
     MixerTool *m_tool;
+
+    QButtonGroup *m_bgColors;
+
+    QToolButton *m_bWet;
+    QToolButton *m_bDry;
 
     KoCanvasResourceProvider *m_resources;
 

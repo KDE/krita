@@ -36,7 +36,7 @@
 * actually paints something, then this information will be used to update the
 * painterly overlays of the painted device.
 */
-struct KisPainterlyBristleInformation {
+struct KisPainterlyInformation {
     float Mixability; ///< how easily the paint mixes with the underlying color and returns to the bristle.
     float PigmentConcentration; ///< how much "pigment" is contained in the bristle (i.e., opacity)
     float PaintVolume; ///< how thick will be the track stroked by the bristle.

@@ -18,7 +18,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QtGui>
+#include <QButtonGroup>
+#include <QColor>
+#include <QGridLayout>
+#include <QPalette>
+#include <QSizePolicy>
+#include <QToolButton>
+#include <QWidget>
 
 #include <KoCanvasResourceProvider.h>
 #include <KoToolProxy.h>
@@ -54,9 +60,66 @@ void KisPainterlyMixer::initTool()
     m_canvas->toolProxy()->setActiveTool(m_tool);
 }
 
+
+#define ROWS 2
+#define COLS 4
+// TODO We need to handle save/load of user-defined colors (and colors number) in the spots.
+// TODO User should be able to add/remove spots. Should he? ... Ok, perhaps not...
+QRgb colors[ROWS*COLS] = {
+                            0xFFFF0000, // Red
+                            0xFF00FF00, // Green
+                            0xFF0000FF, // Blue
+                            0xFF0FF00F, // Whatever :)
+                            0xFFFFFF00, // Yellow
+                            0xFFFF00FF, // Violet
+                            0xFFFFFFFF, // White
+                            0xFF000000 // Black
+                         };
+
 void KisPainterlyMixer::initSpots()
 {
+    int row, col;
+    QGridLayout *l = new QGridLayout(m_spotsFrame);
 
+    l->setSpacing(5);
+
+    m_bgColors = new QButtonGroup(m_spotsFrame);
+
+    for (row = 0; row < ROWS; row++) {
+        for (col = 0; col < COLS; col++) {
+            QToolButton *curr = new QToolButton(m_spotsFrame);
+            l->addWidget(curr, row, col);
+            setupButton(curr, colors[row*COLS + col]);
+            m_bgColors->addButton(curr, row*COLS + col);
+        }
+    }
+
+    l->setColumnStretch(col++, 1);
+
+    m_bWet = new QToolButton(m_spotsFrame);
+    m_bWet->setText("W"); // TODO Icon for the "Wet spot"
+    m_bWet->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+    m_bDry = new QToolButton(m_spotsFrame);
+    m_bDry->setText("D"); // TODO Icon for the "Dry spot"
+    m_bDry->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
+    l->addWidget(m_bWet, 0, col++, ROWS, 1);
+    l->addWidget(m_bDry, 0, col, ROWS, 1);
+
+    connect(m_bgColors, SIGNAL(buttonClicked(int)), this, SLOT(changeColor(int)));
+}
+
+void KisPainterlyMixer::setupButton(QToolButton *button, QRgb color)
+{
+//     button->setFixedSize(15, 15);
+    button->setPalette(QPalette(color, color));
+    button->setAutoFillBackground(true);
+}
+
+void KisPainterlyMixer::changeColor(int index)
+{
+    QRgb color = colors[index];
+    m_resources->setResource(KoCanvasResource::ForegroundColor, KoColor(QColor(color), m_canvas->device()->colorSpace()));
 }
 
 

@@ -48,7 +48,7 @@ public:
     void mouseMoveEvent(KoPointerEvent *e);
 
 public:
-    KisPainterlyBristleInformation bristleInformation() {return m_info;}
+    KisPainterlyInformation bristleInformation() {return m_info;}
 
 private:
     /*
@@ -76,7 +76,7 @@ private:
 
     // We keep a KisPainterlyInformation structure so we store painterly information
     // when we mix with non-painterly paintops.
-    KisPainterlyBristleInformation m_info;
+    KisPainterlyInformation m_info;
 };
 
 #endif // MIXERTOOL_H_

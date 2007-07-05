@@ -177,10 +177,10 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->viewConverter = new KoZoomHandler();
     m_d->canvasController = new KoCanvasController( this );
 
-    createManagers();
     m_d->canvas = new KisCanvas2( m_d->viewConverter, this, doc->shapeController() );
     m_d->canvasController->setCanvas( m_d->canvas );
     m_d->resourceProvider = new KisResourceProvider( this );
+    createManagers();
 
     createActions();
     createGUI();

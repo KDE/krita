@@ -34,6 +34,7 @@
 #include <KoZoomController.h>
 #include <KoCanvasController.h>
 #include <KoGlobal.h>
+#include <KoRulerController.h>
 
 #include "kis_view2.h"
 #include "kis_canvas2.h"
@@ -93,6 +94,7 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
     m_horizontalRuler->setShowMousePosition(true);
     m_horizontalRuler->setUnit(KoUnit(KoUnit::Point));
     m_horizontalRuler->setVisible(show);
+    new KoRulerController( m_horizontalRuler, m_canvasController->canvas()->resourceProvider() );
     m_verticalRuler = new KoRuler(m_view, Qt::Vertical, m_zoomHandler);
     m_verticalRuler->setShowMousePosition(true);
     m_verticalRuler->setUnit(KoUnit(KoUnit::Point));

@@ -61,6 +61,7 @@ if (SHOULD_BUILD_KRITA)
         ${LCMS_INCLUDE_DIR}
         ${PIGMENT_INCLUDES}
         ${KORESOURCES_INCLUDES}
+        ${KOTEXT_INCLUDES}
 
         # 'Export' this for use by filters
         CACHE INTERNAL ""

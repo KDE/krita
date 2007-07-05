@@ -17,9 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QWidget>
-#include <kdebug.h>
-
 #include "ChangecaseFactory.h"
 #include "Changecase.h"
 

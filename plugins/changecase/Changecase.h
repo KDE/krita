@@ -25,7 +25,6 @@
 #include <KoTextEditingPlugin.h>
 
 class QTextDocument;
-class QUndoDocument;
 class QRadioButton;
 
 class Changecase : public KoTextEditingPlugin

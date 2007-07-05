@@ -136,7 +136,7 @@ void Changecase::sentenceCase()
 
             // found end of sentence, go back to last found letter (indicating start of a word)
             if (iter != text.begin() && (*iter == QChar('.') || *iter == QChar('!') || *iter == QChar('?'))) {
-                if (prevLetterIndex >= m_startPosition && prevLetterIndex <= m_endPosition) {
+                if (prevLetterIndex >= m_startPosition && prevLetterIndex <= m_endPosition && currentWord.isLower()) {
                     // kDebug() << "Found end of sentence " << *iter << " : " << currentWord << endl;
                     m_cursor.setPosition(prevLetterIndex);
                     m_cursor.deleteChar();
@@ -150,12 +150,12 @@ void Changecase::sentenceCase()
         }
 
         if (iter == text.begin() && --pos >= m_startPosition) { // start of paragraph, must be start of a sentence also
-            if (pos + 1 == prevLetterIndex) {
+            if (pos + 1 == prevLetterIndex && (*iter).isLower()) {
                 m_cursor.setPosition(pos);
                 m_cursor.deleteChar();
                 m_cursor.insertText((*iter).toUpper());
             }
-            else {
+            else if (!(*iter).isLetter() && currentWord.isLower()) {
                 m_cursor.setPosition(prevLetterIndex);
                 m_cursor.deleteChar();
                 m_cursor.insertText(currentWord.toUpper());
@@ -175,6 +175,7 @@ void Changecase::lowerCase()
     QTextBlock block = m_document->findBlock(m_startPosition);
     int pos = block.position();
     bool finished = false;
+    bool foundToBeChanged = false;
 
     emit startMacro("Change case");
 
@@ -184,8 +185,11 @@ void Changecase::lowerCase()
 
         QString::ConstIterator constIter = text.constBegin();
         while (pos < m_endPosition && constIter != text.constEnd()) {
-            if (pos >= m_startPosition)
+            if (pos >= m_startPosition) {
+                if (!foundToBeChanged && constIter->isUpper())
+                    foundToBeChanged = true;
                 result.append(constIter->toLower());
+            }
 
             pos++;
             constIter++;
@@ -194,7 +198,7 @@ void Changecase::lowerCase()
         if (!(block.isValid() && block.position() + block.length() < m_endPosition))
             finished = true;
 
-        if (result != text) {
+        if (foundToBeChanged) {
             m_cursor.setPosition(qMax(m_startPosition, block.position()));
             m_cursor.setPosition(qMin(pos, m_endPosition), QTextCursor::KeepAnchor);
             m_cursor.insertText(result);
@@ -215,6 +219,7 @@ void Changecase::upperCase()
     QTextBlock block = m_document->findBlock(m_startPosition);
     int pos = block.position();
     bool finished = false;
+    bool foundToBeChanged = false;
 
     emit startMacro("Change case");
 
@@ -224,8 +229,11 @@ void Changecase::upperCase()
 
         QString::ConstIterator constIter = text.constBegin();
         while (pos < m_endPosition && constIter != text.constEnd()) {
-            if (pos >= m_startPosition)
+            if (pos >= m_startPosition) {
+                if (!foundToBeChanged && constIter->isLower())
+                    foundToBeChanged = true;
                 result.append(constIter->toUpper());
+            }
 
             pos++;
             constIter++;
@@ -234,7 +242,7 @@ void Changecase::upperCase()
         if (!(block.isValid() && block.position() + block.length() < m_endPosition))
             finished = true;
 
-        if (result != text) {
+        if (foundToBeChanged) {
             m_cursor.setPosition(qMax(m_startPosition, block.position()));
             m_cursor.setPosition(qMin(pos, m_endPosition), QTextCursor::KeepAnchor);
             m_cursor.insertText(result);
@@ -255,6 +263,7 @@ void Changecase::initialCaps()
     QTextBlock block = m_document->findBlock(m_startPosition);
     int pos = block.position();
     bool finished = false;
+    bool foundToBeChanged = false;
 
     emit startMacro("Change case");
 
@@ -268,8 +277,11 @@ void Changecase::initialCaps()
             bool isSpace = constIter->isSpace();
             
             if (pos >= m_startPosition) {
-                if (space && !isSpace)
+                if (space && !isSpace) {
+                    if (!foundToBeChanged && constIter->isLower())
+                        foundToBeChanged = true;
                     result.append(constIter->toTitleCase());
+                }
                 else
                     result.append(*constIter);
             }
@@ -282,9 +294,11 @@ void Changecase::initialCaps()
         if (!(block.isValid() && block.position() + block.length() < m_endPosition))
             finished = true;
 
-        m_cursor.setPosition(qMax(m_startPosition, block.position()));
-        m_cursor.setPosition(qMin(pos, m_endPosition), QTextCursor::KeepAnchor);
-        m_cursor.insertText(result);
+        if (foundToBeChanged) {
+            m_cursor.setPosition(qMax(m_startPosition, block.position()));
+            m_cursor.setPosition(qMin(pos, m_endPosition), QTextCursor::KeepAnchor);
+            m_cursor.insertText(result);
+        }
 
         if (finished)
             break;

@@ -64,6 +64,7 @@ class KoRulerPrivate {
 
         bool m_showTabs;
         QList<KoRuler::Tab> m_tabs;
+        int m_tabIndex; //indext of selected tab - only valid when m_selected indicates tab
 
         bool m_rightToLeft;
         int m_selected;
@@ -86,7 +87,7 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     setShowIndents(false); 
     setShowTabs(false);
 
-    setRightToLeft(true);
+    setRightToLeft(false);
     d->m_firstLineIndent = d->m_paragraphIndent = 0;
     d->m_endIndent = 0;
     updateMouseCoordinate(-1);
@@ -367,7 +368,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
             foreach (Tab t, d->m_tabs) {
                 double x;
                 if (d->m_rightToLeft)
-                    x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + t.position)
+                    x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - t.position)
                             + qMin(0, d->m_offset);
                 else
                     x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + t.position)
@@ -621,11 +622,58 @@ QList<KoRuler::Tab> KoRuler::tabs() const {
 void KoRuler::mousePressEvent ( QMouseEvent* ev )
 {
     QPoint pos = ev->pos();
-
     d->m_selected = 0;
 
+    int x;
+
+    if (d->m_showTabs && pos.y() > height() - 9) {
+        int i = 0;
+        foreach (Tab t, d->m_tabs) {
+            if (d->m_rightToLeft)
+                x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - t.position)
+                        + d->m_offset);
+            else
+                x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + t.position)
+                        + d->m_offset);
+
+            switch (t.type) {
+            case LeftTab:
+                if (pos.x() >= x-6 && pos.x() <= x) {
+                    d->m_selected = 4;
+                    d->m_selectOffset = x - pos.x();
+                    d->m_tabIndex = i;
+                }
+                break;
+            case RightTab:
+                if (pos.x() >= x && pos.x() <= x+6) {
+                    d->m_selected = 4;
+                    d->m_selectOffset = x - pos.x();
+                    d->m_tabIndex = i;
+                }
+                break;
+            case CenterTab:
+                if (pos.x() >= x-6 && pos.x() <= x+6) {
+                    d->m_selected = 4;
+                    d->m_selectOffset = x - pos.x();
+                    d->m_tabIndex = i;
+                }
+                break;
+            case DelimiterTab:
+                if (pos.x() >= x-6 && pos.x() <= x+6) {
+                    d->m_selected = 4;
+                    d->m_selectOffset = x - pos.x();
+                    d->m_tabIndex = i;
+                }
+                break;
+            default:
+                break;
+            }
+            i++;
+        }
+    }
+
     if (d->m_rightToLeft) {
-        int x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_firstLineIndent
+        x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_firstLineIndent
                 - d->m_paragraphIndent) + d->m_offset);
         if (pos.x() >= x-10 && pos.x() <= x && pos.y() <10) {
             d->m_selectOffset = x - pos.x();
@@ -646,7 +694,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
             d->m_selected = 3;
         }
     } else {
-        int x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart
+        x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart
              + d->m_firstLineIndent + d->m_paragraphIndent) + d->m_offset);
         if (pos.x() >= x && pos.x() <= x+10 && pos.y() <10) {
             d->m_selectOffset = x - pos.x();
@@ -667,12 +715,27 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
             d->m_selected = 3;
         }
     }
+
+    if (d->m_showTabs && d->m_selected == 0) {
+        // still haven't found something so let assume the user wants to add a tab
+        double tabpos = d->m_viewConverter->viewToDocumentX(pos.x() - d->m_offset)
+                    - d->m_activeRangeStart;
+        Tab t = {tabpos, LeftTab};
+        d->m_tabs.append(t);
+        d->m_selectOffset = 0;
+        d->m_selected = 4;
+        d->m_tabIndex = d->m_tabs.count() - 1;
+        update();
+    }
 }
 
 void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
 {
     if( d->m_selected >0 && d->m_selected < 4)
         emit indentsChanged(true);
+
+    if( d->m_selected == 4)
+        emit tabsChanged(true);
 
     d->m_selected = 0;
 }
@@ -721,6 +784,20 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         if (d->m_paragraphIndent + d->m_endIndent > activeLength)
             d->m_endIndent = activeLength - d->m_paragraphIndent;;
         emit indentsChanged(false);
+        break;
+    case 4:
+        if (d->m_rightToLeft)
+            d->m_tabs[d->m_tabIndex].position = d->m_activeRangeEnd -
+                d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset - d->m_offset);
+        else
+            d->m_tabs[d->m_tabIndex].position = d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset
+                - d->m_offset) - d->m_activeRangeStart;
+        if (d->m_tabs[d->m_tabIndex].position < 0)
+            d->m_tabs[d->m_tabIndex].position = 0;
+        if (d->m_tabs[d->m_tabIndex].position > activeLength)
+            d->m_tabs[d->m_tabIndex].position = activeLength;
+
+        emit tabsChanged(false);
         break;
     }
     update();

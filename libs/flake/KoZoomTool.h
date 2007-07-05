@@ -52,6 +52,8 @@ public:
     virtual void keyReleaseEvent( QKeyEvent *event );
     /// reimplemented method
     virtual void activate(bool temporary = false);
+    /// reimplemented method
+    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
 
     /// reimplemented method
     virtual void paint( QPainter &painter, const KoViewConverter &converter );

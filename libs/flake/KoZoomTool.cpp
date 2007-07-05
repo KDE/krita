@@ -100,3 +100,7 @@ void KoZoomTool::activate(bool temporary) {
     m_temporary = temporary;
 }
 
+void KoZoomTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
+    mousePressEvent(event);
+}
+

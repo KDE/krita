@@ -357,7 +357,6 @@ void KoCanvasController::zoomTo(const QRect &viewRect)
     m_d->preferredCenterFractionY = 1.0 * viewRect.center().y() / m_d->documentSize.height();
 
     emit zoomBy(scale);
-    recenterPreferred();
 }
 
 void KoCanvasController::setToolOptionWidget(QWidget *widget) {

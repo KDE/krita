@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright (c) 2007 Cyrille Berger (cberger@cberger.net)
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -79,8 +78,10 @@ class Bracketing2HDRPlugin : public KParts::Plugin
         
         void computeCameraResponse();
     private:
+        QList<BracketingFrame> reduceSizeOfFrames(double size, QList<BracketingFrame> originalFrames);
+        void computeCameraResponse(QList<BracketingFrame> frames);
         /// Create the HDR paintdevice
-        void createHDRPaintDevice( KisPaintDeviceSP device );
+        void createHDRPaintDevice( QList<BracketingFrame> frames, KisPaintDeviceSP device );
         /// Normalize the intensity vector such as intensity[numberOfInputLevels()/2] = 1.0
         void normalize(QVector<double>& intensity);
         /// Fill holes in the response
@@ -94,7 +95,7 @@ class Bracketing2HDRPlugin : public KParts::Plugin
     private:
         KisView2 * m_view;
         Ui_WdgBracketing2HDR* m_wdgBracketing2HDR;
-        QList<BracketingFrame> m_images;
+        QList<BracketingFrame> m_imagesFrames;
         // Camera response
         QVector<double> m_intensityR, m_intensityG, m_intensityB, m_weights;
         // Options for the calibration

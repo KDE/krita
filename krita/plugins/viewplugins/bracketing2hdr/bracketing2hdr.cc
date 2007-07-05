@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright (c) 2007 Cyrille Berger (cberger@cberger.net)
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -37,6 +36,7 @@
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_doc2.h"
+#include "kis_filter_strategy.h"
 #include "kis_global.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
@@ -158,26 +158,6 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
     connect(m_wdgBracketing2HDR->pushButtonCreateHDRLayer, SIGNAL(released()), dialog, SLOT(accept ()));
     connect(m_wdgBracketing2HDR->pushButtonAddImages, SIGNAL(released()), this, SLOT(slotAddImages()));
     connect(m_wdgBracketing2HDR->pushButtonCalculateCameraResponse, SIGNAL(released()), this, SLOT(computeCameraResponse()));
-    #if 0
-    addImage( "~/tmp/hdr/exposures/img01.jpg" );
-    addImage( "~/tmp/hdr/exposures/img02.jpg" );
-    addImage( "~/tmp/hdr/exposures/img03.jpg" );
-    addImage( "~/tmp/hdr/exposures/img04.jpg" );
-    addImage( "~/tmp/hdr/exposures/img05.jpg" );
-    addImage( "~/tmp/hdr/exposures/img06.jpg" );
-    addImage( "~/tmp/hdr/exposures/img07.jpg" );
-    addImage( "~/tmp/hdr/exposures/img08.jpg" );
-    addImage( "~/tmp/hdr/exposures/img09.jpg" );
-    addImage( "~/tmp/hdr/exposures/img10.jpg" );
-    addImage( "~/tmp/hdr/exposures/img11.jpg" );
-    addImage( "~/tmp/hdr/exposures/img12.jpg" );
-    addImage( "~/tmp/hdr/exposures/img13.jpg" );
-    #endif
-    #if 0
-    addImage( "~/tmp/hdr/cambredaze/HPIM3068.JPG" );
-    addImage( "~/tmp/hdr/cambredaze/HPIM3069.JPG" );
-    addImage( "~/tmp/hdr/cambredaze/HPIM3070.JPG" );
-    #endif
 
     if(dialog->exec()==QDialog::Accepted)
     {
@@ -206,21 +186,21 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
         above = parent->firstChild();
         img->addLayer(layer, parent, above);
 
-        createHDRPaintDevice( layer->paintDevice() );
+        createHDRPaintDevice( m_imagesFrames, layer->paintDevice() );
         m_view->canvas()->update();
     }
     delete dialog;
 }
 
 
-void Bracketing2HDRPlugin::createHDRPaintDevice( KisPaintDeviceSP device )
+void Bracketing2HDRPlugin::createHDRPaintDevice( QList<BracketingFrame> frames,  KisPaintDeviceSP device )
 {
-    int width = m_images[0].image->width();
-    int height = m_images[0].image->height();
+    int width = frames[0].image->width();
+    int height = frames[0].image->height();
     // Create iterators
-    for(int k = 0; k < m_images.size(); k++)
+    for(int k = 0; k < frames.size(); k++)
     {
-        m_images[k].it = new KisHLineConstIteratorPixel( m_images[k].device->createHLineConstIterator(0, 0, width) );
+        frames[k].it = new KisHLineConstIteratorPixel( frames[k].device->createHLineConstIterator(0, 0, width) );
     }
     KisHLineIteratorPixel dstIt = device->createHLineIterator(0, 0, width);
 //     QColor c;
@@ -233,17 +213,17 @@ void Bracketing2HDRPlugin::createHDRPaintDevice( KisPaintDeviceSP device )
         {
             // compute the sum and normalization coefficient for rgb values from the bracketing ldr images
             v.rsum = v.rdiv = v.gsum = v.gdiv = v.bsum = v.bdiv = 0.0;
-            for(int k = 0; k < m_images.size(); k++)
+            for(int k = 0; k < frames.size(); k++)
             {
-                double coef = m_images[k].apexBrightness;
-                m_images[k].device->colorSpace()->toRgbA16(m_images[k].it->rawData(), c, 1);
+                double coef = frames[k].apexBrightness;
+                frames[k].device->colorSpace()->toRgbA16(frames[k].it->rawData(), c, 1);
                 v.rsum += m_intensityR[ KoRgbU16Traits::red(c) ] * m_weights[ KoRgbU16Traits::red(c) ] * coef ;
                 v.rdiv += m_weights[ KoRgbU16Traits::red(c) ] * coef * coef ;
                 v.gsum += m_intensityG[ KoRgbU16Traits::green(c) ] * m_weights[ KoRgbU16Traits::green(c) ] * coef ;
                 v.gdiv += m_weights[ KoRgbU16Traits::green(c) ] * coef * coef ;
                 v.bsum += m_intensityB[ KoRgbU16Traits::blue(c) ] * m_weights[ KoRgbU16Traits::blue(c) ] * coef ;
                 v.bdiv += m_weights[ KoRgbU16Traits::blue(c) ] * coef * coef ;
-                ++(*m_images[k].it);
+                ++(*frames[k].it);
             }
             float* pixelData = reinterpret_cast<float*>(dstIt.rawData());
             if( v.rdiv != 0.0)
@@ -268,15 +248,15 @@ void Bracketing2HDRPlugin::createHDRPaintDevice( KisPaintDeviceSP device )
             ++dstIt;
         }
         dstIt.nextRow();
-        for(int k = 0; k < m_images.size(); k++)
+        for(int k = 0; k < frames.size(); k++)
         {
-            m_images[k].it->nextRow();
+            frames[k].it->nextRow();
         }
     }
     // Delete iterators
-    for(int k = 0; k < m_images.size(); k++)
+    for(int k = 0; k < frames.size(); k++)
     {
-        delete m_images[k].it;
+        delete frames[k].it;
     }
 }
 
@@ -350,9 +330,25 @@ void Bracketing2HDRPlugin::fillHoles(QVector<double>& intensity)
     }
 }
 
+QList<Bracketing2HDRPlugin::BracketingFrame> Bracketing2HDRPlugin::reduceSizeOfFrames(double size, QList<BracketingFrame> originalFrames)
+{
+    QList<BracketingFrame> frames = originalFrames;
+    for(QList<BracketingFrame>::iterator it = frames.begin();
+        it != frames.end(); ++it)
+    {
+        it->image = new KisImage(*it->image);
+        it->device = it->image->projection();
+        double scalecoefficient = size / qMax(it->image->width(), it->image->height());
+        it->image->scale(scalecoefficient, scalecoefficient, 0, new KisBoxFilterStrategy());
+    }
+    return frames;
+}
+
 
 void Bracketing2HDRPlugin::computeCameraResponse()
 {
+    QTime time;
+    time.start();
 //     kDebug() << "computeCameraResponse()" << endl;
     loadImagesInMemory();
     switch(responseType())
@@ -367,6 +363,18 @@ void Bracketing2HDRPlugin::computeCameraResponse()
             kError() << "NOT IMPLEMENTED YET !" << endl;
             Q_ASSERT(false);
     }
+    // First compute on downscaled version
+    QList<BracketingFrame> frames1000 = reduceSizeOfFrames(1000, m_imagesFrames);
+    QList<BracketingFrame> frames500 = reduceSizeOfFrames(500, frames1000);
+    QList<BracketingFrame> frames100 = reduceSizeOfFrames(100, frames500);
+    computeCameraResponse(frames100);
+    computeCameraResponse(frames500);
+    computeCameraResponse(frames1000);
+//     computeCameraResponse(m_imagesFrames);
+    kDebug() << "Computing curves took: " << time.elapsed() << endl;
+}
+void Bracketing2HDRPlugin::computeCameraResponse(QList<BracketingFrame> frames)
+{
 //     return;
     // Normalize the intensity responses
     normalize(m_intensityR);
@@ -386,13 +394,13 @@ void Bracketing2HDRPlugin::computeCameraResponse()
         sums[k].resize(numberOfInputLevels());
     }
     QVector<double> iROld, iGOld, iBOld;
-    int width = m_images[0].image->width();
-    int height = m_images[0].image->height();
+    int width = frames[0].image->width();
+    int height = frames[0].image->height();
     while(true)
     {
 //         kDebug() << "New loop" << endl;
         // Compute answer
-        createHDRPaintDevice( device );
+        createHDRPaintDevice( frames, device );
         // Copy the old responses
         iROld = m_intensityR;
         iGOld = m_intensityG;
@@ -404,9 +412,9 @@ void Bracketing2HDRPlugin::computeCameraResponse()
             sums[k].fill(0.0);
         }
         // Create iterators
-        for(int k = 0; k < m_images.size(); k++)
+        for(int k = 0; k < frames.size(); k++)
         {
-            m_images[k].it = new KisHLineConstIteratorPixel( m_images[k].device->createHLineConstIterator(0, 0, width) );
+            frames[k].it = new KisHLineConstIteratorPixel( frames[k].device->createHLineConstIterator(0, 0, width) );
         }
         KisHLineIteratorPixel dstIt = device->createHLineIterator(0, 0, width);
         quint8* c = KoRgbU16Traits::allocate(1);
@@ -417,32 +425,32 @@ void Bracketing2HDRPlugin::computeCameraResponse()
             {
                 float* pixelData = reinterpret_cast<float*>(dstIt.rawData());
                 // compute the sum and normalization coefficient for rgb values from the bracketing ldr images
-                for(int k = 0; k < m_images.size(); k++)
+                for(int k = 0; k < frames.size(); k++)
                 {
-                    double coef = m_images[k].apexBrightness;
-                    m_images[k].device->colorSpace()->toRgbA16(m_images[k].it->rawData(), c, 1);
+                    double coef = frames[k].apexBrightness;
+                    frames[k].device->colorSpace()->toRgbA16(frames[k].it->rawData(), c, 1);
 //                     if( KoRgbU16Traits::red(c) < 100)
-//                         kDebug() << KoRgbU16Traits::red(c) << " " << (int)m_images[k].it->rawData()[2]  << " " << k << " " << (pixelData[2] * coef) << " "  << pixelData[2] << " " << sums[KoRgbU16Traits::red_pos][ KoRgbU16Traits::red(c) ] << " " << counts[KoRgbU16Traits::red_pos][ KoRgbU16Traits::red(c) ] << " " <<  << endl;
+//                         kDebug() << KoRgbU16Traits::red(c) << " " << (int)frames[k].it->rawData()[2]  << " " << k << " " << (pixelData[2] * coef) << " "  << pixelData[2] << " " << sums[KoRgbU16Traits::red_pos][ KoRgbU16Traits::red(c) ] << " " << counts[KoRgbU16Traits::red_pos][ KoRgbU16Traits::red(c) ] << " " <<  << endl;
                     sums[KoRgbU16Traits::red_pos][ KoRgbU16Traits::red(c) ] += pixelData[2] * coef ;
                     counts[KoRgbU16Traits::red_pos][ KoRgbU16Traits::red(c) ] ++;
                     sums[KoRgbU16Traits::green_pos][ KoRgbU16Traits::green(c) ] += pixelData[1] * coef ;
                     counts[KoRgbU16Traits::green_pos][ KoRgbU16Traits::green(c) ] ++;
                     sums[KoRgbU16Traits::blue_pos][ KoRgbU16Traits::blue(c) ] += pixelData[0] * coef ;
                     counts[KoRgbU16Traits::blue_pos][ KoRgbU16Traits::blue(c) ] ++;
-                    ++(*m_images[k].it);
+                    ++(*frames[k].it);
                 }
                 ++dstIt;
             }
             dstIt.nextRow();
-            for(int k = 0; k < m_images.size(); k++)
+            for(int k = 0; k < frames.size(); k++)
             {
-                m_images[k].it->nextRow();
+                frames[k].it->nextRow();
             }
         }
         // Delete iterators
-        for(int k = 0; k < m_images.size(); k++)
+        for(int k = 0; k < frames.size(); k++)
         {
-            delete m_images[k].it;
+            delete frames[k].it;
         }
         // Update intensity responses
         #define UPDATEINTENSITY(n,vec) \
@@ -513,7 +521,7 @@ void Bracketing2HDRPlugin::computeCameraResponse()
 
 bool Bracketing2HDRPlugin::loadImagesInMemory()
 {
-    m_images.clear();
+    m_imagesFrames.clear();
     double apexNorm;
     for(int i = 0; i < m_wdgBracketing2HDR->tableWidgetImages->rowCount(); i++)
     {
@@ -538,6 +546,7 @@ bool Bracketing2HDRPlugin::loadImagesInMemory()
         d.import(fileName);
         f.image = d.image();
         f.device = 0;
+        f.image->setUndoAdapter(0);
         if(f.image)
         {
             f.device = f.image->projection();
@@ -549,11 +558,11 @@ bool Bracketing2HDRPlugin::loadImagesInMemory()
         }
         // compute the maximum and minimu response
         // add the frame to the list of images
-        m_images.push_back(f);
+        m_imagesFrames.push_back(f);
     }
     for(int i = 0; i < m_wdgBracketing2HDR->tableWidgetImages->rowCount(); i++)
     {
-        m_images[i].apexBrightness /= apexNorm;
+        m_imagesFrames[i].apexBrightness /= apexNorm;
     }
     return true;
 }

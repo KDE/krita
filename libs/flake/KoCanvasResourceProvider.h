@@ -142,7 +142,7 @@ public:
      * Return the resource determined by param key as an integer.
      * @param key the indentifying key for the resource.
      */
-    bool intResource(int key) const;
+    int intResource(int key) const;
 
     /**
      * Return the resource determined by param key as a double.

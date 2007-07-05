@@ -129,7 +129,7 @@ bool KoCanvasResourceProvider::boolResource(int key) const {
     return d->resources[key].toBool();
 }
 
-bool KoCanvasResourceProvider::intResource(int key) const {
+int KoCanvasResourceProvider::intResource(int key) const {
     if(! d->resources.contains(key))
         return 0;
     return d->resources[key].toInt();

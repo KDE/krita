@@ -91,15 +91,18 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule* const module, const QStringL
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(slotStarted(Kross::Action*)));
     //connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
 
-    QString file = KGlobal::dirs()->locateLocal("appdata", "scripts/scripts.rc");
-    QStringList files = KGlobal::dirs()->findAllResources("appdata", "scripts/*.rc");
-    Kross::Manager::self().setProperty("configfile", file);
-    Kross::Manager::self().setProperty("configfiles", files);
-    if( QFileInfo(file).exists() )
-        Kross::Manager::self().actionCollection()->readXmlFile(file);
-    else
-        foreach(QString f, files)
-            Kross::Manager::self().actionCollection()->readXmlFile(f);
+    if( Kross::Manager::self().property("configfile") == QVariant::Invalid ) {
+        QString file = KGlobal::dirs()->locateLocal("appdata", "scripts/scripts.rc");
+        QStringList files = KGlobal::dirs()->findAllResources("appdata", "scripts/*.rc");
+        Kross::Manager::self().setProperty("configfile", file);
+        Kross::Manager::self().setProperty("configfiles", files);
+
+        if( QFileInfo(file).exists() )
+            Kross::Manager::self().actionCollection()->readXmlFile(file);
+        else
+            foreach(QString f, files)
+                Kross::Manager::self().actionCollection()->readXmlFile(f);
+    }
 
     KoView* view = d->module->view();
     KoMainWindow* mainwindow = view ? view->shell() : 0;

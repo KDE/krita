@@ -72,12 +72,6 @@ public:
                 tabs.append(tab);
             }
         }
-else { // for demo purposes.
-    KoRuler::Tab tab;
-    tab.position = 60;
-    tab.type = KoRuler::LeftTab;
-    tabs.append(tab);
-}
         ruler->updateTabs(tabs);
     }
 

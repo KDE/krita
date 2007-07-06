@@ -50,8 +50,15 @@ public:
 
 public:
     void setBristleInformation(KisPainterlyInformation info) {m_info = info;}
-    void setBristleInformation(QString key, float data) {m_info[key] = data;}
+    void setBristleInformation(QString key, float data, bool mode)
+        {
+            if (mode == KPI_RELATIVE)
+                m_info[key] += data;
+            if (mode == KPI_ABSOLUTE)
+                m_info[key] = data;
+        }
     KisPainterlyInformation bristleInformation() {return m_info;}
+    float bristleInformation(QString key) {return m_info[key];}
 
 private:
     void initBristleInformation();

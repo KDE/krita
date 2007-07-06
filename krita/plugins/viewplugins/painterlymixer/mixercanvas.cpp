@@ -73,7 +73,7 @@ void MixerCanvas::setDevice(KoColorSpace *cs)
     addPainterlyOverlays(m_device.data());
 }
 
-void MixerCanvas::mouseDoubleClickEvent(QMouseEvent *event)
+void MixerCanvas::mouseDoubleClickEvent(QMouseEvent */*event*/)
 {
 //     m_toolProxy->mouseDoubleClickEvent(event, event->pos());
 }

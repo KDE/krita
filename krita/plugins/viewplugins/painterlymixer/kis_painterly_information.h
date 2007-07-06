@@ -46,6 +46,9 @@ struct KisPainterlyInformation {
 };
 */
 
+#define KPI_ABSOLUTE 0
+#define KPI_RELATIVE 1
+
 typedef QHash<QString, float> KisPainterlyInformation;
 
 #endif // KIS_PAINTERLY_INFORMATION_H_

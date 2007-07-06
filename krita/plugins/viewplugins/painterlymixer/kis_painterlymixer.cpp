@@ -110,6 +110,7 @@ void KisPainterlyMixer::initSpots()
     connect(m_bgColors, SIGNAL(buttonClicked(int)), this, SLOT(slotChangeColor(int)));
     connect(m_bWet, SIGNAL(pressed()), this, SLOT(slotIncreaseWetness()));
     connect(m_bDry, SIGNAL(pressed()), this, SLOT(slotDecreaseWetness()));
+
 }
 
 void KisPainterlyMixer::setupButton(QToolButton *button, int index)
@@ -117,6 +118,7 @@ void KisPainterlyMixer::setupButton(QToolButton *button, int index)
 //     button->setFixedSize(15, 15);
     button->setPalette(QPalette(m_vColors[index].rgba(), m_vColors[index].rgba()));
     button->setAutoFillBackground(true);
+    button->setAutoRepeat(true);
 }
 
 void KisPainterlyMixer::loadColors()
@@ -132,27 +134,37 @@ void KisPainterlyMixer::loadColors()
     m_vColors.append(QColor(0xFF000000)); // Black
 }
 
+// TODO Load/Save of wetness steps
+#define MINIMUM_PV 0.50
+#define PV_STEP 0.025
+#define WET_DRY_STEP 0.025
+
 void KisPainterlyMixer::slotChangeColor(int index)
 {
-    m_resources->setForegroundColor(KoColor(m_vColors[index], m_canvas->device()->colorSpace()));
-}
+    if (m_resources->foregroundColor().toQColor().rgba() == m_vColors[index].rgba()) {
+        float pc = m_tool->bristleInformation("PaintVolume");
+        if ((pc + PV_STEP) < 1.0)
+            m_tool->setBristleInformation("PaintVolume", PV_STEP, KPI_RELATIVE);
+        else
+            m_tool->setBristleInformation("PaintVolume", 1.0, KPI_ABSOLUTE);
+    } else {
+        m_resources->setForegroundColor(KoColor(m_vColors[index], m_canvas->device()->colorSpace()));
+        m_tool->setBristleInformation("PaintVolume", MINIMUM_PV, KPI_ABSOLUTE);
+    }
 
-#define WET_DRY_STEP 0.025
+    updateInformationLabel();
+}
 
 void KisPainterlyMixer::slotIncreaseWetness()
 {
-    // TODO Load/Save of wetness steps
-
     if (isCurrentPaintOpPainterly()) {
         // TODO Do something to change wetness in painterly paintops.
     } else {
-        KisPainterlyInformation info = m_tool->bristleInformation();
-        if (info["Wetness"] < 1.0) {
-            info["Wetness"] += WET_DRY_STEP;
-            if (info["Wetness"] > 1.0)
-                info["Wetness"] = 1.0;
-            m_tool->setBristleInformation(info);
-        }
+        float wetness = m_tool->bristleInformation("Wetness");
+        if ((wetness + WET_DRY_STEP) < 1.0)
+            m_tool->setBristleInformation("Wetness", WET_DRY_STEP, KPI_RELATIVE);
+        else
+            m_tool->setBristleInformation("Wetness", 1.0, KPI_ABSOLUTE);
     }
     updateInformationLabel();
 }
@@ -164,11 +176,9 @@ void KisPainterlyMixer::slotDecreaseWetness()
     if (isCurrentPaintOpPainterly()) {
         // TODO Do something to change wetness in painterly paintops.
     } else {
-        KisPainterlyInformation info = m_tool->bristleInformation();
-        if (info["Wetness"] > WET_DRY_STEP) {
-            info["Wetness"] -= WET_DRY_STEP;
-            m_tool->setBristleInformation(info);
-        }
+        float wetness = m_tool->bristleInformation("Wetness");
+        if (wetness > WET_DRY_STEP)
+            m_tool->setBristleInformation("Wetness", -WET_DRY_STEP, KPI_RELATIVE);
     }
     updateInformationLabel();
 }
@@ -188,8 +198,8 @@ bool KisPainterlyMixer::isCurrentPaintOpPainterly()
 
 void KisPainterlyMixer::updateInformationLabel()
 {
-    KisPainterlyInformation info = m_tool->bristleInformation();
     QString text;
+    KisPainterlyInformation info = m_tool->bristleInformation();
 
     text.sprintf("W: %.2f V: %.2f PC: %.2f", info["Wetness"], info["PaintVolume"], info["PigmentConcentration"]);
 

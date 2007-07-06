@@ -53,6 +53,8 @@ private:
 
     bool isCurrentPaintOpPainterly();
 
+    void updateInformationLabel();
+
 private slots:
     void slotChangeColor(int index);
     void slotIncreaseWetness();

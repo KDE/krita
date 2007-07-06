@@ -63,6 +63,8 @@ void KisPainterlyMixer::initTool()
 
     m_canvas->setToolProxy(new KoToolProxy(m_canvas));
     m_canvas->toolProxy()->setActiveTool(m_tool);
+
+    updateInformationLabel();
 }
 
 
@@ -96,16 +98,18 @@ void KisPainterlyMixer::initSpots()
     m_bWet = new QToolButton(m_spotsFrame);
     m_bWet->setText("W"); // TODO Icon for the "Wet spot"
     m_bWet->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+    m_bWet->setAutoRepeat(true);
     m_bDry = new QToolButton(m_spotsFrame);
     m_bDry->setText("D"); // TODO Icon for the "Dry spot"
     m_bDry->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+    m_bDry->setAutoRepeat(true);
 
     l->addWidget(m_bWet, 0, col++, ROWS, 1);
     l->addWidget(m_bDry, 0, col, ROWS, 1);
 
     connect(m_bgColors, SIGNAL(buttonClicked(int)), this, SLOT(slotChangeColor(int)));
-    connect(m_bWet, SIGNAL(clicked(bool)), this, SLOT(slotIncreaseWetness()));
-    connect(m_bDry, SIGNAL(clicked(bool)), this, SLOT(slotDecreaseWetness()));
+    connect(m_bWet, SIGNAL(pressed()), this, SLOT(slotIncreaseWetness()));
+    connect(m_bDry, SIGNAL(pressed()), this, SLOT(slotDecreaseWetness()));
 }
 
 void KisPainterlyMixer::setupButton(QToolButton *button, int index)
@@ -133,7 +137,7 @@ void KisPainterlyMixer::slotChangeColor(int index)
     m_resources->setForegroundColor(KoColor(m_vColors[index], m_canvas->device()->colorSpace()));
 }
 
-#define WET_DRY_STEP 0.05
+#define WET_DRY_STEP 0.025
 
 void KisPainterlyMixer::slotIncreaseWetness()
 {
@@ -143,10 +147,14 @@ void KisPainterlyMixer::slotIncreaseWetness()
         // TODO Do something to change wetness in painterly paintops.
     } else {
         KisPainterlyInformation info = m_tool->bristleInformation();
-        info["Wetness"] += WET_DRY_STEP;
-        m_tool->setBristleInformation(info);
+        if (info["Wetness"] < 1.0) {
+            info["Wetness"] += WET_DRY_STEP;
+            if (info["Wetness"] > 1.0)
+                info["Wetness"] = 1.0;
+            m_tool->setBristleInformation(info);
+        }
     }
-//     updateInformationLabel();
+    updateInformationLabel();
 }
 
 void KisPainterlyMixer::slotDecreaseWetness()
@@ -157,14 +165,17 @@ void KisPainterlyMixer::slotDecreaseWetness()
         // TODO Do something to change wetness in painterly paintops.
     } else {
         KisPainterlyInformation info = m_tool->bristleInformation();
-        info["Wetness"] -= WET_DRY_STEP;
-        m_tool->setBristleInformation(info);
+        if (info["Wetness"] > WET_DRY_STEP) {
+            info["Wetness"] -= WET_DRY_STEP;
+            m_tool->setBristleInformation(info);
+        }
     }
-//     updateInformationLabel();
+    updateInformationLabel();
 }
 
 bool KisPainterlyMixer::isCurrentPaintOpPainterly()
 {
+    // Is there a cleaner way to do this?!
     KisPainter painter(m_canvas->device());
     KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(
                           m_resources->resource(KisResourceProvider::CurrentPaintop).value<KoID>(),
@@ -173,6 +184,16 @@ bool KisPainterlyMixer::isCurrentPaintOpPainterly()
     painter.setPaintOp(current);
 
     return current->painterly();
+}
+
+void KisPainterlyMixer::updateInformationLabel()
+{
+    KisPainterlyInformation info = m_tool->bristleInformation();
+    QString text;
+
+    text.sprintf("W: %.2f V: %.2f PC: %.2f", info["Wetness"], info["PaintVolume"], info["PigmentConcentration"]);
+
+    m_information->setText(text);
 }
 
 

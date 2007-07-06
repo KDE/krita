@@ -34,6 +34,12 @@
 class KoView;
 class KoZoomHandler;
 
+/// Snapping directions
+#define SNAP_NONE 0
+#define SNAP_HORIZ 1
+#define SNAP_VERT 2
+#define SNAP_BOTH 3
+
 class KOGUIUTILS_EXPORT KoGuides : public QObject
 {
     Q_OBJECT
@@ -59,7 +65,6 @@ public:
     void paintGuides( QPainter &painter );
 
     typedef int SnapStatus;
-    static const SnapStatus SNAP_NONE, SNAP_HORIZ, SNAP_VERT, SNAP_BOTH;
 
     /**
      * @brief Handle mousePressEvent

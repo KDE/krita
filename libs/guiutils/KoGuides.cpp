@@ -71,11 +71,6 @@ private:
     QAction* m_pos;
 };
 
-const KoGuides::SnapStatus KoGuides::SNAP_NONE = 0;
-const KoGuides::SnapStatus KoGuides::SNAP_HORIZ = 1;
-const KoGuides::SnapStatus KoGuides::SNAP_VERT = 2;
-const KoGuides::SnapStatus KoGuides::SNAP_BOTH = 3;
-
 KoGuides::KoGuides( KoView *view, KoZoomHandler *zoomHandler )
 : m_view( view )
 , m_zoomHandler( zoomHandler )

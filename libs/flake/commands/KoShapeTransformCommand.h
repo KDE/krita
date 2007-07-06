@@ -38,7 +38,7 @@ public:
      * @param shapes all the shapes that should be transformed
      * @param transformations the transformation to apply to all shapes
      */
-    KoShapeTransformCommand( const QList<KoShape*> &shapes, const QMatrix &transformation, QUndoCommand *parent = 0 );
+    KoShapeTransformCommand( const QList<KoShape*> &shapes, const QMatrix &transformations, QUndoCommand *parent = 0 );
 
     /**
      * A command to transform a selection of shapes with the same transformation.

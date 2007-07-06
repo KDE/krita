@@ -364,9 +364,9 @@ void KoGuides::getGuideLines( QList<double> &horizontalPos, QList<double> &verti
 
 void KoGuides::snapToGuideLines( QRectF &rect, int snap, SnapStatus &snapStatus, QPointF &diff )
 {
-    if( !(snapStatus & SNAP_VERT))
+    if( !(snapStatus & Qt::Vertical))
         diff.setX(10000);
-    if( !(snapStatus & SNAP_HORIZ))
+    if( !(snapStatus & Qt::Horizontal))
         diff.setY(10000);
 
     for ( int i = 0; i < GL_END; ++i )
@@ -377,60 +377,60 @@ void KoGuides::snapToGuideLines( QRectF &rect, int snap, SnapStatus &snapStatus,
             if ( ( *it )->orientation == Qt::Horizontal )
             {
                 double tmp = (*it)->position - rect.top();
-                if ( snapStatus & SNAP_HORIZ || QABS( tmp ) < m_zoomHandler->unzoomItYOld( snap ) )
+                if ( snapStatus & Qt::Horizontal || QABS( tmp ) < m_zoomHandler->unzoomItYOld( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.y()))
                     {
                         diff.setY( tmp );
-                        snapStatus |= SNAP_HORIZ;
+                        snapStatus |= Qt::Horizontal;
                     }
                 }
                 tmp = (*it)->position - rect.bottom();
-                if ( snapStatus & SNAP_HORIZ || QABS( tmp ) < m_zoomHandler->unzoomItYOld( snap ) )
+                if ( snapStatus & Qt::Horizontal || QABS( tmp ) < m_zoomHandler->unzoomItYOld( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.y()))
                     {
                         diff.setY( tmp );
-                        snapStatus |= SNAP_HORIZ;
+                        snapStatus |= Qt::Horizontal;
                     }
                 }
             }
             else
             {
                 double tmp = (*it)->position - rect.left();
-                if ( snapStatus & SNAP_VERT || QABS( tmp ) < m_zoomHandler->unzoomItXOld( snap ) )
+                if ( snapStatus & Qt::Vertical || QABS( tmp ) < m_zoomHandler->unzoomItXOld( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.x()))
                     {
                         diff.setX( tmp );
-                        snapStatus |= SNAP_VERT;
+                        snapStatus |= Qt::Vertical;
                     }
                 }
                 tmp = (*it)->position - rect.right();
-                if ( snapStatus & SNAP_VERT || QABS( tmp ) < m_zoomHandler->unzoomItXOld( snap ) )
+                if ( snapStatus & Qt::Vertical || QABS( tmp ) < m_zoomHandler->unzoomItXOld( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.x()))
                     {
                         diff.setX( tmp );
-                        snapStatus |= SNAP_VERT;
+                        snapStatus |= Qt::Vertical;
                     }
                 }
             }
         }
     }
 
-    if(!(snapStatus & SNAP_VERT))
+    if(!(snapStatus & Qt::Vertical))
         diff.setX( 0 );
 
-    if(!(snapStatus & SNAP_HORIZ))
+    if(!(snapStatus & Qt::Horizontal))
         diff.setY( 0 );
 }
 
 void KoGuides::snapToGuideLines( QPointF &pos, int snap, SnapStatus &snapStatus, QPointF &diff )
 {
-    if( !(snapStatus & SNAP_VERT))
+    if( !(snapStatus & Qt::Vertical))
         diff.setX(10000);
-    if( !(snapStatus & SNAP_HORIZ))
+    if( !(snapStatus & Qt::Horizontal))
         diff.setY(10000);
 
     for ( int i = 0; i < GL_END; ++i )
@@ -441,34 +441,34 @@ void KoGuides::snapToGuideLines( QPointF &pos, int snap, SnapStatus &snapStatus,
             if ( ( *it )->orientation == Qt::Horizontal )
             {
                 double tmp = (*it)->position - pos.y();
-                if ( snapStatus & SNAP_HORIZ || QABS( tmp ) < m_zoomHandler->unzoomItYOld( snap ) )
+                if ( snapStatus & Qt::Horizontal || QABS( tmp ) < m_zoomHandler->unzoomItYOld( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.y()))
                     {
                         diff.setY( tmp );
-                        snapStatus |= SNAP_HORIZ;
+                        snapStatus |= Qt::Horizontal;
                     }
                 }
             }
             else
             {
                 double tmp = (*it)->position - pos.x();
-                if ( snapStatus & SNAP_VERT || QABS( tmp ) < m_zoomHandler->unzoomItXOld( snap ) )
+                if ( snapStatus & Qt::Vertical || QABS( tmp ) < m_zoomHandler->unzoomItXOld( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.x()))
                     {
                         diff.setX( tmp );
-                        snapStatus |= SNAP_VERT;
+                        snapStatus |= Qt::Vertical;
                     }
                 }
             }
         }
     }
 
-    if(!(snapStatus & SNAP_VERT))
+    if(!(snapStatus & Qt::Vertical))
         diff.setX( 0 );
 
-    if(!(snapStatus & SNAP_HORIZ))
+    if(!(snapStatus & Qt::Horizontal))
         diff.setY( 0 );
 }
 
@@ -535,7 +535,7 @@ void KoGuides::repaintSnapping( const QPointF &snappedPoint, SnapStatus snapStat
         QList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
         for ( ; it != m_guideLines[i].end(); ++it )
         {
-            if ( ( *it )->orientation == Qt::Horizontal && ( snapStatus & SNAP_HORIZ ) )
+            if ( ( *it )->orientation == Qt::Horizontal && ( snapStatus & Qt::Horizontal ) )
             {
                 if( virtuallyEqual( snappedPoint.y(), (*it)->position ) )
                 {
@@ -553,7 +553,7 @@ void KoGuides::repaintSnapping( const QPointF &snappedPoint, SnapStatus snapStat
             }
             else
             {
-                if ( snapStatus & SNAP_VERT )
+                if ( snapStatus & Qt::Vertical )
                 {
                     if( virtuallyEqual( snappedPoint.x(), (*it)->position ) )
                     {

@@ -77,7 +77,7 @@ public:
             setToolType( TOOL_TYPE_SELECTED );
             //setToolType( dynamicToolType() );
             setIcon( "tool_outline_selection" );
-            setPriority( 5 );
+            setPriority( 55 );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 

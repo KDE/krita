@@ -81,7 +81,7 @@ public:
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_rect_selection" );
             setShortcut( KShortcut( Qt::Key_R ) );
-            setPriority( 2 );
+            setPriority( 52 );
         }
 
     virtual ~KisToolSelectRectangularFactory(){}

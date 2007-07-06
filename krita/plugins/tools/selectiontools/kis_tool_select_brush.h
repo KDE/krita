@@ -68,7 +68,7 @@ public:
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_brush_selection" );
             setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
-            setPriority( 0 );
+            setPriority( 50 );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 

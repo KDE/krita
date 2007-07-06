@@ -73,7 +73,7 @@ public:
             setToolTip( i18n( "Select a contiguous area of colors" ) );
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_contiguous_selection" );
-            setPriority( 6 );
+            setPriority( 56 );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 

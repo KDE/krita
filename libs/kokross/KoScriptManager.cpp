@@ -294,22 +294,15 @@ KoScriptManagerDialog::~KoScriptManagerDialog()
 
 void KoScriptManagerDialog::slotAccepted()
 {
-    kDebug()<<"KoScriptManagerDialog::slotAccepted()"<<endl;
-
-    //QByteArray partname = componentData().componentName().toUtf8(); //KApplication::kApplication()->objectName()
-    QString partname = KApplication::kApplication()->objectName();
-    if( ! partname.isNull() ) {
-        const QString dir = KGlobal::dirs()->saveLocation("data", partname + "/scripts/");
-        if( ! dir.isEmpty() ) {
-            const QString file = QFileInfo(dir, "scripts.rc").absoluteFilePath();
-            QFile f(file);
-            if( f.open(QIODevice::WriteOnly) ) {
-                if( Kross::Manager::self().actionCollection()->writeXml(&f) )
-                    kDebug()<<"KoScriptManagerDialog: Successfully saved file: "<<file<<endl;
-            } else kDebug()<<"KoScriptManagerDialog: Failed to save file: "<<file<<endl;
-            f.close();
-        } else kDebug()<<"..1"<<endl;
-    } else kDebug()<<"..3"<<endl;
+    const QString dir = KGlobal::dirs()->saveLocation("appdata", "scripts/");
+    if( ! dir.isEmpty() ) {
+        const QString file = QFileInfo(dir, "scripts.rc").absoluteFilePath();
+        QFile f(file);
+        if( f.open(QIODevice::WriteOnly) )
+            if( Kross::Manager::self().actionCollection()->writeXml(&f) )
+                kDebug()<<"KoScriptManagerDialog: Successfully saved file: "<<file<<endl;
+        f.close();
+    }
 }
 
 #include "KoScriptManager.moc"

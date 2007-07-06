@@ -91,21 +91,15 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule* const module, const QStringL
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(slotStarted(Kross::Action*)));
     //connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
 
-    QByteArray partname = componentData().componentName().toUtf8(); //KApplication::kApplication()->objectName()
-    if( ! partname.isNull() && Kross::Manager::self().property(partname) == QVariant::Invalid ) {
-        QStringList files = KGlobal::dirs()->findAllResources("data", partname + "/scripts/*.rc");
-        Kross::Manager::self().setProperty(partname, files);
-
-        //TODO find a better way...
-        if( files.count() > 0 )
-            Kross::Manager::self().actionCollection()->readXmlFile(files[0]);
-/*
-        foreach(QString file, files) {
-            kDebug()<<"################################################# KoScriptingPart Loading: "<<file<<endl;
-            Kross::Manager::self().actionCollection()->readXmlFile(file);
-        }
-*/
-    }
+    QString file = KGlobal::dirs()->locateLocal("appdata", "scripts/scripts.rc");
+    QStringList files = KGlobal::dirs()->findAllResources("appdata", "scripts/*.rc");
+    Kross::Manager::self().setProperty("configfile", file);
+    Kross::Manager::self().setProperty("configfiles", files);
+    if( QFileInfo(file).exists() )
+        Kross::Manager::self().actionCollection()->readXmlFile(file);
+    else
+        foreach(QString f, files)
+            Kross::Manager::self().actionCollection()->readXmlFile(f);
 
     KoView* view = d->module->view();
     KoMainWindow* mainwindow = view ? view->shell() : 0;
@@ -114,7 +108,6 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule* const module, const QStringL
         QDockWidget* docker = mainwindow->createDockWidget(&factory);
         Q_UNUSED(docker);
     }
-
 }
 
 KoScriptingPart::~KoScriptingPart()

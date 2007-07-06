@@ -275,7 +275,6 @@ static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString& borderstyle
 
 void KoParagraphStyle::setLineHeightPercent(int lineHeight) {
     setProperty(PercentLineHeight, lineHeight);
-    remove(LineSpacing);
 }
 
 int KoParagraphStyle::lineHeightPercent() const {
@@ -284,8 +283,6 @@ int KoParagraphStyle::lineHeightPercent() const {
 
 void KoParagraphStyle::setLineHeightAbsolute(double height) {
     setProperty(FixedLineHeight, height);
-    remove(LineSpacing);
-    remove(PercentLineHeight);
 }
 
 double KoParagraphStyle::lineHeightAbsolute() const {
@@ -294,8 +291,6 @@ double KoParagraphStyle::lineHeightAbsolute() const {
 
 void KoParagraphStyle::setMinimumLineHeight(double height) {
     setProperty(MinimumLineHeight, height);
-    remove(FixedLineHeight);
-    remove(PercentLineHeight);
 }
 
 double KoParagraphStyle::minimumLineHeight() const {
@@ -304,8 +299,6 @@ double KoParagraphStyle::minimumLineHeight() const {
 
 void KoParagraphStyle::setLineSpacing(double spacing) {
     setProperty(LineSpacing, spacing);
-    remove(FixedLineHeight);
-    remove(PercentLineHeight);
 }
 
 double KoParagraphStyle::lineSpacing() const {

@@ -137,6 +137,8 @@ public:
      * Sets the line height as a percentage of the highest character on that line.
      * A good typographically correct value would be 120%
      * Note that lineSpacing() is added to this.
+     * You should consider doing a remove(KoParagraphStyle::LineSpacing); because if set, it will
+     *  be used instead of this value.
      * @see setLineSpacingFromFont
      */
     void setLineHeightPercent(int lineHeight);
@@ -145,7 +147,7 @@ public:
 
     /**
      * Sets the line height to a specific pt-based height, ignoring the font size.
-     * Note that lineSpacing() is added to this.
+     * Setting this will ignore the lineHeightPercent() and lineSpacing() values.
      */
     void setLineHeightAbsolute(double height);
     /// @see setLineHeightAbsolute
@@ -153,6 +155,8 @@ public:
 
     /**
      * Sets the line height to have a minimum height in pt.
+     * You should consider doing a remove(KoParagraphStyle::FixedLineHeight); because if set, it will
+     *  be used instead of this value.
      */
     void setMinimumLineHeight(double height);
     /// @see setMinimumLineHeight
@@ -161,6 +165,8 @@ public:
     /**
      * Sets the space between two lines to be a specific height. The total linespacing will become
      * the line height + this height.  Where the line height is dependent on the font.
+     * You should consider doing a remove(KoParagraphStyle::FixedLineHeight) and a
+     * remove(KoParagraphStyle::PercentLineHeight); because if set, they will be used instead of this value.
      */
     void setLineSpacing(double spacing);
     /// @see setLineSpacing
@@ -463,9 +469,10 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
 
     static KoParagraphStyle *fromBlock(const QTextBlock &block);
 
+    void remove(int key);
+
 private:
     void setProperty(int key, const QVariant &value);
-    void remove(int key);
     double propertyDouble(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;

@@ -21,9 +21,8 @@
 #ifndef KIS_PAINTERLY_INFORMATION_H_
 #define KIS_PAINTERLY_INFORMATION_H_
 
+#include <QHash>
 #include <QString>
-
-#include <KoColor.h>
 
 /**
 * KisPainterlyInformation is a simple structure that keeps all information
@@ -36,6 +35,7 @@
 * actually paints something, then this information will be used to update the
 * painterly overlays of the painted device.
 */
+/*
 struct KisPainterlyInformation {
     float Mixability; ///< how easily the paint mixes with the underlying color and returns to the bristle.
     float PigmentConcentration; ///< how much "pigment" is contained in the bristle (i.e., opacity)
@@ -44,5 +44,8 @@ struct KisPainterlyInformation {
     float Viscosity; ///< how easily the paint spread.
     float Wetness; ///< how wet is the paint. This behaves on almost all other information.
 };
+*/
+
+typedef QHash<QString, float> KisPainterlyInformation;
 
 #endif // KIS_PAINTERLY_INFORMATION_H_

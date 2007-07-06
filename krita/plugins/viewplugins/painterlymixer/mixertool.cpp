@@ -59,18 +59,30 @@
 MixerTool::MixerTool(MixerCanvas *canvas, KisPaintDevice* device, KoCanvasResourceProvider *rp)
     : KoTool(canvas), m_canvasDev(device), m_resources(rp)
 {
-    //{{ - Just for testing!
-    m_info.Mixability = 0.9f;
-    m_info.PigmentConcentration = 0.9f;
-    m_info.PaintVolume = 0.8f;
-    m_info.Reflectivity = 0.1f;
-    m_info.Viscosity = 0.2f;
-    m_info.Wetness = 0.8f;
-    //}}
+    initBristleInformation();
 }
 
 MixerTool::~MixerTool()
 {
+}
+
+#define INIT_MIXABILITY 0.9
+#define INIT_PIGMENT_CONCENTRATION 0.9
+#define INIT_PAINT_VOLUME 0.8
+#define INIT_REFLECTIVITY 0.1
+#define INIT_VISCOSITY 0.4
+#define INIT_WETNESS 0.5
+
+void MixerTool::initBristleInformation()
+{
+    // TODO Save/Load of bristle information
+    // Use hard-coded values for now
+    m_info["Mixability"] = INIT_MIXABILITY;
+    m_info["PigmentConcentration"] = INIT_PIGMENT_CONCENTRATION;
+    m_info["PaintVolume"] = INIT_PAINT_VOLUME;
+    m_info["Reflectivity"] = INIT_REFLECTIVITY;
+    m_info["Viscosity"] = INIT_VISCOSITY;
+    m_info["Wetness"] = INIT_WETNESS;
 }
 
 void MixerTool::mousePressEvent(KoPointerEvent *e)
@@ -95,8 +107,8 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
                           static_cast<KisPaintOpSettings*>(m_resources->resource(KisResourceProvider::CurrentPaintopSettings).value<void*>()),
                           &painter, 0);
     painter.setPaintOp(current); // The painter now has the paintop and will destroy it.
-    painter.setPaintColor(m_resources->resource(KoCanvasResource::ForegroundColor).value<KoColor>());
-    painter.setBackgroundColor(m_resources->resource(KoCanvasResource::BackgroundColor).value<KoColor>());
+    painter.setPaintColor(m_resources->foregroundColor());
+    painter.setBackgroundColor(m_resources->backgroundColor());
     painter.setBrush(static_cast<KisBrush*>(m_resources->resource(KisResourceProvider::CurrentBrush).value<void*>()));
     //}}
 
@@ -169,12 +181,12 @@ void MixerTool::mixPaint(KisPaintDeviceSP stroke, KoPointerEvent *e)
         m_canvasDev->colorSpace()->toQColor(can_it_main.rawData(), &canvasColor, &canvasCell.opacity);
 
         if (strokeCell.opacity) {
-            strokeCell.wetness = force * m_info.Wetness;
-            strokeCell.mixability = force * m_info.Mixability * strokeCell.wetness;
-            strokeCell.pigmentConcentration = force * m_info.PigmentConcentration;
-            strokeCell.reflectivity = force * m_info.Reflectivity * strokeCell.wetness;
-            strokeCell.viscosity = force * m_info.Viscosity / strokeCell.wetness;
-            strokeCell.volume = force * m_info.PaintVolume;
+            strokeCell.wetness = force * m_info["Wetness"];
+            strokeCell.mixability = force * m_info["Mixability"] * strokeCell.wetness;
+            strokeCell.pigmentConcentration = force * m_info["PigmentConcentration"];
+            strokeCell.reflectivity = force * m_info["Reflectivity"] * strokeCell.wetness;
+            strokeCell.viscosity = force * m_info["Viscosity"] / strokeCell.wetness;
+            strokeCell.volume = force * m_info["PaintVolume"];
             strokeCell.setRgb(strokeColor.red(),
                                strokeColor.green(),
                                strokeColor.blue());
@@ -244,7 +256,7 @@ void MixerTool::updateResources(KisPaintDeviceSP stroke)
         b /= total;
         final.setRgb(r, g, b);
 
-        m_resources->setResource(KoCanvasResource::ForegroundColor, KoColor(final, stroke->colorSpace()));
+        m_resources->setForegroundColor(KoColor(final, stroke->colorSpace()));
     }
 }
 

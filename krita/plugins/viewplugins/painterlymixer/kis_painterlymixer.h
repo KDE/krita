@@ -30,6 +30,7 @@ class QButtonGroup;
 class QToolButton;
 class QWidget;
 
+class KisPaintOp;
 class KisView2;
 
 class MixerTool;
@@ -50,12 +51,17 @@ private:
 
     void setupButton(QToolButton *button, int index);
 
+    bool isCurrentPaintOpPainterly();
+
 private slots:
-    void changeColor(int index);
+    void slotChangeColor(int index);
+    void slotIncreaseWetness();
+    void slotDecreaseWetness();
 
 private:
     KisView2 *m_view;
     MixerTool *m_tool;
+    KisPaintOp *m_currentOp;
 
     QButtonGroup *m_bgColors;
     QList<QColor> m_vColors;

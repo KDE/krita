@@ -23,12 +23,13 @@
 
 #include <QPointF>
 
-#include <KoCanvasResourceProvider.h>
 #include <KoTool.h>
 
 #include "kis_paint_device.h"
 
 #include "kis_painterly_information.h"
+
+class KoCanvasResourceProvider;
 
 class MixerCanvas;
 
@@ -48,9 +49,13 @@ public:
     void mouseMoveEvent(KoPointerEvent *e);
 
 public:
+    void setBristleInformation(KisPainterlyInformation info) {m_info = info;}
+    void setBristleInformation(QString key, float data) {m_info[key] = data;}
     KisPainterlyInformation bristleInformation() {return m_info;}
 
 private:
+    void initBristleInformation();
+
     /*
     Update all painterly overlays, and to the mixing. It's called when a non-painterly paintop is used.
     */

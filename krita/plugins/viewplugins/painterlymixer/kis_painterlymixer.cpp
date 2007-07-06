@@ -135,18 +135,18 @@ void KisPainterlyMixer::loadColors()
 }
 
 // TODO Load/Save of wetness steps
-#define MINIMUM_PV 0.50
-#define PV_STEP 0.025
+#define MINIMUM_PV 120
+#define PV_STEP 2.5
 #define WET_DRY_STEP 0.025
 
 void KisPainterlyMixer::slotChangeColor(int index)
 {
     if (m_resources->foregroundColor().toQColor().rgba() == m_vColors[index].rgba()) {
         float pc = m_tool->bristleInformation("PaintVolume");
-        if ((pc + PV_STEP) < 1.0)
+        if ((pc + PV_STEP) < 255.0)
             m_tool->setBristleInformation("PaintVolume", PV_STEP, KPI_RELATIVE);
         else
-            m_tool->setBristleInformation("PaintVolume", 1.0, KPI_ABSOLUTE);
+            m_tool->setBristleInformation("PaintVolume", 255.0, KPI_ABSOLUTE);
     } else {
         m_resources->setForegroundColor(KoColor(m_vColors[index], m_canvas->device()->colorSpace()));
         m_tool->setBristleInformation("PaintVolume", MINIMUM_PV, KPI_ABSOLUTE);
@@ -177,7 +177,7 @@ void KisPainterlyMixer::slotDecreaseWetness()
         // TODO Do something to change wetness in painterly paintops.
     } else {
         float wetness = m_tool->bristleInformation("Wetness");
-        if (wetness > WET_DRY_STEP)
+        if (wetness > 0.1 + WET_DRY_STEP)
             m_tool->setBristleInformation("Wetness", -WET_DRY_STEP, KPI_RELATIVE);
     }
     updateInformationLabel();

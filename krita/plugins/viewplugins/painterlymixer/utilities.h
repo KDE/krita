@@ -117,11 +117,15 @@ public:
             rgb_to_hls(red, green, blue, &hue, &lightness, &saturation);
         }
 
-    void mixUsingRgb(const Cell &cell);
+    void mixProperties(const Cell &cell, float force);
 
-    void mixUsingHls(const Cell &cell);
+    void mixColorsUsingRgb(const Cell &cell, float force);
 
-    void mixUsingCmy(const Cell &cell);
+    void mixColorsUsingHls(const Cell &cell);
+
+    void mixColorsUsingCmy(const Cell &cell);
+
+    void debug();
 };
 
 #endif // UTILITIES_H_

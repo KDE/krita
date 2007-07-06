@@ -88,7 +88,61 @@ void cmyToRgb(int cyan, int magenta, int yellow, int *red, int *green, int *blue
     densityToTransmittance(yellow, blue);
 }
 
-void Cell::mixUsingRgb(const Cell &cell)
+float sigmoid(float value)
+{
+    //TODO return a sigmoid in [0, 1] here
+    // TESTED ONLY WITH MOUSE!
+    if (value == 0.5)
+        return value + 0.8;
+    else
+        return value;
+}
+
+float activeVolume(float volume, float wetness, float force)
+{
+    return volume * sigmoid(wetness) * sigmoid(force);
+}
+
+void Cell::mixProperties(const Cell &cell, float force)
+{
+    float V_c, V_s; // Volumes in Canvas and Stroke
+    float w_c, w_s; // Wetness in the Canvas and in the Stroke
+    float o_c, o_s; // Opacities
+    float V_ac, V_as; // Active Volumes in Canvas and Stroke
+    float a; // Adsorbency
+    float V_f, w_f, o_f; // Finals
+
+    V_c = cell.volume;
+    V_s = volume;
+
+    w_c = cell.wetness;
+    w_s = wetness;
+
+    o_c = (float)cell.opacity / 255.0;
+    o_s = (float)opacity / 255.0;
+
+    a = cell.canvasAdsorbency;
+
+    V_ac = activeVolume(V_c, w_c, force);
+    V_as = activeVolume(V_s, w_s, force);
+
+    w_f = (V_ac * w_c + V_as * w_s) / (V_ac + V_as);
+    o_f = (V_ac * o_c + V_as * o_s) / (V_ac + V_as);
+    V_f = ((1 - a) * V_c) + V_as;
+
+    if (V_f > 255.0)
+        V_f = 255.0;
+
+    // Normalize
+    o_f = 255 * o_f;
+
+    wetness = w_f;
+    opacity = (quint8)o_f;
+    volume = V_f;
+}
+
+/*
+void Cell::mixColorsUsingRgb(const Cell &cell, float)
 {
     float ratio;
     int delta;
@@ -104,12 +158,51 @@ void Cell::mixUsingRgb(const Cell &cell)
     blue = cell.blue + (int)(ratio * delta);
 
     updateHlsCmy();
+}*/
+
+
+void Cell::mixColorsUsingRgb(const Cell &cell, float force)
+{
+    float V_c, V_s; // Volumes in Canvas and Stroke
+    float w_c, w_s; // Wetness in the Canvas and in the Stroke
+    float V_ac, V_as; // Active Volumes in Canvas and Stroke
+
+    float r_c, r_s;
+    float g_c, g_s;
+    float b_c, b_s;
+    float r_f, g_f, b_f;
+
+    V_c = cell.volume;
+    V_s = volume;
+
+    w_c = cell.wetness;
+    w_s = wetness;
+
+    V_ac = activeVolume(V_c, w_c, force);
+    V_as = activeVolume(V_s, w_s, force);
+
+    r_c = (float)cell.red / 255.0;
+    g_c = (float)cell.green / 255.0;
+    b_c = (float)cell.blue / 255.0;
+
+    r_s = (float)red / 255.0;
+    g_s = (float)green / 255.0;
+    b_s = (float)blue / 255.0;
+
+    r_f = (V_ac * r_c + V_as * r_s) / (V_ac + V_as);
+    g_f = (V_ac * g_c + V_as * g_s) / (V_ac + V_as);
+    b_f = (V_ac * b_c + V_as * b_s) / (V_ac + V_as);
+
+//     Normalize and set
+    red = (int)(r_f*255.0);
+    green = (int)(g_f*255.0);
+    blue = (int)(b_f*255.0);
 }
 
 /*
 This implementation use Tunde Cockshott Wet&Sticky code.
 */
-void Cell::mixUsingHls(const Cell &cell)
+void Cell::mixColorsUsingHls(const Cell &cell)
 {
     float ratio, delta;
     ratio = volume / cell.volume;
@@ -129,7 +222,7 @@ void Cell::mixUsingHls(const Cell &cell)
     updateRgbCmy();
 }
 
-void Cell::mixUsingCmy(const Cell &cell)
+void Cell::mixColorsUsingCmy(const Cell &cell)
 {
     float ratio;
     int delta;
@@ -145,4 +238,12 @@ void Cell::mixUsingCmy(const Cell &cell)
     yellow = cell.yellow + (int)(ratio * delta);
 
     updateRgbHls();
+}
+
+void Cell::debug()
+{
+    kDebug() << "WETNESS: " << wetness << endl
+             << "VOLUME: " << volume << endl
+             << "OPACITY: " << (int)opacity << endl
+             << "RED: " << red << " GREEN: " << green << " BLUE: " << blue << endl;
 }

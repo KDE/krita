@@ -66,9 +66,10 @@ MixerTool::~MixerTool()
 {
 }
 
+#define INIT_CANVAS_ADSORBENCY 0.3
 #define INIT_MIXABILITY 0.9
 #define INIT_PIGMENT_CONCENTRATION 0.9
-#define INIT_PAINT_VOLUME 0.8
+#define INIT_PAINT_VOLUME 150.0
 #define INIT_REFLECTIVITY 0.1
 #define INIT_VISCOSITY 0.4
 #define INIT_WETNESS 0.5
@@ -77,6 +78,7 @@ void MixerTool::initBristleInformation()
 {
     // TODO Save/Load of bristle information
     // Use hard-coded values for now
+    m_info["CanvasAdsorbency"] = INIT_CANVAS_ADSORBENCY;
     m_info["Mixability"] = INIT_MIXABILITY;
     m_info["PigmentConcentration"] = INIT_PIGMENT_CONCENTRATION;
     m_info["PaintVolume"] = INIT_PAINT_VOLUME;
@@ -177,41 +179,62 @@ void MixerTool::mixPaint(KisPaintDeviceSP stroke, KoPointerEvent *e)
     pressure = e->pressure();
     force = pressure + FORCE_COEFF * pow(pressure, 2);
     while (!it_main.isDone()) {
-        stroke->colorSpace()->toQColor(it_main.rawData(), &strokeColor, &strokeCell.opacity);
+        stroke->colorSpace()->toQColor(it_main.rawData(), &strokeColor, &strokeCell.opacity); // This is not useful!
         m_canvasDev->colorSpace()->toQColor(can_it_main.rawData(), &canvasColor, &canvasCell.opacity);
 
         if (strokeCell.opacity) {
-            strokeCell.wetness = force * m_info["Wetness"];
-            strokeCell.mixability = force * m_info["Mixability"] * strokeCell.wetness;
-            strokeCell.pigmentConcentration = force * m_info["PigmentConcentration"];
-            strokeCell.reflectivity = force * m_info["Reflectivity"] * strokeCell.wetness;
-            strokeCell.viscosity = force * m_info["Viscosity"] / strokeCell.wetness;
-            strokeCell.volume = force * m_info["PaintVolume"];
+            // Initializing stroke cell
+            strokeCell.wetness = m_info["Wetness"];
+            strokeCell.mixability = m_info["Mixability"] * strokeCell.wetness;
+            strokeCell.pigmentConcentration = m_info["PigmentConcentration"];
+            strokeCell.reflectivity = m_info["Reflectivity"] * strokeCell.wetness;
+            strokeCell.viscosity = m_info["Viscosity"] / strokeCell.wetness;
+            strokeCell.volume = m_info["PaintVolume"];
+            strokeCell.canvasAdsorbency = m_info["CanvasAdsorbency"];
             strokeCell.setRgb(strokeColor.red(),
-                               strokeColor.green(),
-                               strokeColor.blue());
+                              strokeColor.green(),
+                              strokeColor.blue());
+
+//            kDebug() << "STROKE CELL!!!!!" << endl;
+//            strokeCell.debug();
+
             if (canvasCell.opacity) {
-//                 canvasCell.cadsorb = (float)*can_it_adso.rawData() / 255.0;
+                // Loading canvas cell
+                canvasCell.canvasAdsorbency = (float)*can_it_adso.rawData() / 255.0;
                 canvasCell.mixability = (float)*can_it_mixa.rawData() / 255.0;
-                canvasCell.pigmentConcentration = (float)*can_it_pigm.rawData() / 255.0;
+                canvasCell.pigmentConcentration = (float)*can_it_pigm.rawData();
                 canvasCell.reflectivity = (float)*can_it_refl.rawData() / 255.0;
                 canvasCell.viscosity = (float)*can_it_visc.rawData() / 255.0;
-                canvasCell.volume = (float)*can_it_volu.rawData() / 255.0;
+                canvasCell.volume = (float)*can_it_volu.rawData();
                 canvasCell.wetness = (float)*can_it_wetn.rawData() / 255.0;
                 canvasCell.setRgb(canvasColor.red(),
                                    canvasColor.green(),
                                    canvasColor.blue());
 
-                strokeCell.mixUsingRgb(canvasCell);
-//                 strokeCell.mixUsingHls(canvasCell);
-//                 strokeCell.mixUsingCmy(canvasCell);
+//                 kDebug() << "CANVAS CELL!!!!!" << endl;
+//                 canvasCell.debug();
+
+                strokeCell.mixProperties(canvasCell, force);
+//                 kDebug() << "--------------------------" << endl
+//                          << "DOPO LE PROPERTIES" << endl
+//                          << "----                  ----" << endl;
+//                 strokeCell.debug();
+
+                strokeCell.mixColorsUsingRgb(canvasCell, force);
+//                 kDebug() << "--------------------------" << endl
+//                          << "DOPO IL MIXING" << endl
+//                          << "----                  ----" << endl;
+//                 strokeCell.debug();
+//                 strokeCell.mixColorsUsingHls(canvasCell);
+//                 strokeCell.mixColorsUsingCmy(canvasCell);
 
                 strokeColor.setRgb(strokeCell.red, strokeCell.green, strokeCell.blue);
             }
             stroke->colorSpace()->fromQColor(strokeColor, strokeCell.opacity, it_main.rawData());
 
+            *it_adso.rawData() = (quint8)(strokeCell.canvasAdsorbency*255.0);
             *it_wetn.rawData() = (quint8)(strokeCell.wetness*255.0);
-            *it_volu.rawData() = (quint8)(strokeCell.volume*255.0);
+            *it_volu.rawData() = (quint8)(strokeCell.volume);
             *it_visc.rawData() = (quint8)(strokeCell.viscosity*255.0);
             *it_refl.rawData() = (quint8)(strokeCell.reflectivity*255.0);
             *it_pigm.rawData() = (quint8)(strokeCell.pigmentConcentration*255.0);

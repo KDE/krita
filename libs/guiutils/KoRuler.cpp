@@ -32,12 +32,72 @@
 
 #include <KoViewConverter.h>
 
-class KoTabChooser : public QWidget {
+class KoRulerTabChooser : public QWidget {
     public:
-        KoTabChooser() {}
-        virtual ~KoTabChooser() {}
+        KoRulerTabChooser(QWidget *parent) : QWidget(parent), m_type(KoRuler::LeftTab) {}
+        virtual ~KoRulerTabChooser() {}
         KoRuler::TabType type() {return m_type;}
-        void mousePressEvent( QMouseEvent *e ) {}
+        void mousePressEvent(QMouseEvent *)
+        {
+            switch(m_type) {
+            case KoRuler::LeftTab:
+                m_type = KoRuler::RightTab;
+                break;
+            case KoRuler::RightTab:
+                m_type = KoRuler::CenterTab;
+                break;
+            case KoRuler::CenterTab:
+                m_type = KoRuler::DelimiterTab;
+                break;
+            case KoRuler::DelimiterTab:
+                m_type = KoRuler::LeftTab;
+                break;
+            }
+            update();
+        }
+
+        void paintEvent(QPaintEvent *)
+        {
+            QPainter painter(this);
+            QPolygonF polygon;
+
+            painter.setPen(palette().color(QPalette::Text));
+            painter.setBrush(palette().color(QPalette::Text));
+            painter.setRenderHint( QPainter::Antialiasing );
+
+            double x= width()/2;
+            painter.translate(0,-height()/2+5);
+
+            switch (m_type) {
+            case KoRuler::LeftTab:
+                polygon << QPointF(x+0.5, height() - 8.5)
+                    << QPointF(x-5.5, height() - 2.5)
+                    << QPointF(x+0.5, height() - 2.5);
+                painter.drawPolygon(polygon);
+                break;
+            case KoRuler::RightTab:
+                polygon << QPointF(x+0.5, height() - 8.5)
+                    << QPointF(x+6.5, height() - 2.5)
+                    << QPointF(x+0.5, height() - 2.5);
+                painter.drawPolygon(polygon);
+                break;
+            case KoRuler::CenterTab:
+                polygon << QPointF(x+0.5, height() - 8.5)
+                    << QPointF(x-5.5, height() - 2.5)
+                    << QPointF(x+6.5, height() - 2.5);
+                painter.drawPolygon(polygon);
+                break;
+            case KoRuler::DelimiterTab:
+                polygon << QPointF(x-5.5, height() - 2.5)
+                    << QPointF(x+0.5, height() - 8.5)
+                    << QPointF(x+6.5, height() - 2.5);
+                painter.drawPolyline(polygon);
+                break;
+            default:
+                break;
+            }
+            painter.setRenderHint( QPainter::Antialiasing, false );
+        }
 
     private:
         KoRuler::TabType m_type;
@@ -75,7 +135,7 @@ class KoRulerPrivate {
         int m_selected;
         int m_selectOffset;
 
-        KoTabChooser *m_tabChooser;
+        KoRulerTabChooser *m_tabChooser;
 };
 
 
@@ -101,7 +161,7 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     d->m_selected = 0;
 
     if(orientation == Qt::Horizontal) {
-        d->m_tabChooser = new KoTabChooser;
+        d->m_tabChooser = new KoRulerTabChooser(parent);
     } else {
         d->m_tabChooser = 0;
     }
@@ -738,7 +798,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         // still haven't found something so let assume the user wants to add a tab
         double tabpos = d->m_viewConverter->viewToDocumentX(pos.x() - d->m_offset)
                     - d->m_activeRangeStart;
-        Tab t = {tabpos, LeftTab};
+        Tab t = {tabpos, d->m_tabChooser->type()};
         d->m_tabs.append(t);
         d->m_selectOffset = 0;
         d->m_selected = 4;

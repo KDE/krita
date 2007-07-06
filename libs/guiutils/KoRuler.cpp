@@ -32,10 +32,10 @@
 
 #include <KoViewConverter.h>
 
-class KoRulerTabChooser : public QWidget {
+class RulerTabChooser : public QWidget {
     public:
-        KoRulerTabChooser(QWidget *parent) : QWidget(parent), m_type(KoRuler::LeftTab) {}
-        virtual ~KoRulerTabChooser() {}
+        RulerTabChooser(QWidget *parent) : QWidget(parent), m_type(KoRuler::LeftTab) {}
+        virtual ~RulerTabChooser() {}
         KoRuler::TabType type() {return m_type;}
         void mousePressEvent(QMouseEvent *)
         {
@@ -96,7 +96,6 @@ class KoRulerTabChooser : public QWidget {
             default:
                 break;
             }
-            painter.setRenderHint( QPainter::Antialiasing, false );
         }
 
     private:
@@ -135,7 +134,7 @@ class KoRulerPrivate {
         int m_selected;
         int m_selectOffset;
 
-        KoRulerTabChooser *m_tabChooser;
+        RulerTabChooser *m_tabChooser;
 };
 
 
@@ -161,7 +160,7 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     d->m_selected = 0;
 
     if(orientation == Qt::Horizontal) {
-        d->m_tabChooser = new KoRulerTabChooser(parent);
+        d->m_tabChooser = new RulerTabChooser(parent);
     } else {
         d->m_tabChooser = 0;
     }

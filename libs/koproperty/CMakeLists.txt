@@ -1,6 +1,5 @@
 
 
-add_subdirectory( editors )
 add_subdirectory( test )
 
 include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty/editors ${KOMAIN_INCLUDES} )

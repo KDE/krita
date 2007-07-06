@@ -95,8 +95,16 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule* const module, const QStringL
     if( ! partname.isNull() && Kross::Manager::self().property(partname) == QVariant::Invalid ) {
         QStringList files = KGlobal::dirs()->findAllResources("data", partname + "/scripts/*.rc");
         Kross::Manager::self().setProperty(partname, files);
-        foreach(QString file, files)
+
+        //TODO find a better way...
+        if( files.count() > 0 )
+            Kross::Manager::self().actionCollection()->readXmlFile(files[0]);
+/*
+        foreach(QString file, files) {
+            kDebug()<<"################################################# KoScriptingPart Loading: "<<file<<endl;
             Kross::Manager::self().actionCollection()->readXmlFile(file);
+        }
+*/
     }
 
     KoView* view = d->module->view();
@@ -142,16 +150,6 @@ bool KoScriptingPart::showExecuteScriptFile()
     return filedialog->exec() ? Kross::Manager::self().executeScriptFile( filedialog->selectedUrl().path() ) : false;
 }
 
-KDialog* KoScriptingPart::showScriptManager()
-{
-    KDialog* dialog = new KDialog();
-    dialog->setCaption( i18n("Script Manager") );
-    dialog->setButtons( KDialog::Ok | KDialog::Cancel );
-    dialog->setMainWidget( new KoScriptManagerCollection(dialog->mainWidget()) );
-    dialog->resize( QSize(520, 380).expandedTo( dialog->minimumSizeHint() ) );
-    return dialog;
-}
-
 void addMenu(QMenu* menu, Kross::ActionCollection* collection)
 {
     foreach(Kross::Action* a, collection->actions())
@@ -176,22 +174,8 @@ void KoScriptingPart::slotShowExecuteScriptFile()
 
 void KoScriptingPart::slotShowScriptManager()
 {
-    KDialog* dialog = showScriptManager();
-    int result = dialog->exec();
-    /*
-    if ( view->isModified() ) {
-        if( result == QDialog::Accepted ) { //&& dialog->result() == KDialog::Ok ) {
-            // save new config
-            Manager::self().writeConfig();
-        }
-        else {
-            // restore old config
-            Manager::self().readConfig();
-        }
-        QMetaObject::invokeMethod(&Manager::self(), "configChanged");
-    }
-    */
-    Q_UNUSED(result);
+    KoScriptManagerDialog* dialog = new KoScriptManagerDialog();
+    dialog->exec();
     dialog->delayedDestruct();
 }
 

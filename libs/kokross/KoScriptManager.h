@@ -98,4 +98,16 @@ class KoScriptManagerCollection : public QWidget
         Private* const d;
 };
 
+class KoScriptManagerDialog : public KDialog
+{
+        Q_OBJECT
+    public:
+        explicit KoScriptManagerDialog();
+        virtual ~KoScriptManagerDialog();
+    private Q_SLOTS:
+        void slotAccepted();
+    private:
+        KoScriptManagerCollection* m_collection;
+};
+
 #endif

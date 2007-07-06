@@ -33,6 +33,7 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QTreeView>
 #include <QtCore/QSignalMapper>
+#include <QtCore/QFileInfo>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -275,5 +276,40 @@ bool KoScriptManagerModule::uninstallPackage(Action* action)
     return true;
 }
 #endif
+
+KoScriptManagerDialog::KoScriptManagerDialog()
+    : KDialog()
+{
+    setCaption( i18n("Script Manager") );
+    setButtons( KDialog::Ok | KDialog::Cancel );
+    m_collection = new KoScriptManagerCollection( mainWidget() );
+    setMainWidget(m_collection);
+    resize( QSize(520, 380).expandedTo( minimumSizeHint() ) );
+    connect(this, SIGNAL(accepted()), this, SLOT(slotAccepted()));
+}
+
+KoScriptManagerDialog::~KoScriptManagerDialog()
+{
+}
+
+void KoScriptManagerDialog::slotAccepted()
+{
+    kDebug()<<"KoScriptManagerDialog::slotAccepted()"<<endl;
+
+    //QByteArray partname = componentData().componentName().toUtf8(); //KApplication::kApplication()->objectName()
+    QString partname = KApplication::kApplication()->objectName();
+    if( ! partname.isNull() ) {
+        const QString dir = KGlobal::dirs()->saveLocation("data", partname + "/scripts/");
+        if( ! dir.isEmpty() ) {
+            const QString file = QFileInfo(dir, "scripts.rc").absoluteFilePath();
+            QFile f(file);
+            if( f.open(QIODevice::WriteOnly) ) {
+                if( Kross::Manager::self().actionCollection()->writeXml(&f) )
+                    kDebug()<<"KoScriptManagerDialog: Successfully saved file: "<<file<<endl;
+            } else kDebug()<<"KoScriptManagerDialog: Failed to save file: "<<file<<endl;
+            f.close();
+        } else kDebug()<<"..1"<<endl;
+    } else kDebug()<<"..3"<<endl;
+}
 
 #include "KoScriptManager.moc"

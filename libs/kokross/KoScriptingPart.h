@@ -69,12 +69,6 @@ class KOKROSS_EXPORT KoScriptingPart : public KParts::Plugin
         */
         static bool showExecuteScriptFile();
 
-        /**
-        * \return a \a KDialog instance that can be used to show the "Script Manager" dialog
-        * that allows to manage the collection of all scripts the application knows about.
-        */
-        static KDialog* showScriptManager();
-
     protected Q_SLOTS:
 
         /**

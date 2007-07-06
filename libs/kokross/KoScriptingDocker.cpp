@@ -20,6 +20,7 @@
 #include "KoScriptingDocker.h"
 #include "KoScriptingModule.h"
 #include "KoScriptingPart.h"
+#include "KoScriptManager.h"
 
 #include <QToolBar>
 #include <QBoxLayout>
@@ -153,7 +154,7 @@ KoScriptingDocker::~KoScriptingDocker()
 
 void KoScriptingDocker::slotShowScriptManager()
 {
-    KDialog* dialog = KoScriptingPart::showScriptManager();
+    KoScriptManagerDialog* dialog = new KoScriptManagerDialog();
     dialog->exec();
     dialog->delayedDestruct();
 }

@@ -188,7 +188,7 @@ bool KisPainterlyMixer::isCurrentPaintOpPainterly()
     // Is there a cleaner way to do this?!
     KisPainter painter(m_canvas->device());
     KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(
-                          m_resources->resource(KisResourceProvider::CurrentPaintop).value<KoID>(),
+                          m_resources->resource(KisResourceProvider::CurrentPaintop).value<KoID>().id(),
                           static_cast<KisPaintOpSettings*>(m_resources->resource(KisResourceProvider::CurrentPaintopSettings).value<void*>()),
                           &painter, 0);
     painter.setPaintOp(current);

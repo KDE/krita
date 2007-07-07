@@ -87,5 +87,16 @@ add_test(krita-image-KisImage_View_ConverterTest KisImage_View_ConverterTest)
 
 ########### next target ###############
 
+set(kis_selection_bltmask_test_SRCS kis_selection_bltmask_test.cpp )
+
+kde4_automoc(${kis_selection_bltmask_test_SRCS})
+
+kde4_add_executable(Kis_Selection_BltMask_Test RUN_UNINSTALLED ${kis_selection_bltmask_test_SRCS})
+
+target_link_libraries(Kis_Selection_BltMask_Test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
+
+add_test(krita-image-Selection-BltMask-Test Kis_Selection_BltMask_Test)
+
+########### next target ###############
 
 endif(KDE4_BUILD_TESTS)

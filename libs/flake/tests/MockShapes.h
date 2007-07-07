@@ -1,7 +1,7 @@
 #include <KoShapeGroup.h>
 #include <KoCanvasBase.h>
 #include <KoShapeControllerBase.h>
-#include <QPainter.h>
+#include <QPainter>
 
 #include "kdebug.h"
 

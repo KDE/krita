@@ -16,11 +16,11 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <KoTextEditingRegistry.h>
-
 #include "AutocorrectPlugin.h"
 #include "AutocorrectFactory.h"
 #include <kgenericfactory.h>
+
+#include <KoTextEditingRegistry.h>
 
 K_EXPORT_COMPONENT_FACTORY(autocorrect,
                            KGenericFactory<AutocorrectPlugin>( "AutocorrectPlugin" ) )

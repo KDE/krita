@@ -16,12 +16,11 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "ChangecasePlugin.h"
+#include "ChangecaseFactory.h"
 
 #include <KoTextEditingRegistry.h>
 #include <kgenericfactory.h>
-
-#include "ChangecasePlugin.h"
-#include "ChangecaseFactory.h"
 
 K_EXPORT_COMPONENT_FACTORY(changecase,
         KGenericFactory<ChangecasePlugin>( "ChangecasePlugin" ) )

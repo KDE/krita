@@ -16,6 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef DATEVARIABLE_H
+#define DATEVARIABLE_H
 
 #include <KoVariable.h>
 
@@ -58,3 +60,5 @@ private:
     QDateTime m_time;
     int m_offset;
 };
+
+#endif

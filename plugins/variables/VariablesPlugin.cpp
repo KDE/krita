@@ -16,11 +16,11 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <KoInlineObjectRegistry.h>
-
 #include "VariablesPlugin.h"
 #include "DateVariableFactory.h"
 #include <kgenericfactory.h>
+
+#include <KoInlineObjectRegistry.h>
 
 K_EXPORT_COMPONENT_FACTORY(textvariables,
                            KGenericFactory<VariablesPlugin>( "VariablesPlugin" ) )

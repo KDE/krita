@@ -210,11 +210,11 @@ bool Autocorrect::autoFractions() {
     QString trimmed = m_word.trimmed();
 
     if (trimmed == QString("1/2"))
-        m_word.replace(0, 3, QString("½"));
+        m_word.replace(0, 3, QString("Â½"));
     else if (trimmed == QString("1/4"))
-        m_word.replace(0, 3, QString("¼"));
+        m_word.replace(0, 3, QString("Â¼"));
     else if (trimmed == QString("3/4"))
-        m_word.replace(0, 3, QString("¾"));
+        m_word.replace(0, 3, QString("Â¾"));
     else
         return false;
 
@@ -251,7 +251,7 @@ void Autocorrect::replaceSingleQuotes() {
     // TODO
 }
 
-QString Autocorrect::autoDetectURL(QString word) const
+QString Autocorrect::autoDetectURL(const QString &word) const
 {
     /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doAutoDetectUrl
      * from KOffice 1.x branch */

@@ -106,6 +106,7 @@ protected:
     virtual void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
     KisPainter* painter();
     KisPaintDeviceSP source();
+
 private:
     Private* const d;
 };

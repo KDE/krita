@@ -25,13 +25,14 @@
 #include <QRegion>
 #include <QBitArray>
 
-#include <kis_shared.h>
+#include <kdebug.h>
 #include <kurl.h>
 
 #include "KoUnit.h"
 
 #include "kis_global.h"
 #include "kis_types.h"
+#include "kis_shared.h"
 
 #include <krita_export.h>
 
@@ -105,8 +106,7 @@ public:
 
     /**
      * Unlock the image to make sure the rest of Krita learns about changes in the image
-     * again. If the rootLayer is dirty on unlocking, an imgUpdated signal is sent out
-     * immediately.
+     * again.
      */
     void unlock();
 
@@ -359,7 +359,7 @@ public:
      * @param layer the layer to be added
      * @param parent the parent layer
      */
-    bool addLayer(KisLayerSP layer, KisGroupLayerSP parent);
+    bool addLayer(KisLayerSP layer, KisGroupLayerSP parent = 0);
 
     /**
      * Add already existing layer to image.
@@ -370,9 +370,6 @@ public:
      *                  parent, add this layer above the specified sibling.
      *                  if 0, the layer is put in the lowermost position in
      *                  its group.
-     * @param notify If true, the image is immediately recomposited, if false,
-     *               no recomposition is done yet. The added layer is all
-     *
      * returns false if adding the layer didn't work, true if the layer got added
      */
     bool addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
@@ -481,11 +478,36 @@ signals:
     /// Emitted after a layer's properties (visible, locked, opacity, composite op, name, ...) change
     void sigLayerPropertiesChanged(KisLayerSP layer);
 
-    /** Emitted when the list of layers has changed completely.
-        This means e.g. when the image is flattened, but not when it is rotated,
-        as the layers only change internally then.
-    */
+    /**
+     * Emitted when the list of layers has changed completely.
+     * This means e.g. when the image is flattened, but not when it is rotated,
+     * as the layers only change internally then.
+     */
     void sigLayersChanged(KisGroupLayerSP rootLayer);
+
+    /**
+     * Emitted after a mask is added to the specified parent layer.
+     */
+    void sigMaskAdded( KisMaskSP mask, KisLayerSP parent );
+
+    /**
+     * Emitted after a mask is removed. The mask still exists, but the
+     * parent does no longer have a reference to it
+     */
+    void sigMaskRemoved( KisMaskSP mask, KisLayerSP wasParent, KisMaskSP wasAboveThis );
+
+    /**
+     * Emitted after a mask has been moved to a different position
+     * under its parent layer, or when it has changed to a new parent
+     * layer. The mask already has a reference to its new parent layer.
+     */
+    void sigMaskMoved( KisMaskSP mask, KisLayerSP previousParent, KisMaskSP wasAboveThis );
+
+    /**
+     * Emitted after the properties of a mask (active, filter config,
+     * etc) have changed
+     */
+    void sigMaskPropertiesChanged( KisMaskSP mask );
 
     /**
        Emitted whenever an action has caused the image to be
@@ -504,9 +526,6 @@ signals:
     void sigSizeChanged(qint32 w, qint32 h);
     void sigProfileChanged(KoColorProfile *  profile);
     void sigColorSpaceChanged(KoColorSpace*  cs);
-
-    /// Emitted when any layer's mask info got updated (or when the current layer changes)
-    void sigMaskInfoChanged();
 
     friend class KisGroupLayer; // Allow the group layer to emit these
                                 // signals for us. This is a bit

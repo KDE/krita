@@ -455,6 +455,7 @@ void KisLayer::addEffectMask( KisMaskSP mask, int i )
     if ( i < 0 ) i = 0;
 
     m_d->effectMasks.insert( i, mask );
+    mask->setParentLayer( this );
 }
 
 void KisLayer::addEffectMask( KisMaskSP mask,  KisMaskSP aboveThis )
@@ -468,11 +469,14 @@ void KisLayer::removeEffectMask( KisMaskSP mask )
     int i = m_d->effectMasks.indexOf( mask );
     if ( i > -1 && i < m_d->effectMasks.size() )
         m_d->effectMasks.removeAt( i );
+    mask->setParentLayer( 0 );
 
 }
 
 void KisLayer::removeEffectMask( int index )
 {
+    KisMaskSP mask = m_d->effectMasks.at( index );
+    mask->setParentLayer( 0 );
     m_d->effectMasks.removeAt( index );
 }
 

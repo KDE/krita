@@ -57,8 +57,6 @@ void KisThreadedApplicatorTest::testApplication()
 
     KisPaintDeviceSP test = new KisPaintDevice( colorSpace, "test" );
     KisThreadedApplicator applicator( test, QRect( 0, 0, 1000, 1000 ), &factory);
-//    connect( &applicator, SIGNAL( jobDone( ThreadWeaver::Job ) ),
-//    this, SLOT( jobDone() ) );
     applicator.execute();
 }
 

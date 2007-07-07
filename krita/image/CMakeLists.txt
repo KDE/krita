@@ -28,7 +28,6 @@ set(kritaimage_LIB_SRCS
    kis_recorded_paint_actions.cc
    kis_threaded_applicator.cpp
    kis_projection.cc
-   kis_pigment_concentration_mask.cpp
    kis_adjustment_layer.cc
    kis_paint_engine.cc
    kis_progress_subject.cc
@@ -38,6 +37,8 @@ set(kritaimage_LIB_SRCS
    kis_boundary.cc
    kis_brush.cc
    kis_convolution_painter.cc
+   kis_painterly_overlay.cpp
+   kis_painterly_overlay_colorspace.cpp
    kis_fill_painter.cc
    kis_filter.cc
    kis_filter_registry.cc
@@ -76,22 +77,14 @@ set(kritaimage_LIB_SRCS
    kis_perspective_grid.cpp
    kis_perspective_math.cpp
    kis_mask.cc
-   kis_adsorbency_mask.cc
    kis_transparency_mask.cc
    kis_effect_mask.cc
-   kis_gravity_mask.cc
-   kis_height_mask.cc
-   kis_viscosity_mask.cc
-   kis_wetness_mask.cc
-   kis_volume_mask.cc
-   kis_mixability_mask.cc
    kis_progress_updater.cpp
    kis_progress_updater_p.cpp
    kis_image_view_converter.cpp
    kis_image_commands.cc
    kis_layer_commands.cc
    kis_undo_adapter.cc
-   kis_reflectivity_mask.cpp
    kis_transformation_mask.cpp
    kis_clone_layer.cpp
    kis_pixel_selection.cpp

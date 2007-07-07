@@ -238,6 +238,7 @@ public:
     /**
      * A version of bitBlt that renders using an external mask, ignoring
      * the src device's own selection, if it has one.
+     *
      * @param dx the destination x-coordinate
      * @param dy the destination y-coordinate
      * @param op  a pointer to the composite op use to blast the pixels from src on dst

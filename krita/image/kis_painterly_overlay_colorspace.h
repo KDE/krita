@@ -60,7 +60,9 @@ class KRITAIMAGE_EXPORT KisPainterlyOverlayColorSpace
 
 public:
 
-    virtual ~KisPainterlyOverlayColorSpace();
+    virtual ~KisPainterlyOverlayColorSpace()
+        {
+        };
 
     static KisPainterlyOverlayColorSpace* instance();
 

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,6 +28,7 @@ class KisImageTester : public QObject
 
 private slots:
 
+    void layerTests();
     void mergeTests();
 };
 

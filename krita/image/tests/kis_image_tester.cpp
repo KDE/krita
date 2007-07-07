@@ -19,7 +19,7 @@
 #include <QApplication>
 
 #include <qtest_kde.h>
-#include <KoColorSpace.h>
+
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
@@ -31,6 +31,18 @@
 
 #define IMAGE_WIDTH 1
 #define IMAGE_HEIGHT 1
+
+void KisImageTester::layerTests()
+{
+    KisImageSP image = new KisImage( 0, IMAGE_WIDTH, IMAGE_WIDTH, 0, "layer tests" );
+    QVERIFY( image->rootLayer() != 0 );
+    QVERIFY( image->rootLayer()->firstChild() == 0 );
+
+    KisLayerSP layer = new KisPaintLayer( image, "layer 1", OPACITY_OPAQUE );
+    image->addLayer( layer );
+
+    QVERIFY( image->rootLayer()->firstChild() == layer );
+}
 
 void KisImageTester::mergeTests()
 {

@@ -25,7 +25,7 @@
 #include "kis_painterly_overlay_colorspace.h"
 #include <krita_export.h>
 
-class KisPainterlyOverlay : public KisPaintDevice {
+class KRITAIMAGE_EXPORT KisPainterlyOverlay : public KisPaintDevice {
 
 Q_OBJECT
 

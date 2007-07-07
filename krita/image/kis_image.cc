@@ -199,11 +199,8 @@ void KisImage::rollBackLayerName()
 
 void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace)
 {
-    Q_ASSERT(colorSpace);
-
     if (colorSpace == 0) {
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-        kWarning(41010) << "No colorspace specified: using RGBA\n";
     }
 
     m_d = new KisImagePrivate();
@@ -229,9 +226,6 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
     m_d->width = width;
     m_d->height = height;
 
-    blockSignals( this );
-    lock();
-
     m_d->recorder = new KisActionRecorder;
 }
 
@@ -247,6 +241,7 @@ void KisImage::lock()
             m_d->projection->lock();
         m_d->sizeChangedWhileLocked = false;
         m_d->selectionChangedWhileLocked = false;
+        blockSignals( true );
     }
     m_d->lockCount++;
 }
@@ -259,6 +254,8 @@ void KisImage::unlock()
         m_d->lockCount--;
 
         if (m_d->lockCount == 0) {
+            blockSignals( false );
+
             if (m_d->sizeChangedWhileLocked) {
                 emit sigSizeChanged(m_d->width, m_d->height);
             }
@@ -629,16 +626,20 @@ void KisImage::setLayerProperties(KisLayerSP layer, quint8 opacity, const KoComp
 
 KisGroupLayerSP KisImage::rootLayer() const
 {
+    Q_ASSERT( m_d->rootLayer );
     return m_d->rootLayer;
 }
 
 KisPaintDeviceSP KisImage::projection()
 {
+    Q_ASSERT( m_d->rootLayer );
+    Q_ASSERT( m_d->rootLayer->projection() );
     return m_d->rootLayer->projection();
 }
 
 KisProjection * KisImage::projectionManager()
 {
+    Q_ASSERT( m_d->projection );
     return m_d->projection;
 }
 
@@ -655,6 +656,8 @@ KisLayerSP KisImage::findLayer(int id) const
 
 void KisImage::preparePaintLayerAfterAdding( KisLayerSP layer )
 {
+    kDebug() << "preparePaintLayerAfterAdding " << layer << endl;
+
     KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(layer.data()));
     if (!player.isNull()) {
 
@@ -665,13 +668,14 @@ void KisImage::preparePaintLayerAfterAdding( KisLayerSP layer )
             actions.at(i)->act(player.data()->paintDevice(), width(), height());
         }
 
-        connect(player.data(), SIGNAL(sigMaskInfoChanged()),
-                this, SIGNAL(sigMaskInfoChanged()));
     }
 
     if (layer->extent().isValid()) layer->setDirty();
 
+    // Despite the name of the function, this signal is emitted for
+    // every added layer.
     if (!layer->temporary()) {
+        kDebug() << "Emitting sigLayerAdded for " << layer << endl;
         emit sigLayerAdded(layer);
     }
 }
@@ -680,8 +684,9 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent)
 {
     if ( parent )
         return addLayer( layer, parent, parent->firstChild() );
-    else
+    else {
         return addLayer( layer, rootLayer(), rootLayer()->firstChild() );
+    }
 }
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
@@ -726,11 +731,6 @@ bool KisImage::removeLayer(KisLayerSP layer)
                 l = l->nextSibling();
             }
             unlock();
-        }
-        KisPaintLayerSP player = dynamic_cast<KisPaintLayer*>(layer.data());
-        if (player.isNull()) {
-            disconnect(player.data(), SIGNAL(sigMaskInfoChanged()),
-                       this, SIGNAL(sigMaskInfoChanged()));
         }
 
         KisLayerSP l = layer->prevSibling();
@@ -975,7 +975,6 @@ QImage KisImage::convertToQImage(const QRect& r, const double xScale, const doub
     quint8 *imageRow = new quint8[srcRect.width() * pixelSize];
     const qint32 imageRowX = srcRect.x();
 
-    qDebug( "Created temporary memory areas: %d",  t.elapsed() );
     t.restart();
 
     for (qint32 y = 0; y < r.height(); ++y) {
@@ -1001,7 +1000,6 @@ QImage KisImage::convertToQImage(const QRect& r, const double xScale, const doub
         }
     }
 
-    qDebug( "Created scaled image data : %d",  t.elapsed() );
     t.restart();
     delete [] imageRow;
 
@@ -1023,8 +1021,6 @@ QImage KisImage::convertToQImage(const QRect& r, const double xScale, const doub
       data += 4;
     }
 #endif
-    qDebug( "Converted to QImage: %d",  t.elapsed() );
-
     return image;
 }
 #endif

@@ -141,7 +141,7 @@ KisLayerSP KisGroupLayer::at(int index) const
 {
     if (childCount() && index >= 0 && qBound(uint(0), uint(index), childCount() - 1) == uint(index))
         return m_layers.at(reverseIndex(index));
-    return KisLayerSP(0);
+    return 0;
 }
 
 int KisGroupLayer::index(KisLayerSP layer) const

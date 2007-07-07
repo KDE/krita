@@ -24,12 +24,12 @@
 #include <threadweaver/Job.h>
 
 #include "kis_types.h"
-
+#include <krita_export.h>
 /**
    A threadweaver job that knows about paint devices and rects. Note
    that it is the task of the job implementation to handle the margin!
  */
-class KisJob : public ThreadWeaver::Job
+class KRITAIMAGE_EXPORT KisJob : public ThreadWeaver::Job
 {
 public:
 
@@ -44,9 +44,11 @@ public:
 
     virtual ~KisJob() {}
 
-    /// done() is called when the job is done
+    /**
+     * Reimplement this method if you need something done whenever the
+     * job is done.
+     */
     virtual void jobDone() = 0;
-
 protected:
 
     KisPaintDeviceSP m_dev;
@@ -57,7 +59,7 @@ protected:
 /**
    Implement this interface to create the specific jobs you need.
  */
-class KisJobFactory {
+class KRITAIMAGE_EXPORT KisJobFactory {
 
 public:
 
@@ -73,7 +75,7 @@ public:
    paint device and creates threadweaver jobs for as many subrects as
    are needed to cover the whole paint device.
 */
-class KisThreadedApplicator : public QObject {
+class KRITAIMAGE_EXPORT KisThreadedApplicator : public QObject {
 
     Q_OBJECT
 

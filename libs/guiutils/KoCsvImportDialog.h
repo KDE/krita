@@ -51,7 +51,7 @@ public:
     };
 
     KoCsvImportDialog(QWidget* parent);
-    ~KoCsvImportDialog();
+    virtual ~KoCsvImportDialog();
 
     void     setData( const QByteArray& data);
     bool     firstRowContainHeaders();

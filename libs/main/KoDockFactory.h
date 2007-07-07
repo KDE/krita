@@ -38,16 +38,19 @@ public:
     /// @return the id of the dock widget
     virtual QString id() const = 0;
 
-    /// @return the name the dock widget (actually a null string);
-    /// needed only when used with KoGenericRegistry.
-    QString name() const { return QString(); }
-
     /// @return the dock widget area the widget should appear in by default
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const = 0;
 
     /// Creates the dock widget
     /// @return the created dock widget
     virtual QDockWidget* createDockWidget() = 0;
+
+#ifdef Q_CC_MSVC
+    /// @cond PRIVATE
+    /// Dummy method, needed only when used with KoGenericRegistry under msvc.
+    QString name() const { return QString(); }
+    /// @endcond
+#endif
 };
 
 #endif

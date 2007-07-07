@@ -2,14 +2,14 @@
 #define TESTDOCUMENTAYOUT_H
 
 #include <QObject>
+#include <QPainter>
 #include <qtest_kde.h>
 
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoShape.h>
+#include <KoViewConverter.h>
 
-class QPainter;
-class KoViewConverter;
 class MockTextShape;
 class QTextDocument;
 

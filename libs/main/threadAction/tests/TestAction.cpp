@@ -3,7 +3,7 @@
 #include <kdebug.h>
 #include <KoAction.h>
 #include <KoExecutePolicy.h>
-#include <ThreadWeaver.h>
+#include <threadweaver/ThreadWeaver.h>
 
 class TestAction::Notifier {
 public:

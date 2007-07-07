@@ -191,7 +191,8 @@ protected:
         virtual void debug( QString line ) const = 0;
 
     protected:
-        static QColor levelColor[];
+#define levelColorSize 5
+        static QColor levelColor[levelColorSize];
         virtual void paintRect( QPainter & p, int level ) const;
 #endif
     protected:
@@ -797,7 +798,7 @@ template <typename T>
 void KoRTree<T>::Node::paintRect( QPainter & p, int level ) const
 {
     QColor c( Qt::black );
-    if ( level < int( sizeof(levelColor) / sizeof(QColor) ) )
+    if ( level < levelColorSize )
     {
         c = levelColor[level];
     }

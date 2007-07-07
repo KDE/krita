@@ -268,4 +268,16 @@ KisImageSP KisTool::currentImage()
     return d->currentImage;
 }
 
+void KisTool::mousePressEvent( KoPointerEvent *event ) {
+    event->ignore();
+}
+
+void KisTool::mouseMoveEvent( KoPointerEvent *event ) {
+    event->ignore();
+}
+
+void KisTool::mouseReleaseEvent( KoPointerEvent *event ) {
+    event->ignore();
+}
+
 #include "kis_tool.moc"

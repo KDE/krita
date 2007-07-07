@@ -168,7 +168,6 @@ void KisControlFrame::slotBrushChanged(KisBrush * brush)
                 slotSetBrush( new KisIconItem(brush) );
         }
 
-        m_brushChooserPopup->hide();
 }
 
 void KisControlFrame::slotPatternChanged(KisPattern * pattern)
@@ -182,7 +181,6 @@ void KisControlFrame::slotPatternChanged(KisPattern * pattern)
         else
                 slotSetPattern( new KisIconItem(pattern) );
 
-        m_patternChooserPopup->hide();
 }
 
 
@@ -197,7 +195,6 @@ void KisControlFrame::slotGradientChanged(KisGradient * gradient)
         else
                 slotSetGradient( new KisIconItem(gradient) );
 
-        m_gradientChooserPopup->hide();
 }
 
 void KisControlFrame::createBrushesChooser(KisView2 * view)
@@ -212,8 +209,7 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
 
     m_brushesTab = new QTabWidget(m_brushChooserPopup);
     m_brushesTab->setObjectName("brushestab");
-    m_brushesTab->setTabShape(QTabWidget::Triangular);
-    m_brushesTab->setFocusPolicy(Qt::NoFocus);
+    m_brushesTab->setFocusPolicy(Qt::StrongFocus);
     m_brushesTab->setFont(m_font);
     m_brushesTab->setContentsMargins(1, 1, 1, 1);
 
@@ -283,7 +279,6 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
 
     m_patternsTab = new QTabWidget(m_patternChooserPopup);
     m_patternsTab->setObjectName("patternstab");
-    m_patternsTab->setTabShape(QTabWidget::Triangular);
     m_patternsTab->setFocusPolicy(Qt::NoFocus);
     m_patternsTab->setFont(m_font);
     m_patternsTab->setContentsMargins(1, 1, 1, 1);
@@ -331,7 +326,6 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
 
     m_gradientTab = new QTabWidget(m_gradientChooserPopup);
     m_gradientTab->setObjectName("gradientstab");
-    m_gradientTab->setTabShape(QTabWidget::Triangular);
     m_gradientTab->setFocusPolicy(Qt::NoFocus);
     m_gradientTab->setFont(m_font);
     m_gradientTab->setContentsMargins(1, 1, 1, 1);

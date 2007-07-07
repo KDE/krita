@@ -18,26 +18,13 @@
  */
 #include "TestKoShapeFactory.h"
 #include <qtest_kde.h>
-#include <QBuffer>
-#include <QFile>
-#include <QDateTime>
-#include <QProcess>
-#include <QString>
-#include <QTextStream>
-#include <QtXml>
-#include <QStringList>
 
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
-
-#include "KoShapeLoadingContext.h"
-#include "KoShapeRegistry.h"
-#include "KoPathShapeFactory.h"
-#include "KoShape.h"
-#include "KoShapeFactory.h"
-#include "KoShapeLoadingContext.h"
-#include "KoPathShape.h"
-#include <KoXmlReader.h>
+#include <KoShapeLoadingContext.h>
+#include <KoPathShapeFactory.h>
+#include <KoShape.h>
+#include <KoShapeFactory.h>
 #include <KoXmlNS.h>
 #include <kdebug.h>
 

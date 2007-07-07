@@ -42,6 +42,7 @@
 #include <KoGenStyle.h>
 #include <KoUnit.h>
 #include <KoOasisStyles.h>
+#include <KoOasisLoadingContext.h>
 
 #include <QPainter>
 #include <QVariant>
@@ -651,6 +652,8 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
             // TODO what do we do in the case the z-index is not there then the order in the doc
             // is the the order of the z-index
         }
+
+        setBackground( loadOdfFill( element, context ) );
     }
 
     if ( attributes & OdfSize ) {
@@ -673,6 +676,33 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
     }
 
     return true;
+}
+
+QBrush KoShape::loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
+    KoStyleStack &styleStack = context.koLoadingContext().styleStack();
+    QString fill;
+    if( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+    {
+        // fill the style stack with the shapes style
+        context.koLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "graphic" );
+        styleStack.setTypeProperties( "graphic" );
+        if( styleStack.hasProperty( KoXmlNS::draw, "fill" ) )
+            fill = styleStack.property( KoXmlNS::draw, "fill" );
+    }
+    else if( element.hasAttributeNS( KoXmlNS::presentation, "style-name" ) )
+    {
+        // fill the style stack with the shapes style
+        context.koLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
+        styleStack.setTypeProperties( "presentation" );
+        if ( styleStack.hasProperty( KoXmlNS::presentation, "fill" ) )
+            fill = styleStack.property( KoXmlNS::presentation, "fill" );
+    }
+
+    if ( fill == "solid" || fill == "hatch" )
+        return KoOasisStyles::loadOasisFillStyle( styleStack, fill, context.koLoadingContext().oasisStyles() );
+
+    return QBrush();
 }
 
 QMatrix KoShape::parseOdfTransform( const QString &transform )

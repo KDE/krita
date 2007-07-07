@@ -644,6 +644,9 @@ protected:
      */
     QString style( KoShapeSavingContext &context ) const;
 
+    /// Loads the fill style
+    QBrush loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context );
+
 /* ** end loading saving */
 
 

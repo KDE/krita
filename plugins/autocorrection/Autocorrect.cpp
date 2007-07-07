@@ -251,8 +251,10 @@ void Autocorrect::replaceSingleQuotes() {
     // TODO
 }
 
-QString Autocorrect::autoDetectURL(const QString &word) const
+QString Autocorrect::autoDetectURL(const QString &_word) const
 {
+    QString word = _word;
+
     /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doAutoDetectUrl
      * from KOffice 1.x branch */
     // kDebug() << "link:" << word << endl;

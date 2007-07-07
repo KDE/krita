@@ -1,5 +1,3 @@
-if(KDE4_BUILD_TESTS)
-
 include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
 ########### next target ###############
@@ -8,11 +6,9 @@ set(kis_layer_test_SRCS kis_layer_test.cpp )
 
 kde4_automoc(${kis_layer_test_SRCS})
 
-kde4_add_executable(KisLayerTest RUN_UNINSTALLED ${kis_layer_test_SRCS})
+kde4_add_unit_test(KisLayerTest TESTNAME krita-image-KisLayerTest  ${kis_layer_test_SRCS})
 
 target_link_libraries(KisLayerTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
-
-add_test(krita-image-KisLayerTest KisLayerTest)
 
 ########### next target ###############
 
@@ -20,11 +16,9 @@ set(kis_image_tester_SRCS kis_image_tester.cpp )
 
 kde4_automoc(${kis_image_tester_SRCS})
 
-kde4_add_executable(KisImageTester RUN_UNINSTALLED ${kis_image_tester_SRCS})
+kde4_add_unit_test(KisImageTester TESTNAME krita-image-KisImageTester  ${kis_image_tester_SRCS})
 
 target_link_libraries(KisImageTester  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
-
-add_test(krita-image-KisImageTester KisImageTester)
 
 ########### next target ###############
 
@@ -32,11 +26,9 @@ set(kis_integer_maths_tester_SRCS kis_integer_maths_tester.cpp )
 
 kde4_automoc(${kis_integer_maths_tester_SRCS})
 
-kde4_add_executable(KisIntegerMathsTester RUN_UNINSTALLED ${kis_integer_maths_tester_SRCS})
+kde4_add_unit_test(KisIntegerMathsTester TESTNAME krita-image-KisIntegerMathsTester  ${kis_integer_maths_tester_SRCS})
 
 target_link_libraries(KisIntegerMathsTester  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
-
-add_test(krita-image-KisIntegerMathsTester KisIntegerMathsTester)
 
 ########### next target ###############
 
@@ -44,11 +36,9 @@ set(kis_filter_configuration_tester_SRCS kis_filter_configuration_tester.cc )
 
 kde4_automoc(${kis_filter_configuration_tester_SRCS})
 
-kde4_add_executable(KisFilterConfigurationTester RUN_UNINSTALLED ${kis_filter_configuration_tester_SRCS})
+kde4_add_unit_test(KisFilterConfigurationTester TESTNAME krita-image-KisFilterConfigurationTester  ${kis_filter_configuration_tester_SRCS})
 
 target_link_libraries(KisFilterConfigurationTester  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
-
-add_test(krita-image-KisFilterConfigurationTester KisFilterConfigurationTester)
 
 ########### next target ###############
 
@@ -56,22 +46,18 @@ set(kis_effect_mask_test_SRCS kis_effect_mask_test.cpp )
 
 kde4_automoc(${kis_effect_mask_test_SRCS})
 
-kde4_add_executable(KisEffectMaskTest RUN_UNINSTALLED ${kis_effect_mask_test_SRCS})
+kde4_add_unit_test(KisEffectMaskTest TESTNAME krita-image-KisEffectMaskTest  ${kis_effect_mask_test_SRCS})
 
 target_link_libraries(KisEffectMaskTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
-
-add_test(krita-image-KisEffectMaskTest KisEffectMaskTest)
 
 ########### next target ###############
 set(kis_iterator_test_SRCS kis_iterator_test.cpp )
 
 kde4_automoc(${kis_iterator_test_SRCS})
 
-kde4_add_executable(KisIteratorTest RUN_UNINSTALLED ${kis_iterator_test_SRCS})
+kde4_add_unit_test(KisIteratorTest TESTNAME krita-image-KisIteratorTest  ${kis_iterator_test_SRCS})
 
 target_link_libraries(KisIteratorTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
-
-add_test(krita-image-KisIteratorTest KisIteratorTest)
 
 ########### next target ###############
 
@@ -79,11 +65,9 @@ set(kis_image_view_converter_test_SRCS kis_image_view_converter_test.cpp )
 
 kde4_automoc(${kis_image_view_converter_test_SRCS})
 
-kde4_add_executable(KisImage_View_ConverterTest RUN_UNINSTALLED ${kis_image_view_converter_test_SRCS})
+kde4_add_unit_test(KisImage_View_ConverterTest TESTNAME krita-image-KisImage_View_ConverterTest  ${kis_image_view_converter_test_SRCS})
 
 target_link_libraries(KisImage_View_ConverterTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
-
-add_test(krita-image-KisImage_View_ConverterTest KisImage_View_ConverterTest)
 
 ########### next target ###############
 
@@ -91,12 +75,8 @@ set(kis_selection_bltmask_test_SRCS kis_selection_bltmask_test.cpp )
 
 kde4_automoc(${kis_selection_bltmask_test_SRCS})
 
-kde4_add_executable(Kis_Selection_BltMask_Test RUN_UNINSTALLED ${kis_selection_bltmask_test_SRCS})
+kde4_add_unit_test(Kis_Selection_BltMask_Test TESTNAME krita-image-Selection-BltMask-Test ${kis_selection_bltmask_test_SRCS})
 
 target_link_libraries(Kis_Selection_BltMask_Test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
 
-add_test(krita-image-Selection-BltMask-Test Kis_Selection_BltMask_Test)
-
 ########### next target ###############
-
-endif(KDE4_BUILD_TESTS)

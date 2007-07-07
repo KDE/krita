@@ -1,6 +1,3 @@
-
-if(KDE4_BUILD_TESTS)
-
 include_directories( ${FLAKE_INCLUDES} )
 
 ########### next target ###############
@@ -9,11 +6,9 @@ set(TestPosition_test_SRCS TestPosition.cpp )
 
 kde4_automoc(${TestPosition_test_SRCS})
 
-kde4_add_executable(TestPosition RUN_UNINSTALLED ${TestPosition_test_SRCS})
+kde4_add_unit_test(TestPosition TESTNAME libs-flake-TestPosition ${TestPosition_test_SRCS})
 
 target_link_libraries(TestPosition  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
-
-add_test(libs-flake-TestPosition ${EXECUTABLE_OUTPUT_PATH}/TestPosition)
 
 ########### next target ###############
 
@@ -21,11 +16,9 @@ set(TestSelection_test_SRCS TestSelection.cpp )
 
 kde4_automoc(${TestSelection_test_SRCS})
 
-kde4_add_executable(TestSelection RUN_UNINSTALLED ${TestSelection_test_SRCS})
+kde4_add_unit_test(TestSelection TESTNAME libs-flake-TestSelection ${TestSelection_test_SRCS})
 
 target_link_libraries(TestSelection  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
-
-add_test(libs-flake-TestSelection ${EXECUTABLE_OUTPUT_PATH}/TestSelection)
 
 ########### next target ###############
 
@@ -33,11 +26,9 @@ set(TestPathShape_test_SRCS TestPathShape.cpp )
 
 kde4_automoc(${TestPathShape_test_SRCS})
 
-kde4_add_executable(TestPathShape RUN_UNINSTALLED ${TestPathShape_test_SRCS})
+kde4_add_unit_test(TestPathShape TESTNAME libs-flake-TestPathShape ${TestPathShape_test_SRCS})
 
 target_link_libraries(TestPathShape  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
-
-add_test(libs-flake-TestPathShape ${EXECUTABLE_OUTPUT_PATH}/TestPathShape)
 
 ########### next target ###############
 
@@ -45,11 +36,9 @@ set(TestPathTool_test_SRCS TestPathTool.cpp )
 
 kde4_automoc(${TestPathTool_test_SRCS})
 
-kde4_add_executable(TestPathTool RUN_UNINSTALLED ${TestPathTool_test_SRCS})
+kde4_add_unit_test(TestPathTool TESTNAME libs-flake-TestPathTool ${TestPathTool_test_SRCS})
 
 target_link_libraries(TestPathTool  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
-
-add_test(libs-flake-TestPathTool ${EXECUTABLE_OUTPUT_PATH}/TestPathTool)
 
 ########### next target ###############
 
@@ -57,11 +46,9 @@ set(TestControlPointMoveCommand_test_SRCS TestControlPointMoveCommand.cpp )
 
 kde4_automoc(${TestControlPointMoveCommand_test_SRCS})
 
-kde4_add_executable(TestControlPointMoveCommand RUN_UNINSTALLED ${TestControlPointMoveCommand_test_SRCS})
+kde4_add_unit_test(TestControlPointMoveCommand TESTNAME libs-flake-TestControlPointMoveCommand ${TestControlPointMoveCommand_test_SRCS})
 
 target_link_libraries(TestControlPointMoveCommand  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
-
-add_test(libs-flake-TestControlPointMoveCommand ${EXECUTABLE_OUTPUT_PATH}/TestControlPointMoveCommand)
 
 ########### next target ###############
 
@@ -69,11 +56,9 @@ set(TestPointTypeCommand_test_SRCS TestPointTypeCommand.cpp )
 
 kde4_automoc(${TestPointTypeCommand_test_SRCS})
 
-kde4_add_executable(TestPointTypeCommand RUN_UNINSTALLED ${TestPointTypeCommand_test_SRCS})
+kde4_add_unit_test(TestPointTypeCommand TESTNAME libs-flake-TestPointTypeCommand ${TestPointTypeCommand_test_SRCS})
 
 target_link_libraries(TestPointTypeCommand  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
-
-add_test(libs-flake-TestPointTypeCommand ${EXECUTABLE_OUTPUT_PATH}/TestPointTypeCommand)
 
 ########### next target ###############
 
@@ -81,11 +66,9 @@ set(TestPointRemoveCommand_test_SRCS TestPointRemoveCommand.cpp )
 
 kde4_automoc(${TestPointRemoveCommand_test_SRCS})
 
-kde4_add_executable(TestPointRemoveCommand RUN_UNINSTALLED ${TestPointRemoveCommand_test_SRCS})
+kde4_add_unit_test(TestPointRemoveCommand TESTNAME libs-flake-TestPointRemoveCommand  ${TestPointRemoveCommand_test_SRCS})
 
 target_link_libraries(TestPointRemoveCommand  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
-
-add_test(libs-flake-TestPointRemoveCommand ${EXECUTABLE_OUTPUT_PATH}/TestPointRemoveCommand)
 
 ########### next target ###############
 
@@ -93,11 +76,9 @@ set(TestRemoveSubpathCommand_test_SRCS TestRemoveSubpathCommand.cpp )
 
 kde4_automoc(${TestRemoveSubpathCommand_test_SRCS})
 
-kde4_add_executable(TestRemoveSubpathCommand RUN_UNINSTALLED ${TestRemoveSubpathCommand_test_SRCS})
+kde4_add_unit_test(TestRemoveSubpathCommand TESTNAME libs-flake-TestRemoveSubpathCommand ${TestRemoveSubpathCommand_test_SRCS})
 
 target_link_libraries(TestRemoveSubpathCommand  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
-
-add_test(libs-flake-TestRemoveSubpathCommand ${EXECUTABLE_OUTPUT_PATH}/TestRemoveSubpathCommand)
 
 ########### next target ###############
 
@@ -105,11 +86,9 @@ set(TestShapeAt_test_SRCS TestShapeAt.cpp )
 
 kde4_automoc(${TestShapeAt_test_SRCS})
 
-kde4_add_executable(TestShapeAt RUN_UNINSTALLED ${TestShapeAt_test_SRCS})
+kde4_add_unit_test(TestShapeAt TESTNAME libs-flake-TestShapeAt ${TestShapeAt_test_SRCS})
 
 target_link_libraries(TestShapeAt  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
-
-add_test(libs-flake-TestShapeAt ${EXECUTABLE_OUTPUT_PATH}/TestShapeAt)
 
 ########### next target ###############
 
@@ -117,11 +96,9 @@ set(TestShapePaint_test_SRCS TestShapePainting.cpp )
 
 kde4_automoc(${TestShapePaint_test_SRCS})
 
-kde4_add_executable(TestShapePainting RUN_UNINSTALLED ${TestShapePaint_test_SRCS})
+kde4_add_unit_test(TestShapePainting TESTNAME libs-flake-TestShapePainting ${TestShapePaint_test_SRCS})
 
 target_link_libraries(TestShapePainting  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
-
-add_test(libs-flake-TestShapePainting ${EXECUTABLE_OUTPUT_PATH}/TestShapePainting)
 
 ########### next target ###############
 
@@ -129,11 +106,9 @@ set(TestKoShapeFactory_test_SRCS TestKoShapeFactory.cpp )
 
 kde4_automoc(${TestKoShapeFactory_test_SRCS})
 
-kde4_add_executable(TestKoShapeFactory RUN_UNINSTALLED ${TestKoShapeFactory_test_SRCS})
+kde4_add_unit_test(TestKoShapeFactory TESTNAME libs-flake-TestKoShapeFactory ${TestKoShapeFactory_test_SRCS})
 
 target_link_libraries(TestKoShapeFactory  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
-
-add_test(libs-flake-TestKoShapeFactory ${EXECUTABLE_OUTPUT_PATH}/TestKoShapeFactory)
 
 ########### next target ###############
 
@@ -141,12 +116,8 @@ set(TestKoShapeRegistry_test_SRCS TestKoShapeRegistry.cpp )
 
 kde4_automoc(${TestKoShapeRegistry_test_SRCS})
 
-kde4_add_executable(TestKoShapeRegistry RUN_UNINSTALLED ${TestKoShapeRegistry_test_SRCS})
+kde4_add_unit_test(TestKoShapeRegistry TESTNAME libs-flake-TestKoShapeRegistry  ${TestKoShapeRegistry_test_SRCS})
 
 target_link_libraries(TestKoShapeRegistry  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
 
-add_test(libs-flake-TestKoShapeRegistry ${EXECUTABLE_OUTPUT_PATH}/TestKoShapeRegistry)
-
 ########### next target ###############
-
-endif(KDE4_BUILD_TESTS)

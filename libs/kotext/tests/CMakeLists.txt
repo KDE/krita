@@ -1,7 +1,3 @@
-
-
-if(KDE4_BUILD_TESTS)
-
 include_directories( ${KOTEXT_INCLUDES} )
 
 # all tests for obsolete classes
@@ -55,17 +51,13 @@ include_directories( ${KOTEXT_INCLUDES} )
 
 set(TestDocumentLayout_test_SRCS TestDocumentLayout.cpp)
 kde4_automoc(${TestDocumentLayout_test_SRCS})
-kde4_add_executable(TestDocumentLayout RUN_UNINSTALLED ${TestDocumentLayout_test_SRCS})
+kde4_add_unit_test(TestDocumentLayout TESTNAME libs-kotext-TestDocumentLayout  ${TestDocumentLayout_test_SRCS})
 target_link_libraries(TestDocumentLayout kotext ${QT_QTTEST_LIBRARY})
-add_test(libs-kotext-TestDocumentLayout ${EXECUTABLE_OUTPUT_PATH}/TestDocumentLayout)
 
 ########### next target ###############
 
 set(TestBorder_test_SRCS TestBorder.cpp)
 kde4_automoc(${TestBorder_test_SRCS})
-kde4_add_executable(TestBorder RUN_UNINSTALLED ${TestBorder_test_SRCS})
+kde4_add_unit_test(TestBorder TESTNAME libs-kotext-TestBorder  ${TestBorder_test_SRCS})
 target_link_libraries(TestBorder kotext ${QT_QTTEST_LIBRARY})
-add_test(libs-kotext-TestBorder ${EXECUTABLE_OUTPUT_PATH}/TestBorder)
 
-
-endif(KDE4_BUILD_TESTS)

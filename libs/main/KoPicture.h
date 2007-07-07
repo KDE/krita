@@ -63,6 +63,14 @@ public:
      */
     KoPicture& operator=(const KoPicture& other);
 
+    /**
+     * Comparison operator
+     */
+    bool operator==(const KoPicture& other) const { return m_key==other.m_key; }
+
+    /**
+     * Returns type of the picture.
+     */
     KoPictureType::Type getType(void) const;
 
     /**

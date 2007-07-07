@@ -171,7 +171,7 @@ private:
     void init();
 
 private:
-    class Private;
+    struct Private;
     Private * const d;
 };
 

@@ -21,7 +21,7 @@
 #include "KoExecutePolicy.h"
 #include "ActionJob_p.h"
 
-#include <WeaverInterface.h>
+#include <threadweaver/WeaverInterface.h>
 
 class KoAction::Private {
 public:

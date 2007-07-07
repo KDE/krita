@@ -25,6 +25,7 @@
 
 #include <QTextInlineObject>
 #include <QFontMetricsF>
+#include <QPainter>
 #include <KDebug>
 
 class KoTextAnchor::Private {

@@ -23,40 +23,16 @@
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
 
-/* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
-#if defined _WIN32 || defined _WIN64
-
 #ifndef FLAKE_EXPORT
 # if defined(MAKE_FLAKE_LIB)
    /* We are building this library */ 
 #  define FLAKE_EXPORT KDE_EXPORT
+#  define FLAKE_TEST_EXPORT KDE_EXPORT
 # else
    /* We are using this library */ 
 #  define FLAKE_EXPORT KDE_IMPORT
+#  define FLAKE_TEST_EXPORT KDE_IMPORT
 # endif
 #endif
-
-#else /* UNIX */
-
-#define FLAKE_EXPORT KDE_EXPORT
-
-#endif
-
-/* Now the same for FLAKE_TEST_EXPORT, if compiling with unit tests enabled */
-
-#ifdef COMPILING_TESTS
-#if defined _WIN32 || defined _WIN64
-# if defined( MAKE_FLAKE_LIB )
-#       define FLAKE_TEST_EXPORT KDE_EXPORT
-#   else
-#       define FLAKE_TEST_EXPORT KDE_IMPORT
-#   endif
-# else /* not windows */
-#   define FLAKE_TEST_EXPORT KDE_EXPORT
-# endif
-#else /* not compiling tests */
-#   define FLAKE_TEST_EXPORT
-#endif
-
 
 #endif

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoJobsListPolicy.h"
-#include <Job.h>
+#include <threadweaver/Job.h>
 
 using namespace ThreadWeaver;
 

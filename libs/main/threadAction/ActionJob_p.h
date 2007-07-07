@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
@@ -18,7 +19,7 @@
  */
 #ifndef TW_ACTIONJOB_H
 #define TW_ACTIONJOB_H
-#include <Job.h>
+#include <threadweaver/Job.h>
 
 #include <QSemaphore>
 #include <QVariant>

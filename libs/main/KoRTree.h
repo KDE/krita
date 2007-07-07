@@ -40,7 +40,7 @@
  * This class implements a R-tree as described in
  * "R-TREES. A DYNAMIC INDEX STRUCTURE FOR SPATIAL SEARCHING" by Antomn Guttman
  *
- * It only supports 2 dimentional bounding boxes which are repesented by a QRectF.
+ * It only supports 2 dimensional bounding boxes which are repesented by a QRectF.
  * For node splitting the Quadratic-Cost Algorithm is used as descibed by Guttman.
  */
 template <typename T>
@@ -480,7 +480,7 @@ void KoRTree<T>::debug() const
 #endif
 
 template <typename T>
-QPair< typename KoRTree<T>::Node*, typename KoRTree<T>::Node* > KoRTree<T>::splitNode( KoRTree<T>::Node* node )
+QPair< typename KoRTree<T>::Node*, typename KoRTree<T>::Node* > KoRTree<T>::splitNode( typename KoRTree<T>::Node* node )
 {
     //qDebug() << "KoRTree::splitNode" << node;
     Node * n1;

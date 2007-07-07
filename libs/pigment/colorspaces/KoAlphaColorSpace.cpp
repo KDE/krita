@@ -295,7 +295,7 @@ void KoAlphaColorSpace::alpha(const quint8 *pixel, quint8 *alpha) const
     *alpha = *pixel;
 }
 
-void KoAlphaColorSpace::toQColor(const quint8 */*src*/, QColor *c, KoColorProfile * /*profile*/) const
+void KoAlphaColorSpace::toQColor(const quint8 * /*src*/, QColor *c, KoColorProfile * /*profile*/) const
 {
     c->setRgb(255, 255, 255);
 }

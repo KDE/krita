@@ -22,6 +22,7 @@
 #include "KoPAStyles.h"
 
 #include <QDebug>
+#include <QPainter>
 
 #include <KoShapeSavingContext.h>
 #include <KoShapeLayer.h>

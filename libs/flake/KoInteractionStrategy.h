@@ -23,10 +23,10 @@
 #define KOINTERACTIONSTRATEGY_H
 
 #include <QList>
+#include <QPainter>
 
 #include <KoSelection.h>
 
-class QPainter;
 class KoPointerEvent;
 class QUndoCommand;
 class KoCanvasBase;

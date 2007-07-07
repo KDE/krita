@@ -612,7 +612,7 @@ private:
      */
     QVector<quint8> * threadLocalConversionCache(quint32 size) const;
 
-    class Private;
+    struct Private;
     Private * const d;
 };
 

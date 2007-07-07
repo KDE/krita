@@ -23,7 +23,7 @@
 #include "ActionJob_p.h"
 #include "KoJobsListPolicy.h"
 
-#include <WeaverInterface.h>
+#include <threadweaver/WeaverInterface.h>
 #include <KDebug>
 
 using namespace ThreadWeaver;

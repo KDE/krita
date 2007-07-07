@@ -18,7 +18,7 @@
  */
 #ifndef TW_JOBSLISTPOLICY_H
 #define TW_JOBSLISTPOLICY_H
-#include <QueuePolicy.h>
+#include <threadweaver/QueuePolicy.h>
 
 #include <QMutex>
 #include <QList>

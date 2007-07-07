@@ -61,15 +61,6 @@ class KOGUIUTILS_EXPORT KoDualColorButton : public QWidget
     };
 
     /**
-     * Constructs a new KoDualColorButton using the default black and white
-     * colors.
-     *
-     * @param parent The parent widget of the KoDualColorButton.
-     * @param dialogParent The parent widget of the color selection dialog.
-     */
-    explicit KoDualColorButton( QWidget *parent = 0, QWidget* dialogParent = 0 );
-
-    /**
      * Constructs a new KoDualColorButton with the supplied foreground and
      * background colors.
      *

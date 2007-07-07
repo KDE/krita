@@ -225,7 +225,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QStri
         }
 
         KoColorProfile *p = profileByName(profileName);
-        if(not p and not profileName.isEmpty())
+        if(!p && !profileName.isEmpty())
         {
             kDebug() << "Profile not found : " << profileName << endl;
             return 0;

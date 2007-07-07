@@ -219,7 +219,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         virtual bool profileIsCompatible(KoColorProfile* profile) const
         {
             KoLcmsColorProfile* p = dynamic_cast<KoLcmsColorProfile*>(profile);
-            return (p and p->colorSpaceSignature() == colorSpaceSignature());
+            return (p && p->colorSpaceSignature() == colorSpaceSignature());
         }
         
         virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * koprofile=0) const
@@ -647,7 +647,7 @@ class KoLcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo {
         virtual bool profileIsCompatible(KoColorProfile* profile) const
         {
             KoLcmsColorProfile* p = dynamic_cast<KoLcmsColorProfile*>(profile);
-            return p and p->colorSpaceSignature() == colorSpaceSignature();
+            return p && p->colorSpaceSignature() == colorSpaceSignature();
         }
 };
 

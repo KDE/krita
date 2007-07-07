@@ -38,6 +38,10 @@ public:
     /// @return the id of the dock widget
     virtual QString id() const = 0;
 
+    /// @return the name the dock widget (actually a null string);
+    /// needed only when used with KoGenericRegistry.
+    QString name() const { return QString(); }
+
     /// @return the dock widget area the widget should appear in by default
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const = 0;
 

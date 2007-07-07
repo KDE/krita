@@ -102,7 +102,7 @@ public:
      * information here.
      * Optionally, @p extraNativeMimeTypes are added after the native mimetype.
      */
-    KOMAIN_EXPORT static QStringList mimeFilter( const QByteArray& mimetype, Direction direction,
+    static QStringList mimeFilter( const QByteArray& mimetype, Direction direction,
                                                       const QStringList& extraNativeMimeTypes = QStringList() );
 
     /**

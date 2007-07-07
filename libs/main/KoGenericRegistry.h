@@ -119,8 +119,10 @@ public:
     QList<KoID> listKeys() const
     {
         QList<KoID> answer;
-        foreach(QString key, m_hash.keys())
-            answer.append(KoID(key, value(key)->name()));
+        QList<QString> keys(m_hash.keys());
+        // we do not use foreach() here because of GCC 3.3.x bug
+        for (QList<QString>::const_iterator it(keys.constBegin()); it!=keys.constEnd(); ++it)
+            answer.append(KoID(*it, value(*it)->name()));
         return answer;
     }
 

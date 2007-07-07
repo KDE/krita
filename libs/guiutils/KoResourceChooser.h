@@ -74,7 +74,7 @@ protected:
     virtual bool viewportEvent(QEvent * e);
 
 private:
-    class Private;
+    struct Private;
     Private* const d;
 };
 

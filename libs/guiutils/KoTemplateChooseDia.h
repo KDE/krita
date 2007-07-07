@@ -63,7 +63,7 @@ class KoTCDIconViewItem : public QListWidgetItem
 	    : QListWidgetItem ( parent )
 	    {}
 
-    explicit KoTCDIconViewItem(QListWidget *parent=0, const QString &text=0, const QPixmap &icon=0,
+    explicit KoTCDIconViewItem(QListWidget *parent, const QString &text=0, const QPixmap &icon=0,
                       const QString &descr=0, const QString &fullname=0)
 	    : QListWidgetItem(text, parent)
 	    {
@@ -78,7 +78,6 @@ class KoTCDIconViewItem : public QListWidgetItem
     private :
 	QString m_descr;
 	QString m_full;
-
 };
 
 class KoTemplateChooseDiaPrivate;

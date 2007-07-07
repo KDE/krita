@@ -49,7 +49,7 @@ public:
      * @param character will be filled when the user pressed Ok with the selected character.
      * @param parent the parent widget this dialog will be associated with.
      */
-    KOGUIUTILS_EXPORT static bool selectChar( QString &font, QChar &character, QWidget* parent = 0, const char* name = 0);
+    static bool selectChar( QString &font, QChar &character, QWidget* parent = 0, const char* name = 0);
 
 signals:
     /**

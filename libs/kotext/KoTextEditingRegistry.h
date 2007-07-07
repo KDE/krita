@@ -21,10 +21,8 @@
 #define KOTEXTEDITINGREGISTRY_H
 
 #include <KoGenericRegistry.h>
-#include <kotext_export.h>
+#include <KoTextEditingFactory.h>
 #include <QObject>
-
-class KoTextEditingFactory;
 
 /**
  * This singleton class keeps a register of all available text editing plugins.

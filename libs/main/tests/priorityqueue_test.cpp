@@ -41,7 +41,7 @@ static const char* const keys[] = { "one",  "two", "three",  "four", "five",
                                     "six", "seven", "eight", "nine", "ten",
                                     "eleven", "twelve", 0 };
 
-int main( int /*argc*/, char **/*argv*/ )
+int main( int /*argc*/, char ** /*argv*/ )
 {
     Q3PtrList<Node> list;
     list.setAutoDelete( true );

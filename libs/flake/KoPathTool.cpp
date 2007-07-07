@@ -385,7 +385,7 @@ void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
     {
         if( event->button() & Qt::LeftButton )
         {
-            if( event->modifiers() & Qt::ControlModifier == 0 )
+            if( (event->modifiers() & Qt::ControlModifier) == 0 )
             {
                 m_pointSelection.clear();
             }

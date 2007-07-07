@@ -26,12 +26,12 @@
 
 #include <KoShapeContainer.h>
 #include <KoXmlReader.h>
+#include <KoPASavingContext.h>
 
 #include "kopageapp_export.h"
 
-class KoPageLayout;
+struct KoPageLayout;
 class KoOasisLoadingContext;
-class KoPASavingContext;
 class KoGenStyle;
 class KoShape;
 

@@ -445,10 +445,10 @@ double KoShape::rotation() const {
 
     // check if the matrix has shearing mixed in
     if( fabs( fabs(d->localMatrix.m12()) - fabs(d->localMatrix.m21()) ) > 1e-10 )
-        return nan("");
+        return NAN;
     // check if the matrix has scaling mixed in
     if( fabs( d->localMatrix.m11() - d->localMatrix.m22() ) > 1e-10 )
-        return nan("");
+        return NAN;
 
     // calculate the angle from the matrix elements
     double angle = atan2( d->localMatrix.m21(), d->localMatrix.m11() ) * 180.0 / M_PI;

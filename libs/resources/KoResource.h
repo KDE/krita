@@ -30,7 +30,7 @@
  *
  * This replaces the KisKrayon facility that used to be present in Krayon.
  */
-class KORESOURCE_EXPORT KoResource : public QObject {
+class KORESOURCES_EXPORT KoResource : public QObject {
     typedef QObject super;
     Q_OBJECT
 

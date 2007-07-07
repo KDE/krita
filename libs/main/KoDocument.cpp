@@ -2868,7 +2868,7 @@ void KoDocument::deleteOpenPaneDelayed()
     d->m_startUpWidget = 0;
 }
 
-QWidget* KoDocument::createCustomDocumentWidget(QWidget */*parent*/) {
+QWidget* KoDocument::createCustomDocumentWidget(QWidget * /*parent*/) {
     return 0;
 }
 

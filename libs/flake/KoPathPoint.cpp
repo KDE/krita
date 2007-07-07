@@ -112,7 +112,7 @@ void KoPathPoint::setControlPoint2( const QPointF & point )
 
 void KoPathPoint::setProperties( KoPointProperties properties ) 
 {
-    if( properties & HasControlPoint1 == 0 || properties & HasControlPoint2 == 0 )
+    if( (properties & HasControlPoint1) == 0 || (properties & HasControlPoint2) == 0 )
     {
         // strip smooth and symmetric flags if points has not two control points
         properties &= ~IsSmooth;
@@ -138,7 +138,7 @@ void KoPathPoint::setProperty( KoPointProperty property )
                 return;
         break;
         case HasControlPoint1:
-            if( d->properties & CanHaveControlPoint1 == 0 )
+            if( (d->properties & CanHaveControlPoint1) == 0 )
                 return;
         break;
         case CanHaveControlPoint2:
@@ -146,16 +146,16 @@ void KoPathPoint::setProperty( KoPointProperty property )
                 return;
         break;
         case HasControlPoint2:
-            if( d->properties & CanHaveControlPoint2 == 0 )
+            if( (d->properties & CanHaveControlPoint2) == 0 )
                 return;
         break;
         case IsSmooth:
-            if( d->properties & HasControlPoint1 == 0 && d->properties & HasControlPoint2 == 0 )
+            if( (d->properties & HasControlPoint1) == 0 && (d->properties & HasControlPoint2) == 0 )
                 return;
             d->properties &= ~IsSymmetric;
         break;
         case IsSymmetric:
-            if( d->properties & HasControlPoint1 == 0 && d->properties & HasControlPoint2 == 0 )
+            if( (d->properties & HasControlPoint1) == 0 && (d->properties & HasControlPoint2) == 0 )
                 return;
             d->properties &= ~IsSmooth;
         break;

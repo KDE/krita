@@ -19,7 +19,7 @@
 #ifndef KO_ACTION_H
 #define KO_ACTION_H
 
-#include <ThreadWeaver.h>
+#include <threadweaver/ThreadWeaver.h>
 
 #include "kofficecore_export.h"
 

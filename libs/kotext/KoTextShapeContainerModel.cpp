@@ -137,7 +137,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move) {
         //relation->anchor->setOffset(offset);
     } */
 
-    if(qAbs(newPosition.y() < 10)) // TopOfFrame
+    if(qAbs(newPosition.y()) < 10.0) // TopOfFrame
 {//kDebug() << "  TopOfFrame\n";
         relation->anchor->setAlignment(KoTextAnchor::TopOfFrame);
 }

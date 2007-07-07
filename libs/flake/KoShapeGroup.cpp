@@ -23,6 +23,8 @@
 #include "KoShapeSavingContext.h"
 #include "KoXmlWriter.h"
 
+#include <QPainter>
+
 KoShapeGroup::KoShapeGroup()
 : KoShapeContainer(new SimpleShapeContainerModel())
 {

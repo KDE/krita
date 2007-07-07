@@ -22,6 +22,7 @@
 #include "KoLineBorder.h"
 #include "KoViewConverter.h"
 #include "KoShape.h"
+#include "KoShapeSavingContext.h"
 
 #include <QPainterPath>
 

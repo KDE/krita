@@ -207,7 +207,7 @@ KisView2::~KisView2()
 
 void KisView2::dragEnterEvent(QDragEnterEvent *event)
 {
-    kDebug() << "KisView2::dragEnterEvent" << endl;
+    kDebug(41007) << "KisView2::dragEnterEvent" << endl;
     // Only accept drag if we're not busy, particularly as we may
     // be showing a progress bar and calling qApp->processEvents().
     if (K3URLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {

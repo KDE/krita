@@ -242,7 +242,7 @@ void Cell::mixColorsUsingCmy(const Cell &cell)
 
 void Cell::debug()
 {
-    kDebug() << "WETNESS: " << wetness << endl
+    kDebug(41006) << "WETNESS: " << wetness << endl
              << "VOLUME: " << volume << endl
              << "OPACITY: " << (int)opacity << endl
              << "RED: " << red << " GREEN: " << green << " BLUE: " << blue << endl;

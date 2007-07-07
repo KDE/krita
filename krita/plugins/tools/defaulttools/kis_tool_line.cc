@@ -154,7 +154,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
             } else {
                 // Remove the last remaining line.
                 // m_painter can be 0 here...!!!
-kDebug() <<"do we ever go here" << endl;
+kDebug(41006) <<"do we ever go here" << endl;
                 QRectF bound;
                 bound.setTopLeft(m_startPos);
                 bound.setBottomRight(m_endPos);

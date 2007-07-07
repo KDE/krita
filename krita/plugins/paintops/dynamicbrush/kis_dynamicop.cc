@@ -115,7 +115,7 @@ void KisDynamicOp::paintAt(const KisPaintInformation& info)
     KisPaintInformation adjustedInfo(info);
 
 
-//     kDebug() << info.pressure << " " << info.xTilt << " " << info.yTilt << endl;
+//     kDebug(41006) << info.pressure << " " << info.xTilt << " " << info.yTilt << endl;
 
     // Painting should be implemented according to the following algorithm:
     // retrieve brush

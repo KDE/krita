@@ -73,18 +73,18 @@ public:
         , m_dst(dst)
         , m_rect(rect)
         {
-            kDebug() << "Thread created " << m_name << ", " << QThread::currentThread() << ", " << m_rect << "\n";
+            kDebug(41006) << "Thread created " << m_name << ", " << QThread::currentThread() << ", " << m_rect << "\n";
         };
 
     void run()
         {
-            kDebug() << "Thread started:" << m_name  << ", " << QThread::currentThread() << "\n";
+            kDebug(41006) << "Thread started:" << m_name  << ", " << QThread::currentThread() << "\n";
 
             KisRectIteratorPixel dstIt = m_dst->createRectIterator(m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height(), true );
             KisRectIteratorPixel srcIt = m_src->createRectIterator(m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height(), false);
             qint32 depth = m_src -> colorSpace() -> colorChannelCount();
 
-            kDebug() << "Thread " << m_name << " starts loop \n";
+            kDebug(41006) << "Thread " << m_name << " starts loop \n";
 
             while( ! srcIt.isDone() ) {
                 if ( srcIt.isSelected() ) {
@@ -95,7 +95,7 @@ public:
                 ++srcIt;
                 ++dstIt;
             }
-            kDebug() << "Thread " << m_name << " finished \n";
+            kDebug(41006) << "Thread " << m_name << " finished \n";
         };
 
 private:
@@ -112,7 +112,7 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), "colors", i18n("Invert with
 
 void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
-    kDebug() << "Going to invert " << rect << "\n";
+    kDebug(41006) << "Going to invert " << rect << "\n";
     int h2 = rect.height() / 2;
     int w2 = rect.width() / 2;
 

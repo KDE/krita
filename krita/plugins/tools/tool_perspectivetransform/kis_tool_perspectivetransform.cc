@@ -269,42 +269,42 @@ void KisToolPerspectiveTransform::mousePressEvent(KoPointerEvent *event)
                     QPoint mousep = controller->windowToView( event->pos().roundQPoint() );
                     if( mouseNear( mousep, controller->windowToView(m_topleft.toPoint() ) ) )
                     {
-                        kDebug() << " PRESS TOPLEFT HANDLE " << endl;
+                        kDebug(41006) << " PRESS TOPLEFT HANDLE " << endl;
                         m_currentSelectedPoint = &m_topleft;
                     }
                     else if( mouseNear( mousep, controller->windowToView(m_topright.toPoint() ) ) )
                     {
-                        kDebug() << " PRESS TOPRIGHT HANDLE " << endl;
+                        kDebug(41006) << " PRESS TOPRIGHT HANDLE " << endl;
                         m_currentSelectedPoint = &m_topright;
                     }
                     else if( mouseNear( mousep, controller->windowToView(m_bottomleft.toPoint() ) ) )
                     {
-                        kDebug() << " PRESS BOTTOMLEFT HANDLE " << endl;
+                        kDebug(41006) << " PRESS BOTTOMLEFT HANDLE " << endl;
                         m_currentSelectedPoint = &m_bottomleft;
                     }
                     else if( mouseNear( mousep, controller->windowToView(m_bottomright.toPoint() ) ) )
                     {
-                        kDebug() << " PRESS BOTTOMRIGHT HANDLE " << endl;
+                        kDebug(41006) << " PRESS BOTTOMRIGHT HANDLE " << endl;
                         m_currentSelectedPoint = &m_bottomright;
                     } else if( mouseNear( mousep, controller->windowToView(QPointF((m_topleft+m_topright)*0.5).toPoint() ) ) )
                     {
-                        kDebug() << " PRESS TOP HANDLE " << endl;
+                        kDebug(41006) << " PRESS TOP HANDLE " << endl;
                         m_handleSelected = TOPHANDLE;
                     }else if( mouseNear( mousep, controller->windowToView(QPointF((m_topleft+m_bottomleft)*0.5).toPoint() ) ) )
                     {
-                        kDebug() << " PRESS LEFT HANDLE " << endl;
+                        kDebug(41006) << " PRESS LEFT HANDLE " << endl;
                         m_handleSelected = LEFTHANDLE;
                     }else if( mouseNear( mousep, controller->windowToView(QPointF((m_bottomleft+m_bottomright)*0.5).toPoint() ) ) )
                     {
-                        kDebug() << " PRESS BOTTOM HANDLE " << endl;
+                        kDebug(41006) << " PRESS BOTTOM HANDLE " << endl;
                         m_handleSelected = BOTTOMHANDLE;
                     }else if( mouseNear( mousep, controller->windowToView(QPointF((m_bottomright+m_topright)*0.5).toPoint() ) ) )
                     {
-                        kDebug() << " PRESS RIGHT HANDLE " << endl;
+                        kDebug(41006) << " PRESS RIGHT HANDLE " << endl;
                         m_handleSelected = RIGHTHANDLE;
                     }else if( mouseNear( mousep, controller->windowToView(QPointF((m_topleft+m_bottomleft + m_bottomright+m_topright)*0.25).toPoint() ) ) )
                     {
-                        kDebug() << " PRESS MIDDLE HANDLE " << endl;
+                        kDebug(41006) << " PRESS MIDDLE HANDLE " << endl;
                         m_handleSelected = MIDDLEHANDLE;
                     }
                 }
@@ -379,7 +379,7 @@ void KisToolPerspectiveTransform::mouseMoveEvent(KoPointerEvent *event)
                         break;
                     case MIDDLEHANDLE:
                     case NOHANDLE:
-                        kDebug() << "Should NOT happen" << endl;
+                        kDebug(41006) << "Should NOT happen" << endl;
                 }
                 double matrixTo[3][3];
                 b = KisPerspectiveMath::computeMatrixTransfoToPerspective(topLeft, topRight, bottomLeft, bottomRight, dstRect );
@@ -442,7 +442,7 @@ void KisToolPerspectiveTransform::mouseReleaseEvent(KoPointerEvent * event)
                         {
                             for(int j = 0; j < 3; j++)
                             {
-                                kDebug() << "sol[" << 3*i+j << "]=" << b[3*i+j] << endl;
+                                kDebug(41006) << "sol[" << 3*i+j << "]=" << b[3*i+j] << endl;
                                 matrix[i][j] = b[3*i+j];
                             }
                         }
@@ -516,7 +516,7 @@ void KisToolPerspectiveTransform::paintOutline(QPainter& gc, const QRect&)
         {
             case DRAWRECTINTERRACTION:
             {
-                kDebug() << "DRAWRECTINTERRACTION paintOutline " << m_points.size() << endl;
+                kDebug(41006) << "DRAWRECTINTERRACTION paintOutline " << m_points.size() << endl;
                 QPointF start, end;
                 QPoint startPos;
                 QPoint endPos;

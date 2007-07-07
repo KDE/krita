@@ -58,12 +58,12 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         QDomDocument document;
         if(not document.setContent(&xmlFile, false, &errMsg, &errLine, &errCol))
         {
-            kDebug() << "Error reading XML at line " << errLine << " column " << errCol << " : " << errMsg << endl;
+            kDebug(41006) << "Error reading XML at line " << errLine << " column " << errCol << " : " << errMsg << endl;
         }
         QDomElement rootElement = document.documentElement();
         if(rootElement.tagName() != "MetaDataEditor")
         {
-            kDebug() << "Invalid XML file" << endl;
+            kDebug(41006) << "Invalid XML file" << endl;
         }
         
         const QString uiFileName = rootElement.attribute("uiFile");
@@ -78,7 +78,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         QWidget *widget = dynamic_cast<QWidget*>(loader.load(&uiFile, this));
         if(widget ==0)
         {
-            kDebug() << "Failed to load ui file " << uiFileName << endl;
+            kDebug(41006) << "Failed to load ui file " << uiFileName << endl;
             continue;
         }
         uiFile.close();
@@ -103,7 +103,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                 {
                     if( not d->store->hasEntry( schema, entryName))
                     {
-                        kDebug() << " Store doesn't have yet entry : " << entryName << " in " << schemaUri  << " == " << schema->generateQualifiedName(entryName) << endl;
+                        kDebug(41006) << " Store doesn't have yet entry : " << entryName << " in " << schemaUri  << " == " << schema->generateQualifiedName(entryName) << endl;
                     }
                     KisMetaData::Value& value = d->store->getEntry(schema, entryName).value();
                     KisEntryEditor* ee = 0;
@@ -123,10 +123,10 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                     }
                     d->entryEditors.insert(&value, ee);
                 } else {
-                    kDebug() << "Unknown schema : " << schemaUri << endl;
+                    kDebug(41006) << "Unknown schema : " << schemaUri << endl;
                 }
             } else {
-                kDebug() << "Unknown object : " << editorName << endl;
+                kDebug(41006) << "Unknown object : " << editorName << endl;
             }
         }
         xmlFile.close();

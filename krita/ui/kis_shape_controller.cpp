@@ -187,9 +187,9 @@ void KisShapeController::addShape( KoShape* shape )
         // KisShapeLayer::KoShapeLayer::KoShapeContainer::KoShape.
 
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( shape->parent() );
-        kDebug() << "shape: " << shape << endl;
-        kDebug() << "shape parent: " << shape->parent() << endl;
-        kDebug() << "shape layer: " << shapeLayer << endl;
+        kDebug(41007) << "shape: " << shape << endl;
+        kDebug(41007) << "shape parent: " << shape->parent() << endl;
+        kDebug(41007) << "shape layer: " << shapeLayer << endl;
 
 //TODO this doesn't work with shape selections
 #if 0
@@ -199,7 +199,7 @@ void KisShapeController::addShape( KoShape* shape )
             // and add it on top of the image stack.
 
             KisLayerContainerShape * container = dynamic_cast<KisLayerContainerShape*>( m_d->image->rootLayer().data() );
-            kDebug() << "container: " << container << endl;
+            kDebug(41007) << "container: " << container << endl;
             shapeLayer = new KisShapeLayer(container,
                                            m_d->image,
                                            i18n( "Flake shapes %1", m_d->nameServer->number() ),
@@ -325,7 +325,7 @@ KoShape * KisShapeController::shapeForLayer( KisLayerSP layer )
     if ( m_d->layerShapes.contains( layer ) )
         return m_d->layerShapes[layer];
     else {
-        kDebug() << "KisShapeController::shapeForLayer does not find a shape for layer " << layer << ", this should never happen!" << endl;
+        kDebug(41007) << "KisShapeController::shapeForLayer does not find a shape for layer " << layer << ", this should never happen!" << endl;
         return 0;
     }
 }

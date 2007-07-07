@@ -150,7 +150,7 @@ class FreehandPaintJobExecutor : public QThread {
         }
         virtual void run()
         {
-            kDebug() << "run" << endl;
+            kDebug(41007) << "run" << endl;
             while(not m_finish or not empty() )
             {
                 FreehandPaintJob* nextJob = 0;
@@ -161,7 +161,7 @@ class FreehandPaintJobExecutor : public QThread {
                         nextJob = m_queue.dequeue();
                     }
                 }
-                kDebug() << "nextJob = " << nextJob << endl;
+                kDebug(41007) << "nextJob = " << nextJob << endl;
                 if(nextJob)
                 {
                     nextJob->run();
@@ -169,12 +169,12 @@ class FreehandPaintJobExecutor : public QThread {
                     msleep(1);
                 }
             }
-            kDebug() << "finish running" << endl;
+            kDebug(41007) << "finish running" << endl;
         }
         void postJob(FreehandPaintJob* job)
         {
             QMutexLocker lock(&m_mutex_queue);
-            kDebug() << "push job = " << job << endl;
+            kDebug(41007) << "push job = " << job << endl;
             m_queue.enqueue(job);
         }
         void finish() {
@@ -478,7 +478,7 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
 void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*previousJob*/)
 {
     m_paintJobs.append(job);
-    kDebug() << "Queue length: " << m_executor->queueLength() << endl;
+    kDebug(41007) << "Queue length: " << m_executor->queueLength() << endl;
     m_executor->postJob(job);
 }
 

@@ -95,7 +95,7 @@ DynamicBrush::~DynamicBrush()
 
 void DynamicBrush::slotEditDynamicPrograms()
 {
-    kDebug() << " BOUH " << endl;
+    kDebug(41006) << " BOUH " << endl;
     KisDynamicProgramsEditor editor(m_view);
     editor.exec();
 }

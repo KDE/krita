@@ -40,15 +40,15 @@ class BaseFunction {
             }
             if( count >= 10000)
             {
-                kDebug() << "Too much iterations in estimating r2 v = " << v << endl;
+                kDebug(41006) << "Too much iterations in estimating r2 v = " << v << endl;
             }
             if( r2 < 0 )
             {
-                kDebug() << "r2 can't be of negative value, r2 = " << r2 << " a = " << a << " b = " << b << " r1 = " << r1 << endl;
+                kDebug(41006) << "r2 can't be of negative value, r2 = " << r2 << " a = " << a << " b = " << b << " r1 = " << r1 << endl;
                 return 0.0;
             }
             // Compute t2
-//             kDebug() << "Estimated r2 = " << r2 << endl;
+//             kDebug(41006) << "Estimated r2 = " << r2 << endl;
             return (t1-t1c) / poly(a,b,c,r2) + t2c;
         }
         inline double derivEnA(double a, double b, double c, double r, double t1c, double t1, double t2c)
@@ -189,11 +189,11 @@ class HomographyFunction : public BaseFunction {
             r2 *= m_norm;
             double fx1 = func(aim1, bim1, cim1, r1, m_xc, m_i1, m_xc);
             double fy1 = func(aim1, bim1, cim1, r1, m_yc, m_j1, m_yc);
-//             kDebug() << "Real r1 = " << ( (fx1- m_xc) * (fx1-m_xc) + (fy1-m_yc) * (fy1-m_yc)) * m_norm << " fx1 = " << fx1 << " fy1 = " << fy1 << " " << m_i1 << " " << m_j1 << endl;
+//             kDebug(41006) << "Real r1 = " << ( (fx1- m_xc) * (fx1-m_xc) + (fy1-m_yc) * (fy1-m_yc)) * m_norm << " fx1 = " << fx1 << " fy1 = " << fy1 << " " << m_i1 << " " << m_j1 << endl;
             double fx2 = func(aim2, bim2, cim2, r2, m_xc, m_i2, m_xc);
             double fy2 = func(aim2, bim2, cim2, r2, m_yc, m_j2, m_yc);
             double norm = 1.0 / ( h13 * fx2 + h23 * fy2 + 1.0 );
-//             kDebug() << "Real r2 = " << ( (fx2 - m_xc ) * (fx2 - m_xc) + (fy2 - m_yc) * (fy2 -m_yc)) * m_norm << " fx2 = " << fx2 << " fy2 = " << fy2 << " " << m_i2 << " " << m_j2 << " " << ((h11 * fx2 + h21 * fy2 + h31) * norm) << " " << ((h12 * fx2 + h22 * fy2 + h32) * norm) << endl;
+//             kDebug(41006) << "Real r2 = " << ( (fx2 - m_xc ) * (fx2 - m_xc) + (fy2 - m_yc) * (fy2 -m_yc)) * m_norm << " fx2 = " << fx2 << " fy2 = " << fy2 << " " << m_i2 << " " << m_j2 << " " << ((h11 * fx2 + h21 * fy2 + h31) * norm) << " " << ((h12 * fx2 + h22 * fy2 + h32) * norm) << endl;
             res_f1 = (fx1 - (h11 * fx2 + h21 * fy2 + h31) * norm);
             res_f2 = (fy1 - (h12 * fx2 + h22 * fy2 + h32) * norm);
         }
@@ -303,11 +303,11 @@ class HomographySameDistortionFunction : public BaseFunction {
             r2 *= m_norm;
             double fx1 = func(aim, bim, cim, r1, m_xc, m_i1, m_xc);
             double fy1 = func(aim, bim, cim, r1, m_yc, m_j1, m_yc);
-//             kDebug() << "Real r1 = " << ( (fx1- m_xc) * (fx1-m_xc) + (fy1-m_yc) * (fy1-m_yc)) * m_norm << " fx1 = " << fx1 << " fy1 = " << fy1 << " " << m_i1 << " " << m_j1 << endl;
+//             kDebug(41006) << "Real r1 = " << ( (fx1- m_xc) * (fx1-m_xc) + (fy1-m_yc) * (fy1-m_yc)) * m_norm << " fx1 = " << fx1 << " fy1 = " << fy1 << " " << m_i1 << " " << m_j1 << endl;
             double fx2 = func(aim, bim, cim, r2, m_xc, m_i2, m_xc);
             double fy2 = func(aim, bim, cim, r2, m_yc, m_j2, m_yc);
             double norm = 1.0 / ( h13 * fx2 + h23 * fy2 + 1.0 );
-//             kDebug() << "Real r2 = " << ( (fx2 - m_xc ) * (fx2 - m_xc) + (fy2 - m_yc) * (fy2 -m_yc)) * m_norm << " fx2 = " << fx2 << " fy2 = " << fy2 << " " << m_i2 << " " << m_j2 << " " << ((h11 * fx2 + h21 * fy2 + h31) * norm) << " " << ((h12 * fx2 + h22 * fy2 + h32) * norm) << endl;
+//             kDebug(41006) << "Real r2 = " << ( (fx2 - m_xc ) * (fx2 - m_xc) + (fy2 - m_yc) * (fy2 -m_yc)) * m_norm << " fx2 = " << fx2 << " fy2 = " << fy2 << " " << m_i2 << " " << m_j2 << " " << ((h11 * fx2 + h21 * fy2 + h31) * norm) << " " << ((h12 * fx2 + h22 * fy2 + h32) * norm) << endl;
             res_f1 = (fx1 - (h11 * fx2 + h21 * fy2 + h31) * norm);
             res_f2 = (fy1 - (h12 * fx2 + h22 * fy2 + h32) * norm);
         }

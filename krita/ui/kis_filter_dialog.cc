@@ -88,7 +88,7 @@ void KisFilterDialog::setFilter(KisFilterSP f)
 
 void KisFilterDialog::updatePreview()
 {
-    kDebug() << "KisFilterDialog::updatePreview()" << endl;
+    kDebug(41007) << "KisFilterDialog::updatePreview()" << endl;
     if( not d->currentFilter ) return;
     if( d->currentFilterConfigurationWidget )
     {

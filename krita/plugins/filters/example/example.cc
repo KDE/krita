@@ -72,8 +72,6 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
 
-
-    int pixelsProcessed = 0;
     setProgressTotalSteps(size.width() * size.height());
 
     KoColorSpace * cs = src->colorSpace();
@@ -103,7 +101,7 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
         srcIt.nextRow();
         dstIt.nextRow();
     }
-    kDebug() << "Per-pixel isSelected(): " << t.elapsed() << " ms\n";
+    kDebug(41006) << "Per-pixel isSelected(): " << t.elapsed() << " ms\n";
     t.restart();
 
 
@@ -153,7 +151,7 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
         srcIt.nextRow();
         dstIt.nextRow();
     }
-    kDebug() << "Consecutive pixels: " << t.elapsed() << " ms\n";
+    kDebug(41006) << "Consecutive pixels: " << t.elapsed() << " ms\n";
 
 
     delete inverter;

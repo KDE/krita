@@ -80,13 +80,13 @@ KisFilterRegistry* KisFilterRegistry::instance()
 
 void KisFilterRegistry::add(KisFilterSP item)
 {
-    kDebug() << "adding " << item->id() << endl;
+    kDebug(41001) << "adding " << item->id() << endl;
     add(item->id(), item);
 }
 
 void KisFilterRegistry::add(const QString &id, KisFilterSP item)
 {
-    kDebug() << "adding " << id << endl;
+    kDebug(41001) << "adding " << id << endl;
     KoGenericRegistry<KisFilterSP>::add(id, item);
     emit(filterAdded(id));
 }

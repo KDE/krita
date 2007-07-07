@@ -85,7 +85,7 @@ lMatches matching(const lInterestPoints& pointsref, const lInterestPoints& point
             }
         }
     }
-    kDebug() << matchPoints.size() << " points were matched" << endl;
+    kDebug(41006) << matchPoints.size() << " points were matched" << endl;
     return matchPoints;
 }
 

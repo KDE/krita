@@ -592,7 +592,7 @@ QRect KisPaintDevice::exactBoundsOldMethod() const
         }
         if (found) break;
     }
-//    kDebug() << "Exactbounds " << boundX << ", " << boundY << ", " << boundW << ", " << boundH << " took " << t.elapsed() << endl;
+//    kDebug(41001) << "Exactbounds " << boundX << ", " << boundY << ", " << boundW << ", " << boundH << " took " << t.elapsed() << endl;
     return QRect(boundX, boundY, boundW, boundH);
 
 

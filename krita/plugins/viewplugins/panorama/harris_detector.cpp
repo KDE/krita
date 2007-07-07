@@ -172,7 +172,7 @@ class HarrisPoint : public KisInterestPoint {
 lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP device, const QRect& rect)
 // lHarrisPoints computeHarrisPoints(KisPaintDeviceSP device, QRect rect)
 {
-    kDebug() << "Compute Harris points on the rect : " << rect << endl;
+    kDebug(41006) << "Compute Harris points on the rect : " << rect << endl;
     Q_ASSERT(device->colorSpace()->id() == "GRAYA");
     lInterestPoints points;
     
@@ -198,8 +198,8 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
             
             Q_UINT8 pixelvalue[5];
             
-            kDebug() << " Compute the derivatives" << endl;
-            kDebug() << "  horizontal derivatives" << endl;
+            kDebug(41006) << " Compute the derivatives" << endl;
+            kDebug(41006) << "  horizontal derivatives" << endl;
             /* Horizontal computation of derivatives */
             for(int y = rect.top() + 2; y < rect.bottom() - 2; y++)
             {
@@ -218,7 +218,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                     infoValues[INFO_HDIFF] = alpha1 * ( pixelvalue[LEFT] - pixelvalue[RIGHT] ) + alpha2 * ( pixelvalue[LEFTLEFT] - pixelvalue[RIGHTRIGHT] );
                     infoValues[INFO_HADD] = beta0 * ( pixelvalue[CENTER] ) + beta1 * ( pixelvalue[LEFT] + pixelvalue[RIGHT] ) + beta2 * ( pixelvalue[LEFTLEFT] + pixelvalue[RIGHTRIGHT] );
                     infoValues[INFO_INTENSITY] = pixelvalue[CENTER];
-//                     kDebug() << hitDevice.x() << " " << hitDevice.y() << " " << infoValues[INFO_HDIFF] << " " << infoValues[INFO_HADD] << " " << (int)pixelvalue[CENTER] << " " << infoValues[INFO_INTENSITY] << endl;
+//                     kDebug(41006) << hitDevice.x() << " " << hitDevice.y() << " " << infoValues[INFO_HDIFF] << " " << infoValues[INFO_HADD] << " " << (int)pixelvalue[CENTER] << " " << infoValues[INFO_INTENSITY] << endl;
                     memmove(pixelvalue, pixelvalue + 1, 4*sizeof(Q_UINT8));
                     ++hitDevice;
                     ++hitinfoDevice;
@@ -235,7 +235,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
             
             float hdiffValue[5];
             float haddValue[5];
-            kDebug() << "  vertical derivatives" << endl;
+            kDebug(41006) << "  vertical derivatives" << endl;
             /* Vertical computation of derivatives */
             for(int x = rect.left() + 4; x < rect.right() - 4; x++)
             {
@@ -294,8 +294,8 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
         
         float pixelvalue[6][6];
         
-        kDebug() << " Compute the blur" << endl;
-        kDebug() << "  horizontal blur" << endl;
+        kDebug(41006) << " Compute the blur" << endl;
+        kDebug(41006) << "  horizontal blur" << endl;
         /* Horizontal computation of derivatives */
         for(int y = rect.top() + 2; y < rect.bottom() - 2; y++)
         {
@@ -334,7 +334,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
         KisVLineIteratorPixel vitinfoDevice = infoDevice-> createVLineIterator(rect.left() + 4, rect.top() + 2, rect.height() - 4);
         
         float infoValue[6][6];
-        kDebug() << "  vertical blur" << endl;
+        kDebug(41006) << "  vertical blur" << endl;
         /* Vertical computation of derivatives */
         for(int x = rect.left() + 4; x < rect.right() - 4; x++)
         {
@@ -371,7 +371,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
 
 #if 0
         KisTransaction("", infoDevice);
-        kDebug() << " Blur" << endl;
+        kDebug(41006) << " Blur" << endl;
         {
             // Compute the blur mask
             KisAutobrushShape* kas = new KisAutobrushCircleShape(5, 5, 2, 2);
@@ -386,7 +386,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
             delete kas;
         }
 #endif
-        kDebug() << " compute curvatures" << endl;
+        kDebug(41006) << " compute curvatures" << endl;
         // Compute the curvatures
         {
             KisRectIteratorPixel vitinfoDeviceRect = infoDevice->createRectIterator(2, 0, rect.width() - 2, rect.height() - 2);
@@ -406,7 +406,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                   infoValue[ INFO_HIGH ] = infoValue[ INFO_LOW ];
                   infoValue[ INFO_LOW ] = a;
                 }
-//                 kDebug() << vitinfoDeviceRect.x() << " " << vitinfoDeviceRect.y() << " " << infoValue[INFO_XX] << " " << infoValue[INFO_YY]  << " " << infoValue[INFO_XY] << " " << infoValue[INFO_HIGH] << " " << infoValue[INFO_LOW] << " " << trace << " " << temp << " " << det << endl;
+//                 kDebug(41006) << vitinfoDeviceRect.x() << " " << vitinfoDeviceRect.y() << " " << infoValue[INFO_XX] << " " << infoValue[INFO_YY]  << " " << infoValue[INFO_XY] << " " << infoValue[INFO_HIGH] << " " << infoValue[INFO_LOW] << " " << trace << " " << temp << " " << det << endl;
             }
         }
         // Detect Harris Points
@@ -419,7 +419,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                 {
                     float* infoValue = reinterpret_cast<float*>(hitinfoDevice.rawData());
                     float low = infoValue[ INFO_LOW ];
-//                     kDebug() << low << endl;
+//                     kDebug(41006) << low << endl;
                     if(low > THRESHOLD_LAMBDA)
                     {
                         KisRectIteratorPixel vitinfoDeviceRect = infoDevice->createRectIterator(x - 1, y - 1, 3, 3);
@@ -434,7 +434,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                         }
                         if(greater)
                         {
-//                             kDebug() << "new point" << endl;
+//                             kDebug(41006) << "new point" << endl;
                             HarrisPoint* hp = new HarrisPoint( x, y, infoValue[INFO_INTENSITY], infoValue[INFO_HIGH], infoValue[INFO_LOW], device);
                             #if 0
                             points.push_back( hp );
@@ -460,7 +460,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                                         {
                                             if( hp->low() >= static_cast<HarrisPoint*>(*it)->low())
                                             {
-    //                                             kDebug() << "insert point" << endl;
+    //                                             kDebug(41006) << "insert point" << endl;
                                                 points.insert(it, hp);
                                                 break;
                                             }
@@ -477,9 +477,9 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                 hitinfoDevice.nextRow();
             }
         }
-        kDebug() << "Harris detector has found : " << points.size() << " harris points" << endl;
+        kDebug(41006) << "Harris detector has found : " << points.size() << " harris points" << endl;
     
-    kDebug() << "Harris detector has found : " << points.size() << " harris points" << endl;
+    kDebug(41006) << "Harris detector has found : " << points.size() << " harris points" << endl;
     
     delete floatCs;
     return points;

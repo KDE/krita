@@ -46,7 +46,7 @@ KisDynamicProgramsEditor::~KisDynamicProgramsEditor()
 
 void KisDynamicProgramsEditor::setCurrentProgram(const QString& text)
 {
-    kDebug() << "program changed to " << text << endl;
+    kDebug(41006) << "program changed to " << text << endl;
     if(m_currentEditor) delete m_currentEditor;
     KisDynamicProgram* program = KisDynamicProgramRegistry::instance()->get( text );
     Q_ASSERT(program);

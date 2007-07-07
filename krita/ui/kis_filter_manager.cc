@@ -94,7 +94,7 @@ void KisFilterManager::insertFilter(QString name)
         actionMenu = new KActionMenu(category.name(), this);
         d->actionCollection->addAction(category.id(), actionMenu );
         d->filterActionMenus[category.id()] = actionMenu;
-        kDebug() << "Creating entry menu for " << category.id() << " with name " << category.name() << endl;
+        kDebug(41007) << "Creating entry menu for " << category.id() << " with name " << category.name() << endl;
     }
     
     KisFilterHandler* handler = new KisFilterHandler( this, f, d->view);

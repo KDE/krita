@@ -115,106 +115,106 @@ void PerfTest::slotPerfTest()
         qint32 testCount = (qint32)qRound(dlgPerfTest->page()->intTestCount->value());
 
         if (dlgPerfTest->page()->chkBitBlt->isChecked()) {
-            kDebug() << "bltTest:\n";
+            kDebug(41006) << "bltTest:\n";
             QString s = bltTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkFill->isChecked()) {
-            kDebug() << "Filltest\n";
+            kDebug(41006) << "Filltest\n";
             QString s= fillTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkGradient->isChecked()) {
-            kDebug() << "Gradienttest\n";
+            kDebug(41006) << "Gradienttest\n";
             QString s = gradientTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkPixel->isChecked()) {
-            kDebug() << "Pixeltest\n";
+            kDebug(41006) << "Pixeltest\n";
             QString s = pixelTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkShape->isChecked()) {
-            kDebug() << "Shapetest\n";
+            kDebug(41006) << "Shapetest\n";
             QString s = shapeTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkLayer->isChecked()) {
-            kDebug() << "LayerTest\n";
+            kDebug(41006) << "LayerTest\n";
             QString s = layerTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkScale->isChecked()) {
-            kDebug() << "Scaletest\n";
+            kDebug(41006) << "Scaletest\n";
             QString s = scaleTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkRotate->isChecked()) {
-            kDebug() << "Rotatetest\n";
+            kDebug(41006) << "Rotatetest\n";
             QString s = rotateTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkRender->isChecked()) {
-            kDebug() << "Rendertest\n";
+            kDebug(41006) << "Rendertest\n";
             QString s = renderTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkSelection->isChecked()) {
-            kDebug() << "Selectiontest\n";
+            kDebug(41006) << "Selectiontest\n";
             QString s = selectionTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkColorConversion->isChecked()) {
-            kDebug() << "Colorconversiontest\n";
+            kDebug(41006) << "Colorconversiontest\n";
             QString s = colorConversionTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkFilter-> isChecked()) {
-            kDebug() << "filtertest\n";
+            kDebug(41006) << "filtertest\n";
             QString s = filterTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkReadBytes->isChecked()) {
-            kDebug() << "Readbytes test\n";
+            kDebug(41006) << "Readbytes test\n";
             QString s = readBytesTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkWriteBytes-> isChecked()) {
-            kDebug() << "Writebytes test\n";
+            kDebug(41006) << "Writebytes test\n";
             QString s = writeBytesTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkIterators->isChecked()) {
-            kDebug() << "Iterators test\n";
+            kDebug(41006) << "Iterators test\n";
             QString s = iteratorTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkPaintView->isChecked()) {
-            kDebug() << "paintview test\n";
+            kDebug(41006) << "paintview test\n";
             QString s = paintViewTest(testCount);
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         if (dlgPerfTest->page()->chkPaintViewFPS->isChecked()) {
-            kDebug() << "paint current view (fps) test\n";
+            kDebug(41006) << "paint current view (fps) test\n";
             QString s = paintViewFPSTest();
             report = report.append(s);
-            kDebug() << s << "\n";
+            kDebug(41006) << s << endl;
         }
         KDialog *d = new KDialog(m_view);
         d->setCaption( i18n("Performance test results") );
@@ -244,7 +244,7 @@ QString PerfTest::bltTest(quint32 testCount)
 
     for (QList<KoID>::Iterator it = l.begin(); it != l.end(); ++it) {
 
-        kDebug() << "Image->" << (*it).name() << "\n";
+        kDebug(41006) << "Image->" << (*it).name() << endl;
 
         report = report.append( "  Testing blitting on " + (*it).name() + '\n');
 
@@ -252,13 +252,13 @@ QString PerfTest::bltTest(quint32 testCount)
                 KoColorSpaceRegistry::instance()->colorSpace(*it,""));
 
         report = report.append(doBlit(COMPOSITE_OVER, *it, OPACITY_OPAQUE, testCount, img));
-        report = report.append( "\n");
+        report = report.append( '\n');
         report = report.append(doBlit(COMPOSITE_OVER, *it, OPACITY_OPAQUE / 2, testCount, img));
-        report = report.append( "\n");
+        report = report.append( '\n');
         report = report.append(doBlit(COMPOSITE_COPY, *it, OPACITY_OPAQUE, testCount, img));
-        report = report.append( "\n");
+        report = report.append( '\n');
         report = report.append(doBlit(COMPOSITE_COPY, *it, OPACITY_OPAQUE / 2, testCount, img));
-        report = report.append( "\n");
+        report = report.append( '\n');
     }
 
     return report;
@@ -406,7 +406,7 @@ QString PerfTest::fillTest(quint32 testCount)
     QList<KoID> l = KoColorSpaceRegistry::instance()->listKeys();
 
     for (QList<KoID>::Iterator it = l.begin(); it != l.end(); ++it) {
-        kDebug() << "Filltest on " << (*it).name() + '\n';
+        kDebug(41006) << "Filltest on " << (*it).name() + '\n';
 
         report = report.append( "  Testing blitting on " + (*it).name() + '\n');
 
@@ -596,10 +596,10 @@ QString PerfTest::rotateTest(quint32 testCount)
 
         for (uint i = 0; i < testCount; ++i) {
             for (double angle = 0; angle < 360; ++angle) {
-                kDebug() << "Rotating " << (*it).name() << " at " << angle << " degrees\n";
+                kDebug(41006) << "Rotating " << (*it).name() << " at " << angle << " degrees\n";
                 KisImageSP img = doc->newImage("cs-" + (*it).name(), 1000, 1000, KoColorSpaceRegistry::instance()->colorSpace(*it,""));
                 img->rotate(angle, m_view->canvasSubject()->progressDisplay());
-                kDebug() << "Size: " << img->projection()->extent() << endl;
+                kDebug(41006) << "Size: " << img->projection()->extent() << endl;
             }
         }
         report = report.append(QString("    rotated  1000 x 1000 pixels over 360 degrees, degree by degree, %1 times: %2\n").arg(testCount).arg(t.elapsed()));
@@ -633,7 +633,7 @@ QString PerfTest::colorConversionTest(quint32 testCount)
 
         QList<KoID> l2 = KoColorSpaceRegistry::instance()->listKeys();
         for (QList<KoID>::Iterator it2 = l2.begin(); it2 != l2.end(); ++it2) {
-            kDebug() << "test conversion from " << (*it).name() << " to " << (*it2).name() << endl;
+            kDebug(41006) << "test conversion from " << (*it).name() << " to " << (*it2).name() << endl;
 
             t.restart();
             for (uint i = 0; i < testCount; ++i) {
@@ -670,7 +670,7 @@ QString PerfTest::filterTest(quint32 testCount)
 
             KisFilterSP f = KisFilterRegistry::instance()->get(*it);
             t.restart();
-            kDebug() << "test filter " << f->id().name() << " on " << img->colorSpace()->name() << endl;
+            kDebug(41006) << "test filter " << f->id().name() << " on " << img->colorSpace()->name() << endl;
             for (quint32 i = 0; i < testCount; ++i) {
                 f->enableProgress();
                 f->process(l, l, f->configuration(f->createConfigurationWidget(m_view, l)), QRect(0, 0, 1000, 1000));

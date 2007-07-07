@@ -49,7 +49,7 @@ class PanoptimFunction {
         it->f(parameters, f1, f2);
         v.push_back(f1);
         v.push_back(f2);
-//         kDebug() << f1 << " = f1 f2 = " << f2 << " " << it->m_i1 << " " << it->m_j1 << " " << it->m_i2 << " " << it->m_j2 << endl;
+//         kDebug(41006) << f1 << " = f1 f2 = " << f2 << " " << it->m_i1 << " " << it->m_j1 << " " << it->m_i2 << " " << it->m_j2 << endl;
       }
       return v;
     }

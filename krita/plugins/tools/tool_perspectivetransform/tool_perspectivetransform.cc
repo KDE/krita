@@ -48,7 +48,7 @@ ToolPerspectiveTransform::ToolPerspectiveTransform(QObject *parent, const QStrin
 
     if ( parent->inherits("KoToolRegistry") )
     {
-        kDebug() << " add perspective transform tool to the registry" << endl;
+        kDebug(41006) << " add perspective transform tool to the registry" << endl;
         KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
         r->add(new KisToolPerspectiveTransformFactory());
     }

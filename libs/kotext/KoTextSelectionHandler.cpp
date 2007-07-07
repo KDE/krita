@@ -108,7 +108,14 @@ void KoTextSelectionHandler::underline(bool underline) {
     Q_ASSERT(d->caret);
     emit startMacro(i18n("Underline"));
     QTextCharFormat format;
-    format.setFontUnderline(underline);
+    if (underline) {
+        format.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
+        format.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
+    } else {
+        format.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::NoLineType);
+        format.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::NoLineStyle);
+    }
+    //format.setFontUnderline(underline);
     d->caret->mergeCharFormat(format);
     emit stopMacro();
 }
@@ -117,7 +124,14 @@ void KoTextSelectionHandler::strikeOut(bool strikeout) {
     Q_ASSERT(d->caret);
     emit startMacro(i18n("Strike Out"));
     QTextCharFormat format;
-    format.setFontStrikeOut(strikeout ? Qt::SolidLine : Qt::NoPen);
+    if (strikeout) {
+        format.setProperty(KoCharacterStyle::StrikeOutType, KoCharacterStyle::SingleLine);
+        format.setProperty(KoCharacterStyle::StrikeOutStyle, KoCharacterStyle::SolidLine);
+    } else {
+        format.setProperty(KoCharacterStyle::StrikeOutType, KoCharacterStyle::NoLineType);
+        format.setProperty(KoCharacterStyle::StrikeOutStyle, KoCharacterStyle::NoLineStyle);
+    }
+    //format.setFontStrikeOut(strikeout ? Qt::SolidLine : Qt::NoPen);
     d->caret->mergeCharFormat(format);
     emit stopMacro();
 }

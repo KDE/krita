@@ -282,6 +282,8 @@ KoScriptManagerDialog::KoScriptManagerDialog()
 {
     setCaption( i18n("Script Manager") );
     setButtons( KDialog::Ok | KDialog::Cancel );
+    setButtonText( KDialog::Ok, i18n("Save") );
+    setButtonIcon( KDialog::Ok, KIcon("document-save") );
     m_collection = new KoScriptManagerCollection( mainWidget() );
     setMainWidget(m_collection);
     resize( QSize(520, 380).expandedTo( minimumSizeHint() ) );

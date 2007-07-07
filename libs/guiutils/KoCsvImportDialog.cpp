@@ -60,7 +60,6 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     setDefaultButton(KDialog::No);
 
     setCaption( i18n( "Import Data" ) );
-    qApp->restoreOverrideCursor();
 
     QStringList encodings;
     encodings << i18nc( "Descriptive encoding name", "Recommended ( %1 )" ,"UTF-8" );
@@ -119,7 +118,6 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
 
 KoCsvImportDialog::~KoCsvImportDialog()
 {
-    qApp->setOverrideCursor(Qt::WaitCursor);
 }
 
 

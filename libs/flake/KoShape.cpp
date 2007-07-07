@@ -41,6 +41,7 @@
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
 #include <KoUnit.h>
+#include <KoOasisStyles.h>
 
 #include <QPainter>
 #include <QVariant>
@@ -617,7 +618,7 @@ QString KoShape::style( KoShapeSavingContext &context ) const
             style.addProperty( "draw:fill","none" );
             break;
         default:    // TODO all the other ones.
-            //KoOasisStyles::saveOasisFillStyle( style, context.mainStyles(), bg );
+            KoOasisStyles::saveOasisFillStyle( style, context.mainStyles(), bg );
             break;
     }
 

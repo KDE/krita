@@ -45,6 +45,10 @@ public:
         delete listStyle;
     }
 
+    void setProperty(int key, const QVariant &value) {
+        stylesPrivate->add(key, value);
+    }
+
     QString name;
     KoCharacterStyle *charStyle;
     KoListStyle *listStyle;
@@ -63,6 +67,7 @@ static const int properties[] = {
     QTextFormat::TextIndent,
     QTextFormat::BlockIndent,
     QTextFormat::BlockNonBreakableLines,
+    QTextFormat::BackgroundBrush,
     KoParagraphStyle::StyleId,
     KoParagraphStyle::FixedLineHeight,
     KoParagraphStyle::MinimumLineHeight,
@@ -735,6 +740,25 @@ void KoParagraphStyle::setTextProgressionDirection(KoText::Direction dir) {
     setProperty(TextProgressionDirection, dir);
 }
 
+void KoParagraphStyle::setBackground (const QBrush &brush) {
+    d->setProperty(QTextFormat::BackgroundBrush, brush);
+}
+
+void KoParagraphStyle::clearBackground() {
+    d->stylesPrivate->remove(QTextCharFormat::BackgroundBrush);
+}
+
+QBrush KoParagraphStyle::background() const {
+    QVariant variant = d->stylesPrivate->value(QTextFormat::BackgroundBrush);
+
+    if(variant.isNull()) {
+        QBrush brush;
+        return brush;
+    }
+    return qvariant_cast<QBrush>(variant);
+}
+
+
 void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
     // in 1.6 this was defined at KoParagLayout::loadOasisParagLayout(KoParagLayout&, KoOasisContext&)
 
@@ -1012,7 +1036,7 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
     // The fo:background-color attribute specifies the background color of a paragraph.
     if ( styleStack.hasProperty( KoXmlNS::fo, "background-color") ) {
         const QString bgcolor = styleStack.property( KoXmlNS::fo, "background-color");
-        QBrush brush = d->charStyle->background();
+        QBrush brush = background();
         if (bgcolor == "transparent")
             brush.setStyle(Qt::NoBrush);
         else {
@@ -1020,7 +1044,7 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
                 brush.setStyle(Qt::SolidPattern);
             brush.setColor(bgcolor); // #rrggbb format
         }
-        d->charStyle->setBackground(brush);
+        setBackground(brush);
     }
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,

@@ -279,6 +279,13 @@ public:
      */
     bool followDocBaseline() const;
 
+    /// See similar named method on QTextBlockFormat
+    void setBackground (const QBrush &brush);
+    /// See similar named method on QTextBlockFormat
+    QBrush background () const;
+    /// See similar named method on QTextBlockFormat
+    void clearBackground ();
+    
     void setBreakBefore(bool on);
     bool breakBefore();
     void setBreakAfter(bool on);

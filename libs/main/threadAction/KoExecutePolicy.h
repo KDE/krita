@@ -20,7 +20,7 @@
 #ifndef TW_EXECUTEPOLICY_H
 #define TW_EXECUTEPOLICY_H
 
-#include <kofficecore_export.h>
+#include <komain_export.h>
 
 class QVariant;
 

@@ -26,7 +26,7 @@
 #include <QFont>
 #include <QMap>
 
-#include <kofficecore_export.h>
+#include <komain_export.h>
 
 class KConfig;
 

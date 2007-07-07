@@ -23,7 +23,7 @@
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
-#include <kofficecore_export.h>
+#include <komain_export.h>
 template<class T> class QList;
 template<class Key, class Value> class QMap;
 class QString;

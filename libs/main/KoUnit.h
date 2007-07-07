@@ -23,7 +23,7 @@
 #include <QString>
 #include <QStringList>
 #include <math.h> // for floor
-#include <kofficecore_export.h>
+#include <komain_export.h>
 
 class KoXmlWriter;
 

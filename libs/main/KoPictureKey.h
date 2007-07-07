@@ -22,7 +22,7 @@
 
 #include <QString>
 #include <QDateTime>
-#include <kofficecore_export.h>
+#include <komain_export.h>
 /**
  * \file KoPictureKey.h
  * \todo correct documentation (for example: sed "s/image/picture/g")

@@ -24,7 +24,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QString>
-#include <kofficecore_export.h>
+#include <komain_export.h>
 #include "KoGenStyle.h"
 
 

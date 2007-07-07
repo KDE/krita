@@ -47,7 +47,7 @@ class QIODevice;
  *
  * @author: David Faure <faure@kde.org>
  */
-#include <kofficecore_export.h>
+#include <komain_export.h>
 
 class KOMAIN_EXPORT KoOasisStore
 {

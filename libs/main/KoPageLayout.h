@@ -25,7 +25,7 @@
 
 #include "KoGenStyles.h"
 #include "KoPageFormat.h"
-#include "kofficecore_export.h"
+#include "komain_export.h"
 #include "KoXmlReader.h"
 
 /**

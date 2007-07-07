@@ -20,7 +20,7 @@
 #ifndef KOXMLNS_H
 #define KOXMLNS_H
 
-#include <kofficecore_export.h>
+#include <komain_export.h>
 /**
  * Repository of XML namespaces used for OASIS documents.
  * Note: if we have code which needs often those as QStrings, then maybe

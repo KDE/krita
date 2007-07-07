@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QStringList>
 
-#include <kofficecore_export.h>
+#include <komain_export.h>
 
 /**
  * The pluginloader singleton is responsible for loading the plugins

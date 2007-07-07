@@ -23,7 +23,7 @@
 #define KOOASISSETTINGS_H
 
 #include <qdom.h>
-#include <kofficecore_export.h>
+#include <komain_export.h>
 #include <KoXmlReader.h>
 
 /**

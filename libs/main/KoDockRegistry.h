@@ -22,7 +22,7 @@
 
 #include "KoGenericRegistry.h"
 #include "KoDockFactory.h"
-#include "kofficecore_export.h"
+#include "komain_export.h"
 
 #include <QObject>
 

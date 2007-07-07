@@ -21,7 +21,7 @@
 #define __koFactory_h__
 
 #include <kparts/factory.h>
-#include <kofficecore_export.h>
+#include <komain_export.h>
 
 class KOMAIN_EXPORT KoFactory : public KParts::Factory
 {

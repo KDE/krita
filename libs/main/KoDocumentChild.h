@@ -20,7 +20,7 @@
 #define __koDocumentChild_h__
 
 #include <KoChild.h>
-#include <kofficecore_export.h>
+#include <komain_export.h>
 #include <KoXmlReader.h>
 
 class KoView;

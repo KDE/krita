@@ -24,7 +24,7 @@
 #include <q3ptrlist.h>
 #include <QStringList>
 #include <QPixmap>
-#include <kofficecore_export.h>
+#include <komain_export.h>
 #include <kcomponentdata.h>
 
 /** @internal */

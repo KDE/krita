@@ -26,7 +26,7 @@
 #include <KoFilter.h>
 #include <KoQueryTrader.h>
 #include <KoStoreDevice.h>
-#include <kofficecore_export.h>
+#include <komain_export.h>
 
 class KTemporaryFile;
 class KoFilterManager;

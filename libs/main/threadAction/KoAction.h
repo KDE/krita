@@ -21,7 +21,7 @@
 
 #include <threadweaver/ThreadWeaver.h>
 
-#include "kofficecore_export.h"
+#include "komain_export.h"
 
 #include <QVariant>
 

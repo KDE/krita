@@ -22,7 +22,7 @@
 #include <QHash>
 #include <QtXml>
 
-#include <kofficecore_export.h>
+#include <komain_export.h>
 #include <KoXmlReader.h>
 
 class KoGenStyles;

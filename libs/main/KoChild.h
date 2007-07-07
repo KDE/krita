@@ -23,7 +23,7 @@
 #include <QMatrix>
 //Added by qt3to4:
 #include <QPolygon>
-#include <kofficecore_export.h>
+#include <komain_export.h>
 
 /**
  * KoChild is an abstract base class that represents the geometry

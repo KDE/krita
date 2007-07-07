@@ -26,7 +26,7 @@
 #include <qpicture.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <kofficecore_export.h>
+#include <komain_export.h>
 
 class QPainter;
 class QSize;

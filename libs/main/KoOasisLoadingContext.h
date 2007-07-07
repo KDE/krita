@@ -24,7 +24,7 @@ class KoOasisStyles;
 class KoStore;
 
 #include <QMap>
-#include <kofficecore_export.h>
+#include <komain_export.h>
 #include <QStringList>
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>

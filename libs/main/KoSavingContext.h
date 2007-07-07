@@ -19,7 +19,7 @@
 #ifndef KOSAVINGCONTEXT_H
 #define KOSAVINGCONTEXT_H
 
-#include <kofficecore_export.h>
+#include <komain_export.h>
 
 class KoGenStyles;
 

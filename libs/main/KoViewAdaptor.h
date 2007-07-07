@@ -30,7 +30,7 @@ class QString;
 class QStringList;
 
 #include "KoViewAdaptor.h"
-#include "kofficecore_export.h"
+#include "komain_export.h"
 //Added by qt3to4:
 
 // class KDCOPActionProxy;

@@ -23,7 +23,7 @@
 #ifndef KOPAGEFORMAT_H
 #define KOPAGEFORMAT_H
 
-#include "kofficecore_export.h"
+#include "komain_export.h"
 
 #include <kprinter.h>
 

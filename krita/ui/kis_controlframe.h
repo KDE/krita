@@ -46,24 +46,6 @@ class KisResourceMediator;
 class KisPaintopBox;
 class KisView2;
 
-class KisPopupFrame : public QMenu {
-
-    Q_OBJECT
-
-public:
-
-    KisPopupFrame(QWidget * parent, const char * name = 0);
-    virtual void keyPressEvent(QKeyEvent *);
-
-public:
-
-    void setChooser(KisItemChooser * chooser) { m_chooser = chooser; }
-    KisItemChooser * chooser() { return m_chooser; }
-
-private:
-    KisItemChooser * m_chooser;
-};
-
 
 /**
  *   Control Frame - status display with access to
@@ -106,9 +88,9 @@ private:
     KisIconWidget *m_patternWidget;
     KisIconWidget *m_gradientWidget;
 
-    KisPopupFrame * m_brushChooserPopup;
-    KisPopupFrame * m_patternChooserPopup;
-    KisPopupFrame * m_gradientChooserPopup;
+    QWidget * m_brushChooserPopup;
+    QWidget * m_patternChooserPopup;
+    QWidget * m_gradientChooserPopup;
 
     KisResourceMediator *m_brushMediator;
     KisResourceMediator *m_patternMediator;

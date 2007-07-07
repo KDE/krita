@@ -20,12 +20,12 @@
 #ifndef KIS_ICONWIDGET_H_
 #define KIS_ICONWIDGET_H_
 
-#include <QToolButton>
+#include <kis_popup_button.h>
 
 class QTableWidgetItem;
 
-class KisIconWidget : public QToolButton {
-    typedef QToolButton super;
+class KisIconWidget : public KisPopupButton {
+    typedef KisPopupButton super;
     Q_OBJECT
 
 /**

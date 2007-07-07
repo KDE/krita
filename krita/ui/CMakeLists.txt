@@ -1,3 +1,6 @@
+
+include_directories( ${KOTEXT_INCLUDES} )
+
 add_subdirectory( tests )
 
 configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-processor.h )
@@ -77,6 +80,7 @@ set(kritaui_LIB_SRCS
     kis_palette_docker.cc
     kis_pattern_chooser.cc
     kis_perspective_grid_manager.cpp
+    kis_popup_button.cc
     kis_previewdialog.cc
     kis_previewwidget.cc
     kis_qpainter_canvas.cpp

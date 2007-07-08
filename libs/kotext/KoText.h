@@ -37,9 +37,9 @@ namespace KoText {
     enum Options {
         ShowTextFrames =  278622039,
         BidiDocument = 493038196,
-        CurrentTextDocument = 382490375,
-        CurrentTextPosition = 183523,
-        CurrentTextAnchor = 341899485
+        CurrentTextDocument = 382490375, ///< set by the text plugin whenever the document is changed
+        CurrentTextPosition = 183523,   ///<  set by the text plugin whenever the position is changed
+        CurrentTextAnchor = 341899485   ///<  set by the text plugin whenever the anchor-position is changed
     };
 
     /// enum for a type of tabulator used

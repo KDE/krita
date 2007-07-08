@@ -88,7 +88,6 @@ public:
     }
 
     void tabsChanged(bool final) {
-kDebug() << "tabsChanged\n";
         Q_UNUSED(final); // TODO use this to cache the tab struct I'm altering.
         QTextBlock block = currentBlock();
         if(! block.isValid())

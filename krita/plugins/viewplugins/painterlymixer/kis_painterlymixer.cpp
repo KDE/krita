@@ -29,6 +29,7 @@
 #include <KDebug>
 
 #include <KoCanvasResourceProvider.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoToolProxy.h>
 
 #include "kis_canvas2.h"
@@ -46,7 +47,8 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
 {
     setupUi(this);
 
-    m_canvas->setDevice(m_view->image()->colorSpace());
+//     m_canvas->setDevice(m_view->image()->colorSpace());
+    m_canvas->setDevice(KoColorSpaceRegistry::instance()->rgb8());
     initTool();
     initSpots();
 }

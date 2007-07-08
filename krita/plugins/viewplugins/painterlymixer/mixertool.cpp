@@ -69,7 +69,7 @@ MixerTool::~MixerTool()
 #define INIT_CANVAS_ADSORBENCY 0.3
 #define INIT_MIXABILITY 0.9
 #define INIT_PIGMENT_CONCENTRATION 0.9
-#define INIT_PAINT_VOLUME 150.0
+#define INIT_PAINT_VOLUME 120.0
 #define INIT_REFLECTIVITY 0.1
 #define INIT_VISCOSITY 0.4
 #define INIT_WETNESS 0.5
@@ -195,9 +195,6 @@ void MixerTool::mixPaint(KisPaintDeviceSP stroke, KoPointerEvent *e)
                               strokeColor.green(),
                               strokeColor.blue());
 
-//            kDebug() << "STROKE CELL!!!!!" << endl;
-//            strokeCell.debug();
-
             if (canvasCell.opacity) {
                 // Loading canvas cell
                 canvasCell.canvasAdsorbency = (float)*can_it_adso.rawData() / 255.0;
@@ -211,22 +208,11 @@ void MixerTool::mixPaint(KisPaintDeviceSP stroke, KoPointerEvent *e)
                                    canvasColor.green(),
                                    canvasColor.blue());
 
-//                 kDebug() << "CANVAS CELL!!!!!" << endl;
-//                 canvasCell.debug();
+                strokeCell.mixColorsUsingRgb(canvasCell, force);
+//                 strokeCell.mixColorsUsingHls(canvasCell, force);
+//                 strokeCell.mixColorsUsingCmy(canvasCell, force);
 
                 strokeCell.mixProperties(canvasCell, force);
-//                 kDebug() << "--------------------------" << endl
-//                          << "DOPO LE PROPERTIES" << endl
-//                          << "----                  ----" << endl;
-//                 strokeCell.debug();
-
-                strokeCell.mixColorsUsingRgb(canvasCell, force);
-//                 kDebug() << "--------------------------" << endl
-//                          << "DOPO IL MIXING" << endl
-//                          << "----                  ----" << endl;
-//                 strokeCell.debug();
-//                 strokeCell.mixColorsUsingHls(canvasCell);
-//                 strokeCell.mixColorsUsingCmy(canvasCell);
 
                 strokeColor.setRgb(strokeCell.red, strokeCell.green, strokeCell.blue);
             }

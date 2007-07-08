@@ -48,7 +48,7 @@ void addPainterlyOverlays(KisPaintDevice* dev)
 This implementation uses
 Zimmer, System and method for digital rendering of images and printed articulation, 1994
 */
-void transmittanceToDensity(int T, int *D)
+void transmittanceToDensity(long T, long *D)
 {
     double d;
     if (T == 0)
@@ -56,32 +56,32 @@ void transmittanceToDensity(int T, int *D)
     else
         d = -log10((double)T/255.0);
     d = d * 1024.0/3.0;
-    *D = (int)(d + 0.5);
+    *D = (long)(d + 0.5);
 }
 
 /*
 This implementation uses
 Zimmer, System and method for digital rendering of images and printed articulation, 1994
 */
-void densityToTransmittance(int D, int *T)
+void densityToTransmittance(long D, long *T)
 {
     double d;
-    d = 255.0 * pow(10.0, - (double)D * 3.0/1024.0);
+    d = 255.0 * pow(M_E, - (double)D * 3.0/1024.0);
     if (d < 0.0)
         d = 0.0;
     if (d > 255.0)
         d = 255.0;
-    *T = (int)(d + 0.5);
+    *T = (long)(d + 0.5);
 }
 
-void rgbToCmy(int red, int green, int blue, int *cyan, int *magenta, int *yellow)
+void rgbToCmy(long red, long green, long blue, long *cyan, long *magenta, long *yellow)
 {
     transmittanceToDensity(red, cyan);
     transmittanceToDensity(green, magenta);
     transmittanceToDensity(blue, yellow);
 }
 
-void cmyToRgb(int cyan, int magenta, int yellow, int *red, int *green, int *blue)
+void cmyToRgb(long cyan, long magenta, long yellow, long *red, long *green, long *blue)
 {
     densityToTransmittance(cyan, red);
     densityToTransmittance(magenta, green);
@@ -93,7 +93,7 @@ float sigmoid(float value)
     //TODO return a sigmoid in [0, 1] here
     // TESTED ONLY WITH MOUSE!
     if (value == 0.5)
-        return value + 0.8;
+        return value + 0.3;
     else
         return value;
 }
@@ -134,7 +134,7 @@ void Cell::mixProperties(const Cell &cell, float force)
         V_f = 255.0;
 
     // Normalize
-    o_f = 255 * o_f;
+    o_f = 255.0 * o_f;
 
     wetness = w_f;
     opacity = (quint8)o_f;
@@ -194,15 +194,17 @@ void Cell::mixColorsUsingRgb(const Cell &cell, float force)
     b_f = (V_ac * b_c + V_as * b_s) / (V_ac + V_as);
 
 //     Normalize and set
-    red = (int)(r_f*255.0);
-    green = (int)(g_f*255.0);
-    blue = (int)(b_f*255.0);
+    red = (long)(r_f*255.0);
+    green = (long)(g_f*255.0);
+    blue = (long)(b_f*255.0);
+
+    updateHlsCmy();
 }
 
 /*
 This implementation use Tunde Cockshott Wet&Sticky code.
 */
-void Cell::mixColorsUsingHls(const Cell &cell)
+void Cell::mixColorsUsingHls(const Cell &cell, float)
 {
     float ratio, delta;
     ratio = volume / cell.volume;
@@ -222,20 +224,20 @@ void Cell::mixColorsUsingHls(const Cell &cell)
     updateRgbCmy();
 }
 
-void Cell::mixColorsUsingCmy(const Cell &cell)
+void Cell::mixColorsUsingCmy(const Cell &cell, float)
 {
     float ratio;
     int delta;
 
     ratio = wetness*volume / cell.wetness*cell.volume;
     delta = cyan - cell.cyan;
-    cyan = cell.cyan + (int)(ratio * delta);
+    cyan = cell.cyan + (long)(ratio * delta);
 
     delta = magenta - cell.magenta;
-    magenta = cell.magenta + (int)(ratio * delta);
+    magenta = cell.magenta + (long)(ratio * delta);
 
     delta = yellow - cell.yellow;
-    yellow = cell.yellow + (int)(ratio * delta);
+    yellow = cell.yellow + (long)(ratio * delta);
 
     updateRgbHls();
 }

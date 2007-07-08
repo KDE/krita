@@ -61,7 +61,7 @@ void KoZoomTool::wheelEvent ( KoPointerEvent * event )
 void KoZoomTool::mouseReleaseEvent( KoPointerEvent *event ) {
     KoInteractionTool::mouseReleaseEvent(event);
     if(m_temporary)
-        emit KoTool::sigDone();
+        emit KoTool::done();
 }
 
 void KoZoomTool::mousePressEvent( KoPointerEvent *event ) {

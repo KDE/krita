@@ -44,7 +44,7 @@ void KoCanvasResourceProvider::setResource( int key, const QVariant & value )
     else {
         d->resources.insert( key, value );
     }
-    emit sigResourceChanged( key, value );
+    emit resourceChanged( key, value );
 }
 
 QVariant KoCanvasResourceProvider::resource(int key)
@@ -167,7 +167,7 @@ void KoCanvasResourceProvider::clearResource(int key) {
         return;
     d->resources.remove(key);
     QVariant empty;
-    emit sigResourceChanged( key, empty );
+    emit resourceChanged( key, empty );
 }
 
 #include "KoCanvasResourceProvider.moc"

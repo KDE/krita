@@ -938,16 +938,16 @@ signals:
      * Emitted e.g. at the beginning of a save operation
      * This is emitted by KoDocument and used by KoView to display a statusbar message
      */
-    void sigStatusBarMessage( const QString& text );
+    void statusBarMessage( const QString& text );
 
     /**
      * Emitted e.g. at the end of a save operation
      * This is emitted by KoDocument and used by KoView to clear the statusbar message
      */
-    void sigClearStatusBarMessage();
+    void clearStatusBarMessage();
 
-    void sigBeginOperation();
-    void sigEndOperation();
+    void beginOperation();
+    void endOperation();
 
     /**
     * Emitted when the document is modified

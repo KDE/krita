@@ -607,7 +607,7 @@ void KoPathTool::activate (bool temporary) {
         }
     }
     if( !found ) {
-        emit sigDone();
+        emit done();
         return;
     }
     useCursor(Qt::ArrowCursor, true);

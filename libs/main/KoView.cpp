@@ -146,10 +146,10 @@ KoView::KoView( KoDocument *document, QWidget *parent )
   connect( d->m_doc, SIGNAL( childChanged( KoDocumentChild * ) ),
            this, SLOT( slotChildChanged( KoDocumentChild * ) ) );
 
-  connect( d->m_doc, SIGNAL( sigBeginOperation() ),
+  connect( d->m_doc, SIGNAL( beginOperation() ),
            this, SLOT( beginOperation() ) );
 
-  connect( d->m_doc, SIGNAL( sigEndOperation() ),
+  connect( d->m_doc, SIGNAL( endOperation() ),
            this, SLOT( endOperation() ) );
 
 
@@ -178,9 +178,9 @@ KoView::KoView( KoDocument *document, QWidget *parent )
                this, SLOT( slotClearStatusText() ) );
 #endif
 
-      connect( d->m_doc, SIGNAL( sigStatusBarMessage( const QString& ) ),
+      connect( d->m_doc, SIGNAL( statusBarMessage( const QString& ) ),
                this, SLOT( slotActionStatusText( const QString& ) ) );
-      connect( d->m_doc, SIGNAL( sigClearStatusBarMessage() ),
+      connect( d->m_doc, SIGNAL( clearStatusBarMessage() ),
                this, SLOT( slotClearStatusText() ) );
   }
   d->m_doc->setCurrent();

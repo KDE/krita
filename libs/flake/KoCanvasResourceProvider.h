@@ -39,7 +39,7 @@ namespace KoCanvasResource {
     /**
      * This enum holds identifiers to the resources that can be stored in here.
      */
-    enum EnumCanvasResource {
+    enum CanvasResource {
         ForegroundColor,    ///< The active forground color selected for this canvas.
         BackgroundColor,    ///< The active background color selected for this canvas.
         CompositeOperation,
@@ -79,19 +79,19 @@ public:
 
     /**
      * Set a resource of any type.
-     * @param key the integer key, based on KoCanvasResource::EnumCanvasResource
+     * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param value the new value for the key.
      */
     void setResource( int key, const QVariant & value );
     /**
      * Set a resource of type KoColor.
-     * @param key the integer key, based on KoCanvasResource::EnumCanvasResource
+     * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param color the new value for the key.
      */
     void setResource( int key, const KoColor & color );
     /**
      * Set a resource of type KoId.
-     * @param key the integer key, based on KoCanvasResource::EnumCanvasResource
+     * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param id the new value for the key.
      */
     void setResource( int key, const KoID & id );
@@ -194,7 +194,7 @@ signals:
      * @param key the indentifying key for the resource
      * @param value the variants new value.
      */
-    void sigResourceChanged(int key, const QVariant & value);
+    void resourceChanged(int key, const QVariant & value);
 
 private:
 

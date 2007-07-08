@@ -58,7 +58,7 @@ void KritaShapeTool::activate (bool temporary)
     }
     if ( !m_kritaShapeshape )
     {
-        emit sigDone();
+        emit done();
         return;
     }
     useCursor( Qt::ArrowCursor, true );

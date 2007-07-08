@@ -46,10 +46,8 @@ KoTool::KoTool(KoCanvasBase *canvas )
         KoCanvasResourceProvider * crp = m_canvas->resourceProvider();
         Q_ASSERT_X(crp, "KoTool::KoTool", "No KoCanvasResourceProvider");
         if (crp)
-            connect( m_canvas->resourceProvider(),
-                 SIGNAL( sigResourceChanged(int, const QVariant & ) ),
-                 this,
-                 SLOT( resourceChanged( int, const QVariant &  ) ) );
+            connect( m_canvas->resourceProvider(), SIGNAL( resourceChanged(int, const QVariant & ) ),
+                 this, SLOT( resourceChanged( int, const QVariant &  ) ) );
     }
 }
 
@@ -123,7 +121,7 @@ void KoTool::useCursor(QCursor cursor, bool force) {
         return;
 
     d->previousCursor = cursor;
-    emit sigCursorChanged(d->previousCursor);
+    emit cursorChanged(d->previousCursor);
 }
 
 QWidget * KoTool::optionWidget() {

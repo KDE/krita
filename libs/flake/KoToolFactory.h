@@ -59,7 +59,7 @@ public:
      * Create the new factory
      * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the tool, for
-     *   example for use by the KoTool::sigActivateTemporary.
+     *   example for use by the KoTool::activateTemporary.
      * @param name the user visible name of the tool this factory creates.
      */
     KoToolFactory(QObject *parent, const QString &id, const QString &name);

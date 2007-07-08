@@ -300,22 +300,22 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
         // repaint the decorations before we deactivate the tool as it might deleted 
         // data needed for the repaint
         d->canvasData->activeTool->deactivate();
-        disconnect(d->canvasData->activeTool, SIGNAL(sigCursorChanged(QCursor)),
+        disconnect(d->canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
                 this, SLOT(updateCursor(QCursor)));
-        disconnect(d->canvasData->activeTool, SIGNAL(sigActivateTool(const QString &)),
+        disconnect(d->canvasData->activeTool, SIGNAL(activateTool(const QString &)),
                 this, SLOT(switchToolRequested(const QString &)));
-        disconnect(d->canvasData->activeTool, SIGNAL(sigActivateTemporary(const QString &)),
+        disconnect(d->canvasData->activeTool, SIGNAL(activateTemporary(const QString &)),
                 this, SLOT(switchToolTemporaryRequested(const QString &)));
-        disconnect(d->canvasData->activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
+        disconnect(d->canvasData->activeTool, SIGNAL(done()), this, SLOT(switchBackRequested()));
     }
     d->canvasData->activeTool = tool;
-    connect(d->canvasData->activeTool, SIGNAL(sigCursorChanged(QCursor)),
+    connect(d->canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
             this, SLOT(updateCursor(QCursor)));
-    connect(d->canvasData->activeTool, SIGNAL(sigActivateTool(const QString &)),
+    connect(d->canvasData->activeTool, SIGNAL(activateTool(const QString &)),
             this, SLOT(switchToolRequested(const QString &)));
-    connect(d->canvasData->activeTool, SIGNAL(sigActivateTemporary(const QString &)),
+    connect(d->canvasData->activeTool, SIGNAL(activateTemporary(const QString &)),
             this, SLOT(switchToolTemporaryRequested(const QString &)));
-    connect(d->canvasData->activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
+    connect(d->canvasData->activeTool, SIGNAL(done()), this, SLOT(switchBackRequested()));
 
     // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
     d->canvasData->canvas->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);

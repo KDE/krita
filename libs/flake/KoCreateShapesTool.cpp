@@ -48,7 +48,7 @@ void KoCreateShapesTool::paint( QPainter &painter, const KoViewConverter &conver
 
 void KoCreateShapesTool::mouseReleaseEvent( KoPointerEvent *event ) {
     KoInteractionTool::mouseReleaseEvent(event);
-    emit KoTool::sigDone();
+    emit KoTool::done();
 }
 
 void KoCreateShapesTool::setShapeId( const QString &id ) {

@@ -231,11 +231,11 @@ public slots:
      * <p>There is one case where two tools are activated at the same.  This is the case
      * where one tool delegates work to another temporarily.  For example, while shift is
      * being held down.  The second tool will get activated with temporary=true and
-     * it should emit sigDone() when the state that activated it is ended.
+     * it should emit done() when the state that activated it is ended.
      * <p>One of the important tasks of activate is to call useCursor()
      *
      * @param temporary if true, this tool is only temporarily actived
-     *                  and should emit sigDone when it is done.
+     *                  and should emit done when it is done.
      * @see deactivate()
      */
     virtual void activate(bool temporary = false);
@@ -263,7 +263,7 @@ signals:
      * @param id the identification of the desired tool
      * @see toolId(), KoToolFactory::id()
      */
-    void sigActivateTool(const QString &id );
+    void activateTool(const QString &id );
 
     /**
      * Emitted when this tool wants itself to temporarily be replaced by another tool.
@@ -272,25 +272,25 @@ signals:
      * replaced by a colorpicker.
      * @param id the identification of the desired tool
      */
-    void sigActivateTemporary(const QString & id);
+    void activateTemporary(const QString & id);
 
     /**
      * Emitted when the tool has been temporarily activated and wants
      * to notify the world that it's done.
      */
-    void sigDone();
+    void done();
 
     /**
      * Emitted by useCursor() when the cursor to display on the canvas is changed.
      * The KoToolManager should connect to this signal to handle cursors further.
      */
-    void sigCursorChanged(QCursor cursor);
+    void cursorChanged(QCursor cursor);
 
     /**
      * A tool can have a selection that is copy-able, this signal is emitted when that status changes.
      * @param hasSelection is true when the tool holds selected data.
      */
-    void sigSelectionChanged(bool hasSelection);
+    void selectionChanged(bool hasSelection);
 
 protected:
     /**

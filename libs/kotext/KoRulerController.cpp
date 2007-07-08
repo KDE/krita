@@ -129,7 +129,7 @@ KoRulerController::KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceP
     : QObject(horizontalRuler),
     d(new Private(horizontalRuler, crp))
 {
-    connect(crp, SIGNAL(sigResourceChanged(int, const QVariant &)), this, SLOT(canvasResourceChanged(int)));
+    connect(crp, SIGNAL(resourceChanged(int, const QVariant &)), this, SLOT(canvasResourceChanged(int)));
     connect(horizontalRuler, SIGNAL(indentsChanged(bool)), this, SLOT(indentsChanged()));
     connect(horizontalRuler, SIGNAL(tabsChanged(bool)), this, SLOT(tabsChanged(bool)));
 }

@@ -271,9 +271,9 @@ KoToolSelection* KoToolProxy::selection() {
 void KoToolProxy::setActiveTool(KoTool *tool) {
     Q_ASSERT(tool);
     if(d->activeTool)
-        disconnect(d->activeTool, SIGNAL(sigSelectionChanged(bool)), this, SLOT(selectionChanged(bool)));
+        disconnect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
     d->activeTool = tool;
-    connect(d->activeTool, SIGNAL(sigSelectionChanged(bool)), this, SLOT(selectionChanged(bool)));
+    connect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
     d->selectionChanged(d->activeTool->selection() && d->activeTool->selection()->hasSelection());
 }
 

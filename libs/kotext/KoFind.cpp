@@ -168,7 +168,7 @@ KoFind::KoFind(QWidget *parent, KoCanvasResourceProvider *provider, KActionColle
     : QObject(parent),
     d (new Private(this, provider, parent))
 {
-    connect(provider, SIGNAL(sigResourceChanged(int,const QVariant&)), this, SLOT(resourceChanged(int,const QVariant& )));
+    connect(provider, SIGNAL(resourceChanged(int,const QVariant&)), this, SLOT(resourceChanged(int,const QVariant& )));
     ac->addAction(KStandardAction::Find, "edit_find", this, SLOT( findActivated() ));
     d->findNext = ac->addAction(KStandardAction::FindNext, "edit_findnext", this, SLOT( findNextActivated() ));
     d->findNext->setEnabled(false);

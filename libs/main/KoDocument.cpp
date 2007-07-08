@@ -429,7 +429,7 @@ bool KoDocument::saveFile()
         else {
             KIO::UDSEntry entry;
             if ( KIO::NetAccess::stat( url(), entry, shells().current() ) ) { // this file exists => backup
-                emit sigStatusBarMessage( i18n("Making backup...") );
+                emit statusBarMessage( i18n("Making backup...") );
                 KUrl backup;
                 if ( d->m_backupPath.isEmpty())
                     backup = url();
@@ -443,7 +443,7 @@ bool KoDocument::saveFile()
         }
     }
 
-    emit sigStatusBarMessage( i18n("Saving...") );
+    emit statusBarMessage( i18n("Saving...") );
     bool ret = false;
     bool suppressErrorDialog = false;
     if ( !isNativeFormat( outputMimeType ) ) {
@@ -497,7 +497,7 @@ bool KoDocument::saveFile()
         d->mimeType = outputMimeType;
         setConfirmNonNativeSave ( isExporting (), false );
     }
-    emit sigClearStatusBarMessage();
+    emit clearStatusBarMessage();
 
     return ret;
 }
@@ -578,11 +578,11 @@ void KoDocument::slotAutoSave()
         if ( d->m_specialOutputFlag == SaveEncrypted && d->m_password.isNull( ) )
         {
             // That advice should also fix this error from occurring again
-            emit sigStatusBarMessage( i18n( "The password of this encrypted document is not known. Autosave aborted! Please save your work manually." ) );
+            emit statusBarMessage( i18n( "The password of this encrypted document is not known. Autosave aborted! Please save your work manually." ) );
         }
         else {
             connect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
-            emit sigStatusBarMessage( i18n("Autosaving...") );
+            emit statusBarMessage( i18n("Autosaving...") );
             d->m_autosaving = true;
             bool ret = saveNativeFormat( autoSaveFile( localFilePath() ) );
             setModified( true );
@@ -591,10 +591,10 @@ void KoDocument::slotAutoSave()
                 d->m_autoSaveTimer.stop(); // until the next change
             }
             d->m_autosaving = false;
-            emit sigClearStatusBarMessage();
+            emit clearStatusBarMessage();
             disconnect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
             if ( !ret )
-                emit sigStatusBarMessage( i18n("Error during autosave! Partition full?") );
+                emit statusBarMessage( i18n("Error during autosave! Partition full?") );
         }
     }
 }
@@ -2127,7 +2127,7 @@ void KoDocument::emitBeginOperation()
 
     /* if we're already in an operation, don't send the signal again */
     if (!isInOperation())
-        emit sigBeginOperation();
+        emit beginOperation();
     d->m_numOperations++;
 }
 
@@ -2137,7 +2137,7 @@ void KoDocument::emitEndOperation()
 
     /* don't end the operation till we've cleared all the nested operations */
     if (d->m_numOperations == 0)
-        emit sigEndOperation();
+        emit endOperation();
     else if (d->m_numOperations < 0)
         /* ignore 'end' calls with no matching 'begin' call */
         d->m_numOperations = 0;

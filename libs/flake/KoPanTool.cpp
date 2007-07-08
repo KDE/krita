@@ -61,7 +61,7 @@ void KoPanTool::mouseReleaseEvent( KoPointerEvent *event ) {
     event->accept();
     useCursor(QCursor(Qt::OpenHandCursor));
     if(m_temporary)
-        emit sigDone();
+        emit done();
 }
 
 void KoPanTool::keyPressEvent(QKeyEvent *event) {
@@ -71,7 +71,7 @@ void KoPanTool::keyPressEvent(QKeyEvent *event) {
 
 void KoPanTool::activate(bool temporary) {
     if(m_controller == 0)
-        emit sigDone();
+        emit done();
     m_temporary = temporary;
     useCursor(QCursor(Qt::OpenHandCursor), true);
 }

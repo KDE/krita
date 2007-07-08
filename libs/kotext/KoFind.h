@@ -29,10 +29,23 @@ class KoCanvasResourceProvider;
 class KActionCollection;
 class QTextDocument;
 
+/**
+ * This controller class allows you to get the relevant find actions
+ * added to your action collection and make them act similarly for all KOffice apps.
+ */
 class KOTEXT_EXPORT KoFind : public QObject {
     Q_OBJECT
 public:
+    /**
+     * Constructor for the KoFind controller.
+     * You can create and forget this class in order to gain find features for your application.
+     * @param parent the parent widget, used both as an anchor for the find dialog and for
+     *   memory management purposes.
+     * @param provider the resource provider for the canvas, used to signal the text shape.
+     * @param ac the action collection that the find actions can be added to.
+     */
     KoFind(QWidget *parent, KoCanvasResourceProvider *provider, KActionCollection *ac);
+    /// destructor
     ~KoFind();
 
 private:

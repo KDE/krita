@@ -843,7 +843,10 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
             QTextCharFormat linkCf = cursor.charFormat(); // and copy it to alter it
             linkCf.setAnchor(true);
+            linkCf.setForeground(Qt::blue);
             linkCf.setAnchorHref(ts.attributeNS(KoXmlNS::xlink, "href"));
+            linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
+            linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
             linkCf.setFontItalic(true);
             cursor.setCharFormat(linkCf);
             loadSpan(context, ts, cursor, stripLeadingSpace); // recurse

@@ -30,6 +30,7 @@
 class QPointF;
 class KisPainter;
 class KisFilterConfiguration;
+class Ui_FilterOpOptions;
 
 class KisFilterOpFactory  : public KisPaintOpFactory  {
 
@@ -41,9 +42,19 @@ public:
     virtual QString id() const { return "filter"; }
     virtual QString name() const { return i18n("Filter"); }
     virtual QString pixmap() { return "filterop.png"; }
+    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice);
 };
 
-
+class KisFilterOpSettings : public QObject, public KisPaintOpSettings {
+    Q_OBJECT
+    public:
+        KisFilterOpSettings(QWidget* parent);
+        virtual ~KisFilterOpSettings();
+        virtual QWidget *widget() const { return m_optionsWidget; }
+    private:
+        QWidget* m_optionsWidget;
+        Ui_FilterOpOptions* m_uiOptions;
+};
 
 class KisFilterOp : public KisPaintOp {
 

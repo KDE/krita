@@ -35,16 +35,50 @@
 #include "kis_painter.h"
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
+#include "kis_filter_registry.h"
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
 #include "kis_paintop.h"
 #include "kis_selection.h"
 
+#include "ui_FilterOpOptionsWidget.h"
 
 KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
 {
     KisPaintOp * op = new KisFilterOp(painter);
     return op;
+}
+
+KisPaintOpSettings *KisFilterOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice)
+{
+    Q_UNUSED(inputDevice);
+    return new KisFilterOpSettings(parent);
+}
+
+KisFilterOpSettings::KisFilterOpSettings(QWidget* parent) :
+        QObject(parent),
+        KisPaintOpSettings(parent),
+        m_optionsWidget(new QWidget(parent)),
+        m_uiOptions(new Ui_FilterOpOptions())
+{
+    m_uiOptions->setupUi(m_optionsWidget);
+
+    // Check which filters support painting
+    QList<KoID> l = KisFilterRegistry::instance()->listKeys();
+    QList<KoID> l2;
+    QList<KoID>::iterator it;
+    for (it = l.begin(); it !=  l.end(); ++it) {
+        KisFilterSP f = KisFilterRegistry::instance()->value((*it).id());
+        if (f->supportsPainting()) {
+            l2.push_back(*it);
+        }
+    }
+    m_uiOptions->filtersList->setIDList( l2 );
+}
+
+KisFilterOpSettings::~KisFilterOpSettings()
+{
+    delete m_uiOptions;
 }
 
 
@@ -159,3 +193,5 @@ void KisFilterOp::setFilterConfiguration(KisFilterConfiguration* filterConfigura
     delete m_filterConfiguration;
     m_filterConfiguration = filterConfiguration;
 }
+
+#include "kis_filterop.moc"

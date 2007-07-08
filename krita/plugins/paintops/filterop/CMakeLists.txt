@@ -7,6 +7,8 @@ set(kritafilterop_PART_SRCS
 
 kde4_automoc(${kritafilterop_PART_SRCS})
 
+kde4_add_ui_files(kritafilterop_PART_SRCS FilterOpOptionsWidget.ui)
+
 kde4_add_plugin(kritafilterop ${kritafilterop_PART_SRCS})
 
 

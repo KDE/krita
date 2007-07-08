@@ -24,16 +24,24 @@
 #include <KoColorSpaceAbstract.h>
 
 /**
- * Inherits this colorspace if you can't provide all the functions defined in KoColorSpace
- * and that you colorspace is unsupported by LCMS.
+ * Inherit this colorspace if you can't provide all the functions
+ * defined in KoColorSpace and/or if your colorspace is unsupported by
+ * LCMS.
  *
- * If you choose _fallback_ == KoRGB16Fallback, you need to reimplement toRgbA16/fromRgbA16.
- * If you choose _fallback_ == KoLAB16Fallback, you need to reimplement toLabA16/fromLabA16
+ * If you choose _fallback_ == KoRGB16Fallback, you need to
+ * reimplement toRgbA16/fromRgbA16.
+ *
+ * If you choose _fallback_ == KoLAB16Fallback, you need to
+ * reimplement toLabA16/fromLabA16.
  */
 template<class _CSTraits, class _fallback_>
 class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
     protected:
-        KoIncompleteColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent) : KoColorSpaceAbstract<_CSTraits>(id, name, parent), m_fallBackColorSpace(_fallback_::createColorSpace())
+        KoIncompleteColorSpace(const QString &id,
+                               const QString &name,
+                               KoColorSpaceRegistry * parent)
+            : KoColorSpaceAbstract<_CSTraits>(id, name, parent),
+              m_fallBackColorSpace(_fallback_::createColorSpace())
         {
             m_qcolordata = new quint16[4];
             m_convertionCache.resize( m_fallBackColorSpace->pixelSize() );
@@ -43,10 +51,10 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
           delete m_fallBackColorSpace;
         }
     public:
-        
+
         virtual bool hasHighDynamicRange() const { return false; }
         virtual KoColorProfile * profile() const { return 0; }
-        
+
         virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile=0) const
         {
             Q_UNUSED(profile);

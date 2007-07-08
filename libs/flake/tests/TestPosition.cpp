@@ -73,7 +73,7 @@ void TestPosition::testAbsolutePosition() {
 }
 
 void TestPosition::testSetAbsolutePosition() {
-    shape1->rotate(0);
+    shape1->rotate(-90); // rotate back as we are rotating relative
     shape1->setPosition(QPointF(10, 10));
     QCOMPARE(shape1->absolutePosition(), QPointF(10 + 25, 10 + 25) );
     shape1->setAbsolutePosition(QPointF(10, 10));

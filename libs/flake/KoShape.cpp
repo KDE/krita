@@ -150,7 +150,7 @@ void KoShape::scale( double sx, double sy )
     scaleMatrix.translate( pos.x(), pos.y() );
     scaleMatrix.scale( sx, sy );
     scaleMatrix.translate( -pos.x(), -pos.y() );
-    applyTransformation( scaleMatrix );
+    d->localMatrix = d->localMatrix * scaleMatrix;
 
     notifyChanged();
     d->shapeChanged(ScaleChanged);
@@ -163,7 +163,7 @@ void KoShape::rotate( double angle )
     rotateMatrix.translate( center.x(), center.y() );
     rotateMatrix.rotate( angle );
     rotateMatrix.translate( -center.x(), -center.y() );
-    d->localMatrix = rotateMatrix * d->localMatrix;
+    d->localMatrix = d->localMatrix * rotateMatrix;
 
     notifyChanged();
     d->shapeChanged(RotationChanged);
@@ -176,7 +176,7 @@ void KoShape::shear( double sx, double sy )
     shearMatrix.translate( pos.x(), pos.y() );
     shearMatrix.shear( sx, sy );
     shearMatrix.translate( -pos.x(), -pos.y() );
-    d->localMatrix = shearMatrix * d->localMatrix;
+    d->localMatrix = d->localMatrix * shearMatrix;
 
     notifyChanged();
     d->shapeChanged(ShearChanged);
@@ -203,13 +203,13 @@ void KoShape::resize( const QSizeF &newSize )
     d->shapeChanged(SizeChanged);
 }
 
-void KoShape::setPosition( const QPointF &position )
+void KoShape::setPosition( const QPointF &newPosition )
 {
-    QPointF currentPos = d->localMatrix.map( QPointF(0,0) );
-    if( position == currentPos )
+    QPointF currentPos = position();
+    if( newPosition == currentPos )
         return;
     QMatrix translateMatrix;
-    translateMatrix.translate( position.x()-currentPos.x(), position.y()-currentPos.y() );
+    translateMatrix.translate( newPosition.x()-currentPos.x(), newPosition.y()-currentPos.y() );
     d->localMatrix = d->localMatrix * translateMatrix;
 
     notifyChanged();
@@ -259,7 +259,7 @@ QMatrix KoShape::transformationMatrix(const KoViewConverter *converter) const {
     }
 
     if(converter) {
-        QPointF pos = position();
+        QPointF pos = d->localMatrix.map( QPoint() );
         QPointF trans = converter->documentToView( pos ) - pos;
         matrix.translate( trans.x(), trans.y() );
     }
@@ -371,7 +371,7 @@ void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor)
     QPointF translate = newPosition - currentAbsPosition;
     QMatrix translateMatrix;
     translateMatrix.translate( translate.x(), translate.y() );
-    d->localMatrix = d->localMatrix * translateMatrix;
+    applyTransformation( translateMatrix );
     notifyChanged();
     d->shapeChanged(PositionChanged);
 }
@@ -473,7 +473,9 @@ QSizeF KoShape::size () const {
 }
 
 QPointF KoShape::position() const {
-    return d->localMatrix.map( QPointF(0,0) );
+    QPointF center( 0.5*size().width(), 0.5*size().height() );
+    return d->localMatrix.map( center ) - center;
+    //return d->localMatrix.map( QPointF(0,0) );
 }
 
 void KoShape::addConnectionPoint( const QPointF &point ) {

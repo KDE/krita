@@ -382,6 +382,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     if( m_img == 0 ) {
         m_img = new KisImage(m_adapter, width, height, cs, "built image");
         Q_CHECK_PTR(m_img);
+        m_img->lock();
         if(profile && !profile->isSuitableForOutput())
         {
             KisAnnotationSP annotation;
@@ -486,7 +487,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 
     delete [] row_pointer;
-
+    m_img->unlock();
     return KisImageBuilder_RESULT_OK;
 
 }

@@ -366,7 +366,7 @@ KisImageSP KisDoc2::loadImage(const QDomElement& element)
     QString attr;
     QDomNode node;
     QDomNode child;
-    KisImageSP img;
+    KisImageSP img = 0;
     QString name;
     qint32 width;
     qint32 height;
@@ -426,12 +426,14 @@ KisImageSP KisDoc2::loadImage(const QDomElement& element)
 
         img = new KisImage(m_d->undoAdapter, width, height, cs, name);
         Q_CHECK_PTR(img);
+        img->lock();
         connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
         documentInfo()->setAboutInfo("title", name);
         documentInfo()->setAboutInfo("comment", description);
         img->setResolution(xres, yres);
 
         loadLayers(element, img, img->rootLayer());
+        img->unlock();
 
     }
 
@@ -797,6 +799,8 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
     setUndo(false);
 
     KisImageSP img = KisImageSP(new KisImage(m_d->undoAdapter, width, height, colorspace, name));
+    img->lock();
+
     Q_CHECK_PTR(img);
     connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
 
@@ -813,6 +817,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
     setCurrentImage(img );
 
     setUndo(true);
+    img->unlock();
 
     return img;
 }
@@ -833,7 +838,10 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColor
     setUndo(false);
 
     img = new KisImage(m_d->undoAdapter, width, height, cs, name);
+
     Q_CHECK_PTR(img);
+    img->lock();
+
     connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
     img->setResolution(imgResolution, imgResolution);
     img->setProfile(cs->profile());
@@ -864,7 +872,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColor
     cfg.defImgResolution(imgResolution);
 
     setUndo(true);
-
+    img->unlock();
     return true;
 }
 

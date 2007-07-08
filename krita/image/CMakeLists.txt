@@ -88,6 +88,16 @@ set(kritaimage_LIB_SRCS
    kis_transformation_mask.cpp
    kis_clone_layer.cpp
    kis_pixel_selection.cpp
+   kis_adsorbency_mask.cc
+   kis_gravity_mask.cc
+   kis_height_mask.cc
+   kis_mixability_mask.cc
+   kis_pigment_concentration_mask.cpp
+   kis_reflectivity_mask.cpp
+   kis_transparency_mask.cc
+   kis_viscosity_mask.cc
+   kis_volume_mask.cc
+   kis_wetness_mask.cc 
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})

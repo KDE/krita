@@ -32,22 +32,12 @@ class KisShapeControllerTest : public QObject
 
 private slots:
 
-    void initTestCase();
-    void cleanupTestCase();
-
     // tests
     void testSetImage();
     void testAddShape();
     void testRemoveShape();
     void testSetInitialShapeForView();
     void testShapeForLayer();
-
-private:
-
-    KisDoc2 * m_doc;
-    KisNameServer * m_nameServer;
-    KisImage * m_image;
-    KisShapeController * m_shapeController;
 
 };
 

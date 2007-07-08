@@ -55,6 +55,8 @@ public:
 
 private slots:
 
+    friend class KisShapeControllerTest;
+
     // These slots keep track of changes in the layer stack and make
     // sure that the shape stack doesn't get out of sync
     void slotLayerAdded( KisLayerSP layer );
@@ -66,6 +68,12 @@ private slots:
     void slotMaskRemoved( KisMaskSP mask, KisLayerSP wasParent,  KisMaskSP wasAboveThis );
     void slotMaskMoved( KisMaskSP mask, KisLayerSP previousParent, KisMaskSP wasAboveThis );
     void slotMasksChanged( KisLayerSP layer );
+
+private:
+
+    int layerMapSize();
+    int maskMapSize();
+
 
 private:
 

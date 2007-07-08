@@ -84,7 +84,10 @@ KisShapeController::~KisShapeController()
 
 void KisShapeController::setImage( KisImageSP image )
 {
+    kDebug() << "Setting image " << image << endl;
+
     if ( m_d->image ) {
+        kDebug() << "disconnecting previous image " << m_d->image << endl;
         m_d->image->disconnect( this );
         // First clear the current set of shapes away
         foreach( KoShape* shape, m_d->layerShapes ) {
@@ -104,31 +107,32 @@ void KisShapeController::setImage( KisImageSP image )
         m_d->maskShapes.clear();
     }
 
+    if ( image ) {
+        m_d->image = image;
 
+        kDebug() << "Connecting new image\n";
 
-    m_d->image = image;
+        KisLayerMapVisitor v( m_d->layerShapes, m_d->maskShapes );
+        m_d->image->rootLayer()->accept( v );
+        m_d->layerShapes = v.layerMap();
+        m_d->maskShapes = v.maskMap();
 
-    KisLayerMapVisitor v( m_d->layerShapes, m_d->maskShapes );
-    m_d->image->rootLayer()->accept( v );
-    m_d->layerShapes = v.layerMap();
-    m_d->maskShapes = v.maskMap();
-
-    foreach( KoView *view, m_d->doc->views() ) {
-        KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
-        foreach( KoShape* shape, m_d->layerShapes ) {
-            canvas->shapeManager()->add(shape);
+        foreach( KoView *view, m_d->doc->views() ) {
+            KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
+            foreach( KoShape* shape, m_d->layerShapes ) {
+                canvas->shapeManager()->add(shape);
+            }
+            foreach( KoShape* shape, m_d->maskShapes ) {
+                canvas->shapeManager()->add( shape );
+            }
+            canvas->canvasWidget()->update();
         }
-        foreach( KoShape* shape, m_d->maskShapes ) {
-            canvas->shapeManager()->add( shape );
-        }
-        canvas->canvasWidget()->update();
+
+        connect( m_d->image.data(), SIGNAL(sigLayerAdded( KisLayerSP )), this, SLOT(slotLayerAdded( KisLayerSP )) );
+        connect( m_d->image, SIGNAL(sigLayerRemoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )), this, SLOT(slotLayerRemoved( KisLayerSP, KisGroupLayerSP, KisLayerSP) ));
+        connect( m_d->image, SIGNAL(sigLayerMoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )), this, SLOT(slotLayerMoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )) );
+        connect( m_d->image, SIGNAL(sigLayersChanged( KisGroupLayerSP )), this, SLOT(slotLayersChanged( KisGroupLayerSP )) );
     }
-
-    connect( m_d->image.data(), SIGNAL(sigLayerAdded( KisLayerSP )), this, SLOT(slotLayerAdded( KisLayerSP )) );
-    connect( m_d->image.data(), SIGNAL(sigLayerRemoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )), this, SLOT(slotLayerRemoved( KisLayerSP, KisGroupLayerSP, KisLayerSP) ));
-    connect( m_d->image.data(), SIGNAL(sigLayerMoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )), this, SLOT(slotLayerMoved( KisLayerSP, KisGroupLayerSP, KisLayerSP )) );
-    connect( m_d->image.data(), SIGNAL(sigLayersChanged( KisGroupLayerSP )), this, SLOT(slotLayersChanged( KisGroupLayerSP )) );
-
 }
 
 void KisShapeController::removeShape( KoShape* shape )
@@ -166,6 +170,7 @@ void KisShapeController::removeShape( KoShape* shape )
 
 void KisShapeController::addShape( KoShape* shape )
 {
+    if ( !m_d->image ) return;
     // Only non-krita shapes get added through this method; krita
     // layer shapes are added to kisimage and then end up in
     // slotLayerAdded
@@ -233,6 +238,8 @@ void KisShapeController::addShape( KoShape* shape )
 
 void KisShapeController::setInitialShapeForView( KisView2 * view )
 {
+    if ( !m_d->image ) return;
+
     if(! m_d->layerShapes.isEmpty()) {
         Q_ASSERT(view->canvasBase());
         Q_ASSERT(view->canvasBase()->shapeManager());
@@ -246,6 +253,7 @@ void KisShapeController::setInitialShapeForView( KisView2 * view )
 
 void KisShapeController::slotLayerAdded( KisLayerSP layer )
 {
+    kDebug() << "slotLayerAdded " << layer << endl;
     // Check whether the layer is already in the map
     if ( m_d->layerShapes.contains( layer ) ) {
         kDebug(41007) << "The document already contains layer " << layer->name() << endl;
@@ -296,6 +304,8 @@ void KisShapeController::slotLayerAdded( KisLayerSP layer )
 
 void KisShapeController::slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis )
 {
+    kDebug() << "slotLayerRemoved " << layer << endl;
+
     Q_UNUSED( wasParent );
     Q_UNUSED( wasAboveThis );
 
@@ -304,6 +314,8 @@ void KisShapeController::slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wa
 
 void KisShapeController::slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis )
 {
+    kDebug() << "slotLayerMoved " << layer << endl;
+
     Q_UNUSED( previousParent );
     Q_UNUSED( wasAboveThis );
 
@@ -314,6 +326,7 @@ void KisShapeController::slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP prev
 
 void KisShapeController::slotLayersChanged( KisGroupLayerSP rootLayer )
 {
+    kDebug() << "slotLayersChanged " << rootLayer << endl;
     Q_UNUSED( rootLayer );
 
     setImage( m_d->image );
@@ -357,5 +370,17 @@ void KisShapeController::slotMaskMoved( KisMaskSP mask, KisLayerSP previousParen
 void KisShapeController::slotMasksChanged( KisLayerSP layer )
 {
 }
+
+
+int KisShapeController::layerMapSize()
+{
+    return m_d->layerShapes.size();
+}
+
+int KisShapeController::maskMapSize()
+{
+    return m_d->maskShapes.size();
+}
+
 
 #include "kis_shape_controller.moc"

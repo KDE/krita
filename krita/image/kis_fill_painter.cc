@@ -168,6 +168,16 @@ void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP projec
 void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP projection) {
     m_cancelRequested = false;
 
+    if (m_width < 0 || m_height < 0) {
+        if (m_device->image()) {
+            m_width = m_device->image()->width();
+            m_height = m_device->image()->height();
+        }
+        else {
+            m_width = m_height = 500;
+        }
+    }
+
     m_size = m_width * m_height;
 
     // Create a selection from the surrounding area
@@ -183,8 +193,8 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
     QRect rc = m_selection->selectedExactRect();
 
     // Sets dirty!
-//     bltSelection(rc.x(), rc.y(), m_compositeOp, filled, m_selection, m_opacity,
-//                  rc.x(), rc.y(), rc.width(), rc.height());
+    bltMask(rc.x(), rc.y(), m_compositeOp, filled, m_selection, m_opacity,
+                 rc.x(), rc.y(), rc.width(), rc.height());
 
     emit notifyProgressDone();
 
@@ -210,6 +220,13 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
             QRect rc = m_device->selection()->selectedExactRect();
             m_width = rc.width() - (startX - rc.x());
             m_height = rc.height() - (startY - rc.y());
+        }
+        else if (m_device->image()) {
+            m_width = m_device->image()->width();
+            m_height = m_device->image()->height();
+        }
+        else {
+            m_width = m_height = 500;
         }
     }
     // Otherwise the width and height should have been set

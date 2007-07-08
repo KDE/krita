@@ -46,6 +46,7 @@ class KoStyleManager;
 class KoShape;
 class KoImageCollection;
 class KoImageData;
+class KoTextAnchor;
 
 //class QDomDocument;
 class QTextCursor;
@@ -151,6 +152,11 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
         * Load the image and return a KoShape instance for it.
         */
         virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
+
+        /**
+        * Load an anchor for the shape and return a KoTextAnchor instance for it.
+        */
+        virtual KoTextAnchor* loadShapeAnchor(KoTextLoadingContext& context, const KoXmlElement& anchorElem, QTextCursor& cursor, KoShape* shape);
 
         /**
         * This is called in loadBody before reading the body starts.

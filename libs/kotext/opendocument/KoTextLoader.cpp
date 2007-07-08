@@ -38,6 +38,7 @@
 #include <KoShape.h>
 #include <KoShapeLoadingContext.h>
 #include <KoImageData.h>
+#include <KoTextAnchor.h>
 
 #include "../styles/KoStyleManager.h"
 #include "../styles/KoParagraphStyle.h"
@@ -760,6 +761,11 @@ void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& 
 KoShape* KoTextLoader::loadImageShape(KoTextLoadingContext&, const KoXmlElement&, const KoXmlElement&, QTextCursor&)
 {
     return 0;
+}
+
+KoTextAnchor* KoTextLoader::loadShapeAnchor(KoTextLoadingContext&, const KoXmlElement&, QTextCursor&, KoShape*)
+{
+    return 0; //new KoTextAnchor(shape);
 }
 
 //1.6: KoTextParag::loadOasisSpan

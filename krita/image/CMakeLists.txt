@@ -88,11 +88,6 @@ set(kritaimage_LIB_SRCS
    kis_transformation_mask.cpp
    kis_clone_layer.cpp
    kis_pixel_selection.cpp
-   metadata/kis_meta_data_entry.cc
-   metadata/kis_meta_data_store.cc
-   metadata/kis_meta_data_value.cc
-   metadata/kis_meta_data_schema.cc
-   metadata/kis_meta_data_io_backend.cc
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})

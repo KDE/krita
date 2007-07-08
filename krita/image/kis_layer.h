@@ -42,9 +42,6 @@ class QBitArray;
 class KisGroupLayer;
 class KoColorSpace;
 class QUndoCommand;
-namespace KisMetaData {
-    class Store;
-}
 
 /**
  * Abstract class that represents the concept of a Layer in Krita. This is not related
@@ -292,11 +289,6 @@ public:
      */
     bool hasEffectMasks() const;
 
-    
-    /**
-     * @return the metadata object associated with this object.
-     */
-    KisMetaData::Store* metaData();
     
 protected:
     /**

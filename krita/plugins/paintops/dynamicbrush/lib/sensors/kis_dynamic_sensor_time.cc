@@ -42,7 +42,7 @@ double KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
             m_time = m_length;
         }
     }
-    kdDebug() << m_time << " " << pi.movement.length() << " " << m_length << " " << (1.0 - m_time / m_length) << endl;
+//     kdDebug() << m_time << " " << pi.movement.length() << " " << m_length << " " << (1.0 - m_time / m_length) << endl;
     return 1.0 - m_time / m_length;
 }
 

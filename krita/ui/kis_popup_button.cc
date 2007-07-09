@@ -22,12 +22,13 @@
 #include <kdebug.h>
 
 struct KisPopupButton::Private {
-    Private() : popupWidget(new QWidget) {}
+    Private() : popupWidget(0) {}
     QWidget* popupWidget;
 };
 
 KisPopupButton::KisPopupButton(QWidget* parent) : QPushButton(parent), d(new Private)
 {
+    setPopupWidget(new QWidget);
     connect(this, SIGNAL(released()), SLOT(showPopupWidget()));
 }
 
@@ -40,14 +41,22 @@ KisPopupButton::~KisPopupButton()
 void KisPopupButton::setPopupWidget(QWidget* widget)
 {
     delete d->popupWidget;
-    d->popupWidget = widget;
+    if(widget)
+    {
+        d->popupWidget = widget;
+    } else {
+        d->popupWidget = new QWidget;
+    }
     d->popupWidget->setWindowFlags(Qt::Popup);
 }
 
 void KisPopupButton::showPopupWidget()
 {
-    d->popupWidget->move( mapToGlobal ( QPoint(0, height() )));
-    d->popupWidget->setVisible(true);
+    if(d->popupWidget)
+    {
+        d->popupWidget->move( mapToGlobal ( QPoint(0, height() )));
+        d->popupWidget->setVisible(true);
+    }
 }
 
 #include "kis_popup_button.moc"

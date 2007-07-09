@@ -30,7 +30,9 @@
 class QPointF;
 class KisPainter;
 class KisFilterConfiguration;
+class KisFilterConfigWidget;
 class Ui_FilterOpOptions;
+class KoID;
 
 class KisFilterOpFactory  : public KisPaintOpFactory  {
 
@@ -51,9 +53,15 @@ class KisFilterOpSettings : public QObject, public KisPaintOpSettings {
         KisFilterOpSettings(QWidget* parent);
         virtual ~KisFilterOpSettings();
         virtual QWidget *widget() const { return m_optionsWidget; }
+        KisFilterSP filter() const;
+        KisFilterConfiguration* filterConfig() const;
+    protected slots:
+        void setCurrentFilter(const KoID &);
     private:
         QWidget* m_optionsWidget;
         Ui_FilterOpOptions* m_uiOptions;
+        KisFilterSP m_currentFilter;
+        KisFilterConfigWidget* m_currentFilterConfigWidget;
 };
 
 class KisFilterOp : public KisPaintOp {

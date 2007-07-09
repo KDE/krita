@@ -30,9 +30,35 @@
 #include "kis_iterator_test.h"
 #include "kis_paint_device.h"
 
-void KisIteratorTest::writeBytes()
+void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)( KoColorSpace*cs ) )
 {
-    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
+
+    foreach( QString csId, csIds ) {
+
+        kDebug() << "Testing with " << csId << endl;
+
+        QList<KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
+        if ( profiles.size() == 0 ) {
+            KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
+            if ( cs ) ( this->*funcPtr )( cs );
+        }
+        else {
+            foreach( KoColorProfile * profile, profiles ) {
+                KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
+                if ( cs ) ( this->*funcPtr )( cs );
+            }
+
+        }
+    }
+}
+
+
+
+
+void KisIteratorTest::writeBytes( KoColorSpace * colorSpace )
+{
+
     KisPaintDevice dev( colorSpace, "test");
 
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
@@ -68,9 +94,9 @@ void KisIteratorTest::writeBytes()
     QVERIFY( dev.exactBounds() == QRect( -10, -10, 640, 64 ) );
 }
 
-void KisIteratorTest::fill()
+void KisIteratorTest::fill( KoColorSpace * colorSpace )
 {
-    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+
     KisPaintDevice dev( colorSpace, "test");
 
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
@@ -94,9 +120,9 @@ void KisIteratorTest::fill()
 
 }
 
-void KisIteratorTest::rectIter()
+void KisIteratorTest::rectIter( KoColorSpace * colorSpace )
 {
-    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+
     KisPaintDevice dev( colorSpace, "test");
 
     quint8 * bytes = new quint8( colorSpace->pixelSize() );
@@ -117,13 +143,13 @@ void KisIteratorTest::rectIter()
     QVERIFY( dev.extent() == QRect( 0, 0, 128, 128 ) );
     QVERIFY( dev.exactBounds() == QRect( 0, 0, 128, 128 ) );
 
-     // BSAR: This causes an assert: BUG!
-     // CBR - naturally as we still have iterators accessing the data
-     // BSAR: of course not, isDone() has returned true, we're done
-     // accessing the data.
-     //dev.clear();
+    // BSAR: This causes an assert: BUG!
+    // CBR - naturally as we still have iterators accessing the data
+    // BSAR: of course not, isDone() has returned true, we're done
+    // accessing the data.
+    //dev.clear();
 
-     //it = dev.createRectIterator(10, 10, 128, 128);
+    //it = dev.createRectIterator(10, 10, 128, 128);
 //     while ( !it.isDone() ) {
 //         memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
 //         ++it;
@@ -133,9 +159,8 @@ void KisIteratorTest::rectIter()
 
 }
 
-void KisIteratorTest::hLineIter()
+void KisIteratorTest::hLineIter( KoColorSpace * colorSpace )
 {
-    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisPaintDevice dev( colorSpace, "test");
 
     quint8 * bytes = new quint8( colorSpace->pixelSize() );
@@ -186,9 +211,9 @@ void KisIteratorTest::hLineIter()
 
 }
 
-void KisIteratorTest::vLineIter()
+void KisIteratorTest::vLineIter( KoColorSpace * colorSpace )
 {
-    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+
     KisPaintDevice dev( colorSpace, "test");
     quint8 * bytes = new quint8( colorSpace->pixelSize() );
     memset( bytes, 128, colorSpace->pixelSize() );
@@ -224,10 +249,9 @@ void KisIteratorTest::vLineIter()
 
 }
 
-void KisIteratorTest::randomAccessor()
+void KisIteratorTest::randomAccessor( KoColorSpace * colorSpace )
 {
 
-    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisPaintDevice dev( colorSpace, "test");
     quint8 * bytes = new quint8( colorSpace->pixelSize() );
     memset( bytes, 128, colorSpace->pixelSize() );
@@ -255,6 +279,36 @@ void KisIteratorTest::randomAccessor()
 
 }
 
+
+void KisIteratorTest::writeBytes()
+{
+    allCsApplicator( &KisIteratorTest::writeBytes );
+}
+
+void KisIteratorTest::fill()
+{
+    allCsApplicator( &KisIteratorTest::fill );
+}
+
+void KisIteratorTest::rectIter()
+{
+    allCsApplicator( &KisIteratorTest::rectIter );
+}
+
+void KisIteratorTest::hLineIter()
+{
+    allCsApplicator( &KisIteratorTest::hLineIter );
+}
+
+void KisIteratorTest::vLineIter()
+{
+    allCsApplicator( &KisIteratorTest::vLineIter );
+}
+
+void KisIteratorTest::randomAccessor()
+{
+    allCsApplicator( &KisIteratorTest::randomAccessor );
+}
 
 QTEST_KDEMAIN(KisIteratorTest, NoGUI)
 #include "kis_iterator_test.moc"

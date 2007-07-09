@@ -21,9 +21,22 @@
 
 #include <QtTest/QtTest>
 
+class KoColorSpace;
+
 class KisIteratorTest : public QObject
 {
     Q_OBJECT
+
+private:
+    void allCsApplicator(void (KisIteratorTest::* funcPtr)( KoColorSpace*cs ) );
+
+    void writeBytes( KoColorSpace * cs );
+    void fill( KoColorSpace * cs );
+    void rectIter( KoColorSpace * cs );
+    void hLineIter( KoColorSpace * cs );
+    void vLineIter( KoColorSpace * cs );
+    void randomAccessor( KoColorSpace * cs );
+
 
 private slots:
 

@@ -41,6 +41,7 @@ void KisPainterlyOverlayTester::testPainterlyOverlayColorSpaceCell()
 {
     KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
     Q_ASSERT( cs );
+    Q_ASSERT( cs->compositeOp( COMPOSITE_OVER ) == 0 );
     quint8 * bytes = cs->allocPixelBuffer( 1 );
     memset( bytes, 0, cs->pixelSize() );
 

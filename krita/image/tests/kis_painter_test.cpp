@@ -31,6 +31,9 @@
 #include "kis_painter.h"
 #include "kis_pixel_selection.h"
 /*
+
+Note: the bltMask tests assume the following geometry:
+
 0,0               0,30
   +---------+------+
   |  10,10  |      |
@@ -44,34 +47,69 @@
   +----------------+
                   30,30
  */
-// void KisPainterTest::testPaintDeviceBltMask()
-// {
-//     KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "dst");
+void KisPainterTest::testPaintDeviceBltMask(KoColorSpace * cs)
+{
 
-//     KisPixelSelectionSP src = new KisPaintDevice( KoColorSpaceRegistry::instance()->rgb8(), "src" );
-//     src->fill
-//     QCOMPARE( src->selectedExactRect(), QRect( 0, 0, 20, 20 ) );
+    KisPaintDeviceSP dst = new KisPaintDevice( cs, "dst");
 
-//     KisPixelSelectionSP mask = KisPixelSelectionSP(new KisPixelSelection(dev));
-//     mask->select(QRect(10,10,20,20));
-//     QCOMPARE( mask->selectedExactRect(), QRect( 10, 10, 20, 20 ) );
+    KisPaintDeviceSP src = new KisPaintDevice( cs, "src" );
+    src->fill( 0, 0, 20, 20, KoColor( Qt::red, 128, cs ).data() );
 
-//     KisPixelSelectionSP dst = KisPixelSelectionSP(new KisPixelSelection(dev));
-//     KisPainter painter(dst);
+    QCOMPARE( src->exactBounds(), QRect( 0, 0, 20, 20 ) );
+
+    KisPixelSelectionSP mask = KisPixelSelectionSP(new KisPixelSelection(dst));
+    mask->select(QRect(10,10,20,20));
+    QCOMPARE( mask->selectedExactRect(), QRect( 10, 10, 20, 20 ) );
 
 
-//     painter.bltMask(0, 0,
-//                     dst->colorSpace()->compositeOp(COMPOSITE_OVER),
-//                     src,
-//                     mask,
-//                     OPACITY_OPAQUE,
-//                     0, 0, 30, 30);
-//     painter.end();
+    KisPainter painter(dst);
 
-//     //dst->convertToQImage(0).save( "bla.png" );
+    painter.bltMask(0, 0,
+                    dst->colorSpace()->compositeOp(COMPOSITE_OVER),
+                    src,
+                    mask,
+                    OPACITY_OPAQUE,
+                    0, 0, 30, 30);
+    painter.end();
 
-//     QCOMPARE( dst->selectedExactRect(), QRect( 10, 10, 10, 10 ) );
-// }
+    QImage img = dst->convertToQImage(0);
+    img.save( "bla_" + cs->name() + ".png" );
+
+    QCOMPARE( dst->exactBounds(), QRect( 10, 10, 10, 10 ) );
+}
+
+void KisPainterTest::testPaintDeviceBltMask()
+{
+    QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
+
+    foreach( QString csId, csIds ) {
+
+        kDebug() << "Testing with " << csId << endl;
+
+        QList<KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
+        if ( profiles.size() == 0 ) {
+            KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
+            if ( cs->compositeOp( COMPOSITE_OVER ) != 0) {
+                testPaintDeviceBltMask( cs );
+            }
+            else {
+                kDebug() << "Cannot bitBlt for cs " << csId << endl;
+            }
+        }
+        else {
+            foreach( KoColorProfile * profile, profiles ) {
+                KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
+                if ( cs->compositeOp( COMPOSITE_OVER ) != 0) {
+                    testPaintDeviceBltMask( cs );
+                }
+                else {
+                    kDebug() << "Cannot bitBlt for cs " << csId << endl;
+                }
+            }
+
+        }
+    }
+}
 
 void KisPainterTest::testSelectionBltMask()
 {
@@ -97,9 +135,17 @@ void KisPainterTest::testSelectionBltMask()
                     0, 0, 30, 30);
     painter.end();
 
-    //dst->convertToQImage(0).save( "bla.png" );
+    dst->convertToQImage(0).save( "bla.png" );
 
     QCOMPARE( dst->selectedExactRect(), QRect( 10, 10, 10, 10 ) );
+
+    KisRectConstIteratorPixel it = dst->createRectConstIterator(10, 10, 10, 10);
+    while ( !it.isDone() ) {
+        // These are selections, so only one channel and it should
+        // be totally selected
+        QCOMPARE( it.rawData()[0], MAX_SELECTED );
+        ++it;
+    }
 }
 
 /*

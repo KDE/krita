@@ -21,15 +21,21 @@
 
 #include <QtTest/QtTest>
 
+class KoColorSpace;
+
 class KisPainterTest : public QObject
 {
     Q_OBJECT
 
+private:
+
+    void testPaintDeviceBltMask( KoColorSpace * cs );
+
 private slots:
 
+    void testPaintDeviceBltMask();
     void testSelectionBltMask();
     void testSelectionBltMask2();
-//    void testPaintDeviceBltMask();
 
 };
 

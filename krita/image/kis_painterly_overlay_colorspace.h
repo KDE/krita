@@ -39,7 +39,7 @@ struct KisPainterlyOverlayColorSpaceTraits : public KoColorSpaceTrait<_channels_
     static const quint8 volume_pos = 7;
     static const quint8 wetness_pos = 8;
 
-    struct Pixel {
+    struct Cell {
         _channels_type_ adsorbency;
         _channels_type_ gravity;
         _channels_type_ mixability;

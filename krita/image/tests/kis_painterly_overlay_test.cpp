@@ -19,13 +19,21 @@
 #include <qtest_kde.h>
 #include "kis_painterly_overlay_test.h"
 #include "kis_painterly_overlay.h"
+#include "kis_painterly_overlay_colorspace.h"
 #include <kdebug.h>
 
 
 void KisPainterlyOverlayTester::testConstructor()
 {
     KisPainterlyOverlay * overlay = new KisPainterlyOverlay();
+    Q_ASSERT( overlay );
     delete overlay;
+}
+
+void KisPainterlyOverlayTester::testPainterlyOverlayColorSpace()
+{
+    KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
+    Q_ASSERT( cs );
 }
 
 

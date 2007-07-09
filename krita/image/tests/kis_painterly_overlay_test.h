@@ -28,6 +28,7 @@ class KisPainterlyOverlayTester : public QObject
 private slots:
 
     void testConstructor();
+    void testPainterlyOverlayColorSpace();
 };
 
 #endif

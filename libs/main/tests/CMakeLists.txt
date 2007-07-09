@@ -62,12 +62,15 @@ target_link_libraries(kooasisstoretest  ${KDE4_KDECORE_LIBS} komain )
 
 ########### next target ###############
 
+if(KDE4_BUILD_TESTS)
 set(rtreetestapp_SRCS rtreetestapp.cpp Tool.cpp )
 
 kde4_automoc(${rtreetestapp_SRCS})
 
-kde4_add_unit_test(rtreetestapp TESTNAME libs-komain-rtreeTest ${rtreetestapp_SRCS})
+# this test shows a GUI and expects interaction; so don't run it with a 'make test'
+kde4_add_executable(rtreetestapp RUN_UNINSTALLED ${rtreetestapp_SRCS})
 
 target_link_libraries(rtreetestapp komain ${QT_QTTEST_LIBRARY} )
+endif(KDE4_BUILD_TESTS)
 
 ########### end ###############

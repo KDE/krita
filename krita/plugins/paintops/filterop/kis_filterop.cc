@@ -44,9 +44,11 @@
 
 #include "ui_FilterOpOptionsWidget.h"
 
-KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
+KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettings *_settings, KisPainter * _painter, KisImageSP _image)
 {
-    KisPaintOp * op = new KisFilterOp(painter);
+    const KisFilterOpSettings* settings = dynamic_cast<const KisFilterOpSettings*>(_settings);
+    Q_ASSERT(settings);
+    KisPaintOp * op = new KisFilterOp(settings, _painter);
     return op;
 }
 
@@ -85,8 +87,8 @@ KisFilterOpSettings::~KisFilterOpSettings()
 
 void KisFilterOpSettings::setCurrentFilter(const KoID & id)
 {
-    KisFilterSP filter = KisFilterRegistry::instance()->get(id.id());
-    m_currentFilterConfigWidget = filter->createConfigurationWidget(0,0);
+    m_currentFilter = KisFilterRegistry::instance()->get(id.id());
+    m_currentFilterConfigWidget = m_currentFilter->createConfigurationWidget(0,0);
     m_uiOptions->popupButtonOptions->setPopupWidget(m_currentFilterConfigWidget);
 }
 
@@ -97,31 +99,42 @@ KisFilterSP KisFilterOpSettings::filter() const
 
 KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
 {
+    if(not m_currentFilterConfigWidget) return 0;
     return m_currentFilterConfigWidget->configuration();
 }
 
-KisFilterOp::KisFilterOp(KisPainter * painter)
-    : super(painter)
+KisFilterOp::KisFilterOp(const KisFilterOpSettings* settings, KisPainter * painter)
+    : super(painter), m_settings(settings)
 {
-    m_filterConfiguration = 0;
 }
 
 KisFilterOp::~KisFilterOp()
 {
-    delete m_filterConfiguration;
 }
 
 void KisFilterOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return;
+    if (not painter())
+    {
+      kDebug() << "No painter !" << endl;
+      return;
+    }
 
-    KisFilterSP filter = painter()->filter();
-    if (!filter) return;
+    KisFilterSP filter = m_settings->filter();
+    if (not filter)
+    {
+      kDebug() << "No filter !" << endl;
+      return;
+    }
 
-    if ( ! source() ) return;
+    if ( not source() )
+    {
+      kDebug() << "No source !" << endl;
+      return;
+    }
 
     KisBrush * brush = painter()->brush();
-    if (!brush) return;
+    if (not brush) return;
 
     KoColorSpace * colorSpace = source()->colorSpace();
 
@@ -160,7 +173,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     // Filter the paint device
     filter->disableProgress();
     QRect r( 0, 0, maskWidth, maskHeight );
-    filter->process( tmpDev, r, m_filterConfiguration);
+    filter->process( tmpDev, r, m_settings->filterConfig());
     filter->enableProgress();
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
@@ -188,7 +201,6 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     if (painter()->bounds().isValid()) {
         dstRect &= painter()->bounds();
     }
-
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
     qint32 sx = dstRect.x() - x;
@@ -204,12 +216,6 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
         painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), tmpDev, painter()->opacity(), sx, sy, sw, sh);
     }
 
-}
-
-void KisFilterOp::setFilterConfiguration(KisFilterConfiguration* filterConfiguration)
-{
-    delete m_filterConfiguration;
-    m_filterConfiguration = filterConfiguration;
 }
 
 #include "kis_filterop.moc"

@@ -78,7 +78,6 @@ void KisPainter::init()
 {
     m_transaction = 0;
     m_paintOp = 0;
-    m_filter = 0;
     m_brush = 0;
     m_pattern= 0;
     m_opacity = OPACITY_OPAQUE;
@@ -818,14 +817,4 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     // and if we're painting without outlines, then there will be no dirty rect. Let's do it ourselves...
 
     bltSelection(r.x(), r.y(), m_compositeOp, polygon, opacity(), r.x(), r.y(), r.width(), r.height());
-}
-
-KisFilterSP KisPainter::filter()
-{
-    return m_filter;
-}
-
-void KisPainter::setFilter(KisFilterSP filter)
-{
-    m_filter = filter;
 }

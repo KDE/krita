@@ -557,11 +557,6 @@ public:
     /// Returns the opacity that is used in painting
     quint8 opacity() const { return m_opacity; }
 
-    /// Sets the current KisFilter, used by the paintops that support it (like KisFilterOp)
-    void setFilter(KisFilterSP filter);
-    /// Returns the current KisFilter
-    KisFilterSP filter();
-
     /**
      * The offset for paint operations that use it (like KisDuplicateOp). It will use as source
      * the part of the layer that is at its paintedPosition - duplicateOffset
@@ -661,7 +656,6 @@ protected:
     int m_duplicateHealingRadius;
     bool m_duplicatePerspectiveCorrection;
     quint8 m_opacity;
-    KisFilterSP m_filter;
     KisPaintOp * m_paintOp;
     double m_pressure;
     bool m_cancelRequested;

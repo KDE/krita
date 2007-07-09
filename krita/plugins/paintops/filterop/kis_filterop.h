@@ -70,14 +70,12 @@ class KisFilterOp : public KisPaintOp {
 
 public:
 
-    KisFilterOp(KisPainter * painter);
+    KisFilterOp(const KisFilterOpSettings* settings, KisPainter * painter);
     virtual ~KisFilterOp();
 
     void paintAt(const KisPaintInformation& info);
-public:
-    void setFilterConfiguration(KisFilterConfiguration*);
 private:
-    KisFilterConfiguration* m_filterConfiguration;
+    const KisFilterOpSettings* m_settings;
 };
 
 

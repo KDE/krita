@@ -71,13 +71,13 @@ target_link_libraries(KisImage_View_ConverterTest  ${KDE4_KDEUI_LIBS} koguiutils
 
 ########### next target ###############
 
-set(kis_selection_bltmask_test_SRCS kis_selection_bltmask_test.cpp )
+set(kis_painter_test_SRCS kis_painter_test.cpp )
 
-kde4_automoc(${kis_selection_bltmask_test_SRCS})
+kde4_automoc(${kis_painter_test_SRCS})
 
-kde4_add_unit_test(Kis_Selection_BltMask_Test TESTNAME krita-image-Selection-BltMask-Test ${kis_selection_bltmask_test_SRCS})
+kde4_add_unit_test(Kis_Painter_Test TESTNAME krita-image-Painter-Test ${kis_painter_test_SRCS})
 
-target_link_libraries(Kis_Selection_BltMask_Test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(Kis_Painter_Test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -85,7 +85,7 @@ set(kis_threaded_applicator_test_SRCS kis_threaded_applicator_test.cpp )
 
 kde4_automoc(${kis_threaded_applicator_test_SRCS})
 
-kde4_add_unit_test(Kis_Threaded_Applicator_Test TESTNAME krita-image-Selection-BltMask-Test ${kis_threaded_applicator_test_SRCS})
+kde4_add_unit_test(Kis_Threaded_Applicator_Test TESTNAME krita-image-Threaded_Applicator-Test ${kis_threaded_applicator_test_SRCS})
 
 target_link_libraries(Kis_Threaded_Applicator_Test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
 
@@ -95,7 +95,7 @@ set(kis_painterly_overlay_test_SRCS kis_painterly_overlay_test.cpp )
 
 kde4_automoc(${kis_painterly_overlay_test_SRCS})
 
-kde4_add_unit_test(Kis_Painterly_Overlay_Test TESTNAME krita-image-Selection-BltMask-Test ${kis_painterly_overlay_test_SRCS})
+kde4_add_unit_test(Kis_Painterly_Overlay_Test TESTNAME krita-image-Painterly-Overlay-Test ${kis_painterly_overlay_test_SRCS})
 
 target_link_libraries(Kis_Painterly_Overlay_Test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
 

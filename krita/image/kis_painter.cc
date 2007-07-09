@@ -384,8 +384,10 @@ void KisPainter::bltMask(qint32 dx, qint32 dy,
     QRect srcRect = QRect(sx, sy, sw, sh);
 
     if (op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
-        srcRect &= srcdev->extent();
+        srcRect &= srcdev->exactBounds();
     }
+
+    srcRect &= selMask->exactBounds();
 
     if (srcRect.isEmpty()) {
         return;

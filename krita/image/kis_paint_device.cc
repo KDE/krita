@@ -883,7 +883,7 @@ QImage KisPaintDevice::convertToQImage(KoColorProfile *  dstProfile, float expos
         h = image()->height();
     }
     else {
-        extent(x1, y1, w, h);
+        exactBounds(x1, y1, w, h);
     }
 
     return convertToQImage(dstProfile, x1, y1, w, h, exposure);

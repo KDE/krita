@@ -41,7 +41,7 @@
 
 KisPixelSelection::KisPixelSelection(KisPaintDeviceSP dev)
     : KisMask(dev,
-            QString("selection for ") + dev->objectName())
+              QString("selection for ") + dev->objectName())
     , m_parentPaintDevice(dev)
     , m_dirty(false)
 {

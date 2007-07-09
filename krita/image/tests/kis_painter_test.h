@@ -21,13 +21,14 @@
 
 #include <QtTest/QtTest>
 
-class KisSelectionBltMaskTest : public QObject
+class KisPainterTest : public QObject
 {
     Q_OBJECT
 
 private slots:
 
     void testSelectionBltMask();
+//    void testPaintDeviceBltMask();
 
 };
 

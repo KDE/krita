@@ -90,7 +90,7 @@ public:
     QWidget * optionWidget();
 
     /**
-     * Quick help is a short help text about the way the tool functions. 
+     * Quick help is a short help text about the way the tool functions.
      *
      * Deprecated: this method may move to KoToolFactory.
      */
@@ -227,7 +227,9 @@ public slots:
      * This method is called when this tool instance is activated.
      * For any main window there is only one tool active at a time, which then gets all
      * user input.  Switching between tools will call deactivate on one and activate on the
-     * new tool allowing the tool to flush items (like a selection) when it is not in use.
+     * new tool allowing the tool to flush items (like a selection)
+     * when it is not in use.
+     *
      * <p>There is one case where two tools are activated at the same.  This is the case
      * where one tool delegates work to another temporarily.  For example, while shift is
      * being held down.  The second tool will get activated with temporary=true and

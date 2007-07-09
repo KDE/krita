@@ -281,7 +281,9 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
     Q_ASSERT(tool);
     if (d->canvasData == 0)
         return;
+
     bool newActiveTool = d->canvasData->activeTool != 0;
+
     if (newActiveTool) {
         d->canvasData->activeTool->repaintDecorations();
         // check if this tool is inputDeviceAgnostic and used by other devices, in which case we should not deactivate.
@@ -294,10 +296,11 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
             }
         }
     }
+
     if(newActiveTool) {
         foreach(QAction *action, d->canvasData->activeTool->actions().values())
             action->setEnabled(false);
-        // repaint the decorations before we deactivate the tool as it might deleted 
+        // repaint the decorations before we deactivate the tool as it might deleted
         // data needed for the repaint
         d->canvasData->activeTool->deactivate();
         disconnect(d->canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
@@ -308,6 +311,7 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
                 this, SLOT(switchToolTemporaryRequested(const QString &)));
         disconnect(d->canvasData->activeTool, SIGNAL(done()), this, SLOT(switchBackRequested()));
     }
+
     d->canvasData->activeTool = tool;
     connect(d->canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
             this, SLOT(updateCursor(QCursor)));
@@ -548,7 +552,7 @@ void KoToolManager::switchInputDevice(const KoInputDevice &device) {
     if (device.isMouse() && d->tabletEventTimer.isActive()) {
         // Ignore switch to mouse for a short time after a tablet event
         // is received, as this is likely to be either the mouse event sent
-        // to a widget that doesn't accept the tablet event, or, on X11, 
+        // to a widget that doesn't accept the tablet event, or, on X11,
         // a core event sent after the tablet event.
         return;
     }

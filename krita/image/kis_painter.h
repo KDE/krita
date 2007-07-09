@@ -251,12 +251,12 @@ public:
      * @param sh the height of the region
      */
     void bltMask(qint32 dx, qint32 dy,
-                      const KoCompositeOp *op,
-                      const KisPaintDeviceSP src,
-                      const KisPaintDeviceSP selMask,
-                      quint8 opacity,
-                      qint32 sx, qint32 sy,
-                      qint32 sw, qint32 sh);
+                 const KoCompositeOp *op,
+                 const KisPaintDeviceSP src,
+                 const KisPaintDeviceSP selMask,
+                 quint8 opacity,
+                 qint32 sx, qint32 sy,
+                 qint32 sw, qint32 sh);
 
 
     /**

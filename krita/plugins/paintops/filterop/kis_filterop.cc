@@ -166,7 +166,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     Q_CHECK_PTR(tmpDev);
 
     // Copy the layer data onto the new paint device
-
+#if 0
     KisPainter p( tmpDev );
     p.bitBlt( 0,  0,  colorSpace->compositeOp(COMPOSITE_COPY), source(), OPACITY_OPAQUE, x, y, maskWidth, maskHeight );
 
@@ -175,7 +175,13 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     QRect r( 0, 0, maskWidth, maskHeight );
     filter->process( tmpDev, r, m_settings->filterConfig());
     filter->enableProgress();
-
+#endif
+    
+    // Filter the paint device
+    filter->disableProgress();
+    filter->process(source(), QPoint(x,y), tmpDev, QPoint(0,0), QSize(maskWidth, maskHeight), m_settings->filterConfig());
+    filter->enableProgress();
+    
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 
     KisHLineIterator hiter = tmpDev->createHLineIterator(0, 0, maskWidth);

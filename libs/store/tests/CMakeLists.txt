@@ -39,17 +39,14 @@ kde4_add_unit_test(koxmlreadertest TESTNAME libs-store-koxmlreadertest ${koxmlre
 target_link_libraries(koxmlreadertest kstore ${QT_QTTEST_LIBRARY} )
 
 ########### next target ###############
-if(KDE4_BUILD_TESTS)
 
 set(storedroptest_SRCS storedroptest.cpp )
 
 kde4_automoc(${storedroptest_SRCS})
 
-# this test shows a GUI and expects interaction; so don't run it with a 'make test'
-kde4_add_executable(storedroptest RUN_UNINSTALLED ${storedroptest_SRCS})
+kde4_add_test_executable(storedroptest ${storedroptest_SRCS})
 
 target_link_libraries(storedroptest  ${KDE4_KDECORE_LIBS} kstore )
-endif(KDE4_BUILD_TESTS)
 
 ########### next target ###############
 

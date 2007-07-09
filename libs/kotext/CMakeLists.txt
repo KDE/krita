@@ -1,6 +1,6 @@
 
 
-include_directories( ${KOGUIUTILS_INCLUDES} )
+include_directories( ${KOGUIUTILS_INCLUDES} ${KOMAIN_INCLUDES} )
 
 add_subdirectory( kohyphen ) 
 add_subdirectory( tests ) 

@@ -102,6 +102,50 @@ void KisPainterTest::testSelectionBltMask()
     QCOMPARE( dst->selectedExactRect(), QRect( 10, 10, 10, 10 ) );
 }
 
+/*
+0,0               0,30
+  +-----------+------+
+  |    13,13  |      |
+  |      x +--+      |
+  |     +--+##|      |
+  |     |#####|      |
+  +-----+-----+      |
+  |         20,20    |
+  |                  |
+  |                  |
+  +------------------+
+                  30,30
+ */
+void KisPainterTest::testSelectionBltMask2()
+{
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "temporary");
+
+    KisPixelSelectionSP src = KisPixelSelectionSP(new KisPixelSelection(dev));
+    src->select(QRect(0,0,20,20));
+    QCOMPARE( src->selectedExactRect(), QRect( 0, 0, 20, 20 ) );
+
+    KisPixelSelectionSP mask = KisPixelSelectionSP(new KisPixelSelection(dev));
+    mask->select(QRect(10,15,20,15));
+    mask->select(QRect(15,10,15,5));
+    QCOMPARE( mask->selectedExactRect(), QRect( 10, 10, 20, 20 ) );
+
+    KisPixelSelectionSP dst = KisPixelSelectionSP(new KisPixelSelection(dev));
+    KisPainter painter(dst);
+
+
+    painter.bltMask(0, 0,
+                    dst->colorSpace()->compositeOp(COMPOSITE_OVER),
+                    src,
+                    mask,
+                    OPACITY_OPAQUE,
+                    0, 0, 30, 30);
+    painter.end();
+
+    QCOMPARE( dst->selectedExactRect(), QRect( 10, 10, 10, 10 ) );
+    QCOMPARE( dst->selected(13,13), MIN_SELECTED);
+}
+
+
 
 QTEST_KDEMAIN(KisPainterTest, NoGUI)
 #include "kis_painter_test.moc"

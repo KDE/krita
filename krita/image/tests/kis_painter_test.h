@@ -28,6 +28,7 @@ class KisPainterTest : public QObject
 private slots:
 
     void testSelectionBltMask();
+    void testSelectionBltMask2();
 //    void testPaintDeviceBltMask();
 
 };

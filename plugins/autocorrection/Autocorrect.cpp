@@ -20,6 +20,7 @@
 #include "Autocorrect.h"
 
 #include <QTextBlock>
+#include <klocale.h>
 #include <kdebug.h>
 
 Autocorrect::Autocorrect() {
@@ -45,7 +46,7 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
     selectWord(m_cursor, cursorPosition);
     m_word = m_cursor.selectedText();
 
-    emit startMacro("Autocorrection");
+    emit startMacro(i18n("Autocorrection"));
 
     bool done = autoFormatURLs();
     if(!done) done = singleSpaces();

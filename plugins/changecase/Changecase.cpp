@@ -55,7 +55,7 @@ void Changecase::checkSection(QTextDocument *document, int startPosition, int en
     m_endPosition = endPosition;
 
     KDialog *dialog = new KDialog();
-    dialog->setCaption("Changecase");
+    dialog->setCaption(i18n("Changecase"));
     dialog->setButtons(KDialog::Ok | KDialog::Cancel);
 
     QWidget *widget = new QWidget(dialog);
@@ -83,6 +83,8 @@ void Changecase::checkSection(QTextDocument *document, int startPosition, int en
 
 void Changecase::process()
 {
+    emit startMacro(i18n("Change case"));
+
     if (m_sentenceCaseRadio->isChecked())
         sentenceCase();
     else if (m_lowerCaseRadio->isChecked())
@@ -93,6 +95,8 @@ void Changecase::process()
         initialCaps();
     else if (m_toggleCaseRadio->isChecked())
         toggleCase();
+
+    emit stopMacro();
 }
 
 void Changecase::sentenceCase()
@@ -103,8 +107,6 @@ void Changecase::sentenceCase()
 
     // TODO
     // * Exception?
-    emit startMacro("Change case");
-
     while (true) {
         QString text = block.text();
         int prevLetterIndex = -1;
@@ -166,8 +168,6 @@ void Changecase::sentenceCase()
             break;
         block = block.next();
     }
-
-    emit stopMacro();
 }
 
 void Changecase::lowerCase()
@@ -176,8 +176,6 @@ void Changecase::lowerCase()
     int pos = block.position();
     bool finished = false;
     bool foundToBeChanged = false;
-
-    emit startMacro("Change case");
 
     while (true) {
         QString text = block.text();
@@ -210,8 +208,6 @@ void Changecase::lowerCase()
         block = block.next();
         pos = block.position();
     }
-
-    emit stopMacro();
 }
 
 void Changecase::upperCase()
@@ -220,8 +216,6 @@ void Changecase::upperCase()
     int pos = block.position();
     bool finished = false;
     bool foundToBeChanged = false;
-
-    emit startMacro("Change case");
 
     while (true) {
         QString text = block.text();
@@ -254,8 +248,6 @@ void Changecase::upperCase()
         block = block.next();
         pos = block.position();
     }
-
-    emit stopMacro();
 }
 
 void Changecase::initialCaps()
@@ -264,8 +256,6 @@ void Changecase::initialCaps()
     int pos = block.position();
     bool finished = false;
     bool foundToBeChanged = false;
-
-    emit startMacro("Change case");
 
     while (true) {
         QString text = block.text();
@@ -306,8 +296,6 @@ void Changecase::initialCaps()
         block = block.next();
         pos = block.position();
     }
-
-    emit stopMacro();
 }
 
 void Changecase::toggleCase()
@@ -315,8 +303,6 @@ void Changecase::toggleCase()
     QTextBlock block = m_document->findBlock(m_startPosition);
     int pos = block.position();
     bool finished = false;
-
-    emit startMacro("Change case");
 
     while (true) {
         QString text = block.text();
@@ -352,8 +338,6 @@ void Changecase::toggleCase()
         block = block.next();
         pos = block.position();
     }
-
-    emit stopMacro();
 }
 
 #include "Changecase.moc"

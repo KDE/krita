@@ -26,6 +26,23 @@
 #include <KoColorSpaceTraits.h>
 #include <KoFallBack.h>
 
+/**
+ *
+ * XXX: Maybe split in two: one surface and one artistic medium
+ * overlay? Now these properties are mixed up
+ *
+ * * adsobency: property of the canvas. How fast wetness is dried
+ * * gravity: property of the canvas: which direction the paint is
+ * supposed to flow
+ * * mixability: property of the paint. How easy it is to mix the paint
+ * * height: canvas property. The height of the canvas fibers
+ * * pigment_concentration: paint property. How concentrated the color is (similar to alpha)
+ * * viscosity: paint property: how fast or slow the paint flows.
+ * * volume: paint property: how much paint there is on the canvas.
+ * height + volume is total height
+ * * wetness: how wet the paint is. Wetter = less sticky
+ */
+
 template<typename _channels_type_>
 struct KisPainterlyOverlayColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 9, 0> {
 
@@ -87,25 +104,37 @@ public:
         }
     void fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile * /*profile*/) const
         {
+            // Don't call this!
+            Q_ASSERT( 0 == 1 );
         }
 
     void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KoColorProfile * /*profile*/) const
         {
+            // Don't call this!
+            Q_ASSERT( 0 == 1 );
         }
 
     void toQColor(const quint8 *srcU8, QColor *c, KoColorProfile * /*profile*/) const
         {
+            // Don't call this!
+            Q_ASSERT( 0 == 1 );
         }
 
     void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/) const
         {
+            // Don't call this!
+            Q_ASSERT( 0 == 1 );
         }
 
     void fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
         {
+            // Don't call this!
+            Q_ASSERT( 0 == 1 );
         }
     void toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
         {
+            // Don't call this!
+            Q_ASSERT( 0 == 1 );
         }
 
 };

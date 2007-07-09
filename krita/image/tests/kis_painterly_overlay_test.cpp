@@ -34,6 +34,29 @@ void KisPainterlyOverlayTester::testPainterlyOverlayColorSpace()
 {
     KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
     Q_ASSERT( cs );
+    QCOMPARE( cs->pixelSize(), 9 * sizeof( float ) );
+}
+
+void KisPainterlyOverlayTester::testPainterlyOverlayColorSpaceCell()
+{
+    KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
+    Q_ASSERT( cs );
+    quint8 * bytes = cs->allocPixelBuffer( 1 );
+    memset( bytes, 0, cs->pixelSize() );
+
+    PainterlyOverlayFloatTraits::Cell * cell =
+        reinterpret_cast<PainterlyOverlayFloatTraits::Cell *>( bytes );
+
+    QVERIFY( cell->adsorbency == 0.0 );
+    QVERIFY( cell->gravity == 0.0 );
+    QVERIFY( cell->mixability == 0.0 );
+    QVERIFY( cell->height == 0.0 );
+    QVERIFY( cell->pigment_concentration == 0.0 );
+    QVERIFY( cell->viscosity == 0.0 );
+    QVERIFY( cell->volume == 0.0 );
+    QVERIFY( cell->wetness == 0.0 );
+
+    delete cell;
 }
 
 

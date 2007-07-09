@@ -178,7 +178,7 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name)
     m_d->nChannels = colorSpace->channelCount();
 
     quint8 *defaultPixel = new quint8 [ m_d->pixelSize ];
-    colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, defaultPixel);
+    memset( defaultPixel, 0, m_d->pixelSize );
 
     m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
     delete [] defaultPixel;

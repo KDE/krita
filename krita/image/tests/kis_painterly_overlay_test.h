@@ -29,6 +29,7 @@ private slots:
 
     void testConstructor();
     void testPainterlyOverlayColorSpace();
+    void testPainterlyOverlayColorSpaceCell();
 };
 
 #endif

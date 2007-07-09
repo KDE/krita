@@ -61,7 +61,8 @@ public:
            STYLE_NUMERIC_TEXT = 13,
            STYLE_HATCH = 14,
            STYLE_GRAPHICAUTO = 15,
-           STYLE_PRESENTATIONAUTO = 16};
+           STYLE_PRESENTATIONAUTO = 16,
+           STYLE_STROKE_DASH = 17};
 
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),

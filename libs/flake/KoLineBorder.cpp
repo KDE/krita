@@ -27,6 +27,7 @@
 #include <QPainterPath>
 
 #include <KoGenStyle.h>
+#include <KoGenStyles.h>
 
 class KoLineBorder::Private {
 public:
@@ -64,9 +65,54 @@ void KoLineBorder::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
 {
     Q_UNUSED( context );
     // TODO implement all possibilities
-    style.addProperty( "draw:stroke", "solid" );
+    switch( lineStyle() )
+    {
+        case Qt::NoPen:
+            style.addProperty( "draw:stroke", "none" );
+            return;
+        case Qt::SolidLine:
+            style.addProperty( "draw:stroke", "solid" );
+            break;
+        default: // must be a dashed line
+        {
+            style.addProperty( "draw:stroke", "dash" );
+            // save stroke dash (14.14.7) which is severly limited, but still
+            KoGenStyle dashStyle( KoGenStyle::STYLE_STROKE_DASH );
+            dashStyle.addAttribute( "draw:style", "rect" );
+            QVector<qreal> dashes = lineDashes();
+            dashStyle.addAttribute( "draw:dots1", static_cast<int>(1) );
+            dashStyle.addAttributePt( "draw:dots1-length", dashes[0]*lineWidth() );
+            dashStyle.addAttributePt( "draw:distance", dashes[1]*lineWidth() );
+            if( dashes.size() > 2 )
+            {
+                dashStyle.addAttribute( "draw:dots2", static_cast<int>(1) );
+                dashStyle.addAttributePt( "draw:dots2-length", dashes[2]*lineWidth() );
+            }
+            QString dashStyleName = context.mainStyles().lookup( dashStyle, "dash" );
+            style.addProperty( "draw:stroke-dash", dashStyleName );
+            break;
+        }
+    }
+
     style.addProperty( "svg:stroke-color", color().name() );
+    style.addProperty( "svg:stroke-opacity", QString("%1").arg( color().alphaF() ) );
     style.addPropertyPt( "svg:stroke-width", lineWidth() );
+
+    switch( joinStyle() )
+    {
+        case Qt::MiterJoin:
+            style.addProperty( "draw:stroke-linejoin", "miter" );
+            break;
+        case Qt::BevelJoin:
+            style.addProperty( "draw:stroke-linejoin", "bevel" );
+            break;
+        case Qt::RoundJoin:
+            style.addProperty( "draw:stroke-linejoin", "round" );
+            break;
+        default:
+            style.addProperty( "draw:stroke-linejoin", "miter" );
+            break;
+    }
 }
 
 void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) {

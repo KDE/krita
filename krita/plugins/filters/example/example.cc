@@ -102,8 +102,9 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
         dstIt.nextRow();
     }
     kDebug(41006) << "Per-pixel isSelected(): " << t.elapsed() << " ms\n";
+    
+#if 0
     t.restart();
-
 
     bool hasSelection = src->hasSelection();
 
@@ -153,7 +154,7 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
     }
     kDebug(41006) << "Consecutive pixels: " << t.elapsed() << " ms\n";
 
-
+#endif
     delete inverter;
     setProgressDone(); // Must be called even if you don't really support progression
 

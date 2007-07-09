@@ -21,8 +21,7 @@
 #define KOTEXTEDITINGPLUGINFACTORY_H
 
 #include <QString>
-
-#include <KoID.h>
+#include <QObject>
 
 #include <kotext_export.h>
 

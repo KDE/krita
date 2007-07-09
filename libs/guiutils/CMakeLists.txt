@@ -35,7 +35,7 @@ set(koguiutils_LIB_SRCS
    KoTemplateChooseDia.cpp
    KoTemplateCreateDia.cpp
    KoToolBox.cpp
-   KoUnitWidgets.cpp
+    KoUnitDoubleSpinBox.cpp
    KoZoomAction.cpp
    KoZoomController.cpp
    KoZoomHandler.cpp
@@ -105,7 +105,7 @@ install(
     KoTabulator.h
     KoTemplateChooseDia.h
     KoTemplateCreateDia.h
-    KoUnitWidgets.h
+    KoUnitDoubleSpinBox.h
     KoZoomAction.h
     KoZoomController.h
     KoZoomHandler.h

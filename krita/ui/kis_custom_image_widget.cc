@@ -25,7 +25,7 @@
 #include <kcolorcombo.h>
 #include <kdebug.h>
 
-#include "KoUnitWidgets.h"
+#include "KoUnitDoubleSpinBox.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"

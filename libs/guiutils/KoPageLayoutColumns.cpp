@@ -20,7 +20,7 @@
 #include <KoPageLayoutColumns.h>
 #include <KoPageLayoutDia.h>
 #include <KoUnit.h>
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 
 #include <QLabel>
 #include <QLayout>

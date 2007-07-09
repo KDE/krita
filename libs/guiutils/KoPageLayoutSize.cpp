@@ -19,7 +19,7 @@
 
 #include "KoPageLayoutSize.h"
 #include "KoPageLayoutDia.h"
-#include "KoUnitWidgets.h"
+#include "KoUnitDoubleSpinBox.h"
 #include <KoUnit.h>
 
 #include <klocale.h>

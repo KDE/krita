@@ -144,7 +144,7 @@
     <customwidget>
       <class>KoUnitDoubleSpinBox</class>
       <extends></extends>
-      <header location="local" >KoUnitWidgets.h</header>
+      <header location="local" >KoUnitDoubleSpinBox.h</header>
       <sizehint>
         <width>-1</width>
         <height>-1</height>

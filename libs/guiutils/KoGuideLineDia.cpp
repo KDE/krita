@@ -29,7 +29,7 @@
 #include <QRadioButton>
 
 #include <klocale.h>
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 #include <kvbox.h>
 
 

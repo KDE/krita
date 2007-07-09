@@ -27,7 +27,7 @@
 #include "KoPageLayoutSize.h"
 #include "KoPageLayoutHeader.h"
 #include <KoUnit.h>
-#include "KoUnitWidgets.h"
+#include "KoUnitDoubleSpinBox.h"
 
 #include <klocale.h>
 #include <kiconloader.h>

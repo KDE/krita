@@ -36,7 +36,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 #include <KoGlobal.h>
 
 class KoLineWidthAction::KoLineWidthActionPrivate

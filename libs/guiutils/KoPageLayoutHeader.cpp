@@ -18,7 +18,7 @@
 
 #include <KoPageLayoutHeader.h>
 #include <KoPageLayoutHeader.moc>
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 
 #include <QCheckBox>
 #include <QHBoxLayout>

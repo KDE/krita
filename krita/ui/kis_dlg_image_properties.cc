@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kcolorcombo.h>
 
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpace.h>
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"

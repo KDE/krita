@@ -19,22 +19,32 @@
 
 #include "kis_popup_button.h"
 
+#include <QFrame>
+#include <QHBoxLayout>
+
 #include <kdebug.h>
 
 struct KisPopupButton::Private {
-    Private() : popupWidget(0) {}
+    Private() : frame(0), frameLayout(0), popupWidget(0) {}
+    QFrame* frame;
+    QHBoxLayout* frameLayout;
     QWidget* popupWidget;
 };
 
 KisPopupButton::KisPopupButton(QWidget* parent) : QPushButton(parent), d(new Private)
 {
+    d->frame = new QFrame();
+    d->frame->setFrameStyle( QFrame::Box | QFrame::Plain );
+    d->frame->setWindowFlags(Qt::Popup);
+    d->frameLayout = new QHBoxLayout(d->frame);
+    d->frameLayout->setMargin(0);
     setPopupWidget(new QWidget);
     connect(this, SIGNAL(released()), SLOT(showPopupWidget()));
 }
 
 KisPopupButton::~KisPopupButton()
 {
-    delete d->popupWidget;
+    delete d->frame;
     delete d;
 }
 
@@ -44,18 +54,19 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
     if(widget)
     {
         d->popupWidget = widget;
+        d->popupWidget->setParent(d->frame);
     } else {
-        d->popupWidget = new QWidget;
+        d->popupWidget = new QWidget(d->frame);
     }
-    d->popupWidget->setWindowFlags(Qt::Popup);
+    d->frameLayout->addWidget(d->popupWidget);
 }
 
 void KisPopupButton::showPopupWidget()
 {
     if(d->popupWidget)
     {
-        d->popupWidget->move( mapToGlobal ( QPoint(0, height() )));
-        d->popupWidget->setVisible(true);
+        d->frame->move( mapToGlobal ( QPoint(0, height() )));
+        d->frame->setVisible(true);
     }
 }
 

@@ -80,6 +80,7 @@ KisFilterOpSettings::KisFilterOpSettings(QWidget* parent) :
     }
     m_uiOptions->filtersList->setIDList( l2 );
     connect(m_uiOptions->filtersList, SIGNAL(activated(const KoID &)), SLOT(setCurrentFilter(const KoID &)));
+    setCurrentFilter( l2.first() );
 }
 
 void KisFilterOpSettings::setLayer( KisLayerSP layer )
@@ -87,7 +88,7 @@ void KisFilterOpSettings::setLayer( KisLayerSP layer )
     if(layer)
     {
         m_paintDevice = layer->paintDevice();
-        if(m_currentFilterConfigWidget and m_currentFilterConfigWidget->configuration()->isCompatible(m_paintDevice))
+        if( not m_currentFilterConfigWidget or ( m_currentFilterConfigWidget and m_currentFilterConfigWidget->configuration()->isCompatible(m_paintDevice)) ) // The "not m_currentFilterConfigWidget" is a corner case which happen because the first configuration settings is created before any layer is selected in the view
         {
             setCurrentFilter(KoID(m_currentFilter->id()));
         }
@@ -104,8 +105,14 @@ KisFilterOpSettings::~KisFilterOpSettings()
 void KisFilterOpSettings::setCurrentFilter(const KoID & id)
 {
     m_currentFilter = KisFilterRegistry::instance()->get(id.id());
-    m_currentFilterConfigWidget = m_currentFilter->createConfigurationWidget(0, m_paintDevice);
-    m_uiOptions->popupButtonOptions->setPopupWidget(m_currentFilterConfigWidget);
+    Q_ASSERT( m_currentFilter );
+    if(m_paintDevice)
+    {
+        m_currentFilterConfigWidget = m_currentFilter->createConfigurationWidget(0, m_paintDevice);
+        m_uiOptions->popupButtonOptions->setPopupWidget(m_currentFilterConfigWidget);
+    } else {
+        m_currentFilterConfigWidget = 0;
+    }
 }
 
 KisFilterSP KisFilterOpSettings::filter() const

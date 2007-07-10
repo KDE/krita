@@ -707,7 +707,6 @@ void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& 
     const KoXmlElement frameElem = _frameElem;
     const KoXmlElement imageElem = _imageElem;
 
-
     /*
     //context.fillStyleStack( parent, KoXmlNS::text, "style-name", "graphic-properties" );
     //double width = 0.0, height = 0.0;
@@ -725,22 +724,6 @@ void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& 
     }
     */
 
-    QString href = imageElem.attribute("href");
-    kDebug(32500)<<"KoTextLoader::loadImage href="<<href<<endl;
-
-    if( ! context.store()->hasFile(href) ) {
-        kWarning(32500) << "KoTextLoader::loadImage Picture '" << href << "' not available..." << endl;
-        return;
-    }
-    if( context.store()->isOpen() ) {
-        kWarning(32500) << "KoTextLoader::loadImage Store already reading something" << endl;
-        return;
-    }
-    if( ! context.store()->open(href) ) {
-        kWarning(32500) << "KoTextLoader::loadImage Failed to open the store" << endl;
-        return;
-    }
-
     KoShape* shape = loadImageShape(context, frameElem, imageElem, cursor);
     if( ! shape ) {
         kWarning(32500) << "KoTextLoader::loadImage Failed to create picture shape" << endl;
@@ -754,12 +737,27 @@ void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& 
             kDebug(32500)<<"Successful loaded picture shape."<<endl;
         }
     }
-
-    context.store()->close();
 }
 
-KoShape* KoTextLoader::loadImageShape(KoTextLoadingContext&, const KoXmlElement&, const KoXmlElement&, QTextCursor&)
+KoShape* KoTextLoader::loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor)
 {
+    /*
+    KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape");
+    KoShape *shape = factory ? factory->createDefaultShape() : 0;
+    if( ! shape ) return 0;
+    KoStore* store = context.store();
+    QString href = imageElem.attribute("href");
+    if( ! store->hasFile(href) ) return shape;
+    if( store->isOpen() ) return shape;
+    if( ! store->open(href) ) return shape;
+    KoImageCollection* imagecollection = new KoImageCollection();
+    imagecollection->loadFromStore(store);
+    KoImageData* imagedata = new KoImageData(imagecollection);
+    //bool ok = imagedata->loadFromStore( store->device() );
+    shape->setUserData( imagedata );
+    store->close();
+    return shape;
+    */
     return 0;
 }
 

@@ -142,7 +142,7 @@ bool KisBrushOpSettings::varyDarken() const
     return m_darken->isChecked();
 }
 
-KisPaintOpSettings* KisBrushOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/, KisLayerSP /*layer*/)
+KisPaintOpSettings* KisBrushOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
 {
     if (inputDevice == KoInputDevice::mouse()) {
         // No options for mouse, only tablet devices

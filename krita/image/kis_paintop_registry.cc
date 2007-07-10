@@ -78,11 +78,11 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
     return 0;
 }
 
-KisPaintOpSettings * KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image, KisLayerSP layer) const
+KisPaintOpSettings * KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image) const
 {
     KisPaintOpFactorySP f = value(id.id());
     if (f)
-        return f->settings( parent, inputDevice, image, layer );
+        return f->settings( parent, inputDevice, image);
 
     return 0;
 }

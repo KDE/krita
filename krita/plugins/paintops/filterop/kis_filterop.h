@@ -44,7 +44,7 @@ public:
     virtual QString id() const { return "filter"; }
     virtual QString name() const { return i18n("Filter"); }
     virtual QString pixmap() { return "filterop.png"; }
-    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image, KisLayerSP layer);
+    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
 };
 
 class KisFilterOpSettings : public QObject, public KisPaintOpSettings {
@@ -55,12 +55,14 @@ class KisFilterOpSettings : public QObject, public KisPaintOpSettings {
         virtual QWidget *widget() const { return m_optionsWidget; }
         KisFilterSP filter() const;
         KisFilterConfiguration* filterConfig() const;
+        virtual void setLayer( KisLayerSP layer );
     protected slots:
         void setCurrentFilter(const KoID &);
     private:
         QWidget* m_optionsWidget;
         Ui_FilterOpOptions* m_uiOptions;
         KisFilterSP m_currentFilter;
+        KisPaintDeviceSP m_paintDevice;
         KisFilterConfigWidget* m_currentFilterConfigWidget;
 };
 

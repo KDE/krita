@@ -37,6 +37,7 @@
 #include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
 #include "kis_filter_registry.h"
+#include "kis_layer.h"
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
 #include "kis_paintop.h"
@@ -52,7 +53,7 @@ KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettings *_settings, K
     return op;
 }
 
-KisPaintOpSettings *KisFilterOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/, KisLayerSP /*layer*/)
+KisPaintOpSettings *KisFilterOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
 {
     Q_UNUSED(inputDevice);
     return new KisFilterOpSettings(parent);
@@ -80,6 +81,14 @@ KisFilterOpSettings::KisFilterOpSettings(QWidget* parent) :
     connect(m_uiOptions->filtersList, SIGNAL(activated(const KoID &)), SLOT(setCurrentFilter(const KoID &)));
 }
 
+void KisFilterOpSettings::setLayer( KisLayerSP layer )
+{
+    if(layer)
+        m_paintDevice = layer->paintDevice();
+    else
+        m_paintDevice = 0;
+}
+
 KisFilterOpSettings::~KisFilterOpSettings()
 {
     delete m_uiOptions;
@@ -88,7 +97,7 @@ KisFilterOpSettings::~KisFilterOpSettings()
 void KisFilterOpSettings::setCurrentFilter(const KoID & id)
 {
     m_currentFilter = KisFilterRegistry::instance()->get(id.id());
-    m_currentFilterConfigWidget = m_currentFilter->createConfigurationWidget(0,0);
+    m_currentFilterConfigWidget = m_currentFilter->createConfigurationWidget(0, m_paintDevice);
     m_uiOptions->popupButtonOptions->setPopupWidget(m_currentFilterConfigWidget);
 }
 

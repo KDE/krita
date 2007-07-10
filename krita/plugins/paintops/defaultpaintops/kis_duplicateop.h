@@ -39,7 +39,7 @@ public:
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "duplicate"; }
     virtual QString name() const { return i18n("Duplicate"); }
-    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image, KisLayerSP layer);
+    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
 };
 
 class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings {

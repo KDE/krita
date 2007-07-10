@@ -52,7 +52,7 @@ public:
      * with the specified parent as widget parent. Returns 0 if there
      * are no settings available for the given device.
      */
-    KisPaintOpSettings * settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image, KisLayerSP layer) const;
+    KisPaintOpSettings * settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image) const;
 
     // Whether we should show this paintop in the toolchest
     bool userVisible(const KoID & id, KoColorSpace* cs) const;

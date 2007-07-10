@@ -29,6 +29,8 @@
 
 #include <KoInputDevice.h>
 
+#include <kis_types.h>
+
 class QString;
 class QHBoxLayout;
 
@@ -71,7 +73,8 @@ private slots:
     void slotItemSelected(int index);
     void colorSpaceChanged(KoColorSpace *cs);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
-
+    void slotCurrentLayerChanged(KisLayerSP layer);
+    
 private:
     QPixmap paintopPixmap(const KoID & paintop);
     void updateOptionWidget();

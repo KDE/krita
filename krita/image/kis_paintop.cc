@@ -291,7 +291,7 @@ void KisPaintOpSettings::mousePressEvent(KoPointerEvent *e)
   e->ignore();
 }
 
-KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/, KisImageSP /*image*/, KisLayerSP /*layer*/) { return 0; }
+KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/, KisImageSP /*image*/) { return 0; }
 
 QString KisPaintOpFactory::pixmap()
 {

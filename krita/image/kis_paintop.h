@@ -125,6 +125,7 @@ public:
 
     virtual void mousePressEvent(KoPointerEvent *e);
 
+    virtual void setLayer(KisLayerSP ) {}
     /**
      * @return a pointer to the widget displaying the settings
      */
@@ -169,7 +170,7 @@ public:
      * specified input device. Return 0 if there are no settings available for the given
      * device.
      */
-    virtual KisPaintOpSettings* settings(QWidget* parent, const KoInputDevice& inputDevice, KisImageSP image, KisLayerSP layer);
+    virtual KisPaintOpSettings* settings(QWidget* parent, const KoInputDevice& inputDevice, KisImageSP image);
 
 };
 #endif // KIS_PAINTOP_H_

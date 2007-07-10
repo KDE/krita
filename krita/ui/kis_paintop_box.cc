@@ -82,6 +82,7 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
 
     connect(view->layerManager(), SIGNAL(currentColorSpaceChanged(KoColorSpace*)),
             this, SLOT(colorSpaceChanged(KoColorSpace*)));
+    connect(view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)),  SLOT(slotCurrentLayerChanged(KisLayerSP)));
 
     connect(KoToolManager::instance(),
             SIGNAL(inputDeviceChanged(const KoInputDevice &)),
@@ -181,6 +182,21 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
     setCurrentPaintop(paintop);
 }
 
+void KisPaintopBox::slotCurrentLayerChanged(KisLayerSP layer)
+{
+    for(InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.begin();
+        it != m_inputDevicePaintopSettings.end(); ++it)
+    {
+        foreach(KisPaintOpSettings * s, it.value())
+        {
+            if(s)
+            {
+                s->setLayer(layer);
+            }
+        }
+    }
+}
+
 void KisPaintopBox::updateOptionWidget()
 {
     if (m_optionWidget != 0) {
@@ -232,7 +248,7 @@ const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, c
         // Create settings for each paintop.
 
         foreach (KoID paintopId, m_paintops) {
-            KisPaintOpSettings *settings = KisPaintOpRegistry::instance()->settings(paintopId, this, inputDevice, m_view->image(), m_view->activeLayer());
+            KisPaintOpSettings *settings = KisPaintOpRegistry::instance()->settings(paintopId, this, inputDevice, m_view->image());
             settingsArray.append(settings);
             if (settings && settings->widget()) {
                 settings->widget()->hide();

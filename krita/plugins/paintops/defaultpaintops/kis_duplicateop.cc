@@ -53,8 +53,9 @@ KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettings *_settings
     return op;
 }
 
-KisPaintOpSettings *KisDuplicateOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image, KisLayerSP layer)
+KisPaintOpSettings *KisDuplicateOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
+    Q_UNUSED(inputDevice);
     return new KisDuplicateOpSettings(parent, image);
 }
 

@@ -9,7 +9,6 @@ set(textvariables_SRCS
     FixedDateFormat.cpp
 )
 
-kde4_automoc(${textvariables_SRCS})
 
 kde4_add_ui_files( textvariables_SRCS
     FixedDateFormat.ui

@@ -1,7 +1,6 @@
 
 set(kritacolorspaceconversion_PART_SRCS colorspaceconversion.cc dlg_colorspaceconversion.cc )
 
-kde4_automoc(${kritacolorspaceconversion_PART_SRCS})
 
 kde4_add_ui_files(kritacolorspaceconversion_PART_SRCS wdgconvertcolorspace.ui )
 

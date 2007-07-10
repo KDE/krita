@@ -1,7 +1,6 @@
 
 set(kritatogether_PART_SRCS together.cc )
 
-kde4_automoc(${kritatogether_PART_SRCS})
 
 # kde4_add_ui_files(kritatogether_PART_SRCS myuifile.ui )
 

@@ -7,7 +7,6 @@ set(kritapainterlymixer_PART_SRCS
     utilities.cpp
     )
 
-kde4_automoc(${kritapainterlymixer_PART_SRCS})
 
 kde4_add_ui_files(kritapainterlymixer_PART_SRCS kis_painterlymixer.ui)
 

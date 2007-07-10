@@ -5,7 +5,6 @@ set(kritatoolpolyline_PART_SRCS
     kis_tool_polyline.cc
     )
 
-kde4_automoc(${kritatoolpolyline_PART_SRCS})
 
 kde4_add_plugin(kritatoolpolyline ${kritatoolpolyline_PART_SRCS})
 

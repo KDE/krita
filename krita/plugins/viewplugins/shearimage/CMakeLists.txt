@@ -1,7 +1,6 @@
 
 set(kritashearimage_PART_SRCS shearimage.cc dlg_shearimage.cc )
 
-kde4_automoc(${kritashearimage_PART_SRCS})
 
 kde4_add_ui_files(kritashearimage_PART_SRCS wdg_shearimage.ui )
 

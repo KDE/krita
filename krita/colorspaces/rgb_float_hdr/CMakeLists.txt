@@ -11,7 +11,6 @@ if(OPENEXR_FOUND)
 
 set(kritargbf16hdr_LIB_SRCS kis_rgb_f16_hdr_colorspace.cc )
 
-kde4_automoc(${kritargbf16hdr_LIB_SRCS})
 
 kde4_add_library(kritargbf16hdr SHARED ${kritargbf16hdr_LIB_SRCS})
 

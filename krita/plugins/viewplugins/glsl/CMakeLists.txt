@@ -3,7 +3,6 @@
 
 set(kritaglsl_PART_SRCS glsl.cc dlg_glsl.cc )
 
-kde4_automoc(${kritaglsl_PART_SRCS})
 
 kde4_add_ui_files(kritaglsl_PART_SRCS wdg_glsl.ui )
 

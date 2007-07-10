@@ -23,7 +23,6 @@ set(kstore_LIB_SRCS
    KoEncryptedStore.cpp
    )
 
-kde4_automoc(${kstore_LIB_SRCS})
 
 kde4_add_library(kstore SHARED ${kstore_LIB_SRCS})
 

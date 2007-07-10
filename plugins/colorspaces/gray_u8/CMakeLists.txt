@@ -22,7 +22,6 @@ install(TARGETS kofficegrayau8colorspace  DESTINATION ${LIB_INSTALL_DIR})
 
 set(kofficegrayau8plugin_PART_SRCS gray_plugin.cc )
 
-kde4_automoc(${kofficegrayau8plugin_PART_SRCS})
 
 kde4_add_plugin(kofficegrayau8plugin ${kofficegrayau8plugin_PART_SRCS})
 

@@ -11,7 +11,6 @@ SET (kritashape_LIB_SRCS
 	KritaShapeToolFactory.cpp
 	)
 
-kde4_automoc(${kritashape_LIB_SRCS})
 kde4_add_plugin(kritashape ${kritashape_LIB_SRCS})
 
 target_link_libraries(kritashape flake koguiutils kritaui)

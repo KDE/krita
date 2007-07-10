@@ -7,7 +7,6 @@ include_directories( ${KOMAIN_INCLUDES} )
 
 set(kwmf_LIB_SRCS kwmf.cc qwmf.cc )
 
-kde4_automoc(${kwmf_LIB_SRCS})
 
 kde4_add_library(kwmf SHARED ${kwmf_LIB_SRCS})
 

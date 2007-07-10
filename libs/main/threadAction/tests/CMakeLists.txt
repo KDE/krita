@@ -7,7 +7,6 @@ include_directories(
 
 set(TestAction_SRCS TestAction.cpp )
 
-kde4_automoc(${TestAction_SRCS})
 
 kde4_add_unit_test(TestAction TESTNAME libs-komain-threadAction-TestAction ${TestAction_SRCS})
 

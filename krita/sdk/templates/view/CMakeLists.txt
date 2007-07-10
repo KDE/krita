@@ -1,7 +1,6 @@
 
 set(krita%{APPNAMELC}_PART_SRCS %{APPNAMELC}.cc )
 
-kde4_automoc(${krita%{APPNAMELC}_PART_SRCS})
 
 # kde4_add_ui_files(krita%{APPNAMELC}_PART_SRCS myuifile.ui )
 

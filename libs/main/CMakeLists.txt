@@ -75,7 +75,6 @@ set(komain_LIB_SRCS
     KoDockRegistry.cpp
 )
 
-kde4_automoc(${komain_LIB_SRCS})
 
 #kde4_add_ui3_files(komain_LIB_SRCS
 #   koDocumentInfoUserMetadataWidget.ui )

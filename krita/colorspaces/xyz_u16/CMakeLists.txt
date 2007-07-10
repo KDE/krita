@@ -7,7 +7,6 @@
 
 set(krita_xyz_u16_LIB_SRCS kis_xyz_u16_colorspace.cc )
 
-kde4_automoc(${krita_xyz_u16_LIB_SRCS})
 
 kde4_add_library(krita_xyz_u16 SHARED ${krita_xyz_u16_LIB_SRCS})
 
@@ -21,7 +20,6 @@ install(TARGETS krita_xyz_u16  DESTINATION ${LIB_INSTALL_DIR})
 
 set(krita_xyz_u16_plugin_PART_SRCS xyz_u16_plugin.cc )
 
-kde4_automoc(${krita_xyz_u16_plugin_PART_SRCS})
 
 kde4_add_plugin(krita_xyz_u16_plugin ${krita_xyz_u16_plugin_PART_SRCS})
 

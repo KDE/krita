@@ -3,7 +3,6 @@ set(kritaconvolutionfilters_PART_SRCS
    convolutionfilters.cc
    kis_convolution_filter.cc )
 
-kde4_automoc(${kritaconvolutionfilters_PART_SRCS})
 
 kde4_add_plugin(kritaconvolutionfilters ${kritaconvolutionfilters_PART_SRCS})
 

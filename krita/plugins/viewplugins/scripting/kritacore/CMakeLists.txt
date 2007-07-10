@@ -17,7 +17,6 @@ set(krossmodulekrita_LIB_SRCS
    krs_monitor.cpp
    )
 
-kde4_automoc(${krossmodulekrita_LIB_SRCS})
 qt4_wrap_cpp(krossmodulekrita_LIB_SRCS krs_iterator.h krs_const_iterator.h)
 kde4_add_library(krossmodulekrita SHARED ${krossmodulekrita_LIB_SRCS})
 ##add_definitions(${KDE4_ENABLE_EXCEPTIONS})

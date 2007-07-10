@@ -5,7 +5,6 @@ set(kritatoolstar_PART_SRCS
     kis_tool_star.cc
     )
 
-kde4_automoc(${kritatoolstar_PART_SRCS})
 
 kde4_add_ui_files(kritatoolstar_PART_SRCS wdg_tool_star.ui)
 

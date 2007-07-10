@@ -12,7 +12,6 @@ target_link_libraries(zoomhandler_test  ${KDE4_KDEUI_LIBS} koguiutils komain ${Q
 
 set(zoomcontroller_test_SRCS zoomcontroller_test.cpp )
 
-kde4_automoc(${zoomcontroller_test_SRCS})
 
 kde4_add_unit_test(zoomcontroller_test TESTNAME libs-koguiutils-zoomcontroller_test  ${zoomcontroller_test_SRCS})
 

@@ -7,7 +7,6 @@
 
 set(koffice_graya_u16_LIB_SRCS kis_gray_u16_colorspace.cc )
 
-kde4_automoc(${koffice_graya_u16_LIB_SRCS})
 
 kde4_add_library(koffice_graya_u16 SHARED ${koffice_graya_u16_LIB_SRCS})
 
@@ -21,7 +20,6 @@ install(TARGETS koffice_graya_u16  DESTINATION ${LIB_INSTALL_DIR})
 
 set(koffice_graya_u16_plugin_PART_SRCS gray_u16_plugin.cc )
 
-kde4_automoc(${koffice_graya_u16_plugin_PART_SRCS})
 
 kde4_add_plugin(koffice_graya_u16_plugin ${koffice_graya_u16_plugin_PART_SRCS})
 

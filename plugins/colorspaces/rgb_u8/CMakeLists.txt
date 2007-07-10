@@ -11,7 +11,6 @@ endif(KUNITTEST_FOUND)
 
 set(kritargb_LIB_SRCS kis_rgb_colorspace.cc kis_rgb_u8_compositeop.cc)
 
-kde4_automoc(${kritargb_LIB_SRCS})
 
 kde4_add_library(kritargb SHARED ${kritargb_LIB_SRCS})
 
@@ -25,7 +24,6 @@ install(TARGETS kritargb  DESTINATION ${LIB_INSTALL_DIR})
 
 set(kritargbplugin_PART_SRCS rgb_plugin.cc )
 
-kde4_automoc(${kritargbplugin_PART_SRCS})
 
 kde4_add_plugin(kritargbplugin ${kritargbplugin_PART_SRCS})
 

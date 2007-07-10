@@ -131,7 +131,6 @@ endif(HAVE_OPENGL AND HAVE_GLEW)
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-kde4_automoc(${kritaui_LIB_SRCS})
 
 kde4_add_ui_files(kritaui_LIB_SRCS
     wdgautobrush.ui

@@ -13,7 +13,6 @@ SET ( defaulttools_SRCS
 #kde4_add_ui_files(defaulttools_SRCS
 #)
 
-kde4_automoc(${defaulttools_SRCS})
 kde4_add_plugin(defaulttools ${defaulttools_SRCS})
 target_link_libraries(defaulttools flake koguiutils kotext)
 install(TARGETS defaulttools DESTINATION ${PLUGIN_INSTALL_DIR})

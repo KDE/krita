@@ -31,7 +31,6 @@ set(pigment_SRCS
 
 add_subdirectory(tests)
 
-kde4_automoc(${pigment_SRCS})
 
 kde4_add_library(pigment SHARED ${pigment_SRCS})
 

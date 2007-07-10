@@ -12,7 +12,6 @@ target_link_libraries(TestPAPageInsertCommand  ${KDE4_KDECORE_LIBS} kopageapp ${
 
 set(TestPAPageDeleteCommand_test_SRCS TestPAPageDeleteCommand.cpp )
 
-kde4_automoc(${TestPAPageDeleteCommand_test_SRCS})
 
 kde4_add_unit_test(TestPAPageDeleteCommand TESTNAME libs-kopageapp-TestPAPageDeleteCommand  ${TestPAPageDeleteCommand_test_SRCS})
 
@@ -22,7 +21,6 @@ target_link_libraries(TestPAPageDeleteCommand  ${KDE4_KDECORE_LIBS} kopageapp ${
 
 set(TestPAPageMoveCommand_test_SRCS TestPAPageMoveCommand.cpp )
 
-kde4_automoc(${TestPAPageMoveCommand_test_SRCS})
 
 kde4_add_unit_test(TestPAPageMoveCommand TESTNAME libs-kopageapp-TestPAPageMoveCommand  ${TestPAPageMoveCommand_test_SRCS})
 

@@ -12,7 +12,6 @@ target_link_libraries(kis_layer_model_test  ${KDE4_KDEUI_LIBS} koguiutils komain
 
 set(kis_shape_controller_test_SRCS kis_shape_controller_test.cpp )
 
-kde4_automoc(${kis_shape_controller_test_SRCS})
 
 kde4_add_unit_test(kis_shape_controller_test TESTNAME krita-ui-kis_shape_controller_test  ${kis_shape_controller_test_SRCS})
 

@@ -5,7 +5,6 @@ set(kritarandompickfilter_PART_SRCS
     kis_wdg_random_pick.cpp
     )
 
-kde4_automoc(${kritarandompickfilter_PART_SRCS})
 
 kde4_add_ui_files(kritarandompickfilter_PART_SRCS
     wdgrandompickoptions.ui

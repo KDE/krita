@@ -5,7 +5,6 @@ set(kritanoisefilter_PART_SRCS
     kis_wdg_noise.cpp
     )
 
-kde4_automoc(${kritanoisefilter_PART_SRCS})
 
 kde4_add_ui_files(kritanoisefilter_PART_SRCS
     wdgnoiseoptions.ui

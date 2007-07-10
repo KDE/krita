@@ -39,7 +39,6 @@ set(koproperty_LIB_SRCS ${libkopropertyeditors_SRCS}
    factory.cpp
    widget.cpp )
 
-kde4_automoc(${koproperty_LIB_SRCS})
 
 kde4_add_library(koproperty SHARED ${koproperty_LIB_SRCS})
 

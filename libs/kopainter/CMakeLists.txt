@@ -7,7 +7,6 @@ set(kopainter_LIB_SRCS
    kogradientmanager.cc
 )
 
-kde4_automoc(${kopainter_LIB_SRCS})
 
 kde4_add_library(kopainter SHARED ${kopainter_LIB_SRCS})
 

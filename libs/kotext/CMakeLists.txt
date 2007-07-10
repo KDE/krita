@@ -67,7 +67,6 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     opendocument/KoTextLoadingContext.cpp
  )
 
-kde4_automoc(${kotext_LIB_SRCS})
 
 kde4_add_ui_files(kotext_LIB_SRCS
    timedateformatwidget.ui

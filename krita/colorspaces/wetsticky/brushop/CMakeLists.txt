@@ -5,7 +5,6 @@ set(kritawsbrushpaintop_PART_SRCS
     kis_wsbrushop.cc
     )
 
-kde4_automoc(${kritawsbrushpaintop_PART_SRCS})
 
 kde4_add_plugin(kritawsbrushpaintop ${kritawsbrushpaintop_PART_SRCS})
 

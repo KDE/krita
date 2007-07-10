@@ -9,7 +9,6 @@ set(kritadynamicbrush_PART_SRCS
     )
 
 kde4_add_ui_files(kritadynamicbrush_PART_SRCS DynamicBrushOptions.ui DynamicProgramsEditor.ui)
-kde4_automoc(${kritadynamicbrush_PART_SRCS})
 
 kde4_add_plugin(kritadynamicbrushpaintop ${kritadynamicbrush_PART_SRCS})
 

@@ -22,6 +22,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
+#include <KoColorProfile.h>
 
 #include "kis_iterators_pixel.h"
 #include "kis_random_accessor.h"
@@ -59,6 +60,7 @@ void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)( KoColor
 void KisIteratorTest::writeBytes( KoColorSpace * colorSpace )
 {
 
+
     KisPaintDevice dev( colorSpace, "test");
 
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
@@ -92,6 +94,8 @@ void KisIteratorTest::writeBytes( KoColorSpace * colorSpace )
 
     QVERIFY( dev.extent() == QRect( -64, -64, 64 * 11, 64 * 2 ) );
     QVERIFY( dev.exactBounds() == QRect( -10, -10, 640, 64 ) );
+
+    delete[] bytes;
 }
 
 void KisIteratorTest::fill( KoColorSpace * colorSpace )
@@ -101,7 +105,7 @@ void KisIteratorTest::fill( KoColorSpace * colorSpace )
 
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
 
-    quint8 * bytes = new quint8( colorSpace->pixelSize() );
+    quint8 * bytes = colorSpace->allocPixelBuffer( 1 );
     memset( bytes, 128, colorSpace->pixelSize() );
 
     dev.fill( 0, 0, 5, 5, bytes );
@@ -118,6 +122,7 @@ void KisIteratorTest::fill( KoColorSpace * colorSpace )
     QVERIFY( dev.extent() == QRect( 0, 0, 8 * 64, 8 * 64 ) );
     QVERIFY( dev.exactBounds() == QRect( 5, 5, 500, 500 ) );
 
+    delete[] bytes;
 }
 
 void KisIteratorTest::rectIter( KoColorSpace * colorSpace )
@@ -125,45 +130,50 @@ void KisIteratorTest::rectIter( KoColorSpace * colorSpace )
 
     KisPaintDevice dev( colorSpace, "test");
 
-    quint8 * bytes = new quint8( colorSpace->pixelSize() );
+    quint8 * bytes = colorSpace->allocPixelBuffer( 1 );
     memset( bytes, 128, colorSpace->pixelSize() );
 
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
 
-    KisRectConstIteratorPixel cit = dev.createRectConstIterator(0, 0, 128, 128);
-    while ( !cit.isDone() ) ++cit;
-    QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
-    QVERIFY( dev.exactBounds() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
+    {
+        // Const does not extend the extent
 
-    KisRectIteratorPixel it = dev.createRectIterator(0, 0, 128, 128);
-    while ( !it.isDone() ) {
-        memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
-        ++it;
+        KisRectConstIteratorPixel cit = dev.createRectConstIterator(0, 0, 128, 128);
+        while ( !cit.isDone() ) ++cit;
+        QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
+        QVERIFY( dev.exactBounds() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
+
+        // Non-const does
+
+        KisRectIteratorPixel it = dev.createRectIterator(0, 0, 128, 128);
+        while ( !it.isDone() ) {
+            memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
+            ++it;
+        }
+        QVERIFY( dev.extent() == QRect( 0, 0, 128, 128 ) );
+        QVERIFY( dev.exactBounds() == QRect( 0, 0, 128, 128 ) );
     }
-    QVERIFY( dev.extent() == QRect( 0, 0, 128, 128 ) );
-    QVERIFY( dev.exactBounds() == QRect( 0, 0, 128, 128 ) );
 
-    // BSAR: This causes an assert: BUG!
-    // CBR - naturally as we still have iterators accessing the data
-    // BSAR: of course not, isDone() has returned true, we're done
-    // accessing the data.
-    //dev.clear();
+    dev.clear();
 
-    //it = dev.createRectIterator(10, 10, 128, 128);
-//     while ( !it.isDone() ) {
-//         memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
-//         ++it;
-//     }
-//     QVERIFY( dev.extent() == QRect( 0, 0, 3 * 64, 3 * 64 ) );
-//     QVERIFY( dev.exactBounds() == QRect( 10, 10, 128, 128 ) );
+    {
+        KisRectIteratorPixel it = dev.createRectIterator(10, 10, 128, 128);
+        while ( !it.isDone() ) {
+            memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
+            ++it;
+        }
+        QVERIFY( dev.extent() == QRect( 0, 0, 3 * 64, 3 * 64 ) );
+        QVERIFY( dev.exactBounds() == QRect( 10, 10, 128, 128 ) );
+    }
 
+    delete[] bytes;
 }
 
 void KisIteratorTest::hLineIter( KoColorSpace * colorSpace )
 {
     KisPaintDevice dev( colorSpace, "test");
 
-    quint8 * bytes = new quint8( colorSpace->pixelSize() );
+    quint8 * bytes = colorSpace->allocPixelBuffer( 1 );
     memset( bytes, 128, colorSpace->pixelSize() );
 
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
@@ -183,7 +193,6 @@ void KisIteratorTest::hLineIter( KoColorSpace * colorSpace )
 
     kDebug() << "XXXXXXXXXXXXXX BUG: 147191" << endl;
     QVERIFY( dev.extent() == QRect( 0, 0, 128, 64) );
-    kDebug () << dev.exactBounds() << endl;
     QVERIFY( dev.exactBounds() == QRect( 0, 0, 128, 1 ) );
 
     dev.clear();
@@ -195,7 +204,6 @@ void KisIteratorTest::hLineIter( KoColorSpace * colorSpace )
     }
 
     QVERIFY( dev.extent() == QRect( 0, 0, 128, 64) );
-    kDebug () << dev.exactBounds() << endl;
     QVERIFY( dev.exactBounds() == QRect( 0, 1, 128, 1 ) );
 
     dev.clear();
@@ -209,13 +217,14 @@ void KisIteratorTest::hLineIter( KoColorSpace * colorSpace )
     QVERIFY( dev.extent() == QRect( 0, 0, 192, 64) );
     QVERIFY( dev.exactBounds() == QRect( 10, 10, 128, 1 ) );
 
+    delete[] bytes;
 }
 
 void KisIteratorTest::vLineIter( KoColorSpace * colorSpace )
 {
 
     KisPaintDevice dev( colorSpace, "test");
-    quint8 * bytes = new quint8( colorSpace->pixelSize() );
+    quint8 * bytes = colorSpace->allocPixelBuffer( 1 );
     memset( bytes, 128, colorSpace->pixelSize() );
 
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
@@ -232,7 +241,6 @@ void KisIteratorTest::vLineIter( KoColorSpace * colorSpace )
         ++it;
     }
     QVERIFY( dev.extent() == QRect( 0, 0, 64, 128) );
-    kDebug () << dev.exactBounds() << endl;
     QVERIFY( dev.exactBounds() == QRect( 0, 0, 1, 128 ) );
 
     dev.clear();
@@ -246,6 +254,7 @@ void KisIteratorTest::vLineIter( KoColorSpace * colorSpace )
     QVERIFY( dev.extent() == QRect( 0, 0, 64, 192) );
     QVERIFY( dev.exactBounds() == QRect( 10, 10, 1, 128 ) );
 
+    delete[] bytes;
 
 }
 
@@ -253,7 +262,7 @@ void KisIteratorTest::randomAccessor( KoColorSpace * colorSpace )
 {
 
     KisPaintDevice dev( colorSpace, "test");
-    quint8 * bytes = new quint8( colorSpace->pixelSize() );
+    quint8 * bytes = colorSpace->allocPixelBuffer( 1 );
     memset( bytes, 128, colorSpace->pixelSize() );
 
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
@@ -273,10 +282,10 @@ void KisIteratorTest::randomAccessor( KoColorSpace * colorSpace )
             memcpy( ac.rawData(), bytes, colorSpace->pixelSize() );
         }
     }
-    kDebug() << dev.extent() << endl;
     QVERIFY( dev.extent() == QRect(0, 0, 128, 128 ) );
     QVERIFY( dev.exactBounds() == QRect(0, 0, 128, 128 ) );
 
+    delete[] bytes;
 }
 
 
@@ -293,6 +302,7 @@ void KisIteratorTest::fill()
 void KisIteratorTest::rectIter()
 {
     allCsApplicator( &KisIteratorTest::rectIter );
+    rectIter( KoColorSpaceRegistry::instance()->colorSpace( "RGBAF32", 0 ) );
 }
 
 void KisIteratorTest::hLineIter()

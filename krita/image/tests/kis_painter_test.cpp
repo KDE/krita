@@ -30,6 +30,41 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_pixel_selection.h"
+
+void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( KoColorSpace*cs ) )
+{
+    QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
+
+    foreach( QString csId, csIds ) {
+
+        kDebug() << "Testing with " << csId << endl;
+
+        QList<KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
+        if ( profiles.size() == 0 ) {
+            KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
+            if ( cs->compositeOp( COMPOSITE_OVER ) != 0) {
+                if ( cs ) ( this->*funcPtr )( cs );
+            }
+            else {
+                kDebug() << "Cannot bitBlt for cs " << csId << endl;
+            }
+        }
+        else {
+            foreach( KoColorProfile * profile, profiles ) {
+                KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
+                if ( cs->compositeOp( COMPOSITE_OVER ) != 0) {
+                    if ( cs ) ( this->*funcPtr )( cs );
+                }
+                else {
+                    kDebug() << "Cannot bitBlt for cs " << csId << endl;
+                }
+            }
+
+        }
+    }
+}
+
+
 /*
 
 Note: the bltMask tests assume the following geometry:
@@ -80,36 +115,54 @@ void KisPainterTest::testPaintDeviceBltMask(KoColorSpace * cs)
 
 void KisPainterTest::testPaintDeviceBltMask()
 {
-    QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
-
-    foreach( QString csId, csIds ) {
-
-        kDebug() << "Testing with " << csId << endl;
-
-        QList<KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
-        if ( profiles.size() == 0 ) {
-            KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
-            if ( cs->compositeOp( COMPOSITE_OVER ) != 0) {
-                testPaintDeviceBltMask( cs );
-            }
-            else {
-                kDebug() << "Cannot bitBlt for cs " << csId << endl;
-            }
-        }
-        else {
-            foreach( KoColorProfile * profile, profiles ) {
-                KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
-                if ( cs->compositeOp( COMPOSITE_OVER ) != 0) {
-                    testPaintDeviceBltMask( cs );
-                }
-                else {
-                    kDebug() << "Cannot bitBlt for cs " << csId << endl;
-                }
-            }
-
-        }
-    }
+    allCsApplicator( &KisPainterTest::testPaintDeviceBltMask );
 }
+
+void KisPainterTest::testPaintDeviceBltMaskIrregular(KoColorSpace * cs)
+{
+
+    KisPaintDeviceSP dst = new KisPaintDevice( cs, "dst");
+
+    KisPaintDeviceSP src = new KisPaintDevice( cs, "src" );
+    src->fill( 0, 0, 20, 20, KoColor( Qt::red, 128, cs ).data() );
+
+    QCOMPARE( src->exactBounds(), QRect( 0, 0, 20, 20 ) );
+
+    KisPixelSelectionSP mask = KisPixelSelectionSP(new KisPixelSelection(dst));
+    mask->select(QRect(10,15,20,15));
+    mask->select(QRect(15,10,15,5));
+    QCOMPARE( mask->selectedExactRect(), QRect( 10, 10, 20, 20 ) );
+    QCOMPARE( mask->selected(13,13), MIN_SELECTED);
+
+    KisPainter painter(dst);
+
+    painter.bltMask(0, 0,
+                    dst->colorSpace()->compositeOp(COMPOSITE_OVER),
+                    src,
+                    mask,
+                    OPACITY_OPAQUE,
+                    0, 0, 30, 30);
+    painter.end();
+
+    QImage img = dst->convertToQImage(0);
+    img.save( "bla_" + cs->name() + ".png" );
+
+    QCOMPARE( dst->exactBounds(), QRect( 10, 10, 10, 10 ) );
+    QColor c;
+    quint8 alpha;
+    dst->pixel( 13, 13, &c, &alpha );
+    QCOMPARE( alpha, OPACITY_TRANSPARENT );
+    QCOMPARE( c.red(), 0 );
+    QCOMPARE( c.blue(), 0 );
+    QCOMPARE( c.green(), 0 );
+}
+
+
+void KisPainterTest::testPaintDeviceBltMaskIrregular()
+{
+    allCsApplicator( &KisPainterTest::testPaintDeviceBltMaskIrregular );
+}
+
 
 void KisPainterTest::testSelectionBltMask()
 {
@@ -149,6 +202,9 @@ void KisPainterTest::testSelectionBltMask()
 }
 
 /*
+
+Test with non-square selection
+
 0,0               0,30
   +-----------+------+
   |    13,13  |      |
@@ -162,8 +218,9 @@ void KisPainterTest::testSelectionBltMask()
   +------------------+
                   30,30
  */
-void KisPainterTest::testSelectionBltMask2()
+void KisPainterTest::testSelectionBltMaskIrregular()
 {
+
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "temporary");
 
     KisPixelSelectionSP src = KisPixelSelectionSP(new KisPixelSelection(dev));
@@ -174,6 +231,7 @@ void KisPainterTest::testSelectionBltMask2()
     mask->select(QRect(10,15,20,15));
     mask->select(QRect(15,10,15,5));
     QCOMPARE( mask->selectedExactRect(), QRect( 10, 10, 20, 20 ) );
+    QCOMPARE( mask->selected(13,13), MIN_SELECTED);
 
     KisPixelSelectionSP dst = KisPixelSelectionSP(new KisPixelSelection(dev));
     KisPainter painter(dst);
@@ -186,6 +244,8 @@ void KisPainterTest::testSelectionBltMask2()
                     OPACITY_OPAQUE,
                     0, 0, 30, 30);
     painter.end();
+
+    dst->convertToQImage(0).save( "bla.png" );
 
     QCOMPARE( dst->selectedExactRect(), QRect( 10, 10, 10, 10 ) );
     QCOMPARE( dst->selected(13,13), MIN_SELECTED);

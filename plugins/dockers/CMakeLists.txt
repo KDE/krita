@@ -16,8 +16,6 @@ set(kofficedockers_SRCS
     Plugin.cpp
 )
 
-kde4_automoc(${kofficedockers_SRCS})
-
 #kde4_add_ui_files( kofficedockers_SRCS
 #)
 

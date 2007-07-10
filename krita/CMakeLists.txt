@@ -94,9 +94,7 @@ if (SHOULD_BUILD_KRITA)
 
     set(kritapart_PART_SRCS krita_part_init.cc)
 
-    kde4_automoc(${kritapart_PART_SRCS})
-
-    kde4_add_plugin(kritapart WITH_PREFIX ${kritapart_PART_SRCS})
+        kde4_add_plugin(kritapart WITH_PREFIX ${kritapart_PART_SRCS})
 
     
 

@@ -24,8 +24,6 @@ set( kopageapp_LIB_SRCS
      commands/KoPAPageMoveCommand.cpp
 )
 
-kde4_automoc(${kopageapp_LIB_SRCS})
-
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
 
 target_link_libraries(kopageapp ${KDE4_KDECORE_LIBS} koguiutils flake kotext)

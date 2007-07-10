@@ -2,8 +2,6 @@
 
 set(storage_test_SRCS storage_test.cpp )
 
-kde4_automoc(${storage_test_SRCS})
-
 kde4_add_unit_test(storage_test TESTNAME libs-store-storage_test ${storage_test_SRCS})
 
 target_link_libraries(storage_test  ${KDE4_KDECORE_LIBS} kstore )

@@ -104,8 +104,6 @@ install(TARGETS komain DESTINATION ${LIB_INSTALL_DIR} )
 
 set(kodocinfopropspage_PART_SRCS KoDocInfoPropsFactory.cpp )
 
-kde4_automoc(${kodocinfopropspage_PART_SRCS})
-
 kde4_add_plugin(kodocinfopropspage ${kodocinfopropspage_PART_SRCS})
 
 

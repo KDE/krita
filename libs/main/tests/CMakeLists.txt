@@ -4,8 +4,6 @@ include_directories( ${KOMAIN_INCLUDES} )
 
 set(priorityqueue_test_SRCS priorityqueue_test.cpp )
 
-kde4_automoc(${priorityqueue_test_SRCS})
-
 kde4_add_unit_test(priorityqueue_test TESTNAME libs-komain-priorityQueueTest ${priorityqueue_test_SRCS})
 
 target_link_libraries(priorityqueue_test  ${KDE4_KDECORE_LIBS} komain )

@@ -2,8 +2,6 @@
 
 set(krita%{APPNAMELC}_PART_SRCS %{APPNAMELC}.cc )
 
-kde4_automoc(${krita%{APPNAMELC}_PART_SRCS})
-
 kde4_add_plugin(krita%{APPNAMELC} ${krita%{APPNAMELC}_PART_SRCS})
 
 

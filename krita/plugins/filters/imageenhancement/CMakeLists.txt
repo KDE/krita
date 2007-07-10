@@ -6,8 +6,6 @@ set(kritaimageenhancement_PART_SRCS
     kis_wavelet_noise_reduction.cpp
     )
 
-kde4_automoc(${kritaimageenhancement_PART_SRCS})
-
 kde4_add_plugin(kritaimageenhancement ${kritaimageenhancement_PART_SRCS})
 
 

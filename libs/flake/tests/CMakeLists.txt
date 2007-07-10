@@ -4,8 +4,6 @@ include_directories( ${FLAKE_INCLUDES} )
 
 set(TestPosition_test_SRCS TestPosition.cpp )
 
-kde4_automoc(${TestPosition_test_SRCS})
-
 kde4_add_unit_test(TestPosition TESTNAME libs-flake-TestPosition ${TestPosition_test_SRCS})
 
 target_link_libraries(TestPosition  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})

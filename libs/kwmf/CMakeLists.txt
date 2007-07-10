@@ -26,8 +26,6 @@ set(kowmf_LIB_SRCS
    kowmfwrite.cc 
    kowmfpaint.cc )
 
-kde4_automoc(${kowmf_LIB_SRCS})
-
 kde4_add_library(kowmf SHARED ${kowmf_LIB_SRCS})
 
 target_link_libraries(kowmf  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QT3SUPPORT_LIBRARY})

@@ -50,14 +50,12 @@ include_directories( ${KOTEXT_INCLUDES} )
 ########### next target ###############
 
 set(TestDocumentLayout_test_SRCS TestDocumentLayout.cpp)
-kde4_automoc(${TestDocumentLayout_test_SRCS})
 kde4_add_unit_test(TestDocumentLayout TESTNAME libs-kotext-TestDocumentLayout  ${TestDocumentLayout_test_SRCS})
 target_link_libraries(TestDocumentLayout kotext ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestBorder_test_SRCS TestBorder.cpp)
-kde4_automoc(${TestBorder_test_SRCS})
 kde4_add_unit_test(TestBorder TESTNAME libs-kotext-TestBorder  ${TestBorder_test_SRCS})
 target_link_libraries(TestBorder kotext ${QT_QTTEST_LIBRARY})
 

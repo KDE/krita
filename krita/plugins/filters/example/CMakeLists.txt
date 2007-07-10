@@ -2,8 +2,6 @@
 
 set(kritaexample_PART_SRCS example.cc )
 
-kde4_automoc(${kritaexample_PART_SRCS})
-
 kde4_add_plugin(kritaexample ${kritaexample_PART_SRCS})
 
 

@@ -4,8 +4,6 @@ include_directories( ${KOPAGEAPP_INCLUDES} )
 
 set(TestPAPageInsertCommand_test_SRCS TestPAPageInsertCommand.cpp )
 
-kde4_automoc(${TestPAPageInsertCommand_test_SRCS})
-
 kde4_add_unit_test(TestPAPageInsertCommand TESTNAME libs-kopageapp-TestPAPageInsertCommand  ${TestPAPageInsertCommand_test_SRCS})
 
 target_link_libraries(TestPAPageInsertCommand  ${KDE4_KDECORE_LIBS} kopageapp ${QT_QTTEST_LIBRARY})

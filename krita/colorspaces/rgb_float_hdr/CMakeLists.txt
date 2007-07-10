@@ -28,8 +28,6 @@ endif(OPENEXR_FOUND)
 
 set(kritargbf32hdr_LIB_SRCS kis_rgb_f32_hdr_colorspace.cc )
 
-kde4_automoc(${kritargbf32hdr_LIB_SRCS})
-
 kde4_add_library(kritargbf32hdr SHARED ${kritargbf32hdr_LIB_SRCS})
 
 target_link_libraries(kritargbf32hdr  ${KDE4_KDECORE_LIBS} pigment )
@@ -40,8 +38,6 @@ install(TARGETS kritargbf32hdr  DESTINATION ${LIB_INSTALL_DIR})
 ########### next target ###############
 
 set(kritargbfloathdrplugin_PART_SRCS rgb_float_hdr.cc )
-
-kde4_automoc(${kritargbfloathdrplugin_PART_SRCS})
 
 kde4_add_plugin(kritargbfloathdrplugin ${kritargbfloathdrplugin_PART_SRCS})
 

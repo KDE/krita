@@ -4,8 +4,6 @@ include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
 set(kis_layer_model_test_SRCS kis_layer_model_test.cpp )
 
-kde4_automoc(${kis_layer_model_test_SRCS})
-
 kde4_add_unit_test(kis_layer_model_test TESTNAME krita-ui-kis_layer_model_test  ${kis_layer_model_test_SRCS})
 
 target_link_libraries(kis_layer_model_test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaui ${QT_QTTEST_LIBRARY})

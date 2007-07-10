@@ -4,8 +4,6 @@ include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
 set(zoomhandler_test_SRCS zoomhandler_test.cpp )
 
-kde4_automoc(${zoomhandler_test_SRCS})
-
 kde4_add_unit_test(zoomhandler_test TESTNAME libs-koguiutils-zoomhandler_test  ${zoomhandler_test_SRCS})
 
 target_link_libraries(zoomhandler_test  ${KDE4_KDEUI_LIBS} koguiutils komain ${QT_QTTEST_LIBRARY})

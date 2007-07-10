@@ -4,8 +4,6 @@ include_directories( ${PIGMENT_INCLUDES} )
 
 set(TestColorConversion_test_SRCS TestColorConversion.cpp )
 
-kde4_automoc(${TestColorConversion_test_SRCS})
-
 kde4_add_unit_test(TestColorConversion TESTNAME libs-pigment-TestColorConversion  ${TestColorConversion_test_SRCS})
 
 target_link_libraries(TestColorConversion  ${KDE4_KDECORE_LIBS} pigment ${QT_QTTEST_LIBRARY})

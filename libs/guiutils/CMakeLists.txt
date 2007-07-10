@@ -60,8 +60,6 @@ set(koguiutils_LIB_SRCS
    KoLineStyleSelector.cpp
 )
 
-kde4_automoc(${koguiutils_LIB_SRCS})
-
 kde4_add_ui_files( koguiutils_LIB_SRCS
     KoCsvImportDialog.ui
     KoGeneralPropertyUi.ui

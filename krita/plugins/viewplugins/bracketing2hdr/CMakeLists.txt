@@ -2,8 +2,6 @@ include_directories(${CMAKE_SOURCE_DIR}/krita/image/metadata)
 
 set(kritabracketing2hdr_PART_SRCS bracketing2hdr.cc )
 
-kde4_automoc(${kritabracketing2hdr_PART_SRCS})
-
 kde4_add_ui_files(kritabracketing2hdr_PART_SRCS wdgbracketing2hdr.ui )
 
 kde4_add_plugin(kritabracketing2hdr ${kritabracketing2hdr_PART_SRCS})

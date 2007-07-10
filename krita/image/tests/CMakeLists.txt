@@ -4,8 +4,6 @@ include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
 set(kis_layer_test_SRCS kis_layer_test.cpp )
 
-kde4_automoc(${kis_layer_test_SRCS})
-
 kde4_add_unit_test(KisLayerTest TESTNAME krita-image-KisLayerTest  ${kis_layer_test_SRCS})
 
 target_link_libraries(KisLayerTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
@@ -52,8 +50,6 @@ target_link_libraries(KisEffectMaskTest  ${KDE4_KDEUI_LIBS} koguiutils komain kr
 
 ########### next target ###############
 set(kis_iterator_test_SRCS kis_iterator_test.cpp )
-
-kde4_automoc(${kis_iterator_test_SRCS})
 
 kde4_add_unit_test(KisIteratorTest TESTNAME krita-image-KisIteratorTest  ${kis_iterator_test_SRCS})
 

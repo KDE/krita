@@ -100,8 +100,6 @@ set(kritaimage_LIB_SRCS
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
-kde4_automoc(${kritaimage_LIB_SRCS})
-
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
 target_link_libraries(kritaimage ${KDE4_KDECORE_LIBS} pigment komain kopainter koresources ${KDE4_THREADWEAVER_LIBRARIES} )

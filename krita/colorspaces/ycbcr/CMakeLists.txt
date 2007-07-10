@@ -4,8 +4,6 @@
 
 set(kritaycbcrplugin_PART_SRCS ycbcr_plugin.cc kis_ycbcr_u16_colorspace.cc kis_ycbcr_u8_colorspace.cc )
 
-kde4_automoc(${kritaycbcrplugin_PART_SRCS})
-
 kde4_add_plugin(kritaycbcrplugin ${kritaycbcrplugin_PART_SRCS})
 
 

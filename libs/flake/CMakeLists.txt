@@ -102,8 +102,6 @@ set(flake_SRCS
     commands/KoShapeTransformCommand.cpp
 )
 
-kde4_automoc(${flake_SRCS})
-
 kde4_add_library(flake SHARED ${flake_SRCS})
 
 target_link_libraries(flake ${KDE4_KDEUI_LIBS} komain kstore pigment)

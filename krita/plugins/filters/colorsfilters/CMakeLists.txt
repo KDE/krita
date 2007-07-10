@@ -6,8 +6,6 @@ set(kritacolorsfilters_PART_SRCS
     kis_brightness_contrast_filter.cc
     )
 
-kde4_automoc(${kritacolorsfilters_PART_SRCS})
-
 kde4_add_ui_files(kritacolorsfilters_PART_SRCS
     wdg_perchannel.ui
     wdg_brightness_contrast.ui

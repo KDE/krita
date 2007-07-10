@@ -18,8 +18,6 @@ set(kritadynamicbrushlib_LIB_SRCS
     ui/kis_sensor_selector.cc
 )
 
-kde4_automoc(${kritadynamicbrushlib_LIB_SRCS})
-
 kde4_add_ui_files(kritadynamicbrushlib_LIB_SRCS transformations/SizeTransformationEditor.ui ui/SensorSelector.ui sensors/SensorTimeConfiguration.ui)
 
 kde4_add_library(kritadynamicbrush SHARED ${kritadynamicbrushlib_LIB_SRCS})

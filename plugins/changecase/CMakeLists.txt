@@ -8,8 +8,6 @@ set(changecase_SRCS
     ChangecaseFactory.cpp
 )
 
-kde4_automoc(${changecase_SRCS})
-
 kde4_add_plugin(changecase ${changecase_SRCS})
 
 target_link_libraries(changecase kotext)

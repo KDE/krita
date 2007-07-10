@@ -4,8 +4,6 @@ set(kritabumpmap_PART_SRCS
     bumpmap.cc
     )
 
-kde4_automoc(${kritabumpmap_PART_SRCS})
-
 kde4_add_ui_files(kritabumpmap_PART_SRCS wdgbumpmap.ui)
 
 kde4_add_plugin(kritabumpmap ${kritabumpmap_PART_SRCS})

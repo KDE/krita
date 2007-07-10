@@ -10,8 +10,6 @@ endif(KUNITTEST_FOUND)
 
 set(kofficegrayau8colorspace_LIB_SRCS kis_gray_colorspace.cc )
 
-kde4_automoc(${kofficegrayau8colorspace_LIB_SRCS})
-
 kde4_add_library(kofficegrayau8colorspace SHARED ${kofficegrayau8colorspace_LIB_SRCS})
 
 target_link_libraries(kofficegrayau8colorspace  ${KDE4_KDECORE_LIBS} pigment )

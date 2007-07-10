@@ -10,8 +10,6 @@ set(autocorrect_SRCS
     AutocorrectFactory.cpp
 )
 
-kde4_automoc(${autocorrect_SRCS})
-
 #kde4_add_ui_files( autocorrect_SRCS
 #)
 

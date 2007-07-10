@@ -122,6 +122,11 @@ void KisIteratorTest::fill( KoColorSpace * colorSpace )
     QVERIFY( dev.extent() == QRect( 0, 0, 8 * 64, 8 * 64 ) );
     QVERIFY( dev.exactBounds() == QRect( 5, 5, 500, 500 ) );
 
+    dev.clear();
+    dev.fill( 33, -10, 348, 1028, bytes );
+    QCOMPARE( dev.extent(), QRect( 0, -64, 6 * 64, 17 * 64 ) );
+    QCOMPARE( dev.exactBounds(), QRect( 33, -10, 348, 1028 ) );
+
     delete[] bytes;
 }
 
@@ -183,39 +188,45 @@ void KisIteratorTest::hLineIter( KoColorSpace * colorSpace )
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
     QVERIFY( dev.exactBounds() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
 
+    {
 
-    dev.clear();
-    KisHLineIteratorPixel it = dev.createHLineIterator(0, 0, 128);
-    while ( !it.isDone() ) {
-        memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
-        ++it;
+        dev.clear();
+        KisHLineIteratorPixel it = dev.createHLineIterator(0, 0, 128);
+        while ( !it.isDone() ) {
+            memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
+            ++it;
+        }
+
+
+        QCOMPARE( dev.extent(), QRect( 0, 0, 128, 64) );
+        QCOMPARE( dev.exactBounds(), QRect( 0, 0, 128, 1 ) );
     }
-
-    kDebug() << "XXXXXXXXXXXXXX BUG: 147191" << endl;
-    QVERIFY( dev.extent() == QRect( 0, 0, 128, 64) );
-    QVERIFY( dev.exactBounds() == QRect( 0, 0, 128, 1 ) );
-
-    dev.clear();
-
-    it = dev.createHLineIterator(0, 1, 128);
-    while ( !it.isDone() ) {
-        memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
-        ++it;
-    }
-
-    QVERIFY( dev.extent() == QRect( 0, 0, 128, 64) );
-    QVERIFY( dev.exactBounds() == QRect( 0, 1, 128, 1 ) );
 
     dev.clear();
 
-    it = dev.createHLineIterator(10, 10, 128);
-    while ( !it.isDone() ) {
-        memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
-        ++it;
+    {
+        KisHLineIteratorPixel it = dev.createHLineIterator(0, 1, 128);
+        while ( !it.isDone() ) {
+            memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
+            ++it;
+        }
+
+        QVERIFY( dev.extent() == QRect( 0, 0, 128, 64) );
+        QVERIFY( dev.exactBounds() == QRect( 0, 1, 128, 1 ) );
     }
 
-    QVERIFY( dev.extent() == QRect( 0, 0, 192, 64) );
-    QVERIFY( dev.exactBounds() == QRect( 10, 10, 128, 1 ) );
+    dev.clear();
+
+    {
+        KisHLineIteratorPixel it = dev.createHLineIterator(10, 10, 128);
+        while ( !it.isDone() ) {
+            memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
+            ++it;
+        }
+
+        QVERIFY( dev.extent() == QRect( 0, 0, 192, 64) );
+        QVERIFY( dev.exactBounds() == QRect( 10, 10, 128, 1 ) );
+    }
 
     delete[] bytes;
 }
@@ -234,25 +245,28 @@ void KisIteratorTest::vLineIter( KoColorSpace * colorSpace )
     QVERIFY( dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
     QVERIFY( dev.exactBounds() == QRect(qint32_MAX, qint32_MAX, 0, 0) );
 
-
-    KisVLineIteratorPixel it = dev.createVLineIterator(0, 0, 128);
-    while ( !it.isDone() ) {
-        memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
-        ++it;
+    {
+        KisVLineIteratorPixel it = dev.createVLineIterator(0, 0, 128);
+        while ( !it.isDone() ) {
+            memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
+            ++it;
+        }
+        QCOMPARE( ( QRect ) dev.extent(), QRect( 0, 0, 64, 128) );
+        QCOMPARE( ( QRect ) dev.exactBounds(), QRect( 0, 0, 1, 128 ) );
     }
-    QVERIFY( dev.extent() == QRect( 0, 0, 64, 128) );
-    QVERIFY( dev.exactBounds() == QRect( 0, 0, 1, 128 ) );
 
     dev.clear();
 
-    it = dev.createVLineIterator(10, 10, 128);
-    while ( !it.isDone() ) {
-        memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
-        ++it;
-    }
+    {
+        KisVLineIteratorPixel it = dev.createVLineIterator(10, 10, 128);
+        while ( !it.isDone() ) {
+            memcpy(it.rawData(), bytes, colorSpace->pixelSize() );
+            ++it;
+        }
 
-    QVERIFY( dev.extent() == QRect( 0, 0, 64, 192) );
-    QVERIFY( dev.exactBounds() == QRect( 10, 10, 1, 128 ) );
+        QCOMPARE( dev.extent(), QRect( 0, 0, 64, 192) );
+        QCOMPARE( dev.exactBounds(), QRect( 10, 10, 1, 128 ) );
+    }
 
     delete[] bytes;
 
@@ -302,7 +316,6 @@ void KisIteratorTest::fill()
 void KisIteratorTest::rectIter()
 {
     allCsApplicator( &KisIteratorTest::rectIter );
-    rectIter( KoColorSpaceRegistry::instance()->colorSpace( "RGBAF32", 0 ) );
 }
 
 void KisIteratorTest::hLineIter()

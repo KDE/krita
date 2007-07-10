@@ -52,6 +52,7 @@ void KisImageTester::mergeTests()
     KoColorSpace * colorSpace = reg->colorSpace("RGBA", 0);
 
     KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, colorSpace, "merge test");
+    image->unlock();
 
     KoColor mergedPixel = image->mergedPixel(0, 0);
 
@@ -81,6 +82,7 @@ void KisImageTester::mergeTests()
     layer2->setDirty();
 
     layer2->paintDevice()->setPixel(0, 0, QColor(255, 255, 255), OPACITY_OPAQUE);
+    layer2->setDirty();
 
     mergedPixel = image->mergedPixel(0, 0);
     mergedPixel.toQColor(&color, &opacity);

@@ -180,6 +180,20 @@ void KoGenStyle::addAttributePt( const QString& attrName, double attrValue )
     m_attributes.insert( attrName, str );
 }
 
+void KoGenStyle::addStyleMap( const QMap<QString, QString>& styleMap )
+{
+    // check, if already present
+    for ( int i = 0 ; i < m_maps.count() ; ++i ) {
+        if ( m_maps[i].count() == styleMap.count() ) {
+            int comp = compareMap( m_maps[i], styleMap );
+            if ( comp == 0 )
+                return;
+        }
+    }
+    m_maps.append( styleMap );
+}
+
+
 #ifndef NDEBUG
 void KoGenStyle::printDebug() const
 {

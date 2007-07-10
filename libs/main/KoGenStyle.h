@@ -230,9 +230,7 @@ public:
      * @brief Add a style:map to the style.
      * @param styleMap the attributes for the map, associated as (name,value).
      */
-    void addStyleMap( const QMap<QString, QString>& styleMap ) {
-        m_maps.append( styleMap );
-    }
+    void addStyleMap( const QMap<QString, QString>& styleMap );
 
     /**
      * @return true if the style has no attributes, no properties, no style map etc.

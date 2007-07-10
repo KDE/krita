@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Filter Op
+Name[sv]=Filtreringsoperation
 Comment=Filter Op
+Comment[sv]=Filtreringsoperation
 ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritafilterop

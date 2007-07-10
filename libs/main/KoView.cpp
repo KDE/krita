@@ -482,14 +482,11 @@ QDockWidget * KoView::createDock(const QString & title, QWidget * w)
     d->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     d->setWidget(w);
 
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    cfg->setGroup("");
-    QFont f  = KGlobalSettings::generalFont();
-    float ps = qMin(9.0, KGlobalSettings::generalFont().pointSize() * 0.8);
-    ps = cfg->readEntry("palettefontsize", (int)ps);
-    if (ps < 6) ps = 6;
-    f.setPointSize(6);
-    d->setFont( f );
+    KConfigGroup group(KGlobal::config(), "");
+    QFont dockWidgetFont = KGlobalSettings::generalFont();
+    double pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize());
+    dockWidgetFont.setPointSizeF(pointSize);
+    d->setFont(dockWidgetFont);
 
     d->setObjectName(title);
     mainWindow()->addDockWidget(Qt::RightDockWidgetArea, d);

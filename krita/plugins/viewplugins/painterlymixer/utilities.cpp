@@ -145,21 +145,27 @@ void Cell::mixProperties(const Cell &cell, float force)
 void Cell::mixColorsUsingRgb(const Cell &cell, float)
 {
     float ratio;
-    int delta;
+    long delta;
 
-    ratio = wetness*volume / cell.wetness*cell.volume;
+    kDebug() << "WETNESS: " << wetness << " VOLUME: " << volume << endl;
+    kDebug() << "CELL WETNESS: " << cell.wetness << " VOLUME: " << cell.volume << endl;
+    ratio = (wetness*volume) / (cell.wetness*cell.volume);
     delta = red - cell.red;
-    red = cell.red + (int)(ratio * delta);
+    kDebug() << "RATIO: " << ratio << endl;
+    red = cell.red + (long)(ratio * delta);
+    kDebug() << "RED: " << red << endl;
 
     delta = green - cell.green;
-    green = cell.green + (int)(ratio * delta);
+    green = cell.green + (long)(ratio * delta);
+    kDebug() << "GREEN: " << green << endl;
 
     delta = blue - cell.blue;
-    blue = cell.blue + (int)(ratio * delta);
+    blue = cell.blue + (long)(ratio * delta);
+    kDebug() << "BLUE: " << blue << endl;
 
     updateHlsCmy();
-}*/
-
+}
+*/
 
 void Cell::mixColorsUsingRgb(const Cell &cell, float force)
 {
@@ -229,7 +235,7 @@ void Cell::mixColorsUsingCmy(const Cell &cell, float)
     float ratio;
     int delta;
 
-    ratio = wetness*volume / cell.wetness*cell.volume;
+    ratio = (wetness*volume) / (cell.wetness*cell.volume);
     delta = cyan - cell.cyan;
     cyan = cell.cyan + (long)(ratio * delta);
 

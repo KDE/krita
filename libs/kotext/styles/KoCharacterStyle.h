@@ -84,7 +84,7 @@ public:
         SmallCaps, ///< Small capitalized letters.
         Uppercase, ///< Uppercase characters. E.g. "My teXT"=>"MY TEXT"
         Lowercase, ///< Lowercase characters. E.g. "My teXT"=>"my text"
-        Capitalize ///< Capatialize characters. E.g. "my text"=>"My Text"
+        Capitalize ///< Capitalize characters. E.g. "my text"=>"My Text"
     };
 
     /**

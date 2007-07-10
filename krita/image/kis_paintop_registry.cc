@@ -37,6 +37,8 @@
 #include "KoID.h"
 #include "kis_debug_areas.h"
 #include "KoColorSpace.h"
+#include "kis_layer.h"
+#include "kis_image.h"
 
 KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 
@@ -76,11 +78,11 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
     return 0;
 }
 
-KisPaintOpSettings * KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice) const
+KisPaintOpSettings * KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image, KisLayerSP layer) const
 {
     KisPaintOpFactorySP f = value(id.id());
     if (f)
-        return f->settings( parent, inputDevice );
+        return f->settings( parent, inputDevice, image, layer );
 
     return 0;
 }

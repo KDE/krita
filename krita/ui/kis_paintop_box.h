@@ -86,6 +86,8 @@ private:
     QHBoxLayout * m_layout;
     QWidget * m_optionWidget;
 
+    KisView2 * m_view;
+    
     QList<KoID> m_paintops;
     QList<KoID> m_displayedOps;
 

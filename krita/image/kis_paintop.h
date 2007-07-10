@@ -33,6 +33,7 @@ class QWidget;
 class QPointF;
 class KoColorSpace;
 class KoInputDevice;
+class KoPointerEvent;
 
 class KisQImagemask;
 class KisPainter;
@@ -115,12 +116,14 @@ private:
  * This class is used to cache the settings (and the associated widget) for a paintop
  * between two creation. There is one KisPaintOpSettings per input device (mouse, tablet, etc...).
  */
-class KisPaintOpSettings {
+class KRITAIMAGE_EXPORT KisPaintOpSettings {
 
 public:
     KisPaintOpSettings() {}
     KisPaintOpSettings(QWidget *parent) { Q_UNUSED(parent); }
     virtual ~KisPaintOpSettings() {}
+
+    virtual void mousePressEvent(KoPointerEvent *e);
 
     /**
      * @return a pointer to the widget displaying the settings
@@ -166,7 +169,7 @@ public:
      * specified input device. Return 0 if there are no settings available for the given
      * device.
      */
-    virtual KisPaintOpSettings* settings(QWidget* parent, const KoInputDevice& inputDevice);
+    virtual KisPaintOpSettings* settings(QWidget* parent, const KoInputDevice& inputDevice, KisImageSP image, KisLayerSP layer);
 
 };
 #endif // KIS_PAINTOP_H_

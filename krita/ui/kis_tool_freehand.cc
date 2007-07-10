@@ -228,6 +228,12 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 
     if (!currentLayer()->paintDevice()) return;
 
+    if(currentPaintOpSettings())
+    {
+        currentPaintOpSettings()->mousePressEvent(e);
+        if(e->isAccepted()) return;
+    }
+    
     if (e->button() == Qt::LeftButton)
     {
         initPaint(e);

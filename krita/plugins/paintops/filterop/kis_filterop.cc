@@ -52,7 +52,7 @@ KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettings *_settings, K
     return op;
 }
 
-KisPaintOpSettings *KisFilterOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice)
+KisPaintOpSettings *KisFilterOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/, KisLayerSP /*layer*/)
 {
     Q_UNUSED(inputDevice);
     return new KisFilterOpSettings(parent);

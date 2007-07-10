@@ -44,7 +44,7 @@ public:
     virtual QString id() const { return "filter"; }
     virtual QString name() const { return i18n("Filter"); }
     virtual QString pixmap() { return "filterop.png"; }
-    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice);
+    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image, KisLayerSP layer);
 };
 
 class KisFilterOpSettings : public QObject, public KisPaintOpSettings {

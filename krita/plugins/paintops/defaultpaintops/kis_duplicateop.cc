@@ -3,7 +3,7 @@
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2004-2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,10 @@
 
 #include <kdebug.h>
 
+#include <QWidget>
+
 #include <KoColorSpaceRegistry.h>
+#include <KoPointerEvent.h>
 
 #include "kis_brush.h"
 #include "kis_global.h"
@@ -41,22 +44,64 @@
 #include "kis_perspective_grid.h"
 #include "kis_random_sub_accessor.h"
 
-KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
+KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettings *_settings, KisPainter * _painter, KisImageSP _image)
 {
-    KisPaintOp * op = new KisDuplicateOp(painter, image);
+    const KisDuplicateOpSettings* settings = dynamic_cast<const KisDuplicateOpSettings *>(_settings);
+    Q_ASSERT(settings);
+    KisPaintOp * op = new KisDuplicateOp(settings, _painter, _image);
     Q_CHECK_PTR(op);
     return op;
 }
 
+KisPaintOpSettings *KisDuplicateOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image, KisLayerSP layer)
+{
+    return new KisDuplicateOpSettings(parent, image);
+}
 
-KisDuplicateOp::KisDuplicateOp(KisPainter * painter, KisImageSP image)
-    : super(painter), m_srcdev(0), m_target(0), m_image( image )
+KisDuplicateOpSettings::KisDuplicateOpSettings(QWidget* parent, KisImageSP image) :
+        QObject(parent),
+        KisPaintOpSettings(parent),
+        m_optionsWidget(new QWidget(parent))/*,
+        m_uiOptions(new Ui_FilterOpOptions())*/,
+        m_image(image),
+        m_isOffsetNotUptodate(true)
+{
+//     m_uiOptions->setupUi(m_optionsWidget);
+
+}
+
+KisDuplicateOpSettings::~KisDuplicateOpSettings()
+{
+//     delete m_uiOptions;
+}
+
+void KisDuplicateOpSettings::mousePressEvent(KoPointerEvent *e)
+{
+    kDebug() << "\\o/" << endl;
+    if (e->modifiers() == Qt::ShiftModifier) {
+      m_position = m_image->documentToPixel(e->point);
+      m_isOffsetNotUptodate = true;
+      e->accept();
+    } else {
+      if(m_isOffsetNotUptodate)
+      {
+          m_offset = m_image->documentToPixel(e->point) - m_position;
+          m_isOffsetNotUptodate = false;
+      }
+      e->ignore();
+    }
+    kDebug() << m_offset << endl;
+}
+
+KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings* settings, KisPainter * painter, KisImageSP image)
+    : super(painter), m_srcdev(0), m_target(0), m_image( image ), m_settings(settings)
 {
 }
 
 KisDuplicateOp::~KisDuplicateOp()
 {
 }
+
 
 double KisDuplicateOp::minimizeEnergy(const double* m, double* sol, int w, int h)
 {
@@ -131,9 +176,9 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     painter()->setPressure(info.pressure);
 
-    QPointF srcPointF = pt - painter()->duplicateOffset();
-    QPoint srcPoint = QPoint(x - static_cast<qint32>(painter()->duplicateOffset().x()),
-                             y - static_cast<qint32>(painter()->duplicateOffset().y()));
+    QPointF srcPointF = pt - m_settings->offset();
+    QPoint srcPoint = QPoint(x - static_cast<qint32>(m_settings->offset().x()),
+                             y - static_cast<qint32>(m_settings->offset().y()));
 
 
     qint32 sw = dab->extent().width();
@@ -203,7 +248,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
         // Compute the translation in the perspective transformation space:
         QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(painter()->duplicateStart()) );
-        QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, QPointF(painter()->duplicateStart()) - QPointF(painter()->duplicateOffset()) );
+        QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, QPointF(painter()->duplicateStart()) - QPointF(m_settings->offset()) );
         QPointF translat = duplicateStartPoisitionT - positionStartPaintingT;
         KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh);
         KisRandomSubAccessorPixel srcAcc = device->createRandomSubAccessor();

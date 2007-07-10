@@ -3,7 +3,7 @@
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,8 +39,23 @@ public:
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "duplicate"; }
     virtual QString name() const { return i18n("Duplicate"); }
-    virtual bool userVisible(KoColorSpace *) { return false; }
+    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image, KisLayerSP layer);
+};
 
+class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings {
+    public:
+        KisDuplicateOpSettings(QWidget* parent, KisImageSP image);
+        virtual ~KisDuplicateOpSettings();
+        virtual QWidget *widget() const { return m_optionsWidget; }
+        virtual void mousePressEvent(KoPointerEvent *e);
+        QPointF offset() const { return m_offset; }
+    private:
+        QWidget* m_optionsWidget;
+//         Ui_FilterOpOptions* m_uiOptions;
+        KisImageSP m_image;
+        bool m_isOffsetNotUptodate;
+        QPointF m_position; // Give the position of the last alt-click
+        QPointF m_offset;
 };
 
 class KisDuplicateOp : public KisPaintOp {
@@ -50,7 +65,7 @@ class KisDuplicateOp : public KisPaintOp {
 
 public:
 
-    KisDuplicateOp(KisPainter * painter, KisImageSP image);
+    KisDuplicateOp(const KisDuplicateOpSettings* settings, KisPainter * painter, KisImageSP image);
     virtual ~KisDuplicateOp();
 
     void paintAt(const KisPaintInformation& info);
@@ -61,7 +76,7 @@ private:
     KisPaintDeviceSP m_srcdev;
     KisPaintDeviceSP m_target;
     KisImageSP m_image;
-
+    const KisDuplicateOpSettings* m_settings;
 };
 
 #endif // KIS_DUPLICATEOP_H_

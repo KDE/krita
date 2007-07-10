@@ -49,7 +49,7 @@
 
 KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * name)
     : QWidget(parent),
-      m_resourceProvider(view->resourceProvider())
+      m_resourceProvider(view->resourceProvider()), m_view(view)
 {
     Q_ASSERT(view != 0);
 
@@ -232,7 +232,7 @@ const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, c
         // Create settings for each paintop.
 
         foreach (KoID paintopId, m_paintops) {
-            KisPaintOpSettings *settings = KisPaintOpRegistry::instance()->settings(paintopId, this, inputDevice);
+            KisPaintOpSettings *settings = KisPaintOpRegistry::instance()->settings(paintopId, this, inputDevice, m_view->image(), m_view->activeLayer());
             settingsArray.append(settings);
             if (settings && settings->widget()) {
                 settings->widget()->hide();

@@ -26,6 +26,10 @@
 
 #include <QString>
 
+#include <KoColor.h>
+#include <KoColorSpace.h>
+#include <KoPointerEvent.h>
+
 #include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_brush.h"
@@ -33,11 +37,10 @@
 #include "kis_paintop.h"
 #include "kis_qimage_mask.h"
 
-#include "KoColorSpace.h"
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"
-#include "KoColor.h"
 #include "kis_datamanager.h"
+
 
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 
@@ -283,8 +286,12 @@ KisPaintDeviceSP KisPaintOp::source()
     return d->source;
 }
 
+void KisPaintOpSettings::mousePressEvent(KoPointerEvent *e)
+{
+  e->ignore();
+}
 
-KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/) { return 0; }
+KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/, KisImageSP /*image*/, KisLayerSP /*layer*/) { return 0; }
 
 QString KisPaintOpFactory::pixmap()
 {

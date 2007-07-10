@@ -50,6 +50,8 @@ public:
     virtual void fromXML( const QString&  );
     virtual QString toString();
 
+    bool isCompatible(const KisPaintDeviceSP) const;
+    
 public:
     QList<KisCurve> curves;
     quint16 *transfers[256];

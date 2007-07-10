@@ -105,6 +105,11 @@ qint32 KisFilterConfiguration::version() const
     return m_version;
 }
 
+bool KisFilterConfiguration::isCompatible(const KisPaintDeviceSP) const
+{
+    return true;
+}
+
 void KisFilterConfiguration::setProperty(const QString & name, const QVariant & value)
 {
     if ( m_properties.find( name ) == m_properties.end() ) {

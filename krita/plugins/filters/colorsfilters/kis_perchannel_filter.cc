@@ -65,6 +65,11 @@ KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
     delete adjustment;
 }
 
+bool KisPerChannelFilterConfiguration::isCompatible(const KisPaintDeviceSP dev) const
+{
+    return dev->colorSpace() == oldCs;
+}
+
 void KisPerChannelFilterConfiguration::fromXML( const QString& s )
 {
     QDomDocument doc;

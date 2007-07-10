@@ -63,7 +63,8 @@ KisFilterOpSettings::KisFilterOpSettings(QWidget* parent) :
         QObject(parent),
         KisPaintOpSettings(parent),
         m_optionsWidget(new QWidget(parent)),
-        m_uiOptions(new Ui_FilterOpOptions())
+        m_uiOptions(new Ui_FilterOpOptions()),
+        m_currentFilterConfigWidget(0)
 {
     m_uiOptions->setupUi(m_optionsWidget);
 
@@ -84,7 +85,13 @@ KisFilterOpSettings::KisFilterOpSettings(QWidget* parent) :
 void KisFilterOpSettings::setLayer( KisLayerSP layer )
 {
     if(layer)
+    {
         m_paintDevice = layer->paintDevice();
+        if(m_currentFilterConfigWidget and m_currentFilterConfigWidget->configuration()->isCompatible(m_paintDevice))
+        {
+            setCurrentFilter(KoID(m_currentFilter->id()));
+        }
+    }
     else
         m_paintDevice = 0;
 }

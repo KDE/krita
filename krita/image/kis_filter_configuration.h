@@ -23,6 +23,8 @@
 #include <QBitArray>
 #include <QVariant>
 #include <kdebug.h>
+
+#include "kis_types.h"
 #include "krita_export.h"
 
 
@@ -75,6 +77,11 @@ public:
     qint32 version() const;
 
     /**
+     * Check if that configuration is compatible with this paint device.
+     * The default implementation allways return true.
+     */
+    virtual bool isCompatible(const KisPaintDeviceSP) const;
+    /**
      * Set the property with name to value.
      */
     virtual void setProperty(const QString & name, const QVariant & value);
@@ -87,6 +94,8 @@ public:
 
     virtual QVariant getProperty(const QString & name);
 
+    
+    
     int getInt(const QString & name, int def = 0);
     double getDouble(const QString & name, double def = 0.0);
     bool getBool(const QString & name, bool def = false);

@@ -43,6 +43,7 @@
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     : KisFilterConfiguration( "perchannel", 1 )
 {
+    transfers = new quint16*[n];
     for(int i = 0; i < n; i++) {
         curves.append(KisCurve());
 
@@ -62,6 +63,7 @@ KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 {
     for(int i=0;i<nTransfers;i++)
         delete [] transfers[i];
+    delete[] transfers;
     delete adjustment;
 }
 

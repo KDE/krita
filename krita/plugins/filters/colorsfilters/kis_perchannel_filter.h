@@ -54,7 +54,7 @@ public:
     
 public:
     QList<KisCurve> curves;
-    quint16 *transfers[256];
+    quint16 **transfers;
     quint16 nTransfers;
     // Caching of adjustment
     bool dirty;

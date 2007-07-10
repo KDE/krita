@@ -506,7 +506,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
             LPGAMMATABLE *transferFunctions = new LPGAMMATABLE[ _CSTraits::channels_nb +1];
 
-            for(uint ch=0; ch < _CSTraits::channels_nb; ch++) {
+            for(uint ch=0; ch < this->colorChannelCount(); ch++) {
                 transferFunctions[ch] = cmsBuildGamma(256, 1.0);
                 for(uint i =0; i < 256; i++) {
                     transferFunctions[ch]->GammaTable[i] = transferValues[ch][i];

@@ -1,3 +1,5 @@
+#if 0
+
 /*
  *  kis_tool_duplicate.h - part of Krita
  *
@@ -95,3 +97,4 @@ public:
 
 #endif //__KIS_TOOL_DUPLICATE_H__
 
+#endif

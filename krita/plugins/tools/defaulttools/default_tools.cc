@@ -33,7 +33,6 @@
 #include "kis_tool_rectangle.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_line.h"
-#include "kis_tool_duplicate.h"
 #include "kis_tool_ellipse.h"
 #include "kis_tool_measure.h"
 
@@ -52,7 +51,6 @@ DefaultTools::DefaultTools(QObject *parent, const QStringList &)
     r->add(new KisToolBrushFactory(r, QStringList()));
     r->add(new KisToolColorPickerFactory(r, QStringList()));
     r->add(new KisToolLineFactory(r, QStringList()));
-    r->add(new KisToolDuplicateFactory(r, QStringList()));
     r->add(new KisToolEllipseFactory(r, QStringList()));
     r->add(new KisToolRectangleFactory(r, QStringList()));
     r->add(new KisToolMeasureFactory(r, QStringList()));

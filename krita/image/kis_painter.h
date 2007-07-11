@@ -557,27 +557,6 @@ public:
     /// Returns the opacity that is used in painting
     quint8 opacity() const { return m_opacity; }
 
-    /**
-     * The offset for paint operations that use it (like KisDuplicateOp). It will use as source
-     * the part of the layer that is at its paintedPosition - duplicateOffset
-     */
-    // TODO: this is an hack ! it must be fix, the following functions have nothing to do here
-    void setDuplicateOffset(const QPointF& offset) { m_duplicateOffset = offset; }
-    /// Returns the offset for duplication
-    QPointF duplicateOffset(){ return m_duplicateOffset; }
-
-    inline void setDuplicateHealing(bool v) { m_duplicateHealing = v; }
-    inline bool duplicateHealing() { return m_duplicateHealing; }
-
-    inline void setDuplicateHealingRadius(int r) { m_duplicateHealingRadius = r; }
-    inline int duplicateHealingRadius() { return m_duplicateHealingRadius; }
-
-    inline void setDuplicatePerspectiveCorrection(bool v) { m_duplicatePerspectiveCorrection = v; }
-    inline bool duplicatePerspectiveCorrection() { return m_duplicatePerspectiveCorrection; }
-
-    void setDuplicateStart(const QPointF start) { m_duplicateStart = start;}
-    QPointF duplicateStart() { return m_duplicateStart;}
-
     /// Sets the current pressure for things that like to use this
     void setPressure(double pressure) { m_pressure = pressure; }
     /// Returns the current pressure
@@ -651,10 +630,6 @@ protected:
     KisBrush *m_brush;
     KisPattern *m_pattern;
     QPointF m_duplicateOffset;
-    QPointF m_duplicateStart;
-    bool m_duplicateHealing;
-    int m_duplicateHealingRadius;
-    bool m_duplicatePerspectiveCorrection;
     quint8 m_opacity;
     KisPaintOp * m_paintOp;
     double m_pressure;

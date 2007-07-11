@@ -29,6 +29,7 @@
 
 class QPointF;
 class KisPainter;
+class Ui_DuplicateOpOptionsWidget;
 
 class KisDuplicateOpFactory  : public KisPaintOpFactory  {
 
@@ -49,9 +50,11 @@ class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings {
         virtual QWidget *widget() const { return m_optionsWidget; }
         virtual void mousePressEvent(KoPointerEvent *e);
         QPointF offset() const { return m_offset; }
+        bool healing() const;
+        bool perspectiveCorrection() const;
     private:
         QWidget* m_optionsWidget;
-//         Ui_FilterOpOptions* m_uiOptions;
+        Ui_DuplicateOpOptionsWidget* m_uiOptions;
         KisImageSP m_image;
         bool m_isOffsetNotUptodate;
         QPointF m_position; // Give the position of the last alt-click
@@ -77,6 +80,8 @@ private:
     KisPaintDeviceSP m_target;
     KisImageSP m_image;
     const KisDuplicateOpSettings* m_settings;
+    QPointF m_duplicateStart;
+    bool m_duplicateStartIsSet;
 };
 
 #endif // KIS_DUPLICATEOP_H_

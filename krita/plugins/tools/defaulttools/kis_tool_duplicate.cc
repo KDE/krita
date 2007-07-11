@@ -1,3 +1,4 @@
+#if 0
 /*
  *  kis_tool_duplicate.cc - part of Krita
  *
@@ -234,3 +235,5 @@ QWidget* KisToolDuplicate::createOptionWidget()
 }
 
 #include "kis_tool_duplicate.moc"
+
+#endif

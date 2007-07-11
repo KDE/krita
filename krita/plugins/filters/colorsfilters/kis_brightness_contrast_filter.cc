@@ -342,6 +342,7 @@ KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::co
 void KisBrightnessContrastConfigWidget::setConfiguration( KisFilterConfiguration * config )
 {
     KisBrightnessContrastFilterConfiguration * cfg = dynamic_cast<KisBrightnessContrastFilterConfiguration *>(config);
+    Q_ASSERT(cfg);
     m_page->kCurve->setCurve(cfg->curve);
 }
 

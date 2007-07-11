@@ -44,6 +44,8 @@
 #include "kis_perspective_grid.h"
 #include "kis_random_sub_accessor.h"
 
+#include "ui_DuplicateOpOptionsWidget.h"
+
 KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettings *_settings, KisPainter * _painter, KisImageSP _image)
 {
     const KisDuplicateOpSettings* settings = dynamic_cast<const KisDuplicateOpSettings *>(_settings);
@@ -62,18 +64,18 @@ KisPaintOpSettings *KisDuplicateOpFactory::settings(QWidget * parent, const KoIn
 KisDuplicateOpSettings::KisDuplicateOpSettings(QWidget* parent, KisImageSP image) :
         QObject(parent),
         KisPaintOpSettings(parent),
-        m_optionsWidget(new QWidget(parent))/*,
-        m_uiOptions(new Ui_FilterOpOptions())*/,
+        m_optionsWidget(new QWidget(parent)),
+        m_uiOptions(new Ui_DuplicateOpOptionsWidget()),
         m_image(image),
         m_isOffsetNotUptodate(true)
 {
-//     m_uiOptions->setupUi(m_optionsWidget);
+    m_uiOptions->setupUi(m_optionsWidget);
 
 }
 
 KisDuplicateOpSettings::~KisDuplicateOpSettings()
 {
-//     delete m_uiOptions;
+    delete m_uiOptions;
 }
 
 void KisDuplicateOpSettings::mousePressEvent(KoPointerEvent *e)
@@ -94,8 +96,18 @@ void KisDuplicateOpSettings::mousePressEvent(KoPointerEvent *e)
     kDebug() << m_offset << endl;
 }
 
+bool KisDuplicateOpSettings::healing() const
+{
+    return m_uiOptions->cbHealing->isChecked();
+}
+
+bool KisDuplicateOpSettings::perspectiveCorrection() const
+{
+    return m_uiOptions->cbPerspective->isChecked();
+}
+
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings* settings, KisPainter * painter, KisImageSP image)
-    : super(painter), m_srcdev(0), m_target(0), m_image( image ), m_settings(settings)
+    : super(painter), m_srcdev(0), m_target(0), m_image( image ), m_settings(settings), m_duplicateStartIsSet(false)
 {
 }
 
@@ -134,10 +146,14 @@ double KisDuplicateOp::minimizeEnergy(const double* m, double* sol, int w, int h
 
 void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return;
+    if (not painter()) return;
+    if (not m_duplicateStartIsSet)
+    {
+        m_duplicateStartIsSet = true;
+        m_duplicateStart = info.pos;
+    }
 
-    bool heal = painter()->duplicateHealing();
-//     int healradius = painter()->duplicateHealingRadius();
+    bool heal = m_settings->healing();
 
     KisPaintDeviceSP device = painter()->device();
     if (source()) device = source();
@@ -199,7 +215,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     // Perspective correction ?
     KisPainter copyPainter(m_srcdev);
-    if(painter()->duplicatePerspectiveCorrection())
+    if(m_settings->perspectiveCorrection())
     {
         double startM[3][3];
         double endM[3][3];
@@ -248,8 +264,8 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 #endif
 
         // Compute the translation in the perspective transformation space:
-        QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(painter()->duplicateStart()) );
-        QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, QPointF(painter()->duplicateStart()) - QPointF(m_settings->offset()) );
+        QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) );
+        QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(m_settings->offset()) );
         QPointF translat = duplicateStartPoisitionT - positionStartPaintingT;
         KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh);
         KisRandomSubAccessorPixel srcAcc = device->createRandomSubAccessor();

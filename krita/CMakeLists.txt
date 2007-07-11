@@ -108,8 +108,6 @@ install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
     set(krita_KDEINIT_SRCS main.cc)
 
-    kde4_automoc(${krita_KDEINIT_SRCS})
-
     kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
     target_link_libraries(kdeinit_krita kritaui)

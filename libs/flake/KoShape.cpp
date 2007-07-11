@@ -648,7 +648,8 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
             }
         }
         if ( element.hasAttributeNS( KoXmlNS::draw, "z-index" ) ) {
-            // what do we do in case of copy/paste
+            // TODO what do we do in case of copy/paste
+            setZIndex( element.attributeNS( KoXmlNS::draw, "z-index" ).toInt() );
         }
         else {
             // TODO what do we do in the case the z-index is not there then the order in the doc

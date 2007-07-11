@@ -118,13 +118,6 @@ class Painter : public QObject
          */
         void setStrokeStyle(uint style);
 
-        /**
-         * This function define the duplicate offset.
-         * It takes two arguments :
-         *  - horizontal offset
-         *  - vertical offset
-         */
-        void setDuplicateOffset(double x1, double y1);
     public slots: // Composite operations
         void composeWith(qint32 dx, qint32 dy, const QString& compositeOp, const QObject* source, qint32 opacity, qint32 sx, qint32 sy, qint32 sw, qint32 sh);
     public slots: // Painting operations

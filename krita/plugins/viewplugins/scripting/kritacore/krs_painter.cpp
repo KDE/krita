@@ -172,10 +172,6 @@ void Painter::setStrokeStyle(uint style)
     m_painter->setStrokeStyle(strokestyle);
 }
 
-void Painter::setDuplicateOffset(double x1, double y1)
-{
-    m_painter->setDuplicateOffset(QPointF(x1,y1));
-}
 
 void Painter::paintPolyline(QVariantList pointsX, QVariantList pointsY)
 {

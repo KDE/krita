@@ -52,20 +52,19 @@ namespace {
                        qint32 dststride,
                        const quint8 *src,
                        qint32 srcstride,
-                       const quint8 *mask,
+                       const quint8 *maskRowStart,
                        qint32 maskstride,
                        qint32 rows,
                        qint32 cols,
                        quint8 opacity,
                        const QBitArray & channelFlags) const
         {
-            Q_UNUSED(mask);
-            Q_UNUSED(maskstride);
             Q_UNUSED(channelFlags);
 
             quint8 *d;
             const quint8 *s;
             qint32 i;
+
 
             if (rows <= 0 || cols <= 0)
                 return;
@@ -73,9 +72,21 @@ namespace {
                 return;
             if (opacity != OPACITY_OPAQUE) {
                 while (rows-- > 0) {
+
+                    const quint8 *mask = maskRowStart;
+
                     d = dst;
                     s = src;
                     for (i = cols; i > 0; i--, d++, s++) {
+                        // If the mask tells us to completely not
+                        // blend this pixel, continue.
+                        if ( mask != 0 ) {
+                            if ( mask[0] == OPACITY_TRANSPARENT ) {
+                                mask++;
+                                continue;
+                            }
+                            mask++;
+                        }
                         if (s[PIXEL_MASK] == OPACITY_TRANSPARENT)
                             continue;
                         int srcAlpha = (s[PIXEL_MASK] * opacity + UINT8_MAX / 2) / UINT8_MAX;
@@ -83,13 +94,29 @@ namespace {
                     }
                     dst += dststride;
                     src += srcstride;
+                    if(maskRowStart) {
+                        maskRowStart += maskstride;
+                }
                 }
             }
             else {
                 while (rows-- > 0) {
+                    const quint8 *mask = maskRowStart;
+
                     d = dst;
                     s = src;
                     for (i = cols; i > 0; i--, d++, s++) {
+
+                        if ( mask != 0 ) {
+                            // If the mask tells us to completely not
+                            // blend this pixel, continue.
+                            if ( mask[0] == OPACITY_TRANSPARENT ) {
+                                mask++;
+                                continue;
+                            }
+                            mask++;
+                        }
+
                         if (s[PIXEL_MASK] == OPACITY_TRANSPARENT)
                             continue;
                         if (d[PIXEL_MASK] == OPACITY_TRANSPARENT || s[PIXEL_MASK] == OPACITY_OPAQUE) {
@@ -101,6 +128,9 @@ namespace {
                     }
                     dst += dststride;
                     src += srcstride;
+                    if(maskRowStart) {
+                        maskRowStart += maskstride;
+                }
                 }
             }
         }

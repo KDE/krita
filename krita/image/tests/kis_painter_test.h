@@ -31,6 +31,9 @@ private:
     void allCsApplicator(void (KisPainterTest::* funcPtr)( KoColorSpace*cs ) );
     void testPaintDeviceBltMask( KoColorSpace * cs );
     void testPaintDeviceBltMaskIrregular( KoColorSpace * cs );
+
+
+
 private slots:
 
     void testPaintDeviceBltMask(); // Square selection

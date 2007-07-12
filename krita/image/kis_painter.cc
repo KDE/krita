@@ -400,8 +400,6 @@ void KisPainter::bltMask(qint32 dx, qint32 dy,
     sw = srcRect.width();
     sh = srcRect.height();
 
-    addDirtyRect(QRect(dx, dy, sw, sh));
-
     KoColorSpace * srcCs = srcdev->colorSpace();
 
     qint32 dstY = dy;
@@ -465,6 +463,8 @@ void KisPainter::bltMask(qint32 dx, qint32 dy,
         dstY += rows;
         rowsRemaining -= rows;
     }
+
+    addDirtyRect(QRect(dx, dy, sw, sh));
 }
 
 void KisPainter::bltMask(QPoint pos, const KisPaintDeviceSP src, KisPaintDeviceSP selMask, QRect srcRect )

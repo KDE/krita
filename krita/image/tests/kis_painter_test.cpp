@@ -148,13 +148,18 @@ void KisPainterTest::testPaintDeviceBltMaskIrregular(KoColorSpace * cs)
     img.save( "bla_" + cs->name() + ".png" );
 
     QCOMPARE( dst->exactBounds(), QRect( 10, 10, 10, 10 ) );
-    QColor c;
-    quint8 alpha;
-    dst->pixel( 13, 13, &c, &alpha );
-    QCOMPARE( alpha, OPACITY_TRANSPARENT );
-    QCOMPARE( c.red(), 0 );
-    QCOMPARE( c.blue(), 0 );
-    QCOMPARE( c.green(), 0 );
+    foreach ( KoChannelInfo * channel, cs->channels() ) {
+        // Only compare alpha if there actually is an alpha channel in
+        // this colorspace
+        if ( channel->channelType() == KoChannelInfo::ALPHA ) {
+            QColor c;
+            quint8 alpha;
+
+            dst->pixel( 13, 13, &c, &alpha );
+
+            QCOMPARE( ( int ) alpha, ( int ) OPACITY_TRANSPARENT );
+        }
+    }
 }
 
 

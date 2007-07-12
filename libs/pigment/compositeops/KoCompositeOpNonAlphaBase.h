@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KOCOMPOSITEOPALPHABASE_H_
-#define _KOCOMPOSITEOPALPHABASE_H_
+#ifndef _KOCOMPOSITEOPNONALPHABASE_H_
+#define _KOCOMPOSITEOPNONALPHABASE_H_
 
 #include <QBitArray>
 
@@ -32,17 +33,19 @@
 
 /**
  * A template base class for all composite op that compose color
- * channels values for colorspaces that have an alpha channel.
+ * channels values for colorspaces that do not have an alpha channel.
+ * This class looks at the mask value and if the mask value is 0, then
+ * the corresponding src and dst pixels will not be composited.
  *
  * @param _compositeOp this class should define a function with the
- *        following signature: inline static void composeColorChannels
+ * following signature: inline static void composeColorChannels
  */
 template<class _CSTraits, class _compositeOp>
-class KoCompositeOpAlphaBase : public KoCompositeOp {
+class KoCompositeOpNonAlphaBase : public KoCompositeOp {
     typedef typename _CSTraits::channels_type channels_type;
     public:
 
-        KoCompositeOpAlphaBase(KoColorSpace * cs, const QString& id, const QString& description)
+        KoCompositeOpNonAlphaBase(KoColorSpace * cs, const QString& id, const QString& description)
         : KoCompositeOp(cs, id, description )
         {
         }
@@ -76,43 +79,22 @@ class KoCompositeOpAlphaBase : public KoCompositeOp {
 
                     channels_type srcAlpha = srcN[_CSTraits::alpha_pos];
 
-                    // apply the alphamask
+                    // Don't blend dst with src if the mask is fully
+                    // transparent
+
                     if (mask != 0) {
-                        if (*mask != OPACITY_OPAQUE) {
-                            srcAlpha = KoColorSpaceMaths<channels_type,quint8>::multiply(srcAlpha, *mask);
+                        if (*mask == OPACITY_TRANSPARENT) {
+                            mask++;
+                            columns--;
+                            srcN+=_CSTraits::channels_nb;
+                            dstN+=_CSTraits::channels_nb;
+                            continue;
                         }
                         mask++;
                     }
 
-                    if (srcAlpha != NATIVE_OPACITY_TRANSPARENT) {
+                    _compositeOp::composeColorChannels( NATIVE_OPACITY_OPAQUE, srcN, dstN, pixelSize, channelFlags );
 
-                        if (opacity != NATIVE_OPACITY_OPAQUE) {
-                            srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, opacity);
-                        }
-
-                        if (srcAlpha == NATIVE_OPACITY_OPAQUE) {
-                            memcpy(dstN, srcN, pixelSize);
-                        } else {
-                            channels_type dstAlpha = dstN[_CSTraits::alpha_pos];
-
-                            channels_type srcBlend;
-
-                            if (dstAlpha == NATIVE_OPACITY_OPAQUE) {
-                                srcBlend = srcAlpha;
-                            } else {
-                                channels_type newAlpha = dstAlpha + KoColorSpaceMaths<channels_type>::multiply(NATIVE_OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                                dstN[_CSTraits::alpha_pos] = newAlpha;
-
-                                if (newAlpha != 0) {
-                                    srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, newAlpha);
-                                } else {
-                                    srcBlend = srcAlpha;
-                                }
-                            }
-                            _compositeOp::composeColorChannels( srcBlend, srcN, dstN, pixelSize, channelFlags );
-
-                        }
-                    }
                     columns--;
                     srcN+=_CSTraits::channels_nb;
                     dstN+=_CSTraits::channels_nb;

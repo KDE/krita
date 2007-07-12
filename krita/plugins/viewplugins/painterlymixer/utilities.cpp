@@ -22,6 +22,8 @@
 
 #include <cmath>
 
+#include <QList>
+
 #include "kis_paint_device.h"
 #include "kis_adsorbency_mask.h"
 #include "kis_mixability_mask.h"
@@ -88,6 +90,28 @@ void cmyToRgb(long cyan, long magenta, long yellow, long *red, long *green, long
     densityToTransmittance(yellow, blue);
 }
 
+float m_rgb_xyz[3][3] = { 0.576700,   0.297361,   0.0270328,
+                          0.185556,   0.627355,   0.0706879,
+                          0.188212,   0.0752847,  0.991248 };
+
+float m_xyz_rgb[3][3] = {  2.04148,   -0.969258,   0.0134455,
+                          -0.564977,   1.87599,   -0.118373,
+                          -0.344713,   0.0415557,  1.01527 };
+
+void rgbToXyz(float r, float g, float b, float *x, float *y, float *z)
+{
+    *x = m_rgb_xyz[0][0] * r + m_rgb_xyz[0][1] * g + m_rgb_xyz[0][2] * b;
+    *y = m_rgb_xyz[1][0] * r + m_rgb_xyz[1][1] * g + m_rgb_xyz[1][2] * b;
+    *z = m_rgb_xyz[2][0] * r + m_rgb_xyz[2][1] * g + m_rgb_xyz[2][2] * b;
+}
+
+void xyzToRgb(float x, float y, float z, float *r, float *g, float *b)
+{
+    *r = m_xyz_rgb[0][0] * x + m_xyz_rgb[0][1] * y + m_xyz_rgb[0][2] * z;
+    *g = m_xyz_rgb[1][0] * x + m_xyz_rgb[1][1] * y + m_xyz_rgb[1][2] * z;
+    *b = m_xyz_rgb[2][0] * x + m_xyz_rgb[2][1] * y + m_xyz_rgb[2][2] * z;
+}
+
 float sigmoid(float value)
 {
     //TODO return a sigmoid in [0, 1] here
@@ -141,31 +165,61 @@ void Cell::mixProperties(const Cell &cell, float force)
     volume = V_f;
 }
 
-/*
-void Cell::mixColorsUsingRgb(const Cell &cell, float)
+void Cell::mixColorsUsingXyz(const Cell &cell, float force)
 {
-    float ratio;
-    long delta;
+    float V_c, V_s; // Volumes in Canvas and Stroke
+    float w_c, w_s; // Wetness in the Canvas and in the Stroke
+    float V_ac, V_as; // Active Volumes in Canvas and Stroke
 
-    kDebug() << "WETNESS: " << wetness << " VOLUME: " << volume << endl;
-    kDebug() << "CELL WETNESS: " << cell.wetness << " VOLUME: " << cell.volume << endl;
-    ratio = (wetness*volume) / (cell.wetness*cell.volume);
-    delta = red - cell.red;
-    kDebug() << "RATIO: " << ratio << endl;
-    red = cell.red + (long)(ratio * delta);
-    kDebug() << "RED: " << red << endl;
+    V_c = cell.volume;
+    V_s = volume;
 
-    delta = green - cell.green;
-    green = cell.green + (long)(ratio * delta);
-    kDebug() << "GREEN: " << green << endl;
+    w_c = cell.wetness;
+    w_s = wetness;
 
-    delta = blue - cell.blue;
-    blue = cell.blue + (long)(ratio * delta);
-    kDebug() << "BLUE: " << blue << endl;
+    V_ac = activeVolume(V_c, w_c, force);
+    V_as = activeVolume(V_s, w_s, force);
 
-    updateHlsCmy();
+    float r_c, g_c, b_c;
+    float r_s, g_s, b_s;
+    float r_f, g_f, b_f;
+
+    float X_c, x_c, Y_c, y_c, Z_c;
+    float X_s, x_s, Y_s, y_s, Z_s;
+    float X_f, x_f, Y_f, y_f, Z_f;
+
+    r_c = (float)cell.red;
+    g_c = (float)cell.green;
+    b_c = (float)cell.blue;
+
+    r_s = (float)red;
+    g_s = (float)green;
+    b_s = (float)blue;
+
+    rgbToXyz(r_c, g_c, b_c, &X_c, &Y_c, &Z_c);
+    rgbToXyz(r_s, g_s, b_s, &X_s, &Y_s, &Z_s);
+
+    x_c = X_c / (X_c + Y_c + Z_c);
+    y_c = Y_c / (X_c + Y_c + Z_c);
+
+    x_s = X_s / (X_s + Y_s + Z_s);
+    y_s = Y_s / (X_s + Y_s + Z_s);
+
+    // Luminance is the sum of luminances
+    Y_f = (V_ac * Y_c + V_as * Y_s) / (V_ac + V_as);
+
+    x_f = (V_ac * x_c + V_as * x_s) / (V_ac + V_as);
+    y_f = (V_ac * y_c + V_as * y_s) / (V_ac + V_as);
+
+    X_f = (Y_f / y_f) * x_f;
+    Z_f = (Y_f / y_f) * (1 - x_f - y_f);
+
+    xyzToRgb(X_f, Y_f, Z_f, &r_f, &g_f, &b_f);
+
+    red = (long) ((long)(r_f) < 256 ? r_f : 255);
+    green = (long) ((long)(g_f) < 256 ? g_f : 255);
+    blue = (long) ((long)(b_f) < 256 ? b_f : 255);
 }
-*/
 
 void Cell::mixColorsUsingRgb(const Cell &cell, float force)
 {

@@ -28,7 +28,8 @@ void transmittanceToDensity(long T, long *D);
 void densityToTransmittance(long D, long *T);
 void rgbToCmy(long red, long green, long blue, long *cyan, long *magenta, long *yellow);
 void cmyToRgb(long cyan, long magenta, long yellow, long *red, long *green, long *blue);
-
+void rgbToXyz(float r, float g, float b, float *x, float *y, float *z);
+void xyzToRgb(float x, float y, float z, float *r, float *g, float *b);
 
 class Cell {
 public:
@@ -118,6 +119,10 @@ public:
         }
 
     void mixProperties(const Cell &cell, float force);
+
+
+
+    void mixColorsUsingXyz(const Cell &cell, float force);
 
     void mixColorsUsingRgb(const Cell &cell, float force);
 

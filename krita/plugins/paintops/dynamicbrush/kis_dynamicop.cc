@@ -60,7 +60,7 @@ KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, K
     return op;
 }
 
-KisPaintOpSettings *KisDynamicOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice)
+KisPaintOpSettings *KisDynamicOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED(inputDevice);
     return new KisDynamicOpSettings(parent);

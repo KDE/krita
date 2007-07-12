@@ -39,7 +39,7 @@ class KisDynamicOpFactory : public KisPaintOpFactory  {
         virtual QString id() const { return "dynamicbrush"; }
         virtual QString name() const { return i18n("Dynamic Brush"); }
         virtual QString pixmap() { return "dynamicbrush.png"; }
-        virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice);
+        virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     private:
 };
 

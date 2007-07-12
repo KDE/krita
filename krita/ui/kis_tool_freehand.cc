@@ -150,6 +150,7 @@ class FreehandPaintJobExecutor : public QThread {
         }
         virtual void run()
         {
+            QMutexLocker lockRunning(&m_mutex_running);
             kDebug(41007) << "run" << endl;
             while(not m_finish or not empty() )
             {
@@ -179,6 +180,7 @@ class FreehandPaintJobExecutor : public QThread {
         }
         void finish() {
             m_finish = true;
+            QMutexLocker lockRunning(&m_mutex_running);
         }
         bool empty() {
             QMutexLocker lock(&m_mutex_queue);
@@ -195,6 +197,7 @@ class FreehandPaintJobExecutor : public QThread {
     private:
         QQueue<FreehandPaintJob* > m_queue;
         QMutex m_mutex_queue;
+        QMutex m_mutex_running;
         bool m_finish;
 };
 
@@ -387,7 +390,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
       << ", incremental " << m_paintIncremental
       << ", paint on selection: " << m_paintOnSelection
       << ", active device has selection: " << device->hasSelection()
-      << ", target has selection: " << m_target->hasSelection()
+//       << ", target has selection: " << m_target->hasSelection()
       << endl;
 */
     if(m_smooth)
@@ -402,7 +405,6 @@ void KisToolFreehand::endPaint()
 {
     m_mode = HOVER;
     m_executor->finish();
-    while(m_executor->isRunning()) sleep(1); // Wait for all painting jobs to be finished
     if (currentImage()) {
 
         if (m_painter) {

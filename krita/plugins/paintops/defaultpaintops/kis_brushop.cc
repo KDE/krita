@@ -304,7 +304,7 @@ double KisBrushOp::paintLine(const KisPaintInformation &pi1,
         adjustedInfo1.pressure = PRESSURE_DEFAULT;
         adjustedInfo2.pressure = PRESSURE_DEFAULT;
     }
-    super::paintLine( adjustedInfo1, adjustedInfo2, savedDist );
+    return super::paintLine( adjustedInfo1, adjustedInfo2, savedDist );
 }
 
 #include "kis_brushop.moc"

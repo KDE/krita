@@ -27,6 +27,7 @@ install( FILES
     airbrush.png
     paintbrush.png
     eraser.png
+    duplicate.png
     pencil.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 
 

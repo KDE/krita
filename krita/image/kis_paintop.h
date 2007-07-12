@@ -123,13 +123,26 @@ public:
     KisPaintOpSettings(QWidget *parent) { Q_UNUSED(parent); }
     virtual ~KisPaintOpSettings() {}
 
+    /**
+     * This function is called by a tool when the mouse is pressed. It's usefull if
+     * the paintop needs mouse interaction for instance in the case of the duplicate op.
+     * If the tool is supposed to ignore the event, the paint op should call e->accept();
+     * and if the tool is supposed to use the event e->ignore(); should be called.
+     */
     virtual void mousePressEvent(KoPointerEvent *e);
 
+    /**
+     * Call this function when the layer is changed
+     */
     virtual void setLayer(KisLayerSP ) {}
     /**
      * @return a pointer to the widget displaying the settings
      */
     virtual QWidget *widget() const { return 0; }
+    /**
+     * Call this function when the paint op is selected or the tool is activated
+     */
+    virtual void activate();
 };
 
 /**

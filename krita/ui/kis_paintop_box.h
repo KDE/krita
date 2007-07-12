@@ -81,7 +81,7 @@ private:
     const KoID & currentPaintop();
     void setCurrentPaintop(const KoID & paintop);
     KoID defaultPaintop(const KoInputDevice & inputDevice);
-    const KisPaintOpSettings *paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice);
+    KisPaintOpSettings *paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice);
 
 private:
     KisResourceProvider *m_resourceProvider;

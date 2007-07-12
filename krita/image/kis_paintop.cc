@@ -3,7 +3,7 @@
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -289,6 +289,10 @@ KisPaintDeviceSP KisPaintOp::source()
 void KisPaintOpSettings::mousePressEvent(KoPointerEvent *e)
 {
   e->ignore();
+}
+
+void KisPaintOpSettings::activate()
+{
 }
 
 KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/, KisImageSP /*image*/) { return 0; }

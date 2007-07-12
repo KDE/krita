@@ -96,6 +96,17 @@ void KisDuplicateOpSettings::mousePressEvent(KoPointerEvent *e)
     kDebug() << m_offset << endl;
 }
 
+void KisDuplicateOpSettings::activate()
+{
+    if( m_image->perspectiveGrid()->countSubGrids() != 1 )
+    {
+        m_uiOptions->cbPerspective->setEnabled( false );
+        m_uiOptions->cbPerspective->setChecked( false );
+    } else {
+        m_uiOptions->cbPerspective->setEnabled( true );
+    }
+}
+
 bool KisDuplicateOpSettings::healing() const
 {
     return m_uiOptions->cbHealing->isChecked();

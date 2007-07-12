@@ -108,6 +108,8 @@ void KisPaintopBox::slotItemSelected(int index)
         KoID paintop = m_displayedOps.at(index);
 
         setCurrentPaintop(paintop);
+        KisPaintOpSettings* settings = paintopSettings(currentPaintop(), KoToolManager::instance()->currentInputDevice());
+        if(settings) settings->activate();
     }
 }
 
@@ -240,7 +242,7 @@ KoID KisPaintopBox::defaultPaintop(const KoInputDevice & inputDevice)
     }
 }
 
-const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice)
+KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice)
 {
     QList<KisPaintOpSettings *> settingsArray;
     InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find( inputDevice );

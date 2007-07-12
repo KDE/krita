@@ -40,6 +40,7 @@ public:
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "duplicate"; }
     virtual QString name() const { return i18n("Duplicate"); }
+    virtual QString pixmap() { return "duplicate.png"; }
     virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
 };
 
@@ -49,6 +50,7 @@ class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings {
         virtual ~KisDuplicateOpSettings();
         virtual QWidget *widget() const { return m_optionsWidget; }
         virtual void mousePressEvent(KoPointerEvent *e);
+        virtual void activate();
         QPointF offset() const { return m_offset; }
         bool healing() const;
         bool perspectiveCorrection() const;

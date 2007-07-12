@@ -37,6 +37,7 @@
 #include <kis_adjustment_layer.h>
 #include <kis_mask.h>
 #include <kis_paint_layer.h>
+#include <kis_paintop.h>
 #include <kis_brush.h>
 #include <kis_pattern.h>
 #include <kis_gradient.h>
@@ -88,6 +89,10 @@ void KisTool::activate(bool )
     d->currentGradient = static_cast<KisGradient *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentGradient ).value<void *>() );
     d->currentPaintOp = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintop ).value<KoID >().id();
     d->currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintopSettings ).value<void *>() );
+    if( d->currentPaintOpSettings )
+    {
+      d->currentPaintOpSettings->activate();
+    }
     d->currentLayer = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
     d->currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( KisResourceProvider::HdrExposure ).toDouble() );
     d->currentImage = image();

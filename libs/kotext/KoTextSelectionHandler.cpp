@@ -374,6 +374,7 @@ void KoTextSelectionHandler::addBookmark(const QString &name, KoShape *shape) {
 bool KoTextSelectionHandler::deleteInlineObjects(bool backward) {
     QTextCursor cursor(*d->caret);
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
+    Q_ASSERT(layout);
     KoInlineTextObjectManager *manager = layout->inlineObjectTextManager();
     KoInlineObject *object;
     bool found = false;

@@ -51,7 +51,6 @@ public:
         findNext(0),
         findPrev(0),
         document(0),
-        lastKnownPosition(-1),
         startedPosition(-1),
         matches(0),
         restarted(false)
@@ -61,14 +60,17 @@ public:
     void resourceChanged(int key, const QVariant &variant) {
         if(key == KoText::CurrentTextDocument) {
             document = static_cast<QTextDocument*> (variant.value<void*>());
-            lastKnownPosition = -1;
+            if(document)
+                lastKnownPosition = QTextCursor(document);
+            else
+                lastKnownPosition = QTextCursor(); // invalid!
         }
         else if(key == KoText::CurrentTextPosition) {
             // TODO
         }
     }
     void findActivated() {
-        lastKnownPosition = -1;
+        lastKnownPosition.setPosition(-1);
         if(dialog) {
             dialog->show();
             KWindowSystem::activateWindow( dialog->winId() );
@@ -114,12 +116,12 @@ public:
             flags |= QTextDocument::FindCaseSensitively;
         if((dialog->options() & KFind::FindBackwards) != 0)
             flags |= QTextDocument::FindBackward;
-        if(lastKnownPosition == -1) {
+        if(lastKnownPosition.position() == -1) {
             if((dialog->options() & KFind::FromCursor) != 0)
-                lastKnownPosition = provider->intResource(KoText::CurrentTextPosition);
+                lastKnownPosition.setPosition(provider->intResource(KoText::CurrentTextPosition));
             else
-                lastKnownPosition = 0;
-            startedPosition = lastKnownPosition;
+                lastKnownPosition.setPosition(0);
+            startedPosition = lastKnownPosition.position();
             restarted = false;
             matches = 0;
         }
@@ -133,15 +135,16 @@ public:
             cursor = document->find(regExp, lastKnownPosition, flags);
         else
             cursor = document->find(dialog->pattern(), lastKnownPosition, flags);
-        if(cursor.position() == -1 && !restarted && startedPosition <= lastKnownPosition) { // end of doc, restart
-            lastKnownPosition = 0;
+
+        if(cursor.position() == -1 && !restarted && startedPosition <= lastKnownPosition.position()) { // end of doc, restart
+            lastKnownPosition.setPosition(0);
             restarted = true;
             parseSettingsAndFind();
             return;
         }
 
         if(restarted && cursor.position() > startedPosition || cursor.position() == -1) { // looped round.
-            KMessageBox::information(dialog, i18n("Found %1 matches", matches));
+            KMessageBox::information(dialog, matches?i18np("Found 1 match", "Found %1 matches", matches):i18n("Found no match"));
             restarted = false; // allow to restart again.
             matches = 0;
             return;
@@ -149,7 +152,7 @@ public:
 
         provider->setResource(KoText::CurrentTextPosition, cursor.position());
         provider->setResource(KoText::CurrentTextAnchor, cursor.anchor());
-        lastKnownPosition = cursor.position();
+        lastKnownPosition = cursor;
         matches++;
     }
 
@@ -160,7 +163,8 @@ public:
     QAction *findNext, *findPrev;
 
     QTextDocument *document;
-    int lastKnownPosition, startedPosition, matches;
+    int startedPosition, matches;
+    QTextCursor lastKnownPosition;
     bool restarted;
 };
 

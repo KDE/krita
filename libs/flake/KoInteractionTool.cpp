@@ -135,7 +135,7 @@ double KoInteractionTool::rotationOfHandle( KoFlake::SelectionHandle handle, boo
         case KoFlake::TopMiddleHandle:
             if( useEdgeRotation )
             {
-                direction = koSelection()->absolutePosition( KoFlake::TopRightCorner ) 
+                direction = koSelection()->absolutePosition( KoFlake::TopRightCorner )
                     - koSelection()->absolutePosition( KoFlake::TopLeftCorner );
             }
             else
@@ -151,7 +151,7 @@ double KoInteractionTool::rotationOfHandle( KoFlake::SelectionHandle handle, boo
         case KoFlake::RightMiddleHandle:
             if( useEdgeRotation )
             {
-                direction = koSelection()->absolutePosition( KoFlake::BottomRightCorner ) 
+                direction = koSelection()->absolutePosition( KoFlake::BottomRightCorner )
                         - koSelection()->absolutePosition( KoFlake::TopRightCorner );
             }
             else
@@ -208,7 +208,7 @@ double KoInteractionTool::rotationOfHandle( KoFlake::SelectionHandle handle, boo
         case KoFlake::TopMiddleHandle:
             if( useEdgeRotation )
                 rotation -= 0.0;
-            else 
+            else
                 rotation -= 270.0;
             break;
         case KoFlake::TopRightHandle:
@@ -384,6 +384,8 @@ void KoInteractionTool::mouseMoveEvent( KoPointerEvent *event ) {
 QRectF KoInteractionTool::handlesSize() {
     QRectF bound = koSelection()->boundingRect();
     // expansion Border
+    if ( !m_canvas || !m_canvas->viewConverter() ) return bound;
+
     QPointF border = m_canvas->viewConverter()->viewToDocument(QPointF(HANDLE_DISTANCE, HANDLE_DISTANCE));
     bound.adjust(-border.x(), -border.y(), border.x(), border.y());
     return bound;
@@ -528,6 +530,7 @@ KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool 
 
     recalcSelectionBox();
     const KoViewConverter *converter = m_canvas->viewConverter();
+    if ( !converter ) return KoFlake::NoHandle;
 
     if(innerHandleMeaning != 0)
     {
@@ -638,8 +641,8 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     painter.setPen( pen );
     bool editable=false;
     foreach(KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
-        
-        
+
+
         QMatrix matrix = shape->transformationMatrix(0);
         outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), shape->size())));
         for(int i =0; i<outline.count(); i++)
@@ -649,7 +652,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         // for sharper on-screen rendering
         outline = outline.toPolygon();
         outline.translate(0.5,0.5);
-        
+
         painter.drawPolygon(outline);
         if(!shape->isLocked())
             editable = true;
@@ -678,7 +681,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         return;
 
     painter.setRenderHint( QPainter::Antialiasing, false );
-    
+
     pen = QPen( Qt::black );
     pen.setWidth(1);
     painter.setPen(pen);

@@ -236,6 +236,9 @@ bool KoCanvasController::eventFilter(QObject* watched, QEvent* event) {
 
 void KoCanvasController::emitPointerPositionChangedSignals(QEvent *event)
 {
+    if ( !m_d->canvas ) return;
+    if ( !m_d->canvas->viewConverter() ) return;
+
     QPoint pointerPos;
     QMouseEvent * mouseEvent = dynamic_cast<QMouseEvent*>( event );
     if ( mouseEvent ) {

@@ -221,6 +221,68 @@ void Cell::mixColorsUsingXyz(const Cell &cell, float force)
     blue = (long) ((long)(b_f) < 256 ? b_f : 255);
 }
 
+void Cell::mixColorsUsingRgb_2(const Cell &cell, float force)
+{
+    float V_c, V_s; // Volumes in Canvas and Stroke
+    float w_c, w_s; // Wetness in the Canvas and in the Stroke
+    float V_ac, V_as; // Active Volumes in Canvas and Stroke
+
+    float r_c, r_s;
+    float g_c, g_s;
+    float b_c, b_s;
+    float r_f, g_f, b_f;
+
+    V_c = cell.volume;
+    V_s = volume;
+
+    w_c = cell.wetness;
+    w_s = wetness;
+
+    V_ac = activeVolume(V_c, w_c, force);
+    V_as = activeVolume(V_s, w_s, force);
+
+    r_c = (float)cell.red / 255.0;
+    g_c = (float)cell.green / 255.0;
+    b_c = (float)cell.blue / 255.0;
+
+    r_s = (float)red / 255.0;
+    g_s = (float)green / 255.0;
+    b_s = (float)blue / 255.0;
+
+#define GREEN_TO_RED 0.5
+#define RED_TO_GREEN 0.2
+#define GREEN_TO_BLUE 0.5
+#define BLUE_TO_GREEN 0.15
+
+    float ratio = V_as / V_ac;
+    float delta;
+    // Green is near enough to red so that a great amount of green changes the amount of red
+    r_f = (V_ac * r_c + V_as * r_s) / (V_ac + V_as);
+    delta = (g_c - g_s) * GREEN_TO_RED;
+    r_f += ratio*delta;
+
+    g_f = (V_ac * g_c + V_as * g_s) / (V_ac + V_as);
+    delta = (r_c - r_s) * RED_TO_GREEN + (b_c - b_s) * BLUE_TO_GREEN;
+    g_f += ratio*delta;
+
+    b_f = (V_ac * b_c + V_as * b_s) / (V_ac + V_as);
+    delta = (g_c - g_s) * GREEN_TO_BLUE;
+    b_f += ratio*delta;
+
+    if (r_f < 0) r_f = 0; if (r_f > 1) r_f = 1;
+    if (g_f < 0) g_f = 0; if (g_f > 1) g_f = 1;
+    if (b_f < 0) b_f = 0; if (b_f > 1) b_f = 1;
+
+//     Normalize and set
+    red = (long)(r_f*255);
+    green = (long)(g_f*255);
+    blue = (long)(b_f*255);
+
+//     kDebug() << "RED: " << red << " GREEN: " << green << " BLUE: " << blue << endl;
+
+    updateHlsCmy();
+}
+
 void Cell::mixColorsUsingRgb(const Cell &cell, float force)
 {
     float V_c, V_s; // Volumes in Canvas and Stroke

@@ -26,7 +26,7 @@
 class KoColorSpace;
 
 /**
- * This layer is of a type that can be painted on. A paint layer can
+ * This layer is of a type that can be d on. A paint layer can
  * have any number of effect masks, a transparency mask, a local
  * selection and a protection mask.
  *
@@ -74,11 +74,50 @@ public:
         }
 
 
-    /// Returns the paintDevice that accompanies this layer
+    /**
+     * Returns the paintDevice that accompanies this layer
+     */
     KisPaintDeviceSP paintDevice() const;
 
+    /**
+     * Returns the original pixels before masks have been applied.
+     * This is the same as the paintDevice() OVER driedPaintDevice();
+     */
     KisPaintDeviceSP original() const;
 
+    /**
+     * Return the dried pixels -- i.e., pixels that have been fixed
+     * through the physics process. This may be 0. The physics process
+     * will automatically set this paint device when it becomes needed.
+     */
+    KisPaintDeviceSP driedPaintDevice();
+
+    /**
+     * Sets the dried paint device associated with this paint layer to
+     * 0.
+     */
+    void removeDriedPaintDevice();
+
+    /**
+     * Return the painterly overlay -- a special paint device that
+     * uses the KisPainterlyOverlayColorSpace that defines things
+     * like wetness and canvas height. You need to explicitly create
+     * the painterly overlay before accessing it. Running a physics
+     * filter may also create the painterly overlay.
+     *
+     * Note: this may be 0.
+     */
+    KisPainterlyOverlaySP painterlyOverlay();
+
+    /**
+     * Create a painterly overlay on this paint layer
+     */
+    void createPainterlyOverlay();
+
+    /**
+     * Sets the painterly overlay associated with this paint layer to 0.
+     */
+    void removePainterlyOverlay();
 
 public slots:
 

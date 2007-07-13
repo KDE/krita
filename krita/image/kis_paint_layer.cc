@@ -43,6 +43,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_effect_mask.h"
 #include "kis_transparency_mask.h"
+#include "kis_painterly_overlay.h"
 #include "kis_mask.h"
 
 class KisPaintLayer::Private
@@ -50,6 +51,8 @@ class KisPaintLayer::Private
 public:
     KisPaintDeviceSP paintDevice;
     KisPaintDeviceSP projection;
+    KisPaintDeviceSP driedPaintDevice;
+    KisPainterlyOverlaySP painterlyOverlay;
 };
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
@@ -192,6 +195,32 @@ KisPaintDeviceSP KisPaintLayer::paintDevice() const
 KisPaintDeviceSP KisPaintLayer::original() const
 {
     return m_d->paintDevice;
+}
+
+
+KisPaintDeviceSP KisPaintLayer::driedPaintDevice()
+{
+    return m_d->driedPaintDevice;
+}
+
+void KisPaintLayer::removeDriedPaintDevice()
+{
+    m_d->driedPaintDevice = 0;
+}
+
+KisPainterlyOverlaySP KisPaintLayer::painterlyOverlay()
+{
+    return m_d->painterlyOverlay;
+}
+
+void KisPaintLayer::createPainterlyOverlay()
+{
+    m_d->painterlyOverlay = new KisPainterlyOverlay();
+}
+
+void KisPaintLayer::removePainterlyOverlay()
+{
+    m_d->painterlyOverlay = 0;
 }
 
 

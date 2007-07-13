@@ -44,7 +44,7 @@
  */
 
 template<typename _channels_type_>
-struct KisPainterlyOverlayColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 9, 0> {
+struct KisPainterlyOverlayColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 9, -1> {
 
     static const quint8 adsorbency_pos = 0;
     static const quint8 gravity_pos = 1;

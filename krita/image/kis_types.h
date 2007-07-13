@@ -51,6 +51,9 @@ typedef KisSharedPtrVector<KisPaintDevice> vKisPaintDeviceSP;
 typedef vKisPaintDeviceSP::iterator vKisPaintDeviceSP_it;
 typedef vKisPaintDeviceSP::const_iterator vKisPaintDeviceSP_cit;
 
+class KisPainterlyOverlay;
+typedef KisSharedPtr<KisPainterlyOverlay> KisPainterlyOverlaySP;
+
 class KisMask;
 typedef KisSharedPtr<KisMask> KisMaskSP;
 typedef KisWeakSharedPtr<KisMask> KisMaskWSP;

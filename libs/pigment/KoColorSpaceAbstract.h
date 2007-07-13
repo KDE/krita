@@ -81,7 +81,7 @@ namespace {
     class KoMixColorsOpImpl : public KoMixColorsOp {
         public:
             KoMixColorsOpImpl()
-            { 
+            {
             }
             virtual ~KoMixColorsOpImpl() { }
             virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
@@ -107,7 +107,7 @@ namespace {
 
                     alphaTimesWeight *= *weights;
 
-                    for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                    for(int i = 0; i < _CSTraits::channels_nb; i++)
                     {
                         if (i != _CSTraits::alpha_pos) {
                             totals[i] += color[i] * alphaTimesWeight;
@@ -130,7 +130,7 @@ namespace {
 
                 if (totalAlpha > 0) {
 
-                    for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                    for(int i = 0; i < _CSTraits::channels_nb; i++)
                     {
                         if (i != _CSTraits::alpha_pos) {
 
@@ -202,10 +202,10 @@ namespace {
                     // XXX: This can, no doubt, be optimized in clever
                     // ways. (BSAR)
 
-                    uint j = channelFlags.size();
+                    int j = channelFlags.size();
                     Q_ASSERT( j == _CSTraits::channels_nb );
 
-                    for ( uint i = 0; i < j; ++i ) {
+                    for ( int i = 0; i < j; ++i ) {
                         if ( channelFlags.testBit( i ) ) {
                             if ( i == _CSTraits::alpha_pos ) {
                                 _CSTraits::setAlpha(dst, CLAMP((totalAlpha/ factor) + offset, 0, 0xFF ),1);

@@ -27,9 +27,12 @@
  * This class is the base class to define the main characteristics of a colorspace
  * which inherits KoColorSpaceAbstract.
  *
- * For instance a colorspace of three color channels and alpha channel  in 16bits,
+ * For instance a colorspace of three color channels and alpha channel in 16bits,
  * will be defined as KoColorSpaceTrait\<quint16, 4, 3\>. The same without the alpha
  * channel is KoColorSpaceTrait\<quint16,3,-1\>
+ *
+ * So: if you do not have an alpha channel, the _alpha_pos is -1.
+ * Other code will depend on that.
  *
  */
 template<typename _channels_type_, int _channels_nb_, int _alpha_pos_>
@@ -140,7 +143,7 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
     static const qint32 red_pos = 2;
     static const qint32 green_pos = 1;
     static const qint32 blue_pos = 0;
-    
+
     /// @return the red component
     inline static channels_type red(quint8* data) {
         channels_type* d = parent::nativeArray(data);

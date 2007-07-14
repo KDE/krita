@@ -261,7 +261,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                     selection->setShapeSelection(shapeSelection);
                 }
                 else {
-                    shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+                    shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
                 }
                 shape->setParent(shapeSelection);
                 QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);

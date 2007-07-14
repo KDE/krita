@@ -286,27 +286,32 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
         if( ! tag.isNull() ) {
             context.styleStack().save();
             const QString localName = tag.localName();
-            const bool isTextNS = ( tag.namespaceURI() == KoXmlNS::text );
-            if ( isTextNS && localName == "p" ) {  // text paragraph
-                loadParagraph(context, tag, cursor);
+            if( tag.namespaceURI() == KoXmlNS::text ) {
+                if ( localName == "p" ) {  // text paragraph
+                    loadParagraph(context, tag, cursor);
+                }
+                else if ( localName == "h" ) { // heading
+                    loadHeading(context, tag, cursor);
+                }
+                else if ( localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
+                            || localName == "list" || localName == "numbered-paragraph" ) { // OASIS
+                    loadList(context, tag, cursor);
+                }
+                else if ( localName == "section" ) { // Temporary support (###TODO)
+                    loadSection(context, tag, cursor);
+                }
+                else {
+                    kWarning(32500)<<"KoTextLoader::loadBody unhandled text::"<<localName<<endl;
+                }
             }
-            else if ( isTextNS && localName == "h" ) { // heading
-                loadHeading(context, tag, cursor);
+            else if( tag.namespaceURI() == KoXmlNS::draw ) {
+                if ( localName == "frame" ) {
+                    loadFrame(context, tag, cursor);
+                }
+                else {
+                    kWarning(32500)<<"KoTextLoader::loadBody unhandled draw::"<<localName<<endl;
+                }
             }
-            else if ( isTextNS &&
-                    ( localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
-                        || localName == "list" || localName == "numbered-paragraph" ) ) { // OASIS
-                loadList(context, tag, cursor);
-            }
-            else if ( isTextNS && localName == "section" ) { // Temporary support (###TODO)
-                loadSection(context, tag, cursor);
-            }
-            else {
-                #ifdef KOOPENDOCUMENTLOADER_DEBUG
-                    kDebug(32500)<<"Unhandled localName="<<localName<<endl;
-                #endif
-            }
-
             context.styleStack().restore(); // remove the styles added by the paragraph or list
         }
         processBody();

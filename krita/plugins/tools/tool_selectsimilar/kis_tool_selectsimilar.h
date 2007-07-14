@@ -90,7 +90,7 @@ public:
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_similar_selection" );
             setShortcut( KShortcut(Qt::CTRL + Qt::Key_E) );
-            setPriority( 7 );
+            setPriority( 57 );
         }
 
     virtual ~KisToolSelectSimilarFactory(){}

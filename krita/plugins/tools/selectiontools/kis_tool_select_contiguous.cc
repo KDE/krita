@@ -62,7 +62,7 @@ KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
     m_optWidget = 0;
     m_fuzziness = 20;
     m_sampleMerged = false;
-    m_selectAction = SELECTION_ADD;
+    m_selectAction = SELECTION_REPLACE;
 }
 
 KisToolSelectContiguous::~KisToolSelectContiguous()
@@ -88,6 +88,9 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
             return;
 
         KisPaintDeviceSP dev = currentLayer()->paintDevice();
+        bool hasSelection = dev->hasSelection();
+        KisPixelSelectionSP pixelSelection = dev->pixelSelection();
+
 
         if (!dev || !currentLayer()->visible())
             return;
@@ -98,31 +101,40 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         fillpainter.setFillThreshold(m_fuzziness);
         fillpainter.setSampleMerged(m_sampleMerged);
         KisPixelSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage() );
-        KisSelectedTransaction *t = 0;
-        if (currentImage()->undo()) t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
+        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
 
-        if (!dev->hasSelection()) {
-            dev->pixelSelection()->clear();
+        if(! hasSelection || m_selectAction == SELECTION_REPLACE)
+        {
+            pixelSelection->clear();
             if(m_selectAction==SELECTION_SUBTRACT)
-                selection->invert();
+                pixelSelection->invert();
         }
 
-        switch (m_selectAction) {
+        switch(m_selectAction)
+        {
+            case SELECTION_REPLACE:
+            case SELECTION_ADD:
+                dev->addSelection(selection);
+                break;
             case SELECTION_SUBTRACT:
                 dev->subtractSelection(selection);
                 break;
-            case SELECTION_ADD:
-            default:
-                dev->addSelection(selection);
+            case SELECTION_INTERSECT:
+                dev->intersectSelection(selection);
                 break;
-
+            default:
+                break;
         }
 
-        //dev->setDirty(selection->extent()); // A bit too wide, but that's not that bad
-        dev->emitSelectionChanged();
+        if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
+            dev->setDirty(selection->selectedRect());
+            dev->emitSelectionChanged(selection->selectedRect());
+        } else {
+            dev->setDirty(currentImage()->bounds());
+            dev->emitSelectionChanged();
+        }
 
-        if (currentImage()->undo())
-            currentImage()->undoAdapter()->addCommand(t);
+        m_canvas->addCommand(t);
 
         QApplication::restoreOverrideCursor();
     }
@@ -141,7 +153,7 @@ void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
 
 void KisToolSelectContiguous::slotSetAction(int action)
 {
-    if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
+    if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT)
         m_selectAction =(enumSelectionMode)action;
 // XXX: Fix cursors when then are done.
 //     switch(m_selectAction) {

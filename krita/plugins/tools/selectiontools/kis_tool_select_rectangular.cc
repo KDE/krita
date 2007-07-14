@@ -269,11 +269,11 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                 shapeSelection->addChild(shape);
             }
 
-            if(hasSelection && m_selectAction != SELECTION_REPLACE) {
+            if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
                 dev->setDirty(rc);
                 dev->emitSelectionChanged(rc);
             } else {
-                dev->setDirty();
+                dev->setDirty(currentImage()->bounds());
                 dev->emitSelectionChanged();
             }
         }
@@ -282,12 +282,13 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
 }
 
 void KisToolSelectRectangular::slotSetAction(int action) {
-    if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
+    if (action >= SELECTION_ADD && action <= SELECTION_INTERSECT)
         m_selectAction =(enumSelectionMode)action;
 }
 
 void KisToolSelectRectangular::slotSetSelectionMode(int mode) {
     m_selectionMode = (selectionMode)mode;
+
 }
 
 QWidget* KisToolSelectRectangular::createOptionWidget()

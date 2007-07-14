@@ -164,7 +164,9 @@ void KisToolSelectPolygonal::finish()
                     pixelSelection->invert();
             }
 
-            KisPainter painter(pixelSelection);
+            KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
+
+            KisPainter painter(tmpSel);
             painter.setBounds( currentImage()->bounds() );
             painter.setPaintColor(KoColor(Qt::black, pixelSelection->colorSpace()));
             painter.setFillStyle(KisPainter::FillStyleForegroundColor);
@@ -173,28 +175,31 @@ void KisToolSelectPolygonal::finish()
             painter.setOpacity(OPACITY_OPAQUE);
             KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, currentImage());
             painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
+            painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
+            painter.paintPolygon(m_points);
 
-            switch(m_selectAction || m_selectAction == SELECTION_REPLACE)
+            switch(m_selectAction)
             {
                 case SELECTION_REPLACE:
                 case SELECTION_ADD:
-                    painter.setCompositeOp(pixelSelection->colorSpace()->compositeOp(COMPOSITE_OVER));
+                    dev->addSelection(tmpSel);
                     break;
                 case SELECTION_SUBTRACT:
-                    painter.setCompositeOp(pixelSelection->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
+                    dev->subtractSelection(tmpSel);
+                    break;
+                case SELECTION_INTERSECT:
+                    dev->intersectSelection(tmpSel);
                     break;
                 default:
                     break;
             }
 
-            painter.paintPolygon(m_points);
-
-            if(hasSelection && m_selectAction != SELECTION_REPLACE) {
+            if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
                 QRect rect(painter.dirtyRegion().boundingRect());
                 dev->setDirty(rect);
                 dev->emitSelectionChanged(rect);
             } else {
-                dev->setDirty();
+                dev->setDirty(currentImage()->bounds());
                 dev->emitSelectionChanged();
             }
             m_canvas->addCommand(t);
@@ -313,7 +318,7 @@ QWidget* KisToolSelectPolygonal::optionWidget()
 }
 
 void KisToolSelectPolygonal::slotSetAction(int action) {
-    if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
+    if (action >= SELECTION_ADD && action <= SELECTION_INTERSECT)
         m_selectAction =(enumSelectionMode)action;
 }
 

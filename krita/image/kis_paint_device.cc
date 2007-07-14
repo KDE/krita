@@ -1094,8 +1094,8 @@ void KisPaintDevice::intersectSelection(KisPixelSelectionSP selection) {
 
     KisPainter painter(tmpSel);
     QRect r = selection->selectedExactRect();
-    painter.bltMask(r.x(), r.y(),  selection->colorSpace()->compositeOp(COMPOSITE_OVER), KisPaintDeviceSP(pixelSelection().data()),
-                    KisPaintDeviceSP(selection.data()), OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+    painter.bltMask(r.x(), r.y(),  selection->colorSpace()->compositeOp(COMPOSITE_OVER), pixelSelection(),
+                    selection, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
     painter.end();
 
     pixelSelection()->clear();

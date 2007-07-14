@@ -168,8 +168,8 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
             if (currentImage() && currentLayer()->paintDevice()) {
                 KisPaintDeviceSP dev = currentLayer()->paintDevice();
 
-                bool hasSelection = dev->hasSelection();
-                KisSelectionSP selection = dev->selection();
+            bool hasSelection = dev->hasSelection();
+            KisSelectionSP selection = dev->selection();
 
             if(m_selectionMode == PIXEL_SELECTION){
                 KisPixelSelectionSP pixelSelection = dev->pixelSelection();
@@ -183,7 +183,9 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                         pixelSelection->invert();
                 }
 
-                KisPainter painter(pixelSelection);
+                KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
+
+                KisPainter painter(tmpSel);
                 painter.setBounds( currentImage()->bounds() );
                 painter.setPaintColor(KoColor(Qt::black, selection->colorSpace()));
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
@@ -192,29 +194,34 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 painter.setOpacity(OPACITY_OPAQUE);
                 KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, currentImage());
                 painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
+                painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
+
+                painter.paintEllipse(QRectF(m_startPos, m_endPos), PRESSURE_DEFAULT/*e->pressure()*/,
+                                     e->xTilt(), e->yTilt());
 
                 switch(m_selectAction)
                 {
                     case SELECTION_REPLACE:
                     case SELECTION_ADD:
-                        painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_OVER));
+                        dev->addSelection(tmpSel);
                         break;
                     case SELECTION_SUBTRACT:
-                        painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
+                        dev->subtractSelection(tmpSel);
+                        break;
+                    case SELECTION_INTERSECT:
+                        dev->intersectSelection(tmpSel);
                         break;
                     default:
                         break;
                 }
 
-                painter.paintEllipse(QRectF(m_startPos, m_endPos), PRESSURE_DEFAULT/*e->pressure()*/,
-                                     e->xTilt(), e->yTilt());
 
-                if(hasSelection && m_selectAction != SELECTION_REPLACE) {
+                if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
                     QRect rect(painter.dirtyRegion().boundingRect());
                     dev->setDirty(rect);
                     dev->emitSelectionChanged(rect);
                 } else {
-                    dev->setDirty();
+                    dev->setDirty(currentImage()->bounds());
                     dev->emitSelectionChanged();
                 }
 
@@ -271,7 +278,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 }
 
 void KisToolSelectElliptical::slotSetAction(int action) {
-    if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
+    if (action >= SELECTION_ADD && action <= SELECTION_INTERSECT)
         m_selectAction =(enumSelectionMode)action;
 }
 

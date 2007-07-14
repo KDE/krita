@@ -654,7 +654,7 @@ bool KisPaintDevice::read(KoStore *store)
         return retval;
 }
 
-void KisPaintDevice::convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent)
+void KisPaintDevice::convertTo(KoColorSpace * dstColorSpace, KoColorConvertionTransformation::Intent renderingIntent)
 {
     if ( (colorSpace()->id() == dstColorSpace->id()) )
     {
@@ -824,7 +824,7 @@ QImage KisPaintDevice::convertToQImage(KoColorProfile *  dstProfile, qint32 x1, 
     // XXX: Is this really faster than converting line by line and building the QImage directly?
     //      This copies potentially a lot of data.
     readBytes(data, x1, y1, w, h);
-    QImage image = colorSpace()->convertToQImage(data, w, h, dstProfile, INTENT_PERCEPTUAL, exposure);
+    QImage image = colorSpace()->convertToQImage(data, w, h, dstProfile, KoColorConvertionTransformation::IntentPerceptual, exposure);
     delete[] data;
 
     return image;

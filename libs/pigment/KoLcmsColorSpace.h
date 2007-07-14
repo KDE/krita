@@ -282,7 +282,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         }
         virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                 KoColorProfile *dstProfile,
-                qint32 renderingIntent, float exposure) const
+                KoColorConvertionTransformation::Intent renderingIntent, float exposure) const
 
         {
             Q_UNUSED(exposure);
@@ -351,7 +351,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 quint8 * dst,
                 const KoColorSpace * dstColorSpace,
                 quint32 numPixels,
-                qint32 renderingIntent) const
+                KoColorConvertionTransformation::Intent renderingIntent) const
         {
             if (dstColorSpace->id() == this->id()
                 && dstColorSpace->profile() == profile())

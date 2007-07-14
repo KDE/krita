@@ -28,6 +28,7 @@
 #include <kdebug.h>
 #include <kurl.h>
 
+#include <KoColorConvertionTransformation.h>
 #include "KoUnit.h"
 
 #include "kis_global.h"
@@ -190,7 +191,7 @@ public:
     /**
      * Convert the image and all its layers to the dstColorSpace
      */
-    void convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent = INTENT_PERCEPTUAL);
+    void convertTo(KoColorSpace * dstColorSpace, KoColorConvertionTransformation::Intent renderingIntent = KoColorConvertionTransformation::IntentPerceptual);
 
     // Get the profile associated with this image
     KoColorProfile *  profile() const;

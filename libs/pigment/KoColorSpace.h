@@ -20,7 +20,6 @@
 #ifndef KOCOLORSPACE_H
 #define KOCOLORSPACE_H
 
-#include <lcms.h>
 #include <limits.h>
 
 #include <QImage>
@@ -30,9 +29,12 @@
 #include <QBitArray>
 
 #include "KoColorSpaceConstants.h"
+#include "KoColorConvertionTransformation.h"
 #include <KoChannelInfo.h>
 #include <KoID.h>
 #include <pigment_export.h>
+
+
 
 
 class KoCompositeOp;
@@ -346,7 +348,7 @@ public:
      * @param exposure The exposure setting for rendering a preview of a high dynamic range image.
      */
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   KoColorProfile *  dstProfile, qint32 renderingIntent = INTENT_PERCEPTUAL,
+                                   KoColorProfile *  dstProfile, KoColorConvertionTransformation::Intent renderingIntent = KoColorConvertionTransformation::IntentPerceptual,
                                    float exposure = 0.0f) const = 0;
 
     /**
@@ -402,7 +404,7 @@ public:
     virtual bool convertPixelsTo(const quint8 * src,
                                  quint8 * dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
-                                 qint32 renderingIntent = INTENT_PERCEPTUAL) const;
+                                 KoColorConvertionTransformation::Intent renderingIntent = KoColorConvertionTransformation::IntentPerceptual) const;
 
 //============================== Manipulation functions ==========================//
 

@@ -22,6 +22,7 @@
 #include "klocale.h"
 #include <KoIncompleteColorSpace.h>
 #include <KoFallBack.h>
+#include <math.h>
 
 #define UINT8_TO_FLOAT(v) (KoColorSpaceMaths<quint8, typename _CSTraits::channels_type >::scaleToA(v))
 #define FLOAT_TO_UINT8(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint8>::scaleToA(v))

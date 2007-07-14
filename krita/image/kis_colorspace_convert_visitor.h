@@ -20,6 +20,8 @@
 
 #include <QBitArray>
 
+#include <KoColorConvertionTransformation.h>
+
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
@@ -34,7 +36,7 @@
 
 class KoColorSpaceConvertVisitor :public KisLayerVisitor {
 public:
-    KoColorSpaceConvertVisitor(KoColorSpace *dstColorSpace, qint32 renderingIntent);
+    KoColorSpaceConvertVisitor(KoColorSpace *dstColorSpace, KoColorConvertionTransformation::Intent renderingIntent);
     virtual ~KoColorSpaceConvertVisitor();
 
 public:
@@ -50,11 +52,11 @@ public:
 
 private:
     KoColorSpace *m_dstColorSpace;
-    qint32 m_renderingIntent;
+    KoColorConvertionTransformation::Intent m_renderingIntent;
     QBitArray m_emptyChannelFlags;
 };
 
-KoColorSpaceConvertVisitor::KoColorSpaceConvertVisitor(KoColorSpace *dstColorSpace, qint32 renderingIntent) :
+KoColorSpaceConvertVisitor::KoColorSpaceConvertVisitor(KoColorSpace *dstColorSpace, KoColorConvertionTransformation::Intent renderingIntent) :
     KisLayerVisitor(),
     m_dstColorSpace(dstColorSpace),
     m_renderingIntent(renderingIntent)

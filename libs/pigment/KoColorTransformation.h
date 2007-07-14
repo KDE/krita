@@ -20,6 +20,8 @@
 #ifndef _KO_COLOR_TRANSFORMATION_H_
 #define _KO_COLOR_TRANSFORMATION_H_
 
+#include <qglobal.h>
+
 /**
  * This is the base class of all color transform that takes one pixel in input
  * and one pixel in output.

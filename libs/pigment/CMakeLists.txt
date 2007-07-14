@@ -3,7 +3,6 @@ include_directories( ${KOMAIN_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LCM
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
-#	set(FILE_OPENEXR_SOURCES KoF16HalfColorSpaceTrait.cpp) 
 	include_directories(${OPENEXR_INCLUDE_DIR})
 	set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
 endif(OPENEXR_FOUND)
@@ -18,7 +17,7 @@ set(pigment_SRCS
     KoColorConversions.cpp
     KoBasicHistogramProducers.cpp
     KoHistogramProducer.cpp
-#	${FILE_OPENEXR_SOURCES}
+    KoColorConvertionTransformation.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoIccColorProfile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsColorProfile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsRGBColorProfile.cpp

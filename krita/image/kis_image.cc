@@ -469,7 +469,7 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
     }
 }
 
-void KisImage::convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent)
+void KisImage::convertTo(KoColorSpace * dstColorSpace, KoColorConvertionTransformation::Intent renderingIntent)
 {
     if ( m_d->colorSpace == dstColorSpace )
     {

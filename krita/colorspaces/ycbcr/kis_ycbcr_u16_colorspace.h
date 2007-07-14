@@ -48,12 +48,6 @@ public:
     {
         return false;
     }
-    /**
-     * lcms colorspace type definition.
-     */
-   virtual quint32 colorSpaceType() { return TYPE_YCbCr_16; }
-
-    virtual icColorSpaceSignature colorSpaceSignature() { return icSigYCbCrData; }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisYCbCrU16ColorSpace(parent, p); }
 

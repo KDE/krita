@@ -31,10 +31,6 @@ public:
             return false;
         }
 
-    quint32 colorSpaceType() { return 0; }
-
-     icColorSpaceSignature colorSpaceSignature() { return ( icColorSpaceSignature ) 0; }
-
      KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p)
         {
             Q_UNUSED( p );

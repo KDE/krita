@@ -60,23 +60,26 @@ public:
     void resourceChanged(int key, const QVariant &variant) {
         if(key == KoText::CurrentTextDocument) {
             document = static_cast<QTextDocument*> (variant.value<void*>());
-            if(document)
-                lastKnownPosition = QTextCursor(document);
-            else
-                lastKnownPosition = QTextCursor(); // invalid!
+            lastKnownPosition = QTextCursor(); // make invalid
         }
-        else if(key == KoText::CurrentTextPosition) {
-            // TODO
+        else if(dialog && (key == KoText::CurrentTextPosition || key == KoText::CurrentTextAnchor)) {
+            const int selectionStart = provider->intResource(KoText::CurrentTextPosition);
+            const int selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
+            dialog->setHasSelection(selectionEnd != selectionStart);
         }
     }
     void findActivated() {
-        lastKnownPosition.setPosition(-1);
+        lastKnownPosition = QTextCursor();
         if(dialog) {
             dialog->show();
             KWindowSystem::activateWindow( dialog->winId() );
             return;
         }
         dialog = new NonClosingFindDialog(widget);
+        dialog->setOptions(KFind::FromCursor);
+        const int selectionStart = provider->intResource(KoText::CurrentTextPosition);
+        const int selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
+        dialog->setHasSelection(selectionEnd != selectionStart);
         connect( dialog, SIGNAL(okClicked()), parent, SLOT(startFind()) );
         dialog->show();
 
@@ -85,15 +88,13 @@ public:
 
     }
     void findNextActivated() {
-        if(dialog == 0) {
-            findActivated();
-            return;
-        }
+        Q_ASSERT(dialog);
+        dialog->setOptions( (dialog->options() | KFind::FindBackwards) ^ KFind::FindBackwards);
         parseSettingsAndFind();
     }
     void findPreviousActivated() {
-        // set 'backwards' as option
-        // search again
+        Q_ASSERT(dialog);
+        dialog->setOptions( dialog->options() | KFind::FindBackwards);
         parseSettingsAndFind();
     }
     void replaceActivated() {
@@ -116,16 +117,28 @@ public:
             flags |= QTextDocument::FindCaseSensitively;
         if((dialog->options() & KFind::FindBackwards) != 0)
             flags |= QTextDocument::FindBackward;
-        if(lastKnownPosition.position() == -1) {
+        if(lastKnownPosition.isNull()) {
+            lastKnownPosition = QTextCursor(document);
             if((dialog->options() & KFind::FromCursor) != 0)
                 lastKnownPosition.setPosition(provider->intResource(KoText::CurrentTextPosition));
-            else
-                lastKnownPosition.setPosition(0);
             startedPosition = lastKnownPosition.position();
             restarted = false;
             matches = 0;
         }
-        // TODO SelectedText option ?
+        const bool selectedText = (dialog->options() & KFind::SelectedText) != 0;
+        int selectionStart=0;
+        int selectionEnd=0;
+        if(selectedText) {
+            selectionStart = provider->intResource(KoText::CurrentTextPosition);
+            selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
+            if(selectionEnd < selectionStart)
+                qSwap(selectionStart, selectionEnd);
+
+            if(lastKnownPosition.position() < selectionStart || lastKnownPosition.position() > selectionEnd) {
+                lastKnownPosition.setPosition(selectionStart);
+                startedPosition = selectionStart;
+            }
+        }
 
         QTextCursor cursor;
         QRegExp regExp;
@@ -136,7 +149,9 @@ public:
         else
             cursor = document->find(dialog->pattern(), lastKnownPosition, flags);
 
-        if(cursor.position() == -1 && !restarted && startedPosition <= lastKnownPosition.position()) { // end of doc, restart
+        if((selectedText && cursor.position() > selectionEnd || // end of selection
+                cursor.position() == -1 && !restarted) && startedPosition <= lastKnownPosition.position()) { // end of doc
+            // restart
             lastKnownPosition.setPosition(0);
             restarted = true;
             parseSettingsAndFind();
@@ -150,8 +165,16 @@ public:
             return;
         }
 
-        provider->setResource(KoText::CurrentTextPosition, cursor.position());
-        provider->setResource(KoText::CurrentTextAnchor, cursor.anchor());
+        if(selectedText) {
+            provider->setResource(KoText::SelectedTextPosition, cursor.position());
+            provider->setResource(KoText::SelectedTextAnchor, cursor.anchor());
+        }
+        else {
+            provider->setResource(KoText::CurrentTextPosition, cursor.position());
+            provider->setResource(KoText::CurrentTextAnchor, cursor.anchor());
+            provider->clearResource(KoText::SelectedTextPosition);
+            provider->clearResource(KoText::SelectedTextAnchor);
+        }
         lastKnownPosition = cursor;
         matches++;
     }

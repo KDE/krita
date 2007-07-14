@@ -38,8 +38,11 @@ namespace KoText {
         ShowTextFrames =  278622039,
         BidiDocument = 493038196,
         CurrentTextDocument = 382490375, ///< set by the text plugin whenever the document is changed
-        CurrentTextPosition = 183523,   ///<  set by the text plugin whenever the position is changed
-        CurrentTextAnchor = 341899485   ///<  set by the text plugin whenever the anchor-position is changed
+        CurrentTextPosition = 183523,   ///<  used by the text plugin whenever the position is changed
+        CurrentTextAnchor = 341899485,   ///<  used by the text plugin whenever the anchor-position is changed
+        SelectedTextPosition = 21314576,   ///<  used by the text plugin whenever the alternative selection is changed
+        ///  used by the text plugin whenever the alternative selection anchor-position is changed
+        SelectedTextAnchor = 3344189
     };
 
     /// enum for a type of tabulator used

@@ -269,7 +269,7 @@ public:
     /**
      *   Converts the paint device to a different colorspace
      */
-    virtual void convertTo(KoColorSpace * dstColorSpace, KoColorConvertionTransformation::Intent renderingIntent = KoColorConvertionTransformation::IntentPerceptual);
+    virtual void convertTo(KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
 
     /**
      * Changes the profile of the colorspace of this paint device to the given

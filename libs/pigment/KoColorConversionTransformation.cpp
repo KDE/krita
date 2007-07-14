@@ -17,44 +17,44 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoColorConvertionTransformation.h"
+#include "KoColorConversionTransformation.h"
 
 #include "KoColorSpace.h"
 
-struct KoColorConvertionTransformation::Private {
+struct KoColorConversionTransformation::Private {
     KoColorSpace* srcColorSpace;
     KoColorSpace* dstColorSpace;
     Intent renderingIntent;
 };
 
-KoColorConvertionTransformation::KoColorConvertionTransformation(KoColorSpace* srcCs, KoColorSpace* dstCs, Intent renderingIntent) : d(new Private)
+KoColorConversionTransformation::KoColorConversionTransformation(KoColorSpace* srcCs, KoColorSpace* dstCs, Intent renderingIntent) : d(new Private)
 {
     d->srcColorSpace = srcCs;
     setParameters(dstCs, renderingIntent);
 }
 
-void KoColorConvertionTransformation::setParameters(KoColorSpace* dstCs, Intent renderingIntent)
+void KoColorConversionTransformation::setParameters(KoColorSpace* dstCs, Intent renderingIntent)
 {
     d->dstColorSpace = dstCs;
     d->renderingIntent = renderingIntent;
 }
 
-const KoColorSpace* KoColorConvertionTransformation::srcColorSpace() const
+const KoColorSpace* KoColorConversionTransformation::srcColorSpace() const
 {
     return d->srcColorSpace;
 }
 
-const KoColorSpace* KoColorConvertionTransformation::dstColorSpace() const
+const KoColorSpace* KoColorConversionTransformation::dstColorSpace() const
 {
     return d->dstColorSpace;
 }
 
-KoColorConvertionTransformation::Intent KoColorConvertionTransformation::renderingIntent()
+KoColorConversionTransformation::Intent KoColorConversionTransformation::renderingIntent()
 {
     return d->renderingIntent;
 }
 
-void KoColorConvertionTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+void KoColorConversionTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
 {   
     // 4 channels: labA, 2 bytes per lab channel
     quint8 *pixels = new quint8[sizeof(quint16)*4*nPixels];

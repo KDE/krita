@@ -57,10 +57,10 @@ DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
 
     fillCmbDestProfile(m_page->cmbColorSpaces->currentItem());
 
-    m_intentButtonGroup.addButton(m_page->radioAbsoluteColorimetric, KoColorConvertionTransformation::IntentAbsoluteColorimetric);
-    m_intentButtonGroup.addButton(m_page->radioPerceptual, KoColorConvertionTransformation::IntentPerceptual);
-    m_intentButtonGroup.addButton(m_page->radioRelativeColorimetric, KoColorConvertionTransformation::IntentRelativeColorimetric);
-    m_intentButtonGroup.addButton(m_page->radioSaturation, KoColorConvertionTransformation::IntentSaturation);
+    m_intentButtonGroup.addButton(m_page->radioAbsoluteColorimetric, KoColorConversionTransformation::IntentAbsoluteColorimetric);
+    m_intentButtonGroup.addButton(m_page->radioPerceptual, KoColorConversionTransformation::IntentPerceptual);
+    m_intentButtonGroup.addButton(m_page->radioRelativeColorimetric, KoColorConversionTransformation::IntentRelativeColorimetric);
+    m_intentButtonGroup.addButton(m_page->radioSaturation, KoColorConversionTransformation::IntentSaturation);
 
     connect(m_page->cmbColorSpaces, SIGNAL(activated(const KoID &)),
         this, SLOT(fillCmbDestProfile(const KoID &)));

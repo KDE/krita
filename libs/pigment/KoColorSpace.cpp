@@ -156,7 +156,7 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
                                    quint8 * dst,
                                    const KoColorSpace * dstColorSpace,
                                    quint32 numPixels,
-                                   KoColorConvertionTransformation::Intent renderingIntent) const
+                                   KoColorConversionTransformation::Intent renderingIntent) const
 {
     Q_UNUSED(renderingIntent);
     // 4 channels: labA, 2 bytes per lab channel

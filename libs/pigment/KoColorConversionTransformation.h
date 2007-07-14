@@ -27,7 +27,7 @@ class KoColorSpace;
 /**
  * This is the base class of all color transform that convert the color of a pixel
  */
-class KoColorConvertionTransformation : KoColorTransformation{
+class KoColorConversionTransformation : KoColorTransformation{
         struct Private;
     public:
         enum Intent {
@@ -37,7 +37,7 @@ class KoColorConvertionTransformation : KoColorTransformation{
             IntentAbsoluteColorimetric =3
         };
     public:
-        KoColorConvertionTransformation(KoColorSpace* srcCs, KoColorSpace* cs, Intent renderingIntent = IntentPerceptual);
+        KoColorConversionTransformation(KoColorSpace* srcCs, KoColorSpace* cs, Intent renderingIntent = IntentPerceptual);
     public:
         virtual void setParameters(KoColorSpace* dstCs, Intent renderingIntent);
         const KoColorSpace* srcColorSpace() const;

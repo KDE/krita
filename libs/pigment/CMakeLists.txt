@@ -17,7 +17,7 @@ set(pigment_SRCS
     KoColorConversions.cpp
     KoBasicHistogramProducers.cpp
     KoHistogramProducer.cpp
-    KoColorConvertionTransformation.cpp
+    KoColorConversionTransformation.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoIccColorProfile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsColorProfile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsRGBColorProfile.cpp

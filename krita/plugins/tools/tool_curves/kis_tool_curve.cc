@@ -547,7 +547,7 @@ QWidget* KisToolCurve::createOptionWidget()
 
 void KisToolCurve::slotSetAction(int action) {
     if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
-        m_selectAction =(enumSelectionMode)action;
+        m_selectAction =(selectionAction)action;
 }
 
 QWidget* KisToolCurve::createSelectionOptionWidget(QWidget* parent)

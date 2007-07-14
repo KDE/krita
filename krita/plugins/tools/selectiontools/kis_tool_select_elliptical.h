@@ -67,7 +67,7 @@ private:
     QPointF m_endPos;
     bool m_selecting;
     KisSelectionOptions * m_optWidget;
-    enumSelectionMode m_selectAction;
+    selectionAction m_selectAction;
     selectionMode m_selectionMode;
 
 };

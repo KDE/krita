@@ -62,14 +62,14 @@ private:
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
-    void setPickerCursor(enumSelectionMode);
+    void setPickerCursor(selectionAction);
 
     QWidget *m_optWidget;
     KisSelectionOptions *m_selectionOptionsWidget;
 
     int m_fuzziness;
-    enumSelectionMode m_defaultSelectAction;
-    enumSelectionMode m_currentSelectAction;
+    selectionAction m_defaultSelectAction;
+    selectionAction m_currentSelectAction;
     QTimer *m_timer;
     QCursor m_addCursor;
     QCursor m_subtractCursor;

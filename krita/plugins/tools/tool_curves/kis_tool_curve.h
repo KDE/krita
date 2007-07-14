@@ -199,7 +199,7 @@ private:
      * Members used by slotSetAction() and selectCurve()
      */
     KisSelectionOptions* m_optWidget;
-    enumSelectionMode m_selectAction;
+    selectionAction m_selectAction;
 };
 
 #endif //__KIS_TOOL_CURVE_H_

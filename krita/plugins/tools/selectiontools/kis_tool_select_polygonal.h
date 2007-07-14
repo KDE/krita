@@ -68,7 +68,7 @@ protected:
 private:
     vQPointF m_points;
     KisSelectionOptions * m_optWidget;
-    enumSelectionMode m_selectAction;
+    selectionAction m_selectAction;
     selectionMode m_selectionMode;
 };
 

@@ -279,7 +279,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 
 void KisToolSelectElliptical::slotSetAction(int action) {
     if (action >= SELECTION_ADD && action <= SELECTION_INTERSECT)
-        m_selectAction =(enumSelectionMode)action;
+        m_selectAction =(selectionAction)action;
 }
 
 void KisToolSelectElliptical::slotSetSelectionMode(int mode) {

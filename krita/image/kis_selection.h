@@ -37,7 +37,7 @@ enum selectionMode {
     SHAPE_PROTECTION
 };
 
-enum enumSelectionMode {
+enum selectionAction {
     SELECTION_REPLACE,
     SELECTION_ADD,
     SELECTION_SUBTRACT,

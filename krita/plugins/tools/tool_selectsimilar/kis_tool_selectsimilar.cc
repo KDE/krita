@@ -45,7 +45,7 @@
 
 #include "kis_tool_selectsimilar.h"
 
-void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const quint8 * c, int fuzziness, enumSelectionMode mode)
+void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const quint8 * c, int fuzziness, selectionAction mode)
 {
     // XXX: Multithread this!
     qint32 x, y, w, h;
@@ -169,7 +169,7 @@ useCursor(m_subtractCursor);
 void KisToolSelectSimilar::slotTimer()
 {
     int state = QApplication::keyboardModifiers() & (Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier);
-    enumSelectionMode action;
+    selectionAction action;
 
     if (state == Qt::ShiftModifier)
         action = SELECTION_ADD;
@@ -184,7 +184,7 @@ void KisToolSelectSimilar::slotTimer()
     }
 }
 
-void KisToolSelectSimilar::setPickerCursor(enumSelectionMode action)
+void KisToolSelectSimilar::setPickerCursor(selectionAction action)
 {
 //     switch (action) {
 //         case SELECTION_ADD:
@@ -203,7 +203,7 @@ void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
 
 void KisToolSelectSimilar::slotSetAction(int action)
 {
-    m_defaultSelectAction = (enumSelectionMode)action;
+    m_defaultSelectAction = (selectionAction)action;
 }
 
 QWidget* KisToolSelectSimilar::createOptionWidget()

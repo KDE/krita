@@ -154,7 +154,7 @@ void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
 void KisToolSelectContiguous::slotSetAction(int action)
 {
     if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT)
-        m_selectAction =(enumSelectionMode)action;
+        m_selectAction =(selectionAction)action;
 // XXX: Fix cursors when then are done.
 //     switch(m_selectAction) {
 //         case SELECTION_ADD:

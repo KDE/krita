@@ -60,7 +60,7 @@ private:
     KisSelectionOptions * m_optWidget;
 
     int m_fuzziness;
-    enumSelectionMode m_selectAction;
+    selectionAction m_selectAction;
     bool m_sampleMerged;
 };
 

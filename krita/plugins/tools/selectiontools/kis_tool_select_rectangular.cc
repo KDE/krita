@@ -283,7 +283,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
 
 void KisToolSelectRectangular::slotSetAction(int action) {
     if (action >= SELECTION_ADD && action <= SELECTION_INTERSECT)
-        m_selectAction =(enumSelectionMode)action;
+        m_selectAction =(selectionAction)action;
 }
 
 void KisToolSelectRectangular::slotSetSelectionMode(int mode) {

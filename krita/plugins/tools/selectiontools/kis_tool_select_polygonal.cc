@@ -319,7 +319,7 @@ QWidget* KisToolSelectPolygonal::optionWidget()
 
 void KisToolSelectPolygonal::slotSetAction(int action) {
     if (action >= SELECTION_ADD && action <= SELECTION_INTERSECT)
-        m_selectAction =(enumSelectionMode)action;
+        m_selectAction =(selectionAction)action;
 }
 
 void KisToolSelectPolygonal::slotSetSelectionMode(int mode) {

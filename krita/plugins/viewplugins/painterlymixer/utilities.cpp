@@ -165,6 +165,102 @@ void Cell::mixProperties(const Cell &cell, float force)
     volume = V_f;
 }
 
+float acoth(float z)
+{
+    return 0.5*log((1 + 1/z) / (1 - 1/z));
+}
+
+#include <vector>
+using namespace std;
+
+void Cell::mixColorsUsingKS(const Cell &cell, float force)
+{
+    float V_c, V_s; // Volumes in Canvas and Stroke
+    float w_c, w_s; // Wetness in the Canvas and in the Stroke
+    float V_ac, V_as; // Active Volumes in Canvas and Stroke
+
+    V_c = cell.volume;
+    V_s = volume;
+
+    w_c = cell.wetness;
+    w_s = wetness;
+
+    V_ac = activeVolume(V_c, w_c, force);
+    V_as = activeVolume(V_s, w_s, force);
+
+    vector<float> c(6), s(6), f(3);
+    vector<float> a_c(3), b_c(3), c_c(3);
+    vector<float> a_s(3), b_s(3), c_s(3);
+    vector<float> a_f(3), b_f(3), c_f(3);
+    vector<float> S_c(3), S_s(3), S_f(3);
+
+    c[0] = (float)cell.red/255;
+    c[1] = (float)cell.green/255;
+    c[2] = (float)cell.blue/255;
+
+    s[0] = (float)red/255;
+    s[1] = (float)green/255;
+    s[2] = (float)blue/255;
+
+    for (int i = 0; i < 3; i++) {
+        if (c[i] == 1.0) c[i] -= 0.4/255.0;
+        if (c[i] == 0.0) c[i] += 0.4/255.0;
+        if (s[i] == 1.0) s[i] -= 0.4/255.0;
+        if (s[i] == 0.0) s[i] += 0.4/255.0;
+
+        c[i+3] = c[i] - (2.0/100.0)*c[i];
+        s[i+3] = s[i] - (2.0/100.0)*s[i];
+    }
+
+    for (int i = 0; i < 3; i++) {
+        a_c[i] = 0.5*( c[i] + ( c[i+3] - c[i] + 1) / c[i+3] );
+        a_s[i] = 0.5*( s[i] + ( s[i+3] - s[i] + 1) / s[i+3] );
+        b_c[i] = sqrt( pow( a_c[i], 2 ) - 1 );
+        b_s[i] = sqrt( pow( a_s[i], 2 ) - 1 );
+
+        S_c[i] = ( 1.0 / b_c[i] ) * acoth( ( pow( b_c[i], 2 ) - ( a_c[i] - c[i] ) * ( a_c[i] - 1 ) ) / ( b_c[i] * ( 1 - c[i] ) ) );
+        S_s[i] = ( 1.0 / b_s[i] ) * acoth( ( pow( b_s[i], 2 ) - ( a_s[i] - s[i] ) * ( a_s[i] - 1 ) ) / ( b_s[i] * ( 1 - s[i] ) ) );
+
+#define THICKNESS 0.8
+
+        c_c[i] = a_c[i] * sinh( b_c[i] * S_c[i] * THICKNESS ) + b_c[i] * cosh( b_c[i] * S_c[i] * THICKNESS );
+        c_s[i] = a_s[i] * sinh( b_s[i] * S_s[i] * THICKNESS ) + b_s[i] * cosh( b_s[i] * S_s[i] * THICKNESS );
+
+        a_f[i] = ( V_ac * a_c[i] + V_as * a_s[i] ) / ( V_ac + V_as );
+        b_f[i] = ( V_ac * b_c[i] + V_as * b_s[i] ) / ( V_ac + V_as );
+        c_f[i] = ( V_ac * c_c[i] + V_as * c_s[i] ) / ( V_ac + V_as );
+
+        S_f[i] = ( V_ac * S_c[i] + V_as * S_s[i] ) / ( V_ac + V_as );
+
+        f[i]  = sinh( b_f[i] * S_f[i] * THICKNESS ) / c_f[i];
+//         f[i] += b_f[i] / c_f[i];
+
+        if (f[i] < 0) f[i] = 0; if (f[i] > 1) f[i] = 1;
+
+        /*
+        Implement mixing as glazing
+        R_c[i] = sinh( b_c[i] * S_c[i] ) / c_c[i];
+        T_c[i] = b_c[i] / c_c[i];
+
+        R_s[i] = sinh( b_s[i] * S_s[i] ) / c_s[i];
+        T_s[i] = b_s[i] / c_s[i];
+
+        R_f[i] = R_s[i] + ( pow( T_s[i], 2 ) * R_c[i] ) / ( 1 - R_s[i] * R_c[i] );
+        T_f[i] = ( T_s[i] * T_c[i] ) / ( 1 - R_s[i] * R_c[i] );
+
+        kDebug() << "Channel " << i + 1 << " CANVAS R: " << R_c[i] << " T: " << T_c[i] << endl;
+        kDebug() << "Channel " << i + 1 << " STROKE R: " << R_s[i] << " T: " << T_s[i] << endl;
+        kDebug() << "Channel " << i + 1 << " FINAL  R: " << R_f[i] << " T: " << T_f[i] << endl << "------------------------" << endl;
+
+        f[i] = (R_f[i] + T_f[i]) * 255.0;
+*/
+    }
+
+    red = (long) (f[0]*255);
+    green = (long) (f[1]*255);
+    blue = (long) (f[2]*255);
+}
+
 void Cell::mixColorsUsingXyz(const Cell &cell, float force)
 {
     float V_c, V_s; // Volumes in Canvas and Stroke
@@ -268,6 +364,52 @@ void Cell::mixColorsUsingRgb_2(const Cell &cell, float force)
     b_f = (V_ac * b_c + V_as * b_s) / (V_ac + V_as);
     delta = (g_c - g_s) * GREEN_TO_BLUE;
     b_f += ratio*delta;
+
+    if (r_f < 0) r_f = 0; if (r_f > 1) r_f = 1;
+    if (g_f < 0) g_f = 0; if (g_f > 1) g_f = 1;
+    if (b_f < 0) b_f = 0; if (b_f > 1) b_f = 1;
+
+//     Normalize and set
+    red = (long)(r_f*255);
+    green = (long)(g_f*255);
+    blue = (long)(b_f*255);
+
+//     kDebug() << "RED: " << red << " GREEN: " << green << " BLUE: " << blue << endl;
+
+    updateHlsCmy();
+}
+
+void Cell::mixColorsUsingRgbAdditive(const Cell &cell, float force)
+{
+    float V_c, V_s; // Volumes in Canvas and Stroke
+    float w_c, w_s; // Wetness in the Canvas and in the Stroke
+    float V_ac, V_as; // Active Volumes in Canvas and Stroke
+
+    float r_c, r_s;
+    float g_c, g_s;
+    float b_c, b_s;
+    float r_f, g_f, b_f;
+
+    V_c = cell.volume;
+    V_s = volume;
+
+    w_c = cell.wetness;
+    w_s = wetness;
+
+    V_ac = activeVolume(V_c, w_c, force);
+    V_as = activeVolume(V_s, w_s, force);
+
+    r_c = (float)cell.red / 255.0;
+    g_c = (float)cell.green / 255.0;
+    b_c = (float)cell.blue / 255.0;
+
+    r_s = (float)red / 255.0;
+    g_s = (float)green / 255.0;
+    b_s = (float)blue / 255.0;
+
+    r_f = r_c + r_s;
+    r_f = g_c + g_s;
+    r_f = b_c + b_s;
 
     if (r_f < 0) r_f = 0; if (r_f > 1) r_f = 1;
     if (g_f < 0) g_f = 0; if (g_f > 1) g_f = 1;

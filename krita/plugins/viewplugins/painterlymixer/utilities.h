@@ -120,11 +120,11 @@ public:
 
     void mixProperties(const Cell &cell, float force);
 
-
-
+    void mixColorsUsingKS(const Cell &cell, float force);
     void mixColorsUsingXyz(const Cell &cell, float force);
 
     void mixColorsUsingRgb(const Cell &cell, float force);
+    void mixColorsUsingRgbAdditive(const Cell &cell, float force);
     void mixColorsUsingRgb_2(const Cell &cell, float force);
 
     void mixColorsUsingHls(const Cell &cell, float force);

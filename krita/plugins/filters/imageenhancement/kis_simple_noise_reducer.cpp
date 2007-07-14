@@ -60,42 +60,42 @@ inline int ABS(int v)
     return v;
 }
 
-void KisSimpleNoiseReducer::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
+void KisSimpleNoiseReducer::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
     int threshold, windowsize;
     if(config ==0)
     {
         config = defaultConfiguration(src);
     }
-    
+
     threshold = config->getInt("threshold", 50);
     windowsize = config->getInt("windowsize", 1);
-    
+
     KoColorSpace* cs = src->colorSpace();
-    
+
     // Compute the blur mask
     KisAutobrushShape* kas = new KisAutobrushCircleShape(2*windowsize+1, 2*windowsize+1, windowsize, windowsize);
-    
+
     QImage mask;
     kas->createBrush(&mask);
 //    mask.save("testmask.png", "PNG");
-    
+
     KisKernelSP kernel = KisKernel::fromQImage(mask);
-    
+
     KisPaintDeviceSP interm = new KisPaintDevice(*src);
     KisConvolutionPainter painter( interm );
     painter.beginTransaction("bouuh");
     painter.applyMatrix(kernel, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
-    
+
     if (painter.cancelRequested()) {
         cancel();
     }
-    
+
 
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width() );
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
     KisHLineConstIteratorPixel intermIt = interm->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
-    
+
     for( int j = 0; j < size.height(); j++)
     {
         while( ! srcIt.isDone() )
@@ -117,7 +117,7 @@ void KisSimpleNoiseReducer::process(const KisPaintDeviceSP src, const QPoint& sr
         dstIt.nextRow();
         intermIt.nextRow();
     }
-    
+
     setProgressDone(); // Must be called even if you don't really support progression
 }
 

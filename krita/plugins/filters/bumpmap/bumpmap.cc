@@ -130,7 +130,7 @@ KisFilterConfiguration* KisFilterBumpmap::designerConfiguration(const KisPaintDe
 }
 
 
-void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
+void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
     if (!src) return;
     if (!dst) return;

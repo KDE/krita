@@ -51,7 +51,7 @@ public:
     virtual QString toString();
 
     bool isCompatible(const KisPaintDeviceSP) const;
-    
+
 public:
     QList<KisCurve> curves;
     quint16 **transfers;
@@ -74,7 +74,7 @@ public:
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 //     virtual KisFilterConfiguration* configuration() { return new KisPerChannelFilterConfiguration(0); }
-    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     static inline KoID id() { return KoID("perchannel", i18n("Color Adjustment")); }
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }

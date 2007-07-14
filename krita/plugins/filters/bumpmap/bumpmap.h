@@ -72,7 +72,7 @@ class KisFilterBumpmap : public KisFilter
 public:
     KisFilterBumpmap();
 public:
-    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }

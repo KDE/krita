@@ -49,7 +49,7 @@ KisFilterConfiguration* KisUnsharpFilter::designerConfiguration(KisPaintDeviceSP
     return config;
 }
 
-void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& areaSize, KisFilterConfiguration* config)
+void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& areaSize, const KisFilterConfiguration* config)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
@@ -69,7 +69,7 @@ void KisUnsharpFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopL
 
     QImage mask;
     kas->createBrush(&mask);
-//    mask.save("testmask.png", "PNG"); 
+//    mask.save("testmask.png", "PNG");
 
     KisKernelSP kernel = KisKernelSP(KisKernel::fromQImage(mask));
 

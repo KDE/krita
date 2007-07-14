@@ -83,7 +83,7 @@ KisFilterConfiguration* KisFilterRandomPick::designerConfiguration(const KisPain
     return config;
 }
 
-void KisFilterRandomPick::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
+void KisFilterRandomPick::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);

@@ -52,7 +52,7 @@ KisFilterConfiguration* KisWaveletNoiseReduction::designerConfiguration(const Ki
     return config;
 }
 
-void KisWaveletNoiseReduction::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& areaSize, KisFilterConfiguration* config)
+void KisWaveletNoiseReduction::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& areaSize, const KisFilterConfiguration* config)
 {
 
     float threshold;

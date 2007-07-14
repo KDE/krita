@@ -70,7 +70,7 @@ bool KisCubismFilter::workWith(KoColorSpace* /*cs*/)
 
 
 void KisCubismFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
-                               KisFilterConfiguration* configuration, const QRect& rect)
+                               const KisFilterConfiguration* configuration, const QRect& rect)
 {
     Q_ASSERT(src);
     Q_ASSERT(dst);

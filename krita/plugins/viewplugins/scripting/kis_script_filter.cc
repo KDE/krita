@@ -47,7 +47,7 @@ QString KisScriptFilter::category() const
     return d->action->property("category").toString();
 }
 
-void KisScriptFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
+void KisScriptFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
     d->action->trigger();
 

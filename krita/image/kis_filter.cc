@@ -181,7 +181,7 @@ void KisFilter::setAutoUpdate(bool set) {
     m_autoUpdate = set;
 }
 
-QRect KisFilter::enlargeRect(QRect rect, KisFilterConfiguration* c) const {
+QRect KisFilter::enlargeRect(QRect rect, const KisFilterConfiguration* c) const {
     int margin = overlapMarginNeeded(c);
     rect.setLeft(rect.left() - margin);
     rect.setTop(rect.top() - margin);
@@ -190,7 +190,7 @@ QRect KisFilter::enlargeRect(QRect rect, KisFilterConfiguration* c) const {
     return rect;
 }
 
-void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, KisFilterConfiguration* config)
+void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config)
 {
     process(device, rect.topLeft(), device, rect.topLeft(), rect.size(), config);
 }

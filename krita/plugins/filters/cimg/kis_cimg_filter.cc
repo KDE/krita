@@ -159,7 +159,7 @@ KisCImgFilter::KisCImgFilter()
 }
 
 
-void KisCImgFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
+void KisCImgFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
     Q_UNUSED(dst); ///////////////////// WTF !
 

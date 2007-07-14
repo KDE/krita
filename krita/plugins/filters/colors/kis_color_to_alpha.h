@@ -27,7 +27,7 @@ class KisFilterColorToAlpha : public KisFilter {
     public:
         KisFilterColorToAlpha();
     public:
-        virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
+        virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
         static inline KoID id() { return KoID("colortoalpha", i18n("Color to Alpha")); }
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }

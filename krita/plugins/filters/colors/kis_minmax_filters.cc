@@ -73,11 +73,12 @@ KisFilterMax::KisFilterMax() : KisFilter(id(), CategoryColors, i18n("M&aximize C
 {
 }
 
-void KisFilterMax::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* /*config*/)
+void KisFilterMax::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
+    Q_UNUSED( config );
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
-    
+
     KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height() );
     KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
 
@@ -86,7 +87,7 @@ void KisFilterMax::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
 
     KoColorSpace * cs = src->colorSpace();
     qint32 nC = cs->colorChannelCount();
-    
+
     funcMaxMin F;
     KoChannelInfo::enumChannelValueType cT = cs->channels()[0]->channelValueType();
     if( cT == KoChannelInfo::UINT8 || cT == KoChannelInfo::INT8 )
@@ -101,7 +102,7 @@ void KisFilterMax::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
     } else {
         return;
     }
-    
+
     while( ! srcIt.isDone() )
     {
         if(srcIt.isSelected())
@@ -119,11 +120,11 @@ KisFilterMin::KisFilterMin() : KisFilter(id(), CategoryColors, i18n("M&inimize C
 {
 }
 
-void KisFilterMin::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* /*config*/)
+void KisFilterMin::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* /*config*/)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
-    
+
     KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
     KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
 
@@ -132,7 +133,7 @@ void KisFilterMin::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
 
     KoColorSpace * cs = src->colorSpace();
     qint32 nC = cs->colorChannelCount();
-    
+
     funcMaxMin F;
     KoChannelInfo::enumChannelValueType cT = cs->channels()[0]->channelValueType();
     if( cT == KoChannelInfo::UINT8 || cT == KoChannelInfo::INT8 )
@@ -147,7 +148,7 @@ void KisFilterMin::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
     } else {
         return;
     }
-    
+
     while( ! srcIt.isDone() )
     {
         if(srcIt.isSelected())

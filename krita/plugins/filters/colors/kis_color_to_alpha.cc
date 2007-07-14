@@ -48,17 +48,17 @@ KisFilterConfiguration* KisFilterColorToAlpha::designerConfiguration(KisPaintDev
     return config;
 }
 
-void KisFilterColorToAlpha::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
+void KisFilterColorToAlpha::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
-    
+
     if(config == 0) config = new KisFilterConfiguration("colortoalpha", 1);
-    
+
     QVariant value;
     QColor cTA = (config->getProperty("targetcolor", value)) ? value.value<QColor>() : QColor(255,255,255);
     int threshold = (config->getProperty("threshold", value)) ? value.toInt() : 0;
-    
+
     KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height() );
     KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
 
@@ -67,10 +67,10 @@ void KisFilterColorToAlpha::process(const KisPaintDeviceSP src, const QPoint& sr
 
     KoColorSpace * cs = src->colorSpace();
     qint32 pixelsize = cs->pixelSize();
-    
+
     quint8* color = new quint8[pixelsize];
     cs->fromQColor(cTA, color);
-    
+
     while( ! srcIt.isDone() )
     {
         if(srcIt.isSelected())

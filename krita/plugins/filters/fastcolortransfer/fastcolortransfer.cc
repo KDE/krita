@@ -73,7 +73,7 @@ KisFilterConfiguration* KisFilterFastColorTransfer::designerConfiguration(KisPai
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
+void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);

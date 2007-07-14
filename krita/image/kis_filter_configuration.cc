@@ -120,7 +120,7 @@ void KisFilterConfiguration::setProperty(const QString & name, const QVariant & 
     }
 }
 
-bool KisFilterConfiguration::getProperty(const QString & name, QVariant & value)
+bool KisFilterConfiguration::getProperty(const QString & name, QVariant & value) const
 {
    if ( m_properties.find( name ) == m_properties.end() ) {
        return false;
@@ -131,7 +131,7 @@ bool KisFilterConfiguration::getProperty(const QString & name, QVariant & value)
    }
 }
 
-QVariant KisFilterConfiguration::getProperty(const QString & name)
+QVariant KisFilterConfiguration::getProperty(const QString & name) const
 {
     if ( m_properties.find( name ) == m_properties.end() ) {
         return QVariant();
@@ -142,7 +142,7 @@ QVariant KisFilterConfiguration::getProperty(const QString & name)
 }
 
 
-int KisFilterConfiguration::getInt(const QString & name, int def)
+int KisFilterConfiguration::getInt(const QString & name, int def) const
 {
     QVariant v = getProperty(name);
     if (v.isValid())
@@ -152,7 +152,7 @@ int KisFilterConfiguration::getInt(const QString & name, int def)
 
 }
 
-double KisFilterConfiguration::getDouble(const QString & name, double def)
+double KisFilterConfiguration::getDouble(const QString & name, double def) const
 {
     QVariant v = getProperty(name);
     if (v.isValid())
@@ -161,7 +161,7 @@ double KisFilterConfiguration::getDouble(const QString & name, double def)
         return def;
 }
 
-bool KisFilterConfiguration::getBool(const QString & name, bool def)
+bool KisFilterConfiguration::getBool(const QString & name, bool def) const
 {
     QVariant v = getProperty(name);
     if (v.isValid())
@@ -170,7 +170,7 @@ bool KisFilterConfiguration::getBool(const QString & name, bool def)
         return def;
 }
 
-QString KisFilterConfiguration::getString(const QString & name, const QString & def)
+QString KisFilterConfiguration::getString(const QString & name, const QString & def) const
 {
     QVariant v = getProperty(name);
     if (v.isValid())

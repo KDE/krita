@@ -25,12 +25,12 @@ public:
 KisPainterlyOverlay::KisPainterlyOverlay()
     : KisPaintDevice( KisPainterlyOverlayColorSpace::instance() )
 {
-            m_d = new Private();
-        }
+    m_d = new Private();
+}
 
-        KisPainterlyOverlay::~KisPainterlyOverlay()
-        {
-            delete m_d;
-        }
+KisPainterlyOverlay::~KisPainterlyOverlay()
+{
+    delete m_d;
+}
 
 #include "kis_painterly_overlay.moc"

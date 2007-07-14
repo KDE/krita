@@ -52,7 +52,7 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), "artistic", i18n("&Oilp
 {
 }
 
-void KisOilPaintFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
+void KisOilPaintFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
 
     if (!configuration) {

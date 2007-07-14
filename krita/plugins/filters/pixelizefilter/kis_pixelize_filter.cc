@@ -55,7 +55,7 @@ KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), "artistic", i18n("&Pixe
 {
 }
 
-void KisPixelizeFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
+void KisPixelizeFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration )
 {
 // FIXME THIS FILTER DOESN'T WORK WELL IF SRC != DST !!!
     Q_ASSERT( src );

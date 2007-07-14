@@ -90,13 +90,13 @@ public:
                          KisPaintDeviceSP dst,
                          const QPoint& dstTopLeft,
                          const QSize& size,
-                         KisFilterConfiguration* config
+                         const KisFilterConfiguration* config
         ) = 0;
 
     /**
      * Provided for convenience only when source and destination are the same
      */
-    void process(KisPaintDeviceSP device, const QRect& rect, KisFilterConfiguration* config);
+    void process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config);
 
 public:
     /**
@@ -160,9 +160,9 @@ public:
     /**
      * Used when threading is used -- the overlap margin is passed to the
      * filter to use to compute pixels, but the margin is not pasted into the
-     * resulting image.
+     * resulting image. Use this for convolution filters, for instance.
      */
-    virtual int overlapMarginNeeded(KisFilterConfiguration* = 0) const { return 0; }
+    virtual int overlapMarginNeeded( const KisFilterConfiguration* = 0 ) const { return 0; }
 
      /**
      * Similar to overlapMarginNeeded: some filters will alter a lot of pixels that are
@@ -171,7 +171,7 @@ public:
      * might be bigger. Use this function to determine that rect.
      * The default implementation makes a guess using overlapMarginNeeded.
       */
-    virtual QRect enlargeRect(QRect rect, KisFilterConfiguration* = 0) const;
+    virtual QRect enlargeRect(QRect rect, const KisFilterConfiguration* = 0) const;
 
 
     /**

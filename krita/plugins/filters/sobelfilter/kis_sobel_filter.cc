@@ -56,7 +56,7 @@
 //     m_doVertically = getBool( "doVertically" );
 //     m_keepSign = getBool( "makeOpaque" );
 // }
-// 
+//
 // QString KisSobelFilterConfiguration::toString()
 // {
 //     m_properties.clear();
@@ -64,7 +64,7 @@
 //     setProperty("doVertically", m_doVertically);
 //     setProperty("keepSign", m_keepSign);
 //     setProperty("makeOpaque", m_makeOpaque);
-// 
+//
 //     return KisFilterConfiguration::toString();
 // }
 
@@ -90,7 +90,7 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-void KisSobelFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
+void KisSobelFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration)
 {
     //read the filter configuration values from the KisFilterConfiguration object
     bool doHorizontal = configuration->getBool("doHorizontally", true);

@@ -183,7 +183,7 @@ std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfigurat
 }
 
 
-void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
+void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
     if (!config) {
         kWarning() << "No configuration object for per-channel filter\n";
@@ -191,7 +191,7 @@ void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
     }
 
     KisPerChannelFilterConfiguration* configBC =
-            static_cast<KisPerChannelFilterConfiguration*>(config);
+            static_cast<const KisPerChannelFilterConfiguration*>(config);
     if (configBC->nTransfers != src->colorSpace()->colorChannelCount()) {
         // We got an illegal number of colorchannels.KisFilter
         return;

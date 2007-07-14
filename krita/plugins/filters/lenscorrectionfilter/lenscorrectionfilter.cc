@@ -88,7 +88,7 @@ KisFilterConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidg
     return new KisWdgLensCorrection((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterLensCorrection::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft,  const QSize& size, KisFilterConfiguration* config)
+void KisFilterLensCorrection::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft,  const QSize& size, const KisFilterConfiguration* config)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
@@ -121,7 +121,7 @@ void KisFilterLensCorrection::process(const KisPaintDeviceSP src, const QPoint& 
 
     int tx = dstTopLeft.x() - srcTopLeft.x();
     int ty = dstTopLeft.y() - srcTopLeft.y();
-    
+
     while(!dstIt.isDone())
     {
         double off_x = dstIt.x() - xcenter;

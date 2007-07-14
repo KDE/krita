@@ -28,19 +28,29 @@ class KisFilterManager;
 class KisLayer;
 class KisView2;
 
+/**
+ *
+ */
 class KisFilterHandler : public QObject {
-        Q_OBJECT
-    public:
-        KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view);
-        ~KisFilterHandler();
-        const KisFilterSP filter() const;
-    public slots:
-        void showDialog();
-        void reapply();
-        void apply(KisLayerSP, KisFilterConfiguration*);
-    private:
-        struct Private;
-        Private* const d;
+
+    Q_OBJECT
+
+public:
+
+    KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view);
+    ~KisFilterHandler();
+
+    const KisFilterSP filter() const;
+
+public slots:
+
+    void showDialog();
+    void reapply();
+    void apply(KisLayerSP, KisFilterConfiguration*);
+
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

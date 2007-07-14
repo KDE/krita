@@ -51,7 +51,7 @@ class KisCubismFilter : public KisFilter
 public:
     KisCubismFilter();
 public:
-    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, const KisFilterConfiguration* , const QRect&);
     static inline KoID id() { return KoID("cubism", i18n("Cubism")); }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }

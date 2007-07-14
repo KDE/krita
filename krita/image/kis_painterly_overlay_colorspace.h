@@ -41,6 +41,10 @@
  * * volume: paint property: how much paint there is on the canvas.
  * height + volume is total height
  * * wetness: how wet the paint is. Wetter = less sticky
+ *
+ * reinterpret_cast your quint8* to
+ * KisPainterlyOverlayColorSpaceTraits::Cell to have easy access to
+ * the individual properties. See the unittest for example code.
  */
 
 template<typename _channels_type_>

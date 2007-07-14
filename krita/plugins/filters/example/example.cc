@@ -67,8 +67,9 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), CategoryAdjust, i18n("&Inve
 {
 }
 
-void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* /*config*/)
+void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
+    Q_UNUSED( config );
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
 
@@ -102,7 +103,7 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
         dstIt.nextRow();
     }
     kDebug(41006) << "Per-pixel isSelected(): " << t.elapsed() << " ms\n";
-    
+
 #if 0
     t.restart();
 

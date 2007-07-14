@@ -33,7 +33,7 @@ public:
     KisCImgFilterConfiguration();
     virtual QString toString();
     virtual void fromXML(const QString & s);
-    
+
 public:
 
     qint32 nb_iter;    // Number of smoothing iterations
@@ -54,7 +54,7 @@ class KisCImgFilter : public KisFilter
 public:
     KisCImgFilter();
 public:
-    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     static inline KoID id() { return KoID("cimg", i18n("Image Restoration (cimg-based)")); }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return false; }

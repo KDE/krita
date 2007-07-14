@@ -38,7 +38,7 @@ public:
     inline quint32 dropSize() { return getInt("dropsize"); }
     inline quint32 number() {return getInt("number"); }
     inline quint32 fishEyes() {return getInt("fishEyes"); }
-    
+
 };
 
 class KisRainDropsFilter : public KisFilter
@@ -46,7 +46,7 @@ class KisRainDropsFilter : public KisFilter
 public:
     KisRainDropsFilter();
 public:
-    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     static inline KoID id() { return KoID("raindrops", i18n("Raindrops")); }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }

@@ -29,10 +29,18 @@ class KisSobelFilter : public KisFilter
 public:
     KisSobelFilter();
 public:
-    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
+    virtual void process(const KisPaintDeviceSP src,
+                         const QPoint& srcTopLeft,
+                         KisPaintDeviceSP dst,
+                         const QPoint& dstTopLeft,
+                         const QSize& size, const KisFilterConfiguration* config);
+
     static inline KoID id() { return KoID("sobel", i18n("Sobel")); }
+
     virtual bool supportsPainting() { return false; }
+
     virtual bool supportsPreview() { return true; }
+
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 private:

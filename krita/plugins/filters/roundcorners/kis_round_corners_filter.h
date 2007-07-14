@@ -41,7 +41,7 @@ class KisRoundCornersFilter : public KisFilter
 public:
     KisRoundCornersFilter();
 public:
-    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
+    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     static inline KoID id() { return KoID("roundcorners", i18n("Round Corners")); }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }

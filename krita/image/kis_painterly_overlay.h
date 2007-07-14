@@ -25,6 +25,16 @@
 #include "kis_painterly_overlay_colorspace.h"
 #include <krita_export.h>
 
+/**
+ * KisPainterlyOverlay is a special paintdevice that uses the
+ * KisPainterlyOverlayColorSpace to describe the data pertinent to
+ * canvas and painterly medium.
+ *
+ * XXX: Consider whether we should separate canvas properties and
+ * medium properties.
+ *
+ * See the unittest for example code.
+ */
 class KRITAIMAGE_EXPORT KisPainterlyOverlay : public KisPaintDevice {
 
 Q_OBJECT

@@ -73,7 +73,7 @@ KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), "artistic", i18n("&Ra
  */
 
 
-void KisRainDropsFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
+void KisRainDropsFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration)
 {
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 DropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();

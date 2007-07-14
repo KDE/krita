@@ -48,7 +48,7 @@ public:
      * Reimplement this method if you need something done whenever the
      * job is done.
      */
-    virtual void jobDone() = 0;
+    virtual void jobDone() {}
 protected:
 
     KisPaintDeviceSP m_dev;

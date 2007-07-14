@@ -104,8 +104,6 @@ void KisThreadedApplicator::execute()
 
 void KisThreadedApplicator::jobDone( Job* job)
 {
-    KisJob* kisJob = static_cast<KisJob*>( job );
-    kisJob->jobDone();
     delete job;
 }
 

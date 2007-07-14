@@ -87,8 +87,9 @@ bool KisAutoContrast::workWith(KoColorSpace* cs)
     return (cs->profile() != 0);
 }
 
-void KisAutoContrast::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* )
+void KisAutoContrast::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size,const KisFilterConfiguration* config)
 {
+    Q_UNUSED( config );
     // initialize
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
     KisHistogram histogram(src, producer, LINEAR);
@@ -249,7 +250,7 @@ bool KisDesaturateFilter::workWith(KoColorSpace* cs)
     return (cs->profile() != 0);
 }
 
-void KisDesaturateFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
+void KisDesaturateFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
     Q_UNUSED( config );
 

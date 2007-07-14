@@ -35,7 +35,7 @@ class KisScriptFilter : public KisFilter {
     public:
         KisScriptFilter(Kross::Action* action);
         virtual ~KisScriptFilter();
-        virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
+        virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     public Q_SLOTS:
         QString category() const;
     signals:

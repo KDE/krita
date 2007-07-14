@@ -174,7 +174,7 @@ bool KisBrightnessContrastFilter::workWith(KoColorSpace* cs)
 }
 
 
-void KisBrightnessContrastFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
+void KisBrightnessContrastFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
 
     if (!config) {

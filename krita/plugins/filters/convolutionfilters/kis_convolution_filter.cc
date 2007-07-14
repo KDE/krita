@@ -30,7 +30,7 @@
 #include "kis_progress_display_interface.h"
 #include "kis_progress_subject.h"
 
-void KisConvolutionFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
+void KisConvolutionFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration)
 {
     if (!configuration) {
         setProgressDone();

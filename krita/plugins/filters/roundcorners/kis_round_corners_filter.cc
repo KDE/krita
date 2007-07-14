@@ -54,14 +54,14 @@ KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), "map", i18n("&R
 {
 }
 
-void KisRoundCornersFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
+void KisRoundCornersFilter::process( const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration )
 {
     if (!src ||
         srcTopLeft.isNull() ||
         !dst ||
         dstTopLeft.isNull() ||
         !size.isValid() ||
-        !configuration) 
+        !configuration)
     {
         setProgressDone();
         return;

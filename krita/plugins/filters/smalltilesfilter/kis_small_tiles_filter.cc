@@ -74,7 +74,7 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "map", i18n("&Small
 {
 }
 
-void KisSmallTilesFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* configuration)
+void KisSmallTilesFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration)
 {
         //read the filter configuration values from the KisFilterConfiguration object
         quint32 numberOfTiles = ((KisSmallTilesFilterConfiguration*)configuration)->numberOfTiles();

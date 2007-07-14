@@ -20,6 +20,7 @@
 #include "kis_painterly_overlay_test.h"
 #include "kis_painterly_overlay.h"
 #include "kis_painterly_overlay_colorspace.h"
+#include "kis_types.h"
 #include <kdebug.h>
 
 
@@ -28,6 +29,10 @@ void KisPainterlyOverlayTester::testConstructor()
     KisPainterlyOverlay * overlay = new KisPainterlyOverlay();
     Q_ASSERT( overlay );
     delete overlay;
+
+    KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
+    Q_ASSERT( cs );
+
 }
 
 void KisPainterlyOverlayTester::testPainterlyOverlayColorSpace()
@@ -60,7 +65,59 @@ void KisPainterlyOverlayTester::testPainterlyOverlayColorSpaceCell()
     delete cell;
 }
 
+void KisPainterlyOverlayTester::testPainterlyOverlay()
+{
+    KisPainterlyOverlaySP overlay = new KisPainterlyOverlay();
+    Q_ASSERT( overlay );
+    KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
+    Q_ASSERT( cs );
+    QVERIFY( overlay->colorSpace() == cs );
+    quint8 * bytes = cs->allocPixelBuffer( 1 );
+    memset( bytes, 0,  cs->pixelSize());
 
+    overlay->fill( 0, 0, 100, 100, bytes );
+
+    {
+        KisRectIteratorPixel it = overlay->createRectIterator(0, 0, 128, 128);
+        while ( !it.isDone() ) {
+
+            PainterlyOverlayFloatTraits::Cell * cell =
+                reinterpret_cast<PainterlyOverlayFloatTraits::Cell *>( it.rawData() );
+
+            QVERIFY( cell->adsorbency == 0.0 );
+            QVERIFY( cell->gravity == 0.0 );
+            QVERIFY( cell->mixability == 0.0 );
+            QVERIFY( cell->height == 0.0 );
+            QVERIFY( cell->pigment_concentration == 0.0 );
+            QVERIFY( cell->viscosity == 0.0 );
+            QVERIFY( cell->volume == 0.0 );
+            QVERIFY( cell->wetness == 0.0 );
+
+            cell->wetness = 1.0;
+            cell->mixability = 1.1;
+
+            ++it;
+        }
+        QVERIFY( overlay->exactBounds() == QRect( 0, 0, 128, 128 ) );
+    }
+
+
+    {
+        KisRectConstIteratorPixel it = overlay->createRectConstIterator(10, 10, 10, 10);
+        while ( !it.isDone() ) {
+
+            const PainterlyOverlayFloatTraits::Cell * cell =
+                reinterpret_cast<const PainterlyOverlayFloatTraits::Cell *>( it.rawData() );
+
+            QVERIFY( cell->wetness == 1.0 );
+            QVERIFY( cell->mixability < 1.2 && cell->mixability > 1.0 );
+
+            ++it;
+        }
+    }
+
+
+}
 
 QTEST_KDEMAIN(KisPainterlyOverlayTester, NoGUI)
 #include "kis_painterly_overlay_test.moc"

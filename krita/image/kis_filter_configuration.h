@@ -90,18 +90,18 @@ public:
      * Set value to the value associated with property name
      * @return false if the specified property did not exist.
      */
-    virtual bool getProperty(const QString & name, QVariant & value);
+    virtual bool getProperty(const QString & name, QVariant & value) const;
 
-    virtual QVariant getProperty(const QString & name);
+    virtual QVariant getProperty(const QString & name) const;
 
-    
-    
-    int getInt(const QString & name, int def = 0);
-    double getDouble(const QString & name, double def = 0.0);
-    bool getBool(const QString & name, bool def = false);
-    QString getString(const QString & name, const QString & def = QString::null);
 
-    QMap<QString, QVariant> getProperties() { return m_properties; }
+
+    int getInt(const QString & name, int def = 0) const;
+    double getDouble(const QString & name, double def = 0.0) const;
+    bool getBool(const QString & name, bool def = false) const;
+    QString getString(const QString & name, const QString & def = QString::null) const;
+
+    QMap<QString, QVariant> getProperties() const { return m_properties; }
 
 
     /**

@@ -54,9 +54,6 @@ void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)( KoColor
     }
 }
 
-
-
-
 void KisIteratorTest::writeBytes( KoColorSpace * colorSpace )
 {
 

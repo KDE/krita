@@ -130,7 +130,7 @@ KisFilterConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterWave::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config)
+void KisFilterWave::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
     Q_ASSERT(src.data() != 0);
     Q_ASSERT(dst.data() != 0);

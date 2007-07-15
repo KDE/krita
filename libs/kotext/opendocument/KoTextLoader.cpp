@@ -892,7 +892,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
                     KoVariableManager *varManager = textObjectManager->variableManager();
                     if (varManager) {
                         if (KoInlineObjectRegistry::instance()->contains("date")) {
-                            KoInlineObjectFactory *dateFactory = KoInlineObjectRegistry::instance()->get("date");
+                            KoInlineObjectFactory *dateFactory = KoInlineObjectRegistry::instance()->value("date");
                             if (dateFactory) {
                                 QDateTime dateTime = QDateTime::fromString(ts.attributeNS(KoXmlNS::text, "date-value"), Qt::ISODate);
                                 KoInlineObject *dateObject = dateFactory->createInlineObject(new KoProperties());
@@ -913,7 +913,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
                     KoVariableManager *varManager = textObjectManager->variableManager();
                     if (varManager) {
                         if (KoInlineObjectRegistry::instance()->contains("date")) {
-                            KoInlineObjectFactory *dateFactory = KoInlineObjectRegistry::instance()->get("date");
+                            KoInlineObjectFactory *dateFactory = KoInlineObjectRegistry::instance()->value("date");
                             if (dateFactory) {
                                 QDateTime dateTime = QDateTime::fromString(ts.attributeNS(KoXmlNS::text, "time-value"), Qt::ISODate);
                                 KoInlineObject *dateObject = dateFactory->createInlineObject(new KoProperties());

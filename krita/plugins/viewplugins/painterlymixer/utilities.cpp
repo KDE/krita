@@ -21,6 +21,7 @@
 */
 
 #include <cmath>
+#include <vector>
 
 #include <QList>
 
@@ -34,6 +35,8 @@
 #include "kis_wetness_mask.h"
 
 #include "utilities.h"
+
+using namespace std;
 
 void addPainterlyOverlays(KisPaintDevice* dev)
 {
@@ -175,8 +178,7 @@ float acoth(float z)
     return 0.5*log((1 + 1/z) / (1 - 1/z));
 }
 
-#include <vector>
-using namespace std;
+#define THICKNESS 1
 
 void Cell::mixColorsUsingKS(const Cell &cell, float force)
 {
@@ -194,12 +196,12 @@ void Cell::mixColorsUsingKS(const Cell &cell, float force)
     V_as = activeVolume(V_s, w_s, force);
 
     vector<float> c(6), s(6), f(3);
-    float a_c, b_c;
-    float a_s, b_s;
-    float a_f, b_f;
+    float a_c, b_c, c_c;
+    float a_s, b_s, c_s;
+    float a_f, b_f, c_f;
     float S_c, S_s, S_f;
     float K_c, K_s, K_f;
-    float c_f, R_f, T_f;
+    float R_f, T_f;
 
     c[0] = (float)cell.red/255;
     c[1] = (float)cell.green/255;
@@ -236,51 +238,49 @@ void Cell::mixColorsUsingKS(const Cell &cell, float force)
 
         c_f = sqrt( ( K_f / S_f ) * ( K_f / S_f + 2 ) );
 
-#define THICKNESS 1
-
         R_f = 1 / ( 1 + ( K_f / S_f ) + c_f * coth( c_f * S_f * THICKNESS ) );
         T_f = c_f * R_f * ( 1 / sinh( c_f * S_f * THICKNESS ) );
 
         f[i] = R_f + T_f;
 
-        if (f[i] < 0) f[i] = 0; if (f[i] > 1) f[i] = 1;
-
 /* Curtis et al. idea
-        c_c[i] = a_c[i] * sinh( b_c[i] * S_c[i] * THICKNESS ) + b_c[i] * cosh( b_c[i] * S_c[i] * THICKNESS );
-        c_s[i] = a_s[i] * sinh( b_s[i] * S_s[i] * THICKNESS ) + b_s[i] * cosh( b_s[i] * S_s[i] * THICKNESS );
+        c_c = a_c * sinh( b_c * S_c * THICKNESS ) + b_c * cosh( b_c * S_c * THICKNESS );
+        c_s = a_s * sinh( b_s * S_s * THICKNESS ) + b_s * cosh( b_s * S_s * THICKNESS );
 
-        a_f[i] = ( V_ac * a_c[i] + V_as * a_s[i] ) / ( V_ac + V_as );
-        b_f[i] = ( V_ac * b_c[i] + V_as * b_s[i] ) / ( V_ac + V_as );
-        c_f[i] = ( V_ac * c_c[i] + V_as * c_s[i] ) / ( V_ac + V_as );
+        a_f = ( V_ac * a_c + V_as * a_s ) / ( V_ac + V_as );
+        b_f = ( V_ac * b_c + V_as * b_s ) / ( V_ac + V_as );
+        c_f = ( V_ac * c_c + V_as * c_s ) / ( V_ac + V_as );
 
-        S_f[i] = ( V_ac * S_c[i] + V_as * S_s[i] ) / ( V_ac + V_as );
+        S_f = ( V_ac * S_c + V_as * S_s ) / ( V_ac + V_as );
 
-        f[i]  = sinh( b_f[i] * S_f[i] * THICKNESS ) / c_f[i];
-        f[i] += b_f[i] / c_f[i];
+        f[i]  = sinh( b_f * S_f * THICKNESS ) / c_f;
+        f[i] += b_f / c_f;
 */
 
 /* Implement mixing as glazing (Curtis et al.)
 
-        R_c[i] = sinh( b_c[i] * S_c[i] ) / c_c[i];
-        T_c[i] = b_c[i] / c_c[i];
+        R_c = sinh( b_c * S_c ) / c_c;
+        T_c = b_c / c_c;
 
-        R_s[i] = sinh( b_s[i] * S_s[i] ) / c_s[i];
-        T_s[i] = b_s[i] / c_s[i];
+        R_s = sinh( b_s * S_s ) / c_s;
+        T_s = b_s / c_s;
 
-        R_f[i] = R_s[i] + ( pow( T_s[i], 2 ) * R_c[i] ) / ( 1 - R_s[i] * R_c[i] );
-        T_f[i] = ( T_s[i] * T_c[i] ) / ( 1 - R_s[i] * R_c[i] );
+        R_f = R_s + ( pow( T_s, 2 ) * R_c ) / ( 1 - R_s * R_c );
+        T_f = ( T_s * T_c ) / ( 1 - R_s * R_c );
 
-        kDebug() << "Channel " << i + 1 << " CANVAS R: " << R_c[i] << " T: " << T_c[i] << endl;
-        kDebug() << "Channel " << i + 1 << " STROKE R: " << R_s[i] << " T: " << T_s[i] << endl;
-        kDebug() << "Channel " << i + 1 << " FINAL  R: " << R_f[i] << " T: " << T_f[i] << endl << "------------------------" << endl;
-
-        f[i] = (R_f[i] + T_f[i]) * 255.0;
+        kDebug() << "Channel " << i + 1 << " CANVAS R: " << R_c << " T: " << T_c << endl;
+        kDebug() << "Channel " << i + 1 << " STROKE R: " << R_s << " T: " << T_s << endl;
+        kDebug() << "Channel " << i + 1 << " FINAL  R: " << R_f << " T: " << T_f << endl << "------------------------" << endl;
 */
+
+        if (f[i] < 0) f[i] = 0; if (f[i] > 1) f[i] = 1;
     }
 
     red = (long) (f[0]*255);
     green = (long) (f[1]*255);
     blue = (long) (f[2]*255);
+
+    updateHlsCmy();
 }
 
 void Cell::mixColorsUsingXyz(const Cell &cell, float force)
@@ -337,6 +337,8 @@ void Cell::mixColorsUsingXyz(const Cell &cell, float force)
     red = (long) ((long)(r_f) < 256 ? r_f : 255);
     green = (long) ((long)(g_f) < 256 ? g_f : 255);
     blue = (long) ((long)(b_f) < 256 ? b_f : 255);
+
+    updateHlsCmy();
 }
 
 void Cell::mixColorsUsingRgb_2(const Cell &cell, float force)

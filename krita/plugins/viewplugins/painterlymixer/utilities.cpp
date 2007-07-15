@@ -97,9 +97,17 @@ float m_rgb_xyz[3][3] = { 0.576700,   0.297361,   0.0270328,
                           0.185556,   0.627355,   0.0706879,
                           0.188212,   0.0752847,  0.991248 };
 
-float m_xyz_rgb[3][3] = {  2.04148,   -0.969258,   0.0134455,
+float m_xyz_rgb[3][3] = {  2.04148,   -0.969258,   0.013446,
                           -0.564977,   1.87599,   -0.118373,
-                          -0.344713,   0.0415557,  1.01527 };
+                          -0.344713,   0.0415557,  1.01527  };
+
+float m_ref_xyz[3][3] = { 0.215017, 1.186732, 0.001164,
+                          0.007658, 0.991915, 0.000426,
+                          1.034589, 0.001704, 0.000000 };
+
+float m_xyz_ref[3][3] = { {    0.00108081, -0.00295319, 0.966365 },
+                          {   -0.656215,    1.79304,    0.123108 },
+                          { 1527.94,    -1827.51,    -304.022    } };
 
 void rgbToXyz(float r, float g, float b, float *x, float *y, float *z)
 {
@@ -113,6 +121,20 @@ void xyzToRgb(float x, float y, float z, float *r, float *g, float *b)
     *r = m_xyz_rgb[0][0] * x + m_xyz_rgb[0][1] * y + m_xyz_rgb[0][2] * z;
     *g = m_xyz_rgb[1][0] * x + m_xyz_rgb[1][1] * y + m_xyz_rgb[1][2] * z;
     *b = m_xyz_rgb[2][0] * x + m_xyz_rgb[2][1] * y + m_xyz_rgb[2][2] * z;
+}
+
+void xyzToRef(float x, float y, float z, float *r1, float *r2, float *r3)
+{
+    *r1 = m_xyz_ref[0][0] * x + m_xyz_ref[0][1] * y + m_xyz_ref[0][2] * z;
+    *r2 = m_xyz_ref[1][0] * x + m_xyz_ref[1][1] * y + m_xyz_ref[1][2] * z;
+    *r3 = m_xyz_ref[2][0] * x + m_xyz_ref[2][1] * y + m_xyz_ref[2][2] * z;
+}
+
+void refToXyz(float r1, float r2, float r3, float *x, float *y, float *z)
+{
+    *x = m_ref_xyz[0][0] * r1 + m_ref_xyz[0][1] * r2 + m_ref_xyz[0][2] * r3;
+    *y = m_ref_xyz[1][0] * r1 + m_ref_xyz[1][1] * r2 + m_ref_xyz[1][2] * r3;
+    *z = m_ref_xyz[2][0] * r1 + m_ref_xyz[2][1] * r2 + m_ref_xyz[2][2] * r3;
 }
 
 float sigmoid(float value)
@@ -212,6 +234,11 @@ void Cell::mixColorsUsingKS(const Cell &cell, float force)
     s[2] = (float)blue/255;
 
     for (int i = 0; i < 3; i++) {
+        if (c[i] == 0.0 && s[i] == 0.0) {
+            f[i] = 0;
+            continue;
+        }
+
         if (c[i] == 1.0) c[i] -= 0.4/255.0;
         if (c[i] == 0.0) c[i] += 0.4/255.0;
         if (s[i] == 1.0) s[i] -= 0.4/255.0;
@@ -219,9 +246,7 @@ void Cell::mixColorsUsingKS(const Cell &cell, float force)
 
         c[i+3] = c[i] - (0.4/255.0)*c[i];
         s[i+3] = s[i] - (0.4/255.0)*s[i];
-    }
 
-    for (int i = 0; i < 3; i++) {
         a_c = 0.5*( c[i] + ( c[i+3] - c[i] + 1) / c[i+3] );
         a_s = 0.5*( s[i] + ( s[i+3] - s[i] + 1) / s[i+3] );
         b_c = sqrt( pow( a_c, 2 ) - 1 );
@@ -274,6 +299,127 @@ void Cell::mixColorsUsingKS(const Cell &cell, float force)
 */
 
         if (f[i] < 0) f[i] = 0; if (f[i] > 1) f[i] = 1;
+    }
+
+    red = (long) (f[0]*255);
+    green = (long) (f[1]*255);
+    blue = (long) (f[2]*255);
+
+    updateHlsCmy();
+}
+
+void Cell::mixColorsUsingKSXyz(const Cell &cell, float force)
+{
+    float V_c, V_s; // Volumes in Canvas and Stroke
+    float w_c, w_s; // Wetness in the Canvas and in the Stroke
+    float V_ac, V_as; // Active Volumes in Canvas and Stroke
+
+    V_c = cell.volume;
+    V_s = volume;
+
+    w_c = cell.wetness;
+    w_s = wetness;
+
+    V_ac = activeVolume(V_c, w_c, force);
+    V_as = activeVolume(V_s, w_s, force);
+
+    float c[6], s[6], f[3];
+    float a_c, b_c, c_c;
+    float a_s, b_s, c_s;
+    float a_f, b_f, c_f;
+    float S_c, S_s, S_f;
+    float K_c, K_s, K_f;
+    float R_f, T_f;
+
+    c[0] = (float)cell.red/255;
+    c[1] = (float)cell.green/255;
+    c[2] = (float)cell.blue/255;
+
+    s[0] = (float)red/255;
+    s[1] = (float)green/255;
+    s[2] = (float)blue/255;
+
+    rgbToXyz(c[0], c[1], c[2], c+0, c+1, c+2);
+    xyzToRef(c[0], c[1], c[2], c+0, c+1, c+2);
+    rgbToXyz(s[0], s[1], s[2], s+0, s+1, s+2);
+    xyzToRef(s[0], s[1], s[2], s+0, s+1, s+2);
+
+    for (int i = 0; i < 3; i++) {
+        if (c[i] == 0.0 && s[i] == 0.0) {
+            f[i] = 0;
+            continue;
+        }
+
+        if (c[i] > 1.0) c[i] = 1.0;
+        if (c[i] < 0.0) c[i] = 0.0;
+        if (s[i] > 1.0) s[i] = 1.0;
+        if (s[i] < 0.0) s[i] = 0.0;
+
+        if (c[i] == 1.0) c[i] -= 0.4/255.0;
+        if (c[i] == 0.0) c[i] += 0.4/255.0;
+        if (s[i] == 1.0) s[i] -= 0.4/255.0;
+        if (s[i] == 0.0) s[i] += 0.4/255.0;
+
+        c[i+3] = c[i] - (0.4/255.0)*c[i];
+        s[i+3] = s[i] - (0.4/255.0)*s[i];
+
+        a_c = 0.5*( c[i] + ( c[i+3] - c[i] + 1) / c[i+3] );
+        a_s = 0.5*( s[i] + ( s[i+3] - s[i] + 1) / s[i+3] );
+        b_c = sqrt( pow( a_c, 2 ) - 1 );
+        b_s = sqrt( pow( a_s, 2 ) - 1 );
+
+        S_c = ( 1 / b_c ) * acoth( ( pow( b_c, 2 ) - ( a_c - c[i] ) * ( a_c - 1 ) ) / ( b_c * ( 1 - c[i] ) ) );
+        S_s = ( 1 / b_s ) * acoth( ( pow( b_s, 2 ) - ( a_s - s[i] ) * ( a_s - 1 ) ) / ( b_s * ( 1 - s[i] ) ) );
+
+        K_c = S_c * ( a_c - 1 );
+        K_s = S_s * ( a_s - 1 );
+
+        S_f = ( V_ac * S_c + V_as * S_s ) / ( V_ac + V_as );
+        K_f = ( V_ac * K_c + V_as * K_s ) / ( V_ac + V_as );
+
+        c_f = sqrt( ( K_f / S_f ) * ( K_f / S_f + 2 ) );
+
+        R_f = 1 / ( 1 + ( K_f / S_f ) + c_f * coth( c_f * S_f * THICKNESS ) );
+        T_f = c_f * R_f * ( 1 / sinh( c_f * S_f * THICKNESS ) );
+
+        f[i] = R_f + T_f;
+
+/* Curtis et al. idea
+        c_c = a_c * sinh( b_c * S_c * THICKNESS ) + b_c * cosh( b_c * S_c * THICKNESS );
+        c_s = a_s * sinh( b_s * S_s * THICKNESS ) + b_s * cosh( b_s * S_s * THICKNESS );
+
+        a_f = ( V_ac * a_c + V_as * a_s ) / ( V_ac + V_as );
+        b_f = ( V_ac * b_c + V_as * b_s ) / ( V_ac + V_as );
+        c_f = ( V_ac * c_c + V_as * c_s ) / ( V_ac + V_as );
+
+        S_f = ( V_ac * S_c + V_as * S_s ) / ( V_ac + V_as );
+
+        f[i]  = sinh( b_f * S_f * THICKNESS ) / c_f;
+        f[i] += b_f / c_f;
+*/
+
+/* Implement mixing as glazing (Curtis et al.)
+
+        R_c = sinh( b_c * S_c ) / c_c;
+        T_c = b_c / c_c;
+
+        R_s = sinh( b_s * S_s ) / c_s;
+        T_s = b_s / c_s;
+
+        R_f = R_s + ( pow( T_s, 2 ) * R_c ) / ( 1 - R_s * R_c );
+        T_f = ( T_s * T_c ) / ( 1 - R_s * R_c );
+
+        kDebug() << "Channel " << i + 1 << " CANVAS R: " << R_c << " T: " << T_c << endl;
+        kDebug() << "Channel " << i + 1 << " STROKE R: " << R_s << " T: " << T_s << endl;
+        kDebug() << "Channel " << i + 1 << " FINAL  R: " << R_f << " T: " << T_f << endl << "------------------------" << endl;
+*/
+    }
+
+    refToXyz(f[0], f[1], f[2], f+0, f+1, f+2);
+    xyzToRgb(f[0], f[1], f[2], f+0, f+1, f+2);
+
+    for (int j = 0; j < 3; j++) {
+        if (f[j] < 0) f[j] = 0; if (f[j] > 1) f[j] = 1;
     }
 
     red = (long) (f[0]*255);

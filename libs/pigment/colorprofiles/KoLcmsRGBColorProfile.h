@@ -54,7 +54,9 @@ public:
 
      /**
      * Return the chromaticities of the primaries and whitepoint that the
-     * profile was created with.
+     * profile was created with. These will differ slightly from those obtained
+     * by chromaticitiesFromProfile() due to lower precision and rounding when
+     * extracting them from the actual icc profile.
      */
     Chromaticities chromaticities() const;
 

@@ -38,11 +38,25 @@ public:
 
     /**
      * Create an RGB profile for the colorspace defined by a set of chromaticities.
+     * If a name is not specified, a default name will be generated based on the
+     * chromaticities and gamma.
      *
      * @param chromaticities the chromaticities of the primaries and whitepoint
      * @param gamma gamma value for the red, green and blue transfer functions
+     * @param name the profile name
      */
-    KoLcmsRGBColorProfile(const Chromaticities &chromaticities, double gamma);
+    KoLcmsRGBColorProfile(const Chromaticities &chromaticities, double gamma, QString name = QString());
+
+    /**
+     * Destructor.
+     */
+    ~KoLcmsRGBColorProfile();
+
+     /**
+     * Return the chromaticities of the primaries and whitepoint that the
+     * profile was created with.
+     */
+    Chromaticities chromaticities() const;
 
     /**
      * Extract the chromaticities of the primaries and whitepoint of an RGB 
@@ -52,13 +66,9 @@ public:
      */
     static Chromaticities chromaticitiesFromProfile(cmsHPROFILE profile);
 
-    /**
-     * Extract the chromaticities of the primaries and whitepoint of an RGB 
-     * profile.
-     * 
-     * @param profile the RGB profile
-     */
-    static Chromaticities chromaticitiesFromProfile(KoLcmsRGBColorProfile *profile);
+private:
+    class Private;
+    Private *d;
 };
 
 #endif // KOLCMSRGBCOLORPROFILE_H

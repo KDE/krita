@@ -21,7 +21,18 @@
 
 #include <kdebug.h>
 
-KoLcmsRGBColorProfile::KoLcmsRGBColorProfile(const Chromaticities &chromaticities, double gamma)
+class KoLcmsRGBColorProfile::Private
+{
+public:
+    Private()
+    {
+    }
+
+    Chromaticities chromaticities;
+};
+
+KoLcmsRGBColorProfile::KoLcmsRGBColorProfile(const Chromaticities &chromaticities, double gamma, QString profileName)
+    : d(new Private())
 {
     const int numGammaTableEntries = 256;
     LPGAMMATABLE gammaTable = cmsBuildGamma(numGammaTableEntries, gamma);
@@ -36,9 +47,44 @@ KoLcmsRGBColorProfile::KoLcmsRGBColorProfile(const Chromaticities &chromaticitie
     cmsHPROFILE profile = cmsCreateRGBProfile(const_cast<cmsCIExyY *>(&chromaticities.whitePoint), 
                                               const_cast<cmsCIExyYTRIPLE *>(&chromaticities.primaries), 
                                               transferFunctions);
+
+    if (profileName.isEmpty()) {
+        profileName = QString("lcms virtual RGB profile - R(%1, %2) G(%3, %4) B(%5, %6) W(%7, %8) gamma %9")
+                                   .arg(chromaticities.primaries.Red.x)
+                                   .arg(chromaticities.primaries.Red.y)
+                                   .arg(chromaticities.primaries.Green.x)
+                                   .arg(chromaticities.primaries.Green.y)
+                                   .arg(chromaticities.primaries.Blue.x)
+                                   .arg(chromaticities.primaries.Blue.y)
+                                   .arg(chromaticities.whitePoint.x)
+                                   .arg(chromaticities.whitePoint.y)
+                                   .arg(gamma);
+    }
+
+    // icSigProfileDescriptionTag is the compulsory tag and is the profile name
+    // displayed by other applications.
+    cmsAddTag(profile, icSigProfileDescriptionTag, profileName.toLatin1());
+
+    cmsAddTag(profile, icSigDeviceModelDescTag, profileName.toLatin1());
+
+    // Clear the default manufacturer's tag that is set to "(lcms internal)" 
+    cmsAddTag(profile, icSigDeviceMfgDescTag, "");
+
     cmsFreeGamma(gammaTable);
 
     setProfile(profile);
+
+    d->chromaticities = chromaticities;
+}
+
+KoLcmsRGBColorProfile::~KoLcmsRGBColorProfile()
+{
+    delete d;
+}
+
+KoLcmsRGBColorProfile::Chromaticities KoLcmsRGBColorProfile::chromaticities() const
+{
+    return d->chromaticities;
 }
 
 static cmsCIExyY RGB2xyY(cmsHPROFILE RGBProfile, double red, double green, double blue)
@@ -102,10 +148,5 @@ KoLcmsRGBColorProfile::Chromaticities KoLcmsRGBColorProfile::chromaticitiesFromP
     chromaticities.whitePoint = RGB2xyY(profile, 1.0f, 1.0f, 1.0f);
 
     return chromaticities;
-}
-
-KoLcmsRGBColorProfile::Chromaticities KoLcmsRGBColorProfile::chromaticitiesFromProfile(KoLcmsRGBColorProfile *profile)
-{
-    return chromaticitiesFromProfile(profile->lcmsProfile());
 }
 

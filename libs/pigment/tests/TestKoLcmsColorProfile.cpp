@@ -68,8 +68,10 @@ void TestKoLcmsColorProfile::testProfileCreationFromChromaticities()
 
     QCOMPARE(profile->colorSpaceSignature(), icSigRgbData);
 
+    cmsHPROFILE lcmsProfile = profile->lcmsProfile();
+
     KoLcmsRGBColorProfile::Chromaticities profileChromaticities = 
-        KoLcmsRGBColorProfile::chromaticitiesFromProfile(profile);
+        KoLcmsRGBColorProfile::chromaticitiesFromProfile(lcmsProfile);
 
     QCOMPARE(testRounding(profileChromaticities.primaries.Red.x),   testRounding(chromaticities.primaries.Red.x));
     QCOMPARE(testRounding(profileChromaticities.primaries.Red.y),   testRounding(chromaticities.primaries.Red.y));
@@ -80,8 +82,6 @@ void TestKoLcmsColorProfile::testProfileCreationFromChromaticities()
     QCOMPARE(testRounding(profileChromaticities.whitePoint.x),      testRounding(chromaticities.whitePoint.x));
     QCOMPARE(testRounding(profileChromaticities.whitePoint.y),      testRounding(chromaticities.whitePoint.y));
 
-    cmsHPROFILE lcmsProfile = profile->lcmsProfile();
-
     LPGAMMATABLE redGamma = cmsReadICCGamma(lcmsProfile, icSigRedTRCTag);
     LPGAMMATABLE greenGamma = cmsReadICCGamma(lcmsProfile, icSigGreenTRCTag);
     LPGAMMATABLE blueGamma = cmsReadICCGamma(lcmsProfile, icSigBlueTRCTag);
@@ -89,6 +89,39 @@ void TestKoLcmsColorProfile::testProfileCreationFromChromaticities()
     QCOMPARE(testRounding(cmsEstimateGamma(redGamma)), gamma);
     QCOMPARE(testRounding(cmsEstimateGamma(greenGamma)), gamma);
     QCOMPARE(testRounding(cmsEstimateGamma(blueGamma)), gamma);
+
+    QString expectedProfileName = QString("lcms virtual RGB profile - R(%1, %2) G(%3, %4) B(%5, %6) W(%7, %8) gamma %9")
+                                .arg(chromaticities.primaries.Red.x)
+                                .arg(chromaticities.primaries.Red.y)
+                                .arg(chromaticities.primaries.Green.x)
+                                .arg(chromaticities.primaries.Green.y)
+                                .arg(chromaticities.primaries.Blue.x)
+                                .arg(chromaticities.primaries.Blue.y)
+                                .arg(chromaticities.whitePoint.x)
+                                .arg(chromaticities.whitePoint.y)
+                                .arg(gamma);
+
+    QCOMPARE(profile->name(), expectedProfileName);
+    QCOMPARE(QString(cmsTakeProductDesc(lcmsProfile)), expectedProfileName);
+
+    profileChromaticities = profile->chromaticities();
+
+    QCOMPARE(profileChromaticities.primaries.Red.x,   chromaticities.primaries.Red.x);
+    QCOMPARE(profileChromaticities.primaries.Red.y,   chromaticities.primaries.Red.y);
+    QCOMPARE(profileChromaticities.primaries.Green.x, chromaticities.primaries.Green.x);
+    QCOMPARE(profileChromaticities.primaries.Green.y, chromaticities.primaries.Green.y);
+    QCOMPARE(profileChromaticities.primaries.Blue.x,  chromaticities.primaries.Blue.x);
+    QCOMPARE(profileChromaticities.primaries.Blue.y,  chromaticities.primaries.Blue.y);
+    QCOMPARE(profileChromaticities.whitePoint.x,      chromaticities.whitePoint.x);
+    QCOMPARE(profileChromaticities.whitePoint.y,      chromaticities.whitePoint.y);
+
+    const QString testProfileName = "Test Profile Name";
+
+    profile = new KoLcmsRGBColorProfile(chromaticities, gamma, testProfileName);
+    lcmsProfile = profile->lcmsProfile();
+
+    QCOMPARE(profile->name(), testProfileName);
+    QCOMPARE(QString(cmsTakeProductDesc(lcmsProfile)), testProfileName);
 }
 
 QTEST_MAIN(TestKoLcmsColorProfile)

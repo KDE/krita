@@ -107,7 +107,7 @@ namespace {
 
                     alphaTimesWeight *= *weights;
 
-                    for(int i = 0; i < _CSTraits::channels_nb; i++)
+                    for(int i = 0; i < (int)_CSTraits::channels_nb; i++)
                     {
                         if (i != _CSTraits::alpha_pos) {
                             totals[i] += color[i] * alphaTimesWeight;
@@ -130,7 +130,7 @@ namespace {
 
                 if (totalAlpha > 0) {
 
-                    for(int i = 0; i < _CSTraits::channels_nb; i++)
+                    for(int i = 0; i < (int)_CSTraits::channels_nb; i++)
                     {
                         if (i != _CSTraits::alpha_pos) {
 
@@ -203,7 +203,7 @@ namespace {
                     // ways. (BSAR)
 
                     int j = channelFlags.size();
-                    Q_ASSERT( j == _CSTraits::channels_nb );
+                    Q_ASSERT( j == (int)_CSTraits::channels_nb );
 
                     for ( int i = 0; i < j; ++i ) {
                         if ( channelFlags.testBit( i ) ) {

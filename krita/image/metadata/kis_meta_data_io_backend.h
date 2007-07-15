@@ -1,0 +1,94 @@
+/*
+ *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#ifndef _KIS_META_DATA_IO_BACKEND_H_
+#define _KIS_META_DATA_IO_BACKEND_H_
+
+#include <krita_export.h>
+
+#include <KoGenericRegistry.h>
+
+class QIODevice;
+
+namespace KisMetaData {
+    class Store;
+    /**
+     * This is a the interface for input or output backend to KisMetaData.
+     * For instance, to add support to exif or xmp or iptc or dublin core
+     * or anything else, it is needed to extend this interface.
+     */
+    class KRITAIMAGE_EXPORT IOBackend {
+        public:
+            /**
+             * Tell wether the backend input/ouput from/to binary data
+             * or text (XML or RDF) data.
+             */
+            enum BackendType {
+                Binary,
+                Text
+            };
+        public:
+            virtual ~IOBackend() {}
+            virtual QString id() const = 0;
+            virtual QString name() const = 0;
+            /**
+             * @return the type of the backend
+             */
+            virtual BackendType type() const = 0;
+            /**
+             * @return tell if this backend support saving
+             */
+            virtual bool supportSaving() const = 0;
+            /**
+             * @param store the list of metadata to save
+             * @param ioDevice the device to where the metadata will be saved
+             * @return true if the save was successfull
+             */
+            virtual bool saveTo(Store* store, QIODevice* ioDevice) const = 0;
+            /**
+             * @param store the list of metadata
+             * @return true if this backend is capable of saving all the metadata
+             * of the store
+             */
+            virtual bool canSaveAllEntries(Store* store) const = 0;
+            /**
+             * @return true if this backend support loading
+             */
+            virtual bool supportLoading() const = 0;
+            /**
+             * @param store the list of metadata to load
+             * @param ioDevice the device from where the metadata will be loaded
+             * @return true if the load was successfull
+             */
+            virtual bool loadFrom(Store* store, QIODevice* ioDevice) const = 0;
+    };
+
+    class KRITAIMAGE_EXPORT IOBackendRegistry : public KoGenericRegistry<IOBackend*> {
+        struct Private;
+        private:
+            IOBackendRegistry();
+        public:
+            static IOBackendRegistry* instance();
+        private:
+            Private* const d;
+    };
+ 
+}
+
+
+#endif

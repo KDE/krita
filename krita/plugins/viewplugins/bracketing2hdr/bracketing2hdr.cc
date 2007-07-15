@@ -46,11 +46,9 @@
 #include "kis_view2.h"
 #include "kis_layer_manager.h"
 
-/*
 #include "kis_meta_data_schema.h"
 #include "kis_meta_data_store.h"
 #include "kis_meta_data_value.h"
-*/
 
 #include "ui_wdgbracketing2hdr.h"
 
@@ -107,7 +105,6 @@ void Bracketing2HDRPlugin::addImage(const QString& filename)
 //         kDebug(41006) << "Image " << filename << " has fail to load." << endl;
         return;
     }
-#if 0
     KisMetaData::Store* exifInfo = projection->metaData();
     double exposure = 0.;
     if(exifInfo->containsEntry( KisMetaData::Schema::EXIFSchemaUri, "ExposureTime" ))
@@ -135,7 +132,6 @@ void Bracketing2HDRPlugin::addImage(const QString& filename)
     m_wdgBracketing2HDR->tableWidgetImages->setItem(index, 1, new QTableWidgetItem(QString::number(exposure)));
     m_wdgBracketing2HDR->tableWidgetImages->setItem(index, 2, new QTableWidgetItem(QString::number(aperture)));
     m_wdgBracketing2HDR->tableWidgetImages->setItem(index, 3, new QTableWidgetItem(QString::number(iso)));
-#endif
 #endif
 }
 

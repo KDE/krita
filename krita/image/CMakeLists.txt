@@ -97,7 +97,11 @@ set(kritaimage_LIB_SRCS
    kis_viscosity_mask.cc
    kis_volume_mask.cc
    kis_wetness_mask.cc 
-)
+   metadata/kis_meta_data_store.cc
+   metadata/kis_meta_data_value.cc
+   metadata/kis_meta_data_schema.cc
+   metadata/kis_meta_data_io_backend.cc
+   metadata/kis_meta_data_entry.cc )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})

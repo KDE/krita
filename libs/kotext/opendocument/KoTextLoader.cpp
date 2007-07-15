@@ -39,6 +39,12 @@
 #include <KoShapeLoadingContext.h>
 #include <KoImageData.h>
 #include <KoTextAnchor.h>
+#include <KoTextDocumentLayout.h>
+#include <KoVariableManager.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoInlineObjectRegistry.h>
+#include <KoProperties.h>
+#include <KoVariable.h>
 
 #include "../styles/KoStyleManager.h"
 #include "../styles/KoParagraphStyle.h"
@@ -844,10 +850,13 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
         else if ( isTextNS && localName == "a" ) // text:a
         {
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
-            QTextCharFormat linkCf = cursor.charFormat(); // and copy it to alter it
+            QTextCharFormat linkCf(cf); // and copy it to alter it
             linkCf.setAnchor(true);
-            linkCf.setForeground(Qt::blue);
             linkCf.setAnchorHref(ts.attributeNS(KoXmlNS::xlink, "href"));
+            QBrush foreground = linkCf.foreground();
+            foreground.setColor(Qt::blue);
+            foreground.setStyle(Qt::Dense1Pattern);
+            linkCf.setForeground(foreground);
             linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
             linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
             linkCf.setFontItalic(true);
@@ -873,6 +882,48 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
         else if ( isDrawNS && localName == "frame" ) // draw:frame
         {
             loadFrame(context, ts, cursor);
+        }
+        else if ( isTextNS && localName == "date" )
+        {
+            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (cursor.block().document()->documentLayout());
+            if ( layout ) {
+                KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                if ( textObjectManager ) {
+                    KoVariableManager *varManager = textObjectManager->variableManager();
+                    if (varManager) {
+                        if (KoInlineObjectRegistry::instance()->contains("date")) {
+                            KoInlineObjectFactory *dateFactory = KoInlineObjectRegistry::instance()->get("date");
+                            if (dateFactory) {
+                                QDateTime dateTime = QDateTime::fromString(ts.attributeNS(KoXmlNS::text, "date-value"), Qt::ISODate);
+                                KoInlineObject *dateObject = dateFactory->createInlineObject(new KoProperties());
+                                ((KoVariable *)dateObject)->setValue(dateTime.date().toString(Qt::LocaleDate));
+                                textObjectManager->insertInlineObject(cursor, dateObject);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if ( isTextNS && localName == "time" )
+        {
+            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (cursor.block().document()->documentLayout());
+            if ( layout ) {
+                KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                if ( textObjectManager ) {
+                    KoVariableManager *varManager = textObjectManager->variableManager();
+                    if (varManager) {
+                        if (KoInlineObjectRegistry::instance()->contains("date")) {
+                            KoInlineObjectFactory *dateFactory = KoInlineObjectRegistry::instance()->get("date");
+                            if (dateFactory) {
+                                QDateTime dateTime = QDateTime::fromString(ts.attributeNS(KoXmlNS::text, "time-value"), Qt::ISODate);
+                                KoInlineObject *dateObject = dateFactory->createInlineObject(new KoProperties());
+                                ((KoVariable *)dateObject)->setValue(dateTime.time().toString(Qt::LocaleDate));
+                                textObjectManager->insertInlineObject(cursor, dateObject);
+                            }
+                        }
+                    }
+                }
+            }
         }
         else
         {

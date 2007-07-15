@@ -63,12 +63,13 @@ KoLcmsRGBColorProfile::KoLcmsRGBColorProfile(const Chromaticities &chromaticitie
 
     // icSigProfileDescriptionTag is the compulsory tag and is the profile name
     // displayed by other applications.
-    cmsAddTag(profile, icSigProfileDescriptionTag, profileName.toLatin1());
+    cmsAddTag(profile, icSigProfileDescriptionTag, profileName.toLatin1().data());
 
-    cmsAddTag(profile, icSigDeviceModelDescTag, profileName.toLatin1());
+    cmsAddTag(profile, icSigDeviceModelDescTag, profileName.toLatin1().data());
 
     // Clear the default manufacturer's tag that is set to "(lcms internal)" 
-    cmsAddTag(profile, icSigDeviceMfgDescTag, "");
+    QByteArray ba("");
+    cmsAddTag(profile, icSigDeviceMfgDescTag, ba.data());
 
     cmsFreeGamma(gammaTable);
 

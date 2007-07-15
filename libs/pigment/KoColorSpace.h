@@ -358,7 +358,7 @@ public:
     quint8 *allocPixelBuffer(quint32 numPixels) const;
 
     /**
-     * Convert the specified data to Lab. All colorspaces are guaranteed to support this
+     * Convert the specified data to Lab (D50). All colorspaces are guaranteed to support this
      *
      * @param src the source data
      * @param dst the destination data
@@ -367,7 +367,7 @@ public:
     virtual void toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const = 0;
 
     /**
-     * Convert the specified data from Lab. to this colorspace. All colorspaces are
+     * Convert the specified data from Lab (D50). to this colorspace. All colorspaces are
      * guaranteed to support this.
      *
      * @param src the pixels in 16 bit lab format
@@ -377,7 +377,7 @@ public:
     virtual void fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const = 0;
 
     /**
-     * Convert the specified data to Rgb 16 bits. All colorspaces are guaranteed to support this
+     * Convert the specified data to sRGB 16 bits. All colorspaces are guaranteed to support this
      *
      * @param src the source data
      * @param dst the destination data
@@ -386,7 +386,7 @@ public:
     virtual void toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const =0;
 
     /**
-     * Convert the specified data from Rgb 16 bits. to this colorspace. All colorspaces are
+     * Convert the specified data from sRGB 16 bits. to this colorspace. All colorspaces are
      * guaranteed to support this.
      *
      * @param src the pixels in 16 bit rgb format

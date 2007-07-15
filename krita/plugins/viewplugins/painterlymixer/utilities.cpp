@@ -165,6 +165,11 @@ void Cell::mixProperties(const Cell &cell, float force)
     volume = V_f;
 }
 
+float coth(float z)
+{
+    return ( cosh(z) / sinh(z) );
+}
+
 float acoth(float z)
 {
     return 0.5*log((1 + 1/z) / (1 - 1/z));
@@ -189,10 +194,12 @@ void Cell::mixColorsUsingKS(const Cell &cell, float force)
     V_as = activeVolume(V_s, w_s, force);
 
     vector<float> c(6), s(6), f(3);
-    vector<float> a_c(3), b_c(3), c_c(3);
-    vector<float> a_s(3), b_s(3), c_s(3);
-    vector<float> a_f(3), b_f(3), c_f(3);
-    vector<float> S_c(3), S_s(3), S_f(3);
+    float a_c, b_c;
+    float a_s, b_s;
+    float a_f, b_f;
+    float S_c, S_s, S_f;
+    float K_c, K_s, K_f;
+    float c_f, R_f, T_f;
 
     c[0] = (float)cell.red/255;
     c[1] = (float)cell.green/255;
@@ -208,21 +215,37 @@ void Cell::mixColorsUsingKS(const Cell &cell, float force)
         if (s[i] == 1.0) s[i] -= 0.4/255.0;
         if (s[i] == 0.0) s[i] += 0.4/255.0;
 
-        c[i+3] = c[i] - (2.0/100.0)*c[i];
-        s[i+3] = s[i] - (2.0/100.0)*s[i];
+        c[i+3] = c[i] - (0.4/255.0)*c[i];
+        s[i+3] = s[i] - (0.4/255.0)*s[i];
     }
 
     for (int i = 0; i < 3; i++) {
-        a_c[i] = 0.5*( c[i] + ( c[i+3] - c[i] + 1) / c[i+3] );
-        a_s[i] = 0.5*( s[i] + ( s[i+3] - s[i] + 1) / s[i+3] );
-        b_c[i] = sqrt( pow( a_c[i], 2 ) - 1 );
-        b_s[i] = sqrt( pow( a_s[i], 2 ) - 1 );
+        a_c = 0.5*( c[i] + ( c[i+3] - c[i] + 1) / c[i+3] );
+        a_s = 0.5*( s[i] + ( s[i+3] - s[i] + 1) / s[i+3] );
+        b_c = sqrt( pow( a_c, 2 ) - 1 );
+        b_s = sqrt( pow( a_s, 2 ) - 1 );
 
-        S_c[i] = ( 1.0 / b_c[i] ) * acoth( ( pow( b_c[i], 2 ) - ( a_c[i] - c[i] ) * ( a_c[i] - 1 ) ) / ( b_c[i] * ( 1 - c[i] ) ) );
-        S_s[i] = ( 1.0 / b_s[i] ) * acoth( ( pow( b_s[i], 2 ) - ( a_s[i] - s[i] ) * ( a_s[i] - 1 ) ) / ( b_s[i] * ( 1 - s[i] ) ) );
+        S_c = ( 1 / b_c ) * acoth( ( pow( b_c, 2 ) - ( a_c - c[i] ) * ( a_c - 1 ) ) / ( b_c * ( 1 - c[i] ) ) );
+        S_s = ( 1 / b_s ) * acoth( ( pow( b_s, 2 ) - ( a_s - s[i] ) * ( a_s - 1 ) ) / ( b_s * ( 1 - s[i] ) ) );
 
-#define THICKNESS 0.8
+        K_c = S_c * ( a_c - 1 );
+        K_s = S_s * ( a_s - 1 );
 
+        S_f = ( V_ac * S_c + V_as * S_s ) / ( V_ac + V_as );
+        K_f = ( V_ac * K_c + V_as * K_s ) / ( V_ac + V_as );
+
+        c_f = sqrt( ( K_f / S_f ) * ( K_f / S_f + 2 ) );
+
+#define THICKNESS 1
+
+        R_f = 1 / ( 1 + ( K_f / S_f ) + c_f * coth( c_f * S_f * THICKNESS ) );
+        T_f = c_f * R_f * ( 1 / sinh( c_f * S_f * THICKNESS ) );
+
+        f[i] = R_f + T_f;
+
+        if (f[i] < 0) f[i] = 0; if (f[i] > 1) f[i] = 1;
+
+/* Curtis et al. idea
         c_c[i] = a_c[i] * sinh( b_c[i] * S_c[i] * THICKNESS ) + b_c[i] * cosh( b_c[i] * S_c[i] * THICKNESS );
         c_s[i] = a_s[i] * sinh( b_s[i] * S_s[i] * THICKNESS ) + b_s[i] * cosh( b_s[i] * S_s[i] * THICKNESS );
 
@@ -233,12 +256,11 @@ void Cell::mixColorsUsingKS(const Cell &cell, float force)
         S_f[i] = ( V_ac * S_c[i] + V_as * S_s[i] ) / ( V_ac + V_as );
 
         f[i]  = sinh( b_f[i] * S_f[i] * THICKNESS ) / c_f[i];
-//         f[i] += b_f[i] / c_f[i];
+        f[i] += b_f[i] / c_f[i];
+*/
 
-        if (f[i] < 0) f[i] = 0; if (f[i] > 1) f[i] = 1;
+/* Implement mixing as glazing (Curtis et al.)
 
-        /*
-        Implement mixing as glazing
         R_c[i] = sinh( b_c[i] * S_c[i] ) / c_c[i];
         T_c[i] = b_c[i] / c_c[i];
 

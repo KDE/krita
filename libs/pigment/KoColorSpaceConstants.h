@@ -20,6 +20,9 @@
 #ifndef _KO_COLOR_SPACE_CONSTANTS_H_
 #define _KO_COLOR_SPACE_CONSTANTS_H_
 
+#include <climits>
+#include <qglobal.h>
+
 // TODO: find a better place or way to define those stuff
 const quint8 OPACITY_TRANSPARENT = 0;
 const quint8 OPACITY_OPAQUE = UCHAR_MAX;

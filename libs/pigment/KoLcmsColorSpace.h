@@ -418,7 +418,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent);
         }
 
-        virtual KoColorTransformation *createBrightnessContrastAdjustment(quint16 *transferValues) const
+        virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const
         {
             if (!d->profile) return 0;
 
@@ -500,7 +500,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             return adj;
         }
 
-        virtual KoColorTransformation *createPerChannelAdjustment(quint16 **transferValues) const
+        virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const*transferValues) const
         {
             if (!d->profile) return 0;
 

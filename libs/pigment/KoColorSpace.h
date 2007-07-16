@@ -67,7 +67,7 @@ public:
      * @param nColors the number of pixels in the colors array
      * @param dst the destination pixel
      */
-    virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const = 0;
+    virtual void mixColors(const quint8 * const*colors, const quint8 *weights, quint32 nColors, quint8 *dst) const = 0;
 };
 
 /**
@@ -96,7 +96,7 @@ public:
      * This function is thread-safe.
      *
      */
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors, const QBitArray & channelFlags) const = 0;
+    virtual void convolveColors(const quint8* const* colors, const qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors, const QBitArray & channelFlags) const = 0;
 };
 
 /**
@@ -458,7 +458,7 @@ public:
      * transferValues is a 256 bins array with values from 0 to 0xFFFF
      * This function is thread-safe, but you need to create one KoColorTransformation per thread.
      */
-    virtual KoColorTransformation *createBrightnessContrastAdjustment(quint16 *transferValues) const = 0;
+    virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const = 0;
 
     /**
      * Create an adjustment object for desaturating
@@ -471,7 +471,7 @@ public:
      * transferValues is an array of colorChannelCount number of 256 bins array with values from 0 to 0xFFFF
      * This function is thread-safe, but you need to create one KoColorTransformation per thread.
      */
-    virtual KoColorTransformation *createPerChannelAdjustment(quint16 **transferValues) const = 0;
+    virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const* transferValues) const = 0;
 
     /**
      * Darken all color channels with the given amount. If compensate is true,

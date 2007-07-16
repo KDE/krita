@@ -129,7 +129,7 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             _fallback_::toRgbA16(this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
         }
 
-        virtual KoColorTransformation *createBrightnessContrastAdjustment(quint16 *transferValues) const
+        virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const
         {
           return _fallback_::createTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createBrightnessContrastAdjustment( transferValues ));
         }
@@ -140,7 +140,7 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
           return _fallback_::createTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createDesaturateAdjustment());
         }
 
-        virtual KoColorTransformation *createPerChannelAdjustment(quint16 **transferValues) const
+        virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const* transferValues) const
         {
           return _fallback_::createTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createPerChannelAdjustment( transferValues ));
         }

@@ -35,7 +35,7 @@ class KisGenericColorspace : public KoColorSpace {
         public:
             KisGenericColorspaceConvolutionOpImpl() { }
             virtual ~KisGenericColorspaceConvolutionOpImpl() { }
-            virtual void convolveColors(quint8** colors, qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors, const QBitArray & channelFlags) const
+            virtual void convolveColors(const quint8* const* colors, const qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors, const QBitArray & channelFlags) const
             {
                 _type totals[ _nbchannels ];
                 for(uint i = 0; i < _nbchannels; i++)
@@ -43,7 +43,7 @@ class KisGenericColorspace : public KoColorSpace {
                     totals[ i ] = 0;
                 }
     
-                _type** colorsT = reinterpret_cast<_type**>( colors );
+                const _type* const* colorsT = reinterpret_cast<const _type* const*>( colors );
                 _type* dstT = reinterpret_cast<_type*>( dst );
                 
                 while (nColors--)
@@ -182,7 +182,7 @@ class KisGenericColorspace : public KoColorSpace {
                 dstT[ i ] = totals[ i ] / factor + offset ;
             }
         }
-        virtual KoColorTransformation *createBrightnessContrastAdjustment(quint16 *) const
+        virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *) const
         {
             return 0;
         }
@@ -202,7 +202,7 @@ class KisGenericColorspace : public KoColorSpace {
             return 0;
         }
 
-        virtual KoColorTransformation *createPerChannelAdjustment(quint16 **) const
+        virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const*) const
         {
             return 0;
         }

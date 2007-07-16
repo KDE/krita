@@ -191,7 +191,7 @@ void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
     }
 
     KisPerChannelFilterConfiguration* configBC =
-            static_cast<const KisPerChannelFilterConfiguration*>(config);
+            const_cast<KisPerChannelFilterConfiguration*>(static_cast<const KisPerChannelFilterConfiguration*>(config)); // Somehow, this shouldn't happen
     if (configBC->nTransfers != src->colorSpace()->colorChannelCount()) {
         // We got an illegal number of colorchannels.KisFilter
         return;

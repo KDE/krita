@@ -88,3 +88,12 @@ kde4_add_unit_test(Kis_Painterly_Overlay_Test TESTNAME krita-image-Painterly-Ove
 target_link_libraries(Kis_Painterly_Overlay_Test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
+
+set(kis_selection_test_SRCS kis_selection_test.cpp )
+
+
+kde4_add_unit_test(Kis_Selection_Test TESTNAME krita-image-Selection-Test ${kis_selection_test_SRCS})
+
+target_link_libraries(Kis_Selection_Test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############

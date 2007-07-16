@@ -34,6 +34,7 @@ set(kritaimage_LIB_SRCS
    kis_qimage_mask.cc
    kis_autobrush_resource.cc
    kis_autogradient_resource.cc
+   kis_basic_math_toolbox.cpp
    kis_boundary.cc
    kis_brush.cc
    kis_convolution_painter.cc
@@ -57,6 +58,7 @@ set(kritaimage_LIB_SRCS
    kis_paint_layer.cc
    kis_meta_registry.cc
    kis_nameserver.cc
+   kis_paint_device.cc
    kis_painter.cc
    kis_paintop.cc
    kis_paintop_registry.cc
@@ -66,12 +68,11 @@ set(kritaimage_LIB_SRCS
    kis_rotate_visitor.cc
    kis_selected_transaction.cc
    kis_selection.cc
+   kis_serializable_configuration.cc
    kis_shared.cc
    kis_transaction.cc
    kis_transform_worker.cc
    kis_vec.cc
-   kis_paint_device.cc
-   kis_basic_math_toolbox.cpp
    kis_math_toolbox.cpp
    kis_filter_strategy.h
    kis_perspective_grid.cpp

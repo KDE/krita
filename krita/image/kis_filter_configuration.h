@@ -18,11 +18,9 @@
 #ifndef _KIS_FILTER_CONFIGURATION_H_
 #define _KIS_FILTER_CONFIGURATION_H_
 
-#include <QString>
-#include <QMap>
+#include "kis_serializable_configuration.h"
+
 #include <QBitArray>
-#include <QVariant>
-#include <kdebug.h>
 
 #include "kis_types.h"
 #include "krita_export.h"
@@ -36,16 +34,14 @@
  *
  * XXX: Use KoProperties here!
  */
-class KRITAIMAGE_EXPORT KisFilterConfiguration {
+class KRITAIMAGE_EXPORT KisFilterConfiguration : public KisSerializableConfiguration {
 
 public:
 
     /**
      * Create a new filter config.
      */
-    KisFilterConfiguration(const QString & name, qint32 version)
-        : m_name(name)
-        , m_version(version) {}
+    KisFilterConfiguration(const QString & name, qint32 version);
 
     /**
      * Deep copy the filter configFile
@@ -56,15 +52,10 @@ public:
 
 public:
 
-    /**
-     * Fill the filter configuration object from the XML encoded representation in s.
-     */
-    virtual void fromXML(const QString &);
-
-    /**
-     * Create a serialized version of this filter config
-     */
-    virtual QString toString();
+    virtual void fromXML(QString);
+    virtual void fromXML(const QDomElement&);
+    virtual QString toXML() const;
+    virtual void toXML(QDomDocument&, QDomElement&) const;
 
     /**
      * Get the unique, language independent name of the filter.
@@ -81,27 +72,6 @@ public:
      * The default implementation allways return true.
      */
     virtual bool isCompatible(const KisPaintDeviceSP) const;
-    /**
-     * Set the property with name to value.
-     */
-    virtual void setProperty(const QString & name, const QVariant & value);
-
-    /**
-     * Set value to the value associated with property name
-     * @return false if the specified property did not exist.
-     */
-    virtual bool getProperty(const QString & name, QVariant & value) const;
-
-    virtual QVariant getProperty(const QString & name) const;
-
-
-
-    int getInt(const QString & name, int def = 0) const;
-    double getDouble(const QString & name, double def = 0.0) const;
-    bool getBool(const QString & name, bool def = false) const;
-    QString getString(const QString & name, const QString & def = QString::null) const;
-
-    QMap<QString, QVariant> getProperties() const { return m_properties; }
 
 
     /**
@@ -110,31 +80,18 @@ public:
      * alone. It is up to the filter to decide whether channels that
      * are to be left alone are copied to the dest file or not.
      */
-    QBitArray channelFlags()
-        {
-            return m_channelFlags;
-        }
+    QBitArray channelFlags();
 
     /**
      * Set the channel flags. An empty array is allowed; that means
      * that all channels are to be filtered. Filters can optimize on
      * that.
      */
-    void setChannelFlags(QBitArray channelFlags)
-        {
-            m_channelFlags = channelFlags;
-        }
-
+    void setChannelFlags(QBitArray channelFlags);
 
 private:
-        void dump();
-
-protected:
-
-    QString m_name;
-    qint32 m_version;
-    QMap<QString, QVariant> m_properties;
-    QBitArray m_channelFlags;
+    struct Private;
+    Private* const d;
 };
 
 #endif // _KIS_FILTER_CONFIGURATION_H_

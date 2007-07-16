@@ -30,79 +30,58 @@
 #include "kis_types.h"
 #include "kis_filter_config_widget.h"
 
+struct KisFilterConfiguration::Private {
+    QString name;
+    qint32 version;
+    QBitArray channelFlags;
+};
 
-KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)
+KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 version)
+    : d(new Private)
 {
-    m_name = rhs.m_name;
-    m_version = rhs.m_version;
-    m_properties = rhs.m_properties;
+ d->name = name;
+ d->version = version;
 }
 
-void KisFilterConfiguration::fromXML(const QString & s )
+KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs) : d(new Private)
 {
-    m_properties.clear();
-
-    QDomDocument doc;
-    doc.setContent( s );
-    QDomElement e = doc.documentElement();
-    QDomNode n = e.firstChild();
-
-    m_name = e.attribute("name");
-    m_version = e.attribute("version").toInt();
-
-    while (!n.isNull()) {
-        // We don't nest elements in filter configuration. For now...
-        QDomElement e = n.toElement();
-        QString name;
-        QString type;
-        QString value;
-
-        if (!e.isNull()) {
-            if (e.tagName() == "property") {
-                name = e.attribute("name");
-                type = e.attribute("type");
-                value = e.text();
-                // XXX Convert the variant pro-actively to the right type?
-                m_properties[name] = QVariant(value);
-            }
-        }
-        n = n.nextSibling();
-    }
-    //dump();
+    d->name = rhs.d->name;
+    d->version = rhs.d->version;
 }
 
-QString KisFilterConfiguration::toString()
+void KisFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
 {
-    QDomDocument doc = QDomDocument("filterconfig");
-    QDomElement root = doc.createElement( "filterconfig" );
-    root.setAttribute( "name", m_name );
-    root.setAttribute( "version", m_version );
+    root.setAttribute( "name", d->name );
+    root.setAttribute( "version", d->version );
+    
+    KisSerializableConfiguration::toXML(doc, root);
+}
 
-    doc.appendChild( root );
+QString KisFilterConfiguration::toXML() const
+{
+    return KisSerializableConfiguration::toXML();
+}
 
-    QMap<QString, QVariant>::Iterator it;
-    for ( it = m_properties.begin(); it != m_properties.end(); ++it ) {
-        QDomElement e = doc.createElement( "property" );
-        e.setAttribute( "name", QString(it.key().toLatin1()) );
-        QVariant v = it.value();
-        e.setAttribute( "type", v.typeName() );
-        QString s = v.toString();
-        QDomText text = doc.createCDATASection(v.toString() ); // XXX: Unittest this!
-        e.appendChild(text);
-        root.appendChild(e);
-    }
+void KisFilterConfiguration::fromXML(const QDomElement& e)
+{
+    d->name = e.attribute("name");
+    d->version = e.attribute("version").toInt();
+    KisSerializableConfiguration::fromXML(e);
+}
 
-    return doc.toString();
+void KisFilterConfiguration::fromXML(QString str)
+{
+    return KisSerializableConfiguration::fromXML( str);
 }
 
 const QString & KisFilterConfiguration::name() const
 {
-    return m_name;
+    return d->name;
 }
 
 qint32 KisFilterConfiguration::version() const
 {
-    return m_version;
+    return d->version;
 }
 
 bool KisFilterConfiguration::isCompatible(const KisPaintDeviceSP) const
@@ -110,79 +89,12 @@ bool KisFilterConfiguration::isCompatible(const KisPaintDeviceSP) const
     return true;
 }
 
-void KisFilterConfiguration::setProperty(const QString & name, const QVariant & value)
+QBitArray KisFilterConfiguration::channelFlags()
 {
-    if ( m_properties.find( name ) == m_properties.end() ) {
-        m_properties.insert( name, value );
-    }
-    else {
-        m_properties[name] = value;
-    }
+    return d->channelFlags;
 }
 
-bool KisFilterConfiguration::getProperty(const QString & name, QVariant & value) const
+void KisFilterConfiguration::setChannelFlags(QBitArray channelFlags)
 {
-   if ( m_properties.find( name ) == m_properties.end() ) {
-       return false;
-   }
-   else {
-       value = m_properties[name];
-       return true;
-   }
-}
-
-QVariant KisFilterConfiguration::getProperty(const QString & name) const
-{
-    if ( m_properties.find( name ) == m_properties.end() ) {
-        return QVariant();
-    }
-    else {
-        return m_properties[name];
-    }
-}
-
-
-int KisFilterConfiguration::getInt(const QString & name, int def) const
-{
-    QVariant v = getProperty(name);
-    if (v.isValid())
-        return v.toInt();
-    else
-        return def;
-
-}
-
-double KisFilterConfiguration::getDouble(const QString & name, double def) const
-{
-    QVariant v = getProperty(name);
-    if (v.isValid())
-        return v.toDouble();
-    else
-        return def;
-}
-
-bool KisFilterConfiguration::getBool(const QString & name, bool def) const
-{
-    QVariant v = getProperty(name);
-    if (v.isValid())
-        return v.toBool();
-    else
-        return def;
-}
-
-QString KisFilterConfiguration::getString(const QString & name, const QString & def) const
-{
-    QVariant v = getProperty(name);
-    if (v.isValid())
-        return v.toString();
-    else
-        return def;
-}
-
-void KisFilterConfiguration::dump()
-{
-    QMap<QString, QVariant>::Iterator it;
-    for ( it = m_properties.begin(); it != m_properties.end(); ++it ) {
-    }
-
+    d->channelFlags = channelFlags;
 }

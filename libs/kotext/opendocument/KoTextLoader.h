@@ -138,40 +138,40 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
 
         /**
         * Load the frame element \p frameElem into the \p cursor .
+        *
+        * This method does normaly something like at the example above with an
+        * own implementation of \a KoTextFrameLoader to handle frames.
+        * \code
+        * KoTextFrameLoader frameloader(this);
+        * frameloader.loadFrame(context, parent, cursor);
+        * \endcode
         */
-        virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
+        virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor) = 0;
+
+    Q_SIGNALS:
 
         /**
-        * Load the image frame into the \p cursor .
+        * This signal is emitted during loading with a percentage within 1-100 range
+        * \param percent the progress as a percentage
         */
-        virtual void loadImage(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
+        void sigProgress(int percent);
 
     protected:
 
         /**
-        * Load the image and return a KoShape instance for it.
-        */
-        virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
-
-        /**
-        * Load an anchor for the shape and return a KoTextAnchor instance for it.
-        */
-        virtual KoTextAnchor* loadShapeAnchor(KoTextLoadingContext& context, const KoXmlElement& anchorElem, QTextCursor& cursor, KoShape* shape);
-
-        /**
         * This is called in loadBody before reading the body starts.
         */
-        virtual void startBody(int total) { Q_UNUSED(total); }
+        virtual void startBody(int total);
 
         /**
         * This is called in loadBody on each item that is readed within the body.
         */
-        virtual void processBody() {}
+        virtual void processBody();
 
         /**
         * This is called in loadBody once the body was readed.
         */
-        virtual void endBody() {}
+        virtual void endBody();
 
     private:
         /// \internal d-pointer class.

@@ -21,6 +21,7 @@
  */
 
 #include "KoTextLoader.h"
+#include "KoTextFrameLoader.h"
 #include "KoTextLoadingContext.h"
 //#include "KWDocument.h"
 //#include "frames/KWTextFrameSet.h"
@@ -67,12 +68,20 @@
 class KoTextLoader::Private
 {
     public:
-        explicit Private() {}
+        KoStyleManager* stylemanager;
+        int bodyProgressTotal;
+        int bodyProgressValue;
+        int lastElapsed;
+        QTime dt;
+
+        explicit Private() {
+            bodyProgressTotal = bodyProgressValue = lastElapsed = 0;
+            dt.start();
+        }
         ~Private() {
             qDeleteAll(listStyles);
+            kDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
         }
-
-        KoStyleManager* stylemanager;
 
         KoParagraphStyle *paragraphStyle(const QString &name) {
             if (paragraphStyles.contains(name))
@@ -587,9 +596,9 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
         //listStyle->applyStyle(cursor.block());
         QTextBlock current = cursor.block();
         list->add(current);
-        
+
         loadBody(context, e, cursor);
-        
+
         if( ! listStyle->hasPropertiesForLevel(level) ) { // set default style
             KoListLevelProperties props;
             props.setStyle(KoListStyle::DecimalItem);
@@ -693,88 +702,6 @@ static QString normalizeWhitespace( const QString& in, bool leadingSpace )
     // and now trim off the unused part of the string
     text.truncate(w);
     return text;
-}
-
-void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
-{
-    for(KoXmlNode node = parent.firstChild(); !node.isNull(); node = node.nextSibling()) {
-        KoXmlElement ts = node.toElement();
-        if( ts.isNull() ) continue;
-        const QString localName( ts.localName() );
-        //const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
-        const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
-        if (isDrawNS && localName == "image") {
-            loadImage(context, parent, ts, cursor);
-        }
-        else {
-            kDebug(32500) << "KoTextLoader::loadFrame Unhandled frame: " << localName << endl;
-        }
-    }
-}
-
-void KoTextLoader::loadImage(KoTextLoadingContext& context, const KoXmlElement& _frameElem, const KoXmlElement& _imageElem, QTextCursor& cursor)
-{
-    Q_UNUSED(cursor);
-    const KoXmlElement frameElem = _frameElem;
-    const KoXmlElement imageElem = _imageElem;
-
-    /*
-    //context.fillStyleStack( parent, KoXmlNS::text, "style-name", "graphic-properties" );
-    //double width = 0.0, height = 0.0;
-    QDomNamedNodeMap attrs = parent.attributes();
-    for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++) {
-        kDebug(32500) << "KoTextLoader::loadImage Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
-        //if (attrs.item(iAttr).nodeName() == "svg:width") width = KoUnit::parseValue(attrs.item(iAttr).nodeValue());
-        //else if (attrs.item(iAttr).nodeName() == "svg:height") height = KoUnit::parseValue(attrs.item(iAttr).nodeValue());
-    }
-    attrs = ts.attributes();
-    QString href;
-    for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++) {
-        kDebug(32500) << "KoTextLoader::loadImage Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
-        if (attrs.item(iAttr).localName() == "href") href = attrs.item(iAttr).nodeValue();
-    }
-    */
-
-    KoShape* shape = loadImageShape(context, frameElem, imageElem, cursor);
-    if( ! shape ) {
-        kWarning(32500) << "KoTextLoader::loadImage Failed to create picture shape" << endl;
-    }
-    else {
-        KoShapeLoadingContext shapecontext(context);
-        if( ! shape->loadOdf(frameElem, shapecontext) ) {
-            kWarning(32500) << "Failed to load picture shape" << endl;
-        }
-        else {
-            kDebug(32500)<<"Successful loaded picture shape."<<endl;
-        }
-    }
-}
-
-KoShape* KoTextLoader::loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor)
-{
-    /*
-    KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape");
-    KoShape *shape = factory ? factory->createDefaultShape() : 0;
-    if( ! shape ) return 0;
-    KoStore* store = context.store();
-    QString href = imageElem.attribute("href");
-    if( ! store->hasFile(href) ) return shape;
-    if( store->isOpen() ) return shape;
-    if( ! store->open(href) ) return shape;
-    KoImageCollection* imagecollection = new KoImageCollection();
-    imagecollection->loadFromStore(store);
-    KoImageData* imagedata = new KoImageData(imagecollection);
-    //bool ok = imagedata->loadFromStore( store->device() );
-    shape->setUserData( imagedata );
-    store->close();
-    return shape;
-    */
-    return 0;
-}
-
-KoTextAnchor* KoTextLoader::loadShapeAnchor(KoTextLoadingContext&, const KoXmlElement&, QTextCursor&, KoShape*)
-{
-    return 0; //new KoTextAnchor(shape);
 }
 
 //1.6: KoTextParag::loadOasisSpan
@@ -956,5 +883,25 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
     }
 }
 //#endif
+
+void KoTextLoader::startBody(int total)
+{
+    d->bodyProgressTotal += total;
+}
+
+void KoTextLoader::processBody()
+{
+    d->bodyProgressValue++;
+    if( d->dt.elapsed() >= d->lastElapsed + 1000 ) { // update only once per second
+        d->lastElapsed = d->dt.elapsed();
+        Q_ASSERT( d->bodyProgressTotal > 0 );
+        const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;
+        emit sigProgress( percent );
+    }
+}
+
+void KoTextLoader::endBody()
+{
+}
 
 #include "KoTextLoader.moc"

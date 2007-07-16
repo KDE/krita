@@ -167,7 +167,7 @@ bool KisLoadVisitor::visit(KisAdjustmentLayer* layer)
         m_store->close();
         if (!data.isEmpty()) {
             KisFilterConfiguration * kfc = layer->filter();
-            kfc->fromXML(QString(data));
+            kfc->fromLegacyXML(QString(data));
         }
     }
 

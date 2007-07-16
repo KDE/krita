@@ -57,18 +57,25 @@ public:
 
     /**
      * Fill the filter configuration object from the XML encoded representation in s.
+     * This function use the "Legacy" style XML in the 1.x kra file.
      */
-    virtual void fromXML(const QString&);
-
-    virtual void fromXML(const QDomElement&);
+    virtual void fromLegacyXML(const QString&);
+    /**
+     * Fill the filter configuration object from the XML encoded representation in s.
+     * This function use the "Legacy" style XML in the 1.x kra file.
+     */
+    virtual void fromLegacyXML(const QDomElement&);
     
     /**
      * Create a serialized version of this filter config
+     * This function use the "Legacy" style XML in the 1.x kra file.
      */
-    QString toString() const;
-
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-    virtual QString toXML() const;
+    virtual void toLegacyXML(QDomDocument&, QDomElement&) const;
+    /**
+     * Create a serialized version of this filter config
+     * This function use the "Legacy" style XML in the 1.x kra file.
+     */
+    virtual QString toLegacyXML() const;
 
     
     /**

@@ -52,10 +52,10 @@ public:
 
 public:
 
-    virtual void fromXML(QString);
-    virtual void fromXML(const QDomElement&);
-    virtual QString toXML() const;
-    virtual void toXML(QDomDocument&, QDomElement&) const;
+    virtual void fromLegacyXML(QString);
+    virtual void fromLegacyXML(const QDomElement&);
+    virtual QString toLegacyXML() const;
+    virtual void toLegacyXML(QDomDocument&, QDomElement&) const;
 
     /**
      * Get the unique, language independent name of the filter.

@@ -40,10 +40,10 @@ void KisFilterConfigurationTester::testRoundTrip()
     KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
     QCOMPARE(kfc->version(), 1);
     QCOMPARE(kfc->name(), QString("test"));
-    QString s = kfc->toString();
+    QString s = kfc->toLegacyXML();
     delete kfc;
     kfc = new KisFilterConfiguration("test2", 2);
-    kfc->fromXML( s );
+    kfc->fromLegacyXML( s );
     QCOMPARE(kfc->version(), 1);
     QCOMPARE(kfc->name(), QString("test"));
     delete kfc;

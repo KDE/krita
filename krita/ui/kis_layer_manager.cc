@@ -402,7 +402,7 @@ namespace {
             virtual void redo()
             {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
-                m_config->fromXML(m_after);
+                m_config->fromLegacyXML(m_after);
                 //Q_ASSERT(m_after == m_config->toString());
                 m_layer->setFilter(m_config);
                 m_layer->setDirty();
@@ -412,7 +412,7 @@ namespace {
             virtual void undo()
             {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
-                m_config->fromXML(m_before);
+                m_config->fromLegacyXML(m_before);
                 //Q_ASSERT(m_before == m_config->toString());
                 m_layer->setFilter(m_config);
                 m_layer->setDirty();
@@ -446,13 +446,13 @@ void KisLayerManager::showLayerProperties(KisLayerSP layer)
     if (KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data())))
     {
         KisDlgAdjLayerProps dlg(alayer, alayer->name(), i18n("Adjustment Layer Properties"), m_view, "dlgadjlayerprops");
-        QString before = dlg.filterConfiguration()->toString();
+        QString before = dlg.filterConfiguration()->toLegacyXML();
         if (dlg.exec() == QDialog::Accepted)
         {
             KisChangeFilterCmd * cmd = new KisChangeFilterCmd(alayer,
                     dlg.filterConfiguration(),
                     before,
-                    dlg.filterConfiguration()->toString());
+                    dlg.filterConfiguration()->toLegacyXML());
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
             m_doc->setModified( true );

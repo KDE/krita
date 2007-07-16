@@ -41,17 +41,17 @@ KisSerializableConfiguration::KisSerializableConfiguration(const KisSerializable
 {
 }
 
-void KisSerializableConfiguration::fromXML(const QString & s )
+void KisSerializableConfiguration::fromLegacyXML(const QString & s )
 {
     d->properties.clear();
 
     QDomDocument doc;
     doc.setContent( s );
     QDomElement e = doc.documentElement();
-    fromXML(e);
+    fromLegacyXML(e);
 }
 
-void KisSerializableConfiguration::fromXML(const QDomElement& e)
+void KisSerializableConfiguration::fromLegacyXML(const QDomElement& e)
 {
     QDomNode n = e.firstChild();
 
@@ -77,7 +77,7 @@ void KisSerializableConfiguration::fromXML(const QDomElement& e)
     //dump();
 }
 
-void KisSerializableConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
+void KisSerializableConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) const
 {
     QMap<QString, QVariant>::Iterator it;
     for ( it = d->properties.begin(); it != d->properties.end(); ++it ) {
@@ -92,20 +92,14 @@ void KisSerializableConfiguration::toXML(QDomDocument& doc, QDomElement& root) c
     }
 }
 
-QString KisSerializableConfiguration::toXML() const
+QString KisSerializableConfiguration::toLegacyXML() const
 {
     QDomDocument doc = QDomDocument("filterconfig");
     QDomElement root = doc.createElement( "filterconfig" );
     doc.appendChild( root );
-    toXML(doc, root);
+    toLegacyXML(doc, root);
     return doc.toString();
 }
-
-QString KisSerializableConfiguration::toString() const
-{
-  return toXML();
-}
-
 
 void KisSerializableConfiguration::setProperty(const QString & name, const QVariant & value)
 {

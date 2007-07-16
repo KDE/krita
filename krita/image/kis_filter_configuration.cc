@@ -49,29 +49,29 @@ KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rh
     d->version = rhs.d->version;
 }
 
-void KisFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
+void KisFilterConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) const
 {
     root.setAttribute( "name", d->name );
     root.setAttribute( "version", d->version );
     
-    KisSerializableConfiguration::toXML(doc, root);
+    KisSerializableConfiguration::toLegacyXML(doc, root);
 }
 
-QString KisFilterConfiguration::toXML() const
+QString KisFilterConfiguration::toLegacyXML() const
 {
-    return KisSerializableConfiguration::toXML();
+    return KisSerializableConfiguration::toLegacyXML();
 }
 
-void KisFilterConfiguration::fromXML(const QDomElement& e)
+void KisFilterConfiguration::fromLegacyXML(const QDomElement& e)
 {
     d->name = e.attribute("name");
     d->version = e.attribute("version").toInt();
-    KisSerializableConfiguration::fromXML(e);
+    KisSerializableConfiguration::fromLegacyXML(e);
 }
 
-void KisFilterConfiguration::fromXML(QString str)
+void KisFilterConfiguration::fromLegacyXML(QString str)
 {
-    return KisSerializableConfiguration::fromXML( str);
+    return KisSerializableConfiguration::fromLegacyXML( str);
 }
 
 const QString & KisFilterConfiguration::name() const

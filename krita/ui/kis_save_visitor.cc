@@ -159,7 +159,7 @@ bool KisSaveVisitor::visit(KisAdjustmentLayer* layer)
         location += m_name + QString("/layers/layer%1").arg(m_count) + ".filterconfig";
 
         if (m_store->open(location)) {
-            QString s = layer->filter()->toString();
+            QString s = layer->filter()->toLegacyXML();
             m_store->write(s.toUtf8(), qstrlen(s.toUtf8()));
             m_store->close();
         }

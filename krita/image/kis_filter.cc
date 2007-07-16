@@ -87,7 +87,7 @@ void KisFilter::saveToBookmark(const QString& configname, KisFilterConfiguration
     if ( config == 0 ) return;
 
     KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
-    cfg.writeEntry(configname,config->toString());
+    cfg.writeEntry(configname,config->toLegacyXML());
 }
 
 KisFilterConfiguration* KisFilter::loadFromBookmark(const QString& configname)
@@ -95,7 +95,7 @@ KisFilterConfiguration* KisFilter::loadFromBookmark(const QString& configname)
     if(not existInBookmark(configname)) return 0;
     KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
     KisFilterConfiguration* config = new KisFilterConfiguration(id(), 1);
-    config->fromXML(cfg.readEntry<QString>(configname, ""));
+    config->fromLegacyXML(cfg.readEntry<QString>(configname, ""));
     return config;
 }
 

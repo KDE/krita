@@ -43,6 +43,10 @@ KoGridData::KoGridData()
 {
 }
 
+KoGridData::~KoGridData() {
+    delete d;
+}
+
 double KoGridData::gridX() const
 {
    return d->gridX;

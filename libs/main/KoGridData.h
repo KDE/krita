@@ -32,6 +32,7 @@ class KOMAIN_EXPORT KoGridData
 {
 public:
     KoGridData();
+    ~KoGridData();
 
     /// return the grid width
     double gridX() const;

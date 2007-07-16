@@ -168,7 +168,7 @@ void KisMaskManager::createFilterMask()
 {
     KisLayerSP activeLayer = m_view->activeLayer();
 
-    if ( activeLayer && m_view ) {
+    if ( activeLayer ) {
 
         KisPaintDeviceSP dev = activeLayer->projection();
 

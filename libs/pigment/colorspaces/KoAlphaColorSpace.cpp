@@ -194,7 +194,8 @@ namespace {
                                 }
                                 mask++;
                             }
-                            memset(d, OPACITY_TRANSPARENT, linesize);
+                            // linesize is uninitialized here, so it just crashes
+                            //memset(d, OPACITY_TRANSPARENT, linesize);
                         }
                         dst += dststride;
                         src += srcstride;

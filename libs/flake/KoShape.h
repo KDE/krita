@@ -647,6 +647,9 @@ protected:
     /// Loads the fill style
     QBrush loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context );
 
+    /// Loads the stroke style
+    KoShapeBorderModel * loadOdfStroke( const KoXmlElement & element, KoShapeLoadingContext & context );
+
 /* ** end loading saving */
 
 

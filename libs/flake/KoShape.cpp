@@ -34,6 +34,7 @@
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
 #include "KoViewConverter.h"
+#include "KoLineBorder.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -596,6 +597,7 @@ void KoShape::setName( const QString & name ) {
 // loading & saving methods
 void KoShape::saveOdfConnections(KoShapeSavingContext &context) const {
     // TODO  save "draw-glue-point" elements (9.2.19)
+    Q_UNUSED( context );
 }
 
 QString KoShape::style( KoShapeSavingContext &context ) const
@@ -657,6 +659,7 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
         }
 
         setBackground( loadOdfFill( element, context ) );
+        setBorder( loadOdfStroke( element, context ) );
     }
 
     if ( attributes & OdfSize ) {
@@ -706,6 +709,70 @@ QBrush KoShape::loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext
         return KoOasisStyles::loadOasisFillStyle( styleStack, fill, context.koLoadingContext().oasisStyles() );
 
     return QBrush();
+}
+
+KoShapeBorderModel * KoShape::loadOdfStroke( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
+    KoStyleStack &styleStack = context.koLoadingContext().styleStack();
+    QString stroke;
+    if( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+    {
+        // fill the style stack with the shapes style
+        context.koLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "graphic" );
+        styleStack.setTypeProperties( "graphic" );
+        if( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) )
+            stroke = styleStack.property( KoXmlNS::draw, "stroke" );
+    }
+    else if( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+    {
+        // fill the style stack with the shapes style
+        context.koLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
+        styleStack.setTypeProperties( "presentation" );
+        if ( styleStack.hasProperty( KoXmlNS::presentation, "stroke" ) )
+            stroke = styleStack.property( KoXmlNS::presentation, "stroke" );
+    }
+
+    KoLineBorder * border = 0;
+
+    if( stroke == "solid" )
+    {
+        border = new KoLineBorder();
+    }
+    else if( stroke == "dash" )
+    {
+        border = new KoLineBorder();
+        if( styleStack.hasProperty( KoXmlNS::draw, "stroke-dash" ) )
+        {
+            QString dashStyleName = styleStack.property( KoXmlNS::draw, "stroke-dash" );
+            // TODO load dashes
+        }
+    }
+    else 
+        return 0;
+
+    if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-color" ) )
+        border->setColor( styleStack.property( KoXmlNS::svg, "stroke-color" ) );
+    if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-opacity" ) )
+    {
+        QColor color = border->color();
+        QString opacity = styleStack.property( KoXmlNS::svg, "stroke-opacity" );
+        color.setAlphaF( opacity.toDouble() );
+        border->setColor( color );
+    }
+    if( styleStack.hasProperty( KoXmlNS::svg, "stroke-width" ) )
+        border->setLineWidth( KoUnit::parseValue( styleStack.property( KoXmlNS::svg, "stroke-width" ) ) );
+    if( styleStack.hasProperty( KoXmlNS::draw, "stroke-linejoin" ) )
+    {
+        QString join = styleStack.property( KoXmlNS::draw, "stroke-linejoin" );
+        if( join == "bevel" )
+            border->setJoinStyle( Qt::BevelJoin );
+        else if( join == "round" )
+            border->setJoinStyle( Qt::RoundJoin );
+        else
+            border->setJoinStyle( Qt::MiterJoin );
+    }
+
+    return border;
 }
 
 QMatrix KoShape::parseOdfTransform( const QString &transform )

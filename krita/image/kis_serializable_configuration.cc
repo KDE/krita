@@ -182,3 +182,7 @@ QMap<QString, QVariant> KisSerializableConfiguration::getProperties() const
 {
     return d->properties;
 }
+
+KisSerializableConfigurationFactory::~KisSerializableConfigurationFactory()
+{
+}

@@ -19,15 +19,10 @@
 
 #include <QString>
 
-#include <kconfig.h>
-
+#include "kis_bookmarked_configuration_manager.h"
 #include "kis_filter_configuration.h"
 #include "kis_paint_device.h"
 #include "kis_types.h"
-
-const KoID KisFilter::ConfigDefault = KoID("Default", i18n("Default"));
-const KoID KisFilter::ConfigDesigner = KoID("Designer", i18n("Designer"));
-const KoID KisFilter::ConfigLastUsed = KoID("Last Used", i18n("Last used"));
 
 const KoID KisFilter::CategoryAdjust = KoID("adjust_filters", i18n("Adjust"));
 const KoID KisFilter::CategoryArtistic = KoID("artistic_filters", i18n("Artistic"));
@@ -40,8 +35,17 @@ const KoID KisFilter::CategoryMap = KoID("map_filters", i18n("Map"));
 const KoID KisFilter::CategoryNonPhotorealistic = KoID("nonphotorealistic_filters", i18n("Non-photorealistic"));
 const KoID KisFilter::CategoryOther = KoID("other_filters", i18n("Other"));
 
+struct KisFilter::Private {
+    Private() : bookmarkManager(0) {}
+    KisBookmarkedConfigurationManager* bookmarkManager;
+    bool cancelRequested;
+    bool progressEnabled;
+    bool autoUpdate;
+};
+
 KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entry)
     : KisProgressSubject(0, id.id().toLatin1())
+    , d(new Private)
     , m_id(id)
     , m_progressDisplay(0)
     , m_category(category)
@@ -54,58 +58,24 @@ KisFilterConfiguration * KisFilter::designerConfiguration(const KisPaintDeviceSP
     return new KisFilterConfiguration(m_id.id(), 0);
 }
 
+KisFilterConfiguration * KisFilter::defaultConfiguration(const KisPaintDeviceSP pd)
+{
+    KisFilterConfiguration* fc = 0;
+    if(bookmarkManager())
+    {
+        fc = dynamic_cast<KisFilterConfiguration*>(bookmarkManager()->defaultConfiguration());
+    }
+    if(not fc or not fc->isCompatible(pd) )
+    {
+        fc = designerConfiguration(pd);
+    }
+    return fc;
+}
+
 KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, const KisPaintDeviceSP)
 {
     return 0;
 }
-
-KisFilterConfiguration * KisFilter::defaultConfiguration(const KisPaintDeviceSP pd)
-{
-  if(existInBookmark(KisFilter::ConfigDefault.id()))
-  {
-    return loadFromBookmark(KisFilter::ConfigDefault.id());
-  }
-  else if(existInBookmark(KisFilter::ConfigLastUsed.id()))
-  {
-    return loadFromBookmark(KisFilter::ConfigLastUsed.id());
-  }
-  else {
-    return designerConfiguration(pd);
-  }
-}
-
-QHash<QString, KisFilterConfiguration*> KisFilter::bookmarkedConfigurations( const KisPaintDeviceSP )
-{
-  QHash<QString, KisFilterConfiguration*> bookmarkedConfig;
-  bookmarkedConfig.insert(i18n("designer"), designerConfiguration(0));
-  return bookmarkedConfig;
-}
-
-
-void KisFilter::saveToBookmark(const QString& configname, KisFilterConfiguration* config)
-{
-    if ( config == 0 ) return;
-
-    KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
-    cfg.writeEntry(configname,config->toLegacyXML());
-}
-
-KisFilterConfiguration* KisFilter::loadFromBookmark(const QString& configname)
-{
-    if(not existInBookmark(configname)) return 0;
-    KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
-    KisFilterConfiguration* config = new KisFilterConfiguration(id(), 1);
-    config->fromLegacyXML(cfg.readEntry<QString>(configname, ""));
-    return config;
-}
-
-bool KisFilter::existInBookmark(const QString& configname)
-{
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    QMap< QString, QString > m = cfg->entryMap(configEntryGroup());
-    return (m.find(configname) != m.end());
-}
-
 
 void KisFilter::setProgressDisplay(KisProgressDisplayInterface * progressDisplay)
 {
@@ -114,18 +84,18 @@ void KisFilter::setProgressDisplay(KisProgressDisplayInterface * progressDisplay
 
 
 void KisFilter::enableProgress() {
-    m_progressEnabled = true;
-    m_cancelRequested = false;
+    d->progressEnabled = true;
+    d->cancelRequested = false;
 }
 
 void KisFilter::disableProgress() {
-    m_progressEnabled = false;
-    m_cancelRequested = false;
+    d->progressEnabled = false;
+    d->cancelRequested = false;
 }
 
 void KisFilter::setProgressTotalSteps(qint32 totalSteps)
 {
-    if (m_progressEnabled) {
+    if (d->progressEnabled) {
 
         m_progressTotalSteps = totalSteps;
         m_lastProgressPerCent = 0;
@@ -136,7 +106,7 @@ void KisFilter::setProgressTotalSteps(qint32 totalSteps)
 
 void KisFilter::setProgress(qint32 progress)
 {
-    if (m_progressEnabled) {
+    if (d->progressEnabled) {
         qint32 progressPerCent = (progress * 100) / m_progressTotalSteps;
         m_progressSteps = progress;
 
@@ -156,7 +126,7 @@ void KisFilter::incProgress()
 
 void KisFilter::setProgressStage(const QString& stage, qint32 progress)
 {
-    if (m_progressEnabled) {
+    if (d->progressEnabled) {
 
         qint32 progressPerCent = (progress * 100) / m_progressTotalSteps;
 
@@ -167,18 +137,18 @@ void KisFilter::setProgressStage(const QString& stage, qint32 progress)
 
 void KisFilter::setProgressDone()
 {
-    if (m_progressEnabled) {
+    if (d->progressEnabled) {
         emit notifyProgressDone();
     }
 }
 
 
 bool KisFilter::autoUpdate() {
-    return m_autoUpdate;
+    return d->autoUpdate;
 }
 
 void KisFilter::setAutoUpdate(bool set) {
-    m_autoUpdate = set;
+    d->autoUpdate = set;
 }
 
 QRect KisFilter::enlargeRect(QRect rect, const KisFilterConfiguration* c) const {
@@ -193,6 +163,26 @@ QRect KisFilter::enlargeRect(QRect rect, const KisFilterConfiguration* c) const 
 void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config)
 {
     process(device, rect.topLeft(), device, rect.topLeft(), rect.size(), config);
+}
+
+void KisFilter::cancel()
+{
+    d->cancelRequested = true;
+}
+
+bool KisFilter::progressEnabled() const
+{
+    return d->progressEnabled;
+}
+
+bool KisFilter::cancelRequested() const
+{
+    return d->progressEnabled && d->cancelRequested;
+}
+
+KisBookmarkedConfigurationManager* KisFilter::bookmarkManager()
+{
+    return d->bookmarkManager;
 }
 
 #include "kis_filter.moc"

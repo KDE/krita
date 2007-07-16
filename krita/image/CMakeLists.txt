@@ -35,6 +35,7 @@ set(kritaimage_LIB_SRCS
    kis_autobrush_resource.cc
    kis_autogradient_resource.cc
    kis_basic_math_toolbox.cpp
+   kis_bookmarked_configuration_manager.cc
    kis_boundary.cc
    kis_brush.cc
    kis_convolution_painter.cc

@@ -33,6 +33,7 @@
 #include "krita_export.h"
 
 class KoColorSpace;
+class KisBookmarkedConfigurationManager;
 class KisProgressDisplayInterface;
 class KisFilterConfigWidget;
 class KisFilterConfiguration;
@@ -44,9 +45,6 @@ class QWidget;
 class KRITAIMAGE_EXPORT KisFilter : public KisProgressSubject, public KisShared {
     Q_OBJECT
 public:
-    static const KoID ConfigDefault;
-    static const KoID ConfigDesigner;
-    static const KoID ConfigLastUsed;
     static const KoID CategoryAdjust;
     static const KoID CategoryArtistic;
     static const KoID CategoryBlur;
@@ -120,29 +118,9 @@ public:
     virtual bool supportsAdjustmentLayers() { return supportsPreview(); }
 
     /**
-     * Return a list of default configuration to demonstrates the use of the filter
-     * @return a list with a null element if the filter do not use a configuration
+     * @return the bookmark manager for this filter
      */
-    QHash<QString, KisFilterConfiguration*> bookmarkedConfigurations( const KisPaintDeviceSP );
-
-    /**
-     * Save this filter configuration for a later use.
-     * @param configname the name of this configuration in the kritarc
-     * @param config the configuration object to save
-     */
-    void saveToBookmark(const QString& configname, KisFilterConfiguration* config);
-
-    /**
-     * Save this filter configuration for a later use.
-     * @param configname the name of this configuration in the kritarc
-     * @param config the configuration object to save
-     */
-    KisFilterConfiguration* loadFromBookmark(const QString& configname);
-
-    /**
-     * @return true if this configuration exist in the bookmarks
-     */
-    bool existInBookmark(const QString& configname);
+    KisBookmarkedConfigurationManager* bookmarkManager();
 
     /**
      * Can this filter work incrementally when painting, or do we need to work
@@ -220,19 +198,20 @@ public:
     /**
      * call this to cancel the current filtering
      */
-    virtual void cancel() { m_cancelRequested = true; }
+    virtual void cancel();
 
     virtual void setAutoUpdate(bool set);
-    bool progressEnabled() const { return m_progressEnabled; }
+    bool progressEnabled() const;
     /**
      * @return true if cancel was requested and if progress is enabled
      */
-    inline bool cancelRequested() const { return m_progressEnabled && m_cancelRequested; }
+    bool cancelRequested() const;
 
 protected:
 
+    void setBookmarkManager(KisBookmarkedConfigurationManager* );
     /// @return the name of config group in KConfig
-    inline QString configEntryGroup() { return id() + "_filter_bookmarks"; }
+//     inline QString configEntryGroup() { return id() + "_filter_bookmarks"; }
     /// @return the default configuration as defined by whoever wrote the plugin
     virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP); // FIXME: this name sucks so much
 
@@ -247,9 +226,8 @@ protected slots:
     inline qint32 progress() { return m_progressSteps; }
 
 private:
-    bool m_cancelRequested;
-    bool m_progressEnabled;
-    bool m_autoUpdate;
+    struct Private;
+    Private* const d;
 
 protected:
     qint32 m_progressTotalSteps;

@@ -98,3 +98,25 @@ void KisFilterConfiguration::setChannelFlags(QBitArray channelFlags)
 {
     d->channelFlags = channelFlags;
 }
+
+struct KisFilterConfigurationFactory::Private
+{
+    QString name;
+    qint32 version;
+};
+
+KisFilterConfigurationFactory::KisFilterConfigurationFactory(const QString & name, qint32 version) : d(new Private)
+{
+    d->name = name;
+    d->version = version;
+}
+
+KisFilterConfigurationFactory::~KisFilterConfigurationFactory()
+{
+    delete d;
+}
+
+KisSerializableConfiguration* KisFilterConfigurationFactory::create()
+{
+    return new KisFilterConfiguration(d->name, d->version);
+}

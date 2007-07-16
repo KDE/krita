@@ -94,4 +94,14 @@ private:
     Private* const d;
 };
 
+class KisFilterConfigurationFactory : public KisSerializableConfigurationFactory {
+    public:
+        KisFilterConfigurationFactory(const QString & name, qint32 version);
+        virtual ~KisFilterConfigurationFactory();
+        virtual KisSerializableConfiguration* create();
+    private:
+        struct Private;
+        Private* const d;
+};
+
 #endif // _KIS_FILTER_CONFIGURATION_H_

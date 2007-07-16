@@ -107,4 +107,10 @@ private:
     Private* const d;
 };
 
+class KisSerializableConfigurationFactory {
+    public:
+        virtual ~KisSerializableConfigurationFactory();
+        virtual KisSerializableConfiguration* create() =0;
+};
+
 #endif // _KIS_FILTER_CONFIGURATION_H_

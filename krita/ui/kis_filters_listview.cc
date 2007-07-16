@@ -198,8 +198,8 @@ void KisFiltersListView::buildPreviews()
 
             if (m_filterForAdjustmentLayers && !filter->supportsAdjustmentLayers()) continue;
 
-            const QHash<QString, KisFilterConfiguration*>& configlist = filter->bookmarkedConfigurations(m_thumb);
-
+//             const QHash<QString, KisFilterConfiguration*>& configlist;// = filter->bookmarkedConfigurations(m_thumb); // TODO:fixme, or not this should be done in a model
+            QHash<QString, KisFilterConfiguration*> configlist;
             // apply the filter for each of example of configuration
             for ( QHash<QString, KisFilterConfiguration*>::const_iterator itc = configlist.begin();
                 itc != configlist.end();

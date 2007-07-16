@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <kmessagebox.h>
 #include <kguiitem.h>
 
+#include "kis_bookmarked_configuration_manager.h"
 #include "kis_doc2.h"
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
@@ -205,7 +206,10 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         dev->setDirty(rect);
         d->view->document()->setModified(true);
         if (cmd) d->view->document()->addCommand(cmd);
-        d->filter->saveToBookmark(KisFilter::ConfigLastUsed.id(), config);
+        if(d->filter->bookmarkManager())
+        {
+            d->filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config);
+        }
         if(d->lastConfiguration != config)
         {
             delete d->lastConfiguration;

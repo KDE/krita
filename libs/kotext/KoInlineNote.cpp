@@ -110,6 +110,7 @@ void KoInlineNote::paint (QPainter &painter, QPaintDevice *pd, const QTextDocume
     range.start=0;
     range.length=d->label.length();
     range.format = format;
+    range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     layouts.append(range);
     layout.setAdditionalFormats(layouts);
 

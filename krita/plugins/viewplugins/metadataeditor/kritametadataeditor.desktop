@@ -2,8 +2,12 @@
 Encoding=UTF-8
 Name=metadataeditor
 Name[de]=Metadateneditor
+Name[sv]=Metadata-editor
 Comment=metadataeditor
 Comment[de]=Metadateneditor
+Comment[pt]=editor de meta-dados
+Comment[pt_BR]=editor de meta-dados
+Comment[sv]=Metadata-editor
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritametadataeditor

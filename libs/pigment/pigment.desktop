@@ -5,6 +5,8 @@ X-KDE-ServiceType=KOffice/ColorSpace
 Comment=A module implementing a complete colorspace for use with libpigment
 Comment[de]=Ein Modul, das einen kompletten Farbraum zur Benutzung mit libpigment implementiert
 Comment[fa]=پیمانه‌ای که فضای رنگ کاملی برای استفاده با libpigment را پیاده‌سازی می‌کند
+Comment[pt]=Um módulo que implementa um espaço de cores completo para usar com a 'libpigment'
+Comment[pt_BR]=Um módulo que implementa um espaço de cores completo para usar com a 'libpigment'
 Comment[sv]=En modul som implementerar en fullständig färgrymd för användning med libpigment
 Comment[x-test]=xxA module implementing a complete colorspace for use with libpigmentxx
 [PropertyDef::X-Pigment-Version]

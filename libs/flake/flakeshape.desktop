@@ -2,12 +2,16 @@
 Encoding=UTF-8
 Name=Shape definition
 Name[de]=Formdefinition
+Name[pt]=Definição da forma
+Name[pt_BR]=Definição da forma
 Name[sv]=Formdefinition
 Name[x-test]=xxShape definitionxx
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Shape
 Comment=Definition of a flake shape object
 Comment[de]=Definition eines Flake-Formobjektes
+Comment[pt]=Definição de um objecto de forma do Flake
+Comment[pt_BR]=Definição de um objecto de forma do Flake
 Comment[sv]=Definition av ett formobjekt i Flake
 Comment[x-test]=xxDefinition of a flake shape objectxx
 [PropertyDef::X-Flake-Version]

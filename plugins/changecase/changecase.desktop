@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Name=Change case plugin
 Name[fa]=تغییر وصلۀ حالت
+Name[pt]='Plugin' de mudança de capitalização
+Name[pt_BR]='Plugin' de mudança de capitalização
 Name[sv]=Insticksprogram för skiftlägesändring
 ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service

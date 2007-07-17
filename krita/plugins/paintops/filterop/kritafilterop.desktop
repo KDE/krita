@@ -1,8 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Filter Op
+Name[pt]=Operação de Filtragem
+Name[pt_BR]=Operação de Filtragem
 Name[sv]=Filtreringsoperation
 Comment=Filter Op
+Comment[pt]=Operação de Filtragem
+Comment[pt_BR]=Operação de Filtragem
 Comment[sv]=Filtreringsoperation
 ServiceTypes=Krita/Paintop
 Type=Service

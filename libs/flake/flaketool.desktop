@@ -3,12 +3,16 @@ Encoding=UTF-8
 Name=Flake tool definition
 Name[de]=Flake-Werkzeugdefinition
 Name[fa]=تعریف ابزار Flake
+Name[pt]=Definição da ferramenta do Flake
+Name[pt_BR]=Definição da ferramenta do Flake
 Name[sv]=Verktygsdefinition i Flake
 Name[x-test]=xxFlake tool definitionxx
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Tool
 Comment=Definition of flake tools
 Comment[de]=Definition von Flake-Werkzeugen
+Comment[pt]=Definição das ferramentas do Flake
+Comment[pt_BR]=Definição das ferramentas do Flake
 Comment[sv]=Definition av verktyg i Flake
 Comment[x-test]=xxDefinition of flake toolsxx
 [PropertyDef::X-Flake-Version]

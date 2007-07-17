@@ -109,8 +109,5 @@ void KoTextFrameLoader::loadImage(KoTextLoadingContext& context, const KoXmlElem
         kWarning(32500) << "KoTextFrameLoader::loadImage Failed to create picture shape" << endl;
         return;
     }
-    KoShapeLoadingContext shapecontext(context);
-    if( ! shape->loadOdf(frameElem, shapecontext) )
-        kWarning(32500) << "KoTextFrameLoader::loadImage Failed to load picture shape" << endl;
 }
 

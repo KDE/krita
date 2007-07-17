@@ -94,11 +94,6 @@ class KOTEXT_EXPORT KoTextFrameLoader
         */
         virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor) = 0;
 
-        /**
-        * Load an anchor for the shape and return a KoTextAnchor instance for it.
-        */
-        virtual KoTextAnchor* loadImageAnchor(KoTextLoadingContext& context, const KoXmlElement& anchorElem, QTextCursor& cursor, KoShape* shape) = 0;
-
     private:
         /// \internal d-pointer class.
         class Private;

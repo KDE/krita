@@ -821,9 +821,21 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
                         if (KoInlineObjectRegistry::instance()->contains("date")) {
                             KoInlineObjectFactory *dateFactory = KoInlineObjectRegistry::instance()->value("date");
                             if (dateFactory) {
+                                QString dataStyle = ts.attributeNS(KoXmlNS::style, "data-style-name");
+                                QString dateFormat = "";
+                                if (!dataStyle.isEmpty()) {
+                                    if (context.oasisStyles().dataFormats().contains(dataStyle)) {
+                                        KoOasisStyles::NumericStyleFormat dataFormat = context.oasisStyles().dataFormats().value(dataStyle);
+                                        dateFormat = dataFormat.prefix + dataFormat.formatStr + dataFormat.suffix;
+                                    }
+                                }
+                                kDebug() << "Final date format :" << dateFormat << endl;
                                 QDateTime dateTime = QDateTime::fromString(ts.attributeNS(KoXmlNS::text, "date-value"), Qt::ISODate);
                                 KoInlineObject *dateObject = dateFactory->createInlineObject(new KoProperties());
-                                ((KoVariable *)dateObject)->setValue(dateTime.date().toString(Qt::LocaleDate));
+                                if (dateFormat.isEmpty())
+                                    ((KoVariable *)dateObject)->setValue(dateTime.date().toString(Qt::LocalDate));
+                                else
+                                    ((KoVariable *)dateObject)->setValue(dateTime.date().toString(dateFormat));
                                 textObjectManager->insertInlineObject(cursor, dateObject);
                             }
                         }
@@ -842,9 +854,20 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
                         if (KoInlineObjectRegistry::instance()->contains("date")) {
                             KoInlineObjectFactory *dateFactory = KoInlineObjectRegistry::instance()->value("date");
                             if (dateFactory) {
+                                QString dataStyle = ts.attributeNS(KoXmlNS::style, "data-style-name");
+                                QString dateFormat = "";
+                                if (!dataStyle.isEmpty()) {
+                                    if (context.oasisStyles().dataFormats().contains(dataStyle)) {
+                                        KoOasisStyles::NumericStyleFormat dataFormat = context.oasisStyles().dataFormats().value(dataStyle);
+                                        dateFormat = dataFormat.prefix + dataFormat.formatStr + dataFormat.suffix;
+                                    }
+                                }
                                 QDateTime dateTime = QDateTime::fromString(ts.attributeNS(KoXmlNS::text, "time-value"), Qt::ISODate);
                                 KoInlineObject *dateObject = dateFactory->createInlineObject(new KoProperties());
-                                ((KoVariable *)dateObject)->setValue(dateTime.time().toString(Qt::LocaleDate));
+                                if (dateFormat.isEmpty())
+                                    ((KoVariable *)dateObject)->setValue(dateTime.time().toString(Qt::LocalDate));
+                                else
+                                    ((KoVariable *)dateObject)->setValue(dateTime.time().toString(dateFormat));
                                 textObjectManager->insertInlineObject(cursor, dateObject);
                             }
                         }

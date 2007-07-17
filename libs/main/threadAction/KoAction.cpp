@@ -19,7 +19,6 @@
 #include "KoAction.h"
 #include "KoJobsListPolicy.h"
 #include "KoExecutePolicy.h"
-#include "ActionJob_p.h"
 
 #include <threadweaver/WeaverInterface.h>
 

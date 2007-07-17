@@ -173,10 +173,9 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
     if ( store->open( "root" ) ) {
         if ( store->size() == 22 ) {
             QIODevice* dev = store->device();
-            unsigned int i = 0;
-            while ( static_cast<char>( getch(dev) ) == test3[i++] );
+            QByteArray dataReadBack = dev->read(strlen( test3 ));
             store->close();
-            if ( ( i - 1 ) != strlen( test3 ) )
+            if ( dataReadBack != QByteArray( test3 ) )
                 return cleanUp( store, testFile, unableToRead );
         }
         else {
@@ -227,6 +226,10 @@ int main( int argc, char **argv )
       return 1;
     if ( test( "Zip", KoStore::Zip, "test.zip" ) != 0 )
       return 1;
+#ifdef QCA2
     if ( test( "Encrypted", KoStore::Encrypted, "testEncrypted.zip" ) != 0 )
       return 1;
+#endif
+    return 0;
 }
+

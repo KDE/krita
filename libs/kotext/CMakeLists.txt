@@ -52,6 +52,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoTextShapeContainerModel.cpp
     KoBookmark.cpp
     KoBookmarkManager.cpp
+    KoInlineNote.cpp
     KoRulerController.cpp
     KoFind.cpp
 

@@ -834,23 +834,16 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
                                 QString result;
                                 if (localName == "date") {
                                     QDateTime dateTime = QDateTime::fromString(ts.attributeNS(KoXmlNS::text, "date-value"), Qt::ISODate);
-                                    KoInlineObject *dateObject = dateFactory->createInlineObject(new KoProperties());
                                     if (dateFormat.isEmpty())
                                         result = dateTime.date().toString(Qt::LocalDate);
-                                        //((KoVariable *)dateObject)->setValue(dateTime.date().toString(Qt::LocalDate));
                                     else
                                         result = dateTime.date().toString(dateFormat);
-                                        //((KoVariable *)dateObject)->setValue(dateTime.date().toString(dateFormat));
-                                    //kDebug() << dateTime.date().toString(dateFormat) << endl;
                                 } else {
                                     QDateTime dateTime = QDateTime::fromString(ts.attributeNS(KoXmlNS::text, "time-value"), Qt::ISODate);
-                                    KoInlineObject *dateObject = dateFactory->createInlineObject(new KoProperties());
                                     if (dateFormat.isEmpty())
                                         result = dateTime.time().toString(Qt::LocalDate);
-                                        //((KoVariable *)dateObject)->setValue(dateTime.time().toString(Qt::LocalDate));
                                     else
                                         result = dateTime.time().toString(dateFormat);
-                                        //((KoVariable *)dateObject)->setValue(dateTime.time().toString(dateFormat));
                                 }
                                 ((KoVariable *)dateObject)->setValue(result);
                                 textObjectManager->insertInlineObject(cursor, dateObject);

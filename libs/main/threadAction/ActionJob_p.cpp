@@ -22,6 +22,7 @@
 #include <QCoreApplication>
 #include <QEvent>
 #include <QThread>
+#include <KDebug>
 
 class ActionJobEvent : public QEvent {
 public:
@@ -35,6 +36,7 @@ ActionJob::ActionJob(KoAction *parent, Enable enable, const QVariant &params)
     m_started(false),
     m_params(params)
 {
+    connect(this, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(deleteLater()));
 }
 
 void ActionJob::run() {
@@ -64,7 +66,6 @@ bool ActionJob::event(QEvent *e) {
     if(event) {
         m_action->doActionUi(m_params);
         m_semaphore.release();
-        deleteLater();
         return true;
     }
     return QObject::event(e);

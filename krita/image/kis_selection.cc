@@ -146,13 +146,10 @@ QRect KisSelection::selectedRect() const
 
 QRect KisSelection::selectedExactRect() const
 {
-    kDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
     if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice) {
-        kDebug() << "bla1\n";
         return exactBounds();
     }
     else {
-        kDebug() << "bla2\n";
         return exactBounds().unite(m_parentPaintDevice->exactBounds());
     }
 }

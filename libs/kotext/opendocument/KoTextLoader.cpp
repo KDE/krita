@@ -836,6 +836,51 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
                                 QDateTime dateTime = QDateTime::fromString(ts.attributeNS(KoXmlNS::text, localName + "-value"), Qt::ISODate);
                                 if (ts.attributeNS(KoXmlNS::text, "fixed") != "true")
                                     dateTime = QDateTime::currentDateTime();
+                                QString adjustTime = ts.attributeNS(KoXmlNS::text, localName + "-adjust");
+                                if (!adjustTime.isEmpty()) {
+                                    int multiplier = 1;
+                                    if (adjustTime.contains("-"))
+                                        multiplier = -1;
+                                    QString timePart, datePart;
+                                    QStringList parts = adjustTime.mid(adjustTime.indexOf('P') + 1).split('T');
+                                    datePart = parts[0];
+                                    if (parts.size() > 1)
+                                        timePart = parts[1];
+                                    QRegExp rx("([0-9]+)([DHMSY])");
+                                    int value;
+                                    bool valueOk;
+                                    if (!timePart.isEmpty()) {
+                                        int pos = 0;
+                                        while ((pos = rx.indexIn(timePart, pos)) != -1) {
+                                            value = rx.cap(1).toInt(&valueOk);
+                                            if (valueOk) {
+                                                if (rx.cap(2) == "H")
+                                                    dateTime = dateTime.addSecs(multiplier * 3600 * value);
+                                                else if (rx.cap(2) == "M")
+                                                    dateTime = dateTime.addSecs(multiplier * 60 * value);
+                                                else if (rx.cap(2) == "S")
+                                                    dateTime = dateTime.addSecs(multiplier * value);
+                                            }
+                                            pos += rx.matchedLength();
+                                        }
+                                    }
+                                    if (!datePart.isEmpty()) {
+                                        int pos = 0;
+                                        while ((pos = rx.indexIn(timePart, pos)) != -1) {
+                                            value = rx.cap(1).toInt(&valueOk);
+                                            if (valueOk) {
+                                                if (rx.cap(2) == "Y")
+                                                    dateTime = dateTime.addYears(multiplier * value);
+                                                else if (rx.cap(2) == "M")
+                                                    dateTime = dateTime.addMonths(multiplier * value);
+                                                else if (rx.cap(2) == "D")
+                                                    dateTime = dateTime.addDays(multiplier * value);
+                                            }
+                                            pos += rx.matchedLength();
+                                        }
+                                    }
+
+                                }
                                 if (localName == "date") {
                                     if (dateFormat.isEmpty())
                                         result = dateTime.date().toString(Qt::LocalDate);

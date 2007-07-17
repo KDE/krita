@@ -32,25 +32,6 @@
 #include "kis_wdg_blur.h"
 #include "ui_wdgblur.h"
 
-// KisKernelSP kernelFromQImage(const QImage& img)
-// {
-//     KisKernelSP k = new KisKernel;
-//     k->width = img.width();
-//     k->height = img.height();
-//     k->offset = 0;
-//     uint count = k->width * k->height;
-//     k->data = new qint32[count];
-//     qint32* itData = k->data;
-//     quint8* itImg = img.bits();
-//     k->factor = 0;
-//     for(uint i = 0; i < count; ++i , ++itData, itImg+=4)
-//     {
-//         *itData = 255 - ( *itImg + *(itImg+1) + *(itImg+2) ) / 3;
-//         k->factor += *itData;
-//     }
-//     return k;
-// }
-
 KisBlurFilter::KisBlurFilter() : KisFilter(id(), CategoryBlur, i18n("&Blur..."))
 {
 }

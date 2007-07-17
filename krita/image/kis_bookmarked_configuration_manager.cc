@@ -73,7 +73,16 @@ QList<QString> KisBookmarkedConfigurationManager::configurations() const
 {
     KSharedConfig::Ptr cfg = KGlobal::config();
     QMap< QString, QString > m = cfg->entryMap(configEntryGroup());
-    return m.keys();
+    QList<QString> keys = m.keys();
+    QList<QString> configsKey;
+    foreach(QString key, keys)
+    {
+        if(key != ConfigDefault.id() and key != ConfigLastUsed.id())
+        {
+            configsKey << key;
+        }
+    }
+    return configsKey;
 }
 
 KisSerializableConfiguration* KisBookmarkedConfigurationManager::defaultConfiguration()

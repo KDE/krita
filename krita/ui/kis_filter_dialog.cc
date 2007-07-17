@@ -19,10 +19,14 @@
 
 #include "kis_filter_dialog.h"
 
-#include "kis_filter.h"
-#include "kis_filter_config_widget.h"
-#include "kis_filter_mask.h"
-#include "kis_layer.h"
+// From krita/image
+#include <kis_filter.h>
+#include <kis_filter_config_widget.h>
+#include <kis_filter_mask.h>
+#include <kis_layer.h>
+
+// From krita/ui
+#include "kis_bookmarked_filter_configurations_model.h"
 
 #include "ui_wdgfilterdialog.h"
 
@@ -40,6 +44,7 @@ struct KisFilterDialog::Private {
     KisFilterConfigWidget* currentFilterConfigurationWidget;
     KisFilterSP currentFilter;
     KisLayerSP layer;
+    KisPaintDeviceSP thumb;
     Ui_FilterDialog uiFilterDialog;
     KisFilterMaskSP mask;
     QGridLayout *widgetLayout;
@@ -53,6 +58,7 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     d->uiFilterDialog.setupUi( this );
     d->widgetLayout = new QGridLayout( d->uiFilterDialog.centralWidgetHolder );
     d->layer = layer;
+    d->thumb = layer->paintDevice()->createThumbnailDevice(100, 100);
     d->mask = new KisFilterMask();
     d->layer->setPreviewMask( d->mask );
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed ()), SLOT(accept()));
@@ -81,6 +87,7 @@ void KisFilterDialog::setFilter(KisFilterSP f)
         d->currentFilterConfigurationWidget->setConfiguration( d->currentFilter->defaultConfiguration( d->layer->paintDevice() ) );
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigPleaseUpdatePreview()), SLOT(updatePreview()));
     }
+    d->uiFilterDialog.comboBoxPresets->setModel( new KisBookmarkedFilterConfigurationsModel(d->thumb, f )  );
     d->widgetLayout->addWidget( d->currentCentralWidget, 0 , 0);
     d->uiFilterDialog.centralWidgetHolder->setMinimumSize( d->currentCentralWidget->minimumSize() );
     updatePreview();

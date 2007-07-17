@@ -211,7 +211,7 @@ protected:
 
     void setBookmarkManager(KisBookmarkedConfigurationManager* );
     /// @return the name of config group in KConfig
-//     inline QString configEntryGroup() { return id() + "_filter_bookmarks"; }
+    inline QString configEntryGroup() { return id() + "_filter_bookmarks"; }
     /// @return the default configuration as defined by whoever wrote the plugin
     virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP); // FIXME: this name sucks so much
 

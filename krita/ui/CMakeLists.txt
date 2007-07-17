@@ -20,6 +20,8 @@ set(kritaui_LIB_SRCS
     kis_autobrush.cc
     kis_autogradient.cc
     kis_birdeye_box.cc
+    kis_bookmarked_filter_configurations_model.cc
+    kis_bookmarked_configurations_model.cc
     kis_boundary_painter.cc
     kis_brush_chooser.cc
     kis_canvas2.cpp

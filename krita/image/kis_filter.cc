@@ -51,6 +51,7 @@ KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entr
     , m_category(category)
     , m_entry(entry)
 {
+    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisFilterConfigurationFactory(id.id(), 1) ));
 }
 
 KisFilterConfiguration * KisFilter::designerConfiguration(const KisPaintDeviceSP)
@@ -183,6 +184,12 @@ bool KisFilter::cancelRequested() const
 KisBookmarkedConfigurationManager* KisFilter::bookmarkManager()
 {
     return d->bookmarkManager;
+}
+
+void KisFilter::setBookmarkManager(KisBookmarkedConfigurationManager* bm)
+{
+    delete d->bookmarkManager;
+    d->bookmarkManager = bm;
 }
 
 #include "kis_filter.moc"

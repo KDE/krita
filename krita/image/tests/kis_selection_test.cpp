@@ -64,7 +64,9 @@ void KisSelectionTest::testInvertSelection()
     pixelSelection->invert();
 
     QCOMPARE( dev->pixelSelection()->selected(100,100), MAX_SELECTED);
+    QCOMPARE( dev->pixelSelection()->selected(22,22), MAX_SELECTED);
     QCOMPARE( dev->selection()->selected(100,100), MAX_SELECTED);
+    QCOMPARE( dev->selection()->selected(22,22), MAX_SELECTED);
     QCOMPARE( dev->selection()->selected(10,10), MIN_SELECTED);
 }
 

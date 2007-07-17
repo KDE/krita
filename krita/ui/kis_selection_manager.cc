@@ -587,9 +587,9 @@ void KisSelectionManager::selectAll()
     if (img->undo()) t = new KisSelectedTransaction(i18n("Select All"), dev);
     Q_CHECK_PTR(t);
 
-    dev->selection()->clear();
-    dev->selection()->invert();
-    dev->setDirty();
+    dev->pixelSelection()->clear();
+    dev->pixelSelection()->invert();
+    dev->setDirty(img->bounds());
     dev->emitSelectionChanged();
 
     if (img->undo())
@@ -613,7 +613,7 @@ void KisSelectionManager::deselect()
     } else {
         dev->deselect();
     }
-    dev->setDirty();
+    dev->setDirty(img->bounds());
     dev->emitSelectionChanged();
 
     if (img->undo())
@@ -638,7 +638,7 @@ void KisSelectionManager::clear()
     }
 
     dev->clearSelection();
-    dev->setDirty();
+    dev->setDirty(img->bounds());
     dev->emitSelectionChanged();
 
     if (img->undo()) img->undoAdapter()->addCommand(t);
@@ -710,7 +710,7 @@ void KisSelectionManager::reselect()
     Q_CHECK_PTR(t);
 
     dev->reselect(); // sets hasSelection=true
-    dev->setDirty();
+    dev->setDirty(img->bounds());
     dev->emitSelectionChanged();
 
     if (img->undo())
@@ -727,7 +727,7 @@ void KisSelectionManager::invert()
     if (!dev) return;
 
     if (dev->hasSelection()) {
-        KisSelectionSP s = dev->selection();
+        KisPixelSelectionSP s = dev->pixelSelection();
 
         KisSelectedTransaction * t = 0;
         if (img->undo())
@@ -737,7 +737,7 @@ void KisSelectionManager::invert()
         }
 
         s->invert();
-        dev->setDirty();
+        dev->setDirty(img->bounds());
         dev->emitSelectionChanged();
 
         if (t) {
@@ -784,7 +784,7 @@ void KisSelectionManager::feather()
         return;
     }
 
-    KisSelectionSP selection = dev->selection();
+    KisPixelSelectionSP selection = dev->pixelSelection();
     KisSelectedTransaction * t = 0;
     if (img->undo()) t = new KisSelectedTransaction(i18n("Feather..."), dev);
     Q_CHECK_PTR(t);
@@ -819,7 +819,7 @@ void KisSelectionManager::feather()
     painter.applyMatrix(k, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID);
     painter.end();
 
-    dev->setDirty();
+    dev->setDirty(img->bounds());
     dev->emitSelectionChanged();
 
     if (img->undo())
@@ -858,7 +858,7 @@ void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
     if (!dev) return;
 
     if (!dev->hasSelection()) return;
-    KisSelectionSP selection = dev->selection();
+    KisPixelSelectionSP selection = dev->pixelSelection();
 
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
@@ -991,7 +991,7 @@ void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
     delete[] buf;
     delete[] out;
 
-    dev->setDirty();
+    dev->setDirty(img->bounds());
     dev->emitSelectionChanged();
 
     if (t) {
@@ -1009,7 +1009,7 @@ void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock
     if (!dev) return;
 
     if (!dev->hasSelection()) return;
-    KisSelectionSP selection = dev->selection();
+    KisPixelSelectionSP selection = dev->pixelSelection();
 
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
@@ -1158,7 +1158,7 @@ void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock
     delete[] buf;
     delete[] out;
 
-    dev->setDirty();
+    dev->setDirty(img->bounds());
     dev->emitSelectionChanged();
 }
 
@@ -1173,7 +1173,7 @@ void KisSelectionManager::smooth()
     if (!dev) return;
 
     if (!dev->hasSelection()) return;
-    KisSelectionSP selection = dev->selection();
+    KisPixelSelectionSP selection = dev->pixelSelection();
 
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
@@ -1227,7 +1227,7 @@ void KisSelectionManager::smooth()
 
     delete[] out;
 
-    dev->setDirty();
+    dev->setDirty(img->bounds());
     dev->emitSelectionChanged();
 }
 

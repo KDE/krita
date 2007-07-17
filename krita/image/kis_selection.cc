@@ -262,6 +262,9 @@ void KisSelection::updateProjection()
 {
     clear();
     if(m_hasPixelSelection) {
+         quint8 defPixel = *(m_pixelSelection->dataManager()->defaultPixel());
+         m_datamanager->setDefaultPixel(&defPixel);
+
         m_pixelSelection->renderToProjection(this);
     }
     if(m_hasShapeSelection) {

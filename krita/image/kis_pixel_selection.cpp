@@ -213,6 +213,7 @@ QVector<QPolygon> KisPixelSelection::outline()
     QTime t;
     t.start();
 
+    quint8 defaultPixel = *(m_datamanager->defaultPixel());
     QRect selectionExtent = exactBounds();
     qint32 xOffset = selectionExtent.x();
     qint32 yOffset = selectionExtent.y();
@@ -232,7 +233,7 @@ QVector<QPolygon> KisPixelSelection::outline()
     for (qint32 y = 0; y < height; y++) {
         for (qint32 x = 0; x < width; x++) {
 
-            if(buffer[y*width+x]== MIN_SELECTED)
+            if(buffer[y*width+x]== defaultPixel)
                 continue;
 
             EdgeType startEdge = TopEdge;
@@ -280,20 +281,21 @@ QVector<QPolygon> KisPixelSelection::outline()
 
 
 
-bool KisPixelSelection::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, quint8* buffer, qint32 bufWidth, qint32 bufHeight)
+bool KisPixelSelection::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, quint8* buffer, qint32 bufWidth, qint32 bufHeight )
 {
-    if(buffer[y*bufWidth+x] == MIN_SELECTED)
+    quint8 defaultPixel = *(m_datamanager->defaultPixel());
+    if(buffer[y*bufWidth+x] == defaultPixel)
         return false;
 
     switch(edge){
         case LeftEdge:
-            return x == 0 || buffer[y*bufWidth+(x - 1)] == MIN_SELECTED;
+            return x == 0 || buffer[y*bufWidth+(x - 1)] == defaultPixel;
         case TopEdge:
-            return y == 0 || buffer[(y - 1)*bufWidth+x] == MIN_SELECTED;
+            return y == 0 || buffer[(y - 1)*bufWidth+x] == defaultPixel;
         case RightEdge:
-            return x == bufWidth -1 || buffer[y*bufWidth+(x + 1)] == MIN_SELECTED;
+            return x == bufWidth -1 || buffer[y*bufWidth+(x + 1)] == defaultPixel;
         case BottomEdge:
-            return y == bufHeight -1 || buffer[(y + 1)*bufWidth+x] == MIN_SELECTED;
+            return y == bufHeight -1 || buffer[(y + 1)*bufWidth+x] == defaultPixel;
     }
     return false;
 }
@@ -372,6 +374,6 @@ void KisPixelSelection::renderToProjection(KisSelection* projection)
 {
     KisPainter painter(projection);
     QRect r = selectedExactRect();
-    painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, KisPaintDeviceSP(this), r.x(), r.y(), r.width(), r.height());
+    painter.bitBlt(r.x(), r.y(), COMPOSITE_COPY, KisPaintDeviceSP(this), r.x(), r.y(), r.width(), r.height());
     painter.end();
 }

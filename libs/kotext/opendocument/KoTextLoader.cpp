@@ -832,14 +832,16 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
                                 kDebug() << "Final date format :" << dateFormat << endl;
                                 KoInlineObject *dateObject = dateFactory->createInlineObject(new KoProperties());
                                 QString result;
+                                
+                                QDateTime dateTime = QDateTime::fromString(ts.attributeNS(KoXmlNS::text, localName + "-value"), Qt::ISODate);
+                                if (ts.attributeNS(KoXmlNS::text, "fixed") != "true")
+                                    dateTime = QDateTime::currentDateTime();
                                 if (localName == "date") {
-                                    QDateTime dateTime = QDateTime::fromString(ts.attributeNS(KoXmlNS::text, "date-value"), Qt::ISODate);
                                     if (dateFormat.isEmpty())
                                         result = dateTime.date().toString(Qt::LocalDate);
                                     else
                                         result = dateTime.date().toString(dateFormat);
                                 } else {
-                                    QDateTime dateTime = QDateTime::fromString(ts.attributeNS(KoXmlNS::text, "time-value"), Qt::ISODate);
                                     if (dateFormat.isEmpty())
                                         result = dateTime.time().toString(Qt::LocalDate);
                                     else

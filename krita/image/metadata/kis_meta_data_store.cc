@@ -22,6 +22,7 @@
 
 #include "kis_meta_data_entry.h"
 #include "kis_meta_data_schema.h"
+#include "kis_meta_data_value.h"
 
 using namespace KisMetaData;
 
@@ -50,12 +51,18 @@ Store::~Store()
 
 void Store::copyFrom(const Store* store)
 {
-//     const Entry& entry;
-//     foreach(entry, store->entries)
+    for(QHash<QString, Entry>::const_iterator entryIt = store->begin();
+        entryIt != store->end(); ++entryIt)
     {
-//         if(entry.value()->type() != KisMetaData::Value::Invalid)
+        const Entry& entry = entryIt.value();
+        if(entry.value().type() != KisMetaData::Value::Invalid)
         {
-//             Entry& thisEntry = getEntry(  );
+            if(hasEntry(entry.qualifiedName()))
+            {
+                getEntry( entry.qualifiedName() ).value() = entry.value();
+            } else {
+                addEntry(entry);
+            }
         }
     }
 }

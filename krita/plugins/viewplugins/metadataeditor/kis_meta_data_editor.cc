@@ -43,7 +43,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         KPageDialog(parent), d(new Private)
 {
     d->originalStore = originalStore;
-    d->store = originalStore;// new KisMetaData::Store(*originalStore);
+    d->store = new KisMetaData::Store(*originalStore);
     
     QStringList files = KGlobal::dirs()->findAllResources("data", "kritaplugins/metadataeditor/*.rc");
 
@@ -146,13 +146,13 @@ KisMetaDataEditor::~KisMetaDataEditor()
     {
         delete e;
     }
-//     delete d->store;
+    delete d->store;
     delete d;
 }
 
 void KisMetaDataEditor::accept ()
 {
     KPageDialog::accept();
-    d->store->debugDump();
+    d->originalStore->copyFrom(d->store);
 }
 

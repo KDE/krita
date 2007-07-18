@@ -4,6 +4,8 @@
     <Menu name="Tools"><text>&amp;Tools</text>
         <Menu name="Recording"><text>&amp;Recording</text>
             <Action name="Recording_Replay"/>
+            <Action name="Recording_Save"/>
+            <Action name="Recording_Load"/>
         </Menu>
     </Menu>
 </MenuBar>

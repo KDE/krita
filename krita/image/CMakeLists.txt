@@ -63,6 +63,7 @@ set(kritaimage_LIB_SRCS
    kis_painter.cc
    kis_paintop.cc
    kis_paintop_registry.cc
+   kis_paint_information.cc
    kis_pattern.cc
    kis_random_accessor.cpp
    kis_random_sub_accessor.cpp

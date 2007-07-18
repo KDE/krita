@@ -67,7 +67,7 @@ void KoResource::setValid(bool valid)
     d->valid = valid;
 }
 
-void KoResource::toXML(QDomDocument& , QDomElement& e)
+void KoResource::toXML(QDomDocument& , QDomElement& e) const
 {
     e.setAttribute("name", name());
     e.setAttribute("filename", filename());

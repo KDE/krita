@@ -121,6 +121,8 @@ public:
 
     virtual KisBrush* clone() const;
 
+    virtual void toXML(QDomDocument& , QDomElement&) const;
+
 protected:
     void setWidth(qint32 w);
     void setHeight(qint32 h);

@@ -16,46 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_recorded_action.h"
+#include "kis_paint_information.h"
 
-#include <QDomDocument>
 #include <QDomElement>
-#include <QString>
 
-struct KisRecordedAction::Private {
-    QString name;
-    QString id;
-};
 
-KisRecordedAction::KisRecordedAction(QString name, QString id) : d(new Private)
+void KisPaintInformation::toXML(QDomDocument&, QDomElement& e)
 {
-    d->name = name;
-    d->id = id;
-}
-
-KisRecordedAction::~KisRecordedAction()
-{
-    delete d;
-}
-
-QString KisRecordedAction::id()
-{
-    return d->id;
-}
-
-QString KisRecordedAction::name()
-{
-    return d->name;
-}
-
-void KisRecordedAction::toXML(QDomDocument& , QDomElement elt)
-{
-    elt.setAttribute( "name", name() );
-    elt.setAttribute( "id", id() );
-}
-
-void KisRecordedAction::fromXML(QDomElement elt)
-{
-    d->name = elt.attribute("name","");
-    Q_ASSERT(d->id == elt.attribute( "id", ""));
+    e.setAttribute("pointX", pos.x());
+    e.setAttribute("pointY", pos.y());
+    e.setAttribute("pressure", pressure);
+    e.setAttribute("xTilt", xTilt);
+    e.setAttribute("yTilt", yTilt);
+    e.setAttribute("movementX", movement.x());
+    e.setAttribute("movementY", movement.y());
 }

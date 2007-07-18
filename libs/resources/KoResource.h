@@ -65,7 +65,7 @@ public:
      */
     virtual QImage img() {return QImage(); }
 
-    virtual void toXML(QDomDocument& , QDomElement&);
+    virtual void toXML(QDomDocument& , QDomElement&) const;
     
 public:
     QString filename() const;

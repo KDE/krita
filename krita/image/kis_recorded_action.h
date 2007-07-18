@@ -19,6 +19,8 @@
 #ifndef _KIS_RECORDED_ACTION_H_
 #define _KIS_RECORDED_ACTION_H_
 
+class QDomDocument;
+class QDomElement;
 class QString;
 
 #include <krita_export.h>
@@ -29,6 +31,11 @@ class KRITAIMAGE_EXPORT KisRecordedAction {
         KisRecordedAction(QString name, QString id);
         virtual ~KisRecordedAction();
         virtual void play() = 0;
+        virtual void toXML(QDomDocument& doc, QDomElement elt);
+        virtual void fromXML(QDomElement elt);
+    public:
+        QString id();
+        QString name();
     private:
         Private* const d;
 };

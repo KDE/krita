@@ -20,6 +20,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QDomElement>
 #include <QFile>
 #include <QImage>
 #include <QPoint>
@@ -1327,6 +1328,12 @@ KisBrush* KisBrush::clone() const {
     c->setValid(true);
 
     return c;
+}
+
+void KisBrush::toXML(QDomDocument& d, QDomElement& e) const
+{
+    e.setAttribute( "type", "brush" );
+    KoResource::toXML(d,e);
 }
 
 #include "kis_brush.moc"

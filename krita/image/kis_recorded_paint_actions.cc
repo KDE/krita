@@ -18,6 +18,10 @@
 
 #include "kis_recorded_paint_actions.h"
 
+#include <QDomDocument>
+#include <QDomElement>
+
+#include "kis_brush.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
 #include "kis_paint_information.h"
@@ -66,4 +70,20 @@ void KisRecordedPolyLinePaintAction::play()
     {
         savedDist = painter.paintLine(d->infos[i],d->infos[i+1]);
     }
+}
+
+void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement elt)
+{
+    elt.setAttribute("layer", d->layer->id());
+    elt.setAttribute("paintop", d->paintOpId);
+    QDomElement ressourceElt = doc.createElement( "Brush");
+    d->brush->toXML(doc, ressourceElt);
+    elt.appendChild(ressourceElt);
+    foreach(KisPaintInformation info, d->infos)
+    {
+        QDomElement infoElt = doc.createElement( "Waypoint");
+        info.toXML(doc, infoElt);
+        elt.appendChild(infoElt);
+    }
+    KisRecordedPaintAction::toXML(doc,elt);
 }

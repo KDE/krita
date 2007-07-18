@@ -23,6 +23,8 @@
 #include "kis_vec.h"
 #include "krita_export.h"
 
+class QDomDocument;
+class QDomElement;
 
 /**
  * This class keeps information that can be used in the painting process, for example by
@@ -55,5 +57,7 @@ public:
 
     /// The movement of the pen is equal to current position minus the last position of the call to paintAt
     KisVector2D movement;
+    
+    void toXML(QDomDocument&, QDomElement&);
 };
 #endif

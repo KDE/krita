@@ -81,8 +81,6 @@ set(kritaimage_LIB_SRCS
    kis_perspective_math.cpp
    kis_mask.cc
    kis_effect_mask.cc
-   kis_progress_updater.cpp
-   kis_progress_updater_p.cpp
    kis_image_view_converter.cpp
    kis_image_commands.cc
    kis_layer_commands.cc

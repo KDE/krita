@@ -35,7 +35,7 @@ int testLookup()
     map2.insert( "map2key1", "map2value1" );
     map2.insert( "map2key2", "map2value2" );
 
-    KoGenStyle first( KoGenStyle::STYLE_AUTO, "paragraph" );
+    KoGenStyle first( KoGenStyle::StyleAuto, "paragraph" );
     first.addAttribute( "style:master-page-name", "Standard" );
     first.addProperty( "style:page-number", "0" );
     first.addProperty( "style:foobar", "2", KoGenStyle::TextType );
@@ -45,9 +45,9 @@ int testLookup()
     QString firstName = coll.lookup( first );
     kDebug() << "The first style got assigned the name " << firstName << endl;
     assert( firstName == "A1" ); // it's fine if it's something else, but the koxmlwriter tests require a known name
-    assert( first.type() == KoGenStyle::STYLE_AUTO );
+    assert( first.type() == KoGenStyle::StyleAuto );
 
-    KoGenStyle second( KoGenStyle::STYLE_AUTO, "paragraph" );
+    KoGenStyle second( KoGenStyle::StyleAuto, "paragraph" );
     second.addAttribute( "style:master-page-name", "Standard" );
     second.addProperty( "style:page-number", "0" );
     second.addProperty( "style:foobar", "2", KoGenStyle::TextType );
@@ -66,7 +66,7 @@ int testLookup()
     s = coll.style( "foobarblah" ); // check lookup of non-existing style
     assert( !s );
 
-    KoGenStyle third( KoGenStyle::STYLE_AUTO, "paragraph", secondName ); // inherited style
+    KoGenStyle third( KoGenStyle::StyleAuto, "paragraph", secondName ); // inherited style
     third.addProperty( "style:margin-left", "1.249cm" );
     third.addProperty( "style:page-number", "0" ); // same as parent
     third.addProperty( "style:foobar", "3", KoGenStyle::TextType ); // different from parent
@@ -76,14 +76,14 @@ int testLookup()
     kDebug() << "The third style got assigned the name " << thirdName << endl;
     assert( thirdName == "P1" );
 
-    KoGenStyle user( KoGenStyle::STYLE_USER, "paragraph" ); // differs from third since it doesn't inherit second, and has a different type
+    KoGenStyle user( KoGenStyle::StyleUser, "paragraph" ); // differs from third since it doesn't inherit second, and has a different type
     user.addProperty( "style:margin-left", "1.249cm" );
 
     QString userStyleName = coll.lookup( user, "User", KoGenStyles::DontForceNumbering );
     kDebug() << "The user style got assigned the name " << userStyleName << endl;
     assert( userStyleName == "User" );
 
-    KoGenStyle sameAsParent( KoGenStyle::STYLE_AUTO, "paragraph", secondName ); // inherited style
+    KoGenStyle sameAsParent( KoGenStyle::StyleAuto, "paragraph", secondName ); // inherited style
     sameAsParent.addAttribute( "style:master-page-name", "Standard" );
     sameAsParent.addProperty( "style:page-number", "0" );
     sameAsParent.addProperty( "style:foobar", "2", KoGenStyle::TextType );
@@ -97,7 +97,7 @@ int testLookup()
 
     // OK, now add a style marked as for styles.xml; it looks like the above style, but
     // since it's marked for styles.xml it shouldn't be shared with it.
-    KoGenStyle headerStyle( KoGenStyle::STYLE_AUTO, "paragraph" );
+    KoGenStyle headerStyle( KoGenStyle::StyleAuto, "paragraph" );
     headerStyle.addAttribute( "style:master-page-name", "Standard" );
     headerStyle.addProperty( "style:page-number", "0" );
     headerStyle.addProperty( "style:foobar", "2", KoGenStyle::TextType );
@@ -107,10 +107,10 @@ int testLookup()
     QString headerStyleName = coll.lookup( headerStyle, "foobar" );
 
     assert( coll.styles().count() == 4 );
-    assert( coll.styles( KoGenStyle::STYLE_AUTO ).count() == 2 );
-    assert( coll.styles( KoGenStyle::STYLE_USER ).count() == 1 );
+    assert( coll.styles( KoGenStyle::StyleAuto ).count() == 2 );
+    assert( coll.styles( KoGenStyle::StyleUser ).count() == 1 );
 
-    Q3ValueList<KoGenStyles::NamedStyle> stylesXmlStyles = coll.styles( KoGenStyle::STYLE_AUTO, true );
+    Q3ValueList<KoGenStyles::NamedStyle> stylesXmlStyles = coll.styles( KoGenStyle::StyleAuto, true );
     assert( stylesXmlStyles.count() == 1 );
     KoGenStyles::NamedStyle firstStyle = stylesXmlStyles.first();
     assert( firstStyle.name == headerStyleName );
@@ -125,9 +125,9 @@ int testLookup()
 
     coll.markStyleForStylesXml( firstName );
     {
-        Q3ValueList<KoGenStyles::NamedStyle> stylesXmlStyles = coll.styles( KoGenStyle::STYLE_AUTO, true );
+        Q3ValueList<KoGenStyles::NamedStyle> stylesXmlStyles = coll.styles( KoGenStyle::StyleAuto, true );
         assert( stylesXmlStyles.count() == 2 );
-        Q3ValueList<KoGenStyles::NamedStyle> contentXmlStyles = coll.styles( KoGenStyle::STYLE_AUTO, false );
+        Q3ValueList<KoGenStyles::NamedStyle> contentXmlStyles = coll.styles( KoGenStyle::StyleAuto, false );
         assert( contentXmlStyles.count() == 1 );
     }
 
@@ -145,16 +145,16 @@ int testDefaultStyle()
      */
     KoGenStyles coll;
 
-    KoGenStyle defaultStyle( KoGenStyle::STYLE_AUTO, "paragraph" );
+    KoGenStyle defaultStyle( KoGenStyle::StyleAuto, "paragraph" );
     defaultStyle.addAttribute( "style:master-page-name", "Standard" );
     defaultStyle.addProperty( "myfont", "isBold" );
     defaultStyle.setDefaultStyle( true );
     QString defaultStyleName = coll.lookup( defaultStyle );
     assert( !defaultStyleName.isEmpty() ); // whatever, but not empty
-    assert( defaultStyle.type() == KoGenStyle::STYLE_AUTO );
+    assert( defaultStyle.type() == KoGenStyle::StyleAuto );
     assert( defaultStyle.isDefaultStyle() );
 
-    KoGenStyle anotherStyle( KoGenStyle::STYLE_AUTO, "paragraph" );
+    KoGenStyle anotherStyle( KoGenStyle::StyleAuto, "paragraph" );
     anotherStyle.addAttribute( "style:master-page-name", "Standard" );
     anotherStyle.addProperty( "myfont", "isBold" );
     QString anotherStyleName = coll.lookup( anotherStyle );
@@ -170,7 +170,7 @@ int testDefaultStyle()
     // from the default style.
     // KoGenStyles doesn't fetch info from the parent style when testing
     // for equality, so KSpread uses isEmpty() to check for equality-to-parent.
-    KoGenStyle dataStyle( KoGenStyle::STYLE_AUTO, "paragraph", defaultStyleName );
+    KoGenStyle dataStyle( KoGenStyle::StyleAuto, "paragraph", defaultStyleName );
     assert( dataStyle.isEmpty() );
     // and then it doesn't look up the auto style, but rather uses the parent style directly.
 
@@ -185,7 +185,7 @@ int testUserStyles()
      */
     KoGenStyles coll;
 
-    KoGenStyle user1( KoGenStyle::STYLE_USER, "paragraph" );
+    KoGenStyle user1( KoGenStyle::StyleUser, "paragraph" );
     user1.addAttribute( "style:display-name", "User 1" );
     user1.addProperty( "myfont", "isBold" );
 
@@ -193,7 +193,7 @@ int testUserStyles()
     kDebug() << "The user style got assigned the name " << user1StyleName << endl;
     assert( user1StyleName == "User1" );
 
-    KoGenStyle user2( KoGenStyle::STYLE_USER, "paragraph" );
+    KoGenStyle user2( KoGenStyle::StyleUser, "paragraph" );
     user2.addAttribute( "style:display-name", "User 2" );
     user2.addProperty( "myfont", "isBold" );
 
@@ -204,7 +204,7 @@ int testUserStyles()
     // And now, what if the data uses that style?
     // This is like sameAsParent in the other test, but this time the
     // parent is a STYLE_USER...
-    KoGenStyle dataStyle( KoGenStyle::STYLE_AUTO, "paragraph", user2StyleName );
+    KoGenStyle dataStyle( KoGenStyle::StyleAuto, "paragraph", user2StyleName );
     dataStyle.addProperty( "myfont", "isBold" );
 
     QString dataStyleName = coll.lookup( dataStyle, "DataStyle" );
@@ -212,7 +212,7 @@ int testUserStyles()
     assert( dataStyleName == "User2" ); // it found the parent as equal
 
     // Let's do the opposite test, just to make sure
-    KoGenStyle dataStyle2( KoGenStyle::STYLE_AUTO, "paragraph", user2StyleName );
+    KoGenStyle dataStyle2( KoGenStyle::StyleAuto, "paragraph", user2StyleName );
     dataStyle2.addProperty( "myfont", "isNotBold" );
 
     QString dataStyle2Name = coll.lookup( dataStyle2, "DataStyle" );
@@ -239,7 +239,7 @@ int testStylesDotXml()
 
     // Check that an autostyle-in-style.xml and an autostyle-in-content.xml
     // don't get the same name. It confuses KoGenStyle's named-based maps.
-    KoGenStyle headerStyle( KoGenStyle::STYLE_AUTO, "paragraph" );
+    KoGenStyle headerStyle( KoGenStyle::StyleAuto, "paragraph" );
     headerStyle.addAttribute( "style:master-page-name", "Standard" );
     headerStyle.addProperty( "style:page-number", "0" );
     headerStyle.setAutoStyleInStylesDotXml( true );
@@ -248,7 +248,7 @@ int testStylesDotXml()
 
     //coll.dump();
 
-    KoGenStyle first( KoGenStyle::STYLE_AUTO, "paragraph" );
+    KoGenStyle first( KoGenStyle::StyleAuto, "paragraph" );
     first.addAttribute( "style:master-page-name", "Standard" );
     QString firstName = coll.lookup( first, "P" );
     kDebug() << "The auto style got assigned the name " << firstName << endl;

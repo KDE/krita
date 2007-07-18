@@ -603,10 +603,10 @@ QString KoShape::style( KoShapeSavingContext &context ) const
 {
     KoGenStyle style;
     if ( context.isSet( KoShapeSavingContext::PresentationShape ) ) {
-        style = KoGenStyle( KoGenStyle::STYLE_PRESENTATIONAUTO, "presentation" );
+        style = KoGenStyle( KoGenStyle::StylePresentationAuto, "presentation" );
     }
     else {
-        style = KoGenStyle( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
+        style = KoGenStyle( KoGenStyle::StyleGraphicAuto, "graphic" );
     }
 
     // and fill the style
@@ -621,9 +621,24 @@ QString KoShape::style( KoShapeSavingContext &context ) const
         case Qt::NoBrush:
             style.addProperty( "draw:fill","none" );
             break;
-        default:    // TODO all the other ones.
+        case Qt::SolidPattern:
+        case Qt::Dense1Pattern:
+        case Qt::Dense2Pattern:
+        case Qt::Dense3Pattern:
+        case Qt::Dense4Pattern:
+        case Qt::Dense5Pattern:
+        case Qt::Dense6Pattern:
+        case Qt::Dense7Pattern:
+        case Qt::HorPattern:
+        case Qt::BDiagPattern:
+        case Qt::VerPattern:
+        case Qt::FDiagPattern:
+        case Qt::CrossPattern:
+        case Qt::DiagCrossPattern:
             KoOasisStyles::saveOasisFillStyle( style, context.mainStyles(), bg );
             break;
+        default:    // TODO all the other ones.
+        break;
     }
 
     if ( context.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {

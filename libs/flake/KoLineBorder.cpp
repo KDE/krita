@@ -77,7 +77,7 @@ void KoLineBorder::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
         {
             style.addProperty( "draw:stroke", "dash" );
             // save stroke dash (14.14.7) which is severly limited, but still
-            KoGenStyle dashStyle( KoGenStyle::STYLE_STROKE_DASH );
+            KoGenStyle dashStyle( KoGenStyle::StyleStrokeDash );
             dashStyle.addAttribute( "draw:style", "rect" );
             QVector<qreal> dashes = lineDashes();
             dashStyle.addAttribute( "draw:dots1", static_cast<int>(1) );

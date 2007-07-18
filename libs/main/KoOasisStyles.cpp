@@ -699,7 +699,7 @@ QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QStrin
     Q_UNUSED(_suffix);
     kDebug(30003)<<"QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
-    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_TIME );
+    KoGenStyle currentStyle( KoGenStyle::StyleNumericTime );
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
@@ -854,7 +854,7 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
 
     // Not supported into Qt: "era" "week-of-year" "quarter"
 
-    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_DATE );
+    KoGenStyle currentStyle( KoGenStyle::StyleNumericDate );
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
@@ -1029,7 +1029,7 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
     kDebug(30003)<<"QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
-    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_FRACTION );
+    KoGenStyle currentStyle( KoGenStyle::StyleNumericFraction );
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
@@ -1094,7 +1094,7 @@ QString KoOasisStyles::saveOasisNumberStyle( KoGenStyles &mainStyles, const QStr
     kDebug(30003)<<"QString saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
-    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_NUMBER );
+    KoGenStyle currentStyle( KoGenStyle::StyleNumericNumber );
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
@@ -1144,7 +1144,7 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
     kDebug(30003)<<"QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
-    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_PERCENTAGE );
+    KoGenStyle currentStyle( KoGenStyle::StyleNumericPercentage );
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
@@ -1196,7 +1196,7 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     kDebug(30003)<<"QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
-    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_SCIENTIFIC );
+    KoGenStyle currentStyle( KoGenStyle::StyleNumericScientific );
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     int decimalplace = 0;
@@ -1275,7 +1275,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles,
     kDebug(30003)<<"QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
-    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_CURRENCY );
+    KoGenStyle currentStyle( KoGenStyle::StyleNumericCurrency );
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
@@ -1331,7 +1331,7 @@ QString KoOasisStyles::saveOasisTextStyle( KoGenStyles &mainStyles, const QStrin
     kDebug(30003)<<"QString saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
-    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_TEXT );
+    KoGenStyle currentStyle( KoGenStyle::StyleNumericText );
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
@@ -1433,7 +1433,7 @@ void KoOasisStyles::saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& main
 
 QString KoOasisStyles::saveOasisHatchStyle( KoGenStyles& mainStyles, const QBrush &brush )
 {
-    KoGenStyle hatchStyle( KoGenStyle::STYLE_HATCH /*no family name*/);
+    KoGenStyle hatchStyle( KoGenStyle::StyleHatch /*no family name*/);
     hatchStyle.addAttribute( "draw:color", brush.color().name() );
     //hatchStyle.addAttribute( "draw:distance", m_distance ); not implemented into kpresenter
     switch( brush.style() )

@@ -20,13 +20,15 @@
 #ifndef KOPASTYLES_H
 #define KOPASTYLES_H
 
+#include <KoGenStyle.h>
+
 /**
  * This namespace contains style types needed for kopageapp
  */
 namespace KoPAStyles
 {
     enum { 
-        STYLE_PAGE = 20 /// style for drawing-page see ODF 14.13.2 Drawing Page Style
+        STYLE_PAGE = KoGenStyle::StyleFirstCustom /// style for drawing-page see ODF 14.13.2 Drawing Page Style
     };
 }
 

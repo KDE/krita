@@ -26,7 +26,7 @@
 
 KoGenStyle KoPageLayout::saveOasis() const
 {
-    KoGenStyle style(KoGenStyle::STYLE_PAGELAYOUT);
+    KoGenStyle style(KoGenStyle::StylePageLayout);
     style.addPropertyPt("fo:page-width", width);
     style.addPropertyPt("fo:page-height", height);
     style.addPropertyPt("fo:margin-left", left);

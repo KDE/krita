@@ -40,36 +40,37 @@ class KOMAIN_EXPORT KoGenStyle
 public:
     /**
      * Possible values for the "type" argument of the KoGenStyle constructor.
-     * Those values can be extended by applications (starting at number 20),
+     * Those values can be extended by applications (starting at StyleFirstCustom),
      * it's for their own consumption anyway.
      * (The reason for having the very common ones here, is to make it possible to
      * use them from libkotext and flake).
      */
-    enum { STYLE_PAGELAYOUT = 0,
-           STYLE_USER = 1,
-           STYLE_AUTO = 2,
-           STYLE_MASTER = 3,
-           STYLE_LIST = 4,
-           STYLE_AUTO_LIST = 5,
-           STYLE_NUMERIC_NUMBER = 6,
-           STYLE_NUMERIC_DATE = 7,
-           STYLE_NUMERIC_TIME = 8,
-           STYLE_NUMERIC_FRACTION = 9,
-           STYLE_NUMERIC_PERCENTAGE = 10,
-           STYLE_NUMERIC_SCIENTIFIC = 11,
-           STYLE_NUMERIC_CURRENCY = 12,
-           STYLE_NUMERIC_TEXT = 13,
-           STYLE_HATCH = 14,
-           STYLE_GRAPHICAUTO = 15,
-           STYLE_PRESENTATIONAUTO = 16,
-           STYLE_STROKE_DASH = 17};
+    enum { StylePageLayout = 0,
+           StyleUser = 1,
+           StyleAuto = 2,
+           StyleMaster = 3,
+           StyleList = 4,
+           StyleAutoList = 5,
+           StyleNumericNumber = 6,
+           StyleNumericDate = 7,
+           StyleNumericTime = 8,
+           StyleNumericFraction = 9,
+           StyleNumericPercentage = 10,
+           StyleNumericScientific = 11,
+           StyleNumericCurrency = 12,
+           StyleNumericText = 13,
+           StyleHatch = 14,
+           StyleGraphicAuto = 15,
+           StylePresentationAuto = 16,
+           StyleStrokeDash = 17,
+           StyleFirstCustom = 25 };
 
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),
      * but first you must define its properties and attributes.
      *
      * @param type this is a hook for the application to categorize styles
-     * See the STYLE_* enum. Ignored when writing out the style.
+     * See the Style* enum. Ignored when writing out the style.
      *
      * @param familyName The value for style:family, e.g. text, paragraph, graphic etc.
      * The family is for style:style elements only; number styles and list styles don't have one.
@@ -80,7 +81,7 @@ public:
                          const QString& parentName = QString() );
     ~KoGenStyle();
 
-    /*
+    /**
      * setAutoStyleInStylesDotXml(true) marks a given automatic style as being needed in styles.xml.
      * For instance styles used by headers and footers need to go there, since
      * they are saved in styles.xml, and styles.xml must be independent from content.xml.
@@ -92,7 +93,7 @@ public:
     /// @return the value passed to setAutoStyleInStylesDotXml; false by default
     bool autoStyleInStylesDotXml() const { return m_autoStyleInStylesDotXml; }
 
-    /*
+    /**
      * setDefaultStyle(true) marks a given style as being the default style.
      * This means we expect that you will call writeStyle( ...,"style:default-style"),
      * and its name will be ommitted in the output.

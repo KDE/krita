@@ -202,7 +202,7 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
         if ( m_paragLayout.counter->numbering() != KoParagCounter::NUM_NONE &&
              m_paragLayout.counter->style() != KoParagCounter::STYLE_NONE )
         {
-            KoGenStyle listStyle( KoGenStyle::STYLE_LIST /*, no family*/ );
+            KoGenStyle listStyle( KoGenStyle::StyleList /*, no family*/ );
             m_paragLayout.counter->saveOasis( listStyle, true );
             // This display-name will probably look nicer in OO, but this also means
             // no re-use possible between list styles...

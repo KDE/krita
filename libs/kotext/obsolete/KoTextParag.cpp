@@ -2860,7 +2860,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
     if ( m_layout.style )
         parentStyleName = m_layout.style->name();
 
-    KoGenStyle autoStyle( KoGenStyle::STYLE_AUTO, "paragraph", parentStyleName );
+    KoGenStyle autoStyle( KoGenStyle::StyleAuto, "paragraph", parentStyleName );
     paragFormat()->save( autoStyle, context );
     m_layout.saveOasis( autoStyle, context, false );
 
@@ -2937,7 +2937,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
         if ( curFormat == paragFormat() ) {                             \
             writer.addTextSpan( text.mid( startPos, next - startPos ), m_tabCache ); \
         } else {                                                        \
-            KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text" );            \
+            KoGenStyle gs( KoGenStyle::StyleAuto, "text" );            \
             curFormat->save( gs, context, paragFormat() );              \
             writer.startElement( "text:span" );                         \
             if ( !gs.isEmpty() ) {                                      \
@@ -3017,7 +3017,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
         }
         CHECKPOS( i ) // do cursor position and bookmarks
         if ( ch.isCustom() ) {
-            KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text" );
+            KoGenStyle gs( KoGenStyle::StyleAuto, "text" );
             curFormat->save( gs, context, paragFormat() );
             writer.startElement( "text:span" );
             if ( !gs.isEmpty() ) {

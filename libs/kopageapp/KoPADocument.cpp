@@ -189,7 +189,7 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 void KoPADocument::saveOdfAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, bool stylesDotXml )
 {
     // test style writing
-    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_GRAPHICAUTO, stylesDotXml );
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleGraphicAuto, stylesDotXml );
     QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         //qDebug() << "style:style" << ( *it ).name;
@@ -203,7 +203,7 @@ void KoPADocument::saveOdfAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyl
         ( *it ).style->writeStyle( &contentWriter, mainStyles, "style:style", ( *it ).name , "style:drawing-page-properties" );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT, stylesDotXml );
+    styles = mainStyles.styles( KoGenStyle::StylePageLayout, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         //qDebug() << "style:style" << ( *it ).name;

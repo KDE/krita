@@ -30,13 +30,14 @@ public:
 };
 
 ActionJob::ActionJob(KoAction *parent, Enable enable, const QVariant &params)
-    : Job(parent),
+    : Job(0), // don't pass a parent since QObject refuses to work when you pass a parent thats in a different thread
     m_action(parent),
     m_enable(enable),
     m_started(false),
     m_params(params)
 {
-    connect(this, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(deleteLater()));
+    connect(this, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(deleteLater()), Qt::DirectConnection);
+    moveToThread(QCoreApplication::instance()->thread());
 }
 
 void ActionJob::run() {

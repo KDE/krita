@@ -110,11 +110,7 @@ QPixmap KoImageData::pixmap() {
     return d->pixmap;
 }
 
-void KoImageData::setUrl(const KUrl &location) {
-    d->url = location;
-}
-
-KUrl KoImageData::location() const {
+KUrl KoImageData::imageLocation() const {
     return d->url;
 }
 
@@ -167,6 +163,7 @@ bool KoImageData::loadFromStore(QIODevice *device) {
                 return false;
             }
         }
+        d->url = d->tempImageFile->fileName();
         d->tempImageFile->close();
     }
     else { // small image; just load it in memory.

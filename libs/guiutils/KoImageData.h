@@ -51,7 +51,7 @@ public:
     enum ImageQuality {
         LowQuality,     // 50ppi
         MediumQuality,  // 100ppi
-        FullQuality     // upto 150ppi
+        HighQuality     // upto 150ppi
     };
 
     /**
@@ -96,14 +96,9 @@ public:
     QPixmap pixmap();
 
     /**
-     * Set a url as location.  Returned with the location() getter.
-     * This data member does not change the internal behavior.
-     */
-    void setUrl(const KUrl &location);
-    /**
      * Return the location as set on setUrl()
      */
-    KUrl location() const;
+    KUrl imageLocation() const;
 
     /// If using SaveInStore, the collection will set a url-like location using this method.
     void setStoreHref(const QString &href);

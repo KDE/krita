@@ -7,6 +7,8 @@ set(textvariables_SRCS
     DateVariable.cpp
     DateVariableFactory.cpp
     FixedDateFormat.cpp
+    PageVariable.cpp
+    PageVariableFactory.cpp
 )
 
 

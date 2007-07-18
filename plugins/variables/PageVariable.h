@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,22 +16,33 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "VariablesPlugin.h"
-#include "DateVariableFactory.h"
-#include "PageVariableFactory.h"
-#include <kgenericfactory.h>
+#ifndef PAGEVARIABLE_H
+#define PAGEVARIABLE_H
 
-#include <KoInlineObjectRegistry.h>
+#include <KoVariable.h>
 
-K_EXPORT_COMPONENT_FACTORY(textvariables,
-                           KGenericFactory<VariablesPlugin>( "VariablesPlugin" ) )
+#include <QString>
 
-VariablesPlugin::VariablesPlugin( QObject *parent, const QStringList& )
-    : QObject(parent)
-{
-    KoInlineObjectRegistry::instance()->add( new PageVariableFactory( parent));
-    KoInlineObjectRegistry::instance()->add( new DateVariableFactory( parent));
-}
+/**
+ * This is a KoVariable for page numbers.
+ */
+class PageVariable : public KoVariable {
+public:
+    enum PageType {
+        PageCount,
+        PageNumber
+    };
+    
+    /**
+     * Constructor.
+     */
+    PageVariable();
 
-#include "VariablesPlugin.moc"
+    void setProperties(const KoProperties *props);
 
+    void propertyChanged(Property property, const QVariant &value);
+private:
+    PageType m_type;
+};
+
+#endif

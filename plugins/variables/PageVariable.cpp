@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,22 +16,33 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "VariablesPlugin.h"
-#include "DateVariableFactory.h"
-#include "PageVariableFactory.h"
-#include <kgenericfactory.h>
 
-#include <KoInlineObjectRegistry.h>
+#include "PageVariable.h"
 
-K_EXPORT_COMPONENT_FACTORY(textvariables,
-                           KGenericFactory<VariablesPlugin>( "VariablesPlugin" ) )
+#include <KoProperties.h>
+#include <kdebug.h>
+#include <KoDocument.h>
 
-VariablesPlugin::VariablesPlugin( QObject *parent, const QStringList& )
-    : QObject(parent)
+PageVariable::PageVariable()
+    : KoVariable(true),
+    m_type(PageCount)
 {
-    KoInlineObjectRegistry::instance()->add( new PageVariableFactory( parent));
-    KoInlineObjectRegistry::instance()->add( new DateVariableFactory( parent));
 }
 
-#include "VariablesPlugin.moc"
+void PageVariable::setProperties(const KoProperties *props) {
+    // Nothing to be done here ?
+    if (props->boolProperty("count")) {
+        m_type = PageCount;
+    } else {
+        m_type = PageNumber;
+    }
+}
 
+void PageVariable::propertyChanged(Property property, const QVariant &value) {
+    if ((property == KoInlineObject::PageCount) && (m_type == PageCount)) {
+        setValue(value.toString());
+    }// else if ((property == KoInlineObject::StartPage) && (m_type == PageNumber)) {
+    //    setValue(value.toString());
+    //}
+    //TODO: support for the PageNumber...
+}

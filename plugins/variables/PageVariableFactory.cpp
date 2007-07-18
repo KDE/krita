@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,22 +16,22 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "VariablesPlugin.h"
-#include "DateVariableFactory.h"
+
 #include "PageVariableFactory.h"
-#include <kgenericfactory.h>
+#include "PageVariable.h"
 
-#include <KoInlineObjectRegistry.h>
+#include <KoProperties.h>
+#include <kdebug.h>
 
-K_EXPORT_COMPONENT_FACTORY(textvariables,
-                           KGenericFactory<VariablesPlugin>( "VariablesPlugin" ) )
-
-VariablesPlugin::VariablesPlugin( QObject *parent, const QStringList& )
-    : QObject(parent)
+PageVariableFactory::PageVariableFactory(QObject *parent)
+    : KoInlineObjectFactory(parent, "page")
 {
-    KoInlineObjectRegistry::instance()->add( new PageVariableFactory( parent));
-    KoInlineObjectRegistry::instance()->add( new DateVariableFactory( parent));
+    // Nothing
+    kDebug() << "Creating the page variable factory" << endl;
 }
 
-#include "VariablesPlugin.moc"
-
+KoInlineObject *PageVariableFactory::createInlineObject(const KoProperties *properties) const {
+    PageVariable *var = new PageVariable;
+    var->setProperties(properties);
+    return var;
+}

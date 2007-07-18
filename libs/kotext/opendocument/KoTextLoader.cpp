@@ -45,7 +45,6 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoInlineObjectRegistry.h>
 #include <KoProperties.h>
-#include <KoVariable.h>
 
 #include "../styles/KoStyleManager.h"
 #include "../styles/KoParagraphStyle.h"
@@ -829,23 +828,47 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
                                         dateFormat = dataFormat.prefix + dataFormat.formatStr + dataFormat.suffix;
                                     }
                                 }
-                                KoProperties *dateProperties = new KoProperties();
-                                dateProperties->setProperty("fixed", QVariant(ts.attributeNS(KoXmlNS::text, "fixed") == "true"));
-                                dateProperties->setProperty("time", ts.attributeNS(KoXmlNS::text, localName + "-value"));
-                                dateProperties->setProperty("definition", dateFormat);
-                                dateProperties->setProperty("adjust", ts.attributeNS(KoXmlNS::text, localName + "-adjust"));
+                                KoProperties dateProperties;
+                                dateProperties.setProperty("fixed", QVariant(ts.attributeNS(KoXmlNS::text, "fixed") == "true"));
+                                dateProperties.setProperty("time", ts.attributeNS(KoXmlNS::text, localName + "-value"));
+                                dateProperties.setProperty("definition", dateFormat);
+                                dateProperties.setProperty("adjust", ts.attributeNS(KoXmlNS::text, localName + "-adjust"));
                                 if (dateFormat.isEmpty())
-                                    dateProperties->setProperty("displayType", localName);
+                                    dateProperties.setProperty("displayType", localName);
                                 else
-                                    dateProperties->setProperty("displayType", "custom");
+                                    dateProperties.setProperty("displayType", "custom");
                                 
-                                KoInlineObject *dateObject = dateFactory->createInlineObject(dateProperties);
+                                KoInlineObject *dateObject = dateFactory->createInlineObject(&dateProperties);
                                 textObjectManager->insertInlineObject(cursor, dateObject);
                             }
                         }
                     }
                 }
             }
+        }
+        else if ( isTextNS && (localName == "page-count" || localName == "page-number") ) {
+            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (cursor.block().document()->documentLayout());
+            if ( layout ) {
+                KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                if ( textObjectManager ) {
+                    KoVariableManager *varManager = textObjectManager->variableManager();
+                    if (varManager) {
+                        if (KoInlineObjectRegistry::instance()->contains("page")) {
+                            KoInlineObjectFactory *pageFactory = KoInlineObjectRegistry::instance()->value("page");
+                            if (pageFactory) {
+                                KoProperties props;
+                                if (localName == "page-count")
+                                    props.setProperty("count", true);
+                                else
+                                    props.setProperty("count", false);
+                                KoInlineObject *pageObject = pageFactory->createInlineObject(&props);
+                                textObjectManager->insertInlineObject(cursor, pageObject);
+                            }
+                        }
+                    }
+                }
+            }
+
         }
         else
         {

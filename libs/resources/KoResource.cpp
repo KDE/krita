@@ -18,44 +18,59 @@
  */
 #include "KoResource.h"
 
-KoResource::KoResource(const QString& filename)
+#include <QDomElement>
+
+struct KoResource::Private {
+    QString name;
+    QString filename;
+    bool valid;
+};
+
+KoResource::KoResource(const QString& filename) : d(new Private)
 {
-    m_filename = filename;
-    m_valid = false;
+    d->filename = filename;
+    d->valid = false;
 }
 
 KoResource::~KoResource()
 {
+    delete d;
 }
 
 QString KoResource::filename() const
 {
-    return m_filename;
+    return d->filename;
 }
 
 void KoResource::setFilename(const QString& filename)
 {
-    m_filename = filename;
+    d->filename = filename;
 }
 
 QString KoResource::name() const
 {
-    return m_name;
+    return d->name;
 }
 
 void KoResource::setName(const QString& name)
 {
-    m_name = name;
+    d->name = name;
 }
 
 bool KoResource::valid() const
 {
-    return m_valid;
+    return d->valid;
 }
 
 void KoResource::setValid(bool valid)
 {
-    m_valid = valid;
+    d->valid = valid;
+}
+
+void KoResource::toXML(QDomDocument& , QDomElement& e)
+{
+    e.setAttribute("name", name());
+    e.setAttribute("filename", filename());
 }
 
 #include "KoResource.moc"

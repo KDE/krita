@@ -24,6 +24,9 @@
 #include <QString>
 #include <koresource_export.h>
 
+class QDomDocument;
+class QDomElement;
+
 /**
  * The KoResource class provides a representation of Krita image resources.  This
  * includes, but not limited to, brushes and patterns.
@@ -62,6 +65,8 @@ public:
      */
     virtual QImage img() {return QImage(); }
 
+    virtual void toXML(QDomDocument& , QDomElement&);
+    
 public:
     QString filename() const;
     void setFilename(const QString& filename);
@@ -75,9 +80,8 @@ private:
     KoResource& operator=(const KoResource&);
 
 private:
-    QString m_name;
-    QString m_filename;
-    bool m_valid;
+    struct Private;
+    Private* const d;
 };
 
 #endif // KORESOURCE_H_

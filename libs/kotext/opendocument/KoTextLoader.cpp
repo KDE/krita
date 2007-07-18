@@ -605,7 +605,8 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
             props.setLevel(0);
             listStyle->setLevel(props);
         }
-        listStyle->applyStyle(current, level);
+        if( prev != current )
+            listStyle->applyStyle(current, level);
     }
 
     // set the list level back to the previous value

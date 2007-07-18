@@ -23,15 +23,6 @@
 #include <QFontMetricsF>
 #include <QTextOption>
 
-// store notes in text using this class
-// make Layout detect these and then make a TextShape hold an additional QTextDocument
-// for footnotes.  Footnotes are then added to the shape and thus layouted.
-// the TextShape has to paint the footnote-document.
-
-// Got to think if its most useful to have the footnote document have an offset in where
-// the text is positioned, or that we need an 'offset-from-top' double in the shape.
-
-
 class KoInlineNote::Private {
 public:
     Private(KoInlineNote::Type t) : autoNumbering(false), type(t) {}

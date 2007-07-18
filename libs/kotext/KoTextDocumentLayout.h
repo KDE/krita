@@ -43,9 +43,12 @@ class KOTEXT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayout {
 public:
     class LayoutState;
 
+    /// This struct is a helper for painting of kotext texts.
     struct PaintContext {
         PaintContext() : viewConverter(0) { }
+        /// the QText context
         QAbstractTextDocumentLayout::PaintContext textContext;
+        /// A view converter, when set, is used to find out when the zoom is so low that painting of text is unneeded
         const KoViewConverter *viewConverter;
     };
 
@@ -150,7 +153,12 @@ public:
         virtual bool previousParag() = 0;
         /// Return the y position of the offset for the current shape (See KoTextShapeData::documentOffset() )
         virtual double documentOffsetInShape() = 0;
-        /// paint the document
+        /**
+         * Paint the document.
+         * Paint the whole document, at least within the cliprect as set on the painter.
+         * @param painter the painter to draw to.
+         * @param context a set of variables able to alter the way things are painted.
+         */
         virtual void draw(QPainter *painter, const KoTextDocumentLayout::PaintContext & context) = 0;
         /**
          * After all shapes have been used and there is still text left, use the param shape to continue
@@ -193,7 +201,7 @@ public:
     static void updateTabsForLine(const QTextBlock &block, int lineNumber);
 
 public slots:
-    /// make sure we start a layout run
+    /// make sure we start a layout run (returns immediately)
     void scheduleLayout();
 
 protected:

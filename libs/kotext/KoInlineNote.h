@@ -22,33 +22,63 @@
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 
-/** foot or end note */
+/**
+ * This object is an inline object, which means it is anchored in the text-flow and it can hold note info.
+ * Typical notes that use this are Footnotes and Endnotes.
+ */
 class KOTEXT_EXPORT KoInlineNote : public KoInlineObject {
 public:
+    /// The type of note specifies how the application will use the text from the note.
     enum Type {
-        Footnote,
-        Endnote
-        // Comment?
+        Footnote,   ///< Notes of this type will have their text placed at the bottom of a shape.
+        Endnote     ///< Notes of this type are used as endnotes in appliations that support that.
+        // Comment-note?
     };
 
+    /**
+     * Construct a new note to be inserted in the text using KoTextSelectionHandler::insertInlineObject() for example.
+     * @param type the type of note, which specifies how the application will use the text from the new note.
+     */
     KoInlineNote(Type type);
-    ~KoInlineNote();
+    // destructor
+    virtual ~KoInlineNote();
 
+    /**
+     * Set the text that backs this note.
+     * @param text the new text
+     */
     void setText(const QString &text);
+    /**
+     * Set the label that is shown at the spot this inline note is inserted.
+     * @param text the new label
+     */
     void setLabel(const QString &text);
+    /// return the current text
     QString text() const;
+    /// return the current label
     QString label() const;
 
+    /**
+     * @return whether the label should be automatically recreated or if the label is static.
+     */
     bool autoNumbering() const;
+    /**
+     * Set whether the label should be automatically recreated.
+     * @param on if true then changes in footnote-ordering will recalcualte the label.
+     */
     void setAutoNumbering(bool on);
 
+    /// return the type of note.
     Type type() const;
 
 protected:
+    /// reimplemented
     virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
             int posInDocument, const QTextCharFormat &format);
+    /// reimplemented
     virtual void resize(const QTextDocument *document, QTextInlineObject object,
             int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    /// reimplemented
     virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
             const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 

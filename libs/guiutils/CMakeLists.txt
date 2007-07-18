@@ -58,6 +58,8 @@ set(koguiutils_LIB_SRCS
    KoColorPatch.cpp
    KoDualColorButton.cpp
    KoLineStyleSelector.cpp
+    KoProgressUpdater.cpp
+    KoPrintingDialog.cpp
 )
 
 kde4_add_ui_files( koguiutils_LIB_SRCS

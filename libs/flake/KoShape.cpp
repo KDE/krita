@@ -404,8 +404,7 @@ void KoShape::notifyChanged()
 }
 
 void KoShape::setUserData(KoShapeUserData *userData) {
-    if(d->userData)
-        delete d->userData;
+    delete d->userData;
     d->userData = userData;
 }
 
@@ -414,7 +413,7 @@ KoShapeUserData *KoShape::userData() const {
 }
 
 void KoShape::setApplicationData(KoShapeApplicationData *appData) {
-    delete d->appData;
+    // appdata is deleted by the application.
     d->appData = appData;
 }
 

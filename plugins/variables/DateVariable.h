@@ -34,7 +34,14 @@
 class DateVariable : public KoVariable {
 public:
     enum DateType {
-        Fixed
+        Fixed,
+        AutoUpdate
+    };
+    
+    enum DisplayType {
+        Date,
+        Time,
+        Custom
     };
 
     /**
@@ -49,16 +56,26 @@ public:
     QString definition() const { return m_definition; }
     void setDefinition(const QString &definition);
 
-    int offset() const { return m_offset; }
-    void setOffset(int offset);
+    int daysOffset() const { return m_daysOffset; }
+    void setDaysOffset(int daysOffset);
+    
+    int monthsOffset() const { return m_monthsOffset; }
+    void setMonthsOffset(int monthsOffset);
+    
+    int yearsOffset() const { return m_yearsOffset; }
+    void setYearsOffset(int yearsOffset);
+    
+    int secsOffset() const { return m_secsOffset; }
+    void setSecsOffset(int secsOffset);
 
 private:
     void update();
 
     DateType m_type;
+    DisplayType m_displayType;
     QString m_definition;
     QDateTime m_time;
-    int m_offset;
+    int m_daysOffset, m_monthsOffset, m_yearsOffset, m_secsOffset;
 };
 
 #endif

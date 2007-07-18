@@ -110,7 +110,7 @@ void FixedDateFormat::listClicked(QListWidgetItem *item) {
 }
 
 void FixedDateFormat::offsetChanged(int offset) {
-    m_variable->setOffset(offset);
+    m_variable->setDaysOffset(offset);
 }
 
 void FixedDateFormat::insertCustomButtonPressed() {

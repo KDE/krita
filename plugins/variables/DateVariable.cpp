@@ -25,14 +25,78 @@
 DateVariable::DateVariable(DateType type)
     : KoVariable(),
     m_type(type),
-    m_offset(0)
+    m_displayType(Custom),
+    m_daysOffset(0),
+    m_monthsOffset(0),
+    m_yearsOffset(0),
+    m_secsOffset(0)
 {
     m_time = QDateTime::currentDateTime();
 }
 
 void DateVariable::setProperties(const KoProperties *props) {
     m_definition = props->stringProperty("definition");
-    m_offset = props->intProperty("offset", 0);
+    if (!props->stringProperty("time").isEmpty())
+        m_time = QDateTime::fromString(props->stringProperty("time"), Qt::ISODate);
+    if (props->boolProperty("fixed"))
+        m_type = Fixed;
+    else
+        m_type = AutoUpdate;
+    QString displayTypeProp = props->stringProperty("displayType", "custom");
+    if (displayTypeProp == "custom")
+        m_displayType = Custom;
+    else if (displayTypeProp == "date")
+        m_displayType = Date;
+    else if (displayTypeProp == "time")
+        m_displayType = Time;
+    QString adjustTime = props->stringProperty("adjust");
+    if (!adjustTime.isEmpty()) {
+        m_daysOffset = 0;
+        m_monthsOffset = 0;
+        m_yearsOffset = 0;
+        m_secsOffset = 0;
+        int multiplier = 1;
+        if (adjustTime.contains("-"))
+            multiplier = -1;
+        QString timePart, datePart;
+        QStringList parts = adjustTime.mid(adjustTime.indexOf('P') + 1).split('T');
+        datePart = parts[0];
+        if (parts.size() > 1)
+            timePart = parts[1];
+        QRegExp rx("([0-9]+)([DHMSY])");
+        int value;
+        bool valueOk;
+        if (!timePart.isEmpty()) {
+            int pos = 0;
+            while ((pos = rx.indexIn(timePart, pos)) != -1) {
+                value = rx.cap(1).toInt(&valueOk);
+                if (valueOk) {
+                    if (rx.cap(2) == "H")
+                        m_secsOffset += multiplier * 3600 * value;
+                    else if (rx.cap(2) == "M")
+                        m_secsOffset += multiplier * 60 * value;
+                    else if (rx.cap(2) == "S")
+                        m_secsOffset += multiplier * value;
+                }
+                pos += rx.matchedLength();
+            }
+        }
+        if (!datePart.isEmpty()) {
+            int pos = 0;
+            while ((pos = rx.indexIn(datePart, pos)) != -1) {
+                value = rx.cap(1).toInt(&valueOk);
+                if (valueOk) {
+                    if (rx.cap(2) == "Y")
+                        m_yearsOffset += multiplier * value;
+                    else if (rx.cap(2) == "M")
+                        m_monthsOffset += multiplier * value;
+                    else if (rx.cap(2) == "D")
+                        m_daysOffset += multiplier * value;
+                }
+                pos += rx.matchedLength();
+            }
+        }
+    }
     update();
 }
 
@@ -49,15 +113,49 @@ void DateVariable::setDefinition(const QString &definition) {
     update();
 }
 
-void DateVariable::setOffset(int offset) {
-    m_offset = offset;
+void DateVariable::setSecsOffset(int offset) {
+    m_secsOffset = offset;
+    update();
+}
+
+void DateVariable::setDaysOffset(int offset) {
+    m_daysOffset = offset;
+    update();
+}
+
+void DateVariable::setMonthsOffset(int offset) {
+    m_monthsOffset = offset;
+    update();
+}
+
+void DateVariable::setYearsOffset(int offset) {
+    m_yearsOffset = offset;
     update();
 }
 
 void DateVariable::update() {
+    QDateTime target;
     switch(m_type) {
         case Fixed:
-            setValue(m_time.addDays(m_offset).toString(m_definition));
+            target = m_time;
+            break;
+        case AutoUpdate:
+            target = QDateTime::currentDateTime();
+            break;
+    }
+    target = target.addSecs(m_secsOffset);
+    target = target.addDays(m_daysOffset);
+    target = target.addMonths(m_monthsOffset);
+    target = target.addYears(m_yearsOffset);
+    switch (m_displayType) {
+        case Custom:
+            setValue(target.toString(m_definition));
+            break;
+        case Time:
+            setValue(target.time().toString(Qt::LocalDate));
+            break;
+        case Date:
+            setValue(target.date().toString(Qt::LocalDate));
             break;
     }
 }

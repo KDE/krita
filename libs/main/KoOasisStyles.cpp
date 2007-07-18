@@ -21,9 +21,11 @@
 #include "KoDom.h"
 #include "KoGenStyles.h"
 #include "KoXmlNS.h"
+#include "KoUnit.h"
 
 #include <QBrush>
 #include <QBuffer>
+#include <QPen>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -1606,6 +1608,63 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
         }
     }
     return tmpBrush;
+}
+
+QPen KoOasisStyles::loadOasisStrokeStyle( const KoStyleStack &styleStack, const QString & stroke, const KoOasisStyles & oasisStyles )
+{
+    QPen tmpPen;
+
+    if( stroke == "solid" || stroke == "dash" )
+    {
+        if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-color" ) )
+            tmpPen.setColor( styleStack.property( KoXmlNS::svg, "stroke-color" ) );
+        if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-opacity" ) )
+        {
+            QColor color = tmpPen.color();
+            QString opacity = styleStack.property( KoXmlNS::svg, "stroke-opacity" );
+            color.setAlphaF( opacity.toDouble() );
+            tmpPen.setColor( color );
+        }
+        if( styleStack.hasProperty( KoXmlNS::svg, "stroke-width" ) )
+            tmpPen.setWidthF( KoUnit::parseValue( styleStack.property( KoXmlNS::svg, "stroke-width" ) ) );
+        if( styleStack.hasProperty( KoXmlNS::draw, "stroke-linejoin" ) )
+        {
+            QString join = styleStack.property( KoXmlNS::draw, "stroke-linejoin" );
+            if( join == "bevel" )
+                tmpPen.setJoinStyle( Qt::BevelJoin );
+            else if( join == "round" )
+                tmpPen.setJoinStyle( Qt::RoundJoin );
+            else
+                tmpPen.setJoinStyle( Qt::MiterJoin );
+        }
+
+        if( stroke == "dash" && styleStack.hasProperty( KoXmlNS::draw, "stroke-dash" ) )
+        {
+            QString dashStyleName = styleStack.property( KoXmlNS::draw, "stroke-dash" );
+
+            KoXmlElement * dashElement = oasisStyles.drawStyles()[ dashStyleName ];
+            if( dashElement )
+            {
+                QVector<qreal> dashes;
+                if( dashElement->hasAttributeNS( KoXmlNS::draw, "dots1" ) )
+                {
+                    double dotLength = KoUnit::parseValue( dashElement->attributeNS( KoXmlNS::draw, "dots1-length", QString() ) );
+                    dashes.append( dotLength / tmpPen.width() );
+                    double dotDistance = KoUnit::parseValue( dashElement->attributeNS( KoXmlNS::draw, "distance", QString() ) );
+                    dashes.append( dotDistance / tmpPen.width() );
+                    if( dashElement->hasAttributeNS( KoXmlNS::draw, "dots2" ) )
+                    {
+                        dotLength = KoUnit::parseValue( dashElement->attributeNS( KoXmlNS::draw, "dots2-length", QString() ) );
+                        dashes.append( dotLength / tmpPen.width() );
+                        dashes.append( dotDistance / tmpPen.width() );
+                    }
+                    tmpPen.setDashPattern( dashes );
+                }
+            }
+        }
+    }
+
+    return tmpPen;
 }
 
 const KoXmlElement* KoOasisStyles::defaultStyle( const QString& family ) const

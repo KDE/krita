@@ -731,47 +731,20 @@ KoShapeBorderModel * KoShape::loadOdfStroke( const KoXmlElement & element, KoSha
             stroke = styleStack.property( KoXmlNS::presentation, "stroke" );
     }
 
-    KoLineBorder * border = 0;
+    if( stroke == "solid" || stroke == "dash" )
+    {
+        QPen pen = KoOasisStyles::loadOasisStrokeStyle( styleStack, stroke, context.koLoadingContext().oasisStyles() );
 
-    if( stroke == "solid" )
-    {
-        border = new KoLineBorder();
+        KoLineBorder * border = new KoLineBorder();
+        border->setLineWidth( pen.width() );
+        border->setColor( pen.color() );
+        border->setJoinStyle( pen.joinStyle() );
+        border->setLineStyle( pen.style(), pen.dashPattern() );
+
+        return border;
     }
-    else if( stroke == "dash" )
-    {
-        border = new KoLineBorder();
-        if( styleStack.hasProperty( KoXmlNS::draw, "stroke-dash" ) )
-        {
-            QString dashStyleName = styleStack.property( KoXmlNS::draw, "stroke-dash" );
-            // TODO load dashes
-        }
-    }
-    else 
+    else
         return 0;
-
-    if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-color" ) )
-        border->setColor( styleStack.property( KoXmlNS::svg, "stroke-color" ) );
-    if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-opacity" ) )
-    {
-        QColor color = border->color();
-        QString opacity = styleStack.property( KoXmlNS::svg, "stroke-opacity" );
-        color.setAlphaF( opacity.toDouble() );
-        border->setColor( color );
-    }
-    if( styleStack.hasProperty( KoXmlNS::svg, "stroke-width" ) )
-        border->setLineWidth( KoUnit::parseValue( styleStack.property( KoXmlNS::svg, "stroke-width" ) ) );
-    if( styleStack.hasProperty( KoXmlNS::draw, "stroke-linejoin" ) )
-    {
-        QString join = styleStack.property( KoXmlNS::draw, "stroke-linejoin" );
-        if( join == "bevel" )
-            border->setJoinStyle( Qt::BevelJoin );
-        else if( join == "round" )
-            border->setJoinStyle( Qt::RoundJoin );
-        else
-            border->setJoinStyle( Qt::MiterJoin );
-    }
-
-    return border;
 }
 
 QMatrix KoShape::parseOdfTransform( const QString &transform )

@@ -151,6 +151,8 @@ public:
 
     static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOasisStyles & oasisStyles );
 
+    static QPen loadOasisStrokeStyle( const KoStyleStack &styleStack, const QString & stroke, const KoOasisStyles & oasisStyles );
+
 private:
     enum TypeAndLocation
     {

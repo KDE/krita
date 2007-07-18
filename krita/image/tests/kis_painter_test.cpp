@@ -168,6 +168,43 @@ void KisPainterTest::testPaintDeviceBltMaskIrregular()
     allCsApplicator( &KisPainterTest::testPaintDeviceBltMaskIrregular );
 }
 
+void KisPainterTest::testPaintDeviceBltMaskInverted(KoColorSpace * cs)
+{
+
+    KisPaintDeviceSP dst = new KisPaintDevice( cs, "dst");
+
+    KisPaintDeviceSP src = new KisPaintDevice( cs, "src" );
+    src->fill( 0, 0, 30, 30, KoColor( Qt::red, 128, cs ).data() );
+
+    QCOMPARE( src->exactBounds(), QRect( 0, 0, 30, 30 ) );
+
+    KisPixelSelectionSP mask = KisPixelSelectionSP(new KisPixelSelection(dst));
+    mask->select(QRect(10,10,20,20));
+    mask->invert();
+    QCOMPARE( mask->selectedExactRect(), QRect( 10, 10, 20, 20 ) );
+
+
+    KisPainter painter(dst);
+
+    painter.bltMask(0, 0,
+                    dst->colorSpace()->compositeOp(COMPOSITE_OVER),
+                    src,
+                    mask,
+                    OPACITY_OPAQUE,
+                    0, 0, 30, 30);
+    painter.end();
+
+    QImage img = dst->convertToQImage(0);
+    img.save( "bla_" + cs->name() + ".png" );
+
+    QCOMPARE( dst->exactBounds(), QRect( 0, 0, 30, 30 ) );
+}
+
+void KisPainterTest::testPaintDeviceBltMaskInverted()
+{
+    allCsApplicator( &KisPainterTest::testPaintDeviceBltMaskInverted );
+}
+
 
 void KisPainterTest::testSelectionBltMask()
 {

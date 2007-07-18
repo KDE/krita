@@ -32,6 +32,7 @@ class KoShape;
 class KoStyleManager;
 class QTextLayout;
 class KoInlineTextObjectManager;
+class KoViewConverter;
 
 /**
  * KWords text layouter that allows text to flow in multiple frames and around
@@ -65,17 +66,19 @@ public:
     KoInlineTextObjectManager *inlineObjectTextManager();
 
     /// Returns the bounding rectangle of block.
-    QRectF blockBoundingRect ( const QTextBlock & block ) const;
+    virtual QRectF blockBoundingRect ( const QTextBlock & block ) const;
     /**
      * Returns the total size of the document. This is useful to display
      * widgets since they can use to information to update their scroll bars
      * correctly
      */
-    QSizeF documentSize () const;
+    virtual QSizeF documentSize () const;
     /// Draws the layout on the given painter with the given context.
-    void draw ( QPainter * painter, const PaintContext & context );
+    virtual void draw ( QPainter * painter, const PaintContext & context );
+    /// Draws the layout on the given painter with the given context, and pass the zoom.
+    void draw ( QPainter * painter, const PaintContext & context, const KoViewConverter *converter );
     /// Returns the bounding rectacle of frame. Returns the bounding rectangle of frame.
-    QRectF frameBoundingRect ( QTextFrame * frame ) const;
+    virtual QRectF frameBoundingRect ( QTextFrame * frame ) const;
     /**
      * Returns the cursor postion for the given point with the accuracy
      * specified. Returns -1 to indicate failure if no valid cursor position
@@ -83,9 +86,9 @@ public:
      * @param point the point in the document
      * @param accuracy if Qt::ExactHit this method will return -1 when not actaully hitting any text
      */
-    int hitTest ( const QPointF & point, Qt::HitTestAccuracy accuracy ) const;
+    virtual int hitTest ( const QPointF & point, Qt::HitTestAccuracy accuracy ) const;
     /// reimplemented to always return 1
-    int pageCount () const;
+    virtual int pageCount () const;
 
     /**
      * Actually do the layout of the text.
@@ -141,7 +144,7 @@ public:
         /// Return the y position of the offset for the current shape (See KoTextShapeData::documentOffset() )
         virtual double documentOffsetInShape() = 0;
         /// paint the document
-        virtual void draw(QPainter *painter, const PaintContext & context ) = 0;
+        virtual void draw(QPainter *painter, const PaintContext & context, const KoViewConverter *converter ) = 0;
         /**
          * After all shapes have been used and there is still text left, use the param shape to continue
          * layout.
@@ -178,7 +181,7 @@ public:
     KoShape* shapeForPosition(int position) const;
 
     /// reimplemented from QAbstractTextDocumentLayout
-    void documentChanged(int position, int charsRemoved, int charsAdded);
+    virtual void documentChanged(int position, int charsRemoved, int charsAdded);
 
     static void updateTabsForLine(const QTextBlock &block, int lineNumber);
 

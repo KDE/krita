@@ -42,6 +42,13 @@ class KOTEXT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayout {
     Q_OBJECT
 public:
     class LayoutState;
+
+    struct PaintContext {
+        PaintContext() : viewConverter(0) { }
+        QAbstractTextDocumentLayout::PaintContext textContext;
+        const KoViewConverter *viewConverter;
+    };
+
     /// constructor
     explicit KoTextDocumentLayout(QTextDocument *document, KoTextDocumentLayout::LayoutState *layout = 0);
     virtual ~KoTextDocumentLayout();
@@ -74,9 +81,9 @@ public:
      */
     virtual QSizeF documentSize () const;
     /// Draws the layout on the given painter with the given context.
-    virtual void draw ( QPainter * painter, const PaintContext & context );
+    virtual void draw ( QPainter * painter, const QAbstractTextDocumentLayout::PaintContext & context );
     /// Draws the layout on the given painter with the given context, and pass the zoom.
-    void draw ( QPainter * painter, const PaintContext & context, const KoViewConverter *converter );
+    void draw ( QPainter * painter, const KoTextDocumentLayout::PaintContext & context);
     /// Returns the bounding rectacle of frame. Returns the bounding rectangle of frame.
     virtual QRectF frameBoundingRect ( QTextFrame * frame ) const;
     /**
@@ -144,7 +151,7 @@ public:
         /// Return the y position of the offset for the current shape (See KoTextShapeData::documentOffset() )
         virtual double documentOffsetInShape() = 0;
         /// paint the document
-        virtual void draw(QPainter *painter, const PaintContext & context, const KoViewConverter *converter ) = 0;
+        virtual void draw(QPainter *painter, const KoTextDocumentLayout::PaintContext & context) = 0;
         /**
          * After all shapes have been used and there is still text left, use the param shape to continue
          * layout.

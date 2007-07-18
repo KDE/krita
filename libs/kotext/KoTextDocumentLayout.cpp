@@ -51,7 +51,7 @@ public:
     bool nextParag() { return false; }
     bool previousParag() { return false; }
     double documentOffsetInShape() { return 0; }
-    void draw(QPainter *, const QAbstractTextDocumentLayout::PaintContext &, const KoViewConverter*) {}
+    void draw(QPainter *, const KoTextDocumentLayout::PaintContext &) {}
     KoStyleManager *styleManager() const { return m_styleManager; }
     void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
     bool setFollowupShape(KoShape *) { return false; }
@@ -157,12 +157,14 @@ QSizeF KoTextDocumentLayout::documentSize() const {
     return QSizeF(10, 10);
 }
 
-void KoTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) {
-    m_state->draw(painter, context, 0);
+void KoTextDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context) {
+    PaintContext pc;
+    pc.textContext = context;
+    m_state->draw(painter, pc);
 }
 
-void KoTextDocumentLayout::draw ( QPainter * painter, const PaintContext & context, const KoViewConverter *converter ) {
-    m_state->draw(painter, context, converter);
+void KoTextDocumentLayout::draw ( QPainter * painter, const KoTextDocumentLayout::PaintContext & context) {
+    m_state->draw(painter, context);
 }
 
 QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const {

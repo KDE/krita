@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef TW_ACTIONJOB_H
-#define TW_ACTIONJOB_H
+#ifndef KO_ACTIONJOB_H
+#define KO_ACTIONJOB_H
 #include <threadweaver/Job.h>
 
 #include <QWaitCondition>

@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOINLINEOBJECTMANAGER_H
-#define KOINLINEOBJECTMANAGER_H
+#ifndef KOINLINETEXTOBJECTMANAGER_H
+#define KOINLINETEXTOBJECTMANAGER_H
 
 #include "KoInlineObject.h"
 #include "KoInlineObjectFactory.h"

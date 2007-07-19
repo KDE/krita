@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TW_EXECUTEPOLICY_H
-#define TW_EXECUTEPOLICY_H
+#ifndef KO_EXECUTEPOLICY_H
+#define KO_EXECUTEPOLICY_H
 
 #include <komain_export.h>
 

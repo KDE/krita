@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef TW_JOBSLISTPOLICY_H
-#define TW_JOBSLISTPOLICY_H
+#ifndef KO_JOBSLISTPOLICY_H
+#define KO_JOBSLISTPOLICY_H
 #include <threadweaver/QueuePolicy.h>
 
 #include <QMutex>

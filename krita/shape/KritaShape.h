@@ -26,6 +26,9 @@
 class QString;
 class KUrl;
 
+#include <QWaitCondition>
+#include <QMutex>
+
 #define KritaShapeId "KritaShape"
 
 /**
@@ -67,6 +70,8 @@ public:
     virtual void saveOdf( KoShapeSavingContext & context ) const;
     // reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    // reimplemented
+    virtual void waitUntilReady() const;
 
     void setDisplayProfile( const QString & profileName );
     void importImage( const KUrl & url );
@@ -80,6 +85,8 @@ private:
     class Private;
     Private * m_d;
 
+    mutable QMutex m_mutex;
+    mutable QWaitCondition m_waiter;
 };
 
 

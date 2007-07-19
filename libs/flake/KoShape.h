@@ -597,6 +597,14 @@ public:
      */
     virtual void waitUntilReady() const {}
 
+    /**
+     * Schedule the shape for thread-safe deletion.
+     * After calling this method will self-delete in the main threads event loop.
+     * If deleting a shape can possibly be done in a separate thread, you should delete it
+     * using this method.  If you delete a shape from another thread then its possible the main
+     * thread will use it after its been removed, while painting for example.
+     * Note that in contrary to the equivalent method on QObject, you can not call this more than ones!
+     */
     void deleteLater();
 
 protected:

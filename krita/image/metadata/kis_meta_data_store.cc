@@ -71,7 +71,7 @@ bool Store::addEntry(const Entry& entry)
 {
     if(d->entries.contains(entry.qualifiedName()) and d->entries[entry.qualifiedName()].isValid() )
     {
-        kDebug() << "Entry " << entry.qualifiedName() << " allready exist in the store, can't be included twice" << endl;
+        kDebug(41001) << "Entry " << entry.qualifiedName() << " allready exist in the store, can't be included twice" << endl;
         return false;
     }
     d->entries.insert(entry.qualifiedName(), entry);
@@ -140,20 +140,20 @@ QHash<QString, Entry>::const_iterator Store::end() const
 
 void Store::debugDump() const
 {
-    kDebug() << "=== Dumping MetaData Store ===" << endl;
-/*    kDebug() << " - Schemas " << endl;
+    kDebug(41001) << "=== Dumping MetaData Store ===" << endl;
+/*    kDebug(41001) << " - Schemas " << endl;
     foreach(Schema* s, d->uri2Schema)
     {
-        kDebug() << *s << endl;
+        kDebug(41001) << *s << endl;
     }*/
-    kDebug() << " - Metadata (there are " << d->entries.size() << " entries)" << endl;
+    kDebug(41001) << " - Metadata (there are " << d->entries.size() << " entries)" << endl;
     foreach(const Entry& e, d->entries)
     {
         if(e.isValid())
         {
-            kDebug() << e << endl;
+            kDebug(41001) << e << endl;
         } else {
-            kDebug() << "Invalid entry" << endl;
+            kDebug(41001) << "Invalid entry" << endl;
         }
     }
 }

@@ -57,8 +57,10 @@ void ActionJob::run() {
         m_action->doActionUi(m_params);
     else {
         // do it in the main thread.
+        m_mutex.lock();
         QCoreApplication::postEvent(this, new ActionJobEvent());
-        m_semaphore.acquire();
+        m_waiter.wait(&m_mutex);
+        m_mutex.unlock();
     }
 }
 
@@ -66,7 +68,9 @@ bool ActionJob::event(QEvent *e) {
     ActionJobEvent *event = dynamic_cast<ActionJobEvent*> (e);
     if(event) {
         m_action->doActionUi(m_params);
-        m_semaphore.release();
+        m_mutex.lock(); // wait for the above to start waiting on us.
+        m_waiter.wakeAll();
+        m_mutex.unlock();
         return true;
     }
     return QObject::event(e);

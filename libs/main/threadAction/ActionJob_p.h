@@ -21,7 +21,8 @@
 #define TW_ACTIONJOB_H
 #include <threadweaver/Job.h>
 
-#include <QSemaphore>
+#include <QWaitCondition>
+#include <QMutex>
 #include <QVariant>
 
 class QEvent;
@@ -52,7 +53,8 @@ private:
     Enable m_enable;
     bool m_started;
     QVariant m_params;
-    QSemaphore m_semaphore;
+    QWaitCondition m_waiter;
+    QMutex m_mutex;
 };
 
 #endif

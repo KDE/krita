@@ -597,6 +597,8 @@ public:
      */
     virtual void waitUntilReady() const {}
 
+    void deleteLater();
+
 protected:
 
 /* ** loading saving helper methods */

@@ -35,6 +35,7 @@
 #include "KoShapeLoadingContext.h"
 #include "KoViewConverter.h"
 #include "KoLineBorder.h"
+#include "ShapeDeleter_p.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -592,6 +593,14 @@ QString KoShape::name() const {
 void KoShape::setName( const QString & name ) {
     d->name = name;
 }
+
+void KoShape::deleteLater() {
+    foreach(KoShapeManager *manager, d->shapeManagers)
+        manager->remove(this);
+    d->shapeManagers.clear();
+    new ShapeDeleter(this);
+}
+
 
 // loading & saving methods
 void KoShape::saveOdfConnections(KoShapeSavingContext &context) const {

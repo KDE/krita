@@ -24,6 +24,7 @@
 
 #include <QProgressBar>
 #include <QString>
+// #include <KDebug>
 
 
 class KoProgressUpdaterPrivate : public QObject {
@@ -79,7 +80,8 @@ public:
         foreach(KoProgressUpdaterPrivate *updater, subtasks) {
             if(updater->interrupted()) {
                 currentProgress = -1;
-                break;
+                lock.unlock();
+                return;
             }
             int progress = updater->progress();
             if(progress > 100 || progress < 0)
@@ -153,9 +155,9 @@ void KoProgressUpdater::scheduleUpdate() {
 
 void KoProgressUpdater::cancel() {
     d->lock.lock();
-    foreach(KoProgressUpdaterPrivate *KoUpdater, d->subtasks) {
-        KoUpdater->setProgress(100);
-        KoUpdater->interrupt();
+    foreach(KoProgressUpdaterPrivate *updater, d->subtasks) {
+        updater->setProgress(100);
+        updater->interrupt();
     }
     d->lock.unlock();
     scheduleUpdate();

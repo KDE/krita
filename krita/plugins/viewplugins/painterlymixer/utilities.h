@@ -122,7 +122,7 @@ public:
 
     void mixColorsUsingKS(const Cell &cell, float force);
     void mixColorsUsingKSXyz(const Cell &cell, float force);
-    void mixColorsUsingXyz(const Cell &cell, float force);
+//     void mixColorsUsingXyz(const Cell &cell, float force);
 
     void mixColorsUsingRgb(const Cell &cell, float force);
     void mixColorsUsingRgbAdditive(const Cell &cell, float force);

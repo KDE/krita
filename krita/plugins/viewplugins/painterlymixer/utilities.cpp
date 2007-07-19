@@ -21,9 +21,14 @@
 */
 
 #include <cmath>
-#include <vector>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
 
 #include <QList>
+
+#include <gmm/gmm.h>
+#include <lcms.h>
 
 #include "kis_paint_device.h"
 #include "kis_adsorbency_mask.h"
@@ -37,6 +42,10 @@
 #include "utilities.h"
 
 using namespace std;
+
+#define THICKNESS 1
+#define C_SIZE 10
+#define MAX_RATIO 1000000000
 
 void addPainterlyOverlays(KisPaintDevice* dev)
 {
@@ -55,11 +64,11 @@ Zimmer, System and method for digital rendering of images and printed articulati
 */
 void transmittanceToDensity(long T, long *D)
 {
-    double d;
+    float d;
     if (T == 0)
         d = 3.0;
     else
-        d = -log10((double)T/255.0);
+        d = -log10((float)T/255.0);
     d = d * 1024.0/3.0;
     *D = (long)(d + 0.5);
 }
@@ -70,8 +79,8 @@ Zimmer, System and method for digital rendering of images and printed articulati
 */
 void densityToTransmittance(long D, long *T)
 {
-    double d;
-    d = 255.0 * pow(M_E, - (double)D * 3.0/1024.0);
+    float d;
+    d = 255.0 * pow(M_E, - (float)D * 3.0/1024.0);
     if (d < 0.0)
         d = 0.0;
     if (d > 255.0)
@@ -93,49 +102,11 @@ void cmyToRgb(long cyan, long magenta, long yellow, long *red, long *green, long
     densityToTransmittance(yellow, blue);
 }
 
-float m_rgb_xyz[3][3] = { 0.576700,   0.297361,   0.0270328,
-                          0.185556,   0.627355,   0.0706879,
-                          0.188212,   0.0752847,  0.991248 };
-
-float m_xyz_rgb[3][3] = {  2.04148,   -0.969258,   0.013446,
-                          -0.564977,   1.87599,   -0.118373,
-                          -0.344713,   0.0415557,  1.01527  };
-
-float m_ref_xyz[3][3] = { 0.215017, 1.186732, 0.001164,
-                          0.007658, 0.991915, 0.000426,
-                          1.034589, 0.001704, 0.000000 };
-
-float m_xyz_ref[3][3] = { {    0.00108081, -0.00295319, 0.966365 },
-                          {   -0.656215,    1.79304,    0.123108 },
-                          { 1527.94,    -1827.51,    -304.022    } };
-
-void rgbToXyz(float r, float g, float b, float *x, float *y, float *z)
-{
-    *x = m_rgb_xyz[0][0] * r + m_rgb_xyz[0][1] * g + m_rgb_xyz[0][2] * b;
-    *y = m_rgb_xyz[1][0] * r + m_rgb_xyz[1][1] * g + m_rgb_xyz[1][2] * b;
-    *z = m_rgb_xyz[2][0] * r + m_rgb_xyz[2][1] * g + m_rgb_xyz[2][2] * b;
-}
-
-void xyzToRgb(float x, float y, float z, float *r, float *g, float *b)
-{
-    *r = m_xyz_rgb[0][0] * x + m_xyz_rgb[0][1] * y + m_xyz_rgb[0][2] * z;
-    *g = m_xyz_rgb[1][0] * x + m_xyz_rgb[1][1] * y + m_xyz_rgb[1][2] * z;
-    *b = m_xyz_rgb[2][0] * x + m_xyz_rgb[2][1] * y + m_xyz_rgb[2][2] * z;
-}
-
-void xyzToRef(float x, float y, float z, float *r1, float *r2, float *r3)
-{
-    *r1 = m_xyz_ref[0][0] * x + m_xyz_ref[0][1] * y + m_xyz_ref[0][2] * z;
-    *r2 = m_xyz_ref[1][0] * x + m_xyz_ref[1][1] * y + m_xyz_ref[1][2] * z;
-    *r3 = m_xyz_ref[2][0] * x + m_xyz_ref[2][1] * y + m_xyz_ref[2][2] * z;
-}
-
-void refToXyz(float r1, float r2, float r3, float *x, float *y, float *z)
-{
-    *x = m_ref_xyz[0][0] * r1 + m_ref_xyz[0][1] * r2 + m_ref_xyz[0][2] * r3;
-    *y = m_ref_xyz[1][0] * r1 + m_ref_xyz[1][1] * r2 + m_ref_xyz[1][2] * r3;
-    *z = m_ref_xyz[2][0] * r1 + m_ref_xyz[2][1] * r2 + m_ref_xyz[2][2] * r3;
-}
+double g_REF_XYZ[3][C_SIZE] = {
+	{ 0.00332596, 0.168329, 0.0977301, 0.12178, 0.502248, 0.45424, 0.0717572, 0.00266851, 8.2916e-05, 3.38869e-06},
+	{ 0.000347754, 0.0275165, 0.169206, 0.502836, 0.539392, 0.230916, 0.0287143, 0.00103668, 3.2496e-05, 1.3527e-06},
+	{ 0.0150249, 0.853996, 0.697775, 0.0424252, 0.000349115, 0, 0, 0, 0, 0}
+};
 
 float sigmoid(float value)
 {
@@ -200,8 +171,6 @@ float acoth(float z)
     return 0.5*log((1 + 1/z) / (1 - 1/z));
 }
 
-#define THICKNESS 1
-
 void Cell::mixColorsUsingKS(const Cell &cell, float force)
 {
     float V_c, V_s; // Volumes in Canvas and Stroke
@@ -218,9 +187,9 @@ void Cell::mixColorsUsingKS(const Cell &cell, float force)
     V_as = activeVolume(V_s, w_s, force);
 
     vector<float> c(6), s(6), f(3);
-    float a_c, b_c, c_c;
-    float a_s, b_s, c_s;
-    float a_f, b_f, c_f;
+    float a_c, b_c/*, c_c*/;
+    float a_s, b_s/*, c_s*/;
+    float /*a_f, b_f,*/ c_f;
     float S_c, S_s, S_f;
     float K_c, K_s, K_f;
     float R_f, T_f;
@@ -308,6 +277,141 @@ void Cell::mixColorsUsingKS(const Cell &cell, float force)
     updateHlsCmy();
 }
 
+void simplex(const gmm::dense_matrix<double> &M_1, vector<double> &X, const vector<double> &B)
+{
+/*
+	const int rows = 6 + C_SIZE + 1;
+	const int cols = C_SIZE*2 + 3 + 2;
+	gmm::dense_matrix<double> M(rows, cols);
+
+	gmm::clear(M);
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < C_SIZE; j++) {
+			M(i, j) = M_1(i, j);
+			M(i+3, j) = M_1(i, j);
+		}
+		M(i, i+C_SIZE) = 1;
+		M(i+3, i+C_SIZE) = -1;
+		M(i, cols-1) = M(i+3, cols-1) = B[i];
+	}
+
+	for (int i = 6; i < C_SIZE + 6; i++) {
+		M(i, i - 6) = M(i, (i+C_SIZE+3) - 6) = 1;
+		M(i, cols-1) = 1;
+	}
+
+	for (int j = 0; j < C_SIZE; j++)
+		M(rows-1, j) = -1;
+
+	M(rows-1, cols-2) = 1;
+*/
+	const int rows = 3 + C_SIZE + 1;
+	const int cols = C_SIZE + C_SIZE + 1 + 1;
+	gmm::dense_matrix<double> M(rows, cols);
+
+	gmm::clear(M);
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < C_SIZE; j++) {
+			M(i, j) = M_1(i, j);
+		}
+		M(i, cols-1) = B[i];
+	}
+
+// 	for (int i = 3; i < rows - 1; i++)
+// 		M(i, i-3) = M(i, (i+C_SIZE)-3) = M(i, cols-1) = 1;
+
+	for (int i = 3; i < rows - 1; i++) {
+		M(i, i-3) = M(i, (i+C_SIZE)-3) = 1;
+		M(i, cols-1) = 1;
+	}
+
+	for (int j = 0; j < C_SIZE; j++)
+		M(rows-1, j) = -1;
+
+	M(rows-1, cols-2) = 1;
+
+// 	cout << M << endl << "           -------------------------------------------           " << endl;
+// 	string s;
+// 	cin >> s;
+
+	while ( true ) {
+		double min = 0.0;
+		double ratio, ratio_min = MAX_RATIO;
+		int i_pivot = -1, j_pivot = -1;
+		for (int j = 0; j < cols-1; j++) {
+			if (M(rows-1, j) < min) {
+				for (int i = 0; i < rows-1; i++) {
+					if (M(i, j) <= 0)
+						continue;
+					ratio = M(i, cols-1) / M(i, j);
+					if ( ratio <= ratio_min ) {
+						ratio_min = ratio;
+						min = M(rows-1, j);
+						i_pivot = i;
+						j_pivot = j;
+					}
+				}
+			}
+		}
+
+		if (min == 0.0)
+			break;
+
+// 		cout << "PIVOT (" << i_pivot << "," << j_pivot << "): " << M(i_pivot, j_pivot) << endl;
+
+		for (int i = 0; i < rows; i++) {
+			if (i == i_pivot || M(i, j_pivot) == 0.0)
+				continue;
+			double sour = M(i_pivot, j_pivot);
+			double dest = M(i, j_pivot);
+			for (int j = 0; j < cols; j++) {
+				if (j == j_pivot) {
+					M(i, j) = 0;
+					continue;
+				}
+				M(i, j) = sour * M(i, j) - dest * M(i_pivot, j);
+			}
+		}
+// 		cout << M << endl;
+// 		cin >> s;
+	}
+
+	for (int j = 0; j < C_SIZE; j++) {
+		int count = 0, i_useful;
+		for (int i = 0; i < rows; i++) {
+			if (M(i, j) != 0.0) {
+				i_useful = i;
+				count++;
+			}
+		}
+		if (count != 1)
+			X[j] = 0;
+		else
+			X[j] = M(i_useful, cols-1) / M(i_useful, j);
+	}
+/*
+	int slack_size = cols - C_SIZE - 1;
+	vector<double> slack(slack_size);
+	for (int j = C_SIZE; j < slack_size; j++) {
+		int count = 0, i_useful;
+		for (int i = 0; i < rows; i++) {
+			if (M(i, j) != 0.0) {
+				i_useful = i;
+				count++;
+			}
+		}
+		if (count != 1)
+			slack[j-C_SIZE] = 0;
+		else
+			slack[j-C_SIZE] = M(i_useful, cols-1) / M(i_useful, j);
+	}
+	cout << "SLACK: " << slack << endl;
+*/
+// 	cout << "RESULT: " << X << endl;
+}
+
 void Cell::mixColorsUsingKSXyz(const Cell &cell, float force)
 {
     float V_c, V_s; // Volumes in Canvas and Stroke
@@ -323,112 +427,95 @@ void Cell::mixColorsUsingKSXyz(const Cell &cell, float force)
     V_ac = activeVolume(V_c, w_c, force);
     V_as = activeVolume(V_s, w_s, force);
 
-    float c[6], s[6], f[3];
-    float a_c, b_c, c_c;
-    float a_s, b_s, c_s;
-    float a_f, b_f, c_f;
-    float S_c, S_s, S_f;
-    float K_c, K_s, K_f;
-    float R_f, T_f;
+	gmm::dense_matrix<double> REF_XYZ(3, C_SIZE);
 
-    c[0] = (float)cell.red/255;
-    c[1] = (float)cell.green/255;
-    c[2] = (float)cell.blue/255;
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < C_SIZE; j++)
+			REF_XYZ(i, j) = g_REF_XYZ[i][j];
 
-    s[0] = (float)red/255;
-    s[1] = (float)green/255;
-    s[2] = (float)blue/255;
+	double RGB[3], XYZ[3];
+	vector<double> vREF1(C_SIZE), vREF2(C_SIZE), vXYZ(3);
 
-    rgbToXyz(c[0], c[1], c[2], c+0, c+1, c+2);
-    xyzToRef(c[0], c[1], c[2], c+0, c+1, c+2);
-    rgbToXyz(s[0], s[1], s[2], s+0, s+1, s+2);
-    xyzToRef(s[0], s[1], s[2], s+0, s+1, s+2);
+	cmsHPROFILE hsRGB = cmsCreate_sRGBProfile();
+    cmsHPROFILE hXYZ  = cmsCreateXYZProfile();
 
-    for (int i = 0; i < 3; i++) {
-        if (c[i] == 0.0 && s[i] == 0.0) {
-            f[i] = 0;
-            continue;
-        }
+    cmsHTRANSFORM RGB_XYZ = cmsCreateTransform(hsRGB, TYPE_RGB_DBL, hXYZ, TYPE_XYZ_DBL,
+                                               INTENT_ABSOLUTE_COLORIMETRIC, cmsFLAGS_NOTPRECALC);
+    cmsHTRANSFORM XYZ_RGB = cmsCreateTransform(hXYZ, TYPE_XYZ_DBL, hsRGB, TYPE_RGB_DBL,
+                                               INTENT_ABSOLUTE_COLORIMETRIC, cmsFLAGS_NOTPRECALC);
 
-        if (c[i] > 1.0) c[i] = 1.0;
-        if (c[i] < 0.0) c[i] = 0.0;
-        if (s[i] > 1.0) s[i] = 1.0;
-        if (s[i] < 0.0) s[i] = 0.0;
+	RGB[0] = (float)cell.red/255;
+	RGB[1] = (float)cell.green/255;
+	RGB[2] = (float)cell.blue/255;
+    cmsDoTransform(RGB_XYZ, RGB, XYZ, 1);
 
-        if (c[i] == 1.0) c[i] -= 0.4/255.0;
-        if (c[i] == 0.0) c[i] += 0.4/255.0;
-        if (s[i] == 1.0) s[i] -= 0.4/255.0;
-        if (s[i] == 0.0) s[i] += 0.4/255.0;
+	for (int i = 0; i < 3; i++)
+		vXYZ[i] = XYZ[i];
 
-        c[i+3] = c[i] - (0.4/255.0)*c[i];
-        s[i+3] = s[i] - (0.4/255.0)*s[i];
+	simplex(REF_XYZ, vREF1, vXYZ);
 
-        a_c = 0.5*( c[i] + ( c[i+3] - c[i] + 1) / c[i+3] );
-        a_s = 0.5*( s[i] + ( s[i+3] - s[i] + 1) / s[i+3] );
-        b_c = sqrt( pow( a_c, 2 ) - 1 );
-        b_s = sqrt( pow( a_s, 2 ) - 1 );
+	RGB[0] = (float)red/255;
+	RGB[1] = (float)green/255;
+	RGB[2] = (float)blue/255;
+    cmsDoTransform(RGB_XYZ, RGB, XYZ, 1);
 
-        S_c = ( 1 / b_c ) * acoth( ( pow( b_c, 2 ) - ( a_c - c[i] ) * ( a_c - 1 ) ) / ( b_c * ( 1 - c[i] ) ) );
-        S_s = ( 1 / b_s ) * acoth( ( pow( b_s, 2 ) - ( a_s - s[i] ) * ( a_s - 1 ) ) / ( b_s * ( 1 - s[i] ) ) );
+	for (int i = 0; i < 3; i++)
+		vXYZ[i] = XYZ[i];
 
-        K_c = S_c * ( a_c - 1 );
-        K_s = S_s * ( a_s - 1 );
+	simplex(REF_XYZ, vREF2, vXYZ);
 
-        S_f = ( V_ac * S_c + V_as * S_s ) / ( V_ac + V_as );
-        K_f = ( V_ac * K_c + V_as * K_s ) / ( V_ac + V_as );
+	for (int i = 0; i < C_SIZE; i++) {
 
-        c_f = sqrt( ( K_f / S_f ) * ( K_f / S_f + 2 ) );
+		if (vREF1[i] > 0.99999) vREF1[i] = 1.0 - (1.0/10000.0);
+		if (vREF2[i] > 0.99999) vREF2[i] = 1.0 - (1.0/10000.0);
+		if (vREF1[i] < 0.00001) vREF1[i] = (1.0/10000.0);
+		if (vREF2[i] < 0.00001) vREF2[i] = (1.0/10000.0);
+		double c_b = vREF1[i] - (1.0/100.0)*vREF1[i];
+        double s_b = vREF2[i] - (1.0/100.0)*vREF2[i];
 
-        R_f = 1 / ( 1 + ( K_f / S_f ) + c_f * coth( c_f * S_f * THICKNESS ) );
-        T_f = c_f * R_f * ( 1 / sinh( c_f * S_f * THICKNESS ) );
+        double a_c = 0.5*( vREF1[i] + ( c_b - vREF1[i] + 1) / c_b );
+        double a_s = 0.5*( vREF2[i] + ( s_b - vREF2[i] + 1) / s_b );
+        double b_c = sqrt( pow( a_c, 2 ) - 1 );
+        double b_s = sqrt( pow( a_s, 2 ) - 1 );
 
-        f[i] = R_f + T_f;
+        double S_c = ( 1 / b_c ) * acoth( ( pow( b_c, 2 ) - ( a_c - vREF1[i] ) * ( a_c - 1 ) ) / ( b_c * ( 1 - vREF1[i] ) ) );
+        double S_s = ( 1 / b_s ) * acoth( ( pow( b_s, 2 ) - ( a_s - vREF2[i] ) * ( a_s - 1 ) ) / ( b_s * ( 1 - vREF2[i] ) ) );
 
-/* Curtis et al. idea
-        c_c = a_c * sinh( b_c * S_c * THICKNESS ) + b_c * cosh( b_c * S_c * THICKNESS );
-        c_s = a_s * sinh( b_s * S_s * THICKNESS ) + b_s * cosh( b_s * S_s * THICKNESS );
+        double K_c = S_c * ( a_c - 1 );
+        double K_s = S_s * ( a_s - 1 );
 
-        a_f = ( V_ac * a_c + V_as * a_s ) / ( V_ac + V_as );
-        b_f = ( V_ac * b_c + V_as * b_s ) / ( V_ac + V_as );
-        c_f = ( V_ac * c_c + V_as * c_s ) / ( V_ac + V_as );
+        double S_f = ( V_ac * S_c + V_as * S_s ) / ( V_ac + V_as );
+        double K_f = ( V_ac * K_c + V_as * K_s ) / ( V_ac + V_as );
+// 		double S_f = 0.5 * S_c + 0.5 * S_s;
+// 		double K_f = 0.5 * K_c + 0.5 * K_s;
 
-        S_f = ( V_ac * S_c + V_as * S_s ) / ( V_ac + V_as );
+        double c_f = sqrt( ( K_f / S_f ) * ( K_f / S_f + 2 ) );
 
-        f[i]  = sinh( b_f * S_f * THICKNESS ) / c_f;
-        f[i] += b_f / c_f;
-*/
+        double R_f = 1 / ( 1 + ( K_f / S_f ) + c_f * coth( c_f * S_f * THICKNESS ) );
+//         double T_f = c_f * R_f * ( 1 / sinh( c_f * S_f * THICKNESS ) );
 
-/* Implement mixing as glazing (Curtis et al.)
+		vREF1[i] = R_f; // + T_f;
 
-        R_c = sinh( b_c * S_c ) / c_c;
-        T_c = b_c / c_c;
+// 		vREF1[i] = ( V_ac * vREF1[i] + V_as * vREF2[i] ) / ( V_ac + V_as );
+	}
 
-        R_s = sinh( b_s * S_s ) / c_s;
-        T_s = b_s / c_s;
+	gmm::mult(REF_XYZ, vREF1, vXYZ);
+	for (int i = 0; i < 3; i++)
+		XYZ[i] = vXYZ[i];
+	cmsDoTransform(XYZ_RGB, XYZ, RGB, 1);
 
-        R_f = R_s + ( pow( T_s, 2 ) * R_c ) / ( 1 - R_s * R_c );
-        T_f = ( T_s * T_c ) / ( 1 - R_s * R_c );
-
-        kDebug() << "Channel " << i + 1 << " CANVAS R: " << R_c << " T: " << T_c << endl;
-        kDebug() << "Channel " << i + 1 << " STROKE R: " << R_s << " T: " << T_s << endl;
-        kDebug() << "Channel " << i + 1 << " FINAL  R: " << R_f << " T: " << T_f << endl << "------------------------" << endl;
-*/
-    }
-
-    refToXyz(f[0], f[1], f[2], f+0, f+1, f+2);
-    xyzToRgb(f[0], f[1], f[2], f+0, f+1, f+2);
-
-    for (int j = 0; j < 3; j++) {
-        if (f[j] < 0) f[j] = 0; if (f[j] > 1) f[j] = 1;
-    }
-
-    red = (long) (f[0]*255);
-    green = (long) (f[1]*255);
-    blue = (long) (f[2]*255);
+    red = (long) (RGB[0]*255);
+    green = (long) (RGB[1]*255);
+    blue = (long) (RGB[2]*255);
 
     updateHlsCmy();
-}
 
+	cmsDeleteTransform(RGB_XYZ);
+	cmsDeleteTransform(XYZ_RGB);
+	cmsCloseProfile(hsRGB);
+	cmsCloseProfile(hXYZ);
+}
+/*
 void Cell::mixColorsUsingXyz(const Cell &cell, float force)
 {
     float V_c, V_s; // Volumes in Canvas and Stroke
@@ -486,7 +573,7 @@ void Cell::mixColorsUsingXyz(const Cell &cell, float force)
 
     updateHlsCmy();
 }
-
+*/
 void Cell::mixColorsUsingRgb_2(const Cell &cell, float force)
 {
     float V_c, V_s; // Volumes in Canvas and Stroke

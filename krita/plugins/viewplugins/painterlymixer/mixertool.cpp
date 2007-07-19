@@ -209,8 +209,8 @@ void MixerTool::mixPaint(KisPaintDeviceSP stroke, KoPointerEvent *e)
                                    canvasColor.blue());
 
                 if (strokeColor != canvasColor) {
-                    strokeCell.mixColorsUsingKS(canvasCell, force);
-//                     strokeCell.mixColorsUsingKSXyz(canvasCell, force);
+//                     strokeCell.mixColorsUsingKS(canvasCell, force);
+                    strokeCell.mixColorsUsingKSXyz(canvasCell, force);
 //                     strokeCell.mixColorsUsingRgb_2(canvasCell, force);
 //                     strokeCell.mixColorsUsingRgbAdditive(canvasCell, force);
 //                     strokeCell.mixColorsUsingXyz(canvasCell, force);

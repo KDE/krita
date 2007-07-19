@@ -63,7 +63,7 @@ public:
            StyleGraphicAuto = 15,
            StylePresentationAuto = 16,
            StyleStrokeDash = 17,
-           StyleFirstCustom = 25 };
+           StyleFirstCustom = 2500 };
 
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),

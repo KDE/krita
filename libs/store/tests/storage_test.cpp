@@ -69,6 +69,8 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
 
     kDebug() << "======================="<<testName<<"====================================" << endl;
     KoStore* store = KoStore::createStore( testFile, KoStore::Write, "", backend );
+    if ( store == 0 )
+        return cleanUp( store, testFile, badStorage );
     if ( store->bad() )
         return cleanUp( store, testFile, badStorage );
 

@@ -587,6 +587,15 @@ public:
      */
     void notifyChanged();
 
+    /**
+     * A shape can be in a state that its doing loading or text layout or similar in which case
+     * it can be shown on screen just fine (probably partially) but it should really not be printed
+     * until its fully done.
+     * Flake will call this method from a non-main thread and only start printing it when the
+     * method returned.
+     * Warning!  This method can be blocking for a long time, never call it on the gui-thread!
+     */
+    virtual void waitUntilReady() const {}
 
 protected:
 

@@ -23,9 +23,18 @@
 
 class KoShape;
 
+/**
+ * Small helper class that will try to delete itself and the param shape with it.
+ * It will do the actual delete in the main-thread, no matter which thread it has been
+ * created in.
+ */
 class ShapeDeleter : public QObject {
     Q_OBJECT
 public:
+    /**
+     * Create a ShapeDeleter that will delete param shape
+     * @param shape the shape that will be deleted soon after this object is created.
+     */
     ShapeDeleter(KoShape *shape);
     ~ShapeDeleter();
 

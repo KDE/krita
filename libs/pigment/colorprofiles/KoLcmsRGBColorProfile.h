@@ -45,7 +45,7 @@ public:
      * @param gamma gamma value for the red, green and blue transfer functions
      * @param name the profile name
      */
-    KoLcmsRGBColorProfile(const Chromaticities &chromaticities, double gamma, QString name = QString());
+    KoLcmsRGBColorProfile(const Chromaticities &chromaticities, double gamma, const QString &name = QString());
 
     /**
      * Destructor.

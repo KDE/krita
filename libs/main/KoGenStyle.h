@@ -62,8 +62,11 @@ public:
            StyleHatch = 14,
            StyleGraphicAuto = 15,
            StylePresentationAuto = 16,
-           StyleStrokeDash = 17,
-           StyleFirstCustom = 2500 };
+           StyleStrokeDash = 17,        ///< draw:stroke-dash as in 14.14.7 odf spec
+           StyleGradient = 18,          ///< draw:gradient as in 14.14.1 odf spec
+           StyleGradientLinear = 19,    ///< linear svg:gradient as in 14.14.2 odf spec
+           StyleGradientRadial = 20,    ///< radial svg:gradient as in 14.14.2 odf spec
+           StyleFirstCustom = 2500 };   ///< the first style for applications to use
 
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),

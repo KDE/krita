@@ -149,6 +149,11 @@ public:
     static void saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush );
     static QString saveOasisHatchStyle( KoGenStyles& mainStyles, const QBrush &brush );
 
+    /// Saves gradient style of brush into mainStyles and returns the styles name
+    static QString saveOasisGradientStyle( KoGenStyles &mainStyles, const QBrush &brush );
+    /// Loads gradient style from style stack and oasisStyles adapted to the given size and returns a brush
+    static QBrush loadOasisGradientStyle( const KoStyleStack &styleStack, const KoOasisStyles & oasisStyles, const QSizeF &size );
+
     static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOasisStyles & oasisStyles );
 
     static QPen loadOasisStrokeStyle( const KoStyleStack &styleStack, const QString & stroke, const KoOasisStyles & oasisStyles );

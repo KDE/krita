@@ -35,6 +35,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
+#include <math.h>
+
 class KoOasisStyles::Private
 {
 public:
@@ -1376,59 +1378,61 @@ void KoOasisStyles::addKofficeNumericStyleExtension( KoXmlWriter & elementWriter
 
 void KoOasisStyles::saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush )
 {
-    if ( brush.style() == Qt::SolidPattern )
+    switch( brush.style() )
     {
+    case Qt::SolidPattern:
         styleFill.addProperty( "draw:fill","solid" );
         styleFill.addProperty( "draw:fill-color", brush.color().name() );
-    }
-    else if ( brush.style() == Qt::Dense1Pattern )
-    {
+        break;
+    case Qt::Dense1Pattern:
         styleFill.addProperty( "draw:transparency", "94%" );
         styleFill.addProperty( "draw:fill","solid" );
         styleFill.addProperty( "draw:fill-color", brush.color().name() );
-    }
-    else if ( brush.style() == Qt::Dense2Pattern )
-    {
+        break;
+    case Qt::Dense2Pattern:
         styleFill.addProperty( "draw:transparency", "88%" );
         styleFill.addProperty( "draw:fill","solid" );
         styleFill.addProperty( "draw:fill-color", brush.color().name() );
-    }
-    else if ( brush.style() == Qt::Dense3Pattern )
-    {
+        break;
+    case Qt::Dense3Pattern:
         styleFill.addProperty( "draw:transparency", "63%" );
         styleFill.addProperty( "draw:fill","solid" );
         styleFill.addProperty( "draw:fill-color", brush.color().name() );
-    }
-    else if ( brush.style() == Qt::Dense4Pattern )
-    {
+        break;
+    case Qt::Dense4Pattern:
         styleFill.addProperty( "draw:transparency", "50%" );
         styleFill.addProperty( "draw:fill","solid" );
         styleFill.addProperty( "draw:fill-color", brush.color().name() );
-    }
-    else if ( brush.style() == Qt::Dense5Pattern )
-    {
+        break;
+    case Qt::Dense5Pattern:
         styleFill.addProperty( "draw:transparency", "37%" );
         styleFill.addProperty( "draw:fill","solid" );
         styleFill.addProperty( "draw:fill-color", brush.color().name() );
-    }
-    else if ( brush.style() == Qt::Dense6Pattern )
-    {
+        break;
+    case Qt::Dense6Pattern:
         styleFill.addProperty( "draw:transparency", "12%" );
         styleFill.addProperty( "draw:fill","solid" );
         styleFill.addProperty( "draw:fill-color", brush.color().name() );
-    }
-    else if ( brush.style() == Qt::Dense7Pattern )
-    {
+        break;
+    case Qt::Dense7Pattern:
         styleFill.addProperty( "draw:transparency", "6%" );
         styleFill.addProperty( "draw:fill","solid" );
         styleFill.addProperty( "draw:fill-color", brush.color().name() );
-    }
-    else //otherstyle
-    {
+        break;
+    case Qt::LinearGradientPattern:
+    case Qt::RadialGradientPattern:
+    case Qt::ConicalGradientPattern:
+        styleFill.addProperty( "draw:fill","gradient" );
+        styleFill.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles, brush ) );
+        break;
+    case Qt::TexturePattern:
+        // TODO
+        break;
+    default: //otherstyle
         styleFill.addProperty( "draw:fill","hatch" );
-        styleFill.addProperty( "draw:fill-hatch-name", saveOasisHatchStyle( mainStyles,brush ) );
+        styleFill.addProperty( "draw:fill-hatch-name", saveOasisHatchStyle( mainStyles, brush ) );
+        break;
     }
-
 }
 
 QString KoOasisStyles::saveOasisHatchStyle( KoGenStyles& mainStyles, const QBrush &brush )
@@ -1467,6 +1471,182 @@ QString KoOasisStyles::saveOasisHatchStyle( KoGenStyles& mainStyles, const QBrus
     }
 
     return mainStyles.lookup( hatchStyle, "hatch" );
+}
+
+QString KoOasisStyles::saveOasisGradientStyle( KoGenStyles &mainStyles, const QBrush &brush )
+{
+    KoGenStyle gradientStyle;
+    if( brush.style() == Qt::RadialGradientPattern )
+    {
+        const QRadialGradient *gradient = static_cast<const QRadialGradient*>( brush.gradient() );
+        gradientStyle = KoGenStyle( KoGenStyle::StyleGradientRadial /*no family name*/ );
+        gradientStyle.addAttribute( "draw:style", "radial" );
+        gradientStyle.addAttributePt( "svg:cx", gradient->center().x() );
+        gradientStyle.addAttributePt( "svg:cy", gradient->center().y() );
+        gradientStyle.addAttributePt( "svg:r",  gradient->radius() );
+        gradientStyle.addAttributePt( "svg:fx", gradient->focalPoint().x() );
+        gradientStyle.addAttributePt( "svg:fy", gradient->focalPoint().y() );
+    }
+    else if( brush.style() == Qt::LinearGradientPattern )
+    {
+        const QLinearGradient *gradient = static_cast<const QLinearGradient*>( brush.gradient() );
+        gradientStyle = KoGenStyle( KoGenStyle::StyleGradientLinear /*no family name*/ );
+        gradientStyle.addAttribute( "draw:style", "linear" );
+        gradientStyle.addAttributePt( "svg:x1", gradient->start().x() );
+        gradientStyle.addAttributePt( "svg:y1", gradient->start().y() );
+        gradientStyle.addAttributePt( "svg:x2", gradient->finalStop().x() );
+        gradientStyle.addAttributePt( "svg:y2", gradient->finalStop().y() );
+    }
+    const QGradient * gradient = brush.gradient();
+    if( gradient->spread() == QGradient::RepeatSpread )
+        gradientStyle.addAttribute( "svg:spreadMethod", "repeat" );
+    else if( gradient->spread() == QGradient::ReflectSpread )
+        gradientStyle.addAttribute( "svg:spreadMethod", "reflect" );
+    else
+        gradientStyle.addAttribute( "svg:spreadMethod", "pad" );
+
+    QBuffer buffer;
+    buffer.open( QIODevice::WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+
+    // save stops
+    QGradientStops stops = gradient->stops();
+    foreach( QGradientStop stop, stops )
+    {
+        elementWriter.startElement( "svg:stop" );
+        elementWriter.addAttribute( "svg:offset", QString( "%1" ).arg( stop.first ) );
+        elementWriter.addAttribute( "svg:color", stop.second.name() );
+        if( stop.second.alphaF() < 1.0 )
+            elementWriter.addAttribute( "svg:stop-opacity", QString( "%1" ).arg( stop.second.alphaF() ) );
+        elementWriter.endElement();
+    }
+
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    gradientStyle.addChildElement( "svg:stop", elementContents );
+
+    return mainStyles.lookup( gradientStyle, "gradient" );
+}
+
+QBrush KoOasisStyles::loadOasisGradientStyle( const KoStyleStack &styleStack, const KoOasisStyles & oasisStyles, const QSizeF &size )
+{
+    QString styleName = styleStack.property( KoXmlNS::draw, "fill-gradient-name" );
+
+    KoXmlElement* e = oasisStyles.drawStyles()[styleName];
+    if( ! e )
+        return QBrush();
+
+    QGradient * gradient = 0;
+
+    if( e->namespaceURI() == KoXmlNS::draw && e->localName() == "gradient" )
+    {
+        QString type = e->attributeNS( KoXmlNS::draw, "style", QString::null );
+        if( type == "radial" )
+        {
+            QRadialGradient * rg = new QRadialGradient();
+            // TODO : find out whether Oasis works with boundingBox only?
+            double cx = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cx", QString::null ).remove("%") );
+            double cy = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cy", QString::null ).remove("%") );
+            rg->setCenter( QPointF( size.width() * 0.01 * cx, size.height() * 0.01 * cy ) );
+            rg->setFocalPoint( rg->center() );
+            double dx = 0.5 * size.width();
+            double dy = 0.5 * size.height();
+            rg->setRadius( sqrt( dx*dx + dy*dy ) );
+            gradient = rg;
+        }
+        else if( type == "linear" )
+        {
+            QLinearGradient * lg = new QLinearGradient();
+            double angle = 90 + e->attributeNS( KoXmlNS::draw, "angle", "0" ).toDouble();
+            double radius = 0.5 * sqrt( size.width()*size.width() + size.height()*size.height() );
+            double sx = cos( angle * M_PI / 180 ) * radius;
+            double sy = sin( angle * M_PI / 180 ) * radius;
+            lg->setStart( QPointF( 0.5 * size.width() + sx, 0.5 * size.height() + sy ) );
+            lg->setFinalStop( QPointF( 0.5 * size.width() - sx, 0.5 * size.height() - sy ) );
+            gradient = lg;
+        }
+        else
+            return QBrush();
+
+        QGradientStop start;
+        start.first = 0.0;
+        start.second = QColor( e->attributeNS( KoXmlNS::draw, "start-color", QString::null ) );
+        start.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "start-intensity", "100" ).remove("%").toDouble() );
+
+        QGradientStop end;
+        end.first = 1.0;
+        end.second = QColor( e->attributeNS( KoXmlNS::draw, "end-color", QString::null ) );
+        end.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove("%").toDouble() );
+
+        QGradientStops stops;
+        gradient->setStops( stops << start << end );
+    }
+    else if( e->namespaceURI() == KoXmlNS::svg )
+    {
+        if( e->localName() == "linearGradient" )
+        {
+            QLinearGradient * lg = new QLinearGradient();
+            QPointF start, stop;
+            start.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "x1", QString::null ) ) );
+            start.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "y1", QString::null ) ) );
+            stop.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "x2", QString::null ) ) );
+            stop.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "y2", QString::null ) ) );
+            lg->setStart( start );
+            lg->setFinalStop( stop );
+            gradient = lg;
+        }
+        else if( e->localName() == "radialGradient" )
+        {
+            QRadialGradient * rg = new QRadialGradient();
+            QPointF center, focalPoint;
+            center.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "cx", QString::null ) ) );
+            center.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "cy", QString::null ) ) );
+            double r = KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "r", QString::null ) );
+            focalPoint.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "fx", QString::null ) ) );
+            focalPoint.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "fy", QString::null ) ) );
+            rg->setCenter( center );
+            rg->setFocalPoint( focalPoint );
+            rg->setRadius( r );
+            gradient = rg;
+        }
+
+        QString strSpread( e->attributeNS( KoXmlNS::svg, "spreadMethod", "pad" ) );
+        if( strSpread == "repeat" )
+            gradient->setSpread( QGradient::RepeatSpread );
+        else if( strSpread == "reflect" )
+            gradient->setSpread( QGradient::ReflectSpread );
+        else
+            gradient->setSpread( QGradient::PadSpread );
+
+        QGradientStops stops;
+
+        // load stops
+        QDomNodeList list = e->childNodes();
+        for( int i = 0; i < list.count(); ++i )
+        {
+            if( list.item( i ).isElement() )
+            {
+                QDomElement colorstop = list.item( i ).toElement();
+
+                if( colorstop.namespaceURI() == KoXmlNS::svg && colorstop.localName() == "stop" )
+                {
+                    QGradientStop stop;
+                    stop.second = QColor( colorstop.attributeNS( KoXmlNS::svg, "color", QString::null ) );
+                    stop.second.setAlphaF( colorstop.attributeNS( KoXmlNS::svg, "stop-opacity", "1.0" ).toDouble() );
+                    stop.first = colorstop.attributeNS( KoXmlNS::svg, "offset", "0.0" ).toDouble();
+                    stops.append( stop );
+                }
+            }
+        }
+        // TODO should the stops be sorted?
+        gradient->setStops( stops );
+    }
+
+    if( ! gradient )
+        return QBrush();
+
+    QBrush resultBrush( *gradient );
+    delete gradient;
+    return resultBrush;
 }
 
 QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill, const KoOasisStyles & oasisStyles )
@@ -1607,6 +1787,7 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
             }
         }
     }
+
     return tmpBrush;
 }
 

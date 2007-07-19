@@ -630,24 +630,9 @@ QString KoShape::style( KoShapeSavingContext &context ) const
         case Qt::NoBrush:
             style.addProperty( "draw:fill","none" );
             break;
-        case Qt::SolidPattern:
-        case Qt::Dense1Pattern:
-        case Qt::Dense2Pattern:
-        case Qt::Dense3Pattern:
-        case Qt::Dense4Pattern:
-        case Qt::Dense5Pattern:
-        case Qt::Dense6Pattern:
-        case Qt::Dense7Pattern:
-        case Qt::HorPattern:
-        case Qt::BDiagPattern:
-        case Qt::VerPattern:
-        case Qt::FDiagPattern:
-        case Qt::CrossPattern:
-        case Qt::DiagCrossPattern:
+        default:
             KoOasisStyles::saveOasisFillStyle( style, context.mainStyles(), bg );
             break;
-        default:    // TODO all the other ones.
-        break;
     }
 
     if ( context.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
@@ -659,6 +644,18 @@ QString KoShape::style( KoShapeSavingContext &context ) const
 
 bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingContext &context, int attributes )
 {
+    if ( attributes & OdfSize ) {
+        QPointF pos;
+        pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
+        pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
+        setPosition( pos );
+
+        QSizeF size;
+        size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
+        size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
+        resize( size );
+    }
+
     if ( attributes & OdfMandatories ) {
         if ( element.hasAttributeNS( KoXmlNS::draw, "layer" ) ) {
             KoShapeLayer * layer = context.layer( element.attributeNS( KoXmlNS::draw, "layer" ) );
@@ -683,18 +680,6 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
 
         setBackground( loadOdfFill( element, context ) );
         setBorder( loadOdfStroke( element, context ) );
-    }
-
-    if ( attributes & OdfSize ) {
-        QPointF pos;
-        pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
-        pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
-        setPosition( pos );
-
-        QSizeF size;
-        size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
-        size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
-        resize( size );
     }
 
     if( attributes & OdfTransformation )
@@ -730,6 +715,8 @@ QBrush KoShape::loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext
 
     if ( fill == "solid" || fill == "hatch" )
         return KoOasisStyles::loadOasisFillStyle( styleStack, fill, context.koLoadingContext().oasisStyles() );
+    else if( fill == "gradient" )
+        return KoOasisStyles::loadOasisGradientStyle( styleStack, context.koLoadingContext().oasisStyles(), size() );
 
     return QBrush();
 }

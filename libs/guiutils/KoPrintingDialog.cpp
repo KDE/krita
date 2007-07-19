@@ -68,12 +68,10 @@ public:
             parent->preparePage(pageNumber);
         updater.setProgress(50);
 
-        // here we should create a set of progress objects and give one
-        // to each of the KoSHape::waitUntilReady() objects; calling the 'finish()' when done.
         QList<KoShape*> shapes = parent->shapesOnPage(pageNumber);
         const int progressPart = 50 / shapes.count();
         foreach(KoShape *shape, shapes) {
-            kDebug(30004) << "Calling waitUntilReady on shape\n";
+            kDebug(30004) << "Calling waitUntilReady on shape (" << shape << ")\n";
             shape->waitUntilReady();
             kDebug(30004) << "  done\n";
             updater.setProgress(updater.progress() + progressPart);
@@ -141,6 +139,8 @@ KoPrintingDialog::KoPrintingDialog(QWidget *parent)
     grid->addWidget(bar, 1, 0, 1, 3);
     d->button = new QPushButton(i18n("Cancel"), this);
     grid->addWidget(d->button, 2, 2);
+
+    connect(d->button, SIGNAL(released()), this, SLOT(cancelPressed()));
 }
 
 KoPrintingDialog::~KoPrintingDialog()

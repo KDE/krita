@@ -42,7 +42,11 @@ ActionJob::ActionJob(KoAction *parent, Enable enable, const QVariant &params)
 
 void ActionJob::run() {
     m_started = true;
+    if(m_action.isNull())
+        return;
     m_action->doAction(m_params);
+    if(m_action.isNull())
+        return;
     switch(m_enable) {
         case EnableOn:
             m_action->setEnabled(true);
@@ -67,7 +71,8 @@ void ActionJob::run() {
 bool ActionJob::event(QEvent *e) {
     ActionJobEvent *event = dynamic_cast<ActionJobEvent*> (e);
     if(event) {
-        m_action->doActionUi(m_params);
+        if(! m_action.isNull())
+            m_action->doActionUi(m_params);
         m_mutex.lock(); // wait for the above to start waiting on us.
         m_waiter.wakeAll();
         m_mutex.unlock();

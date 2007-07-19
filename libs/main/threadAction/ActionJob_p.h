@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
@@ -24,6 +23,7 @@
 #include <QWaitCondition>
 #include <QMutex>
 #include <QVariant>
+#include <QPointer>
 
 class QEvent;
 
@@ -49,7 +49,7 @@ private:
     bool event(QEvent *e);
 
 private:
-    KoAction *m_action;
+    QPointer<KoAction> m_action;
     Enable m_enable;
     bool m_started;
     QVariant m_params;

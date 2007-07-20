@@ -654,7 +654,7 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
         QSizeF size;
         size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
         size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
-        resize( size );
+        setSize( size );
     }
 
     if ( attributes & OdfMandatories ) {

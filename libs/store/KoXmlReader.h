@@ -25,8 +25,8 @@
 
 #include <kostore_export.h>
 
-#include <qxml.h>
-#include <qdom.h>
+#include <QtXml/qxml.h>
+#include <QtXml/qdom.h>
 
 class QIODevice;
 class QTextDecoder;

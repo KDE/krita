@@ -22,7 +22,7 @@ void TestDocumentLayout::initTestCase() {
 void TestDocumentLayout::initForNewTest(const QString &initText) {
     // this leaks memory like mad, but who cares ;)
     shape1 = new MockTextShape();
-    shape1->resize(QSizeF(200, 1000));
+    shape1->setSize(QSizeF(200, 1000));
 
     // this leaks memory like mad, but who cares ;)
     doc = shape1->layout->document();

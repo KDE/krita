@@ -85,10 +85,10 @@ public:
     /// Used by shapeChanged() to select which change was made
     enum ChangeType {
         PositionChanged, ///< used after a setPosition()
-        RotationChanged, ///< used after a rotate()
-        ScaleChanged,   ///< used after a scale()
-        ShearChanged,   ///< used after a shear()
-        SizeChanged,    ///< used after a resize()
+        RotationChanged, ///< used after a setRotation()
+        ScaleChanged,   ///< used after a setScale()
+        ShearChanged,   ///< used after a setShear()
+        SizeChanged,    ///< used after a setSize()
         ParentChanged,   ///< used after a setParent()
         CollisionDetected ///< used when another shape moved in our boundingrect
     };
@@ -138,8 +138,6 @@ public:
      * @param element element which represents the shape in odf
      *
      * @return false if loading failed
-     *
-     * TODO make it pure virtual
      */
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) = 0;
 
@@ -165,7 +163,7 @@ public:
      * @param sx scale in x direction
      * @param sy scale in y direction
      */
-    void scale( double sx, double sy );
+    void setScale( double sx, double sy );
 
     /**
      * Return the current scaling adjustment over the X axis.
@@ -178,11 +176,11 @@ public:
     KDE_DEPRECATED double scaleY() const;
 
     /**
-     * @brief Rotate the shape
+     * @brief Rotate the shape (relative)
      *
-     * The shape will be rotated using the center of the shape using the size()
+     * The shape will be rotated from the current rotation using the center of the shape using the size()
      *
-     * @param angle set the rotation angle of the shape in degrees
+     * @param angle change the angle of rotation increasing it with 'angle' degrees
      */
     void rotate( double angle );
 
@@ -200,7 +198,7 @@ public:
      * @param sx shear in x direction
      * @param sy shear in y direction
      */
-    void shear( double sx, double sy );
+    void setShear( double sx, double sy );
 
     /**
      * Return the current horizontal shearing angle for this shape.
@@ -223,7 +221,7 @@ public:
      * Easiest example of this difference is that using this method will not distort the
      * size of pattern-fills and borders.
      */
-    virtual void resize( const QSizeF &size );
+    virtual void setSize( const QSizeF &size );
 
     /**
      * @brief Get the size of the shape in pt.

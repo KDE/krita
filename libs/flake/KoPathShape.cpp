@@ -449,16 +449,16 @@ QPointF KoPathShape::position() const
     return KoShape::position();
 }
 
-void KoPathShape::resize( const QSizeF &newSize )
+void KoPathShape::setSize( const QSizeF &newSize )
 {
     QSizeF oldSize = size();
     double zoomX = newSize.width() / oldSize.width(); 
     double zoomY = newSize.height() / oldSize.height(); 
     QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
 
-    //qDebug() << "resize" << zoomX << "," << zoomY << "," << newSize;
+    //qDebug() << "setSize" << zoomX << "," << zoomY << "," << newSize;
     map( matrix );
-    KoShape::resize( newSize );
+    KoShape::setSize( newSize );
 }
 
 KoPathPoint * KoPathShape::moveTo( const QPointF &p )

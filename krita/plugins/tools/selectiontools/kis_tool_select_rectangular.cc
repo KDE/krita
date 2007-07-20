@@ -233,7 +233,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                 KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoRectangleShape");
                 if(rectFactory) {
                     shape = rectFactory->createDefaultShape();
-                    shape->resize(documentRect.size());
+                    shape->setSize(documentRect.size());
                     shape->setPosition(documentRect.topLeft());
                 }
                 else {

@@ -9,9 +9,11 @@ class KoShapeContainer;
 class TestPosition : public QObject
 {
     Q_OBJECT
+public:
+    TestPosition();
+
 private slots:
-    void initTestCase();
-    void cleanupTestCase();
+    void init(); // will be called before each testfunction is executed.
 
     // tests
     void testBasePosition();

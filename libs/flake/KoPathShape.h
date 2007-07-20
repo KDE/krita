@@ -92,7 +92,7 @@ public:
     virtual QRectF boundingRect() const;
     virtual QSizeF size() const;
     virtual QPointF position() const;
-    virtual void resize( const QSizeF &size );
+    virtual void setSize( const QSizeF &size );
 
     // reimplemented
     virtual void saveOdf( KoShapeSavingContext & context ) const;

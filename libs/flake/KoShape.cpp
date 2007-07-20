@@ -145,7 +145,7 @@ void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &convert
     }*/
 }
 
-void KoShape::scale( double sx, double sy )
+void KoShape::setScale( double sx, double sy )
 {
     QPointF pos = position();
     QMatrix scaleMatrix;
@@ -171,7 +171,7 @@ void KoShape::rotate( double angle )
     d->shapeChanged(RotationChanged);
 }
 
-void KoShape::shear( double sx, double sy )
+void KoShape::setShear( double sx, double sy )
 {
     QPointF pos = position();
     QMatrix shearMatrix;
@@ -184,7 +184,7 @@ void KoShape::shear( double sx, double sy )
     d->shapeChanged(ShearChanged);
 }
 
-void KoShape::resize( const QSizeF &newSize )
+void KoShape::setSize( const QSizeF &newSize )
 {
     QSizeF s( size() );
     if(s == newSize)
@@ -438,12 +438,13 @@ KoInsets KoShape::borderInsets() const {
 double KoShape::scaleX() const {
     return 0.0;
 }
+
 double KoShape::scaleY() const {
     return 0.0;
 }
 
 double KoShape::rotation() const {
-    // try to extract the rotation angle out of the local matrix 
+    // try to extract the rotation angle out of the local matrix
     // if it is a pure rotation matrix
 
     // check if the matrix has shearing mixed in

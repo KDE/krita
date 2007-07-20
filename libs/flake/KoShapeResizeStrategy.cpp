@@ -191,7 +191,7 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
         QSizeF size( scaleX * m_startSizes[i].width(), scaleY * m_startSizes[i].height() );
 
         // apply the transformation
-        shape->resize( size );
+        shape->setSize( size );
         // apply the rest of the transformation without the resizing part
         shape->applyTransformation( scaleMatrix.inverted() * resizeMatrix );
         shape->applyTransformation( mirrorMatrix );

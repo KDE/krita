@@ -78,7 +78,7 @@ void KoShapeGroupCommand::redo () {
             }
         }
         m_container->setPosition( bound.topLeft() );
-        m_container->resize( bound.size() );
+        m_container->setSize( bound.size() );
     }
 
     QMatrix groupTransform = m_container->transformationMatrix(0).inverted();

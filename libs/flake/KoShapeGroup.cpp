@@ -43,7 +43,7 @@ bool KoShapeGroup::hitTest( const QPointF &position ) const {
 void KoShapeGroup::childCountChanged() {
     QRectF br = boundingRect();
     setPosition( br.topLeft() );
-    resize( br.size() );
+    setSize( br.size() );
 }
 
 void KoShapeGroup::saveOdf( KoShapeSavingContext & context ) const {

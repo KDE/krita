@@ -72,7 +72,7 @@ QUndoCommand* KoCreateShapeStrategy::createCommand() {
     // if the user has dragged when creating the shape,
     // resize the shape to the dragged size
     if(newSize.width() > 1.0 && newSize.height() > 1.0)
-        shape->resize(newSize);
+        shape->setSize(newSize);
 
     QUndoCommand * cmd = parent->m_canvas->shapeController()->addShape( shape );
     if ( cmd )

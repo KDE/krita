@@ -112,7 +112,7 @@ void KoParameterShape::paintHandle( QPainter & painter, const KoViewConverter & 
     painter.drawPolygon( poly );
 }
 
-void KoParameterShape::resize( const QSizeF &newSize )
+void KoParameterShape::setSize( const QSizeF &newSize )
 {
     QSizeF oldSize = size();
     QMatrix matrix( newSize.width() / oldSize.width(), 0, 0, newSize.height() / oldSize.height(), 0, 0 );
@@ -122,7 +122,7 @@ void KoParameterShape::resize( const QSizeF &newSize )
         m_handles[i] = matrix.map( m_handles[i] );
     }
 
-    KoPathShape::resize( newSize );
+    KoPathShape::setSize( newSize );
 }
 
 QPointF KoParameterShape::normalize()

@@ -13,7 +13,7 @@ void TestShapeAt::test() {
     MockCanvas canvas;
     KoShapeManager manager(&canvas);
     shape1.setPosition(QPointF(100, 100));
-    shape1.resize(QSizeF(50, 50));
+    shape1.setSize(QSizeF(50, 50));
     shape1.setZIndex(0);
     manager.add(&shape1);
 
@@ -25,7 +25,7 @@ void TestShapeAt::test() {
     QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::NextUnselected) != 0 );
 
     shape2.setPosition(QPointF(80, 80));
-    shape2.resize(QSizeF(50, 50));
+    shape2.setSize(QSizeF(50, 50));
     shape2.setZIndex(1);
     manager.add(&shape2);
 
@@ -47,7 +47,7 @@ void TestShapeAt::test() {
     QCOMPARE(manager.shapeAt(QPointF(105, 105), KoFlake::NextUnselected), &shape1);
 
     shape3.setPosition(QPointF(120, 80));
-    shape3.resize(QSizeF(50, 50));
+    shape3.setSize(QSizeF(50, 50));
     shape3.setZIndex(2);
     manager.add(&shape3);
 

@@ -3,18 +3,34 @@
 #include "MockShapes.h"
 #include <QPointF>
 
+TestPosition::TestPosition()
+    : shape1(0),
+    shape2(0),
+    childShape1(0),
+    childShape2(0),
+    container(0),
+    container2(0)
+{
+}
 
-void TestPosition::initTestCase() {
+void TestPosition::init() {
+    delete container;
+    delete container2;
+    delete shape1;
+    delete shape2;
+    delete childShape1;
+    delete childShape2;
+
     shape1 = new MockShape();
     shape1->setPosition(QPointF(50, 50));
-    shape1->resize(QSize(50, 50));
+    shape1->setSize(QSize(50, 50));
     shape2 = new MockShape();
     shape2->setPosition(QPointF(20, 20));
-    shape2->resize(QSize(50, 50));
+    shape2->setSize(QSize(50, 50));
 
     childShape1 = new MockShape();
     childShape1->setPosition(QPointF(20, 20));
-    childShape1->resize(QSize(50, 50));
+    childShape1->setSize(QSize(50, 50));
     container = new MockContainer();
     container->setPosition(QPointF(100, 100));
     container->addChild(childShape1);
@@ -22,21 +38,12 @@ void TestPosition::initTestCase() {
 
     childShape2 = new MockShape();
     childShape2->setPosition(QPointF(25, 25));
-    childShape2->resize(QSizeF(10, 15));
+    childShape2->setSize(QSizeF(10, 15));
     container2 = new MockContainer();
     container2->setPosition(QPointF(100, 200));
-    container2->resize(QSizeF(100, 100));
+    container2->setSize(QSizeF(100, 100));
     container2->rotate(90);
     container2->addChild(childShape2);
-}
-
-void TestPosition::cleanupTestCase() {
-    delete container;
-    delete container2;
-    delete shape1;
-    delete shape2;
-    delete childShape1;
-    delete childShape2;
 }
 
 void TestPosition::testBasePosition() {
@@ -123,11 +130,11 @@ void TestPosition::testSetAndGetRotation() {
     shape1->rotate(180);
     QCOMPARE(shape1->rotation(), 180.0);
     shape1->rotate(2);
-    QCOMPARE(shape1->rotation(), 2.0);
+    QCOMPARE(shape1->rotation(), 182.0);
     shape1->rotate(4);
-    QCOMPARE(shape1->rotation(), 4.0);
+    QCOMPARE(shape1->rotation(), 186.0);
     shape1->rotate(358);
-    QCOMPARE(shape1->rotation(), 358.0);
+    QCOMPARE(shape1->rotation(), 184.0);
 }
 
 QTEST_MAIN(TestPosition)

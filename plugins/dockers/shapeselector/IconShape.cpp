@@ -24,7 +24,7 @@
 
 IconShape::IconShape(const QString &icon) {
     m_icon = KIcon(icon).pixmap(22);
-    resize(m_icon.size());
+    setSize(m_icon.size());
 }
 
 void IconShape::paint(QPainter &painter, const KoViewConverter &converter) {

@@ -145,7 +145,7 @@ void KoSelection::requestSelectionChangedEvent() {
 
 void KoSelection::selectionChangedEvent() {
     d->eventTriggered = false;
-    scale(1,1);
+    setScale(1,1);
     //just as well use the oppertunity to update the size and position
     updateSizeAndPosition();
     emit selectionChanged();
@@ -172,7 +172,7 @@ void KoSelection::updateSizeAndPosition()
 {
     QRectF bb = sizeRect();
     QMatrix matrix = transformationMatrix(0);
-    resize( bb.size() );
+    setSize( bb.size() );
     QPointF p = matrix.map(bb.topLeft() + matrix.inverted().map( position()) );
     setPosition( p );
 }

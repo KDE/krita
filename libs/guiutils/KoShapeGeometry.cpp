@@ -66,7 +66,7 @@ void KoShapeGeometry::updateShape() {
     QPointF pos(widget.left->value(), widget.top->value());
     m_shape->setAbsolutePosition(pos);
     QSizeF size(widget.width->value(), widget.height->value());
-    m_shape->resize(size);
+    m_shape->setSize(size);
     m_shape->repaint();
 }
 
@@ -85,7 +85,7 @@ void KoShapeGeometry::save() {
 
 void KoShapeGeometry::cancel() {
     m_shape->setAbsolutePosition(mOriginalPosition);
-    m_shape->resize(mOriginalSize);
+    m_shape->setSize(mOriginalSize);
 }
 
 KAction *KoShapeGeometry::createAction() {

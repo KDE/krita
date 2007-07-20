@@ -59,7 +59,7 @@ ShapeSelector::~ShapeSelector() {
 }
 
 void ShapeSelector::loadShapeTypes() {
-    m_mainFolder->resize(m_canvas->size());
+    m_mainFolder->setSize(m_canvas->size());
 
     foreach(QString id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
@@ -117,7 +117,7 @@ void ShapeSelector::add(KoShape *shape) {
 }
 
 void ShapeSelector::setSize(const QSize &size) {
-    m_mainFolder->resize(QSizeF(size));
+    m_mainFolder->setSize(QSizeF(size));
 }
 
 #include "ShapeSelector.moc"

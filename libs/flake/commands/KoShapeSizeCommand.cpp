@@ -50,7 +50,7 @@ void KoShapeSizeCommand::redo () {
     int i=0;
     foreach(KoShape *shape, d->shapes) {
         shape->repaint();
-        shape->resize(d->newSizes[i++]);
+        shape->setSize(d->newSizes[i++]);
         shape->repaint();
     }
 }
@@ -60,7 +60,7 @@ void KoShapeSizeCommand::undo () {
     int i=0;
     foreach(KoShape *shape, d->shapes) {
         shape->repaint();
-        shape->resize(d->previousSizes[i++]);
+        shape->setSize(d->previousSizes[i++]);
         shape->repaint();
     }
 }

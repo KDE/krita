@@ -1,12 +1,14 @@
+#ifndef MOCKSHAPES_H
+#define MOCKSHAPES_H
+
 #include <KoShapeGroup.h>
 #include <KoCanvasBase.h>
 #include <KoShapeControllerBase.h>
+#include <KoShapeContainerModel.h>
 #include <QPainter>
 
 #include "kdebug.h"
 
-#ifndef MOCKSHAPES_H
-#define MOCKSHAPES_H
 
 class MockShape : public KoShape {
 public:
@@ -24,6 +26,7 @@ public:
 
 class MockContainer : public KoShapeContainer {
 public:
+    MockContainer(KoShapeContainerModel *model) : KoShapeContainer(model), paintedCount(0) {}
     MockContainer() : paintedCount(0) {}
     void paintComponent(QPainter &painter, const KoViewConverter &converter) {
         Q_UNUSED(painter);
@@ -96,6 +99,54 @@ public:
     }
 private:
     QSet<KoShape * > m_shapes;
+};
+
+class MockContainerModel : public KoShapeContainerModel {
+public:
+    MockContainerModel()
+    {
+        resetCounts();
+    }
+
+    /// reimplemented
+    void add(KoShape *child) {
+        m_children.append(child); // note that we explicitly do not check for duplicates here!
+    }
+    /// reimplemented
+    void remove(KoShape *child) {
+        m_children.removeAll(child);
+    }
+
+    /// reimplemented
+    void setClipping(const KoShape *, bool ) { } // ignored
+    /// reimplemented
+    bool childClipped(const KoShape *) const { return false; }// ignored
+    /// reimplemented
+    bool isChildLocked(const KoShape *child) const { return child->isLocked(); }
+    /// reimplemented
+    int count() const { return m_children.count(); }
+    /// reimplemented
+    QList<KoShape*> iterator() const { return m_children; }
+    /// reimplemented
+    void containerChanged(KoShapeContainer *) { m_containerChangedCalled++; }
+    /// reimplemented
+    void proposeMove(KoShape *, QPointF &) { m_proposeMoveCalled++; }
+    /// reimplemented
+    void childChanged(KoShape *, KoShape::ChangeType ) { m_childChangedCalled++; }
+
+    int containerChangedCalled() const { return m_containerChangedCalled; }
+    int childChangedCalled() const { return m_childChangedCalled; }
+    int proposeMoveCalled() const { return m_proposeMoveCalled; }
+
+    void resetCounts() {
+        m_containerChangedCalled = 0;
+        m_childChangedCalled = 0;
+        m_proposeMoveCalled = 0;
+    }
+
+private:
+    QList<KoShape*> m_children;
+    int m_containerChangedCalled, m_childChangedCalled, m_proposeMoveCalled;
 };
 
 #endif

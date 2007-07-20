@@ -45,8 +45,9 @@ class KoShapeContainerModel;
  * all children move with it.
  *
  * <p>Each child can optionally be said to be 'clipped' by the container.
- * This feature will give the effect that even if the child has a size and
- * position outside the container, it will not be shown.  This is especially useful
+ * This feature will give the effect that if the child has a size and
+ * position outside the container, parts outside the container will not be shown. 
+ * This is especially useful
  * for showing cutouts of content, like images, without changing the actual content.
  *
  * <p>For so called clipped children any modification made to the container is

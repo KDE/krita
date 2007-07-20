@@ -2,7 +2,6 @@
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
-   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,10 +29,9 @@
 #include "KoPointerEvent.h"
 #include "KoCanvasResourceProvider.h"
 #include "KoInteractionTool.h"
-#include "commands/KoShapeTransformCommand.h"
+#include "commands/KoShapeMoveCommand.h"
 
 #include <kdebug.h>
-#include <klocale.h>
 #include <QPainter>
 #include <QMouseEvent>
 #include <QPainterPath>
@@ -49,9 +47,12 @@ KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, co
         if( ! isEditable( shape ) )
             continue;
         m_selectedShapes << shape;
+        m_previousPositions << shape->position();
+        m_newPositions << shape->position();
         boundingRect = boundingRect.unite( shape->boundingRect() );
     }
     m_initialTopLeft = boundingRect.topLeft();
+    m_initialSelectionPosition = canvas->shapeManager()->selection()->position();
 }
 
 void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
@@ -70,26 +71,29 @@ void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
             diff.setY(0);
     }
 
-    QMatrix matrix;
-    matrix.translate( diff.x(), diff.y() );
-    QMatrix applyMatrix = matrix * m_translationMatrix.inverted();
+    Q_ASSERT(m_newPositions.count());
 
-    foreach( KoShape * shape, m_selectedShapes ) {
+    m_diff = diff;
+    int i=0;
+    foreach(KoShape *shape, m_selectedShapes) {
+        diff = m_previousPositions.at(i) + m_diff - shape->position();
+        if(shape->parent())
+            shape->parent()->model()->proposeMove(shape, diff);
+        m_canvas->clipToDocument(shape, diff);
+        QPointF newPos (shape->position() + diff);
+        m_newPositions[i] = newPos;
         shape->repaint();
-        shape->applyTransformation( applyMatrix );
+        shape->setPosition(newPos);
         shape->repaint();
+        i++;
     }
-    m_canvas->shapeManager()->selection()->applyTransformation( applyMatrix );
-    m_translationMatrix = matrix;
+    m_canvas->shapeManager()->selection()->setPosition(m_initialSelectionPosition + m_diff);
 }
 
 QUndoCommand* KoShapeMoveStrategy::createCommand() {
-    if( m_translationMatrix.isIdentity() )
+    if(m_diff.x() == 0 && m_diff.y() == 0)
         return 0;
-    KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_translationMatrix );
-    cmd->setText( i18n( "Move shapes" ) );
-    cmd->undo();
-    return cmd;
+    return new KoShapeMoveCommand(m_selectedShapes, m_previousPositions, m_newPositions);
 }
 
 void KoShapeMoveStrategy::paint( QPainter &painter, const KoViewConverter &converter) {

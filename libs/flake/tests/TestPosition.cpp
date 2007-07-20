@@ -119,5 +119,16 @@ void TestPosition::testSetAbsolutePosition2() {
     QCOMPARE(childShape2->position(), QPointF(-200, 200) );
 }
 
+void TestPosition::testSetAndGetRotation() {
+    shape1->rotate(180);
+    QCOMPARE(shape1->rotation(), 180.0);
+    shape1->rotate(2);
+    QCOMPARE(shape1->rotation(), 2.0);
+    shape1->rotate(4);
+    QCOMPARE(shape1->rotation(), 4.0);
+    shape1->rotate(358);
+    QCOMPARE(shape1->rotation(), 358.0);
+}
+
 QTEST_MAIN(TestPosition)
 #include "TestPosition.moc"

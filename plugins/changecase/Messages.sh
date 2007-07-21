@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT *.cpp  -o $podir/changecase.pot
+$XGETTEXT *.cpp  -o $podir/ChangecasePlugin.pot

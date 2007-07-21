@@ -21,7 +21,8 @@
 
 #include <KoProperties.h>
 #include <kdebug.h>
-#include <KoDocument.h>
+#include <KoTextShapeData.h>
+#include <KoShape.h>
 
 PageVariable::PageVariable()
     : KoVariable(true),
@@ -30,7 +31,6 @@ PageVariable::PageVariable()
 }
 
 void PageVariable::setProperties(const KoProperties *props) {
-    // Nothing to be done here ?
     if (props->boolProperty("count")) {
         m_type = PageCount;
     } else {
@@ -41,8 +41,16 @@ void PageVariable::setProperties(const KoProperties *props) {
 void PageVariable::propertyChanged(Property property, const QVariant &value) {
     if ((property == KoInlineObject::PageCount) && (m_type == PageCount)) {
         setValue(value.toString());
-    }// else if ((property == KoInlineObject::StartPage) && (m_type == PageNumber)) {
-    //    setValue(value.toString());
-    //}
-    //TODO: support for the PageNumber...
+    }
+}
+
+void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument) {
+    if (m_type == PageNumber) {
+        if (shape) {
+            KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
+            if (shapeData) {
+                setValue(QString::number(shapeData->pageNumber()));
+            }
+        }
+    }
 }

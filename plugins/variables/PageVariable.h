@@ -42,6 +42,8 @@ public:
 
     void propertyChanged(Property property, const QVariant &value);
 private:
+    void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
+    
     PageType m_type;
 };
 

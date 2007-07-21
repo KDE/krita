@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2005-2007 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,10 +19,14 @@
 #ifndef KIS_RGB_FLOAT_HDR_COLORSPACE_H_
 #define KIS_RGB_FLOAT_HDR_COLORSPACE_H_
 
-#include "klocale.h"
-#include <KoIncompleteColorSpace.h>
-#include <KoFallBack.h>
+#include <klocale.h>
 #include <math.h>
+
+#include "KoIncompleteColorSpace.h"
+#include "KoFallBack.h"
+#include "KoLcmsRGBColorProfile.h"
+#include "KoColorSpaceRegistry.h"
+#include "KoColorSpaceTraits.h"
 
 #define UINT8_TO_FLOAT(v) (KoColorSpaceMaths<quint8, typename _CSTraits::channels_type >::scaleToA(v))
 #define FLOAT_TO_UINT8(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint8>::scaleToA(v))
@@ -33,13 +37,49 @@ template <class _CSTraits>
 class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB16Fallback>
 {
     public:
-        KisRgbFloatHDRColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent)
+        KisRgbFloatHDRColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoColorProfile *profile)
           : KoIncompleteColorSpace<_CSTraits, KoRGB16Fallback>(id, name, parent)
         {
+            // We assume an alpha channel at the moment
+            Q_ASSERT(_CSTraits::alpha_pos != -1);
 
+            // We require a profile
+            Q_ASSERT(profile);
+
+            m_profile = 0;
+
+            if (profile) {
+                m_profile = dynamic_cast<KoLcmsColorProfile *>(profile);
+                Q_ASSERT(m_profile != 0);
+            }
+
+            // We use an RgbU16 colorspace to convert exposed pixels into
+            // QImages.
+            m_rgbU16ColorSpace = KoColorSpaceRegistry::instance()->rgb16(profile);
+            Q_ASSERT(m_rgbU16ColorSpace);
         }
 
         virtual bool hasHighDynamicRange() const { return true; }
+
+        virtual KoColorProfile *profile() const { return m_profile; }
+
+        virtual bool profileIsCompatible(KoColorProfile* profile) const
+        {
+            KoLcmsColorProfile *lcmsProfile = dynamic_cast<KoLcmsColorProfile *>(profile);
+            if (lcmsProfile) {
+                if (lcmsProfile->colorSpaceSignature() == icSigRgbData) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        virtual bool willDegrade(ColorSpaceIndependence /*independence*/) const 
+        {
+            // Currently all levels of colorspace independence will degrade floating point
+            // colorspaces images.
+            return true;
+        }
 
         virtual void fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile * /*profile*/) const
         {
@@ -82,37 +122,40 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB1
 
 
         virtual QImage convertToQImage(const quint8 *dataU8, qint32 width, qint32 height,
-                                                    KoColorProfile *  /*dstProfile*/,
-                                                    qint32 /*renderingIntent*/, float exposure) const
+                                       KoColorProfile *dstProfile,
+                                       KoColorConversionTransformation::Intent renderingIntent, 
+                                       float exposure) const
         {
-            const typename _CSTraits::channels_type *data = reinterpret_cast<const typename _CSTraits::channels_type *>(dataU8);
+            int numPixelsToConvert = width * height;
+            KoRgbU16Traits::Pixel *u16Pixels = new KoRgbU16Traits::Pixel[numPixelsToConvert];
+            KoRgbU16Traits::Pixel *dstPixel = u16Pixels;
 
-            QImage img = QImage(width, height, QImage::Format_ARGB32);
+            const Pixel *srcPixels = reinterpret_cast<const Pixel *>(dataU8);
+            const Pixel *srcPixel = srcPixels;
 
-            qint32 i = 0;
-            uchar *j = img.bits();
+            const float exposureFactor = pow(2, exposure + 2.47393);
 
-            // XXX: For now assume gamma 2.2.
-            double gamma = 1 / 2.2;
-            double exposureFactor = pow(2, exposure + 2.47393);
+            // Apply exposure and convert to u16.
+            while (numPixelsToConvert > 0) {
 
-            while ( i < width * height * 4) {
-                *( j + 3)  = KoColorSpaceMaths<float, quint8>::scaleToA(*( data + i + 3 ));
-                *( j + 2 ) = convertToDisplay(*( data + i + 2 ), exposureFactor, gamma); //red_pos
-                *( j + 1 ) = convertToDisplay(*( data + i + 1 ), exposureFactor, gamma); //green_pos
-                *( j + 0 ) = convertToDisplay(*( data + i + 0 ), exposureFactor, gamma); //blue_pos
-                i += 4;
-                j += 4;
+                dstPixel->red = convertToDisplay(srcPixel->red, exposureFactor);
+                dstPixel->green = convertToDisplay(srcPixel->green, exposureFactor);
+                dstPixel->blue = convertToDisplay(srcPixel->blue, exposureFactor);
+                dstPixel->alpha = KoColorSpaceMaths<typename _CSTraits::channels_type, quint16>::scaleToA(srcPixel->alpha);
+
+                ++dstPixel;
+                ++srcPixel;
+                --numPixelsToConvert;
             }
 
-            /*
-            if (srcProfile != 0 && dstProfile != 0) {
-                convertPixelsTo(img.bits(), srcProfile,
-                        img.bits(), this, dstProfile,
-                        width * height, renderingIntent);
-            }
-            */
-            return img;
+            QImage image = m_rgbU16ColorSpace->convertToQImage(reinterpret_cast<quint8 *>(u16Pixels), 
+                                                               width, 
+                                                               height, 
+                                                               dstProfile, 
+                                                               renderingIntent);
+            delete [] u16Pixels;
+
+            return image;
         }
 
         virtual void invertColor(quint8 * srcU8, qint32 nPixels) const
@@ -145,22 +188,50 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB1
             }
         }
     private:
-        quint8 convertToDisplay(double value, double exposureFactor, double gamma) const
+        struct Pixel {
+            typename _CSTraits::channels_type blue;
+            typename _CSTraits::channels_type green;
+            typename _CSTraits::channels_type red;
+            typename _CSTraits::channels_type alpha;
+        };
+
+        quint16 convertToDisplay(typename _CSTraits::channels_type value, float exposureFactor) const
         {
-            //value *= pow(2, exposure + 2.47393);
             value *= exposureFactor;
 
-            value = pow(value, gamma);
+            // After adjusting by the exposure, map 1.0 to 3.5 f-stops below 1.0
+            // I.e. scale by 1/(2^3.5).
+            const float middleGreyScaleFactor = 0.0883883;
+            value *= middleGreyScaleFactor;
 
-            // scale middle gray to the target framebuffer value
+            const int minU16 = 0;
+            const int maxU16 = 65535;
 
-            value *= 84.66f;
-
-            int valueInt = (int)(value + 0.5);
-
-            return CLAMP(valueInt, 0, 255);
+            return (quint16)qBound(minU16, qRound(value * maxU16), maxU16);
         }
 
+        KoLcmsColorProfile *m_profile;
+        KoColorSpace *m_rgbU16ColorSpace;
+
+        friend class KisRgbFloatHDRColorSpaceTest;
 };
 
-#endif // KIS_STRATEGY_COLORSPACE_RGB_H_
+class KisRgbFloatHDRColorSpaceFactory : public KoColorSpaceFactory
+{
+public:
+    virtual bool profileIsCompatible(KoColorProfile* profile) const
+    {
+        KoLcmsColorProfile *lcmsProfile = dynamic_cast<KoLcmsColorProfile *>(profile);
+        if (lcmsProfile) {
+            if (lcmsProfile->colorSpaceSignature() == icSigRgbData) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    virtual QString defaultProfile() { return "lcms virtual RGB profile - Rec. 709 Linear"; }
+};
+
+#endif
+

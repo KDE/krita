@@ -2,6 +2,7 @@
  * rgb_plugin.cc -- Part of Krita
  *
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,18 +22,11 @@
 
 #include "config-openexr.h"
 
-#include <stdlib.h>
-#include <vector>
-
-#include <QPoint>
-
 #include <klocale.h>
-#include <kiconloader.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kgenericfactory.h>
-#include <KoColorSpaceRegistry.h>
-#include <KoBasicHistogramProducers.h>
+
+#include "KoColorSpaceRegistry.h"
+#include "KoBasicHistogramProducers.h"
 
 #include "kis_rgb_f32_hdr_colorspace.h"
 
@@ -48,10 +42,33 @@ RGBFloatHDRPlugin::RGBFloatHDRPlugin(QObject *parent, const QStringList &)
     : QObject(parent)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
+
+    // Create default profile for rgb float hdr colorspaces.
+    KoLcmsRGBColorProfile::Chromaticities chromaticities;
+
+    chromaticities.primaries.Red.x = 0.6400f;
+    chromaticities.primaries.Red.y = 0.3300f;
+    chromaticities.primaries.Red.Y = 1.0f;
+    chromaticities.primaries.Green.x = 0.3000f;
+    chromaticities.primaries.Green.y = 0.6000f;
+    chromaticities.primaries.Green.Y = 1.0f;
+    chromaticities.primaries.Blue.x = 0.1500f;
+    chromaticities.primaries.Blue.y = 0.0600f;
+    chromaticities.primaries.Blue.Y = 1.0f;
+    chromaticities.whitePoint.x = 0.3127f;
+    chromaticities.whitePoint.y = 0.3290f;
+    chromaticities.whitePoint.Y = 1.0f;
+
+    const double gamma = 1.0;
+
+    KoLcmsRGBColorProfile *profile = new KoLcmsRGBColorProfile(chromaticities, gamma, "lcms virtual RGB profile - Rec. 709 Linear");
+
+    f->addProfile(profile);
+
 #ifdef HAVE_OPENEXR
     // Register F16 HDR colorspace
     {
-        KoColorSpace * colorSpaceRGBF16Half  = new KisRgbF16HDRColorSpace(f, 0);
+        KoColorSpace * colorSpaceRGBF16Half  = new KisRgbF16HDRColorSpace(f, profile);
         KoColorSpaceFactory *csf  = new KisRgbF16HDRColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceRGBF16Half);
         f->add(csf);
@@ -62,7 +79,7 @@ RGBFloatHDRPlugin::RGBFloatHDRPlugin(QObject *parent, const QStringList &)
 #endif
     // Register F32 HDR colorspace
     {
-        KoColorSpace * colorSpaceRGBF32  = new KisRgbF32HDRColorSpace(f, 0);
+        KoColorSpace * colorSpaceRGBF32  = new KisRgbF32HDRColorSpace(f, profile);
         KoColorSpaceFactory *csf  = new KisRgbF32HDRColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceRGBF32);
         f->add(csf);

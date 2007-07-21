@@ -18,9 +18,10 @@
 #ifndef KIS_STRATEGY_COLORSPACE_RGB_32F_HDR_H_
 #define KIS_STRATEGY_COLORSPACE_RGB_32F_HDR_H_
 
-#include "klocale.h"
+#include <klocale.h>
+
 #include "kis_rgb_float_hdr_colorspace.h"
-#include <krita_rgbf32_export.h>
+#include "krita_rgbf32_export.h"
 
 #include <KoColorSpaceTraits.h>
 
@@ -30,19 +31,9 @@ class KRITA_RGBF32_EXPORT KisRgbF32HDRColorSpace : public KisRgbFloatHDRColorSpa
 {
     public:
         KisRgbF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence independence) const {
-          if (independence == TO_RGBA8 || independence == TO_LAB16)
-            return true;
-          else
-            return false;
-        }
-        bool profileIsCompatible(KoColorProfile*) const {
-            return false;
-        }
 };
 
-
-class KRITA_RGBF32_EXPORT KisRgbF32HDRColorSpaceFactory : public KoColorSpaceFactory
+class KRITA_RGBF32_EXPORT KisRgbF32HDRColorSpaceFactory : public KisRgbFloatHDRColorSpaceFactory
 {
 public:
     /**
@@ -52,14 +43,8 @@ public:
     virtual QString id() const { return "RGBAF32"; }
     virtual QString name() const { return i18n("RGB (32-bit float/channel) for High Dynamic Range imaging"); }
     
-    virtual bool profileIsCompatible(KoColorProfile* profile) const
-    {
-        return false;
-    }
-
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisRgbF32HDRColorSpace(parent, p); }
-
-    virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; }
 };
 
-#endif // KIS_STRATEGY_COLORSPACE_RGB_H_
+#endif
+

@@ -1,16 +1,11 @@
 
-# if(KUNITTEST_FOUND)
-#     add_subdirectory(tests)
-# endif(KUNITTEST_FOUND)
-
-
+add_subdirectory(tests)
 
 ########### next target ###############
 
 if(OPENEXR_FOUND)
 
 set(kritargbf16hdr_LIB_SRCS kis_rgb_f16_hdr_colorspace.cc )
-
 
 kde4_add_library(kritargbf16hdr SHARED ${kritargbf16hdr_LIB_SRCS})
 
@@ -39,8 +34,6 @@ install(TARGETS kritargbf32hdr  DESTINATION ${LIB_INSTALL_DIR})
 set(kritargbfloathdrplugin_PART_SRCS rgb_float_hdr.cc )
 
 kde4_add_plugin(kritargbfloathdrplugin ${kritargbfloathdrplugin_PART_SRCS})
-
-
 
 target_link_libraries(kritargbfloathdrplugin  ${KDE4_KDECORE_LIBS} ${RGBF16_LIB} kritargbf32hdr  pigment)
 

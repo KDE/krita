@@ -990,6 +990,8 @@ void KisPaintDevice::emitSelectionChanged()
     if (m_d->parentLayer && m_d->parentLayer->image()) {
         m_d->parentLayer->image()->slotSelectionChanged();
     }
+    if (m_d->selection)
+        m_d->selection->updateProjection();
 }
 
 void KisPaintDevice::emitSelectionChanged(const QRect& r)
@@ -997,7 +999,8 @@ void KisPaintDevice::emitSelectionChanged(const QRect& r)
     if (m_d->parentLayer && m_d->parentLayer->image()) {
         m_d->parentLayer->image()->slotSelectionChanged(r);
     }
-}
+    if (m_d->selection)
+        m_d->selection->updateProjection();}
 
 KisSelectionSP KisPaintDevice::selection()
 {
@@ -1014,8 +1017,6 @@ KisSelectionSP KisPaintDevice::selection()
     }
     m_d->hasSelection = true;
 
-    //TODO find a better place for this call
-    m_d->selection->updateProjection();
     return m_d->selection;
 }
 

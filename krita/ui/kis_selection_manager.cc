@@ -343,7 +343,7 @@ bool KisSelectionManager::selectionIsActive()
     if (img) {
         KisPaintDeviceSP dev = m_parent->activeDevice();
         if (dev) {
-            if (dev->hasSelection()) {
+            if (dev->hasSelection() && dev->selection()->hasPixelSelection()) {
                 return true;
             }
         }
@@ -1714,9 +1714,18 @@ void KisSelectionManager::computeTransition (quint8* transition, quint8** buf, q
 void KisSelectionManager::timerEvent()
 {
     if (selectionIsActive()) {
-        offset++;
-        if(offset>7) offset = 0;
-        m_parent->canvasBase()->updateCanvas(QRectF(0.0,0.0,1000.0,1000.0));
+        KisPaintDeviceSP dev = m_parent->activeDevice();
+        if(dev) {
+            offset++;
+            if(offset>7) offset = 0;
+
+            QRect bound = dev->pixelSelection()->selectedRect();
+            double xRes = m_parent->image()->xRes();
+            double yRes = m_parent->image()->yRes();
+            QRectF rect( int(bound.left()) / xRes, int(bound.top()) / yRes,
+                         int(1 + bound.right()) / xRes, int(1 + bound.bottom()) / yRes);
+            m_parent->canvasBase()->updateCanvas(rect);
+        }
     }
 }
 

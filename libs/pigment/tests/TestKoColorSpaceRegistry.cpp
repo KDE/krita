@@ -29,7 +29,7 @@ void TestKoColorSpaceRegistry::testRgbU8()
 
     cmsAddTag(lcmsProfile, icSigProfileDescriptionTag, testProfileName.toLatin1().data());
     cmsAddTag(lcmsProfile, icSigDeviceModelDescTag, testProfileName.toLatin1().data());
-    const QByteArray manufacturerName("");
+    QByteArray manufacturerName("");
     cmsAddTag(lcmsProfile, icSigDeviceMfgDescTag, manufacturerName.data());
 
     KoColorProfile *testProfile = new KoLcmsColorProfile(lcmsProfile);
@@ -71,7 +71,7 @@ void TestKoColorSpaceRegistry::testRgbU16()
 
     cmsAddTag(lcmsProfile, icSigProfileDescriptionTag, testProfileName.toLatin1().data());
     cmsAddTag(lcmsProfile, icSigDeviceModelDescTag, testProfileName.toLatin1().data());
-    const QByteArray manufacturerName("");
+    QByteArray manufacturerName("");
     cmsAddTag(lcmsProfile, icSigDeviceMfgDescTag, manufacturerName.data());
 
     KoColorProfile *testProfile = new KoLcmsColorProfile(lcmsProfile);
@@ -118,7 +118,7 @@ void TestKoColorSpaceRegistry::testLab()
 
     cmsAddTag(lcmsProfile, icSigProfileDescriptionTag, testProfileName.toLatin1().data());
     cmsAddTag(lcmsProfile, icSigDeviceModelDescTag, testProfileName.toLatin1().data());
-    const QByteArray manufacturerName("");
+    QByteArray manufacturerName("");
     cmsAddTag(lcmsProfile, icSigDeviceMfgDescTag, manufacturerName.data());
 
     KoColorProfile *testProfile = new KoLcmsColorProfile(lcmsProfile);

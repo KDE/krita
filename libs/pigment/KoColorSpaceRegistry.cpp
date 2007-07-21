@@ -279,21 +279,34 @@ KoColorSpace * KoColorSpaceRegistry::alpha8()
    return d->alphaCs;
 }
 
-KoColorSpace * KoColorSpaceRegistry::rgb8()
+KoColorSpace * KoColorSpaceRegistry::rgb8(const QString &profileName)
 {
-    return colorSpace("RGBA", "");
+    return colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profileName);
 }
 
-
-KoColorSpace * KoColorSpaceRegistry::lab16()
+KoColorSpace * KoColorSpaceRegistry::rgb8(KoColorProfile * profile)
 {
-    return colorSpace("LABA", "");
+    return colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profile);
 }
 
-
-KoColorSpace * KoColorSpaceRegistry::rgb16()
+KoColorSpace * KoColorSpaceRegistry::rgb16(const QString &profileName)
 {
-    return colorSpace("RGBA16", "");
+    return colorSpace(KoRgbU16ColorSpace::colorSpaceId(), profileName);
+}
+
+KoColorSpace * KoColorSpaceRegistry::rgb16(KoColorProfile * profile)
+{
+    return colorSpace(KoRgbU16ColorSpace::colorSpaceId(), profile);
+}
+
+KoColorSpace * KoColorSpaceRegistry::lab16(const QString &profileName)
+{
+    return colorSpace(KoLabColorSpace::colorSpaceId(), profileName);
+}
+
+KoColorSpace * KoColorSpaceRegistry::lab16(KoColorProfile * profile)
+{
+    return colorSpace(KoLabColorSpace::colorSpaceId(), profile);
 }
 
 #include "KoColorSpaceRegistry.moc"

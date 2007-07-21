@@ -34,6 +34,13 @@ public:
     KoRgbU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
     virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
     virtual KoColorTransformation* createInvertTransformation() const;
+
+    /**
+     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
+     * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
+     * This is the value that the member function id() returns.
+     */
+    static QString colorSpaceId();
 };
 
 class KoRgbU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
@@ -43,16 +50,12 @@ public:
 
     KoRgbU8ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_BGRA_8,icSigRgbData )
     {}
-    virtual QString id() const { return "RGBA"; }
+    virtual QString id() const { return KoRgbU8ColorSpace::colorSpaceId(); }
     virtual QString name() const { return i18n("RGB (8-bit integer/channel)"); }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KoRgbU8ColorSpace(parent, p); }
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; }
-
-
-
-
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_H_

@@ -140,29 +140,59 @@ public:
     KoColorSpace * alpha8();
 
     /**
-     * Convenience method to get an RGB 8bit colorspace with the default lcms profile
+     * Convenience method to get an RGB 8bit colorspace. If a profile is not specified,
+     * an sRGB profile will be used.
+     * @param profileName the name of an RGB color profile
+     * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
-    KoColorSpace * rgb8();
+    KoColorSpace * rgb8(const QString &profileName = QString());
     
     /**
-     * Convenience method to get an LAB 16bit colorspace with the default lcms profile
+     * Convenience method to get an RGB 8bit colorspace with the given profile.
+     * @param profile an RGB profile
+     * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
-    KoColorSpace * lab16();
+    KoColorSpace * rgb8(KoColorProfile * profile);
+    
+    /**
+     * Convenience method to get an RGB 16bit colorspace. If a profile is not specified,
+     * an sRGB profile will be used.
+     * @param profileName the name of an RGB color profile
+     * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
+     */
+    KoColorSpace * rgb16(const QString &profileName = QString());
 
     /**
-     * Convenience method to get an RGB 16bit colorspace with the default lcms profile
+     * Convenience method to get an RGB 16bit colorspace with the given profile.
+     * @param profile an RGB profile
+     * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
-    KoColorSpace * rgb16();
+    KoColorSpace * rgb16(KoColorProfile * profile);
+
+    /**
+     * Convenience method to get an Lab 16bit colorspace. If a profile is not specified,
+     * an Lab profile with a D50 whitepoint will be used.
+     * @param profileName the name of an Lab color profile
+     * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
+     */
+    KoColorSpace * lab16(const QString &profileName = QString());
+
+    /**
+     * Convenience method to get an Lab 16bit colorspace with the given profile.
+     * @param profile an Lab profile
+     * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
+     */
+    KoColorSpace * lab16(KoColorProfile * profile);
 
     /**
      * add a KisConstructPaintDeviceAction to the registry for a colorspace
      */
-    void addPaintDeviceAction(KoColorSpace* cs, KisPaintDeviceAction* action);
+    void addPaintDeviceAction(KoColorSpace* colorSpace, KisPaintDeviceAction* action);
 
     /**
      * Get a list of KisConstructPaintDeviceAction for a colorspace
      */
-    QList<KisPaintDeviceAction *> paintDeviceActionsFor(KoColorSpace* cs);
+    QList<KisPaintDeviceAction *> paintDeviceActionsFor(KoColorSpace* colorSpace);
 
 private:
     KoColorSpaceRegistry();

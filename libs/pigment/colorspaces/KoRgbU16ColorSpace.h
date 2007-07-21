@@ -28,6 +28,13 @@ class KoRgbU16ColorSpace : public KoLcmsColorSpace<KoRgbU16Traits>
     public:
         KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
+
+    /**
+     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
+     * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
+     * This is the value that the member function id() returns.
+     */
+    static QString colorSpaceId();
 };
 
 class KoRgbU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
@@ -36,7 +43,7 @@ class KoRgbU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
         KoRgbU16ColorSpaceFactory() : KoLcmsColorSpaceFactory( TYPE_BGRA_16, icSigRgbData )
         {
         }
-        virtual QString id() const { return "RGBA16"; }
+        virtual QString id() const { return KoRgbU16ColorSpace::colorSpaceId(); }
         virtual QString name() const { return i18n("RGB (16-bit integer/channel)"); }
 
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoRgbU16ColorSpace(parent, p); }

@@ -98,6 +98,17 @@ struct KoLabU16Traits : public KoColorSpaceTrait<quint16, 4,3> {
     static const qint32 L_pos = 0;
     static const qint32 a_pos = 1;
     static const qint32 b_pos = 2;
+
+    /**
+     * An Lab pixel
+     */
+    struct Pixel {
+        quint16 L;
+        quint16 a;
+        quint16 b;
+        quint16 alpha;
+    };
+
     /// @return the L component
     inline static channels_type L(quint8* data) {
         channels_type* d = nativeArray(data);
@@ -143,6 +154,16 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
     static const qint32 red_pos = 2;
     static const qint32 green_pos = 1;
     static const qint32 blue_pos = 0;
+
+    /**
+     * An RGB pixel
+     */
+    struct Pixel {
+        channels_type blue;
+        channels_type green;
+        channels_type red;
+        channels_type alpha;
+    };
 
     /// @return the red component
     inline static channels_type red(quint8* data) {

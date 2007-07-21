@@ -29,6 +29,14 @@ class KoLabColorSpace : public KoLcmsColorSpace<KoLabU16Traits>
         KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
         virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
+
+        /**
+         * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
+         * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
+         * This is the value that the member function id() returns.
+         */
+        static QString colorSpaceId();
+
     private:
         static const quint32 CHANNEL_L = 0;
         static const quint32 CHANNEL_A = 1;
@@ -45,7 +53,7 @@ class KoLabColorSpaceFactory : public KoLcmsColorSpaceFactory
         KoLabColorSpaceFactory() : KoLcmsColorSpaceFactory( (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), icSigLabData)
         {}
         /// reimplemented from KoColorSpaceFactory
-        virtual QString id() const { return "LABA"; }
+        virtual QString id() const { return KoLabColorSpace::colorSpaceId(); }
         /// reimplemented from KoColorSpaceFactory
         virtual QString name() const { return i18n("L*a*b* (16-bit integer/channel)"); }
 

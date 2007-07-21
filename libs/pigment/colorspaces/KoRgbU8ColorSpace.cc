@@ -65,7 +65,7 @@ private:
 };
 
 KoRgbU8ColorSpace::KoRgbU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-    KoLcmsColorSpace<RgbU8Traits>("RGBA", i18n("RGB 8-bit integer/channel)"), parent, TYPE_BGRA_8, icSigRgbData, p)
+    KoLcmsColorSpace<RgbU8Traits>(colorSpaceId(), i18n("RGB 8-bit integer/channel)"), parent, TYPE_BGRA_8, icSigRgbData, p)
 {
     addChannel(new KoChannelInfo(i18n("Red"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255,0,0)));
     addChannel(new KoChannelInfo(i18n("Green"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0,255,0)));
@@ -88,3 +88,9 @@ KoColorTransformation* KoRgbU8ColorSpace::createInvertTransformation() const
 {
     return new KoRgbU8InvertColorTransformation(this);
 }
+
+QString KoRgbU8ColorSpace::colorSpaceId()
+{
+    return QString("RGBA");
+}
+

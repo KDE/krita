@@ -229,7 +229,6 @@ void Canvas::paintEvent(QPaintEvent * e) {
 }
 
 bool Canvas::event(QEvent *e) {
-/*
     if (e->type() == QEvent::ToolTip) {
         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
 
@@ -240,7 +239,6 @@ bool Canvas::event(QEvent *e) {
         else
             QToolTip::showText(helpEvent->globalPos(), "");
     }
-*/
     return QWidget::event(e);
 }
 

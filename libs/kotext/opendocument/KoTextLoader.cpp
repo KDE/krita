@@ -54,7 +54,6 @@
 
 // KDE + Qt includes
 #include <QDomDocument>
-#include <QTextDocument>
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QTextList>
@@ -870,6 +869,31 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
                 }
             }
 
+        }
+        else if ( isTextNS && ((localName == "title") || (localName == "subject") || (localName == "keywords")) ) {
+            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (cursor.block().document()->documentLayout());
+            if ( layout ) {
+                KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                if ( textObjectManager ) {
+                    KoVariableManager *varManager = textObjectManager->variableManager();
+                    if (varManager) {
+                        if (KoInlineObjectRegistry::instance()->contains("info")) {
+                            KoInlineObjectFactory *infoFactory = KoInlineObjectRegistry::instance()->value("info");
+                            if (infoFactory) {
+                                KoProperties props;
+                                if (localName == "title")
+                                    props.setProperty("property", KoInlineObject::Title);
+                                else if (localName == "subject")
+                                    props.setProperty("property", KoInlineObject::Subject);
+                                else if (localName == "keywords")
+                                    props.setProperty("property", KoInlineObject::Keywords);
+                                KoInlineObject *infoObject = infoFactory->createInlineObject(&props);
+                                textObjectManager->insertInlineObject(cursor, infoObject);
+                            }
+                        }
+                    }
+                }
+            }
         }
         else
         {

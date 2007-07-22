@@ -455,7 +455,7 @@ double KoShape::rotation() const {
         return NAN;
 
     // calculate the angle from the matrix elements
-    double angle = atan2( d->localMatrix.m21(), d->localMatrix.m11() ) * 180.0 / M_PI;
+    double angle = atan2( -d->localMatrix.m21(), d->localMatrix.m11() ) * 180.0 / M_PI;
     if( angle < 0.0 )
         angle += 360.0;
 

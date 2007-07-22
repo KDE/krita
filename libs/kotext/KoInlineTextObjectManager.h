@@ -132,6 +132,9 @@ public:
 
     QList<KoTextLocator*> textLocators() const;
 
+public slots:
+    void documentInformationUpdated (const QString &info, const QString &data);
+    
 signals:
     /**
      * Emitted whenever a propery is set and it turns out to be changed.

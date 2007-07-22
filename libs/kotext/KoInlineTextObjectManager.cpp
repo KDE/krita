@@ -179,4 +179,41 @@ QList<KoTextLocator*> KoInlineTextObjectManager::textLocators() const {
     return answers;
 }
 
+void KoInlineTextObjectManager::documentInformationUpdated (const QString &info, const QString &data) {
+    if (info == "title")
+        setProperty(KoInlineObject::Title, data);
+    else if (info == "description")
+        setProperty(KoInlineObject::Description, data);
+    else if (info == "subject")
+        setProperty(KoInlineObject::Subject, data);
+    else if (info == "keyword")
+        setProperty(KoInlineObject::Keywords, data);
+    else if (info == "creator")
+        setProperty(KoInlineObject::AuthorName, data);
+    else if (info == "initial")
+        setProperty(KoInlineObject::AuthorInitials, data);
+    else if (info == "author-title")
+        setProperty(KoInlineObject::SenderTitle, data);
+    else if (info == "email")
+        setProperty(KoInlineObject::SenderEmail, data);
+    else if (info == "telephone")
+        setProperty(KoInlineObject::SenderPhonePrivate, data);
+    else if (info == "telephone-work")
+        setProperty(KoInlineObject::SenderPhoneWork, data);
+    else if (info == "fax")
+        setProperty(KoInlineObject::SenderFax, data);
+    else if (info == "country")
+        setProperty(KoInlineObject::SenderCountry, data);
+    else if (info == "postal-code")
+        setProperty(KoInlineObject::SenderPostalCode, data);
+    else if (info == "city")
+        setProperty(KoInlineObject::SenderCity, data);
+    else if (info == "street")
+        setProperty(KoInlineObject::SenderStreet, data);
+    else if (info == "position")
+        setProperty(KoInlineObject::SenderPosition, data);
+    else if (info == "company")
+        setProperty(KoInlineObject::SenderCompany, data);
+}
+
 #include "KoInlineTextObjectManager.moc"

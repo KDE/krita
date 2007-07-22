@@ -190,6 +190,8 @@ class KOMAIN_EXPORT KoDocumentInfo : public QObject
     QMap<QString, QString> m_aboutInfo;
 
     bool m_firstSave;
+signals:
+    void infoUpdated(const QString &info, const QString &data);
 };
 
 #endif

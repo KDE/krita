@@ -141,6 +141,7 @@ void KoDocumentInfo::setAuthorInfo( const QString& info, const QString& data )
         return;
 
     m_authorInfo.insert( info, data );
+    emit infoUpdated(info, data);
 }
 
 QString KoDocumentInfo::authorInfo( const QString& info ) const
@@ -153,7 +154,11 @@ QString KoDocumentInfo::authorInfo( const QString& info ) const
 
 void KoDocumentInfo::setAboutInfo( const QString& info, const QString& data )
 {
+    if( !m_aboutTags.contains( info ) )
+        return;
+    
     m_aboutInfo.insert( info, data );
+    emit infoUpdated(info, data);
 }
 
 QString KoDocumentInfo::aboutInfo( const QString& info ) const

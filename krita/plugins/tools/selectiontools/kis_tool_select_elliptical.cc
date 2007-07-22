@@ -256,7 +256,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 
                 KisShapeSelection* shapeSelection;
                 if(!selection->hasShapeSelection()) {
-                    shapeSelection = new KisShapeSelection(currentImage());
+                    shapeSelection = new KisShapeSelection(currentImage(), dev);
                     QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
                     cmd->redo();
                     selection->setShapeSelection(shapeSelection);

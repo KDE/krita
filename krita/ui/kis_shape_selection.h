@@ -30,7 +30,7 @@ class KRITAUI_EXPORT KisShapeSelection : public QObject, public KoShapeContainer
     Q_OBJECT
 
 public:
-    KisShapeSelection(KisImageSP image);
+    KisShapeSelection(KisImageSP image, KisPaintDeviceSP dev);
     virtual ~KisShapeSelection();
 
     ///Not implemented
@@ -49,6 +49,8 @@ public:
 
     virtual void addChild(KoShape* shape);
 
+    virtual void setDirty();
+
 protected:
     virtual QPainterPath selectionOutline();
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
@@ -60,6 +62,10 @@ private:
     int m_dashOffset;
     QTimer* m_timer;
     KisImageSP m_image;
+    QPainterPath m_outline;
+    bool m_dirty;
+
+    friend class KisShapeSelectionModel;
 };
 
 class KRITAUI_EXPORT KisShapeSelectionFactory : public KoShapeFactory

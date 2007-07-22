@@ -117,6 +117,7 @@ set(kritaui_LIB_SRCS
     kis_dlg_transformation_effect.cpp
     kis_mask_widgets.cpp
     kis_shape_selection.cpp
+    kis_shape_selection_model.cpp
 )
 
 if(HAVE_OPENGL AND HAVE_GLEW)

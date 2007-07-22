@@ -25,11 +25,12 @@
 #include <KoPathShape.h>
 #include <KoCompositeOp.h>
 #include "kis_painter.h"
+#include "kis_shape_selection_model.h"
 
 #include <kdebug.h>
 
-KisShapeSelection::KisShapeSelection(KisImageSP image)
-    : KoShapeContainer()
+KisShapeSelection::KisShapeSelection(KisImageSP image, KisPaintDeviceSP dev)
+    : KoShapeContainer(new KisShapeSelectionModel(image, dev, this))
     , m_image(image)
 {
     m_dashOffset = 0;
@@ -38,6 +39,7 @@ KisShapeSelection::KisShapeSelection(KisImageSP image)
     m_timer->start(300);
     setShapeId("KisShapeSelection");
     setSelectable(false);
+    m_dirty = false;
 }
 
 KisShapeSelection::~KisShapeSelection()
@@ -62,20 +64,24 @@ void KisShapeSelection::repaintTimerEvent()
 
 QPainterPath KisShapeSelection::selectionOutline()
 {
-    QList<KoShape*> shapesList = iterator();
+    if(m_dirty) {
+        QList<KoShape*> shapesList = iterator();
 
-    QPainterPath outline;
-    KoPathShape* pathShape;
-    foreach( KoShape * shape, shapesList )
-    {
-        pathShape = dynamic_cast<KoPathShape*>( shape );
-        if(pathShape) {
-            QMatrix shapeMatrix = shape->transformationMatrix(0);
+        QPainterPath outline;
+        KoPathShape* pathShape;
+        foreach( KoShape * shape, shapesList )
+        {
+            pathShape = dynamic_cast<KoPathShape*>( shape );
+            if(pathShape) {
+                QMatrix shapeMatrix = shape->transformationMatrix(0);
 
             outline = outline.united(shapeMatrix.map(shape->outline()));
+            }
         }
+        m_outline = outline;
+        m_dirty = false;
     }
-    return outline;
+    return m_outline;
 }
 
 void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter)
@@ -93,7 +99,7 @@ void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter&
     stroker.setDashOffset(m_dashOffset-4);
 
     painter.setRenderHint(QPainter::Antialiasing);
-    QColor outlineColor = Qt::blue;
+    QColor outlineColor = Qt::black;
 
     QMatrix zoomMatrix;
     zoomMatrix.scale(zoomX, zoomY);
@@ -121,6 +127,12 @@ void KisShapeSelection::addChild(KoShape* shape)
     shape->setBorder(new KoLineBorder( 0, Qt::lightGray ));
     shape->setBackground(Qt::NoBrush);
     KoShapeContainer::addChild(shape);
+    setDirty();
+}
+
+void KisShapeSelection::setDirty()
+{
+    m_dirty = true;
 }
 
 

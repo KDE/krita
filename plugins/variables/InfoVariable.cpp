@@ -17,40 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "PageVariable.h"
+#include "InfoVariable.h"
 
+#include <KoInlineTextObjectManager.h>
 #include <KoProperties.h>
 #include <kdebug.h>
-#include <KoTextShapeData.h>
-#include <KoShape.h>
 
-PageVariable::PageVariable()
+InfoVariable::InfoVariable()
     : KoVariable(true),
-    m_type(PageCount)
+    m_type(KoInlineObject::DocumentURL)
 {
 }
 
-void PageVariable::setProperties(const KoProperties *props) {
-    if (props->boolProperty("count")) {
-        m_type = PageCount;
-    } else {
-        m_type = PageNumber;
-    }
+void InfoVariable::setProperties(const KoProperties *props) {
+    m_type = (Property) props->property("property").value<int>();
+    //kDebug() << "Ok, we've got the type " << m_type << endl;
+    setValue(manager()->property(m_type).toString());
 }
 
-void PageVariable::propertyChanged(Property property, const QVariant &value) {
-    if ((property == KoInlineObject::PageCount) && (m_type == PageCount)) {
+void InfoVariable::propertyChanged(Property property, const QVariant &value) {
+    //kDebug() << "property is :" << manager()->stringProperty(m_type) << endl;
+    //kDebug() << "Property " << property << " changed to " << value << endl;
+    if (property == m_type) {
         setValue(value.toString());
-    }
-}
-
-void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument) {
-    if (m_type == PageNumber) {
-        if (shape) {
-            KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
-            if (shapeData) {
-                setValue(QString::number(shapeData->pageNumber()));
-            }
-        }
     }
 }

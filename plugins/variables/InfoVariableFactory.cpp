@@ -17,40 +17,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "PageVariable.h"
+#include "InfoVariableFactory.h"
+#include "InfoVariable.h"
 
 #include <KoProperties.h>
 #include <kdebug.h>
-#include <KoTextShapeData.h>
-#include <KoShape.h>
 
-PageVariable::PageVariable()
-    : KoVariable(true),
-    m_type(PageCount)
+InfoVariableFactory::InfoVariableFactory(QObject *parent)
+    : KoInlineObjectFactory(parent, "info")
 {
 }
 
-void PageVariable::setProperties(const KoProperties *props) {
-    if (props->boolProperty("count")) {
-        m_type = PageCount;
-    } else {
-        m_type = PageNumber;
-    }
-}
-
-void PageVariable::propertyChanged(Property property, const QVariant &value) {
-    if ((property == KoInlineObject::PageCount) && (m_type == PageCount)) {
-        setValue(value.toString());
-    }
-}
-
-void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument) {
-    if (m_type == PageNumber) {
-        if (shape) {
-            KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
-            if (shapeData) {
-                setValue(QString::number(shapeData->pageNumber()));
-            }
-        }
-    }
+KoInlineObject *InfoVariableFactory::createInlineObject(const KoProperties *properties) const {
+    InfoVariable *var = new InfoVariable;
+    var->setProperties(properties);
+    return var;
 }

@@ -19,6 +19,7 @@
 #include "VariablesPlugin.h"
 #include "DateVariableFactory.h"
 #include "PageVariableFactory.h"
+#include "InfoVariableFactory.h"
 #include <kgenericfactory.h>
 
 #include <KoInlineObjectRegistry.h>
@@ -31,6 +32,7 @@ VariablesPlugin::VariablesPlugin( QObject *parent, const QStringList& )
 {
     KoInlineObjectRegistry::instance()->add( new PageVariableFactory( parent));
     KoInlineObjectRegistry::instance()->add( new DateVariableFactory( parent));
+    KoInlineObjectRegistry::instance()->add( new InfoVariableFactory( parent));
 }
 
 #include "VariablesPlugin.moc"

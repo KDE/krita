@@ -16,20 +16,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef INFOVARIABLE_H
+#define INFOVARIABLE_H
 
-#include "PageVariableFactory.h"
-#include "PageVariable.h"
+#include <KoVariable.h>
+#include <QString>
 
-#include <KoProperties.h>
-#include <kdebug.h>
+/**
+ * This is a KoVariable for document informations.
+ */
+class InfoVariable : public KoVariable {
+public:
+    /**
+     * Constructor.
+     */
+    InfoVariable();
 
-PageVariableFactory::PageVariableFactory(QObject *parent)
-    : KoInlineObjectFactory(parent, "page")
-{
-}
+    void setProperties(const KoProperties *props);
 
-KoInlineObject *PageVariableFactory::createInlineObject(const KoProperties *properties) const {
-    PageVariable *var = new PageVariable;
-    var->setProperties(properties);
-    return var;
-}
+    void propertyChanged(Property property, const QVariant &value);
+private:
+    KoInlineObject::Property m_type;
+};
+
+#endif

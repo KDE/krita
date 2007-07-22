@@ -17,19 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "PageVariableFactory.h"
-#include "PageVariable.h"
+#ifndef KO_INFO_VARIABLE_FACTORY
+#define KO_INFO_VARIABLE_FACTORY
 
-#include <KoProperties.h>
-#include <kdebug.h>
+#include <KoInlineObjectFactory.h>
 
-PageVariableFactory::PageVariableFactory(QObject *parent)
-    : KoInlineObjectFactory(parent, "page")
-{
-}
+class KoVariable;
 
-KoInlineObject *PageVariableFactory::createInlineObject(const KoProperties *properties) const {
-    PageVariable *var = new PageVariable;
-    var->setProperties(properties);
-    return var;
-}
+class InfoVariableFactory : public KoInlineObjectFactory {
+public:
+    explicit InfoVariableFactory(QObject *parent);
+    ~InfoVariableFactory() {}
+
+    KoInlineObject *createInlineObject(const KoProperties *properties) const;
+
+    ObjectType type() const { return TextVariable; }
+};
+
+#endif

@@ -9,6 +9,8 @@ set(textvariables_SRCS
     FixedDateFormat.cpp
     PageVariable.cpp
     PageVariableFactory.cpp
+    InfoVariable.cpp
+    InfoVariableFactory.cpp
 )
 
 

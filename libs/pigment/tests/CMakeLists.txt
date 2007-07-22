@@ -32,3 +32,11 @@ kde4_add_unit_test(TestKoColorSpaceRegistry TESTNAME libs-pigment-TestKoColorSpa
 
 target_link_libraries(TestKoColorSpaceRegistry  ${KDE4_KDECORE_LIBS} pigment ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestKoColorSpaceMaths_test_SRCS TestKoColorSpaceMaths.cpp)
+
+kde4_add_unit_test(TestKoColorSpaceMaths TESTNAME libs-pigment-TestKoColorSpaceMaths ${TestKoColorSpaceMaths_test_SRCS})
+
+target_link_libraries(TestKoColorSpaceMaths  ${KDE4_KDECORE_LIBS} pigment ${QT_QTTEST_LIBRARY})
+

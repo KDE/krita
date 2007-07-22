@@ -29,6 +29,7 @@ const half KoColorSpaceMathsTraits<half>::unitValue = 1.0;
 const half KoColorSpaceMathsTraits<half>::max = HALF_MAX;
 const half KoColorSpaceMathsTraits<half>::min = -HALF_MAX;
 const half KoColorSpaceMathsTraits<half>::epsilon = HALF_EPSILON;
+const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<half>::channelValueType = KoChannelInfo::FLOAT16;
 #endif
 
 const float KoColorSpaceMathsTraits<float>::zeroValue = 0.0;
@@ -36,4 +37,10 @@ const float KoColorSpaceMathsTraits<float>::unitValue = 1.0;
 const float KoColorSpaceMathsTraits<float>::max = FLT_MAX;
 const float KoColorSpaceMathsTraits<float>::min = -FLT_MAX;
 const float KoColorSpaceMathsTraits<float>::epsilon = FLT_EPSILON;
+const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<float>::channelValueType = KoChannelInfo::FLOAT32;
+
+const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<quint8>::channelValueType = KoChannelInfo::UINT8;
+const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<quint16>::channelValueType = KoChannelInfo::UINT16;
+const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<qint16>::channelValueType = KoChannelInfo::INT16;
+const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<quint32>::channelValueType = KoChannelInfo::UINT32;
 

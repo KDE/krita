@@ -22,6 +22,8 @@
 
 #include <pigment_export.h>
 #include <KoIntegerMaths.h>
+#include "KoChannelInfo.h"
+
 #undef _T
 
 template<typename _T>
@@ -30,7 +32,7 @@ class KoColorSpaceMathsTraits {
 };
 
 template<>
-class KoColorSpaceMathsTraits<quint8> {
+class PIGMENT_EXPORT KoColorSpaceMathsTraits<quint8> {
     public:
         typedef qint32 compositetype;
         static const quint8 zeroValue = 0;
@@ -39,10 +41,11 @@ class KoColorSpaceMathsTraits<quint8> {
         static const quint8 min = 0;
         static const quint8 epsilon = 1;
         static const qint8 bits = 8;
+        static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
 template<>
-class KoColorSpaceMathsTraits<quint16> {
+class PIGMENT_EXPORT KoColorSpaceMathsTraits<quint16> {
     public:
         typedef qint64 compositetype;
         static const quint16 zeroValue = 0;
@@ -51,10 +54,11 @@ class KoColorSpaceMathsTraits<quint16> {
         static const quint16 min = 0;
         static const quint16 epsilon = 1;
         static const qint8 bits = 16;
+        static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
 template<>
-class KoColorSpaceMathsTraits<qint16> {
+class PIGMENT_EXPORT KoColorSpaceMathsTraits<qint16> {
     public:
         typedef qint64 compositetype;
         static const qint16 zeroValue = 0;
@@ -63,10 +67,11 @@ class KoColorSpaceMathsTraits<qint16> {
         static const qint16 min = -32768;
         static const qint16 epsilon = 1;
         static const qint8 bits = 16;
+        static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
 template<>
-class KoColorSpaceMathsTraits<quint32> {
+class PIGMENT_EXPORT KoColorSpaceMathsTraits<quint32> {
     public:
         typedef qint64 compositetype;
         static const quint32 zeroValue = 0;
@@ -75,6 +80,7 @@ class KoColorSpaceMathsTraits<quint32> {
         static const quint32 min = 0;
         static const quint32 epsilon = 1;
         static const qint8 bits= 32;
+        static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
 #include <config-openexr.h>
@@ -82,7 +88,7 @@ class KoColorSpaceMathsTraits<quint32> {
 #include <half.h>
                  
 template<>
-class PIGMENT_EXPORT KoColorSpaceMathsTraits<half> { // This class is exported as unfortunately half constants can't be defined in the class declaration
+class PIGMENT_EXPORT KoColorSpaceMathsTraits<half> {
     public:
         typedef double compositetype;
         static const half zeroValue;
@@ -91,11 +97,12 @@ class PIGMENT_EXPORT KoColorSpaceMathsTraits<half> { // This class is exported a
         static const half min;
         static const half epsilon;
         static const qint8 bits = 16;
+        static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 #endif
 
 template<>
-class PIGMENT_EXPORT KoColorSpaceMathsTraits<float> { // This class is exported as unfortunately float constants can't be defined in the class declaration
+class PIGMENT_EXPORT KoColorSpaceMathsTraits<float> {
     public:
         typedef double compositetype;
         static const float zeroValue;
@@ -104,6 +111,7 @@ class PIGMENT_EXPORT KoColorSpaceMathsTraits<float> { // This class is exported 
         static const float min;
         static const float epsilon;
         static const qint8 bits = 32;
+        static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
 template<typename _T, typename _Tdst = _T>

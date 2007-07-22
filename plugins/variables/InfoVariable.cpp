@@ -31,13 +31,9 @@ InfoVariable::InfoVariable()
 
 void InfoVariable::setProperties(const KoProperties *props) {
     m_type = (Property) props->property("property").value<int>();
-    //kDebug() << "Ok, we've got the type " << m_type << endl;
-    setValue(manager()->property(m_type).toString());
 }
 
 void InfoVariable::propertyChanged(Property property, const QVariant &value) {
-    //kDebug() << "property is :" << manager()->stringProperty(m_type) << endl;
-    //kDebug() << "Property " << property << " changed to " << value << endl;
     if (property == m_type) {
         setValue(value.toString());
     }

@@ -309,4 +309,45 @@ KoColorSpace * KoColorSpaceRegistry::lab16(KoColorProfile * profile)
     return colorSpace(KoLabColorSpace::colorSpaceId(), profile);
 }
 
+QList<KoID> KoColorSpaceRegistry::colorModelsList() const
+{
+    QList<KoID> ids;
+    QList<KoColorSpaceFactory*> factories = values();
+    foreach(KoColorSpaceFactory* factory, factories)
+    {
+        if(not ids.contains(factory->colorModelId()))
+        {
+            ids << factory->colorModelId();
+        }
+    }
+    return ids;
+}
+
+QList<KoID> KoColorSpaceRegistry::colorDepthList(const KoID& colorModelId) const
+{
+    QList<KoID> ids;
+    QList<KoColorSpaceFactory*> factories = values();
+    foreach(KoColorSpaceFactory* factory, factories)
+    {
+        if(not ids.contains(factory->colorDepthId()) and factory->colorModelId() == colorModelId )
+        {
+            ids << factory->colorDepthId();
+        }
+    }
+    return ids;
+}
+
+QString KoColorSpaceRegistry::colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId)
+{
+    QList<KoColorSpaceFactory*> factories = values();
+    foreach(KoColorSpaceFactory* factory, factories)
+    {
+        if(factory->colorModelId() == colorModelId and factory->colorDepthId() == colorDepthId )
+        {
+            return factory->id();
+        }
+    }
+    return "";
+}
+
 #include "KoColorSpaceRegistry.moc"

@@ -25,13 +25,14 @@
 #include <kcolorcombo.h>
 #include <kdebug.h>
 
-#include "KoUnitDoubleSpinBox.h"
-#include "KoColorSpaceRegistry.h"
-#include "KoColorProfile.h"
-#include "KoColorSpace.h"
-#include "KoID.h"
-#include "KoColor.h"
+#include <KoUnitDoubleSpinBox.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorProfile.h>
+#include <KoColorSpace.h>
+#include <KoID.h>
+#include <KoColor.h>
 #include <KoUnit.h>
+#include <KoColorModelStandardIds.h>
 
 #include "kis_doc2.h"
 #include "kis_meta_registry.h"
@@ -65,9 +66,11 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(0);
 
-    cmbColorSpaces->setIDList(KoColorSpaceRegistry::instance()->listKeys());
-    cmbColorSpaces->setCurrent(defColorSpaceName);
-
+    cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList());
+    cmbColorModels->setCurrent(RGBAColorModelID);
+    fillCmbDepths(cmbColorModels->currentItem());
+    cmbColorDepth->setCurrent(Integer8BitsColorDepthID);
+    
     connect(doubleResolution, SIGNAL(valueChanged(double)),
         this, SLOT(resolutionChanged(double)));
     connect(cmbWidthUnit, SIGNAL(activated(int)),
@@ -78,12 +81,16 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
         this, SLOT(heightUnitChanged(int)));
     connect(doubleHeight, SIGNAL(valueChanged(double)),
         this, SLOT(heightChanged(double)));
-    connect(cmbColorSpaces, SIGNAL(activated(const KoID &)),
-        this, SLOT(fillCmbProfiles(const KoID &)));
+    connect(cmbColorModels, SIGNAL(activated(const KoID &)),
+        this, SLOT(fillCmbDepths(const KoID &)));
+    connect(cmbColorDepth, SIGNAL(activated(const KoID &)),
+        this, SLOT(fillCmbProfiles()));
+    connect(cmbColorModels, SIGNAL(activated(const KoID &)),
+        this, SLOT(fillCmbProfiles()));
     connect (m_createButton, SIGNAL( clicked() ), this, SLOT (buttonClicked()) );
     m_createButton -> setDefault(true);
 
-    fillCmbProfiles(cmbColorSpaces->currentItem());
+    fillCmbProfiles();
 
 }
 
@@ -149,7 +156,9 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::buttonClicked()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(cmbColorSpaces->currentItem(), cmbProfile->currentText());
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(
+            KoColorSpaceRegistry::instance()->colorSpaceId(cmbColorModels->currentItem(), cmbColorDepth->currentItem())
+            , cmbProfile->currentText());
 
     QColor qc(Qt::white);
 
@@ -184,15 +193,16 @@ quint8 KisCustomImageWidget::backgroundOpacity() const
     return (opacity * 255) / 100;
 }
 
-void KisCustomImageWidget::fillCmbProfiles(const KoID & s)
+void KisCustomImageWidget::fillCmbProfiles()
 {
+    QString s = KoColorSpaceRegistry::instance()->colorSpaceId(cmbColorModels->currentItem(), cmbColorDepth->currentItem());
     cmbProfile->clear();
 
-    if (!KoColorSpaceRegistry::instance()->contains(s.id())) {
+    if (!KoColorSpaceRegistry::instance()->contains(s)) {
         return;
     }
 
-    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());
+    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s);
     if (csf == 0) return;
 
     QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
@@ -201,6 +211,12 @@ void KisCustomImageWidget::fillCmbProfiles(const KoID & s)
         cmbProfile->addSqueezedItem(profile->name());
     }
     cmbProfile->setCurrent(csf->defaultProfile());
+}
+
+ void KisCustomImageWidget::fillCmbDepths(const KoID& d)
+{
+    cmbColorDepth->clear();
+    cmbColorDepth->setIDList(KoColorSpaceRegistry::instance()->colorDepthList(d));
 }
 
 #include "kis_custom_image_widget.moc"

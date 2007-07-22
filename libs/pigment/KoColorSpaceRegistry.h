@@ -135,6 +135,14 @@ public:
     KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profileName);
 
     /**
+     * Return the id of the colorspace that have the defined colorModelId with colorDepthId.
+     * @param colorModelId id of the color model
+     * @param colorDepthId id of the color depth
+     * @return the id of the wanted colorspace, or "" if no colorspace correspond to those ids
+     */
+    QString colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId);
+    
+    /**
      * Convenience method to get the often used alpha colorspace
      */
     KoColorSpace * alpha8();
@@ -194,6 +202,15 @@ public:
      */
     QList<KisPaintDeviceAction *> paintDeviceActionsFor(KoColorSpace* colorSpace);
 
+    /**
+     * @return the list of available color models
+     */
+    QList<KoID> colorModelsList() const;
+    /**
+     * @return the list of available color models for the given colorModelId
+     */
+    QList<KoID> colorDepthList(const KoID& colorModelId) const;
+    
 private:
     KoColorSpaceRegistry();
     KoColorSpaceRegistry(const KoColorSpaceRegistry&);

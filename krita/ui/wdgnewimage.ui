@@ -6,19 +6,13 @@
     <x>0</x>
     <y>0</y>
     <width>590</width>
-    <height>565</height>
+    <height>537</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>New Image</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item>
     <widget class="QLabel" name="lblName" >
      <property name="text" >
@@ -37,24 +31,45 @@
     </widget>
    </item>
    <item>
+    <widget class="KisCmbIDList" native="1" name="cmbColorModels_2" />
+   </item>
+   <item>
     <widget class="QGroupBox" name="grpImage" >
      <property name="title" >
       <string>Image Size</string>
      </property>
      <layout class="QHBoxLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
       <property name="spacing" >
        <number>6</number>
       </property>
+      <property name="leftMargin" >
+       <number>9</number>
+      </property>
+      <property name="topMargin" >
+       <number>9</number>
+      </property>
+      <property name="rightMargin" >
+       <number>9</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>9</number>
+      </property>
       <item>
        <layout class="QVBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="lblWidth" >
@@ -83,11 +98,20 @@
       </item>
       <item>
        <layout class="QVBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QDoubleSpinBox" name="doubleWidth" >
@@ -122,11 +146,20 @@
       </item>
       <item>
        <layout class="QVBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QComboBox" name="cmbWidthUnit" />
@@ -181,32 +214,36 @@
    <item>
     <widget class="QGroupBox" name="grpMode" >
      <property name="title" >
-      <string>Mode</string>
+      <string>Color</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>11</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
       <item row="0" column="0" >
        <widget class="QLabel" name="lblColorSpaces" >
         <property name="text" >
-         <string>Color space:</string>
+         <string>Model:</string>
         </property>
         <property name="buddy" >
-         <cstring>cmbColorSpaces</cstring>
+         <cstring>cmbColorModels</cstring>
         </property>
        </widget>
       </item>
       <item row="0" column="1" >
-       <widget class="KisCmbIDList" native="1" name="cmbColorSpaces" />
-      </item>
-      <item row="1" column="1" >
-       <widget class="SqueezedComboBox" name="cmbProfile" />
+       <widget class="KisCmbIDList" native="1" name="cmbColorModels" />
       </item>
       <item row="1" column="0" >
+       <widget class="QLabel" name="lblColorSpaces_2" >
+        <property name="text" >
+         <string>Depth:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>cmbColorModels</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="KisCmbIDList" native="1" name="cmbColorDepth" />
+      </item>
+      <item row="2" column="0" >
        <widget class="QLabel" name="lblProfiles" >
         <property name="text" >
          <string>Profile:</string>
@@ -215,6 +252,9 @@
          <cstring>cmbProfile</cstring>
         </property>
        </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="SqueezedComboBox" name="cmbProfile" />
       </item>
      </layout>
     </widget>
@@ -225,10 +265,22 @@
       <string>Contents</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
+      <property name="leftMargin" >
        <number>11</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin" >
+       <number>11</number>
+      </property>
+      <property name="rightMargin" >
+       <number>11</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>11</number>
+      </property>
+      <property name="horizontalSpacing" >
+       <number>6</number>
+      </property>
+      <property name="verticalSpacing" >
        <number>6</number>
       </property>
       <item row="2" column="1" >
@@ -245,7 +297,98 @@
        </widget>
       </item>
       <item row="0" column="1" >
-       <widget class="KColorCombo" native="1" name="cmbColor" />
+       <widget class="KColorCombo" name="cmbColor" >
+        <item>
+         <property name="text" >
+          <string>Custom...</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+       </widget>
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="lblDescription" >
@@ -279,11 +422,20 @@
          <enum>QFrame::Plain</enum>
         </property>
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="textLabel1" >
@@ -332,11 +484,20 @@
    </item>
    <item>
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>6</number>
+     </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
      </property>
      <item>
       <spacer>
@@ -368,6 +529,12 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
+   <class>KColorCombo</class>
+   <extends>QComboBox</extends>
+   <header>kcolorcombo.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KisCmbIDList</class>
    <extends>QWidget</extends>
    <header>kis_cmb_idlist.h</header>
@@ -377,16 +544,10 @@
    <extends>QComboBox</extends>
    <header>squeezedcombobox.h</header>
   </customwidget>
-  <customwidget>
-   <class>KColorCombo</class>
-   <extends>QWidget</extends>
-   <header>kcolorcombo.h</header>
-   <container>1</container>
-  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>txtName</tabstop>
-  <tabstop>cmbColorSpaces</tabstop>
+  <tabstop>cmbColorModels</tabstop>
   <tabstop>cmbProfile</tabstop>
   <tabstop>cmbColor</tabstop>
   <tabstop>sliderOpacity</tabstop>

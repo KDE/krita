@@ -103,21 +103,42 @@ void KoPathShapeLoader::svgCurveToCubic( double x1, double y1, double x2, double
 
 void KoPathShapeLoader::svgCurveToCubicSmooth( double x, double y, double x2, double y2, bool abs )
 {
+    Q_UNUSED ( x );
+    Q_UNUSED ( y );
+    Q_UNUSED ( x2 );
+    Q_UNUSED ( y2 );
+    Q_UNUSED ( abs );
     // TODO implement
 }
 
 void KoPathShapeLoader::svgCurveToQuadratic( double x, double y, double x1, double y1, bool abs )
 {
+    Q_UNUSED ( x );
+    Q_UNUSED ( y );
+    Q_UNUSED ( x1 );
+    Q_UNUSED ( y1 );
+    Q_UNUSED ( abs );
     // TODO implement
 }
 
 void KoPathShapeLoader::svgCurveToQuadraticSmooth( double x, double y, bool abs )
 {
+    Q_UNUSED ( x );
+    Q_UNUSED ( y );
+    Q_UNUSED ( abs );
     // TODO implement
 }
 
 void KoPathShapeLoader::svgArcTo( double x, double y, double r1, double r2, double angle, bool largeArcFlag, bool sweepFlag, bool abs )
 {
+    Q_UNUSED ( x );
+    Q_UNUSED ( y );
+    Q_UNUSED ( r1 );
+    Q_UNUSED ( r2 );
+    Q_UNUSED ( angle );
+    Q_UNUSED ( largeArcFlag );
+    Q_UNUSED ( sweepFlag );
+    Q_UNUSED ( abs );
     // TODO implement
 }
 

@@ -24,6 +24,7 @@
 #include <KoColorSpaceTraits.h>
 
 #include <pigment_xyz_u16_export.h>
+#include <KoColorModelStandardIds.h>
 
 typedef KoColorSpaceTrait<quint16, 4, 3> XyzU16Traits;
 
@@ -44,6 +45,9 @@ class KisXyzU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
         }
         virtual QString id() const { return "XYZA16"; }
         virtual QString name() const { return i18n("XYZ (16-bit integer/channel)"); }
+
+        virtual KoID colorModelId() const { return XYZAColorModelID; }
+        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
 
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisXyzU16ColorSpace(parent, p); }
 

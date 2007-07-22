@@ -23,6 +23,7 @@
 #include <krita_gray_u8_export.h>
 #include "KoLcmsColorSpace.h"
 #include <KoColorSpaceTraits.h>
+#include <KoColorModelStandardIds.h>
 
 typedef KoColorSpaceTrait<quint8, 1, -1> GrayU8Traits;
 
@@ -40,6 +41,8 @@ public:
     {}
     virtual QString id() const { return "GRAY"; }
     virtual QString name() const { return i18n("Grayscale (8-bit integer/channel)"); }
+    virtual KoID colorModelId() const { return GrayColorModelID; }
+    virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisGrayColorSpace(parent, p); }
 

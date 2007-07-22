@@ -631,6 +631,10 @@ public:
      */
     virtual QString name() const = 0;
 
+    
+    virtual KoID colorModelId() const = 0;
+    virtual KoID colorDepthId() const = 0;
+    
     virtual bool profileIsCompatible(KoColorProfile* profile) const =0;
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *) = 0;
 

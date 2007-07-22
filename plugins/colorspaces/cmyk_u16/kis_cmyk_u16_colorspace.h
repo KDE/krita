@@ -24,10 +24,11 @@
 #include <KoColorSpaceTraits.h>
 
 #include <pigment_cmyk_u16_export.h>
+#include "KoColorModelStandardIds.h"
 
 typedef KoColorSpaceTrait<quint16, 5, 4> CmykU16Traits;
 
-class PIGMENT_CMYK_U16_EXPORT KisCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
+class KisCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
 {
     public:
         KisCmykU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
@@ -42,6 +43,8 @@ class KisCmykU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
         }
         virtual QString id() const { return "CMYKA16"; }
         virtual QString name() const { return i18n("CMYK (16-bit integer/channel)"); }
+        virtual KoID colorModelId() const { return CMYKAColorModelID; }
+        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
 
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisCmykU16ColorSpace(parent, p); }
 

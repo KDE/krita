@@ -20,11 +20,16 @@
 
 #include "KoColorSpaceRegistry.h"
 
+#include "KoColorModelStandardIds.h"
+
 class KisPainterlyOverlayColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
      QString id() const { return "painterlyoverlay"; }
      QString name() const { return i18n("Painterly Overlay (32 bit float/channel)"); }
+
+     virtual KoID colorModelId() const { return KoID("painterlyoverlay", i18n("Painterly Overlay") ); }
+     virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
 
      bool profileIsCompatible(KoColorProfile* /*profile*/) const
         {

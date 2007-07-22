@@ -24,6 +24,7 @@
 #include "krita_rgbf32_export.h"
 
 #include <KoColorSpaceTraits.h>
+#include <KoColorModelStandardIds.h>
 
 typedef KoRgbTraits<float> RgbF32Traits;
 
@@ -42,6 +43,8 @@ public:
      */
     virtual QString id() const { return "RGBAF32"; }
     virtual QString name() const { return i18n("RGB (32-bit float/channel) for High Dynamic Range imaging"); }
+    virtual KoID colorModelId() const { return RGBAColorModelID; }
+    virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
     
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisRgbF32HDRColorSpace(parent, p); }
 };

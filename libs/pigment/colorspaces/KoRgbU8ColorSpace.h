@@ -21,6 +21,7 @@
 #include <klocale.h>
 #include <KoLcmsColorSpace.h>
 #include <KoColorSpaceTraits.h>
+#include "KoColorModelStandardIds.h"
 
 typedef KoRgbTraits<quint8>  RgbU8Traits;
 
@@ -52,6 +53,8 @@ public:
     {}
     virtual QString id() const { return KoRgbU8ColorSpace::colorSpaceId(); }
     virtual QString name() const { return i18n("RGB (8-bit integer/channel)"); }
+    virtual KoID colorModelId() const { return RGBAColorModelID; }
+    virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KoRgbU8ColorSpace(parent, p); }
 

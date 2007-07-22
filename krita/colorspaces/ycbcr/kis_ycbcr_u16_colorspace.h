@@ -23,6 +23,7 @@
 #include "kis_ycbcr_base_colorspace.h"
 
 #include "kis_ycbcr_traits.h"
+#include <KoColorModelStandardIds.h>
 
 typedef KoYCbCrTraits<quint16> YCbCrU16Traits;
 
@@ -43,6 +44,8 @@ class KisYCbCrU16ColorSpaceFactory : public KoColorSpaceFactory
 public:
     virtual QString id() const { return "YCbCrAU16"; }
     virtual QString name() const { return i18n("YCBCR (16-bit integer/channel)"); }
+    virtual KoID colorModelId() const { return YCbCrAColorModelID; }
+    virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
 
     virtual bool profileIsCompatible(KoColorProfile* /*profile*/) const
     {

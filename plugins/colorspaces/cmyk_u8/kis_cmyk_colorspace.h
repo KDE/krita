@@ -22,6 +22,7 @@
 
 #include <KoLcmsColorSpace.h>
 #include <KoColorSpaceTraits.h>
+#include "KoColorModelStandardIds.h"
 
 typedef KoColorSpaceTrait<quint8, 5, 4> CmykU8Traits;
 
@@ -39,6 +40,8 @@ class KisCmykU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
         {}
         virtual QString id() const { return "CMYK"; }
         virtual QString name() const { return i18n("CMYK (8-bit integer/channel)"); }
+        virtual KoID colorModelId() const { return CMYKAColorModelID; }
+        virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
 
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisCmykU8ColorSpace(parent, p); }
 

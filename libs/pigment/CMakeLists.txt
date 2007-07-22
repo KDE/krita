@@ -18,6 +18,7 @@ set(pigment_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/KoBasicHistogramProducers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoHistogramProducer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionTransformation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorModelStandardIds.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoIccColorProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsColorProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsRGBColorProfile.cpp

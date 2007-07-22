@@ -23,6 +23,7 @@
 #include <half.h>
 
 #include "kis_rgb_float_hdr_colorspace.h"
+#include <KoColorModelStandardIds.h>
 
 #include "krita_rgbf16_export.h"
 
@@ -45,6 +46,8 @@ public:
      */
     virtual QString id() const { return "RGBAF16HALF"; }
     virtual QString name() const { return i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"); }
+    virtual KoID colorModelId() const { return RGBAColorModelID; }
+    virtual KoID colorDepthId() const { return Float16BitsColorDepthID; }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisRgbF16HDRColorSpace(parent, p); };
 };

@@ -22,6 +22,7 @@
 
 #include "KoLcmsColorSpace.h"
 #include "KoColorSpaceTraits.h"
+#include "KoColorModelStandardIds.h"
 
 class KoLabColorSpace : public KoLcmsColorSpace<KoLabU16Traits>
 {
@@ -56,6 +57,9 @@ class KoLabColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual QString id() const { return KoLabColorSpace::colorSpaceId(); }
         /// reimplemented from KoColorSpaceFactory
         virtual QString name() const { return i18n("L*a*b* (16-bit integer/channel)"); }
+
+        virtual KoID colorModelId() const { return LABAColorModelID; }
+        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
 
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoLabColorSpace(parent, p); }
 

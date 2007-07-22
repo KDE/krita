@@ -21,6 +21,7 @@
 
 #include "klocale.h"
 #include "kis_ycbcr_base_colorspace.h"
+#include <KoColorModelStandardIds.h>
 
 #include "kis_ycbcr_traits.h"
 
@@ -40,6 +41,8 @@ class KisYCbCrU8ColorSpaceFactory : public KoColorSpaceFactory
 public:
     virtual QString id() const { return "YCbCrAU8"; }
     virtual QString name() const { return i18n("YCBCR (8-bit integer/channel)"); }
+    virtual KoID colorModelId() const { return YCbCrAColorModelID; }
+    virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
 
     virtual bool profileIsCompatible(KoColorProfile* /*profile*/) const
     {

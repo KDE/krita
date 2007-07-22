@@ -235,9 +235,9 @@ bool Canvas::event(QEvent *e) {
         const QPointF pos(helpEvent->x(), helpEvent->y());
         IconShape *is = dynamic_cast<IconShape*> (m_parent->m_shapeManager->shapeAt(pos));
         if(is)
-            QToolTip::showText(helpEvent->globalPos(), is->toolTip());
+            QToolTip::showText(helpEvent->globalPos(), is->toolTip(), this);
         else
-            QToolTip::showText(helpEvent->globalPos(), "");
+            QToolTip::showText(helpEvent->globalPos(), "", this);
     }
     return QWidget::event(e);
 }

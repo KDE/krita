@@ -24,7 +24,7 @@ kde4_add_library(kritadynamicbrush SHARED ${kritadynamicbrushlib_LIB_SRCS})
 
 target_link_libraries(kritadynamicbrush kritaui)
 
-set_target_properties(kritadynamicbrush PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
+set_target_properties(kritadynamicbrush PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
 install(TARGETS kritadynamicbrush  DESTINATION ${LIB_INSTALL_DIR})
 

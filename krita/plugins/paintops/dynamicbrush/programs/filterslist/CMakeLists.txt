@@ -12,7 +12,7 @@ kde4_add_library(kritafilterslistdynamicprogram SHARED ${libkritafilterslistdyna
 
 target_link_libraries(kritafilterslistdynamicprogram kritadynamicbrush)
 
-set_target_properties(kritafilterslistdynamicprogram PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
+set_target_properties(kritafilterslistdynamicprogram PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
 install(TARGETS kritafilterslistdynamicprogram  DESTINATION ${LIB_INSTALL_DIR})
 

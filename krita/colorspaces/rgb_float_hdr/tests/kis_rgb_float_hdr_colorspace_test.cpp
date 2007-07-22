@@ -10,6 +10,10 @@
 #include "KoLcmsRGBColorProfile.h"
 #include "../kis_rgb_f32_hdr_colorspace.h"
 
+#ifdef HAVE_OPENEXR
+#include "../kis_rgb_f16_hdr_colorspace.h"
+#endif
+
 double testRound(double value, const int numDecimalPlaces = 3)
 {
     double factor;
@@ -83,7 +87,7 @@ U16Pixel F32PixelToU16Pixel(const F32Pixel f32Pixel, float exposure)
 
 void KisRgbFloatHDRColorSpaceTest::testProfile()
 {
-    const QString COLORSPACE_ID = "RGBAF32";
+    const QString colorSpaceId = KisRgbF32HDRColorSpace::colorSpaceId();
 
     KoLcmsRGBColorProfile::Chromaticities chromaticities;
 
@@ -104,7 +108,7 @@ void KisRgbFloatHDRColorSpaceTest::testProfile()
 
     KoLcmsRGBColorProfile *profile = new KoLcmsRGBColorProfile(chromaticities, gamma);
 
-    KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(COLORSPACE_ID, profile);
+    KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, profile);
     QVERIFY2(colorSpace != 0, "Created colorspace");
 
     QCOMPARE(colorSpace->profile(), profile);
@@ -195,6 +199,14 @@ void KisRgbFloatHDRColorSpaceTest::testProfile()
 
 void KisRgbFloatHDRColorSpaceTest::testFactory()
 {
+#ifdef HAVE_OPENEXR
+    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Float16BitsColorDepthID);
+    QCOMPARE(colorSpaceId, KisRgbF16HDRColorSpace::colorSpaceId());
+#endif
+
+    colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Float32BitsColorDepthID);
+    QCOMPARE(colorSpaceId, KisRgbF32HDRColorSpace::colorSpaceId());
+
     KoLcmsRGBColorProfile::Chromaticities chromaticities;
 
     chromaticities.primaries.Red.x = 0.6400f;
@@ -214,13 +226,12 @@ void KisRgbFloatHDRColorSpaceTest::testFactory()
 
     KoLcmsRGBColorProfile *profile = new KoLcmsRGBColorProfile(chromaticities, gamma);
 
-    const QString COLORSPACE_ID = "RGBAF32";
-    KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(COLORSPACE_ID);
+    KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(colorSpaceId);
     QVERIFY(colorSpaceFactory);
 
     QVERIFY(colorSpaceFactory->profileIsCompatible(profile));
 
-    KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(COLORSPACE_ID, 0);
+    KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, 0);
     QVERIFY2(colorSpace != 0, "Created colorspace");
     QVERIFY2(colorSpace->profile() != 0, "Has a profile by default");
 
@@ -230,6 +241,68 @@ void KisRgbFloatHDRColorSpaceTest::testFactory()
 
     QCOMPARE(testRound(cmsEstimateGamma(redGamma)), gamma);
 }
+
+template <class ColorSpaceTraits>
+void KisRgbFloatHDRColorSpaceTest::testChannels(const QString &colorSpaceId, 
+                                                const KoChannelInfo::enumChannelValueType channelValueType)
+{
+    KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, 0);
+    QVERIFY(colorSpace != 0);
+
+    QList<KoChannelInfo*> channels = colorSpace->channels();
+
+    const int numChannels = 4;
+
+    QCOMPARE(channels.size(), numChannels);
+
+    const int redChannelIndex = 0;
+    const int greenChannelIndex = 1;
+    const int blueChannelIndex = 2;
+    const int alphaChannelIndex = 3;
+
+    QCOMPARE(channels[redChannelIndex]->name(), i18n("Red"));
+    QCOMPARE(channels[redChannelIndex]->pos(), (int)(ColorSpaceTraits::red_pos * sizeof(typename ColorSpaceTraits::channels_type)));
+    QCOMPARE(channels[redChannelIndex]->color(), QColor(255, 0, 0));
+
+    QCOMPARE(channels[greenChannelIndex]->name(), i18n("Green"));
+    QCOMPARE(channels[greenChannelIndex]->pos(), (int)(ColorSpaceTraits::green_pos * sizeof(typename ColorSpaceTraits::channels_type)));
+    QCOMPARE(channels[greenChannelIndex]->color(), QColor(0, 255, 0));
+
+    QCOMPARE(channels[blueChannelIndex]->name(), i18n("Blue"));
+    QCOMPARE(channels[blueChannelIndex]->pos(), (int)(ColorSpaceTraits::blue_pos * sizeof(typename ColorSpaceTraits::channels_type)));
+    QCOMPARE(channels[blueChannelIndex]->color(), QColor(0, 0, 255));
+
+    QCOMPARE(channels[alphaChannelIndex]->name(), i18n("Alpha"));
+    QCOMPARE(channels[alphaChannelIndex]->pos(), (int)(ColorSpaceTraits::alpha_pos * sizeof(typename ColorSpaceTraits::channels_type)));
+    QCOMPARE(channels[alphaChannelIndex]->color(), QColor(0, 0, 0));
+
+    const int numColorChannels = 3;
+
+    for (int channelIndex = 0; channelIndex < numColorChannels; channelIndex++)
+    {
+        QCOMPARE(channels[channelIndex]->channelType(), KoChannelInfo::COLOR);
+    }
+
+    QCOMPARE(channels[alphaChannelIndex]->channelType(), KoChannelInfo::ALPHA);
+
+    for (int channelIndex = 0; channelIndex < numChannels; channelIndex++)
+    {
+        QCOMPARE(channels[channelIndex]->channelValueType(), channelValueType);
+        QCOMPARE(channels[channelIndex]->size(), (int)sizeof(typename ColorSpaceTraits::channels_type));
+    }
+}
+
+void KisRgbFloatHDRColorSpaceTest::testF32Channels()
+{
+    testChannels<RgbF32Traits>(KisRgbF32HDRColorSpace::colorSpaceId(), KoChannelInfo::FLOAT32);
+}
+
+#ifdef HAVE_OPENEXR
+void KisRgbFloatHDRColorSpaceTest::testF16Channels()
+{
+    testChannels<RgbF16Traits>(KisRgbF16HDRColorSpace::colorSpaceId(), KoChannelInfo::FLOAT16);
+}
+#endif
 
 QTEST_KDEMAIN(KisRgbFloatHDRColorSpaceTest, NoGUI)
 #include "kis_rgb_float_hdr_colorspace_test.moc"

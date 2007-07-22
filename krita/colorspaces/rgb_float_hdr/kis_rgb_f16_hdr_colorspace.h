@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_STRATEGY_COLORSPACE_RGB_16F_HDR_H_
-#define KIS_STRATEGY_COLORSPACE_RGB_16F_HDR_H_
+#ifndef KIS_RGB_F16_HDR_COLORSPACE_H_
+#define KIS_RGB_F16_HDR_COLORSPACE_H_
 
 #include <klocale.h>
 
@@ -33,8 +33,15 @@ typedef KoRgbTraits<half> RgbF16Traits;
 
 class KRITA_RGBF16_EXPORT KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>
 {
-    public:
-        KisRgbF16HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+public:
+    KisRgbF16HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+
+    /**
+     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
+     * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
+     * This is the value that the member function id() returns.
+     */
+    static QString colorSpaceId();
 };
 
 class KRITA_RGBF16_EXPORT KisRgbF16HDRColorSpaceFactory : public KisRgbFloatHDRColorSpaceFactory
@@ -44,7 +51,7 @@ public:
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual QString id() const { return "RGBAF16HALF"; }
+    virtual QString id() const { return KisRgbF16HDRColorSpace::colorSpaceId(); }
     virtual QString name() const { return i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"); }
     virtual KoID colorModelId() const { return RGBAColorModelID; }
     virtual KoID colorDepthId() const { return Float16BitsColorDepthID; }

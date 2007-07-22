@@ -27,6 +27,10 @@
 #include "KoLcmsRGBColorProfile.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpaceTraits.h"
+#include "KoChannelInfo.h"
+
+#include "compositeops/KoCompositeOpOver.h"
+#include "compositeops/KoCompositeOpErase.h"
 
 #define UINT8_TO_FLOAT(v) (KoColorSpaceMaths<quint8, typename _CSTraits::channels_type >::scaleToA(v))
 #define FLOAT_TO_UINT8(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint8>::scaleToA(v))
@@ -57,6 +61,36 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB1
             // QImages.
             m_rgbU16ColorSpace = KoColorSpaceRegistry::instance()->rgb16(profile);
             Q_ASSERT(m_rgbU16ColorSpace);
+
+            const KoChannelInfo::enumChannelValueType channelValueType = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::channelValueType;
+            const int channelSize = sizeof(typename _CSTraits::channels_type);
+
+            this->addChannel(new KoChannelInfo(i18n("Red"),
+                                         _CSTraits::red_pos * channelSize,
+                                         KoChannelInfo::COLOR,
+                                         channelValueType,
+                                         channelSize,
+                                         QColor(255,0,0)));
+            this->addChannel(new KoChannelInfo(i18n("Green"),
+                                         _CSTraits::green_pos * channelSize,
+                                         KoChannelInfo::COLOR,
+                                         channelValueType,
+                                         channelSize,
+                                         QColor(0,255,0)));
+            this->addChannel(new KoChannelInfo(i18n("Blue"),
+                                         _CSTraits::blue_pos * channelSize,
+                                         KoChannelInfo::COLOR,
+                                         channelValueType,
+                                         channelSize,
+                                         QColor(0,0,255)));
+            this->addChannel(new KoChannelInfo(i18n("Alpha"),
+                                         _CSTraits::alpha_pos * channelSize,
+                                         KoChannelInfo::ALPHA,
+                                         channelValueType,
+                                         channelSize));
+
+            addCompositeOp( new KoCompositeOpOver<_CSTraits>( this ) );
+            addCompositeOp( new KoCompositeOpErase<_CSTraits>( this ) );
         }
 
         virtual bool hasHighDynamicRange() const { return true; }

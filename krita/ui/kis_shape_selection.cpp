@@ -124,7 +124,7 @@ void KisShapeSelection::renderToProjection(KisSelection* projection)
 
 void KisShapeSelection::addChild(KoShape* shape)
 {
-    shape->setBorder(new KoLineBorder( 0, Qt::lightGray ));
+    shape->setBorder(0);
     shape->setBackground(Qt::NoBrush);
     KoShapeContainer::addChild(shape);
     setDirty();

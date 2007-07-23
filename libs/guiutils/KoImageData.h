@@ -49,6 +49,7 @@ public:
      * The DPI of the original image are read from the source file making this real units quality metrics.
      */
     enum ImageQuality {
+        NoPreviewImage,      ///<  shows a dummy.
         LowQuality,     // 50ppi
         MediumQuality,  // 100ppi
         HighQuality     // upto 150ppi

@@ -27,6 +27,7 @@
 #include <KDebug>
 #include <QSizeF>
 #include <QIODevice>
+#include <QPainter>
 
 class KoImageData::Private {
 public:
@@ -92,6 +93,14 @@ QPixmap KoImageData::pixmap() {
 
         if(! d->image.isNull()) {
             int multiplier = 150; // max 150 ppi
+            if(d->quality == NoPreviewImage) {
+                d->pixmap = QPixmap(1,1);
+                QPainter p(&d->pixmap);
+                p.setPen(QPen(Qt::gray));
+                p.drawPoint(0, 0);
+                p.end();
+                return d->pixmap;
+            }
             if(d->quality == LowQuality)
                 multiplier = 50;
             else if(d->quality == MediumQuality)

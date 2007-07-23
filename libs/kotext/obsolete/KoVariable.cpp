@@ -251,8 +251,10 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
 
     QString tmp ( dateTime.toString(m_strFormat) );
     const int month = dateTime.date().month();
-    tmp.replace("PPPP", KGlobal::locale()->calendar()->monthNamePossessive(month, false)); //long possessive month name
-    tmp.replace("PPP",  KGlobal::locale()->calendar()->monthNamePossessive(month, true));  //short possessive month name
+    tmp.replace("PPPP", KGlobal::locale()->calendar()->monthName(month, 
+                 KCalendarSystem::LongNamePossessive)); //long possessive month name
+    tmp.replace("PPP",  KGlobal::locale()->calendar()->monthName(month,
+                 KCalendarSystem::ShortNamePossessive));  //short possessive month name
     return tmp;
 }
 

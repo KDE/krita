@@ -14,8 +14,6 @@ set(flake_SRCS
     KoCanvasResourceProvider.cpp
     KoInteractionStrategy.cpp
     KoInteractionTool.cpp
-    KoShapeBorderModel.cpp
-    KoLineBorder.cpp
     KoPathShape.cpp
     KoPathPoint.cpp
     KoSelection.cpp
@@ -71,6 +69,11 @@ set(flake_SRCS
     KoSvgPathParser.cpp
     KoPathShapeLoader.cpp
     ShapeDeleter_p.cpp
+    KoShapeBorderModel.cpp
+    KoShapeBorderFactory.cpp
+    KoShapeBorderRegistry.cpp
+    KoLineBorder.cpp
+    KoLineBorderFactory.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp

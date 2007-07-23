@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Shape border definition
+Type=ServiceType
+X-KDE-ServiceType=KOffice/Border
+Comment=Definition of a flake shape border
+[PropertyDef::X-Flake-Version]
+Type=int

@@ -33,7 +33,7 @@ QString ShapeSelectorFactory::id() const
 
 Qt::DockWidgetArea ShapeSelectorFactory::defaultDockWidgetArea() const
 {
-    return Qt::LeftDockWidgetArea;
+    return Qt::BottomDockWidgetArea;
 }
 
 QDockWidget* ShapeSelectorFactory::createDockWidget()

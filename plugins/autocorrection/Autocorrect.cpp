@@ -45,6 +45,7 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
     m_cursor = QTextCursor(document);
     selectWord(m_cursor, cursorPosition);
     m_word = m_cursor.selectedText();
+    if (m_word.isEmpty()) return;
 
     emit startMacro(i18n("Autocorrection"));
 

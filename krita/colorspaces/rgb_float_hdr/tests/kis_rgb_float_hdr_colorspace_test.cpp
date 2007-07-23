@@ -199,8 +199,9 @@ void KisRgbFloatHDRColorSpaceTest::testProfile()
 
 void KisRgbFloatHDRColorSpaceTest::testFactory()
 {
+    QString colorSpaceId;
 #ifdef HAVE_OPENEXR
-    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Float16BitsColorDepthID);
+    colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Float16BitsColorDepthID);
     QCOMPARE(colorSpaceId, KisRgbF16HDRColorSpace::colorSpaceId());
 #endif
 

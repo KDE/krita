@@ -331,9 +331,9 @@ double acoth(float z)
 void computeKS(const vector<float> &vREF, vector<float> &vKS)
 {
 	vector<float>::iterator i = vKS.begin();
-	for (vector<float>::iterator j = const_cast<vector<float>&>(vREF).begin(); j != vREF.end(); i += 2, j++) {
-		if ((*j) > 0.999) (*j) = 0.999;
-		if ((*j) < 0.001) (*j) = 0.001;
+	for (vector<float>::const_iterator j = /*const_cast<vector<float>&>*/(vREF).begin(); j != vREF.end(); i += 2, j++) {
+// 		if ((*j) > 0.999) (*j) = 0.999;
+// 		if ((*j) < 0.001) (*j) = 0.001;
 
 		float c_b = (*j) - 0.0001;
 

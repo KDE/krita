@@ -67,7 +67,7 @@ void KisIlluminantTester::testReflectanceColorSpace()
 
 	QVERIFY (cs->pixelSize() == 21*sizeof(float));
 
-	QColor c(255,0,0);
+	QColor c(255,255,255);
 
 	float *REF = new float[21];
 
@@ -94,35 +94,66 @@ void KisIlluminantTester::testReflectanceColorSpace()
 
 void KisIlluminantTester::testIlluminantProfile()
 {
+	const QString PATH = "/home/emanuele/kde/src/4/koffice/krita/plugins/viewplugins/painterlymixer/";
 	KisIlluminantProfile *profile = new KisIlluminantProfile(PATH+"/IlluminantD65.ill");
 
 	KoColorSpace *cs = new KisKSColorSpace(profile);
 
 	KisPaintDeviceSP pdev = new KisPaintDevice(cs);
 
-	KisRectIteratorPixel it = pdev->createRectIterator(0,0,64,64);
+	QColor colors[] = {
+		QColor(255,0,0),
+		QColor(0,255,0),
+		QColor(0,0,255),
+		QColor(255,255,0),
+		QColor(255,0,255),
+		QColor(0,255,255),
+		QColor(255,255,255),
+		QColor(0,0,0),
+		QColor(127,0,0),
+		QColor(0,127,0),
+		QColor(0,0,127),
+		QColor(127,127,0),
+		QColor(127,0,127),
+		QColor(0,127,127),
+		QColor(127,127,127)
+	};
 
-	QColor red(255,0,0);
-	QColor yellow(255,255,0);
-	float *redKS = new float[21];
-	float *yellowKS = new float[21];
+	float *color1 = new float[21];
+	float *color2 = new float[21];
 
-	cs->fromQColor(red, reinterpret_cast<quint8 *>(redKS));
-	cs->fromQColor(yellow, reinterpret_cast<quint8 *>(yellowKS));
+	for (int i = 0; i < 14; i++) {
+		for (int j = i+1; j < 15; j++) {
+			cs->fromQColor(colors[i], reinterpret_cast<quint8 *>(color1));
+			cs->fromQColor(colors[j], reinterpret_cast<quint8 *>(color2));
 
+			KisRectIteratorPixel it_c1 = pdev->createRectIterator(48*i+0 , 32*j+0 , 16, 16);
+			KisRectIteratorPixel it_c2 = pdev->createRectIterator(48*i+0 , 32*j+16, 16, 16);
+			KisRectIteratorPixel it_cm = pdev->createRectIterator(48*i+16, 32*j+0 , 32, 32);
 
-	while (!it.isDone()) {
-// 		cs->fromQColor(c, it.rawData());
-// 		cs->toQColor(it.rawData(), &c);
-		for (int i = 0; i < 21; i++)
-			reinterpret_cast<float*>(it.rawData())[i] = 0.5*redKS[i]+0.5*yellowKS[i];
-		++it;
+			while (!it_c1.isDone()) {
+				for (int i = 0; i < 21; i++) {
+					reinterpret_cast<float*>(it_c1.rawData())[i] = color1[i];
+					reinterpret_cast<float*>(it_c2.rawData())[i] = color2[i];
+				}
+				++it_c1; ++it_c2;
+			}
+
+			while (!it_cm.isDone()) {
+				for (int i = 0; i < 21; i++)
+					reinterpret_cast<float*>(it_cm.rawData())[i] = 0.5*color1[i] + 0.5*color2[i];
+				++it_cm;
+			}
+		}
 	}
 
 	kDebug() << "BOF!" << endl;
-	pdev->convertToQImage(0).save("prova.png");
+	pdev->convertToQImage(0).save("mixing.png");
 
-	delete cs; delete profile;
+	delete cs;
+	delete profile;
+	delete [] color1;
+	delete [] color2;
 }
 
 QTEST_KDEMAIN(KisIlluminantTester, NoGUI)

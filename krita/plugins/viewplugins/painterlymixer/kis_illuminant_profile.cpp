@@ -95,11 +95,19 @@ bool KisIlluminantProfile::loadCurve(QTextStream &in_ill)
 		for(bool leggi = false; !in_ill.atEnd(); leggi = !leggi) {
 			in_ill >> str_curr;
 			curr = str_curr.toFloat();
-			if (leggi) {
+			if (!leggi) {
+				wavelen = (int) curr;
+				if (wavelen > last_wl)
+					break;
+				if (str_curr == "!") {
+					i++;
+					leggi = true; // So it continues
+					continue;
+				}
+			} else {
 				H = curr;
-
 				if (wavelen >= first_wl) {
-					int pos = i / ((last_wl - first_wl)/cols);
+					int pos = i/* / ((last_wl - first_wl)/cols)*/;
 					for (int j = 0; j < 4 && !in_xyz.atEnd(); j++) {
 						in_xyz >> str_curr;
 						curr = str_curr.toFloat();
@@ -117,12 +125,6 @@ bool KisIlluminantProfile::loadCurve(QTextStream &in_ill)
 							c[j-1][pos] += (H*cmf);
 					}
 				}
-			} else {
-				wavelen = (int) curr;
-				if (wavelen > last_wl)
-					break;
-				if (wavelen > first_wl)
-					i++;
 			}
 		}
 

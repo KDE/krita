@@ -22,6 +22,9 @@
 
 #include "KoColorModelStandardIds.h"
 
+#include "compositeops/KoCompositeOpOver.h"
+#include "compositeops/KoCompositeOpErase.h"
+
 class KisPainterlyOverlayColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
@@ -119,8 +122,10 @@ KisPainterlyOverlayColorSpace::KisPainterlyOverlayColorSpace(const QString &id, 
                                  PainterlyOverlayFloatTraits::wetness_pos * sizeof(float),
                                  KoChannelInfo::SUBSTANCE,
                                  KoChannelInfo::FLOAT32,
-                                 sizeof(quint16),
+                                 sizeof(float),
                                  QColor(255,0,0)));
 
+	addCompositeOp( new KoCompositeOpOver<PainterlyOverlayFloatTraits>( this ) );
+	addCompositeOp( new KoCompositeOpErase<PainterlyOverlayFloatTraits>( this ) );
 }
 

@@ -131,7 +131,7 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
   }
 
   QList<int> sizes;
-  sizes << 20 << width() - 20;
+  sizes << width() - 20 << 20;
   d->m_splitter->setSizes(sizes);
 
   // Set the sizes of the details pane splitters

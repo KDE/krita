@@ -120,7 +120,7 @@ install(TARGETS krita DESTINATION ${BIN_INSTALL_DIR})
 
     ########### install files ###############
 
-install( FILES  krita.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES  krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  krita.rc krita_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/krita)
 

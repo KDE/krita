@@ -81,7 +81,7 @@ class KisKSColorSpace : public KoIncompleteColorSpace<KSFloatTraits, KoRGB16Fall
 		cmsHPROFILE hsRGB, hXYZ;
 		cmsHTRANSFORM XYZ_BGR, BGR_XYZ;
 
-		mutable QHash< uint, vector<quint16> > m_cache;
+		mutable QHash< uint, quint16 * > m_cache;
 
 };
 

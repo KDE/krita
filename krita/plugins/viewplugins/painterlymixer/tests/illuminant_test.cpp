@@ -63,7 +63,7 @@ void KisIlluminantTester::testReflectanceColorSpace()
 
 	KoColorSpace *cs = new KisKSColorSpace(profile);
 
-	cout << (int)cs->pixelSize() << endl;
+// 	cout << (int)cs->pixelSize() << endl;
 
 	QVERIFY (cs->pixelSize() == 21*sizeof(float));
 
@@ -83,6 +83,9 @@ void KisIlluminantTester::testReflectanceColorSpace()
 	KoColor kc(c, cs);
 
 	kDebug() << "KO: " << kc.toQColor() << endl;
+	cs->fromQColor(c, reinterpret_cast<quint8 *>(REF));
+	for (int i = 0; i < 21; i++) cout << REF[i] << ", ";
+	cout << endl;
 
 	delete [] REF;
 }
@@ -97,13 +100,26 @@ void KisIlluminantTester::testIlluminantProfile()
 
 	KisPaintDeviceSP pdev = new KisPaintDevice(cs);
 
-	KisRectIteratorPixel it = pdev->createRectIterator(0,0,128,128);
+	KisRectIteratorPixel it = pdev->createRectIterator(0,0,64,64);
+
+	QColor red(255,0,0);
+	QColor yellow(255,255,0);
+	float *redKS = new float[21];
+	float *yellowKS = new float[21];
+
+	cs->fromQColor(red, reinterpret_cast<quint8 *>(redKS));
+	cs->fromQColor(yellow, reinterpret_cast<quint8 *>(yellowKS));
+
 
 	while (!it.isDone()) {
-		cs->fromQColor(QColor(255,0,0), it.rawData());
+// 		cs->fromQColor(c, it.rawData());
+// 		cs->toQColor(it.rawData(), &c);
+		for (int i = 0; i < 21; i++)
+			reinterpret_cast<float*>(it.rawData())[i] = 0.5*redKS[i]+0.5*yellowKS[i];
 		++it;
 	}
 
+	kDebug() << "BOF!" << endl;
 	pdev->convertToQImage(0).save("prova.png");
 
 	delete cs; delete profile;

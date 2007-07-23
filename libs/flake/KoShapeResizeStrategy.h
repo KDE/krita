@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOSHAPESCALETRATEGY_H
-#define KOSHAPESCALETRATEGY_H
+#ifndef KOSHAPERESIZESTRATEGY_H
+#define KOSHAPERESIZESTRATEGY_H
 
 #include "KoInteractionStrategy.h"
 #include "KoInteractionTool.h"
@@ -59,5 +59,5 @@ private:
     QList<QMatrix> m_lastTransforms;
 };
 
-#endif /* KOSHAPESCALETRATEGY_H */
+#endif
 

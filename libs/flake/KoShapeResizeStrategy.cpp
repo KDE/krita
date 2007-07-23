@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -76,7 +76,7 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
         case KoFlake::TopLeftHandle:
             m_top = true; m_bottom = false; m_left = true; m_right = false; break;
         default:
-            ;// throw exception ?  TODO
+             Q_ASSERT(0); // illegal 'corner'
     }
 }
 
@@ -95,37 +95,20 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map( m_start );
 
     double zoomX=1, zoomY=1;
+    if(m_left)
+        zoomX = (startWidth - distance.x()) / startWidth;
+    else if(m_right)
+        zoomX = (startWidth + distance.x()) / startWidth;
+    if(m_top)
+        zoomY = (startHeight - distance.y()) / startHeight;
+    else if(m_bottom)
+        zoomY = (startHeight + distance.y()) / startHeight;
     if(keepAspect) {
-        double ratio = startWidth / startHeight;
-        double width = startWidth - distance.x();
-        double height = startHeight - distance.y();
-        int toLargestEdge = (m_bottom?1:0) + (m_top?1:0) + // should be false when only one
-            (m_left?1:0) + (m_right?1:0);                  // of the direction bools is set
-        bool horizontal = m_left || m_right;
-
-        if(toLargestEdge != 1) { // one of the corners.
-            if (width < height) // the biggest border is the one in control
-                width = height * ratio;
-            else
-                height = width / ratio;
-        } else {
-            if (horizontal)
-                height = width / ratio;
-            else
-                width = height * ratio;
-        }
-        zoomX = startWidth / width;
-        zoomY = startHeight / height;
-    }
-    else {
-        if(m_left)
-            zoomX = (startWidth - distance.x()) / startWidth;
-        else if(m_right)
-            zoomX = (startWidth + distance.x()) / startWidth;
-        if(m_top)
-            zoomY = (startHeight - distance.y()) / startHeight;
-        else if(m_bottom)
-            zoomY = (startHeight + distance.y()) / startHeight;
+        const bool cornerUsed = ((m_bottom?1:0) + (m_top?1:0) + (m_left?1:0) + (m_right?1:0)) == 2;
+        if(cornerUsed && startWidth < startHeight || m_left || m_right)
+            zoomY = zoomX;
+        else
+            zoomX = zoomY;
     }
 
     bool scaleFromCenter = modifiers & Qt::ControlModifier;

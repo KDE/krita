@@ -24,7 +24,6 @@
 #include "KoDom.h"
 #include "KoDocumentAdaptor.h"
 #include "KoGlobal.h"
-//   #include <QtDBus/QtDBus>
 #include "KoDocumentChild.h"
 #include "KoView.h"
 #include "KoMainWindow.h"
@@ -34,55 +33,30 @@
 #include "KoOasisStore.h"
 #include "KoXmlNS.h"
 #include "KoOpenPane.h"
-//
-//   #include <KoStoreDevice.h>
+
 #include <KoXmlWriter.h>
-//
+
 #include <kdialog.h>
-//   #include <kdebug.h>
-//   #include <kdeversion.h>
 #include <kfileitem.h>
-//   #include <kiconloader.h>
-//   #include <kcomponentdata.h>
-//   #include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-//   #include <kmimetype.h>
 #include <kparts/partmanager.h>
-//   #include <kprinter.h>
 #include <ksavefile.h>
 #include <kxmlguifactory.h>
-//   #include <KActionCollection>
-//   #include <kstandardaction.h>
 #include <KIconLoader>
 #include <kundostack.h>
-//
+
 #include <QBuffer>
-//   #include <QCursor>
 #include <QDir>
-//   #include <QFile>
 #include <QFileInfo>
-//   #include <QImage>
-//   #include <QMap>
 #include <QPainter>
 #include <QTimer>
 #include <QDBusConnection>
-//   #include <QXmlSimpleReader>
 #include <QLayout>
-//   #include <QByteArray>
-//   #include <QPixmap>
-//   #include <QChildEvent>
-//   #include <QEvent>
-//   #include <QResizeEvent>
-//   #include <QDateTime>
-//   #include <QUndoStack>
-//   #include <QUndoCommand>
 #include <QApplication>
-//   #include <assert.h>
-
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KUrl didn't like it,

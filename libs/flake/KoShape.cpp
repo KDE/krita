@@ -283,12 +283,14 @@ void KoShape::applyTransformation( const QMatrix &matrix )
     QMatrix transformMatrix = globalMatrix * matrix * globalMatrix.inverted();
     d->localMatrix = transformMatrix * d->localMatrix;
     notifyChanged();
+    d->shapeChanged(GenericMatrixChange);
 }
 
 void KoShape::setTransformation( const QMatrix &matrix )
 {
     d->localMatrix = matrix;
     notifyChanged();
+    d->shapeChanged(GenericMatrixChange);
 }
 
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2) {

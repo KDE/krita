@@ -30,6 +30,9 @@ class QButtonGroup;
 class QToolButton;
 class QWidget;
 
+class KoColorSpace;
+class KisIlluminantProfile;
+
 class KisPaintOp;
 class KisView2;
 
@@ -49,8 +52,6 @@ private:
 
     void loadColors();
 
-    void setupButton(QToolButton *button, int index);
-
     bool isCurrentPaintOpPainterly();
 
     void updateInformationLabel();
@@ -66,13 +67,17 @@ private:
     KisPaintOp *m_currentOp;
 
     QButtonGroup *m_bgColors;
-    QList<QColor> m_vColors;
+    QList<KoColor> m_vColors;
 
     QToolButton *m_bWet;
     QToolButton *m_bDry;
 
     KoCanvasResourceProvider *m_resources;
 
+	QStringList m_illuminants;
+
+	KoColorSpace *m_colorspace;
+	KisIlluminantProfile *m_illuminant;
 };
 
 #endif // KIS_PAINTERLY_MIXER_H_

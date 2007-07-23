@@ -1,8 +1,6 @@
 /*
- * painterlymixer.h -- Part of Krita
+ *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
  *
- * Copyright (c) 2007 Boudewijn Rempt (boud@valdyas.org)
- * Copyright (c) 2007 Emanuele Tamponi (emanuele@valinor.it)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,24 +17,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef PAINTERLY_MIXER_H
-#define PAINTERLY_MIXER_H
+#ifndef COLORSPOT_H_
+#define COLORSPOT_H_
 
-#include <kparts/plugin.h>
+#include <QToolButton>
 
-class KisView2;
-class KisPainterlyMixerDockerFactory;
+class KoColor;
+class QColor;
 
-class PainterlyMixer : public KParts::Plugin {
-    Q_OBJECT
+class ColorSpot : public QToolButton {
+	Q_OBJECT
 
-public:
-    PainterlyMixer(QObject *parent, const QStringList &);
-    virtual ~PainterlyMixer();
+	typedef QToolButton super;
 
-private:
-    KisView2* m_view;
-    KisPainterlyMixerDockerFactory* m_factory;
+	public:
+		ColorSpot (QWidget *parent, const KoColor &color);
+
+		~ColorSpot();
+
+		void setColor(const KoColor &color);
+
+		KoColor color() const { return m_color; }
+
+	private:
+		KoColor m_color;
 };
 
-#endif // PAINTERLY_MIXER_H
+
+#endif // COLORSPOT_H_

@@ -25,12 +25,12 @@
 #include <KoCanvasResourceProvider.h>
 
 #include "kis_paint_device.h"
-
-#include "kis_painterly_information.h"
+#include "kis_painterly_overlay.h"
 
 class QFrame;
 class KisPaintOp;
 class MixerTool;
+class KoColorSpace;
 
 class MixerCanvas : public QFrame, public KoCanvasBase {
     Q_OBJECT
@@ -40,8 +40,9 @@ public:
     ~MixerCanvas();
 
     // Initializes the canvas KisPaintDevice, and add overlays to it.
-    void setDevice(KoColorSpace *cs);
+	void setDevice(KoColorSpace *cs);
     KisPaintDevice *device() {return m_device.data();}
+    KisPainterlyOverlay *overlay() {return m_overlay.data();}
 
     void setToolProxy(KoToolProxy *proxy) {m_toolProxy = proxy;}
     KoToolProxy* toolProxy() {return m_toolProxy;}
@@ -75,6 +76,7 @@ private:
     KoToolProxy *m_toolProxy;
 
     KisPaintDeviceSP m_device;
+	KisPainterlyOverlaySP m_overlay;
 
 };
 

@@ -20,40 +20,29 @@
 
 #include <QCursor>
 #include <QFrame>
+#include <QStringList>
 
 #include <kdebug.h>
 
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceProvider.h>
 #include <KoColor.h>
-#include <KoColorConversions.h>
 #include <KoColorSpace.h>
+#include <KoColorProfile.h>
 #include <KoID.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
 #include <KoToolProxy.h>
-#include <KoUnit.h>
-#include <KoViewConverter.h>
 
-#include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
-#include "kis_painter.h"
-#include "kis_paintop.h"
-#include "kis_paintop_registry.h"
-#include "kis_resource_provider.h"
+#include "kis_painterly_overlay.h"
 
-#include "kis_adsorbency_mask.h"
-#include "kis_mixability_mask.h"
-#include "kis_pigment_concentration_mask.h"
-#include "kis_reflectivity_mask.h"
-#include "kis_volume_mask.h"
-#include "kis_viscosity_mask.h"
-#include "kis_wetness_mask.h"
+// #include "kis_illuminant_profile.h"
+// #include "kis_ks_colorspace.h"
+
+#include "colorspot.h"
+#include "mixertool.h"
 
 #include "mixercanvas.h"
-#include "mixertool.h"
-#include "kis_painterly_information.h"
-#include "utilities.h"
 
 MixerCanvas::MixerCanvas(QWidget *parent)
     : QFrame(parent), KoCanvasBase(0), m_toolProxy(0)
@@ -70,7 +59,7 @@ MixerCanvas::~MixerCanvas()
 void MixerCanvas::setDevice(KoColorSpace *cs)
 {
     m_device = new KisPaintDevice(cs);
-    addPainterlyOverlays(m_device.data());
+	m_overlay = new KisPainterlyOverlay;
 }
 
 void MixerCanvas::mouseDoubleClickEvent(QMouseEvent */*event*/)

@@ -1,8 +1,6 @@
 /*
- * painterlymixer.h -- Part of Krita
+ *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
  *
- * Copyright (c) 2007 Boudewijn Rempt (boud@valdyas.org)
- * Copyright (c) 2007 Emanuele Tamponi (emanuele@valinor.it)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,24 +17,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef PAINTERLY_MIXER_H
-#define PAINTERLY_MIXER_H
+#include <QColor>
+#include <QToolButton>
 
-#include <kparts/plugin.h>
+#include "KoColor.h"
+#include "KoColorSpace.h"
 
-class KisView2;
-class KisPainterlyMixerDockerFactory;
+#include "colorspot.h"
 
-class PainterlyMixer : public KParts::Plugin {
-    Q_OBJECT
+ColorSpot::ColorSpot(QWidget *parent, const KoColor &color) : super(parent)
+{
+	Q_ASSERT(color.colorSpace()->id() == "kscolorspace");
 
-public:
-    PainterlyMixer(QObject *parent, const QStringList &);
-    virtual ~PainterlyMixer();
+	m_color = color;
 
-private:
-    KisView2* m_view;
-    KisPainterlyMixerDockerFactory* m_factory;
-};
+	setPalette(QPalette(color.toQColor().rgba(), color.toQColor().rgba()));
+	setAutoFillBackground(true);
+	setAutoRepeat(true);
+}
 
-#endif // PAINTERLY_MIXER_H
+ColorSpot::~ColorSpot()
+{
+}
+
+void ColorSpot::setColor(const KoColor &color)
+{
+	Q_ASSERT(color.colorSpace()->id() == "kscolorspace");
+
+	m_color = color;
+}
+
+
+#include "colorspot.moc"

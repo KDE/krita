@@ -21,16 +21,25 @@
 #include <QButtonGroup>
 #include <QColor>
 #include <QGridLayout>
+#include <QList>
 #include <QPalette>
 #include <QSizePolicy>
+#include <QString>
+#include <QStringList>
 #include <QToolButton>
 #include <QWidget>
 
+#include <KComponentData>
 #include <KDebug>
+#include <KGlobal>
+#include <KStandardDirs>
 
-#include <KoCanvasResourceProvider.h>
-#include <KoColorSpaceRegistry.h>
-#include <KoToolProxy.h>
+#include "KoCanvasResourceProvider.h"
+#include "KoColorSpaceRegistry.h"
+#include "KoColorSpace.h"
+#include "KoColor.h"
+#include "KoColorProfile.h"
+#include "KoToolProxy.h"
 
 #include "kis_canvas2.h"
 #include "kis_painter.h"
@@ -39,16 +48,27 @@
 #include "kis_resource_provider.h"
 #include "kis_view2.h"
 
-#include "kis_painterlymixer.h"
+#include "kis_illuminant_profile.h"
+#include "kis_ks_colorspace.h"
+
+#include "colorspot.h"
 #include "mixertool.h"
+
+#include "kis_painterlymixer.h"
 
 KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
     : QWidget(parent), m_view(view), m_resources(view->canvasBase()->resourceProvider())
 {
     setupUi(this);
 
-//     m_canvas->setDevice(m_view->image()->colorSpace());
-    m_canvas->setDevice(KoColorSpaceRegistry::instance()->rgb8());
+	KGlobal::mainComponent().dirs()->addResourceType("kis_illuminants",
+                                                     "data", "krita/profiles/");
+
+    m_illuminants += KGlobal::mainComponent().dirs()->findAllResources("kis_illuminants", "*.ill");
+
+	m_illuminant = new KisIlluminantProfile(m_illuminants[0]);
+	m_colorspace = new KisKSColorSpace(m_illuminant);
+    m_canvas->setDevice(m_colorspace);
     initTool();
     initSpots();
 }
@@ -57,11 +77,13 @@ KisPainterlyMixer::~KisPainterlyMixer()
 {
     if (m_tool)
         delete m_tool;
+	delete m_illuminant;
+	delete m_colorspace;
 }
 
 void KisPainterlyMixer::initTool()
 {
-    m_tool = new MixerTool(m_canvas, m_canvas->device(), m_resources);
+    m_tool = new MixerTool(m_canvas, m_canvas->device(), m_canvas->overlay(), m_resources);
 
     m_canvas->setToolProxy(new KoToolProxy(m_canvas));
     m_canvas->toolProxy()->setActiveTool(m_tool);
@@ -86,10 +108,8 @@ void KisPainterlyMixer::initSpots()
     for (row = 0; row < ROWS; row++) {
         for (col = 0; col < COLS; col++) {
             int index = row*COLS + col;
-            QToolButton *curr = new QToolButton(m_spotsFrame);
+            QToolButton *curr = new ColorSpot(m_spotsFrame, m_vColors[index]);
             l->addWidget(curr, row, col);
-
-            setupButton(curr, index);
 
             m_bgColors->addButton(curr, index);
         }
@@ -112,28 +132,20 @@ void KisPainterlyMixer::initSpots()
     connect(m_bgColors, SIGNAL(buttonClicked(int)), this, SLOT(slotChangeColor(int)));
     connect(m_bWet, SIGNAL(pressed()), this, SLOT(slotIncreaseWetness()));
     connect(m_bDry, SIGNAL(pressed()), this, SLOT(slotDecreaseWetness()));
-
-}
-
-void KisPainterlyMixer::setupButton(QToolButton *button, int index)
-{
-//     button->setFixedSize(15, 15);
-    button->setPalette(QPalette(m_vColors[index].rgba(), m_vColors[index].rgba()));
-    button->setAutoFillBackground(true);
-    button->setAutoRepeat(true);
 }
 
 void KisPainterlyMixer::loadColors()
 {
     // TODO We need to handle save/load of user-defined colors in the spots.
-    m_vColors.append(QColor(0xFFFF0000)); // Red
-    m_vColors.append(QColor(0xFF00FF00)); // Green
-    m_vColors.append(QColor(0xFF0000FF)); // Blue
-    m_vColors.append(QColor(0xFF0FA311)); // Whatever :)
-    m_vColors.append(QColor(0xFFFFFF00)); // Yellow
-    m_vColors.append(QColor(0xFFFF00FF)); // Violet
-    m_vColors.append(QColor(0xFFFFFFFF)); // White
-    m_vColors.append(QColor(0xFF000000)); // Black
+	KoColorSpace *cs = m_canvas->device()->colorSpace();
+    m_vColors.append(KoColor(QColor(0xFFFF0000), cs)); // Red
+    m_vColors.append(KoColor(QColor(0xFF00FF00), cs)); // Green
+    m_vColors.append(KoColor(QColor(0xFF0000FF), cs)); // Blue
+    m_vColors.append(KoColor(QColor(0xFF0FA311), cs)); // Whatever :)
+    m_vColors.append(KoColor(QColor(0xFFFFFF00), cs)); // Yellow
+    m_vColors.append(KoColor(QColor(0xFFFF00FF), cs)); // Violet
+    m_vColors.append(KoColor(QColor(0xFFFFFFFF), cs)); // White
+    m_vColors.append(KoColor(QColor(0xFF000000), cs)); // Black
 }
 
 // TODO Load/Save of wetness steps
@@ -143,14 +155,14 @@ void KisPainterlyMixer::loadColors()
 
 void KisPainterlyMixer::slotChangeColor(int index)
 {
-    if (m_resources->foregroundColor().toQColor().rgba() == m_vColors[index].rgba()) {
+    if (m_resources->foregroundColor().toQColor().rgba() == m_vColors[index].toQColor().rgba()) {
         float pc = m_tool->bristleInformation("PaintVolume");
         if ((pc + PV_STEP) < 255.0)
             m_tool->setBristleInformation("PaintVolume", PV_STEP, KPI_RELATIVE);
         else
             m_tool->setBristleInformation("PaintVolume", 255.0, KPI_ABSOLUTE);
     } else {
-        m_resources->setForegroundColor(KoColor(m_vColors[index], m_canvas->device()->colorSpace()));
+        m_resources->setForegroundColor(m_vColors[index]);
         m_tool->setBristleInformation("PaintVolume", MINIMUM_PV, KPI_ABSOLUTE);
     }
 

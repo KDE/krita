@@ -24,28 +24,6 @@
 #include <QHash>
 #include <QString>
 
-/**
-* KisPainterlyInformation is a simple structure that keeps all information
-* that a painterly paintop needs. Really, each "bristle" of a paintop could
-* have a separate structure for its own.
-* We provide here a brief description of these information. More can be found
-* in the relative KisMask subclass and on http://wiki.koffice.org
-* Please note that these information should be stored per-bristle, or per
-* "paint unit", and represents the paint status in the paintop. Once the paintop
-* actually paints something, then this information will be used to update the
-* painterly overlays of the painted device.
-*/
-/*
-struct KisPainterlyInformation {
-    float Mixability; ///< how easily the paint mixes with the underlying color and returns to the bristle.
-    float PigmentConcentration; ///< how much "pigment" is contained in the bristle (i.e., opacity)
-    float PaintVolume; ///< how thick will be the track stroked by the bristle.
-    float Reflectivity; ///< how much this paint is suscettible to reflection (high for watercolor, for example)
-    float Viscosity; ///< how easily the paint spread.
-    float Wetness; ///< how wet is the paint. This behaves on almost all other information.
-};
-*/
-
 #define KPI_ABSOLUTE 0
 #define KPI_RELATIVE 1
 

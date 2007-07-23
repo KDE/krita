@@ -26,6 +26,7 @@
 #include <KoTool.h>
 
 #include "kis_paint_device.h"
+#include "kis_painterly_overlay.h"
 
 #include "kis_painterly_information.h"
 
@@ -37,7 +38,7 @@ class MixerTool : public KoTool {
     Q_OBJECT
 
 public:
-    MixerTool(MixerCanvas *canvas, KisPaintDevice* device, KoCanvasResourceProvider *rp);
+    MixerTool(MixerCanvas *canvas, KisPaintDevice* device, KisPainterlyOverlay *overlay, KoCanvasResourceProvider *rp);
     ~MixerTool();
 
 // Implement KoTool
@@ -66,22 +67,23 @@ private:
     /*
     Update all painterly overlays, and to the mixing. It's called when a non-painterly paintop is used.
     */
-    void mixPaint(KisPaintDeviceSP stroke, KoPointerEvent *e);
+    void mixPaint(KisPaintDeviceSP stroke, KisPainterlyOverlaySP overlay, KoPointerEvent *e);
 
     /*
     Updates the information of the paintop (color, painterly information for next iteration and such)
     */
-    void updateResources(KisPaintDeviceSP stroke);
+    void updateResources(KisPaintDeviceSP stroke, KisPainterlyOverlaySP overlay);
 
     /*
     If a painterly paintop is used, it will change the painterly properties of the paint device. We want
     to "restore" the status of the canvas to the better one possible in order to keep the paint in perfect
     shape.
     */
-    void preserveProperties(KisPaintDeviceSP stroke);
+    void preserveProperties(KisPainterlyOverlaySP overlay);
 
 private:
-    KisPaintDevice* m_canvasDev;
+    KisPaintDevice* m_canvasDevice;
+	KisPainterlyOverlay *m_canvasOverlay;
     KoCanvasResourceProvider *m_resources;
 
     QPointF lastPos;

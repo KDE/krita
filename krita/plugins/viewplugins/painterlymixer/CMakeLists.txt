@@ -1,10 +1,14 @@
+add_subdirectory(tests)
+
 set(kritapainterlymixer_PART_SRCS
-    mixercanvas.cpp
-    mixertool.cpp
+    painterlymixer.cpp
     kis_painterlymixer.cpp
     kis_painterlymixerdocker.cpp
-    painterlymixer.cpp
-    utilities.cpp
+	colorspot.cpp
+    mixercanvas.cpp
+    mixertool.cpp
+	kis_illuminant_profile.cpp
+	kis_ks_colorspace.cpp
     )
 
 
@@ -19,3 +23,4 @@ install(TARGETS kritapainterlymixer  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install(FILES  kritapainterlymixer.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES  IlluminantD65.ill CIEXYZ10deg.txt DESTINATION ${DATA_INSTALL_DIR}/krita/profiles)

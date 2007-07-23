@@ -1,8 +1,6 @@
 /*
- * painterlymixer.h -- Part of Krita
+ *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
  *
- * Copyright (c) 2007 Boudewijn Rempt (boud@valdyas.org)
- * Copyright (c) 2007 Emanuele Tamponi (emanuele@valinor.it)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,24 +17,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef PAINTERLY_MIXER_H
-#define PAINTERLY_MIXER_H
+#ifndef KIS_ILLUMINANT_TESTER_H
+#define KIS_ILLUMINANT_TESTER_H
 
-#include <kparts/plugin.h>
+#include <QtTest/QtTest>
 
-class KisView2;
-class KisPainterlyMixerDockerFactory;
+class KisIlluminantTester : public QObject
+{
+	Q_OBJECT
 
-class PainterlyMixer : public KParts::Plugin {
-    Q_OBJECT
+	private slots:
 
-public:
-    PainterlyMixer(QObject *parent, const QStringList &);
-    virtual ~PainterlyMixer();
-
-private:
-    KisView2* m_view;
-    KisPainterlyMixerDockerFactory* m_factory;
+		void testConstructor();
+		void testReflectanceColorSpace();
+		void testIlluminantProfile();
 };
 
-#endif // PAINTERLY_MIXER_H
+#endif

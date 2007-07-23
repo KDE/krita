@@ -174,7 +174,8 @@ void mixKSBytes(quint32 channels, float *stroke, float *canvas,
     V_as = activeVolume(V_s, w_s, force);
 
 	for (quint32 i = 0; i < channels; i++)
-		stroke[i] = (V_ac * canvas[i] + V_as * stroke[i]) / (V_ac + V_as);
+		if (canvas[i] != stroke[i])
+			stroke[i] = (V_ac * canvas[i] + V_as * stroke[i]) / (V_ac + V_as);
 }
 
 void mixProperties(PainterlyOverlayFloatTraits::Cell *strCell,

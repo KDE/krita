@@ -18,46 +18,34 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KODOCUMENT_h
-#define KODOCUMENT_h
+#ifndef KODOCUMENT_H
+#define KODOCUMENT_H
 
 #include <QDateTime>
-//   #include <QList>
 #include <QMatrix>
-//   //Added by qt3to4:
-//   #include <QPixmap>
-//   #include <QByteArray>
 #include <Q3PtrList>
-//   #include <QList>
-//
+
 #include <kparts/part.h>
-//   #include <kurl.h>
 #include <kservice.h>
 #include <kcomponentdata.h>
-//   #include <KoGlobal.h>
-#include <KoUnit.h>
-#include <KoPageLayout.h>
-#include "komain_export.h"
 
+#include "KoUnit.h"
+#include "KoPageLayout.h"
+#include "komain_export.h"
+#include "KoGridData.h"
+#include "KoGuidesData.h"
 #include <KoXmlReader.h>
-#include <KoGridData.h>
-#include <KoGuidesData.h>
-//
-//   class QDomElement;
-//   class QDomDocument;
+
 class QXmlSimpleReader;
 class QUndoCommand;
-//
+
 class KoStore;
 class KoMainWindow;
-//
 class KoChild;
 class KoDocumentChild;
 class KoView;
 class KoDocumentInfo;
-//   // class DCOPObject;
 class KoOasisStyles;
-//   class KoXmlWriter;
 class KoOpenPane;
 
 

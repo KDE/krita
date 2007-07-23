@@ -42,8 +42,8 @@ class KoViewConverter;
  */
 class FLAKE_EXPORT KoShapeBorderModel {
 public:
-    KoShapeBorderModel() {}
-    virtual ~KoShapeBorderModel() {}
+    KoShapeBorderModel();
+    virtual ~KoShapeBorderModel();
 
     /**
      * @brief Fill the style object
@@ -59,11 +59,7 @@ public:
      * @param shape the shape the insets will be calculated for
      * Note that the KoInsets is a new object that you are responsible to delete afterwards.
      */
-    KoInsets borderInsets(const KoShape *shape) {
-        KoInsets insets;
-        borderInsets(shape, insets);
-        return insets;
-    }
+    KoInsets borderInsets(const KoShape *shape);
     /**
      * Return a borderInsets object filled with the size inside the shape that this border takes.
      * @param shape the shape the insets will be calculated for
@@ -84,6 +80,17 @@ public:
      * @param converter to convert between internal and view coordinates.
      */
     virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter) = 0;
+
+    /// refcounting
+    void addUser();
+    /// refcounting
+    int removeUser();
+    /// refcounting
+    int useCount() const;
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

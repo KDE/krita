@@ -78,6 +78,11 @@ public:
             manager->remove(me);
         delete userData;
         delete appData;
+        if(border) {
+            border->removeUser();
+            if(border->useCount() == 0)
+                delete border;
+        }
     }
 
     void shapeChanged(ChangeType type) {
@@ -566,7 +571,11 @@ KoShapeBorderModel *KoShape::border() const {
 }
 
 void KoShape::setBorder(KoShapeBorderModel *border) {
+    if(d->border)
+        d->border->removeUser();
     d->border = border;
+    if(d->border)
+        d->border->addUser();
 }
 
 const QMatrix& KoShape::matrix() const {

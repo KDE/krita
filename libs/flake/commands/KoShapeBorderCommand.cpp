@@ -27,10 +27,15 @@
 class KoShapeBorderCommand::Private {
 public:
     Private() {}
+    ~Private() {
+        foreach(KoShapeBorderModel* border, oldBorders) {
+            if(border->useCount() <= 0)
+                delete border;
+        }
+    }
     QList<KoShape*> shapes;                ///< the shapes to set border for
     QList<KoShapeBorderModel*> oldBorders; ///< the old borders, one for each shape
     QList<KoShapeBorderModel*> newBorders; ///< the new borders to set
-
 };
 
 KoShapeBorderCommand::KoShapeBorderCommand( const QList<KoShape*> &shapes, KoShapeBorderModel *border,
@@ -47,10 +52,6 @@ KoShapeBorderCommand::KoShapeBorderCommand( const QList<KoShape*> &shapes, KoSha
     foreach( KoShape *shape, d->shapes )
         d->oldBorders.append( shape->border() );
 
-    // XXX this command forgets to delete the old border on a shape and assumes someone else is still
-    // using it.  For such cases we should probably create a new border for each shape in the redo method.
-    // and delete the old borders in the destructor
-
     setText( i18n( "Set border" ) );
 }
 
@@ -66,12 +67,8 @@ KoShapeBorderCommand::KoShapeBorderCommand( const QList<KoShape*> &shapes,
     d->newBorders = borders;
 
     // save old borders
-    foreach( KoShape *shape, d->shapes )
+    foreach( KoShape *shape, shapes )
         d->oldBorders.append( shape->border() );
-
-    // XXX this command forgets to delete the old border on a shape and assumes someone else is still
-    // using it.  For such cases we should probably create a new border for each shape in the redo method.
-    // and delete the old borders in the destructor
 
     setText( i18n( "Set border" ) );
 }
@@ -84,9 +81,10 @@ void KoShapeBorderCommand::redo () {
     QUndoCommand::redo();
     QList<KoShapeBorderModel*>::iterator borderIt = d->newBorders.begin();
     foreach( KoShape *shape, d->shapes ) {
+        shape->repaint();
         shape->setBorder( *borderIt );
         shape->repaint();
-        borderIt++;
+        ++borderIt;
     }
 }
 
@@ -94,8 +92,9 @@ void KoShapeBorderCommand::undo () {
     QUndoCommand::undo();
     QList<KoShapeBorderModel*>::iterator borderIt = d->oldBorders.begin();
     foreach( KoShape *shape, d->shapes ) {
+        shape->repaint();
         shape->setBorder( *borderIt );
         shape->repaint();
-        borderIt++;
+        ++borderIt;
     }
 }

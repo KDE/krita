@@ -24,7 +24,7 @@
 #include <KoShapeManager.h>
 #include <KoShape.h>
 
-// #include <KDebug>
+#include <KDebug>
 #include <KLocale>
 #include <QPainter>
 #include <QPrinter>
@@ -72,7 +72,8 @@ public:
         const int progressPart = 50 / shapes.count();
         foreach(KoShape *shape, shapes) {
             kDebug(30004) << "Calling waitUntilReady on shape (" << shape << ")\n";
-            shape->waitUntilReady();
+            if(! stop)
+                shape->waitUntilReady();
             kDebug(30004) << "  done\n";
             updater.setProgress(updater.progress() + progressPart);
         }
@@ -86,7 +87,7 @@ public:
 
         if(!stop && index < pages.count()) {
             printer->newPage();
-            pageNumber->setText(i18n("page %1", QString::number(pages[index])));
+            pageNumber->setText(i18n("Printing page %1", QString::number(pages[index])));
             action->execute(pages[index++]);
             return;
         }
@@ -95,16 +96,22 @@ public:
         painter->end();
         progress->cancel();
         parent->printingDone();
-        pageNumber->setText(i18n("done"));
+        pageNumber->setText(i18n("Printing done"));
         button->setText(i18n("Close"));
-        QTimer::singleShot(1200, parent, SLOT(accept()));
-        //parent->done(0);
+        stop = true;
+        QTimer::singleShot(12000, parent, SLOT(accept()));
     }
 
     void cancelPressed() {
+        if(stop) { // pressed a second time.
+            parent->done(0);
+            return;
+        }
         stop = true;
         progress->cancel();
         parent->printingDone();
+        pageNumber->setText(i18n("Cancelled"));
+        QTimer::singleShot(1200, parent, SLOT(accept()));
     }
 
     KoZoomHandler zoomer;
@@ -130,10 +137,8 @@ KoPrintingDialog::KoPrintingDialog(QWidget *parent)
     setAttribute(Qt::WA_DeleteOnClose, true);
     QGridLayout *grid = new QGridLayout(this);
     setLayout(grid);
-    QLabel *label = new QLabel(i18n("Printing"), this);
-    grid->addWidget(label, 0, 0);
     d->pageNumber = new QLabel(this);
-    grid->addWidget(d->pageNumber, 0, 1);
+    grid->addWidget(d->pageNumber, 0, 0);
     QProgressBar *bar = new QProgressBar(this);
     d->progress = new KoProgressUpdater(bar);
     grid->addWidget(bar, 1, 0, 1, 3);
@@ -179,7 +184,7 @@ void KoPrintingDialog::showEvent(QShowEvent *event) {
         d->progress->start();
         for(int i=0; i < d->pages.count(); i++)
             d->updaters.append(d->progress->startSubtask()); // one per page
-        d->pageNumber->setText(i18n("page %1", QString::number(d->pages[d->index])));
+        d->pageNumber->setText(i18n("Printing page %1", QString::number(d->pages[d->index])));
         d->action->execute(d->pages[d->index++]);
     }
 }

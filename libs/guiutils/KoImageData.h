@@ -96,9 +96,18 @@ public:
     QPixmap pixmap();
 
     /**
-     * Return the location as set on setUrl()
+     * Return the location of the external file.  Returns an empty URL if there is no external file.
+     * @see image()
      */
     KUrl imageLocation() const;
+
+    /**
+     * Return the internal store of the image.
+     * Will return a null image if the image is stored externally.
+     * @see imageLocation()
+     * @see QImage::isNull()
+     */
+    const QImage image() const;
 
     /// If using SaveInStore, the collection will set a url-like location using this method.
     void setStoreHref(const QString &href);

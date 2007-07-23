@@ -174,3 +174,7 @@ bool KoImageData::loadFromStore(QIODevice *device) {
     return true;
 }
 
+const QImage KoImageData::image() const {
+    return d->image;
+}
+

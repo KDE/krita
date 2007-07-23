@@ -35,6 +35,7 @@
 #include "KoToolProxy.h"
 #include "KoToolManager.h"
 #include "KoColorSpace.h"
+#include "KoShapeManager.h"
 
 #include "kis_types.h"
 #include "kis_canvas2.h"
@@ -45,6 +46,7 @@
 #include "kis_resource_provider.h"
 #include "kis_config.h"
 #include "kis_debug_areas.h"
+#include "kis_selection_manager.h"
 
 class KisOpenGLCanvas2::Private
 {
@@ -240,6 +242,16 @@ void KisOpenGLCanvas2::paintGL()
     // Setup the painter to take care of the offset; all that the
     // classes that do painting need to keep track of is resolution
     gc.translate(-m_d->documentOffset.x(), -m_d->documentOffset.y());
+
+    // Paint the shapes (other than the layers)
+    gc.save();
+    m_d->canvas->globalShapeManager()->paint( gc, *m_d->viewConverter, false );
+    gc.restore();
+
+    //Paint marching ants and selection shapes
+    gc.save();
+    m_d->canvas->view()->selectionManager()->paint(gc, *m_d->viewConverter );
+    gc.restore();
 
     //m_d->gridDrawer->draw(&gc, m_d->viewConverter->viewToDocument(ev->rect()));
     m_d->toolProxy->paint(gc, *m_d->viewConverter );

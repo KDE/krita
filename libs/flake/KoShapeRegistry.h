@@ -71,10 +71,10 @@ private:
     KoShape * createShapeInternal( const KoXmlElement & e, KoShapeLoadingContext & context ) const;
 
 private:
-    static KoShapeRegistry *m_singleton;
+    static KoShapeRegistry *s_singleton;
 
     class Private;
-    Private * d;
+    Private * const d;
 
 };
 

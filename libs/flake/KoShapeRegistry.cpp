@@ -19,11 +19,12 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoShapeRegistry.h"
-#include "KoPluginLoader.h"
 #include "KoPathShapeFactory.h"
 #include "KoShapeLoadingContext.h"
-#include "KoXmlReader.h"
-#include "KoXmlNS.h"
+
+#include <KoPluginLoader.h>
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
 
 #include <QString>
 #include <QHash>
@@ -41,13 +42,16 @@ public:
 };
 
 KoShapeRegistry::KoShapeRegistry()
+    : d(new Private())
 {
 }
 
+KoShapeRegistry::~KoShapeRegistry()
+{
+    delete d;
+}
+
 void KoShapeRegistry::init() {
-
-    d = new Private();
-
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FlakePlugins";
     config.blacklist = "FlakePluginsDisabled";
@@ -93,23 +97,17 @@ void KoShapeRegistry::init() {
     }
 }
 
-
-KoShapeRegistry::~KoShapeRegistry()
-{
-    delete d;
-}
-
-KoShapeRegistry *KoShapeRegistry::m_singleton = 0;
+KoShapeRegistry *KoShapeRegistry::s_singleton = 0;
 static KStaticDeleter<KoShapeRegistry> staticShapeRegistryDeleter;
 
 KoShapeRegistry* KoShapeRegistry::instance()
 {
-    if(KoShapeRegistry::m_singleton == 0)
+    if(KoShapeRegistry::s_singleton == 0)
     {
-        staticShapeRegistryDeleter.setObject(m_singleton, new KoShapeRegistry());
-        KoShapeRegistry::m_singleton->init();
+        staticShapeRegistryDeleter.setObject(s_singleton, new KoShapeRegistry());
+        KoShapeRegistry::s_singleton->init();
     }
-    return KoShapeRegistry::m_singleton;
+    return KoShapeRegistry::s_singleton;
 }
 
 KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const

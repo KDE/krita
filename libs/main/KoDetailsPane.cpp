@@ -18,30 +18,10 @@
 */
 #include "KoDetailsPane.h"
 
-#include <QApplication>
-#include <QCheckBox>
-#include <QLabel>
-#include <QFile>
-#include <QImage>
-#include <QRect>
-#include <QBrush>
-#include <QPainter>
-#include <QEvent>
-#include <QSplitter>
-#include <QPixmap>
 #include <QStandardItemModel>
 
 #include <kcomponentdata.h>
-#include <klocale.h>
-#include <kpushbutton.h>
-#include <kconfig.h>
-#include <kurl.h>
-#include <kfileitem.h>
-#include <kio/previewjob.h>
-#include <kdebug.h>
-#include <ktextbrowser.h>
 #include <kglobalsettings.h>
-#include "KoTemplates.h"
 
 
 ////////////////////////////////////

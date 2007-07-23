@@ -19,31 +19,24 @@
 */
 
 #include "KoMainWindow.h"
-#include "KoDocument.h"
 #include "KoView.h"
+#include "KoDocument.h"
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
-#include "KoQueryTrader.h"
-// #include "KoMainWindowIface.h"
 #include "KoFrame.h"
 #include "KoFileDialog.h"
 #include "KoVersionDialog.h"
 #include "kkbdaccessextensions.h"
 #include "KoDockFactory.h"
 
+#include <krecentfilesaction.h>
 #include <kaboutdata.h>
-#include <kprinter.h>
-#include <kdeversion.h>
-#include <kstandardaction.h>
+#include <ktoggleaction.h>
 #include <kmessagebox.h>
-#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <kedittoolbar.h>
-#include <QProgressBar>
-#include <kpushbutton.h>
-#include <kdebug.h>
 #include <ktemporaryfile.h>
 #include <krecentdocument.h>
 #include <kparts/partmanager.h>
@@ -55,27 +48,15 @@
 #include <ktoolinvocation.h>
 #include <kxmlguifactory.h>
 #include <kfileitem.h>
-#include <kicon.h>
-#include <QObject>
-//Added by qt3to4:
-#include <QCloseEvent>
-#include <Q3PtrList>
-#include <QEvent>
-#include <QLabel>
-#include <QResizeEvent>
-#include <QApplication>
-#include <QSplitter>
-#include <kxmlguifactory.h>
-#include <ktoolbar.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <ktoolbar.h>
 #include <kactionmenu.h>
-
-// qt includes
-#include <QDockWidget>
-#include <QMap>
 #include <kactioncollection.h>
+
+//   // qt includes
+#include <QDockWidget>
+#include <QApplication>
+#include <QProgressBar>
+#include <QSplitter>
 
 class KoPartManager : public KParts::PartManager
 {

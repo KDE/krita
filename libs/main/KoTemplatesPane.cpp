@@ -18,28 +18,10 @@
 */
 
 #include "KoTemplatesPane.h"
-
-#include <QCheckBox>
-#include <QLabel>
-#include <QFile>
-#include <QImage>
-#include <QRect>
-#include <QBrush>
-#include <QPainter>
-#include <QSplitter>
-#include <QPixmap>
-#include <QStandardItemModel>
-
-#include <kcomponentdata.h>
-#include <klocale.h>
-#include <kpushbutton.h>
-#include <kconfig.h>
-#include <kurl.h>
-#include <kdebug.h>
-#include <ktextbrowser.h>
-#include <kconfiggroup.h>
-
 #include "KoTemplates.h"
+
+#include <QStandardItemModel>
+#include <kcomponentdata.h>
 
 class KoTemplatesPanePrivate
 {

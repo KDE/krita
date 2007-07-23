@@ -23,7 +23,8 @@
 
 #include "KoDom.h"
 #include "KoDocumentAdaptor.h"
-#include <QtDBus/QtDBus>
+#include "KoGlobal.h"
+//   #include <QtDBus/QtDBus>
 #include "KoDocumentChild.h"
 #include "KoView.h"
 #include "KoMainWindow.h"
@@ -33,54 +34,54 @@
 #include "KoOasisStore.h"
 #include "KoXmlNS.h"
 #include "KoOpenPane.h"
-
-#include <KoStoreDevice.h>
+//
+//   #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
-
+//
 #include <kdialog.h>
-#include <kdebug.h>
-#include <kdeversion.h>
+//   #include <kdebug.h>
+//   #include <kdeversion.h>
 #include <kfileitem.h>
-#include <kiconloader.h>
-#include <kcomponentdata.h>
-#include <kconfiggroup.h>
+//   #include <kiconloader.h>
+//   #include <kcomponentdata.h>
+//   #include <kconfiggroup.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kmimetype.h>
+//   #include <kmimetype.h>
 #include <kparts/partmanager.h>
-#include <kprinter.h>
+//   #include <kprinter.h>
 #include <ksavefile.h>
 #include <kxmlguifactory.h>
-#include <KActionCollection>
-#include <kstandardaction.h>
+//   #include <KActionCollection>
+//   #include <kstandardaction.h>
 #include <KIconLoader>
 #include <kundostack.h>
-
+//
 #include <QBuffer>
-#include <QCursor>
+//   #include <QCursor>
 #include <QDir>
-#include <QFile>
+//   #include <QFile>
 #include <QFileInfo>
-#include <QImage>
-#include <QMap>
+//   #include <QImage>
+//   #include <QMap>
 #include <QPainter>
 #include <QTimer>
-#include <QXmlSimpleReader>
+#include <QDBusConnection>
+//   #include <QXmlSimpleReader>
 #include <QLayout>
-#include <QByteArray>
-#include <QPixmap>
-#include <QChildEvent>
-#include <Q3PtrList>
-#include <QEvent>
-#include <QResizeEvent>
-#include <QDateTime>
-#include <QUndoStack>
-#include <QUndoCommand>
+//   #include <QByteArray>
+//   #include <QPixmap>
+//   #include <QChildEvent>
+//   #include <QEvent>
+//   #include <QResizeEvent>
+//   #include <QDateTime>
+//   #include <QUndoStack>
+//   #include <QUndoCommand>
 #include <QApplication>
-#include <assert.h>
+//   #include <assert.h>
 
 
 // Define the protocol used here for embedded documents' URL
@@ -717,7 +718,7 @@ void KoDocument::insertChild( KoDocumentChild *child )
 
 void KoDocument::slotChildChanged( KoChild *c )
 {
-    assert( c->inherits( "KoDocumentChild" ) );
+    Q_ASSERT( c->inherits( "KoDocumentChild" ) );
     emit childChanged( static_cast<KoDocumentChild *>( c ) );
 }
 
@@ -2732,11 +2733,6 @@ QString KoDocument::tagNameToDocumentType( const QString& localName )
         if ( localName == TN2DTArray[i].localName )
             return i18n( TN2DTArray[i].documentType );
     return localName;
-}
-
-QList<KoTextDocument *> KoDocument::allTextDocuments() const
-{
-    return QList<KoTextDocument *>();
 }
 
 KoPageLayout KoDocument::pageLayout(int /*pageNumber*/) const

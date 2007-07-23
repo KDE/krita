@@ -18,21 +18,21 @@
 */
 
 #include "KoApplication.h"
+#include "KoGlobal.h"
 #include "KoApplicationAdaptor.h"
-#include <QtDBus/QtDBus>
-#include <QFile>
-#include <QRegExp>
+
 #include <KoQueryTrader.h>
 #include <KoDocument.h>
 #include <KoMainWindow.h>
+
 #include <klocale.h>
 #include <kcmdlineargs.h>
-#include <kdebug.h>
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <stdlib.h>
+#include <QtDBus/QtDBus>
+#include <QFile>
 
 void qt_generate_epsf( bool b );
 

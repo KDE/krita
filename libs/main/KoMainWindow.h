@@ -18,28 +18,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __ko_main_window_h__
-#define __ko_main_window_h__
+#ifndef KOMAINWINDOW_H
+#define KOMAINWINDOW_H
+
+#include "komain_export.h"
 
 #include <kparts/mainwindow.h>
-#include <kfiledialog.h>
-#include <komain_export.h>
-#include "KoDocument.h"
-#include <krecentfilesaction.h>
-#include <ktoggleaction.h>
-#include <QLabel>
-#include <QResizeEvent>
-#include <Q3PtrList>
-#include <QCloseEvent>
 
-class QLabel;
-class KoView;
+#include <Q3PtrList>
+
 class KoMainWindowPrivate;
-class KUrl;
-class KRecentFilesAction;
-// class DCOPObject;
-class QDockWidget;
+class KoDocument;
+class KoView;
 class KoDockFactory;
+class KRecentFilesAction;
+class QDockWidget;
+class QAction;
+class QLabel;
+
 
 namespace KParts
 {

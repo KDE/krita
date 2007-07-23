@@ -1,4 +1,3 @@
-// -*- c-basic-offset: 4 -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
@@ -19,47 +18,46 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __ko_document_h__
-#define __ko_document_h__
+#ifndef KODOCUMENT_h
+#define KODOCUMENT_h
 
-class KoTextDocument;
 #include <QDateTime>
-#include <QList>
+//   #include <QList>
 #include <QMatrix>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QByteArray>
+//   //Added by qt3to4:
+//   #include <QPixmap>
+//   #include <QByteArray>
 #include <Q3PtrList>
-#include <QList>
-
+//   #include <QList>
+//
 #include <kparts/part.h>
-#include <kurl.h>
+//   #include <kurl.h>
 #include <kservice.h>
 #include <kcomponentdata.h>
-#include <KoGlobal.h>
+//   #include <KoGlobal.h>
 #include <KoUnit.h>
 #include <KoPageLayout.h>
-#include <komain_export.h>
+#include "komain_export.h"
 
 #include <KoXmlReader.h>
 #include <KoGridData.h>
 #include <KoGuidesData.h>
-
-class QDomElement;
-class QDomDocument;
+//
+//   class QDomElement;
+//   class QDomDocument;
 class QXmlSimpleReader;
 class QUndoCommand;
-
+//
 class KoStore;
 class KoMainWindow;
-
+//
 class KoChild;
 class KoDocumentChild;
 class KoView;
 class KoDocumentInfo;
-// class DCOPObject;
+//   // class DCOPObject;
 class KoOasisStyles;
-class KoXmlWriter;
+//   class KoXmlWriter;
 class KoOpenPane;
 
 
@@ -812,12 +810,6 @@ public:
      * @return returns the number of pages in the document.
      */
     virtual int pageCount() const { return 1; }
-
-    /**
-     * @return all kotext-based text objects in the document
-     * This is used by some text-analyzer plugins.
-     */
-    virtual QList<KoTextDocument *> allTextDocuments() const;
 
     /**
      * Returns the unit used to display all measures/distances.

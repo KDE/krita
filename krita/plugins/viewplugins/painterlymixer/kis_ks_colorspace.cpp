@@ -102,14 +102,14 @@ bool KisKSColorSpace::profileIsCompatible(KoColorProfile* profile) const
 void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector<float> &B)
 {
 	const float MAX_RATIO = 100000000.0;
-	const int rows = 3 + X.size() + X.size() + 1;
-	const int cols = X.size() + X.size() + X.size() + 1 + 1;
+	const uint rows = 3 + X.size() + X.size() + 1;
+	const uint cols = X.size() + X.size() + X.size() + 1 + 1;
 	gmm::dense_matrix<float> M(rows, cols);
 
 	gmm::clear(M);
 
-	for (int i = 0; i < 3; i++) {
-		for (unsigned int j = 0; j < X.size(); j++) {
+	for (uint i = 0; i < 3; i++) {
+		for (uint j = 0; j < X.size(); j++) {
 			M(i, j) = M_1(i, j);
 		}
 		M(i, cols-1) = B[i];
@@ -127,20 +127,14 @@ void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector
 
 	M(rows-1, cols-2) = 1;
 
-// 	{
-// 		cout << M << endl;
-// 		string s;
-// 		cin >> s;
-// 	}
-
 	// Transform to a standard maximization problem
 	while ( true ) {
 		float max = 0.0;
 		float ratio, ratio_min = MAX_RATIO;
 		int i_starred = -1, i_pivot = -1, j_pivot = -1;
-		for (int j = 0; j < cols-1; j++) {
-			int count = 0, i_useful;
-			for (int i = 0; i < rows; i++) {
+		for (uint j = 0; j < cols-1; j++) {
+			uint count = 0, i_useful;
+			for (uint i = 0; i < rows; i++) {
 				if (M(i, j) != 0.0) {
 					i_useful = i;
 					count++;
@@ -155,9 +149,9 @@ void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector
 		if (i_starred < 0)
 			break;
 
-		for (int j = 0; j < cols-1; j++) {
+		for (uint j = 0; j < cols-1; j++) {
 			if (M(i_starred, j) > max) {
-				for (int i = 0; i < rows; i++) {
+				for (uint i = 0; i < rows; i++) {
 					if (M(i, j) <= 0)
 						continue;
 					ratio = M(i, cols-1) / M(i, j);
@@ -179,7 +173,7 @@ void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector
 				continue;
 			float sour = M(i_pivot, j_pivot);
 			float dest = M(i, j_pivot);
-			for (int j = 0; j < cols; j++) {
+			for (uint j = 0; j < cols; j++) {
 				if (j == j_pivot) {
 					M(i, j) = 0;
 					continue;
@@ -189,19 +183,13 @@ void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector
 		}
 	}
 
-// 	{
-// 		cout << M << endl;
-// 		string s;
-// 		cin >> s;
-// 	}
-
 	while ( true ) {
 		float min = 0.0;
 		float ratio, ratio_min = MAX_RATIO;
 		int i_pivot = -1, j_pivot = -1;
-		for (int j = 0; j < cols-1; j++) {
+		for (uint j = 0; j < cols-1; j++) {
 			if (M(rows-1, j) < min) {
-				for (int i = 0; i < rows-1; i++) {
+				for (uint i = 0; i < rows-1; i++) {
 					if (M(i, j) <= 0)
 						continue;
 					ratio = M(i, cols-1) / M(i, j);
@@ -223,7 +211,7 @@ void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector
 				continue;
 			float sour = M(i_pivot, j_pivot);
 			float dest = M(i, j_pivot);
-			for (int j = 0; j < cols; j++) {
+			for (uint j = 0; j < cols; j++) {
 				if (j == j_pivot) {
 					M(i, j) = 0;
 					continue;
@@ -233,9 +221,9 @@ void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector
 		}
 	}
 
-	for (unsigned int j = 0; j < X.size(); j++) {
+	for (uint j = 0; j < X.size(); j++) {
 		int count = 0, i_useful;
-		for (int i = 0; i < rows; i++) {
+		for (uint i = 0; i < rows; i++) {
 			if (M(i, j) != 0.0) {
 				i_useful = i;
 				count++;
@@ -340,13 +328,12 @@ double acoth(float z)
 	return 0.5*log((1 + 1/z) / (1 - 1/z));
 }
 
-void computeKS(const vector<float> &vREF_const, vector<float> &vKS)
+void computeKS(const vector<float> &vREF, vector<float> &vKS)
 {
-	vector<float> vREF = vREF_const;
 	vector<float>::iterator i = vKS.begin();
-	for (vector<float>::iterator j = vREF.begin(); j != vREF.end(); i += 2, j++) {
-// 		if ((*j) > 0.999) { kDebug() << "TROPPO GRANDE  " << (*j) << endl; (*j) = 0.999; }
-// 		if ((*j) < 0.001) { kDebug() << "TROPPO PICCOLO " << (*j) << endl; (*j) = 0.001; }
+	for (vector<float>::iterator j = const_cast<vector<float>&>(vREF).begin(); j != vREF.end(); i += 2, j++) {
+		if ((*j) > 0.999) (*j) = 0.999;
+		if ((*j) < 0.001) (*j) = 0.001;
 
 		float c_b = (*j) - 0.0001;
 
@@ -362,15 +349,14 @@ void computeKS(const vector<float> &vREF_const, vector<float> &vKS)
 
 void KisKSColorSpace::fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
 {
-// 	kDebug() << "ALWAYS HERE!" << endl;
 	const quint32 ncols = m_profile->matrix().ncols();
 	const quint16 *src16 = reinterpret_cast<const quint16 *>(srcU8);
 	float *dstf = reinterpret_cast<float *>(dstU8);
 
-	for (quint32 i = 0; i < nPixels; i++) {
-		double XYZ[3];
-		vector<float> vXYZ(3), vREF(ncols), vKS(2*ncols);
+	double XYZ[3];
+	vector<float> vXYZ(3), vREF(ncols), vKS(2*ncols);
 
+	for (quint32 i = 0; i < nPixels; i++) {
 		cmsDoTransform(BGR_XYZ, const_cast<quint16*>(src16), XYZ, 1);
 
 		for (quint32 j = 0; j < 3; j++) vXYZ[j] = XYZ[j];
@@ -412,10 +398,10 @@ void KisKSColorSpace::toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPi
 	const float *srcf = reinterpret_cast<const float *>(srcU8);
 	quint16 *dst16 = reinterpret_cast<quint16 *>(dstU8);
 
-	for (quint32 i = 0; i < nPixels; i++) {
-		double XYZ[3];
-		vector<float> vXYZ(3), vREF(ncols), vKS(2*ncols);
+	double XYZ[3];
+	vector<float> vXYZ(3), vREF(ncols), vKS(2*ncols);
 
+	for (quint32 i = 0; i < nPixels; i++) {
 		for (quint32 j = 0; j < 2*ncols; j++) vKS[j] = srcf[j];
 
 		uint hash = qHash(vKS);

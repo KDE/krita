@@ -39,7 +39,20 @@ class KoColorProfile;
 class KoColorSpaceRegistry;
 class KisIlluminantProfile;
 
-typedef KoColorSpaceTrait<float, 21, 20> KSFloatTraits;
+template<typename _channels_type_>
+struct KisKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 21, 20> {
+
+	struct Cell {
+		struct {
+			_channels_type_ absorption;
+			_channels_type_ scattering;
+		} wavelen[10];
+		_channels_type_ alpha;
+	};
+
+};
+
+typedef KisKSColorSpaceTraits<float> KSFloatTraits;
 
 class KisKSColorSpace : public KoIncompleteColorSpace<KSFloatTraits, KoRGB16Fallback>
 {

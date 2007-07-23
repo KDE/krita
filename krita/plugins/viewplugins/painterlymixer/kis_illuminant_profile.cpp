@@ -69,7 +69,7 @@ bool KisIlluminantProfile::loadCurve(QTextStream &in_ill)
 {
 	QString cie = KGlobal::mainComponent().dirs()->locate("kis_illuminants", "CIEXYZ10deg.txt");
 	QFile f_xyz(cie);
-	QString str_cols, str_first_wl, str_last_wl, str_proportion, str_curr;
+	QString str_first_wl, str_last_wl, str_proportion, str_curr;
 	int cols, first_wl, last_wl;
 	float proportion, curr;
 
@@ -77,8 +77,8 @@ bool KisIlluminantProfile::loadCurve(QTextStream &in_ill)
 		QTextStream in_xyz(&f_xyz);
 // 		in_xyz.setCodec(QTextCodec::codecForName("ISO 8859-1"));
 
-		in_ill >> str_cols >> str_first_wl >> str_last_wl >> str_proportion;
-		cols = str_cols.toInt();
+		in_ill >> str_first_wl >> str_last_wl >> str_proportion;
+		cols = 10;
 		first_wl = str_first_wl.toInt();
 		last_wl = str_last_wl.toInt();
 		proportion = str_proportion.toFloat();
@@ -145,10 +145,7 @@ bool KisIlluminantProfile::loadCurve(QTextStream &in_ill)
 
 bool KisIlluminantProfile::loadMatrix(QTextStream &in_ill)
 {
-	QString str_cols;
-	int cols;
-	in_ill >> str_cols;
-	cols = str_cols.toInt();
+	int cols = 10;
 	gmm::resize(m_matrix, 3, cols);
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; i < cols; j++)
@@ -168,7 +165,6 @@ bool KisIlluminantProfile::save(QString fileName)
 		QTextStream out_ill(&f_ill);
 
 		out_ill << 1 << endl;
-		out_ill << cols << endl;
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < cols - 1; j++)
 				out_ill << m_matrix(i, j) << " ";

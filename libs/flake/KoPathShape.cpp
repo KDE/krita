@@ -457,8 +457,8 @@ void KoPathShape::setSize( const QSizeF &newSize )
     QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
 
     //qDebug() << "setSize" << zoomX << "," << zoomY << "," << newSize;
-    map( matrix );
     KoShape::setSize( newSize );
+    map( matrix );
 }
 
 KoPathPoint * KoPathShape::moveTo( const QPointF &p )

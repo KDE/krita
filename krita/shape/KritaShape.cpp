@@ -41,10 +41,8 @@ public:
 };
 
 KritaShape::KritaShape(const KUrl& url, const QString & profileName)
-    : QObject()
-    , KoShape()
+    : m_d( new Private())
 {
-    m_d = new Private();
     m_d->url = url;
     m_d->doc = 0;
     if ( !url.isEmpty() ) {
@@ -95,6 +93,8 @@ void KritaShape::paint( QPainter& painter, const KoViewConverter& converter )
         painter.drawImage(paintRect.toRect(), qimg);
 
     }
+    else if(m_d->doc == 0)
+        tryLoadFromImageData(dynamic_cast<KoImageData*> (KoShape::userData()));
 }
 
 void KritaShape::setDisplayProfile( const QString & profileName ) {
@@ -115,14 +115,31 @@ void KritaShape::waitUntilReady() const {
 
     KoImageData *data = dynamic_cast<KoImageData*> (KoShape::userData());
     if(data == 0 || !data->imageLocation().isValid())
-        return; // no data available at all.
+        return; // no data available at all, so don't try to wait later on.
 
     KritaShape *me = const_cast<KritaShape*> (this);
 
     m_mutex.lock();
-    me->importImage(data->imageLocation());
+    me->tryLoadFromImageData(data);
     m_waiter.wait(&m_mutex);
     m_mutex.unlock();
+}
+
+void KritaShape::tryLoadFromImageData(KoImageData *data) {
+    if(data == 0)
+        return;
+    KUrl url = data->imageLocation();
+    QImage image = data->image();
+    if(url.isEmpty() || image.isNull())
+        return;
+    delete m_d->doc;
+    m_d->doc = new KisDoc2(0, 0, false);
+    connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+    if(! url.isEmpty())
+        m_d->doc->openURL(url);
+    else {
+        // TODO load from the QImage. (make sure sigLoadingFinished is emitted afterwards!)
+    }
 }
 
 #include "KritaShape.moc"

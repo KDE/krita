@@ -25,6 +25,7 @@
 
 class QString;
 class KUrl;
+class KoImageData;
 
 #include <QWaitCondition>
 #include <QMutex>
@@ -81,9 +82,13 @@ private slots:
     void slotLoadingFinished();
 
 private:
+    /// will initiate a load of the image data.
+    void tryLoadFromImageData(KoImageData *data);
+
+private:
 
     class Private;
-    Private * m_d;
+    Private * const m_d;
 
     mutable QMutex m_mutex;
     mutable QWaitCondition m_waiter;

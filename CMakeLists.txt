@@ -17,14 +17,18 @@ find_package(KdepimLibs REQUIRED)
 find_package(LCMS REQUIRED)
 find_package(PNG REQUIRED)
 find_package(Eigen)
+macro_optional_find_package(Boost)
 macro_optional_find_package(QCA2)
 macro_optional_find_package(Exif)
 macro_optional_find_package(LibArt)
 macro_optional_find_package(Freetype)
 macro_optional_find_package(Fontconfig)
+
 macro_log_feature(EIGEN_FOUND "Eigen" "Eigen is needed by KSpread, KSpread won't be built" "http://eigen.tuxfamily.org" TRUE "1.0.5")
 
 macro_log_feature(QCA2_FOUND "libqca2" "QCA2 is needed to compile support for encrypted OpenDocument files" "Module into kdesupport" FALSE "2.0" "" )
+
+macro_log_feature(BOOST_FOUND "libboost-dev" "Boost is needed by KPresenter. KPresenter will not be built" "http://www.boost.org" TRUE "")
 
 if (APPLE)
    find_package(Carbon REQUIRED)
@@ -120,7 +124,12 @@ else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
                         "   lcms 1.15 or newer (http://www.littlecms.com/)")
 endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
-
+#Check if build kpresenter here to be able to test if we can build filters/kpresenter
+if(BOOST_FOUND)
+    set(SHOULD_BUILD_KPRESENTER TRUE)
+else(BOOST_FOUND)
+    set(SHOULD_BUILD_KPRESENTER FALSE)
+endif(BOOST_FOUND)
 
 add_subdirectory(libs)
 MESSAGE(STATUS "Before koffice-2.0 disable compile of example subdir, not necessary for official release")
@@ -148,6 +157,10 @@ if(SHOULD_BUILD_KSPREAD)
     macro_optional_add_subdirectory(kspread)
 endif(SHOULD_BUILD_KSPREAD)
 
+if(SHOULD_BUILD_KPRESENTER)
+    macro_optional_add_subdirectory(kpresenter)
+endif(SHOULD_BUILD_KPRESENTER)
+
 macro_optional_add_subdirectory(kdgantt1)
 macro_optional_add_subdirectory(kdgantt)
 # macro_optional_add_subdirectory(kchart)
@@ -162,7 +175,6 @@ macro_optional_add_subdirectory(kivio)
 #macro_optional_add_subdirectory(koshell)
 macro_optional_add_subdirectory(kounavail)
 macro_optional_add_subdirectory(kplato)
-macro_optional_add_subdirectory(kpresenter)
 macro_optional_add_subdirectory(krita)
 macro_optional_add_subdirectory(kugar)
 macro_optional_add_subdirectory(kword)

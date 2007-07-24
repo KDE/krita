@@ -32,7 +32,7 @@
 
 struct KisFilterDialog::Private {
     Private() : currentCentralWidget(0), currentFilterConfigurationWidget(0),
-            currentFilter(0), layer(0), mask(0)
+            currentFilter(0), layer(0), mask(0), currentBookmarkedFilterConfigurationsModel(0)
     {
     }
     ~Private()
@@ -48,6 +48,7 @@ struct KisFilterDialog::Private {
     Ui_FilterDialog uiFilterDialog;
     KisFilterMaskSP mask;
     QGridLayout *widgetLayout;
+    KisBookmarkedFilterConfigurationsModel* currentBookmarkedFilterConfigurationsModel;
 };
 
 KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
@@ -61,6 +62,7 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     d->thumb = layer->paintDevice()->createThumbnailDevice(100, 100);
     d->mask = new KisFilterMask();
     d->layer->setPreviewMask( d->mask );
+    connect(d->uiFilterDialog.comboBoxPresets, SIGNAL(activated ( int )), SLOT(slotBookmarkedFilterConfigurationSelected(int )) );
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed ()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed ()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed ()), SLOT(apply()));
@@ -87,7 +89,9 @@ void KisFilterDialog::setFilter(KisFilterSP f)
         d->currentFilterConfigurationWidget->setConfiguration( d->currentFilter->defaultConfiguration( d->layer->paintDevice() ) );
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigPleaseUpdatePreview()), SLOT(updatePreview()));
     }
-    d->uiFilterDialog.comboBoxPresets->setModel( new KisBookmarkedFilterConfigurationsModel(d->thumb, f )  );
+    delete d->currentBookmarkedFilterConfigurationsModel;
+    d->currentBookmarkedFilterConfigurationsModel = new KisBookmarkedFilterConfigurationsModel(d->thumb, f );
+    d->uiFilterDialog.comboBoxPresets->setModel(  d->currentBookmarkedFilterConfigurationsModel );
     d->widgetLayout->addWidget( d->currentCentralWidget, 0 , 0);
     d->uiFilterDialog.centralWidgetHolder->setMinimumSize( d->currentCentralWidget->minimumSize() );
     updatePreview();
@@ -116,6 +120,16 @@ void KisFilterDialog::apply()
         config = d->currentFilterConfigurationWidget->configuration();
     }
     emit(sigPleaseApplyFilter(d->layer, config));
+}
+
+void KisFilterDialog::slotBookmarkedFilterConfigurationSelected(int index)
+{
+    if(d->currentFilterConfigurationWidget)
+    {
+        QModelIndex modelIndex = d->currentBookmarkedFilterConfigurationsModel->index(index,0);
+        KisFilterConfiguration* config  = d->currentBookmarkedFilterConfigurationsModel->configuration( modelIndex );
+        d->currentFilterConfigurationWidget->setConfiguration( config );
+    }
 }
 
 #include "kis_filter_dialog.moc"

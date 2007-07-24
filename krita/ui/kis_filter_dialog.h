@@ -37,6 +37,7 @@ class KisFilterDialog : public QDialog {
     public slots:
         void updatePreview();
     protected slots:
+        void slotBookmarkedFilterConfigurationSelected(int );
         void apply();
     signals:
         void sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*);

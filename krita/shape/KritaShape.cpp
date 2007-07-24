@@ -23,14 +23,17 @@
 #include <QVBoxLayout>
 #include <QCoreApplication>
 
+#include <klocale.h>
 #include <kdebug.h>
 
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
 #include <KoImageData.h>
 
 #include "kis_image.h"
 #include "kis_doc2.h"
+#include "kis_group_layer.h"
 
 class KritaShape::Private
 {
@@ -50,7 +53,7 @@ KritaShape::KritaShape(const KUrl& url, const QString & profileName)
     }
     m_d->displayProfile = KoColorSpaceRegistry::instance()->profileByName(profileName);
     setKeepAspectRatio(true);
-    moveToThread(QCoreApplication::instance()->thread()); // its a QObject; lets me sure it always has a proper thread.
+    moveToThread(QCoreApplication::instance()->thread()); // it's a QObject; lets make sure it always has a proper thread.
 }
 
 KritaShape::~KritaShape()
@@ -126,19 +129,40 @@ void KritaShape::waitUntilReady() const {
 }
 
 void KritaShape::tryLoadFromImageData(KoImageData *data) {
+
     if(data == 0)
         return;
+
     KUrl url = data->imageLocation();
     QImage image = data->image();
+
     if(url.isEmpty() || image.isNull())
         return;
+
     delete m_d->doc;
+
     m_d->doc = new KisDoc2(0, 0, false);
+
     connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+
     if(! url.isEmpty())
         m_d->doc->openURL(url);
     else {
-        // TODO load from the QImage. (make sure sigLoadingFinished is emitted afterwards!)
+        // Create an empty image
+        KisImageSP img = m_d->doc->newImage(i18n( "Converted from KoImageData" ), image.width(), image.height(), 0 );
+
+        // Convert the QImage to a paint device
+        img->rootLayer()->firstChild()->paintDevice()->convertFromQImage( image, "", 0, 0 );
+
+        slotLoadingFinished();
+    }
+}
+
+QImage KritaShape::convertToQImage()
+{
+    if ( m_d->doc && m_d->doc->image() ) {
+        KisImageSP img = m_d->doc->image();
+        return img->convertToQImage( 0, 0, img->width(), img->height(), m_d->displayProfile );
     }
 }
 

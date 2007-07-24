@@ -20,6 +20,8 @@
 #include <QGridLayout>
 #include <QToolButton>
 #include <QLabel>
+#include <QImage>
+#include <QAction>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -29,6 +31,7 @@
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoImageData.h>
 
 #include "KritaShape.h"
 
@@ -61,6 +64,20 @@ void KritaShapeTool::activate (bool temporary)
         emit done();
         return;
     }
+
+    // Create an action to set the krita shape to a simple qimage
+    // shape.
+    // XXX: find better description!
+    QAction * action = new QAction(i18n("Convert Color Managed Image to unmanaged Image"), this);
+    addAction("convert_to_qimage", action);
+    action->setToolTip( i18n( "Remove color management from this image and convert to RGB." ) );
+    connect(action, SIGNAL(triggered()), this, SLOT( textDefaultFormat() ));
+
+    // setup the context list.
+    QList<QAction*> list;
+    list.append(this->action("convert_to_qimage"));
+    setPopupActionList(list);
+
     useCursor( Qt::ArrowCursor, true );
 }
 
@@ -115,3 +132,16 @@ void KritaShapeTool::slotChangeUrl()
         m_kritaShapeshape->importImage(url);
 }
 
+void KritaShapeTool::slotConvertToQImage()
+{
+    QImage img = m_kritaShapeshape->convertToQImage();
+
+    // XXX: is it okay to create a new constructor which takes a
+    // QImage on KoImageData?
+    //KoImageData * imageData = new KoImageData( img );
+
+    // XXX: or should we delete the krita shape, create a picture
+    // shape and set the imageData object on that?
+    //m_kritaShapeshape->KoShape::setUserData( imageData );
+
+}

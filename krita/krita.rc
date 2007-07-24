@@ -190,6 +190,8 @@
  <Action name="copy"/>
  <Action name="paste"/>
  <Action name="paste_new"/>
+ <Separator/>
+ <ActionList name="flake_tool_actions"/>
 </Menu>
 
 </kpartgui>

@@ -31,6 +31,7 @@
 #include <QPoint>
 
 #include <kdebug.h>
+#include <kxmlguifactory.h>
 
 #include "KoToolProxy.h"
 #include "KoToolManager.h"
@@ -303,6 +304,14 @@ void KisOpenGLCanvas2::mouseMoveEvent(QMouseEvent *e) {
 
 void KisOpenGLCanvas2::mousePressEvent(QMouseEvent *e) {
     m_d->toolProxy->mousePressEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+    if(e->button() == Qt::RightButton) {
+        m_d->canvas->view()->unplugActionList( "flake_tool_actions" );
+        m_d->canvas->view()->plugActionList( "flake_tool_actions",
+                                m_d->toolProxy->popupActionList() );
+        QMenu *menu = dynamic_cast<QMenu*> (m_d->canvas->view()->factory()->container("FlakePopup", m_d->canvas->view()));
+        if(menu)
+            menu->exec( e->globalPos() );
+    }
 }
 
 void KisOpenGLCanvas2::mouseReleaseEvent(QMouseEvent *e) {

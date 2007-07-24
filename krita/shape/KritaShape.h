@@ -77,6 +77,8 @@ public:
     void setDisplayProfile( const QString & profileName );
     void importImage( const KUrl & url );
 
+    QImage convertToQImage();
+
 private slots:
 
     void slotLoadingFinished();

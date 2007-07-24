@@ -28,8 +28,10 @@
 #include <QTime>
 #include <QPixmap>
 #include <QApplication>
+#include <QMenu>
 
 #include <kdebug.h>
+#include <kxmlguifactory.h>
 
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
@@ -233,6 +235,14 @@ void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e) {
 
 void KisQPainterCanvas::mousePressEvent(QMouseEvent *e) {
     m_d->toolProxy->mousePressEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+    if(e->button() == Qt::RightButton) {
+        m_d->canvas->view()->unplugActionList( "flake_tool_actions" );
+        m_d->canvas->view()->plugActionList( "flake_tool_actions",
+                                m_d->toolProxy->popupActionList() );
+        QMenu *menu = dynamic_cast<QMenu*> (m_d->canvas->view()->factory()->container("FlakePopup", m_d->canvas->view()));
+        if(menu)
+            menu->exec( e->globalPos() );
+    }
 }
 
 void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e) {

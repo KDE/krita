@@ -47,6 +47,10 @@ protected slots:
 
    void slotChangeUrl();
 
+private slots:
+
+   void slotConvertToQImage();
+
 private:
     KritaShape *m_kritaShapeshape;
 };

@@ -131,7 +131,7 @@ QString KoImageData::storeHref() const {
     return d->storeHref;
 }
 
-bool KoImageData::loadFromStore(QIODevice *device) {
+bool KoImageData::loadFromFile(QIODevice *device) {
     struct Finally {
         Finally(QIODevice *d) : device (d), bytes(0) {}
         ~Finally() {
@@ -142,6 +142,11 @@ bool KoImageData::loadFromStore(QIODevice *device) {
         char *bytes;
     };
     Finally finally(device);
+
+    // remove prev data
+    delete d->tempImageFile;
+    d->tempImageFile = 0;
+    d->image = QImage();
 
     if(device->size() > 25E4) { // larger than 250Kb, save to tmp file.
         d->tempImageFile = new KTemporaryFile();
@@ -166,7 +171,7 @@ bool KoImageData::loadFromStore(QIODevice *device) {
                 }
                 bytes -= written;
             }
-            if(failed) { // read or write failed; so lets clealy abort.
+            if(failed) { // read or write failed; so lets cleanly abort.
                 delete d->tempImageFile;
                 d->tempImageFile = 0;
                 return false;
@@ -186,4 +191,3 @@ bool KoImageData::loadFromStore(QIODevice *device) {
 const QImage KoImageData::image() const {
     return d->image;
 }
-

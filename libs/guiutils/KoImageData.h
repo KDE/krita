@@ -122,7 +122,7 @@ public:
      * @para device the device that is used to get the data from.
      * @return returns true if load was successful.
      */
-    bool loadFromStore(QIODevice *device);
+    bool loadFromFile(QIODevice *device);
 
     bool operator==(const KoImageData &other) {
         return other.d == d;

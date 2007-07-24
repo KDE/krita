@@ -136,7 +136,7 @@ void KritaShape::tryLoadFromImageData(KoImageData *data) {
     KUrl url = data->imageLocation();
     QImage image = data->image();
 
-    if(url.isEmpty() || image.isNull())
+    if(url.isEmpty() && image.isNull())
         return;
 
     delete m_d->doc;
@@ -164,6 +164,7 @@ QImage KritaShape::convertToQImage()
         KisImageSP img = m_d->doc->image();
         return img->convertToQImage( 0, 0, img->width(), img->height(), m_d->displayProfile );
     }
+    return QImage();
 }
 
 #include "KritaShape.moc"

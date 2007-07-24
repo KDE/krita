@@ -1544,13 +1544,13 @@ QBrush KoOasisStyles::loadOasisGradientStyle( const KoStyleStack &styleStack, co
 
     if( e->namespaceURI() == KoXmlNS::draw && e->localName() == "gradient" )
     {
-        QString type = e->attributeNS( KoXmlNS::draw, "style", QString::null );
+        QString type = e->attributeNS( KoXmlNS::draw, "style", QString() );
         if( type == "radial" )
         {
             QRadialGradient * rg = new QRadialGradient();
             // TODO : find out whether Oasis works with boundingBox only?
-            double cx = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cx", QString::null ).remove("%") );
-            double cy = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cy", QString::null ).remove("%") );
+            double cx = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cx", QString() ).remove("%") );
+            double cy = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cy", QString() ).remove("%") );
             rg->setCenter( QPointF( size.width() * 0.01 * cx, size.height() * 0.01 * cy ) );
             rg->setFocalPoint( rg->center() );
             double dx = 0.5 * size.width();
@@ -1574,12 +1574,12 @@ QBrush KoOasisStyles::loadOasisGradientStyle( const KoStyleStack &styleStack, co
 
         QGradientStop start;
         start.first = 0.0;
-        start.second = QColor( e->attributeNS( KoXmlNS::draw, "start-color", QString::null ) );
+        start.second = QColor( e->attributeNS( KoXmlNS::draw, "start-color", QString() ) );
         start.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "start-intensity", "100" ).remove("%").toDouble() );
 
         QGradientStop end;
         end.first = 1.0;
-        end.second = QColor( e->attributeNS( KoXmlNS::draw, "end-color", QString::null ) );
+        end.second = QColor( e->attributeNS( KoXmlNS::draw, "end-color", QString() ) );
         end.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove("%").toDouble() );
 
         QGradientStops stops;
@@ -1591,10 +1591,10 @@ QBrush KoOasisStyles::loadOasisGradientStyle( const KoStyleStack &styleStack, co
         {
             QLinearGradient * lg = new QLinearGradient();
             QPointF start, stop;
-            start.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "x1", QString::null ) ) );
-            start.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "y1", QString::null ) ) );
-            stop.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "x2", QString::null ) ) );
-            stop.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "y2", QString::null ) ) );
+            start.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "x1", QString() ) ) );
+            start.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "y1", QString() ) ) );
+            stop.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "x2", QString() ) ) );
+            stop.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "y2", QString() ) ) );
             lg->setStart( start );
             lg->setFinalStop( stop );
             gradient = lg;
@@ -1603,11 +1603,11 @@ QBrush KoOasisStyles::loadOasisGradientStyle( const KoStyleStack &styleStack, co
         {
             QRadialGradient * rg = new QRadialGradient();
             QPointF center, focalPoint;
-            center.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "cx", QString::null ) ) );
-            center.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "cy", QString::null ) ) );
-            double r = KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "r", QString::null ) );
-            focalPoint.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "fx", QString::null ) ) );
-            focalPoint.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "fy", QString::null ) ) );
+            center.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "cx", QString() ) ) );
+            center.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "cy", QString() ) ) );
+            double r = KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "r", QString() ) );
+            focalPoint.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "fx", QString() ) ) );
+            focalPoint.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "fy", QString() ) ) );
             rg->setCenter( center );
             rg->setFocalPoint( focalPoint );
             rg->setRadius( r );
@@ -1635,7 +1635,7 @@ QBrush KoOasisStyles::loadOasisGradientStyle( const KoStyleStack &styleStack, co
                 if( colorstop.namespaceURI() == KoXmlNS::svg && colorstop.localName() == "stop" )
                 {
                     QGradientStop stop;
-                    stop.second = QColor( colorstop.attributeNS( KoXmlNS::svg, "color", QString::null ) );
+                    stop.second = QColor( colorstop.attributeNS( KoXmlNS::svg, "color", QString() ) );
                     stop.second.setAlphaF( colorstop.attributeNS( KoXmlNS::svg, "stop-opacity", "1.0" ).toDouble() );
                     stop.first = colorstop.attributeNS( KoXmlNS::svg, "offset", "0.0" ).toDouble();
                     stops.append( stop );

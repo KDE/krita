@@ -347,7 +347,14 @@ void KoInteractionTool::paint( QPainter &painter, const KoViewConverter &convert
 }
 
 void KoInteractionTool::mousePressEvent( KoPointerEvent *event ) {
-    Q_ASSERT(m_currentStrategy == 0);
+    if(m_currentStrategy) { // possible if the user presses an extra mouse button
+        m_currentStrategy->cancelInteraction();
+        delete m_currentStrategy;
+        m_currentStrategy = 0;
+        event->accept();
+        updateCursor();
+        return;
+    }
     m_currentStrategy = KoInteractionStrategy::createStrategy(event, this, m_canvas);
     d->moveCommand = 0;
     updateCursor();

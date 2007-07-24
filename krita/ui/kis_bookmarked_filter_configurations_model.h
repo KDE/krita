@@ -25,11 +25,25 @@
 
 class KisFilterConfiguration;
 
+/**
+ * Use this model to get the list of configuration for a Filter.
+ */
 class KisBookmarkedFilterConfigurationsModel : public KisBookmarkedConfigurationsModel {
     public:
+        /**
+         * @param thumb a 100x100 thumbnail used to preview the filters
+         * @param filter the filter
+         */
         KisBookmarkedFilterConfigurationsModel(KisPaintDeviceSP thumb, KisFilterSP filter);
         ~KisBookmarkedFilterConfigurationsModel();
+        /**
+         * Calling this method with role == Qt::DecorationRole will return a 100x100
+         * thumbnail.
+         */
         virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+        /**
+         * @return the filter configuration
+         */
         KisFilterConfiguration* configuration(const QModelIndex &index) const;
     private:
         struct Private;

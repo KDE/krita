@@ -24,12 +24,30 @@
 class KisBookmarkedConfigurationManager;
 class KisSerializableConfiguration;
 
+/**
+ * This class provides basic functionnalities for a model of a bookmark
+ * of configurations.
+ */
 class KisBookmarkedConfigurationsModel : public QAbstractListModel {
     public:
+        /**
+         * Initialized thee model with the bookmarks manager
+         */
         KisBookmarkedConfigurationsModel(KisBookmarkedConfigurationManager*);
         ~KisBookmarkedConfigurationsModel();
+        /**
+         * @return the number of configurations (the minimum is allways 2, the default
+         * configuration and the last used configuration are allways present)
+         */
         virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+        /**
+         * When role == Qt::DisplayRole, this function will return the name of the
+         * configuration.
+         */
         virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+        /**
+         * @return the configuration at the given index
+         */
         KisSerializableConfiguration* configuration(const QModelIndex &index) const;
     private:
         struct Private;

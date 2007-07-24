@@ -26,9 +26,9 @@
 #include "KoPictureShared.h"
 #include "KoOasisLoadingContext.h"
 
-#include <QBrush>
-#include <QBuffer>
-#include <QPen>
+#include <QtGui/QBrush>
+#include <QtCore/QBuffer>
+#include <QtGui/QPen>
 
 #include <kdebug.h>
 #include <kglobal.h>

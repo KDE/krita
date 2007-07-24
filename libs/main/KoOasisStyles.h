@@ -20,8 +20,7 @@
 #ifndef KOOASISSTYLES_H
 #define KOOASISSTYLES_H
 
-#include <QHash>
-#include <QtXml>
+#include <QtCore/QHash>
 
 #include <komain_export.h>
 #include <KoXmlReader.h>
@@ -29,6 +28,8 @@
 class KoGenStyles;
 class KoXmlWriter;
 class QBrush;
+class QPen;
+class QSizeF;
 class KoGenStyle;
 class KoStyleStack;
 class KoOasisLoadingContext;

@@ -24,6 +24,7 @@
 #include <QPainter>
 //Added by qt3to4:
 #include <QPixmap>
+#include <Q3DragObject>
 
 #include <kdebug.h>
 #include <kurl.h>

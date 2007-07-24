@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +23,8 @@
 #include "KoGenStyles.h"
 #include "KoXmlNS.h"
 #include "KoUnit.h"
+#include "KoPictureShared.h"
+#include "KoOasisLoadingContext.h"
 
 #include <QBrush>
 #include <QBuffer>
@@ -34,6 +37,8 @@
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 
 #include <math.h>
 
@@ -1789,6 +1794,64 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
     }
 
     return tmpBrush;
+}
+
+QBrush KoOasisStyles::loadOasisPatternStyle( const KoStyleStack &styleStack, KoOasisLoadingContext & context )
+{
+    QString styleName = styleStack.property( KoXmlNS::draw, "fill-image-name" );
+
+    KoXmlElement* e = context.oasisStyles().drawStyles()[styleName];
+    if( ! e )
+        return QBrush();
+
+    const QString href = e->attributeNS( KoXmlNS::xlink, "href", QString() );
+
+    if( href.isEmpty() )
+        return QBrush();
+
+    QString strExtension;
+    const int result=href.lastIndexOf(".");
+    if (result>=0)
+    {
+        strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
+    }
+    QString filename(href);
+
+    KoPictureShared picture;
+    KoStore* store = context.store();
+    if ( store->open( filename ) )
+    {
+        KoStoreDevice dev(store);
+        if ( ! picture.load( &dev, strExtension ) )
+            kWarning() << "Cannot load picture: " << filename << " " << href << endl;
+        store->close();
+    }
+
+    QSize imageSize = picture.getOriginalSize();
+
+    // optional attributes which can override original image size
+    if( e->hasAttributeNS( KoXmlNS::draw, "fill-image-height" ) && e->hasAttributeNS( KoXmlNS::draw, "fill-image-width" ) )
+    {
+        QString height = e->attributeNS( KoXmlNS::draw, "fill-image-height", QString() );
+        double newHeight = 0.0;
+        if( height.endsWith( '%' ) )
+            newHeight = 0.01 * height.remove( "%" ).toDouble() * imageSize.height();
+        else
+            newHeight = KoUnit::parseValue( height );
+        QString width = e->attributeNS( KoXmlNS::draw, "fill-image-width", QString() );
+        double newWidth = 0.0;
+        if( width.endsWith( '%' ) )
+            newWidth = 0.01 * width.remove( "%" ).toDouble() * imageSize.width();
+        else
+            newWidth = KoUnit::parseValue( width );
+        if( newHeight > 0.0 )
+            imageSize.setHeight( static_cast<int>( newHeight ) );
+        if( newWidth > 0.0 )
+            imageSize.setWidth( static_cast<int>( newWidth ) );
+    }
+
+    QBrush resultBrush( picture.generatePixmap( imageSize ) );
+    return resultBrush;
 }
 
 QPen KoOasisStyles::loadOasisStrokeStyle( const KoStyleStack &styleStack, const QString & stroke, const KoOasisStyles & oasisStyles )

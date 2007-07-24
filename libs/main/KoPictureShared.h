@@ -30,7 +30,7 @@
 class KoXmlWriter;
 class QPainter;
 class QSize;
-
+class Q3DragObject;
 
 class KoPictureBase;
 

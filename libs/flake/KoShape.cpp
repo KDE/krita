@@ -729,6 +729,8 @@ QBrush KoShape::loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext
         return KoOasisStyles::loadOasisFillStyle( styleStack, fill, context.koLoadingContext().oasisStyles() );
     else if( fill == "gradient" )
         return KoOasisStyles::loadOasisGradientStyle( styleStack, context.koLoadingContext().oasisStyles(), size() );
+    else if( fill == "bitmap" )
+        return KoOasisStyles::loadOasisPatternStyle( styleStack, context.koLoadingContext() );
 
     return QBrush();
 }

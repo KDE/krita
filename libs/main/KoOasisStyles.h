@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,6 +31,7 @@ class KoXmlWriter;
 class QBrush;
 class KoGenStyle;
 class KoStyleStack;
+class KoOasisLoadingContext;
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -153,6 +155,9 @@ public:
     static QString saveOasisGradientStyle( KoGenStyles &mainStyles, const QBrush &brush );
     /// Loads gradient style from style stack and oasisStyles adapted to the given size and returns a brush
     static QBrush loadOasisGradientStyle( const KoStyleStack &styleStack, const KoOasisStyles & oasisStyles, const QSizeF &size );
+
+    /// Loads pattern style from style stack and oasisstyle
+    static QBrush loadOasisPatternStyle( const KoStyleStack &styleStack, KoOasisLoadingContext & context );
 
     static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOasisStyles & oasisStyles );
 

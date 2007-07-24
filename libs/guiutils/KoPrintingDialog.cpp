@@ -99,10 +99,10 @@ public:
         pageNumber->setText(i18n("Printing done"));
         button->setText(i18n("Close"));
         stop = true;
-        QTimer::singleShot(12000, parent, SLOT(accept()));
+        QTimer::singleShot(1200, parent, SLOT(accept()));
     }
 
-    void cancelPressed() {
+    void stopPressed() {
         if(stop) { // pressed a second time.
             parent->done(0);
             return;
@@ -110,7 +110,7 @@ public:
         stop = true;
         progress->cancel();
         parent->printingDone();
-        pageNumber->setText(i18n("Cancelled"));
+        pageNumber->setText(i18n("Stopped"));
         QTimer::singleShot(1200, parent, SLOT(accept()));
     }
 
@@ -142,15 +142,15 @@ KoPrintingDialog::KoPrintingDialog(QWidget *parent)
     QProgressBar *bar = new QProgressBar(this);
     d->progress = new KoProgressUpdater(bar);
     grid->addWidget(bar, 1, 0, 1, 3);
-    d->button = new QPushButton(i18n("Cancel"), this);
+    d->button = new QPushButton(i18n("Stop"), this);
     grid->addWidget(d->button, 2, 2);
 
-    connect(d->button, SIGNAL(released()), this, SLOT(cancelPressed()));
+    connect(d->button, SIGNAL(released()), this, SLOT(stopPressed()));
 }
 
 KoPrintingDialog::~KoPrintingDialog()
 {
-    d->cancelPressed();
+    d->stopPressed();
     delete d;
 }
 
@@ -172,7 +172,7 @@ QPainter & KoPrintingDialog::painter() const {
     return *d->painter;
 }
 
-bool KoPrintingDialog::isCancelled() const {
+bool KoPrintingDialog::isStopped() const {
     return d->stop;
 }
 

@@ -29,7 +29,7 @@ class KoShape;
 
 
 /**
- * Dialog that will allow you to print any flake-based document, with full interaction and ability to cancel.
+ * Dialog that will allow you to print any flake-based document, with full interaction and ability to stop.
  * Using this class allows any application to print a set of shapes that are contained in the shapeManager()
  * in a thread-safe manner, while ensuring that the full content is present before printing.  A requirement
  * for any shape that may use the network or simply use a lot of processing power to prepare its content
@@ -92,7 +92,7 @@ protected:
      * This method will be called in a thread that is not the main-thread. So the processing can take
      * a reasonably long time withing posing problems for user interaction.
      * @param pageNumber the number of the page to prepare.
-     * @see isCancelled()
+     * @see isStopped()
      */
     virtual void preparePage(int pageNumber) = 0;
 
@@ -114,10 +114,10 @@ protected:
     QPainter &painter() const;
 
     /**
-     * Return true if the user pressed cancel.
+     * Return true if the user pressed stop.
      * It is suggested to query this setting in long loops and abort the process as soon at it retuns yes.
      */
-    bool isCancelled() const;
+    bool isStopped() const;
 
     /// reimplemented
     virtual void showEvent(QShowEvent *event);
@@ -133,7 +133,7 @@ private:
     Private * const d;
     Q_PRIVATE_SLOT(d, void preparePage(const QVariant &page))
     Q_PRIVATE_SLOT(d, void printPage(const QVariant &page))
-    Q_PRIVATE_SLOT(d, void cancelPressed())
+    Q_PRIVATE_SLOT(d, void stopPressed())
 };
 
 #endif

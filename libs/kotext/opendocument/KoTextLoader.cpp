@@ -293,7 +293,11 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
         kDebug(32500)<<"KoTextLoader::loadBody"<<endl;
     #endif
 
+#ifdef KOXML_USE_QDOM
+    startBody( bodyElem.childNodes().count() );
+#else
     startBody( bodyElem.childNodesCount() );
+#endif
     KoXmlElement tag;
     forEachElement(tag, bodyElem) {
         if( ! tag.isNull() ) {

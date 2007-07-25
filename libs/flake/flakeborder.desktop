@@ -1,8 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Shape border definition
+Name[fa]=تعریف لبه شکل
+Name[pt]=Definição do contorno da forma
+Name[pt_BR]=Definição do contorno da forma
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Border
 Comment=Definition of a flake shape border
+Comment[pt]=Definição do contorno de uma forma do Flake
+Comment[pt_BR]=Definição do contorno de uma forma do Flake
 [PropertyDef::X-Flake-Version]
 Type=int

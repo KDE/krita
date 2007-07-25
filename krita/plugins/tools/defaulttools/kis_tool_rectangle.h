@@ -86,10 +86,9 @@ public:
         : KoToolFactory(parent, "KritaShape/KisToolRectangle", i18n( "Rectangle" ))
         {
             setToolTip( i18n( "Draw a rectangle" ) );
-            // Temporarily
-            //setToolType( TOOL_TYPE_SHAPE );
+
+            setToolType( TOOL_TYPE_SHAPE );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setToolType( dynamicToolType() );
             setIcon( "tool_rectangle" );
             //setShortcut( Qt::Key_F6 );
             setPriority( 2 );

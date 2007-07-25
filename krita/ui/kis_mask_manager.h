@@ -27,6 +27,8 @@ class KActionCollection;
 class KAction;
 class KToggleAction;
 
+#include "kis_mask.h"
+
 /**
  * Handle the gui for manipulating masks.
  */

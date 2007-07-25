@@ -75,7 +75,6 @@ public:
         {
             setToolTip( i18n( "Select an area by its outline" ) );
             setToolType( TOOL_TYPE_SELECTED );
-            //setToolType( dynamicToolType() );
             setIcon( "tool_outline_selection" );
             setPriority( 55 );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );

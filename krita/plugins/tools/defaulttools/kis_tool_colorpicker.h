@@ -86,8 +86,7 @@ public:
         : KoToolFactory(parent, "KritaSelected/KisToolColorPicker", i18n( "Color Picker" ))
         {
             setToolTip(i18n("Select a color from the image or current layer"));
-            //setToolType(TOOL_TYPE_SELECTED);
-            setToolType( dynamicToolType() );
+            setToolType(TOOL_TYPE_SELECTED);
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority( 14 );
             setIcon("color-picker");

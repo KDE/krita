@@ -139,9 +139,8 @@ public:
         : KoToolFactory(parent, "KisToolCrop", i18n( "Crop" ))
         {
             setToolTip(i18n("Crop the image to an area"));
-     //       setToolType(TOOL_TYPE_TRANSFORM);
+            setToolType(TOOL_TYPE_TRANSFORM);
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setToolType( dynamicToolType() );
             setPriority( 10 );
             setIcon("tool_crop");
         }

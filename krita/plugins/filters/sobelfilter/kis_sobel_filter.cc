@@ -42,6 +42,7 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
+#include <kis_paint_device.h>
 #include <kis_progress_display_interface.h>
 
 #include "kis_multi_bool_filter_widget.h"

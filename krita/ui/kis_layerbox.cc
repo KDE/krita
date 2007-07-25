@@ -60,6 +60,7 @@
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 #include <kis_group_layer.h>
+#include <kis_mask.h>
 
 #include "kis_cmb_composite.h"
 #include "kis_view2.h"

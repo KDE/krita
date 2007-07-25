@@ -70,8 +70,7 @@ public:
         : KoToolFactory(parent, "KisToolPolygon", i18n( "Polygon" ))
         {
             setToolTip( i18n( "Draw a polygon. Shift-mouseclick ends the polygon." ) );
-            //setToolType( TOOL_TYPE_SHAPE );
-            setToolType( dynamicToolType() );
+            setToolType( TOOL_TYPE_SHAPE );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_polygon" );
             setPriority( 4 );

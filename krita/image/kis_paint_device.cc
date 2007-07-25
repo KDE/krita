@@ -78,8 +78,6 @@ public:
     QTimer * longRunningFilterTimer;
     QPaintEngine * paintEngine;
 
-    // XXX: Use shared pointers here?
-    QHash<QString, KisMaskSP> painterlyChannels;
 #ifdef CACHE_EXACT_BOUNDS
     QRect exactBounds;
 #endif
@@ -1329,32 +1327,5 @@ qint32 KisPaintDevice::getY() const
 {
     return m_d->y;
 }
-
-KisMaskSP KisPaintDevice::painterlyChannel( const QString & channelId )
-{
-    if (m_d->painterlyChannels.contains(channelId))
-        return m_d->painterlyChannels.value(channelId);
-
-    return 0;
-}
-
-const QHash<QString,KisMaskSP> KisPaintDevice::painterlyChannels()
-{
-    return m_d->painterlyChannels;
-}
-
-void KisPaintDevice::addPainterlyChannel( KisMaskSP painterlyChannel )
-{
-    m_d->painterlyChannels[painterlyChannel->id()] = painterlyChannel;
-}
-
-KisMaskSP KisPaintDevice::removePainterlyChannel( const QString & channelId )
-{
-    if ( m_d->painterlyChannels.contains( channelId ) ) {
-        return m_d->painterlyChannels.take( channelId );
-    }
-    return 0;
-}
-
 
 #include "kis_paint_device.moc"

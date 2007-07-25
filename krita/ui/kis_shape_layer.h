@@ -57,6 +57,18 @@ public:
     virtual ~KisShapeLayer();
 
 public:
+    // KisNode overrides
+
+    virtual QString nodeType()
+        {
+            return KIS_SHAPE_LAYER_ID;
+        }
+
+    virtual bool canHaveChildren()
+        {
+            return true;
+        }
+
     // KoShape overrides
     bool isSelectable() const { return false; }
 

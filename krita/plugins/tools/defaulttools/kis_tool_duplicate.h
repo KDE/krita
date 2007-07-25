@@ -79,9 +79,8 @@ public:
         : KoToolFactory(parent, "KritaFreehand/KisToolDuplicate", i18n( "Duplicate Brush" ))
         {
             setToolTip( i18n( "Duplicate parts of the image. Shift-click to select the point to duplicate from to begin." ) );
-            //setToolType( TOOL_TYPE_FREEHAND );
+            setToolType( TOOL_TYPE_FREEHAND );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setToolType( dynamicToolType() );
             setIcon( "tool_duplicate" );
             setPriority( 8 );
             setInputDeviceAgnostic(false);

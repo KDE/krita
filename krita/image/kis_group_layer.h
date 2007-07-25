@@ -28,6 +28,8 @@
 
 class KoColorSpace;
 
+const QString KIS_GROUP_LAYER_ID = "KisGroupLayer";
+
 /**
  * A KisLayer that bundles child layers into a single layer.
  * The top layer is firstChild(), with index 0; the bottommost lastChild() with index childCount() - 1.
@@ -46,6 +48,16 @@ public:
     QIcon icon() const;
 
     KisLayerSP clone() const;
+
+    virtual QString nodeType()
+        {
+            return KIS_GROUP_LAYER_ID;
+        }
+
+    virtual bool canHaveChildren()
+        {
+            return true;
+        }
 
 signals:
 
@@ -116,10 +128,7 @@ public:
        Accect the specified visitor.
        @return true if the operation succeeded, false if it failed.
     */
-    bool accept(KisLayerVisitor &v)
-        {
-            return v.visit(this);
-        }
+    bool accept(KisLayerVisitor &v);
 
     /**
        Clear the projection or create a projection from the specified

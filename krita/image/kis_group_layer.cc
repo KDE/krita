@@ -264,6 +264,12 @@ QRect KisGroupLayer::exactBounds() const
     return groupExactBounds;
 }
 
+bool KisGroupLayer::accept(KisLayerVisitor &v)
+{
+    return v.visit(this);
+}
+
+
 qint32 KisGroupLayer::x() const
 {
     return m_x;

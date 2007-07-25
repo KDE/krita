@@ -31,6 +31,7 @@
 #include <kis_undo_adapter.h>
 #include <kis_types.h>
 #include <kis_layer_shape.h>
+#include <kis_tool.h>
 
 #include "ui_wdg_tool_transform.h"
 
@@ -133,8 +134,7 @@ public:
         : KoToolFactory(parent, "KisToolTransform", i18n( "Transform" ))
         {
             setToolTip( i18n( "Transform a layer or a selection" ) );
-            //setToolType( TOOL_TYPE_TRANSFORM );
-            setToolType( dynamicToolType() );
+            setToolType( TOOL_TYPE_TRANSFORM );
             setIcon( "transform" );
             setPriority( 11 );
 

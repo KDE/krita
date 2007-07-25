@@ -88,16 +88,8 @@ set(kritaimage_LIB_SRCS
    kis_transformation_mask.cpp
    kis_clone_layer.cpp
    kis_pixel_selection.cpp
-   kis_adsorbency_mask.cc
-   kis_gravity_mask.cc
-   kis_height_mask.cc
-   kis_mixability_mask.cc
-   kis_pigment_concentration_mask.cpp
-   kis_reflectivity_mask.cpp
    kis_transparency_mask.cc
-   kis_viscosity_mask.cc
-   kis_volume_mask.cc
-   kis_wetness_mask.cc 
+   kis_node.cpp
    metadata/kis_meta_data_store.cc
    metadata/kis_meta_data_value.cc
    metadata/kis_meta_data_schema.cc

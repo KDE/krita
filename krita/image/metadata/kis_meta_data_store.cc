@@ -151,7 +151,7 @@ void Store::debugDump() const
     {
         if(e.isValid())
         {
-            kDebug(41001) << e << endl;
+            //kDebug(41001) << e << endl;
         } else {
             kDebug(41001) << "Invalid entry" << endl;
         }

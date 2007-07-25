@@ -33,6 +33,7 @@
 #include <KoShapeContainer.h>
 #include <KoViewConverter.h>
 #include <KoShapeManager.h>
+#include <KoCompositeOp.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -40,7 +41,7 @@
 #include "kis_shape_layer_canvas.h"
 #include "kis_image_view_converter.h"
 #include <kis_painter.h>
-#include <KoCompositeOp.h>
+#include "kis_layer_visitor.h"
 
 class KisShapeLayer::Private
 {

@@ -32,16 +32,17 @@
 
 #include "kis_shared.h"
 #include "kis_types.h"
-#include "kis_layer_visitor.h"
 
-#include "kis_paint_device.h"
-#include "kis_selection.h"
+#include "kis_node.h"
 
+class KisPaintDevice;
 class QIcon;
 class QBitArray;
 class KisGroupLayer;
 class KoColorSpace;
 class QUndoCommand;
+class KisLayerVisitor;
+
 namespace KisMetaData {
     class Store;
 }
@@ -58,7 +59,7 @@ namespace KisMetaData {
  * TODO: Add a layer mode whereby the projection of the layer is used
  * as a clipping path?
  **/
-class KRITAIMAGE_EXPORT KisLayer: public QObject, public KisShared
+class KRITAIMAGE_EXPORT KisLayer : public QObject, public KisNode, public KisShared
 {
 
     Q_OBJECT
@@ -87,9 +88,7 @@ public:
      * Return the layer data before the effect masks have had their go
      * at it.
      */
-    virtual KisPaintDeviceSP original() const {
-        return projection();
-    }
+    virtual KisPaintDeviceSP original() const;
 
     /**
      * Return the paintdevice you can use to change pixels on. For a
@@ -105,12 +104,11 @@ public:
      * @return the selection associated with this layer, if there is
      * one. Otherwise, return 0;
      */
-    virtual KisSelectionSP selection() const { return 0; }
+    virtual KisSelectionSP selection() const;
 
     virtual QIcon icon() const = 0;
 
     virtual KoDocumentSectionModel::PropertyList properties() const;
-    virtual void setProperties( const KoDocumentSectionModel::PropertyList &properties  );
 
     virtual void setChannelFlags( QBitArray & channelFlags );
     QBitArray & channelFlags();
@@ -204,8 +202,6 @@ public:
     /// Recursively searches this layer and any child layers for a layer with the specified ID.
     virtual KisLayerSP findLayer(int id) const;
 
-    enum { Visible = 1, Hidden = 2, Locked = 4, Unlocked = 8 };
-
     /// Returns the total number of layers in this layer, its child
     /// layers, and their child layers recursively, optionally ones
     /// with the specified properties Visible or Locked, which you can
@@ -237,7 +233,7 @@ public:
     QUndoCommand *setOpacityCommand(quint8 val);
     QUndoCommand *setOpacityCommand(quint8 prevOpacity, quint8 newOpacity);
 
-    bool locked() const;
+    virtual bool locked() const;
     void setLocked(bool l);
     QUndoCommand *setLockedCommand(bool locked);
 
@@ -292,12 +288,12 @@ public:
      */
     bool hasEffectMasks() const;
 
-    
+
     /**
      * @return the metadata object associated with this object.
      */
     KisMetaData::Store* metaData();
-    
+
 protected:
     /**
      * Apply the effect masks to the given projection, producing
@@ -334,8 +330,8 @@ class KRITAIMAGE_EXPORT KisIndirectPaintingSupport {
 
 public:
 
-    KisIndirectPaintingSupport() : m_compositeOp(0) { }
-    virtual ~KisIndirectPaintingSupport() {}
+    KisIndirectPaintingSupport();
+    virtual ~KisIndirectPaintingSupport();
 
     // Indirect painting
     void setTemporaryTarget(KisPaintDeviceSP t);

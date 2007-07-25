@@ -33,6 +33,7 @@
 #include <kis_group_layer.h>
 #include <kis_mask_shape.h>
 #include <kis_adjustment_layer.h>
+#include <kis_mask.h>
 
 KisLayerMapVisitor::KisLayerMapVisitor(QMap<KisLayerSP, KoShape*> & layerMap, QMap<KisMaskSP, KoShape*> & maskMap)
     : m_layerMap( layerMap )

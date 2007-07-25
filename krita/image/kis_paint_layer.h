@@ -25,6 +25,7 @@
 
 class KoColorSpace;
 
+const QString KIS_PAINT_LAYER_ID = "KisPaintLayer";
 /**
  * This layer is of a type that can be d on. A paint layer can
  * have any number of effect masks, a transparency mask, a local
@@ -45,6 +46,17 @@ public:
     KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KoColorSpace * colorSpace);
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
+
+    virtual QString nodeType()
+        {
+            return KIS_PAINT_LAYER_ID;
+        }
+
+    virtual bool canHaveChildren()
+        {
+            return true;
+        }
+
 
     KoColorSpace * colorSpace();
 
@@ -68,12 +80,7 @@ public:
 
     QImage createThumbnail(qint32 w, qint32 h);
 
-    bool accept(KisLayerVisitor &v)
-        {
-            return v.visit(this);
-        }
-
-
+    bool accept(KisLayerVisitor &v);
     /**
      * Returns the paintDevice that accompanies this layer
      */

@@ -39,6 +39,7 @@
 #include "kis_effect_mask.h"
 #include "kis_dlg_adjustment_layer.h"
 #include "kis_mask_widgets.h"
+#include "kis_selection.h"
 
 KisMaskManager::KisMaskManager( KisView2 * view)
     : m_view( view )

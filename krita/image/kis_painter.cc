@@ -343,28 +343,6 @@ void KisPainter::bitBlt(QPoint pos, const KisPaintDeviceSP src, QRect srcRect )
     bitBlt( pos.x(), pos.y(), m_compositeOp, src, m_opacity, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height() );
 }
 
-void KisPainter::copyMask(const QPoint &tl, KisPaintDeviceSP src, QRect rc, const QString &id)
-{
-    KisMaskSP msk = src->painterlyChannel(id);
-    KisMaskSP dst = m_device->painterlyChannel(id);
-    if (!msk || !dst)
-        return;
-
-    KisPainter p(dst);
-    p.bitBlt(tl, msk, rc);
-    p.end();
-}
-
-void KisPainter::copyMasks(QPoint tl, KisPaintDeviceSP src, QRect rc, QStringList ids)
-{
-    QString id;
-    if (ids.empty())
-        ids = m_device->painterlyChannels().keys();
-
-    foreach (id, ids)
-        copyMask(tl, src, rc, id);
-}
-
 void KisPainter::bltMask(qint32 dx, qint32 dy,
                          const KoCompositeOp *op,
                          const KisPaintDeviceSP srcdev,

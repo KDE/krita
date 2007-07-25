@@ -20,6 +20,7 @@
 
 #include <QRect>
 
+#include "kicon.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_mask.h"
@@ -43,6 +44,8 @@ enum selectionAction {
     SELECTION_SUBTRACT,
     SELECTION_INTERSECT
 };
+
+const QString KIS_SELECTION_ID = "KisSelection";
 
 class KisSelectionComponent;
 
@@ -84,6 +87,24 @@ public:
     KisSelection(const KisSelection& rhs);
 
     virtual ~KisSelection();
+
+
+    virtual QString nodeType()
+        {
+            return KIS_SELECTION_ID;
+        }
+
+    virtual bool canHaveChildren()
+        {
+            return false;
+        }
+
+    QIcon icon() const
+        {
+            return KIcon("frame-edit"); //XXX: Get good icon!
+        }
+
+
 
     /// Returns selectedness, or 0 if invalid coordinates
     quint8 selected(qint32 x, qint32 y) const;

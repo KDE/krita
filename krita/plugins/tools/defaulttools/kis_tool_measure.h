@@ -77,7 +77,7 @@ public:
     KisToolMeasureFactory(QObject *parent, const QStringList&)
         : KoToolFactory(parent, "KritaShape/KisToolMeasure", i18n( "Measure" ))
         {
-            setToolType( dynamicToolType() );
+            setToolType( TOOL_TYPE_TRANSFORM );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority( 15 );
         }

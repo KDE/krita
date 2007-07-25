@@ -117,8 +117,7 @@ public:
         : KoToolFactory(parent, "KritaFill/KisToolGradient", i18n( "Gradient" ))
         {
             setToolTip( i18n( "Draw a gradient." ) );
-            //setToolType( TOOL_TYPE_FILL );
-            setToolType( dynamicToolType() );
+            setToolType( TOOL_TYPE_FILL );
             setIcon( "tool_gradient" );
             setShortcut( KShortcut( Qt::Key_G ) );
             setPriority( 13 );

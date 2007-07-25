@@ -19,6 +19,8 @@
 #ifndef _KIS_EFFECT_MASK_
 #define _KIS_EFFECT_MASK_
 
+#include "kicon.h"
+
 #include "kis_types.h"
 #include "kis_mask.h"
 /**
@@ -29,6 +31,7 @@
    The effect could be a filter, a transformation or anything else
    that messes up pixels.
 */
+const QString KIS_EFFECT_MASK_ID = "KisEffectMask";
 
 class KRITAIMAGE_EXPORT KisEffectMask : public KisMask
 {
@@ -42,7 +45,24 @@ public:
 
     virtual ~KisEffectMask();
     KisEffectMask( const KisEffectMask& rhs );
-    virtual QString id() { return "KisEffectMask"; }
+
+    QIcon icon() const
+        {
+            return KIcon(""); // XXX: Find nice icon for the subclasses.
+        }
+
+    virtual QString id() { return KIS_EFFECT_MASK_ID; }
+
+
+    virtual QString nodeType()
+        {
+            return id();
+        }
+
+    virtual bool canHaveChildren()
+        {
+            return false;
+        }
 
     /**
      * Apply the effect the projection using the mask as a selection.

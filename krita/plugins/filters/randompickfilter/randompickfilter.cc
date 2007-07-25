@@ -41,6 +41,7 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
+#include <kis_paint_device.h>
 
 #include "kis_wdg_random_pick.h"
 #include "ui_wdgrandompickoptions.h"

@@ -587,30 +587,6 @@ public:
      */
     KisUndoAdapter *undoAdapter() const;
 
-    /**
-     * @return the painterly channel with the specified id or 0 if
-     * this paint device does not have such a channel
-     */
-    KisMaskSP painterlyChannel( const QString & channelId );
-
-    /**
-    * @return the reference to the hash that contains the painterly channels.
-    */
-    const QHash<QString,KisMaskSP> painterlyChannels();
-
-    /**
-     * Add a painterly channel to the paint device. The paint device
-     * assumes ownership of the channel.
-     */
-    void addPainterlyChannel( KisMaskSP painterlyChannel );
-
-    /**
-     * Removes the specified painterly channel from the list of
-     * painterly channels owned by this paint device. The channel is
-     * not deleted.
-     */
-    KisMaskSP removePainterlyChannel( const QString & channelId );
-
 signals:
     void positionChanged(KisPaintDeviceSP device);
     void ioProgress(qint8 percentage);

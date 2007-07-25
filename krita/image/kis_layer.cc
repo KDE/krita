@@ -83,6 +83,7 @@ public:
 
 KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
     : QObject(0)
+    , KisNode( img, name )
     , m_d( new Private )
 {
     m_d->id = getID();
@@ -101,6 +102,7 @@ KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
 
 KisLayer::KisLayer(const KisLayer& rhs)
     : QObject( 0 )
+    , KisNode( rhs )
     , KisShared(rhs)
     , m_d( new Private() )
 {
@@ -132,19 +134,16 @@ KoColorSpace * KisLayer::colorSpace()
 
 KoDocumentSectionModel::PropertyList KisLayer::properties() const
 {
-    KoDocumentSectionModel::PropertyList l;
-    l << KoDocumentSectionModel::Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible());
-    l << KoDocumentSectionModel::Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), locked());
+    KoDocumentSectionModel::PropertyList l = KisNode::properties();
     l << KoDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
     l << KoDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->id());
     return l;
 }
 
-void KisLayer::setProperties( const KoDocumentSectionModel::PropertyList &properties )
-{
-    setVisible( properties.at( 0 ).state.toBool() );
-    setLocked( properties.at( 1 ).state.toBool() );
+KisPaintDeviceSP KisLayer::original() const {
+    return projection();
 }
+
 
 void KisLayer::setChannelFlags( QBitArray & channelFlags )
 {
@@ -388,6 +387,8 @@ QImage KisLayer::createThumbnail(qint32, qint32)
     return QImage();
 }
 
+KisSelectionSP KisLayer::selection() const { return 0; }
+
 void KisLayer::notifyPropertyChanged()
 {
     if(image() && !signalsBlocked())
@@ -526,5 +527,8 @@ quint8 KisIndirectPaintingSupport::temporaryOpacity() const {
     return m_compositeOpacity;
 }
 
+
+KisIndirectPaintingSupport::KisIndirectPaintingSupport() : m_compositeOp(0) { }
+KisIndirectPaintingSupport::~KisIndirectPaintingSupport() {}
 
 #include "kis_layer.moc"

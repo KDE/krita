@@ -81,8 +81,7 @@ public:
         {
             setToolTip(i18n("Draw a line with the current brush"));
             // Temporarily
-            //setToolType(TOOL_TYPE_SHAPE);
-            setToolType( dynamicToolType() );
+            setToolType(TOOL_TYPE_SHAPE);
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority( 1 );
             setIcon("tool_line");

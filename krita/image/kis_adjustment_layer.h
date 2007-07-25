@@ -28,6 +28,8 @@
 
 class KisFilterConfiguration;
 
+const QString KIS_ADJUSTMENT_LAYER_ID = "KisAdjustmentLayer";
+
 /**
  * Class that contains a KisFilter and optionally a KisSelection. The combination
  * is used by to influence the rendering of the layers under this layer in the
@@ -47,6 +49,17 @@ public:
     KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
+
+
+    virtual QString nodeType()
+        {
+            return KIS_ADJUSTMENT_LAYER_ID;
+        }
+
+    virtual bool canHaveChildren()
+        {
+            return false;
+        }
 
     void updateProjection(const QRect& r);
     KisPaintDeviceSP projection() const;

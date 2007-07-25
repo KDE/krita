@@ -44,9 +44,6 @@ public:
     KisToolSelectSimilar(KoCanvasBase * canvas);
     virtual ~KisToolSelectSimilar();
 
-//     virtual quint32 priority() { return 8; }
-//     virtual enumToolType toolType() { return TOOL_SELECT; }
-
     virtual void paint(QPainter& gc, const KoViewConverter &converter) {}
     virtual void mousePressEvent(KoPointerEvent *e);
 
@@ -86,7 +83,6 @@ public:
         {
             setToolTip( i18n( "Select similar colors" ) );
             setToolType( TOOL_TYPE_SELECTED );
-//            setToolType( dynamicToolType() );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_similar_selection" );
             setShortcut( KShortcut(Qt::CTRL + Qt::Key_E) );

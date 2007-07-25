@@ -25,6 +25,8 @@
 
 class KisFilterStrategy;
 
+const QString KIS_TRANSFORMATION_MASK_ID = "KisTransformationMask";
+
 /**
  * A transformation mask applies a particular transformation to the
  * pixels of a paint device that are selected by the mask paint
@@ -44,7 +46,18 @@ public:
 
     KisTransformationMask( const KisTransformationMask& rhs );
 
-    virtual QString id() { return "KisTransformationMask"; }
+
+    virtual QString nodeType()
+        {
+            return id();
+        }
+
+    virtual bool canHaveChildren()
+        {
+            return false;
+        }
+
+    virtual QString id() { return KIS_TRANSFORMATION_MASK_ID; }
 
     void setXScale( double xscale )
         {

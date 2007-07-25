@@ -45,6 +45,7 @@
 #include "kis_transparency_mask.h"
 #include "kis_painterly_overlay.h"
 #include "kis_mask.h"
+#include "kis_layer_visitor.h"
 
 class KisPaintLayer::Private
 {
@@ -185,6 +186,13 @@ QImage KisPaintLayer::createThumbnail(qint32 w, qint32 h)
     else
         return QImage();
 }
+
+bool KisPaintLayer::accept(KisLayerVisitor &v)
+{
+    return v.visit(this);
+}
+
+
 
 /// Returns the paintDevice that accompanies this layer
 KisPaintDeviceSP KisPaintLayer::paintDevice() const

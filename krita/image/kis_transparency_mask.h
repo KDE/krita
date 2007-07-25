@@ -24,6 +24,9 @@
 #include "kis_effect_mask.h"
 
 class QRect;
+
+const QString KIS_TRANSPARENCY_MASK_ID = "KIS_TRANSPARENCY_MASK";
+
 /**
    A transparency mask is a single channel mask that applies a particular
    transparency to the layer the mask belongs to. It differs from an
@@ -39,8 +42,19 @@ public:
     virtual ~KisTransparencyMask();
     KisTransparencyMask( const KisTransparencyMask& rhs );
 
+
+    virtual QString nodeType()
+        {
+            return id();
+        }
+
+    virtual bool canHaveChildren()
+        {
+            return false;
+        }
+
     virtual void apply( KisPaintDeviceSP projection, const QRect & rc );
-    virtual QString id() { return "KisTransparencyMask"; }
+    virtual QString id() { return KIS_TRANSPARENCY_MASK_ID; }
 };
 
 #endif //_KIS_TRANSPARENCY_MASK_

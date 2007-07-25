@@ -75,8 +75,7 @@ public:
         : KoToolFactory(parent, "KritaShape/KisToolEllipse", i18n( "Ellipse" ))
         {
             setToolTip( i18n( "Draw an ellipse" ) );
-            //setToolType( TOOL_TYPE_SHAPE );
-            setToolType( dynamicToolType() );
+            setToolType( TOOL_TYPE_SHAPE );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_ellipse" );
             setPriority( 3 );

@@ -21,12 +21,16 @@
 #include <QRect>
 #include <QPainterPath>
 
+#include <kicon.h>
+
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_mask.h"
 #include "kis_selection_component.h"
 
 #include <krita_export.h>
+
+const QString KIS_PIXEL_SELECTION_ID = "KisPixelSelection";
 
 /**
  * KisPixelSelection contains a byte-map representation of a layer, where
@@ -65,6 +69,25 @@ public:
     KisPixelSelection(const KisPixelSelection& rhs);
 
     virtual ~KisPixelSelection();
+
+
+
+    virtual QString nodeType()
+        {
+            return KIS_PIXEL_SELECTION_ID;
+        }
+
+    virtual bool canHaveChildren()
+        {
+            return false;
+        }
+
+    QIcon icon() const
+        {
+            return KIcon("frame-edit"); //XXX: Get good icon!
+        }
+
+
 
     // Returns selectedness, or 0 if invalid coordinates
     quint8 selected(qint32 x, qint32 y) const;

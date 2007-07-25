@@ -22,6 +22,7 @@
 #include <QRect>
 
 #include "kis_types.h"
+#include "kis_node.h"
 #include "kis_paint_device.h"
 
 #include <krita_export.h>
@@ -61,7 +62,7 @@
    XXX: For now, all masks are 8 bit. Make the channel depth settable.
 
  */
-class KRITAIMAGE_EXPORT KisMask : public KisPaintDevice {
+class KRITAIMAGE_EXPORT KisMask : public KisPaintDevice, public KisNode {
 
 public:
 

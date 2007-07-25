@@ -146,7 +146,6 @@ private slots:
     void slotLoadingFinished();
     void slotUpdateFullScreen(bool);
     void slotPreferences();
-
     void slotEditPalette();
 
 private:

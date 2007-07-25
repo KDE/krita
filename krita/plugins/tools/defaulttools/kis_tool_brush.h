@@ -74,8 +74,7 @@ public:
         {
             setToolTip( i18n( "Paint freely" ) );
             // Temporarily
-            //setToolType( TOOL_TYPE_SHAPE );
-            setToolType( dynamicToolType() );
+            setToolType( TOOL_TYPE_SHAPE );
             setIcon( "tool_freehand" );
             setShortcut( KShortcut( Qt::Key_B ) );
             setPriority( 0 );

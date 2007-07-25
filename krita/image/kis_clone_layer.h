@@ -35,6 +35,8 @@ enum CopyLayerType
     COPY_ORIGINAL
 };
 
+const QString KIS_CLONE_LAYER_ID = "KisCloneLayer";
+
 /**
  * A copy layer adds the contents of another layer in another place in
  * the layer stack. If is possible to add more effect masks to the
@@ -52,6 +54,17 @@ public:
     KisCloneLayer(KisLayerSP from, KisImageSP img, const QString &name, quint8 opacity);
     KisCloneLayer(const KisCloneLayer& rhs);
     virtual ~KisCloneLayer();
+
+
+    virtual QString nodeType()
+        {
+            return KIS_CLONE_LAYER_ID;
+        }
+
+    virtual bool canHaveChildren()
+        {
+            return true;
+        }
 
     void updateProjection(const QRect& r);
     KisPaintDeviceSP projection() const;

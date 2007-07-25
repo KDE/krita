@@ -78,8 +78,7 @@ public:
         : KoToolFactory(parent, "KisToolStar", i18n( "Star" ))
         {
             setToolTip(i18n("Draw a star with the current brush"));
-            //setToolType(TOOL_TYPE_SHAPE);
-            setToolType( dynamicToolType() );
+            setToolType(TOOL_TYPE_SHAPE);
             setPriority( 6 );
             setIcon("tool_star");
             setActivationShapeId( KIS_LAYER_SHAPE_ID );

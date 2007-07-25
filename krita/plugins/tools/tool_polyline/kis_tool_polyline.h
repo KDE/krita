@@ -80,8 +80,7 @@ public:
         : KoToolFactory(parent, "KisToolPolyline", i18n( "Polyline" ))
         {
             setToolTip( i18n( "Draw a polyline. Shift-mouseclick ends the polyline." ) );
-//             setToolType( TOOL_TYPE_SHAPE );
-            setToolType( dynamicToolType() );
+            setToolType( TOOL_TYPE_SHAPE );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "polyline" );
             setPriority( 5 );

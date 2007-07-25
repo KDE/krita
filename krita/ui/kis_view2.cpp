@@ -94,6 +94,8 @@
 #include "kis_resourceserver.h"
 #include "kis_palette_docker.h"
 #include "kis_layer_model.h"
+#include "kis_projection.h"
+#include "kis_node.h"
 
 class KisView2::KisView2Private {
 
@@ -572,9 +574,6 @@ void KisView2::connectCurrentImage()
     if( m_d->birdEyeBox )
         m_d->birdEyeBox->setImage( img );
 
-// XXX: Why doesn't this compile?
-//    connect( KisConfigNotifier::instance(), SIGNAL( configChanged()
-//    ), img->projectionManager(), SLOT( updateSettings() ) );
 }
 
 void KisView2::disconnectCurrentImage()
@@ -646,6 +645,17 @@ void KisView2::slotPreferences()
 {
     if ( PreferencesDialog::editPreferences() ) {
         KisConfigNotifier::instance()->notifyConfigChanged();
+
+        // Update the settings for those classes that are not listening
+        image()->projectionManager()->updateSettings();
+
+        // Update the settings for all nodes -- they don't query
+        // KisConfig directly because they need the settings during
+        // compositing, and they don't connect to the confignotifier
+        // because nodes are not QObjects (because only one base class
+        // can be a QObject).
+        KisNode* node = dynamic_cast<KisNode*>( image()->rootLayer().data() );
+        node->updateSettings();
     }
 }
 

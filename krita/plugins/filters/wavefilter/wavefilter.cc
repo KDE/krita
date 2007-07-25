@@ -42,7 +42,7 @@
 #include <kis_layer.h>
 #include <kis_random_sub_accessor.h>
 #include <kis_types.h>
-
+#include <kis_paint_device.h>
 #include "kis_wdg_wave.h"
 #include "ui_wdgwaveoptions.h"
 

@@ -38,6 +38,7 @@
 #include "kis_layer_manager.h"
 #include "kis_types.h"
 #include "kis_view2.h"
+#include "kis_image.h"
 
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_entry.h>

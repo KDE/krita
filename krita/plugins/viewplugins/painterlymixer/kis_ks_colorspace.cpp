@@ -19,7 +19,9 @@
 
 #include <cmath>
 
-#include <glpk.h>
+extern "C" {
+   #include "glpk.h"
+}
 
 #include <gmm/gmm.h>
 #include <lcms.h>

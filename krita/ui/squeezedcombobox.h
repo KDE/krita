@@ -65,6 +65,12 @@ public:
      */
     virtual ~SqueezedComboBox();
 
+    /**
+     * 
+     * Returns true if the combobox contains the original (not-squeezed)
+     * version of text.
+     * @param text the original (not-squeezed) text to check for
+     */
     bool contains(const QString & text) const;
 
     /**

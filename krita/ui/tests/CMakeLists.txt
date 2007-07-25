@@ -17,4 +17,12 @@ kde4_add_unit_test(kis_shape_controller_test TESTNAME krita-ui-kis_shape_control
 
 target_link_libraries(kis_shape_controller_test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage kritaui ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(squeezedcombobox_test_SRCS squeezedcombobox_test.cpp )
+
+kde4_add_unit_test(squeezedcombobox_test TESTNAME krita-ui-squeezedcombobox_test  ${squeezedcombobox_test_SRCS})
+
+target_link_libraries(squeezedcombobox_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
+
 ########### end ###############

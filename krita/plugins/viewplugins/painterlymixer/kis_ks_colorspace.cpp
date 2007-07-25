@@ -385,7 +385,7 @@ double acoth(double z)
 {
 	return 0.5*log((1 + 1/z) / (1 - 1/z));
 }
-/*
+
 void computeKS(const vector<float> &vREF, vector<float> &vKS)
 {
 	double R, Rb, a, b, K, S;
@@ -407,8 +407,8 @@ void computeKS(const vector<float> &vREF, vector<float> &vKS)
 		*(i+1) = S;
 	}
 }
-*/
 
+/*
 void computeKS(const vector<float> &vREF, vector<float> &vKS)
 {
 	double R, K, S;
@@ -424,7 +424,7 @@ void computeKS(const vector<float> &vREF, vector<float> &vKS)
 		*(i+1) = S;
 	}
 }
-
+*/
 /*
 void computeKS(const vector<float> &vREF, vector<float> &vKS)
 {
@@ -464,7 +464,7 @@ void KisKSColorSpace::fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 n
 	}
 }
 
-/*
+
 void computeReflectance(const vector<float> &vKS, vector<float> &vREF)
 {
 	double b, K, S, R;
@@ -479,8 +479,8 @@ void computeReflectance(const vector<float> &vKS, vector<float> &vREF)
 		*j = R;
 	}
 }
-*/
 
+/*
 void computeReflectance(const vector<float> &vKS, vector<float> &vREF)
 {
 	double K, S, q, R;
@@ -494,7 +494,7 @@ void computeReflectance(const vector<float> &vKS, vector<float> &vREF)
 		*j = R;
 	}
 }
-
+*/
 /*
 void computeReflectance(const vector<float> &vKS, vector<float> &vREF)
 {

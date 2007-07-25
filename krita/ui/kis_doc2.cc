@@ -1007,6 +1007,7 @@ void KisDoc2::setCurrentImage(KisImageSP image)
         m_d->image->disconnect( this );
     }
     m_d->image = image;
+    m_d->image->setUndoAdapter( m_d->undoAdapter );
     m_d->shapeController->setImage( image );
     m_d->layerModel->setImage( image );
     setUndo(true);

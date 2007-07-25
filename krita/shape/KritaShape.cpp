@@ -154,7 +154,8 @@ void KritaShape::tryLoadFromImageData(KoImageData *data) {
         // Convert the QImage to a paint device
         img->rootLayer()->firstChild()->paintDevice()->convertFromQImage( image, "", 0, 0 );
 
-        slotLoadingFinished();
+        // emits sigLoadingFinished
+        m_d->doc->setCurrentImage( img );
     }
 }
 

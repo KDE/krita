@@ -293,9 +293,9 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
         kDebug(32500)<<"KoTextLoader::loadBody"<<endl;
     #endif
 
-    startBody( bodyElem.childNodes().count() );
-    for(KoXmlNode node = bodyElem.firstChild(); ! node.isNull(); node = node.nextSibling()) {
-        KoXmlElement tag = node.toElement();
+    startBody( bodyElem.childNodesCount() );
+    KoXmlElement tag;
+    forEachElement(tag, bodyElem) {
         if( ! tag.isNull() ) {
             context.styleStack().save();
             const QString localName = tag.localName();
@@ -354,7 +354,7 @@ void KoTextLoader::loadParagraph(KoTextLoadingContext& context, const KoXmlEleme
         kDebug(32500)<<"KoTextLoader::loadParagraph styleName="<<styleName<<" userStyleName="<<userStyleName<<" userStyle="<<(userStyle?"YES":"NULL")<<endl;
     #endif
     if ( !styleName.isEmpty() ) {
-        const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
+        const KoXmlElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
         QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString() ) : QString();
         if ( masterPageName.isEmpty() )
             masterPageName = "Standard";
@@ -479,7 +479,7 @@ void KoTextLoader::loadHeading(KoTextLoadingContext& context, const KoXmlElement
         kDebug(32500)<<"KoTextLoader::loadHeading style-name="<<styleName<<" outline-level="<<level<<endl;
     #endif
     if ( !styleName.isEmpty() ) {
-        const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
+        const KoXmlElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
         //QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
         //if ( masterPageName.isEmpty() ) masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
         #ifdef KOOPENDOCUMENTLOADER_DEBUG

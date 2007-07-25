@@ -1625,21 +1625,16 @@ QBrush KoOasisStyles::loadOasisGradientStyle( const KoStyleStack &styleStack, co
         QGradientStops stops;
 
         // load stops
-        QDomNodeList list = e->childNodes();
-        for( int i = 0; i < list.count(); ++i )
+        KoXmlElement colorstop;
+        forEachElement(colorstop, (*e))
         {
-            if( list.item( i ).isElement() )
+            if( colorstop.namespaceURI() == KoXmlNS::svg && colorstop.localName() == "stop" )
             {
-                QDomElement colorstop = list.item( i ).toElement();
-
-                if( colorstop.namespaceURI() == KoXmlNS::svg && colorstop.localName() == "stop" )
-                {
-                    QGradientStop stop;
-                    stop.second = QColor( colorstop.attributeNS( KoXmlNS::svg, "color", QString() ) );
-                    stop.second.setAlphaF( colorstop.attributeNS( KoXmlNS::svg, "stop-opacity", "1.0" ).toDouble() );
-                    stop.first = colorstop.attributeNS( KoXmlNS::svg, "offset", "0.0" ).toDouble();
-                    stops.append( stop );
-                }
+                QGradientStop stop;
+                stop.second = QColor( colorstop.attributeNS( KoXmlNS::svg, "color", QString() ) );
+                stop.second.setAlphaF( colorstop.attributeNS( KoXmlNS::svg, "stop-opacity", "1.0" ).toDouble() );
+                stop.first = colorstop.attributeNS( KoXmlNS::svg, "offset", "0.0" ).toDouble();
+                stops.append( stop );
             }
         }
         // TODO should the stops be sorted?

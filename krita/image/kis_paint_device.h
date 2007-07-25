@@ -531,15 +531,6 @@ public:
     /** @return the current pixel selection of the selection. It will create a new pixel selection and selection if missing.*/
     KisPixelSelectionSP pixelSelection();
 
-    /** Adds the specified selection to the currently active selection for this paintdevice */
-    void addSelection(KisPixelSelectionSP selection);
-
-    /** Subtracts the specified selection from the currently active selection for this paindevice */
-    void subtractSelection(KisPixelSelectionSP selection);
-
-    /** Intersects the specified selection from the currently active selection for this paindevice */
-    void intersectSelection(KisPixelSelectionSP selection);
-
     /** Whether there is a valid selection for this paintdevice. */
     bool hasSelection() const;
 

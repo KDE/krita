@@ -182,13 +182,13 @@ void KisToolSelectPolygonal::finish()
             {
                 case SELECTION_REPLACE:
                 case SELECTION_ADD:
-                    dev->addSelection(tmpSel);
+                    pixelSelection->addSelection(tmpSel);
                     break;
                 case SELECTION_SUBTRACT:
-                    dev->subtractSelection(tmpSel);
+                    pixelSelection->subtractSelection(tmpSel);
                     break;
                 case SELECTION_INTERSECT:
-                    dev->intersectSelection(tmpSel);
+                    pixelSelection->intersectSelection(tmpSel);
                     break;
                 default:
                     break;

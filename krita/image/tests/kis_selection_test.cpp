@@ -37,21 +37,21 @@ void KisSelectionTest::testSelectionActions()
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
     tmpSel->select(QRect(10,0,20,20));
 
-    dev->addSelection(tmpSel);
+    pixelSelection->addSelection(tmpSel);
     QCOMPARE( dev->selection()->selectedExactRect(), QRect( 0, 0, 30, 20 ) );
 
 
     pixelSelection->clear();
     pixelSelection->select(QRect(0,0,20,20));
 
-    dev->subtractSelection(tmpSel);
+    pixelSelection->subtractSelection(tmpSel);
     QCOMPARE( dev->selection()->selectedExactRect(), QRect( 0, 0, 10, 20 ) );
 
 
     pixelSelection->clear();
     pixelSelection->select(QRect(0,0,20,20));
 
-    dev->intersectSelection(tmpSel);
+    pixelSelection->intersectSelection(tmpSel);
     QCOMPARE( dev->selection()->selectedExactRect(), QRect( 10, 0, 10, 20 ) );
 }
 

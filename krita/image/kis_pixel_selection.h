@@ -98,6 +98,15 @@ public:
 
     void select(QRect r);
 
+    /** Add a selection */
+    void addSelection(KisPixelSelectionSP selection);
+
+    /** Subtracts a selection */
+    void subtractSelection(KisPixelSelectionSP selection);
+
+    /** Intersects a selection */
+    void intersectSelection(KisPixelSelectionSP selection);
+
     void invert();
 
     void clear(QRect r);

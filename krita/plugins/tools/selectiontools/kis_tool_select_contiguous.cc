@@ -114,13 +114,13 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         {
             case SELECTION_REPLACE:
             case SELECTION_ADD:
-                dev->addSelection(selection);
+                pixelSelection->addSelection(selection);
                 break;
             case SELECTION_SUBTRACT:
-                dev->subtractSelection(selection);
+                pixelSelection->subtractSelection(selection);
                 break;
             case SELECTION_INTERSECT:
-                dev->intersectSelection(selection);
+                pixelSelection->intersectSelection(selection);
                 break;
             default:
                 break;

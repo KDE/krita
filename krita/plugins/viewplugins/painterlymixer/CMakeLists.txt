@@ -16,7 +16,7 @@ kde4_add_ui_files(kritapainterlymixer_PART_SRCS kis_painterlymixer.ui)
 
 kde4_add_plugin(kritapainterlymixer ${kritapainterlymixer_PART_SRCS})
 
-target_link_libraries(kritapainterlymixer kritaui glpk)
+target_link_libraries(kritapainterlymixer kritaui ${GLPK_LIBRARY})
 
 install(TARGETS kritapainterlymixer  DESTINATION ${PLUGIN_INSTALL_DIR})
 

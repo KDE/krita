@@ -11,13 +11,18 @@ find_path(GLPK_INCLUDE_DIR NAMES glpk.h
      /usr/local/include
    )
 
-if(GLPK_INCLUDE_DIR)
+find_library(GLPK_LIBRARY glpk
+      /usr/lib
+      /usr/local/lib
+    )
+
+if(GLPK_INCLUDE_DIR AND GLPK_LIBRARY)
   set(GLPK_FOUND TRUE)
-endif(GLPK_INCLUDE_DIR)
+endif(GLPK_INCLUDE_DIR AND GLPK_LIBRARY)
 
 if(GLPK_FOUND)
    if(NOT GLPK_FIND_QUIETLY)
-      message(STATUS "Found GLPK: ${GLPK_INCLUDE_DIR}")
+      message(STATUS "Found GLPK: ${GLPK_INCLUDE_DIR} ${GLPK_LIBRARY}")
    endif(NOT GLPK_FIND_QUIETLY)
 else(GLPK_FOUND)
    if(GLPK_FIND_REQUIRED)
@@ -26,5 +31,6 @@ else(GLPK_FOUND)
 endif(GLPK_FOUND)
 
 mark_as_advanced(GLPK_INCLUDE_DIR)
+mark_as_advanced(GLPK_LIBRARY)
 
 endif(GLPK_INCLUDE_DIR)

@@ -9,4 +9,4 @@ set(illuminant_test_SRCS illuminant_test.cpp
 
 kde4_add_unit_test(KisIlluminantTester TESTNAME krita-painterlymixer-KisIlluminantTester  ${illuminant_test_SRCS})
 
-target_link_libraries(KisIlluminantTester  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisIlluminantTester  glpk ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

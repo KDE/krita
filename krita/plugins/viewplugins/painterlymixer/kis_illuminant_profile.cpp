@@ -49,7 +49,6 @@ bool KisIlluminantProfile::load()
 
 	if (f_ill.open(QFile::ReadOnly)) {
 		QTextStream in_ill(&f_ill);
-// 		in_ill.setCodec(QTextCodec::codecForName("ISO 8859-1"));
 
 		in_ill >> curr;
 
@@ -69,18 +68,18 @@ bool KisIlluminantProfile::loadCurve(QTextStream &in_ill)
 {
 	QString cie = KGlobal::mainComponent().dirs()->locate("kis_illuminants", "CIEXYZ10deg.txt");
 	QFile f_xyz(cie);
-	QString str_first_wl, str_last_wl, str_proportion, str_curr;
-	int cols, first_wl, last_wl;
+	QString str_first_wl, str_last_wl, str_band_size, str_proportion, str_curr;
+	int cols, first_wl, last_wl, band_size;
 	float proportion, curr;
 
 	if (f_xyz.open(QFile::ReadOnly)) {
 		QTextStream in_xyz(&f_xyz);
-// 		in_xyz.setCodec(QTextCodec::codecForName("ISO 8859-1"));
 
-		in_ill >> str_first_wl >> str_last_wl >> str_proportion;
-		cols = 10;
+		in_ill >> str_first_wl >> str_last_wl >> str_band_size >> str_proportion;
+		cols = SAMPLE_NUMBER;
 		first_wl = str_first_wl.toInt();
 		last_wl = str_last_wl.toInt();
+		band_size = str_band_size.toInt();
 		proportion = str_proportion.toFloat();
 
 		float cmf, k, H, Hy_integral = 0, c[3][cols];
@@ -99,15 +98,13 @@ bool KisIlluminantProfile::loadCurve(QTextStream &in_ill)
 				wavelen = (int) curr;
 				if (wavelen > last_wl)
 					break;
-				if (str_curr == "!") {
+				if (curr > first_wl)
 					i++;
-					leggi = true; // So it continues
-					continue;
-				}
 			} else {
 				H = curr;
 				if (wavelen >= first_wl) {
-					int pos = i/* / ((last_wl - first_wl)/cols)*/;
+// 					int pos = i / ((last_wl - first_wl)/cols);
+					int pos = i / band_size;
 					for (int j = 0; j < 4 && !in_xyz.atEnd(); j++) {
 						in_xyz >> str_curr;
 						curr = str_curr.toFloat();
@@ -145,9 +142,10 @@ bool KisIlluminantProfile::loadCurve(QTextStream &in_ill)
 	return false;
 }
 
+
 bool KisIlluminantProfile::loadMatrix(QTextStream &in_ill)
 {
-	int cols = 10;
+	int cols = SAMPLE_NUMBER;
 	gmm::resize(m_matrix, 3, cols);
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; i < cols; j++)

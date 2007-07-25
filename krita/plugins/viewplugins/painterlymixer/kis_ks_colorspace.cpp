@@ -19,6 +19,8 @@
 
 #include <cmath>
 
+#include <glpk.h>
+
 #include <gmm/gmm.h>
 #include <lcms.h>
 
@@ -99,6 +101,57 @@ bool KisKSColorSpace::profileIsCompatible(KoColorProfile* profile) const
 	return true;
 }
 
+void simplex(const gmm::dense_matrix<float> &M, vector<float> &X, const vector<float> &B)
+{
+	cout << "XYZ IN INGRESSO: " << B << endl;
+
+	LPX *lp;
+
+	lp = lpx_create_prob();
+	lpx_set_prob_name(lp, "XYZ2REF");
+	lpx_set_obj_dir(lp, LPX_MIN);
+
+	lpx_add_rows(lp, 3);
+
+	lpx_set_row_name(lp, 1, "X");
+	lpx_set_row_name(lp, 2, "Y");
+	lpx_set_row_name(lp, 3, "Z");
+
+	for (int i = 0; i < 3; i++)
+		lpx_set_row_bnds(lp, i+1, LPX_FX, B[i], B[i]);
+
+	lpx_add_cols(lp, X.size());
+
+	for (uint i = 0; i < X.size(); i++) {
+		lpx_set_col_name(lp, i+1, QString("R"+QString::number(i+1)).toAscii().data());
+		lpx_set_col_bnds(lp, i+1, LPX_DB, 0.00001, 0.99999);
+		lpx_set_obj_coef(lp, i+1, 1.0);
+	}
+
+	int ind[X.size()+1];
+	for (uint i = 1; i <= X.size(); i++)
+		ind[i] = i;
+
+	for (int i = 0; i < 3; i++) {
+		double row[X.size()+1];
+		for (int j = 0; j < X.size(); j++) {
+			if (M(i, j))
+				row[j+1] = M(i, j);
+			else
+				row[j+1] = 1e-11;
+		}
+		lpx_set_mat_row(lp, i+1, X.size(), ind, row);
+	}
+	lpx_simplex(lp);
+
+	for (int i = 0; i < X.size(); i++)
+		X[i] = lpx_get_col_prim(lp, i+1);
+
+	vector<float> test(3);
+	gmm::mult(M, X, test);
+	cout << "COMPUTED XYZ: " << test << endl;
+}
+/*
 void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector<float> &B)
 {
 	const float MAX_RATIO = 100000000.0;
@@ -165,8 +218,11 @@ void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector
 			}
 		}
 
-		if (max == 0.0)
+		if (max == 0.0) {
+			for (uint i = 0; i < X.size(); i++)
+				X[i] = 0.001;
 			return;
+		}
 
 		for (int i = 0; i < rows; i++) {
 			if (i == i_pivot || M(i, j_pivot) == 0.0)
@@ -206,6 +262,9 @@ void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector
 		if (min == 0.0)
 			break;
 
+		if (i_pivot < 0 || j_pivot < 0)
+			return;
+
 		for (int i = 0; i < rows; i++) {
 			if (i == i_pivot || M(i, j_pivot) == 0.0)
 				continue;
@@ -237,7 +296,6 @@ void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector
 // 	cout << "RESULT: " << X << endl;
 }
 
-/*
 void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector<float> &B)
 {
 	const float MAX_RATIO = 100000000.0;
@@ -318,32 +376,65 @@ void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector
 }
 */
 
-double coth(float z)
+double coth(double z)
 {
 	return ( cosh(z) / sinh(z) );
 }
 
-double acoth(float z)
+double acoth(double z)
 {
 	return 0.5*log((1 + 1/z) / (1 - 1/z));
 }
+/*
+void computeKS(const vector<float> &vREF, vector<float> &vKS)
+{
+	double R, Rb, a, b, K, S;
+	vector<float>::iterator i = vKS.begin();
+	for (vector<float>::const_iterator j = vREF.begin(); j != vREF.end(); i += 2, j++) {
+		R = *j;
+		if (R > 0.99999) R = 0.99999;
+		if (R < 0.00001) R = 0.00001;
+
+		Rb = R - 0.000001;
+
+		a = 0.5 * ( R + ( Rb - R + 1) / Rb );
+		b = sqrt( a*a - 1 );
+
+		S = (1 / b) * acoth( ( b*b - ( a - R ) * ( a - 1 ) ) / ( b * ( 1 - R ) ) );
+		K = S * ( a - 1 );
+
+		*(i+0) = K;
+		*(i+1) = S;
+	}
+}
+*/
 
 void computeKS(const vector<float> &vREF, vector<float> &vKS)
 {
+	double R, K, S;
 	vector<float>::iterator i = vKS.begin();
-	for (vector<float>::const_iterator j = /*const_cast<vector<float>&>*/(vREF).begin(); j != vREF.end(); i += 2, j++) {
-// 		if ((*j) > 0.999) (*j) = 0.999;
-// 		if ((*j) < 0.001) (*j) = 0.001;
+	for (vector<float>::const_iterator j = vREF.begin(); j != vREF.end(); i += 2, j++) {
+		R = *j;
+		if (R > 0.99999) R = 0.99999;
+		if (R < 0.00001) R = 0.00001;
+		K = ( pow( R - 1, 2 ) ) / ( 2 * R );
+		S = 1;
 
-		float c_b = (*j) - 0.0001;
-
-		float a_c = 0.5*( (*j) + ( c_b - (*j) + 1) / c_b );
-		float b_c = sqrt( pow( a_c, 2 ) - 1 );
-
-		*(i+1) = ( 1 / b_c ) * acoth( ( pow( b_c, 2 ) - ( a_c - (*j) ) * ( a_c - 1 ) ) / ( b_c * ( 1 - (*j) ) ) );
-		*(i+0) = *(i+1) * ( a_c - 1 );
+		*(i+0) = K;
+		*(i+1) = S;
 	}
 }
+
+/*
+void computeKS(const vector<float> &vREF, vector<float> &vKS)
+{
+	vector<float>::iterator i = vKS.begin();
+	for (vector<float>::const_iterator j = vREF.begin(); j != vREF.end(); i += 2, j++) {
+		*(i+0) = (*j);
+		*(i+1) = 1;
+	}
+}
+*/
 
 #define NORMALIZATION 65535.0
 
@@ -373,16 +464,46 @@ void KisKSColorSpace::fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 n
 	}
 }
 
+/*
+void computeReflectance(const vector<float> &vKS, vector<float> &vREF)
+{
+	double b, K, S, R;
+	vector<float>::const_iterator i = vKS.begin();
+	for (vector<float>::iterator j = vREF.begin(); j != vREF.end(); i += 2, j++) {
+		K = *(i+0);
+		S = *(i+1);
+		b = sqrt( ( K / S ) * ( K / S + 2 ) );
+
+		R = 1 / ( 1 + ( K / S ) + b * coth( b * S ) );
+
+		*j = R;
+	}
+}
+*/
+
+void computeReflectance(const vector<float> &vKS, vector<float> &vREF)
+{
+	double K, S, q, R;
+	vector<float>::const_iterator i = vKS.begin();
+	for (vector<float>::iterator j = vREF.begin(); j != vREF.end(); i += 2, j++) {
+		K = *(i+0);
+		S = *(i+1);
+		q = K / S;
+		R = 1 + q - sqrt( q*q + 2 * q );
+
+		*j = R;
+	}
+}
+
+/*
 void computeReflectance(const vector<float> &vKS, vector<float> &vREF)
 {
 	vector<float>::const_iterator i = vKS.begin();
 	for (vector<float>::iterator j = vREF.begin(); j != vREF.end(); i += 2, j++) {
-		float c_f = sqrt( ( *(i+0) / *(i+1) ) * ( *(i+0) / *(i+1) + 2 ) );
-
-		(*j) = 1 / ( 1 + ( *(i+0) / *(i+1) ) + c_f * coth( c_f * (*(i+1)) ) );
+		(*j) = *(i+0);
 	}
 }
-
+*/
 uint qHash(const vector<float> &v)
 {
 	float sum = 0;
@@ -404,10 +525,10 @@ void KisKSColorSpace::toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPi
 	for (quint32 i = 0; i < nPixels; i++) {
 		for (quint32 j = 0; j < 2*ncols; j++) vKS[j] = srcf[j];
 
-		uint hash = qHash(vKS);
-		if (m_cache.contains(hash)) {
-			memcpy((void*)dst16, (void*)m_cache[hash], 8);
-		} else {
+// 		uint hash = qHash(vKS);
+// 		if (m_cache.contains(hash)) {
+// 			memcpy((void*)dst16, (void*)m_cache[hash], 8);
+// 		} else {
 			computeReflectance(vKS, vREF);
 
 			gmm::mult(m_profile->matrix(), vREF, vXYZ);
@@ -418,10 +539,10 @@ void KisKSColorSpace::toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPi
 
 			dst16[3] = (quint16)(srcf[2*ncols] * NORMALIZATION);
 
-			if (m_cache.count() >= 1000)
-				m_cache.clear();
-			memcpy((void*)*(m_cache.insert(hash, new quint16[4])), (void*)dst16, 8);
-		}
+// 			if (m_cache.count() >= 1000)
+// 				m_cache.clear();
+// 			memcpy((void*)*(m_cache.insert(hash, new quint16[4])), (void*)dst16, 8);
+// 		}
 
 		srcf += 2*ncols + 1;
 		dst16 += 4;

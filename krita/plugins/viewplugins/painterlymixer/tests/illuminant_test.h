@@ -31,6 +31,7 @@ class KisIlluminantTester : public QObject
 		void testConstructor();
 		void testReflectanceColorSpace();
 		void testIlluminantProfile();
+		void testGLPK();
 };
 
 #endif

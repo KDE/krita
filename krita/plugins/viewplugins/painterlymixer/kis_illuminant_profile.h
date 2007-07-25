@@ -26,6 +26,8 @@
 
 #include "KoColorProfile.h"
 
+#define SAMPLE_NUMBER 55
+
 class QTextStream;
 
 class KisIlluminantProfile : public KoColorProfile {

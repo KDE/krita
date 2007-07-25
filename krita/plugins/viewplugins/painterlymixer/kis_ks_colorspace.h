@@ -40,13 +40,13 @@ class KoColorSpaceRegistry;
 class KisIlluminantProfile;
 
 template<typename _channels_type_>
-struct KisKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 21, 20> {
+struct KisKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 2*SAMPLE_NUMBER+1, 2*SAMPLE_NUMBER> {
 
 	struct Cell {
 		struct {
 			_channels_type_ absorption;
 			_channels_type_ scattering;
-		} wavelen[10];
+		} wavelen[SAMPLE_NUMBER];
 		_channels_type_ alpha;
 	};
 
@@ -98,5 +98,8 @@ class KisKSColorSpace : public KoIncompleteColorSpace<KSFloatTraits, KoRGB16Fall
 
 };
 
+void simplex(const gmm::dense_matrix<float> &M_1, vector<float> &X, const vector<float> &B);
+void computeKS(const vector<float> &vREF, vector<float> &vKS);
+void computeReflectance(const vector<float> &vKS, vector<float> &vREF);
 
 #endif // KIS_KS_COLORSPACE_H_

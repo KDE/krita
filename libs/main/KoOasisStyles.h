@@ -157,8 +157,8 @@ public:
     /// Loads gradient style from style stack and oasisStyles adapted to the given size and returns a brush
     static QBrush loadOasisGradientStyle( const KoStyleStack &styleStack, const KoOasisStyles & oasisStyles, const QSizeF &size );
 
-    /// Loads pattern style from style stack and oasisstyle
-    static QBrush loadOasisPatternStyle( const KoStyleStack &styleStack, KoOasisLoadingContext & context );
+    /// Loads pattern style from style stack and oasisstyle adapted to the given size
+    static QBrush loadOasisPatternStyle( const KoStyleStack &styleStack, KoOasisLoadingContext & context, const QSizeF &size );
 
     static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOasisStyles & oasisStyles );
 

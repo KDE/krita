@@ -43,9 +43,6 @@ class KoShape;
  * The framework will then call open() to populate the widget with data from
  * the param shape.  After the user ok-ed the dialog the save() will be called
  * to allow the widget to apply all settings from the widget to the shape.
- * Next, the createAction will be called which expects an action to be created
- * with an execute() and unexecute() to redo or undo the changes the user made
- * in this specific dialog.
  */
 class FLAKE_EXPORT KoShapeConfigWidgetBase : public QWidget {
 public:
@@ -67,7 +64,6 @@ public:
      * Called by the tool that created the shape.
      */
     virtual void save() = 0;
-    virtual KAction *createAction() = 0;
 
     /**
      * Overwrite this method to set the application unit type and update all unit-widgets

@@ -31,6 +31,7 @@
 
 #include <kdebug.h>
 #include <QTextCharFormat>
+#include <QtGui/QFontDatabase>
 #include <QFont>
 #include <QTextCursor>
 #include <QTextBlock>
@@ -157,15 +158,33 @@ void KoTextSelectionHandler::insertFrameBreak() {
 }
 
 void KoTextSelectionHandler::setFontSize(int size) {
-    // TODO
+    QTextCharFormat newSize;
+    newSize.setFontPointSize(size);
+    d->caret->mergeCharFormat(newSize);
 }
 
 void KoTextSelectionHandler::increaseFontSize() {
-    // TODO
+    const int current = d->caret->charFormat().fontPointSize();
+    QFontDatabase fontDB;
+    foreach(int pt, fontDB.standardSizes()) {
+        if(pt > current) {
+            setFontSize(pt);
+            return;
+        }
+    }
 }
 
 void KoTextSelectionHandler::decreaseFontSize() {
-    // TODO
+    const int current = d->caret->charFormat().fontPointSize();
+    int prev = 1;
+    QFontDatabase fontDB;
+    foreach(int pt, fontDB.standardSizes()) {
+        if(pt >= current) {
+            setFontSize(prev);
+            return;
+        }
+        prev = pt;
+    }
 }
 
 void KoTextSelectionHandler::setHorizontalTextAlignment(Qt::Alignment align) {
@@ -246,7 +265,7 @@ void KoTextSelectionHandler::insert(const QString &text) {
 }
 
 void KoTextSelectionHandler::selectFont(QWidget *parent) {
-    KoFontDia *fontDlg = new KoFontDia( d->caret->charFormat()); // , 0, parent);
+    KoFontDia *fontDlg = new KoFontDia( d->caret->charFormat());
     fontDlg->exec();
     d->caret->setCharFormat(fontDlg->format());
     delete fontDlg;

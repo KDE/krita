@@ -1,0 +1,63 @@
+<ui version="4.0" >
+ <class>WdgBookmarkedConfigurationsEditor</class>
+ <widget class="QWidget" name="WdgBookmarkedConfigurationsEditor" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>450</width>
+    <height>245</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Edit presets</string>
+  </property>
+  <layout class="QHBoxLayout" >
+   <item>
+    <widget class="QListView" name="listConfigurations" />
+   </item>
+   <item>
+    <layout class="QVBoxLayout" >
+     <item>
+      <widget class="QPushButton" name="pushButtonBookmarkCurrent" >
+       <property name="text" >
+        <string>Bookmark current</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonDelete" >
+       <property name="text" >
+        <string>Delete</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonClose" >
+       <property name="text" >
+        <string>Close</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

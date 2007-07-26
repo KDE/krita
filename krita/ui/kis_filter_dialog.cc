@@ -26,6 +26,7 @@
 #include <kis_layer.h>
 
 // From krita/ui
+#include "kis_bookmarked_configurations_editor.h"
 #include "kis_bookmarked_filter_configurations_model.h"
 
 #include "ui_wdgfilterdialog.h"
@@ -63,10 +64,11 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     d->mask = new KisFilterMask();
     d->layer->setPreviewMask( d->mask );
     connect(d->uiFilterDialog.comboBoxPresets, SIGNAL(activated ( int )), SLOT(slotBookmarkedFilterConfigurationSelected(int )) );
-    connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed ()), SLOT(accept()));
-    connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed ()), SLOT(apply()));
-    connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed ()), SLOT(apply()));
-    connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed ()), SLOT(reject()));
+    connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
+    connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
+    connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
+    connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
+    connect(d->uiFilterDialog.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
 }
 
 KisFilterDialog::~KisFilterDialog()
@@ -130,6 +132,12 @@ void KisFilterDialog::slotBookmarkedFilterConfigurationSelected(int index)
         KisFilterConfiguration* config  = d->currentBookmarkedFilterConfigurationsModel->configuration( modelIndex );
         d->currentFilterConfigurationWidget->setConfiguration( config );
     }
+}
+
+void KisFilterDialog::editConfigurations()
+{
+    KisBookmarkedConfigurationsEditor editor(this, d->currentBookmarkedFilterConfigurationsModel);
+    editor.exec();
 }
 
 #include "kis_filter_dialog.moc"

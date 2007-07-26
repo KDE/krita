@@ -13,37 +13,24 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_FILTER_DIALOG_H_
-#define _KIS_FILTER_DIALOG_H_
+#ifndef _KIS_BOOKMARKED_CONFIGURATIONS_EDITOR_H_
+#define _KIS_BOOKMARKED_CONFIGURATIONS_EDITOR_H_
 
 #include <QDialog>
+#include <krita_export.h>
 
-#include <kis_types.h>
+class KisBookmarkedConfigurationsModel;
 
-class KisFilter;
-class KisFilterConfiguration;
-
-class KisFilterDialog : public QDialog {
-    Q_OBJECT
-    struct Private;
+class KRITAUI_EXPORT KisBookmarkedConfigurationsEditor : public QDialog {
     public:
-        KisFilterDialog(QWidget* parent, KisLayerSP device);
-        ~KisFilterDialog();
-        void setFilter(KisFilterSP f);
-    public slots:
-        void updatePreview();
-    protected slots:
-        void slotBookmarkedFilterConfigurationSelected(int );
-        void apply();
-        void editConfigurations();
-    signals:
-        void sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*);
+        KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* manager);
+        ~KisBookmarkedConfigurationsEditor();
     private:
-        KisFilterDialog::Private* const d;
+        struct Private;
+        Private* const d;
 };
 
 #endif

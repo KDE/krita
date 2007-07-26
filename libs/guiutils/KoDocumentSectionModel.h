@@ -36,6 +36,11 @@
  * The KoDocumentSectionView will display a thumbnail and a row of
  * icon properties for every document section.
  *
+ * KoDocumentSectionModel is separate from the flake hierarchy:
+ * documents sections are things like layers, sheets or pages, i.e., a
+ * shape can cover more than one section, and a section can contain
+ * many shapes or part of shapes.)
+ *
  * See also the Qt documentation for QAbstractItemModel. This class
  * only extends that interface to provide a name and set of toggle
  * properties (like visible, locked, selected -- let your imagination

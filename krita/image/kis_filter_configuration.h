@@ -48,7 +48,7 @@ public:
      */
     KisFilterConfiguration(const KisFilterConfiguration & rhs);
 
-    virtual ~KisFilterConfiguration() {}
+    virtual ~KisFilterConfiguration();
 
 public:
 

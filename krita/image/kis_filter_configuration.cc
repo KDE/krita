@@ -39,8 +39,8 @@ struct KisFilterConfiguration::Private {
 KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 version)
     : d(new Private)
 {
- d->name = name;
- d->version = version;
+     d->name = name;
+     d->version = version;
 }
 
 KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs) : d(new Private)
@@ -49,11 +49,16 @@ KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rh
     d->version = rhs.d->version;
 }
 
+KisFilterConfiguration::~KisFilterConfiguration()
+{
+    delete d;
+}
+
 void KisFilterConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) const
 {
     root.setAttribute( "name", d->name );
     root.setAttribute( "version", d->version );
-    
+
     KisSerializableConfiguration::toLegacyXML(doc, root);
 }
 

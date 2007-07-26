@@ -48,14 +48,37 @@ QString KisRecordedAction::name()
     return d->name;
 }
 
-void KisRecordedAction::toXML(QDomDocument& , QDomElement elt)
+void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt)
 {
     elt.setAttribute( "name", name() );
     elt.setAttribute( "id", id() );
 }
 
+
+/*
+
 void KisRecordedAction::fromXML(QDomElement elt)
 {
     d->name = elt.attribute("name","");
     Q_ASSERT(d->id == elt.attribute( "id", ""));
+}
+*/
+
+struct KisRecordedActionFactory::Private {
+    QString id;
+};
+
+KisRecordedActionFactory::KisRecordedActionFactory(QString id) : d(new Private)
+{
+    d->id = id;
+}
+
+KisRecordedActionFactory::~KisRecordedActionFactory()
+{
+    delete d;
+}
+
+QString KisRecordedActionFactory::id()
+{
+    return d->id;
 }

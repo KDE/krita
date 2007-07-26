@@ -72,18 +72,35 @@ void KisRecordedPolyLinePaintAction::play()
     }
 }
 
-void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement elt)
+void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement& elt)
 {
     elt.setAttribute("layer", d->layer->id());
     elt.setAttribute("paintop", d->paintOpId);
     QDomElement ressourceElt = doc.createElement( "Brush");
     d->brush->toXML(doc, ressourceElt);
     elt.appendChild(ressourceElt);
+    QDomElement waypointsElt = doc.createElement( "Waypoints");
     foreach(KisPaintInformation info, d->infos)
     {
         QDomElement infoElt = doc.createElement( "Waypoint");
         info.toXML(doc, infoElt);
-        elt.appendChild(infoElt);
+        waypointsElt.appendChild(infoElt);
     }
+    elt.appendChild(waypointsElt);
     KisRecordedPaintAction::toXML(doc,elt);
+}
+
+KisRecordedPolyLinePaintActionFactory::KisRecordedPolyLinePaintActionFactory() :
+        KisRecordedActionFactory("PolyLinePaintAction")
+{
+}
+KisRecordedPolyLinePaintActionFactory::~KisRecordedPolyLinePaintActionFactory()
+{
+    
+}
+
+KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img, const QDomElement& elt)
+{
+    
+    return 0;
 }

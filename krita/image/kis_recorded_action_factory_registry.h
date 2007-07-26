@@ -16,36 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_RECORDED_ACTION_H_
-#define _KIS_RECORDED_ACTION_H_
+#ifndef _KIS_RECORDED_ACTION_FACTORY_REGISTRY_H_
+#define _KIS_RECORDED_ACTION_FACTORY_REGISTRY_H_
 
-class QDomDocument;
-class QDomElement;
-class QString;
+#include <KoGenericRegistry.h>
+
+class KisRecordedActionFactory;
 
 #include <krita_export.h>
-#include <kis_types.h>
 
-class KRITAIMAGE_EXPORT KisRecordedAction {
+class KRITAIMAGE_EXPORT KisRecordedActionFactoryRegistry : public KoGenericRegistry<KisRecordedActionFactory*>
+{
     public:
-        KisRecordedAction(QString name, QString id);
-        virtual ~KisRecordedAction();
-        virtual void play() = 0;
-        virtual void toXML(QDomDocument& doc, QDomElement& elt);
-    public:
-        QString id();
-        QString name();
-    private:
-        struct Private;
-        Private* const d;
-};
-
-class KRITAIMAGE_EXPORT KisRecordedActionFactory {
-    public:
-        KisRecordedActionFactory(QString id);
-        virtual ~KisRecordedActionFactory();
-        virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt) =0;
-        QString id();
+        KisRecordedActionFactoryRegistry();
+        ~KisRecordedActionFactoryRegistry();
+        static KisRecordedActionFactoryRegistry* instance();
     private:
         struct Private;
         Private* const d;

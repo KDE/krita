@@ -39,10 +39,17 @@ class KRITAIMAGE_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaint
         ~KisRecordedPolyLinePaintAction();
         void addPoint(const KisPaintInformation& info);
         virtual void play();
-        virtual void toXML(QDomDocument& doc, QDomElement elt);
+        virtual void toXML(QDomDocument& doc, QDomElement& elt);
     private:
         struct Private;
         Private* const d;
+};
+
+class KisRecordedPolyLinePaintActionFactory : public KisRecordedActionFactory {
+    public:
+        KisRecordedPolyLinePaintActionFactory();
+        virtual ~KisRecordedPolyLinePaintActionFactory();
+        virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt);
 };
 
 #endif

@@ -361,8 +361,14 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
                                             if (rowTag.namespaceURI() == KoXmlNS::table) {
                                                 if (rowLocalName == "table-cell") {
                                                     // Ok, it's a cell...
-                                                    cursor = tbl->cellAt(tbl->rows() - 1, currentCell).firstCursorPosition();
-                                                    loadBody(context, rowTag, cursor);
+                                                    const int currentRow = tbl->rows() - 1;
+                                                    QTextTableCell cell = tbl->cellAt(currentRow, currentCell);
+                                                    if (cell.isValid()) {
+                                                        cursor = cell.firstCursorPosition();
+                                                        loadBody(context, rowTag, cursor);
+                                                    }
+                                                    else
+                                                        kDebug(32500)<<"Invalid table-cell row="<<currentRow<<" column="<<currentCell<<endl;
                                                     currentCell++;
                                                 }
                                             }

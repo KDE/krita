@@ -35,7 +35,11 @@ namespace KoText {
 
     /// This enum contains values to be used as keys in the KoCanvasResourceProvider
     enum Options {
-        ShowTextFrames =  278622039,
+        ShowTextFrames =  278622039, ///< boolean that enables painting of frame outlines
+        ShowSpaces,         ///< boolean that enables painting of spaces
+        ShowTabs,           ///< boolean that enables painting of tabs
+        ShowEnters,         ///< boolean that enables painting of enters (linefeed chars)
+        ShowSpecialCharacters,  ///< boolean that enables painting of special characters (nbsp etc)
         BidiDocument = 493038196,
         CurrentTextDocument = 382490375, ///< set by the text plugin whenever the document is changed
         CurrentTextPosition = 183523,   ///<  used by the text plugin whenever the position is changed

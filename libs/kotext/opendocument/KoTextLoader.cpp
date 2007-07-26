@@ -57,6 +57,7 @@
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QTextList>
+#include <QTextTable>
 #include <klocale.h>
 
 // if defined then debugging is enabled
@@ -323,6 +324,59 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
                 }
                 else {
                     kWarning(32500)<<"KoTextLoader::loadBody unhandled draw::"<<localName<<endl;
+                }
+            } else if( tag.namespaceURI() == KoXmlNS::table ) {
+                if ( localName == "table" ) {
+                    cursor.insertText("\n");
+                    cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 1);
+                    QTextTable *tbl = cursor.insertTable(1, 1);
+                    int rows = 0;
+                    int columns = 0;
+                    kDebug() << "Table inserted" << endl;
+                    for(KoXmlNode tblNode = node.firstChild(); ! tblNode.isNull(); tblNode = tblNode.nextSibling()) {
+                        KoXmlElement tblTag = tblNode.toElement();
+                        if( ! tblTag.isNull() ) {
+                            const QString tblLocalName = tblTag.localName();
+                            if (tblTag.namespaceURI() == KoXmlNS::table) {
+                                if (tblLocalName == "table-column") {
+                                    // Do some parsing with the column, see §8.2.1, ODF 1.1 spec
+                                    columns++;
+                                    if (rows > 0)
+                                        tbl->resize(rows, columns);
+                                    else
+                                        tbl->resize(1, columns);
+                                } else if (tblLocalName == "table-row") {
+                                    // Lot of work to do here...
+                                    rows++;
+                                    if (columns > 0)
+                                        tbl->resize(rows, columns);
+                                    else
+                                        tbl->resize(rows, 1);
+                                    // Added a row
+                                    int currentCell = 0;
+                                    for(KoXmlNode rowNode = tblNode.firstChild(); ! rowNode.isNull(); rowNode = rowNode.nextSibling()) {
+                                        KoXmlElement rowTag = rowNode.toElement();
+                                        if (!rowTag.isNull()) {
+                                            const QString rowLocalName = rowTag.localName();
+                                            if (rowTag.namespaceURI() == KoXmlNS::table) {
+                                                if (rowLocalName == "table-cell") {
+                                                    // Ok, it's a cell...
+                                                    cursor = tbl->cellAt(tbl->rows() - 1, currentCell).firstCursorPosition();
+                                                    loadBody(context, rowTag, cursor);
+                                                    currentCell++;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    cursor = tbl->lastCursorPosition ();
+                    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
+                }
+                else {
+                    kWarning(32500)<<"KoTextLoader::loadBody unhandled table::"<<localName<<endl;
                 }
             }
             context.styleStack().restore(); // remove the styles added by the paragraph or list
@@ -713,7 +767,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
         const QString localName( ts.localName() );
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
-
+        
         // allow loadSpanTag to modify the stylestack
         context.styleStack().save();
 

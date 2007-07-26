@@ -38,6 +38,7 @@ typedef QDomDocument KoXmlDocument;
 #else
 
 class KoXmlElement;
+class KoXmlNode;
 class KoXmlText;
 class KoXmlCDATASection;
 class KoXmlDocumentType;

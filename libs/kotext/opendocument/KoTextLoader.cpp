@@ -333,8 +333,8 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
                     int rows = 0;
                     int columns = 0;
                     kDebug() << "Table inserted" << endl;
-                    for(KoXmlNode tblNode = node.firstChild(); ! tblNode.isNull(); tblNode = tblNode.nextSibling()) {
-                        KoXmlElement tblTag = tblNode.toElement();
+                    KoXmlElement tblTag;
+                    forEachElement(tblTag, tag) {
                         if( ! tblTag.isNull() ) {
                             const QString tblLocalName = tblTag.localName();
                             if (tblTag.namespaceURI() == KoXmlNS::table) {
@@ -354,8 +354,8 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
                                         tbl->resize(rows, 1);
                                     // Added a row
                                     int currentCell = 0;
-                                    for(KoXmlNode rowNode = tblNode.firstChild(); ! rowNode.isNull(); rowNode = rowNode.nextSibling()) {
-                                        KoXmlElement rowTag = rowNode.toElement();
+                                    KoXmlElement rowTag;
+                                    forEachElement(rowTag, tblTag) {
                                         if (!rowTag.isNull()) {
                                             const QString rowLocalName = rowTag.localName();
                                             if (rowTag.namespaceURI() == KoXmlNS::table) {

@@ -155,14 +155,6 @@ KoView::KoView( KoDocument *document, QWidget *parent )
 
   actionCollection()->setAssociatedWidget(this);
   setupGlobalActions();
-  /**** not needed anymore, according to David (Werner)
-  KActionCollection *coll = actionCollection();
-  QValueList<QAction *> docActions = document->actionCollection()->actions();
-  QValueList<QAction *>::ConstIterator it = docActions.begin();
-  QValueList<QAction *>::ConstIterator end = docActions.end();
-  for (; it != end; ++it )
-      coll->insert( *it );
-  */
 
   KStatusBar * sb = statusBar();
   if ( sb ) // No statusbar in e.g. konqueror

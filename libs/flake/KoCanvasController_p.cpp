@@ -134,6 +134,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         else
             m_draggedShape = factory->createDefaultShape();
 
+        Q_ASSERT(m_draggedShape);
         if (!m_draggedShape) return;
 
         if( m_draggedShape->shapeId().isEmpty() )
@@ -145,6 +146,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
 }
 
 void Viewport::handleDropEvent(QDropEvent *event) {
+
     if ( !m_draggedShape ) return;
 
     m_draggedShape->setAbsolutePosition( correctPosition(event->pos()) );

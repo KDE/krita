@@ -133,6 +133,9 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         }
         else
             m_draggedShape = factory->createDefaultShape();
+
+        if (!m_draggedShape) return;
+
         if( m_draggedShape->shapeId().isEmpty() )
             m_draggedShape->setShapeId(factory->id());
         m_draggedShape->setZIndex(INT_MAX);
@@ -142,6 +145,8 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
 }
 
 void Viewport::handleDropEvent(QDropEvent *event) {
+    if ( !m_draggedShape ) return;
+
     m_draggedShape->setAbsolutePosition( correctPosition(event->pos()) );
     m_parent->canvas()->shapeManager()->remove(m_draggedShape); // remove it to not interfere with z-index calc.
     QUndoCommand * cmd = m_parent->canvas()->shapeController()->addShape( m_draggedShape );

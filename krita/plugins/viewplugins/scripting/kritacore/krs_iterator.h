@@ -219,7 +219,7 @@ class Iterator : public IteratorBase
                 memcpy(m_it->rawData(), iter->m_it->oldRawData(), m_layer->colorSpace()->pixelSize());
             } else {
                 ConstIteratorBase* citer = dynamic_cast< ConstIteratorBase* >(obj);
-                if(iter)
+                if(citer)
                 {
                     memcpy(m_it->rawData(), citer->oldRawData(), m_layer->colorSpace()->pixelSize());
                 }

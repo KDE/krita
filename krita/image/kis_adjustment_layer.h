@@ -76,7 +76,7 @@ public:
     KisFilterConfiguration * filter() const;
     void setFilter(KisFilterConfiguration * filterConfig);
 
-    KisSelectionSP selection();
+    KisSelectionSP selection() const;
 
     /// Set the selection of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);

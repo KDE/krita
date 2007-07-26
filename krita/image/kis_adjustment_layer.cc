@@ -122,7 +122,7 @@ void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
 }
 
 
-KisSelectionSP KisAdjustmentLayer::selection()
+KisSelectionSP KisAdjustmentLayer::selection() const
 {
     return m_selection;
 }

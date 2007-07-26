@@ -4,10 +4,12 @@ Name=Shape border definition
 Name[fa]=تعریف لبه شکل
 Name[pt]=Definição do contorno da forma
 Name[pt_BR]=Definição do contorno da forma
+Name[sv]=Formkantdefinition
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Border
 Comment=Definition of a flake shape border
 Comment[pt]=Definição do contorno de uma forma do Flake
 Comment[pt_BR]=Definição do contorno de uma forma do Flake
+Comment[sv]=Definition av en formkant i Flake
 [PropertyDef::X-Flake-Version]
 Type=int

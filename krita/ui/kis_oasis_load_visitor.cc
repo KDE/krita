@@ -39,14 +39,14 @@
 
 #include "kis_doc2.h"
 
-void KisOasisLoadVisitor::loadImage(const QDomElement& elem)
+void KisOasisLoadVisitor::loadImage(const KoXmlElement& elem)
 {
     m_image = new KisImage(m_doc->undoAdapter(), 100, 100, KoColorSpaceRegistry::instance()->colorSpace("RGBA",""), "OpenRaster Image (name)"); // TODO: take into account width and height parameters, and metadata, when width = height = 0 use the new function from boud to get the size of the image after the layers have been loaded
 
     m_image->lock();
-    for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
+    for (KoXmlNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "image:stack") { // it's the root layer !
-            QDomElement subelem = node.toElement();
+            KoXmlElement subelem = node.toElement();
             loadGroupLayer(subelem, m_image->rootLayer());
             return;
         }
@@ -55,19 +55,19 @@ void KisOasisLoadVisitor::loadImage(const QDomElement& elem)
     m_image = KisImageSP(0);
 }
 
-void KisOasisLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayer* layer)
+void KisOasisLoadVisitor::loadLayerInfo(const KoXmlElement& elem, KisLayer* layer)
 {
     layer->setName(elem.attribute("name"));
     layer->setX(elem.attribute("x").toInt());
     layer->setY(elem.attribute("y").toInt());
 }
 
-void KisOasisLoadVisitor::loadAdjustementLayer(const QDomElement& elem, KisAdjustmentLayerSP aL)
+void KisOasisLoadVisitor::loadAdjustementLayer(const KoXmlElement& elem, KisAdjustmentLayerSP aL)
 {
     loadLayerInfo(elem, aL.data());
 }
 
-void KisOasisLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL)
+void KisOasisLoadVisitor::loadPaintLayer(const KoXmlElement& elem, KisPaintLayerSP pL)
 {
     loadLayerInfo(elem, pL.data());
 
@@ -97,13 +97,13 @@ void KisOasisLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerS
     kDebug(41008) << "Loading was unsuccessful" << endl;
 }
 
-void KisOasisLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL)
+void KisOasisLoadVisitor::loadGroupLayer(const KoXmlElement& elem, KisGroupLayerSP gL)
 {
     loadLayerInfo(elem, gL.data());
-    for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
+    for (KoXmlNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement())
         {
-            QDomElement subelem = node.toElement();
+            KoXmlElement subelem = node.toElement();
             if(node.nodeName()== "image:stack")
             {
                 quint8 opacity = 255;

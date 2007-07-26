@@ -21,8 +21,9 @@
 #include "kis_global.h"
 #include "kis_types.h"
 
+#include <KoXmlReader.h>
+
 class KoOasisStore;
-class QDomElement;
 class KisPaintLayer;
 class KisGroupLayer;
 class KisAdjustmentLayer;
@@ -34,14 +35,14 @@ public:
     virtual ~KisOasisLoadVisitor() {}
 
 public:
-    void loadImage(const QDomElement& elem);
-    void loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL);
-    void loadAdjustementLayer(const QDomElement& elem, KisAdjustmentLayerSP pL);
-    void loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL);
+    void loadImage(const KoXmlElement& elem);
+    void loadPaintLayer(const KoXmlElement& elem, KisPaintLayerSP pL);
+    void loadAdjustementLayer(const KoXmlElement& elem, KisAdjustmentLayerSP pL);
+    void loadGroupLayer(const KoXmlElement& elem, KisGroupLayerSP gL);
     inline KisImageSP image() { return m_image; }
     QMap<KisLayer *, QString>& layerFilenames() { return m_layerFilenames; }
 private:
-    void loadLayerInfo(const QDomElement& elem, KisLayer* layer);
+    void loadLayerInfo(const KoXmlElement& elem, KisLayer* layer);
     KisImageSP m_image;
     KisDoc2* m_doc;
     QMap<KisLayer *, QString> m_layerFilenames;

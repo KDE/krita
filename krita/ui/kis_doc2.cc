@@ -232,13 +232,13 @@ QDomDocument KisDoc2::saveXML()
     return doc;
 }
 
-bool KisDoc2::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocument&, KoStore* store)
+bool KisDoc2::loadOasis( const KoXmlDocument& doc, KoOasisStyles&, const KoXmlDocument&, KoStore* store)
 {
     kDebug(41008) << "loading with OpenRaster" << endl;
-    QDomNode root = doc.documentElement();
-    for (QDomNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
+    KoXmlNode root = doc.documentElement();
+    for (KoXmlNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "office:body") {
-            QDomElement elem = node.toElement();
+            KoXmlElement elem = node.toElement();
             KoOasisStore* oasisStore =  new KoOasisStore( store );
             KisOasisLoadVisitor olv(this,oasisStore);
             olv.loadImage(elem);
@@ -280,11 +280,11 @@ bool KisDoc2::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
     return true;
 }
 
-bool KisDoc2::loadXML(QIODevice *, const QDomDocument& doc)
+bool KisDoc2::loadXML(QIODevice *, const KoXmlDocument& doc)
 {
-    QDomElement root;
+    KoXmlElement root;
     QString attr;
-    QDomNode node;
+    KoXmlNode node;
     KisImageSP img;
 
     if (!init())
@@ -309,7 +309,7 @@ bool KisDoc2::loadXML(QIODevice *, const QDomDocument& doc)
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
             if (node.nodeName() == "IMAGE") {
-                QDomElement elem = node.toElement();
+                KoXmlElement elem = node.toElement();
                 if (!(img = loadImage(elem)))
                     return false;
 
@@ -359,13 +359,13 @@ QDomElement KisDoc2::saveImage(QDomDocument& doc, KisImageSP img)
     return image;
 }
 
-KisImageSP KisDoc2::loadImage(const QDomElement& element)
+KisImageSP KisDoc2::loadImage(const KoXmlElement& element)
 {
 
     KisConfig cfg;
     QString attr;
-    QDomNode node;
-    QDomNode child;
+    KoXmlNode node;
+    KoXmlNode child;
     KisImageSP img = 0;
     QString name;
     qint32 width;
@@ -440,10 +440,10 @@ KisImageSP KisDoc2::loadImage(const QDomElement& element)
     return img;
 }
 
-void KisDoc2::loadLayers(const QDomElement& element, KisImageSP img, KisGroupLayerSP parent)
+void KisDoc2::loadLayers(const KoXmlElement& element, KisImageSP img, KisGroupLayerSP parent)
 {
-    QDomNode node = element.firstChild();
-    QDomNode child;
+    KoXmlNode node = element.firstChild();
+    KoXmlNode child;
 
     if(!node.isNull())
     {
@@ -465,7 +465,7 @@ void KisDoc2::loadLayers(const QDomElement& element, KisImageSP img, KisGroupLay
     }
 }
 
-KisLayerSP KisDoc2::loadLayer(const QDomElement& element, KisImageSP img)
+KisLayerSP KisDoc2::loadLayer(const KoXmlElement& element, KisImageSP img)
 {
     // Nota bene: If you add new properties to layers, you should
     // ALWAYS define a default value in case the property is not
@@ -528,7 +528,7 @@ KisLayerSP KisDoc2::loadLayer(const QDomElement& element, KisImageSP img)
 }
 
 
-KisLayerSP KisDoc2::loadPaintLayer(const QDomElement& element, KisImageSP img,
+KisLayerSP KisDoc2::loadPaintLayer(const KoXmlElement& element, KisImageSP img,
                                   const QString & name, qint32 x, qint32 y,
                                   qint32 opacity, bool visible, bool locked, const QString & compositeOp)
 {
@@ -563,9 +563,9 @@ KisLayerSP KisDoc2::loadPaintLayer(const QDomElement& element, KisImageSP img,
 
     // Load exif info
 /*TODO: write and use the legacy stuff to load that exif tag
-        for( QDomNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() )
+        for( KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() )
     {
-        QDomElement e = node.toElement();
+        KoXmlElement e = node.toElement();
         if ( !e.isNull() && e.tagName() == "ExifInfo" )
         {
             layer->paintDevice()->exifInfo()->load(e);
@@ -575,7 +575,7 @@ KisLayerSP KisDoc2::loadPaintLayer(const QDomElement& element, KisImageSP img,
     return KisLayerSP(layer.data());
 }
 
-KisGroupLayerSP KisDoc2::loadGroupLayer(const QDomElement& element, KisImageSP img,
+KisGroupLayerSP KisDoc2::loadGroupLayer(const KoXmlElement& element, KisImageSP img,
                                        const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                                        const QString & compositeOp)
 {
@@ -596,7 +596,7 @@ KisGroupLayerSP KisDoc2::loadGroupLayer(const QDomElement& element, KisImageSP i
     return layer;
 }
 
-KisAdjustmentLayerSP KisDoc2::loadAdjustmentLayer(const QDomElement& element, KisImageSP img,
+KisAdjustmentLayerSP KisDoc2::loadAdjustmentLayer(const KoXmlElement& element, KisImageSP img,
                                              const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                                              const QString & compositeOp)
 {
@@ -639,7 +639,7 @@ KisAdjustmentLayerSP KisDoc2::loadAdjustmentLayer(const QDomElement& element, Ki
 }
 
 
-KisShapeLayerSP KisDoc2::loadShapeLayer(const QDomElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp)
+KisShapeLayerSP KisDoc2::loadShapeLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp)
 {
 #ifdef __GNUC__
 #warning "Implement loading of shape layers!"

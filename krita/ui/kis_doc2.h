@@ -69,10 +69,10 @@ public:
     virtual bool wantExportConfirmation() const { return false; }
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
-    virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
+    virtual bool loadOasis( const KoXmlDocument&, KoOasisStyles&, const KoXmlDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
     virtual bool loadChildren( KoStore* store);
-    virtual bool loadXML(QIODevice *, const QDomDocument& doc);
+    virtual bool loadXML(QIODevice *, const KoXmlDocument& doc);
     virtual QByteArray mimeType() const;
     virtual QWidget* createCustomDocumentWidget(QWidget *parent);
     virtual KoDocument* hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix = QMatrix());
@@ -177,13 +177,13 @@ private slots:
 private:
 
     QDomElement saveImage(QDomDocument& doc, KisImageSP img);
-    KisImageSP loadImage(const QDomElement& elem);
-    void loadLayers(const QDomElement& element, KisImageSP img, KisGroupLayerSP parent);
-    KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
-    KisLayerSP loadPaintLayer(const QDomElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString & compositeOp);
-    KisGroupLayerSP loadGroupLayer(const QDomElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
-    KisAdjustmentLayerSP loadAdjustmentLayer(const QDomElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString & compositeOp);
-    KisShapeLayerSP loadShapeLayer(const QDomElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
+    KisImageSP loadImage(const KoXmlElement& elem);
+    void loadLayers(const KoXmlElement& element, KisImageSP img, KisGroupLayerSP parent);
+    KisLayerSP loadLayer(const KoXmlElement& elem, KisImageSP img);
+    KisLayerSP loadPaintLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString & compositeOp);
+    KisGroupLayerSP loadGroupLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
+    KisAdjustmentLayerSP loadAdjustmentLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString & compositeOp);
+    KisShapeLayerSP loadShapeLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
     bool init();
 
     void setIOSteps(qint32 nsteps);

@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
- 
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -31,6 +32,7 @@ class KoShape;
 class KoXmlWriter;
 class KoSavingContext;
 class KoGenStyles;
+class KoShapeLayer;
 
 /**
  * The set of data for the ODF file format used during saving of a shape.
@@ -131,10 +133,22 @@ public:
      */
     const QString drawId( const KoShape * shape, bool insert = true );
 
+    /**
+     * Adds a layer to save into a layer-set in styles.xml according to 9.1.2/9.1.3 odf spec
+     * @param layer the layer to save
+     */
+    void addLayerForSaving( const KoShapeLayer * layer );
+
+    /**
+     * Saves the layers added with addLayerForSaving to the xml writer
+     */
+    void saveLayerSet( KoXmlWriter * xmlWriter ) const;
+
 private:
     KoXmlWriter *m_xmlWriter;
     KoShapeSavingOptions m_savingOptions;
     QMap<const KoShape *, QString> m_drawIds;
+    QList<const KoShapeLayer*> m_layers;
     int m_drawId;
 
     KoSavingContext &m_context;

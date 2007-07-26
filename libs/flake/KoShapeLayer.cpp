@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,7 +20,11 @@
 #include "KoShapeLayer.h"
 #include "SimpleShapeContainerModel.h"
 #include "KoShapeSavingContext.h"
-#include "KoXmlWriter.h"
+#include "KoShapeLoadingContext.h"
+#include <KoXmlWriter.h>
+#include <KoGenStyle.h>
+#include <KoGenStyles.h>
+#include <KoXmlNS.h>
 
 KoShapeLayer::KoShapeLayer()
 : KoShapeContainer(new SimpleShapeContainerModel())
@@ -50,17 +54,23 @@ QRectF KoShapeLayer::boundingRect() const
 }
 
 void KoShapeLayer::saveOdf( KoShapeSavingContext & context ) const {
-    // save according to parag 9.1.3
-    context.xmlWriter().startElement( "draw:layer" );
-    context.xmlWriter().startElement( "svg:title" );
-    context.xmlWriter().addTextNode(name());
-    context.xmlWriter().endElement();
-    context.xmlWriter().endElement();
+    // save later according to parag 9.1.3
+    context.addLayerForSaving( this );
 
     foreach(KoShape* shape, iterator())
         shape->saveOdf(context);
 }
 
 bool KoShapeLayer::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    return false; // TODO
+    // set layer name
+    setName( element.attributeNS( KoXmlNS::draw, "name" ) );
+    // layer locking
+    setLocked( element.attributeNS( KoXmlNS::draw, "protected", "false" ) == "true" );
+    // layer visibility
+    setVisible( element.attributeNS( KoXmlNS::draw, "display", "false" ) != "none" );
+
+    // add layer by name into shape context
+    context.addLayer( this, name() );
+
+    return true;
 }

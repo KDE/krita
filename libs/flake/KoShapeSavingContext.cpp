@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
 */
 
 #include "KoShapeSavingContext.h"
+#include "KoShapeLayer.h"
 
 #include <KoGenStyles.h>
 #include <KoSavingContext.h>
@@ -84,4 +86,28 @@ const QString KoShapeSavingContext::drawId( const KoShape * shape, bool insert )
         return it.value();
     }
     return QString();
+}
+
+void KoShapeSavingContext::addLayerForSaving( const KoShapeLayer * layer )
+{
+    if( layer && ! m_layers.contains( layer ) )
+        m_layers.append( layer );
+}
+
+void KoShapeSavingContext::saveLayerSet( KoXmlWriter * xmlWriter ) const
+{
+    Q_ASSERT( xmlWriter );
+
+    xmlWriter->startElement( "draw:layer-set" );
+    foreach( const KoShapeLayer * layer, m_layers )
+    {
+        xmlWriter->startElement( "draw:layer" );
+        xmlWriter->addAttribute( "draw:name", layer->name() );
+        if( layer->isLocked() )
+            xmlWriter->addAttribute( "draw:protected", "true" );
+        if( ! layer->isVisible() )
+            xmlWriter->addAttribute( "draw:display", "none" );
+        xmlWriter->endElement();  // draw:layer
+    }
+    xmlWriter->endElement();  // draw:layer-set
 }

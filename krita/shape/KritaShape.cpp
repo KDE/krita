@@ -142,7 +142,6 @@ void KritaShape::tryLoadFromImageData(KoImageData *data) {
     delete m_d->doc;
 
     m_d->doc = new KisDoc2(0, 0, false);
-
     connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
 
     if(! url.isEmpty())

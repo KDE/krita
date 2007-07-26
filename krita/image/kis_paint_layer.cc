@@ -84,7 +84,9 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     , m_d( new Private() )
 {
     Q_ASSERT(img);
-    Q_ASSERT(colorSpace);
+    if ( img && colorSpace == 0 )
+        colorSpace = img->colorSpace();
+    Q_ASSERT( colorSpace );
     m_d->paintDevice = new KisPaintDevice(this, colorSpace, name);
     m_d->projection = 0;
     init();

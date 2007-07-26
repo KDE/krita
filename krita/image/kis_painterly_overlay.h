@@ -19,12 +19,16 @@
 #ifndef KIS_PAINTERLY_OVERLAY
 #define KIS_PAINTERLY_OVERLAY
 
-#include "kis_paint_device.h"
+#include <kicon.h>
 #include <klocale.h>
 
+#include "kis_paint_device.h"
 #include "kis_painterly_overlay_colorspace.h"
+#include "kis_node.h"
+
 #include <krita_export.h>
 
+const QString KIS_PAINTERLY_OVERLAY_ID = "KisPainterlyOverlay";
 /**
  * KisPainterlyOverlay is a special paintdevice that uses the
  * KisPainterlyOverlayColorSpace to describe the data pertinent to
@@ -35,7 +39,7 @@
  *
  * See the unittest for example code.
  */
-class KRITAIMAGE_EXPORT KisPainterlyOverlay : public KisPaintDevice {
+class KRITAIMAGE_EXPORT KisPainterlyOverlay : public KisPaintDevice, public KisNode {
 
 Q_OBJECT
 
@@ -44,6 +48,20 @@ public:
     KisPainterlyOverlay();
     virtual ~KisPainterlyOverlay();
 
+    QIcon icon() const
+        {
+            return KIcon(""); // XXX: Find nice icon for the subclasses.
+        }
+
+    virtual QString nodeType()
+        {
+            return KIS_PAINTERLY_OVERLAY_ID;
+        }
+
+    virtual bool canHaveChildren()
+        {
+            return false;
+        }
 private:
 
     class Private;

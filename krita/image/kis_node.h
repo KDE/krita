@@ -21,14 +21,13 @@
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "krita_export.h"
-#include "KoDocumentSectionModel.h"
+
+class KisNodeGraphListener;
 
 /**
  * A KisNode is the base class for all components of an image: nodes,
  * masks, selections. A node knows its direct peers, parent and
- * children and whether it can have children. The node implementations
- * must calll the sigAboutToRemoveNode and sigAboutToAddNode signals
- * on the parent image in order to keep the various models updated.
+ * children and whether it can have children.
  *
  * KisNode is a temporary solution while working towards making Krita
  * completely flake based.
@@ -38,145 +37,131 @@ class KRITAIMAGE_EXPORT KisNode : public KisShared {
 
 public:
 
-    enum { Visible = 1, Hidden = 2, Locked = 4, Unlocked = 8 };
 
-
+    /**
+     * Create an empty node without a parent.
+     *
+     * @param the image that owns this node. The image will be
+     * informed before and after changes in this node's node list.
+     */
     KisNode();
-    KisNode( KisImageWSP image, const QString & name );
+
+    /**
+     * Create a copy of this node. The copy will not have a parent
+     * node.
+     */
     KisNode( const KisNode & rhs );
+
+    /**
+     * Delete this node
+     */
     virtual ~KisNode();
 
-    virtual QString nodeType() = 0;
-    virtual bool canHaveChildren() = 0;
-    virtual QIcon icon() const = 0;
-
-    virtual KoDocumentSectionModel::PropertyList properties() const;
-    virtual void setProperties( const KoDocumentSectionModel::PropertyList &properties  );
-
-    virtual const bool visible() const { return false; }
-    virtual bool locked() const { return false; }
+public:
 
     /**
-     * Returns the index of the node in its parent's list of child
-     * nodes. Indices increase from 0, which is the topmost node in
-     * the list, to the bottommost.
+     * @return the graph listener this node belongs to. 0 if the node
+     * does not belong to a grap listener.
      */
-    virtual int index() const;
+    KisNodeGraphListener * graphListener() const;
 
     /**
-     * Returns the parent node of a node. This is 0 only for a root
+     * Set the graph listener for this node. The graphlistener will be
+     * informed before and after the list of child nodes has changed.
+     */
+    void setGraphListener( KisNodeGraphListener * graphListener );
+
+    /**
+     * Returns the parent node of this node. This is 0 only for a root
      * node; otherwise this will be an actual Node
      */
-    virtual KisNodeSP parentNode();
-
-    virtual const KisNodeSP parentNode() const;
+    KisNodeSP parent() const;
 
     /**
-     * Returns the previous sibling of this node in the parent's
-     * list. This is the node *above* this node. 0 is returned if
-     * there is no parent, or if this child has no more previous
-     * siblings (== firstChild())
+     * Set the parent of this node.
      */
-    virtual KisNodeSP prevSiblingNode() const;
+    void setParent( KisNodeSP parent );
+
+    /**
+     * Returns the first child node of this node.
+     */
+    KisNodeSP firstChild() const;
+
+    /**
+     * Returns the last child node of this node.
+     */
+    KisNodeSP lastChild() const;
+
+    /**
+     * Returns the previous sibling of this node in the parent's list.
+     * This is the node *above* this node in the composition stack. 0
+     * is returned if this child has no more previous siblings (==
+     * firstChild())
+     */
+    KisNodeSP prevSibling() const;
 
     /**
      * Returns the next sibling of this node in the parent's list.
-     * This is the node *below* this node. 0 is returned if there is
-     * no parent, or if this child has no more next siblings (==
+     * This is the node *below* this node in the composition stack. 0
+     * is returned if this child has no more next siblings (==
      * lastChild())
      */
-    virtual KisNodeSP nextSiblingNode() const;
+    KisNodeSP nextSibling() const;
 
     /**
      * Returns how many direct child nodes this node has (not
-     * recursive). The childcount can include masks.
+     * recursive).
      */
-    virtual uint childCount() const;
+    quint32 childCount() const;
 
     /**
-     * Retrieve the child node at the specified index. Returns 0 if
-     * there is no node at this index.
+     * Retrieve the child node at the specified index.
+     *
+     * @return 0 if there is no node at this index.
      */
-    virtual KisNodeSP atNode(int index) const;
+    KisNodeSP at( quint32 index ) const;
 
     /**
-     * Returns the first child node of this node (if it supports
-     * that).
+     * Retrieve the index of the specified child node.
+     *
+     * @return -1 if the specified node is not a child node of this
+     * node.
      */
-    virtual KisNodeSP firstChildNode() const;
-
-    /**
-     * Returns the last child node of this node (if it supports that).
-     */
-    virtual KisNodeSP lastChildNode() const;
-
-    /**
-     * Recursively searches this node and any child nodes for a node
-     * with the specified name.
-     */
-    virtual KisNodeSP findNode(const QString& name) const;
-
-    /**
-     * Recursively searches this node and any child nodes for a node
-     * with the specified ID.
-     */
-    virtual KisNodeSP findNode(int id) const;
-
-    /**
-     * Returns the total number of nodes in this node, its child
-     * nodes, and their child nodes recursively, optionally ones
-     * with the specified properties Visible or Locked, which you can
-     * OR together.
-     */
-    virtual int numNodes(int type = 0) const;
-
-    /**
-     * Called whenever the settings are changed. The whole graph below
-     * this node is called.
-     */
-    virtual void updateSettings();
-
+    int index( const KisNodeSP node ) const;
 
     /**
      * Adds the node to this group at the specified index.
-     * childCount() is a valid index and appends to the end. Fails and
-     * returns false if the node is already in this group or any
-     * other (remove it first.)
-    */
-    bool addNode(KisNodeSP newNode, int index);
+     * childCount() is a valid index and appends to the end.
+     *
+     * @return false if the node is already in this node or any other
+     * node in the graph. (remove it first.)
+     */
+    bool add( KisNodeSP newNode, quint32 index );
 
     /**
      * Add the specified node above the specified node (if aboveThis
      * == 0, the bottom is used)
      */
-    bool addNode(KisNodeSP newNode, KisNodeSP aboveThis);
+    bool add( KisNodeSP newNode, KisNodeSP aboveThis );
 
     /**
-     * Removes the node at the specified index from the group.
+     * Removes the node at the specified index from the child nodes.
+     *
+     * @return false if there is no node at this index
      */
-    bool removeNode(int index);
+    bool remove( quint32 index );
 
     /**
-     * Removes the node from this group. Fails if there's no such node
-     * in this group.
+     * Removes the node from the child nodes.
+     *
+     * @return false if there's no such node in this node.
      */
-    bool removeNode(KisNodeSP node);
-
-protected:
-
-    bool useProjections();
+    bool remove( KisNodeSP node );
 
 
 private:
 
-    void init();
-
-    /**
-     * Set the parent of this node. This method is private because a
-     * node can only gain a parent through being added to the node
-     * stack.
-     */
-    void setParent( KisNodeSP parent );
+    inline int reverseIndex(int index) const { return childCount() - 1 - index; }
 
     class Private;
     Private * m_d;

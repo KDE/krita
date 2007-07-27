@@ -347,10 +347,6 @@ public:
 
     KisProjection * projectionManager();
 
-    KisLayerSP findLayer(const QString& name) const;
-
-    KisLayerSP findLayer(int id) const;
-
     /// Move layer to specified position
     bool moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
 

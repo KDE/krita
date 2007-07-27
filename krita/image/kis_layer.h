@@ -200,12 +200,6 @@ public:
     /// Returns the last child layer of this layer (if it supports that).
     virtual KisLayerSP lastChild() const { return KisLayerSP(0); }
 
-    /// Recursively searches this layer and any child layers for a layer with the specified name.
-    virtual KisLayerSP findLayer(const QString& name) const;
-
-    /// Recursively searches this layer and any child layers for a layer with the specified ID.
-    virtual KisLayerSP findLayer(int id) const;
-
     /// Returns the total number of layers in this layer, its child
     /// layers, and their child layers recursively, optionally ones
     /// with the specified properties Visible or Locked, which you can

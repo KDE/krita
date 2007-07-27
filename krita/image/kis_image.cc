@@ -643,17 +643,6 @@ KisProjection * KisImage::projectionManager()
     return m_d->projection;
 }
 
-KisLayerSP KisImage::findLayer(const QString& name) const
-{
-    return rootLayer()->findLayer(name);
-}
-
-KisLayerSP KisImage::findLayer(int id) const
-{
-    return rootLayer()->findLayer(id);
-}
-
-
 void KisImage::preparePaintLayerAfterAdding( KisLayerSP layer )
 {
     kDebug() << "preparePaintLayerAfterAdding " << layer << endl;

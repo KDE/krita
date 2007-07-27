@@ -242,25 +242,27 @@ int KisLayer::index() const
     return m_d->index;
 }
 
-KisLayerSP KisLayer::findLayer(const QString& n) const
-{
-    if (name() == n)
-        return KisLayerSP(const_cast<KisLayer*>(this)); //HACK any less ugly way? findLayer() is conceptually const...
-    for (KisLayerSP layer = firstChild(); layer; layer = layer->nextSibling())
-        if (KisLayerSP found = layer->findLayer(n))
-            return found;
-    return KisLayerSP(0);
-}
+// XXX: replace with FindLayerVisitors
 
-KisLayerSP KisLayer::findLayer(int i) const
-{
-    if (id() == i)
-        return KisLayerSP(const_cast<KisLayer*>(this)); //HACK
-    for (KisLayerSP layer = firstChild(); layer; layer = layer->nextSibling())
-        if (KisLayerSP found = layer->findLayer(i))
-            return found;
-    return KisLayerSP(0);
-}
+// KisLayerSP KisLayer::findLayer(const QString& n) const
+// {
+//     if (name() == n)
+//         return KisLayerSP(const_cast<KisLayer*>(this)); //HACK any less ugly way? findLayer() is conceptually const...
+//     for (KisLayerSP layer = firstChild(); layer; layer = layer->nextSibling())
+//         if (KisLayerSP found = layer->findLayer(n))
+//             return found;
+//     return KisLayerSP(0);
+// }
+
+// KisLayerSP KisLayer::findLayer(int i) const
+// {
+//     if (id() == i)
+//         return KisLayerSP(const_cast<KisLayer*>(this)); //HACK
+//     for (KisLayerSP layer = firstChild(); layer; layer = layer->nextSibling())
+//         if (KisLayerSP found = layer->findLayer(i))
+//             return found;
+//     return KisLayerSP(0);
+// }
 
 int KisLayer::numLayers(int flags) const
 {

@@ -32,6 +32,8 @@
 #include <KoShapeLayer.h>
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
+#include <KoDom.h>
+#include <KoXmlNS.h>
 
 #include "KoPACanvas.h"
 #include "KoPAView.h"
@@ -39,16 +41,16 @@
 #include "KoPAMasterPage.h"
 #include "KoPASavingContext.h"
 #include "KoPAStyles.h"
+#include "KoPALoadingContext.h"
 
 KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoDocument( parentWidget, parent, singleViewMode )
 {
-    KoPAMasterPage * masterPage = new KoPAMasterPage();
-    m_masterPages.append( masterPage );
-    insertPage( new KoPAPage( masterPage ), 0 /*add first*/ );
+//    KoPAMasterPage * masterPage = new KoPAMasterPage();
+//    m_masterPages.append( masterPage );
 #ifndef NDEBUG
     //TODO This produces some pages to be used for testing remove when we have loading support
-    KoPathShape *pathShape = new KoPathShape();
+/*    KoPathShape *pathShape = new KoPathShape();
     pathShape->lineTo( QPointF( 100, 100 ) );
     pathShape->setPosition( QPointF( 100, 100 ) );
     pathShape->setBorder( new KoLineBorder( 1.0 ) );
@@ -58,7 +60,7 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
         parentShape->addChild( pathShape );
     }
     insertPage( new KoPAPage(  masterPage ), 1 );
-    insertPage(  new KoPAPage(  masterPage ), 2 );
+    insertPage(  new KoPAPage(  masterPage ), 2 );*/
 #endif
 }
 
@@ -89,7 +91,24 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
     Q_UNUSED( doc );
     Q_UNUSED( settings );
 
+    emit sigProgress( 0 );
     KoOasisLoadingContext loadingContext( this, oasisStyles, store );
+    KoPALoadingContext paContext( loadingContext );
+
+    KoXmlElement content = doc.documentElement();
+    KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+
+    if ( realBody.isNull() ) {
+        kError() << "No body tag found!" << endl;
+        return false;
+    }
+
+    KoXmlElement body = KoDom::namedItemNS(realBody, KoXmlNS::office, odfTagName());
+
+    if ( body.isNull() ) {
+        kError() << "No office:" << odfTagName() << " tag found!" << endl;
+        return false;
+    }
 
     //load master pages
     const QHash<QString, KoXmlElement*> masterStyles( oasisStyles.masterPages() );
@@ -97,9 +116,22 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
     for ( ; it != masterStyles.constEnd(); ++it )
     {
         qDebug() << "Master:" << it.key();
-        m_masterPages[0]->loadOdf( *( it.value() ), loadingContext );
+        KoPAMasterPage * masterPage = new KoPAMasterPage();
+        masterPage->loadOdf( *( it.value() ), paContext );
+        m_masterPages.append( masterPage );
+        paContext.addMasterPage (it.key(), masterPage);
     }
 
+    KoXmlElement pageElement;
+    forEachElement( pageElement, body )
+    {
+        KoPAPage* page = new KoPAPage();
+        page->loadOdf(pageElement, paContext);
+
+        insertPage( page, -1 );
+    }
+
+    emit sigProgress( 100 );
     return true;
 }
 

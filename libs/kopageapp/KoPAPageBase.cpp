@@ -20,6 +20,7 @@
 #include "KoPAPageBase.h"
 #include "KoPASavingContext.h"
 #include "KoPAStyles.h"
+#include "KoPALoadingContext.h"
 
 #include <QDebug>
 #include <QPainter>
@@ -74,10 +75,6 @@ void KoPAPageBase::saveOdf( KoShapeSavingContext & context ) const
     context.xmlWriter().endElement(); //draw:page
 }
 
-bool KoPAPageBase::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    return false; // TODO
-}
-
 void KoPAPageBase::saveOdfShapes( KoShapeSavingContext &context ) const
 {
     QList<KoShape*> shapes( iterator() );
@@ -122,8 +119,12 @@ void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &p
     KoOasisStyles::saveOasisFillStyle( style, paContext.mainStyles(), background );
 }
 
-bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoOasisLoadingContext & loadingContext )
+bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext & loadingContext )
 {
+    KoPALoadingContext &paContext = static_cast<KoPALoadingContext&>( loadingContext );
+
+    loadOdfPageTag(element, paContext);
+
     // load shapes, this is only for testing
     KoXmlNode n = element.firstChild();
     for ( ; !n.isNull(); n = n.nextSibling() )
@@ -135,4 +136,8 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoOasisLoadingContext &
         }
     }
     return true;
+}
+
+void KoPAPageBase::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
+{
 }

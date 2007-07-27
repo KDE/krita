@@ -42,6 +42,9 @@ public:
 protected:
     virtual void createOdfPageTag( KoPASavingContext &paContext ) const;
 
+    /// Reimplemented from KoPageBase
+    virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+    
     KoPageLayout m_pageLayout;
 };
 

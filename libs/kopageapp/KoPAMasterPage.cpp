@@ -21,13 +21,18 @@
 
 #include <KoGenStyle.h>
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
+#include <KoOasisStyles.h>
+#include <KoOasisLoadingContext.h>
 
 #include "KoPASavingContext.h"
+#include "KoPALoadingContext.h"
 
 KoPAMasterPage::KoPAMasterPage()
 : KoPAPageBase()
 {
     m_pageLayout = KoPageLayout::standardLayout();
+    setPageTitle ( "Standard" );
 }
 
 KoPAMasterPage::~KoPAMasterPage()
@@ -42,7 +47,22 @@ void KoPAMasterPage::createOdfPageTag( KoPASavingContext &paContext ) const
     QString pageLayoutName( paContext.mainStyles().lookup( pageLayoutStyle, "pm" ) );
 
     paContext.xmlWriter().startElement( "style:master-page" );
-    paContext.xmlWriter().addAttribute( "style:name", "Standard" ); //TODO
-    paContext.addMasterPage( this, "Standard" );
+    paContext.xmlWriter().addAttribute( "style:name", pageTitle() );
+    paContext.addMasterPage( this, pageTitle() );
     paContext.xmlWriter().addAttribute( "style:page-layout-name", pageLayoutName );
+}
+
+void KoPAMasterPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
+{
+    setPageTitle( element.attributeNS( KoXmlNS::style, "name" ) );
+    QString pageLayoutName = element.attributeNS( KoXmlNS::style, "page-layout-name" );
+    const KoOasisStyles& styles = loadingContext.koLoadingContext().oasisStyles();
+    const KoXmlElement* masterPageStyle = styles.findStyle( pageLayoutName );
+    KoPageLayout pageLayout = KoPageLayout::standardLayout();
+    
+    if ( masterPageStyle ) {
+        pageLayout.loadOasis( *masterPageStyle );
+    }
+
+    setPageLayout( pageLayout );
 }

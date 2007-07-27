@@ -22,13 +22,21 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLayer.h>
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 
 #include "KoPAMasterPage.h"
 #include "KoPASavingContext.h"
+#include "KoPALoadingContext.h"
 
 KoPAPage::KoPAPage( KoPAMasterPage * masterPage )
 : KoPAPageBase()
 , m_masterPage( masterPage )
+{
+}
+
+KoPAPage::KoPAPage()
+:KoPAPageBase()
+, m_masterPage( 0 )
 {
 }
 
@@ -38,6 +46,8 @@ KoPAPage::~KoPAPage()
 
 KoPageLayout & KoPAPage::pageLayout()
 {
+    Q_ASSERT( m_masterPage );
+
     return m_masterPage->pageLayout();
 }
 
@@ -46,4 +56,16 @@ void KoPAPage::createOdfPageTag( KoPASavingContext &paContext ) const
     paContext.xmlWriter().startElement( "draw:page" );
     paContext.xmlWriter().addAttribute( "draw:id", "page" + QString::number( paContext.page() ) );
     paContext.xmlWriter().addAttribute( "draw:master-page-name", paContext.masterPageName( m_masterPage ) );
+}
+
+void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
+{
+    setPageTitle( element.attributeNS( KoXmlNS::draw, "name" ) );
+    QString master = element.attributeNS (KoXmlNS::draw, "master-page-name" );
+    setMasterPage( loadingContext.masterPageFromName( master ) );
+}
+
+void KoPAPage::setMasterPage( KoPAMasterPage * masterPage )
+{
+    m_masterPage = masterPage;
 }

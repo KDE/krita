@@ -34,6 +34,7 @@ struct KoPageLayout;
 class KoOasisLoadingContext;
 class KoGenStyle;
 class KoShape;
+class KoPALoadingContext;
 
 /**
  * Base class used for KoPAMasterPage and KoPAPage
@@ -59,8 +60,6 @@ public:
 
     // reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
-
-    bool loadOdf( const KoXmlElement &element, KoOasisLoadingContext & loadingContext );
 
 
     /// @return the layout of the page
@@ -137,6 +136,14 @@ protected:
      * @see saveOdfPageStyle
      */
     virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
+
+    /**
+     * @brief Load page data
+     *
+     * @param element the page element
+     * @param paContext the pageapp loading context
+     */
+    virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
 
 private:    
     QString m_pageTitle;

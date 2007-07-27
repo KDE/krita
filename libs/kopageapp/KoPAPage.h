@@ -32,6 +32,7 @@ public:
      * @param masterPage masterpage used for this page
      */
     explicit KoPAPage( KoPAMasterPage * masterPage );
+    KoPAPage ();
     ~KoPAPage();
 
     /// @return the layout set by the masterpage
@@ -44,6 +45,9 @@ public:
 protected:
     virtual void createOdfPageTag( KoPASavingContext &paContext ) const;
 
+    /// Reimplemented from KoPageBase
+    virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+    
     KoPAMasterPage * m_masterPage;
 };
 

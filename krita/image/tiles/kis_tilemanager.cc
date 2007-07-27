@@ -58,7 +58,7 @@ KisTileManager::KisTileManager()
     m_swapForbidden = false;
 
     // Hardcoded (at the moment only?): 4 pools of 1000 tiles each
-    m_tilesPerPool = 1000;
+    m_tilesPerPool = 100;
 
     m_pools = new quint8*[4];
     m_poolPixelSizes = new qint32[4];
@@ -242,16 +242,17 @@ void KisTileManager::maySwapTile(const KisTile* tile)
 
 quint8* KisTileManager::requestTileData(qint32 pixelSize)
 {
-    m_bigKritaLock.lock();
-    quint8* data = findTileFor(pixelSize);
-    m_bigKritaLock.unlock();
-
-    if ( !data ) {
-        data = new quint8[m_tileSize * pixelSize];
+    if ( pixelSize > 10 )
+        return new quint8[ m_tileSize * pixelSize ];
+    else {
+        m_bigKritaLock.lock();
+        quint8* data = findTileFor(pixelSize);
+        m_bigKritaLock.unlock();
+        if ( !data ) {
+            data = new quint8[m_tileSize * pixelSize];
+        }
+        return data;
     }
-
-    return data;
-
 }
 
 void KisTileManager::dontNeedTileData(quint8* data, qint32 pixelSize)

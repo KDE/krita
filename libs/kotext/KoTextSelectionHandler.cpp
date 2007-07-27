@@ -76,6 +76,70 @@ public:
     }
 };
 
+class CharFormatVisitor {
+public:
+    CharFormatVisitor() {}
+    virtual ~CharFormatVisitor() {}
+
+    virtual void visit(QTextCharFormat &format) const = 0;
+
+    static void visitSelection(QTextCursor *caret, const CharFormatVisitor &visitor) {
+        int start = caret->position();
+        int end = caret->anchor();
+        if(start > end) { // swap
+            int tmp = start;
+            start = end;
+            end = tmp;
+        }
+        else if(start == end) { // just set a new one.
+            QTextCharFormat format = caret->charFormat();
+            visitor.visit(format);
+            caret->setCharFormat(format);
+            return;
+        }
+
+        QTextBlock block = caret->block();
+        if(block.position() > start)
+            block = block.document()->findBlock(start);
+
+        QList<QTextCursor> cursors;
+        QList<QTextCharFormat> formats;
+        // now loop over all blocks that the selection contains and alter the text fragments where applicable.
+        while(block.isValid() && block.position() < end) {
+            QTextBlock::iterator iter = block.begin();
+            while(! iter.atEnd()) {
+                QTextFragment fragment = iter.fragment();
+                if(fragment.position() > end)
+                    break;
+                if(fragment.position() + fragment.length() <= start) {
+                    iter++;
+                    continue;
+                }
+
+                QTextCursor cursor(block);
+                cursor.setPosition(fragment.position() +1);
+                QTextCharFormat format = cursor.charFormat(); // this gets the format one char before the postion.
+                visitor.visit(format);
+
+                cursor.setPosition(qMax(start, fragment.position()));
+                int to = qMin(end, fragment.position() + fragment.length());
+                cursor.setPosition(to, QTextCursor::KeepAnchor);
+                cursors.append(cursor);
+                formats.append(format);
+
+                iter++;
+            }
+            block = block.next();
+        }
+        QList<QTextCharFormat>::Iterator iter = formats.begin();
+        foreach(QTextCursor cursor, cursors) {
+            cursor.mergeCharFormat(*iter);
+            ++iter;
+        }
+    }
+};
+
+
 KoTextSelectionHandler::KoTextSelectionHandler(QObject *parent)
 : KoToolSelection(parent),
     d(new Private())
@@ -163,28 +227,41 @@ void KoTextSelectionHandler::setFontSize(int size) {
     d->caret->mergeCharFormat(newSize);
 }
 
-void KoTextSelectionHandler::increaseFontSize() {
-    const int current = d->caret->charFormat().fontPointSize();
-    QFontDatabase fontDB;
-    foreach(int pt, fontDB.standardSizes()) {
-        if(pt > current) {
-            setFontSize(pt);
-            return;
+class FontResizer : public CharFormatVisitor {
+  public:
+    enum Type { Grow, Shrink };
+    FontResizer(Type type_) : type(type_) {
+        QFontDatabase fontDB;
+        defaultSizes = fontDB.standardSizes();
+    }
+    void visit(QTextCharFormat &format) const {
+        const int current = format.fontPointSize();
+        int prev = 1;
+        foreach(int pt, defaultSizes) {
+            if(type == Grow && pt > current || type == Shrink && pt >= current) {
+                format.setFontPointSize(type==Grow ? pt : prev);
+                return;
+            }
+            prev = pt;
         }
     }
+
+    QList<int> defaultSizes;
+    const Type type;
+};
+
+void KoTextSelectionHandler::increaseFontSize() {
+    emit startMacro(i18n("Increase font size"));
+    FontResizer sizer(FontResizer::Grow);
+    CharFormatVisitor::visitSelection(d->caret, sizer);
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::decreaseFontSize() {
-    const int current = d->caret->charFormat().fontPointSize();
-    int prev = 1;
-    QFontDatabase fontDB;
-    foreach(int pt, fontDB.standardSizes()) {
-        if(pt >= current) {
-            setFontSize(prev);
-            return;
-        }
-        prev = pt;
-    }
+    emit startMacro(i18n("Decrease font size"));
+    FontResizer sizer(FontResizer::Shrink);
+    CharFormatVisitor::visitSelection(d->caret, sizer);
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::setHorizontalTextAlignment(Qt::Alignment align) {
@@ -246,6 +323,10 @@ void KoTextSelectionHandler::decreaseIndent() {
     emit startMacro(i18n("Decrease Indent"));
     BlockFormatVisitor::visitSelection(d->caret, indenter);
     emit stopMacro();
+}
+
+void KoTextSelectionHandler::setFontFamily(const QString &familyName) {
+    // TODO
 }
 
 void KoTextSelectionHandler::setTextColor(const QColor &color) {

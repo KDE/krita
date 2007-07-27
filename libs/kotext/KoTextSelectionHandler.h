@@ -97,6 +97,8 @@ public slots:
      */
     void setFontSize(int size);
 
+    void setFontFamily(const QString &familyName);
+
     /**
      * Alter the selections font size to be slightly bigger.
      */

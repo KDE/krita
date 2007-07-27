@@ -463,7 +463,15 @@ quint8* KisTileManager::findTileFor(qint32 pixelSize)
         if (m_pools[i] == 0) {
             // allocate new pool
             m_poolPixelSizes[i] = pixelSize;
-            m_pools[i] = new quint8[pixelSize * m_tileSize * m_tilesPerPool];
+            try {
+                m_pools[i] = new quint8[pixelSize * m_tileSize * m_tilesPerPool];
+            }
+            catch ( std::bad_alloc ) {
+                kDebug() << ">>>>>>> Could not allocated memory " << pixelSize << " " << m_tileSize << " " << m_tilesPerPool << endl;
+                // XXX: bart! What shall we do here?
+                abort();
+            }
+
             // j = 1 because we return the first element, so no need to add it to the freelist
             for (int j = 1; j < m_tilesPerPool; j++)
                 m_poolFreeList[i].append(&m_pools[i][j * pixelSize * m_tileSize]);

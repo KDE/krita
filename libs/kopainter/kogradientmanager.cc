@@ -335,28 +335,28 @@ KoGradient* KoGradientManager::parseSvgGradient(const QDomElement& element)
 
 			s = element.attribute( "x1", "0%" );
 			double xOrigin;
-			if( s.endsWith( "%" ) )
+			if( s.endsWith( '%' ) )
 				xOrigin = s.remove( '%' ).toDouble();
 			else
 				xOrigin = s.toDouble() * 100.0;
 
 			s = element.attribute( "y1", "0%" );
 			double yOrigin;
-			if( s.endsWith( "%" ) )
+			if( s.endsWith( '%' ) )
 				yOrigin = s.remove( '%' ).toDouble();
 			else
 				yOrigin = s.toDouble() * 100.0;
 
 			s = element.attribute( "x2", "100%" );
 			double xVector;
-			if( s.endsWith( "%" ) )
+			if( s.endsWith( '%' ) )
 				xVector = s.remove( '%' ).toDouble();
 			else
 				xVector = s.toDouble() * 100.0;
 
 			s = element.attribute( "y2", "0%" );
 			double yVector;
-			if( s.endsWith( "%" ) )
+			if( s.endsWith( '%' ) )
 				yVector = s.remove( '%' ).toDouble();
 			else
 				yVector = s.toDouble() * 100.0;
@@ -383,48 +383,48 @@ KoGradient* KoGradientManager::parseSvgGradient(const QDomElement& element)
 
 			s = element.attribute( "cx", "50%" );
 			double xOrigin;
-			if( s.endsWith( "%" ) )
+			if( s.endsWith( '%' ) )
 				xOrigin = s.remove( '%' ).toDouble();
 			else
 				xOrigin = s.toDouble() * 100.0;
 
 			s = element.attribute( "cy", "50%" );
 			double yOrigin;
-			if( s.endsWith( "%" ) )
+			if( s.endsWith( '%' ) )
 				yOrigin = s.remove( '%' ).toDouble();
 			else
 				yOrigin = s.toDouble() * 100.0;
 
 			s = element.attribute( "cx", "50%" );
 			double xVector;
-			if( s.endsWith( "%" ) )
+			if( s.endsWith( '%' ) )
 				xVector = s.remove( '%' ).toDouble();
 			else
 				xVector = s.toDouble() * 100.0;
 
 			s = element.attribute( "r", "50%" );
-			if( s.endsWith( "%" ) )
+			if( s.endsWith( '%' ) )
 				xVector += s.remove( '%' ).toDouble();
 			else
 				xVector += s.toDouble() * 100.0;
 
 			s = element.attribute( "cy", "50%" );
 			double yVector;
-			if( s.endsWith( "%" ) )
+			if( s.endsWith( '%' ) )
 				yVector = s.remove( '%' ).toDouble();
 			else
 				yVector = s.toDouble() * 100.0;
 
 			s = element.attribute( "fx", "50%" );
 			double xFocal;
-			if( s.endsWith( "%" ) )
+			if( s.endsWith( '%' ) )
 				xFocal = s.remove( '%' ).toDouble();
 			else
 				xFocal = s.toDouble() * 100.0;
 
 			s = element.attribute( "fy", "50%" );
 			double yFocal;
-			if( s.endsWith( "%" ) )
+			if( s.endsWith( '%' ) )
 				yFocal = s.remove( '%' ).toDouble();
 			else
 				yFocal = s.toDouble() * 100.0;
@@ -545,7 +545,7 @@ void KoGradientManager::parseSvgColor(QColor &color, const QString &s)
 	{
 		QString rgbColor = s.trimmed();
 		QColor c;
-		if( rgbColor.startsWith( "#" ) )
+		if( rgbColor.startsWith( '#' ) )
 			c.setNamedColor( rgbColor );
 		else
 		{

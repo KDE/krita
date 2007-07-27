@@ -213,7 +213,7 @@ bool KoDocumentChild::loadOasisDocument( KoStore* store, const KoXmlDocument& ma
         QString relPath = KUrl( m_tmpURL ).path();
         path += relPath.mid( 1 ); // remove leading '/'
     }
-    if ( !path.endsWith( "/" ) )
+    if ( !path.endsWith( '/' ) )
         path += '/';
     const QString mimeType = KoOasisStore::mimeForPath( manifestDoc, path );
     kDebug(30003) << k_funcinfo << "path for manifest file=" << path << " mimeType=" << mimeType << endl;
@@ -424,12 +424,12 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         if ( !path.isEmpty() )
             path += '/';
         path += d->m_doc->url().path();
-        if ( path.startsWith( "/" ) )
+        if ( path.startsWith( '/' ) )
             path = path.mid( 1 ); // remove leading '/', no wanted in manifest
     }
 
     // OOo uses a trailing slash for the path to embedded objects (== directories)
-    if ( !path.endsWith( "/" ) )
+    if ( !path.endsWith( '/' ) )
         path += '/';
     QByteArray mimetype = d->m_doc->nativeOasisMimeType();
     if ( mimetype.isEmpty() )

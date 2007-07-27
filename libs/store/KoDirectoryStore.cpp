@@ -86,7 +86,7 @@ bool KoDirectoryStore::enterRelativeDirectory( const QString& dirName )
 {
     QDir origDir( m_currentPath );
     m_currentPath += dirName;
-    if ( !m_currentPath.endsWith("/") )
+    if ( !m_currentPath.endsWith('/') )
         m_currentPath += '/';
     //kDebug(s_area) << "KoDirectoryStore::enterRelativeDirectory m_currentPath now " << m_currentPath << endl;
     QDir newDir( m_currentPath );

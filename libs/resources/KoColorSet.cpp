@@ -188,7 +188,7 @@ bool KoColorSet::init()
             index = 3;
         }
         for (qint32 i = index; i < lines.size(); i++) {
-            if (lines[i].startsWith("#")) {
+            if (lines[i].startsWith('#')) {
                 m_comment += lines[i].mid(1).trimmed() + ' ';
             }
             else if (!lines[i].isEmpty())

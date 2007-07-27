@@ -151,7 +151,7 @@ double KoStyleStack::fontSize(const double defaultFontPointSize) const
         KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName ).toElement();
         if ( properties.hasAttributeNS( m_foNSURI, name ) ) {
             const QString value = properties.attributeNS( m_foNSURI, name, QString() );
-            if ( value.endsWith( "%" ) ) {
+            if ( value.endsWith( '%' ) ) {
                 //sebsauer, 20070609, the specs don't say that we have to calc them together but
                 //just that we are looking for a valid parent fontsize. So, let's only take the
                 //first percent definition into account and keep on to seek for a valid parent,

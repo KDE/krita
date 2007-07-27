@@ -236,7 +236,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         currentPaintOpSettings()->mousePressEvent(e);
         if(e->isAccepted()) return;
     }
-    
+
     if (e->button() == Qt::LeftButton)
     {
         initPaint(e);
@@ -278,11 +278,19 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
                     cosTangent * dragVec.x() - sinTangent * dragVec.y(),
                     sinTangent * dragVec.x() + cosTangent * dragVec.y() );
             }
-            newTangent /= norm( newTangent ) ;
+
+            if ( norm( newTangent ) != 0 ) {
+                newTangent /= norm( newTangent ) ;
+            }
+
             double cosPreviousNewTangent = cos(angle(newTangent,m_previousTangent ));
             newTangent += m_previousTangent;
             newTangent *= 0.5 * cosPreviousNewTangent;
-            newTangent += (1.0 - cosPreviousNewTangent ) * dragVec / norm(dragVec);
+
+            if ( norm( dragVec ) != 0 ) {
+                newTangent += (1.0 - cosPreviousNewTangent ) * dragVec / norm(dragVec);
+            }
+
             newTangent *= m_smoothness / norm( newTangent ) ;
             double normVec = 0.5 * norm(dragVec);
             paintBezierCurve(m_previousPaintInformation,

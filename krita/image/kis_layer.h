@@ -59,12 +59,15 @@ namespace KisMetaData {
  * TODO: Add a layer mode whereby the projection of the layer is used
  * as a clipping path?
  **/
-class KRITAIMAGE_EXPORT KisLayer : public QObject, public KisNode, public KisShared
+class KRITAIMAGE_EXPORT KisLayer : public QObject, public KisShared
 {
 
     Q_OBJECT
 
 public:
+
+    enum { Visible = 1, Hidden = 2, Locked = 4, Unlocked = 8 };
+
     KisLayer(KisImageWSP img, const QString &name, quint8 opacity);
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
@@ -109,6 +112,7 @@ public:
     virtual QIcon icon() const = 0;
 
     virtual KoDocumentSectionModel::PropertyList properties() const;
+    virtual void setProperties( const KoDocumentSectionModel::PropertyList &properties  );
 
     virtual void setChannelFlags( QBitArray & channelFlags );
     QBitArray & channelFlags();

@@ -39,7 +39,7 @@ const QString KIS_PAINTERLY_OVERLAY_ID = "KisPainterlyOverlay";
  *
  * See the unittest for example code.
  */
-class KRITAIMAGE_EXPORT KisPainterlyOverlay : public KisPaintDevice, public KisNode {
+class KRITAIMAGE_EXPORT KisPainterlyOverlay : public KisPaintDevice {
 
 Q_OBJECT
 

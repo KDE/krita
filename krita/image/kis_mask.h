@@ -62,7 +62,7 @@
    XXX: For now, all masks are 8 bit. Make the channel depth settable.
 
  */
-class KRITAIMAGE_EXPORT KisMask : public KisPaintDevice, public KisNode {
+class KRITAIMAGE_EXPORT KisMask : public KisPaintDevice  {
 
 public:
 

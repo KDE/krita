@@ -83,7 +83,7 @@ public:
 
 KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
     : QObject(0)
-    , KisNode( img, name )
+//    , KisNode( img, name )
     , m_d( new Private )
 {
     m_d->id = getID();
@@ -102,7 +102,7 @@ KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
 
 KisLayer::KisLayer(const KisLayer& rhs)
     : QObject( 0 )
-    , KisNode( rhs )
+//     , KisNode( rhs )
     , KisShared(rhs)
     , m_d( new Private() )
 {
@@ -134,10 +134,19 @@ KoColorSpace * KisLayer::colorSpace()
 
 KoDocumentSectionModel::PropertyList KisLayer::properties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisNode::properties();
+//     KoDocumentSectionModel::PropertyList l = KisNode::properties();
+    KoDocumentSectionModel::PropertyList l;
+    l << KoDocumentSectionModel::Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible());
+    l << KoDocumentSectionModel::Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), locked());
     l << KoDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
     l << KoDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->id());
     return l;
+}
+
+void KisLayer::setProperties( const KoDocumentSectionModel::PropertyList &properties )
+{
+//     setVisible( properties.at( 0 ).state.toBool() );
+//     setLocked( properties.at( 1 ).state.toBool() );
 }
 
 KisPaintDeviceSP KisLayer::original() const {

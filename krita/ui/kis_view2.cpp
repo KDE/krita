@@ -654,8 +654,8 @@ void KisView2::slotPreferences()
         // compositing, and they don't connect to the confignotifier
         // because nodes are not QObjects (because only one base class
         // can be a QObject).
-        KisNode* node = dynamic_cast<KisNode*>( image()->rootLayer().data() );
-        node->updateSettings();
+//        KisNode* node = dynamic_cast<KisNode*>( image()->rootLayer().data() );
+//        node->updateSettings();
     }
 }
 

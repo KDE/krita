@@ -637,7 +637,7 @@ bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & f
         format = format.remove( 0, 2 );
         changed = true;
     }
-    else if ( format.startsWith( "h" ) )
+    else if ( format.startsWith( 'h' ) )
     {
         addTextNumber( text, elementWriter );
 
@@ -657,7 +657,7 @@ bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & f
         format = format.remove( 0, 2 );
         changed = true;
     }
-    else if ( format.startsWith( "m" ) )
+    else if ( format.startsWith( 'm' ) )
     {
         addTextNumber( text, elementWriter );
 
@@ -677,7 +677,7 @@ bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & f
         format = format.remove( 0, 2 );
         changed = true;
     }
-    else if ( format.startsWith( "s" ) )
+    else if ( format.startsWith( 's' ) )
     {
         addTextNumber( text, elementWriter );
 
@@ -916,7 +916,7 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
                 elementWriter.endElement();
                 format = format.remove( 0, 2 );
             }
-            else if ( format.startsWith( "M" ) )
+            else if ( format.startsWith( 'M' ) )
             {
                 addTextNumber( text, elementWriter );
                 elementWriter.startElement( "number:month" );
@@ -975,7 +975,7 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
                 elementWriter.endElement();
                 format = format.remove( 0, 2 );
             }
-            else if ( format.startsWith( "d" ) )
+            else if ( format.startsWith( 'd' ) )
             {
                 addTextNumber( text, elementWriter );
 

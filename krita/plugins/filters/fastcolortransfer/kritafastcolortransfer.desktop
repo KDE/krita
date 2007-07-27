@@ -63,5 +63,5 @@ Name[x-test]=xxColor Transfer Filterxx
 Name[zh_TW]=色彩轉換過濾器
 ServiceTypes=Krita/Filter
 Type=Service
-X-KDE-Library=kritafastcolortransfer
+X-KDE-Library=kritafastcolortransferfilter
 X-Krita-Version=3

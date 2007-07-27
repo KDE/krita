@@ -129,6 +129,8 @@ if(BOOST_FOUND)
     set(SHOULD_BUILD_KPRESENTER TRUE)
 else(BOOST_FOUND)
     set(SHOULD_BUILD_KPRESENTER FALSE)
+    message(STATUS  "KPresenters requires the boost headers, KPresenter will not be built.\n"
+                    "   If you want to compile KPresenter you should install libboost-dev")
 endif(BOOST_FOUND)
 
 add_subdirectory(libs)

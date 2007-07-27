@@ -11,13 +11,13 @@ set(GENERIC_KOFFICE_LIB_SOVERSION "5")
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
+macro_optional_find_package(Boost)
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(KdepimLibs REQUIRED)
 find_package(LCMS REQUIRED)
 find_package(PNG REQUIRED)
 find_package(Eigen)
-macro_optional_find_package(Boost)
 macro_optional_find_package(QCA2)
 macro_optional_find_package(Exif)
 macro_optional_find_package(LibArt)
@@ -28,7 +28,7 @@ macro_log_feature(EIGEN_FOUND "Eigen" "Eigen is needed by KSpread, KSpread won't
 
 macro_log_feature(QCA2_FOUND "libqca2" "QCA2 is needed to compile support for encrypted OpenDocument files" "Module into kdesupport" FALSE "2.0" "" )
 
-macro_log_feature(BOOST_FOUND "libboost-dev" "Boost is needed by KPresenter. KPresenter will not be built" "http://www.boost.org" TRUE "")
+macro_log_feature(Boost_FOUND "libboost-dev" "Boost is needed by KPresenter. KPresenter will not be built" "http://www.boost.org" TRUE "")
 
 if (APPLE)
    find_package(Carbon REQUIRED)
@@ -125,13 +125,13 @@ else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
 #Check if build kpresenter here to be able to test if we can build filters/kpresenter
-if(BOOST_FOUND)
+if(Boost_FOUND)
     set(SHOULD_BUILD_KPRESENTER TRUE)
-else(BOOST_FOUND)
+else(Boost_FOUND)
     set(SHOULD_BUILD_KPRESENTER FALSE)
     message(STATUS  "KPresenters requires the boost headers, KPresenter will not be built.\n"
                     "   If you want to compile KPresenter you should install libboost-dev")
-endif(BOOST_FOUND)
+endif(Boost_FOUND)
 
 add_subdirectory(libs)
 MESSAGE(STATUS "Before koffice-2.0 disable compile of example subdir, not necessary for official release")

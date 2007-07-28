@@ -32,6 +32,7 @@ public:
 
 KisNode::KisNode()
 {
+    m_d = new Private();
     m_d->parent = 0;
     m_d->graphListener = 0;
 
@@ -41,6 +42,7 @@ KisNode::KisNode()
 KisNode::KisNode( const KisNode & rhs )
     : KisShared( rhs )
 {
+    m_d = new Private();
     m_d->parent = 0;
     m_d->graphListener = rhs.m_d->graphListener;
 }

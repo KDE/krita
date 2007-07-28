@@ -69,7 +69,7 @@ void KisNodeTest::testCreation()
 {
     TestGraphListener graphListener;
 
-    KisNodeSP node = new KisNode();
+    KisNode * node = new KisNode();
     QVERIFY( node->graphListener() == 0 );
 
     node->setGraphListener( &graphListener );
@@ -85,6 +85,8 @@ void KisNodeTest::testCreation()
     QVERIFY( node->at( 0 ) == 0 );
     QVERIFY( node->at( UINT_MAX ) == 0 );
     QVERIFY( node->index( 0 ) == -1 );
+
+    delete node;
 }
 
 void KisNodeTest::testOrdering()

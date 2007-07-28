@@ -450,7 +450,8 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     void setCharacterStyle(KoCharacterStyle *style);
 
     /**
-     * Returns the list style for this paragraph style, or 0 if there is none.
+     * Returns the list style for this paragraph style.
+     * @see KoListStyle::isValid()
      * @see setListStyle()
      * @see removeListStyle()
      */

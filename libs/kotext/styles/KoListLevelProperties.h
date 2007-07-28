@@ -87,7 +87,17 @@ public:
     void setListId(const QString &listId);
     /// return the listId used by all list-styles that together make 1 user defined list in an ODF file.
     QString listId() const;
-    bool LetterSynchronization() const;
+    /**
+     * For alpha-based lists numbers above the 'z' will increase the value of all characters at the same time.
+     * If true; we get the sequence 'aa', 'bb', 'cc'. If false; 'aa', 'ab', 'ac'.
+     * @return if letterSynchronization should be applied.
+     */
+    bool letterSynchronization() const;
+    /**
+     * For alpha-based lists numbers above the 'z' will increase the value of all characters at the same time.
+     * If true; we get the sequence 'aa', 'bb', 'cc'. If false; 'aa', 'ab', 'ac'.
+     * @param on if letterSynchronization should be applied.
+     */
     void setLetterSynchronization(bool on);
 
     bool operator==(const KoListLevelProperties &other) const;

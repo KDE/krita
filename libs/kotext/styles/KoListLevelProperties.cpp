@@ -235,7 +235,7 @@ QString KoListLevelProperties::listId() const {
     return propertyString(KoListStyle::ListId);
 }
 
-bool KoListLevelProperties::LetterSynchronization() const {
+bool KoListLevelProperties::letterSynchronization() const {
     return propertyBoolean(KoListStyle::LetterSynchronization);
 }
 

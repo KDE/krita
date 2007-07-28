@@ -143,6 +143,7 @@ void KoListStyle::removePropertiesForLevel(int level) {
 }
 
 void KoListStyle::applyStyle(const QTextBlock &block, int level) {
+    Q_ASSERT(isValid());
     if(level == 0) { // illegal level; fetch the first proper level we have
         if(d->levels.count())
             level = d->levels.keys().first();

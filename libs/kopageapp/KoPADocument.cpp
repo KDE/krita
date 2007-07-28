@@ -122,13 +122,15 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
         paContext.addMasterPage (it.key(), masterPage);
     }
 
-    KoXmlElement pageElement;
-    forEachElement( pageElement, body )
+    KoXmlElement element;
+    forEachElement( element, body )
     {
-        KoPAPage* page = newPage();
-        page->loadOdf(pageElement, paContext);
+        if ( element.tagName() == "page" && element.namespaceURI() == KoXmlNS::draw ) {
+            KoPAPage* page = newPage();
+            page->loadOdf( element, paContext );
 
-        insertPage( page, -1 );
+            insertPage( page, -1 );
+        }
     }
 
     emit sigProgress( 100 );

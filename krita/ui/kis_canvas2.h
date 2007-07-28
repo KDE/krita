@@ -175,7 +175,7 @@ private:
 private:
 
     class KisCanvas2Private;
-    KisCanvas2Private * m_d;
+    KisCanvas2Private * const m_d;
 };
 
 #endif

@@ -118,7 +118,7 @@ public: // KisAbstractCanvasWidget
 
 private:
     class Private;
-    Private * m_d;
+    Private * const m_d;
 
 };
 

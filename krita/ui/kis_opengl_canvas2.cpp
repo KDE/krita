@@ -62,8 +62,8 @@ public:
 
 KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures )
     : QGLWidget( QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget() )
+    , m_d( new Private(canvas->viewConverter()) )
 {
-    m_d = new Private(canvas->viewConverter());
     m_d->canvas = canvas;
     m_d->toolProxy = canvas->toolProxy();
     m_d->openGLImageTextures = imageTextures;

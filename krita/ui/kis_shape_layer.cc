@@ -58,11 +58,11 @@ KisShapeLayer::KisShapeLayer( KoShapeContainer * parent,
                               const QString &name,
                               quint8 opacity )
     : KisExternalLayer( img, name, opacity )
+    , m_d( new Private() )
 {
     KoShapeContainer::setParent( parent );
     setShapeId( KIS_SHAPE_LAYER_ID );
 
-    m_d = new Private();
     m_d->converter = new KisImageViewConverter(image());
     m_d->x = 0;
     m_d->y = 0;

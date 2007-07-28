@@ -116,8 +116,9 @@ public:
 
 KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc)
     : KoCanvasBase(sc)
+    , m_d ( new KisCanvas2Private(this, viewConverter, view) )
 {
-    m_d = new KisCanvas2Private(this, viewConverter, view);
+
     resetMonitorProfile();
     createCanvas();
     connect( view->canvasController(), SIGNAL( moveDocumentOffset( const QPoint& ) ),

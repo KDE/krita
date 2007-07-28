@@ -28,8 +28,8 @@ public:
 };
 
 KisMaskShape::KisMaskShape(KoShapeContainer * parent, KisMaskSP mask )
+    : m_d( new Private() )
 {
-    m_d = new Private();
     m_d->mask = mask;
 
     setParent( parent );

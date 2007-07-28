@@ -193,7 +193,7 @@ private:
 private:
 
     class KisDocPrivate;
-    KisDocPrivate * m_d;
+    KisDocPrivate * const m_d;
 
 };
 

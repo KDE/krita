@@ -94,13 +94,12 @@ public:
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     : QWidget( parent )
-
+    , m_d( new Private( canvas->viewConverter() ) )
 {
     // XXX: Reset pattern size and color when the properties change!
 
     KisConfig cfg;
 
-    m_d = new Private(canvas->viewConverter());
     m_d->canvas =  canvas;
     m_d->gridDrawer = new QPainterGridDrawer(canvas->view()->document(), canvas->viewConverter());
     m_d->toolProxy = canvas->toolProxy();

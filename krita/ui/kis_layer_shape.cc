@@ -33,8 +33,9 @@ public:
 
 KisLayerShape::KisLayerShape( KoShapeContainer * parent, KisLayerSP layer)
     : KoShapeContainer()
+    , m_d ( new Private() )
 {
-    m_d = new Private();
+
     m_d->layer = layer;
     Q_ASSERT( layer->image() );
 

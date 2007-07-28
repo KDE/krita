@@ -32,7 +32,6 @@ public:
      * @param masterPage masterpage used for this page
      */
     explicit KoPAPage( KoPAMasterPage * masterPage );
-    KoPAPage ();
     ~KoPAPage();
 
     /// @return the layout set by the masterpage

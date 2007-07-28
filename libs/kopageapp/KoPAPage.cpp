@@ -34,12 +34,6 @@ KoPAPage::KoPAPage( KoPAMasterPage * masterPage )
 {
 }
 
-KoPAPage::KoPAPage()
-:KoPAPageBase()
-, m_masterPage( 0 )
-{
-}
-
 KoPAPage::~KoPAPage()
 {
 }

@@ -116,7 +116,7 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
     for ( ; it != masterStyles.constEnd(); ++it )
     {
         qDebug() << "Master:" << it.key();
-        KoPAMasterPage * masterPage = new KoPAMasterPage();
+        KoPAMasterPage * masterPage = newMasterPage();
         masterPage->loadOdf( *( it.value() ), paContext );
         m_masterPages.append( masterPage );
         paContext.addMasterPage (it.key(), masterPage);
@@ -125,7 +125,7 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
     KoXmlElement pageElement;
     forEachElement( pageElement, body )
     {
-        KoPAPage* page = new KoPAPage();
+        KoPAPage* page = newPage();
         page->loadOdf(pageElement, paContext);
 
         insertPage( page, -1 );
@@ -428,5 +428,16 @@ QList<KoPAPageBase*> KoPADocument::pages() const
 {
     return m_pages;
 }
+
+KoPAPage * KoPADocument::newPage()
+{
+    return new KoPAPage( 0 );
+}
+
+KoPAMasterPage * KoPADocument::newMasterPage()
+{
+    return new KoPAMasterPage();
+}
+
 
 #include "KoPADocument.moc"

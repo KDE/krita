@@ -75,8 +75,8 @@ public:
 
 
 KisProjection::KisProjection( KisImageWSP image, KisGroupLayerWSP rootLayer )
+    : m_d( new Private() )
 {
-    m_d = new Private();
     m_d->image = image;
     m_d->roi = image->bounds();
     m_d->rootLayer = rootLayer;

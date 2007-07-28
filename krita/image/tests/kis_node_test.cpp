@@ -30,22 +30,22 @@ class TestGraphListener : public KisNodeGraphListener
 {
 public:
 
-    virtual void aboutToAddANode( KisNode *parent, int index )
+    virtual void aboutToAddANode( KisNode *, int )
         {
             beforeInsertRow = true;
         }
 
-    virtual void nodeHasBeenAdded( KisNode *parent, int index )
+    virtual void nodeHasBeenAdded( KisNode *, int )
         {
             afterInsertRow = true;
         }
 
-    virtual void aboutToRemoveANode( KisNode *parent, int index )
+    virtual void aboutToRemoveANode( KisNode *, int )
         {
             beforeRemoveRow  = true;
         }
 
-    virtual void nodeHasBeenRemoved( KisNode *parent, int index )
+    virtual void nodeHasBeenRemoved( KisNode *, int )
         {
             afterRemoveRow = true;
         }
@@ -91,45 +91,85 @@ void KisNodeTest::testCreation()
 
 void KisNodeTest::testOrdering()
 {
-#if 0
-    TestGraphListener graphListener( this );
+    TestGraphListener graphListener;
 
-    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace( "RGBA", 0 );
-    KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "merge test" );
+    KisNodeSP root = new KisNode();
+    root->setGraphListener( &graphListener );
 
     KisNodeSP node1 = new KisNode();
-    KisNodeSP node2 = new KisNode();
-    KisNodeSP node3 = new KisNode();
+    node1->setGraphListener( &graphListener );
 
+    KisNodeSP node2 = new KisNode();
+    node2->setGraphListener( &graphListener );
+
+    KisNodeSP node3 = new KisNode();
+    node3->setGraphListener( &graphListener );
+
+    KisNodeSP node4 = new KisNode();
+    node4->setGraphListener( &graphListener );
      /*
       +---------+
-      | node 2 |
-      | node 3 |
-      | node 1 |
+      | node 4  |
+      | node 2  |
+      | node 3  |
+      | node 1  |
       |root     |
       +---------+
      */
 
-    image->addNode( node1, image->rootNode() );
-    image->addNode( node2, image->rootNode() );
-    image->addNode( node3, image->rootNode(), node1 );
+    graphListener.resetBools();
+    root->add( node1, 0 );
+    QVERIFY( graphListener.beforeInsertRow == true );
+    QVERIFY( graphListener.afterInsertRow == true );
+    QVERIFY( graphListener.beforeRemoveRow == false );
+    QVERIFY( graphListener.afterRemoveRow == false );
+    graphListener.resetBools();
 
-    QVERIFY( image->nnodes() == 3 );
+    root->add( node2, 0 );
+    QVERIFY( graphListener.beforeInsertRow == true );
+    QVERIFY( graphListener.afterInsertRow == true );
+    QVERIFY( graphListener.beforeRemoveRow == false );
+    QVERIFY( graphListener.afterRemoveRow == false );
+    graphListener.resetBools();
 
-    QVERIFY( node1->parentNode() == image->rootNode() );
-    QVERIFY( node2->parentNode() == image->rootNode() );
-    QVERIFY( node3->parentNode() == image->rootNode() );
+    root->add( node3, node1 );
+    QVERIFY( graphListener.beforeInsertRow == true );
+    QVERIFY( graphListener.afterInsertRow == true );
+    QVERIFY( graphListener.beforeRemoveRow == false );
+    QVERIFY( graphListener.afterRemoveRow == false );
+    graphListener.resetBools();
 
-    QVERIFY( image->rootNode()->firstChild() == node2 );
-    QVERIFY( image->rootNode()->lastChild() == node1 );
+    root->add( node3, node1 );
+    QVERIFY( graphListener.beforeInsertRow == true );
+    QVERIFY( graphListener.afterInsertRow == true );
+    QVERIFY( graphListener.beforeRemoveRow == false );
+    QVERIFY( graphListener.afterRemoveRow == false );
+    graphListener.resetBools();
 
-    QVERIFY( image->rootNode()->at( 0 ) == node2 );
-    QVERIFY( image->rootNode()->at( 1 ) == node3 );
-    QVERIFY( image->rootNode()->at( 2 ) == node1 );
+    root->add( node4, root->childCount() );
+    QVERIFY( graphListener.beforeInsertRow == true );
+    QVERIFY( graphListener.afterInsertRow == true );
+    QVERIFY( graphListener.beforeRemoveRow == false );
+    QVERIFY( graphListener.afterRemoveRow == false );
+    graphListener.resetBools();
 
-    QVERIFY( image->rootNode()->index( node1 ) == 2 );
-    QVERIFY( image->rootNode()->index( node3 ) == 1 );
-    QVERIFY( image->rootNode()->index( node2 ) == 0 );
+
+    QVERIFY( root->childCount() == 3 );
+#if 0
+    QVERIFY( node1->parent() == rootNode() );
+    QVERIFY( node2->parent() == rootNode() );
+    QVERIFY( node3->parent() == rootNode() );
+
+    QVERIFY( rootNode()->firstChild() == node2 );
+    QVERIFY( rootNode()->lastChild() == node1 );
+
+    QVERIFY( rootNode()->at( 0 ) == node2 );
+    QVERIFY( rootNode()->at( 1 ) == node3 );
+    QVERIFY( rootNode()->at( 2 ) == node1 );
+
+    QVERIFY( rootNode()->index( node1 ) == 2 );
+    QVERIFY( rootNode()->index( node3 ) == 1 );
+    QVERIFY( rootNode()->index( node2 ) == 0 );
 
     QVERIFY( node3->prevSibling() == node2 );
     QVERIFY( node2->prevSibling() == 0 );
@@ -148,18 +188,18 @@ void KisNodeTest::testOrdering()
       |root     |
       +---------+
      */
-    image->moveNode( node2, image->rootNode(), node1 );
+    moveNode( node2, rootNode(), node1 );
 
-    QVERIFY( image->rootNode()->firstChild() == node3 );
-    QVERIFY( image->rootNode()->lastChild() == node1 );
+    QVERIFY( rootNode()->firstChild() == node3 );
+    QVERIFY( rootNode()->lastChild() == node1 );
 
-    QVERIFY( image->rootNode()->at( 0 ) == node3 );
-    QVERIFY( image->rootNode()->at( 1 ) == node2 );
-    QVERIFY( image->rootNode()->at( 2 ) == node1 );
+    QVERIFY( rootNode()->at( 0 ) == node3 );
+    QVERIFY( rootNode()->at( 1 ) == node2 );
+    QVERIFY( rootNode()->at( 2 ) == node1 );
 
-    QVERIFY( image->rootNode()->index( node1 ) == 2 );
-    QVERIFY( image->rootNode()->index( node2 ) == 1 );
-    QVERIFY( image->rootNode()->index( node3 ) == 0 );
+    QVERIFY( rootNode()->index( node1 ) == 2 );
+    QVERIFY( rootNode()->index( node2 ) == 1 );
+    QVERIFY( rootNode()->index( node3 ) == 0 );
 
     QVERIFY( node3->prevSibling() == 0 );
     QVERIFY( node2->prevSibling() == node3 );

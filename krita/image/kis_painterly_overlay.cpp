@@ -24,8 +24,8 @@ public:
 
 KisPainterlyOverlay::KisPainterlyOverlay()
     : KisPaintDevice( KisPainterlyOverlayColorSpace::instance() )
+    , m_d( new Private() )
 {
-    m_d = new Private();
 }
 
 KisPainterlyOverlay::~KisPainterlyOverlay()

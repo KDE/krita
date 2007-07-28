@@ -110,16 +110,20 @@ public:
 
 
 KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace, const QString& name)
-    : QObject(0), KisShared()
+    : QObject(0)
+    , KisShared()
+    , m_d( new KisImagePrivate() )
 {
     setObjectName(name);
     init(adapter, width, height, colorSpace);
 }
 
-KisImage::KisImage(const KisImage& rhs) : QObject(), KisShared(rhs)
+KisImage::KisImage(const KisImage& rhs)
+    : QObject()
+    , KisShared(rhs)
+    , m_d( new KisImagePrivate() )
 {
     if (this != &rhs) {
-        m_d = new KisImagePrivate(*rhs.m_d);
         m_d->perspectiveGrid = new KisPerspectiveGrid(*rhs.m_d->perspectiveGrid);
         m_d->uri = rhs.m_d->uri;
         m_d->width = rhs.m_d->width;
@@ -203,7 +207,6 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     }
 
-    m_d = new KisImagePrivate();
     m_d->backgroundColor = KoColor(Qt::white, colorSpace);
     m_d->lockCount = 0;
     m_d->sizeChangedWhileLocked = false;

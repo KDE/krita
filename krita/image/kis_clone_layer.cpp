@@ -46,8 +46,8 @@ public:
 
 KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageSP img, const QString &name, quint8 opacity)
     : KisLayer( img, name, opacity )
+    , m_d( new Private() )
 {
-    m_d = new Private();
     m_d->projection = 0;
     m_d->copyFrom = from;
     m_d->type = COPY_PROJECTION;
@@ -58,8 +58,8 @@ KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageSP img, const QString &nam
 KisCloneLayer::KisCloneLayer(const KisCloneLayer& rhs)
     : KisLayer( rhs )
     , KisIndirectPaintingSupport( rhs )
+    , m_d( new Private() )
 {
-    m_d = new Private();
     // XXX: Yah, booh!
     m_d->projection = new KisPaintDevice( *rhs.projection().data() );
     m_d->copyFrom = rhs.copyFrom();

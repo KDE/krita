@@ -70,6 +70,7 @@ KisAdjustmentLayer::~KisAdjustmentLayer()
 
 void KisAdjustmentLayer::updateProjection(const QRect& r)
 {
+    Q_UNUSED( r );
 
 }
 

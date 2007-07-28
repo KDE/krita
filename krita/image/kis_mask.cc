@@ -48,8 +48,8 @@ KisMask::KisMask(KisPaintDeviceSP dev,  const QString & name)
 
 KisMask::KisMask(const QString & name)
     : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), name)
+    , m_d( new KisMaskPrivate() )
 {
-    m_d = new KisMaskPrivate();
     m_d->parent = 0;
     m_d->active = false;
 
@@ -57,9 +57,11 @@ KisMask::KisMask(const QString & name)
 
 KisMask::KisMask(const KisMask& rhs)
     : KisPaintDevice(rhs)
+    , m_d( new KisMaskPrivate() )
 {
-    // XXX: as soon as there are pointers in m_d, fix this.
-    m_d = rhs.m_d;
+    m_d->parent = rhs.m_d->parent;
+    m_d->parentLayer = rhs.m_d->parentLayer;
+    m_d->active = rhs.m_d->active;
 }
 
 KisMask::~KisMask()

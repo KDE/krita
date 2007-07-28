@@ -164,7 +164,7 @@ private:
     inline int reverseIndex(int index) const { return childCount() - 1 - index; }
 
     class Private;
-    Private * m_d;
+    Private * const m_d;
 
 };
 

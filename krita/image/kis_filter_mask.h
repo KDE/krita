@@ -51,7 +51,7 @@ public:
 private:
 
     class Private;
-    Private * m_d;
+    Private * const m_d;
 };
 
 #endif //_KIS_FILTER_MASK_

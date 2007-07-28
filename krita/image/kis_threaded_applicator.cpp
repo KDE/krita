@@ -43,8 +43,8 @@ public:
 
 
 KisThreadedApplicator::KisThreadedApplicator( KisPaintDeviceSP dev, const QRect & rc, KisJobFactory * jobFactory, int margin )
+    : m_d( new Private() )
 {
-    m_d = new Private();
     m_d->dev = dev;
     m_d->rc = rc;
     m_d->jobFactory = jobFactory;

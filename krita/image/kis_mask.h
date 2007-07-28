@@ -100,7 +100,7 @@ private:
 
     class KisMaskPrivate;
 
-    KisMaskPrivate * m_d;
+    KisMaskPrivate * const m_d;
 
 };
 

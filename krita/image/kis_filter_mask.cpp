@@ -29,8 +29,8 @@ public:
 
 KisFilterMask::KisFilterMask()
     : KisEffectMask()
+    , m_d( new Private() )
 {
-    m_d = new Private();
     m_d->filterConfig = 0;
 }
 
@@ -42,7 +42,9 @@ KisFilterMask::~KisFilterMask()
 
 KisFilterMask::KisFilterMask( const KisFilterMask& rhs )
     : KisEffectMask( rhs )
+    , m_d( new Private() )
 {
+    m_d->filterConfig = rhs.m_d->filterConfig;
 }
 
 KisFilterConfiguration * KisFilterMask::filter() const
@@ -65,8 +67,8 @@ void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc )
     if (projection->hasSelection())
         oldSelection = projection->selection();
 
-    
-    projection->setSelection    
+
+    projection->setSelection
 */
     KisFilterSP filter = KisFilterRegistry::instance()->value( m_d->filterConfig->name() );
     if (!filter) {

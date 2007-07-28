@@ -87,6 +87,8 @@ public:
     void setListId(const QString &listId);
     /// return the listId used by all list-styles that together make 1 user defined list in an ODF file.
     QString listId() const;
+    bool LetterSynchronization() const;
+    void setLetterSynchronization(bool on);
 
     bool operator==(const KoListLevelProperties &other) const;
     KoListLevelProperties & operator=(const KoListLevelProperties &other);

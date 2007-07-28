@@ -51,6 +51,7 @@ static const int properties[] = {
     KoListStyle::BulletCharacter,
     KoListStyle::BulletSize,
     KoListStyle::Alignment,
+    KoListStyle::LetterSynchronization,
     -1
 };
 
@@ -233,6 +234,15 @@ void KoListLevelProperties::setListId(const QString &listId) {
 QString KoListLevelProperties::listId() const {
     return propertyString(KoListStyle::ListId);
 }
+
+bool KoListLevelProperties::LetterSynchronization() const {
+    return propertyBoolean(KoListStyle::LetterSynchronization);
+}
+
+void KoListLevelProperties::setLetterSynchronization(bool on) {
+    setProperty(KoListStyle::LetterSynchronization, on);
+}
+
 
 // static
 KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list) {

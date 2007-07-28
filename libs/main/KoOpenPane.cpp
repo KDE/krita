@@ -131,13 +131,13 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
   }
 
   QList<int> sizes;
-  sizes << width() - 20 << 20;
-  d->m_splitter->setSizes(sizes);
 
   // Set the sizes of the details pane splitters
   KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
   sizes = cfgGrp.readEntry("DetailsPaneSplitterSizes", sizes);
-  emit splitterResized(0, sizes);
+
+  if(!sizes.isEmpty())
+    emit splitterResized(0, sizes);
 
   connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
           this, SLOT(saveSplitterSizes(KoDetailsPane*, const QList<int>&)));
@@ -162,9 +162,9 @@ void KoOpenPane::showOpenFileDialog()
   const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
       KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
 
-  if (mimeFilter.isEmpty()) 
+  if (mimeFilter.isEmpty())
   {
-      kDebug(30003) << "No mime types found!\n";  
+      kDebug(30003) << "No mime types found!\n";
       return;
   }
   KUrl url = KFileDialog::getOpenUrl(KUrl("kfiledialog:///OpenDialog"), mimeFilter.join(" "), this);
@@ -273,7 +273,7 @@ void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
 
 Q3ListViewItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight)
 {
-  return addPane(title, KIcon(icon).pixmap(K3Icon::SizeLarge,K3Icon::SizeLarge), 
+  return addPane(title, KIcon(icon).pixmap(K3Icon::SizeLarge,K3Icon::SizeLarge),
     widget, sortWeight);
 }
 

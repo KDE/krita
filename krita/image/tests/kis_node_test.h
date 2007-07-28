@@ -25,6 +25,21 @@ class KisNodeTest : public QObject
 {
     Q_OBJECT
 
+public:
+
+    bool beforeInsertRow;
+    bool afterInsertRow;
+    bool beforeRemoveRow;
+    bool afterRemoveRow;
+
+    void resetBools()
+        {
+            beforeRemoveRow = false;
+            afterRemoveRow = false;
+            beforeInsertRow = false;
+            afterInsertRow = false;
+        }
+
 private slots:
 
     void testCreation();

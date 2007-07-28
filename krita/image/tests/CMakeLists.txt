@@ -98,11 +98,10 @@ target_link_libraries(Kis_Selection_Test  ${KDE4_KDEUI_LIBS} koguiutils komain k
 
 ########### next target ###############
 
-#set(kis_node_test_SRCS kis_node_test.cpp )
+set(kis_node_test_SRCS kis_node_test.cpp )
 
+kde4_add_unit_test(Kis_Node_Test TESTNAME krita-image-Node-Test ${kis_node_test_SRCS})
 
-#kde4_add_unit_test(Kis_Node_Test TESTNAME krita-image-Node-Test ${kis_node_test_SRCS})
-
-#target_link_libraries(Kis_Node_Test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(Kis_Node_Test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############

@@ -155,7 +155,12 @@ bool KisNode::add( KisNodeSP newNode, KisNodeSP aboveThis )
         kWarning() << "invalid input to KisGroupNode::addNode(KisNodeSP newNode, KisNodeSP aboveThis)!" << endl;
         return false;
     }
-    return add(newNode, aboveThis ? parent()->index( aboveThis ) : childCount());
+
+    quint32 i = childCount();
+    if ( aboveThis && parent() )
+        i = index( aboveThis );
+
+    return add(newNode, i);
 }
 
 bool KisNode::remove( quint32 index )

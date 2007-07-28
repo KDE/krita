@@ -76,13 +76,12 @@ public:
 DlgGlsl::DlgGlsl( KisView2 *  parent,
                   const char * name)
     : KDialog (parent)
+    , m_d( new Private )
 {
     setCaption( i18n("Glsl Image") );
     setButtons(  Ok | Cancel);
     setDefaultButton( Ok );
     setObjectName(name);
-
-    m_d = new Private();
 
     m_d->view = parent;
     m_d->page = new WdgGlsl(this);

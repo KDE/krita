@@ -2,6 +2,7 @@
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +26,8 @@
 #include <KoPluginLoader.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+#include <KoOasisLoadingContext.h>
+#include <KoStyleStack.h>
 
 #include <QString>
 #include <QHash>
@@ -156,7 +159,11 @@ KoShape * KoShapeRegistry::createShapeInternal( const KoXmlElement & element, Ko
             if( shape->shapeId().isEmpty() )
                 shape->setShapeId(factory->id());
 
-            if ( shape->loadOdf( element, context ) )
+            context.koLoadingContext().styleStack().save();
+            bool loaded = shape->loadOdf( element, context );
+            context.koLoadingContext().styleStack().restore();
+
+            if( loaded )
                 return shape;
 
             // Maybe a shape with a lower priority can load our

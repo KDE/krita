@@ -25,8 +25,12 @@
 #include <QDebug>
 #include <QPainter>
 
+#include <kdebug.h>
+
 #include <KoShapeSavingContext.h>
+#include <KoOasisLoadingContext.h>
 #include <KoShapeLayer.h>
+#include <KoShapeRegistry.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoOasisStyles.h>
@@ -125,16 +129,34 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
 
     loadOdfPageTag(element, paContext);
 
-    // load shapes, this is only for testing
-    KoXmlNode n = element.firstChild();
-    for ( ; !n.isNull(); n = n.nextSibling() )
+    // load layers and shapes 
+    // This needs some work as this is only for layers which are the same for all pages
+    KoXmlElement layerElement;
+    forEachElement( layerElement, loadingContext.koLoadingContext().oasisStyles().layerSet() )
     {
-        if ( n.isElement() )
-        {
-            KoXmlElement child = n.toElement();
-            qDebug() << "Element:" << child.tagName();
+        KoShapeLayer * layer = new KoShapeLayer();
+        if ( layer->loadOdf( layerElement, loadingContext ) ) {
+            addChild( layer );
         }
     }
+
+    KoShapeLayer * layer = dynamic_cast<KoShapeLayer *>( iterator().first() );
+    if ( layer )
+    {
+        KoXmlElement child;
+        forEachElement( child, element )
+        {
+            kDebug() << "loading shape " << child.localName() << endl;
+
+            KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, loadingContext );
+            if ( shape ) {
+                if( ! shape->parent() ) {
+                    layer->addChild( shape );
+                }
+            }
+        }
+    }
+
     return true;
 }
 

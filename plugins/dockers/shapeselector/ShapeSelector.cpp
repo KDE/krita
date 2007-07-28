@@ -46,7 +46,7 @@ ShapeSelector::ShapeSelector(QWidget *parent)
     m_canvas = new Canvas(this);
     setWidget(m_canvas);
     m_shapeManager = new KoShapeManager(m_canvas);
-    setMinimumSize(30, 30);
+//     setMinimumSize(30, 30);
     m_mainFolder = new FolderShape();
 
     QTimer::singleShot(0, this, SLOT(loadShapeTypes()));
@@ -60,6 +60,7 @@ ShapeSelector::~ShapeSelector() {
 
 void ShapeSelector::loadShapeTypes() {
     m_mainFolder->setSize(m_canvas->size());
+    qreal maxHeight = 0;
 
     foreach(QString id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
@@ -68,11 +69,13 @@ void ShapeSelector::loadShapeTypes() {
             oneAdded=true;
             TemplateShape *shape = new TemplateShape(shapeTemplate);
             m_mainFolder->addChild(shape);
+            maxHeight = qMax(maxHeight, shape->size().height());
         }
         if(!oneAdded)
             m_mainFolder->addChild(new GroupShape(factory));
     }
     m_shapeManager->add(m_mainFolder);
+    m_canvas->setMinimumSize(qRound(maxHeight) + 10, qRound(maxHeight) + 10);
 }
 
 void ShapeSelector::itemSelected() {
@@ -94,6 +97,7 @@ void ShapeSelector::itemSelected() {
 void ShapeSelector::add(KoShape *shape) {
     int x=5, y=5; // 5 = gap
     int w = (int) shape->size().width();
+    int maxHeight = 0;
     bool ok=true; // lets be optimistic ;)
     do {
         int rowHeight=0;
@@ -110,10 +114,13 @@ void ShapeSelector::add(KoShape *shape) {
                 break;
             }
         }
+
+        maxHeight = qMax(maxHeight, rowHeight);
     } while(! ok);
     shape->setPosition(QPointF(x, y));
 
     m_shapeManager->add(shape);
+    m_canvas->setMinimumSize(maxHeight + 10, maxHeight + 10);
 }
 
 void ShapeSelector::setSize(const QSize &size) {

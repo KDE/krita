@@ -19,12 +19,9 @@
 
 #include "KoOpenPane.h"
 
-#include <q3vbox.h>
 #include <QLayout>
 #include <q3header.h>
-#include <q3widgetstack.h>
 #include <QLabel>
-#include <q3valuelist.h>
 #include <QImage>
 #include <QPainter>
 #include <QPen>

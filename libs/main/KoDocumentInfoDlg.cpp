@@ -249,14 +249,14 @@ void KoDocumentInfoDlg::saveAuthorData()
 
     KConfig* config = KoGlobal::kofficeConfig();
     KConfigGroup cgs( config, "Author" );
-    config->writeEntry("telephone", d->m_authorUi->lePhoneHome->text());
-    config->writeEntry("telephone-work", d->m_authorUi->lePhoneWork->text());
-    config->writeEntry("fax", d->m_authorUi->leFax->text());
-    config->writeEntry("country",d->m_authorUi->leCountry->text());
-    config->writeEntry("postal-code",d->m_authorUi->lePostal->text());
-    config->writeEntry("city",  d->m_authorUi->leCity->text());
-    config->writeEntry("street", d->m_authorUi->leStreet->text());
-    config->sync();
+    cgs.writeEntry("telephone", d->m_authorUi->lePhoneHome->text());
+    cgs.writeEntry("telephone-work", d->m_authorUi->lePhoneWork->text());
+    cgs.writeEntry("fax", d->m_authorUi->leFax->text());
+    cgs.writeEntry("country",d->m_authorUi->leCountry->text());
+    cgs.writeEntry("postal-code",d->m_authorUi->lePostal->text());
+    cgs.writeEntry("city",  d->m_authorUi->leCity->text());
+    cgs.writeEntry("street", d->m_authorUi->leStreet->text());
+    cgs.sync();
 }
 
 void KoDocumentInfoDlg::slotResetMetaData()

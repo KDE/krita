@@ -108,7 +108,7 @@ public:
         MinimumWidth,   ///< The minimum width, in pt, of the listItem including the prefix/suffix.
         ListId,         ///< A group of lists together are called 1 (user intended) list in ODF. Store the listId here
         IsOutline,       ///< If true then this list is an outline list (for header paragraphs)
-        LetterSynchronization, ///< If letters are used for numbering, when true increment all at the same time. (aa, bb)
+        LetterSynchronization ///< If letters are used for numbering, when true increment all at the same time. (aa, bb)
     };
 
     /**

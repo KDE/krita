@@ -77,7 +77,7 @@ class FLAKE_EXPORT KoPathShape : public KoShape
 {
 public:
     /**
-     * @brief
+     * @brief constructor
      */
     KoPathShape();
 
@@ -86,12 +86,18 @@ public:
      */
     virtual ~KoPathShape();
 
+    /// reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
     virtual void paintPoints( QPainter &painter, const KoViewConverter &converter, int handleRadius );
+    /// reimplemented
     virtual const QPainterPath outline() const;
+    /// reimplemented
     virtual QRectF boundingRect() const;
+    /// reimplemented
     virtual QSizeF size() const;
+    /// reimplemented
     virtual QPointF position() const;
+    /// reimplemented
     virtual void setSize( const QSizeF &size );
 
     // reimplemented
@@ -390,7 +396,7 @@ public:
      * @return point in document coordinates
      */
     QPointF shapeToDocument( const QPointF &point ) const;
-    
+
     /**
      * @brief transform rect from shape coordinates to document coordinates
      *
@@ -399,7 +405,7 @@ public:
      * @return rect in document coordinates
      */
     QRectF shapeToDocument( const QRectF &rect ) const;
-    
+
     /**
      * @brief transform point from world coordinates to document coordinates
      *
@@ -408,7 +414,7 @@ public:
      * @return point in shape coordinates
      */
     QPointF documentToShape( const QPointF &point ) const;
-    
+
     /**
      * @brief transform rect from world coordinates to document coordinates
      *
@@ -419,6 +425,7 @@ public:
     QRectF documentToShape( const QRectF &rect ) const;
 
 private:
+    // TODO move all the private methods to live on the d pointer object
     void map( const QMatrix &matrix );
 
     void updateLast( KoPathPoint ** lastPoint );
@@ -438,7 +445,7 @@ private:
     void paintDebug( QPainter &painter );
 #endif
 
-protected:    
+protected:
     QRectF handleRect( const QPointF &p, double radius ) const;
     /**
      * @brief add a arc.

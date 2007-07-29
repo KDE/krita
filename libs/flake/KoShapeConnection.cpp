@@ -23,6 +23,8 @@
 #include <QPainter>
 #include <QPen>
 #include <QPointF>
+#include <QList>
+#include <QPainterPath>
 
 class KoShapeConnection::Private {
 public:
@@ -58,6 +60,7 @@ public:
     int gluePointIndex2;
     QPointF endPoint;
     int zIndex;
+    QList<QPointF> controlPoints;
 };
 
 KoShapeConnection::KoShapeConnection(KoShape *from, int gp1, KoShape *to, int gp2)
@@ -94,9 +97,19 @@ void KoShapeConnection::paint(QPainter &painter, const KoViewConverter &converte
     else
         b = converter.documentToView(d->endPoint);
 
+    QPainterPath path;
+    path.moveTo(a);
+
+    foreach(QPointF point, d->controlPoints)
+    {
+        path.lineTo(converter.documentToView(point));
+    }
+
+    path.lineTo(b);
+
     QPen pen(Qt::black);
     painter.setPen(pen);
-    painter.drawLine(a, b);
+    painter.drawPath(path);
 }
 
 KoShape *KoShapeConnection::shape1() const {
@@ -136,7 +149,18 @@ QPointF KoShapeConnection::endPoint() const {
 QRectF KoShapeConnection::boundingRect() const {
     QPointF start = startPoint();
     QPointF end = endPoint();
-    QRectF br(start.x(), start.y(), end.x() - start.x(), end.y() - start.y());
+    QPointF topLeft(qMin(start.x(), end.x()), qMin(start.y(), end.y()));
+    QPointF bottomRight(qMax(start.x(), end.x()), qMax(start.y(), end.y()));
+
+    foreach(QPointF point, d->controlPoints)
+    {
+        topLeft.setX(qMin(topLeft.x(), point.x()));
+        topLeft.setY(qMin(topLeft.y(), point.y()));
+        bottomRight.setX(qMax(bottomRight.x(), point.x()));
+        bottomRight.setY(qMax(bottomRight.y(), point.y()));
+    }
+
+    QRectF br(topLeft.x(), topLeft.y(), bottomRight.x() - topLeft.x(), bottomRight.y() - topLeft.y());
     return br.normalized();
 }
 
@@ -159,6 +183,11 @@ void KoShapeConnection::setEndPoint(KoShape* shape, int gluePointIndex)
     d->gluePointIndex2 = gluePointIndex;
     d->zIndex = qMax(d->zIndex, shape->zIndex() + 1);
     d->shape2->addConnection(this);
+}
+
+void KoShapeConnection::appendControlPoint(const QPointF& point)
+{
+    d->controlPoints.append(point);
 }
 
 //static

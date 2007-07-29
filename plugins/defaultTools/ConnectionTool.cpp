@@ -64,6 +64,7 @@ void ConnectionTool::mousePressEvent( KoPointerEvent *event ) {
     QRectF region = m_canvas->viewConverter()->viewToDocument(QRectF(0, 0, 20, 20));
     region.moveTo(event->point.x() - region.width() / 2, event->point.y() - region.height() / 2);
     m_lastMousePos = event->point;
+    bool created = false;
 
     foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(region)) {
         QMatrix matrix = shape->transformationMatrix(0);
@@ -74,6 +75,7 @@ void ConnectionTool::mousePressEvent( KoPointerEvent *event ) {
             if(qAbs(distance.x()) < 10 && qAbs(distance.y()) < 10) { // distance is in pixels.
                 if(m_connection == 0) {
                     m_connection = createConnection(shape, index, event->point);
+                    created = true;
                 }
                 else {
                     m_connection->setEndPoint(shape, index);
@@ -81,7 +83,24 @@ void ConnectionTool::mousePressEvent( KoPointerEvent *event ) {
                 }
                 return;
             }
+
             index++;
+        }
+    }
+
+    if(event->button() == Qt::LeftButton)
+    {
+        if(m_connection && !created)
+        {
+            m_connection->appendControlPoint(event->point);
+        }
+    }
+    else if(event->button() == Qt::RightButton)
+    {
+        if(m_connection)
+        {
+            m_connection->setEndPoint(event->point);
+            m_connection = 0;
         }
     }
 }

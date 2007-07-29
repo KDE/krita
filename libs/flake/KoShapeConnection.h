@@ -143,6 +143,9 @@ public:
     /// Sets shape2 to @p shape and gluePointIndex2 to @p gluePointIndex
     void setEndPoint(KoShape* shape, int gluePointIndex);
 
+    /// Append @p point to the list of control points
+    void appendControlPoint(const QPointF& point);
+
 private:
     class Private;
     Private * const d;

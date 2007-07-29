@@ -89,24 +89,38 @@ void KisNodeTest::testCreation()
     delete node;
 }
 
+void dumpNodeStack( KisNodeSP node, QString prefix = QString( "\t" ) ) {
+    for ( uint i = 0; i < node->childCount(); ++i ) {
+        if ( node->at( i )->parent() )
+            kDebug() << prefix << "\t" << node->at( i ) << "node at " << i << " has index from parent: " << node->index( node->at( i ) ) << endl;
+
+        if ( node->at( i )->childCount() > 0 ) {
+            dumpNodeStack( node->at( i ), prefix + "\t" );
+        }
+    }
+
+}
+
 void KisNodeTest::testOrdering()
 {
     TestGraphListener graphListener;
 
     KisNodeSP root = new KisNode();
     root->setGraphListener( &graphListener );
+    kDebug() << "Root: " << root << endl;
 
     KisNodeSP node1 = new KisNode();
-    node1->setGraphListener( &graphListener );
+    kDebug() << "Node 1: " << node1 << endl;
 
     KisNodeSP node2 = new KisNode();
-    node2->setGraphListener( &graphListener );
+    kDebug() << "Node 2: " << node2 << endl;
 
     KisNodeSP node3 = new KisNode();
-    node3->setGraphListener( &graphListener );
+    kDebug() << "Node 3: " << node3 << endl;
 
     KisNodeSP node4 = new KisNode();
-    node4->setGraphListener( &graphListener );
+    kDebug() << "Node 4: " << node4 << endl;
+
      /*
       +---------+
       | node 4  |
@@ -118,14 +132,14 @@ void KisNodeTest::testOrdering()
      */
 
     graphListener.resetBools();
-    root->add( node1, 0 );
+    root->add( node1, root->childCount() );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );
     QVERIFY( graphListener.afterRemoveRow == false );
     graphListener.resetBools();
 
-    root->add( node2, 0 );
+    root->add( node2, root->childCount() );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );
@@ -146,33 +160,37 @@ void KisNodeTest::testOrdering()
     QVERIFY( graphListener.afterRemoveRow == false );
     graphListener.resetBools();
 
-
     QVERIFY( root->childCount() == 4 );
+
+    QVERIFY( node1->parent() == root );
+    QVERIFY( node2->parent() == root );
+    QVERIFY( node3->parent() == root );
+    QVERIFY( node4->parent() == root );
+
+    QVERIFY( root->firstChild() == node1 );
+    QVERIFY( root->lastChild() == node4 );
+
+    QVERIFY( root->at( 0 ) == node1 );
+    QVERIFY( root->at( 1 ) == node3 );
+    QVERIFY( root->at( 2 ) == node2 );
+    QVERIFY( root->at( 3 ) == node4 );
+
+    QVERIFY( root->index( node1 ) == 0 );
+    QVERIFY( root->index( node3 ) == 1 );
+    QVERIFY( root->index( node2 ) == 2 );
+    QVERIFY( root->index( node4 ) == 3 );
+
+    QVERIFY( node4->prevSibling() == node2 );
+    QVERIFY( node3->prevSibling() == node1 );
+    QVERIFY( node2->prevSibling() == node3 );
+    QVERIFY( node1->prevSibling() == 0 );
+
+    QVERIFY( node4->nextSibling() == 0 );
+    QVERIFY( node3->nextSibling() == node2 );
+    QVERIFY( node2->nextSibling() == node4 );
+    QVERIFY( node1->nextSibling() == node3 );
+
 #if 0
-    QVERIFY( node1->parent() == rootNode() );
-    QVERIFY( node2->parent() == rootNode() );
-    QVERIFY( node3->parent() == rootNode() );
-
-    QVERIFY( rootNode()->firstChild() == node2 );
-    QVERIFY( rootNode()->lastChild() == node1 );
-
-    QVERIFY( rootNode()->at( 0 ) == node2 );
-    QVERIFY( rootNode()->at( 1 ) == node3 );
-    QVERIFY( rootNode()->at( 2 ) == node1 );
-
-    QVERIFY( rootNode()->index( node1 ) == 2 );
-    QVERIFY( rootNode()->index( node3 ) == 1 );
-    QVERIFY( rootNode()->index( node2 ) == 0 );
-
-    QVERIFY( node3->prevSibling() == node2 );
-    QVERIFY( node2->prevSibling() == 0 );
-    QVERIFY( node1->prevSibling() == node3 );
-
-    QVERIFY( node3->nextSibling() == node1 );
-    QVERIFY( node2->nextSibling() == node3 );
-    QVERIFY( node1->nextSibling() == 0 );
-
-
     /*
       +---------+
       | node 3 |
@@ -181,18 +199,18 @@ void KisNodeTest::testOrdering()
       |root     |
       +---------+
      */
-    moveNode( node2, rootNode(), node1 );
+    moveNode( node2, root, node1 );
 
-    QVERIFY( rootNode()->firstChild() == node3 );
-    QVERIFY( rootNode()->lastChild() == node1 );
+    QVERIFY( root->firstChild() == node3 );
+    QVERIFY( root->lastChild() == node1 );
 
-    QVERIFY( rootNode()->at( 0 ) == node3 );
-    QVERIFY( rootNode()->at( 1 ) == node2 );
-    QVERIFY( rootNode()->at( 2 ) == node1 );
+    QVERIFY( root->at( 0 ) == node3 );
+    QVERIFY( root->at( 1 ) == node2 );
+    QVERIFY( root->at( 2 ) == node1 );
 
-    QVERIFY( rootNode()->index( node1 ) == 2 );
-    QVERIFY( rootNode()->index( node2 ) == 1 );
-    QVERIFY( rootNode()->index( node3 ) == 0 );
+    QVERIFY( root->index( node1 ) == 2 );
+    QVERIFY( root->index( node2 ) == 1 );
+    QVERIFY( root->index( node3 ) == 0 );
 
     QVERIFY( node3->prevSibling() == 0 );
     QVERIFY( node2->prevSibling() == node3 );

@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_node.h"
+#include <QList>
 
 #include "kdebug.h"
 
@@ -27,7 +28,7 @@ public:
 
     KisNodeSP parent;
     KisNodeGraphListener * graphListener;
-    vKisNodeSP nodes;
+    QList<KisNodeSP> nodes;
 };
 
 KisNode::KisNode()
@@ -74,12 +75,18 @@ void KisNode::setParent( KisNodeSP parent )
 
 KisNodeSP KisNode::firstChild() const
 {
-    return at(0);
+    if ( !m_d->nodes.isEmpty() )
+        return m_d->nodes.first();
+    else
+        return 0;
 }
 
 KisNodeSP KisNode::lastChild() const
 {
-    return at(childCount() - 1);
+    if ( !m_d->nodes.isEmpty() )
+        return m_d->nodes.last();
+    else
+        return 0;
 }
 
 KisNodeSP KisNode::prevSibling() const
@@ -105,10 +112,8 @@ quint32 KisNode::childCount() const
 
 KisNodeSP KisNode::at( quint32 index ) const
 {
-    if (    childCount()
-         && qBound( uint( 0 ), uint( index ), childCount() - 1 ) == uint( index ) ) {
-
-        return m_d->nodes.at( reverseIndex( index ) );
+    if ( !m_d->nodes.isEmpty() && index < ( quint32 )m_d->nodes.size() ) {
+        return m_d->nodes.at( index );
     }
 
     return 0;
@@ -116,7 +121,11 @@ KisNodeSP KisNode::at( quint32 index ) const
 
 int KisNode::index( const KisNodeSP node ) const
 {
-    return  m_d->nodes.indexOf( node );
+    if ( m_d->nodes.contains( node ) ) {
+         return m_d->nodes.indexOf( node );
+    }
+
+    return -1;
 }
 
 bool KisNode::add( KisNodeSP newNode, quint32 index )
@@ -124,18 +133,18 @@ bool KisNode::add( KisNodeSP newNode, quint32 index )
     Q_ASSERT( newNode );
 
     if ( !newNode ) return false;
-    if ( index > childCount() ) return false;
     if ( newNode->parent() ) return false;
     if ( m_d->nodes.contains(newNode) ) return false;
 
     if ( m_d->graphListener )
         m_d->graphListener->aboutToAddANode( this, index );
 
-    if (index == 0)
+    if ( index >= childCount() )
         m_d->nodes.append(newNode);
-    else
-        m_d->nodes.insert(m_d->nodes.begin() + reverseIndex(index) + 1, newNode);
-
+    else {
+        //m_d->nodes.insert(m_d->nodes.begin() + reverseIndex(index) + 1, newNode);
+        m_d->nodes.insert( index + 1, newNode );
+    }
     newNode->setParent( this );
     newNode->setGraphListener( m_d->graphListener );
 
@@ -157,7 +166,7 @@ bool KisNode::add( KisNodeSP newNode, KisNodeSP aboveThis )
     }
 
     quint32 i = childCount();
-    if ( aboveThis && parent() )
+    if ( aboveThis )
         i = index( aboveThis );
 
     return add(newNode, i);
@@ -174,7 +183,8 @@ bool KisNode::remove( quint32 index )
         if ( m_d->graphListener )
             m_d->graphListener->aboutToRemoveANode( this, index );
 
-        m_d->nodes.erase(m_d->nodes.begin() + reverseIndex(index));
+        //m_d->nodes.erase(m_d->nodes.begin() + reverseIndex(index));
+        m_d->nodes.removeAt( index );
 
         if ( m_d->graphListener ) m_d->graphListener->nodeHasBeenRemoved(this, index);
 

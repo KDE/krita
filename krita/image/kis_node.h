@@ -83,12 +83,14 @@ public:
     void setParent( KisNodeSP parent );
 
     /**
-     * Returns the first child node of this node.
+     * Returns the first child node of this node, or 0 if there are no
+     * child nodes.
      */
     KisNodeSP firstChild() const;
 
     /**
-     * Returns the last child node of this node.
+     * Returns the last child node of this node, or 0 if there are no
+     * child nodes.
      */
     KisNodeSP lastChild() const;
 
@@ -160,8 +162,6 @@ public:
 
 
 private:
-
-    inline int reverseIndex(int index) const { return childCount() - 1 - index; }
 
     class Private;
     Private * const m_d;

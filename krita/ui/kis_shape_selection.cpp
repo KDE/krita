@@ -24,6 +24,7 @@
 #include <KoLineBorder.h>
 #include <KoPathShape.h>
 #include <KoCompositeOp.h>
+
 #include "kis_painter.h"
 #include "kis_shape_selection_model.h"
 

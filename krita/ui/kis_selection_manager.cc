@@ -42,6 +42,9 @@
 #include <KoMainWindow.h>
 #include <KoQueryTrader.h>
 #include <KoViewConverter.h>
+#include <KoSelection.h>
+#include <KoShapeManager.h>
+#include <KoLineBorder.h>
 
 #include "kis_adjustment_layer.h"
 #include "kis_canvas2.h"
@@ -66,6 +69,7 @@
 #include "kis_resource_provider.h"
 #include "kis_undo_adapter.h"
 #include "kis_pixel_selection.h"
+#include "kis_shape_selection.h"
 
 #include "kis_clipboard.h"
 #include "kis_view2.h"
@@ -121,6 +125,10 @@ KisSelectionManager::KisSelectionManager(KisView2 * parent, KisDoc2 * doc)
     // provide a signal to tell the selection manager that we've got a
     // current selection now (global or local).
     connect(timer, SIGNAL(timeout()), this, SLOT(timerEvent()));
+
+    KoSelection * selection = m_parent->canvasBase()->globalShapeManager()->selection();
+    Q_ASSERT( selection );
+    connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 }
 
 KisSelectionManager::~KisSelectionManager()
@@ -1725,6 +1733,26 @@ void KisSelectionManager::timerEvent()
             QRectF rect( int(bound.left()) / xRes, int(bound.top()) / yRes,
                          int(1 + bound.right()) / xRes, int(1 + bound.bottom()) / yRes);
             m_parent->canvasBase()->updateCanvas(rect);
+        }
+    }
+}
+
+void KisSelectionManager::shapeSelectionChanged()
+{
+    KoShapeManager* shapeManager = m_parent->canvasBase()->globalShapeManager();
+
+    KoSelection * selection = shapeManager->selection();
+    QList<KoShape*> selectedShapes = selection->selectedShapes();
+
+    KoLineBorder* border = new KoLineBorder(0, Qt::lightGray);
+    foreach(KoShape* shape, shapeManager->shapes())
+    {
+        if(dynamic_cast<KisShapeSelection*>(shape->parent()))
+        {
+            if(selectedShapes.contains(shape))
+                shape->setBorder(border);
+            else
+                shape->setBorder(0);
         }
     }
 }

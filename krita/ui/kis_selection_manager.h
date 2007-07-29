@@ -91,6 +91,7 @@ public slots:
     void toggleDisplaySelection();
 
     void timerEvent();
+    void shapeSelectionChanged();
 
 public:
     void grow (qint32 xradius, qint32 yradius);

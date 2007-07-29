@@ -24,6 +24,7 @@
 #include <QPointF>
 
 class KoShape;
+class KoShapeConnection;
 
 class ConnectionTool : public KoTool {
     Q_OBJECT
@@ -47,11 +48,13 @@ public:
     void deactivate();
 
 private:
+    /// Creates a connection between @p shape1 and @p shape2
     void createConnection(KoShape *shape1, int gluePointIndex1, KoShape *shape2, int gluePointIndex2);
+    /// Creates a connection between @p shape and @p endPoint
+    KoShapeConnection* createConnection(KoShape *shape, int gluePointIndex, const QPointF& endPoint);
 
 private:
-    KoShape *m_startShape;
-    int m_gluePointIndex;
+    KoShapeConnection* m_connection;
     QList<KoShape*> m_shapesPaintedWithConnections;
     QPointF m_lastMousePos;
 };

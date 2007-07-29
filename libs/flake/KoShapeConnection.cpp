@@ -27,12 +27,12 @@
 class KoShapeConnection::Private {
 public:
     Private(KoShape *from, int gp1, KoShape *to, int gp2)
-        : shape1(from),
-        shape2(to),
-        gluePointIndex1(gp1),
-        gluePointIndex2(gp2)
+    : shape1(from),
+    shape2(to),
+    gluePointIndex1(gp1),
+    gluePointIndex2(gp2)
     {
-        Q_ASSERT(shape1->connectors().count() > gp1);
+        Q_ASSERT(shape1 == 0 || shape1->connectors().count() > gp1);
         Q_ASSERT(shape2 == 0 || shape2->connectors().count() > gp2);
 
         zIndex = shape1->zIndex() + 1;
@@ -40,8 +40,20 @@ public:
             zIndex = qMax(zIndex, shape2->zIndex() + 1);
     }
 
+    Private(KoShape *from, int gp1, const QPointF& ep)
+    : shape1(from),
+    shape2(0),
+    gluePointIndex1(gp1),
+    gluePointIndex2(0),
+    endPoint (ep)
+    {
+        Q_ASSERT(shape1 == 0 || shape1->connectors().count() > gp1);
+
+        zIndex = shape1->zIndex() + 1;
+    }
+
     KoShape * const shape1;
-    KoShape * const shape2;
+    KoShape * shape2;
     int gluePointIndex1;
     int gluePointIndex2;
     QPointF endPoint;
@@ -53,6 +65,12 @@ KoShapeConnection::KoShapeConnection(KoShape *from, int gp1, KoShape *to, int gp
 {
     d->shape1->addConnection(this);
     d->shape2->addConnection(this);
+}
+
+KoShapeConnection::KoShapeConnection(KoShape* from, int gluePointIndex, const QPointF& endPoint)
+: d(new Private(from, gluePointIndex, endPoint))
+{
+    d->shape1->addConnection(this);
 }
 
 KoShapeConnection::~KoShapeConnection() {
@@ -120,6 +138,27 @@ QRectF KoShapeConnection::boundingRect() const {
     QPointF end = endPoint();
     QRectF br(start.x(), start.y(), end.x() - start.x(), end.y() - start.y());
     return br.normalized();
+}
+
+void KoShapeConnection::setEndPoint(const QPointF& point)
+{
+    d->endPoint = point;
+}
+
+void KoShapeConnection::setEndPoint(KoShape* shape, int gluePointIndex)
+{
+    if(!shape)
+        return;
+
+    if(d->shape2)
+    {
+        d->shape2->removeConnection(this);
+    }
+
+    d->shape2 = shape;
+    d->gluePointIndex2 = gluePointIndex;
+    d->zIndex = qMax(d->zIndex, shape->zIndex() + 1);
+    d->shape2->addConnection(this);
 }
 
 //static

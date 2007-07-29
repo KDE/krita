@@ -61,8 +61,18 @@ public:
      * @param to is the shape for the endpoint.
      * @param gluePointIndex2 The point to connect to is found via the index in the list of connectors on the end shape.
      */
-    explicit KoShapeConnection(KoShape *from, int gluePointIndex1, KoShape *to,  int gluePointIndex2);
-    // TODO add a constructor for a shape and a QPointF for a connection between a shape a static-point
+    explicit KoShapeConnection(KoShape *from, int gluePointIndex1, KoShape *to, int gluePointIndex2);
+    /**
+     * Constructor for connection between a shape and a fixed point.
+     * The connection will be added to the shape. Note that we refer to the gluePoints by index
+     * instead of directly accessing the point. This is done because resizing the shape may alter
+     * the actual point but not the index.
+     *
+     * @param from is the originating shape.
+     * @param gluePointIndex The point to connect to is found via the index in the list of of connectors on the originating shape.
+     * @param endPoint Fixed point on the canvas where the connection is anchored.
+     */
+    explicit KoShapeConnection(KoShape* from, int gluePointIndex, const QPointF& endPoint);
     ~KoShapeConnection();
 
     /**
@@ -127,6 +137,11 @@ public:
      * Return a bounding rectangle in which this connection is completely present.
      */
     QRectF boundingRect() const;
+
+    /// Set endPoint to @p point
+    void setEndPoint(const QPointF& point);
+    /// Sets shape2 to @p shape and gluePointIndex2 to @p gluePointIndex
+    void setEndPoint(KoShape* shape, int gluePointIndex);
 
 private:
     class Private;

@@ -30,8 +30,7 @@
 
 ConnectionTool::ConnectionTool(KoCanvasBase *canvas)
 : KoTool(canvas),
-    m_startShape(0),
-    m_gluePointIndex(-1)
+m_connection(0)
 {
 }
 
@@ -41,8 +40,8 @@ ConnectionTool::~ConnectionTool() {
 
 void ConnectionTool::paint( QPainter &painter, const KoViewConverter &converter ) {
     QList<KoShape*> repaints = m_shapesPaintedWithConnections;
-    if(m_startShape)
-        repaints.append(m_startShape);
+    if(m_connection && m_connection->shape1())
+        repaints.append(m_connection->shape1());
     double zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     foreach(KoShape *shape, repaints) {
@@ -55,16 +54,9 @@ void ConnectionTool::paint( QPainter &painter, const KoViewConverter &converter 
         }
     }
 
-    if(m_startShape)
+    if(m_connection)
     {
-        double x, y;
-        converter.zoom(&x, &y);
-        QMatrix matrix = m_startShape->transformationMatrix(&converter);
-        matrix.scale(x, y);
-        QPointF startPoint = matrix.map(m_startShape->connectors()[m_gluePointIndex]);
-        QPointF endPoint = converter.documentToView (m_lastMousePos);
-        painter.setPen(QPen(Qt::black)); // TODO make color configurable
-        painter.drawLine(startPoint, endPoint);
+        m_connection->paint(painter, converter);
     }
 }
 
@@ -72,7 +64,7 @@ void ConnectionTool::mousePressEvent( KoPointerEvent *event ) {
     QRectF region = m_canvas->viewConverter()->viewToDocument(QRectF(0, 0, 20, 20));
     region.moveTo(event->point.x() - region.width() / 2, event->point.y() - region.height() / 2);
     m_lastMousePos = event->point;
-    
+
     foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(region)) {
         QMatrix matrix = shape->transformationMatrix(0);
         int index = 0;
@@ -80,14 +72,12 @@ void ConnectionTool::mousePressEvent( KoPointerEvent *event ) {
             QPointF p = matrix.map(point);
             QPointF distance = m_canvas->viewConverter()->documentToView(p - event->point);
             if(qAbs(distance.x()) < 10 && qAbs(distance.y()) < 10) { // distance is in pixels.
-                if(m_startShape == 0) {
-                    m_startShape = shape;
-                    m_gluePointIndex = index;
+                if(m_connection == 0) {
+                    m_connection = createConnection(shape, index, event->point);
                 }
                 else {
-                    createConnection(m_startShape, m_gluePointIndex, shape, index);
-		    m_startShape = 0;
-                    m_gluePointIndex = 0;
+                    m_connection->setEndPoint(shape, index);
+                    m_connection = 0;
                 }
                 return;
             }
@@ -114,13 +104,14 @@ void ConnectionTool::mouseMoveEvent( KoPointerEvent *event ) {
 // TODO do a for loop to repaint only the actual points.
             shape->repaint(); // because it used to have connections painted, but no longer will.
     }
-    
+
     m_lastMousePos = event->point;
 
-    if(m_startShape)
+    if(m_connection)
     {
         // TODO Only update the rect that's needed
         m_canvas->updateCanvas(m_canvas->canvasWidget()->geometry());
+        m_connection->setEndPoint (event->point);
     }
 }
 
@@ -130,16 +121,22 @@ void ConnectionTool::mouseReleaseEvent( KoPointerEvent *event ) {
 void ConnectionTool::activate (bool temporary) {
     Q_UNUSED(temporary);
     useCursor(Qt::ArrowCursor, true);
-    m_startShape = 0;
+    m_connection = 0;
 }
 
 void ConnectionTool::deactivate() {
-    m_startShape = 0;
+    m_connection = 0;
 }
 
 void ConnectionTool::createConnection(KoShape *shape1, int gluePointIndex1, KoShape *shape2, int gluePointIndex2) {
     kDebug() << "create Connection!\n";
     new KoShapeConnection(shape1, gluePointIndex1, shape2, gluePointIndex2); // will add itself.
+}
+
+KoShapeConnection* ConnectionTool::createConnection(KoShape *shape, int gluePointIndex, const QPointF& endPoint)
+{
+    kDebug() << "create Connection!\n";
+    return new KoShapeConnection(shape, gluePointIndex, endPoint); // will add itself.
 }
 
 #include "ConnectionTool.moc"

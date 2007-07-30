@@ -83,7 +83,10 @@ public:
      */
     explicit KoShapeContainer(KoShapeContainerModel *model);
 
-    /// destructor
+    /**
+     * Destructor for the shape container.
+     * All children will be orphaned by calling a KoShape::setParent(0)
+     */
     virtual ~KoShapeContainer();
 
     /**

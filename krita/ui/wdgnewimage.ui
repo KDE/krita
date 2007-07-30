@@ -31,9 +31,6 @@
     </widget>
    </item>
    <item>
-    <widget class="KisCmbIDList" native="1" name="cmbColorModels_2" />
-   </item>
-   <item>
     <widget class="QGroupBox" name="grpImage" >
      <property name="title" >
       <string>Image Size</string>
@@ -231,7 +228,7 @@
        <widget class="KisCmbIDList" native="1" name="cmbColorModels" />
       </item>
       <item row="1" column="0" >
-       <widget class="QLabel" name="lblColorSpaces_2" >
+       <widget class="QLabel" name="lblColorModels" >
         <property name="text" >
          <string>Depth:</string>
         </property>

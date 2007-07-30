@@ -440,7 +440,7 @@ QRectF KoPathShape::boundingRect() const
 
 QSizeF KoPathShape::size() const
 {
-    // don't call boundingRect here as it uses transformationMatrix which leads to invinit reccursion
+    // don't call boundingRect here as it uses transformationMatrix which leads to infinite reccursion
     return outline().boundingRect().size();
 }
 

@@ -21,16 +21,15 @@
 #ifndef MIXERCANVAS_H_
 #define MIXERCANVAS_H_
 
+#include <QFrame>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceProvider.h>
 
-#include "kis_paint_device.h"
-#include "kis_painterly_overlay.h"
-
-class QFrame;
+class KoCanvasResourceProvider;
+class KoColorSpace;
+class KisPaintDevice;
+class KisPainterlyOverlay;
 class KisPaintOp;
 class MixerTool;
-class KoColorSpace;
 
 class MixerCanvas : public QFrame, public KoCanvasBase {
     Q_OBJECT

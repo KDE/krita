@@ -18,10 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
-#include <QCursor>
-#include <QFrame>
-
 #include <kdebug.h>
 
 #include <KoCanvasBase.h>
@@ -30,22 +26,19 @@
 #include <KoColorSpace.h>
 #include <KoID.h>
 #include <KoPointerEvent.h>
-#include <KoShapeManager.h>
-#include <KoToolProxy.h>
-#include <KoUnit.h>
-#include <KoViewConverter.h>
 
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
-#include "kis_painterly_overlay.h"
-#include "kis_painter.h"
-#include "kis_paintop.h"
 #include "kis_paint_information.h"
+#include "kis_painter.h"
+#include "kis_painterly_overlay.h"
+#include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 #include "kis_resource_provider.h"
 
-#include "mixercanvas.h"
 #include "kis_painterly_information.h"
+#include "mathematics.h"
+#include "mixercanvas.h"
 
 #include "mixertool.h"
 
@@ -140,25 +133,12 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
     m_canvas->updateCanvas(rc);
 }
 
-float sigmoid(float value)
-{
-    //TODO return a sigmoid in [0, 1] here
-    // TESTED ONLY WITH MOUSE!
-    if (value == 0.5)
-        return value + 0.3;
-    else
-        return value;
-}
-
 float activeVolume(float volume, float wetness, float force)
 {
-    return volume * sigmoid(wetness) * sigmoid(force);
+    return volume * maths::sigmoid(wetness) * maths::sigmoid(force);
 }
 
-void mixKSBytes(quint32 channels, float *stroke, float *canvas,
-				PainterlyOverlayFloatTraits::Cell *strCell,
-				PainterlyOverlayFloatTraits::Cell *canCell,
-				float force)
+void mixColorChannels(uint nchannels, float *stroke, float *canvas, PainterlyCell *strCell, PainterlyCell *canCell, float force)
 {
 	float V_c, V_s; // Volumes in Canvas and Stroke
     float w_c, w_s; // Wetness in the Canvas and in the Stroke
@@ -173,20 +153,17 @@ void mixKSBytes(quint32 channels, float *stroke, float *canvas,
     V_ac = activeVolume(V_c, w_c, force);
     V_as = activeVolume(V_s, w_s, force);
 
-	for (quint32 i = 0; i < channels; i++)
-		if (canvas[i] != stroke[i])
-			stroke[i] = (V_ac * canvas[i] + V_as * stroke[i]) / (V_ac + V_as);
+	for (quint32 i = 0; i < nchannels; i++)
+		stroke[i] = (V_ac * canvas[i] + V_as * stroke[i]) / (V_ac + V_as);
 }
 
-void mixProperties(PainterlyOverlayFloatTraits::Cell *strCell,
-				   PainterlyOverlayFloatTraits::Cell *canCell, float force)
+void mixProperties(PainterlyCell *strCell, PainterlyCell *canCell, float force)
 {
 	float V_c, V_s; // Volumes in Canvas and Stroke
     float w_c, w_s; // Wetness in the Canvas and in the Stroke
-    float o_c, o_s; // Opacities
     float V_ac, V_as; // Active Volumes in Canvas and Stroke
     float a; // Adsorbency
-    float V_f, w_f, o_f; // Finals
+    float V_f, w_f; // Finals
 
 	V_c = canCell->volume;
     V_s = strCell->volume;
@@ -203,14 +180,10 @@ void mixProperties(PainterlyOverlayFloatTraits::Cell *strCell,
     a = strCell->adsorbency;
 
     w_f = (V_ac * w_c + V_as * w_s) / (V_ac + V_as);
-    o_f = (V_ac * o_c + V_as * o_s) / (V_ac + V_as);
     V_f = ((1 - a) * V_c) + V_as;
 
     if (V_f > 255.0)
         V_f = 255.0;
-
-    // Normalize
-    o_f = 255.0 * o_f;
 
     strCell->wetness = w_f;
     strCell->volume = V_f;
@@ -233,12 +206,10 @@ void MixerTool::mixPaint(KisPaintDeviceSP stroke, KisPainterlyOverlaySP overlay,
     pressure = e->pressure();
     force = pressure + FORCE_COEFF * pow(pressure, 2);
     while (!it_stroke_main.isDone()) {
-//         cs->toQColor(it_stroke_main.rawData(), &strokeColor, &strokeCell.opacity); // This is not useful!
-//         cs->toQColor(it_canvas_main.rawData(), &canvasColor, &canvasCell.opacity);
-		PainterlyOverlayFloatTraits::Cell *strokeCell =
-                reinterpret_cast<PainterlyOverlayFloatTraits::Cell *>( it_stroke_over.rawData() );
-		PainterlyOverlayFloatTraits::Cell *canvasCell =
-                reinterpret_cast<PainterlyOverlayFloatTraits::Cell *>( it_canvas_over.rawData() );
+		PainterlyCell *strokeCell =
+                reinterpret_cast<PainterlyCell *>( it_stroke_over.rawData() );
+		PainterlyCell *canvasCell =
+                reinterpret_cast<PainterlyCell *>( it_canvas_over.rawData() );
 
         if (cs->alpha(it_stroke_main.rawData())) {
             strokeCell->wetness = m_info["Wetness"];
@@ -249,10 +220,10 @@ void MixerTool::mixPaint(KisPaintDeviceSP stroke, KisPainterlyOverlaySP overlay,
             strokeCell->adsorbency = m_info["CanvasAdsorbency"];
 
             if (cs->alpha(it_canvas_main.rawData())) {
-                mixKSBytes(cs->pixelSize()/sizeof(float),
-						   reinterpret_cast<float *>(it_stroke_main.rawData()),
-						   reinterpret_cast<float *>(it_canvas_main.rawData()),
-						   strokeCell, canvasCell, force);
+                mixColorChannels(cs->colorChannelCount(),
+								 reinterpret_cast<float *>(it_stroke_main.rawData()),
+								 reinterpret_cast<float *>(it_canvas_main.rawData()),
+								 strokeCell, canvasCell, force);
 
                 mixProperties(strokeCell, canvasCell, force);
             }
@@ -263,7 +234,7 @@ void MixerTool::mixPaint(KisPaintDeviceSP stroke, KisPainterlyOverlaySP overlay,
     }
 }
 
-void MixerTool::updateResources(KisPaintDeviceSP stroke, KisPainterlyOverlaySP overlay)
+void MixerTool::updateResources(KisPaintDeviceSP stroke, KisPainterlyOverlaySP /*overlay*/)
 {
     // TODO Update tool's own KisPainterlyInformation structure.
     QColor current;

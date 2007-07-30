@@ -19,7 +19,7 @@
 
 #include <gmm/gmm.h>
 #include <lcms.h>
-#include <glpk.h>
+// #include <glpk.h>
 
 #include <QColor>
 #include <QString>
@@ -83,7 +83,6 @@ void KisIlluminantTester::testReflectanceColorSpace()
 
 		for (int i = 0; i < 3; i++) vXYZ[i] = XYZ[i];
 
-		cout << "REAL XYZ: " << vXYZ << endl;
 		cout << "REAL RGB: " << RGB[0] << ", " << RGB[1] << ", " << RGB[2] << endl;
 
 		simplex(profile->matrix(), vREF, vXYZ);
@@ -92,15 +91,13 @@ void KisIlluminantTester::testReflectanceColorSpace()
 		cmsDoTransform(XYZ_RGB, XYZ, RGB, 1);
 		computeKS(vREF, vKS);
 
-		cout << "COMPUTED REF: " << vREF << endl;
-		cout << "COMPUTED KS : " << vKS << endl;
 		cout << "COMPUTED RGB: " << RGB[0] << ", " << RGB[1] << ", " << RGB[2] << endl;
 		cout << "--------------------------------------------" << endl;
 	}
 
 	{
 		double RGB[] = { 0, 1, 0 };
-		double XYZ[3];
+double XYZ[3];
 
 		cmsDoTransform(RGB_XYZ, RGB, XYZ, 1);
 
@@ -108,7 +105,6 @@ void KisIlluminantTester::testReflectanceColorSpace()
 
 		for (int i = 0; i < 3; i++) vXYZ[i] = XYZ[i];
 
-		cout << "REAL XYZ: " << vXYZ << endl;
 		cout << "REAL RGB: " << RGB[0] << ", " << RGB[1] << ", " << RGB[2] << endl;
 
 		simplex(profile->matrix(), vREF, vXYZ);
@@ -117,15 +113,13 @@ void KisIlluminantTester::testReflectanceColorSpace()
 		cmsDoTransform(XYZ_RGB, XYZ, RGB, 1);
 		computeKS(vREF, vKS);
 
-		cout << "COMPUTED REF: " << vREF << endl;
-		cout << "COMPUTED KS: " << vKS << endl;
 		cout << "COMPUTED RGB: " << RGB[0] << ", " << RGB[1] << ", " << RGB[2] << endl;
 		cout << "--------------------------------------------" << endl;
 	}
 
 	{
 		double RGB[] = { 0, 0, 1 };
-		double XYZ[3];
+double XYZ[3];
 
 		cmsDoTransform(RGB_XYZ, RGB, XYZ, 1);
 
@@ -133,7 +127,6 @@ void KisIlluminantTester::testReflectanceColorSpace()
 
 		for (int i = 0; i < 3; i++) vXYZ[i] = XYZ[i];
 
-		cout << "REAL XYZ: " << vXYZ << endl;
 		cout << "REAL RGB: " << RGB[0] << ", " << RGB[1] << ", " << RGB[2] << endl;
 
 		simplex(profile->matrix(), vREF, vXYZ);
@@ -142,8 +135,6 @@ void KisIlluminantTester::testReflectanceColorSpace()
 		cmsDoTransform(XYZ_RGB, XYZ, RGB, 1);
 		computeKS(vREF, vKS);
 
-		cout << "COMPUTED REF: " << vREF << endl;
-		cout << "COMPUTED KS: " << vKS << endl;
 		cout << "COMPUTED RGB: " << RGB[0] << ", " << RGB[1] << ", " << RGB[2] << endl;
 		cout << "--------------------------------------------" << endl;
 	}
@@ -157,6 +148,7 @@ void KisIlluminantTester::testReflectanceColorSpace()
 		computeKS(vREF, vKS);
 		computeReflectance(vKS, vREFafter);
 
+		cout << "-----------------------------------------------" << endl;
 		for (int i = 0; i < 2*SAMPLE_NUMBER; i+=2)
 			cout << "R: " << vREF[i/2] << ", K: " << vKS[i+0] << ", S: " << vKS[i+1] << ", R again: " << vREFafter[i/2] << endl;
 	}
@@ -170,7 +162,7 @@ void KisIlluminantTester::testReflectanceColorSpace()
 #include "kis_iterators_pixel.h"
 
 void KisIlluminantTester::testIlluminantProfile()
-{
+{/*
 	KisIlluminantProfile *profile = new KisIlluminantProfile("IlluminantD65.ill");
 
 	KoColorSpace *cs = new KisKSColorSpace(profile);
@@ -201,8 +193,7 @@ void KisIlluminantTester::testIlluminantProfile()
 	for (int i = 0; i < 14; i++) {
 		for (int j = i+1; j < 15; j++) {
 			kDebug() << "----------------------------------------------------" << endl;
-			kDebug() << "COLOR1: " << colors[i] << endl;
-			kDebug() << "COLOR2: " << colors[j] << endl;
+			kDebug() << "----------------------------------------------------" << endl;
 			cs->fromQColor(colors[i], reinterpret_cast<quint8 *>(color1));
 			cs->fromQColor(colors[j], reinterpret_cast<quint8 *>(color2));
 
@@ -236,7 +227,7 @@ void KisIlluminantTester::testIlluminantProfile()
 	delete cs;
 	delete profile;
 	delete [] color1;
-	delete [] color2;
+	delete [] color2;*/
 }
 
 void KisIlluminantTester::testGLPK()

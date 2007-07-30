@@ -17,72 +17,58 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KS_COLORSPACE_H_
-#define KIS_KS_COLORSPACE_H_
+#ifndef KIS_RGBKS_COLORSPACE_H_
+#define KIS_RGBKS_COLORSPACE_H_
 
 #include "KoIncompleteColorSpace.h"
 #include "KoColorSpaceTraits.h"
 
 class QString;
 class KoColorProfile;
-class KoColorSpaceRegistry;
-class KisIlluminantProfile;
 
 template<typename _channels_type_>
-struct KisKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, _to_decide_, _to_decide_> {
+struct KisRGBKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 7, 6> {
 
 	struct Cell {
 		struct {
 			_channels_type_ absorption;
 			_channels_type_ scattering;
-		} wavelen[_to_decide_];
+		} wavelen[3];
 		_channels_type_ alpha;
 	};
 
 };
 
-typedef KisKSColorSpaceTraits<float> KSTraits;
+typedef KisRGBKSColorSpaceTraits<float> RGBKSTraits;
 
-class KisKSColorSpace : public KoIncompleteColorSpace<KSTraits, KoRGB16Fallback>
+class KisRGBKSColorSpace : public KoIncompleteColorSpace<RGBKSTraits, KoRGB16Fallback>
 {
-
 	public:
 
-		~KisKSColorSpace()
+		~KisRGBKSColorSpace()
 		{
-			cmsDeleteTransform(BGR_XYZ);
-			cmsDeleteTransform(XYZ_BGR);
-			cmsCloseProfile(hsRGB);
-			cmsCloseProfile(hXYZ);
 		}
 
-		KisKSColorSpace(KoColorProfile *p);
+		KisRGBKSColorSpace();
 
-// 		KisKSColorSpace(const KisKSColorSpace&);
-// 		KisKSColorSpace operator=(const KisKSColorSpace&);
+// 		KisRGBKSColorSpace(const KisRGBKSColorSpace&);
+// 		KisRGBKSColorSpace operator=(const KisRGBKSColorSpace&);
 
 	public:
 
-		bool willDegrade(ColorSpaceIndependence independence) const
+		bool willDegrade(ColorSpaceIndependence) const
 		{
-			Q_UNUSED(independence)
-
 			return true;
 		}
 
-		KoColorProfile *profile() const { return m_profile; }
-		bool profileIsCompatible(KoColorProfile *profile) const;
+		bool profileIsCompatible(KoColorProfile *) const
+		{
+			return false;
+		}
 
 		void fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
 		void toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
-
-	private:
-
-		KisIlluminantProfile *m_profile;
-
-		cmsHPROFILE hsRGB, hXYZ;
-		cmsHTRANSFORM XYZ_BGR, BGR_XYZ;
 };
 
 
-#endif // KIS_KS_COLORSPACE_H_
+#endif // KIS_RGBKS_COLORSPACE_H_

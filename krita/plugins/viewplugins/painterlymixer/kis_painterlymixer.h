@@ -30,6 +30,7 @@ class QButtonGroup;
 class QToolButton;
 class QWidget;
 
+class KoColor;
 class KoColorSpace;
 class KisIlluminantProfile;
 
@@ -74,10 +75,7 @@ private:
 
     KoCanvasResourceProvider *m_resources;
 
-	QStringList m_illuminants;
-
 	KoColorSpace *m_colorspace;
-	KisIlluminantProfile *m_illuminant;
 };
 
 #endif // KIS_PAINTERLY_MIXER_H_

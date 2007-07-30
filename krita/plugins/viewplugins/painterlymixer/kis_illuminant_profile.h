@@ -20,13 +20,9 @@
 #ifndef KIS_ILLUMINANT_PROFILE_H_
 #define KIS_ILLUMINANT_PROFILE_H_
 
-#include <gmm/gmm.h>
-
 #include <QString>
 
 #include "KoColorProfile.h"
-
-#define SAMPLE_NUMBER 55
 
 class QTextStream;
 
@@ -47,15 +43,10 @@ class KisIlluminantProfile : public KoColorProfile {
 
 		bool isSuitableForDisplay() const {return false;}
 
-		const gmm::dense_matrix<float> &matrix() const {return m_matrix;}
-
 	private:
 		bool loadCurve(QTextStream &in_ill);
 		bool loadMatrix(QTextStream &in_ill);
 
-	private:
-
-		gmm::dense_matrix<float> m_matrix;
 };
 
 

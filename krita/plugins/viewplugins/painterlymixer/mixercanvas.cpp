@@ -18,11 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QCursor>
 #include <QFrame>
-#include <QStringList>
 
-#include <kdebug.h>
+#include <KDebug>
 
 #include <KoCanvasBase.h>
 #include <KoColor.h>
@@ -35,9 +33,6 @@
 
 #include "kis_paint_device.h"
 #include "kis_painterly_overlay.h"
-
-// #include "kis_illuminant_profile.h"
-// #include "kis_ks_colorspace.h"
 
 #include "colorspot.h"
 #include "mixertool.h"

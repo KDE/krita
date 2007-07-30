@@ -17,32 +17,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QColor>
-#include <QToolButton>
+#ifndef KIS_SIMPLEX_TESTER_H
+#define KIS_SIMPLEX_TESTER_H
 
-#include "KoColor.h"
-#include "KoColorSpace.h"
+#include <QtTest/QtTest>
 
-#include "colorspot.h"
-
-ColorSpot::ColorSpot(QWidget *parent, const KoColor &color) : super(parent)
+class KisSimplexTester : public QObject
 {
-	m_color = color;
+	Q_OBJECT
 
-	setPalette(QPalette(color.toQColor().rgba(), color.toQColor().rgba()));
-	setAutoFillBackground(true);
-	setAutoRepeat(true);
-}
+	private slots:
 
-ColorSpot::~ColorSpot()
-{
+		void testSimplex();
+		void testDegeneration();
+};
 
-}
-
-void ColorSpot::setColor(const KoColor &color)
-{
-	m_color = color;
-}
-
-
-#include "colorspot.moc"
+#endif

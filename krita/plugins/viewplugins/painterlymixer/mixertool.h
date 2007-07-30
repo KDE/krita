@@ -22,23 +22,26 @@
 #define MIXERTOOL_H_
 
 #include <QPointF>
+#include <QString>
 
 #include <KoTool.h>
 
-#include "kis_paint_device.h"
-#include "kis_painterly_overlay.h"
+#include "kis_painterly_overlay_colorspace.h"
 
 #include "kis_painterly_information.h"
 
+class QPainter;
 class KoCanvasResourceProvider;
-
+class KoViewConverter;
+class KisPaintDevice;
+class KisPainterlyOverlay;
 class MixerCanvas;
 
 class MixerTool : public KoTool {
     Q_OBJECT
 
 public:
-    MixerTool(MixerCanvas *canvas, KisPaintDevice* device, KisPainterlyOverlay *overlay, KoCanvasResourceProvider *rp);
+    MixerTool(MixerCanvas *canvas, KisPaintDevice *device, KisPainterlyOverlay *overlay, KoCanvasResourceProvider *rp);
     ~MixerTool();
 
 // Implement KoTool
@@ -50,8 +53,8 @@ public:
     void mouseMoveEvent(KoPointerEvent *e);
 
 public:
-    void setBristleInformation(KisPainterlyInformation info) {m_info = info;}
-    void setBristleInformation(QString key, float data, bool mode)
+    void setBristleInformation(const KisPainterlyInformation &info) {m_info = info;}
+    void setBristleInformation(const QString &key, float data, bool mode)
         {
             if (mode == KPI_RELATIVE)
                 m_info[key] += data;
@@ -59,7 +62,7 @@ public:
                 m_info[key] = data;
         }
     KisPainterlyInformation bristleInformation() {return m_info;}
-    float bristleInformation(QString key) {return m_info[key];}
+    float bristleInformation(const QString &key) {return m_info[key];}
 
 private:
     void initBristleInformation();
@@ -82,7 +85,7 @@ private:
     void preserveProperties(KisPainterlyOverlaySP overlay);
 
 private:
-    KisPaintDevice* m_canvasDevice;
+    KisPaintDevice *m_canvasDevice;
 	KisPainterlyOverlay *m_canvasOverlay;
     KoCanvasResourceProvider *m_resources;
 
@@ -92,5 +95,11 @@ private:
     // when we mix with non-painterly paintops.
     KisPainterlyInformation m_info;
 };
+
+typedef PainterlyOverlayFloatTraits::Cell PainterlyCell;
+
+float activeVolume(float volume, float wetness, float force);
+void mixColorChannels(uint nchannels, float *stroke, float *canvas, PainterlyCell *strCell, PainterlyCell *canCell, float force);
+void mixProperties(PainterlyCell *strCell, PainterlyCell *canCell, float force);
 
 #endif // MIXERTOOL_H_

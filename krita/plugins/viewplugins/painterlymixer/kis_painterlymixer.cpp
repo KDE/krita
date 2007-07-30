@@ -48,8 +48,7 @@
 #include "kis_resource_provider.h"
 #include "kis_view2.h"
 
-#include "kis_illuminant_profile.h"
-#include "kis_ks_colorspace.h"
+#include "kis_rgbks_colorspace.h"
 
 #include "colorspot.h"
 #include "mixertool.h"
@@ -61,13 +60,7 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
 {
     setupUi(this);
 
-	KGlobal::mainComponent().dirs()->addResourceType("kis_illuminants",
-                                                     "data", "krita/profiles/");
-
-    m_illuminants += KGlobal::mainComponent().dirs()->findAllResources("kis_illuminants", "*.ill");
-
-	m_illuminant = new KisIlluminantProfile(m_illuminants[0]);
-	m_colorspace = new KisKSColorSpace(m_illuminant);
+	m_colorspace = new KisRGBKSColorSpace;
     m_canvas->setDevice(m_colorspace);
     initTool();
     initSpots();
@@ -77,7 +70,6 @@ KisPainterlyMixer::~KisPainterlyMixer()
 {
     if (m_tool)
         delete m_tool;
-	delete m_illuminant;
 	delete m_colorspace;
 }
 

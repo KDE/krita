@@ -17,32 +17,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QColor>
-#include <QToolButton>
+#ifndef MATHEMATICS_H_
+#define MATHEMATICS_H_
 
-#include "KoColor.h"
-#include "KoColorSpace.h"
+namespace maths {
 
-#include "colorspot.h"
+const double MATH_THICKNESS = 1.0;
+const double MATH_LIM_SUP = 0.99609375; // 1 - 3.90625*10^-3
+const double MATH_LIM_SUB = 3.90625e-3;
+const double MATH_SUB_BLACK = 3.90625e-4;
+const double MATH_NORMALIZATION = 65535.0;
 
-ColorSpot::ColorSpot(QWidget *parent, const KoColor &color) : super(parent)
-{
-	m_color = color;
+double coth(double z);
 
-	setPalette(QPalette(color.toQColor().rgba(), color.toQColor().rgba()));
-	setAutoFillBackground(true);
-	setAutoRepeat(true);
+double acoth(double z);
+
+void mult(const int rows, const int cols, const float **M, const float *A, float *R);
+
+double sigmoid(double value);
+
+void computeKS(const int nrefs, const float *vREF, float *vKS);
+
+void computeReflectance(const int nrefs, const float *vKS, float *vREF);
+
+// void simplex(const int rows, const int cols, const float **M, float *X, const float *B);
+
+float convert2f (unsigned short value);
+
+unsigned short convert2i (float value);
+
 }
 
-ColorSpot::~ColorSpot()
-{
 
-}
-
-void ColorSpot::setColor(const KoColor &color)
-{
-	m_color = color;
-}
-
-
-#include "colorspot.moc"
+#endif // MATHEMATICS_H_

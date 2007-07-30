@@ -17,38 +17,41 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KS_COLORSPACE_H_
-#define KIS_KS_COLORSPACE_H_
+#ifndef KIS_REFLECTANCE_COLORSPACE_H_
+#define KIS_REFLECTANCE_COLORSPACE_H_
 
-#include "KoIncompleteColorSpace.h"
+#include "KoColorProfile.h"
 #include "KoColorSpaceTraits.h"
+#include "KoIncompleteColorSpace.h"
+
+#include "kis_illuminant_profile.h"
+
+using namespace std;
 
 class QString;
 class KoColorProfile;
 class KoColorSpaceRegistry;
-class KisIlluminantProfile;
 
 template<typename _channels_type_>
-struct KisKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, _to_decide_, _to_decide_> {
+struct KisReflectanceColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, _to_decide_, _to_decide_> {
 
 	struct Cell {
 		struct {
-			_channels_type_ absorption;
-			_channels_type_ scattering;
+			_channels_type_ reflectance;
 		} wavelen[_to_decide_];
 		_channels_type_ alpha;
 	};
 
 };
 
-typedef KisKSColorSpaceTraits<float> KSTraits;
+typedef KisReflectanceColorSpaceTraits<float> ReflectanceTraits;
 
-class KisKSColorSpace : public KoIncompleteColorSpace<KSTraits, KoRGB16Fallback>
+class KisReflectanceColorSpace : public KoIncompleteColorSpace<ReflectanceTraits, KoRGB16Fallback>
 {
 
 	public:
 
-		~KisKSColorSpace()
+		~KisReflectanceColorSpace()
 		{
 			cmsDeleteTransform(BGR_XYZ);
 			cmsDeleteTransform(XYZ_BGR);
@@ -56,17 +59,15 @@ class KisKSColorSpace : public KoIncompleteColorSpace<KSTraits, KoRGB16Fallback>
 			cmsCloseProfile(hXYZ);
 		}
 
-		KisKSColorSpace(KoColorProfile *p);
+		KisReflectanceColorSpace(KoColorProfile *p);
 
-// 		KisKSColorSpace(const KisKSColorSpace&);
-// 		KisKSColorSpace operator=(const KisKSColorSpace&);
+// 		KisReflectanceColorSpace(const KisReflectanceColorSpace&);
+// 		KisReflectanceColorSpace operator=(const KisReflectanceColorSpace&);
 
 	public:
 
-		bool willDegrade(ColorSpaceIndependence independence) const
+		bool willDegrade(ColorSpaceIndependence) const
 		{
-			Q_UNUSED(independence)
-
 			return true;
 		}
 
@@ -85,4 +86,4 @@ class KisKSColorSpace : public KoIncompleteColorSpace<KSTraits, KoRGB16Fallback>
 };
 
 
-#endif // KIS_KS_COLORSPACE_H_
+#endif // KIS_REFLECTANCE_COLORSPACE_H_

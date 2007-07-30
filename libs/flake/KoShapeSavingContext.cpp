@@ -25,6 +25,10 @@
 #include <KoGenStyles.h>
 #include <KoSavingContext.h>
 #include <KoXmlWriter.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
+
+#include <kmimetype.h>
 
 KoShapeSavingContext::KoShapeSavingContext( KoXmlWriter &xmlWriter, KoSavingContext &context )
 : m_xmlWriter( &xmlWriter )
@@ -110,4 +114,42 @@ void KoShapeSavingContext::saveLayerSet( KoXmlWriter * xmlWriter ) const
         xmlWriter->endElement();  // draw:layer
     }
     xmlWriter->endElement();  // draw:layer-set
+}
+
+QString KoShapeSavingContext::addImageForSaving( const QPixmap &pixmap )
+{
+    QString filename = "Pictures/image" + QTime::currentTime().toString( "_hh_mm_ss_zzz.png" );
+    if( m_pixmaps.contains( filename ) )
+    {
+        int i = 1;
+        while( m_pixmaps.contains( filename + QString("_%1").arg( i ) ) )
+            i++;
+        filename += QString("_%1").arg( i );
+    }
+
+    m_pixmaps[filename] = pixmap;
+    return filename;
+}
+
+bool KoShapeSavingContext::saveImages( KoStore * store, KoXmlWriter * manifestWriter ) const
+{
+    QString fileName("/tmp/temp.png");
+    // Find the mimetype only by the extension, not by file content (as the file is empty!)
+    const QString mimetype( KMimeType::findByPath( fileName, 0 ,true )->name() );
+
+    QMapIterator<QString, QPixmap> i( m_pixmaps );
+    while( i.hasNext() )
+    {
+        i.next();
+        if( store->open( i.key() ) )
+        {
+            KoStoreDevice dev(store);
+            if ( ! i.value().save(&dev, "PNG" ) )
+                return false; // e.g. bad image?
+            if ( !store->close() )
+                return false; // e.g. disk full
+            manifestWriter->addManifestEntry( i.key(), mimetype );
+        }
+    }
+    return true;
 }

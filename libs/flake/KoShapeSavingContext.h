@@ -33,6 +33,8 @@ class KoXmlWriter;
 class KoSavingContext;
 class KoGenStyles;
 class KoShapeLayer;
+class QPixmap;
+class KoStore;
 
 /**
  * The set of data for the ODF file format used during saving of a shape.
@@ -144,11 +146,24 @@ public:
      */
     void saveLayerSet( KoXmlWriter * xmlWriter ) const;
 
+    /**
+     * Adds a pixmap for saving into the Pictures subfolder within the odf file
+     * @param pixmap the pixmap to save
+     * @return the filename of the pixmap to refer to
+     */
+    QString addImageForSaving( const QPixmap &pixmap );
+
+    /**
+     * Saves images added with addImageForSaving to the store
+     */
+    bool saveImages( KoStore *store, KoXmlWriter* manifestWriter ) const;
+
 private:
     KoXmlWriter *m_xmlWriter;
     KoShapeSavingOptions m_savingOptions;
     QMap<const KoShape *, QString> m_drawIds;
     QList<const KoShapeLayer*> m_layers;
+    QMap<QString, QPixmap> m_pixmaps;
     int m_drawId;
 
     KoSavingContext &m_context;

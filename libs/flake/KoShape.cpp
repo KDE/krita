@@ -36,11 +36,11 @@
 #include "KoViewConverter.h"
 #include "KoLineBorder.h"
 #include "ShapeDeleter_p.h"
+#include "KoShapeStyleWriter.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoGenStyles.h>
 #include <KoGenStyle.h>
 #include <KoUnit.h>
 #include <KoOasisStyles.h>
@@ -636,22 +636,10 @@ QString KoShape::style( KoShapeSavingContext &context ) const
     {
         b->fillStyle( style, context );
     }
-    QBrush bg( background() );
-    switch ( bg.style() )
-    {
-        case Qt::NoBrush:
-            style.addProperty( "draw:fill","none" );
-            break;
-        default:
-            KoOasisStyles::saveOasisFillStyle( style, context.mainStyles(), bg );
-            break;
-    }
 
-    if ( context.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
-        style.setAutoStyleInStylesDotXml( true );
-    }
+    KoShapeStyleWriter styleWriter( context );
 
-    return context.mainStyles().lookup( style, context.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
+    return styleWriter.addFillStyle( style, background() );
 }
 
 bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingContext &context, int attributes )
@@ -747,7 +735,7 @@ KoShapeBorderModel * KoShape::loadOdfStroke( const KoXmlElement & element, KoSha
         if( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) )
             stroke = styleStack.property( KoXmlNS::draw, "stroke" );
     }
-    else if( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+    else if( element.hasAttributeNS( KoXmlNS::presentation, "style-name" ) )
     {
         // fill the style stack with the shapes style
         context.koLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
@@ -761,7 +749,7 @@ KoShapeBorderModel * KoShape::loadOdfStroke( const KoXmlElement & element, KoSha
         QPen pen = KoOasisStyles::loadOasisStrokeStyle( styleStack, stroke, context.koLoadingContext().oasisStyles() );
 
         KoLineBorder * border = new KoLineBorder();
-        border->setLineWidth( pen.width() );
+        border->setLineWidth( pen.widthF() );
         border->setColor( pen.color() );
         border->setJoinStyle( pen.joinStyle() );
         border->setLineStyle( pen.style(), pen.dashPattern() );

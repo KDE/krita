@@ -1430,9 +1430,6 @@ void KoOasisStyles::saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& main
         styleFill.addProperty( "draw:fill","gradient" );
         styleFill.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles, brush ) );
         break;
-    case Qt::TexturePattern:
-        // TODO
-        break;
     default: //otherstyle
         styleFill.addProperty( "draw:fill","hatch" );
         styleFill.addProperty( "draw:fill-hatch-name", saveOasisHatchStyle( mainStyles, brush ) );
@@ -1544,6 +1541,11 @@ QBrush KoOasisStyles::loadOasisGradientStyle( const KoStyleStack &styleStack, co
 
     if( e->namespaceURI() == KoXmlNS::draw && e->localName() == "gradient" )
     {
+        // FIXME seems like oo renders the gradient start stop color at the center of the
+        // radial gradient, and the start color at the radius of the radial gradient
+        // whereas it is not mentioned in the spec how it should be rendered
+        // note that svg defines that exactly as the opposite as oo does
+        // so what should we do?
         QString type = e->attributeNS( KoXmlNS::draw, "style", QString() );
         if( type == "radial" )
         {

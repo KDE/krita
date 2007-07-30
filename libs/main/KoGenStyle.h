@@ -66,6 +66,7 @@ public:
            StyleGradient = 18,          ///< draw:gradient as in 14.14.1 odf spec
            StyleGradientLinear = 19,    ///< linear svg:gradient as in 14.14.2 odf spec
            StyleGradientRadial = 20,    ///< radial svg:gradient as in 14.14.2 odf spec
+           StyleFillImage = 21,         ///< fill image as in 14.14.4 odf spec
            StyleFirstCustom = 2500 };   ///< the first style for applications to use
 
     /**

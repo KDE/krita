@@ -48,7 +48,7 @@ void maximize(const quint8* s, quint8* d, uint nbpixels)
 }
 
 template<typename _TYPE>
-        void minimize(const quint8* s, quint8* d, uint nbpixels)
+void minimize(const quint8* s, quint8* d, uint nbpixels)
 {
     const _TYPE* sT = (_TYPE*)(s);
     _TYPE* dT = (_TYPE*)(d);
@@ -95,7 +95,7 @@ void KisFilterMax::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
         F = & maximize<quint8>;
     } else if( cT == KoChannelInfo::UINT16 || cT == KoChannelInfo::INT16 )
     {
-        F = & maximize<quint8>;
+        F = & maximize<quint16>;
     } else if( cT == KoChannelInfo::FLOAT32 )
     {
         F = & maximize<float>;
@@ -141,7 +141,7 @@ void KisFilterMin::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
         F = & minimize<quint8>;
     } else if( cT == KoChannelInfo::UINT16 || cT == KoChannelInfo::INT16 )
     {
-        F = & minimize<quint8>;
+        F = & minimize<quint16>;
     } else if( cT == KoChannelInfo::FLOAT32 )
     {
         F = & minimize<float>;

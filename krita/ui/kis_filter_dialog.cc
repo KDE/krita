@@ -136,7 +136,9 @@ void KisFilterDialog::slotBookmarkedFilterConfigurationSelected(int index)
 
 void KisFilterDialog::editConfigurations()
 {
-    KisBookmarkedConfigurationsEditor editor(this, d->currentBookmarkedFilterConfigurationsModel);
+    KisSerializableConfiguration* config =
+            d->currentFilterConfigurationWidget ? d->currentFilterConfigurationWidget->configuration() : 0;
+    KisBookmarkedConfigurationsEditor editor(this, d->currentBookmarkedFilterConfigurationsModel, config);
     editor.exec();
 }
 

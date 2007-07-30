@@ -73,3 +73,30 @@ KisSerializableConfiguration* KisBookmarkedConfigurationsModel::configuration(co
 {
     return 0;
 }
+
+bool KisBookmarkedConfigurationsModel::isIndexDeletable(const QModelIndex &index) const
+{
+    if(not index.isValid() or index.row() < 2) return false;
+    return true;
+}
+
+void KisBookmarkedConfigurationsModel::saveConfiguration(QString name, const KisSerializableConfiguration* config)
+{
+    d->bookmarkManager->save(name, config);
+    if(not d->configsKey.contains(name))
+    {
+        beginInsertColumns(QModelIndex(), d->configsKey.count(), d->configsKey.count());
+        d->configsKey << name;
+        endInsertColumns();
+    }
+}
+
+void KisBookmarkedConfigurationsModel::deleteIndex(const QModelIndex &index)
+{
+    if(not index.isValid() or index.row() < 2) return ;
+    int idx = index.row() - 2;
+    d->bookmarkManager->remove( d->configsKey[idx]);
+    beginRemoveColumns(QModelIndex(), idx, idx);
+    d->configsKey.removeAt(idx);
+    endRemoveColumns();
+}

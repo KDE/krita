@@ -59,6 +59,10 @@ class KRITAIMAGE_EXPORT KisBookmarkedConfigurationManager {
          * @return the default configuration
          */
         KisSerializableConfiguration* defaultConfiguration();
+        /**
+         * Remove a bookmarked configuration
+         */
+        void remove(QString name);
     private:
         QString configEntryGroup() const;
     private:

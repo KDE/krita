@@ -49,6 +49,18 @@ class KisBookmarkedConfigurationsModel : public QAbstractListModel {
          * @return the configuration at the given index
          */
         KisSerializableConfiguration* configuration(const QModelIndex &index) const;
+        /**
+         * @return true if the configuration at the given index can be removed
+         */
+        virtual bool isIndexDeletable(const QModelIndex &index) const;
+        /**
+         * Add a configuration to the bookmark manager.
+         */
+        virtual void saveConfiguration(QString name, const KisSerializableConfiguration* config);
+        /**
+         * Delete the configuration at the given index. (if possible)
+         */
+        virtual void deleteIndex(const QModelIndex &index);
     private:
         struct Private;
         Private* const d;

@@ -23,11 +23,27 @@
 #include <krita_export.h>
 
 class KisBookmarkedConfigurationsModel;
+class KisSerializableConfiguration;
+class QModelIndex;
 
+/**
+ * This dialog is used to edit the content of a bookmark manager
+ */
 class KRITAUI_EXPORT KisBookmarkedConfigurationsEditor : public QDialog {
+    Q_OBJECT
     public:
-        KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* manager);
+        /**
+         * @param parent
+         * @param manager the model representing the bookmark manager
+         * @param currentConfig is used if the user choose to create a new configuration
+         *                      entry or to replace an existing entry
+         */
+        KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* manager, const KisSerializableConfiguration* currentConfig);
         ~KisBookmarkedConfigurationsEditor();
+    private slots:
+        void currentConfigChanged(const QModelIndex& idx);
+        void addCurrentConfiguration( );
+        void deleteConfiguration();
     private:
         struct Private;
         Private* const d;

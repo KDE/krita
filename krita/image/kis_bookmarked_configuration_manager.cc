@@ -102,3 +102,10 @@ QString KisBookmarkedConfigurationManager::configEntryGroup() const
 {
     return d->configEntryGroup;
 }
+
+void KisBookmarkedConfigurationManager::remove(QString name)
+{
+    KSharedConfig::Ptr cfg = KGlobal::config();
+    KConfigGroup group = cfg->group(configEntryGroup());
+    group.deleteEntry(name);
+}

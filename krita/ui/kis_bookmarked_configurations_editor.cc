@@ -25,18 +25,48 @@
 struct KisBookmarkedConfigurationsEditor::Private {
     Ui_WdgBookmarkedConfigurationsEditor editorUi;
     KisBookmarkedConfigurationsModel* model;
+    const KisSerializableConfiguration* currentConfig;
 };
 
 
-KisBookmarkedConfigurationsEditor::KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* model) : QDialog(parent), d(new Private)
+KisBookmarkedConfigurationsEditor::KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* model, const KisSerializableConfiguration* currentConfig) : QDialog(parent), d(new Private)
 {
     d->editorUi.setupUi(this);
     d->model = model;
+    d->currentConfig = currentConfig;
     d->editorUi.listConfigurations->setModel( d->model );
     connect(d->editorUi.pushButtonClose, SIGNAL(pressed()), SLOT(accept()));
+    
+    connect(d->editorUi.listConfigurations, SIGNAL(clicked(const QModelIndex&)), SLOT(currentConfigChanged(const QModelIndex&)));
+    currentConfigChanged(d->editorUi.listConfigurations->currentIndex());
+    
+    connect(d->editorUi.pushButtonDelete,SIGNAL(pressed()), SLOT(deleteConfiguration()));
+    connect(d->editorUi.pushButtonBookmarkCurrent,SIGNAL(pressed()), SLOT(addCurrentConfiguration()));
+    
+    if(not d->currentConfig)
+    {
+        d->editorUi.pushButtonBookmarkCurrent->setEnabled(false);
+    }
 }
 
 KisBookmarkedConfigurationsEditor::~KisBookmarkedConfigurationsEditor()
 {
     delete d;
 }
+
+void KisBookmarkedConfigurationsEditor::currentConfigChanged(const QModelIndex& idx)
+{
+    d->editorUi.pushButtonDelete->setEnabled( d->model->isIndexDeletable(idx) );
+}
+
+void KisBookmarkedConfigurationsEditor::addCurrentConfiguration()
+{
+    d->model->saveConfiguration(i18n("New configuration"), d->currentConfig);
+}
+
+void KisBookmarkedConfigurationsEditor::deleteConfiguration()
+{
+    d->model->deleteIndex( d->editorUi.listConfigurations->currentIndex());
+}
+
+#include "kis_bookmarked_configurations_editor.moc"

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
+ *               2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -241,7 +242,7 @@ void KoPathTool::segmentToCurve()
 void KoPathTool::convertToPath()
 {
     QList<KoParameterShape*> shapesToConvert;
-    foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection ) )
+    foreach( KoShape *shape, m_selectedShapes)
     {
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
         if ( parameterShape && parameterShape->isParametricShape() )
@@ -294,38 +295,28 @@ void KoPathTool::breakAtSegment()
 }
 
 void KoPathTool::paint( QPainter &painter, const KoViewConverter &converter) {
-    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-
-    painter.save();
     painter.setRenderHint( QPainter::Antialiasing, true );
     // use different colors so that it is also visible on a background of the same color
     painter.setBrush( Qt::white ); //TODO make configurable
     painter.setPen( Qt::blue );
 
-    foreach( KoShape *shape, selectedShapes ) 
+    foreach( KoPathShape *shape, m_selectedShapes )
     {
-        KoPathShape *pathShape = dynamic_cast<KoPathShape*>( shape );
+        painter.save();
+        painter.setMatrix( shape->transformationMatrix( &converter ) * painter.matrix() );
 
-        if ( !shape->isLocked() && pathShape )
+        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
+        if ( parameterShape && parameterShape->isParametricShape() )
         {
-            painter.save();
-            painter.setMatrix( shape->transformationMatrix( &converter ) * painter.matrix() );
-
-            KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
-            if ( parameterShape && parameterShape->isParametricShape() )
-            {
-                parameterShape->paintHandles( painter, converter, m_handleRadius );
-            }
-            else
-            {
-                pathShape->paintPoints( painter, converter, m_handleRadius );
-            }
-
-            painter.restore();
+            parameterShape->paintHandles( painter, converter, m_handleRadius );
         }
-    }
+        else
+        {
+            shape->paintPoints( painter, converter, m_handleRadius );
+        }
 
-    painter.restore();
+        painter.restore();
+    }
 
     if ( m_currentStrategy )
     {
@@ -334,7 +325,6 @@ void KoPathTool::paint( QPainter &painter, const KoViewConverter &converter) {
         painter.restore();
     }
 
-    painter.save();
     painter.setBrush( Qt::green ); // TODO make color configurable
     painter.setPen( Qt::blue );
 
@@ -356,20 +346,13 @@ void KoPathTool::paint( QPainter &painter, const KoViewConverter &converter) {
             m_activeHandle = 0;
         }
     }
-
-    painter.restore();
 }
 
 void KoPathTool::repaintDecorations()
 {
-    foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes()) 
+    foreach(KoShape *shape, m_selectedShapes)
     {
-        KoPathShape *pathShape = dynamic_cast<KoPathShape*> (shape);
-
-        if ( !shape->isLocked() && pathShape )
-        {
-            repaint( pathShape->boundingRect() );
-        }
+        repaint( shape->boundingRect() );
     }
 
     m_pointSelection.repaint();
@@ -417,51 +400,45 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
         return;
     }
 
-    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    foreach( KoShape *shape, selectedShapes ) 
+    foreach( KoPathShape *shape, m_selectedShapes )
     {
-        KoPathShape *pathShape = dynamic_cast<KoPathShape*>( shape );
-
-        if ( !shape->isLocked() && pathShape )
+        QRectF roi = handleRect( shape->documentToShape( event->point ) );
+        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
+        if ( parameterShape && parameterShape->isParametricShape() )
         {
-            QRectF roi = handleRect( pathShape->documentToShape( event->point ) );
-            KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( pathShape );
-            if ( parameterShape && parameterShape->isParametricShape() )
+            int handleId = parameterShape->handleIdAt( roi );
+            //qDebug() << "handleId" << handleId;
+            if ( handleId != -1 )
             {
-                int handleId = parameterShape->handleIdAt( roi );
-                //qDebug() << "handleId" << handleId;
-                if ( handleId != -1 )
-                {
-                    useCursor(Qt::SizeAllCursor);
-                    delete m_activeHandle;
-                    m_activeHandle = new ActiveParameterHandle( this, parameterShape, handleId );
-                    m_activeHandle->repaint();
-                    return;
-                }
-
+                useCursor(Qt::SizeAllCursor);
+                delete m_activeHandle;
+                m_activeHandle = new ActiveParameterHandle( this, parameterShape, handleId );
+                m_activeHandle->repaint();
+                return;
             }
-            else
+
+        }
+        else
+        {
+            QList<KoPathPoint*> points = shape->pointsAt( roi );
+            if( ! points.empty() )
             {
-                QList<KoPathPoint*> points = pathShape->pointsAt( roi );
-                if( ! points.empty() )
-                {
-                    useCursor(Qt::SizeAllCursor);
+                useCursor(Qt::SizeAllCursor);
 
-                    KoPathPoint *p = points.first();
-                    KoPathPoint::KoPointType type = KoPathPoint::Node;
+                KoPathPoint *p = points.first();
+                KoPathPoint::KoPointType type = KoPathPoint::Node;
 
-                    // check for the control points as otherwise it is no longer 
-                    // possible to change the control points when they are the same as the point
-                    if( p->properties() & KoPathPoint::HasControlPoint1 && roi.contains( p->controlPoint1() ) )
-                        type = KoPathPoint::ControlPoint1;
-                    else if( p->properties() & KoPathPoint::HasControlPoint2 && roi.contains( p->controlPoint2() ) )
-                        type = KoPathPoint::ControlPoint2;
+                // check for the control points as otherwise it is no longer 
+                // possible to change the control points when they are the same as the point
+                if( p->properties() & KoPathPoint::HasControlPoint1 && roi.contains( p->controlPoint1() ) )
+                    type = KoPathPoint::ControlPoint1;
+                else if( p->properties() & KoPathPoint::HasControlPoint2 && roi.contains( p->controlPoint2() ) )
+                    type = KoPathPoint::ControlPoint2;
 
-                    delete m_activeHandle;
-                    m_activeHandle = new ActivePointHandle( this, p, type );
-                    m_activeHandle->repaint();
-                    return;
-                }
+                delete m_activeHandle;
+                m_activeHandle = new ActivePointHandle( this, p, type );
+                m_activeHandle->repaint();
+                return;
             }
         }
     }
@@ -588,25 +565,23 @@ void KoPathTool::keyReleaseEvent(QKeyEvent *event) {
 
 void KoPathTool::activate (bool temporary) {
     Q_UNUSED(temporary);
-    bool found = false;
-
     // retrieve the actual global handle radius
     m_handleRadius = m_canvas->resourceProvider()->handleRadius();
 
-    foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes()) 
+    foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes())
     {
         KoPathShape *pathShape = dynamic_cast<KoPathShape*> (shape);
 
         if ( !shape->isLocked() && pathShape )
         {
-            found = true;
             // as the tool is just in activation repaintDecorations does not yet get called
             // so we need to use repaint of the tool and it is only needed to repaint the 
             // current canvas
             repaint( pathShape->boundingRect() );
+            m_selectedShapes.append(pathShape);
         }
     }
-    if( !found ) {
+    if( m_selectedShapes.isEmpty() ) {
         emit done();
         return;
     }
@@ -615,6 +590,7 @@ void KoPathTool::activate (bool temporary) {
 
 void KoPathTool::deactivate() {
     m_pointSelection.clear();
+    m_selectedShapes.clear();
 
     delete m_activeHandle;
     m_activeHandle = 0;
@@ -624,32 +600,14 @@ void KoPathTool::deactivate() {
 
 void KoPathTool::resourceChanged( int key, const QVariant & res )
 {
-    switch( key )
-    {
-        case KoCanvasResource::HandleRadius:
-        {
-            QRectF repaintRect;
-            foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
-            {
-                KoPathShape *pathShape = dynamic_cast<KoPathShape*>( shape );
-                if( pathShape )
-                {
-                    if( repaintRect.isEmpty() )
-                        repaintRect = pathShape->shapeToDocument( pathShape->outline().controlPointRect() );
-                    else
-                        repaintRect |= pathShape->shapeToDocument( pathShape->outline().controlPointRect() );
-                }
-            }
-            repaint( repaintRect );
-            m_pointSelection.repaint();
-            m_handleRadius = res.toUInt();
-            m_pointSelection.repaint();
-            repaint( repaintRect );
-        }
-        break;
-        default:
-            return;
-    }
+    if(key != KoCanvasResource::HandleRadius)
+        return;
+
+    foreach(KoPathShape *shape, m_selectedShapes)
+        repaint( shape->outline().controlPointRect() );
+    m_pointSelection.repaint();
+    m_handleRadius = res.toUInt();
+    m_pointSelection.repaint();
 }
 
 void KoPathTool::selectPoints( const QRectF &rect, bool clearSelection )
@@ -659,29 +617,18 @@ void KoPathTool::selectPoints( const QRectF &rect, bool clearSelection )
         m_pointSelection.clear();
     }
 
-    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    foreach( KoShape *shape, selectedShapes ) 
+    foreach(KoPathShape* shape, m_selectedShapes)
     {
-        KoPathShape *pathShape = dynamic_cast<KoPathShape*>( shape );
-
-        if ( !shape->isLocked() && pathShape )
-        {
-            KoParameterShape *parameterShape = dynamic_cast<KoParameterShape*>( shape );
-
-            if ( ! parameterShape || ! parameterShape->isParametricShape() )
-            {
-                QList<KoPathPoint*> selected = pathShape->pointsAt( pathShape->documentToShape( rect ) );
-                foreach( KoPathPoint* point, selected )
-                {
-                    m_pointSelection.add( point, false );
-                }
-            }
-        }
+        KoParameterShape *parameterShape = dynamic_cast<KoParameterShape*>( shape );
+        if(parameterShape)
+            continue;
+        foreach( KoPathPoint* point, shape->pointsAt( shape->documentToShape( rect ) ))
+            m_pointSelection.add( point, false );
     }
 }
 
 void KoPathTool::repaint( const QRectF &repaintRect ) {
-    //qDebug() << "KoPathTool::repaint(" << repaintRect << ")" << m_handleRadius;
+    //kDebug(30006) << "KoPathTool::repaint(" << repaintRect << ")" << m_handleRadius;
     m_canvas->updateCanvas( repaintRect.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius ) );
 }
 
@@ -891,12 +838,10 @@ void KoPathTool::KoPathPointSelection::repaint()
 
 void KoPathTool::KoPathPointSelection::update()
 {
-    QSet<KoShape *> shapes = m_tool->m_canvas->shapeManager()->selection()->selectedShapes().toSet();
-
     KoPathShapePointMap::iterator it( m_shapePointMap.begin() );
     while ( it != m_shapePointMap.end() )
     {
-        if ( ! shapes.contains( it.key() ) )
+        if ( ! m_tool->m_selectedShapes.contains( it.key() ) )
         {
             it = m_shapePointMap.erase( it );
         }

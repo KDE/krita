@@ -269,6 +269,7 @@ private:
     KoInteractionStrategy *m_currentStrategy; ///< the rubber selection strategy
 
     QButtonGroup *m_pointTypeGroup;
+    QList<KoPathShape*> m_selectedShapes;
 };
 
 #endif

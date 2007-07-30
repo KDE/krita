@@ -1,4 +1,4 @@
-add_subdirectory(tests)
+#add_subdirectory(tests)
 
 set(kritapainterlymixer_PART_SRCS
 	colorspot.cpp

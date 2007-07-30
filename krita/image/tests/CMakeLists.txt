@@ -105,3 +105,11 @@ kde4_add_unit_test(Kis_Node_Test TESTNAME krita-image-Node-Test ${kis_node_test_
 target_link_libraries(Kis_Node_Test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
+
+set(kis_node_facade_test_SRCS kis_node_facade_test.cpp )
+
+kde4_add_unit_test(Kis_Node_Facade_Test TESTNAME krita-image-Node_Facade-Test ${kis_node_facade_test_SRCS})
+
+target_link_libraries(Kis_Node_Facade_Test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############

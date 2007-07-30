@@ -57,6 +57,20 @@ public:
      */
     virtual ~KisNode();
 
+protected:
+
+    /**
+     * Re-implement this method to add constraints for the node
+     * subclasses that can be added as to this subclass of KisNode.
+     *
+     * @return false if the given node is not allowed as a subclass to
+     * this node
+     */
+     virtual bool allowAsChild( KisNodeSP )
+        {
+            return true;
+        }
+
 public:
 
     /**
@@ -76,11 +90,6 @@ public:
      * node; otherwise this will be an actual Node
      */
     KisNodeSP parent() const;
-
-    /**
-     * Set the parent of this node.
-     */
-    void setParent( KisNodeSP parent );
 
     /**
      * Returns the first child node of this node, or 0 if there are no
@@ -130,6 +139,15 @@ public:
      * node.
      */
     int index( const KisNodeSP node ) const;
+
+private:
+
+    friend class KisNodeFacade;
+    friend class KisNodeTest;
+    /**
+     * Set the parent of this node.
+     */
+    void setParent( KisNodeSP parent );
 
     /**
      * Adds the node to this group at the specified index.

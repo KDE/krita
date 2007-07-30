@@ -91,6 +91,7 @@ set(kritaimage_LIB_SRCS
    kis_pixel_selection.cpp
    kis_transparency_mask.cc
    kis_node.cpp
+   kis_node_facade.cpp
    metadata/kis_meta_data_store.cc
    metadata/kis_meta_data_value.cc
    metadata/kis_meta_data_schema.cc

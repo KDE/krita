@@ -19,8 +19,8 @@
 #include <qtest_kde.h>
 #include <limits.h>
 
-#include "kis_node_test.h"
-
+#include "kis_node_facade_test.h"
+#include "kis_node_facade.h"
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_node.h"
@@ -65,12 +65,14 @@ public:
 };
 
 
-void KisNodeTest::testCreation()
+void KisNodeFacadeTest::testCreation()
 {
     TestGraphListener graphListener;
 
-    KisNode * node = new KisNode();
+    KisNodeSP node = new KisNode();
     QVERIFY( node->graphListener() == 0 );
+
+    KisNodeFacade facade(node);
 
     node->setGraphListener( &graphListener );
     QVERIFY( node->graphListener() != 0 );
@@ -86,7 +88,6 @@ void KisNodeTest::testCreation()
     QVERIFY( node->at( UINT_MAX ) == 0 );
     QVERIFY( node->index( 0 ) == -1 );
 
-    delete node;
 }
 
 void dumpNodeStack( KisNodeSP node, QString prefix = QString( "\t" ) ) {
@@ -101,13 +102,15 @@ void dumpNodeStack( KisNodeSP node, QString prefix = QString( "\t" ) ) {
 
 }
 
-void KisNodeTest::testOrdering()
+void KisNodeFacadeTest::testOrdering()
 {
     TestGraphListener graphListener;
 
     KisNodeSP root = new KisNode();
     root->setGraphListener( &graphListener );
     kDebug() << "Root: " << root << endl;
+
+    KisNodeFacade facade( root );
 
     KisNodeSP node1 = new KisNode();
     kDebug() << "Node 1: " << node1 << endl;
@@ -132,7 +135,7 @@ void KisNodeTest::testOrdering()
      */
 
     graphListener.resetBools();
-    root->add( node1, root->childCount() );
+    facade.addNode( node1, root, root->childCount() );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );
@@ -141,7 +144,7 @@ void KisNodeTest::testOrdering()
     QVERIFY( root->lastChild() == node1 );
     graphListener.resetBools();
 
-    root->add( node2, root->childCount() );
+    facade.addNode( node2, root, root->childCount() );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );
@@ -150,7 +153,7 @@ void KisNodeTest::testOrdering()
     QVERIFY( root->lastChild() == node2 );
     graphListener.resetBools();
 
-    root->add( node3, node1 );
+    facade.addNode( node3, node1 );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );
@@ -159,7 +162,7 @@ void KisNodeTest::testOrdering()
     QVERIFY( root->lastChild() == node2 );
     graphListener.resetBools();
 
-    root->add( node4, root->childCount() );
+    facade.addNode( node4, root, root->childCount() );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );
@@ -208,7 +211,7 @@ void KisNodeTest::testOrdering()
       +---------+
      */
     graphListener.resetBools();
-    QVERIFY( root->remove( root->at( 3 ) ) == true );
+    QVERIFY( facade.removeNode( node4 ) == true );
     QVERIFY( node4->parent() == 0 );
     QVERIFY( graphListener.beforeInsertRow == false );
     QVERIFY( graphListener.afterInsertRow == false );
@@ -221,7 +224,7 @@ void KisNodeTest::testOrdering()
     QVERIFY( node4->nextSibling() == 0 );
     graphListener.resetBools();
 
-    node3->add( node4, node3->childCount() );
+    facade.addNode( node4, node3 );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );
@@ -234,10 +237,10 @@ void KisNodeTest::testOrdering()
     QVERIFY( node3->lastChild() == node4 );
     QVERIFY( node4->prevSibling() == 0 );
     QVERIFY( node4->nextSibling() == 0 );
-    QVERIFY( root->remove( node4 ) == false );
+    QVERIFY( facade.removeNode( node4 ) == false );
     graphListener.resetBools();
 
-    node3->remove( node4 );
+    facade.removeNode( node4 );
     QVERIFY( graphListener.beforeInsertRow == false );
     QVERIFY( graphListener.afterInsertRow == false );
     QVERIFY( graphListener.beforeRemoveRow == true );
@@ -252,7 +255,7 @@ void KisNodeTest::testOrdering()
 }
 
 
-QTEST_KDEMAIN(KisNodeTest, NoGUI)
-#include "kis_node_test.moc"
+QTEST_KDEMAIN(KisNodeFacadeTest, NoGUI)
+#include "kis_node_facade_test.moc"
 
 

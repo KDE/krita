@@ -131,7 +131,7 @@ int KisNode::index( const KisNodeSP node ) const
 bool KisNode::add( KisNodeSP newNode, quint32 index )
 {
     Q_ASSERT( newNode );
-
+    if ( !allowAsChild( newNode ) ) return false;
     if ( !newNode ) return false;
     if ( newNode->parent() ) return false;
     if ( m_d->nodes.contains(newNode) ) return false;
@@ -183,7 +183,6 @@ bool KisNode::remove( quint32 index )
         if ( m_d->graphListener )
             m_d->graphListener->aboutToRemoveANode( this, index );
 
-        //m_d->nodes.erase(m_d->nodes.begin() + reverseIndex(index));
         m_d->nodes.removeAt( index );
 
         if ( m_d->graphListener ) m_d->graphListener->nodeHasBeenRemoved(this, index);

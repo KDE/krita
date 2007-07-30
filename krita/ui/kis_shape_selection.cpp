@@ -33,6 +33,7 @@
 KisShapeSelection::KisShapeSelection(KisImageSP image, KisPaintDeviceSP dev)
     : KoShapeContainer(new KisShapeSelectionModel(image, dev, this))
     , m_image(image)
+    , m_parentPaintDevice(dev)
 {
     m_dashOffset = 0;
     m_timer = new QTimer(this);
@@ -129,6 +130,19 @@ void KisShapeSelection::addChild(KoShape* shape)
     shape->setBackground(Qt::NoBrush);
     KoShapeContainer::addChild(shape);
     setDirty();
+
+    if(childCount() == 1) {
+        m_parentPaintDevice->setDirty(m_image->bounds());
+    }
+    else {
+        QRect updateRect = shape->boundingRect().toAlignedRect();
+
+        QMatrix matrix;
+        matrix.scale(m_image->xRes(), m_image->yRes());
+        updateRect = matrix.mapRect(updateRect);
+        m_parentPaintDevice->setDirty(updateRect);
+    }
+    m_parentPaintDevice->emitSelectionChanged();
 }
 
 void KisShapeSelection::setDirty()

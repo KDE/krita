@@ -62,6 +62,7 @@ private:
     int m_dashOffset;
     QTimer* m_timer;
     KisImageSP m_image;
+    KisPaintDeviceSP m_parentPaintDevice;
     QPainterPath m_outline;
     bool m_dirty;
 

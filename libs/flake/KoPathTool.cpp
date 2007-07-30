@@ -568,6 +568,8 @@ void KoPathTool::activate (bool temporary) {
     // retrieve the actual global handle radius
     m_handleRadius = m_canvas->resourceProvider()->handleRadius();
 
+    repaintDecorations();
+    m_selectedShapes.clear();
     foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes())
     {
         KoPathShape *pathShape = dynamic_cast<KoPathShape*> (shape);
@@ -586,9 +588,11 @@ void KoPathTool::activate (bool temporary) {
         return;
     }
     useCursor(Qt::ArrowCursor, true);
+    connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(activate()));
 }
 
 void KoPathTool::deactivate() {
+    disconnect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(activate()));
     m_pointSelection.clear();
     m_selectedShapes.clear();
 

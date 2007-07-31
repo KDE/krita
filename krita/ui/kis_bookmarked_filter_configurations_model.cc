@@ -27,6 +27,7 @@
 struct KisBookmarkedFilterConfigurationsModel::Private {
     KisPaintDeviceSP thumb;
     KisFilterSP filter;
+    QHash<int, QImage> previewCache;
 };
 
 KisBookmarkedFilterConfigurationsModel::KisBookmarkedFilterConfigurationsModel(KisPaintDeviceSP thumb, KisFilterSP filter)
@@ -49,10 +50,13 @@ QVariant KisBookmarkedFilterConfigurationsModel::data(const QModelIndex &index, 
     }
     if(role == Qt::DecorationRole)
     {
-        QImage pm(100,100, QImage::Format_ARGB32);
-        KisPaintDeviceSP target = new KisPaintDevice(*d->thumb);
-        d->filter->process(target, QRect(0,0,100,100), configuration(index));
-        return target->convertToQImage(0,0.0);
+        if(not d->previewCache.contains(index.row()))
+        {
+            KisPaintDeviceSP target = new KisPaintDevice(*d->thumb);
+            d->filter->process(target, QRect(0,0,100,100), configuration(index));
+            d->previewCache[index.row()] = target->convertToQImage(0,0.0);
+        }
+        return d->previewCache[index.row()];
     } else {
         return KisBookmarkedConfigurationsModel::data(index, role);
     }

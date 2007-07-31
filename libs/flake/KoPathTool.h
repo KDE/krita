@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
+ *               2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -84,6 +85,7 @@ private:
     void selectPoints( const QRectF &rect, bool clearSelection );
 
     void updateOptionsWidget();
+    void updateActions();
 
     /// repaints the specified rect
     void repaint( const QRectF &repaintRect );
@@ -258,6 +260,9 @@ private:
          * be removed from the selection.
          */
         void update();
+
+        /// returns if the selection has any points selected
+        bool isEmpty() const { return m_selectedPoints.isEmpty(); }
 
     private:
         QSet<KoPathPoint *> m_selectedPoints;

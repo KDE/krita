@@ -32,7 +32,7 @@ class QRectF;
 /**
  * Tool for creating path shapes.
  */
-class KoCreatePathTool : public KoTool 
+class FLAKE_EXPORT KoCreatePathTool : public KoTool 
 {
 public:
     /**
@@ -53,13 +53,16 @@ public slots:
     void activate( bool temporary = false );
     void resourceChanged( int key, const QVariant & res );
 
-private:
+protected:
     /// add path shape to document
-    void addPathShape();
+    virtual void addPathShape();
+
+    KoPathShape *m_shape;
+
+private:
     QRectF handleRect( const QPointF &p );
     void repaintAdjusted( const QRectF &rect );
 
-    KoPathShape *m_shape;
     KoPathPoint *m_activePoint;
     KoPathPoint *m_firstPoint;
     int m_handleRadius;

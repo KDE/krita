@@ -25,4 +25,13 @@ kde4_add_unit_test(squeezedcombobox_test TESTNAME krita-ui-squeezedcombobox_test
 
 target_link_libraries(squeezedcombobox_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(kis_files_test_SRCS kis_files_test.cpp )
+
+kde4_add_unit_test(kis_files_test TESTNAME krita-ui-kis_files_test ${kis_files_test_SRCS})
+
+target_link_libraries(kis_files_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
+add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+
 ########### end ###############

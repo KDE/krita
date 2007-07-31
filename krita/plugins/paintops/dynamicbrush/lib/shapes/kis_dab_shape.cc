@@ -95,7 +95,7 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
     qint32 sy = dabRect.y();//dstRect.y() - y;
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
-//     kDebug() << sx << " " << sy << " " << sw << " " << sh << endl;
+//     kDebug() << sx <<"" << sy <<"" << sw <<"" << sh;
     if (painter()->device()->hasSelection()) {
         painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_dab,
                                 painter()->device()->selection(), painter()->opacity(), sx, sy, sw, sh);

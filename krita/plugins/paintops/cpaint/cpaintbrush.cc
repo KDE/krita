@@ -35,7 +35,7 @@ K_EXPORT_COMPONENT_FACTORY(kritacpaintbrush, CPaintBrushFactory("kritacore"))
 CPaintBrush::CPaintBrush(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    kDebug(41006) << ">>>>>>>>>>>>>>> loading cpaint\n";
+    kDebug(41006) <<">>>>>>>>>>>>>>> loading cpaint";
     setComponentData(CPaintBrushFactory::componentData());
 
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();

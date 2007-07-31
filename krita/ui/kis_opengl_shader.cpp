@@ -39,7 +39,7 @@ KisOpenGLShader::KisOpenGLShader(GLenum shaderType)
     KIS_OPENGL_PRINT_ERROR();
 
     if (m_shader == 0) {
-        kDebug(DBG_AREA_UI) << "Failed to create shader\n";
+        kDebug(DBG_AREA_UI) <<"Failed to create shader";
     }
 }
 
@@ -70,8 +70,8 @@ void KisOpenGLShader::loadSourceCode(GLsizei numSourceCodeStrings, const GLcharA
         if (compiled) {
             m_valid = true;
         } else {
-            kDebug(DBG_AREA_UI) << "Failed to compile shader\n";
-            kDebug(DBG_AREA_UI) << "Info log: \n" << getInfoLog() << endl;
+            kDebug(DBG_AREA_UI) <<"Failed to compile shader";
+            kDebug(DBG_AREA_UI) <<"Info log:" << getInfoLog();
         }
     }
 }
@@ -81,14 +81,14 @@ void KisOpenGLShader::loadSourceCode(QString sourceCodeFilename)
     QString fullFilename = KisFactory2::componentData().dirs()->findResource("kis_shaders", sourceCodeFilename);
 
     if (fullFilename.isNull()) {
-        kDebug(DBG_AREA_UI) << "Failed to find shader source code file: " << sourceCodeFilename << endl;
+        kDebug(DBG_AREA_UI) <<"Failed to find shader source code file:" << sourceCodeFilename;
         return;
     }
 
     QFile sourceCodeFile(fullFilename);
 
     if (!sourceCodeFile.open(IO_ReadOnly)) {
-        kDebug(DBG_AREA_UI) << "Unable to open shader source code file: " << fullFilename << endl;
+        kDebug(DBG_AREA_UI) <<"Unable to open shader source code file:" << fullFilename;
         return;
     }
 
@@ -106,7 +106,7 @@ void KisOpenGLShader::loadSourceCode(QString sourceCodeFilename)
     }
 
     if (sourceCodeStrings.isEmpty()) {
-        kDebug(DBG_AREA_UI) << "Shader source code file is empty: " << fullFilename << endl;
+        kDebug(DBG_AREA_UI) <<"Shader source code file is empty:" << fullFilename;
         return;
     }
 

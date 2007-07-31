@@ -65,7 +65,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettings * settings, KisPainter * painter, KisImageSP image) const
 {
     if (painter == 0) {
-        kWarning() << " KisPaintOpRegistry::paintOp painter is null" << endl;
+        kWarning() <<" KisPaintOpRegistry::paintOp painter is null";
         return 0;
     }
 
@@ -92,7 +92,7 @@ bool KisPaintOpRegistry::userVisible(const KoID & id, KoColorSpace* cs) const
 
     KisPaintOpFactorySP f = value(id.id());
     if (!f) {
-        kDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
+        kDebug(DBG_AREA_REGISTRY) <<"No paintop" << id.id() <<"";
         return false;
     }
     return f->userVisible(cs);
@@ -104,7 +104,7 @@ QString KisPaintOpRegistry::pixmap(const KoID & id) const
     KisPaintOpFactorySP f = value(id.id());
 
     if (!f) {
-        kDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
+        kDebug(DBG_AREA_REGISTRY) <<"No paintop" << id.id() <<"";
         return "";
     }
 

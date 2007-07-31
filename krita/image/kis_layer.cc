@@ -169,20 +169,20 @@ void KisLayer::setDirty()
 {
 
     QRect rc = extent();
-//    kDebug(41001) << "setDirty " << name() << ", " << rc << endl;
+//    kDebug(41001) <<"setDirty" << name() <<"," << rc;
     setDirty( QRegion( rc ) );
 }
 
 void KisLayer::setDirty(const QRect & rc)
 {
-//    kDebug(41001) << "setDirty rc " << name() << ", " << rc << endl;
+//    kDebug(41001) <<"setDirty rc" << name() <<"," << rc;
     setDirty( QRegion( rc ) );
 }
 
 void KisLayer::setDirty( const QRegion & region)
 {
     QMutexLocker(&m_d->regionLock);
-//    kDebug(41001) << "setDirty region " << name() << ", " << region.boundingRect() << endl;
+//    kDebug(41001) <<"setDirty region" << name() <<"," << region.boundingRect();
 
     // If we're dirty, our parent is dirty, if we've got a parent
     if ( region.isEmpty() ) return;
@@ -199,7 +199,7 @@ void KisLayer::setDirty( const QRegion & region)
 
 bool KisLayer::isDirty( const QRect & rect )
 {
-//    kDebug(41001) << "isDirty " << name() << ", " << rect << ", " << m_d->dirtyRegion.intersects( rect ) << endl;
+//    kDebug(41001) <<"isDirty" << name() <<"," << rect <<"," << m_d->dirtyRegion.intersects( rect );
     QMutexLocker(&m_d->regionLock);
     return m_d->dirtyRegion.intersects( rect );
 }
@@ -207,7 +207,7 @@ bool KisLayer::isDirty( const QRect & rect )
 void KisLayer::setClean( QRect rc )
 {
     QMutexLocker(&m_d->regionLock);
-//    kDebug(41001) << "setClean " << name() << ", " <<  rc << endl;
+//    kDebug(41001) <<"setClean" << name() <<"," <<  rc;
     m_d->dirtyRegion -= QRegion( rc );
 }
 

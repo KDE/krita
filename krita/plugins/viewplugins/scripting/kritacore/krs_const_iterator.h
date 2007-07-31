@@ -195,7 +195,7 @@ class ConstIterator : public ConstIteratorBase
                 case KoChannelInfo::FLOAT32:
                     return *((float*) data);
                 default:
-                    kDebug(41011) << "Unsupported data format in script" << endl;
+                    kDebug(41011) <<"Unsupported data format in script";
                     return QVariant();
             }
         }

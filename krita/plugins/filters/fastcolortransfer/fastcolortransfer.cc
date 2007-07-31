@@ -78,7 +78,7 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
-//     kDebug() << "Start transferring color" << endl;
+//     kDebug() <<"Start transferring color";
     QVariant value;
     QString fileName;
     if (config && config->getProperty("filename", value))
@@ -86,7 +86,7 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
         fileName = value.toString();
     } else {
         // XXX: Make this a warning message box!
-//         kDebug() << "No file name for the reference image was specified." << endl;
+//         kDebug() <<"No file name for the reference image was specified.";
         return;
     }
 
@@ -102,7 +102,7 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
     }
     if(!ref)
     {
-//         kDebug() << "No reference image was specified." << endl;
+//         kDebug() <<"No reference image was specified.";
         return;
     }
 
@@ -110,7 +110,7 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
     KoColorSpace* labCS = KoColorSpaceRegistry::instance()->colorSpace(KoID("LABA"),"");
     if(!labCS)
     {
-//         kDebug() << "The LAB colorspace is not available." << endl;
+//         kDebug() <<"The LAB colorspace is not available.";
         return;
     }
     KoColorSpace* oldCS = src->colorSpace();
@@ -143,7 +143,7 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
     sigmaL_src *= totalSize;
     sigmaA_src *= totalSize;
     sigmaB_src *= totalSize;
-//     kDebug() << totalSize << " " << meanL_src << " " << meanA_src << " " << meanB_src << " " << sigmaL_src << " " << sigmaA_src << " " << sigmaB_src << endl;
+//     kDebug() << totalSize <<"" << meanL_src <<"" << meanA_src <<"" << meanB_src <<"" << sigmaL_src <<"" << sigmaA_src <<"" << sigmaB_src;
     // Compute the means and sigmas of src
     double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
     double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
@@ -169,7 +169,7 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
     sigmaL_ref *= totalSize;
     sigmaA_ref *= totalSize;
     sigmaB_ref *= totalSize;
-//     kDebug() << totalSize << " " << meanL_ref << " " << meanA_ref << " " << meanB_ref << " " << sigmaL_ref << " " << sigmaA_ref << " " << sigmaB_ref << endl;
+//     kDebug() << totalSize <<"" << meanL_ref <<"" << meanA_ref <<"" << meanB_ref <<"" << sigmaL_ref <<"" << sigmaA_ref <<"" << sigmaB_ref;
 
     // Transfer colors
     dst->convertTo(labCS); // FIXME: DON'T CONVERT to LAB !
@@ -177,7 +177,7 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
         double coefL = sqrt((sigmaL_ref - meanL_ref * meanL_ref) / (sigmaL_src - meanL_src * meanL_src));
         double coefA = sqrt((sigmaA_ref - meanA_ref * meanA_ref) / (sigmaA_src - meanA_src * meanA_src));
         double coefB = sqrt((sigmaB_ref - meanB_ref * meanB_ref) / (sigmaB_src - meanB_src * meanB_src));
-//         kDebug() << coefL << " " << coefA << " " << coefB << endl;
+//         kDebug() << coefL <<"" << coefA <<"" << coefB;
         KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
         while(!dstIt.isDone())
         {

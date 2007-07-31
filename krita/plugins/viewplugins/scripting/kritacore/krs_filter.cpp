@@ -75,7 +75,7 @@ bool Filter::process(QObject* layer)
     PaintDevice* paintDevice = dynamic_cast< PaintDevice* >(layer);
     if(! paintDevice || ! m_filter->workWith( paintDevice->paintDevice()->colorSpace()))
     {
-        kWarning(41011) << i18n("An error has occurred in %1",QString("process")) << endl;
+        kWarning(41011) << i18n("An error has occurred in %1",QString("process"));
         return false;
     }
 
@@ -98,7 +98,7 @@ bool Filter::process(QObject* layer, int x, int y, int width, int height)
     PaintDevice* paintDevice = dynamic_cast< PaintDevice* >(layer);
     if(! paintDevice || ! m_filter->workWith( paintDevice->paintDevice()->colorSpace()))
     {
-        kWarning(41011) << i18n("An error has occurred in %1",QString("process")) << endl;
+        kWarning(41011) << i18n("An error has occurred in %1",QString("process"));
         return false;
     }
     QRect rect(x, y, width, height);

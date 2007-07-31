@@ -151,7 +151,7 @@ class FreehandPaintJobExecutor : public QThread {
         virtual void run()
         {
             QMutexLocker lockRunning(&m_mutex_running);
-            kDebug(41007) << "run" << endl;
+            kDebug(41007) <<"run";
             while(not m_finish or not empty() )
             {
                 FreehandPaintJob* nextJob = 0;
@@ -162,7 +162,7 @@ class FreehandPaintJobExecutor : public QThread {
                         nextJob = m_queue.dequeue();
                     }
                 }
-                kDebug(41007) << "nextJob = " << nextJob << endl;
+                kDebug(41007) <<"nextJob =" << nextJob;
                 if(nextJob)
                 {
                     nextJob->run();
@@ -170,12 +170,12 @@ class FreehandPaintJobExecutor : public QThread {
                     msleep(1);
                 }
             }
-            kDebug(41007) << "finish running" << endl;
+            kDebug(41007) <<"finish running";
         }
         void postJob(FreehandPaintJob* job)
         {
             QMutexLocker lock(&m_mutex_queue);
-            kDebug(41007) << "push job = " << job << endl;
+            kDebug(41007) <<"push job =" << job;
             m_queue.enqueue(job);
         }
         void finish() {
@@ -393,7 +393,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     }
     m_previousTangent = QPointF(0,0);
     m_previousDrag = QPointF(0,0);
-/*    kDebug(41007) << "target: " << m_target << "( " << m_target->name() << " )"
+/*    kDebug(41007) <<"target:" << m_target <<"(" << m_target->name() <<" )"
       << " source: " << m_source << "( " << m_source->name() << " )"
       << ", incremental " << m_paintIncremental
       << ", paint on selection: " << m_paintOnSelection
@@ -494,7 +494,7 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
 void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*previousJob*/)
 {
     m_paintJobs.append(job);
-    kDebug(41007) << "Queue length: " << m_executor->queueLength() << endl;
+    kDebug(41007) <<"Queue length:" << m_executor->queueLength();
     m_executor->postJob(job);
 }
 

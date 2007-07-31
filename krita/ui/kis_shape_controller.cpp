@@ -70,8 +70,8 @@ KisShapeController::KisShapeController( KisDoc2 * doc, KisNameServer *nameServer
 
 KisShapeController::~KisShapeController()
 {
-    kDebug(41007) << "Deleting the KisShapeController. There are " << m_d->layerShapes.size() << " shapes" << endl;
-    kDebug(41007) << "Deleting the KisShapeController. There are " << m_d->maskShapes.size() << " masks" << endl;
+    kDebug(41007) <<"Deleting the KisShapeController. There are" << m_d->layerShapes.size() <<" shapes";
+    kDebug(41007) <<"Deleting the KisShapeController. There are" << m_d->maskShapes.size() <<" masks";
 /*
     foreach( KoShape* shape, m_d->layerShapes ) {
         removeShape( shape);
@@ -85,10 +85,10 @@ KisShapeController::~KisShapeController()
 
 void KisShapeController::setImage( KisImageSP image )
 {
-    kDebug() << "Setting image " << image << endl;
+    kDebug() <<"Setting image" << image;
 
     if ( m_d->image ) {
-        kDebug() << "disconnecting previous image " << m_d->image << endl;
+        kDebug() <<"disconnecting previous image" << m_d->image;
         m_d->image->disconnect( this );
         // First clear the current set of shapes away
         foreach( KoShape* shape, m_d->layerShapes ) {
@@ -111,7 +111,7 @@ void KisShapeController::setImage( KisImageSP image )
     if ( image ) {
         m_d->image = image;
 
-        kDebug() << "Connecting new image\n";
+        kDebug() <<"Connecting new image";
 
         KisLayerMapVisitor v( m_d->layerShapes, m_d->maskShapes );
         m_d->image->rootLayer()->accept( v );
@@ -141,7 +141,7 @@ void KisShapeController::removeShape( KoShape* shape )
     if ( !shape ) return;
 
     KoShapeContainer * container = shape->parent();
-    kDebug(41007) << "parent is " << container << endl;
+    kDebug(41007) <<"parent is" << container;
 
     if ( container ) {
         container->removeChild( shape );
@@ -193,9 +193,9 @@ void KisShapeController::addShape( KoShape* shape )
         // KisShapeLayer::KoShapeLayer::KoShapeContainer::KoShape.
 
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( shape->parent() );
-        kDebug(41007) << "shape: " << shape << endl;
-        kDebug(41007) << "shape parent: " << shape->parent() << endl;
-        kDebug(41007) << "shape layer: " << shapeLayer << endl;
+        kDebug(41007) <<"shape:" << shape;
+        kDebug(41007) <<"shape parent:" << shape->parent();
+        kDebug(41007) <<"shape layer:" << shapeLayer;
 
 //TODO this doesn't work with shape selections
 #if 0
@@ -205,7 +205,7 @@ void KisShapeController::addShape( KoShape* shape )
             // and add it on top of the image stack.
 
             KisLayerContainerShape * container = dynamic_cast<KisLayerContainerShape*>( m_d->image->rootLayer().data() );
-            kDebug(41007) << "container: " << container << endl;
+            kDebug(41007) <<"container:" << container;
             shapeLayer = new KisShapeLayer(container,
                                            m_d->image,
                                            i18n( "Flake shapes %1", m_d->nameServer->number() ),
@@ -230,7 +230,7 @@ void KisShapeController::addShape( KoShape* shape )
         }
     }
     else {
-        kWarning() << "Eeek -- we tried to add a krita layer shape without going through KisImage" << endl;
+        kWarning() <<"Eeek -- we tried to add a krita layer shape without going through KisImage";
     }
 
     m_d->doc->setModified( true );
@@ -254,10 +254,10 @@ void KisShapeController::setInitialShapeForView( KisView2 * view )
 
 void KisShapeController::slotLayerAdded( KisLayerSP layer )
 {
-    kDebug() << "slotLayerAdded " << layer << endl;
+    kDebug() <<"slotLayerAdded" << layer;
     // Check whether the layer is already in the map
     if ( m_d->layerShapes.contains( layer ) ) {
-        kDebug(41007) << "The document already contains layer " << layer->name() << endl;
+        kDebug(41007) <<"The document already contains layer" << layer->name();
         return;
     }
 
@@ -270,10 +270,10 @@ void KisShapeController::slotLayerAdded( KisLayerSP layer )
     // Create a shape around the layer (Bjarne frowns upon promiscuous
     // dynamic casts, though, and I dare say he's right. I still like
     // it better than adding layerId's everywhere.
-    kDebug(41007) << "Is grouplayer?: " << dynamic_cast<KisGroupLayer*>( layer.data() ) << endl;
-    kDebug(41007) << "Is adjustmentlayer?: " << dynamic_cast<KisAdjustmentLayer*>( layer.data() ) << endl;
-    kDebug(41007) << "Is paintlayer?: " << dynamic_cast<KisPaintLayer*>( layer.data() ) << endl;
-    kDebug(41007) << "Is shapelayer?: " << dynamic_cast<KisShapeLayer*>( layer.data() ) << endl;
+    kDebug(41007) <<"Is grouplayer?:" << dynamic_cast<KisGroupLayer*>( layer.data() );
+    kDebug(41007) <<"Is adjustmentlayer?:" << dynamic_cast<KisAdjustmentLayer*>( layer.data() );
+    kDebug(41007) <<"Is paintlayer?:" << dynamic_cast<KisPaintLayer*>( layer.data() );
+    kDebug(41007) <<"Is shapelayer?:" << dynamic_cast<KisShapeLayer*>( layer.data() );
 
     if ( dynamic_cast<KisGroupLayer*>( layer.data() ) ) {
         shape = new KisLayerContainerShape(parent, layer);
@@ -305,7 +305,7 @@ void KisShapeController::slotLayerAdded( KisLayerSP layer )
 
 void KisShapeController::slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis )
 {
-    kDebug() << "slotLayerRemoved " << layer << endl;
+    kDebug() <<"slotLayerRemoved" << layer;
 
     Q_UNUSED( wasParent );
     Q_UNUSED( wasAboveThis );
@@ -315,7 +315,7 @@ void KisShapeController::slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wa
 
 void KisShapeController::slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis )
 {
-    kDebug() << "slotLayerMoved " << layer << endl;
+    kDebug() <<"slotLayerMoved" << layer;
 
     Q_UNUSED( previousParent );
     Q_UNUSED( wasAboveThis );
@@ -327,7 +327,7 @@ void KisShapeController::slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP prev
 
 void KisShapeController::slotLayersChanged( KisGroupLayerSP rootLayer )
 {
-    kDebug() << "slotLayersChanged " << rootLayer << endl;
+    kDebug() <<"slotLayersChanged" << rootLayer;
     Q_UNUSED( rootLayer );
 
     setImage( m_d->image );
@@ -339,7 +339,7 @@ KoShape * KisShapeController::shapeForLayer( KisLayerSP layer )
     if ( m_d->layerShapes.contains( layer ) )
         return m_d->layerShapes[layer];
     else {
-        kDebug(41007) << "KisShapeController::shapeForLayer does not find a shape for layer " << layer << ", this should never happen!" << endl;
+        kDebug(41007) <<"KisShapeController::shapeForLayer does not find a shape for layer" << layer <<", this should never happen!";
         return 0;
     }
 }
@@ -348,7 +348,7 @@ KoShape * KisShapeController::shapeForLayer( KisLayerSP layer )
 void KisShapeController::slotMaskAdded( KisMaskSP mask )
 {
     if ( m_d->maskShapes.contains( mask ) ) {
-        kWarning() << "KisShapeController::slotAddedMask: mask " << mask << " is already in the map\n";
+        kWarning() <<"KisShapeController::slotAddedMask: mask" << mask <<" is already in the map";
         return;
     }
 

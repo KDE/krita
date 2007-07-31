@@ -190,7 +190,7 @@ bool KisNode::remove( quint32 index )
 
         return true;
     }
-    kWarning() << "invalid input to KisGroupNode::removeNode()!" << endl;
+    kWarning() << "invalid input to KisGroupNode::removeNode()!";
     return false;
 }
 
@@ -198,7 +198,7 @@ bool KisNode::remove( KisNodeSP node )
 {
     if ( node->parent().data() != this)
     {
-        kWarning() << "invalid input to KisGroupNode::removeNode()!" << endl;
+        kWarning() << "invalid input to KisGroupNode::removeNode()!";
         return false;
     }
 

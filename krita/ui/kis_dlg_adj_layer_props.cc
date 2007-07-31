@@ -62,7 +62,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     m_currentConfiguration = layer->filter();
     m_currentFilter = KisFilterRegistry::instance()->get(m_currentConfiguration->name()).data();
     if (!m_currentFilter) {
-        kWarning() << "No filter specified!\n";
+        kWarning() <<"No filter specified!";
     }
 
     KisPaintDeviceSP dev = 0;
@@ -167,7 +167,7 @@ void KisDlgAdjLayerProps::slotConfigChanged()
 void KisDlgAdjLayerProps::refreshPreview()
 {
     if (!m_preview) {
-        kDebug(41007) << "no preview!\n";
+        kDebug(41007) <<"no preview!";
         return;
     }
 

@@ -35,7 +35,7 @@ KisSensorSelector::KisSensorSelector(QWidget* parent) : QWidget(parent), m_curre
 
 void KisSensorSelector::setCurrent(KisDynamicSensor* sensor)
 {
-    kDebug(41006) << "setCurrent " << sensor << " " << sensor->id().id() << endl;
+    kDebug(41006) <<"setCurrent" << sensor <<"" << sensor->id().id();
     m_currentSensor = sensor;
     sensorSelectorUI->comboBoxSensor->setCurrent( sensor->id() );
     delete m_currentConfigWidget;

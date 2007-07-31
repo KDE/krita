@@ -88,7 +88,7 @@ void KisImageTester::mergeTests()
     mergedPixel.toQColor(&color, &opacity);
 
     // Does not work. See BUG: 147193
-    kDebug() << "XXXXXXXXXXXXXXXX: BUG: 147193" << endl;
+    kDebug() <<"XXXXXXXXXXXXXXXX: BUG: 147193";
     QCOMPARE(( uint ) opacity, ( uint ) OPACITY_OPAQUE);
     QCOMPARE(( uint ) color.red(), ( uint )255);
     QCOMPARE(( uint ) color.green(), ( uint )( 128 + ((255 - 128) / 2) ) );

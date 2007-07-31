@@ -84,7 +84,7 @@ void KisFilterManager::insertFilter(QString name)
     Q_ASSERT(f);
     if(d->filters2Action.keys().contains(f.data()) )
     {
-        kWarning() << "Filter " << name << " has allready been inserted" << endl;
+        kWarning() <<"Filter" << name <<" has allready been inserted";
         return;
     }
     KoID category = f->menuCategory();
@@ -94,7 +94,7 @@ void KisFilterManager::insertFilter(QString name)
         actionMenu = new KActionMenu(category.name(), this);
         d->actionCollection->addAction(category.id(), actionMenu );
         d->filterActionMenus[category.id()] = actionMenu;
-        kDebug(41007) << "Creating entry menu for " << category.id() << " with name " << category.name() << endl;
+        kDebug(41007) <<"Creating entry menu for" << category.id() <<" with name" << category.name();
     }
     
     KisFilterHandler* handler = new KisFilterHandler( this, f, d->view);

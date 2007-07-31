@@ -91,7 +91,7 @@ QObject* ConstPaintDevice::createHistogram(const QString& histoname, uint typenr
     /*
     QList<KoID> listID = KisHistogramProducerFactoryRegistry::instance()->listKeys();
     for(QList<KoID>::iterator it = listID.begin(); it != listID.end(); it++)
-        kDebug(41011) << (*it).name() << " " << (*it).id() << endl;
+        kDebug(41011) << (*it).name() <<"" << (*it).id();
     */
 
     enumHistogramType type ;

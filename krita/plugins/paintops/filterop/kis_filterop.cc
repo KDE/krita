@@ -139,20 +139,20 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 {
     if (not painter())
     {
-      kDebug() << "No painter !" << endl;
+      kDebug() <<"No painter !";
       return;
     }
 
     KisFilterSP filter = m_settings->filter();
     if (not filter)
     {
-      kDebug() << "No filter !" << endl;
+      kDebug() <<"No filter !";
       return;
     }
 
     if ( not source() )
     {
-      kDebug() << "No source !" << endl;
+      kDebug() <<"No source !";
       return;
     }
 

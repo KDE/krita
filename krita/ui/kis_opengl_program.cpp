@@ -37,7 +37,7 @@ KisOpenGLProgram::KisOpenGLProgram()
     KIS_OPENGL_PRINT_ERROR();
 
     if (m_program == 0) {
-        kDebug(DBG_AREA_UI) << "Failed to create program\n";
+        kDebug(DBG_AREA_UI) <<"Failed to create program";
     }
 }
 
@@ -65,7 +65,7 @@ GLint KisOpenGLProgram::uniformVariableLocation(const GLchar *variableName) cons
         KIS_OPENGL_PRINT_ERROR();
 
         if (location == -1) {
-            kDebug(DBG_AREA_UI) << "Failed to find uniform variable '" << variableName << "' in program\n";
+            kDebug(DBG_AREA_UI) <<"Failed to find uniform variable '" << variableName <<"' in program";
         }
     }
 
@@ -163,8 +163,8 @@ void KisOpenGLProgram::link()
             m_isValid = true;
         } else {
             m_isValid = false;
-            kDebug(DBG_AREA_UI) << "Failed to link program\n";
-            kDebug(DBG_AREA_UI) << "Info log: \n" << getInfoLog() << endl;
+            kDebug(DBG_AREA_UI) <<"Failed to link program";
+            kDebug(DBG_AREA_UI) <<"Info log:" << getInfoLog();
         }
     }
 }

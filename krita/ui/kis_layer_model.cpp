@@ -46,7 +46,7 @@ KisLayerModel::~KisLayerModel()
 
 void KisLayerModel::setImage( KisImageSP image )
 {
-    kDebug(41007) << "KisLayerModel::setImage " << image << endl;
+    kDebug(41007) <<"KisLayerModel::setImage" << image;
     if ( m_d->image ) {
         m_d->image->disconnect( this );
     }
@@ -64,7 +64,7 @@ void KisLayerModel::setImage( KisImageSP image )
 
 KisLayerSP KisLayerModel::layerFromIndex(const QModelIndex &index)
 {
-    kDebug(41007) << "KisLayerModel::layerFromIndex " << index << endl;
+    kDebug(41007) <<"KisLayerModel::layerFromIndex" << index;
 
     if( !index.isValid() )
         return KisLayerSP(0);
@@ -77,7 +77,7 @@ KisLayerSP KisLayerModel::layerFromIndex(const QModelIndex &index)
 
 vKisLayerSP KisLayerModel::layersFromIndexes(const QModelIndexList &indexes)
 {
-    kDebug(41007) << "KisLayerModel::layersFromIndexes " << indexes.count() << endl;
+    kDebug(41007) <<"KisLayerModel::layersFromIndexes" << indexes.count();
     vKisLayerSP out;
     for (int i = 0, n = indexes.count(); i < n; ++i)
         if (KisLayerSP layer = layerFromIndex(indexes.at(i)))
@@ -87,7 +87,7 @@ vKisLayerSP KisLayerModel::layersFromIndexes(const QModelIndexList &indexes)
 
 QModelIndex KisLayerModel::indexFromLayer(const KisLayer *layer) const
 {
-    kDebug(41007) << "KisLayer::indexFromLayer " << layer << ", layer index: " << layer->index() << endl;
+    kDebug(41007) <<"KisLayer::indexFromLayer" << layer <<", layer index:" << layer->index();
     Q_ASSERT(layer);
     if ( layer->parentLayer() )
         return createIndex(layer->index(), 0, ( void* )layer);
@@ -99,7 +99,7 @@ QModelIndex KisLayerModel::indexFromLayer(const KisLayer *layer) const
 
 KisMaskSP KisLayerModel::maskFromIndex(const QModelIndex &index)
 {
-    kDebug(41007) << "KisLayerModel::maskFromIndex " << index << endl;
+    kDebug(41007) <<"KisLayerModel::maskFromIndex" << index;
 
     if( !index.isValid() )
         return KisMaskSP(0);
@@ -116,7 +116,7 @@ KisMaskSP KisLayerModel::maskFromIndex(const QModelIndex &index)
 
 vKisMaskSP KisLayerModel::masksFromIndexes(const QModelIndexList &indexes)
 {
-    kDebug(41007) << "KisLayerModel::masksFromIndexes " << indexes.count() << endl;
+    kDebug(41007) <<"KisLayerModel::masksFromIndexes" << indexes.count();
     vKisMaskSP out;
     for (int i = 0, n = indexes.count(); i < n; ++i)
         if (KisMaskSP mask = maskFromIndex(indexes.at(i)))
@@ -149,7 +149,7 @@ QModelIndex KisLayerModel::indexFromMask(const KisMask *mask) const
 //         if ( parentLayer->selection() )
 //             maskIndex++;
 
-//         kDebug(41007) << "KisMask::indexFromMask " << mask << ", mask index: " << maskIndex << endl;
+//         kDebug(41007) <<"KisMask::indexFromMask" << mask <<", mask index:" << maskIndex;
 
 //         return createIndex(maskIndex, 0, ( void* )mask);
 //     } else {
@@ -159,11 +159,11 @@ QModelIndex KisLayerModel::indexFromMask(const KisMask *mask) const
 
 int KisLayerModel::rowCount(const QModelIndex &parent) const
 {
-    kDebug(41007) << "KisLayerModel::rowCount " << parent << endl;
+    kDebug(41007) <<"KisLayerModel::rowCount" << parent;
 
     if (!parent.isValid()) {
         // Root layer
-        kDebug(41007) << "Root layer: " << m_d->image->rootLayer() << ", childcount: " << m_d->image->rootLayer()->childCount() << endl;;
+        kDebug(41007) <<"Root layer:" << m_d->image->rootLayer() <<", childcount:" << m_d->image->rootLayer()->childCount();;
         return m_d->image->rootLayer()->childCount();
     }
     else  {
@@ -178,7 +178,7 @@ int KisLayerModel::columnCount(const QModelIndex&) const
 
 QModelIndex KisLayerModel::index(int row, int column, const QModelIndex &parent) const
 {
-    kDebug(41007) << "KisLayerModel::index(row = " << row << ", column=" << column << ", parent=" << parent << " parent is valid: " << parent.isValid() << endl;
+    kDebug(41007) <<"KisLayerModel::index(row =" << row <<", column=" << column <<", parent=" << parent <<" parent is valid:" << parent.isValid();
 
     if (!hasIndex(row, column, parent))
     {
@@ -199,7 +199,7 @@ QModelIndex KisLayerModel::index(int row, int column, const QModelIndex &parent)
 
 QModelIndex KisLayerModel::parent(const QModelIndex &index) const
 {
-    kDebug(41007) << "KisLayerModel::parent " << index << endl;
+    kDebug(41007) <<"KisLayerModel::parent" << index;
     if (!index.isValid())
         return QModelIndex();
 
@@ -207,14 +207,14 @@ QModelIndex KisLayerModel::parent(const QModelIndex &index) const
     Q_ASSERT(index.internalPointer());
 
     KisLayer * l = static_cast<KisLayer*>( index.internalPointer() );
-    kDebug(41007) << " layer: " << l << ", name: " << l->name() << ", parent: " << l->parent() << endl;
+    kDebug(41007) <<" layer:" << l <<", name:" << l->name() <<", parent:" << l->parent();
 
     KisGroupLayer *p = l->parentLayer().data();
 
     // If the parent is the root layer, we want to return an invalid
     // parent, because the qt model shouldn't know about our root layer.
     if ( p && p->parentLayer().data() ) {
-        kDebug(41007) << "parent layer: " << p << ", name: " << p->name() << ", parent: " << p->parentLayer() << endl;
+        kDebug(41007) <<"parent layer:" << p <<", name:" << p->name() <<", parent:" << p->parentLayer();
         return indexFromLayer( p );
     }
     else
@@ -224,7 +224,7 @@ QModelIndex KisLayerModel::parent(const QModelIndex &index) const
 
 QVariant KisLayerModel::data(const QModelIndex &index, int role) const
 {
-//     kDebug(41007) << "KisLayerModel::data(index=" << index << ", role=" << role << endl;
+//     kDebug(41007) <<"KisLayerModel::data(index=" << index <<", role=" << role;
     if (!index.isValid())
         return QVariant();
 
@@ -253,7 +253,7 @@ QVariant KisLayerModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags KisLayerModel::flags(const QModelIndex &index) const
 {
-    kDebug(41007) << "KisLayerModel::flags " << index << endl;
+    kDebug(41007) <<"KisLayerModel::flags" << index;
     if (!index.isValid())
         return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
 
@@ -272,7 +272,7 @@ Qt::ItemFlags KisLayerModel::flags(const QModelIndex &index) const
 
 bool KisLayerModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    kDebug(41007) << "KisLayerModel::setData( index=" << index << ", value=" << value << ", role=" << role << endl;
+    kDebug(41007) <<"KisLayerModel::setData( index=" << index <<", value=" << value <<", role=" << role;
     if (!index.isValid())
         return false;
 
@@ -307,25 +307,25 @@ bool KisLayerModel::setData(const QModelIndex &index, const QVariant &value, int
 
 void KisLayerModel::beginInsertLayers( KisGroupLayer * parent, int index )
 {
-    kDebug(41007) << "KisLayerModel::beginInsertLayers parent=" << parent << ", index=" << index << endl;
+    kDebug(41007) <<"KisLayerModel::beginInsertLayers parent=" << parent <<", index=" << index;
     beginInsertRows( indexFromLayer( parent ), index, index );
 }
 
 void KisLayerModel::endInsertLayers( KisGroupLayer *, int)
 {
-    kDebug(41007) << "KisLayerModel::endInsertLayers\n";
+    kDebug(41007) <<"KisLayerModel::endInsertLayers";
     endInsertRows();
 }
 
 void KisLayerModel::beginRemoveLayers( KisGroupLayer * parent, int index )
 {
-    kDebug(41007) << "KisLayerModel::beginRemoveLayers parent=" << parent << ", index=" << index << endl;
+    kDebug(41007) <<"KisLayerModel::beginRemoveLayers parent=" << parent <<", index=" << index;
     beginRemoveRows( indexFromLayer( parent ), index, index );
 }
 
 void KisLayerModel::endRemoveLayers( KisGroupLayer *, int )
 {
-    kDebug(41007) << "KisLayerModel::endRemoveLayers\n";
+    kDebug(41007) <<"KisLayerModel::endRemoveLayers";
     endRemoveRows();
 }
 
@@ -357,7 +357,7 @@ void KisLayerModel::endRemoveMasks( KisLayer * , int )
 #if 0
 QMimeData * KisLayerModel::mimeData ( const QModelIndexList & indexes ) const
 {
-    kDebug(41007) << "KisLayerModel::mimeData" << endl;
+    kDebug(41007) <<"KisLayerModel::mimeData";
     QMimeData* data = new QMimeData;
     // TODO: manage the drag
 
@@ -366,8 +366,8 @@ QMimeData * KisLayerModel::mimeData ( const QModelIndexList & indexes ) const
 
 bool KisLayerModel::dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
 { // TODO: manage the drop
-    kDebug(41007) << "KisLayerModel::dropMimeData" << endl;
-    kDebug(41007) << "KisLayerModel::dropMimeData " << data->formats() << endl;
+    kDebug(41007) <<"KisLayerModel::dropMimeData";
+    kDebug(41007) <<"KisLayerModel::dropMimeData" << data->formats();
 //     const QString format = "application/x-qabstractitemmodeldatalist";
 /*    if(not data->hasFormat( format ))
     {
@@ -377,16 +377,16 @@ bool KisLayerModel::dropMimeData ( const QMimeData * data, Qt::DropAction action
     QDataStream stream(&encoded, QIODevice::ReadOnly);*/
     if(action == Qt::CopyAction)
     {
-        kDebug(41007) << "KisLayerModel::dropMimeData copy action" << endl;
+        kDebug(41007) <<"KisLayerModel::dropMimeData copy action";
 /*        while (!stream.atEnd()) {
             int r, c;
             QMap<int, QVariant> v;
             stream >> r >> c >> v;
-            kDebug(41007) << "KisLayerModel::dropMimeData copy action " << r << " " << c << endl;
+            kDebug(41007) <<"KisLayerModel::dropMimeData copy action" << r <<"" << c;
         }*/
         return true;
     } else if(action == Qt::MoveAction) {
-        kDebug(41007) << "KisLayerModel::dropMimeData move action" << endl;
+        kDebug(41007) <<"KisLayerModel::dropMimeData move action";
         return true;
     }
     return false;

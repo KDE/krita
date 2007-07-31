@@ -185,7 +185,7 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
 {
     if (aboveThis && aboveThis->parentLayer().data() != this)
     {
-        kWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)!" << endl;
+        kWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)!";
         return false;
     }
     return addLayer(newLayer, aboveThis ? aboveThis->index() : childCount());
@@ -215,7 +215,7 @@ bool KisGroupLayer::removeLayer(int x)
         if ( image() ) image()->sigALayerHasBeenRemoved(this, x);
         return true;
     }
-    kWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
+    kWarning() << "invalid input to KisGroupLayer::removeLayer()!";
     return false;
 }
 
@@ -223,7 +223,7 @@ bool KisGroupLayer::removeLayer(KisLayerSP layer)
 {
     if (layer->parentLayer().data() != this)
     {
-        kWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
+        kWarning() << "invalid input to KisGroupLayer::removeLayer()!";
         return false;
     }
 

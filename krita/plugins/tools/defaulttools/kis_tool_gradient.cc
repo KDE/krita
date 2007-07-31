@@ -126,8 +126,8 @@ void KisToolGradient::paint( QPainter &painter, const KoViewConverter &converter
                                                 normalisedGradientVectorStart + normalisedGradientVector);
 
 //                     glValidateProgramARB(m_gradientProgram->handle());
-//                     kDebug(DBG_AREA_TOOLS) << "Validate: " << endl;
-//                     kDebug(DBG_AREA_TOOLS) << m_gradientProgram->getInfoLog() << endl;
+//                     kDebug(DBG_AREA_TOOLS) <<"Validate:";
+//                     kDebug(DBG_AREA_TOOLS) << m_gradientProgram->getInfoLog();
 
 
                     glBegin(GL_QUADS);

@@ -48,14 +48,14 @@ KisQpainterImageContext::KisQpainterImageContext()
 
 KisQpainterImageContext::~KisQpainterImageContext()
 {
-    kDebug(41001) << "Destroyed KisQpainterImageContext\n";
+    kDebug(41001) <<"Destroyed KisQpainterImageContext";
 
     --SharedContextWidgetRefCount;
-    kDebug(41001) << "Shared context widget ref count now " << SharedContextWidgetRefCount << endl;
+    kDebug(41001) <<"Shared context widget ref count now" << SharedContextWidgetRefCount;
 
     if (SharedContextWidgetRefCount == 0) {
 
-        kDebug(41001) << "Deleting shared context widget\n";
+        kDebug(41001) <<"Deleting shared context widget";
         delete SharedContextWidget;
         SharedContextWidget = 0;
     }
@@ -65,7 +65,7 @@ KisQpainterImageContext::~KisQpainterImageContext()
 
 KisQpainterImageContext::KisQpainterImageContext(KisImageSP image, KoColorProfile *monitorProfile)
 {
-    kDebug(41001) << "Created KisQpainterImageContext\n";
+    kDebug(41001) <<"Created KisQpainterImageContext";
 
     m_image = image;
     m_monitorProfile = monitorProfile;
@@ -94,7 +94,7 @@ KisQpainterImageContextSP KisQpainterImageContext::getImageContext(KisImageSP im
 
         if (it != imageContextMap.end()) {
 
-            kDebug(41001) << "Sharing image context from map\n";
+            kDebug(41001) <<"Sharing image context from map";
 
             KisQpainterImageContextSP context = KisQpainterImageContextSP((*it).second);
             context->setMonitorProfile(monitorProfile);
@@ -104,12 +104,12 @@ KisQpainterImageContextSP KisQpainterImageContext::getImageContext(KisImageSP im
             KisQpainterImageContext *imageContext = new KisQpainterImageContext(image, monitorProfile);
             imageContextMap[image] = imageContext;
 
-            kDebug(41001) << "Added shareable context to map\n";
+            kDebug(41001) <<"Added shareable context to map";
 
             return KisQpainterImageContextSP(imageContext);
         }
     } else {
-        kDebug(41001) << "Creating non-shareable image context\n";
+        kDebug(41001) <<"Creating non-shareable image context";
 
         return KisQpainterImageContextSP(new KisQpainterImageContext(image, monitorProfile));
     }
@@ -132,7 +132,7 @@ QGLWidget *KisQpainterImageContext::sharedContextWidget() const
 
 void KisQpainterImageContext::updateImageTextureTiles(const QRect& rect)
 {
-    //kDebug(41007) << "updateImageTextureTiles " << rect << endl;
+    //kDebug(41007) <<"updateImageTextureTiles" << rect;
 
     QRect updateRect = rect & m_image->bounds();
 

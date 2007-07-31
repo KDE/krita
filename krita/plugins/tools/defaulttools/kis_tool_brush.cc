@@ -70,7 +70,7 @@ void KisToolBrush::timeoutPaint()
     if (currentImage() && m_painter) {
         m_painter->paintAt( m_previousPaintInformation );
         QRegion r = m_painter->dirtyRegion();
-        kDebug(41006) << "Timeout paint dirty region: " << r << endl;
+        kDebug(41006) <<"Timeout paint dirty region:" << r;
         currentLayer()->setDirty(r);
     }
 }
@@ -81,7 +81,7 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
     KisToolFreehand::initPaint(e);
 
     if (!m_painter) {
-        kWarning() << "Didn't create a painter! Something is wrong!\n";
+        kWarning() <<"Didn't create a painter! Something is wrong!";
         return;
     }
 

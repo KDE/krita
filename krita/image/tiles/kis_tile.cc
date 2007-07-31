@@ -144,7 +144,7 @@ void KisTile::addReader() const
     if (m_nReadlock++ == 0)
         KisTileManager::instance()->ensureTileLoaded(this);
     else if (m_nReadlock < 0) {
-        kDebug(41000) << m_nReadlock << endl;
+        kDebug(41000) << m_nReadlock;
         assert(0);
     }
     assert(m_data);

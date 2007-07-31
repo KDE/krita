@@ -71,7 +71,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
     : KoScriptingPart(new Scripting::Module( dynamic_cast<KisView2*>(parent) ), list)
     , d(new Private())
 {
-    kDebug(41011) << "ScriptingPart Ctor" << endl;
+    kDebug(41011) <<"ScriptingPart Ctor";
     setComponentData(ScriptingPart::componentData());
     setXMLFile(KStandardDirs::locate("data","kritaplugins/scripting.rc"), true);
 
@@ -84,7 +84,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
             KisFilterRegistry::instance()->add( KisFilterSP(sf) );
 //             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
 //             if( ! factory ) continue;
-           kDebug(41011) << "Adding scripting filters with id=" << sf->id() << endl;
+           kDebug(41011) <<"Adding scripting filters with id=" << sf->id();
         }
     }
 
@@ -92,7 +92,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
 
 ScriptingPart::~ScriptingPart()
 {
-    kDebug(41011) << "ScriptingPart Dtor" << endl;
+    kDebug(41011) <<"ScriptingPart Dtor";
     delete d;
 }
 
@@ -104,7 +104,7 @@ void ScriptingPart::myStarted(Kross::Action*)
 void ScriptingPart::myFinished(Kross::Action*)
 {
 #if 0
-//     kDebug() << "ScriptingPart::executionFinished" << endl;
+//     kDebug() <<"ScriptingPart::executionFinished";
     d->view->document()->setModified(true);
 
 //FIXME sebsauer, 20070601, who did remove it without providing an replacment?

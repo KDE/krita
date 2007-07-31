@@ -272,7 +272,7 @@ KisTileCompressor::~KisTileCompressor()
 
 void KisTileCompressor::enqueue( KisTile * tile )
 {
-    kDebug(41001) << "Enqueueing tile " << tile << " for compression\n";
+    kDebug(41001) <<"Enqueueing tile" << tile <<" for compression";
     tile->setTileState( QUEUED );
     m_tileQueue.enqueue( tile );
 }
@@ -280,7 +280,7 @@ void KisTileCompressor::enqueue( KisTile * tile )
 void KisTileCompressor::dequeue( KisTile * tile )
 {
     m_queueLock.lock();
-    kDebug(41001) << "Dequeueing tile " << tile << " for compression\n";
+    kDebug(41001) <<"Dequeueing tile" << tile <<" for compression";
     if ( int i =  m_tileQueue.indexOf( tile ) > -1)
         m_tileQueue.removeAt(i);
     m_queueLock.unlock();
@@ -296,7 +296,7 @@ void KisTileCompressor::run()
             m_queueLock.unlock();
         }
         if ( tile && tile->tileState() == QUEUED ) {
-            kDebug(41001) << "Going to compress tile " << tile << ", state: " << tile->tileState() << endl;
+            kDebug(41001) <<"Going to compress tile" << tile <<", state:" << tile->tileState();
             tile->setTileState(  COMPRESSED );
             KisTileManager::instance()->maySwapTile(tile);
         }
@@ -306,7 +306,7 @@ void KisTileCompressor::run()
 
 void KisTileCompressor::decompress( KisTile * tile )
 {
-    kDebug(41001) << "Decompressing tile " << tile << endl;
+    kDebug(41001) <<"Decompressing tile" << tile;
     tile->setTileState(  UNCOMPRESSED );
 }
 

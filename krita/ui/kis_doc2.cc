@@ -234,7 +234,7 @@ QDomDocument KisDoc2::saveXML()
 
 bool KisDoc2::loadOasis( const KoXmlDocument& doc, KoOasisStyles&, const KoXmlDocument&, KoStore* store)
 {
-    kDebug(41008) << "loading with OpenRaster" << endl;
+    kDebug(41008) <<"loading with OpenRaster";
     KoXmlNode root = doc.documentElement();
     for (KoXmlNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "office:body") {
@@ -256,7 +256,7 @@ bool KisDoc2::loadOasis( const KoXmlDocument& doc, KoOasisStyles&, const KoXmlDo
 
 bool KisDoc2::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
 {
-    kDebug(41008) << "saving with OpenRaster" << endl;
+    kDebug(41008) <<"saving with OpenRaster";
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
     KoOasisStore* oasisStore =  new KoOasisStore( store );
     KoXmlWriter* contentWriter = oasisStore->contentWriter();
@@ -420,7 +420,7 @@ KisImageSP KisDoc2::loadImage(const KoXmlElement& element)
         }
 
         if (cs == 0) {
-            kWarning(DBG_AREA_FILE) << "Could not open colorspace\n";
+            kWarning(DBG_AREA_FILE) <<"Could not open colorspace";
             return KisImageSP(0);
         }
 
@@ -453,7 +453,7 @@ void KisDoc2::loadLayers(const KoXmlElement& element, KisImageSP img, KisGroupLa
                     KisLayerSP layer = loadLayer(child.toElement(), img);
 
                     if (!layer) {
-                        kWarning(DBG_AREA_FILE) << "Could not load layer\n";
+                        kWarning(DBG_AREA_FILE) <<"Could not load layer";
                     }
                     else {
                         img->nextLayerName(); // Make sure the nameserver is current with the number of layers.
@@ -523,7 +523,7 @@ KisLayerSP KisDoc2::loadLayer(const KoXmlElement& element, KisImageSP img)
     if(attr == "adjustmentlayer")
         return KisLayerSP(loadAdjustmentLayer(element, img, name, x, y, opacity, visible, locked, compositeOpName).data());
 
-    kWarning(DBG_AREA_FILE) << "Specified layertype is not recognised\n";
+    kWarning(DBG_AREA_FILE) <<"Specified layertype is not recognised";
     return KisLayerSP(0);
 }
 
@@ -606,13 +606,13 @@ KisAdjustmentLayerSP KisDoc2::loadAdjustmentLayer(const KoXmlElement& element, K
 
     if ((filtername = element.attribute("filtername")).isNull()) {
         // XXX: Invalid adjustmentlayer! We should warn about it!
-        kWarning(DBG_AREA_FILE) << "No filter in adjustment layer" << endl;
+        kWarning(DBG_AREA_FILE) <<"No filter in adjustment layer";
         return KisAdjustmentLayerSP(0);
     }
 
     KisFilterSP f = KisFilterRegistry::instance()->value(filtername);
     if (!f) {
-        kWarning(DBG_AREA_FILE) << "No filter for filtername " << filtername << "\n";
+        kWarning(DBG_AREA_FILE) <<"No filter for filtername" << filtername <<"";
         return KisAdjustmentLayerSP(0); // XXX: We don't have this filter. We should warn about it!
     }
 

@@ -250,7 +250,7 @@ KisOpenGLGradientProgram::KisOpenGLGradientProgram(const KisGradient *gradient,
 
     attachShader(m_gradientShader->shader());
     link();
-    kDebug(DBG_AREA_TOOLS) << getInfoLog() << endl;
+    kDebug(DBG_AREA_TOOLS) << getInfoLog();
 }
 
 KisOpenGLGradientProgram::~KisOpenGLGradientProgram()

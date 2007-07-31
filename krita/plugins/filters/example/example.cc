@@ -102,7 +102,7 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
         srcIt.nextRow();
         dstIt.nextRow();
     }
-    kDebug(41006) << "Per-pixel isSelected(): " << t.elapsed() << " ms\n";
+    kDebug(41006) <<"Per-pixel isSelected():" << t.elapsed() <<" ms";
 
 #if 0
     t.restart();
@@ -153,7 +153,7 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
         srcIt.nextRow();
         dstIt.nextRow();
     }
-    kDebug(41006) << "Consecutive pixels: " << t.elapsed() << " ms\n";
+    kDebug(41006) <<"Consecutive pixels:" << t.elapsed() <<" ms";
 
 #endif
     delete inverter;

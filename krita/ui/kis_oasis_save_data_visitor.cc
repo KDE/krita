@@ -42,12 +42,12 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
         KoStoreDevice io ( m_oasisStore->store() );
         if ( !io.open( QIODevice::WriteOnly ) )
         {
-            kDebug(41008) << "Couldn't open for writing: " << filename << endl;
+            kDebug(41008) <<"Couldn't open for writing:" << filename;
             return false;
         }
         if ( ! img.save( &io, "PNG", 0 ) )
         {
-            kDebug(41008) << "Saving PNG failed: " << filename << endl;
+            kDebug(41008) <<"Saving PNG failed:" << filename;
             return false;
         }
         io.close();
@@ -55,11 +55,11 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
         {
             m_manifestWriter->addManifestEntry( filename, "" );
         } else {
-            kDebug(41008) << "Closing of data file failed: " << filename << endl;
+            kDebug(41008) <<"Closing of data file failed:" << filename;
             return false;
         }
     } else {
-        kDebug(41008) << "Opening of data file failed :" << filename << endl;
+        kDebug(41008) <<"Opening of data file failed :" << filename;
         return false;
     }*/
     QString filename = "data/" + layer->name() + ".png";
@@ -68,14 +68,14 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
         KoStoreDevice io ( m_oasisStore->store() );
         if ( !io.open( QIODevice::WriteOnly ) )
         {
-            kDebug(41008) << "Couldn't open for writing: " << filename << endl;
+            kDebug(41008) <<"Couldn't open for writing:" << filename;
             return false;
         }
         KisPNGConverter pngconv(0, layer->image()->undoAdapter());
         vKisAnnotationSP_it annotIt = 0;
         if( pngconv.buildFile(&io, layer->image(), layer->paintDevice(), annotIt, annotIt, 0, false, true) != KisImageBuilder_RESULT_OK)
         {
-            kDebug(41008) << "Saving PNG failed: " << filename << endl;
+            kDebug(41008) <<"Saving PNG failed:" << filename;
             return false;
         }
         io.close();
@@ -83,11 +83,11 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
         {
             m_manifestWriter->addManifestEntry( filename, "" );
         } else {
-            kDebug(41008) << "Closing of data file failed: " << filename << endl;
+            kDebug(41008) <<"Closing of data file failed:" << filename;
             return false;
         }
     } else {
-        kDebug(41008) << "Opening of data file failed :" << filename << endl;
+        kDebug(41008) <<"Opening of data file failed :" << filename;
         return false;
     }
 

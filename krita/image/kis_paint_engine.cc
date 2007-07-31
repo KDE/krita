@@ -75,7 +75,7 @@ KisPaintEngine::~KisPaintEngine()
 
 bool KisPaintEngine::begin(QPaintDevice *pdev)
 {
-    kDebug(41001) << "KisPaintEngine::begin" << endl;
+    kDebug(41001) <<"KisPaintEngine::begin";
 
     KisPaintDevice * dev = dynamic_cast<KisPaintDevice*>( pdev );
     Q_ASSERT_X(dev, "KisPaintEngine::begin",
@@ -92,7 +92,7 @@ bool KisPaintEngine::begin(QPaintDevice *pdev)
 
 bool KisPaintEngine::end()
 {
-    kDebug(41001) << "KisPaintEngine::end" << endl;
+    kDebug(41001) <<"KisPaintEngine::end";
     // XXX: End transaction for undo?
     if (d->dirty.boundingRect().isNull())
         return true;
@@ -162,89 +162,89 @@ void KisPaintEngine::updateState(const QPaintEngineState &state)
 
 void KisPaintEngine::drawRects(const QRect *rects, int rectCount)
 {
-    // kDebug(41001) << "KisPaintEngine::drawRects " << rectCount << endl;
+    // kDebug(41001) <<"KisPaintEngine::drawRects" << rectCount;
     QPaintEngine::drawRects( rects, rectCount );
 }
 
 void KisPaintEngine::drawRects(const QRectF *rects, int rectCount)
 {
-    // kDebug(41001) << "KisPaintEngine::drawRects " << rectCount << endl;
+    // kDebug(41001) <<"KisPaintEngine::drawRects" << rectCount;
     QPaintEngine::drawRects( rects, rectCount );
 }
 
 
 void KisPaintEngine::drawLines(const QLine *lines, int lineCount)
 {
-    // kDebug(41001) << "KisPaintEngine::drawLines " << lineCount << endl;
+    // kDebug(41001) <<"KisPaintEngine::drawLines" << lineCount;
     QPaintEngine::drawLines( lines, lineCount );
 }
 
 void KisPaintEngine::drawLines(const QLineF *lines, int lineCount)
 {
-    // kDebug(41001) << "KisPaintEngine::drawLines " << lineCount << endl;
+    // kDebug(41001) <<"KisPaintEngine::drawLines" << lineCount;
     QPaintEngine::drawLines( lines, lineCount );
 }
 
 
 void KisPaintEngine::drawEllipse(const QRectF &r)
 {
-    // kDebug(41001) << "KisPaintEngine::drawEllipse in rect " << r << endl;
+    // kDebug(41001) <<"KisPaintEngine::drawEllipse in rect" << r;
     QPaintEngine::drawEllipse( r );
 }
 
 void KisPaintEngine::drawEllipse(const QRect &r)
 {
-    // kDebug(41001) << "KisPaintEngine::drawEllipse in rect " << r << endl;
+    // kDebug(41001) <<"KisPaintEngine::drawEllipse in rect" << r;
     QPaintEngine::drawEllipse( r );
 }
 
 void KisPaintEngine::initPainter(QPainter &p)
 {
-    kDebug(41001) << "KisPaintEngine::initPainter(QPainter *p) {" << endl;
+    kDebug(41001) <<"KisPaintEngine::initPainter(QPainter *p) {";
     if (d->flags & (DirtyClipRegion | DirtyClipPath)) {
-        kDebug(41001) << "\tDirtyClipPath" << endl;
+        kDebug(41001) <<"\tDirtyClipPath";
         p.setClipPath(d->clipPath);
         d->dirty += QRegion(d->clipPath.boundingRect().toRect());
     }
     if (d->flags & DirtyTransform) {
-        kDebug(41001) << "\tDirtyTransform" << endl;
+        kDebug(41001) <<"\tDirtyTransform";
         p.setMatrix(d->matrix*p.worldMatrix());
     }
     if (d->flags & DirtyPen) {
-        kDebug(41001) << "\tDirtyPen" << endl;
+        kDebug(41001) <<"\tDirtyPen";
         p.setPen(d->pen);
     }
     if (d->flags & (DirtyBrush | DirtyBrushOrigin)) {
-        kDebug(41001) << "\tDirtyBrush" << endl;
+        kDebug(41001) <<"\tDirtyBrush";
         p.setBrush(d->brush);
         p.setBrushOrigin(d->brushOrigin);
     }
     if (d->flags & DirtyFont) {
-        kDebug(41001) << "\tDirtyFont" << endl;
+        kDebug(41001) <<"\tDirtyFont";
         p.setFont(d->font);
     }
     if (d->flags & DirtyBackground) {
-        kDebug(41001) << "\tDirtyBackground" << endl;
+        kDebug(41001) <<"\tDirtyBackground";
         p.setBackground(d->backgroundBrush);
     }
     if (d->flags & DirtyBackgroundMode) {
-        kDebug(41001) << "\tDirtyBackgroundMode" << endl;
+        kDebug(41001) <<"\tDirtyBackgroundMode";
         p.setBackgroundMode(d->backgroundMode);
     }
     if (d->flags & DirtyCompositionMode) {
-        kDebug(41001) << "\tDirtyCompositionMode" << endl;
+        kDebug(41001) <<"\tDirtyCompositionMode";
         p.setCompositionMode(d->compositionMode);
     }
     if (d->flags & DirtyHints) {
-        kDebug(41001) << "\tDirtyHints" << endl;
+        kDebug(41001) <<"\tDirtyHints";
         p.setRenderHints(d->renderHints);
     }
-    kDebug(41001) << "} // initPainter" << endl;
+    kDebug(41001) <<"} // initPainter";
 }
 
 void KisPaintEngine::drawPath(const QPainterPath &path)
 {
-    kDebug(41001) << "KisPaintEngine::drawPath\n";
+    kDebug(41001) <<"KisPaintEngine::drawPath";
     QPainterPath newPath = d->matrix.map(path);
     QRect r = newPath.boundingRect().toRect();
 
@@ -270,20 +270,20 @@ void KisPaintEngine::drawPath(const QPainterPath &path)
 
 void KisPaintEngine::drawPoints(const QPointF *points, int pointCount)
 {
-    // kDebug(41001) << "KisPaintEngine::drawPoints " << pointCount << endl;
+    // kDebug(41001) <<"KisPaintEngine::drawPoints" << pointCount;
     QPaintEngine::drawPoints( points, pointCount );
 }
 
 void KisPaintEngine::drawPoints(const QPoint *points, int pointCount)
 {
-    // kDebug(41001) << "KisPaintEngine::drawPoints: " << pointCount << endl;
+    // kDebug(41001) <<"KisPaintEngine::drawPoints:" << pointCount;
     QPaintEngine::drawPoints( points, pointCount );
 }
 
 
 void KisPaintEngine::drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode)
 {
-    kDebug(41001) << "KisPaintEngine::drawPolygon QPointF: " << pointCount << endl;
+    kDebug(41001) <<"KisPaintEngine::drawPolygon QPointF:" << pointCount;
 
     QPolygonF path;
     const QPointF *point = points;
@@ -315,7 +315,7 @@ void KisPaintEngine::drawPolygon(const QPointF *points, int pointCount, PolygonD
 
 void KisPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode)
 {
-    kDebug(41001) << "KisPaintEngine::drawPolygon QPoint: " << pointCount << endl;
+    kDebug(41001) <<"KisPaintEngine::drawPolygon QPoint:" << pointCount;
 
     QPolygon path;
     const QPoint *point = points;
@@ -348,19 +348,19 @@ void KisPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDr
 
 void KisPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr)
 {
-    // kDebug(41001) << "KisPaintEngine::drawPixmap r: " << r << ", sr: " << sr << endl;
+    // kDebug(41001) <<"KisPaintEngine::drawPixmap r:" << r <<", sr:" << sr;
     drawImage( r, pm.toImage(), sr );
 }
 
 void KisPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
 {
-    // kDebug(41001) << "KisPaintEngine::drawTextItem p: " << p << endl;
+    // kDebug(41001) <<"KisPaintEngine::drawTextItem p:" << p;
     QPaintEngine::drawTextItem( p, textItem );
 }
 
 void KisPaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s)
 {
-    // kDebug(41001) << "KisPaintEngine::drawTiledPixmap r:" << r << ", s: " << s << endl;
+    // kDebug(41001) <<"KisPaintEngine::drawTiledPixmap r:" << r <<", s:" << s;
     // XXX: Reimplement this, the default will convert the pixmap time
     // and again to a QImage
     QPaintEngine::drawTiledPixmap( r, pixmap, s );
@@ -369,7 +369,7 @@ void KisPaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, con
 void KisPaintEngine::drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
                                Qt::ImageConversionFlags flags)
 {
-    // kDebug(41001) << "KisPaintEngine::drawImage r: " << r << ", sr: " << sr << endl;
+    // kDebug(41001) <<"KisPaintEngine::drawImage r:" << r <<", sr:" << sr;
     Q_UNUSED( flags );
     // XXX: How about sub-pixel bitBlting?
     QRect srcRect = sr.toRect();

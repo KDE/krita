@@ -181,37 +181,37 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
 
 
 void KisHistogram::dump() {
-    kDebug(DBG_AREA_MATH) << "Histogram\n";
+    kDebug(DBG_AREA_MATH) <<"Histogram";
 
     switch (m_type) {
     case LINEAR:
-        kDebug(DBG_AREA_MATH) << "Linear histogram\n";
+        kDebug(DBG_AREA_MATH) <<"Linear histogram";
         break;
     case LOGARITHMIC:
-        kDebug(DBG_AREA_MATH) << "Logarithmic histogram\n";
+        kDebug(DBG_AREA_MATH) <<"Logarithmic histogram";
     }
 
-    kDebug(DBG_AREA_MATH) << "Dumping channel " << m_channel << endl;
+    kDebug(DBG_AREA_MATH) <<"Dumping channel" << m_channel;
     Calculations c = calculations();
 
 /*        for( int i = 0; i <256; ++i ) {
-        kDebug(DBG_AREA_MATH) << "Value "
+        kDebug(DBG_AREA_MATH) <<"Value"
               << QString().setNum(i)
               << ": "
               <<  QString().setNum(m_values[i])
               << "\n";
         }*/
-    kDebug(DBG_AREA_MATH) << "\n";
+    kDebug(DBG_AREA_MATH) <<"";
 
-    kDebug(DBG_AREA_MATH) << "Max: " << QString().setNum(c.getMax()) << "\n";
-    kDebug(DBG_AREA_MATH) << "Min: " << QString().setNum(c.getMin()) << "\n";
-    kDebug(DBG_AREA_MATH) << "High: " << QString().setNum(c.getHighest()) << "\n";
-    kDebug(DBG_AREA_MATH) << "Low: " << QString().setNum(c.getLowest()) << "\n";
-    kDebug(DBG_AREA_MATH) << "Mean: " << m_producer->positionToString(c.getMean()) << "\n";
-    kDebug(DBG_AREA_MATH) << "Total: " << QString().setNum(c.getTotal()) << "\n";
-//    kDebug(DBG_AREA_MATH) << "Median: " << QString().setNum(m_median) << "\n";
-//    kDebug(DBG_AREA_MATH) << "Stddev: " << QString().setNum(m_stddev) << "\n";
-//    kDebug(DBG_AREA_MATH) << "percentile: " << QString().setNum(m_percentile) << "\n";
+    kDebug(DBG_AREA_MATH) <<"Max:" << QString().setNum(c.getMax()) <<"";
+    kDebug(DBG_AREA_MATH) <<"Min:" << QString().setNum(c.getMin()) <<"";
+    kDebug(DBG_AREA_MATH) <<"High:" << QString().setNum(c.getHighest()) <<"";
+    kDebug(DBG_AREA_MATH) <<"Low:" << QString().setNum(c.getLowest()) <<"";
+    kDebug(DBG_AREA_MATH) <<"Mean:" << m_producer->positionToString(c.getMean()) <<"";
+    kDebug(DBG_AREA_MATH) <<"Total:" << QString().setNum(c.getTotal()) <<"";
+//    kDebug(DBG_AREA_MATH) <<"Median:" << QString().setNum(m_median) <<"";
+//    kDebug(DBG_AREA_MATH) <<"Stddev:" << QString().setNum(m_stddev) <<"";
+//    kDebug(DBG_AREA_MATH) <<"percentile:" << QString().setNum(m_percentile) <<"";
 
-    kDebug(DBG_AREA_MATH) << "\n";
+    kDebug(DBG_AREA_MATH) <<"";
 }

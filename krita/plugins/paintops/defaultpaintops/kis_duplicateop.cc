@@ -80,7 +80,7 @@ KisDuplicateOpSettings::~KisDuplicateOpSettings()
 
 void KisDuplicateOpSettings::mousePressEvent(KoPointerEvent *e)
 {
-    kDebug() << "\\o/" << endl;
+    kDebug() <<"\\o/";
     if (e->modifiers() == Qt::ShiftModifier) {
       m_position = m_image->documentToPixel(e->point);
       m_isOffsetNotUptodate = true;
@@ -93,7 +93,7 @@ void KisDuplicateOpSettings::mousePressEvent(KoPointerEvent *e)
       }
       e->ignore();
     }
-    kDebug() << m_offset << endl;
+    kDebug() << m_offset;
 }
 
 void KisDuplicateOpSettings::activate()

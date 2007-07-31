@@ -86,7 +86,7 @@ void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &con
 
 void KisShapeLayer::addChild(KoShape *object)
 {
-    kDebug(41001) << "KisShapeLayer::addChild" << endl;
+    kDebug(41001) <<"KisShapeLayer::addChild";
     KoShapeLayer::addChild( object );
     m_d->canvas->shapeManager()->add( object );
 
@@ -106,7 +106,7 @@ QIcon KisShapeLayer::icon() const
 
 void KisShapeLayer::updateProjection(const QRect& r)
 {
-    kDebug(41001) << "KisShapeLayer::updateProjection()" << r << endl;
+    kDebug(41001) <<"KisShapeLayer::updateProjection()" << r;
 }
 
 KisPaintDeviceSP KisShapeLayer::projection() const

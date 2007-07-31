@@ -72,18 +72,18 @@ void KisOasisLoadVisitor::loadPaintLayer(const KoXmlElement& elem, KisPaintLayer
     loadLayerInfo(elem, pL.data());
 
     QString filename = m_layerFilenames[pL.data()];
-    kDebug(41008) << "Loading file : " << filename << endl;
+    kDebug(41008) <<"Loading file :" << filename;
 /*    if (m_oasisStore->store()->open(filename) ) {
         KoStoreDevice io ( m_oasisStore->store() );
         if ( !io.open( QIODevice::ReadOnly ) )
         {
-            kDebug(41008) << "Couldn't open for reading: " << filename << endl;
+            kDebug(41008) <<"Couldn't open for reading:" << filename;
 //             return false;
         }
         QImage img;
         if ( ! img.load( &io, "PNG" ) )
         {
-            kDebug(41008) << "Loading PNG failed: " << filename << endl;
+            kDebug(41008) <<"Loading PNG failed:" << filename;
             m_oasisStore->store()->close();
             io.close();
 //             return false;
@@ -91,10 +91,10 @@ void KisOasisLoadVisitor::loadPaintLayer(const KoXmlElement& elem, KisPaintLayer
         pL->paintDevice()->convertFromQImage(img, "");
         io.close();
         m_oasisStore->store()->close();
-        kDebug(41008) << "Loading was successful" << endl;
+        kDebug(41008) <<"Loading was successful";
 //         return true;
     }*/
-    kDebug(41008) << "Loading was unsuccessful" << endl;
+    kDebug(41008) <<"Loading was unsuccessful";
 }
 
 void KisOasisLoadVisitor::loadGroupLayer(const KoXmlElement& elem, KisGroupLayerSP gL)
@@ -130,7 +130,7 @@ void KisOasisLoadVisitor::loadGroupLayer(const KoXmlElement& elem, KisGroupLayer
                         KoStoreDevice io ( m_oasisStore->store() );
                         if ( !io.open( QIODevice::ReadOnly ) )
                         {
-                            kDebug(41008) << "Couldn't open for reading: " << filename << endl;
+                            kDebug(41008) <<"Couldn't open for reading:" << filename;
                 //             return false;
                         }
                         KisPNGConverter pngConv(0, gL->image()->undoAdapter() );
@@ -140,7 +140,7 @@ void KisOasisLoadVisitor::loadGroupLayer(const KoXmlElement& elem, KisGroupLayer
                         KisPaintLayerSP layer = new KisPaintLayer( gL->image() , "", opacity, pngConv.image()->projection());
                         m_image->addLayer(layer, gL, gL->childCount() );
                         loadPaintLayer(subelem, layer);
-                        kDebug(41008) << "Loading was successful" << endl;
+                        kDebug(41008) <<"Loading was successful";
                 //         return true;
                     }
                 }

@@ -50,7 +50,7 @@ bool KisIlluminantProfile::load()
 				return loadMatrix(in_ill);
 		}
 	} else
-		kDebug() << "No files found!" << endl;
+		kDebug() <<"No files found!";
 
 	return false;
 }

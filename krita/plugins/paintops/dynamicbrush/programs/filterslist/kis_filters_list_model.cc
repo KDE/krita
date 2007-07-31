@@ -69,7 +69,7 @@ void KisFiltersListModel::setCurrentFilterType(int filterType)
 
 void KisFiltersListModel::addNewFilter()
 {
-    kDebug(41006) << "addNewFilter " << m_currentFilterType << endl;
+    kDebug(41006) <<"addNewFilter" << m_currentFilterType;
     KisDynamicTransformation* transfo = 0;
     switch(m_currentFilterType)
     {
@@ -83,7 +83,7 @@ void KisFiltersListModel::addNewFilter()
             transfo = new KisSizeTransformation(0, 0);
             break;
         default:
-            kDebug(41006) << "Unknown filter type" << endl;
+            kDebug(41006) <<"Unknown filter type";
             return;
     }
     beginInsertRows( createIndex(0, 0, 0), m_program->countTransformations(), m_program->countTransformations());
@@ -93,7 +93,7 @@ void KisFiltersListModel::addNewFilter()
 
 void KisFiltersListModel::deleteCurrentFilter()
 {
-    kDebug(41006) << "Remove filter at " << m_currentTransformation << endl;
+    kDebug(41006) <<"Remove filter at" << m_currentTransformation;
     if( m_currentTransformation == -1)
         return;
     beginRemoveRows( createIndex(0, 0, 0), m_currentTransformation, m_currentTransformation);
@@ -104,7 +104,7 @@ void KisFiltersListModel::deleteCurrentFilter()
 
 void KisFiltersListModel::setCurrentFilter(const QModelIndex& midx)
 {
-    kDebug(41006) << "Set current filter " << midx.row() << endl;
+    kDebug(41006) <<"Set current filter" << midx.row();
     m_currentTransformation = midx.row();
 }
 

@@ -36,19 +36,19 @@ bool KisSubPerspectiveGrid::contains(const QPointF p) const
     return true;
 #if 0
     KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation( topLeft().data(), topRight().data() );
-//     kDebug(41001) << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+//     kDebug(41001) << p.y() <<"" << (p.x() * d1.a + d1.b);
     if( p.y() >= p.x() * d1.a + d1.b)
     {
         d1 = KisPerspectiveMath::computeLineEquation( topRight().data(), bottomRight().data() );
-//         kDebug(41001) << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+//         kDebug(41001) << p.y() <<"" << (p.x() * d1.a + d1.b);
         if( p.y() >= p.x() * d1.a + d1.b)
         {
             d1 = KisPerspectiveMath::computeLineEquation( bottomRight().data(), bottomLeft().data() );
-//             kDebug(41001) << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+//             kDebug(41001) << p.y() <<"" << (p.x() * d1.a + d1.b);
             if( p.y() <= p.x() * d1.a + d1.b)
             {
                 d1 = KisPerspectiveMath::computeLineEquation( bottomLeft().data(), topLeft().data() );
-//                 kDebug(41001) << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+//                 kDebug(41001) << p.y() <<"" << (p.x() * d1.a + d1.b);
                 if( p.y() <= p.x() * d1.a + d1.b)
                 {
                     return true;
@@ -75,7 +75,7 @@ bool KisPerspectiveGrid::addNewSubGrid( KisSubPerspectiveGrid* ng )
 {
     if(hasSubGrids() && !ng->topGrid() && !ng->bottomGrid() && !ng->leftGrid() && !ng->rightGrid() )
     {
-        kError() << "sub grids need a neighbourgh if they are not the first grid to be added" << endl;
+        kError() << "sub grids need a neighbourgh if they are not the first grid to be added";
         return false;
     }
     m_subGrids.push_back(ng);

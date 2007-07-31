@@ -90,9 +90,9 @@ void PanoramaPlugin::addImage(const QString& filename)
 
 void PanoramaPlugin::slotAddImages()
 {
-//     kDebug(41006) << "Add image" << endl;
+//     kDebug(41006) <<"Add image";
     QStringList openfiles = KFileDialog::getOpenFileNames(KUrl(),"*", m_view);
-//     kDebug(41006) << openfiles.size() << " files selected for inclusion" << endl;
+//     kDebug(41006) << openfiles.size() <<" files selected for inclusion";
     QString filename;
     foreach(filename, openfiles)
     {
@@ -102,7 +102,7 @@ void PanoramaPlugin::slotAddImages()
 
 void PanoramaPlugin::slotCreatePanoramaLayer()
 {
-    kDebug(41006) << "Create a panorama layer" << endl;
+    kDebug(41006) <<"Create a panorama layer";
     delete m_wdgPanoramaCreation;
     m_wdgPanoramaCreation = new Ui_WdgPanoramaCreation();
     QDialog* dialog = new QDialog(m_view);
@@ -128,7 +128,7 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
         for(int i = 0; i < m_wdgPanoramaCreation->listImages->count(); i++)
         {
             QString fileName = m_wdgPanoramaCreation->listImages->item(i)->text();
-            kDebug(41006) << "Loading fileName " << fileName << endl;
+            kDebug(41006) <<"Loading fileName" << fileName;
             KisDoc2 d;
             d.import(fileName);
             PanoramaImage pi;
@@ -170,7 +170,7 @@ void PanoramaPlugin::slotPreview()
     for(int i = 0; i < m_wdgPanoramaCreation->listImages->count(); i++)
     {
         QString fileName = m_wdgPanoramaCreation->listImages->item(i)->text();
-        kDebug(41006) << "Loading fileName " << fileName << endl;
+        kDebug(41006) <<"Loading fileName" << fileName;
         KisDoc2 d;
         d.import(fileName);
         PanoramaImage pi;
@@ -194,12 +194,12 @@ void PanoramaPlugin::createPanorama(QList<PanoramaImage>& images, KisPaintDevice
 {
     int width = 1000; // TODO TMP variable
     int height = 1000; // TODO TMP variable
-    kDebug(41006) << "Creating panorama with " << images.size() << " images" << endl;
-    kDebug(41006) << "Detecting interest points" << endl;
+    kDebug(41006) <<"Creating panorama with" << images.size() <<" images";
+    kDebug(41006) <<"Detecting interest points";
     KoColorSpace* graycs = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
     if(not graycs)
     {
-        kDebug(41006) << "Gray 8bit is not installed." << endl; // TODO: message box
+        kDebug(41006) <<"Gray 8bit is not installed."; // TODO: message box
         return;
     }
     for(QList<PanoramaImage>::iterator it = images.begin(); it != images.end(); ++it)
@@ -213,13 +213,13 @@ void PanoramaPlugin::createPanorama(QList<PanoramaImage>& images, KisPaintDevice
         height = it->rect.height();
         for(lInterestPoints::const_iterator itp = it->points.begin(); itp != it->points.end(); ++itp)
         {
-          kDebug(41006) << "ip = " << (*itp)->x() << " " << (*itp)->y() << " " << (*itp)->toString() <<endl;
+          kDebug(41006) <<"ip =" << (*itp)->x() <<"" << (*itp)->y() <<"" << (*itp)->toString();
         }
     }
     lMatches mp = matching(images[0].points, images[1].points);
 /*    for(lMatches::const_iterator it = mp.begin(); it != mp.end(); ++it)
     {
-        kDebug(41006) << "init match = " << it->ref->x() << " " << it->ref->y() << " " << it->match->x() << " " <<  it->match->y() << endl;
+        kDebug(41006) <<"init match =" << it->ref->x() <<"" << it->ref->y() <<"" << it->match->x() <<"" <<  it->match->y();
     }*/
     Ransac<ImageMatchModel, void, KisMatch> ransac(2,100,0);
     std::list<ImageMatchModel*> models = ransac.findModels( mp );
@@ -227,22 +227,22 @@ void PanoramaPlugin::createPanorama(QList<PanoramaImage>& images, KisPaintDevice
 //     std::list<HomographyImageMatchModel*> models = ransac.findModels( mp );
     if(not models.empty())
     {
-        kDebug(41006) << "Best model: " << (*models.begin())->fittingErrorSum() << " with " << (*models.begin())->matches().size() << " points " << endl;
+        kDebug(41006) <<"Best model:" << (*models.begin())->fittingErrorSum() <<" with" << (*models.begin())->matches().size() <<" points";
 #if 0
         std::vector<double> p = (*models.begin())->parameters();
 #endif
 #if 1
         Eigen::Matrix3d transfo = (*models.begin())->transfo();
-        kDebug(41006) << "Translation : " << transfo(0,2) << " " << transfo(1,2) << endl;
+        kDebug(41006) <<"Translation :" << transfo(0,2) <<"" << transfo(1,2);
         
         for(std::list<ImageMatchModel*>::iterator it = models.begin(); it != models.end(); it++)
         {
-            kDebug(41006) << " Error: " << (*it)->fittingErrorSum() << " with " << (*it)->matches().size() << endl;
+            kDebug(41006) <<" Error:" << (*it)->fittingErrorSum() <<" with" << (*it)->matches().size();
         }
 //         
 //         for(lMatches::const_iterator it = (*models.begin())->matches().begin(); it != (*models.begin())->matches().end(); ++it)
 //         {
-//             kDebug(41006) << "selected match = " << it->ref->x() << " " << it->ref->y() << " " << it->match->x() << " " <<  it->match->y() << endl;
+//             kDebug(41006) <<"selected match =" << it->ref->x() <<"" << it->ref->y() <<"" << it->match->x() <<"" <<  it->match->y();
 //         }
 
         PanoptimFunction<HomographySameDistortionFunction, HomographySameDistortionFunction::SIZEINDEXES> f( (*models.begin())->matches(), width * 0.5, height * 0.5, width, height );
@@ -262,15 +262,15 @@ void PanoramaPlugin::createPanorama(QList<PanoramaImage>& images, KisPaintDevice
         p[HomographySameDistortionFunction::INDX_h23] = 0.0;
     //       double r = Optimization::Algorithms::gaussNewton< Optimization::Methods::GaussNewton< PanoptimFunction, double> >(&f, p, 100, 1e-12);
         double r = Optimization::Algorithms::levenbergMarquardt(&f, p, 100, 1e-12, 0.01, 10.0);
-        kDebug(41006) << "Remain = " << r << endl;
-    //       kDebug(41006) << "Remain = " << Optimization::gradientDescent(&f, p, 10000, 1e-3, 1e-6) << endl;
+        kDebug(41006) <<"Remain =" << r;
+    //       kDebug(41006) <<"Remain =" << Optimization::gradientDescent(&f, p, 10000, 1e-3, 1e-6);
         for(uint i = 0; i < p.size(); i++)
         {
-            kDebug(41006) << "p["<< i << "]=" << p[i] << endl;
+            kDebug(41006) <<"p["<< i <<"]=" << p[i];
         }
         #if 0
         // Attempt a second optimization by completing the match base
-        kDebug(41006) << "Complete match base" << endl;
+        kDebug(41006) <<"Complete match base";
         lMatches sndmatches;
         for(lMatches::const_iterator it = mp.begin(); it != mp.end(); ++it)
         {
@@ -286,27 +286,27 @@ void PanoramaPlugin::createPanorama(QList<PanoramaImage>& images, KisPaintDevice
           hsdf.f(p, f1, f2);
           if( fabs(f1) < 10.0 and fabs(f2) < 10.0)
           {
-            kDebug(41006) << "Match accepted " << it->ref->x() << " " << it->ref->y() << " " << it->match->x() << " " <<  it->match->y() << " f1 = " << f1 << " f2 = " << f2 << endl;
+            kDebug(41006) <<"Match accepted" << it->ref->x() <<"" << it->ref->y() <<"" << it->match->x() <<"" <<  it->match->y() <<" f1 =" << f1 <<" f2 =" << f2;
             sndmatches.push_back(*it);
           } else {
-            kDebug(41006) << "Match rejected " << it->ref->x() << " " << it->ref->y() << " " << it->match->x() << " " <<  it->match->y() << " f1 = " << f1 << " f2 = " << f2 << endl;
+            kDebug(41006) <<"Match rejected" << it->ref->x() <<"" << it->ref->y() <<"" << it->match->x() <<"" <<  it->match->y() <<" f1 =" << f1 <<" f2 =" << f2;
           }
         }
         
-        kDebug(41006) << "Start second optimization with " << sndmatches.size() << " matches" << endl;
+        kDebug(41006) <<"Start second optimization with" << sndmatches.size() <<" matches";
         PanoptimFunction<HomographySameDistortionFunction, HomographySameDistortionFunction::SIZEINDEXES> f2( sndmatches, width * 0.5, height * 0.5, width, height );
         r = Optimization::Algorithms::levenbergMarquardt(&f2, p, 1000, 1e-12, 0.01, 10.0);
-        kDebug(41006) << "Remain = " << r << endl;
-    //       kDebug(41006) << "Remain = " << Optimization::gradientDescent(&f, p, 10000, 1e-3, 1e-6) << endl;
+        kDebug(41006) <<"Remain =" << r;
+    //       kDebug(41006) <<"Remain =" << Optimization::gradientDescent(&f, p, 10000, 1e-3, 1e-6);
         #endif
         
-    //       kDebug(41006) << "a1 = " << p[0] << " b1 = " << p[1] << " a2 = " << p[2] << " b2 = " << p[3] << " rotation = " << p[4] << " tx21 = " << p[5] << " ty21 = " << p[6] << endl;
-//         kDebug(41006) << transfo(0,0) << " " << transfo(1,1) << " " << cos(p[4]) << " " << cos(p[5]) << endl;
+    //       kDebug(41006) <<"a1 =" << p[0] <<" b1 =" << p[1] <<" a2 =" << p[2] <<" b2 =" << p[3] <<" rotation =" << p[4] <<" tx21 =" << p[5] <<" ty21 =" << p[6];
+//         kDebug(41006) << transfo(0,0) <<"" << transfo(1,1) <<"" << cos(p[4]) <<"" << cos(p[5]);
 #endif
 
         for(uint i = 0; i < p.size(); i++)
         {
-            kDebug(41006) << "p["<< i << "]=" << p[i] << endl;
+            kDebug(41006) <<"p["<< i <<"]=" << p[i];
         }
 
 // HomographyImageMatchModel
@@ -349,7 +349,7 @@ void PanoramaPlugin::createPanorama(QList<PanoramaImage>& images, KisPaintDevice
         secondLayer.yc1 = images[1].rect.height() * 0.5;
         secondLayer.yc2 = images[1].rect.height() * 0.5;
         secondLayer.norm = (4.0 / ( images[1].rect.width() * images[1].rect.width() + images[1].rect.height() * images[1].rect.height() ) );
-        kDebug(41006) << " homography = [" << p[HomographySameDistortionFunction::INDX_h11] << " " << p[HomographySameDistortionFunction::INDX_h21] << " " << p[HomographySameDistortionFunction::INDX_h31] << " ; " << p[HomographySameDistortionFunction::INDX_h12] << " " << p[HomographySameDistortionFunction::INDX_h22] << " " << p[HomographySameDistortionFunction::INDX_h32] << " ; " << p[HomographySameDistortionFunction::INDX_h13] << " " << p[HomographySameDistortionFunction::INDX_h23] << " " << 1.0 << " ] " << endl;
+        kDebug(41006) <<" homography = [" << p[HomographySameDistortionFunction::INDX_h11] <<"" << p[HomographySameDistortionFunction::INDX_h21] <<"" << p[HomographySameDistortionFunction::INDX_h31] <<" ;" << p[HomographySameDistortionFunction::INDX_h12] <<"" << p[HomographySameDistortionFunction::INDX_h22] <<"" << p[HomographySameDistortionFunction::INDX_h32] <<" ;" << p[HomographySameDistortionFunction::INDX_h13] <<"" << p[HomographySameDistortionFunction::INDX_h23] <<"" << 1.0 <<" ]";
         secondLayer.homography(0,0) = p[HomographySameDistortionFunction::INDX_h11];
         secondLayer.homography(0,1) = p[HomographySameDistortionFunction::INDX_h21];
         secondLayer.homography(0,2) = p[HomographySameDistortionFunction::INDX_h31];
@@ -364,7 +364,7 @@ void PanoramaPlugin::createPanorama(QList<PanoramaImage>& images, KisPaintDevice
     
         KisImagesBlender::blend(sources, dstdevice);
     } else {
-        kDebug(41006) << "No models found" << endl;
+        kDebug(41006) <<"No models found";
     }
 }
 

@@ -1792,8 +1792,8 @@ void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
                 i++;
             }
 
-        kDebug(41010) << "Polygons :" << i << endl;
-        kDebug(41010) << "Painting marching ants :" << t.elapsed() << endl;
+        kDebug(41010) <<"Polygons :" << i;
+        kDebug(41010) <<"Painting marching ants :" << t.elapsed();
 
         gc.setWorldMatrix( oldWorldMatrix);
     }

@@ -52,7 +52,7 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
     for (int i = 0; i < parasites.count(); i++) {
         QStringList splitted = parasites.at(i).split(parasiteSplitter, QString::SkipEmptyParts);
         if (splitted.count() != 2) {
-            kWarning(41001) << "Wrong count for this parasite key/value:" << parasites.at(i) << endl;
+            kWarning(41001) << "Wrong count for this parasite key/value:" << parasites.at(i);
             continue;
         }
         QString index = splitted.at(0);
@@ -81,19 +81,19 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
                 else
                     selection[selIndex] = Constant;
             } else {
-                kWarning(41001)<< "Sel: wrong index: " << selIndex << "(dim = " << dim << ")" << endl;
+                kWarning(41001)<< "Sel: wrong index: " << selIndex << "(dim = " << dim << ")";
             }
         } else if (index.startsWith("rank")) {
             int rankIndex = index.mid(strlen("rank")).toInt();
             if (rankIndex < 0 || rankIndex > dim) {
-                kWarning(41001) << "Rankindex out of range: " << rankIndex << endl;
+                kWarning(41001) << "Rankindex out of range: " << rankIndex;
                 continue;
             }
             rank[rankIndex] = (splitted.at(1)).toInt();
         } else if (index == "ncells") {
             ncells = (splitted.at(1)).toInt();
             if (ncells < 1 ) {
-                kWarning(41001) << "ncells out of range: " << ncells << endl;
+                kWarning(41001) << "ncells out of range: " << ncells;
                 ncells = 1;
             }
         }
@@ -266,7 +266,7 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     int len = qstrlen(name);
 
     if (parasite().dim != 1) {
-        kWarning(41001) << "Save to file for pipe brushes with dim != not yet supported!" << endl;
+        kWarning(41001) << "Save to file for pipe brushes with dim != not yet supported!";
         return false;
     }
 
@@ -395,7 +395,7 @@ void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const {
                 break;
             default:
                 kWarning(41001) << "This parasite selectionMode has not been implemented. Reselecting"
-                        << " to Incremental" << endl;
+                        << " to Incremental";
                 m_parasite.selection[i] = KisPipeBrushParasite::Incremental;
                 index = 0;
         }

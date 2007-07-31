@@ -44,7 +44,7 @@ void KisOpenGL::createContext()
 {
     Q_ASSERT(SharedContextWidget == 0);
 
-    kDebug(DBG_AREA_UI) << "Creating shared context widget\n";
+    kDebug(DBG_AREA_UI) <<"Creating shared context widget";
 
     SharedContextWidget = new QGLWidget();//KisOpenGLCanvasFormat);
     SharedContextWidget->makeCurrent();
@@ -69,9 +69,9 @@ void KisOpenGL::initGlew()
 #ifdef HAVE_GLEW
     GLenum err = glewInit();
     if (GLEW_OK != err) {
-        kDebug(DBG_AREA_UI) << "glewInit error: " << (const char *)glewGetErrorString(err) << endl;
+        kDebug(DBG_AREA_UI) <<"glewInit error:" << (const char *)glewGetErrorString(err);
     } else {
-        kDebug(DBG_AREA_UI) << "Status: Using GLEW " << (const char *)glewGetString(GLEW_VERSION) << endl;
+        kDebug(DBG_AREA_UI) <<"Status: Using GLEW" << (const char *)glewGetString(GLEW_VERSION);
     }
 #endif
 }
@@ -86,10 +86,10 @@ bool KisOpenGL::hasShadingLanguage()
 
         if (GLEW_ARB_shader_objects && GLEW_ARB_vertex_shader && GLEW_ARB_fragment_shader
             && GLEW_ARB_shading_language_100) {
-            kDebug(DBG_AREA_UI) << "Check: have opengl shading extensions\n";
+            kDebug(DBG_AREA_UI) <<"Check: have opengl shading extensions";
             haveShadingLanguage = true;
         } else {
-            kDebug(DBG_AREA_UI) << "Check: don't have opengl shading extensions\n";
+            kDebug(DBG_AREA_UI) <<"Check: don't have opengl shading extensions";
         }
     }
 #endif
@@ -102,13 +102,13 @@ void KisOpenGL::printError(const char *file, int line)
 
     while (glErr != GL_NO_ERROR) {
 
-        kDebug(DBG_AREA_UI) << "glError: " << (const char *)gluErrorString(glErr) << endl;
+        kDebug(DBG_AREA_UI) <<"glError:" << (const char *)gluErrorString(glErr);
 
         if (file != 0) {
             if (line != -1) {
-                kDebug(DBG_AREA_UI) << " at " << file << " line " << line << endl;
+                kDebug(DBG_AREA_UI) <<" at" << file <<" line" << line;
             } else {
-                kDebug(DBG_AREA_UI) << " in " << file << endl;
+                kDebug(DBG_AREA_UI) <<" in" << file;
             }
         }
 

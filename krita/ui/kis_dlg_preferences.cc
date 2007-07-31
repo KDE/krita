@@ -85,7 +85,7 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 //     m_dockabilityGroup.addButton(radioDisallowDocking, DOCK_DISABLED);
 //     m_dockabilityGroup.addButton(radioSmartDocking, DOCK_SMART);
 //
-//     kDebug(41007) << "Dock is " << cfg.dockability() << endl;
+//     kDebug(41007) <<"Dock is" << cfg.dockability();
 
 
 //     QAbstractButton *button = m_dockabilityGroup.button(cfg.dockability());

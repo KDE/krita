@@ -94,7 +94,7 @@ void KisCubismFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
         gc.bitBlt(0, 0, COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
         gc.end();
 
-//         kDebug() << src->colorSpace()->id().id() << endl;
+//         kDebug() << src->colorSpace()->id().id();
         cubism(dev, dev, QRect(0, 0, rect.width(), rect.height()), tileSize, tileSaturation);
 
         gc.begin(dst);
@@ -102,7 +102,7 @@ void KisCubismFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
         gc.end();
         if (src->image()) src->image()->unlock();
 
-//         kDebug() << src->colorSpace()->id().id() << endl;
+//         kDebug() << src->colorSpace()->id().id();
     }
 }
 

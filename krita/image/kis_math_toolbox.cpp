@@ -93,7 +93,7 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
                 f[k] = toDouble<qint16>;
                 break;
             default:
-                kWarning() << "Unsupported value type in KisMathToolbox" << endl;
+                kWarning() << "Unsupported value type in KisMathToolbox";
                 return;
         }
     }
@@ -147,7 +147,7 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
                 f[k] = fromDouble<qint16>;
                 break;
             default:
-                kWarning() << "Unsupported value type in KisMathToolbox" << endl;
+                kWarning() << "Unsupported value type in KisMathToolbox";
                 return;
         }
     }

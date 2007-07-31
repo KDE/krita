@@ -209,7 +209,7 @@ KisView2::~KisView2()
 
 void KisView2::dragEnterEvent(QDragEnterEvent *event)
 {
-    kDebug(41007) << "KisView2::dragEnterEvent" << endl;
+    kDebug(41007) <<"KisView2::dragEnterEvent";
     // Only accept drag if we're not busy, particularly as we may
     // be showing a progress bar and calling qApp->processEvents().
     if (K3URLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {
@@ -387,7 +387,7 @@ void KisView2::slotLoadingFinished()
     if(d)
         connect(m_d->canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), d, SLOT(newOptionWidget(QWidget*)));
     else
-        kWarning(41007) << "Could not create tool docker: " << d << endl;
+        kWarning(41007) <<"Could not create tool docker:" << d;
 
     connectCurrentImage();
 
@@ -405,7 +405,7 @@ void KisView2::slotLoadingFinished()
     }
 
     updateGUI();
-//     kDebug(41007) << "image finished loading, active layer: " << img->activeLayer() << ", root layer: " << img->rootLayer() << endl;
+//     kDebug(41007) <<"image finished loading, active layer:" << img->activeLayer() <<", root layer:" << img->rootLayer();
 
 }
 
@@ -532,7 +532,7 @@ void KisView2::connectCurrentImage()
 {
     KisImageSP img = image();
     if (img) {
-//         kDebug(41007) << "Going to connect current image\n";
+//         kDebug(41007) <<"Going to connect current image";
 
         connect(img.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_d->selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
         //connect(img.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), this, SLOT(updateCanvas()));
@@ -696,14 +696,14 @@ void KisView2::loadPlugins()
         KParts::Plugin* plugin =
             KService::createInstance<KParts::Plugin> ( service, this, QStringList(), &errCode);
         if ( plugin ) {
-//             kDebug(41006) << "found plugin " << service->property("Name").toString() << "\n";
+//             kDebug(41006) <<"found plugin" << service->property("Name").toString() <<"";
             insertChildClient(plugin);
         }
         else {
-//             kDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
+//             kDebug(41006) <<"found plugin" << service->property("Name").toString() <<"," << errCode <<"";
             if( errCode == KLibLoader::ErrNoLibrary)
             {
-                kWarning() << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
+                kWarning() <<" Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
             }
         }
     }

@@ -137,7 +137,9 @@ class KisSharedPtr {
 };
 
 /**
- * XXX! Tell us what's the difference between weak and normal shared ptr
+ * A weak shared ptr is an ordinary shared ptr, with one difference:
+ * it doesn't delete the contained pointer if the refcount drops to
+ * zero.
  */
 template<class T>
 class KisWeakSharedPtr {

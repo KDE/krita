@@ -147,8 +147,8 @@ public:
     bool isDirty( const QRect & rect );
 
     /**
-       Mark the specified area as clean
-    */
+     * Mark the specified area as clean
+     */
     void setClean( QRect rc );
 
     /// Return a copy of this layer

@@ -207,7 +207,7 @@ bool KisPattern::init()
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k++) {
                 if (k > m_data.size()) {
-                    kDebug(DBG_AREA_FILE) << "failed in gray\n";
+                    kDebug(DBG_AREA_FILE) <<"failed in gray";
                     return false;
                 }
 
@@ -222,7 +222,7 @@ bool KisPattern::init()
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k++) {
                 if (k + 2 > m_data.size()) {
-                    kDebug(DBG_AREA_FILE) << "failed in grayA\n";
+                    kDebug(DBG_AREA_FILE) <<"failed in grayA";
                     return false;
                 }
 
@@ -236,7 +236,7 @@ bool KisPattern::init()
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++) {
                 if (k + 3 > m_data.size()) {
-                    kDebug(DBG_AREA_FILE) << "failed in RGB\n";
+                    kDebug(DBG_AREA_FILE) <<"failed in RGB";
                     return false;
                 }
 
@@ -251,7 +251,7 @@ bool KisPattern::init()
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++) {
                 if (k + 4 > m_data.size()) {
-                    kDebug(DBG_AREA_FILE) << "failed in RGBA\n";
+                    kDebug(DBG_AREA_FILE) <<"failed in RGBA";
                     return false;
                 }
 

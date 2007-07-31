@@ -124,7 +124,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     KisConfig cfg;
 
-    kDebug(41010) << "paintEvent: rect " << ev->rect() << ", doc offset: " << m_d->documentOffset << endl;
+    kDebug(41010) <<"paintEvent: rect" << ev->rect() <<", doc offset:" << m_d->documentOffset;
     KisImageSP img = m_d->canvas->image();
     if (img == 0) return;
 
@@ -177,12 +177,12 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
         // Checks
         gc.fillRect(ev->rect(), m_d->checkBrush );
     }
-    kDebug(41010) << "Painting checks:" << t.elapsed() << endl;
+    kDebug(41010) <<"Painting checks:" << t.elapsed();
 
     t.restart();
     gc.setCompositionMode( QPainter::CompositionMode_SourceOver );
     gc.drawImage( ev->rect(), m_d->prescaledImage, ev->rect() );
-    kDebug(41010) << "Drawing image:" << t.elapsed() << endl;
+    kDebug(41010) <<"Drawing image:" << t.elapsed();
 
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random()%255, random()%255, random()%255, 150);
@@ -213,19 +213,19 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     // ask the guides, grids, etc to paint themselves
     t.restart();
     m_d->gridDrawer->draw(&gc, m_d->viewConverter->viewToDocument(ev->rect()));
-    kDebug(41010) << "Drawing grid:" << t.elapsed() << endl;
+    kDebug(41010) <<"Drawing grid:" << t.elapsed();
 
     t.restart();
     // Give the tool a chance to paint its stuff
     m_d->toolProxy->paint(gc, *m_d->viewConverter );
-    kDebug(41010) << "Drawing tools:" << t.elapsed() << endl;
+    kDebug(41010) <<"Drawing tools:" << t.elapsed();
     gc.end();
 
 
     QPainter gc2( this );
     t.restart();
     gc2.drawPixmap( ev->rect().topLeft(), pm );
-    kDebug(41010 ) << "Drawing pixmap on widget: " << t.elapsed() << endl;
+    kDebug(41010 ) <<"Drawing pixmap on widget:" << t.elapsed();
 }
 
 void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e) {
@@ -272,7 +272,7 @@ void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
 
 void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
 {
-    kDebug(41010) << "tablet event: " << e->pressure() << endl;
+    kDebug(41010) <<"tablet event:" << e->pressure();
     QPointF pos = e->pos() + (e->hiResGlobalPos() - e->globalPos());
     pos += m_d->documentOffset;
     m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument( pos ) );
@@ -389,7 +389,7 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
             QTime t;
             t.start();
             QImage img2 = ImageUtils::sampleImage(canvasImage, dstSize.width(), dstSize.height(), drawRect);
-            kDebug(41010) << "imageutiles sampleImage " << t.elapsed()  << endl;
+            kDebug(41010) <<"imageutiles sampleImage" << t.elapsed();
            gc.drawImage( rc.topLeft(), img2 );
         }
         else {
@@ -412,11 +412,11 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
             t.start();
 #ifndef USE_QT_SCALING
             QImage img2 = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
-            kDebug(41010) << "Imageutils scale: " << t.elapsed() << endl;
+            kDebug(41010) <<"Imageutils scale:" << t.elapsed();
 #else
             t.restart();
             QImage img2 = croppedImage.scaled( sz, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-            kDebug(41010) << "qimage smooth scale: " << t.elapsed() << endl;
+            kDebug(41010) <<"qimage smooth scale:" << t.elapsed();
 #endif
             gc.drawImage( rc.topLeft(), img2 );
 
@@ -457,7 +457,7 @@ void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
     }
     m_d->prescaledImage = img;
 
-    kDebug(41010) << "Resize event:" << t.elapsed() << endl;
+    kDebug(41010) <<"Resize event:" << t.elapsed();
 }
 
 void KisQPainterCanvas::preScale()
@@ -471,7 +471,7 @@ void KisQPainterCanvas::preScale()
     gc.setCompositionMode( QPainter::CompositionMode_Source );
 
     drawScaledImage( QRect( QPoint( 0, 0 ), size() ), gc);
-    kDebug(41010) << "preScale():" << t.elapsed() << endl;
+    kDebug(41010) <<"preScale():" << t.elapsed();
 
 }
 
@@ -483,7 +483,7 @@ void KisQPainterCanvas::preScale( const QRect & rc )
         QPainter gc( &m_d->prescaledImage );
         gc.setCompositionMode( QPainter::CompositionMode_Source );
         drawScaledImage( rc, gc);
-        kDebug(41010) << "Prescaling took " << t.elapsed() << endl;
+        kDebug(41010) <<"Prescaling took" << t.elapsed();
     }
 }
 

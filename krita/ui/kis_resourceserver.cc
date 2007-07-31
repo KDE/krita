@@ -95,7 +95,7 @@ QList<KoResource*> KisResourceServerBase::resources()
 void KisResourceServerBase::addResource(KoResource* resource)
 {
     if (!resource->valid()) {
-        kWarning(41001) << "Tried to add an invalid resource!" << endl;
+        kWarning(41001) << "Tried to add an invalid resource!";
         return;
     }
 

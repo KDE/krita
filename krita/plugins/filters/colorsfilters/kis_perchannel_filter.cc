@@ -186,7 +186,7 @@ std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfigurat
 void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
     if (!config) {
-        kWarning() << "No configuration object for per-channel filter\n";
+        kWarning() <<"No configuration object for per-channel filter";
         return;
     }
 
@@ -201,7 +201,7 @@ void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
         delete configBC->adjustment;
         configBC->adjustment =
                 src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
-//         kDebug() << configBC->adjustment << endl;
+//         kDebug() << configBC->adjustment;
         configBC->oldCs = src->colorSpace();
         configBC->dirty = false;
     }

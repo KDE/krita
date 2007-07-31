@@ -78,7 +78,7 @@ KoShapeManager *KisShapeLayerCanvas::shapeManager() const
 
 void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 {
-    kDebug(41001) << "KisShapeLayerCanvas::updateCanvas()" << rc << endl;
+    kDebug(41001) <<"KisShapeLayerCanvas::updateCanvas()" << rc;
 
     QRect r = m_viewConverter->documentToView(rc).toRect();
     r.adjust(-2, -2, 2, 2); // for antialias

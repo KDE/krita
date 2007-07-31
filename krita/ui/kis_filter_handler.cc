@@ -168,7 +168,7 @@ void KisFilterHandler::reapply()
 
 void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
 {
-    kDebug(41007) << "Applying a filter" << endl;
+    kDebug(41007) <<"Applying a filter";
     if( not layer ) return;
 
     KisPaintDeviceSP dev = layer->paintDevice();

@@ -74,9 +74,9 @@ KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOp
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
     if (isSharing()) {
-        kDebug(DBG_AREA_UI) << "Created QGLWidget with sharing\n";
+        kDebug(DBG_AREA_UI) <<"Created QGLWidget with sharing";
     } else {
-        kDebug(DBG_AREA_UI) << "Created QGLWidget with no sharing\n";
+        kDebug(DBG_AREA_UI) <<"Created QGLWidget with no sharing";
     }
 }
 
@@ -332,7 +332,7 @@ void KisOpenGLCanvas2::keyReleaseEvent (QKeyEvent *e) {
 
 void KisOpenGLCanvas2::tabletEvent( QTabletEvent *e )
 {
-    kDebug(41010) << "tablet event: " << e->pressure() << endl;
+    kDebug(41010) <<"tablet event:" << e->pressure();
     QPointF pos = e->pos() + (e->hiResGlobalPos() - e->globalPos());
     pos += m_d->documentOffset;
     m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument( pos ) );

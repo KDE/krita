@@ -245,16 +245,16 @@ void KisProjection::updateSettings()
 {
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->weaver->setMaximumNumberOfThreads( cfg.readEntry("maxprojectionthreads",  QThread::idealThreadCount() ) );
-    kDebug(41001) << "maximum number of threads: " << m_d->weaver->maximumNumberOfThreads() << endl;
+    kDebug(41001) <<"maximum number of threads:" << m_d->weaver->maximumNumberOfThreads();
 
     m_d->updateRectSize = cfg.readEntry( "updaterectsize", 512 );
-    kDebug(41001) << "Update rect size: " << m_d->updateRectSize << endl;
+    kDebug(41001) <<"Update rect size:" << m_d->updateRectSize;
 
     m_d->useBoundingRectOfDirtyRegion = cfg.readEntry( "use_bounding_rect_of_dirty_region", true );
-    kDebug(41001) << "Use bounding rect of dirty region: " << m_d->useBoundingRectOfDirtyRegion << endl;
+    kDebug(41001) <<"Use bounding rect of dirty region:" << m_d->useBoundingRectOfDirtyRegion;
 
     m_d->useRegionOfInterest = cfg.readEntry( "use_region_of_interest", false );
-    kDebug(41001) << "Use region of interest: " << m_d->useRegionOfInterest << endl;
+    kDebug(41001) <<"Use region of interest:" << m_d->useRegionOfInterest;
 
 }
 #include "kis_projection.moc"

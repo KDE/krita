@@ -813,7 +813,7 @@ QImage KisPaintDevice::convertToQImage(KoColorProfile *  dstProfile, qint32 x1, 
         data = new quint8 [w * h * m_d->pixelSize];
     } catch(std::bad_alloc)
     {
-        kWarning() << "KisPaintDevice::convertToQImage std::bad_alloc for " << w << " * " << h << " * " << m_d->pixelSize << endl;
+        kWarning() << "KisPaintDevice::convertToQImage std::bad_alloc for " << w << " * " << h << " * " << m_d->pixelSize;
         //delete[] data; // data is not allocated, so don't free it
         return QImage();
     }

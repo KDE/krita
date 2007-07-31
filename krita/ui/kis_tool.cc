@@ -191,7 +191,7 @@ KisImageSP KisTool::image() const
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
     if ( !kisCanvas ) {
-        kDebug(41007) << "The current canvas is not a kis canvas!\n";
+        kDebug(41007) <<"The current canvas is not a kis canvas!";
         return 0;
     }
 #if 0

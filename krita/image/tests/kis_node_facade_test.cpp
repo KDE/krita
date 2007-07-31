@@ -94,7 +94,7 @@ void KisNodeFacadeTest::testCreation()
 void dumpNodeStack( KisNodeSP node, QString prefix = QString( "\t" ) ) {
     for ( uint i = 0; i < node->childCount(); ++i ) {
         if ( node->at( i )->parent() )
-            kDebug() << prefix << "\t" << node->at( i ) << "node at " << i << " has index from parent: " << node->index( node->at( i ) ) << endl;
+            kDebug() << prefix <<"\t" << node->at( i ) <<"node at" << i <<" has index from parent:" << node->index( node->at( i ) );
 
         if ( node->at( i )->childCount() > 0 ) {
             dumpNodeStack( node->at( i ), prefix + "\t" );
@@ -109,24 +109,24 @@ void KisNodeFacadeTest::testOrdering()
 
     KisNodeSP root = new KisNode();
     root->setGraphListener( &graphListener );
-    kDebug() << "Root: " << root << endl;
+    kDebug() <<"Root:" << root;
 
     KisNodeFacade facade( root );
 
     KisNodeSP node1 = new KisNode();
-    kDebug() << "Node 1: " << node1 << endl;
+    kDebug() <<"Node 1:" << node1;
 
     KisNodeSP node2 = new KisNode();
-    kDebug() << "Node 2: " << node2 << endl;
+    kDebug() <<"Node 2:" << node2;
 
     KisNodeSP node3 = new KisNode();
-    kDebug() << "Node 3: " << node3 << endl;
+    kDebug() <<"Node 3:" << node3;
 
     KisNodeSP node4 = new KisNode();
-    kDebug() << "Node 4: " << node4 << endl;
+    kDebug() <<"Node 4:" << node4;
 
     KisNodeSP node5 = new KisNode();
-    kDebug() << "Node 5: " << node5<< endl;
+    kDebug() <<"Node 5:" << node5;
 
      /*
       +---------+

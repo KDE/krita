@@ -37,7 +37,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( KoColorSp
 
     foreach( QString csId, csIds ) {
 
-        kDebug() << "Testing with " << csId << endl;
+        kDebug() <<"Testing with" << csId;
 
         QList<KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
         if ( profiles.size() == 0 ) {
@@ -46,7 +46,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( KoColorSp
                 if ( cs ) ( this->*funcPtr )( cs );
             }
             else {
-                kDebug() << "Cannot bitBlt for cs " << csId << endl;
+                kDebug() <<"Cannot bitBlt for cs" << csId;
             }
         }
         else {
@@ -56,7 +56,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( KoColorSp
                     if ( cs ) ( this->*funcPtr )( cs );
                 }
                 else {
-                    kDebug() << "Cannot bitBlt for cs " << csId << endl;
+                    kDebug() <<"Cannot bitBlt for cs" << csId;
                 }
             }
 

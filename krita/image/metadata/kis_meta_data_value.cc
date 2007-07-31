@@ -187,7 +187,7 @@ bool Value::setVariant(const QVariant& variant)
         {
             QRegExp rx("([^\\/]*)\\/([^\\/]*)");
             rx.indexIn(variant.toString());
-            kDebug() << rx.capturedTexts() << endl;
+            kDebug() << rx.capturedTexts();
         }
         case KisMetaData::Value::Variant:
         {

@@ -42,7 +42,7 @@ KisReflectanceColorSpace::KisReflectanceColorSpace(KoColorProfile *p)
 	if (profileIsCompatible(p))
 		m_profile = dynamic_cast<KisIlluminantProfile*>(p);
 	else {
-		kDebug() << "(KisReflectanceColorSpace Constructor) Profile is not compatible" << endl;
+		kDebug() <<"(KisReflectanceColorSpace Constructor) Profile is not compatible";
 		return;
 	}
 

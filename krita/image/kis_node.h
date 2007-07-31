@@ -28,10 +28,6 @@ class KisNodeGraphListener;
  * A KisNode is the base class for all components of an image: nodes,
  * masks, selections. A node knows its direct peers, parent and
  * children and whether it can have children.
- *
- * KisNode is a temporary solution while working towards making Krita
- * completely flake based.
- *
  */
 class KRITAIMAGE_EXPORT KisNode : public KisShared {
 

@@ -72,7 +72,7 @@ void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc )
 */
     KisFilterSP filter = KisFilterRegistry::instance()->value( m_d->filterConfig->name() );
     if (!filter) {
-        kWarning() << "Could not retrieve filter with name " <<  m_d->filterConfig->name() << endl;
+        kWarning() << "Could not retrieve filter with name " <<  m_d->filterConfig->name();
         return;
     }
 

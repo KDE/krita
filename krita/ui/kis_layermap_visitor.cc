@@ -54,10 +54,10 @@ QMap<KisMaskSP, KoShape*> & KisLayerMapVisitor::maskMap()
 
 bool KisLayerMapVisitor::visit( KisExternalLayer * layer)
 {
-//             kDebug(41007) << "KisLayerMap visitor adding external layer: " << layer->name() << endl;
+//             kDebug(41007) <<"KisLayerMap visitor adding external layer:" << layer->name();
         KisShapeLayer * layerShape = dynamic_cast<KisShapeLayer*>( layer );
         if ( !layerShape ) {
-//                 kDebug(41007) << "this external layer is not a shape layer!\n";
+//                 kDebug(41007) <<"this external layer is not a shape layer!";
             return false;
         }
         m_layerMap[layer] = layerShape;
@@ -67,7 +67,7 @@ bool KisLayerMapVisitor::visit( KisExternalLayer * layer)
 
 bool KisLayerMapVisitor::visit(KisPaintLayer *layer)
 {
-//             kDebug(41007) << "KisLayerMap visitor adding paint layer: " << layer->name() << endl;
+//             kDebug(41007) <<"KisLayerMap visitor adding paint layer:" << layer->name();
     Q_ASSERT( layer->parentLayer() );
     Q_ASSERT( m_layerMap.contains( layer->parentLayer() ) );
 
@@ -84,7 +84,7 @@ bool KisLayerMapVisitor::visit(KisPaintLayer *layer)
 
 bool KisLayerMapVisitor::visit(KisGroupLayer *layer)
 {
-//             kDebug(41007) << "KisLayerMap visitor adding group layer: " << layer->name() << endl;
+//             kDebug(41007) <<"KisLayerMap visitor adding group layer:" << layer->name();
 
     KoShapeContainer * parent = 0;
     if ( m_layerMap.contains( layer->parentLayer() ) ) {
@@ -106,7 +106,7 @@ bool KisLayerMapVisitor::visit(KisGroupLayer *layer)
 
 bool KisLayerMapVisitor::visit(KisAdjustmentLayer *layer)
 {
-//             kDebug(41007) << "KisLayerMap visitor adding adjustment layer: " << layer->name() << endl;
+//             kDebug(41007) <<"KisLayerMap visitor adding adjustment layer:" << layer->name();
 
     Q_ASSERT( m_layerMap.contains( layer->parentLayer() ) );
 

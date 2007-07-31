@@ -37,6 +37,7 @@
 #include "kis_tool_select_elliptical.h"
 #include "kis_tool_select_eraser.h"
 #include "kis_tool_select_brush.h"
+#include "kis_tool_select_path.h"
 
 typedef KGenericFactory<SelectionTools> SelectionToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaselectiontools, SelectionToolsFactory( "krita" ) )
@@ -56,6 +57,7 @@ SelectionTools::SelectionTools(QObject *parent, const QStringList &)
     r->add(new KisToolSelectEraserFactory( r, QStringList()));
     r->add(new KisToolSelectEllipticalFactory( r, QStringList()));
     r->add(new KisToolSelectContiguousFactory( r, QStringList()));
+    r->add(new KisToolSelectPathFactory( r, QStringList()));
 }
 
 SelectionTools::~SelectionTools()

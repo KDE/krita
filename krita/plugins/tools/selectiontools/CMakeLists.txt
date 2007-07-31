@@ -9,6 +9,7 @@ set(kritaselectiontools_PART_SRCS
     kis_tool_select_elliptical.cc
     kis_tool_select_contiguous.cc
     kis_tool_select_outline.cc
+    kis_tool_select_path.cc
     )
 
 

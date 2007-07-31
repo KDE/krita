@@ -209,8 +209,8 @@ void KoCsvImportDialog::fillTable( )
 {
     int row, column;
     bool lastCharDelimiter = false;
-    enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_END_OF_QUOTED_FIELD,
-           S_MAYBE_NORMAL_FIELD, S_NORMAL_FIELD } state = S_START;
+    enum { Start, InQuotedField, MaybeQuotedFieldEnd, QuotedFieldEnd,
+           MaybeInNormalField, InNormalField } state = Start;
 
     QChar x;
     QString field;
@@ -227,6 +227,7 @@ void KoCsvImportDialog::fillTable( )
     kDebug(30501) <<"Encoding:" << d->codec->name();
     inputStream.setCodec( d->codec );
 
+    int delimiterIndex = 0;
     const int delimiterLength = d->delimiter.size();
     bool lastCharWasCr = false; // Last character was a Carriage Return
     while (!inputStream.atEnd())
@@ -261,26 +262,26 @@ void KoCsvImportDialog::fillTable( )
           maxColumn = column;
         switch (state)
         {
-         case S_START :
+         case Start :
             if (x == d->textQuote)
             {
-                state = S_QUOTED_FIELD;
+                state = InQuotedField;
             }
-            else if (!d->delimiter.isEmpty() && x == d->delimiter.at(0))
+            else if (delimiterIndex < delimiterLength && x == d->delimiter.at(delimiterIndex))
             {
-                const int pos = inputStream.pos();
-                QString xString = x + inputStream.read( delimiterLength - 1 );
-                if ( xString == d->delimiter )
+                field += x;
+                delimiterIndex++;
+                if (field.right(delimiterIndex) == d->delimiter)
                 {
-                  if ((d->ignoreDuplicates == false) || (lastCharDelimiter == false))
-                      column += delimiterLength;
-                  lastCharDelimiter = true;
+                    if ((d->ignoreDuplicates == false) || (lastCharDelimiter == false))
+                        column += delimiterLength;
+                    lastCharDelimiter = true;
+                    field.clear();
+                    delimiterIndex = 0;
+                    state = Start;
                 }
-                else
-                {
-                  // reset to old position
-                  inputStream.seek( pos );
-                }
+                else if (delimiterIndex >= delimiterLength)
+                    delimiterIndex = 0;
             }
             else if (x == '\n')
             {
@@ -292,13 +293,13 @@ void KoCsvImportDialog::fillTable( )
             else
             {
                 field += x;
-                state = S_MAYBE_NORMAL_FIELD;
+                state = MaybeInNormalField;
             }
             break;
-         case S_QUOTED_FIELD :
+         case InQuotedField :
             if (x == d->textQuote)
             {
-                state = S_MAYBE_END_OF_QUOTED_FIELD;
+                state = MaybeQuotedFieldEnd;
             }
             else if (x == '\n')
             {
@@ -310,124 +311,121 @@ void KoCsvImportDialog::fillTable( )
                 if ( row > ( d->endRow - d->startRow ) && d->endRow >= 0 )
                   break;
 
-                state = S_START;
+                state = Start;
             }
             else
             {
                 field += x;
             }
             break;
-         case S_MAYBE_END_OF_QUOTED_FIELD :
+         case MaybeQuotedFieldEnd :
             if (x == d->textQuote)
             {
                 field += x;
-                state = S_QUOTED_FIELD;
+                state = InQuotedField;
             }
-            else if (!d->delimiter.isEmpty() && x == d->delimiter.at(0) || x == '\n')
+            else if (x == '\n')
             {
                 setText(row - d->startRow, column - d->startCol, field);
                 field.clear();
-                if (x == '\n')
+                ++row;
+                column = 1;
+                if ( row > ( d->endRow - d->startRow ) && d->endRow >= 0 )
+                    break;
+                state = Start;
+            }
+            else if (delimiterIndex < delimiterLength && x == d->delimiter.at(delimiterIndex))
+            {
+                field += x;
+                delimiterIndex++;
+                if (field.right(delimiterIndex) == d->delimiter)
                 {
-                    ++row;
-                    column = 1;
-                    if ( row > ( d->endRow - d->startRow ) && d->endRow >= 0 )
-                      break;
-                }
-                else
-                {
-                  const int pos = inputStream.pos();
-                  QString xString = x + inputStream.read( delimiterLength - 1 );
-                  if ( xString == d->delimiter )
-                  {
+                    setText(row - d->startRow, column - d->startCol, field.left(field.count()-delimiterIndex));
+                    field.clear();
                     if ((d->ignoreDuplicates == false) || (lastCharDelimiter == false))
-                      column += delimiterLength;
+                        column += delimiterLength;
                     lastCharDelimiter = true;
-                  }
-                  else
-                  {
-                  // reset to old position
-                    inputStream.seek( pos );
-                  }
+                    field.clear();
+                    delimiterIndex = 0;
                 }
-                state = S_START;
+                else if (delimiterIndex >= delimiterLength)
+                    delimiterIndex = 0;
+                state = Start;
             }
             else
             {
-                state = S_END_OF_QUOTED_FIELD;
+                state = QuotedFieldEnd;
             }
             break;
-         case S_END_OF_QUOTED_FIELD :
-            if (!d->delimiter.isEmpty() && x == d->delimiter.at(0) || x == '\n')
+         case QuotedFieldEnd :
+            if (x == '\n')
             {
                 setText(row - d->startRow, column - d->startCol, field);
                 field.clear();
-                if (x == '\n')
+                ++row;
+                column = 1;
+                if ( row > ( d->endRow - d->startRow ) && d->endRow >= 0 )
+                    break;
+                state = Start;
+            }
+            else if (delimiterIndex < delimiterLength && x == d->delimiter.at(delimiterIndex))
+            {
+                field += x;
+                delimiterIndex++;
+                if (field.right(delimiterIndex) == d->delimiter)
                 {
-                    ++row;
-                    column = 1;
-                    if ( row > ( d->endRow - d->startRow ) && d->endRow >= 0 )
-                      break;
-                }
-                else
-                {
-                  const int pos = inputStream.pos();
-                  QString xString = x + inputStream.read( delimiterLength - 1 );
-                  if ( xString == d->delimiter )
-                  {
+                    setText(row - d->startRow, column - d->startCol, field.left(field.count()-delimiterIndex));
+                    field.clear();
                     if ((d->ignoreDuplicates == false) || (lastCharDelimiter == false))
-                      column += delimiterLength;
+                        column += delimiterLength;
                     lastCharDelimiter = true;
-                  }
-                  else
-                  {
-                  // reset to old position
-                    inputStream.seek( pos );
-                  }
+                    field.clear();
+                    delimiterIndex = 0;
                 }
-                state = S_START;
+                else if (delimiterIndex >= delimiterLength)
+                    delimiterIndex = 0;
+                state = Start;
             }
             else
             {
-                state = S_END_OF_QUOTED_FIELD;
+                state = QuotedFieldEnd;
             }
             break;
-         case S_MAYBE_NORMAL_FIELD :
+         case MaybeInNormalField :
             if (x == d->textQuote)
             {
                 field.clear();
-                state = S_QUOTED_FIELD;
+                state = InQuotedField;
                 break;
             }
-         case S_NORMAL_FIELD :
-            if (!d->delimiter.isEmpty() && x == d->delimiter.at(0) || x == '\n')
+         case InNormalField :
+            if (x == '\n')
             {
                 setText(row - d->startRow, column - d->startCol, field);
                 field.clear();
-                if (x == '\n')
+                ++row;
+                column = 1;
+                if ( row > ( d->endRow - d->startRow ) && d->endRow >= 0 )
+                    break;
+                state = Start;
+            }
+            else if (delimiterIndex < delimiterLength && x == d->delimiter.at(delimiterIndex))
+            {
+                field += x;
+                delimiterIndex++;
+                if (field.right(delimiterIndex) == d->delimiter)
                 {
-                    ++row;
-                    column = 1;
-                    if ( row > ( d->endRow - d->startRow ) && d->endRow >= 0 )
-                      break;
-                }
-                else
-                {
-                  const int pos = inputStream.pos();
-                  QString xString = x + inputStream.read( delimiterLength - 1 );
-                  if ( xString == d->delimiter )
-                  {
+                    setText(row - d->startRow, column - d->startCol, field.left(field.count()-delimiterIndex));
+                    field.clear();
                     if ((d->ignoreDuplicates == false) || (lastCharDelimiter == false))
-                      column += delimiterLength;
+                        column += delimiterLength;
                     lastCharDelimiter = true;
-                  }
-                  else
-                  {
-                  // reset to old position
-                    inputStream.seek( pos );
-                  }
+                    field.clear();
+                    delimiterIndex = 0;
                 }
-                state = S_START;
+                else if (delimiterIndex >= delimiterLength)
+                    delimiterIndex = 0;
+                state = Start;
             }
             else
             {
@@ -604,7 +602,7 @@ void KoCsvImportDialog::delimiterClicked(int id)
     else if (id == group->id(d->dialog->m_radioSemicolon))
         d->delimiter = ";";
 
-    kDebug(30501) <<"Delimiter \"" << d->delimiter <<"\" selected.";
+    kDebug(30501) << "Delimiter" << d->delimiter << "selected.";
     fillTable();
 }
 

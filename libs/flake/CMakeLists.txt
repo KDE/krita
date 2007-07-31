@@ -108,6 +108,11 @@ set(flake_SRCS
     commands/KoShapeTransformCommand.cpp
 )
 
+kde4_add_ui_files(flake_SRCS
+    PathToolOptionWidgetBase.ui
+)
+
+
 kde4_add_library(flake SHARED ${flake_SRCS})
 
 target_link_libraries(flake ${KDE4_KDEUI_LIBS} komain kstore pigment)

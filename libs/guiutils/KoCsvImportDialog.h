@@ -15,26 +15,15 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef KO_CSV_IMPORT_DIALOG
 #define KO_CSV_IMPORT_DIALOG
 
-#include <QStringList>
-#include <QWidget>
-
 #include <kdialog.h>
 
 #include "koguiutils_export.h"
-
-#include "ui_KoCsvImportDialog.h"
-
-class KoCsvImportWidget : public QWidget, public Ui::KoCsvImportWidget
-{
-  public:
-    explicit KoCsvImportWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
-};
 
 class KOGUIUTILS_EXPORT KoCsvImportDialog : public KDialog
 {
@@ -53,7 +42,7 @@ public:
     KoCsvImportDialog(QWidget* parent);
     virtual ~KoCsvImportDialog();
 
-    void     setData( const QByteArray& data);
+    void     setData(const QByteArray& data);
     bool     firstRowContainHeaders();
     bool     firstColContainHeaders();
     int      rows();
@@ -68,34 +57,24 @@ protected:
     void adjustRows(int iRows);
     void adjustCols(int iCols);
     bool checkUpdateRange();
-    QTextCodec* getCodec(void) const;
+    QTextCodec* getCodec() const;
 
-    // The real contents of the dialog
-    KoCsvImportWidget *m_dialog;
-
-    bool       m_adjustRows;
-    bool       m_adjustCols;
-    int        m_startRow;
-    int        m_startCol;
-    int        m_endRow;
-    int        m_endCol;
-    QChar      m_textquote;
-    QString    m_delimiter;
-    bool       m_ignoreDups;
-    QByteArray m_fileArray;
-    QTextCodec *m_codec;
-    QStringList m_formatList; ///< List of the column formats
-
-protected slots:
+protected Q_SLOTS:
     void returnPressed();
-    void formatChanged( const QString& );
+    void formatChanged(const QString&);
     void delimiterClicked(int id);
     void textquoteSelected(const QString& mark);
     void currentCellChanged(int, int col);
-    void genericDelimiterChanged( const QString & );
-    void ignoreDuplicatesChanged( int );
+    void genericDelimiterChanged(const QString &);
+    void ignoreDuplicatesChanged(int);
     void updateClicked();
-    void encodingChanged ( const QString & );
+    void encodingChanged(const QString &);
+
+private:
+    Q_DISABLE_COPY(KoCsvImportDialog)
+
+    class Private;
+    Private * const d;
 };
 
 #endif // KO_CSV_IMPORT_DIALOG

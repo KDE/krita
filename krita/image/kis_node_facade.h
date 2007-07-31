@@ -113,22 +113,6 @@ public:
      */
     bool toBottom( KisNodeSP node );
 
-    /**
-     * Return the total number of nodes in this graph.
-     */
-    quint32 numNodes() const;
-
-    /**
-     * Return the total number of visible nodes in this graph
-     */
-    quint32 numVisibleNodes() const;
-
-    /**
-     * Return the total number of hidden nodes in this graph
-     */
-    quint32 numHiddenNodes() const;
-
-
 private:
 
     class Private;

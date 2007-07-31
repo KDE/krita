@@ -128,48 +128,48 @@ int KisNode::index( const KisNodeSP node ) const
     return -1;
 }
 
-bool KisNode::add( KisNodeSP newNode, quint32 index )
-{
-    Q_ASSERT( newNode );
-    if ( !allowAsChild( newNode ) ) return false;
-    if ( !newNode ) return false;
-    if ( newNode->parent() ) return false;
-    if ( m_d->nodes.contains(newNode) ) return false;
-
-    if ( m_d->graphListener )
-        m_d->graphListener->aboutToAddANode( this, index );
-
-    if ( index >= childCount() )
-        m_d->nodes.append(newNode);
-    else {
-        //m_d->nodes.insert(m_d->nodes.begin() + reverseIndex(index) + 1, newNode);
-        m_d->nodes.insert( index + 1, newNode );
-    }
-    newNode->setParent( this );
-    newNode->setGraphListener( m_d->graphListener );
-
-    if ( m_d->graphListener )
-        m_d->graphListener->nodeHasBeenAdded(this, index);
-
-    return true;
-
-}
-
 bool KisNode::add( KisNodeSP newNode, KisNodeSP aboveThis )
 {
     Q_ASSERT( newNode );
 
-    if (aboveThis && aboveThis->parent().data() != this)
+    if ( !newNode ) return false;
+    if (aboveThis && aboveThis->parent().data() != this) return false;
+    if ( !allowAsChild( newNode ) ) return false;
+    if ( newNode->parent() ) return false;
+    if ( m_d->nodes.contains(newNode) ) return false;
+
+
+    int idx = 0;
+
+    if ( aboveThis != 0 ) {
+
+        idx = this->index( aboveThis );
+
+        if ( m_d->graphListener )
+            m_d->graphListener->aboutToAddANode( this, idx );
+
+        if ( idx >= ( int )childCount() )
+            m_d->nodes.append(newNode);
+        else {
+            m_d->nodes.insert( idx + 1, newNode );
+        }
+    }
+    else
     {
-        kWarning() << "invalid input to KisGroupNode::addNode(KisNodeSP newNode, KisNodeSP aboveThis)!" << endl;
-        return false;
+        if ( m_d->graphListener )
+            m_d->graphListener->aboutToAddANode( this, idx );
+
+        m_d->nodes.prepend( newNode );
     }
 
-    quint32 i = childCount();
-    if ( aboveThis )
-        i = index( aboveThis );
+    newNode->setParent( this );
+    newNode->setGraphListener( m_d->graphListener );
 
-    return add(newNode, i);
+    if ( m_d->graphListener )
+        m_d->graphListener->nodeHasBeenAdded(this, idx);
+
+
+    return true;
 }
 
 bool KisNode::remove( quint32 index )
@@ -179,6 +179,7 @@ bool KisNode::remove( quint32 index )
         KisNodeSP removedNode = at(index);
 
         removedNode->setParent( 0 );
+        removedNode->setGraphListener( 0 );
 
         if ( m_d->graphListener )
             m_d->graphListener->aboutToRemoveANode( this, index );

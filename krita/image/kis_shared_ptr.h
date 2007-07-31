@@ -28,7 +28,22 @@ template<class T>
 class KisWeakSharedPtr;
 
 /**
- * XXX! Add documentation!
+ * KisSharedPtr is a shared pointer similar to KSharedPtr and
+ * boost::shared_ptr. The difference with KSharedPtr is that our
+ * constructor is not explicit. The difference with boost is still to
+ * be determined.
+ *
+ * A shared pointer is a wrapper around a real pointer. The shared
+ * pointer keeps a reference count, and when the refernece count drops
+ * to 0 the contained pointer is deleted. You can use the shared
+ * pointer just as you would use a real pointer.
+ *
+ * See also also item 28 and 29 of More Effective C++ and
+ * http://bugs.kde.org/show_bug.cgi?id=52261 as well as
+ * http://www.boost.org/libs/smart_ptr/shared_ptr.htm.
+ *
+ * XXX: We should replace all uses of KisSharedPtr with the boost
+ * shared pointer, if possible.
  */
 template<class T>
 class KisSharedPtr {
@@ -79,7 +94,11 @@ class KisSharedPtr {
         template< class T2> inline operator KisSharedPtr<T2>() const { return KisSharedPtr<T2>(d); }
 
         /**
-        * @return the pointer
+        * @return the contained pointer. If you delete the contained
+        * pointer, you will make KisSharedPtr very unhappy. If you put
+        * the contained pointer in another KisSharedPtr, they won't
+        * know about each other, which again, will make one of the
+        * shared pointers very unhappy at some time.
         */
         inline T* data() { return d; }
 

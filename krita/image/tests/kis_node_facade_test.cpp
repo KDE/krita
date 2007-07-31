@@ -73,6 +73,7 @@ void KisNodeFacadeTest::testCreation()
     QVERIFY( node->graphListener() == 0 );
 
     KisNodeFacade facade(node);
+    QVERIFY( facade.root() == node );
 
     node->setGraphListener( &graphListener );
     QVERIFY( node->graphListener() != 0 );
@@ -124,91 +125,95 @@ void KisNodeFacadeTest::testOrdering()
     KisNodeSP node4 = new KisNode();
     kDebug() << "Node 4: " << node4 << endl;
 
+    KisNodeSP node5 = new KisNode();
+    kDebug() << "Node 5: " << node5<< endl;
+
      /*
       +---------+
       | node 4  |
       | node 2  |
-      | node 3  |
+      |   node 3|
       | node 1  |
       |root     |
       +---------+
      */
 
     graphListener.resetBools();
-    facade.addNode( node1, root, root->childCount() );
+    QVERIFY( facade.addNode( node1, root, root->childCount() ) == true );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );
     QVERIFY( graphListener.afterRemoveRow == false );
     QVERIFY( root->firstChild() == node1 );
     QVERIFY( root->lastChild() == node1 );
+    QVERIFY( root->childCount() == 1 );
     graphListener.resetBools();
 
-    facade.addNode( node2, root, root->childCount() );
+    QVERIFY( facade.addNode( node2, root, root->childCount() ) == true );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );
     QVERIFY( graphListener.afterRemoveRow == false );
     QVERIFY( root->firstChild() == node1 );
     QVERIFY( root->lastChild() == node2 );
+    QVERIFY( root->childCount() == 2 );
     graphListener.resetBools();
 
-    facade.addNode( node3, node1 );
+    QVERIFY( facade.addNode( node3, node1 ) == true );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );
     QVERIFY( graphListener.afterRemoveRow == false );
     QVERIFY( root->firstChild() == node1 );
     QVERIFY( root->lastChild() == node2 );
+    QVERIFY( root->childCount() == 2 );
+    QVERIFY( node1->childCount() == 1 );
     graphListener.resetBools();
 
-    facade.addNode( node4, root, root->childCount() );
+    QVERIFY( facade.addNode( node4, root, root->lastChild() ) == true );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );
     QVERIFY( graphListener.afterRemoveRow == false );
     QVERIFY( root->firstChild() == node1 );
     QVERIFY( root->lastChild() == node4 );
+    QVERIFY( root->childCount() == 3 );
     graphListener.resetBools();
-
-    QVERIFY( root->childCount() == 4 );
 
     QVERIFY( node1->parent() == root );
     QVERIFY( node2->parent() == root );
-    QVERIFY( node3->parent() == root );
+    QVERIFY( node3->parent() == node1 );
     QVERIFY( node4->parent() == root );
 
     QVERIFY( root->firstChild() == node1 );
     QVERIFY( root->lastChild() == node4 );
 
     QVERIFY( root->at( 0 ) == node1 );
-    QVERIFY( root->at( 1 ) == node3 );
-    QVERIFY( root->at( 2 ) == node2 );
-    QVERIFY( root->at( 3 ) == node4 );
+    QVERIFY( root->at( 1 ) == node2 );
+    QVERIFY( root->at( 2 ) == node4 );
+    QVERIFY( node1->at( 0 ) == node3 );
 
     QVERIFY( root->index( node1 ) == 0 );
-    QVERIFY( root->index( node3 ) == 1 );
-    QVERIFY( root->index( node2 ) == 2 );
-    QVERIFY( root->index( node4 ) == 3 );
+    QVERIFY( root->index( node2 ) == 1 );
+    QVERIFY( root->index( node4 ) == 2 );
+    QVERIFY( node1->index( node3 ) == 0 );
 
     QVERIFY( node4->prevSibling() == node2 );
-    QVERIFY( node3->prevSibling() == node1 );
-    QVERIFY( node2->prevSibling() == node3 );
+    QVERIFY( node2->prevSibling() == node1 );
     QVERIFY( node1->prevSibling() == 0 );
+    QVERIFY( node3->prevSibling() == 0 );
 
     QVERIFY( node4->nextSibling() == 0 );
-    QVERIFY( node3->nextSibling() == node2 );
     QVERIFY( node2->nextSibling() == node4 );
-    QVERIFY( node1->nextSibling() == node3 );
+    QVERIFY( node1->nextSibling() == node2 );
+    QVERIFY( node3->nextSibling() == 0 );
 
     /*
-      +---------+
-      | node 3  |
-      |  node 4 |
-      | node 2  |
-      | node 1  |
-      |root     |
-      +---------+
+          node 4
+        node 2
+          node 3
+        node 1
+       root
      */
     graphListener.resetBools();
     QVERIFY( facade.removeNode( node4 ) == true );
@@ -217,19 +222,19 @@ void KisNodeFacadeTest::testOrdering()
     QVERIFY( graphListener.afterInsertRow == false );
     QVERIFY( graphListener.beforeRemoveRow == true );
     QVERIFY( graphListener.afterRemoveRow == true );
-    QVERIFY( root->childCount() == 3 );
+    QVERIFY( root->childCount() == 2 );
     QVERIFY( root->lastChild() == node2 );
     QVERIFY( root->firstChild() == node1 );
     QVERIFY( node4->prevSibling() == 0 );
     QVERIFY( node4->nextSibling() == 0 );
     graphListener.resetBools();
 
-    facade.addNode( node4, node3 );
+    QVERIFY( facade.addNode( node4, node3 ) == true );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );
     QVERIFY( graphListener.afterRemoveRow == false );
-    QVERIFY( root->childCount() == 3 );
+    QVERIFY( root->childCount() == 2 );
     QVERIFY( root->lastChild() == node2 );
     QVERIFY( root->firstChild() == node1 );
     QVERIFY( node3->childCount() == 1 );
@@ -237,21 +242,135 @@ void KisNodeFacadeTest::testOrdering()
     QVERIFY( node3->lastChild() == node4 );
     QVERIFY( node4->prevSibling() == 0 );
     QVERIFY( node4->nextSibling() == 0 );
-    QVERIFY( facade.removeNode( node4 ) == false );
     graphListener.resetBools();
 
-    facade.removeNode( node4 );
+    QVERIFY( facade.removeNode( node4 ) == true );
     QVERIFY( graphListener.beforeInsertRow == false );
     QVERIFY( graphListener.afterInsertRow == false );
     QVERIFY( graphListener.beforeRemoveRow == true );
     QVERIFY( graphListener.afterRemoveRow == true );
     QVERIFY( node3->childCount() == 0 );
     QVERIFY( node4->parent() == 0 );
-    QVERIFY( root->childCount() == 3 );
+    QVERIFY( root->childCount() == 2 );
     QVERIFY( root->lastChild() == node2 );
     QVERIFY( root->firstChild() == node1 );
     QVERIFY( node4->prevSibling() == 0 );
     QVERIFY( node4->nextSibling() == 0 );
+    graphListener.resetBools();
+
+    QVERIFY( facade.addNode( node4, node2 ) == true );
+    graphListener.resetBools();
+
+    QVERIFY( facade.moveNode( node3, root, 0 ) == true );
+    graphListener.resetBools();
+
+    /*
+            node4
+          node2
+          node1
+        node 3
+      root
+
+     */
+
+    QVERIFY( facade.moveNode( node1, node3, 0 ) == true );
+    QVERIFY( facade.moveNode( node2, node3, node1 ) == true );
+
+    QVERIFY( graphListener.beforeInsertRow == true );
+    QVERIFY( graphListener.afterInsertRow == true );
+    QVERIFY( graphListener.beforeRemoveRow == true );
+    QVERIFY( graphListener.afterRemoveRow == true );
+    graphListener.resetBools();
+
+    QVERIFY( facade.moveNode( node4, node4, node4 ) == false );
+
+    QVERIFY( graphListener.beforeInsertRow == false );
+    QVERIFY( graphListener.afterInsertRow == false );
+    QVERIFY( graphListener.beforeRemoveRow == false );
+    QVERIFY( graphListener.afterRemoveRow == false );
+    graphListener.resetBools();
+
+    QCOMPARE( root->childCount(), 1u );
+    QVERIFY( root->firstChild() == node3 );
+    QVERIFY( root->lastChild() == node3 );
+    QVERIFY( node3->childCount() == 2 );
+    QVERIFY( node3->firstChild() == node1 );
+    QVERIFY( node3->lastChild() == node2 );
+
+    /*
+        node4
+      node2
+      node5
+      node1
+     node3
+    root
+    */
+    QVERIFY( facade.addNode( node5, node3, node1 ) == true );
+    QVERIFY( node5->parent() == node3 );
+    QVERIFY( node5->prevSibling() == node1 );
+    QVERIFY( node5->nextSibling() == node2 );
+
+    /*
+       node5
+         node4
+       node2
+       node1
+      node3
+     root
+    */
+
+    QVERIFY( facade.raiseNode( node5 ) == true );
+    QVERIFY( node5->parent() == node3 );
+    QVERIFY( node5->nextSibling() == 0 );
+    QVERIFY( node5->prevSibling() == node2 );
+
+    // Try raising topnode to top
+    QVERIFY( facade.raiseNode( node5 ) == true );
+    QVERIFY( node5->parent() == node3 );
+    QVERIFY( node5->nextSibling() == 0 );
+    QVERIFY( node5->prevSibling() == node2 );
+
+    /*
+       node5
+       node1
+         node4
+       node2
+      node3
+     root
+    */
+    QVERIFY( facade.lowerNode( node2 ) == true );
+    QVERIFY( node2->nextSibling() == node1 );
+    QVERIFY( node2->prevSibling() == 0 );
+
+    // Try lowering bottomnode to bottomg
+    QVERIFY( facade.lowerNode( node2 ) == true );
+    QVERIFY( node2->nextSibling() == node1 );
+    QVERIFY( node2->prevSibling() == 0 );
+
+    /**
+       node4
+     node2
+     node5
+     node1
+    node3
+   root
+    */
+    QVERIFY( facade.toTop( node2 ) == true );
+    QVERIFY( node2->nextSibling() == 0 );
+    QVERIFY( node2->prevSibling() == node5 );
+
+    /**
+     node5
+     node1
+       node4
+     node2
+    node3
+   root
+    */
+    QVERIFY( facade.toBottom( node2 ) == true );
+    QVERIFY( node2->nextSibling() == node1 );
+    QVERIFY( node2->prevSibling() == 0 );
+
 }
 
 

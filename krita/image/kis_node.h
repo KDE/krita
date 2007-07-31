@@ -149,18 +149,10 @@ private:
      */
     void setParent( KisNodeSP parent );
 
-    /**
-     * Adds the node to this group at the specified index.
-     * childCount() is a valid index and appends to the end.
-     *
-     * @return false if the node is already in this node or any other
-     * node in the graph. (remove it first.)
-     */
-    bool add( KisNodeSP newNode, quint32 index );
 
     /**
-     * Add the specified node above the specified node (if aboveThis
-     * == 0, the bottom is used)
+     * Add the specified node above the specified node. If aboveThis
+     * is 0, the node is added at the bottom.
      */
     bool add( KisNodeSP newNode, KisNodeSP aboveThis );
 

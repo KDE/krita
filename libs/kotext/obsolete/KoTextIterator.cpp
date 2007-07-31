@@ -130,10 +130,10 @@ void KoTextIterator::init( const Q3ValueList<KoTextObject *> & lstObjects, KoTex
     Q_ASSERT( (*m_currentTextObj)->isVisible() );
     m_currentParag = m_firstParag;
 #ifdef DEBUG_ITERATOR
-    kDebug(32500) << "KoTextIterator::init from(" << *m_currentTextObj << "," << m_firstParag->paragId() << ") - to(" << (forw?m_lstObjects.last():m_lstObjects.first()) << "," << m_lastParag->paragId() << "), " << m_lstObjects.count() << " textObjects." << endl;
+    kDebug(32500) <<"KoTextIterator::init from(" << *m_currentTextObj <<"," << m_firstParag->paragId() <<") - to(" << (forw?m_lstObjects.last():m_lstObjects.first()) <<"," << m_lastParag->paragId() <<")," << m_lstObjects.count() <<" textObjects.";
     Q3ValueList<KoTextObject *>::Iterator it = m_lstObjects.begin();
     for( ; it != m_lstObjects.end(); ++it )
-        kDebug(32500) << (*it) << " " << (*it)->name() << endl;
+        kDebug(32500) << (*it) <<"" << (*it)->name();
 #endif
     Q_ASSERT( (*m_currentTextObj)->textDocument() == m_currentParag->textDocument() );
     Q_ASSERT( (forw?m_lstObjects.last():m_lstObjects.first())->textDocument() == m_lastParag->textDocument() );
@@ -156,9 +156,9 @@ void KoTextIterator::restart()
         nextTextObject();
 #ifdef DEBUG_ITERATOR
     if ( m_currentParag )
-        kDebug(32500) << "KoTextIterator::restart from(" << *m_currentTextObj << "," << m_currentParag->paragId() << ") - to(" << (forw?m_lstObjects.last():m_lstObjects.first()) << "," << m_lastParag->paragId() << "), " << m_lstObjects.count() << " textObjects." << endl;
+        kDebug(32500) <<"KoTextIterator::restart from(" << *m_currentTextObj <<"," << m_currentParag->paragId() <<") - to(" << (forw?m_lstObjects.last():m_lstObjects.first()) <<"," << m_lastParag->paragId() <<")," << m_lstObjects.count() <<" textObjects.";
     else
-        kDebug(32500) << "KoTextIterator::restart - nowhere to go!" << endl;
+        kDebug(32500) <<"KoTextIterator::restart - nowhere to go!";
 #endif
 }
 
@@ -186,7 +186,7 @@ void KoTextIterator::slotParagraphModified( KoTextParag* parag, int modifyType, 
 void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
 {
 #ifdef DEBUG_ITERATOR
-    kDebug(32500) << "KoTextIterator::slotParagraphDeleted " << parag << " (" << parag->paragId() << ")" << endl;
+    kDebug(32500) <<"KoTextIterator::slotParagraphDeleted" << parag <<" (" << parag->paragId() <<")";
 #endif
     // Note that the direction doesn't matter here. A begin/end
     // at end of parag N or at beginning of parag N+1 is the same,
@@ -218,7 +218,7 @@ void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
     }
 #ifdef DEBUG_ITERATOR
     if ( m_currentParag )
-        kDebug(32500) << "KoTextIterator: firstParag:" << m_firstParag << " (" << m_firstParag->paragId() << ") -  lastParag:" << m_lastParag << " (" << m_lastParag->paragId() << ") m_currentParag:" << m_currentParag << " (" << m_currentParag->paragId() << ")" << endl;
+        kDebug(32500) <<"KoTextIterator: firstParag:" << m_firstParag <<" (" << m_firstParag->paragId() <<") -  lastParag:" << m_lastParag <<" (" << m_lastParag->paragId() <<") m_currentParag:" << m_currentParag <<" (" << m_currentParag->paragId() <<")";
 #endif
 }
 
@@ -226,13 +226,13 @@ void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
 void KoTextIterator::operator++()
 {
     if ( !m_currentParag ) {
-        kDebug(32500) << k_funcinfo << " called past the end" << endl;
+        kDebug(32500) << k_funcinfo <<" called past the end";
         return;
     }
     if ( m_currentParag == m_lastParag ) {
         m_currentParag = 0L;
 #ifdef DEBUG_ITERATOR
-        kDebug(32500) << "KoTextIterator++: done, after last parag " << m_lastParag << endl;
+        kDebug(32500) <<"KoTextIterator++: done, after last parag" << m_lastParag;
 #endif
         return;
     }
@@ -248,10 +248,10 @@ void KoTextIterator::operator++()
     }
 #ifdef DEBUG_ITERATOR
     if ( m_currentParag )
-        kDebug(32500) << "KoTextIterator++ (" << *m_currentTextObj << "," <<
+        kDebug(32500) <<"KoTextIterator++ (" << *m_currentTextObj <<"," <<
             m_currentParag->paragId() << ")" << endl;
     else
-        kDebug(32500) << "KoTextIterator++ (at end)" << endl;
+        kDebug(32500) <<"KoTextIterator++ (at end)";
 #endif
 }
 
@@ -279,7 +279,7 @@ void KoTextIterator::nextTextObject()
     while ( m_currentParag && !(*m_currentTextObj)->isVisible() );
 #ifdef DEBUG_ITERATOR
     if ( m_currentParag )
-        kDebug(32500) << k_funcinfo << " m_currentTextObj=" << (*m_currentTextObj) << endl;
+        kDebug(32500) << k_funcinfo <<" m_currentTextObj=" << (*m_currentTextObj);
 #endif
 }
 
@@ -356,7 +356,7 @@ void KoTextIterator::setOptions( int options )
             if ( m_currentParag == 0 ) // done? -> reinit
             {
 #ifdef DEBUG_ITERATOR
-                kDebug(32500) << k_funcinfo << "was done -> reinit" << endl;
+                kDebug(32500) << k_funcinfo <<"was done -> reinit";
 #endif
                 restart();
             }
@@ -381,7 +381,7 @@ void KoTextIterator::setOptions( int options )
                 m_firstParag = (!isBack) ? firstParag : lastParag;
                 m_firstIndex = (!isBack) ? firstIndex : lastIndex;
 #ifdef DEBUG_ITERATOR
-                kDebug(32500) << "setOptions: FromCursor removed. New m_firstParag=" << m_firstParag << " (" << m_firstParag->paragId() << ") isBack=" << isBack << endl;
+                kDebug(32500) <<"setOptions: FromCursor removed. New m_firstParag=" << m_firstParag <<" (" << m_firstParag->paragId() <<") isBack=" << isBack;
 #endif
             }
         }

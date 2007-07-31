@@ -709,7 +709,7 @@ void KoStylePreview::drawContents( QPainter *painter )
 {
     painter->save();
     QRect r = contentsRect();
-    //kDebug(32500) << "KoStylePreview::drawContents contentsRect=" << DEBUGRECT(r) << endl;
+    //kDebug(32500) <<"KoStylePreview::drawContents contentsRect=" << DEBUGRECT(r);
 
     QRect whiteRect( r.x() + 10, r.y() + 10,
                      r.width() - 20, r.height() - 20 );
@@ -734,7 +734,7 @@ void KoStylePreview::drawContents( QPainter *painter )
     // Move it from the left border a little
     textRect.rLeft() += 4;
     textRect.rRight() += 4;
-    //kDebug(32500) << "KoStylePreview::drawContents textRect=" << DEBUGRECT(textRect)
+    //kDebug(32500) <<"KoStylePreview::drawContents textRect=" << DEBUGRECT(textRect)
     //          << " textSize=" << textSize.width() << "," << textSize.height() << endl;
     painter->setClipRect( textRect.intersect( whiteRect ) );
     painter->translate( textRect.x(), textRect.y() );

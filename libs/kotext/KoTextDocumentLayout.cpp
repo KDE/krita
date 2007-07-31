@@ -175,7 +175,7 @@ QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const {
 }
 
 int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const {
-    // kDebug() << "hitTest[" << point.x() << "," << point.y() << "]" << endl;
+    // kDebug() <<"hitTest[" << point.x() <<"," << point.y() <<"]";
     QTextBlock block = document()->begin();
     int position = -1;
     while(block.isValid()) {
@@ -188,7 +188,7 @@ int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accu
         for(int i=0; i < layout->lineCount(); i++) {
             QTextLine line = layout->lineAt(i);
             updateTabsForLine(block, i);
-            // kDebug() << " + line[" << line.textStart() << "]: " << line.y() << "-" << line.height() << endl;
+            // kDebug() <<" + line[" << line.textStart() <<"]:" << line.y() <<"-" << line.height();
             if(point.y() > line.y() + line.height()) {
                 position = line.textStart() + line.textLength();
                 continue;
@@ -291,7 +291,7 @@ void KoTextDocumentLayout::interruptLayout() {
 
 void KoTextDocumentLayout::layout() {
     d->scheduled = false;
-//kDebug() << "KoTextDocumentLayout::layout" << endl;
+//kDebug() <<"KoTextDocumentLayout::layout";
     class End {
     public:
         End(LayoutState *state) { m_state = state; }

@@ -91,12 +91,12 @@ void KoOasisLoadingContext::addStyles( const KoXmlElement* style, const char* fa
     else if ( family ) {
         const KoXmlElement* def = m_styles.defaultStyle( family );
         if ( def ) { // on top of all, the default style for this family
-            //kDebug(32500) << "pushing default style " << style->attributeNS( KoXmlNS::style, "name", QString() ) << endl;
+            //kDebug(32500) <<"pushing default style" << style->attributeNS( KoXmlNS::style,"name", QString() );
             m_styleStack.push( *def );
         }
     }
 
-    //kDebug(32500) << "pushing style " << style->attributeNS( KoXmlNS::style, "name", QString() ) << endl;
+    //kDebug(32500) <<"pushing style" << style->attributeNS( KoXmlNS::style,"name", QString() );
     m_styleStack.push( *style );
 }
 

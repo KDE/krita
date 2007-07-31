@@ -80,7 +80,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
 
 QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 {
-    kDebug(30004) << "KoUnitDoubleSpinBox::validate : " << input << " at " << pos << endl;
+    kDebug(30004) <<"KoUnitDoubleSpinBox::validate :" << input <<" at" << pos;
 
     QRegExp regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end
     const int res = input.indexOf( regexp );
@@ -88,7 +88,7 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
     if ( res == -1 )
     {
         // Nothing like an unit? The user is probably editing the unit
-        kDebug(30004) << "Intermediate (no unit)" << endl;
+        kDebug(30004) <<"Intermediate (no unit)";
         return QValidator::Intermediate;
     }
 
@@ -96,7 +96,7 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
     const QString number ( input.left( res ).trimmed() );
     const QString unitName ( regexp.cap( 1 ).trimmed().toLower() );
 
-    kDebug(30004) << "Split:" << number << ":" << unitName << ":" << endl;
+    kDebug(30004) <<"Split:" << number <<":" << unitName <<":";
 
     const double value = valueFromText( number );
     double newVal = 0.0;
@@ -109,7 +109,7 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
         else
         {
             // Probably the user is trying to edit the unit
-            kDebug(30004) << "Intermediate (unknown unit)" << endl;
+            kDebug(30004) <<"Intermediate (unknown unit)";
             return QValidator::Intermediate;
         }
     }
@@ -185,7 +185,7 @@ void KoUnitDoubleSpinBox::setMinMaxStep( double min, double max, double step )
 
 QString KoUnitDoubleSpinBox::textFromValue( double value ) const
 {
-    //kDebug(30004) << "textFromValue: " << QString::number( value, 'f', 12 ) << " => " << num << endl;
+    //kDebug(30004) <<"textFromValue:" << QString::number( value, 'f', 12 ) <<" =>" << num;
     //const QString num ( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, d->precision ), KoUnit::unitName( m_unit ) ) );
     //const QString num ( QString( "%1").arg( KGlobal::locale()->formatNumber( value, d->precision )) );
     return KGlobal::locale()->formatNumber( value, d->precision );
@@ -203,7 +203,7 @@ double KoUnitDoubleSpinBox::valueFromText( const QString& str ) const
     bool ok;
     const double dbl = KGlobal::locale()->readNumber( str2, &ok );
     if ( ok )
-      kDebug(30004) << "valueFromText:" << str << ": => :" << str2 << ": => " << QString::number( dbl, 'f', 12 ) << endl;
+      kDebug(30004) <<"valueFromText:" << str <<": => :" << str2 <<": =>" << QString::number( dbl, 'f', 12 );
     else
         kWarning(30004) << "valueFromText error:" << str << ": => :" << str2 << ":" << endl;
     return dbl;

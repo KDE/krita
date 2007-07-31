@@ -161,7 +161,7 @@ KKbdAccessExtensions::KKbdAccessExtensions(KActionCollection *ac, QObject *paren
     : QObject( parent )
     , d( new KKbdAccessExtensionsPrivate )
 {
-    // kDebug() << "KKbdAccessExtensions::KKbdAccessExtensions: running." << endl;
+    // kDebug() <<"KKbdAccessExtensions::KKbdAccessExtensions: running.";
     d->fwdAction  = new KAction(i18n("Resize Panel Forward"), this);
     ac->addAction("resize_panel_forward", d->fwdAction );
     d->fwdAction->setShortcut(KShortcut("F8"));
@@ -203,7 +203,7 @@ bool KKbdAccessExtensions::eventFilter( QObject *o, QEvent *e )
         KShortcut accessKeysSc = d->accessKeysAction->shortcut();
         QKeyEvent* kev = static_cast<QKeyEvent *>(e);
         KShortcut sc = KShortcut(kev->key());
-        // kDebug() << "KKbdAccessExtensions::eventFilter: Key press " << sc << endl;
+        // kDebug() <<"KKbdAccessExtensions::eventFilter: Key press" << sc;
         if (!d->accessKeyLabels) {
             if (sc == fwdSc) {
                 nextHandle();
@@ -285,7 +285,7 @@ QWidgetList* KKbdAccessExtensions::getAllPanels()
                     allPanels->append(widget);
             } else if (qobject_cast<Q3DockWindow*>( widget )) {
                 if (dynamic_cast<Q3DockWindow *>(widget)->isResizeEnabled()) {
-                    // kDebug() << "KKbdAccessExtensions::getAllPanels: QDockWindow = " << widget->name() << endl;
+                    // kDebug() <<"KKbdAccessExtensions::getAllPanels: QDockWindow =" << widget->name();
                     allPanels->append(widget);
                 }
             }
@@ -380,7 +380,7 @@ void KKbdAccessExtensions::prevHandle()
 
 void KKbdAccessExtensions::exitSizing()
 {
-    // kDebug() << "KKbdAccessExtensions::exiting sizing mode." << endl;
+    // kDebug() <<"KKbdAccessExtensions::exiting sizing mode.";
     hideIcon();
     d->handleNdx = 0;
     d->panel = 0;
@@ -390,12 +390,12 @@ void KKbdAccessExtensions::showIcon()
 {
     if (!d->panel) return;
     QPoint p;
-    // kDebug() << "KKbdAccessExtensions::showIcon: topLevelWidget = " << d->panel->topLevelWidget()->name() << endl;
+    // kDebug() <<"KKbdAccessExtensions::showIcon: topLevelWidget =" << d->panel->topLevelWidget()->name();
     QSplitter* splitter = qobject_cast<QSplitter *>(d->panel);
     if (splitter) {
         int handleNdx = d->handleNdx - 1;
         Q3ValueList<int> sizes = splitter->sizes();
-        // kDebug() << "KKbdAccessExtensions::showIcon: sizes = " << sizes << endl;
+        // kDebug() <<"KKbdAccessExtensions::showIcon: sizes =" << sizes;
         if (splitter->orientation() == Qt::Horizontal) {
             d->icon->setShape(Qt::SizeHorCursor);
             p.setX(sizes[handleNdx] + (splitter->handleWidth() / 2));
@@ -405,9 +405,9 @@ void KKbdAccessExtensions::showIcon()
             p.setX(splitter->width() / 2);
             p.setY(sizes[handleNdx] + (splitter->handleWidth() / 2));
         }
-        // kDebug() << "KKbdAccessExtensions::showIcon: p = " << p << endl;
+        // kDebug() <<"KKbdAccessExtensions::showIcon: p =" << p;
         p = splitter->mapToGlobal(p);
-        // kDebug() << "KKbdAccessExtensions::showIcon: mapToGlobal = " << p << endl;
+        // kDebug() <<"KKbdAccessExtensions::showIcon: mapToGlobal =" << p;
     } else {
         Q3DockWindow* dockWindow = qobject_cast<Q3DockWindow *>(d->panel);
         if (!dockWindow) // assert
@@ -415,9 +415,9 @@ void KKbdAccessExtensions::showIcon()
 
         p = dockWindow->pos();
         if (dockWindow->area()) {
-            // kDebug() << "KKbdAccessExtensions::showIcon: pos = " << p << " of window = " << dockWindow->parentWidget()->name() << endl;
+            // kDebug() <<"KKbdAccessExtensions::showIcon: pos =" << p <<" of window =" << dockWindow->parentWidget()->name();
             p = dockWindow->parentWidget()->mapTo(dockWindow->topLevelWidget(), p);
-            // kDebug() << "KKbdAccessExtensions::showIcon: mapTo = " << p << " of window = " << dockWindow->topLevelWidget()->name() << endl;
+            // kDebug() <<"KKbdAccessExtensions::showIcon: mapTo =" << p <<" of window =" << dockWindow->topLevelWidget()->name();
             // TODO: How to get the handle width?
             if (d->handleNdx == 1) {
                 d->icon->setShape(Qt::SizeHorCursor);
@@ -450,7 +450,7 @@ void KKbdAccessExtensions::showIcon()
             p = dockWindow->mapToGlobal(p);       // Undocked.  Position in center of window.
         }
     }
-    // kDebug() << "KKbdAccessExtensions::showIcon: show(p) = " << p << endl;
+    // kDebug() <<"KKbdAccessExtensions::showIcon: show(p) =" << p;
     d->icon->show(p);
 }
 
@@ -463,14 +463,14 @@ void KKbdAccessExtensions::resizePanel(int dx, int dy, int state)
 {
     int adj = dx + dy;
     if (adj == 0) return;
-    // kDebug() << "KKbdAccessExtensions::resizePanel: panel = " << d->panel->name() << endl;
+    // kDebug() <<"KKbdAccessExtensions::resizePanel: panel =" << d->panel->name();
     QSplitter* splitter = qobject_cast<QSplitter*>( d->panel );
     if (splitter) {
         int handleNdx = d->handleNdx - 1;
         Q3ValueList<int> sizes = splitter->sizes();
-        // kDebug() << "KKbdAccessExtensions::resizePanel: before sizes = " << sizes << endl;
+        // kDebug() <<"KKbdAccessExtensions::resizePanel: before sizes =" << sizes;
         sizes[handleNdx] = sizes[handleNdx] + adj;
-        // kDebug() << "KKbdAccessExtensions::resizePanel: setSizes = " << sizes << endl;
+        // kDebug() <<"KKbdAccessExtensions::resizePanel: setSizes =" << sizes;
         splitter->setSizes(sizes);
         QApplication::postEvent(splitter, new QEvent(QEvent::LayoutRequest));
     } else {
@@ -480,7 +480,7 @@ void KKbdAccessExtensions::resizePanel(int dx, int dy, int state)
             return;
 
         if (dockWindow->area()) {
-            // kDebug() << "KKbdAccessExtensions::resizePanel: fixedExtent = " << dockWindow->fixedExtent() << endl;
+            // kDebug() <<"KKbdAccessExtensions::resizePanel: fixedExtent =" << dockWindow->fixedExtent();
             QSize fe = dockWindow->fixedExtent();
             if (d->handleNdx == 1) {
                 // When vertically oriented and dock area is on right side of screen, pressing
@@ -503,7 +503,7 @@ void KKbdAccessExtensions::resizePanel(int dx, int dy, int state)
             }
             dockWindow->updateGeometry();
             QApplication::postEvent(dockWindow->area(), new QEvent(QEvent::LayoutRequest));
-            // kDebug() << "KKbdAccessExtensions::resizePanel: fixedExtent = " << dockWindow->fixedExtent() << endl;
+            // kDebug() <<"KKbdAccessExtensions::resizePanel: fixedExtent =" << dockWindow->fixedExtent();
         } else {
             if (state == Qt::ShiftModifier) {
                 QSize s = dockWindow->size();
@@ -522,7 +522,7 @@ void KKbdAccessExtensions::resizePanel(int dx, int dy, int state)
 
 void KKbdAccessExtensions::resizePanelFromKey(int key, int state)
 {
-    // kDebug() << "KPanelKdbSizer::resizePanelFromKey: key = " << key << " state = " << state << endl;
+    // kDebug() <<"KPanelKdbSizer::resizePanelFromKey: key =" << key <<" state =" << state;
     if (!d->panel) return;
     int dx = 0;
     int dy = 0;
@@ -536,7 +536,7 @@ void KKbdAccessExtensions::resizePanelFromKey(int key, int state)
         case Qt::Key_PageDown:      dy = 5 * stepSize;  break;
     }
     int adj = dx + dy;
-    // kDebug() << "KKbdAccessExtensions::resizePanelFromKey: adj = " << adj << endl;
+    // kDebug() <<"KKbdAccessExtensions::resizePanelFromKey: adj =" << adj;
     if (adj != 0)
         resizePanel(dx, dy, state);
     else {

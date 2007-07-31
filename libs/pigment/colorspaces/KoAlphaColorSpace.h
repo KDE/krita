@@ -121,27 +121,27 @@ public:
     virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16* transferValues) const
     {
         Q_UNUSED(transferValues);
-        kDebug() << "Undefined operation in the alpha colorspace" << endl;
+        kDebug() <<"Undefined operation in the alpha colorspace";
         return 0;
     }
     virtual KoColorTransformation* createDesaturateAdjustment() const
     {
-        kDebug() << "Undefined operation in the alpha colorspace" << endl;
+        kDebug() <<"Undefined operation in the alpha colorspace";
         return 0;
     }
     virtual KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const
     {
-        kDebug() << "Undefined operation in the alpha colorspace" << endl;
+        kDebug() <<"Undefined operation in the alpha colorspace";
         return 0;
     }
     virtual KoColorTransformation *createDarkenAdjustement(qint32 , bool , double ) const
     {
-        kDebug() << "Undefined operation in the alpha colorspace" << endl;
+        kDebug() <<"Undefined operation in the alpha colorspace";
         return 0;
     }
     virtual void invertColor(quint8*, qint32) const
     {
-        kDebug() << "Undefined operation in the alpha colorspace" << endl;
+        kDebug() <<"Undefined operation in the alpha colorspace";
     }
 
 public:

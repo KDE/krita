@@ -59,7 +59,7 @@ KoBgSpellCheck::KoBgSpellCheck( const KSpell2::Loader::Ptr& loader, QObject *par
     : QObject( parent, name )
 {
 #ifdef DEBUG_BGSPELLCHECKING
-    kDebug(32500) << "KoBgSpellCheck::KoBgSpellCheck " << this << endl;
+    kDebug(32500) <<"KoBgSpellCheck::KoBgSpellCheck" << this;
 #endif
     d = new Private;
     d->startupChecking = false;
@@ -123,7 +123,7 @@ void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, int pos )
 {
     KoTextParag* parag = d->backSpeller->currentParag();
 #ifdef DEBUG_BGSPELLCHECKING
-    kDebug(32500) << "KoBgSpellCheck::spellCheckerMisspelling parag=" << parag
+    kDebug(32500) <<"KoBgSpellCheck::spellCheckerMisspelling parag=" << parag
                    << " (id=" << parag->paragId() << ", length="
                    << parag->length() << ") pos=" << pos << " length="
                    << old.length() << endl;
@@ -146,14 +146,14 @@ void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, int pos )
 void KoBgSpellCheck::markWord( KoTextParag* parag, int pos, int length, bool misspelled )
 {
     if ( pos >= parag->length() ) {
-        kDebug(32500) << "markWord: " << pos << " is out of parag (length=" << parag->length() << ")" << endl;
+        kDebug(32500) <<"markWord:" << pos <<" is out of parag (length=" << parag->length() <<")";
         return;
     }
     if ( misspelled && parag == d->intraWordParag &&
          d->intraWordPosition >= pos &&
          d->intraWordPosition < pos+length ) {
 #ifdef DEBUG_BGSPELLCHECKING
-        kDebug(32500) << "markWord: " << parag << " " << pos << " to " << pos+length << " - word being edited" << endl;
+        kDebug(32500) <<"markWord:" << parag <<"" << pos <<" to" << pos+length <<" - word being edited";
 #endif
         return; // not yet
     }
@@ -162,7 +162,7 @@ void KoBgSpellCheck::markWord( KoTextParag* parag, int pos, int length, bool mis
     KoTextFormat format( *ch->format() );
     format.setMisspelled( misspelled );
 #ifdef DEBUG_BGSPELLCHECKING
-    kDebug(32500) << "markWord: changing mark from " << pos << " length=" << length << " misspelled=" << misspelled << endl;
+    kDebug(32500) <<"markWord: changing mark from" << pos <<" length=" << length <<" misspelled=" << misspelled;
 #endif
     parag->setFormat( pos, length, &format, true, KoTextFormat::Misspelled );
     parag->setChanged( true );
@@ -185,7 +185,7 @@ void KoBgSpellCheck::spellCheckerDone()
     Q3PtrDictIterator<KoTextParag> itr( d->paragCache );
     KoTextParag *parag = d->paragCache.take( itr.currentKey() );
 #ifdef DEBUG_BGSPELLCHECKING
-    kDebug(32500) << "spellCheckerDone : " << parag << ", cache = "<< d->paragCache.count() <<endl;
+    kDebug(32500) <<"spellCheckerDone :" << parag <<", cache ="<< d->paragCache.count();
 #endif
     d->backSpeller->check( parag );
 }
@@ -193,7 +193,7 @@ void KoBgSpellCheck::spellCheckerDone()
 void KoBgSpellCheck::stop()
 {
 #ifdef DEBUG_BGSPELLCHECKING
-  kDebug(32500) << "KoBgSpellCheck::stopSpellChecking" << endl;
+  kDebug(32500) <<"KoBgSpellCheck::stopSpellChecking";
 #endif
   d->backSpeller->stop();
 }
@@ -220,7 +220,7 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
         return;
     }
 #ifdef DEBUG_BGSPELLCHECKING
-    kDebug(32500) << "Para modified " << parag << " pos = "<<pos<<", length = "<< length <<endl;
+    kDebug(32500) <<"Para modified" << parag <<" pos ="<<pos<<", length ="<< length;
 #endif
 
     if ( length < 10 ) {
@@ -231,7 +231,7 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
         // pos - 1 wasn't enough for the case a splitting a word into two misspelled halves
         filter.setCurrentPosition( qMax( 0, pos - 2 ) );
         int curPos = filter.currentPosition(); // Filter adjusted it by going back to the last word
-        //kDebug() << "str='" << str << "' set position " << qMax(0, pos-2) << " got back curPos=" << curPos << endl;
+        //kDebug() <<"str='" << str <<"' set position" << qMax(0, pos-2) <<" got back curPos=" << curPos;
         filter.setSettings( d->backSpeller->settings() );
 
         // Tricky: KSpell2::Filter::nextWord's behavior makes the for() loop skip ignored words,
@@ -241,7 +241,7 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
 
         for ( Word w = filter.nextWord(); !w.end; w = filter.nextWord() ) {
             bool misspelling = !d->backSpeller->checkWord( w.word );
-            //kDebug()<<"Word = \""<< w.word<< "\" , misspelled = "<<misspelling<<endl;
+            //kDebug()<<"Word = \""<< w.word<<"\" , misspelled ="<<misspelling;
             markWord( parag, w.start, w.word.length(), misspelling );
         }
         if ( parag->hasChanged() ) // always true currently
@@ -277,7 +277,7 @@ void KoBgSpellCheck::slotClearPara()
     KoTextFormat format( *ch->format() );
     format.setMisspelled( false );
 #ifdef DEBUG_BGSPELLCHECKING
-    kDebug(32500) << "clearPara: resetting mark on paragraph " << parag->paragId() << endl;
+    kDebug(32500) <<"clearPara: resetting mark on paragraph" << parag->paragId();
 #endif
     parag->setFormat( 0, parag->length()-1, &format, true,
                       KoTextFormat::Misspelled );

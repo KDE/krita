@@ -220,14 +220,14 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QStri
         KoColorSpaceFactory *csf = value(csID);
         if(!csf)
         {
-            kDebug() << "Unknown color space type : " << csf << endl;
+            kDebug() <<"Unknown color space type :" << csf;
             return 0;
         }
 
         KoColorProfile *p = profileByName(profileName);
         if(!p && !profileName.isEmpty())
         {
-            kDebug() << "Profile not found : " << profileName << endl;
+            kDebug() <<"Profile not found :" << profileName;
             return 0;
         }
         KoColorSpace *cs = csf->createColorSpace(this, p);
@@ -256,7 +256,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoCol
             KoColorSpaceFactory *csf = value(csID);
             if(!csf)
             {
-                kDebug() << "Unknown color space type : " << csf << endl;
+                kDebug() <<"Unknown color space type :" << csf;
                 return 0;
             }
 

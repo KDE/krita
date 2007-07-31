@@ -72,14 +72,14 @@ QString KoPicture::uniquePictureId() const
 
 KoPicture& KoPicture::operator=( const KoPicture &other )
 {
-    //kDebug(30003) << "KoPicture::= before" << endl;
+    //kDebug(30003) <<"KoPicture::= before";
     if (other.m_sharedData)
         other.linkSharedData();
     if (m_sharedData)
         unlinkSharedData();
     m_sharedData=other.m_sharedData;
     m_key=other.m_key;
-    //kDebug(30003) << "KoPicture::= after" << endl;
+    //kDebug(30003) <<"KoPicture::= after";
     return *this;
 }
 
@@ -148,7 +148,7 @@ void KoPicture::draw(QPainter& painter, int x, int y, int width, int height, int
 
 bool KoPicture::loadXpm(QIODevice* io)
 {
-    kDebug(30003) << "KoPicture::loadXpm" << endl;
+    kDebug(30003) <<"KoPicture::loadXpm";
     if (!io)
     {
         kError(30003) << "No QIODevice!" << endl;
@@ -201,7 +201,7 @@ QString KoPicture::getMimeType(void) const
 
 bool KoPicture::load(QIODevice* io, const QString& extension)
 {
-    kDebug(30003) << "KoPicture::load(QIODevice*, const QString&) " << extension << endl;
+    kDebug(30003) <<"KoPicture::load(QIODevice*, const QString&)" << extension;
     createSharedData();
 
     return m_sharedData->load(io,extension);
@@ -209,7 +209,7 @@ bool KoPicture::load(QIODevice* io, const QString& extension)
 
 bool KoPicture::loadFromFile(const QString& fileName)
 {
-    kDebug(30003) << "KoPicture::loadFromFile " << fileName << endl;
+    kDebug(30003) <<"KoPicture::loadFromFile" << fileName;
     createSharedData();
     return m_sharedData->loadFromFile(fileName);
 }

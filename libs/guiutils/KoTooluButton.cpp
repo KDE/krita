@@ -690,7 +690,7 @@ QSize KoToolButton::minimumSize() const
 
 void KoToolButton::colorSelected( const QColor& color )
 {
-    kDebug(30004) << "selected::: " << color.name() << endl;
+    kDebug(30004) <<"selected:::" << color.name();
 }
 
 void KoToolButton::drawButton(QPainter *_painter)
@@ -820,7 +820,7 @@ bool KoToolButton::eventFilter( QObject* o, QEvent* e )
     if ( o == m_popup ) {
         if ( e->type() == QEvent::MouseButtonPress )
             if ( hitArrow( mapFromGlobal( static_cast<QMouseEvent*>( e )->globalPos() ) ) ) {
-                kDebug() << "KoToolButton::eventFilter-------------->" << endl;
+                kDebug() <<"KoToolButton::eventFilter-------------->";
                 m_popup->close();
                 m_arrowPressed = false;
                 return true;
@@ -847,7 +847,7 @@ void KoToolButton::init()
     m_popup->installEventFilter( this );
 
     ARROW_WIDTH = style().pixelMetric(QStyle::PM_MenuButtonIndicator) + 4;
-    kDebug() << "##################### Arrow: " << ARROW_WIDTH << endl;
+    kDebug() <<"##################### Arrow:" << ARROW_WIDTH;
 }
 
 void KoToolButton::buttonShift( int& dx, int& dy )

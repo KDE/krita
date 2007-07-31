@@ -177,7 +177,7 @@ void KoScriptingPart::slotShowScriptManager()
 
 void KoScriptingPart::slotStarted(Kross::Action* action)
 {
-    kDebug(32010) << "KoScriptingPart::slotStarted action=" << action->objectName() << endl;
+    kDebug(32010) <<"KoScriptingPart::slotStarted action=" << action->objectName();
     KoMainWindow* mainwin = dynamic_cast< KoMainWindow* >( qApp->activeWindow() );
     KoView* view = d->module ? d->module->view() : 0;
     if( view && mainwin && view->shell() == mainwin && view == mainwin->rootView() ) {
@@ -191,7 +191,7 @@ void KoScriptingPart::slotStarted(Kross::Action* action)
 
 void KoScriptingPart::slotFinished(Kross::Action* action)
 {
-    kDebug(32010) << "KoScriptingPart::slotFinished action=" << action->objectName() << endl;
+    kDebug(32010) <<"KoScriptingPart::slotFinished action=" << action->objectName();
     disconnect(action, SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
     if( d->module && d->module == action->object( d->module->objectName() ) ) {
         //d->view->document()->setModified(true);
@@ -202,7 +202,7 @@ void KoScriptingPart::slotFinished(Kross::Action* action)
 
 void KoScriptingPart::slotFinalized(Kross::Action* action)
 {
-    kDebug(32010) << "KoScriptingPart::slotFinalized action=" << action->objectName() << endl;
+    kDebug(32010) <<"KoScriptingPart::slotFinalized action=" << action->objectName();
     disconnect(action, SIGNAL(finalized(Kross::Action*)), this, SLOT(slotFinalized(Kross::Action*)));
     d->actions.removeAll(action);
     if( d->module && d->module == action->object( d->module->objectName() ) ) {

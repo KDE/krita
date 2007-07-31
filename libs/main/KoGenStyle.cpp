@@ -68,7 +68,7 @@ void KoGenStyle::writeStyleProperties( KoXmlWriter* writer, PropertyType i,
 
 void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
 {
-    //kDebug(30003) << "writing out style " << name << " display-name=" << m_attributes["style:display-name"] << " family=" << m_familyName << endl;
+    //kDebug(30003) <<"writing out style" << name <<" display-name=" << m_attributes["style:display-name"] <<" family=" << m_familyName;
     writer->startElement( elementName );
     const KoGenStyle* parentStyle = 0;
     if ( !m_defaultStyle ) {
@@ -83,7 +83,7 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
                 // Note: this is saving code, don't convert to attributeNS!
                 const_cast<KoGenStyle *>( this )->
                     m_familyName = parentStyle->attribute( "style:family" ).toLatin1();
-                //kDebug(30003) << "Got familyname " << m_familyName << " from parent" << endl;
+                //kDebug(30003) <<"Got familyname" << m_familyName <<" from parent";
             }
             writer->addAttribute( "style:parent-style-name", m_parentName );
         }
@@ -100,10 +100,10 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
     }
 
 #if 0 // #ifndef NDEBUG
-    kDebug(30003) << "style: " << name << endl;
+    kDebug(30003) <<"style:" << name;
     printDebug();
     if ( parentStyle ) {
-        kDebug(30003) << " parent: " << m_parentName << endl;
+        kDebug(30003) <<" parent:" << m_parentName;
         parentStyle->printDebug();
     }
 #endif
@@ -198,37 +198,37 @@ void KoGenStyle::addStyleMap( const QMap<QString, QString>& styleMap )
 void KoGenStyle::printDebug() const
 {
     int i = DefaultType;
-    kDebug(30003) << m_properties[i].count() << " properties." << endl;
+    kDebug(30003) << m_properties[i].count() <<" properties.";
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kDebug(30003) << "     " << it.key() << " = " << it.value() << endl;
+        kDebug(30003) <<"" << it.key() <<" =" << it.value();
     }
     i = TextType;
-    kDebug(30003) << m_properties[i].count() << " text properties." << endl;
+    kDebug(30003) << m_properties[i].count() <<" text properties.";
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kDebug(30003) << "     " << it.key() << " = " << it.value() << endl;
+        kDebug(30003) <<"" << it.key() <<" =" << it.value();
     }
     i = ParagraphType;
-    kDebug(30003) << m_properties[i].count() << " paragraph properties." << endl;
+    kDebug(30003) << m_properties[i].count() <<" paragraph properties.";
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kDebug(30003) << "     " << it.key() << " = " << it.value() << endl;
+        kDebug(30003) <<"" << it.key() <<" =" << it.value();
     }
     i = ChildElement;
-    kDebug(30003) << m_properties[i].count() << " child elements." << endl;
+    kDebug(30003) << m_properties[i].count() <<" child elements.";
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kDebug(30003) << "     " << it.key() << " = " << it.value() << endl;
+        kDebug(30003) <<"" << it.key() <<" =" << it.value();
     }
-    kDebug(30003) << m_attributes.count() << " attributes." << endl;
+    kDebug(30003) << m_attributes.count() <<" attributes.";
     for( QMap<QString,QString>::ConstIterator it = m_attributes.begin(); it != m_attributes.end(); ++it ) {
-        kDebug(30003) << "     " << it.key() << " = " << it.value() << endl;
+        kDebug(30003) <<"" << it.key() <<" =" << it.value();
     }
-    kDebug(30003) << m_maps.count() << " maps." << endl;
+    kDebug(30003) << m_maps.count() <<" maps.";
     for ( int i = 0; i < m_maps.count(); ++i ) {
-        kDebug(30003) << "map " << i << ":" << endl;
+        kDebug(30003) <<"map" << i <<":";
         for( QMap<QString,QString>::ConstIterator it = m_maps[i].begin(); it != m_maps[i].end(); ++it ) {
-            kDebug(30003) << "     " << it.key() << " = " << it.value() << endl;
+            kDebug(30003) <<"" << it.key() <<" =" << it.value();
         }
     }
-    kDebug(30003) << endl;
+    kDebug(30003);
 }
 #endif
 

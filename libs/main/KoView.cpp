@@ -135,7 +135,7 @@ KoView::KoView( KoDocument *document, QWidget *parent )
   new KoViewAdaptor(this);
   QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 
-  //kDebug(30003) << "KoView::KoView " << this << endl;
+  //kDebug(30003) <<"KoView::KoView" << this;
   d->m_doc = document;
   KParts::PartBase::setPartObject( this );
 
@@ -189,7 +189,7 @@ KoView::KoView( KoDocument *document, QWidget *parent )
 
 KoView::~KoView()
 {
-  kDebug(30003) << "KoView::~KoView " << this << endl;
+  kDebug(30003) <<"KoView::~KoView" << this;
   delete d->m_scrollTimer;
 //   delete d->m_dcopObject;
   if (!d->m_documentDeleted)
@@ -469,7 +469,7 @@ void KoView::removeStatusBarItem( QWidget * widget )
 
 QDockWidget * KoView::createDock(const QString & title, QWidget * w)
 {
-    kDebug(30003) << "Creating palette " << title << endl;
+    kDebug(30003) <<"Creating palette" << title;
     QDockWidget * d = new QDockWidget(title, mainWindow());
     d->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     d->setWidget(w);
@@ -678,12 +678,12 @@ void KoView::setupGlobalActions()
 
 void KoView::setupPrinter( KPrinter & )
 {
-    kDebug(30003) << "KoView::setupPrinter not implemented by the application!" << endl;
+    kDebug(30003) <<"KoView::setupPrinter not implemented by the application!";
 }
 
 void KoView::print( KPrinter & )
 {
-    kDebug(30003) << "KoView::print not implemented by the application!" << endl;
+    kDebug(30003) <<"KoView::print not implemented by the application!";
 }
 
 void KoView::newView() {

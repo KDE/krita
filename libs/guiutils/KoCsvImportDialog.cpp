@@ -198,7 +198,7 @@ void KoCsvImportDialog::fillTable( )
     int maxColumn = 1;
     row = column = 1;
     QTextStream inputStream(m_fileArray, QIODevice::ReadOnly);
-    kDebug(30501) << "Encoding: " << m_codec->name() << endl;
+    kDebug(30501) <<"Encoding:" << m_codec->name();
     inputStream.setCodec( m_codec );
 
     const int delimiterLength = m_delimiter.size();
@@ -553,7 +553,7 @@ void KoCsvImportDialog::genericDelimiterChanged( const QString & )
 
 void KoCsvImportDialog::formatChanged( const QString& newValue )
 {
-    //kDebug(30501) << "KoCsvImportDialog::formatChanged:" << newValue << endl;
+    //kDebug(30501) <<"KoCsvImportDialog::formatChanged:" << newValue;
     for ( int i = 0; i < m_dialog->m_sheet->numSelections(); ++i )
     {
         Q3TableSelection select ( m_dialog->m_sheet->selection( i ) );
@@ -578,7 +578,7 @@ void KoCsvImportDialog::delimiterClicked(int id)
     else if (id == group->id(m_dialog->m_radioSemicolon))
         m_delimiter = ";";
 
-    kDebug(30501) << "Delimiter \"" << m_delimiter << "\" selected." << endl;
+    kDebug(30501) <<"Delimiter \"" << m_delimiter <<"\" selected.";
     fillTable();
 }
 
@@ -636,7 +636,7 @@ void KoCsvImportDialog::ignoreDuplicatesChanged(int)
 QTextCodec* KoCsvImportDialog::getCodec(void) const
 {
     const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
-    kDebug(30501) << "Encoding: " << strCodec << endl;
+    kDebug(30501) <<"Encoding:" << strCodec;
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );

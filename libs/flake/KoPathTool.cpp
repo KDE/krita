@@ -40,10 +40,13 @@
 #include "KoParameterChangeStrategy.h"
 #include "KoPathPointMoveStrategy.h"
 #include "KoPathPointRubberSelectStrategy.h"
+
+#include <KIcon>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <QKeyEvent>
+#include <QAction>
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QToolButton>
@@ -51,11 +54,14 @@
 
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
 : KoTool(canvas)
-, m_activeHandle( 0 )    
+, m_activeHandle( 0 )
 , m_handleRadius( 3 )
-, m_pointSelection( this )    
+, m_pointSelection( this )
 , m_currentStrategy(0)
 {
+    QAction *action = new QAction(KIcon("pathpoint-corner"), i18n("Corner point"), this);
+    addAction("pathpoint-corner", action);
+    //connect(action
 }
 
 KoPathTool::~KoPathTool() {
@@ -632,7 +638,7 @@ void KoPathTool::selectPoints( const QRectF &rect, bool clearSelection )
 }
 
 void KoPathTool::repaint( const QRectF &repaintRect ) {
-    //kDebug(30006) << "KoPathTool::repaint(" << repaintRect << ")" << m_handleRadius;
+    //kDebug(30006) <<"KoPathTool::repaint(" << repaintRect <<")" << m_handleRadius;
     m_canvas->updateCanvas( repaintRect.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius ) );
 }
 

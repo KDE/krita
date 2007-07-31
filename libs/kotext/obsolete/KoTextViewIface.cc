@@ -182,7 +182,7 @@ void KoTextViewIface::setAlign(const QString &align)
         cmd=m_textView->setAlignCommand(Qt::AlignJustify);
     else
     {
-        kDebug(32500)<<"Align value not recognized...\n";
+        kDebug(32500)<<"Align value not recognized...";
         cmd=m_textView->setAlignCommand(Qt::AlignLeft);
     }
     delete cmd;
@@ -518,7 +518,7 @@ void KoTextViewIface::changeCaseOfText( const QString & caseType)
 
     }
     else
-        kDebug(32500)<<"Error in void KoTextViewIface::changeCaseOfText( const QString & caseType) parameter\n";
+        kDebug(32500)<<"Error in void KoTextViewIface::changeCaseOfText( const QString & caseType) parameter";
     delete cmd;
 }
 

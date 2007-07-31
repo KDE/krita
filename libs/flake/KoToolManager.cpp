@@ -114,7 +114,7 @@ public:
                 toolsHash.insert(tool->id(), origHash.value(tool->id()));
                 continue;
             }
-            kDebug(30006) << "Creating tool " << tool->id() << ". Activated on: " << tool->activationShapeId() << ", prio:" << tool->priority() << endl;
+            kDebug(30006) <<"Creating tool" << tool->id() <<". Activated on:" << tool->activationShapeId() <<", prio:" << tool->priority();
             KoTool *tl = tool->createTool(controller->canvas());
             uniqueToolIds.insert(tl, tool->uniqueId());
             toolsHash.insert(tool->id(), tl);
@@ -337,8 +337,8 @@ void KoToolManager::postSwitchTool() {
         bool first = true;
         foreach(CanvasData *data, list) {
             if(first)
-                kDebug(30006) << "Canvas " << canvasCount++ << endl;
-            kDebug(30006) << "  +- Tool: " << data->activeToolId  << (data == d->canvasData?" *":"") << endl;
+                kDebug(30006) <<"Canvas" << canvasCount++;
+            kDebug(30006) <<"  +- Tool:" << data->activeToolId  << (data == d->canvasData?" *":"");
             first = false;
         }
     }

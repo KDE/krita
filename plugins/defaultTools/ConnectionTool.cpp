@@ -148,13 +148,13 @@ void ConnectionTool::deactivate() {
 }
 
 void ConnectionTool::createConnection(KoShape *shape1, int gluePointIndex1, KoShape *shape2, int gluePointIndex2) {
-    kDebug() << "create Connection!\n";
+    kDebug() <<"create Connection!";
     new KoShapeConnection(shape1, gluePointIndex1, shape2, gluePointIndex2); // will add itself.
 }
 
 KoShapeConnection* ConnectionTool::createConnection(KoShape *shape, int gluePointIndex, const QPointF& endPoint)
 {
-    kDebug() << "create Connection!\n";
+    kDebug() <<"create Connection!";
     return new KoShapeConnection(shape, gluePointIndex, endPoint); // will add itself.
 }
 

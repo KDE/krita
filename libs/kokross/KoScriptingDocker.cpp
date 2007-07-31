@@ -168,7 +168,7 @@ void KoScriptingDocker::slotEnabledChanged(const QString& actionname)
 
 void KoScriptingDocker::slotDoubleClicked()
 {
-    //kDebug()<<"KoScriptingDocker::slotDoubleClicked()"<<endl;
+    //kDebug()<<"KoScriptingDocker::slotDoubleClicked()";
     d->view->slotRun();
 }
 

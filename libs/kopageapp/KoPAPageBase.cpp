@@ -146,7 +146,7 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
         KoXmlElement child;
         forEachElement( child, element )
         {
-            kDebug() << "loading shape " << child.localName() << endl;
+            kDebug() <<"loading shape" << child.localName();
 
             KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, loadingContext );
             if ( shape ) {

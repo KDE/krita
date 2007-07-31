@@ -79,7 +79,7 @@ class KoTextLoader::Private
         }
         ~Private() {
             qDeleteAll(listStyles);
-            kDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+            kDebug() <<"Loading took" << (float)(dt.elapsed()) / 1000 <<" seconds";
         }
 
         KoParagraphStyle *paragraphStyle(const QString &name) {
@@ -151,7 +151,7 @@ void KoTextLoader::loadStyles(KoTextLoadingContext& context, QList<KoXmlElement*
         Q_ASSERT( !styleElem->isNull() );
         if( !defaultStyleDeleted ) { // we are going to import at least one style.
             KoParagStyle *s = defaultStyle();
-            //kDebug(32500) << "loadOasisStyles looking for Standard, to delete it. Found " << s << endl;
+            //kDebug(32500) <<"loadOasisStyles looking for Standard, to delete it. Found" << s;
             if(s) removeStyle(s); // delete the standard style.
             defaultStyleDeleted = true;
         }
@@ -163,7 +163,7 @@ void KoTextLoader::loadStyles(KoTextLoadingContext& context, QList<KoXmlElement*
         sty = addStyle( sty );
         // the real value of followingStyle is set below after loading all styles
         sty->setFollowingStyle( sty );
-        kDebug(32500) << " Loaded style " << sty->name() << endl;
+        kDebug(32500) <<" Loaded style" << sty->name();
         if ( count() > oldStyleCount ) {
             const QString following = styleElem->attributeNS( KoXmlNS::style, "next-style-name", QString::null );
             followingStyles.append( following );
@@ -171,7 +171,7 @@ void KoTextLoader::loadStyles(KoTextLoadingContext& context, QList<KoXmlElement*
         }
         else kWarning() << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
     }
-    if( followingStyles.count() != styleList().count() ) kDebug(32500) << "Ouch, " << followingStyles.count() << " following-styles, but " << styleList().count() << " styles in styleList" << endl;
+    if( followingStyles.count() != styleList().count() ) kDebug(32500) <<"Ouch," << followingStyles.count() <<" following-styles, but" << styleList().count() <<" styles in styleList";
     unsigned int i = 0;
     QString tmpString;
     foreach( tmpString, followingStyles ) {
@@ -196,7 +196,7 @@ void KoTextLoader::loadStyles(KoTextLoadingContext& context, QList<KoXmlElement*
             displayName = name;
 
         #ifdef KOOPENDOCUMENTLOADER_DEBUG
-            kDebug(32500)<<"KoTextLoader::loadStyles styleName="<<name<<" styleDisplayName="<<displayName<<endl;
+            kDebug(32500)<<"KoTextLoader::loadStyles styleName="<<name<<" styleDisplayName="<<displayName;
         #endif
 #if 0 //1.6:
         // OOo hack:
@@ -229,7 +229,7 @@ void KoTextLoader::loadStyles(KoTextLoadingContext& context, QList<KoXmlElement*
 void KoTextLoader::loadAllStyles(KoTextLoadingContext& context)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadAllStyles"<<endl;
+        kDebug(32500)<<"KoTextLoader::loadAllStyles";
     #endif
     // User styles are named and appear in the gui while automatic styles are just a way to
     // save formatting changes done by the user. There is no real tech diff between them
@@ -248,7 +248,7 @@ void KoTextLoader::loadAllStyles(KoTextLoadingContext& context)
     QHash<QString, KoXmlElement*> listStyles = context.oasisStyles().listStyles();
     for(QHash<QString, KoXmlElement*>::Iterator it = listStyles.begin(); it != listStyles.end(); ++it) {
         #ifdef KOOPENDOCUMENTLOADER_DEBUG
-            kDebug(32500)<<"KoTextLoader::loadAllStyles listStyle="<<it.key()<<endl;
+            kDebug(32500)<<"KoTextLoader::loadAllStyles listStyle="<<it.key();
         #endif
         KoListStyle* style = new KoListStyle();
         style->setName(it.key());
@@ -261,7 +261,7 @@ void KoTextLoader::loadAllStyles(KoTextLoadingContext& context)
 void KoTextLoader::loadSettings(KoTextLoadingContext& context, const QDomDocument& settings)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadSettings"<<endl;
+        kDebug(32500)<<"KoTextLoader::loadSettings";
     #endif
     Q_UNUSED(context);
     Q_UNUSED(settings);
@@ -270,7 +270,7 @@ void KoTextLoader::loadSettings(KoTextLoadingContext& context, const QDomDocumen
 bool KoTextLoader::loadPageLayout(KoTextLoadingContext& context, const QString& masterPageName)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadPageLayout"<<endl;
+        kDebug(32500)<<"KoTextLoader::loadPageLayout";
     #endif
     Q_UNUSED(context);
     Q_UNUSED(masterPageName);
@@ -280,7 +280,7 @@ bool KoTextLoader::loadPageLayout(KoTextLoadingContext& context, const QString& 
 bool KoTextLoader::loadMasterPageStyle(KoTextLoadingContext& context, const QString& masterPageName)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadMasterPageStyle"<<endl;
+        kDebug(32500)<<"KoTextLoader::loadMasterPageStyle";
     #endif
     Q_UNUSED(context);
     Q_UNUSED(masterPageName);
@@ -291,7 +291,7 @@ bool KoTextLoader::loadMasterPageStyle(KoTextLoadingContext& context, const QStr
 void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& bodyElem, QTextCursor& cursor)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadBody"<<endl;
+        kDebug(32500)<<"KoTextLoader::loadBody";
     #endif
 
     startBody( KoXml::childNodesCount( bodyElem ) );
@@ -332,7 +332,7 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
                     QTextTable *tbl = cursor.insertTable(1, 1);
                     int rows = 0;
                     int columns = 0;
-                    kDebug() << "Table inserted" << endl;
+                    kDebug() <<"Table inserted";
                     KoXmlElement tblTag;
                     forEachElement(tblTag, tag) {
                         if( ! tblTag.isNull() ) {
@@ -368,7 +368,7 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
                                                         loadBody(context, rowTag, cursor);
                                                     }
                                                     else
-                                                        kDebug(32500)<<"Invalid table-cell row="<<currentRow<<" column="<<currentCell<<endl;
+                                                        kDebug(32500)<<"Invalid table-cell row="<<currentRow<<" column="<<currentCell;
                                                     currentCell++;
                                                 }
                                             }
@@ -398,7 +398,7 @@ void KoTextLoader::loadParagraph(KoTextLoadingContext& context, const KoXmlEleme
     context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
     QString userStyleName = context.styleStack().userStyleName( "paragraph" );
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadParagraph userStyleName="<<userStyleName<<endl;
+        kDebug(32500)<<"KoTextLoader::loadParagraph userStyleName="<<userStyleName;
     #endif
     KoParagraphStyle *userStyle = d->paragraphStyle(userStyleName);
     //if( ! userStyle ) userStyle = d->stylemanager->defaultParagraphStyle();
@@ -411,7 +411,7 @@ void KoTextLoader::loadParagraph(KoTextLoadingContext& context, const KoXmlEleme
     //1.6: KWTextParag::loadOasis
     QString styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadParagraph styleName="<<styleName<<" userStyleName="<<userStyleName<<" userStyle="<<(userStyle?"YES":"NULL")<<endl;
+        kDebug(32500)<<"KoTextLoader::loadParagraph styleName="<<styleName<<" userStyleName="<<userStyleName<<" userStyle="<<(userStyle?"YES":"NULL");
     #endif
     if ( !styleName.isEmpty() ) {
         const KoXmlElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
@@ -419,14 +419,14 @@ void KoTextLoader::loadParagraph(KoTextLoadingContext& context, const KoXmlEleme
         if ( masterPageName.isEmpty() )
             masterPageName = "Standard";
         #ifdef KOOPENDOCUMENTLOADER_DEBUG
-            kDebug(32500) << "KoTextLoader::loadParagraph paragraphStyle.localName=" << (paragraphStyle ? paragraphStyle->localName() : "NULL") << " masterPageName=" << masterPageName << endl;
+            kDebug(32500) <<"KoTextLoader::loadParagraph paragraphStyle.localName=" << (paragraphStyle ? paragraphStyle->localName() :"NULL") <<" masterPageName=" << masterPageName;
         #endif
 
         /*
         QString styleName = context.styleStack().userStyleName( "paragraph" );
         KoParagraphStyle *style = d->stylemanager->paragraphStyle(styleName);
         if ( !style ) {
-            kDebug(32500) << "KoTextLoader::loadSpan: Unknown style. Using default!" << endl;
+            kDebug(32500) <<"KoTextLoader::loadSpan: Unknown style. Using default!";
             style = d->stylemanager->defaultParagraphStyle();
         }
         */
@@ -442,7 +442,7 @@ void KoTextLoader::loadParagraph(KoTextLoadingContext& context, const KoXmlEleme
         if( ! style ) {
             style = d->stylemanager->defaultParagraphStyle();
             #ifdef KOOPENDOCUMENTLOADER_DEBUG
-                kDebug(32500) << "KoTextLoader::loadParagraph using default style!" << endl;
+                kDebug(32500) <<"KoTextLoader::loadParagraph using default style!";
             #endif
         }
         if ( style ) {
@@ -536,14 +536,14 @@ void KoTextLoader::loadHeading(KoTextLoadingContext& context, const KoXmlElement
     //1.6: KWTextParag::loadOasis
     QString styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadHeading style-name="<<styleName<<" outline-level="<<level<<endl;
+        kDebug(32500)<<"KoTextLoader::loadHeading style-name="<<styleName<<" outline-level="<<level;
     #endif
     if ( !styleName.isEmpty() ) {
         const KoXmlElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
         //QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
         //if ( masterPageName.isEmpty() ) masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
         #ifdef KOOPENDOCUMENTLOADER_DEBUG
-            kDebug(32500) << "KoTextLoader::loadBody styleName=" << styleName << endl;
+            kDebug(32500) <<"KoTextLoader::loadBody styleName=" << styleName;
         #endif
         //context.styleStack().save();
         context.styleStack().setTypeProperties( "paragraph" );
@@ -567,7 +567,7 @@ void KoTextLoader::loadHeading(KoTextLoadingContext& context, const KoXmlElement
 
     if( listStyle ) {
         #ifdef KOOPENDOCUMENTLOADER_DEBUG
-            kDebug(32500)<<"KoTextLoader::loadHeading with listStyle !"<<endl;
+            kDebug(32500)<<"KoTextLoader::loadHeading with listStyle !";
         #endif
         paragStyle->setListStyle(*listStyle);
         delete listStyle;
@@ -620,7 +620,7 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
     QTextList* list = cursor.createList(listformat);
 
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadList styleName="<<styleName<<" listStyle="<<(listStyle ? listStyle->name() : "NULL")
+        kDebug(32500)<<"KoTextLoader::loadList styleName="<<styleName<<" listStyle="<<(listStyle ? listStyle->name() :"NULL")
             <<" level="<<level<<" hasPropertiesForLevel="<<listStyle->hasPropertiesForLevel(level)
             //<<" style="<<props.style()<<" prefix="<<props.listItemPrefix()<<" suffix="<<props.listItemSuffix()
             <<endl;
@@ -718,7 +718,7 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
 void KoTextLoader::loadSection(KoTextLoadingContext& context, const KoXmlElement& parent, QTextCursor& cursor)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadSection"<<endl;
+        kDebug(32500)<<"KoTextLoader::loadSection";
     #endif
 
     //TODO
@@ -781,7 +781,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
         {
             QString text = node.toText().data();
             #ifdef KOOPENDOCUMENTLOADER_DEBUG
-                kDebug(32500) << "  <text> localName=" << localName << " parent.localName="<<parent.localName()<<" text=" << text << endl;
+                kDebug(32500) <<"  <text> localName=" << localName <<" parent.localName="<<parent.localName()<<" text=" << text;
             #endif
             text = normalizeWhitespace(text.replace('\n', QChar(0x2028)), *stripLeadingSpace);
 
@@ -795,7 +795,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
         else if ( isTextNS && localName == "span" ) // text:span
         {
             #ifdef KOOPENDOCUMENTLOADER_DEBUG
-                kDebug(32500) << "  <span> localName=" << localName << endl;
+                kDebug(32500) <<"  <span> localName=" << localName;
             #endif
             context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
@@ -806,7 +806,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
             KoCharacterStyle *charstyle = 0;
             if( textStyleElem ) {
                 #ifdef KOOPENDOCUMENTLOADER_DEBUG
-                    kDebug(32500)<<"textStyleName="<<textStyleName<<endl;
+                    kDebug(32500)<<"textStyleName="<<textStyleName;
                 #endif
                 context.addStyles( textStyleElem, "text" );
                 charstyle = d->characterStyle(textStyleName);
@@ -853,7 +853,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
         else if ( isTextNS && localName == "line-break" ) // text:line-break
         {
             #ifdef KOOPENDOCUMENTLOADER_DEBUG
-                kDebug(32500) << "  <line-break> Node localName=" << localName << endl;
+                kDebug(32500) <<"  <line-break> Node localName=" << localName;
             #endif
             //QTextBlockFormat emptyTbf;
             //QTextCharFormat emptyCf;
@@ -976,7 +976,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
             }
 #else
             #ifdef KOOPENDOCUMENTLOADER_DEBUG
-                kDebug(32500) << "  Node localName=" << localName << " is UNHANDLED" << endl;
+                kDebug(32500) <<"  Node localName=" << localName <<" is UNHANDLED";
             #endif
 #endif
         }

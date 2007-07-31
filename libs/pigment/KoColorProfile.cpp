@@ -30,7 +30,7 @@ struct KoColorProfile::Private
 
 KoColorProfile::KoColorProfile(QString fileName) : d(new Private)
 {
-//     kDebug() << " Profile filename = " << fileName << endl;
+//     kDebug() <<" Profile filename =" << fileName;
     d->fileName = fileName;
 }
 

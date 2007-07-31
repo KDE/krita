@@ -263,7 +263,7 @@ void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXml
     if( style.localName() == "list-level-style-bullet" ) { // list with bullets
         //1.6: KoParagCounter::loadOasisListStyle
         QString bulletChar = style.isNull() ? QString() : style.attributeNS( KoXmlNS::text, "bullet-char", QString() );
-        //kDebug()<<"KoListLevelProperties::loadOasis list-level-style-bullet bulletChar="<<bulletChar<<endl;
+        //kDebug()<<"KoListLevelProperties::loadOasis list-level-style-bullet bulletChar="<<bulletChar;
         if( bulletChar.isEmpty() ) { // list without any visible bullets
             setStyle(KoListStyle::NoItem);
         }
@@ -301,19 +301,19 @@ void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXml
                     break;
                 default:
                     QChar customBulletChar = bulletChar[0];
-                    kDebug() << "Unhandled bullet code 0x" << QString::number( (uint)customBulletChar.unicode(), 16 ) << endl;
+                    kDebug() <<"Unhandled bullet code 0x" << QString::number( (uint)customBulletChar.unicode(), 16 );
                     /*
                     QString customBulletFont;
                     // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
                     if ( listStyleProperties.hasAttributeNS( KoXmlNS::style, "font-name" ) )
                     {
                         customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null );
-                        kDebug() << "customBulletFont style:font-name = " << listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null ) << endl;
+                        kDebug() <<"customBulletFont style:font-name =" << listStyleProperties.attributeNS( KoXmlNS::style,"font-name", QString::null );
                     }
                     else if ( listStyleTextProperties.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
                     {
                         customBulletFont = listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString::null );
-                        kDebug() << "customBulletFont fo:font-family = " << listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString::null ) << endl;
+                        kDebug() <<"customBulletFont fo:font-family =" << listStyleTextProperties.attributeNS( KoXmlNS::fo,"font-family", QString::null );
                     }
                     // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
                     */
@@ -326,7 +326,7 @@ void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXml
     else if( style.localName() == "list-level-style-number" ) { // it's a numbered list
 
         const QString format = style.attributeNS( KoXmlNS::style, "num-format", QString() );
-        //kDebug()<<"KoListLevelProperties::loadOasis list-level-style-number format="<<format<<endl;
+        //kDebug()<<"KoListLevelProperties::loadOasis list-level-style-number format="<<format;
         if( format.isEmpty() ) {
             setStyle(KoListStyle::NoItem);
         }

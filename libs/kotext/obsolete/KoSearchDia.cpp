@@ -208,7 +208,7 @@ void KoFindReplace::connectFind( KFind* find )
 KoFindReplace::~KoFindReplace()
 {
     removeHighlight();
-    //kDebug(32500) << "KoFindReplace::~KoFindReplace" << endl;
+    //kDebug(32500) <<"KoFindReplace::~KoFindReplace";
     delete m_find;
     delete m_replace;
 }
@@ -258,7 +258,7 @@ bool KoFindReplace::findNext()
 {
     KFind::Result res = KFind::NoMatch;
     while ( res == KFind::NoMatch && !m_textIterator.atEnd() ) {
-        //kDebug(32500) << "findNext loop. m_bInit=" << m_bInit << " needData=" << needData() << " m_currentParagraphModified=" << m_currentParagraphModified << endl;
+        //kDebug(32500) <<"findNext loop. m_bInit=" << m_bInit <<" needData=" << needData() <<" m_currentParagraphModified=" << m_currentParagraphModified;
         if ( needData() || m_currentParagraphModified ) {
             if ( !m_bInit && !m_currentParagraphModified ) {
                 ++m_textIterator;
@@ -282,7 +282,7 @@ bool KoFindReplace::findNext()
             res = m_replace->replace();
     }
 
-    //kDebug(32500) << k_funcinfo << "we're done. res=" << res << endl;
+    //kDebug(32500) << k_funcinfo <<"we're done. res=" << res;
     if ( res == KFind::NoMatch ) // i.e. at end
     {
         emitUndoRedo();
@@ -358,7 +358,7 @@ void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingL
     if ( m_lastTextObjectHighlighted )
         m_lastTextObjectHighlighted->removeHighlight(true);
     m_lastTextObjectHighlighted = m_textIterator.currentTextObject();
-    //kDebug(32500) << "KoFindReplace::highlight " << matchingIndex << "," << matchingLength << endl;
+    //kDebug(32500) <<"KoFindReplace::highlight" << matchingIndex <<"," << matchingLength;
     KDialog* dialog = m_find ? m_find->findNextDialog() : m_replace->replaceNextDialog();
     highlightPortion(m_textIterator.currentParag(), m_offset + matchingIndex, matchingLength, m_lastTextObjectHighlighted->textDocument(), dialog );
 }
@@ -367,7 +367,7 @@ void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingL
 void KoFindReplace::replace( const QString &text, int matchingIndex,
                              int replacementLength, int matchedLength )
 {
-    //kDebug(32500) << "KoFindReplace::replace m_offset=" << m_offset << " matchingIndex=" << matchingIndex << " matchedLength=" << matchedLength << " options=" << options() << endl;
+    //kDebug(32500) <<"KoFindReplace::replace m_offset=" << m_offset <<" matchingIndex=" << matchingIndex <<" matchedLength=" << matchedLength <<" options=" << options();
     m_matchingIndex = matchingIndex;
     int index = m_offset + matchingIndex;
 

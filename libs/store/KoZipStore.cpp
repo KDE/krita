@@ -31,7 +31,7 @@
 
 KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
-    kDebug(s_area) << "KoZipStore Constructor filename = " << _filename
+    kDebug(s_area) <<"KoZipStore Constructor filename =" << _filename
                     << " mode = " << int(_mode)
                     << " mimetype = " << appIdentification << endl;
 
@@ -48,7 +48,7 @@ KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QByteArray & appIdentif
 
 KoZipStore::KoZipStore( QWidget* window, const KUrl & _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
-    kDebug(s_area) << "KoZipStore Constructor url" << _url.pathOrUrl()
+    kDebug(s_area) <<"KoZipStore Constructor url" << _url.pathOrUrl()
                     << " filename = " << _filename
                     << " mode = " << int(_mode)
                     << " mimetype = " << appIdentification << endl;
@@ -74,7 +74,7 @@ KoZipStore::KoZipStore( QWidget* window, const KUrl & _url, const QString & _fil
 
 KoZipStore::~KoZipStore()
 {
-    kDebug(s_area) << "KoZipStore::~KoZipStore" << endl;
+    kDebug(s_area) <<"KoZipStore::~KoZipStore";
     if ( !m_bFinalized )
         finalize(); // ### no error checking when the app forgot to call finalize itself
     delete m_pZip;
@@ -101,7 +101,7 @@ bool KoZipStore::init( Mode _mode, const QByteArray& appIdentification )
         good = m_pZip->directory() != 0;
     else if ( good && _mode == Write )
     {
-        //kDebug(s_area) << "KoZipStore::init writing mimetype " << appIdentification << endl;
+        //kDebug(s_area) <<"KoZipStore::init writing mimetype" << appIdentification;
 
         m_pZip->setCompression( KZip::NoCompression );
         m_pZip->setExtraField( KZip::NoExtraField );
@@ -157,7 +157,7 @@ bool KoZipStore::openRead( const QString& name )
 qint64 KoZipStore::write( const char* _data, qint64 _len )
 {
   if ( _len == 0L ) return 0;
-  //kDebug(s_area) << "KoZipStore::write " << _len << endl;
+  //kDebug(s_area) <<"KoZipStore::write" << _len;
 
   if ( !m_bIsOpen )
   {
@@ -178,7 +178,7 @@ qint64 KoZipStore::write( const char* _data, qint64 _len )
 
 bool KoZipStore::closeWrite()
 {
-    kDebug(s_area) << "Wrote file " << m_sName << " into ZIP archive. size "
+    kDebug(s_area) <<"Wrote file" << m_sName <<" into ZIP archive. size"
                     << m_iSize << endl;
     return m_pZip->finishWriting( m_iSize );
 #if 0

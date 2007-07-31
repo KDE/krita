@@ -89,7 +89,7 @@ ComboBox::setValue(const QVariant &value, bool emitChange)
 	if (!m_setValueEnabled)
 		return;
 	int idx = property()->listData()->keys.indexOf( value.toString() );
-	kDebug() << "********** " <<idx << " " <<value.toString()<<endl;
+	kDebug() <<"**********" <<idx <<"" <<value.toString();
 	if (idx>=0 && idx<m_edit->count()) {
 		m_edit->setCurrentIndex(idx);
 	}

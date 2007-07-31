@@ -120,7 +120,7 @@ void KoBorder::loadFoBorder( const QString& border )
 
     //TODO: let the user choose a more precise border width (in the current unit)
     double const penWidth = KoUnit::parseValue( _width, 1.0 );
-    //kDebug() << "penWidth:" << penWidth << endl;
+    //kDebug() <<"penWidth:" << penWidth;
     if ( penWidth < 1.5 )
         setPenWidth( 1.0 );
     else if ( penWidth < 2.5 )
@@ -225,10 +225,10 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, cons
     // Wide pen don't draw the last pixel, so add one to the bottom and right coords
     int lastPixelAdj = 1;
 
-    //kDebug(32500) << "KoBorder::drawBorders widths: top=" << topBorderWidth << " bottom=" << bottomBorderWidth
+    //kDebug(32500) <<"KoBorder::drawBorders widths: top=" << topBorderWidth <<" bottom=" << bottomBorderWidth
     //               << " left=" << leftBorderWidth << " right=" << rightBorderWidth << endl;
 
-    //kDebug(32500) << "                   penWidths: top=" << topBorderPenWidth << " bottom=" << bottomBorderPenWidth
+    //kDebug(32500) <<"                   penWidths: top=" << topBorderPenWidth <<" bottom=" << bottomBorderPenWidth
     //               << " left=" << leftBorderPenWidth << " right=" << rightBorderPenWidth << endl;
 
     QColor defaultColor = KoTextFormat::defaultTextColor( &painter );
@@ -257,9 +257,9 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, cons
             painter.setPen( KoBorder::borderPen( bottomBorder, bottomBorderPenWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
-	//kDebug(32500) << "bottomBorderWidth=" << bottomBorderWidth << " bottomBorderWidth/2=" << (int)bottomBorderWidth/2 << endl;
+	//kDebug(32500) <<"bottomBorderWidth=" << bottomBorderWidth <<" bottomBorderWidth/2=" << (int)bottomBorderWidth/2;
         int y = rect.bottom() + bottomBorderPenWidth/2 + 1;
-	//kDebug(32500) << "   -> bottom=" << rect.bottom() << " y=" << y << endl;
+	//kDebug(32500) <<"   -> bottom=" << rect.bottom() <<" y=" << y;
         if ( bottomBorder.m_style==KoBorder::DOUBLE_LINE)
         {
             painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth+lastPixelAdj, y );
@@ -288,7 +288,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, cons
         {
             int yTop = rect.top() - topBorderWidth;
             int yBottom = rect.bottom() + bottomBorderWidth;
-            /*kDebug(32500) << " pen=" << painter.pen() << " rect=" << rect << " topBorderWidth=" << topBorderWidth
+            /*kDebug(32500) <<" pen=" << painter.pen() <<" rect=" << rect <<" topBorderWidth=" << topBorderWidth
                            << " painting from " << x << "," << yTop
                            << " to " << x << "," << yBottom << endl;*/
             painter.drawLine( x, yTop, x, yBottom+lastPixelAdj );
@@ -312,7 +312,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, cons
         {
             int yTop = rect.top()-topBorderWidth;
             int yBottom = rect.bottom()+bottomBorderWidth+lastPixelAdj;
-            /*kDebug(32500) << " pen=" << painter.pen() << " rect=" << rect << " topBorderWidth=" << topBorderWidth
+            /*kDebug(32500) <<" pen=" << painter.pen() <<" rect=" << rect <<" topBorderWidth=" << topBorderWidth
                            << " painting from " << x << "," << yTop
                            << " to " << x << "," << yBottom << endl;*/
             painter.drawLine( x, yTop, x, yBottom );

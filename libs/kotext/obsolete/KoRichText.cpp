@@ -703,7 +703,7 @@ void KoTextCursor::gotoEnd()
     // Don't prevent going to the end of the text, even if it's not visible.
     //if ( doc && !doc->lastParag()->isValid() )
     //{
-//	kDebug(32500) << "Last parag, " << doc->lastParag()->paragId() << ", is invalid - aborting gotoEnd() !" << endl;
+//	kDebug(32500) <<"Last parag," << doc->lastParag()->paragId() <<", is invalid - aborting gotoEnd() !";
 //	return;
 //    }
 
@@ -1111,7 +1111,7 @@ void KoTextString::insert( int index, const QString &s, KoTextFormat *f )
 	ch.startOfRun = 0;
         ch.c = s[ i ];
 #ifdef DEBUG_COLLECTION
-	kDebug(32500) << "KoTextString::insert setting format " << f << " to character " << (int)index+i << endl;
+	kDebug(32500) <<"KoTextString::insert setting format" << f <<" to character" << (int)index+i;
 #endif
 	ch.setFormat( f );
     }
@@ -1218,10 +1218,10 @@ void KoTextString::clear()
 void KoTextString::setFormat( int index, KoTextFormat *f, bool useCollection, bool setFormatAgain )
 {
     KoTextStringChar &ch = data[ index ];
-//    kDebug(32500) << "KoTextString::setFormat index=" << index << " f=" << f << endl;
+//    kDebug(32500) <<"KoTextString::setFormat index=" << index <<" f=" << f;
     if ( useCollection && ch.format() )
     {
-	//kDebug(32500) << "KoTextString::setFormat removing ref on old format " << ch.format() << endl;
+	//kDebug(32500) <<"KoTextString::setFormat removing ref on old format" << ch.format();
 	ch.format()->removeRef();
     }
     ch.setFormat( f, setFormatAgain );
@@ -1491,7 +1491,7 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
 {
     int start = (startChar - &text->at(0));
     int last = (lastChar - &text->at(0) );
-    //kDebug(32500) << "doing BiDi reordering from " << start << " to " << last << "!" << endl;
+    //kDebug(32500) <<"doing BiDi reordering from" << start <<" to" << last <<"!";
 
     KoBidiControl *control = new KoBidiControl( line->context(), line->status );
     QString str;
@@ -1587,7 +1587,7 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
 		} else {
 		    ww = c->format()->width( ' ' );
 		}
-		//kDebug(32500) << "setting char " << pos << " at pos " << x << endl;
+		//kDebug(32500) <<"setting char" << pos <<" at pos" << x;
 		if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
 		x += ww;
 		pos++;

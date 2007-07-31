@@ -13,10 +13,10 @@
 static bool check(const QString& a, const QString& b)
 {
   if (a == b) {
-    kDebug() << "checking '" << a << "' against expected value '" << b << "'... " << "ok" << endl;
+    kDebug() <<"checking '" << a <<"' against expected value '" << b <<"'..." <<"ok";
   }
   else {
-    kDebug() << "checking '" << a << "' against expected value '" << b << "'... " << "KO !" << endl;
+    kDebug() <<"checking '" << a <<"' against expected value '" << b <<"'..." <<"KO !";
     exit(1);
   }
   return true;
@@ -29,7 +29,7 @@ void check_hyphenation( const QStringList& tests, const QStringList& results, co
     QStringList::ConstIterator it, itres;
     for ( it = tests.begin(), itres = results.begin(); it != tests.end() ; ++it, ++itres ) {
         QString result = hypher->hyphenate((*it), lang);
-        kDebug() << (*it) << " hyphenates like this: " << result << endl;
+        kDebug() << (*it) <<" hyphenates like this:" << result;
         check( result.replace(QChar(0xad),'-'), *itres );
     }
 }
@@ -43,7 +43,7 @@ int main (int argc, char ** argv)
     }
     catch (KoHyphenatorException &e)
     {
-        kDebug() << e.message() << endl;
+        kDebug() << e.message();
         return 1;
     }
 
@@ -54,7 +54,7 @@ int main (int argc, char ** argv)
                         "ďábelské" << "ódy";
 
     for ( it = cs_tests.begin(); it != cs_tests.end() ; ++it )
-        kDebug() << (*it) << " hyphenates like this: " << hypher->hyphenate((*it), "cs") << endl;
+        kDebug() << (*it) <<" hyphenates like this:" << hypher->hyphenate((*it),"cs");
 
     //testing English
     QStringList en_tests = QStringList() << "Follow" << "white" << "rabbit";

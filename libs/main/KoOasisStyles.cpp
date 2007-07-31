@@ -91,21 +91,21 @@ void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml 
     KoXmlElement fontStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "font-face-decls" );
 
     if ( !fontStyles.isNull() ) {
-        //kDebug(30003) << "Starting reading in font-face-decls..." << endl;
+        //kDebug(30003) <<"Starting reading in font-face-decls...";
         insertStyles( fontStyles, stylesDotXml ? AutomaticInStyles : AutomaticInContent );
     }// else
-    //   kDebug(30003) << "No items found" << endl;
+    //   kDebug(30003) <<"No items found";
 
-    //kDebug(30003) << "Starting reading in office:automatic-styles. stylesDotXml=" << stylesDotXml << endl;
+    //kDebug(30003) <<"Starting reading in office:automatic-styles. stylesDotXml=" << stylesDotXml;
 
     KoXmlElement autoStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "automatic-styles" );
     if ( !autoStyles.isNull() ) {
         insertStyles( autoStyles, stylesDotXml ? AutomaticInStyles : AutomaticInContent );
     }// else
-    //    kDebug(30003) << "No items found" << endl;
+    //    kDebug(30003) <<"No items found";
 
 
-    //kDebug(30003) << "Reading in master styles" << endl;
+    //kDebug(30003) <<"Reading in master styles";
 
     KoXmlNode masterStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "master-styles" );
     if ( !masterStyles.isNull() ) {
@@ -115,10 +115,10 @@ void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml 
             if ( master.localName() == "master-page" &&
                  master.namespaceURI() == KoXmlNS::style ) {
                 const QString name = master.attributeNS( KoXmlNS::style, "name", QString() );
-                kDebug(30003) << "Master style: '" << name << "' loaded " << endl;
+                kDebug(30003) <<"Master style: '" << name <<"' loaded";
                 d->masterPages.insert( name, new KoXmlElement( master ) );
             } else if( master.localName() == "layer-set" && master.namespaceURI() == KoXmlNS::draw ) {
-                kDebug(30003) << "Master style: layer-set loaded " << endl;
+                kDebug(30003) <<"Master style: layer-set loaded";
                 d->layerSet = master;
             } else
                 // OASIS docu mentions style:handout-master and draw:layer-set here
@@ -127,7 +127,7 @@ void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml 
     }
 
 
-    kDebug(30003) << "Starting reading in office:styles" << endl;
+    kDebug(30003) <<"Starting reading in office:styles";
 
     const KoXmlElement officeStyle = KoDom::namedItemNS( docElement, KoXmlNS::office, "styles" );
     if ( !officeStyle.isNull() ) {
@@ -135,7 +135,7 @@ void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml 
         insertOfficeStyles( officeStyle );
     }
 
-    //kDebug(30003) << "Styles read in." << endl;
+    //kDebug(30003) <<"Styles read in.";
 }
 
 QHash<QString, KoXmlElement*> KoOasisStyles::customStyles(const QString& family) const
@@ -189,7 +189,7 @@ void KoOasisStyles::insertOfficeStyles( const KoXmlElement& styles )
 
 void KoOasisStyles::insertStyles( const KoXmlElement& styles, TypeAndLocation typeAndLocation )
 {
-    //kDebug(30003) << "Inserting styles from " << styles.tagName() << endl;
+    //kDebug(30003) <<"Inserting styles from" << styles.tagName();
     KoXmlElement e;
     forEachElement( e, styles )
         insertStyle( e, typeAndLocation );
@@ -208,29 +208,29 @@ void KoOasisStyles::insertStyle( const KoXmlElement& e, TypeAndLocation typeAndL
             QHash<QString, KoXmlElement*>& dict = d->contentAutoStyles[ family ];
             if ( dict.contains( name ) )
             {
-                kDebug(30003) << "Auto-style: '" << name << "' already exists" << endl;
+                kDebug(30003) <<"Auto-style: '" << name <<"' already exists";
                 delete dict.take( name );
             }
             dict.insert( name, new KoXmlElement( e ) );
-            //kDebug(30003) << "Style: '" << name << "' loaded as a style auto style" << endl;
+            //kDebug(30003) <<"Style: '" << name <<"' loaded as a style auto style";
         } else if ( typeAndLocation == AutomaticInStyles ) {
             QHash<QString, KoXmlElement*>& dict = d->stylesAutoStyles[ family ];
             if ( dict.contains( name ) )
             {
-                kDebug(30003) << "Auto-style: '" << name << "' already exists" << endl;
+                kDebug(30003) <<"Auto-style: '" << name <<"' already exists";
                 delete dict.take( name );
             }
             dict.insert( name, new KoXmlElement( e ) );
-            //kDebug(30003) << "Style: '" << name << "' loaded as a style auto style" << endl;
+            //kDebug(30003) <<"Style: '" << name <<"' loaded as a style auto style";
         } else {
             QHash<QString, KoXmlElement*>& dict = d->customStyles[ family ];
             if ( dict.contains( name ) )
             {
-                kDebug(30003) << "Style: '" << name << "' already exists" << endl;
+                kDebug(30003) <<"Style: '" << name <<"' already exists";
                 delete dict.take( name );
             }
             dict.insert( name, new KoXmlElement( e ) );
-            //kDebug(30003) << "Style: '" << name << "' loaded " << endl;
+            //kDebug(30003) <<"Style: '" << name <<"' loaded";
         }
     } else if ( ns == KoXmlNS::style && (
                 localName == "page-layout"
@@ -239,7 +239,7 @@ void KoOasisStyles::insertStyle( const KoXmlElement& e, TypeAndLocation typeAndL
     {
         if ( d->styles.contains( name ) )
         {
-            kDebug(30003) << "Style: '" << name << "' already exists" << endl;
+            kDebug(30003) <<"Style: '" << name <<"' already exists";
             delete d->styles.take( name );
         }
         d->styles.insert( name, new KoXmlElement( e ) );
@@ -249,7 +249,7 @@ void KoOasisStyles::insertStyle( const KoXmlElement& e, TypeAndLocation typeAndL
             d->defaultStyles.insert( family, new KoXmlElement( e ) );
     } else if ( localName == "list-style" && ns == KoXmlNS::text ) {
         d->listStyles.insert( name, new KoXmlElement( e ) );
-        //kDebug(30003) << "List style: '" << name << "' loaded " << endl;
+        //kDebug(30003) <<"List style: '" << name <<"' loaded";
     } else if ( ns == KoXmlNS::number && (
                    localName == "number-style"
                 || localName == "currency-style"
@@ -339,13 +339,13 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
             format += e.text();
         } else if ( localName == "suffix" ) {
             suffix = e.text();
-            kDebug(30003)<<" suffix :"<<suffix<<endl;
+            kDebug(30003)<<" suffix :"<<suffix;
         } else if ( localName == "prefix" ) {
             prefix = e.text();
-            kDebug(30003)<<" prefix :"<<prefix<<endl;
+            kDebug(30003)<<" prefix :"<<prefix;
         } else if ( localName == "currency-symbol" ) {
             dataStyle.currencySymbol = e.text();
-            kDebug(30003)<<" currency-symbol: "<<dataStyle.currencySymbol<<endl;
+            kDebug(30003)<<" currency-symbol:"<<dataStyle.currencySymbol;
             format += e.text();
             //TODO
             // number:language="de" number:country="DE">€</number:currency-symbol>
@@ -492,10 +492,10 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
     }
 
     const QString styleName = parent.attributeNS( KoXmlNS::style, "name", QString() );
-    kDebug(30003) << "data style: " << styleName << " qt format=" << format << endl;
+    kDebug(30003) <<"data style:" << styleName <<" qt format=" << format;
     if ( !prefix.isEmpty() )
     {
-        kDebug(30003)<<" format.left( prefix.length() ) :"<<format.left( prefix.length() )<<" prefix :"<<prefix<<endl;
+        kDebug(30003)<<" format.left( prefix.length() ) :"<<format.left( prefix.length() )<<" prefix :"<<prefix;
         if ( format.left( prefix.length() )==prefix )
         {
             format = format.right( format.length()-prefix.length() );
@@ -505,7 +505,7 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
     }
     if ( !suffix.isEmpty() )
     {
-        kDebug(30003)<<"format.right( suffix.length() ) :"<<format.right( suffix.length() )<<" suffix :"<<suffix<<endl;
+        kDebug(30003)<<"format.right( suffix.length() ) :"<<format.right( suffix.length() )<<" suffix :"<<suffix;
         if ( format.right( suffix.length() )==suffix )
         {
             format = format.left( format.length()-suffix.length() );
@@ -518,7 +518,7 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
     dataStyle.prefix=prefix;
     dataStyle.suffix=suffix;
     dataStyle.precision = precision;
-    kDebug(30003)<<" finish insert format :"<<format<<" prefix :"<<prefix<<" suffix :"<<suffix<<endl;
+    kDebug(30003)<<" finish insert format :"<<format<<" prefix :"<<prefix<<" suffix :"<<suffix;
     d->dataFormats.insert( styleName, dataStyle );
 }
 
@@ -534,7 +534,7 @@ void KoOasisStyles::importDataStyle( const KoXmlElement& parent )
 
 void KoOasisStyles::parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text )
 {
-    kDebug(30003)<<"parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :"<<format<<endl;
+    kDebug(30003)<<"parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :"<<format;
     do
     {
         if ( !saveOasisKlocaleTimeFormat( elementWriter, format, text ) )
@@ -704,7 +704,7 @@ QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QStrin
 {
     Q_UNUSED(_prefix);
     Q_UNUSED(_suffix);
-    kDebug(30003)<<"QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kDebug(30003)<<"QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format;
     QString format( _format );
     KoGenStyle currentStyle( KoGenStyle::StyleNumericTime );
     QBuffer buffer;
@@ -746,7 +746,7 @@ QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QStrin
 //convert klocale string to good format
 void KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text )
 {
-    kDebug(30003)<<"KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :"<<format<<endl;
+    kDebug(30003)<<"KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :"<<format;
     do
     {
         if ( format.startsWith( "%Y" ) )
@@ -856,7 +856,7 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
 {
     Q_UNUSED(_prefix);
     Q_UNUSED(_suffix);
-    kDebug(30003)<<"QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kDebug(30003)<<"QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format;
     QString format( _format );
 
     // Not supported into Qt: "era" "week-of-year" "quarter"
@@ -1033,7 +1033,7 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
 QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format,
                                                const QString &_prefix, const QString &_suffix )
 {
-    kDebug(30003)<<"QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kDebug(30003)<<"QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::StyleNumericFraction );
@@ -1098,7 +1098,7 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
 QString KoOasisStyles::saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format,
                                              const QString &_prefix, const QString &_suffix )
 {
-    kDebug(30003)<<"QString saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kDebug(30003)<<"QString saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::StyleNumericNumber );
@@ -1118,14 +1118,14 @@ QString KoOasisStyles::saveOasisNumberStyle( KoGenStyles &mainStyles, const QStr
         else if ( format[0]=='0' && !beforeSeparator )
             decimalplaces++;
         else
-            kDebug(30003)<<" error format 0 \n";
+            kDebug(30003)<<" error format 0";
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
     text= _prefix ;
     addTextNumber(text, elementWriter );
     elementWriter.startElement( "number:number" );
-    kDebug(30003)<<" decimalplaces :"<<decimalplaces<<" integerdigits :"<<integerdigits<<endl;
+    kDebug(30003)<<" decimalplaces :"<<decimalplaces<<" integerdigits :"<<integerdigits;
     if (!beforeSeparator)
         elementWriter.addAttribute( "number:decimal-places", decimalplaces );
     elementWriter.addAttribute( "number:min-integer-digits", integerdigits );
@@ -1148,7 +1148,7 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
     //<number:text>%</number:text>
     //</number:percentage-style>
 
-    kDebug(30003)<<"QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kDebug(30003)<<"QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::StyleNumericPercentage );
@@ -1168,7 +1168,7 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
         else if ( format[0]=='0' && !beforeSeparator )
             decimalplaces++;
         else
-            kDebug(30003)<<" error format 0 \n";
+            kDebug(30003)<<" error format 0";
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
@@ -1200,7 +1200,7 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     //</number:number-style>
 
     //example 000,000e+0000
-    kDebug(30003)<<"QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kDebug(30003)<<"QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::StyleNumericScientific );
@@ -1232,7 +1232,7 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
                 else if ( format[0]=='-' )
                     positive = false;
                 else
-                    kDebug(30003)<<"Error into scientific number\n";
+                    kDebug(30003)<<"Error into scientific number";
                 exponential = true;
             }
         }
@@ -1243,7 +1243,7 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
             else if ( format[0]=='0' && !positive )
                 exponentdigits--;
             else
-                kDebug(30003)<<" error into scientific number exponential value\n";
+                kDebug(30003)<<" error into scientific number exponential value";
         }
         format.remove( 0,1 );
     }
@@ -1252,7 +1252,7 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     addTextNumber(text, elementWriter );
 
     elementWriter.startElement( "number:scientific-number" );
-    kDebug(30003)<<" decimalplace :"<<decimalplace<<" integerdigits :"<<integerdigits<<" exponentdigits :"<<exponentdigits<<endl;
+    kDebug(30003)<<" decimalplace :"<<decimalplace<<" integerdigits :"<<integerdigits<<" exponentdigits :"<<exponentdigits;
     if (!beforeSeparator)
         elementWriter.addAttribute( "number:decimal-places", decimalplace );
     elementWriter.addAttribute( "number:min-integer-digits",integerdigits );
@@ -1279,7 +1279,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles,
     //<number:currency-symbol>VEB</number:currency-symbol>
     //</number:currency-style>
 
-    kDebug(30003)<<"QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kDebug(30003)<<"QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::StyleNumericCurrency );
@@ -1299,7 +1299,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles,
         else if ( format[0]=='0' && !beforeSeparator )
             decimalplaces++;
         else
-            kDebug(30003)<<" error format 0 \n";
+            kDebug(30003)<<" error format 0";
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
@@ -1308,7 +1308,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles,
     addTextNumber(text, elementWriter );
 
     elementWriter.startElement( "number:number" );
-    kDebug(30003)<<" decimalplaces :"<<decimalplaces<<" integerdigits :"<<integerdigits<<endl;
+    kDebug(30003)<<" decimalplaces :"<<decimalplaces<<" integerdigits :"<<integerdigits;
     if (!beforeSeparator)
       elementWriter.addAttribute( "number:decimal-places", decimalplaces );
     elementWriter.addAttribute( "number:min-integer-digits", integerdigits );
@@ -1319,7 +1319,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles,
     addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
 
     elementWriter.startElement( "number:currency-symbol" );
-    kDebug(30003)<<" currency-symbol: "<<symbol<<endl;
+    kDebug(30003)<<" currency-symbol:"<<symbol;
     elementWriter.addTextNode( symbol.toUtf8() );
     elementWriter.endElement();
 
@@ -1335,7 +1335,7 @@ QString KoOasisStyles::saveOasisTextStyle( KoGenStyles &mainStyles, const QStrin
     //<number:text-content/>
     ///</number:text-style>
 
-    kDebug(30003)<<"QString saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kDebug(30003)<<"QString saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::StyleNumericText );
@@ -1696,29 +1696,29 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
 
             }
             else
-                kDebug(30003)<<" transparency is not defined into kpresenter :"<<transparency<<endl;
+                kDebug(30003)<<" transparency is not defined into kpresenter :"<<transparency;
         }
     }
     else if ( fill == "hatch" )
     {
         QString style = styleStack.property( KoXmlNS::draw, "fill-hatch-name" );
-        kDebug(30003)<<" hatch style is  : "<<style<<endl;
+        kDebug(30003)<<" hatch style is  :"<<style;
 
         //type not defined by default
         //try to use style.
         KoXmlElement* draw = oasisStyles.drawStyles()[style];
         if ( draw)
         {
-            kDebug(30003)<<"We have a style\n";
+            kDebug(30003)<<"We have a style";
             int angle = 0;
             if( draw->hasAttributeNS( KoXmlNS::draw, "rotation" ))
             {
                 angle = (draw->attributeNS( KoXmlNS::draw, "rotation", QString() ).toInt())/10;
-                kDebug(30003)<<"angle :"<<angle<<endl;
+                kDebug(30003)<<"angle :"<<angle;
             }
             if(draw->hasAttributeNS( KoXmlNS::draw, "color" ) )
             {
-                //kDebug(30003)<<" draw:color :"<<draw->attributeNS( KoXmlNS::draw, "color", QString() )<<endl;
+                //kDebug(30003)<<" draw:color :"<<draw->attributeNS( KoXmlNS::draw,"color", QString() );
                 tmpBrush.setColor(draw->attributeNS( KoXmlNS::draw, "color", QString() ) );
             }
             if( draw->hasAttributeNS( KoXmlNS::draw, "distance" ))
@@ -1755,7 +1755,7 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
                         break;
                     default:
                         //todo fixme when we will have a kopaint
-                        kDebug(30003)<<" draw:rotation 'angle' : "<<angle<<endl;
+                        kDebug(30003)<<" draw:rotation 'angle' :"<<angle;
                         break;
                     }
                 }
@@ -1777,14 +1777,14 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
                         break;
                     default:
                         //todo fixme when we will have a kopaint
-                        kDebug(30003)<<" draw:rotation 'angle' : "<<angle<<endl;
+                        kDebug(30003)<<" draw:rotation 'angle' :"<<angle;
                         break;
                     }
 
                 }
                 else if( styleHash == "triple")
                 {
-                    kDebug(30003)<<" it is not implemented :( \n";
+                    kDebug(30003)<<" it is not implemented :(";
                 }
             }
         }
@@ -1826,7 +1826,7 @@ QBrush KoOasisStyles::loadOasisPatternStyle( const KoStyleStack &styleStack, KoO
 
     // read the pattern repeat style
     QString style = styleStack.property( KoXmlNS::style, "repeat" );
-    kDebug() << "pattern style = " << style << endl;
+    kDebug() <<"pattern style =" << style;
 
     QSize imageSize = picture.getOriginalSize();
 
@@ -1858,9 +1858,9 @@ QBrush KoOasisStyles::loadOasisPatternStyle( const KoStyleStack &styleStack, KoO
         }
     }
 
-    kDebug() << "shape size = " << size << endl;
-    kDebug() << "original image size = " << picture.getOriginalSize() << endl;
-    kDebug() << "resulting image size = " << imageSize << endl; 
+    kDebug() <<"shape size =" << size;
+    kDebug() <<"original image size =" << picture.getOriginalSize();
+    kDebug() <<"resulting image size =" << imageSize; 
 
     QBrush resultBrush( picture.generatePixmap( imageSize, true ) );
 
@@ -1871,7 +1871,7 @@ QBrush KoOasisStyles::loadOasisPatternStyle( const KoStyleStack &styleStack, KoO
         {
             // align pattern to the given size
             QString align = styleStack.property( KoXmlNS::draw, "fill-image-ref-point" );
-            kDebug() << "pattern align = " << align << endl;
+            kDebug() <<"pattern align =" << align;
             if( align == "top-left" )
                 matrix.translate( 0, 0 );
             else if( align == "top" )

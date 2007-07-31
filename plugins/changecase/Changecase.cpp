@@ -139,7 +139,7 @@ void Changecase::sentenceCase()
             // found end of sentence, go back to last found letter (indicating start of a word)
             if (iter != text.begin() && (*iter == QChar('.') || *iter == QChar('!') || *iter == QChar('?'))) {
                 if (prevLetterIndex >= m_startPosition && prevLetterIndex <= m_endPosition && currentWord.isLower()) {
-                    // kDebug() << "Found end of sentence " << *iter << " : " << currentWord << endl;
+                    // kDebug() <<"Found end of sentence" << *iter <<" :" << currentWord;
                     m_cursor.setPosition(prevLetterIndex);
                     m_cursor.deleteChar();
                     m_cursor.insertText(currentWord.toUpper());

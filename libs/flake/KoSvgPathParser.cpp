@@ -375,7 +375,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                 {
                     // when svg parser is used for a parsing an odf path an unknown command
                     // can be encountered, so we stop parsing here
-                    kDebug() << "KoSvgPathParser::parseSVG(): unknown command \"" << command << "\"" << endl;
+                    kDebug() <<"KoSvgPathParser::parseSVG(): unknown command \"" << command <<"\"";
                     return;
                 }
             }

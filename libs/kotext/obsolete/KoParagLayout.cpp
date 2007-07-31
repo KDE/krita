@@ -406,7 +406,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const KoXmlElement& 
         if ( !shadowCssCompat )
             shadowCssCompat = new QString;
         *shadowCssCompat = KoTextFormat::shadowAsCss( distanceX, distanceY, shadowColor );
-        kDebug(32500) << "setting shadow compat to " << ( *shadowCssCompat ) << endl;
+        kDebug(32500) <<"setting shadow compat to" << ( *shadowCssCompat );
     }
     else
     {
@@ -499,7 +499,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
                 double percent = value.toDouble();
                 layout.lineSpacingType = KoParagLayout::LS_MULTIPLE;
                 layout.lineSpacing = percent / 100.0;
-                kDebug(33001) << "line-height =" << percent << ", " << layout.lineSpacing << ", " << percent/100 << endl;
+                kDebug(33001) <<"line-height =" << percent <<"," << layout.lineSpacing <<"," << percent/100;
             }
             else // fixed value
             {
@@ -535,7 +535,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
     KoTabulatorList tabList;
     if ( context.styleStack().hasChildNode( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
         KoXmlElement tabStops = context.styleStack().childNode( KoXmlNS::style, "tab-stops" );
-        //kDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
+        //kDebug(30519) << k_funcinfo << tabStops.childNodes().count() <<" tab stops in layout.";
         KoXmlElement tabStop;
         forEachElement( tabStop, tabStops )
         {
@@ -746,7 +746,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
             element.setAttribute( "spacingvalue", layout.lineSpacing);
         }
         else
-            kDebug()<<" error in lineSpacing Type\n";
+            kDebug()<<" error in lineSpacing Type";
     }
 
     if ( layout.pageBreaking != 0 )

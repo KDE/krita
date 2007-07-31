@@ -61,7 +61,7 @@ void KoLayoutVisitor::visit(QWidget *widget) {
         item.label = label;
         item.x = label->mapToGlobal(QPoint(0,0)).x();
 // QPoint pos = label->mapToGlobal(QPoint(0,0));
-// kDebug() << "Found label: " << label->text() << "  at " << pos << endl;
+// kDebug() <<"Found label:" << label->text() <<"  at" << pos;
         d->addItem(item);
     }
 
@@ -78,7 +78,7 @@ void KoLayoutVisitor::relayout() {
     public:
         Layouter() : x(-20), right(0) {}
         void add(const Item &item) {
-            //kDebug() << "relayout::add " << item.label->text() << endl;
+            //kDebug() <<"relayout::add" << item.label->text();
 
             QGridLayout *layout = 0;
             foreach ( QGridLayout *l, item.label->parentWidget()->findChildren<QGridLayout*>()) {
@@ -115,7 +115,7 @@ void KoLayoutVisitor::relayout() {
 
             foreach(QGridLayout* layout, column.keys()) {
                 QLabel *label = column[layout];
-                //kDebug() << "altering 1 layout (" << label->text() << ")\n";
+                //kDebug() <<"altering 1 layout (" << label->text() <<")";
                 int index = layout->indexOf(label);
                 int row, column, rowSpan, columnSpan;
                 layout->getItemPosition(index, &row, &column, &rowSpan, &columnSpan);

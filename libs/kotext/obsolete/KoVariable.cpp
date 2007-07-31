@@ -352,7 +352,7 @@ QString KoVariableTimeFormat::convert( const QVariant & time ) const
 {
     if ( time.type() != QVariant::Time )
     {
-        kDebug(32500)<<" Error in KoVariableTimeFormat::convert. Value is a "
+        kDebug(32500)<<" Error in KoVariableTimeFormat::convert. Value is a"
                       << time.typeName() << "(" << time.type() << ")" << endl;
         return QString();
     }
@@ -405,7 +405,7 @@ QString KoVariableStringFormat::convert( const QVariant & string ) const
 {
     if ( string.type() != QVariant::String )
     {
-        kDebug(32500)<<" Error in KoVariableStringFormat::convert. Value is a " << string.typeName() << endl;
+        kDebug(32500)<<" Error in KoVariableStringFormat::convert. Value is a" << string.typeName();
         return QString();
     }
 
@@ -429,7 +429,7 @@ QString KoVariableNumberFormat::convert( const QVariant &value ) const
 {
     if ( value.type() != QVariant::Int )
     {
-        kDebug(32500)<<" Error in KoVariableNumberFormat::convert. Value is a " << value.typeName() << endl;
+        kDebug(32500)<<" Error in KoVariableNumberFormat::convert. Value is a" << value.typeName();
         return QString();
     }
 
@@ -464,7 +464,7 @@ KoVariableFormat * KoVariableFormatCollection::format( const QString &key )
 
 KoVariableFormat * KoVariableFormatCollection::createFormat( const QString &key )
 {
-    kDebug(32500) << "KoVariableFormatCollection: creating format for key=" << key << endl;
+    kDebug(32500) <<"KoVariableFormatCollection: creating format for key=" << key;
     KoVariableFormat * format = 0L;
     // The first 4 chars identify the class
     QString type = key.left(4);
@@ -539,7 +539,7 @@ Q3ValueList<KoVariable *> KoVariableCollection::recalcVariables(int type)
             KoTextParag * parag = variable->paragraph();
             if ( parag )
             {
-                //kDebug(32500) << "KoDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
+                //kDebug(32500) <<"KoDoc::recalcVariables -> invalidating parag" << parag->paragId();
                 parag->invalidate( 0 );
                 parag->setChanged( true );
             }
@@ -583,7 +583,7 @@ QList<KAction*> KoVariableCollection::popupActionList() const
     QList<KAction*> listAction;
     // Insert list of actions that change the subtype
     const QStringList subTypeList = m_varSelected->subTypeList();
-    kDebug() << k_funcinfo << "current subtype=" << m_varSelected->subType() << endl;
+    kDebug() << k_funcinfo <<"current subtype=" << m_varSelected->subType();
     QStringList::ConstIterator it = subTypeList.begin();
     for ( int i = 0; it != subTypeList.end() ; ++it, ++i )
     {
@@ -633,7 +633,7 @@ void KoVariableCollection::slotChangeSubType()
     KAction * act = (KAction *)(sender());
     int menuNumber = act->objectName().toInt();
     int newSubType = m_varSelected->variableSubType(menuNumber);
-    kDebug(32500) << "slotChangeSubType: menuNumber=" << menuNumber << " newSubType=" << newSubType << endl;
+    kDebug(32500) <<"slotChangeSubType: menuNumber=" << menuNumber <<" newSubType=" << newSubType;
     if ( m_varSelected->subType() != newSubType )
     {
         KoChangeVariableSubType *cmd=new KoChangeVariableSubType(
@@ -716,7 +716,7 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
     if ( varFormat == 0L ) // still 0 ? Impossible!
         return 0L ;
 
-    kDebug(32500) << "Creating variable. Format=" << varFormat->key() << " type=" << type << endl;
+    kDebug(32500) <<"Creating variable. Format=" << varFormat->key() <<" type=" << type;
     KoVariable * var = 0L;
     switch ( type ) {
         case VT_DATE:
@@ -868,7 +868,7 @@ KoVariable::KoVariable( KoTextDocument *textdoc, KoVariableFormat *varFormat, Ko
 
 KoVariable::~KoVariable()
 {
-    //kDebug(32500) << "KoVariable::~KoVariable " << this << endl;
+    //kDebug(32500) <<"KoVariable::~KoVariable" << this;
     m_varColl->unregisterVariable( this );
     //delete d;
 }
@@ -894,7 +894,7 @@ void KoVariable::resize()
     width = qRound( KoTextZoomHandler::ptToLayoutUnitPt( width ) );
     height = fmt->height();
     m_ascent = fmt->ascent();
-    //kDebug(32500) << "KoVariable::resize text=" << txt << " width=" << width << " height=" << height << " ascent=" << m_ascent << endl;
+    //kDebug(32500) <<"KoVariable::resize text=" << txt <<" width=" << width <<" height=" << height <<" ascent=" << m_ascent;
 }
 
 void KoVariable::recalcAndRepaint()
@@ -903,7 +903,7 @@ void KoVariable::recalcAndRepaint()
     KoTextParag * parag = paragraph();
     if ( parag )
     {
-        //kDebug(32500) << "KoVariable::recalcAndRepaint -> invalidating parag " << parag->paragId() << endl;
+        //kDebug(32500) <<"KoVariable::recalcAndRepaint -> invalidating parag" << parag->paragId();
         parag->invalidate( 0 );
         parag->setChanged( true );
     }
@@ -1007,7 +1007,7 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int 
 
 void KoVariable::save( QDomElement &parentElem )
 {
-    //kDebug(32500) << "KoVariable::save" << endl;
+    //kDebug(32500) <<"KoVariable::save";
     QDomElement variableElem = parentElem.ownerDocument().createElement( "VARIABLE" );
     parentElem.appendChild( variableElem );
     QDomElement typeElem = parentElem.ownerDocument().createElement( "TYPE" );
@@ -2076,7 +2076,7 @@ QString KoFieldVariable::text(bool realValue)
 
 void KoFieldVariable::saveVariable( QDomElement& parentElem )
 {
-    //kDebug(32500) << "KoFieldVariable::saveVariable" << endl;
+    //kDebug(32500) <<"KoFieldVariable::saveVariable";
     QDomElement elem = parentElem.ownerDocument().createElement( "FIELD" );
     parentElem.appendChild( elem );
     elem.setAttribute( "subtype", m_subtype );
@@ -2629,7 +2629,7 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hp
         return;
 
     KoTextFormat * fmt = format();
-    //kDebug(32500) << "KoNoteVariable::drawCustomItem index=" << index() << " x=" << x << " y=" << y << endl;
+    //kDebug(32500) <<"KoNoteVariable::drawCustomItem index=" << index() <<" x=" << x <<" y=" << y;
 
     p->save();
     p->setPen( QPen( fmt->color() ) );

@@ -76,7 +76,7 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     // Slow mode can be very slow, especially at high zoom levels -> configurable
     if ( !isSlowResizeModeAllowed() )
     {
-        kDebug(30003) << "User has disallowed slow mode!" << endl;
+        kDebug(30003) <<"User has disallowed slow mode!";
         fastMode = true;
     }
 
@@ -98,7 +98,7 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
 
 void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool fastMode)
 {
-    //kDebug(30003) << "KoImage::draw currentSize:" << currentSize.width() << "x" << currentSize.height() << endl;
+    //kDebug(30003) <<"KoImage::draw currentSize:" << currentSize.width() <<"x" << currentSize.height();
     if ( !width || !height )
         return;
     QSize origSize = getOriginalSize();
@@ -122,7 +122,7 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
     else
     {
         QSize screenSize( width, height );
-        //kDebug(30003) << "KoPictureImage::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
+        //kDebug(30003) <<"KoPictureImage::draw screenSize=" << screenSize.width() <<"x" << screenSize.height();
 
         scaleAndCreatePixmap(screenSize, fastMode);
 
@@ -154,7 +154,7 @@ bool KoPictureImage::loadData(const QByteArray& array, const QString& /* extensi
 
 bool KoPictureImage::save(QIODevice* io) const
 {
-    kDebug(30003) << k_funcinfo << "writing raw data. size=" << m_rawData.size() << endl;
+    kDebug(30003) << k_funcinfo <<"writing raw data. size=" << m_rawData.size();
     // We save the raw data, to avoid damaging the file by many load/save cycles (especially for JPEG)
     qint64 size = io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return ( size==m_rawData.size() );
@@ -178,7 +178,7 @@ QString KoPictureImage::getMimeType(const QString& extension) const
     // Find the mimetype only by the extension, not by file content (as the file is empty!)
     const QString mimetype( KMimeType::findByPath( fileName, 0 ,true )->name() );
     // ### TODO: use KMimeType::findByContent (but then the mimetype probably need to be cached)
-    kDebug(30003) << "Image is mime type: " << mimetype << endl;
+    kDebug(30003) <<"Image is mime type:" << mimetype;
     return mimetype;
 }
 

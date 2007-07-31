@@ -245,7 +245,7 @@ void KWmf::invokeHandler(
     }
     else
     {
-        kDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
+        kDebug(s_area) <<"invokeHandler: opcode:" << funcTab[i].name <<
             " operands: " << words << endl;
 
         // We don't invoke the handler directly on the incoming operands, but
@@ -849,7 +849,7 @@ void KWmf::skip(
         U32 i;
         S16 discard;
 
-        kDebug(s_area) << "skip: " << words << endl;
+        kDebug(s_area) <<"skip:" << words;
         for (i = 0; i < words; i++)
         {
             operands >> discard;

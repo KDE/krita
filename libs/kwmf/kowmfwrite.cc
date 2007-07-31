@@ -71,7 +71,7 @@ bool KoWmfWrite::begin() {
 
     if ( !d->mFileOut.open( QIODevice::WriteOnly ) )
     {
-        kDebug() << "Cannot open file " << QFile::encodeName(d->mFileOut.fileName()) << endl;
+        kDebug() <<"Cannot open file" << QFile::encodeName(d->mFileOut.fileName());
         return false;
     }
     d->mSt.setDevice( &d->mFileOut );

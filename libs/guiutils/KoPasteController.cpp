@@ -33,7 +33,7 @@ public:
     }
 
     void paste() {
-kDebug() << "Paste!\n";
+kDebug() <<"Paste!";
         if(! canvas->toolProxy()->paste()) {
             // means paste failed
             // TODO find a shape that can be created to hold the relevant content and load it.

@@ -313,7 +313,7 @@ Editor::changeSetInternal(Set *set, bool preservePrevSelection, const QByteArray
 			//store prev. selection for this prop set
 			if (d->currentItem)
 				d->set->setPrevSelection( d->currentItem->property()->name() );
-			kDebug() << d->set->prevSelection() << endl;
+			kDebug() << d->set->prevSelection();
 		}
 		if (!d->setListLater_set) {
 			d->setListLater_set = true;

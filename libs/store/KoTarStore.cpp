@@ -31,13 +31,13 @@
 
 KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
-    kDebug(s_area) << "KoTarStore Constructor filename = " << _filename
+    kDebug(s_area) <<"KoTarStore Constructor filename =" << _filename
                     << " mode = " << int(_mode) << endl;
 
     m_pTar = new KTar( _filename, "application/x-gzip" );
 
     m_bGood = init( _mode ); // open the targz file and init some vars
-    kDebug()<<"appIdentification :"<<appIdentification<<endl;
+    kDebug()<<"appIdentification :"<<appIdentification;
     if ( m_bGood && _mode == Write )
         m_pTar->setOrigFileName( completeMagic( appIdentification ) );
 }
@@ -54,7 +54,7 @@ KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const QByteArray & appIdentif
 
 KoTarStore::KoTarStore( QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
-    kDebug(s_area) << "KoTarStore Constructor url= " << _url.pathOrUrl()
+    kDebug(s_area) <<"KoTarStore Constructor url=" << _url.pathOrUrl()
                     << " filename = " << _filename
                     << " mode = " << int(_mode) << endl;
 
@@ -101,13 +101,13 @@ KoTarStore::~KoTarStore()
 
 QByteArray KoTarStore::completeMagic( const QByteArray& appMimetype )
 {
-    kDebug()<<"QCString KoTarStore::completeMagic( const QCString& appMimetype )********************\n";
+    kDebug()<<"QCString KoTarStore::completeMagic( const QCString& appMimetype )********************";
     QByteArray res( "KOffice " );
     res += appMimetype;
     res += '\004'; // Two magic bytes to make the identification
     res += '\006'; // more reliable (DF)
-    kDebug()<<"sssssssssssssssssssssxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
-    kDebug()<<" return :!!!!!!!!!!!!!!! :"<<res<<endl;
+    kDebug()<<"sssssssssssssssssssssxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    kDebug()<<" return :!!!!!!!!!!!!!!! :"<<res;
     return res;
 }
 
@@ -166,7 +166,7 @@ bool KoTarStore::closeWrite()
 {
     // write the whole bytearray at once into the tar file
 
-    kDebug(s_area) << "Writing file " << m_sName << " into TAR archive. size "
+    kDebug(s_area) <<"Writing file" << m_sName <<" into TAR archive. size"
                     << m_iSize << endl;
     if ( !m_pTar->writeFile( m_sName , "user", "group", m_byteArray.data(),m_iSize ) )
         kWarning( s_area ) << "Failed to write " << m_sName << endl;

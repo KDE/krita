@@ -297,7 +297,7 @@ void KoPathShape::paintDebug( QPainter &painter )
         }
     }
     painter.restore();
-    kDebug(30006) << "nop = " << i << endl;
+    kDebug(30006) <<"nop =" << i;
 }
 
 void KoPathShape::debugPath()
@@ -308,7 +308,7 @@ void KoPathShape::debugPath()
         KoSubpath::const_iterator it( ( *pathIt )->begin() );
         for ( ; it != ( *pathIt )->end(); ++it )
         {
-            kDebug(30006) << "p:" << ( *pathIt ) << "," << *it << "," << ( *it )->point() << "," << ( *it )->properties() << "," << ( *it )->group() << endl;
+            kDebug(30006) <<"p:" << ( *pathIt ) <<"," << *it <<"," << ( *it )->point() <<"," << ( *it )->properties() <<"," << ( *it )->group();
         }
     }
 }
@@ -559,7 +559,7 @@ int KoPathShape::arcToCurve( double rx, double ry, double startAngle, double swe
     //center berechnen
     QPointF center( startpoint - QPointF( cossa * rx, -sinsa * ry ) );
 
-    kDebug(30006) << "kappa" << kappa << "parts" << parts << endl;;
+    kDebug(30006) <<"kappa" << kappa <<"parts" << parts;;
     
     for ( int part = 0; part < parts; ++part )
     {

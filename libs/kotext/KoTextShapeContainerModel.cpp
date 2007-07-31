@@ -82,7 +82,7 @@ QList<KoShape*> KoTextShapeContainerModel::iterator() const {
 }
 
 void KoTextShapeContainerModel::containerChanged(KoShapeContainer *container) {
-kDebug() << "KoTextShapeContainerModel::containerChanged\n";
+kDebug() <<"KoTextShapeContainerModel::containerChanged";
     // TODO
     // For children which are aligned to the side of the page we may need to update the position so they will stay at the same vertical position.
 }
@@ -121,7 +121,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move) {
 
     QPointF newPosition = child->position() + move;
     QRectF parentShapeRect(QPointF(0,0), child->parent()->size());
-//kDebug() << "proposeMove: " << move << " | " << newPosition << " | " << parentShapeRect << endl;
+//kDebug() <<"proposeMove:" << move <<" |" << newPosition <<" |" << parentShapeRect;
 
     if(qAbs(newPosition.x()) < 10) // align left
         relation->anchor->setAlignment(KoTextAnchor::Left);
@@ -138,11 +138,11 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move) {
     } */
 
     if(qAbs(newPosition.y()) < 10.0) // TopOfFrame
-{//kDebug() << "  TopOfFrame\n";
+{//kDebug() <<"  TopOfFrame";
         relation->anchor->setAlignment(KoTextAnchor::TopOfFrame);
 }
     else if(qAbs(parentShapeRect.height() - newPosition.y()) < 10.0)
-{//kDebug() << "  BottomOfFrame\n";
+{//kDebug() <<"  BottomOfFrame";
         relation->anchor->setAlignment(KoTextAnchor::BottomOfFrame); // TODO
 }
     else { // need layout info..
@@ -154,21 +154,21 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move) {
             QTextLine tl = layout->lineAt(0);
             double y = tl.y() - data->documentOffset() - newPosition.y();
             if(y >= 0 && y < 10)
-{//kDebug() << "  TopOfParagraph " << y << "\n";
+{//kDebug() <<"  TopOfParagraph" << y <<"";
                 relation->anchor->setAlignment(KoTextAnchor::TopOfParagraph);
 }
             else {
                 tl = layout->lineAt(layout->lineCount()-1);
                 y = newPosition.y() - tl.y() - data->documentOffset() - tl.ascent();
                 if(y >= 0 && y < 10)
-{//kDebug() << "  BottomOfParagraph " << y << endl;
+{//kDebug() <<"  BottomOfParagraph" << y;
                     relation->anchor->setAlignment(KoTextAnchor::BottomOfParagraph); // TODO
 }
                 else {
                     tl = layout->lineForTextPosition(relation->anchor->positionInDocument() - block.position());
                     y = tl.y() - data->documentOffset() - newPosition.y();
                     if(y >= 0 && y < 10)
-{//kDebug() << "  AboveCurrentLine\n";
+{//kDebug() <<"  AboveCurrentLine";
                         relation->anchor->setAlignment(KoTextAnchor::AboveCurrentLine);
 }
                     //else  do VerticalOffset here as well?

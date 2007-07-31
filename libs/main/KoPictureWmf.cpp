@@ -57,13 +57,13 @@ bool KoPictureWmf::isNull(void) const
 void KoPictureWmf::drawQPicture(QPicture& clipart, QPainter& painter,
     int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
-    kDebug(30003) << "Drawing KoPictureWmf " << this << endl;
-    kDebug(30003) << "  x=" << x << " y=" << y << " width=" << width << " height=" << height << endl;
-    kDebug(30003) << "  sx=" << sx << " sy=" << sy << " sw=" << sw << " sh=" << sh << endl;
+    kDebug(30003) <<"Drawing KoPictureWmf" << this;
+    kDebug(30003) <<"  x=" << x <<" y=" << y <<" width=" << width <<" height=" << height;
+    kDebug(30003) <<"  sx=" << sx <<" sy=" << sy <<" sw=" << sw <<" sh=" << sh;
     painter.save();
     // Thanks to Harri, Qt3 makes it much easier than Qt2 ;)
     QRect br = clipart.boundingRect();
-    kDebug(30003) << "  Bounding rect. " << br << endl;
+    kDebug(30003) <<"  Bounding rect." << br;
 
     painter.translate(x,y); // Translating must be done before scaling!
     if ( br.width() && br.height() )
@@ -82,7 +82,7 @@ void KoPictureWmf::draw(QPainter& painter, int x, int y, int width, int height, 
 bool KoPictureWmf::loadData(const QByteArray& array, const QString& /* extension */)
 {
     // Second, create the original clipart
-    kDebug(30003) << "Trying to load clipart... (Size:" << array.size() << ")" << endl;
+    kDebug(30003) <<"Trying to load clipart... (Size:" << array.size() <<")";
     m_rawData=array;
 
     KoWmfPaint wmf;

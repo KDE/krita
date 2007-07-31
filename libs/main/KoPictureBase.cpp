@@ -43,7 +43,7 @@ KoPictureBase::KoPictureBase(void)
     {
         KConfigGroup group( KGlobal::config(), "KOfficeImage" );
         s_useSlowResizeMode = group.readEntry( "HighResolution", 1 );
-        kDebug(30003) << "HighResolution = " << s_useSlowResizeMode << endl;
+        kDebug(30003) <<"HighResolution =" << s_useSlowResizeMode;
     }
 }
 

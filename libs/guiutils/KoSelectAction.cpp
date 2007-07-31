@@ -92,7 +92,7 @@ int KoSelectAction::plug(QWidget* widget, int index)
   // This function is copied from KActionMenu::plug
   if (!KAuthorized::authorizeKAction(name()))
     return -1;
-  kDebug(129) << "KAction::plug( " << widget << ", " << index << " )" << endl; // remove -- ellis
+  kDebug(129) <<"KAction::plug(" << widget <<"," << index <<" )"; // remove -- ellis
   if ( widget->inherits("QPopupMenu") )
   {
     Q3PopupMenu* menu = static_cast<Q3PopupMenu*>( widget );

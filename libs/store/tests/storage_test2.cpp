@@ -54,7 +54,7 @@ int cleanUp( KoStore* store, const QString& testFile, const char* error )
 {
     QFile::remove( testFile );
     delete store;
-    kDebug() << error << endl;
+    kDebug() << error;
     return 1;
 }
 
@@ -69,7 +69,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
         system( QByteArray( "rm -rf " ) + QFile::encodeName( testFile ) ); // QDir::rmdir isn't recursive! (EEEEK! system! *cries*)
     }
 
-    kDebug() << "======================="<<testName<<"====================================" << endl;
+    kDebug() <<"======================="<<testName<<"====================================";
     KoStore* store = KoStore::createStore( testFile, KoStore::Write, "", backend );
     if ( store->bad() )
         return cleanUp( store, testFile, badStorage );
@@ -92,7 +92,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
         store->close();
     delete store;
 
-    kDebug() << "===========================================================" << endl;
+    kDebug() <<"===========================================================";
 
     store = KoStore::createStore( testFile, KoStore::Read, "", backend );
     if ( store->bad() )
@@ -106,7 +106,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
         stream->readLine(str, DATALEN);      // << as is this
         qint64 len = store->read(str, DATALEN);
         if (len != DATALEN) {
-            kDebug() << "Final length was too small: " << len << " < " << DATALEN << endl;
+            kDebug() <<"Final length was too small:" << len <<" <" << DATALEN;
             return 1;
         }
 
@@ -121,7 +121,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
 
     QFile::remove( testFile );
 
-    kDebug() << "===========================================================" << endl;
+    kDebug() <<"===========================================================";
     return 0;
 }
 

@@ -295,7 +295,7 @@ void KoTemplateCreateDia::slotOk() {
         while ( KIO::NetAccess::exists( dest, true, this ) );
     }
     bool ignore = false;
-    kDebug(30004) << "Trying to create template: " << d->m_name->text() << "URL=" << ".source/"+file+ext << " ICON=" << tmpIcon << endl;
+    kDebug(30004) <<"Trying to create template:" << d->m_name->text() <<"URL=" <<".source/"+file+ext <<" ICON=" << tmpIcon;
     KoTemplate *t=new KoTemplate(d->m_name->text(), QString(), ".source/"+file+ext, tmpIcon, "", "", false, true);
     if(!group->add(t)) {
         KoTemplate *existingTemplate=group->find(d->m_name->text());
@@ -482,7 +482,7 @@ void KoTemplateCreateDia::updatePixmap() {
         d->m_preview->setPixmap(m_pixmap);
     else if(d->m_custom->isChecked() && !d->m_customFile.isEmpty()) {
         if(d->m_customPixmap.isNull()) {
-            kDebug(30004) << "Trying to load picture " << d->m_customFile << endl;
+            kDebug(30004) <<"Trying to load picture" << d->m_customFile;
             // use the code in KoTemplate to load the image... hacky, I know :)
             KoTemplate t("foo", "bar", QString(), d->m_customFile);
             d->m_customPixmap=t.loadPicture(d->m_tree->componentData());

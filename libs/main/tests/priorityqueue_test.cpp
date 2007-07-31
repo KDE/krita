@@ -59,21 +59,21 @@ int main( int /*argc*/, char ** /*argv*/ )
         dict.insert( keys[ i ], n2 );
     }
 
-    kDebug() << "##### Queue 1: " << endl;
+    kDebug() <<"##### Queue 1:";
     queue.dump();
 
-    kDebug() << "##### Queue 2: " << endl;
+    kDebug() <<"##### Queue 2:";
     KOffice::PriorityQueue<Node> queue2( dict );
     queue2.dump();
 
     Node *n = list.at( 6 );
-    kDebug() << "##### Decreasing node: " << n->key() << " at " << n->index() << endl;
+    kDebug() <<"##### Decreasing node:" << n->key() <<" at" << n->index();
     n->setKey( 2 );
     queue.keyDecreased( n );
     queue.dump();
 
     n = list.at( 2 );
-    kDebug() << "##### Decreasing node: " << n->key() << " at " << n->index() << endl;
+    kDebug() <<"##### Decreasing node:" << n->key() <<" at" << n->index();
     n->setKey( 0 );
     queue.keyDecreased( n );
     queue.dump();

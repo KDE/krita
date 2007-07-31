@@ -70,7 +70,7 @@ KoFilter::ConversionStatus KoFilterChain::ChainLink::invokeFilter( const ChainLi
 
 void KoFilterChain::ChainLink::dump() const
 {
-    kDebug( 30500 ) << "   Link: " << m_filterEntry->service()->name() << endl;
+    kDebug( 30500 ) <<"   Link:" << m_filterEntry->service()->name();
 }
 
 int KoFilterChain::ChainLink::lruPartIndex() const
@@ -317,11 +317,11 @@ KoDocument* KoFilterChain::outputDocument()
 
 void KoFilterChain::dump() const
 {
-    kDebug( 30500 ) << "########## KoFilterChain with " << m_chainLinks.count() << " members:" << endl;
+    kDebug( 30500 ) <<"########## KoFilterChain with" << m_chainLinks.count() <<" members:";
     Q3PtrListIterator<ChainLink> it( m_chainLinks );
     for ( ; it.current(); ++it )
         it.current()->dump();
-    kDebug( 30500 ) << "########## KoFilterChain (done) ##########" << endl;
+    kDebug( 30500 ) <<"########## KoFilterChain (done) ##########";
 }
 
 KoFilterChain::KoFilterChain( const KoFilterManager* manager ) :
@@ -436,7 +436,7 @@ void KoFilterChain::finalizeIO()
     // Note: m_*input*Document as we already called manageIO()
     if ( m_inputDocument &&
          static_cast<KoFilterManager::Direction>( filterManagerDirection() ) == KoFilterManager::Export ) {
-        kDebug( 30500 ) << "Saving the output document to the export file" << endl;
+        kDebug( 30500 ) <<"Saving the output document to the export file";
         m_inputDocument->saveNativeFormat( filterManagerExportFile() );
         m_inputFile = filterManagerExportFile();
     }
@@ -508,7 +508,7 @@ KoStoreDevice* KoFilterChain::storageHelper( const QString& file, const QString&
     if ( file.isEmpty() )
         return 0;
     if ( *storage ) {
-        kDebug( 30500 ) << "Uh-oh, we forgot to clean up..." << endl;
+        kDebug( 30500 ) <<"Uh-oh, we forgot to clean up...";
         return 0;
     }
 
@@ -599,7 +599,7 @@ KoStoreDevice* KoFilterChain::storageCreateFirstStream( const QString& streamNam
         return 0;
 
     if ( *device ) {
-        kDebug( 30500 ) << "Uh-oh, we forgot to clean up the storage device!" << endl;
+        kDebug( 30500 ) <<"Uh-oh, we forgot to clean up the storage device!";
         ( *storage )->close();
         return storageCleanupHelper( storage );
     }
@@ -676,10 +676,10 @@ namespace KOffice {
     void Edge::dump( const QByteArray& indent ) const
     {
         if ( m_vertex )
-            kDebug( 30500 ) << indent << "Edge -> '" << m_vertex->mimeType()
+            kDebug( 30500 ) << indent <<"Edge -> '" << m_vertex->mimeType()
                              << "' (" << m_filterEntry->weight << ")" << endl;
         else
-            kDebug( 30500 ) << indent << "Edge -> '(null)' ("
+            kDebug( 30500 ) << indent <<"Edge -> '(null)' ("
                              << m_filterEntry->weight << ")" << endl;
     }
 
@@ -735,7 +735,7 @@ namespace KOffice {
 
     void Vertex::dump( const QByteArray& indent ) const
     {
-        kDebug( 30500 ) << indent << "Vertex: " << m_mimeType << " (" << m_weight << "):" << endl;
+        kDebug( 30500 ) << indent <<"Vertex:" << m_mimeType <<" (" << m_weight <<"):";
         const QByteArray i( indent + "   " );
         Q3PtrListIterator<Edge> it( m_edges );
         for ( ; it.current(); ++it )
@@ -798,12 +798,12 @@ namespace KOffice {
 
     void Graph::dump() const
     {
-        kDebug( 30500 ) << "+++++++++ Graph::dump +++++++++" << endl;
-        kDebug( 30500 ) << "From: " << m_from << endl;
+        kDebug( 30500 ) <<"+++++++++ Graph::dump +++++++++";
+        kDebug( 30500 ) <<"From:" << m_from;
         Q3AsciiDictIterator<Vertex> it( m_vertices );
         for ( ; it.current(); ++it )
             it.current()->dump( "   " );
-        kDebug( 30500 ) << "+++++++++ Graph::dump (done) +++++++++" << endl;
+        kDebug( 30500 ) <<"+++++++++ Graph::dump (done) +++++++++";
     }
 
     // Query the trader and create the vertices and edges representing
@@ -861,7 +861,7 @@ namespace KOffice {
                 }
             }
             else
-                kDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " doesn't apply." << endl;
+                kDebug( 30500 ) <<"Filter:" << ( *it )->service()->name() <<" doesn't apply.";
         }
     }
 

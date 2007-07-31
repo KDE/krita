@@ -33,7 +33,7 @@ KoDirectoryStore::KoDirectoryStore( const QString& path, Mode _mode )
     if ( !m_basePath.endsWith('/') )
         m_basePath += '/';
     m_currentPath = m_basePath;
-    kDebug(s_area) << "KoDirectoryStore::KoDirectoryStore base path:" << m_basePath << endl;
+    kDebug(s_area) <<"KoDirectoryStore::KoDirectoryStore base path:" << m_basePath;
     m_bGood = init( _mode );
 }
 
@@ -50,7 +50,7 @@ bool KoDirectoryStore::init( Mode _mode )
     dir = QDir::current();
     // Dir doesn't exist. If reading -> error. If writing -> create.
     if ( _mode == Write && dir.mkdir( m_basePath ) ) {
-        kDebug(s_area) << "KoDirectoryStore::init Directory created: " << m_basePath << endl;
+        kDebug(s_area) <<"KoDirectoryStore::init Directory created:" << m_basePath;
         return true;
     }
     return false;
@@ -58,13 +58,13 @@ bool KoDirectoryStore::init( Mode _mode )
 
 bool KoDirectoryStore::openReadOrWrite( const QString& name, QIODevice::OpenModeFlag iomode )
 {
-    //kDebug(s_area) << "KoDirectoryStore::openReadOrWrite m_currentPath=" << m_currentPath << " name=" << name << endl;
+    //kDebug(s_area) <<"KoDirectoryStore::openReadOrWrite m_currentPath=" << m_currentPath <<" name=" << name;
     int pos = name.lastIndexOf('/');
     if ( pos != -1 ) // there are subdirs in the name -> maybe need to create them, when writing
     {
         pushDirectory(); // remember where we were
         enterAbsoluteDirectory( QString() );
-        //kDebug(s_area) << "KoDirectoryStore::openReadOrWrite entering " << name.left(pos) << endl;
+        //kDebug(s_area) <<"KoDirectoryStore::openReadOrWrite entering" << name.left(pos);
         bool ret = enterDirectory( name.left( pos ) );
         popDirectory();
         if ( !ret )
@@ -88,13 +88,13 @@ bool KoDirectoryStore::enterRelativeDirectory( const QString& dirName )
     m_currentPath += dirName;
     if ( !m_currentPath.endsWith('/') )
         m_currentPath += '/';
-    //kDebug(s_area) << "KoDirectoryStore::enterRelativeDirectory m_currentPath now " << m_currentPath << endl;
+    //kDebug(s_area) <<"KoDirectoryStore::enterRelativeDirectory m_currentPath now" << m_currentPath;
     QDir newDir( m_currentPath );
     if ( newDir.exists() )
         return true;
     // Dir doesn't exist. If reading -> error. If writing -> create.
     if ( mode() == Write && origDir.mkdir( dirName ) ) {
-        kDebug(s_area) << "Created " << dirName << " under " << origDir.absolutePath() << endl;
+        kDebug(s_area) <<"Created" << dirName <<" under" << origDir.absolutePath();
         return true;
     }
     return false;
@@ -103,7 +103,7 @@ bool KoDirectoryStore::enterRelativeDirectory( const QString& dirName )
 bool KoDirectoryStore::enterAbsoluteDirectory( const QString& path )
 {
     m_currentPath = m_basePath + path;
-    //kDebug(s_area) << "KoDirectoryStore::enterAbsoluteDirectory " << m_currentPath << endl;
+    //kDebug(s_area) <<"KoDirectoryStore::enterAbsoluteDirectory" << m_currentPath;
     QDir newDir( m_currentPath );
     Q_ASSERT( newDir.exists() ); // We've been there before, therefore it must exist.
     return newDir.exists();
@@ -111,6 +111,6 @@ bool KoDirectoryStore::enterAbsoluteDirectory( const QString& path )
 
 bool KoDirectoryStore::fileExists( const QString& absPath ) const
 {
-    kDebug(s_area) << "KoDirectoryStore::fileExists " << m_basePath+absPath << endl;
+    kDebug(s_area) <<"KoDirectoryStore::fileExists" << m_basePath+absPath;
     return QFile::exists( m_basePath + absPath );
 }

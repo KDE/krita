@@ -30,7 +30,7 @@ void testSelectItemSet( KoOasisSettings& settings )
     assert( items.isNull() );
     items = settings.itemSet( "view-settings" );
     assert( !items.isNull() );
-    kDebug() << "testSelectItemSet OK" << endl;
+    kDebug() <<"testSelectItemSet OK";
 }
 
 void testParseConfigItemString( KoOasisSettings& settings )
@@ -39,7 +39,7 @@ void testParseConfigItemString( KoOasisSettings& settings )
     const QString unit = viewSettings.parseConfigItemString( "unit" );
     qDebug( "%s", qPrintable( unit ) );
     assert( unit == "mm" );
-    kDebug() << "testParseConfigItemString OK" << endl;
+    kDebug() <<"testParseConfigItemString OK";
 }
 
 void testIndexedMap( KoOasisSettings& settings )
@@ -54,7 +54,7 @@ void testIndexedMap( KoOasisSettings& settings )
     assert( zoomFactor == 100 );
     KoOasisSettings::Items secondView = viewMap.entry( 1 );
     assert( secondView.isNull() );
-    kDebug() << "testIndexedMap OK" << endl;
+    kDebug() <<"testIndexedMap OK";
 }
 
 void testNamedMap( KoOasisSettings& settings )
@@ -69,7 +69,7 @@ void testNamedMap( KoOasisSettings& settings )
     assert( zoomFactor == 100 );
     KoOasisSettings::Items secondView = viewMap.entry( "foobar" );
     assert( secondView.isNull() );
-    kDebug() << "testNamedMap OK" << endl;
+    kDebug() <<"testNamedMap OK";
 }
 
 int main( int, char** ) {

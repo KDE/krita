@@ -56,13 +56,13 @@ bool KoPictureClipart::isNull(void) const
 void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
     int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
-    kDebug(30003) << "Drawing KoPictureClipart " << this << endl;
-    kDebug(30003) << "  x=" << x << " y=" << y << " width=" << width << " height=" << height << endl;
-    kDebug(30003) << "  sx=" << sx << " sy=" << sy << " sw=" << sw << " sh=" << sh << endl;
+    kDebug(30003) <<"Drawing KoPictureClipart" << this;
+    kDebug(30003) <<"  x=" << x <<" y=" << y <<" width=" << width <<" height=" << height;
+    kDebug(30003) <<"  sx=" << sx <<" sy=" << sy <<" sw=" << sw <<" sh=" << sh;
     painter.save();
     // Thanks to Harri, Qt3 makes it much easier than Qt2 ;)
     QRect br = clipart.boundingRect();
-    kDebug(30003) << "  Bounding rect. " << br << endl;
+    kDebug(30003) <<"  Bounding rect." << br;
 
     painter.translate(x,y); // Translating must be done before scaling!
     if ( br.width() && br.height() )
@@ -81,7 +81,7 @@ void KoPictureClipart::draw(QPainter& painter, int x, int y, int width, int heig
 bool KoPictureClipart::loadData(const QByteArray& array, const QString& extension)
 {
     // Second, create the original clipart
-    kDebug(30003) << "Trying to load clipart... (Size:" << m_rawData.size() << ")" << endl;
+    kDebug(30003) <<"Trying to load clipart... (Size:" << m_rawData.size() <<")";
     m_rawData=array;
     QBuffer buffer( &m_rawData );
     buffer.open(QIODevice::ReadOnly);

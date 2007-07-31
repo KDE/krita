@@ -73,10 +73,10 @@ KoPictureShared::KoPictureShared(const KoPictureShared &other)
 KoPictureShared& KoPictureShared::operator=( const KoPictureShared &other )
 {
     clear();
-    kDebug(30003) << "KoPictureShared::= before" << endl;
+    kDebug(30003) <<"KoPictureShared::= before";
     if (other.m_base)
         m_base=other.m_base->newCopy();
-    kDebug(30003) << "KoPictureShared::= after" << endl;
+    kDebug(30003) <<"KoPictureShared::= after";
     return *this;
 }
 
@@ -111,7 +111,7 @@ void KoPictureShared::draw(QPainter& painter, int x, int y, int width, int heigh
 
 bool KoPictureShared::loadWmf(QIODevice* io)
 {
-    kDebug(30003) << "KoPictureShared::loadWmf" << endl;
+    kDebug(30003) <<"KoPictureShared::loadWmf";
     if (!io)
     {
         kError(30003) << "No QIODevice!" << endl;
@@ -142,7 +142,7 @@ bool KoPictureShared::loadTmp(QIODevice* io)
 // We have a temp file, probably from a downloaded file
 //   We must check the file type
 {
-    kDebug(30003) << "KoPictureShared::loadTmp" << endl;
+    kDebug(30003) <<"KoPictureShared::loadTmp";
     if (!io)
     {
         kError(30003) << "No QIODevice!" << endl;
@@ -230,7 +230,7 @@ bool KoPictureShared::identifyAndLoad( const QByteArray& _array )
     }
     else
     {
-        kDebug(30003) << "Cannot identify the type of temp file!"
+        kDebug(30003) <<"Cannot identify the type of temp file!"
             << " Trying to convert to PNG! (in KoPictureShared::loadTmp" << endl;
 
         // Do not trust QBuffer and do not work directly on the QByteArray array
@@ -272,7 +272,7 @@ bool KoPictureShared::identifyAndLoad( const QByteArray& _array )
         strExtension="png";
     }
 
-    kDebug(30003) << "Temp file considered to be " << strExtension << endl;
+    kDebug(30003) <<"Temp file considered to be" << strExtension;
 
     clearAndSetMode(strExtension);
     if (m_base)
@@ -286,7 +286,7 @@ bool KoPictureShared::identifyAndLoad( const QByteArray& _array )
 
 bool KoPictureShared::loadXpm(QIODevice* io)
 {
-    kDebug(30003) << "KoPictureShared::loadXpm" << endl;
+    kDebug(30003) <<"KoPictureShared::loadXpm";
     if (!io)
     {
         kError(30003) << "No QIODevice!" << endl;
@@ -395,7 +395,7 @@ bool KoPictureShared::loadFromBase64( const QByteArray& str )
 
 bool KoPictureShared::load(QIODevice* io, const QString& extension)
 {
-    kDebug(30003) << "KoPictureShared::load(QIODevice*, const QString&) " << extension << endl;
+    kDebug(30003) <<"KoPictureShared::load(QIODevice*, const QString&)" << extension;
     bool flag=false;
     QString ext( extension.toLower() );
     if (ext=="wmf")
@@ -430,7 +430,7 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
 
 bool KoPictureShared::loadFromFile(const QString& fileName)
 {
-    kDebug(30003) << "KoPictureShared::loadFromFile " << fileName << endl;
+    kDebug(30003) <<"KoPictureShared::loadFromFile" << fileName;
     if ( fileName.isEmpty() )
     {
         kError(30003) << "Cannot load file with empty name!" << endl;
@@ -444,7 +444,7 @@ bool KoPictureShared::loadFromFile(const QString& fileName)
     const int pos = fileName.lastIndexOf('.');
     if (pos==-1)
     {
-        kDebug(30003) << "File with no extension!" << endl;
+        kDebug(30003) <<"File with no extension!";
         // As we have no extension, consider it like a temporary file
         flag = loadTmp( &file );
     }

@@ -47,7 +47,7 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
             KoGenStyle testStyle( style );
             const KoGenStyle* parentStyle = this->style( style.parentName() ); // ## linear search
             if( !parentStyle ) {
-                kDebug(30003) << "KoGenStyles::lookup(" << name << "): parent style '" << style.parentName() << "' not found in collection" << endl;
+                kDebug(30003) <<"KoGenStyles::lookup(" << name <<"): parent style '" << style.parentName() <<"' not found in collection";
             } else {
                 if ( testStyle.m_familyName != parentStyle->m_familyName )
                 {
@@ -146,17 +146,17 @@ void KoGenStyles::markStyleForStylesXml( const QString& name )
 
 void KoGenStyles::dump()
 {
-    kDebug(30003) << "Style array:" << endl;
+    kDebug(30003) <<"Style array:";
     StyleArray::const_iterator it = m_styleArray.begin();
     const StyleArray::const_iterator end = m_styleArray.end();
     for ( ; it != end ; ++it ) {
-        kDebug(30003) << (*it).name << endl;
+        kDebug(30003) << (*it).name;
     }
     for ( NameMap::const_iterator it = m_styleNames.begin(); it != m_styleNames.end(); ++it ) {
-        kDebug(30003) << "style: " << it.key() << endl;
+        kDebug(30003) <<"style:" << it.key();
     }
     for ( NameMap::const_iterator it = m_autoStylesInStylesDotXml.begin(); it != m_autoStylesInStylesDotXml.end(); ++it ) {
-        kDebug(30003) << "auto style for style.xml: " << it.key() << endl;
+        kDebug(30003) <<"auto style for style.xml:" << it.key();
         const KoGenStyle* s = style( it.key() );
         Q_ASSERT( s );
         Q_ASSERT( s->autoStyleInStylesDotXml() );

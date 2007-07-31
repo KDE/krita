@@ -47,11 +47,11 @@ KoShapeAlignCommand::KoShapeAlignCommand( const QList<KoShape*> &shapes, Align a
     QRectF bRect;
     foreach( KoShape *shape, shapes ) {
 //   if(dynamic_cast<KoShapeGroup*> (shape))
-//       kDebug() << "Found Group\n";
+//       kDebug() <<"Found Group";
 //   else if(dynamic_cast<KoShapeContainer*> (shape))
-//       kDebug() << "Found Container\n";
+//       kDebug() <<"Found Container";
 //   else
-//       kDebug() << "Found shape\n";
+//       kDebug() <<"Found shape";
         position = shape->position();
         previousPositions  << position;
         bRect = shape->boundingRect();
@@ -77,7 +77,7 @@ KoShapeAlignCommand::KoShapeAlignCommand( const QList<KoShape*> &shapes, Align a
                 break;
         };
         newPositions  << position + delta;
-//kDebug() << "-> moving " <<  position.x() << "," << position.y() << " to " <<
+//kDebug() <<"-> moving" <<  position.x() <<"," << position.y() <<" to" <<
 //        (position + delta).x() << ", " << (position+delta).y() << endl;
     }
     d->command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);

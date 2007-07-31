@@ -141,7 +141,7 @@ QString KoDocumentAdaptor::documentInfoCompanyName() const
 
 QString KoDocumentAdaptor::documentInfoTelephone() const
 {
-    kDebug(30003)<<" Keep compatibility with koffice <= 1.3 : use documentInfoTelephoneWork\n";
+    kDebug(30003)<<" Keep compatibility with koffice <= 1.3 : use documentInfoTelephoneWork";
     return documentInfoTelephoneWork();
 }
 
@@ -243,7 +243,7 @@ void KoDocumentAdaptor::setDocumentInfoAuthorPosition(const QString &text)
 
 void KoDocumentAdaptor::setDocumentInfoTelephone(const QString &text)
 {
-    kDebug(30003)<<"Keep compatibility with koffice <= 1.3 : use setDocumentInfoTelephoneWork\n";
+    kDebug(30003)<<"Keep compatibility with koffice <= 1.3 : use setDocumentInfoTelephoneWork";
     setDocumentInfoTelephoneWork(text);
 }
 

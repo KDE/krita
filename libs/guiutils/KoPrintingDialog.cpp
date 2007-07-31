@@ -71,10 +71,10 @@ public:
         QList<KoShape*> shapes = parent->shapesOnPage(pageNumber);
         const int progressPart = 50 / shapes.count();
         foreach(KoShape *shape, shapes) {
-            kDebug(30004) << "Calling waitUntilReady on shape (" << shape << ")\n";
+            kDebug(30004) <<"Calling waitUntilReady on shape (" << shape <<")";
             if(! stop)
                 shape->waitUntilReady();
-            kDebug(30004) << "  done\n";
+            kDebug(30004) <<"  done";
             updater.setProgress(updater.progress() + progressPart);
         }
         updater.setProgress(100);

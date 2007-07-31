@@ -85,7 +85,7 @@ QPixmap KoImageData::pixmap() {
         if(d->image.isNull() && d->tempImageFile) {
             d->tempImageFile->open();
             d->image.load(d->tempImageFile, 0);
-            // kDebug() << "  orig: " << d->image.width() << "x" << d->image.height() << endl;
+            // kDebug() <<"  orig:" << d->image.width() <<"x" << d->image.height();
             d->tempImageFile->close();
             d->imageSize.setWidth( DM_TO_POINT(d->image.width() / (double) d->image.dotsPerMeterX() * 10.0) );
             d->imageSize.setHeight( DM_TO_POINT(d->image.height() / (double) d->image.dotsPerMeterY() * 10.0) );
@@ -107,7 +107,7 @@ QPixmap KoImageData::pixmap() {
                 multiplier = 100;
             int width = qMin(d->image.width(), qRound(d->imageSize.width() * multiplier / 72.));
             int height = qMin(d->image.height(), qRound(d->imageSize.height() * multiplier / 72.));
-            // kDebug() << "  image: " << width << "x" << height << endl;
+            // kDebug() <<"  image:" << width <<"x" << height;
 
             QImage scaled = d->image.scaled(width, height);
             if(d->tempImageFile) // free memory

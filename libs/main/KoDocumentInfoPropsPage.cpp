@@ -156,7 +156,7 @@ void KoDocumentInfoPropsPage::applyChanges()
             str << d->m_info->save();
             buffer.close();
 
-            kDebug( 30003 ) << "writing documentinfo.xml" << endl;
+            kDebug( 30003 ) <<"writing documentinfo.xml";
             d->m_dst->writeFile( "documentinfo.xml", entry->user(), entry->group(),
                     buffer.buffer().data(), buffer.buffer().size() );
 
@@ -177,20 +177,20 @@ void KoDocumentInfoPropsPage::applyChanges()
 
 void KoDocumentInfoPropsPage::copy( const QString &path, const KArchiveEntry *entry )
 {
-    kDebug( 30003 ) << "copy " << entry->name() << endl;
+    kDebug( 30003 ) <<"copy" << entry->name();
     if ( entry->isFile() )
     {
         const KArchiveFile *file = static_cast<const KArchiveFile *>( entry );
-        kDebug( 30003 ) << "file :" << entry->name() << endl;
-        kDebug( 30003 ) << "full path is: " << path << entry->name() << endl;
+        kDebug( 30003 ) <<"file :" << entry->name();
+        kDebug( 30003 ) <<"full path is:" << path << entry->name();
         d->m_dst->writeFile( path + entry->name(), entry->user(), entry->group(),
                 file->data().data(), file->size() );
     }
     else
     {
         const KArchiveDirectory *dir = static_cast<const KArchiveDirectory*>( entry );
-        kDebug( 30003 ) << "dir : " << entry->name() << endl;
-        kDebug( 30003 ) << "full path is: " << path << entry->name() << endl;
+        kDebug( 30003 ) <<"dir :" << entry->name();
+        kDebug( 30003 ) <<"full path is:" << path << entry->name();
 
         QString p = path + entry->name();
         if ( p != "/" )

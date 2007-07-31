@@ -102,7 +102,7 @@ void KoFrame::setState( State s )
   if ( d->m_view )
   {
       /*
-      kDebug(30003) << "KoFrame::setView setMaximumSize "
+      kDebug(30003) <<"KoFrame::setView setMaximumSize"
               << "qMax32767(" << d->m_view->maximumWidth() + 2 * border() << "," << d->m_view->maximumWidth() << "), "
               << "qMax32767(" << d->m_view->maximumHeight() + 2 * border() << "," <<  d->m_view->maximumHeight() << ")"
               << endl;
@@ -245,7 +245,7 @@ void KoFrame::mousePressEvent( QMouseEvent* ev )
   //  if ( d->m_state == Active )
   //    d->m_mode = 0;
 
-  kDebug(30003) << "---- MODE=" << d->m_mode << endl;
+  kDebug(30003) <<"---- MODE=" << d->m_mode;
 
   d->m_mousePressPos = mapToParent( ev->pos() );
   d->m_framePos = mapToParent( QPoint( 0, 0 ) );
@@ -263,7 +263,7 @@ void KoFrame::mouseMoveEvent( QMouseEvent* ev )
       // The other modes change the geometry so they call resizeEvent.
       // This one doesn't, so it has to emit geometryChangedby itself.
       emit geometryChanged();
-      //kDebug() << "KoFrame::mouseMoveEvent koFrame position is " << x() << "," << y() << endl;
+      //kDebug() <<"KoFrame::mouseMoveEvent koFrame position is" << x() <<"," << y();
   }
   else if ( d->m_mode == 1 )
   {
@@ -370,7 +370,7 @@ bool KoFrame::eventFilter( QObject* obj, QEvent* ev )
 {
   if ( obj == d->m_view && KParts::PartActivateEvent::test( ev ) )
   {
-    kDebug(30003) << "Activate event"<< endl;
+    kDebug(30003) <<"Activate event";
     KParts::PartActivateEvent* e = (KParts::PartActivateEvent*)ev;
     if ( e->part() == (KParts::Part *)d->m_view->koDocument() )
     {
@@ -382,7 +382,7 @@ bool KoFrame::eventFilter( QObject* obj, QEvent* ev )
   }
   else if ( obj == d->m_view && KParts::PartSelectEvent::test( ev ) )
   {
-    kDebug(30003) << "Selected event" << endl;
+    kDebug(30003) <<"Selected event";
     KParts::PartSelectEvent* e = (KParts::PartSelectEvent*)ev;
     if ( e->part() == (KParts::Part *)d->m_view->koDocument() )
     {

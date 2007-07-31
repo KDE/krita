@@ -132,7 +132,7 @@ void KoXmlWriter::startElement( const char* tagName, bool indentInside )
     d->tags.push( Tag( tagName, parentIndent && indentInside ) );
     writeChar( '<' );
     writeCString( tagName );
-    //kDebug() << k_funcinfo << tagName << endl;
+    //kDebug() << k_funcinfo << tagName;
 }
 
 void KoXmlWriter::addCompleteElement( const char* cstr )
@@ -168,7 +168,7 @@ void KoXmlWriter::endElement()
             "Please report this bug (by saving the document to another format...)" << endl;
 
     Tag tag = d->tags.pop();
-    //kDebug() << k_funcinfo << " tagName=" << tag.tagName << " hasChildren=" << tag.hasChildren << endl;
+    //kDebug() << k_funcinfo <<" tagName=" << tag.tagName <<" hasChildren=" << tag.hasChildren;
     if ( !tag.hasChildren ) {
         writeCString( "/>" );
     }

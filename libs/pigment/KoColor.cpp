@@ -141,7 +141,7 @@ bool KoColor::operator==(const KoColor &other) const
 
 void KoColor::convertTo(KoColorSpace * cs)
 {
-    //kDebug(DBG_AREA_CMS) << "Our colormodel: " << d->colorSpace->id().name()
+    //kDebug(DBG_AREA_CMS) <<"Our colormodel:" << d->colorSpace->id().name()
     //      << ", new colormodel: " << cs->id().name() << "\n";
 
     if (d->colorSpace == cs)
@@ -205,7 +205,7 @@ void KoColor::fromQColor(const QColor& c, quint8 opacity) const
 #ifndef NDEBUG
 void KoColor::dump() const
 {
-    //kDebug(DBG_AREA_CMS) << "KoColor (" << this << "), " << d->colorSpace->id().name() << "\n";
+    //kDebug(DBG_AREA_CMS) <<"KoColor (" << this <<")," << d->colorSpace->id().name() <<"";
     QList<KoChannelInfo *> channels = d->colorSpace->channels();
 
     QList<KoChannelInfo *>::const_iterator begin = channels.begin();
@@ -217,15 +217,15 @@ void KoColor::dump() const
         // XXX: setNum always takes a byte.
         if (ch->size() == sizeof(quint8)) {
             // Byte
-            //kDebug(DBG_AREA_CMS) << "Channel (byte): " << ch->name() << ": " << QString().setNum(d->data[ch->pos()]) << "\n";
+            //kDebug(DBG_AREA_CMS) <<"Channel (byte):" << ch->name() <<":" << QString().setNum(d->data[ch->pos()]) <<"";
         }
         else if (ch->size() == sizeof(quint16)) {
             // Short (may also by an nvidia half)
-            //kDebug(DBG_AREA_CMS) << "Channel (short): " << ch->name() << ": " << QString().setNum(*((const quint16 *)(d->data+ch->pos())))  << "\n";
+            //kDebug(DBG_AREA_CMS) <<"Channel (short):" << ch->name() <<":" << QString().setNum(*((const quint16 *)(d->data+ch->pos())))  <<"";
         }
         else if (ch->size() == sizeof(quint32)) {
             // Integer (may also be float... Find out how to distinguish these!)
-            //kDebug(DBG_AREA_CMS) << "Channel (int): " << ch->name() << ": " << QString().setNum(*((const quint32 *)(d->data+ch->pos())))  << "\n";
+            //kDebug(DBG_AREA_CMS) <<"Channel (int):" << ch->name() <<":" << QString().setNum(*((const quint32 *)(d->data+ch->pos())))  <<"";
         }
     }
 }

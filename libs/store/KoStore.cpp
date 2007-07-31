@@ -245,7 +245,7 @@ bool KoStore::open( const QString & _name )
 
   if ( m_mode == Write )
   {
-    kDebug(s_area) << "KoStore: opening for writing '" << m_sName << "'" << endl;
+    kDebug(s_area) <<"KoStore: opening for writing '" << m_sName <<"'";
     if ( m_strFiles.contains( m_sName ) )
     {
       kWarning(s_area) << "KoStore: Duplicate filename " << m_sName << endl;
@@ -261,7 +261,7 @@ bool KoStore::open( const QString & _name )
   }
   else if ( m_mode == Read )
   {
-    kDebug(s_area) << "Opening for reading '" << m_sName << "'" << endl;
+    kDebug(s_area) <<"Opening for reading '" << m_sName <<"'";
     if ( !openRead( m_sName ) )
       return false;
   }
@@ -280,7 +280,7 @@ bool KoStore::isOpen() const
 
 bool KoStore::close()
 {
-  kDebug(s_area) << "KoStore: Closing" << endl;
+  kDebug(s_area) <<"KoStore: Closing";
 
   if ( !m_bIsOpen )
   {
@@ -384,7 +384,7 @@ qint64 KoStore::size() const
 
 bool KoStore::enterDirectory( const QString& directory )
 {
-  //kDebug(s_area) << "KoStore::enterDirectory " << directory << endl;
+  //kDebug(s_area) <<"KoStore::enterDirectory" << directory;
   int pos;
   bool success = true;
   QString tmp( directory );

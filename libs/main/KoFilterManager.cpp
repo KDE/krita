@@ -263,7 +263,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QByteArr
         }
     }
     else if ( !m_importUrlMimetypeHint.isEmpty() ) {
-        kDebug(s_area) << "Using the mimetype hint: '" << m_importUrlMimetypeHint << "'" << endl;
+        kDebug(s_area) <<"Using the mimetype hint: '" << m_importUrlMimetypeHint <<"'";
         m_graph.setSourceMimeType( m_importUrlMimetypeHint );
     }
     else {
@@ -395,7 +395,7 @@ namespace  // in order not to mess with the global namespace ;)
             if ( impList.empty() || expList.empty() )
             {
                 // This filter cannot be used under these conditions
-                kDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " ruled out" << endl;
+                kDebug( 30500 ) <<"Filter:" << ( *it )->service()->name() <<" ruled out";
                 continue;
             }
 
@@ -437,7 +437,7 @@ namespace  // in order not to mess with the global namespace ;)
                 }
             }
             else
-                kDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " does not apply." << endl;
+                kDebug( 30500 ) <<"Filter:" << ( *it )->service()->name() <<" does not apply.";
         }
     }
 
@@ -479,7 +479,7 @@ namespace  // in order not to mess with the global namespace ;)
 // graph this mimetype has a connection to.
 QStringList KoFilterManager::mimeFilter( const QByteArray& mimetype, Direction direction, const QStringList& extraNativeMimeTypes )
 {
-    //kDebug(s_area) << "mimetype=" << mimetype << " extraNativeMimeTypes=" << extraNativeMimeTypes << endl;
+    //kDebug(s_area) <<"mimetype=" << mimetype <<" extraNativeMimeTypes=" << extraNativeMimeTypes;
     Q3AsciiDict<Vertex> vertices;
     buildGraph( vertices, direction );
 
@@ -496,7 +496,7 @@ QStringList KoFilterManager::mimeFilter( const QByteArray& mimetype, Direction d
     foreach( QString natit, nativeMimeTypes )
     {
        const QStringList outMimes = connected( vertices, natit.toLatin1() );
-     //kDebug(s_area) << k_funcinfo << "output formats connected to mime " << natit << " : " << outMimes << endl;
+     //kDebug(s_area) << k_funcinfo <<"output formats connected to mime" << natit <<" :" << outMimes;
       foreach( QString mit, outMimes )
       {
         if ( !lst.contains( mit ) ) // append only if not there already. Qt4: QSet<QString>?
@@ -552,14 +552,14 @@ bool KoFilterManager::filterAvailable( KoFilterEntry::Ptr entry )
     if ( entry->available != "check" )
         return true;
 
-    //kDebug( 30500 ) << "Checking whether " << entry->service()->name() << " applies." << endl;
+    //kDebug( 30500 ) <<"Checking whether" << entry->service()->name() <<" applies.";
     // generate some "unique" key
     QString key( entry->service()->name() );
     key += " - ";
     key += entry->service()->library();
 
     if ( !m_filterAvailable.contains( key ) ) {
-        //kDebug( 30500 ) << "Not cached, checking..." << endl;
+        //kDebug( 30500 ) <<"Not cached, checking...";
 
         KLibrary* library = KLibLoader::self()->library( QFile::encodeName( entry->service()->library() ) );
         if ( !library ) {

@@ -141,7 +141,7 @@ bool KoOasisStore::closeManifestWriter()
 
 bool KoOasisStore::loadAndParse( const QString& fileName, KoXmlDocument& doc, QString& errorMessage )
 {
-    //kDebug(30003) << "loadAndParse: Trying to open " << fileName << endl;
+    //kDebug(30003) <<"loadAndParse: Trying to open" << fileName;
     if ( !m_store ) {
         kWarning( 30003 ) << "No store backend" << endl;
         errorMessage = i18n( "No store backend" );
@@ -186,7 +186,7 @@ bool KoOasisStore::loadAndParse( QIODevice* fileDevice, KoXmlDocument& doc, QStr
     }
     else
     {
-        kDebug(30003) << "File " << fileName << " loaded and parsed" << endl;
+        kDebug(30003) <<"File" << fileName <<" loaded and parsed";
     }
     return ok;
 }

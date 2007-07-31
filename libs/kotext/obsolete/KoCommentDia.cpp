@@ -41,7 +41,7 @@ KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString
     authorName = _authorName;
     KVBox *page = new KVBox();
     setMainWidget( page );
-    kDebug()<<"_createNote :"<<_createNote<<endl;
+    kDebug()<<"_createNote :"<<_createNote;
     if ( !_createNote.isEmpty() )
         new QLabel( _createNote, page );
 

@@ -98,7 +98,7 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 
 KoTextParag::~KoTextParag()
 {
-    //kDebug(32500) << "KoTextParag::~KoTextParag " << this << " id=" << paragId() << endl;
+    //kDebug(32500) <<"KoTextParag::~KoTextParag" << this <<" id=" << paragId();
 
     // #107961: unregister custom items; KoTextString::clear() will delete them
     const int len = str->length();
@@ -134,7 +134,7 @@ KoTextParag::~KoTextParag()
     {
         doc->informParagraphDeleted( this );
     }
-    //kDebug(32500) << "KoTextParag::~KoTextParag " << this << " done" << endl;
+    //kDebug(32500) <<"KoTextParag::~KoTextParag" << this <<" done";
     ////
 }
 
@@ -178,7 +178,7 @@ void KoTextParag::setLineChanged( short int line )
     else
         m_lineChanged = qMin( m_lineChanged, line ); // also works if line=-1
     changed = true;
-    //kDebug(32500) << "KoTextParag::setLineChanged line=" << line << " -> m_lineChanged=" << m_lineChanged << endl;
+    //kDebug(32500) <<"KoTextParag::setLineChanged line=" << line <<" -> m_lineChanged=" << m_lineChanged;
 }
 
 void KoTextParag::insert( int index, const QString &s )
@@ -213,7 +213,7 @@ void KoTextParag::remove( int index, int len )
 
 void KoTextParag::join( KoTextParag *s )
 {
-    //kDebug(32500) << "KoTextParag::join this=" << paragId() << " (length " << length() << ") with " << s->paragId() << " (length " << s->length() << ")" << endl;
+    //kDebug(32500) <<"KoTextParag::join this=" << paragId() <<" (length" << length() <<") with" << s->paragId() <<" (length" << s->length() <<")";
     int oh = r.height() + s->r.height();
     n = s->n;
     if ( n )
@@ -272,7 +272,7 @@ void KoTextParag::join( KoTextParag *s )
 
 void KoTextParag::move( int &dy )
 {
-    //kDebug(32500) << "KoTextParag::move paragId=" << paragId() << " dy=" << dy << endl;
+    //kDebug(32500) <<"KoTextParag::move paragId=" << paragId() <<" dy=" << dy;
     if ( dy == 0 )
 	return;
     changed = true;
@@ -306,7 +306,7 @@ void KoTextParag::format( int start, bool doMove )
     if ( isValid() )
 	return;
 
-    //kDebug(32500) << "KoTextParag::format " << this << " id:" << paragId() << endl;
+    //kDebug(32500) <<"KoTextParag::format" << this <<" id:" << paragId();
 
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     //if ( p )
@@ -384,7 +384,7 @@ void KoTextParag::format( int start, bool doMove )
     // do page breaks if required
     if ( doc && doc->isPageBreakEnabled() ) {
         int shift = doc->formatter()->formatVertically( doc, this );
-        //kDebug(32500) << "formatVertically returned shift=" << shift << endl;
+        //kDebug(32500) <<"formatVertically returned shift=" << shift;
         if ( shift && !formattedAgain ) {
             formattedAgain = true;
             goto formatAgain;
@@ -395,11 +395,11 @@ void KoTextParag::format( int start, bool doMove )
         doc->formatter()->postFormat( this );
 
     if ( n && doMove && n->isValid() && r.y() + r.height() != n->r.y() ) {
-        //kDebug(32500) << "r=" << r << " n->r=" << n->r << endl;
+        //kDebug(32500) <<"r=" << r <<" n->r=" << n->r;
 	int dy = ( r.y() + r.height() ) - n->r.y();
 	KoTextParag *s = n;
 	bool makeInvalid = false; //p && p->lastInFrame;
-	//kDebug(32500) << "might move of dy=" << dy << ". previous's lastInFrame (=makeInvalid): " << makeInvalid << endl;
+	//kDebug(32500) <<"might move of dy=" << dy <<". previous's lastInFrame (=makeInvalid):" << makeInvalid;
 	while ( s && dy ) {
             if ( s->movedDown ) { // (not in QRT) : moved down -> invalidate and stop moving down
                 s->invalidate( 0 ); // (there is no point in moving down a parag that has a frame break...)
@@ -419,7 +419,7 @@ void KoTextParag::format( int start, bool doMove )
 //#define DEBUG_CI_PLACEMENT
     if ( mFloatingItems ) {
 #ifdef DEBUG_CI_PLACEMENT
-        kDebug(32500) << lineStarts.count() << " lines" << endl;
+        kDebug(32500) << lineStarts.count() <<" lines";
 #endif
         // Place custom items - after the formatting is finished
         int len = length();
@@ -436,7 +436,7 @@ void KoTextParag::format( int start, bool doMove )
                 lineY = (*it)->y;
                 baseLine = (*it)->baseLine;
 #ifdef DEBUG_CI_PLACEMENT
-                kDebug(32500) << "New line (" << line << "): lineStart=" << (*it) << " lineY=" << lineY << " baseLine=" << baseLine << " height=" << (*it)->h << endl;
+                kDebug(32500) <<"New line (" << line <<"): lineStart=" << (*it) <<" lineY=" << lineY <<" baseLine=" << baseLine <<" height=" << (*it)->h;
 #endif
             }
             if ( chr->isCustom() ) {
@@ -445,7 +445,7 @@ void KoTextParag::format( int start, bool doMove )
                 Q_ASSERT( baseLine >= item->ascent() ); // something went wrong in KoTextFormatter if this isn't the case
                 int y = lineY + baseLine - item->ascent();
 #ifdef DEBUG_CI_PLACEMENT
-                kDebug(32500) << "Custom item: i=" << i << " x=" << x << " lineY=" << lineY << " baseLine=" << baseLine << " ascent=" << item->ascent() << " -> y=" << y << endl;
+                kDebug(32500) <<"Custom item: i=" << i <<" x=" << x <<" lineY=" << lineY <<" baseLine=" << baseLine <<" ascent=" << item->ascent() <<" -> y=" << y;
 #endif
                 item->move( x, y );
                 item->finalize();
@@ -602,17 +602,17 @@ void KoTextParag::setFormat( int index, int len, const KoTextFormat *_f, bool us
 	}
 	if ( flags == -1 || flags == KoTextFormat::Format || !fc ) {
 #ifdef DEBUG_COLLECTION
-	    kDebug(32500) << " KoTextParag::setFormat, will use format(f) " << f << " " << _f->key() << endl;
+	    kDebug(32500) <<" KoTextParag::setFormat, will use format(f)" << f <<"" << _f->key();
 #endif
             KoTextFormat* f = fc ? fc->format( _f ) : const_cast<KoTextFormat *>( _f );
 	    str->setFormat( i + index, f, useCollection, true );
 	} else {
 #ifdef DEBUG_COLLECTION
-	    kDebug(32500) << " KoTextParag::setFormat, will use format(of,f,flags) of=" << of << " " << of->key() << ", f=" << _f << " " << _f->key() << endl;
+	    kDebug(32500) <<" KoTextParag::setFormat, will use format(of,f,flags) of=" << of <<"" << of->key() <<", f=" << _f <<"" << _f->key();
 #endif
 	    KoTextFormat *fm = fc->format( of, _f, flags );
 #ifdef DEBUG_COLLECTION
-	    kDebug(32500) << " KoTextParag::setFormat, format(of,f,flags) returned " << fm << " " << fm->key() << " " << endl;
+	    kDebug(32500) <<" KoTextParag::setFormat, format(of,f,flags) returned" << fm <<"" << fm->key() <<"";
 #endif
 	    str->setFormat( i + index, fm, useCollection );
 	}
@@ -817,7 +817,7 @@ void KoTextParag::lineInfo( int l, int &y, int &h, int &bl ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
 	kWarning(32500) << "KoTextParag::lineInfo: line " << l << " out of range!" << endl;
-	kDebug(32500) << (int)lineStarts.count() - 1 << " " << l << endl;
+	kDebug(32500) << (int)lineStarts.count() - 1 <<"" << l;
 	y = 0;
 	h = 15;
 	bl = 10;
@@ -941,7 +941,7 @@ KoParagCounter *KoTextParag::counter()
 
 void KoTextParag::setMargin( Q3StyleSheetItem::Margin m, double _i )
 {
-    //kDebug(32500) << "KoTextParag::setMargin " << m << " margin " << _i << endl;
+    //kDebug(32500) <<"KoTextParag::setMargin" << m <<" margin" << _i;
     m_layout.margins[m] = _i;
     if ( m == Q3StyleSheetItem::MarginTop && prev() )
         prev()->invalidate(0);     // for top margin (post-1.1: remove this, not necessary anymore)
@@ -1137,11 +1137,11 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
     {
 	int xBullet = xLeft + zh->layoutUnitToPixelX( m_layout.counter->bulletX() );
 
-        //kDebug(32500) << "KoTextParag::drawLabel xLU=" << xLU << " counterWidthLU=" << counterWidthLU << endl;
+        //kDebug(32500) <<"KoTextParag::drawLabel xLU=" << xLU <<" counterWidthLU=" << counterWidthLU;
 	// The width and height of the bullet is the width of one space
         int width = zh->layoutUnitToPixelX( xLeft, format->width( ' ' ) );
 
-        //kDebug(32500) << "Pix: xLeft=" << xLeft << " counterWidth=" << counterWidth
+        //kDebug(32500) <<"Pix: xLeft=" << xLeft <<" counterWidth=" << counterWidth
         //          << " xBullet=" << xBullet << " width=" << width << endl;
 
         QString prefix = m_layout.counter->prefix();
@@ -1342,7 +1342,7 @@ int KoTextParag::calculateLineSpacing( int line, int startChar, int lastChar ) c
         while ( line-- > 0 )
             ++it;
 
-        //kDebug(32500) << " line spacing type: " << m_layout.lineSpacingType << " value:" << m_layout.lineSpacingValue() << " line_height=" << (*it)->h << " startChar=" << startChar << " lastChar=" << lastChar << endl;
+        //kDebug(32500) <<" line spacing type:" << m_layout.lineSpacingType <<" value:" << m_layout.lineSpacingValue() <<" line_height=" << (*it)->h <<" startChar=" << startChar <<" lastChar=" << lastChar;
         switch ( m_layout.lineSpacingType )
         {
         case KoParagLayout::LS_MULTIPLE:
@@ -1386,7 +1386,7 @@ int KoTextParag::calculateLineSpacing( int line, int startChar, int lastChar ) c
 QRect KoTextParag::pixelRect( KoTextZoomHandler *zh ) const
 {
     QRect rct( zh->layoutUnitToPixel( rect() ) );
-    //kDebug(32500) << "   pixelRect for parag " << paragId()
+    //kDebug(32500) <<"   pixelRect for parag" << paragId()
     //               << ": rect=" << rect() << " pixelRect=" << rct << endl;
 
     // After division we almost always end up with the top overwriting the bottom of the parag above
@@ -1395,7 +1395,7 @@ QRect KoTextParag::pixelRect( KoTextZoomHandler *zh ) const
         QRect prevRect( zh->layoutUnitToPixel( prev()->rect() ) );
         if ( rct.top() < prevRect.bottom() + 1 )
         {
-            //kDebug(32500) << "   pixelRect: rct.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rct.top() << ")" << endl;
+            //kDebug(32500) <<"   pixelRect: rct.top() adjusted to" << prevRect.bottom() + 1 <<" (was" << rct.top() <<")";
             rct.setTop( prevRect.bottom() + 1 );
         }
     }
@@ -1408,8 +1408,8 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
                          int clipx, int clipy, int clipw, int cliph )
 {
 #ifdef DEBUG_PAINT
-    kDebug(32500) << "KoTextParag::paint =====  id=" << paragId() << " clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << endl;
-    kDebug(32500) << " clipw in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( clipw ) << " cliph in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( cliph ) << endl;
+    kDebug(32500) <<"KoTextParag::paint =====  id=" << paragId() <<" clipx=" << clipx <<" clipy=" << clipy <<" clipw=" << clipw <<" cliph=" << cliph;
+    kDebug(32500) <<" clipw in pix (approx) :" << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( clipw ) <<" cliph in pix (approx) :" << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( cliph );
 #endif
 
     KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
@@ -1479,11 +1479,11 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         if ( m_layout.bottomBorder.width() > 0 && drawBottomBorder)
             paragBottom -= zh->layoutUnitToPixelY( lineSpacing( lastLine ) );
         paragBottom -= KoBorder::zoomWidthY( m_layout.bottomBorder.width(), zh, 0 );
-        //kDebug(32500) << "Parag border: paragBottom=" << paragBottom
+        //kDebug(32500) <<"Parag border: paragBottom=" << paragBottom
         //               << " bottom border width = " << KoBorder::zoomWidthY( m_layout.bottomBorder.width(), zh, 0 ) << endl;
         r.setBottom( paragBottom );
 
-        //kDebug(32500) << "KoTextParag::paint documentWidth=" << documentWidth() << " LU (" << zh->layoutUnitToPixelX(documentWidth()) << " pixels) bordersRect=" << r << endl;
+        //kDebug(32500) <<"KoTextParag::paint documentWidth=" << documentWidth() <<" LU (" << zh->layoutUnitToPixelX(documentWidth()) <<" pixels) bordersRect=" << r;
         KoBorder::drawBorders( painter, zh, r,
                                m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
                                0, QPen(), drawTopBorder, drawBottomBorder );
@@ -1497,7 +1497,7 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
     if ( !visible )
 	return;
     //KoTextStringChar *chr = at( 0 );
-    //if (!chr) { kDebug(32500) << "paragraph " << (void*)this << " " << paragId() << ", can't paint, EMPTY !" << endl;
+    //if (!chr) { kDebug(32500) <<"paragraph" << (void*)this <<"" << paragId() <<", can't paint, EMPTY !";
 
     // This is necessary with the current code, but in theory it shouldn't
     // be necessary, if Xft really gives us fully proportionnal chars....
@@ -1537,7 +1537,7 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
 
     int numLines = lines();
 #ifdef DEBUG_PAINT
-    kDebug(32500) << " paintLines: from line " << line << " to " << numLines-1 << endl;
+    kDebug(32500) <<" paintLines: from line" << line <<" to" << numLines-1;
 #endif
     for( ; line<numLines ; line++ )
     {
@@ -1686,8 +1686,8 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
     assert(zh);
 
 #ifdef DEBUG_PAINT
-    kDebug(32500) << "KoTextParag::drawParagString drawing from " << start << " to " << start+len << endl;
-    kDebug(32500) << " startX in LU: " << startX << " lastY in LU:" << lastY
+    kDebug(32500) <<"KoTextParag::drawParagString drawing from" << start <<" to" << start+len;
+    kDebug(32500) <<" startX in LU:" << startX <<" lastY in LU:" << lastY
                    << " baseLine in LU:" << baseLine << endl;
 #endif
 
@@ -1700,7 +1700,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
     // Calculate startX in pixels
     int startX_pix = zh->layoutUnitToPixelX( startX ) /* + at( rightToLeft ? start+len-1 : start )->pixelxadj */;
 #ifdef DEBUG_PAINT
-    kDebug(32500) << "KoTextParag::drawParagString startX in pixels : " << startX_pix /*<< " adjustment:" << at( rightToLeft ? start+len-1 : start )->pixelxadj*/ << " bw=" << bw << endl;
+    kDebug(32500) <<"KoTextParag::drawParagString startX in pixels :" << startX_pix /*<<" adjustment:" << at( rightToLeft ? start+len-1 : start )->pixelxadj*/ <<" bw=" << bw;
 #endif
 
     int bw_pix = zh->layoutUnitToPixelX( startX, bw );
@@ -1708,7 +1708,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
     int baseLine_pix = zh->layoutUnitToPixelY( lastY, baseLine ); // 2 args=>+1. Is that correct?
     int h_pix = zh->layoutUnitToPixelY( lastY, h );
 #ifdef DEBUG_PAINT
-    kDebug(32500) << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
+    kDebug(32500) <<"KoTextParag::drawParagString h(LU)=" << h <<" lastY(LU)=" << lastY
                    << " h(PIX)=" << h_pix << " lastY(PIX)=" << lastY_pix
                    << " baseLine(PIX)=" << baseLine_pix << endl;
 #endif
@@ -1820,8 +1820,8 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
                                    const Q3MemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoTextZoomHandler* zh, bool drawingShadow )
 {
 #ifdef DEBUG_PAINT
-    kDebug(32500) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << " : '" << s.mid(start,len) << "'" << endl;
-    kDebug(32500) << "In pixels:  startX=" << startX << " lastY=" << lastY << " baseLine=" << baseLine
+    kDebug(32500) <<"KoTextParag::drawParagStringInternal start=" << start <<" len=" << len <<" : '" << s.mid(start,len) <<"'";
+    kDebug(32500) <<"In pixels:  startX=" << startX <<" lastY=" << lastY <<" baseLine=" << baseLine
                    << " bw=" << bw << " h=" << h << " rightToLeft=" << rightToLeft << endl;
 #endif
     if ( drawingShadow && format->shadowDistanceX() == 0 && format->shadowDistanceY() == 0 )
@@ -1838,9 +1838,9 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 
 #if 0
     QFontInfo fi( font );
-    kDebug(32500) << "KoTextParag::drawParagStringInternal requested font " << font.pointSizeF() << " using font " << fi.pointSize() << "pt (format font: " << format->font().pointSizeFloat() << "pt)" << endl;
+    kDebug(32500) <<"KoTextParag::drawParagStringInternal requested font" << font.pointSizeF() <<" using font" << fi.pointSize() <<"pt (format font:" << format->font().pointSizeFloat() <<"pt)";
     QFontMetrics fm( font );
-    kDebug(32500) << "Real font: " << fi.family() << ". Font height in pixels: " << fm.height() << endl;
+    kDebug(32500) <<"Real font:" << fi.family() <<". Font height in pixels:" << fm.height();
 #endif
 
     // 3) Paint
@@ -1962,13 +1962,13 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     if ( start+len < length() && at( start+len )->lineStart )
     {
 #ifdef DEBUG_PAINT
-        //kDebug(32500) << "we are drawing the end of line " << line << ". Auto-hyphenated: " << lineHyphenated( line ) << endl;
+        //kDebug(32500) <<"we are drawing the end of line" << line <<". Auto-hyphenated:" << lineHyphenated( line );
 #endif
         bool drawHyphen = at( start+len-1 )->c.unicode() == 0xad;
         drawHyphen = drawHyphen || lineHyphenated( line );
         if ( drawHyphen ) {
 #ifdef DEBUG_PAINT
-            kDebug(32500) << "drawing hyphen at x=" << startX+bw << endl;
+            kDebug(32500) <<"drawing hyphen at x=" << startX+bw;
 #endif
             painter.drawText( startX + bw, lastY + baseLine, "-" ); // \xad gives squares with some fonts (!?)
         }
@@ -2028,7 +2028,7 @@ void KoTextParag::drawCursor( QPainter &painter, KoTextCursor *cursor, int curx,
 {
     KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
     int x = zh->layoutUnitToPixelX( curx ) /*+ cursor->parag()->at( cursor->index() )->pixelxadj*/;
-    //kDebug(32500) << "  drawCursor: LU: [cur]x=" << curx << ", cury=" << cury << " -> PIX: x=" << x << ", y=" << zh->layoutUnitToPixelY( cury ) << endl;
+    //kDebug(32500) <<"  drawCursor: LU: [cur]x=" << curx <<", cury=" << cury <<" -> PIX: x=" << x <<", y=" << zh->layoutUnitToPixelY( cury );
     KoTextParag::drawCursorDefault( painter, cursor, x,
                             zh->layoutUnitToPixelY( cury ),
                             zh->layoutUnitToPixelY( cury, curh ), cg );
@@ -2120,14 +2120,14 @@ int KoTextParag::nextTab( int chnum, int x, int availableWidth )
         KoTextZoomHandler* zh = textDocument()->formattingZoomHandler();
 
         while ( i >= 0 && i < (int)m_layout.tabList().size() ) {
-            //kDebug(32500) << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type " << m_layout.tabList()[i].type << endl;
+            //kDebug(32500) <<"KoTextParag::nextTab tArray[" << i <<"]=" << tArray[i] <<" type" << m_layout.tabList()[i].type;
             int tab = tArray[ i ];
 
             // If a right-aligned tab is after the right edge then assume
             // that it -is- on the right edge, otherwise the last letters will fall off.
             // This is compatible with OOo's behavior.
             if ( tab > availableWidth ) {
-                //kDebug(32500) << "Tab position adjusted to availableWidth=" << availableWidth << endl;
+                //kDebug(32500) <<"Tab position adjusted to availableWidth=" << availableWidth;
                 tab = availableWidth;
             }
 
@@ -2241,7 +2241,7 @@ void KoTextParag::applyStyle( KoParagStyle *style )
 
 void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags, int marginIndex )
 {
-    //kDebug(32500) << "KoTextParag::setParagLayout flags=" << flags << endl;
+    //kDebug(32500) <<"KoTextParag::setParagLayout flags=" << flags;
     if ( flags & KoParagLayout::Alignment )
         setAlign( layout.alignment );
     if ( flags & KoParagLayout::Margins ) {
@@ -2281,7 +2281,7 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags, int m
 
 void KoTextParag::setCustomItem( int index, KoTextCustomItem * custom, KoTextFormat * currentFormat )
 {
-    //kDebug(32500) << "KoTextParag::setCustomItem " << index << "  " << (void*)custom
+    //kDebug(32500) <<"KoTextParag::setCustomItem" << index <<"" << (void*)custom
     //               << "  currentFormat=" << (void*)currentFormat << endl;
     if ( currentFormat )
         setFormat( index, 1, currentFormat );
@@ -2327,7 +2327,7 @@ void KoTextParag::printRTDebug( int info )
         specialFlags += " wasMovedDown=true";
     if ( partOfTableOfContents() )
         specialFlags += " part-of-TOC=true";
-    kDebug(32500) << "Paragraph " << this << " (" << paragId() << ") [changed="
+    kDebug(32500) <<"Paragraph" << this <<" (" << paragId() <<") [changed="
               << hasChanged() << ", valid=" << isValid()
               << specialFlags
               << "] ------------------ " << endl;
@@ -2336,9 +2336,9 @@ void KoTextParag::printRTDebug( int info )
     if ( next() && next()->paragId() != paragId() + 1 )
         kWarning() << "  Next paragraph " << next() << " has ID " << next()->paragId() << endl;
     //if ( !next() )
-    //    kDebug(32500) << "  next is 0L" << endl;
-    kDebug(32500) << "  Style: " << style() << " " << ( style() ? style()->name().toLocal8Bit().data() : "NO STYLE" ) << endl;
-    kDebug(32500) << "  Text: '" << str->toString() << "'" << endl;
+    //    kDebug(32500) <<"  next is 0L";
+    kDebug(32500) <<"  Style:" << style() <<"" << ( style() ? style()->name().toLocal8Bit().data() :"NO STYLE" );
+    kDebug(32500) <<"  Text: '" << str->toString() <<"'";
     if ( info == 0 ) // paragraph info
     {
         if ( m_layout.counter )
@@ -2348,17 +2348,17 @@ void KoTextParag::printRTDebug( int info )
         static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
         static const char * const s_linespacing[] = { "Single", "1.5", "2", "custom", "atLeast", "Multiple", "Fixed" };
         static const char * const s_dir[] = { "DirL", "DirR", "DirEN", "DirES", "DirET", "DirAN", "DirCS", "DirB", "DirS", "DirWS", "DirON", "DirLRE", "DirLRO", "DirAL", "DirRLE", "DirRLO", "DirPDF", "DirNSM", "DirBN" };
-        kDebug(32500) << "  align: " << s_align[alignment()] << "  resolveAlignment: " << s_align[resolveAlignment()]
+        kDebug(32500) <<"  align:" << s_align[alignment()] <<"  resolveAlignment:" << s_align[resolveAlignment()]
                   << "  isRTL:" << str->isRightToLeft()
                   << "  dir: " << s_dir[direction()] << endl;
         QRect pixr = pixelRect( textDocument()->paintingZoomHandler() );
-        kDebug(32500) << "  rect() : " << DEBUGRECT( rect() )
+        kDebug(32500) <<"  rect() :" << DEBUGRECT( rect() )
                   << "  pixelRect() : " << DEBUGRECT( pixr ) << endl;
-        kDebug(32500) << "  topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
+        kDebug(32500) <<"  topMargin()=" << topMargin() <<" bottomMargin()=" << bottomMargin()
                   << " leftMargin()=" << leftMargin() << " firstLineMargin()=" << firstLineMargin()
                   << " rightMargin()=" << rightMargin() << endl;
         if ( kwLineSpacingType() != KoParagLayout::LS_SINGLE )
-            kDebug(32500) << "  linespacing type=" << s_linespacing[ -kwLineSpacingType() ]
+            kDebug(32500) <<"  linespacing type=" << s_linespacing[ -kwLineSpacingType() ]
                            << " value=" << kwLineSpacing() << endl;
         const int pageBreaking = m_layout.pageBreaking;
         QStringList pageBreakingFlags;
@@ -2373,21 +2373,21 @@ void KoTextParag::printRTDebug( int info )
         if ( pageBreaking & KoParagLayout::KeepWithNext )
             pageBreakingFlags.append( "KeepWithNext" );
         if ( !pageBreakingFlags.isEmpty() )
-            kDebug(32500) << " page Breaking: " << pageBreakingFlags.join(",") << endl;
+            kDebug(32500) <<" page Breaking:" << pageBreakingFlags.join(",");
 
         static const char * const tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
         KoTabulatorList tabList = m_layout.tabList();
         if ( tabList.isEmpty() ) {
             if ( str->toString().indexOf( '\t' ) != -1 )
-                kDebug(32500) << "Tab width: " << textDocument()->tabStopWidth() << endl;
+                kDebug(32500) <<"Tab width:" << textDocument()->tabStopWidth();
         } else {
             KoTabulatorList::Iterator it = tabList.begin();
             for ( ; it != tabList.end() ; it++ )
-                kDebug(32500) << "Tab type:" << tabtype[(*it).type] << " at: " << (*it).ptPos << endl;
+                kDebug(32500) <<"Tab type:" << tabtype[(*it).type] <<" at:" << (*it).ptPos;
         }
     } else if ( info == 1 ) // formatting info
     {
-        kDebug(32500) << "  Paragraph format=" << paragFormat() << " " << paragFormat()->key()
+        kDebug(32500) <<"  Paragraph format=" << paragFormat() <<"" << paragFormat()->key()
                   << " fontsize:" << dynamic_cast<KoTextFormat *>(paragFormat())->pointSize() << endl;
 
         for ( int line = 0 ; line < lines(); ++ line ) {
@@ -2395,9 +2395,9 @@ void KoTextParag::printRTDebug( int info )
             lineInfo( line, y, h, baseLine );
             int startOfLine;
             lineStartOfLine( line, &startOfLine );
-            kDebug(32500) << "  Line " << line << " y=" << y << " height=" << h << " baseLine=" << baseLine << " startOfLine(index)=" << startOfLine << endl;
+            kDebug(32500) <<"  Line" << line <<" y=" << y <<" height=" << h <<" baseLine=" << baseLine <<" startOfLine(index)=" << startOfLine;
         }
-        kDebug(32500) << endl;
+        kDebug(32500);
         KoTextString * s = string();
         int lastX = 0; // pixels
         int lastW = 0; // pixels
@@ -2407,7 +2407,7 @@ void KoTextParag::printRTDebug( int info )
             int pixelx =  textDocument()->formattingZoomHandler()->layoutUnitToPixelX( ch.x )
                           + ch.pixelxadj;
             if ( ch.lineStart )
-                kDebug(32500) << "LINESTART" << endl;
+                kDebug(32500) <<"LINESTART";
             QString attrs = " ";
             if ( ch.whiteSpace )
                 attrs += "whitespace ";
@@ -2417,7 +2417,7 @@ void KoTextParag::printRTDebug( int info )
                 attrs += "wordStop ";
             attrs.truncate( attrs.length() - 1 );
 
-            kDebug(32500) << i << ": '" << QString(ch.c).rightJustified(2)
+            kDebug(32500) << i <<": '" << QString(ch.c).rightJustified(2)
                            << "' (" << QString::number( ch.c.unicode() ).rightJustified(3) << ")"
                       << " x(LU)=" << ch.x
                       << " w(LU)=" << ch.width//s->width(i)
@@ -2442,7 +2442,7 @@ void KoTextParag::printRTDebug( int info )
             if ( ch.isCustom() )
             {
                 KoTextCustomItem * item = ch.customItem();
-                kDebug(32500) << " - custom item " << item
+                kDebug(32500) <<" - custom item" << item
                           << " ownline=" << item->ownLine()
                           << " size=" << item->width << "x" << item->height
                           << " ascent=" << item->ascent()
@@ -2459,7 +2459,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoTextZoo
     // So abort immediately if there's none to draw.
     if ( !format->isStrikedOrUnderlined() )
         return;
-    //kDebug(32500) << "drawFontEffects wordByWord=" << format->wordByWord() <<
+    //kDebug(32500) <<"drawFontEffects wordByWord=" << format->wordByWord() <<
     //    " firstChar='" << QString(firstChar) << "'" << endl;
     // paintLines ensures that we're called word by word if wordByWord is true.
     if ( format->wordByWord() && firstChar.isSpace() )
@@ -2780,7 +2780,7 @@ void KoTextParag::loadOasisSpan( const KoXmlElement& parent, KoOasisContext& con
                 setCustomItem( pos, customItem, 0 );
             KoTextFormat f;
             f.load( context );
-            //kDebug(32500) << "loadOasisSpan: applying formatting from " << pos << " to " << pos+length << "\n   format=" << f.key() << endl;
+            //kDebug(32500) <<"loadOasisSpan: applying formatting from" << pos <<" to" << pos+length <<"\n   format=" << f.key();
             setFormat( pos, length, document()->formatCollection()->format( &f ), true );
             pos += length;
         }
@@ -2810,7 +2810,7 @@ KoParagLayout KoTextParag::loadParagLayout( KoOasisContext& context, KoStyleColl
                 kError(32500) << "Cannot find style \"" << styleName << "\" - using Standard" << endl;
                 style = styleCollection->findStyle( "Standard" );
             }
-            //else kDebug() << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
+            //else kDebug() <<"KoParagLayout::KoParagLayout setting style to" << style <<"" << style->name();
         }
         else
         {
@@ -2930,7 +2930,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
 
     const int cursorIndex = context.cursorTextParagraph() == this ? context.cursorTextIndex() : -1;
 
-    //kDebug() << k_funcinfo << "'" << text << "' from=" << from << " to=" << to << " cursorIndex=" << cursorIndex << endl;
+    //kDebug() << k_funcinfo <<"'" << text <<"' from=" << from <<" to=" << to <<" cursorIndex=" << cursorIndex;
 
     // A helper method would need no less than 7 params...
 #define WRITESPAN( next ) { \
@@ -3031,7 +3031,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
         }
     }
 
-    //kDebug() << k_funcinfo << "startPos=" << startPos << " to=" << to << " curFormat=" << curFormat << endl;
+    //kDebug() << k_funcinfo <<"startPos=" << startPos <<" to=" << to <<" curFormat=" << curFormat;
 
     if ( to >= startPos ) { // Save last format
         WRITESPAN( to + 1 )
@@ -3045,7 +3045,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
 
 void KoTextParag::applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level )
 {
-    //kDebug(32500) << k_funcinfo << "applyListStyle to parag " << this << " heading=" << heading << endl;
+    //kDebug(32500) << k_funcinfo <<"applyListStyle to parag" << this <<" heading=" << heading;
     delete m_layout.counter;
     m_layout.counter = new KoParagCounter;
     m_layout.counter->loadOasis( context, restartNumbering, orderedList, heading, level );
@@ -3105,7 +3105,7 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
     //QPen pen( cg.color( QColorGroup::Highlight ) );
     QPen pen( KGlobalSettings::linkColor() ); // #101820
     painter.setPen( pen );
-    //kDebug() << "KWTextParag::drawFormattingChars start=" << start << " len=" << len << " length=" << length() << endl;
+    //kDebug() <<"KWTextParag::drawFormattingChars start=" << start <<" len=" << len <<" length=" << length();
     if ( start + len == length() && ( whichFormattingChars & FormattingEndParag ) )
     {
         // drawing the end of the parag
@@ -3114,14 +3114,14 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
         int w = format->charWidth( zh, true, &ch, this, 'X' );
         int size = qMin( w, h_pix * 3 / 4 );
         // x,y is the bottom right corner of the
-        //kDebug() << "startX=" << startX << " bw=" << bw << " w=" << w << endl;
+        //kDebug() <<"startX=" << startX <<" bw=" << bw <<" w=" << w;
         int x;
         if ( rightToLeft )
             x = zh->layoutUnitToPixelX( ch.x ) /*+ ch.pixelxadj*/ + ch.pixelwidth - 1;
         else
             x = zh->layoutUnitToPixelX( ch.x ) /*+ ch.pixelxadj*/ + w;
         int y = lastY_pix + baseLine_pix;
-        //kDebug() << "KWTextParag::drawFormattingChars drawing CR at " << x << "," << y << endl;
+        //kDebug() <<"KWTextParag::drawFormattingChars drawing CR at" << x <<"," << y;
         painter.drawLine( (int)(x - size * 0.2), y - size, (int)(x - size * 0.2), y );
         painter.drawLine( (int)(x - size * 0.5), y - size, (int)(x - size * 0.5), y );
         painter.drawLine( x, y, (int)(x - size * 0.7), y );
@@ -3171,7 +3171,7 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
             {
                 /*KoTextStringChar &nextch = str->at(i+1);
                   int nextx = (nextch.x > ch.x) ? nextch.x : rect().width();
-                  //kDebug() << "tab x=" << ch.x << " nextch.x=" << nextch.x
+                  //kDebug() <<"tab x=" << ch.x <<" nextch.x=" << nextch.x
                   //          << " nextx=" << nextx << " startX=" << startX << " bw=" << bw << endl;
                   int availWidth = nextx - ch.x - 1;
                   availWidth=zh->layoutUnitToPixelX(availWidth);*/
@@ -3204,9 +3204,9 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
                 int size = qMin( w, h_pix * 3 / 4 );
                 int arrowsize = zh->zoomItYOld( 2 );
                 // x,y is the bottom right corner of the reversed L
-                //kDebug() << "startX=" << startX << " bw=" << bw << " w=" << w << endl;
+                //kDebug() <<"startX=" << startX <<" bw=" << bw <<" w=" << w;
                 int y = lastY_pix + baseLine_pix - arrowsize;
-                //kDebug() << "KWTextParag::drawFormattingChars drawing Line Break at " << x << "," << y << endl;
+                //kDebug() <<"KWTextParag::drawFormattingChars drawing Line Break at" << x <<"," << y;
                 if ( rightToLeft )
                 {
                     int x = zh->layoutUnitToPixelX( ch.x ) /*+ ch.pixelxadj*/ + ch.pixelwidth - 1;

@@ -114,7 +114,7 @@ bool KoSpell::checkWordInParagraph( KoTextParag *parag, int pos,
     foundWord = w.word;
     start = w.start;
 #ifdef DEBUG_SPELL
-    kDebug()<<"KoSpell: WORD IS " << w.word << ", pos = "<< pos
+    kDebug()<<"KoSpell: WORD IS" << w.word <<", pos ="<< pos
              << ", start = "<< w.start <<endl;
 #endif
     return checkWord( w.word );
@@ -123,7 +123,7 @@ bool KoSpell::checkWordInParagraph( KoTextParag *parag, int pos,
 QString KoSpell::getMoreText()
 {
 #ifdef DEBUG_SPELL
-    kDebug()<<"getMoreText: dialog = " << d->dialog << ", itr = "
+    kDebug()<<"getMoreText: dialog =" << d->dialog <<", itr ="
              << d->itr << ", atEnd = "
              << ( ( d->itr ) ? d->itr->atEnd() : true )
              << " d->parag=" << d->parag
@@ -152,7 +152,7 @@ QString KoSpell::getMoreText()
     d->parag = d->itr->currentParag();
 
     emit aboutToFeedText();
-    //kDebug()<<"here 2"<<endl;
+    //kDebug()<<"here 2";
     while ( !d->dialog && d->parag ) {
         if ( d->parag->string()->needsSpellCheck() &&
              d->parag->length() > 1 )
@@ -199,14 +199,14 @@ int KoSpell::currentStartIndex() const
 void KoSpell::slotCurrentParagraphDeleted()
 {
 #ifdef DEBUG_SPELL
-    kDebug() << "KoSpell::slotCurrentParagraphDeleted itr=" << d->itr << endl;
+    kDebug() <<"KoSpell::slotCurrentParagraphDeleted itr=" << d->itr;
 #endif
     stop();
     if ( d->itr ) {
         d->needsIncrement = false;
         d->parag = d->itr->currentParag();
 #ifdef DEBUG_SPELL
-        kDebug() << "KoSpell::slotCurrentParagraphDeleted d->parag=" << d->parag << endl;
+        kDebug() <<"KoSpell::slotCurrentParagraphDeleted d->parag=" << d->parag;
 #endif
         start();
     } else {
@@ -217,7 +217,7 @@ void KoSpell::slotCurrentParagraphDeleted()
 bool KoSpell::checking() const
 {
 #ifdef DEBUG_SPELL
-    kDebug()<< "KoSpell::checking: itr=" << d->itr
+    kDebug()<<"KoSpell::checking: itr=" << d->itr
              << ", atEnd=" << ( ( d->itr ) ? d->itr->atEnd() : false )
              << ", filter()->atEnd()=" << filter()->atEnd()
              << endl;

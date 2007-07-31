@@ -105,7 +105,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
     double currentAngle = atan2( edge.y(), edge.x() ) / M_PI * 180;
     m_initialSelectionAngle = currentAngle - angle;
 
-    kDebug(30006) << " PREsol.x=" << m_solidPoint.x() << " sol.y=" << m_solidPoint.y() <<endl;
+    kDebug(30006) <<" PREsol.x=" << m_solidPoint.x() <<" sol.y=" << m_solidPoint.y();
     m_solidPoint = canvas->shapeManager()->selection()->transformationMatrix(0).map( m_solidPoint );
 
     // use crossproduct of top edge and left edge of selection bounding rect

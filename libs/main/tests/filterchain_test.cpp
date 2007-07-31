@@ -33,11 +33,11 @@ int main( int /*argc*/, char ** /*argv*/ )
     g.dump();
 
     KoFilterManager *manager = new KoFilterManager( 0 );
-    kDebug() << "Trying to build some filter chains..." << endl;
+    kDebug() <<"Trying to build some filter chains...";
     Q3CString mimeType( "foo/bar" );
     KoFilterChain::Ptr chain = g.chain( manager, mimeType );
     if ( !chain )
-        kDebug() << "Chain for 'foo/bar' is not available, OK" << endl;
+        kDebug() <<"Chain for 'foo/bar' is not available, OK";
     else {
         kError() << "Chain for 'foo/bar' is available!" << endl;
         chain->dump();
@@ -46,7 +46,7 @@ int main( int /*argc*/, char ** /*argv*/ )
     mimeType = "application/x-krita";
     chain = g.chain( manager, mimeType );
     if ( !chain )
-        kDebug() << "Chain for 'application/x-krita' is not available, OK" << endl;
+        kDebug() <<"Chain for 'application/x-krita' is not available, OK";
     else {
         kError() << "Chain 'application/x-krita' is available!" << endl;
         chain->dump();
@@ -57,7 +57,7 @@ int main( int /*argc*/, char ** /*argv*/ )
     if ( !chain )
         kError() << "Chain for 'text/csv' is not available!" << endl;
     else {
-        kDebug() << "Chain for 'text/csv' is available, OK" << endl;
+        kDebug() <<"Chain for 'text/csv' is available, OK";
         chain->dump();
     }
 
@@ -65,7 +65,7 @@ int main( int /*argc*/, char ** /*argv*/ )
     mimeType = "";
     chain = g.chain( manager, mimeType );
     if ( !chain )
-        kDebug() << "It was already a KOffice part, OK" << endl;
+        kDebug() <<"It was already a KOffice part, OK";
     else
         kError() << "We really got a chain? ugh :}" << endl;
 
@@ -75,34 +75,34 @@ int main( int /*argc*/, char ** /*argv*/ )
     if ( !chain )
         kError() << "Hmm... why didn't we find a chain?" << endl;
     else {
-        kDebug() << "Chain for 'text/csv' -> closest part is available ("
+        kDebug() <<"Chain for 'text/csv' -> closest part is available ("
                   << mimeType << "), OK" << endl;
         chain->dump();
     }
 
-    kDebug() << "Checking mimeFilter() for Import:" << endl;
+    kDebug() <<"Checking mimeFilter() for Import:";
     QStringList list = KoFilterManager::mimeFilter( "application/x-kword",  KoFilterManager::Import );
     QStringList::ConstIterator it = list.begin();
     QStringList::ConstIterator end = list.end();
     for ( ; it != end; ++it )
-        kDebug() << "   " << *it << endl;
-    kDebug() << "   " << list.count() << " entries." << endl;
+        kDebug() <<"" << *it;
+    kDebug() <<"" << list.count() <<" entries.";
 
-    kDebug() << "Checking mimeFilter() for Export:" << endl;
+    kDebug() <<"Checking mimeFilter() for Export:";
     list = KoFilterManager::mimeFilter( "application/x-kword",  KoFilterManager::Export );
     it = list.begin();
     end = list.end();
     for ( ; it != end; ++it )
-        kDebug() << "   " << *it << endl;
-    kDebug() << "   " << list.count() << " entries." << endl;
+        kDebug() <<"" << *it;
+    kDebug() <<"" << list.count() <<" entries.";
 
-    kDebug() << "Checking KoShell's mimeFilter():" << endl;
+    kDebug() <<"Checking KoShell's mimeFilter():";
     list = KoFilterManager::mimeFilter();
     it = list.begin();
     end = list.end();
     for ( ; it != end; ++it )
-        kDebug() << "   " << *it << endl;
-    kDebug() << "   " << list.count() << " entries." << endl;
+        kDebug() <<"" << *it;
+    kDebug() <<"" << list.count() <<" entries.";
 
     delete manager;
     return 0;

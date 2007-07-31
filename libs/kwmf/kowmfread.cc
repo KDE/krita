@@ -37,7 +37,7 @@ bool KoWmfRead::load( const QString& filename )
 
     if ( !file.open( QIODevice::ReadOnly ) )
     {
-        kDebug() << "KoWmfRead : Cannot open file " << QFile::encodeName(filename) << endl;
+        kDebug() <<"KoWmfRead : Cannot open file" << QFile::encodeName(filename);
         return false;
     }
 

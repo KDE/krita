@@ -259,7 +259,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
 
     /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doAutoDetectUrl
      * from KOffice 1.x branch */
-    // kDebug() << "link:" << word << endl;
+    // kDebug() <<"link:" << word;
 
     char link_type = 0;
     int pos = word.indexOf("http://");
@@ -320,7 +320,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
         else if (link_type == 3)
             newWord = QString("ftp://") + word;
 
-        kDebug() << "newWord: " << newWord << endl;
+        kDebug() <<"newWord:" << newWord;
         return newWord;
     }
 

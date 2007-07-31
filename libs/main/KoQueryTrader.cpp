@@ -138,7 +138,7 @@ Q3ValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QSt
   unsigned int max = offers.count();
   for( unsigned int i = 0; i < max; i++, ++it )
   {
-    //kDebug(30003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
+    //kDebug(30003) <<"   desktopEntryPath=" << (*it)->desktopEntryPath()
     //               << "   library=" << (*it)->library() << endl;
 
     if ( (*it)->noDisplay() )
@@ -180,17 +180,17 @@ KoFilterEntry::KoFilterEntry( KService::Ptr service )
 
 Q3ValueList<KoFilterEntry::Ptr> KoFilterEntry::query( const QString & _constr )
 {
-  kDebug(30500) << "KoFilterEntry::query( " << _constr << " )" << endl;
+  kDebug(30500) <<"KoFilterEntry::query(" << _constr <<" )";
   Q3ValueList<KoFilterEntry::Ptr> lst;
 
   KService::List offers = KServiceTypeTrader::self()->query( "KOfficeFilter", _constr );
 
   KService::List::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
-  //kDebug(30500) << "Query returned " << max << " offers" << endl;
+  //kDebug(30500) <<"Query returned" << max <<" offers";
   for( unsigned int i = 0; i < max; i++ )
   {
-    //kDebug(30500) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
+    //kDebug(30500) <<"   desktopEntryPath=" << (*it)->desktopEntryPath()
     //               << "   library=" << (*it)->library() << endl;
     // Append converted offer
     lst.append( KoFilterEntry::Ptr( new KoFilterEntry( *it ) ) );

@@ -194,7 +194,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     painter.setClipPath(m.map(outline()));
 
     foreach (KoShape *shape, sortedObjects) {
-        //kDebug(30006) << "KoShapeContainer::painting shape: " << shape->shapeId() << ", " << shape->boundingRect() << endl;
+        //kDebug(30006) <<"KoShapeContainer::painting shape:" << shape->shapeId() <<"," << shape->boundingRect();
         if(! shape->isVisible())
             continue;
         if(! childClipped(shape) ) // the shapeManager will have to draw those, or else we can't do clipRects

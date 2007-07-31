@@ -42,21 +42,30 @@ public:
     explicit KoPathTool(KoCanvasBase *canvas);
     ~KoPathTool();
 
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    /// reimplemented
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
-    void repaintDecorations();
+    /// reimplemented
+    virtual void repaintDecorations();
 
-    void mousePressEvent( KoPointerEvent *event );
-    void mouseMoveEvent( KoPointerEvent *event );
-    void mouseReleaseEvent( KoPointerEvent *event );
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+    /// reimplemented
+    virtual void mousePressEvent( KoPointerEvent *event );
+    /// reimplemented
+    virtual void mouseMoveEvent( KoPointerEvent *event );
+    /// reimplemented
+    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    /// reimplemented
+    virtual void keyPressEvent(QKeyEvent *event);
+    /// reimplemented
+    virtual void keyReleaseEvent(QKeyEvent *event);
 
-public slots:
-    void activate (bool temporary=false);
-    void deactivate();
+    /// reimplemented
+    virtual void activate (bool temporary=false);
+    /// reimplemented
+    virtual void deactivate();
 
 protected:
+    /// reimplemented
     virtual QWidget * createOptionWidget();
 
 private:
@@ -250,7 +259,7 @@ private:
         KoPathTool * m_tool;
     };
 
-    
+
     ActiveHandle * m_activeHandle;       ///< the currently active handle
     int m_handleRadius;                ///< the radius of the control point handles
     /// the point selection 

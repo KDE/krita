@@ -28,7 +28,7 @@ public:
 };
 
 KisNodeFacade::KisNodeFacade( KisNodeSP root )
-    : m_d( new Private( root.data ) )
+    : m_d( new Private( root ) )
 {
 }
 

@@ -78,18 +78,22 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     points->addAction(m_actionPathPointSymmetric);
 
     m_actionLineSegment = new QAction(KIcon("pathsegment-line"), i18n("Segment to Line"), this);
+    m_actionLineSegment->setShortcut(Qt::Key_F);
     addAction("pathsegment-line", m_actionLineSegment );
     connect( m_actionLineSegment, SIGNAL( triggered() ), this, SLOT( segmentToLine() ) );
 
     m_actionCurveSegment = new QAction(KIcon("pathsegment-curve"), i18n("Segment to Curve"), this);
+    m_actionCurveSegment->setShortcut(Qt::Key_C);
     addAction("pathsegment-curve", m_actionCurveSegment );
     connect( m_actionCurveSegment, SIGNAL( triggered() ), this, SLOT( segmentToCurve() ) );
 
     m_actionAddPoint = new QAction(KIcon("pathpoint-insert"), i18n("Insert point"), this);
     addAction("pathpoint-insert", m_actionAddPoint );
+    m_actionAddPoint->setShortcut(Qt::Key_Insert);
     connect( m_actionAddPoint, SIGNAL( triggered() ), this, SLOT( insertPoints() ) );
 
     m_actionRemovePoint = new QAction(KIcon("pathpoint-remove"), i18n("Remove point"), this);
+    m_actionRemovePoint->setShortcut(Qt::Key_Backspace);
     addAction("pathpoint-remove", m_actionRemovePoint );
     connect( m_actionRemovePoint, SIGNAL( triggered() ), this, SLOT( removePoints() ) );
 
@@ -102,6 +106,7 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     connect( m_actionBreakSegment, SIGNAL( triggered() ), this, SLOT( breakAtSegment() ) );
 
     m_actionJoinSegment = new QAction(KIcon("pathpoint-join"), i18n("Join with segment"), this);
+    m_actionJoinSegment->setShortcut(Qt::Key_J);
     addAction("pathpoint-join", m_actionJoinSegment );
     connect( m_actionJoinSegment, SIGNAL( triggered() ), this, SLOT( joinPoints() ) );
 
@@ -110,6 +115,7 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     addAction("pathpoint-merge", m_actionMergePoints );
 
     m_actionConvertToPath = new QAction(KIcon("convert-to-path"), i18n("To Path"), this);
+    m_actionConvertToPath->setShortcut(Qt::Key_P);
     addAction("convert-to-path", m_actionConvertToPath );
     connect( m_actionConvertToPath, SIGNAL( triggered() ), this, SLOT( convertToPath() ) );
 
@@ -482,12 +488,6 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                 m_canvas->resourceProvider()->setHandleRadius( handleRadius );
                 break;
             }
-            case Qt::Key_Backspace:
-                removePoints();
-                break;
-            case Qt::Key_Insert:
-                insertPoints();
-                break;
 #ifndef NDEBUG
             case Qt::Key_D:
                 if ( pathShape )
@@ -504,18 +504,6 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                     breakAtPoint();
                 else if( selectedPoints.size() >= 2 )
                     breakAtSegment();
-                break;
-            case Qt::Key_J:
-                joinPoints();
-                break;
-            case Qt::Key_F:
-                segmentToLine();
-                break;
-            case Qt::Key_C:
-                segmentToCurve();
-                break;
-            case Qt::Key_P:
-                convertToPath();
                 break;
             default:
                 event->ignore();

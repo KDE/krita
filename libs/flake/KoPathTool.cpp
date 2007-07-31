@@ -624,7 +624,7 @@ void KoPathTool::selectPoints( const QRectF &rect, bool clearSelection )
     foreach(KoPathShape* shape, m_selectedShapes)
     {
         KoParameterShape *parameterShape = dynamic_cast<KoParameterShape*>( shape );
-        if(parameterShape)
+        if(parameterShape && parameterShape->isParametricShape() )
             continue;
         foreach( KoPathPoint* point, shape->pointsAt( shape->documentToShape( rect ) ))
             m_pointSelection.add( point, false );

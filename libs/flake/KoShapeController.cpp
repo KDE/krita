@@ -101,10 +101,8 @@ QUndoCommand* KoShapeController::addShape( KoShape *shape, QUndoCommand *parent 
             delete dialog;
             return 0;
         }
-        foreach(KoShapeConfigWidgetBase *widget, widgets) {
+        foreach(KoShapeConfigWidgetBase *widget, widgets)
             widget->save();
-            // TODO action;
-        }
     }
     delete dialog;
     // set the active layer as parent if there is not yet a parent.

@@ -23,6 +23,7 @@
 
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
+#include "PathToolOptionWidget.h"
 
 #include <KoTool.h>
 #include <QMap>
@@ -34,6 +35,8 @@ class KoParameterShape;
 class KoInteractionStrategy;
 class KoPathPointMoveStrategy;
 class KoPathPointRubberSelectStrategy;
+
+class QAction;
 
 /// The tool for editing a KoPathShape or a KoParameterShape
 class FLAKE_TEST_EXPORT KoPathTool : public KoTool {
@@ -64,6 +67,9 @@ public:
     /// reimplemented
     virtual void deactivate();
 
+signals:
+    void typeChanged(int types);
+
 protected:
     /// reimplemented
     virtual QWidget * createOptionWidget();
@@ -77,6 +83,8 @@ private:
      */
     void selectPoints( const QRectF &rect, bool clearSelection );
 
+    void updateOptionsWidget();
+
     /// repaints the specified rect
     void repaint( const QRectF &repaintRect );
     /// returns a handle rect at the given position
@@ -84,11 +92,9 @@ private:
 
     // needed for interaction strategy
     QPointF m_lastPoint;
-    /// snaps given point to grid point
-    QPointF snapToGrid( const QPointF &p, Qt::KeyboardModifiers modifiers );
 
 private slots:
-    void slotPointTypeChanged( int type );
+    void pointTypeChanged( QAction *type );
     void insertPoints();
     void removePoints();
     void segmentToLine();
@@ -279,6 +285,19 @@ private:
 
     QButtonGroup *m_pointTypeGroup;
     QList<KoPathShape*> m_selectedShapes;
+
+    QAction *m_actionPathPointCorner;
+    QAction *m_actionPathPointSmooth;
+    QAction *m_actionPathPointSymmetric;
+    QAction *m_actionLineSegment;
+    QAction *m_actionCurveSegment;
+    QAction *m_actionAddPoint;
+    QAction *m_actionRemovePoint;
+    QAction *m_actionBreakPoint;
+    QAction *m_actionBreakSegment;
+    QAction *m_actionJoinSegment;
+    QAction *m_actionMergePoints;
+    QAction *m_actionConvertToPath;
 };
 
 #endif

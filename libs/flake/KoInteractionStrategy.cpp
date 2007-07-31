@@ -51,6 +51,27 @@ KoInteractionStrategy::KoInteractionStrategy(KoTool *parent, KoCanvasBase *canva
 {
 }
 
+
+void KoInteractionStrategy::applyGrid(QPointF &point) {
+    // The 1e-10 here is a workaround for some weird division problem.
+    // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a double,
+    // but when casting into an int, we get 126. In fact it's 127 - 5.64e-15 !
+    double gridX, gridY;
+    m_canvas->gridSize(&gridX, &gridY);
+
+    // This is a problem when calling applyGrid twice, we get 1 less than the time before.
+    point.setX( static_cast<int>( point.x() / gridX + 1e-10 ) * gridX );
+    point.setY( static_cast<int>( point.y() / gridY + 1e-10 ) * gridY );
+}
+
+QPointF KoInteractionStrategy::snapToGrid( const QPointF &point, Qt::KeyboardModifiers modifiers ) {
+    if( ! m_canvas->snapToGrid() || (modifiers & Qt::ShiftModifier) )
+        return point;
+    QPointF p = point;
+    applyGrid(p);
+    return p;
+}
+
 // static
 KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoPointerEvent *event, KoInteractionTool *parent, KoCanvasBase *canvas) {
     if((event->buttons() & Qt::LeftButton) == 0)
@@ -112,18 +133,6 @@ KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoPointerEvent *eve
         return new KoShapeMoveStrategy(parent, canvas, event->point);
     }
     return 0;
-}
-
-void KoInteractionStrategy::applyGrid(QPointF &point) {
-    // The 1e-10 here is a workaround for some weird division problem.
-    // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a double,
-    // but when casting into an int, we get 126. In fact it's 127 - 5.64e-15 !
-    double gridX, gridY;
-    m_canvas->gridSize(&gridX, &gridY);
-
-    // This is a problem when calling applyGrid twice, we get 1 less than the time before.
-    point.setX( static_cast<int>( point.x() / gridX + 1e-10 ) * gridX );
-    point.setY( static_cast<int>( point.y() / gridY + 1e-10 ) * gridY );
 }
 
 // static

@@ -40,6 +40,7 @@
 #include "KoParameterChangeStrategy.h"
 #include "KoPathPointMoveStrategy.h"
 #include "KoPathPointRubberSelectStrategy.h"
+#include "PathToolOptionWidget.h"
 
 #include <KIcon>
 #include <kdebug.h>
@@ -59,112 +60,73 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 , m_pointSelection( this )
 , m_currentStrategy(0)
 {
-    QAction *action = new QAction(KIcon("pathpoint-corner"), i18n("Corner point"), this);
-    addAction("pathpoint-corner", action);
-    //connect(action
+    QActionGroup *points = new QActionGroup(this);
+    // m_pointTypeGroup->setExclusive( true );
+    m_actionPathPointCorner = new QAction(KIcon("pathpoint-corner"), i18n("Corner point"), this);
+    addAction("pathpoint-corner", m_actionPathPointCorner);
+    m_actionPathPointCorner->setData(KoPathPointTypeCommand::Corner );
+    points->addAction(m_actionPathPointCorner);
+
+    m_actionPathPointSmooth = new QAction(KIcon("pathpoint-smooth"), i18n("Smooth point"), this);
+    addAction("pathpoint-smooth", m_actionPathPointSmooth);
+    m_actionPathPointCorner->setData(KoPathPointTypeCommand::Smooth );
+    points->addAction(m_actionPathPointCorner);
+
+    m_actionPathPointSymmetric = new QAction(KIcon("pathpoint-symmetric"), i18n("Symmetric Point"), this);
+    addAction("pathpoint-symmetric", m_actionPathPointSymmetric );
+    m_actionPathPointCorner->setData(KoPathPointTypeCommand::Symmetric );
+    points->addAction(m_actionPathPointCorner);
+
+    m_actionLineSegment = new QAction(KIcon("pathsegment-line"), i18n("Segment to Line"), this);
+    addAction("pathsegment-line", m_actionLineSegment );
+    connect( m_actionLineSegment, SIGNAL( triggered() ), this, SLOT( segmentToLine() ) );
+
+    m_actionCurveSegment = new QAction(KIcon("pathsegment-curve"), i18n("Segment to Curve"), this);
+    addAction("pathsegment-curve", m_actionCurveSegment );
+    connect( m_actionCurveSegment, SIGNAL( triggered() ), this, SLOT( segmentToCurve() ) );
+
+    m_actionAddPoint = new QAction(KIcon("pathpoint-insert"), i18n("Insert point"), this);
+    addAction("pathpoint-insert", m_actionAddPoint );
+    connect( m_actionAddPoint, SIGNAL( triggered() ), this, SLOT( insertPoints() ) );
+
+    m_actionRemovePoint = new QAction(KIcon("pathpoint-remove"), i18n("Remove point"), this);
+    addAction("pathpoint-remove", m_actionRemovePoint );
+    connect( m_actionRemovePoint, SIGNAL( triggered() ), this, SLOT( removePoints() ) );
+
+    m_actionBreakPoint = new QAction(KIcon("path-break-point"), i18n("Break at point"), this);
+    addAction("path-break-point", m_actionBreakPoint );
+    connect( m_actionBreakPoint, SIGNAL( triggered() ), this, SLOT( breakAtPoint() ) );
+
+    m_actionBreakSegment = new QAction(KIcon("path-break-segment"), i18n("Break at segment"), this);
+    addAction("path-break-segment", m_actionBreakSegment );
+    connect( m_actionBreakSegment, SIGNAL( triggered() ), this, SLOT( breakAtSegment() ) );
+
+    m_actionJoinSegment = new QAction(KIcon("pathpoint-join"), i18n("Join with segment"), this);
+    addAction("pathpoint-join", m_actionJoinSegment );
+    connect( m_actionJoinSegment, SIGNAL( triggered() ), this, SLOT( joinPoints() ) );
+
+    m_actionMergePoints = new QAction(KIcon("pathpoint-merge"), i18n("Merge points"), this);
+    m_actionMergePoints->setEnabled(false); // not implemented yet.
+    addAction("pathpoint-merge", m_actionMergePoints );
+
+    m_actionConvertToPath = new QAction(KIcon("convert-to-path"), i18n("To Path"), this);
+    addAction("convert-to-path", m_actionConvertToPath );
+    connect( m_actionConvertToPath, SIGNAL( triggered() ), this, SLOT( convertToPath() ) );
+
+    connect( points, SIGNAL(triggered(QAction*)), this, SLOT( pointTypeChanged( QAction* ) ) );
 }
 
 KoPathTool::~KoPathTool() {
 }
 
 QWidget * KoPathTool::createOptionWidget() {
-    QWidget *optionWidget = new QWidget();
-    QGridLayout *layout = new QGridLayout( optionWidget );
-    m_pointTypeGroup = new QButtonGroup( optionWidget );
-    m_pointTypeGroup->setExclusive( true );
-
-    QToolButton *button = 0;
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("pathpoint-corner") );
-    button->setToolTip( i18n( "Corner point" ) );
-    m_pointTypeGroup->addButton( button, KoPathPointTypeCommand::Corner );
-    layout->addWidget( button, 0, 0 );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("pathpoint-smooth") );
-    button->setToolTip( i18n( "Smooth point" ) );
-    m_pointTypeGroup->addButton( button, KoPathPointTypeCommand::Smooth );
-    layout->addWidget( button, 0, 1 );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("pathpoint-symmetric") );
-    button->setToolTip( i18n( "Symmetric point" ) );
-    m_pointTypeGroup->addButton( button, KoPathPointTypeCommand::Symmetric );
-    layout->addWidget( button, 0, 2 );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("pathsegment-line") );
-    button->setToolTip( i18n( "Segment to line" ) );
-    layout->addWidget( button, 0, 4 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( segmentToLine() ) );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("pathsegment-curve") );
-    button->setToolTip( i18n( "Segment to curve" ) );
-    layout->addWidget( button, 0, 5 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( segmentToCurve() ) );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("convert-to-path") );
-    button->setToolTip( i18n( "Convert to path" ) );
-    layout->addWidget( button, 0, 6 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( convertToPath() ) );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("pathpoint-insert") );
-    button->setToolTip( i18n( "Insert point" ) );
-    layout->addWidget( button, 1, 0 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( insertPoints() ) );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("pathpoint-remove") );
-    button->setToolTip( i18n( "Remove point" ) );
-    layout->addWidget( button, 1, 1 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( removePoints() ) );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("path-break-point", 22) );
-    button->setToolTip( i18n( "Break at point" ) );
-    layout->addWidget( button, 1, 3 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( breakAtPoint() ) );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("path-break-segment") );
-    button->setToolTip( i18n( "Break at segment" ) );
-    layout->addWidget( button, 1, 4 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( breakAtSegment() ) );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("pathpoint-join") );
-    button->setToolTip( i18n( "Join with segment" ) );
-    layout->addWidget( button, 1, 5 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( joinPoints() ) );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("pathpoint-merge") );
-    button->setToolTip( i18n( "Merge points" ) );
-    layout->addWidget( button, 1, 6 );
-    //connect( button, SIGNAL( clicked( bool ) ), this, SLOT( removePoints() ) );
-
-    layout->setColumnStretch( 0, 0 );
-    layout->setColumnStretch( 1, 0 );
-    layout->setColumnStretch( 2, 0 );
-    //layout->setColumnMinimumWidth( 3, 10 );
-    layout->setColumnStretch( 4, 0 );
-    layout->setColumnStretch( 5, 0 );
-    layout->setColumnStretch( 6, 0 );
-    layout->setColumnStretch( 7, 1 );
-
-    layout->setRowStretch( 0, 0 );
-    layout->setRowStretch( 1, 0 );
-    layout->setRowStretch( 2, 1 );
-    
-    connect( m_pointTypeGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotPointTypeChanged( int ) ) );
-    return optionWidget;
+    PathToolOptionWidget *widget = new PathToolOptionWidget(this);
+    connect(this, SIGNAL(typeChanged(int)), widget, SLOT(setSelectionType(int)));
+    updateOptionsWidget();
+    return widget;
 }
 
-void KoPathTool::slotPointTypeChanged( int type ) 
+void KoPathTool::pointTypeChanged( QAction *type )
 {
     if ( m_pointSelection.size() > 0 )
     {
@@ -186,7 +148,8 @@ void KoPathTool::slotPointTypeChanged( int type )
 
         if ( pointToChange.size() > 0 )
         {
-            KoPathPointTypeCommand *cmd = new KoPathPointTypeCommand( pointToChange, (KoPathPointTypeCommand::PointType)type );
+            KoPathPointTypeCommand *cmd = new KoPathPointTypeCommand( pointToChange,
+                    static_cast<KoPathPointTypeCommand::PointType> (type->data().toInt()));
             m_canvas->addCommand( cmd );
         }
     }
@@ -256,6 +219,7 @@ void KoPathTool::convertToPath()
     }
     if( shapesToConvert.count() )
         m_canvas->addCommand( new KoParameterToPathCommand( shapesToConvert ) );
+    updateOptionsWidget();
 }
 
 void KoPathTool::joinPoints()
@@ -498,6 +462,7 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
 
         switch(event->key()) 
         {
+// TODO move these to the actions in the constructor.
             case Qt::Key_I:
             {
                 int handleRadius = m_canvas->resourceProvider()->handleRadius();
@@ -595,6 +560,18 @@ void KoPathTool::activate (bool temporary) {
     }
     useCursor(Qt::ArrowCursor, true);
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(activate()));
+    updateOptionsWidget();
+}
+
+void KoPathTool::updateOptionsWidget() {
+    PathToolOptionWidget::Types type;
+    foreach(KoPathShape *shape, m_selectedShapes)
+    {
+        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
+        type |= parameterShape && parameterShape->isParametricShape() ?
+            PathToolOptionWidget::ParametricShape : PathToolOptionWidget::PlainPath;
+    }
+    emit typeChanged(type);
 }
 
 void KoPathTool::deactivate() {
@@ -644,16 +621,6 @@ void KoPathTool::repaint( const QRectF &repaintRect ) {
 
 QRectF KoPathTool::handleRect( const QPointF &p ) {
     return QRectF( p.x()-m_handleRadius, p.y()-m_handleRadius, 2*m_handleRadius, 2*m_handleRadius );
-}
-
-QPointF KoPathTool::snapToGrid( const QPointF &p, Qt::KeyboardModifiers modifiers ) {
-    if( ! m_canvas->snapToGrid() || modifiers & Qt::ShiftModifier )
-        return p;
-
-    double gridX, gridY;
-    m_canvas->gridSize( &gridX, &gridY );
-    return QPointF( static_cast<int>( p.x() / gridX + 1e-10 ) * gridX,
-                    static_cast<int>( p.y() / gridY + 1e-10 ) * gridY );
 }
 
 void KoPathTool::ActivePointHandle::paint( QPainter &painter, const KoViewConverter &converter )

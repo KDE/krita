@@ -42,6 +42,7 @@ set(flake_SRCS
     KoCreatePathTool.cpp
     KoCreatePathToolFactory.cpp
     KoPathToolFactory.cpp
+    PathToolOptionWidget.cpp
     KoPathTool.cpp
     KoPathPointRubberSelectStrategy.cpp
     KoPathPointMoveStrategy.cpp

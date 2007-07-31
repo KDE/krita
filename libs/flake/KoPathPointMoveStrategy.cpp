@@ -37,7 +37,7 @@ KoPathPointMoveStrategy::~KoPathPointMoveStrategy()
 
 void KoPathPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers )
 {
-    QPointF docPoint = m_tool->snapToGrid( mouseLocation, modifiers );
+    QPointF docPoint = snapToGrid( mouseLocation, modifiers );
     QPointF move = docPoint - m_lastPosition;
     // as the last position can change when the top left is changed we have
     // to save it in document pos and not in shape pos

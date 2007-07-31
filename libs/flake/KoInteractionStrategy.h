@@ -94,6 +94,13 @@ protected:
      */
     void applyGrid(QPointF &point);
 
+    /**
+     * If applicable, apply the grid settings to the argument point.
+     * @param point the original point
+     * @return the argument point, potentially changed.
+     */
+    QPointF snapToGrid( const QPointF &point, Qt::KeyboardModifiers modifiers );
+
     /// checks recursively if the shape or one of its parents is not visible or locked
     static bool isEditable( KoShape * shape );
 

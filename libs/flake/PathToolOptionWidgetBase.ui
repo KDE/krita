@@ -13,6 +13,18 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" >
+   <property name="leftMargin" >
+    <number>5</number>
+   </property>
+   <property name="topMargin" >
+    <number>5</number>
+   </property>
+   <property name="rightMargin" >
+    <number>5</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>5</number>
+   </property>
    <item row="0" column="0" >
     <widget class="QGroupBox" name="stylesGroup" >
      <property name="title" >
@@ -67,13 +79,6 @@
       </item>
       <item row="2" column="1" >
        <widget class="QToolButton" name="curveSegment" >
-        <property name="text" >
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2" >
-       <widget class="QToolButton" name="pathSegment" >
         <property name="text" >
          <string>...</string>
         </property>

@@ -196,6 +196,11 @@ QString KoCsvImportDialog::text(int row, int col)
     return d->dialog->m_sheet->text( row - d->startRow, col - d->startCol );
 }
 
+void KoCsvImportDialog::setDataWidgetEnabled(bool enable)
+{
+    d->dialog->m_tabWidget->setTabEnabled(0, enable);
+}
+
 
 // ----------------------------------------------------------------
 

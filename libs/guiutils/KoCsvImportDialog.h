@@ -49,6 +49,7 @@ public:
     int      cols();
     int      headerType(int col);
     QString  text(int row, int col);
+    void     setDataWidgetEnabled(bool enable);
 
 protected:
     void fillTable();

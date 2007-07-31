@@ -5,8 +5,6 @@ include_directories( ${KOTEXT_INCLUDES} )
 #
 #   set(kotextformattertest_SRCS kotextformattertest.cpp )
 #
-#   kde4_automoc(${kotextformattertest_SRCS})
-#
 #   kde4_add_executable(kotextformattertest RUN_UNINSTALLED ${kotextformattertest_SRCS})
 #
 #   target_link_libraries(kotextformattertest kotext)
@@ -15,8 +13,6 @@ include_directories( ${KOTEXT_INCLUDES} )
 #
 #   set(kobordertest_SRCS kobordertest.cpp )
 #
-#   kde4_automoc(${kobordertest_SRCS})
-#
 #   kde4_add_executable(kobordertest RUN_UNINSTALLED ${kobordertest_SRCS})
 #
 #   target_link_libraries(kobordertest kotext)
@@ -24,8 +20,6 @@ include_directories( ${KOTEXT_INCLUDES} )
 #   ########### kovariabletest ###############
 #
 #   set(kovariabletest_SRCS kovariabletest.cpp)
-#
-#   kde4_automoc(${kovariabletest_SRCS})
 #
 #   kde4_add_executable(kovariabletest RUN_UNINSTALLED ${kovariabletest_SRCS})
 #
@@ -36,8 +30,6 @@ include_directories( ${KOTEXT_INCLUDES} )
 #   ########### KoUserStyleTester ###############
 #
 #   set(KoUserStyleTester_SRCS KoUserStyleTester.cpp)
-#
-#   kde4_automoc(${KoUserStyleTester_SRCS})
 #
 #   kde4_add_executable(KoUserStyleTester RUN_UNINSTALLED ${KoUserStyleTester_SRCS})
 #

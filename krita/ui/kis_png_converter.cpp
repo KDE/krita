@@ -393,6 +393,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         }
     }
 
+    double coeff = quint8_MAX / (double)( pow(2, color_nb_bits ) - 1 );
     KisPaintLayer* layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), UCHAR_MAX);
     for (int i = 0; i < number_of_passes; i++)
     {
@@ -419,9 +420,10 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                         KisPNGStream stream(row_pointer, color_nb_bits);
                         while (!it.isDone()) {
                             quint8 *d = it.rawData();
-                            d[0] = stream.nextValue() << (8 - color_nb_bits);
+                            d[0] = (quint8)(stream.nextValue() * coeff);
+                            kDebug() << it.x() << " " << it.y() << " " << (int)d[0] << endl;
                             if(transform) cmsDoTransform(transform, d, d, 1);
-                            if(hasalpha) d[1] = stream.nextValue() << (8 - color_nb_bits);
+                            if(hasalpha) d[1] = (quint8)(stream.nextValue() * coeff);
                             else d[1] = UCHAR_MAX;
                             ++it;
                         }
@@ -447,11 +449,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                         KisPNGStream stream(row_pointer, color_nb_bits);
                         while (!it.isDone()) {
                             quint8 *d = it.rawData();
-                            d[2] = stream.nextValue() << (8 - color_nb_bits);
-                            d[1] = stream.nextValue() << (8 - color_nb_bits);
-                            d[0] = stream.nextValue() << (8 - color_nb_bits);
+                            d[2] = (quint8)(stream.nextValue() * coeff);
+                            d[1] = (quint8)(stream.nextValue() * coeff);
+                            d[0] = (quint8)(stream.nextValue() * coeff);
                             if(transform) cmsDoTransform(transform, d, d, 1);
-                            if(hasalpha) d[3] = stream.nextValue() << (8 - color_nb_bits);
+                            if(hasalpha) d[3] = (quint8)(stream.nextValue() * coeff);
                             else d[3] = UCHAR_MAX;
                             ++it;
                         }

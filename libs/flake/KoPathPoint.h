@@ -181,7 +181,7 @@ public:
      * @brief check if there is a controlPoint1
      *
      * @return true when CanHaveControlPoint1 and HasControlPoint1 is set
-     * @return false otherwise
+     * return false otherwise
      */
     bool activeControlPoint1() const;
 
@@ -189,7 +189,7 @@ public:
      * @brief check if there is a controlPoint2
      *
      * @return true when CanHaveControlPoint2 and HasControlPoint2 is set
-     * @return false otherwise
+     * return false otherwise
      */
     bool activeControlPoint2() const;
 
@@ -232,7 +232,7 @@ public:
      * 
      * This takes into account if there are controlpoints 
      *
-     * @param active If true only the active points are used in caluclation
+     * @param active If true only the active points are used in calculation
      *               of the bounding rectangle. If false all points are used.
      *
      * @return bounding rect in document coordinates

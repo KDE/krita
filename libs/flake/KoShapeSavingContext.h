@@ -60,7 +60,8 @@ public:
          * If set the automatic style will be marked as being needed in styles.xml
          */
         AutoStyleInStyleXml = 4,
-        FrameOpened = 8     ///< If a 'draw:frame' tag has been openened shape properties should be saved differently
+        FrameOpened = 8,     ///< If a 'draw:frame' tag has been openened shape properties should be saved differently
+        MainTextFrame = 16
     };
     Q_DECLARE_FLAGS( KoShapeSavingOptions, ShapeSavingOption )
 

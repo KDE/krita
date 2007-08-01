@@ -129,11 +129,6 @@ public:
             return QString( "Layers" );
         }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
-        {
-            return Qt::RightDockWidgetArea;
-        }
-
     virtual QDockWidget* createDockWidget()
         {
             KisLayerBox * dockWidget = new KisLayerBox();

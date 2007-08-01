@@ -68,11 +68,6 @@ QString KisPaletteDockerFactory::id() const
     return QString("KisPaletteDocker");
 }
 
-Qt::DockWidgetArea KisPaletteDockerFactory::defaultDockWidgetArea() const
-{
-    return Qt::RightDockWidgetArea;
-}
-
 QDockWidget* KisPaletteDockerFactory::createDockWidget()
 {
     KisPaletteDocker* dockWidget = new KisPaletteDocker(m_view);

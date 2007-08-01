@@ -63,7 +63,6 @@ public:
     ~KisPaletteDockerFactory() {}
 
     virtual QString id() const;
-    Qt::DockWidgetArea defaultDockWidgetArea() const;
     QDockWidget * createDockWidget();
 
 private:

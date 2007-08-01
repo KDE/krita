@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2000-2006 David Faure <faure@kde.org>
+   Copyright (C) 2007 Thomas zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -572,7 +573,7 @@ KParts::PartManager *KoMainWindow::partManager()
 
 bool KoMainWindow::openDocument( const KUrl & url )
 {
-    if ( !KIO::NetAccess::exists(url,true,0) )
+    if ( !KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0) )
     {
         KMessageBox::error(0L, i18n("The file %1 does not exist.", url.url()) );
         m_recent->removeUrl(url); //remove the file from the recent-opened-file-list
@@ -585,7 +586,7 @@ bool KoMainWindow::openDocument( const KUrl & url )
 // (not virtual)
 bool KoMainWindow::openDocument( KoDocument *newdoc, const KUrl & url )
 {
-    if (!KIO::NetAccess::exists(url,true,0) )
+    if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0) )
     {
         if (!newdoc->checkAutoSaveFile())
         {
@@ -877,7 +878,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
 
             // this file exists and we are not just clicking "Save As" to change filter options
             // => ask for confirmation
-            if ( KIO::NetAccess::exists( newURL, false /*will write*/, this ) && !justChangingFilterOptions )
+            if ( KIO::NetAccess::exists( newURL,  KIO::NetAccess::DestinationSide, this ) && !justChangingFilterOptions )
             {
                 bOk = KMessageBox::questionYesNo( this,
                                                   i18n("A document with this name already exists.\n"\
@@ -1758,13 +1759,26 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
         Q_ASSERT(dockWidget);
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent( this );
-        addDockWidget( factory->defaultDockWidgetArea(), dockWidget );
-        d->m_dockWidgetMap.insert( factory->id(), dockWidget );
+        Qt::DockWidgetArea side = Qt::RightDockWidgetArea;
+        bool visible = true;
+        switch(factory->defaultDockPosition()) {
+            case Qt::DockTornOff:
+                dockWidget->setFloating(true); // position nicely?
+                break;
+            case Qt::DockTop: side = Qt::TopDockWidgetArea; break;
+            case Qt::DockLeft: side = Qt::LeftDockWidgetArea; break;
+            case Qt::DockBottom: side = Qt::BottomDockWidgetArea; break;
+            case Qt::DockRight: side = Qt::RightDockWidgetArea; break;
+            case Qt::DockMinimized: visible = false; break;
+            default:;
+        }
 
         if( dockWidget->features() & QDockWidget::DockWidgetClosable ) {
-            d->m_dockWidgetMenu->setVisible( true );
+            d->m_dockWidgetMenu->setVisible( visible ); // This doesn't actually work; not sure why
             d->m_dockWidgetMenu->addAction( dockWidget->toggleViewAction() );
         }
+        addDockWidget( side, dockWidget );
+        d->m_dockWidgetMap.insert( factory->id(), dockWidget );
     } else {
         dockWidget = d->m_dockWidgetMap[ factory->id() ];
     }
@@ -1774,10 +1788,11 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
 
     KConfigGroup group( KGlobal::config(), "GUI" );
     QFont dockWidgetFont  = KGlobalSettings::generalFont();
-    double pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize());
+    double pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
+    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
     dockWidgetFont.setPointSizeF(pointSize);
     dockWidget->setFont(dockWidgetFont);
-    
+
     return dockWidget;
 }
 

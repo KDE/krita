@@ -81,11 +81,6 @@ public:
             return QString( "KisBirdeyeBox" );
         }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
-        {
-            return Qt::RightDockWidgetArea;
-        }
-
     virtual QDockWidget* createDockWidget()
         {
             KisBirdEyeBox * dockWidget = new KisBirdEyeBox(m_view);

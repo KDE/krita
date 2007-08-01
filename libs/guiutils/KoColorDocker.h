@@ -58,7 +58,6 @@ public:
     ~KoColorDockerFactory() {}
 
     QString id() const;
-    Qt::DockWidgetArea defaultDockWidgetArea() const;
     QDockWidget * createDockWidget();
 private:
 

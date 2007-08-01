@@ -39,7 +39,7 @@ public:
     virtual QString id() const = 0;
 
     /// @return the dock widget area the widget should appear in by default
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const = 0;
+    virtual Qt::Dock defaultDockPosition() const { return Qt::DockRight; }
 
     /// Creates the dock widget
     /// @return the created dock widget

@@ -42,11 +42,6 @@ QString KisPainterlyMixerDockerFactory::id() const
     return QString("KisPainterlyMixerDocker");
 }
 
-Qt::DockWidgetArea KisPainterlyMixerDockerFactory::defaultDockWidgetArea() const
-{
-    return Qt::RightDockWidgetArea;
-}
-
 QDockWidget* KisPainterlyMixerDockerFactory::createDockWidget()
 {
     KisPainterlyMixerDocker* widget = new KisPainterlyMixerDocker(m_view);

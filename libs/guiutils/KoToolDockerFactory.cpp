@@ -26,11 +26,6 @@ QString KoToolDockerFactory::id() const
     return QString("KoToolOptionsDocker");
 }
 
-Qt::DockWidgetArea KoToolDockerFactory::defaultDockWidgetArea() const
-{
-    return Qt::RightDockWidgetArea;
-}
-
 QDockWidget* KoToolDockerFactory::createDockWidget()
 {
     KoToolDocker * dockWidget = new KoToolDocker();

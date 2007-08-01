@@ -38,8 +38,6 @@ public:
     /// reimplemented from parent
     virtual QString id() const;
     /// reimplemented from parent
-    Qt::DockWidgetArea defaultDockWidgetArea() const;
-    /// reimplemented from parent
     QDockWidget* createDockWidget();
 };
 

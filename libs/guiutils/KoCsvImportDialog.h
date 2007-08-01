@@ -25,6 +25,9 @@
 
 #include "koguiutils_export.h"
 
+/**
+ * A dialog to choose the options for importing CSV data.
+ */
 class KOGUIUTILS_EXPORT KoCsvImportDialog : public KDialog
 {
     Q_OBJECT
@@ -96,15 +99,6 @@ public:
      * Enables or disables the data widget.
      */
     void setDataWidgetEnabled(bool enable);
-
-protected:
-    void fillTable();
-    void fillComboBox();
-    void setText(int row, int col, const QString& text);
-    void adjustRows(int iRows);
-    void adjustCols(int iCols);
-    bool checkUpdateRange();
-    QTextCodec* codec() const;
 
 protected Q_SLOTS:
     void returnPressed();

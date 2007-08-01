@@ -46,8 +46,8 @@ class KoCsvImportDialog::Private
 public:
     KoCsvImportWidget* dialog;
 
-    bool        adjustRows;
-    bool        adjustCols;
+    bool        rowsAdjusted;
+    bool        columnsAdjusted;
     int         startRow;
     int         startCol;
     int         endRow;
@@ -58,6 +58,15 @@ public:
     QByteArray  data;
     QTextCodec* codec;
     QStringList formatList; ///< List of the column formats
+
+public:
+    void fillTable();
+    void fillComboBox();
+    void setText(int row, int col, const QString& text);
+    void adjustRows(int iRows);
+    void adjustCols(int iCols);
+    bool checkUpdateRange();
+    QTextCodec* updateCodec() const;
 };
 
 KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
@@ -65,8 +74,8 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     , d(new Private)
 {
     d->dialog = new KoCsvImportWidget(this);
-    d->adjustRows = false;
-    d->adjustCols = false;
+    d->rowsAdjusted = false;
+    d->columnsAdjusted = false;
     d->startRow = 0;
     d->startCol = 0;
     d->endRow = -1;
@@ -143,7 +152,7 @@ KoCsvImportDialog::~KoCsvImportDialog()
 void KoCsvImportDialog::setData( const QByteArray& data )
 {
     d->data = data;
-    fillTable();
+    d->fillTable();
 }
 
 
@@ -215,7 +224,7 @@ void KoCsvImportDialog::setDataWidgetEnabled(bool enable)
 // ----------------------------------------------------------------
 
 
-void KoCsvImportDialog::fillTable()
+void KoCsvImportDialog::Private::fillTable()
 {
     int row, column;
     bool lastCharDelimiter = false;
@@ -227,18 +236,18 @@ void KoCsvImportDialog::fillTable()
 
     qApp->setOverrideCursor(Qt::WaitCursor);
 
-    for (row = 0; row < d->dialog->m_sheet->numRows(); ++row)
-        for (column = 0; column < d->dialog->m_sheet->numCols(); ++column)
-            d->dialog->m_sheet->clearCell(row, column);
+    for (row = 0; row < dialog->m_sheet->numRows(); ++row)
+        for (column = 0; column < dialog->m_sheet->numCols(); ++column)
+            dialog->m_sheet->clearCell(row, column);
 
     int maxColumn = 1;
     row = column = 1;
-    QTextStream inputStream(d->data, QIODevice::ReadOnly);
-    kDebug(30501) <<"Encoding:" << d->codec->name();
-    inputStream.setCodec( d->codec );
+    QTextStream inputStream(data, QIODevice::ReadOnly);
+    kDebug(30501) <<"Encoding:" << codec->name();
+    inputStream.setCodec( codec );
 
     int delimiterIndex = 0;
-    const int delimiterLength = d->delimiter.size();
+    const int delimiterLength = delimiter.size();
     bool lastCharWasCr = false; // Last character was a Carriage Return
     while (!inputStream.atEnd())
     {
@@ -273,17 +282,17 @@ void KoCsvImportDialog::fillTable()
         switch (state)
         {
          case Start :
-            if (x == d->textQuote)
+            if (x == textQuote)
             {
                 state = InQuotedField;
             }
-            else if (delimiterIndex < delimiterLength && x == d->delimiter.at(delimiterIndex))
+            else if (delimiterIndex < delimiterLength && x == delimiter.at(delimiterIndex))
             {
                 field += x;
                 delimiterIndex++;
-                if (field.right(delimiterIndex) == d->delimiter)
+                if (field.right(delimiterIndex) == delimiter)
                 {
-                    if ((d->ignoreDuplicates == false) || (lastCharDelimiter == false))
+                    if ((ignoreDuplicates == false) || (lastCharDelimiter == false))
                         column += delimiterLength;
                     lastCharDelimiter = true;
                     field.clear();
@@ -297,7 +306,7 @@ void KoCsvImportDialog::fillTable()
             {
                 ++row;
                 column = 1;
-                if ( row > ( d->endRow - d->startRow ) && d->endRow >= 0 )
+                if ( row > ( endRow - startRow ) && endRow >= 0 )
                   break;
             }
             else
@@ -307,18 +316,18 @@ void KoCsvImportDialog::fillTable()
             }
             break;
          case InQuotedField :
-            if (x == d->textQuote)
+            if (x == textQuote)
             {
                 state = MaybeQuotedFieldEnd;
             }
             else if (x == '\n')
             {
-                setText(row - d->startRow, column - d->startCol, field);
+                setText(row - startRow, column - startCol, field);
                 field.clear();
 
                 ++row;
                 column = 1;
-                if ( row > ( d->endRow - d->startRow ) && d->endRow >= 0 )
+                if ( row > ( endRow - startRow ) && endRow >= 0 )
                   break;
 
                 state = Start;
@@ -329,30 +338,30 @@ void KoCsvImportDialog::fillTable()
             }
             break;
          case MaybeQuotedFieldEnd :
-            if (x == d->textQuote)
+            if (x == textQuote)
             {
                 field += x;
                 state = InQuotedField;
             }
             else if (x == '\n')
             {
-                setText(row - d->startRow, column - d->startCol, field);
+                setText(row - startRow, column - startCol, field);
                 field.clear();
                 ++row;
                 column = 1;
-                if ( row > ( d->endRow - d->startRow ) && d->endRow >= 0 )
+                if ( row > ( endRow - startRow ) && endRow >= 0 )
                     break;
                 state = Start;
             }
-            else if (delimiterIndex < delimiterLength && x == d->delimiter.at(delimiterIndex))
+            else if (delimiterIndex < delimiterLength && x == delimiter.at(delimiterIndex))
             {
                 field += x;
                 delimiterIndex++;
-                if (field.right(delimiterIndex) == d->delimiter)
+                if (field.right(delimiterIndex) == delimiter)
                 {
-                    setText(row - d->startRow, column - d->startCol, field.left(field.count()-delimiterIndex));
+                    setText(row - startRow, column - startCol, field.left(field.count()-delimiterIndex));
                     field.clear();
-                    if ((d->ignoreDuplicates == false) || (lastCharDelimiter == false))
+                    if ((ignoreDuplicates == false) || (lastCharDelimiter == false))
                         column += delimiterLength;
                     lastCharDelimiter = true;
                     field.clear();
@@ -370,23 +379,23 @@ void KoCsvImportDialog::fillTable()
          case QuotedFieldEnd :
             if (x == '\n')
             {
-                setText(row - d->startRow, column - d->startCol, field);
+                setText(row - startRow, column - startCol, field);
                 field.clear();
                 ++row;
                 column = 1;
-                if ( row > ( d->endRow - d->startRow ) && d->endRow >= 0 )
+                if ( row > ( endRow - startRow ) && endRow >= 0 )
                     break;
                 state = Start;
             }
-            else if (delimiterIndex < delimiterLength && x == d->delimiter.at(delimiterIndex))
+            else if (delimiterIndex < delimiterLength && x == delimiter.at(delimiterIndex))
             {
                 field += x;
                 delimiterIndex++;
-                if (field.right(delimiterIndex) == d->delimiter)
+                if (field.right(delimiterIndex) == delimiter)
                 {
-                    setText(row - d->startRow, column - d->startCol, field.left(field.count()-delimiterIndex));
+                    setText(row - startRow, column - startCol, field.left(field.count()-delimiterIndex));
                     field.clear();
-                    if ((d->ignoreDuplicates == false) || (lastCharDelimiter == false))
+                    if ((ignoreDuplicates == false) || (lastCharDelimiter == false))
                         column += delimiterLength;
                     lastCharDelimiter = true;
                     field.clear();
@@ -402,7 +411,7 @@ void KoCsvImportDialog::fillTable()
             }
             break;
          case MaybeInNormalField :
-            if (x == d->textQuote)
+            if (x == textQuote)
             {
                 field.clear();
                 state = InQuotedField;
@@ -411,23 +420,23 @@ void KoCsvImportDialog::fillTable()
          case InNormalField :
             if (x == '\n')
             {
-                setText(row - d->startRow, column - d->startCol, field);
+                setText(row - startRow, column - startCol, field);
                 field.clear();
                 ++row;
                 column = 1;
-                if ( row > ( d->endRow - d->startRow ) && d->endRow >= 0 )
+                if ( row > ( endRow - startRow ) && endRow >= 0 )
                     break;
                 state = Start;
             }
-            else if (delimiterIndex < delimiterLength && x == d->delimiter.at(delimiterIndex))
+            else if (delimiterIndex < delimiterLength && x == delimiter.at(delimiterIndex))
             {
                 field += x;
                 delimiterIndex++;
-                if (field.right(delimiterIndex) == d->delimiter)
+                if (field.right(delimiterIndex) == delimiter)
                 {
-                    setText(row - d->startRow, column - d->startCol, field.left(field.count()-delimiterIndex));
+                    setText(row - startRow, column - startCol, field.left(field.count()-delimiterIndex));
                     field.clear();
-                    if ((d->ignoreDuplicates == false) || (lastCharDelimiter == false))
+                    if ((ignoreDuplicates == false) || (lastCharDelimiter == false))
                         column += delimiterLength;
                     lastCharDelimiter = true;
                     field.clear();
@@ -442,59 +451,59 @@ void KoCsvImportDialog::fillTable()
                 field += x;
             }
         }
-        if (d->delimiter.isEmpty() || x != d->delimiter.at(0))
+        if (delimiter.isEmpty() || x != delimiter.at(0))
           lastCharDelimiter = false;
     }
 
     if ( !field.isEmpty() )
     {
       // the last line of the file had not any line end
-      setText(row - d->startRow, column - d->startCol, field);
+      setText(row - startRow, column - startCol, field);
       ++row;
       field.clear();
     }
 
-    d->adjustCols = true;
-    adjustRows( row - d->startRow );
-    adjustCols( maxColumn - d->startCol );
-    d->dialog->m_colEnd->setMaximum( maxColumn );
-    if ( d->endCol == -1 )
-      d->dialog->m_colEnd->setValue( maxColumn );
+    columnsAdjusted = true;
+    adjustRows( row - startRow );
+    adjustCols( maxColumn - startCol );
+    dialog->m_colEnd->setMaximum( maxColumn );
+    if ( endCol == -1 )
+      dialog->m_colEnd->setValue( maxColumn );
 
-    for (column = 0; column < d->dialog->m_sheet->numCols(); ++column)
+    for (column = 0; column < dialog->m_sheet->numCols(); ++column)
     {
-        const QString header = d->dialog->m_sheet->horizontalHeader()->label(column);
-        if ( d->formatList.contains( header ) )
-            d->dialog->m_sheet->horizontalHeader()->setLabel(column, i18n("Generic"));
+        const QString header = dialog->m_sheet->horizontalHeader()->label(column);
+        if ( formatList.contains( header ) )
+            dialog->m_sheet->horizontalHeader()->setLabel(column, i18n("Generic"));
 
-        d->dialog->m_sheet->adjustColumn(column);
+        dialog->m_sheet->adjustColumn(column);
     }
     fillComboBox();
 
     qApp->restoreOverrideCursor();
 }
 
-void KoCsvImportDialog::fillComboBox()
+void KoCsvImportDialog::Private::fillComboBox()
 {
-  if ( d->endRow == -1 )
-    d->dialog->m_rowEnd->setValue( d->dialog->m_sheet->numRows() );
-  else
-    d->dialog->m_rowEnd->setValue( d->endRow );
+    if (endRow == -1)
+        dialog->m_rowEnd->setValue(dialog->m_sheet->numRows());
+    else
+        dialog->m_rowEnd->setValue(endRow);
 
-  if ( d->endCol == -1 )
-    d->dialog->m_colEnd->setValue( d->dialog->m_sheet->numCols() );
-  else
-    d->dialog->m_colEnd->setValue( d->endCol );
+    if (endCol == -1)
+        dialog->m_colEnd->setValue(dialog->m_sheet->numCols());
+    else
+        dialog->m_colEnd->setValue(endCol);
 
-  d->dialog->m_rowEnd->setMinimum( 1 );
-  d->dialog->m_colEnd->setMinimum( 1 );
-  d->dialog->m_rowEnd->setMaximum( d->dialog->m_sheet->numRows() );
-  d->dialog->m_colEnd->setMaximum( d->dialog->m_sheet->numCols() );
+    dialog->m_rowEnd->setMinimum(1);
+    dialog->m_colEnd->setMinimum(1);
+    dialog->m_rowEnd->setMaximum(dialog->m_sheet->numRows());
+    dialog->m_colEnd->setMaximum(dialog->m_sheet->numCols());
 
-  d->dialog->m_rowStart->setMinimum( 1 );
-  d->dialog->m_colStart->setMinimum( 1 );
-  d->dialog->m_rowStart->setMaximum( d->dialog->m_sheet->numRows() );
-  d->dialog->m_colStart->setMaximum( d->dialog->m_sheet->numCols() );
+    dialog->m_rowStart->setMinimum(1);
+    dialog->m_colStart->setMinimum(1);
+    dialog->m_rowStart->setMaximum(dialog->m_sheet->numRows());
+    dialog->m_colStart->setMaximum(dialog->m_sheet->numCols());
 }
 
 KoCsvImportDialog::DataType KoCsvImportDialog::dataType(int col) const
@@ -513,54 +522,54 @@ KoCsvImportDialog::DataType KoCsvImportDialog::dataType(int col) const
     return Generic;
 }
 
-void KoCsvImportDialog::setText(int row, int col, const QString& text)
+void KoCsvImportDialog::Private::setText(int row, int col, const QString& text)
 {
-    if ( row < 1 || col < 1 ) // skipped by the user
+    if (row < 1 || col < 1) // skipped by the user
         return;
 
-    if ( ( row > ( d->endRow - d->startRow ) && d->endRow > 0 ) || ( col > ( d->endCol - d->startCol ) && d->endCol > 0 ) )
+    if ((row > (endRow - startRow) && endRow > 0) || (col > (endCol - startCol) && endCol > 0))
       return;
 
-    if ( d->dialog->m_sheet->numRows() < row )
+    if (dialog->m_sheet->numRows() < row)
     {
-        d->dialog->m_sheet->setNumRows( row + 5000 ); /* We add 5000 at a time to limit recalculations */
-        d->adjustRows = true;
+        dialog->m_sheet->setNumRows(row + 5000); /* We add 5000 at a time to limit recalculations */
+        rowsAdjusted = true;
     }
 
-    if ( d->dialog->m_sheet->numCols() < col )
+    if (dialog->m_sheet->numCols() < col)
     {
-        d->dialog->m_sheet->setNumCols( col );
-        d->adjustCols = true;
+        dialog->m_sheet->setNumCols(col);
+        columnsAdjusted = true;
     }
 
-    d->dialog->m_sheet->setText( row - 1, col - 1, text );
+    dialog->m_sheet->setText(row - 1, col - 1, text);
 }
 
 /*
  * Called after the first fillTable() when number of rows are unknown.
  */
-void KoCsvImportDialog::adjustRows(int iRows)
+void KoCsvImportDialog::Private::adjustRows(int iRows)
 {
-    if (d->adjustRows)
+    if (rowsAdjusted)
     {
-        d->dialog->m_sheet->setNumRows( iRows );
-        d->adjustRows = false;
+        dialog->m_sheet->setNumRows(iRows);
+        rowsAdjusted = false;
     }
 }
 
-void KoCsvImportDialog::adjustCols(int iCols)
+void KoCsvImportDialog::Private::adjustCols(int iCols)
 {
-    if (d->adjustCols)
-    {  
-        d->dialog->m_sheet->setNumCols( iCols );
-        d->adjustCols = false;
+    if (columnsAdjusted)
+    {
+        dialog->m_sheet->setNumCols(iCols);
+        columnsAdjusted = false;
 
-        if ( d->endCol == -1 )
+        if (endCol == -1)
         {
-          if ( iCols > ( d->endCol - d->startCol ) )
-            iCols = d->endCol - d->startCol;
+          if (iCols > (endCol - startCol))
+            iCols = endCol - startCol;
 
-          d->dialog->m_sheet->setNumCols( iCols );
+          dialog->m_sheet->setNumCols(iCols);
         }
     }
 }
@@ -571,7 +580,7 @@ void KoCsvImportDialog::returnPressed()
         return;
 
     d->delimiter = d->dialog->m_delimiterEdit->text();
-    fillTable();
+    d->fillTable();
 }
 
 void KoCsvImportDialog::genericDelimiterChanged( const QString & )
@@ -608,7 +617,7 @@ void KoCsvImportDialog::delimiterClicked(int id)
         d->delimiter = ";";
 
     kDebug(30501) << "Delimiter" << d->delimiter << "selected.";
-    fillTable();
+    d->fillTable();
 }
 
 void KoCsvImportDialog::textquoteSelected(const QString& mark)
@@ -618,12 +627,12 @@ void KoCsvImportDialog::textquoteSelected(const QString& mark)
     else
         d->textQuote = mark[0];
 
-    fillTable();
+    d->fillTable();
 }
 
 void KoCsvImportDialog::updateClicked()
 {
-  if ( !checkUpdateRange() )
+  if ( !d->checkUpdateRange() )
     return;
 
   d->startRow = d->dialog->m_rowStart->value() - 1;
@@ -632,19 +641,18 @@ void KoCsvImportDialog::updateClicked()
   d->startCol  = d->dialog->m_colStart->value() - 1;
   d->endCol    = d->dialog->m_colEnd->value();
 
-  fillTable();
+  d->fillTable();
 }
 
-bool KoCsvImportDialog::checkUpdateRange()
+bool KoCsvImportDialog::Private::checkUpdateRange()
 {
-  if ( ( d->dialog->m_rowStart->value() > d->dialog->m_rowEnd->value() )
-       || ( d->dialog->m_colStart->value() > d->dialog->m_colEnd->value() ) )
-  {
-    KMessageBox::error( this, i18n( "Please check the ranges you specified. The start value must be lower than the end value." ) );
-    return false;
-  }
-
-  return true;
+    if ((dialog->m_rowStart->value() > dialog->m_rowEnd->value()) ||
+        (dialog->m_colStart->value() > dialog->m_colEnd->value()))
+    {
+        KMessageBox::error(0, i18n("Please check the ranges you specified. The start value must be lower than the end value."));
+        return false;
+    }
+    return true;
 }
 
 void KoCsvImportDialog::currentCellChanged(int, int col)
@@ -660,12 +668,12 @@ void KoCsvImportDialog::ignoreDuplicatesChanged(int)
     d->ignoreDuplicates = true;
   else
     d->ignoreDuplicates = false;
-  fillTable();
+  d->fillTable();
 }
 
-QTextCodec* KoCsvImportDialog::codec() const
+QTextCodec* KoCsvImportDialog::Private::updateCodec() const
 {
-    const QString strCodec( KGlobal::charsets()->encodingForName( d->dialog->comboBoxEncoding->currentText() ) );
+    const QString strCodec( KGlobal::charsets()->encodingForName( dialog->comboBoxEncoding->currentText() ) );
     kDebug(30501) <<"Encoding:" << strCodec;
 
     bool ok = false;
@@ -696,12 +704,12 @@ QTextCodec* KoCsvImportDialog::codec() const
 
 void KoCsvImportDialog::encodingChanged(const QString &)
 {
-    QTextCodec* codec = this->codec();
+    QTextCodec* codec = d->updateCodec();
 
     if ( codec )
     {
         d->codec = codec;
-        fillTable();
+        d->fillTable();
     }
 }
 

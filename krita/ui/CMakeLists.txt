@@ -25,6 +25,7 @@ set(kritaui_LIB_SRCS
     kis_bookmarked_filter_configurations_model.cc
     kis_boundary_painter.cc
     kis_brush_chooser.cc
+    kis_buffer_stream.cc
     kis_canvas2.cpp
     kis_clipboard.cc
     kis_cmb_composite.cc

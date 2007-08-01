@@ -247,7 +247,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_uint_32 width, height;
     int color_nb_bits, color_type, interlace_type;
     png_get_IHDR(png_ptr, info_ptr, &width, &height, &color_nb_bits, &color_type, &interlace_type, NULL, NULL);
-
+    kDebug(41008) << "width = " << width << " height = " << height << " color_nb_bits = " << color_nb_bits << " color_type = " << color_type << " interlace_type = " << interlace_type << endl;
     // swap byteorder on little endian machines.
     #ifndef WORDS_BIGENDIAN
     if (color_nb_bits > 8 )

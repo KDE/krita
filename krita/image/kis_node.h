@@ -19,17 +19,16 @@
 #define _KIS_NODE_H
 
 #include "kis_types.h"
-#include "kis_shared.h"
+#include "kis_base_node.h"
 #include "krita_export.h"
 
 class KisNodeGraphListener;
 
 /**
- * A KisNode is the base class for all components of an image: nodes,
- * masks, selections. A node knows its direct peers, parent and
- * children and whether it can have children.
+ * A KisNode is a KisBasNode that knows about its direct peers, parent
+ * and children and whether it can have children.
  */
-class KRITAIMAGE_EXPORT KisNode : public KisShared {
+class KRITAIMAGE_EXPORT KisNode : public KisBaseNode {
 
 public:
 

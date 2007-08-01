@@ -3,6 +3,8 @@ add_subdirectory( tiles )
 
 ########### next target ###############
 
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
 set(libkritatile_SRCS
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiled_random_accessor.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledvlineiterator.cc
@@ -90,6 +92,7 @@ set(kritaimage_LIB_SRCS
    kis_clone_layer.cpp
    kis_pixel_selection.cpp
    kis_transparency_mask.cc
+   kis_base_node.cpp
    kis_node.cpp
    kis_node_facade.cpp
    metadata/kis_meta_data_store.cc
@@ -98,7 +101,7 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_io_backend.cc
    metadata/kis_meta_data_entry.cc )
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
 target_link_libraries(kritaimage ${KDE4_KDECORE_LIBS} pigment komain kopainter koresources ${KDE4_THREADWEAVER_LIBRARIES} )

@@ -41,7 +41,7 @@ KisNode::KisNode()
 
 
 KisNode::KisNode( const KisNode & rhs )
-    : KisShared( rhs )
+    : KisBaseNode( rhs )
     , m_d( new Private() )
 {
     m_d->parent = 0;

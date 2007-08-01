@@ -68,6 +68,14 @@ typedef KisSharedPtrVector<KisNode> vKisNodeSP;
 typedef vKisNodeSP::iterator vKisNodeSP_it;
 typedef vKisNodeSP::const_iterator vKisNodeSP_cit;
 
+class KisBaseNode;
+typedef KisSharedPtr<KisBaseNode> KisBaseNodeSP;
+typedef KisWeakSharedPtr<KisBaseNode> KisBaseNodeWSP;
+typedef KisSharedPtrVector<KisBaseNode> vKisBaseNodeSP;
+typedef vKisBaseNodeSP::iterator vKisBaseNodeSP_it;
+typedef vKisBaseNodeSP::const_iterator vKisBaseNodeSP_cit;
+
+
 class KisEffectMask;
 typedef KisSharedPtr<KisEffectMask> KisEffectMaskSP;
 typedef KisWeakSharedPtr<KisEffectMask> KisEffectMaskWSP;

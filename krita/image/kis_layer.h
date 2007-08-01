@@ -40,7 +40,7 @@ class QIcon;
 class QBitArray;
 class KisGroupLayer;
 class KoColorSpace;
-class QUndoCommand;
+//class QUndoCommand;
 class KisLayerVisitor;
 
 namespace KisMetaData {
@@ -220,7 +220,7 @@ public:
 
     virtual const bool visible() const;
     virtual void setVisible(bool v);
-    QUndoCommand *setVisibleCommand(bool visiblel);
+//     QUndoCommand *setVisibleCommand(bool visiblel);
 
     quint8 opacity() const; //0-255
     void setOpacity(quint8 val); //0-255
@@ -228,12 +228,12 @@ public:
     quint8 percentOpacity() const; //0-100
     void setPercentOpacity(quint8 val); //0-100
 
-    QUndoCommand *setOpacityCommand(quint8 val);
-    QUndoCommand *setOpacityCommand(quint8 prevOpacity, quint8 newOpacity);
+//     QUndoCommand *setOpacityCommand(quint8 val);
+//     QUndoCommand *setOpacityCommand(quint8 prevOpacity, quint8 newOpacity);
 
     virtual bool locked() const;
     void setLocked(bool l);
-    QUndoCommand *setLockedCommand(bool locked);
+    //QUndoCommand *setLockedCommand(bool locked);
 
     void notifyPropertyChanged();
     void notifyCommandExecuted();
@@ -246,7 +246,7 @@ public:
 
     const KoCompositeOp * compositeOp() const;
     void setCompositeOp(const KoCompositeOp * compositeOp);
-    QUndoCommand * setCompositeOpCommand(const KoCompositeOp * compositeOp);
+    // QUndoCommand * setCompositeOpCommand(const KoCompositeOp * compositeOp);
 
     KisImageSP image() const;
     virtual void setImage(KisImageSP image);
@@ -356,4 +356,3 @@ private:
 Q_DECLARE_METATYPE( KisLayerSP )
 
 #endif // KIS_LAYER_H_
-

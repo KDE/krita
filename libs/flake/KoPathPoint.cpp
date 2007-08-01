@@ -22,20 +22,10 @@
 #include "KoPathPoint.h"
 #include "KoPathShape.h"
 #include "KoPointGroup.h"
-//   #include "KoShapeBorderModel.h"
-//   #include "KoViewConverter.h"
-//   #include "KoPathShapeLoader.h"
-//
-//   #include <KoShapeSavingContext.h>
-//   #include <KoXmlWriter.h>
-//   #include <KoXmlNS.h>
-//   #include <KoUnit.h>
-//
-//   #include <KDebug>
+
+//#include <KDebug>
 #include <QtGui/QPainter>
 #include <QPointF>
-//   #include <QtGui/QPainterPath>
-//   #include <math.h>
 
 class KoPathPoint::Private {
 public:
@@ -274,13 +264,13 @@ void KoPathPoint::setParent( KoPathShape* parent )
 QRectF KoPathPoint::boundingRect( bool active ) const
 {
     QRectF rect( d->point, QSize( 1, 1 ) );
-    if ( !active || activeControlPoint1() )
+    if ( !active && activeControlPoint1() )
     {
         QRectF r1( d->point, QSize( 1, 1 ) );
         r1.setBottomRight( d->controlPoint1 );
         rect = rect.unite( r1 );
     }
-    if ( !active || activeControlPoint2() )
+    if ( !active && activeControlPoint2() )
     {
         QRectF r2( d->point, QSize( 1, 1 ) );
         r2.setBottomRight( d->controlPoint2 );

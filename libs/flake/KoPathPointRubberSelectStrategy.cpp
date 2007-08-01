@@ -32,4 +32,5 @@ void KoPathPointRubberSelectStrategy::finishInteraction( Qt::KeyboardModifiers m
 { 
     m_tool->selectPoints( selectRect(), !( modifiers & Qt::ControlModifier ) ); 
     m_canvas->updateCanvas( selectRect().normalized() );
+    m_tool->m_pointSelection.repaint();
 }

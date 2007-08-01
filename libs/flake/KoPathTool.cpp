@@ -368,11 +368,6 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
     if( event->button() & Qt::RightButton )
         return;
 
-    // repaint old handle positions
-    m_pointSelection.repaint();
-    if ( m_activeHandle )
-        m_activeHandle->repaint();
-
     if ( m_currentStrategy )
     {
         m_lastPoint = event->point;
@@ -396,6 +391,8 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
             if ( handleId != -1 )
             {
                 useCursor(Qt::SizeAllCursor);
+                if(m_activeHandle)
+                    m_activeHandle->repaint();
                 delete m_activeHandle;
                 m_activeHandle = new ActiveParameterHandle( this, parameterShape, handleId );
                 m_activeHandle->repaint();
@@ -420,6 +417,12 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
                 else if( p->properties() & KoPathPoint::HasControlPoint2 && roi.contains( p->controlPoint2() ) )
                     type = KoPathPoint::ControlPoint2;
 
+                ActivePointHandle *prev = dynamic_cast<ActivePointHandle*> (m_activeHandle);
+                if(prev && prev->m_activePoint == p && prev->m_activePointType == type)
+                    return; // no change;
+
+                if(m_activeHandle)
+                    m_activeHandle->repaint();
                 delete m_activeHandle;
                 m_activeHandle = new ActivePointHandle( this, p, type );
                 m_activeHandle->repaint();
@@ -429,6 +432,8 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
     }
 
     useCursor(Qt::ArrowCursor);
+    if(m_activeHandle)
+        m_activeHandle->repaint();
     delete m_activeHandle;
     m_activeHandle = 0;
 }
@@ -654,7 +659,7 @@ void KoPathTool::ActivePointHandle::paint( QPainter &painter, const KoViewConver
 
 void KoPathTool::ActivePointHandle::repaint() const
 {
-    m_tool->repaint( m_activePoint->boundingRect() );
+    m_tool->repaint( m_activePoint->boundingRect( !m_tool->m_pointSelection.contains(m_activePoint) ) );
 }
 
 void KoPathTool::ActivePointHandle::mousePressEvent( KoPointerEvent *event ) 
@@ -670,15 +675,17 @@ void KoPathTool::ActivePointHandle::mousePressEvent( KoPointerEvent *event )
             }
             else
             {
-                m_tool->m_pointSelection.add( m_activePoint, false ); 
+                m_tool->m_pointSelection.add( m_activePoint, false );
             }
+            m_tool->repaint( m_activePoint->boundingRect(false) );
         }
         else
         {
             // no control modifier, so clear selection and select active point
             if ( !m_tool->m_pointSelection.contains( m_activePoint ) )
             {
-                m_tool->m_pointSelection.add( m_activePoint, true ); 
+                m_tool->m_pointSelection.add( m_activePoint, true );
+                m_tool->repaint( m_activePoint->boundingRect(false) );
             }
         }
         // TODO remove canvas from call ?
@@ -828,7 +835,7 @@ void KoPathTool::KoPathPointSelection::repaint()
 {
     foreach ( KoPathPoint *p, m_selectedPoints )
     {
-        m_tool->repaint( p->boundingRect() );
+        m_tool->repaint( p->boundingRect(false) );
     }
 }
 

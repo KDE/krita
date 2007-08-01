@@ -37,11 +37,11 @@ public:
      */
     enum DataType
     {
-        Generic,    ///< Parses the content; it may become text, number, date, ...
-        Text,       ///< Forces the content to a text value.
-        Date,       ///< Tries to convert the content to a date value.
-        Currency,   ///< Tries to convert the content to a date value.
-        None        ///< Skips the content.
+        Generic     = 0x01, ///< Parses the content; it may become text, number, date, ...
+        Text        = 0x02, ///< Forces the content to a text value.
+        Date        = 0x04, ///< Tries to convert the content to a date value.
+        Currency    = 0x08, ///< Tries to convert the content to a currency value.
+        None        = 0x10  ///< Skips the content.
     };
     Q_DECLARE_FLAGS(DataTypes, DataType)
 

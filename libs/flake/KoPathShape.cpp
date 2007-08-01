@@ -34,8 +34,6 @@
 
 #include <KDebug>
 #include <QtGui/QPainter>
-//   #include <QtGui/QPainterPath>
-//   #include <math.h>
 
 KoPathShape::KoPathShape()
     : d(0) // while we don't actually have any private data, just leave it as this.

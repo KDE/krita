@@ -19,8 +19,9 @@
 #include "TestPathTool.h"
 
 #include <QPainterPath>
-#include "KoPathShape.h"
-#include "KoPathTool.h"
+#include "../KoPathShape.h"
+#include "../KoPathTool.h"
+#include "../KoPathPointData.h"
 #include "MockShapes.h"
 
 void TestPathTool::koPathPointSelection_selectedSegmentsData()
@@ -85,5 +86,5 @@ void TestPathTool::koPathPointSelection_selectedSegmentsData()
 }
 
 
-QTEST_MAIN(TestPathTool)
+QTEST_KDEMAIN(TestPathTool, GUI)
 #include "TestPathTool.moc"

@@ -21,7 +21,6 @@
 
 #include "KoPathTool.h"
 #include "KoCanvasBase.h"
-#include "KoSelection.h"
 #include "KoShapeManager.h"
 #include "KoCanvasResourceProvider.h"
 #include "KoPointerEvent.h"
@@ -34,8 +33,6 @@
 #include "commands/KoParameterToPathCommand.h"
 #include "commands/KoSubpathJoinCommand.h"
 #include "KoParameterShape.h"
-#include "KoInsets.h"
-#include "KoShapeBorderModel.h"
 #include "KoPathControlPointMoveStrategy.h"
 #include "KoParameterChangeStrategy.h"
 #include "KoPathPointMoveStrategy.h"
@@ -45,13 +42,8 @@
 #include <KIcon>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kiconloader.h>
-#include <QKeyEvent>
+#include <QPainter>
 #include <QAction>
-#include <QGridLayout>
-#include <QButtonGroup>
-#include <QToolButton>
-#include <QPainterPath>
 
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
 : KoTool(canvas)

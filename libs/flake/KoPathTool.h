@@ -23,12 +23,8 @@
 #define KOPATHTOOL_H
 
 #include "KoPathPoint.h"
-#include "KoPathPointData.h"
-#include "PathToolOptionWidget.h"
-
-#include <KoTool.h>
-#include <QMap>
-#include <QSet>
+#include "KoPathShape.h"
+#include "KoTool.h"
 
 class QButtonGroup;
 class KoCanvasBase;
@@ -36,6 +32,7 @@ class KoParameterShape;
 class KoInteractionStrategy;
 class KoPathPointMoveStrategy;
 class KoPathPointRubberSelectStrategy;
+class KoPathPointData;
 
 class QAction;
 

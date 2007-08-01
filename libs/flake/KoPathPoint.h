@@ -24,10 +24,6 @@
 
 #include <flake_export.h>
 
-//#include <QMap>
-
-//#include "KoShape.h"
-
 class KoPathShape;
 class QPointF;
 class QMatrix;
@@ -35,10 +31,6 @@ class QRectF;
 class QPainter;
 class QSizeF;
 class KoPointGroup;
-
-//   typedef QMap<KoPathShape *, QSet<KoPathPoint *> > KoPathShapePointMap;
-//   typedef QPair<int,int> KoPathPointIndex;
-//   typedef QMap<KoPathShape *, QSet<KoPathPointIndex> > KoPathShapePointIndexMap;
 
 /**
  * @brief A KoPathPoint represents a point in a path.

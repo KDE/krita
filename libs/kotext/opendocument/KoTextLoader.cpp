@@ -340,7 +340,8 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
                             if (tblTag.namespaceURI() == KoXmlNS::table) {
                                 if (tblLocalName == "table-column") {
                                     // Do some parsing with the column, see §8.2.1, ODF 1.1 spec
-                                    columns++;
+                                    int repeatColumn = tblTag.attributeNS(KoXmlNS::table, "number-columns-repeated", "1").toInt();
+                                    columns = columns + repeatColumn;
                                     if (rows > 0)
                                         tbl->resize(rows, columns);
                                     else

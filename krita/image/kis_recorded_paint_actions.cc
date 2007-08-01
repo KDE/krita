@@ -74,7 +74,7 @@ void KisRecordedPolyLinePaintAction::play()
 
 void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement& elt)
 {
-    elt.setAttribute("layer", d->layer->id());
+    elt.setAttribute("layer", KisRecordedAction::layerToIndexPath(d->layer));
     elt.setAttribute("paintop", d->paintOpId);
     QDomElement ressourceElt = doc.createElement( "Brush");
     d->brush->toXML(doc, ressourceElt);
@@ -101,6 +101,9 @@ KisRecordedPolyLinePaintActionFactory::~KisRecordedPolyLinePaintActionFactory()
 
 KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img, const QDomElement& elt)
 {
-    
+    QString name = elt.attribute("name");
+    KisLayerSP layer = KisRecordedActionFactory::indexPathToLayer(img, elt.attribute("layer"));
+    QString paintOpId = elt.attribute("paintop");
+//     QString brush = 
     return 0;
 }

@@ -141,7 +141,7 @@ KoText::Direction KoTextShapeData::pageDirection() const {
 
 void KoTextShapeData::saveOdf(KoXmlWriter *writer, int from, int to) const {
     QTextBlock block = d->document->findBlock(from);
-    while(block.isValid() && block.position() < to) {
+    while(block.isValid() && ((to == -1) || (block.position() < to))) {
         writer->startElement( "text:p", false );
         if(block.position() < from || block.position() + block.length() > to) {
             int start = qMax(0, from - block.position());

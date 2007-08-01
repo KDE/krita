@@ -604,11 +604,17 @@ void KoPathTool::resourceChanged( int key, const QVariant & res )
     if(key != KoCanvasResource::HandleRadius)
         return;
 
-    foreach(KoPathShape *shape, m_selectedShapes)
-        repaint( shape->outline().controlPointRect() );
-    m_pointSelection.repaint();
+    int oldHandleRadius = m_handleRadius;
+
     m_handleRadius = res.toUInt();
-    m_pointSelection.repaint();
+
+    // repaint with the bigger of old and new handle radius
+    int maxRadius = qMax( m_handleRadius, oldHandleRadius );
+    foreach(KoPathShape *shape, m_selectedShapes)
+    {
+        QRectF controlPointRect = shape->transformationMatrix(0).map( shape->outline() ).controlPointRect();
+        repaint( controlPointRect.adjusted(-maxRadius,-maxRadius,maxRadius,maxRadius) );
+    }
 }
 
 void KoPathTool::selectPoints( const QRectF &rect, bool clearSelection )

@@ -74,20 +74,18 @@ namespace {
     QString getColorSpaceForColorType(int color_type,int color_nb_bits) {
         if(color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
         {
-            switch(color_nb_bits)
+            if(color_nb_bits == 16)
             {
-                case 8:
-                    return "GRAYA";
-                case 16:
-                    return "GRAYA16";
+                return "GRAYA16";
+            } else if(color_nb_bits <= 8) {
+                return "GRAYA";
             }
         } else if(color_type == PNG_COLOR_TYPE_RGB_ALPHA || color_type == PNG_COLOR_TYPE_RGB) {
-            switch(color_nb_bits)
+            if(color_nb_bits == 16)
             {
-                case 8:
-                    return "RGBA";
-                case 16:
-                    return "RGBA16";
+                return "RGBA16";
+            } else if(color_nb_bits <= 8) {
+                return "RGBA";
             }
         } else if(color_type ==  PNG_COLOR_TYPE_PALETTE) {
             return "RGBA"; // <-- we will convert the index image to RGBA
@@ -417,13 +415,13 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                             else d[1] = quint16_MAX;
                             ++it;
                         }
-                    } else {
-                        quint8 *src = row_pointer;
+                    } else  {
+                        KisPNGStream stream(row_pointer, color_nb_bits);
                         while (!it.isDone()) {
                             quint8 *d = it.rawData();
-                            d[0] = *(src++);
+                            d[0] = stream.nextValue() << (8 - color_nb_bits);
                             if(transform) cmsDoTransform(transform, d, d, 1);
-                            if(hasalpha) d[1] = *(src++);
+                            if(hasalpha) d[1] = stream.nextValue() << (8 - color_nb_bits);
                             else d[1] = UCHAR_MAX;
                             ++it;
                         }
@@ -446,14 +444,14 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                             ++it;
                         }
                     } else {
-                        quint8 *src = row_pointer;
+                        KisPNGStream stream(row_pointer, color_nb_bits);
                         while (!it.isDone()) {
                             quint8 *d = it.rawData();
-                            d[2] = *(src++);
-                            d[1] = *(src++);
-                            d[0] = *(src++);
+                            d[2] = stream.nextValue() << (8 - color_nb_bits);
+                            d[1] = stream.nextValue() << (8 - color_nb_bits);
+                            d[0] = stream.nextValue() << (8 - color_nb_bits);
                             if(transform) cmsDoTransform(transform, d, d, 1);
-                            if(hasalpha) d[3] = *(src++);
+                            if(hasalpha) d[3] = stream.nextValue() << (8 - color_nb_bits);
                             else d[3] = UCHAR_MAX;
                             ++it;
                         }

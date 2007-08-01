@@ -29,27 +29,73 @@ class KOGUIUTILS_EXPORT KoCsvImportDialog : public KDialog
 {
     Q_OBJECT
 public:
-    enum Header
+    /**
+     * The type the data should be treated as.
+     */
+    enum DataType
     {
-        TEXT,       ///< Normal text
-        NUMBER,     ///< Number (either like locale or like C)
-        DATE,       ///< Date \todo What type exactly?
-        CURRENCY,   ///< Currency
-        COMMANUMBER,///< Number, which decimal symbol is a comma
-        POINTNUMBER ///< Number, which decimal symbol is a point/dot
+        Generic,    ///< Parses the content; it may become text, number, date, ...
+        Text,       ///< Forces the content to a text value.
+        Date,       ///< Tries to convert the content to a date value.
+        Currency,   ///< Tries to convert the content to a date value.
+        None        ///< Skips the content.
     };
+    Q_DECLARE_FLAGS(DataTypes, DataType)
 
+    /**
+     * Constructor.
+     */
     KoCsvImportDialog(QWidget* parent);
+
+    /**
+     * Destructor.
+     */
     virtual ~KoCsvImportDialog();
 
-    void     setData(const QByteArray& data);
-    bool     firstRowContainHeaders();
-    bool     firstColContainHeaders();
-    int      rows();
-    int      cols();
-    int      headerType(int col);
-    QString  text(int row, int col);
-    void     setDataWidgetEnabled(bool enable);
+    /**
+     * Set the data to import.
+     */
+    void setData(const QByteArray& data);
+
+    /**
+     * \return wether the first row is a header row
+     */
+    bool firstRowContainHeaders() const;
+
+    /**
+     * \return wether the first column is a header column
+     */
+    bool firstColContainHeaders() const;
+
+    /**
+     * \return the number of rows to import
+     */
+    int rows() const;
+
+    /**
+     * \return the number of columns to import
+     */
+    int cols() const;
+
+    /**
+     * The data type of column \p col.
+     */
+    DataType dataType(int col) const;
+
+    /**
+     * The text at \p row, \p col.
+     */
+    QString  text(int row, int col) const;
+
+    /**
+     * Sets the data types, that should be selectable.
+     */
+    void setDataTypes(DataTypes dataTypes);
+
+    /**
+     * Enables or disables the data widget.
+     */
+    void setDataWidgetEnabled(bool enable);
 
 protected:
     void fillTable();
@@ -58,7 +104,7 @@ protected:
     void adjustRows(int iRows);
     void adjustCols(int iCols);
     bool checkUpdateRange();
-    QTextCodec* getCodec() const;
+    QTextCodec* codec() const;
 
 protected Q_SLOTS:
     void returnPressed();
@@ -77,5 +123,7 @@ private:
     class Private;
     Private * const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoCsvImportDialog::DataTypes)
 
 #endif // KO_CSV_IMPORT_DIALOG

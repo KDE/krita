@@ -92,13 +92,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     encodings << description.arg("CP 1258"); // Windows
     d->dialog->comboBoxEncoding->insertItems( 0, encodings );
 
-    d->formatList << i18n( "Text" );
-    d->formatList << i18n( "Number" );
-    //d->formatList << i18n( "Currency" );
-    //d->formatList << i18n( "Date" );
-    d->formatList << i18n( "Decimal Comma Number" );
-    d->formatList << i18n( "Decimal Point Number" );
-    d->dialog->m_formatComboBox->insertItems( 0, d->formatList );
+    setDataTypes(Generic|Text|Date|None);
 
     d->dialog->m_sheet->setReadOnly( true );
 
@@ -153,19 +147,19 @@ void KoCsvImportDialog::setData( const QByteArray& data )
 }
 
 
-bool KoCsvImportDialog::firstRowContainHeaders()
+bool KoCsvImportDialog::firstRowContainHeaders() const
 {
     return d->dialog->m_firstRowHeader->isChecked();
 }
 
 
-bool KoCsvImportDialog::firstColContainHeaders()
+bool KoCsvImportDialog::firstColContainHeaders() const
 {
     return d->dialog->m_firstColHeader->isChecked();
 }
 
 
-int KoCsvImportDialog::rows()
+int KoCsvImportDialog::rows() const
 {
     int rows = d->dialog->m_sheet->numRows();
 
@@ -176,7 +170,7 @@ int KoCsvImportDialog::rows()
 }
 
 
-int KoCsvImportDialog::cols()
+int KoCsvImportDialog::cols() const
 {
     int cols = d->dialog->m_sheet->numCols();
 
@@ -187,13 +181,29 @@ int KoCsvImportDialog::cols()
 }
 
 
-QString KoCsvImportDialog::text(int row, int col)
+QString KoCsvImportDialog::text(int row, int col) const
 {
     // Check for overflow.
     if ( row >= rows() || col >= cols())
 	return QString();
 
     return d->dialog->m_sheet->text( row - d->startRow, col - d->startCol );
+}
+
+void KoCsvImportDialog::setDataTypes(DataTypes dataTypes)
+{
+    d->formatList.clear();
+    if (dataTypes & Generic)
+        d->formatList << i18n("Generic");
+    if (dataTypes & Text)
+        d->formatList << i18n("Text");
+    if (dataTypes & Date)
+        d->formatList << i18n("Date");
+    if (dataTypes & Currency)
+        d->formatList << i18n("Currency");
+    if (dataTypes & None)
+        d->formatList << i18n("None");
+    d->dialog->m_formatComboBox->insertItems(0, d->formatList);
 }
 
 void KoCsvImportDialog::setDataWidgetEnabled(bool enable)
@@ -205,7 +215,7 @@ void KoCsvImportDialog::setDataWidgetEnabled(bool enable)
 // ----------------------------------------------------------------
 
 
-void KoCsvImportDialog::fillTable( )
+void KoCsvImportDialog::fillTable()
 {
     int row, column;
     bool lastCharDelimiter = false;
@@ -450,13 +460,12 @@ void KoCsvImportDialog::fillTable( )
     d->dialog->m_colEnd->setMaximum( maxColumn );
     if ( d->endCol == -1 )
       d->dialog->m_colEnd->setValue( maxColumn );
-    
 
     for (column = 0; column < d->dialog->m_sheet->numCols(); ++column)
     {
         const QString header = d->dialog->m_sheet->horizontalHeader()->label(column);
         if ( d->formatList.contains( header ) )
-            d->dialog->m_sheet->horizontalHeader()->setLabel(column, i18n("Text"));
+            d->dialog->m_sheet->horizontalHeader()->setLabel(column, i18n("Generic"));
 
         d->dialog->m_sheet->adjustColumn(column);
     }
@@ -488,24 +497,20 @@ void KoCsvImportDialog::fillComboBox()
   d->dialog->m_colStart->setMaximum( d->dialog->m_sheet->numCols() );
 }
 
-int KoCsvImportDialog::headerType(int col)
+KoCsvImportDialog::DataType KoCsvImportDialog::dataType(int col) const
 {
-    QString header = d->dialog->m_sheet->horizontalHeader()->label(col);
-    
-    if (header == i18n("Text"))
-        return TEXT;
-    else if (header == i18n("Number"))
-        return NUMBER;
+    const QString header = d->dialog->m_sheet->horizontalHeader()->label(col);
+    if (header == i18n("Generic"))
+        return Generic;
+    else if (header == i18n("Text"))
+        return Text;
+    else if (header == i18n("Date"))
+        return Date;
     else if (header == i18n("Currency"))
-        return CURRENCY;
-    else if ( header == i18n( "Date" ) )
-        return DATE;
-    else if ( header == i18n( "Decimal Comma Number" ) )
-        return COMMANUMBER;
-    else if ( header == i18n( "Decimal Point Number" ) )
-        return POINTNUMBER;
-    else
-        return TEXT; // Should not happen
+        return Currency;
+    else if (header == i18n("None"))
+        return None;
+    return Generic;
 }
 
 void KoCsvImportDialog::setText(int row, int col, const QString& text)
@@ -645,7 +650,8 @@ bool KoCsvImportDialog::checkUpdateRange()
 void KoCsvImportDialog::currentCellChanged(int, int col)
 {
     const QString header = d->dialog->m_sheet->horizontalHeader()->label(col);
-    d->dialog->m_formatComboBox->setItemText( d->dialog->m_formatComboBox->currentIndex(), header );
+    const int index = d->dialog->m_formatComboBox->findText(header);
+    d->dialog->m_formatComboBox->setCurrentIndex(index > -1 ? index : 0);
 }
 
 void KoCsvImportDialog::ignoreDuplicatesChanged(int)
@@ -657,7 +663,7 @@ void KoCsvImportDialog::ignoreDuplicatesChanged(int)
   fillTable();
 }
 
-QTextCodec* KoCsvImportDialog::getCodec(void) const
+QTextCodec* KoCsvImportDialog::codec() const
 {
     const QString strCodec( KGlobal::charsets()->encodingForName( d->dialog->comboBoxEncoding->currentText() ) );
     kDebug(30501) <<"Encoding:" << strCodec;
@@ -688,9 +694,9 @@ QTextCodec* KoCsvImportDialog::getCodec(void) const
     return codec;
 }
 
-void KoCsvImportDialog::encodingChanged ( const QString & )
+void KoCsvImportDialog::encodingChanged(const QString &)
 {
-    QTextCodec* codec = getCodec();
+    QTextCodec* codec = this->codec();
 
     if ( codec )
     {

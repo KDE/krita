@@ -100,6 +100,26 @@ public:
      */
     void setDataWidgetEnabled(bool enable);
 
+    /**
+     * \return the decimal symbol
+     */
+    QString decimalSymbol() const;
+
+    /**
+     * Sets the decimal symbol.
+     */
+    void setDecimalSymbol(const QString& symbol);
+
+    /**
+     * \return the thousands separator
+     */
+    QString thousandsSeparator() const;
+
+    /**
+     * Sets the thousands separator.
+     */
+    void setThousandsSeparator(const QString& separator);
+
 protected Q_SLOTS:
     void returnPressed();
     void formatChanged(const QString&);

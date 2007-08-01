@@ -220,6 +220,26 @@ void KoCsvImportDialog::setDataWidgetEnabled(bool enable)
     d->dialog->m_tabWidget->setTabEnabled(0, enable);
 }
 
+QString KoCsvImportDialog::decimalSymbol() const
+{
+    return d->dialog->m_decimalSymbol->text();
+}
+
+void KoCsvImportDialog::setDecimalSymbol(const QString& symbol)
+{
+    d->dialog->m_decimalSymbol->setText(symbol);
+}
+
+QString KoCsvImportDialog::thousandsSeparator() const
+{
+    return d->dialog->m_thousandsSeparator->text();
+}
+
+void KoCsvImportDialog::setThousandsSeparator(const QString& separator)
+{
+    d->dialog->m_thousandsSeparator->setText(separator);
+}
+
 
 // ----------------------------------------------------------------
 

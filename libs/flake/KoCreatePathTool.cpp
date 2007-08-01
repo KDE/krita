@@ -98,6 +98,7 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         else
         {
             m_activePoint->setPoint( event->point );
+            m_activePoint->setProperty(KoPathPoint::CanHaveControlPoint2);
             m_canvas->updateCanvas( m_shape->boundingRect() );
         }
     }

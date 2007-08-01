@@ -143,13 +143,21 @@ void KoTextShapeData::saveOdf(KoXmlWriter *writer, int from, int to) const {
     QTextBlock block = d->document->findBlock(from);
     while(block.isValid() && ((to == -1) || (block.position() < to))) {
         writer->startElement( "text:p", false );
-        if(block.position() < from || block.position() + block.length() > to) {
+        QTextBlock::iterator it;
+        for (it = block.begin(); !(it.atEnd()); ++it) {
+            QTextFragment currentFragment = it.fragment();
+            if (currentFragment.isValid()) {
+                kDebug() << "Current fragment :" << currentFragment.text();
+                writer->addTextSpan( currentFragment.text() );
+            }
+        }
+        /*if(block.position() < from || block.position() + block.length() > to) {
             int start = qMax(0, from - block.position());
             int end = qMin(to, block.position() + block.length());
             writer->addTextSpan( block.text().mid(start, end - (start + block.position())) );
         }
         else
-            writer->addTextSpan( block.text() );
+            writer->addTextSpan( block.text() );*/
         writer->endElement();
         block = block.next();
     }

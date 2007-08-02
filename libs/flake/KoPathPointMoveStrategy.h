@@ -33,18 +33,17 @@ class KoCanvasBase;
  */
 class KoPathPointMoveStrategy : public KoInteractionStrategy
 {
-public:    
+public:
     KoPathPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, const QPointF &pos );
     virtual ~KoPathPointMoveStrategy();
     virtual void handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers );
     virtual void finishInteraction( Qt::KeyboardModifiers modifiers ); 
     virtual QUndoCommand* createCommand();
 
-private:    
-    /// the last mouse position
-    QPointF m_lastPosition; 
+private:
+    QPointF m_originalPosition;
     /// the accumulated point move amount
-    QPointF m_move;         
+    QPointF m_move;
     /// pointer to the path tool
     KoPathTool * m_tool;
 };

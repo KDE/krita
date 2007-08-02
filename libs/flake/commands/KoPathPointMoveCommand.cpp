@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@ KoPathPointMoveCommand::KoPathPointMoveCommand( const KoPathShapePointMap &point
 : QUndoCommand( parent )
 , m_pointMap( pointMap )
 , m_offset( offset )
+,m_undoCalled(true)
 {
     setText( i18n( "Move points" ) );
 }
@@ -33,6 +35,8 @@ KoPathPointMoveCommand::KoPathPointMoveCommand( const KoPathShapePointMap &point
 void KoPathPointMoveCommand::redo()
 {
     QUndoCommand::redo();
+    if(! m_undoCalled)
+        return;
     KoPathShapePointMap::iterator it( m_pointMap.begin() );
     for ( ; it != m_pointMap.end(); ++it )
     {
@@ -50,13 +54,18 @@ void KoPathPointMoveCommand::redo()
         // repaint new bounding rect
         it.key()->repaint();
     }
+    m_undoCalled = false;
 }
 
 void KoPathPointMoveCommand::undo()
 {
     QUndoCommand::undo();
+    if(m_undoCalled)
+        return;
     m_offset *= -1.0;
+    m_undoCalled = true;
     redo();
     m_offset *= -1.0;
+    m_undoCalled = true;
 }
 

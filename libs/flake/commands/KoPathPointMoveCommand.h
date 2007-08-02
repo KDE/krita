@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,9 +43,11 @@ public:
     void redo();
     /// revert the actions done in redo
     void undo();
+
 private:
     KoPathShapePointMap m_pointMap;
     QPointF m_offset;
+    bool m_undoCalled; // this command stores diffs; so calling undo twice will give wrong results. Guard against that.
 };
 
 #endif // KOPATHPOINTMOVECOMMAND_H

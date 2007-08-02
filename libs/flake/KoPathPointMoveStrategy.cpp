@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,32 +26,34 @@
 
 KoPathPointMoveStrategy::KoPathPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, const QPointF &pos )
 : KoInteractionStrategy( tool, canvas )
-, m_lastPosition( pos )
-, m_move( 0, 0 )
+, m_originalPosition( pos )
 , m_tool( tool )
 {
 }
 
-KoPathPointMoveStrategy::~KoPathPointMoveStrategy() 
+KoPathPointMoveStrategy::~KoPathPointMoveStrategy()
 {
 }
 
 void KoPathPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers )
 {
-    QPointF docPoint = snapToGrid( mouseLocation, modifiers );
-    QPointF move = docPoint - m_lastPosition;
-    // as the last position can change when the top left is changed we have
-    // to save it in document pos and not in shape pos
-    m_lastPosition = docPoint;
+    QPointF newPosition = snapToGrid( mouseLocation, modifiers );
+    QPointF move = newPosition - m_originalPosition;
 
-    m_move += move;
+    if(modifiers & Qt::ControlModifier) { // limit change to one direction only.
+        if(qAbs(move.x()) > qAbs(move.y()))
+            move.setY(0);
+        else
+            move.setX(0);
+    }
 
-    KoPathPointMoveCommand cmd( m_tool->m_pointSelection.selectedPointMap(), move );
+    KoPathPointMoveCommand cmd( m_tool->m_pointSelection.selectedPointMap(), move - m_move);
     cmd.redo();
+    m_move = move;
 }
 
 void KoPathPointMoveStrategy::finishInteraction( Qt::KeyboardModifiers modifiers ) 
-{ 
+{
     Q_UNUSED( modifiers );
 }
 
@@ -59,9 +62,10 @@ QUndoCommand* KoPathPointMoveStrategy::createCommand()
     QUndoCommand *cmd = 0;
     if( !m_move.isNull() )
     {
-        // as the point is already at the new position we need to undo the command
+        // as the point is already at the new position we need to undo the change
+        KoPathPointMoveCommand revert( m_tool->m_pointSelection.selectedPointMap(), -m_move);
+        revert.redo();
         cmd = new KoPathPointMoveCommand( m_tool->m_pointSelection.selectedPointMap(), m_move );
-        cmd->undo();
     }
     return cmd;
 }

@@ -236,7 +236,6 @@ void _read_fn(png_structp png_ptr, png_bytep data, png_size_t length)
             png_error(png_ptr, "Read Error");
             return;
         }
-        kDebug() << length << " " << nr << endl;
         length -= nr;
     }
 }

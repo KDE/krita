@@ -53,9 +53,12 @@ void KisFilesTest::testFiles()
             doc.saveAs( "file://" + tmpFile.fileName());
             QImage resultImg(resultFileInfo.absoluteFilePath());
             QImage sourceImg(tmpFile.fileName());
-            kDebug() << resultImg.width() << " " << sourceImg.width() << endl;
+            resultImg = resultImg.convertToFormat(QImage::Format_ARGB32);
+            sourceImg = sourceImg.convertToFormat(QImage::Format_ARGB32);
+//             kDebug() << resultImg.width() << " " << sourceImg.width() << endl;
             QVERIFY(resultImg.width() == sourceImg.width());
             QVERIFY(resultImg.height() == sourceImg.height());
+//             kDebug() << resultImg.numBytes() << " " << sourceImg.numBytes() << endl;
             QVERIFY(resultImg.numBytes() == sourceImg.numBytes());
             QVERIFY(memcmp( resultImg.bits(), sourceImg.bits(), resultImg.numBytes() )==0);
 #if 0

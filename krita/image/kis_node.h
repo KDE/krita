@@ -30,6 +30,8 @@ class KisNodeGraphListener;
  */
 class KRITAIMAGE_EXPORT KisNode : public KisBaseNode {
 
+    Q_OBJECT
+
 public:
 
 
@@ -66,7 +68,54 @@ protected:
             return true;
         }
 
+public: // dirty region methods. XXX: Make these slots?
+
+    /**
+     * Set the entire node extent dirty; this percolates up to parent
+     * nodes all the way to the root node. By default, nodes have an
+     * infinite size. Subclass for more precision and exactitude.
+     */
+    virtual void setDirty();
+
+    /**
+     * Add the given rect to the set of dirty rects for this node;
+     * this percolates up to parent nodes all the way to the root
+     * node.
+     */
+    void setDirty(const QRect & rect);
+
+    /**
+     * Add the given region to the set of dirty rects for this node;
+     * this percolates up to parent nodes all the way to the root
+     * node, if propagate is true;
+     */
+    void setDirty( const QRegion & region);
+
 public:
+
+    /**
+     * @return true if any part of this layer has been marked dirty
+     */
+    bool isDirty();
+
+    /**
+     *  @return true if the given rect overlaps with the dirty region
+     *  of this node
+     */
+    bool isDirty( const QRect & rect );
+
+    /**
+     * Mark the specified area as clean
+     */
+    void setClean( QRect rc );
+
+    /**
+     * Mark the whole layer as clean
+     */
+    void setClean();
+
+
+public: // Graph methods
 
     /**
      * @return the graph listener this node belongs to. 0 if the node

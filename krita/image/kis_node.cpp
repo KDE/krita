@@ -16,19 +16,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_node.h"
+
 #include <QList>
+#include <QMutex>
+#include <QMutexLocker>
 
-#include "kdebug.h"
+#include <kdebug.h>
 
+#include "kis_global.h"
 #include "kis_node_graph_listener.h"
 
 class KisNode::Private
 {
 public:
 
+    Private()
+        : regionLock( QMutex::Recursive )
+        {
+        }
+
     KisNodeSP parent;
     KisNodeGraphListener * graphListener;
     QList<KisNodeSP> nodes;
+    QRegion dirtyRegion;
+    QMutex regionLock; // Qt says QRegion is thread-safe, but
+                       // experience proves otherwise.
+
 };
 
 KisNode::KisNode()
@@ -62,6 +75,56 @@ void KisNode::setGraphListener( KisNodeGraphListener * graphListener )
 {
     m_d->graphListener = graphListener;
 }
+
+void KisNode::setDirty()
+{
+    // nodes have an infinite size by default.
+    setDirty( QRect( -qint32_MAX, -qint32_MAX, qint32_MAX, qint32_MAX ) );
+}
+
+void KisNode::setDirty(const QRect & rc)
+{
+    setDirty( QRegion( rc ) );
+}
+
+void KisNode::setDirty( const QRegion & region)
+{
+    QMutexLocker(&m_d->regionLock);
+
+    if ( region.isEmpty() ) return;
+
+    // If we're dirty, our parent is dirty, if we've got a parent
+    if (m_d->parent) {
+        m_d->parent->setDirty(region);
+    }
+
+    m_d->dirtyRegion += region;
+}
+
+bool KisNode::isDirty()
+{
+    QMutexLocker(&m_d->regionLock);
+    return !m_d->dirtyRegion.isEmpty();
+}
+
+bool KisNode::isDirty( const QRect & rect )
+{
+    QMutexLocker(&m_d->regionLock);
+    return m_d->dirtyRegion.intersects( rect );
+}
+
+void KisNode::setClean( QRect rc )
+{
+    QMutexLocker(&m_d->regionLock);
+    m_d->dirtyRegion -= QRegion( rc );
+}
+
+void KisNode::setClean()
+{
+    QMutexLocker(&m_d->regionLock);
+    m_d->dirtyRegion = QRegion();
+}
+
 
 KisNodeSP KisNode::parent() const
 {
@@ -207,3 +270,4 @@ bool KisNode::remove( KisNodeSP node )
 }
 
 
+#include "kis_node.moc"

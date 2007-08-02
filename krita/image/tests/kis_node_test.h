@@ -29,7 +29,7 @@ private slots:
 
     void testCreation();
     void testOrdering();
-
+    void testSetDirty();
 };
 
 #endif

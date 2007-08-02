@@ -251,6 +251,61 @@ void KisNodeTest::testOrdering()
     QVERIFY( node4->nextSibling() == 0 );
 }
 
+void KisNodeTest::testSetDirty()
+{
+    // Create a node graph with two branches
+
+    /*
+        node2
+          node4
+              node6
+             node5
+            node5
+          node3
+        node1
+      root
+     */
+    KisNodeSP root = new KisNode();
+    root->setName( "root" );
+
+    KisNodeSP node1 = new KisNode();
+    node1->setName( "node1" );
+    QVERIFY( root->add( node1, 0 ) );
+
+    KisNodeSP node2 = new KisNode();
+    node2->setName( "node2" );
+    QVERIFY( root->add( node2, node1 ) );
+
+    KisNodeSP node3 = new KisNode();
+    node3->setName( "node3" );
+    QVERIFY( node1->add( node3, 0 ) );
+
+    KisNodeSP node4 = new KisNode();
+    node4->setName( "node4" );
+    QVERIFY( node1->add( node4, node3 ) );
+
+    KisNodeSP node5 = new KisNode();
+    node5->setName( "node5" );
+    QVERIFY( node3->add( node5, 0 ) );
+
+    KisNodeSP node6 = new KisNode();
+    node6->setName( "node6" );
+    QVERIFY( node5->add( node6, 0 ) );
+
+    KisNodeSP node7 = new KisNode();
+    node7->setName( "node7" );
+    QVERIFY( node6->add( node7, 0 ) );
+
+    node1->setDirty();
+    QVERIFY( node1->isDirty() );
+    QVERIFY( !node2->isDirty() );
+    QVERIFY( root->isDirty() );
+    root->setClean();
+    QVERIFY( !root->isDirty() );
+    node1->setClean();
+    QVERIFY( !node1->isDirty() );
+
+}
 
 QTEST_KDEMAIN(KisNodeTest, NoGUI)
 #include "kis_node_test.moc"

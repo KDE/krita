@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Dynamic Brush
+Name[bg]=Динамична четка
 Name[de]=Dynamischer Pinsel
 Name[ja]=ダイナミックブラシ
 Name[pt]=Pincel Dinâmico
@@ -8,6 +9,7 @@ Name[pt_BR]=Pincel Dinâmico
 Name[sv]=Dynamisk pensel
 Name[uk]=Динамічний пензель
 Comment=Dynamic brush
+Comment[bg]=Динамична четка
 Comment[de]=Dynamischer Pinsel
 Comment[ja]=ダイナミックブラシ
 Comment[pt]=Pincel Dinâmico

@@ -8,6 +8,7 @@ Name[pt_BR]=Modelo de Cor RGB (v. flutuante de 16-bits e 32-bits HDR)
 Name[sv]=RGB-färgmodell (16-bitars flyttal och 32-bitars HDR)
 Name[x-test]=xxRGB (float 16-bit and 32-bit HDR) Color Modelxx
 Comment=Color model for 16-bit and 32-bit per channel in floating point for High-Dynamic Range RGB images
+Comment[bg]=Цветови модел за 16 и 32 битови изображения RGB
 Comment[de]=Farbmodell für 16-bit und 32-bit pro Kanal in Fließkomma für High-Dynamic Range RGB-Bilder
 Comment[fa]=مدل رنگ برای ۱۶ بیت و ۳۲ بیت در هر مجرا برحسب ممیز شناور برای هر تصویر RGB با گسترۀ پویانمایی بالا
 Comment[ja]=16 ビットおよび 32 ビット浮動小数点数/チャンネルのハイダイナミックレンジ RGB 画像のためのカラーモデル

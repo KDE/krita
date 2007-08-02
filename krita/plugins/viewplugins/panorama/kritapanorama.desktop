@@ -1,11 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=panorama
+Name[bg]=Панорама
 Name[de]=Panorama
 Name[pt]=Panorama
 Name[pt_BR]=Panorama
 Name[sv]=Panorama
 Comment=panorama
+Comment[bg]=Панорама
 Comment[de]=Panorama
 Comment[sv]=Panorama
 ServiceTypes=Krita/ViewPlugin

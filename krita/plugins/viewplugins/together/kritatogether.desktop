@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Together
 Name[be]=Разам
+Name[bg]=Заедно
 Name[de]=Zusammen
 Name[pt]=Conjunto
 Name[pt_BR]=Conjunto
@@ -9,6 +10,7 @@ Name[sv]=Tillsammans
 Name[x-test]=xxTogetherxx
 Comment=Together
 Comment[be]=Разам
+Comment[bg]=Заедно
 Comment[de]=Zusammen
 Comment[pt]=Conjunto
 Comment[pt_BR]=Conjunto

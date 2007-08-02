@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=XYZ Color Model (16-bit integer)
+Name[bg]=Цветови модел XYZ (16 бита)
 Name[de]=XYZ-Farbmodell (16-bit Ganzzahl)
 Name[fa]=مدل رنگ XYZ )عدد صحیح ۱۶ بیتی(
 Name[ja]=XYZ カラーモデル (16 ビット整数)
@@ -10,6 +11,7 @@ Name[sv]=XYZ-färgmodell (16-bitars heltal)
 Name[uk]=Модель кольорів CMYK (16-бітне ціле число)
 Name[x-test]=xxXYZ Color Model (16-bit integer)xx
 Comment=Color model for 16-bit integer per channel XYZ images
+Comment[bg]=Цветови модел за 16 битови изображения XYZ
 Comment[de]=Farbmodell für 16-bit pro Kanal XYZ-Bilder
 Comment[fa]=مدل رنگ برای عدد صحیح ۱۶ بیتی در هر مجرای تصاویر XYZ
 Comment[ja]=16 ビット整数/チャンネルの XYZ 画像のためのカラーモデル

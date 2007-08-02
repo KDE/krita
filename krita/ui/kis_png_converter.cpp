@@ -122,9 +122,11 @@ KisPNGConverter::~KisPNGConverter()
 {
 }
 
-class KisPNGStream {
+class KisPNGReadStream {
     public:
-        KisPNGStream(quint8* buf,  quint32 depth ) : m_posinc(8),m_depth(depth), m_buf(buf) { *m_buf = 0;}
+        KisPNGReadStream(quint8* buf,  quint32 depth ) : m_posinc(8),m_depth(depth), m_buf(buf)
+        {
+        }
         int nextValue()
         {
             if( m_posinc == 0)
@@ -134,6 +136,17 @@ class KisPNGStream {
             }
             m_posinc -= m_depth;
             return (( (*m_buf) >> (m_posinc) ) & ( ( 1 << m_depth ) - 1 ) );
+        }
+    private:
+        quint32 m_posinc, m_depth;
+        quint8* m_buf;
+};
+
+class KisPNGWriteStream {
+    public:
+        KisPNGWriteStream(quint8* buf,  quint32 depth ) : m_posinc(8),m_depth(depth), m_buf(buf)
+        {
+            *m_buf = 0;
         }
         void setNextValue(int v)
         {
@@ -223,6 +236,7 @@ void _read_fn(png_structp png_ptr, png_bytep data, png_size_t length)
             png_error(png_ptr, "Read Error");
             return;
         }
+        kDebug() << length << " " << nr << endl;
         length -= nr;
     }
 }
@@ -297,8 +311,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     // Initialize the special
     png_set_read_fn(png_ptr, iod, _read_fn);
 
-    // Ignore signature
-//     png_set_sig_bytes(png_ptr, 8);
     // read all PNG info up to image data
     png_read_info(png_ptr, info_ptr);
 
@@ -478,11 +490,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                         ++it;
                     }
                 } else  {
-                    KisPNGStream stream(row_pointer, color_nb_bits);
+                    KisPNGReadStream stream(row_pointer, color_nb_bits);
                     while (!it.isDone()) {
                         quint8 *d = it.rawData();
                         d[0] = (quint8)(stream.nextValue() * coeff);
-                        kDebug() << it.x() << " " << it.y() << " " << (int)d[0] << " " << (int)(*row_pointer) << " " << (int)(*(row_pointer+1)) << endl;
+//                         kDebug() << it.x() << " " << it.y() << " " << (int)d[0] << " " << (int)(*row_pointer) << " " << (int)(*(row_pointer+1)) << endl;
                         if(transform) cmsDoTransform(transform, d, d, 1);
                         if(hasalpha) d[1] = (quint8)(stream.nextValue() * coeff);
                         else d[1] = UCHAR_MAX;
@@ -507,7 +519,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                         ++it;
                     }
                 } else {
-                    KisPNGStream stream(row_pointer, color_nb_bits);
+                    KisPNGReadStream stream(row_pointer, color_nb_bits);
                     while (!it.isDone()) {
                         quint8 *d = it.rawData();
                         d[2] = (quint8)(stream.nextValue() * coeff);
@@ -522,7 +534,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 break;
             case PNG_COLOR_TYPE_PALETTE:
                 {
-                    KisPNGStream stream(row_pointer, color_nb_bits);
+                    KisPNGReadStream stream(row_pointer, color_nb_bits);
                     while (!it.isDone()) {
                         quint8 *d = it.rawData();
                         png_color c = palette[ stream.nextValue() ];
@@ -865,7 +877,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
             case PNG_COLOR_TYPE_PALETTE:
             {
                 quint8 *dst = row_pointers[y];
-                KisPNGStream writestream(dst, color_nb_bits);
+                KisPNGWriteStream writestream(dst, color_nb_bits);
                 while (!it.isDone()) {
                     const quint8 *d = it.rawData();
                     int i;

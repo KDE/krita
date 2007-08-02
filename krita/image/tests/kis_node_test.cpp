@@ -305,6 +305,19 @@ void KisNodeTest::testSetDirty()
     node1->setClean();
     QVERIFY( !node1->isDirty() );
 
+    node7->setDirty( QRect( 10, 10, 100, 100 ) );
+    QVERIFY( node7->isDirty() );
+    QVERIFY( node7->isDirty( QRect( 5, 5, 15, 15 ) ) );
+    QVERIFY( root->isDirty( QRect( 5, 5, 15, 15 ) ) );
+    QVERIFY( !root->isDirty( QRect( -10, -10, 20, 20 ) ) );
+    QVERIFY( !node2->isDirty() );
+
+    node7->setClean( QRect( 10, 10, 10, 10 ) );
+    QVERIFY( !node7->isDirty(QRect( 10, 10, 10, 10 )) );
+    QVERIFY( node7->isDirty() );
+    QVERIFY( node7->isDirty( QRect( 0, 0, 50, 50 ) ) );
+
+
 }
 
 QTEST_KDEMAIN(KisNodeTest, NoGUI)

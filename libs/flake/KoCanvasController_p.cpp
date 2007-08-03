@@ -148,9 +148,13 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
 void Viewport::handleDropEvent(QDropEvent *event) {
 
     if ( !m_draggedShape ) return;
-
-    m_draggedShape->setAbsolutePosition( correctPosition(event->pos()) );
+    repaint(m_draggedShape);
     m_parent->canvas()->shapeManager()->remove(m_draggedShape); // remove it to not interfere with z-index calc.
+
+    m_draggedShape->setPosition( QPointF(0,0) ); // always save position.
+    QPointF newPos = correctPosition(event->pos());
+    m_parent->canvas()->clipToDocument(m_draggedShape, newPos); // ensure the shape is dropped inside the document.
+    m_draggedShape->setAbsolutePosition( newPos );
     QUndoCommand * cmd = m_parent->canvas()->shapeController()->addShape( m_draggedShape );
     if(cmd) {
         m_parent->canvas()->addCommand(cmd);
@@ -165,6 +169,7 @@ void Viewport::handleDropEvent(QDropEvent *event) {
     }
     else
         delete m_draggedShape;
+
     m_draggedShape = 0;
 }
 
@@ -195,7 +200,7 @@ void Viewport::repaint(KoShape *shape) {
     rect.moveLeft(rect.left() + canvasWidget->x());
     rect.moveTop(rect.top() + canvasWidget->y());
     rect.adjust(-2, -2, 2, 2); // adjust for antialias
-    update();
+    update(rect);
 }
 
 void Viewport::handleDragLeaveEvent(QDragLeaveEvent *) {

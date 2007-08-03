@@ -93,6 +93,9 @@ kde4_add_ui_files( komain_LIB_SRCS
 
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
+# sebsauer, 2007-08-03: ${KDE4_KPARTS_LIBS} seems to be needed here else e.g.;
+#   ldd -r `which kword`
+#   undefined symbol: _ZNK11QPushButton15minimumSizeHintEv  (/home/kde4/kde4/lib/libkde3support.so.4)
 target_link_libraries(komain kstore ${KDE4_KPARTS_LIBS} ${KDE4_KABC_LIBS} ${KDE4_KDEPRINT_LIBS} kowmf ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBS})
 
 set_target_properties(komain PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )

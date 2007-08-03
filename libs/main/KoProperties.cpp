@@ -42,7 +42,7 @@ KoProperties::~KoProperties() {
     delete d;
 }
 
-QMapIterator<QString, QVariant> KoProperties::propertyIterator()
+QMapIterator<QString, QVariant> KoProperties::propertyIterator() const
 {
     return QMapIterator<QString, QVariant>( d->properties );
 }

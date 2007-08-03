@@ -57,7 +57,7 @@ public:
      * Returns an iterator over the properties. The iterator is not
      * suitable for adding or removing properties.
      */
-    QMapIterator<QString, QVariant> propertyIterator();
+    QMapIterator<QString, QVariant> propertyIterator() const;
 
     /**
      * Create a serialized version of this filter config

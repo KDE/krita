@@ -56,7 +56,8 @@ private:
     QSizeF m_initialSize;
     QPointF m_initialPosition;
     QMatrix m_scaleMatrix;
-    QList<QMatrix> m_lastTransforms;
+    QList<QMatrix> m_oldTransforms;
+    QList<QMatrix> m_transformations;
 };
 
 #endif

@@ -167,8 +167,9 @@ void KoShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &conv
 }
 
 QUndoCommand* KoShapeShearStrategy::createCommand() {
+    KoShapeTransformCommand revert( m_selectedShapes, m_shearMatrix.inverted() );
+    revert.redo();
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_shearMatrix );
     cmd->setText( i18n("Shear") );
-    cmd->undo();
     return cmd;
 }

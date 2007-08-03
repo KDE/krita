@@ -93,8 +93,10 @@ void KoShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &con
 }
 
 QUndoCommand* KoShapeRotateStrategy::createCommand() {
+    KoShapeTransformCommand revert( m_selectedShapes, m_rotationMatrix.inverted() );
+    revert.redo();
+
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_rotationMatrix );
     cmd->setText( i18n("Rotate") );
-    cmd->undo();
     return cmd;
 }

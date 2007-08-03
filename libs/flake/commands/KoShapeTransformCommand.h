@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,10 +23,9 @@
 
 #include <flake_export.h>
 #include <QtGui/QUndoCommand>
-#include <QtGui/QMatrix>
-#include <QtCore/QList>
 
 class KoShape;
+class QMatrix;
 
 /**
  * A command to transform a selection of shapes with the same transformation.
@@ -35,17 +35,22 @@ class FLAKE_EXPORT KoShapeTransformCommand : public QUndoCommand
 public:
     /**
      * A command to transform a selection of shapes with the same transformation.
+     * This command will take the current state of the object as the default state and after re-doing it will
+     * transform all shapes to the state where the transformation is applied.
      * @param shapes all the shapes that should be transformed
      * @param transformation the transformation to apply to all shapes
      */
     KoShapeTransformCommand( const QList<KoShape*> &shapes, const QMatrix &transformation, QUndoCommand *parent = 0 );
 
     /**
-     * A command to transform a selection of shapes with the same transformation.
+     * A command to transform a selection of shapes to the new state.
+     * Each shape passed has an old state and a new state of transformation passed in.
      * @param shapes all the shapes that should be transformed
      * @param transformations the transformation to apply to all shapes
+     * @see KoShape::transformationMatrix()
+     * @see KoShape::setTransformation()
      */
-    KoShapeTransformCommand( const QList<KoShape*> &shapes, const QList<QMatrix> &transformations, QUndoCommand * parent = 0 );
+    KoShapeTransformCommand( const QList<KoShape*> &shapes, const QList<QMatrix> &oldState, const QList<QMatrix> &newState, QUndoCommand * parent = 0 );
 
     /// redo the command
     void redo();
@@ -53,8 +58,8 @@ public:
     void undo();
 
 private:
-    QList<KoShape*> m_shapes;
-    QList<QMatrix> m_transformations;
+    class Private;
+    Private * const d;
 };
 
 #endif // KOSHAPETRANSFORMCOMMAND_H

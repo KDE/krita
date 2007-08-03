@@ -39,7 +39,8 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
             continue;
         m_selectedShapes << shape;
         m_startPositions << shape->position();
-        m_lastTransforms << QMatrix();
+        m_oldTransforms << shape->transformationMatrix(0);
+        m_transformations << QMatrix();
         m_startSizes << shape->size();
     }
     m_start = clicked;
@@ -154,7 +155,7 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
         */
 
         // undo the last resize transformation
-        shape->applyTransformation( m_lastTransforms[i].inverted() );
+        shape->applyTransformation( m_transformations[i].inverted() );
 
         // save the shapes transformation matrix
         QMatrix shapeMatrix = shape->transformationMatrix(0);
@@ -180,7 +181,7 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
         shape->applyTransformation( mirrorMatrix );
 
         // and remember the applied transformation later for later undoing
-        m_lastTransforms[i] = shapeMatrix.inverted() * shape->transformationMatrix(0);
+        m_transformations[i] = shapeMatrix.inverted() * shape->transformationMatrix(0);
 
         shape->applyTransformation( m_windMatrix );
 
@@ -194,16 +195,15 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
 QUndoCommand* KoShapeResizeStrategy::createCommand() {
     QList<QSizeF> newSizes;
     QList<QMatrix> transformations;
-    uint shapeCount = m_selectedShapes.count();
-    for( uint i = 0; i < shapeCount; ++i )
+    const int shapeCount = m_selectedShapes.count();
+    for( int i = 0; i < shapeCount; ++i )
     {
         newSizes << m_selectedShapes[i]->size();
-        transformations << m_unwindMatrix * m_lastTransforms[i] * m_windMatrix;
+        transformations << m_oldTransforms[i] * m_transformations[i];
     }
     QUndoCommand * cmd = new QUndoCommand(i18n("Resize"));
     new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd );
-    new KoShapeTransformCommand( m_selectedShapes, transformations, cmd );
-    cmd->undo();
+    new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, transformations, cmd );
     return cmd;
 }
 

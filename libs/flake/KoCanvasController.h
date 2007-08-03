@@ -154,11 +154,6 @@ public:
     void ensureVisible( KoShape *shape );
 
     /**
-     * XXX
-     */
-    void setToolOptionWidget(QWidget *widget);
-
-    /**
      * @brief zooms in around the center.
      *
      * The center must be specified in document coordinates. The scrollbar positions

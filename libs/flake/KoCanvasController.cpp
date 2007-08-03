@@ -45,11 +45,10 @@
 class KoCanvasController::Private
 {
 public:
-    Private() : canvas(0), canvasMode( Centered ), toolOptionWidget(0), margin(0)
+    Private() : canvas(0), canvasMode( Centered ), margin(0)
     ,ignoreScrollSignals(false) {}
     KoCanvasBase * canvas;
     CanvasMode canvasMode;
-    QWidget * toolOptionWidget;
     int margin; // The viewport margin around the document
     QSize documentSize;
     QPoint documentOffset;
@@ -84,7 +83,6 @@ KoCanvasController::~KoCanvasController()
 {
     delete m_d;
 }
-
 
 void KoCanvasController::scrollContentsBy ( int dx, int dy )
 {
@@ -214,8 +212,6 @@ void KoCanvasController::updateCanvasOffsetY() {
     if(m_d->viewportWidget && m_d->viewportWidget->canvas())
         m_d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
 }
-
-
 
 bool KoCanvasController::eventFilter(QObject* watched, QEvent* event) {
     if(m_d->canvas && m_d->canvas->canvasWidget() && (watched == m_d->canvas->canvasWidget())) {
@@ -357,12 +353,6 @@ void KoCanvasController::zoomTo(const QRect &viewRect)
 
     emit zoomBy(scale);
 }
-
-void KoCanvasController::setToolOptionWidget(QWidget *widget) {
-    m_d->toolOptionWidget = widget;
-    emit toolOptionWidgetChanged(m_d->toolOptionWidget);
-}
-
 
 void KoCanvasController::setDocumentSize( const QSize & sz )
 {

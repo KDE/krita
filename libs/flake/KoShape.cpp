@@ -279,7 +279,7 @@ void KoShape::applyTransformation( const QMatrix &matrix )
     QMatrix globalMatrix = transformationMatrix(0);
     // the transformation is relative to the global coordinate system
     // but we want to change the local matrix, so convert the matrix
-    // to relate to the local coordinate system
+    // to be relative to the local coordinate system
     QMatrix transformMatrix = globalMatrix * matrix * globalMatrix.inverted();
     d->localMatrix = transformMatrix * d->localMatrix;
     notifyChanged();

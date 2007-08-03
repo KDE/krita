@@ -37,7 +37,44 @@ KisShapeSelectionModel::~KisShapeSelectionModel()
 void KisShapeSelectionModel::add(KoShape *child) {
     if(m_shapes.contains(child))
         return;
+
+    child->setBorder(0);
+    child->setBackground(Qt::NoBrush);
+
+    if(count() == 1) {
+        m_parentPaintDevice->setDirty(m_image->bounds());
+    }
+    else {
+        QRect updateRect = child->boundingRect().toAlignedRect();
+
+        QMatrix matrix;
+        matrix.scale(m_image->xRes(), m_image->yRes());
+        updateRect = matrix.mapRect(updateRect);
+        m_parentPaintDevice->setDirty(updateRect);
+    }
+    m_parentPaintDevice->emitSelectionChanged();
+
     m_shapes.append(child);
+    m_shapeSelection->setDirty();
+}
+
+void KisShapeSelectionModel::remove(KoShape *child)
+{
+    if(count() == 0) {
+        m_parentPaintDevice->setDirty(m_image->bounds());
+    }
+    else {
+        QRect updateRect = child->boundingRect().toAlignedRect();
+
+        QMatrix matrix;
+        matrix.scale(m_image->xRes(), m_image->yRes());
+        updateRect = matrix.mapRect(updateRect);
+        m_parentPaintDevice->setDirty(updateRect);
+    }
+    m_parentPaintDevice->emitSelectionChanged();
+
+    m_shapes.removeAll(child);
+    m_shapeSelection->setDirty();
 }
 
 void KisShapeSelectionModel::setClipping(const KoShape *child, bool clipping)
@@ -47,11 +84,6 @@ void KisShapeSelectionModel::setClipping(const KoShape *child, bool clipping)
 bool KisShapeSelectionModel::childClipped(const KoShape *child) const
 {
     return false;
-}
-
-void KisShapeSelectionModel::remove(KoShape *child)
-{
-    m_shapes.removeAll(child);
 }
 
 int KisShapeSelectionModel::count() const

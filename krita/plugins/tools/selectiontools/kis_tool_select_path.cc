@@ -120,7 +120,7 @@ void KisToolSelectPath::addPathShape()
     m_shape = 0;
 
     if(m_selectionMode == PIXEL_SELECTION){
-        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);
+        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Path Selection"), dev);
         KisPixelSelectionSP pixelSelection = dev->pixelSelection();
 
 

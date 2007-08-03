@@ -169,12 +169,10 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 KisPaintDeviceSP dev = currentLayer()->paintDevice();
 
             bool hasSelection = dev->hasSelection();
-            KisSelectionSP selection = dev->selection();
 
             if(m_selectionMode == PIXEL_SELECTION){
-                KisPixelSelectionSP pixelSelection = dev->pixelSelection();
-
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
+                KisPixelSelectionSP pixelSelection = dev->pixelSelection();
 
                 if (!hasSelection || m_selectAction == SELECTION_REPLACE)
                 {
@@ -187,7 +185,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 
                 KisPainter painter(tmpSel);
                 painter.setBounds( currentImage()->bounds() );
-                painter.setPaintColor(KoColor(Qt::black, selection->colorSpace()));
+                painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
                 painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
@@ -215,7 +213,6 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                         break;
                 }
 
-
                 if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
                     QRect rect(painter.dirtyRegion().boundingRect());
                     dev->setDirty(rect);
@@ -224,7 +221,6 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                     dev->setDirty(currentImage()->bounds());
                     dev->emitSelectionChanged();
                 }
-
                 m_canvas->addCommand(t);
             }
             else {

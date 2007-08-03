@@ -47,8 +47,6 @@ public:
      */
     virtual void renderToProjection(KisSelection* projection);
 
-    virtual void addChild(KoShape* shape);
-
     virtual void setDirty();
 
 protected:

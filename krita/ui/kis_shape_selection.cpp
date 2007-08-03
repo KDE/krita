@@ -124,27 +124,6 @@ void KisShapeSelection::renderToProjection(KisSelection* projection)
     painter.fillPainterPath(resolutionMatrix.map(selectionOutline()));
 }
 
-void KisShapeSelection::addChild(KoShape* shape)
-{
-    shape->setBorder(0);
-    shape->setBackground(Qt::NoBrush);
-    KoShapeContainer::addChild(shape);
-    setDirty();
-
-    if(childCount() == 1) {
-        m_parentPaintDevice->setDirty(m_image->bounds());
-    }
-    else {
-        QRect updateRect = shape->boundingRect().toAlignedRect();
-
-        QMatrix matrix;
-        matrix.scale(m_image->xRes(), m_image->yRes());
-        updateRect = matrix.mapRect(updateRect);
-        m_parentPaintDevice->setDirty(updateRect);
-    }
-    m_parentPaintDevice->emitSelectionChanged();
-}
-
 void KisShapeSelection::setDirty()
 {
     m_dirty = true;

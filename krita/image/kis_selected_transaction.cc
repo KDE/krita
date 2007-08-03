@@ -54,6 +54,8 @@ void KisSelectedTransaction::redo()
         m_device->selection();
     else
         m_device->deselect();
+
+    m_device->setDirty(m_device->image()->bounds());
     m_device->emitSelectionChanged();
 }
 
@@ -67,6 +69,8 @@ void KisSelectedTransaction::undo()
         m_device->selection();
     else
         m_device->deselect();
+
+    m_device->setDirty(m_device->image()->bounds());
     m_device->emitSelectionChanged();
 }
 

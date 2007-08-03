@@ -10,6 +10,7 @@ Name[pt_BR]='Plugin' do Flake
 Name[sv]=Flake-insticksprogram
 Name[uk]=Втулок Flake
 Name[x-test]=xxFlake Pluginxx
+Name[zh_TW]=Flake 外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Flake
 Comment=A plugin that contains a set of a shape and a tool
@@ -18,5 +19,6 @@ Comment[pt]=Um 'plugin' que contém um conjunto de uma forma e uma ferramenta
 Comment[pt_BR]=Um 'plugin' que contém um conjunto de uma forma e uma ferramenta
 Comment[sv]=Ett insticksprogram som innehåller en formmängd och ett verktyg
 Comment[x-test]=xxA plugin that contains a set of a shape and a toolxx
+Comment[zh_TW]=包含形狀與工具集的外掛程式
 [PropertyDef::X-Flake-Version]
 Type=int

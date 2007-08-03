@@ -9,6 +9,7 @@ Name[pt_BR]='Plugin' de correcção automática
 Name[sv]=Insticksprogram för automatisk korrigering
 Name[uk]=Втулок автокоректування
 Name[x-test]=xxAutocorrection pluginxx
+Name[zh_TW]=自動修正外掛程式
 ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service
 X-KoText-Version=1

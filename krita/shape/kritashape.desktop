@@ -6,6 +6,7 @@ Name[pt]=Forma do KritaShape
 Name[pt_BR]=Forma do KritaShape
 Name[sv]=Kritashape-form
 Name[x-test]=xxKritaShape Shapexx
+Name[zh_TW]=KritaShape 形狀
 ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=kritashape

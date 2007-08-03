@@ -8,6 +8,7 @@ Name[pt]=Ferramentas Predefinidas do Flake
 Name[pt_BR]=Ferramentas Predefinidas do Flake
 Name[sv]=Flake standardverktyg
 Name[x-test]=xxDefault Flake Toolsxx
+Name[zh_TW]=預設 Flake 工具
 ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=defaulttools

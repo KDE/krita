@@ -6,6 +6,7 @@ Name[pt]='Plugin' de edição de texto para o KOffice
 Name[pt_BR]='Plugin' de edição de texto para o KOffice
 Name[sv]=Insticksprogram med textredigering för Koffice textverktyg
 Name[x-test]=xxText Editing plugin for the KOffce texttoolxx
+Name[zh_TW]=KOffice 文字工具的文字編輯外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-EditingPlugin
 Comment=Definition of a text-editing plugin
@@ -14,5 +15,6 @@ Comment[pt]=Definição de um 'plugin' de edição de texto
 Comment[pt_BR]=Definição de um 'plugin' de edição de texto
 Comment[sv]=Definition av ett Insticksprogram för textredigering
 Comment[x-test]=xxDefinition of a text-editing pluginxx
+Comment[zh_TW]=文字編輯外掛程式定義
 [PropertyDef::X-KoText-Version]
 Type=int

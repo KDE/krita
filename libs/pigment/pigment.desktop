@@ -9,5 +9,6 @@ Comment[pt]=Um módulo que implementa um espaço de cores completo para usar com
 Comment[pt_BR]=Um módulo que implementa um espaço de cores completo para usar com a 'libpigment'
 Comment[sv]=En modul som implementerar en fullständig färgrymd för användning med libpigment
 Comment[x-test]=xxA module implementing a complete colorspace for use with libpigmentxx
+Comment[zh_TW]=實作完整色彩空間以使用 libpigment 的模組
 [PropertyDef::X-Pigment-Version]
 Type=int

@@ -5,6 +5,7 @@ Name[de]=Malerischer Mischer
 Name[pt]=Mistura de Tintas
 Name[pt_BR]=Mistura de Tintas
 Name[sv]=Målarfärgsblandare
+Name[zh_TW]=圖畫混合器
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritapainterlymixer

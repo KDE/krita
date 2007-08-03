@@ -7,6 +7,7 @@ Name[pt]=Definição da ferramenta do Flake
 Name[pt_BR]=Definição da ferramenta do Flake
 Name[sv]=Verktygsdefinition i Flake
 Name[x-test]=xxFlake tool definitionxx
+Name[zh_TW]=Flake 工具定義
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Tool
 Comment=Definition of flake tools
@@ -15,5 +16,6 @@ Comment[pt]=Definição das ferramentas do Flake
 Comment[pt_BR]=Definição das ferramentas do Flake
 Comment[sv]=Definition av verktyg i Flake
 Comment[x-test]=xxDefinition of flake toolsxx
+Comment[zh_TW]=Flake 工具定義
 [PropertyDef::X-Flake-Version]
 Type=int

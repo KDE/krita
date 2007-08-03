@@ -7,6 +7,7 @@ Name[pt_BR]='Plugin' do Filtro GlSl
 Name[sv]=GLSL-filterinsticksprogram
 Name[uk]=Втулок фільтра Glsl
 Name[x-test]=xxGlsl Filter Pluginxx
+Name[zh_TW]=Glsl 過濾器外掛程式
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaglsl

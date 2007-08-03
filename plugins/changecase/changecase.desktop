@@ -5,6 +5,7 @@ Name[fa]=تغییر وصلۀ حالت
 Name[pt]='Plugin' de mudança de capitalização
 Name[pt_BR]='Plugin' de mudança de capitalização
 Name[sv]=Insticksprogram för skiftlägesändring
+Name[zh_TW]=改變大小寫外掛程式
 ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service
 X-KoText-Version=1

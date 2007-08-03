@@ -8,6 +8,7 @@ Name[pt]=Variáveis de Texto
 Name[pt_BR]=Variáveis de Texto
 Name[sv]=Textvariabler
 Name[x-test]=xxText Variablesxx
+Name[zh_TW]=文字變數
 ServiceTypes=KOffice/Text-InlineObject
 Type=Service
 X-KoText-Version=1

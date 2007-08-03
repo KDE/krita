@@ -6,6 +6,7 @@ Name[pt]='Plugin' do Objecto Incorporado de Texto
 Name[pt_BR]='Plugin' do Objecto Incorporado de Texto
 Name[sv]=Insticksprogram för flytande textobjekt
 Name[x-test]=xxInline Text Object Pluginxx
+Name[zh_TW]=內含文字物件外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-InlineObject
 Comment=Definition of a text object
@@ -14,5 +15,6 @@ Comment[pt]=Definição de um objecto de texto
 Comment[pt_BR]=Definição de um objecto de texto
 Comment[sv]=Definition av ett textobjekt
 Comment[x-test]=xxDefinition of a text objectxx
+Comment[zh_TW]=定義文字物件
 [PropertyDef::X-KoText-Version]
 Type=int

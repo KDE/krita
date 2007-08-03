@@ -42,6 +42,11 @@ KoProperties::~KoProperties() {
     delete d;
 }
 
+QMapIterator<QString, QVariant> KoProperties::propertyIterator()
+{
+    return QMapIterator<QString, QVariant>( d->properties );
+}
+
 void KoProperties::load(const QString & s)
 {
     d->properties.clear();
@@ -103,7 +108,7 @@ void KoProperties::setProperty(const QString & name, const QVariant & value)
 
 bool KoProperties::property(const QString & name, QVariant & value) const
 {
-   QMap<QString, QVariant>::const_iterator it = d->properties.find( name ); 
+   QMap<QString, QVariant>::const_iterator it = d->properties.find( name );
    if ( it == d->properties.end() ) {
        return false;
    }

@@ -98,6 +98,7 @@ void KoZoomTool::keyReleaseEvent(QKeyEvent *event) {
 
 void KoZoomTool::activate(bool temporary) {
     m_temporary = temporary;
+    useCursor(m_inCursor, true);
 }
 
 void KoZoomTool::mouseDoubleClickEvent( KoPointerEvent *event ) {

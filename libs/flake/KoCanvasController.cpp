@@ -202,8 +202,6 @@ int KoCanvasController::canvasOffsetY() const {
 void KoCanvasController::updateCanvasOffsetX() {
     if(m_d->ignoreScrollSignals)
         return;
-    // save new preferred x-center
-    m_d->preferredCenterFractionX = (0.5 * viewport()->width() - canvasOffsetX() ) / m_d->documentSize.width();
     emit canvasOffsetXChanged(canvasOffsetX());
     if(m_d->viewportWidget && m_d->viewportWidget->canvas())
         m_d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
@@ -212,8 +210,6 @@ void KoCanvasController::updateCanvasOffsetX() {
 void KoCanvasController::updateCanvasOffsetY() {
     if(m_d->ignoreScrollSignals)
         return;
-    // save new preferred y-center
-    m_d->preferredCenterFractionY = (0.5 * viewport()->height() - canvasOffsetY() ) / m_d->documentSize.height();
     emit canvasOffsetYChanged(canvasOffsetY());
     if(m_d->viewportWidget && m_d->viewportWidget->canvas())
         m_d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
@@ -363,8 +359,6 @@ void KoCanvasController::zoomTo(const QRect &viewRect)
 }
 
 void KoCanvasController::setToolOptionWidget(QWidget *widget) {
-//   if(m_toolOptionWidget)
-//       m_toolOptionWidget->deleteLater();
     m_d->toolOptionWidget = widget;
     emit toolOptionWidgetChanged(m_d->toolOptionWidget);
 }

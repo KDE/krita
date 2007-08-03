@@ -30,15 +30,28 @@
 #include "KoShapeBorderModel.h"
 #include "KoShapeGroup.h"
 #include "KoToolProxy.h"
+#include "KoShapeManagerPaintingStrategy.h"
 
 #include <QPainter>
 #include <kdebug.h>
 
 class KoShapeManager::Private {
 public:
-    Private(KoCanvasBase *c) : canvas(c), tree(4, 2), connectionTree(4, 2) {
-        selection = new KoSelection();
+    Private( KoShapeManager * shapeManager, KoCanvasBase *c ) 
+    : selection( new KoSelection() )
+    , canvas(c)
+    , tree(4, 2)
+    , connectionTree(4, 2) 
+    , strategy( new KoShapeManagerPaintingStrategy( shapeManager ) )
+    {
     }
+
+    ~Private()
+    {
+        delete selection;
+        delete strategy;
+    }
+
     QList<KoShape *> shapes;
     KoSelection * selection;
     KoCanvasBase * canvas;
@@ -46,10 +59,11 @@ public:
     KoRTree<KoShapeConnection *> connectionTree;
     QSet<KoShape *> aggregate4update;
     QHash<KoShape*, int> shapeIndexesBeforeUpdate;
+    KoShapeManagerPaintingStrategy * strategy;
 };
 
 KoShapeManager::KoShapeManager( KoCanvasBase *canvas, const QList<KoShape *> &shapes )
-: d (new Private(canvas))
+: d (new Private(this,canvas))
 {
     Q_ASSERT(d->canvas); // not optional.
     connect( d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()) );
@@ -57,7 +71,7 @@ KoShapeManager::KoShapeManager( KoCanvasBase *canvas, const QList<KoShape *> &sh
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
-: d (new Private(canvas))
+: d (new Private(this,canvas))
 {
     Q_ASSERT(d->canvas); // not optional.
     connect( d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()) );
@@ -67,7 +81,7 @@ KoShapeManager::~KoShapeManager()
 {
     foreach(KoShape *shape, d->shapes)
         shape->removeShapeManager( this );
-    delete d->selection;
+    delete d;
 }
 
 
@@ -196,24 +210,7 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
             painter.restore();
             connectionIterator++;
         }
-        painter.save();
-        painter.setMatrix( shape->transformationMatrix(&converter) * painter.matrix() );
-
-        painter.save();
-        shape->paint( painter, converter );
-        painter.restore();
-        if(shape->border()) {
-            painter.save();
-            shape->border()->paintBorder(shape, painter, converter);
-            painter.restore();
-        }
-        if(! forPrint) {
-            painter.save();
-            painter.setRenderHint( QPainter::Antialiasing, false );
-            shape->paintDecorations( painter, converter, d->canvas );
-            painter.restore();
-        }
-        painter.restore();  // for the matrix
+        d->strategy->paint( shape, painter, converter, forPrint );
     }
 
     while(connectionIterator != sortedConnections.end()) { // paint connections that are above the rest.
@@ -237,6 +234,25 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
     if(! forPrint)
         d->selection->paint( painter, converter );
 }
+
+void KoShapeManager::paintShape( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint )
+{
+    painter.save();
+    shape->paint( painter, converter );
+    painter.restore();
+    if(shape->border()) {
+        painter.save();
+        shape->border()->paintBorder(shape, painter, converter);
+        painter.restore();
+    }
+    if(! forPrint) {
+        painter.save();
+        painter.setRenderHint( QPainter::Antialiasing, false );
+        shape->paintDecorations( painter, converter, d->canvas );
+        painter.restore();
+    }
+}
+
 
 KoShape * KoShapeManager::shapeAt( const QPointF &position, KoFlake::ShapeSelection selection, bool omitHiddenShapes )
 {
@@ -377,6 +393,7 @@ void KoShapeManager::updateTree()
     {
         d->tree.remove( shape );
         QRectF br( shape->boundingRect() );
+        d->strategy->adapt( br );
         d->tree.insert( br, shape );
 
         foreach(KoShapeConnection *connection, shape->connections()) {
@@ -419,6 +436,12 @@ void KoShapeManager::suggestChangeTool(KoPointerEvent *event) {
     }
     KoToolManager::instance()->switchToolRequested(
             KoToolManager::instance()->preferredToolForSelection(shapes));
+}
+
+void KoShapeManager::setStrategy( KoShapeManagerPaintingStrategy * strategy )
+{
+    delete d->strategy;
+    d->strategy = strategy;
 }
 
 #include "KoShapeManager.moc"

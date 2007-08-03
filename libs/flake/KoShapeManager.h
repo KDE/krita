@@ -35,6 +35,8 @@ class KoViewConverter;
 class KoCanvasBase;
 class KoShapeConnection;
 class KoPointerEvent;
+class KoShapeManagerPaintingStrategy;
+
 
 class QPainter;
 class QPointF;
@@ -152,6 +154,16 @@ public:
      */
     void suggestChangeTool(KoPointerEvent *event);
 
+    /**
+     * Paint a shape 
+     *
+     * @param shape the shape to paint
+     * @param painter the painter to paint to.
+     * @param converter to convert between document and view coordinates.
+     * @param forPrint if true, make sure only actual content is drawn and no decorations.
+     */
+    void paintShape( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint );
+
 private:
     /**
      * Add a KoShape to be displayed and managed by this manager.
@@ -165,6 +177,17 @@ private:
      * updates to the tree are done when they are asked for but when they are needed.
      */
     void updateTree();
+
+    /**
+     * Set the strategy of the KoShapeManager
+     *
+     * This can be used to change the behaviour of the painting of the shapes.
+     * @param strategy the new strategy. The given strategy has to be allocared 
+     *        on the stack and you the ownership will be taken by the shape manager.
+     *        The shape manager will delete the last set strategy when you set a 
+     *        new one.
+     */
+    void setStrategy( KoShapeManagerPaintingStrategy * strategy );
 
 signals:
     /// emitted when the selection is changed

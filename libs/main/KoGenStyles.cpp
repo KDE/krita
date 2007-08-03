@@ -51,7 +51,7 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
             } else {
                 if ( testStyle.m_familyName != parentStyle->m_familyName )
                 {
-                    kWarning(30003) << "KoGenStyles::lookup(" << name << ", family=" << testStyle.m_familyName << ") parent style '" << style.parentName() << "' has a different family: " << parentStyle->m_familyName << endl;
+                    kWarning(30003) << "KoGenStyles::lookup(" << name << ", family=" << testStyle.m_familyName << ") parent style '" << style.parentName() << "' has a different family: " << parentStyle->m_familyName;
                 }
 
                 testStyle.m_parentName = parentStyle->m_parentName;

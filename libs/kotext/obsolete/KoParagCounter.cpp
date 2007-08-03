@@ -847,7 +847,7 @@ QString KoParagCounter::makeRomanNumber( int n )
                                     RNTens[ ( n / 10 ) % 10 ] +
                                     RNUnits[ ( n ) % 10 ] );
     else { // should never happen, but better not crash if it does
-        kWarning(32500) << "makeRomanNumber: n=" << n << endl;
+        kWarning(32500) << "makeRomanNumber: n=" << n;
         return QString::number( n );
     }
 }

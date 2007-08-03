@@ -169,7 +169,7 @@ void KoTextLoader::loadStyles(KoTextLoadingContext& context, QList<KoXmlElement*
             followingStyles.append( following );
             ++stylesLoaded;
         }
-        else kWarning() << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+        else kWarning() << "Found duplicate style declaration, overwriting former " << sty->name();
     }
     if( followingStyles.count() != styleList().count() ) kDebug(32500) <<"Ouch," << followingStyles.count() <<" following-styles, but" << styleList().count() <<" styles in styleList";
     unsigned int i = 0;
@@ -315,7 +315,7 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
                     loadSection(context, tag, cursor);
                 }
                 else {
-                    kWarning(32500)<<"KoTextLoader::loadBody unhandled text::"<<localName<<endl;
+                    kWarning(32500)<<"KoTextLoader::loadBody unhandled text::"<<localName;
                 }
             }
             else if( tag.namespaceURI() == KoXmlNS::draw ) {
@@ -323,7 +323,7 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
                     loadFrame(context, tag, cursor);
                 }
                 else {
-                    kWarning(32500)<<"KoTextLoader::loadBody unhandled draw::"<<localName<<endl;
+                    kWarning(32500)<<"KoTextLoader::loadBody unhandled draw::"<<localName;
                 }
             } else if( tag.namespaceURI() == KoXmlNS::table ) {
                 if ( localName == "table" ) {
@@ -383,7 +383,7 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
                     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
                 }
                 else {
-                    kWarning(32500)<<"KoTextLoader::loadBody unhandled table::"<<localName<<endl;
+                    kWarning(32500)<<"KoTextLoader::loadBody unhandled table::"<<localName;
                 }
             }
             context.styleStack().restore(); // remove the styles added by the paragraph or list
@@ -970,7 +970,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
             if ( !handled ) {
                 handled = textDocument()->loadSpanTag( ts, context, this, pos, textData, customItem );
                 if ( !handled ) {
-                    kWarning(32500) << "Ignoring tag " << ts.tagName() << endl;
+                    kWarning(32500) << "Ignoring tag " << ts.tagName();
                     context.styleStack().restore();
                     continue;
                 }

@@ -68,7 +68,7 @@ void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
     if ( br.width() && br.height() )
         painter.scale(double(width)/double(br.width()),double(height)/double(br.height()));
     else
-        kWarning(30003) << "Null bounding rectangle: " << br.width() << " x " << br.height() << endl;
+        kWarning(30003) << "Null bounding rectangle: " << br.width() << " x " << br.height();
     painter.drawPicture(0,0,clipart);
     painter.restore();
 }
@@ -90,7 +90,7 @@ bool KoPictureClipart::loadData(const QByteArray& array, const QString& extensio
     {
         if (!m_clipart.load(&buffer, "svg"))
         {
-            kWarning(30003) << "Loading SVG has failed! (KoPictureClipart::load)" << endl;
+            kWarning(30003) << "Loading SVG has failed! (KoPictureClipart::load)";
             check = false;
         }
     }
@@ -98,7 +98,7 @@ bool KoPictureClipart::loadData(const QByteArray& array, const QString& extensio
     {
         if (!m_clipart.load(&buffer, NULL))
         {
-            kWarning(30003) << "Loading QPicture has failed! (KoPictureClipart::load)" << endl;
+            kWarning(30003) << "Loading QPicture has failed! (KoPictureClipart::load)";
             check = false;
         }
     }

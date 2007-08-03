@@ -491,7 +491,7 @@ inline void KoTextParag::setParagId( int i )
 inline int KoTextParag::paragId() const
 {
     //if ( id == -1 )
-    //	kWarning() << "invalid parag id!!!!!!!! (" << (void*)this << ")" << endl;
+    //	kWarning() << "invalid parag id!!!!!!!! (" << (void*)this << ")";
     return id;
 }
 

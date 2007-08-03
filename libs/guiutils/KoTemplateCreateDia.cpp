@@ -279,7 +279,7 @@ void KoTemplateCreateDia::slotOk() {
     if ( pos > -1 )
         ext = m_file.mid( pos );
     else
-        kWarning(30004) << "Template extension not found!" << endl;
+        kWarning(30004) << "Template extension not found!";
 
     KUrl dest;
     dest.setPath(templateDir+file+ext);
@@ -333,7 +333,7 @@ void KoTemplateCreateDia::slotOk() {
         else if(!d->m_customPixmap.isNull())
             d->m_customPixmap.save(icon, "PNG");
         else
-            kWarning(30004) << "Could not save the preview picture!" << endl;
+            kWarning(30004) << "Could not save the preview picture!";
     }
 
     // if there's a .directory file, we copy this one, too
@@ -488,7 +488,7 @@ void KoTemplateCreateDia::updatePixmap() {
             d->m_customPixmap=t.loadPicture(d->m_tree->componentData());
         }
         else
-            kWarning(30004) << "Trying to load picture" << endl;
+            kWarning(30004) << "Trying to load picture";
 
         if(!d->m_customPixmap.isNull())
             d->m_preview->setPixmap(d->m_customPixmap);

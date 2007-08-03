@@ -482,7 +482,7 @@ int KoTextParag::lineHeightOfChar( int i, int *bl, int *y ) const
 	--it;
     }
 
-    kWarning(32500) << "KoTextParag::lineHeightOfChar: couldn't find lh for " << i << endl;
+    kWarning(32500) << "KoTextParag::lineHeightOfChar: couldn't find lh for " << i;
     return 15;
 }
 
@@ -508,7 +508,7 @@ KoTextStringChar *KoTextParag::lineStartOfChar( int i, int *index, int *line ) c
 	--l;
     }
 
-    kWarning(32500) << "KoTextParag::lineStartOfChar: couldn't find " << i << endl;
+    kWarning(32500) << "KoTextParag::lineStartOfChar: couldn't find " << i;
     return 0;
 }
 
@@ -535,7 +535,7 @@ KoTextStringChar *KoTextParag::lineStartOfLine( int line, int *index ) const
 	return &str->at( i );
     }
 
-    kWarning(32500) << "KoTextParag::lineStartOfLine: couldn't find " << line << endl;
+    kWarning(32500) << "KoTextParag::lineStartOfLine: couldn't find " << line;
     return 0;
 }
 
@@ -768,7 +768,7 @@ bool KoTextParag::fullSelected( int id ) const
 int KoTextParag::lineY( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	kWarning(32500) << "KoTextParag::lineY: line " << l << " out of range!" << endl;
+	kWarning(32500) << "KoTextParag::lineY: line " << l << " out of range!";
 	return 0;
     }
 
@@ -784,7 +784,7 @@ int KoTextParag::lineY( int l ) const
 int KoTextParag::lineBaseLine( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	kWarning(32500) << "KoTextParag::lineBaseLine: line " << l << " out of range!" << endl;
+	kWarning(32500) << "KoTextParag::lineBaseLine: line " << l << " out of range!";
 	return 10;
     }
 
@@ -800,7 +800,7 @@ int KoTextParag::lineBaseLine( int l ) const
 int KoTextParag::lineHeight( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	kWarning(32500) << "KoTextParag::lineHeight: line " << l << " out of range!" << endl;
+	kWarning(32500) << "KoTextParag::lineHeight: line " << l << " out of range!";
 	return 15;
     }
 
@@ -816,7 +816,7 @@ int KoTextParag::lineHeight( int l ) const
 void KoTextParag::lineInfo( int l, int &y, int &h, int &bl ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	kWarning(32500) << "KoTextParag::lineInfo: line " << l << " out of range!" << endl;
+	kWarning(32500) << "KoTextParag::lineInfo: line " << l << " out of range!";
 	kDebug(32500) << (int)lineStarts.count() - 1 <<"" << l;
 	y = 0;
 	h = 15;
@@ -913,7 +913,7 @@ void KoTextCursor::setIndex( int i, bool /*restore*/ )
 // cursor, but this needs to be checked somewhere else.
     if ( i < 0 || i > string->length() ) {
 #if defined(QT_CHECK_RANGE)
-	kWarning(32500) << "KoTextCursor::setIndex: " << i << " out of range" << endl;
+	kWarning(32500) << "KoTextCursor::setIndex: " << i << " out of range";
         //abort();
 #endif
 	i = i < 0 ? 0 : string->length() - 1;
@@ -1379,7 +1379,7 @@ int KoTextParag::calculateLineSpacing( int line, int startChar, int lastChar ) c
             break;
         }
     }
-    kWarning() << "Unhandled linespacing type : " << m_layout.lineSpacingType << endl;
+    kWarning() << "Unhandled linespacing type : " << m_layout.lineSpacingType;
     return 0+shadow;
 }
 
@@ -2010,7 +2010,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 bool KoTextParag::lineHyphenated( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	kWarning() << "KoTextParag::lineHyphenated: line " << l << " out of range!" << endl;
+	kWarning() << "KoTextParag::lineHyphenated: line " << l << " out of range!";
 	return false;
     }
 
@@ -2056,7 +2056,7 @@ void KoTextParag::copyParagData( KoTextParag *parag )
     }
     // This should never happen in KWord, but it happens in KPresenter
     //else
-    //    kWarning() << "Paragraph has no style " << paragId() << endl;
+    //    kWarning() << "Paragraph has no style " << paragId();
 
     // No "following style" setting, or same style -> copy layout & format of previous paragraph
     if (!styleApplied)
@@ -2332,9 +2332,9 @@ void KoTextParag::printRTDebug( int info )
               << specialFlags
               << "] ------------------ " << endl;
     if ( prev() && prev()->paragId() + 1 != paragId() )
-        kWarning() << "  Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;
+        kWarning() << "  Previous paragraph " << prev() << " has ID " << prev()->paragId();
     if ( next() && next()->paragId() != paragId() + 1 )
-        kWarning() << "  Next paragraph " << next() << " has ID " << next()->paragId() << endl;
+        kWarning() << "  Next paragraph " << next() << " has ID " << next()->paragId();
     //if ( !next() )
     //    kDebug(32500) <<"  next is 0L";
     kDebug(32500) <<"  Style:" << style() <<"" << ( style() ? style()->name().toLocal8Bit().data() :"NO STYLE" );
@@ -2765,7 +2765,7 @@ void KoTextParag::loadOasisSpan( const KoXmlElement& parent, KoOasisContext& con
                                                        textData, customItem );
                 if ( !handled )
                 {
-                    kWarning(32500) << "Ignoring tag " << ts.tagName() << endl;
+                    kWarning(32500) << "Ignoring tag " << ts.tagName();
                     context.styleStack().restore();
                     continue;
                 }

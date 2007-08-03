@@ -191,7 +191,7 @@ double KoUnit::parseValue( const QString& _value, double defaultVal )
         return DM_TO_POINT( val * 10.0 );
     else if( unit == "km" )
         return DM_TO_POINT( val * 10000.0 );
-    kWarning() << "KoUnit::parseValue: Unit " << unit << " is not supported, please report." << endl;
+    kWarning() << "KoUnit::parseValue: Unit " << unit << " is not supported, please report.";
 
     // TODO : add support for mi/ft ?
     return defaultVal;

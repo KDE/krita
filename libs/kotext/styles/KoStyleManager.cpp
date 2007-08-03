@@ -105,7 +105,7 @@ void KoStyleManager::alteredStyle(const KoParagraphStyle *style) {
     Q_ASSERT(style);
     int id = style->styleId();
     if(id <= 0) {
-        kWarning(32500) << "alteredStyle received from a non registered style!" << endl;
+        kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
     if(! d->updateQueue.contains(id))
@@ -123,7 +123,7 @@ void KoStyleManager::alteredStyle(const KoCharacterStyle *style) {
     Q_ASSERT(style);
     int id = style->styleId();
     if(id <= 0) {
-        kWarning(32500) << "alteredStyle received from a non registered style!" << endl;
+        kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
     if(! d->updateQueue.contains(id))

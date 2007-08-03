@@ -163,7 +163,7 @@ KoFilter::ConversionStatus KoFilterChain::invokeChain()
     }
 
     if ( !m_chainLinks.current() ) {
-        kWarning( 30500 ) << "Huh?? Found a null pointer in the chain" << endl;
+        kWarning( 30500 ) << "Huh?? Found a null pointer in the chain";
         return KoFilter::StupidError;
     }
 
@@ -194,7 +194,7 @@ QString KoFilterChain::inputFile()
     if ( m_inputQueried == File )
         return m_inputFile;
     else if ( m_inputQueried != Nil ) {
-        kWarning( 30500 ) << "You already asked for some different source." << endl;
+        kWarning( 30500 ) << "You already asked for some different source.";
         return QString();
     }
     m_inputQueried = File;
@@ -218,12 +218,12 @@ QString KoFilterChain::outputFile()
     // sanity check: No embedded filter should ask for a plain file
     // ###### CHECK: This will break as soon as we support exporting embedding filters
     if ( filterManagerParentChain() )
-        kWarning( 30500 )<< "An embedded filter has to use storageFile()!" << endl;
+        kWarning( 30500 )<< "An embedded filter has to use storageFile()!";
 
     if ( m_outputQueried == File )
         return m_outputFile;
     else if ( m_outputQueried != Nil ) {
-        kWarning( 30500 ) << "You already asked for some different destination." << endl;
+        kWarning( 30500 ) << "You already asked for some different destination.";
         return QString();
     }
     m_outputQueried = File;
@@ -273,7 +273,7 @@ KoDocument* KoFilterChain::inputDocument()
     if ( m_inputQueried == Document )
         return m_inputDocument;
     else if ( m_inputQueried != Nil ) {
-        kWarning( 30500 ) << "You already asked for some different source." << endl;
+        kWarning( 30500 ) << "You already asked for some different source.";
         return 0;
     }
 
@@ -293,14 +293,14 @@ KoDocument* KoFilterChain::outputDocument()
     // sanity check: No embedded filter should ask for a document
     // ###### CHECK: This will break as soon as we support exporting embedding filters
     if ( filterManagerParentChain() ) {
-        kWarning( 30500 )<< "An embedded filter has to use storageFile()!" << endl;
+        kWarning( 30500 )<< "An embedded filter has to use storageFile()!";
         return 0;
     }
 
     if ( m_outputQueried == Document )
         return m_outputDocument;
     else if ( m_outputQueried != Nil ) {
-        kWarning( 30500 ) << "You already asked for some different destination." << endl;
+        kWarning( 30500 ) << "You already asked for some different destination.";
         return 0;
     }
 
@@ -546,7 +546,7 @@ void KoFilterChain::storageInit( const QString& file, KoStore::Mode mode, KoStor
 KoStoreDevice* KoFilterChain::storageInitEmbedding( const QString& name )
 {
     if ( m_outputStorage ) {
-        kWarning( 30500 ) << "Ooops! Something's really screwed here." << endl;
+        kWarning( 30500 ) << "Ooops! Something's really screwed here.";
         return 0;
     }
 

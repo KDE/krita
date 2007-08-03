@@ -143,14 +143,14 @@ bool KoOasisStore::loadAndParse( const QString& fileName, KoXmlDocument& doc, QS
 {
     //kDebug(30003) <<"loadAndParse: Trying to open" << fileName;
     if ( !m_store ) {
-        kWarning( 30003 ) << "No store backend" << endl;
+        kWarning( 30003 ) << "No store backend";
         errorMessage = i18n( "No store backend" );
         return false;
     }
 
     if ( !m_store->open(fileName) )
     {
-        kWarning(30003) << "Entry " << fileName << " not found!" << endl;
+        kWarning(30003) << "Entry " << fileName << " not found!";
         errorMessage = i18n( "Could not find %1", fileName );
         return false;
     }

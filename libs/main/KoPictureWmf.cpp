@@ -69,7 +69,7 @@ void KoPictureWmf::drawQPicture(QPicture& clipart, QPainter& painter,
     if ( br.width() && br.height() )
         painter.scale(double(width)/double(br.width()),double(height)/double(br.height()));
     else
-        kWarning(30003) << "Null bounding rectangle: " << br.width() << " x " << br.height() << endl;
+        kWarning(30003) << "Null bounding rectangle: " << br.width() << " x " << br.height();
     painter.drawPicture(0,0,clipart);
     painter.restore();
 }
@@ -88,7 +88,7 @@ bool KoPictureWmf::loadData(const QByteArray& array, const QString& /* extension
     KoWmfPaint wmf;
     if (!wmf.load(array))
     {
-        kWarning(30003) << "Loading WMF has failed! (KoPictureWmf::load)" << endl;
+        kWarning(30003) << "Loading WMF has failed! (KoPictureWmf::load)";
         return false;
     }
     m_originalSize = wmf.boundingRect().size();

@@ -147,13 +147,13 @@ KoInlineTextObjectManager *KoTextDocumentLayout::inlineObjectTextManager() {
 QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const {
     // nobody calls this code and I have no way of implementing it anyway...
     Q_UNUSED(block);
-    kWarning() << "KoTextDocumentLayout::blockBoundingRect is not implemented"<< endl;
+    kWarning() << "KoTextDocumentLayout::blockBoundingRect is not implemented";
     return QRectF(0, 0, 10, 10);
 }
 
 QSizeF KoTextDocumentLayout::documentSize() const {
     // nobody calls this code and I have no way of implementing it anyway...
-    kWarning() << "KoTextDocumentLayout::documentSize is not implemented"<< endl;
+    kWarning() << "KoTextDocumentLayout::documentSize is not implemented";
     return QSizeF(10, 10);
 }
 
@@ -170,7 +170,7 @@ void KoTextDocumentLayout::draw ( QPainter * painter, const KoTextDocumentLayout
 QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const {
     Q_UNUSED(frame);
     // nobody calls this code and I have no way of implementing it anyway...
-    kWarning() << "KoTextDocumentLayout::frameBoundingRect is not implemented"<< endl;
+    kWarning() << "KoTextDocumentLayout::frameBoundingRect is not implemented";
     return QRectF(0, 0, 10, 10);
 }
 

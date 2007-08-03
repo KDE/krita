@@ -447,7 +447,7 @@ void KoTemplateChooseDia::slotOk()
 	}
 	else
 	{
-	    kWarning(30003) << "Unsupported template chooser result: " << d->m_returnType << endl;
+	    kWarning(30003) << "Unsupported template chooser result: " << d->m_returnType;
 	    grp.writeEntry( "LastReturnType", QString() );
 	}
         slotButtonClicked( KDialog::Ok );

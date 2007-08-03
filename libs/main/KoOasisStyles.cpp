@@ -122,7 +122,7 @@ void KoOasisStyles::createStyleMap( const KoXmlDocument& doc, bool stylesDotXml 
                 d->layerSet = master;
             } else
                 // OASIS docu mentions style:handout-master and draw:layer-set here
-                kWarning(30003) << "Unknown tag " << master.tagName() << " in office:master-styles" << endl;
+                kWarning(30003) << "Unknown tag " << master.tagName() << " in office:master-styles";
         }
     }
 
@@ -1820,7 +1820,7 @@ QBrush KoOasisStyles::loadOasisPatternStyle( const KoStyleStack &styleStack, KoO
     {
         KoStoreDevice dev(store);
         if ( ! picture.load( &dev, strExtension ) )
-            kWarning() << "Cannot load picture: " << filename << " " << href << endl;
+            kWarning() << "Cannot load picture: " << filename << " " << href;
         store->close();
     }
 

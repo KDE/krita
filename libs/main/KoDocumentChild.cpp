@@ -237,7 +237,7 @@ bool KoDocumentChild::createAndLoadDocument( KoStore* store, bool doOpenURL, boo
     KoDocumentEntry e = KoDocumentEntry::queryByMimeType( mimeType );
     if ( e.isEmpty() )
     {
-        kWarning(30003) << "Could not create child document with type " << mimeType << endl;
+        kWarning(30003) << "Could not create child document with type " << mimeType;
         bool res = createUnavailDocument( store, true, mimeType );
         if ( res )
         {
@@ -253,7 +253,7 @@ bool KoDocumentChild::createAndLoadDocument( KoStore* store, bool doOpenURL, boo
 
     KoDocument * doc = e.createDoc( &errorMsg, d->m_parent );
     if (!doc) {
-        kWarning(30003) << "createDoc failed" << endl;
+        kWarning(30003) << "createDoc failed";
         bool res = createUnavailDocument( store, true, mimeType );
         if ( res )
         {
@@ -366,7 +366,7 @@ bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL, con
     KService::Ptr serv = KService::serviceByDesktopName( "kounavail" );
     if ( serv.isNull() )
     {
-        kWarning(30003) << "ERROR: service kounavail not found " << endl;
+        kWarning(30003) << "ERROR: service kounavail not found ";
         return false;
     }
     KoDocumentEntry e( serv );
@@ -412,7 +412,7 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
             store->enterDirectory( name );
 
             if ( !d->m_doc->saveOasis( store, manifestWriter ) ) {
-                kWarning(30003) << "KoDocumentChild::saveOasis failed" << endl;
+                kWarning(30003) << "KoDocumentChild::saveOasis failed";
                 return false;
             }
             // Now that we're done leave the directory again

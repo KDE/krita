@@ -110,7 +110,7 @@ bool KoLcmsColorProfile::load()
     file.close();
 
     if (d->profile == 0) {
-        kWarning() << "Failed to load profile from " << fileName() << endl;
+        kWarning() << "Failed to load profile from " << fileName();
     }
 
     return init();

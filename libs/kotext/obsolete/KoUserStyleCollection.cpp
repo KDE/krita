@@ -152,7 +152,7 @@ void KoUserStyleCollection::updateStyleListOrder( const QStringList &lst )
         if( style )
 	    orderStyle.append( style );
         else
-            kWarning(32500) << "updateStyleListOrder: style " << tmpString << " not found!" << endl;
+            kWarning(32500) << "updateStyleListOrder: style " << tmpString << " not found!";
     }
     // we'll lose (and leak) styles if the list didn't have all the styles
     Q_ASSERT( m_styleList.count() == orderStyle.count() );

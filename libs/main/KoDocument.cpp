@@ -1194,7 +1194,7 @@ bool KoDocument::saveToStream( QIODevice * dev )
     dev->open( QIODevice::WriteOnly );
     int nwritten = dev->write( s.data(), s.size() );
     if ( nwritten != (int)s.size() )
-      kWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " <<  s.size() << endl;
+      kWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " <<  s.size();
     return nwritten == (int)s.size();
 }
 
@@ -1446,7 +1446,7 @@ bool KoDocument::openURL( const KUrl & _url )
     {
         // We have no koffice shell when we are being embedded as a readonly part.
         //if ( d->m_shells.isEmpty() )
-        //    kWarning(30003) << "KoDocument::openURL no shell yet !" << endl;
+        //    kWarning(30003) << "KoDocument::openURL no shell yet !";
         // Add to recent actions list in our shells
         Q3PtrListIterator<KoMainWindow> it( d->m_shells );
         for (; it.current(); ++it )
@@ -1678,7 +1678,7 @@ bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, KoXmlD
 
     if (!store->open(filename))
     {
-        kWarning(30003) << "Entry " << filename << " not found!" << endl;
+        kWarning(30003) << "Entry " << filename << " not found!";
         d->lastErrorMessage = i18n( "Could not find %1",filename );
         return false;
     }
@@ -1954,7 +1954,7 @@ bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
         }
         _store->close();
     } else {
-        kWarning() << "couldn't open " << url << endl;
+        kWarning() << "couldn't open " << url;
     }
 
     _store->pushDirectory();
@@ -2380,18 +2380,18 @@ QByteArray KoDocument::nativeFormatMimeType() const
 {
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
     if ( !service ) {
-        kWarning(30003) << "No native service defined to read NativeMimeType from desktop file!" << endl;
+        kWarning(30003) << "No native service defined to read NativeMimeType from desktop file!";
         return QByteArray();
     }
     QByteArray nativeMimeType = service->property( "X-KDE-NativeMimeType" ).toString().toLatin1();
     if ( nativeMimeType.isEmpty() ) {
         // shouldn't happen, let's find out why it happened
         if ( !service->serviceTypes().contains( "KOfficePart" ) )
-            kWarning(30003) << "Wrong desktop file, KOfficePart isn't mentioned" << endl;
+            kWarning(30003) << "Wrong desktop file, KOfficePart isn't mentioned";
         else if ( !KServiceType::serviceType( "KOfficePart" ) )
-            kWarning(30003) << "The KOfficePart service type isn't installed!" << endl;
+            kWarning(30003) << "The KOfficePart service type isn't installed!";
         else
-            kWarning(30003) << "Failed to read NativeMimeType from desktop file!" << endl;
+            kWarning(30003) << "Failed to read NativeMimeType from desktop file!";
     }
     return nativeMimeType;
 }
@@ -2445,7 +2445,7 @@ QByteArray KoDocument::readNativeFormatMimeType( const KComponentData &component
         else {
             QString instname = componentData.isValid() ? componentData.componentName() : KGlobal::mainComponent().componentName();
             if ( instname != "koshell" ) // hack for koshell
-                kWarning(30003) << service->desktopEntryPath() << ": no X-KDE-NativeMimeType entry!" << endl;
+                kWarning(30003) << service->desktopEntryPath() << ": no X-KDE-NativeMimeType entry!";
         }
     }
 

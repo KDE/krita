@@ -1800,7 +1800,7 @@ void KoMailMergeVariable::loadOasis( const KoXmlElement &/*elem*/, KoOasisContex
 
 void KoMailMergeVariable::saveOasis( KoXmlWriter& /*writer*/, KoTextSavingContext& /*context*/ ) const
 {
-        kWarning(32500) << "Not implemented: OASIS saving of mail merge variables" << endl;
+        kWarning(32500) << "Not implemented: OASIS saving of mail merge variables";
 }
 
 
@@ -2091,10 +2091,10 @@ void KoFieldVariable::load( KoXmlElement& elem )
     {
         m_subtype = e.attribute( "subtype" ).toInt();
         if ( m_subtype == VST_NONE )
-            kWarning() << "Field subtype of -1 found in the file !" << endl;
+            kWarning() << "Field subtype of -1 found in the file !";
         m_varValue = QVariant( e.attribute( "value" ) );
     } else
-        kWarning() << "FIELD element not found !" << endl;
+        kWarning() << "FIELD element not found !";
 }
 
 void KoFieldVariable::loadOasis( const KoXmlElement &elem, KoOasisContext& /*context*/ )
@@ -2239,7 +2239,7 @@ void KoFieldVariable::recalc()
     QString value;
     switch( m_subtype ) {
         case VST_NONE:
-            kWarning() << "KoFieldVariable::recalc() called with m_subtype = VST_NONE !" << endl;
+            kWarning() << "KoFieldVariable::recalc() called with m_subtype = VST_NONE !";
             break;
         case VST_FILENAME:
             value = m_doc->url().fileName();
@@ -2276,7 +2276,7 @@ void KoFieldVariable::recalc()
         {
             KoDocumentInfo * info = m_doc->documentInfo();
             if ( !info )
-                kWarning() << "Author information not found in documentInfo !" << endl;
+                kWarning() << "Author information not found in documentInfo !";
             else
             {
                 if ( m_subtype == VST_AUTHORNAME )
@@ -2316,7 +2316,7 @@ void KoFieldVariable::recalc()
             KoDocumentInfo * info = m_doc->documentInfo();
 
             if ( !info )
-                kWarning() << "'About' page not found in documentInfo !" << endl;
+                kWarning() << "'About' page not found in documentInfo !";
             else
             {
                 if ( m_subtype == VST_TITLE )

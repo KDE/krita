@@ -116,7 +116,7 @@ void KoParagStyle::loadStyle( KoXmlElement & parentElem, int docVersion )
         m_name = nameElem.attribute("value");
         m_displayName = i18nc( "Style name", m_name.toUtf8() );
     } else
-        kWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
+        kWarning() << "No NAME tag in LAYOUT -> no name for this style!";
 
     // The followingStyle stuff has to be done after loading all styles.
 

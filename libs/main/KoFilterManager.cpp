@@ -156,7 +156,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     if ( !m_graph.isValid() ) {
         bool userCancelled = false;
 
-        kWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
+        kWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser";
         if ( m_document )
         {
 	    if ( !m_document->isAutoErrorHandlingEnabled() )
@@ -277,7 +277,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QByteArr
         m_graph.setSourceMimeType( t->name().toLatin1() );
 
         if ( !m_graph.isValid() ) {
-            kWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
+            kWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser";
 
             QApplication::setOverrideCursor( Qt::ArrowCursor );
             KoFilterChooser chooser(0, KoFilterManager::mimeFilter ());

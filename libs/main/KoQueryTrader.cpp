@@ -59,7 +59,7 @@ KoDocument* KoDocumentEntry::createDoc( QString* errorMsg, KoDocument* parent ) 
     if( !factory ) {
         if ( errorMsg )
             *errorMsg = KLibLoader::self()->lastErrorMessage();
-        kWarning(30003) << KLibLoader::self()->lastErrorMessage() << endl;
+        kWarning(30003) << KLibLoader::self()->lastErrorMessage();
         return 0;
     }
 
@@ -67,7 +67,7 @@ KoDocument* KoDocumentEntry::createDoc( QString* errorMsg, KoDocument* parent ) 
     if ( factory->inherits( "KParts::Factory" ) )
       obj = static_cast<KParts::Factory *>(factory)->createPart( 0L, parent, "KoDocument" );
     else {
-      kWarning(30003) << "factory doesn't inherit KParts::Factory ! It is a " << factory->metaObject()->className() << endl; // This shouldn't happen...
+      kWarning(30003) << "factory doesn't inherit KParts::Factory ! It is a " << factory->metaObject()->className(); // This shouldn't happen...
       obj = factory->create( parent, "KoDocument" );
     }
 
@@ -90,7 +90,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
   Q3ValueList<KoDocumentEntry> vec = query( false,constr );
   if ( vec.isEmpty() )
   {
-    kWarning(30003) << "Got no results with " << constr << endl;
+    kWarning(30003) << "Got no results with " << constr;
     // Fallback to the old way (which was probably wrong, but better be safe)
     QString constr = QString::fromLatin1( "'%1' in ServiceTypes" ).arg( mimetype );
     vec = query( constr );
@@ -154,7 +154,7 @@ Q3ValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QSt
   }
 
   if ( lst.count() > 1 && !_constr.isEmpty() )
-    kWarning(30003) << "KoDocumentEntry::query " << constr << " got " << max << " offers!" << endl;
+    kWarning(30003) << "KoDocumentEntry::query " << constr << " got " << max << " offers!";
 
   return lst;
 }
@@ -206,7 +206,7 @@ KoFilter* KoFilterEntry::createFilter( KoFilterChain* chain, QObject* parent )
     KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName( m_service->library() ) );
 
     if ( !factory ) {
-        kWarning(30003) << KLibLoader::self()->lastErrorMessage() << endl;
+        kWarning(30003) << KLibLoader::self()->lastErrorMessage();
         return 0;
     }
 

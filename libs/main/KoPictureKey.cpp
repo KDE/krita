@@ -131,7 +131,7 @@ void KoPictureKey::loadAttributes( const QDomElement &elem )
     if (!m_lastModified.isValid())
     {
         // If the date/time is not valid, make it valid by force!
-        kWarning(30003) << "Correcting invalid date/time: " << toString()  << " (in KoPictureKey::loadAttributes)" << endl;
+        kWarning(30003) << "Correcting invalid date/time: " << toString()  << " (in KoPictureKey::loadAttributes)";
         resetDateTimeToEpoch(m_lastModified);
     }
 }

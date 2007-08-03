@@ -115,7 +115,7 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
     }
     else
     {
-        kWarning(30004) << "Not a number: " << number << endl;
+        kWarning(30004) << "Not a number: " << number;
         return QValidator::Invalid;
     }
     newVal = KoUnit::ptToUnit( newVal, d->unit );
@@ -205,7 +205,7 @@ double KoUnitDoubleSpinBox::valueFromText( const QString& str ) const
     if ( ok )
       kDebug(30004) <<"valueFromText:" << str <<": => :" << str2 <<": =>" << QString::number( dbl, 'f', 12 );
     else
-        kWarning(30004) << "valueFromText error:" << str << ": => :" << str2 << ":" << endl;
+        kWarning(30004) << "valueFromText error:" << str << ": => :" << str2 << ":";
     return dbl;
 }
 

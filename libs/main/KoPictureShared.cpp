@@ -101,7 +101,7 @@ void KoPictureShared::draw(QPainter& painter, int x, int y, int width, int heigh
     else
     {
         // Draw a red box (easier DEBUG)
-        kWarning(30003) << "Drawing red rectangle! (KoPictureShared::draw)" << endl;
+        kWarning(30003) << "Drawing red rectangle! (KoPictureShared::draw)";
         painter.save();
         painter.setBrush(QColor(255,0,0));
         painter.drawRect(x,y,width,height);

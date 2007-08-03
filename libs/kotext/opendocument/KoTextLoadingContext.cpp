@@ -77,7 +77,7 @@ bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, int level
 {
     KoXmlElement* fullListStyle = oasisStyles().listStyles()[listStyleName];
     if ( !fullListStyle ) {
-        kWarning(32500) << "List style " << listStyleName << " not found!" << endl;
+        kWarning(32500) << "List style " << listStyleName << " not found!";
         return false;
     }
     else
@@ -101,7 +101,7 @@ bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, // for de
         --i;
     }
     if ( listLevelStyle.isNull() ) {
-        kWarning(32500) << "List level style for level " << level << " in list style " << listStyleName << " not found!" << endl;
+        kWarning(32500) << "List level style for level " << level << " in list style " << listStyleName << " not found!";
         return false;
     }
     //kDebug(32500) <<"Pushing list-level-style from list-style" << listStyleName <<" level" << level;

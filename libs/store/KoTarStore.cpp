@@ -144,13 +144,13 @@ bool KoTarStore::openRead( const QString& name )
     const KArchiveEntry * entry = m_pTar->directory()->entry( name );
     if ( entry == 0L )
     {
-        //kWarning(s_area) << "Unknown filename " << name << endl;
+        //kWarning(s_area) << "Unknown filename " << name;
         //return KIO::ERR_DOES_NOT_EXIST;
         return false;
     }
     if ( entry->isDirectory() )
     {
-        kWarning(s_area) << name << " is a directory !" << endl;
+        kWarning(s_area) << name << " is a directory !";
         //return KIO::ERR_IS_DIRECTORY;
         return false;
     }
@@ -169,7 +169,7 @@ bool KoTarStore::closeWrite()
     kDebug(s_area) <<"Writing file" << m_sName <<" into TAR archive. size"
                     << m_iSize << endl;
     if ( !m_pTar->writeFile( m_sName , "user", "group", m_byteArray.data(),m_iSize ) )
-        kWarning( s_area ) << "Failed to write " << m_sName << endl;
+        kWarning( s_area ) << "Failed to write " << m_sName;
     m_byteArray.resize( 0 ); // save memory
     return true;
 }

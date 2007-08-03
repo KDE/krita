@@ -473,7 +473,7 @@ bool KoEncryptedStore::openRead( const QString& name ) {
         return false;
     }
     if( fileArchiveEntry->isDirectory( ) ) {
-        kWarning( s_area ) << name << " is a directory!" << endl;
+        kWarning( s_area ) << name << " is a directory!";
         return false;
     }
     const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>( fileArchiveEntry );
@@ -499,7 +499,7 @@ bool KoEncryptedStore::openRead( const QString& name ) {
             m_stream->close( );
             delete m_stream;
             m_stream = NULL;
-            kWarning(s_area) << "read error" << endl;
+            kWarning(s_area) << "read error";
             return false;
         }
         m_stream->close( );

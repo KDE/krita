@@ -1146,7 +1146,7 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
     KDataTool* tool = info.createTool( );
     if ( !tool )
     {
-        kWarning() << "Could not create Tool !" << endl;
+        kWarning() << "Could not create Tool !";
         return;
     }
 

@@ -1730,7 +1730,7 @@ void KoTextObject::ensureFormatted( KoTextParag * parag, bool emitAfterFormattin
     while ( !parag->isValid() )
     {
         if ( !m_lastFormatted ) {
-            kWarning() << "ensureFormatted for parag " << parag << " " << parag->paragId() << " still not formatted, but m_lastFormatted==0" << endl;
+            kWarning() << "ensureFormatted for parag " << parag << " " << parag->paragId() << " still not formatted, but m_lastFormatted==0";
             return;
         }
         // The paragid diff is "a good guess". The >=1 is a safety measure ;)
@@ -1826,10 +1826,10 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
             }
 
             if ( parag != m_lastFormatted )
-                kWarning() << "Some code changed m_lastFormatted during formatting! Was " << parag->paragId() << ", is now " << m_lastFormatted->paragId() << endl;
+                kWarning() << "Some code changed m_lastFormatted during formatting! Was " << parag->paragId() << ", is now " << m_lastFormatted->paragId();
 #if 0 // This happens now that formatting can 'abort' (e.g. due to page not yet created)
             else if (!parag->isValid())
-                kWarning() << "PARAGRAPH " << parag->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
+                kWarning() << "PARAGRAPH " << parag->paragId() << " STILL INVALID AFTER FORMATTING";
 #endif
             m_lastFormatted = parag->next();
         }

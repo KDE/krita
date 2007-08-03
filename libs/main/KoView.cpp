@@ -464,7 +464,7 @@ void KoView::removeStatusBarItem( QWidget * widget )
             break;
         }
     if ( it == d->m_statusBarItems.end() )
-        kWarning() << "KoView::removeStatusBarItem. Widget not found : " << widget << endl;
+        kWarning() << "KoView::removeStatusBarItem. Widget not found : " << widget;
 }
 
 QDockWidget * KoView::createDock(const QString & title, QWidget * w)

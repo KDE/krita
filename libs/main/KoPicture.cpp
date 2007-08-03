@@ -138,7 +138,7 @@ void KoPicture::draw(QPainter& painter, int x, int y, int width, int height, int
     else
     {
         // Draw a white box
-        kWarning(30003) << "Drawing white rectangle! (KoPicture::draw)" << endl;
+        kWarning(30003) << "Drawing white rectangle! (KoPicture::draw)";
         painter.save();
         painter.setBrush(QColor(255, 255, 255));
         painter.drawRect(x,y,width,height);

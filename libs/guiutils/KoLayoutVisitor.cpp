@@ -120,7 +120,7 @@ void KoLayoutVisitor::relayout() {
                 int row, column, rowSpan, columnSpan;
                 layout->getItemPosition(index, &row, &column, &rowSpan, &columnSpan);
                 if(columnSpan > 1)
-                    kWarning() << "Attention, colSpan for " << label->text() << " is " << columnSpan << endl;
+                    kWarning() << "Attention, colSpan for " << label->text() << " is " << columnSpan;
                 layout->setColumnMinimumWidth(column, right -label->mapToGlobal(QPoint(0,0)).x());
             }
             column.clear();

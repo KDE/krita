@@ -78,7 +78,7 @@ int KoStyleCollection::loadOasisStyles( KoOasisContext& context )
             ++stylesLoaded;
         }
         else
-            kWarning() << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+            kWarning() << "Found duplicate style declaration, overwriting former " << sty->name();
     }
 
     if( followingStyles.count() != styleList().count() ) {

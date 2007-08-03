@@ -196,7 +196,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const KoXmlElement& 
                 else if ( dir == "R" )
                     layout.direction = QChar::DirR;
                 else
-                    kWarning() << "Unexpected value for paragraph direction: " << dir << endl;
+                    kWarning() << "Unexpected value for paragraph direction: " << dir;
             }
         } else {
             flow = element.attribute( "value" ); // KWord-0.8
@@ -515,7 +515,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
         // kotext has "at least" but that's for the linespacing, not for the entire line height!
         // Strange. kotext also has "at least" for the whole line height....
         // Did we make the wrong choice in kotext?
-        //kWarning() << "Unimplemented support for style:line-height-at-least: " << value << endl;
+        //kWarning() << "Unimplemented support for style:line-height-at-least: " << value;
         // Well let's see if this makes a big difference.
         layout.lineSpacingType = KoParagLayout::LS_AT_LEAST;
         layout.lineSpacing = KoUnit::parseValue( value );
@@ -672,7 +672,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
     if ( layout.style )
         element.setAttribute( "value", layout.style->displayName() );
     //else
-    //    kWarning() << "KoParagLayout::saveParagLayout: style==0!" << endl;
+    //    kWarning() << "KoParagLayout::saveParagLayout: style==0!";
 
     element = doc.createElement( "FLOW" );
     parentElem.appendChild( element );

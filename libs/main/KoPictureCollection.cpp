@@ -99,7 +99,7 @@ KoPicture KoPictureCollection::downloadPicture(const KUrl& url, QWidget *window)
     if (pic.setKeyAndDownloadPicture(url, window))
         insertPicture(pic.getKey(), pic);
     else
-        kWarning(30003) << "Could not download KoPicture from " << url.prettyUrl() << endl;
+        kWarning(30003) << "Could not download KoPicture from " << url.prettyUrl();
 
     return pic;
 }
@@ -122,7 +122,7 @@ KoPicture KoPictureCollection::loadPicture(const QString& fileName)
         if (c.loadFromFile(fileName))
             insertPicture(key, c);
         else
-            kWarning(30003) << "Could not load KoPicture from " << fileName << endl;
+            kWarning(30003) << "Could not load KoPicture from " << fileName;
     }
     return c;
 }
@@ -161,7 +161,7 @@ bool KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, co
     {
         KoPicture c = findPicture( *it );
         if (c.isNull())
-            kWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
+            kWarning(30003) << "Picture " << (*it).toString() << " not found in collection !";
         else
         {
             QString storeURL=getFileName(pictureType, c, counter);
@@ -186,7 +186,7 @@ bool KoPictureCollection::saveOasisToStore( KoStore *store, Q3ValueList<KoPictur
     {
         KoPicture c = findPicture( *it );
         if (c.isNull())
-            kWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
+            kWarning(30003) << "Picture " << (*it).toString() << " not found in collection !";
         else
         {
             QString storeURL( getOasisFileName(c) );
@@ -218,7 +218,7 @@ QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &d
     {
         KoPicture picture = findPicture( *it );
         if ( picture.isNull() )
-            kWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
+            kWarning(30003) << "Picture " << (*it).toString() << " not found in collection !";
         else
         {
             QString pictureName=getFileName(pictureType, picture, counter);
@@ -285,7 +285,7 @@ void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & store
             u.prepend( "file:" );
             if (!store->open( u ))
             {
-                kWarning(30003) << "Could load neither from store nor from file: " << it.value() << endl;
+                kWarning(30003) << "Could load neither from store nor from file: " << it.value();
                 return;
             }
         }

@@ -92,12 +92,12 @@ KPrinter::PageSize KoPageFormat::printerPageSize( KoPageFormat::Format format )
 {
     if ( format == ScreenSize )
     {
-        kWarning() << "You use the page layout SCREEN. Printing in ISO A4 Landscape." << endl;
+        kWarning() << "You use the page layout SCREEN. Printing in ISO A4 Landscape.";
         return KPrinter::A4;
     }
     if ( format == CustomSize )
     {
-        kWarning() << "The used page layout (Custom) is not supported by KPrinter. Printing in A4." << endl;
+        kWarning() << "The used page layout (Custom) is not supported by KPrinter. Printing in A4.";
         return KPrinter::A4;
     }
     return pageFormatInfo[ format ].kprinter;

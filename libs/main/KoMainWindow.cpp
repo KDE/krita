@@ -1284,7 +1284,7 @@ void KoMainWindow::slotFilePrintPreview()
 {
     if ( !rootView() )
     {
-        kWarning() << "KoMainWindow::slotFilePrint : No root view!" << endl;
+        kWarning() << "KoMainWindow::slotFilePrint : No root view!";
         return;
     }
     KPrinter printer( false );
@@ -1368,7 +1368,7 @@ void KoMainWindow::slotToolbarToggled( bool toggle )
         saveMainWindowSettings( KGlobal::config()->group( rootDocument()->componentData().componentName() ) );
   }
   else
-    kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!" << endl;
+    kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
 }
 
 bool KoMainWindow::toolbarIsVisible(const char *tbName)
@@ -1382,7 +1382,7 @@ void KoMainWindow::showToolbar( const char * tbName, bool shown )
     QWidget * tb = toolBar( tbName );
     if ( !tb )
     {
-        kWarning(30003) << "KoMainWindow: toolbar " << tbName << " not found." << endl;
+        kWarning(30003) << "KoMainWindow: toolbar " << tbName << " not found.";
         return;
     }
     if ( shown )
@@ -1443,7 +1443,7 @@ void KoMainWindow::slotRemoveView() {
         view=d->m_rootViews.first();
     view->hide();
     if ( !d->m_rootViews.removeRef(view) )
-        kWarning() << "view not found in d->m_rootViews!" << endl;
+        kWarning() << "view not found in d->m_rootViews!";
 
     if(d->m_rootViews.count()==1)
     {
@@ -1585,7 +1585,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
           d->m_toolbarList.append( act );
       }
       else
-          kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!" << endl;
+          kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
     }
     plugActionList( "toolbarlist", d->m_toolbarList );
 

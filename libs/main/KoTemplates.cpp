@@ -55,7 +55,7 @@ const QPixmap &KoTemplate::loadPicture( const KComponentData &componentData ) {
         // ### TODO: use the class KoPicture instead of QImage to support non-image pictures
         QImage img( m_picture );
         if (img.isNull()) {
-            kWarning() << "Couldn't find icon " << m_picture << endl;
+            kWarning() << "Couldn't find icon " << m_picture;
             m_pixmap=QPixmap();
             return m_pixmap;
         }

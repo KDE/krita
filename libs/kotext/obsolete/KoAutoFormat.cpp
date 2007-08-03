@@ -740,7 +740,7 @@ void KoAutoFormat::saveConfig()
     else
         f.setFileName(KStandardDirs::locateLocal("data", "koffice/autocorrect/"+m_autoFormatLanguage + ".xml",m_doc->componentData()));
     if(!f.open(QIODevice::WriteOnly)) {
-        kWarning()<<"Error during saving autoformat to " << f.fileName() << endl;
+        kWarning()<<"Error during saving autoformat to " << f.fileName();
 	return;
     }
     QTextStream ts(&f);

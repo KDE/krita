@@ -50,7 +50,7 @@ KoFilter::~KoFilter()
 KoEmbeddingFilter::~KoEmbeddingFilter()
 {
     if ( m_partStack.count() != 1 )
-        kWarning() << "Someone messed with the part stack" << endl;
+        kWarning() << "Someone messed with the part stack";
     delete m_partStack.pop();
     delete d;
 }

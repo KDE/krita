@@ -64,7 +64,7 @@ void KoOasisLoadingContext::fillStyleStack( const KoXmlElement& object, const ch
         if ( style )
             addStyles( style, family, isStyleAutoStyle );
         else
-            kWarning(32500) << "fillStyleStack: no style named " << styleName << " found." << endl;
+            kWarning(32500) << "fillStyleStack: no style named " << styleName << " found.";
     }
 }
 
@@ -86,7 +86,7 @@ void KoOasisLoadingContext::addStyles( const KoXmlElement* style, const char* fa
         if ( parentStyle )
             addStyles( parentStyle, family, usingStylesAutoStyles );
         else
-            kWarning(32500) << "Parent style not found: " << parentStyleName << endl;
+            kWarning(32500) << "Parent style not found: " << parentStyleName;
     }
     else if ( family ) {
         const KoXmlElement* def = m_styles.defaultStyle( family );

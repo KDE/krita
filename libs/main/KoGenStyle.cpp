@@ -96,7 +96,7 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
             addAttribute( "style:family", QString::fromLatin1( m_familyName ) );
     else {
         if ( qstrcmp( elementName, "style:style" ) == 0 )
-            kWarning(30003) << "User style " << name << " is without family - invalid. m_type=" << m_type << endl;
+            kWarning(30003) << "User style " << name << " is without family - invalid. m_type=" << m_type;
     }
 
 #if 0 // #ifndef NDEBUG

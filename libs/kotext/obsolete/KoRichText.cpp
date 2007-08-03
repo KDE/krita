@@ -154,7 +154,7 @@ KoTextCursor *KoTextDocDeleteCommand::execute( KoTextCursor *c )
 {
     KoTextParag *s = doc->paragAt( id );
     if ( !s ) {
-        kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
+        kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId();
 	return 0;
     }
 
@@ -178,7 +178,7 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
 {
     KoTextParag *s = doc->paragAt( id );
     if ( !s ) {
-	kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
+	kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId();
 	return 0;
     }
 
@@ -1632,7 +1632,7 @@ void KoTextParag::insertLineStart( int index, KoTextParagLineStart *ls )
     if ( ( it = lineStarts.find( index ) ) == lineStarts.end() ) {
 	lineStarts.insert( index, ls );
     } else {
-        kWarning(32500) << "insertLineStart: there's already a line for char index=" << index << endl;
+        kWarning(32500) << "insertLineStart: there's already a line for char index=" << index;
 	delete *it;
 	lineStarts.erase( it );
 	lineStarts.insert( index, ls );

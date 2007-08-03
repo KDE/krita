@@ -54,7 +54,7 @@ void KoTextIterator::init( const Q3ValueList<KoTextObject *> & lstObjects, KoTex
         } else {
             // !? FromCursor option can't work
             m_options &= ~KFind::FromCursor;
-            kWarning(32500) << "FromCursor specified, but no textview?" << endl;
+            kWarning(32500) << "FromCursor specified, but no textview?";
         }
     } // no else here !
 
@@ -92,7 +92,7 @@ void KoTextIterator::init( const Q3ValueList<KoTextObject *> & lstObjects, KoTex
                     m_lstObjects.pop_front();
                     m_lstObjects.push_back( textobj );
                     if ( m_lstObjects.first() == initialFirst ) { // safety
-                        kWarning(32500) << "Didn't manage to find " << textView->textObject() << " in the list of textobjects!!!" << endl;
+                        kWarning(32500) << "Didn't manage to find " << textView->textObject() << " in the list of textobjects!!!";
                         break;
                     }
                 }
@@ -102,7 +102,7 @@ void KoTextIterator::init( const Q3ValueList<KoTextObject *> & lstObjects, KoTex
                     m_lstObjects.pop_back();
                     m_lstObjects.push_front( textobj );
                     if ( m_lstObjects.first() == initialFirst ) { // safety
-                        kWarning(32500) << "Didn't manage to find " << textView->textObject() << " in the list of textobjects!!!" << endl;
+                        kWarning(32500) << "Didn't manage to find " << textView->textObject() << " in the list of textobjects!!!";
                         break;
                     }
                 }

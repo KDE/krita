@@ -165,7 +165,7 @@ QString KoDocumentInfo::aboutInfo( const QString& info ) const
 {
     if( !m_aboutTags.contains( info ) )
     {
-        kWarning() << info + " page not found in documentInfo !" << endl;
+        kWarning() << info + " page not found in documentInfo !";
         return QString();
     }
 

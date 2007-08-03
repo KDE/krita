@@ -1933,7 +1933,7 @@ void KoParagTabulatorsWidget::setCurrentTab( double tabPos ) {
             setActiveItem( i );
             return;
         }
-    kWarning() << "KoParagTabulatorsWidget::setCurrentTab: no tab found at pos=" << tabPos << endl;
+    kWarning() << "KoParagTabulatorsWidget::setCurrentTab: no tab found at pos=" << tabPos;
 }
 
 QString KoParagTabulatorsWidget::tabToString(const KoTabulator &tab) {

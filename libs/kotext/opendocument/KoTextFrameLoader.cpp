@@ -95,7 +95,7 @@ void KoTextFrameLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElem
             loadImage(context, frameElem, ts, cursor);
         }
         else {
-            kWarning(32500) << "KoTextFrameLoader::loadFrame Unhandled frame: " << localName << endl;
+            kWarning(32500) << "KoTextFrameLoader::loadFrame Unhandled frame: " << localName;
         }
     }
 }
@@ -106,7 +106,7 @@ void KoTextFrameLoader::loadImage(KoTextLoadingContext& context, const KoXmlElem
     const KoXmlElement imageElem = _imageElem;
     KoShape* shape = loadImageShape(context, frameElem, imageElem, cursor);
     if( ! shape ) {
-        kWarning(32500) << "KoTextFrameLoader::loadImage Failed to create picture shape" << endl;
+        kWarning(32500) << "KoTextFrameLoader::loadImage Failed to create picture shape";
         return;
     }
 }

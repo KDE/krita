@@ -371,7 +371,7 @@ static void importUnderline( const QString& in,
     } else if( in == "bold" ) {
         underline = KoTextFormat::U_SIMPLE_BOLD;
     } else
-        kWarning() << k_funcinfo << " unsupported text-underline value: " << in << endl;
+        kWarning() << k_funcinfo << " unsupported text-underline value: " << in;
 }
 
 void KoTextFormat::load( KoOasisContext& context )
@@ -1424,7 +1424,7 @@ void KoTextFormat::parseShadowFromCss( const QString& _css )
     {
         QStringList tokens = css.split(' ', QString::SkipEmptyParts);
         if ( tokens.isEmpty() ) {
-            kWarning(32500) << "Parse error in text-shadow: " << css << endl;
+            kWarning(32500) << "Parse error in text-shadow: " << css;
             return;
         }
         // Check which token looks like a color
@@ -1835,7 +1835,7 @@ KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, c
     cachedFormat->collection = this;
     cKey.insert( cachedFormat->key(), cachedFormat );
     if ( cachedFormat->key() != key )
-	kWarning() << "ASSERT: keys for format not identical: '" << cachedFormat->key() << " '" << key << "'" << endl;
+	kWarning() << "ASSERT: keys for format not identical: '" << cachedFormat->key() << " '" << key << "'";
 #ifdef DEBUG_COLLECTION
     kDebug(32500) <<" format of font and col '" << cachedFormat->key() <<"' - worst case";
 #endif

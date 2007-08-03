@@ -42,7 +42,7 @@ void KoParameterShape::moveHandle( int handleId, const QPointF & point, Qt::Keyb
 {
     if ( handleId >= m_handles.size() )
     {
-        kWarning(30006) << "handleId out of bounds" << endl;
+        kWarning(30006) << "handleId out of bounds";
         return;
     }
 

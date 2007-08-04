@@ -26,9 +26,6 @@
         <height>0</height>
       </size>
     </property>
-    <property name="windowTitle" >
-      <string>PreviewWidgetBase</string>
-    </property>
     <layout class="QGridLayout" >
       <property name="margin" >
         <number>0</number>
@@ -171,9 +168,6 @@
                 <widget class="QCheckBox" name="checkBoxAutoUpdate" >
                   <property name="text" >
                     <string>&amp;Autoupdate</string>
-                  </property>
-                  <property name="shortcut" >
-                    <string>Alt+A</string>
                   </property>
                   <property name="checked" >
                     <bool>true</bool>

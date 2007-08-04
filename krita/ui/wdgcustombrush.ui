@@ -12,9 +12,6 @@
     <height>265</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>KisWdgCustomBrush</string>
-  </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
     <number>11</number>

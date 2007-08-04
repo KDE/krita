@@ -134,7 +134,8 @@ void ModifySelection::slotShrinkSelection()
         qint32 yradius = dlgShrinkSelection->yradius();
         bool shrinkFromImageBorder = dlgShrinkSelection->shrinkFromImageBorder();
 
-        m_view->selectionManager()->shrink(xradius, yradius, shrinkFromImageBorder);
+        //third parameter is edge_lock so shrinkFromImageBorder needs to be inverted
+        m_view->selectionManager()->shrink(xradius, yradius, !shrinkFromImageBorder);
     }
 
     delete dlgShrinkSelection;

@@ -1498,7 +1498,7 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
             dist = ((tmpy * tmpy) / (yradius * yradius) +
                     (tmpx * tmpx) / (xradius * xradius));
             if (dist < 1.0)
-                a = 255 * (quint8)(1.0 - sqrt (dist));
+                a = (quint8)(255 * (1.0 - sqrt (dist)));
             else
                 a = 0;
             density[ x][ y] = a;

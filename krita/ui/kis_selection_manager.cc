@@ -1012,6 +1012,9 @@ void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock
     if (!dev->hasSelection()) return;
     KisPixelSelectionSP selection = dev->pixelSelection();
 
+    KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Shrink"), dev);
+    Q_CHECK_PTR(t);
+
     //determine the layerSize
     QRect layerSize = img->bounds();
     /*
@@ -1159,6 +1162,7 @@ void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock
     delete[] buf;
     delete[] out;
 
+    img->undoAdapter()->addCommand(t);
     dev->setDirty(img->bounds());
     dev->emitSelectionChanged();
 }
@@ -1390,10 +1394,13 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
     if (!dev) return;
 
     if (!dev->hasSelection()) return;
-    KisSelectionSP selection = dev->selection();
+    KisPixelSelectionSP selection = dev->pixelSelection();
 
     //determine the layerSize
     QRect layerSize = img->bounds();
+
+    KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Border"), dev);
+    Q_CHECK_PTR(t);
 
     /*
       This function has no bugs, but if you imagine some you can
@@ -1436,6 +1443,10 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
         for (qint32 i = 0; i < 3; i++)
             delete[] source[i];
         delete[] transition;
+
+        img->undoAdapter()->addCommand(t);
+        dev->setDirty(img->bounds());
+        dev->emitSelectionChanged();
         return;
     }
 
@@ -1625,7 +1636,8 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
     density -= xradius;
     delete[] density;
 
-    dev->setDirty();
+    img->undoAdapter()->addCommand(t);
+    dev->setDirty(img->bounds());
     dev->emitSelectionChanged();
 }
 

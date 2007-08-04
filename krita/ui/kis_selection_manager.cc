@@ -869,7 +869,7 @@ void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
     KisPixelSelectionSP selection = dev->pixelSelection();
 
     //determine the layerSize
-    QRect layerSize = dev->exactBounds();
+    QRect layerSize = img->bounds();
     /*
       Any bugs in this function are probably also in thin_region
       Blame all bugs in this function on jaycox@gimp.org
@@ -1020,7 +1020,7 @@ void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock
     KisPixelSelectionSP selection = dev->pixelSelection();
 
     //determine the layerSize
-    QRect layerSize = dev->exactBounds();
+    QRect layerSize = img->bounds();
     /*
       pretty much the same as fatten_region only different
       blame all bugs in this function on jaycox@gimp.org
@@ -1400,7 +1400,7 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
     KisSelectionSP selection = dev->selection();
 
     //determine the layerSize
-    QRect layerSize = dev->exactBounds();
+    QRect layerSize = img->bounds();
 
     /*
       This function has no bugs, but if you imagine some you can

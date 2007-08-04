@@ -194,12 +194,6 @@ signals:
      */
     void inputDeviceChanged(const KoInputDevice &device);
 
-    /**
-     * Every time a new canvas controller is set, this event is emitted.
-     * @param controller the new canvas controller
-     */
-    void changedCanvas(const KoCanvasController *canvas);
-
 protected:
     friend class KoToolProxy;
     /**

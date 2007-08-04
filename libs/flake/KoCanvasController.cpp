@@ -28,18 +28,21 @@
 #include "KoShape.h"
 #include "KoViewConverter.h"
 #include "KoCanvasBase.h"
+#include "KoCanvasObserver.h"
+#include <KoMainWindow.h>
 
 #include <ksharedconfig.h>
 
-#include <QMouseEvent>
-#include <QPainter>
-#include <QScrollBar>
-#include <QEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPainter>
+#include <QtGui/QScrollBar>
+#include <QtCore/QEvent>
+#include <QtGui/QDockWidget>
 
 #include <config-opengl.h>
 
 #ifdef HAVE_OPENGL
-#include <QGLWidget>
+#include <QtOpenGL/QGLWidget>
 #endif
 
 class KoCanvasController::Private
@@ -501,6 +504,24 @@ void KoCanvasController::wheelEvent( QWheelEvent *event ) {
     }
     else
         QAbstractScrollArea::wheelEvent(event);
+}
+
+void KoCanvasController::activate()
+{
+    QWidget *parent = this;
+    while( parent->parentWidget() ) 
+        parent = parent->parentWidget();
+
+    KoMainWindow *mw = dynamic_cast<KoMainWindow*> (parent);
+    if( ! mw )
+        return;
+
+    foreach(QDockWidget *docker, mw->dockWidgets())
+    {
+        KoCanvasObserver *observer = dynamic_cast<KoCanvasObserver*>( docker );
+        if( observer )
+            observer->setCanvas( canvas() );
+    }
 }
 
 #include "KoCanvasController.moc"

@@ -313,6 +313,12 @@ private:
     bool canvasIsOpenGL() const;
     void emitPointerPositionChangedSignals(QEvent *event);
 
+    friend class KoToolManager;
+    /**
+     * Gets called by the tool manager if this canvas controller is the current active canvas controller.
+     */
+    void activate();
+
 private:
 
     class Private;

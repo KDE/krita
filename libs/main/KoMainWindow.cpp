@@ -1796,4 +1796,9 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
     return dockWidget;
 }
 
+QList<QDockWidget*> KoMainWindow::dockWidgets() 
+{
+    return d->m_dockWidgetMap.values();
+}
+
 #include "KoMainWindow.moc"

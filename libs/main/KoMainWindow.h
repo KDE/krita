@@ -167,6 +167,9 @@ public:
      */
     QDockWidget* createDockWidget(KoDockFactory* factory);
 
+    /// Return the list of dock widgets belonging to this main window.
+    QList<QDockWidget*> dockWidgets();
+
 signals:
     /**
      * This signal is emitted if the document has been saved successfully.

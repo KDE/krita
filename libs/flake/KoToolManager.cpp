@@ -397,7 +397,7 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
     connect(connector, SIGNAL(selectionChanged(QList<KoShape*>)), this,
             SLOT(selectionChanged(QList<KoShape*>)));
 
-    emit changedCanvas( d->canvasData->canvas );
+    d->canvasData->canvas->activate();
 }
 
 void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
@@ -426,20 +426,19 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
             d->canvasData = data;
             postSwitchTool();
             d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
-            emit changedCanvas( d->canvasData->canvas );
+            d->canvasData->canvas->activate();
             return;
         }
     }
     // no such inputDevice for this canvas...
     d->canvasData = d->canvasses.value(newCanvas).first();
     d->inputDevice = d->canvasData->inputDevice;
-    emit changedCanvas( d->canvasData->canvas );
+    d->canvasData->canvas->activate();
 }
 
 void KoToolManager::detachCanvas(KoCanvasController *controller) {
     if (d->canvasData && d->canvasData->canvas == controller) {
         d->canvasData = 0; // replace with a blank one
-        emit changedCanvas( 0 );
     }
 
     QList<KoTool *> tools;
@@ -572,7 +571,7 @@ void KoToolManager::switchInputDevice(const KoInputDevice &device) {
                 postSwitchTool();
                 d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
             }
-            emit changedCanvas( d->canvasData->canvas );
+            d->canvasData->canvas->activate();
             return;
         }
     }
@@ -588,7 +587,7 @@ void KoToolManager::switchInputDevice(const KoInputDevice &device) {
 
     switchToolRequested(oldTool);
     emit inputDeviceChanged(device);
-    emit changedCanvas( d->canvasData->canvas );
+    d->canvasData->canvas->activate();
 }
 
 bool KoToolManager::eventFilter(QObject *object, QEvent *event)

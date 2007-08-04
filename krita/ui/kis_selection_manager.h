@@ -80,7 +80,6 @@ public slots:
     void invert();
     void copySelectionToNewLayer();
     void feather();
-    void border();
     void expand();
     void contract();
     void smooth();
@@ -132,7 +131,6 @@ private:
     QAction *m_invert;
     QAction *m_toNewLayer;
     QAction *m_feather;
-    QAction *m_border;
     QAction *m_expand;
     QAction *m_smooth;
     QAction *m_contract;

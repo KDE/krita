@@ -90,7 +90,6 @@ KisSelectionManager::KisSelectionManager(KisView2 * parent, KisDoc2 * doc)
       m_invert(0),
       m_toNewLayer(0),
       m_feather(0),
-      m_border(0),
       m_expand(0),
       m_smooth(0),
       m_contract(0),
@@ -203,10 +202,6 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Hide Selection")));
     m_toggleDisplaySelection->setChecked(true);
 
-    m_border  = new KAction(i18n("Border..."), this);
-    collection->addAction("border", m_border );
-    connect(m_border, SIGNAL(triggered()), this, SLOT(border()));
-
     m_expand  = new KAction(i18n("Expand..."), this);
     collection->addAction("expand", m_expand );
     connect(m_expand, SIGNAL(triggered()), this, SLOT(expand()));
@@ -304,7 +299,6 @@ void KisSelectionManager::updateGUI()
 
     m_feather->setEnabled(enable);
 
-    m_border->setEnabled(enable);
     m_expand->setEnabled(enable);
     m_smooth->setEnabled(enable);
     m_contract->setEnabled(enable);
@@ -846,7 +840,6 @@ bool KisSelectionManager::displaySelection()
     return m_toggleDisplaySelection->isChecked();
 }
 // XXX: Maybe move these esoteric functions to plugins?
-void KisSelectionManager::border() {}
 void KisSelectionManager::expand() {}
 void KisSelectionManager::contract() {}
 void KisSelectionManager::similar() {}

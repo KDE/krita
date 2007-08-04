@@ -134,7 +134,6 @@
 
     <Separator/>
     <Action name="feather"/>
-   <Action name = "grow"/>
    <Action name = "similar"/>
    <Separator/>
    <Action name="toggle_display_selection"/>

@@ -397,10 +397,12 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
             QList<KoPathPoint*> points = shape->pointsAt( roi );
             if( ! points.empty() )
             {
-                useCursor(Qt::SizeAllCursor);
-
                 KoPathPoint *p = points.first();
                 KoPathPoint::KoPointType type = KoPathPoint::Node;
+
+                // the node point must be hit if the point is not selected yet
+                if( ! m_pointSelection.contains( p ) && ! roi.contains( p->point() ) )
+                    return;
 
                 // check for the control points as otherwise it is no longer 
                 // possible to change the control points when they are the same as the point
@@ -408,6 +410,8 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
                     type = KoPathPoint::ControlPoint1;
                 else if( p->properties() & KoPathPoint::HasControlPoint2 && roi.contains( p->controlPoint2() ) )
                     type = KoPathPoint::ControlPoint2;
+
+                useCursor(Qt::SizeAllCursor);
 
                 ActivePointHandle *prev = dynamic_cast<ActivePointHandle*> (m_activeHandle);
                 if(prev && prev->m_activePoint == p && prev->m_activePointType == type)

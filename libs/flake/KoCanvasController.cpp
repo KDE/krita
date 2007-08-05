@@ -118,6 +118,7 @@ void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
     canvas->setCanvasController(this);
 
     emit canvasSet(this);
+    activate();
 }
 
 KoCanvasBase* KoCanvasController::canvas() const {

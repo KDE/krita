@@ -96,22 +96,6 @@ set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/k
 # Those are included with e.g. <koproperty/set.h>
 set(KOPROPERTY_INCLUDES ${CMAKE_SOURCE_DIR}/libs ${CMAKE_BINARY_DIR}/libs)
 
-set(libkdgantt1_SRCS
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttView.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewEventItem.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewItem.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewItemDrag.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewSubwidgets.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewSummaryItem.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewTaskItem.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewTaskLink.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttViewTaskLinkGroup.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttMinimizeSplitter.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttSemiSizingControl.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttSizingControl.cpp
-	${CMAKE_SOURCE_DIR}/kdgantt1/KDGanttXMLTools.cpp
-	)
-
 # check if build krita there to be able to test if we can build filters/krita
 set(REQUIRED_LCMS_VERSION 115)
 
@@ -163,7 +147,6 @@ if(SHOULD_BUILD_KPRESENTER)
     macro_optional_add_subdirectory(kpresenter)
 endif(SHOULD_BUILD_KPRESENTER)
 
-macro_optional_add_subdirectory(kdgantt1)
 macro_optional_add_subdirectory(kdgantt)
 # macro_optional_add_subdirectory(kchart)
 FIND_PROGRAM(BZIP2_EXECUTABLE NAMES bzip2 )

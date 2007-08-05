@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Grayscale Color Model with Alpha
 Name[de]=Graustufen-Farbmodell mit Alphakanal
+Name[el]=Χρωματικό μοντέλο διαβαθμίσεων του γκρι με άλφα
 Name[fa]=مدل رنگ مقیاس خاکستری با آلفا
 Name[ja]=アルファチャンネル付きグレースケールカラーモデル
 Name[pt]=Modelo de Cor de Tons de Cinzento
@@ -39,7 +40,7 @@ Comment[nl]=Kleurmodel voor afbeeldingen in 8-bit grijswaarden
 Comment[nn]=Fargemodell for 8-bits gråtonebilete
 Comment[pl]=Przestrzeń braw dla 8-bitowych obrazków w skali szarości
 Comment[pt]=Modelo de cor para imagens de tons de cinzento com 8 bits
-Comment[pt_BR]=Modelo de cor para imagens com 8-bits de tons de cinza
+Comment[pt_BR]=Modelo de cor para imagens de tons de cinzento com 8 bits
 Comment[ru]=Цветовое пространство градаций серого (8-бит)
 Comment[sl]=Barvni model za 8 bitne sivinske slike
 Comment[sr]=Модел боја за слике у 8-битним сивим нијансама

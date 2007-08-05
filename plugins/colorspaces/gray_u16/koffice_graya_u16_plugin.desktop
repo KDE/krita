@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Grayscale Color Model with Alpha Channel (16-bit integer)
 Name[de]=Graustufen-Farbmodell mit Alphakanal (16-bit Ganzzahl)
+Name[el]=Χρωματικό μοντέλο διαβαθμίσεων του γκρι με κανάλι άλφα (16 bit ακέραιοι)
 Name[fa]=مدل رنگ مقیاس خاکستری با مجرای آلفا )عدد صحیح ۱۶ بیتی(
 Name[ja]=アルファチャンネル付きグレースケールカラーモデル (16 ビット整数)
 Name[pt]=Modelo de Cor de Tons de Cinzento (inteiros de 16 bits)
@@ -34,7 +35,7 @@ Comment[ne]=प्रति च्यानल ग्रेस्केल छ�
 Comment[nl]=Kleurmodel voor 16-bit/kanaal grijswaarde-afbeeldingen
 Comment[pl]=Przestrzeń barw dla obrazków w skali szarości z 16-bitową liczbą całkowitą na kanał
 Comment[pt]=Modelo de cor para imagens de tons de cinzento com 16 bits por canal
-Comment[pt_BR]=Modelo de cor para imagens de tons de cinza com 16 bits por canal
+Comment[pt_BR]=Modelo de cor para imagens de tons de cinzento com 16 bits por canal
 Comment[ru]=Цветовое пространство градаций серого (целое 16-бит/канал)
 Comment[sl]=Barvni model za 16-bitna cela števila/kanal sivinske slike
 Comment[sr]=Модел боја за слике у сивим нијансама, 16-битно целобројно по каналу

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KOffice Docker Plugin
 Name[de]=KOffice Docker-Modul
+Name[el]=Πρόσθετο προσάρτησης του KOffice
 Name[fa]=وصلۀ پیونددهندۀ KOffice
 Name[pt]='Plugin' Acoplável do KOffice
 Name[pt_BR]='Plugin' Acoplável do KOffice
@@ -12,6 +13,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOffice/Dock
 Comment=A plugin that contains a so called 'dockwidget'
 Comment[de]=Ein Modul, das ein sogenanntes 'dockwidget' enthält
+Comment[el]=Ένα πρόσθετο που περιέχει ένα γραφικό συστατικό προσάρτησης
 Comment[pt]=Um 'plugin' que contém um 'módulo acoplável'
 Comment[pt_BR]=Um 'plugin' que contém um 'módulo acoplável'
 Comment[sv]=Ett insticksprogram som innehåller en så kallad 'grafisk dockningskomponent'

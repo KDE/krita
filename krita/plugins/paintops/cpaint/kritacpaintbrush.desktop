@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Chinese Brush
 Name[de]=Chinesischer Pinsel
+Name[el]=Κινέζικο πινέλο
 Name[ja]=書道の筆
 Name[pt]=Pincel Chinês
 Name[pt_BR]=Pincel Chinês
@@ -11,6 +12,7 @@ Name[x-test]=xxChinese Brushxx
 Name[zh_TW]=毛筆刷
 Comment=Chinese Brush
 Comment[de]=Chinesischer Pinsel
+Comment[el]=Κινέζικο πινέλο
 Comment[ja]=書道の筆
 Comment[pt]=Pincel Chinês
 Comment[pt_BR]=Pincel Chinês

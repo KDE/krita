@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Smeary Brush
 Name[de]=Schmieriger Pinsel
+Name[el]=Πινέλο δαχτυλιάς
 Name[ga]=Scuab Smeartha
 Name[pt]=Pincel de Fumo
 Name[pt_BR]=Pincel de Fumo
@@ -10,6 +11,7 @@ Name[x-test]=xxSmeary Brushxx
 Name[zh_TW]=油畫筆刷
 Comment=Smeary brush
 Comment[de]=Schmieriger Pinsel
+Comment[el]=Πινέλο δαχτυλιάς
 Comment[ga]=Scuab smeartha
 Comment[pt]=Pincel de fumo
 Comment[pt_BR]=Pincel de fumo

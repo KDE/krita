@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Text Editing plugin for the KOffce texttool
 Name[de]=Modul zur Textbearbeitung für das KOffice-Textwerkzeug
+Name[el]=Πρόσθετο επεξεργασίας κειμένου για το KOffice
 Name[pt]='Plugin' de edição de texto para o KOffice
 Name[pt_BR]='Plugin' de edição de texto para o KOffice
 Name[sv]=Insticksprogram med textredigering för Koffice textverktyg
@@ -11,6 +12,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-EditingPlugin
 Comment=Definition of a text-editing plugin
 Comment[de]=Definition eines Moduls zur Textbearbeitung
+Comment[el]=Καθορισμός ενός πρόσθετου επεξεργασίας κειμένου
 Comment[pt]=Definição de um 'plugin' de edição de texto
 Comment[pt_BR]=Definição de um 'plugin' de edição de texto
 Comment[sv]=Definition av ett Insticksprogram för textredigering

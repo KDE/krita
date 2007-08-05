@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Flake Plugin
 Name[de]=Flake-Modul
+Name[el]=Πρόσθετο flake
 Name[fa]=وصلۀ Flake
 Name[ga]=Breiseán Flake
 Name[ja]=Flake プラグイン
@@ -15,6 +16,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOffice/Flake
 Comment=A plugin that contains a set of a shape and a tool
 Comment[de]=Ein Modul, dass einen Satz an Formen und ein Werkzeug enthält
+Comment[el]=Ένα πρόσθετο που περιέχει ένα σύνολο σχήματος και εργαλείου
 Comment[pt]=Um 'plugin' que contém um conjunto de uma forma e uma ferramenta
 Comment[pt_BR]=Um 'plugin' que contém um conjunto de uma forma e uma ferramenta
 Comment[sv]=Ett insticksprogram som innehåller en formmängd och ett verktyg

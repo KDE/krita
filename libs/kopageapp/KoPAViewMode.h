@@ -56,7 +56,16 @@ public:
      *
      * @param master if true work on master pages, if false work on normal pages
      */
-    virtual void setMasterMode( bool master ) { Q_UNUSED(master); }
+    virtual void setMasterMode( bool master );
+
+    /**
+     * @brief Check if the active view mode works on master/normal pages
+     *
+     * The default impementation allways returns true
+     *
+     * @return true
+     */
+    virtual bool masterMode();
 
     /**
      * @brief This method is called when the view mode is activated
@@ -66,14 +75,14 @@ public:
      * @param previousViewMode the view mode which was active before the
      *        activation of this view mode;
      */
-    virtual void activate( KoPAViewMode * previousViewMode ) { Q_UNUSED( previousViewMode ); }
+    virtual void activate( KoPAViewMode * previousViewMode );
 
     /**
      * @bried This method is called when the view mode is deactivated
      *
      * The default implementation does nothing.
      */
-    virtual void deactivate() {}
+    virtual void deactivate();
 
     /**
      * @brief Get the canvas

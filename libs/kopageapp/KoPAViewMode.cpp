@@ -32,6 +32,25 @@ KoPAViewMode::~KoPAViewMode()
 {
 }
 
+void KoPAViewMode::setMasterMode( bool master ) 
+{ 
+    Q_UNUSED(master); 
+}
+
+bool KoPAViewMode::masterMode()
+{
+    return false;
+}
+
+void KoPAViewMode::activate( KoPAViewMode * previousViewMode ) 
+{ 
+    Q_UNUSED( previousViewMode ); 
+}
+
+void KoPAViewMode::deactivate() 
+{
+}
+
 KoPACanvas * KoPAViewMode::canvas() const
 {
     return m_canvas;
@@ -41,3 +60,4 @@ KoPAView * KoPAViewMode::view() const
 {
     return m_view;
 }
+

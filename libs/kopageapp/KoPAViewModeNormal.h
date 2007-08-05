@@ -51,6 +51,8 @@ public:
      */
     virtual void setMasterMode( bool master );
 
+    virtual bool masterMode();
+
 private:
     /// if true it works on master pages, if false on normal pages
     bool m_masterMode;

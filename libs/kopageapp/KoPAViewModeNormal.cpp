@@ -119,8 +119,9 @@ void KoPAViewModeNormal::wheelEvent( QWheelEvent * event, const QPointF &point )
 
 void KoPAViewModeNormal::setMasterMode( bool master )
 {
+    m_masterMode = master;
     KoPAPage * page = dynamic_cast<KoPAPage *>( m_view->activePage() );
-    if ( master ) {
+    if ( m_masterMode ) {
         if ( page ) {
             m_view->setActivePage( page->masterPage() );
             m_savedPage = page;
@@ -130,4 +131,9 @@ void KoPAViewModeNormal::setMasterMode( bool master )
         m_view->setActivePage( m_savedPage );
         m_savedPage = 0;
     }
+}
+
+bool KoPAViewModeNormal::masterMode()
+{
+    return m_masterMode;
 }

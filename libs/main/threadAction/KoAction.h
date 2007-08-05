@@ -23,7 +23,7 @@
 
 #include "komain_export.h"
 
-#include <QVariant>
+#include <QtCore/QVariant>
 
 class KoExecutePolicy;
 

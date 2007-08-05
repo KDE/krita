@@ -20,8 +20,8 @@
 #define KO_JOBSLISTPOLICY_H
 #include <threadweaver/QueuePolicy.h>
 
-#include <QMutex>
-#include <QList>
+#include <QtCore/QMutex>
+#include <QtCore/QList>
 
 class ThreadWeaver::Job;
 

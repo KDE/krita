@@ -23,6 +23,7 @@
 // koffice includes
 #include <KoToolFactory.h>
 #include <KoToolManager.h>
+#include <KoCanvasController.h>
 
 // kde + qt includes
 #include <kdialog.h>
@@ -33,7 +34,7 @@
 
 KoToolBox::KoToolBox(KoCanvasController *canvas, const QString &title)
     : QDockWidget(),
-    m_canvas(canvas)
+    m_canvas(canvas->canvas())
 {
     m_buttonGroup = new QButtonGroup(this);
     setFeatures(DockWidgetMovable | DockWidgetFloatable);
@@ -110,7 +111,7 @@ void KoToolBox::showEvent(QShowEvent *event) {
     QWidget *parent = parentWidget();
     while(parent) {
         QMainWindow *mw = dynamic_cast<QMainWindow *> (parent);
-        parent = parentWidget();
+        parent = parent->parentWidget();
         if(mw == 0)
             continue;
         switch (mw->dockWidgetArea(this)) {
@@ -131,7 +132,7 @@ void KoToolBox::showEvent(QShowEvent *event) {
 }
 
 void KoToolBox::setActiveTool(const KoCanvasController *canvas, int id) {
-    if(canvas != m_canvas)
+    if(canvas->canvas() != m_canvas)
         return;
     QAbstractButton *button = m_buttonGroup->button(id);
     if(button)
@@ -141,6 +142,10 @@ void KoToolBox::setActiveTool(const KoCanvasController *canvas, int id) {
 }
 
 void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<QString> &codes) {
+    setButtonsVisible(canvas->canvas(), codes);
+}
+
+void KoToolBox::setButtonsVisible(const KoCanvasBase *canvas, const QList<QString> &codes) {
     if(canvas != m_canvas)
         return;
     foreach(QAbstractButton *button, m_visibilityCodes.keys()) {
@@ -230,6 +235,10 @@ void KoToolBox::ToolArea::setOrientation ( Qt::Orientation o )
     m_layout->setDirection(o == Qt::Horizontal
             ? QBoxLayout::TopToBottom
             : QBoxLayout::LeftToRight);
+}
+
+void KoToolBox::setCanvas(KoCanvasBase *canvas) {
+    m_canvas = canvas;
 }
 
 #include "KoToolBox.moc"

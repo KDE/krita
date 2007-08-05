@@ -20,6 +20,8 @@
 #ifndef _KO_TOOLBOX_H_
 #define _KO_TOOLBOX_H_
 
+#include <KoCanvasObserver.h>
+
 #include <QList>
 #include <QMap>
 #include <QHash>
@@ -30,6 +32,7 @@ class QBoxLayout;
 class QAbstractButton;
 class ToolArea;
 class KoCanvasController;
+class KoCanvasBase;
 
 /**
  * KoToolBox is a kind of super-specialized toolbar that can order
@@ -45,7 +48,7 @@ class KoCanvasController;
  * rotating in a smart way to show the buttons optimally.
  * @see KoToolManager
  */
-class KoToolBox : public QDockWidget {
+class KoToolBox : public QDockWidget, public KoCanvasObserver {
     Q_OBJECT
 public:
     /// constructor
@@ -92,12 +95,16 @@ public slots:
      */
     void enableTools(bool enable);
 
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
+
 private:
     /**
      * Setup the toolbox by adding the buttons in the right configuration to the ui.
      * You should only call this method one time, and you should call it prior to showing.
      */
     void setup();
+    void setButtonsVisible(const KoCanvasBase *canvas, const QList<QString> &codes);
 
 
 private:
@@ -132,7 +139,7 @@ private:
     QMap<QString, ToolArea*> m_toolAreas;
 
     void showEvent(QShowEvent *event);
-    const KoCanvasController * const m_canvas;
+    const KoCanvasBase *m_canvas;
 };
 
 #endif // _KO_TOOLBOX_H_

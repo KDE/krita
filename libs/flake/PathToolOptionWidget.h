@@ -35,7 +35,7 @@ public:
     };
     Q_DECLARE_FLAGS(Types, Type)
 
-    PathToolOptionWidget(KoPathTool *tool, QWidget *parent = 0);
+    explicit PathToolOptionWidget(KoPathTool *tool, QWidget *parent = 0);
     ~PathToolOptionWidget();
 
 public slots:

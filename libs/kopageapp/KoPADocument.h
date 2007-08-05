@@ -101,10 +101,6 @@ public:
 
     QList<KoPAPageBase*> pages() const;
 
-protected:
-    virtual KoView *createViewInstance( QWidget *parent ) = 0;
-    virtual const char *odfTagName() = 0;
-
     /**
      * Get a new page for inserting into the document
      *
@@ -122,6 +118,11 @@ protected:
      * Reimplement when you need a derivered class in your kopageapplication 
      */
     virtual KoPAMasterPage * newMasterPage();
+
+
+protected:
+    virtual KoView *createViewInstance( QWidget *parent ) = 0;
+    virtual const char *odfTagName() = 0;
 
     void saveOdfAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, bool stylesDotXml );
     void saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyles, QFile *masterStyles );

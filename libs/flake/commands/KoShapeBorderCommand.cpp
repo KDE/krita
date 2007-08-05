@@ -29,7 +29,7 @@ public:
     Private() {}
     ~Private() {
         foreach(KoShapeBorderModel* border, oldBorders) {
-            if(border->useCount() <= 0)
+            if(border && border->useCount() <= 0)
                 delete border;
         }
     }

@@ -112,7 +112,7 @@ protected:
      *
      * Reimplement when you need a derivered class in your kopageapplication 
      */
-    virtual KoPAPage * newPage();
+    virtual KoPAPage * newPage( KoPAMasterPage * masterPage = 0 );
 
     /**
      * Get a new master page for inserting into the document

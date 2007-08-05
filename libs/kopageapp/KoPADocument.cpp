@@ -431,9 +431,9 @@ QList<KoPAPageBase*> KoPADocument::pages() const
     return m_pages;
 }
 
-KoPAPage * KoPADocument::newPage()
+KoPAPage * KoPADocument::newPage( KoPAMasterPage * masterPage )
 {
-    return new KoPAPage( 0 );
+    return new KoPAPage( masterPage );
 }
 
 KoPAMasterPage * KoPADocument::newMasterPage()

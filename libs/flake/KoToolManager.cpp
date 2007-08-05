@@ -373,6 +373,7 @@ void KoToolManager::postSwitchTool() {
         }
         d->canvasData->dummyToolLabel->setText(i18n("Active tool: %1", name));
     }
+    d->canvasData->canvas->setToolOptionWidget(toolWidget);
     emit changedTool(d->canvasData->canvas, d->uniqueToolIds.value(d->canvasData->activeTool));
 }
 

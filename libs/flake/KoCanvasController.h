@@ -154,6 +154,12 @@ public:
     void ensureVisible( KoShape *shape );
 
     /**
+     * will cause the toolOptionWidgetChanged to be emitted and all listeners to be updated to the new widget.
+     * @param widget the widget
+     */
+    void setToolOptionWidget(QWidget *widget);
+
+    /**
      * @brief zooms in around the center.
      *
      * The center must be specified in document coordinates. The scrollbar positions
@@ -249,7 +255,7 @@ signals:
     void sizeChanged(const QSize & size );
 
     /**
-     * XXX
+     * Emit the new tool option widget to be used with this canvas.
      */
     void toolOptionWidgetChanged(QWidget *widget);
 

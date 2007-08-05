@@ -357,6 +357,10 @@ void KoCanvasController::zoomTo(const QRect &viewRect)
     emit zoomBy(scale);
 }
 
+void KoCanvasController::setToolOptionWidget(QWidget *widget) {
+    emit toolOptionWidgetChanged(widget);
+}
+
 void KoCanvasController::setDocumentSize( const QSize & sz )
 {
     m_d->ignoreScrollSignals = true;

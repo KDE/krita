@@ -115,6 +115,12 @@ protected slots:
     /// Called when the selection changed
     virtual void selectionChanged();
 
+    /// Insert a new page after the current one
+    void insertPage();
+
+    /// Delete the current page
+    void deletePage();
+
 protected:
     KoPADocument *m_doc;
     KoPACanvas *m_canvas;
@@ -130,13 +136,14 @@ private:
     KToggleAction *m_actionViewShowGrid;
     KToggleAction *m_actionViewShowMasterPages;
 
+    KAction * m_actionInsertPage;
+    KAction * m_actionDeletePage;
+
     KoRuler *m_horizontalRuler;
     KoRuler *m_verticalRuler;
     KToggleAction* m_viewRulers;
 
     KoZoomAction *m_zoomAction;
-
-    KAction *m_actionFormatFont;
 };
 
 #endif /* KOPAVIEW_H */

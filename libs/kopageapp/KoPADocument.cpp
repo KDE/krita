@@ -410,6 +410,8 @@ void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
     }
 
     pages.insert( index, page );
+    
+    // move active view to new page
 }
 
 int KoPADocument::takePage( KoPAPageBase *page )
@@ -420,8 +422,22 @@ int KoPADocument::takePage( KoPAPageBase *page )
 
     int index = pages.indexOf( page );
 
+    // it should not be possible to delete the last page
+    Q_ASSERT( pages.size() > 1 );
+
     if ( index != -1 ) {
         pages.removeAt( index );
+
+        // change to previous page when the page is the active one if the first one is delete go to the next one
+        int newIndex = index == 0 ? 0 : index - 1;
+        KoPAPageBase * newActivePage = pages.at( newIndex );
+        foreach( KoView *view, views() )
+        {
+            KoPAView * kopaView = static_cast<KoPAView*>( view );
+            if ( page == kopaView->activePage() ) {
+                kopaView->setActivePage( newActivePage );
+            }
+        }
     }
     return index;
 }

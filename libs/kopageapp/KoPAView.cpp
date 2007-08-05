@@ -46,6 +46,8 @@
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"
 #include "KoPAViewModeNormal.h"
+#include "commands/KoPAPageInsertCommand.h"
+#include "commands/KoPAPageDeleteCommand.h"
 
 #include <klocale.h>
 #include <kicon.h>
@@ -163,6 +165,18 @@ void KoPAView::initActions()
     m_viewRulers->setToolTip(i18n("Show/hide the view's rulers"));
     connect(m_viewRulers, SIGNAL(triggered(bool)), this, SLOT(setShowRulers(bool)));
     setShowRulers(true);
+
+    m_actionInsertPage = new KAction( i18n( "Insert Page" ), this );
+    actionCollection()->addAction( "edit_insertpage", m_actionInsertPage );
+    m_actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
+    m_actionInsertPage->setWhatsThis( i18n( "Insert a new page after the current one" ) );
+    connect( m_actionInsertPage, SIGNAL( triggered() ), this, SLOT( insertPage() ) );
+
+    m_actionDeletePage = new KAction( i18n( "Delete Page" ), this );
+    actionCollection()->addAction( "edit_deletepage", m_actionDeletePage );
+    m_actionDeletePage->setToolTip( i18n( "Delete a new page after the current one" ) );
+    m_actionDeletePage->setWhatsThis( i18n( "Delete a new page after the current one" ) );
+    connect( m_actionDeletePage, SIGNAL( triggered() ), this, SLOT( deletePage() ) );
 }
 
 void KoPAView::viewSnapToGrid()
@@ -310,6 +324,29 @@ void KoPAView::setShowRulers(bool show)
     m_verticalRuler->setVisible(show);
 
     m_viewRulers->setChecked(show);
+}
+
+void KoPAView::insertPage()
+{
+    KoPAPageBase * page = 0;
+    if ( m_viewMode->masterMode() ) {
+        page = m_doc->newMasterPage();
+    }
+    else {
+        KoPAPage * activePage = dynamic_cast<KoPAPage*>( m_activePage );
+        KoPAMasterPage * masterPage = activePage->masterPage();
+        page = m_doc->newPage( masterPage );
+    }
+
+    KoPAPageInsertCommand * command = new KoPAPageInsertCommand( m_doc, page, m_activePage );
+    m_canvas->addCommand( command );
+}
+
+
+void KoPAView::deletePage()
+{
+    KoPAPageDeleteCommand * command = new KoPAPageDeleteCommand( m_doc, m_activePage );
+    m_canvas->addCommand( command );
 }
 
 #include "KoPAView.moc"

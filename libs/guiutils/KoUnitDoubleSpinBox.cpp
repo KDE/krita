@@ -49,6 +49,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent)
     QDoubleSpinBox::setDecimals( 2 );
     //setAcceptLocalizedNumbers( true );
     setUnit( KoUnit(KoUnit::Point) );
+    setAlignment( Qt::AlignRight );
 
     connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
 }

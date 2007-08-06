@@ -217,6 +217,9 @@ void KisCanvas2::addCommand(QUndoCommand *command)
 
 KoShapeManager* KisCanvas2::shapeManager() const
 {
+    if (!m_d->view) return m_d->shapeManager;
+    if (!m_d->view->layerManager()) return m_d->shapeManager;
+
     KisLayerSP activeLayer = m_d->view->layerManager()->activeLayer();
     if ( activeLayer ) {
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( activeLayer.data() );

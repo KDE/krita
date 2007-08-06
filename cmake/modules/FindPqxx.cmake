@@ -10,11 +10,7 @@ find_path(PQXX_INCLUDE_DIR pqxx
    /usr/local/include/pqxx
 )
 
-find_library(PQXX_LIBRARIES NAMES pqxx
-   PATHS
-   /usr/lib
-   /usr/local/lib
-)
+find_library(PQXX_LIBRARIES NAMES pqxx)
 
 if(PQXX_INCLUDE_DIR AND PQXX_LIBRARIES)
    set(PQXX_FOUND TRUE)

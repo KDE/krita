@@ -9,15 +9,11 @@ IF (WIN32)
 
   IF(CYGWIN)
 
-    FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h
-      /usr/include
-    )
+    FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h)
 
     FIND_LIBRARY( GLEW_GLEW_LIBRARY glew32
       ${OPENGL_LIBRARY_DIR}
-      /usr/lib
       /usr/lib/w32api
-      /usr/local/lib
       /usr/X11R6/lib
     )
 
@@ -48,9 +44,7 @@ ELSE (WIN32)
   ELSE (APPLE)
 
     FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h
-      /usr/include
       /usr/include/GL
-      /usr/local/include
       /usr/openwin/share/include
       /usr/openwin/include
       /usr/X11R6/include
@@ -60,8 +54,6 @@ ELSE (WIN32)
     )
 
     FIND_LIBRARY( GLEW_GLEW_LIBRARY GLEW
-      /usr/lib
-      /usr/local/lib
       /usr/openwin/lib
       /usr/X11R6/lib
     )

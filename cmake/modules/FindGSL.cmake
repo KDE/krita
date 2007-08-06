@@ -16,27 +16,16 @@ IF (GSL_INCLUDE_DIR AND GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_VERSION)
 
 ELSE (GSL_INCLUDE_DIR AND GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_VERSION)
 
-	FIND_LIBRARY (GSL_LIBRARIES gsl
-		PATHS
-		/usr/lib
-		/usr/local/lib
-	)
+	FIND_LIBRARY (GSL_LIBRARIES gsl)
 
-	FIND_LIBRARY (GSL_CBLAS_LIBRARIES gslcblas
-		PATHS
-		/usr/lib
-		/usr/local/lib
-	)
+	FIND_LIBRARY (GSL_CBLAS_LIBRARIES gslcblas)
 
 	FIND_PATH (GSL_INCLUDE_DIR gsl_multimin.h
 		/usr/include/gsl
 		/usr/local/include/gsl
 	)
 
-	FIND_PROGRAM (GSL_CONFIG gsl-config
-		/usr/bin
-		/usr/local/bin
-	)
+	FIND_PROGRAM (GSL_CONFIG gsl-config)
 
 	IF (GSL_CONFIG)
 		EXEC_PROGRAM (${GSL_CONFIG} ARGS "--version" OUTPUT_VARIABLE gsl_version)

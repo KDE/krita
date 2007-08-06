@@ -26,16 +26,12 @@ endif(NOT WIN32)
 
   FIND_PATH(WPD_INCLUDE_DIR libwpd/libwpd.h
     ${_WPDIncDir}
-    /usr/include
     /usr/include/libwpd-0.8
-    /usr/local/include
   )
 
   FIND_LIBRARY(WPD_LIBRARIES NAMES wpd-0.8
     PATHS
     ${_WPDLinkDir}
-    /usr/lib
-    /usr/local/lib
   )
 
   if (WPD_INCLUDE_DIR AND WPD_LIBRARIES)

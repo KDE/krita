@@ -95,8 +95,6 @@ else(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
      NAMES Magick-config
      PATHS
      ${IMAGEMAGICK_BINARY_PATH}
-     /usr/bin
-     /usr/local/bin
      /opt/local/bin
   )
 
@@ -110,8 +108,6 @@ else(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
      PKGCONFIG(ImageMagick _libMagickIncDir _libMagickLinkDir _libMagickLinkFlags _libMagickCflags)
 
      find_path(IMAGEMAGICK_INCLUDE_DIR magick/api.h
-        /usr/include
-        /usr/local/include
         /opt/local/include
      )
 

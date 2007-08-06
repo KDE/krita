@@ -6,15 +6,11 @@
 #  KUNITTEST_LIBRARIES - The libraries needed to use kunittest
 
 FIND_PATH(KUNITTEST_INCLUDE_DIR kunittest/tester.h
-   /usr/include
-   /usr/local/include
    ${KDE4_INCLUDE_DIR}
 )
 
 FIND_LIBRARY(KUNITTEST_LIBRARIES NAMES kunittest
    PATHS
-   /usr/lib
-   /usr/local/lib
    ${KDE4_LIB_DIR}
 )
 

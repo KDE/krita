@@ -7,8 +7,6 @@ find_path(GMM_INCLUDE_DIR NAMES gmm/gmm.h
      PATHS
      ${INCLUDE_INSTALL_DIR}
      ${GMM_INCLUDE_PATH}
-     /usr/include
-     /usr/local/include
    )
 
 if(GMM_INCLUDE_DIR)

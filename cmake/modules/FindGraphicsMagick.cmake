@@ -24,8 +24,6 @@ set(GRAPHICSMAGICK_FOUND FALSE)
    find_program(GMAGICK_CONFIG_EXECUTABLE
         NAMES GraphicsMagick-config
         PATHS
-        /usr/bin
-        /usr/local/bin
         /opt/local/bin
     )
 

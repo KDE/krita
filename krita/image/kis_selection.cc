@@ -23,6 +23,7 @@
 
 #include "kis_selection.h"
 
+#include <QTime>
 #include <QImage>
 #include <QVector>
 
@@ -257,6 +258,8 @@ void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
 
 void KisSelection::updateProjection()
 {
+    QTime t;
+    t.start();
     clear();
     if(m_hasPixelSelection) {
          quint8 defPixel = *(m_pixelSelection->dataManager()->defaultPixel());
@@ -267,4 +270,5 @@ void KisSelection::updateProjection()
     if(m_hasShapeSelection) {
         m_shapeSelection->renderToProjection(this);
     }
+    kDebug() << "Selection rendering took: " << t.elapsed();
 }

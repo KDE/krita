@@ -364,7 +364,11 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
     if (dev->hasSelection()){
         KisSelectionSP selection = dev->selection();
 
+        QTime t;
+        t.start();
         selection->paint(&canvasImage);
+        kDebug() << "Mask visualisation rendering took: " << t.elapsed();
+
     }
 
     double sx, sy;

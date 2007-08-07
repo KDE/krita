@@ -270,5 +270,5 @@ void KisSelection::updateProjection()
     if(m_hasShapeSelection) {
         m_shapeSelection->renderToProjection(this);
     }
-    kDebug() << "Selection rendering took: " << t.elapsed();
+    kDebug(41010) << "Selection rendering took: " << t.elapsed();
 }

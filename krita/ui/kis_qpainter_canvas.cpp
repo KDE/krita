@@ -367,7 +367,7 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
         QTime t;
         t.start();
         selection->paint(&canvasImage);
-        kDebug() << "Mask visualisation rendering took: " << t.elapsed();
+        kDebug(41010) << "Mask visualisation rendering took: " << t.elapsed();
 
     }
 

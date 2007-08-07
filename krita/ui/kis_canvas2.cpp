@@ -51,6 +51,7 @@
 #include "kis_opengl_image_textures.h"
 #include "kis_shape_controller.h"
 #include "kis_layer_manager.h"
+#include "kis_selection.h"
 
 #ifdef HAVE_OPENGL
 #include <QGLFormat>
@@ -275,11 +276,28 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
     QPainter p( &m_d->canvasCache );
 
     p.setCompositionMode( QPainter::CompositionMode_Source );
-    p.drawImage( rc.x(), rc.y(),
-                 image()->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
-                                          m_d->monitorProfile,
-                                          m_d->view->resourceProvider()->HDRExposure() )
-                 , 0, 0, rc.width(), rc.height() );
+
+    QImage updateImage = image()->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
+                                                  m_d->monitorProfile,
+                                                  m_d->view->resourceProvider()->HDRExposure());
+
+    KisLayerSP layer = resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    if (!layer) return;
+
+    KisPaintDeviceSP dev = layer->paintDevice();
+    if (!dev) return;
+
+    if (dev->hasSelection()){
+        KisSelectionSP selection = dev->selection();
+
+        QTime t;
+        t.start();
+        selection->paint(&updateImage, rc);
+        kDebug(41010) << "Mask visualisation rendering took: " << t.elapsed();
+
+    }
+
+    p.drawImage( rc.x(), rc.y(), updateImage, 0, 0, rc.width(), rc.height() );
     p.end();
 
     QRect vRect = viewRectFromImagePixels( rc );

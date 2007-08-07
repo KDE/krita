@@ -155,17 +155,20 @@ QRect KisSelection::selectedExactRect() const
     }
 }
 
-void KisSelection::paint(QImage* img)
+void KisSelection::paint(QImage* img, const QRect & r)
 {
     if (img->isNull()) {
         return;
     }
 
-    qint32 width = img->width();
-    qint32 height = img->height();
+    qint32 width = r.width();
+    qint32 height = r.height();
+
+    Q_ASSERT(img->width() == width);
+    Q_ASSERT(img->height() == height);
 
     quint8* buffer = new quint8[width*height];
-    readBytes(buffer, 0, 0, width, height);
+    readBytes(buffer, r.x(), r.y(), width, height);
 
     for (qint32 y = 0; y < height; y++) {
 

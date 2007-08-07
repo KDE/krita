@@ -134,7 +134,7 @@ public:
      */
     QRect selectedExactRect() const;
 
-    void paint(QImage* img);
+    void paint(QImage* img, const QRect & r);
 
     // if the parent layer is interested in keeping up to date with the dirtyness
     // of this layer, set to true

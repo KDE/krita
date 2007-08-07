@@ -508,7 +508,7 @@ void KoMainWindow::saveRecentFiles()
 void KoMainWindow::reloadRecentFileList()
 {
     KSharedConfigPtr config = componentData().isValid() ? componentData().config() : KGlobal::config();
-    m_recent->loadEntries( config->group( QString() ) );
+    m_recent->loadEntries( config->group( "RecentFiles" ) );
 }
 
 KoDocument* KoMainWindow::createDoc() const

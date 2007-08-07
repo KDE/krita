@@ -276,7 +276,6 @@ void KisSmudgeOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     Q_INT32 sw = dab->extent().width();
     Q_INT32 sh = dab->extent().height();
 
-    KisPainter copyPainter(m_srcdev);
     int opacity = OPACITY_OPAQUE;
     if(!m_firstRun)
     {
@@ -288,10 +287,21 @@ void KisSmudgeOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
                 opacity = CLAMP((Q_UINT8)(double(opacity) * info.pressure), OPACITY_TRANSPARENT, OPACITY_OPAQUE);
             }
         }
+        KisRectIterator it = m_srcdev->createRectIterator(0, 0, sw, sh, true);
+        KisColorSpace* cs = m_srcdev->colorSpace();
+        while(not it.isDone())
+        {
+//kdDebug() << ((cs->getAlpha(it.rawData()) * opacity) / OPACITY_OPAQUE) << endl;
+            cs->setAlpha(it.rawData(), (cs->getAlpha(it.rawData()) * opacity) / OPACITY_OPAQUE, 1);
+            ++it;
+        }
         opacity = OPACITY_OPAQUE - opacity;
+
     } else {
         m_firstRun = false;
     }
+
+    KisPainter copyPainter(m_srcdev);
     copyPainter.bitBlt(0, 0, COMPOSITE_OVER, device, opacity, pt.x(), pt.y(), sw, sh);
     copyPainter.end();
     

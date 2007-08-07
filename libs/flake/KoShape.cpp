@@ -678,6 +678,9 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
             // is the the order of the z-index
         }
 
+        if( element.hasAttributeNS( KoXmlNS::draw, "name" ) )
+            setName( element.attributeNS( KoXmlNS::draw, "name" ) );
+
         setBackground( loadOdfFill( element, context ) );
         setBorder( loadOdfStroke( element, context ) );
     }
@@ -849,6 +852,9 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
         {
             context.xmlWriter().addAttribute( "draw:id", context.drawId( this ) );
         }
+
+        if( ! name().isEmpty() )
+            context.xmlWriter().addAttribute( "draw:name", name() );
 
         if(d->parent && dynamic_cast<KoShapeLayer*> (d->parent))
             context.xmlWriter().addAttribute("draw:layer", d->parent->name());

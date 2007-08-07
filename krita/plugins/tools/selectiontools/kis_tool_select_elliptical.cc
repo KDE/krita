@@ -89,12 +89,6 @@ void KisToolSelectElliptical::paint(QPainter& gc, const KoViewConverter &convert
 void KisToolSelectElliptical::clearSelection()
 {
     if (m_canvas) {
-
-//         if (currentImage() && currentImage()->floatingSelection().data() != 0) {
-//             currentImage()->unsetFloatingSelection();
-//                         controller->canvas()->update();
-//         }
-
         m_startPos = QPointF(0, 0);
         m_endPos = QPointF(0, 0);
         m_selecting = false;

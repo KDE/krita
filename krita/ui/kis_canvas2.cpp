@@ -56,19 +56,6 @@
 #include <QGLFormat>
 #endif
 
-namespace {
-// XXX: Remove this with Qt 4.3
-static QRect toAlignedRect(QRectF rc)
-{
-    int xmin = int(floor(rc.x()));
-    int xmax = int(ceil(rc.x() + rc.width()));
-    int ymin = int(floor(rc.y()));
-    int ymax = int(ceil(rc.y() + rc.height()));
-    return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
-}
-}
-
-
 class KisCanvas2::KisCanvas2Private {
 
 public:
@@ -236,7 +223,7 @@ KoShapeManager * KisCanvas2::globalShapeManager() const
 
 QRect KisCanvas2::viewRectFromDoc( const QRectF & rc )
 {
-    QRect viewRect = toAlignedRect( m_d->viewConverter->documentToView(rc) );
+    QRect viewRect = m_d->viewConverter->documentToView(rc).toAlignedRect();
     viewRect = viewRect.translated( -m_d->documentOffset );
     viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasWidget->widget()->width(), m_d->canvasWidget->widget()->height() ) );
     return viewRect;
@@ -252,7 +239,7 @@ QRect KisCanvas2::viewRectFromImagePixels( const QRect & rc )
     QRectF docRect;
     docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
 
-    QRect viewRect = toAlignedRect( m_d->viewConverter->documentToView(docRect) );
+    QRect viewRect = m_d->viewConverter->documentToView(docRect).toAlignedRect();
     viewRect = viewRect.translated( -m_d->documentOffset );
     viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasWidget->widget()->width(), m_d->canvasWidget->widget()->height() ) );
 

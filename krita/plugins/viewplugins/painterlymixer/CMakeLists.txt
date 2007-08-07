@@ -25,4 +25,4 @@ install(TARGETS kritapainterlymixer  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install(FILES  kritapainterlymixer.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES  IlluminantD65.ill	DESTINATION ${DATA_INSTALL_DIR}/krita/profiles)
+install(FILES  IlluminantD50.ill IlluminantD65.ill	DESTINATION ${DATA_INSTALL_DIR}/krita/profiles)

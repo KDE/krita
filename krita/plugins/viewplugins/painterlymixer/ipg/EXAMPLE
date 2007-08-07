@@ -1,3 +1,7 @@
+This program will not be compiled with CMake, it's just an utility
+that let you make your own Illuminant Profiles using raw Illuminant
+Spectra.
+
 . compile
 ./ipg IlluminantD65.raw IlluminantD65.ill
 

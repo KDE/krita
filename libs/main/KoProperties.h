@@ -60,6 +60,12 @@ public:
     QMapIterator<QString, QVariant> propertyIterator() const;
 
     /**
+     * @return true if this KoProperties object does not contain any
+     * properties.
+     */
+    bool isEmpty() const;
+
+    /**
      * Create a serialized version of this filter config
      * @return the string version of this properties object
      */
@@ -133,6 +139,19 @@ public:
      * @param def the default value, should there not be any property by the name this will be returned.
      */
     QString stringProperty(const QString & name, const QString & def = QString()) const;
+
+    /**
+     * Returns true if the specified key is present in this properties
+     * object.
+     */
+    bool contains( const QString & key ) const;
+
+    /**
+     * Returns the value assocatied with the specified key if this
+     * properties object contains the specified key; otherwise return
+     * an empty QVariant.
+     */
+    QVariant value( const QString & key ) const;
 
 private:
 

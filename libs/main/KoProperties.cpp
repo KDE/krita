@@ -47,6 +47,12 @@ QMapIterator<QString, QVariant> KoProperties::propertyIterator() const
     return QMapIterator<QString, QVariant>( d->properties );
 }
 
+
+bool KoProperties::isEmpty() const
+{
+    return d->properties.isEmpty();
+}
+
 void KoProperties::load(const QString & s)
 {
     d->properties.clear();
@@ -160,3 +166,14 @@ QString KoProperties::stringProperty(const QString & name, const QString & def) 
     else
         return def;
 }
+
+bool KoProperties::contains( const QString & key ) const
+{
+    return d->properties.contains( key );
+}
+
+QVariant KoProperties::value( const QString & key ) const
+{
+    return d->properties.value( key );
+}
+

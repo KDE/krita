@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
- *
+ *  Copyright (c) 2007 Paolo Capriotti
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -222,6 +222,14 @@ mpf_class pow(mpf_class d, int p)
 	return res;
 }
 
+/*
+   Thanks to Paolo Capriotti for this.
+   Do the "scalar product" operation as:
+
+   < v1, v2 > = integ_a^b ( w(x)v1(x)v2(x) )
+
+   It respects all the properties of the scalar product.
+*/
 void scalar(mpf_class v1[], mpf_class v2[], mpf_class &r)
 {
 	mpf_class W, norm;
@@ -274,6 +282,12 @@ bool loadIlluminant(char *filename)
 	return true;
 }
 
+/*
+   Thanks to Paolo Capriotti for this.
+   Implement Gram-Schmidt to calculate an orthogonal base.
+   The last component of this base is a Legendre Polynomial.
+   Use this polynomialto calculate the roots.
+*/
 bool computeRoots()
 {
 	mpf_class v[NUM+1][NUM+1];

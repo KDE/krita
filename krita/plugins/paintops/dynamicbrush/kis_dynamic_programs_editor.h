@@ -31,6 +31,7 @@ class KisDynamicProgramsEditor : public KDialog {
         ~KisDynamicProgramsEditor();
     public slots:
         void setCurrentProgram(const QString& text);
+        void addProgram();
     private:
         Ui_DynamicProgramsEditor* m_dynamicProgramsEditor;
         QWidget* m_currentEditor;

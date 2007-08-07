@@ -43,10 +43,11 @@ class KisIlluminantProfile : public KoColorProfile {
 
 		bool isSuitableForDisplay() const {return false;}
 
-	private:
-		bool loadCurve(QTextStream &in_ill);
-		bool loadMatrix(QTextStream &in_ill);
+		double **matrix() {return m_matrix;}
 
+	private:
+
+		double **m_matrix;
 };
 
 

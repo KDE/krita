@@ -76,6 +76,7 @@ private:
     KoCanvasResourceProvider *m_resources;
 
 	KoColorSpace *m_colorspace;
+	KisIlluminantProfile *m_illuminant;
 };
 
 #endif // KIS_PAINTERLY_MIXER_H_

@@ -48,6 +48,8 @@
 #include "kis_resource_provider.h"
 #include "kis_view2.h"
 
+#include "kis_illuminant_profile.h"
+#include "kis_ks_colorspace.h"
 #include "kis_rgbks_colorspace.h"
 
 #include "colorspot.h"
@@ -60,7 +62,12 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
 {
     setupUi(this);
 
-	m_colorspace = new KisRGBKSColorSpace;
+    QStringList illuminants;
+    illuminants += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.ill");
+
+	// TODO The Illuminant has to be choosen in runtime
+	m_illuminant = new KisIlluminantProfile(illuminants[0]);
+	m_colorspace = new KisKSColorSpace(m_illuminant);
     m_canvas->setDevice(m_colorspace);
     initTool();
     initSpots();

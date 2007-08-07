@@ -29,13 +29,13 @@ class KoColorSpaceRegistry;
 class KisIlluminantProfile;
 
 template<typename _channels_type_>
-struct KisKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, _to_decide_, _to_decide_> {
+struct KisKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 21, 20> {
 
 	struct Cell {
 		struct {
 			_channels_type_ absorption;
 			_channels_type_ scattering;
-		} wavelen[_to_decide_];
+		} wavelen[10];
 		_channels_type_ alpha;
 	};
 

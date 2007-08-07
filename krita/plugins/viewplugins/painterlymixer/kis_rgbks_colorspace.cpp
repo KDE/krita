@@ -68,10 +68,11 @@ KisRGBKSColorSpace::KisRGBKSColorSpace()
 
 void KisRGBKSColorSpace::fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
 {
+	kDebug() << "CHIAMATA!" << endl;
 	const quint16 *src16 = reinterpret_cast<const quint16 *>(srcU8);
 	float *dstf = RGBKSTraits::nativeArray(dstU8);
 
-	float REF[3];
+	double REF[3];
 
 	for (quint32 i = 0; i < nPixels; i++) {
 		for (quint32 j = 0; j < 3; j++) REF[j] = maths::convert2f(src16[j]);
@@ -91,7 +92,7 @@ void KisRGBKSColorSpace::toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 
 	const float *srcf = RGBKSTraits::nativeArray(srcU8);
 	quint16 *dst16 = reinterpret_cast<quint16 *>(dstU8);
 
-	float REF[3];
+	double REF[3];
 
 	for (quint32 i = 0; i < nPixels; i++) {
 		maths::computeReflectance(3, srcf, REF);

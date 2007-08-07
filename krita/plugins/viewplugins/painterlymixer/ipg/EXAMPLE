@@ -1,0 +1,4 @@
+. compile
+./ipg IlluminantD65.raw IlluminantD65.ill
+
+Next, put the generated .ill file in the resource directory.

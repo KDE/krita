@@ -32,19 +32,19 @@ double coth(double z);
 
 double acoth(double z);
 
-void mult(const int rows, const int cols, const float **M, const float *A, float *R);
+void mult(const int rows, const int cols, double **M, const double *A, double *R);
 
 double sigmoid(double value);
 
-void computeKS(const int nrefs, const float *vREF, float *vKS);
+void computeKS(const int nrefs, const double *vREF, float *vKS);
 
-void computeReflectance(const int nrefs, const float *vKS, float *vREF);
+void computeReflectance(const int nrefs, const float *vKS, double *vREF);
 
-// void simplex(const int rows, const int cols, const float **M, float *X, const float *B);
+void simplex(const int rows, const int cols, double **M, double *X, const double *B);
 
-float convert2f (unsigned short value);
+double convert2f (unsigned short value);
 
-unsigned short convert2i (float value);
+unsigned short convert2i (double value);
 
 }
 

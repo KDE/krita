@@ -18,7 +18,7 @@
  */
 
 #include <cmath>
-// #include <glpk.h>
+#include <glpk.h>
 
 #include <KDebug>
 
@@ -28,19 +28,19 @@ namespace maths {
 
 double coth(double z)
 {
-	return ( cosh(z) / sinh(z) );
+	return 1.0 / tanh(z);
 }
 
 double acoth(double z)
 {
-	return 0.5*log((1 + 1/z) / (1 - 1/z));
+	return 0.5*log((1.0 + 1.0/z) / (1.0 - 1.0/z));
 }
 
-void mult(const int rows, const int cols, const float **M, const float *A, float *R)
+void mult(const int rows, const int cols, double **M, const double *A, double *R)
 {
 	for (int i = 0; i < rows; i++) {
 		R[i] = 0;
-		for (int j = 0; i < cols; j++) {
+		for (int j = 0; j < cols; j++) {
 			R[i] += M[i][j] * A[j];
 		}
 	}
@@ -56,7 +56,7 @@ double sigmoid(double value)
 		return value;
 }
 
-void computeKS(const int nrefs, const float *vREF, float *vKS)
+void computeKS(const int nrefs, const double *vREF, float *vKS)
 {
 	double R, Rb, a, b, K, S;
 	for (int i = 0, j = 0; j < nrefs; i += 2, j += 1) {
@@ -69,49 +69,51 @@ void computeKS(const int nrefs, const float *vREF, float *vKS)
 
 		Rb = R - MATH_SUB_BLACK;
 
-		a = 0.5 * ( R + ( Rb - R + 1) / Rb );
-		b = sqrt( a*a - 1 );
+		a = 0.5 * ( R + ( Rb - R + 1.0) / Rb );
+		b = sqrt( a*a - 1.0 );
 
-		S = (1 / b) * 1 / coth( ( b*b - ( a - R ) * ( a - 1 ) ) / ( b * ( 1 - R ) ) );
-		K = S * ( a - 1 );
+		S = (1.0 / b) * acoth( ( b*b - ( a - R ) * ( a - 1.0 ) ) / ( b * ( 1.0 - R ) ) );
+		K = S * ( a - 1.0 );
 
 		vKS[i+0] = K;
 		vKS[i+1] = log(S);
 	}
 }
 
-/*
-void computeReflectance(const int nrefs, const float *vKS, float *vREF)
+
+void computeReflectance(const int nrefs, const float *vKS, double *vREF)
 {
 	double b, K, S, R;
 	for (int i = 0, j = 0; j < nrefs; i += 2, j += 1) {
 		K = vKS[i+0];
 		S = exp(vKS[i+1]);
 
-		b = sqrt( ( K / S ) * ( K / S + 2 ) );
-		R = 1 / ( 1 + ( K / S ) + b * coth( b * S * MATH_THICKNESS ) );
-
-		vREF[j] = R;
-	}
-}
-*/
-
-void computeReflectance(const int nrefs, const float *vKS, float *vREF)
-{
-	double K, S, q, R;
-	for (int i = 0, j = 0; j < nrefs; i += 2, j += 1) {
-		K = vKS[i+0];
-		S = exp(vKS[i+1]);
-
-		q = K / S;
-		R = 1 + q - sqrt( q*q + 2*q );
+		b = sqrt( ( K / S ) * ( K / S + 2.0 ) );
+		R = 1.0 / ( 1.0 + ( K / S ) + b * coth( b * S * MATH_THICKNESS ) );
 
 		vREF[j] = R;
 	}
 }
 
 /*
-void simplex(const int rows, const int cols, const float **M, float *X, const float *B)
+void computeReflectance(const int nrefs, const float *vKS, double *vREF)
+{
+	double K, S, q, R;
+	for (int i = 0, j = 0; j < nrefs; i += 2, j += 1) {
+		K = vKS[i+0];
+		S = exp(vKS[i+1]);
+// 		kDebug() << "K: " << K << " S: " << S << endl;
+
+		q = K / S;
+		R = 1.0 + q - sqrt( q*q + 2.0*q );
+
+		vREF[j] = R;
+// 		kDebug() << "R: " << R << endl;
+	}
+}
+*/
+
+void simplex(const int rows, const int cols, double **M, double *X, const double *B)
 {
 	glp_prob *lp;
 	glp_smcp parm;
@@ -121,7 +123,7 @@ void simplex(const int rows, const int cols, const float **M, float *X, const fl
 
 	lp = glp_create_prob();
 	glp_set_prob_name(lp, "XYZ2REF");
-	glp_set_obj_dir(lp, GLP_MIN);
+	glp_set_obj_dir(lp, GLP_MAX);
 
 	glp_add_rows(lp, rows);
 
@@ -139,15 +141,15 @@ void simplex(const int rows, const int cols, const float **M, float *X, const fl
 	}
 
 	int ind[cols+1];
-	for (int i = 0; i < cols; i++)
-		ind[i+1] = i;
+	for (int i = 1; i <= cols; i++)
+		ind[i] = i;
 
 	for (int i = 0; i < rows; i++) {
-// 		double row[cols+1];
-// 		for (int j = 0; j < cols; j++) {
-// 			row[j+1] = M[i][j];
-// 		}
-		glp_set_mat_row(lp, i+1, cols, ind, M[i]);
+		double row[cols+1];
+		for (int j = 0; j < cols; j++) {
+			row[j+1] = M[i][j];
+		}
+		glp_set_mat_row(lp, i+1, cols, ind, row);
 	}
 
 	glp_simplex(lp, &parm);
@@ -157,14 +159,14 @@ void simplex(const int rows, const int cols, const float **M, float *X, const fl
 
 	glp_delete_prob(lp);
 }
-*/
 
-float convert2f (unsigned short value)
+
+double convert2f (unsigned short value)
 {
-	return ((float)value)/MATH_NORMALIZATION;
+	return ((double)value)/MATH_NORMALIZATION;
 }
 
-unsigned short convert2i (float value)
+unsigned short convert2i (double value)
 {
 	return (quint16)(value*MATH_NORMALIZATION);
 }

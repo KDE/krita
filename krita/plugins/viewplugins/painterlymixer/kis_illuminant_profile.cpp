@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <cstdlib>
 #include <QFile>
 #include <QString>
 #include <QTextStream>
@@ -36,35 +37,22 @@ KisIlluminantProfile::KisIlluminantProfile(QString fileName) : KoColorProfile(fi
 bool KisIlluminantProfile::load()
 {
 	QFile f_ill(fileName());
-	float curr;
+	QString curr;
 
 	if (f_ill.open(QFile::ReadOnly)) {
 		QTextStream in_ill(&f_ill);
-
-		in_ill >> curr;
-
-		switch ((int)curr) {
-			case 0:
-				return loadCurve(in_ill);
-			case 1:
-				return loadMatrix(in_ill);
+		m_matrix = new double*[3];
+		for (int i = 0; i < 3; i++) {
+			m_matrix[i] = new double[10];
+			for (int j = 0; j < 10; j++) {
+				in_ill >> curr;
+				m_matrix[i][j] = curr.toFloat();
+				kDebug() << m_matrix[i][j];
+			}
 		}
 	} else
 		kDebug() <<"No files found!";
 
-	return false;
-}
-
-bool KisIlluminantProfile::loadCurve(QTextStream &in_ill)
-{
-	// TODO Reimplement loadCurve() using gaussian quadrature
-	return false;
-}
-
-
-bool KisIlluminantProfile::loadMatrix(QTextStream &in_ill)
-{
-	// TODO Reimplement loadMatrix()
 	return false;
 }
 

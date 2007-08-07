@@ -26,6 +26,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 
+#include "KoColorSpaceConstants.h"
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpMultiply.h"
@@ -43,7 +44,7 @@ KisKSColorSpace::KisKSColorSpace(KoColorProfile *p)
 	if (profileIsCompatible(p))
 		m_profile = dynamic_cast<KisIlluminantProfile*>(p);
 
-	const quint32 ncols = m_profile->matrix().ncols();
+	const quint32 ncols = 10;
 
 	for (quint32 i = 0; i < 2*ncols; i+=2) {
 		addChannel(new KoChannelInfo(i18n("Absorption"),
@@ -77,9 +78,9 @@ KisKSColorSpace::KisKSColorSpace(KoColorProfile *p)
 	hXYZ  = cmsCreateXYZProfile();
 
 	XYZ_BGR = cmsCreateTransform(hXYZ, TYPE_XYZ_DBL, hsRGB, TYPE_BGR_16,
-								 INTENT_ABSOLUTE_COLORIMETRIC, cmsFLAGS_NOTPRECALC);
+								 INTENT_PERCEPTUAL, cmsFLAGS_NOTPRECALC);
 	BGR_XYZ = cmsCreateTransform(hsRGB, TYPE_BGR_16, hXYZ, TYPE_XYZ_DBL,
-								 INTENT_ABSOLUTE_COLORIMETRIC, cmsFLAGS_NOTPRECALC);
+								 INTENT_PERCEPTUAL, cmsFLAGS_NOTPRECALC);
 }
 
 bool KisKSColorSpace::profileIsCompatible(KoColorProfile* profile) const
@@ -92,20 +93,21 @@ bool KisKSColorSpace::profileIsCompatible(KoColorProfile* profile) const
 
 void KisKSColorSpace::fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
 {
-	const quint32 ncols = _to_decide_;
+	kDebug() << "CHIAMATA!" << endl;
+	const quint32 ncols = 10;
 	const quint16 *src16 = reinterpret_cast<const quint16 *>(srcU8);
 	float *dstf = reinterpret_cast<float *>(dstU8);
 
-	double XYZ[3], REV[ncols];
+	double XYZ[3], REF[ncols];
 
 	for (quint32 i = 0; i < nPixels; i++) {
 		cmsDoTransform(BGR_XYZ, const_cast<quint16*>(src16), XYZ, 1);
 
-		simplex(3, ncols, m_profile->matrix(), REF, XYZ);
+		maths::simplex(3, ncols, m_profile->matrix(), REF, XYZ);
 
 		maths::computeKS(ncols, REF, dstf);
 
-		dstf[2*ncols] = convert2f(src16[3]);
+		dstf[2*ncols] = maths::convert2f(src16[3]);
 
 		dstf += 2*ncols + 1;
 		src16 += 4;
@@ -114,20 +116,20 @@ void KisKSColorSpace::fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 n
 
 void KisKSColorSpace::toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
 {
-	const quint32 ncols = _to_decide_;
+	const quint32 ncols = 10;
 	const float *srcf = reinterpret_cast<const float *>(srcU8);
 	quint16 *dst16 = reinterpret_cast<quint16 *>(dstU8);
 
 	double XYZ[3], REF[ncols];
 
 	for (quint32 i = 0; i < nPixels; i++) {
-		computeReflectance(ncols, srcf, REF);
+		maths::computeReflectance(ncols, srcf, REF);
 
 		maths::mult(3, ncols, m_profile->matrix(), REF, XYZ);
 
 		cmsDoTransform(XYZ_BGR, XYZ, dst16, 1);
 
-		dst16[3] = convert2i(srcf[2*ncols]);
+		dst16[3] = maths::convert2i(srcf[2*ncols]);
 
 		srcf += 2*ncols + 1;
 		dst16 += 4;

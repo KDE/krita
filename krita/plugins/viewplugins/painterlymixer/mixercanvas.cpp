@@ -86,9 +86,10 @@ void MixerCanvas::paintEvent(QPaintEvent *event)
 {
     QFrame::paintEvent(event);
 
-    QRect r = rect();
+    QRect r = event->rect();
+	QRect imgRect = QRect(0, 0, r.width(), r.height());
     QPainter p(this);
-    p.drawImage(r, m_device->convertToQImage(0, r.x(), r.y(), r.width(), r.height()), r);
+    p.drawImage(r, m_device->convertToQImage(0, r.x(), r.y(), r.width(), r.height()), imgRect);
     p.end();
 }
 

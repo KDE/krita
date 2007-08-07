@@ -53,10 +53,10 @@ class KisOpenGLCanvas2::Private
 {
 public:
     Private(const KoViewConverter *vc) : viewConverter(vc), canvas(0), toolProxy(0) {}
+    const KoViewConverter * viewConverter;
     KisCanvas2 * canvas;
     KoToolProxy * toolProxy;
     KisOpenGLImageTexturesSP openGLImageTextures;
-    const KoViewConverter * viewConverter;
     QPoint documentOffset;
 };
 
@@ -236,6 +236,7 @@ void KisOpenGLCanvas2::paintGL()
     // XXX: Draw selections, masks, visualisations, grids, guides
     //m_gridManager->drawGrid(wr, 0, true);
     QPainter gc ( this );
+    gc.setClipRect( QRect( QPoint( 0, 0 ), QSize() ) );
 
     gc.setRenderHint( QPainter::Antialiasing );
     gc.setRenderHint( QPainter::SmoothPixmapTransform );

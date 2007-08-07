@@ -24,11 +24,11 @@ else(EIGEN_FOUND AND GMM_FOUND)
     message(STATUS "Could not find the Eigen and/or GMM library. The panorama plugin will not be built.")
 endif(EIGEN_FOUND AND GMM_FOUND)
 
-#if(GLPK_FOUND) It's not needed at the moment, but it will be when I finish
+if(GLPK_FOUND) It's not needed at the moment, but it will be when I finish
     add_subdirectory( painterlymixer )
-#else(GLPK_FOUND)
-#    message(STATUS "Could not find the GLPK library. The painterly mixer plugin will not be built.")
-#endif(GLPK_FOUND)
+else(GLPK_FOUND)
+    message(STATUS "Could not find the GLPK library. The painterly mixer plugin will not be built.")
+endif(GLPK_FOUND)
 
 macro_optional_find_package(GLUT)
 if(HAVE_OPENGL)

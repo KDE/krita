@@ -54,6 +54,7 @@ public:
 };
 
 typedef KisSharedPtr<TestClass> TestClassSP;
+typedef KisWeakSharedPtr<TestClass> TestClassWSP;
 typedef KisSharedPtrVector<TestClass> vTestClassSP;
 typedef vTestClassSP::iterator vTestClassSP_it;
 typedef vTestClassSP::const_iterator vTestClassSP_cit;
@@ -100,6 +101,51 @@ void KisSharedPtrTest::testCopy()
     // The first shared pointer went out of scope; the object should
     // have been deleted and the pointer set to 0
     QVERIFY( tcw->deleted = true );
+}
+
+void KisSharedPtrTest::testCopy2()
+{
+
+    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClass * instance = new TestClass( tcw );
+
+    {
+        TestClassSP instanceSP( instance );
+        {
+            // Copy the shared pointer; refcount should be 2 by now.
+            // This happens a lot in Krita code!
+            TestClassSP instanceSP2( instanceSP.data() );
+        }
+        // Even though the second owner of the pointer has gone out of
+        // scope, the pointer shouldn't have been deleted.
+        QVERIFY( instanceSP.data() != 0 );
+        QVERIFY( instance != 0 );
+    }
+
+    // The first shared pointer went out of scope; the object should
+    // have been deleted and the pointer set to 0
+    QVERIFY( tcw->deleted = true );
+}
+
+void KisSharedPtrTest::testWeakSP()
+{
+
+    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClass * instance = new TestClass( tcw );
+
+    {
+        TestClassWSP instanceWSP( instance );
+        {
+            // Copy the shared pointer; refcount should be 2 by now.
+            // This happens a lot in Krita code!
+            TestClassSP instanceSP( instance );
+        }
+        // The wsp doesn't prevent the sp from deleting the instance
+        QVERIFY( !instanceWSP.isValid() );
+        QVERIFY( tcw->deleted = true );
+    }
+
+
 }
 
 

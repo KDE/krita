@@ -29,6 +29,8 @@ private slots:
 
     void testRefTwoSharedPointersOneInstance();
     void testCopy();
+    void testCopy2();
+    void testWeakSP();
 };
 
 #endif

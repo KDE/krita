@@ -98,7 +98,7 @@ class KRITAIMAGE_EXPORT KisFilterConfigurationFactory : public KisSerializableCo
     public:
         KisFilterConfigurationFactory(const QString & name, qint32 version);
         virtual ~KisFilterConfigurationFactory();
-        virtual KisSerializableConfiguration* create();
+        virtual KisSerializableConfiguration* create(const QDomElement& e);
     private:
         struct Private;
         Private* const d;

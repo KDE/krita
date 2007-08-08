@@ -67,7 +67,7 @@ class KisDynamicDummyProgram : public KisDynamicProgram {
 class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactory : public KisSerializableConfigurationFactory {
     public:
         virtual ~KisDynamicProgramFactory() {}
-        virtual KisSerializableConfiguration* create()
+        virtual KisSerializableConfiguration* create(const QDomElement&)
         {
             return new KisDynamicDummyProgram("");
         }

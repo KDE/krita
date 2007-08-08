@@ -110,7 +110,7 @@ private:
 class KRITAIMAGE_EXPORT KisSerializableConfigurationFactory {
     public:
         virtual ~KisSerializableConfigurationFactory();
-        virtual KisSerializableConfiguration* create() =0;
+        virtual KisSerializableConfiguration* create(const QDomElement&) =0;
 };
 
 #endif // _KIS_FILTER_CONFIGURATION_H_

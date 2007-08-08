@@ -18,6 +18,8 @@
 
 #include "kis_bookmarked_configuration_manager.h"
 
+#include <QDomDocument>
+#include <QDomElement>
 #include <QString>
 
 #include <kconfig.h>
@@ -50,8 +52,11 @@ KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(QString co
 {
     if(not exist(configname)) return 0;
     KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
-    KisSerializableConfiguration* config = d->configFactory->create();
-    config->fromLegacyXML(cfg.readEntry<QString>(configname, ""));
+    
+    QDomDocument doc;
+    doc.setContent( cfg.readEntry<QString>(configname, "") );
+    QDomElement e = doc.documentElement();
+    KisSerializableConfiguration* config = d->configFactory->create(e);
     return config;
 }
 

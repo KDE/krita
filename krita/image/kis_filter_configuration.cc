@@ -121,7 +121,9 @@ KisFilterConfigurationFactory::~KisFilterConfigurationFactory()
     delete d;
 }
 
-KisSerializableConfiguration* KisFilterConfigurationFactory::create()
+KisSerializableConfiguration* KisFilterConfigurationFactory::create(const QDomElement& e)
 {
-    return new KisFilterConfiguration(d->name, d->version);
+    KisFilterConfiguration* fc = new KisFilterConfiguration(d->name, d->version);
+    fc->fromLegacyXML( e );
+    return fc;
 }

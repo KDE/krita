@@ -41,35 +41,29 @@ KisSerializableConfiguration::KisSerializableConfiguration(const KisSerializable
 {
 }
 
-void KisSerializableConfiguration::fromLegacyXML(const QString & s )
+void KisSerializableConfiguration::fromXML(const QString & s )
 {
-    d->properties.clear();
+    clearProperties();
 
     QDomDocument doc;
     doc.setContent( s );
     QDomElement e = doc.documentElement();
-    fromLegacyXML(e);
+    fromXML(e);
 }
 
-void KisSerializableConfiguration::fromLegacyXML(const QDomElement& e)
+void KisSerializableConfiguration::fromXML(const QDomElement& e)
 {
-    QDomNode n = e.firstChild();
+    QDomNode n = e.firstChildElement("params").firstChild();
 
 
     while (!n.isNull()) {
         // We don't nest elements in filter configuration. For now...
         QDomElement e = n.toElement();
-        QString name;
-        QString type;
-        QString value;
 
         if (!e.isNull()) {
-            if (e.tagName() == "property") {
-                name = e.attribute("name");
-                type = e.attribute("type");
-                value = e.text();
+            if (e.tagName() == "param") {
                 // XXX Convert the variant pro-actively to the right type?
-                d->properties[name] = QVariant(value);
+                d->properties[e.attribute("name")] = QVariant(e.text());
             }
         }
         n = n.nextSibling();
@@ -77,27 +71,27 @@ void KisSerializableConfiguration::fromLegacyXML(const QDomElement& e)
     //dump();
 }
 
-void KisSerializableConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) const
+void KisSerializableConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
 {
     QMap<QString, QVariant>::Iterator it;
+    QDomElement eParams = doc.createElement( "params" );
     for ( it = d->properties.begin(); it != d->properties.end(); ++it ) {
-        QDomElement e = doc.createElement( "property" );
+        QDomElement e = doc.createElement( "param" );
         e.setAttribute( "name", QString(it.key().toLatin1()) );
         QVariant v = it.value();
-        e.setAttribute( "type", v.typeName() );
-        QString s = v.toString();
         QDomText text = doc.createCDATASection(v.toString() ); // XXX: Unittest this!
         e.appendChild(text);
-        root.appendChild(e);
+        eParams.appendChild(e);
     }
+    root.appendChild(eParams);
 }
 
-QString KisSerializableConfiguration::toLegacyXML() const
+QString KisSerializableConfiguration::toXML() const
 {
     QDomDocument doc = QDomDocument("filterconfig");
     QDomElement root = doc.createElement( "filterconfig" );
     doc.appendChild( root );
-    toLegacyXML(doc, root);
+    toXML(doc, root);
     return doc.toString();
 }
 
@@ -176,6 +170,11 @@ void KisSerializableConfiguration::dump()
     for ( it = d->properties.begin(); it != d->properties.end(); ++it ) {
     }
 
+}
+
+void KisSerializableConfiguration::clearProperties()
+{
+    d->properties.clear();
 }
 
 QMap<QString, QVariant> KisSerializableConfiguration::getProperties() const

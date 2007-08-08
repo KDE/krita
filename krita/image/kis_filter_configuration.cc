@@ -59,24 +59,65 @@ void KisFilterConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) c
     root.setAttribute( "name", d->name );
     root.setAttribute( "version", d->version );
 
-    KisSerializableConfiguration::toLegacyXML(doc, root);
+    QMap<QString, QVariant> properties = getProperties();
+    QMap<QString, QVariant>::Iterator it;
+    for ( it = properties.begin(); it != properties.end(); ++it ) {
+        QDomElement e = doc.createElement( "property" );
+        e.setAttribute( "name", QString(it.key().toLatin1()) );
+        QVariant v = it.value();
+        e.setAttribute( "type", v.typeName() );
+        QString s = v.toString();
+        QDomText text = doc.createCDATASection(v.toString() ); // XXX: Unittest this!
+        e.appendChild(text);
+        root.appendChild(e);
+    }
 }
 
 QString KisFilterConfiguration::toLegacyXML() const
 {
-    return KisSerializableConfiguration::toLegacyXML();
+    QDomDocument doc = QDomDocument("filterconfig");
+    QDomElement root = doc.createElement( "filterconfig" );
+    doc.appendChild( root );
+    toLegacyXML(doc, root);
+    return doc.toString();
 }
 
 void KisFilterConfiguration::fromLegacyXML(const QDomElement& e)
 {
     d->name = e.attribute("name");
     d->version = e.attribute("version").toInt();
-    KisSerializableConfiguration::fromLegacyXML(e);
+    
+    QDomNode n = e.firstChild();
+
+
+    while (!n.isNull()) {
+        // We don't nest elements in filter configuration. For now...
+        QDomElement e = n.toElement();
+        QString name;
+        QString type;
+        QString value;
+
+        if (!e.isNull()) {
+            if (e.tagName() == "property") {
+                name = e.attribute("name");
+                type = e.attribute("type");
+                value = e.text();
+                // XXX Convert the variant pro-actively to the right type?
+                setProperty(name, QVariant(value));
+            }
+        }
+        n = n.nextSibling();
+    }
 }
 
-void KisFilterConfiguration::fromLegacyXML(QString str)
+void KisFilterConfiguration::fromLegacyXML(QString s)
 {
-    return KisSerializableConfiguration::fromLegacyXML( str);
+    clearProperties();
+
+    QDomDocument doc;
+    doc.setContent( s );
+    QDomElement e = doc.documentElement();
+    fromLegacyXML(e);
 }
 
 const QString & KisFilterConfiguration::name() const
@@ -124,6 +165,6 @@ KisFilterConfigurationFactory::~KisFilterConfigurationFactory()
 KisSerializableConfiguration* KisFilterConfigurationFactory::create(const QDomElement& e)
 {
     KisFilterConfiguration* fc = new KisFilterConfiguration(d->name, d->version);
-    fc->fromLegacyXML( e );
+    fc->fromXML( e );
     return fc;
 }

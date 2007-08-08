@@ -49,6 +49,7 @@ void KisFilesTest::testFiles()
             KTemporaryFile tmpFile;
             tmpFile.setSuffix(".png");
             tmpFile.open();
+            tmpFile.setAutoRemove(false);
             doc.setOutputMimeType("image/png");
             doc.saveAs( "file://" + tmpFile.fileName());
             QImage resultImg(resultFileInfo.absoluteFilePath());
@@ -60,14 +61,16 @@ void KisFilesTest::testFiles()
             QVERIFY(resultImg.height() == sourceImg.height());
 //             kDebug() << resultImg.numBytes() << " " << sourceImg.numBytes() << endl;
             QVERIFY(resultImg.numBytes() == sourceImg.numBytes());
-            QVERIFY(memcmp( resultImg.bits(), sourceImg.bits(), resultImg.numBytes() )==0);
-#if 0
-            for(int i = 0; i < sourceImg.numBytes(); i++)
+            if(memcmp(resultImg.bits(), sourceImg.bits(), sourceImg.numBytes()) != 0)
             {
-//                 kDebug() <<(int)resultImg.bits()[i] << " " << (int)sourceImg.bits()[i] << endl;
-//                 QVERIFY2(resultImg.bits()[i] == sourceImg.bits()[i], QString("pixel %1 is different").arg(i).toAscii().data());
+                for(int i = 0; i < sourceImg.numBytes(); i++)
+                {
+                    kDebug() <<(int)resultImg.bits()[i] << " " << (int)sourceImg.bits()[i] << endl;
+//                     QVERIFY2(resultImg.bits()[i] == sourceImg.bits()[i], QString("pixel %1 is different : %2 %3").arg(i)
+//                             .arg((int)resultImg.bits()[i])
+//                             .arg((int)sourceImg.bits()[i]).toAscii().data());
+                }
             }
-#endif
         }
     }
 }

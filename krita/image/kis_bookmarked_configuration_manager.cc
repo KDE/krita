@@ -64,7 +64,7 @@ void KisBookmarkedConfigurationManager::save(QString configname, const KisSerial
 {
     Q_ASSERT( config );
     KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
-    cfg.writeEntry(configname,config->toLegacyXML());
+    cfg.writeEntry(configname,config->toXML());
 }
 
 bool KisBookmarkedConfigurationManager::exist(QString configname) const

@@ -62,4 +62,15 @@ kde4_add_test_executable(rtreetestapp ${rtreetestapp_SRCS})
 
 target_link_libraries(rtreetestapp komain ${QT_QTTEST_LIBRARY} )
 
+########### next target ###############
+
+set(kopropertiestest_SRCS kopropertiestest.cpp )
+
+kde4_add_unit_test(KoPropertiesTest TESTNAME libs-komain-KoPropertiesTest ${kopropertiestest_SRCS})
+
+target_link_libraries(KoPropertiesTest  ${KDE4_KDEUI_LIBS} komain ${QT_QTTEST_LIBRARY})
+
+
+
 ########### end ###############
+

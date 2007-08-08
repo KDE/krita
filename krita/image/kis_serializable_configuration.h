@@ -107,7 +107,7 @@ private:
     Private* const d;
 };
 
-class KisSerializableConfigurationFactory {
+class KRITAIMAGE_EXPORT KisSerializableConfigurationFactory {
     public:
         virtual ~KisSerializableConfigurationFactory();
         virtual KisSerializableConfiguration* create() =0;

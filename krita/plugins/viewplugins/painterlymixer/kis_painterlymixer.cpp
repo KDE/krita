@@ -78,6 +78,7 @@ KisPainterlyMixer::~KisPainterlyMixer()
     if (m_tool)
         delete m_tool;
 	delete m_colorspace;
+	delete m_illuminant;
 }
 
 void KisPainterlyMixer::initTool()

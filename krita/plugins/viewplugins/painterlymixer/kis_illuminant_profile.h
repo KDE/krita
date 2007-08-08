@@ -29,7 +29,7 @@ class QTextStream;
 class KisIlluminantProfile : public KoColorProfile {
 	public:
 		KisIlluminantProfile(QString fileName = "");
-		~KisIlluminantProfile() {return;}
+		~KisIlluminantProfile();
 
 		bool load();
 

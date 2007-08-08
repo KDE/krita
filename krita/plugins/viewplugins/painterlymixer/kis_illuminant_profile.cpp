@@ -30,8 +30,18 @@
 
 KisIlluminantProfile::KisIlluminantProfile(QString fileName) : KoColorProfile(fileName)
 {
+	m_matrix = 0;
 	if (!fileName.isEmpty())
 		load();
+}
+
+KisIlluminantProfile::~KisIlluminantProfile()
+{
+	if (m_matrix) {
+		for (int i = 0; i < 3; i++)
+			delete [] m_matrix[i];
+		delete [] m_matrix;
+	}
 }
 
 bool KisIlluminantProfile::load()
@@ -47,7 +57,6 @@ bool KisIlluminantProfile::load()
 			for (int j = 0; j < 10; j++) {
 				in_ill >> curr;
 				m_matrix[i][j] = curr.toFloat();
-				kDebug() << m_matrix[i][j];
 			}
 		}
 	} else

@@ -40,17 +40,17 @@ class TestClass : public KisShared
 {
 public:
 
-    TestClass( const TestClassWatcher & tcw )
+    TestClass( TestClassWatcher * tcw )
         {
             m_tcw = tcw;
         }
 
     ~TestClass()
         {
-            m_tcw.deleted = true;
+            m_tcw->deleted = true;
         }
 
-    TestClassWatcher m_tcw;
+    TestClassWatcher * m_tcw;
 };
 
 typedef KisSharedPtr<TestClass> TestClassSP;
@@ -60,7 +60,7 @@ typedef vTestClassSP::const_iterator vTestClassSP_cit;
 
 void KisSharedPtrTest::testRefTwoSharedPointersOneInstance()
 {
-    TestClassWatcher tcw;
+    TestClassWatcher * tcw = new TestClassWatcher();
     TestClass * instance = new TestClass( tcw );
 
     {
@@ -75,12 +75,14 @@ void KisSharedPtrTest::testRefTwoSharedPointersOneInstance()
         QVERIFY( instanceSP.data() != 0 );
         QVERIFY( instance != 0 );
     }
-    QVERIFY( tcw.deleted == true );
+    QVERIFY( tcw->deleted == true );
+    delete tcw;
 }
 
 void KisSharedPtrTest::testCopy()
 {
-    TestClassWatcher tcw;
+
+    TestClassWatcher * tcw = new TestClassWatcher();
     TestClass * instance = new TestClass( tcw );
 
     {
@@ -97,7 +99,7 @@ void KisSharedPtrTest::testCopy()
 
     // The first shared pointer went out of scope; the object should
     // have been deleted and the pointer set to 0
-    QVERIFY( tcw.deleted = true );
+    QVERIFY( tcw->deleted = true );
 }
 
 

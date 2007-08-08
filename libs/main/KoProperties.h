@@ -48,10 +48,15 @@ public:
 public:
 
     /**
-     * Fill the filter configuration object from the XML encoded representation in string.
+     * Fill the filter configuration object from the XML encoded
+     * representation in string.
+     *
+     * load() does not touch existing properties if loading fails.
+     *
      * @param string the stored properties.
+     * @return false if loading failing, true if it succeeded
      */
-    void load(const QString &string);
+    bool load(const QString &string);
 
     /**
      * Returns an iterator over the properties. The iterator is not

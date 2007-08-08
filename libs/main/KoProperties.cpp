@@ -53,12 +53,15 @@ bool KoProperties::isEmpty() const
     return d->properties.isEmpty();
 }
 
-void KoProperties::load(const QString & s)
+bool KoProperties::load(const QString & s)
 {
-    d->properties.clear();
 
     QDomDocument doc;
-    doc.setContent( s );
+
+    if ( !doc.setContent( s ) )
+        return false;
+    d->properties.clear();
+
     QDomElement e = doc.documentElement();
     QDomNode n = e.firstChild();
 
@@ -78,6 +81,8 @@ void KoProperties::load(const QString & s)
         }
         n = n.nextSibling();
     }
+
+    return true;
 }
 
 QString KoProperties::store()
@@ -97,7 +102,7 @@ QString KoProperties::store()
         QByteArray bytes;
         QDataStream out( &bytes, QIODevice::WriteOnly );
         out << v;
-        QDomText text = doc.createCDATASection( QString::fromAscii( bytes, bytes.size() ) ); // XXX: Unittest this!
+        QDomText text = doc.createCDATASection( QString::fromAscii( bytes, bytes.size() ) );
         e.appendChild(text);
         root.appendChild(e);
     }

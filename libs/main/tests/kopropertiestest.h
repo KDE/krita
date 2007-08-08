@@ -27,7 +27,8 @@ class KoPropertiesTest : public QObject
 
 private slots:
 
-    void testSerialization();
+    void testDeserialization();
+    void testRoundTrip();
     void testProperties();
     void testPassAround();
 };

@@ -20,11 +20,35 @@
 #include <KoProperties.h>
 #include "kopropertiestest.h"
 
-void KoPropertiesTest::testSerialization()
+void KoPropertiesTest::testDeserialization()
+{
+    QString test = "";
+    KoProperties props;
+    props.setProperty( "bla", "bla" );
+
+    QVERIFY( !props.load( test ) );
+    QVERIFY( !props.isEmpty() );
+    QVERIFY( props.stringProperty( "bla" ) == "bla" );
+
+    test = "<bla>asdsadasjk</bla>";
+    QVERIFY( props.load( test ) );
+    QVERIFY( props.isEmpty() );
+
+    props.setProperty( "bla", "bla" );
+    test = "<bla>asdsadasjk</";
+    QVERIFY( !props.load( test ) );
+    QVERIFY( !props.isEmpty() );
+    QVERIFY( props.stringProperty( "bla" ) == "bla" );
+
+}
+
+void KoPropertiesTest::testRoundTrip()
 {
     KoProperties props;
     props.setProperty( "string", "string" );
     props.setProperty( "xmlstring", "<xml>bla</xml>" );
+    props.setProperty( "xmlstring2", "<xml>&adsa</xml>" );
+    props.setProperty( "cdata", "<![CDATA[blabla]]>" );
     props.setProperty( "int", 10 );
     props.setProperty( "bool",  false );
     props.setProperty( "double",  1.38 );
@@ -35,6 +59,8 @@ void KoPropertiesTest::testSerialization()
 
     QVERIFY( restored.stringProperty( "string" ) == "string" );
     QVERIFY( restored.stringProperty( "xmlstring" ) == "<xml>bla</xml>" );
+    QVERIFY( restored.stringProperty( "xmlstring2" ) == "<xml>&adsa</xml>" );
+    QVERIFY( restored.stringProperty( "cdata" ) == "<![CDATA[blabla]]>" );
     QVERIFY( restored.intProperty( "int" ) == 10 );
     QVERIFY( restored.boolProperty( "bool") == false);
     QVERIFY( restored.doubleProperty( "double" ) == 1.38 );

@@ -178,13 +178,6 @@ public:
 protected:
     /**
      * @internal
-     * Load a WMF file
-     * \note In %KOffice 1.1, a .wmf file was a QPicture file
-     */
-    bool loadWmf(QIODevice* io);
-
-    /**
-     * @internal
      * Loads a temporary file, probably from a downloaded file
      */
     bool loadTmp(QIODevice* io);

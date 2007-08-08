@@ -39,7 +39,7 @@ const char NULL_MIME_TYPE[]="application/x-zerosize";
 
 /**
  * @internal
- * Base class for KoPictureImage, KoPictureClipart, KoPictureEps, KoPictureWmf...
+ * Base class for KoPictureImage, KoPictureClipart, KoPictureEps
  */
 class KoPictureBase
 {

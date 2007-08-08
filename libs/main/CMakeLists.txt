@@ -3,7 +3,7 @@
 add_subdirectory( tests )
 add_subdirectory( threadAction/tests )
 
-include_directories( ${KWMF_INCLUDES} ${KOSTORE_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
+include_directories( ${KOSTORE_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 
 ########### next target ###############
 
@@ -33,7 +33,6 @@ set(komain_LIB_SRCS
    KoPictureClipart.cpp
    KoPictureCollection.cpp
    KoPictureEps.cpp
-   KoPictureWmf.cpp
    KoDocumentInfo.cpp
    KoView.cpp
    KoViewAdaptor.cpp
@@ -112,7 +111,7 @@ kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 #
 #target_link_libraries(komain kstore ${KDE4_KPARTS_LIBS} ${KDE4_KABC_LIBS} ${KDE4_KDEPRINT_LIBS} kowmf ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBRARY})
 
-target_link_libraries(komain kstore ${KDE4_KPARTS_LIBS} ${KDE4_KABC_LIBS} ${KDE4_KDEPRINT_LIBS} kowmf ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBS})
+target_link_libraries(komain kstore ${KDE4_KPARTS_LIBS} ${KDE4_KABC_LIBS} ${KDE4_KDEPRINT_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBS})
 
 set_target_properties(komain PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS komain DESTINATION ${LIB_INSTALL_DIR} )

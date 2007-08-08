@@ -36,7 +36,6 @@
 #include "KoPictureImage.h"
 #include "KoPictureEps.h"
 #include "KoPictureClipart.h"
-#include "KoPictureWmf.h"
 #include "KoPictureShared.h"
 #include <kcodecs.h>
 
@@ -109,35 +108,6 @@ void KoPictureShared::draw(QPainter& painter, int x, int y, int width, int heigh
     }
 }
 
-bool KoPictureShared::loadWmf(QIODevice* io)
-{
-    kDebug(30003) <<"KoPictureShared::loadWmf";
-    if (!io)
-    {
-        kError(30003) << "No QIODevice!" << endl;
-        return false;
-    }
-
-    clear();
-
-    // The extension .wmf was used (KOffice 1.1.x) for QPicture files
-    // For an extern file or in the storage, .wmf can mean a real Windows Meta File.
-
-    QByteArray array ( io->readAll() );
-
-    if ((array[0]=='Q') && (array[1]=='P') &&(array[2]=='I') && (array[3]=='C'))
-    {
-        m_base=new KoPictureClipart();
-        setExtension("qpic");
-    }
-    else
-    {
-        m_base=new KoPictureWmf();
-        setExtension("wmf");
-    }
-    return m_base->loadData(array, m_extension);
-}
-
 bool KoPictureShared::loadTmp(QIODevice* io)
 // We have a temp file, probably from a downloaded file
 //   We must check the file type
@@ -148,9 +118,6 @@ bool KoPictureShared::loadTmp(QIODevice* io)
         kError(30003) << "No QIODevice!" << endl;
         return false;
     }
-
-    // The extension .wmf was used (KOffice 1.1.x) for QPicture files
-    // For an extern file or in the storage, .wmf can mean a real Windows Meta File.
 
     QByteArray array ( io->readAll() );
     return identifyAndLoad( array );
@@ -182,10 +149,6 @@ bool KoPictureShared::identifyAndLoad( const QByteArray& _array )
     else if ((array[0]=='B') && (array[1]=='M'))
     {
         strExtension="bmp";
-    }
-    else if ((array[0]==char(0xd7)) && (array[1]==char(0xcd)) &&(array[2]==char(0xc6)) && (array[3]==char(0x9a)))
-    {
-        strExtension="wmf";
     }
     else if ((array[0]=='<') && (array[1]=='?') && ( array[2]=='x' ) && (array[3]=='m') && ( array[4]=='l' ) )
     {
@@ -353,10 +316,6 @@ void KoPictureShared::clearAndSetMode(const QString& newMode)
     {
         m_base=new KoPictureClipart();
     }
-    else if (mode=="wmf")
-    {
-        m_base=new KoPictureWmf();
-    }
     else if ( (mode=="eps") || (mode=="epsi") || (mode=="epsf") )
     {
         m_base=new KoPictureEps();
@@ -398,9 +357,7 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
     kDebug(30003) <<"KoPictureShared::load(QIODevice*, const QString&)" << extension;
     bool flag=false;
     QString ext( extension.toLower() );
-    if (ext=="wmf")
-        flag=loadWmf(io);
-    else if (ext=="tmp") // ### TODO: also remote scripts need this, don't they?
+    if (ext=="tmp") // ### TODO: also remote scripts need this, don't they?
         flag=loadTmp(io);
     else if ( ext == "bz2" )
     {

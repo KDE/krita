@@ -48,8 +48,7 @@ namespace KoPictureType
         TypeUnknown = 0,    ///< Unknown or not-an-image @see KoPictureBase
         TypeImage,          ///< Image, QImage-based @see KoPictureImage
         TypeEps,            ///< Encapsulated Postscript @see KoPictureEps
-        TypeClipart,        ///< Clipart, QPicture-based @see KoPictureClipart
-        TypeWmf             ///< WMF (Windows Meta File) @see KoPictureWmf
+        TypeClipart        ///< Clipart, QPicture-based @see KoPictureClipart
     };
 }
 

@@ -27,7 +27,42 @@ void KoPropertiesTest::testSerialization()
 
 void KoPropertiesTest::testProperties()
 {
-    QVERIFY( 1 == 0 );
+    KoProperties props;
+    QVERIFY( props.isEmpty() );
+
+    QString visible = "visible";
+    QVERIFY( !props.value( visible ).isValid() );
+
+    props.setProperty( "visible", "bla" );
+    QVERIFY( props.value( "visible" ) == "bla");
+    QVERIFY( props.stringProperty( "visible", "blabla" ) == "bla" );
+
+    props.setProperty( "bool",  true );
+    QVERIFY( props.boolProperty( "bool", false ) == true );
+    props.setProperty( "bool",  false );
+    QVERIFY( props.boolProperty( "bool", true ) == false );
+
+    props.setProperty( "double",  1.0 );
+    QVERIFY( props.doubleProperty( "double", 2.0 ) == 1.0 );
+    props.setProperty( "double",  2.0 );
+    QVERIFY( props.doubleProperty( "double", 1.0 ) == 2.0 );
+
+    props.setProperty( "int",  1 );
+    QVERIFY( props.intProperty( "int", 2 ) == 1 );
+    props.setProperty( "int",  2 );
+    QVERIFY( props.intProperty( "int", 1 ) == 2 );
+
+    QVariant v;
+    QVERIFY( props.property( "sdsadsakldjsajd", v ) == false );
+    QVERIFY( !v.isValid() );
+    QVERIFY( props.property( "visible", v ) == true );
+    QVERIFY( v.isValid() );
+    QVERIFY( v == "bla" );
+
+    QVERIFY( !props.isEmpty() );
+    QVERIFY( props.contains( "visible" ) );
+    QVERIFY( !props.contains( "adsajkdsakj dsaieqwewqoie" ) );
+    QVERIFY( props.contains( visible ) );
 }
 
 

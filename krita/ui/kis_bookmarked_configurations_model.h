@@ -21,6 +21,8 @@
 
 #include <QAbstractListModel>
 
+#include <krita_export.h>
+
 class KisBookmarkedConfigurationManager;
 class KisSerializableConfiguration;
 
@@ -28,7 +30,7 @@ class KisSerializableConfiguration;
  * This class provides basic functionnalities for a model of a bookmark
  * of configurations.
  */
-class KisBookmarkedConfigurationsModel : public QAbstractListModel {
+class KRITAUI_EXPORT KisBookmarkedConfigurationsModel : public QAbstractListModel {
     public:
         /**
          * Initialized thee model with the bookmarks manager

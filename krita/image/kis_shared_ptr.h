@@ -231,6 +231,11 @@ class KisWeakSharedPtr {
         */
         inline bool isNull() const { return (d == 0); }
 
+        /**
+         * @return true if the weak pointer points to a valid pointer and false if
+         *         the data has been deleted or is null
+         */
+        inline bool isValid() const { return d and dataPtr and dataPtr->valid; }
     private:
         void attach(T* nd)
         {

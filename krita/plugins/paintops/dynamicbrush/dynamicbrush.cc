@@ -34,25 +34,27 @@
 // TEMP
 #include <kis_dynamic_brush.h>
 #include <kis_dynamic_brush_registry.h>
-#include <kis_dynamic_program_registry.h>
 #include <kis_filters_list_dynamic_program.h>
 #include <kis_size_transformation.h>
 #include <kis_rotation_transformation.h>
 #include <kis_dynamic_sensor.h>
 // TEMP
 
+#include <kis_bookmarked_configuration_manager.h>
+
 typedef KGenericFactory<DynamicBrush> DynamicBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritadynamicbrushpaintop, DynamicBrushFactory("kritacore"))
 
 DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+    : KParts::Plugin(parent), m_bookmarksManager( new KisBookmarkedConfigurationManager("dynamicop", new KisDynamicProgramFactory()) )
+
 {
     setComponentData(DynamicBrushFactory::componentData());
 
     // This is not a gui plugin; only load it when the doc is created.
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add (new KisDynamicOpFactory);
-    
+    r->add (new KisDynamicOpFactory(m_bookmarksManager));
+#if 0
     {
         // TODO: remove this, temp stuff for testing only
         {
@@ -76,6 +78,7 @@ DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
             KisDynamicProgramRegistry::instance()->add( programTime);
         }
     }
+#endif
     if ( parent->inherits("KisView2") )
     {
         m_view = (KisView2*) parent;
@@ -86,7 +89,6 @@ DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
         actionCollection()->addAction("EditDynamicPrograms", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotEditDynamicPrograms()));
     }
-
 }
 
 DynamicBrush::~DynamicBrush()
@@ -96,7 +98,7 @@ DynamicBrush::~DynamicBrush()
 void DynamicBrush::slotEditDynamicPrograms()
 {
     kDebug(41006) <<" BOUH";
-    KisDynamicProgramsEditor editor(m_view);
+    KisDynamicProgramsEditor editor(m_view, m_bookmarksManager);
     editor.exec();
 }
 

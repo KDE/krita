@@ -22,6 +22,7 @@
 #include <kparts/plugin.h>
 
 class KisView2;
+class KisBookmarkedConfigurationManager;
 
 /**
  * A plugin wrapper that adds the Dynamic brush paintop
@@ -36,6 +37,7 @@ class DynamicBrush : public KParts::Plugin
         void slotEditDynamicPrograms();
     private:
         KisView2 * m_view;
+        KisBookmarkedConfigurationManager* m_bookmarksManager;
 };
 
 #endif // DYNAMIC_BRUSH_H

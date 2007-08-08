@@ -20,13 +20,17 @@
 
 #include <QVBoxLayout>
 
+#include <kis_bookmarked_configuration_manager.h>
+#include <kis_bookmarked_configurations_model.h>
+
+
 #include "ui_DynamicProgramsEditor.h"
 
 #include "kis_dynamic_program.h"
-#include "kis_dynamic_program_registry.h"
 #include "kis_filters_list_dynamic_program.h"
 
-KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent) : KDialog(parent), m_dynamicProgramsEditor(0), m_currentEditor(0), m_frameVBoxLayout(0)
+KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager) : KDialog(parent), m_dynamicProgramsEditor(0), m_currentEditor(0), m_frameVBoxLayout(0),m_bookmarksManager(bookmarksManager),
+    m_bookmarksModel(new KisBookmarkedConfigurationsModel(bookmarksManager))
 {
     setButtons(KDialog::Close);
     QWidget* widget = new QWidget(this);
@@ -36,8 +40,7 @@ KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent) : KDialog(pa
     m_frameVBoxLayout->setMargin(0);
     connect(m_dynamicProgramsEditor->comboBoxPrograms, SIGNAL(currentIndexChanged( const QString &) ), this, SLOT(setCurrentProgram(const QString&)));
     connect(m_dynamicProgramsEditor->pushButtonAdd, SIGNAL(pressed()), SLOT(addProgram()));
-    m_dynamicProgramsEditor->comboBoxPrograms->addItems( KisDynamicProgramRegistry::instance()->keys() );
-    setMainWidget( widget );
+    m_dynamicProgramsEditor->comboBoxPrograms->setModel(m_bookmarksModel);
 }
 
 KisDynamicProgramsEditor::~KisDynamicProgramsEditor()
@@ -48,16 +51,19 @@ KisDynamicProgramsEditor::~KisDynamicProgramsEditor()
 
 void KisDynamicProgramsEditor::setCurrentProgram(const QString& text)
 {
+#if 0
     kDebug(41006) <<"program changed to" << text;
     if(m_currentEditor) delete m_currentEditor;
     KisDynamicProgram* program = KisDynamicProgramRegistry::instance()->get( text );
     Q_ASSERT(program);
     m_currentEditor = program->createEditor( m_dynamicProgramsEditor->frame);
     m_frameVBoxLayout->addWidget(m_currentEditor);
+#endif
 }
 
 void KisDynamicProgramsEditor::addProgram()
 {
+#if 0
     int index = m_dynamicProgramsEditor->comboBoxProgramsType->currentIndex();
     KisDynamicProgram* program = 0;
     switch(index) {
@@ -70,6 +76,7 @@ void KisDynamicProgramsEditor::addProgram()
     }
     Q_ASSERT(program);
     KisDynamicProgramRegistry::instance()->add( program );
+#endif
 }
 
 #include "kis_dynamic_programs_editor.moc"

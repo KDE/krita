@@ -21,6 +21,8 @@
 
 #include "dynamicbrush_export.h"
 
+#include "kis_serializable_configuration.h"
+
 #include <QString>
 
 class KisDynamicShape;
@@ -31,7 +33,7 @@ class QWidget;
 /**
  * This is the base class of a dynamic program.
  */
-class DYNAMIC_BRUSH_EXPORT KisDynamicProgram {
+class DYNAMIC_BRUSH_EXPORT KisDynamicProgram : public KisSerializableConfiguration {
     protected:
         /**
          * @param name the name of this program, will be displayed in the list of programs
@@ -53,6 +55,22 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicProgram {
         virtual QWidget* createEditor(QWidget* parent) = 0;
     private:
         QString m_name;
+};
+
+class KisDynamicDummyProgram : public KisDynamicProgram {
+    public:
+        KisDynamicDummyProgram(const QString& name) : KisDynamicProgram(name) { }
+        virtual void apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo) { }
+        virtual QWidget* createEditor(QWidget* parent) { return 0; }
+};
+
+class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactory : public KisSerializableConfigurationFactory {
+    public:
+        virtual ~KisDynamicProgramFactory() {}
+        virtual KisSerializableConfiguration* create()
+        {
+            return new KisDynamicDummyProgram("");
+        }
 };
 
 

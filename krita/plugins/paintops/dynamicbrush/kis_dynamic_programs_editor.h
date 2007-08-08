@@ -23,11 +23,13 @@
 
 class QVBoxLayout;
 class Ui_DynamicProgramsEditor;
+class KisBookmarkedConfigurationManager;
+class KisBookmarkedConfigurationsModel;
 
 class KisDynamicProgramsEditor : public KDialog {
     Q_OBJECT
     public:
-        KisDynamicProgramsEditor(QWidget* parent);
+        KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager);
         ~KisDynamicProgramsEditor();
     public slots:
         void setCurrentProgram(const QString& text);
@@ -36,7 +38,8 @@ class KisDynamicProgramsEditor : public KDialog {
         Ui_DynamicProgramsEditor* m_dynamicProgramsEditor;
         QWidget* m_currentEditor;
         QVBoxLayout *m_frameVBoxLayout;
- 
+        KisBookmarkedConfigurationManager* m_bookmarksManager;
+        KisBookmarkedConfigurationsModel* m_bookmarksModel;
 };
 
 #endif

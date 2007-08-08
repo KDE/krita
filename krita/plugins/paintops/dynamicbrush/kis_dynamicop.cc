@@ -17,12 +17,13 @@
  */
 #include "kis_dynamicop.h"
 
-#include <QRect>
-#include <QWidget>
-#include <QLayout>
-#include <QLabel>
+#include <QAbstractItemView>
 #include <QCheckBox>
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QRect>
+#include <QWidget>
 
 #include <kdebug.h>
 
@@ -30,6 +31,8 @@
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_autobrush_resource.h>
+#include <kis_bookmarked_configuration_manager.h>
+#include <kis_bookmarked_configurations_model.h>
 #include <kis_brush.h>
 #include <kis_global.h>
 #include <KoInputDevice.h>
@@ -47,7 +50,6 @@
 #include "kis_dynamic_coloring.h"
 #include "kis_dynamic_shape.h"
 #include "kis_dynamic_program.h"
-#include "kis_dynamic_program_registry.h"
 #include "kis_size_transformation.h"
 
 KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
@@ -63,17 +65,18 @@ KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, K
 KisPaintOpSettings *KisDynamicOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED(inputDevice);
-    return new KisDynamicOpSettings(parent);
+    return new KisDynamicOpSettings(parent, m_bookmarksManager);
 }
 
-KisDynamicOpSettings::KisDynamicOpSettings(QWidget* parent) :
+KisDynamicOpSettings::KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager) :
         QObject(parent),
         KisPaintOpSettings(parent),
         m_optionsWidget(new QWidget(parent)),
-        m_uiOptions(new Ui_DynamicBrushOptions())
+        m_uiOptions(new Ui_DynamicBrushOptions()),
+        m_bookmarksModel(new KisBookmarkedConfigurationsModel(bookmarksManager))
 {
     m_uiOptions->setupUi(m_optionsWidget);
-    m_uiOptions->comboBoxPrograms->addItems( KisDynamicProgramRegistry::instance()->keys() );
+    m_uiOptions->comboBoxPrograms->setModel( m_bookmarksModel );
 }
 
 KisDynamicOpSettings::~KisDynamicOpSettings()
@@ -83,14 +86,13 @@ KisDynamicOpSettings::~KisDynamicOpSettings()
 
 // TEMP
 #include <kis_dynamic_brush.h>
-#include <kis_dynamic_program_registry.h>
 // TEMP
 
 
 KisDynamicBrush* KisDynamicOpSettings::createBrush() const
 {
     KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
-    KisDynamicProgram* program = KisDynamicProgramRegistry::instance()->get( m_uiOptions->comboBoxPrograms->currentText() );
+    KisDynamicProgram* program = static_cast<KisDynamicProgram*>(m_bookmarksModel->configuration( m_uiOptions->comboBoxPrograms->view()->currentIndex() ) );
     Q_ASSERT(program);
     current->setProgram(program);
     return current;

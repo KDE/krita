@@ -326,15 +326,21 @@ void KoTextSelectionHandler::decreaseIndent() {
 }
 
 void KoTextSelectionHandler::setFontFamily(const QString &familyName) {
-    // TODO
+    QTextCharFormat format;
+    format.setFontFamily(familyName);
+    d->caret->mergeCharFormat(format);
 }
 
 void KoTextSelectionHandler::setTextColor(const QColor &color) {
-    // TODO
+    QTextCharFormat format;
+    format.setForeground(QBrush(color));
+    d->caret->mergeCharFormat(format);
 }
 
 void KoTextSelectionHandler::setTextBackgroundColor(const QColor &color) {
-    // TODO
+    QTextCharFormat format;
+    format.setBackground(QBrush(color));
+    d->caret->mergeCharFormat(format);
 }
 
 QString KoTextSelectionHandler::selectedText() const {

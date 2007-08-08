@@ -3,5 +3,5 @@ Example:  KoParagDia.cpp
 Extensions are always .cpp and .h
 We prefer one class per file.  This is to make the filename match the class, which
 obviously does not work if there is more then one class in the file.
-When there is a private class that is not used outside the file its ok to have it
+When there is a private class that is not used outside the file it's ok to have it
 in the same file as another class.

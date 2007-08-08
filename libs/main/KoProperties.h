@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+   Copyright (c) 2006-2007 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -34,12 +34,12 @@ class KOMAIN_EXPORT KoProperties {
 public:
 
     /**
-     * Create a new filter config.
+     * Create a new properties object
      */
     KoProperties();
 
     /**
-     * Deep copy the filter configFile
+     * Deep copy the properties object
      */
     KoProperties(const KoProperties & rhs);
 
@@ -48,7 +48,7 @@ public:
 public:
 
     /**
-     * Fill the filter configuration object from the XML encoded
+     * Fill the properties object from the XML encoded
      * representation in string.
      *
      * load() does not touch existing properties if loading fails.
@@ -71,11 +71,16 @@ public:
     bool isEmpty() const;
 
     /**
-     * Create a serialized version of this filter config
+     * Create a serialized version of this properties
      * @return the string version of this properties object
      */
     QString store();
 
+    /**
+     * Create a serialized version of these properties with @param
+     * root as the root element.
+     */
+    QString store( const QString & root );
 
     /**
      * Set the property with name to value.

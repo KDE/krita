@@ -66,7 +66,7 @@ bool KoProperties::load(const QString & s)
     QDomNode n = e.firstChild();
 
     while (!n.isNull()) {
-        // We don't nest elements in filter configuration. For now...
+        // We don't nest elements.
         QDomElement e = n.toElement();
         if (!e.isNull()) {
             if (e.tagName() == "property") {
@@ -85,10 +85,10 @@ bool KoProperties::load(const QString & s)
     return true;
 }
 
-QString KoProperties::store()
+QString KoProperties::store( const QString & s )
 {
-    QDomDocument doc = QDomDocument("filterconfig");
-    QDomElement root = doc.createElement( "filterconfig" );
+    QDomDocument doc = QDomDocument( s );
+    QDomElement root = doc.createElement( s );
 
     doc.appendChild( root );
 
@@ -108,6 +108,13 @@ QString KoProperties::store()
     }
 
     return doc.toString();
+
+}
+
+QString KoProperties::store()
+{
+    // Legacy...
+    store( "filterconfig" );
 }
 
 

@@ -22,7 +22,23 @@
 
 void KoPropertiesTest::testSerialization()
 {
-    QVERIFY( 1 == 0 );
+    KoProperties props;
+    props.setProperty( "string", "string" );
+    props.setProperty( "xmlstring", "<xml>bla</xml>" );
+    props.setProperty( "int", 10 );
+    props.setProperty( "bool",  false );
+    props.setProperty( "double",  1.38 );
+
+    QString stored = props.store();
+    KoProperties restored;
+    restored.load( stored );
+
+    QVERIFY( restored.stringProperty( "string" ) == "string" );
+    QVERIFY( restored.stringProperty( "xmlstring" ) == "<xml>bla</xml>" );
+    QVERIFY( restored.intProperty( "int" ) == 10 );
+    QVERIFY( restored.boolProperty( "bool") == false);
+    QVERIFY( restored.doubleProperty( "double" ) == 1.38 );
+
 }
 
 void KoPropertiesTest::testProperties()

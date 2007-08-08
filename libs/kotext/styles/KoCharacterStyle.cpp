@@ -94,6 +94,17 @@ KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style)
     d->name = style.name();
 }
 
+
+KoCharacterStyle::KoCharacterStyle(const QTextFormat &textFormat)
+    : QObject(0), d( new Private() )
+{
+    QMapIterator<int, QVariant> i(textFormat.properties());
+    while (i.hasNext()) {
+        i.next();
+        d->setProperty(i.key(), i.value());
+    }
+}
+
 void KoCharacterStyle::copyProperties(const KoCharacterStyle *style) {
     d->stylesPrivate->clearAll();
     d->stylesPrivate->copyMissing(style->d->stylesPrivate);
@@ -635,6 +646,10 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     addRef();
 #endif
 
+}
+
+bool KoCharacterStyle::operator==( const KoCharacterStyle &other ) const {
+    return ((*(other.d->stylesPrivate)) == (*(this->d->stylesPrivate)));
 }
 
 #include "KoCharacterStyle.moc"

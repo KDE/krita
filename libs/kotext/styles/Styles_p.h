@@ -36,6 +36,7 @@ public:
     void removeDuplicates(const StylePrivate *other);
     void clearAll() { m_properties.clear(); }
 
+    bool operator==( const StylePrivate &other ) const;
 private:
     QHash<int, QVariant> m_properties;
 };

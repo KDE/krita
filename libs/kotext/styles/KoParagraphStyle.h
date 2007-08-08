@@ -129,6 +129,8 @@ public:
     KoParagraphStyle();
     /// Copy constructor
     KoParagraphStyle(const KoParagraphStyle &orig);
+    /// Copy constructor
+    KoParagraphStyle(const QTextFormat &textFormat);
     /// Destructor
     ~KoParagraphStyle();
 
@@ -478,6 +480,8 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     static KoParagraphStyle *fromBlock(const QTextBlock &block);
 
     void remove(int key);
+    
+    bool operator==( const KoParagraphStyle &other ) const;
 
 private:
     void setProperty(int key, const QVariant &value);

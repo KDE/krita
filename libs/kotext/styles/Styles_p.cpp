@@ -57,3 +57,13 @@ void StylePrivate::removeDuplicates(const StylePrivate *other) {
             m_properties.remove(key);
     }
 }
+
+bool StylePrivate::operator==( const StylePrivate &other ) const {
+    if (other.m_properties.size() != m_properties.size())
+        return false;
+    foreach (int key, m_properties.keys()) {
+        if (m_properties.value(key) != other.value(key))
+            return false;
+    }
+    return true;
+}

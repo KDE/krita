@@ -94,6 +94,8 @@ public:
     explicit KoCharacterStyle(QObject *parent = 0);
     /// Copy constructor
     KoCharacterStyle(const KoCharacterStyle &other);
+    /// Copy constructor
+    KoCharacterStyle(const QTextFormat &textFormat);
     /// Destructor
     ~KoCharacterStyle();
 
@@ -220,6 +222,8 @@ public:
     /// return true if this style has a non-default value set for the Property
     bool hasProperty(int key) const;
 
+    bool operator==( const KoCharacterStyle &other ) const;
+    
 private:
     class Private;
     Private * const d;

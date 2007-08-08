@@ -144,6 +144,18 @@ KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
         setListStyle(*orig.d->listStyle);
 }
 
+KoParagraphStyle::KoParagraphStyle(const QTextFormat &textFormat)
+    : QObject(),
+              d(new Private())
+{
+    d->stylesPrivate = new StylePrivate();
+    QMapIterator<int, QVariant> i(textFormat.properties());
+    while (i.hasNext()) {
+        i.next();
+        d->setProperty(i.key(), i.value());
+    }
+}
+
 KoParagraphStyle::~KoParagraphStyle() {
     delete d;
 }
@@ -1128,6 +1140,10 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block) {
     }
 
     return answer;
+}
+
+bool KoParagraphStyle::operator==( const KoParagraphStyle &other ) const {
+    return ((*(other.d->stylesPrivate)) == (*(this->d->stylesPrivate)));
 }
 
 #include "KoParagraphStyle.moc"

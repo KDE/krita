@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Adrian Page <adrian@pagenet.plus.com>, (C) 2007
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 
 #include <QTest>
 #include <QCoreApplication>

@@ -63,8 +63,40 @@ void KoPropertiesTest::testProperties()
     QVERIFY( props.contains( "visible" ) );
     QVERIFY( !props.contains( "adsajkdsakj dsaieqwewqoie" ) );
     QVERIFY( props.contains( visible ) );
+
+    int count = 0;
+    QMapIterator<QString, QVariant> iter = props.propertyIterator();
+    while ( iter.hasNext() ) {
+        iter.next();
+        count++;
+    }
+    QVERIFY( count == 4 );
+
 }
 
+bool checkProps( const KoProperties & props )
+{
+    return ( props.value( "bla" ) == 1 );
+}
+
+void KoPropertiesTest::testPassAround()
+{
+    KoProperties props;
+    props.setProperty( "bla", 1 );
+    QVERIFY( checkProps( props ) );
+
+    KoProperties props2 = props;
+    QVERIFY( checkProps( props2 ) );
+
+    KoProperties props3( props );
+    checkProps( props3 );
+    props3.setProperty( "bla", 3 );
+    QVERIFY( props3.value( "bla" ) == 3 );
+
+    QVERIFY( checkProps( props ) );
+    QVERIFY( checkProps( props2 ) );
+
+}
 
 QTEST_KDEMAIN(KoPropertiesTest, NoGUI)
 #include "kopropertiestest.moc"

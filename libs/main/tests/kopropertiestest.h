@@ -29,6 +29,7 @@ private slots:
 
     void testSerialization();
     void testProperties();
+    void testPassAround();
 };
 
 #endif

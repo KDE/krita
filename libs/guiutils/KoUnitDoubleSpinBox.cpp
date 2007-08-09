@@ -24,6 +24,8 @@
 #include <KGlobal>
 #include <KLocale>
 
+// #define DEBUG_VALIDATOR
+
 class KoUnitDoubleSpinBox::Private {
 public:
     Private(double low, double up, double step)
@@ -81,7 +83,9 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
 
 QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 {
+#ifdef DEBUG_VALIDATOR
     kDebug(30004) <<"KoUnitDoubleSpinBox::validate :" << input <<" at" << pos;
+#endif
 
     QRegExp regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end
     const int res = input.indexOf( regexp );
@@ -89,7 +93,9 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
     if ( res == -1 )
     {
         // Nothing like an unit? The user is probably editing the unit
+#ifdef DEBUG_VALIDATOR
         kDebug(30004) <<"Intermediate (no unit)";
+#endif
         return QValidator::Intermediate;
     }
 
@@ -97,7 +103,9 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
     const QString number ( input.left( res ).trimmed() );
     const QString unitName ( regexp.cap( 1 ).trimmed().toLower() );
 
+#ifdef DEBUG_VALIDATOR
     kDebug(30004) <<"Split:" << number <<":" << unitName <<":";
+#endif
 
     const double value = valueFromText( number );
     double newVal = 0.0;
@@ -110,7 +118,9 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
         else
         {
             // Probably the user is trying to edit the unit
+#ifdef DEBUG_VALIDATOR
             kDebug(30004) <<"Intermediate (unknown unit)";
+#endif
             return QValidator::Intermediate;
         }
     }

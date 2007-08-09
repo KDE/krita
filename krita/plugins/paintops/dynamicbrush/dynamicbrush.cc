@@ -46,7 +46,7 @@ typedef KGenericFactory<DynamicBrush> DynamicBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritadynamicbrushpaintop, DynamicBrushFactory("kritacore"))
 
 DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent), m_bookmarksManager( new KisBookmarkedConfigurationManager("dynamicop", new KisDynamicProgramFactory()) )
+    : KParts::Plugin(parent), m_bookmarksManager( new KisBookmarkedConfigurationManager("dynamicop", new KisDynamicProgramsFactory()) )
 
 {
     setComponentData(DynamicBrushFactory::componentData());

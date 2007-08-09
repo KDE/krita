@@ -68,9 +68,9 @@ class KisDynamicDummyProgram : public KisDynamicProgram {
         virtual QWidget* createEditor(QWidget* parent) { return 0; }
 };
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactory : public KisSerializableConfigurationFactory {
+class DYNAMIC_BRUSH_EXPORT KisDynamicProgramsFactory : public KisSerializableConfigurationFactory {
     public:
-        virtual ~KisDynamicProgramFactory();
+        virtual ~KisDynamicProgramsFactory();
         virtual KisSerializableConfiguration* create(const QDomElement&);
 };
 

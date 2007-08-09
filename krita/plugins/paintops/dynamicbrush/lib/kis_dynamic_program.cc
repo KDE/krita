@@ -50,13 +50,13 @@ void KisDynamicProgram::toXML(QDomDocument& doc, QDomElement& e) const
     e.setAttribute("name", name());
 }
 
-//----------- KisDynamicProgramFactory -----------//
+//----------- KisDynamicProgramsFactory -----------//
 
-KisDynamicProgramFactory::~KisDynamicProgramFactory()
+KisDynamicProgramsFactory::~KisDynamicProgramsFactory()
 {
 }
 
-KisSerializableConfiguration* KisDynamicProgramFactory::create(const QDomElement& e)
+KisSerializableConfiguration* KisDynamicProgramsFactory::create(const QDomElement& e)
 {
     KisDynamicProgram* program = 0;
     QString type = e.attribute("type","");

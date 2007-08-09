@@ -42,7 +42,9 @@
 MixerCanvas::MixerCanvas(QWidget *parent)
     : QFrame(parent), KoCanvasBase(0), m_toolProxy(0)
 {
-
+	m_dirty = false;
+	m_image = QImage(size(), QImage::Format_ARGB32);
+	m_image.fill(0);
 }
 
 MixerCanvas::~MixerCanvas()
@@ -82,20 +84,53 @@ void MixerCanvas::tabletEvent(QTabletEvent *event)
     m_toolProxy->tabletEvent(event, event->pos());
 }
 
+void MixerCanvas::resizeEvent(QResizeEvent *event)
+{
+	if (event->size().width() > m_image.width() ||
+	    event->size().height() > m_image.height()) {
+		QImage newImg(event->size(), QImage::Format_ARGB32);
+		newImg.fill(0);
+
+		QPainter p(&newImg);
+		p.drawImage(m_image.rect(), m_image, m_image.rect());
+		p.end();
+
+		m_image = newImg;
+	}
+
+	QFrame::resizeEvent(event);
+}
+
 void MixerCanvas::paintEvent(QPaintEvent *event)
 {
-    QFrame::paintEvent(event);
+	if (m_dirty) {
+		QRect r = event->rect();
+		QRect imgRect = QRect(0, 0, r.width(), r.height());
+		QPainter p(&m_image);
+		p.drawImage(r, m_device->convertToQImage(0, r.x(), r.y(), r.width(), r.height()), imgRect);
+		p.end();
 
-    QRect r = event->rect();
-	QRect imgRect = QRect(0, 0, r.width(), r.height());
-    QPainter p(this);
-    p.drawImage(r, m_device->convertToQImage(0, r.x(), r.y(), r.width(), r.height()), imgRect);
-    p.end();
+		m_dirty = false;
+	}
+
+	QPainter p(this);
+	p.drawImage(m_image.rect(), m_image, m_image.rect());
+	p.end();
+
+    QFrame::paintEvent(event);
 }
 
 void MixerCanvas::updateCanvas(const QRectF& rc)
 {
-    update(rc.toRect());
+	m_dirty = true;
+	update(rc.toRect());
+}
+
+void MixerCanvas::slotClear()
+{
+	m_device->clear();
+	m_image.fill(0);
+	update();
 }
 
 

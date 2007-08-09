@@ -23,19 +23,21 @@
 #include "KoIncompleteColorSpace.h"
 #include "KoColorSpaceTraits.h"
 
+#include "kis_illuminant_profile.h"
+
 class QString;
 class KoColorProfile;
 class KoColorSpaceRegistry;
 class KisIlluminantProfile;
 
 template<typename _channels_type_>
-struct KisKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 21, 20> {
+struct KisKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 2*WLS_NUMBER+1, 2*WLS_NUMBER> {
 
 	struct Cell {
 		struct {
 			_channels_type_ absorption;
 			_channels_type_ scattering;
-		} wavelen[10];
+		} wavelen[WLS_NUMBER];
 		_channels_type_ alpha;
 	};
 
@@ -48,13 +50,7 @@ class KisKSColorSpace : public KoIncompleteColorSpace<KSTraits, KoRGB16Fallback>
 
 	public:
 
-		~KisKSColorSpace()
-		{
-			cmsDeleteTransform(BGR_XYZ);
-			cmsDeleteTransform(XYZ_BGR);
-			cmsCloseProfile(hsRGB);
-			cmsCloseProfile(hXYZ);
-		}
+		~KisKSColorSpace();
 
 		KisKSColorSpace(KoColorProfile *p);
 
@@ -83,7 +79,9 @@ class KisKSColorSpace : public KoIncompleteColorSpace<KSTraits, KoRGB16Fallback>
 		cmsHPROFILE hsRGB, hXYZ;
 		cmsHTRANSFORM XYZ_BGR, BGR_XYZ;
 
-		double **m_D50;
+// 		double **m_D50;
+		double **m_D65_D50;
+		double **m_D50_D65;
 };
 
 

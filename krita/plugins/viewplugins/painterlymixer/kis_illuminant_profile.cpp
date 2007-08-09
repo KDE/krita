@@ -51,21 +51,28 @@ bool KisIlluminantProfile::load()
 
 	if (f_ill.open(QFile::ReadOnly)) {
 		QTextStream in_ill(&f_ill);
+
+		curr = in_ill.readLine();
+		setName(curr);
+
 		m_matrix = new double*[3];
 		for (int i = 0; i < 3; i++) {
-			m_matrix[i] = new double[10];
-			for (int j = 0; j < 10; j++) {
+			m_matrix[i] = new double[WLS_NUMBER];
+			for (int j = 0; j < WLS_NUMBER; j++) {
 				in_ill >> curr;
 				m_matrix[i][j] = curr.toFloat();
 			}
 		}
-	} else
-		kDebug() <<"No files found!";
 
-	return false;
+	} else {
+		kDebug() <<"No files found!";
+		return false;
+	}
+
+	return true;
 }
 
-bool KisIlluminantProfile::save(QString fileName)
+bool KisIlluminantProfile::save(QString /*fileName*/)
 {
 	// TODO Reimplement save()
 	return false;
@@ -73,6 +80,8 @@ bool KisIlluminantProfile::save(QString fileName)
 
 bool KisIlluminantProfile::valid() const
 {
-	// TODO Reimplement valid()
-	return false;
+	if (m_matrix)
+		return true;
+	else
+		return false;
 }

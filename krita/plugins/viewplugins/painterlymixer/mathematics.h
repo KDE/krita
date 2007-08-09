@@ -23,9 +23,9 @@
 namespace maths {
 
 const double MATH_THICKNESS = 1.0;
-const double MATH_LIM_SUP = 0.99609375; // 1 - 3.90625*10^-3
-const double MATH_LIM_SUB = 3.90625e-3;
-const double MATH_SUB_BLACK = 3.90625e-5;
+const double MATH_LIM_SUP = 1.0 - 3.90625e-3; // 1e-6;
+const double MATH_LIM_SUB = 0.0 + 3.90625e-3; // 1e-6;
+const double MATH_SUB_BLACK(double R);
 const double MATH_NORMALIZATION = 65535.0;
 
 double coth(double z);

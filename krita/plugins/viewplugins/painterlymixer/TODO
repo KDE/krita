@@ -1,11 +1,11 @@
 o MIXER
-- Remove *all* std::vector
-- Check if I do coth and acoth correctly!
-- Do not redraw the whole canvas!
-- Find something about Gaussian quadrature
-- Implement KisIlluminantProfile using Gaussian quadrature upon 470 wavelenghs (use 15 wavelenghts)
++ Remove *all* std::vector
++ Check if I do coth and acoth correctly!
++ Do not redraw the whole canvas!
++ Find something about Gaussian quadrature
++ Implement KisIlluminantProfile using Gaussian quadrature upon 470 wavelenghs (use 15 wavelenghts)
 - Implement KisReflectanceColorSpace (16 channels, 15 for colors + 1 for opacity)
-- Implement KisKSColorSpace (31 channels, 30 for colors (2 per wavelenght) + 1 for opacity)
++ Implement KisKSColorSpace (31 channels, 30 for colors (2 per wavelenght) + 1 for opacity)
 - Implement configuration option widget for the mixer
 - Implement loading/saving of configuration
 

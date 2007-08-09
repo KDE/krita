@@ -26,6 +26,8 @@
 
 class QTextStream;
 
+const int WLS_NUMBER = 10;
+
 class KisIlluminantProfile : public KoColorProfile {
 	public:
 		KisIlluminantProfile(QString fileName = "");

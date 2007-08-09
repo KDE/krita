@@ -28,6 +28,9 @@ extern "C" {
 
 namespace maths {
 
+const double MATH_SUB_BLACK(double) { return 3.90625e-4; }
+// const double MATH_SUB_BLACK(double R) { return 0.05*R; }
+
 double coth(double z)
 {
 	return 1.0 / tanh(z);
@@ -69,7 +72,7 @@ void computeKS(const int nrefs, const double *vREF, float *vKS)
 		if (R < MATH_LIM_SUB)
 			R = MATH_LIM_SUB;
 
-		Rb = R - MATH_SUB_BLACK;
+		Rb = R - MATH_SUB_BLACK(R);
 
 		a = 0.5 * ( R + ( Rb - R + 1.0) / Rb );
 		b = sqrt( a*a - 1.0 );
@@ -82,16 +85,24 @@ void computeKS(const int nrefs, const double *vREF, float *vKS)
 	}
 }
 
+// 		b = sqrt( ( K / S ) * ( K / S + 2.0 ) );
+// 		R = 1.0 / ( 1.0 + ( K / S ) + b * coth( b * S * MATH_THICKNESS ) );
 
 void computeReflectance(const int nrefs, const float *vKS, double *vREF)
 {
-	double b, K, S, R;
+	double a, b, K, S, R;
 	for (int i = 0, j = 0; j < nrefs; i += 2, j += 1) {
 		K = vKS[i+0];
 		S = exp(vKS[i+1]);
 
-		b = sqrt( ( K / S ) * ( K / S + 2.0 ) );
-		R = 1.0 / ( 1.0 + ( K / S ) + b * coth( b * S * MATH_THICKNESS ) );
+		a = (S + K) / S;
+		b = sqrt( a*a - 1 );
+		R = 1.0 / ( a + b * coth( b * S * MATH_THICKNESS ) );
+
+		if (R > MATH_LIM_SUP)
+			R = MATH_LIM_SUP;
+		if (R < MATH_LIM_SUB)
+			R = MATH_LIM_SUB;
 
 		vREF[j] = R;
 	}
@@ -104,13 +115,16 @@ void computeReflectance(const int nrefs, const float *vKS, double *vREF)
 	for (int i = 0, j = 0; j < nrefs; i += 2, j += 1) {
 		K = vKS[i+0];
 		S = exp(vKS[i+1]);
-// 		kDebug() << "K: " << K << " S: " << S << endl;
 
 		q = K / S;
 		R = 1.0 + q - sqrt( q*q + 2.0*q );
 
+		if (R > MATH_LIM_SUP)
+			R = MATH_LIM_SUP;
+		if (R < MATH_LIM_SUB)
+			R = MATH_LIM_SUB;
+
 		vREF[j] = R;
-// 		kDebug() << "R: " << R << endl;
 	}
 }
 */

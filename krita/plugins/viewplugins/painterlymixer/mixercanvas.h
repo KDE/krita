@@ -22,6 +22,7 @@
 #define MIXERCANVAS_H_
 
 #include <QFrame>
+#include <QImage>
 #include <KoCanvasBase.h>
 
 class KoCanvasResourceProvider;
@@ -53,6 +54,8 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void tabletEvent(QTabletEvent *event);
+// QFrame events
+	void resizeEvent(QResizeEvent *event);
     void paintEvent(QPaintEvent *event);
 
 // Implement KoCanvasBase
@@ -70,12 +73,18 @@ public:
     QWidget* canvasWidget() {return this;}
     void updateCanvas(const QRectF& rc);
 
+public slots:
+	void slotClear();
+
 private:
     bool m_tabletPressed;
     KoToolProxy *m_toolProxy;
 
     KisPaintDeviceSP m_device;
 	KisPainterlyOverlaySP m_overlay;
+
+	bool m_dirty;
+	QImage m_image;
 
 };
 

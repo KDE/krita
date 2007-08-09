@@ -108,9 +108,8 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
     painter.setBrush(static_cast<KisBrush*>(m_resources->resource(KisResourceProvider::CurrentBrush).value<void*>()));
 	painter.setPaintOp(current); // The painter now has the paintop and will destroy it.
 
-    painter.paintLine(KisPaintInformation(lastPos, e->pressure(), e->xTilt(), e->yTilt()),
-                      KisPaintInformation(e->pos(), e->pressure(), e->xTilt(), e->yTilt()));
-// 	painter.paintAt(KisPaintInformation(e->pos(), e->pressure(), e->xTilt(), e->yTilt()));
+    current->paintLine(KisPaintInformation(lastPos, e->pressure(), e->xTilt(), e->yTilt()),
+                       KisPaintInformation(e->pos(), e->pressure(), e->xTilt(), e->yTilt()));
 
     painter.end();
 
@@ -122,7 +121,7 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *e)
     } else
         preserveProperties(overlay);
 
-    QRect rc = stroke->exactBounds();
+    QRect rc = stroke->exactBounds() & m_canvas->canvasWidget()->rect();
     painter.begin(m_canvasDevice);
     painter.bitBlt(rc.topLeft(), stroke, rc);
     painter.end();
@@ -153,8 +152,9 @@ void mixColorChannels(uint nchannels, float *stroke, float *canvas, PainterlyCel
     V_ac = activeVolume(V_c, w_c, force);
     V_as = activeVolume(V_s, w_s, force);
 
-	for (quint32 i = 0; i < nchannels; i++)
+	for (quint32 i = 0; i < nchannels; i++) {
 		stroke[i] = (V_ac * canvas[i] + V_as * stroke[i]) / (V_ac + V_as);
+	}
 }
 
 void mixProperties(PainterlyCell *strCell, PainterlyCell *canCell, float force)
@@ -237,37 +237,36 @@ void MixerTool::mixPaint(KisPaintDeviceSP stroke, KisPainterlyOverlaySP overlay,
 void MixerTool::updateResources(KisPaintDeviceSP stroke, KisPainterlyOverlaySP /*overlay*/)
 {
     // TODO Update tool's own KisPainterlyInformation structure.
-    QColor current;
-    int c_r, c_g, c_b;
-    long r = 0, g = 0, b = 0;
-    int total = 0;
-    quint8 opacity;
+	int channels = stroke->colorSpace()->channelCount();
+
+	float *current;
+	float final[channels];
+	int total = 0;
 
     QRect rc = stroke->exactBounds();
     KisRectIteratorPixel
         it_main = stroke->createRectIterator(rc.x(),rc.y(),rc.width(),rc.height());
 
+	for (int i = 0; i < channels-1; i++)
+		final[i] = 0;
+	final[channels-1] = 1;
+
     while (!it_main.isDone()) {
-        stroke->colorSpace()->toQColor(it_main.rawData(), &current, &opacity);
-        if (opacity) {
-            current.getRgb(&c_r, &c_g, &c_b);
-            r += c_r;
-            g += c_g;
-            b += c_b;
+		current = reinterpret_cast<float *>(it_main.rawData());
+        if (current[channels-1]) { // opacity
+            for (int i = 0; i < channels-1; i++)
+				final[i] += current[i];
+
             ++total;
         }
         ++it_main;
     }
 
     if (total) {
-        QColor final;
+        for (int i = 0; i < channels - 1; i++)
+			final[i] /= (float)total;
 
-        r /= total;
-        g /= total;
-        b /= total;
-        final.setRgb(r, g, b);
-
-        m_resources->setForegroundColor(KoColor(final, stroke->colorSpace()));
+        m_resources->setForegroundColor(KoColor(reinterpret_cast<quint8 *>(final), stroke->colorSpace()));
     }
 }
 

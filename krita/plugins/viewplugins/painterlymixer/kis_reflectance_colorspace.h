@@ -20,26 +20,22 @@
 #ifndef KIS_REFLECTANCE_COLORSPACE_H_
 #define KIS_REFLECTANCE_COLORSPACE_H_
 
-#include "KoColorProfile.h"
-#include "KoColorSpaceTraits.h"
 #include "KoIncompleteColorSpace.h"
+#include "KoColorSpaceTraits.h"
 
 #include "kis_illuminant_profile.h"
-
-using namespace std;
 
 class QString;
 class KoColorProfile;
 class KoColorSpaceRegistry;
+class KisIlluminantProfile;
 
 template<typename _channels_type_>
-struct KisReflectanceColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, _to_decide_, _to_decide_> {
+struct KisReflectanceColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, WLS_NUMBER+1, WLS_NUMBER> {
 
 	struct Cell {
-		struct {
-			_channels_type_ reflectance;
-		} wavelen[_to_decide_];
-		_channels_type_ alpha;
+		_channels_type_ refl[WLS_NUMBER];
+		_channels_type_ opacity;
 	};
 
 };
@@ -51,13 +47,7 @@ class KisReflectanceColorSpace : public KoIncompleteColorSpace<ReflectanceTraits
 
 	public:
 
-		~KisReflectanceColorSpace()
-		{
-			cmsDeleteTransform(BGR_XYZ);
-			cmsDeleteTransform(XYZ_BGR);
-			cmsCloseProfile(hsRGB);
-			cmsCloseProfile(hXYZ);
-		}
+		~KisReflectanceColorSpace();
 
 		KisReflectanceColorSpace(KoColorProfile *p);
 
@@ -66,8 +56,10 @@ class KisReflectanceColorSpace : public KoIncompleteColorSpace<ReflectanceTraits
 
 	public:
 
-		bool willDegrade(ColorSpaceIndependence) const
+		bool willDegrade(ColorSpaceIndependence independence) const
 		{
+			Q_UNUSED(independence)
+
 			return true;
 		}
 
@@ -83,6 +75,8 @@ class KisReflectanceColorSpace : public KoIncompleteColorSpace<ReflectanceTraits
 
 		cmsHPROFILE hsRGB, hXYZ;
 		cmsHTRANSFORM XYZ_BGR, BGR_XYZ;
+
+// 		double **m_D50;
 };
 
 

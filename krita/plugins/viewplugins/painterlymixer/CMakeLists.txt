@@ -6,6 +6,7 @@ set(kritapainterlymixer_PART_SRCS
 	kis_ks_colorspace.cpp
     kis_painterlymixer.cpp
     kis_painterlymixerdocker.cpp
+    kis_reflectance_colorspace.cpp
 	kis_rgbks_colorspace.cpp
 	mathematics.cpp
     mixercanvas.cpp

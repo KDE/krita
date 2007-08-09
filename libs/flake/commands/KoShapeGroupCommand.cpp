@@ -63,22 +63,19 @@ void KoShapeGroupCommand::redo () {
 
     if( dynamic_cast<KoShapeGroup*>( m_container ) )
     {
-        bool boundingRectInitialized=true;
-        QRectF bound;
-        if(m_container->childCount() > 0)
-            bound = m_container->boundingRect();
-        else
-            boundingRectInitialized = false;
-        foreach(KoShape *shape, m_shapes) {
-            if(boundingRectInitialized)
-                bound = bound.unite(shape->boundingRect());
-            else {
-                bound = shape->boundingRect();
-                boundingRectInitialized = true;
-            }
-        }
+        QRectF bound = containerBoundingRect();;
+        QPointF oldGroupPosition = m_container->position();
         m_container->setPosition( bound.topLeft() );
         m_container->setSize( bound.size() );
+
+        if( m_container->childCount() > 0 )
+        {
+            // the group has changed position and so have the group child shapes
+            // -> we need compensate the group position change
+            QPointF positionOffset = oldGroupPosition - bound.topLeft();
+            foreach( KoShape * child, m_container->iterator() )
+                child->moveBy( positionOffset.x(), positionOffset.y() );
+        }
     }
 
     QMatrix groupTransform = m_container->transformationMatrix(0).inverted();
@@ -104,4 +101,43 @@ void KoShapeGroupCommand::undo () {
     QMatrix ungroupTransform = m_container->transformationMatrix(0);
     foreach(KoShape *shape, m_shapes)
         shape->applyTransformation( ungroupTransform );
+
+    if( dynamic_cast<KoShapeGroup*>( m_container ) )
+    {
+        QPointF oldGroupPosition = m_container->position();
+        QRectF bound = containerBoundingRect();
+        if( m_container->childCount() > 0 )
+        {
+            // the group has changed position and so have the group child shapes
+            // -> we need compensate the group position change
+            QPointF positionOffset = oldGroupPosition - bound.topLeft();
+            foreach( KoShape * child, m_container->iterator() )
+                child->moveBy( positionOffset.x(), positionOffset.y() );
+        }
+
+        m_container->setPosition( bound.topLeft() );
+        m_container->setSize( bound.size() );
+    }
+}
+
+QRectF KoShapeGroupCommand::containerBoundingRect()
+{
+    bool boundingRectInitialized=true;
+    QRectF bound;
+    if( m_container->childCount() > 0 )
+        bound = m_container->boundingRect();
+    else
+        boundingRectInitialized = false;
+
+    foreach(KoShape *shape, m_shapes)
+    {
+        if(boundingRectInitialized)
+            bound = bound.unite(shape->boundingRect());
+        else 
+        {
+            bound = shape->boundingRect();
+            boundingRectInitialized = true;
+        }
+    }
+    return bound;
 }

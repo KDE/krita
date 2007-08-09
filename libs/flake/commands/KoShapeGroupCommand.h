@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -63,6 +64,8 @@ protected:
     QList<bool> m_clipped; ///< list of booleas to specify the shape of the same index to eb clipped
     KoShapeContainer *m_container; ///< the container where the grouping should be for.
     QList<KoShapeContainer*> m_oldParents; ///< the old parents of the shapes
+private:
+    QRectF containerBoundingRect();
 };
 
 #endif

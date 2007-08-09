@@ -2270,7 +2270,6 @@ KoXmlNode KoXmlNode::namedItemNS( const QString& nsURI, const QString& name ) co
   KoXmlNodeData* node = d->first;
   while ( node ) 
   {
-    if( !node->prefix.isNull() )
     if( node->namespaceURI == nsURI )
     if( node->localName == name )
       return KoXmlNode( node );

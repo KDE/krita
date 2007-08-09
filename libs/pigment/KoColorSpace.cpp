@@ -159,12 +159,17 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
                                    KoColorConversionTransformation::Intent renderingIntent) const
 {
     Q_UNUSED(renderingIntent);
-    // 4 channels: labA, 2 bytes per lab channel
-    quint8 *pixels = new quint8[sizeof(quint16)*4*numPixels];
-    toLabA16(src, pixels,numPixels);
-    dstColorSpace->fromLabA16(pixels, dst,numPixels);
 
-    delete [] pixels;
+	if (*this == *dstColorSpace) {
+		memmove(dst, src, numPixels*pixelSize());
+	} else {
+		// 4 channels: labA, 2 bytes per lab channel
+		quint8 *pixels = new quint8[sizeof(quint16)*4*numPixels];
+		toLabA16(src, pixels,numPixels);
+		dstColorSpace->fromLabA16(pixels, dst,numPixels);
+
+    	delete [] pixels;
+	}
 
     return true;
 }

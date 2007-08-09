@@ -128,12 +128,38 @@ protected:
     void saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyles, QFile *masterStyles );
 
     /**
+     * This function is called by at the end of addShape. This is used 
+     * e.g. for doing work on the application which is in the KoShapeAppData.
+     *
+     * The default impementation does nothing
+     */
+    virtual void postAddShape( KoPAPageBase * page, KoShape * shape );
+
+    /**
+     * This function is called by at the end of removeShape. This is used 
+     * e.g. for doing work on the application which is in the KoShapeAppData.
+     *
+     * The default impementation does nothing
+     */
+    virtual void postRemoveShape( KoPAPageBase * page, KoShape * shape );
+
+    /**
      * Get the page on which the shape is located
      *
      * @param shape The shape for which the page should be found
      * @return The page on which the shape is located
      */
     KoPAPageBase * pageByShape( KoShape * shape ) const;
+
+    /**
+     * @brief Enables/Disables the given actions in all views
+     *
+     * The actions are of Type KoPAAction
+     *
+     * @param actions which should be enabled/disabled
+     * @param enable new state of the actions
+     */
+    void setActionEnabled( int actions, bool enable );
 
 private:
     QList<KoPAPageBase*> m_pages;

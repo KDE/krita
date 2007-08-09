@@ -349,4 +349,12 @@ void KoPAView::deletePage()
     m_canvas->addCommand( command );
 }
 
+void KoPAView::setActionEnabled( int actions, bool enable )
+{
+    if ( actions & ActionDeletePage )
+    {
+        m_actionDeletePage->setEnabled( enable );
+    }
+}
+
 #include "KoPAView.moc"

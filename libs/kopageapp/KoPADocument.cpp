@@ -43,6 +43,8 @@
 #include "KoPAStyles.h"
 #include "KoPALoadingContext.h"
 
+#include <typeinfo>
+
 KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoDocument( parentWidget, parent, singleViewMode )
 {
@@ -321,6 +323,7 @@ void KoPADocument::addShape( KoShape * shape )
     if(!shape)
         return;
 
+    // the KoShapeController sets the active layer as parent
     KoPAPageBase * page( pageByShape( shape ) );
 
     bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0; 
@@ -338,8 +341,15 @@ void KoPADocument::addShape( KoShape * shape )
             }
         }
     }
+
+    postAddShape( page, shape );
 }
 
+void KoPADocument::postAddShape( KoPAPageBase * page, KoShape * shape )
+{
+    Q_UNUSED( page );
+    Q_UNUSED( shape );
+}
 
 void KoPADocument::removeShape( KoShape *shape )
 {
@@ -363,6 +373,14 @@ void KoPADocument::removeShape( KoShape *shape )
             }
         }
     }
+
+    postRemoveShape( page, shape );
+}
+
+void KoPADocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
+{
+    Q_UNUSED( page );
+    Q_UNUSED( shape );
 }
 
 KoPAPageBase * KoPADocument::pageByShape( KoShape * shape ) const
@@ -374,6 +392,15 @@ KoPAPageBase * KoPADocument::pageByShape( KoShape * shape ) const
         page = dynamic_cast<KoPAPageBase*>( parent );
     }
     return page;
+}
+
+void KoPADocument::setActionEnabled( int actions, bool enable )
+{
+    foreach( KoView *view, views() ) 
+    {
+        KoPAView * kopaView = static_cast<KoPAView*>( view );
+        kopaView->setActionEnabled( actions, enable );
+    }
 }
 
 void KoPADocument::insertPage( KoPAPageBase* page, int index )
@@ -389,6 +416,10 @@ void KoPADocument::insertPage( KoPAPageBase* page, int index )
     }
 
     pages.insert( index, page );
+    
+    if ( pages.size() == 2 ) {
+        setActionEnabled( KoPAView::ActionDeletePage, true );
+    }
 }
 
 void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
@@ -410,6 +441,10 @@ void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
     }
 
     pages.insert( index, page );
+
+    if ( pages.size() == 2 ) {
+        setActionEnabled( KoPAView::ActionDeletePage, true );
+    }
     
     // move active view to new page
 }
@@ -438,6 +473,10 @@ int KoPADocument::takePage( KoPAPageBase *page )
                 kopaView->setActivePage( newActivePage );
             }
         }
+    }
+
+    if ( pages.size() == 1 ) {
+        setActionEnabled( KoPAView::ActionDeletePage, false );
     }
     return index;
 }

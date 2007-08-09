@@ -43,6 +43,11 @@ class KOPAGEAPP_EXPORT KoPAView : public KoView
 {
     Q_OBJECT
 public:
+    enum KoPAAction
+    {
+        ActionDeletePage = 1
+    };
+
     /**
      * Constructor
      * @param document the document of this view
@@ -87,6 +92,16 @@ public:
      * @param mode the new view mode
      */
     void setViewMode( KoPAViewMode* mode );
+
+    /**
+     * @brief Enables/Disables the given actions
+     *
+     * The actions are of Type KoPAAction
+     *
+     * @param actions which should be enabled/disabled
+     * @param enable new state of the actions
+     */
+    void setActionEnabled( int actions, bool enable );
 
 public slots:
     /// Shows/hides the rulers

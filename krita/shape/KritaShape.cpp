@@ -73,6 +73,7 @@ void KritaShape::slotLoadingFinished()
 {
     m_mutex.lock();
     if ( m_d && m_d->doc && m_d->doc->image() ) {
+        // XXX: Resize image to correct aspect ratio
         m_waiter.wakeAll();
         repaint();
     }

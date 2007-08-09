@@ -53,7 +53,7 @@ void KisSerializableConfiguration::fromXML(const QString & s )
 
 void KisSerializableConfiguration::fromXML(const QDomElement& e)
 {
-    QDomNode n = e.firstChildElement("params").firstChild();
+    QDomNode n = e.firstChild();
 
 
     while (!n.isNull()) {
@@ -74,22 +74,19 @@ void KisSerializableConfiguration::fromXML(const QDomElement& e)
 void KisSerializableConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
 {
     QMap<QString, QVariant>::Iterator it;
-    QDomElement eParams = doc.createElement( "params" );
     for ( it = d->properties.begin(); it != d->properties.end(); ++it ) {
         QDomElement e = doc.createElement( "param" );
         e.setAttribute( "name", QString(it.key().toLatin1()) );
         QVariant v = it.value();
         QDomText text = doc.createCDATASection(v.toString() ); // XXX: Unittest this!
-        e.appendChild(text);
-        eParams.appendChild(e);
+        root.appendChild(text);
     }
-    root.appendChild(eParams);
 }
 
 QString KisSerializableConfiguration::toXML() const
 {
-    QDomDocument doc = QDomDocument("filterconfig");
-    QDomElement root = doc.createElement( "filterconfig" );
+    QDomDocument doc = QDomDocument("params");
+    QDomElement root = doc.createElement( "params" );
     doc.appendChild( root );
     toXML(doc, root);
     return doc.toString();

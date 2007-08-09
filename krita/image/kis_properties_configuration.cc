@@ -35,10 +35,12 @@ struct KisPropertiesConfiguration::Private {
 
 KisPropertiesConfiguration::KisPropertiesConfiguration() : d(new Private)
 {
-  
+
 }
 
-KisPropertiesConfiguration::KisPropertiesConfiguration(const KisPropertiesConfiguration& rhs) : d(new Private(*rhs.d))
+KisPropertiesConfiguration::KisPropertiesConfiguration(const KisPropertiesConfiguration& rhs)
+    : KisSerializableConfiguration( rhs )
+    , d(new Private(*rhs.d))
 {
 }
 

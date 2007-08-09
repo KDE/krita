@@ -29,7 +29,7 @@ class KisDynamicTransformation;
 
 class FILTERS_LIST_PROGRAM_EXPORT KisFiltersListDynamicProgram : public KisDynamicProgram {
     public:
-        KisFiltersListDynamicProgram(const QString& name) : KisDynamicProgram(name)
+        KisFiltersListDynamicProgram(const QString& name) : KisDynamicProgram(name, "filterslist")
         {
         }
         ~KisFiltersListDynamicProgram();

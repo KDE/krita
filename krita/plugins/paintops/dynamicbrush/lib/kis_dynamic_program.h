@@ -38,12 +38,13 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicProgram : public KisSerializableConfigurati
         /**
          * @param name the name of this program, will be displayed in the list of programs
          */
-        KisDynamicProgram(const QString& name) : m_name(name) { }
+        KisDynamicProgram(const QString& name, const QString& type);
     public:
-        virtual ~KisDynamicProgram() {}
+        virtual ~KisDynamicProgram();
         /// @return the name of this program
-        QString name() const { return m_name; }
-        QString id() const { return m_name; }
+        QString name() const;
+        QString id() const;
+        QString type() const;
         /**
          * Apply the program on the shape and the coloring
          */
@@ -53,24 +54,24 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicProgram : public KisSerializableConfigurati
          * @return a QWidget which display editing option for that program
          */
         virtual QWidget* createEditor(QWidget* parent) = 0;
+        virtual void fromXML(const QDomElement&);
+        virtual void toXML(QDomDocument&, QDomElement&) const;
     private:
-        QString m_name;
+        struct Private;
+        Private* const d;
 };
 
 class KisDynamicDummyProgram : public KisDynamicProgram {
     public:
-        KisDynamicDummyProgram(const QString& name) : KisDynamicProgram(name) { }
+        KisDynamicDummyProgram(const QString& name) : KisDynamicProgram(name, "dummy") { }
         virtual void apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo) { }
         virtual QWidget* createEditor(QWidget* parent) { return 0; }
 };
 
 class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactory : public KisSerializableConfigurationFactory {
     public:
-        virtual ~KisDynamicProgramFactory() {}
-        virtual KisSerializableConfiguration* create(const QDomElement&)
-        {
-            return new KisDynamicDummyProgram("");
-        }
+        virtual ~KisDynamicProgramFactory();
+        virtual KisSerializableConfiguration* create(const QDomElement&);
 };
 
 

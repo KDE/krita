@@ -139,7 +139,7 @@ void simplex(const int rows, const int cols, double **M, double *X, const double
 
 	lp = glp_create_prob();
 	glp_set_prob_name(lp, "XYZ2REF");
-	glp_set_obj_dir(lp, GLP_MAX);
+	glp_set_obj_dir(lp, GLP_MIN);
 
 	glp_add_rows(lp, rows);
 

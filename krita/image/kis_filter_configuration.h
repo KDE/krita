@@ -18,7 +18,7 @@
 #ifndef _KIS_FILTER_CONFIGURATION_H_
 #define _KIS_FILTER_CONFIGURATION_H_
 
-#include "kis_serializable_configuration.h"
+#include "kis_properties_configuration.h"
 
 #include <QBitArray>
 
@@ -34,7 +34,7 @@
  *
  * XXX: Use KoProperties here!
  */
-class KRITAIMAGE_EXPORT KisFilterConfiguration : public KisSerializableConfiguration {
+class KRITAIMAGE_EXPORT KisFilterConfiguration : public KisPropertiesConfiguration {
 
 public:
 

@@ -18,6 +18,10 @@
 
 #include "kis_dynamic_program.h"
 
+#include <QDomElement>
+
+// #include "kis_filters_list_dynamic_program.h"
+
 struct KisDynamicProgram::Private {
     QString name;
     QString type;
@@ -34,22 +38,35 @@ QString KisDynamicProgram::name() const { return d->name; }
 QString KisDynamicProgram::id() const { return d->name; }
 QString KisDynamicProgram::type() const { return d->type; }
 
-void KisDynamicProgram::fromXML(const QDomElement&)
+void KisDynamicProgram::fromXML(const QDomElement& e)
 {
-    
+    Q_ASSERT(e.attribute("type","") == type());
+    d->name = e.attribute("name", "");
 }
 
-void KisDynamicProgram::toXML(QDomDocument&, QDomElement&) const
+void KisDynamicProgram::toXML(QDomDocument& doc, QDomElement& e) const
 {
-    
+    e.setAttribute("type", type());
+    e.setAttribute("name", name());
 }
+
+//----------- KisDynamicProgramFactory -----------//
 
 KisDynamicProgramFactory::~KisDynamicProgramFactory()
 {
-
 }
 
-KisSerializableConfiguration* KisDynamicProgramFactory::create(const QDomElement&)
+KisSerializableConfiguration* KisDynamicProgramFactory::create(const QDomElement& e)
 {
-    return new KisDynamicDummyProgram("");
+    KisDynamicProgram* program = 0;
+    QString type = e.attribute("type","");
+    if(type == "filterslist") {
+//         program = new KisFiltersListDynamicProgram("");
+        program = 0;
+    } else {
+        return new KisDynamicDummyProgram("");
+    }
+    Q_ASSERT(program);
+    program->fromXML(e);
+    return program;
 }

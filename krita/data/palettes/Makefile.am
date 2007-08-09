@@ -28,8 +28,6 @@ kritapalettes_DATA = \
     Khaki.gpl \
     Lights.gpl \
     Madeira.gpl \
-    Makefile.am \
-    Makefile.in \
     Muted.gpl \
     Named_Colors.gpl \
     new_kde.gpl \

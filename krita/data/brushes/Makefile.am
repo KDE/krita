@@ -59,8 +59,6 @@ kritabrushes_DATA =  \
     galaxy.gbr \
     galaxy_small.gbr \
     hsparks.gih \
-    Makefile.am \
-    Makefile.in \
     pepper.gbr \
     pixel.gbr \
     SketchBrush-16.gih \

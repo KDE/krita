@@ -18,7 +18,7 @@
  */
 
 #include "Styles_p.h"
-
+#include <KDebug>
 #include <QTextFormat>
 
 StylePrivate::StylePrivate() {
@@ -56,6 +56,10 @@ void StylePrivate::removeDuplicates(const StylePrivate *other) {
         if(m_properties.value(key) == other->value(key))
             m_properties.remove(key);
     }
+}
+
+QList<int> StylePrivate::keys() {
+    return m_properties.keys();
 }
 
 bool StylePrivate::operator==( const StylePrivate &other ) const {

@@ -23,6 +23,13 @@
 #include <KDebug>
 #include <QTextDocument>
 #include <QTextBlock>
+#include <KoGenStyle.h>
+#include <KoGenStyles.h>
+#include <KoShapeSavingContext.h>
+#include "styles/KoStyleManager.h"
+#include "styles/KoCharacterStyle.h"
+#include "styles/KoParagraphStyle.h"
+#include "KoTextDocumentLayout.h"
 
 class KoTextShapeData::Private {
 public:
@@ -139,8 +146,62 @@ KoText::Direction KoTextShapeData::pageDirection() const {
 }
 
 
-void KoTextShapeData::saveOdf(KoXmlWriter *writer, int from, int to) const {
+void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) const {
+    KoXmlWriter *writer = &context.xmlWriter();
     QTextBlock block = d->document->findBlock(from);
+    kDebug() << "The document is " << d->document;
+    
+    KoStyleManager *styleManager = 0;
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (d->document->documentLayout());
+    QHash<int, QString> styleNames; // Store a QTextFormat.objectIndex() => ODF style name
+    if (lay) {
+        styleManager = lay->styleManager();
+        if (styleManager) {
+            kDebug() << "-------------------------------------------------------------------------------";
+            kDebug() << "BEGINNING OF THE STYLE MESS";
+            
+            // First, get the style manager, we'll need it.
+            KoParagraphStyle *defaultParagraphStyle = styleManager->defaultParagraphStyle();
+            KoCharacterStyle *defaultCharacterStyle = defaultParagraphStyle->characterStyle();
+                
+            // Ok, now we will iterate over the QTextFormat contained in this textFrameSet.
+            foreach (QTextFormat textFormat, d->document->allFormats()) {
+                kDebug() << "There is a textFormat :" << textFormat << "; type =" << textFormat.type();
+                if (textFormat.type() == QTextFormat::BlockFormat) {
+                    // This is a QTextBlockFormat, we'll convert it to a KoParagraphStyle
+                    KoParagraphStyle paragStyle = KoParagraphStyle(textFormat);
+                } else if (textFormat.type() == QTextFormat::CharFormat) {
+                    // This is a QTextCharFormat.
+                    KoCharacterStyle *originalCharStyle = styleManager->characterStyle(textFormat.intProperty(KoCharacterStyle::StyleId));
+                    if (!originalCharStyle) {
+                        continue;
+                    }
+                    // we'll convert it to a KoCharacterStyle to check for local changes.
+                    KoCharacterStyle charStyle = KoCharacterStyle(textFormat);
+                    kDebug() << "&charStyle :" << &charStyle << "  ; originalCharStyle:" << originalCharStyle;
+                    KoGenStyle test(0, "text");
+                    if (charStyle == (*originalCharStyle)) {
+                        kDebug() << "This IS the real character style :" << originalCharStyle->name();
+    //                         QString displayName = originalCharStyle->name();
+    //                         QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
+                        originalCharStyle->saveOdf(&test);
+                    } else {
+                        kDebug() << "There are manual changes... We'll have to store them then";
+                        charStyle.removeDuplicates(*originalCharStyle);
+                        charStyle.saveOdf(&test);
+                    }
+                    QString generatedName = context.mainStyles().lookup(test, "T");
+                    kDebug() << "Storing this style, result :" << generatedName;
+                    styleNames[textFormat.objectIndex()] = generatedName;
+                    //textFormat.setProperty(QTextFormat::UserProperty + 42, generatedName);
+                } else {
+                    // It doesn't matter yet.
+                }
+            }
+            kDebug() << "END OF THE STYLE MESS";
+            kDebug() << "-------------------------------------------------------------------------------";
+        }
+    }
     while(block.isValid() && ((to == -1) || (block.position() < to))) {
         writer->startElement( "text:p", false );
         QTextBlock::iterator it;
@@ -150,8 +211,29 @@ void KoTextShapeData::saveOdf(KoXmlWriter *writer, int from, int to) const {
             if (currentFragment.isValid()) {
                 if (firstFragmentFormat == -1)
                     firstFragmentFormat = currentFragment.charFormatIndex();
-                if (currentFragment.charFormatIndex() != firstFragmentFormat)
+                kDebug() << "The fragment format is " << currentFragment.charFormatIndex();
+                QTextFormat charFormat = currentFragment.charFormat();
+                QMapIterator<int, QVariant> i(charFormat.properties());
+                while (i.hasNext()) {
+                    i.next();
+                    kDebug() << "Key/Value : " << i.key() << "/" << i.value();
+                }
+                kDebug() << "StyleId in StyleManager :" << charFormat.intProperty(KoParagraphStyle::StyleId);
+                if (styleManager) {
+                    KoCharacterStyle *customCharStyle = styleManager->characterStyle(charFormat.intProperty(KoParagraphStyle::StyleId));
+                    if (customCharStyle) {
+                        kDebug() << "This format is in styleManager : " << customCharStyle->name();
+                        if (customCharStyle == styleManager->defaultParagraphStyle()->characterStyle()) {
+                            kDebug() << "This is the default style !";
+                        }
+                    }
+                }
+                if (currentFragment.charFormatIndex() != firstFragmentFormat) {
                     writer->startElement( "text:span", false );
+                    if (styleNames.contains(charFormat.objectIndex()))
+                        writer->addAttribute("text:style", styleNames[charFormat.objectIndex()]);
+                        //kDebug() << "This charFormat has a name :" << styleNames[charFormat.objectIndex()];
+                }
                 writer->addTextSpan( currentFragment.text() );
                 if (currentFragment.charFormatIndex() != firstFragmentFormat)
                     writer->endElement( );
@@ -166,6 +248,9 @@ void KoTextShapeData::saveOdf(KoXmlWriter *writer, int from, int to) const {
             writer->addTextSpan( block.text() );*/
         writer->endElement();
         block = block.next();
+    }
+    foreach (QTextFormat textFormat, d->document->allFormats()) {
+        textFormat.clearProperty(-1);
     }
 }
 

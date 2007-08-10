@@ -29,6 +29,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoUnit.h>
+#include <KoGenStyle.h>
 
 #include <KDebug>
 
@@ -649,7 +650,38 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
 }
 
 bool KoCharacterStyle::operator==( const KoCharacterStyle &other ) const {
+    kDebug() << "Comparing !";
     return ((*(other.d->stylesPrivate)) == (*(this->d->stylesPrivate)));
+}
+
+void KoCharacterStyle::removeDuplicates ( const KoCharacterStyle &other ) {
+    kDebug() << "Going to remove duplicates in the style.";
+    this->d->stylesPrivate->removeDuplicates(other.d->stylesPrivate);
+    kDebug() << "Done.";
+}
+
+void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
+    QList<int> keys = d->stylesPrivate->keys();
+    foreach (int key, keys) {
+        if (key == QTextFormat::FontWeight) {
+            bool ok = false;
+            int boldness = d->stylesPrivate->value(key).toInt(&ok);
+            if (ok) {
+                if (boldness == 50) {
+                    target->addProperty("fo:font-weight", "normal", KoGenStyle::TextType);
+                } else if (boldness == 75) {
+                    target->addProperty("fo:font-weight", "bold", KoGenStyle::TextType);
+                } else {
+                    // Remember : Qt and CSS/XSL doesn't have the same scale...
+                    target->addProperty("fo:font-weight", boldness*10, KoGenStyle::TextType);
+                }
+            } else {
+                kDebug() << "What is this ???" << d->stylesPrivate->value(key);
+            }
+        } else {
+            kDebug() << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
+        }
+    }
 }
 
 #include "KoCharacterStyle.moc"

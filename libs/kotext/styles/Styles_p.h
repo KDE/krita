@@ -35,7 +35,7 @@ public:
     void copyMissing(const StylePrivate *other);
     void removeDuplicates(const StylePrivate *other);
     void clearAll() { m_properties.clear(); }
-
+    QList<int> keys();
     bool operator==( const StylePrivate &other ) const;
 private:
     QHash<int, QVariant> m_properties;

@@ -28,7 +28,7 @@
 
 class QTextDocument;
 class KoXmlWriter;
-
+class KoShapeSavingContext;
 /**
  * The data store that is held by each KoTextShape instance.
  * This is a separe object to allow KWord proper to use this class' api and
@@ -119,7 +119,7 @@ public:
      */
     int pageNumber() const;
 
-    void saveOdf(KoXmlWriter *writer, int from = 0, int to = -1) const;
+    void saveOdf(KoShapeSavingContext & context, int from = 0, int to = -1) const;
 
     /**
      * Set the page direction.

@@ -30,6 +30,7 @@ class StylePrivate;
 class QTextBlock;
 class KoStyleStack;
 class KoTextLoadingContext;
+class KoGenStyle;
 
 /**
  * A container for all properties for a character style.
@@ -224,6 +225,9 @@ public:
 
     bool operator==( const KoCharacterStyle &other ) const;
     
+    void removeDuplicates ( const KoCharacterStyle &other );
+    
+    void saveOdf ( KoGenStyle *target );
 private:
     class Private;
     Private * const d;

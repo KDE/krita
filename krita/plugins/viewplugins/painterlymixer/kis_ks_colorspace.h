@@ -78,10 +78,6 @@ class KisKSColorSpace : public KoIncompleteColorSpace<KSTraits, KoRGB16Fallback>
 
 		cmsHPROFILE hsRGB, hXYZ;
 		cmsHTRANSFORM XYZ_BGR, BGR_XYZ;
-
-// 		double **m_D50;
-		double **m_D65_D50;
-		double **m_D50_D65;
 };
 
 

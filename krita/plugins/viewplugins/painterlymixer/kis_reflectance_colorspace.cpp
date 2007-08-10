@@ -151,12 +151,13 @@ void KisReflectanceColorSpace::fromRgbA16(const quint8 * srcU8, quint8 * dstU8, 
 	const quint16 *src16 = reinterpret_cast<const quint16 *>(srcU8);
 	float *dstf = reinterpret_cast<float *>(dstU8);
 
-	double XYZ[3], REF[ncols];
+	double XYZ50[3], XYZCUR[3], REF[ncols];
 
 	for (quint32 i = 0; i < nPixels; i++) {
-		cmsDoTransform(BGR_XYZ, const_cast<quint16*>(src16), XYZ, 1);
+		cmsDoTransform(BGR_XYZ, const_cast<quint16*>(src16), XYZ50, 1);
 
-		maths::simplex(3, ncols, m_profile->matrix(), REF, XYZ);
+		maths::mult(3, 3, m_profile->fromD50(), XYZ50, XYZCUR);
+		maths::simplex(3, ncols, m_profile->matrix(), REF, XYZCUR);
 
 		for (uint i = 0; i < ncols; i++)
 			dstf[i] = REF[i];
@@ -174,16 +175,16 @@ void KisReflectanceColorSpace::toRgbA16(const quint8 * srcU8, quint8 * dstU8, qu
 	const float *srcf = reinterpret_cast<const float *>(srcU8);
 	quint16 *dst16 = reinterpret_cast<quint16 *>(dstU8);
 
-	double XYZ[3], REF[ncols];
+	double XYZ50[3], XYZCUR[3], REF[ncols];
 
 	for (quint32 i = 0; i < nPixels; i++) {
 		for (uint i = 0; i < ncols; i++)
 			REF[i] = srcf[i];
 
-		maths::mult(3, ncols, m_profile->matrix(), REF, XYZ);
-		// TODO Do Chromatic Adaptation
+		maths::mult(3, ncols, m_profile->matrix(), REF, XYZCUR);
+		maths::mult(3, 3, m_profile->toD50(), XYZCUR, XYZ50);
 
-		cmsDoTransform(XYZ_BGR, XYZ, dst16, 1);
+		cmsDoTransform(XYZ_BGR, XYZ50, dst16, 1);
 
 		dst16[3] = maths::convert2i(srcf[ncols]);
 

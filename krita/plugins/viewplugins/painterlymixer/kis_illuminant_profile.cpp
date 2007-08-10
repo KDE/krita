@@ -30,7 +30,7 @@
 
 KisIlluminantProfile::KisIlluminantProfile(QString fileName) : KoColorProfile(fileName)
 {
-	m_matrix = 0;
+	m_matrix = m_fromD50 = m_toD50 = 0;
 	if (!fileName.isEmpty())
 		load();
 }
@@ -38,9 +38,14 @@ KisIlluminantProfile::KisIlluminantProfile(QString fileName) : KoColorProfile(fi
 KisIlluminantProfile::~KisIlluminantProfile()
 {
 	if (m_matrix) {
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 3; i++) {
 			delete [] m_matrix[i];
+			delete [] m_fromD50[i];
+			delete [] m_toD50[i];
+		}
 		delete [] m_matrix;
+		delete [] m_fromD50;
+		delete [] m_toD50;
 	}
 }
 
@@ -61,6 +66,24 @@ bool KisIlluminantProfile::load()
 			for (int j = 0; j < WLS_NUMBER; j++) {
 				in_ill >> curr;
 				m_matrix[i][j] = curr.toFloat();
+			}
+		}
+
+		m_fromD50 = new double*[3];
+		for (int i = 0; i < 3; i++) {
+			m_fromD50[i] = new double[3];
+			for (int j = 0; j < 3; j++) {
+				in_ill >> curr;
+				m_fromD50[i][j] = curr.toFloat();
+			}
+		}
+
+		m_toD50 = new double*[3];
+		for (int i = 0; i < 3; i++) {
+			m_toD50[i] = new double[3];
+			for (int j = 0; j < 3; j++) {
+				in_ill >> curr;
+				m_toD50[i][j] = curr.toFloat();
 			}
 		}
 

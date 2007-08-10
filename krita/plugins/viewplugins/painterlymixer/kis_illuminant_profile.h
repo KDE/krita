@@ -46,10 +46,14 @@ class KisIlluminantProfile : public KoColorProfile {
 		bool isSuitableForDisplay() const {return false;}
 
 		double **matrix() {return m_matrix;}
+		double **fromD50() {return m_fromD50;}
+		double **toD50() {return m_toD50;}
 
 	private:
 
 		double **m_matrix;
+		double **m_fromD50;
+		double **m_toD50;
 };
 
 

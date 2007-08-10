@@ -28,6 +28,7 @@
 
 // KDE
 #include <kcharsets.h>
+#include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -60,6 +61,8 @@ public:
     QStringList formatList; ///< List of the column formats
 
 public:
+    void loadSettings();
+    void saveSettings();
     void fillTable();
     void fillComboBox();
     void setText(int row, int col, const QString& text);
@@ -105,6 +108,8 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
 
     d->dialog->m_sheet->setReadOnly( true );
 
+    d->loadSettings();
+
     //resize(sizeHint());
     resize( 600, 400 ); // Try to show as much as possible of the table view
     setMainWidget(d->dialog);
@@ -141,6 +146,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
 
 KoCsvImportDialog::~KoCsvImportDialog()
 {
+    d->saveSettings();
     delete d;
 }
 
@@ -243,6 +249,45 @@ void KoCsvImportDialog::setThousandsSeparator(const QString& separator)
 
 // ----------------------------------------------------------------
 
+
+void KoCsvImportDialog::Private::loadSettings()
+{
+    KConfigGroup configGroup = KGlobal::config()->group("CSVDialog Settings");
+    textQuote = configGroup.readEntry("textQuote", "\"")[0];
+    delimiter = configGroup.readEntry("delimiter", ",");
+    ignoreDuplicates = configGroup.readEntry("ignoreDups", false);
+    const QString codecText = configGroup.readEntry("codec", "");
+
+    // update widgets
+    if (!codecText.isEmpty()) {
+      dialog->comboBoxEncoding->setCurrentIndex(dialog->comboBoxEncoding->findText(codecText));
+      codec = updateCodec();
+    }
+    if (delimiter == ",")
+        dialog->m_radioComma->setChecked(true);
+    else if (delimiter == "\t")
+        dialog->m_radioTab->setChecked(true);
+    else if (delimiter == " ")
+        dialog->m_radioSpace->setChecked(true);
+    else if (delimiter == ";")
+        dialog->m_radioSemicolon->setChecked(true);
+    else {
+        dialog->m_radioOther->setChecked(true);
+        dialog->m_delimiterEdit->setText(delimiter);
+    }
+    dialog->m_ignoreDuplicates->setChecked(ignoreDuplicates);
+    dialog->m_comboQuote->setCurrentIndex(textQuote == '\'' ? 1 : textQuote == '"' ? 0 : 2);
+}
+
+void KoCsvImportDialog::Private::saveSettings()
+{
+    KConfigGroup configGroup = KGlobal::config()->group("CSVDialog Settings");
+    configGroup.writeEntry("textQuote", QString(textQuote));
+    configGroup.writeEntry("delimiter", delimiter);
+    configGroup.writeEntry("ignoreDups", ignoreDuplicates);
+    configGroup.writeEntry("codec", dialog->comboBoxEncoding->currentText());
+    configGroup.sync();
+}
 
 void KoCsvImportDialog::Private::fillTable()
 {

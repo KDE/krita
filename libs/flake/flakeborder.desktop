@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Shape border definition
+Name[es]=Definición del borde la forma
 Name[fa]=تعریف لبه شکل
 Name[pt]=Definição do contorno da forma
 Name[pt_BR]=Definição do contorno da forma
@@ -9,6 +10,7 @@ Name[zh_TW]=形狀邊框定義
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Border
 Comment=Definition of a flake shape border
+Comment[es]=Definición del borde de una forma de Flake
 Comment[pt]=Definição do contorno de uma forma do Flake
 Comment[pt_BR]=Definição do contorno de uma forma do Flake
 Comment[sv]=Definition av en formkant i Flake

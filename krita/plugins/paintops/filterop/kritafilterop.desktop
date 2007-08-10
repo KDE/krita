@@ -2,11 +2,13 @@
 Encoding=UTF-8
 Name=Filter Op
 Name[el]=Ενέργεια φίλτρου
+Name[es]=Operación de filtrado
 Name[pt]=Operação de Filtragem
 Name[pt_BR]=Operação de Filtragem
 Name[sv]=Filtreringsoperation
 Name[zh_TW]=濾鏡工具
 Comment=Filter Op
+Comment[es]=Operación de filtrado
 Comment[pt]=Operação de Filtragem
 Comment[pt_BR]=Operação de Filtragem
 Comment[sv]=Filtreringsoperation

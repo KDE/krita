@@ -922,12 +922,13 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
             context.xmlWriter().addAttribute( "draw:transform", transform );
         }
         */
-        if( ! d->localMatrix.isIdentity() )
+        QMatrix matrix = transformationMatrix(0);
+        if( ! matrix.isIdentity() )
         {
             QString m = QString( "matrix(%1 %2 %3 %4 %5pt %6pt)" )
-                    .arg( d->localMatrix.m11() ).arg( d->localMatrix.m12() )
-                    .arg( d->localMatrix.m21() ).arg( d->localMatrix.m22() )
-                    .arg( d->localMatrix.dx() ) .arg( d->localMatrix.dy() );
+                    .arg( matrix.m11() ).arg( matrix.m12() )
+                    .arg( matrix.m21() ).arg( matrix.m22() )
+                    .arg( matrix.dx() ) .arg( matrix.dy() );
             context.xmlWriter().addAttribute( "draw:transform", m );
         }
     }

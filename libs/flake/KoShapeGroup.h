@@ -26,6 +26,9 @@
 
 #include <flake_export.h>
 
+class KoShapeSavingContext;
+class KoShapeLoadingContext;
+
 /**
  * Provide grouping for shapes.
  * The group shape allows you to add children which will then be grouped in selections

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 class KoOasisLoadingContext;
 class KoShapeLayer;
 class KoShape;
+class KoShapeControllerBase;
 
 /**
  * Context passed to shapes during loading.
@@ -43,6 +45,9 @@ public:
      */
     KoShapeLoadingContext( KoOasisLoadingContext & context );
 
+    /// destructor
+    ~KoShapeLoadingContext();
+
     /// return the embedded loading context
     KoOasisLoadingContext & koLoadingContext();
 
@@ -55,6 +60,15 @@ public:
     void addShapeId( KoShape * shape, const QString & id );
     /// return the shape formerly registered using addShapeId()
     KoShape * shapeById( const QString & id );
+
+    /// sets a shape controller to add shapes during loading (e.g. group loading)
+    void setShapeController( KoShapeControllerBase * shapeController );
+
+    /// Adds a shape to the context for later adding to the document
+    void addShapeToDocument( KoShape * shape );
+
+    /// Transfers ownership of all collected shapes during loading to the shape controller.
+    void transferShapesToDocument( KoShapeControllerBase * controller );
 
 private:
     class Private;

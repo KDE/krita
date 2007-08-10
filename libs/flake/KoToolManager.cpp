@@ -517,6 +517,8 @@ void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
 }
 
 KoCanvasController *KoToolManager::activeCanvasController() const {
+    if( ! d->canvasData )
+        return 0;
     return d->canvasData->canvas;
 }
 

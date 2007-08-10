@@ -22,6 +22,7 @@
 #include "KoShapeRegistry.h"
 #include "KoPathShapeFactory.h"
 #include "KoShapeLoadingContext.h"
+#include "KoShapeGroup.h"
 
 #include <KoPluginLoader.h>
 #include <KoXmlReader.h>
@@ -130,6 +131,21 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
             if ( shape )
                 return shape;
         }
+    }
+    // Hardwire the group shape into the loading as it should not appear
+    // in the shape selector
+    else if( e.localName() == "g" && e.namespaceURI() == KoXmlNS::draw )
+    {
+        KoShapeGroup * group = new KoShapeGroup();
+
+        context.koLoadingContext().styleStack().save();
+        bool loaded = group->loadOdf( e, context );
+        context.koLoadingContext().styleStack().restore();
+
+        if( loaded )
+            return group;
+
+        delete group;
     }
     else {
         return createShapeInternal( e, context );

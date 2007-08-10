@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,7 +22,10 @@
 #include "KoShapeContainerModel.h"
 #include "SimpleShapeContainerModel.h"
 #include "KoShapeSavingContext.h"
+#include "KoShapeLoadingContext.h"
 #include "KoXmlWriter.h"
+#include "KoXmlReader.h"
+#include "KoShapeRegistry.h"
 
 #include <QPainter>
 
@@ -59,5 +63,35 @@ void KoShapeGroup::saveOdf( KoShapeSavingContext & context ) const {
 }
 
 bool KoShapeGroup::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    return false; // TODO
+    KoXmlElement child;
+    forEachElement( child, element )
+    {
+        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, context );
+        if( shape )
+        {
+            addChild( shape );
+            // add shape to context for later adding to the document
+            context.addShapeToDocument( shape );
+        }
+    }
+
+    loadOdfAttributes( element, context, OdfMandatories );
+
+    QRectF bound;
+    bool boundInitialized = false;
+    foreach( KoShape * shape, iterator() )
+    {
+        if( ! boundInitialized )
+            bound = shape->boundingRect();
+        else
+            bound = bound.united( shape->boundingRect() );
+    }
+
+    setSize( bound.size() );
+    setPosition( bound.topLeft() );
+
+    foreach( KoShape * shape, iterator() )
+        shape->moveBy( -bound.topLeft().x(), -bound.topLeft().y() );
+
+    return true;
 }

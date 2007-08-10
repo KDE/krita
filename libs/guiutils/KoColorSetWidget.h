@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSWATCHWIDGET_H_
-#define KOSWATCHWIDGET_H_
+#ifndef KOCOLORSETWIDGET_H_
+#define KOCOLORSETWIDGET_H_
 
 #include <QWidgetAction>
 #include <QFrame>

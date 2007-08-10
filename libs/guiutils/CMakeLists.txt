@@ -55,6 +55,7 @@ set(koguiutils_LIB_SRCS
    KoUniColorChooser.cpp
    KoUniColorDialog.cpp
    KoColorSetWidget.cpp
+   KoColorSetAction.cpp
    KoColorPatch.cpp
    KoDualColorButton.cpp
    KoLineStyleSelector.cpp

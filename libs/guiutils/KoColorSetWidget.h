@@ -20,7 +20,8 @@
 #ifndef KOSWATCHWIDGET_H_
 #define KOSWATCHWIDGET_H_
 
-#include <QToolButton>
+#include <QWidgetAction>
+#include <QFrame>
 
 #include <koguiutils_export.h>
 
@@ -35,7 +36,7 @@ class KoColorSet;
  * a larger widget is popped up. This larger widget provides lots of functionallity to choose the color from
  * a colorset.
  */
-class KOGUIUTILS_EXPORT KoColorSetWidget : public QToolButton
+class KOGUIUTILS_EXPORT KoColorSetWidget : public QFrame
 {
 
     Q_OBJECT

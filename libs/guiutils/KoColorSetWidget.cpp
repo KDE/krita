@@ -27,6 +27,8 @@
 #include <QFrame>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QMenu>
+#include <QWidgetAction>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -37,23 +39,11 @@
 #include <KoColorPatch.h>
 #include <KoColorSpaceRegistry.h>
 
-class KoColorSetContainer : public QFrame
-{
-public:
-    KoColorSetContainer(KoColorSetWidget *parent) : QFrame(parent, Qt::Popup ), m_parent(parent) {}
-
-protected:
-
-private:
-    KoColorSetWidget *m_parent;
-};
-
 class KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
     KoColorSetWidget *thePublic;
     KoColorSet *colorSet;
     QTimer m_timer;
-    KoColorSetContainer *container;
     QVBoxLayout *mainLayout;
     bool firstShowOfContainer;
     QCheckBox *filterCheckBox;
@@ -105,7 +95,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
 void KoColorSetWidget::KoColorSetWidgetPrivate::addRecent(const KoColor &color)
 {
     if(numRecents<6) {
-        recentPatches[numRecents] = new KoColorPatch(container);
+        recentPatches[numRecents] = new KoColorPatch(thePublic);
         recentPatches[numRecents]->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
         recentPatches[numRecents]->setFrameShape(QFrame::Box);
         recentsLayout->insertWidget(numRecents+1, recentPatches[numRecents]);
@@ -133,14 +123,11 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::activateRecent(int i)
 }
 
 KoColorSetWidget::KoColorSetWidget(QWidget *parent)
-   : QToolButton(parent)
+   : QFrame(parent)
     ,d(new KoColorSetWidgetPrivate())
 {
     d->thePublic = this;
     d->colorSet = 0;
-    d->container = new KoColorSetContainer(this);
-    d->container->setAttribute(Qt::WA_WindowPropagation);
-    d->container->setFrameShape(QFrame::Box);
 
     d->firstShowOfContainer = true;
 
@@ -170,13 +157,12 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     d->filter(QCheckBox::On);
 
-    d->container->setLayout(d->mainLayout);
-
-    setIcon(KIcon("textcolor"));
+    setLayout(d->mainLayout);
 
 /*    connect(d->slider, SIGNAL(sliderReleased()), SLOT(sliderReleased()));
     connect(lineEdit(), SIGNAL(editingFinished()), SLOT(lineEditFinished()));
 */
+    
 }
 
 KoColorSetWidget::~KoColorSetWidget()
@@ -186,7 +172,6 @@ KoColorSetWidget::~KoColorSetWidget()
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *patch)
 {
-    hidePopup();
     int i;
 
     for(i = 0; i <numRecents; i++)
@@ -201,7 +186,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *pat
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::showPopup()
 {
-    if(firstShowOfContainer) {
+    /* if(firstShowOfContainer) {
         container->show(); //show container a bit early so the slider can be layout'ed
         firstShowOfContainer = false;
     }
@@ -211,12 +196,12 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::showPopup()
     container->move(thePublic->mapToGlobal( QPoint(6 - recentPatches[0]->pos().x(), 24)));
 
     container->raise();
-    container->show();
+    container->show(); */
 }
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::hidePopup()
 {
-    container->hide();
+    // container->hide();
 }
 
 void KoColorSetWidget::setOppositeColor(const KoColor &color)
@@ -231,18 +216,18 @@ void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
 
 void KoColorSetWidget::hideEvent(QHideEvent *)
 {
-    d->hidePopup();
+    // d->hidePopup();
 }
 
 void KoColorSetWidget::mousePressEvent(QMouseEvent *)
 {
-    d->showPopup();
+    // d->showPopup();
 }
 
 
 void KoColorSetWidget::changeEvent(QEvent *e)
 {
-    switch (e->type())
+    /* switch (e->type())
     {
         case QEvent::EnabledChange:
             if (!isEnabled())
@@ -254,7 +239,6 @@ void KoColorSetWidget::changeEvent(QEvent *e)
         default:
             break;
     }
-    QToolButton::changeEvent(e);
+    QToolButton::changeEvent(e); */
 }
-
 #include "KoColorSetWidget.moc"

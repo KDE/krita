@@ -193,7 +193,7 @@ bool KoColorSet::init()
             }
             else if (!lines[i].isEmpty())
             {
-                QStringList a = lines[i].replace(QChar('\t'), " ").split(" ");
+                QStringList a = lines[i].replace(QChar('\t'), " ").split(" ", QString::SkipEmptyParts);
 
                 if (a.count() < 3)
                 {

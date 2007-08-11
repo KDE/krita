@@ -31,6 +31,7 @@
 #include <QWidgetAction>
 
 #include <kglobal.h>
+#include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
@@ -54,8 +55,6 @@ public:
     int numRecents;
 
     void colorTriggered(KoColorPatch *patch);
-    void showPopup();
-    void hidePopup();
     void addRecent(const KoColor &);
     void activateRecent(int i);
     void filter(int state);
@@ -159,6 +158,13 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     setLayout(d->mainLayout);
 
+    // Use Default.gpl for testing
+    QString defaultPalette("krita/palettes/Default.gpl");
+    QString dir = KGlobal::dirs()->findResourceDir("data", defaultPalette);
+    KoColorSet *colorSet = new KoColorSet(dir.append(defaultPalette));
+    colorSet->load();
+    setColorSet(colorSet);
+
 /*    connect(d->slider, SIGNAL(sliderReleased()), SLOT(sliderReleased()));
     connect(lineEdit(), SIGNAL(editingFinished()), SLOT(lineEditFinished()));
 */
@@ -182,26 +188,8 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *pat
 
     if(i == numRecents) // we didn't find it above
         addRecent(patch->color());
-}
 
-void KoColorSetWidget::KoColorSetWidgetPrivate::showPopup()
-{
-    /* if(firstShowOfContainer) {
-        container->show(); //show container a bit early so the slider can be layout'ed
-        firstShowOfContainer = false;
-    }
-
-    
-
-    container->move(thePublic->mapToGlobal( QPoint(6 - recentPatches[0]->pos().x(), 24)));
-
-    container->raise();
-    container->show(); */
-}
-
-void KoColorSetWidget::KoColorSetWidgetPrivate::hidePopup()
-{
-    // container->hide();
+    emit thePublic->colorChanged(patch->color(), true);
 }
 
 void KoColorSetWidget::setOppositeColor(const KoColor &color)
@@ -214,31 +202,4 @@ void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
     d->filter(d->filterCheckBox->checkState());
 }
 
-void KoColorSetWidget::hideEvent(QHideEvent *)
-{
-    // d->hidePopup();
-}
-
-void KoColorSetWidget::mousePressEvent(QMouseEvent *)
-{
-    // d->showPopup();
-}
-
-
-void KoColorSetWidget::changeEvent(QEvent *e)
-{
-    /* switch (e->type())
-    {
-        case QEvent::EnabledChange:
-            if (!isEnabled())
-                d->hidePopup();
-            break;
-        case QEvent::PaletteChange:
-            d->container->setPalette(palette());
-            break;
-        default:
-            break;
-    }
-    QToolButton::changeEvent(e); */
-}
 #include "KoColorSetWidget.moc"

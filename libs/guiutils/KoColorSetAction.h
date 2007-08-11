@@ -54,9 +54,11 @@ signals:
      * Emitted every time the color changes (by calling setColor() or
      * by user interaction.
      * @param color the new color
-     * @param final if the value is final (ie not produced by the pointer moving over around)
      */
-    void colorChanged(KoColor &color, bool final);
+    void colorChanged(const KoColor &color);
+
+private slots:
+    void handleColorChange(const KoColor &color, bool final);
 
 private:
     class KoColorSetActionPrivate;

@@ -41,6 +41,7 @@ KoColorSetAction::KoColorSetAction(QObject *parent)
     QMenu *menu = new QMenu();
     QWidgetAction *wdgAction = new QWidgetAction(menu);
     d->colorSetWidget = new KoColorSetWidget(menu);
+    connect(d->colorSetWidget, SIGNAL(colorChanged(const KoColor &, bool)), this, SLOT(handleColorChange(const KoColor &, bool)));
     wdgAction->setDefaultWidget(d->colorSetWidget);
     menu->addAction(wdgAction);
     setMenu(menu);
@@ -51,6 +52,14 @@ KoColorSetAction::KoColorSetAction(QObject *parent)
 KoColorSetAction::~KoColorSetAction()
 {
     delete d;
+}
+
+void KoColorSetAction::handleColorChange(const KoColor &color, bool final)
+{
+    if (final) {
+        menu()->hide();
+        emit colorChanged(color);
+    }
 }
 
 #include "KoColorSetAction.moc"

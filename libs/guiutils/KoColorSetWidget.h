@@ -78,12 +78,7 @@ signals:
      * @param color the new color
      * @param final if the value is final (ie not produced by the pointer moving over around)
      */
-    void colorChanged(KoColor &color, bool final);
-
-protected:
-    virtual void hideEvent(QHideEvent *); ///< reimplemented from QComboBox
-    virtual void mousePressEvent(QMouseEvent *e); ///< reimplemented from QComboBox
-    virtual void changeEvent(QEvent *e); ///< reimplemented from QComboBox
+    void colorChanged(const KoColor &color, bool final);
 
 private:
     Q_PRIVATE_SLOT(d, void colorTriggered(KoColorPatch *))

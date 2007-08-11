@@ -180,6 +180,8 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *pat
 {
     int i;
 
+    emit thePublic->colorChanged(patch->color(), true);
+
     for(i = 0; i <numRecents; i++)
         if(patch == recentPatches[i]) {
             activateRecent(i);
@@ -188,8 +190,6 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *pat
 
     if(i == numRecents) // we didn't find it above
         addRecent(patch->color());
-
-    emit thePublic->colorChanged(patch->color(), true);
 }
 
 void KoColorSetWidget::setOppositeColor(const KoColor &color)

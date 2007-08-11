@@ -61,7 +61,7 @@ public:
     /**
      * @brief Check if the active view mode works on master/normal pages
      *
-     * The default impementation allways returns true
+     * The default impementation always returns true
      *
      * @return true
      */

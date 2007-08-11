@@ -36,7 +36,7 @@ class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject {
 public:
     /// the vertical alignment options for the shape this anchor holds.
     enum AnchorVertical {
-        TopOfFrame,         ///< Align the anchors top to the top of the frame it is layed-out in.
+        TopOfFrame,         ///< Align the anchors top to the top of the frame it is laid-out in.
         TopOfParagraph,     ///< Align the anchors top to the top of the paragraph it is anchored in.
         AboveCurrentLine,   ///< Align the anchors top to the top of the line it is anchord in.
         BelowCurrentLine,   ///< Align the anchors bottom to the bottom of the line it is anchord in.
@@ -46,9 +46,9 @@ public:
     };
     /// the horizontal alignment options for the shape this anchor holds.
     enum AnchorHorizontal {
-        Left,               ///< Align the anchors left to the left of the frame it is layed-out in.
-        Right,              ///< Align the anchors rigth to the rigth of the frame it is layed-out in.
-        Center,             ///< Align the anchors center to the center of the frame it is layed-out in.
+        Left,               ///< Align the anchors left to the left of the frame it is laid-out in.
+        Right,              ///< Align the anchors rigth to the rigth of the frame it is laid-out in.
+        Center,             ///< Align the anchors center to the center of the frame it is laid-out in.
         ClosestToBinding,   ///< Like Left when on an odd page, or Right otherwise.
         FurtherFromBinding, ///< Like Left when on an even page, or Right otherwise.
         HorizontalOffset    ///< Move the anchor to be an exact horizontal distance from the the anchor.

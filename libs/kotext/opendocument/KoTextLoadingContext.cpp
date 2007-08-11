@@ -67,7 +67,7 @@ static KoXmlElement findListLevelStyle( const KoXmlElement& fullListStyle, int l
     for ( KoXmlNode n = fullListStyle.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
        const KoXmlElement listLevelItem = n.toElement();
-       if ( listLevelItem.attributeNS( KoXmlNS::text, "level", QString::null ).toInt() == level )
+       if ( listLevelItem.attributeNS( KoXmlNS::text, "level", QString() ).toInt() == level )
            return listLevelItem;
     }
     return KoXmlElement();

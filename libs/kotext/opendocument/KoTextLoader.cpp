@@ -155,7 +155,7 @@ void KoTextLoader::loadStyles(KoTextLoadingContext& context, QList<KoXmlElement*
             if(s) removeStyle(s); // delete the standard style.
             defaultStyleDeleted = true;
         }
-        KoParagStyle *sty = new KoParagStyle( QString::null );
+        KoParagStyle *sty = new KoParagStyle( QString() );
         // Load the style
         sty->loadStyle( *styleElem, context );
         // Style created, now let's try to add it
@@ -165,7 +165,7 @@ void KoTextLoader::loadStyles(KoTextLoadingContext& context, QList<KoXmlElement*
         sty->setFollowingStyle( sty );
         kDebug(32500) <<" Loaded style" << sty->name();
         if ( count() > oldStyleCount ) {
-            const QString following = styleElem->attributeNS( KoXmlNS::style, "next-style-name", QString::null );
+            const QString following = styleElem->attributeNS( KoXmlNS::style, "next-style-name", QString() );
             followingStyles.append( following );
             ++stylesLoaded;
         }
@@ -495,7 +495,7 @@ void KoTextLoader::loadHeading(KoTextLoadingContext& context, const KoXmlElement
 {
     context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
 #if 0 //1.6:
-    int level = tag.attributeNS( KoXmlNS::text, "outline-level", QString::null ).toInt();
+    int level = tag.attributeNS( KoXmlNS::text, "outline-level", QString() ).toInt();
     bool listOK = false;
     // When a heading is inside a list, it seems that the list prevails.
     // Example:
@@ -510,7 +510,7 @@ void KoTextLoader::loadHeading(KoTextLoadingContext& context, const KoXmlElement
     listOK = context.pushOutlineListLevelStyle( level );
     int restartNumbering = -1;
     if ( tag.hasAttributeNS( KoXmlNS::text, "start-value" ) ) // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
-        restartNumbering = tag.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
+        restartNumbering = tag.attributeNS( KoXmlNS::text, "start-value", QString() ).toInt();
     KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
     parag->loadOasis( tag, context, styleColl, pos );
     if ( !lastParagraph ) setFirstParag( parag ); // First parag
@@ -520,7 +520,7 @@ void KoTextLoader::loadHeading(KoTextLoadingContext& context, const KoXmlElement
         context.listStyleStack().pop();
     }
 #else
-    int level = parent.attributeNS( KoXmlNS::text, "outline-level", QString::null ).toInt();
+    int level = parent.attributeNS( KoXmlNS::text, "outline-level", QString() ).toInt();
     //1.6: KoOasisContext::pushOutlineListLevelStyle
     //KoXmlElement outlineStyle = KoDom::namedItemNS( oasisStyles().officeStyle(), KoXmlNS::text, "outline-style" );
     KoListStyle* listStyle = 0;
@@ -541,7 +541,7 @@ void KoTextLoader::loadHeading(KoTextLoadingContext& context, const KoXmlElement
     #endif
     if ( !styleName.isEmpty() ) {
         const KoXmlElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
-        //QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
+        //QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString() ) : QString();
         //if ( masterPageName.isEmpty() ) masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
         #ifdef KOOPENDOCUMENTLOADER_DEBUG
             kDebug(32500) <<"KoTextLoader::loadBody styleName=" << styleName;
@@ -593,7 +593,7 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
     // The optional text:style-name attribute specifies the name of the list style that is applied to the list.
     QString styleName;
     if ( parent.hasAttributeNS( KoXmlNS::text, "style-name" ) ) {
-        styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
+        styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
         context.setCurrentListStyleName(styleName);
     }
     else {
@@ -642,7 +642,7 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
         /*
         //TODO handle also the other item properties
         if( e.hasAttributeNS( KoXmlNS::text, "start-value" ) ) {
-            int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString::null).toInt();
+            int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString()).toInt();
             KoListLevelProperties p = KoListLevelProperties::fromTextList(list);
             p.setStartValue(startValue);
             QTextListFormat f = list->format();

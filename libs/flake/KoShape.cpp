@@ -74,6 +74,8 @@ public:
     }
 
     ~Private() {
+        if( parent )
+            parent->removeChild( me );
         foreach(KoShapeManager *manager, shapeManagers)
             manager->remove(me);
         delete userData;

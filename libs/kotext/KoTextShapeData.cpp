@@ -182,9 +182,9 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     // we'll convert it to a KoCharacterStyle to check for local changes.
                     KoCharacterStyle charStyle = KoCharacterStyle(textFormat);
                     kDebug() << "&charStyle :" << &charStyle << "  ; originalCharStyle:" << originalCharStyle;
-                    KoGenStyle test(0, "text");
                     QString generatedName;
                     if (charStyle == (*originalCharStyle)) {
+                        KoGenStyle test(KoGenStyle::StyleUser, "text");
                         kDebug() << "This IS the real character style :" << originalCharStyle->name();
                         QString displayName = originalCharStyle->name();
                         QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
@@ -192,6 +192,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                         generatedName = context.mainStyles().lookup(test, internalName);
                     } else {
                         kDebug() << "There are manual changes... We'll have to store them then";
+                        KoGenStyle test(KoGenStyle::StyleAuto, "text");
                         charStyle.removeDuplicates(*originalCharStyle);
                         charStyle.saveOdf(&test);
                         generatedName = context.mainStyles().lookup(test, "T");

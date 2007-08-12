@@ -592,7 +592,8 @@ KoStoreDevice* KoFilterChain::storageCreateFirstStream( const QString& streamNam
     if ( !m_internalEmbeddingDirectories.isEmpty() ) {
         QStringList::ConstIterator it = m_internalEmbeddingDirectories.begin();
         QStringList::ConstIterator end = m_internalEmbeddingDirectories.end();
-        for ( ; it != end && ( *storage )->enterDirectory( *it ); ++it );
+        while (it != end && ( *storage )->enterDirectory( *it ))
+            ++it;
     }
 
     if ( !( *storage )->open( streamName ) )

@@ -231,7 +231,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                 if (currentFragment.charFormatIndex() != firstFragmentFormat) {
                     writer->startElement( "text:span", false );
                     if (styleNames.contains(charFormat.objectIndex()))
-                        writer->addAttribute("text:style", styleNames[charFormat.objectIndex()]);
+                        writer->addAttribute("text:style-name", styleNames[charFormat.objectIndex()]);
                         //kDebug() << "This charFormat has a name :" << styleNames[charFormat.objectIndex()];
                 }
                 writer->addTextSpan( currentFragment.text() );

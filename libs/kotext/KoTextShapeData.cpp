@@ -153,7 +153,8 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
     
     KoStyleManager *styleManager = 0;
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (d->document->documentLayout());
-    QHash<int, QString> styleNames; // Store a QTextFormat.objectIndex() => ODF style name
+    QHash<int, QString> styleNames; // Store an int index for a QTextFormat => ODF style name
+    QVector<QTextFormat> allFormats = d->document->allFormats(); // Will be used to get the indexes.
     if (lay) {
         styleManager = lay->styleManager();
         if (styleManager) {
@@ -165,7 +166,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
             KoCharacterStyle *defaultCharacterStyle = defaultParagraphStyle->characterStyle();
                 
             // Ok, now we will iterate over the QTextFormat contained in this textFrameSet.
-            foreach (QTextFormat textFormat, d->document->allFormats()) {
+            foreach (QTextFormat textFormat, allFormats) {
                 kDebug() << "There is a textFormat :" << textFormat << "; type =" << textFormat.type();
                 if (textFormat.type() == QTextFormat::BlockFormat) {
                     // This is a QTextBlockFormat, we'll convert it to a KoParagraphStyle
@@ -192,8 +193,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     }
                     QString generatedName = context.mainStyles().lookup(test, "T");
                     kDebug() << "Storing this style, result :" << generatedName;
-                    styleNames[textFormat.objectIndex()] = generatedName;
-                    //textFormat.setProperty(QTextFormat::UserProperty + 42, generatedName);
+                    styleNames[allFormats.indexOf(textFormat)] = generatedName;
                 } else {
                     // It doesn't matter yet.
                 }
@@ -230,8 +230,8 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                 }
                 if (currentFragment.charFormatIndex() != firstFragmentFormat) {
                     writer->startElement( "text:span", false );
-                    if (styleNames.contains(charFormat.objectIndex()))
-                        writer->addAttribute("text:style-name", styleNames[charFormat.objectIndex()]);
+                    if (styleNames.contains(allFormats.indexOf(charFormat)))
+                        writer->addAttribute("text:style-name", styleNames[allFormats.indexOf(charFormat)]);
                         //kDebug() << "This charFormat has a name :" << styleNames[charFormat.objectIndex()];
                 }
                 writer->addTextSpan( currentFragment.text() );

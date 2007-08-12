@@ -224,7 +224,6 @@ static void importOasisLine( const QString& type, const QString& style,
     else if (fixedType == "double")
         lineType = KoCharacterStyle::DoubleLine;
     
-    //TODO: fix that mess a bit, using custom LineStyle...
     if ( fixedStyle == "solid" )
         lineStyle = KoCharacterStyle::SolidLine;
     else if ( fixedStyle == "dotted" )
@@ -241,6 +240,42 @@ static void importOasisLine( const QString& type, const QString& style,
         lineStyle = KoCharacterStyle::WaveLine;
     // TODO bold. But this is another attribute in OASIS (text-underline-width), which makes sense.
     // We should separate them in kotext...
+}
+
+static QString exportOasisLineType(KoCharacterStyle::LineType lineType) {
+    switch (lineType) {
+        case KoCharacterStyle::NoLineType:
+            return "none";
+        case KoCharacterStyle::SingleLine:
+            return "single";
+        case KoCharacterStyle::DoubleLine:
+            return "double";
+        default:
+            return "";
+    }
+}
+
+static QString exportOasisLineStyle(KoCharacterStyle::LineStyle lineStyle) {
+    switch (lineStyle) {
+        case KoCharacterStyle::NoLineStyle:
+            return "none";
+        case KoCharacterStyle::SolidLine:
+            return "solid";
+        case KoCharacterStyle::DottedLine:
+            return "dotted";
+        case KoCharacterStyle::DashLine:
+            return "dash";
+        case KoCharacterStyle::LongDashLine:
+            return "long-dash";
+        case KoCharacterStyle::DotDashLine:
+            return "dot-dash";
+        case KoCharacterStyle::DotDotDashLine:
+            return "dot-dot-dash";
+        case KoCharacterStyle::WaveLine:
+            return "wave";
+        default:
+            return "";
+    }
 }
 
 void KoCharacterStyle::setFontFamily (const QString &family) {
@@ -683,6 +718,38 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
                 target->addProperty("fo:font-style", "italic", KoGenStyle::TextType);
             } else {
                 target->addProperty("fo:font-style", "", KoGenStyle::TextType);
+            }
+        } else if (key == UnderlineStyle) {
+            bool ok = false;
+            int style = d->stylesPrivate->value(key).toInt(&ok);
+            if (ok) {
+                target->addProperty("style:text-underline-style", exportOasisLineStyle((KoCharacterStyle::LineStyle) style), KoGenStyle::TextType);
+            } else {
+                kDebug() << "What is this ???" << d->stylesPrivate->value(key);
+            }
+        } else if (key == UnderlineType) {
+            bool ok = false;
+            int type = d->stylesPrivate->value(key).toInt(&ok);
+            if (ok) {
+                target->addProperty("style:text-underline-type", exportOasisLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
+            } else {
+                kDebug() << "What is this ???" << d->stylesPrivate->value(key);
+            }
+        } else if (key == StrikeOutStyle) {
+            bool ok = false;
+            int style = d->stylesPrivate->value(key).toInt(&ok);
+            if (ok) {
+                target->addProperty("style:text-line-through-style", exportOasisLineStyle((KoCharacterStyle::LineStyle) style), KoGenStyle::TextType);
+            } else {
+                kDebug() << "What is this ???" << d->stylesPrivate->value(key);
+            }
+        } else if (key == StrikeOutType) {
+            bool ok = false;
+            int type = d->stylesPrivate->value(key).toInt(&ok);
+            if (ok) {
+                target->addProperty("style:text-line-through-type", exportOasisLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
+            } else {
+                kDebug() << "What is this ???" << d->stylesPrivate->value(key);
             }
         } else {
             kDebug() << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);

@@ -67,9 +67,8 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles) {
             id = cf.intProperty(KoCharacterStyle::StyleId);
             if(id > 0 && changedStyles.contains(id)) {
                 // create selection
-                cursor.setPosition(block.position() + fragment.position());
-                cursor.setPosition(block.position() + fragment.position() +
-                        fragment.length(), QTextCursor::KeepAnchor);
+                cursor.setPosition(fragment.position());
+                cursor.setPosition(fragment.position() + fragment.length(), QTextCursor::KeepAnchor);
                 KoCharacterStyle *style = m_styleManager->characterStyle(id);
                 Q_ASSERT(style);
 

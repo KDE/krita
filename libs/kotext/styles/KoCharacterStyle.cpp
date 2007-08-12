@@ -678,6 +678,12 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
             } else {
                 kDebug() << "What is this ???" << d->stylesPrivate->value(key);
             }
+        } else if (key == QTextFormat::FontItalic) {
+            if (d->stylesPrivate->value(key).toBool()) {
+                target->addProperty("fo:font-style", "italic", KoGenStyle::TextType);
+            } else {
+                target->addProperty("fo:font-style", "", KoGenStyle::TextType);
+            }
         } else {
             kDebug() << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
         }

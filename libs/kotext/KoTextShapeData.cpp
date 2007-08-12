@@ -31,6 +31,8 @@
 #include "styles/KoParagraphStyle.h"
 #include "KoTextDocumentLayout.h"
 
+#include <QUrl>
+
 class KoTextShapeData::Private {
 public:
     Private()
@@ -181,17 +183,19 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     KoCharacterStyle charStyle = KoCharacterStyle(textFormat);
                     kDebug() << "&charStyle :" << &charStyle << "  ; originalCharStyle:" << originalCharStyle;
                     KoGenStyle test(0, "text");
+                    QString generatedName;
                     if (charStyle == (*originalCharStyle)) {
                         kDebug() << "This IS the real character style :" << originalCharStyle->name();
-    //                         QString displayName = originalCharStyle->name();
-    //                         QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
+                        QString displayName = originalCharStyle->name();
+                        QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
                         originalCharStyle->saveOdf(&test);
+                        generatedName = context.mainStyles().lookup(test, internalName);
                     } else {
                         kDebug() << "There are manual changes... We'll have to store them then";
                         charStyle.removeDuplicates(*originalCharStyle);
                         charStyle.saveOdf(&test);
+                        generatedName = context.mainStyles().lookup(test, "T");
                     }
-                    QString generatedName = context.mainStyles().lookup(test, "T");
                     kDebug() << "Storing this style, result :" << generatedName;
                     styleNames[allFormats.indexOf(textFormat)] = generatedName;
                 } else {
@@ -211,15 +215,9 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
             if (currentFragment.isValid()) {
                 if (firstFragmentFormat == -1)
                     firstFragmentFormat = currentFragment.charFormatIndex();
-                kDebug() << "The fragment format is " << currentFragment.charFormatIndex();
                 QTextFormat charFormat = currentFragment.charFormat();
-                QMapIterator<int, QVariant> i(charFormat.properties());
-                while (i.hasNext()) {
-                    i.next();
-                    kDebug() << "Key/Value : " << i.key() << "/" << i.value();
-                }
-                kDebug() << "StyleId in StyleManager :" << charFormat.intProperty(KoParagraphStyle::StyleId);
                 if (styleManager) {
+                    kDebug() << "StyleId in StyleManager :" << charFormat.intProperty(KoParagraphStyle::StyleId);
                     KoCharacterStyle *customCharStyle = styleManager->characterStyle(charFormat.intProperty(KoParagraphStyle::StyleId));
                     if (customCharStyle) {
                         kDebug() << "This format is in styleManager : " << customCharStyle->name();
@@ -232,7 +230,6 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     writer->startElement( "text:span", false );
                     if (styleNames.contains(allFormats.indexOf(charFormat)))
                         writer->addAttribute("text:style-name", styleNames[allFormats.indexOf(charFormat)]);
-                        //kDebug() << "This charFormat has a name :" << styleNames[charFormat.objectIndex()];
                 }
                 writer->addTextSpan( currentFragment.text() );
                 if (currentFragment.charFormatIndex() != firstFragmentFormat)

@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef MATCHING_CURVES_H_
+#define MATCHING_CURVES_H_
 
 namespace cmf {
 
@@ -1443,3 +1445,5 @@ const double z[] = {
 };
 
 };
+
+#endif // MATCHING_CURVES_H_

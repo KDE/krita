@@ -37,7 +37,9 @@
 #include <gmp.h>
 #include <gmpxx.h>
 
+#include "adaptation_matrices.h"
 #include "matching_curves.h"
+#include "precomputed_D50.h"
 
 using namespace gmm;
 using namespace std;
@@ -50,6 +52,10 @@ class c {
 	mpf_class mW[NUM];
 	mpf_class mX[NUM];
 	mpf_class m_matrix[3][NUM];
+	mpf_class m_fromD50[3][3];
+	mpf_class m_toD50[3][3];
+	mpf_class m_AM[3][3];
+	mpf_class m_AM_1[3][3];
 
 	public:
 		mpf_class &H(int i)
@@ -71,6 +77,26 @@ class c {
 		{
 			if (i >= 0 && i < 3 && j >= 0 && j < NUM)
 				return m_matrix[i][j];
+		}
+		mpf_class &fromD50(int i, int j)
+		{
+			if (i >= 0 && i < 3 && j >= 0 && j < 3)
+				return m_fromD50[i][j];
+		}
+		mpf_class &toD50(int i, int j)
+		{
+			if (i >= 0 && i < 3 && j >= 0 && j < 3)
+				return m_toD50[i][j];
+		}
+		mpf_class &AM(int i, int j)
+		{
+			if (i >= 0 && i < 3 && j >= 0 && j < 3)
+				return m_AM[i][j];
+		}
+		mpf_class &AM_1(int i, int j)
+		{
+			if (i >= 0 && i < 3 && j >= 0 && j < 3)
+				return m_AM_1[i][j];
 		}
 		const mpf_class x(int i)
 		{
@@ -116,43 +142,76 @@ void div(mpf_class v[], mpf_class k, mpf_class vr[]);
 mpf_class pow(mpf_class d, int p);
 void scalar(mpf_class v1[], mpf_class v2[], mpf_class &r);
 
+void AM_mul(mpf_class M[3][3], mpf_class v[], mpf_class vr[]);
+
 mpf_class standardIntegral(int p);
 bool loadIlluminant(char *filename);
+bool chooseAdaptationMatrix(char *type);
 bool computeRoots();
 bool computeWeights();
 bool computeMatrix();
-bool saveMatrix(char *filename);
+bool computeD50Conversions();
+bool saveMatrix(char *profilename, char *filename);
 
 int main(int argc, char *argv[])
 {
 	bool goon;
 
-	if (argc != 3) {
-		cout << "Usage: " << argv[0] << " inputfile outputfile" << endl;
+	if (argc != 5) {
+		cout << "Usage: " << argv[0] << " input_file adaptation_type profile_name output_file" << endl;
 		return 255;
+	} else {
+		string choice;
+		cout << "I'm going to create a profile with these settings:" << endl;
+		cout << "\t- Input file: " << argv[1] << endl;
+		cout << "\t- Adaptation matrix: " << argv[2] << endl;
+		cout << "\t- Output profile name: " << argv[3] << endl;
+		cout << "\t- Output profile filename: " << argv[4] << endl;
+		cout << "Continue? [Y/n] " << endl;
+again:
+		cin >> choice;
+		if (choice == "Y" || choice == "y" || choice == "yes" || choice == "Yes" || choice == "YES") {
+			cout << "Starting..." << endl;
+			goto start;
+		}
+		if (choice == "n" || choice == "N" || choice == "no" || choice == "No" || choice == "NO") {
+			cout << "Bye" << endl;
+			return 254;
+		}
+		cout << "You should answer Y or N" << endl;
+		goto again;
 	}
 
+start:
 	mpf_set_default_prec(PREC);
 
 	goon = loadIlluminant(argv[1]);
 	if (!goon)
 		return 1;
 
-	goon = computeRoots();
+	goon = chooseAdaptationMatrix(argv[2]);
 	if (!goon)
 		return 2;
 
-	goon = computeWeights();
+	goon = computeRoots();
 	if (!goon)
 		return 3;
 
-	goon = computeMatrix();
+	goon = computeWeights();
 	if (!goon)
 		return 4;
 
-	goon = saveMatrix(argv[2]);
+	goon = computeMatrix();
 	if (!goon)
 		return 5;
+
+	goon = computeD50Conversions();
+	if (!goon)
+		return 6;
+
+	goon = saveMatrix(argv[3], argv[4]);
+	if (!goon)
+		return 7;
 
 	return 0;
 }
@@ -280,6 +339,39 @@ bool loadIlluminant(char *filename)
 	}
 
 	return true;
+}
+
+bool chooseAdaptationMatrix(char *type)
+{
+	bool how = false;
+	const double (*myAM)[3];
+	const double (*myAM_1)[3];
+	if (strcmp(type, "XYZ") == 0) {
+		myAM = AM::XYZ;
+		myAM_1 = AM::XYZ_1;
+		how = true;
+	}
+	if (strcmp(type, "Bradford") == 0) {
+		myAM = AM::Bradford;
+		myAM_1 = AM::Bradford_1;
+		how = true;
+	}
+	if (strcmp(type, "VonKries") == 0) {
+		myAM = AM::VonKries;
+		myAM_1 = AM::VonKries_1;
+		how = true;
+	}
+
+	if (how) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				C.AM(i,j) = myAM[i][j];
+				C.AM_1(i,j) = myAM_1[i][j];
+			}
+		}
+	}
+
+	return how;
 }
 
 /*
@@ -444,11 +536,101 @@ bool computeMatrix()
 	return true;
 }
 
-bool saveMatrix(char *filename)
+bool computeD50Conversions() {
+	mpf_class wD50[3];
+	mpf_class wCur[3];
+	mpf_class rD50[3];
+	mpf_class rCur[3];
+
+	mpf_class rMatFrom[3][3];
+	mpf_class rMatTo[3][3];
+	mpf_class tempFrom[3][3];
+	mpf_class tempTo[3][3];
+
+	cout << "White point" << endl;
+	for (int i = 0; i < 3; i++) {
+		wD50[i] = wCur[i] = 0.0;
+		for (int j = 0; j < 10; j++) {
+			wD50[i] += precom::D50[i][j];
+			wCur[i] += C.matrix(i,j);
+		}
+		cout.precision(7);
+		cout << wD50[i] << "\t" << wCur[i] << endl;
+	}
+	cout << endl;
+
+	cout << "Cone domain" << endl;
+	for (int i = 0; i < 3; i++) {
+		rD50[i] = rCur[i] = 0.0;
+		for (int j = 0; j < 3; j++) {
+			rD50[i] += C.AM(i,j) * wD50[j];
+			rCur[i] += C.AM(i,j) * wCur[j];
+		}
+		cout.precision(7);
+		cout << rD50[i] << "\t" << rCur[i] << endl;
+	}
+	cout << endl;
+
+	cout << "Cone domain from D50 matrix" << endl;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (i == j) {
+				rMatFrom[i][j] = rCur[i]/rD50[i];
+				rMatTo[i][j] = rD50[i]/rCur[i];
+			} else {
+				rMatFrom[i][j] = 0.0;
+				rMatTo[i][j] = 0.0;
+			}
+			cout.precision(7);
+			cout.width(12);
+			cout << rMatFrom[i][j];
+		}
+		cout << endl;
+	}
+	cout << endl;
+
+	cout << "Temporary matrix, AM*Cone" << endl;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			tempFrom[i][j] = tempTo[i][j] = 0.0;
+			for (int k = 0; k < 3; k++) {
+				tempFrom[i][j] += C.AM(i,k)*rMatFrom[k][j];
+				tempTo[i][j] += C.AM(i,k)*rMatTo[k][j];
+			}
+			cout.precision(7);
+			cout.width(12);
+			cout << tempFrom[i][j];
+		}
+		cout << endl;
+	}
+	cout << endl;
+
+	cout << "Final chromatic adaptation matrix, Temp*AM_1" << endl;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			C.fromD50(i,j) = C.toD50(i,j) = 0.0;
+			for (int k = 0; k < 3; k++) {
+				C.fromD50(i,j) += tempFrom[i][k]*C.AM_1(k,j);
+				C.toD50(i,j) += tempTo[i][k]*C.AM_1(k,j);
+			}
+			cout.precision(7);
+			cout.width(12);
+			cout << C.fromD50(i,j);
+		}
+		cout << endl;
+	}
+	cout << endl;
+
+	return true;
+}
+
+bool saveMatrix(char *profilename, char *filename)
 {
 	ofstream f;
 
 	f.open(filename);
+
+	f << profilename << endl;
 
 	f.precision(128);
 	for (int i = 0; i < 3; i++)
@@ -457,6 +639,17 @@ bool saveMatrix(char *filename)
 				f << C.matrix(i,j).get_d() << endl;
 			else
 				f << 1e-128 << endl;
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++)
+			f << C.fromD50(i,j).get_d() << "\t";
+		f << endl;
+	}
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++)
+			f << C.toD50(i,j).get_d() << "\t";
+		f << endl;
+	}
 
 	return true;
 }

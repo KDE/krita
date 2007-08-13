@@ -249,9 +249,9 @@ KoDocument::KoDocument( QWidget * parentWidget, QObject* parent, bool singleView
     // the parent setting *always* overrides! (Simon)
     if ( parent )
     {
-        if ( parent->inherits( "KoDocument" ) )
+        if ( ::qobject_cast<KoDocument *>(parent) )
             d->m_bSingleViewMode = ((KoDocument *)parent)->isSingleViewMode();
-        else if ( parent->inherits( "KParts::Part" ) )
+        else if ( ::qobject_cast<KParts::Part*>(parent) )
             d->m_bSingleViewMode = true;
     }
 
@@ -692,8 +692,9 @@ void KoDocument::insertChild( KoDocumentChild *child )
 
 void KoDocument::slotChildChanged( KoChild *c )
 {
-    Q_ASSERT( c->inherits( "KoDocumentChild" ) );
-    emit childChanged( static_cast<KoDocumentChild *>( c ) );
+    KoDocumentChild* child = ::qobject_cast<KoDocumentChild *>(c);
+    Q_ASSERT(child);
+    emit childChanged( child );
 }
 
 void KoDocument::slotChildDestroyed()

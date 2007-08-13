@@ -368,7 +368,7 @@ protected: // protected methods are mostly for koshell, it's the only one derivi
      * call is actually an import operation (like File --> Import).
      *
      * If this is true, you must call KoDocument::import() instead of
-     * KoDocument::openURL(), in any reimplementation of openDocument() or
+     * KoDocument::openUrl(), in any reimplementation of openDocument() or
      * openDocumentInternal().
      */
     bool isImporting() const;

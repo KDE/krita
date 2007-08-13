@@ -31,7 +31,7 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
     , m_view( view )
     , m_url( url )
 {
-    m_doc->openURL(url);
+    m_doc->openUrl(url);
     if ( !m_doc->isLoading() ) {
         slotLoadingFinished();
     }

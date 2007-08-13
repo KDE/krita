@@ -144,16 +144,16 @@ public:
      * Reimplemented from KParts::ReadWritePart for internal reasons
      * (for the autosave functionality)
      */
-    virtual bool openURL( const KUrl & url );
+    virtual bool openUrl( const KUrl & url );
 
     /**
      * Opens the document given by @p url, without storing the URL
      * in the KoDocument.
-     * Call this instead of openURL() to implement KoMainWindow's
+     * Call this instead of openUrl() to implement KoMainWindow's
      * File --> Import feature.
      *
-     * @note This will call openURL(). To differentiate this from an ordinary
-     *       Open operation (in any reimplementation of openURL() or openFile())
+     * @note This will call openUrl(). To differentiate this from an ordinary
+     *       Open operation (in any reimplementation of openUrl() or openFile())
      *       call isImporting().
      */
     bool import( const KUrl &url );
@@ -319,7 +319,7 @@ public:
     /**
      * Show the last error message in a message box.
      * The dialog box will mention a loading problem.
-     * openURL/openFile takes care of doing it, but not loadNativeFormat itself,
+     * openUrl/openFile takes care of doing it, but not loadNativeFormat itself,
      * so this is often called after loadNativeFormat returned false.
      */
     void showLoadingErrorDialog();
@@ -593,14 +593,14 @@ public:
     bool isAutosaving() const;
 
     /**
-     * Set whether the next openURL call should check for an auto-saved file
+     * Set whether the next openUrl call should check for an auto-saved file
      * and offer to open it. This is usually true, but can be turned off
      * (e.g. for the preview module).
      */
     void setCheckAutoSaveFile( bool b );
 
     /**
-     * Set whether the next openURL call should show error message boxes in case
+     * Set whether the next openUrl call should show error message boxes in case
      * of errors. This is usually the case, but e.g. not when generating thumbnail
      * previews.
      */
@@ -722,7 +722,7 @@ public:
     bool isModified() const;
 
     /**
-     * Returns true during loading (openURL can be asynchronous)
+     * Returns true during loading (openUrl can be asynchronous)
      */
     bool isLoading() const;
 
@@ -967,7 +967,7 @@ protected:
      *  Applies a filter if necessary, and calls loadNativeFormat in any case
      *  You should not have to reimplement, except for very special cases.
      *
-     * This method is called from the KReadOnlyPart::openURL method.
+     * This method is called from the KReadOnlyPart::openUrl method.
      */
     virtual bool openFile();
 
@@ -1073,7 +1073,7 @@ protected:
     virtual bool saveExternalChildren();
 
     /**
-     *  Returns whether or not the current openURL() or openFile() call is
+     *  Returns whether or not the current openUrl() or openFile() call is
      *  actually an import operation (like File --> Import).
      *  This is for informational purposes only.
      */

@@ -66,7 +66,7 @@ void KritaShape::importImage(const KUrl & url )
     delete m_d->doc;
     m_d->doc = new KisDoc2(0, 0, false);
     connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
-    m_d->doc->openURL(url);
+    m_d->doc->openUrl(url);
 }
 
 void KritaShape::slotLoadingFinished()
@@ -146,7 +146,7 @@ void KritaShape::tryLoadFromImageData(KoImageData *data) {
     connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
 
     if(! url.isEmpty())
-        m_d->doc->openURL(url);
+        m_d->doc->openUrl(url);
     else {
         // Create an empty image
         KisImageSP img = m_d->doc->newImage(i18n( "Converted from KoImageData" ), image.width(), image.height(), 0 );

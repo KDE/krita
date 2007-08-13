@@ -58,7 +58,7 @@ public Q_SLOTS: // METHODS
      * Warning: this is asynchronous. The document might not be loaded yet when
      * this call returns. See isLoading.
      */
-    Q_SCRIPTABLE void openURL( const QString & url );
+    Q_SCRIPTABLE void openUrl( const QString & url );
 
     /**
      * @return TRUE is the document is still loading

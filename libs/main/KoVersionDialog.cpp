@@ -221,7 +221,7 @@ void KoVersionDialog::slotOpen()
         shell->show();
     }
     else
-        m_doc->openURL( tmp.fileName() );
+        m_doc->openUrl( tmp.fileName() );
 
     tmp.setAutoRemove(true);
     slotButtonClicked( Close );

@@ -308,11 +308,11 @@ bool KoDocumentChild::finishLoadingDocument( KoStore* store, KoDocument* doc, bo
                     return false;
                 }
                 if ( result == KMessageBox::Yes )
-                    res = d->m_doc->openURL( url );
+                    res = d->m_doc->openUrl( url );
                 // and if == No, res will still be false so we'll use a kounavail below
             }
             else
-                res = d->m_doc->openURL( url );
+                res = d->m_doc->openUrl( url );
         }
         if ( !res )
         {

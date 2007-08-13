@@ -158,7 +158,7 @@ public:
     bool m_doNotSaveExtDoc; // makes it possible to save only internally stored child documents
     bool m_current;
     bool m_storeInternal; // Store this doc internally even if url is external
-    bool m_bLoading; // True while loading (openURL is async)
+    bool m_bLoading; // True while loading (openUrl is async)
 
     KoOpenPane* m_startUpWidget;
     QString m_templateType;
@@ -1358,7 +1358,7 @@ bool KoDocument::checkAutoSaveFile()
         case KMessageBox::Yes : {
             KUrl url;
             url.setPath( asf );
-            bool ret = openURL( url );
+            bool ret = openUrl( url );
             if ( ret )
                 resetURL();
             return ret;
@@ -1381,9 +1381,9 @@ bool KoDocument::import( const KUrl & _url )
     d->m_isImporting = true;
 
     // open...
-    ret = openURL (_url);
+    ret = openUrl (_url);
 
-    // reset m_url & m_file (kindly? set by KParts::openURL()) to simulate a
+    // reset m_url & m_file (kindly? set by KParts::openUrl()) to simulate a
     // File --> Import
     if (ret)
     {
@@ -1397,9 +1397,9 @@ bool KoDocument::import( const KUrl & _url )
     return ret;
 }
 
-bool KoDocument::openURL( const KUrl & _url )
+bool KoDocument::openUrl( const KUrl & _url )
 {
-    kDebug(30003) <<"KoDocument::openURL url=" << _url.url();
+    kDebug(30003) <<"KoDocument::openUrl url=" << _url.url();
     d->lastErrorMessage.clear();
 
     // Reimplemented, to add a check for autosave files and to improve error reporting
@@ -1420,7 +1420,7 @@ bool KoDocument::openURL( const KUrl & _url )
         QString asf = autoSaveFile( file );
         if ( QFile::exists( asf ) )
         {
-            //kDebug(30003) <<"KoDocument::openURL asf=" << asf;
+            //kDebug(30003) <<"KoDocument::openUrl asf=" << asf;
             // ## TODO compare timestamps ?
             int res = KMessageBox::warningYesNoCancel( 0,
                                                        i18n( "An autosaved file exists for this document.\nDo you want to open it instead?" ));
@@ -1447,7 +1447,7 @@ bool KoDocument::openURL( const KUrl & _url )
     {
         // We have no koffice shell when we are being embedded as a readonly part.
         //if ( d->m_shells.isEmpty() )
-        //    kWarning(30003) << "KoDocument::openURL no shell yet !";
+        //    kWarning(30003) << "KoDocument::openUrl no shell yet !";
         // Add to recent actions list in our shells
         Q3PtrListIterator<KoMainWindow> it( d->m_shells );
         for (; it.current(); ++it )
@@ -1708,7 +1708,7 @@ bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, KoXmlD
 bool KoDocument::loadNativeFormat( const QString & file )
 {
     QFileInfo fileInfo( file );
-    if ( !fileInfo.exists() ) // check duplicated from openURL, but this is useful for templates
+    if ( !fileInfo.exists() ) // check duplicated from openUrl, but this is useful for templates
     {
         d->lastErrorMessage = i18n("The file %1 does not exist.", file);
         return false;
@@ -2761,7 +2761,7 @@ void KoDocument::showStartUpWidget( KoMainWindow* parent, bool alwaysShow )
 
 void KoDocument::openExistingFile( const KUrl& url )
 {
-    bool ok = openURL( url );
+    bool ok = openUrl( url );
     setModified( false );
 
     if( ok )

@@ -46,7 +46,7 @@ bool KoShapeGroup::hitTest( const QPointF &position ) const {
 
 void KoShapeGroup::childCountChanged() {
     QRectF br = boundingRect();
-    setPosition( br.topLeft() );
+    setAbsolutePosition( br.topLeft(), KoFlake::TopLeftCorner );
     setSize( br.size() );
 }
 

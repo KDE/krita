@@ -80,3 +80,8 @@ target_link_libraries(TestShapeContainer  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST
 
 ########### end ###############
 
+set(TestShapeGroupCommand_test_SRCS TestShapeGroupCommand.cpp )
+kde4_add_unit_test(TestShapeGroupCommand TESTNAME libs-flake-TestShapeGroupCommand  ${TestShapeGroupCommand_test_SRCS})
+target_link_libraries(TestShapeGroupCommand  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
+########### end ###############

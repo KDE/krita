@@ -476,7 +476,8 @@ QDockWidget * KoView::createDock(const QString & title, QWidget * w)
 
     KConfigGroup group(KGlobal::config(), "");
     QFont dockWidgetFont = KGlobalSettings::generalFont();
-    double pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize());
+    double pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
+    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
     dockWidgetFont.setPointSizeF(pointSize);
     d->setFont(dockWidgetFont);
 

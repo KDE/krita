@@ -1476,7 +1476,9 @@ bool KoDocument::openFile()
 
     KUrl u;
     u.setPath( localFilePath() );
-    QString typeName = KMimeType::findByUrl( u, 0, true )->name();
+    QString typeName = arguments().mimeType();
+    if (typeName.isEmpty())
+        typeName = KMimeType::findByUrl( u, 0, true )->name();
 
     // Allow to open backup files, don't keep the mimetype application/x-trash.
     if ( typeName == "application/x-trash" )

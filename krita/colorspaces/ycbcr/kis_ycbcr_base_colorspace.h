@@ -98,8 +98,8 @@ class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB16F
                 dst->Cb = _CSTraits::computeCb( red, green, blue);
                 dst->Cr = _CSTraits::computeCr( red, green, blue);
                 dst->alpha = UINT16_TO_NATIVE(src[KoRgbU16Traits::alpha_pos]);
-                src ++;
-                dst += 4;
+                src +=4;
+                dst ++;
                 nPixels--;
             }
         }

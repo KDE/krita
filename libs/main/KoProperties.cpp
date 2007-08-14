@@ -114,7 +114,7 @@ QString KoProperties::store( const QString & s )
 QString KoProperties::store()
 {
     // Legacy...
-    store( "filterconfig" );
+    return store( "filterconfig" );
 }
 
 

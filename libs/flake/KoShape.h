@@ -547,6 +547,9 @@ public:
      */
     void setTransformation( const QMatrix &matrix );
 
+    /// Returns the shapes local transformation matrix
+    QMatrix localTransformation() const;
+
     /**
      * Copy all the settings from the parameter shape and apply them to this shape.
      * Settings like the position and rotation to visible and locked.  The parent

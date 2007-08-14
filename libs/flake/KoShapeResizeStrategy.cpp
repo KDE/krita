@@ -39,7 +39,7 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
             continue;
         m_selectedShapes << shape;
         m_startPositions << shape->position();
-        m_oldTransforms << shape->transformationMatrix(0);
+        m_oldTransforms << shape->localTransformation();
         m_transformations << QMatrix();
         m_startSizes << shape->size();
     }
@@ -199,7 +199,7 @@ QUndoCommand* KoShapeResizeStrategy::createCommand() {
     for( int i = 0; i < shapeCount; ++i )
     {
         newSizes << m_selectedShapes[i]->size();
-        transformations << m_oldTransforms[i] * m_transformations[i];
+        transformations << m_selectedShapes[i]->localTransformation();
     }
     QUndoCommand * cmd = new QUndoCommand(i18n("Resize"));
     new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd );

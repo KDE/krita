@@ -53,6 +53,7 @@ private:
     QRectF m_initialBoundingRect;
     QPointF m_start;
     QMatrix m_rotationMatrix;
+    QList<QMatrix> m_oldTransforms;
 };
 
 #endif /* KOSHAPEROTATESTRATEGY_H */

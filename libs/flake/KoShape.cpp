@@ -295,6 +295,11 @@ void KoShape::setTransformation( const QMatrix &matrix )
     d->shapeChanged(GenericMatrixChange);
 }
 
+QMatrix KoShape::localTransformation() const
+{
+    return d->localMatrix;
+}
+
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2) {
     int diff = s1->zIndex() - s2->zIndex();
     if(diff == 0) {

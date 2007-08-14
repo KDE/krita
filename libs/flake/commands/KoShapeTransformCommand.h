@@ -33,14 +33,6 @@ class QMatrix;
 class FLAKE_EXPORT KoShapeTransformCommand : public QUndoCommand
 {
 public:
-    /**
-     * A command to transform a selection of shapes with the same transformation.
-     * This command will take the current state of the object as the default state and after re-doing it will
-     * transform all shapes to the state where the transformation is applied.
-     * @param shapes all the shapes that should be transformed
-     * @param transformation the transformation to apply to all shapes
-     */
-    KoShapeTransformCommand( const QList<KoShape*> &shapes, const QMatrix &transformation, QUndoCommand *parent = 0 );
 
     /**
      * A command to transform a selection of shapes to the new state.

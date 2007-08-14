@@ -45,6 +45,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
         if( ! isEditable( shape ) )
             continue;
         m_selectedShapes << shape;
+        m_oldTransforms << shape->localTransformation();
     }
 
     // Eventhoug we aren't currently activated by the corner handles we might as well code like it
@@ -167,9 +168,10 @@ void KoShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &conv
 }
 
 QUndoCommand* KoShapeShearStrategy::createCommand() {
-    KoShapeTransformCommand revert( m_selectedShapes, m_shearMatrix.inverted() );
-    revert.redo();
-    KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_shearMatrix );
+    QList<QMatrix> newTransforms;
+    foreach( KoShape* shape, m_selectedShapes )
+        newTransforms << shape->localTransformation();
+    KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );
     cmd->setText( i18n("Shear") );
     return cmd;
 }

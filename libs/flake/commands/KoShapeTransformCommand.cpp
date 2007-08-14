@@ -34,17 +34,6 @@ public:
     QList<QMatrix> newState;
 };
 
-KoShapeTransformCommand::KoShapeTransformCommand( const QList<KoShape*> &shapes, const QMatrix &transformation, QUndoCommand *parent )
-    : QUndoCommand(parent),
-    d( new Private(shapes))
-{
-    foreach(KoShape *shape, shapes) {
-        QMatrix current = shape->transformationMatrix(0);
-        d->oldState.append( current );
-        d->newState.append( current * transformation );
-    }
-}
-
 KoShapeTransformCommand::KoShapeTransformCommand( const QList<KoShape*> &shapes, const QList<QMatrix> &oldState, const QList<QMatrix> &newState, QUndoCommand * parent )
     : QUndoCommand(parent),
     d( new Private(shapes))

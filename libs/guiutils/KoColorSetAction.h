@@ -59,6 +59,7 @@ signals:
 
 private slots:
     void handleColorChange(const KoColor &color, bool final);
+    void resizeMenu(const QSize &size);
 
 private:
     class KoColorSetActionPrivate;

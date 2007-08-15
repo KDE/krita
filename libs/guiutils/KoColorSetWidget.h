@@ -71,6 +71,9 @@ public slots:
      */
     void setColorSet(KoColorSet *colorSet);
 
+protected:
+    virtual void resizeEvent(QResizeEvent *event);
+
 signals:
 
     /**
@@ -80,6 +83,14 @@ signals:
      * @param final if the value is final (ie not produced by the pointer moving over around)
      */
     void colorChanged(const KoColor &color, bool final);
+
+    /**
+     * Emitted every time the size of this widget changes because of new colorset with
+     * different number of colors is loaded. This is useful for KoColorSetAction to update
+     * correct size of the menu showing this widget.
+     * @param size the new size
+     */
+    void widgetSizeChanged(const QSize &size);
 
 private:
     Q_PRIVATE_SLOT(d, void colorTriggered(KoColorPatch *))

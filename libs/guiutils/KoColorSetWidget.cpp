@@ -111,8 +111,11 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
     }
 
     KoEditColorSetDialog *dlg = new KoEditColorSetDialog(palettes, colorSet->name(), thePublic);
-    if (dlg->exec()) // always reload the color set
+    if (dlg->exec()) { // always reload the color set
         thePublic->setColorSet(dlg->activeColorSet());
+        colorSetContainer->setFixedSize(colorSetLayout->sizeHint());
+        thePublic->setFixedSize(mainLayout->sizeHint());
+    }
     delete dlg;
 }
 
@@ -226,6 +229,11 @@ void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
 {
     d->colorSet = colorSet;
     d->filter(d->filterCheckBox->checkState());
+}
+
+void KoColorSetWidget::resizeEvent(QResizeEvent *event)
+{
+    emit widgetSizeChanged(event->size());
 }
 
 #include "KoColorSetWidget.moc"

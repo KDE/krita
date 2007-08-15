@@ -7,14 +7,9 @@ find_path(GLPK_INCLUDE_DIR NAMES glpk.h
      PATHS
      ${INCLUDE_INSTALL_DIR}
      ${GLPK_INCLUDE_PATH}
-     /usr/include
-     /usr/local/include
    )
 
-find_library(GLPK_LIBRARY glpk
-      /usr/lib
-      /usr/local/lib
-    )
+find_library(GLPK_LIBRARY glpk)
 
 if(GLPK_INCLUDE_DIR AND GLPK_LIBRARY)
   set(GLPK_FOUND TRUE)

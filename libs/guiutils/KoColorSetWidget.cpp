@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2007 Casper Boemann <cbr@boemann.dk>
+   Copyright (c) 2007 Fredy Yanardi <fyanardi@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +30,7 @@
 #include <QMouseEvent>
 #include <QMenu>
 #include <QWidgetAction>
+#include <QDir>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -38,6 +40,7 @@
 
 #include <KoColorSet.h>
 #include <KoColorPatch.h>
+#include <KoEditColorSetDialog.h>
 #include <KoColorSpaceRegistry.h>
 
 class KoColorSetWidget::KoColorSetWidgetPrivate {
@@ -52,26 +55,28 @@ public:
     QGridLayout *colorSetLayout;
     QHBoxLayout *recentsLayout;
     KoColorPatch *recentPatches[6];
+    QPushButton *addRemoveButton;
     int numRecents;
 
     void colorTriggered(KoColorPatch *patch);
     void addRecent(const KoColor &);
     void activateRecent(int i);
     void filter(int state);
+    void addRemoveColors();
 };
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
 {
     bool hide = (state ==QCheckBox::On);
 
-    if (colorSetContainer)
+    if (colorSetContainer) 
         delete colorSetContainer;
     colorSetContainer = new QWidget();
     colorSetLayout = new QGridLayout();
     colorSetLayout->setMargin(0);
     colorSetLayout->setSpacing(1);
     for(int i = 0; i<16; i++) {
-        colorSetLayout->setColumnMinimumWidth(i, 16);
+        colorSetLayout->setColumnMinimumWidth(i, 12);
     }
     colorSetContainer->setLayout(colorSetLayout);
 
@@ -80,22 +85,41 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
             if(!hide || i%3!=0 && i%16!=5) {
                 KoColorPatch *patch = new KoColorPatch(colorSetContainer);
                 patch->setColor(colorSet->getColor(i).color);
-                patch->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
                 patch->setFrameShape(QFrame::Box);
                 connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
                 colorSetLayout->addWidget(patch, i/16, i%16);
             }
         }
     }
+
     mainLayout->insertWidget(2, colorSetContainer);
 }
 
+void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
+{
+    // TODO: don't hardcode default location of palettes
+    QList<KoColorSet *> palettes;
+    QString defaultPalette("krita/palettes/Default.gpl");
+    QString dir = KGlobal::dirs()->findResourceDir("data", defaultPalette);
+    QDir loc = dir + "krita/palettes/";
+    loc.setNameFilters(QStringList("*.gpl"));
+    QStringList entryList = loc.entryList(QDir::Files);
+    QStringList::iterator it;
+    for (it = entryList.begin(); it != entryList.end(); ++it) {
+        (*it).prepend(dir + "krita/palettes/");
+        palettes.append(new KoColorSet(*it));
+    }
+
+    KoEditColorSetDialog *dlg = new KoEditColorSetDialog(palettes, colorSet->name(), thePublic);
+    if (dlg->exec()) // always reload the color set
+        thePublic->setColorSet(dlg->activeColorSet());
+    delete dlg;
+}
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::addRecent(const KoColor &color)
 {
     if(numRecents<6) {
         recentPatches[numRecents] = new KoColorPatch(thePublic);
-        recentPatches[numRecents]->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
         recentPatches[numRecents]->setFrameShape(QFrame::Box);
         recentsLayout->insertWidget(numRecents+1, recentPatches[numRecents]);
         connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
@@ -140,10 +164,12 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->recentsLayout = new QHBoxLayout();
     d->mainLayout->addLayout(d->recentsLayout);
     d->recentsLayout->setMargin(0);
-    d->recentsLayout->setSpacing(2);
+    d->recentsLayout->setSpacing(1);
     d->recentsLayout->addWidget(new QLabel("Recent:"));
     d->recentsLayout->addStretch(1);
-    d->recentsLayout->addWidget(new QPushButton("Add / Remove Colors..."));
+    d->addRemoveButton = new QPushButton("Add / Remove Colors...");
+    connect(d->addRemoveButton, SIGNAL(clicked()), SLOT(addRemoveColors()));
+    d->recentsLayout->addWidget(d->addRemoveButton);
 
     KoColor color(KoColorSpaceRegistry::instance()->rgb8());
     color.fromQColor(QColor(128,0,0));

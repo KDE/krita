@@ -56,6 +56,7 @@ set(koguiutils_LIB_SRCS
    KoUniColorDialog.cpp
    KoColorSetWidget.cpp
    KoColorSetAction.cpp
+   KoEditColorSetDialog.cpp
    KoColorPatch.cpp
    KoDualColorButton.cpp
    KoLineStyleSelector.cpp
@@ -69,6 +70,7 @@ kde4_add_ui_files( koguiutils_LIB_SRCS
     #KoPageLayoutColumns.ui
     #KoPageLayoutHeaderBase.ui
     KoShapeGeometry.ui
+    KoEditColorSet.ui
 )
 
 kde4_add_library(koguiutils SHARED ${koguiutils_LIB_SRCS})

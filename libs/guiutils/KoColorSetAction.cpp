@@ -32,19 +32,20 @@ class KoColorSetAction::KoColorSetActionPrivate
 {
 public:
     KoColorSetWidget *colorSetWidget;
+    QMenu *menu;
 };
 
 KoColorSetAction::KoColorSetAction(QObject *parent)
     : QAction(parent),
     d(new KoColorSetActionPrivate())
 {
-    QMenu *menu = new QMenu();
-    QWidgetAction *wdgAction = new QWidgetAction(menu);
-    d->colorSetWidget = new KoColorSetWidget(menu);
+    d->menu = new QMenu();
+    QWidgetAction *wdgAction = new QWidgetAction(d->menu);
+    d->colorSetWidget = new KoColorSetWidget(d->menu);
     connect(d->colorSetWidget, SIGNAL(colorChanged(const KoColor &, bool)), this, SLOT(handleColorChange(const KoColor &, bool)));
     wdgAction->setDefaultWidget(d->colorSetWidget);
-    menu->addAction(wdgAction);
-    setMenu(menu);
+    d->menu->addAction(wdgAction);
+    setMenu(d->menu);
     setIcon(KIcon("textcolor"));
     setToolTip(i18n("Text Color..."));
 }

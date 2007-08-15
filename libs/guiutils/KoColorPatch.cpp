@@ -22,7 +22,7 @@
 
 KoColorPatch::KoColorPatch( QWidget *parent ) : QFrame( parent )
 {
-    setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 }
 
 KoColorPatch::~KoColorPatch()
@@ -31,7 +31,7 @@ KoColorPatch::~KoColorPatch()
 
 QSize KoColorPatch::sizeHint() const
 {
-    return QSize(16,16);
+    return QSize(12,12);
 }
 
 void KoColorPatch::setColor(const KoColor c)

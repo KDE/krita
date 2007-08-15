@@ -95,8 +95,10 @@ KoEditColorSet::~KoEditColorSet()
 
 void KoEditColorSet::setActiveColorSet(int index)
 {
-    if (m_gridLayout)
+    if (m_gridLayout) {
         delete m_gridLayout;
+        m_activePatch = 0;
+    }
 
     QWidget *wdg = new QWidget(m_scrollArea);
     m_gridLayout = new QGridLayout();

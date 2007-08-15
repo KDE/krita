@@ -1177,6 +1177,21 @@ void KoParagraphStyle::saveOdf ( KoGenStyle *target ) {
                 if (!align.isEmpty())
                     target->addProperty("fo:text-align", align, KoGenStyle::ParagraphType);
             }
+        } else if (key == KoParagraphStyle::TextProgressionDirection) {
+            int directionValue = 0;
+            bool ok = false;
+            directionValue = d->stylesPrivate->value(key).toInt(&ok);
+            if (ok) {
+                QString direction = "";
+                if (directionValue == KoText::LeftRightTopBottom)
+                    direction = "lr";
+                else if (directionValue == KoText::RightLeftTopBottom)
+                    direction = "rl";
+                else if (directionValue == KoText::TopBottomRightLeft)
+                    direction = "tb";
+                if (!direction.isEmpty())
+                    target->addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
+            }
         } else {
             kDebug() << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
         }

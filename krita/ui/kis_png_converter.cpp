@@ -338,7 +338,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     int compression_type;
     png_uint_32 proflen;
 
-    
+
     KoColorProfile* profile = 0;
     if(png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen))
     {
@@ -470,7 +470,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     KisPaintLayer* layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), UCHAR_MAX);
     for (png_uint_32 y = 0; y < height; y++) {
         KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width);
-        
+
         png_bytep row_pointer = reader->readLine();
 
         switch(color_type)
@@ -493,7 +493,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     while (!it.isDone()) {
                         quint8 *d = it.rawData();
                         d[0] = (quint8)(stream.nextValue() * coeff);
-//                         kDebug() << it.x() << " " << it.y() << " " << (int)d[0] << " " << (int)(*row_pointer) << " " << (int)(*(row_pointer+1)) << endl;
                         if(transform) cmsDoTransform(transform, d, d, 1);
                         if(hasalpha) d[1] = (quint8)(stream.nextValue() * coeff);
                         else d[1] = UCHAR_MAX;

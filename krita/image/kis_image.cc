@@ -648,8 +648,6 @@ KisProjection * KisImage::projectionManager()
 
 void KisImage::preparePaintLayerAfterAdding( KisLayerSP layer )
 {
-    kDebug() <<"preparePaintLayerAfterAdding" << layer;
-
     KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(layer.data()));
     if (!player.isNull()) {
 
@@ -667,7 +665,6 @@ void KisImage::preparePaintLayerAfterAdding( KisLayerSP layer )
     // Despite the name of the function, this signal is emitted for
     // every added layer.
     if (!layer->temporary()) {
-        kDebug() <<"Emitting sigLayerAdded for" << layer;
         emit sigLayerAdded(layer);
     }
 }

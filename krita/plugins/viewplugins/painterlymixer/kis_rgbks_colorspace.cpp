@@ -68,7 +68,6 @@ KisRGBKSColorSpace::KisRGBKSColorSpace()
 
 void KisRGBKSColorSpace::fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
 {
-	kDebug() << "CALLED!" << endl;
 	const quint16 *src16 = reinterpret_cast<const quint16 *>(srcU8);
 	float *dstf = RGBKSTraits::nativeArray(dstU8);
 

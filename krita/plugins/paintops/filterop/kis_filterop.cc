@@ -139,20 +139,17 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 {
     if (not painter())
     {
-      kDebug() <<"No painter !";
       return;
     }
 
     KisFilterSP filter = m_settings->filter();
     if (not filter)
     {
-      kDebug() <<"No filter !";
       return;
     }
 
     if ( not source() )
     {
-      kDebug() <<"No source !";
       return;
     }
 
@@ -199,12 +196,12 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     filter->process( tmpDev, r, m_settings->filterConfig());
     filter->enableProgress();
 #endif
-    
+
     // Filter the paint device
     filter->disableProgress();
     filter->process(source(), QPoint(x,y), tmpDev, QPoint(0,0), QSize(maskWidth, maskHeight), m_settings->filterConfig());
     filter->enableProgress();
-    
+
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 
     KisHLineIterator hiter = tmpDev->createHLineIterator(0, 0, maskWidth);

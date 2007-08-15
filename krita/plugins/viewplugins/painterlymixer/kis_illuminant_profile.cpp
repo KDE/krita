@@ -88,7 +88,7 @@ bool KisIlluminantProfile::load()
 		}
 
 	} else {
-		kDebug() <<"No files found!";
+		kWarning() <<"No files found!";
 		return false;
 	}
 

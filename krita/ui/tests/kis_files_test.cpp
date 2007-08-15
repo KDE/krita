@@ -40,7 +40,6 @@ void KisFilesTest::testFiles()
     {
         if( not sourceFileInfo.isHidden())
         {
-            kDebug() << "Testing : " << sourceFileInfo.absoluteFilePath() << endl;
             QFileInfo resultFileInfo(  QString(FILES_DATA_DIR) + "/results/" + sourceFileInfo.fileName() + ".png" );
             QVERIFY(resultFileInfo.exists());
             KisDoc2 doc;

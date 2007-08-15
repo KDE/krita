@@ -38,7 +38,6 @@ FilterOp::FilterOp(QObject *parent, const QStringList &)
 {
     setComponentData(FilterOpFactory::componentData());
 
-    kDebug() <<"KisFilter Op";
     // This is not a gui plugin; only load it when the doc is created.
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add (new KisFilterOpFactory);

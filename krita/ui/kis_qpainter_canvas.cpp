@@ -373,7 +373,7 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
         gc.drawImage( rc.topLeft(), canvasImage.copy( drawRect ) );
     }
     else {
-        if ( scaleX > 2.0 && scaleY > 2.0 ) {
+        if ( scaleX > 1.0 && scaleY > 1.0 ) {
             QTime t;
             t.start();
             QImage img2 = ImageUtils::sampleImage(canvasImage, dstSize.width(), dstSize.height(), drawRect);

@@ -144,7 +144,7 @@ double Value::asDouble() const
     return 0.0;
 }
 
-int Value::asInteger() const 
+int Value::asInteger() const
 {
     switch(type())
     {
@@ -187,7 +187,6 @@ bool Value::setVariant(const QVariant& variant)
         {
             QRegExp rx("([^\\/]*)\\/([^\\/]*)");
             rx.indexIn(variant.toString());
-            kDebug() << rx.capturedTexts();
         }
         case KisMetaData::Value::Variant:
         {

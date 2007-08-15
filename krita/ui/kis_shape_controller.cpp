@@ -85,10 +85,7 @@ KisShapeController::~KisShapeController()
 
 void KisShapeController::setImage( KisImageSP image )
 {
-    kDebug() <<"Setting image" << image;
-
     if ( m_d->image ) {
-        kDebug() <<"disconnecting previous image" << m_d->image;
         m_d->image->disconnect( this );
         // First clear the current set of shapes away
         foreach( KoShape* shape, m_d->layerShapes ) {
@@ -110,8 +107,6 @@ void KisShapeController::setImage( KisImageSP image )
 
     if ( image ) {
         m_d->image = image;
-
-        kDebug() <<"Connecting new image";
 
         KisLayerMapVisitor v( m_d->layerShapes, m_d->maskShapes );
         m_d->image->rootLayer()->accept( v );
@@ -254,7 +249,6 @@ void KisShapeController::setInitialShapeForView( KisView2 * view )
 
 void KisShapeController::slotLayerAdded( KisLayerSP layer )
 {
-    kDebug() <<"slotLayerAdded" << layer;
     // Check whether the layer is already in the map
     if ( m_d->layerShapes.contains( layer ) ) {
         kDebug(41007) <<"The document already contains layer" << layer->name();
@@ -305,8 +299,6 @@ void KisShapeController::slotLayerAdded( KisLayerSP layer )
 
 void KisShapeController::slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis )
 {
-    kDebug() <<"slotLayerRemoved" << layer;
-
     Q_UNUSED( wasParent );
     Q_UNUSED( wasAboveThis );
 
@@ -315,8 +307,6 @@ void KisShapeController::slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wa
 
 void KisShapeController::slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis )
 {
-    kDebug() <<"slotLayerMoved" << layer;
-
     Q_UNUSED( previousParent );
     Q_UNUSED( wasAboveThis );
 
@@ -327,7 +317,6 @@ void KisShapeController::slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP prev
 
 void KisShapeController::slotLayersChanged( KisGroupLayerSP rootLayer )
 {
-    kDebug() <<"slotLayersChanged" << rootLayer;
     Q_UNUSED( rootLayer );
 
     setImage( m_d->image );

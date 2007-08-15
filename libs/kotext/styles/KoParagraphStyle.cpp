@@ -23,8 +23,10 @@
 #include "KoTextDocumentLayout.h"
 #include "KoStyleManager.h"
 #include "KoListLevelProperties.h"
-
+#include "KoGenStyle.h"
 #include "Styles_p.h"
+
+#include <KDebug>
 
 #include <QTextBlock>
 #include <QTextBlockFormat>
@@ -1144,6 +1146,41 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block) {
 
 bool KoParagraphStyle::operator==( const KoParagraphStyle &other ) const {
     return ((*(other.d->stylesPrivate)) == (*(this->d->stylesPrivate)));
+}
+
+void KoParagraphStyle::removeDuplicates ( const KoParagraphStyle &other ) {
+    this->d->stylesPrivate->removeDuplicates(other.d->stylesPrivate);
+}
+
+void KoParagraphStyle::saveOdf ( KoGenStyle *target ) {
+    QList<int> keys = d->stylesPrivate->keys();
+    foreach (int key, keys) {
+        if (key == QTextFormat::BlockAlignment) {
+            int alignValue = 0;
+            bool ok = false;
+            alignValue = d->stylesPrivate->value(key).toInt(&ok);
+            if (ok) {
+                Qt::Alignment alignment = (Qt::Alignment) alignValue;
+                QString align = "";
+                if (alignment == (Qt::AlignLeft | Qt::AlignAbsolute))
+                    align = "left";
+                else if (alignment == (Qt::AlignRight | Qt::AlignAbsolute))
+                    align = "right";
+                else if (alignment == Qt::AlignLeading)
+                    align = "start";
+                else if (alignment == Qt::AlignTrailing)
+                    align = "end";
+                else if (alignment == Qt::AlignHCenter)
+                    align = "center";
+                else if (alignment == Qt::AlignJustify)
+                    align = "justify";
+                if (!align.isEmpty())
+                    target->addProperty("fo:text-align", align, KoGenStyle::ParagraphType);
+            }
+        } else {
+            kDebug() << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
+        }
+    }
 }
 
 #include "KoParagraphStyle.moc"

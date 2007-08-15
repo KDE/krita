@@ -163,16 +163,36 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
             kDebug() << "-------------------------------------------------------------------------------";
             kDebug() << "BEGINNING OF THE STYLE MESS";
             
-            // First, get the style manager, we'll need it.
-            KoParagraphStyle *defaultParagraphStyle = styleManager->defaultParagraphStyle();
-            KoCharacterStyle *defaultCharacterStyle = defaultParagraphStyle->characterStyle();
-                
             // Ok, now we will iterate over the QTextFormat contained in this textFrameSet.
             foreach (QTextFormat textFormat, allFormats) {
                 kDebug() << "There is a textFormat :" << textFormat << "; type =" << textFormat.type();
                 if (textFormat.type() == QTextFormat::BlockFormat) {
-                    // This is a QTextBlockFormat, we'll convert it to a KoParagraphStyle
+                    // This is a QTextBlockFormat.
+                    KoParagraphStyle *originalParagraphStyle = styleManager->paragraphStyle(textFormat.intProperty(KoParagraphStyle::StyleId));
+                    if (!originalParagraphStyle) {
+                        continue;
+                    }
+                    // we'll convert it to a KoParagraphStyle to check for local changes.
                     KoParagraphStyle paragStyle = KoParagraphStyle(textFormat);
+                    QString generatedName;
+                    if (paragStyle == (*originalParagraphStyle)) {
+                        // This is the real, unmodified character style.
+                        KoGenStyle test(KoGenStyle::StyleUser, "paragraph");
+                        test.setAutoStyleInStylesDotXml(true);
+                        QString displayName = originalParagraphStyle->name();
+                        QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
+                        originalParagraphStyle->saveOdf(&test);
+                        generatedName = context.mainStyles().lookup(test, internalName);
+                    } else {
+                        // There are manual changes... We'll have to store them then
+                        KoGenStyle test(KoGenStyle::StyleAuto, "paragraph");
+                        test.setAutoStyleInStylesDotXml(false);
+                        paragStyle.removeDuplicates(*originalParagraphStyle);
+                        paragStyle.saveOdf(&test);
+                        generatedName = context.mainStyles().lookup(test, "P");
+                    }
+                    kDebug() << "Storing this style, result :" << generatedName;
+                    styleNames[allFormats.indexOf(textFormat)] = generatedName;
                 } else if (textFormat.type() == QTextFormat::CharFormat) {
                     // This is a QTextCharFormat.
                     KoCharacterStyle *originalCharStyle = styleManager->characterStyle(textFormat.intProperty(KoCharacterStyle::StyleId));
@@ -181,18 +201,17 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     }
                     // we'll convert it to a KoCharacterStyle to check for local changes.
                     KoCharacterStyle charStyle = KoCharacterStyle(textFormat);
-                    kDebug() << "&charStyle :" << &charStyle << "  ; originalCharStyle:" << originalCharStyle;
                     QString generatedName;
                     if (charStyle == (*originalCharStyle)) {
+                        // This is the real, unmodified character style.
                         KoGenStyle test(KoGenStyle::StyleUser, "text");
                         test.setAutoStyleInStylesDotXml(true);
-                        kDebug() << "This IS the real character style :" << originalCharStyle->name();
                         QString displayName = originalCharStyle->name();
                         QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
                         originalCharStyle->saveOdf(&test);
                         generatedName = context.mainStyles().lookup(test, internalName);
                     } else {
-                        kDebug() << "There are manual changes... We'll have to store them then";
+                        // There are manual changes... We'll have to store them then
                         KoGenStyle test(KoGenStyle::StyleAuto, "text");
                         test.setAutoStyleInStylesDotXml(false);
                         charStyle.removeDuplicates(*originalCharStyle);
@@ -211,6 +230,8 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
     }
     while(block.isValid() && ((to == -1) || (block.position() < to))) {
         writer->startElement( "text:p", false );
+        if (styleNames.contains(allFormats.indexOf(block.blockFormat())))
+            writer->addAttribute("text:style-name", styleNames[allFormats.indexOf(block.blockFormat())]);
         QTextBlock::iterator it;
         int firstFragmentFormat = -1;
         for (it = block.begin(); !(it.atEnd()); ++it) {
@@ -219,16 +240,6 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                 if (firstFragmentFormat == -1)
                     firstFragmentFormat = currentFragment.charFormatIndex();
                 QTextFormat charFormat = currentFragment.charFormat();
-                if (styleManager) {
-                    kDebug() << "StyleId in StyleManager :" << charFormat.intProperty(KoParagraphStyle::StyleId);
-                    KoCharacterStyle *customCharStyle = styleManager->characterStyle(charFormat.intProperty(KoParagraphStyle::StyleId));
-                    if (customCharStyle) {
-                        kDebug() << "This format is in styleManager : " << customCharStyle->name();
-                        if (customCharStyle == styleManager->defaultParagraphStyle()->characterStyle()) {
-                            kDebug() << "This is the default style !";
-                        }
-                    }
-                }
                 if (currentFragment.charFormatIndex() != firstFragmentFormat) {
                     writer->startElement( "text:span", false );
                     if (styleNames.contains(allFormats.indexOf(charFormat)))

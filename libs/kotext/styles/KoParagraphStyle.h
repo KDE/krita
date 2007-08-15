@@ -32,6 +32,7 @@ class KoCharacterStyle;
 class KoListStyle;
 class QTextBlock;
 class KoStyleStack;
+class KoGenStyle;
 
 /**
  * A container for all properties for the paragraph wide style.
@@ -482,7 +483,10 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     void remove(int key);
     
     bool operator==( const KoParagraphStyle &other ) const;
-
+    
+    void removeDuplicates ( const KoParagraphStyle &other );
+    
+    void saveOdf ( KoGenStyle *target );
 private:
     void setProperty(int key, const QVariant &value);
     double propertyDouble(int key) const;

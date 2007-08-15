@@ -685,14 +685,11 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
 }
 
 bool KoCharacterStyle::operator==( const KoCharacterStyle &other ) const {
-    kDebug() << "Comparing !";
     return ((*(other.d->stylesPrivate)) == (*(this->d->stylesPrivate)));
 }
 
 void KoCharacterStyle::removeDuplicates ( const KoCharacterStyle &other ) {
-    kDebug() << "Going to remove duplicates in the style.";
     this->d->stylesPrivate->removeDuplicates(other.d->stylesPrivate);
-    kDebug() << "Done.";
 }
 
 void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {

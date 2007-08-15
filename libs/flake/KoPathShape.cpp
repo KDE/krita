@@ -314,22 +314,22 @@ void KoPathShape::debugPath()
 
 QPointF KoPathShape::shapeToDocument( const QPointF &point ) const
 {
-    return transformationMatrix(0).map( point );
+    return absoluteTransformation(0).map( point );
 }
 
 QRectF KoPathShape::shapeToDocument( const QRectF &rect ) const 
 {
-    return transformationMatrix(0).mapRect( rect );
+    return absoluteTransformation(0).mapRect( rect );
 }
 
 QPointF KoPathShape::documentToShape( const QPointF &point ) const
 {
-    return transformationMatrix(0).inverted().map( point );
+    return absoluteTransformation(0).inverted().map( point );
 }
 
 QRectF KoPathShape::documentToShape( const QRectF &rect ) const 
 {
-    return transformationMatrix(0).inverted().mapRect( rect );
+    return absoluteTransformation(0).inverted().mapRect( rect );
 }
 
 
@@ -432,13 +432,13 @@ QRectF KoPathShape::boundingRect() const
         bb.adjust( -inset.left, -inset.top, inset.right, inset.bottom );
     }
     //qDebug() << "KoPathShape::boundingRect = " << bb;
-    return transformationMatrix( 0 ).mapRect( bb );
+    return absoluteTransformation( 0 ).mapRect( bb );
 }
 
 
 QSizeF KoPathShape::size() const
 {
-    // don't call boundingRect here as it uses transformationMatrix which leads to infinite reccursion
+    // don't call boundingRect here as it uses absoluteTransformation which leads to infinite reccursion
     return outline().boundingRect().size();
 }
 
@@ -610,7 +610,7 @@ void KoPathShape::update()
 QPointF KoPathShape::normalize()
 {
     QPointF oldTL( boundingRect().topLeft() );
-    
+
     QPointF tl( outline().boundingRect().topLeft() );
     QMatrix matrix;
     matrix.translate( -tl.x(), -tl.y() );
@@ -619,7 +619,7 @@ QPointF KoPathShape::normalize()
     // keep the top left point of the object
     QPointF newTL( boundingRect().topLeft() );
     QPointF diff( oldTL - newTL );
-    moveBy( diff.x(), diff.y() );
+    setAbsolutePosition( absolutePosition() + diff );
     return tl;
 }
 
@@ -1027,8 +1027,8 @@ bool KoPathShape::combine( KoPathShape *path )
     if( ! path )
         return false;
 
-    QMatrix pathMatrix = path->transformationMatrix(0);
-    QMatrix myMatrix = transformationMatrix(0).inverted();
+    QMatrix pathMatrix = path->absoluteTransformation(0);
+    QMatrix myMatrix = absoluteTransformation(0).inverted();
 
     foreach( KoSubpath* subpath, path->m_subpaths )
     {
@@ -1053,7 +1053,7 @@ bool KoPathShape::separate( QList<KoPathShape*> & separatedPaths )
     if( ! m_subpaths.size() )
         return false;
 
-    QMatrix myMatrix = transformationMatrix(0);
+    QMatrix myMatrix = absoluteTransformation(0);
 
     foreach( KoSubpath* subpath, m_subpaths )
     {

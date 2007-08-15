@@ -279,7 +279,7 @@ void KoPathTool::paint( QPainter &painter, const KoViewConverter &converter) {
     foreach( KoPathShape *shape, m_selectedShapes )
     {
         painter.save();
-        painter.setMatrix( shape->transformationMatrix( &converter ) * painter.matrix() );
+        painter.setMatrix( shape->absoluteTransformation( &converter ) * painter.matrix() );
 
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
         if ( parameterShape && parameterShape->isParametricShape() )
@@ -616,7 +616,7 @@ void KoPathTool::resourceChanged( int key, const QVariant & res )
     int maxRadius = qMax( m_handleRadius, oldHandleRadius );
     foreach(KoPathShape *shape, m_selectedShapes)
     {
-        QRectF controlPointRect = shape->transformationMatrix(0).map( shape->outline() ).controlPointRect();
+        QRectF controlPointRect = shape->absoluteTransformation(0).map( shape->outline() ).controlPointRect();
         repaint( controlPointRect.adjusted(-maxRadius,-maxRadius,maxRadius,maxRadius) );
     }
 }
@@ -651,7 +651,7 @@ QRectF KoPathTool::handleRect( const QPointF &p ) {
 void KoPathTool::ActivePointHandle::paint( QPainter &painter, const KoViewConverter &converter )
 { 
     painter.save();
-    painter.setMatrix( m_activePoint->parent()->transformationMatrix(&converter) * painter.matrix() );
+    painter.setMatrix( m_activePoint->parent()->absoluteTransformation(&converter) * painter.matrix() );
     KoShape::applyConversion( painter, converter );
 
     QRectF handle = converter.viewToDocument( m_tool->handleRect( QPoint(0,0) ) );
@@ -734,7 +734,7 @@ bool KoPathTool::ActivePointHandle::check()
 void KoPathTool::ActiveParameterHandle::paint( QPainter &painter, const KoViewConverter &converter )
 {
     painter.save();
-    painter.setMatrix( m_parameterShape->transformationMatrix(&converter) * painter.matrix() );
+    painter.setMatrix( m_parameterShape->absoluteTransformation(&converter) * painter.matrix() );
 
     m_parameterShape->paintHandle( painter, converter, m_handleId, m_tool->m_handleRadius );
     painter.restore();
@@ -767,7 +767,7 @@ void KoPathTool::KoPathPointSelection::paint( QPainter &painter, const KoViewCon
     {
         painter.save();
 
-        painter.setMatrix( it.key()->transformationMatrix(&converter) * painter.matrix() );
+        painter.setMatrix( it.key()->absoluteTransformation(&converter) * painter.matrix() );
         KoShape::applyConversion( painter, converter );
 
         QRectF handle = converter.viewToDocument( m_tool->handleRect( QPoint(0,0) ) );

@@ -184,7 +184,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     QList<KoShape*> sortedObjects = d->children->iterator();
     qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
 
-    QMatrix baseMatrix = transformationMatrix(0).inverted() * painter.matrix();
+    QMatrix baseMatrix = absoluteTransformation(0).inverted() * painter.matrix();
 
     // clip the children to the parent outline.
     QMatrix m;
@@ -208,12 +208,12 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
         }
 
         painter.save();
-        painter.setMatrix( shape->transformationMatrix(&converter) * baseMatrix );
+        painter.setMatrix( shape->absoluteTransformation(&converter) * baseMatrix );
         shape->paint(painter, converter);
         painter.restore();
         if(shape->border()) {
             painter.save();
-            painter.setMatrix( shape->transformationMatrix(&converter) * baseMatrix );
+            painter.setMatrix( shape->absoluteTransformation(&converter) * baseMatrix );
             shape->border()->paintBorder(shape, painter, converter);
             painter.restore();
         }

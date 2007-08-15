@@ -44,7 +44,7 @@ KoShapeRotateStrategy::KoShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas
             m_initialBoundingRect = shape->boundingRect();
         else
             m_initialBoundingRect = m_initialBoundingRect.united( shape->boundingRect() );
-        m_oldTransforms << shape->localTransformation();
+        m_oldTransforms << shape->transformation();
     }
 }
 
@@ -72,10 +72,10 @@ void KoShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     m_rotationMatrix = matrix;
     foreach( KoShape * shape, m_selectedShapes ) {
         shape->repaint();
-        shape->applyTransformation( applyMatrix );
+        shape->applyAbsoluteTransformation( applyMatrix );
         shape->repaint();
     }
-    m_canvas->shapeManager()->selection()->applyTransformation( applyMatrix );
+    m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( applyMatrix );
 }
 
 void KoShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
@@ -96,7 +96,7 @@ void KoShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &con
 QUndoCommand* KoShapeRotateStrategy::createCommand() {
     QList<QMatrix> newTransforms;
     foreach( KoShape* shape, m_selectedShapes )
-        newTransforms << shape->localTransformation();
+        newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );
     cmd->setText( i18n("Rotate") );

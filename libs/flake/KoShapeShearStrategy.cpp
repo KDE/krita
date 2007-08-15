@@ -45,7 +45,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
         if( ! isEditable( shape ) )
             continue;
         m_selectedShapes << shape;
-        m_oldTransforms << shape->localTransformation();
+        m_oldTransforms << shape->transformation();
     }
 
     // Eventhoug we aren't currently activated by the corner handles we might as well code like it
@@ -107,7 +107,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
     m_initialSelectionAngle = currentAngle - angle;
 
     kDebug(30006) <<" PREsol.x=" << m_solidPoint.x() <<" sol.y=" << m_solidPoint.y();
-    m_solidPoint = canvas->shapeManager()->selection()->transformationMatrix(0).map( m_solidPoint );
+    m_solidPoint = canvas->shapeManager()->selection()->absoluteTransformation(0).map( m_solidPoint );
 
     // use crossproduct of top edge and left edge of selection bounding rect
     // to determine if the selection is mirrored
@@ -153,10 +153,10 @@ void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMod
     foreach( KoShape *shape, m_selectedShapes )
     {
         shape->repaint();
-        shape->applyTransformation( applyMatrix );
+        shape->applyAbsoluteTransformation( applyMatrix );
         shape->repaint();
     }
-    m_canvas->shapeManager()->selection()->applyTransformation( applyMatrix );
+    m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( applyMatrix );
     m_shearMatrix = matrix;
 }
 
@@ -170,7 +170,7 @@ void KoShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &conv
 QUndoCommand* KoShapeShearStrategy::createCommand() {
     QList<QMatrix> newTransforms;
     foreach( KoShape* shape, m_selectedShapes )
-        newTransforms << shape->localTransformation();
+        newTransforms << shape->transformation();
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );
     cmd->setText( i18n("Shear") );
     return cmd;

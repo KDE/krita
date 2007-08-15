@@ -52,7 +52,7 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
     {
         //qDebug() << "KoCreatePathTool::paint" << m_shape;
         painter.save();
-        painter.setMatrix( m_shape->transformationMatrix( &converter ) * painter.matrix() );
+        painter.setMatrix( m_shape->absoluteTransformation( &converter ) * painter.matrix() );
 
         painter.save();
         m_shape->paint( painter, converter );

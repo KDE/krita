@@ -97,7 +97,7 @@ void KoSelection::select(KoShape * object)
     }
 
     if(d->selectedShapes.count() == 1)
-        setTransformation( object->transformationMatrix(0) );
+        setTransformation( object->absoluteTransformation(0) );
     else
         setTransformation( QMatrix() );
 
@@ -120,7 +120,7 @@ void KoSelection::deselect(KoShape * object)
         d->selectedShapes.removeAll( object );
 
     if(d->selectedShapes.count() == 1)
-        setTransformation( firstSelectedShape()->transformationMatrix(0) );
+        setTransformation( firstSelectedShape()->absoluteTransformation(0) );
 
     requestSelectionChangedEvent();
 }
@@ -171,7 +171,7 @@ bool KoSelection::hitTest( const QPointF &position ) const
 void KoSelection::updateSizeAndPosition()
 {
     QRectF bb = sizeRect();
-    QMatrix matrix = transformationMatrix(0);
+    QMatrix matrix = absoluteTransformation(0);
     setSize( bb.size() );
     QPointF p = matrix.map(bb.topLeft() + matrix.inverted().map( position()) );
     setPosition( p );
@@ -182,7 +182,7 @@ QRectF KoSelection::sizeRect() const
     bool first=true;
     QRectF bb;
 
-    QMatrix itmat = transformationMatrix(0).inverted();
+    QMatrix itmat = absoluteTransformation(0).inverted();
 
     if ( !d->selectedShapes.isEmpty() )
     {
@@ -191,11 +191,11 @@ QRectF KoSelection::sizeRect() const
             if( dynamic_cast<KoShapeGroup*>( *it ))
                 continue;
             if(first) {
-                bb = ((*it)->transformationMatrix(0) * itmat).mapRect(QRectF(QPointF(),(*it)->size()));
+                bb = ((*it)->absoluteTransformation(0) * itmat).mapRect(QRectF(QPointF(),(*it)->size()));
                 first = false;
             }
             else
-                bb = bb.unite( ((*it)->transformationMatrix(0) * itmat).mapRect(QRectF(QPointF(),(*it)->size())) );
+                bb = bb.unite( ((*it)->absoluteTransformation(0) * itmat).mapRect(QRectF(QPointF(),(*it)->size())) );
         }
     }
 
@@ -204,7 +204,7 @@ QRectF KoSelection::sizeRect() const
 
 QRectF KoSelection::boundingRect() const
 {
-    return transformationMatrix(0).mapRect( sizeRect() );
+    return absoluteTransformation(0).mapRect( sizeRect() );
 }
 
 const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) const {

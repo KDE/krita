@@ -74,17 +74,17 @@ void KoShapeGroupCommand::redo () {
             // -> we need compensate the group position change
             QPointF positionOffset = oldGroupPosition - bound.topLeft();
             foreach( KoShape * child, m_container->iterator() )
-                child->moveBy( positionOffset.x(), positionOffset.y() );
+                child->setAbsolutePosition( child->absolutePosition() + positionOffset );
         }
     }
 
-    QMatrix groupTransform = m_container->transformationMatrix(0).inverted();
+    QMatrix groupTransform = m_container->absoluteTransformation(0).inverted();
 
     uint shapeCount = m_shapes.count();
     for( uint i = 0; i < shapeCount; ++i )
     {
         KoShape * shape = m_shapes[i];
-        shape->applyTransformation( groupTransform );
+        shape->applyAbsoluteTransformation( groupTransform );
         m_container->addChild(shape);
         m_container->setClipping( shape, m_clipped[i] );
     }
@@ -93,14 +93,14 @@ void KoShapeGroupCommand::redo () {
 void KoShapeGroupCommand::undo () {
     QUndoCommand::undo();
 
-    QMatrix ungroupTransform = m_container->transformationMatrix(0);
+    QMatrix ungroupTransform = m_container->absoluteTransformation(0);
     for(int i=0; i < m_shapes.count(); i++) 
     {
         KoShape * shape = m_shapes[i];
         m_container->removeChild( shape );
         if( m_oldParents.at( i ) )
             m_oldParents.at( i )->addChild( shape );
-        shape->applyTransformation( ungroupTransform );
+        shape->applyAbsoluteTransformation( ungroupTransform );
     }
 
     if( dynamic_cast<KoShapeGroup*>( m_container ) )
@@ -124,7 +124,7 @@ void KoShapeGroupCommand::undo () {
             // -> we need compensate the group position change
             QPointF positionOffset = oldGroupPosition - bound.topLeft();
             foreach( KoShape * child, m_container->iterator() )
-                child->moveBy( positionOffset.x(), positionOffset.y() );
+                child->setAbsolutePosition( child->absolutePosition() + positionOffset );
 
             m_container->setAbsolutePosition( bound.topLeft(), KoFlake::TopLeftCorner );
             m_container->setSize( bound.size() );

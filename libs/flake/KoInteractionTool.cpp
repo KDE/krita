@@ -569,13 +569,13 @@ void KoInteractionTool::recalcSelectionBox() {
 
     if(koSelection()->count()>1)
     {
-        QMatrix matrix = koSelection()->transformationMatrix(0);
+        QMatrix matrix = koSelection()->absoluteTransformation(0);
         d->selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->size())));
         d->angle = 0.0; //koSelection()->rotation();
     }
     else
     {
-        QMatrix matrix = koSelection()->firstSelectedShape()->transformationMatrix(0);
+        QMatrix matrix = koSelection()->firstSelectedShape()->absoluteTransformation(0);
         d->selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->firstSelectedShape()->size())));
         d->angle = 0.0; //koSelection()->firstSelectedShape()->rotation();
     }
@@ -650,7 +650,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     foreach(KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
 
 
-        QMatrix matrix = shape->transformationMatrix(0);
+        QMatrix matrix = shape->absoluteTransformation(0);
         outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), shape->size())));
         for(int i =0; i<outline.count(); i++)
             outline[i] = converter.documentToView(outline.value(i));
@@ -668,7 +668,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     if(m_selection->count()>1)
     {
-        QMatrix matrix = m_selection->transformationMatrix(0);
+        QMatrix matrix = m_selection->absoluteTransformation(0);
         outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), m_selection->size())));
         for(int i =0; i<outline.count(); i++)
             outline[i] = converter.documentToView(outline.value(i));
@@ -678,7 +678,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     }
     else if( m_selection->firstSelectedShape() )
     {
-        QMatrix matrix = m_selection->firstSelectedShape()->transformationMatrix(0);
+        QMatrix matrix = m_selection->firstSelectedShape()->absoluteTransformation(0);
         outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), m_selection->firstSelectedShape()->size())));
         for(int i =0; i<outline.count(); i++)
             outline[i] = converter.documentToView(outline.value(i));

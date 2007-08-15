@@ -75,7 +75,7 @@ QPainterPath KisShapeSelection::selectionOutline()
         {
             pathShape = dynamic_cast<KoPathShape*>( shape );
             if(pathShape) {
-                QMatrix shapeMatrix = shape->transformationMatrix(0);
+                QMatrix shapeMatrix = shape->absoluteTransformation(0);
 
             outline = outline.united(shapeMatrix.map(shape->outline()));
             }

@@ -478,16 +478,6 @@ public:
     void setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor = KoFlake::CenteredPositon);
 
     /**
-     * Move this shape from its current (absolute) position over a specified distance.
-     * This takes the position of the shape, and moves it in the normal plain. This takes
-     * into account the rotation of the object so distanceX really will be the resulting
-     * horizontal distance.
-     * @param distanceX the horizontal distance to move
-     * @param distanceY the vertical distance to move
-     */
-    void moveBy(double distanceX, double distanceY);
-
-    /**
      * Set a data object on the shape to be used by an application.
      * This is specifically useful when a shape is created in a plugin and that data from that
      * shape should be accessible outside the plugin.
@@ -527,19 +517,25 @@ public:
 
     /**
      * Create a matrix that describes all the transformations done on this shape.
+     *
+     * The absolute transformation is the combined transformation of this shape
+     * and all its parents and grandparents.
+     *
      * @param converter if not null, this method uses the converter to mark the right
      *        offsets in the current view.
      */
-    QMatrix transformationMatrix(const KoViewConverter *converter) const;
+    QMatrix absoluteTransformation(const KoViewConverter *converter) const;
 
     /**
      * Applies a transformation to this shape.
      *
      * The transformation given is relative to the global coordinate system, i.e. the document.
+     * This is a convenience function to apply a global transformation to this shape.
+     * @see applyTransformation
      *
      * @param matrix the transformation matrix to apply
      */
-    void applyTransformation(const QMatrix &matrix );
+    void applyAbsoluteTransformation(const QMatrix &matrix );
 
     /**
      * Sets a new transformation matrix describing the local transformations on this shape.
@@ -548,7 +544,16 @@ public:
     void setTransformation( const QMatrix &matrix );
 
     /// Returns the shapes local transformation matrix
-    QMatrix localTransformation() const;
+    QMatrix transformation() const;
+
+    /**
+     * Applies a transformation to this shape.
+     *
+     * The transformation given is relative to the shape coordinate system.
+     *
+     * @param matrix the transformation matrix to apply
+     */
+    void applyTransformation( const QMatrix &matrix );
 
     /**
      * Copy all the settings from the parameter shape and apply them to this shape.

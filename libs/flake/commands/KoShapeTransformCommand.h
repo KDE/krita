@@ -38,8 +38,9 @@ public:
      * A command to transform a selection of shapes to the new state.
      * Each shape passed has an old state and a new state of transformation passed in.
      * @param shapes all the shapes that should be transformed
-     * @param transformations the transformation to apply to all shapes
-     * @see KoShape::transformationMatrix()
+     * @param oldState the old shapes transformations
+     * @param newState the new shapes transformations
+     * @see KoShape::transformation()
      * @see KoShape::setTransformation()
      */
     KoShapeTransformCommand( const QList<KoShape*> &shapes, const QList<QMatrix> &oldState, const QList<QMatrix> &newState, QUndoCommand * parent = 0 );

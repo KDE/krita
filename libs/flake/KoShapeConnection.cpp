@@ -85,12 +85,12 @@ KoShapeConnection::~KoShapeConnection() {
 void KoShapeConnection::paint(QPainter &painter, const KoViewConverter &converter) {
     double x, y;
     converter.zoom(&x, &y);
-    QMatrix matrix = d->shape1->transformationMatrix(&converter);
+    QMatrix matrix = d->shape1->absoluteTransformation(&converter);
     matrix.scale(x, y);
     QPointF a = matrix.map(d->shape1->connectors()[d->gluePointIndex1]);
     QPointF b;
     if(d->shape2) {
-        matrix = d->shape2->transformationMatrix(&converter);
+        matrix = d->shape2->absoluteTransformation(&converter);
         matrix.scale(x, y);
         b = matrix.map(d->shape2->connectors()[d->gluePointIndex2]);
     }
@@ -137,12 +137,12 @@ int KoShapeConnection::gluePointIndex2() const {
 }
 
 QPointF KoShapeConnection::startPoint() const {
-    return d->shape1->transformationMatrix(0).map(d->shape1->connectors()[d->gluePointIndex1]);
+    return d->shape1->absoluteTransformation(0).map(d->shape1->connectors()[d->gluePointIndex1]);
 }
 
 QPointF KoShapeConnection::endPoint() const {
     if(d->shape2)
-        return d->shape2->transformationMatrix(0).map(d->shape2->connectors()[d->gluePointIndex2]);
+        return d->shape2->absoluteTransformation(0).map(d->shape2->connectors()[d->gluePointIndex2]);
     return d->endPoint;
 }
 

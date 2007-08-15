@@ -39,7 +39,7 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
             continue;
         m_selectedShapes << shape;
         m_startPositions << shape->position();
-        m_oldTransforms << shape->localTransformation();
+        m_oldTransforms << shape->transformation();
         m_transformations << QMatrix();
         m_startSizes << shape->size();
     }
@@ -53,7 +53,7 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
 
     if( shp )
     {
-        m_windMatrix = shp->transformationMatrix(0);
+        m_windMatrix = shp->absoluteTransformation(0);
         m_unwindMatrix = m_windMatrix.inverted();
         m_initialSize = shp->size();
         m_initialPosition = m_windMatrix.map(QPointF());
@@ -146,7 +146,7 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
         shape->repaint();
 
         // this uses resize for the zooming part
-        shape->applyTransformation( m_unwindMatrix );
+        shape->applyAbsoluteTransformation( m_unwindMatrix );
 
         /*
          normally we would just apply the resizeMatrix now and be done with it, but
@@ -155,10 +155,10 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
         */
 
         // undo the last resize transformation
-        shape->applyTransformation( m_transformations[i].inverted() );
+        shape->applyAbsoluteTransformation( m_transformations[i].inverted() );
 
         // save the shapes transformation matrix
-        QMatrix shapeMatrix = shape->transformationMatrix(0);
+        QMatrix shapeMatrix = shape->absoluteTransformation(0);
 
         // calculate the matrix we would apply to the local shape matrix
         // that tells us the effective scale values we have to use for the resizing
@@ -177,18 +177,18 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
         // apply the transformation
         shape->setSize( size );
         // apply the rest of the transformation without the resizing part
-        shape->applyTransformation( scaleMatrix.inverted() * resizeMatrix );
-        shape->applyTransformation( mirrorMatrix );
+        shape->applyAbsoluteTransformation( scaleMatrix.inverted() * resizeMatrix );
+        shape->applyAbsoluteTransformation( mirrorMatrix );
 
         // and remember the applied transformation later for later undoing
-        m_transformations[i] = shapeMatrix.inverted() * shape->transformationMatrix(0);
+        m_transformations[i] = shapeMatrix.inverted() * shape->absoluteTransformation(0);
 
-        shape->applyTransformation( m_windMatrix );
+        shape->applyAbsoluteTransformation( m_windMatrix );
 
         shape->repaint();
         i++;
     }
-    m_canvas->shapeManager()->selection()->applyTransformation( matrix * m_scaleMatrix.inverted() );
+    m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( matrix * m_scaleMatrix.inverted() );
     m_scaleMatrix = matrix;
 }
 
@@ -199,7 +199,7 @@ QUndoCommand* KoShapeResizeStrategy::createCommand() {
     for( int i = 0; i < shapeCount; ++i )
     {
         newSizes << m_selectedShapes[i]->size();
-        transformations << m_selectedShapes[i]->localTransformation();
+        transformations << m_selectedShapes[i]->transformation();
     }
     QUndoCommand * cmd = new QUndoCommand(i18n("Resize"));
     new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd );

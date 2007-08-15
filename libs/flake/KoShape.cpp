@@ -230,7 +230,7 @@ bool KoShape::hitTest( const QPointF &position ) const
     if(d->parent && d->parent->childClipped(this) && !d->parent->hitTest(position))
         return false;
 
-    QPointF point = transformationMatrix(0).inverted().map( position );
+    QPointF point = absoluteTransformation(0).inverted().map( position );
     KoInsets insets(0, 0, 0, 0);
     if(d->border)
         d->border->borderInsets(this, insets);
@@ -248,16 +248,16 @@ QRectF KoShape::boundingRect() const
         d->border->borderInsets(this, insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
-    return transformationMatrix(0).mapRect( bb );
+    return absoluteTransformation(0).mapRect( bb );
 }
 
-QMatrix KoShape::transformationMatrix(const KoViewConverter *converter) const {
+QMatrix KoShape::absoluteTransformation(const KoViewConverter *converter) const {
     QMatrix matrix;
     // apply parents matrix to inherit any transformations done there.
     KoShapeContainer * container = d->parent;
     if( container ) {
         if( container->childClipped(this) )
-            matrix = container->transformationMatrix(0);
+            matrix = container->absoluteTransformation(0);
         else {
             QSizeF containerSize = container->size();
             QPointF containerPos = container->absolutePosition() - QPointF( 0.5*containerSize.width(), 0.5*containerSize.height() );
@@ -276,14 +276,19 @@ QMatrix KoShape::transformationMatrix(const KoViewConverter *converter) const {
     return d->localMatrix * matrix;
 }
 
-void KoShape::applyTransformation( const QMatrix &matrix )
+void KoShape::applyAbsoluteTransformation( const QMatrix &matrix )
 {
-    QMatrix globalMatrix = transformationMatrix(0);
+    QMatrix globalMatrix = absoluteTransformation(0);
     // the transformation is relative to the global coordinate system
     // but we want to change the local matrix, so convert the matrix
     // to be relative to the local coordinate system
     QMatrix transformMatrix = globalMatrix * matrix * globalMatrix.inverted();
-    d->localMatrix = transformMatrix * d->localMatrix;
+    applyTransformation( transformMatrix );
+}
+
+void KoShape::applyTransformation( const QMatrix &matrix )
+{
+    d->localMatrix = matrix * d->localMatrix;
     notifyChanged();
     d->shapeChanged(GenericMatrixChange);
 }
@@ -295,7 +300,7 @@ void KoShape::setTransformation( const QMatrix &matrix )
     d->shapeChanged(GenericMatrixChange);
 }
 
-QMatrix KoShape::localTransformation() const
+QMatrix KoShape::transformation() const
 {
     return d->localMatrix;
 }
@@ -347,7 +352,7 @@ void KoShape::repaint() const {
             d->border->borderInsets(this, insets);
             rect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
         }
-        rect = transformationMatrix(0).mapRect(rect);
+        rect = absoluteTransformation(0).mapRect(rect);
         foreach( KoShapeManager * manager, d->shapeManagers )
             manager->repaint( rect, this, true );
     }
@@ -356,7 +361,7 @@ void KoShape::repaint() const {
 void KoShape::repaint(const QRectF &shape) const {
     if ( !d->shapeManagers.empty() && isVisible() )
     {
-        QRectF rect(transformationMatrix(0).mapRect(shape));
+        QRectF rect(absoluteTransformation(0).mapRect(shape));
         foreach( KoShapeManager * manager, d->shapeManagers )
         {
             manager->repaint(rect);
@@ -379,7 +384,7 @@ QPointF KoShape::absolutePosition(KoFlake::Position anchor) const {
         case KoFlake::BottomRightCorner: point = QPointF(size().width(), size().height()); break;
         case KoFlake::CenteredPositon: point = QPointF(size().width() / 2.0, size().height() / 2.0); break;
     }
-    return transformationMatrix(0).map(point);
+    return absoluteTransformation(0).map(point);
 }
 
 void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor) {
@@ -387,7 +392,7 @@ void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor)
     QPointF translate = newPosition - currentAbsPosition;
     QMatrix translateMatrix;
     translateMatrix.translate( translate.x(), translate.y() );
-    applyTransformation( translateMatrix );
+    applyAbsoluteTransformation( translateMatrix );
     notifyChanged();
     d->shapeChanged(PositionChanged);
 }
@@ -403,11 +408,6 @@ void KoShape::copySettings(const KoShape *shape) {
     d->locked = shape->isLocked();
     d->keepAspect = shape->keepAspectRatio();
     d->localMatrix = shape->d->localMatrix;
-}
-
-void KoShape::moveBy(double distanceX, double distanceY) {
-    QPointF p = absolutePosition();
-    setAbsolutePosition(QPointF(p.x() + distanceX, p.y() + distanceY));
 }
 
 void KoShape::notifyChanged()
@@ -696,7 +696,7 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
     {
         QString transform = element.attributeNS( KoXmlNS::draw, "transform", QString() );
         if( ! transform.isEmpty() )
-            applyTransformation( parseOdfTransform( transform ) );
+            applyAbsoluteTransformation( parseOdfTransform( transform ) );
     }
 
     return true;
@@ -895,7 +895,7 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
         bool scale = qAbs(d->scaleX - 1) > 1E-6 || qAbs(d->scaleY -1) > 1E-6;
 
         if(rotate && (skew || scale)) {
-            QMatrix matrix; // can't use transformationMatrix() as that includes transformation of the container as well.
+            QMatrix matrix; // can't use absoluteTransformation() as that includes transformation of the container as well.
             QSizeF size(this->size());
             if ( d->angle != 0 )
             {
@@ -929,7 +929,7 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
             context.xmlWriter().addAttribute( "draw:transform", transform );
         }
         */
-        QMatrix matrix = transformationMatrix(0);
+        QMatrix matrix = absoluteTransformation(0);
         if( ! matrix.isIdentity() )
         {
             QString m = QString( "matrix(%1 %2 %3 %4 %5pt %6pt)" )

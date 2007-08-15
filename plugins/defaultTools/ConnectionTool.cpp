@@ -46,7 +46,7 @@ void ConnectionTool::paint( QPainter &painter, const KoViewConverter &converter 
     converter.zoom(&zoomX, &zoomY);
     foreach(KoShape *shape, repaints) {
         // TODO check if they are not clipped.
-        QMatrix matrix = shape->transformationMatrix(&converter);
+        QMatrix matrix = shape->absoluteTransformation(&converter);
         matrix.scale(zoomX, zoomY);
         foreach(QPointF point, shape->connectors()) {
             point = matrix.map(point);
@@ -67,7 +67,7 @@ void ConnectionTool::mousePressEvent( KoPointerEvent *event ) {
     bool created = false;
 
     foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(region)) {
-        QMatrix matrix = shape->transformationMatrix(0);
+        QMatrix matrix = shape->absoluteTransformation(0);
         int index = 0;
         foreach(QPointF point, shape->connectors()) {
             QPointF p = matrix.map(point);

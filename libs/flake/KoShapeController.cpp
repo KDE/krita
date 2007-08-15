@@ -79,6 +79,10 @@ QUndoCommand* KoShapeController::addShape( KoShape *shape, QUndoCommand *parent 
         KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);
         if(widget == 0)
             continue;
+        if( ! widget->showOnShapeCreate() ) {
+            delete widget;
+            continue;
+        }
         widgets.append(widget);
         widget->setResourceProvider(d->canvas->resourceProvider());
         widget->setUnit(d->canvas->unit());
@@ -86,6 +90,8 @@ QUndoCommand* KoShapeController::addShape( KoShape *shape, QUndoCommand *parent 
         pageCount ++;
     }
     foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
+        if( ! panel->showOnShapeCreate() )
+            continue;
         panel->open(shape);
         widgets.append(panel);
         panel->setResourceProvider(d->canvas->resourceProvider());

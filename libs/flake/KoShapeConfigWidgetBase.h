@@ -78,6 +78,10 @@ public:
         m_resourceProvider = provider;
     }
 
+    /// Return true if the shape config panel should be shown after the shape is created
+    virtual bool showOnShapeCreate() { return false; }
+
+
 protected:
     KoCanvasResourceProvider *m_resourceProvider; ///< the resource provider with data for this canvas
 };

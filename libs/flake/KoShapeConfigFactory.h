@@ -64,6 +64,7 @@ public:
      */
     virtual bool showForShapeId(const QString &id) const { Q_UNUSED(id); return true; }
 
+
     /// \internal a compare for sorting.
     static bool compare(KoShapeConfigFactory *f1, KoShapeConfigFactory *f2) {
         return f1->sortingOrder() - f2->sortingOrder() > 0;

@@ -22,7 +22,7 @@
 #include <QTimer>
 #include <QApplication>
 #include <QSize>
-#include <QPushButton>
+#include <QToolButton>
 #include <QHBoxLayout>
 #include <QCheckBox>
 #include <QFrame>
@@ -55,7 +55,7 @@ public:
     QGridLayout *colorSetLayout;
     QHBoxLayout *recentsLayout;
     KoColorPatch *recentPatches[6];
-    QPushButton *addRemoveButton;
+    QToolButton *addRemoveButton;
     int numRecents;
 
     void colorTriggered(KoColorPatch *patch);
@@ -168,22 +168,26 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->mainLayout->addLayout(d->recentsLayout);
     d->recentsLayout->setMargin(0);
     d->recentsLayout->setSpacing(1);
-    d->recentsLayout->addWidget(new QLabel("Recent:"));
+    d->recentsLayout->addWidget(new QLabel(i18n("Recent:")));
     d->recentsLayout->addStretch(1);
-    d->addRemoveButton = new QPushButton("Add / Remove Colors...");
-    connect(d->addRemoveButton, SIGNAL(clicked()), SLOT(addRemoveColors()));
-    d->recentsLayout->addWidget(d->addRemoveButton);
 
     KoColor color(KoColorSpaceRegistry::instance()->rgb8());
     color.fromQColor(QColor(128,0,0));
     d->addRecent(color);
 
-    d->filterCheckBox = new QCheckBox("Hide colors with bad contrast");
+    d->filterCheckBox = new QCheckBox(i18n("Hide colors with bad contrast"));
     d->filterCheckBox->setChecked(true);
     d->mainLayout->addWidget(d->filterCheckBox);
     connect(d->filterCheckBox, SIGNAL(stateChanged(int)), SLOT(filter(int)));
 
     d->filter(QCheckBox::On);
+
+    d->addRemoveButton = new QToolButton(this);
+    d->addRemoveButton->setText(i18n("Add / Remove Colors..."));
+    d->addRemoveButton->setAutoRaise(true);
+    d->addRemoveButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    connect(d->addRemoveButton, SIGNAL(clicked()), SLOT(addRemoveColors()));
+    d->mainLayout->addWidget(d->addRemoveButton);
 
     setLayout(d->mainLayout);
 

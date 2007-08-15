@@ -56,12 +56,32 @@ private:
     KoColorPatch *m_activePatch;
 };
 
+/**
+ * A dialog for editing palettes/color sets in an application. Example use of this dialog is in text color toolbar,
+ * the toolbar brings a set of colors from one palette, and a button brings this dialog for editing palettes.
+ * This dialog is able to:
+ * - Set active palette from a combobox
+ * - Add/remove color from a palette
+ * - Open new palette from a gimp palette file (.gpl)
+ * - Save changes to the file
+ * @see KoColorSetWidget
+ */
 class KOGUIUTILS_EXPORT KoEditColorSetDialog : public KDialog
 {
     Q_OBJECT
 
 public:
+    /**
+     * Constructs a KoEditColorSetDialog.
+     * @param palettes all availabe palettes that are going to be edited.
+     * @param activePalette name of the palette which will be activated after this dialog is shown.
+     * @param parent the parent widget
+     */
     KoEditColorSetDialog(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent = 0);
+
+    /**
+     * @return the last active KoColorSet in the dialog before the user press OK
+     */
     KoColorSet *activeColorSet();
 
     /**

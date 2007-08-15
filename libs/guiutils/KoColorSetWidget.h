@@ -72,7 +72,7 @@ public slots:
     void setColorSet(KoColorSet *colorSet);
 
 protected:
-    virtual void resizeEvent(QResizeEvent *event);
+    virtual void resizeEvent(QResizeEvent *event); ///< reimplemented from QFrame
 
 signals:
 

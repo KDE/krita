@@ -1121,3 +1121,8 @@ KoSubpath * KoPathShape::subPath( int subpathIndex ) const
 
     return m_subpaths.at( subpathIndex );
 }
+
+QString KoPathShape::pathShapeId() const
+{
+    return KoPathShapeId;
+}

@@ -96,7 +96,8 @@ QUndoCommand* KoShapeController::addShape( KoShape *shape, QUndoCommand *parent 
         widgets.append(panel);
         panel->setResourceProvider(d->canvas->resourceProvider());
         panel->setUnit(d->canvas->unit());
-        dialog->addPage(panel, panel->objectName());
+        QString title = panel->windowTitle().isEmpty() ? panel->objectName() : panel->windowTitle();
+        dialog->addPage(panel, title);
         pageCount ++;
     }
 

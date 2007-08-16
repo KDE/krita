@@ -120,6 +120,7 @@ KoPathTool::~KoPathTool() {
 QWidget * KoPathTool::createOptionWidget() {
     PathToolOptionWidget *widget = new PathToolOptionWidget(this);
     connect(this, SIGNAL(typeChanged(int)), widget, SLOT(setSelectionType(int)));
+    connect(this, SIGNAL(pathChanged(KoPathShape*)), widget, SLOT(setSelectedPath(KoPathShape*)));
     updateOptionsWidget();
     return widget;
 }
@@ -570,6 +571,10 @@ void KoPathTool::updateOptionsWidget() {
         type |= parameterShape && parameterShape->isParametricShape() ?
             PathToolOptionWidget::ParametricShape : PathToolOptionWidget::PlainPath;
     }
+    if( m_selectedShapes.count() == 1 )
+        emit pathChanged( m_selectedShapes.first() );
+    else 
+        emit pathChanged( 0 );
     emit typeChanged(type);
 }
 

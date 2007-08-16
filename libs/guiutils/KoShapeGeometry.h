@@ -48,6 +48,9 @@ public:
     /// reimplemented from KoShapeConfigWidgetBase
     void setUnit(KoUnit unit);
 
+    /// reimplemented 
+    virtual bool showOnShapeCreate() { return true; }
+
 private slots:
     void updateShape();
     void protectSizeChanged(int protectSizeState);

@@ -424,6 +424,21 @@ public:
      */
     QRectF documentToShape( const QRectF &rect ) const;
 
+    /**
+     * Returns the specific path shape id.
+     *
+     * Path shape derived shapes have a different shape id which link them
+     * to their respective shape factories. In most cases they do not have
+     * a special tool for editing them. 
+     * This function returns the specific shape id for finding the shape
+     * factory from KoShapeRegistry. The default KoPathShapeId is returned 
+     * from KoShape::shapeId() so that the generic path editing tool gets 
+     * activated when the shape is selected.
+     *
+     * @return the specific shape id
+     */
+    virtual QString pathShapeId() const;
+
 private:
     // TODO move all the private methods to live on the d pointer object
     void map( const QMatrix &matrix );

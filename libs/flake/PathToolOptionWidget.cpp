@@ -19,10 +19,14 @@
 
 #include "PathToolOptionWidget.h"
 #include "KoPathTool.h"
+#include "KoPathShape.h"
+#include "KoShapeFactory.h"
+#include "KoShapeRegistry.h"
+#include "KoShapeConfigWidgetBase.h"
 
 PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
     : QWidget(parent),
-    m_tool(tool)
+    m_tool(tool), m_path(0)
 {
     widget.setupUi(this);
     widget.corner->setDefaultAction(tool->action("pathpoint-corner"));
@@ -45,9 +49,29 @@ PathToolOptionWidget::~PathToolOptionWidget() {
 
 void PathToolOptionWidget::setSelectionType(int type) {
     const bool plain = type & PlainPath;
-    widget.stylesGroup->setVisible(plain);
-    widget.actionsGroup->setVisible(plain);
-    widget.convertToPath->setVisible( type & ParametricShape);
+    if( plain )
+        widget.stackedWidget->setCurrentIndex(0);
+    else
+        widget.stackedWidget->setCurrentIndex(1);
+}
+
+void PathToolOptionWidget::setSelectedPath( KoPathShape * path )
+{
+    while( widget.configWidget->count() )
+        widget.configWidget->removeWidget( widget.configWidget->widget( 0 ) );
+
+    m_path = path;
+    if( ! m_path )
+        return;
+    KoShapeFactory *factory = KoShapeRegistry::instance()->value( m_path->pathShapeId() );
+    if( ! factory )
+        return;
+    QList<KoShapeConfigWidgetBase*> panels = factory->createShapeOptionPanels();
+    if( ! panels.count() )
+        return;
+
+    KoShapeConfigWidgetBase * panel = panels.first();
+    widget.configWidget->insertWidget( 0, panel );
 }
 
 #include <PathToolOptionWidget.moc>

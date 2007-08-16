@@ -67,7 +67,7 @@ public:
 
 signals:
     void typeChanged(int types);
-
+    void pathChanged(KoPathShape* path);
 protected:
     /// reimplemented
     virtual QWidget * createOptionWidget();

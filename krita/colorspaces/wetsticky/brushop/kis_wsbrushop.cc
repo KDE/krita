@@ -37,7 +37,7 @@ KisPaintOp * KisWSBrushOpFactory::createOp(const KisPaintOpSettings */*settings*
 }
 
 KisWSBrushOp::KisWSBrushOp(KisPainter * painter)
-    : super(painter)
+    : KisPaintOp(painter)
 {
 }
 

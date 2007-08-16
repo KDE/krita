@@ -39,8 +39,6 @@ public:
 
 class KisWSBrushOp : public KisPaintOp {
 
-    typedef KisPaintOp super;
-
 public:
 
     KisWSBrushOp(KisPainter * painter);

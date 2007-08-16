@@ -54,7 +54,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>Qt::DockRight</string>
+                            <string>Right</string>
                         </property>
                     </item>
                     <item>
@@ -64,7 +64,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>Qt::DockLeft</string>
+                            <string>Left</string>
                         </property>
                     </item>
                     <property name="name">

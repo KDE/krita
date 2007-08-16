@@ -145,6 +145,7 @@ public:
     QVector<QPolygon> outline();
 
     virtual void renderToProjection(KisSelection* projection);
+    virtual void renderToProjection(KisSelection* projection, const QRect& r);
 
 
 private:

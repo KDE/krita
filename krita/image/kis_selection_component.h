@@ -28,6 +28,7 @@ public:
     virtual ~KisSelectionComponent() {}
 
     virtual void renderToProjection(KisSelection* projection) = 0;
+    virtual void renderToProjection(KisSelection* projection, const QRect& r) = 0;
 };
 
 #endif

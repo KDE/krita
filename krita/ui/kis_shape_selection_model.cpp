@@ -37,7 +37,7 @@ KisShapeSelectionModel::~KisShapeSelectionModel()
 }
 
 void KisShapeSelectionModel::add(KoShape *child) {
-    if(m_shapes.contains(child))
+    if(m_shapeMap.contains(child))
         return;
 
     child->setBorder(0);
@@ -56,7 +56,7 @@ void KisShapeSelectionModel::add(KoShape *child) {
     }
     m_parentPaintDevice->emitSelectionChanged();
 
-    m_shapes.append(child);
+    m_shapeMap.insert(child, child->boundingRect());
     m_shapeSelection->setDirty();
 }
 
@@ -75,7 +75,7 @@ void KisShapeSelectionModel::remove(KoShape *child)
     }
     m_parentPaintDevice->emitSelectionChanged();
 
-    m_shapes.removeAll(child);
+    m_shapeMap.remove(child);
     m_shapeSelection->setDirty();
 }
 
@@ -90,30 +90,30 @@ bool KisShapeSelectionModel::childClipped(const KoShape *child) const
 
 int KisShapeSelectionModel::count() const
 {
-    return m_shapes.count();
+    return m_shapeMap.count();
 }
 
 QList<KoShape*> KisShapeSelectionModel::iterator() const
 {
-    return QList<KoShape*>(m_shapes);
+    return QList<KoShape*>(m_shapeMap.keys());
 }
 void KisShapeSelectionModel::containerChanged(KoShapeContainer *)
 {
 }
 
-void KisShapeSelectionModel::childChanged(KoShape *, KoShape::ChangeType )
+void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType )
 {
     m_shapeSelection->setDirty();
-    QRectF bound = m_shapeSelection->selectionOutline().boundingRect();
+    QRectF changedRect = m_shapeMap[child];
+    changedRect = changedRect.unite(child->boundingRect());
 
     QMatrix matrix;
     matrix.scale(m_image->xRes(), m_image->yRes());
-    bound = matrix.mapRect(bound);
+    changedRect = matrix.mapRect(changedRect);
 
-    QRect updateRect = bound.toAlignedRect();
-    updateRect = updateRect.unite(m_parentPaintDevice->selection()->selectedRect());
-    m_parentPaintDevice->setDirty(updateRect);
-    m_parentPaintDevice->emitSelectionChanged();
+    m_shapeMap[child] = child->boundingRect();
+    m_parentPaintDevice->setDirty(changedRect.toAlignedRect());
+    m_parentPaintDevice->emitSelectionChanged(changedRect.toAlignedRect());
 }
 
 bool KisShapeSelectionModel::isChildLocked(const KoShape *child) const {

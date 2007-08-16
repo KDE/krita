@@ -40,6 +40,7 @@
 #include "kis_selection_component.h"
 #include "kis_mask.h"
 #include "kis_pixel_selection.h"
+#include "kis_fill_painter.h"
 
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
@@ -100,6 +101,13 @@ void KisSelection::clear()
     quint8 defPixel = MIN_SELECTED;
     m_datamanager->setDefaultPixel(&defPixel);
     m_datamanager->clear();
+}
+
+void KisSelection::clear(const QRect& r)
+{
+    KisFillPainter painter(KisPaintDeviceSP(this));
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    painter.fillRect(r, KoColor(Qt::white, cs), *(dataManager()->defaultPixel()));
 }
 
 void KisSelection::invert()
@@ -272,6 +280,23 @@ void KisSelection::updateProjection()
     }
     if(m_hasShapeSelection) {
         m_shapeSelection->renderToProjection(this);
+    }
+    kDebug(41010) << "Selection rendering took: " << t.elapsed();
+}
+
+void KisSelection::updateProjection(const QRect& r)
+{
+    QTime t;
+    t.start();
+    clear(r);
+    if(m_hasPixelSelection) {
+         quint8 defPixel = *(m_pixelSelection->dataManager()->defaultPixel());
+         m_datamanager->setDefaultPixel(&defPixel);
+
+        m_pixelSelection->renderToProjection(this, r);
+    }
+    if(m_hasShapeSelection) {
+        m_shapeSelection->renderToProjection(this, r);
     }
     kDebug(41010) << "Selection rendering took: " << t.elapsed();
 }

@@ -39,11 +39,11 @@ public:
     QList<KoShape*> iterator() const;
 
     void containerChanged(KoShapeContainer * );
-    void childChanged(KoShape *, KoShape::ChangeType );
+    void childChanged(KoShape * child, KoShape::ChangeType );
     bool isChildLocked(const KoShape *child) const;
 
 private:
-    QList<KoShape *> m_shapes;
+    QMap<KoShape*, QRectF> m_shapeMap;
     KisImageSP m_image;
     KisPaintDeviceSP m_parentPaintDevice;
     KisShapeSelection* m_shapeSelection;

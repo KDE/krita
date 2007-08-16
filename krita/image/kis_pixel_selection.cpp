@@ -406,8 +406,23 @@ void KisPixelSelection::appendCoordinate(QPolygon * path, int x, int y, EdgeType
 
 void KisPixelSelection::renderToProjection(KisSelection* projection)
 {
+    QRect updateRect = selectedExactRect();
     KisPainter painter(projection);
-    QRect r = selectedExactRect();
-    painter.bitBlt(r.x(), r.y(), COMPOSITE_COPY, KisPaintDeviceSP(this), r.x(), r.y(), r.width(), r.height());
+    painter.bitBlt(updateRect.x(), updateRect.y(), COMPOSITE_OVER, KisPaintDeviceSP(this),
+                   updateRect.x(), updateRect.y(), updateRect.width(), updateRect.height());
     painter.end();
+}
+
+void KisPixelSelection::renderToProjection(KisSelection* projection, const QRect& r)
+{
+    QRect updateRect = r.intersected(selectedExactRect());
+    if(updateRect.isValid()) {
+        kDebug() << "Pixel Selection updated" << updateRect;
+        KisPainter painter(projection);
+        painter.bitBlt(updateRect.x(), updateRect.y(), COMPOSITE_OVER, KisPaintDeviceSP(this),
+                       updateRect.x(), updateRect.y(), updateRect.width(), updateRect.height());
+        painter.end();
+    }
+    else
+        kDebug() << "Pixel Selection not updated";
 }

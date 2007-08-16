@@ -46,6 +46,7 @@ public:
      * @param projection the target selection 
      */
     virtual void renderToProjection(KisSelection* projection);
+    virtual void renderToProjection(KisSelection* projection, const QRect& r);
 
     virtual void setDirty();
 

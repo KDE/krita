@@ -112,6 +112,7 @@ public:
     void invert();
 
     void clear();
+    void clear(const QRect& r);
 
     /// Tests if the the rect is totally outside the selection
     bool isTotallyUnselected(QRect r) const;
@@ -150,7 +151,9 @@ public:
     KisSelectionComponent* shapeSelection();
     void setPixelSelection(KisPixelSelectionSP pixelSelection);
     void setShapeSelection(KisSelectionComponent* shapeSelection);
+
     void updateProjection();
+    void updateProjection(const QRect& r);
 
 private:
 

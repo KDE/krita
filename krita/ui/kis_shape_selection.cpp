@@ -124,6 +124,20 @@ void KisShapeSelection::renderToProjection(KisSelection* projection)
     painter.fillPainterPath(resolutionMatrix.map(selectionOutline()));
 }
 
+void KisShapeSelection::renderToProjection(KisSelection* projection, const QRect& r)
+{
+    KisPainter painter(projection);
+    painter.setPaintColor(KoColor(Qt::black, projection->colorSpace()));
+    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+    painter.setOpacity(OPACITY_OPAQUE);
+    painter.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_OVER));
+
+    QMatrix resolutionMatrix;
+    resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
+    painter.fillPainterPath(resolutionMatrix.map(selectionOutline()));
+}
+
 void KisShapeSelection::setDirty()
 {
     m_dirty = true;

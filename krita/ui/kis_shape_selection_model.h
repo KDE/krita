@@ -39,7 +39,7 @@ public:
     QList<KoShape*> iterator() const;
 
     void containerChanged(KoShapeContainer * );
-    void childChanged(KoShape * child, KoShape::ChangeType );
+    void childChanged(KoShape * child, KoShape::ChangeType type);
     bool isChildLocked(const KoShape *child) const;
 
 private:

@@ -225,6 +225,14 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                         break;
                 }
                 m_canvas->addCommand(t);
+
+                if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
+                    dev->setDirty(rc);
+                    dev->emitSelectionChanged(rc);
+                } else {
+                    dev->setDirty(currentImage()->bounds());
+                    dev->emitSelectionChanged();
+                }
             }
             else {
                 QRectF documentRect = convertToPt(bound);
@@ -263,18 +271,9 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                 else {
                     shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
                 }
-                shape->setParent(shapeSelection);
                 QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
                 m_canvas->addCommand(cmd);
                 shapeSelection->addChild(shape);
-            }
-
-            if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
-                dev->setDirty(rc);
-                dev->emitSelectionChanged(rc);
-            } else {
-                dev->setDirty(currentImage()->bounds());
-                dev->emitSelectionChanged();
             }
         }
         m_selecting = false;

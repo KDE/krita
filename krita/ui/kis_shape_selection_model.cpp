@@ -43,7 +43,7 @@ void KisShapeSelectionModel::add(KoShape *child) {
     child->setBorder(0);
     child->setBackground(Qt::NoBrush);
 
-    if(count() == 1) {
+    if(count() == 0) {
         m_parentPaintDevice->setDirty(m_image->bounds());
     }
     else {
@@ -54,10 +54,11 @@ void KisShapeSelectionModel::add(KoShape *child) {
         updateRect = matrix.mapRect(updateRect);
         m_parentPaintDevice->setDirty(updateRect);
     }
-    m_parentPaintDevice->emitSelectionChanged();
 
     m_shapeMap.insert(child, child->boundingRect());
     m_shapeSelection->setDirty();
+
+    m_parentPaintDevice->emitSelectionChanged();
 }
 
 void KisShapeSelectionModel::remove(KoShape *child)
@@ -101,8 +102,11 @@ void KisShapeSelectionModel::containerChanged(KoShapeContainer *)
 {
 }
 
-void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType )
+void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType type)
 {
+    if(type == KoShape::ParentChanged)
+        return;
+
     m_shapeSelection->setDirty();
     QRectF changedRect = m_shapeMap[child];
     changedRect = changedRect.unite(child->boundingRect());

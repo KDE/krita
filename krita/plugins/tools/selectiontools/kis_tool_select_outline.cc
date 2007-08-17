@@ -185,7 +185,6 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                     else {
                         shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
                     }
-                    path->setParent(shapeSelection);
                     QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
                     m_canvas->addCommand(cmd);
                     shapeSelection->addChild(path);

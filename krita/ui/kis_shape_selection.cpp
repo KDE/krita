@@ -126,16 +126,46 @@ void KisShapeSelection::renderToProjection(KisSelection* projection)
 
 void KisShapeSelection::renderToProjection(KisSelection* projection, const QRect& r)
 {
-    KisPainter painter(projection);
-    painter.setPaintColor(KoColor(Qt::black, projection->colorSpace()));
-    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-    painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-    painter.setOpacity(OPACITY_OPAQUE);
-    painter.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_OVER));
-
     QMatrix resolutionMatrix;
     resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
-    painter.fillPainterPath(resolutionMatrix.map(selectionOutline()));
+
+    QTime t;
+    t.start();
+
+    KisMaskSP tmpMask = KisMaskSP(new KisMask(m_parentPaintDevice, "tmp"));
+
+    const qint32 MASK_IMAGE_WIDTH = 256;
+    const qint32 MASK_IMAGE_HEIGHT = 256;
+
+    QImage polygonMaskImage(MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT, QImage::Format_ARGB32);
+    QPainter maskPainter(&polygonMaskImage);
+    maskPainter.setRenderHint(QPainter::Antialiasing, true);
+
+    // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
+
+    for (qint32 x = r.x(); x < r.x() + r.width(); x += MASK_IMAGE_WIDTH) {
+        for (qint32 y = r.y(); y < r.y() + r.height(); y += MASK_IMAGE_HEIGHT) {
+
+            maskPainter.fillRect(polygonMaskImage.rect(), QColor(OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, 255));
+            maskPainter.translate(-x, -y);
+            maskPainter.fillPath(resolutionMatrix.map(selectionOutline()), QColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255));
+            maskPainter.translate(x, y);
+
+            qint32 rectWidth = qMin(r.x() + r.width() - x, MASK_IMAGE_WIDTH);
+            qint32 rectHeight = qMin(r.y() + r.height() - y, MASK_IMAGE_HEIGHT);
+
+            KisRectIterator rectIt = tmpMask->createRectIterator(x, y, rectWidth, rectHeight);
+
+            while (!rectIt.isDone()) {
+                (*rectIt.rawData()) = qRed(polygonMaskImage.pixel(rectIt.x() - x, rectIt.y() - y));
+                ++rectIt;
+            }
+        }
+    }
+    KisPainter painter(projection);
+    painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, KisPaintDeviceSP(tmpMask), r.x(), r.y(), r.width(), r.height());
+    painter.end();
+    kDebug(41010) << "Shape selection rendering: " << t.elapsed();
 }
 
 void KisShapeSelection::setDirty()

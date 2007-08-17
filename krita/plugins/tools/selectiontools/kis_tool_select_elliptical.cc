@@ -254,7 +254,6 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 else {
                     shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
                 }
-                shape->setParent(shapeSelection);
                 QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
                 m_canvas->addCommand(cmd);
                 shapeSelection->addChild(shape);

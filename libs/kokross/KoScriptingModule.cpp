@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "KoScriptingModule.h"
+#include "KoScriptingOdf.h"
 
 // qt
 #include <QApplication>
@@ -92,6 +93,11 @@ QObject* KoScriptingModule::document()
 {
     KoDocument* kdoc = doc();
     return kdoc ? kdoc->findChild< KoDocumentAdaptor* >() : 0;
+}
+
+QObject* KoScriptingModule::store()
+{
+    return new KoScriptingOdfStore(this, doc());
 }
 
 #include "KoScriptingModule.moc"

@@ -60,6 +60,9 @@ class KOKROSS_EXPORT KoScriptingModule : public QObject
         /** Return the \a KoDocumentAdaptor object. */
         virtual QObject* document();
 
+        /** Return a \a KoScriptingOdfStore object. */
+        virtual QObject* store();
+
     private:
         /// \internal d-pointer class.
         class Private;

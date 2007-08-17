@@ -60,7 +60,7 @@ void PathToolOptionWidget::setSelectionType(int type) {
 void PathToolOptionWidget::setSelectedPath( KoPathShape * path )
 {
     // remove the config widget if a null path is set, or the path has changed
-    if( ! m_path || path != m_path )
+    if( ! path || path != m_path )
     {
         while( widget.configWidget->count() )
             widget.configWidget->removeWidget( widget.configWidget->widget( 0 ) );
@@ -68,6 +68,7 @@ void PathToolOptionWidget::setSelectedPath( KoPathShape * path )
 
     if( ! path )
     {
+        m_path = 0;
         m_configPanel = 0;
         return;
     }
@@ -90,7 +91,8 @@ void PathToolOptionWidget::setSelectedPath( KoPathShape * path )
         connect( m_configPanel, SIGNAL(propertyChanged()), this, SLOT(shapePropertyChanged()));
     }
 
-    m_configPanel->open( path );
+    if( m_configPanel )
+        m_configPanel->open( m_path );
 }
 
 void PathToolOptionWidget::shapePropertyChanged()

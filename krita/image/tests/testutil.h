@@ -118,6 +118,6 @@ QList<KoColorSpace*> allColorSpaces()
     }
     return colorSpaces;
 }
-};
+}
 
 #endif

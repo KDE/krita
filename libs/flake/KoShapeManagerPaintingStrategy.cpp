@@ -54,7 +54,8 @@ void KoShapeManagerPaintingStrategy::paint( KoShape * shape, QPainter &painter, 
     painter.restore();  // for the matrix
 }
 
-void KoShapeManagerPaintingStrategy::adapt( QRectF & rect )
+void KoShapeManagerPaintingStrategy::adapt( KoShape * shape, QRectF & rect )
 {
+    Q_UNUSED( shape );
     Q_UNUSED( rect );
 }

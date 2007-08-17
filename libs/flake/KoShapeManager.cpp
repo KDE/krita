@@ -393,7 +393,7 @@ void KoShapeManager::updateTree()
     {
         d->tree.remove( shape );
         QRectF br( shape->boundingRect() );
-        d->strategy->adapt( br );
+        d->strategy->adapt( shape, br );
         d->tree.insert( br, shape );
 
         foreach(KoShapeConnection *connection, shape->connections()) {

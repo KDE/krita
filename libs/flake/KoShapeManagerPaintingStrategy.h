@@ -57,9 +57,9 @@ public:
      *
      * @param rect rect which will be updated to give the rect the shape occupies.
      */
-    virtual void adapt( QRectF & rect );
+    virtual void adapt( KoShape * shape, QRectF & rect );
 
-private:    
+private:
     class Private;
     Private * const d;
 };

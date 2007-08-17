@@ -30,6 +30,7 @@
 #include <KoUnit.h>
 
 class KoShape;
+class QUndoCommand;
 
 /**
  * Base widget for shape-configuration panels.
@@ -45,12 +46,13 @@ class KoShape;
  * to allow the widget to apply all settings from the widget to the shape.
  */
 class FLAKE_EXPORT KoShapeConfigWidgetBase : public QWidget {
+    Q_OBJECT
 public:
     /**
      * Default constructor
      */
-    KoShapeConfigWidgetBase() : m_resourceProvider( 0 ) {}
-    virtual ~KoShapeConfigWidgetBase() {}
+    KoShapeConfigWidgetBase();
+    virtual ~KoShapeConfigWidgetBase();
 
     /**
      * Open the argument shape by interpreting the data and setting that data on this
@@ -71,20 +73,23 @@ public:
      * Called by the tool that created the shape using KoCavasBase::unit()
      * @param unit the new unit to show data in.
      */
-    virtual void setUnit(KoUnit unit) { Q_UNUSED(unit); }
+    virtual void setUnit(KoUnit unit);
 
     /// called to set the canvas resource provider of the canvas the user used to insert the new shape.
-    void setResourceProvider(KoCanvasResourceProvider* provider) {
-        m_resourceProvider = provider;
-    }
+    void setResourceProvider(KoCanvasResourceProvider* provider);
 
     /// Return true if the shape config panel should be shown after the shape is created
-    virtual bool showOnShapeCreate() { return false; }
+    virtual bool showOnShapeCreate();
 
+    /// Creates a command which applies all changes to the opened shape
+    virtual QUndoCommand * createCommand();
+
+signals:
+    /// is emitted after one of the config options has changed
+    void propertyChanged();
 
 protected:
     KoCanvasResourceProvider *m_resourceProvider; ///< the resource provider with data for this canvas
 };
-
 
 #endif

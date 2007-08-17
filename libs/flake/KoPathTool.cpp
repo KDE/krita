@@ -444,6 +444,11 @@ void KoPathTool::mouseReleaseEvent( KoPointerEvent *event ) {
             m_canvas->addCommand( command );
         delete m_currentStrategy;
         m_currentStrategy = 0;
+
+        if( m_selectedShapes.count() == 1 )
+            emit pathChanged( m_selectedShapes.first() );
+        else
+            emit pathChanged( 0 );
     }
 }
 

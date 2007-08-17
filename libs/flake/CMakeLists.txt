@@ -77,6 +77,7 @@ set(flake_SRCS
     KoLineBorder.cpp
     KoLineBorderFactory.cpp
     KoShapeStyleWriter.cpp
+    KoShapeConfigWidgetBase.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp

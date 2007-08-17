@@ -23,9 +23,9 @@
 #include "KoShape.h"
 #include "KoShapeManager.h"
 
-class KoShapeManagerPaintingStrategy::Private 
+class KoShapeManagerPaintingStrategy::Private
 {
-public:    
+public:
     Private( KoShapeManager * manager )
     : shapeManager( manager )
     {
@@ -35,7 +35,7 @@ public:
 };
 
 KoShapeManagerPaintingStrategy::KoShapeManagerPaintingStrategy( KoShapeManager * shapeManager )
-: d( new KoShapeManagerPaintingStrategy::Private( shapeManager ) ) 
+: d( new KoShapeManagerPaintingStrategy::Private( shapeManager ) )
 {
 }
 
@@ -58,4 +58,9 @@ void KoShapeManagerPaintingStrategy::adapt( KoShape * shape, QRectF & rect )
 {
     Q_UNUSED( shape );
     Q_UNUSED( rect );
+}
+
+KoShapeManager * KoShapeManagerPaintingStrategy::shapeManager()
+{
+    return d->shapeManager;
 }

@@ -59,6 +59,9 @@ public:
      */
     virtual void adapt( KoShape * shape, QRectF & rect );
 
+protected:
+    KoShapeManager * shapeManager();
+
 private:
     class Private;
     Private * const d;

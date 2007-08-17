@@ -732,6 +732,10 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
             } else {
                 kDebug() << "What is this ???" << d->stylesPrivate->value(key);
             }
+        } else if (key == UnderlineColor) {
+            QColor color = d->stylesPrivate->value(key).value<QColor>();
+            if (color.isValid())
+                target->addProperty("style:text-underline-color", color.name(), KoGenStyle::TextType);
         } else if (key == StrikeOutStyle) {
             bool ok = false;
             int style = d->stylesPrivate->value(key).toInt(&ok);
@@ -748,7 +752,11 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
             } else {
                 kDebug() << "What is this ???" << d->stylesPrivate->value(key);
             }
-        } else if (key == QTextFormat::BackgroundBrush) {
+        } else if (key == StrikeOutColor) {
+            QColor color = d->stylesPrivate->value(key).value<QColor>();
+            if (color.isValid())
+                target->addProperty("style:text-line-through-color", color.name(), KoGenStyle::TextType);
+        }  else if (key == QTextFormat::BackgroundBrush) {
             QBrush brush = d->stylesPrivate->value(key).value<QBrush>();
             if (brush.style() == Qt::NoBrush)
                 target->addProperty("fo:background-color", "transparent", KoGenStyle::TextType);

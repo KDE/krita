@@ -748,6 +748,12 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
             } else {
                 kDebug() << "What is this ???" << d->stylesPrivate->value(key);
             }
+        } else if (key == QTextFormat::BackgroundBrush) {
+            QBrush brush = d->stylesPrivate->value(key).value<QBrush>();
+            if (brush.style() == Qt::NoBrush)
+                target->addProperty("fo:background-color", "transparent", KoGenStyle::TextType);
+            else
+                target->addProperty("fo:background-color", brush.color().name(), KoGenStyle::TextType);
         } else {
             kDebug() << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
         }

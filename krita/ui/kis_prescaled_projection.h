@@ -57,7 +57,7 @@ class QRect;
  */
 class KRITAUI_EXPORT KisPrescaledProjection : QObject
 {
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
 

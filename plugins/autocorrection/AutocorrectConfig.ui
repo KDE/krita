@@ -1,0 +1,612 @@
+<ui version="4.0" >
+ <class>AutocorrectConfig</class>
+ <widget class="QWidget" name="AutocorrectConfig" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>558</width>
+    <height>454</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Autocorrection</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab_1" >
+      <attribute name="title" >
+       <string>Si&amp;mpe Autocorrection</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <item>
+        <widget class="QCheckBox" name="upperCase" >
+         <property name="whatsThis" >
+          <string>Detect when a new sentence is started and always ensure that the first character is an uppercase character</string>
+         </property>
+         <property name="text" >
+          <string>Convert &amp;first letter of a sentence automatically to uppercase
+(e.g. "my house. in this town" to "my house. In this town")</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="upperUpper" >
+         <property name="toolTip" >
+          <string/>
+         </property>
+         <property name="whatsThis" >
+          <string>All words are checked for the common mistake of holding the shift key down a bit too long. If some words must have two uppercase characters, then those exceptions should be added in the 'Exceptions' tab.</string>
+         </property>
+         <property name="text" >
+          <string>Convert &amp;two uppercase characters to one uppercase and one lowercase character
+ (e.g. PErfect to Perfect)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="autoFormatUrl" >
+         <property name="whatsThis" >
+          <string>Detect when a URL (Uniform Resource Locator) is typed and provide formatting that matches the way an Internet browser would show a URL.</string>
+         </property>
+         <property name="text" >
+          <string>Autoformat &amp;URLs</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="ignoreDoubleSpace" >
+         <property name="whatsThis" >
+          <string>Make sure that more than one space cannot be typed, as this is a common mistake which is quite hard to find in formatted text.</string>
+         </property>
+         <property name="text" >
+          <string>&amp;Suppress double spaces</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="trimParagraphs" >
+         <property name="whatsThis" >
+          <string>Keep correct formatting and indenting of sentences by automatically removing spaces typed at the beginning and end of a paragraph.</string>
+         </property>
+         <property name="text" >
+          <string>R&amp;emove spaces at the beginning and end of paragraphs</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="autoChangeFormat" >
+         <property name="whatsThis" >
+          <string>When you use _underline_ or *bold*, the text between the underscores or asterisks will be converted to underlined or bold text.</string>
+         </property>
+         <property name="text" >
+          <string>Automatically do &amp;bold and underline formatting</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="autoReplaceNumber" >
+         <property name="whatsThis" >
+          <string>Most standard fraction notations will be converted when available</string>
+         </property>
+         <property name="text" >
+          <string>Re&amp;place 1/2... with ½...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="useNumberStyle" >
+         <property name="whatsThis" >
+          <string>When typing '1)' or similar in front of a paragraph, automatically convert the paragraph to use that numbering style. This has the advantage that further paragraphs will also be numbered and the spacing is done correctly.</string>
+         </property>
+         <property name="text" >
+          <string>Use &amp;autonumbering for numbered paragraphs</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="autoSuperScript" >
+         <property name="text" >
+          <string>Rep&amp;lace 1st... with 1^st...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="capitalizeDaysName" >
+         <property name="text" >
+          <string>Capitalize name of days</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="useBulletStyle" >
+         <property name="whatsThis" >
+          <string>When typing '*' or '-' in front of a paragraph, automatically convert the paragraph to use that list-style. Using a list-style formatting means that a correct bullet is used to draw the list.</string>
+         </property>
+         <property name="text" >
+          <string>Use l&amp;ist-formatting for bulleted paragraphs</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="leftMargin" >
+          <number>20</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="bulletStyle" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text" >
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="defaultBulletStyle" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text" >
+            <string>Default</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2" >
+      <attribute name="title" >
+       <string>Custom &amp;Quotes</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" colspan="2" >
+        <widget class="QCheckBox" name="typographicDoubleQuotes" >
+         <property name="text" >
+          <string>Replace &amp;double quotes with typographical quotes</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <layout class="QHBoxLayout" >
+         <property name="spacing" >
+          <number>0</number>
+         </property>
+         <property name="leftMargin" >
+          <number>20</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="doubleQuote1" >
+           <property name="text" >
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="doubleQuote2" >
+           <property name="text" >
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="1" >
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QPushButton" name="doubleDefault" >
+           <property name="text" >
+            <string>Default</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0" colspan="2" >
+        <widget class="QCheckBox" name="typographicSimpleQuotes" >
+         <property name="text" >
+          <string>Replace &amp;single quotes with typographical quotes</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" >
+        <layout class="QHBoxLayout" >
+         <property name="spacing" >
+          <number>0</number>
+         </property>
+         <property name="leftMargin" >
+          <number>20</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="simpleQuote1" >
+           <property name="text" >
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="simpleQuote1_2" >
+           <property name="text" >
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="3" column="1" >
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QPushButton" name="simpleDefault" >
+           <property name="text" >
+            <string>Default</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="1" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3" >
+      <attribute name="title" >
+       <string>Ad&amp;vanced Autocorrection</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" colspan="2" >
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QLabel" name="label" >
+           <property name="text" >
+            <string>Replacements and exceptions for language:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="autoFormatLanguage" >
+           <item>
+            <property name="text" >
+             <string>Default</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>All Languages</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QCheckBox" name="advancedAutoCorrection" >
+         <property name="text" >
+          <string>&amp;Enable word replacement</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QCheckBox" name="autoCorrectionWithFormat" >
+         <property name="text" >
+          <string>Replace &amp;text with format</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" >
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QLabel" name="label_2" >
+           <property name="text" >
+            <string>&amp;Find</string>
+           </property>
+           <property name="buddy" >
+            <cstring>find</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="find" />
+         </item>
+         <item>
+          <widget class="QToolButton" name="specialChar1" >
+           <property name="text" >
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3" >
+           <property name="text" >
+            <string>Re&amp;place</string>
+           </property>
+           <property name="buddy" >
+            <cstring>specialChar2</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="specialChar2" />
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButton_2" >
+           <property name="text" >
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item rowspan="2" row="3" column="1" >
+        <layout class="QVBoxLayout" >
+         <item>
+          <widget class="QPushButton" name="pushButton_3" >
+           <property name="text" >
+            <string>&amp;Add</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_4" >
+           <property name="text" >
+            <string>Remove</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_5" >
+           <property name="text" >
+            <string>C&amp;hange Format...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_6" >
+           <property name="text" >
+            <string>C&amp;lear Format</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0" >
+        <widget class="QTableWidget" name="tableWidget" >
+         <column>
+          <property name="text" >
+           <string>Find</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>Replace</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_4" >
+      <attribute name="title" >
+       <string>E&amp;xceptions</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <layout class="QVBoxLayout" >
+         <item>
+          <widget class="QLabel" name="label_4" >
+           <property name="text" >
+            <string>Do not treat as the end of a sentence:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="abbreviation" />
+         </item>
+         <item>
+          <widget class="QListWidget" name="abbreviationList" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Maximum" hsizetype="Expanding" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="autoinclude1" >
+           <property name="text" >
+            <string>Autoinclude</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="1" >
+        <layout class="QVBoxLayout" >
+         <item>
+          <widget class="QPushButton" name="add1" >
+           <property name="text" >
+            <string>&amp;Add</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="remove1" >
+           <property name="text" >
+            <string>R&amp;emove</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0" >
+        <layout class="QVBoxLayout" >
+         <item>
+          <widget class="QLabel" name="label_5" >
+           <property name="text" >
+            <string>Accept two uppercase letters in:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="twoUpperLetter" />
+         </item>
+         <item>
+          <widget class="QListWidget" name="twoUpperLetterList" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Maximum" hsizetype="Expanding" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="autoinclude2" >
+           <property name="text" >
+            <string>Autoinclude</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="1" >
+        <layout class="QVBoxLayout" >
+         <item>
+          <widget class="QPushButton" name="add2" >
+           <property name="text" >
+            <string>A&amp;dd</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="remove2" >
+           <property name="text" >
+            <string>Remove</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

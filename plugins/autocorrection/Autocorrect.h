@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,11 +24,44 @@
 #include <QTextCursor>
 
 class Autocorrect : public KoTextEditingPlugin {
+    Q_OBJECT
 public:
     Autocorrect();
+    virtual ~Autocorrect();
 
     void finishedWord(QTextDocument *document, int cursorPosition);
     void finishedParagraph(QTextDocument *document, int cursorPosition);
+
+    void setUppercaseFirstCharOfSentence(bool b) { m_uppercaseFirstCharOfSentence = b; }
+    void setFixTwoUppercaseChars(bool b) { m_fixTwoUppercaseChars = b; }
+    void setAutoFormatURLs(bool b) { m_autoFormatURLs = b; }
+    void setSingleSpaces(bool b) { m_singleSpaces = b; }
+    void setTrimParagraphs(bool b) { m_trimParagraphs = b; }
+    void setAutoBoldUnderline(bool b) { m_autoBoldUnderline = b; }
+    void setAutoFractions(bool b) { m_autoFractions = b; }
+    void setAutoNumbering(bool b) { m_autoNumbering = b; }
+    void setSuperscriptAppendix(bool b) { m_superscriptAppendix = b; }
+    void setCapitalizeWeekDays(bool b) { m_capitalizeWeekDays = b; }
+    void setAutoFormatBulletList(bool b) { m_autoFormatBulletList = b; }
+    void setReplaceDoubleQuotes(bool b) { m_replaceDoubleQuotes = b; }
+    void setReplaceSingleQuotes(bool b) { m_replaceSingleQuotes = b; }
+
+    bool getUppercaseFirstCharOfSentence() { return m_uppercaseFirstCharOfSentence; }
+    bool getFixTwoUppercaseChars() { return m_fixTwoUppercaseChars; }
+    bool getAutoFormatURLs() { return m_autoFormatURLs; }
+    bool getSingleSpaces() { return m_singleSpaces; }
+    bool getTrimParagraphs() { return m_trimParagraphs; }
+    bool getAutoBoldUnderline() { return m_autoBoldUnderline; }
+    bool getAutoFractions() { return m_autoFractions; }
+    bool getAutoNumbering() { return m_autoNumbering; }
+    bool getSuperscriptAppendix() { return m_superscriptAppendix; }
+    bool getCapitalizeWeekDays() { return m_capitalizeWeekDays; }
+    bool getAutoFormatBulletList() { return m_autoFormatBulletList; }
+    bool getReplaceDoubleQuotes() { return m_replaceDoubleQuotes; }
+    bool getReplaceSingleQuotes() { return m_replaceSingleQuotes; }
+
+private slots:
+    void configureAutocorrect();
 
 private:
     void uppercaseFirstCharOfSentence();
@@ -49,6 +83,9 @@ private:
 
     /// @returns the actual link that will be set as anchor href
     QString autoDetectURL(const QString &word) const;
+
+    void readConfig();
+    void writeConfig();
 
 private:
     bool m_uppercaseFirstCharOfSentence; // convert first letter of a sentence automaticall to uppercase

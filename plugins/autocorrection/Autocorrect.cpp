@@ -18,12 +18,23 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "Autocorrect.h"
+#include "AutocorrectConfigDialog.h"
 
 #include <QTextBlock>
+#include <QAction>
+
 #include <klocale.h>
 #include <kdebug.h>
+#include <KConfigGroup>
+
+#include <KoGlobal.h>
 
 Autocorrect::Autocorrect() {
+    /* setup actions for this plugin */
+    QAction *configureAction = new QAction(i18n("Configure &Autocorrection..."), this);
+    connect(configureAction, SIGNAL(triggered()), this, SLOT(configureAutocorrect()));
+    addAction("configure_autocorrection", configureAction);
+
     m_singleSpaces = true;
     m_uppercaseFirstCharOfSentence = false;
     m_fixTwoUppercaseChars = false;
@@ -37,8 +48,14 @@ Autocorrect::Autocorrect() {
     m_replaceDoubleQuotes = false;
     m_replaceSingleQuotes = false;
 
+    readConfig();
     // default double quote open 0x201c
     // default double quote close 0x201d
+}
+
+Autocorrect::~Autocorrect()
+{
+    writeConfig();
 }
 
 void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
@@ -71,6 +88,14 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
 void Autocorrect::finishedParagraph(QTextDocument *document, int cursorPosition) {
     if(! m_trimParagraphs) return;
     // TODO
+}
+
+void Autocorrect::configureAutocorrect()
+{
+    AutocorrectConfigDialog *cfgDlg = new AutocorrectConfigDialog(this);
+    if (cfgDlg->exec()) {
+        // TODO
+    }
 }
 
 // ******************** individual features;
@@ -326,3 +351,44 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
 
     return QString();
 }
+
+void Autocorrect::readConfig()
+{
+    KConfigGroup interface = KoGlobal::kofficeConfig()->group("Autocorrect");
+
+    m_uppercaseFirstCharOfSentence = interface.readEntry("UppercaseFirstCharOfSentence", m_uppercaseFirstCharOfSentence);
+    m_fixTwoUppercaseChars = interface.readEntry("FixTwoUppercaseChars", m_fixTwoUppercaseChars);
+    m_autoFormatURLs = interface.readEntry("AutoFormatURLs", m_autoFormatURLs);
+    m_singleSpaces = interface.readEntry("SingleSpaces", m_singleSpaces);
+    m_trimParagraphs = interface.readEntry("TrimParagraphs", m_trimParagraphs);
+    m_autoBoldUnderline = interface.readEntry("AutoBoldUnderline", m_autoBoldUnderline);
+    m_autoFractions = interface.readEntry("AutoFractions", m_autoFractions);
+    m_autoNumbering = interface.readEntry("AutoNumbering", m_autoNumbering);
+    m_superscriptAppendix = interface.readEntry("SuperscriptAppendix", m_superscriptAppendix);
+    m_capitalizeWeekDays = interface.readEntry("CapitalizeWeekDays", m_capitalizeWeekDays);
+    m_autoFormatBulletList = interface.readEntry("AutoFormatBulletList", m_autoFormatBulletList);
+
+    m_replaceDoubleQuotes = interface.readEntry("ReplaceDoubleQuotes", m_replaceDoubleQuotes);
+    m_replaceSingleQuotes = interface.readEntry("ReplaceSingleQuotes", m_replaceSingleQuotes);
+}
+
+void Autocorrect::writeConfig()
+{
+    KConfigGroup interface = KoGlobal::kofficeConfig()->group("Autocorrect");
+    interface.writeEntry("UppercaseFirstCharOfSentence", m_uppercaseFirstCharOfSentence);
+    interface.writeEntry("FixTwoUppercaseChars", m_fixTwoUppercaseChars);
+    interface.writeEntry("AutoFormatURLs", m_autoFormatURLs);
+    interface.writeEntry("SingleSpaces", m_singleSpaces);
+    interface.writeEntry("TrimParagraphs", m_trimParagraphs);
+    interface.writeEntry("AutoBoldUnderline", m_autoBoldUnderline);
+    interface.writeEntry("AutoFractions", m_autoFractions);
+    interface.writeEntry("AutoNumbering", m_autoNumbering);
+    interface.writeEntry("SuperscriptAppendix", m_superscriptAppendix);
+    interface.writeEntry("CapitalizeWeekDays", m_capitalizeWeekDays);
+    interface.writeEntry("AutoFormatBulletList", m_autoFormatBulletList);
+
+    interface.writeEntry("ReplaceDoubleQuotes", m_replaceDoubleQuotes);
+    interface.writeEntry("ReplaceSingleQuotes", m_replaceSingleQuotes);
+
+}
+

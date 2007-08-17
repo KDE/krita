@@ -8,10 +8,12 @@ set(autocorrect_SRCS
     AutocorrectPlugin.cpp
     Autocorrect.cpp
     AutocorrectFactory.cpp
+    AutocorrectConfigDialog.cpp
 )
 
-#kde4_add_ui_files( autocorrect_SRCS
-#)
+kde4_add_ui_files( autocorrect_SRCS
+    AutocorrectConfig.ui
+)
 
 kde4_add_plugin(autocorrect ${autocorrect_SRCS})
 

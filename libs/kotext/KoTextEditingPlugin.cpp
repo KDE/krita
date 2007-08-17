@@ -25,13 +25,19 @@
 
 #include <KDebug>
 
+class KoTextEditingPlugin::Private
+{
+public:
+    QHash<QString, QAction*> actionCollection;
+};
+
 KoTextEditingPlugin::KoTextEditingPlugin()
-    : d(0)
+    : d(new Private())
 {
 }
 
 KoTextEditingPlugin::~KoTextEditingPlugin() {
-    // delete d;
+    delete d;
 }
 
 void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) const {
@@ -64,6 +70,11 @@ QString KoTextEditingPlugin::paragraph(QTextDocument *document, int cursorPositi
     return block.text();
 }
 
+void KoTextEditingPlugin::addAction(const QString &name, QAction *action)
+{
+    d->actionCollection.insert(name, action);
+}
+
 void KoTextEditingPlugin::checkSection(QTextDocument *document, int startPosition, int endPosition) {
     QTextBlock block = document->findBlock(startPosition);
     int pos = block.position();
@@ -89,6 +100,11 @@ void KoTextEditingPlugin::checkSection(QTextDocument *document, int startPositio
             break;
         block = block.next();
     }
+}
+
+QHash<QString, QAction*> KoTextEditingPlugin::actions() const
+{
+    return d->actionCollection;
 }
 
 #include "KoTextEditingPlugin.moc"

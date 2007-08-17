@@ -21,8 +21,10 @@
 
 #include <QObject>
 #include <QString>
+#include <QHash>
 #include <kotext_export.h>
 
+class QAction;
 class QTextDocument;
 class QTextCursor;
 class QUndoCommand;
@@ -77,6 +79,11 @@ public:
      */
     virtual void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
+    /**
+     * Retrieves the entire collection of actions for the plugin
+     */
+    QHash<QString, QAction*> actions() const;
+
 signals:
     /// emitted when a series of commands is started that together need to become 1 undo action.
     void startMacro(const QString &name);
@@ -108,6 +115,14 @@ protected:
      * @param cursorPosition the position of the cursor somewhere in the word.
      */
     QString paragraph(QTextDocument *document, int cursorPosition) const;
+
+    /**
+     * Add an action under the given name to the action collection.
+     *
+     * @param name The name by which the action be retrieved again from the collection.
+     * @param action The action to add.
+     */
+    void addAction(const QString &name, QAction *action);
 
 private:
     class Private;

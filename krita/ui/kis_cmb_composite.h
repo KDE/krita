@@ -38,7 +38,6 @@
 
 class KRITAUI_EXPORT KisCmbComposite : public QComboBox
 {
-    typedef QComboBox super;
 
     Q_OBJECT
 

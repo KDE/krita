@@ -22,11 +22,11 @@
 #include <QDomDocument>
 #include <QDomElement>
 
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_types.h"
 
 
-class KisSaveXmlVisitor : public KisLayerVisitor {
+class KisSaveXmlVisitor : public KisNodeVisitor {
 public:
     KisSaveXmlVisitor(QDomDocument doc, QDomElement element, quint32 &count, bool root=false);
 

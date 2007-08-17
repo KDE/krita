@@ -55,12 +55,13 @@ namespace {
     quint32 const GimpPatternMagic = (('G' << 24) + ('P' << 16) + ('A' << 8) + ('T' << 0));
 }
 
-KisPattern::KisPattern(const QString& file) : super(file), m_hasFile(true)
+KisPattern::KisPattern(const QString& file)
+    : KoResource(file), m_hasFile(true)
 {
 }
 
 KisPattern::KisPattern(KisPaintDevice* image, int x, int y, int w, int h)
-    : super(""), m_hasFile(false)
+    : KoResource(""), m_hasFile(false)
 {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?

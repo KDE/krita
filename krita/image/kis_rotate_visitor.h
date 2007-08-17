@@ -26,7 +26,6 @@ class KisPaintDevice;
 class KisProgressDisplayInterface;
 
 class KRITAIMAGE_EXPORT KisRotateVisitor : public KisProgressSubject {
-    typedef KisProgressSubject super;
 
     /* Structs for the image rescaling routine */
 

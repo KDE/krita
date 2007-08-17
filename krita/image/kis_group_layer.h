@@ -28,8 +28,6 @@
 
 class KoColorSpace;
 
-const QString KIS_GROUP_LAYER_ID = "KisGroupLayer";
-
 /**
  * A KisLayer that bundles child layers into a single layer.
  * The top layer is firstChild(), with index 0; the bottommost lastChild() with index childCount() - 1.
@@ -43,73 +41,37 @@ class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer {
 public:
     KisGroupLayer(KisImageWSP img, const QString &name, quint8 opacity);
     KisGroupLayer(const KisGroupLayer& rhs);
-    ~KisGroupLayer();
+    virtual ~KisGroupLayer();
 
     QIcon icon() const;
 
     KisLayerSP clone() const;
 
-    virtual QString nodeType()
-        {
-            return KIS_GROUP_LAYER_ID;
-        }
+    /// override from KisBaseNode
+    void updateSettings();
 
-    virtual bool canHaveChildren()
-        {
-            return true;
-        }
-
-signals:
-
-    /**
-       Emitted whenever the specified region has been dirtied.
-    */
-    void sigDirtyRegionAdded( const QRegion & );
-
-    /**
-       Emitten whenver the specified rect has been dirtied.
-    */
-    void sigDirtyRectAdded( const QRect & );
-
-public:
-
-    KoColorSpace * colorSpace();
-
-
-public slots:
-    /**
-     * Set the entire layer extent dirty; this percolates up to parent layers all the
-     * way to the root layer.
-     */
+    /// override from KisNode
     void setDirty();
 
-    /**
-     * Add the given rect to the set of dirty rects for this layer;
-     * this percolates up to parent layers all the way to the root
-     * layer.
-     */
+    /// override from KisNode
     void setDirty(const QRect & rect);
 
-    /**
-     * Add the given region to the set of dirty rects for this layer;
-     * this percolates up to parent layers all the way to the root
-     * layer.
-     */
+    /// override from KisNode
     void setDirty( const QRegion & region);
 
-public:
-
-    qint32 x() const;
-    void setX(qint32);
-
-    qint32 y() const;
-    void setY(qint32);
+//     /**
+//      * Set a projection manager on this group layer. The group layer
+//      * will inform the projection manager of new
+//      */
+//     void setProjectionManager( KisProjectionSP projectionManager );
 
     /**
-       Sets this layer and all its descendants' owner image to the
-       given image.
-    */
-    void setImage(KisImageSP image);
+     * XXX: make the colorspace of a layergroup user-settable: we want
+     * to be able to have, for instance, a group of grayscale layers
+     * resulting in a grayscale projection that is then merged with an
+     * rgb image stack.
+     */
+    KoColorSpace * colorSpace();
 
     /**
        Return the united extents of all layers in this group layer;
@@ -124,11 +86,17 @@ public:
      */
     QRect exactBounds() const;
 
+    qint32 x() const;
+    void setX(qint32 x);
+
+    qint32 y() const;
+    void setY(qint32 y);
+
     /**
        Accect the specified visitor.
        @return true if the operation succeeded, false if it failed.
     */
-    bool accept(KisLayerVisitor &v);
+    bool accept(KisNodeVisitor &v);
 
     /**
        Clear the projection or create a projection from the specified
@@ -156,83 +124,30 @@ public:
     }
 
     /**
-       Update the given rect of the projection paint device.
-
-       Note for hackers: keep this method thread-safe!
-    */
+     *  Update the given rect of the projection paint device.
+     *
+     * Note for hackers: keep this method thread-safe!
+     */
     void updateProjection(const QRect & rc);
 
-    /**
-       @return the number of layers contained in this group layer. The
-       count is _not_ recursive, i.e., a child grouplayer that
-       contains ten other layers counts for one.
-    */
-    uint childCount() const;
-
-    /**
-     @return the bottom-most layer of the layers contained in this
-     group. This is not recursive: if the bottom-most layer is a
-     grouplayer, the grouplayer is returned, not the first child of
-     that group layer.
-    */
-    KisLayerSP firstChild() const;
-
-    /**
-     @return the top-most layer of the layers contained in this
-     group. This is not recursive: if the top-most layer is a
-     grouplayer, the grouplayer is returned, not the last child
-     of that group layer.
-    */
-    KisLayerSP lastChild() const;
-
-    /**
-     *  @returns the layer at the specified index.
-     */
-    KisLayerSP at(int index) const;
-
-    /**
-       @returns the index of the specified layer if it's in this
-       group, or -1 otherwise.
-    */
-    int index(KisLayerSP layer) const;
-
     QImage createThumbnail(qint32 w, qint32 h);
+
+signals:
+
+    void regionDirtied( const QRegion & );
+    void rectDirtied( const QRect & );
+    void settingsUpdated();
+
+private:
+
 
     /// Returns if the layer will induce the projection hack (if the only layer in this group)
     bool paintLayerInducesProjectionOptimization(KisPaintLayerSP l) const;
 
-private:
+    class Private;
+    Private * const m_d;
 
-    friend class KisImage; // Only KisImage is allowed to add layers
 
-    /**
-     * Adds the layer to this group at the specified index.
-     * childCount() is a valid index and appends to the end. Fails and
-     * returns false if the layer is already in this group or any
-     * other (remove it first.)
-    */
-    bool addLayer(KisLayerSP newLayer, int index);
-
-    /**
-     * Add the specified layer above the specified layer (if aboveThis
-     * == 0, the bottom is used)
-     */
-    bool addLayer(KisLayerSP newLayer, KisLayerSP aboveThis);
-
-    /// Removes the layer at the specified index from the group.
-    bool removeLayer(int index);
-
-    /// Removes the layer from this group. Fails if there's no such layer in this group.
-    bool removeLayer(KisLayerSP layer);
-
-private:
-
-    inline int reverseIndex(int index) const { return childCount() - 1 - index; }
-    vKisLayerSP m_layers; // Contains the list of all layers
-    KisPaintDeviceSP m_projection; // The cached composition of all layers in this group
-
-    qint32 m_x;
-    qint32 m_y;
 };
 
 #endif // KIS_GROUP_LAYER_H_

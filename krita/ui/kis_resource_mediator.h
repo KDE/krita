@@ -36,7 +36,6 @@ class KisResourceServerBase;
  */
 class KisResourceMediator : public QObject {
     Q_OBJECT
-    typedef QObject super;
 
 public:
     KisResourceMediator(KisItemChooser *chooser,
@@ -53,7 +52,7 @@ public:
     QWidget *chooserWidget() const;
 
 public slots:
-    
+
     void setActiveItem(QTableWidgetItem *item);
 
 signals:

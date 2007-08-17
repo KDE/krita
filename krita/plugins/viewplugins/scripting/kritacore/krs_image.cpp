@@ -29,7 +29,7 @@
 #include <kis_filter_strategy.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
-#include <kis_meta_registry.h>
+
 
 using namespace Scripting;
 

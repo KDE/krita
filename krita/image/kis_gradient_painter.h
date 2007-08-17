@@ -31,8 +31,6 @@ class KisGradient;
 class KRITAIMAGE_EXPORT KisGradientPainter : public KisPainter
 {
 
-    typedef KisPainter super;
-
 public:
 
         KisGradientPainter();

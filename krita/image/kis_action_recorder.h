@@ -25,19 +25,30 @@
 
 class KisRecordedAction;
 
+/**
+ * XXX: dox?
+ */
 class KRITAIMAGE_EXPORT KisActionRecorder : public QObject {
+
     Q_OBJECT
-    public:
-        KisActionRecorder();
-        ~KisActionRecorder();
-        QList<KisRecordedAction*> actions() const;
-    public slots:
-        void addAction(KisRecordedAction* action);
-    signals:
-        void addedAction(KisRecordedAction* action);
-    private:
-        struct Private;
-        Private* const d;
+
+public:
+    KisActionRecorder();
+    ~KisActionRecorder();
+    QList<KisRecordedAction*> actions() const;
+
+public slots:
+
+    void addAction(KisRecordedAction* action);
+
+signals:
+
+    void addedAction(KisRecordedAction* action);
+
+private:
+
+    struct Private;
+    Private* const d;
 };
 
 

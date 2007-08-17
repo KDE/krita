@@ -51,7 +51,7 @@ enum enumBrushType {
 };
 
 class KRITAIMAGE_EXPORT KisBrush : public KoResource {
-    typedef KoResource super;
+
     Q_OBJECT
 
 public:

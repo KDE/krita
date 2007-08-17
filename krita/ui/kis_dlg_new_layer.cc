@@ -33,7 +33,7 @@
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 #include "kis_dlg_new_layer.h"
-#include "kis_meta_registry.h"
+
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
@@ -45,7 +45,7 @@ NewLayerDialog::NewLayerDialog(const KoID colorSpaceID,
                    const QString & deviceName,
                    QWidget *parent,
                    const char *name)
-    : super(parent)
+    : KDialog(parent)
 {
     setCaption( i18n("New Layer") );
     setButtons( Ok| Cancel );

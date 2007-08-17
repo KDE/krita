@@ -37,7 +37,6 @@ namespace {
     const qint32 DEFAULT_MAX_TILES_MEM = 5000;
     const qint32 DEFAULT_SWAPPINESS = 100;
     const qint32 DEFAULT_PRESSURE_CORRECTION = 50;
-    const qint32 DEFAULT_DOCKABILITY = 0;
     const qint32 DEFAULT_UNDO_LIMIT = 50;
     const qint32 DEFAULT_BORDER_SIZE = 128;
 }
@@ -322,38 +321,6 @@ void KisConfig::setTabletDeviceAxis(const QString& tabletDeviceName, const QStri
     m_cfg.writeEntry("TabletDevice" + tabletDeviceName + axisName, axis);
 }
 
-void KisConfig::setDockability( qint32 dockability )
-{
-    m_cfg.writeEntry( "palettesdockability", dockability );
-}
-
-qint32 KisConfig::dockability()
-{
-    return m_cfg.readEntry("palettesdockability", DEFAULT_DOCKABILITY);
-}
-
-qint32 KisConfig::getDefaultDockability()
-{
-    return DEFAULT_DOCKABILITY;
-}
-
-float KisConfig::dockerFontSize()
-{
-    return (float) m_cfg.readEntry("palettefontsize", (int)getDefaultDockerFontSize());
-}
-
-float KisConfig::getDefaultDockerFontSize()
-{
-    float ps = qMin((double)9, KGlobalSettings::generalFont().pointSize() * 0.8);
-    if (ps < 6) ps = 6;
-    return ps;
-}
-
-void KisConfig::setDockerFontSize(float size)
-{
-    m_cfg.writeEntry("palettefontsize", (double)size);
-}
-
 quint32 KisConfig::getGridMainStyle()
 {
     quint32 v = m_cfg.readEntry("gridmainstyle", 0);
@@ -487,10 +454,9 @@ void KisConfig::setCheckersColor(QColor v)
     m_cfg.writeEntry("checkerscolor", v);
 }
 
-
 int KisConfig::numProjectionThreads()
 {
-    return m_cfg.readEntry( "maxprojectionthreads", 5 );
+    return m_cfg.readEntry( "maxprojectionthreads", QThread::idealThreadCount()  );
 }
 
 void KisConfig::setNumProjectThreads( int num )
@@ -500,7 +466,7 @@ void KisConfig::setNumProjectThreads( int num )
 
 int KisConfig::projectionChunkSize()
 {
-    return m_cfg.readEntry( "updaterectsize", 512 );
+    return m_cfg.readEntry( "updaterectsize", 1024 );
 }
 
 void KisConfig::setProjectionChunkSize( int num )
@@ -510,7 +476,7 @@ void KisConfig::setProjectionChunkSize( int num )
 
 bool KisConfig::aggregateDirtyRegionsInPainter()
 {
-    return m_cfg.readEntry( "aggregate_dirty_regions", false );
+    return m_cfg.readEntry( "aggregate_dirty_regions", true );
 }
 
 void KisConfig::setAggregateDirtyRegionsInPainter( bool aggregate )
@@ -520,7 +486,7 @@ void KisConfig::setAggregateDirtyRegionsInPainter( bool aggregate )
 
 bool KisConfig::useBoundingRectInProjection()
 {
-    return m_cfg.readEntry( "use_bounding_rect_of_dirty_region", false );
+    return m_cfg.readEntry( "use_bounding_rect_of_dirty_region", true );
 }
 
 void KisConfig::setUseBoundingRectInProjection( bool use )
@@ -546,4 +512,55 @@ bool KisConfig::updateAllOfQPainterCanvas()
 void KisConfig::setUpdateAllOfQpainterCanvas( bool all )
 {
     m_cfg.writeEntry( "update_all_of_qpainter_canvas", all );
+}
+
+bool KisConfig::fastZoom()
+{
+    return m_cfg.readEntry( "fast_zoom", false );
+}
+
+void KisConfig::setFastZoom( bool fastZoom )
+{
+    m_cfg.writeEntry( "fast_zoom", fastZoom );
+}
+
+
+bool KisConfig::useSampling()
+{
+    return m_cfg.readEntry( "sampled_scaling", false );
+}
+
+void KisConfig::setSampling( bool sampling )
+{
+    m_cfg.writeEntry( "sampled_scaling", sampling );
+}
+
+bool KisConfig::useDeferredSmoothing()
+{
+    return m_cfg.readEntry( "deferred_smoothing", false );
+}
+
+void KisConfig::setDeferredSmoothing( bool deferredSmoothing )
+{
+    m_cfg.writeEntry( "deferred_smoothing", deferredSmoothing );
+}
+
+bool KisConfig::useQtSmoothScaling()
+{
+    return m_cfg.readEntry( "qt_smooth_scaling", false );
+}
+
+void KisConfig::setUseQtSmoothScaling( bool useQtSmootScaling )
+{
+    m_cfg.writeEntry( "qt_smooth_scaling", useQtSmootScaling );
+}
+
+bool KisConfig::threadColorspaceConversion()
+{
+    return m_cfg.readEntry( "thread_colorspace_conversion", false );
+}
+
+void KisConfig::setThreadColorspaceConversion( bool threadColorspaceConversion )
+{
+    m_cfg.writeEntry( "thread_colorspace_conversion", threadColorspaceConversion );
 }

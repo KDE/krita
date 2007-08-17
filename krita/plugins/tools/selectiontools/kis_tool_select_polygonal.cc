@@ -155,20 +155,20 @@ void KisToolSelectPolygonal::finish()
 
         if(m_selectionMode == PIXEL_SELECTION){
             KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Polygonal Selection"), dev);
-            KisPixelSelectionSP pixelSelection = dev->pixelSelection();
+            KisPixelSelectionSP getOrCreatePixelSelection = dev->selection()->getOrCreatePixelSelection();
 
             if (!hasSelection || m_selectAction == SELECTION_REPLACE)
             {
-                pixelSelection->clear();
+                getOrCreatePixelSelection->clear();
                 if(m_selectAction == SELECTION_SUBTRACT)
-                    pixelSelection->invert();
+                    getOrCreatePixelSelection->invert();
             }
 
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
 
             KisPainter painter(tmpSel);
             painter.setBounds( currentImage()->bounds() );
-            painter.setPaintColor(KoColor(Qt::black, pixelSelection->colorSpace()));
+            painter.setPaintColor(KoColor(Qt::black, getOrCreatePixelSelection->colorSpace()));
             painter.setFillStyle(KisPainter::FillStyleForegroundColor);
             painter.setStrokeStyle(KisPainter::StrokeStyleNone);
             painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
@@ -182,13 +182,13 @@ void KisToolSelectPolygonal::finish()
             {
                 case SELECTION_REPLACE:
                 case SELECTION_ADD:
-                    pixelSelection->addSelection(tmpSel);
+                    getOrCreatePixelSelection->addSelection(tmpSel);
                     break;
                 case SELECTION_SUBTRACT:
-                    pixelSelection->subtractSelection(tmpSel);
+                    getOrCreatePixelSelection->subtractSelection(tmpSel);
                     break;
                 case SELECTION_INTERSECT:
-                    pixelSelection->intersectSelection(tmpSel);
+                    getOrCreatePixelSelection->intersectSelection(tmpSel);
                     break;
                 default:
                     break;

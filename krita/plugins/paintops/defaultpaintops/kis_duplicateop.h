@@ -65,9 +65,6 @@ class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings {
 
 class KisDuplicateOp : public KisPaintOp {
 
-    typedef KisPaintOp super;
-
-
 public:
 
     KisDuplicateOp(const KisDuplicateOpSettings* settings, KisPainter * painter, KisImageSP image);

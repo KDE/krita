@@ -45,7 +45,6 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
-#include "kis_pattern.h"
 #include "KoColorSpace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
@@ -102,6 +101,8 @@ KisPainter::~KisPainter()
 void KisPainter::begin(KisPaintDeviceSP device)
 {
     if (!device) return;
+
+    Q_ASSERT( device->colorSpace() );
 
     if (m_transaction)
         delete m_transaction;
@@ -681,7 +682,7 @@ void KisPainter::fillPolygon(const vQPointF& points, FillStyle fillStyle)
 
     polygonPath.closeSubpath();
 
-    FillStyle m_fillStyle = fillStyle;
+    m_fillStyle = fillStyle;
     fillPainterPath(polygonPath);
 }
 

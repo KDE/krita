@@ -27,7 +27,7 @@
 #include "compositeops/KoCompositeOpErase.h"
 
 KisGrayColorSpace ::KisGrayColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-            KoLcmsColorSpace<GrayU8Traits>("GRAYU8", i18n("Grayscale 8-bit integer/channel)"), parent, TYPE_GRAY_8, icSigGrayData, p)
+            KoLcmsColorSpace<GrayU8Traits>("GRAYU8", i18n("Grayscale without alpha (8-bit integer/channel)"), parent, TYPE_GRAY_8, icSigGrayData, p)
 {
     addChannel(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
 

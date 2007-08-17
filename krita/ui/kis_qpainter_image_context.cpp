@@ -20,7 +20,7 @@
 #include <ksharedptr.h>
 
 #include "kis_global.h"
-#include "kis_meta_registry.h"
+
 #include "KoColorSpaceRegistry.h"
 #include <KoIntegerMaths.h>
 #include "kis_image.h"

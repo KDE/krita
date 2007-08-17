@@ -46,10 +46,10 @@
 #include "kis_pattern.h"
 #include "KoColorSpace.h"
 #include "kis_types.h"
-#include "kis_vec.h"
+
 #include "kis_selection.h"
 #include "kis_gradient_painter.h"
-#include "kis_meta_registry.h"
+
 #include "KoColorSpaceRegistry.h"
 
 namespace {
@@ -73,7 +73,7 @@ namespace {
 
 
     class LinearGradientStrategy : public GradientShapeStrategy {
-        typedef GradientShapeStrategy super;
+
     public:
         LinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
@@ -86,7 +86,7 @@ namespace {
     };
 
     LinearGradientStrategy::LinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : super(gradientVectorStart, gradientVectorEnd)
+        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
     {
         double dx = gradientVectorEnd.x() - gradientVectorStart.x();
         double dy = gradientVectorEnd.y() - gradientVectorStart.y();
@@ -124,7 +124,7 @@ namespace {
 
 
     class BiLinearGradientStrategy : public LinearGradientStrategy {
-        typedef LinearGradientStrategy super;
+
     public:
         BiLinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
@@ -132,13 +132,13 @@ namespace {
     };
 
     BiLinearGradientStrategy::BiLinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : super(gradientVectorStart, gradientVectorEnd)
+        : LinearGradientStrategy(gradientVectorStart, gradientVectorEnd)
     {
     }
 
     double BiLinearGradientStrategy::valueAt(double x, double y) const
     {
-        double t = super::valueAt(x, y);
+        double t = LinearGradientStrategy::valueAt(x, y);
 
         // Reflect
         if (t < -DBL_EPSILON) {
@@ -150,7 +150,7 @@ namespace {
 
 
     class RadialGradientStrategy : public GradientShapeStrategy {
-        typedef GradientShapeStrategy super;
+
     public:
         RadialGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
@@ -161,7 +161,7 @@ namespace {
     };
 
     RadialGradientStrategy::RadialGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : super(gradientVectorStart, gradientVectorEnd)
+        : GradientShapeStrategy (gradientVectorStart, gradientVectorEnd)
     {
         double dx = gradientVectorEnd.x() - gradientVectorStart.x();
         double dy = gradientVectorEnd.y() - gradientVectorStart.y();
@@ -190,7 +190,7 @@ namespace {
 
 
     class SquareGradientStrategy : public GradientShapeStrategy {
-        typedef GradientShapeStrategy super;
+
     public:
         SquareGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
@@ -203,7 +203,7 @@ namespace {
     };
 
     SquareGradientStrategy::SquareGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : super(gradientVectorStart, gradientVectorEnd)
+        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
     {
         double dx = gradientVectorEnd.x() - gradientVectorStart.x();
         double dy = gradientVectorEnd.y() - gradientVectorStart.y();
@@ -250,7 +250,7 @@ namespace {
 
 
     class ConicalGradientStrategy : public GradientShapeStrategy {
-        typedef GradientShapeStrategy super;
+
     public:
         ConicalGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
@@ -261,7 +261,7 @@ namespace {
     };
 
     ConicalGradientStrategy::ConicalGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : super(gradientVectorStart, gradientVectorEnd)
+        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
     {
         double dx = gradientVectorEnd.x() - gradientVectorStart.x();
         double dy = gradientVectorEnd.y() - gradientVectorStart.y();
@@ -290,7 +290,6 @@ namespace {
 
 
     class ConicalSymetricGradientStrategy : public GradientShapeStrategy {
-        typedef GradientShapeStrategy super;
     public:
         ConicalSymetricGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
@@ -301,7 +300,7 @@ namespace {
     };
 
     ConicalSymetricGradientStrategy::ConicalSymetricGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : super(gradientVectorStart, gradientVectorEnd)
+        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
     {
         double dx = gradientVectorEnd.x() - gradientVectorStart.x();
         double dy = gradientVectorEnd.y() - gradientVectorStart.y();
@@ -469,12 +468,12 @@ namespace {
 }
 
 KisGradientPainter::KisGradientPainter()
-    : super()
+    : KisPainter()
 {
     m_gradient = 0;
 }
 
-KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device) : super(device), m_gradient(0)
+KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device) : KisPainter(device), m_gradient(0)
 {
 }
 

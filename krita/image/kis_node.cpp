@@ -21,10 +21,14 @@
 #include <QMutex>
 #include <QMutexLocker>
 
+
+
 #include <kdebug.h>
 
 #include "kis_global.h"
 #include "kis_node_graph_listener.h"
+#include "kis_node_visitor.h"
+
 
 class KisNode::Private
 {
@@ -59,12 +63,23 @@ KisNode::KisNode( const KisNode & rhs )
 {
     m_d->parent = 0;
     m_d->graphListener = rhs.m_d->graphListener;
+    foreach( KisNodeSP node, rhs.m_d->nodes ) {
+        m_d->nodes.append( node.data()->clone() );
+    }
 }
 
 KisNode::~KisNode()
 {
+    m_d->nodes.clear();
     delete m_d;
 }
+
+bool KisNode::accept(KisNodeVisitor &v)
+{
+    return v.visit( this );
+}
+
+
 
 KisNodeGraphListener * KisNode::graphListener() const
 {
@@ -78,8 +93,7 @@ void KisNode::setGraphListener( KisNodeGraphListener * graphListener )
 
 void KisNode::setDirty()
 {
-    // nodes have an infinite size by default.
-    setDirty( QRect( -qint32_MAX, -qint32_MAX, qint32_MAX, qint32_MAX ) );
+    setDirty( extent() );
 }
 
 void KisNode::setDirty(const QRect & rc)
@@ -191,6 +205,28 @@ int KisNode::index( const KisNodeSP node ) const
     return -1;
 }
 
+QList<KisNodeSP> KisNode::childNodes( QStringList nodeTypes, const KoProperties & properties ) const
+{
+//     if ( nodeTypes.isEmpty() && properties.isEmpty() )
+//         return m_d->nodes;
+
+    QList<KisNodeSP> nodes;
+
+    foreach( KisNodeSP node, m_d->nodes ) {
+        if ( !nodeTypes.isEmpty() ) {
+            foreach ( QString nodeType,  nodeTypes ) {
+                if ( node->inherits( nodeType.toAscii() ) ) {
+                    if ( properties.isEmpty() || node->check( properties ) )
+                        nodes.append( node );
+                }
+            }
+        }
+        else if ( properties.isEmpty() || node->check( properties ) )
+            nodes.append( node );
+        }
+    return nodes;
+}
+
 bool KisNode::add( KisNodeSP newNode, KisNodeSP aboveThis )
 {
     Q_ASSERT( newNode );
@@ -201,6 +237,7 @@ bool KisNode::add( KisNodeSP newNode, KisNodeSP aboveThis )
     if ( newNode->parent() ) return false;
     if ( m_d->nodes.contains(newNode) ) return false;
 
+    newNode->prepareForAddition();
 
     int idx = 0;
 
@@ -227,6 +264,7 @@ bool KisNode::add( KisNodeSP newNode, KisNodeSP aboveThis )
 
     newNode->setParent( this );
     newNode->setGraphListener( m_d->graphListener );
+    newNode->initAfterAddition();
 
     if ( m_d->graphListener )
         m_d->graphListener->nodeHasBeenAdded(this, idx);
@@ -240,7 +278,7 @@ bool KisNode::remove( quint32 index )
     if ( index < childCount() )
     {
         KisNodeSP removedNode = at(index);
-
+        removedNode->prepareForRemoval();
         removedNode->setParent( 0 );
         removedNode->setGraphListener( 0 );
 
@@ -253,7 +291,6 @@ bool KisNode::remove( quint32 index )
 
         return true;
     }
-    kWarning() << "invalid input to KisGroupNode::removeNode()!";
     return false;
 }
 
@@ -261,7 +298,6 @@ bool KisNode::remove( KisNodeSP node )
 {
     if ( node->parent().data() != this)
     {
-        kWarning() << "invalid input to KisGroupNode::removeNode()!";
         return false;
     }
 

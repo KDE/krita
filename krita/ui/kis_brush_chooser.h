@@ -27,7 +27,7 @@ class QCheckBox;
 class KisDoubleWidget;
 
 class KisBrushChooser : public KisItemChooser {
-    typedef KisItemChooser super;
+
     Q_OBJECT
 
 public:

@@ -36,7 +36,7 @@ class WdgImageProperties : public QWidget, public Ui::WdgImageProperties
 };
 
 class KisDlgImageProperties : public KDialog {
-    typedef KDialog super;
+
     Q_OBJECT
 
 public:
@@ -47,7 +47,7 @@ public:
 
     KoColorSpace * colorSpace();
     KoColorProfile * profile();
-    
+
 private slots:
 
     void fillCmbProfiles(const KoID &);

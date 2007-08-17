@@ -25,7 +25,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_doc2.h>
 #include <kis_layer.h>
-#include <kis_meta_registry.h>
 #include <kis_iterators_pixel.h>
 #include <kis_transaction.h>
 #include <kis_math_toolbox.h>
@@ -116,7 +115,7 @@ bool PaintDevice::fastWaveletUntransformation(QObject* wavelet)
         kWarning(41011) << "The passed argument is not a valid Wavelet-object." << endl;
         return false;
     }
-    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->value( paintDevice()->colorSpace()->mathToolboxId().id() );
+    KisMathToolbox* mathToolbox = KisMathToolboxFactoryRegistry::instance()->value( paintDevice()->colorSpace()->mathToolboxId().id() );
     QRect rect = paintDevice()->exactBounds();
     mathToolbox->fastWaveletUntransformation( paintDevice(), rect, wav->wavelet() );
     return true;

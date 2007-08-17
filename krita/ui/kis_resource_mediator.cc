@@ -30,7 +30,8 @@
 
 KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
                      QObject *parent,
-                     const char *name) : super(parent), m_chooser(chooser)
+                     const char *name)
+    : QObject(parent), m_chooser(chooser)
 {
     setObjectName(name);
 

@@ -35,7 +35,9 @@ class QImage;
 /**
    KisPaintEngine is an implementation of Qt's paint engine that works
    on KisPaintDevices. KisPaintDevices generally have a tiled data
-   backend and can have any colorspace as defined in Pigment
+   backend and can have any colorspace as defined in Pigment.
+
+   On QPainter::end() the KisPaintDevice we have worked on is set dirty.
 
    @see KisPaintDevice
    @see KoColorSpace

@@ -114,15 +114,6 @@ public:
     qint32 tabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, qint32 defaultAxis) const;
     void setTabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, qint32 axis) const;
 
-    qint32 dockability();
-    qint32 getDefaultDockability();
-    void setDockability( qint32 dockability);
-
-    float dockerFontSize();
-    float getDefaultDockerFontSize();
-    void setDockerFontSize(float);
-
-
     quint32 getGridMainStyle();
     void setGridMainStyle(quint32 v);
     quint32 getGridSubdivisionStyle();
@@ -168,6 +159,25 @@ public:
 
     bool updateAllOfQPainterCanvas();
     void setUpdateAllOfQpainterCanvas(bool all);
+
+    // Use nearest-neighbour interpolation on KisImage
+    bool fastZoom();
+    void setFastZoom( bool fastZoom );
+
+    // Use Blitz sampling on a QImage
+    bool useSampling();
+    void setSampling( bool sampling );
+
+    // First nearest-neighbour, then smooth scaling
+    bool useDeferredSmoothing();
+    void setDeferredSmoothing( bool deferredSmoothing );
+
+    // Don't use our own method, but use Qt
+    bool useQtSmoothScaling();
+    void setUseQtSmoothScaling( bool useQtSmootScaling );
+
+    bool threadColorspaceConversion();
+    void setThreadColorspaceConversion( bool threadColorspaceConversion );
 
 private:
     KisConfig(const KisConfig&);

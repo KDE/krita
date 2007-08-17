@@ -22,7 +22,12 @@
 #include "kis_node.h"
 #include "krita_export.h"
 /**
+ *
  * KisNodeFacade is the public interface to adding and removing nodes.
+ *
+ * XXX: also make this the public interface for setting node
+ * properties so we don't need notifyPropertyChanged all over the
+ * place?
  *
  */
 class KRITAIMAGE_EXPORT KisNodeFacade {
@@ -30,10 +35,21 @@ class KRITAIMAGE_EXPORT KisNodeFacade {
 public:
 
     /**
+     * Create a new, empty KisNodeFacade
+     */
+    KisNodeFacade();
+
+    /**
      * Create a new kisnodefacade for the given root.
      */
     KisNodeFacade( KisNodeSP root );
+
     virtual ~KisNodeFacade();
+
+    /**
+     * Set the rootnode for this facade
+     */
+    void setRoot( KisNodeSP root );
 
     /**
      * Return the root node for the graph this facade managed
@@ -48,7 +64,8 @@ public:
 
     /**
      * Add an already existing node to the image. The node is put on top
-     * of the nodes in the specified nodegroup.
+     * of the nodes in the specified nodegroup. If parent is 0, then
+     * the root is used as parent.
      *
      * @param node the node to be added
      * @param parent the parent node
@@ -76,7 +93,7 @@ public:
      * returns false if the node is already in this group or any
      * other (remove it first.)
      */
-    bool addNode( KisNodeSP node,  KisNodeSP parent, int index );
+    bool addNode( KisNodeSP node,  KisNodeSP parent, quint32 index );
 
     /**
      * Remove the specified node.

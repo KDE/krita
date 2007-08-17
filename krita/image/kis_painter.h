@@ -57,7 +57,7 @@ class KisPaintInformation;
  * of KisPainter: KisConvolutionPainter, KisFillPainter and KisGradientPainter
  */
 class KRITAIMAGE_EXPORT KisPainter : public KisProgressSubject {
-    typedef KisProgressSubject super;
+
 
 public:
     /// Construct painter without a device

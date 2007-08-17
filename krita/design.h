@@ -20,6 +20,21 @@
   Both libraries are used by the user interface, which is a KOffice
   part. the user interface loads tools and other plugins.
 
+  There are the following types of plugins
+
+<ul>
+  <li> filters
+  <li> tools
+  <li> paintops
+  <li> colorspaces
+  <li> file filters
+  <li> view plugins
+</u>
+ 
+  Of these, file filters exist outside the Krita tree and colorspaces
+  depend only on pigment, which is also outside krita itself. Please
+  consult the plugin writers' manual for more information.
+
  */
 #ifndef DESIGN
 #define DESIGN

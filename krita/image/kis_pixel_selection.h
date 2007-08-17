@@ -25,12 +25,9 @@
 
 #include "kis_types.h"
 #include "kis_paint_device.h"
-#include "kis_mask.h"
 #include "kis_selection_component.h"
 
 #include <krita_export.h>
-
-const QString KIS_PIXEL_SELECTION_ID = "KisPixelSelection";
 
 /**
  * KisPixelSelection contains a byte-map representation of a layer, where
@@ -41,27 +38,38 @@ const QString KIS_PIXEL_SELECTION_ID = "KisPixelSelection";
  *       often you want to combine several actions in to perfom one operation and you
  *       do not want recomposition to happen all the time.
  */
-class KRITAIMAGE_EXPORT KisPixelSelection : public KisMask, public KisSelectionComponent {
+class KRITAIMAGE_EXPORT KisPixelSelection : public KisPaintDevice, public KisSelectionComponent {
 
 public:
+
+
     /**
-     * Create a new KisPixelSelection
-    * @param dev the parent paint device. The selection will never be bigger than the parent
-     *              paint device.
+     * Create a new KisPixelSelection. This selection will not have a
+     * parent paint device.
+     */
+    KisPixelSelection();
+
+    /**
+     * Create a new KisPixelSelection. The selection will never be
+     * bigger than the parent paint device. This constructor will not
+     * set the newly created pixel selection on the parent paintdevice.
+     *
+     * The parent paint device can be the paintDevice of a paint
+     * layer. If the selection belongs to a paint layer, both the
+     * selection and the paint device will have the paint layer set as
+     * parent layer.
+     *
+     * @param dev the parent paint device.
      */
     KisPixelSelection(KisPaintDeviceSP dev);
 
 
     /**
-     * Create a new KisPixelSelection from the given mask. The selection
-     * will share its pixel data with the mask
+     * Create a new KisPixelSelection from the given mask. The
+     * selection will share its pixel data with the mask.
      */
     KisPixelSelection( KisPaintDeviceSP parent, KisMaskSP mask );
 
-    /**
-     * Create a new KisPixelSelection. This selection will not have a parent paint device.
-     */
-    KisPixelSelection();
 
     /**
      * Copy the selection
@@ -69,25 +77,6 @@ public:
     KisPixelSelection(const KisPixelSelection& rhs);
 
     virtual ~KisPixelSelection();
-
-
-
-    virtual QString nodeType()
-        {
-            return KIS_PIXEL_SELECTION_ID;
-        }
-
-    virtual bool canHaveChildren()
-        {
-            return false;
-        }
-
-    QIcon icon() const
-        {
-            return KIcon("frame-edit"); //XXX: Get good icon!
-        }
-
-
 
     // Returns selectedness, or 0 if invalid coordinates
     quint8 selected(qint32 x, qint32 y) const;
@@ -134,13 +123,20 @@ public:
      */
     QRect selectedExactRect() const;
 
-    // if the parent layer is interested in keeping up to date with the dirtyness
-    // of this layer, set to true
-    void setInterestedInDirtyness(bool b) { m_dirty = b; }
-    bool interestedInDirtyness() const { return m_dirty; }
+    /**
+     * If the parent layer is interested in keeping up to date with
+     * the dirtyness of this layer, set to true
+     */
+    void setInterestedInDirtyness(bool b);
 
-    virtual void setDirty(const QRect & rc);
-    virtual void setDirty();
+    /**
+     * returns true if the parent layer is interested in keeping up to
+     * date with the dirtyness of this layer.
+     */
+    bool interestedInDirtyness() const;
+
+    void setDirty(const QRect & rc);
+    void setDirty();
 
     QVector<QPolygon> outline();
 
@@ -151,16 +147,10 @@ public:
 private:
 
     // We don't want these methods to be used on selections:
-    void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
-        {
-            KisPaintDevice::extent(x,y,w,h);
-        }
 
-    QRect extent() const { return KisPaintDevice::extent(); }
-
-    void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
+    QRect extent() const
         {
-            return KisPaintDevice::exactBounds(x,y,w,h);
+            return KisPaintDevice::extent();
         }
 
     QRect exactBounds() const
@@ -168,10 +158,6 @@ private:
             return KisPaintDevice::exactBounds();
         }
 
-    QRegion region() const
-        {
-            return KisPaintDevice::region();
-        }
 
     enum EdgeType
     {
@@ -187,8 +173,9 @@ private:
     void appendCoordinate(QPolygon * path, int x, int y, EdgeType edge);
 
 private:
-    KisPaintDeviceWSP m_parentPaintDevice;
-    bool m_dirty;
+
+    struct Private;
+    Private * const m_d;
 };
 
 #endif // KIS_PIXEL_SELECTION_H_

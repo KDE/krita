@@ -37,7 +37,7 @@
 #include <knuminput.h>
 #include <khbox.h>
 
-#include <kis_meta_registry.h>
+
 #include <kis_factory.h>
 #include <kis_canvas_subject.h>
 #include <KoColorSpaceRegistry.h>
@@ -47,7 +47,8 @@
 #include "kis_wet_colorspace.h"
 #include "kis_wet_palette_widget.h"
 
-KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : super(parent)
+KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name)
+    : QWidget(parent)
 {
     setObjectName(name);
 

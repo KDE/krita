@@ -62,12 +62,9 @@ public:
     GeneralTab( QWidget *parent = 0, const char *name = 0 );
 
     enumCursorStyle cursorStyle();
-//     enumKoDockability dockability();
-//     float dockerFontSize();
-    
+
     void setDefault();
-private:
-//     QButtonGroup m_dockabilityGroup;
+
 };
 
 //=======================
@@ -166,8 +163,8 @@ private slots:
 private:
     class DeviceSettings {
     public:
-        DeviceSettings(KisCanvasWidget::X11TabletDevice *tabletDevice, bool enabled, 
-                       qint32 xAxis, qint32 yAxis, qint32 pressureAxis, 
+        DeviceSettings(KisCanvasWidget::X11TabletDevice *tabletDevice, bool enabled,
+                       qint32 xAxis, qint32 yAxis, qint32 pressureAxis,
                        qint32 xTiltAxis, qint32 yTiltAxis, qint32 wheelAxis,
                        qint32 toolIDAxis, qint32 serialNumberAxis);
         DeviceSettings();
@@ -176,7 +173,7 @@ private:
 
         void setEnabled(bool enabled);
         bool enabled() const;
-    
+
         qint32 numAxes() const;
 
         void setXAxis(qint32 axis);
@@ -187,7 +184,7 @@ private:
         void setWheelAxis(qint32 axis);
         void setToolIDAxis(qint32 axis);
         void setSerialNumberAxis(qint32 axis);
-    
+
         qint32 xAxis() const;
         qint32 yAxis() const;
         qint32 pressureAxis() const;
@@ -196,7 +193,7 @@ private:
         qint32 wheelAxis() const;
         qint32 toolIDAxis() const;
         qint32 serialNumberAxis() const;
-    
+
     private:
         KisCanvasWidget::X11TabletDevice *m_tabletDevice;
 
@@ -212,8 +209,7 @@ private:
     };
 
     class TabletDeviceSettingsDialog : public KDialog {
-        typedef KDialog super;
-    
+
     public:
         TabletDeviceSettingsDialog(const QString& deviceName,
                                    DeviceSettings settings,
@@ -222,12 +218,12 @@ private:
         virtual ~TabletDeviceSettingsDialog();
 
         DeviceSettings settings();
-    
+
     private:
         WdgTabletDeviceSettings *m_page;
         DeviceSettings m_settings;
     };
-    
+
     void initTabletDevices();
 
     Q3ValueVector<DeviceSettings> m_deviceSettings;

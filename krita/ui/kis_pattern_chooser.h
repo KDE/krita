@@ -23,7 +23,7 @@
 class QLabel;
 
 class KisPatternChooser : public KisItemChooser {
-    typedef KisItemChooser super;
+
     Q_OBJECT
 
 public:

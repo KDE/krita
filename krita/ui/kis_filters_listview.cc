@@ -175,6 +175,7 @@ void KisFiltersListView::setLayer(KisLayerSP layer) {
 
 void KisFiltersListView::setCurrentFilter(KoID filter)
 {
+    Q_UNUSED( filter );
     // XXX!
 //    setCurrentItem(findItem(filter.name()));
 }

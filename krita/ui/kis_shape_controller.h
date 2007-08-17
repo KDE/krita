@@ -51,7 +51,7 @@ public:
 
     void setInitialShapeForView( KisView2 * view );
 
-    KoShape * shapeForLayer( KisLayerSP layer );
+    KoShape * shapeForLayer( KisNodeSP layer );
 
 private slots:
 
@@ -60,20 +60,13 @@ private slots:
     // These slots keep track of changes in the layer stack and make
     // sure that the shape stack doesn't get out of sync
     void slotLayerAdded( KisLayerSP layer );
-    void slotLayerRemoved( KisLayerSP layer,  KisGroupLayerSP wasParent,  KisLayerSP wasAboveThis );
-    void slotLayerMoved( KisLayerSP layer,  KisGroupLayerSP previousParent, KisLayerSP wasAboveThis );
+    void slotLayerRemoved( KisLayerSP layer );
+    void slotLayerMoved( KisLayerSP layer );
     void slotLayersChanged( KisGroupLayerSP rootLayer );
-
-    void slotMaskAdded( KisMaskSP mask );
-    void slotMaskRemoved( KisMaskSP mask, KisLayerSP wasParent,  KisMaskSP wasAboveThis );
-    void slotMaskMoved( KisMaskSP mask, KisLayerSP previousParent, KisMaskSP wasAboveThis );
-    void slotMasksChanged( KisLayerSP layer );
 
 private:
 
     int layerMapSize();
-    int maskMapSize();
-
 
 private:
 

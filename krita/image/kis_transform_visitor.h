@@ -22,7 +22,7 @@
 
 #include "klocale.h"
 
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
@@ -37,14 +37,14 @@
 class KisProgressDisplayInterface;
 class KisFilterStrategy;
 
-class KisTransformVisitor : public KisLayerVisitor {
+class KisTransformVisitor : public KisNodeVisitor {
 
 public:
 
     KisTransformVisitor(KisImageSP img, double  xscale, double  yscale,
         double  /*xshear*/, double  /*yshear*/, double angle,
         qint32  tx, qint32  ty, KisProgressDisplayInterface *progress, KisFilterStrategy *filter)
-        : KisLayerVisitor()
+        : KisNodeVisitor()
         , m_sx(xscale)
         , m_sy(yscale)
         , m_tx(tx)
@@ -93,7 +93,7 @@ public:
     {
 	layer->resetProjection();
 
-        KisLayerSP child = layer->firstChild();
+        KisNodeSP child = layer->firstChild();
         while (child) {
             child->accept(*this);
             child = child->nextSibling();

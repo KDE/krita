@@ -78,6 +78,8 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
                                           KisPainter * painter,
                                           KisImageSP image)
 {
+    Q_UNUSED( image );
+
     const KisCPaintOpSettings * cpaintOpSettings =
         dynamic_cast<const KisCPaintOpSettings*>( settings );
 
@@ -147,7 +149,7 @@ void KisCPaintOpSettings::resetCurrentBrush()
 //=================
 
 KisCPaintOp::KisCPaintOp(Brush * brush, const KisCPaintOpSettings * settings, KisPainter * painter)
-    : super(painter)
+    : KisPaintOp(painter)
 {
     m_currentBrush = brush;
     m_ink = settings->ink();

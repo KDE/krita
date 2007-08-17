@@ -87,7 +87,7 @@ public:
 
 
 KisSmearyOp::KisSmearyOp(KisPainter * painter)
-    : super(painter)
+    : KisPaintOp(painter)
 {
     for (int i = 0; i < NUMBER_OF_TUFTS / 2; ++i) {
         m_leftTufts.append(new SmearyTuft(i, STARTING_PAINTLOAD, painter->paintColor()));
@@ -174,6 +174,7 @@ void KisSmearyOp::paintAt(const KisPaintInformation& info)
 
 KisPaintOp * KisSmearyOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
 {
+    Q_UNUSED( image );
     KisPaintOp * op = new KisSmearyOp(painter);
     Q_CHECK_PTR(op);
     return op;

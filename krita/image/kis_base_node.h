@@ -26,7 +26,9 @@
 #include "krita_export.h"
 #include "KoDocumentSectionModel.h"
 
-class KisLayerVisitor;
+class KoProperties;
+
+class KisNodeVisitor;
 
 /**
  * A KisBaseNode is the base class for all components of an image:
@@ -94,22 +96,57 @@ public:
      *
      * Subclasses can extent this list with new properties, like
      * opacity for layers or visualized for masks.
+     *
+     * The order of properties is, unfortunately, for now, important,
+     * so take care which properties superclasses of your class
+     * define.
+     *
+     * KisBaseNode defines visible = 0, locked = 1
+     * KisLayer defines  opacity = 2, compositeOp = 3
+     * KisMask defines active = 2 (KisMask does not inherit kislayer)
      */
-    virtual KoDocumentSectionModel::PropertyList properties() const;
-
-    virtual void setProperties( const KoDocumentSectionModel::PropertyList &properties  );
-
-
+    virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
 
     /**
-     * Accept the KisLayerVisitor (for the Visitor design pattern),
-     * should call the correct function on the KisLayerVisitor for
-     * this node type.
+     * Change the section model properties.
+     */
+    virtual void setSectionModelProperties( const KoDocumentSectionModel::PropertyList &properties  );
+
+    /**
+     * Return all the properties of this layer as a KoProperties-based
+     * serializable key-value list.
+     */
+    KoProperties & nodeProperties() const;
+
+    /**
+     * Merge the specified properties with the properties of this
+     * layer. Whereever these properties overlap, the value of the
+     * node properties is changed. No properties on the node are
+     * deleted. If there are new properties in this list, they will be
+     * added on the node.
+     */
+    void mergeNodeProperties( const KoProperties & properties );
+
+    /**
+     * Compare the given properties list with the properties of this
+     * node.
+     *
+     * @return false only if the same property exists in both lists
+     * but with a different value. Properties that are not in both
+     * lists are disregarded.
+     */
+    bool check( const KoProperties & properties );
+
+    /**
+     * Accept the KisNodeVisitor (for the Visitor design pattern),
+     * should call the correct function on the KisNodeVisitor for this
+     * node type, so you need to override it for all leaf classes in
+     * the node inheritance hierarchy.
      *
      * return false if the visitor could not succesfully act on this
      * node instance.
      */
-    virtual bool accept(KisLayerVisitor &)
+    virtual bool accept(KisNodeVisitor &)
         {
             return false;
         }
@@ -193,6 +230,25 @@ public:
     virtual void setY(qint32)
         {
         }
+
+        /**
+     * Returns an approximation of where the bounds on actual data are
+     * in this node.
+     */
+    virtual QRect extent() const
+        {
+            return QRect();
+        }
+
+    /**
+     * Returns the exact bounds of where the actual data resides in
+     * this node.
+     */
+    virtual QRect exactBounds() const
+        {
+            return QRect();
+        }
+
 
 private:
 

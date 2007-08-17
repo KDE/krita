@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,30 +15,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _KIS_META_REGISTRY_
-#define _KIS_META_REGISTRY_
 
-#include <krita_export.h>
+#ifndef KIS_PIXEL_SELECTION_H
+#define KIS_PIXEL_SELECTION_H
 
-class KisMathToolboxFactoryRegistry;
+#include <QtTest/QtTest>
 
-class KRITAIMAGE_EXPORT KisMetaRegistry {
+class KisPixelSelectionTest : public QObject
+{
+    Q_OBJECT
 
-public:
+private slots:
 
-    virtual ~KisMetaRegistry();
-    static KisMetaRegistry* instance();
+    void testCreation();
 
-    KisMathToolboxFactoryRegistry* mtRegistry() { return m_mtRegistry; }
-
-private:
-
-    KisMetaRegistry();
-    KisMetaRegistry( const KisMetaRegistry& );
-    KisMetaRegistry operator=( const KisMetaRegistry& );
-
-    static KisMetaRegistry * m_singleton;
-
-    KisMathToolboxFactoryRegistry* m_mtRegistry;
 };
+
 #endif
+

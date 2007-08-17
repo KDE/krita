@@ -41,7 +41,7 @@
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
-#include "kis_meta_registry.h"
+
 #include <kis_transaction.h>
 #include <kis_undo_adapter.h>
 #include <kis_global.h>
@@ -125,10 +125,10 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
 
         KisGroupLayerSP parent = image->rootLayer();
         if (m_view->activeLayer())
-            parent = m_view->activeLayer()->parentLayer().data();
+            parent = dynamic_cast<KisGroupLayer*>( m_view->activeLayer()->parentLayer().data() );
 
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), i18n("Drop Shadow"), opacity, shadowDev));
-        image->addLayer( KisLayerSP(l.data()), parent, src->nextSibling() );
+        image->addNode( l.data(), parent.data(), src->nextSibling() );
 
         if (allowResize)
         {

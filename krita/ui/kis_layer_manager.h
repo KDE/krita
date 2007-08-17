@@ -83,18 +83,18 @@ public slots:
     void showLayerProperties(KisLayerSP layer);
 
     void layerAdd();
-    void addLayer(KisGroupLayerSP parent, KisLayerSP above);
-    void addGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
+    void addLayer(KisNodeSP parent, KisLayerSP above);
+    void addGroupLayer(KisNodeSP parent, KisLayerSP above);
 
     void addCloneLayer();
-    void addCloneLayer( KisGroupLayerSP parent, KisLayerSP above );
+    void addCloneLayer( KisNodeSP parent, KisLayerSP above );
 
     void addShapeLayer();
-    void addShapeLayer( KisGroupLayerSP parent, KisLayerSP above );
+    void addShapeLayer( KisNodeSP parent, KisLayerSP above );
 
     void addAdjustmentLayer();
-    void addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above);
-    void addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
+    void addAdjustmentLayer(KisNodeSP parent, KisLayerSP above);
+    void addAdjustmentLayer(KisNodeSP parent, KisLayerSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
 
     void layerRemove();
     void layerDuplicate();

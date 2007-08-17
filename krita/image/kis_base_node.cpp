@@ -17,22 +17,21 @@
  */
 #include <klocale.h>
 #include "kis_base_node.h"
-
+#include <KoProperties.h>
 
 class KisBaseNode::Private
 {
 public:
 
-    bool visible;
-    bool locked;
+    KoProperties properties;
     KisBaseNodeSP linkedTo;
 };
 
 KisBaseNode::KisBaseNode()
     : m_d( new Private() )
 {
-    m_d->visible = true;
-    m_d->locked = false;
+    setVisible( true );
+    setLocked( false );
     m_d->linkedTo = 0;
 }
 
@@ -42,8 +41,11 @@ KisBaseNode::KisBaseNode( const KisBaseNode & rhs )
     , KisShared( rhs )
     ,  m_d( new Private() )
 {
-    m_d->visible = rhs.m_d->visible;
-    m_d->locked = rhs.m_d->locked;
+    QMapIterator<QString, QVariant> iter = rhs.m_d->properties.propertyIterator();
+    while ( iter.hasNext() ) {
+        iter.next();
+        m_d->properties.setProperty( iter.key(), iter.value() );
+    }
     m_d->linkedTo = rhs.m_d->linkedTo;
 }
 
@@ -52,7 +54,7 @@ KisBaseNode::~KisBaseNode()
     delete m_d;
 }
 
-KoDocumentSectionModel::PropertyList KisBaseNode::properties() const
+KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l;
     l << KoDocumentSectionModel::Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible());
@@ -61,11 +63,40 @@ KoDocumentSectionModel::PropertyList KisBaseNode::properties() const
     return l;
 }
 
-void KisBaseNode::setProperties( const KoDocumentSectionModel::PropertyList &properties )
+void KisBaseNode::setSectionModelProperties( const KoDocumentSectionModel::PropertyList &properties )
 {
     setVisible( properties.at( 0 ).state.toBool() );
     setLocked( properties.at( 1 ).state.toBool() );
 }
+
+KoProperties & KisBaseNode::nodeProperties() const
+{
+    return m_d->properties;
+}
+
+void KisBaseNode::mergeNodeProperties( const KoProperties & properties )
+{
+    QMapIterator<QString, QVariant> iter = properties.propertyIterator();
+    while ( iter.hasNext() )
+    {
+        iter.next();
+        m_d->properties.setProperty( iter.key(), iter.value() );
+    }
+}
+
+bool KisBaseNode::check( const KoProperties & properties )
+{
+    QMapIterator<QString, QVariant> iter = properties.propertyIterator();
+    while ( iter.hasNext() ) {
+        iter.next();
+        if ( m_d->properties.contains( iter.key() ) ) {
+            if ( m_d->properties.value( iter.key() ) != iter.value() )
+                return false;
+        }
+    }
+    return true;
+}
+
 
 QImage KisBaseNode::createThumbnail(qint32 w, qint32 h )
 {
@@ -83,22 +114,22 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h )
 
 const bool KisBaseNode::visible() const
 {
-    return m_d->visible;
+    return m_d->properties.boolProperty( "visible", true );
 }
 
 void KisBaseNode::setVisible(bool visible)
 {
-    m_d->visible = visible;
+    m_d->properties.setProperty( "visible", visible );
 }
 
 bool KisBaseNode::locked() const
 {
-    return m_d->locked;
+    return m_d->properties.boolProperty( "locked", false );
 }
 
 void KisBaseNode::setLocked(bool locked)
 {
-    m_d->locked = locked;
+    m_d->properties.setProperty( "locked", locked );
 }
 
 #include "kis_base_node.moc"

@@ -32,7 +32,7 @@
 #include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_painter.h"
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_layer.h"
 
 class KisCloneLayer::Private {
@@ -146,9 +146,9 @@ QIcon KisCloneLayer::icon() const
     return KIcon("edit-copy");
 }
 
-KoDocumentSectionModel::PropertyList KisCloneLayer::properties() const
+KoDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = KisLayer::properties();
+    KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     if ( m_d->copyFrom )
         l << KoDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
     return l;
@@ -204,7 +204,7 @@ QRect KisCloneLayer::exactBounds() const
     return QRect();
 }
 
-bool KisCloneLayer::accept(KisLayerVisitor & v)
+bool KisCloneLayer::accept(KisNodeVisitor & v)
 {
     return v.visit( this );
 }
@@ -247,3 +247,5 @@ CopyLayerType KisCloneLayer::copyType() const
 {
     return m_d->type;
 }
+
+#include "kis_clone_layer.moc"

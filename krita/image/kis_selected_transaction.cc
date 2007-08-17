@@ -20,13 +20,14 @@
 #include "kis_selected_transaction.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
+#include "kis_selection.h"
 
 KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent) :
     KisTransaction(name, device, parent),
     m_device(device),
     m_hadSelection(device->hasSelection())
 {
-    m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(device->pixelSelection().data()));
+    m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(device->selection()->getOrCreatePixelSelection().data()));
     if(! m_hadSelection) {
         m_device->deselect(); // let us not be the cause of select
     }
@@ -48,7 +49,7 @@ void KisSelectedTransaction::redo()
         return;
     }
 
-    super::redo();
+    KisTransaction::redo();
     m_selTransaction->redo();
     if(m_redoHasSelection)
         m_device->selection();
@@ -63,7 +64,7 @@ void KisSelectedTransaction::undo()
 {
     m_redoHasSelection = m_device->hasSelection();
 
-    super::undo();
+    KisTransaction::undo();
     m_selTransaction->undo();
     if(m_hadSelection)
         m_device->selection();
@@ -78,7 +79,7 @@ void KisSelectedTransaction::undoNoUpdate()
 {
     m_redoHasSelection = m_device->hasSelection();
 
-    super::undoNoUpdate();
+    KisTransaction::undoNoUpdate();
     m_selTransaction->undoNoUpdate();
     if(m_hadSelection)
         m_device->selection();

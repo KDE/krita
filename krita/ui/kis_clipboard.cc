@@ -36,7 +36,7 @@
 // kritaimage
 #include <kis_types.h>
 #include <kis_paint_device.h>
-#include <kis_meta_registry.h>
+
 #include <kis_annotation.h>
 
 // local

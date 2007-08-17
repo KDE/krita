@@ -30,7 +30,7 @@ class QTableWidgetItem;
 typedef QList<QTableWidgetItem *> vQTableWidgetItem;
 
 class KisItemChooser : public QWidget {
-    typedef QWidget super;
+
     Q_OBJECT
 
 public:

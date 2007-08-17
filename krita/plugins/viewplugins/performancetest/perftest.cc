@@ -41,7 +41,7 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
-#include "kis_meta_registry.h"
+
 #include "kis_resourceserver.h"
 #include "kis_cursor.h"
 #include "kis_doc2.h"

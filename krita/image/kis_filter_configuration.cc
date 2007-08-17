@@ -43,7 +43,9 @@ KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 vers
      d->version = version;
 }
 
-KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs) : d(new Private)
+KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)
+    : KisPropertiesConfiguration( rhs )
+    , d( new Private )
 {
     d->name = rhs.d->name;
     d->version = rhs.d->version;
@@ -86,7 +88,7 @@ void KisFilterConfiguration::fromLegacyXML(const QDomElement& e)
 {
     d->name = e.attribute("name");
     d->version = e.attribute("version").toInt();
-    
+
     QDomNode n = e.firstChild();
 
 

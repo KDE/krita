@@ -37,7 +37,7 @@
 #include <knuminput.h>
 
 #include <kis_painter.h>
-#include <kis_meta_registry.h>
+
 #include <KoColorSpaceRegistry.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -47,7 +47,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_progress_display_interface.h>
-#include <kis_vec.h>
+
 
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_cubism_filter.h"

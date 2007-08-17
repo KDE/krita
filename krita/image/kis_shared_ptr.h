@@ -95,10 +95,9 @@ class KisSharedPtr {
 
         /**
         * @return the contained pointer. If you delete the contained
-        * pointer, you will make KisSharedPtr very unhappy. If you put
-        * the contained pointer in another KisSharedPtr, they won't
-        * know about each other, which again, will make one of the
-        * shared pointers very unhappy at some time.
+        * pointer, you will make KisSharedPtr very unhappy. It is
+        * perfectly save to put the contained pointer in another
+        * KisSharedPtr, though.
         */
         inline T* data() { return d; }
 

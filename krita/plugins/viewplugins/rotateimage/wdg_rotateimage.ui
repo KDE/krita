@@ -19,7 +19,7 @@
       <item row="0" column="0" >
         <widget class="QGroupBox" name="grpDirection" >
           <property name="title" >
-            <string>Qt::Orientation</string>
+            <string>Orientation</string>
           </property>
           <layout class="QGridLayout" >
             <item rowspan="1" row="0" column="0" colspan="2" >

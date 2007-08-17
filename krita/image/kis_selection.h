@@ -53,20 +53,20 @@ class KisSelectionComponent;
  * KisSelection contains a byte-map representation of a layer, where
  * the value of a byte signifies whether a corresponding pixel is selected, or not.
  *
- * NOTE: If you need to manually call emitSelectionChanged on the owner paint device
- *       of a selection. KisSelection does not emit any signals by itself because
- *       often you want to combine several actions in to perfom one operation and you
- *       do not want recomposition to happen all the time.
+ * NOTE: You need to manually call emitSelectionChanged on the owner
+ * paint device of a selection. KisSelection does not emit any signals
+ * by itself because often you want to combine several actions in to
+ * perfom one operation and you do not want recomposition to happen
+ * all the time.
  */
-class KRITAIMAGE_EXPORT KisSelection : public KisMask {
-
-    typedef KisMask super;
+class KRITAIMAGE_EXPORT KisSelection : public KisPaintDevice {
 
 public:
     /**
-     * Create a new KisSelection
-    * @param dev the parent paint device. The selection will never be bigger than the parent
-     *              paint device.
+     * Create a new KisSelection.
+     *
+     * @param dev the parent paint device. The selection will never be
+     * bigger than the parent paint device.
      */
     KisSelection(KisPaintDeviceSP dev);
 
@@ -88,38 +88,45 @@ public:
 
     virtual ~KisSelection();
 
-
-    virtual QString nodeType()
-        {
-            return KIS_SELECTION_ID;
-        }
-
-    virtual bool canHaveChildren()
-        {
-            return false;
-        }
-
     QIcon icon() const
         {
             return KIcon("frame-edit"); //XXX: Get good icon!
         }
 
 
-
-    /// Returns selectedness, or 0 if invalid coordinates
+    /**
+     * Returns selectedness of the specified pixel, or 0 if invalid
+     * coordinates
+     */
     quint8 selected(qint32 x, qint32 y) const;
 
+    /**
+     * Invert the selection.
+     *
+     * XXX: The extent that is inverted is the total
+     * extent of the selection project, not that of the selection
+     * components, the parent paint device or the image. Shouldn't we
+     * fix this?
+     */
     void invert();
 
+    /**
+     * Clear the selection.
+     *
+     * XXX: shouldn't we also clear the selection components?
+     */
     void clear();
     void clear(const QRect& r);
 
-    /// Tests if the the rect is totally outside the selection
+    /**
+     * Tests if the the rect is totally outside the selection
+     */
     bool isTotallyUnselected(QRect r) const;
 
     /**
-     * Tests if the the rect is totally outside the selection, but uses selectedRect
-     * instead of selectedRect, and this is faster (but might deliver false positives!)
+     * Tests if the the rect is totally outside the selection, but
+     * uses selectedRect instead of selectedRect, and this is faster
+     * (but might deliver false positives!)
      */
     bool isProbablyTotallyUnselected(QRect r) const;
 
@@ -137,18 +144,44 @@ public:
 
     void paint(QImage* img, const QRect & r);
 
-    // if the parent layer is interested in keeping up to date with the dirtyness
-    // of this layer, set to true
-    void setInterestedInDirtyness(bool b) { m_dirty = b; }
-    bool interestedInDirtyness() const { return m_dirty; }
+    /**
+     * If the parent paint device is interested in keeping up to date
+     * with the dirtyness of this selection, set to true
+     */
+    void setInterestedInDirtyness(bool b) { m_interestedInDirtyness = b; }
+
+    /**
+     * returns true if the parent paint device is interested in
+     * keeping up with the dirtyness of the selection.
+     */
+    bool interestedInDirtyness() const { return m_interestedInDirtyness; }
 
     virtual void setDirty(const QRect & rc);
     virtual void setDirty();
 
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
+
+    /**
+     * return the pixel selection component of this selection or zero
+     * if hasPixelSelection() returns false.
+     */
     KisPixelSelectionSP pixelSelection();
+
+    /**
+     * return the vector selection component of this selection or zero
+     * if hasShapeSelection() returns false.
+     */
     KisSelectionComponent* shapeSelection();
+
+
+    /**
+     * Return the pixel selection associated with this selection or
+     * create a new one if there is currently no pixel selection
+     * component in this selection.
+     */
+    KisPixelSelectionSP getOrCreatePixelSelection();
+
     void setPixelSelection(KisPixelSelectionSP pixelSelection);
     void setShapeSelection(KisSelectionComponent* shapeSelection);
 
@@ -158,31 +191,24 @@ public:
 private:
 
     // We don't want these methods to be used on selections:
-    void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
+
+    QRect extent() const
         {
-            KisPaintDevice::extent(x,y,w,h);
+            return KisPaintDevice::extent();
         }
 
-    QRect extent() const { return KisPaintDevice::extent(); }
-
-    void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
-        {
-            return KisPaintDevice::exactBounds(x,y,w,h);
-        }
 
     QRect exactBounds() const
         {
             return KisPaintDevice::exactBounds();
         }
 
-    QRegion region() const
-        {
-            return KisPaintDevice::region();
-        }
 
 private:
+
+    // XXX: Move to Private class!
     KisPaintDeviceWSP m_parentPaintDevice;
-    bool m_dirty;
+    bool m_interestedInDirtyness;
     bool m_hasPixelSelection;
     bool m_hasShapeSelection;
     KisPixelSelectionSP m_pixelSelection;

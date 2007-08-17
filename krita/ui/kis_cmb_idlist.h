@@ -33,8 +33,6 @@
  */
 class KRITAUI_EXPORT KisCmbIDList : public QComboBox
 {
-    typedef QComboBox super;
-
     Q_OBJECT
 
 public:

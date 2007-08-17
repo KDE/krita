@@ -39,7 +39,7 @@ class KoShapeControllerBase;
 class KisView2;
 class KisChildDoc;
 class KisUndoAdapter;
-class KisLayerModel;
+class KisNodeModel;
 
 /**
  * The class that represents a Krita document containing content and
@@ -136,13 +136,13 @@ public:
      */
     KoShapeControllerBase * shapeController();
 
-    KoShape * shapeForLayer( KisLayerSP layer );
+    KoShape * shapeForLayer( KisNodeSP layer );
 
     /**
      * The layer model provides a light-weight Qt model-view
      * compatible model on the internal Krita image layer hierarchy.
      */
-    KisLayerModel * layerModel();
+    KisNodeModel * layerModel();
 
 public slots:
     void slotImageUpdated();

@@ -99,44 +99,66 @@ public:
 
     bool willDegrade(ColorSpaceIndependence independence) const
         {
+            Q_UNUSED( independence );
             return true;
         }
 
-    bool profileIsCompatible(KoColorProfile* /*profile*/) const
+    bool profileIsCompatible(KoColorProfile* profile) const
         {
+            Q_UNUSED( profile );
             return false;
         }
-    void fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile * /*profile*/) const
+    void fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile * profile) const
         {
+            Q_UNUSED( c );
+            Q_UNUSED( dstU8 );
+            Q_UNUSED( profile );
             // Don't call this!
             Q_ASSERT( 0 == 1 );
         }
 
-    void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KoColorProfile * /*profile*/) const
+    void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KoColorProfile * profile) const
         {
+            Q_UNUSED( c );
+            Q_UNUSED( opacity );
+            Q_UNUSED( dstU8 );
+            Q_UNUSED( profile );
             // Don't call this!
             Q_ASSERT( 0 == 1 );
         }
 
-    void toQColor(const quint8 *srcU8, QColor *c, KoColorProfile * /*profile*/) const
+    void toQColor(const quint8 *srcU8, QColor *c, KoColorProfile * profile) const
         {
+            Q_UNUSED( srcU8 );
+            Q_UNUSED( c );
+            Q_UNUSED( profile );
             // Don't call this!
             Q_ASSERT( 0 == 1 );
         }
 
-    void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/) const
+    void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KoColorProfile * profile) const
         {
+            Q_UNUSED( srcU8 );
+            Q_UNUSED( c );
+            Q_UNUSED( opacity );
+            Q_UNUSED( profile );
             // Don't call this!
             Q_ASSERT( 0 == 1 );
         }
 
     void fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
         {
+            Q_UNUSED( srcU8 );
+            Q_UNUSED( dstU8 );
+            Q_UNUSED( nPixels );
             // Don't call this!
             Q_ASSERT( 0 == 1 );
         }
     void toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
         {
+            Q_UNUSED( srcU8 );
+            Q_UNUSED( dstU8 );
+            Q_UNUSED( nPixels );
             // Don't call this!
             Q_ASSERT( 0 == 1 );
         }

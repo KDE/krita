@@ -34,7 +34,8 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_shared.h"
-
+#include "kis_node_graph_listener.h"
+#include "kis_node_facade.h"
 #include <krita_export.h>
 
 class KoColorSpace;
@@ -47,13 +48,12 @@ class KisFilterStrategy;
 class KoColorProfile;
 class KisProgressDisplayInterface;
 class KisPerspectiveGrid;
-class KisProjection;
 
 /**
  * This is the image class, it contains a tree of KisLayer stack and meta information about the image. And it also provides some functions
  * to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject, public KisShared {
+class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public KisNodeGraphListener, public KisShared {
 
     Q_OBJECT
 
@@ -62,6 +62,15 @@ public:
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
 
+public: // KisNodeGraphListener implementation
+
+    void aboutToAddANode( KisNode *parent, int index );
+    void nodeHasBeenAdded( KisNode *parent, int index );
+    void aboutToRemoveANode( KisNode *parent, int index );
+    void nodeHasBeenRemoved( KisNode *parent, int index );
+    void aboutToMoveNode( KisNode * parent, int oldIndex, int newIndex );
+    void nodeHasBeenMoved( KisNode * parent, int oldIndex, int newIndex );
+
 public:
 
     /**
@@ -69,36 +78,46 @@ public:
      * using the given profile. The exposure setting is used if the image
      * has a high dynamic range.
      */
-    virtual void renderToPainter(qint32 srcX,
-                                 qint32 srcY,
-                                 qint32 dstX,
-                                 qint32 dstY,
-                                 qint32 width,
-                                 qint32 height,
-                                 QPainter &painter,
-                                 KoColorProfile *profile,
-                                 float exposure = 0.0f);
+    void renderToPainter(qint32 srcX,
+                         qint32 srcY,
+                         qint32 dstX,
+                         qint32 dstY,
+                         qint32 width,
+                         qint32 height,
+                         QPainter &painter,
+                         KoColorProfile *profile,
+                         float exposure = 0.0f);
 
     /**
      * Render the projection onto a QImage.
      */
-     virtual QImage convertToQImage(qint32 x1,
-                                    qint32 y1,
-                                    qint32 width,
-                                    qint32 height,
-                                    KoColorProfile * profile,
-                                    float exposure = 0.0f);
-#if 0
+    QImage convertToQImage(qint32 x1,
+                           qint32 y1,
+                           qint32 width,
+                           qint32 height,
+                           KoColorProfile * profile,
+                           float exposure = 0.0f);
+
      /**
       * Render the projection scaled onto a QImage. Use this when
       * zoom < 100% to avoid color-adjusting pixels that will be
-      * filtered away anyway.
+      * filtered away anyway. It uses nearest-neighbour sampling, so
+      * the result is inaccurate and ugly. Set the option "fast_zoom"
+      * to true to make Krita use this.
+      *
+      * @param r the source rectangle in pixels that needs to be drawn
+      * @param xScale the X axis scale in percent
+      * @param yScale the Y axis scale in percent
+      * @param projection the display profile
+      * @param exposure the exposure (for hdr images)
+      *
+      * @return a qimage containing the sampled image pixels
       */
-     virtual QImage convertToQImage(const QRect& r,
-                                    const double xScale, const double yScale,
-                                    KoColorProfile *profile,
-                                    float exposure = 0.0f);
-#endif
+     QImage convertToQImage(const QRect& r,
+                            const double xScale, const double yScale,
+                            KoColorProfile *profile,
+                            float exposure = 0.0f);
+
     /**
      * Lock the image to make sure no recompositing-causing signals get emitted
      * while you're messing with the layers. Don't forget to unlock again.
@@ -313,16 +332,6 @@ public:
     QSize size() const { return QSize( width(), height() ); }
 
     /**
-     * @return a region built from the extents of all layers in this image.
-     */
-    QRegion extent() const;
-
-    /**
-     * @return a region built from all the dirty rects in all layers in this image
-     */
-    QRegion dirtyRegion() const;
-
-    /**
      *  returns a paintdevice that contains the merged layers of this image, within
      * the bounds of this image (with the colorspace and profile of this image)
      */
@@ -333,22 +342,14 @@ public:
      */
     KoColor mergedPixel(qint32 x, qint32 y);
 
-    // This was only used from the performance tests?
-    KisLayerSP newLayer(const QString& name, quint8 opacity, const QString & compositeOp, KoColorSpace * colorspace);
-
-
-    void setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp * compositeOp, const QString& name, QBitArray channelFlags);
-
     KisGroupLayerSP rootLayer() const;
 
     /// Return the projection; that is, the complete, composited representation
     /// of this image.
     KisPaintDeviceSP projection();
 
-    KisProjection * projectionManager();
-
     /// Move layer to specified position
-    bool moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
+    bool KDE_DEPRECATED moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
 
     /**
      * Add an already existing layer to the image. The layer is put on top
@@ -356,7 +357,7 @@ public:
      * @param layer the layer to be added
      * @param parent the parent layer
      */
-    bool addLayer(KisLayerSP layer, KisGroupLayerSP parent = 0);
+    bool KDE_DEPRECATED addLayer(KisLayerSP layer, KisGroupLayerSP parent = 0);
 
     /**
      * Add already existing layer to image.
@@ -369,7 +370,7 @@ public:
      *                  its group.
      * returns false if adding the layer didn't work, true if the layer got added
      */
-    bool addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
+    bool KDE_DEPRECATED addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
 
     /**
      * Adds the layer to this group at the specified index.
@@ -377,25 +378,34 @@ public:
      * returns false if the layer is already in this group or any
      * other (remove it first.)
      */
-    bool addLayer( KisLayerSP layer,  KisGroupLayerSP parent, int index );
+    bool KDE_DEPRECATED addLayer( KisLayerSP layer,  KisGroupLayerSP parent, int index );
 
     /// Remove layer
-    bool removeLayer(KisLayerSP layer);
+    bool KDE_DEPRECATED removeLayer(KisLayerSP layer);
 
     /// Move layer up one slot
-    bool raiseLayer(KisLayerSP layer);
+    bool KDE_DEPRECATED raiseLayer(KisLayerSP layer);
 
     /// Move layer down one slot
-    bool lowerLayer(KisLayerSP layer);
+    bool KDE_DEPRECATED lowerLayer(KisLayerSP layer);
 
     /// Move layer to top slot
-    bool toTop(KisLayerSP layer);
+    bool KDE_DEPRECATED toTop(KisLayerSP layer);
 
     /// Move layer to bottom slot
-    bool toBottom(KisLayerSP layer);
+    bool KDE_DEPRECATED toBottom(KisLayerSP layer);
 
-    qint32 nlayers() const;
-    qint32 nHiddenLayers() const;
+    /**
+     * Return the number of layers (not other nodes) that are in this
+     * image.
+     */
+    qint32 KDE_DEPRECATED nlayers() const;
+
+    /**
+     * Return the number of layers (not other node types) that are in
+     * this image and that are hidden.
+     */
+    qint32 KDE_DEPRECATED nHiddenLayers() const;
 
     /**
      * Merge all visible layers and discard hidden ones.
@@ -453,25 +463,6 @@ signals:
 
     void sigActiveSelectionChanged(KisImageSP image);
 
-    /// Emitted after a layer is added: you can find out where by asking it for its parent(), et al.
-    void sigLayerAdded(KisLayerSP layer);
-
-    /** Emitted after a layer is removed.
-        It's no longer in the image, but still exists, so @p layer is valid.
-
-        @param layer the removed layer
-        @param parent the parent of the layer, before it was removed
-        @param wasAboveThis the layer it was above, before it was removed.
-    */
-    void sigLayerRemoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAboveThis);
-
-    /** Emitted after a layer is moved to a different position under its parent layer, or its parent changes.
-
-        @param previousParent the parent of the layer, before it was moved
-        @param wasAboveThis the layer it was above, before it was moved.
-    */
-    void sigLayerMoved(KisLayerSP layer, KisGroupLayerSP previousParent, KisLayerSP wasAboveThis);
-
     /// Emitted after a layer's properties (visible, locked, opacity, composite op, name, ...) change
     void sigLayerPropertiesChanged(KisLayerSP layer);
 
@@ -482,35 +473,14 @@ signals:
      */
     void sigLayersChanged(KisGroupLayerSP rootLayer);
 
-    /**
-     * Emitted after a mask is added to the specified parent layer.
-     */
-    void sigMaskAdded( KisMaskSP mask, KisLayerSP parent );
+    void sigLayerMoved( KisLayerSP layer );
+    void sigLayerRemoved( KisLayerSP layer );
 
     /**
-     * Emitted after a mask is removed. The mask still exists, but the
-     * parent does no longer have a reference to it
-     */
-    void sigMaskRemoved( KisMaskSP mask, KisLayerSP wasParent, KisMaskSP wasAboveThis );
-
-    /**
-     * Emitted after a mask has been moved to a different position
-     * under its parent layer, or when it has changed to a new parent
-     * layer. The mask already has a reference to its new parent layer.
-     */
-    void sigMaskMoved( KisMaskSP mask, KisLayerSP previousParent, KisMaskSP wasAboveThis );
-
-    /**
-     * Emitted after the properties of a mask (active, filter config,
-     * etc) have changed
-     */
-    void sigMaskPropertiesChanged( KisMaskSP mask );
-
-    /**
-       Emitted whenever an action has caused the image to be
-       recomposited.
-
-       @param rc The recty that has been recomposited.
+     *  Emitted whenever an action has caused the image to be
+     *  recomposited.
+     *
+     * @param rc The recty that has been recomposited.
      */
     void sigImageUpdated( const QRect & );
 
@@ -524,29 +494,25 @@ signals:
     void sigProfileChanged(KoColorProfile *  profile);
     void sigColorSpaceChanged(KoColorSpace*  cs);
 
-    friend class KisGroupLayer; // Allow the group layer to emit these
-                                // signals for us. This is a bit
-                                // dirty. (BSAR)
-
     /**
      * Inform the model that we're going to add a layer.
      */
-    void sigAboutToAddALayer( KisGroupLayer *parent, int index );
+    void sigAboutToAddANode( KisNode *parent, int index );
 
     /**
      * Inform the model we're done adding a layer.
      */
-    void sigLayerHasBeenAdded( KisGroupLayer *parent, int index );
+    void sigNodeHasBeenAdded( KisNode *parent, int index );
 
     /**
      * Inform the model we're going to remove a layer.
      */
-    void sigAboutToRemoveALayer( KisGroupLayer *parent, int index );
+    void sigAboutToRemoveANode( KisNode *parent, int index );
 
     /**
      * Inform the model we're done removing a layer.
      */
-    void sigALayerHasBeenRemoved( KisGroupLayer *parent, int index );
+    void sigNodeHasBeenRemoved( KisNode *parent, int index );
 
 
 public slots:
@@ -559,8 +525,6 @@ public slots:
        the layers, who then notify the layerbox that they are ready
        for new thumbnails
     */
-    void slotCommandExecuted();
-
 
 private:
     KisImage& operator=(const KisImage& rhs);

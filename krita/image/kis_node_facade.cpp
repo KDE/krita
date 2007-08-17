@@ -16,26 +16,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_node_facade.h"
+#include "kis_node_graph_listener.h"
 #include "kis_node.h"
 #include <kdebug.h>
 
 class KisNodeFacade::Private
 {
 public:
-
-    Private( KisNodeSP node ) : root( node ) {}
-
-    KisNodeSP const root;
+    KisNodeSP root;
 };
 
-KisNodeFacade::KisNodeFacade( KisNodeSP root )
-    : m_d( new Private( root ) )
+KisNodeFacade::KisNodeFacade()
+    : m_d( new Private() )
 {
+}
+
+KisNodeFacade::KisNodeFacade( KisNodeSP root )
+    : m_d( new Private() )
+{
+    m_d->root = root;
 }
 
 KisNodeFacade::~KisNodeFacade()
 {
     delete m_d;
+}
+
+void KisNodeFacade::setRoot( KisNodeSP root )
+{
+    m_d->root = root;
 }
 
 const KisNodeSP KisNodeFacade::root() const
@@ -50,19 +59,36 @@ bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveTh
     if ( node == parent ) return false;
     if ( node == aboveThis ) return false;
     if ( parent == aboveThis ) return false;
+    if ( !node->parent() ) return false;
+
+    if ( aboveThis && aboveThis->parent() != parent ) return false;
+
+    int oldIndex = node->parent()->index( node );
+    int newIndex = parent->childCount();
+    if ( aboveThis ) newIndex = parent->index( aboveThis ) + 1;
+
+    if ( node->graphListener() )
+        node->graphListener()->aboutToMoveNode(node.data(), oldIndex, newIndex);
 
     if ( node->parent() )
         if ( !node->parent()->remove( node ) ) return false;
 
-    return parent->add( node, aboveThis );
+    bool success = parent->add( node, aboveThis );
+    if ( node->graphListener() )
+        node->graphListener()->nodeHasBeenMoved(node.data(), oldIndex, newIndex);
+
+    return success;
 }
 
 bool KisNodeFacade::addNode(KisNodeSP node, KisNodeSP parent)
 {
     if ( !node ) return false;
-    if ( !parent ) return false;
+    if ( !parent && !m_d->root ) return false;
 
-    return parent->add( node, parent->lastChild() );
+    if ( parent )
+        return parent->add( node, parent->lastChild() );
+    else
+        return m_d->root->add( node, m_d->root->lastChild() );
 }
 
 bool KisNodeFacade::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
@@ -73,7 +99,7 @@ bool KisNodeFacade::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThi
     return parent->add( node, aboveThis );
 }
 
-bool KisNodeFacade::addNode( KisNodeSP node,  KisNodeSP parent, int index )
+bool KisNodeFacade::addNode( KisNodeSP node,  KisNodeSP parent, quint32 index )
 {
     if ( !node ) return false;
     if ( !parent ) return false;

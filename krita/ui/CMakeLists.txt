@@ -32,11 +32,12 @@ set(kritaui_LIB_SRCS
     kis_config.cc
     kis_config_notifier.cpp
     kis_controlframe.cc
-    kis_layer_model.cpp
+    kis_node_model.cpp
     kis_cursor.cc
     kis_custom_brush.cc
     kis_custom_image_widget.cc
     kis_custom_palette.cc
+    kis_image_view_converter.cpp
     kis_custom_pattern.cc
     kis_dlg_adj_layer_props.cc
     kis_dlg_adjustment_layer.cc
@@ -119,6 +120,9 @@ set(kritaui_LIB_SRCS
     kis_mask_widgets.cpp
     kis_shape_selection.cpp
     kis_shape_selection_model.cpp
+    kis_tool_freehand_p.cpp
+    kis_imagepipe_brush.cc
+    kis_prescaled_projection.cpp
 )
 
 if(HAVE_OPENGL AND HAVE_GLEW)

@@ -62,11 +62,11 @@
    XXX: For now, all masks are 8 bit. Make the channel depth settable.
 
  */
-class KRITAIMAGE_EXPORT KisMask : public KisPaintDevice  {
+class KRITAIMAGE_EXPORT KisMask : public KisNode  {
+
+    Q_OBJECT
 
 public:
-
-    KisMask(KisPaintDeviceSP dev, const QString & name);
 
     /**
      * Create a new KisMask.
@@ -80,27 +80,39 @@ public:
 
     virtual ~KisMask();
 
-    KisPaintDeviceSP parentPaintDevice() const;
+    virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
 
-    void setParentLayer( KisLayerSP parent );
-    KisLayerSP parentLayer() const;
-
-    void setName( const QString & name );
+    virtual void setSectionModelProperties( const KoDocumentSectionModel::PropertyList &properties  );
 
     /**
      * @return true if the mask is active, i.e. should be applied on
      * its parent layer.
      */
-    bool active();
+    bool active() const;
+
+    /**
+     * set the active status of this mask. Inactive layers can be
+     * edited but are not applied to their parent layer.
+     */
     void setActive( bool active );
 
-    virtual QString id() { return "KisMask"; }
+    /**
+     * Return the selection associated with this mask. A selection can
+     * contain both a paint device and shapes.
+     */
+    KisSelectionSP selection() const;
+
+    /**
+     * Change the selection to the specified selection object. The
+     * selection is deep copied.
+     */
+    void setSelection( KisSelectionSP selection );
 
 private:
 
-    class KisMaskPrivate;
+    class Private;
 
-    KisMaskPrivate * const m_d;
+    Private * const m_d;
 
 };
 

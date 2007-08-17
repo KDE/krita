@@ -99,7 +99,7 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush() const
 }
 
 KisDynamicOp::KisDynamicOp(const KisDynamicOpSettings *settings, KisPainter *painter)
-    : super(painter), m_settings(settings)
+    : KisPaintOp(painter), m_settings(settings)
 {
     Q_ASSERT(settings);
     m_brush = m_settings->createBrush();
@@ -143,12 +143,12 @@ void KisDynamicOp::paintAt(const KisPaintInformation& info)
     KisDynamicColoring* coloringsrc = m_brush->coloring()->clone();
 
     m_brush->program()->apply(dabsrc, coloringsrc, adjustedInfo);
-    
 
-    
+
+
     dabsrc->paintAt(info.pos, adjustedInfo, coloringsrc );
-    
-    
+
+
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);
 }

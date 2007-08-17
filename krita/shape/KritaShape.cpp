@@ -152,7 +152,9 @@ void KritaShape::tryLoadFromImageData(KoImageData *data) {
         KisImageSP img = m_d->doc->newImage(i18n( "Converted from KoImageData" ), image.width(), image.height(), 0 );
 
         // Convert the QImage to a paint device
-        img->rootLayer()->firstChild()->paintDevice()->convertFromQImage( image, "", 0, 0 );
+        KisPaintLayer * layer = dynamic_cast<KisPaintLayer*>( img->root()->firstChild().data() );
+        if ( layer )
+            layer->paintDevice()->convertFromQImage( image, "", 0, 0 );
 
         // emits sigLoadingFinished
         m_d->doc->setCurrentImage( img );

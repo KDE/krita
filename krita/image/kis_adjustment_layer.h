@@ -21,7 +21,7 @@
 #include <QObject>
 #include "kis_types.h"
 #include "kis_paint_device.h"
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_layer.h"
 #include "KoCompositeOp.h"
 #include <krita_export.h>
@@ -36,6 +36,23 @@ const QString KIS_ADJUSTMENT_LAYER_ID = "KisAdjustmentLayer";
  * layerstack.
  *
  * AdjustmentLayers also function as a kind of "fixating layers".
+ *
+ * XXX: implement prepareForRemoval with:
+         // Adjustment layers should mark the layers underneath them, whose rendering
+        // they have cached, dirty on removal. Otherwise, the group won't be re-rendered.
+        KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(layer.data());
+        if (al) {
+            QRect r = al->extent();
+            lock(); // Lock the image, because we are going to dirty a lot of layers
+            KisLayerSP l = layer->nextSibling();
+            while (l) {
+                KisAdjustmentLayer * al2 = dynamic_cast<KisAdjustmentLayer*>(l.data());
+                if (al2 != 0) break;
+                l = l->nextSibling();
+            }
+            unlock();
+        }
+
  */
 class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer, public KisIndirectPaintingSupport
 {
@@ -50,23 +67,12 @@ public:
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
 
-
-    virtual QString nodeType()
-        {
-            return KIS_ADJUSTMENT_LAYER_ID;
-        }
-
-    virtual bool canHaveChildren()
-        {
-            return false;
-        }
-
     void updateProjection(const QRect& r);
     KisPaintDeviceSP projection() const;
     KisPaintDeviceSP paintDevice() const;
 
     QIcon icon() const;
-    KoDocumentSectionModel::PropertyList properties() const;
+    KoDocumentSectionModel::PropertyList sectionModelProperties() const;
 
     /// Return a copy of this layer
     KisLayerSP clone() const;
@@ -81,13 +87,27 @@ public:
     /// Set the selection of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
 
-public:
-
+    /**
+     * overriden from KisBaseNode
+     */
     qint32 x() const;
-    void setX(qint32);
 
+    /**
+     * overriden from KisBaseNode
+     */
+    void setX(qint32 x);
+
+    /**
+     * overriden from KisBaseNode
+     */
     qint32 y() const;
-    void setY(qint32);
+
+    /**
+     * overriden from KisBaseNode
+     */
+    void setY(qint32 y);
+
+public:
 
     /// Returns an approximation of where the bounds on actual data are in this layer
     QRect extent() const;
@@ -95,28 +115,27 @@ public:
     /// Returns the exact bounds of where the actual data resides in this layer
     QRect exactBounds() const;
 
-    bool accept(KisLayerVisitor &);
+    bool accept(KisNodeVisitor &);
 
     void resetCache();
-    KisPaintDeviceSP cachedPaintDevice() { return m_cachedPaintDev; }
 
-    bool showSelection() const { return m_showSelection; }
-    void setSelection(bool b) { m_showSelection = b; }
+    KisPaintDeviceSP cachedPaintDevice();
+
+    bool showSelection() const;
+    void setSelection(bool b);
 
     QImage createThumbnail(qint32 w, qint32 h);
 
     // KisIndirectPaintingSupport
-    KisLayer* layer() { return this; }
+    KisLayer* layer()
+        {
+            return this;
+        }
 
 private:
-    bool m_showSelection;
-    KisFilterConfiguration * m_filterConfig;
-    KisSelectionSP m_selection;
-    KisSelectionSP m_selectionProjection;
-    KisPaintDeviceSP m_cachedPaintDev;
-    QRegion m_dirtyRegion;
 
-
+    class Private;
+    Private * const m_d;
 };
 
 #endif // KIS_ADJUSTMENT_LAYER_H_

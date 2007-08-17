@@ -24,8 +24,9 @@
 #include <KoLineBorder.h>
 #include <KoPathShape.h>
 #include <KoCompositeOp.h>
-
+#include <KoColorSpaceRegistry.h>
 #include "kis_painter.h"
+#include "kis_paint_device.h"
 #include "kis_shape_selection_model.h"
 
 #include <kdebug.h>
@@ -132,7 +133,7 @@ void KisShapeSelection::renderToProjection(KisSelection* projection, const QRect
     QTime t;
     t.start();
 
-    KisMaskSP tmpMask = KisMaskSP(new KisMask(m_parentPaintDevice, "tmp"));
+    KisPaintDeviceSP tmpMask = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("GRAY", 0), "tmp");
 
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;
@@ -163,7 +164,7 @@ void KisShapeSelection::renderToProjection(KisSelection* projection, const QRect
         }
     }
     KisPainter painter(projection);
-    painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, KisPaintDeviceSP(tmpMask), r.x(), r.y(), r.width(), r.height());
+    painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, tmpMask, r.x(), r.y(), r.width(), r.height());
     painter.end();
     kDebug(41010) << "Shape selection rendering: " << t.elapsed();
 }
@@ -186,6 +187,7 @@ KoShape* KisShapeSelectionFactory::createDefaultShape() const
 
 KoShape* KisShapeSelectionFactory::createShape( const KoProperties* params ) const
 {
+    Q_UNUSED( params );
     return 0;
 }
 

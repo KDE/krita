@@ -23,25 +23,24 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_external_layer_iface.h"
 
 /**
  * Creates the right layershape for all layers and puts them in the
  * right order
  */
-class KisLayerMapVisitor : public KisLayerVisitor {
+class KisLayerMapVisitor : public KisNodeVisitor {
 public:
 
     /**
      * @param layerMap: the map that maps layers to layer shapes and
      * masks to mask shapes.
      */
-    KisLayerMapVisitor(QMap<KisLayerSP, KoShape*> & layerMap, QMap<KisMaskSP, KoShape*> & maskMap);
+    KisLayerMapVisitor( QMap<KisNodeSP, KoShape*> & nodeMap );
     virtual ~KisLayerMapVisitor() {}
 
-    QMap<KisLayerSP, KoShape*> & layerMap();
-    QMap<KisMaskSP, KoShape*> & maskMap();
+    QMap<KisNodeSP, KoShape*> & layerMap();
 
 public:
 
@@ -53,14 +52,22 @@ public:
 
     bool visit(KisAdjustmentLayer *layer);
 
+    bool visit(KisCloneLayer *layer);
+
+    bool visit(KisFilterMask *mask);
+
+    bool visit(KisTransparencyMask *mask);
+
+    bool visit(KisTransformationMask *mask);
+
+    bool visit(KisSelectionMask *mask);
+
 private:
 
-    void fillMaskMap( KisLayerSP layer, KoShapeContainer * container );
+    bool visitLeafNodeLayer( KisLayer * layer );
+    bool visitMask( KisMask * mask );
 
-private:
-
-    QMap<KisLayerSP, KoShape*> m_layerMap;
-    QMap<KisMaskSP, KoShape*> m_maskMap;
+    QMap<KisNodeSP, KoShape*> m_nodeMap;
 };
 
 

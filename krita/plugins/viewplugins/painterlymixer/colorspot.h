@@ -28,8 +28,6 @@ class QColor;
 class ColorSpot : public QToolButton {
 	Q_OBJECT
 
-	typedef QToolButton super;
-
 	public:
 		ColorSpot (QWidget *parent, const KoColor &color);
 

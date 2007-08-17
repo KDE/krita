@@ -20,8 +20,7 @@
 
 #include <qglobal.h>
 #include <QRect>
-#include <QRegion>
-
+#include "kis_memento.h"
 
 class KoStore;
 
@@ -88,6 +87,12 @@ public:
      */
     inline void rollforward(KisMementoSP memento) { ACTUAL_DATAMGR::rollforward(memento); }
 
+    /**
+     * @returns true is there is a memento active. This means that
+     * iterators can rely on oldData() to function.
+     */
+    inline bool hasCurrentMemento() const { return ACTUAL_DATAMGR::hasCurrentMemento(); }
+
 public:
     /**
      * Reads and writes the tiles from/onto a KoStore (which is simply a file within a zip file)
@@ -110,13 +115,6 @@ public:
                          { return ACTUAL_DATAMGR::extent(x, y, w, h); }
 
     QRect extent() const { return ACTUAL_DATAMGR::extent(); }
-
-    /**
-       Return the region that is built from all non-default pixels or
-       tiles.
-    */
-    QRegion region() const { return ACTUAL_DATAMGR::region(); }
-
 
 public:
 

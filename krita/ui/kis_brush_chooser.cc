@@ -29,7 +29,7 @@
 #include "kis_brush.h"
 
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
-    : super(parent, name)
+    : KisItemChooser(parent, name)
 {
     m_lbSpacing = new QLabel(i18n("Spacing: "), this);
     m_slSpacing = new KisDoubleWidget(0.0, 10, this, "double_widget");

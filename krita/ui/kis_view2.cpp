@@ -93,7 +93,7 @@
 #include "ui_wdgpalettechooser.h"
 #include "kis_resourceserver.h"
 #include "kis_palette_docker.h"
-#include "kis_layer_model.h"
+#include "kis_node_model.h"
 #include "kis_projection.h"
 #include "kis_node.h"
 
@@ -373,6 +373,7 @@ void KisView2::slotLoadingFinished()
     KisImageSP img = image();
 
     m_d->canvas->setImageSize( img->width(), img->height() );
+    slotSetImageSize( img->width(), img->height() );
 
     if(m_d->statusBar) {
         m_d->statusBar->imageSizeChanged(img->width(), img->height());
@@ -399,7 +400,7 @@ void KisView2::slotLoadingFinished()
     }
 
 
-    if ( KisLayerSP layer = img->rootLayer()->firstChild() ) {
+    if ( KisLayerSP layer = dynamic_cast<KisLayer*>( img->rootLayer()->firstChild().data() ) ) {
         m_d->layerBox->setCurrentLayer( layer );
         m_d->layerManager->activateLayer( layer );
     }
@@ -543,11 +544,13 @@ void KisView2::connectCurrentImage()
 
         }
         connect(img.data(), SIGNAL( sigSizeChanged( qint32, qint32 ) ), m_d->resourceProvider, SLOT( slotSetImageSize( qint32, qint32 ) ) );
+        connect(img.data(), SIGNAL( sigSizeChanged( qint32, qint32 ) ), this, SLOT( slotSetImageSize( qint32, qint32 ) ) );
+
         connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
 
         connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
-        connect(img.data(), SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
-        connect(img.data(), SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
+        connect(img.data(), SIGNAL(sigLayerRemoved( KisLayerSP )), m_d->layerManager, SLOT(layersUpdated()));
+        connect(img.data(), SIGNAL(sigLayerMoved( KisLayerSP )), m_d->layerManager, SLOT(layersUpdated()));
         connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
 
         connect( m_d->layerManager, SIGNAL( sigLayerActivated( KisLayerSP ) ),
@@ -646,16 +649,14 @@ void KisView2::slotPreferences()
     if ( PreferencesDialog::editPreferences() ) {
         KisConfigNotifier::instance()->notifyConfigChanged();
 
-        // Update the settings for those classes that are not listening
-        image()->projectionManager()->updateSettings();
 
         // Update the settings for all nodes -- they don't query
         // KisConfig directly because they need the settings during
         // compositing, and they don't connect to the confignotifier
         // because nodes are not QObjects (because only one base class
         // can be a QObject).
-//        KisNode* node = dynamic_cast<KisNode*>( image()->rootLayer().data() );
-//        node->updateSettings();
+        KisNode* node = dynamic_cast<KisNode*>( image()->rootLayer().data() );
+        node->updateSettings();
     }
 }
 
@@ -681,6 +682,13 @@ void KisView2::slotEditPalette()
     base->setMainWidget(cp);
     base->show();
 }
+
+void KisView2::slotSetImageSize( qint32 w, qint32 h )
+{
+    m_d->canvasController->setDocumentSize( QSize( int( ceil( m_d->viewConverter->documentToViewX( w / image()->xRes() ) ) ),
+                                                   int( ceil( m_d->viewConverter->documentToViewY( h / image()->yRes() ) ) ) ) );
+}
+
 
 void KisView2::loadPlugins()
 {

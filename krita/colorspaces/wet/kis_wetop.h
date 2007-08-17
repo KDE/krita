@@ -48,7 +48,7 @@ public:
 };
 
 class KisWetOpSettings : public KisPaintOpSettings {
-    typedef KisPaintOpSettings super;
+
 public:
     KisWetOpSettings(QWidget *parent);
 
@@ -64,7 +64,6 @@ private:
 
 class KisWetOp : public KisPaintOp {
 
-    typedef KisPaintOp super;
     bool m_size;
     bool m_wetness;
     bool m_strength;

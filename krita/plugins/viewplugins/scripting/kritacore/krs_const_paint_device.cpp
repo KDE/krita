@@ -24,7 +24,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_doc2.h>
 #include <kis_layer.h>
-#include <kis_meta_registry.h>
 #include <kis_iterators_pixel.h>
 #include <kis_transaction.h>
 #include <kis_math_toolbox.h>
@@ -115,7 +114,7 @@ QObject* ConstPaintDevice::createHistogram(const QString& histoname, uint typenr
 
 QObject* ConstPaintDevice::fastWaveletTransformation()
 {
-    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->value( paintDevice()->colorSpace()->mathToolboxId().id() );
+    KisMathToolbox* mathToolbox = KisMathToolboxFactoryRegistry::instance()->value( paintDevice()->colorSpace()->mathToolboxId().id() );
     QRect rect = paintDevice()->exactBounds();
     KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(paintDevice(), rect);
     return new Wavelet(wav);

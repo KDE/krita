@@ -15,13 +15,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_COPY_LAYER_H_
-#define KIS_COPY_LAYER_H_
+#ifndef KIS_CLONE_LAYER_H_
+#define KIS_CLONE_LAYER_H_
 
 #include <QObject>
 #include "kis_types.h"
 #include "kis_paint_device.h"
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_layer.h"
 #include "KoCompositeOp.h"
 
@@ -49,6 +49,8 @@ const QString KIS_CLONE_LAYER_ID = "KisCloneLayer";
 class KRITAIMAGE_EXPORT KisCloneLayer : public KisLayer, public KisIndirectPaintingSupport
 {
 
+    Q_OBJECT
+
 public:
 
     KisCloneLayer(KisLayerSP from, KisImageSP img, const QString &name, quint8 opacity);
@@ -71,7 +73,7 @@ public:
     KisPaintDeviceSP paintDevice() const;
 
     QIcon icon() const;
-    KoDocumentSectionModel::PropertyList properties() const;
+    KoDocumentSectionModel::PropertyList sectionModelProperties() const;
 
     /// Return a copy of this layer
     KisLayerSP clone() const;
@@ -88,7 +90,7 @@ public:
     /// Returns the exact bounds of where the actual data resides in this layer
     QRect exactBounds() const;
 
-    bool accept(KisLayerVisitor &);
+    bool accept(KisNodeVisitor &);
 
     QImage createThumbnail(qint32 w, qint32 h);
 
@@ -110,5 +112,5 @@ private:
 
 };
 
-#endif // KIS_COPY_LAYER_H_
+#endif // KIS_CLONE_LAYER_H_
 

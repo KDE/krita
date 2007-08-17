@@ -28,7 +28,6 @@ class KisProgressDisplayInterface;
 class KisFilterStrategy;
 
 class KRITAIMAGE_EXPORT KisTransformWorker : public KisProgressSubject {
-    typedef KisProgressSubject super;
 
 public:
     KisTransformWorker(KisPaintDeviceSP dev,

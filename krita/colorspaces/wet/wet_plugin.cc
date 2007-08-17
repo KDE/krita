@@ -36,7 +36,7 @@
 
 #include <KoMainWindow.h>
 
-#include "kis_meta_registry.h"
+
 #include <kis_factory.h>
 #include <kis_image.h>
 #include <kis_types.h>

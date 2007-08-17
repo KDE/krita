@@ -37,7 +37,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
-#include "kis_meta_registry.h"
+
 #include "KoColorSpaceRegistry.h"
 #include "kis_datamanager.h"
 #include "kis_undo_adapter.h"
@@ -45,7 +45,7 @@
 #include "kis_transparency_mask.h"
 #include "kis_painterly_overlay.h"
 #include "kis_mask.h"
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 
 class KisPaintLayer::Private
 {
@@ -57,7 +57,7 @@ public:
 };
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
-    : super(img, name, opacity)
+    : KisLayer(img, name, opacity)
     , m_d( new Private() )
 {
     Q_ASSERT(img);
@@ -70,7 +70,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
 
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity)
-    : super(img, name, opacity)
+    : KisLayer(img, name, opacity)
     , m_d( new Private() )
 {
     Q_ASSERT(img);
@@ -80,7 +80,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
 }
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KoColorSpace * colorSpace)
-    : super(img, name, opacity)
+    : KisLayer(img, name, opacity)
     , m_d( new Private() )
 {
     Q_ASSERT(img);
@@ -92,8 +92,10 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     init();
 }
 
-KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) :
-    KisLayer(rhs), m_d (new Private), KisIndirectPaintingSupport(rhs)
+KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
+    : KisLayer(rhs)
+    , KisIndirectPaintingSupport(rhs)
+    , m_d (new Private)
 {
     m_d->paintDevice = new KisPaintDevice( *rhs.m_d->paintDevice.data() );
     m_d->projection = 0;
@@ -110,12 +112,8 @@ KisPaintLayer::~KisPaintLayer()
 
 void KisPaintLayer::init()
 {
-    m_d->paintDevice->startBackgroundFilters();
     connect( m_d->paintDevice.data(), SIGNAL( colorSpaceChanged( KoColorSpace* ) ), this, SLOT( slotColorSpaceChanged() ) );
     connect( m_d->paintDevice.data(), SIGNAL( profileChanged( KoColorProfile* ) ), this, SLOT( slotColorSpaceChanged() ) );
-    connect( m_d->paintDevice.data(), SIGNAL( dirtied() ), this, SLOT( setDirty() ) );
-    connect( m_d->paintDevice.data(), SIGNAL( dirtied( const QRect & ) ), this, SLOT( setDirty( const QRect &) ) );
-    connect( m_d->paintDevice.data(), SIGNAL( dirtied( const QRegion & ) ), this, SLOT( setDirty( const QRegion & ) ) );
 }
 
 
@@ -161,9 +159,9 @@ QIcon KisPaintLayer::icon() const
     return QIcon();
 }
 
-KoDocumentSectionModel::PropertyList KisPaintLayer::properties() const
+KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const
 {
-    KoDocumentSectionModel::PropertyList l = super::properties();
+    KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     l << KoDocumentSectionModel::Property(i18n("Colorspace"), m_d->paintDevice->colorSpace()->name());
     if( KoColorProfile *profile = m_d->paintDevice->colorSpace()->profile() )
         l << KoDocumentSectionModel::Property(i18n("Profile"), profile->name());
@@ -189,7 +187,7 @@ QImage KisPaintLayer::createThumbnail(qint32 w, qint32 h)
         return QImage();
 }
 
-bool KisPaintLayer::accept(KisLayerVisitor &v)
+bool KisPaintLayer::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
 }
@@ -237,7 +235,7 @@ void KisPaintLayer::removePainterlyOverlay()
 qint32 KisPaintLayer::x() const
 {
     if (m_d->paintDevice)
-        return m_d->paintDevice->getX();
+        return m_d->paintDevice->x();
     else
         return 0;
 }
@@ -250,7 +248,7 @@ void KisPaintLayer::setX(qint32 x)
 
 qint32 KisPaintLayer::y() const {
     if (m_d->paintDevice)
-        return m_d->paintDevice->getY();
+        return m_d->paintDevice->y();
     else
         return 0;
 }
@@ -275,23 +273,7 @@ QRect KisPaintLayer::exactBounds() const {
 
 void KisPaintLayer::slotColorSpaceChanged()
 {
-    notifyPropertyChanged();
+//    notifyPropertyChanged();
 }
-
-
-void KisPaintLayer::setDirty() {
-    QRect rc = extent();
-    super::setDirty(rc);
-}
-
-void KisPaintLayer::setDirty(const QRect & rect) {
-    super::setDirty(rect);
-}
-
-void KisPaintLayer::setDirty(const QRegion & region) {
-    super::setDirty(region);
-}
-
-
 
 #include "kis_paint_layer.moc"

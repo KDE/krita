@@ -45,7 +45,7 @@ KisCustomGradientDialog::KisCustomGradientDialog(KisView2 * view, QWidget * pare
     connect(m_page, SIGNAL(activatedResource(KoResource *)), view->resourceProvider(), SLOT(slotGradientActivated(KoResource*)));
 }
 
-KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const char *name) : super(parent, name)
+KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const char *name) : KisItemChooser(parent, name)
 {
     m_lbName = new QLabel();
 

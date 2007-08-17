@@ -24,7 +24,7 @@
 
 #include <kdebug.h>
 
-#include "kis_vec.h"
+
 #include "kis_brush.h"
 #include "kis_global.h"
 #include "kis_paint_device.h"
@@ -37,6 +37,7 @@
 
 KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
 {
+    Q_UNUSED( image );
     KisPaintOp * op = new KisAirbrushOp(painter);
     Q_CHECK_PTR(op);
     return op;
@@ -44,7 +45,7 @@ KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettings */*settings
 
 
 KisAirbrushOp::KisAirbrushOp(KisPainter * painter)
-    : super(painter)
+    : KisPaintOp(painter)
 {
 }
 

@@ -42,7 +42,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_global.h"
-#include "kis_meta_registry.h"
+
 #include "kis_view2.h"
 #include "kis_paint_device.h"
 #include "KoColorSpaceRegistry.h"

@@ -30,7 +30,6 @@ class QProgressBar;
 
 class KisLabelProgress : public QWidget, public KisProgressDisplayInterface {
     Q_OBJECT
-    typedef QWidget super;
 
 public:
     KisLabelProgress(QWidget *parent, const char *name = 0);

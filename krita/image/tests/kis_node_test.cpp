@@ -50,10 +50,23 @@ public:
             afterRemoveRow = true;
         }
 
+    virtual void aboutToMoveNode( KisNode *, int, int )
+        {
+            beforeMove = true;
+        }
+
+    virtual void nodeHasBeenMoved( KisNode *, int, int )
+        {
+            afterMove = true;
+        }
+
+
     bool beforeInsertRow;
     bool afterInsertRow;
     bool beforeRemoveRow;
     bool afterRemoveRow;
+    bool beforeMove;
+    bool afterMove;
 
     void resetBools()
         {
@@ -61,6 +74,8 @@ public:
             afterRemoveRow = false;
             beforeInsertRow = false;
             afterInsertRow = false;
+            beforeMove = false;
+            afterMove = false;
         }
 };
 
@@ -92,8 +107,6 @@ void KisNodeTest::testCreation()
 void dumpNodeStack( KisNodeSP node, QString prefix = QString( "\t" ) ) {
     for ( uint i = 0; i < node->childCount(); ++i ) {
         if ( node->at( i )->parent() )
-            kDebug() << prefix <<"\t" << node->at( i ) <<"node at" << i <<" has index from parent:" << node->index( node->at( i ) );
-
         if ( node->at( i )->childCount() > 0 ) {
             dumpNodeStack( node->at( i ), prefix + "\t" );
         }
@@ -107,19 +120,10 @@ void KisNodeTest::testOrdering()
 
     KisNodeSP root = new KisNode();
     root->setGraphListener( &graphListener );
-    kDebug() <<"Root:" << root;
-
     KisNodeSP node1 = new KisNode();
-    kDebug() <<"Node 1:" << node1;
-
     KisNodeSP node2 = new KisNode();
-    kDebug() <<"Node 2:" << node2;
-
     KisNodeSP node3 = new KisNode();
-    kDebug() <<"Node 3:" << node3;
-
     KisNodeSP node4 = new KisNode();
-    kDebug() <<"Node 4:" << node4;
 
      /*
       +---------+
@@ -318,6 +322,47 @@ void KisNodeTest::testSetDirty()
     QVERIFY( node7->isDirty( QRect( 0, 0, 50, 50 ) ) );
 
 
+}
+
+
+void KisNodeTest::testChildNodes()
+{
+    KisNodeSP root = new KisNode();
+    KisNodeSP a = new TestNodeA();
+    root->add( a, 0 );
+    a->setVisible( true );
+    a->setLocked( true );
+
+    KisNodeSP b = new TestNodeB();
+    root->add( b, 0 );
+    b->setVisible( false );
+    b->setLocked( true );
+
+    KisNodeSP c = new TestNodeC();
+    root->add( c, 0 );
+    c->setVisible( false );
+    c->setVisible( false );
+
+    QList<KisNodeSP> allNodes = root->childNodes( QStringList(), KoProperties() );
+    QCOMPARE( (int) allNodes.count(), 3 ); // a, b, c
+
+    QStringList nodeTypes;
+    nodeTypes << "TestNodeA" << "TestNodeB";
+    QList<KisNodeSP> subSetOfNodeTypes = root->childNodes( nodeTypes, KoProperties() );
+    QVERIFY( subSetOfNodeTypes.count() == 2 ); // a, b
+
+    nodeTypes.clear();
+    nodeTypes << "TestNodeB" << "TestNodeC";
+    KoProperties props;
+    props.setProperty( "visibile", false );
+    props.setProperty( "locked", true );
+    QList<KisNodeSP> subsetOfTypesAndProps = root->childNodes( nodeTypes, props );
+    QVERIFY( subsetOfTypesAndProps.count() == 1 ); // b
+
+    KoProperties props2;
+    props.setProperty( "visibile", false );
+    QList<KisNodeSP> subSetOfProps = root->childNodes( QStringList(), props );
+    QVERIFY( subSetOfProps.count() == 2 ); // b, c
 }
 
 QTEST_KDEMAIN(KisNodeTest, NoGUI)

@@ -45,8 +45,6 @@ public:
 
 class KisEraseOp : public KisPaintOp {
 
-    typedef KisPaintOp super;
-
 public:
 
     KisEraseOp(KisPainter * painter);

@@ -32,7 +32,6 @@ class KisDoubleWidget : public QWidget
 {
     Q_OBJECT
 
-    typedef QWidget super;
 public:
     KisDoubleWidget(QWidget* parent = 0, const char* name = 0);
     KisDoubleWidget(double min, double max, QWidget* parent = 0, const char* name = 0);

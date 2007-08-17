@@ -20,6 +20,7 @@
 #include "kis_import_catcher.h"
 #include "kis_types.h"
 
+#include "kis_count_visitor.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
 #include "kis_image.h"
@@ -48,28 +49,34 @@ void KisImportCatcher::slotLoadingFinished()
         KisLayerSP importedImageLayer = KisLayerSP( importedImage->rootLayer().data() );
 
         if (!importedImageLayer.isNull()) {
+            QStringList list;
+            list << "KisLayer";
 
-            if (importedImageLayer->numLayers() == 2) {
+            KisCountVisitor visitor(list, KoProperties());
+            importedImageLayer->accept( visitor );
+
+            if (visitor.count() == 2) {
                 // Don't import the root if this is not a layered image (1 group layer
                 // plus 1 other).
-                importedImageLayer = importedImageLayer->firstChild();
-                importedImage->removeLayer(importedImageLayer);
+                importedImageLayer = dynamic_cast<KisLayer*>( importedImageLayer->firstChild().data() );
+                if ( importedImageLayer )
+                    importedImage->removeLayer(importedImageLayer);
             }
 
             importedImageLayer->setName(m_url.prettyUrl());
 
-            KisGroupLayerSP parent = 0;
+            KisNodeSP parent = 0;
             KisLayerSP currentActiveLayer = m_view->activeLayer();
 
             if (currentActiveLayer) {
-                parent = currentActiveLayer->parentLayer();
+                parent = currentActiveLayer->parent();
             }
 
             if (parent.isNull()) {
                 parent = m_view->image()->rootLayer();
             }
 
-            m_view->image()->addLayer(importedImageLayer, parent, currentActiveLayer);
+            m_view->image()->addNode(importedImageLayer.data(), parent, currentActiveLayer.data());
         }
     }
     m_doc->deleteLater();

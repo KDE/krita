@@ -43,7 +43,7 @@ KisPaintOp * KisConvolveOpFactory::createOp(const KisPaintOpSettings */*settings
 
 
 KisConvolveOp::KisConvolveOp(KisPainter * painter)
-    : super(painter)
+    : KisPaintOp(painter)
 {
 }
 

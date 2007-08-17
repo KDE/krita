@@ -25,8 +25,6 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
-class KisTransactionPrivate;
-
 class KRITAIMAGE_EXPORT KisTransaction : public QUndoCommand {
 public:
     KisTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent = 0);
@@ -37,7 +35,8 @@ public:
     virtual void undo();
     virtual void undoNoUpdate();
 private:
-    KisTransactionPrivate * m_private;
+    class Private;
+    Private * const m_private;
 };
 
 #endif // KIS_TILE_COMMAND_H_

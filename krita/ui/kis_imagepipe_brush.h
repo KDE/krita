@@ -35,7 +35,7 @@ class QImage;
  * The parasite info that gets loaded from the terribly documented gimp pipe brush parasite.
  * We only store data we actually use.
  * BC: How it seems the dimension stuff interacts with rank, selectionMode and the actual
- * selection of a brush to be drawn. So apparantly you can have at most 4 'dimensions'.
+ * selection of a brush to be drawn. So apparently you can have at most 4 'dimensions'.
  * Each dimension has a number of brushes, the rank. Each dimension has an associated selection
  * mode and placement mode (which we don't use). The selection mode says us in which way
  * which of the brushes or brush sets will be selected. In the case of a 1-dimensional pipe
@@ -76,10 +76,10 @@ public:
     //qint32 step;
     qint32 ncells;
     qint32 dim;
-    // Apparantly only used for editing a pipe brush, which we won't at the moment
+    // Apparently only used for editing a pipe brush, which we won't at the moment
     // qint32 cols, rows;
     // qint32 cellwidth, cellheight;
-    // Aparantly the gimp doesn't use this anymore? Anyway it is a bit weird to
+    // Apparently the gimp doesn't use this anymore? Anyway it is a bit weird to
     // paint at someplace else than where your cursor displays it will...
     //Placement placement;
     qint32 rank[MaxDim];
@@ -94,7 +94,7 @@ public:
 
 
 class KRITAIMAGE_EXPORT KisImagePipeBrush : public KisBrush {
-    typedef KisBrush super;
+
     Q_OBJECT
 
 public:

@@ -45,8 +45,6 @@ public:
 
 class KisPenOp : public KisPaintOp {
 
-    typedef KisPaintOp super;
-
 public:
 
     KisPenOp(KisPainter * painter);

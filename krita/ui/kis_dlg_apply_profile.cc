@@ -32,14 +32,14 @@
 #include "kis_factory2.h"
 #include "kis_types.h"
 
-#include <kis_meta_registry.h>
+
 
 #include "squeezedcombobox.h"
 
 
 // XXX: Hardcode RGBA name. This should be a constant, somewhere.
 KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
-    : super(parent )
+    : KDialog(parent )
 {
     setButtons( Ok |Cancel );
     setObjectName(name);

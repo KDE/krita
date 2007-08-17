@@ -81,8 +81,6 @@ private:
 
 class KisCPaintOp : public KisPaintOp {
 
-    typedef KisPaintOp super;
-
 public:
 
     KisCPaintOp(Brush * brush, const KisCPaintOpSettings * settings, KisPainter * painter);

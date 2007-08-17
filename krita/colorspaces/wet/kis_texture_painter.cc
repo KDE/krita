@@ -31,14 +31,15 @@
 #include "kis_texture_painter.h"
 
 KisTexturePainter::KisTexturePainter()
-    : super()
+    : KisPainter()
 {
     // XXX make at least one of these configurable, probably blurh
     m_height = 1;
     m_blurh = 0.7;
 }
 
-KisTexturePainter::KisTexturePainter(KisPaintDeviceSP device) : super(device)
+KisTexturePainter::KisTexturePainter(KisPaintDeviceSP device)
+    : KisPainter(device)
 {
     m_height = 1;
     m_blurh = 0.7;

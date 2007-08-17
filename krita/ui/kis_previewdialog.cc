@@ -26,7 +26,7 @@
 #include "kis_previewdialog.h"
 
 KisPreviewDialog::KisPreviewDialog(QWidget *  parent, const char * name, const QString caption)
-    : super(parent)
+    : KDialog(parent)
 {
     setCaption( caption );
     setButtons( Ok|Cancel );

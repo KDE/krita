@@ -27,7 +27,7 @@
 
 // kritaimage
 #include "kis_types.h"
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_image.h"
 #include "kis_selection.h"
 #include "kis_layer.h"
@@ -38,7 +38,7 @@
 #include "kis_datamanager.h"
 
 KisLoadVisitor::KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, QString name) :
-    KisLayerVisitor(),
+    KisNodeVisitor(),
     m_layerFilenames(layerFilenames)
 {
     m_external = false;
@@ -88,7 +88,7 @@ bool KisLoadVisitor::visit(KisPaintLayer *layer)
         // Create a colorspace with the embedded profile
         KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(layer->paintDevice()->colorSpace()->id(), new KoIccColorProfile(data));
         // replace the old colorspace
-        layer->paintDevice()->setData(layer->paintDevice()->dataManager(), cs);
+        layer->paintDevice()->setDataManager(layer->paintDevice()->dataManager(), cs);
         QRect rc = layer->paintDevice()->extent();
         layer->setDirty(rc);
     }
@@ -124,13 +124,7 @@ bool KisLoadVisitor::visit(KisGroupLayer *layer)
     if(m_external)
         visitor.setExternalUri(m_uri);
 
-    KisLayerSP child = layer->firstChild();
-
-    while(child)
-    {
-        child->accept(visitor);
-        child = child->nextSibling();
-    }
+    visitAll( layer );
 
     layer->setDirty(m_img->bounds());
     return true;

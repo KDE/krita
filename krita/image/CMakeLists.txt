@@ -25,6 +25,9 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   kis_base_node.cpp
+   kis_node.cpp
+   kis_node_facade.cpp
    kis_action_recorder.cc
    kis_recorded_action.cc
    kis_recorded_paint_actions.cc
@@ -55,12 +58,10 @@ set(kritaimage_LIB_SRCS
    kis_gradient_painter.cc
    kis_histogram.cc
    kis_image.cc
-   kis_imagepipe_brush.cc
    kis_iterator.cc
    kis_layer.cc
    kis_group_layer.cc
    kis_paint_layer.cc
-   kis_meta_registry.cc
    kis_nameserver.cc
    kis_paint_device.cc
    kis_painter.cc
@@ -85,7 +86,6 @@ set(kritaimage_LIB_SRCS
    kis_perspective_math.cpp
    kis_mask.cc
    kis_effect_mask.cc
-   kis_image_view_converter.cpp
    kis_image_commands.cc
    kis_layer_commands.cc
    kis_undo_adapter.cc
@@ -93,9 +93,7 @@ set(kritaimage_LIB_SRCS
    kis_clone_layer.cpp
    kis_pixel_selection.cpp
    kis_transparency_mask.cc
-   kis_base_node.cpp
-   kis_node.cpp
-   kis_node_facade.cpp
+   kis_selection_mask.cpp	
    metadata/kis_meta_data_store.cc
    metadata/kis_meta_data_value.cc
    metadata/kis_meta_data_schema.cc

@@ -33,7 +33,7 @@ class KoColorSpace;
 class KisPaintDevice;
 
 class KRITAIMAGE_EXPORT KisPattern : public KoResource {
-    typedef KoResource super;
+
     Q_OBJECT
 
 public:

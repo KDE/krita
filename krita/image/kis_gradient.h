@@ -225,7 +225,7 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
 };
 
 class KRITAIMAGE_EXPORT KisGradient : public KoResource {
-    typedef KoResource super;
+
     Q_OBJECT
 
 public:

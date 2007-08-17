@@ -68,8 +68,6 @@ class KisFilterOpSettings : public QObject, public KisPaintOpSettings {
 
 class KisFilterOp : public KisPaintOp {
 
-    typedef KisPaintOp super;
-
 public:
 
     KisFilterOp(const KisFilterOpSettings* settings, KisPainter * painter);

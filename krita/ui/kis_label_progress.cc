@@ -51,7 +51,8 @@ public:
     }
 };
 
-KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name) : super(parent)
+KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name)
+    : QWidget(parent)
 {
     setObjectName(name);
     m_subject = 0;
@@ -152,7 +153,7 @@ bool KisLabelProgress::event(QEvent * e)
             subjectDestroyed();
             break;
         default:
-            return super::event(e);
+            return QWidget::event(e);
     };
 
     return true;

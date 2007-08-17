@@ -41,7 +41,7 @@
 #include "kis_shape_layer_canvas.h"
 #include "kis_image_view_converter.h"
 #include <kis_painter.h>
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 
 class KisShapeLayer::Private
 {
@@ -168,7 +168,7 @@ QRect KisShapeLayer::exactBounds() const
     return QRectF( rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes() ).toRect();
 }
 
-bool KisShapeLayer::accept(KisLayerVisitor& visitor)
+bool KisShapeLayer::accept(KisNodeVisitor& visitor)
 {
     return visitor.visit(this);
 }
@@ -177,3 +177,5 @@ KoShapeManager *KisShapeLayer::shapeManager() const
 {
     return m_d->canvas->shapeManager();
 }
+
+#include "kis_shape_layer.moc"

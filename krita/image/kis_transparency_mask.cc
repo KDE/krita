@@ -20,6 +20,7 @@
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "KoColorSpace.h"
+#include "kis_selection.h"
 
 #include "kdebug.h"
 
@@ -38,12 +39,12 @@ KisTransparencyMask::KisTransparencyMask( const KisTransparencyMask& rhs )
 {
 }
 
-void KisTransparencyMask::apply( KisPaintDeviceSP projection, const QRect & rc )
+void KisTransparencyMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
 {
     KoColorSpace * cs = projection->colorSpace();
 
     KisHLineIteratorPixel projectionIt = projection->createHLineIterator( rc.x(), rc.y(), rc.width() );
-    KisHLineConstIteratorPixel maskIt = createHLineConstIterator( rc.x(), rc.y(), rc.width() );
+    KisHLineConstIteratorPixel maskIt = selection()->createHLineConstIterator( rc.x(), rc.y(), rc.width() );
 
     for ( int row = rc.y(); row < rc.height(); ++row ) {
         while ( !projectionIt.isDone() ) {
@@ -60,3 +61,5 @@ void KisTransparencyMask::apply( KisPaintDeviceSP projection, const QRect & rc )
 
 
 }
+
+#include "kis_transparency_mask.moc"

@@ -35,6 +35,8 @@ const QString KIS_TRANSFORMATION_MASK_ID = "KisTransformationMask";
 
 class KRITAIMAGE_EXPORT KisTransformationMask : public KisEffectMask
 {
+    Q_OBJECT
+
 public:
 
     /**
@@ -143,7 +145,7 @@ public:
     /**
      * Apply the effect the projection using the mask as a selection.
      */
-    virtual void apply( KisPaintDeviceSP projection, const QRect & rc );
+    virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) const;
 
 private:
 

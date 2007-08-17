@@ -22,7 +22,8 @@
 #include <QTableWidgetItem>
 #include "kis_iconwidget.h"
 
-KisIconWidget::KisIconWidget(QWidget *parent, const char *name) : super(parent)
+KisIconWidget::KisIconWidget(QWidget *parent, const char *name)
+    : KisPopupButton(parent)
 {
     setObjectName(name);
     m_item = 0;

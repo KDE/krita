@@ -28,14 +28,14 @@
 #include "kis_double_widget.h"
 
 KisDoubleWidget::KisDoubleWidget(QWidget* parent, const char* name)
-  : super(parent)
+  : QWidget(parent)
 {
     setObjectName(name);
     init(0, 1);
 }
 
 KisDoubleWidget::KisDoubleWidget(double min, double max, QWidget* parent, const char* name)
-  : super(parent)
+  : QWidget(parent)
 {
     setObjectName(name);
     init(min, max);

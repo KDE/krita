@@ -19,7 +19,7 @@
 #define KIS_PROJECTION
 
 #include <QObject>
-
+#include "kis_shared.h"
 #include "kis_types.h"
 #include <threadweaver/Job.h>
 #include "krita_export.h"
@@ -54,13 +54,13 @@ using namespace ThreadWeaver;
    XXX: Add regions-of-interest so kis_projection will only recomposit
         the interesting regions
  */
-class KRITAIMAGE_EXPORT KisProjection : public QObject {
+class KRITAIMAGE_EXPORT KisProjection : public QObject, public KisShared {
 
     Q_OBJECT
 
 public:
 
-    KisProjection( KisImageWSP image, KisGroupLayerWSP rootLayer );
+    KisProjection( KisImageWSP image );
     virtual ~KisProjection();
 
     /**
@@ -105,19 +105,25 @@ public:
      * Return the region of interest.
      */
     QRect regionOfInterest();
-
 signals:
 
     void sigProjectionUpdated( const QRect & );
 
-public slots:
-
-    void updateSettings();
 
 private slots:
 
-    void slotAddDirtyRegion( const QRegion & region );
-    void slotAddDirtyRect( const QRect & rect );
+    void updateSettings();
+
+    /**
+     * Add the specified region to the recomposition queue
+     */
+    void addDirtyRegion( const QRegion & region );
+
+    /**
+     * Add the specfied rect to the recomposition queue
+     */
+    void addDirtyRect( const QRect & rect );
+
 
     void slotUpdateUi( ThreadWeaver::Job* );
 
@@ -127,6 +133,9 @@ private:
     void scheduleRect( const QRect & rc );
 
 private:
+
+    KisProjection( const KisProjection & );
+    KisProjection & operator=( const KisProjection& );
 
     class Private;
     Private * const m_d;

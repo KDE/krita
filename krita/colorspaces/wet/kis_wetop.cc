@@ -28,7 +28,7 @@
 #include <kis_paintop.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
-#include <kis_meta_registry.h>
+
 #include <KoColorSpaceRegistry.h>
 #include "KoInputDevice.h"
 
@@ -36,7 +36,7 @@
 #include "kis_wet_colorspace.h"
 
 KisWetOpSettings::KisWetOpSettings(QWidget *parent)
-    : super(parent)
+    : KisPaintOpSettings(parent)
 {
     m_options = new WetPaintOptions(parent, "wet option widget");
 }
@@ -77,7 +77,7 @@ KisPaintOpSettings* KisWetOpFactory::settings(QWidget * parent, const KoInputDev
 }
 
 KisWetOp::KisWetOp(const KisWetOpSettings * settings, KisPainter * painter)
-    : super(painter)
+    : KisPaintOp(painter)
 {
     if (settings) {
         m_size = settings->varySize();

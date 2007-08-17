@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/*
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -43,7 +43,7 @@
 
 #include <kis_image.h>
 #include <kis_layer.h>
-#include <kis_meta_registry.h>
+
 
 #include "kis_config.h"
 #include "kis_canvas2.h"
@@ -55,19 +55,8 @@
 #include "kis_selection.h"
 
 //#define DEBUG_REPAINT
-//#define USE_QT_SCALING
+#define USE_QT_SCALING
 
-namespace {
-// XXX: Remove this with Qt 4.3
-    static QRect toAlignedRect(QRectF rc)
-    {
-        int xmin = int(floor(rc.x()));
-        int xmax = int(ceil(rc.x() + rc.width()));
-        int ymin = int(floor(rc.y()));
-        int ymax = int(ceil(rc.y() + rc.height()));
-        return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
-    }
-}
 
 #define NOT_DEFAULT_EXPOSURE 1e100
 
@@ -75,10 +64,10 @@ class KisQPainterCanvas::Private {
 public:
     Private(const KoViewConverter *vc)
         : toolProxy(0),
-        canvas(0),
-        viewConverter(vc),
-        gridDrawer(0),
-        currentExposure( NOT_DEFAULT_EXPOSURE )
+          canvas(0),
+          viewConverter(vc),
+          gridDrawer(0),
+          currentExposure( NOT_DEFAULT_EXPOSURE )
         {
         }
 
@@ -237,7 +226,7 @@ void KisQPainterCanvas::mousePressEvent(QMouseEvent *e) {
     if(e->button() == Qt::RightButton) {
         m_d->canvas->view()->unplugActionList( "flake_tool_actions" );
         m_d->canvas->view()->plugActionList( "flake_tool_actions",
-                                m_d->toolProxy->popupActionList() );
+                                             m_d->toolProxy->popupActionList() );
         QMenu *menu = dynamic_cast<QMenu*> (m_d->canvas->view()->factory()->container("FlakePopup", m_d->canvas->view()));
         if(menu)
             menu->exec( e->globalPos() );
@@ -353,8 +342,6 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
     if (img == 0) return;
     QRect rc = r;
 
-    QImage canvasImage = m_d->canvas->canvasCache();
-
     double sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);
 
@@ -362,56 +349,74 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
     double scaleX = sx / img->xRes();
     double scaleY = sy / img->yRes();
 
-    // comput how large a fully scaled image is
+    QImage canvasImage = m_d->canvas->canvasCache();
+
+    // compute how large a fully scaled image is
     QSize dstSize = QSize(int(canvasImage.width() * scaleX ), int( canvasImage.height() * scaleY));
 
     // Don't go outside the image (will crash the sampleImage method below)
     QRect drawRect = rc.translated( m_d->documentOffset).intersected(QRect(QPoint(),dstSize));
 
-    // Pixel-for-pixel mode
-    if ( scaleX == 1.0 && scaleY == 1.0 ) {
-        gc.drawImage( rc.topLeft(), canvasImage.copy( drawRect ) );
-    }
-    else {
-        if ( scaleX > 1.0 && scaleY > 1.0 ) {
-            QTime t;
-            t.start();
-            QImage img2 = ImageUtils::sampleImage(canvasImage, dstSize.width(), dstSize.height(), drawRect);
-            kDebug(41010) <<"imageutiles sampleImage" << t.elapsed();
-           gc.drawImage( rc.topLeft(), img2 );
-        }
-        else {
-            // Go from the widget coordinates to points
-            QRectF imageRect = m_d->viewConverter->viewToDocument( rc.translated( m_d->documentOffset ) );
+    // Go from the widget coordinates to points
+    QRectF imageRect = m_d->viewConverter->viewToDocument( rc.translated( m_d->documentOffset ) );
 
-            double pppx,pppy;
-            pppx = img->xRes();
-            pppy = img->yRes();
+    double pppx,pppy;
+    pppx = img->xRes();
+    pppy = img->yRes();
 
-            imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
+    // Go from points to pixels
+    imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
                         imageRect.right() * pppx, imageRect.bottom() * pppy);
 
-            // Don't go outside the image and convert to whole pixels
-            QRect alignedRect = toAlignedRect(imageRect.intersected( canvasImage.rect() ));
+    // Don't go outside the image and convert to whole pixels
+    QRect alignedRect = imageRect.intersected( canvasImage.rect() ).toAlignedRect();
 
-            QSize sz = QSize( ( int )( alignedRect.width() * scaleX ), ( int )( alignedRect.height() * scaleY ));
-            QImage croppedImage = canvasImage.copy( alignedRect );
-            QTime t;
-            t.start();
-#ifndef USE_QT_SCALING
-            QImage img2 = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
-            kDebug(41010) <<"Imageutils scale:" << t.elapsed();
-#else
-            t.restart();
-            QImage img2 = croppedImage.scaled( sz, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-            kDebug(41010) <<"qimage smooth scale:" << t.elapsed();
-#endif
-            gc.drawImage( rc.topLeft(), img2 );
+    if ( m_d->canvas->useFastZooming() ) {
 
+        // XXX: Check whether the right coordinates are used
 
-            //gc.drawImage( rc.topLeft(), ImageUtils::scale(croppedImage, sz.width(), sz.height() ));
+        QTime t;
+        t.start();
+        QImage tmpImage = img->convertToQImage( alignedRect, scaleX, scaleY, m_d->canvas->monitorProfile(), m_d->currentExposure );
+        kDebug(41010 ) << "KisImage::convertToQImage" << t.elapsed();
+        gc.drawImage( rc.topLeft(), tmpImage );
 
+    }
+    else {
+
+        // Pixel-for-pixel mode
+        if ( scaleX == 1.0 && scaleY == 1.0 ) {
+            gc.drawImage( rc.topLeft(), canvasImage.copy( drawRect ) );
         }
+        else {
+            if ( scaleX > 1.0 && scaleY > 1.0 ) {
+                QTime t;
+                t.start();
+                QImage img2 = ImageUtils::sampleImage(canvasImage, dstSize.width(), dstSize.height(), drawRect);
+                kDebug(41010) <<"imageutiles sampleImage" << t.elapsed();
+                gc.drawImage( rc.topLeft(), img2 );
+            }
+            else {
+                QSize sz = QSize( ( int )( alignedRect.width() * scaleX ), ( int )( alignedRect.height() * scaleY ));
+                QImage croppedImage = canvasImage.copy( alignedRect );
+                QTime t;
+                t.start();
+#ifndef USE_QT_SCALING
+                QImage img2 = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
+                kDebug(41010) <<"Imageutils scale:" << t.elapsed();
+#else
+                t.restart();
+                QImage img2 = croppedImage.scaled( sz, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+                kDebug(41010) <<"qimage smooth scale:" << t.elapsed();
+#endif
+                gc.drawImage( rc.topLeft(), img2 );
+
+
+                //gc.drawImage( rc.topLeft(), ImageUtils::scale(croppedImage, sz.width(), sz.height() ));
+
+            }
+        }
+
     }
 }
 

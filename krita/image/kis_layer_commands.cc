@@ -24,14 +24,12 @@
 #include "kis_layer.h"
 
 KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :
-    super(name), m_layer(layer)
+    QUndoCommand(name), m_layer(layer)
 {
 }
 
-
-
 KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, quint8 oldOpacity, quint8 newOpacity) :
-    super(i18n("Layer Opacity"), layer)
+    KisLayerCommand(i18n("Layer Opacity"), layer)
 {
     m_oldOpacity = oldOpacity;
     m_newOpacity = newOpacity;
@@ -51,7 +49,7 @@ void KisLayerOpacityCommand::undo()
 
 KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp* oldCompositeOp,
                                 const KoCompositeOp* newCompositeOp) :
-    super(i18n("Layer Composite Mode"), layer)
+    KisLayerCommand(i18n("Layer Composite Mode"), layer)
 {
     m_oldCompositeOp = oldCompositeOp;
     m_newCompositeOp = newCompositeOp;
@@ -70,7 +68,7 @@ void KisLayerCompositeOpCommand::undo()
 
 
 KisLayerMoveCommand::KisLayerMoveCommand(KisLayerSP layer, const QPoint& oldpos, const QPoint& newpos) :
-    super(i18n("Move Layer"), layer)
+    KisLayerCommand(i18n("Move Layer"), layer)
 {
     m_oldPos = oldpos;
     m_newPos = newpos;

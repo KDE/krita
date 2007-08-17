@@ -35,85 +35,6 @@
 #include "kis_image.h"
 #include "kis_group_layer.h"
 
-class TestLayer : public KisLayer {
-
-public:
-
-    TestLayer( KisImageWSP image, const QString & name, quint8 opacity )
-        : KisLayer( image, name, opacity )
-        {
-        }
-
-
-    virtual QString nodeType()
-        {
-            return "TEST";
-        }
-
-    virtual bool canHaveChildren()
-        {
-            return false;
-        }
-
-    void updateProjection(const QRect&)
-        {
-        }
-
-    KisPaintDeviceSP projection() const
-        {
-            return 0;
-        }
-
-    KisPaintDeviceSP paintDevice() const
-        {
-            return 0;
-        }
-
-    QIcon icon() const
-        {
-            return QIcon();
-        }
-
-    KisLayerSP clone() const
-        {
-            return new TestLayer(image(), name(), opacity());
-        }
-
-    qint32 x() const
-        {
-            return 0;
-        }
-
-    void setX(qint32)
-        {
-        }
-
-    qint32 y() const
-        {
-            return 0;
-        }
-
-    void setY(qint32)
-        {
-        }
-
-    QRect extent() const
-        {
-            return QRect();
-        }
-
-    QRect exactBounds() const
-        {
-            return QRect();
-        }
-
-    bool accept(KisLayerVisitor&)
-        {
-            return false;
-        }
-
-
-};
 
 void KisLayerTest::testCreation()
 {
@@ -157,9 +78,13 @@ void KisLayerTest::testOrdering()
     KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace( "RGBA", 0 );
     KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "merge test" );
 
-    KisLayerSP layer1 = new TestLayer( image, "test", OPACITY_OPAQUE );
-    KisLayerSP layer2 = new TestLayer( image, "test", OPACITY_OPAQUE );
-    KisLayerSP layer3 = new TestLayer( image, "test", OPACITY_OPAQUE );
+    KisLayerSP layer1 = new TestLayer( image, "layer1", OPACITY_OPAQUE );
+    KisLayerSP layer2 = new TestLayer( image, "layer2", OPACITY_OPAQUE );
+    KisLayerSP layer3 = new TestLayer( image, "layer3", OPACITY_OPAQUE );
+
+    QVERIFY( layer1->name() == "layer1" );
+    QVERIFY( layer2->name() == "layer2" );
+    QVERIFY( layer3->name() == "layer3" );
 
     /*
       +---------+
@@ -170,34 +95,34 @@ void KisLayerTest::testOrdering()
       +---------+
      */
 
-    image->addLayer( layer1, image->rootLayer() );
-    image->addLayer( layer2, image->rootLayer() );
-    image->addLayer( layer3, image->rootLayer(), layer1 );
+    QVERIFY( image->addLayer( layer1, image->rootLayer() ) );
+    QVERIFY( image->addLayer( layer2, image->rootLayer() ) );
+    QVERIFY( image->addLayer( layer3, image->rootLayer(), layer1 ) );
 
-    QVERIFY( image->nlayers() == 3 );
+    QCOMPARE( (int) image->nlayers(), 4 );
 
-    QVERIFY( layer1->parentLayer() == image->rootLayer() );
-    QVERIFY( layer2->parentLayer() == image->rootLayer() );
-    QVERIFY( layer3->parentLayer() == image->rootLayer() );
+    QVERIFY( layer1->parent() == image->root() );
+    QVERIFY( layer2->parent() == image->root() );
+    QVERIFY( layer3->parent() == image->root() );
 
-    QVERIFY( image->rootLayer()->firstChild() == layer2 );
-    QVERIFY( image->rootLayer()->lastChild() == layer1 );
+    QVERIFY( image->rootLayer()->firstChild() == layer1.data() );
+    QVERIFY( image->rootLayer()->lastChild() == layer2.data() );
 
-    QVERIFY( image->rootLayer()->at( 0 ) == layer2 );
-    QVERIFY( image->rootLayer()->at( 1 ) == layer3 );
-    QVERIFY( image->rootLayer()->at( 2 ) == layer1 );
+    QVERIFY( image->rootLayer()->at( 0 ) == layer1.data() );
+    QVERIFY( image->rootLayer()->at( 1 ) == layer3.data() );
+    QVERIFY( image->rootLayer()->at( 2 ) == layer2.data() );
 
-    QVERIFY( image->rootLayer()->index( layer1 ) == 2 );
+    QVERIFY( image->rootLayer()->index( layer1 ) == 0 );
     QVERIFY( image->rootLayer()->index( layer3 ) == 1 );
-    QVERIFY( image->rootLayer()->index( layer2 ) == 0 );
+    QVERIFY( image->rootLayer()->index( layer2 ) == 2 );
 
-    QVERIFY( layer3->prevSibling() == layer2 );
-    QVERIFY( layer2->prevSibling() == 0 );
-    QVERIFY( layer1->prevSibling() == layer3 );
+    QVERIFY( layer3->prevSibling() == layer1.data() );
+    QVERIFY( layer2->prevSibling() == layer3.data() );
+    QVERIFY( layer1->prevSibling() == 0 );
 
-    QVERIFY( layer3->nextSibling() == layer1 );
-    QVERIFY( layer2->nextSibling() == layer3 );
-    QVERIFY( layer1->nextSibling() == 0 );
+    QVERIFY( layer3->nextSibling() == layer2.data() );
+    QVERIFY( layer2->nextSibling() == 0 );
+    QVERIFY( layer1->nextSibling() == layer3.data() );
 
 
     /*
@@ -208,43 +133,88 @@ void KisLayerTest::testOrdering()
       |root     |
       +---------+
      */
-    image->moveLayer( layer2, image->rootLayer(), layer1 );
+    QVERIFY( image->moveLayer( layer2, image->rootLayer(), layer1 ) );
 
-    QVERIFY( image->rootLayer()->firstChild() == layer3 );
-    QVERIFY( image->rootLayer()->lastChild() == layer1 );
+    QVERIFY( image->rootLayer()->at( 0 ) == layer1.data() );
+    QVERIFY( image->rootLayer()->at( 1 ) == layer2.data() );
+    QVERIFY( image->rootLayer()->at( 2 ) == layer3.data() );
 
-    QVERIFY( image->rootLayer()->at( 0 ) == layer3 );
-    QVERIFY( image->rootLayer()->at( 1 ) == layer2 );
-    QVERIFY( image->rootLayer()->at( 2 ) == layer1 );
+    QVERIFY( image->rootLayer()->firstChild() == layer1.data() );
+    QVERIFY( image->rootLayer()->lastChild() == layer3.data() );
 
-    QVERIFY( image->rootLayer()->index( layer1 ) == 2 );
+    QVERIFY( image->rootLayer()->index( layer1 ) == 0 );
     QVERIFY( image->rootLayer()->index( layer2 ) == 1 );
-    QVERIFY( image->rootLayer()->index( layer3 ) == 0 );
+    QVERIFY( image->rootLayer()->index( layer3 ) == 2 );
 
-    QVERIFY( layer3->prevSibling() == 0 );
-    QVERIFY( layer2->prevSibling() == layer3 );
-    QVERIFY( layer1->prevSibling() == layer2 );
+    QVERIFY( layer3->prevSibling() == layer2.data() );
+    QVERIFY( layer2->prevSibling() == layer1.data() );
+    QVERIFY( layer1->prevSibling() == 0 );
 
-    QVERIFY( layer3->nextSibling() == layer2 );
-    QVERIFY( layer2->nextSibling() == layer1 );
-    QVERIFY( layer1->nextSibling() == 0 );
+    QVERIFY( layer3->nextSibling() == 0 );
+    QVERIFY( layer2->nextSibling() == layer3.data() );
+    QVERIFY( layer1->nextSibling() == layer2.data() );
 
 }
 
-void KisLayerTest::testEffectMasks()
+
+void KisLayerTest::testMoveNode()
 {
     KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace( "RGBA", 0 );
     KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "merge test" );
 
-    KisPaintLayerSP layer1 = new KisPaintLayer( image, "test", OPACITY_OPAQUE );
-//     KisEffectMask * mask1 = new KisEffectMask();
-//     layer1->addEffectMask( mask1 );
-//     QVERIFY( layer1->effectMasks().size() == 1 );
+    KisLayerSP node1 = new TestLayer( image, "layer1", OPACITY_OPAQUE );
+    KisLayerSP node2 = new TestLayer( image, "layer2", OPACITY_OPAQUE );
+    KisLayerSP node3 = new TestLayer( image, "layer3", OPACITY_OPAQUE );
+
+    node1->setName( "node1" );
+    node2->setName( "node2" );
+    node3->setName( "node3" );
+
+    QVERIFY( image->addNode( node1 ) );
+    QVERIFY( image->addNode( node2 ) );
+    QVERIFY( image->addNode( node3 ) );
+
+    QVERIFY( image->root()->at( 0 ) == node1.data() );
+    QVERIFY( image->root()->at( 1 ) == node2.data() );
+    QVERIFY( image->root()->at( 2 ) == node3.data() );
+
+    QVERIFY( image->moveNode( node3, image->root(), node1 ) );
+
+    QVERIFY( image->root()->at( 0 ) == node1.data() );
+    QVERIFY( image->root()->at( 1 ) == node3.data() );
+    QVERIFY( image->root()->at( 2 ) == node2.data() );
 
 }
 
 
+void KisLayerTest::testMoveLayer()
+{
+    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace( "RGBA", 0 );
+    KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "merge test" );
+
+    KisLayerSP node1 = new TestLayer( image, "layer1", OPACITY_OPAQUE );
+    KisLayerSP node2 = new TestLayer( image, "layer2", OPACITY_OPAQUE );
+    KisLayerSP node3 = new TestLayer( image, "layer3", OPACITY_OPAQUE );
+    node1->setName( "node1" );
+    node2->setName( "node2" );
+    node3->setName( "node3" );
+
+    QVERIFY( image->addNode( node1 ) );
+    QVERIFY( image->addNode( node2 ) );
+    QVERIFY( image->addNode( node3 ) );
+
+    QVERIFY( image->root()->at( 0 ) == node1.data() );
+    QVERIFY( image->root()->at( 1 ) == node2.data() );
+    QVERIFY( image->root()->at( 2 ) == node3.data() );
+
+    QVERIFY( image->moveLayer( node3, image->rootLayer(), node1 ) );
+
+    QVERIFY( image->root()->at( 0 ) == node1.data() );
+    QVERIFY( image->root()->at( 1 ) == node3.data() );
+    QVERIFY( image->root()->at( 2 ) == node2.data() );
+
+}
+
 QTEST_KDEMAIN(KisLayerTest, NoGUI)
 #include "kis_layer_test.moc"
-
 

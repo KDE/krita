@@ -25,7 +25,6 @@
 
 class QRect;
 
-const QString KIS_TRANSPARENCY_MASK_ID = "KIS_TRANSPARENCY_MASK";
 
 /**
    A transparency mask is a single channel mask that applies a particular
@@ -35,6 +34,8 @@ const QString KIS_TRANSPARENCY_MASK_ID = "KIS_TRANSPARENCY_MASK";
 */
 class KRITAIMAGE_EXPORT KisTransparencyMask : public KisEffectMask
 {
+    Q_OBJECT
+
 public:
 
     KisTransparencyMask();
@@ -42,19 +43,7 @@ public:
     virtual ~KisTransparencyMask();
     KisTransparencyMask( const KisTransparencyMask& rhs );
 
-
-    virtual QString nodeType()
-        {
-            return id();
-        }
-
-    virtual bool canHaveChildren()
-        {
-            return false;
-        }
-
-    virtual void apply( KisPaintDeviceSP projection, const QRect & rc );
-    virtual QString id() { return KIS_TRANSPARENCY_MASK_ID; }
+    virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) const;
 };
 
 #endif //_KIS_TRANSPARENCY_MASK_

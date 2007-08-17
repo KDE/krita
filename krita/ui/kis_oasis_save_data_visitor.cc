@@ -96,12 +96,7 @@ bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)
 
 bool KisOasisSaveDataVisitor::visit(KisGroupLayer *layer)
 {
-    KisLayerSP child = layer->firstChild();
-    while(child)
-    {
-        child->accept(*this);
-        child = child->nextSibling();
-    }
+    visitAll( layer );
     return true;
 }
 

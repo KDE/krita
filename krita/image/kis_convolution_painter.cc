@@ -47,10 +47,9 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
-#include "kis_pattern.h"
 #include "KoColorSpace.h"
 #include "kis_types.h"
-#include "kis_vec.h"
+
 #include "kis_selection.h"
 #include "kis_convolution_painter.h"
 
@@ -76,11 +75,11 @@ KisKernelSP KisKernel::fromQImage(const QImage& img)
 
 
 KisConvolutionPainter::KisConvolutionPainter()
-    : super()
+    : KisPainter()
 {
 }
 
-KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : super(device)
+KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : KisPainter(device)
 {
 }
 

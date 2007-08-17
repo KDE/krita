@@ -40,7 +40,7 @@ struct KisBristle {
 };
 
 struct KisPaintBrush : public KisShared {
-    KisPaintBrush(double paintbrushMinRadius, double paintbrushMaxRadius, double bristlesDensity, double bristlesMinRadius, double bristlesMaxRadius) : 
+    KisPaintBrush(double paintbrushMinRadius, double paintbrushMaxRadius, double bristlesDensity, double bristlesMinRadius, double bristlesMaxRadius) :
             m_paintbrushMinRadius(paintbrushMinRadius), m_paintbrushMaxRadius(paintbrushMaxRadius), m_bristlesDensity(bristlesDensity), m_bristlesMinRadius(bristlesMinRadius), m_bristlesMaxRadius(bristlesMaxRadius), m_firstStroke(true)
     {
         m_bristles.push_back( KisBristle(-0.5,-0.5 ) );
@@ -106,7 +106,7 @@ void KisBristleShape::startPainting(KisPainter* _painter)
     m_paintBrush->bristlesPainter->setBrush( new KisAutobrushResource(img) );
     m_paintBrush->bristlesPainter->setPaintOp( KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, m_paintBrush->bristlesPainter, 0) );
     m_paintBrush->bristlesPainter->setPaintColor( KoColor( QColor( (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX ), KoColorSpaceRegistry::instance()->rgb8()) );
- 
+
 }
 
 void KisBristleShape::endPainting()
@@ -118,6 +118,9 @@ void KisBristleShape::endPainting()
 
 void KisBristleShape::paintAt(const QPointF &brushPos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc)
 {
+    Q_UNUSED( info );
+    Q_UNUSED( coloringsrc );
+
     double angleCos = cos(m_angle);
     double angleSin = sin(m_angle);
     for( QList< KisBristle >::iterator it = m_paintBrush->m_bristles.begin();
@@ -147,7 +150,7 @@ void KisBristleShape::paintAt(const QPointF &brushPos, const KisPaintInformation
 #if 0
 void KisBristleShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* coloringsrc,const QPointF &brushPos, const KisPaintInformation& info)
 {
-    
+
     double angleCos = cos(m_angle);
     double angleSin = sin(m_angle);
     kDebug(41006) << angleCos <<"" << angleSin;

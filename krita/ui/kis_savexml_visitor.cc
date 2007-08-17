@@ -27,7 +27,7 @@
 #include "kis_paint_layer.h"
 
 KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, QDomElement element, quint32 &count, bool root) :
-    KisLayerVisitor(),
+    KisNodeVisitor(),
     m_doc(doc),
     m_count(count),
     m_root(root)
@@ -95,14 +95,7 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
 
     KisSaveXmlVisitor visitor(m_doc, elem, m_count);
 
-    KisLayerSP child = layer->firstChild();
-
-    while(child)
-    {
-        child->accept(visitor);
-        child = child->nextSibling();
-    }
-    return true;
+    return visitAll( layer );
 }
 
 bool KisSaveXmlVisitor::visit(KisAdjustmentLayer* layer)

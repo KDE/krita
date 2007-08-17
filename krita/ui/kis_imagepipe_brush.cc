@@ -139,7 +139,7 @@ bool KisPipeBrushParasite::saveToDevice(QIODevice* dev) const {
     return true;
 }
 
-KisImagePipeBrush::KisImagePipeBrush(const QString& filename) : super(filename)
+KisImagePipeBrush::KisImagePipeBrush(const QString& filename) : KisBrush(filename)
 {
     m_brushType = INVALID;
     m_numOfBrushes = 0;
@@ -149,7 +149,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& filename) : super(filename)
 KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
                                      QVector< QVector<KisPaintDevice*> > devices,
                                      QVector<KisPipeBrushParasite::SelectionMode> modes)
-    : super("")
+    : KisBrush("")
 {
     Q_ASSERT(devices.count() == modes.count());
     Q_ASSERT(devices.count() > 0);

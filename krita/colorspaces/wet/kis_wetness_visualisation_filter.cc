@@ -21,7 +21,7 @@
 #include <klocale.h>
 #include <ktoggleaction.h>
 
-#include "kis_meta_registry.h"
+
 #include <kis_view.h>
 #include <kis_image.h>
 #include <KoColorSpaceRegistry.h>

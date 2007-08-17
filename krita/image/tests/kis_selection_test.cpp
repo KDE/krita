@@ -27,11 +27,36 @@
 
 #include "kis_pixel_selection.h"
 
+
+void KisSelectionTest::testSelectionComponents()
+{
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "tmp");
+    QVERIFY( dev->hasSelection() == false );
+    QVERIFY( dev->selection() != 0 );
+    QVERIFY( dev->hasSelection() == true );
+
+    KisSelectionSP selection = dev->selection();
+    QVERIFY( selection->hasPixelSelection() == false );
+    QVERIFY( selection->hasShapeSelection() == false );
+    QVERIFY( selection->pixelSelection() == 0 );
+    QVERIFY( selection->shapeSelection() == 0 );
+
+    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+    QVERIFY( selection->pixelSelection() == pixelSelection );
+    QVERIFY( selection->hasPixelSelection() == true );
+
+}
+
 void KisSelectionTest::testSelectionActions()
 {
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "tmp");
+    KisPixelSelectionSP pixelSelection = new KisPixelSelection();
 
-    KisPixelSelectionSP pixelSelection = dev->pixelSelection();
+    KisSelectionSP selection = dev->selection();
+    QVERIFY( selection->hasPixelSelection() == false );
+    QVERIFY( selection->hasShapeSelection() == false );
+    selection->setPixelSelection( pixelSelection );
+
     pixelSelection->select(QRect(0,0,20,20));
 
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
@@ -57,17 +82,32 @@ void KisSelectionTest::testSelectionActions()
 
 void KisSelectionTest::testInvertSelection()
 {
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "tmp");
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs, "tmp");
+    quint8* pixel = cs->allocPixelBuffer( 1 );
+    cs->fromQColor( Qt::white, pixel );
+    dev->fill( 0, 0, 512, 512, pixel);
 
-    KisPixelSelectionSP pixelSelection = dev->pixelSelection();
-    pixelSelection->select(QRect(0,0,20,20));
+    KisSelectionSP selection = dev->selection();
+    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+    pixelSelection->select(QRect(20,20,20,20));
+    QCOMPARE( pixelSelection->selected( 30, 30 ), MAX_SELECTED );
+    QCOMPARE( pixelSelection->selected( 0, 0 ), MIN_SELECTED );
+    QCOMPARE( pixelSelection->selected( 512, 512 ), MIN_SELECTED );
+
     pixelSelection->invert();
 
-    QCOMPARE( dev->pixelSelection()->selected(100,100), MAX_SELECTED);
-    QCOMPARE( dev->pixelSelection()->selected(22,22), MAX_SELECTED);
-    QCOMPARE( dev->selection()->selected(100,100), MAX_SELECTED);
-    QCOMPARE( dev->selection()->selected(22,22), MAX_SELECTED);
-    QCOMPARE( dev->selection()->selected(10,10), MIN_SELECTED);
+    QCOMPARE( pixelSelection->selected(100,100), MAX_SELECTED);
+    QCOMPARE( pixelSelection->selected(22,22), MIN_SELECTED);
+    QCOMPARE( pixelSelection->selected( 0, 0 ), MAX_SELECTED );
+    QCOMPARE( pixelSelection->selected( 512, 512 ), MAX_SELECTED );
+
+    // XXX: This should happen automatically
+    selection->updateProjection();
+
+    QCOMPARE( selection->selected(100,100), MAX_SELECTED);
+    QCOMPARE( selection->selected(22,22), MIN_SELECTED);
+    QCOMPARE( selection->selected(10,10), MAX_SELECTED);
 }
 
 

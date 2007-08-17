@@ -25,75 +25,66 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_layer.h"
+#include "kis_selection.h"
 
-class KisMask::KisMaskPrivate
+class KisMask::Private
 {
 
 public:
-    KisPaintDeviceSP parent;
-    KisLayerSP parentLayer;
-    bool active;
+    KisSelectionSP selection;
 };
 
 
-KisMask::KisMask(KisPaintDeviceSP dev,  const QString & name)
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(),
-                     name)
-    , m_d( new KisMaskPrivate() )
+KisMask::KisMask( const QString & name )
+    : m_d( new Private() )
 {
-    Q_ASSERT(dev);
-    m_d->parent = dev;
-    m_d->active = true;
-}
-
-KisMask::KisMask(const QString & name)
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), name)
-    , m_d( new KisMaskPrivate() )
-{
-    m_d->parent = 0;
-    m_d->active = false;
-
+    setName( name );
+    m_d->selection = new KisSelection();
 }
 
 KisMask::KisMask(const KisMask& rhs)
-    : KisPaintDevice(rhs)
-    , m_d( new KisMaskPrivate() )
+    : KisNode( rhs )
+    , m_d( new Private() )
 {
-    m_d->parent = rhs.m_d->parent;
-    m_d->parentLayer = rhs.m_d->parentLayer;
-    m_d->active = rhs.m_d->active;
+    setName( rhs.name() );
+    m_d->selection = new KisSelection( *rhs.m_d->selection.data() );
 }
 
 KisMask::~KisMask()
 {
+    delete m_d;
 }
 
-KisPaintDeviceSP KisMask::parentPaintDevice() const
+KoDocumentSectionModel::PropertyList KisMask::sectionModelProperties() const
 {
-    return m_d->parent;
+    KoDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
+    l << KoDocumentSectionModel::Property(i18n("Active"), KIcon("active"), KIcon("inactive"), active());
+    return l;
 }
 
-void KisMask::setName( const QString & name )
+void KisMask::setSectionModelProperties( const KoDocumentSectionModel::PropertyList &properties )
 {
-    setObjectName( name );
+    setActive( properties.at( 2 ).state.toBool() );
 }
 
-void KisMask::setParentLayer( KisLayerSP parentLayer )
+bool KisMask::active() const
 {
-    m_d->parentLayer = parentLayer;
-}
-
-KisLayerSP KisMask::parentLayer() const
-{
-    return m_d->parentLayer;
-}
-
-bool KisMask::active()
-{
-    return m_d->active;
+    return nodeProperties().boolProperty( "active", true );
 }
 
 void KisMask::setActive( bool active )
 {
-    m_d->active = active;
+    nodeProperties().setProperty( "active", active );
 }
+
+KisSelectionSP KisMask::selection() const
+{
+    return m_d->selection;
+}
+
+void KisMask::setSelection( KisSelectionSP selection )
+{
+    m_d->selection = selection;
+}
+
+#include "kis_mask.moc"

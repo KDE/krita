@@ -48,6 +48,8 @@ public:
     KisMaskShape( KoShapeContainer * parent, KisMaskSP mask );
     ~KisMaskShape();
 
+    KisMaskSP mask();
+
     void paint(QPainter &painter, const KoViewConverter &converter)
         {
             Q_UNUSED( painter );

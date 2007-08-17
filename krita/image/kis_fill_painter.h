@@ -22,7 +22,7 @@
 #include <QRect>
 
 #include "kis_pixel_selection.h"
-#include "kis_meta_registry.h"
+
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_painter.h"
@@ -39,8 +39,6 @@ class KisPattern;
  */
 class KRITAIMAGE_EXPORT KisFillPainter : public KisPainter
 {
-
-    typedef KisPainter super;
 
 public:
 

@@ -21,6 +21,92 @@
 
 #include <QtTest/QtTest>
 
+#include "kis_layer.h"
+#include "kis_types.h"
+#include "kis_node_visitor.h"
+
+class TestLayer : public KisLayer {
+
+    Q_OBJECT
+
+public:
+
+    TestLayer( KisImageWSP image, const QString & name, quint8 opacity )
+        : KisLayer( image, name, opacity )
+        {
+        }
+
+
+    virtual QString nodeType()
+        {
+            return "TEST";
+        }
+
+    virtual bool canHaveChildren()
+        {
+            return false;
+        }
+
+    void updateProjection(const QRect&)
+        {
+        }
+
+    KisPaintDeviceSP projection() const
+        {
+            return 0;
+        }
+
+    KisPaintDeviceSP paintDevice() const
+        {
+            return 0;
+        }
+
+    QIcon icon() const
+        {
+            return QIcon();
+        }
+
+    KisLayerSP clone() const
+        {
+            return new TestLayer(image(), name(), opacity());
+        }
+
+    qint32 x() const
+        {
+            return 0;
+        }
+
+    void setX(qint32)
+        {
+        }
+
+    qint32 y() const
+        {
+            return 0;
+        }
+
+    void setY(qint32)
+        {
+        }
+
+    QRect extent() const
+        {
+            return QRect();
+        }
+
+    QRect exactBounds() const
+        {
+            return QRect();
+        }
+
+    bool accept(KisNodeVisitor& v)
+        {
+            return v.visit( this );
+        }
+
+
+};
+
 class KisLayerTest : public QObject
 {
     Q_OBJECT
@@ -29,7 +115,8 @@ private slots:
 
     void testCreation();
     void testOrdering();
-    void testEffectMasks();
+    void testMoveNode();
+    void testMoveLayer();
 
 };
 

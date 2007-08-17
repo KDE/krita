@@ -28,7 +28,7 @@
 #include "kis_icon_item.h"
 #include "kis_pattern.h"
 
-KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name) : super(parent, name)
+KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name) : KisItemChooser(parent, name)
 {
     m_lbName = new QLabel(this);
 

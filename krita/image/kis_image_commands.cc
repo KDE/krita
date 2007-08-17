@@ -32,8 +32,9 @@
 #include "kis_group_layer.h"
 #include "kis_undo_adapter.h"
 
-KisImageCommand::KisImageCommand(const QString& name, KisImageSP image) :
-    super(name), m_image(image)
+KisImageCommand::KisImageCommand(const QString& name, KisImageSP image)
+    : QUndoCommand(name)
+    , m_image(image)
 {
 }
 
@@ -47,7 +48,7 @@ void KisImageCommand::setUndo(bool undo)
 
 
 KisImageLockCommand::KisImageLockCommand(KisImageSP image, bool lockImage)
-    : super("lock image", image)  // Not for translation, this is only ever used inside a macro command.
+    : KisImageCommand("lock image", image)  // Not for translation, this is only ever used inside a macro command.
 {
     m_lockImage = lockImage;
 }
@@ -77,7 +78,7 @@ void KisImageLockCommand::undo()
 
 
 KisImageResizeCommand::KisImageResizeCommand(KisImageSP image, qint32 width, qint32 height, qint32 oldWidth, qint32 oldHeight)
-    : super(i18n("Resize Image"), image)
+    : KisImageCommand(i18n("Resize Image"), image)
 {
     m_before = QSize(oldWidth, oldHeight);
     m_after = QSize(width, height);
@@ -100,7 +101,7 @@ void KisImageResizeCommand::undo()
 
 
 KisImageConvertTypeCommand::KisImageConvertTypeCommand(KisImageSP image, KoColorSpace * beforeColorSpace, KoColorSpace * afterColorSpace)
-    : super(i18n("Convert Image Type"), image)
+    : KisImageCommand(i18n("Convert Image Type"), image)
 {
     m_beforeColorSpace = beforeColorSpace;
     m_afterColorSpace = afterColorSpace;
@@ -124,9 +125,10 @@ void KisImageConvertTypeCommand::undo()
 
 
 
-KisImagePropsCommand::KisImagePropsCommand(KisImageSP image,                                          KoColorSpace* newColorSpace, KoColorProfile* newProfile)
-    : super(i18n("Property Changes"), image)
-    ,  m_newProfile(newProfile)
+KisImagePropsCommand::KisImagePropsCommand(KisImageSP image,KoColorSpace* newColorSpace, KoColorProfile* newProfile)
+    : KisImageCommand(i18n("Property Changes"), image)
+    , m_newColorSpace( newColorSpace )
+    , m_newProfile(newProfile)
 {
     m_oldColorSpace = m_image->colorSpace();
     m_oldProfile = m_image->profile();
@@ -150,8 +152,8 @@ void KisImagePropsCommand::undo()
 
 
 
-KisImageChangeLayersCommand::KisImageChangeLayersCommand(KisImageSP image, KisGroupLayerSP oldRootLayer, KisGroupLayerSP newRootLayer, const QString& name)
-    : super(name, image)
+KisImageChangeLayersCommand::KisImageChangeLayersCommand(KisImageSP image, KisNodeSP oldRootLayer, KisNodeSP newRootLayer, const QString& name)
+    : KisImageCommand(name, image)
 {
     m_oldRootLayer = oldRootLayer;
     m_newRootLayer = newRootLayer;
@@ -160,7 +162,7 @@ KisImageChangeLayersCommand::KisImageChangeLayersCommand(KisImageSP image, KisGr
 void KisImageChangeLayersCommand::redo()
 {
     setUndo(false);
-    m_image->setRootLayer(m_newRootLayer);
+    m_image->setRootLayer( static_cast<KisGroupLayer*>( m_newRootLayer.data() ) );
     m_image->notifyLayersChanged();
     setUndo(true);
 }
@@ -168,35 +170,35 @@ void KisImageChangeLayersCommand::redo()
 void KisImageChangeLayersCommand::undo()
 {
     setUndo(false);
-    m_image->setRootLayer(m_oldRootLayer);
+    m_image->setRootLayer( static_cast<KisGroupLayer*>( m_oldRootLayer.data() ) );
     m_image->notifyLayersChanged();
     setUndo(true);
 }
 
 
 
-KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageSP image, KisLayerSP layer)
-    : super(i18n("Add Layer"), image)
+KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageSP image, KisNodeSP layer)
+    : KisImageCommand(i18n("Add Layer"), image)
 {
     m_layer = layer;
-    m_parent = layer->parentLayer();
+    m_parent = layer->parent();
     m_aboveThis = layer->nextSibling();
 }
 
 void KisImageLayerAddCommand::redo()
 {
-    m_image->addLayer(m_layer, m_parent, m_aboveThis);
+    m_image->addNode(m_layer, m_parent, m_aboveThis);
 }
 
 void KisImageLayerAddCommand::undo()
 {
-    m_image->removeLayer(m_layer);
+    m_image->removeNode(m_layer);
 }
 
 
 
-KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageSP image, KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAbove)
-    : super(i18n("Remove Layer"), image)
+KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP wasParent, KisNodeSP wasAbove)
+    : KisImageCommand(i18n("Remove Layer"), image)
 {
     m_layer = layer;
     m_prevParent = wasParent;
@@ -206,41 +208,41 @@ KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageSP image, KisLaye
 
 void KisImageLayerRemoveCommand::redo()
 {
-    m_image->removeLayer(m_layer);
+    m_image->removeNode(m_layer);
 }
 
 void KisImageLayerRemoveCommand::undo()
 {
-    m_image->addLayer(m_layer, m_prevParent, m_prevAbove);
+    m_image->addNode(m_layer, m_prevParent, m_prevAbove);
 }
 
 
 
-KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAbove)
-    : super(i18n("Move Layer"), image)
+KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP wasParent, KisNodeSP wasAbove)
+    : KisImageCommand(i18n("Move Layer"), image)
 {
     m_layer = layer;
     m_prevParent = wasParent;
     m_prevAbove = wasAbove;
-    m_newParent = layer->parentLayer();
+    m_newParent = layer->parent();
     m_newAbove = layer->nextSibling();
 }
 
 void KisImageLayerMoveCommand::redo()
 {
-    m_image->moveLayer(m_layer, m_newParent, m_newAbove);
+    m_image->moveNode(m_layer, m_newParent, m_newAbove);
 }
 
 void KisImageLayerMoveCommand::undo()
 {
-    m_image->moveLayer(m_layer, m_prevParent, m_prevAbove);
+    m_image->moveNode(m_layer, m_prevParent, m_prevAbove);
 }
 
 
 
 
 KisImageLayerPropsCommand::KisImageLayerPropsCommand(KisImageSP image, KisLayerSP layer, qint32 opacity, const KoCompositeOp* compositeOp, const QString& name, QBitArray channelFlags )
-    : super(i18n("Property Changes"), image)
+    : KisImageCommand(i18n("Property Changes"), image)
 {
     m_layer = layer;
     m_name = name;
@@ -256,7 +258,10 @@ void KisImageLayerPropsCommand::redo()
     const KoCompositeOp* compositeOp = m_layer->compositeOp();
     QBitArray channelFlags = m_layer->channelFlags();
 
-    m_image->setLayerProperties(m_layer, m_opacity, m_compositeOp, m_name, m_channelFlags);
+    m_layer->setName(name);
+    m_layer->setOpacity(opacity);
+    m_layer->setCompositeOp(compositeOp);
+    m_layer->setChannelFlags( channelFlags );
 
     m_compositeOp = compositeOp;
     m_channelFlags = channelFlags;

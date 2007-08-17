@@ -17,7 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
- // A big thank to Glenn Randers-Pehrson for his wonderful documentation of libpng available at http://www.libpng.org/pub/png/libpng-1.2.5-manual.html
+// A big thank to Glenn Randers-Pehrson for his wonderful
+// documentation of libpng available at
+// http://www.libpng.org/pub/png/libpng-1.2.5-manual.html
+
 #include "kis_png_converter.h"
 
 #include <config-endian.h> // WORDS_BIGENDIAN
@@ -42,7 +45,7 @@
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
-#include <kis_meta_registry.h>
+
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 
@@ -260,10 +263,10 @@ void _flush_fn(png_structp png_ptr)
 
 KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 {
-    kDebug(41008) << "Start decoding PNG File" << endl;
+    kDebug(41008) << "Start decoding PNG File";
     if(not iod->open(QIODevice::ReadOnly))
     {
-        kDebug(41008) << "Failed to open PNG File" << endl;
+        kDebug(41008) << "Failed to open PNG File";
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
@@ -350,17 +353,17 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
             profile = new KoIccColorProfile(profile_rawdata);
             Q_CHECK_PTR(profile);
             if (profile) {
-//                 kDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
+//                 kDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo();
                 if(!profile->isSuitableForOutput())
                 {
-                    kDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile" << endl; // TODO: in ko2 popup a selection menu to inform the user
+                    kDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
                 }
             }
         } else {
-            kDebug(41008) << "Profile isn't ICC, skiped." << endl;
+            kDebug(41008) << "Profile isn't ICC, skiped.";
         }
     } else {
-        kDebug(41008) << "no embedded profile, will use the default profile" << endl;
+        kDebug(41008) << "no embedded profile, will use the default profile";
     }
 
     // Retrieve a pointer to the colorspace
@@ -397,10 +400,10 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     if(m_doc)
     {
         KoDocumentInfo * info = m_doc->documentInfo();
-        kDebug(41008) << "There are " << num_comments << " comments in the text" << endl;
+        kDebug(41008) << "There are " << num_comments << " comments in the text";
         for(int i = 0; i < num_comments; i++)
         {
-            kDebug(41008) << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text << endl;
+            kDebug(41008) << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text;
             if(QString::compare(text_ptr[i].key, "title") == 0)
             {
                     info->setAboutInfo("title", text_ptr[i].text);
@@ -429,7 +432,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     {
         // new png_byte[] may raise such an exception if the image
         // is invalid / to large.
-        kDebug(41008) << "bad alloc: " << e.what() << endl;
+        kDebug(41008) << "bad alloc: " << e.what();
         // Free only the already allocated png_byte instances.
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         return (KisImageBuilder_RESULT_FAILURE);
@@ -564,7 +567,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
 KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
 {
-    kDebug(41008) << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri << endl;
+    kDebug(41008) << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri;
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
@@ -581,7 +584,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
         uriTF.setPath( tmpFile );
 
         // open the file
-        kDebug(41008) << QFile::encodeName(uriTF.path()) << " " << uriTF.path() << " " << uriTF << endl;
+        kDebug(41008) << QFile::encodeName(uriTF.path()) << " " << uriTF.path() << " " << uriTF;
         QFile *fp = new QFile(QFile::encodeName(uriTF.path()) );
         if (fp->exists())
         {
@@ -605,7 +608,7 @@ KisImageSP KisPNGConverter::image()
 
 KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
 {
-    kDebug(41008) << "Start writing PNG File " << uri << endl;
+    kDebug(41008) << "Start writing PNG File " << uri;
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
@@ -624,7 +627,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
 {
     if(not iodevice->open(QIODevice::WriteOnly))
     {
-        kDebug(41008) << "Failed to open PNG File for writting" << endl;
+        kDebug(41008) << "Failed to open PNG File for writting";
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
@@ -723,7 +726,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
         }
         if(!toomuchcolor)
         {
-            kDebug(41008) << "Found a palette of " << num_palette << " colors" << endl;
+            kDebug(41008) << "Found a palette of " << num_palette << " colors";
             color_type = PNG_COLOR_TYPE_PALETTE;
             if( num_palette <= 2)
             {
@@ -761,16 +764,16 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
         if (!(*it) || (*it) -> type() == QString()) {
-            kDebug(41008) << "Warning: empty annotation" << endl;
+            kDebug(41008) << "Warning: empty annotation";
             ++it;
             continue;
         }
 
-        kDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
+        kDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size();
 
         if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
             // FIXME: it should be possible to save krita_attributes in the "CHUNKs"
-            kDebug(41008) << "can't save this annotation : " << (*it) -> type() << endl;
+            kDebug(41008) << "can't save this annotation : " << (*it) -> type();
         } else { // Profile
             char* name = new char[(*it)->type().length()+1];
             strcpy(name, (*it)->type().toAscii());

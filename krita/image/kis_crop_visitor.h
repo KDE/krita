@@ -22,7 +22,7 @@
 
 #include "klocale.h"
 
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
@@ -35,12 +35,12 @@
 #include "kis_layer_commands.h"
 
 
-class KisCropVisitor : public KisLayerVisitor {
+class KisCropVisitor : public KisNodeVisitor {
 
 public:
 
     KisCropVisitor( const QRect & rc, bool movelayers = true)
-        : KisLayerVisitor()
+        : KisNodeVisitor()
         , m_rect(rc), m_movelayers(movelayers)
     {
     }
@@ -89,7 +89,7 @@ public:
     {
 	layer->resetProjection();
 
-        KisLayerSP child = layer->firstChild();
+        KisNodeSP child = layer->firstChild();
         while (child) {
             child->accept(*this);
             child = child->nextSibling();

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,31 +15,38 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_LAYER_VISITOR_H_
-#define KIS_LAYER_VISITOR_H_
 
-#include "kis_global.h"
-#include "kis_types.h"
+#ifndef KIS_COUNT_VISITOR_TESTER_H
+#define KIS_COUNT_VISITOR_TESTER_H
 
-class KisPaintLayer;
-class KisGroupLayer;
-class KisAdjustmentLayer;
-class KisExternalLayer;
-class KisCloneLayer;
+#include <QtTest/QtTest>
 
-class KisLayerVisitor {
-public:
-    KisLayerVisitor() {}
-    virtual ~KisLayerVisitor() {}
+#include "kis_node.h"
 
-public:
-    virtual bool visit(KisPaintLayer *layer) = 0;
-    virtual bool visit(KisGroupLayer *layer) = 0;
-    virtual bool visit(KisAdjustmentLayer *layer) = 0;
-    virtual bool visit(KisExternalLayer *layer) = 0;
-    virtual bool visit(KisCloneLayer *layer) { Q_UNUSED( layer ); return false; }
+class TestNodeA : public KisNode
+{
+    Q_OBJECT
+};
+
+class TestNodeB : public KisNode
+{
+    Q_OBJECT
+};
+
+class TestNodeC : public KisNode
+{
+    Q_OBJECT
 };
 
 
-#endif // KIS_LAYER_VISITOR_H_
+class KisCountVisitorTest : public QObject
+{
+    Q_OBJECT
+
+private slots:
+
+    void testCounting();
+};
+
+#endif
 

@@ -41,7 +41,7 @@
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
-#include "kis_vec.h"
+
 #include "kis_canvas.h"
 
 #include "kis_curve_framework.h"

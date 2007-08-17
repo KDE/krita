@@ -62,7 +62,7 @@
 #include "kis_dlg_preferences.h"
 #include "kis_factory2.h"
 #include "KoID.h"
-#include "kis_meta_registry.h"
+
 #include "KoColorProfile.h"
 
 #ifdef EXTENDED_X11_TABLET_SUPPORT
@@ -81,21 +81,7 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 {
     KisConfig cfg;
 
-//     m_dockabilityGroup.addButton(radioAllowDocking, DOCK_ENABLED);
-//     m_dockabilityGroup.addButton(radioDisallowDocking, DOCK_DISABLED);
-//     m_dockabilityGroup.addButton(radioSmartDocking, DOCK_SMART);
-//
-//     kDebug(41007) <<"Dock is" << cfg.dockability();
-
-
-//     QAbstractButton *button = m_dockabilityGroup.button(cfg.dockability());
-//     Q_ASSERT(button);
-//     if (button) {
-//         button->setChecked(true);
-//     }
-
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
-    numDockerFontSize->setValue((int)cfg.dockerFontSize());
 }
 
 void GeneralTab::setDefault()
@@ -103,12 +89,7 @@ void GeneralTab::setDefault()
     KisConfig cfg;
 
     m_cmbCursorShape->setCurrentIndex(cfg.getDefaultCursorStyle());
-/*    QAbstractButton *button = m_dockabilityGroup.button(cfg.getDefaultDockability());
-    Q_ASSERT(button);
-    if (button) {
-        button->setChecked(true);
-    }
-    numDockerFontSize->setValue((int)(cfg.getDefaultDockerFontSize()));*/
+
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -116,15 +97,6 @@ enumCursorStyle GeneralTab::cursorStyle()
     return (enumCursorStyle)m_cmbCursorShape->currentIndex();
 }
 
-// enumKoDockability GeneralTab::dockability()
-// {
-//     return (enumKoDockability)m_dockabilityGroup.checkedId();
-// }
-//
-// float GeneralTab::dockerFontSize()
-// {
-//     return (float)numDockerFontSize->value();
-// }
 
 //---------------------------------------------------------------------------------------------------
 
@@ -262,6 +234,7 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name  )
     intChunkSize->setValue( cfg.projectionChunkSize() );
     intNumThreads->setValue( cfg.numProjectionThreads() );
     chkUpdateAllOfQPainterCanvas->setChecked( cfg.updateAllOfQPainterCanvas() );
+    chkFastZoom->setChecked( cfg.fastZoom() );
 }
 
 void PerformanceTab::setDefault()
@@ -274,6 +247,7 @@ void PerformanceTab::setDefault()
     intChunkSize->setValue( 512 );
     intNumThreads->setValue( QThread::idealThreadCount()  );
     chkUpdateAllOfQPainterCanvas->setChecked( true );
+    chkFastZoom->setChecked( false );
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -455,7 +429,7 @@ qint32 TabletSettingsTab::DeviceSettings::serialNumberAxis() const
 
 TabletSettingsTab::TabletDeviceSettingsDialog::TabletDeviceSettingsDialog(const QString& deviceName, DeviceSettings settings,
                                                                           QWidget *parent, const char *name)
-    : super(parent)
+    : KDialog(parent)
 {
     setCaption( i18n("Configure %1",deviceName) );
     setButtons(  Ok | Cancel );
@@ -901,8 +875,6 @@ bool PreferencesDialog::editPreferences()
     {
         KisConfig cfg;
         cfg.setCursorStyle(dialog->m_general->cursorStyle());
-//         cfg.setDockability( dialog->m_general->dockability() );
-//         cfg.setDockerFontSize( dialog->m_general->dockerFontSize() );
 
         // Color settings
         cfg.setMonitorProfile( dialog->m_colorSettings->m_page->cmbMonitorProfile->currentText());
@@ -923,7 +895,7 @@ bool PreferencesDialog::editPreferences()
         cfg.setAggregateDirtyRegionsInPainter( dialog->m_performanceSettings->chkAggregateDirtyRegions->isChecked() );
         cfg.setUseBoundingRectInProjection( dialog->m_performanceSettings->chkUseBoundingRect->isChecked() );
         cfg.setUpdateAllOfQpainterCanvas( dialog->m_performanceSettings->chkUpdateAllOfQPainterCanvas->isChecked() );
-
+        cfg.setFastZoom( dialog->m_performanceSettings->chkFastZoom->isChecked() );
         // let the tile manager know
         KisTileManager::instance()->configChanged();
 

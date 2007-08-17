@@ -43,7 +43,7 @@ typedef QList<QModelIndex> QModelIndexList;
 
 class KMenu;
 class KoCompositeOp;
-class KisLayerModel;
+class KisNodeModel;
 class KisLayerManager;
 
 /**
@@ -58,7 +58,7 @@ public:
     virtual ~KisLayerBox();
 
     void setUpdatesAndSignalsEnabled(bool enable);
-    void setImage(KisLayerManager * layerManager, KisImageSP image, KisLayerModel * layerModel);
+    void setImage(KisLayerManager * layerManager, KisImageSP image, KisNodeModel * nodeModel);
 
     virtual bool eventFilter(QObject *object, QEvent *event);
 
@@ -114,7 +114,7 @@ private:
     KMenu *m_viewModeMenu;
     KMenu *m_newLayerMenu;
     KisImageSP m_image;
-    KisLayerModel * m_layerModel;
+    KisNodeModel * m_nodeModel;
     KisLayerManager * m_layerManager;
 };
 

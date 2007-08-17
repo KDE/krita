@@ -27,7 +27,7 @@ class KisPreviewWidget;
 class QFrame;
 
 class KisPreviewDialog: public KDialog {
-    typedef KDialog super;
+
     Q_OBJECT
 
 public:

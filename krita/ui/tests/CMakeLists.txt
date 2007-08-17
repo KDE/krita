@@ -2,11 +2,19 @@ include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
 ########### next target ###############
 
-set(kis_layer_model_test_SRCS kis_layer_model_test.cpp )
+set(kis_node_model_test_SRCS kis_node_model_test.cpp )
 
-kde4_add_unit_test(kis_layer_model_test TESTNAME krita-ui-kis_layer_model_test  ${kis_layer_model_test_SRCS})
+kde4_add_unit_test(kis_node_model_test TESTNAME krita-ui-kis_node_model_test  ${kis_node_model_test_SRCS})
 
-target_link_libraries(kis_layer_model_test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaui ${QT_QTTEST_LIBRARY})
+target_link_libraries(kis_node_model_test  ${KDE4_KDEUI_LIBS} koguiutils komain kritaui ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_image_view_converter_test_SRCS kis_image_view_converter_test.cpp )
+
+kde4_add_unit_test(KisImageViewConverterTest TESTNAME krita-image-KisImageViewConverterTest  ${kis_image_view_converter_test_SRCS})
+
+target_link_libraries(KisImageViewConverterTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -33,5 +41,13 @@ kde4_add_unit_test(kis_files_test TESTNAME krita-ui-kis_files_test ${kis_files_t
 
 target_link_libraries(kis_files_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
 add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+
+########### end ###############
+
+set(kis_prescaled_projection_test_SRCS kis_prescaled_projection_test.cpp )
+
+kde4_add_unit_test(KisPrescaledProjectionTest TESTNAME krita-ui-kis_prescaled_projection_test ${kis_prescaled_projection_test_SRCS})
+
+target_link_libraries(KisPrescaledProjectionTest  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
 
 ########### end ###############

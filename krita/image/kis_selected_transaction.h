@@ -28,7 +28,7 @@
 #include "krita_export.h"
 
 class KRITAIMAGE_EXPORT KisSelectedTransaction : public KisTransaction {
-    typedef KisTransaction super;
+
 public:
     KisSelectedTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent = 0);
     virtual ~KisSelectedTransaction();

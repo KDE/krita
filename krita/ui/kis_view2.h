@@ -147,6 +147,7 @@ private slots:
     void slotUpdateFullScreen(bool);
     void slotPreferences();
     void slotEditPalette();
+    void slotSetImageSize( qint32 w, qint32 h );
 
 private:
 

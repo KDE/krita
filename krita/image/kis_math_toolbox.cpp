@@ -30,6 +30,7 @@
 //Added by qt3to4:
 #include <Q3MemArray>
 
+KisMathToolboxFactoryRegistry * KisMathToolboxFactoryRegistry::m_singleton = 0;
 
 KisMathToolbox::KisMathToolbox(KoID id) : m_id(id)
 {
@@ -39,6 +40,14 @@ KisMathToolbox::~KisMathToolbox()
 {
 }
 
+KisMathToolboxFactoryRegistry * KisMathToolboxFactoryRegistry::instance()
+{
+    if ( KisMathToolboxFactoryRegistry::m_singleton == 0 ) {
+        KisMathToolboxFactoryRegistry::m_singleton = new KisMathToolboxFactoryRegistry();
+    }
+    return KisMathToolboxFactoryRegistry::m_singleton;
+}
+
 KisMathToolboxFactoryRegistry::KisMathToolboxFactoryRegistry()
 {
     add(new KisBasicMathToolbox());
@@ -46,6 +55,7 @@ KisMathToolboxFactoryRegistry::KisMathToolboxFactoryRegistry()
 KisMathToolboxFactoryRegistry::~KisMathToolboxFactoryRegistry()
 {
 }
+
 template<typename T>
 double toDouble(const quint8* data, int channelpos )
 {

@@ -53,6 +53,18 @@ public:
      * Inform the model we're done removing a node.
      */
     virtual void nodeHasBeenRemoved( KisNode *parent, int index ) = 0;
+
+    /**
+     * Inform the model we're about to start moving a node (which
+     * includes removing and adding the same node)
+     */
+    virtual void aboutToMoveNode( KisNode * parent, int oldIndex, int newIndex ) = 0;
+
+    /**
+     * Inform the model we're done moving the node: it has been
+     * removed and added succesfully
+     */
+    virtual void nodeHasBeenMoved( KisNode * parent, int oldIndex, int newIndex ) = 0;
 };
 
 #endif

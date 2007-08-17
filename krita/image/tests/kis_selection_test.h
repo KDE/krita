@@ -28,6 +28,7 @@ class KisSelectionTest : public QObject
     Q_OBJECT
 
 private slots:
+    void testSelectionComponents();
     void testSelectionActions();
     void testInvertSelection();
 };

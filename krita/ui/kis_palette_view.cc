@@ -24,7 +24,7 @@
 #include <kdebug.h>
 #include <kcolordialog.h> // KColorCells
 
-#include <kis_meta_registry.h>
+
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_palette_view.h"

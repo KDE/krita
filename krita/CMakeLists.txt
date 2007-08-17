@@ -2,7 +2,6 @@ project(krita)
 
 if (SHOULD_BUILD_KRITA)
 
-    macro_optional_find_package(Kunittest)
     include(CheckFunctionExists)
 
     macro_optional_find_package(GLEW)
@@ -19,13 +18,6 @@ if (SHOULD_BUILD_KRITA)
         message(STATUS "OpenGL NOT found - krita will not be able to use OpenGL for")
         message(STATUS "hardware accelerated rendering.")
     endif(HAVE_OPENGL)
-
-#    if(X11_Xinput_FOUND)
-#        set(HAVE_XINPUTEXT 1)
-#        message(STATUS "Found XInput extension")
-#    else(X11_Xinput_FOUND)
-#        set(HAVE_XINPUTEXT 0)
-#    endif(X11_Xinput_FOUND)
 
     set(HAVE_XINPUTEXT 0)
 

@@ -49,7 +49,7 @@ public:
 
 class KisBrushOpSettings : public QObject, public KisPaintOpSettings {
     Q_OBJECT
-    typedef KisPaintOpSettings super;
+
 public:
     KisBrushOpSettings(QWidget *parent);
 
@@ -88,8 +88,6 @@ private:
 };
 
 class KisBrushOp : public KisPaintOp {
-
-    typedef KisPaintOp super;
 
 public:
 

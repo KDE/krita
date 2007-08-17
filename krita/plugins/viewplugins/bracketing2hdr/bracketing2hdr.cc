@@ -183,7 +183,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
         }
         if(!parent)
             parent = m_view->image()->rootLayer();
-        above = parent->firstChild();
+        above = qobject_cast<KisLayer*>( parent->firstChild().data() );
         img->addLayer(layer, parent, above);
 
         createHDRPaintDevice( m_imagesFrames, layer->paintDevice() );

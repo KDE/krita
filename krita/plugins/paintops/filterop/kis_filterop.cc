@@ -127,7 +127,7 @@ KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
 }
 
 KisFilterOp::KisFilterOp(const KisFilterOpSettings* settings, KisPainter * painter)
-    : super(painter), m_settings(settings)
+    : KisPaintOp(painter), m_settings(settings)
 {
 }
 

@@ -39,9 +39,9 @@ void KisImageTester::layerTests()
     QVERIFY( image->rootLayer()->firstChild() == 0 );
 
     KisLayerSP layer = new KisPaintLayer( image, "layer 1", OPACITY_OPAQUE );
-    image->addLayer( layer );
+    image->addNode( layer );
 
-    QVERIFY( image->rootLayer()->firstChild() == layer );
+    QVERIFY( image->rootLayer()->firstChild()->objectName() == layer->objectName() );
 }
 
 void KisImageTester::mergeTests()
@@ -63,7 +63,7 @@ void KisImageTester::mergeTests()
     QCOMPARE(opacity, OPACITY_TRANSPARENT);
 
     KisPaintLayer * layer = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE);
-    image->addLayer(layer, image->rootLayer(), 0);
+    image->addNode(layer, image->rootLayer(), 0);
 
     layer->paintDevice()->setPixel(0, 0, QColor(255, 128, 64), OPACITY_OPAQUE);
     layer->setDirty();
@@ -76,8 +76,8 @@ void KisImageTester::mergeTests()
     QCOMPARE(color.green(), 128);
     QCOMPARE(color.blue(), 64);
 
-    KisPaintLayer * layer2 = new KisPaintLayer(image, "layer 2", OPACITY_OPAQUE / 2);
-    image->addLayer(layer2, image->rootLayer(), layer);
+    KisPaintLayerSP layer2 = new KisPaintLayer(image, "layer 2", OPACITY_OPAQUE / 255);
+    image->addNode( layer2.data() );
 
     layer2->paintDevice()->setPixel(0, 0, QColor(255, 255, 255), OPACITY_OPAQUE);
     layer2->setDirty();

@@ -41,7 +41,7 @@ private:
 };
 
 class KisGradientChooser : public KisItemChooser {
-    typedef KisItemChooser super;
+
     Q_OBJECT
 
 public:

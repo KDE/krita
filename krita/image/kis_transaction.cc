@@ -21,8 +21,9 @@
 #include "kis_global.h"
 #include "kis_memento.h"
 #include "kis_paint_device.h"
+#include "kis_datamanager.h"
 
-class KisTransactionPrivate {
+class KisTransaction::Private {
 public:
     QString name;
     KisPaintDeviceSP device;
@@ -30,12 +31,12 @@ public:
     bool firstRedo;
 };
 
-KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent) : QUndoCommand(name, parent)
+KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent)
+    : QUndoCommand(name, parent)
+    , m_private( new Private() )
 {
-    m_private = new KisTransactionPrivate;
-
     m_private->device = device;
-    m_private->memento = device->getMemento();
+    m_private->memento = device->dataManager()->getMemento();
     m_private->firstRedo = true;
 }
 
@@ -58,12 +59,12 @@ void KisTransaction::redo()
     }
     Q_ASSERT(!m_private->memento.isNull());
 
-    m_private->device->rollforward(m_private->memento);
+    m_private->device->dataManager()->rollforward(m_private->memento);
 
     QRect rc;
     qint32 x, y, width, height;
     m_private->memento->extent(x,y,width,height);
-    rc.setRect(x + m_private->device->getX(), y + m_private->device->getY(), width, height);
+    rc.setRect(x + m_private->device->x(), y + m_private->device->y(), width, height);
 
     m_private->device->setDirty( rc );
 }
@@ -71,12 +72,12 @@ void KisTransaction::redo()
 void KisTransaction::undo()
 {
     Q_ASSERT(!m_private->memento.isNull());
-    m_private->device->rollback(m_private->memento);
+    m_private->device->dataManager()->rollback(m_private->memento);
 
     QRect rc;
     qint32 x, y, width, height;
     m_private->memento->extent(x,y,width,height);
-    rc.setRect(x + m_private->device->getX(), y + m_private->device->getY(), width, height);
+    rc.setRect(x + m_private->device->x(), y + m_private->device->y(), width, height);
 
     m_private->device->setDirty( rc );
 }
@@ -85,5 +86,5 @@ void KisTransaction::undoNoUpdate()
 {
     Q_ASSERT(!m_private->memento.isNull());
 
-    m_private->device->rollback(m_private->memento);
+    m_private->device->dataManager()->rollback(m_private->memento);
 }

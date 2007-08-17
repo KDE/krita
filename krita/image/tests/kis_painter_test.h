@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SELETION_BLTMASK_TEST_H
-#define KIS_SELETION_BLTMASK_TEST_H
+#ifndef KIS_PAINTER_TEST_H
+#define KIS_PAINTER_TEST_H
 
 #include <QtTest/QtTest>
 

@@ -26,11 +26,15 @@
 #include <QTime>
 #include <QImage>
 #include <QVector>
+#include <QRect>
 
 #include <kdebug.h>
 
-#include "KoColorSpaceRegistry.h"
-#include "KoIntegerMaths.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
+#include <KoColorProfile.h>
+#include <KoIntegerMaths.h>
+#include <KoCompositeOp.h>
 
 #include "kis_debug_areas.h"
 #include "kis_types.h"
@@ -40,46 +44,53 @@
 #include "kis_selection_component.h"
 #include "kis_mask.h"
 #include "kis_pixel_selection.h"
+#include "kis_painter.h"
 #include "kis_fill_painter.h"
 
-
 KisSelection::KisSelection(KisPaintDeviceSP dev)
-    : super(dev,
-            QString("selection for ") + dev->objectName())
+    : KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace( "GRAY", 0), QString("selection for ") + dev->objectName())
     , m_parentPaintDevice(dev)
-    , m_dirty(false)
+    , m_interestedInDirtyness(false)
     , m_hasPixelSelection(false)
     , m_hasShapeSelection(false)
+    , m_shapeSelection( 0 )
 {
     Q_ASSERT(dev);
 }
 
 
 KisSelection::KisSelection( KisPaintDeviceSP parent, KisMaskSP mask )
-    : super( parent, "selection from mask" )
+    : KisPaintDevice( KoColorSpaceRegistry::instance()->colorSpace( "GRAY", 0), "selection from mask" )
     , m_parentPaintDevice( parent )
-    , m_dirty( false )
+    , m_interestedInDirtyness( false )
     , m_hasPixelSelection(false)
     , m_hasShapeSelection(false)
+    , m_shapeSelection( 0 )
 {
-    m_datamanager = mask->dataManager();
+    QRect extent = mask->extent();
+    KisPainter gc( this );
+    gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
+    gc.bitBlt( extent.topLeft(), mask->selection(), extent );
+    gc.end();
 }
 
 KisSelection::KisSelection()
-    : super("anonymous selection")
+    : KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace( "GRAY", 0), "anonymous selection")
     , m_parentPaintDevice(0)
-    , m_dirty(false)
+    , m_interestedInDirtyness(false)
     , m_hasPixelSelection(false)
     , m_hasShapeSelection(false)
+    , m_shapeSelection( 0 )
 {
 }
 
 KisSelection::KisSelection(const KisSelection& rhs)
-    : super(rhs)
+    : KisPaintDevice(rhs)
     , m_parentPaintDevice(rhs.m_parentPaintDevice)
-    , m_dirty(false)
+    , m_interestedInDirtyness(false)
     , m_hasPixelSelection(false)
     , m_hasShapeSelection(false)
+    , m_shapeSelection( 0 )
 {
 }
 
@@ -99,8 +110,8 @@ quint8 KisSelection::selected(qint32 x, qint32 y) const
 void KisSelection::clear()
 {
     quint8 defPixel = MIN_SELECTED;
-    m_datamanager->setDefaultPixel(&defPixel);
-    m_datamanager->clear();
+    dataManager()->setDefaultPixel(&defPixel);
+    dataManager()->clear();
 }
 
 void KisSelection::clear(const QRect& r)
@@ -113,8 +124,12 @@ void KisSelection::clear(const QRect& r)
 void KisSelection::invert()
 {
     qint32 x,y,w,h;
+    QRect rc = extent();
+    x = rc.x();
+    y = rc.y();
+    w = rc.width();
+    h = rc.height();
 
-    extent(x, y, w, h);
     KisRectIterator it = createRectIterator(x, y, w, h);
     while ( ! it.isDone() )
     {
@@ -123,13 +138,13 @@ void KisSelection::invert()
         *(it.rawData()) = MAX_SELECTED - *(it.rawData());
         ++it;
     }
-    quint8 defPixel = MAX_SELECTED - *(m_datamanager->defaultPixel());
-    m_datamanager->setDefaultPixel(&defPixel);
+    quint8 defPixel = MAX_SELECTED - *(dataManager()->defaultPixel());
+    dataManager()->setDefaultPixel(&defPixel);
 }
 
 bool KisSelection::isTotallyUnselected(QRect r) const
 {
-    if(*(m_datamanager->defaultPixel()) != MIN_SELECTED)
+    if(*(dataManager()->defaultPixel()) != MIN_SELECTED)
         return false;
     QRect sr = selectedExactRect();
     return ! r.intersects(sr);
@@ -137,7 +152,7 @@ bool KisSelection::isTotallyUnselected(QRect r) const
 
 bool KisSelection::isProbablyTotallyUnselected(QRect r) const
 {
-    if(*(m_datamanager->defaultPixel()) != MIN_SELECTED)
+    if(*(dataManager()->defaultPixel()) != MIN_SELECTED)
         return false;
     QRect sr = selectedRect();
     return ! r.intersects(sr);
@@ -147,7 +162,7 @@ bool KisSelection::isProbablyTotallyUnselected(QRect r) const
 
 QRect KisSelection::selectedRect() const
 {
-    if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
+    if(*(dataManager()->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
         return extent();
     else
         return extent().unite(m_parentPaintDevice->extent());
@@ -155,7 +170,7 @@ QRect KisSelection::selectedRect() const
 
 QRect KisSelection::selectedExactRect() const
 {
-    if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice) {
+    if(*(dataManager()->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice) {
         return exactBounds();
     }
     else {
@@ -222,14 +237,14 @@ void KisSelection::paint(QImage* img, const QRect & r)
 
 void KisSelection::setDirty(const QRect& rc)
 {
-    if (m_dirty)
-        super::setDirty(rc);
+    if (m_interestedInDirtyness)
+        KisPaintDevice::setDirty(rc);
 }
 
 void KisSelection::setDirty()
 {
-    if (m_dirty)
-        super::setDirty();
+    if (m_interestedInDirtyness)
+        KisPaintDevice::setDirty();
 }
 
 bool KisSelection::hasPixelSelection() const
@@ -255,6 +270,16 @@ KisSelectionComponent* KisSelection::shapeSelection()
    return m_shapeSelection;
 }
 
+KisPixelSelectionSP KisSelection::getOrCreatePixelSelection()
+{
+    if ( !m_hasPixelSelection ) {
+        KisPixelSelectionSP pixelSelection = new KisPixelSelection(m_parentPaintDevice);
+        setPixelSelection( pixelSelection );
+    }
+
+    return m_pixelSelection;
+}
+
 void KisSelection::setPixelSelection(KisPixelSelectionSP pixelSelection)
 {
      m_pixelSelection = pixelSelection;
@@ -274,7 +299,7 @@ void KisSelection::updateProjection()
     clear();
     if(m_hasPixelSelection) {
          quint8 defPixel = *(m_pixelSelection->dataManager()->defaultPixel());
-         m_datamanager->setDefaultPixel(&defPixel);
+         dataManager()->setDefaultPixel(&defPixel);
 
         m_pixelSelection->renderToProjection(this);
     }

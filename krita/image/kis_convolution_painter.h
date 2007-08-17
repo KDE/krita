@@ -60,8 +60,6 @@ public:
 class KRITAIMAGE_EXPORT KisConvolutionPainter : public KisPainter
 {
 
-    typedef KisPainter super;
-
 public:
 
     KisConvolutionPainter();

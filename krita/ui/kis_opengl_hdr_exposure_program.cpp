@@ -49,7 +49,7 @@ void KisOpenGLHDRExposureProgram::setExposureUniformVariable()
 
 void KisOpenGLHDRExposureProgram::activate()
 {
-    super::activate();
+    KisOpenGLProgram::activate();
     setExposureUniformVariable();
     setUniformVariable("image", ImageTextureUnit);
 }

@@ -24,8 +24,6 @@
 class KisTexturePainter : public KisPainter
 {
 
-    typedef KisPainter super;
-
 public:
 
     KisTexturePainter();

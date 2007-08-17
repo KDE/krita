@@ -50,10 +50,24 @@ public:
             afterRemoveRow = true;
         }
 
+
+    virtual void aboutToMoveNode( KisNode *, int, int )
+        {
+            beforeMove = true;
+        }
+
+    virtual void nodeHasBeenMoved( KisNode *, int, int )
+        {
+            afterMove = true;
+        }
+
+
     bool beforeInsertRow;
     bool afterInsertRow;
     bool beforeRemoveRow;
     bool afterRemoveRow;
+    bool beforeMove;
+    bool afterMove;
 
     void resetBools()
         {
@@ -61,9 +75,10 @@ public:
             afterRemoveRow = false;
             beforeInsertRow = false;
             afterInsertRow = false;
+            beforeMove = false;
+            afterMove = false;
         }
 };
-
 
 void KisNodeFacadeTest::testCreation()
 {
@@ -109,24 +124,14 @@ void KisNodeFacadeTest::testOrdering()
 
     KisNodeSP root = new KisNode();
     root->setGraphListener( &graphListener );
-    kDebug() <<"Root:" << root;
 
     KisNodeFacade facade( root );
 
     KisNodeSP node1 = new KisNode();
-    kDebug() <<"Node 1:" << node1;
-
     KisNodeSP node2 = new KisNode();
-    kDebug() <<"Node 2:" << node2;
-
     KisNodeSP node3 = new KisNode();
-    kDebug() <<"Node 3:" << node3;
-
     KisNodeSP node4 = new KisNode();
-    kDebug() <<"Node 4:" << node4;
-
     KisNodeSP node5 = new KisNode();
-    kDebug() <<"Node 5:" << node5;
 
      /*
       +---------+
@@ -261,7 +266,11 @@ void KisNodeFacadeTest::testOrdering()
     QVERIFY( facade.addNode( node4, node2 ) == true );
     graphListener.resetBools();
 
+    QVERIFY( graphListener.beforeMove == false );
+    QVERIFY( graphListener.afterMove == false );
     QVERIFY( facade.moveNode( node3, root, 0 ) == true );
+    QVERIFY( graphListener.beforeMove == true );
+    QVERIFY( graphListener.afterMove == true );
     graphListener.resetBools();
 
     /*
@@ -373,6 +382,38 @@ void KisNodeFacadeTest::testOrdering()
 
 }
 
+
+void KisNodeFacadeTest::testMove()
+{
+    TestGraphListener graphListener;
+
+    KisNodeSP root = new KisNode();
+    root->setGraphListener( &graphListener );
+
+    KisNodeFacade facade( root );
+
+    KisNodeSP node1 = new KisNode();
+    node1->setName( "node1" );
+    KisNodeSP node2 = new KisNode();
+    node2->setName( "node2" );
+    KisNodeSP node3 = new KisNode();
+    node3->setName( "node3" );
+
+    facade.addNode( node1 );
+    facade.addNode( node2 );
+    facade.addNode( node3 );
+
+    QVERIFY( root->at( 0 ) == node1 );
+    QVERIFY( root->at( 1 ) == node2 );
+    QVERIFY( root->at( 2 ) == node3 );
+
+    facade.moveNode( node3, root, node1 );
+
+    QVERIFY( root->at( 0 ) == node1 );
+    QVERIFY( root->at( 1 ) == node3 );
+    QVERIFY( root->at( 2 ) == node2 );
+
+}
 
 QTEST_KDEMAIN(KisNodeFacadeTest, NoGUI)
 #include "kis_node_facade_test.moc"

@@ -21,12 +21,12 @@
 
 #include <QRect>
 #include "kis_types.h"
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_image.h"
 
 class KoStore;
 
-class KisSaveVisitor : public KisLayerVisitor {
+class KisSaveVisitor : public KisNodeVisitor {
 public:
     KisSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, QString name);
 

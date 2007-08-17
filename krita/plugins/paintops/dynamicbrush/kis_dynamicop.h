@@ -39,7 +39,7 @@ class KisDynamicOpFactory : public KisPaintOpFactory  {
           m_bookmarksManager(bookmarksManager)
         {}
         virtual ~KisDynamicOpFactory() {}
-    
+
         virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
         virtual QString id() const { return "dynamicbrush"; }
         virtual QString name() const { return i18n("Dynamic Brush"); }
@@ -64,8 +64,6 @@ class KisDynamicOpSettings : public QObject, public KisPaintOpSettings {
 };
 
 class KisDynamicOp : public KisPaintOp {
-
-    typedef KisPaintOp super;
 
 public:
 

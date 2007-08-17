@@ -25,7 +25,7 @@
 
 #include "colorspot.h"
 
-ColorSpot::ColorSpot(QWidget *parent, const KoColor &color) : super(parent)
+ColorSpot::ColorSpot(QWidget *parent, const KoColor &color) : QToolButton(parent)
 {
 	m_color = color;
 

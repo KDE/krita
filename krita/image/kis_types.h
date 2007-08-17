@@ -33,6 +33,8 @@
  * and the disadvantage that inheritiance relations are no longer
  * recognizable
  */
+class KisProjection;
+typedef KisSharedPtr<KisProjection> KisProjectionSP;
 
 class KisImage;
 typedef KisSharedPtr<KisImage> KisImageSP;
@@ -117,6 +119,9 @@ typedef KisWeakSharedPtr<KisGroupLayer> KisGroupLayerWSP;
 
 class KisSelection;
 typedef KisSharedPtr<KisSelection> KisSelectionSP;
+
+class KisSelectionMask;
+typedef KisSharedPtr<KisSelectionMask> KisSelectionMaskSP;
 
 class KisPixelSelection;
 typedef KisSharedPtr<KisPixelSelection> KisPixelSelectionSP;

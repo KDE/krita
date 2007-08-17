@@ -39,7 +39,6 @@ class WdgApplyProfile : public QWidget, public Ui::WdgApplyProfile
 
 class KisDlgApplyProfile : public KDialog
 {
-    typedef KDialog super;
 
     Q_OBJECT
 

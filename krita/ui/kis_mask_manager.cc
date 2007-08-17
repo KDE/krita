@@ -156,12 +156,12 @@ void KisMaskManager::createTransparencyMask()
     if ( activeLayer ) {
         KisMaskSP mask = new KisTransparencyMask();
         mask->setName( i18n( "Transparency Mask" ) ); // XXX:Auto-increment a number here, like with layers
-        mask->setParentLayer( activeLayer );
-        if ( m_activeMask )
-            activeLayer->addEffectMask( mask, m_activeMask );
-        else
-            activeLayer->addEffectMask( mask );
-        activateMask( mask );
+//         mask->setParent( activeLayer );
+//         if ( m_activeMask )
+//             activeLayer->addEffectMask( mask, m_activeMask );
+//         else
+//             activeLayer->addEffectMask( mask );
+//         activateMask( mask );
     }
 }
 
@@ -185,15 +185,15 @@ void KisMaskManager::createFilterMask()
 
             KisFilterMask * mask = new KisFilterMask();
 
-            mask->setParentLayer( activeLayer );
+//             mask->setParent( activeLayer );
             mask->setActive( true );
             mask->setFilter( filter );
             mask->setName( name );
 
-            if ( m_activeMask )
-                activeLayer->addEffectMask( mask, m_activeMask );
-            else
-                activeLayer->addEffectMask( mask );
+//             if ( m_activeMask )
+//                 activeLayer->addEffectMask( mask, m_activeMask );
+//             else
+//                 activeLayer->addEffectMask( mask );
 
             activateMask( mask );
         }
@@ -208,7 +208,7 @@ void KisMaskManager::createTransformationMask()
         KisDlgTransformationEffect dlg(QString(), 1.0, 1.0, 0.0, 0.0, 0.0, 0, 0, KoID( "Mitchell" ), m_view);
         if ( dlg.exec() == QDialog::Accepted ) {
             KisTransformationMask * mask = new KisTransformationMask();
-            mask->setParentLayer( activeLayer );
+//             mask->setParent( activeLayer );
             mask->setName( dlg.transformationEffect()->maskName() );
             mask->setXScale( dlg.transformationEffect()->xScale() );
             mask->setYScale( dlg.transformationEffect()->yScale() );
@@ -219,10 +219,10 @@ void KisMaskManager::createTransformationMask()
             mask->setYTranslation( dlg.transformationEffect()->moveY() );
             mask->setFilterStrategy( dlg.transformationEffect()->filterStrategy() );
             mask->setActive( true );
-            if ( m_activeMask )
-                activeLayer->addEffectMask( mask, m_activeMask );
-            else
-                activeLayer->addEffectMask( mask );
+//             if ( m_activeMask )
+//                 activeLayer->addEffectMask( mask, m_activeMask );
+//             else
+//                 activeLayer->addEffectMask( mask );
             activateMask( mask );
         }
 

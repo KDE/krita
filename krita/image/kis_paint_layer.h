@@ -36,7 +36,6 @@ const QString KIS_PAINT_LAYER_ID = "KisPaintLayer";
  * and by changing the transparency of the paint layer's pixels.
  */
 class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisIndirectPaintingSupport {
-    typedef KisLayer super;
 
     Q_OBJECT
 
@@ -64,7 +63,7 @@ public:
     KisPaintDeviceSP projection() const;
 
     QIcon icon() const;
-    KoDocumentSectionModel::PropertyList properties() const;
+    KoDocumentSectionModel::PropertyList sectionModelProperties() const;
     KisLayerSP clone() const;
 
 public:
@@ -80,7 +79,7 @@ public:
 
     QImage createThumbnail(qint32 w, qint32 h);
 
-    bool accept(KisLayerVisitor &v);
+    bool accept(KisNodeVisitor &v);
     /**
      * Returns the paintDevice that accompanies this layer
      */
@@ -127,11 +126,6 @@ public:
     void removePainterlyOverlay();
 
 public slots:
-
-    /// Overridden to call the private convertMaskToSelection
-    void setDirty();
-    void setDirty(const QRect & rect);
-    void setDirty(const QRegion & region);
 
     // KisIndirectPaintingSupport
     KisLayer* layer() { return this; }

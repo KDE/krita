@@ -31,7 +31,7 @@ class KoCompositeOp;
 
 /// the base command for commands altering a KisImage
 class KisImageCommand : public QUndoCommand {
-    typedef QUndoCommand super;
+
 
 public:
     /**
@@ -61,7 +61,6 @@ protected:
   * of macro commands. Place it at the start and end of the macro command.
   */
 class KisImageLockCommand : public KisImageCommand {
-    typedef KisImageCommand super;
 
 public:
     /**
@@ -81,7 +80,6 @@ private:
 
 
 class KisImageResizeCommand : public KisImageCommand {
-    typedef KisImageCommand super;
 
 public:
     KisImageResizeCommand(KisImageSP image, qint32 width, qint32 height, qint32 oldWidth, qint32 oldHeight);
@@ -97,7 +95,6 @@ private:
 
 
 class KisImageConvertTypeCommand : public KisImageCommand {
-    typedef KisImageCommand super;
 
 public:
     KisImageConvertTypeCommand(KisImageSP image, KoColorSpace * beforeColorSpace, KoColorSpace * afterColorSpace);
@@ -114,7 +111,6 @@ private:
 
 /// The command for image property changes
 class KRITAIMAGE_EXPORT KisImagePropsCommand : public KisImageCommand {
-    typedef KisImageCommand super;
 
 public:
     /**
@@ -142,23 +138,21 @@ private:
 
 
 class KisImageChangeLayersCommand : public KisImageCommand {
-    typedef KisImageCommand super;
 
 public:
-    KisImageChangeLayersCommand(KisImageSP image, KisGroupLayerSP oldRootLayer, KisGroupLayerSP newRootLayer, const QString& name);
+    KisImageChangeLayersCommand(KisImageSP image, KisNodeSP oldRootLayer, KisNodeSP newRootLayer, const QString& name);
     virtual ~KisImageChangeLayersCommand() {}
 
     virtual void redo();
     virtual void undo();
 
 private:
-    KisGroupLayerSP m_oldRootLayer;
-    KisGroupLayerSP m_newRootLayer;
+    KisNodeSP m_oldRootLayer;
+    KisNodeSP m_newRootLayer;
 };
 
 /// The command for adding a layer
 class KisImageLayerAddCommand : public KisImageCommand {
-    typedef KisImageCommand super;
 
 public:
     /**
@@ -166,22 +160,22 @@ public:
      * @param image The image the command will be working on.
      * @param layer the layer to add
      */
-    KisImageLayerAddCommand(KisImageSP image, KisLayerSP layer);
+    KisImageLayerAddCommand(KisImageSP image, KisNodeSP layer);
     virtual ~KisImageLayerAddCommand() {}
 
     virtual void redo();
     virtual void undo();
 
 private:
-    KisLayerSP m_layer;
-    KisGroupLayerSP m_parent;
-    KisLayerSP m_aboveThis;
+    KisNodeSP m_layer;
+    KisNodeSP m_parent;
+    KisNodeSP m_aboveThis;
 };
 
 
 /// The command for removing a layer
 class KisImageLayerRemoveCommand : public KisImageCommand {
-    typedef KisImageCommand super;
+
 
 public:
     /**
@@ -191,21 +185,21 @@ public:
      * @param wasParent the parent of the layer
      * @param wasAbove the layer above the layer
      */
-    KisImageLayerRemoveCommand(KisImageSP image, KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAbove);
+    KisImageLayerRemoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP wasParent, KisNodeSP wasAbove);
     virtual ~KisImageLayerRemoveCommand() {}
 
     virtual void redo();
     virtual void undo();
 
 private:
-    KisLayerSP m_layer;
-    KisGroupLayerSP m_prevParent;
-    KisLayerSP m_prevAbove;
+    KisNodeSP m_layer;
+    KisNodeSP m_prevParent;
+    KisNodeSP m_prevAbove;
 };
 
 /// The command for layer moves inside the layer stack
 class KisImageLayerMoveCommand: public KisImageCommand {
-    typedef KisImageCommand super;
+
 
 public:
     /**
@@ -216,23 +210,23 @@ public:
      * @param wasParent the previous parent of the layer
      * @param wasAbove the layer that was above the layer before the move
      */
-    KisImageLayerMoveCommand(KisImageSP image, KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAbove);
+    KisImageLayerMoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP wasParent, KisNodeSP wasAbove);
     virtual ~KisImageLayerMoveCommand() {}
 
     virtual void redo();
     virtual void undo();
 
 private:
-    KisLayerSP m_layer;
-    KisGroupLayerSP m_prevParent;
-    KisLayerSP m_prevAbove;
-    KisGroupLayerSP m_newParent;
-    KisLayerSP m_newAbove;
+    KisNodeSP m_layer;
+    KisNodeSP m_prevParent;
+    KisNodeSP m_prevAbove;
+    KisNodeSP m_newParent;
+    KisNodeSP m_newAbove;
 };
 
 /// The command for image property changes
 class KRITAIMAGE_EXPORT KisImageLayerPropsCommand : public KisImageCommand {
-    typedef KisImageCommand super;
+
 
 public:
     /**

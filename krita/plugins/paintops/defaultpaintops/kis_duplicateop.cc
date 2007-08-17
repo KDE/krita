@@ -37,7 +37,7 @@
 #include "kis_layer.h"
 #include "kis_painter.h"
 #include "kis_types.h"
-#include "kis_meta_registry.h"
+
 #include "kis_paintop.h"
 #include "kis_iterators_pixel.h"
 #include "kis_selection.h"
@@ -116,7 +116,9 @@ bool KisDuplicateOpSettings::perspectiveCorrection() const
 }
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings* settings, KisPainter * painter, KisImageSP image)
-    : super(painter), m_srcdev(0), m_target(0), m_image( image ), m_settings(settings), m_duplicateStartIsSet(false)
+    : KisPaintOp(painter), m_srcdev(0), m_target(0), m_image( image )
+    , m_settings(settings)
+    , m_duplicateStartIsSet(false)
 {
 }
 

@@ -29,7 +29,7 @@ class QWidget;
 class WdgLayerProperties;
 
 class NewLayerDialog : public KDialog {
-    typedef KDialog super;
+
     Q_OBJECT
 
 public:

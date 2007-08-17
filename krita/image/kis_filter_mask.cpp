@@ -59,7 +59,7 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
     m_d->filterConfig = filterConfig;
 }
 
-void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc )
+void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
 {
     Q_ASSERT( m_d->filterConfig );
 /*
@@ -81,3 +81,5 @@ void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc )
     projection->setSelection( oldSelection );
 */
 }
+
+#include "kis_filter_mask.moc"

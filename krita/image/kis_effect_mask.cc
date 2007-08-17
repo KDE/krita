@@ -31,3 +31,5 @@ KisEffectMask::KisEffectMask( const KisEffectMask& rhs )
     : KisMask( rhs )
 {
 }
+
+#include "kis_effect_mask.moc"

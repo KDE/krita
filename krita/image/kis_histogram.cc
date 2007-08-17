@@ -61,9 +61,9 @@ KisHistogram::~KisHistogram()
 
 void KisHistogram::updateHistogram()
 {
-    qint32 x,y,w,h;
-    m_dev->exactBounds(x,y,w,h);
-    KisRectConstIteratorPixel srcIt = m_dev->createRectConstIterator(x,y,w,h);
+    QRect r;
+    r = m_dev->exactBounds();
+    KisRectConstIteratorPixel srcIt = m_dev->createRectConstIterator(r.x(), r.y(), r.width(), r.height());
     KoColorSpace* cs = m_dev->colorSpace();
 
     QTime t;

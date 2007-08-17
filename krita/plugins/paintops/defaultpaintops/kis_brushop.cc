@@ -60,7 +60,7 @@ KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettings *settings,
 }
 
 KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
-    : super(parent)
+    : KisPaintOpSettings(parent)
 {
     m_optionsWidget = new QWidget(parent);
     m_optionsWidget->setObjectName("brush option widget");
@@ -153,7 +153,7 @@ KisPaintOpSettings* KisBrushOpFactory::settings(QWidget * parent, const KoInputD
 }
 
 KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
-    : super(painter)
+    : KisPaintOp(painter)
     , m_pressureSize(true)
     , m_pressureOpacity(false)
     , m_pressureDarken(false)
@@ -304,7 +304,7 @@ double KisBrushOp::paintLine(const KisPaintInformation &pi1,
         adjustedInfo1.pressure = PRESSURE_DEFAULT;
         adjustedInfo2.pressure = PRESSURE_DEFAULT;
     }
-    return super::paintLine( adjustedInfo1, adjustedInfo2, savedDist );
+    return KisPaintOp::paintLine( adjustedInfo1, adjustedInfo2, savedDist );
 }
 
 #include "kis_brushop.moc"

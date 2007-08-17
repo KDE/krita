@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,25 +16,34 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_math_toolbox.h"
-#include "kis_meta_registry.h"
+#ifndef KIS_PAINT_DEVICE_TESTER_H
+#define KIS_PAINT_DEVICE_TESTER_H
 
-KisMetaRegistry * KisMetaRegistry::m_singleton = 0;
+#include <QtTest/QtTest>
 
-KisMetaRegistry::KisMetaRegistry()
+class KisPaintDeviceTest : public QObject
 {
-    m_mtRegistry = new KisMathToolboxFactoryRegistry();
-}
+    Q_OBJECT
 
-KisMetaRegistry::~KisMetaRegistry()
-{
-}
 
-KisMetaRegistry * KisMetaRegistry::instance()
-{
-    if ( KisMetaRegistry::m_singleton == 0 ) {
-        KisMetaRegistry::m_singleton = new KisMetaRegistry();
-    }
-    return KisMetaRegistry::m_singleton;
-}
+private slots:
+
+    void testCreation();
+    void testPaintEngine();
+    void testStore();
+    void testGeometry();
+    void testClear();
+    void testCrop();
+    void testRoundtripReadWrite();
+    void testColorSpaceConversion();
+    void testRoundtripConversion();
+    void testThumbnail();
+    void testPixel();
+    void testDirty();
+    void testMirror();
+    void testMirrorTransaction();
+    void testSelection();
+};
+
+#endif
 

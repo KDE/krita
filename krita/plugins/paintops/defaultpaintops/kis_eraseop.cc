@@ -38,6 +38,7 @@
 
 KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
 {
+    Q_UNUSED( image )
     KisPaintOp * op = new KisEraseOp(painter);
     Q_CHECK_PTR(op);
     return op;
@@ -45,7 +46,7 @@ KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettings */*settings*/,
 
 
 KisEraseOp::KisEraseOp(KisPainter * painter)
-    : super(painter)
+    : KisPaintOp(painter)
 {
 }
 

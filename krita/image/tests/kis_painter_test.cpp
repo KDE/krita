@@ -202,6 +202,7 @@ void KisPainterTest::testPaintDeviceBltMaskInverted(KoColorSpace * cs)
 
 void KisPainterTest::testPaintDeviceBltMaskInverted()
 {
+//    QFAIL( "Loops endlessly, first write KisSelection test" );
     allCsApplicator( &KisPainterTest::testPaintDeviceBltMaskInverted );
 }
 

@@ -69,7 +69,7 @@ namespace {
 #define DEFAULT_SPACING 0.25
 #define MAXIMUM_SCALE 2
 
-KisBrush::KisBrush(const QString& filename) : super(filename)
+KisBrush::KisBrush(const QString& filename) : KoResource(filename)
 {
     m_brushType = INVALID;
     m_ownData = true;
@@ -81,7 +81,7 @@ KisBrush::KisBrush(const QString& filename) : super(filename)
 
 KisBrush::KisBrush(const QString& filename,
            const QByteArray& data,
-           qint32 & dataPos) : super(filename)
+           qint32 & dataPos) : KoResource(filename)
 {
     m_brushType = INVALID;
     m_ownData = false;
@@ -97,7 +97,7 @@ KisBrush::KisBrush(const QString& filename,
 }
 
 KisBrush::KisBrush(KisPaintDevice* image, int x, int y, int w, int h)
-    : super(QString(""))
+    : KoResource(QString(""))
 {
     m_brushType = INVALID;
     m_ownData = true;
@@ -110,7 +110,7 @@ KisBrush::KisBrush(KisPaintDevice* image, int x, int y, int w, int h)
 }
 
 KisBrush::KisBrush(const QImage& image, const QString& name)
-    : super(QString(""))
+    : KoResource(QString(""))
 {
     m_ownData = false;
     m_useColorAsMask = false;

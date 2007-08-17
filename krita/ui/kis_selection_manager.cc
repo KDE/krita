@@ -370,8 +370,8 @@ void KisSelectionManager::imgSelectionChanged(KisImageSP img)
                     if(!timer->isActive())
                         timer->start ( 300 );
 
-                    KisPixelSelectionSP pixelSelection = selection->pixelSelection();
-                    outline = pixelSelection->outline();
+                    KisPixelSelectionSP getOrCreatePixelSelection = selection->getOrCreatePixelSelection();
+                    outline = getOrCreatePixelSelection->outline();
                     updateSimpleOutline();
                 }
             }
@@ -531,7 +531,9 @@ KisLayerSP KisSelectionManager::paste()
   if (dlg->exec() == QDialog::Accepted)
   layer->convertTo(img->colorSpace());
 */
-	if(!img->addLayer(KisLayerSP(layer), m_parent->activeLayer()->parentLayer(), m_parent->activeLayer())) {
+	if(!img->addNode( layer ,
+                          m_parent->activeLayer()->parentLayer().data(),
+                          m_parent->activeLayer().data() ) ) {
             return 0;
         }
 
@@ -589,8 +591,8 @@ void KisSelectionManager::selectAll()
     if (img->undo()) t = new KisSelectedTransaction(i18n("Select All"), dev);
     Q_CHECK_PTR(t);
 
-    dev->pixelSelection()->clear();
-    dev->pixelSelection()->invert();
+    dev->selection()->getOrCreatePixelSelection()->clear();
+    dev->selection()->getOrCreatePixelSelection()->invert();
     dev->setDirty(img->bounds());
     dev->emitSelectionChanged();
 
@@ -729,7 +731,7 @@ void KisSelectionManager::invert()
     if (!dev) return;
 
     if (dev->hasSelection()) {
-        KisPixelSelectionSP s = dev->pixelSelection();
+        KisPixelSelectionSP s = dev->selection()->getOrCreatePixelSelection();
 
         KisSelectedTransaction * t = 0;
         if (img->undo())
@@ -786,7 +788,7 @@ void KisSelectionManager::feather()
         return;
     }
 
-    KisPixelSelectionSP selection = dev->pixelSelection();
+    KisPixelSelectionSP selection = dev->selection()->getOrCreatePixelSelection();
     KisSelectedTransaction * t = 0;
     if (img->undo()) t = new KisSelectedTransaction(i18n("Feather..."), dev);
     Q_CHECK_PTR(t);
@@ -859,7 +861,7 @@ void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
     if (!dev) return;
 
     if (!dev->hasSelection()) return;
-    KisPixelSelectionSP selection = dev->pixelSelection();
+    KisPixelSelectionSP selection = dev->selection()->getOrCreatePixelSelection();
 
     //determine the layerSize
     QRect layerSize = img->bounds();
@@ -1010,7 +1012,7 @@ void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock
     if (!dev) return;
 
     if (!dev->hasSelection()) return;
-    KisPixelSelectionSP selection = dev->pixelSelection();
+    KisPixelSelectionSP selection = dev->selection()->getOrCreatePixelSelection();
 
     KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Shrink"), dev);
     Q_CHECK_PTR(t);
@@ -1178,7 +1180,7 @@ void KisSelectionManager::smooth()
     if (!dev) return;
 
     if (!dev->hasSelection()) return;
-    KisPixelSelectionSP selection = dev->pixelSelection();
+    KisPixelSelectionSP selection = dev->selection()->getOrCreatePixelSelection();
 
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
@@ -1394,7 +1396,7 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
     if (!dev) return;
 
     if (!dev->hasSelection()) return;
-    KisPixelSelectionSP selection = dev->pixelSelection();
+    KisPixelSelectionSP selection = dev->selection()->getOrCreatePixelSelection();
 
     //determine the layerSize
     QRect layerSize = img->bounds();
@@ -1732,7 +1734,7 @@ void KisSelectionManager::timerEvent()
             offset++;
             if(offset>7) offset = 0;
 
-            QRect bound = dev->pixelSelection()->selectedRect();
+            QRect bound = dev->selection()->getOrCreatePixelSelection()->selectedRect();
             double xRes = m_parent->image()->xRes();
             double yRes = m_parent->image()->yRes();
             QRectF rect( int(bound.left()) / xRes, int(bound.top()) / yRes,

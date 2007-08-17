@@ -34,7 +34,7 @@
 #include "KoColorProfile.h"
 #include "KoID.h"
 
-#include "kis_meta_registry.h"
+
 #include "kis_dlg_image_properties.h"
 #include "kis_types.h"
 #include "kis_image.h"
@@ -45,7 +45,7 @@
 #include "squeezedcombobox.h"
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, const char *name)
-    : super(parent)
+    : KDialog(parent)
 {
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );

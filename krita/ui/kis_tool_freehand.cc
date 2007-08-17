@@ -1,5 +1,5 @@
 /*
- *  kis_tool_brush.cc - part of Krita
+ *  kis_tool_freehand.cc - part of Krita
  *
  *  Copyright (c) 2003-2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
@@ -53,154 +53,7 @@
 #include "kis_canvas2.h"
 #include "kis_cursor.h"
 #include "kis_tool_freehand.h"
-
-
-class FreehandPaintJob {
-public:
-    FreehandPaintJob(KisToolFreehand* freeHand,
-                     KisPainter* painter,
-                     const KisPaintInformation & pi1,
-                     const KisPaintInformation & pi2,
-                     const FreehandPaintJob* previousPaintJob);
-public:
-    double dragDist() const { return m_dragDist; }
-public:
-    virtual void run() =0;
-protected:
-    KisToolFreehand* m_toolFreeHand;
-    KisPainter* m_painter;
-    double m_dragDist;
-    KisPaintInformation m_pi1;
-    KisPaintInformation m_pi2;
-    const FreehandPaintJob* m_previousPaintJob;
-};
-
-FreehandPaintJob::FreehandPaintJob(KisToolFreehand* toolFreeHand, KisPainter* painter,
-                                   const KisPaintInformation & pi1,
-                                   const KisPaintInformation & pi2,
-                                   const FreehandPaintJob* previousPaintJob) :
-    m_toolFreeHand(toolFreeHand),
-    m_painter(painter),
-    m_pi1(pi1),
-    m_pi2(pi2),
-    m_previousPaintJob(previousPaintJob)
-{
-}
-
-class FreehandPaintLineJob : public FreehandPaintJob {
-public:
-    FreehandPaintLineJob(KisToolFreehand* freeHand,
-                         KisPainter* painter,
-                         const KisPaintInformation & pi1,
-                         const KisPaintInformation & pi2,
-                         const FreehandPaintJob* previousPaintJob);
-    virtual void run();
-};
-
-
-FreehandPaintLineJob::FreehandPaintLineJob(KisToolFreehand* toolFreeHand, KisPainter* painter,
-                                           const KisPaintInformation & pi1,
-                                           const KisPaintInformation & pi2,
-                                           const FreehandPaintJob* previousPaintJob) : FreehandPaintJob(toolFreeHand, painter, pi1, pi2, previousPaintJob)
-{
-}
-
-void FreehandPaintLineJob::run()
-{
-    m_dragDist = (m_previousPaintJob) ? m_dragDist = m_previousPaintJob->dragDist() : 0.0;
-    m_dragDist = m_painter->paintLine(m_pi1, m_pi2, m_dragDist);
-    m_toolFreeHand->setDirty( m_painter->dirtyRegion() );
-}
-
-class FreehandPaintBezierJob : public FreehandPaintJob {
-public:
-    FreehandPaintBezierJob(KisToolFreehand* freeHand,
-                           KisPainter* painter,
-                           const KisPaintInformation & pi1,
-                           const QPointF& control1,
-                           const QPointF& control2,
-                           const KisPaintInformation & pi2,
-                           const FreehandPaintJob* previousPaintJob);
-    virtual void run();
-private:
-    QPointF m_control1;
-    QPointF m_control2;
-};
-
-
-FreehandPaintBezierJob::FreehandPaintBezierJob(KisToolFreehand* toolFreeHand, KisPainter* painter,
-                                               const KisPaintInformation & pi1,
-                                               const QPointF& control1,
-                                               const QPointF& control2,
-                                               const KisPaintInformation & pi2,
-                                               const FreehandPaintJob* previousPaintJob) : FreehandPaintJob(toolFreeHand, painter, pi1, pi2, previousPaintJob), m_control1(control1),m_control2(control2)
-{
-}
-
-void FreehandPaintBezierJob::run()
-{
-    m_dragDist = (m_previousPaintJob) ? m_dragDist = m_previousPaintJob->dragDist() : 0.0;
-    m_dragDist = m_painter->paintBezierCurve(m_pi1, m_control1, m_control2, m_pi2, m_dragDist);
-    m_toolFreeHand->setDirty( m_painter->dirtyRegion() );
-}
-
-class FreehandPaintJobExecutor : public QThread {
-    public:
-        FreehandPaintJobExecutor() : m_finish(false) {
-        }
-        virtual void run()
-        {
-            QMutexLocker lockRunning(&m_mutex_running);
-            kDebug(41007) <<"run";
-            while(not m_finish or not empty() )
-            {
-                FreehandPaintJob* nextJob = 0;
-                {
-                    QMutexLocker lock(&m_mutex_queue);
-                    if(m_queue.size() > 0)
-                    {
-                        nextJob = m_queue.dequeue();
-                    }
-                }
-                kDebug(41007) <<"nextJob =" << nextJob;
-                if(nextJob)
-                {
-                    nextJob->run();
-                } else {
-                    msleep(1);
-                }
-            }
-            kDebug(41007) <<"finish running";
-        }
-        void postJob(FreehandPaintJob* job)
-        {
-            QMutexLocker lock(&m_mutex_queue);
-            kDebug(41007) <<"push job =" << job;
-            m_queue.enqueue(job);
-        }
-        void finish() {
-            m_finish = true;
-            QMutexLocker lockRunning(&m_mutex_running);
-        }
-        bool empty() {
-            QMutexLocker lock(&m_mutex_queue);
-            return m_queue.size() == 0;
-        }
-        int queueLength() {
-            QMutexLocker lock(&m_mutex_queue);
-            return m_queue.size();
-        }
-        void start() {
-            m_finish = false;
-            QThread::start();
-        }
-    private:
-        QQueue<FreehandPaintJob* > m_queue;
-        QMutex m_mutex_queue;
-        QMutex m_mutex_running;
-        bool m_finish;
-};
-
+#include "kis_tool_freehand_p.h"
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
     : KisToolPaint(canvas, cursor)
@@ -221,7 +74,6 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 KisToolFreehand::~KisToolFreehand()
 {
 }
-
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
@@ -349,6 +201,8 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             // projection).
             KisLayerSP l = layer->layer();
             KisPaintLayerSP pl = dynamic_cast<KisPaintLayer*>(l.data());
+
+#if 0 //XXX: Warning, investigate what this was supposed to do!
             if (l->parentLayer() && (l->parentLayer()->parentLayer() == 0)
                 && (l->parentLayer()->childCount() == 1)
                 && l->parentLayer()->paintLayerInducesProjectionOptimization(pl))
@@ -359,7 +213,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
                 // XXX: What does this and why? (BSAR)
                 l->parentLayer()->resetProjection(pl->paintDevice());
             }
-
+#endif
             m_target = new KisPaintDevice(currentLayer().data(),
                                           device->colorSpace());
             layer->setTemporaryTarget(m_target);

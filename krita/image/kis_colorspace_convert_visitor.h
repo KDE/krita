@@ -24,7 +24,7 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
 #include "kis_adjustment_layer.h"
@@ -34,7 +34,7 @@
 #include "kis_filter_registry.h"
 #include "kis_filter.h"
 
-class KoColorSpaceConvertVisitor :public KisLayerVisitor {
+class KoColorSpaceConvertVisitor :public KisNodeVisitor {
 public:
     KoColorSpaceConvertVisitor(KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent);
     virtual ~KoColorSpaceConvertVisitor();
@@ -57,7 +57,7 @@ private:
 };
 
 KoColorSpaceConvertVisitor::KoColorSpaceConvertVisitor(KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) :
-    KisLayerVisitor(),
+    KisNodeVisitor(),
     m_dstColorSpace(dstColorSpace),
     m_renderingIntent(renderingIntent)
 {
@@ -73,10 +73,10 @@ bool KoColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
     // The image is already set to the new colorspace, so this'll work.
     layer->resetProjection();
     layer->setChannelFlags( m_emptyChannelFlags );
-    KisLayerSP child = layer->firstChild();
+    KisLayerSP child = dynamic_cast<KisLayer*>( layer->firstChild().data() );
     while (child) {
         child->accept(*this);
-        child = child->nextSibling();
+        child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
     }
     layer->setDirty();
     return true;

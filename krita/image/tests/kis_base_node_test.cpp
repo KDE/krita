@@ -29,7 +29,7 @@
 
 class TestNode : public KisBaseNode
 {
-    bool accept( KisLayerVisitor & )
+    bool accept( KisNodeVisitor & )
         {
             return false;
         }
@@ -65,7 +65,7 @@ void KisBaseNodeTest::testContract()
     node->setLocked( !node->locked() );
     QVERIFY( node->locked() == true );
 
-    KoDocumentSectionModel::PropertyList list = node->properties();
+    KoDocumentSectionModel::PropertyList list = node->sectionModelProperties();
     QVERIFY( list.count() == 2 );
     QVERIFY( list.at( 0 ).state == node->visible() );
     QVERIFY( list.at( 1 ).state == node->locked() );
@@ -76,8 +76,37 @@ void KisBaseNodeTest::testContract()
 
 }
 
+void KisBaseNodeTest::testProperties()
+{
+    KisBaseNodeSP node = new TestNode();
 
+    {
+        KoProperties props;
 
+        props.setProperty( "bladiebla", false );
+        QVERIFY( node->check( props ) );
+
+        props.setProperty( "visible", true );
+        props.setProperty( "locked", false );
+        QVERIFY( node->check( props ) );
+
+        props.setProperty( "locked", true );
+        QVERIFY( !node->check( props ) );
+
+        node->nodeProperties().setProperty( "locked", false );
+        QVERIFY( node->locked() == false );
+    }
+    {
+        KoProperties props;
+        props.setProperty( "blablabla", 10 );
+        node->mergeNodeProperties( props );
+
+        QVERIFY( node->nodeProperties().intProperty( "blablabla" ) == 10 );
+        QVERIFY( node->check( props ) );
+        props.setProperty( "blablabla", 12 );
+        QVERIFY( !node->check( props ) );
+    }
+}
 
 QTEST_KDEMAIN(KisBaseNodeTest, GUI)
 #include "kis_base_node_test.moc"

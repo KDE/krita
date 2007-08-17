@@ -24,7 +24,7 @@
 
 #include "kis_types.h"
 #include "kis_paint_device.h"
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_painter.h"
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -40,14 +40,14 @@
 #include "kis_iterators_pixel.h"
 #include "kis_clone_layer.h"
 
-class KisMergeVisitor : public KisLayerVisitor {
+class KisMergeVisitor : public KisNodeVisitor {
 public:
     /**
      * Don't even _think_ of creating a merge visitor without a projection; without a projection,
      * the adjustmentlayers won't work.
      */
     KisMergeVisitor(KisPaintDeviceSP projection, const QRect& rc) :
-        KisLayerVisitor()
+        KisNodeVisitor()
         {
             Q_ASSERT(projection);
 
@@ -228,8 +228,8 @@ public:
                 // Don't forget that we need to take into account the extended sourcing area as well
                 //selectedRect = f->enlargeRect(selectedRect, cfg);
 
-                tmp->setX(selection->getX());
-                tmp->setY(selection->getY());
+                tmp->setX(selection->x());
+                tmp->setY(selection->y());
 
                 // Indirect painting
                 if (tempTarget) {

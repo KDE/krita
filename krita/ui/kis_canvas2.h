@@ -21,7 +21,6 @@
 
 #include <QObject>
 #include <QWidget>
-#include <QPixmap>
 #include <QSize>
 
 #include <KoCanvasBase.h>
@@ -114,7 +113,6 @@ public: // KoCanvasBase implementation
 
     void disconnectCurrentImage();
 
-    void resetCanvas();
 
     // Temporary! Either get the current layer and image from the
     // resource provider, or use this, which gets them from the
@@ -127,6 +125,7 @@ public: // KisCanvas2 methods
     KisView2* view();
 
     bool usingHDRExposureProgram();
+    bool useFastZooming();
 
 public slots:
 
@@ -157,6 +156,7 @@ private slots:
 private:
 
     void resetMonitorProfile();
+    void resetCanvas();
 
     KisCanvas2(const KisCanvas2&);
 

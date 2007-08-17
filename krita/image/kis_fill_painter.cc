@@ -48,7 +48,7 @@
 #include "KoColorSpace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
-#include "kis_vec.h"
+
 #include "kis_pixel_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_iterators_pixel.h"
@@ -60,7 +60,7 @@ namespace {
 }
 
 KisFillPainter::KisFillPainter()
-    : super()
+    : KisPainter()
 {
     m_width = m_height = -1;
     m_sampleMerged = false;
@@ -68,7 +68,8 @@ KisFillPainter::KisFillPainter()
     m_fuzzy = false;
 }
 
-KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
+KisFillPainter::KisFillPainter(KisPaintDeviceSP device)
+    : KisPainter(device)
 {
     m_width = m_height = -1;
     m_sampleMerged = false;
@@ -271,9 +272,12 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
     emit notifyProgressStage(i18n("Making fill outline..."), 0);
 
     bool hasSelection = m_careForSelection && sourceDevice->hasSelection();
-    KisPixelSelectionSP srcSel = KisPixelSelectionSP(0);
-    if (hasSelection)
-        srcSel = sourceDevice->pixelSelection();
+    KisSelectionSP srcSel = KisSelectionSP(0);
+    if (hasSelection) {
+        srcSel = sourceDevice->selection();
+        if(!srcSel->hasPixelSelection())
+            srcSel->setPixelSelection(KisPixelSelectionSP(new KisPixelSelection(sourceDevice)));
+    }
 
     while(!stack.empty()) {
         FillSegment* segment = stack.top();

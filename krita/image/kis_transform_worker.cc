@@ -279,7 +279,11 @@ template <> void calcDimensions <KisHLineIteratorPixel>
         r.getRect(&srcStart, &firstLine, &srcLen, &numLines);
     }
     else {
-        dev->exactBounds(srcStart, firstLine, srcLen, numLines);
+        QRect rc = dev->exactBounds();
+        srcStart = rc.x();
+        firstLine = rc.y();
+        srcLen = rc.width();
+        numLines = rc.height();
     }
 }
 
@@ -292,7 +296,11 @@ template <> void calcDimensions <KisVLineIteratorPixel>
         r.getRect(&firstLine, &srcStart, &numLines, &srcLen);
     }
     else {
-        dev->exactBounds(firstLine, srcStart, numLines, srcLen);
+        QRect rc = dev->exactBounds();
+        firstLine = rc.x();
+        srcStart = rc.y();
+        numLines= rc.width();
+        srcLen = rc.height();
     }
 }
 
@@ -624,7 +632,7 @@ bool KisTransformWorker::run()
         if(m_dev->hasSelection())
             m_dev->selection()->clear();
 
-        srcdev->move(srcdev->getX() + xtranslate, srcdev->getY() + ytranslate);
+        srcdev->move(srcdev->x() + xtranslate, srcdev->y() + ytranslate);
         rotateNone(srcdev, m_dev);
 
         //progress info
@@ -664,7 +672,7 @@ bool KisTransformWorker::run()
      else
      {
          // No need to filter again when we are only scaling
-         tmpdev3->move(tmpdev3->getX() + xtranslate, tmpdev3->getY());
+         tmpdev3->move(tmpdev3->x() + xtranslate, tmpdev3->y());
          rotateNone(tmpdev3, m_dev);
      }
 

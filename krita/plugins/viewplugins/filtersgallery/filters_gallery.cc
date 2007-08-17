@@ -35,7 +35,7 @@
 #include "kis_dlg_filtersgallery.h"
 #include "kis_filter.h"
 #include "kis_filters_listview.h"
-#include "kis_meta_registry.h"
+
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 #include "kis_view2.h"

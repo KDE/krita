@@ -20,7 +20,7 @@
 
 #include <KoColor.h>
 
-#include <kis_vec.h>
+
 
 #include "brush.h"
 #include "bristle.h"

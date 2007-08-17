@@ -58,8 +58,6 @@ public:
  */
 class KisSmearyOp : public KisPaintOp {
 
-    typedef KisPaintOp super;
-
 public:
 
     KisSmearyOp(KisPainter * painter);

@@ -1,6 +1,6 @@
-/* 
+/*
  * This file is part of the KDE project
- * 
+ *
  * Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -30,13 +30,14 @@
 
 /**
  * An data extension mechanism for Krita.
- * 
- * An annotation can be of something like a QByteArray or a QString op a more specific
- * datatype that can be attached to an image (or maybe later, if needed, to a layer)
- * and contains data that must be associated with an image for purposes of import/export.
- * 
- * Annotations will be saved to krita images and may be exported in filetypes that support
- * them.
+ *
+ * An annotation can be of something like a QByteArray or a QString op
+ * a more specific datatype that can be attached to an image (or maybe
+ * later, if needed, to a layer) and contains data that must be
+ * associated with an image for purposes of import/export.
+ *
+ * Annotations will be saved to krita images and may be exported in
+ * filetypes that support them.
  *
  * Examples of annotations are EXIF data and ICC profiles.
  */
@@ -46,7 +47,8 @@ class KisAnnotation : public KisShared {
 public:
 
     /**
-     * Creates a new annotation object. The annotation object cannot be changed later
+     * Creates a new annotation object. The annotation object cannot
+     * be changed later
      *
      * @param type a non-localized string identifying the type of the annotation
      * @param description a localized string describing the annotation

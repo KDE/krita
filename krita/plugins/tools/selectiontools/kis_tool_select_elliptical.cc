@@ -166,13 +166,13 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 
             if(m_selectionMode == PIXEL_SELECTION){
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
-                KisPixelSelectionSP pixelSelection = dev->pixelSelection();
+                KisPixelSelectionSP getOrCreatePixelSelection = dev->selection()->getOrCreatePixelSelection();
 
                 if (!hasSelection || m_selectAction == SELECTION_REPLACE)
                 {
-                    pixelSelection->clear();
+                    getOrCreatePixelSelection->clear();
                     if(m_selectAction == SELECTION_SUBTRACT)
-                        pixelSelection->invert();
+                        getOrCreatePixelSelection->invert();
                 }
 
                 KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
@@ -195,13 +195,13 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 {
                     case SELECTION_REPLACE:
                     case SELECTION_ADD:
-                        pixelSelection->addSelection(tmpSel);
+                        getOrCreatePixelSelection->addSelection(tmpSel);
                         break;
                     case SELECTION_SUBTRACT:
-                        pixelSelection->subtractSelection(tmpSel);
+                        getOrCreatePixelSelection->subtractSelection(tmpSel);
                         break;
                     case SELECTION_INTERSECT:
-                        pixelSelection->intersectSelection(tmpSel);
+                        getOrCreatePixelSelection->intersectSelection(tmpSel);
                         break;
                     default:
                         break;

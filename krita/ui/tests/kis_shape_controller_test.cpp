@@ -31,7 +31,7 @@
 #include "kis_doc2.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
-#include "kis_layer_model.h"
+#include "kis_node_model.h"
 #include "kis_nameserver.h"
 #include "kis_paint_layer.h"
 #include "kis_clone_layer.h"
@@ -58,7 +58,6 @@ void KisShapeControllerTest::testSetImage()
     shapeController->setImage( image );
 
     QCOMPARE( shapeController->layerMapSize(), 2 );
-    QCOMPARE( shapeController->maskMapSize(), 0 );
 
     KisLayerSP layer2 = new KisPaintLayer( image, "test2", OPACITY_OPAQUE );
     image->addLayer( layer2 );
@@ -75,18 +74,16 @@ void KisShapeControllerTest::testSetImage()
     image->addLayer( layer4, image->rootLayer() );
     QCOMPARE( shapeController->layerMapSize(), 5 );
 
-    KisMaskSP mask1 = new KisTransparencyMask();
-    mask1->setParentLayer( layer );
-    layer->addEffectMask( mask1 );
-    QCOMPARE( shapeController->maskMapSize(), 1 );
+//     KisMaskSP mask1 = new KisTransparencyMask();
+//     mask1->setParentLayer( layer );
+//     layer->addEffectMask( mask1 );
+//     QCOMPARE( shapeController->maskMapSize(), 1 );
 
     image->removeLayer( layer2 );
     QCOMPARE( shapeController->layerMapSize(), 1 );
-    QCOMPARE( shapeController->maskMapSize(), 1 );
 
     image->removeLayer( layer );
     QCOMPARE( shapeController->layerMapSize(), 0 );
-    QCOMPARE( shapeController->maskMapSize(), 0 );
 
     shapeController->setImage( 0 );
 

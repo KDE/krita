@@ -37,7 +37,7 @@
 #include <kis_selected_transaction.h>
 #include <kis_painter.h>
 #include <kis_paintop_registry.h>
-#include <kis_vec.h>
+
 
 #include <kis_canvas.h>
 

@@ -89,7 +89,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
 
         KisPaintDeviceSP dev = currentLayer()->paintDevice();
         bool hasSelection = dev->hasSelection();
-        KisPixelSelectionSP pixelSelection = dev->pixelSelection();
+        KisPixelSelectionSP getOrCreatePixelSelection = dev->selection()->getOrCreatePixelSelection();
 
 
         if (!dev || !currentLayer()->visible())
@@ -105,22 +105,22 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
 
         if(! hasSelection || m_selectAction == SELECTION_REPLACE)
         {
-            pixelSelection->clear();
+            getOrCreatePixelSelection->clear();
             if(m_selectAction==SELECTION_SUBTRACT)
-                pixelSelection->invert();
+                getOrCreatePixelSelection->invert();
         }
 
         switch(m_selectAction)
         {
             case SELECTION_REPLACE:
             case SELECTION_ADD:
-                pixelSelection->addSelection(selection);
+                getOrCreatePixelSelection->addSelection(selection);
                 break;
             case SELECTION_SUBTRACT:
-                pixelSelection->subtractSelection(selection);
+                getOrCreatePixelSelection->subtractSelection(selection);
                 break;
             case SELECTION_INTERSECT:
-                pixelSelection->intersectSelection(selection);
+                getOrCreatePixelSelection->intersectSelection(selection);
                 break;
             default:
                 break;

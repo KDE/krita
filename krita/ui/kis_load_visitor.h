@@ -23,11 +23,11 @@
 
 // kritaimage
 #include "kis_types.h"
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 
 class KoStore;
 
-class KisLoadVisitor : public KisLayerVisitor {
+class KisLoadVisitor : public KisNodeVisitor {
 public:
     KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, QString name);
 

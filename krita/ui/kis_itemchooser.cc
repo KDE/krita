@@ -24,7 +24,8 @@
 #include "kis_global.h"
 #include "kis_icon_item.h"
 
-KisItemChooser::KisItemChooser(QWidget *parent, const char *name) : super(parent)
+KisItemChooser::KisItemChooser(QWidget *parent, const char *name)
+    : QWidget(parent)
 {
     setObjectName(name);
 /*    m_frame = new QVBox(this);

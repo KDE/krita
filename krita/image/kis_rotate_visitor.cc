@@ -120,8 +120,8 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
 KisPaintDeviceSP KisRotateVisitor::rotateRight90(KisPaintDeviceSP src)
 {
     KisPaintDeviceSP dst = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace(), "rotateright90"));
-    dst->setX(src->getX());
-    dst->setY(src->getY());
+    dst->setX(src->x());
+    dst->setY(src->y());
 
     qint32 pixelSize = src->pixelSize();
     QRect r = src->exactBounds();
@@ -178,8 +178,8 @@ KisPaintDeviceSP KisRotateVisitor::rotateLeft90(KisPaintDeviceSP src)
 KisPaintDeviceSP KisRotateVisitor::rotate180(KisPaintDeviceSP src)
 {
     KisPaintDeviceSP dst = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace(), "rotate180"));
-    dst->setX(src->getX());
-    dst->setY(src->getY());
+    dst->setX(src->x());
+    dst->setY(src->y());
 
     qint32 pixelSize = src->pixelSize();
     QRect r = src->exactBounds();
@@ -277,8 +277,8 @@ KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, QP
                                 centerOfRotation.x() * cosAngle - centerOfRotation.y() * sinAngle,
                                 centerOfRotation.x() * sinAngle + centerOfRotation.y() * cosAngle);
 
-    dst->setX((qint32)(dst->getX() + centerOfRotation.x() - rotatedCenterOfRotation.x()));
-    dst->setY((qint32)(dst->getY() + centerOfRotation.y() - rotatedCenterOfRotation.y()));
+    dst->setX((qint32)(dst->x() + centerOfRotation.x() - rotatedCenterOfRotation.x()));
+    dst->setY((qint32)(dst->y() + centerOfRotation.y() - rotatedCenterOfRotation.y()));
 
     setProgressDone();
 
@@ -288,8 +288,8 @@ KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, QP
 KisPaintDeviceSP KisRotateVisitor::xShear(KisPaintDeviceSP src, double shearX)
 {
     KisPaintDeviceSP dst = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace(), "xShear"));
-    dst->setX(src->getX());
-    dst->setY(src->getY());
+    dst->setX(src->x());
+    dst->setY(src->y());
 
     QRect r = src->exactBounds();
 
@@ -340,8 +340,8 @@ KisPaintDeviceSP KisRotateVisitor::yShear(KisPaintDeviceSP src, double shearY)
     KisPaintDeviceSP dst = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace(), "yShear"));
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
 
-    dst->setX(src->getX());
-    dst->setY(src->getY());
+    dst->setX(src->x());
+    dst->setY(src->y());
 
     QRect r = src->exactBounds();
 

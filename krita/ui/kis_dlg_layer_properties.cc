@@ -50,7 +50,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
                                              const KoColorSpace * colorSpace,
                                              const QBitArray & channelFlags,
                                              QWidget *parent, const char *name, Qt::WFlags f)
-    : super(parent)
+    : KDialog(parent)
     , m_colorSpace( colorSpace )
 {
     Q_UNUSED(f);

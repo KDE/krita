@@ -25,7 +25,7 @@
 class QTableWidgetItem;
 
 class KisIconWidget : public KisPopupButton {
-    typedef KisPopupButton super;
+
     Q_OBJECT
 
 /**

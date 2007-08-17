@@ -40,7 +40,7 @@ class WdgLayerProperties : public QWidget, public Ui::WdgLayerProperties
 };
 
 class KisDlgLayerProperties : public KDialog {
-    typedef KDialog super;
+
     Q_OBJECT
 
 public:

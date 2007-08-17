@@ -38,7 +38,7 @@
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 #include "kis_perspective_grid.h"
-#include "kis_vec.h"
+
 
 #include "QPainter"
 #include "kis_boundary_painter.h"

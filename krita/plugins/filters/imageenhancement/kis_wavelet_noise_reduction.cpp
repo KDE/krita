@@ -24,7 +24,6 @@
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_math_toolbox.h>
-#include <kis_meta_registry.h>
 #include <kis_multi_double_filter_widget.h>
 #include <kis_paint_device.h>
 
@@ -70,7 +69,7 @@ void KisWaveletNoiseReduction::process(const KisPaintDeviceSP src, const QPoint&
     int maxrectsize = qMax( areaSize.width(), areaSize.height());
     for(size = 2; size < maxrectsize; size *= 2) ;
 
-    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( src->colorSpace()->mathToolboxId().id() );
+    KisMathToolbox* mathToolbox = KisMathToolboxFactoryRegistry::instance()->get( src->colorSpace()->mathToolboxId().id() );
     QRect srcRect(srcTopLeft, areaSize);
     setProgressTotalSteps(mathToolbox->fastWaveletTotalSteps(srcRect) * 2 + size*size*depth );
     connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));

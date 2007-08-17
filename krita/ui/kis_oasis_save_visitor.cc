@@ -57,13 +57,7 @@ bool KisOasisSaveVisitor::visit(KisGroupLayer *layer)
     m_bodyWriter->startElement("image:stack");
     saveLayerInfo(layer);
 
-    KisLayerSP child = layer->firstChild();
-
-    while(child)
-    {
-        child->accept(*this);
-        child = child->nextSibling();
-    }
+    visitAll( layer );
 
     m_bodyWriter->endElement();
     return true;

@@ -27,6 +27,7 @@ public:
     KisMaskSP mask;
 };
 
+
 KisMaskShape::KisMaskShape(KoShapeContainer * parent, KisMaskSP mask )
     : m_d( new Private() )
 {
@@ -39,4 +40,10 @@ KisMaskShape::KisMaskShape(KoShapeContainer * parent, KisMaskSP mask )
 KisMaskShape::~KisMaskShape()
 {
     delete m_d;
+}
+
+
+KisMaskSP KisMaskShape::mask()
+{
+    return m_d->mask;
 }

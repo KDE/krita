@@ -42,6 +42,7 @@
 
 KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
 {
+    Q_UNUSED( image );
     KisPaintOp * op = new KisPenOp(painter);
     Q_CHECK_PTR(op);
     return op;
@@ -49,7 +50,7 @@ KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettings */*settings*/, K
 
 
 KisPenOp::KisPenOp(KisPainter * painter)
-    : super(painter)
+    : KisPaintOp(painter)
 {
 }
 

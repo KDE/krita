@@ -36,7 +36,7 @@
 // #include <kis_filter_registry.h>
 // #include <kis_image.h>
 // #include <kis_layer.h>
-// #include <kis_meta_registry.h>
+// 
 // #include <kis_paint_layer.h>
 // #include <kis_pattern.h>
 // #include <kis_resourceserver.h>

@@ -58,10 +58,9 @@ private:
 };
 
 template <class T> class KisResourceServer : public KisResourceServerBase {
-    typedef KisResourceServerBase super;
 
 public:
-    KisResourceServer(const QString & type) :super(type) {}
+    KisResourceServer(const QString & type) : KisResourceServerBase(type) {}
     virtual ~KisResourceServer() {}
 
 private:

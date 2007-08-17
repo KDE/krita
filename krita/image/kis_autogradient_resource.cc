@@ -22,7 +22,7 @@
 
 #include "kis_gradient.h"
 #include "kis_autogradient_resource.h"
-#include "kis_meta_registry.h"
+
 
 // FIXME: use the same #define as in kis_gradient.cc, probably best customizable?
 #define PREVIEW_WIDTH 64

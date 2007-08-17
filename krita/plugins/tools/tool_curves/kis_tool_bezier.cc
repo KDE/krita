@@ -38,7 +38,7 @@
 #include "kis_canvas_controller.h"
 #include "kis_canvas.h"
 #include "kis_cursor.h"
-#include "kis_vec.h"
+
 
 #include "kis_curve_framework.h"
 #include "kis_tool_bezier.h"

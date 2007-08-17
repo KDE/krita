@@ -35,7 +35,7 @@
 #include <KoColorModelStandardIds.h>
 
 #include "kis_doc2.h"
-#include "kis_meta_registry.h"
+
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 #include "kis_image.h"
@@ -45,6 +45,8 @@
 KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorSpaceName, const QString & imageName)
     : WdgNewImage(parent)
 {
+    Q_UNUSED( defColorSpaceName );
+
     m_doc = doc;
 
     txtName->setText(imageName);
@@ -70,7 +72,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
     cmbColorModels->setCurrent(RGBAColorModelID);
     fillCmbDepths(cmbColorModels->currentItem());
     cmbColorDepth->setCurrent(Integer8BitsColorDepthID);
-    
+
     connect(doubleResolution, SIGNAL(valueChanged(double)),
         this, SLOT(resolutionChanged(double)));
     connect(cmbWidthUnit, SIGNAL(activated(int)),
@@ -173,8 +175,8 @@ void KisCustomImageWidget::buttonClicked()
     m_doc->newImage(txtName->text(), width, height, cs, KoColor(qc, cs), txtDescription->toPlainText(), resolution);
 
     KisImageSP img = m_doc->image();
-    if (img) {
-        KisLayerSP layer = img->rootLayer()->firstChild();
+    if ( img && img->root() && img->root()->firstChild() ) {
+        KisLayer * layer = dynamic_cast<KisLayer*>( img->root()->firstChild().data() );
         if (layer) {
             layer->setOpacity(backgroundOpacity());
         }

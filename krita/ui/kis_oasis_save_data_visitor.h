@@ -21,7 +21,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 
 class KoOasisStore;
 class KoXmlWriter;
@@ -30,7 +30,7 @@ class KisAdjustmentLayer;
 class KisGroupLayer;
 class KisPaintLayer;
 
-class KisOasisSaveDataVisitor : public KisLayerVisitor {
+class KisOasisSaveDataVisitor : public KisNodeVisitor {
 public:
     KisOasisSaveDataVisitor(KoOasisStore* os, KoXmlWriter* manifestWriter);
     virtual ~KisOasisSaveDataVisitor() {}

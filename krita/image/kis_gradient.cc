@@ -37,7 +37,7 @@
 #include <klocale.h>
 
 #include "kis_gradient.h"
-#include "kis_meta_registry.h"
+
 
 #define PREVIEW_WIDTH 64
 #define PREVIEW_HEIGHT 64
@@ -52,7 +52,8 @@ KisGradientSegment::SineInterpolationStrategy *KisGradientSegment::SineInterpola
 KisGradientSegment::SphereIncreasingInterpolationStrategy *KisGradientSegment::SphereIncreasingInterpolationStrategy::m_instance = 0;
 KisGradientSegment::SphereDecreasingInterpolationStrategy *KisGradientSegment::SphereDecreasingInterpolationStrategy::m_instance = 0;
 
-KisGradient::KisGradient(const QString& file) : super(file), m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() )
+KisGradient::KisGradient(const QString& file)
+    : KoResource(file), m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() )
 {
 }
 

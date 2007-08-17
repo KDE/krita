@@ -20,17 +20,16 @@
 #define KIS_LAYER_COMMANDS_H_
 
 #include <krita_export.h>
-
 #include <QUndoCommand>
-
 #include "kis_types.h"
 
 class KoCompositeOp;
 class KisLayer;
 
 /// the base command for commands altering a layer
-class KRITAIMAGE_EXPORT KisLayerCommand : public QUndoCommand {
-    typedef QUndoCommand super;
+class KRITAIMAGE_EXPORT KisLayerCommand
+    : public QUndoCommand
+{
 
 public:
     /**
@@ -48,7 +47,6 @@ protected:
 
 /// The command for setting the layer opacity
 class KRITAIMAGE_EXPORT KisLayerOpacityCommand : public KisLayerCommand {
-    typedef KisLayerCommand super;
 
 public:
     /**
@@ -70,7 +68,6 @@ private:
 
 /// The command for setting the composite op
 class KRITAIMAGE_EXPORT KisLayerCompositeOpCommand : public KisLayerCommand {
-    typedef KisLayerCommand super;
 
 public:
     /**
@@ -92,7 +89,6 @@ private:
 
 /// The command for moving of a layer
 class KRITAIMAGE_EXPORT KisLayerMoveCommand : public KisLayerCommand {
-    typedef KisLayerCommand super;
 
 public:
     /**

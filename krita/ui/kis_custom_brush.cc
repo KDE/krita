@@ -93,7 +93,7 @@ void KisCustomBrush::slotAddPredefined() {
     } else {
         extension = ".gih";
     }
-    
+
     QString tempFileName;
     {
         KTemporaryFile file;
@@ -103,7 +103,7 @@ void KisCustomBrush::slotAddPredefined() {
         file.open();
         tempFileName = file.fileName();
     }
-    
+
     // Save it to that file
     m_brush->setFilename(tempFileName);
 
@@ -142,12 +142,12 @@ void KisCustomBrush::createBrush() {
 
     // We only loop over the rootLayer. Since we actually should have a layer selection
     // list, no need to elaborate on that here and now
-    KisLayer* layer = img->rootLayer()->firstChild().data();
+    KisLayer* layer = dynamic_cast<KisLayer*>( img->rootLayer()->firstChild().data() );
     while (layer) {
         KisPaintLayer* paint = 0;
         if (layer->visible() && (paint = dynamic_cast<KisPaintLayer*>(layer)))
             devices[0].push_back(paint->paintDevice().data());
-        layer = layer->nextSibling().data();
+        layer = dynamic_cast<KisLayer*>( layer->nextSibling().data() );
     }
     QVector<KisPipeBrushParasite::SelectionMode> modes;
 
@@ -160,7 +160,7 @@ void KisCustomBrush::createBrush() {
         default: modes.push_back(KisPipeBrushParasite::Incremental);
     }
 
-    m_brush = new KisImagePipeBrush(img->name(), w, h, devices, modes);
+    m_brush = new KisImagePipeBrush(img->objectName(), w, h, devices, modes);
     if (colorAsMask->isChecked())
         m_brush->makeMaskImage();
 }

@@ -32,7 +32,7 @@
 #include "kis_selection.h"
 
 KisSaveVisitor::KisSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, QString name) :
-    KisLayerVisitor(),
+    KisNodeVisitor(),
     m_count(count)
 {
     m_external = false;
@@ -124,14 +124,7 @@ bool KisSaveVisitor::visit(KisGroupLayer *layer)
     if(m_external)
         visitor.setExternalUri(m_uri);
 
-    KisLayerSP child = layer->firstChild();
-
-    while(child)
-    {
-        child->accept(visitor);
-        child = child->nextSibling();
-    }
-    return true;
+    return visitAll( layer );
 }
 
 bool KisSaveVisitor::visit(KisAdjustmentLayer* layer)

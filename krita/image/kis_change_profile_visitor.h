@@ -20,7 +20,7 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
 #include "kis_adjustment_layer.h"
@@ -34,7 +34,7 @@
  * conversions. This is essential if you have loaded an image that didn't
  * have an embedded profile to which you want to attach the right profile.
  */
-class KisChangeProfileVisitor :public KisLayerVisitor {
+class KisChangeProfileVisitor :public KisNodeVisitor {
 public:
     KisChangeProfileVisitor(KoColorSpace *oldColorSpace, KoColorSpace *dstColorSpace);
     virtual ~KisChangeProfileVisitor();
@@ -56,7 +56,7 @@ private:
 
 KisChangeProfileVisitor::KisChangeProfileVisitor(KoColorSpace * oldColorSpace,
                                                  KoColorSpace *dstColorSpace) :
-    KisLayerVisitor(),
+    KisNodeVisitor(),
     m_oldColorSpace(oldColorSpace),
     m_dstColorSpace(dstColorSpace)
 {
@@ -71,10 +71,10 @@ bool KisChangeProfileVisitor::visit(KisGroupLayer * layer)
     // Clear the projection, we will have to re-render everything.
     layer->resetProjection();
 
-    KisLayerSP child = layer->firstChild();
+    KisLayerSP child = dynamic_cast<KisLayer*>( layer->firstChild().data() );
     while (child) {
         child->accept(*this);
-        child = child->nextSibling();
+        child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
     }
     layer->setDirty();
     return true;

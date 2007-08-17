@@ -34,7 +34,7 @@ class KisPainter;
 class FreehandPaintJobExecutor;
 class FreehandPaintJob;
 class KisRecordedPolyLinePaintAction;
-
+class FreehandPaintJobExecutor;
 
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 {
@@ -51,7 +51,7 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *e);
 
     virtual void setDirty(const QRegion& region);
-    
+
 protected:
 
     /// Paint a single brush footprint on the current layer
@@ -79,7 +79,7 @@ protected:
     QPointF m_previousTangent;
     QPointF m_previousDrag;
     double m_dragDist;
-    
+
     bool m_paintIncremental;
     bool m_paintOnSelection;
 

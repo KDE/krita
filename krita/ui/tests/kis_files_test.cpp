@@ -55,10 +55,8 @@ void KisFilesTest::testFiles()
             QImage sourceImg(tmpFile.fileName());
             resultImg = resultImg.convertToFormat(QImage::Format_ARGB32);
             sourceImg = sourceImg.convertToFormat(QImage::Format_ARGB32);
-//             kDebug() << resultImg.width() << " " << sourceImg.width() << endl;
             QVERIFY(resultImg.width() == sourceImg.width());
             QVERIFY(resultImg.height() == sourceImg.height());
-//             kDebug() << resultImg.numBytes() << " " << sourceImg.numBytes() << endl;
             QVERIFY(resultImg.numBytes() == sourceImg.numBytes());
             if(memcmp(resultImg.bits(), sourceImg.bits(), sourceImg.numBytes()) != 0)
             {

@@ -21,7 +21,7 @@
 
 #include "kis_types.h"
 #include "kis_progress_subject.h"
-#include "kis_layer_visitor.h"
+#include "kis_node_visitor.h"
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"
 #include "kis_undo_adapter.h"
@@ -32,7 +32,11 @@
 #include "kis_adjustment_layer.h"
 #include "kis_external_layer_iface.h"
 
-class KisShearVisitor : public KisLayerVisitor {
+/**
+ * Shears the layers it visits. Will set the paint devices of the
+ * visited layers dirty. *
+ */
+class KisShearVisitor : public KisNodeVisitor {
 public:
     KisShearVisitor(double xshear, double yshear, KisProgressDisplayInterface *progress)
         : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {}
@@ -82,7 +86,7 @@ public:
     }
 
     bool visit(KisGroupLayer* layer) {
-        KisLayerSP child = layer->firstChild();
+        KisNodeSP child = layer->firstChild();
 
         while(child)
         {

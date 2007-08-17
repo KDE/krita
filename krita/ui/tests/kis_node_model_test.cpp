@@ -27,24 +27,24 @@
 #include "kis_types.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
-#include "kis_layer_model.h"
+#include "kis_node_model.h"
 #include "KoColorSpace.h"
 #include "KoCompositeOp.h"
 #include "KoColorSpaceRegistry.h"
 
-#include "kis_layer_model_test.h"
+#include "kis_node_model_test.h"
 
 void kislayermodel_test::testRowcount()
 {
     KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
 
-    KisLayerModel model(0);
+    KisNodeModel model(0);
     model.setImage( img );
 
-    KisLayerSP l1 = img->newLayer("first", 200, COMPOSITE_OVER, img->colorSpace());
+    KisLayerSP l1 = new KisPaintLayer(img, "first", 200, img->colorSpace());
     QVERIFY( model.rowCount() == 1 );
 
-    KisLayerSP l2 = img->newLayer("second", 200, COMPOSITE_OVER, img->colorSpace());
+    KisLayerSP l2 = new KisPaintLayer(img, "second", 200, img->colorSpace());
     QVERIFY( model.rowCount() == 2 );
 
     KisGroupLayerSP parent = new KisGroupLayer(img, "group 1", 200);
@@ -69,10 +69,10 @@ void kislayermodel_test::testModelIndex()
 {
     KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
 
-    KisLayerModel model(0);
+    KisNodeModel model(0);
     model.setImage( img );
 
-    KisLayerSP first = img->newLayer("first", 200, COMPOSITE_OVER, img->colorSpace());
+    KisLayerSP first = new KisPaintLayer(img, "first", 200, img->colorSpace());
     QModelIndex idx = model.index( 0, 0 );
 
     QVERIFY( idx.isValid() );
@@ -80,7 +80,7 @@ void kislayermodel_test::testModelIndex()
     QVERIFY( idx.internalPointer() == first.data() );
     QVERIFY( model.hasChildren( idx ) == false );
 
-    KisLayerSP second = img->newLayer( "second", 200, COMPOSITE_OVER, img->colorSpace() );
+    KisLayerSP second = new KisPaintLayer(img, "second", 200, img->colorSpace() );
     QModelIndex idx2 = model.index( 1, 0 );
 
     QVERIFY( idx2.isValid() );
@@ -125,12 +125,11 @@ void kislayermodel_test::testGroupLayers()
 {
     KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
 
-    KisLayerModel model(0);
+    KisNodeModel model(0);
     model.setImage( img );
 
-    KisLayerSP first = img->newLayer("first", 200, COMPOSITE_OVER, img->colorSpace());
-    KisLayerSP second = img->newLayer( "second", 200, COMPOSITE_OVER, img->colorSpace() );
-
+    KisLayerSP first = new KisPaintLayer(img, "first", 200, img->colorSpace());
+    KisLayerSP second = new KisPaintLayer(img, "second", 200, img->colorSpace() );
 
     KisGroupLayerSP parent = new KisGroupLayer (img, "group 1", 200);
     img->addLayer( parent, img->rootLayer() );
@@ -152,5 +151,5 @@ void kislayermodel_test::testGroupLayers()
 
 QTEST_KDEMAIN(kislayermodel_test, GUI)
 
-#include "kis_layer_model_test.moc"
+#include "kis_node_model_test.moc"
 

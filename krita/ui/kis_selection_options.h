@@ -42,8 +42,6 @@ class KRITAUI_EXPORT KisSelectionOptions : public QWidget
 
     Q_OBJECT
 
-    typedef QWidget super;
-
 public:
     KisSelectionOptions(KisCanvas2 * subject);
     virtual ~KisSelectionOptions();

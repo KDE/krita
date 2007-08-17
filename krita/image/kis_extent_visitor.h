@@ -18,22 +18,23 @@
 #ifndef KIS_EXTENT_VISITOR_H_
 #define KIS_EXTENT_VISITOR_H_
 
-#include "kis_global.h"
-#include "kis_types.h"
+#include "kis_node_visitor.h"
 
-#include "kis_layer_visitor.h"
-
+#include "kis_paint_layer.h"
+#include "kis_group_layer.h"
+#include "kis_adjustment_layer.h"
 #include "kis_external_layer_iface.h"
-
-class KisPaintLayer;
-class KisGroupLayer;
-class KisAdjustmentLayer;
+#include "kis_clone_layer.h"
+#include "kis_filter_mask.h"
+#include "kis_transparency_mask.h"
+#include "kis_transformation_mask.h"
 
 /**
  * The ExtentVisitor determines the total extent of all layers
  * that comprise the image: the union therefore of their extents.
  */
-class KisExtentVisitor : public KisLayerVisitor {
+class KisExtentVisitor : public KisNodeVisitor {
+
 public:
 
     /**
@@ -45,13 +46,11 @@ public:
         : m_imageRect(rc)
         , m_region(rc)
         , m_exact(exact)
-    {
-    }
+        {
+        }
     virtual ~KisExtentVisitor() {}
 
     QRegion region() { return m_region; }
-
-public:
 
     bool visit( KisExternalLayer * )
         {
@@ -59,37 +58,48 @@ public:
         }
 
     bool visit(KisPaintLayer *layer)
-    {
-        if (m_exact) {
-            m_region = m_region.united(layer->exactBounds());
+        {
+            if (m_exact) {
+                m_region = m_region.united(layer->exactBounds());
+            }
+            else {
+                m_region = m_region.united(layer->extent());
+            }
+            return true;
         }
-        else {
-            m_region = m_region.united(layer->extent());
-        }
-        return true;
-    }
 
     bool visit(KisGroupLayer *layer)
-    {
-        KisLayerSP child = layer->firstChild();
-        while (child) {
-            child->accept(*this);
-            child = child->nextSibling();
-        }
+        {
+            KisNodeSP child = layer->firstChild();
+            while (child) {
+                child->accept(*this);
+                child = child->nextSibling();
+            }
 
-        return true;
-    }
+            return true;
+        }
 
     bool visit(KisAdjustmentLayer *layer)
-    {
-        if (m_exact) {
-            m_region = m_region.united(layer->exactBounds());
+        {
+            if (m_exact) {
+                m_region = m_region.united(layer->exactBounds());
+            }
+            else {
+                m_region = m_region.united(layer->extent());
+            }
+            return true;
         }
-        else {
-            m_region = m_region.united(layer->extent());
+
+    bool visit(KisCloneLayer *layer)
+        {
+            if (m_exact) {
+                m_region = m_region.united(layer->exactBounds());
+            }
+            else {
+                m_region = m_region.united(layer->extent());
+            }
+            return true;
         }
-        return true;
-    }
 
 private:
 

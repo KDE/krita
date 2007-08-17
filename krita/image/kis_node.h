@@ -21,19 +21,23 @@
 #include "kis_types.h"
 #include "kis_base_node.h"
 #include "krita_export.h"
+#include <KoProperties.h>
 
+class KisNodeVisitor;
 class KisNodeGraphListener;
 
 /**
- * A KisNode is a KisBasNode that knows about its direct peers, parent
+ * A KisNode is a KisBaseNode that knows about its direct peers, parent
  * and children and whether it can have children.
+ *
+ * NOTE: your subclasses must have the Q_OBJECT declaration, even if
+ * you do not define new signals or slots.
  */
 class KRITAIMAGE_EXPORT KisNode : public KisBaseNode {
 
     Q_OBJECT
 
 public:
-
 
     /**
      * Create an empty node without a parent.
@@ -54,6 +58,12 @@ public:
      */
     virtual ~KisNode();
 
+    virtual KisNodeSP clone() {
+        return KisNodeSP(new KisNode(*this));
+    }
+
+    virtual bool accept(KisNodeVisitor &v);
+
 protected:
 
     /**
@@ -72,8 +82,8 @@ public: // dirty region methods. XXX: Make these slots?
 
     /**
      * Set the entire node extent dirty; this percolates up to parent
-     * nodes all the way to the root node. By default, nodes have an
-     * infinite size. Subclass for more precision and exactitude.
+     * nodes all the way to the root node. By default this is the
+     * empty rect (through KisBaseNode::extent())
      */
     virtual void setDirty();
 
@@ -82,14 +92,14 @@ public: // dirty region methods. XXX: Make these slots?
      * this percolates up to parent nodes all the way to the root
      * node.
      */
-    void setDirty(const QRect & rect);
+    virtual void setDirty(const QRect & rect);
 
     /**
      * Add the given region to the set of dirty rects for this node;
      * this percolates up to parent nodes all the way to the root
      * node, if propagate is true;
      */
-    void setDirty( const QRegion & region);
+    virtual void setDirty( const QRegion & region);
 
 public:
 
@@ -184,15 +194,50 @@ public: // Graph methods
      */
     int index( const KisNodeSP node ) const;
 
+
+    /**
+     * Return a list of child nodes of the current node that conform
+     * to the specified constraints. There are no guarantees about the
+     * order of the nodes in the list. The function is not recursive.
+     *
+     * @param nodeTypes. if not empty, only nodes that inherit the
+     * classnames in this stringlist will be returned.
+     * @param properties. if not empty, only nodes for which
+     * KisNodeBase::check(properties) returns true will be returned.
+     */
+    QList<KisNodeSP> childNodes( QStringList nodeTypes, const KoProperties & properties ) const;
+
+
+protected:
+
+    /**
+     * Re-implement this method if your node type has to do something
+     * before it is removed.
+     */
+    virtual void prepareForRemoval() {};
+
+    /**
+     * Re-implement this method if your node type has to do something
+     * before being added to the stack.
+     */
+    virtual void prepareForAddition() {};
+
+    /**
+     * Re-implement this method if your node type has to do something
+     * right after being added to the stack.
+     */
+    virtual void initAfterAddition() {};
+
+
 private:
 
     friend class KisNodeFacade;
     friend class KisNodeTest;
+
     /**
      * Set the parent of this node.
      */
     void setParent( KisNodeSP parent );
-
 
     /**
      * Add the specified node above the specified node. If aboveThis

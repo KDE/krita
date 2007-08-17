@@ -51,23 +51,14 @@ const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 */
 class KisShapeLayer : public KisExternalLayer, public KoShapeLayer
 {
+    Q_OBJECT
+
 public:
 
     KisShapeLayer( KoShapeContainer * parent, KisImageSP img, const QString &name, quint8 opacity );
     virtual ~KisShapeLayer();
 
 public:
-    // KisNode overrides
-
-    virtual QString nodeType()
-        {
-            return KIS_SHAPE_LAYER_ID;
-        }
-
-    virtual bool canHaveChildren()
-        {
-            return true;
-        }
 
     // KoShape overrides
     bool isSelectable() const { return false; }
@@ -110,7 +101,7 @@ public:
 
     QRect exactBounds() const;
 
-    bool accept(KisLayerVisitor&);
+    bool accept(KisNodeVisitor&);
 
     KoShapeManager *shapeManager() const;
 

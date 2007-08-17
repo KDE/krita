@@ -32,6 +32,8 @@ class KisFilterConfiguration;
 
 class KRITAIMAGE_EXPORT KisFilterMask : public KisEffectMask
 {
+    Q_OBJECT
+
 public:
 
     /**
@@ -46,7 +48,7 @@ public:
     KisFilterConfiguration * filter() const;
     void setFilter(KisFilterConfiguration * filterConfig);
 
-    void apply( KisPaintDeviceSP projection, const QRect & rc );
+    void apply( KisPaintDeviceSP projection, const QRect & rc ) const;
 
 private:
 

@@ -25,7 +25,7 @@
 #include <kis_convolution_painter.h>
 #include <kis_global.h>
 #include <kis_multi_integer_filter_widget.h>
-#include <kis_meta_registry.h>
+
 #include <kis_paint_device.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()

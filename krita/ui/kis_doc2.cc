@@ -71,7 +71,7 @@
 #include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_meta_registry.h"
+
 #include "kis_nameserver.h"
 #include "kis_paint_device_action.h"
 #include "kis_paint_layer.h"
@@ -94,7 +94,7 @@
 #include "kis_canvas2.h"
 #include "kis_undo_adapter.h"
 #include "kis_shape_controller.h"
-#include "kis_layer_model.h"
+#include "kis_node_model.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -143,7 +143,7 @@ public:
 
     KisImageSP image;
     KisShapeController * shapeController;
-    KisLayerModel * layerModel;
+    KisNodeModel * layerModel;
 };
 
 
@@ -213,7 +213,7 @@ bool KisDoc2::init()
 //     }
 
     m_d->shapeController = new KisShapeController( this, m_d->nserver );
-    m_d->layerModel = new KisLayerModel( this );
+    m_d->layerModel = new KisNodeModel( this );
 
     return true;
 }
@@ -815,7 +815,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
     img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
 
     setCurrentImage(img );
-
+    layer->setDirty();
     setUndo(true);
     img->unlock();
 
@@ -872,7 +872,9 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColor
     cfg.defImgResolution(imgResolution);
 
     setUndo(true);
+    layer->setDirty();
     img->unlock();
+
     return true;
 }
 
@@ -933,13 +935,13 @@ KoShapeControllerBase * KisDoc2::shapeController()
     return m_d->shapeController;
 }
 
-KoShape * KisDoc2::shapeForLayer( KisLayerSP layer )
+KoShape * KisDoc2::shapeForLayer( KisNodeSP layer )
 {
     return m_d->shapeController->shapeForLayer( layer );
 }
 
 
-KisLayerModel * KisDoc2::layerModel()
+KisNodeModel * KisDoc2::layerModel()
 {
     return m_d->layerModel;
 }

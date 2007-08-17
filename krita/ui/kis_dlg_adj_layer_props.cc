@@ -56,7 +56,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     Q_ASSERT( layer );
     m_layer = layer.data();
 
-    KisLayerSP next = layer->nextSibling();
+    KisLayerSP next = dynamic_cast<KisLayer*>( layer->nextSibling().data() );
     Q_ASSERT( next );
 
     m_currentConfiguration = layer->filter();

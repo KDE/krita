@@ -38,7 +38,6 @@ typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 class KisTiledIterator;
 class KisTiledRandomAccessor;
 class KoStore;
-class QRegion;
 
 class KisTileDataWrapper : public KisShared {
     KisTile* m_tile;
@@ -89,9 +88,7 @@ protected:
     KisMementoSP getMemento();
     void rollback(KisMementoSP memento);
     void rollforward(KisMementoSP memento);
-
-    // For debugging use.
-    bool hasCurrentMemento() const { return !m_currentMemento; }
+    bool hasCurrentMemento() const { return m_currentMemento; }
 
 protected:
     /**
@@ -107,7 +104,6 @@ protected:
 
     void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
     QRect extent() const;
-    QRegion region() const;
 
     void setExtent(qint32 x, qint32 y, qint32 w, qint32 h);
 

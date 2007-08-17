@@ -68,7 +68,7 @@ class KisAutoMaskShape : public KisDabShape {
         virtual KisDynamicShape* clone() const;
         virtual quint8 alphaAt(int x, int y);
         virtual void resize(double xs, double ys);
-        virtual void rotate(double r) { /* TODO */}
+    virtual void rotate(double r) { Q_UNUSED( r ); }
         virtual void createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* coloringsrc,const QPointF &pos, const KisPaintInformation& info);
         virtual QRect rect()
         {

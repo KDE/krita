@@ -21,6 +21,26 @@
 
 #include <QtTest/QtTest>
 
+#include "kis_node.h"
+
+class TestNodeA : public KisNode
+{
+    Q_OBJECT
+};
+
+class TestNodeB : public KisNode
+{
+    Q_OBJECT
+};
+
+class TestNodeC : public KisNode
+{
+    Q_OBJECT
+};
+
+
+
+
 class KisNodeTest : public QObject
 {
     Q_OBJECT
@@ -30,6 +50,7 @@ private slots:
     void testCreation();
     void testOrdering();
     void testSetDirty();
+    void testChildNodes();
 };
 
 #endif

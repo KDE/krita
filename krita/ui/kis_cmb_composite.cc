@@ -26,7 +26,7 @@
 #include "kis_cmb_composite.h"
 
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
-    : super(parent)
+    : QComboBox(parent)
 {
     setObjectName(name);
     setEditable(false);
@@ -40,7 +40,7 @@ KisCmbComposite::~KisCmbComposite()
 
 void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
 {
-    super::clear();
+    QComboBox::clear();
     m_list = list;
 
     for(int i = 0; i < m_list.count(); ++i)
@@ -49,7 +49,7 @@ void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
 
 KoCompositeOp * KisCmbComposite::currentItem() const
 {
-    qint32 i = super::currentIndex();
+    qint32 i = QComboBox::currentIndex();
     if (i > m_list.count() - 1) return 0;
 
     return m_list[i];
@@ -60,7 +60,7 @@ void KisCmbComposite::setCurrent(const KoCompositeOp* op)
     qint32 index = m_list.indexOf(const_cast<KoCompositeOp*>( op ));
 
     if (index >= 0) {
-        super::setCurrentIndex(index);
+        QComboBox::setCurrentIndex(index);
     }
 }
 
@@ -68,7 +68,7 @@ void KisCmbComposite::setCurrent(const QString & s)
 {
     for (int i = 0; i < m_list.count(); ++i) {
         if (m_list.at(i)->id() == s) {
-            super::setCurrentIndex(i);
+            QComboBox::setCurrentIndex(i);
             break;
         }
     }

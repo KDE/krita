@@ -43,8 +43,6 @@ public:
 
 class KisConvolveOp : public KisPaintOp {
 
-    typedef KisPaintOp super;
-
 public:
 
     KisConvolveOp(KisPainter * painter);

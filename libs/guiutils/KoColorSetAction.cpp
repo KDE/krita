@@ -25,8 +25,12 @@
 #include <QWidgetAction>
 #include <QMenu>
 
+#include <KColorDialog>
 #include <klocale.h>
 #include <kicon.h>
+
+#include <KoColor.h>
+#include <KoColorSpaceRegistry.h>
 
 class KoColorSetAction::KoColorSetActionPrivate
 {
@@ -49,6 +53,7 @@ KoColorSetAction::KoColorSetAction(QObject *parent)
     setMenu(d->menu);
     setIcon(KIcon("textcolor"));
     setToolTip(i18n("Text Color..."));
+    connect(this, SIGNAL(triggered()), this, SLOT(showCustomColorDialog()));
 }
 
 KoColorSetAction::~KoColorSetAction()
@@ -67,6 +72,17 @@ void KoColorSetAction::handleColorChange(const KoColor &color, bool final)
 void KoColorSetAction::resizeMenu(const QSize &size)
 {
     d->menu->resize(size);
+}
+
+void KoColorSetAction::showCustomColorDialog()
+{
+    QColor color;
+    int result = KColorDialog::getColor(color);
+    if (result == KColorDialog::Accepted) {
+        KoColor newColor(color, KoColorSpaceRegistry::instance()->rgb8());
+        d->colorSetWidget->addRecentColor(newColor);
+        emit colorChanged(newColor);
+    }
 }
 
 #include "KoColorSetAction.moc"

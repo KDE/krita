@@ -209,6 +209,11 @@ KoColorSetWidget::~KoColorSetWidget()
     delete d;
 }
 
+void KoColorSetWidget::addRecentColor(const KoColor &color)
+{
+    d->addRecent(color);
+}
+
 void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *patch)
 {
     int i;

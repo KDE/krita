@@ -56,6 +56,13 @@ public:
      */
     virtual ~KoColorSetWidget();
 
+    /**
+     * Add a color  to the list of recent colors. This method is useful when the user selects a color
+     * from other interface or dialog.
+     * @param color the color to be added to the list of recent colors.
+     */
+    void addRecentColor(const KoColor &color);
+
 public slots:
 
     /**

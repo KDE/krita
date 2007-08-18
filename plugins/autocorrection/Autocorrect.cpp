@@ -23,9 +23,10 @@
 #include <QTextBlock>
 #include <QAction>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KLocale>
 #include <KConfigGroup>
+#include <KCalendarSystem>
+#include <KDebug>
 
 #include <KoGlobal.h>
 
@@ -49,6 +50,11 @@ Autocorrect::Autocorrect() {
     m_replaceSingleQuotes = false;
 
     readConfig();
+
+    KLocale *locale = KGlobal::locale();
+    for (int i = 1; i <=7; i++)
+        m_cacheNameOfDays.append(locale->calendar()->weekDayName(i).toLower());
+
     // default double quote open 0x201c
     // default double quote close 0x201d
 }
@@ -260,7 +266,15 @@ void Autocorrect::superscriptAppendix() {
 
 void Autocorrect::capitalizeWeekDays() {
     if(! m_capitalizeWeekDays) return;
-    // TODO
+
+    QString trimmed = m_word.trimmed();
+    foreach (QString name, m_cacheNameOfDays) {
+        if (trimmed == name) {
+            int pos = m_word.indexOf(name);
+            m_word.replace(pos, 1, name.at(0).toUpper());
+            return;
+        }
+    }
 }
 
 void Autocorrect::autoFormatBulletList() {

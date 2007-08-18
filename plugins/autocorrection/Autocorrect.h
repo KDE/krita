@@ -105,6 +105,8 @@ private:
 
     QString m_word;
     QTextCursor m_cursor;
+
+    QStringList m_cacheNameOfDays;
 };
 
 #endif

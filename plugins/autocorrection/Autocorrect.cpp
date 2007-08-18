@@ -145,11 +145,8 @@ void Autocorrect::uppercaseFirstCharOfSentence() {
                 QString prevWord = m_cursor.selectedText();
 
                 // search for exception
-                foreach (QString exception, m_upperCaseExceptions)
-                    if (prevWord.trimmed() == exception) {
-                        replace = false;
-                        break;
-                    }
+                if (m_upperCaseExceptions.contains(prevWord.trimmed()))
+                    replace = false;
 
                 if (replace)
                     m_word.replace(0, 1, m_word.at(0).toUpper());
@@ -168,9 +165,8 @@ void Autocorrect::fixTwoUppercaseChars() {
     if(! m_fixTwoUppercaseChars) return;
     if (m_word.length() <= 2) return;
 
-    foreach (QString exception, m_twoUpperLetterExceptions)
-        if (m_word.trimmed() == exception)
-            return;
+    if (m_twoUpperLetterExceptions.contains(m_word.trimmed()))
+        return;
 
     QChar secondChar = m_word.at(1);
 

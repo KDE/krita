@@ -79,6 +79,14 @@ public:
         }
 };
 
+class TestNode : public KisNode
+{
+public:
+
+    void setDirty() {
+        KisNode::setDirty( QRect( -1000, -1000, 2000, 200 ) );
+    }
+};
 
 void KisNodeTest::testCreation()
 {
@@ -269,34 +277,34 @@ void KisNodeTest::testSetDirty()
         node1
       root
      */
-    KisNodeSP root = new KisNode();
+    KisNodeSP root = new TestNode();
     root->setName( "root" );
 
-    KisNodeSP node1 = new KisNode();
+    KisNodeSP node1 = new TestNode();
     node1->setName( "node1" );
     QVERIFY( root->add( node1, 0 ) );
 
-    KisNodeSP node2 = new KisNode();
+    KisNodeSP node2 = new TestNode();
     node2->setName( "node2" );
     QVERIFY( root->add( node2, node1 ) );
 
-    KisNodeSP node3 = new KisNode();
+    KisNodeSP node3 = new TestNode();
     node3->setName( "node3" );
     QVERIFY( node1->add( node3, 0 ) );
 
-    KisNodeSP node4 = new KisNode();
+    KisNodeSP node4 = new TestNode();
     node4->setName( "node4" );
     QVERIFY( node1->add( node4, node3 ) );
 
-    KisNodeSP node5 = new KisNode();
+    KisNodeSP node5 = new TestNode();
     node5->setName( "node5" );
     QVERIFY( node3->add( node5, 0 ) );
 
-    KisNodeSP node6 = new KisNode();
+    KisNodeSP node6 = new TestNode();
     node6->setName( "node6" );
     QVERIFY( node5->add( node6, 0 ) );
 
-    KisNodeSP node7 = new KisNode();
+    KisNodeSP node7 = new TestNode();
     node7->setName( "node7" );
     QVERIFY( node6->add( node7, 0 ) );
 

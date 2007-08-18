@@ -22,6 +22,7 @@
 
 #include <KoTextEditingPlugin.h>
 #include <QTextCursor>
+#include <QSet>
 
 class Autocorrect : public KoTextEditingPlugin {
     Q_OBJECT
@@ -116,8 +117,8 @@ private:
     QString m_autocorrectLang;
     QStringList m_cacheNameOfDays;
     QHash<QString, QString> m_superScriptEntries;
-    QStringList m_upperCaseExceptions;
-    QStringList m_twoUpperLetterExceptions;
+    QSet<QString> m_upperCaseExceptions;
+    QSet<QString> m_twoUpperLetterExceptions;
 };
 
 #endif

@@ -22,10 +22,13 @@
 
 #include <QTextBlock>
 #include <QAction>
+#include <QFile>
+#include <QDomDocument>
 
 #include <KLocale>
 #include <KConfigGroup>
 #include <KCalendarSystem>
+#include <KStandardDirs>
 #include <KDebug>
 
 #include <KoGlobal.h>
@@ -115,6 +118,8 @@ void Autocorrect::uppercaseFirstCharOfSentence() {
     m_cursor.setPosition(block.position());
     m_cursor.setPosition(startPos, QTextCursor::KeepAnchor);
 
+    int position = m_cursor.selectionEnd();
+
     QString text = m_cursor.selectedText();
 
     if (text.isEmpty()) // start of a paragraph
@@ -124,11 +129,30 @@ void Autocorrect::uppercaseFirstCharOfSentence() {
         constIter--;
 
         while (constIter != text.constBegin()) {
-            while (constIter != text.begin() && constIter->isSpace())
+            while (constIter != text.begin() && constIter->isSpace()) {
                 constIter--;
+                position--;
+            }
 
             if (constIter != text.constBegin() && (*constIter == QChar('.') || *constIter == QChar('!') || *constIter == QChar('?'))) {
-                m_word.replace(0, 1, m_word.at(0).toUpper());
+                constIter--;
+                while (constIter != text.constBegin() && !(constIter->isLetter())) {
+                    position--;
+                    constIter--;
+                }
+                bool replace = true;
+                selectWord(m_cursor, --position);
+                QString prevWord = m_cursor.selectedText();
+
+                // search for exception
+                foreach (QString exception, m_upperCaseExceptions)
+                    if (prevWord.trimmed() == exception) {
+                        replace = false;
+                        break;
+                    }
+
+                if (replace)
+                    m_word.replace(0, 1, m_word.at(0).toUpper());
                 break;
             }
             else
@@ -144,12 +168,16 @@ void Autocorrect::fixTwoUppercaseChars() {
     if(! m_fixTwoUppercaseChars) return;
     if (m_word.length() <= 2) return;
 
+    foreach (QString exception, m_twoUpperLetterExceptions)
+        if (m_word.trimmed() == exception)
+            return;
+
     QChar secondChar = m_word.at(1);
 
     if (secondChar.isUpper()) {
         QChar thirdChar = m_word.at(2);
 
-        if (thirdChar.isLower()) // TODO: fix two uppercase chars exceptions
+        if (thirdChar.isLower())
             m_word.replace(1, 1, secondChar.toLower());
     }
 }
@@ -384,6 +412,10 @@ void Autocorrect::readConfig()
 
     m_replaceDoubleQuotes = interface.readEntry("ReplaceDoubleQuotes", m_replaceDoubleQuotes);
     m_replaceSingleQuotes = interface.readEntry("ReplaceSingleQuotes", m_replaceSingleQuotes);
+
+    m_autocorrectLang = interface.readEntry("formatLanguage", m_autocorrectLang);
+
+    readAutocorrectXmlEntry();
 }
 
 void Autocorrect::writeConfig()
@@ -403,6 +435,69 @@ void Autocorrect::writeConfig()
 
     interface.writeEntry("ReplaceDoubleQuotes", m_replaceDoubleQuotes);
     interface.writeEntry("ReplaceSingleQuotes", m_replaceSingleQuotes);
+
+    interface.writeEntry("formatLanguage", m_autocorrectLang);
+}
+
+void Autocorrect::readAutocorrectXmlEntry()
+{
+    // Taken from KOffice 1.x KoAutoFormat.cpp
+    KLocale *locale = KGlobal::locale();
+    QString kdelang = locale->languageList().first();
+    kdelang.remove(QRegExp("@.*"));
+
+    QString fname;
+    if (!m_autocorrectLang.isEmpty())
+        fname = KGlobal::dirs()->findResource("data", "koffice/autocorrect/" + m_autocorrectLang + ".xml");
+    if (m_autocorrectLang != "all_languages") {
+        if (fname.isEmpty() && !kdelang.isEmpty())
+            fname = KGlobal::dirs()->findResource("data", "koffice/autocorrect/" + kdelang + ".xml");
+        if (fname.isEmpty() && kdelang.contains("_")) {
+            kdelang.remove( QRegExp( "_.*" ) );
+            fname = KGlobal::dirs()->findResource("data", "koffice/autocorrect/" + kdelang + ".xml");
+        }
+        if (fname.isEmpty())
+            fname = KGlobal::dirs()->findResource("data", "koffice/autocorrect/autocorrect.xml");
+    }
+    if (m_autocorrectLang.isEmpty())
+        m_autocorrectLang = kdelang;
+
+    if (fname.isEmpty())
+        return;
+
+    QFile xmlFile(fname);
+    if (!xmlFile.open(IO_ReadOnly))
+        return;
+
+    QDomDocument doc;
+    if (!doc.setContent(&xmlFile))
+        return;
+
+    if (doc.doctype().name() != "autocorrection")
+        return;
+    
+    QDomElement de = doc.documentElement();
+
+    QDomElement upper = de.namedItem("UpperCaseExceptions").toElement();
+    if (!upper.isNull()) {
+        QDomNodeList nl = upper.childNodes();
+        for (int i = 0; i < nl.count(); i++) 
+            m_upperCaseExceptions += nl.item(i).toElement().attribute("exception");
+    }
+
+    QDomElement twoUpper = de.namedItem("TwoUpperLetterExceptions").toElement();
+    if (!twoUpper.isNull()) {
+        QDomNodeList nl = twoUpper.childNodes();
+        for(int i = 0; i < nl.count(); i++)
+            m_twoUpperLetterExceptions += nl.item(i).toElement().attribute("exception");
+    }
+
+    QDomElement superScript = de.namedItem("SuperScript").toElement();
+    if (!superScript.isNull()) {
+        QDomNodeList nl = superScript.childNodes();
+        for(int i = 0; i < nl.count() ; i++)
+            m_superScriptEntries.insert(nl.item(i).toElement().attribute("find"), nl.item(i).toElement().attribute("super"));
+    }
 
 }
 

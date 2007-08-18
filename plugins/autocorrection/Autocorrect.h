@@ -25,7 +25,13 @@
 
 class Autocorrect : public KoTextEditingPlugin {
     Q_OBJECT
+
 public:
+    struct TypographicQuotes {
+        QChar begin;
+        QChar end;
+    };
+
     Autocorrect();
     virtual ~Autocorrect();
 
@@ -86,6 +92,7 @@ private:
 
     void readConfig();
     void writeConfig();
+    void readAutocorrectXmlEntry();
 
 private:
     bool m_uppercaseFirstCharOfSentence; // convert first letter of a sentence automaticall to uppercase
@@ -106,7 +113,11 @@ private:
     QString m_word;
     QTextCursor m_cursor;
 
+    QString m_autocorrectLang;
     QStringList m_cacheNameOfDays;
+    QHash<QString, QString> m_superScriptEntries;
+    QStringList m_upperCaseExceptions;
+    QStringList m_twoUpperLetterExceptions;
 };
 
 #endif

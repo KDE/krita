@@ -174,18 +174,18 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     }
                     // we'll convert it to a KoParagraphStyle to check for local changes.
                     KoParagraphStyle paragStyle = KoParagraphStyle(textFormat);
+                    QString displayName = originalParagraphStyle->name();
+                    QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
                     QString generatedName;
                     if (paragStyle == (*originalParagraphStyle)) {
                         // This is the real, unmodified character style.
                         KoGenStyle test(KoGenStyle::StyleUser, "paragraph");
                         test.setAutoStyleInStylesDotXml(true);
-                        QString displayName = originalParagraphStyle->name();
-                        QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
                         originalParagraphStyle->saveOdf(&test);
                         generatedName = context.mainStyles().lookup(test, internalName);
                     } else {
                         // There are manual changes... We'll have to store them then
-                        KoGenStyle test(KoGenStyle::StyleAuto, "paragraph");
+                        KoGenStyle test(KoGenStyle::StyleAuto, "paragraph", internalName);
                         test.setAutoStyleInStylesDotXml(false);
                         paragStyle.removeDuplicates(*originalParagraphStyle);
                         paragStyle.saveOdf(&test);
@@ -233,7 +233,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
         if (styleNames.contains(allFormats.indexOf(block.blockFormat())))
             writer->addAttribute("text:style-name", styleNames[allFormats.indexOf(block.blockFormat())]);
         QTextBlock::iterator it;
-        int firstFragmentFormat = -1;
+        int firstFragmentFormat = block.charFormatIndex();
         for (it = block.begin(); !(it.atEnd()); ++it) {
             QTextFragment currentFragment = it.fragment();
             if (currentFragment.isValid()) {

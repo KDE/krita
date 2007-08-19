@@ -35,6 +35,8 @@ public:
     void setProperties(const KoProperties *props);
 
     void propertyChanged(Property property, const QVariant &value);
+    
+    void saveOdf (KoShapeSavingContext & context);
 private:
     KoInlineObject::Property m_type;
 };

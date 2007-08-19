@@ -22,6 +22,8 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoProperties.h>
 #include <kdebug.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
 
 InfoVariable::InfoVariable()
     : KoVariable(true),
@@ -36,5 +38,21 @@ void InfoVariable::setProperties(const KoProperties *props) {
 void InfoVariable::propertyChanged(Property property, const QVariant &value) {
     if (property == m_type) {
         setValue(value.toString());
+    }
+}
+
+void InfoVariable::saveOdf (KoShapeSavingContext & context) {
+    KoXmlWriter *writer = &context.xmlWriter();
+    QString nodeName;
+    if (m_type == KoInlineObject::Title)
+        nodeName = "text:title";
+    else if (m_type == KoInlineObject::Subject)
+        nodeName = "text:subject";
+    else if (m_type == KoInlineObject::Keywords)
+        nodeName = "text:keywords";
+    if (!nodeName.isEmpty()) {
+        writer->startElement(nodeName.toLatin1(), false);
+        writer->addTextNode(value());
+        writer->endElement();
     }
 }

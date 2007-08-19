@@ -48,7 +48,7 @@
 #include "kis_fill_painter.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace( "GRAY", 0), QString("selection for ") + dev->objectName())
+    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), QString("selection for ") + dev->objectName())
     , m_parentPaintDevice(dev)
     , m_interestedInDirtyness(false)
     , m_hasPixelSelection(false)
@@ -60,7 +60,7 @@ KisSelection::KisSelection(KisPaintDeviceSP dev)
 
 
 KisSelection::KisSelection( KisPaintDeviceSP parent, KisMaskSP mask )
-    : KisPaintDevice( KoColorSpaceRegistry::instance()->colorSpace( "GRAY", 0), "selection from mask" )
+    : KisPaintDevice( KoColorSpaceRegistry::instance()->alpha8(), "selection from mask" )
     , m_parentPaintDevice( parent )
     , m_interestedInDirtyness( false )
     , m_hasPixelSelection(false)
@@ -75,7 +75,7 @@ KisSelection::KisSelection( KisPaintDeviceSP parent, KisMaskSP mask )
 }
 
 KisSelection::KisSelection()
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace( "GRAY", 0), "anonymous selection")
+    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "anonymous selection")
     , m_parentPaintDevice(0)
     , m_interestedInDirtyness(false)
     , m_hasPixelSelection(false)

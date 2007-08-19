@@ -113,19 +113,19 @@ void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter&
 
 void KisShapeSelection::renderToProjection(KisSelection* projection)
 {
-    KisPainter painter(projection);
-    painter.setPaintColor(KoColor(Qt::black, projection->colorSpace()));
-    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-    painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-    painter.setOpacity(OPACITY_OPAQUE);
-    painter.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_OVER));
-
     QMatrix resolutionMatrix;
     resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
-    painter.fillPainterPath(resolutionMatrix.map(selectionOutline()));
+
+    QRectF boundingRect = resolutionMatrix.mapRect(selectionOutline().boundingRect());
+    renderSelection(projection, boundingRect.toAlignedRect());
 }
 
 void KisShapeSelection::renderToProjection(KisSelection* projection, const QRect& r)
+{
+    renderSelection(projection, r);
+}
+
+void KisShapeSelection::renderSelection(KisSelection* projection, const QRect& r)
 {
     QMatrix resolutionMatrix;
     resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
@@ -133,7 +133,7 @@ void KisShapeSelection::renderToProjection(KisSelection* projection, const QRect
     QTime t;
     t.start();
 
-    KisPaintDeviceSP tmpMask = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("GRAY", 0), "tmp");
+    KisPaintDeviceSP tmpMask = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "tmp");
 
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;

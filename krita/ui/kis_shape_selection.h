@@ -58,6 +58,8 @@ private slots:
     void repaintTimerEvent();
 
 private:
+    void renderSelection(KisSelection* projection, const QRect& r);
+
     int m_dashOffset;
     QTimer* m_timer;
     KisImageSP m_image;

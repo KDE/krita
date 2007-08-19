@@ -46,7 +46,7 @@ struct KisPixelSelection::Private{
 };
 
 KisPixelSelection::KisPixelSelection()
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace( "GRAY", 0 ), QString("selection") )
+    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), QString("selection") )
     , m_d( new Private )
 {
     m_d->parentPaintDevice = 0;
@@ -55,7 +55,7 @@ KisPixelSelection::KisPixelSelection()
 }
 
 KisPixelSelection::KisPixelSelection(KisPaintDeviceSP dev)
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace( "GRAY", 0 ), QString("selection for ") + dev->objectName())
+    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), QString("selection for ") + dev->objectName())
     , m_d( new Private )
 {
     Q_ASSERT(dev);
@@ -65,7 +65,7 @@ KisPixelSelection::KisPixelSelection(KisPaintDeviceSP dev)
 
 
 KisPixelSelection::KisPixelSelection( KisPaintDeviceSP parent, KisMaskSP mask )
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace( "GRAY", 0 ), QString("selection for ") + parent->objectName())
+    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), QString("selection for ") + parent->objectName())
     , m_d( new Private )
 {
     Q_ASSERT(parent);
@@ -444,12 +444,9 @@ void KisPixelSelection::renderToProjection(KisSelection* projection, const QRect
 {
     QRect updateRect = r.intersected(selectedExactRect());
     if(updateRect.isValid()) {
-        kDebug() << "Pixel Selection updated" << updateRect;
         KisPainter painter(projection);
         painter.bitBlt(updateRect.x(), updateRect.y(), COMPOSITE_OVER, KisPaintDeviceSP(this),
                        updateRect.x(), updateRect.y(), updateRect.width(), updateRect.height());
         painter.end();
     }
-    else
-        kDebug() << "Pixel Selection not updated";
 }

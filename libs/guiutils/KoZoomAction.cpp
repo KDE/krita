@@ -341,6 +341,8 @@ void KoZoomAction::updateWidgets(KoZoomMode::Mode mode, double zoom)
 
 void KoZoomAction::setEffectiveZoom(double zoom)
 {
+    if(d->effectiveZoom == zoom)
+        return;
     d->effectiveZoom = zoom;
 
     if(d->number)

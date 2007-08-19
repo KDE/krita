@@ -34,7 +34,6 @@ class QDomElement;
  * This replaces the KisKrayon facility that used to be present in Krayon.
  */
 class KORESOURCES_EXPORT KoResource : public QObject {
-    typedef QObject super;
     Q_OBJECT
 
 public:

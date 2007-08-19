@@ -107,6 +107,10 @@ public:
      */
     virtual void setup() {}
 
+    /**
+     * Save the frame as ODF
+     * @param context the context for saving.
+     */
     virtual void saveOdf (KoShapeSavingContext & context) { Q_UNUSED(context) }
     
     /**

@@ -557,7 +557,7 @@ int KoPathShape::arcToCurve( double rx, double ry, double startAngle, double swe
     //center berechnen
     QPointF center( startpoint - QPointF( cossa * rx, -sinsa * ry ) );
 
-    kDebug(30006) <<"kappa" << kappa <<"parts" << parts;;
+    //kDebug(30006) <<"kappa" << kappa <<"parts" << parts;;
     
     for ( int part = 0; part < parts; ++part )
     {

@@ -1193,7 +1193,7 @@ void KoParagraphStyle::saveOdf ( KoGenStyle *target ) {
                     target->addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
             }
         } else {
-            kDebug() << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
+            //kDebug() << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
         }
     }
 }

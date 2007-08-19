@@ -763,7 +763,7 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
             else
                 target->addProperty("fo:background-color", brush.color().name(), KoGenStyle::TextType);
         } else {
-            kDebug() << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
+//             kDebug() << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
         }
     }
 }

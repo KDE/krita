@@ -54,3 +54,19 @@ void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *docu
         }
     }
 }
+
+void PageVariable::saveOdf (KoShapeSavingContext & context) {
+    KoXmlWriter *writer = &context.xmlWriter();
+    if (m_type == PageCount) {
+        // <text:page-count>3</text:page-count>
+        writer->startElement("text:page-count", false);
+        writer->addTextNode(value());
+        writer->endElement();
+    } else {
+        // <text:page-number text:select-page="current" >3</text:page-number>
+        writer->startElement("text:page-number", false);
+        writer->addAttribute("text:select-page", "current");
+        writer->addTextNode(value());
+        writer->endElement();
+    }
+}

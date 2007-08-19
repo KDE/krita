@@ -32,6 +32,7 @@ class QVariant;
 class KoShape;
 class KoInlineTextObjectManager;
 class InlineObjectPrivate;
+class KoShapeSavingContext;
 
 /**
  * Base class for all inline-text-objects.
@@ -106,6 +107,8 @@ public:
      */
     virtual void setup() {}
 
+    virtual void saveOdf (KoShapeSavingContext & context) { Q_UNUSED(context) }
+    
     /**
      * Update position of the inline object.
      * This is called each time the paragraph this inline object is in is re-layouted giving you the opportunity

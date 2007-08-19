@@ -26,6 +26,8 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoShapeSavingContext.h>
+#include "KoInlineObject.h"
+#include "KoInlineTextObjectManager.h"
 #include "styles/KoStyleManager.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoParagraphStyle.h"
@@ -147,7 +149,6 @@ KoText::Direction KoTextShapeData::pageDirection() const {
     return d->direction;
 }
 
-
 void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) const {
     KoXmlWriter *writer = &context.xmlWriter();
     QTextBlock block = d->document->findBlock(from);
@@ -161,12 +162,8 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
     if (lay) {
         styleManager = lay->styleManager();
         if (styleManager) {
-            kDebug() << "-------------------------------------------------------------------------------";
-            kDebug() << "BEGINNING OF THE STYLE MESS";
-            
             // Ok, now we will iterate over the QTextFormat contained in this textFrameSet.
             foreach (QTextFormat textFormat, allFormats) {
-                kDebug() << "There is a textFormat :" << textFormat << "; type =" << textFormat.type();
                 if (textFormat.type() == QTextFormat::BlockFormat) {
                     // This is a QTextBlockFormat.
                     KoParagraphStyle *originalParagraphStyle = styleManager->paragraphStyle(textFormat.intProperty(KoParagraphStyle::StyleId));
@@ -192,9 +189,10 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                         paragStyle.saveOdf(&test);
                         generatedName = context.mainStyles().lookup(test, "P");
                     }
-                    kDebug() << "Storing this style, result :" << generatedName;
                     styleNames[allFormats.indexOf(textFormat)] = generatedName;
                 } else if (textFormat.type() == QTextFormat::CharFormat) {
+                    if (textFormat.objectType() == 1001)
+                        continue;
                     // This is a QTextCharFormat.
                     KoCharacterStyle *originalCharStyle = styleManager->characterStyle(textFormat.intProperty(KoCharacterStyle::StyleId));
                     if (!originalCharStyle) {
@@ -225,14 +223,11 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                         charStyle.saveOdf(&test);
                         generatedName = context.mainStyles().lookup(test, "T");
                     }
-                    kDebug() << "Storing this style, result :" << generatedName;
                     styleNames[allFormats.indexOf(textFormat)] = generatedName;
                 } else {
                     // It doesn't matter yet.
                 }
             }
-            kDebug() << "END OF THE STYLE MESS";
-            kDebug() << "-------------------------------------------------------------------------------";
         }
     }
     while(block.isValid() && ((to == -1) || (block.position() < to))) {
@@ -244,28 +239,27 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
             QTextFragment currentFragment = it.fragment();
             if (currentFragment.isValid()) {
                 QTextFormat charFormat = currentFragment.charFormat();
-                if (currentFragment.charFormat() != firstFragmentFormat) {
-                    writer->startElement( "text:span", false );
-                    if (styleNames.contains(allFormats.indexOf(charFormat)))
-                        writer->addAttribute("text:style-name", styleNames[allFormats.indexOf(charFormat)]);
+                KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( d->document->documentLayout() );
+                Q_ASSERT(layout && layout->inlineObjectTextManager());
+                KoInlineObject *inlineObject = layout->inlineObjectTextManager()->inlineTextObject((const QTextCharFormat &)charFormat);
+                if (inlineObject) {
+                    // Hey, there is a KoInlineTextObject in this fragment, stop here !
+                    //writer->addTextSpan("Here will come an inlineTextObject");
+                    inlineObject->saveOdf(context);
+                } else {
+                    if (currentFragment.charFormat() != firstFragmentFormat) {
+                        writer->startElement( "text:span", false );
+                        if (styleNames.contains(allFormats.indexOf(charFormat)))
+                            writer->addAttribute("text:style-name", styleNames[allFormats.indexOf(charFormat)]);
+                    }
+                    writer->addTextSpan( currentFragment.text() );
+                    if (currentFragment.charFormat() != firstFragmentFormat)
+                        writer->endElement( );
                 }
-                writer->addTextSpan( currentFragment.text() );
-                if (currentFragment.charFormat() != firstFragmentFormat)
-                    writer->endElement( );
             }
         }
-        /*if(block.position() < from || block.position() + block.length() > to) {
-            int start = qMax(0, from - block.position());
-            int end = qMin(to, block.position() + block.length());
-            writer->addTextSpan( block.text().mid(start, end - (start + block.position())) );
-        }
-        else
-            writer->addTextSpan( block.text() );*/
         writer->endElement();
         block = block.next();
-    }
-    foreach (QTextFormat textFormat, d->document->allFormats()) {
-        textFormat.clearProperty(-1);
     }
 }
 

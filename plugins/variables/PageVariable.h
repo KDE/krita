@@ -20,6 +20,8 @@
 #define PAGEVARIABLE_H
 
 #include <KoVariable.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
 
 #include <QString>
 
@@ -41,6 +43,8 @@ public:
     void setProperties(const KoProperties *props);
 
     void propertyChanged(Property property, const QVariant &value);
+   
+    void saveOdf (KoShapeSavingContext & context);
 private:
     void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
     

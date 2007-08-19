@@ -20,35 +20,77 @@
 #ifndef KOSCRIPTINGODF_H
 #define KOSCRIPTINGODF_H
 
+#include <QPair>
 #include <QObject>
 #include <QDomDocument>
 #include <QtDebug>
-#include <KoStore.h>
-#include <KoOasisStore.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoDocument.h>
-#include <KoDocumentAdaptor.h>
-
-//#include "TextFrame.h"
-//#include "TextTable.h"
-//#include "TextCursor.h"
 
 /**
-* The KoScriptingOdfReader provides functionality to read content from
-* a KoStore.
+* The KoScriptingOdfReader provides functionality to read content
+* from a KoStore.
+*
+* The following python samples does open the content.xml file and
+* reads all text:p elements from it;
+* \code
+* import Kross, KWord
+* KWord.document().openUrl("/home/kde4/testDoc.odt")
+* reader = KWord.store().open("META-INF/manifest.xml")
+* reader = store.open("content.xml")
+* def onElement():
+*     if reader.name() != "text:p":
+*         raise "This should never happen cause of the filter"
+*     print "%s %s" % (reader.level(),reader.attributeNames())
+* reader.connect("onElement()", onElement)
+* reader.setNameFilter("text:p")
+* reader.start()
+* \endcode
 */
 class KoScriptingOdfReader : public QObject
 {
         Q_OBJECT
     public:
+        /// Constructor.
         explicit KoScriptingOdfReader(QObject* parent, const KoXmlDocument& doc);
+        /// Destructor.
         virtual ~KoScriptingOdfReader();
+        /// Return the KoXmlDocument instance this reader operates on.
+        KoXmlDocument doc() const;
+        /// Return the current element.
+        KoXmlElement currentElement() const;
 
     public Q_SLOTS:
 
         /**
+        * Return the element tag-name filter that will be applied on reading.
+        */
+        QString nameFilter() const;
+
+        /**
+        * Set the element tag-name filter that will be applied on reading.
+        *
+        * This python sample demonstrates usage of the setNameFilter()-method;
+        * \code
+        * # Only handle text:p elements.
+        * reader.setNameFilter("text:p")
+        *
+        * # Use a regular expression for the tag-name.
+        * reader.setNameFilter(".*:p", True)
+        * \endcode
+        */
+        void setNameFilter(const QString& name = QString(), bool regularExpression = false) const;
+
+        //QString levelFilter() const;
+        //void setLevelFilter(const QString& name = QString()) const;
+
+        /**
         * Start the reading.
+        *
+        * This will fire up the whole reading process. We walk through
+        * all elements and emit the onElement() signal or other signals
+        * for each element we are interested in.
         */
         void start();
 
@@ -63,6 +105,9 @@ class KoScriptingOdfReader : public QObject
         */
         QString namespaceURI() const;
 
+        //QString prefix() const { return m_currentElement.prefix(); }
+        //QString localName() const { return m_currentElement.localName(); }
+
         /**
         * The level the element is on. Elements may nested and the level is
         * a number that defines how much elements are around this element.
@@ -70,9 +115,6 @@ class KoScriptingOdfReader : public QObject
         * root-element have a level of 1, there children of 2, etc.
         */
         int level() const;
-
-        //QString prefix() const { return m_currentElement.prefix(); }
-        //QString localName() const { return m_currentElement.localName(); }
 
         /**
         * Return a list of attribute-names the element has. This could be
@@ -122,8 +164,7 @@ class KoScriptingOdfReader : public QObject
         bool isText() const;
 
         //bool isCDATASection() const { return m_currentElement.isCDATASection(); }
-        //bool isDocument() const;
-
+        //bool isDocument() const { return m_currentElement.isDocument(); }
         //QString toText() const { return m_currentElement.toText().data(); }
         //KoXmlCDATASection toCDATASection() const;
 
@@ -135,18 +176,108 @@ class KoScriptingOdfReader : public QObject
     Q_SIGNALS:
 
         /**
-        * This signal got emitted after start() was called for each element we
-        * read.
+        * This signal got emitted after start() was called for each
+        * element we read.
         */
         void onElement();
 
+    protected:
+        /// Emit the onElement signal above.
+        void emitOnElement();
+        /// Set the current element.
+        void setCurrentElement(const KoXmlElement& elem);
+        /// Set the level.
+        void setLevel(int level);
+        /// Element-handler.
+        virtual void handleElement(KoXmlElement& elem, int level = 0);
     private:
         /// \internal d-pointer class.
         class Private;
         /// \internal d-pointer instance.
         Private* const d;
-        /// \internal recursive element-handler.
-        void handleElem(KoXmlElement& elem, int level = 0);
+};
+
+/**
+* The KoScriptingOdfManifestReader class handles reading ODF META-INF/manifest.xml files.
+*
+* The following python sample script does use the KWord scripting module to load a
+* ISO OpenDocument Text file and print the content of the manifest-file to stdout;
+* \code
+* import Kross, KWord
+* KWord.document().openUrl("/home/kde4/testDoc.odt")
+* reader = KWord.store().open("META-INF/manifest.xml")
+* if not reader:
+*     raise "Failed to read the mainfest"
+* for i in range( reader.count() ):
+*     print "%s %s" % (reader.type(i),reader.path(i))
+* \endcode
+*/
+class KoScriptingOdfManifestReader : public KoScriptingOdfReader
+{
+        Q_OBJECT
+    public:
+        /// Constructor.
+        KoScriptingOdfManifestReader(QObject* parent, const KoXmlDocument& doc);
+        /// Destructor.
+        virtual ~KoScriptingOdfManifestReader() {}
+    public Q_SLOTS:
+        /** Returns the number of file-entries the manifest has. */
+        int count() const { return m_entries.count(); }
+        /** Returns the type of the file-entry. This could be for example
+        something like "text/xml" or "application/vnd.oasis.opendocument.text" */
+        QString type(int index) { return m_entries.value(index).first; }
+        /** Return the path of the file-entry. This could be for example
+        something like "/", "content.xml" or "styles.xml". */
+        QString path(int index) { return m_entries.value(index).second; }
+        /**
+        * Return a list of paths for the defined type. If not type is defined
+        * just all paths are returned.
+        *
+        * Python sample that does use the paths-method;
+        * \code
+        * # Following may print ['/','content.xml','styles.xml']
+        * print reader.paths()
+        *
+        * # Following may print ['content.xml','styles.xml']
+        * print reader.paths("text/xml")
+        * \endcode
+        */
+        QStringList paths(const QString& type = QString());
+    private:
+        QList< QPair<QString,QString> > m_entries;
+};
+
+/**
+* The KoScriptingOdfManifestReader class handles reading ODF styles.xml files.
+*/
+class KoScriptingOdfStylesReader : public KoScriptingOdfReader
+{
+        Q_OBJECT
+    public:
+        /// Constructor.
+        KoScriptingOdfStylesReader(QObject* parent, const KoXmlDocument& doc);
+        /// Destructor.
+        virtual ~KoScriptingOdfStylesReader() {}
+    public Q_SLOTS:
+        //QString style(const QString& styleName);
+};
+
+/**
+* The KoScriptingOdfManifestReader class handles reading ODF content.xml files.
+*/
+class KoScriptingOdfContentReader : public KoScriptingOdfReader
+{
+        Q_OBJECT
+    public:
+        /// Constructor.
+        KoScriptingOdfContentReader(QObject* parent, const KoXmlDocument& doc);
+        /// Destructor.
+        virtual ~KoScriptingOdfContentReader() {}
+    public Q_SLOTS:
+        //QStringList headers(const QString& filter);
+        //QStringList lists(const QString& filter);
+        //QStringList images(const QString& filter);
+        //QStringList tables(const QString& filter);
 };
 
 /**
@@ -166,7 +297,7 @@ class KoScriptingOdfReader : public QObject
 * # Get a KoStore instance.
 * store = KWord.store()
 * # Open the content.xml file within the KoStore.
-* reader = store.readFile("content.xml")
+* reader = store.open("content.xml")
 * if not reader:
 *     raise "Failed to read file from the store"
 *
@@ -184,12 +315,12 @@ class KoScriptingOdfStore : public QObject
 {
         Q_OBJECT
     public:
+        /// Constructor.
         explicit KoScriptingOdfStore(QObject* parent, KoDocument* doc);
+        /// Destructor.
         virtual ~KoScriptingOdfStore();
 
     public Q_SLOTS:
-
-        //QStringList files();
 
         /**
         * Returns true if there exists a file with the defined name
@@ -199,9 +330,18 @@ class KoScriptingOdfStore : public QObject
         * \code
         * if not store.hasFile("content.xml"):
         *     raise "No content.xml file within the store."
+        * if not store.hasFile("tar:/META-INF/manifest.xml"):
+        *     raise "No manifest.xml file within the store."
         * \endcode
         */
         bool hasFile(const QString& fileName);
+
+        /**
+        * Returns true if the store is already opened else false
+        * got returned. The store does allow to open and deal
+        * with maximal one file the same time.
+        */
+        bool isOpen() const;
 
         /**
         * Open the file with the defined name \p fileName and
@@ -209,14 +349,33 @@ class KoScriptingOdfStore : public QObject
         * was open successful else NULL (aka no object) got
         * returned.
         *
-        * The following python sample does use the readFile-method;
+        * If the store is already opened, it got closed before
+        * we try to open the new file. This means, that all
+        * previous \a KoScriptingOdfReader instances are
+        * invalid and that only the last one returned by using
+        * the open-method is valid till closed.
+        *
+        * The following python sample does use the open-method;
         * \code
-        * reader = store.readFile("content.xml")
-        * if not reader:
-        *     raise "Failed to read the content.xml from the store."
+        * # Fetch a reader for the styles.xml file.
+        * stylesReader = store.open("styles.xml")
+        * if not stylesReader:
+        *     raise "Failed to read styles"
+        *
+        * # Now fetch a reader for the manifest. Please note,
+        * # that stylesReader.close() is implicit done here.
+        * manifestReader = store.open("META-INF/manifest.xml")
+        * if not manifestReader:
+        *     raise "Failed to read mainfest"
         * \endcode
         */
-        QObject* readFile(const QString& fileName);
+        QObject* open(const QString& fileName);
+
+        /**
+        * Closes the store if it's opened. If the store was not opened
+        * or got closed successful true is returned.
+        */
+        bool close();
 
         //QStringList directories();
         //bool hasDirectory(const QString& directoryName);
@@ -237,6 +396,7 @@ class KoScriptingOdfStore : public QObject
         //void setFilter(const QString& filter) {}
         //void start() {}
 
+        //QStringList manifestFiles();
         //QString toString() const;
 
     Q_SIGNALS:

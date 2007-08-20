@@ -126,11 +126,11 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
 				cs->normalisedChannelsValue(canvasIt.rawData(), canvasColor);		// canvasColor
 				canvasCell = reinterpret_cast<PropertyCell *>(caOverIt.rawData());	// canvasCell
 
-				float volume_bc, volume_cb;
-				computePaintTransferAmount(brushCell, canvasCell, pressure, 0.6, volume_bc, volume_cb);
-
 				float alpha = bufferColor[channels-1] >= canvasColor[channels-1] ?
 						bufferColor[channels-1] : canvasColor[channels-1];
+/*
+				float volume_bc, volume_cb;
+				computePaintTransferAmount(brushCell, canvasCell, pressure, 0.6, volume_bc, volume_cb);
 
 				if (volume_bc) { // Paint transfer is from brush to canvas
 					// The result of the mixing goes in the buffer.
@@ -151,20 +151,25 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
 					bufferCell->volume -= volume_cb;
 					brushCell->volume += volume_cb;
 				}
+*/
+
+				mixChannels(bufferColor, canvasColor, pressure*canvasCell->volume, brushColor, pressure*brushCell->volume);
+				mixProperty(bufferCell, canvasCell, pressure*canvasCell->volume, brushCell, pressure*brushCell->volume);
 
 				bufferColor[channels-1] = alpha;
 
 				if (bufferCell->volume < 0)
 					bufferCell->volume = 0;
-				if (brushCell->volume < 0)
-					brushCell->volume = 0;
+// 				if (brushCell->volume < 0)
+// 					brushCell->volume = 0;
 				if (bufferCell->volume > 1000.0)
 					bufferCell->volume = 1000.0;
-				if (brushCell->volume > 1000.0)
-					brushCell->volume = 1000.0;
+// 				if (brushCell->volume > 1000.0)
+// 					brushCell->volume = 1000.0;
 
 				cs->fromNormalisedChannelsValue(bufferIt.rawData(), bufferColor);
-				cs->fromNormalisedChannelsValue(brush->rawData(x,y), brushColor);
+				cs->fromNormalisedChannelsValue(brush->rawData(x,y), bufferColor);
+				*brushCell = *bufferCell;
 			}
 
 			++bufferIt; ++canvasIt;
@@ -210,15 +215,11 @@ void KisComplexOp::mixProperty(PropertyCell *mixed, const PropertyCell *cell1, f
 	QVector<float> vCell2(overlaycs->channelCount());
 	QVector<float> vMixed(overlaycs->channelCount());
 
-// 	float prevVolume = mixed->volume;
-
 	overlaycs->normalisedChannelsValue(reinterpret_cast<const quint8 *>(cell1), vCell1);
 	overlaycs->normalisedChannelsValue(reinterpret_cast<const quint8 *>(cell2), vCell2);
 	overlaycs->normalisedChannelsValue(reinterpret_cast<quint8 *>(mixed), vMixed);
 
 	mixChannels(vMixed, vCell1, vol1, vCell2, vol2);
-
-// 	mixed->volume = prevVolume;
 
 	overlaycs->fromNormalisedChannelsValue(reinterpret_cast<quint8 *>(mixed), vMixed);
 }

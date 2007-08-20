@@ -79,12 +79,7 @@ KoEditColorSet::KoEditColorSet(const QList<KoColorSet *> &palettes, const QStrin
     widget.open->setIcon(KIcon("document-open"));
     widget.save->setIcon(KIcon("document-save"));
 
-    if (!m_activeColorSet) {
-        widget.add->setEnabled(false);
-        widget.remove->setEnabled(false);
-        widget.open->setEnabled(false);
-        widget.save->setEnabled(false);
-    }
+    setEnabled(m_activeColorSet != 0);
 
     connect(widget.add, SIGNAL(clicked()), this, SLOT(addColor()));
     connect(widget.remove, SIGNAL(clicked()), this, SLOT(removeColor()));
@@ -113,12 +108,14 @@ void KoEditColorSet::setActiveColorSet(int index)
     m_gridLayout->setSpacing(2);
 
     m_activeColorSet = m_colorSets.value(index);
-    Q_ASSERT(m_activeColorSet);
-    for (int i = 0; i < m_activeColorSet->nColors(); i++) {
-        KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
-        patch->setColor(m_activeColorSet->getColor(i).color);
-        connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
-        m_gridLayout->addWidget(patch, i/16, i%16);
+    setEnabled(m_activeColorSet != 0);
+    if (m_activeColorSet) {
+        for (int i = 0; i < m_activeColorSet->nColors(); i++) {
+            KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
+            patch->setColor(m_activeColorSet->getColor(i).color);
+            connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
+            m_gridLayout->addWidget(patch, i/16, i%16);
+        }
     }
 
     wdg->setLayout(m_gridLayout);
@@ -196,6 +193,7 @@ KoEditColorSetDialog::KoEditColorSetDialog(const QList<KoColorSet *> &palettes, 
     ui = new KoEditColorSet(palettes, activePalette, this);
     setMainWidget(ui);
     setCaption(i18n("Add/Remove Colors"));
+    enableButton(KDialog::Ok, ui->isEnabled());
 }
 
 KoEditColorSetDialog::~KoEditColorSetDialog()

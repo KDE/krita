@@ -54,11 +54,14 @@ KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
     : KisNode()
     , m_d( new Private )
 {
-    Q_ASSERT( img );
+//     Q_ASSERT( img );
     setName( name );
     setOpacity( opacity );
     m_d->image = img;
-    m_d->compositeOp = const_cast<KoCompositeOp*>( img->colorSpace()->compositeOp( COMPOSITE_OVER ) );
+	if (m_d->image)
+    	m_d->compositeOp = const_cast<KoCompositeOp*>( img->colorSpace()->compositeOp( COMPOSITE_OVER ) );
+	else
+		m_d->compositeOp = 0;
     m_d->metaDataStore = new KisMetaData::Store();
 }
 
@@ -81,14 +84,17 @@ KisLayer::~KisLayer()
 
 KoColorSpace * KisLayer::colorSpace()
 {
-    return m_d->image->colorSpace();
+	if (m_d->image)
+    	return m_d->image->colorSpace();
+	return 0;
 }
 
 KoDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
     l << KoDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
-    l << KoDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->id());
+	if (compositeOp())
+    	l << KoDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->id());
     return l;
 }
 

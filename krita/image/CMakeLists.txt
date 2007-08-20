@@ -44,6 +44,7 @@ set(kritaimage_LIB_SRCS
    kis_bookmarked_configuration_manager.cc
    kis_boundary.cc
    kis_brush.cc
+   kis_complex_color.cpp
    kis_convolution_painter.cc
    kis_painterly_overlay.cpp
    kis_painterly_overlay_colorspace.cpp

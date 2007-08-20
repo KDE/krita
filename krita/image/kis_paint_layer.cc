@@ -83,7 +83,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     : KisLayer(img, name, opacity)
     , m_d( new Private() )
 {
-    Q_ASSERT(img);
+//     Q_ASSERT(img);
     if ( img && colorSpace == 0 )
         colorSpace = img->colorSpace();
     Q_ASSERT( colorSpace );

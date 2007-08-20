@@ -38,6 +38,7 @@ class QRect;
 class QStringList;
 class KisTransaction;
 class KisBrush;
+class KisComplexColor;
 class KisPattern;
 class KisPaintOp;
 class KisPaintInformation;
@@ -503,6 +504,11 @@ public:
     // Returns the current fill color
     KoColor fillColor() const { return m_fillColor; }
 
+	void setSourceLayer(KisPaintLayer *source) { m_sourceLayer = source; }
+	KisPaintLayer *sourceLayer() { return m_sourceLayer; }
+	void setComplexColor(KisComplexColor *color) { m_complexColor = color; }
+	KisComplexColor *complexColor() { return m_complexColor; }
+
     /// This enum contains the styles with which we can fill things like polygons and ellipses
     enum FillStyle {
         FillStyleNone,
@@ -607,6 +613,8 @@ protected:
     KoColor m_paintColor;
     KoColor m_backgroundColor;
     KoColor m_fillColor;
+	KisPaintLayer *m_sourceLayer;
+	KisComplexColor *m_complexColor;
     FillStyle m_fillStyle;
     StrokeStyle m_strokeStyle;
     bool m_antiAliasPolygonFill;

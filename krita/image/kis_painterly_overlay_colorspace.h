@@ -48,17 +48,16 @@
  */
 
 template<typename _channels_type_>
-struct KisPainterlyOverlayColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 9, -1> {
+struct KisPainterlyOverlayColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 8, -1> {
 
     static const quint8 adsorbency_pos = 0;
     static const quint8 gravity_pos = 1;
     static const quint8 mixability_pos = 2;
     static const quint8 height_pos = 3;
     static const quint8 pigment_concentration_pos = 4;
-    static const quint8 reflectivity_pos = 5;
-    static const quint8 viscosity_pos = 6;
-    static const quint8 volume_pos = 7;
-    static const quint8 wetness_pos = 8;
+    static const quint8 viscosity_pos = 5;
+    static const quint8 volume_pos = 6;
+    static const quint8 wetness_pos = 7;
 
     struct Cell {
         _channels_type_ adsorbency;
@@ -74,6 +73,7 @@ struct KisPainterlyOverlayColorSpaceTraits : public KoColorSpaceTrait<_channels_
 };
 
 typedef KisPainterlyOverlayColorSpaceTraits<float> PainterlyOverlayFloatTraits;
+typedef PainterlyOverlayFloatTraits::Cell PropertyCell;
 
 class KRITAIMAGE_EXPORT KisPainterlyOverlayColorSpace
     : public KoIncompleteColorSpace<PainterlyOverlayFloatTraits, KoRGB16Fallback>

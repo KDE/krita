@@ -91,7 +91,10 @@
 #include <QRect>
 #include <QSize>
 
-#include <kcpuinfo.h>
+#include <solid/devicenotifier.h>
+#include <solid/device.h>
+#include <solid/deviceinterface.h>
+#include <solid/processor.h>
 
 #include <config-endian.h> // WORDS_BIGENDIAN
 #include <config-processor.h>
@@ -152,7 +155,15 @@ QImage MImageScale::smoothScale(const QImage& image, int dw, int dh)
 #if defined(QT_ARCH_I386)
 #ifdef HAVE_X86_MMX
 //#warning Using MMX Smoothscale
-    bool haveMMX = KCPUInfo::haveExtension( KCPUInfo::IntelMMX );
+    bool haveMMX = false;
+
+    //get a Processor
+    QList<Solid::Device> list = Solid::Device::listFromType(Solid::DeviceInterface::Processor, QString());
+    if (!list.empty()) {
+        Solid::Device device = list[0];
+        haveMMX = (device.as<Solid::Processor>()->extensions() & Solid::Processor::IntelMMX);
+    }
+
     if(haveMMX){
         __mimageScale_mmx_AARGBA(scaleinfo, (unsigned int *)buffer.scanLine(0),
                                  0, 0, 0, 0, dw, dh, dw, sow);

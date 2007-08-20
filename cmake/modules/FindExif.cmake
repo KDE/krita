@@ -7,18 +7,18 @@
 #
 
 
-# use pkg-config to get the directories and then use these values
-# in the FIND_PATH() and FIND_LIBRARY() calls
-INCLUDE(UsePkgConfig)
-
 if(LIBEXIF_INCLUDE_DIR AND LIBEXIF_LIBRARY)
 
   # Already in cache
   set(LIBEXIF_FOUND TRUE)
 
 else(LIBEXIF_INCLUDE_DIR AND LIBEXIF_LIBRARY)
-
-  PKGCONFIG(libexif _LibexifIncDir _LibexifLinkDir _LibexifLinkFlags _LibexifCflags)
+  if(NOT WIN32)
+    # use pkg-config to get the directories and then use these values
+    # in the FIND_PATH() and FIND_LIBRARY() calls
+    INCLUDE(UsePkgConfig)
+    PKGCONFIG(libexif _LibexifIncDir _LibexifLinkDir _LibexifLinkFlags _LibexifCflags)
+   endif(NOT WIN32)
 
   if(_LibexifLinkFlags)
     # query pkg-config asking for a libexif >= 0.6.12

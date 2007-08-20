@@ -110,6 +110,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
         palettes.append(new KoColorSet(*it));
     }
 
+    Q_ASSERT(colorSet);
     KoEditColorSetDialog *dlg = new KoEditColorSetDialog(palettes, colorSet->name(), thePublic);
     if (dlg->exec()) { // always reload the color set
         thePublic->setColorSet(dlg->activeColorSet());

@@ -28,6 +28,8 @@
 #include <KoXmlWriter.h>
 #include <KoDocument.h>
 
+class KoScriptingOdfStore;
+
 /**
 * The KoScriptingOdfReader provides functionality to read content
 * from a KoStore.
@@ -52,13 +54,15 @@ class KoScriptingOdfReader : public QObject
 {
         Q_OBJECT
     public:
-        /// Constructor.
-        explicit KoScriptingOdfReader(QObject* parent, const KoXmlDocument& doc);
-        /// Destructor.
+        /** Constructor. */
+        explicit KoScriptingOdfReader(KoScriptingOdfStore* store, const KoXmlDocument& doc);
+        /** Destructor. */
         virtual ~KoScriptingOdfReader();
-        /// Return the KoXmlDocument instance this reader operates on.
+        /** Return the KoScriptingOdfStore instance this reader belongs to. */
+        KoScriptingOdfStore* store() const;
+        /** Return the KoXmlDocument instance this reader operates on. */
         KoXmlDocument doc() const;
-        /// Return the current element.
+        /** Return the current element. */
         KoXmlElement currentElement() const;
 
     public Q_SLOTS:
@@ -151,15 +155,11 @@ class KoScriptingOdfReader : public QObject
 
         /**
         * Return true if the current element is an element.
-        *
-        * \deprecated probably refactor this later.
         */
         bool isElement() const;
 
         /**
         * Return true if the current element is a text-element.
-        *
-        * \deprecated probably refactor this later.
         */
         bool isText() const;
 
@@ -167,6 +167,11 @@ class KoScriptingOdfReader : public QObject
         //bool isDocument() const { return m_currentElement.isDocument(); }
         //QString toText() const { return m_currentElement.toText().data(); }
         //KoXmlCDATASection toCDATASection() const;
+
+        /**
+        * Return true if the current element has children.
+        */
+        bool hasChildren() const;
 
         /**
         * Return the content of the element as string.
@@ -182,18 +187,18 @@ class KoScriptingOdfReader : public QObject
         void onElement();
 
     protected:
-        /// Emit the onElement signal above.
+        /** Emit the onElement signal above. */
         void emitOnElement();
-        /// Set the current element.
+        /** Set the current element. */
         void setCurrentElement(const KoXmlElement& elem);
-        /// Set the level.
+        /** Set the level. */
         void setLevel(int level);
-        /// Element-handler.
+        /** Element-handler. */
         virtual void handleElement(KoXmlElement& elem, int level = 0);
     private:
-        /// \internal d-pointer class.
+        /** \internal d-pointer class. */
         class Private;
-        /// \internal d-pointer instance.
+        /** \internal d-pointer instance. */
         Private* const d;
 };
 
@@ -216,9 +221,9 @@ class KoScriptingOdfManifestReader : public KoScriptingOdfReader
 {
         Q_OBJECT
     public:
-        /// Constructor.
-        KoScriptingOdfManifestReader(QObject* parent, const KoXmlDocument& doc);
-        /// Destructor.
+        /** Constructor. */
+        KoScriptingOdfManifestReader(KoScriptingOdfStore* store, const KoXmlDocument& doc);
+        /** Destructor. */
         virtual ~KoScriptingOdfManifestReader() {}
     public Q_SLOTS:
         /** Returns the number of file-entries the manifest has. */
@@ -254,9 +259,9 @@ class KoScriptingOdfStylesReader : public KoScriptingOdfReader
 {
         Q_OBJECT
     public:
-        /// Constructor.
-        KoScriptingOdfStylesReader(QObject* parent, const KoXmlDocument& doc);
-        /// Destructor.
+        /** Constructor. */
+        KoScriptingOdfStylesReader(KoScriptingOdfStore* store, const KoXmlDocument& doc);
+        /** Destructor. */
         virtual ~KoScriptingOdfStylesReader() {}
     public Q_SLOTS:
         //QString style(const QString& styleName);
@@ -269,9 +274,9 @@ class KoScriptingOdfContentReader : public KoScriptingOdfReader
 {
         Q_OBJECT
     public:
-        /// Constructor.
-        KoScriptingOdfContentReader(QObject* parent, const KoXmlDocument& doc);
-        /// Destructor.
+        /** Constructor. */
+        KoScriptingOdfContentReader(KoScriptingOdfStore* store, const KoXmlDocument& doc);
+        /** Destructor. */
         virtual ~KoScriptingOdfContentReader() {}
     public Q_SLOTS:
         //QStringList headers(const QString& filter);
@@ -315,10 +320,13 @@ class KoScriptingOdfStore : public QObject
 {
         Q_OBJECT
     public:
-        /// Constructor.
+        /** Constructor. */
         explicit KoScriptingOdfStore(QObject* parent, KoDocument* doc);
-        /// Destructor.
+        /** Destructor. */
         virtual ~KoScriptingOdfStore();
+
+        //KoStore* readStore() const;
+        //QIODevice* readDevice() const;
 
     public Q_SLOTS:
 
@@ -377,6 +385,18 @@ class KoScriptingOdfStore : public QObject
         */
         bool close();
 
+        /**
+        * Extract the content of the file named \p fileName and return
+        * it as an array of bytes.
+        */
+        QByteArray extract(const QString& fileName);
+
+        /**
+        * Extract the content of the file named \p fileName to the defined
+        * target-file \p toFileName and return true on success.
+        */
+        bool extractToFile(const QString& fileName, const QString& toFileName);
+
         //QStringList directories();
         //bool hasDirectory(const QString& directoryName);
         //QString currentDirectory();
@@ -396,9 +416,6 @@ class KoScriptingOdfStore : public QObject
         //void setFilter(const QString& filter) {}
         //void start() {}
 
-        //QStringList manifestFiles();
-        //QString toString() const;
-
     Q_SIGNALS:
 
         //void onElement();
@@ -406,9 +423,9 @@ class KoScriptingOdfStore : public QObject
         //void onParagraph();
 
     private:
-        /// \internal d-pointer class.
+        /** \internal d-pointer class. */
         class Private;
-        /// \internal d-pointer instance.
+        /** \internal d-pointer instance. */
         Private* const d;
 };
 

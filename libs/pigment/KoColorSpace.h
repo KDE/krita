@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -199,11 +200,15 @@ public:
      * Return a string with the channel's value with integer
      * channels normalised to the floating point range 0 to 1, if
      * appropriate.
-     *
-     * XXX: Also have something like this that returns a QVector<float> in the range
-     * 0-1? And vice-versa -- fill the pixel from a QVector<float>?
      */
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
+
+	/**
+	 * Return a QVector of floats with channels' values normalized
+	 * to floating point range 0 to 1.
+	 */
+	virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const = 0;
+	virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) = 0;
 
     /**
      * Convert the value of the channel at the specified position into
@@ -631,10 +636,10 @@ public:
      */
     virtual QString name() const = 0;
 
-    
+
     virtual KoID colorModelId() const = 0;
     virtual KoID colorDepthId() const = 0;
-    
+
     virtual bool profileIsCompatible(KoColorProfile* profile) const =0;
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *) = 0;
 

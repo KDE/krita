@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -289,6 +290,27 @@ class KoColorSpaceAbstract : public KoColorSpace {
             typename _CSTraits::channels_type c = _CSTraits::nativeArray(pixel)[channelIndex];
             return QString().setNum( 100. * ((double)c ) / KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue);
         }
+
+		virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const
+		{
+			Q_ASSERT((int)channels.count() == (int)_CSTraits::channels_nb);
+			typename _CSTraits::channels_type c;
+			for (uint i = 0; i < _CSTraits::channels_nb; i++) {
+            	c = _CSTraits::nativeArray(pixel)[i];
+				channels[i] = ((double)c ) / KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue;
+			}
+		}
+
+		virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values)
+		{
+			Q_ASSERT((int)values.count() == (int)_CSTraits::channels_nb);
+			typename _CSTraits::channels_type c;
+			for (uint i = 0; i < _CSTraits::channels_nb; i++) {
+				c = (typename _CSTraits::channels_type)
+					((float)KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue * values[i]);
+				_CSTraits::nativeArray(pixel)[i] = c;
+			}
+		}
 
         virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const {
             typename _CSTraits::channels_type c = _CSTraits::nativeArray(srcPixel)[channelIndex];

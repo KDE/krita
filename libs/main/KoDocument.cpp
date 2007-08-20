@@ -273,8 +273,10 @@ KoDocument::KoDocument( QWidget * parentWidget, QObject* parent, bool singleView
     m_pageLayout.right = 0;
 
     d->m_undoStack = new KUndoStack( this );
-    d->m_undoStack->createUndoAction( actionCollection() );
-    d->m_undoStack->createRedoAction( actionCollection() );
+    QAction* undoAction = d->m_undoStack->createUndoAction( actionCollection() );
+    undoAction->setIconText(i18n("Undo"));
+    QAction* redoAction = d->m_undoStack->createRedoAction( actionCollection() );
+    redoAction->setIconText(i18n("Redo"));
     connect( d->m_undoStack, SIGNAL( cleanChanged( bool ) ), this, SLOT( setDocumentClean( bool ) ) );
 
     // A way to 'fix' the job's window, since we have no widget known to KParts

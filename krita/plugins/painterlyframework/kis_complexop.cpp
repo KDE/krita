@@ -127,7 +127,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
 				canvasCell = reinterpret_cast<PropertyCell *>(caOverIt.rawData());	// canvasCell
 
 				float volume_bc, volume_cb;
-				computePaintTransferAmount(brushCell, canvasCell, pressure, 1.0, volume_bc, volume_cb);
+				computePaintTransferAmount(brushCell, canvasCell, pressure, 0.6, volume_bc, volume_cb);
 
 				float alpha = bufferColor[channels-1] >= canvasColor[channels-1] ?
 						bufferColor[channels-1] : canvasColor[channels-1];
@@ -158,10 +158,10 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
 					bufferCell->volume = 0;
 				if (brushCell->volume < 0)
 					brushCell->volume = 0;
-				if (bufferCell->volume > 1)
-					bufferCell->volume = 1;
-				if (brushCell->volume > 1)
-					brushCell->volume = 1;
+				if (bufferCell->volume > 1000.0)
+					bufferCell->volume = 1000.0;
+				if (brushCell->volume > 1000.0)
+					brushCell->volume = 1000.0;
 
 				cs->fromNormalisedChannelsValue(bufferIt.rawData(), bufferColor);
 				cs->fromNormalisedChannelsValue(brush->rawData(x,y), brushColor);
@@ -176,6 +176,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
 		buOverIt.nextRow();
 		caOverIt.nextRow();
 	}
+	painter()->setPressure(pressure);
 
     if (source()->hasSelection()) {
         painter()->bltSelection(rc.x(), rc.y(), painter()->compositeOp(), buffer->paintDevice(),
@@ -209,11 +210,15 @@ void KisComplexOp::mixProperty(PropertyCell *mixed, const PropertyCell *cell1, f
 	QVector<float> vCell2(overlaycs->channelCount());
 	QVector<float> vMixed(overlaycs->channelCount());
 
+// 	float prevVolume = mixed->volume;
+
 	overlaycs->normalisedChannelsValue(reinterpret_cast<const quint8 *>(cell1), vCell1);
 	overlaycs->normalisedChannelsValue(reinterpret_cast<const quint8 *>(cell2), vCell2);
 	overlaycs->normalisedChannelsValue(reinterpret_cast<quint8 *>(mixed), vMixed);
 
 	mixChannels(vMixed, vCell1, vol1, vCell2, vol2);
+
+// 	mixed->volume = prevVolume;
 
 	overlaycs->fromNormalisedChannelsValue(reinterpret_cast<quint8 *>(mixed), vMixed);
 }
@@ -229,20 +234,25 @@ void KisComplexOp::computePaintTransferAmount(PropertyCell *brush,
 
 	float amt;
 
-	const float XFER_FRACTION = 0.2;
-	const float MAX_XFER_QUANTITY = 0.001;
-	const float EQUAL_PAINT_CUTOFF = 1.0/30.0;
+	const float XFER_FRACTION = 0.1;
+	const float MAX_XFER_QUANTITY = 1.0;
+	const float EQUAL_PAINT_CUTOFF = 1.0/60.0;
 
 	float paintDiff = ab - ac;
+// 	float equalPaintCutoff = maths::clamp(0, 1, fabs(paintDiff)/EQUAL_PAINT_CUTOFF);
+// 	float velocityCutoff = maths::smoothstep(0.2, 0.3, v);
+	int xferDir = maths::sign(paintDiff);
 
-	if (paintDiff > 0)
+	if (xferDir > 0)
 		amt = ab;
 	else
 		amt = ac;
 
 	amt = amt * XFER_FRACTION;
+// 	amt = amt * equalPaintCutoff * velocityCutoff;
+// 	amt = maths::clamp(0, MAX_XFER_QUANTITY, amt);
 
-	if (paintDiff > 0) {
+	if (xferDir > 0) {
 		volume_bc = amt;
 		volume_cb = 0;
 	} else {

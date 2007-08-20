@@ -34,6 +34,12 @@ KRITAPAINTERLYCOMMON_EXPORT void mult(const int rows, const int cols, double **M
 
 KRITAPAINTERLYCOMMON_EXPORT double sigmoid(double v);
 
+KRITAPAINTERLYCOMMON_EXPORT double smoothstep(double min, double max, double v);
+
+KRITAPAINTERLYCOMMON_EXPORT double clamp(double min, double max, double v);
+
+KRITAPAINTERLYCOMMON_EXPORT int sign(double v);
+
 KRITAPAINTERLYCOMMON_EXPORT void computeKS(const int nrefs, const double *vREF, float *vKS);
 
 KRITAPAINTERLYCOMMON_EXPORT void computeReflectance(const int nrefs, const float *vKS, double *vREF);

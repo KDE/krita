@@ -34,7 +34,7 @@ const double MATH_LIM_SUB = 0.0 + 3.90625e-3;
 const double MATH_NORMALIZATION = 65535.0;
 
 // double MATH_SUB_BLACK(double) { return 3.90625e-4; }
-double MATH_SUB_BLACK(double R) { return 0.4*R; }
+double MATH_SUB_BLACK(double R) { return 0.2*R; }
 
 double coth(double z)
 {
@@ -58,14 +58,71 @@ void mult(const int rows, const int cols, double **M, const double *A, double *R
 
 double sigmoid(double v)
 {
-	const double PRESSURE_SHIFT = 0.017;
-	double P = 1.0 / ( 1.0 + exp( -6 * ( v*v*v + PRESSURE_SHIFT ) ) );
+	/*
+	const double PRESSURE_SHIFT = 0.02;
+	double P = 1.0 / ( 1.0 + exp( -6 * ( v + PRESSURE_SHIFT ) ) );
 	if (P > 1)
 		P = 1;
 	if (P < 0)
 		P = 0;
 
 	return P;
+	*/
+	return smoothstep(-0.1, 0.9, v);
+}
+
+double smoothstep(double a, double b, double v)
+{
+	const double b1 = log(1.0/0.00247262 - 1.0);
+	const double b2 = log(1.0/0.99752737 - 1.0);
+
+	if (a > b) {
+		double tmp = a;
+		a = b;
+		b = tmp;
+	}
+
+	if (v < a)
+		return a;
+	if (v > b)
+		return b;
+
+	if (a == b)
+		return v;
+
+	double del = -a + b;
+	double del_k = b1 - b2;
+	double del_c = -a*b2 + b*b1;
+
+	double k = del_k/del;
+	double c = del_c/del;
+
+	double z = 1.0 / ( 1.0 + exp( -k*v + c ) );
+
+	return z;
+}
+
+double clamp(double min, double max, double v)
+{
+	if (min > max) {
+		double tmp = min;
+		min = max;
+		max = tmp;
+	}
+
+	if (v < min)
+		return min;
+	if (v > max)
+		return max;
+	return v;
+}
+
+int sign(double v)
+{
+	if (v >= 0)
+		return 1;
+	else
+		return -1;
 }
 
 void computeKS(const int nrefs, const double *vREF, float *vKS)
@@ -148,7 +205,7 @@ void simplex(const int rows, const int cols, double **M, double *X, const double
 
 	lp = glp_create_prob();
 	glp_set_prob_name(lp, "XYZ2REF");
-	glp_set_obj_dir(lp, GLP_MIN);
+	glp_set_obj_dir(lp, GLP_MAX);
 
 	glp_add_rows(lp, rows);
 

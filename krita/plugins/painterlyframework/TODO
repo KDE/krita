@@ -1,0 +1,29 @@
+o MIXER
++ Remove *all* std::vector
++ Check if I do coth and acoth correctly!
++ Do not redraw the whole canvas!
++ Find something about Gaussian quadrature
++ Implement KisIlluminantProfile using Gaussian quadrature upon 470 wavelenghs (use 15 wavelenghts)
+- Implement KisReflectanceColorSpace (16 channels, 15 for colors + 1 for opacity)
++ Implement KisKSColorSpace (31 channels, 30 for colors (2 per wavelenght) + 1 for opacity)
+- Implement configuration option widget for the mixer
+- Implement loading/saving of configuration
+
+o PAINT OPERATION
+- Find something about the physical system involved.
+- Look at some tutorials (Bart's one, probably...)
+- Find a good way to implement bristles.
+- Correct the Mixer so that it can handle such paintop.
+- Probably more to come in these days.
+
+o PHYSICS FILTER
+- Find something about physical operation involved.
+- Find a way to put this in the infrastructure of Krita
+  - Can it be used with non-painterly color spaces?
+  - Can it be used without painterly overlays?
+- Find a good way to implement undo's.
+
+o MORE TO COME
+- Ask if I can add my color spaces to the color space registry.
+- More reflectance curves and illuminant profiles.
+- TEST TEST TEST!

@@ -1,0 +1,6 @@
+./isg 5000 IlluminantD50.raw && \
+./isg 6500 IlluminantD65.raw && \
+./isg 7500 IlluminantD75.raw && \
+echo Y | ./ipg IlluminantD50.raw Bradford "CIE Standard D50-Illuminant" ../IlluminantD50.ill && \
+echo Y | ./ipg IlluminantD65.raw Bradford "CIE Standard D65-Illuminant" ../IlluminantD65.ill && \
+echo Y | ./ipg IlluminantD75.raw Bradford "CIE Standard D75-Illuminant" ../IlluminantD75.ill

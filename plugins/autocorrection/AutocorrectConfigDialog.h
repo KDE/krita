@@ -61,7 +61,7 @@ public:
      * @param autocorrect the autocorrection plugin
      * @param parent the parent widget
      */
-    AutocorrectConfigDialog(Autocorrect *autocorret, QWidget *parent = 0);
+    explicit AutocorrectConfigDialog(Autocorrect *autocorret, QWidget *parent = 0);
 
     /**
      * Destructor

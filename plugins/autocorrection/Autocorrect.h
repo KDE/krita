@@ -22,7 +22,14 @@
 
 #include <KoTextEditingPlugin.h>
 #include <QTextCursor>
+#include <QTextCharFormat>
 #include <QSet>
+
+/* struct AutocorrectEntry
+{
+    QString replace;
+    QTextCharFormat format;
+}; */
 
 class Autocorrect : public KoTextEditingPlugin {
     Q_OBJECT
@@ -52,6 +59,8 @@ public:
     void setAutoFormatBulletList(bool b) { m_autoFormatBulletList = b; }
     void setReplaceDoubleQuotes(bool b) { m_replaceDoubleQuotes = b; }
     void setReplaceSingleQuotes(bool b) { m_replaceSingleQuotes = b; }
+    void setAdvancedAutocorrect(bool b) { m_advancedAutocorrect = b; }
+    void setAutocorrectEntries(QHash<QString, QString> entries);
 
     bool getUppercaseFirstCharOfSentence() { return m_uppercaseFirstCharOfSentence; }
     bool getFixTwoUppercaseChars() { return m_fixTwoUppercaseChars; }
@@ -66,6 +75,8 @@ public:
     bool getAutoFormatBulletList() { return m_autoFormatBulletList; }
     bool getReplaceDoubleQuotes() { return m_replaceDoubleQuotes; }
     bool getReplaceSingleQuotes() { return m_replaceSingleQuotes; }
+    bool getAdvancedAutocorrect() { return m_advancedAutocorrect; }
+    QHash<QString, QString> getAutocorrectEntries();
 
 private slots:
     void configureAutocorrect();
@@ -87,6 +98,7 @@ private:
     void autoFormatBulletList();
     void replaceDoubleQuotes();
     void replaceSingleQuotes();
+    void advancedAutocorrect();
 
     /// @returns the actual link that will be set as anchor href
     QString autoDetectURL(const QString &word) const;
@@ -107,6 +119,7 @@ private:
     bool m_superscriptAppendix; // replace 1st with 1 and a superscript "st"
     bool m_capitalizeWeekDays;
     bool m_autoFormatBulletList; // use list formatting for bulletted paragraphs.
+    bool m_advancedAutocorrect; // autocorrection from a list of entries
 
     bool m_replaceDoubleQuotes;  // replace double quotes with typographical quotes
     bool m_replaceSingleQuotes;  // replace single quotes with typographical quotes
@@ -119,6 +132,7 @@ private:
     QHash<QString, QString> m_superScriptEntries;
     QSet<QString> m_upperCaseExceptions;
     QSet<QString> m_twoUpperLetterExceptions;
+    QHash<QString, QString /*AutocorrectEntry*/> m_autocorrectEntries;
 };
 
 #endif

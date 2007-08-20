@@ -21,7 +21,10 @@
 
 #include "Autocorrect.h"
 
+#include <QHeaderView>
 #include <KLocale>
+
+// #include <KoFontDia.h>
 
 AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     : QWidget(parent),
@@ -39,9 +42,35 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     widget.autoSuperScript->setCheckState(m_autocorrect->getSuperscriptAppendix() ? Qt::Checked : Qt::Unchecked);
     widget.capitalizeDaysName->setCheckState(m_autocorrect->getCapitalizeWeekDays() ? Qt::Checked : Qt::Unchecked);
     widget.useBulletStyle->setCheckState(m_autocorrect->getAutoFormatBulletList() ? Qt::Checked : Qt::Unchecked);
+    widget.advancedAutocorrection->setCheckState(m_autocorrect->getAdvancedAutocorrect() ? Qt::Checked : Qt::Unchecked);
 
     widget.typographicDoubleQuotes->setCheckState(m_autocorrect->getReplaceDoubleQuotes() ? Qt::Checked : Qt::Unchecked);
     widget.typographicSimpleQuotes->setCheckState(m_autocorrect->getReplaceSingleQuotes() ? Qt::Checked : Qt::Unchecked);
+
+    // enableAdvAutocorrection(true /*widget.advancedAutocorrection->checkState()*/);
+
+    m_autocorrectEntries = m_autocorrect->getAutocorrectEntries();
+    widget.tableWidget->setRowCount(m_autocorrectEntries.size());
+    widget.tableWidget->verticalHeader()->hide();
+    QHash<QString, QString>::const_iterator i = m_autocorrectEntries.constBegin();
+    int j = 0;
+    while (i != m_autocorrectEntries.constEnd()) {
+        widget.tableWidget->setItem(j, 0, new QTableWidgetItem(i.key()));
+        widget.tableWidget->setItem(j++, 1, new QTableWidgetItem(i.value()));
+        ++i;
+    }
+    widget.tableWidget->setSortingEnabled(true);
+    widget.tableWidget->sortByColumn(0, Qt::AscendingOrder);
+
+    // enableAdvAutocorrection(widget.advancedAutocorrection->checkState());
+    connect(widget.advancedAutocorrection, SIGNAL(stateChanged(int)), this, SLOT(enableAdvAutocorrection(int)));
+    connect(widget.autoCorrectionWithFormat, SIGNAL(stateChanged(int)), this, SLOT(enableAutocorrectFormat(int)));
+    connect(widget.addButton, SIGNAL(clicked()), this, SLOT(addAutocorrectEntry()));
+    connect(widget.removeButton, SIGNAL(clicked()), this, SLOT(removeAutocorrectEntry()));
+    connect(widget.tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(setFindReplaceText(int, int)));
+    connect(widget.find, SIGNAL(textChanged(const QString &)), this, SLOT(enableAddRemoveButton()));
+    connect(widget.replace, SIGNAL(textChanged(const QString &)), this, SLOT(enableAddRemoveButton()));
+    connect(widget.changeFormat, SIGNAL(clicked()), this, SLOT(changeCharFormat()));
 }
 
 AutocorrectConfig::~AutocorrectConfig()
@@ -61,9 +90,122 @@ void AutocorrectConfig::applyConfig()
     m_autocorrect->setSuperscriptAppendix(widget.autoSuperScript->checkState() == Qt::Checked);
     m_autocorrect->setCapitalizeWeekDays(widget.capitalizeDaysName->checkState() == Qt::Checked);
     m_autocorrect->setAutoFormatBulletList(widget.useBulletStyle->checkState() == Qt::Checked);
+    m_autocorrect->setAdvancedAutocorrect(widget.advancedAutocorrection->checkState() == Qt::Checked);
+
+    m_autocorrect->setAutocorrectEntries(m_autocorrectEntries);
 
     m_autocorrect->setReplaceDoubleQuotes(widget.typographicDoubleQuotes->checkState() == Qt::Checked);
     m_autocorrect->setReplaceSingleQuotes(widget.typographicSimpleQuotes->checkState() == Qt::Checked);
+}
+
+void AutocorrectConfig::enableAdvAutocorrection(int state)
+{
+    bool enable = state == Qt::Checked;
+    widget.autoCorrectionWithFormat->setEnabled(enable);
+    widget.findLabel->setEnabled(enable);
+    widget.find->setEnabled(enable);
+    widget.specialChar1->setEnabled(enable);
+    widget.replaceLabel->setEnabled(enable);
+    widget.replace->setEnabled(enable);
+    widget.specialChar2->setEnabled(enable);
+    widget.addButton->setEnabled(enable);
+    widget.removeButton->setEnabled(enable);
+    widget.tableWidget->setEnabled(enable);
+    if (!enable) enableAutocorrectFormat(Qt::Unchecked);
+}
+
+void AutocorrectConfig::enableAutocorrectFormat(int state)
+{
+    bool enable = state == Qt::Checked;
+    // widget.changeFormat->setEnabled(enable);
+    // widget.clearFormat->setEnabled(enable);
+}
+
+void AutocorrectConfig::addAutocorrectEntry()
+{
+    int currentRow = widget.tableWidget->currentRow();
+    QString find = widget.find->text();
+    bool modify = false;
+
+    // Modify actually, not add, so we want to remove item from hash
+    if (currentRow != -1 && find == widget.tableWidget->item(currentRow, 0)->text()) {
+        m_autocorrectEntries.remove(find);
+        modify = true;
+    }
+
+    m_autocorrectEntries.insert(find, widget.replace->text());
+    widget.tableWidget->setSortingEnabled(false);
+    int size = widget.tableWidget->rowCount();
+
+    if (modify) {
+        widget.tableWidget->removeRow(currentRow);
+        size--;
+    }
+    else
+        widget.tableWidget->setRowCount(++size);
+
+    QTableWidgetItem *item = new QTableWidgetItem(find);
+    widget.tableWidget->setItem(size - 1, 0, item);
+    widget.tableWidget->setItem(size - 1, 1, new QTableWidgetItem(widget.replace->text()));
+
+    widget.tableWidget->setSortingEnabled(true);
+    widget.tableWidget->setCurrentCell(item->row(), 0);
+}
+
+void AutocorrectConfig::removeAutocorrectEntry()
+{
+    widget.tableWidget->setSortingEnabled(false);
+    m_autocorrectEntries.remove(widget.find->text());
+    widget.tableWidget->removeRow(widget.tableWidget->currentRow());
+    widget.tableWidget->setSortingEnabled(true);
+}
+
+void AutocorrectConfig::enableAddRemoveButton()
+{
+    QString find = widget.find->text();
+    QString replace = widget.find->text();
+    int currentRow = -1;
+    if (m_autocorrectEntries.contains(find)) {
+        currentRow = widget.tableWidget->findItems(find, Qt::MatchFixedString).first()->row();
+        widget.tableWidget->setCurrentCell(currentRow, 0);
+    }
+    else
+        currentRow = widget.tableWidget->currentRow();
+
+    bool enable;
+    if (currentRow == -1 || find.isEmpty()) // disable if no text in find/replace
+        enable = !(find.isEmpty() || replace.isEmpty());
+    else if (find == widget.tableWidget->item(currentRow, 0)->text()) {
+        // We disable add / remove button if no text for the replacement
+        enable = !widget.tableWidget->item(currentRow, 1)->text().isEmpty();
+        widget.addButton->setText(i18n("&Modify"));
+    }
+    else if (!widget.tableWidget->item(currentRow, 1)->text().isEmpty()) {
+        enable = true;
+        widget.addButton->setText(i18n("&Add"));
+    }
+
+    if (currentRow != -1) {
+    if (replace == widget.tableWidget->item(currentRow, 1)->text())
+        widget.addButton->setEnabled(false);
+    else
+        widget.addButton->setEnabled(enable);
+    }
+    widget.removeButton->setEnabled(enable);
+}
+
+void AutocorrectConfig::changeCharFormat()
+{
+    /* QTextCharFormat format;
+    KoFontDia *dia = new KoFontDia(format, this);
+    if (dia->exec())
+        ; */
+}
+
+void AutocorrectConfig::setFindReplaceText(int row, int column)
+{
+    widget.find->setText(widget.tableWidget->item(row, 0)->text());
+    widget.replace->setText(widget.tableWidget->item(row, 1)->text());
 }
 
 AutocorrectConfigDialog::AutocorrectConfigDialog(Autocorrect *autocorrect, QWidget *parent)

@@ -36,9 +36,19 @@ public:
 public slots:
     void applyConfig();
 
+private slots:
+    void enableAdvAutocorrection(int state);
+    void enableAutocorrectFormat(int state);
+    void addAutocorrectEntry();
+    void removeAutocorrectEntry();
+    void setFindReplaceText(int row, int column);
+    void enableAddRemoveButton();
+    void changeCharFormat();
+
 private:
     Ui::AutocorrectConfig widget;
     Autocorrect *m_autocorrect;
+    QHash<QString, QString> m_autocorrectEntries;
 };
 
 class AutocorrectConfigDialog : public KDialog

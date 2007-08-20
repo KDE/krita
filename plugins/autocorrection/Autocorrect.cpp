@@ -79,6 +79,7 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
     if(!done) done = singleSpaces();
     if(!done) done = autoBoldUnderline();
     if(!done) done = autoFractions();
+    if(!done) advancedAutocorrect();
     if(!done) uppercaseFirstCharOfSentence();
     if(!done) fixTwoUppercaseChars();
     if(!done) autoNumbering();
@@ -98,6 +99,10 @@ void Autocorrect::finishedParagraph(QTextDocument *document, int cursorPosition)
     if(! m_trimParagraphs) return;
     // TODO
 }
+
+void Autocorrect::setAutocorrectEntries(QHash<QString, QString> entries) { m_autocorrectEntries = entries; }
+
+QHash<QString, QString> Autocorrect::getAutocorrectEntries() { return m_autocorrectEntries; }
 
 void Autocorrect::configureAutocorrect()
 {
@@ -316,6 +321,29 @@ void Autocorrect::replaceSingleQuotes() {
     // TODO
 }
 
+void Autocorrect::advancedAutocorrect()
+{
+    if (!m_advancedAutocorrect) return;
+
+    int startPos = m_cursor.selectionStart();
+    int length = m_word.length();
+
+    QString word = m_word.toLower().trimmed();
+    if (m_autocorrectEntries.contains(word)) {
+        int pos = m_word.toLower().indexOf(word);
+        QString replacement = m_autocorrectEntries.value(word);
+        m_word.replace(pos, pos + word.length(), replacement);
+    }
+
+    // We do replacement here, since the length of new word might be different from length of
+    // the old world. Length difference might affect other type of autocorrection
+    m_cursor.setPosition(startPos);
+    m_cursor.setPosition(startPos + length, QTextCursor::KeepAnchor);
+    m_cursor.insertText(m_word);
+    m_cursor.setPosition(startPos); // also restore the selection
+    m_cursor.setPosition(startPos + m_word.length(), QTextCursor::KeepAnchor);
+}
+
 QString Autocorrect::autoDetectURL(const QString &_word) const
 {
     QString word = _word;
@@ -405,6 +433,7 @@ void Autocorrect::readConfig()
     m_superscriptAppendix = interface.readEntry("SuperscriptAppendix", m_superscriptAppendix);
     m_capitalizeWeekDays = interface.readEntry("CapitalizeWeekDays", m_capitalizeWeekDays);
     m_autoFormatBulletList = interface.readEntry("AutoFormatBulletList", m_autoFormatBulletList);
+    m_advancedAutocorrect = interface.readEntry("AdvancedAutocorrect", m_advancedAutocorrect);
 
     m_replaceDoubleQuotes = interface.readEntry("ReplaceDoubleQuotes", m_replaceDoubleQuotes);
     m_replaceSingleQuotes = interface.readEntry("ReplaceSingleQuotes", m_replaceSingleQuotes);
@@ -428,6 +457,7 @@ void Autocorrect::writeConfig()
     interface.writeEntry("SuperscriptAppendix", m_superscriptAppendix);
     interface.writeEntry("CapitalizeWeekDays", m_capitalizeWeekDays);
     interface.writeEntry("AutoFormatBulletList", m_autoFormatBulletList);
+    interface.writeEntry("AdvancedAutocorrect", m_advancedAutocorrect);
 
     interface.writeEntry("ReplaceDoubleQuotes", m_replaceDoubleQuotes);
     interface.writeEntry("ReplaceSingleQuotes", m_replaceSingleQuotes);
@@ -495,5 +525,38 @@ void Autocorrect::readAutocorrectXmlEntry()
             m_superScriptEntries.insert(nl.item(i).toElement().attribute("find"), nl.item(i).toElement().attribute("super"));
     }
 
+    /* Load advanced autocorrect entry, including the format */
+    QDomElement item = de.namedItem("items").toElement();
+    if(!item.isNull())
+    {
+        QDomNodeList nl = item.childNodes();
+        for (int i = 0; i < nl.count(); i++) {
+            QDomElement element = nl.item(i).toElement();
+            QString find = element.attribute("find");
+            QString replace = element.attribute("replace");
+            /* AutocorrectEntry entry;
+            entry.replace = element.attribute("replace");
+            if (element.hasAttribute("FONT"))
+                entry.format.setFontFamily(element.attribute("FONT"));
+            if (element.hasAttribute("SIZE"))
+                entry.format.setFontPointSize(element.attribute("SIZE").toInt());
+            if (element.hasAttribute("BOLD"))
+                entry.format.setFontWeight(QFont::Bold);
+            if (element.hasAttribute("ITALIC"))
+                entry.format.setFontItalic(true);
+            if (element.hasAttribute("UNDERLINE"))
+                entry.format.setFontUnderline(true);
+            if (element.hasAttribute("STRIKEOUT"))
+                entry.format.setFontStrikeOut(true);
+            if (element.hasAttribute("VERTALIGN"))
+                entry.format.setVerticalAlignment(static_cast<QTextCharFormat::VerticalAlignment>(element.attribute("VERTALIGN").toInt()));
+            if (element.hasAttribute("TEXTCOLOR"))
+                ; // entry.format.setForeground(QBrush(QColor::(element.attribute("TEXTCOLOR"))));
+            if (element.hasAttribute("TEXTBGCOLOR"))
+                ; // entry.format.setBackground(QBrush(QColor(element.attribute("TEXTBGCOLOR"))));
+            */
+            m_autocorrectEntries.insert(find, replace);
+        }
+    }
 }
 

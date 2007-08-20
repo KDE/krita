@@ -16,7 +16,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_1" >
       <attribute name="title" >
@@ -354,7 +354,7 @@
         </layout>
        </item>
        <item row="1" column="0" >
-        <widget class="QCheckBox" name="advancedAutoCorrection" >
+        <widget class="QCheckBox" name="advancedAutocorrection" >
          <property name="text" >
           <string>&amp;Enable word replacement</string>
          </property>
@@ -362,6 +362,9 @@
        </item>
        <item row="2" column="0" >
         <widget class="QCheckBox" name="autoCorrectionWithFormat" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
          <property name="text" >
           <string>Replace &amp;text with format</string>
          </property>
@@ -370,7 +373,7 @@
        <item row="3" column="0" >
         <layout class="QHBoxLayout" >
          <item>
-          <widget class="QLabel" name="label_2" >
+          <widget class="QLabel" name="findLabel" >
            <property name="text" >
             <string>&amp;Find</string>
            </property>
@@ -390,20 +393,20 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_3" >
+          <widget class="QLabel" name="replaceLabel" >
            <property name="text" >
             <string>Re&amp;place</string>
            </property>
            <property name="buddy" >
-            <cstring>specialChar2</cstring>
+            <cstring>replace</cstring>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="specialChar2" />
+          <widget class="QLineEdit" name="replace" />
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_2" >
+          <widget class="QToolButton" name="specialChar2" >
            <property name="text" >
             <string>...</string>
            </property>
@@ -414,28 +417,34 @@
        <item rowspan="2" row="3" column="1" >
         <layout class="QVBoxLayout" >
          <item>
-          <widget class="QPushButton" name="pushButton_3" >
+          <widget class="QPushButton" name="addButton" >
            <property name="text" >
             <string>&amp;Add</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_4" >
+          <widget class="QPushButton" name="removeButton" >
            <property name="text" >
             <string>Remove</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_5" >
+          <widget class="QPushButton" name="changeFormat" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
            <property name="text" >
             <string>C&amp;hange Format...</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_6" >
+          <widget class="QPushButton" name="clearFormat" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
            <property name="text" >
             <string>C&amp;lear Format</string>
            </property>
@@ -458,6 +467,21 @@
        </item>
        <item row="4" column="0" >
         <widget class="QTableWidget" name="tableWidget" >
+         <property name="editTriggers" >
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="selectionMode" >
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior" >
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="sortingEnabled" >
+          <bool>false</bool>
+         </property>
+         <property name="cornerButtonEnabled" >
+          <bool>false</bool>
+         </property>
          <column>
           <property name="text" >
            <string>Find</string>

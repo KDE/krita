@@ -998,13 +998,11 @@ QVector<quint8*> KisTiledDataManager::readPlanarBytes( QVector<qint32> channelsi
     if (h < 0)
         h = 0;
 
-    qint32 dstY = 0;
     qint32 srcY = y;
     qint32 rowsRemaining = h;
 
     while (rowsRemaining > 0) {
 
-        qint32 dstX = 0;
         qint32 srcX = x;
         qint32 columnsRemaining = w;
         qint32 numContiguousSrcRows = numContiguousRows(srcY, srcX, srcX + w - 1);
@@ -1037,12 +1035,10 @@ QVector<quint8*> KisTiledDataManager::readPlanarBytes( QVector<qint32> channelsi
             }
 
             srcX += columns;
-            dstX += columns;
             columnsRemaining -= columns;
         }
 
         srcY += rows;
-        dstY += rows;
         rowsRemaining -= rows;
     }
     return planes;
@@ -1062,13 +1058,11 @@ void KisTiledDataManager::writePlanarBytes( QVector<quint8*> planes, QVector<qin
 
     int numChannels = planes.size();
 
-    qint32 srcY = 0;
     qint32 dstY = y;
     qint32 rowsRemaining = h;
 
     while (rowsRemaining > 0) {
 
-        qint32 srcX = 0;
         qint32 dstX = x;
         qint32 columnsRemaining = w;
         qint32 numContiguousdstRows = numContiguousRows(dstY, dstX, dstX + w - 1);
@@ -1084,7 +1078,7 @@ void KisTiledDataManager::writePlanarBytes( QVector<quint8*> planes, QVector<qin
             KisTileDataWrapperSP tileData = pixelPtrSafe(dstX, dstY, true);
             quint8 *dstData = tileData->data();
 
-            for (qint32 row = 0; row < rows; row++) {
+            for (qint32 row = 0; row < rows; ++row) {
                 for ( int col = 0; col < columns; ++col ) {
                     for ( int channelPos = 0;  channelPos < numChannels; ++ channelPos ) {
                         qint32 channelSize = channelsizes[channelPos];
@@ -1096,12 +1090,11 @@ void KisTiledDataManager::writePlanarBytes( QVector<quint8*> planes, QVector<qin
             }
 
             dstX += columns;
-            srcX += columns;
             columnsRemaining -= columns;
         }
 
+
         dstY += rows;
-        srcY += rows;
         rowsRemaining -= rows;
     }
 }

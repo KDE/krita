@@ -425,6 +425,9 @@ void KisPaintDeviceTest::testRoundtripReadWrite()
     dev2->writeBytes( bytes, image.rect() );
     QVERIFY( dev2->exactBounds() == image.rect() );
 
+    dev2->convertToQImage(0, 0, 0, image.width(), image.height()).save( "readwrite.png" );
+
+
     QPoint pt;
     if ( !TestUtil::comparePaintDevices( pt, dev, dev2 ) ) {
         QFAIL( QString( "Failed round trip using readBytes and writeBytes, first different pixel: %1,%2 " ).arg( pt.x() ).arg( pt.y() ).toAscii() );
@@ -590,6 +593,7 @@ void KisPaintDeviceTest::testMirror()
     KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
 
+
     quint8* pixel = cs->allocPixelBuffer( 1 );
     cs->fromQColor( Qt::white, pixel );
     dev->fill( 0, 0, 512, 512, pixel);
@@ -629,12 +633,23 @@ void KisPaintDeviceTest::testMirror()
     QVERIFY( c2 == Qt::black );
 
     dev->mirrorY();
+    dev->convertToQImage(0, 0, 0, 1024, 512).save( "mirror.png" );
 
     dev->pixel( 5, 5, &c1, &opacity1 );
     dev->pixel( 5, 517, &c2, &opacity2 );
 
     QVERIFY( c1 == Qt::black );
     QVERIFY( c2 == Qt::white );
+
+    {
+        QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+        KisPaintDeviceSP dev2 = new KisPaintDevice( cs );
+        dev2->convertFromQImage( image, "" );
+        dev2->mirrorX();
+        dev2->mirrorX();
+        dev2->mirrorX();
+        dev2->convertToQImage(0, 0, 0, image.width(), image.height()).save( "mirror_test2.png" );
+    }
 }
 
 void KisPaintDeviceTest::testMirrorTransaction()
@@ -710,32 +725,20 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     quint8 opacity1;
     dev->pixel( 5, 5, &c1, &opacity1 );
 
-    qDebug() << c1.blue() << ","
-             << c1.green() << ","
-             << c1.red() << ","
-             << opacity1;
-
-
-    QVector<quint8*> planes = dev->readPlanarBytes( 500, 500, 1000, 1000 );
+    QVector<quint8*> planes = dev->readPlanarBytes( 500, 500, 100, 100 );
     QVector<quint8*> swappedPlanes;
 
     QCOMPARE( ( int )planes.size(), ( int )dev->channelCount() );
 
     for ( uint i = 1; i < dev->channelCount() + 1; ++i ) {
-        qDebug() << "plane" << i << "," << dev->channelCount() - i << endl;
         swappedPlanes.append( planes[dev->channelCount() - i] );
     }
 
-    dev->writePlanarBytes( swappedPlanes, 0, 0, 1000, 1000 );
+    dev->writePlanarBytes( swappedPlanes, 0, 0, 100, 100 );
 
-    dev->convertToQImage(0, 0, 0, 5000, 5000).save( "bla.png" );
+    dev->convertToQImage(0, 0, 0, 5000, 5000).save( "planar.png" );
 
     dev->pixel( 5, 5, &c1, &opacity1 );
-
-    qDebug() << c1.blue() << ","
-             << c1.green() << ","
-             << c1.red() << ","
-             << opacity1;
 
     QVERIFY( c1.red() == 200 );
     QVERIFY( c1.green() == 255 );

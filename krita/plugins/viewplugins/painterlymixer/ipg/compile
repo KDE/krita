@@ -1,1 +1,0 @@
-g++ -o ipg ipg.cpp -lm -lgmp -lgmpxx -I/home/emanuele/devel/inst/kde/include

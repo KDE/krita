@@ -705,6 +705,15 @@ void KisPaintDeviceTest::testMirrorTransaction()
 
     QVERIFY( c1 == Qt::black );
     QVERIFY( c2 == Qt::white );
+
+    {
+        QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+        KisPaintDeviceSP dev2 = new KisPaintDevice( cs );
+        dev2->convertFromQImage( image, "" );
+        KisTransaction t( "mirror", dev2, 0 );
+        dev2->mirrorX();
+        dev2->convertToQImage(0, 0, 0, image.width(), image.height()).save( "mirror_test_t_2.png" );
+    }
 }
 
 void KisPaintDeviceTest::testSelection()

@@ -97,6 +97,8 @@ class KisGenericColorspace : public KoColorSpace {
         virtual QString channelValueText(const quint8 */*pixel*/, quint32 /*channelIndex*/) const { return "invalid"; };
 
         virtual QString normalisedChannelValueText(const quint8 */*pixel*/, quint32 /*channelIndex*/) const { return "invalid"; };
+		virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const { return; }
+		virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) { return; }
 
         virtual quint8 scaleToU8(const quint8 * /*srcPixel*/, qint32 /*channelPos*/) const { return 0; }
 

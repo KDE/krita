@@ -39,6 +39,7 @@
 // Krita/image
 #include <kis_action_recorder.h>
 #include <kis_brush.h>
+#include <kis_complex_color.h>
 #include <kis_fill_painter.h>
 #include <kis_group_layer.h>
 #include <kis_layer.h>
@@ -77,16 +78,23 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-    if (!currentImage()) return;
+//     if (!currentImage())
+// 		return;
 
-    if (!currentBrush()) return;
+    if (!currentBrush())
+		return;
 
-    if (!currentLayer()->paintDevice()) return;
+	if (!currentComplexColor())
+		return;
+
+    if (!currentLayer()->paintDevice())
+		return;
 
     if(currentPaintOpSettings())
     {
         currentPaintOpSettings()->mousePressEvent(e);
-        if(e->isAccepted()) return;
+        if(e->isAccepted())
+			return;
     }
 
     if (e->button() == Qt::LeftButton)
@@ -171,7 +179,8 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 
 void KisToolFreehand::initPaint(KoPointerEvent *)
 {
-    if (!currentLayer() || !currentLayer()->paintDevice()) return;
+    if (!currentLayer() || !currentLayer()->paintDevice())
+		return;
 
     if (m_compositeOp == 0 ) {
         KisPaintDeviceSP device = currentLayer()->paintDevice();
@@ -234,7 +243,9 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_painter->setPaintColor(currentFgColor());
     m_painter->setBackgroundColor(currentBgColor());
     m_painter->setBrush(currentBrush());
-
+	if (dynamic_cast<KisPaintLayer *>(currentLayer().data()))
+		m_painter->setSourceLayer(dynamic_cast<KisPaintLayer *>(currentLayer().data()));
+	m_painter->setComplexColor(currentComplexColor());
 
     // if you're drawing on a temporary layer, the layer already sets this
     if (m_paintIncremental) {
@@ -318,7 +329,8 @@ void KisToolFreehand::endPaint()
     if(m_smooth)
     {
     } else {
-        currentLayer()->image()->actionRecorder()->addAction(m_polyLinePaintAction);
+		if (currentLayer()->image())
+        	currentLayer()->image()->actionRecorder()->addAction(m_polyLinePaintAction);
         m_polyLinePaintAction = 0;
     }
 }
@@ -348,7 +360,7 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
 void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*previousJob*/)
 {
     m_paintJobs.append(job);
-    kDebug(41007) <<"Queue length:" << m_executor->queueLength();
+    kDebug(41007) << "Queue length:" << m_executor->queueLength();
     m_executor->postJob(job);
 }
 

@@ -33,6 +33,7 @@ class KoCanvasBase;
 class KisBrush;
 class KisPattern;
 class KisGradient;
+class KisComplexColor;
 class KisPaintOpSettings;
 
 /// Definitions of the toolgroups of Krita
@@ -103,7 +104,7 @@ protected:
 
     /// @return the image wrapped in the dummy shape in the shape
     /// manager. XXX: This is probably wrong!
-    KisImageSP image() const;
+    virtual KisImageSP image() const;
 
     /// Call this to set the document modified
     void notifyModified() const;
@@ -114,6 +115,7 @@ protected:
     KisLayerSP currentLayer();
     KoColor currentFgColor();
     KoColor currentBgColor();
+	KisComplexColor * currentComplexColor();
     QString currentPaintOp();
     KisPaintOpSettings * currentPaintOpSettings();
 

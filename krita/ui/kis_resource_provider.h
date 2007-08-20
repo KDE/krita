@@ -28,6 +28,7 @@
 #include "kis_view2.h"
 #include "kis_image.h"
 #include "krita_export.h"
+#include "kis_complex_color.h"
 
 class KisPaintOpSettings;
 class KisBrush;
@@ -61,7 +62,8 @@ public:
         CurrentGradient,
         CurrentPaintop,
         CurrentPaintopSettings,
-        CurrentKritaLayer
+        CurrentKritaLayer,
+		CurrentComplexColor
     };
 
 
@@ -87,6 +89,8 @@ public:
     const KisPaintOpSettings *currentPaintopSettings() const;
 
     KisLayerSP currentLayer() const;
+
+	KisComplexColor *currentComplexColor() const;
 
 
 public slots:
@@ -126,6 +130,7 @@ private:
     KisView2 * m_view;
     KoCanvasResourceProvider * m_resourceProvider;
     KisBrush * m_defaultBrush;
+	KisComplexColor *m_defaultComplex;
 };
 
 #endif

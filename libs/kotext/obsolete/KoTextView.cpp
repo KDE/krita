@@ -927,7 +927,7 @@ bool KoTextView::placeCursor( const QPoint &pos, bool insertDirectCursor )
         s = textDocument()->firstParag();
     m_cursor->place( pos, s, false, &m_variablePosition );
     if ( m_variablePosition != -1 )
-        kDebug() << k_funcinfo <<" m_variablePosition set to" << m_variablePosition;
+        kDebug() <<" m_variablePosition set to" << m_variablePosition;
     updateUI( true );
     return addParag;
 }
@@ -1195,7 +1195,7 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
 
 bool KoTextView::openLink( KoLinkVariable* variable )
 {
-    kDebug() << k_funcinfo << variable->url();
+    kDebug() << variable->url();
     KUrl url( variable->url() );
     if( url.isValid() )
     {

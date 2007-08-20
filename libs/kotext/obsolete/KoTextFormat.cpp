@@ -371,7 +371,7 @@ static void importUnderline( const QString& in,
     } else if( in == "bold" ) {
         underline = KoTextFormat::U_SIMPLE_BOLD;
     } else
-        kWarning() << k_funcinfo << " unsupported text-underline value: " << in;
+        kWarning() << " unsupported text-underline value: " << in;
 }
 
 void KoTextFormat::load( KoOasisContext& context )

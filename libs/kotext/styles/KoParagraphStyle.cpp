@@ -879,7 +879,7 @@ void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
     KoTabulatorList tabList;
     if ( styleStack.hasChildNode( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
         QDomElement tabStops = styleStack.childNode( KoXmlNS::style, "tab-stops" );
-        //kDebug(30519) << k_funcinfo << tabStops.childNodes().count() <<" tab stops in layout.";
+        //kDebug(30519) << tabStops.childNodes().count() <<" tab stops in layout.";
         QDomElement tabStop;
         forEachElement( tabStop, tabStops )
         {

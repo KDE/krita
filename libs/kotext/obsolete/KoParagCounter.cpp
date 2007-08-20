@@ -205,7 +205,7 @@ void KoParagCounter::loadOasisListStyle( const KoXmlElement& listStyle,
     // styles have a start-value, but that doesn't mean restartNumbering, as it does for paragraphs
     m_restartCounter = loadingStyle ? false : ( restartNumbering != -1 );
     m_startNumber = ( restartNumbering != -1 ) ? restartNumbering : 1;
-    //kDebug() << k_funcinfo <<"IN: restartNumbering=" << restartNumbering <<" OUT: m_restartCounter=" << m_restartCounter <<" m_startNumber=" << m_startNumber;
+    //kDebug() <<"IN: restartNumbering=" << restartNumbering <<" OUT: m_restartCounter=" << m_restartCounter <<" m_startNumber=" << m_startNumber;
 
     m_prefix = listStyle.attributeNS( KoXmlNS::style, "num-prefix", QString::null );
     m_suffix = listStyle.attributeNS( KoXmlNS::style, "num-suffix", QString::null );

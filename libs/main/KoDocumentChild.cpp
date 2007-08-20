@@ -89,7 +89,7 @@ KoDocumentChild::KoDocumentChild( KoDocument* parent )
 
 void KoDocumentChild::setDocument( KoDocument *doc, const QRect &geometry )
 {
-  kDebug(30003)<<k_funcinfo<<"doc:"<<doc->url().url();
+  kDebug(30003)<<"doc:"<<doc->url().url();
   d->m_doc = doc;
   setGeometry( geometry );
 
@@ -135,7 +135,7 @@ void KoDocumentChild::loadOasis( const KoXmlElement &frameElement, const KoXmlEl
         m_tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
     else
         m_tmpURL = url;
-    kDebug(30003) << k_funcinfo << m_tmpURL;
+    kDebug(30003) << m_tmpURL;
 }
 
 
@@ -216,7 +216,7 @@ bool KoDocumentChild::loadOasisDocument( KoStore* store, const KoXmlDocument& ma
     if ( !path.endsWith( '/' ) )
         path += '/';
     const QString mimeType = KoOasisStore::mimeForPath( manifestDoc, path );
-    kDebug(30003) << k_funcinfo <<"path for manifest file=" << path <<" mimeType=" << mimeType;
+    kDebug(30003) <<"path for manifest file=" << path <<" mimeType=" << mimeType;
     if ( mimeType.isEmpty() ) {
         kError(30003) << "Manifest doesn't have media-type for " << path << endl;
         return false;
@@ -387,7 +387,7 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     QString path;
     if ( d->m_doc->isStoredExtern() )
     {
-        kDebug(30003)<<k_funcinfo<<" external (don't save) url:" << d->m_doc->url().url();
+        kDebug(30003)<<" external (don't save) url:" << d->m_doc->url().url();
         path = d->m_doc->url().url();
     }
     else
@@ -396,11 +396,11 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         // parent document).
         assert( d->m_doc->url().protocol() == INTERNAL_PROTOCOL );
         const QString name = d->m_doc->url().path();
-        kDebug(30003) << k_funcinfo <<"saving" << name;
+        kDebug(30003) <<"saving" << name;
 
         if ( d->m_doc->nativeOasisMimeType().isEmpty() ) {
             // Embedded object doesn't support OASIS OpenDocument, save in the old format.
-            kDebug(30003) << k_funcinfo <<"Embedded object doesn't support OASIS OpenDocument, save in the old format.";
+            kDebug(30003) <<"Embedded object doesn't support OASIS OpenDocument, save in the old format.";
 
             if ( !d->m_doc->saveToStore( store, name ) )
                 return false;
@@ -448,7 +448,7 @@ void KoDocumentChild::saveOasisAttributes( KoXmlWriter &xmlWriter, const QString
         KUrl u;
         u.setProtocol( INTERNAL_PROTOCOL );
         u.setPath( name );
-        kDebug(30003) << k_funcinfo << u;
+        kDebug(30003) << u;
         d->m_doc->setUrl( u );
     }
 

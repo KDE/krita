@@ -609,7 +609,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
     if ( repaint )
         emit hideCursor();
     if ( textdoc->hasSelection( selectionId, true ) && removeSelected ) {
-        kDebug() << k_funcinfo <<"removing selection" << selectionId;
+        kDebug() <<"removing selection" << selectionId;
         // call replaceSelectionCommand, which will call insert() back, but this time without a selection.
         emitNewCommand(replaceSelectionCommand( cursor, txt, commandName, selectionId, insertFlags, customItemsMap ));
         return;
@@ -1713,7 +1713,7 @@ void KoTextObject::setViewArea( QWidget* w, int maxY )
 
 void KoTextObject::setLastFormattedParag( KoTextParag *parag )
 {
-    //kDebug() << k_funcinfo << parag <<" (" << ( parag ? QString::number(parag->paragId()) : QString("(null)") ) <<")";
+    //kDebug() << parag <<" (" << ( parag ? QString::number(parag->paragId()) : QString("(null)") ) <<")";
     if ( !m_lastFormatted || !parag || m_lastFormatted->paragId() >= parag->paragId() ) {
         m_lastFormatted = parag;
     }
@@ -1929,7 +1929,7 @@ KCommand *KoTextObject::changeCaseOfTextParag( int cursorPosStart, int cursorPos
     int posEnd = cursorPosStart;
     KoTextCursor c1( textdoc );
     KoTextCursor c2( textdoc );
-    //kDebug() << k_funcinfo <<"from" << cursorPosStart <<" to" << cursorPosEnd <<" (excluded). Parag=" << parag <<" length=" << parag->length();
+    //kDebug() <<"from" << cursorPosStart <<" to" << cursorPosEnd <<" (excluded). Parag=" << parag <<" length=" << parag->length();
     for ( int i = cursorPosStart; i < cursorPosEnd; ++i )
     {
         KoTextStringChar & ch = *(parag->at(i));
@@ -1941,7 +1941,7 @@ KCommand *KoTextObject::changeCaseOfTextParag( int cursorPosStart, int cursorPos
             c1.setIndex( posStart );
             c2.setParag( parag );
             c2.setIndex( posEnd );
-            //kDebug() << k_funcinfo <<"found custom at" << i <<" : doing from" << posStart <<" to" << posEnd;
+            //kDebug() <<"found custom at" << i <<" : doing from" << posStart <<" to" << posEnd;
 
             const QString repl = text.mid( posStart, posEnd - posStart );
             textdoc->setSelectionStart( KoTextDocument::Temp, &c1 );
@@ -1966,7 +1966,7 @@ KCommand *KoTextObject::changeCaseOfTextParag( int cursorPosStart, int cursorPos
                 c1.setIndex( posStart );
                 c2.setParag( parag );
                 c2.setIndex( posEnd );
-                //kDebug() << k_funcinfo <<"found new format at" << i <<" : doing from" << posStart <<" to" << posEnd;
+                //kDebug() <<"found new format at" << i <<" : doing from" << posStart <<" to" << posEnd;
 
                 const QString repl = text.mid( posStart, posEnd - posStart );
                 textdoc->setSelectionStart( KoTextDocument::Temp, &c1 );
@@ -1982,7 +1982,7 @@ KCommand *KoTextObject::changeCaseOfTextParag( int cursorPosStart, int cursorPos
     }
     if ( posStart != cursorPosEnd )
     {
-        //kDebug() << k_funcinfo <<"finishing: doing from" << posStart <<" to" << cursorPosEnd;
+        //kDebug() <<"finishing: doing from" << posStart <<" to" << cursorPosEnd;
         c1.setParag( parag );
         c1.setIndex( posStart );
         c2.setParag( parag );

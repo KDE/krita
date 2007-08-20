@@ -26,7 +26,7 @@
 
 int testLookup()
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
     KoGenStyles coll;
 
     QMap<QString, QString> map1;
@@ -136,7 +136,7 @@ int testLookup()
 
 int testDefaultStyle()
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
     /* Create a default style,
      * and then an auto style with exactly the same attributes
      * -> the lookup gives the default style.
@@ -179,7 +179,7 @@ int testDefaultStyle()
 
 int testUserStyles()
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
     /* Two user styles with exactly the same attributes+properties will not get merged, since
      * they don't have exactly the same attributes after all: the display-name obviously differs :)
      */
@@ -234,7 +234,7 @@ int testUserStyles()
 
 int testStylesDotXml()
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
     KoGenStyles coll;
 
     // Check that an autostyle-in-style.xml and an autostyle-in-content.xml

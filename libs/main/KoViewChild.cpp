@@ -147,7 +147,7 @@ void KoViewChild::slotDocGeometryChanged()
 
 void KoViewChild::setInitialFrameGeometry()
 {
-    kDebug(30003) << k_funcinfo;
+    kDebug(30003) ;
 
     // Connect only now, so that the GUI building doesn't move us around.
     connect( m_frame, SIGNAL( geometryChanged() ),

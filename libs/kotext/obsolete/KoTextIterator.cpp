@@ -226,7 +226,7 @@ void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
 void KoTextIterator::operator++()
 {
     if ( !m_currentParag ) {
-        kDebug(32500) << k_funcinfo <<" called past the end";
+        kDebug(32500) <<" called past the end";
         return;
     }
     if ( m_currentParag == m_lastParag ) {
@@ -279,7 +279,7 @@ void KoTextIterator::nextTextObject()
     while ( m_currentParag && !(*m_currentTextObj)->isVisible() );
 #ifdef DEBUG_ITERATOR
     if ( m_currentParag )
-        kDebug(32500) << k_funcinfo <<" m_currentTextObj=" << (*m_currentTextObj);
+        kDebug(32500) <<" m_currentTextObj=" << (*m_currentTextObj);
 #endif
 }
 
@@ -356,7 +356,7 @@ void KoTextIterator::setOptions( int options )
             if ( m_currentParag == 0 ) // done? -> reinit
             {
 #ifdef DEBUG_ITERATOR
-                kDebug(32500) << k_funcinfo <<"was done -> reinit";
+                kDebug(32500) <<"was done -> reinit";
 #endif
                 restart();
             }

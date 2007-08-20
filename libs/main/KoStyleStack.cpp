@@ -203,7 +203,7 @@ bool KoStyleStack::isUserStyle( const KoXmlElement& e, const QString& family ) c
     if ( e.attributeNS( m_styleNSURI, "family", QString() ) != family )
         return false;
     const KoXmlElement parent = e.parentNode().toElement();
-    //kDebug(30003) << k_funcinfo <<"tagName=" << e.tagName() <<" parent-tagName=" << parent.tagName();
+    //kDebug(30003) <<"tagName=" << e.tagName() <<" parent-tagName=" << parent.tagName();
     return parent.localName() == "styles" /*&& parent.namespaceURI() == KoXmlNS::office*/;
 }
 
@@ -213,7 +213,7 @@ QString KoStyleStack::userStyleName( const QString& family ) const
     while ( it != m_stack.begin() )
     {
         --it;
-        //kDebug(30003) << k_funcinfo << (*it).attributeNS( m_styleNSURI,"name", QString());
+        //kDebug(30003) << (*it).attributeNS( m_styleNSURI,"name", QString());
         if ( isUserStyle( *it, family ) )
             return (*it).attributeNS( m_styleNSURI, "name", QString() );
     }
@@ -227,7 +227,7 @@ QString KoStyleStack::userStyleDisplayName( const QString& family ) const
     while ( it != m_stack.begin() )
     {
         --it;
-        //kDebug(30003) << k_funcinfo << (*it).attributeNS( m_styleNSURI,"display-name");
+        //kDebug(30003) << (*it).attributeNS( m_styleNSURI,"display-name");
         if ( isUserStyle( *it, family ) )
             return (*it).attributeNS( m_styleNSURI, "display-name", QString() );
     }

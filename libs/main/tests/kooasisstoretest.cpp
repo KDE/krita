@@ -27,7 +27,7 @@
 void testMimeForPath( KoXmlDocument& doc )
 {
     QString mime = KoOasisStore::mimeForPath( doc, "Object 1" );
-    kDebug() << k_funcinfo << mime;
+    kDebug() << mime;
     assert( !mime.isNull() );
     assert( !mime.isEmpty() );
     assert( mime == "application/vnd.oasis.opendocument.text" );

@@ -2930,7 +2930,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
 
     const int cursorIndex = context.cursorTextParagraph() == this ? context.cursorTextIndex() : -1;
 
-    //kDebug() << k_funcinfo <<"'" << text <<"' from=" << from <<" to=" << to <<" cursorIndex=" << cursorIndex;
+    //kDebug() <<"'" << text <<"' from=" << from <<" to=" << to <<" cursorIndex=" << cursorIndex;
 
     // A helper method would need no less than 7 params...
 #define WRITESPAN( next ) { \
@@ -3031,7 +3031,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
         }
     }
 
-    //kDebug() << k_funcinfo <<"startPos=" << startPos <<" to=" << to <<" curFormat=" << curFormat;
+    //kDebug() <<"startPos=" << startPos <<" to=" << to <<" curFormat=" << curFormat;
 
     if ( to >= startPos ) { // Save last format
         WRITESPAN( to + 1 )
@@ -3045,7 +3045,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
 
 void KoTextParag::applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level )
 {
-    //kDebug(32500) << k_funcinfo <<"applyListStyle to parag" << this <<" heading=" << heading;
+    //kDebug(32500) <<"applyListStyle to parag" << this <<" heading=" << heading;
     delete m_layout.counter;
     m_layout.counter = new KoParagCounter;
     m_layout.counter->loadOasis( context, restartNumbering, orderedList, heading, level );

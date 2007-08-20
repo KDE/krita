@@ -496,7 +496,7 @@ QStringList KoFilterManager::mimeFilter( const QByteArray& mimetype, Direction d
     foreach( QString natit, nativeMimeTypes )
     {
        const QStringList outMimes = connected( vertices, natit.toLatin1() );
-     //kDebug(s_area) << k_funcinfo <<"output formats connected to mime" << natit <<" :" << outMimes;
+     //kDebug(s_area) <<"output formats connected to mime" << natit <<" :" << outMimes;
       foreach( QString mit, outMimes )
       {
         if ( !lst.contains( mit ) ) // append only if not there already. Qt4: QSet<QString>?

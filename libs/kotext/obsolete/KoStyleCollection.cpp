@@ -117,7 +117,7 @@ void KoStyleCollection::saveOasis( KoGenStyles& styles, int styleType, KoTextSav
     {
         KoParagStyle* style = static_cast<KoParagStyle *>( tmpStyle );
         style->saveStyle( styles, styleType, refStyleName, context );
-        kDebug() << k_funcinfo <<"Saved style" << style->displayName() <<" to OASIS format as" << style->name();
+        kDebug() <<"Saved style" << style->displayName() <<" to OASIS format as" << style->name();
         if ( refStyleName.isEmpty() ) // i.e. first style
             refStyleName = style->name();
     }

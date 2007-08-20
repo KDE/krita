@@ -871,7 +871,7 @@ bool KoDocument::isModified() const
 {
     if ( KParts::ReadWritePart::isModified() )
     {
-        //kDebug(30003)<<k_funcinfo<<" Modified doc='"<<url().url()<<"' extern="<<isStoredExtern();
+        //kDebug(30003)<<" Modified doc='"<<url().url()<<"' extern="<<isStoredExtern();
         return true;
     }
     // Then go through internally stored children (considered to be part of this doc)
@@ -887,7 +887,7 @@ bool KoDocument::isModified() const
 
 bool KoDocument::saveChildren( KoStore* _store )
 {
-    //kDebug(30003)<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'";
+    //kDebug(30003)<<" checking children of doc='"<<url().url()<<"'";
     int i = 0;
     Q3PtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
@@ -903,7 +903,7 @@ bool KoDocument::saveChildren( KoStore* _store )
                 if (!isExporting ())
                     childDoc->setModified( false );
             }
-            //else kDebug(30003)<<k_funcinfo<<" external (don't save) url:" << childDoc->url().url();
+            //else kDebug(30003)<<" external (don't save) url:" << childDoc->url().url();
         }
     }
     return true;
@@ -911,7 +911,7 @@ bool KoDocument::saveChildren( KoStore* _store )
 
 bool KoDocument::saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
-    //kDebug(30003)<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'";
+    //kDebug(30003)<<" checking children of doc='"<<url().url()<<"'";
     Q3PtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
         KoDocument* childDoc = it.current()->document();
@@ -930,12 +930,12 @@ bool KoDocument::saveExternalChildren()
 {
     if ( d->m_doNotSaveExtDoc )
     {
-        //kDebug(30003)<<k_funcinfo<<" Don't save external docs in doc='"<<url().url()<<"'";
+        //kDebug(30003)<<" Don't save external docs in doc='"<<url().url()<<"'";
         d->m_doNotSaveExtDoc = false;
         return true;
     }
 
-    //kDebug(30003)<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'";
+    //kDebug(30003)<<" checking children of doc='"<<url().url()<<"'";
     KoDocumentChild *ch;
     Q3PtrListIterator<KoDocumentChild> it = children();
     for (; (ch = it.current()); ++it )
@@ -950,7 +950,7 @@ bool KoDocument::saveExternalChildren()
                 if ( !doc->save() )
                     return false; // error
             }
-            //kDebug(30003)<<k_funcinfo<<" not modified doc='"<<url().url()<<"'";
+            //kDebug(30003)<<" not modified doc='"<<url().url()<<"'";
             // save possible external docs inside doc
             if ( doc && !doc->saveExternalChildren() )
                 return false;
@@ -2134,8 +2134,8 @@ void KoDocument::setModified( bool mod )
     if ( isAutosaving() ) // ignore setModified calls due to autosaving
         return;
 
-    //kDebug(30003)<<k_funcinfo<<" url:" << m_url.path();
-    //kDebug(30003)<<k_funcinfo<<" mod="<<mod<<" MParts mod="<<KParts::ReadWritePart::isModified()<<" isModified="<<isModified();
+    //kDebug(30003)<<" url:" << m_url.path();
+    //kDebug(30003)<<" mod="<<mod<<" MParts mod="<<KParts::ReadWritePart::isModified()<<" isModified="<<isModified();
 
     if ( mod && !d->modifiedAfterAutosave ) {
         // First change since last autosave -> start the autosave timer
@@ -2173,7 +2173,7 @@ void KoDocument::setDoNotSaveExtDoc( bool on )
 
 int KoDocument::queryCloseDia()
 {
-    //kDebug(30003)<<k_funcinfo;
+    //kDebug(30003);
 
     QString name;
     if ( documentInfo() )
@@ -2208,7 +2208,7 @@ int KoDocument::queryCloseDia()
 
 int KoDocument::queryCloseExternalChildren()
 {
-    //kDebug(30003)<<k_funcinfo<<" checking for children in:"<<url().url();
+    //kDebug(30003)<<" checking for children in:"<<url().url();
     setDoNotSaveExtDoc(false);
     Q3PtrListIterator<KoDocumentChild> it( children() );
     for (; it.current(); ++it )
@@ -2225,7 +2225,7 @@ int KoDocument::queryCloseExternalChildren()
                 if ( foo ) //###TODO: Handle non-native mimetype docs
                 {
                     {
-                        kDebug(30003)<<k_funcinfo<<" found modified child:"<<doc->url().url()<<" extern="<<doc->isStoredExtern();
+                        kDebug(30003)<<" found modified child:"<<doc->url().url()<<" extern="<<doc->isStoredExtern();
                         if ( doc->queryCloseDia() == KMessageBox::Cancel )
                             return  KMessageBox::Cancel;
                     }
@@ -2240,7 +2240,7 @@ int KoDocument::queryCloseExternalChildren()
 
 void KoDocument::setTitleModified( const QString &caption, bool mod )
 {
-    //kDebug(30003)<<k_funcinfo<<" url:"<<url().url()<<" caption:"<<caption<<" mod:"<<mod;
+    //kDebug(30003)<<" url:"<<url().url()<<" caption:"<<caption<<" mod:"<<mod;
     KoDocument *doc = dynamic_cast<KoDocument *>( parent() );
     if ( doc )
     {
@@ -2259,7 +2259,7 @@ void KoDocument::setTitleModified( const QString &caption, bool mod )
 
 void KoDocument::setTitleModified()
 {
-    //kDebug(30003)<<k_funcinfo<<" url:"<<url().url()<<" extern:"<<isStoredExtern()<<" current:"<<d->m_current;
+    //kDebug(30003)<<" url:"<<url().url()<<" extern:"<<isStoredExtern()<<" current:"<<d->m_current;
     KoDocument *doc = dynamic_cast<KoDocument *>( parent() );
     QString caption;
     if ( (url().isEmpty() || isStoredExtern()) && d->m_current )
@@ -2272,7 +2272,7 @@ void KoDocument::setTitleModified()
         if ( caption.isEmpty() )
             caption = url().pathOrUrl();             // Fall back to document URL
 
-        //kDebug(30003)<<k_funcinfo<<" url:"<<url().url()<<" caption:"<<caption;
+        //kDebug(30003)<<" url:"<<url().url()<<" caption:"<<caption;
         if ( doc )
         {
             doc->setTitleModified( caption, isModified() );
@@ -2629,7 +2629,7 @@ QString KoDocument::backupPath()const
 
 void KoDocument::setCurrent( bool on )
 {
-    //kDebug(30003)<<k_funcinfo<<" url:"<<url().url()<<" set to:"<<on;
+    //kDebug(30003)<<" url:"<<url().url()<<" set to:"<<on;
     KoDocument *doc = dynamic_cast<KoDocument *>( parent() );
     if ( doc )
     {
@@ -2656,7 +2656,7 @@ void KoDocument::setCurrent( bool on )
 
 void KoDocument::forceCurrent( bool on )
 {
-    //kDebug(30003)<<k_funcinfo<<" url:"<<url().url()<<" force to:"<<on;
+    //kDebug(30003)<<" url:"<<url().url()<<" force to:"<<on;
     d->m_current = on;
     KoDocument *doc = dynamic_cast<KoDocument *>( parent() );
     if ( doc )
@@ -2678,7 +2678,7 @@ bool KoDocument::storeInternal() const
 void KoDocument::setStoreInternal( bool i )
 {
     d->m_storeInternal = i;
-    //kDebug(30003)<<k_funcinfo<<"="<<d->m_storeInternal<<" doc:"<<url().url();
+    //kDebug(30003)<<"="<<d->m_storeInternal<<" doc:"<<url().url();
 }
 
 bool KoDocument::hasExternURL() const

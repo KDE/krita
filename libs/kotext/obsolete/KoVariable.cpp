@@ -583,7 +583,7 @@ QList<KAction*> KoVariableCollection::popupActionList() const
     QList<KAction*> listAction;
     // Insert list of actions that change the subtype
     const QStringList subTypeList = m_varSelected->subTypeList();
-    kDebug() << k_funcinfo <<"current subtype=" << m_varSelected->subType();
+    kDebug() <<"current subtype=" << m_varSelected->subType();
     QStringList::ConstIterator it = subTypeList.begin();
     for ( int i = 0; it != subTypeList.end() ; ++it, ++i )
     {

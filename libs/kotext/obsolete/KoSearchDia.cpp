@@ -282,7 +282,7 @@ bool KoFindReplace::findNext()
             res = m_replace->replace();
     }
 
-    //kDebug(32500) << k_funcinfo <<"we're done. res=" << res;
+    //kDebug(32500) <<"we're done. res=" << res;
     if ( res == KFind::NoMatch ) // i.e. at end
     {
         emitUndoRedo();

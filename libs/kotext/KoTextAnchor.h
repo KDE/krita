@@ -108,6 +108,7 @@ public:
     /// set the new offset. Causes a new layout soon.
     void setOffset(const QPointF &offset);
 
+    void saveOdf (KoShapeSavingContext & context);
 private:
     class Private;
     Private * const d;

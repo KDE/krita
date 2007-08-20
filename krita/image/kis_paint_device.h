@@ -257,6 +257,30 @@ public:
     void writeBytes(const quint8 * data, const QRect &rect);
 
     /**
+     * Copy the bytes in the paint device into a vector of arrays of bytes,
+     * where the number of arrays is the number of channels in the
+     * paint device. If the specified area is larger than the paint
+     * device's extent, the default pixel will be read.
+     */
+    QVector<quint8*> readPlanarBytes( qint32 x, qint32 y, qint32 w, qint32 h);
+
+    /**
+     * Write the data in the separate arrays to the channes. If there
+     * are less vectors than channels, the remaining channels will not
+     * be copied. If any of the arrays points to 0, the channel in
+     * that location will not be touched. If the specified area is
+     * larger than the paint device, the paint device will be
+     * extended. There are no guards: if the area covers more pixels
+     * than there are bytes in the arrays, krita will happily fill
+     * your paint device with areas of memory you never wanted to be
+     * read. Krita may also crash.
+     *
+     * XXX: what about undo?
+     */
+    void writePlanarBytes( QVector<quint8*> planes, qint32 x, qint32 y, qint32 w, qint32 h);
+
+
+    /**
      *   Converts the paint device to a different colorspace
      */
     void convertTo(KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
@@ -580,6 +604,12 @@ private:
      */
     qint32 rowStride(qint32 x, qint32 y) const;
 
+    /**
+     * Return a vector with in order the size in bytes of the channels
+     * in the colorspace of this paint device.
+     */
+    QVector<qint32> channelSizes();
+
 protected:
 
     KisDataManagerSP m_datamanager;
@@ -592,4 +622,3 @@ private:
 };
 
 #endif // KIS_PAINT_DEVICE_IMPL_H_
-

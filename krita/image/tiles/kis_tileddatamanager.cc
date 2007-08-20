@@ -25,7 +25,6 @@
 #include "kis_global.h"
 #include "kis_debug_areas.h"
 #include "kis_tileddatamanager.h"
-#include "kis_tilediterator.h"
 #include "kis_tile.h"
 #include "kis_memento.h"
 #include "kis_tilemanager.h"
@@ -863,8 +862,8 @@ void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)
 
 
 void KisTiledDataManager::readBytes(quint8 * data,
-                    qint32 x, qint32 y,
-                    qint32 w, qint32 h)
+                                    qint32 x, qint32 y,
+                                    qint32 w, qint32 h)
 {
     if (data == 0) return;
     //Q_ASSERT(data != 0);
@@ -975,6 +974,138 @@ void KisTiledDataManager::writeBytes(const quint8 * bytes,
         rowsRemaining -= rows;
     }
 }
+
+
+QVector<quint8*> KisTiledDataManager::readPlanarBytes( QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h)
+{
+    int numChannels = channelsizes.size();
+
+    QVector<quint8*> planes;
+
+    quint32 numPixels = w * h;
+    int i = 0;
+    foreach( qint32 channelsize, channelsizes ) {
+        planes.append( new quint8[ numPixels * channelsize ] );
+        ++i;
+    }
+
+
+    QVector<quint8*> planePointers = planes;
+
+    if (w < 0)
+        w = 0;
+
+    if (h < 0)
+        h = 0;
+
+    qint32 dstY = 0;
+    qint32 srcY = y;
+    qint32 rowsRemaining = h;
+
+    while (rowsRemaining > 0) {
+
+        qint32 dstX = 0;
+        qint32 srcX = x;
+        qint32 columnsRemaining = w;
+        qint32 numContiguousSrcRows = numContiguousRows(srcY, srcX, srcX + w - 1);
+
+        qint32 rows = qMin(numContiguousSrcRows, rowsRemaining);
+
+        while (columnsRemaining > 0) {
+
+            qint32 numContiguousSrcColumns = numContiguousColumns(srcX, srcY, srcY + rows - 1);
+
+            qint32 columns = qMin(numContiguousSrcColumns, columnsRemaining);
+
+            KisTileDataWrapperSP tileData = pixelPtrSafe(srcX, srcY, false);
+            const quint8 *srcData = tileData -> data();
+
+            for (qint32 row = 0; row < rows; row++) {
+                for ( qint32 col = 0; col < columns; ++col ) {
+                    for( int channelPos = 0; channelPos < numChannels; ++channelPos ) {
+
+                        quint8 *dstData = planePointers.at( channelPos );
+                        qint32 channelsize = channelsizes.at( channelPos );
+
+                        memcpy(dstData, srcData, channelsize);
+
+                        srcData += channelsize;
+                        planePointers[channelPos] += channelsize;
+                    }
+
+                }
+            }
+
+            srcX += columns;
+            dstX += columns;
+            columnsRemaining -= columns;
+        }
+
+        srcY += rows;
+        dstY += rows;
+        rowsRemaining -= rows;
+    }
+    return planes;
+}
+
+void KisTiledDataManager::writePlanarBytes( QVector<quint8*> planes, QVector<qint32> channelsizes,  qint32 x, qint32 y, qint32 w, qint32 h)
+{
+    Q_ASSERT( planes.size() == channelsizes.size() );
+    Q_ASSERT( planes.size() > 0 );
+
+    // XXX: Is this correct?
+    if (w < 0)
+        w = 0;
+
+    if (h < 0)
+        h = 0;
+
+    int numChannels = planes.size();
+
+    qint32 srcY = 0;
+    qint32 dstY = y;
+    qint32 rowsRemaining = h;
+
+    while (rowsRemaining > 0) {
+
+        qint32 srcX = 0;
+        qint32 dstX = x;
+        qint32 columnsRemaining = w;
+        qint32 numContiguousdstRows = numContiguousRows(dstY, dstX, dstX + w - 1);
+
+        qint32 rows = qMin(numContiguousdstRows, rowsRemaining);
+
+        while (columnsRemaining > 0) {
+
+            qint32 numContiguousdstColumns = numContiguousColumns(dstX, dstY, dstY + rows - 1);
+
+            qint32 columns = qMin(numContiguousdstColumns, columnsRemaining);
+
+            KisTileDataWrapperSP tileData = pixelPtrSafe(dstX, dstY, true);
+            quint8 *dstData = tileData->data();
+
+            for (qint32 row = 0; row < rows; row++) {
+                for ( int col = 0; col < columns; ++col ) {
+                    for ( int channelPos = 0;  channelPos < numChannels; ++ channelPos ) {
+                        qint32 channelSize = channelsizes[channelPos];
+                        memcpy( dstData, planes[channelPos], channelSize );
+                        dstData += channelSize;
+                        planes[channelPos] += channelSize;
+                    }
+                }
+            }
+
+            dstX += columns;
+            srcX += columns;
+            columnsRemaining -= columns;
+        }
+
+        dstY += rows;
+        srcY += rows;
+        rowsRemaining -= rows;
+    }
+}
+
 
 qint32 KisTiledDataManager::numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const
 {

@@ -20,6 +20,7 @@
 
 #include <qglobal.h>
 #include <q3valuevector.h>
+#include <qvector.h>
 
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
@@ -139,6 +140,30 @@ protected:
     void writeBytes(const quint8 * bytes,
             qint32 x, qint32 y,
             qint32 w, qint32 h);
+
+
+    /**
+     * Copy the bytes in the paint device into a vector of arrays of bytes,
+     * where the number of arrays is the number of channels in the
+     * paint device. If the specified area is larger than the paint
+     * device's extent, the default pixel will be read.
+     */
+    QVector<quint8*> readPlanarBytes( QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
+
+    /**
+     * Write the data in the separate arrays to the channes. If there
+     * are less vectors than channels, the remaining channels will not
+     * be copied. If any of the arrays points to 0, the channel in
+     * that location will not be touched. If the specified area is
+     * larger than the paint device, the paint device will be
+     * extended. There are no guards: if the area covers more pixels
+     * than there are bytes in the arrays, krita will happily fill
+     * your paint device with areas of memory you never wanted to be
+     * read. Krita may also crash.
+     *
+     * XXX: what about undo?
+     */
+    void writePlanarBytes( QVector<quint8*> planes, QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
 
     /// Get the number of contiguous columns starting at x, valid for all values
     /// of y between minY and maxY.

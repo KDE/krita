@@ -697,6 +697,53 @@ void KisPaintDeviceTest::testSelection()
     QFAIL( "Implement unittests for the selection API of KisPaintDevice" );
 }
 
+void KisPaintDeviceTest::testPlanarReadWrite()
+{
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    KisPaintDeviceSP dev = new KisPaintDevice( cs );
+
+    quint8* pixel = cs->allocPixelBuffer( 1 );
+    cs->fromQColor( QColor( 255, 200, 155), 100, pixel );
+    dev->fill( 0, 0, 5000, 5000, pixel);
+
+    QColor c1;
+    quint8 opacity1;
+    dev->pixel( 5, 5, &c1, &opacity1 );
+
+    qDebug() << c1.blue() << ","
+             << c1.green() << ","
+             << c1.red() << ","
+             << opacity1;
+
+
+    QVector<quint8*> planes = dev->readPlanarBytes( 500, 500, 1000, 1000 );
+    QVector<quint8*> swappedPlanes;
+
+    QCOMPARE( ( int )planes.size(), ( int )dev->channelCount() );
+
+    for ( uint i = 1; i < dev->channelCount() + 1; ++i ) {
+        qDebug() << "plane" << i << "," << dev->channelCount() - i << endl;
+        swappedPlanes.append( planes[dev->channelCount() - i] );
+    }
+
+    dev->writePlanarBytes( swappedPlanes, 0, 0, 1000, 1000 );
+
+    dev->convertToQImage(0, 0, 0, 5000, 5000).save( "bla.png" );
+
+    dev->pixel( 5, 5, &c1, &opacity1 );
+
+    qDebug() << c1.blue() << ","
+             << c1.green() << ","
+             << c1.red() << ","
+             << opacity1;
+
+    QVERIFY( c1.red() == 200 );
+    QVERIFY( c1.green() == 255 );
+    QVERIFY( c1.blue() == 100);
+    QVERIFY( opacity1 == 155 );
+
+}
+
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)
 #include "kis_paint_device_test.moc"
 

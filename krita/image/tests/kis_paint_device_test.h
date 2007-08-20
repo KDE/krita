@@ -25,9 +25,6 @@ class KisPaintDeviceTest : public QObject
 {
     Q_OBJECT
 
-
-private slots:
-
     void testCreation();
     void testPaintEngine();
     void testStore();
@@ -43,6 +40,10 @@ private slots:
     void testMirror();
     void testMirrorTransaction();
     void testSelection();
+
+private slots:
+
+    void testPlanarReadWrite();
 };
 
 #endif

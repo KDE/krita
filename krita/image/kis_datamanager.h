@@ -101,6 +101,7 @@ public:
     inline bool write(KoStore *store) { return ACTUAL_DATAMGR::write(store); }
     inline bool read(KoStore *store) { return ACTUAL_DATAMGR::read(store); }
 
+
 public:
 
     /**
@@ -174,6 +175,43 @@ public:
              qint32 x, qint32 y,
              qint32 w, qint32 h)
         {ACTUAL_DATAMGR::writeBytes( data, x, y, w, h); }
+
+
+    /**
+     * Copy the bytes in the paint device into a vector of arrays of bytes,
+     * where the number of arrays is the number of channels in the
+     * paint device. If the specified area is larger than the paint
+     * device's extent, the default pixel will be read.
+     *
+     * @param channelsize a vector with for every channel its size in bytes
+     */
+    QVector<quint8*> readPlanarBytes( QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h)
+        {
+            return ACTUAL_DATAMGR::readPlanarBytes( channelsizes, x, y, w, h );
+        }
+
+    /**
+     * Write the data in the separate arrays to the channes. If there
+     * are less vectors than channels, the remaining channels will not
+     * be copied. If any of the arrays points to 0, the channel in
+     * that location will not be touched. If the specified area is
+     * larger than the paint device, the paint device will be
+     * extended. There are no guards: if the area covers more pixels
+     * than there are bytes in the arrays, krita will happily fill
+     * your paint device with areas of memory you never wanted to be
+     * read. Krita may also crash.
+     *
+     * @param planes a vector with a byte array for every plane
+     * @param channelsize a vector with for every channel its size in
+     * bytes
+     *
+     * XXX: what about undo?
+     */
+    void writePlanarBytes( QVector<quint8*> planes, QVector<qint32> channelsizes,  qint32 x, qint32 y, qint32 w, qint32 h)
+        {
+            ACTUAL_DATAMGR::writePlanarBytes( planes, channelsizes, x, y, w, h );
+        }
+
 
     /**
      * Get the number of contiguous columns starting at x, valid for all values

@@ -45,6 +45,19 @@ KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
           m_dragging (false)
 {
     setObjectName("tool_polyline");
+
+    QAction *action = new QAction(i18n("&Finish Polyline"), this);
+    addAction("finish_polyline", action );
+    connect(action, SIGNAL(triggered()), this, SLOT(finish()));
+    action = new QAction(KIcon("cancel"), i18n("&Cancel"), this);
+    addAction("cancel_polyline", action );
+    connect(action, SIGNAL(triggered()), this, SLOT(cancel()));
+
+
+    QList<QAction*> list;
+    list.append(this->action("finish_polyline"));
+    list.append(this->action("cancel_polyline"));
+    setPopupActionList(list);
 }
 
 KisToolPolyline::~KisToolPolyline()
@@ -70,12 +83,6 @@ void KisToolPolyline::mousePressEvent(KoPointerEvent *event)
             }
         } else if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier ) {
             finish();
-        }
-        if (event->button() == Qt::RightButton && (m_dragging || !m_points.isEmpty()) ) {
-            QMenu menu;
-            menu.addAction(i18n("&Finish Polyline"), this, SLOT(finish()));
-            menu.addAction(KIcon("cancel"), i18n("&Cancel"), this, SLOT(cancel()));
-            menu.exec(QCursor::pos());
         }
     }
 }

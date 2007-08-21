@@ -227,7 +227,7 @@ void KisQPainterCanvas::mousePressEvent(QMouseEvent *e) {
         m_d->canvas->view()->unplugActionList( "flake_tool_actions" );
         m_d->canvas->view()->plugActionList( "flake_tool_actions",
                                              m_d->toolProxy->popupActionList() );
-        QMenu *menu = dynamic_cast<QMenu*> (m_d->canvas->view()->factory()->container("FlakePopup", m_d->canvas->view()));
+        QMenu *menu = dynamic_cast<QMenu*> (m_d->canvas->view()->factory()->container("image_popup", m_d->canvas->view()));
         if(menu)
             menu->exec( e->globalPos() );
     }

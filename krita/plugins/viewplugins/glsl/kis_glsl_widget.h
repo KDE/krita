@@ -20,8 +20,36 @@
 #ifndef _KIS_GLSL_WIDGET
 #define _KIS_GLSL_WIDGET
 
+#include <gl/glew.h>
+#include <QGLWidget>
+
+class KisOpenGLShader;
+
+
 class KisGlslWidget : public QGLWidget
 {
-}
+    public:
+        KisGlslWidget(QWidget *parent = 0);
+        ~KisGlslWidget();
+        
+        void paintGL();
+        void resizeGL(int width, int height);
+        void initializeGL();
+        
+        GLuint bindTexture(const quint8* buffer, const quint32 width, 
+                           const quint32 height, GLenum target = GL_TEXTURE_2D, 
+                           GLint format = GL_RGBA);
+        
+        bool isValidGLSL() { return m_valid; };
+        
+    public slots:
+        void fragmentShaderSlot(const QString& shader);
+        void vertexShaderSlot(const QString& shader);
+     
+    private:
+        GLuint fragshader, vertexshader, fragprogram, vertexprogram;
+        QGLFramebufferObject framebuffer;
+        bool m_valid;
+}       
 
 #endif

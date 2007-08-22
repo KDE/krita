@@ -18,6 +18,8 @@ find_package(KdepimLibs REQUIRED)
 find_package(LCMS REQUIRED)
 find_package(PNG REQUIRED)
 find_package(Eigen)
+macro_optional_find_package(Blitz)
+
 macro_optional_find_package(QCA2)
 macro_optional_find_package(Exif)
 macro_optional_find_package(LibArt)
@@ -106,6 +108,10 @@ else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
                         "   If you want to compile Krita you should install:\n"
                         "   lcms 1.15 or newer (http://www.littlecms.com/)")
 endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+
+if(NOT BLITZ_FOUND)
+   set(SHOULD_BUILD_KRITA FALSE)
+endif(NOT BLITZ_FOUND)
 
 #Check if build kpresenter here to be able to test if we can build filters/kpresenter
 if(Boost_FOUND)

@@ -64,7 +64,7 @@ public:
         CurrentPaintopSettings,
         CurrentKritaLayer,
         CurrentComplexColor,
-        CurrentDisplayProfile
+        CurrentDisplayProfile,
         CurrentImage
     };
 

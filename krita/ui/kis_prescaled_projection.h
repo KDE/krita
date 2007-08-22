@@ -29,6 +29,9 @@ class QRect;
 class QSize;
 class QPainter;
 
+class KoViewConverter;
+class KoColorProfile;
+
 #include <kis_types.h>
 
 /**
@@ -99,6 +102,13 @@ public:
      */
     QImage prescaledQImage() const;
 
+    /**
+     * Set the view converter, the object that is responsible for
+     * translating between image pixels, document points and view
+     * pixels, keeping track of zoom levels.
+     */
+    void setViewConverter( KoViewConverter * viewConverter );
+
 public slots:
 
     /**
@@ -142,6 +152,16 @@ public slots:
      * Resize the prescaled image.
      */
     void resizePrescaledImage( QSize newSize, QSize oldSize );
+
+    /**
+     * Set the current monitor profile
+     */
+    void setMonitorProfile( KoColorProfile * profile );
+
+    /**
+     * Set the current HDR exposure
+     */
+    void setHDRExposure( float exposure );
 
 signals:
 

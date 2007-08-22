@@ -52,6 +52,7 @@ struct KisPrescaledProjection::Private
         , imageSize( 0, 0 )
         , viewConverter( 0 )
         , monitorProfile( 0 )
+        , exposure( 0.0 )
         {
         }
 
@@ -74,6 +75,7 @@ struct KisPrescaledProjection::Private
     KisImageSP image;
     KoViewConverter * viewConverter;
     KoColorProfile * monitorProfile;
+    float exposure;
 };
 
 KisPrescaledProjection::KisPrescaledProjection()
@@ -114,6 +116,11 @@ QPixmap KisPrescaledProjection::prescaledPixmap() const
 QImage KisPrescaledProjection::prescaledQImage() const
 {
     return m_d->prescaledQImage;
+}
+
+void KisPrescaledProjection::setViewConverter( KoViewConverter * viewConverter )
+{
+    m_d->viewConverter = viewConverter;
 }
 
 void KisPrescaledProjection::updateSettings()
@@ -200,6 +207,16 @@ void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
     if ( !m_d->useNearestNeighbour || !m_d->cacheKisImageAsQImage ) {
         m_d->unscaledCache = QImage( w, h, QImage::Format_ARGB32 );
     }
+}
+
+void KisPrescaledProjection::setMonitorProfile( KoColorProfile * profile )
+{
+    m_d->monitorProfile = profile;
+}
+
+void KisPrescaledProjection::setHDRExposure( float exposure )
+{
+    m_d->exposure = exposure;
 }
 
 void KisPrescaledProjection::preScale()

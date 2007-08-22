@@ -1005,7 +1005,11 @@ QVector<quint8*> KisTiledDataManager::readPlanarBytes( QVector<qint32> channelsi
 
         qint32 srcX = x;
         qint32 columnsRemaining = w;
-        qint32 numContiguousSrcRows = numContiguousRows(srcY, srcX, srcX + w - 1);
+        /*
+        ### [!] We _enforce_ the format: row1row2row3 in each plane. If we'd read in > 1 row for each tile, the resulting data depends on the starting position
+        of the reading...
+        */
+        qint32 numContiguousSrcRows = 1;
 
         qint32 rows = qMin(numContiguousSrcRows, rowsRemaining);
 
@@ -1065,7 +1069,11 @@ void KisTiledDataManager::writePlanarBytes( QVector<quint8*> planes, QVector<qin
 
         qint32 dstX = x;
         qint32 columnsRemaining = w;
-        qint32 numContiguousdstRows = numContiguousRows(dstY, dstX, dstX + w - 1);
+        /*
+        ### [!] We _enforce_ the format: row1row2row3 in each plane. If we'd read in > 1 row for each tile, the resulting data depends on the starting position
+        of the reading...
+        */
+        qint32 numContiguousdstRows = 1;
 
         qint32 rows = qMin(numContiguousdstRows, rowsRemaining);
 

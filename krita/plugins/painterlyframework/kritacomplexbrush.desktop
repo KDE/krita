@@ -1,7 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Complex Brush
+Name[ga]=Scuab Choimpléascach
+Name[pt]=Pincel Complexo
+Name[pt_BR]=Pincel Complexo
 Comment=A brush with complex color loading
+Comment[pt]=Um pincel com um carregamento complexo de cor
+Comment[pt_BR]=Um pincel com um carregamento complexo de cor
 ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacomplexbrush

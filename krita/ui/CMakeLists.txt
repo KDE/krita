@@ -1,5 +1,5 @@
 
-include_directories( ${KOTEXT_INCLUDES} )
+include_directories( ${KOTEXT_INCLUDES} ${BLITZ_INCLUDES} )
 
 add_subdirectory( tests )
 

@@ -55,7 +55,7 @@
 #include "kis_selection.h"
 
 //#define DEBUG_REPAINT
-#define USE_QT_SCALING
+//#define USE_QT_SCALING
 
 
 #define NOT_DEFAULT_EXPOSURE 1e100
@@ -396,6 +396,7 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
                 QTime t;
                 t.start();
                 QImage img2 = croppedImage.scaled( sz, Qt::KeepAspectRatio, Qt::FastTransformation );
+                kDebug() << "QImage fast scaling " << t.elapsed();
                 gc.drawImage( rc.topLeft(), img2 );
             }
             else {
@@ -404,8 +405,8 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
                 QTime t;
                 t.start();
 #ifndef USE_QT_SCALING
-                QImage img2 = Blitz::smoothscale( croppedImage, sz );
-                kDebug(41010) <<"Imageutils scale:" << t.elapsed();
+                QImage img2 = Blitz::smoothScale( croppedImage, sz );
+                kDebug(41010) <<"Blitz scale:" << t.elapsed();
 #else
                 t.restart();
                 QImage img2 = croppedImage.scaled( sz, Qt::KeepAspectRatio, Qt::SmoothTransformation );

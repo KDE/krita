@@ -89,8 +89,7 @@ bool KisLoadVisitor::visit(KisPaintLayer *layer)
         KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(layer->paintDevice()->colorSpace()->id(), new KoIccColorProfile(data));
         // replace the old colorspace
         layer->paintDevice()->setDataManager(layer->paintDevice()->dataManager(), cs);
-        QRect rc = layer->paintDevice()->extent();
-        layer->setDirty(rc);
+
     }
 
 //     // mask
@@ -112,7 +111,7 @@ bool KisLoadVisitor::visit(KisPaintLayer *layer)
 //         }
 //         layer->setDirty(); // Update the entire layer
 //     }
-
+    layer->setDirty(m_img->bounds());
     return true;
 
 }
@@ -148,6 +147,7 @@ bool KisLoadVisitor::visit(KisAdjustmentLayer* layer)
             layer->setSelection( selection );
         }
         m_store->close();
+
     }
 
     // filter configuration
@@ -166,6 +166,8 @@ bool KisLoadVisitor::visit(KisAdjustmentLayer* layer)
     }
 
     return true;
+
+    layer->setDirty( m_img->bounds() );
 
 }
 

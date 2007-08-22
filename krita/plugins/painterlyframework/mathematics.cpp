@@ -33,8 +33,8 @@ const double MATH_LIM_SUP = 1.0 - 3.90625e-3;
 const double MATH_LIM_SUB = 0.0 + 3.90625e-3;
 const double MATH_NORMALIZATION = 65535.0;
 
-// double MATH_SUB_BLACK(double) { return 3.90625e-4; }
-double MATH_SUB_BLACK(double R) { return 0.2*R; }
+double MATH_SUB_BLACK(double) { return 3.90625e-4; }
+// double MATH_SUB_BLACK(double R) { return 0.4*R; }
 
 double coth(double z)
 {
@@ -145,13 +145,11 @@ void computeKS(const int nrefs, const double *vREF, float *vKS)
 		K = S * ( a - 1.0 );
 
 		vKS[i+0] = K;
-		vKS[i+1] = S;
+		vKS[i+1] = log(S);
 	}
 }
 
-// 		b = sqrt( ( K / S ) * ( K / S + 2.0 ) );
-// 		R = 1.0 / ( 1.0 + ( K / S ) + b * coth( b * S * MATH_THICKNESS ) );
-/* Do not use this anymore
+// Do not use this anymore
 void computeReflectance(const int nrefs, const float *vKS, double *vREF)
 {
 	double a, b, K, S, R;
@@ -171,8 +169,8 @@ void computeReflectance(const int nrefs, const float *vKS, double *vREF)
 		vREF[j] = R;
 	}
 }
-*/
 
+/*
 void computeReflectance(const int nrefs, const float *vKS, double *vREF)
 {
 	double K, S, q, R;
@@ -191,7 +189,7 @@ void computeReflectance(const int nrefs, const float *vKS, double *vREF)
 		vREF[j] = R;
 	}
 }
-
+*/
 
 void simplex(const int rows, const int cols, double **M, double *X, const double *B)
 {
@@ -201,7 +199,7 @@ void simplex(const int rows, const int cols, double **M, double *X, const double
 
 	glp_init_smcp(&parm);
 	parm.msg_lev = GLP_MSG_OFF;
-	parm.meth = GLP_DUALP;
+//	parm.meth = GLP_DUALP;
 
 	lp = glp_create_prob();
 	glp_set_prob_name(lp, "XYZ2REF");
@@ -236,7 +234,7 @@ void simplex(const int rows, const int cols, double **M, double *X, const double
 		glp_set_mat_row(lp, i+1, cols, ind, row);
 	}
 
-	lpx_scale_prob(lp);
+//	lpx_scale_prob(lp);
 	glp_simplex(lp, &parm);
 
 	for (int i = 0; i < cols; i++)

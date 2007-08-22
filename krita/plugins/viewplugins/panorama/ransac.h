@@ -30,9 +30,9 @@ class Ransac {
      * @param iter number of iterations
      */
     Ransac( uint _nbGood, uint _iter, _TmodelStaticParam_* params) :
-      m_nbGood(_nbGood), m_iter(_iter), m_params(params)
+        m_nbGood(_nbGood), m_iter(_iter), m_params(params)
     {
-      
+
     }
     ~Ransac()
     {

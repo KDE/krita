@@ -179,6 +179,9 @@ public:
     bool threadColorspaceConversion();
     void setThreadColorspaceConversion( bool threadColorspaceConversion );
 
+    bool cacheKisImageAsQImage();
+    void setCacheKisImageAsQImage( bool cacheKisImageAsQImage );
+
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

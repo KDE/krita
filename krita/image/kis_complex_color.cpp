@@ -35,7 +35,7 @@
 #include "kis_complex_color.h"
 
 const PropertyCell hardDefault = {
-	0.7,
+    0.7,
     0.7,
     0.7,
     0.7,
@@ -48,361 +48,361 @@ const PropertyCell hardDefault = {
 const double DEFAULT_SCALE = 1.0;
 
 KisComplexColor::KisComplexColor(KoColorSpace *colorSpace)
-	: super(0, "Complex Color Layer", 255, colorSpace)
+    : KisPaintLayer(0, "Complex Color Layer", 255, colorSpace)
 {
-	m_scaling = DEFAULT_SCALE;
-	m_defaultColor = KoColor(colorSpace);
-	m_defaultProperty = 0;
+    m_scaling = DEFAULT_SCALE;
+    m_defaultColor = KoColor(colorSpace);
+    m_defaultProperty = 0;
 
-	KoColor kc(Qt::black, colorSpace);
-	fromKoColor(kc);
+    KoColor kc(Qt::black, colorSpace);
+    fromKoColor(kc);
 }
 
 KisComplexColor::KisComplexColor(KoColorSpace *colorSpace, const KoColor &kc)
-	: super(0, "Complex Color Layer", 255, colorSpace)
+    : KisPaintLayer(0, "Complex Color Layer", 255, colorSpace)
 {
-	m_scaling = DEFAULT_SCALE;
-	m_defaultColor = KoColor(colorSpace);
-	m_defaultProperty = 0;
+    m_scaling = DEFAULT_SCALE;
+    m_defaultColor = KoColor(colorSpace);
+    m_defaultProperty = 0;
 
-	fromKoColor(kc);
+    fromKoColor(kc);
 }
 
 KisComplexColor::~KisComplexColor()
 {
-	if (m_defaultProperty)
-		delete [] m_defaultProperty;
+    if (m_defaultProperty)
+        delete [] m_defaultProperty;
 }
 
 void KisComplexColor::fromKoColor(const KoColor &kc)
 {
-	if (painterlyOverlay())
-		removePainterlyOverlay();
-	createPainterlyOverlay();
-	paintDevice()->clear();
+    if (painterlyOverlay())
+        removePainterlyOverlay();
+    createPainterlyOverlay();
+    paintDevice()->clear();
 
-	m_center = QPoint(0,0);
-	m_offset = QPoint(0,0);
-	m_size = QSize(1,1);
+    m_center = QPoint(0,0);
+    m_offset = QPoint(0,0);
+    m_size = QSize(1,1);
 
-	translate();
+    translate();
 
-	setDefaultColor(kc);
-	setDefaultProperty(hardDefault);
+    setDefaultColor(kc);
+    setDefaultProperty(hardDefault);
 }
 
 KoColorSpace *KisComplexColor::colorSpace()
 {
-	return paintDevice()->colorSpace();
+    return paintDevice()->colorSpace();
 }
 
 void KisComplexColor::convertTo(KoColorSpace *dstColorSpace)
 {
-	paintDevice()->convertTo(dstColorSpace);
-	m_defaultColor.convertTo(dstColorSpace);
+    paintDevice()->convertTo(dstColorSpace);
+    m_defaultColor.convertTo(dstColorSpace);
 }
 
 KoColor KisComplexColor::simpleColor()
 {
-	const int channels = colorSpace()->colorChannelCount();
-	int total = 0;
-	QVector<float> sum(channels+1);
-	QVector<float> cur(channels+1);
+    const int channels = colorSpace()->colorChannelCount();
+    int total = 0;
+    QVector<float> sum(channels+1);
+    QVector<float> cur(channels+1);
 
-	KoColor kc(colorSpace());
+    KoColor kc(colorSpace());
 
-	for (int i = 0; i < channels; i++)
-		sum[i] = 0;
-	sum[channels] = 1;
+    for (int i = 0; i < channels; i++)
+        sum[i] = 0;
+    sum[channels] = 1;
 
-	for (int y = top(); y < bottom(); y++) {
-		for (int x = left(); x < right(); x++) {
-			if (colorSpace()->alpha(rawData(x,y))) {
-				colorSpace()->normalisedChannelsValue(rawData(x,y), cur);
-				for (int i = 0; i < channels; i++)
-					sum[i] += cur[i];
-				total++;
-			}
-		}
-	}
+    for (int y = top(); y < bottom(); y++) {
+        for (int x = left(); x < right(); x++) {
+            if (colorSpace()->alpha(rawData(x,y))) {
+                colorSpace()->normalisedChannelsValue(rawData(x,y), cur);
+                for (int i = 0; i < channels; i++)
+                    sum[i] += cur[i];
+                total++;
+            }
+        }
+    }
 
-	if (total) {
-		for (int i = 0; i < channels; i++)
-			sum[i] /= (float)total;
+    if (total) {
+        for (int i = 0; i < channels; i++)
+            sum[i] /= (float)total;
 
-		colorSpace()->fromNormalisedChannelsValue(kc.data(), sum);
-	}
-	return kc;
+        colorSpace()->fromNormalisedChannelsValue(kc.data(), sum);
+    }
+    return kc;
 }
 
 KoColor KisComplexColor::defaultColor()
 {
-	if (!m_defaultColor.colorSpace() || m_defaultColor.colorSpace()->id() != colorSpace()->id())
-		m_defaultColor.convertTo(colorSpace());
-	return m_defaultColor;
+    if (!m_defaultColor.colorSpace() || m_defaultColor.colorSpace()->id() != colorSpace()->id())
+        m_defaultColor.convertTo(colorSpace());
+    return m_defaultColor;
 }
 
 quint8 * KisComplexColor::defaultProperty()
 {
-	return m_defaultProperty;
+    return m_defaultProperty;
 }
 
 void KisComplexColor::setDefaultColor(const KoColor &kc)
 {
-	m_defaultColor = kc;
-	m_defaultColor.convertTo(colorSpace());
+    m_defaultColor = kc;
+    m_defaultColor.convertTo(colorSpace());
 }
 
 void KisComplexColor::setDefaultProperty(const PropertyCell &pc)
 {
-	if (m_defaultProperty)
-		delete [] m_defaultProperty;
+    if (m_defaultProperty)
+        delete [] m_defaultProperty;
 
-	m_defaultProperty = new quint8[painterlyOverlay()->colorSpace()->pixelSize()];
+    m_defaultProperty = new quint8[painterlyOverlay()->colorSpace()->pixelSize()];
 
-	memcpy(m_defaultProperty, reinterpret_cast<const quint8 *>(&pc), sizeof(PropertyCell));
+    memcpy(m_defaultProperty, reinterpret_cast<const quint8 *>(&pc), sizeof(PropertyCell));
 }
 
 QSize KisComplexColor::size()
 {
-	return m_size;
+    return m_size;
 }
 
 void KisComplexColor::setSize(const QSize &rc)
 {
 
-	QPoint more;
+    QPoint more;
 
-	int oldleft = absLeft();
-	int oldtop = absTop();
+    int oldleft = absLeft();
+    int oldtop = absTop();
 
-	m_size = rc;
+    m_size = rc;
 
-	int newleft = absLeft();
-	int newtop = absTop();
+    int newleft = absLeft();
+    int newtop = absTop();
 
-	more.setX( ( newleft - oldleft ) );
-	more.setY( ( newtop - oldtop ) );
+    more.setX( ( newleft - oldleft ) );
+    more.setY( ( newtop - oldtop ) );
 
 // 	m_center -= more;
-	m_offset += more;
+    m_offset += more;
 
-	translate();
+    translate();
 }
 
 int KisComplexColor::absLeft()
 {
-	int l = - ( m_size.width() - (m_size.width() % 2) ) / 2;
-	return l;
+    int l = - ( m_size.width() - (m_size.width() % 2) ) / 2;
+    return l;
 }
 
 int KisComplexColor::absTop()
 {
-	int t = - ( m_size.height() - (m_size.height() % 2) ) / 2;
-	return t;
+    int t = - ( m_size.height() - (m_size.height() % 2) ) / 2;
+    return t;
 }
 
 int KisComplexColor::absRight()
 {
-	int r = absLeft() + m_size.width();
-	return r;
+    int r = absLeft() + m_size.width();
+    return r;
 }
 
 int KisComplexColor::absBottom()
 {
-	int b = absTop() + m_size.height();
-	return b;
+    int b = absTop() + m_size.height();
+    return b;
 }
 
 int KisComplexColor::left()
 {
-	int l = absLeft() - m_center.x();
-	return l;
+    int l = absLeft() - m_center.x();
+    return l;
 }
 
 int KisComplexColor::top()
 {
-	int t = absTop() - m_center.y();
-	return t;
+    int t = absTop() - m_center.y();
+    return t;
 }
 
 int KisComplexColor::right()
 {
-	int r = absRight() - m_center.x();
-	return r;
+    int r = absRight() - m_center.x();
+    return r;
 }
 
 int KisComplexColor::bottom()
 {
-	int b = absBottom() - m_center.y();
-	return b;
+    int b = absBottom() - m_center.y();
+    return b;
 }
 
 quint8 * KisComplexColor::rawData(int x, int y)
 {
-	absolute(&x, &y);
+    absolute(&x, &y);
 
-	KisRandomAccessorPixel ac = paintDevice()->createRandomAccessor(x,y);
+    KisRandomAccessorPixel ac = paintDevice()->createRandomAccessor(x,y);
 
-	if (!colorSpace()->alpha(ac.rawData()))
-		memcpy(ac.rawData(), defaultColor().data(), colorSpace()->pixelSize());
+    if (!colorSpace()->alpha(ac.rawData()))
+        memcpy(ac.rawData(), defaultColor().data(), colorSpace()->pixelSize());
 
-	return ac.rawData();
+    return ac.rawData();
 }
 
 quint8 * KisComplexColor::rawData(const QPoint &p)
 {
-	return rawData(p.x(),p.y());
+    return rawData(p.x(),p.y());
 }
 
 PropertyCell * KisComplexColor::property(int x, int y)
 {
-	absolute(&x, &y);
+    absolute(&x, &y);
 
-	KisRandomAccessorPixel ac = painterlyOverlay()->createRandomAccessor(x,y);
+    KisRandomAccessorPixel ac = painterlyOverlay()->createRandomAccessor(x,y);
 
-	PropertyCell *cell = reinterpret_cast<PropertyCell *>(ac.rawData());
-	if (!cell->volume)
-		memcpy(ac.rawData(), m_defaultProperty, sizeof(PropertyCell));
+    PropertyCell *cell = reinterpret_cast<PropertyCell *>(ac.rawData());
+    if (!cell->volume)
+        memcpy(ac.rawData(), m_defaultProperty, sizeof(PropertyCell));
 
-	return cell;
+    return cell;
 }
 
 PropertyCell * KisComplexColor::property(const QPoint &p)
 {
-	return property(p.x(),p.y());
+    return property(p.x(),p.y());
 }
 
 float KisComplexColor::scaling()
 {
-	return m_scaling;
+    return m_scaling;
 }
 
 QPoint KisComplexColor::center()
 {
-	return m_center;
+    return m_center;
 }
 
 void KisComplexColor::center(int *x, int *y)
 {
-	*x = m_center.x();
-	*y = m_center.y();
+    *x = m_center.x();
+    *y = m_center.y();
 }
 
 void KisComplexColor::setColor(int x, int y, const KoColor &kc)
 {
-	absolute(&x, &y);
+    absolute(&x, &y);
 
-	KoColor tmp = kc;
-	tmp.convertTo(colorSpace());
+    KoColor tmp = kc;
+    tmp.convertTo(colorSpace());
 
-	KisRandomAccessorPixel ac = paintDevice()->createRandomAccessor(x,y);
-	memcpy(ac.rawData(), tmp.data(), colorSpace()->pixelSize());
+    KisRandomAccessorPixel ac = paintDevice()->createRandomAccessor(x,y);
+    memcpy(ac.rawData(), tmp.data(), colorSpace()->pixelSize());
 
-	colorSpace()->setAlpha(ac.rawData(), 255, 1);
+    colorSpace()->setAlpha(ac.rawData(), 255, 1);
 }
 
 void KisComplexColor::setColor(const QPoint &p, const KoColor &kc)
 {
-	setColor(p.x(),p.y(),kc);
+    setColor(p.x(),p.y(),kc);
 }
 
 void KisComplexColor::setProperty(int x, int y, const PropertyCell &pc)
 {
-	absolute(&x, &y);
+    absolute(&x, &y);
 
-	KisRandomAccessorPixel ac = painterlyOverlay()->createRandomAccessor(x,y);
-	memcpy(ac.rawData(), reinterpret_cast<const quint8 *>(&pc), painterlyOverlay()->colorSpace()->pixelSize());
+    KisRandomAccessorPixel ac = painterlyOverlay()->createRandomAccessor(x,y);
+    memcpy(ac.rawData(), reinterpret_cast<const quint8 *>(&pc), painterlyOverlay()->colorSpace()->pixelSize());
 }
 
 void KisComplexColor::setProperty(const QPoint &p, const PropertyCell &pc)
 {
-	setProperty(p.x(),p.y(),pc);
+    setProperty(p.x(),p.y(),pc);
 }
 
 float KisComplexColor::setScaling(float s)
 {
-	float oldScaling = m_scaling;
-	m_scaling = s;
+    float oldScaling = m_scaling;
+    m_scaling = s;
 
-	return oldScaling;
+    return oldScaling;
 }
 
 QPoint KisComplexColor::setCenter(int x, int y)
 {
-	QPoint oldCenter = m_center;
+    QPoint oldCenter = m_center;
 
-	absolute(&x, &y);
-	m_center = QPoint(x,y);
+    absolute(&x, &y);
+    m_center = QPoint(x,y);
 
-	return oldCenter;
+    return oldCenter;
 }
 
 QPoint KisComplexColor::setCenter(QPoint p)
 {
-	QPoint oldCenter = m_center;
+    QPoint oldCenter = m_center;
 
-	absolute(&p);
-	m_center = p;
+    absolute(&p);
+    m_center = p;
 
-	return oldCenter;
+    return oldCenter;
 }
 
 KisPaintDeviceSP KisComplexColor::dab(int w, int h)
 {/*
-	if (w > m_size.width() || h > m_size.height())
-		return 0;
+   if (w > m_size.width() || h > m_size.height())
+   return 0;
 
-	int x = m_center.x() - w/2;
-	int y = m_center.y() - h/2;
+   int x = m_center.x() - w/2;
+   int y = m_center.y() - h/2;
 
-	KisPaintDeviceSP dst = new KisPaintDevice(colorSpace());
+   KisPaintDeviceSP dst = new KisPaintDevice(colorSpace());
 
-	KisRectIteratorPixel it_dst = dst->createRectIterator(0,0,w,h);
-	KisRectIteratorPixel it_src = paintDevice()->createRectIterator(x,y,w,h);
+   KisRectIteratorPixel it_dst = dst->createRectIterator(0,0,w,h);
+   KisRectIteratorPixel it_src = paintDevice()->createRectIterator(x,y,w,h);
 
-	while(!it_src.isDone()) {
-		memcpy(it_dst.rawData(),it_src.rawData(),paintDevice()->colorSpace()->pixelSize());
-		++it_src;
-		++it_dst;
-	}
+   while(!it_src.isDone()) {
+   memcpy(it_dst.rawData(),it_src.rawData(),paintDevice()->colorSpace()->pixelSize());
+   ++it_src;
+   ++it_dst;
+   }
 
-	return dst;
-*/}
+   return dst;
+ */}
 
 void KisComplexColor::scale(int *x, int *y)
 {
-	*x = (int)(*x * m_scaling);
-	*y = (int)(*y * m_scaling);
+    *x = (int)(*x * m_scaling);
+    *y = (int)(*y * m_scaling);
 }
 
 void KisComplexColor::scale(QPoint *p)
 {
-	*p *= m_scaling;
+    *p *= m_scaling;
 }
 
 void KisComplexColor::absolute(int *x, int *y)
 {
-	scale(x,y);
-	*x += m_center.x();
-	*y += m_center.y();
-	Q_ASSERT(*x >= absLeft() && *y >= absTop());
-	Q_ASSERT(*x < absRight() && *y < absBottom());
+    scale(x,y);
+    *x += m_center.x();
+    *y += m_center.y();
+    Q_ASSERT(*x >= absLeft() && *y >= absTop());
+    Q_ASSERT(*x < absRight() && *y < absBottom());
 }
 
 void KisComplexColor::absolute(QPoint *p)
 {
-	int x = p->x();
-	int y = p->y();
-	absolute(&x,&y);
-	p->setX(x);
-	p->setY(y);
+    int x = p->x();
+    int y = p->y();
+    absolute(&x,&y);
+    p->setX(x);
+    p->setY(y);
 }
 
 void KisComplexColor::translate()
 {
-	paintDevice()->move(m_offset);
-	painterlyOverlay()->move(m_offset);
+    paintDevice()->move(m_offset);
+    painterlyOverlay()->move(m_offset);
 }
 
 #include "kis_complex_color.moc"

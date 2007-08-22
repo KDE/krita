@@ -64,16 +64,16 @@ KisResourceProvider::KisResourceProvider(KisView2 * view )
     v = qVariantFromValue( static_cast<void *>( m_defaultBrush ) );
     m_resourceProvider->setResource( CurrentBrush, v );
 
-	m_defaultComplex = new KisComplexColor(m_view->image()->colorSpace());
-	v = qVariantFromValue( static_cast<void *>( m_defaultComplex ));
-	m_resourceProvider->setResource(CurrentComplexColor, v );
+    m_defaultComplex = new KisComplexColor(m_view->image()->colorSpace());
+    v = qVariantFromValue( static_cast<void *>( m_defaultComplex ));
+    m_resourceProvider->setResource(CurrentComplexColor, v );
 
 }
 
 KisResourceProvider::~KisResourceProvider()
 {
     delete m_defaultBrush;
-	delete m_defaultComplex;
+    delete m_defaultComplex;
 }
 
 

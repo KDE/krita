@@ -22,7 +22,16 @@
 #include <QColor>
 #include <QRect>
 #include <QPoint>
+#include <QSize>
+#include <QPainter>
 
+#include <blitz.h>
+
+#include <KoColorProfile.h>
+#include <KoViewConverter.h>
+
+#include "kis_types.h"
+#include "kis_image.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 
@@ -36,7 +45,13 @@ struct KisPrescaledProjection::Private
         , useSmoothScaling( true ) // Default
         , drawCheckers( false )
         , scrollCheckers( false )
+        , cacheKisImageAsQImage( true )
         , checkSize( 32 )
+        , documentOffset( 0, 0 )
+        , canvasSize( 0, 0 )
+        , imageSize( 0, 0 )
+        , viewConverter( 0 )
+        , monitorProfile( 0 )
         {
         }
 
@@ -47,11 +62,18 @@ struct KisPrescaledProjection::Private
     bool useSmoothScaling;
     bool drawCheckers;
     bool scrollCheckers;
+    bool cacheKisImageAsQImage;
     QColor checkersColor;
     qint32 checkSize;
     QImage unscaledCache;
     QImage prescaledQImage;
     QPixmap prescaledPixmap;
+    QPoint documentOffset;
+    QSize canvasSize;
+    QSize imageSize;
+    KisImageSP image;
+    KoViewConverter * viewConverter;
+    KoColorProfile * monitorProfile;
 };
 
 KisPrescaledProjection::KisPrescaledProjection()
@@ -67,6 +89,11 @@ KisPrescaledProjection::~KisPrescaledProjection()
     delete m_d;
 }
 
+
+void KisPrescaledProjection::setImage( KisImageSP image )
+{
+    m_d->image = image;
+}
 
 bool KisPrescaledProjection::drawCheckers() const
 {
@@ -104,18 +131,162 @@ void KisPrescaledProjection::updateSettings()
     m_d->scrollCheckers = cfg.scrollCheckers();
     m_d->checkSize = cfg.checkSize();
     m_d->checkersColor = cfg.checkersColor();
+    m_d->cacheKisImageAsQImage = cfg.cacheKisImageAsQImage();
 }
 
 void KisPrescaledProjection::documentOffsetMoved( const QPoint &documentOffset )
 {
+    m_d->documentOffset = documentOffset;
 }
 
 void KisPrescaledProjection::updateCanvasProjection( const QRect & rc )
 {
+#if 0
+    // When using fast zoom, we don't have a canvas cache
+    if ( !m_d->useNearestNeighbour ) {
+
+        QPainter p( &m_d->unscaledCache );
+
+        p.setCompositionMode( QPainter::CompositionMode_Source );
+
+        QImage updateImage = m_d->image->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
+                                                      m_d->monitorProfile,
+                                                      m_d->view->resourceProvider()->HDRExposure());
+
+        KisLayerSP layer = resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+        if (!layer) return;
+
+        KisPaintDeviceSP dev = layer->paintDevice();
+        if (!dev) return;
+
+        if (dev->hasSelection()){
+            KisSelectionSP selection = dev->selection();
+
+            QTime t;
+            t.start();
+            selection->paint(&updateImage, rc);
+            kDebug(41010) << "Mask visualisation rendering took: " << t.elapsed();
+
+        }
+
+        p.drawImage( rc.x(), rc.y(), updateImage, 0, 0, rc.width(), rc.height() );
+        p.end();
+
+    }
+    else {
+        // XXX: Draw the selection also if we're using fast scaling
+        // instead of the canvas cache
+    }
+
+    QRect vRect = viewRectFromImagePixels( rc );
+
+    if ( !vRect.isEmpty() ) {
+
+        m_d->canvasWidget->preScale( vRect );
+
+        if ( m_d->updateAllOfQPainterCanvas ) {
+            m_d->canvasWidget->widget()->update();
+        }
+        else {
+            m_d->canvasWidget->widget()->update( vRect );
+        }
+    }
+#endif
 }
 
 void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
 {
+    m_d->imageSize = QSize( w, h );
+    if ( !m_d->useNearestNeighbour || !m_d->cacheKisImageAsQImage ) {
+        m_d->unscaledCache = QImage( w, h, QImage::Format_ARGB32 );
+    }
 }
+
+void KisPrescaledProjection::preScale()
+{
+    preScale( QRect( QPoint( 0, 0 ), m_d->canvasSize ) );
+}
+
+void KisPrescaledProjection::preScale( const QRect & rc )
+{
+    if ( !rc.isEmpty() ) {
+        QTime t;
+        t.start();
+        QPainter gc( &m_d->prescaledQImage );
+        gc.setCompositionMode( QPainter::CompositionMode_Source );
+        drawScaledImage( rc, gc);
+        kDebug(41010) <<"Prescaling took" << t.elapsed();
+    }
+
+}
+
+void KisPrescaledProjection::resizePrescaledImage( QSize newSize, QSize oldSize )
+{
+
+    QTime t;
+    t.start();
+
+    QImage img = QImage(newSize, QImage::Format_ARGB32);
+    QPainter gc( &img );
+    gc.setCompositionMode( QPainter::CompositionMode_Source );
+
+    if ( newSize.width() > oldSize.width() || newSize.height() > oldSize.height() ) {
+
+        gc.drawImage( 0, 0,
+                      m_d->prescaledQImage,
+                      0, 0, m_d->prescaledQImage.width(), m_d->prescaledQImage.height() );
+
+        QRegion r( QRect( 0, 0, newSize.width(), newSize.height() ) );
+        r -= QRegion( QRect( 0, 0, m_d->prescaledQImage.width(), m_d->prescaledQImage.height() ) );
+
+        foreach( QRect rc, r.rects() ) {
+            drawScaledImage( rc, gc );
+        }
+    }
+    else {
+        gc.drawImage( 0, 0, m_d->prescaledQImage,
+                      0, 0, m_d->prescaledQImage.width(), m_d->prescaledQImage.height() );
+    }
+    m_d->prescaledQImage = img;
+    m_d->canvasSize = newSize;
+
+    kDebug(41010) <<"Resize event:" << t.elapsed();
+
+}
+
+void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc )
+{
+    if ( !m_d->image )
+        return;
+
+#if 0
+    // When we're drawing pixels 1:1, don't try to scale at all
+    if () {
+
+    }
+    else {
+        // Use nearest neighbour interpolation from the raw KisImage
+        if ( m_d->useNearestNeighbour || m_d->useDeferredSmoothing ) {
+            if ( m_d->useDeferredSmoothing ) {
+                // Start smoothing job. The job will be replaced by
+                // the next smoothing job if it is added before this
+                // one is done.
+            }
+        }
+        else {
+
+            if ( m_d->useQtScaling ) {
+
+            }
+            else if ( m_d->useSampling ) {
+
+            }
+            else { // Smooth scaling using blitz
+            }
+        }
+    }
+#endif
+}
+
 
 #include "kis_prescaled_projection.moc"

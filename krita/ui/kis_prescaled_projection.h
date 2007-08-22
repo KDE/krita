@@ -26,6 +26,10 @@ class QPixmap;
 class QImage;
 class QPoint;
 class QRect;
+class QSize;
+class QPainter;
+
+#include <kis_types.h>
 
 /**
  * KisPrescaledProjection is responsible for keeping around a
@@ -63,6 +67,8 @@ public:
 
     KisPrescaledProjection();
     virtual ~KisPrescaledProjection();
+
+    void setImage( KisImageSP image );
 
     /**
      * @return true if the prescaled projection is set to draw the
@@ -115,14 +121,49 @@ public slots:
     void updateCanvasProjection( const QRect & rc );
 
     /**
-     * Called whenever the size of the image changes
+     * Called whenever the size of the KisImage changes
      */
     void setImageSize(qint32 w, qint32 h);
+
+    /**
+     * Called whenever the zoom level changes or another chunk of the
+     * image becomes visible. The currently visible area of the image
+     * is complete scaled again.
+     */
+    void preScale();
+
+    /**
+     * preScale and draw onto the scaled projection the specfied rect,
+     * in KisImage pixels.
+     */
+    void preScale( const QRect & rc );
+
+    /**
+     * Resize the prescaled image.
+     */
+    void resizePrescaledImage( QSize newSize, QSize oldSize );
+
+signals:
+
+    /**
+     * emitted whenever the prescaled image is ready for painting.
+     * This can happen in two stages: a coarse first stage and a
+     * smooth second stage.
+     */
+    void sigPrescaledProjectionUpdated( const QRect & rc );
 
 private:
 
     KisPrescaledProjection( const KisPrescaledProjection & );
     KisPrescaledProjection operator=( const KisPrescaledProjection & );
+
+    /**
+     * Draw the prescaled image onto the painter.
+     *
+     * @param rc The desired rect in KisImage pixels
+     * @param gc The painter we draw on
+     */
+    void drawScaledImage( const QRect & rc,  QPainter & gc );
 
     struct Private;
     Private * const m_d;

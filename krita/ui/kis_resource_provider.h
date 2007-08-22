@@ -63,7 +63,8 @@ public:
         CurrentPaintop,
         CurrentPaintopSettings,
         CurrentKritaLayer,
-		CurrentComplexColor
+        CurrentComplexColor,
+        CurrentDisplayProfile,
     };
 
 
@@ -90,8 +91,9 @@ public:
 
     KisLayerSP currentLayer() const;
 
-	KisComplexColor *currentComplexColor() const;
+    KisComplexColor *currentComplexColor() const;
 
+    KoColorProfile * currentDisplayProfile() const;
 
 public slots:
 
@@ -108,7 +110,7 @@ public slots:
      * the image size in postscript points.
      */
     void slotSetImageSize( qint32 w, qint32 h );
-
+//    void slotSetDisplayProfile( KoColorProfile * profile );
 
 private slots:
 
@@ -124,13 +126,15 @@ signals:
     void sigPatternChanged(KisPattern * pattern);
     void sigPaintopChanged(KoID paintop, const KisPaintOpSettings *paintopSettings);
     void sigLayerChanged( const KisLayerSP layer );
+    void sigDisplayProfileChanged( const KoColorProfile * profile );
 
 private:
 
     KisView2 * m_view;
     KoCanvasResourceProvider * m_resourceProvider;
     KisBrush * m_defaultBrush;
-	KisComplexColor *m_defaultComplex;
+    KisComplexColor *m_defaultComplex;
+
 };
 
 #endif

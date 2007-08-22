@@ -30,78 +30,80 @@
 #include "kis_paint_layer.h"
 #include "kis_painterly_overlay_colorspace.h"
 
+/**
+ * XXX: Why inherit KisPaintLayer and not KisPaintDevice? (boud)
+ * XXX: Add dox
+ */
 class KRITAUI_EXPORT KisComplexColor : public KisPaintLayer {
-	Q_OBJECT
+    Q_OBJECT
 
-	typedef KisPaintLayer super;
+public:
 
-	public:
+    KisComplexColor(KoColorSpace *colorSpace);
+    KisComplexColor(KoColorSpace *colorSpace, const KoColor &kc);
+    ~KisComplexColor();
 
-		KisComplexColor(KoColorSpace *colorSpace);
-		KisComplexColor(KoColorSpace *colorSpace, const KoColor &kc);
-		~KisComplexColor();
+    void fromKoColor(const KoColor &kc);
+    KoColorSpace *colorSpace();
+    void convertTo(KoColorSpace * dstColorSpace);
+    KoColor simpleColor();
 
-		void fromKoColor(const KoColor &kc);
- 		KoColorSpace *colorSpace();
-		void convertTo(KoColorSpace * dstColorSpace);
-		KoColor simpleColor();
+    KoColor defaultColor();
+    quint8 * defaultProperty();
+    void setDefaultColor(const KoColor &kc);
+    void setDefaultProperty(const PropertyCell &pc);
+    void setDefaultProperty(const int type, const float value);
 
-		KoColor defaultColor();
-		quint8 * defaultProperty();
-		void setDefaultColor(const KoColor &kc);
-		void setDefaultProperty(const PropertyCell &pc);
-		void setDefaultProperty(const int type, const float value);
+    QSize size();
+    void setSize(const QSize &size);
 
-		QSize size();
-		void setSize(const QSize &size);
+    int left();
+    int top();
+    int right();
+    int bottom();
 
-		int left();
-		int top();
-		int right();
-		int bottom();
+    quint8 *rawData(int x, int y);
+    quint8 *rawData(const QPoint &p);
+    PropertyCell * property(int x, int y);
+    PropertyCell * property(const QPoint &p);
+    float scaling();
+    QPoint center();
+    void center(int *x, int *y);
 
-		quint8 *rawData(int x, int y);
-		quint8 *rawData(const QPoint &p);
-		PropertyCell * property(int x, int y);
-		PropertyCell * property(const QPoint &p);
-		float scaling();
-		QPoint center();
-		void center(int *x, int *y);
+    void setColor(int x, int y, const KoColor &kc);
+    void setColor(const QPoint &p, const KoColor &kc);
+    void setProperty(int x, int y, const PropertyCell &pc);
+    void setProperty(const QPoint &p, const PropertyCell &pc);
+    void setProperty(int x, int y, const int t, const float v);
+    void setProperty(const QPoint &p, const int t, const float v);
+    float setScaling(float s);
+    QPoint setCenter(int x, int y);
+    QPoint setCenter(QPoint p);
 
-		void setColor(int x, int y, const KoColor &kc);
-		void setColor(const QPoint &p, const KoColor &kc);
-		void setProperty(int x, int y, const PropertyCell &pc);
-		void setProperty(const QPoint &p, const PropertyCell &pc);
-		void setProperty(int x, int y, const int t, const float v);
-		void setProperty(const QPoint &p, const int t, const float v);
-		float setScaling(float s);
-		QPoint setCenter(int x, int y);
-		QPoint setCenter(QPoint p);
+    KisPaintDeviceSP dab(int w, int h);
 
-		KisPaintDeviceSP dab(int w, int h);
+private:
 
-	private:
+    void scale(int *x, int *y);
+    void scale(QPoint *p);
 
-		void scale(int *x, int *y);
-		void scale(QPoint *p);
+    void absolute(int *x, int *y);
+    void absolute(QPoint *p);
 
-		void absolute(int *x, int *y);
-		void absolute(QPoint *p);
+    int absLeft();
+    int absTop();
+    int absRight();
+    int absBottom();
 
-		int absLeft();
-		int absTop();
-		int absRight();
-		int absBottom();
+    void translate();
 
-		void translate();
+    float m_scaling;
+    QPoint m_center;
+    QPoint m_offset;
+    QSize m_size;
 
-		float m_scaling;
-		QPoint m_center;
-		QPoint m_offset;
-		QSize m_size;
-
-		KoColor m_defaultColor;
-		quint8 *m_defaultProperty;
+    KoColor m_defaultColor;
+    quint8 *m_defaultProperty;
 
 };
 

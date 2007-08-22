@@ -48,7 +48,7 @@
 #include "kis_config.h"
 #include "kis_canvas2.h"
 #include "kis_resource_provider.h"
-#include "scale.h"
+#include "blitz.h"
 #include "kis_doc2.h"
 #include "kis_grid_drawer.h"
 #include "kis_selection_manager.h"
@@ -389,20 +389,22 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
             gc.drawImage( rc.topLeft(), canvasImage.copy( drawRect ) );
         }
         else {
+            QSize sz = QSize( ( int )( alignedRect.width() * scaleX ), ( int )( alignedRect.height() * scaleY ));
+            QImage croppedImage = canvasImage.copy( alignedRect );
+
             if ( scaleX > 1.0 && scaleY > 1.0 ) {
                 QTime t;
                 t.start();
-                QImage img2 = ImageUtils::sampleImage(canvasImage, dstSize.width(), dstSize.height(), drawRect);
-                kDebug(41010) <<"imageutiles sampleImage" << t.elapsed();
+                QImage img2 = croppedImage.scaled( sz, Qt::KeepAspectRatio, Qt::FastTransformation );
                 gc.drawImage( rc.topLeft(), img2 );
             }
             else {
-                QSize sz = QSize( ( int )( alignedRect.width() * scaleX ), ( int )( alignedRect.height() * scaleY ));
-                QImage croppedImage = canvasImage.copy( alignedRect );
+
+
                 QTime t;
                 t.start();
 #ifndef USE_QT_SCALING
-                QImage img2 = ImageUtils::scale( croppedImage, sz.width(), sz.height() );
+                QImage img2 = Blitz::smoothscale( croppedImage, sz );
                 kDebug(41010) <<"Imageutils scale:" << t.elapsed();
 #else
                 t.restart();

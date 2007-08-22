@@ -95,7 +95,7 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, KoColorSpace *cs)
         return d->dab;
     }
     d->previousMask = mask;
-    
+
     // Convert the kiscolor to the right colorspace. TODO: check if the paintColor has change
     Q_CHECK_PTR(d->dab);
 
@@ -286,23 +286,20 @@ KisPaintDeviceSP KisPaintOp::source()
     return d->source;
 }
 
-void KisPaintOpSettings::mousePressEvent(KoPointerEvent *e)
+
+bool KisPaintOpFactory::userVisible(KoColorSpace * cs )
 {
-  e->ignore();
+    return cs && cs->id() != "WET";
 }
 
-void KisPaintOpSettings::activate()
-{
-}
 
-KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/, KisImageSP /*image*/) { return 0; }
+KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/, KisImageSP /*image*/)
+{
+    return 0;
+}
 
 QString KisPaintOpFactory::pixmap()
 {
     return "";
 }
 
-bool KisPaintOpFactory::userVisible(KoColorSpace * cs )
-{
-    return cs && cs->id() != "WET";
-}

@@ -82,8 +82,8 @@ void KisPainter::init()
     m_pattern= 0;
     m_opacity = OPACITY_OPAQUE;
     m_dab = 0;
-	m_sourceLayer = 0;
-	m_complexColor = 0;
+    m_sourceLayer = 0;
+    m_complexColor = 0;
     m_fillStyle = FillStyleNone;
     m_strokeStyle = StrokeStyleBrush;
     m_pressure = PRESSURE_MIN;

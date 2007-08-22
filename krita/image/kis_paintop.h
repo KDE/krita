@@ -27,7 +27,7 @@
 #include "kis_types.h"
 
 #include <krita_export.h>
-
+#include "kis_paintop_settings.h"
 class QWidget;
 
 class QPointF;
@@ -111,40 +111,6 @@ protected:
 private:
     Private* const d;
 };
-
-/**
- * This class is used to cache the settings (and the associated widget) for a paintop
- * between two creation. There is one KisPaintOpSettings per input device (mouse, tablet, etc...).
- */
-class KRITAIMAGE_EXPORT KisPaintOpSettings {
-
-public:
-    KisPaintOpSettings() {}
-    KisPaintOpSettings(QWidget *parent) { Q_UNUSED(parent); }
-    virtual ~KisPaintOpSettings() {}
-
-    /**
-     * This function is called by a tool when the mouse is pressed. It's usefull if
-     * the paintop needs mouse interaction for instance in the case of the duplicate op.
-     * If the tool is supposed to ignore the event, the paint op should call e->accept();
-     * and if the tool is supposed to use the event e->ignore(); should be called.
-     */
-    virtual void mousePressEvent(KoPointerEvent *e);
-
-    /**
-     * Call this function when the layer is changed
-     */
-    virtual void setLayer(KisLayerSP ) {}
-    /**
-     * @return a pointer to the widget displaying the settings
-     */
-    virtual QWidget *widget() const { return 0; }
-    /**
-     * Call this function when the paint op is selected or the tool is activated
-     */
-    virtual void activate();
-};
-
 /**
  * The paintop factory is responsible for creating paintops of the specified class.
  * If there is an optionWidget, the derived paintop itself must support settings,

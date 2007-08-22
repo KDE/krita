@@ -17,6 +17,7 @@
  */
 
 #include "kis_prescaled_projection.h"
+
 #include <QImage>
 #include <QPixmap>
 #include <QColor>
@@ -25,11 +26,16 @@
 #include <QSize>
 #include <QPainter>
 
-#include <blitz/blitz.h>
+#include <blitz.h>
 
 #include <KoColorProfile.h>
 #include <KoViewConverter.h>
 
+#include "kis_paint_layer.h"
+#include "kis_layer.h"
+#include "kis_node.h"
+#include "kis_paint_device.h"
+#include "kis_selection.h"
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_config.h"
@@ -45,6 +51,7 @@ struct KisPrescaledProjection::Private
         , useSmoothScaling( true ) // Default
         , drawCheckers( false )
         , scrollCheckers( false )
+        , drawMaskVisualisationOnUnscaledCanvasCache( false )
         , cacheKisImageAsQImage( true )
         , checkSize( 32 )
         , documentOffset( 0, 0 )
@@ -63,6 +70,7 @@ struct KisPrescaledProjection::Private
     bool useSmoothScaling;
     bool drawCheckers;
     bool scrollCheckers;
+    bool drawMaskVisualisationOnUnscaledCanvasCache;
     bool cacheKisImageAsQImage;
     QColor checkersColor;
     qint32 checkSize;
@@ -76,6 +84,7 @@ struct KisPrescaledProjection::Private
     KoViewConverter * viewConverter;
     KoColorProfile * monitorProfile;
     float exposure;
+    KisNodeSP currentLayer;
 };
 
 KisPrescaledProjection::KisPrescaledProjection()
@@ -139,6 +148,7 @@ void KisPrescaledProjection::updateSettings()
     m_d->checkSize = cfg.checkSize();
     m_d->checkersColor = cfg.checkersColor();
     m_d->cacheKisImageAsQImage = cfg.cacheKisImageAsQImage();
+    m_d->drawMaskVisualisationOnUnscaledCanvasCache = cfg.drawMaskVisualisationOnUnscaledCanvasCache();
 }
 
 void KisPrescaledProjection::documentOffsetMoved( const QPoint &documentOffset )
@@ -148,7 +158,7 @@ void KisPrescaledProjection::documentOffsetMoved( const QPoint &documentOffset )
 
 void KisPrescaledProjection::updateCanvasProjection( const QRect & rc )
 {
-#if 0
+
     // When using fast zoom, we don't have a canvas cache
     if ( !m_d->useNearestNeighbour ) {
 
@@ -158,14 +168,17 @@ void KisPrescaledProjection::updateCanvasProjection( const QRect & rc )
 
         QImage updateImage = m_d->image->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
                                                       m_d->monitorProfile,
-                                                      m_d->view->resourceProvider()->HDRExposure());
+                                                      m_d->exposure);
 
-        KisLayerSP layer = resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+        KisPaintLayerSP layer = qobject_cast<KisPaintLayer*>( m_d->currentLayer.data() );
         if (!layer) return;
 
         KisPaintDeviceSP dev = layer->paintDevice();
         if (!dev) return;
 
+        // XXX: Also visualize the global selection
+        // XXX: Also visualize the selection if the current node is
+        //      the selection
         if (dev->hasSelection()){
             KisSelectionSP selection = dev->selection();
 
@@ -189,16 +202,10 @@ void KisPrescaledProjection::updateCanvasProjection( const QRect & rc )
 
     if ( !vRect.isEmpty() ) {
 
-        m_d->canvasWidget->preScale( vRect );
+        preScale( vRect );
 
-        if ( m_d->updateAllOfQPainterCanvas ) {
-            m_d->canvasWidget->widget()->update();
-        }
-        else {
-            m_d->canvasWidget->widget()->update( vRect );
-        }
     }
-#endif
+
 }
 
 void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
@@ -217,6 +224,11 @@ void KisPrescaledProjection::setMonitorProfile( KoColorProfile * profile )
 void KisPrescaledProjection::setHDRExposure( float exposure )
 {
     m_d->exposure = exposure;
+}
+
+void KisPrescaledProjection::setCurrentNode( const KisNodeSP node )
+{
+    m_d->currentLayer = node;
 }
 
 void KisPrescaledProjection::preScale()
@@ -305,5 +317,21 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc )
 #endif
 }
 
+QRect KisPrescaledProjection::viewRectFromImagePixels( const QRect & rc )
+{
+    double pppx,pppy;
+    pppx = m_d->image->xRes();
+    pppy = m_d->image->yRes();
+
+    QRectF docRect;
+    docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
+
+    QRect viewRect = m_d->viewConverter->documentToView(docRect).toAlignedRect();
+    viewRect = viewRect.translated( -m_d->documentOffset );
+    viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasSize.width(), m_d->canvasSize.width() ) );
+
+    return viewRect;
+
+}
 
 #include "kis_prescaled_projection.moc"

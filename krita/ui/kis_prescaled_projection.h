@@ -163,6 +163,11 @@ public slots:
      */
     void setHDRExposure( float exposure );
 
+    /**
+     * Set the current node
+     */
+    void setCurrentNode( const KisNodeSP node );
+
 signals:
 
     /**
@@ -184,6 +189,12 @@ private:
      * @param gc The painter we draw on
      */
     void drawScaledImage( const QRect & rc,  QPainter & gc );
+
+    /**
+     * Return the intersection of the widget size and the given rect
+     * in image pixels converted to widget pixels.
+     */
+    QRect viewRectFromImagePixels( const QRect & imageRect );
 
     struct Private;
     Private * const m_d;

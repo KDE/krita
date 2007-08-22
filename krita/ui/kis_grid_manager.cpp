@@ -34,9 +34,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 
-
 #include "kis_config.h"
-#include "kis_grid_drawer.h"
 #include "kis_image.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"

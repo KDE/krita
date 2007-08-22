@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #include "kis_grid_drawer.h"
 
 #include <config-opengl.h>
@@ -35,13 +35,13 @@
 #include "kis_perspective_grid_manager.h"
 
 
-GridDrawer::GridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter)
+KisGridDrawer::KisGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter)
     : m_doc( doc ),
       m_viewConverter( viewConverter )
 {
 }
 
-Qt::PenStyle GridDrawer::gs2style(quint32 s)
+Qt::PenStyle KisGridDrawer::gs2style(quint32 s)
 {
     switch(s)
     {
@@ -58,7 +58,7 @@ Qt::PenStyle GridDrawer::gs2style(quint32 s)
     }
 }
 
-void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisSubPerspectiveGrid* grid)
+void KisGridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisSubPerspectiveGrid* grid)
 {
     Q_UNUSED(image);
     Q_UNUSED(wr);
@@ -81,17 +81,17 @@ void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& wr, const Ki
     v23.setX( v23.x() / grid->subdivisions()); v23.setY( v23.y() / grid->subdivisions() );
     KisPerspectiveMath::LineEquation d34 = KisPerspectiveMath::computeLineEquation( grid->bottomRight().data(), grid->bottomLeft().data() );
     KisPerspectiveMath::LineEquation d41 = KisPerspectiveMath::computeLineEquation( grid->bottomLeft().data(), grid->topLeft().data() );
-    
+
     QPointF horizVanishingPoint = KisPerspectiveMath::computeIntersection(d12,d34);
     QPointF vertVanishingPoint = KisPerspectiveMath::computeIntersection(d23,d41);
-    
+
     for(int i = 1; i < grid->subdivisions(); i ++)
     {
         QPointF pol1 = *grid->topRight() + i * v12;
         KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation( &pol1, &vertVanishingPoint );
         QPointF pol1b =  KisPerspectiveMath::computeIntersection(d1,d34);
         drawLine( pol1.toPoint(), pol1b.toPoint() );
-        
+
         QPointF pol2 = *grid->bottomRight() + i * v23;
         KisPerspectiveMath::LineEquation d2 = KisPerspectiveMath::computeLineEquation( &pol2, &horizVanishingPoint );
         QPointF pol2b = KisPerspectiveMath::computeIntersection(d2,d41);
@@ -104,7 +104,7 @@ void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& wr, const Ki
     drawLine( *grid->bottomLeft().data(), *grid->topLeft().data() );
 }
 
-void GridDrawer::drawGrid(const QRectF& area)
+void KisGridDrawer::drawGrid(const QRectF& area)
 {
     if(!m_doc->gridData().showGrid())
         return;
@@ -163,8 +163,9 @@ void GridDrawer::drawGrid(const QRectF& area)
     }
 }
 
-QPainterGridDrawer::QPainterGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter): GridDrawer(doc, viewConverter),
- m_painter(0)
+QPainterGridDrawer::QPainterGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter)
+    : KisGridDrawer(doc, viewConverter),
+      m_painter(0)
 {
 }
 
@@ -174,7 +175,8 @@ void QPainterGridDrawer::draw(QPainter *p, const QRectF &area)
     drawGrid(area);
 }
 
-OpenGLGridDrawer::OpenGLGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter): GridDrawer(doc, viewConverter)
+OpenGLGridDrawer::OpenGLGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter)
+    : KisGridDrawer(doc, viewConverter)
 {
 #ifdef HAVE_OPENGL
     glPushAttrib(GL_ALL_ATTRIB_BITS);

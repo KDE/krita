@@ -41,8 +41,11 @@ class KisGridManager : public QObject
         void setup(KActionCollection * collection);
 
     public slots:
+
         void updateGUI();
+
     private slots:
+
         void toggleGrid();
         void toggleSnapToGrid();
         void fastConfig1x1();
@@ -51,7 +54,9 @@ class KisGridManager : public QObject
         void fastConfig10x10();
         void fastConfig20x20();
         void fastConfig40x40();
+
     private:
+
         KisView2* m_view;
         KToggleAction* m_toggleGrid;
         KToggleAction* m_toggleSnapToGrid;

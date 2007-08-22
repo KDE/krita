@@ -22,8 +22,12 @@ class QWidget;
 class QRect;
 class QPoint;
 class QImage;
+class QPainter;
 
 class KoToolProxy;
+
+class KisCanvas2;
+class KisGridDrawer;
 
 class KisAbstractCanvasWidget {
 
@@ -38,6 +42,11 @@ public:
     virtual KoToolProxy * toolProxy() = 0;
 
     virtual void documentOffsetMoved( QPoint ) = 0;
+
+    void drawDecorations( QPainter & gc, bool ants, bool grids, bool tools,
+                          const QPoint & documentOffset,
+                          const QRect & clipRect,
+                          KisCanvas2 * canvas, KisGridDrawer * gridDrawer );
 
     /**
      * Prescale the canvas represention of the image (if necessary, it
@@ -55,7 +64,7 @@ public:
 
     /**
      * Returns one check of the background checkerboard pattern.
-     * 
+     *
      * @param checkSize the size of the check
      */
     QImage checkImage(qint32 checkSize);

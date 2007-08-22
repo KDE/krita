@@ -575,3 +575,13 @@ void KisConfig::setCacheKisImageAsQImage( bool cacheKisImageAsQImage )
     m_cfg.writeEntry( "cache_kis_image_as_qimage", cacheKisImageAsQImage );
 }
 
+
+bool KisConfig::drawMaskVisualisationOnUnscaledCanvasCache()
+{
+    return m_cfg.readEntry( "drawMaskVisualisationOnUnscaledCanvasCache", false );
+}
+
+void KisConfig::setDrawMaskVisualisationOnUnscaledCanvasCache( bool drawMaskVisualisationOnUnscaledCanvasCache )
+{
+    m_cfg.writeEntry( "drawMaskVisualisationOnUnscaledCanvasCache", drawMaskVisualisationOnUnscaledCanvasCache );
+}

@@ -77,7 +77,7 @@ public:
     QBrush checkBrush;
     QImage prescaledImage;
     QPoint documentOffset;
-    QPainterGridDrawer* gridDrawer;
+    KisGridDrawer* gridDrawer;
     double currentExposure;
 };
 
@@ -102,6 +102,7 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
 
 KisQPainterCanvas::~KisQPainterCanvas()
 {
+    delete m_d->gridDrawer;
     delete m_d;
 }
 
@@ -180,36 +181,9 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     // ask the current layer to paint its selection (and potentially
     // other things, like wetness and active-layer outline
 
+    drawDecorations(gc, true, true, true, m_d->documentOffset, ev->rect(), m_d->canvas, m_d->gridDrawer );
 
-    // Setup the painter to take care of the offset; all that the
-    // classes that do painting need to keep track of is resolution
-    gc.setRenderHint( QPainter::Antialiasing );
-    gc.setRenderHint( QPainter::SmoothPixmapTransform );
-    gc.translate( QPoint( -m_d->documentOffset.x(), -m_d->documentOffset.y() ) );
-
-
-    // Paint the shapes (other than the layers)
-    gc.save();
-    gc.setClipRect( ev->rect() );
-    m_d->canvas->globalShapeManager()->paint( gc, *m_d->viewConverter, false );
-    gc.restore();
-
-    //Paint marching ants and selection shapes
-    gc.save();
-    m_d->canvas->view()->selectionManager()->paint(gc, *m_d->viewConverter );
-    gc.restore();
-
-    // ask the guides, grids, etc to paint themselves
-    t.restart();
-    m_d->gridDrawer->draw(&gc, m_d->viewConverter->viewToDocument(ev->rect()));
-    kDebug(41010) <<"Drawing grid:" << t.elapsed();
-
-    t.restart();
-    // Give the tool a chance to paint its stuff
-    m_d->toolProxy->paint(gc, *m_d->viewConverter );
-    kDebug(41010) <<"Drawing tools:" << t.elapsed();
     gc.end();
-
 
     QPainter gc2( this );
     t.restart();

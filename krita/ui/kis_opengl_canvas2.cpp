@@ -48,6 +48,7 @@
 #include "kis_config.h"
 #include "kis_debug_areas.h"
 #include "kis_selection_manager.h"
+#include "kis_grid_drawer.h"
 
 class KisOpenGLCanvas2::Private
 {
@@ -58,6 +59,8 @@ public:
     KoToolProxy * toolProxy;
     KisOpenGLImageTexturesSP openGLImageTextures;
     QPoint documentOffset;
+    KisGridDrawer * gridDrawer;
+
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures )
@@ -67,6 +70,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOp
     m_d->canvas = canvas;
     m_d->toolProxy = canvas->toolProxy();
     m_d->openGLImageTextures = imageTextures;
+    m_d->gridDrawer = new QPainterGridDrawer(canvas->view()->document(), canvas->viewConverter());
+
     setAcceptDrops( true );
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground);
@@ -82,6 +87,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOp
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
 {
+    delete m_d->gridDrawer;
     delete m_d;
 }
 
@@ -233,30 +239,14 @@ void KisOpenGLCanvas2::paintGL()
     // made current after the textures are deleted following an image resize.
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    // XXX: Draw selections, masks, visualisations, grids, guides
-    //m_gridManager->drawGrid(wr, 0, true);
     QPainter gc ( this );
-    gc.setClipRect( QRect( QPoint( 0, 0 ), QSize() ) );
 
-    gc.setRenderHint( QPainter::Antialiasing );
-    gc.setRenderHint( QPainter::SmoothPixmapTransform );
+    drawDecorations( gc, true, true, true,
+                     m_d->documentOffset,
+                     QRect( QPoint( 0, 0 ), QSize() ),
+                     m_d->canvas, m_d->gridDrawer );
 
-    // Setup the painter to take care of the offset; all that the
-    // classes that do painting need to keep track of is resolution
-    gc.translate(-m_d->documentOffset.x(), -m_d->documentOffset.y());
-
-    // Paint the shapes (other than the layers)
-    gc.save();
-    m_d->canvas->globalShapeManager()->paint( gc, *m_d->viewConverter, false );
-    gc.restore();
-
-    //Paint marching ants and selection shapes
-    gc.save();
-    m_d->canvas->view()->selectionManager()->paint(gc, *m_d->viewConverter );
-    gc.restore();
-
-    //m_d->gridDrawer->draw(&gc, m_d->viewConverter->viewToDocument(ev->rect()));
-    m_d->toolProxy->paint(gc, *m_d->viewConverter );
+    gc.end();
 }
 
 void KisOpenGLCanvas2::setPixelToViewTransformation(void)

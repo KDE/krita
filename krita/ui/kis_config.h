@@ -182,6 +182,9 @@ public:
     bool cacheKisImageAsQImage();
     void setCacheKisImageAsQImage( bool cacheKisImageAsQImage );
 
+    bool drawMaskVisualisationOnUnscaledCanvasCache();
+    void setDrawMaskVisualisationOnUnscaledCanvasCache( bool drawMaskVisualisationOnUnscaledCanvasCache );
+
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

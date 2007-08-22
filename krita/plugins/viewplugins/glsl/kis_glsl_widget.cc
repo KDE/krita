@@ -39,7 +39,7 @@ void KisGlslWidget::initializeGL()
     
     //if glew can't initialize, everything following is useless
     if(GLEW_OK != err) {
-        qDebug("Unable to initialize glew, usefule information follows");
+        qDebug("Unable to initialize glew, useful information follows");
         qDebug("OpenGL version: %s", glGetString(GL_VERSION));
         qDebug("Error: %s", glewGetErrorString(err));
         m_valid = false;
@@ -56,7 +56,7 @@ void KisGlslWidget::initializeGL()
         glewGetExtension("GL_EXT_framebuffer_object")   != GL_TRUE ||
         glewGetExtension("GL_ARB_texture_rectangle")    != GL_TRUE )
     {
-        QMessageBox::warning( this, i18n( "Krita" ), i18n( "The OpenGL filter cannot run. Your graphics card or driver is missing the necessary extensions" ) );
+       QMessageBox::warning( this, i18n( "Krita" ), i18n( "The OpenGL filter cannot run. Your graphics card or driver is missing the necessary extensions" ) );
         m_valid = false;
         return;
     }

@@ -184,14 +184,6 @@ void KisLayer::setImage(KisImageSP image)
     }
 }
 
-void KisLayer::paint(QImage &, qint32, qint32, qint32, qint32)
-{
-}
-
-void KisLayer::paint(QImage &, const QRect&, const QSize&, const QSize&)
-{
-}
-
 KisSelectionMaskSP KisLayer::selectionMask() const
 {
     return 0;

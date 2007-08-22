@@ -504,10 +504,13 @@ public:
     // Returns the current fill color
     KoColor fillColor() const { return m_fillColor; }
 
-	void setSourceLayer(KisPaintLayer *source) { m_sourceLayer = source; }
-	KisPaintLayer *sourceLayer() { return m_sourceLayer; }
-	void setComplexColor(KisComplexColor *color) { m_complexColor = color; }
-	KisComplexColor *complexColor() { return m_complexColor; }
+    // XXX
+    void setSourceLayer(KisPaintLayer *source) { m_sourceLayer = source; }
+    KisPaintLayer *sourceLayer() { return m_sourceLayer; }
+
+    // XXX
+    void setComplexColor(KisComplexColor *color) { m_complexColor = color; }
+    KisComplexColor *complexColor() { return m_complexColor; }
 
     /// This enum contains the styles with which we can fill things like polygons and ellipses
     enum FillStyle {
@@ -521,6 +524,7 @@ public:
 
     /// Set the current style with which to fill
     void setFillStyle(FillStyle fillStyle) { m_fillStyle = fillStyle; }
+
     /// Returns the current fill style
     FillStyle fillStyle() const { return m_fillStyle; }
 

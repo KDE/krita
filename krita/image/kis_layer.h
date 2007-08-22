@@ -185,12 +185,7 @@ public:
      */
     void setImage(KisImageSP image);
 
-private:
-    /// paints a mask where the selection on this layer resides
-    virtual void paint(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
-    virtual void paint(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 public:
-
 
     /**
      * Returns true if there are any effect masks present

@@ -36,13 +36,7 @@ class KisMemento : public KisShared
 public:
     KisMemento(quint32 pixelSize);
     ~KisMemento();
-/*
-    // For consolidating transactions
-    virtual KisTransaction &operator+=(const KisTransaction &) = 0;
-    // For consolidating transactions
-    virtual KisTransaction &operator+(const KisTransaction &,
-                  const KisTransaction &) = 0;
-*/
+
     void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
     QRect extent() const;
 

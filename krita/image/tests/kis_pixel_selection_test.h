@@ -28,6 +28,7 @@ class KisPixelSelectionTest : public QObject
 private slots:
 
     void testCreation();
+    void testInvert();
 
 };
 

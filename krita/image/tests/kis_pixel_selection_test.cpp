@@ -56,6 +56,14 @@ void KisPixelSelectionTest::testCreation()
 
 }
 
+void KisPixelSelectionTest::testInvert()
+{
+    KisPixelSelectionSP selection = new KisPixelSelection();
+    selection->select(QRect( 5, 5, 10, 10));
+    selection->invert();
+    QCOMPARE( selection->selected( 20, 20), MAX_SELECTED);
+}
+
 QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI)
 #include "kis_pixel_selection_test.moc"
 

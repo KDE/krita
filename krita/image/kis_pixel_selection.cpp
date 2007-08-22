@@ -196,7 +196,9 @@ void KisPixelSelection::clear()
 
 void KisPixelSelection::invert()
 {
-    QRect rc = exactBounds();
+    //extent is needed here (not exactBounds), because unselected but existing pixel
+    //need to be inverted too
+    QRect rc = extent();
 
     KisRectIterator it = createRectIterator(rc.x(), rc.y(), rc.width(), rc.height());
     while ( ! it.isDone() )

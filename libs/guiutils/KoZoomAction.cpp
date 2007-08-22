@@ -67,6 +67,7 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bo
     d->zoomButtonGroup = 0;
     d->doSpecialAspectMode = doSpecialAspectMode;
 
+    setIcon(KIcon("zoom-original"));
     setEditable( true );
     setMaxComboViewCount( 15 );
 

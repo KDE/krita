@@ -31,20 +31,24 @@
 #include <KoColorProfile.h>
 #include <KoViewConverter.h>
 
-#include "kis_paint_layer.h"
-#include "kis_layer.h"
-#include "kis_node.h"
-#include "kis_paint_device.h"
-#include "kis_selection.h"
-#include "kis_types.h"
-#include "kis_image.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_mask.h"
+#include "kis_node.h"
+#include "kis_paint_device.h"
+#include "kis_paint_layer.h"
+#include "kis_selection.h"
+#include "kis_selection_mask.h"
+#include "kis_types.h"
+
 
 struct KisPrescaledProjection::Private
 {
     Private()
-        : useDeferredSmoothing( false )
+        : updateAllOfQPainterCanvas( false )
+        , useDeferredSmoothing( false )
         , useNearestNeighbour( false )
         , useQtScaling( false )
         , useSampling( false )
@@ -53,6 +57,7 @@ struct KisPrescaledProjection::Private
         , scrollCheckers( false )
         , drawMaskVisualisationOnUnscaledCanvasCache( false )
         , cacheKisImageAsQImage( true )
+        , showMask( true )
         , checkSize( 32 )
         , documentOffset( 0, 0 )
         , canvasSize( 0, 0 )
@@ -62,7 +67,7 @@ struct KisPrescaledProjection::Private
         , exposure( 0.0 )
         {
         }
-
+    bool updateAllOfQPainterCanvas;
     bool useDeferredSmoothing;
     bool useNearestNeighbour;
     bool useQtScaling;
@@ -72,6 +77,7 @@ struct KisPrescaledProjection::Private
     bool scrollCheckers;
     bool drawMaskVisualisationOnUnscaledCanvasCache;
     bool cacheKisImageAsQImage;
+    bool showMask;
     QColor checkersColor;
     qint32 checkSize;
     QImage unscaledCache;
@@ -84,7 +90,7 @@ struct KisPrescaledProjection::Private
     KoViewConverter * viewConverter;
     KoColorProfile * monitorProfile;
     float exposure;
-    KisNodeSP currentLayer;
+    KisNodeSP currentNode;
 };
 
 KisPrescaledProjection::KisPrescaledProjection()
@@ -135,6 +141,7 @@ void KisPrescaledProjection::setViewConverter( KoViewConverter * viewConverter )
 void KisPrescaledProjection::updateSettings()
 {
     KisConfig cfg;
+    m_d->updateAllOfQPainterCanvas = cfg.updateAllOfQPainterCanvas();
     m_d->useDeferredSmoothing = cfg.useDeferredSmoothing();
     m_d->useNearestNeighbour = cfg.fastZoom();
     m_d->useQtScaling = cfg.useQtSmoothScaling();
@@ -159,51 +166,66 @@ void KisPrescaledProjection::documentOffsetMoved( const QPoint &documentOffset )
 void KisPrescaledProjection::updateCanvasProjection( const QRect & rc )
 {
 
-    // When using fast zoom, we don't have a canvas cache
+    // We cache the KisImage as a QImage
     if ( !m_d->useNearestNeighbour ) {
 
-        QPainter p( &m_d->unscaledCache );
+        if ( m_d->cacheKisImageAsQImage ) {
 
-        p.setCompositionMode( QPainter::CompositionMode_Source );
+            QPainter p( &m_d->unscaledCache );
+            p.setCompositionMode( QPainter::CompositionMode_Source );
 
-        QImage updateImage = m_d->image->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
-                                                      m_d->monitorProfile,
-                                                      m_d->exposure);
+            QImage updateImage = m_d->image->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
+                                                             m_d->monitorProfile,
+                                                             m_d->exposure);
 
-        KisPaintLayerSP layer = qobject_cast<KisPaintLayer*>( m_d->currentLayer.data() );
-        if (!layer) return;
+            if ( m_d->showMask && m_d->drawMaskVisualisationOnUnscaledCanvasCache ) {
 
-        KisPaintDeviceSP dev = layer->paintDevice();
-        if (!dev) return;
+                // XXX: Also visualize the global selection
 
-        // XXX: Also visualize the global selection
-        // XXX: Also visualize the selection if the current node is
-        //      the selection
-        if (dev->hasSelection()){
-            KisSelectionSP selection = dev->selection();
+                KisSelectionSP selection = 0;
+                if ( m_d->currentNode->inherits( "KisMask" ) ) {
+                    selection = dynamic_cast<const KisMask*>( m_d->currentNode.data() )->selection();
+                }
+                else if ( m_d->currentNode->inherits( "KisLayer" ) ) {
 
-            QTime t;
-            t.start();
-            selection->paint(&updateImage, rc);
-            kDebug(41010) << "Mask visualisation rendering took: " << t.elapsed();
+                    KisLayerSP layer = dynamic_cast<KisLayer*>( m_d->currentNode.data() );
+                    if ( KisSelectionMaskSP selectionMask = layer->selectionMask() ) {
+                        selection = selectionMask->selection();
+                    }
 
+                    // XXX: transitional! Remove when we use
+                    // KisSelectionMask instead of the selection in the
+                    // paintdevice. That way we can also select on groups etc.
+                    if ( !selection && m_d->currentNode->inherits( "KisPaintLayer" ) ) {
+                        KisPaintDeviceSP dev = ( dynamic_cast<KisPaintLayer*>( m_d->currentNode.data() ) )->paintDevice();
+                        if ( dev ) {
+                            selection = dev->selection();
+                        }
+                    }
+                }
+
+                QTime t;
+                t.start();
+                selection->paint(&updateImage, rc);
+                kDebug(41010) << "Mask visualisation rendering took: " << t.elapsed();
+            }
+
+            p.drawImage( rc.x(), rc.y(), updateImage, 0, 0, rc.width(), rc.height() );
+            p.end();
         }
+    }
 
-        p.drawImage( rc.x(), rc.y(), updateImage, 0, 0, rc.width(), rc.height() );
-        p.end();
+    QRect vRect;
 
+    if ( m_d->updateAllOfQPainterCanvas ) {
+        vRect = QRect( m_d->documentOffset, m_d->canvasSize );
     }
     else {
-        // XXX: Draw the selection also if we're using fast scaling
-        // instead of the canvas cache
+        QRect vRect = viewRectFromImagePixels( rc );
     }
 
-    QRect vRect = viewRectFromImagePixels( rc );
-
     if ( !vRect.isEmpty() ) {
-
         preScale( vRect );
-
     }
 
 }
@@ -228,8 +250,14 @@ void KisPrescaledProjection::setHDRExposure( float exposure )
 
 void KisPrescaledProjection::setCurrentNode( const KisNodeSP node )
 {
-    m_d->currentLayer = node;
+    m_d->currentNode = node;
 }
+
+void KisPrescaledProjection::showCurrentMask( bool showMask )
+{
+    m_d->showMask = showMask;
+}
+
 
 void KisPrescaledProjection::preScale()
 {

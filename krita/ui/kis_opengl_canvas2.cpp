@@ -239,9 +239,15 @@ void KisOpenGLCanvas2::paintGL()
     // made current after the textures are deleted following an image resize.
     glBindTexture(GL_TEXTURE_2D, 0);
 
+
+    // XXX: make settable
+    bool drawAnts = true;
+    bool drawGrids = true;
+    bool drawTools = true;
+
     QPainter gc ( this );
 
-    drawDecorations( gc, true, true, true,
+    drawDecorations( gc, drawAnts, drawGrids, drawTools,
                      m_d->documentOffset,
                      QRect( QPoint( 0, 0 ), QSize() ),
                      m_d->canvas, m_d->gridDrawer );

@@ -178,10 +178,16 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     QColor color = QColor(random()%255, random()%255, random()%255, 150);
     gc.fillRect(ev->rect(), color);
 #endif
+
     // ask the current layer to paint its selection (and potentially
     // other things, like wetness and active-layer outline
 
-    drawDecorations(gc, true, true, true, m_d->documentOffset, ev->rect(), m_d->canvas, m_d->gridDrawer );
+    // XXX: make settable
+    bool drawAnts = true;
+    bool drawGrids = true;
+    bool drawTools = true;
+
+    drawDecorations(gc, drawAnts, drawGrids, drawTools, m_d->documentOffset, ev->rect(), m_d->canvas, m_d->gridDrawer );
 
     gc.end();
 

@@ -43,6 +43,9 @@ public:
 
     virtual void documentOffsetMoved( QPoint ) = 0;
 
+    /**
+     * Draw the specified decorations on the view.
+     */
     void drawDecorations( QPainter & gc, bool ants, bool grids, bool tools,
                           const QPoint & documentOffset,
                           const QRect & clipRect,

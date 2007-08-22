@@ -168,6 +168,13 @@ public slots:
      */
     void setCurrentNode( const KisNodeSP node );
 
+    /**
+     * Toggle whether the selection should be displayed as a mask.
+     * (The display as ants should be a toggle, too, but is done
+     * elsewhere.)
+     */
+    void showCurrentMask( bool showMask );
+
 signals:
 
     /**

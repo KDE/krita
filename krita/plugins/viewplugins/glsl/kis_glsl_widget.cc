@@ -17,16 +17,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
-#include <QGLWidget>
-#include <kis_opengl_shader.h>
-#include <kis_painter_device.h>
 
 #include "kis_glsl_widget.h"
 
-KisGlslWidget::KisGlslWidget(QWidget *parent) : QGLWidget(parent)
+#include <QGLFramebufferObject>
+#include <QMessageBox>
+
+#include <klocale.h>
+#include <kdebug.h>
+
+
+KisGlslWidget::KisGlslWidget(KisPaintDeviceSP device, QWidget *parent) : QGLWidget(parent), m_device(device)
 {
-    
 }
 
 KisGlslWidget::~KisGlslWidget()
@@ -35,7 +37,10 @@ KisGlslWidget::~KisGlslWidget()
 
 void KisGlslWidget::initializeGL()
 {
+    quint8* imgbuf;
+    
     int err = glewInit();
+  
     
     //if glew can't initialize, everything following is useless
     if(GLEW_OK != err) {
@@ -61,6 +66,9 @@ void KisGlslWidget::initializeGL()
         return;
     }
     
+    //get the bounds of the image
+    m_bounds = m_device->exactBounds();
+    
     glEnable(GL_TEXTURE_RECTANGLE_ARB);
     glShadeModel(GL_SMOOTH); // Enables Smooth Shading
     glEnable(GL_DEPTH_TEST); // Enables Depth Testing
@@ -70,23 +78,69 @@ void KisGlslWidget::initializeGL()
     //Setup orthogonal rendering
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glViewPort(0.0, 0.0, (GLfloat)imageWidth, (GLfloat)imageHeight);
+    glViewport(0.0f, 0.0f, (GLfloat)m_bounds.width(),
+               (GLfloat)m_bounds.height());
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0.0, (GLfloat)imageWidth, 0.0, (GLfloat)imageHeight);
+    gluOrtho2D(0.0f, (GLfloat)m_bounds.width(), 0.0f, (GLfloat)m_bounds.height());
     
     //bind the texture from krita using readBytes
-    //quint8* imgbuf = readBytes()
-    glGenTexture(1, m_texture);
+    m_device->readBytes(imgbuf, m_bounds);
+    glGenTextures(1, &m_texture);
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_texture);
     
-    glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAX_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER,
+                    GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER,
+                    GL_LINEAR);
     glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_T, GL_CLAMP);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     
-    glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, imageWidth, imageHeight,
-                 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8, imgbuf);
+    glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, m_bounds.width(), 
+                 m_bounds.height(),0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8,
+                 imgbuf);
     
 }
+
+void KisGlslWidget::resizeGL(int width, int height)
+{
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0.0f, (GLfloat)width, 0.0f, (GLfloat)height);
+}
+
+void KisGlslWidget::paintGL() 
+{
+    glActiveTexture(GL_TEXTURE0_ARB);
+    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_texture);
+    
+    glUseProgram(m_program);
+    glUniform1i(glGetUniformLocation(m_program, "image"), 0);
+    
+    glBegin(GL_QUADS);
+    
+    glTexCoord2f(0.0f, 0.0f); 
+    glVertex2f(0.0f, 0.0f);
+    
+    glTexCoord2f(0.0f, (GLfloat)m_bounds.height()); 
+    glVertex2f(0.0f, (GLfloat)height());
+    
+    glTexCoord2f((GLfloat)m_bounds.width(), (GLfloat)m_bounds.height());
+    glVertex2f((GLfloat)width(), (GLfloat)height());
+               
+    glTexCoord2f((GLfloat)m_bounds.width(), 0.0f);
+    glVertex2f((GLfloat)width(), 0.0f);
+    
+    glEnd();
+    
+    glUseProgram(0);
+}
+
+
+
+#include "kis_glsl_widget.moc"
+

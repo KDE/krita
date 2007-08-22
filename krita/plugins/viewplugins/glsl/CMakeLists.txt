@@ -1,4 +1,4 @@
-set(kritaglsl_PART_SRCS glsl.cc dlg_glsl.cc )
+set(kritaglsl_PART_SRCS glsl.cc dlg_glsl.cc kis_glsl_widget.cc)
 
 kde4_add_ui_files(kritaglsl_PART_SRCS wdg_glsl.ui )
 kde4_add_plugin(kritaglsl ${kritaglsl_PART_SRCS})

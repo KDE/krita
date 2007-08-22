@@ -17,39 +17,47 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+ 
 #ifndef _KIS_GLSL_WIDGET
 #define _KIS_GLSL_WIDGET
 
-#include <gl/glew.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+
+#include <QtOpenGL>
 #include <QGLWidget>
 
-class KisOpenGLShader;
+#include <kis_paint_device.h>
+
+class QGLFramebufferObject;
+class QString;
 
 
 class KisGlslWidget : public QGLWidget
 {
+    Q_OBJECT
+            
     public:
-        KisGlslWidget(QWidget *parent = 0);
+        KisGlslWidget(KisPaintDeviceSP device, QWidget *parent = 0);
         ~KisGlslWidget();
         
         void paintGL();
         void resizeGL(int width, int height);
         void initializeGL();
         
-        GLuint bindTexture(const quint8* buffer, const quint32 width, 
-                           const quint32 height, GLenum target = GL_TEXTURE_2D, 
-                           GLint format = GL_RGBA);
-        
-        bool isValidGLSL() { return m_valid; };
+        bool isValidGLSL() const { return m_valid; }
         
     public slots:
-        void fragmentShaderSlot(const QString& shader);
-        void vertexShaderSlot(const QString& shader);
+       // void slotFragmentShader(const QString& shader);
+       // void slotVertexShader(const QString& shader);
      
     private:
-        GLuint fragshader, vertexshader, fragprogram, vertexprogram;
-        QGLFramebufferObject framebuffer;
+        GLuint m_texture, m_fragshader, m_vertexshader, m_program;
+        QGLFramebufferObject *m_framebuffer;
         bool m_valid;
-}       
+        KisPaintDeviceSP m_device;
+        QRect m_bounds;
+};       
 
 #endif

@@ -65,6 +65,7 @@ public:
         CurrentKritaLayer,
         CurrentComplexColor,
         CurrentDisplayProfile
+        CurrentImage
     };
 
 
@@ -95,6 +96,8 @@ public:
 
     KoColorProfile * currentDisplayProfile() const;
 
+    KisImageSP currentImage() const;
+
 public slots:
 
     void slotSetFGColor(const KoColor& c);
@@ -104,7 +107,6 @@ public slots:
     void slotGradientActivated(KoResource *gradient);
     void slotPaintopActivated(const KoID & paintop, const KisPaintOpSettings *paintopSettings);
     void slotLayerActivated( const KisLayerSP layer );
-
     /**
      * Set the image size in pixels. The resource provider will store
      * the image size in postscript points.

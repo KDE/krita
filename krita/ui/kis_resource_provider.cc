@@ -162,6 +162,11 @@ KoColorProfile * KisResourceProvider::currentDisplayProfile() const
 
 }
 
+KisImageSP KisResourceProvider::currentImage() const
+{
+    return m_view->image();
+}
+
 void KisResourceProvider::slotBrushActivated(KoResource *res)
 {
 
@@ -261,6 +266,7 @@ void KisResourceProvider::slotSetImageSize( qint32 w, qint32 h )
 void KisResourceProvider::slotSetDisplayProfile( KoColorProfile * profile )
 {
     m_displayProfile = profile;
+    emit sigDisplayProfileChanged( profile );
 }
 
 void KisResourceProvider::slotResourceChanged( int key, const QVariant & res )

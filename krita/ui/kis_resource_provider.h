@@ -110,7 +110,7 @@ public slots:
      * the image size in postscript points.
      */
     void slotSetImageSize( qint32 w, qint32 h );
-//    void slotSetDisplayProfile( KoColorProfile * profile );
+    void slotSetDisplayProfile( KoColorProfile * profile );
 
 private slots:
 
@@ -134,6 +134,7 @@ private:
     KoCanvasResourceProvider * m_resourceProvider;
     KisBrush * m_defaultBrush;
     KisComplexColor *m_defaultComplex;
+    KoColorProfile * m_displayProfile;
 
 };
 

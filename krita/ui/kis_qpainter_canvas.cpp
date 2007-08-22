@@ -384,7 +384,7 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
     }
     else {
 
-        // Pixel-for-pixel mode
+        // Don't scale if not necessary;
         if ( scaleX == 1.0 && scaleY == 1.0 ) {
             gc.drawImage( rc.topLeft(), canvasImage.copy( drawRect ) );
         }
@@ -392,11 +392,11 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
             QSize sz = QSize( ( int )( alignedRect.width() * scaleX ), ( int )( alignedRect.height() * scaleY ));
             QImage croppedImage = canvasImage.copy( alignedRect );
 
-            if ( scaleX > 1.0 && scaleY > 1.0 ) {
+            if ( sx >= 1.0 && sy >= 1.0 ) {
                 QTime t;
                 t.start();
                 QImage img2 = croppedImage.scaled( sz, Qt::KeepAspectRatio, Qt::FastTransformation );
-                kDebug() << "QImage fast scaling " << t.elapsed();
+                kDebug(41010) << "QImage fast scaling " << t.elapsed();
                 gc.drawImage( rc.topLeft(), img2 );
             }
             else {

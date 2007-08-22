@@ -25,7 +25,7 @@
 #include <QSize>
 #include <QPainter>
 
-#include <blitz.h>
+#include <blitz/blitz.h>
 
 #include <KoColorProfile.h>
 #include <KoViewConverter.h>

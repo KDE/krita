@@ -4,9 +4,9 @@ add_subdirectory( tools )
 add_subdirectory( viewplugins )
 
 find_package(GLPK)
-
-if(GLPK_FOUND)
+set(REQUIRED_LCMS_VERSION 419)
+if(GLPK_FOUND AND NOT GPLK_VERSION LESS ${REQUIRED_LCMS_VERSION})
     add_subdirectory( painterlyframework )
-else(GLPK_FOUND)
+else(GLPK_FOUND AND NOT GPLK_VERSION LESS ${REQUIRED_LCMS_VERSION})
     message(STATUS "Could not find the GLPK library. The painterly mixer plugin will not be built.")
-endif(GLPK_FOUND)
+endif(GLPK_FOUND AND NOT GPLK_VERSION LESS ${REQUIRED_LCMS_VERSION})

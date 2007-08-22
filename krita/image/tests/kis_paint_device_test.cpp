@@ -739,6 +739,14 @@ void KisPaintDeviceTest::testPlanarReadWrite()
 
     QCOMPARE( ( int )planes.size(), ( int )dev->channelCount() );
 
+    for (int i = 0; i < 100*100; i++) {
+        // BGRA encoded
+        QVERIFY(planes.at(2)[i] == 255);
+        QVERIFY(planes.at(1)[i] == 200);
+        QVERIFY(planes.at(0)[i] == 155);
+        QVERIFY(planes.at(3)[i] == 100);
+    }
+
     for ( uint i = 1; i < dev->channelCount() + 1; ++i ) {
         swappedPlanes.append( planes[dev->channelCount() - i] );
     }
@@ -754,6 +762,12 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     QVERIFY( c1.blue() == 100);
     QVERIFY( opacity1 == 155 );
 
+    dev->pixel( 75, 50, &c1, &opacity1 );
+
+    QVERIFY( c1.red() == 200 );
+    QVERIFY( c1.green() == 255 );
+    QVERIFY( c1.blue() == 100);
+    QVERIFY( opacity1 == 155 );
 }
 
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)

@@ -273,7 +273,11 @@ KisSelectionComponent* KisSelection::shapeSelection()
 KisPixelSelectionSP KisSelection::getOrCreatePixelSelection()
 {
     if ( !m_hasPixelSelection ) {
-        KisPixelSelectionSP pixelSelection = new KisPixelSelection(m_parentPaintDevice);
+        KisPixelSelectionSP pixelSelection;
+        if(m_parentPaintDevice)
+            pixelSelection = new KisPixelSelection(m_parentPaintDevice);
+        else
+            pixelSelection = new KisPixelSelection();
         setPixelSelection( pixelSelection );
     }
 

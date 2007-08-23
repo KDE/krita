@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritawetplugin" version="1">
-<MenuBar>
-<Menu name="View"><text>&amp;View</text>
-	<Action name="wetnessvisualisation"/>
-</Menu>
-</MenuBar>
-</kpartgui>

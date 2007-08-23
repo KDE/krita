@@ -23,6 +23,7 @@
 
 #include <QFrame>
 #include <QImage>
+#include <QUndoCommand>
 #include <KoCanvasBase.h>
 
 #include "kis_paint_device.h"
@@ -45,30 +46,30 @@ public:
     ~MixerCanvas();
 
     void setResources(KoCanvasResourceProvider *rp);
-	void setLayer(KoColorSpace *cs);
+    void setLayer(KoColorSpace *cs);
 
-	KisPaintLayer *layer()
-		{
-			return m_layer.data();
-		}
+    KisPaintLayer *layer()
+        {
+            return m_layer.data();
+        }
     KisPaintDevice *device()
-		{
-			return m_layer->paintDevice().data();
-		}
+        {
+            return m_layer->paintDevice().data();
+        }
     KisPainterlyOverlay *overlay()
-		{
-			return m_layer->painterlyOverlay().data();
-		}
+        {
+            return m_layer->paintDevice()->painterlyOverlay().data();
+        }
 
     void setToolProxy(KoToolProxy *proxy)
-		{
-			m_toolProxy = proxy;
-		}
+        {
+            m_toolProxy = proxy;
+        }
 
     KoToolProxy* toolProxy()
-		{
-			return m_toolProxy;
-		}
+        {
+            return m_toolProxy;
+        }
 
 // Events to be redirected to the MixerTool
 protected:
@@ -78,7 +79,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void tabletEvent(QTabletEvent *event);
 // QFrame events
-	void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event);
     void paintEvent(QPaintEvent *event);
 
 // Implement KoCanvasBase
@@ -86,29 +87,29 @@ public:
     // These methods are not needed.
     void gridSize(double *, double *) const {Q_ASSERT(false);}
     bool snapToGrid() const {Q_ASSERT(false); return false;}
-    void addCommand(QUndoCommand *) {}
+    void addCommand(QUndoCommand *command) {delete command;}
     KoShapeManager *shapeManager() const {Q_ASSERT(false); return 0;}
     KoToolProxy * toolProxy() const {Q_ASSERT(false); return m_toolProxy;}
     const KoViewConverter *viewConverter() const {Q_ASSERT(false); return 0;}
     KoUnit unit() const {Q_ASSERT(false); return KoUnit();}
     void updateInputMethodInfo() {Q_ASSERT(false);}
-	void updateCanvas(const QRectF&) {}
+    void updateCanvas(const QRectF&) {}
 
     QWidget* canvasWidget()
-		{
-			return this;
-		}
+        {
+            return this;
+        }
 
     void updateCanvas(const QRegion& region);
 
 public slots:
-	void slotClear();
-	void slotResourceChanged(int key, const QVariant &value);
+    void slotClear();
+    void slotResourceChanged(int key, const QVariant &value);
 
 private:
-	void initPaintopSettings();
-	void checkCurrentPaintop();
-	void checkCurrentLayer();
+    void initPaintopSettings();
+    void checkCurrentPaintop();
+    void checkCurrentLayer();
 
 private:
     bool m_tabletPressed;
@@ -116,8 +117,8 @@ private:
 
     KisPaintLayerSP m_layer;
 
-	bool m_dirty;
-	QImage m_image;
+    bool m_dirty;
+    QImage m_image;
 
 };
 

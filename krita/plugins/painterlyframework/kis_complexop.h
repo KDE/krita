@@ -44,22 +44,22 @@ class KisComplexOp : public KisPaintOp {
 
     typedef KisPaintOp super;
 
-	public:
+    public:
 
-		KisComplexOp(KisPainter *painter);
-		virtual ~KisComplexOp();
+        KisComplexOp(KisPainter *painter);
+        virtual ~KisComplexOp();
 
-		void paintAt(const KisPaintInformation& info);
-		bool painterly() const {return true;}
+        void paintAt(const KisPaintInformation& info);
+        bool painterly() const {return true;}
 
-	private:
+    private:
 
-		void mixChannels(QVector<float> &mixed, const QVector<float> &val1, float vol1, const QVector<float> &val2, float vol2);
-		void mixProperty(PropertyCell *mixed, const PropertyCell *cell1, float vol1, const PropertyCell *cell2, float vol2);
-		void computePaintTransferAmount(PropertyCell *brush,
-										PropertyCell *canvas,
-										float pressure, float velocity,
-										float &volume_bc, float &volume_cb);
+        void mixChannels(QVector<float> &mixed, const QVector<float> &val1, float vol1, const QVector<float> &val2, float vol2);
+        void mixProperty(PropertyCell *mixed, const PropertyCell *cell1, float vol1, const PropertyCell *cell2, float vol2);
+        void computePaintTransferAmount(PropertyCell *brush,
+                                        PropertyCell *canvas,
+                                        float pressure, float velocity,
+                                        float &volume_bc, float &volume_cb);
 
 };
 

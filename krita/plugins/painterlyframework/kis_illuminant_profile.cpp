@@ -30,81 +30,81 @@
 
 KisIlluminantProfile::KisIlluminantProfile(QString fileName) : KoColorProfile(fileName)
 {
-	m_matrix = m_fromD50 = m_toD50 = 0;
-	if (!fileName.isEmpty())
-		load();
+    m_matrix = m_fromD50 = m_toD50 = 0;
+    if (!fileName.isEmpty())
+        load();
 }
 
 KisIlluminantProfile::~KisIlluminantProfile()
 {
-	if (m_matrix) {
-		for (int i = 0; i < 3; i++) {
-			delete [] m_matrix[i];
-			delete [] m_fromD50[i];
-			delete [] m_toD50[i];
-		}
-		delete [] m_matrix;
-		delete [] m_fromD50;
-		delete [] m_toD50;
-	}
+    if (m_matrix) {
+        for (int i = 0; i < 3; i++) {
+            delete [] m_matrix[i];
+            delete [] m_fromD50[i];
+            delete [] m_toD50[i];
+        }
+        delete [] m_matrix;
+        delete [] m_fromD50;
+        delete [] m_toD50;
+    }
 }
 
 bool KisIlluminantProfile::load()
 {
-	QFile f_ill(fileName());
-	QString curr;
+    QFile f_ill(fileName());
+    QString curr;
 
-	if (f_ill.open(QFile::ReadOnly)) {
-		QTextStream in_ill(&f_ill);
+    if (f_ill.open(QFile::ReadOnly)) {
+        QTextStream in_ill(&f_ill);
 
-		curr = in_ill.readLine();
-		setName(curr);
+        curr = in_ill.readLine();
+        setName(curr);
 
-		m_matrix = new double*[3];
-		for (int i = 0; i < 3; i++) {
-			m_matrix[i] = new double[WLS_NUMBER];
-			for (int j = 0; j < WLS_NUMBER; j++) {
-				in_ill >> curr;
-				m_matrix[i][j] = curr.toFloat();
-			}
-		}
+        m_matrix = new double*[3];
+        for (int i = 0; i < 3; i++) {
+            m_matrix[i] = new double[WLS_NUMBER];
+            for (int j = 0; j < WLS_NUMBER; j++) {
+                in_ill >> curr;
+                m_matrix[i][j] = curr.toFloat();
+            }
+        }
 
-		m_fromD50 = new double*[3];
-		for (int i = 0; i < 3; i++) {
-			m_fromD50[i] = new double[3];
-			for (int j = 0; j < 3; j++) {
-				in_ill >> curr;
-				m_fromD50[i][j] = curr.toFloat();
-			}
-		}
+        m_fromD50 = new double*[3];
+        for (int i = 0; i < 3; i++) {
+            m_fromD50[i] = new double[3];
+            for (int j = 0; j < 3; j++) {
+                in_ill >> curr;
+                m_fromD50[i][j] = curr.toFloat();
+            }
+        }
 
-		m_toD50 = new double*[3];
-		for (int i = 0; i < 3; i++) {
-			m_toD50[i] = new double[3];
-			for (int j = 0; j < 3; j++) {
-				in_ill >> curr;
-				m_toD50[i][j] = curr.toFloat();
-			}
-		}
+        m_toD50 = new double*[3];
+        for (int i = 0; i < 3; i++) {
+            m_toD50[i] = new double[3];
+            for (int j = 0; j < 3; j++) {
+                in_ill >> curr;
+                m_toD50[i][j] = curr.toFloat();
+            }
+        }
 
-	} else {
-		kWarning() <<"No files found!";
-		return false;
-	}
+    } else {
+        kWarning() <<"No files found!";
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 bool KisIlluminantProfile::save(QString /*fileName*/)
 {
-	// TODO Reimplement save()
-	return false;
+    // TODO Reimplement save()
+    return false;
 }
 
 bool KisIlluminantProfile::valid() const
 {
-	if (m_matrix)
-		return true;
-	else
-		return false;
+    if (m_matrix)
+        return true;
+    else
+        return false;
 }

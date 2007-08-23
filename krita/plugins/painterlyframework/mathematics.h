@@ -24,8 +24,6 @@
 
 namespace maths {
 
-KRITAPAINTERLYCOMMON_EXPORT double MATH_SUB_BLACK(double R);
-
 KRITAPAINTERLYCOMMON_EXPORT double coth(double z);
 
 KRITAPAINTERLYCOMMON_EXPORT double acoth(double z);

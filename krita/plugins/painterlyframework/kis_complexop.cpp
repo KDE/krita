@@ -50,216 +50,247 @@ KisComplexOp::~KisComplexOp()
 
 void KisComplexOp::paintAt(const KisPaintInformation& info)
 {
-	if (!painter()->brush())
-		return;
+    KisPaintInformation adjustedInfo(info);
+    float pressure = maths::sigmoid(info.pressure);
 
-	if (!painter()->sourceLayer())
-		return;
+    adjustedInfo.pressure = pressure;
 
-	KisPaintLayerSP layer = dynamic_cast<KisPaintLayer *>(painter()->sourceLayer());
+    if (!painter()->device())
+        return;
 
-	if (!layer)
-		return;
+    if (!painter()->brush())
+        return;
 
-	if (!layer->painterlyOverlay())
-		layer->createPainterlyOverlay();
+    KisBrush *brush = painter()->brush();
 
-	KoColorSpace *cs = layer->paintDevice()->colorSpace();
-	KisPaintLayerSP buffer = new KisPaintLayer(0, "Temporary Buffer", 255, cs);
-	buffer->createPainterlyOverlay();
+    if (!painter()->device()->painterlyOverlay())
+        return;
 
-	float pressure = maths::sigmoid(info.pressure);
+    KisPaintDeviceSP canvas = painter()->device();
+    KoColorSpace *cs = canvas->colorSpace();
 
-	{
-		KisBrush *brush = painter()->brush();
-		KisPaintDeviceSP dab;
+    if (!cs)
+        return;
 
-		if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-			dab = brush->image(cs, info, 0, 0);
-		} else {
-			KisQImagemaskSP mask = brush->mask(info, 0, 0);
-			dab = computeDab(mask);
-		}
+    KisPaintDeviceSP buffer = new KisPaintDevice(cs);
+    buffer->createPainterlyOverlay();
 
-		{
-			KisPainter p(buffer->paintDevice());
-			p.bitBlt(QPoint(0,0), dab, dab->exactBounds());
-			p.end();
-		}
-	}
+    QPointF hotSpot = brush->hotSpot(adjustedInfo);
+    QPointF pt = info.pos - hotSpot;
 
-	QSize sz = buffer->paintDevice()->exactBounds().size();
+    qint32 x;
+    double xFraction;
+    qint32 y;
+    double yFraction;
 
-	if (!painter()->complexColor())
-		return;
+    splitCoordinate(pt.x(), &x, &xFraction);
+    splitCoordinate(pt.y(), &y, &yFraction);
 
-	KisComplexColor *brush = painter()->complexColor();
-	brush->setSize(sz);
+    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
 
-	QRect rc(QPoint( (int)info.pos.x() + brush->left(),
-			         (int)info.pos.y() + brush->top() ), sz);
+    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
+        dab = brush->image(cs, adjustedInfo, xFraction, yFraction);
+    } else {
+        KisQImagemaskSP mask = brush->mask(adjustedInfo, xFraction, yFraction);
+        dab = computeDab(mask);
+        dab->convertTo(cs);
+    }
+    {
+        KisPainter p(buffer->paintDevice());
+        p.bitBlt(dab->exactBounds().topLeft(), dab, dab->exactBounds());
+        p.end();
+    }
 
-	int channels = cs->channelCount();
+    painter()->setPressure(pressure);
 
-	KisHLineIteratorPixel bufferIt = buffer->paintDevice()->createHLineIterator(0,0,sz.width());
-	KisHLineIteratorPixel buOverIt = buffer->painterlyOverlay()->createHLineIterator(0,0,sz.width());
-	KisHLineIteratorPixel canvasIt = layer->paintDevice()->createHLineIterator(rc.x(),rc.y(),sz.width());
-	KisHLineIteratorPixel caOverIt = layer->painterlyOverlay()->createHLineIterator(rc.x(),rc.y(),sz.width());
+    QSize sz(brush->maskWidth(adjustedInfo),
+             brush->maskHeight(adjustedInfo));
 
-	QVector<float> bufferColor(channels), brushColor(channels), canvasColor(channels);
-	PropertyCell *bufferCell, *brushCell, *canvasCell;
+    QRect dstRect(x, y, sz.width(), sz.height());
 
-	if (brush->colorSpace()->id() != cs->id())
-		brush->convertTo(cs);
+    if ( painter()->bounds().isValid() ) {
+        dstRect &= painter()->bounds();
+    }
 
-	for (int y = brush->top(); y < brush->bottom(); y++) {
-		for (int x = brush->left(); x < brush->right(); x++) {
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid())
+        return;
 
-			if (cs->alpha(bufferIt.rawData())) { // If alpha != 0
+    if (!painter()->complexColor())
+        return;
 
-				cs->normalisedChannelsValue(bufferIt.rawData(), bufferColor);		// bufferColor
-				bufferCell = reinterpret_cast<PropertyCell *>(buOverIt.rawData());	// bufferCell
+    KisComplexColor *complex = painter()->complexColor();
+    complex->setSize(sz);
 
-				cs->normalisedChannelsValue(brush->rawData(x,y), brushColor);		// brushColor
-				brushCell = brush->property(x,y);									// brushCell
+    qint32 sx = dstRect.x() - x;
+    qint32 sy = dstRect.y() - y;
+    qint32 sw = dstRect.width();
+    qint32 sh = dstRect.height();
 
-				cs->normalisedChannelsValue(canvasIt.rawData(), canvasColor);		// canvasColor
-				canvasCell = reinterpret_cast<PropertyCell *>(caOverIt.rawData());	// canvasCell
+    int channels = cs->channelCount();
 
-				float alpha = bufferColor[channels-1] >= canvasColor[channels-1] ?
-						bufferColor[channels-1] : canvasColor[channels-1];
+    KisHLineIteratorPixel bufferIt = buffer->createHLineIterator(0,0,sz.width());
+    KisHLineIteratorPixel buOverIt = buffer->painterlyOverlay()->createHLineIterator(0,0,sz.width());
+    KisHLineIteratorPixel canvasIt = canvas->createHLineIterator(x,y,sz.width());
+    KisHLineIteratorPixel caOverIt = canvas->painterlyOverlay()->createHLineIterator(x,y,sz.width());
+
+    QVector<float> bufferColor(channels), brushColor(channels), canvasColor(channels);
+    PropertyCell *bufferCell, *brushCell, *canvasCell;
+
+    if (complex->colorSpace()->id() != cs->id())
+        complex->convertTo(cs);
+
+    for (int y = complex->top(); y < complex->bottom(); y++) {
+        for (int x = complex->left(); x < complex->right(); x++) {
+
+            if (cs->alpha(bufferIt.rawData())) { // If alpha != 0
+
+                cs->normalisedChannelsValue(bufferIt.rawData(), bufferColor);        // bufferColor
+                bufferCell = reinterpret_cast<PropertyCell *>(buOverIt.rawData());    // bufferCell
+
+                cs->normalisedChannelsValue(complex->rawData(x,y), brushColor);        // brushColor
+                brushCell = complex->property(x,y);                                    // brushCell
+
+                cs->normalisedChannelsValue(canvasIt.rawData(), canvasColor);        // canvasColor
+                canvasCell = reinterpret_cast<PropertyCell *>(caOverIt.rawData());    // canvasCell
+
+                float alpha = bufferColor[channels-1] >= canvasColor[channels-1] ?
+                        bufferColor[channels-1] : canvasColor[channels-1];
 /*
-				float volume_bc, volume_cb;
-				computePaintTransferAmount(brushCell, canvasCell, pressure, 0.6, volume_bc, volume_cb);
+                float volume_bc, volume_cb;
+                computePaintTransferAmount(brushCell, canvasCell, pressure, 0.6, volume_bc, volume_cb);
 
-				if (volume_bc) { // Paint transfer is from brush to canvas
-					// The result of the mixing goes in the buffer.
-					mixChannels(bufferColor, canvasColor, canvasCell->volume, brushColor, volume_bc);
-					mixProperty(bufferCell, canvasCell, canvasCell->volume, brushCell, volume_bc);
+                if (volume_bc) { // Paint transfer is from complex to canvas
+                    // The result of the mixing goes in the buffer.
+                    mixChannels(bufferColor, canvasColor, canvasCell->volume, brushColor, volume_bc);
+                    mixProperty(bufferCell, canvasCell, canvasCell->volume, brushCell, volume_bc);
 
-					bufferCell->volume += volume_bc;
-					brushCell->volume -= volume_bc;
-				}
-				if (volume_cb) {
-					// The result of the mixing goes in the brush; the buffer gets the color of the canvas!
-					bufferColor = canvasColor;
-					*bufferCell = *canvasCell;
+                    bufferCell->volume += volume_bc;
+                    brushCell->volume -= volume_bc;
+                }
+                if (volume_cb) {
+                    // The result of the mixing goes in the complex; the buffer gets the color of the canvas!
+                    bufferColor = canvasColor;
+                    *bufferCell = *canvasCell;
 
-					mixChannels(brushColor, canvasColor, volume_cb, brushColor, brushCell->volume);
-					mixProperty(brushCell, canvasCell, volume_cb, brushCell, brushCell->volume);
+                    mixChannels(brushColor, canvasColor, volume_cb, brushColor, brushCell->volume);
+                    mixProperty(brushCell, canvasCell, volume_cb, brushCell, brushCell->volume);
 
-					bufferCell->volume -= volume_cb;
-					brushCell->volume += volume_cb;
-				}
+                    bufferCell->volume -= volume_cb;
+                    brushCell->volume += volume_cb;
+                }
 */
+//                 if (cs->alpha(canvasIt.rawData()) && canvasCell->volume)
+                    mixChannels(bufferColor, canvasColor, pressure*canvasCell->volume, brushColor, pressure*brushCell->volume);
+//                 else
+//                     bufferColor = brushColor;
+//                 if (canvasCell->volume)
+                    mixProperty(bufferCell, canvasCell, pressure*canvasCell->volume, brushCell, pressure*brushCell->volume);
+//                 else
+//                     *bufferCell = *canvasCell;
 
-				mixChannels(bufferColor, canvasColor, pressure*canvasCell->volume, brushColor, pressure*brushCell->volume);
-				mixProperty(bufferCell, canvasCell, pressure*canvasCell->volume, brushCell, pressure*brushCell->volume);
+                bufferColor[channels-1] = alpha;
 
-				bufferColor[channels-1] = alpha;
+                if (bufferCell->volume < 0)
+                    bufferCell->volume = 0;
+//                 if (brushCell->volume < 0)
+//                     brushCell->volume = 0;
+                if (bufferCell->volume > 1000.0)
+                    bufferCell->volume = 1000.0;
+//                 if (brushCell->volume > 1000.0)
+//                     brushCell->volume = 1000.0;
 
-				if (bufferCell->volume < 0)
-					bufferCell->volume = 0;
-// 				if (brushCell->volume < 0)
-// 					brushCell->volume = 0;
-				if (bufferCell->volume > 1000.0)
-					bufferCell->volume = 1000.0;
-// 				if (brushCell->volume > 1000.0)
-// 					brushCell->volume = 1000.0;
+                cs->fromNormalisedChannelsValue(bufferIt.rawData(), bufferColor);
+                cs->fromNormalisedChannelsValue(complex->rawData(x,y), bufferColor);
+                *brushCell = *bufferCell;
+            }
 
-				cs->fromNormalisedChannelsValue(bufferIt.rawData(), bufferColor);
-				cs->fromNormalisedChannelsValue(brush->rawData(x,y), bufferColor);
-				*brushCell = *bufferCell;
-			}
+            ++bufferIt; ++canvasIt;
+            ++buOverIt; ++caOverIt;
+        }
 
-			++bufferIt; ++canvasIt;
-			++buOverIt; ++caOverIt;
-		}
-
-		bufferIt.nextRow();
-		canvasIt.nextRow();
-		buOverIt.nextRow();
-		caOverIt.nextRow();
-	}
-	painter()->setPressure(pressure);
+        bufferIt.nextRow();
+        canvasIt.nextRow();
+        buOverIt.nextRow();
+        caOverIt.nextRow();
+    }
 
     if (source()->hasSelection()) {
-        painter()->bltSelection(rc.x(), rc.y(), painter()->compositeOp(), buffer->paintDevice(),
-                                source()->selection(), painter()->opacity(), 0, 0, sz.width(), sz.height());
+        painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), buffer,
+                                source()->selection(), painter()->opacity(), sx, sy, sw, sh);
     }
     else {
-        painter()->bitBlt(rc.x(), rc.y(), painter()->compositeOp(), buffer->paintDevice(), painter()->opacity(), 0, 0, sz.width(), sz.height());
+        painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), buffer, painter()->opacity(), sx, sy, sw, sh);
     }
 
-	KisPainter over(layer->painterlyOverlay());
-	over.bitBlt(rc.topLeft(), buffer->painterlyOverlay(), QRect(QPoint(0,0),sz));
-	over.end();
+    KisPainter over(canvas->painterlyOverlay());
+    over.bitBlt(dstRect.topLeft(), buffer->painterlyOverlay(), QRect(sx, sy, sw, sh));
+    over.end();
 
-	brush->setDefaultColor(brush->simpleColor());
+    complex->setDefaultColor(complex->simpleColor());
 }
 
 void KisComplexOp::mixChannels(QVector<float> &mixed, const QVector<float> &val1, float vol1, const QVector<float> &val2, float vol2)
 {
-	Q_ASSERT(mixed.count() == val1.count() && val1.count() == val2.count());
-	Q_ASSERT(vol1 >= 0 && vol2 >= 0);
+    Q_ASSERT(mixed.count() == val1.count() && val1.count() == val2.count());
+    Q_ASSERT(vol1 >= 0 && vol2 >= 0);
 
-	for (int i = 0; i < mixed.count(); i++)
-		mixed[i] = ( vol1 * val1[i] + vol2 * val2[i] ) / ( vol1 + vol2 );
+    for (int i = 0; i < mixed.count(); i++)
+        mixed[i] = ( vol1 * val1[i] + vol2 * val2[i] ) / ( vol1 + vol2 );
 }
 
 void KisComplexOp::mixProperty(PropertyCell *mixed, const PropertyCell *cell1, float vol1, const PropertyCell *cell2, float vol2)
 {
-	KoColorSpace *overlaycs = KisPainterlyOverlayColorSpace::instance();
+    KoColorSpace *overlaycs = KisPainterlyOverlayColorSpace::instance();
 
-	QVector<float> vCell1(overlaycs->channelCount());
-	QVector<float> vCell2(overlaycs->channelCount());
-	QVector<float> vMixed(overlaycs->channelCount());
+    QVector<float> vCell1(overlaycs->channelCount());
+    QVector<float> vCell2(overlaycs->channelCount());
+    QVector<float> vMixed(overlaycs->channelCount());
 
-	overlaycs->normalisedChannelsValue(reinterpret_cast<const quint8 *>(cell1), vCell1);
-	overlaycs->normalisedChannelsValue(reinterpret_cast<const quint8 *>(cell2), vCell2);
-	overlaycs->normalisedChannelsValue(reinterpret_cast<quint8 *>(mixed), vMixed);
+    overlaycs->normalisedChannelsValue(reinterpret_cast<const quint8 *>(cell1), vCell1);
+    overlaycs->normalisedChannelsValue(reinterpret_cast<const quint8 *>(cell2), vCell2);
+    overlaycs->normalisedChannelsValue(reinterpret_cast<quint8 *>(mixed), vMixed);
 
-	mixChannels(vMixed, vCell1, vol1, vCell2, vol2);
+    mixChannels(vMixed, vCell1, vol1, vCell2, vol2);
 
-	overlaycs->fromNormalisedChannelsValue(reinterpret_cast<quint8 *>(mixed), vMixed);
+    overlaycs->fromNormalisedChannelsValue(reinterpret_cast<quint8 *>(mixed), vMixed);
 }
 
-void KisComplexOp::computePaintTransferAmount(PropertyCell *brush,
-												PropertyCell *canvas,
-												float pressure, float velocity,
-												float &volume_bc, float &volume_cb)
+void KisComplexOp::computePaintTransferAmount(PropertyCell *complex,
+                                                PropertyCell *canvas,
+                                                float pressure, float velocity,
+                                                float &volume_bc, float &volume_cb)
 {
-	float ac = pressure * canvas->volume;
-	float ab = pressure * brush->volume;
-	float v = velocity;
+    float ac = pressure * canvas->volume;
+    float ab = pressure * complex->volume;
+    float v = velocity;
 
-	float amt;
+    float amt;
 
-	const float XFER_FRACTION = 0.1;
-	const float MAX_XFER_QUANTITY = 1.0;
-	const float EQUAL_PAINT_CUTOFF = 1.0/60.0;
+    const float XFER_FRACTION = 0.1;
+    const float MAX_XFER_QUANTITY = 1.0;
+    const float EQUAL_PAINT_CUTOFF = 1.0/60.0;
 
-	float paintDiff = ab - ac;
-// 	float equalPaintCutoff = maths::clamp(0, 1, fabs(paintDiff)/EQUAL_PAINT_CUTOFF);
-// 	float velocityCutoff = maths::smoothstep(0.2, 0.3, v);
-	int xferDir = maths::sign(paintDiff);
+    float paintDiff = ab - ac;
+    float equalPaintCutoff = maths::clamp(0, 1, fabs(paintDiff)/EQUAL_PAINT_CUTOFF);
+    float velocityCutoff = maths::smoothstep(0.2, 0.3, v);
+    int xferDir = maths::sign(paintDiff);
 
-	if (xferDir > 0)
-		amt = ab;
-	else
-		amt = ac;
+    if (xferDir > 0)
+        amt = ab;
+    else
+        amt = ac;
 
-	amt = amt * XFER_FRACTION;
-// 	amt = amt * equalPaintCutoff * velocityCutoff;
-// 	amt = maths::clamp(0, MAX_XFER_QUANTITY, amt);
+    amt = amt * XFER_FRACTION;
+    amt = amt * equalPaintCutoff * velocityCutoff;
+    amt = maths::clamp(0, MAX_XFER_QUANTITY, amt);
 
-	if (xferDir > 0) {
-		volume_bc = amt;
-		volume_cb = 0;
-	} else {
-		volume_bc = 0;
-		volume_cb = amt;
-	}
+    if (xferDir > 0) {
+        volume_bc = amt;
+        volume_cb = 0;
+    } else {
+        volume_bc = 0;
+        volume_cb = amt;
+    }
 }
 
 

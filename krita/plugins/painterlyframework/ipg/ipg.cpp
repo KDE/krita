@@ -129,7 +129,7 @@ class c {
 		const mpf_class W_func(int i)
 		{
 			if (i >= 0 && i <= 470)
-				return H(i)*F(i);
+				return mpf_class(1.0); //H(i)*F(i);
 		}
 } C;
 
@@ -497,7 +497,7 @@ bool computeMatrix()
 
 	for (int i = 0; i < NUM; i++) {
 		int X = C.X(i).get_ui();
-		Hy_integral += C.W(i)*C.y(X)/C.F(X);
+		Hy_integral += C.W(i)*C.H(X)*C.y(X);
 	}
 
 	Hy_integral *= 470.0/2.0;
@@ -507,15 +507,15 @@ bool computeMatrix()
 
 	for (int j = 0; j < NUM; j++) {
 		int X = C.X(j).get_ui();
-		C.matrix(0,j) = k*(470.0/2.0)*C.W(j)*C.x(X)/C.F(X);
+		C.matrix(0,j) = k*(470.0/2.0)*C.W(j)*C.H(X)*C.x(X);
 	}
 	for (int j = 0; j < NUM; j++) {
 		int X = C.X(j).get_ui();
-		C.matrix(1,j) = k*(470.0/2.0)*C.W(j)*C.y(X)/C.F(X);
+		C.matrix(1,j) = k*(470.0/2.0)*C.W(j)*C.H(X)*C.y(X);
 	}
 	for (int j = 0; j < NUM; j++) {
 		int X = C.X(j).get_ui();
-		C.matrix(2,j) = k*(470.0/2.0)*C.W(j)*C.z(X)/C.F(X);
+		C.matrix(2,j) = k*(470.0/2.0)*C.W(j)*C.H(X)*C.z(X);
 	}
 /*
 	cout.precision(DBL_PREC);

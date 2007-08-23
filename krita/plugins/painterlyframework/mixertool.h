@@ -42,14 +42,14 @@ public:
     ~MixerTool();
 
 public:
-	void setDirty(const QRegion& region);
+    void setDirty(const QRegion& region);
 
 protected:
-	void initPaint(KoPointerEvent *e);
-	void endPaint();
+    void initPaint(KoPointerEvent *e);
+    void endPaint();
 
-	MixerCanvas *m_mixer;
-	KisResourceProvider *m_resources;
+    MixerCanvas *m_mixer;
+    KisResourceProvider *m_resources;
 };
 
 

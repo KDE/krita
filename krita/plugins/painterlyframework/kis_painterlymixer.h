@@ -48,7 +48,7 @@ public:
 
 private:
 
-	void initCanvas();
+    void initCanvas();
     void initTool();
     void initSpots();
 
@@ -69,8 +69,8 @@ private:
 
     KisResourceProvider *m_resources;
 
-	KoColorSpace *m_colorspace;
-	KisIlluminantProfile *m_illuminant;
+    KoColorSpace *m_colorspace;
+    KisIlluminantProfile *m_illuminant;
 };
 
 #endif // KIS_PAINTERLY_MIXER_H_

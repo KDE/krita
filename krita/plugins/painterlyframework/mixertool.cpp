@@ -46,7 +46,7 @@
 MixerTool::MixerTool(MixerCanvas *mixer, KisResourceProvider *rp)
     : KisToolFreehand(mixer, QCursor(), "Mixer Wrapper Tool"), m_mixer(mixer), m_resources(rp)
 {
-	activate();
+    activate();
 }
 
 MixerTool::~MixerTool()
@@ -54,7 +54,7 @@ MixerTool::~MixerTool()
 }
 
 void MixerTool::initPaint(KoPointerEvent *e) {
-	KisToolFreehand::initPaint(e);
+    KisToolFreehand::initPaint(e);
 
     if (!m_painter)
         return;
@@ -64,20 +64,20 @@ void MixerTool::initPaint(KoPointerEvent *e) {
                                                               m_painter,
                                                               0);
 
-	if (!op)
-		return;
+    if (!op)
+        return;
 
-	m_painter->setPaintOp(op);
+    m_painter->setPaintOp(op);
 }
 
 void MixerTool::endPaint() {
-	KisToolFreehand::endPaint();
-	m_resources->setFGColor(m_resources->currentComplexColor()->simpleColor());
+    KisToolFreehand::endPaint();
+    m_resources->setFGColor(m_resources->currentComplexColor()->simpleColor());
 }
 
 void MixerTool::setDirty(const QRegion& region) {
-	KisToolFreehand::setDirty(region);
-	m_mixer->updateCanvas(region);
+    KisToolFreehand::setDirty(region);
+    m_mixer->updateCanvas(region);
 }
 
 

@@ -34,13 +34,13 @@ class KisIlluminantProfile;
 template<typename _channels_type_>
 struct KisKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 2*WLS_NUMBER+1, 2*WLS_NUMBER> {
 
-	struct Cell {
-		struct {
-			_channels_type_ absorption;
-			_channels_type_ scattering;
-		} wavelen[WLS_NUMBER];
-		_channels_type_ alpha;
-	};
+    struct Cell {
+        struct {
+            _channels_type_ absorption;
+            _channels_type_ scattering;
+        } wavelen[WLS_NUMBER];
+        _channels_type_ alpha;
+    };
 
 };
 
@@ -49,36 +49,36 @@ typedef KisKSColorSpaceTraits<float> KSTraits;
 class KRITAPAINTERLYCOMMON_EXPORT KisKSColorSpace : public KoIncompleteColorSpace<KSTraits, KoRGB16Fallback>
 {
 
-	public:
+    public:
 
-		~KisKSColorSpace();
+        ~KisKSColorSpace();
 
-		KisKSColorSpace(KoColorProfile *p);
+        KisKSColorSpace(KoColorProfile *p);
 
-// 		KisKSColorSpace(const KisKSColorSpace&);
-// 		KisKSColorSpace operator=(const KisKSColorSpace&);
+//         KisKSColorSpace(const KisKSColorSpace&);
+//         KisKSColorSpace operator=(const KisKSColorSpace&);
 
-	public:
+    public:
 
-		bool willDegrade(ColorSpaceIndependence independence) const
-		{
-			Q_UNUSED(independence)
+        bool willDegrade(ColorSpaceIndependence independence) const
+        {
+            Q_UNUSED(independence)
 
-			return true;
-		}
+            return true;
+        }
 
-		KoColorProfile *profile() const { return m_profile; }
-		bool profileIsCompatible(KoColorProfile *profile) const;
+        KoColorProfile *profile() const { return m_profile; }
+        bool profileIsCompatible(KoColorProfile *profile) const;
 
-		void fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
-		void toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
+        void fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
+        void toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
 
-	private:
+    private:
 
-		KisIlluminantProfile *m_profile;
+        KisIlluminantProfile *m_profile;
 
-		cmsHPROFILE hsRGB, hXYZ;
-		cmsHTRANSFORM XYZ_BGR, BGR_XYZ;
+        cmsHPROFILE hsRGB, hXYZ;
+        cmsHTRANSFORM XYZ_BGR, BGR_XYZ;
 };
 
 

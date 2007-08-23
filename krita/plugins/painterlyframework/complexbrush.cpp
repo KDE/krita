@@ -37,8 +37,8 @@ ComplexBrush::ComplexBrush(QObject *parent, const QStringList &)
 {
     setComponentData(ComplexBrushFactory::componentData());
 
-	KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-	r->add(KisPaintOpFactorySP(new KisComplexOpFactory));
+    KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
+    r->add(KisPaintOpFactorySP(new KisComplexOpFactory));
 }
 
 ComplexBrush::~ComplexBrush()

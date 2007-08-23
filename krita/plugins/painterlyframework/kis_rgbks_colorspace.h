@@ -30,13 +30,13 @@ class KoColorProfile;
 template<typename _channels_type_>
 struct KisRGBKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 7, 6> {
 
-	struct Cell {
-		struct {
-			_channels_type_ absorption;
-			_channels_type_ scattering;
-		} wavelen[3];
-		_channels_type_ alpha;
-	};
+    struct Cell {
+        struct {
+            _channels_type_ absorption;
+            _channels_type_ scattering;
+        } wavelen[3];
+        _channels_type_ alpha;
+    };
 
 };
 
@@ -44,31 +44,31 @@ typedef KisRGBKSColorSpaceTraits<float> RGBKSTraits;
 
 class KRITAPAINTERLYCOMMON_EXPORT KisRGBKSColorSpace : public KoIncompleteColorSpace<RGBKSTraits, KoRGB16Fallback>
 {
-	public:
+    public:
 
-		~KisRGBKSColorSpace()
-		{
-		}
+        ~KisRGBKSColorSpace()
+        {
+        }
 
-		KisRGBKSColorSpace();
+        KisRGBKSColorSpace();
 
-// 		KisRGBKSColorSpace(const KisRGBKSColorSpace&);
-// 		KisRGBKSColorSpace operator=(const KisRGBKSColorSpace&);
+//         KisRGBKSColorSpace(const KisRGBKSColorSpace&);
+//         KisRGBKSColorSpace operator=(const KisRGBKSColorSpace&);
 
-	public:
+    public:
 
-		bool willDegrade(ColorSpaceIndependence) const
-		{
-			return true;
-		}
+        bool willDegrade(ColorSpaceIndependence) const
+        {
+            return true;
+        }
 
-		bool profileIsCompatible(KoColorProfile *) const
-		{
-			return false;
-		}
+        bool profileIsCompatible(KoColorProfile *) const
+        {
+            return false;
+        }
 
-		void fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
-		void toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
+        void fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
+        void toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
 };
 
 

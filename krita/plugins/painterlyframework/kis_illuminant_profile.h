@@ -30,31 +30,31 @@ class QTextStream;
 const int WLS_NUMBER = 16;
 
 class KRITAPAINTERLYCOMMON_EXPORT KisIlluminantProfile : public KoColorProfile {
-	public:
-		KisIlluminantProfile(QString fileName = "");
-		~KisIlluminantProfile();
+    public:
+        KisIlluminantProfile(QString fileName = "");
+        ~KisIlluminantProfile();
 
-		bool load();
+        bool load();
 
-		bool save(QString fileName);
+        bool save(QString fileName);
 
-		bool valid() const;
+        bool valid() const;
 
-		bool isSuitableForOutput() const {return false;}
+        bool isSuitableForOutput() const {return false;}
 
-		bool isSuitableForPrinting() const {return false;}
+        bool isSuitableForPrinting() const {return false;}
 
-		bool isSuitableForDisplay() const {return false;}
+        bool isSuitableForDisplay() const {return false;}
 
-		double **matrix() {return m_matrix;}
-		double **fromD50() {return m_fromD50;}
-		double **toD50() {return m_toD50;}
+        double **matrix() {return m_matrix;}
+        double **fromD50() {return m_fromD50;}
+        double **toD50() {return m_toD50;}
 
-	private:
+    private:
 
-		double **m_matrix;
-		double **m_fromD50;
-		double **m_toD50;
+        double **m_matrix;
+        double **m_fromD50;
+        double **m_toD50;
 };
 
 

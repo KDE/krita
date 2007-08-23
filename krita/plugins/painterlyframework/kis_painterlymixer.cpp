@@ -66,31 +66,31 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
     QStringList illuminants;
     illuminants += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "IlluminantD50.ill");
 
-	// TODO The Illuminant has to be choosen in runtime
-	m_illuminant = new KisIlluminantProfile(illuminants[0]);
-	m_colorspace = new KisKSColorSpace(m_illuminant);
-// 	m_colorspace = new KisRGBKSColorSpace;
-	initCanvas();
-	initTool();
+    // TODO The Illuminant has to be choosen in runtime
+    m_illuminant = new KisIlluminantProfile(illuminants[0]);
+    m_colorspace = new KisKSColorSpace(m_illuminant);
+//     m_colorspace = new KisRGBKSColorSpace;
+    initCanvas();
+    initTool();
     initSpots();
 
-	m_bErase->setIcon(KIcon("edit-delete"));
-	connect(m_bErase, SIGNAL(clicked()), m_canvas, SLOT(slotClear()));
+    m_bErase->setIcon(KIcon("edit-delete"));
+    connect(m_bErase, SIGNAL(clicked()), m_canvas, SLOT(slotClear()));
 }
 
 KisPainterlyMixer::~KisPainterlyMixer()
 {
     if (m_tool)
         delete m_tool;
-	delete m_colorspace;
-	delete m_illuminant;
+    delete m_colorspace;
+    delete m_illuminant;
 }
 
 void KisPainterlyMixer::initCanvas()
 {
     m_canvas->setLayer(m_colorspace);
     m_canvas->setToolProxy(new KoToolProxy(m_canvas));
-	m_canvas->setResources(m_view->canvasBase()->resourceProvider());
+    m_canvas->setResources(m_view->canvasBase()->resourceProvider());
 }
 
 void KisPainterlyMixer::initTool()
@@ -130,7 +130,7 @@ void KisPainterlyMixer::initSpots()
 void KisPainterlyMixer::loadColors()
 {
     // TODO We need to handle save/load of user-defined colors in the spots.
-	KoColorSpace *cs = m_colorspace;
+    KoColorSpace *cs = m_colorspace;
     m_vColors.append(KoColor(QColor(0xFFFF0000), cs)); // Red
     m_vColors.append(KoColor(QColor(0xFF00FF00), cs)); // Green
     m_vColors.append(KoColor(QColor(0xFF0000FF), cs)); // Blue
@@ -143,16 +143,16 @@ void KisPainterlyMixer::loadColors()
 
 void KisPainterlyMixer::slotChangeColor(int index)
 {
-	/*
+    /*
     if (m_resources->fgColor().toQColor().rgba() == m_vColors[index].toQColor().rgba()) {
-		// TODO Increment volume
+        // TODO Increment volume
     } else {
         m_resources->setFGColor(m_vColors[index]);
         // TODO Set Complex Color
     }
-	*/
-	m_resources->setFGColor(m_vColors[index]);
-	m_resources->currentComplexColor()->fromKoColor(m_vColors[index]);
+    */
+    m_resources->setFGColor(m_vColors[index]);
+    m_resources->currentComplexColor()->fromKoColor(m_vColors[index]);
 }
 /*
 bool KisPainterlyMixer::isCurrentPaintOpPainterly()

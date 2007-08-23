@@ -5,11 +5,11 @@ add_subdirectory(tests)
 # Painterly Common Libraries
 
 set(kritapainterlycommon_PART_SRCS
-	kis_illuminant_profile.cpp
-	kis_ks_colorspace.cpp
-	kis_rgbks_colorspace.cpp
-	mathematics.cpp
-	)
+    kis_illuminant_profile.cpp
+    kis_ks_colorspace.cpp
+    kis_rgbks_colorspace.cpp
+    mathematics.cpp
+    )
 
 kde4_add_library(kritapainterlycommon SHARED ${kritapainterlycommon_PART_SRCS})
 target_link_libraries(kritapainterlycommon kritaimage glpk)
@@ -20,8 +20,8 @@ install(TARGETS kritapainterlycommon DESTINATION ${LIB_INSTALL_DIR})
 # Painterly Mixer
 
 set(kritapainterlymixer_PART_SRCS
-	colorspot.cpp
-	mixercanvas.cpp
+    colorspot.cpp
+    mixercanvas.cpp
     mixertool.cpp
     kis_painterlymixer.cpp
     kis_painterlymixerdocker.cpp

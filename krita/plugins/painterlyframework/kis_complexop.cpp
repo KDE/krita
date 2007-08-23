@@ -58,19 +58,16 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
     if (!painter()->device())
         return;
 
+    KisPaintDeviceSP canvas = painter()->device();
+    KoColorSpace *cs = canvas->colorSpace();
+
     if (!painter()->brush())
         return;
 
     KisBrush *brush = painter()->brush();
 
-    if (!painter()->device()->painterlyOverlay())
-        return;
-
-    KisPaintDeviceSP canvas = painter()->device();
-    KoColorSpace *cs = canvas->colorSpace();
-
-    if (!cs)
-        return;
+    if (!canvas->painterlyOverlay())
+        canvas->createPainterlyOverlay();
 
     KisPaintDeviceSP buffer = new KisPaintDevice(cs);
     buffer->createPainterlyOverlay();

@@ -96,7 +96,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
         dab->convertTo(cs);
     }
     {
-        KisPainter p(buffer->paintDevice());
+        KisPainter p(buffer);
         p.bitBlt(dab->exactBounds().topLeft(), dab, dab->exactBounds());
         p.end();
     }

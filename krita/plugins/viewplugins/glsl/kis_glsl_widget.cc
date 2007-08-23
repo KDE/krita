@@ -134,6 +134,7 @@ void KisGlslWidget::resizeGL(int width, int height)
 void KisGlslWidget::paintGL() 
 {
     glClear( GL_COLOR_BUFFER_BIT );
+            
     glActiveTexture(GL_TEXTURE0_ARB);
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_texture);
     

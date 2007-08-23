@@ -166,9 +166,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     bool heal = m_settings->healing();
 
-    KisPaintDeviceSP device = painter()->device();
-    if (source()) device = source();
-    if (!device) return;
+    if (!source()) return;
 
     KisBrush * brush = painter()->brush();
     if (!brush) return;
@@ -194,7 +192,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     if (brush->brushType() == IMAGE ||
         brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), info, xFraction, yFraction);
+        dab = brush->image(source()->colorSpace(), info, xFraction, yFraction);
         dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     }
     else {
@@ -217,10 +215,10 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     if( srcPoint.y() < 0)
         srcPoint.setY(0);
-    if( !(m_srcdev && m_srcdev->colorSpace() != device->colorSpace()) )
+    if( !(m_srcdev && m_srcdev->colorSpace() != source()->colorSpace()) )
     {
-        m_srcdev = new KisPaintDevice(device->colorSpace(), "duplicate source dev");
-        m_target = new KisPaintDevice(device->colorSpace(), "duplicate target dev");
+        m_srcdev = new KisPaintDevice(source()->colorSpace(), "duplicate source dev");
+        m_target = new KisPaintDevice(source()->colorSpace(), "duplicate target dev");
     }
     Q_CHECK_PTR(m_srcdev);
 
@@ -279,7 +277,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
         QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(m_settings->offset()) );
         QPointF translat = duplicateStartPoisitionT - positionStartPaintingT;
         KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh);
-        KisRandomSubAccessorPixel srcAcc = device->createRandomSubAccessor();
+        KisRandomSubAccessorPixel srcAcc = source()->createRandomSubAccessor();
         //Action
         while(!dstIt.isDone())
         {
@@ -295,7 +293,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     } else {
         // Or, copy the source data on the temporary device:
-        copyPainter.bitBlt(0, 0, COMPOSITE_COPY, device, srcPoint.x(), srcPoint.y(), sw, sh);
+        copyPainter.bitBlt(0, 0, COMPOSITE_COPY, source(), srcPoint.x(), srcPoint.y(), sw, sh);
         copyPainter.end();
     }
 
@@ -307,8 +305,8 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
         quint16 dataSrcDev[4];
         double* matrix = new double[ 3 * sw * sh ];
         // First divide
-        KoColorSpace* deviceCs = device->colorSpace();
-        KisHLineConstIteratorPixel deviceIt = device->createHLineConstIterator(x, y, sw );
+        KoColorSpace* deviceCs = source()->colorSpace();
+        KisHLineConstIteratorPixel deviceIt = source()->createHLineConstIterator(x, y, sw );
         KisHLineIteratorPixel srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
         double* matrixIt = &matrix[0];
         for(int j = 0; j < sh; j++)
@@ -343,7 +341,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
         }
 
         // Finaly multiply
-        deviceIt = device->createHLineIterator(x, y, sw);
+        deviceIt = source()->createHLineIterator(x, y, sw);
         srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
         matrixIt = &matrix[0];
         for(int j = 0; j < sh; j++)

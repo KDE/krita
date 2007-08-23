@@ -600,6 +600,12 @@ signals:
     void profileChanged(KoColorProfile *  profile);
     void colorSpaceChanged(KoColorSpace *colorspace);
 
+    /**
+     * Emitted when the default empty painterly overlay for this paint
+     * device is replaced with a real painterly overlay. Used to
+     * manage the undo system.
+     */
+    void painterlyOverlayCreated();
 private:
 
     KisPaintDevice& operator=(const KisPaintDevice&);

@@ -36,7 +36,7 @@
 #include <kis_brush.h>
 #include <kis_global.h>
 #include <KoInputDevice.h>
-#include <kis_layer.h>
+
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_paintop.h>

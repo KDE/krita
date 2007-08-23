@@ -34,11 +34,9 @@ public:
     virtual ~KisSelectedTransaction();
 
 public:
-    virtual void redo();
-    virtual void undo();
-    virtual void undoNoUpdate();
-
-public:
+    void redo();
+    void undo();
+    void undoNoUpdate();
 
 private:
     KisPaintDeviceSP m_device;

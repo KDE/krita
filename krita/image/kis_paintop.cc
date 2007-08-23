@@ -52,14 +52,12 @@ struct KisPaintOp::Private
     KoColor previousPaintColor;
     KisQImagemaskSP previousMask;
     KisPainter * painter;
-    KisPaintDeviceSP source; // use this layer as source layer for the operation
 };
 
 
 KisPaintOp::KisPaintOp( KisPainter * painter) : d(new Private)
 {
     d->painter = painter;
-    setSource(painter->device());
 }
 
 KisPaintOp::~KisPaintOp()
@@ -134,12 +132,6 @@ void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fract
     *whole = i;
     *fraction = f;
 }
-
-void KisPaintOp::setSource(KisPaintDeviceSP p) {
-    Q_ASSERT(p);
-    d->source = p;
-}
-
 
 double KisPaintOp::paintBezierCurve(const KisPaintInformation &pi1,
                                     const QPointF &control1,
@@ -283,7 +275,7 @@ KisPainter* KisPaintOp::painter()
 
 KisPaintDeviceSP KisPaintOp::source()
 {
-    return d->source;
+    return d->painter->device();
 }
 
 

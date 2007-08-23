@@ -55,7 +55,6 @@ public:
      * information..
      */
     virtual void paintAt(const KisPaintInformation& info) = 0;
-    void setSource(KisPaintDeviceSP p);
 
     /**
      * A painterly paintop must have a PainterlyInformation structure,
@@ -105,7 +104,15 @@ protected:
      * Split the coordinate into whole + fraction, where fraction is always >= 0.
      */
     virtual void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
+
+    /**
+     * Return the painter this paintop is owned by
+     */
     KisPainter* painter();
+
+    /**
+     * Return the paintdevice the painter this paintop is owned by
+     */
     KisPaintDeviceSP source();
 
 private:

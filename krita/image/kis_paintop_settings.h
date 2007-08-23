@@ -37,7 +37,7 @@ public:
     virtual ~KisPaintOpSettings() {}
 
     /**
-     * This function is called by a tool when the mouse is pressed. It's usefull if
+     * This function is called by a tool when the mouse is pressed. It's useful if
      * the paintop needs mouse interaction for instance in the case of the duplicate op.
      * If the tool is supposed to ignore the event, the paint op should call e->accept();
      * and if the tool is supposed to use the event e->ignore(); should be called.
@@ -47,7 +47,7 @@ public:
     /**
      * Call this function when the layer is changed
      */
-    virtual void setLayer(KisLayerSP layer )
+    virtual void KDE_DEPRECATED setLayer(KisLayerSP layer )
         {
             m_layer = layer;
         }

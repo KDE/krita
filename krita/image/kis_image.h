@@ -105,18 +105,22 @@ public:
       * the result is inaccurate and ugly. Set the option "fast_zoom"
       * to true to make Krita use this.
       *
+      * XXX: Implement the mask option to draw the mask onto the
+      * scaled image.
+      *
       * @param r the source rectangle in pixels that needs to be drawn
       * @param xScale the X axis scale in percent
       * @param yScale the Y axis scale in percent
       * @param projection the display profile
       * @param exposure the exposure (for hdr images)
-      *
+      * @param mask the mask that will be rendered on top of the image
       * @return a qimage containing the sampled image pixels
       */
      QImage convertToQImage(const QRect& r,
                             const double xScale, const double yScale,
                             KoColorProfile *profile,
-                            float exposure = 0.0f);
+                            float exposure = 0.0f,
+                            KisSelectionSP mask = 0);
 
     /**
      * Lock the image to make sure no recompositing-causing signals get emitted

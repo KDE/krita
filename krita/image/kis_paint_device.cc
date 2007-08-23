@@ -919,7 +919,11 @@ KisPainterlyOverlaySP KisPaintDevice::painterlyOverlay()
 
 void KisPaintDevice::createPainterlyOverlay()
 {
-    m_d->painterlyOverlay = new KisPainterlyOverlay();
+    if ( !m_d->painterlyOverlay ) {
+        m_d->painterlyOverlay = new KisPainterlyOverlay();
+        emit ( painterlyOverlayCreated() );
+    }
+
 }
 
 void KisPaintDevice::removePainterlyOverlay()

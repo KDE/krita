@@ -88,7 +88,11 @@ void KisFilterOpSettings::setLayer( KisLayerSP layer )
     if(layer)
     {
         m_paintDevice = layer->paintDevice();
-        if( not m_currentFilterConfigWidget or ( m_currentFilterConfigWidget and m_currentFilterConfigWidget->configuration()->isCompatible(m_paintDevice)) ) // The "not m_currentFilterConfigWidget" is a corner case which happen because the first configuration settings is created before any layer is selected in the view
+        // The "not m_currentFilterConfigWidget" is a corner case
+        // which happen because the first configuration settings is
+        // created before any layer is selected in the view
+        if( !m_currentFilterConfigWidget ||
+            ( m_currentFilterConfigWidget && m_currentFilterConfigWidget->configuration()->isCompatible(m_paintDevice)) )
         {
             setCurrentFilter(KoID(m_currentFilter->id()));
         }

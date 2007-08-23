@@ -45,7 +45,6 @@
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
-#include <kis_painterly_overlay.h>
 #include <kis_paintop.h>
 #include <kis_recorded_paint_actions.h>
 #include <kis_selection.h>
@@ -80,7 +79,7 @@ KisToolFreehand::~KisToolFreehand()
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
 //     if (!currentImage())
-//         return;
+// 		return;
 
     if (!currentBrush())
         return;
@@ -236,11 +235,9 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     } else {
         m_target = device;
     }
-
     m_painter = new KisPainter( m_target );
     Q_CHECK_PTR(m_painter);
     m_source = device;
-
     m_painter->beginTransaction(m_transactionText);
 
     m_painter->setPaintColor(currentFgColor());
@@ -265,7 +262,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
       << ", paint on selection: " << m_paintOnSelection
       << ", active device has selection: " << device->hasSelection()
 //       << ", target has selection: " << m_target->hasSelection()
-      << endl;
+<< endl;
 */
     if(m_smooth)
     {

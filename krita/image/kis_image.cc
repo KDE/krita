@@ -921,7 +921,7 @@ QImage KisImage::convertToQImage(qint32 x,
 }
 
 
-QImage KisImage::convertToQImage(const QRect& r, const double xScale, const double yScale, KoColorProfile *profile, float exposure)
+QImage KisImage::convertToQImage(const QRect& r, const double xScale, const double yScale, KoColorProfile *profile, float exposure, KisSelectionSP mask)
 {
     if (r.isEmpty()) {
         return QImage();

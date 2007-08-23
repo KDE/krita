@@ -36,7 +36,7 @@
 
 KisToolRectangle::KisToolRectangle(KoCanvasBase * canvas)
     : KisToolShape(canvas, KisCursor::load("tool_rectangle_cursor.png", 6, 6)),
-          m_dragging (false)
+      m_dragging (false)
 {
     setObjectName("tool_rectangle");
 
@@ -44,7 +44,7 @@ KisToolRectangle::KisToolRectangle(KoCanvasBase * canvas)
     currentImage() = 0;
     m_dragStart = QPointF(0, 0);
     m_dragEnd = QPointF(0, 0);
- }
+}
 
 KisToolRectangle::~KisToolRectangle()
 {
@@ -93,7 +93,7 @@ void KisToolRectangle::mouseMoveEvent(KoPointerEvent *event)
             m_dragEnd += trans;
         } else {
             QPointF diag = pos - (event->modifiers() & Qt::ControlModifier
-                    ? m_dragCenter : m_dragStart);
+                                  ? m_dragCenter : m_dragStart);
             // square?
             if (event->modifiers() & Qt::ShiftModifier) {
                 double size = qMax(fabs(diag.x()), fabs(diag.y()));
@@ -119,7 +119,7 @@ void KisToolRectangle::mouseMoveEvent(KoPointerEvent *event)
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
 
         m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
-                (m_dragStart.y() + m_dragEnd.y()) / 2);
+                               (m_dragStart.y() + m_dragEnd.y()) / 2);
     }
 }
 

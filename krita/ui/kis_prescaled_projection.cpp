@@ -44,6 +44,110 @@
 #include "kis_types.h"
 
 
+// Casper's version that's fixed for jitter.
+QImage sampleImage(const QImage& image, int columns, int rows, const QRect &dstRect)
+{
+    int *x_offset;
+    int *y_offset;
+
+    long j;
+    long y;
+
+    uchar *pixels;
+
+    register const uchar *p;
+
+    register long x;
+
+    register uchar *q;
+
+    /*
+      Initialize sampled image attributes.
+    */
+    if ((columns == image.width()) && (rows == image.height()))
+        return image.copy( dstRect );
+
+    const int d = image.depth() / 8;
+
+    QImage sample_image( dstRect.width(), dstRect.height(), image.depth());
+    sample_image.setAlphaBuffer( image.hasAlphaBuffer());
+    /*
+      Allocate scan line buffer and column offset buffers.
+    */
+    pixels= new uchar[ image.width() * d ];
+    x_offset= new int[ sample_image.width() ];
+    y_offset= new int[ sample_image.height() ];
+    /*
+      Initialize pixel offsets.
+    */
+// In the following several code 0.5 needs to be added, otherwise the image
+// would be moved by half a pixel to bottom-right, just like
+// with Qt's QImage::scale()
+    for (x=0; x < (long) sample_image.width(); x++)
+    {
+        x_offset[x] = int((x + dstRect.left()) * image.width() / columns);
+    }
+    for (y=0; y < (long) sample_image.height(); y++)
+    {
+        y_offset[y] = int((y + dstRect.top()) * image.height() / rows);
+    }
+    /*
+      Sample each row.
+    */
+    j=(-1);
+    for (y=0; y < (long) sample_image.height(); y++)
+    {
+        q= sample_image.scanLine( y );
+        if (j != y_offset[y] )
+        {
+            /*
+              Read a scan line.
+            */
+            j= y_offset[y];
+            p= image.scanLine( j );
+            (void) memcpy(pixels,p,image.width()*d);
+        }
+        /*
+          Sample each column.
+        */
+        switch( d )
+        {
+        case 1: // 8bit
+            for (x=0; x < (long) sample_image.width(); x++)
+            {
+                *q++=pixels[ x_offset[x] ];
+            }
+            break;
+        case 4: // 32bit
+            for (x=0; x < (long) sample_image.width(); x++)
+            {
+                *(QRgb*)q=((QRgb*)pixels)[ x_offset[x] ];
+                q += d;
+            }
+            break;
+        default:
+            for (x=0; x < (long) sample_image.width(); x++)
+            {
+                memcpy( q, pixels + x_offset[x] * d, d );
+                q += d;
+            }
+            break;
+        }
+    }
+    if( d != 4 ) // != 32bit
+    {
+        sample_image.setNumColors( image.numColors());
+        for( int i = 0; i < image.numColors(); ++i )
+            sample_image.setColor( i, image.color( i ));
+    }
+    delete[] y_offset;
+    delete[] x_offset;
+    delete[] pixels;
+    return sample_image;
+}
+
+
+
 struct KisPrescaledProjection::Private
 {
     Private()
@@ -332,8 +436,15 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc )
         }
         else {
 
-            if ( m_d->useQtScaling ) {
+            QImage unscaled = m_d->unscaledCache;
 
+            // If we don't cache the image as an unscaled QImage, get
+            // an unscaled QImage for this rect from KisImage.
+            if ( !m_d->cacheKisImageAsQImage ) {
+
+            }
+
+            if ( m_d->useQtScaling ) {
             }
             else if ( m_d->useSampling ) {
 

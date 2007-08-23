@@ -49,10 +49,10 @@
 
 struct KisTool::Private {
     Private() : currentBrush(0),
-            currentPattern(0),
-            currentGradient(0),
-            currentPaintOpSettings(0)
-    { }
+                currentPattern(0),
+                currentGradient(0),
+                currentPaintOpSettings(0)
+        { }
     QCursor cursor; // the cursor that should be shown on tool activation.
 
     // From the canvas resources
@@ -61,7 +61,7 @@ struct KisTool::Private {
     KisGradient * currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
-	KisComplexColor * currentComplexColor;
+    KisComplexColor * currentComplexColor;
     QString currentPaintOp;
     KisPaintOpSettings * currentPaintOpSettings;
     KisLayerSP currentLayer;
@@ -89,12 +89,12 @@ void KisTool::activate(bool )
     d->currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentBrush ).value<void *>() );
     d->currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPattern).value<void *>() );
     d->currentGradient = static_cast<KisGradient *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentGradient ).value<void *>() );
-	d->currentComplexColor = static_cast<KisComplexColor *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentComplexColor ).value<void *>() );
+    d->currentComplexColor = static_cast<KisComplexColor *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentComplexColor ).value<void *>() );
     d->currentPaintOp = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintop ).value<KoID >().id();
     d->currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintopSettings ).value<void *>() );
     if( d->currentPaintOpSettings )
     {
-      d->currentPaintOpSettings->activate();
+        d->currentPaintOpSettings->activate();
     }
     d->currentLayer = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
     d->currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( KisResourceProvider::HdrExposure ).toDouble() );
@@ -143,51 +143,51 @@ void KisTool::resourceChanged( int key, const QVariant & v )
 
 QPointF KisTool::convertToPixelCoord( KoPointerEvent *e )
 {
-	if (!image())
-		return e->point;
+    if (!image())
+        return e->point;
 
     return image()->documentToPixel(e->point);
 }
 
 QPoint KisTool::convertToIntPixelCoord( KoPointerEvent *e )
 {
-	if (!image())
-		return e->point.toPoint();
+    if (!image())
+        return e->point.toPoint();
 
     return image()->documentToIntPixel(e->point);
 }
 
 QRectF KisTool::convertToPt( const QRectF &rect )
 {
-	if (!image())
-		return rect;
+    if (!image())
+        return rect;
     QRectF r;
     //We add 1 in the following to the extreme coords because a pixel always has size
     r.setCoords(int(rect.left()) / image()->xRes(), int(rect.top()) / image()->yRes(),
-             int(1 + rect.right()) / image()->xRes(), int(1 + rect.bottom()) / image()->yRes());
+                int(1 + rect.right()) / image()->xRes(), int(1 + rect.bottom()) / image()->yRes());
     return r;
 }
 
 QPointF KisTool::pixelToView(const QPoint &pixelCoord)
 {
-	if (!image())
-		return pixelCoord;
+    if (!image())
+        return pixelCoord;
     QPointF documentCoord = image()->pixelToDocument(pixelCoord);
     return m_canvas->viewConverter()->documentToView(documentCoord);
 }
 
 QPointF KisTool::pixelToView(const QPointF &pixelCoord)
 {
-	if (!image())
-		return pixelCoord;
+    if (!image())
+        return pixelCoord;
     QPointF documentCoord = image()->pixelToDocument(pixelCoord);
     return m_canvas->viewConverter()->documentToView(documentCoord);
 }
 
 QRectF KisTool::pixelToView(const QRectF &pixelRect)
 {
-	if (!image())
-		return pixelRect;
+    if (!image())
+        return pixelRect;
     QPointF topLeft = pixelToView(pixelRect.topLeft());
     QPointF bottomRight = pixelToView(pixelRect.bottomRight());
     return QRectF(topLeft, bottomRight);
@@ -287,7 +287,7 @@ KoColor KisTool::currentBgColor()
 
 KisComplexColor * KisTool::currentComplexColor()
 {
-	return d->currentComplexColor;
+    return d->currentComplexColor;
 }
 
 KisImageSP KisTool::currentImage()

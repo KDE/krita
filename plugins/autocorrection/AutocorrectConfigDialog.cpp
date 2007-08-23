@@ -69,6 +69,21 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     connect(widget.find, SIGNAL(textChanged(const QString &)), this, SLOT(enableAddRemoveButton()));
     connect(widget.replace, SIGNAL(textChanged(const QString &)), this, SLOT(enableAddRemoveButton()));
     connect(widget.changeFormat, SIGNAL(clicked()), this, SLOT(changeCharFormat()));
+
+    /* tab 4 - Exceptions */
+    m_upperCaseExceptions = m_autocorrect->getUpperCaseExceptions();
+    m_twoUpperLetterExceptions = m_autocorrect->getTwoUpperLetterExceptions();
+    widget.abbreviationList->addItems(m_upperCaseExceptions.toList());
+    widget.twoUpperLetterList->addItems(m_twoUpperLetterExceptions.toList());
+    widget.add1->setEnabled(false);
+    widget.add2->setEnabled(false);
+
+    connect(widget.abbreviation, SIGNAL(textChanged(const QString &)), this, SLOT(abbreviationChanged(const QString &)));
+    connect(widget.twoUpperLetter, SIGNAL(textChanged(const QString &)), this, SLOT(twoUpperLetterChanged(const QString &)));
+    connect(widget.add1, SIGNAL(clicked()), this, SLOT(addAbbreviationEntry()));
+    connect(widget.remove1, SIGNAL(clicked()), this, SLOT(removeAbbreviationEntry()));
+    connect(widget.add2, SIGNAL(clicked()), this, SLOT(addTwoUpperLetterEntry()));
+    connect(widget.remove2, SIGNAL(clicked()), this, SLOT(removeTwoUpperLetterEntry()));
 }
 
 AutocorrectConfig::~AutocorrectConfig()
@@ -91,6 +106,8 @@ void AutocorrectConfig::applyConfig()
     m_autocorrect->setAdvancedAutocorrect(widget.advancedAutocorrection->checkState() == Qt::Checked);
 
     m_autocorrect->setAutocorrectEntries(m_autocorrectEntries);
+    m_autocorrect->setUpperCaseExceptions(m_upperCaseExceptions);
+    m_autocorrect->setTwoUpperLetterExceptions(m_twoUpperLetterExceptions);
 
     m_autocorrect->setReplaceDoubleQuotes(widget.typographicDoubleQuotes->checkState() == Qt::Checked);
     m_autocorrect->setReplaceSingleQuotes(widget.typographicSimpleQuotes->checkState() == Qt::Checked);
@@ -192,6 +209,13 @@ void AutocorrectConfig::enableAddRemoveButton()
     widget.removeButton->setEnabled(enable);
 }
 
+void AutocorrectConfig::setFindReplaceText(int row, int column)
+{
+    Q_UNUSED(column);
+    widget.find->setText(widget.tableWidget->item(row, 0)->text());
+    widget.replace->setText(widget.tableWidget->item(row, 1)->text());
+}
+
 void AutocorrectConfig::changeCharFormat()
 {
     /* QTextCharFormat format;
@@ -200,10 +224,52 @@ void AutocorrectConfig::changeCharFormat()
         ; */
 }
 
-void AutocorrectConfig::setFindReplaceText(int row, int column)
+void AutocorrectConfig::abbreviationChanged(const QString &text)
 {
-    widget.find->setText(widget.tableWidget->item(row, 0)->text());
-    widget.replace->setText(widget.tableWidget->item(row, 1)->text());
+    widget.add1->setEnabled(!text.isEmpty());
+}
+
+void AutocorrectConfig::twoUpperLetterChanged(const QString &text)
+{
+    widget.add2->setEnabled(!text.isEmpty());
+}
+
+void AutocorrectConfig::addAbbreviationEntry()
+{
+    QString text = widget.abbreviation->text();
+    if (!m_upperCaseExceptions.contains(text)) {
+        m_upperCaseExceptions.insert(text);
+        widget.abbreviationList->addItem(text);
+    }
+    widget.abbreviation->clear();
+}
+
+void AutocorrectConfig::removeAbbreviationEntry()
+{
+    int currentRow = widget.abbreviationList->currentRow();
+    QListWidgetItem *item = widget.abbreviationList->takeItem(currentRow);
+    Q_ASSERT(item);
+    m_upperCaseExceptions.remove(item->text());
+    delete item;
+}
+
+void AutocorrectConfig::addTwoUpperLetterEntry()
+{
+    QString text = widget.twoUpperLetter->text();
+    if (!m_twoUpperLetterExceptions.contains(text)) {
+        m_twoUpperLetterExceptions.insert(text);
+        widget.twoUpperLetterList->addItem(text);
+    }
+    widget.twoUpperLetter->clear();
+}
+
+void AutocorrectConfig::removeTwoUpperLetterEntry()
+{
+    int currentRow = widget.twoUpperLetterList->currentRow();
+    QListWidgetItem *item = widget.twoUpperLetterList->takeItem(currentRow);
+    Q_ASSERT(item);
+    m_twoUpperLetterExceptions.remove(item->text());
+    delete item;
 }
 
 AutocorrectConfigDialog::AutocorrectConfigDialog(Autocorrect *autocorrect, QWidget *parent)

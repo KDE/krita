@@ -100,8 +100,12 @@ void Autocorrect::finishedParagraph(QTextDocument *document, int cursorPosition)
     // TODO
 }
 
+void Autocorrect::setUpperCaseExceptions(QSet<QString> exceptions) { m_upperCaseExceptions = exceptions; }
+void Autocorrect::setTwoUpperLetterExceptions(QSet<QString> exceptions) { m_twoUpperLetterExceptions = exceptions; }
 void Autocorrect::setAutocorrectEntries(QHash<QString, QString> entries) { m_autocorrectEntries = entries; }
 
+QSet<QString> Autocorrect::getUpperCaseExceptions() { return m_upperCaseExceptions; }
+QSet<QString> Autocorrect::getTwoUpperLetterExceptions() { return m_twoUpperLetterExceptions; }
 QHash<QString, QString> Autocorrect::getAutocorrectEntries() { return m_autocorrectEntries; }
 
 void Autocorrect::configureAutocorrect()

@@ -525,6 +525,9 @@
          </item>
          <item>
           <widget class="QCheckBox" name="autoinclude1" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
            <property name="text" >
             <string>Autoinclude</string>
            </property>
@@ -587,6 +590,9 @@
          </item>
          <item>
           <widget class="QCheckBox" name="autoinclude2" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
            <property name="text" >
             <string>Autoinclude</string>
            </property>

@@ -37,6 +37,7 @@ public slots:
     void applyConfig();
 
 private slots:
+    /* tab 3 */
     void enableAdvAutocorrection(int state);
     void enableAutocorrectFormat(int state);
     void addAutocorrectEntry();
@@ -45,9 +46,19 @@ private slots:
     void enableAddRemoveButton();
     void changeCharFormat();
 
+    /* tab 4 */
+    void abbreviationChanged(const QString &text);
+    void twoUpperLetterChanged(const QString &text);
+    void addAbbreviationEntry();
+    void removeAbbreviationEntry();
+    void addTwoUpperLetterEntry();
+    void removeTwoUpperLetterEntry();
+
 private:
     Ui::AutocorrectConfig widget;
     Autocorrect *m_autocorrect;
+    QSet<QString> m_upperCaseExceptions;
+    QSet<QString> m_twoUpperLetterExceptions;
     QHash<QString, QString> m_autocorrectEntries;
 };
 

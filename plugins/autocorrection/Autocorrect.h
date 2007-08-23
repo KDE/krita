@@ -60,6 +60,8 @@ public:
     void setReplaceDoubleQuotes(bool b) { m_replaceDoubleQuotes = b; }
     void setReplaceSingleQuotes(bool b) { m_replaceSingleQuotes = b; }
     void setAdvancedAutocorrect(bool b) { m_advancedAutocorrect = b; }
+    void setUpperCaseExceptions(QSet<QString> exceptions);
+    void setTwoUpperLetterExceptions(QSet<QString> exceptions);
     void setAutocorrectEntries(QHash<QString, QString> entries);
 
     bool getUppercaseFirstCharOfSentence() { return m_uppercaseFirstCharOfSentence; }
@@ -76,6 +78,8 @@ public:
     bool getReplaceDoubleQuotes() { return m_replaceDoubleQuotes; }
     bool getReplaceSingleQuotes() { return m_replaceSingleQuotes; }
     bool getAdvancedAutocorrect() { return m_advancedAutocorrect; }
+    QSet<QString> getUpperCaseExceptions();
+    QSet<QString> getTwoUpperLetterExceptions();
     QHash<QString, QString> getAutocorrectEntries();
 
 private slots:

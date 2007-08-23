@@ -49,8 +49,7 @@ class KisGlslWidget : public QGLWidget
         bool isValidGLSL() const { return m_valid; }
         
     public slots:
-        void slotShaders(const QString& fragShader, 
-                         const QString& vertShader);
+        void slotShaders(const QString &fragmentShader, const QString &vertexShader);
      
     private:
         
@@ -59,6 +58,7 @@ class KisGlslWidget : public QGLWidget
         bool m_valid;
         KisPaintDeviceSP m_device;
         QRect m_bounds;
+        quint8* m_imgbuf;
 };       
 
 #endif

@@ -37,6 +37,8 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_view2.h>
+#include <kis_layer.h>
+#include "kis_glsl_widget.h"
 
 
 // This shader performs a 9-tap Laplacian edge detection filter.
@@ -65,7 +67,7 @@ class DlgGlsl::Private
 public:
     KisView2 * view;
     WdgGlsl * page;
-    QLabel * imageLabel;
+    KisGlslWidget * glslview;
     QScrollArea * scrollArea;
     KisPaintDeviceSP dev;
     int maxTextureSize;
@@ -95,14 +97,13 @@ DlgGlsl::DlgGlsl( KisView2 *  parent,
     vbox->addWidget( m_d->scrollArea );
     m_d->page->grpPreview->setLayout( vbox );
 
-    m_d->imageLabel = new QLabel;
-    m_d->imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    m_d->imageLabel->setScaledContents(true);
-
-    if ( m_d->dev = m_d->view->activeDevice() )
-        m_d->imageLabel->setPixmap( QPixmap::fromImage( m_d->dev->convertToQImage( 0 ) ) );
-
-    m_d->scrollArea->setWidget(m_d->imageLabel);
+    m_d->glslview = new KisGlslWidget(m_d->view->activeLayer()->paintDevice(), m_d->scrollArea);
+    m_d->glslview->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    m_d->scrollArea->setWidget(m_d->glslview);
+    
+    if(!m_d->glslview->isValidGLSL()) {
+        close();
+    }
 
     setMainWidget(m_d->page);
     resize(m_d->page->sizeHint());
@@ -113,51 +114,12 @@ DlgGlsl::DlgGlsl( KisView2 *  parent,
     connect( m_d->page->bnPreview,  SIGNAL( clicked() ),
              this,  SLOT( resetPreview() ) );
 
-    if ( !setupGL() ) close();
 
 }
 
 DlgGlsl::~DlgGlsl()
 {
     delete m_d;
-}
-
-
-bool DlgGlsl::setupGL()
-{
-    int argc = 0;
-
-    glutInit ( &argc, 0 );
-    glutCreateWindow("test");
-
-    glewInit();
-
-    if (glewIsSupported("GL_VERSION_2_0") != GL_TRUE ||
-        glewGetExtension("GL_ARB_fragment_shader")      != GL_TRUE ||
-        glewGetExtension("GL_ARB_vertex_shader")        != GL_TRUE ||
-        glewGetExtension("GL_ARB_shader_objects")       != GL_TRUE ||
-        glewGetExtension("GL_ARB_shading_language_100") != GL_TRUE ||
-        glewGetExtension("GL_EXT_framebuffer_object")   != GL_TRUE ||
-        glewGetExtension("GL_ARB_texture_rectangle")    != GL_TRUE )
-    {
-        QMessageBox::warning( this, i18n( "Krita" ), i18n( "The OpenGL filter cannot run. Your graphics card or driver is missing the necessary extensions" ) );
-        return false;
-    }
-
-    glEnable(GL_TEXTURE_2D);
-    glShadeModel(GL_SMOOTH); // Enables Smooth Shading
-    glEnable(GL_DEPTH_TEST); // Enables Depth Testing
-    glDepthFunc(GL_LEQUAL); // The Type Of Depth Test To Do
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
-
-    // create FBO (off-screen framebuffer)
-    glGenFramebuffersEXT(1, &m_d->fb);
-    // bind offscreen buffer
-    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_d->fb);
-
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE,&m_d->maxTextureSize);
-
-    return true;
 }
 
 void DlgGlsl::okClicked()
@@ -167,8 +129,8 @@ void DlgGlsl::okClicked()
 
 void DlgGlsl::resetPreview()
 {
-    // Create texture from image (for now, just all of it, provided
-    // it's smaller than maxtexturesize)
+    m_d->glslview->slotShaders(m_d->page->fragmentText->toPlainText(), m_d->page->vertexText->toPlainText());
+    m_d->glslview->updateGL();
 }
 
 #include "dlg_glsl.moc"

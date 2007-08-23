@@ -51,16 +51,12 @@ private slots:
     void okClicked();
     void resetPreview();
 
-private:
-
-    bool setupGL();
 
 private:
 
     class Private;
     Private * const m_d;
-
-
+    
 };
 
 #endif // DLG_GLSLIMAGE

@@ -47,8 +47,6 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     widget.typographicDoubleQuotes->setCheckState(m_autocorrect->getReplaceDoubleQuotes() ? Qt::Checked : Qt::Unchecked);
     widget.typographicSimpleQuotes->setCheckState(m_autocorrect->getReplaceSingleQuotes() ? Qt::Checked : Qt::Unchecked);
 
-    // enableAdvAutocorrection(true /*widget.advancedAutocorrection->checkState()*/);
-
     m_autocorrectEntries = m_autocorrect->getAutocorrectEntries();
     widget.tableWidget->setRowCount(m_autocorrectEntries.size());
     widget.tableWidget->verticalHeader()->hide();
@@ -62,7 +60,7 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     widget.tableWidget->setSortingEnabled(true);
     widget.tableWidget->sortByColumn(0, Qt::AscendingOrder);
 
-    // enableAdvAutocorrection(widget.advancedAutocorrection->checkState());
+    enableAdvAutocorrection(widget.advancedAutocorrection->checkState());
     connect(widget.advancedAutocorrection, SIGNAL(stateChanged(int)), this, SLOT(enableAdvAutocorrection(int)));
     connect(widget.autoCorrectionWithFormat, SIGNAL(stateChanged(int)), this, SLOT(enableAutocorrectFormat(int)));
     connect(widget.addButton, SIGNAL(clicked()), this, SLOT(addAutocorrectEntry()));
@@ -163,17 +161,17 @@ void AutocorrectConfig::removeAutocorrectEntry()
 void AutocorrectConfig::enableAddRemoveButton()
 {
     QString find = widget.find->text();
-    QString replace = widget.find->text();
+    QString replace = widget.replace->text();
     int currentRow = -1;
     if (m_autocorrectEntries.contains(find)) {
-        currentRow = widget.tableWidget->findItems(find, Qt::MatchFixedString).first()->row();
+        currentRow = widget.tableWidget->findItems(find, Qt::MatchCaseSensitive).first()->row();
         widget.tableWidget->setCurrentCell(currentRow, 0);
     }
     else
         currentRow = widget.tableWidget->currentRow();
 
     bool enable;
-    if (currentRow == -1 || find.isEmpty()) // disable if no text in find/replace
+    if (currentRow == -1 || find.isEmpty() || replace.isEmpty()) // disable if no text in find/replace
         enable = !(find.isEmpty() || replace.isEmpty());
     else if (find == widget.tableWidget->item(currentRow, 0)->text()) {
         // We disable add / remove button if no text for the replacement

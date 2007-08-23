@@ -115,6 +115,7 @@ void KisGlslWidget::resizeGL(int width, int height)
 
 void KisGlslWidget::paintGL() 
 {
+    
     glActiveTexture(GL_TEXTURE0_ARB);
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_texture);
     
@@ -140,7 +141,62 @@ void KisGlslWidget::paintGL()
     glUseProgram(0);
 }
 
-
+void KisGlslWidget::slotShaders(const QString &fragShader, const QString &vertShader)
+{
+    
+    const char * sourcetmp[1];
+    GLint compiled;
+    int loglength;
+    const int logbufsize = 2048;
+    GLchar log[logbufsize];
+    
+    
+    sourcetmp[0] = fragShader.toAscii().constData();
+    
+    glShaderSource(m_fragshader, 1, sourcetmp, NULL);
+    glCompileShader(m_fragshader);
+    
+    glGetShaderiv(m_fragshader, GL_COMPILE_STATUS, &compiled);
+    
+    if(!compiled) {
+        glGetShaderInfoLog(m_fragshader, logbufsize, &loglength, log); 
+        QMessageBox::warning( this, i18n( "Krita" ), i18n( "There is an error in your Fragment Shader" ) );
+        qDebug("Fragment shader log: %s", log);
+        m_valid = false;
+        return;
+    }
+    
+    sourcetmp[0] = vertShader.toAscii().constData();
+    
+    glShaderSource(m_vertexshader, 1, sourcetmp, NULL);
+    glCompileShader(m_vertexshader);
+    
+    glGetShaderiv(m_vertexshader, GL_COMPILE_STATUS, &compiled);
+    
+    if(!compiled) {
+        glGetShaderInfoLog(m_vertexshader, logbufsize, &loglength, log); 
+        QMessageBox::warning( this, i18n( "Krita" ), i18n( "There is an error in your Vertex Shader" ) );
+        qDebug("Vertex shader log: %s", log);
+        m_valid = false;
+        return;
+    }
+    
+    glAttachShader(m_program, m_fragshader);
+    glAttachShader(m_program, m_vertexshader);
+    
+    glLinkProgram(m_program);
+    
+    glGetProgramiv(m_program, GL_LINK_STATUS, &compiled);
+    
+    if(!compiled) {
+        glGetProgramInfoLog(m_program, logbufsize, &loglength, log); 
+        QMessageBox::warning( this, i18n( "Krita" ), i18n( "There is an error with your GLSL Program, it cannot be linked" ) );
+        qDebug("Vertex shader log: %s", log);
+        m_valid = false;
+        return;
+    }
+    
+}
 
 #include "kis_glsl_widget.moc"
 

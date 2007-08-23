@@ -49,10 +49,11 @@ class KisGlslWidget : public QGLWidget
         bool isValidGLSL() const { return m_valid; }
         
     public slots:
-       // void slotFragmentShader(const QString& shader);
-       // void slotVertexShader(const QString& shader);
+        void slotShaders(const QString& fragShader, 
+                         const QString& vertShader);
      
     private:
+        
         GLuint m_texture, m_fragshader, m_vertexshader, m_program;
         QGLFramebufferObject *m_framebuffer;
         bool m_valid;

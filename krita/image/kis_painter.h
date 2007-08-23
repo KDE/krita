@@ -505,10 +505,6 @@ public:
     KoColor fillColor() const { return m_fillColor; }
 
     // XXX
-    void setSourceLayer(KisPaintLayer *source) { m_sourceLayer = source; }
-    KisPaintLayer *sourceLayer() { return m_sourceLayer; }
-
-    // XXX
     void setComplexColor(KisComplexColor *color) { m_complexColor = color; }
     KisComplexColor *complexColor() { return m_complexColor; }
 
@@ -617,8 +613,8 @@ protected:
     KoColor m_paintColor;
     KoColor m_backgroundColor;
     KoColor m_fillColor;
-	KisPaintLayer *m_sourceLayer;
-	KisComplexColor *m_complexColor;
+    KisPaintLayer *m_sourceLayer;
+    KisComplexColor *m_complexColor;
     FillStyle m_fillStyle;
     StrokeStyle m_strokeStyle;
     bool m_antiAliasPolygonFill;

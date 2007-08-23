@@ -21,6 +21,7 @@
 #include "kis_global.h"
 #include "kis_memento.h"
 #include "kis_paint_device.h"
+#include "kis_painterly_overlay.h"
 #include "kis_datamanager.h"
 
 class KisTransaction::Private {
@@ -28,6 +29,7 @@ public:
     QString name;
     KisPaintDeviceSP device;
     KisMementoSP memento;
+    KisMementoSP overlayMemento;
     bool firstRedo;
 };
 
@@ -37,6 +39,10 @@ KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device, QUn
 {
     m_private->device = device;
     m_private->memento = device->dataManager()->getMemento();
+
+    if (m_private->device->painterlyOverlay())
+      m_private->overlayMemento = device->painterlyOverlay()->dataManager()->getMemento();
+
     m_private->firstRedo = true;
 }
 
@@ -46,6 +52,11 @@ KisTransaction::~KisTransaction()
         // For debugging purposes
         m_private->memento->setInvalid();
     }
+    if (m_private->overlayMemento) {
+        // For debugging purposes
+        m_private->overlayMemento->setInvalid();
+    }
+
     delete m_private;
 }
 
@@ -57,6 +68,7 @@ void KisTransaction::redo()
         m_private->firstRedo = false;
         return;
     }
+
     Q_ASSERT(!m_private->memento.isNull());
 
     m_private->device->dataManager()->rollforward(m_private->memento);
@@ -67,6 +79,16 @@ void KisTransaction::redo()
     rc.setRect(x + m_private->device->x(), y + m_private->device->y(), width, height);
 
     m_private->device->setDirty( rc );
+
+    if (!m_private->overlayMemento.isNull()) {
+        m_private->device->painterlyOverlay()->dataManager()->rollforward(m_private->overlayMemento);
+
+        m_private->overlayMemento->extent(x,y,width,height);
+        rc.setRect(x + m_private->device->painterlyOverlay()->x(),
+                   y + m_private->device->painterlyOverlay()->y(), width, height);
+
+        m_private->device->painterlyOverlay()->setDirty( rc );
+    }
 }
 
 void KisTransaction::undo()
@@ -80,6 +102,16 @@ void KisTransaction::undo()
     rc.setRect(x + m_private->device->x(), y + m_private->device->y(), width, height);
 
     m_private->device->setDirty( rc );
+
+    if (!m_private->overlayMemento.isNull()) {
+        m_private->device->painterlyOverlay()->dataManager()->rollback(m_private->overlayMemento);
+
+        m_private->overlayMemento->extent(x,y,width,height);
+        rc.setRect(x + m_private->device->painterlyOverlay()->x(),
+                   y + m_private->device->painterlyOverlay()->y(), width, height);
+
+        m_private->device->painterlyOverlay()->setDirty( rc );
+    }
 }
 
 void KisTransaction::undoNoUpdate()
@@ -87,4 +119,7 @@ void KisTransaction::undoNoUpdate()
     Q_ASSERT(!m_private->memento.isNull());
 
     m_private->device->dataManager()->rollback(m_private->memento);
+
+    if (!m_private->overlayMemento.isNull())
+        m_private->device->painterlyOverlay()->dataManager()->rollback(m_private->overlayMemento);
 }

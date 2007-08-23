@@ -27,14 +27,13 @@
 
 #include "kis_image.h"
 #include "kis_paint_device.h"
-#include "kis_paint_layer.h"
 #include "kis_painterly_overlay_colorspace.h"
 
 /**
  * XXX: Why inherit KisPaintLayer and not KisPaintDevice? (boud)
  * XXX: Add dox
  */
-class KRITAUI_EXPORT KisComplexColor : public KisPaintLayer {
+class KRITAUI_EXPORT KisComplexColor : public KisPaintDevice {
     Q_OBJECT
 
 public:
@@ -44,8 +43,6 @@ public:
     ~KisComplexColor();
 
     void fromKoColor(const KoColor &kc);
-    KoColorSpace *colorSpace();
-    void convertTo(KoColorSpace * dstColorSpace);
     KoColor simpleColor();
 
     KoColor defaultColor();

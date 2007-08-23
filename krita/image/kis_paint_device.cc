@@ -51,6 +51,7 @@
 #include "kis_random_sub_accessor.h"
 #include "kis_selection.h"
 #include "kis_layer.h"
+#include "kis_painterly_overlay.h"
 #include "kis_paint_device.h"
 #include "kis_datamanager.h"
 
@@ -81,6 +82,8 @@ public:
 #ifdef CACHE_EXACT_BOUNDS
     QRect exactBounds;
 #endif
+
+    KisPainterlyOverlaySP painterlyOverlay;
 
 };
 
@@ -907,6 +910,21 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
 
     return thumbnail;
 
+}
+
+KisPainterlyOverlaySP KisPaintDevice::painterlyOverlay()
+{
+    return m_d->painterlyOverlay;
+}
+
+void KisPaintDevice::createPainterlyOverlay()
+{
+    m_d->painterlyOverlay = new KisPainterlyOverlay();
+}
+
+void KisPaintDevice::removePainterlyOverlay()
+{
+    m_d->painterlyOverlay = 0;
 }
 
 

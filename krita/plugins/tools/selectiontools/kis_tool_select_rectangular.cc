@@ -257,8 +257,6 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                     shape = path;
                 }
 
-                KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
-                Q_ASSERT(canvas);
                 KisSelectionSP selection = dev->selection();
 
                 KisShapeSelection* shapeSelection;

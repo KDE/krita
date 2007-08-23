@@ -171,8 +171,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                     path->close();
                     path->normalize();
 
-                    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
-                    Q_ASSERT(canvas);
+
                     KisSelectionSP selection = dev->selection();
 
                     KisShapeSelection* shapeSelection;

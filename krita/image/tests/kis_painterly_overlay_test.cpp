@@ -39,7 +39,7 @@ void KisPainterlyOverlayTester::testPainterlyOverlayColorSpace()
 {
     KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
     Q_ASSERT( cs );
-    QCOMPARE( cs->pixelSize(), uint(9 * sizeof( float )) );
+    QCOMPARE( cs->pixelSize(), uint(8 * sizeof( float )) );
 }
 
 void KisPainterlyOverlayTester::testPainterlyOverlayColorSpaceCell()

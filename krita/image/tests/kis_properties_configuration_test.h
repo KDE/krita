@@ -21,20 +21,20 @@
 
 #include <QtTest/QtTest>
 
-class KisSerializableConfiguration;
+class KisPropertiesConfiguration;
 
-class KisSerializableConfigurationTest : public QObject
+class KisPropertiesConfigurationTest : public QObject
 {
     Q_OBJECT
     public:
-        KisSerializableConfigurationTest();
+        KisPropertiesConfigurationTest();
     private slots:
         void testSetGet();
         void testSerialization();
         void testDefaultValues();
     private:
-        KisSerializableConfiguration* createConfig();
-        void testConfig(KisSerializableConfiguration* config);
+        KisPropertiesConfiguration* createConfig();
+        void testConfig(KisPropertiesConfiguration* config);
     private:
         int v1;
         QString v2;

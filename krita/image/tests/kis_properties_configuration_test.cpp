@@ -16,38 +16,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_serializable_configuration_test.h"
+#include "kis_properties_configuration_test.h"
 
 #include <qtest_kde.h>
-#include "kis_serializable_configuration.h"
+#include "kis_properties_configuration.h"
 
-KisSerializableConfigurationTest::KisSerializableConfigurationTest() :
+KisPropertiesConfigurationTest::KisPropertiesConfigurationTest() :
     v1(10), v2("hello"), v3(1242.0), v4(true)
 {
     
 }
 
-void KisSerializableConfigurationTest::testSerialization()
+void KisPropertiesConfigurationTest::testSerialization()
 {
-    KisSerializableConfiguration* config = createConfig();
+    KisPropertiesConfiguration* config = createConfig();
     QString xml = config->toXML();
-    KisSerializableConfiguration* decodedConfig = new KisSerializableConfiguration();
+    KisPropertiesConfiguration* decodedConfig = new KisPropertiesConfiguration();
     decodedConfig->fromXML( xml);
     testConfig(decodedConfig);
     delete config;
     delete decodedConfig;
 }
 
-void KisSerializableConfigurationTest::testSetGet()
+void KisPropertiesConfigurationTest::testSetGet()
 {
-    KisSerializableConfiguration* config = createConfig();
+    KisPropertiesConfiguration* config = createConfig();
     testConfig(config);
     delete config;
 }
 
-void KisSerializableConfigurationTest::testDefaultValues()
+void KisPropertiesConfigurationTest::testDefaultValues()
 {
-    KisSerializableConfiguration* config = new KisSerializableConfiguration();
+    KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
     QVERIFY ( config->getInt("bouh", v1) == v1 );
     QVERIFY ( config->getString("bouh", v2) == v2 );
     QVERIFY ( config->getDouble("bouh", v3) == v3 );
@@ -55,9 +55,9 @@ void KisSerializableConfigurationTest::testDefaultValues()
     delete config;
 }
 
-KisSerializableConfiguration* KisSerializableConfigurationTest::createConfig()
+KisPropertiesConfiguration* KisPropertiesConfigurationTest::createConfig()
 {
-    KisSerializableConfiguration* config = new KisSerializableConfiguration();
+    KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
     config->setProperty("v1", v1);
     config->setProperty("v2", v2);
     config->setProperty("v3", v3);
@@ -65,7 +65,7 @@ KisSerializableConfiguration* KisSerializableConfigurationTest::createConfig()
     return config;
 }
 
-void KisSerializableConfigurationTest::testConfig(KisSerializableConfiguration* config)
+void KisPropertiesConfigurationTest::testConfig(KisPropertiesConfiguration* config)
 {
     QVERIFY( config->getInt("v1", 0) == v1);
     QVERIFY( config->getString("v2", "") == v2);
@@ -73,6 +73,6 @@ void KisSerializableConfigurationTest::testConfig(KisSerializableConfiguration* 
     QVERIFY( config->getBool("v4", not v4) == v4);
 }
 
-QTEST_KDEMAIN(KisSerializableConfigurationTest, NoGUI)
+QTEST_KDEMAIN(KisPropertiesConfigurationTest, NoGUI)
 
-#include "kis_serializable_configuration_test.moc"
+#include "kis_properties_configuration_test.moc"

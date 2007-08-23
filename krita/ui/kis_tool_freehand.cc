@@ -45,6 +45,7 @@
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
+#include <kis_painterly_overlay.h>
 #include <kis_paintop.h>
 #include <kis_recorded_paint_actions.h>
 #include <kis_selection.h>
@@ -79,22 +80,22 @@ KisToolFreehand::~KisToolFreehand()
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
 //     if (!currentImage())
-// 		return;
+//         return;
 
     if (!currentBrush())
-		return;
+        return;
 
-	if (!currentComplexColor())
-		return;
+    if (!currentComplexColor())
+        return;
 
     if (!currentLayer()->paintDevice())
-		return;
+        return;
 
     if(currentPaintOpSettings())
     {
         currentPaintOpSettings()->mousePressEvent(e);
         if(e->isAccepted())
-			return;
+            return;
     }
 
     if (e->button() == Qt::LeftButton)
@@ -180,7 +181,7 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 void KisToolFreehand::initPaint(KoPointerEvent *)
 {
     if (!currentLayer() || !currentLayer()->paintDevice())
-		return;
+        return;
 
     if (m_compositeOp == 0 ) {
         KisPaintDeviceSP device = currentLayer()->paintDevice();
@@ -235,17 +236,17 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     } else {
         m_target = device;
     }
+
     m_painter = new KisPainter( m_target );
     Q_CHECK_PTR(m_painter);
     m_source = device;
+
     m_painter->beginTransaction(m_transactionText);
 
     m_painter->setPaintColor(currentFgColor());
     m_painter->setBackgroundColor(currentBgColor());
     m_painter->setBrush(currentBrush());
-	if (dynamic_cast<KisPaintLayer *>(currentLayer().data()))
-		m_painter->setSourceLayer(dynamic_cast<KisPaintLayer *>(currentLayer().data()));
-	m_painter->setComplexColor(currentComplexColor());
+    m_painter->setComplexColor(currentComplexColor());
 
     // if you're drawing on a temporary layer, the layer already sets this
     if (m_paintIncremental) {
@@ -329,8 +330,8 @@ void KisToolFreehand::endPaint()
     if(m_smooth)
     {
     } else {
-		if (currentLayer()->image())
-        	currentLayer()->image()->actionRecorder()->addAction(m_polyLinePaintAction);
+        if (currentLayer()->image())
+            currentLayer()->image()->actionRecorder()->addAction(m_polyLinePaintAction);
         m_polyLinePaintAction = 0;
     }
 }

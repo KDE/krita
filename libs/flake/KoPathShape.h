@@ -439,6 +439,9 @@ public:
      */
     virtual QString pathShapeId() const;
 
+    /// Returns a odf/svg string represenatation of the path data with the given matrix applied.
+    QString toString( const QMatrix &matrix ) const;
+
 private:
     // TODO move all the private methods to live on the d pointer object
     void map( const QMatrix &matrix );

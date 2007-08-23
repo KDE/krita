@@ -51,72 +51,7 @@ void KoPathShape::saveOdf( KoShapeSavingContext & context ) const
     context.xmlWriter().startElement( "draw:path" );
     saveOdfAttributes( context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation );
 
-    QString d;
-
-    KoSubpathList::const_iterator pathIt( m_subpaths.begin() );
-    for ( ; pathIt != m_subpaths.end(); ++pathIt )
-    {
-        KoSubpath::const_iterator it( ( *pathIt )->begin() );
-        KoPathPoint * lastPoint( *it );
-        bool activeCP = false;
-        for ( ; it != ( *pathIt )->end(); ++it )
-        {
-            if ( it == ( *pathIt )->begin() )
-            {
-                if ( ( *it )->properties() & KoPathPoint::StartSubpath )
-                {
-                    d += QString( "M%1 %2" ).arg( (*it)->point().x() )
-                                            .arg( (*it)->point().y() );
-                }
-            }
-            else if ( activeCP || ( *it )->activeControlPoint1() )
-            {
-                QPointF cp1( activeCP ? lastPoint->controlPoint2() : lastPoint->point() );
-                QPointF cp2( ( *it )->activeControlPoint1() ? ( *it )->controlPoint1() : ( *it )->point() );
-
-                d += QString( "C%1 %2 %3 %4 %5 %6" ).arg( cp1.x() )
-                                                    .arg( cp1.y() )    
-                                                    .arg( cp2.x() )    
-                                                    .arg( cp2.y() )    
-                                                    .arg( ( *it )->point().x() )    
-                                                    .arg( ( *it )->point().y() );
-            }
-            else
-            {
-                d += QString( "L%1 %2" ).arg( ( *it )->point().x() )
-                                        .arg( ( *it )->point().y() );
-            }
-            if ( ( *it )->properties() & KoPathPoint::CloseSubpath )
-            {
-                // add curve when there is a curve on the way to the first point
-                KoPathPoint * firstPoint = ( *pathIt )->first();
-                if ( ( *it )->activeControlPoint2() || firstPoint->activeControlPoint1() )
-                {
-                    QPointF cp1( ( *it )->activeControlPoint2() ? ( *it )->controlPoint2() : ( *it )->point() );
-                    QPointF cp2( firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : firstPoint->point() );
-
-                    d += QString( "C%1 %2 %3 %4 %5 %6" ).arg( cp1.x() )
-                                                        .arg( cp1.y() )    
-                                                        .arg( cp2.x() )    
-                                                        .arg( cp2.y() )    
-                                                        .arg( firstPoint->point().x() )    
-                                                        .arg( firstPoint->point().y() );
-                }
-                d += QString( "Z" );
-            }
-
-            if ( ( *it )->activeControlPoint2() )
-            {
-                activeCP = true;
-            }
-            else
-            {
-                activeCP = false;
-            }
-            lastPoint = *it;
-        }
-    }
-    context.xmlWriter().addAttribute( "svg:d", d );
+    context.xmlWriter().addAttribute( "svg:d", toString( QMatrix() ) );
 
     context.xmlWriter().endElement();
 }
@@ -1125,4 +1060,72 @@ KoSubpath * KoPathShape::subPath( int subpathIndex ) const
 QString KoPathShape::pathShapeId() const
 {
     return KoPathShapeId;
+}
+
+QString KoPathShape::toString( const QMatrix &matrix ) const
+{
+    QString d;
+
+    KoSubpathList::const_iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
+    {
+        KoSubpath::const_iterator it( ( *pathIt )->begin() );
+        KoPathPoint * lastPoint( *it );
+        bool activeCP = false;
+        for ( ; it != ( *pathIt )->end(); ++it )
+        {
+            if ( it == ( *pathIt )->begin() )
+            {
+                if ( ( *it )->properties() & KoPathPoint::StartSubpath )
+                {
+                    QPointF p = matrix.map( (*it)->point() );
+                    d += QString( "M%1 %2" ).arg( p.x() ).arg( p.y() );
+                }
+            }
+            else if ( activeCP || ( *it )->activeControlPoint1() )
+            {
+                QPointF cp1 = matrix.map( activeCP ? lastPoint->controlPoint2() : lastPoint->point() );
+                QPointF cp2 = matrix.map( ( *it )->activeControlPoint1() ? ( *it )->controlPoint1() : ( *it )->point() );
+                QPointF p = matrix.map( (*it)->point() );
+                d += QString( "C%1 %2 %3 %4 %5 %6" )
+                        .arg( cp1.x() ).arg( cp1.y() )
+                        .arg( cp2.x() ).arg( cp2.y() )
+                        .arg( p.x() ).arg( p.y() );
+            }
+            else
+            {
+                QPointF p = matrix.map( (*it)->point() );
+                d += QString( "L%1 %2" ).arg( p.x() ).arg( p.y() );
+            }
+            if ( ( *it )->properties() & KoPathPoint::CloseSubpath )
+            {
+                // add curve when there is a curve on the way to the first point
+                KoPathPoint * firstPoint = ( *pathIt )->first();
+                if ( ( *it )->activeControlPoint2() || firstPoint->activeControlPoint1() )
+                {
+                    QPointF cp1 = matrix.map( ( *it )->activeControlPoint2() ? ( *it )->controlPoint2() : ( *it )->point() );
+                    QPointF cp2 = matrix.map( firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : firstPoint->point() );
+                    QPointF p = matrix.map( firstPoint->point() );
+
+                    d += QString( "C%1 %2 %3 %4 %5 %6" )
+                            .arg( cp1.x() ).arg( cp1.y() )
+                            .arg( cp2.x() ).arg( cp2.y() )
+                            .arg( p.x() ).arg( p.y() );
+                }
+                d += QString( "Z" );
+            }
+
+            if ( ( *it )->activeControlPoint2() )
+            {
+                activeCP = true;
+            }
+            else
+            {
+                activeCP = false;
+            }
+            lastPoint = *it;
+        }
+    }
+
+    return d;
 }

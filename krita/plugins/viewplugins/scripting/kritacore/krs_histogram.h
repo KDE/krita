@@ -24,6 +24,14 @@
 #include <kis_types.h>
 #include <kis_histogram.h>
 
+#ifdef min
+#undef min
+#endif
+
+#ifdef max
+#undef max
+#endif
+
 namespace Scripting {
 
 class ConstPaintDevice;

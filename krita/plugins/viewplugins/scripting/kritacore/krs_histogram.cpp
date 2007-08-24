@@ -21,6 +21,14 @@
 
 #include <kis_paint_layer.h>
 
+#ifdef min
+#undef min
+#endif
+
+#ifdef max
+#undef max
+#endif
+
 using namespace Scripting;
 
 Histogram::Histogram(ConstPaintDevice* layer, KoHistogramProducerSP producer, const enumHistogramType type)

@@ -19,6 +19,10 @@
 #include <stdlib.h>
 #include "gauss.h"
 
+#if defined(_WIN32) || defined(_WIN64)
+#define srand48 srand
+#endif
+
 double gauss::gaussian(double mean, double std, int seed)
 {
 

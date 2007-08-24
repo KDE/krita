@@ -40,23 +40,24 @@ void KoHighlightingTab::underlineChanged(int item) {
 
 void KoHighlightingTab::open(const QTextCharFormat &format) {
     widget.underlineStyle->setCurrentIndex(1);
-    switch(format.underlineStyle()) {
-        case QTextCharFormat::SingleUnderline:
+    KoCharacterStyle::LineStyle underlineStyle = (KoCharacterStyle::LineStyle)(format.intProperty(KoCharacterStyle::UnderlineStyle));
+    switch(underlineStyle) {
+        case KoCharacterStyle::SolidLine:
             widget.underlineLineStyle->setCurrentIndex(0);
             break;
-        case QTextCharFormat::DashUnderline:
+        case KoCharacterStyle::DashLine:
             widget.underlineLineStyle->setCurrentIndex(1);
             break;
-        case QTextCharFormat::DotLine:
+        case KoCharacterStyle::DottedLine:
             widget.underlineLineStyle->setCurrentIndex(2);
             break;
-        case QTextCharFormat::DashDotLine:
+        case KoCharacterStyle::DotDashLine:
             widget.underlineLineStyle->setCurrentIndex(3);
             break;
-        case QTextCharFormat::DashDotDotLine:
+        case KoCharacterStyle::DotDotDashLine:
             widget.underlineLineStyle->setCurrentIndex(4);
             break;
-        case QTextCharFormat::WaveUnderline:
+        case KoCharacterStyle::WaveLine:
             widget.underlineLineStyle->setCurrentIndex(5);
             break;
         default:
@@ -64,7 +65,8 @@ void KoHighlightingTab::open(const QTextCharFormat &format) {
             break;
     }
     underlineChanged(widget.underlineStyle->currentIndex());
-    widget.underlineColor->setColor(format.underlineColor());
+    QColor color = format.colorProperty(KoCharacterStyle::UnderlineColor);
+    widget.underlineColor->setColor(color);
 
     widget.strikethrough->setChecked(format.fontStrikeOut());
 }

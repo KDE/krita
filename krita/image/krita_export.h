@@ -25,86 +25,71 @@
 
 #include <kdemacros.h>
 
-#ifdef Q_WS_WIN
+/* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
+#if defined(_WIN32) || defined(_WIN64)
 
 
 #ifndef KRITA_EXPORT
 # ifdef MAKE_KRITA_LIB
 #  define KRITA_EXPORT KDE_EXPORT
-# elif KDE_MAKE_LIB
-#  define KRITA_EXPORT KDE_IMPORT
 # else
-#  define KRITA_EXPORT
+#  define KRITA_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #ifndef KRITAUI_EXPORT
 # ifdef MAKE_KRITAUI_LIB
 #  define KRITAUI_EXPORT KDE_EXPORT
-# elif KDE_MAKE_LIB
-#  define KRITAUI_EXPORT KDE_IMPORT
 # else
-#  define KRITAUI_EXPORT
+#  define KRITAUI_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #ifndef KRITACORE_EXPORT
 # ifdef MAKE_KRITACORE_LIB
 #  define KRITACORE_EXPORT KDE_EXPORT
-# elif KDE_MAKE_LIB
-#  define KRITACORE_EXPORT KDE_IMPORT
 # else
-#  define KRITACORE_EXPORT
+#  define KRITACORE_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #ifndef KRITATOOL_EXPORT
 # ifdef MAKE_KRITATOOL_LIB
 #  define KRITATOOL_EXPORT KDE_EXPORT
-# elif KDE_MAKE_LIB
-#  define KRITATOOL_EXPORT KDE_IMPORT
 # else
-#  define KRITATOOL_EXPORT
+#  define KRITATOOL_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #ifndef KRITAPAINT_EXPORT
 # ifdef MAKE_KRITAPAINT_LIB
 #  define KRITAPAINT_EXPORT KDE_EXPORT
-# elif KDE_MAKE_LIB
-#  define KRITAPAINT_EXPORT KDE_IMPORT
 # else
-#  define KRITAPAINT_EXPORT
+#  define KRITAPAINT_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #ifndef KRITAIMAGE_EXPORT
 # ifdef MAKE_KRITAIMAGE_LIB
 #  define KRITAIMAGE_EXPORT KDE_EXPORT
-# elif KDE_MAKE_LIB
-#  define KRITAIMAGE_EXPORT KDE_IMPORT
 # else
-#  define KRITAIMAGE_EXPORT
+#  define KRITAIMAGE_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #ifndef KRITASCRIPTING_EXPORT
 # ifdef MAKE_KRITASCRIPTING_LIB
 #  define KRITASCRIPTING_EXPORT KDE_EXPORT
-# elif KDE_MAKE_LIB
-#  define KRITASCRIPTING_EXPORT KDE_IMPORT
 # else
-#  define KRITASCRIPTING_EXPORT
+#  define KRITASCRIPTING_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #ifndef KROSSKRITACORE_EXPORT
 # ifdef MAKE_KROSSKRITACORE_LIB
 #  define KROSSKRITACORE_EXPORT KDE_EXPORT
-# elif KDE_MAKE_LIB
-#  define KROSSKRITACORE_EXPORT KDE_IMPORT
 # else
-#  define KROSSKRITACORE_EXPORT
+#  define KROSSKRITACORE_EXPORT KDE_IMPORT
 # endif
 #endif
 

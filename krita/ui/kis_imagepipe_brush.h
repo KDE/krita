@@ -93,7 +93,7 @@ public:
 };
 
 
-class KRITAIMAGE_EXPORT KisImagePipeBrush : public KisBrush {
+class KRITAUI_EXPORT KisImagePipeBrush : public KisBrush {
 
     Q_OBJECT
 

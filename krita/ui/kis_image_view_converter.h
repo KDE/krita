@@ -32,7 +32,7 @@
  * For usage remember that the document here is the flake-points. And the view is the
  * krita-pixels.
  */
-class KRITAIMAGE_EXPORT KisImageViewConverter : public KoViewConverter {
+class KRITAUI_EXPORT KisImageViewConverter : public KoViewConverter {
 public:
     /**
      * constructor

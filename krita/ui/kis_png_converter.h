@@ -60,7 +60,7 @@ enum KisImageBuilder_Result {
 /**
  * This class allows to import/export a PNG from either a file or a QIODevice.
  */
-class KRITAIMAGE_EXPORT KisPNGConverter : public KisProgressSubject {
+class KRITAUI_EXPORT KisPNGConverter : public KisProgressSubject {
         Q_OBJECT
     public:
         /**

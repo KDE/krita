@@ -173,7 +173,7 @@ public:
      *        The shape manager will delete the last set strategy when you set a 
      *        new one.
      */
-    void setStrategy( KoShapeManagerPaintingStrategy * strategy );
+    void setPaintingStrategy( KoShapeManagerPaintingStrategy * strategy );
 
 private:
     /**

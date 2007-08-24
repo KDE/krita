@@ -438,7 +438,7 @@ void KoShapeManager::suggestChangeTool(KoPointerEvent *event) {
             KoToolManager::instance()->preferredToolForSelection(shapes));
 }
 
-void KoShapeManager::setStrategy( KoShapeManagerPaintingStrategy * strategy )
+void KoShapeManager::setPaintingStrategy( KoShapeManagerPaintingStrategy * strategy )
 {
     delete d->strategy;
     d->strategy = strategy;

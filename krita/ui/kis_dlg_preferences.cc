@@ -812,7 +812,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Display" ));
     page->setHeader( i18n( "Display" ) );
-    page->setIcon(  KIcon(BarIcon( "screen", K3Icon::SizeMedium)));
+    page->setIcon(  KIcon(BarIcon( "datashow", K3Icon::SizeMedium)));
     addPage( page );
 
     m_displaySettings = new DisplaySettingsTab( vbox );

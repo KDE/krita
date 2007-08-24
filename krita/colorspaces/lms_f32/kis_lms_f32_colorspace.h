@@ -25,14 +25,12 @@
 
 #include <klocale.h>
 
-#include <krita_export.h>
-
 #include "KoF32HalfColorSpaceTrait.h"
 #include "KoLcmsColorSpaceTrait.h"
 
 class KoColorSpaceRegistry;
 
-class KRITACOLOR_EXPORT KisLmsF32ColorSpace : public KoF32ColorSpaceTrait, public KoLcmsColorSpaceTrait {
+class KisLmsF32ColorSpace : public KoF32ColorSpaceTrait, public KoLcmsColorSpaceTrait {
 public:
     KisLmsF32ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
     virtual ~KisLmsF32ColorSpace();

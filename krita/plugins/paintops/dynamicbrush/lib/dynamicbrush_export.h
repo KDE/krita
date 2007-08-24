@@ -27,7 +27,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef DYNAMIC_BRUSH_EXPORT
-# if defined(MAKE_KRITADYNAMICBRUSHLIB_LIB)
+# if defined(MAKE_KRITADYNAMICBRUSH_LIB)
    /* We are building this library */ 
 #  define DYNAMIC_BRUSH_EXPORT KDE_EXPORT
 # else

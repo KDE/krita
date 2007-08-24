@@ -18,35 +18,26 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KRITA_EXPORT_H
-#define KRITA_EXPORT_H
+#ifndef KROSSKRITACORE_EXPORT_H
+#define KROSSKRITACORE_EXPORT_H
 
 #include <kdemacros.h>
 
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined(_WIN32) || defined(_WIN64)
 
-#ifndef KRITAUI_EXPORT
-# ifdef MAKE_KRITAUI_LIB
-#  define KRITAUI_EXPORT KDE_EXPORT
+#ifndef KROSSKRITACORE_EXPORT
+# ifdef MAKE_KROSSMODULEKRITA_LIB
+#  define KROSSKRITACORE_EXPORT KDE_EXPORT
 # else
-#  define KRITAUI_EXPORT KDE_IMPORT
+#  define KROSSKRITACORE_EXPORT KDE_IMPORT
 # endif
 #endif
 
-#ifndef KRITAIMAGE_EXPORT
-# ifdef MAKE_KRITAIMAGE_LIB
-#  define KRITAIMAGE_EXPORT KDE_EXPORT
-# else
-#  define KRITAIMAGE_EXPORT KDE_IMPORT
-# endif
-#endif
+#else /* not windows */
 
-#else // not windows
-
-#define KRITAUI_EXPORT KDE_EXPORT
-#define KRITAIMAGE_EXPORT KDE_EXPORT
+#define KROSSKRITACORE_EXPORT KDE_EXPORT
 
 #endif /* not windows */
 
-#endif /* KRITA_EXPORT_H */
+#endif /* KROSSKRITACORE_EXPORT_H */

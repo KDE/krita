@@ -23,7 +23,7 @@
 
 #include <kis_types.h>
 #include <kis_paint_layer.h>
-#include <krita_export.h>
+#include "krosskritacore_export.h"
 
 class KisDoc2;
 

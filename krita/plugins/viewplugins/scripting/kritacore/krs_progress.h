@@ -20,7 +20,7 @@
 #define KRITACOREPROGRESS_H
 
 #include <kis_progress_subject.h>
-#include <krita_export.h>
+#include "krosskritacore_export.h"
 
 class KisView2;
 

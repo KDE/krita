@@ -27,7 +27,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef KRITA_GRAY_U16_EXPORT
-# if defined(MAKE_KRITA_GRAY_U16_LIB)
+# if defined(MAKE_KRITA_GRAY_U16_PLUGIN_LIB)
    /* We are building this library */ 
 #  define KRITA_GRAY_U16_EXPORT KDE_EXPORT
 # else

@@ -21,7 +21,7 @@
 #define KRITA_KROSS_KRITACOREMONITOR_H
 
 #include <QObject>
-#include <krita_export.h>
+#include "krosskritacore_export.h"
 //#include <KoScriptingModule.h>
 
 class KisView2;

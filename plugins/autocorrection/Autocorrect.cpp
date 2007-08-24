@@ -39,6 +39,8 @@ Autocorrect::Autocorrect() {
     connect(configureAction, SIGNAL(triggered()), this, SLOT(configureAutocorrect()));
     addAction("configure_autocorrection", configureAction);
 
+    m_enableAutocorrect = false;
+
     m_singleSpaces = true;
     m_uppercaseFirstCharOfSentence = false;
     m_fixTwoUppercaseChars = false;
@@ -68,6 +70,8 @@ Autocorrect::~Autocorrect()
 }
 
 void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
+    if (!m_enableAutocorrect) return;
+
     m_cursor = QTextCursor(document);
     selectWord(m_cursor, cursorPosition);
     m_word = m_cursor.selectedText();

@@ -112,6 +112,8 @@ private:
     void readAutocorrectXmlEntry();
 
 private:
+    bool m_enableAutocorrect;
+
     bool m_uppercaseFirstCharOfSentence; // convert first letter of a sentence automaticall to uppercase
     bool m_fixTwoUppercaseChars;  // convert two uppercase characters to one upper and one lowercase.
     bool m_autoFormatURLs;

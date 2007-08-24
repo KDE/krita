@@ -311,7 +311,14 @@ void KisTileManager::toSwap(TileInfo* info)
         }
 
         if (!foundFree) { // No position found or free, create a new
-            long pagesize = sysconf(_SC_PAGESIZE);
+            long pagesize;
+#ifdef Q_WS_WIN
+            SYSTEM_INFO systemInfo;
+            GetSystemInfo(&systemInfo);
+            pagesize = systemInfo.dwPageSize;
+#else
+            pagesize = sysconf(_SC_PAGESIZE);
+#endif
             TempFile* tfile = 0;
             if (m_files.empty() || m_files.back().fileSize >= MaxSwapFileSize) {
                 m_files.push_back(TempFile());

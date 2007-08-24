@@ -2738,6 +2738,11 @@ QString KoDocument::unitName() const
 
 void KoDocument::showStartUpWidget( KoMainWindow* parent, bool alwaysShow )
 {
+#ifndef NDEBUG
+    if(d->m_templateType.isEmpty())
+        kDebug(30003) << "showStartUpWidget called, but setTemplateType() never called. This will not show a lot";
+#endif
+
     if(!alwaysShow) {
         KConfigGroup cfgGrp( componentData().config(), "TemplateChooserDialog" );
         QString fullTemplateName = cfgGrp.readPathEntry( "AlwaysUseTemplate" );
@@ -2752,7 +2757,7 @@ void KoDocument::showStartUpWidget( KoMainWindow* parent, bool alwaysShow )
     if(d->m_startUpWidget){
         d->m_startUpWidget->show();
     } else {
-        d->m_startUpWidget = createOpenPane( parent->centralWidget(), componentData(), templateType() );
+        d->m_startUpWidget = createOpenPane( parent->centralWidget(), componentData(), d->m_templateType );
     }
 
     parent->setDocToOpen( this );

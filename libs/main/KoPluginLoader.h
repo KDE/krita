@@ -59,8 +59,6 @@ MyPlugin::MyPlugin( QObject *parent, const QStringList& ) : QObject(parent) {
 }
 #include "MyPlugin.moc"
 @endcode
- *
- * TODO: make plugins manageable.
  */
 class KOMAIN_EXPORT KoPluginLoader : public QObject
 {

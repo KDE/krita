@@ -33,7 +33,7 @@
  * XXX: Why inherit KisPaintLayer and not KisPaintDevice? (boud)
  * XXX: Add dox
  */
-class KRITAUI_EXPORT KisComplexColor : public KisPaintDevice {
+class KRITAIMAGE_EXPORT KisComplexColor : public KisPaintDevice {
     Q_OBJECT
 
 public:

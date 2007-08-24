@@ -23,7 +23,7 @@
 #include <QDockWidget>
 #include <KoDockFactory.h>
 
-#define KOKROSS_EXPORT KDE_EXPORT
+#include "kokross_export.h"
 
 /**
 * The KoScriptingDockerFactory class implements a factory to

@@ -26,7 +26,7 @@
 #include <KoView.h>
 #include <KoDocument.h>
 
-#define KOKROSS_EXPORT KDE_EXPORT
+#include "kokross_export.h"
 
 /**
 * The KoScriptingModule provides the base class for Kross

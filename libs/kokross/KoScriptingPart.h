@@ -31,7 +31,7 @@ namespace Kross {
     class Action;
 }
 
-#define KOKROSS_EXPORT KDE_EXPORT
+#include "kokross_export.h"
 
 /**
 * The KoScriptingPart class implements the top-level guiclient

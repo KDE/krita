@@ -20,6 +20,7 @@
 
 #include "KoHighlightingTab.h"
 #include "KoText.h"
+#include "styles/KoCharacterStyle.h"
 
 KoHighlightingTab::KoHighlightingTab( QWidget* parent)
     : QWidget ( parent)
@@ -72,20 +73,19 @@ void KoHighlightingTab::save(QTextCharFormat &format) const {
     switch(widget.underlineStyle->currentIndex()) {
         case 0: format.setUnderlineStyle(QTextCharFormat::NoUnderline); break;
         case 1:
-            QTextCharFormat::UnderlineStyle style;
+            format.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
             switch(widget.underlineLineStyle->currentIndex()) {
-                case 0: style = QTextCharFormat::SingleUnderline; break;
-                case 1: style = QTextCharFormat::DashUnderline; break;
-                case 2: style = QTextCharFormat::DotLine; break;
-                case 3: style = QTextCharFormat::DashDotLine; break;
-                case 4: style = QTextCharFormat::DashDotDotLine; break;
-                case 5: style = QTextCharFormat::WaveUnderline; break;
+                case 0: format.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine); break;
+                case 1: format.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::DashLine); break;
+                case 2: format.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::DottedLine); break;
+                case 3: format.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::DotDashLine); break;
+                case 4: format.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::DotDotDashLine); break;
+                case 5: format.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::WaveLine); break;
                 default:
-                    style = QTextCharFormat::SingleUnderline; break;
+                    format.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
                     kWarning() << "Unknown items in the underlineLineStyle combobox!\n";
             }
-            format.setUnderlineStyle(style);
-            format.setUnderlineColor(widget.underlineColor->color());
+            format.setProperty(KoCharacterStyle::UnderlineColor, widget.underlineColor->color());
             break;
         case 2: // unsupported by Qt right now :(  TODO
             format.setUnderlineStyle(QTextCharFormat::SingleUnderline);

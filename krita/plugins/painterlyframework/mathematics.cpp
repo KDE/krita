@@ -33,8 +33,8 @@ const double MATH_LIM_SUP = 1.0 - 3.90625e-3;
 const double MATH_LIM_SUB = 0.0 + 3.90625e-3;
 const double MATH_NORMALIZATION = 65535.0;
 
-// double MATH_SUB_BLACK(double) { return 3.90625e-5; }
-double MATH_SUB_BLACK(double R) { return 0.001*R; }
+double MATH_SUB_BLACK(double) { return 3.90625e-5; }
+// double MATH_SUB_BLACK(double R) { return 0.001*R; }
 
 void correctReflectance(double &R)
 {
@@ -42,6 +42,16 @@ void correctReflectance(double &R)
         R = MATH_LIM_SUP;
     if (R < MATH_LIM_SUB)
         R = MATH_LIM_SUB;
+}
+
+void normalizeReflectance(int num, double *R)
+{
+    double max = 1.0;
+    for (int i = 0; i < num; i++)
+        if (R[i] > max)
+            max = R[i];
+    for (int i = 0; i < num; i++)
+        R[i] = R[i] / max;
 }
 
 double coth(double z)
@@ -160,6 +170,7 @@ void computeReflectance(const int nrefs, const float *vKS, double *vREF)
 
         vREF[j] = R;
     }
+    normalizeReflectance(nrefs, vREF);
 }
 
 /*

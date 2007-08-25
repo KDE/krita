@@ -109,8 +109,8 @@ public:
       * scaled image.
       *
       * @param r the source rectangle in pixels that needs to be drawn
-      * @param xScale the X axis scale in percent
-      * @param yScale the Y axis scale in percent
+      * @param xScale the X axis scale (1.0 == 100%)
+      * @param yScale the Y axis scale (1.0 == 100%)
       * @param projection the display profile
       * @param exposure the exposure (for hdr images)
       * @param mask the mask that will be rendered on top of the image

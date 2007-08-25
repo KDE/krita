@@ -43,10 +43,12 @@
 #include "kis_selection_mask.h"
 #include "kis_types.h"
 
+#define EPSILON 1e-6
 
 // Casper's version that's fixed for jitter.
 QImage sampleImage(const QImage& image, int columns, int rows, const QRect &dstRect)
 {
+    Q_ASSERT( image.format() == QImage::Format_ARGB32 );
     int *x_offset;
     int *y_offset;
 
@@ -67,22 +69,21 @@ QImage sampleImage(const QImage& image, int columns, int rows, const QRect &dstR
     if ((columns == image.width()) && (rows == image.height()))
         return image.copy( dstRect );
 
-    const int d = image.depth() / 8;
-
-    QImage sample_image( dstRect.width(), dstRect.height(), image.depth());
-    sample_image.setAlphaBuffer( image.hasAlphaBuffer());
+    QImage sample_image( dstRect.width(), dstRect.height(), QImage::Format_ARGB32);
     /*
       Allocate scan line buffer and column offset buffers.
     */
-    pixels= new uchar[ image.width() * d ];
+    pixels= new uchar[ image.width() * 4 ];
     x_offset= new int[ sample_image.width() ];
     y_offset= new int[ sample_image.height() ];
+
     /*
       Initialize pixel offsets.
     */
 // In the following several code 0.5 needs to be added, otherwise the image
 // would be moved by half a pixel to bottom-right, just like
 // with Qt's QImage::scale()
+
     for (x=0; x < (long) sample_image.width(); x++)
     {
         x_offset[x] = int((x + dstRect.left()) * image.width() / columns);
@@ -105,41 +106,18 @@ QImage sampleImage(const QImage& image, int columns, int rows, const QRect &dstR
             */
             j= y_offset[y];
             p= image.scanLine( j );
-            (void) memcpy(pixels,p,image.width()*d);
+            (void) memcpy(pixels,p,image.width() * 4);
         }
         /*
           Sample each column.
         */
-        switch( d )
+        for (x=0; x < (long) sample_image.width(); x++)
         {
-        case 1: // 8bit
-            for (x=0; x < (long) sample_image.width(); x++)
-            {
-                *q++=pixels[ x_offset[x] ];
-            }
-            break;
-        case 4: // 32bit
-            for (x=0; x < (long) sample_image.width(); x++)
-            {
-                *(QRgb*)q=((QRgb*)pixels)[ x_offset[x] ];
-                q += d;
-            }
-            break;
-        default:
-            for (x=0; x < (long) sample_image.width(); x++)
-            {
-                memcpy( q, pixels + x_offset[x] * d, d );
-                q += d;
-            }
-            break;
+            *(QRgb*)q=((QRgb*)pixels)[ x_offset[x] ];
+            q += 4;
         }
     }
-    if( d != 4 ) // != 32bit
-    {
-        sample_image.setNumColors( image.numColors());
-        for( int i = 0; i < image.numColors(); ++i )
-            sample_image.setColor( i, image.color( i ));
-    }
+
     delete[] y_offset;
     delete[] x_offset;
     delete[] pixels;
@@ -172,11 +150,15 @@ struct KisPrescaledProjection::Private
         {
         }
     bool updateAllOfQPainterCanvas;
-    bool useDeferredSmoothing;
-    bool useNearestNeighbour;
-    bool useQtScaling;
-    bool useSampling;
-    bool useSmoothScaling;
+    bool useDeferredSmoothing; // first sample, then smoothscale when
+                               // zoom < 1.0
+    bool useNearestNeighbour; // Use Krita to sample the image when
+                              // zoom < 1.0
+    bool useQtScaling; // Use Qt to smoothscale the image when zoom <
+                       // 1.0
+    bool useSampling; // use the above sample function instead
+                      // qpainter's built-in scaling when zoom > 1.0
+    bool useSmoothScaling; // Use blitz' smootscale when zoom < 1.0
     bool drawCheckers;
     bool scrollCheckers;
     bool drawMaskVisualisationOnUnscaledCanvasCache;
@@ -195,6 +177,7 @@ struct KisPrescaledProjection::Private
     KoColorProfile * monitorProfile;
     float exposure;
     KisNodeSP currentNode;
+    QTimer t;
 };
 
 KisPrescaledProjection::KisPrescaledProjection()
@@ -420,10 +403,69 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc )
     if ( !m_d->image )
         return;
 
-#if 0
-    // When we're drawing pixels 1:1, don't try to scale at all
-    if () {
+    // get the x and y zoom level
+    double zoomX, zoomY;
+    m_d->viewConverter->zoom(&zoomX, &zoomY);
 
+    // Get the KisImage resolution
+    double xRes = m_d->image->xRes();
+    double yRes = m_d->image->yRes();
+
+    // Compute the scale factors
+    double scaleX = zoomX / xRes;
+    double scaleY = zoomY / yRes;
+
+    // Size of the image in KisImage pixels
+    QSize imagePixelSize( m_d->image->width(), m_d->image->height() );
+
+    // compute how large a fully scaled image is in viewpixels
+    QSize dstSize = QSize(int(imagePixelSize.width() * scaleX ), int( imagePixelSize.height() * scaleY));
+
+    // Don't go outside the image (will crash the sampleImage method below)
+    QRect drawRect = rc.translated( m_d->documentOffset ).intersected(QRect( QPoint(0, 0), dstSize ) );
+
+    // Go from the widget coordinates to points
+    QRectF imageRect = m_d->viewConverter->viewToDocument( rc.translated( m_d->documentOffset ) );
+
+    // Go from points to view pixels
+    imageRect.setCoords( imageRect.left() * xRes, imageRect.top() * yRes,
+                         imageRect.right() * xRes, imageRect.bottom() * yRes );
+
+    // Don't go outside the image
+    QRect alignedImageRect = imageRect.intersected( m_d->image->bounds() ).toAlignedRect();
+
+    // the size of the rect after scaling
+    QSize scaledSize = QSize( ( int )( alignedImageRect.width() * scaleX ), ( int )( alignedImageRect.height() * scaleY ));
+
+
+    // And now for deciding what to do and when -- the complicated bit
+
+    if ( scaleX > 1.0 - EPSILON && scaleY > 1.0 - EPSILON ) {
+        kDebug(41010 ) << "Scale is 1.0, don't scale";
+        QImage img;
+
+        // Get the image directly from the KisImage
+        if ( m_d->useNearestNeighbour || !m_d->cacheKisImageAsQImage ) {
+            img = m_d->image->convertToQImage( drawRect, 1.0, 1.0, m_d->monitorProfile, m_d->exposure );
+        }
+        else {
+            // Crop the canvascache
+            img = m_d->unscaledCache.copy( drawRect );
+        }
+
+        // If so desired, use the sampleImage originally taken from
+        // gwenview, which got it from mosfet, who got it from
+        // ImageMagick
+        if ( m_d->useSampling ) {
+            gc.drawImage( rc.topLeft(), sampleImage(img, dstSize.width(), dstSize.height(), drawRect) );
+        }
+        else {
+            // Else, let QPainter do the scaling, like we did in 1.6
+            gc.save();
+            gc.scale(scaleX, scaleY);
+            gc.drawImage(rc.topLeft(), img);
+            gc.restore();
+        }
     }
     else {
         // Use nearest neighbour interpolation from the raw KisImage
@@ -433,10 +475,13 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc )
                 // the next smoothing job if it is added before this
                 // one is done.
             }
+            QImage tmpImage = m_d->image->convertToQImage( alignedImageRect, scaleX, scaleY, m_d->monitorProfile, m_d->exposure );
+            gc.drawImage( rc.topLeft(), tmpImage );
         }
         else {
 
-            QImage unscaled = m_d->unscaledCache;
+
+            QImage croppedImage = m_d->unscaledCache.copy( alignedImageRect );
 
             // If we don't cache the image as an unscaled QImage, get
             // an unscaled QImage for this rect from KisImage.
@@ -453,17 +498,17 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc )
             }
         }
     }
-#endif
+
 }
 
 QRect KisPrescaledProjection::viewRectFromImagePixels( const QRect & rc )
 {
-    double pppx,pppy;
-    pppx = m_d->image->xRes();
-    pppy = m_d->image->yRes();
+    double xRes,yRes;
+    xRes = m_d->image->xRes();
+    yRes = m_d->image->yRes();
 
     QRectF docRect;
-    docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
+    docRect.setCoords((rc.left() - 2) / xRes, (rc.top() - 2) / yRes, (rc.right() + 2) / xRes, (rc.bottom() + 2) / yRes);
 
     QRect viewRect = m_d->viewConverter->documentToView(docRect).toAlignedRect();
     viewRect = viewRect.translated( -m_d->documentOffset );

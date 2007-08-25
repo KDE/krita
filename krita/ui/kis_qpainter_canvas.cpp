@@ -349,7 +349,7 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
                         imageRect.right() * pppx, imageRect.bottom() * pppy);
 
     // Don't go outside the image and convert to whole pixels
-    QRect alignedRect = imageRect.intersected( canvasImage.rect() ).toAlignedRect();
+    QRect alignedImageRect = imageRect.intersected( canvasImage.rect() ).toAlignedRect();
 
     if ( m_d->canvas->useFastZooming() ) {
 
@@ -357,7 +357,7 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
 
         QTime t;
         t.start();
-        QImage tmpImage = img->convertToQImage( alignedRect, scaleX, scaleY, m_d->canvas->monitorProfile(), m_d->currentExposure );
+        QImage tmpImage = img->convertToQImage( alignedImageRect, scaleX, scaleY, m_d->canvas->monitorProfile(), m_d->currentExposure );
         kDebug(41010 ) << "KisImage::convertToQImage" << t.elapsed();
         gc.drawImage( rc.topLeft(), tmpImage );
 
@@ -369,8 +369,8 @@ void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
             gc.drawImage( rc.topLeft(), canvasImage.copy( drawRect ) );
         }
         else {
-            QSize sz = QSize( ( int )( alignedRect.width() * scaleX ), ( int )( alignedRect.height() * scaleY ));
-            QImage croppedImage = canvasImage.copy( alignedRect );
+            QSize sz = QSize( ( int )( alignedImageRect.width() * scaleX ), ( int )( alignedImageRect.height() * scaleY ));
+            QImage croppedImage = canvasImage.copy( alignedImageRect );
 
             if ( sx >= 1.0 && sy >= 1.0 ) {
                 QTime t;

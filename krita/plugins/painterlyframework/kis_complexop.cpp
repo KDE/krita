@@ -176,14 +176,8 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
                     brushCell->volume += volume_cb;
                 }
 */
-//                 if (cs->alpha(canvasIt.rawData()) && canvasCell->volume)
-                    mixChannels(bufferColor, canvasColor, pressure*canvasCell->volume, brushColor, pressure*brushCell->volume);
-//                 else
-//                     bufferColor = brushColor;
-//                 if (canvasCell->volume)
-                    mixProperty(bufferCell, canvasCell, pressure*canvasCell->volume, brushCell, pressure*brushCell->volume);
-//                 else
-//                     *bufferCell = *canvasCell;
+                mixChannels(bufferColor, canvasColor, pressure*canvasCell->volume, brushColor, pressure*brushCell->volume);
+                mixProperty(bufferCell, canvasCell, pressure*canvasCell->volume, brushCell, pressure*brushCell->volume);
 
                 bufferColor[channels-1] = alpha;
 

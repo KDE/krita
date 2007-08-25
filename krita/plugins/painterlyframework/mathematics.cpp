@@ -33,8 +33,16 @@ const double MATH_LIM_SUP = 1.0 - 3.90625e-3;
 const double MATH_LIM_SUB = 0.0 + 3.90625e-3;
 const double MATH_NORMALIZATION = 65535.0;
 
-double MATH_SUB_BLACK(double) { return 3.90625e-4; }
+double MATH_SUB_BLACK(double) { return 3.90625e-5; }
 // double MATH_SUB_BLACK(double R) { return 0.4*R; }
+
+void correctReflectance(double &R)
+{
+    if (R > MATH_LIM_SUP)
+        R = MATH_LIM_SUP;
+    if (R < MATH_LIM_SUB)
+        R = MATH_LIM_SUB;
+}
 
 double coth(double z)
 {
@@ -121,10 +129,7 @@ void computeKS(const int nrefs, const double *vREF, float *vKS)
     for (int i = 0, j = 0; j < nrefs; i += 2, j += 1) {
         R = vREF[j];
 
-        if (R > MATH_LIM_SUP)
-            R = MATH_LIM_SUP;
-        if (R < MATH_LIM_SUB)
-            R = MATH_LIM_SUB;
+        correctReflectance(R);
 
         Rb = R - MATH_SUB_BLACK(R);
 
@@ -151,10 +156,7 @@ void computeReflectance(const int nrefs, const float *vKS, double *vREF)
         b = sqrt( a*a - 1 );
         R = 1.0 / ( a + b * coth( b * S * MATH_THICKNESS ) );
 
-        if (R > MATH_LIM_SUP)
-            R = MATH_LIM_SUP;
-        if (R < MATH_LIM_SUB)
-            R = MATH_LIM_SUB;
+//         correctReflectance(R);
 
         vREF[j] = R;
     }
@@ -171,10 +173,7 @@ void computeReflectance(const int nrefs, const float *vKS, double *vREF)
         q = K / S;
         R = 1.0 + q - sqrt( q*q + 2.0*q );
 
-        if (R > MATH_LIM_SUP)
-            R = MATH_LIM_SUP;
-        if (R < MATH_LIM_SUB)
-            R = MATH_LIM_SUB;
+        correctReflectance(R);
 
         vREF[j] = R;
     }
@@ -189,11 +188,11 @@ void simplex(const int rows, const int cols, double **M, double *X, const double
 
     glp_init_smcp(&parm);
     parm.msg_lev = GLP_MSG_OFF;
-//    parm.meth = GLP_DUALP;
+    parm.meth = GLP_DUALP;
 
     lp = glp_create_prob();
     glp_set_prob_name(lp, "XYZ2REF");
-    glp_set_obj_dir(lp, GLP_MAX);
+    glp_set_obj_dir(lp, GLP_MIN);
 
     glp_add_rows(lp, rows);
 
@@ -224,7 +223,7 @@ void simplex(const int rows, const int cols, double **M, double *X, const double
         glp_set_mat_row(lp, i+1, cols, ind, row);
     }
 
-//    lpx_scale_prob(lp);
+    lpx_scale_prob(lp);
     glp_simplex(lp, &parm);
 
     for (int i = 0; i < cols; i++)

@@ -27,7 +27,7 @@
 
 class QTextStream;
 
-const int WLS_NUMBER = 16;
+const int WLS_NUMBER = 15;
 
 class KRITAPAINTERLYCOMMON_EXPORT KisIlluminantProfile : public KoColorProfile {
     public:

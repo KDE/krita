@@ -523,24 +523,12 @@ bool computeMatrix()
 		int X = C.X(j).get_ui();
 		C.matrix(2,j) = k*(470.0/2.0)*C.W(j)*C.z(X)*C.final_normalization(X);
 	}
-/*
-	cout.precision(DBL_PREC);
-	cout << "double g_matrix[3][10] = {" << endl;
-	for (int i = 0; i < 3; i++) {
-		cout << "\t{" << endl;
-		for (int j = 0; j < (NUM-1); j++) {
-			cout.fill(' ');
-			cout << "\t\t" << C.matrix(i,j) << "," << endl;
-		}
-		cout.fill(' ');
-		cout << "\t\t" << C.matrix(i,NUM-1) << endl << "\t}";
-		if (i != 2)
-			cout << "," << endl;
-		else
-			cout << endl;
-	}
-	cout << "};" << endl;
-*/
+
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < NUM; j++)
+            if (C.matrix(i,j) < ZERO)
+                C.matrix(i,j) = ZERO;
+
 	return true;
 }
 
@@ -645,10 +633,7 @@ bool saveMatrix(char *profilename, char *filename)
 	f.precision(DBL_PREC);
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < NUM; j++)
-			if (C.matrix(i,j).get_d())
-				f << C.matrix(i,j).get_d() << endl;
-			else
-				f << ZERO << endl;
+            f << C.matrix(i,j).get_d() << endl;
 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++)

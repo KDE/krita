@@ -134,7 +134,7 @@ void KisPainterlyMixer::loadColors()
     m_vColors.append(KoColor(QColor(0xFFFF0000), cs)); // Red
     m_vColors.append(KoColor(QColor(0xFF00FF00), cs)); // Green
     m_vColors.append(KoColor(QColor(0xFF0000FF), cs)); // Blue
-    m_vColors.append(KoColor(QColor(0xFF00BABA), cs)); // Whatever :)
+    m_vColors.append(KoColor(QColor(0xFF0A939D), cs)); // Whatever :)
     m_vColors.append(KoColor(QColor(0xFFFFFF00), cs)); // Yellow
     m_vColors.append(KoColor(QColor(0xFFFF00FF), cs)); // Violet
     m_vColors.append(KoColor(QColor(0xFFFFFFFF), cs)); // White

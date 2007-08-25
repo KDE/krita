@@ -33,8 +33,8 @@ const double MATH_LIM_SUP = 1.0 - 3.90625e-3;
 const double MATH_LIM_SUB = 0.0 + 3.90625e-3;
 const double MATH_NORMALIZATION = 65535.0;
 
-double MATH_SUB_BLACK(double) { return 3.90625e-5; }
-// double MATH_SUB_BLACK(double R) { return 0.4*R; }
+// double MATH_SUB_BLACK(double) { return 3.90625e-5; }
+double MATH_SUB_BLACK(double R) { return 0.001*R; }
 
 void correctReflectance(double &R)
 {
@@ -192,7 +192,7 @@ void simplex(const int rows, const int cols, double **M, double *X, const double
 
     lp = glp_create_prob();
     glp_set_prob_name(lp, "XYZ2REF");
-    glp_set_obj_dir(lp, GLP_MIN);
+    glp_set_obj_dir(lp, GLP_MAX);
 
     glp_add_rows(lp, rows);
 

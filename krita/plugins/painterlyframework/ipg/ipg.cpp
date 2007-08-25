@@ -45,7 +45,7 @@ using namespace gmm;
 using namespace std;
 
 #define GMP_PREC 1024
-#define NUM 16
+#define NUM 15
 #define DBL_PREC 64
 #define ZERO 1e-64
 
@@ -129,8 +129,13 @@ class c {
 		const mpf_class W_func(int i)
 		{
 			if (i >= 0 && i <= 470)
-				return mpf_class(1.0); //H(i)*F(i);
+				return H(i)*F(i);
 		}
+        const mpf_class final_normalization(int i)
+        {
+            if (i >= 0 && i <= 470)
+                return 1.0/F(i);
+        }
 } C;
 
 void get_v(mpf_class v[], double d[]);
@@ -323,8 +328,9 @@ mpf_class standardIntegral(int p)
 
 		x = 2.0*(double)(i)/470.0 - 1.0;
 
-		I += pow(x, p)*C.W_func(i)*norm;
+		I += pow(x, p)*C.W_func(i);
 	}
+    I *= norm;
 
 	return I;
 }
@@ -497,7 +503,7 @@ bool computeMatrix()
 
 	for (int i = 0; i < NUM; i++) {
 		int X = C.X(i).get_ui();
-		Hy_integral += C.W(i)*C.H(X)*C.y(X);
+		Hy_integral += C.W(i)*C.y(X)*C.final_normalization(X);
 	}
 
 	Hy_integral *= 470.0/2.0;
@@ -507,15 +513,15 @@ bool computeMatrix()
 
 	for (int j = 0; j < NUM; j++) {
 		int X = C.X(j).get_ui();
-		C.matrix(0,j) = k*(470.0/2.0)*C.W(j)*C.H(X)*C.x(X);
+		C.matrix(0,j) = k*(470.0/2.0)*C.W(j)*C.x(X)*C.final_normalization(X);
 	}
 	for (int j = 0; j < NUM; j++) {
 		int X = C.X(j).get_ui();
-		C.matrix(1,j) = k*(470.0/2.0)*C.W(j)*C.H(X)*C.y(X);
+		C.matrix(1,j) = k*(470.0/2.0)*C.W(j)*C.y(X)*C.final_normalization(X);
 	}
 	for (int j = 0; j < NUM; j++) {
 		int X = C.X(j).get_ui();
-		C.matrix(2,j) = k*(470.0/2.0)*C.W(j)*C.H(X)*C.z(X);
+		C.matrix(2,j) = k*(470.0/2.0)*C.W(j)*C.z(X)*C.final_normalization(X);
 	}
 /*
 	cout.precision(DBL_PREC);

@@ -520,7 +520,7 @@ public:
      *  @param version the DTD version (usually the application's version).
      *  @deprecated use createOasisXmlWriter instead
      */
-    QDomDocument createDomDocument( const QString& tagName, const QString& version ) const KDE_DEPRECATED;
+    KDE_DEPRECATED QDomDocument createDomDocument( const QString& tagName, const QString& version ) const;
 
     /**
      *  Return an XML writer for saving Oasis XML into the device @p dev,

@@ -101,7 +101,7 @@ public:
     ~KoToolManager();
 
     /// You can just create a toolProxy with new, no need to use this method.
-    KoToolProxy *createToolProxy(KoCanvasBase *parentCanvas) KDE_DEPRECATED;
+    KDE_DEPRECATED KoToolProxy *createToolProxy(KoCanvasBase *parentCanvas);
 
     /**
      * Register actions for switching to tools at the actionCollection parameter.

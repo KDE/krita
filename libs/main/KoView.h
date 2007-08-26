@@ -255,7 +255,7 @@ public:
    *
    * @deprecated, use applyViewTransformations / reverseViewTransformations instead.
    */
-  virtual QMatrix matrix() const KDE_DEPRECATED;
+  virtual KDE_DEPRECATED QMatrix matrix() const;
 
   /**
    * Apply the transformations that the view makes to its contents.

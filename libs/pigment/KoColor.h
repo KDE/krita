@@ -101,7 +101,7 @@ public:
     void fromQColor(const QColor& c, quint8 opacity) const;
 
     /// For easy memcpy'ing etc.   WARNING; violates encapsulation.
-    quint8 * KDE_DEPRECATED data() const;
+    KDE_DEPRECATED quint8 * data() const;
 
 #ifndef NODEBUG
     /// use kDebug calls to print internal info

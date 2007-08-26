@@ -315,7 +315,7 @@ QList<KoID> KoColorSpaceRegistry::colorModelsList() const
     QList<KoColorSpaceFactory*> factories = values();
     foreach(KoColorSpaceFactory* factory, factories)
     {
-        if(not ids.contains(factory->colorModelId()))
+        if(!ids.contains(factory->colorModelId()))
         {
             ids << factory->colorModelId();
         }
@@ -329,7 +329,7 @@ QList<KoID> KoColorSpaceRegistry::colorDepthList(const KoID& colorModelId) const
     QList<KoColorSpaceFactory*> factories = values();
     foreach(KoColorSpaceFactory* factory, factories)
     {
-        if(not ids.contains(factory->colorDepthId()) and factory->colorModelId() == colorModelId )
+        if(!ids.contains(factory->colorDepthId()) && factory->colorModelId() == colorModelId )
         {
             ids << factory->colorDepthId();
         }
@@ -342,7 +342,7 @@ QString KoColorSpaceRegistry::colorSpaceId(const KoID& colorModelId, const KoID&
     QList<KoColorSpaceFactory*> factories = values();
     foreach(KoColorSpaceFactory* factory, factories)
     {
-        if(factory->colorModelId() == colorModelId and factory->colorDepthId() == colorDepthId )
+        if(factory->colorModelId() == colorModelId && factory->colorDepthId() == colorDepthId )
         {
             return factory->id();
         }

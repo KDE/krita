@@ -2495,6 +2495,11 @@ KoXmlCDATASection::KoXmlCDATASection(): KoXmlText()
   d->nodeType = KoXmlNode::CDATASectionNode;
 }
 
+KoXmlCDATASection::KoXmlCDATASection( const KoXmlCDATASection& cdata )
+{
+   *this = cdata;
+}
+
 KoXmlCDATASection::~KoXmlCDATASection()
 {
   d->unref();

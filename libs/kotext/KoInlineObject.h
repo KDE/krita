@@ -111,7 +111,7 @@ public:
      * Save this inlineObject as ODF
      * @param context the context for saving.
      */
-    virtual void saveOdf (KoShapeSavingContext & context) { Q_UNUSED(context) }
+    virtual void saveOdf (KoShapeSavingContext & context);
     
     /**
      * Update position of the inline object.

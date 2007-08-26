@@ -19,6 +19,7 @@
 
 #include "KoInlineObject.h"
 #include "KoTextDocumentLayout.h"
+#include "KoShapeSavingContext.h"
 
 class InlineObjectPrivate {
 public:
@@ -50,6 +51,10 @@ void KoInlineObject::setManager(KoInlineTextObjectManager *manager) {
 
 KoInlineTextObjectManager *KoInlineObject::manager() {
     return d->manager;
+}
+
+void KoInlineObject::saveOdf(KoShapeSavingContext & context) {
+    Q_UNUSED(context);
 }
 
 void KoInlineObject::propertyChanged(Property key, const QVariant &value) {

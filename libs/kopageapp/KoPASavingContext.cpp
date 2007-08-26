@@ -19,6 +19,8 @@
 
 #include "KoPASavingContext.h"
 
+#include <QPixmap>
+
 KoPASavingContext::KoPASavingContext( KoXmlWriter &xmlWriter, KoSavingContext &context, int page )
 : KoShapeSavingContext( xmlWriter, context )
 , m_page( page )    

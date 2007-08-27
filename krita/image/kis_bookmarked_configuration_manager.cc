@@ -50,13 +50,20 @@ KisBookmarkedConfigurationManager::~KisBookmarkedConfigurationManager()
 
 KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(QString configname) const
 {
-    if(not exist(configname)) return 0;
+    if(not exist(configname))
+    {
+        if(configname == ConfigDefault.id())
+            return d->configFactory->createDefault();
+        else
+            return 0;
+    }
     KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
     
     QDomDocument doc;
     doc.setContent( cfg.readEntry<QString>(configname, "") );
     QDomElement e = doc.documentElement();
     KisSerializableConfiguration* config = d->configFactory->create(e);
+    kDebug() << config << endl;
     return config;
 }
 
@@ -113,4 +120,21 @@ void KisBookmarkedConfigurationManager::remove(QString name)
     KSharedConfig::Ptr cfg = KGlobal::config();
     KConfigGroup group = cfg->group(configEntryGroup());
     group.deleteEntry(name);
+}
+
+QString KisBookmarkedConfigurationManager::uniqueName(KLocalizedString base)
+{
+#ifndef QT_NO_DEBUG
+    QString prev;
+#endif
+    int nb = 1;
+    while(true)
+    {
+        QString cur = base.subs(nb++).toString();
+        if(not exist(cur)) return cur;
+#ifndef QT_NO_DEBUG
+        Q_ASSERT(prev != cur);
+        prev = cur;
+#endif
+    }
 }

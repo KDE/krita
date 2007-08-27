@@ -261,11 +261,10 @@ template <class T>
 Q_INLINE_TEMPLATE void KisSharedPtr<T>::attach(T* p) const
 {
     if (d != p) {
-        T *x = p;
-        if (x) x->ref.ref();
-        x = qAtomicSetPtr(&d, x);
-        if (x && !x->ref.deref())
-            delete x;
+        if (p) p->ref.ref();
+        if (d && !d->ref.deref())
+            delete d;
+        d = p;
     }
 }
 

@@ -19,19 +19,23 @@
 #ifndef _KIS_SHARED_H_
 #define _KIS_SHARED_H_
 
-#include <QAtomic>
+#include <qatomic.h>
 #include <kis_shared_ptr.h>
 #include <krita_export.h>
 
 class KisSharedData;
 
 class KRITAIMAGE_EXPORT KisShared {
+#if QT_VERSION < 0x040400
+    private:
+        typedef QAtomic QAtomicInt;
+#endif
     friend class KisSharedData;
     protected:
         KisShared();
         ~KisShared();
     public:
-        QAtomic ref;
+        QAtomicInt ref;
         KisSharedPtr< KisSharedData > dataPtr;
 };
 

@@ -19,16 +19,20 @@
 #ifndef _KIS_SHARED_DATA_H_
 #define _KIS_SHARED_DATA_H_
 
-#include <QAtomic>
+#include <qatomic.h>
 #include <kis_shared_ptr.h>
 
 /**
  * XXX: Add documentation!
  */
 class KisSharedData  {
+#if QT_VERSION < 0x040400
+    private:
+        typedef QAtomic QAtomicInt;
+#endif
     public:
         KisSharedData() : valid(true) { }
-        QAtomic ref;
+        QAtomicInt ref;
         bool valid;
 };
 

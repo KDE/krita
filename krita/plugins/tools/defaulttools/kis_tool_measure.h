@@ -20,8 +20,9 @@
 #ifndef KIS_TOOL_MEASURE_H_
 #define KIS_TOOL_MEASURE_H_
 
-#include "kis_tool.h"
+#include <KoUnit.h>
 
+#include "kis_tool.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "KoToolFactory.h"
@@ -32,12 +33,35 @@ class QWidget;
 
 class KoCanvasBase;
 
+
+class KisToolMeasureOptionsWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    KisToolMeasureOptionsWidget(QWidget* parent, double resolution);
+
+public slots:
+    void slotSetDistance(double distance);
+    void slotSetAngle(double angle);
+    void slotUnitChanged(int index);
+
+private:
+    void updateDistance();
+
+    double m_resolution;
+    QLabel* m_distanceLabel;
+    QLabel* m_angleLabel;
+    double m_distance;
+    KoUnit m_unit;
+};
+
 class KisToolMeasure : public KisTool {
 
     Q_OBJECT
     typedef KisTool super;
 
- public:
+public:
     KisToolMeasure(KoCanvasBase * canvas);
     virtual ~KisToolMeasure();
 
@@ -63,7 +87,7 @@ private:
 
 private:
     bool m_dragging;
-    QWidget *m_optWidget;
+    KisToolMeasureOptionsWidget *m_optWidget;
 
     QPointF m_startPos;
     QPointF m_endPos;

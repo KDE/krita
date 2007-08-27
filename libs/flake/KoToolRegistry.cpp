@@ -19,7 +19,7 @@
  */
 
 #include "KoToolRegistry.h"
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 
 #include <KoPluginLoader.h>
 
@@ -45,7 +45,7 @@ KoToolRegistry::~KoToolRegistry()
 
 // static
 KoToolRegistry *KoToolRegistry::s_instance = 0;
-static KStaticDeleter<KoToolRegistry> staticToolRegistryDeleter;
+static K3StaticDeleter<KoToolRegistry> staticToolRegistryDeleter;
 
 KoToolRegistry* KoToolRegistry::instance()
 {

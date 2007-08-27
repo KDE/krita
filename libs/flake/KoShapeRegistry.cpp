@@ -35,7 +35,7 @@
 #include <QMultiMap>
 
 #include <kdebug.h>
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 
 class KoShapeRegistry::Private
 {
@@ -102,7 +102,7 @@ void KoShapeRegistry::init() {
 }
 
 KoShapeRegistry *KoShapeRegistry::s_singleton = 0;
-static KStaticDeleter<KoShapeRegistry> staticShapeRegistryDeleter;
+static K3StaticDeleter<KoShapeRegistry> staticShapeRegistryDeleter;
 
 KoShapeRegistry* KoShapeRegistry::instance()
 {

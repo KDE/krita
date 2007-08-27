@@ -21,7 +21,7 @@
 
 #include <KoPluginLoader.h>
 
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 
 void KoTextEditingRegistry::init() {
     KoPluginLoader::PluginsConfig config;
@@ -33,7 +33,7 @@ void KoTextEditingRegistry::init() {
 }
 
 KoTextEditingRegistry *KoTextEditingRegistry::s_instance = 0;
-static KStaticDeleter<KoTextEditingRegistry> staticShapeRegistryDeleter;
+static K3StaticDeleter<KoTextEditingRegistry> staticShapeRegistryDeleter;
 
 KoTextEditingRegistry* KoTextEditingRegistry::instance() {
     if(KoTextEditingRegistry::s_instance == 0) {

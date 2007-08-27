@@ -20,7 +20,7 @@
 #include "KoDockRegistry.h"
 #include "KoPluginLoader.h"
 
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 
 KoDockRegistry::KoDockRegistry() {
 }
@@ -39,7 +39,7 @@ KoDockRegistry::~KoDockRegistry()
 
 // static
 KoDockRegistry *KoDockRegistry::s_instance = 0;
-static KStaticDeleter<KoDockRegistry> staticToolRegistryDeleter;
+static K3StaticDeleter<KoDockRegistry> staticToolRegistryDeleter;
 
 KoDockRegistry* KoDockRegistry::instance()
 {

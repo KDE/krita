@@ -27,7 +27,7 @@
 
 #include <flake_export.h>
 
-//#include <kstaticdeleter.h>
+//#include <k3staticdeleter.h>
 
 #include <QImage>
 #include <QTime>

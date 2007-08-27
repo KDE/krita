@@ -42,7 +42,7 @@ public:
     QStack<Tag> tags;
     int baseIndentLevel;
 
-    char* indentBuffer; // maybe make it static, but then it needs a KStaticDeleter,
+    char* indentBuffer; // maybe make it static, but then it needs a K3StaticDeleter,
                           // and would eat 1K all the time... Maybe refcount it :)
     char* escapeBuffer; // can't really be static if we want to be thread-safe
 };

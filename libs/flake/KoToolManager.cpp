@@ -54,7 +54,7 @@
 #include <QTimer>
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 #include <kaction.h>
 #include <QStack>
 #include <QLabel>
@@ -633,7 +633,7 @@ void KoToolManager::registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas) 
 
 //static
 KoToolManager* KoToolManager::s_instance = 0;
-static KStaticDeleter<KoToolManager> staticToolManagerDeleter;
+static K3StaticDeleter<KoToolManager> staticToolManagerDeleter;
 
 KoToolManager* KoToolManager::instance() {
     if (s_instance == 0)

@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 
 #include "kohyphen.h"
 #include <kdebug.h>
@@ -36,7 +36,7 @@
 //#define DEBUG_HYPHENATOR 1
 
 KoHyphenator* KoHyphenator::s_self;
-static KStaticDeleter<KoHyphenator> kohyphensd;
+static K3StaticDeleter<KoHyphenator> kohyphensd;
 
 KoHyphenator* KoHyphenator::self()
 {

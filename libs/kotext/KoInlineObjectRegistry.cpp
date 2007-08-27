@@ -25,7 +25,7 @@
 #include <KoPluginLoader.h>
 
 #include <kdebug.h>
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 
 void KoInlineObjectRegistry::init() {
     KoPluginLoader::PluginsConfig config;
@@ -37,7 +37,7 @@ void KoInlineObjectRegistry::init() {
 }
 
 KoInlineObjectRegistry *KoInlineObjectRegistry::s_instance = 0;
-static KStaticDeleter<KoInlineObjectRegistry> staticInlineObjectRegistryDeleter;
+static K3StaticDeleter<KoInlineObjectRegistry> staticInlineObjectRegistryDeleter;
 
 KoInlineObjectRegistry* KoInlineObjectRegistry::instance() {
     if(KoInlineObjectRegistry::s_instance == 0) {

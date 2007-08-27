@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 #include <KConfig>
 
 class KoPluginLoader::Private {
@@ -46,7 +46,7 @@ KoPluginLoader::~KoPluginLoader()
 }
 
 KoPluginLoader *KoPluginLoader::Private::singleton = 0;
-static KStaticDeleter<KoPluginLoader> pluginLoaderStatic;
+static K3StaticDeleter<KoPluginLoader> pluginLoaderStatic;
 
 KoPluginLoader* KoPluginLoader::instance()
 {

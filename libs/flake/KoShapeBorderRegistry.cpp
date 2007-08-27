@@ -19,7 +19,7 @@
 #include "KoShapeBorderRegistry.h"
 #include <KoPluginLoader.h>
 
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 
 KoShapeBorderRegistry::KoShapeBorderRegistry()
 {
@@ -43,7 +43,7 @@ KoShapeBorderRegistry::~KoShapeBorderRegistry()
 }
 
 KoShapeBorderRegistry *KoShapeBorderRegistry::m_singleton = 0;
-static KStaticDeleter<KoShapeBorderRegistry> staticShapeRegistryDeleter;
+static K3StaticDeleter<KoShapeBorderRegistry> staticShapeRegistryDeleter;
 
 KoShapeBorderRegistry* KoShapeBorderRegistry::instance()
 {

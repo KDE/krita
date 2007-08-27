@@ -31,7 +31,7 @@
 #include <QThread>
 #include <qfile.h>
 
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
 
@@ -45,7 +45,7 @@
 
 KisTileManager* KisTileManager::m_singleton = 0;
 
-static KStaticDeleter<KisTileManager> staticDeleter;
+static K3StaticDeleter<KisTileManager> staticDeleter;
 
 KisTileManager::KisTileManager()
     : m_bigKritaLock( QMutex::Recursive )

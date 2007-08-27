@@ -41,7 +41,7 @@
 #include <QUndoCommand>
 #include <kcursor.h>
 #include <kstandarddirs.h>
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 #include <kdebug.h>
 
 #define HANDLE_DISTANCE 10
@@ -616,7 +616,7 @@ void KoInteractionTool::activate(bool temporary) {
 
 // ##########  SelectionDecorator ############
 QImage * SelectionDecorator::s_rotateCursor=0;
-static KStaticDeleter<QImage> staticRotateCursorDeleter;
+static K3StaticDeleter<QImage> staticRotateCursorDeleter;
 
 SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
         bool rotationHandles, bool shearHandles)

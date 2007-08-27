@@ -17,3 +17,30 @@ kde4_add_plugin(kritadefaulttools ${kritadefaulttools_PART_SRCS})
 target_link_libraries(kritadefaulttools kritaui)
 
 install(TARGETS kritadefaulttools  DESTINATION ${PLUGIN_INSTALL_DIR})
+
+
+########### install files ###############
+
+install( FILES
+    tool_color_fill.png 
+    tool_colorpicker.png
+    tool_move.png
+    tool_rectangle_cursor.png
+    tool_ellipse_cursor.png
+    tool_line_cursor.png
+    tool_freehand_cursor.png
+    tool_fill_cursor.png
+    tool_gradient_cursor.png
+    tool_gradient.png
+    tool_line.png
+    tool_rectangle.png
+    tool_ellipse.png
+    tool_pan.png
+    tool_freehand.png
+    tool_text.png
+    openhand_cursor.xpm
+    closedhand_cursor.xpm
+    DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+
+install( FILES  kritadefaulttools.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+

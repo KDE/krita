@@ -80,10 +80,16 @@ bool KoScriptingOdfReader::hasAttributeNS(const QString& namespaceURI, const QSt
 
 bool KoScriptingOdfReader::isNull() const { return d->currentElement.isNull(); }
 bool KoScriptingOdfReader::isElement() const { return d->currentElement.isElement(); }
-bool KoScriptingOdfReader::isText() const { return d->currentElement.isText(); }
 QString KoScriptingOdfReader::text() const { return d->currentElement.text(); }
 
-bool KoScriptingOdfReader::hasChildren() const { return d->currentElement.hasChildNodes(); }
+bool KoScriptingOdfReader::hasChildren() const {
+    const int count = d->currentElement.childNodesCount();
+    if( count < 1 )
+        return false;
+    if( count == 1 && d->currentElement.firstChild().isText() )
+        return false;
+    return true;
+}
 
 void KoScriptingOdfReader::emitOnElement() { emit onElement(); }
 void KoScriptingOdfReader::setCurrentElement(const KoXmlElement& elem) { d->currentElement = elem; }

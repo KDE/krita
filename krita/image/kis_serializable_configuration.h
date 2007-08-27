@@ -52,6 +52,7 @@ class KRITAIMAGE_EXPORT KisSerializableConfiguration {
 class KRITAIMAGE_EXPORT KisSerializableConfigurationFactory {
     public:
         virtual ~KisSerializableConfigurationFactory();
+        virtual KisSerializableConfiguration* createDefault() =0;
         virtual KisSerializableConfiguration* create(const QDomElement&) =0;
 };
 

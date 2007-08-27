@@ -164,8 +164,14 @@ KisFilterConfigurationFactory::~KisFilterConfigurationFactory()
     delete d;
 }
 
+KisSerializableConfiguration* KisFilterConfigurationFactory::createDefault()
+{
+    return new KisFilterConfiguration(d->name, d->version);
+}
+
 KisSerializableConfiguration* KisFilterConfigurationFactory::create(const QDomElement& e)
 {
+    kDebug() << "create" << endl;
     KisFilterConfiguration* fc = new KisFilterConfiguration(d->name, d->version);
     fc->fromXML( e );
     return fc;

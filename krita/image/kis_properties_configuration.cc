@@ -46,6 +46,7 @@ KisPropertiesConfiguration::KisPropertiesConfiguration(const KisPropertiesConfig
 
 void KisPropertiesConfiguration::fromXML(const QString & s )
 {
+    kDebug() << "From XML (s) !!!!" << endl;
     clearProperties();
 
     QDomDocument doc;
@@ -58,12 +59,13 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
 {
     QDomNode n = e.firstChild();
 
-
+    kDebug() << "From XML (e) !!!!" << endl;
     while (!n.isNull()) {
         // We don't nest elements in filter configuration. For now...
         QDomElement e = n.toElement();
-
-        if (!e.isNull()) {
+kDebug() << e.isNull() << " tag = " << e.tagName() << endl;
+        if (not e.isNull()) {
+kDebug() << e.tagName() << endl;
             if (e.tagName() == "param") {
                 // XXX Convert the variant pro-actively to the right type?
                 d->properties[e.attribute("name")] = QVariant(e.text());
@@ -71,7 +73,7 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
         }
         n = n.nextSibling();
     }
-    //dump();
+    dump();
 }
 
 void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
@@ -82,7 +84,8 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
         e.setAttribute( "name", QString(it.key().toLatin1()) );
         QVariant v = it.value();
         QDomText text = doc.createCDATASection(v.toString() ); // XXX: Unittest this!
-        root.appendChild(text);
+        e.appendChild(text);
+        root.appendChild(e);
     }
 }
 

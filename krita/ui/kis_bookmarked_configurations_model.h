@@ -56,6 +56,10 @@ class KRITAUI_EXPORT KisBookmarkedConfigurationsModel : public QAbstractListMode
          */
         virtual bool isIndexDeletable(const QModelIndex &index) const;
         /**
+         * @return the flags associated to the index
+         */
+        Qt::ItemFlags flags(const QModelIndex & index) const;
+        /**
          * Add a configuration to the bookmark manager.
          */
         virtual void saveConfiguration(QString name, const KisSerializableConfiguration* config);

@@ -20,6 +20,8 @@
 
 #include <QList>
 
+#include <kdebug.h>
+
 #include <KoID.h>
 
 #include <kis_bookmarked_configuration_manager.h>
@@ -54,7 +56,7 @@ QVariant KisBookmarkedConfigurationsModel::data(const QModelIndex &index, int ro
     {
         return QVariant();
     }
-    if(role == Qt::DisplayRole)
+    if(role == Qt::DisplayRole or role == Qt::EditRole)
     {
         switch(index.row())
         {
@@ -71,7 +73,21 @@ QVariant KisBookmarkedConfigurationsModel::data(const QModelIndex &index, int ro
 
 KisSerializableConfiguration* KisBookmarkedConfigurationsModel::configuration(const QModelIndex &index) const
 {
-    return 0;
+//     kDebug() << index.isValid() << endl;
+    if(not index.isValid()) return 0;
+//     kDebug() << index.row() << endl;
+    switch(index.row())
+    {
+        case 0:
+            kDebug() << "loading default" << endl;
+            return d->bookmarkManager->load( KisBookmarkedConfigurationManager::ConfigDefault.id() );
+            break;
+        case 1:
+            return d->bookmarkManager->load( KisBookmarkedConfigurationManager::ConfigLastUsed.id() );
+            break;
+        default:
+            return d->bookmarkManager->load( d->configsKey[ index.row() - 2 ] );
+    }
 }
 
 bool KisBookmarkedConfigurationsModel::isIndexDeletable(const QModelIndex &index) const
@@ -99,4 +115,23 @@ void KisBookmarkedConfigurationsModel::deleteIndex(const QModelIndex &index)
     beginRemoveColumns(QModelIndex(), idx, idx);
     d->configsKey.removeAt(idx);
     endRemoveColumns();
+}
+
+Qt::ItemFlags KisBookmarkedConfigurationsModel::flags(const QModelIndex & index) const
+{
+    if(not index.isValid()) return 0;
+    switch(index.row())
+    {
+        case 0:
+            return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+        case 1:
+            if(d->bookmarkManager->exist(KisBookmarkedConfigurationManager::ConfigLastUsed.id()) )
+            {
+                return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+            } else {
+                return 0;
+            }
+        default:
+            return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+    }
 }

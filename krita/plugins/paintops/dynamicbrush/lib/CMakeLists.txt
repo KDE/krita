@@ -5,6 +5,7 @@ set(kritadynamicbrushlib_LIB_SRCS
     kis_dynamic_brush_registry.cc
     kis_dynamic_brush.cc
     kis_dynamic_program.cc
+    kis_dynamic_program_factory_registry.cc
     kis_dynamic_sensor.cc
     kis_dynamic_shape.cc
     transformations/kis_dynamic_transformation.cc
@@ -22,7 +23,7 @@ kde4_add_ui_files(kritadynamicbrushlib_LIB_SRCS transformations/SizeTransformati
 
 kde4_add_library(kritadynamicbrush SHARED ${kritadynamicbrushlib_LIB_SRCS})
 
-target_link_libraries(kritadynamicbrush kritaui)
+target_link_libraries(kritadynamicbrush kritaui )
 
 set_target_properties(kritadynamicbrush PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

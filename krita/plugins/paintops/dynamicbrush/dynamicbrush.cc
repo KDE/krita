@@ -29,8 +29,10 @@
 #include <kis_view2.h>
 
 #include "kis_dynamicop.h"
+#include "kis_dynamic_program.h"
 #include "kis_dynamic_programs_editor.h"
 
+#if 0
 // TEMP
 #include <kis_dynamic_brush.h>
 #include <kis_dynamic_brush_registry.h>
@@ -39,6 +41,7 @@
 #include <kis_rotation_transformation.h>
 #include <kis_dynamic_sensor.h>
 // TEMP
+#endif
 
 #include <kis_bookmarked_configuration_manager.h>
 

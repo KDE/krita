@@ -54,6 +54,12 @@
      </item>
      <item>
       <widget class="QComboBox" name="comboBoxPrograms" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="editable" >
         <bool>true</bool>
        </property>
@@ -74,18 +80,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBoxProgramsType" >
-       <item>
-        <property name="text" >
-         <string>basic</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>filters list</string>
-        </property>
-       </item>
-      </widget>
+      <widget class="KisCmbIDList" name="comboBoxProgramsType" />
      </item>
      <item>
       <spacer>
@@ -120,6 +115,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisCmbIDList</class>
+   <extends>QComboBox</extends>
+   <header>kis_cmb_idlist.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

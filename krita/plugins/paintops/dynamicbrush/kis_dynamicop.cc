@@ -92,7 +92,9 @@ KisDynamicOpSettings::~KisDynamicOpSettings()
 KisDynamicBrush* KisDynamicOpSettings::createBrush() const
 {
     KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
-    KisDynamicProgram* program = static_cast<KisDynamicProgram*>(m_bookmarksModel->configuration( m_uiOptions->comboBoxPrograms->view()->currentIndex() ) );
+    QModelIndex modelIndex = m_bookmarksModel->index(
+            m_uiOptions->comboBoxPrograms->currentIndex(),0);
+    KisDynamicProgram* program = static_cast<KisDynamicProgram*>(m_bookmarksModel->configuration( modelIndex ) );
     Q_ASSERT(program);
     current->setProgram(program);
     return current;

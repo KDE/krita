@@ -27,20 +27,23 @@
 #include "ui_DynamicProgramsEditor.h"
 
 #include "kis_dynamic_program.h"
-#include "kis_filters_list_dynamic_program.h"
+#include "kis_dynamic_program_factory_registry.h"
 
 KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager) : KDialog(parent), m_dynamicProgramsEditor(0), m_currentEditor(0), m_frameVBoxLayout(0),m_bookmarksManager(bookmarksManager),
     m_bookmarksModel(new KisBookmarkedConfigurationsModel(bookmarksManager))
 {
+    setCaption(i18n("Edit dynamic programs"));
     setButtons(KDialog::Close);
     QWidget* widget = new QWidget(this);
     m_dynamicProgramsEditor = new Ui_DynamicProgramsEditor;
     m_dynamicProgramsEditor->setupUi(widget);
+    setMainWidget(widget);
     m_frameVBoxLayout = new QVBoxLayout(m_dynamicProgramsEditor->frame);
     m_frameVBoxLayout->setMargin(0);
     connect(m_dynamicProgramsEditor->comboBoxPrograms, SIGNAL(currentIndexChanged( const QString &) ), this, SLOT(setCurrentProgram(const QString&)));
     connect(m_dynamicProgramsEditor->pushButtonAdd, SIGNAL(pressed()), SLOT(addProgram()));
     m_dynamicProgramsEditor->comboBoxPrograms->setModel(m_bookmarksModel);
+    m_dynamicProgramsEditor->comboBoxProgramsType->setIDList( KisDynamicProgramFactoryRegistry::instance()->listKeys() );
 }
 
 KisDynamicProgramsEditor::~KisDynamicProgramsEditor()
@@ -51,32 +54,23 @@ KisDynamicProgramsEditor::~KisDynamicProgramsEditor()
 
 void KisDynamicProgramsEditor::setCurrentProgram(const QString& text)
 {
-#if 0
     kDebug(41006) <<"program changed to" << text;
-    if(m_currentEditor) delete m_currentEditor;
-    KisDynamicProgram* program = KisDynamicProgramRegistry::instance()->get( text );
+    delete m_currentEditor;
+    KisDynamicProgram* program = static_cast<KisDynamicProgram*>( m_bookmarksManager->load( text ) );
     Q_ASSERT(program);
     m_currentEditor = program->createEditor( m_dynamicProgramsEditor->frame);
     m_frameVBoxLayout->addWidget(m_currentEditor);
-#endif
 }
 
 void KisDynamicProgramsEditor::addProgram()
 {
-#if 0
     int index = m_dynamicProgramsEditor->comboBoxProgramsType->currentIndex();
-    KisDynamicProgram* program = 0;
-    switch(index) {
-      case 0:
-//         program = new ;
-        break;
-      case 1:
-        program = new KisFiltersListDynamicProgram(i18n("New program"));
-        break;
-    }
+    QString id = m_dynamicProgramsEditor->comboBoxProgramsType->currentItem().id();
+    KisDynamicProgramFactory* factory = KisDynamicProgramFactoryRegistry::instance()->value( id );
+    Q_ASSERT(factory);
+    KisDynamicProgram* program = factory->program( m_bookmarksManager->uniqueName( ki18n("New program %1") ) );
     Q_ASSERT(program);
-    KisDynamicProgramRegistry::instance()->add( program );
-#endif
+    m_bookmarksManager->save(program->name(), program);
 }
 
 #include "kis_dynamic_programs_editor.moc"

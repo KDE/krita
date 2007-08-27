@@ -20,13 +20,26 @@
 
 #include <QWidget>
 
+#include <klocale.h>
+
 // Dynamic Brush lib includes
 #include "kis_dynamic_coloring.h"
+#include "kis_dynamic_program_factory_registry.h"
 #include "kis_dynamic_shape.h"
 #include "kis_dynamic_transformation.h"
 
 // Filterslist program includes
 #include "kis_filters_list_dynamic_program_editor.h"
+
+class Factory {
+    public:
+        Factory()
+        {
+            KisDynamicProgramFactoryRegistry::instance()->add( new KisFiltersListDynamicProgramFactory );
+        }
+};
+
+static Factory factory;
 
 KisFiltersListDynamicProgram::~KisFiltersListDynamicProgram()
 {
@@ -55,7 +68,17 @@ void KisFiltersListDynamicProgram::apply(KisDynamicShape* shape, KisDynamicColor
 
 }
 
-QWidget* KisFiltersListDynamicProgram::createEditor(QWidget* parent)
+QWidget* KisFiltersListDynamicProgram::createEditor(QWidget* /*parent*/)
 {
     return new KisFiltersListDynamicProgramEditor(this);
+}
+
+KisFiltersListDynamicProgramFactory::KisFiltersListDynamicProgramFactory() :
+    KisDynamicProgramFactory("filterslist", i18n("Filters list"))
+{
+}
+
+KisDynamicProgram* KisFiltersListDynamicProgramFactory::program(QString name)
+{
+    return new KisFiltersListDynamicProgram(name);
 }

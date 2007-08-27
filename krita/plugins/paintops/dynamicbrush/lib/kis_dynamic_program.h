@@ -61,18 +61,32 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicProgram : public KisSerializableConfigurati
         Private* const d;
 };
 
+class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactory {
+    public:
+        KisDynamicProgramFactory(QString id, QString name);
+        virtual ~KisDynamicProgramFactory();
+        QString id() const;
+        QString name() const;
+        virtual KisDynamicProgram* program(QString name) = 0;
+    private:
+        struct Private;
+        Private* const d;
+};
+
 class KisDynamicDummyProgram : public KisDynamicProgram {
     public:
         KisDynamicDummyProgram(const QString& name) : KisDynamicProgram(name, "dummy") { }
-        virtual void apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo) { }
-        virtual QWidget* createEditor(QWidget* parent) { return 0; }
+        virtual void apply(KisDynamicShape* , KisDynamicColoring* , const KisPaintInformation& ) { }
+        virtual QWidget* createEditor(QWidget* ) { return 0; }
 };
 
 class DYNAMIC_BRUSH_EXPORT KisDynamicProgramsFactory : public KisSerializableConfigurationFactory {
     public:
         virtual ~KisDynamicProgramsFactory();
+        virtual KisSerializableConfiguration* createDefault();
         virtual KisSerializableConfiguration* create(const QDomElement&);
 };
+
 
 
 #endif

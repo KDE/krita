@@ -20,7 +20,7 @@
 
 #include <QDomElement>
 
-// #include "kis_filters_list_dynamic_program.h"
+#include "kis_filters_list_dynamic_program.h"
 
 struct KisDynamicProgram::Private {
     QString name;
@@ -44,29 +44,62 @@ void KisDynamicProgram::fromXML(const QDomElement& e)
     d->name = e.attribute("name", "");
 }
 
-void KisDynamicProgram::toXML(QDomDocument& doc, QDomElement& e) const
+void KisDynamicProgram::toXML(QDomDocument& /*doc*/, QDomElement& e) const
 {
     e.setAttribute("type", type());
     e.setAttribute("name", name());
 }
 
+//----------- KisDynamicProgramFactory -----------//
+
+struct KisDynamicProgramFactory::Private {
+    QString id;
+    QString name;
+};
+
+KisDynamicProgramFactory::KisDynamicProgramFactory(QString id, QString name) : d(new Private)
+{
+    d->id = id;
+    d->name = name;
+}
+
+KisDynamicProgramFactory::~KisDynamicProgramFactory()
+{
+}
+
+QString KisDynamicProgramFactory::id() const
+{
+    return d->id;
+}
+
+QString KisDynamicProgramFactory::name() const
+{
+    return d->name;
+}
+
 //----------- KisDynamicProgramsFactory -----------//
+
+#include "kis_dynamic_program_factory_registry.h"
 
 KisDynamicProgramsFactory::~KisDynamicProgramsFactory()
 {
 }
 
+KisSerializableConfiguration* KisDynamicProgramsFactory::createDefault()
+{
+    return new KisDynamicDummyProgram("");
+}
+
+
 KisSerializableConfiguration* KisDynamicProgramsFactory::create(const QDomElement& e)
 {
-    KisDynamicProgram* program = 0;
-    QString type = e.attribute("type","");
-    if(type == "filterslist") {
-//         program = new KisFiltersListDynamicProgram("");
-        program = 0;
-    } else {
-        return new KisDynamicDummyProgram("");
-    }
+    QString type = e.attribute("type", "");
+    QString name = e.attribute("name", "");
+    KisDynamicProgramFactory* factory = KisDynamicProgramFactoryRegistry::instance()->value( type );
+    Q_ASSERT(factory);
+    KisDynamicProgram* program = factory->program( name );
     Q_ASSERT(program);
     program->fromXML(e);
     return program;
 }
+

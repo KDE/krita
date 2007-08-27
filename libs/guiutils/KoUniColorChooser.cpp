@@ -818,10 +818,14 @@ void KoUniColorChooser::updateValues()
     m_RIn->blockSignals(true);
     m_GIn->blockSignals(true);
     m_BIn->blockSignals(true);
-    m_CIn->blockSignals(true);
-    m_MIn->blockSignals(true);
-    m_YIn->blockSignals(true);
-    m_KIn->blockSignals(true);
+
+    if (cmykColorSpace()) {
+        m_CIn->blockSignals(true);
+        m_MIn->blockSignals(true);
+        m_YIn->blockSignals(true);
+        m_KIn->blockSignals(true);
+    }
+
     m_LIn->blockSignals(true);
     m_aIn->blockSignals(true);
     m_bIn->blockSignals(true);
@@ -882,10 +886,14 @@ void KoUniColorChooser::updateValues()
     m_RIn->blockSignals(false);
     m_GIn->blockSignals(false);
     m_BIn->blockSignals(false);
-    m_CIn->blockSignals(false);
-    m_MIn->blockSignals(false);
-    m_YIn->blockSignals(false);
-    m_KIn->blockSignals(false);
+
+    if (cmykColorSpace()) {
+        m_CIn->blockSignals(false);
+        m_MIn->blockSignals(false);
+        m_YIn->blockSignals(false);
+        m_KIn->blockSignals(false);
+    }
+
     m_LIn->blockSignals(false);
     m_aIn->blockSignals(false);
     m_bIn->blockSignals(false);

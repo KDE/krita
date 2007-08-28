@@ -73,12 +73,13 @@ DlgGlsl::DlgGlsl( KisView2 *  parent,
     m_d->scrollArea = new QScrollArea;
     m_d->scrollArea->setBackgroundRole(QPalette::Dark);
 
-    vbox->addWidget( m_d->scrollArea );
-    m_d->page->grpPreview->setLayout( vbox );
 
-    m_d->glslview = new KisGlslWidget(m_d->view->activeLayer()->paintDevice(), m_d->scrollArea);
+
+    m_d->glslview = new KisGlslWidget(m_d->view->activeLayer()->paintDevice());
     m_d->glslview->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    m_d->scrollArea->setWidget(m_d->glslview);
+    //m_d->scrollArea->setWidget(m_d->glslview);
+    vbox->addWidget( m_d->glslview);
+    m_d->page->grpPreview->setLayout( vbox );
     
     if(!m_d->glslview->isValidGLSL()) {
         close();

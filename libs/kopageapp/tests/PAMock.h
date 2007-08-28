@@ -31,7 +31,7 @@ public:
     : KoPADocument( 0, 0 )
     {}
     KoView *createViewInstance( QWidget * /* parent */ ) { return 0; }
-    const char *odfTagName() { return ""; }
+    const char *odfTagName( bool ) { return ""; }
 };
 
 

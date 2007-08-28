@@ -105,10 +105,10 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
         return false;
     }
 
-    KoXmlElement body = KoDom::namedItemNS(realBody, KoXmlNS::office, odfTagName());
+    KoXmlElement body = KoDom::namedItemNS(realBody, KoXmlNS::office, odfTagName( false ));
 
     if ( body.isNull() ) {
-        kError() << "No office:" << odfTagName() << " tag found!" << endl;
+        kError() << "No office:" << odfTagName( false ) << " tag found!" << endl;
         return false;
     }
 
@@ -176,7 +176,7 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
 
     contentTmpWriter.startElement( "office:body" );
-    contentTmpWriter.startElement( odfTagName() );
+    contentTmpWriter.startElement( odfTagName( true ) );
 
     paContext.setXmlWriter( contentTmpWriter );
     paContext.setOptions( KoPASavingContext::DrawId );

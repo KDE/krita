@@ -22,18 +22,27 @@
 #include "KoCompositeOp.h"
 #include "KoColorSpace.h"
 
-KoCompositeOp::KoCompositeOp()
+struct KoCompositeOp::Private {
+    KoColorSpace * colorSpace;
+    QString id;
+    QString description;
+    bool userVisible;
+    QBitArray defaultChannelFlags;
+};
+
+KoCompositeOp::KoCompositeOp() : d(new Private)
 {
 
 }
 
 
 KoCompositeOp::KoCompositeOp(KoColorSpace * cs, const QString& id,  const QString& description,  const bool userVisible)
-    : m_colorSpace( cs )
-    , m_id( id )
-    , m_description( description )
-    , m_userVisible( userVisible )
+    : d(new Private)
 {
+    d->colorSpace = cs;
+    d->id = id;
+    d->description = description;
+    d->userVisible = userVisible;
 }
 
 void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
@@ -46,6 +55,30 @@ void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
                srcRowStart, srcRowStride,
                maskRowStart, maskRowStride,
                rows, numColumns,
-               opacity, m_defaultChannelFlags);
+               opacity, d->defaultChannelFlags);
 }
 
+KoColorSpace* KoCompositeOp::colorSpace()
+{
+    return d->colorSpace;
+}
+
+QString KoCompositeOp::id() const
+{
+    return d->id;
+}
+
+QString KoCompositeOp::description() const
+{
+    return d->description;
+}
+
+KoColorSpace * KoCompositeOp::colorSpace() const
+{
+    return d->colorSpace;
+}
+
+bool KoCompositeOp::userVisible() const
+{
+    return d->userVisible;
+}

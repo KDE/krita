@@ -61,13 +61,14 @@ namespace {
                 Q_UNUSED( channelFlags );
                 quint8 *dst = dstRowStart;
                 const quint8 *src = srcRowStart;
-                qint32 bytesPerPixel = m_colorSpace->pixelSize();
+                KoColorSpace* cs = colorSpace();
+                qint32 bytesPerPixel = cs->pixelSize();
 
                 while (rows > 0) {
                     memcpy(dst, src, numColumns * bytesPerPixel);
 
                     if (opacity != OPACITY_OPAQUE) {
-                        m_colorSpace->multiplyAlpha(dst, opacity, numColumns);
+                        cs->multiplyAlpha(dst, opacity, numColumns);
                     }
 
                     dst += dstRowStride;

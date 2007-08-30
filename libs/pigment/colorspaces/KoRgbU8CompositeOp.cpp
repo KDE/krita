@@ -59,103 +59,103 @@ void KoRgbU8CompositeOp::composite(quint8 *dst, qint32 dstRowStride,
 {
     Q_ASSERT( channelFlags.size() == 4 || channelFlags.isEmpty() );
 
-    if ( m_id == COMPOSITE_UNDEF ) {
+    if ( id() == COMPOSITE_UNDEF ) {
         // Undefined == no composition
     }
-    else if ( m_id == COMPOSITE_OVER ) {
+    else if ( id() == COMPOSITE_OVER ) {
         compositeOver(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if ( m_id == COMPOSITE_IN ) {
+    else if ( id() == COMPOSITE_IN ) {
         compositeIn(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if ( m_id == COMPOSITE_OUT ) {
+    else if ( id() == COMPOSITE_OUT ) {
         compositeOut(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if ( m_id == COMPOSITE_ATOP ) {
+    else if ( id() == COMPOSITE_ATOP ) {
         compositeAtop(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if ( m_id == COMPOSITE_XOR ) {
+    else if ( id() == COMPOSITE_XOR ) {
         compositeXor(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if ( m_id == COMPOSITE_PLUS ) {
+    else if ( id() == COMPOSITE_PLUS ) {
         compositePlus(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_MINUS) {
+    else if (id() == COMPOSITE_MINUS) {
         compositeMinus(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_ADD) {
+    else if (id() == COMPOSITE_ADD) {
         compositeAdd(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_SUBTRACT) {
+    else if (id() == COMPOSITE_SUBTRACT) {
         compositeSubtract(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_DIFF) {
+    else if (id() == COMPOSITE_DIFF) {
         compositeDiff(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_MULT) {
+    else if (id() == COMPOSITE_MULT) {
         compositeMultiply(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_DIVIDE) {
+    else if (id() == COMPOSITE_DIVIDE) {
         compositeDivide(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_BUMPMAP) {
+    else if (id() == COMPOSITE_BUMPMAP) {
         compositeBumpmap(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_COPY) {
+    else if (id() == COMPOSITE_COPY) {
         compositeCopy(m_pixelSize, dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_COPY_RED) {
+    else if (id() == COMPOSITE_COPY_RED) {
         compositeCopyRed(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_COPY_GREEN) {
+    else if (id() == COMPOSITE_COPY_GREEN) {
         compositeCopyGreen(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_COPY_BLUE) {
+    else if (id() == COMPOSITE_COPY_BLUE) {
         compositeCopyBlue(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_COPY_OPACITY) {
+    else if (id() == COMPOSITE_COPY_OPACITY) {
         compositeCopyOpacity(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_CLEAR) {
+    else if (id() == COMPOSITE_CLEAR) {
         compositeClear(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_DISSOLVE) {
+    else if (id() == COMPOSITE_DISSOLVE) {
         compositeDissolve(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_NO) {
+    else if (id() == COMPOSITE_NO) {
         // No composition.
     }
-    else if (m_id == COMPOSITE_DARKEN) {
+    else if (id() == COMPOSITE_DARKEN) {
         compositeDarken(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_LIGHTEN) {
+    else if (id() == COMPOSITE_LIGHTEN) {
         compositeLighten(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_HUE) {
+    else if (id() == COMPOSITE_HUE) {
         compositeHue(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_SATURATION) {
+    else if (id() == COMPOSITE_SATURATION) {
         compositeSaturation(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_VALUE) {
+    else if (id() == COMPOSITE_VALUE) {
         compositeValue(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_COLOR) {
+    else if (id() == COMPOSITE_COLOR) {
         compositeColor(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_SCREEN) {
+    else if (id() == COMPOSITE_SCREEN) {
         compositeScreen(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_OVERLAY) {
+    else if (id() == COMPOSITE_OVERLAY) {
         compositeOverlay(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_ERASE) {
+    else if (id() == COMPOSITE_ERASE) {
         compositeErase(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_DODGE) {
+    else if (id() == COMPOSITE_DODGE) {
         compositeDodge(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (m_id == COMPOSITE_BURN) {
+    else if (id() == COMPOSITE_BURN) {
         compositeBurn(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity, channelFlags);
     }
 
@@ -1979,7 +1979,7 @@ void KoRgbU8CompositeOp::compositeCopy(qint32 pixelSize,
             memcpy(dst, src, numColumns * pixelSize);
 
             if (opacity != OPACITY_OPAQUE) {
-                m_colorSpace->multiplyAlpha(dst, opacity, numColumns);
+                colorSpace()->multiplyAlpha(dst, opacity, numColumns);
             }
 
             dst += dstRowStride;

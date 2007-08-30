@@ -72,10 +72,10 @@ public:
     KoCompositeOp(KoColorSpace * cs, const QString& id, const QString& description, const bool userVisible = true);
     virtual ~KoCompositeOp() {}
 
-    QString id() const { return m_id; }
-    QString description() const { return m_description; }
-    KoColorSpace * colorSpace() const { return m_colorSpace; }
-    bool userVisible() const { return m_userVisible; }
+    QString id() const;
+    QString description() const;
+    KoColorSpace * colorSpace() const;
+    bool userVisible() const;
     /**
       @param dstRowStart pointer to the start of the byte array we will composite the source on
       @param dstRowStride length of the rows of the block of destination pixels in bytes
@@ -111,15 +111,12 @@ public:
 			   qint32 rows, qint32 numColumns,
 			   quint8 opacity,
 			   const QBitArray & channelFlags) const = 0;
-
-protected:
+    protected:
+        KoColorSpace* colorSpace();
+private:
     KoCompositeOp();
-
-    KoColorSpace * m_colorSpace;
-    QString m_id;
-    QString m_description;
-    bool m_userVisible;
-    QBitArray m_defaultChannelFlags;
+    struct Private;
+    Private* const d;
 };
 
 #endif // KOCOMPOSITEOP_H

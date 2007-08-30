@@ -37,6 +37,11 @@ class KoCompositeOpOver : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOp
         }
 
     public:
+        inline static channels_type selectAlpha( channels_type srcAlpha, channels_type dstAlpha)
+        {
+            Q_UNUSED(dstAlpha);
+            return srcAlpha;
+        }
 
         inline static void composeColorChannels( channels_type srcBlend,
                                                  const channels_type* srcN,

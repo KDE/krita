@@ -117,7 +117,7 @@ public:
 
                     while (columns > 0) {
 
-                        channels_type srcAlpha = srcN[_CSTraits::alpha_pos];
+                        channels_type srcAlpha = _compositeOp::selectAlpha(srcN[_CSTraits::alpha_pos], dstN[_CSTraits::alpha_pos]);
 
                         // apply the alphamask
                         if (mask != 0) {

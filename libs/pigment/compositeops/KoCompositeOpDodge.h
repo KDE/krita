@@ -38,7 +38,10 @@ class KoCompositeOpDodge : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeO
         }
 
     public:
-
+        inline static channels_type selectAlpha( channels_type srcAlpha, channels_type dstAlpha)
+        {
+            return QMIN(srcAlpha, dstAlpha);
+        }
         inline static void composeColorChannels( channels_type srcBlend,
                                                  const channels_type* src,
                                                  channels_type* dst,

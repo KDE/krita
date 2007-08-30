@@ -194,7 +194,7 @@ namespace {
                         dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::min,
                                               KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max);
                     }
-                    _CSTraits::setAlpha(dst, CLAMP((totalAlpha/ factor) + offset, 0, 0xFF ),1);
+                    _CSTraits::setAlpha(dst, CLAMP((totalAlpha/ factor) + offset, 0, 0xFF ),1); // TODO: not bit depth independent
                 }
                 else {
                     // Do only the selected channels. Keep track of the
@@ -209,7 +209,7 @@ namespace {
                     for ( int i = 0; i < j; ++i ) {
                         if ( channelFlags.testBit( i ) ) {
                             if ( i == _CSTraits::alpha_pos ) {
-                                _CSTraits::setAlpha(dst, CLAMP((totalAlpha/ factor) + offset, 0, 0xFF ),1);
+                                _CSTraits::setAlpha(dst, CLAMP((totalAlpha/ factor) + offset, 0, 0xFF ),1); // TODO: not bit depth independent
                             }
                             else {
                                 typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype v = totals[i] / factor + offset;

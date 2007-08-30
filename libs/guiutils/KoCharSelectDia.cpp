@@ -85,7 +85,7 @@ void KoCharSelectDia::initDialog(const QChar &_chr, const QString &_font)
     d->charSelect = new KCharSelect( page );
     d->charSelect->setCurrentChar( _chr );
     d->charSelect->setCurrentFont( QFont(_font) );
-    connect(d->charSelect, SIGNAL(charSelected()),this, SLOT(slotDoubleClicked()));
+    connect(d->charSelect, SIGNAL(charSelected(QChar)),this, SLOT(slotDoubleClicked()));
     d->charSelect->resize( d->charSelect->sizeHint() );
 //     d->charSelect->enableFontCombo( true );
     grid->addWidget( d->charSelect, 0, 0 );

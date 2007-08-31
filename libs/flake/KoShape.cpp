@@ -627,16 +627,8 @@ void KoShape::saveOdfConnections(KoShapeSavingContext &context) const {
     Q_UNUSED( context );
 }
 
-QString KoShape::style( KoShapeSavingContext &context ) const
+QString KoShape::saveStyle( KoGenStyle &style, KoShapeSavingContext &context ) const
 {
-    KoGenStyle style;
-    if ( context.isSet( KoShapeSavingContext::PresentationShape ) ) {
-        style = KoGenStyle( KoGenStyle::StylePresentationAuto, "presentation" );
-    }
-    else {
-        style = KoGenStyle( KoGenStyle::StyleGraphicAuto, "graphic" );
-    }
-
     // and fill the style
     KoShapeBorderModel * b = border();
     if ( b )
@@ -647,6 +639,12 @@ QString KoShape::style( KoShapeSavingContext &context ) const
     KoShapeStyleWriter styleWriter( context );
 
     return styleWriter.addFillStyle( style, background() );
+}
+
+void KoShape::loadStyle( const KoXmlElement & element, KoShapeLoadingContext &context )
+{
+    setBackground( loadOdfFill( element, context ) );
+    setBorder( loadOdfStroke( element, context ) );
 }
 
 bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingContext &context, int attributes )
@@ -688,8 +686,7 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
         if( element.hasAttributeNS( KoXmlNS::draw, "name" ) )
             setName( element.attributeNS( KoXmlNS::draw, "name" ) );
 
-        setBackground( loadOdfFill( element, context ) );
-        setBorder( loadOdfStroke( element, context ) );
+        loadStyle( element, context );
     }
 
     if( attributes & OdfTransformation )
@@ -702,27 +699,34 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
     return true;
 }
 
-QBrush KoShape::loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context )
+QString KoShape::getStyleProperty( const char *property, const KoXmlElement & element, KoShapeLoadingContext & context )
 {
     KoStyleStack &styleStack = context.koLoadingContext().styleStack();
-    QString fill;
+    QString value;
     if( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
         // fill the style stack with the shapes style
         context.koLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "graphic" );
         styleStack.setTypeProperties( "graphic" );
-        if( styleStack.hasProperty( KoXmlNS::draw, "fill" ) )
-            fill = styleStack.property( KoXmlNS::draw, "fill" );
+        if( styleStack.hasProperty( KoXmlNS::draw, property ) )
+            value = styleStack.property( KoXmlNS::draw, property );
     }
     else if( element.hasAttributeNS( KoXmlNS::presentation, "style-name" ) )
     {
         // fill the style stack with the shapes style
         context.koLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
         styleStack.setTypeProperties( "presentation" );
-        if ( styleStack.hasProperty( KoXmlNS::presentation, "fill" ) )
-            fill = styleStack.property( KoXmlNS::presentation, "fill" );
+        if ( styleStack.hasProperty( KoXmlNS::presentation, property ) )
+            value = styleStack.property( KoXmlNS::presentation, property );
     }
 
+    return value;
+}
+
+QBrush KoShape::loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
+    KoStyleStack &styleStack = context.koLoadingContext().styleStack();
+    QString fill = getStyleProperty( "fill", element, context );
     if ( fill == "solid" || fill == "hatch" )
         return KoOasisStyles::loadOasisFillStyle( styleStack, fill, context.koLoadingContext().oasisStyles() );
     else if( fill == "gradient" )
@@ -736,24 +740,7 @@ QBrush KoShape::loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext
 KoShapeBorderModel * KoShape::loadOdfStroke( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
     KoStyleStack &styleStack = context.koLoadingContext().styleStack();
-    QString stroke;
-    if( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
-    {
-        // fill the style stack with the shapes style
-        context.koLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "graphic" );
-        styleStack.setTypeProperties( "graphic" );
-        if( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) )
-            stroke = styleStack.property( KoXmlNS::draw, "stroke" );
-    }
-    else if( element.hasAttributeNS( KoXmlNS::presentation, "style-name" ) )
-    {
-        // fill the style stack with the shapes style
-        context.koLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
-        styleStack.setTypeProperties( "presentation" );
-        if ( styleStack.hasProperty( KoXmlNS::presentation, "stroke" ) )
-            stroke = styleStack.property( KoXmlNS::presentation, "stroke" );
-    }
-
+    QString stroke = getStyleProperty( "stroke", element, context );
     if( stroke == "solid" || stroke == "dash" )
     {
         QPen pen = KoOasisStyles::loadOasisStrokeStyle( styleStack, stroke, context.koLoadingContext().oasisStyles() );
@@ -850,10 +837,16 @@ void KoShape::saveOdfFrameAttributes(KoShapeSavingContext &context) const {
 
 void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) const {
     if(attributes & OdfMandatories) {
+        KoGenStyle style;
         // all items that should be written to 'draw:frame' and any other 'draw:' object that inherits this shape
-        context.xmlWriter().addAttribute( context.isSet( KoShapeSavingContext::PresentationShape ) ?
-                                          "presentation:style-name": "draw:style-name",
-                                          style( context ) );
+        if ( context.isSet( KoShapeSavingContext::PresentationShape ) ) {
+            style = KoGenStyle( KoGenStyle::StylePresentationAuto, "presentation" );
+            context.xmlWriter().addAttribute( "presentation:style-name", saveStyle( style, context ) );
+        }
+        else {
+            style = KoGenStyle( KoGenStyle::StyleGraphicAuto, "graphic" );
+            context.xmlWriter().addAttribute( "draw:style-name", saveStyle( style, context ) );
+        }
 
         if ( context.isSet( KoShapeSavingContext::DrawId ) )
         {

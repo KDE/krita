@@ -49,6 +49,7 @@ class KoShapeApplicationData;
 class KoShapeSavingContext;
 class KoCanvasBase;
 class KoShapeLoadingContext;
+class KoGenStyle;
 
 /**
  *
@@ -660,21 +661,36 @@ protected:
     void saveOdfConnections( KoShapeSavingContext &context ) const;
 
     /**
-     * @brief Get the style used for the shape
+     * @brief Saves the style used for the shape
      *
-     * This method calls fillStyle and add then the style to the context
+     * This method fills the given style object with the border and
+     * background properties and then adds the style to the context.
      *
+     * @param style the style object to fill
      * @param context used for saving
      * @return the name of the style
      * @see saveOdf
      */
-    QString style( KoShapeSavingContext &context ) const;
+    virtual QString saveStyle( KoGenStyle &style, KoShapeSavingContext &context ) const;
+
+    /**
+     * Loads the stroke and fill style from the given element.
+     *
+     * @param element the xml element to  load the style from
+     * @param context the loading context used for loading
+     */
+    virtual void loadStyle( const KoXmlElement & element, KoShapeLoadingContext &context );
 
     /// Loads the fill style
     QBrush loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context );
 
     /// Loads the stroke style
     KoShapeBorderModel * loadOdfStroke( const KoXmlElement & element, KoShapeLoadingContext & context );
+
+    /**
+     * Fills the style stack and returns the value of the given style property (e.g fill, stroke).
+     */
+    QString getStyleProperty( const char *property, const KoXmlElement & element, KoShapeLoadingContext & context );
 
 /* ** end loading saving */
 

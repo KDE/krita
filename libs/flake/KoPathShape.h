@@ -442,6 +442,11 @@ public:
     /// Returns a odf/svg string represenatation of the path data with the given matrix applied.
     QString toString( const QMatrix &matrix ) const;
 
+    /// Returns the fill rule for the path object
+    Qt::FillRule fillRule() const;
+
+    /// Sets the fill rule to be used for painting the background
+    void setFillRule( Qt::FillRule fillRule );
 private:
     // TODO move all the private methods to live on the d pointer object
     void map( const QMatrix &matrix );
@@ -462,6 +467,10 @@ private:
 #ifndef NDEBUG
     void paintDebug( QPainter &painter );
 #endif
+    /// reimplemented
+    virtual QString saveStyle( KoGenStyle &style, KoShapeSavingContext &context ) const;
+    /// reimplemented
+    virtual void loadStyle( const KoXmlElement & element, KoShapeLoadingContext &context );
 
 protected:
     QRectF handleRect( const QPointF &p, double radius ) const;

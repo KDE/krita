@@ -25,25 +25,39 @@
 #include "KoShapeBorderModel.h"
 #include "KoViewConverter.h"
 #include "KoPathShapeLoader.h"
-
 #include "KoShapeSavingContext.h"
+#include "KoShapeLoadingContext.h"
+
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
+#include <KoGenStyle.h>
+#include <KoStyleStack.h>
+#include <KoOasisLoadingContext.h>
 
 #include <KDebug>
 #include <QtGui/QPainter>
 
+class KoPathShape::Private
+{
+public:
+    Private() : fillRule( Qt::OddEvenFill )
+    {
+    }
+
+    Qt::FillRule fillRule;
+};
+
 KoPathShape::KoPathShape()
-    : d(0) // while we don't actually have any private data, just leave it as this.
+    : d( new Private() ) // while we don't actually have any private data, just leave it as this.
 {
 }
 
 KoPathShape::~KoPathShape()
 {
     clear();
-    //delete d;
+    delete d;
 }
 
 void KoPathShape::saveOdf( KoShapeSavingContext & context ) const
@@ -119,6 +133,24 @@ bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
     return true;
 }
 
+QString KoPathShape::saveStyle( KoGenStyle &style, KoShapeSavingContext &context ) const
+{
+    style.addProperty( "svg:fill-rule", d->fillRule == Qt::OddEvenFill ? "evenodd" : "nonzero" );
+
+    return KoShape::saveStyle( style, context );
+}
+
+void KoPathShape::loadStyle( const KoXmlElement & element, KoShapeLoadingContext &context )
+{
+    KoShape::loadStyle( element, context );
+    KoStyleStack &styleStack = context.koLoadingContext().styleStack();
+    if ( styleStack.hasProperty( KoXmlNS::svg, "fill-rule" ) )
+    {
+        QString rule = styleStack.property( KoXmlNS::svg, "fill-rule" );
+        d->fillRule = rule == "nonzero" ?  Qt::WindingFill : Qt::OddEvenFill;
+    }
+}
+
 QRectF KoPathShape::loadOdfViewbox( const KoXmlElement & element ) const
 {
     QRectF viewbox;
@@ -180,7 +212,8 @@ void KoPathShape::paint( QPainter &painter, const KoViewConverter &converter )
 {
     applyConversion( painter, converter );
     QPainterPath path( outline() );
-    
+    path.setFillRule( d->fillRule );
+
     painter.setBrush( background() );
     painter.drawPath( path );
     //paintDebug( painter );
@@ -1128,4 +1161,14 @@ QString KoPathShape::toString( const QMatrix &matrix ) const
     }
 
     return d;
+}
+
+Qt::FillRule KoPathShape::fillRule() const
+{
+    return d->fillRule;
+}
+
+void KoPathShape::setFillRule( Qt::FillRule fillRule )
+{
+    d->fillRule = fillRule;
 }

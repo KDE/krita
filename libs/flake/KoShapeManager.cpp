@@ -129,7 +129,7 @@ void KoShapeManager::add( KoShape *shape, bool repaint )
     {
         foreach(KoShape* containerShape, container->iterator())
         {
-            add(containerShape);
+            add( containerShape, repaint );
         }
     }
 }

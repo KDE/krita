@@ -58,7 +58,7 @@ public:
 
     void updateReadWrite( bool readwrite );
 
-    KoViewConverter * viewConverter() { return &m_zoomHandler; }
+    virtual KoViewConverter * viewConverter() { return &m_zoomHandler; }
 
     KoZoomHandler* zoomHandler() { return &m_zoomHandler; }
 

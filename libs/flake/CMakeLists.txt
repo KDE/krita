@@ -109,6 +109,7 @@ set(flake_SRCS
     commands/KoParameterHandleMoveCommand.cpp
     commands/KoParameterToPathCommand.cpp
     commands/KoShapeTransformCommand.cpp
+    commands/KoPathFillRuleCommand.cpp
 )
 
 kde4_add_ui_files(flake_SRCS

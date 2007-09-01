@@ -5,4 +5,4 @@ add_subdirectory( autocorrection )
 add_subdirectory( defaultTools )
 add_subdirectory( dockers )
 add_subdirectory( changecase )
-
+add_subdirectory( spellcheck )

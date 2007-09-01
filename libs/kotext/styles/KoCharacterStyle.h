@@ -57,7 +57,8 @@ public:
         UnderlineStyle,
         UnderlineType,
         UnderlineColor,
-        TransformText
+        TransformText,
+        Spelling
     };
 
     /// list of possible line type : no line, single line, double line

@@ -30,6 +30,10 @@
 #include <kdebug.h>
 #include <kis_paint_information.h>
 
+#ifdef Q_CC_MSVC
+#include <iso646.h>
+#endif
+
 class KisToolFreehand;
 class KisPainter;
 

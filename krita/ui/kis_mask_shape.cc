@@ -17,6 +17,9 @@
  */
 #include "kis_mask_shape.h"
 
+#include <QPainter>
+#include "KoViewConverter.h"
+
 #include <kis_types.h>
 #include <kis_mask.h>
 
@@ -47,3 +50,11 @@ KisMaskSP KisMaskShape::mask()
 {
     return m_d->mask;
 }
+
+void KisMaskShape::paint(QPainter &painter, const KoViewConverter &converter)
+{
+   Q_UNUSED( painter );
+   Q_UNUSED( converter );
+   // Do nothing! Masks don't paint on QPainters
+}
+

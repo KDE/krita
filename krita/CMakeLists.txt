@@ -35,6 +35,12 @@ if (SHOULD_BUILD_KRITA)
         set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     endif(OPENEXR_FOUND)
 
+    if(WIN32)
+        if(MSVC)
+            # C4522: 'class' : multiple assignment operators specified
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd4522")
+        endif(MSVC)
+    endif(WIN32)
 
     set(KRITA_INCLUDES
         # For config-*.h

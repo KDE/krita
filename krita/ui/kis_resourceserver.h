@@ -42,6 +42,8 @@ public:
     void addResource(KoResource* resource);
     QList<KoResource*> resources();
     QString type() { return m_type; }
+    QString id() const { return QString(); }
+    QString name() const { return QString(); }
 
 signals:
     void resourceAdded(KoResource*);

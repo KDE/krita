@@ -72,7 +72,7 @@ KisFilterConfiguration* KisEmbossFilter::designerConfiguration(const KisPaintDev
  *                     understand. You get the diference between the colors and
  *                     increase it. After this, get the gray tone
  */
-void KisEmbossFilter::KisEmbossFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration )
+void KisEmbossFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration )
 {
 
     //read the filter configuration values from the KisFilterConfiguration object

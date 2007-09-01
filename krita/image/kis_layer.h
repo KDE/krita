@@ -32,8 +32,8 @@
 
 #include "kis_types.h"
 #include "kis_node.h"
+#include "kis_paint_device.h"
 
-class KisPaintDevice;
 class QIcon;
 class QBitArray;
 class KisGroupLayer;

@@ -357,7 +357,9 @@ KisPaintDeviceSP KisComplexColor::dab(int w, int h)
    }
 
    return dst;
- */}
+ */
+   return 0;
+}
 
 void KisComplexColor::scale(int *x, int *y)
 {

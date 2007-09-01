@@ -22,6 +22,10 @@
 
 #include <qglobal.h>
 
+#ifdef Q_CC_MSVC
+#include <iso646.h>
+#endif
+
 #include <kis_shared_data.h>
 
 template<class T>

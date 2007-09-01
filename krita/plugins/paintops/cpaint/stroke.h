@@ -19,13 +19,15 @@
 #ifndef STROKE_H
 #define STROKE_H
 
-#include <vector.h>
+#include <vector>
 #include <math.h>
 #include <stdio.h>
 
 class Brush;
 class Sample;
 class KoColor;
+
+using namespace std;
 
 class Stroke {
 

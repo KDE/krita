@@ -18,6 +18,10 @@
 
 #include "kis_meta_data_io_backend.h"
 
+#ifdef Q_CC_MSVC
+#include <iso646.h>
+#endif
+
 using namespace KisMetaData;
 
 

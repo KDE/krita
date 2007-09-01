@@ -48,6 +48,7 @@ class KRITAIMAGE_EXPORT KisRecordedActionFactory {
         virtual ~KisRecordedActionFactory();
         virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt) =0;
         QString id();
+        QString name();
     protected:
         static KisLayerSP indexPathToLayer(KisImageSP img, QString);
     private:

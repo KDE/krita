@@ -26,6 +26,10 @@
 
 #include <kis_bookmarked_configuration_manager.h>
 
+#ifdef Q_CC_MSVC
+#include <iso646.h>
+#endif
+
 struct KisBookmarkedConfigurationsModel::Private
 {
     KisBookmarkedConfigurationManager* bookmarkManager;

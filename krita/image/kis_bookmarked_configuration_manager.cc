@@ -27,6 +27,10 @@
 
 #include <KoID.h>
 
+#ifdef Q_CC_MSVC
+#include <iso646.h>
+#endif
+
 #include "kis_serializable_configuration.h"
 
 const KoID KisBookmarkedConfigurationManager::ConfigDefault = KoID("Default", i18n("Default"));

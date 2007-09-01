@@ -72,7 +72,7 @@ public:
 
     KisFiltersListView(QWidget* parent, bool filterForAdjustmentLayers = false);
 
-    KisFiltersListView(KisLayerSP layer, QWidget* parent, bool filterForAdjustmentLayers = false) KDE_DEPRECATED;
+    KDE_CONSTRUCTOR_DEPRECATED KisFiltersListView(KisLayerSP layer, QWidget* parent, bool filterForAdjustmentLayers = false);
 
     KisFiltersListView(KisPaintDeviceSP layer, QWidget* parent, bool filterForAdjustmentLayers = false);
 

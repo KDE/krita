@@ -24,8 +24,8 @@
 #include <kis_shared_ptr.h>
 #include <krita_export.h>
 #include <kis_global.h>
+#include "kis_tiled_random_accessor.h"
 
-class KisTiledRandomAccessor;
 typedef KisSharedPtr<KisTiledRandomAccessor> KisTiledRandomAccessorSP;
 
 class KisTiledDataManager;

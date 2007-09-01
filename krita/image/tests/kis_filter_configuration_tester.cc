@@ -19,8 +19,6 @@
 #include <QApplication>
 #include <qtest_kde.h>
 #include <kdebug.h>
-#include <kunittest/runner.h>
-#include <kunittest/module.h>
 
 #include "kis_filter_configuration_tester.h"
 #include "../kis_filter_configuration.h"

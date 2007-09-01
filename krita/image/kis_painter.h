@@ -596,11 +596,13 @@ public:
 protected:
     /// Initialize, set everything to '0' or defaults
     void init();
-    KisPainter(const KisPainter&);
-    KisPainter& operator=(const KisPainter&);
 
     /// Fill the polygon defined by points with the fillStyle
     void fillPolygon(const vQPointF& points, FillStyle fillStyle);
+
+private:
+    KisPainter(const KisPainter&);
+    KisPainter& operator=(const KisPainter&);
 
 protected:
     KisPaintDeviceSP m_device;

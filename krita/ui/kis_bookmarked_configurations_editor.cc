@@ -22,6 +22,10 @@
 
 #include "kis_bookmarked_configurations_model.h"
 
+#ifdef Q_CC_MSVC
+#include <iso646.h>
+#endif
+
 struct KisBookmarkedConfigurationsEditor::Private {
     Ui_WdgBookmarkedConfigurationsEditor editorUi;
     KisBookmarkedConfigurationsModel* model;

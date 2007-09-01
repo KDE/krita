@@ -30,6 +30,7 @@
 
 #include <KoColorSpaceRegistry.h>
 #include <KoPointerEvent.h>
+#include <KoInputDevice.h>
 
 #include "kis_brush.h"
 #include "kis_global.h"

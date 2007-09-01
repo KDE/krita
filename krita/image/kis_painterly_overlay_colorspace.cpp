@@ -49,7 +49,7 @@ public:
 
 };
 
-KisPainterlyOverlayColorSpace * KisPainterlyOverlayColorSpace::KisPainterlyOverlayColorSpace::instance()
+KisPainterlyOverlayColorSpace * KisPainterlyOverlayColorSpace::instance()
 {
     KoColorSpaceRegistry * registry = KoColorSpaceRegistry::instance();
     KisPainterlyOverlayColorSpace * cs =

@@ -90,6 +90,11 @@ QString KisRecordedActionFactory::id()
     return d->id;
 }
 
+QString KisRecordedActionFactory::name()
+{
+    return QString();
+}
+
 KisLayerSP KisRecordedActionFactory::indexPathToLayer(KisImageSP img, QString path)
 {
     QStringList indexes = path.split("\\");

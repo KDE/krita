@@ -32,6 +32,10 @@
 
 #include "kis_entry_editor.h"
 
+#ifdef Q_CC_MSVC
+#include <iso646.h>
+#endif
+
 struct KisMetaDataEditor::Private {
     KisMetaData::Store* originalStore;
     KisMetaData::Store* store;

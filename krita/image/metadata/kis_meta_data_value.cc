@@ -24,6 +24,10 @@
 
 #include <kdebug.h>
 
+#ifdef Q_CC_MSVC
+#include <iso646.h>
+#endif
+
 using namespace KisMetaData;
 
 struct Value::Private {

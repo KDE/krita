@@ -28,6 +28,7 @@
 #include <krita_export.h>
 
 #include "kis_types.h"
+#include "kis_paint_device.h"
 
 #include "ui_kis_previewwidgetbase.h"
 

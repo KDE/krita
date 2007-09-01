@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+#include "kis_paintop.h"
 #include "kis_types.h"
 #include "KoGenericRegistry.h"
 #include <krita_export.h>

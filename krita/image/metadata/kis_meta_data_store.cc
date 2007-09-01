@@ -24,6 +24,10 @@
 #include "kis_meta_data_schema.h"
 #include "kis_meta_data_value.h"
 
+#ifdef Q_CC_MSVC
+#include <iso646.h>
+#endif
+
 using namespace KisMetaData;
 
 uint qHash(const Entry& e)

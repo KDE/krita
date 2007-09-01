@@ -20,6 +20,10 @@
 
 #include "kis_recorded_paint_actions.h"
 
+#ifdef Q_CC_MSVC
+#include <iso646.h>
+#endif
+
 struct KisRecordedActionFactoryRegistry::Private {
     static KisRecordedActionFactoryRegistry* instance;
 };

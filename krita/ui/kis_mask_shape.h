@@ -50,12 +50,7 @@ public:
 
     KisMaskSP mask();
 
-    void paint(QPainter &painter, const KoViewConverter &converter)
-        {
-            Q_UNUSED( painter );
-            Q_UNUSED( converter );
-            // Do nothing! Masks don't paint on QPainters
-        }
+    void paint(QPainter &painter, const KoViewConverter &converter);
     bool isSelectable() const { return false; }
 
     bool loadOdf( const KoXmlElement&, KoShapeLoadingContext&)

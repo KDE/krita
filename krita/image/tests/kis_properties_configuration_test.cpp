@@ -21,6 +21,10 @@
 #include <qtest_kde.h>
 #include "kis_properties_configuration.h"
 
+#ifdef Q_CC_MSVC
+#include <iso646.h>
+#endif
+
 KisPropertiesConfigurationTest::KisPropertiesConfigurationTest() :
     v1(10), v2("hello"), v3(1242.0), v4(true)
 {

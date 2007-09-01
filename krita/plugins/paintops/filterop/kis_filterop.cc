@@ -28,6 +28,7 @@
 
 #include "KoColorSpace.h"
 #include "KoCompositeOp.h"
+#include "KoInputDevice.h"
 
 #include "kis_brush.h"
 #include "kis_global.h"

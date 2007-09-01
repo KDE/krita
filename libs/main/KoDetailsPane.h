@@ -43,7 +43,7 @@ class KoDetailsPane : public QWidget, public Ui_KoDetailsPaneBase
     QStandardItemModel* model() const;
 
   signals:
-    /// Emited when a file is requested to be opened
+    /// Emitted when a file is requested to be opened
     void openUrl(const KUrl&);
 
     /// This is used to keep all splitters in different details panes synced

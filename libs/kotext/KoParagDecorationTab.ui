@@ -324,7 +324,7 @@ paragraphs with different styles.&lt;/p>
 
 &lt;p>When this option is unchecked, top and bottom borders
 always appear at the top and bottom of paragraphs with this style,
-regardless of the style of the preceeding and subsequent paragraphs.&lt;/p></string>
+regardless of the style of the preceding and subsequent paragraphs.&lt;/p></string>
                       </property>
                     </widget>
                   </item>

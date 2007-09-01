@@ -23,7 +23,7 @@
 #include <QString>
 
 /**
- * This is a KoVariable for document informations.
+ * This is a KoVariable for document information.
  */
 class InfoVariable : public KoVariable {
 public:

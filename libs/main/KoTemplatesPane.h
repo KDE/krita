@@ -53,7 +53,7 @@ class KoTemplatesPane : public KoDetailsPane
     bool isSelected();
 
   signals:
-    /// Emited when the always use checkbox is selected
+    /// Emitted when the always use checkbox is selected
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
 
   protected slots:

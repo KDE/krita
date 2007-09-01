@@ -12,12 +12,13 @@
 
 void TestKoColorSpaceRegistry::testRgbU8()
 {
-    KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(KoRgbU8ColorSpace::colorSpaceId());
+    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, 
+                                                                          Integer8BitsColorDepthID);
+    KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(colorSpaceId);
     QVERIFY(colorSpaceFactory != 0);
 
     KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     QVERIFY(colorSpace != 0);
-    QCOMPARE(colorSpace->id(), KoRgbU8ColorSpace::colorSpaceId());
 
     KoColorProfile *profile = colorSpace->profile();
     QVERIFY(profile != 0);
@@ -54,12 +55,13 @@ void TestKoColorSpaceRegistry::testRgbU8()
 
 void TestKoColorSpaceRegistry::testRgbU16()
 {
-    KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(KoRgbU16ColorSpace::colorSpaceId());
+   QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, 
+                                                                         Integer16BitsColorDepthID);
+    KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(colorSpaceId);
     QVERIFY(colorSpaceFactory != 0);
 
     KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb16();
     QVERIFY(colorSpace != 0);
-    QCOMPARE(colorSpace->id(), KoRgbU16ColorSpace::colorSpaceId());
 
     KoColorProfile *profile = colorSpace->profile();
     QVERIFY(profile != 0);
@@ -96,12 +98,13 @@ void TestKoColorSpaceRegistry::testRgbU16()
 
 void TestKoColorSpaceRegistry::testLab()
 {
-    KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(KoLabColorSpace::colorSpaceId());
+    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(LABAColorModelID, 
+                                                                          Integer16BitsColorDepthID);
+    KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(colorSpaceId);
     QVERIFY(colorSpaceFactory != 0);
 
     KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->lab16();
     QVERIFY(colorSpace != 0);
-    QCOMPARE(colorSpace->id(), KoLabColorSpace::colorSpaceId());
 
     KoColorProfile *profile = colorSpace->profile();
     QVERIFY(profile != 0);

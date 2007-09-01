@@ -26,7 +26,7 @@ target_link_libraries(TestKoLcmsColorProfile  ${KDE4_KDECORE_LIBS} pigment ${QT_
 
 ########### next target ###############
 
-set(TestKoColorSpaceRegistry_test_SRCS TestKoColorSpaceRegistry.cpp ${pigment_SRCS})
+set(TestKoColorSpaceRegistry_test_SRCS TestKoColorSpaceRegistry.cpp )
 
 kde4_add_unit_test(TestKoColorSpaceRegistry TESTNAME libs-pigment-TestKoColorSpaceRegistry  ${TestKoColorSpaceRegistry_test_SRCS})
 

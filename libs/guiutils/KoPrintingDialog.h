@@ -85,6 +85,9 @@ public:
      */
     QPrinter &printer();
 
+public slots:
+    void startPrinting();
+
 protected:
     /**
      * Reimplement this method to setup the shapeManager and painter and maybe the shapes for

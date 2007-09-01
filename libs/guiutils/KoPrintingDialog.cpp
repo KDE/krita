@@ -178,6 +178,10 @@ bool KoPrintingDialog::isStopped() const {
 
 void KoPrintingDialog::showEvent(QShowEvent *event) {
     QWidget::showEvent(event);
+    QTimer::singleShot(0, this, SLOT(startPrinting()));
+}
+
+void KoPrintingDialog::startPrinting() {
     if(d->index == 0 && d->pages.count() > 0 && d->printer) {
         d->painter = new QPainter(d->printer);
         d->zoomer.setZoomAndResolution(100, d->printer->resolution(), d->printer->resolution());

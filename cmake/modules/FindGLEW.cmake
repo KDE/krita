@@ -24,7 +24,9 @@ IF (WIN32)
       ${GLEW_ROOT_PATH}/include
     )
 
-    FIND_LIBRARY( GLEW_GLEW_LIBRARY glew
+    FIND_LIBRARY( GLEW_GLEW_LIBRARY
+      NAMES glew glew32
+      PATHS
       ${GLEW_ROOT_PATH}/Release
       ${OPENGL_LIBRARY_DIR}
     )

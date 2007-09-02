@@ -23,13 +23,12 @@ void TestShapeContainer::testModel() {
 
     shape1->setAbsolutePosition( shape1->absolutePosition() + QPointF(10.,40.) );
     QCOMPARE(model->containerChangedCalled(), 0);
-    QCOMPARE(model->childChangedCalled(), 4);
+    QCOMPARE(model->childChangedCalled(), 5); // we get a generic Matrix as well as a position change...
     QCOMPARE(model->proposeMoveCalled(), 0);
 
     shape1->setTransformation(QMatrix());
     QCOMPARE(model->containerChangedCalled(), 0);
-QEXPECT_FAIL("", "faulty", Continue); // TODO fix KoShape
-    QCOMPARE(model->childChangedCalled(), 5);
+    QCOMPARE(model->childChangedCalled(), 6);
     QCOMPARE(model->proposeMoveCalled(), 0);
 
     model->resetCounts();

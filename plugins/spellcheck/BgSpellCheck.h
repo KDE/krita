@@ -34,7 +34,7 @@ class BgSpellCheck : public BackgroundChecker
 {
     Q_OBJECT
 public:
-    BgSpellCheck(const Speller &speller, QObject *parent = 0);
+    explicit BgSpellCheck(const Speller &speller, QObject *parent = 0);
     void start(QTextDocument *document, int startPosition, int endPosition);
 
 protected:

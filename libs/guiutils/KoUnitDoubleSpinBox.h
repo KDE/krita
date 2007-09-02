@@ -106,7 +106,6 @@ public:
     /**
      * Transfrom a string into a double, while taking care of locale specific symbols.
      * @param str the string to transform into a number
-     * @param ok true, if the conversion was successful
      * @return the value as double
      */
     virtual double valueFromText( const QString& str ) const;

@@ -41,6 +41,8 @@ class KisFiltersListDynamicProgram : public KisDynamicProgram {
             m_transformations.append(transfo);
         }
         virtual QWidget* createEditor(QWidget* parent);
+        virtual void fromXML(const QDomElement&);
+        virtual void toXML(QDomDocument&, QDomElement&) const;
     private:
         QList<KisDynamicTransformation*> m_transformations;
 };

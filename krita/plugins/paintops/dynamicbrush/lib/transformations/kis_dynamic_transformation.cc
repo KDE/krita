@@ -18,4 +18,18 @@
 
 #include "kis_dynamic_transformation.h"
 
+#include <QDomElement>
+
 #include "kis_dynamic_transformation.moc"
+
+void KisDynamicTransformation::toXML(QDomDocument&, QDomElement& e) const
+{
+    e.setAttribute("id", id());
+}
+
+void KisDynamicTransformation::fromXML(const QDomElement& e)
+{
+    Q_ASSERT(e.attribute("id","") == id());
+    
+}
+

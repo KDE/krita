@@ -27,6 +27,8 @@
 
 #include <klocale.h>
 
+#include "kis_serializable_configuration.h"
+
 class QWidget;
 class KisPaintInformation;
 
@@ -42,7 +44,7 @@ const KoID YTiltId ("ytilt", i18n("Y-Tilt"));
  * Sensor are used to extract from KisPaintInformation a single
  * double value which can be used to control 
  */
-class DYNAMIC_BRUSH_EXPORT KisDynamicSensor : public QObject {
+class DYNAMIC_BRUSH_EXPORT KisDynamicSensor : public QObject, public KisSerializableConfiguration {
     public:
         enum ParameterSign {
             NegativeParameter = -1,
@@ -63,6 +65,7 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicSensor : public QObject {
          */
         static KisDynamicSensor* id2Sensor(const KoID&);
         static KisDynamicSensor* id2Sensor(const QString& s) { return id2Sensor(KoID(s)); }
+        static KisDynamicSensor* createFromXML(const QDomElement&);
         /**
          * @return the list of sensors
          */
@@ -70,7 +73,10 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicSensor : public QObject {
         /**
          * @return the identifiant of this sensor
          */
-        inline const KoID& id() { return m_id; }
+        inline QString id() const { return m_id.id(); }
+        inline QString name() const { return m_id.name(); }
+        virtual void toXML(QDomDocument&, QDomElement&) const;
+        virtual void fromXML(const QDomElement&);
     private:
         const KoID& m_id;
 };

@@ -19,6 +19,9 @@
 #include "kis_rotation_transformation.h"
 
 #include <math.h>
+
+#include <QDomElement>
+
 #include "kis_dynamic_shape.h"
 #include "kis_dynamic_sensor.h"
 
@@ -40,6 +43,29 @@ void KisRotationTransformation::transformBrush(KisDynamicShape* dabsrc, const Ki
 
 void KisRotationTransformation::transformColoring(KisDynamicColoring* , const KisPaintInformation& )
 {
+}
+
+void KisRotationTransformation::toXML(QDomDocument& d, QDomElement& e) const
+{
+    KisDynamicTransformation::toXML(d,e);
+    QDomElement eSensor = d.createElement( "sensor" );
+    m_transfoParameter->toXML( d, eSensor);
+    e.appendChild( eSensor );
+}
+
+void KisRotationTransformation::fromXML(const QDomElement& rootElt)
+{
+    QDomNode n = rootElt.firstChild();
+    while (!n.isNull()) {
+        QDomElement e = n.toElement();
+        if (not e.isNull()) {
+            if (e.tagName() == "sensor") {
+                m_transfoParameter = KisDynamicSensor::createFromXML(e);
+            }
+        }
+        n = n.nextSibling();
+    }
+
 }
 
 #include "kis_rotation_transformation.moc"

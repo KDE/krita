@@ -73,6 +73,20 @@ QWidget* KisFiltersListDynamicProgram::createEditor(QWidget* /*parent*/)
     return new KisFiltersListDynamicProgramEditor(this);
 }
 
+void KisFiltersListDynamicProgram::fromXML(const QDomElement& elt)
+{
+    KisFiltersListDynamicProgram::fromXML(elt);
+    
+}
+
+void KisFiltersListDynamicProgram::toXML(QDomDocument& doc, QDomElement& rootElt) const
+{
+    KisFiltersListDynamicProgram::toXML(doc, rootElt);
+    
+}
+
+//--- KisFiltersListDynamicProgramFactory ---//
+
 KisFiltersListDynamicProgramFactory::KisFiltersListDynamicProgramFactory() :
     KisDynamicProgramFactory("filterslist", i18n("Filters list"))
 {
@@ -82,3 +96,4 @@ KisDynamicProgram* KisFiltersListDynamicProgramFactory::program(QString name)
 {
     return new KisFiltersListDynamicProgram(name);
 }
+

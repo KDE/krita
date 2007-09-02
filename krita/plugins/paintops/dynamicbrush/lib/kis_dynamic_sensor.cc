@@ -18,6 +18,8 @@
 
 #include "kis_dynamic_sensor.h"
 
+#include <QDomElement>
+
 #include "sensors/kis_dynamic_sensors.h"
 #include "sensors/kis_dynamic_sensor_time.h"
 
@@ -60,9 +62,32 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
     return 0;
 }
 
+KisDynamicSensor* KisDynamicSensor::createFromXML(const QDomElement& e)
+{
+    QString id = e.attribute("id","");
+    KisDynamicSensor* sensor = id2Sensor(id);
+    if(sensor)
+    {
+        sensor->fromXML( e );
+    }
+    return sensor;
+}
+
 QList<KoID> KisDynamicSensor::sensorsIds()
 {
     QList<KoID> ids;
     ids << PressureId << XTiltId << YTiltId << SpeedId << DrawingAngleId << TimeId << FuzzyId;
     return ids;
+}
+
+
+void KisDynamicSensor::toXML(QDomDocument&, QDomElement& e) const
+{
+    e.setAttribute("id", id());
+}
+
+void KisDynamicSensor::fromXML(const QDomElement& e)
+{
+    Q_ASSERT(e.attribute("id","") == id());
+    
 }

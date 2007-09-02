@@ -38,7 +38,7 @@ public:
     /**
      * Writes the style of the brush using the internal saving context
      * @param style the style to write to
-     * @param fill the fill style to save
+     * @param brush the fill style to save
      * @return the name of the saved style
      */
     QString addFillStyle( KoGenStyle &style, const QBrush &brush );

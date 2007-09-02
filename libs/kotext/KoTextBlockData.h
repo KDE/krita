@@ -68,7 +68,7 @@ public:
     QString counterText() const;
 
     /// set a list of tab-data objects for this block.  One item per line.
-    void setTabLineData(const QList<TabLineData> &lines);
+    void setTabLineData(const QList<KoTextBlockData::TabLineData> &lines);
     /// return the tabLineData
     QList<TabLineData> tabLineData() const;
 

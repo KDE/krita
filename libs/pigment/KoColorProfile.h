@@ -64,7 +64,7 @@ class PIGMENT_EXPORT KoColorProfile {
          */
         QString fileName() const;
         /**
-         * @param f new filename
+         * @param filename new filename
          */
         void setFileName(const QString &filename);
         

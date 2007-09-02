@@ -19,14 +19,12 @@
 #ifndef _KIS_ROTATION_TRANSFORMATION_
 #define _KIS_ROTATION_TRANSFORMATION_
 
-#include "dynamicbrush_export.h"
-
 #include "kis_dynamic_transformation.h"
 #include <klocale.h>
 
 class KisDynamicSensor;
 
-class DYNAMIC_BRUSH_EXPORT KisRotationTransformation : public KisDynamicTransformation {
+class KisRotationTransformation : public KisDynamicTransformation {
     Q_OBJECT
     public:
         KisRotationTransformation(KisDynamicSensor* transfoParameter);

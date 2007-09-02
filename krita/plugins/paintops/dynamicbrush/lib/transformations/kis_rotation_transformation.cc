@@ -26,7 +26,7 @@
 #include "kis_dynamic_sensor.h"
 
 KisRotationTransformation::KisRotationTransformation(KisDynamicSensor* transfoParameter)
-    : KisDynamicTransformation(KoID("rotation",i18n("Rotation"))), m_transfoParameter(transfoParameter)
+    : KisDynamicTransformation(KisDynamicTransformation::RotationTransformationID), m_transfoParameter(transfoParameter)
 {
     
 }

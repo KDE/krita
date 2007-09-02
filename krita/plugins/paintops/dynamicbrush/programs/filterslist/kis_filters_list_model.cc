@@ -18,10 +18,9 @@
 
 #include "kis_filters_list_model.h"
 
+#include <kdebug.h>
+
 #include "kis_dynamic_transformation.h"
-#include "kis_darken_transformation.h"
-#include "kis_size_transformation.h"
-#include "kis_rotation_transformation.h"
 
 #include "kis_filters_list_dynamic_program.h"
 
@@ -69,6 +68,7 @@ void KisFiltersListModel::setCurrentFilterType(int filterType)
 
 void KisFiltersListModel::addNewFilter()
 {
+#if 0
     kDebug(41006) <<"addNewFilter" << m_currentFilterType;
     KisDynamicTransformation* transfo = 0;
     switch(m_currentFilterType)
@@ -89,6 +89,7 @@ void KisFiltersListModel::addNewFilter()
     beginInsertRows( createIndex(0, 0, 0), m_program->countTransformations(), m_program->countTransformations());
     m_program->appendTransformation( transfo );
     endInsertRows();
+#endif
 }
 
 void KisFiltersListModel::deleteCurrentFilter()

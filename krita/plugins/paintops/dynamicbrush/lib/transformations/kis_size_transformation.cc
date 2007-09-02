@@ -26,7 +26,7 @@
 #include "ui_SizeTransformationEditor.h"
 
 KisSizeTransformation::KisSizeTransformation(KisDynamicSensor* hTransfoParameter, KisDynamicSensor* vTransfoParameter)
-    : KisDynamicTransformation(KoID("size",i18n("Resize"))),
+    : KisDynamicTransformation(KisDynamicTransformation::SizeTransformationID),
       m_horizTransfoParameter(hTransfoParameter), m_vertiTransfoParameter(vTransfoParameter),
       m_hmax(2.0), m_hmin(0.5), m_vmax(2.0), m_vmin(0.5)
 {

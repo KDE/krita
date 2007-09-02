@@ -38,6 +38,10 @@ class KisDynamicColoring;
 class DYNAMIC_BRUSH_EXPORT KisDynamicTransformation : public QObject, public KisSerializableConfiguration {
     Q_OBJECT
     public:
+        static KoID SizeTransformationID;
+        static KoID RotationTransformationID;
+        static KoID DarkenTransformationID;
+    public:
         KisDynamicTransformation(const KoID& name) : m_name(name) {}
         virtual ~KisDynamicTransformation() { }
         virtual QString id() const { return m_name.id(); }

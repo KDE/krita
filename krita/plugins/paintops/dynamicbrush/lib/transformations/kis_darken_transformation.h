@@ -19,14 +19,12 @@
 #ifndef _KIS_DARKEN_TRANSFORMATION_
 #define _KIS_DARKEN_TRANSFORMATION_
 
-#include "dynamicbrush_export.h"
-
 #include "kis_dynamic_transformation.h"
 #include <klocale.h>
 
 class KisDynamicSensor;
 
-class DYNAMIC_BRUSH_EXPORT KisDarkenTransformation : public KisDynamicTransformation {
+class KisDarkenTransformation : public KisDynamicTransformation {
     Q_OBJECT
     public:
         KisDarkenTransformation(KisDynamicSensor* transfoParameter);

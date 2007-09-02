@@ -3,5 +3,6 @@ Encoding=UTF-8
 Name=SpellCheck plugin
 ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service
-X-KoText-Version=1
 X-KDE-Library=spellcheck
+X-KoText-MinVersion=0
+X-Flake-PluginVersion=1

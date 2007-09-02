@@ -22,5 +22,7 @@ Comment[pt_BR]=Definição de um objecto de forma do Flake
 Comment[sv]=Definition av ett formobjekt i Flake
 Comment[x-test]=xxDefinition of a flake shape objectxx
 Comment[zh_TW]=Flake 形狀物件定義
-[PropertyDef::X-Flake-Version]
+[PropertyDef::X-Flake-MinVersion]
+Type=int
+[PropertyDef::X-Flake-PluginVersion]
 Type=int

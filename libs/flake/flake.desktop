@@ -26,5 +26,7 @@ Comment[pt_BR]=Um 'plugin' que contém um conjunto de uma forma e uma ferramenta
 Comment[sv]=Ett insticksprogram som innehåller en formmängd och ett verktyg
 Comment[x-test]=xxA plugin that contains a set of a shape and a toolxx
 Comment[zh_TW]=包含形狀與工具集的外掛程式
-[PropertyDef::X-Flake-Version]
+[PropertyDef::X-Flake-MinVersion]
+Type=int
+[PropertyDef::X-Flake-PluginVersion]
 Type=int

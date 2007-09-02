@@ -22,5 +22,7 @@ Comment[pt_BR]=Definição de um objecto de texto
 Comment[sv]=Definition av ett textobjekt
 Comment[x-test]=xxDefinition of a text objectxx
 Comment[zh_TW]=定義文字物件
-[PropertyDef::X-KoText-Version]
+[PropertyDef::X-KoText-MinVersion]
+Type=int
+[PropertyDef::X-Flake-PluginVersion]
 Type=int

@@ -72,4 +72,5 @@ Comment[zh_TW]=每色頻為 16-bit 的 CMYK 圖片色彩模型
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=krita_cmyk_u16_plugin
-X-Pigment-Version=1
+X-Pigment-MinVersion=0
+X-Flake-PluginVersion=1

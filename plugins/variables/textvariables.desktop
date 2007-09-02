@@ -14,5 +14,6 @@ Name[x-test]=xxText Variablesxx
 Name[zh_TW]=文字變數
 ServiceTypes=KOffice/Text-InlineObject
 Type=Service
-X-KoText-Version=1
 X-KDE-Library=textvariables
+X-KoText-MinVersion=0
+X-Flake-PluginVersion=1

@@ -22,5 +22,7 @@ Comment[pt_BR]=Definição de um 'plugin' de edição de texto
 Comment[sv]=Definition av ett Insticksprogram för textredigering
 Comment[x-test]=xxDefinition of a text-editing pluginxx
 Comment[zh_TW]=文字編輯外掛程式定義
-[PropertyDef::X-KoText-Version]
+[PropertyDef::X-KoText-MinVersion]
+Type=int
+[PropertyDef::X-Flake-PluginVersion]
 Type=int

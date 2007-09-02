@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -32,11 +32,11 @@ void KoToolRegistry::init() {
     config.blacklist = "FlakePluginsDisabled";
     config.group = "koffice";
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Flake"),
-                                      QString::fromLatin1("[X-Flake-Version] == 1"));
+                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"));
     config.whiteList = "ToolPlugins";
     config.blacklist = "ToolPluginsDisabled";
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Tool"),
-                                      QString::fromLatin1("[X-Flake-Version] == 1"));
+                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"));
 }
 
 KoToolRegistry::~KoToolRegistry()

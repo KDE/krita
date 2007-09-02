@@ -23,5 +23,7 @@ Comment[pt_BR]=Definição das ferramentas do Flake
 Comment[sv]=Definition av verktyg i Flake
 Comment[x-test]=xxDefinition of flake toolsxx
 Comment[zh_TW]=Flake 工具定義
-[PropertyDef::X-Flake-Version]
+[PropertyDef::X-Flake-MinVersion]
+Type=int
+[PropertyDef::X-Flake-PluginVersion]
 Type=int

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
+ * Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -73,7 +74,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
     if(config.whiteList && config.blacklist && config.group) {
-        kDebug(30003) <<"Loading" << serviceType <<" with checking the config";
+        kDebug(30003) <<"Loading" << serviceType <<"with checking the config";
         KConfigGroup configGroup = KGlobal::config()->group(config.group);
         QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
         QList<QString> knownList;
@@ -99,17 +100,31 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     else
         plugins = offers;
 
-    QList<QString> whiteList;
+    QMap<QString, KSharedPtr<KService> > serviceNames;
     foreach(KSharedPtr<KService> service, plugins) {
+        if(serviceNames.contains(service->name())) { // duplicate
+            QVariant pluginVersion2 = service->property("X-Flake-PluginVersion");
+            if(pluginVersion2.isNull()) // just take the first one found...
+                continue;
+            KSharedPtr<KService> otherService = serviceNames.value(service->name());
+            QVariant pluginVersion = otherService->property("X-Flake-PluginVersion");
+            if(! (pluginVersion.isNull() || pluginVersion.toInt() < pluginVersion2.toInt()) )
+                continue; // replace the old one with this one, since its newer.
+        }
+        serviceNames.insert(service->name(), service);
+    }
+
+    QList<QString> whiteList;
+    foreach(KSharedPtr<KService> service, serviceNames.values()) {
         int errCode = 0;
         QObject * plugin = KService::createInstance<QObject>(service, this, QStringList(), &errCode );
         if ( plugin ) {
             whiteList << service->library();
-            kDebug(30003) <<"Loaded plugin" << service->name();
+            kDebug(30003) << "Loaded plugin" << service->name();
             delete plugin;
         }
         else {
-            kWarning(30003) <<"Loading plugin '" << service->name() << "' failed, "<< KLibLoader::errorString( errCode ) << " ("<< errCode << ")\n";
+            kWarning(30003) << "Loading plugin" << service->name() << "failed, "<< KLibLoader::errorString( errCode ) << "("<< errCode << ")";
         }
     }
 

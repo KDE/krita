@@ -15,5 +15,6 @@ Name[x-test]=xxAutocorrection pluginxx
 Name[zh_TW]=自動修正外掛程式
 ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service
-X-KoText-Version=1
+X-KoText-MinVersion=0
+X-KoText-PluginVersion=1
 X-KDE-Library=autocorrect

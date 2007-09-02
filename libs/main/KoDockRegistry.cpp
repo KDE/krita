@@ -30,7 +30,9 @@ void KoDockRegistry::init() {
     config.whiteList = "DockerPlugins";
     config.blacklist = "DockerPluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Dock"), QString(), config);
+    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Dock"),
+                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
+                                     config);
 }
 
 KoDockRegistry::~KoDockRegistry()

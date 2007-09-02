@@ -33,7 +33,7 @@ void KoInlineObjectRegistry::init() {
     config.blacklist = "TextInlinePluginsDisabled";
     config.group = "koffice";
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Text-InlineObject"),
-                                      QString::fromLatin1("[X-KoText-Version] == 1"), config);
+                                      QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
 }
 
 KoInlineObjectRegistry *KoInlineObjectRegistry::s_instance = 0;

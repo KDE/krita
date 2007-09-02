@@ -30,7 +30,7 @@ void KoShapeBorderRegistry::init() {
     config.whiteList = "FlakeBorderPlugins";
     config.blacklist = "FlakeBorderPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Border"),
-                                     QString::fromLatin1("[X-Flake-Version] == 1"),
+                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
                                      config);
 
     // Also add our hard-coded basic border

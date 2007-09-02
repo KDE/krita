@@ -11,5 +11,6 @@ Name[sv]=Insticksprogram för skiftlägesändring
 Name[zh_TW]=改變大小寫外掛程式
 ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service
-X-KoText-Version=1
 X-KDE-Library=changecase
+X-KoText-MinVersion=0
+X-Flake-PluginVersion=1

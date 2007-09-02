@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
@@ -61,12 +61,12 @@ void KoShapeRegistry::init() {
     config.blacklist = "FlakePluginsDisabled";
     config.group = "koffice";
     KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Flake"),
-                                      QString::fromLatin1("[X-Flake-Version] == 1"),
+                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
                                       config);
     config.whiteList = "ShapePlugins";
     config.blacklist = "ShapePluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Shape"),
-                                     QString::fromLatin1("[X-Flake-Version] == 1"),
+                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
                                      config);
 
     // Also add our hard-coded basic shape

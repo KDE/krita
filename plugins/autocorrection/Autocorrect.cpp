@@ -341,15 +341,15 @@ void Autocorrect::advancedAutocorrect()
         int pos = m_word.toLower().indexOf(word);
         QString replacement = m_autocorrectEntries.value(word);
         m_word.replace(pos, pos + word.length(), replacement);
-    }
 
-    // We do replacement here, since the length of new word might be different from length of
-    // the old world. Length difference might affect other type of autocorrection
-    m_cursor.setPosition(startPos);
-    m_cursor.setPosition(startPos + length, QTextCursor::KeepAnchor);
-    m_cursor.insertText(m_word);
-    m_cursor.setPosition(startPos); // also restore the selection
-    m_cursor.setPosition(startPos + m_word.length(), QTextCursor::KeepAnchor);
+        // We do replacement here, since the length of new word might be different from length of
+        // the old world. Length difference might affect other type of autocorrection
+        m_cursor.setPosition(startPos);
+        m_cursor.setPosition(startPos + length, QTextCursor::KeepAnchor);
+        m_cursor.insertText(m_word);
+        m_cursor.setPosition(startPos); // also restore the selection
+        m_cursor.setPosition(startPos + m_word.length(), QTextCursor::KeepAnchor);
+    }
 }
 
 QString Autocorrect::autoDetectURL(const QString &_word) const

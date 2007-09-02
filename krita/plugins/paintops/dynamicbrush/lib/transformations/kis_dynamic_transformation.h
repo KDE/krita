@@ -43,8 +43,6 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicTransformation : public QObject {
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info) =0;
         virtual void transformColoring(KisDynamicColoring* dabsrc, const KisPaintInformation& info) =0;
         virtual QWidget* createConfigWidget(QWidget* parent) =0;
-        inline void setNextTransformation(KisDynamicTransformation* n) { if(m_next) { delete m_next; } m_next = n; }
-        inline KisDynamicTransformation* nextTransformation() { return m_next; }
     private:
         KoID m_name;
         KisDynamicTransformation* m_next;

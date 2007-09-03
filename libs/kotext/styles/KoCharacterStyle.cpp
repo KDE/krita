@@ -589,7 +589,13 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
                             va, d->m_relativeTextSize, d->m_offsetFromBaseLine, context );
     }
 #endif
-
+    if( styleStack.hasProperty( KoXmlNS::style, "text-position")) { // OO 3.10.7
+        QString textPosition = styleStack.property( KoXmlNS::style, "text-position");
+        if (textPosition.startsWith("super"))
+            setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+        else if (textPosition.startsWith("sub"))
+            setVerticalAlignment(QTextCharFormat::AlignSubScript);
+    }
     // The fo:font-variant attribute provides the option to display text as small capitalized letters.
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-variant" ) ) {
         if ( styleStack.property( KoXmlNS::fo, "font-variant" ) == "small-caps" )

@@ -104,7 +104,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
 
       if(!url.isLocalFile() || QFile::exists(url.path())) {
         KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
-        fileList.append(fileItem);
+        fileList.prepend(fileItem);
         //center all icons in 64x64 area
         QImage icon = fileItem.pixmap(64).toImage();
         icon.convertToFormat(QImage::Format_ARGB32);
@@ -113,7 +113,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
         item->setEditable(false);
         item->setData(fileItem.pixmap(128), Qt::UserRole);
         item->setFileItem(fileItem);
-        rootItem->appendRow(item);
+        rootItem->insertRow(0,item);
       }
     }
 

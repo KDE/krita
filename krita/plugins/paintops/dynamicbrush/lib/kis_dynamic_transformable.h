@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -15,14 +15,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_dynamic_shape.h"
+#ifndef _KIS_DYNAMIC_TRANSFORMABLE_H_
+#define _KIS_DYNAMIC_TRANSFORMABLE_H_
 
-void KisDynamicShape::startPainting(KisPainter* painter)
-{
-    m_painter = painter;
-}
+/**
+ * This is an interface to define the function call which are common between
+ * shapes and coloring.
+ */
+class KisDynamicTransformable {
+    public:
+        /**
+         * Call this function to rotate this object
+         */
+        virtual void rotate(double r) = 0;
+        /**
+         * Call this function to resize the object.
+         * @param xs horizontal scaling
+         * @param ys vertical scaling
+         */
+        virtual void resize(double xs, double ys) = 0;
+};
 
-void KisDynamicShape::endPainting()
-{
-    m_painter = 0;
-}
+#endif

@@ -3,8 +3,7 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,22 +28,17 @@ class KisDynamicColoring;
 class KisPaintInformation;
 class KisPainter;
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicShape {
+#include "kis_dynamic_transformable.h"
+
+class DYNAMIC_BRUSH_EXPORT KisDynamicShape : public KisDynamicTransformable {
     public:
         KisDynamicShape() {}
         virtual ~KisDynamicShape() {}
     public:
         virtual QRect rect() =0;
         virtual KisDynamicShape* clone() const = 0;
-        virtual void rotate(double r) = 0;
         virtual void startPainting(KisPainter* m_painter);
         virtual void endPainting();
-        /**
-         * Call this function to resize the shape.
-         * @param xs horizontal scaling
-         * @param ys vertical scaling
-         */
-        virtual void resize(double xs, double ys) = 0;
         virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc) = 0;
     protected:
         KisPainter* painter() { return m_painter;}

@@ -3,8 +3,7 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,12 +24,13 @@
 
 #include <kis_types.h>
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicColoring {
+#include "kis_dynamic_transformable.h"
+
+class DYNAMIC_BRUSH_EXPORT KisDynamicColoring : public KisDynamicTransformable {
     public:
         virtual ~KisDynamicColoring();
     public:
         virtual KisDynamicColoring* clone() const = 0;
-        virtual void resize(double xs, double ys) = 0;
         virtual void darken(qint32 v) = 0;
         virtual void colorAt(int x, int y, KoColor*) = 0;
 };
@@ -42,6 +42,8 @@ class KisPlainColoring : public KisDynamicColoring {
         virtual ~KisPlainColoring();
         virtual KisDynamicColoring* clone() const;
         virtual void darken(qint32 v);
+        virtual void rotate(double r)
+        {}
         virtual void resize(double , double ) {
             // Do nothing as plain color doesn't have size
         }

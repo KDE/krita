@@ -24,6 +24,7 @@
  */
 class KisDynamicTransformable {
     public:
+        virtual ~KisDynamicTransformable() {}
         /**
          * Call this function to rotate this object
          */

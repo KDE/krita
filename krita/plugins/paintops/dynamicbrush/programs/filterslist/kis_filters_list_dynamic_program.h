@@ -37,9 +37,7 @@ class KisFiltersListDynamicProgram : public KisDynamicProgram {
         inline KisDynamicTransformation* transfoAt(uint i) { return m_transformations[i]; }
         inline void removeTransformationAt(uint i) { m_transformations.removeAt(i); }
         inline uint countTransformations() const { return m_transformations.size(); }
-        inline void appendTransformation(KisDynamicTransformation* transfo) {
-            m_transformations.append(transfo);
-        }
+        void appendTransformation(KisDynamicTransformation* transfo);
         virtual QWidget* createEditor(QWidget* parent);
         virtual void fromXML(const QDomElement&);
         virtual void toXML(QDomDocument&, QDomElement&) const;

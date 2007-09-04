@@ -49,7 +49,10 @@ void KisRotationTransformation::toXML(QDomDocument& d, QDomElement& e) const
 {
     KisDynamicTransformation::toXML(d,e);
     QDomElement eSensor = d.createElement( "sensor" );
-    m_transfoParameter->toXML( d, eSensor);
+    if(m_transfoParameter)
+    {
+        m_transfoParameter->toXML( d, eSensor);
+    }
     e.appendChild( eSensor );
 }
 

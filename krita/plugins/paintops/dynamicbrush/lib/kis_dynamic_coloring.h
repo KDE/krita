@@ -42,7 +42,7 @@ class KisPlainColoring : public KisDynamicColoring {
         virtual ~KisPlainColoring();
         virtual KisDynamicColoring* clone() const;
         virtual void darken(qint32 v);
-        virtual void rotate(double r)
+        virtual void rotate(double )
         {}
         virtual void resize(double , double ) {
             // Do nothing as plain color doesn't have size

@@ -21,6 +21,7 @@
 #include <kdebug.h>
 
 #include "kis_dynamic_transformation.h"
+#include "kis_dynamic_transformations_factory.h"
 
 #include "kis_filters_list_dynamic_program.h"
 
@@ -61,35 +62,15 @@ Qt::ItemFlags KisFiltersListModel::flags(const QModelIndex &index) const
      return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-void KisFiltersListModel::setCurrentFilterType(int filterType)
+void KisFiltersListModel::setCurrentFilterType(const KoID & filterType)
 {
-    m_currentFilterType = filterType;
+    m_currentFilterType = filterType.id();
 }
 
 void KisFiltersListModel::addNewFilter()
 {
-#if 0
-    kDebug(41006) <<"addNewFilter" << m_currentFilterType;
-    KisDynamicTransformation* transfo = 0;
-    switch(m_currentFilterType)
-    {
-        case 0:
-            transfo = new KisDarkenTransformation(0);
-            break;
-        case 1:
-            transfo = new KisRotationTransformation(0);
-            break;
-        case 2:
-            transfo = new KisSizeTransformation(0, 0);
-            break;
-        default:
-            kDebug(41006) <<"Unknown filter type";
-            return;
-    }
-    beginInsertRows( createIndex(0, 0, 0), m_program->countTransformations(), m_program->countTransformations());
-    m_program->appendTransformation( transfo );
-    endInsertRows();
-#endif
+    kDebug(41006) << "addNewFilter " << m_currentFilterType;
+    m_program->appendTransformation( KisDynamicTransformationsFactory::id2Transformation( m_currentFilterType ));
 }
 
 void KisFiltersListModel::deleteCurrentFilter()

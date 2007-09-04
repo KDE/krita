@@ -103,3 +103,4 @@ KisSerializableConfiguration* KisDynamicProgramsFactory::create(const QDomElemen
     return program;
 }
 
+#include "kis_dynamic_program.moc"

@@ -18,6 +18,7 @@
 
 #include "kis_filters_list_dynamic_program.h"
 
+#include <QDomNode>
 #include <QWidget>
 
 #include <klocale.h>
@@ -27,6 +28,7 @@
 #include "kis_dynamic_program_factory_registry.h"
 #include "kis_dynamic_shape.h"
 #include "kis_dynamic_transformation.h"
+#include "kis_dynamic_transformations_factory.h"
 
 // Filterslist program includes
 #include "kis_filters_list_dynamic_program_editor.h"
@@ -68,6 +70,12 @@ void KisFiltersListDynamicProgram::apply(KisDynamicShape* shape, KisDynamicColor
 
 }
 
+void KisFiltersListDynamicProgram::appendTransformation(KisDynamicTransformation* transfo) {
+    kDebug(41006) << "Append transfo : " << transfo->name();
+    m_transformations.append(transfo);
+    emit(programChanged());
+}
+
 QWidget* KisFiltersListDynamicProgram::createEditor(QWidget* /*parent*/)
 {
     return new KisFiltersListDynamicProgramEditor(this);
@@ -75,14 +83,47 @@ QWidget* KisFiltersListDynamicProgram::createEditor(QWidget* /*parent*/)
 
 void KisFiltersListDynamicProgram::fromXML(const QDomElement& elt)
 {
-    KisFiltersListDynamicProgram::fromXML(elt);
-    
+    KisDynamicProgram::fromXML(elt);
+    QDomNode n = elt.firstChild();
+    while (not n.isNull()) {
+        QDomElement e = n.toElement();
+        if (not e.isNull()) {
+            if (e.tagName() == "Filters") {
+                QDomNode nFilter = e.firstChild();
+                while(not nFilter.isNull())
+                {
+                    QDomElement eFilter = nFilter.toElement();
+                    if(eFilter.tagName() == "Filter")
+                    {
+                        KisDynamicTransformation* transfo = KisDynamicTransformationsFactory::createFromXML(eFilter);
+                        if(transfo)
+                        {
+                            appendTransformation(transfo);
+                        }
+                    }
+                    nFilter = nFilter.nextSibling();
+                }
+            }
+        }
+        n = n.nextSibling();
+    }
+
 }
 
 void KisFiltersListDynamicProgram::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
-    KisFiltersListDynamicProgram::toXML(doc, rootElt);
+    KisDynamicProgram::toXML(doc, rootElt);
     
+    QDomElement filtersElt = doc.createElement("Filters");
+    for( QList<KisDynamicTransformation*>::const_iterator it = m_transformations.begin();
+    it != m_transformations.end(); ++it)
+    {
+        QDomElement filterElt = doc.createElement("Filter");
+        (*it)->toXML(doc, filterElt);
+        filtersElt.appendChild(filterElt);
+    }
+    rootElt.appendChild(filtersElt);
+
 }
 
 //--- KisFiltersListDynamicProgramFactory ---//

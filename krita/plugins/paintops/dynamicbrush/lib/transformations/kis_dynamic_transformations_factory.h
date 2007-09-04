@@ -20,6 +20,10 @@
 
 #include "dynamicbrush_export.h"
 
+#include <QList>
+
+#include <KoID.h>
+
 class KisDynamicTransformation;
 class QDomElement;
 

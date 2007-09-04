@@ -17,14 +17,21 @@
 
 #include "kis_dynamic_transformations_factory.h"
 
+#include <QDomElement>
+
+#include "kis_darken_transformation.h"
+#include "kis_dynamic_transformation.h"
+#include "kis_rotation_transformation.h"
+#include "kis_size_transformation.h"
+
 KisDynamicTransformation* KisDynamicTransformationsFactory::id2Transformation(QString id)
 {
     if(id == KisDynamicTransformation::SizeTransformationID.id())
     {
         return new KisSizeTransformation(0, 0);
     } else if(id == KisDynamicTransformation::DarkenTransformationID.id()) {
-        return transfo = new KisDarkenTransformation(0);
-    } else if(id == KisDynamicTransformation::RotationTransformationID) {
+        return new KisDarkenTransformation(0);
+    } else if(id == KisDynamicTransformation::RotationTransformationID.id()) {
         return new KisRotationTransformation(0);
     }
     return 0;

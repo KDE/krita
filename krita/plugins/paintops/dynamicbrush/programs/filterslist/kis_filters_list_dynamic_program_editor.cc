@@ -26,18 +26,21 @@
 #include "kis_filters_list_dynamic_program.h"
 #include "kis_filters_list_model.h"
 #include "kis_dynamic_transformation.h"
+#include "kis_dynamic_transformations_factory.h"
 
 KisFiltersListDynamicProgramEditor::KisFiltersListDynamicProgramEditor(KisFiltersListDynamicProgram* program) :
         m_program(program), m_currentFilterEditor(0)
 {
     m_filtersListDynamicProgramEditor = new Ui_FiltersListDynamicProgramEditor();
     m_filtersListDynamicProgramEditor->setupUi(this);
+    
+    m_filtersListDynamicProgramEditor->comboBoxFilter->setIDList(KisDynamicTransformationsFactory::ids());
     // Initialize the model
     m_filtersModel = new KisFiltersListModel( program, m_filtersListDynamicProgramEditor->listViewFilters);
     m_filtersListDynamicProgramEditor->listViewFilters->setModel( m_filtersModel );
     // Connect the respective signals to the actions of the model
-    m_filtersModel->connect(m_filtersListDynamicProgramEditor->comboBoxFilter,
-                            SIGNAL(activated(int)), SLOT(setCurrentFilterType(int)));
+    connect(m_filtersListDynamicProgramEditor->comboBoxFilter, SIGNAL(activated(const KoID &)),
+                            m_filtersModel, SLOT(setCurrentFilterType(const KoID &)));
     m_filtersModel->connect(m_filtersListDynamicProgramEditor->pushButtonAdd,
                             SIGNAL(pressed()), SLOT(addNewFilter()));
     m_filtersModel->connect(m_filtersListDynamicProgramEditor->listViewFilters->selectionModel(),

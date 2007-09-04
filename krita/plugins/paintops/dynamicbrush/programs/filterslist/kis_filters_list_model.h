@@ -21,6 +21,8 @@
 
 #include <QAbstractListModel>
 
+#include <KoID.h>
+
 class KisFiltersListDynamicProgram;
 
 class KisFiltersListModel : public QAbstractListModel {
@@ -43,11 +45,11 @@ class KisFiltersListModel : public QAbstractListModel {
     private slots:
         void addNewFilter();
         void deleteCurrentFilter();
-        void setCurrentFilterType(int filterType);
+        void setCurrentFilterType(const KoID &);
         void setCurrentFilter(const QModelIndex&);
     private:
         KisFiltersListDynamicProgram* m_program;
-        int m_currentFilterType;
+        QString m_currentFilterType;
         int m_currentTransformation;
 };
 

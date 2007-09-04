@@ -9,6 +9,7 @@ set(kritadynamicbrushlib_LIB_SRCS
     kis_dynamic_sensor.cc
     kis_dynamic_shape.cc
     transformations/kis_dynamic_transformation.cc
+    transformations/kis_dynamic_transformations_factory.cc
     transformations/kis_rotation_transformation.cc
     transformations/kis_size_transformation.cc
     transformations/kis_darken_transformation.cc

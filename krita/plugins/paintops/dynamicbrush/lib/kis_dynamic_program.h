@@ -24,6 +24,7 @@
 #include "kis_serializable_configuration.h"
 
 #include <QString>
+#include <QObject>
 
 class KisDynamicShape;
 class KisDynamicColoring;
@@ -33,7 +34,8 @@ class QWidget;
 /**
  * This is the base class of a dynamic program.
  */
-class DYNAMIC_BRUSH_EXPORT KisDynamicProgram : public KisSerializableConfiguration {
+class DYNAMIC_BRUSH_EXPORT KisDynamicProgram : public QObject, public KisSerializableConfiguration {
+    Q_OBJECT
     protected:
         /**
          * @param name the name of this program, will be displayed in the list of programs
@@ -56,6 +58,8 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicProgram : public KisSerializableConfigurati
         virtual QWidget* createEditor(QWidget* parent) = 0;
         virtual void fromXML(const QDomElement&);
         virtual void toXML(QDomDocument&, QDomElement&) const;
+    signals:
+        void programChanged();
     private:
         struct Private;
         Private* const d;

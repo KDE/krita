@@ -23,7 +23,6 @@
 #include <kis_bookmarked_configuration_manager.h>
 #include <kis_bookmarked_configurations_model.h>
 
-
 #include "ui_DynamicProgramsEditor.h"
 
 #include "kis_dynamic_program.h"
@@ -56,10 +55,11 @@ void KisDynamicProgramsEditor::setCurrentProgram(const QString& text)
 {
     kDebug(41006) <<"program changed to" << text;
     delete m_currentEditor;
-    KisDynamicProgram* program = static_cast<KisDynamicProgram*>( m_bookmarksManager->load( text ) );
-    Q_ASSERT(program);
-    m_currentEditor = program->createEditor( m_dynamicProgramsEditor->frame);
+    m_currentProgram = static_cast<KisDynamicProgram*>( m_bookmarksManager->load( text ) );
+    Q_ASSERT(m_currentProgram);
+    m_currentEditor = m_currentProgram->createEditor( m_dynamicProgramsEditor->frame);
     m_frameVBoxLayout->addWidget(m_currentEditor);
+    connect(m_currentProgram, SIGNAL(programChanged()), SLOT(saveCurrentProgram()));
 }
 
 void KisDynamicProgramsEditor::addProgram()
@@ -71,6 +71,12 @@ void KisDynamicProgramsEditor::addProgram()
     KisDynamicProgram* program = factory->program( m_bookmarksManager->uniqueName( ki18n("New program %1") ) );
     Q_ASSERT(program);
     m_bookmarksManager->save(program->name(), program);
+}
+
+void KisDynamicProgramsEditor::saveCurrentProgram()
+{
+    kDebug(41006) <<"saveCurrentProgram " << m_currentProgram->name();
+    m_bookmarksManager->save(m_currentProgram->name(), m_currentProgram);
 }
 
 #include "kis_dynamic_programs_editor.moc"

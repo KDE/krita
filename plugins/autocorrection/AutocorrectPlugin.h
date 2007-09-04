@@ -19,13 +19,14 @@
 #ifndef AUTOCORRECTPLUGIN_H
 #define AUTOCORRECTPLUGIN_H
 
-#include <QObject>
+#include <QtCore/QObject>
+#include <QtCore/QVariant>
 
 class AutocorrectPlugin : public QObject {
     Q_OBJECT
 
 public:
-    AutocorrectPlugin(QObject * parent,  const QStringList & );
+    AutocorrectPlugin(QObject * parent,  const QVariantList & );
     ~AutocorrectPlugin() {}
 };
 

@@ -16,16 +16,19 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "AutocorrectPlugin.h"
 #include "AutocorrectFactory.h"
-#include <kgenericfactory.h>
+
+#include <KPluginFactory>
+#include <KPluginLoader>
 
 #include <KoTextEditingRegistry.h>
 
-K_EXPORT_COMPONENT_FACTORY(autocorrect,
-                           KGenericFactory<AutocorrectPlugin>( "AutocorrectPlugin" ) )
+K_PLUGIN_FACTORY( AutocorrectPluginFactory, registerPlugin<AutocorrectPlugin>(); );
+K_EXPORT_PLUGIN( AutocorrectPluginFactory("AutocorrectPlugin") );
 
-AutocorrectPlugin::AutocorrectPlugin( QObject *parent, const QStringList& )
+AutocorrectPlugin::AutocorrectPlugin( QObject *parent, const QVariantList& )
     : QObject(parent)
 {
     KoTextEditingRegistry::instance()->add( new AutocorrectFactory( parent));

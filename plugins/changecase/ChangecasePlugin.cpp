@@ -19,13 +19,15 @@
 #include "ChangecasePlugin.h"
 #include "ChangecaseFactory.h"
 
+#include <KPluginFactory>
+#include <KPluginLoader>
+
 #include <KoTextEditingRegistry.h>
-#include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(changecase,
-        KGenericFactory<ChangecasePlugin>( "ChangecasePlugin" ) )
+K_PLUGIN_FACTORY( ChangecasePluginFactory, registerPlugin<ChangecasePlugin>(); );
+K_EXPORT_PLUGIN( ChangecasePluginFactory("ChangecasePlugin") );
 
-ChangecasePlugin::ChangecasePlugin( QObject *parent, const QStringList& )
+ChangecasePlugin::ChangecasePlugin( QObject *parent, const QVariantList& )
     : QObject(parent)
 {
     KoTextEditingRegistry::instance()->add( new ChangecaseFactory( parent));

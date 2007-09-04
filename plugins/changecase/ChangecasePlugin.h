@@ -20,13 +20,14 @@
 #ifndef CHANGECASEPLUGIN_H
 #define CHANGECASEPLUGIN_H
 
-#include <QObject>
+#include <QtCore/QObject>
+#include <QtCore/QVariant>
 
 class ChangecasePlugin : public QObject {
     Q_OBJECT
 
 public:
-    ChangecasePlugin(QObject * parent,  const QStringList & );
+    ChangecasePlugin(QObject * parent,  const QVariantList & );
     ~ChangecasePlugin() {}
 };
 

@@ -20,13 +20,14 @@
 #ifndef SPELLCHECKPLUGIN_H
 #define SPELLCHECKPLUGIN_H
 
-#include <QObject>
+#include <QtCore/QObject>
+#include <QtCore/QVariant>
 
 class SpellCheckPlugin : public QObject {
     Q_OBJECT
 
 public:
-    SpellCheckPlugin(QObject * parent,  const QStringList &);
+    SpellCheckPlugin(QObject * parent,  const QVariantList &);
     ~SpellCheckPlugin() {}
 };
 

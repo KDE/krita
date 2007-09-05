@@ -54,14 +54,21 @@ Autocorrect::Autocorrect() {
     m_replaceDoubleQuotes = false;
     m_replaceSingleQuotes = false;
 
+    // TODO put this into configuration dialog
+    // default double quote open 0x201c
+    // default double quote close 0x201d
+    // default single quote open 0x2018
+    // default single quote close 0x2019
+    m_typographicSingleQuotes.begin = QChar(0x2018);
+    m_typographicSingleQuotes.end = QChar(0x2019);
+    m_typographicDoubleQuotes.begin = QChar(0x201c);
+    m_typographicDoubleQuotes.end = QChar(0x201d);
+
     readConfig();
 
     KLocale *locale = KGlobal::locale();
     for (int i = 1; i <=7; i++)
         m_cacheNameOfDays.append(locale->calendar()->weekDayName(i).toLower());
-
-    // default double quote open 0x201c
-    // default double quote close 0x201d
 }
 
 Autocorrect::~Autocorrect()
@@ -90,8 +97,7 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
     if(!done) superscriptAppendix();
     if(!done) capitalizeWeekDays();
     if(!done) autoFormatBulletList();
-    if(!done) replaceDoubleQuotes();
-    if(!done) replaceSingleQuotes();
+    if(!done) replaceTypographicQuotes();
 
     if(m_cursor.selectedText() != m_word)
         m_cursor.insertText(m_word);
@@ -319,14 +325,85 @@ void Autocorrect::autoFormatBulletList() {
     // TODO
 }
 
-void Autocorrect::replaceDoubleQuotes() {
-    if(! m_replaceDoubleQuotes) return;
-    // TODO
-}
+void Autocorrect::replaceTypographicQuotes()
+{
+    /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doTypographicQuotes
+     * from KOffice 1.x branch */
 
-void Autocorrect::replaceSingleQuotes() {
-    if(! m_replaceSingleQuotes) return;
-    // TODO
+    if (!m_replaceDoubleQuotes) return;
+    if (!m_replaceSingleQuotes) return;
+    if (!(m_word.contains('"') || m_word.contains('\''))) return;
+
+    // Need to determine if we want a starting or ending quote.
+    // we use a starting quote in three cases:
+    //  1. if the previous character is a space
+    //  2. if the previous character is some kind of opening punctuation (e.g., "(", "[", or "{")
+    //     a. and the character before that is not an opening quote (so that we get quotations of single characters
+    //        right)
+    //  3. if the previous character is an opening quote (so that we get nested quotations right)
+    //     a. and the character before that is not an opening quote (so that we get quotations of single characters
+    //         right)
+    //     b. and the previous quote of a different kind (so that we get empty quotations right)
+
+    bool ending = true;
+    QString::Iterator iter = m_word.end();
+    iter--;
+
+    while (iter != m_word.begin()) {
+        if (*iter == QChar('"') || *iter == QChar('\'')) {
+            bool doubleQuotes = *iter == QChar('"');
+
+            if ((iter - 1) != m_word.begin()) {
+                QChar::Category c1 = (*(iter - 1)).category();
+
+                // case 1 and 2
+                if (c1 == QChar::Separator_Space || c1 == QChar::Separator_Line || c1 == QChar::Separator_Paragraph || 
+                        c1 == QChar::Punctuation_Open || c1 == QChar::Other_Control)
+                    ending = false;
+
+                // case 3
+                if (c1 == QChar::Punctuation_InitialQuote) {
+                    QChar openingQuote;
+
+                    if (doubleQuotes)
+                        openingQuote = m_typographicDoubleQuotes.begin;
+                    else
+                        openingQuote = m_typographicSingleQuotes.begin;
+
+                    // case 3b
+                    if (*(iter - 1) != openingQuote)
+                        ending = false;
+                }
+            }
+
+            // case 2a and 3a
+            if ((iter - 2) != m_word.constBegin() && !ending)
+            {
+                 QChar::Category c2 = (*(iter - 2)).category();
+                 ending = (c2 == QChar::Punctuation_InitialQuote);
+            }
+
+            if (doubleQuotes) {
+                if (!ending)
+                    *iter = m_typographicDoubleQuotes.begin;
+                else
+                    *iter = m_typographicDoubleQuotes.end;
+            }
+            else {
+                if (!ending)
+                    *iter = m_typographicSingleQuotes.begin;
+                else
+                    *iter = m_typographicSingleQuotes.end;
+            }
+        }
+        iter--;
+    }
+
+    // first character
+    if (*iter == QChar('"'))
+        *iter = m_typographicDoubleQuotes.begin;
+    else if (*iter == QChar('\''))
+        *iter = m_typographicSingleQuotes.begin;
 }
 
 void Autocorrect::advancedAutocorrect()

@@ -100,8 +100,7 @@ private:
     void superscriptAppendix();
     void capitalizeWeekDays();
     void autoFormatBulletList();
-    void replaceDoubleQuotes();
-    void replaceSingleQuotes();
+    void replaceTypographicQuotes();
     void advancedAutocorrect();
 
     /// @returns the actual link that will be set as anchor href
@@ -139,6 +138,8 @@ private:
     QSet<QString> m_upperCaseExceptions;
     QSet<QString> m_twoUpperLetterExceptions;
     QHash<QString, QString /*AutocorrectEntry*/> m_autocorrectEntries;
+    TypographicQuotes m_typographicSingleQuotes;
+    TypographicQuotes m_typographicDoubleQuotes;
 };
 
 #endif

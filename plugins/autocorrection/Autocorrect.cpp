@@ -331,9 +331,8 @@ void Autocorrect::replaceTypographicQuotes()
     /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doTypographicQuotes
      * from KOffice 1.x branch */
 
-    if (!m_replaceDoubleQuotes) return;
-    if (!m_replaceSingleQuotes) return;
-    if (!(m_word.contains('"') || m_word.contains('\''))) return;
+    if (!(m_replaceDoubleQuotes && m_word.contains('"')) && 
+            !(m_replaceSingleQuotes && m_word.contains('\''))) return;
 
     // Need to determine if we want a starting or ending quote.
     // we use a starting quote in three cases:
@@ -384,13 +383,13 @@ void Autocorrect::replaceTypographicQuotes()
                  ending = (c2 == QChar::Punctuation_InitialQuote);
             }
 
-            if (doubleQuotes) {
+            if (doubleQuotes && m_replaceDoubleQuotes) {
                 if (!ending)
                     *iter = m_typographicDoubleQuotes.begin;
                 else
                     *iter = m_typographicDoubleQuotes.end;
             }
-            else {
+            else if (m_replaceSingleQuotes) {
                 if (!ending)
                     *iter = m_typographicSingleQuotes.begin;
                 else
@@ -401,9 +400,9 @@ void Autocorrect::replaceTypographicQuotes()
     }
 
     // first character
-    if (*iter == QChar('"'))
+    if (*iter == QChar('"') && m_replaceDoubleQuotes)
         *iter = m_typographicDoubleQuotes.begin;
-    else if (*iter == QChar('\''))
+    else if (*iter == QChar('\'') && m_replaceSingleQuotes)
         *iter = m_typographicSingleQuotes.begin;
 }
 

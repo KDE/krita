@@ -34,6 +34,7 @@
 #include <kis_global.h>
 #include <kis_image.h>
 #include <kis_recorded_action.h>
+#include <kis_recorded_action_factory_registry.h>
 #include <kis_types.h>
 #include <kis_view2.h>
 
@@ -61,9 +62,9 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QStringList &)
         actionCollection()->addAction("Recording_Save", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotSave()));
         // Save recorded action
-        action  = new KAction(i18n("Load"), this);
-        actionCollection()->addAction("Recording_Load", action );
-        connect(action, SIGNAL(triggered()), this, SLOT(slotLoad()));
+        action  = new KAction(i18n("Open"), this);
+        actionCollection()->addAction("Recording_Open", action );
+        connect(action, SIGNAL(triggered()), this, SLOT(slotOpen()));
     }
 }
 
@@ -88,7 +89,7 @@ void BigBrotherPlugin::slotSave()
     QString filename = KFileDialog::getSaveFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
     if(not filename.isNull())
     {
-        QDomDocument doc(filename);
+        QDomDocument doc;
         QDomElement e = doc.createElement("RecordedActions");
         
         KisActionRecorder* actionRecorder = m_view->image()->actionRecorder();
@@ -110,9 +111,56 @@ void BigBrotherPlugin::slotSave()
     }
 }
 
-void BigBrotherPlugin::slotLoad()
+void BigBrotherPlugin::slotOpen()
 {
-    
+    QString filename = KFileDialog::getOpenFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
+    if(not filename.isNull())
+    {
+        QDomDocument doc;
+        QFile f(filename);
+        if(f.exists())
+        {
+            kDebug() << f.open( QIODevice::ReadOnly);
+            QString err;
+            int line, col;
+            if(not doc.setContent(&f, &err, &line, &col))
+            {
+                // TODO error message
+                kDebug() << err << " line = " << line << " col = " << col;
+                f.close();
+                return;
+            }
+            f.close();
+            QDomElement docElem = doc.documentElement();
+            if(not docElem.isNull() and docElem.tagName() == "RecordedActions")
+            {
+                QDomNode node = docElem.firstChild();
+                while(not node.isNull()) {
+                    QDomElement elt = node.toElement(); // try to convert the node to an element.
+                    if(not elt.isNull() and elt.tagName() == "RecordedAction") {
+                        QString id = elt.attribute("id", "");
+                        if(not id.isNull())
+                        {
+                            kDebug() << "Reconstruct : " << id << endl; // the node really is an element.
+                            KisRecordedActionFactory* raf = KisRecordedActionFactoryRegistry::instance()->get(id);
+                            KisRecordedAction* ra = raf->fromXML( m_view->image(), elt);
+                            ra->play();
+                            delete ra;
+                        } else {
+                            kDebug() << "Invalid recorded action: null id";
+                        }
+                    } else {
+                        kDebug() << "Unknown element " << elt.tagName() << (elt.tagName() == "RecordedAction");
+                    }
+                    node = node.nextSibling();
+                }
+            } else {
+                // TODO error message
+            }
+        } else {
+            kDebug() << "Unexistant file";
+        }
+    }
 }
 
 #include "bigbrother.moc"

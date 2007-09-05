@@ -36,7 +36,7 @@ private slots:
 
     void slotReplay();
     void slotSave();
-    void slotLoad();
+    void slotOpen();
 
 private:
 

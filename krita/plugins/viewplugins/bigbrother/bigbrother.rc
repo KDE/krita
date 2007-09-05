@@ -1,11 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritabigbrother" version="1">
+<kpartgui library="kritabigbrother" version="2">
 <MenuBar>
     <Menu name="Tools"><text>&amp;Tools</text>
         <Menu name="Recording"><text>&amp;Recording</text>
             <Action name="Recording_Replay"/>
             <Action name="Recording_Save"/>
-            <Action name="Recording_Load"/>
+            <Action name="Recording_Open"/>
         </Menu>
     </Menu>
 </MenuBar>

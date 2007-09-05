@@ -25,8 +25,8 @@
 
 #include <KoTextEditingRegistry.h>
 
-K_PLUGIN_FACTORY( AutocorrectPluginFactory, registerPlugin<AutocorrectPlugin>(); );
-K_EXPORT_PLUGIN( AutocorrectPluginFactory("AutocorrectPlugin") );
+K_PLUGIN_FACTORY( AutocorrectPluginFactory, registerPlugin<AutocorrectPlugin>(); )
+K_EXPORT_PLUGIN( AutocorrectPluginFactory("AutocorrectPlugin") )
 
 AutocorrectPlugin::AutocorrectPlugin( QObject *parent, const QVariantList& )
     : QObject(parent)

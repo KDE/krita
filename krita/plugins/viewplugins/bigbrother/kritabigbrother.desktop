@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=bigbrother
+Name[x-test]=xxbigbrotherxx
+Comment=bigbrother
+Comment[x-test]=xxbigbrotherxx
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritabigbrother
+X-Krita-Version=3

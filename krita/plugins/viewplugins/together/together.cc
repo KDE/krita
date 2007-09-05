@@ -55,67 +55,12 @@ TogetherPlugin::TogetherPlugin(QObject *parent, const QStringList &)
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/together.rc"), true);
 
-        // Replay recording action
-        KAction* action  = new KAction(i18n("Replay"), this);
-        actionCollection()->addAction("Recording_Replay", action );
-        connect(action, SIGNAL(triggered()), this, SLOT(slotReplay()));
-        // Save recorded action
-        action  = new KAction(i18n("Save"), this);
-        actionCollection()->addAction("Recording_Save", action );
-        connect(action, SIGNAL(triggered()), this, SLOT(slotSave()));
-        // Save recorded action
-        action  = new KAction(i18n("Load"), this);
-        actionCollection()->addAction("Recording_Load", action );
-        connect(action, SIGNAL(triggered()), this, SLOT(slotLoad()));
     }
 }
 
 TogetherPlugin::~TogetherPlugin()
 {
     m_view = 0;
-}
-
-void TogetherPlugin::slotReplay()
-{
-    KisActionRecorder* actionRecorder = m_view->image()->actionRecorder();
-    QList<KisRecordedAction*> actions = actionRecorder->actions();
-    for( QList<KisRecordedAction*>::iterator it = actions.begin();
-         it != actions.end(); ++it)
-    {
-        (*it)->play();
-    }
-}
-
-void TogetherPlugin::slotSave()
-{
-    QString filename = KFileDialog::getSaveFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
-    if(not filename.isNull())
-    {
-        QDomDocument doc(filename);
-        QDomElement e = doc.createElement("RecordedActions");
-        
-        KisActionRecorder* actionRecorder = m_view->image()->actionRecorder();
-        QList<KisRecordedAction*> actions = actionRecorder->actions();
-        for( QList<KisRecordedAction*>::iterator it = actions.begin();
-            it != actions.end(); ++it)
-        {
-            QDomElement eAct = doc.createElement("RecordedAction");
-            (*it)->toXML(doc, eAct);
-            e.appendChild(eAct);
-        }
-        
-        doc.appendChild(e);
-        QFile f(filename);
-        f.open( QIODevice::WriteOnly);
-        QTextStream stream(&f);
-        doc.save(stream,2);
-        f.close();
-    }
-}
-
-void TogetherPlugin::slotLoad()
-{
-    
 }
 
 #include "together.moc"

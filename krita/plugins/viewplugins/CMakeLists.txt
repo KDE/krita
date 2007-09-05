@@ -14,6 +14,7 @@ add_subdirectory( together )
 add_subdirectory( scripting )
 add_subdirectory( bracketing2hdr )
 add_subdirectory( metadataeditor )
+add_subdirectory( bigbrother )
 
 find_package(GMM)
 find_package(GLPK)

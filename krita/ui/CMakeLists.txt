@@ -82,6 +82,7 @@ set(kritaui_LIB_SRCS
     kis_previewdialog.cc
     kis_previewwidget.cc
     kis_qpainter_canvas.cpp
+    kis_recorded_paint_actions.cc
     kis_resource_mediator.cc
     kis_resource_provider.cc
     kis_resourceserver.cc

@@ -143,9 +143,14 @@ void BigBrotherPlugin::slotOpen()
                         {
                             kDebug() << "Reconstruct : " << id << endl; // the node really is an element.
                             KisRecordedActionFactory* raf = KisRecordedActionFactoryRegistry::instance()->get(id);
-                            KisRecordedAction* ra = raf->fromXML( m_view->image(), elt);
-                            ra->play();
-                            delete ra;
+                            if(raf)
+                            {
+                                KisRecordedAction* ra = raf->fromXML( m_view->image(), elt);
+                                ra->play();
+                                delete ra;
+                            } else {
+                                kDebug() << "Unknown action : " << id << endl;
+                            }
                         } else {
                             kDebug() << "Invalid recorded action: null id";
                         }

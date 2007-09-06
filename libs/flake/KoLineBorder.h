@@ -51,6 +51,9 @@ public:
     explicit KoLineBorder(double lineWidth, const QColor &color = Qt::black);
     virtual ~KoLineBorder();
 
+    /// Assignment operator
+    KoLineBorder& operator = ( const KoLineBorder &rhs );
+
     /// Sets the lines cap style
     void setCapStyle( Qt::PenCapStyle style );
     /// Returns the lines cap style

@@ -25,7 +25,7 @@
 class KoPathShape;
 
 /// A helper class for parsing path data when loading from svg/odf
-class KoPathShapeLoader : public KoSvgPathParser
+class FLAKE_EXPORT KoPathShapeLoader : public KoSvgPathParser
 {
 public:
     KoPathShapeLoader( KoPathShape * path );

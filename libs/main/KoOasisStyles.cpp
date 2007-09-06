@@ -1517,7 +1517,7 @@ QString KoOasisStyles::saveOasisGradientStyle( KoGenStyles &mainStyles, const QB
     {
         elementWriter.startElement( "svg:stop" );
         elementWriter.addAttribute( "svg:offset", QString( "%1" ).arg( stop.first ) );
-        elementWriter.addAttribute( "svg:color", stop.second.name() );
+        elementWriter.addAttribute( "svg:stop-color", stop.second.name() );
         if( stop.second.alphaF() < 1.0 )
             elementWriter.addAttribute( "svg:stop-opacity", QString( "%1" ).arg( stop.second.alphaF() ) );
         elementWriter.endElement();
@@ -1633,7 +1633,7 @@ QBrush KoOasisStyles::loadOasisGradientStyle( const KoStyleStack &styleStack, co
             if( colorstop.namespaceURI() == KoXmlNS::svg && colorstop.localName() == "stop" )
             {
                 QGradientStop stop;
-                stop.second = QColor( colorstop.attributeNS( KoXmlNS::svg, "color", QString() ) );
+                stop.second = QColor( colorstop.attributeNS( KoXmlNS::svg, "stop-color", QString() ) );
                 stop.second.setAlphaF( colorstop.attributeNS( KoXmlNS::svg, "stop-opacity", "1.0" ).toDouble() );
                 stop.first = colorstop.attributeNS( KoXmlNS::svg, "offset", "0.0" ).toDouble();
                 stops.append( stop );

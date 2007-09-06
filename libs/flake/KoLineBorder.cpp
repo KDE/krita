@@ -61,6 +61,17 @@ KoLineBorder::~KoLineBorder() {
     delete d;
 }
 
+KoLineBorder& KoLineBorder::operator = ( const KoLineBorder &rhs )
+{
+    if( this == &rhs )
+        return *this;
+
+    d->pen = rhs.d->pen;
+    d->color = rhs.d->color;
+
+    return *this;
+}
+
 void KoLineBorder::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
 {
     Q_UNUSED( context );

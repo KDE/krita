@@ -27,6 +27,7 @@
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
 
+class KoShapeSavingContext;
 class KoPAPage;
 class KoPAPageBase;
 class KoPAMasterPage;
@@ -125,7 +126,7 @@ protected:
     virtual const char *odfTagName( bool withNamespace ) = 0;
 
     void saveOdfAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, bool stylesDotXml );
-    void saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyles, QFile *masterStyles );
+    void saveOdfDocumentStyles( KoStore * store, KoShapeSavingContext& context, QFile *masterStyles );
 
     /**
      * This function is called by at the end of addShape. This is used 

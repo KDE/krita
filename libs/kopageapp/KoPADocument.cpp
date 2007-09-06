@@ -30,6 +30,7 @@
 #include <KoOasisLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
+#include <KoShapeStyleWriter.h>
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
 #include <KoDom.h>
@@ -214,7 +215,7 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         return false;
 
     manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-    saveOdfDocumentStyles( store, mainStyles, &masterStyles );
+    saveOdfDocumentStyles( store, paContext, &masterStyles );
 
     if ( !store->close() ) // done with styles.xml
         return false;
@@ -247,12 +248,17 @@ void KoPADocument::saveOdfAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyl
     }
 }
 
-void KoPADocument::saveOdfDocumentStyles( KoStore * store, KoGenStyles& mainStyles, QFile *masterStyles )
+void KoPADocument::saveOdfDocumentStyles( KoStore * store, KoShapeSavingContext & context, QFile *masterStyles )
 {
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
+    KoGenStyles & mainStyles = context.mainStyles();
 
     stylesWriter->startElement( "office:styles" );
+
+    KoShapeStyleWriter styleHandler( context );
+    styleHandler.writeOfficeStyles( stylesWriter );
+
     stylesWriter->endElement(); // office:styles
 
     stylesWriter->startElement( "office:automatic-styles" );

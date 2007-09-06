@@ -59,5 +59,6 @@ public:
     KisVector2D movement;
     
     void toXML(QDomDocument&, QDomElement&);
+    static KisPaintInformation fromXML(QDomElement&);
 };
 #endif

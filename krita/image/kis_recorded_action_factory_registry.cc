@@ -42,7 +42,6 @@ KisRecordedActionFactoryRegistry* KisRecordedActionFactoryRegistry::instance()
 
 KisRecordedActionFactoryRegistry::KisRecordedActionFactoryRegistry() : d(new Private)
 {
-    add(new KisRecordedPolyLinePaintActionFactory);
 }
 
 KisRecordedActionFactoryRegistry::~KisRecordedActionFactoryRegistry()

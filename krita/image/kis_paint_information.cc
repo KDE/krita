@@ -31,3 +31,15 @@ void KisPaintInformation::toXML(QDomDocument&, QDomElement& e)
     e.setAttribute("movementX", movement.x());
     e.setAttribute("movementY", movement.y());
 }
+
+KisPaintInformation KisPaintInformation::fromXML(QDomElement& e)
+{
+    double pointX = e.attribute("pointX","0.0").toDouble();
+    double pointY = e.attribute("pointY","0.0").toDouble();
+    double pressure = e.attribute("pressure","0.0").toDouble();
+    double xTilt = e.attribute("xTilt","0.0").toDouble();
+    double yTilt = e.attribute("yTilt","0.0").toDouble();
+    double movementX = e.attribute("movementX","0.0").toDouble();
+    double movementY = e.attribute("movementY","0.0").toDouble();
+    return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt, KisVector2D(movementX, movementY));
+}

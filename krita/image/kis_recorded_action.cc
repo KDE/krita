@@ -65,7 +65,7 @@ QString KisRecordedAction::layerToIndexPath(KisLayerSP _layer)
     KisNodeSP parent = 0;
     while((parent = layer->parent()))
     {
-        path = "\\" + layer->parent()->index( layer ) + path;
+        path = (QString("\\%0").arg(layer->parent()->index( layer ))) + path;
         layer = parent;
     }
     return path;

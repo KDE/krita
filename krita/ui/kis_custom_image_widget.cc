@@ -160,7 +160,7 @@ void KisCustomImageWidget::buttonClicked()
 {
     KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(
             KoColorSpaceRegistry::instance()->colorSpaceId(cmbColorModels->currentItem(), cmbColorDepth->currentItem())
-            , cmbProfile->currentText());
+            , cmbProfile->itemHighlighted());
 
     QColor qc(Qt::white);
 

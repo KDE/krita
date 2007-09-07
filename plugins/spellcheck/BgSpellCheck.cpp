@@ -37,6 +37,7 @@ void BgSpellCheck::start(QTextDocument *document, int startPosition, int endPosi
     m_cursor = QTextCursor(document);
     m_cursor.setPosition(startPosition);
     m_currentPosition = -1;
+    m_endPosition = endPosition;
     kDebug(31000) << "Starting BgSpellCheck: " << startPosition;
     m_currentBlock = m_cursor.block();
     BackgroundChecker::start();
@@ -47,11 +48,15 @@ QString BgSpellCheck::fetchMoreText()
     m_cursor.select(QTextCursor::WordUnderCursor);
     QString word = m_cursor.selectedText();
     int position = m_cursor.selectionStart();
+
+    // checking should end here
+    if (position > m_endPosition && m_endPosition > 0) return QString();
+
     // don't know why, but the bg spell check doesn't emit mispelling for most of the cases
     // call the foundMisspelling manually until it's solved
     if (!checkWord(word))
         foundMisspelling(word, position);
-    kDebug(31000) << "Current word: " << word << " ; Position: " << position << " : " << checkWord(word);
+    // kDebug(31000) << "Current word: " << word << " ; Position: " << position << " : " << checkWord(word);
 
     // check whether we can move to next word (moveNextWord)
     // and whether we are keep selecting the same word again and again (samePosition)
@@ -62,7 +67,7 @@ QString BgSpellCheck::fetchMoreText()
             // analyze the remaining of the text in this block, whether we still have words to check
             m_cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             QString remaining = m_cursor.selectedText();
-            kDebug(31000) << "Remaining text from this block: " << remaining;
+            // kDebug(31000) << "Remaining text from this block: " << remaining;
             int pos = m_cursor.selectionStart();
             QString::ConstIterator constIter = remaining.constBegin();
             while (constIter != remaining.constEnd()) {
@@ -78,7 +83,7 @@ QString BgSpellCheck::fetchMoreText()
         while (true) { // found an end of text block, search for a non-empty text block
             if (word.isEmpty()) {
                 // kDebug(31000) << "Empty word";
-                QString space = "something"; // just to avoid returning empty string which will stop bg checker
+                QString space = " "; // just to avoid returning empty string which will stop bg checker
                 if (m_cursor.block().length() != 1)
                     return space;
                 if (!m_cursor.movePosition(QTextCursor::NextBlock))
@@ -104,7 +109,7 @@ void BgSpellCheck::foundMisspelling(const QString &word, int start)
 {
     kDebug(31000) << "Mispelling: " << word << " : " << start;
     int position = m_cursor.selectionStart();
-    emit misspelledWord(word, position);
+    emit misspelledWord(word, position, true);
     if (position != start)
         BackgroundChecker::continueChecking();
 }

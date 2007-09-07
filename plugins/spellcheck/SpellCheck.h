@@ -27,6 +27,7 @@
 
 #include <sonnet/speller.h>
 
+class QTextDocument;
 class BgSpellCheck;
 
 class SpellCheck : public KoTextEditingPlugin
@@ -40,12 +41,14 @@ public:
     void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
 private slots:
-    void highlightMisspelled(const QString &word, int startPosition);
+    void highlightMisspelled(const QString &word, int startPosition, bool misspelled = true);
     void dequeueDocument();
+    void checkDocument(int position, int charsRemoved, int charsAdded);
 
 private:
     Sonnet::Speller m_speller;
     QTextCursor m_cursor;
+    QTextDocument *m_document;
     QString m_word;
     BgSpellCheck *m_bgSpellCheck;
     QQueue<QTextDocument *> m_documentsQueue;

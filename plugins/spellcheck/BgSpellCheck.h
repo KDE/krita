@@ -44,7 +44,7 @@ private slots:
     void foundMisspelling(const QString &word, int start);
 
 signals:
-    void misspelledWord(const QString &word, int startPosition);
+    void misspelledWord(const QString &word, int startPosition, bool misspelled);
 
 private:
     QTextDocument *m_document;
@@ -52,6 +52,7 @@ private:
     QTextCursor m_cursor;
 
     int m_currentPosition;
+    int m_endPosition;
 };
 
 #endif

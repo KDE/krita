@@ -68,11 +68,6 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(0);
 
-    cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList());
-    cmbColorModels->setCurrent(RGBAColorModelID);
-    fillCmbDepths(cmbColorModels->currentItem());
-    cmbColorDepth->setCurrent(Integer8BitsColorDepthID);
-
     connect(doubleResolution, SIGNAL(valueChanged(double)),
         this, SLOT(resolutionChanged(double)));
     connect(cmbWidthUnit, SIGNAL(activated(int)),
@@ -83,17 +78,11 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
         this, SLOT(heightUnitChanged(int)));
     connect(doubleHeight, SIGNAL(valueChanged(double)),
         this, SLOT(heightChanged(double)));
-    connect(cmbColorModels, SIGNAL(activated(const KoID &)),
-        this, SLOT(fillCmbDepths(const KoID &)));
-    connect(cmbColorDepth, SIGNAL(activated(const KoID &)),
-        this, SLOT(fillCmbProfiles()));
-    connect(cmbColorModels, SIGNAL(activated(const KoID &)),
-        this, SLOT(fillCmbProfiles()));
     connect (m_createButton, SIGNAL( clicked() ), this, SLOT (buttonClicked()) );
     m_createButton -> setDefault(true);
 
-    fillCmbProfiles();
-
+    colorSpaceSelector->setCurrentColorModel(RGBAColorModelID);
+    colorSpaceSelector->setCurrentColorDepth(Integer8BitsColorDepthID);
 }
 
 void KisCustomImageWidget::resolutionChanged(double res)
@@ -158,9 +147,7 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::buttonClicked()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(
-            KoColorSpaceRegistry::instance()->colorSpaceId(cmbColorModels->currentItem(), cmbColorDepth->currentItem())
-            , cmbProfile->itemHighlighted());
+    KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
 
     QColor qc(Qt::white);
 
@@ -193,32 +180,6 @@ quint8 KisCustomImageWidget::backgroundOpacity() const
         return 0;
 
     return (opacity * 255) / 100;
-}
-
-void KisCustomImageWidget::fillCmbProfiles()
-{
-    QString s = KoColorSpaceRegistry::instance()->colorSpaceId(cmbColorModels->currentItem(), cmbColorDepth->currentItem());
-    cmbProfile->clear();
-
-    if (!KoColorSpaceRegistry::instance()->contains(s)) {
-        return;
-    }
-
-    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s);
-    if (csf == 0) return;
-
-    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
-
-    foreach (KoColorProfile *profile, profileList) {
-        cmbProfile->addSqueezedItem(profile->name());
-    }
-    cmbProfile->setCurrent(csf->defaultProfile());
-}
-
- void KisCustomImageWidget::fillCmbDepths(const KoID& d)
-{
-    cmbColorDepth->clear();
-    cmbColorDepth->setIDList(KoColorSpaceRegistry::instance()->colorDepthList(d));
 }
 
 #include "kis_custom_image_widget.moc"

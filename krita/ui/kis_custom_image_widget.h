@@ -53,13 +53,11 @@ public:
 
 private slots:
     void buttonClicked();
-    void fillCmbProfiles();
     void widthUnitChanged(int index);
     void widthChanged(double value);
     void heightUnitChanged(int index);
     void heightChanged(double value);
     void resolutionChanged(double value);
-    void fillCmbDepths(const KoID& d);
 
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'

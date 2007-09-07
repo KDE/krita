@@ -23,6 +23,7 @@ set(kritaui_LIB_SRCS
     kis_clipboard.cc
     kis_cmb_composite.cc
     kis_cmb_idlist.cc
+    kis_color_space_selector.cc
     kis_config.cc
     kis_config_notifier.cpp
     kis_controlframe.cc
@@ -148,6 +149,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgcustompattern.ui
     wdglayerproperties.ui
     wdgcolorsettings.ui
+    wdgcolorspaceselector.ui
     wdgdisplaysettings.ui
     wdgpressuresettings.ui
     wdgtabletdevicesettings.ui

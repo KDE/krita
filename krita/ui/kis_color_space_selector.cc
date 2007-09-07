@@ -1,0 +1,98 @@
+/*
+ *  Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "kis_color_space_selector.h"
+
+#include <KoColorProfile.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoID.h>
+
+#include "ui_wdgcolorspaceselector.h"
+
+struct KisColorSpaceSelector::Private {
+    Ui_WdgColorSpaceSelector* colorSpaceSelector;
+};
+
+KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent), d(new Private)
+{
+    d->colorSpaceSelector = new Ui_WdgColorSpaceSelector;
+    d->colorSpaceSelector->setupUi(this);
+    d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList());
+    fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
+    connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
+        this, SLOT(fillCmbDepths(const KoID &)));
+    connect(d->colorSpaceSelector->cmbColorDepth, SIGNAL(activated(const KoID &)),
+        this, SLOT(fillCmbProfiles()));
+    connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
+        this, SLOT(fillCmbProfiles()));
+    fillCmbProfiles();
+}
+
+KisColorSpaceSelector::~KisColorSpaceSelector()
+{
+    
+}
+
+
+void KisColorSpaceSelector::fillCmbProfiles()
+{
+    QString s = KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem());
+    d->colorSpaceSelector->cmbProfile->clear();
+
+    if (!KoColorSpaceRegistry::instance()->contains(s)) {
+        return;
+    }
+
+    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s);
+    if (csf == 0) return;
+
+    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
+
+    foreach (KoColorProfile *profile, profileList) {
+        d->colorSpaceSelector->cmbProfile->addSqueezedItem(profile->name());
+    }
+    d->colorSpaceSelector->cmbProfile->setCurrent(csf->defaultProfile());
+}
+
+ void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
+{
+    d->colorSpaceSelector->cmbColorDepth->clear();
+    d->colorSpaceSelector->cmbColorDepth->setIDList(KoColorSpaceRegistry::instance()->colorDepthList(id));
+}
+
+KoColorSpace* KisColorSpaceSelector::currentColorSpace()
+{
+    return KoColorSpaceRegistry::instance()->colorSpace( 
+            KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem())
+            , d->colorSpaceSelector->cmbProfile->itemHighlighted());
+}
+
+void KisColorSpaceSelector::setCurrentColorModel(const KoID& id)
+{
+    d->colorSpaceSelector->cmbColorModels->setCurrent(id);
+    fillCmbDepths(id);
+}
+
+void KisColorSpaceSelector::setCurrentColorDepth(const KoID& id)
+{
+    d->colorSpaceSelector->cmbColorDepth->setCurrent(id);
+    fillCmbProfiles();
+}
+
+#include "kis_color_space_selector.moc"

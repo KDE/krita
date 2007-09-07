@@ -111,6 +111,7 @@ endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
 if(NOT BLITZ_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
+   message(STATUS  "Krita requires blitz. Krita will not be builded, blitz is available throught kdesupport")
 endif(NOT BLITZ_FOUND)
 
 #Check if build kpresenter here to be able to test if we can build filters/kpresenter

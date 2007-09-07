@@ -69,13 +69,15 @@ const QString COMPOSITE_COPY_OPACITY = "copy_opacity";
 class PIGMENT_EXPORT KoCompositeOp {
 public:
 
-    KoCompositeOp(KoColorSpace * cs, const QString& id, const QString& description, const bool userVisible = true);
+    KoCompositeOp(KoColorSpace * cs, const QString& id, const QString& description, QString category = "", const bool userVisible = true);
     virtual ~KoCompositeOp() {}
 
     QString id() const;
     QString description() const;
     KoColorSpace * colorSpace() const;
     bool userVisible() const;
+    QString category() const;
+    
     /**
       @param dstRowStart pointer to the start of the byte array we will composite the source on
       @param dstRowStride length of the rows of the block of destination pixels in bytes

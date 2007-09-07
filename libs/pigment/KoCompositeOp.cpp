@@ -26,6 +26,7 @@ struct KoCompositeOp::Private {
     KoColorSpace * colorSpace;
     QString id;
     QString description;
+    QString category;
     bool userVisible;
     QBitArray defaultChannelFlags;
 };
@@ -36,13 +37,14 @@ KoCompositeOp::KoCompositeOp() : d(new Private)
 }
 
 
-KoCompositeOp::KoCompositeOp(KoColorSpace * cs, const QString& id,  const QString& description,  const bool userVisible)
+KoCompositeOp::KoCompositeOp(KoColorSpace * cs, const QString& id,  const QString& description, QString category, const bool userVisible)
     : d(new Private)
 {
     d->colorSpace = cs;
     d->id = id;
     d->description = description;
     d->userVisible = userVisible;
+    d->category = category;
 }
 
 void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
@@ -56,6 +58,11 @@ void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
                maskRowStart, maskRowStride,
                rows, numColumns,
                opacity, d->defaultChannelFlags);
+}
+
+QString KoCompositeOp::category() const
+{
+    return d->category;
 }
 
 KoColorSpace* KoCompositeOp::colorSpace()

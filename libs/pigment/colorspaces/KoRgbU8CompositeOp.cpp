@@ -44,7 +44,7 @@
 
 
 KoRgbU8CompositeOp::KoRgbU8CompositeOp(KoColorSpace * cs, const QString& id, const QString& description, const bool userVisible)
-    : KoCompositeOp(cs, id, description, userVisible)
+    : KoCompositeOp(cs, id, description, "", userVisible)
 {
     m_pixelSize = cs->pixelSize();
 }

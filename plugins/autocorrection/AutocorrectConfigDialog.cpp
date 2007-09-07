@@ -19,10 +19,9 @@
 
 #include "AutocorrectConfigDialog.h"
 
-#include "Autocorrect.h"
-
 #include <QHeaderView>
 #include <KLocale>
+#include <KCharSelect>
 
 // #include <KoFontDia.h>
 
@@ -44,9 +43,27 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     widget.useBulletStyle->setCheckState(m_autocorrect->getAutoFormatBulletList() ? Qt::Checked : Qt::Unchecked);
     widget.advancedAutocorrection->setCheckState(m_autocorrect->getAdvancedAutocorrect() ? Qt::Checked : Qt::Unchecked);
 
+    /* tab 2 - Custom Quotes */
     widget.typographicDoubleQuotes->setCheckState(m_autocorrect->getReplaceDoubleQuotes() ? Qt::Checked : Qt::Unchecked);
-    widget.typographicSimpleQuotes->setCheckState(m_autocorrect->getReplaceSingleQuotes() ? Qt::Checked : Qt::Unchecked);
+    widget.typographicSingleQuotes->setCheckState(m_autocorrect->getReplaceSingleQuotes() ? Qt::Checked : Qt::Unchecked);
+    m_singleQuotes = m_autocorrect->getTypographicSingleQuotes();
+    widget.singleQuote1->setText(m_singleQuotes.begin);
+    widget.singleQuote2->setText(m_singleQuotes.end);
+    m_doubleQuotes = m_autocorrect->getTypographicDoubleQuotes();
+    widget.doubleQuote1->setText(m_doubleQuotes.begin);
+    widget.doubleQuote2->setText(m_doubleQuotes.end);
+    connect(widget.typographicSingleQuotes, SIGNAL(stateChanged(int)), this, SLOT(enableSingleQuotes(int)));
+    connect(widget.typographicDoubleQuotes, SIGNAL(stateChanged(int)), this, SLOT(enableDoubleQuotes(int)));
+    connect(widget.singleQuote1, SIGNAL(clicked()), this, SLOT(selectSingleQuoteCharOpen()));
+    connect(widget.singleQuote2, SIGNAL(clicked()), this, SLOT(selectSingleQuoteCharClose()));
+    connect(widget.singleDefault, SIGNAL(clicked()), this, SLOT(setDefaultSingleQuotes()));
+    connect(widget.doubleQuote1, SIGNAL(clicked()), this, SLOT(selectDoubleQuoteCharOpen()));
+    connect(widget.doubleQuote2, SIGNAL(clicked()), this, SLOT(selectDoubleQuoteCharClose()));
+    connect(widget.doubleDefault, SIGNAL(clicked()), this, SLOT(setDefaultDoubleQuotes()));
+    enableSingleQuotes(widget.typographicSingleQuotes->checkState());
+    enableDoubleQuotes(widget.typographicDoubleQuotes->checkState());
 
+    /* tab 3 - Advanced Autocorrection */
     m_autocorrectEntries = m_autocorrect->getAutocorrectEntries();
     widget.tableWidget->setRowCount(m_autocorrectEntries.size());
     widget.tableWidget->verticalHeader()->hide();
@@ -110,7 +127,83 @@ void AutocorrectConfig::applyConfig()
     m_autocorrect->setTwoUpperLetterExceptions(m_twoUpperLetterExceptions);
 
     m_autocorrect->setReplaceDoubleQuotes(widget.typographicDoubleQuotes->checkState() == Qt::Checked);
-    m_autocorrect->setReplaceSingleQuotes(widget.typographicSimpleQuotes->checkState() == Qt::Checked);
+    m_autocorrect->setReplaceSingleQuotes(widget.typographicSingleQuotes->checkState() == Qt::Checked);
+    m_autocorrect->setTypographicSingleQuotes(m_singleQuotes);
+    m_autocorrect->setTypographicDoubleQuotes(m_doubleQuotes);
+}
+
+void AutocorrectConfig::enableSingleQuotes(int state)
+{
+    bool enable = state == Qt::Checked;
+    widget.singleQuote1->setEnabled(enable);
+    widget.singleQuote2->setEnabled(enable);
+    widget.singleDefault->setEnabled(enable);
+}
+
+void AutocorrectConfig::enableDoubleQuotes(int state)
+{
+    bool enable = state == Qt::Checked;
+    widget.doubleQuote1->setEnabled(enable);
+    widget.doubleQuote2->setEnabled(enable);
+    widget.doubleDefault->setEnabled(enable);
+}
+
+void AutocorrectConfig::selectSingleQuoteCharOpen()
+{
+    CharSelectDialog *dlg = new CharSelectDialog(this);
+    dlg->setCurrentChar(m_singleQuotes.begin);
+    if (dlg->exec()) {
+        m_singleQuotes.begin = dlg->currentChar();
+        widget.singleQuote1->setText(m_singleQuotes.begin);
+    }
+    delete dlg;
+}
+
+void AutocorrectConfig::selectSingleQuoteCharClose()
+{
+    CharSelectDialog *dlg = new CharSelectDialog(this);
+    dlg->setCurrentChar(m_singleQuotes.end);
+    if (dlg->exec()) {
+        m_singleQuotes.end = dlg->currentChar();
+        widget.singleQuote2->setText(m_singleQuotes.end);
+    }
+    delete dlg;
+}
+
+void AutocorrectConfig::setDefaultSingleQuotes()
+{
+    m_singleQuotes = m_autocorrect->getTypographicDefaultSingleQuotes();
+    widget.singleQuote1->setText(m_singleQuotes.begin);
+    widget.singleQuote2->setText(m_singleQuotes.end);
+}
+
+void AutocorrectConfig::selectDoubleQuoteCharOpen()
+{
+    CharSelectDialog *dlg = new CharSelectDialog(this);
+    dlg->setCurrentChar(m_doubleQuotes.begin);
+    if (dlg->exec()) {
+        m_doubleQuotes.begin = dlg->currentChar();
+        widget.doubleQuote1->setText(m_doubleQuotes.begin);
+    }
+    delete dlg;
+}
+
+void AutocorrectConfig::selectDoubleQuoteCharClose()
+{
+    CharSelectDialog *dlg = new CharSelectDialog(this);
+    dlg->setCurrentChar(m_doubleQuotes.end);
+    if (dlg->exec()) {
+        m_doubleQuotes.end = dlg->currentChar();
+        widget.doubleQuote2->setText(m_doubleQuotes.end);
+    }
+    delete dlg;
+}
+
+void AutocorrectConfig::setDefaultDoubleQuotes()
+{
+    m_doubleQuotes = m_autocorrect->getTypographicDefaultDoubleQuotes();
+    widget.doubleQuote1->setText(m_doubleQuotes.begin);
+    widget.doubleQuote2->setText(m_doubleQuotes.end);
 }
 
 void AutocorrectConfig::enableAdvAutocorrection(int state)
@@ -284,6 +377,25 @@ AutocorrectConfigDialog::AutocorrectConfigDialog(Autocorrect *autocorrect, QWidg
 AutocorrectConfigDialog::~AutocorrectConfigDialog()
 {
     delete ui;
+}
+
+CharSelectDialog::CharSelectDialog(QWidget *parent)
+    : KDialog(parent)
+{
+    m_charSelect = new KCharSelect(this,
+            KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable);
+    setMainWidget(m_charSelect);
+    setCaption(i18n("Select Character"));
+}
+
+QChar CharSelectDialog::currentChar() const
+{
+    return m_charSelect->currentChar();
+}
+
+void CharSelectDialog::setCurrentChar(const QChar &c)
+{
+    m_charSelect->setCurrentChar(c);
 }
 
 #include "AutocorrectConfigDialog.moc"

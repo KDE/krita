@@ -60,6 +60,8 @@ public:
     void setReplaceDoubleQuotes(bool b) { m_replaceDoubleQuotes = b; }
     void setReplaceSingleQuotes(bool b) { m_replaceSingleQuotes = b; }
     void setAdvancedAutocorrect(bool b) { m_advancedAutocorrect = b; }
+    void setTypographicSingleQuotes(TypographicQuotes singleQuote) { m_typographicSingleQuotes = singleQuote; }
+    void setTypographicDoubleQuotes(TypographicQuotes doubleQuote) { m_typographicDoubleQuotes = doubleQuote; }
     void setUpperCaseExceptions(QSet<QString> exceptions);
     void setTwoUpperLetterExceptions(QSet<QString> exceptions);
     void setAutocorrectEntries(QHash<QString, QString> entries);
@@ -78,6 +80,10 @@ public:
     bool getReplaceDoubleQuotes() { return m_replaceDoubleQuotes; }
     bool getReplaceSingleQuotes() { return m_replaceSingleQuotes; }
     bool getAdvancedAutocorrect() { return m_advancedAutocorrect; }
+    TypographicQuotes getTypographicSingleQuotes() { return m_typographicSingleQuotes; }
+    TypographicQuotes getTypographicDoubleQuotes() { return m_typographicDoubleQuotes; }
+    TypographicQuotes getTypographicDefaultSingleQuotes();
+    TypographicQuotes getTypographicDefaultDoubleQuotes();
     QSet<QString> getUpperCaseExceptions();
     QSet<QString> getTwoUpperLetterExceptions();
     QHash<QString, QString> getAutocorrectEntries();

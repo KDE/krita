@@ -16,7 +16,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_1" >
       <attribute name="title" >
@@ -254,7 +254,7 @@
         </layout>
        </item>
        <item row="2" column="0" colspan="2" >
-        <widget class="QCheckBox" name="typographicSimpleQuotes" >
+        <widget class="QCheckBox" name="typographicSingleQuotes" >
          <property name="text" >
           <string>Replace &amp;single quotes with typographical quotes</string>
          </property>
@@ -269,14 +269,14 @@
           <number>20</number>
          </property>
          <item>
-          <widget class="QPushButton" name="simpleQuote1" >
+          <widget class="QPushButton" name="singleQuote1" >
            <property name="text" >
             <string/>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="simpleQuote1_2" >
+          <widget class="QPushButton" name="singleQuote2" >
            <property name="text" >
             <string/>
            </property>
@@ -287,7 +287,7 @@
        <item row="3" column="1" >
         <layout class="QHBoxLayout" >
          <item>
-          <widget class="QPushButton" name="simpleDefault" >
+          <widget class="QPushButton" name="singleDefault" >
            <property name="text" >
             <string>Default</string>
            </property>

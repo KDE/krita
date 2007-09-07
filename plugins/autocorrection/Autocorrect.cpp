@@ -114,6 +114,22 @@ void Autocorrect::setUpperCaseExceptions(QSet<QString> exceptions) { m_upperCase
 void Autocorrect::setTwoUpperLetterExceptions(QSet<QString> exceptions) { m_twoUpperLetterExceptions = exceptions; }
 void Autocorrect::setAutocorrectEntries(QHash<QString, QString> entries) { m_autocorrectEntries = entries; }
 
+Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultSingleQuotes()
+{
+    Autocorrect::TypographicQuotes quote;
+    quote.begin = QChar(0x2018);
+    quote.end = QChar(0x2019);
+    return quote;
+}
+
+Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultDoubleQuotes()
+{
+    Autocorrect::TypographicQuotes quote;
+    quote.begin = QChar(0x201c);
+    quote.end = QChar(0x201d);
+    return quote;
+}
+
 QSet<QString> Autocorrect::getUpperCaseExceptions() { return m_upperCaseExceptions; }
 QSet<QString> Autocorrect::getTwoUpperLetterExceptions() { return m_twoUpperLetterExceptions; }
 QHash<QString, QString> Autocorrect::getAutocorrectEntries() { return m_autocorrectEntries; }

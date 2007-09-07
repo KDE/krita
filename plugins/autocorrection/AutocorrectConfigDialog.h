@@ -21,10 +21,11 @@
 #define AUTOCORRECTCONFIGDIALOG_H
 
 #include "ui_AutocorrectConfig.h"
+#include "Autocorrect.h"
 
 #include <KDialog>
 
-class Autocorrect;
+class KCharSelect;
 
 class AutocorrectConfig : public QWidget
 {
@@ -37,6 +38,16 @@ public slots:
     void applyConfig();
 
 private slots:
+    /* tab 2 */
+    void enableSingleQuotes(int state);
+    void enableDoubleQuotes(int state);
+    void selectSingleQuoteCharOpen();
+    void selectSingleQuoteCharClose();
+    void setDefaultSingleQuotes();
+    void selectDoubleQuoteCharOpen();
+    void selectDoubleQuoteCharClose();
+    void setDefaultDoubleQuotes();
+
     /* tab 3 */
     void enableAdvAutocorrection(int state);
     void enableAutocorrectFormat(int state);
@@ -57,6 +68,8 @@ private slots:
 private:
     Ui::AutocorrectConfig widget;
     Autocorrect *m_autocorrect;
+    Autocorrect::TypographicQuotes m_singleQuotes;
+    Autocorrect::TypographicQuotes m_doubleQuotes;
     QSet<QString> m_upperCaseExceptions;
     QSet<QString> m_twoUpperLetterExceptions;
     QHash<QString, QString> m_autocorrectEntries;
@@ -81,6 +94,18 @@ public:
 
 private:
     AutocorrectConfig *ui;
+};
+
+class CharSelectDialog : public KDialog
+{
+    Q_OBJECT
+public:
+    explicit CharSelectDialog(QWidget *parent);
+    QChar currentChar() const;
+    void setCurrentChar(const QChar &c);
+
+private:
+    KCharSelect *m_charSelect;
 };
 
 #endif

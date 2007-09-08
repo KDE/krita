@@ -34,9 +34,9 @@ class KisSimpleNoiseReducer : public KisFilter
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
 
         static inline KoID id() { return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer")); }
-        virtual bool supportsPainting() { return false; }
-        virtual bool supportsPreview() { return true; }
-        virtual bool supportsIncrementalPainting() { return false; }
+        virtual bool supportsPainting() const { return false; }
+        virtual bool supportsPreview() const { return true; }
+        virtual bool supportsIncrementalPainting() const { return false; }
     protected:
         virtual KisFilterConfiguration * designerConfiguration(const KisPaintDeviceSP);
 };

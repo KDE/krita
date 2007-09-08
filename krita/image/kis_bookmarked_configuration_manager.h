@@ -59,7 +59,7 @@ class KRITAIMAGE_EXPORT KisBookmarkedConfigurationManager {
         /**
          * @return the default configuration
          */
-        KisSerializableConfiguration* defaultConfiguration();
+        KisSerializableConfiguration* defaultConfiguration() const;
         /**
          * Remove a bookmarked configuration
          */

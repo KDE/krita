@@ -66,6 +66,7 @@ public:
 public:
 
     virtual void setProgressDisplay(KisProgressDisplayInterface * progressDisplay);
+    virtual KisProgressDisplayInterface*progressDisplay( );
 
     /**
      * Override this function with the implementation of your filter.
@@ -104,18 +105,18 @@ public:
      * configuration widget.
      * @return the default configuration of this widget
      */
-    virtual KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP);
+    virtual KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP) const;
 
     /**
      * If true, this filter can be used in painting tools as a paint operation
      */
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
 
     /// This filter can be displayed in a preview dialog
-    virtual bool supportsPreview() { return false; }
+    virtual bool supportsPreview() const { return false; }
 
     /// This filter can be used in adjustment layers
-    virtual bool supportsAdjustmentLayers() { return supportsPreview(); }
+    virtual bool supportsAdjustmentLayers() const { return supportsPreview(); }
 
     /**
      * @return the bookmark manager for this filter
@@ -123,17 +124,22 @@ public:
     KisBookmarkedConfigurationManager* bookmarkManager();
 
     /**
+     * @return the bookmark manager for this filter
+     */
+    const KisBookmarkedConfigurationManager* bookmarkManager() const;
+
+    /**
      * Can this filter work incrementally when painting, or do we need to work
      * on the state as it was before painting started. The former is faster.
      */
-    virtual bool supportsIncrementalPainting() { return true; }
+    virtual bool supportsIncrementalPainting() const { return true; }
 
     /**
      * This filter supports cutting up the work area and filtering
      * each chunk in a separate thread. Filters that need access to the
      * whole area for correct computations should return false.
      */
-    virtual bool supportsThreading() { return true; }
+    virtual bool supportsThreading() const { return true; }
 
     /**
      * Used when threading is used -- the overlap margin is passed to the
@@ -158,7 +164,7 @@ public:
      *
      * @return the degree of independence
      */
-    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_RGBA8; }
+    virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_RGBA8; }
 
     /**
      * Determine if this filter can work with this colorSpace. For instance, some
@@ -170,7 +176,7 @@ public:
      *
      * @param cs the colorspace that we want to know this filter works with
      */
-    virtual bool workWith(KoColorSpace* cs) { Q_UNUSED(cs); return true; }
+    virtual bool workWith(KoColorSpace* cs) const { Q_UNUSED(cs); return true; }
 
     virtual void enableProgress();
     virtual void disableProgress();
@@ -178,14 +184,14 @@ public:
     bool autoUpdate();
 
     /// @return Unique identification for this filter
-    inline QString id() const { return m_id.id(); }
-    inline QString name() const { return m_id.name(); }
+    QString id() const;
+    QString name() const;
 
     /// @return the submenu in the filters menu does filter want to go?
-    inline KoID menuCategory() const { return m_category; }
+    KoID menuCategory() const;
 
     /// @return the i18n'ed string this filter wants to show itself in the menu
-    inline QString menuEntry() const { return m_entry; }
+    QString menuEntry() const;
 
     /**
      * Create the configuration widget for this filter.
@@ -213,7 +219,7 @@ protected:
     /// @return the name of config group in KConfig
     inline QString configEntryGroup() { return id() + "_filter_bookmarks"; }
     /// @return the default configuration as defined by whoever wrote the plugin
-    virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP); // FIXME: this name sucks so much
+    virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP) const; // FIXME: this name sucks so much
 
 protected slots:
 
@@ -223,21 +229,11 @@ protected slots:
     void incProgress();
     void setProgressStage(const QString& stage, qint32 progress);
     void setProgressDone();
-    inline qint32 progress() { return m_progressSteps; }
+    qint32 progress();
 
 private:
     struct Private;
     Private* const d;
-
-protected:
-    qint32 m_progressTotalSteps;
-    qint32 m_lastProgressPerCent;
-    qint32 m_progressSteps;
-
-    KoID m_id;
-    KisProgressDisplayInterface * m_progressDisplay;
-    KoID m_category; // The category in the filter menu this filter fits
-    QString m_entry; // the i18n'ed accelerated menu text
 };
 
 

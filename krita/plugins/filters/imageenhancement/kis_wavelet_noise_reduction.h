@@ -41,10 +41,10 @@ public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 
     static inline KoID id() { return KoID("waveletnoisereducer", i18n("Wavelet Noise Reducer")); }
-    virtual bool supportsPainting() { return false; }
-    virtual bool supportsPreview() { return true; }
-    virtual bool supportsIncrementalPainting() { return false; }
-    virtual bool supportsThreading() { return false; }
+    virtual bool supportsPainting() const { return false; }
+    virtual bool supportsPreview() const { return true; }
+    virtual bool supportsIncrementalPainting() const { return false; }
+    virtual bool supportsThreading() const { return false; }
 private:
     virtual KisFilterConfiguration * designerConfiguration(const KisPaintDeviceSP);
 

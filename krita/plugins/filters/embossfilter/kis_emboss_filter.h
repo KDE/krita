@@ -31,12 +31,12 @@ public:
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     static inline KoID id() { return KoID("emboss", i18n("Emboss")); }
-    virtual bool supportsPainting() { return false; }
-    virtual bool supportsPreview() { return true; }
+    virtual bool supportsPainting() const { return false; }
+    virtual bool supportsPreview() const { return true; }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
 protected:
-    virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP);
+    virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP) const;
 
 private:
     inline int Lim_Max (int Now, int Up, int Max);

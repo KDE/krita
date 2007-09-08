@@ -24,17 +24,21 @@
 #include <kmessagebox.h>
 #include <kguiitem.h>
 
-#include "kis_bookmarked_configuration_manager.h"
+#include <KoColorSpace.h>
+
+#include <kis_action_recorder.h>
+#include <kis_bookmarked_configuration_manager.h>
+#include <kis_filter.h>
+#include <kis_filter_configuration.h>
+#include <kis_layer.h>
+#include <kis_recorded_filter_action.h>
+
 #include "kis_doc2.h"
-#include "kis_filter.h"
-#include "kis_filter_configuration.h"
 #include "kis_filter_dialog.h"
 #include "kis_filter_manager.h"
-#include "kis_layer.h"
 #include "kis_transaction.h"
 #include "kis_view2.h"
 #include "kis_painter.h"
-#include "KoColorSpace.h"
 #include "kis_threaded_applicator.h"
 
 class KisFilterJob : public KisJob {
@@ -216,6 +220,8 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         }
         d->lastConfiguration = config;
         d->manager->setLastFilterHandler(this);
+        
+        layer->image()->actionRecorder()->addAction(new KisRecordedFilterAction(d->filter->name(), layer, d->filter, config));
     }
     d->filter->disableProgress();
     QApplication::restoreOverrideCursor();

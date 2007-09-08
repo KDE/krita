@@ -41,25 +41,33 @@ struct KisFilter::Private {
     bool cancelRequested;
     bool progressEnabled;
     bool autoUpdate;
+    qint32 progressTotalSteps;
+    qint32 lastProgressPerCent;
+    qint32 progressSteps;
+
+    KoID id;
+    KisProgressDisplayInterface * progressDisplay;
+    KoID category; // The category in the filter menu this filter fits
+    QString entry; // the i18n'ed accelerated menu text
 };
 
 KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entry)
     : KisProgressSubject(0, id.id().toLatin1())
     , d(new Private)
-    , m_id(id)
-    , m_progressDisplay(0)
-    , m_category(category)
-    , m_entry(entry)
 {
     setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisFilterConfigurationFactory(id.id(), 1) ));
+    d->id = id;
+    d->progressDisplay = 0;
+    d->category = category;
+    d->entry = entry;
 }
 
-KisFilterConfiguration * KisFilter::designerConfiguration(const KisPaintDeviceSP)
+KisFilterConfiguration * KisFilter::designerConfiguration(const KisPaintDeviceSP) const
 {
-    return new KisFilterConfiguration(m_id.id(), 0);
+    return new KisFilterConfiguration(id(), 0);
 }
 
-KisFilterConfiguration * KisFilter::defaultConfiguration(const KisPaintDeviceSP pd)
+KisFilterConfiguration * KisFilter::defaultConfiguration(const KisPaintDeviceSP pd) const
 {
     KisFilterConfiguration* fc = 0;
     if(bookmarkManager())
@@ -80,7 +88,12 @@ KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, const Ki
 
 void KisFilter::setProgressDisplay(KisProgressDisplayInterface * progressDisplay)
 {
-    m_progressDisplay = progressDisplay;
+    d->progressDisplay = progressDisplay;
+}
+
+KisProgressDisplayInterface* KisFilter::progressDisplay()
+{
+    return d->progressDisplay;
 }
 
 
@@ -98,9 +111,9 @@ void KisFilter::setProgressTotalSteps(qint32 totalSteps)
 {
     if (d->progressEnabled) {
 
-        m_progressTotalSteps = totalSteps;
-        m_lastProgressPerCent = 0;
-        m_progressSteps = 0;
+        d->progressTotalSteps = totalSteps;
+        d->lastProgressPerCent = 0;
+        d->progressSteps = 0;
         emit notifyProgress(0);
     }
 }
@@ -108,12 +121,12 @@ void KisFilter::setProgressTotalSteps(qint32 totalSteps)
 void KisFilter::setProgress(qint32 progress)
 {
     if (d->progressEnabled) {
-        qint32 progressPerCent = (progress * 100) / m_progressTotalSteps;
-        m_progressSteps = progress;
+        qint32 progressPerCent = (progress * 100) / d->progressTotalSteps;
+        d->progressSteps = progress;
 
-        if (progressPerCent != m_lastProgressPerCent) {
+        if (progressPerCent != d->lastProgressPerCent) {
 
-            m_lastProgressPerCent = progressPerCent;
+            d->lastProgressPerCent = progressPerCent;
             emit notifyProgress(progressPerCent);
         }
     }
@@ -121,7 +134,7 @@ void KisFilter::setProgress(qint32 progress)
 
 void KisFilter::incProgress()
 {
-    setProgress(++m_progressSteps);
+    setProgress(++d->progressSteps);
 
 }
 
@@ -129,9 +142,9 @@ void KisFilter::setProgressStage(const QString& stage, qint32 progress)
 {
     if (d->progressEnabled) {
 
-        qint32 progressPerCent = (progress * 100) / m_progressTotalSteps;
+        qint32 progressPerCent = (progress * 100) / d->progressTotalSteps;
 
-        m_lastProgressPerCent = progressPerCent;
+        d->lastProgressPerCent = progressPerCent;
         emit notifyProgressStage(stage, progressPerCent);
     }
 }
@@ -186,10 +199,24 @@ KisBookmarkedConfigurationManager* KisFilter::bookmarkManager()
     return d->bookmarkManager;
 }
 
+const KisBookmarkedConfigurationManager* KisFilter::bookmarkManager() const
+{
+    return d->bookmarkManager;
+}
+
 void KisFilter::setBookmarkManager(KisBookmarkedConfigurationManager* bm)
 {
     delete d->bookmarkManager;
     d->bookmarkManager = bm;
 }
+
+QString KisFilter::id() const { return d->id.id(); }
+QString KisFilter::name() const { return d->id.name(); }
+
+KoID KisFilter::menuCategory() const { return d->category; }
+
+QString KisFilter::menuEntry() const { return d->entry; }
+
+qint32 KisFilter::progress() { return d->progressSteps; }
 
 #include "kis_filter.moc"

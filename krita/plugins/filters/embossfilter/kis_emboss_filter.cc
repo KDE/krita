@@ -52,9 +52,9 @@ KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), CategoryEmboss, i18n("&Embo
 {
 }
 
-KisFilterConfiguration* KisEmbossFilter::designerConfiguration(const KisPaintDeviceSP)
+KisFilterConfiguration* KisEmbossFilter::designerConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(m_id.id(), 0);
+    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
     config->setProperty("depth",30);
     return config;
 }

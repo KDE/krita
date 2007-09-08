@@ -48,7 +48,7 @@ KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget
 
 KisFilterConfiguration * KisSimpleNoiseReducer::designerConfiguration(const KisPaintDeviceSP)
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(m_id.id(), 0);
+    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
     config->setProperty("threshold", 50);
     config->setProperty("windowsize", 1);
     return config;

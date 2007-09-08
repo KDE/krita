@@ -29,8 +29,8 @@ public:
     KisGaussianBlurFilter();
 public:
     static inline KoID id() { return KoID("gaussian blur", i18n("Gaussian Blur")); }
-    virtual bool supportsPainting() { return true; }
-    virtual bool supportsIncrementalPainting() { return false; }
+    virtual bool supportsPainting() const { return true; }
+    virtual bool supportsIncrementalPainting() const { return false; }
 };
 
 class KisSharpenFilter : public KisConvolutionFilter {
@@ -38,8 +38,8 @@ public:
     KisSharpenFilter();
 public:
     static inline KoID id() { return KoID("sharpen", i18n("Sharpen")); }
-    virtual bool supportsPainting() { return true; }
-    virtual bool supportsIncrementalPainting() { return false; }
+    virtual bool supportsPainting() const { return true; }
+    virtual bool supportsIncrementalPainting() const { return false; }
 };
 
 class KisMeanRemovalFilter : public KisConvolutionFilter {
@@ -47,7 +47,7 @@ public:
     KisMeanRemovalFilter();
 public:
     static inline KoID id() { return KoID("mean removal", i18n("Mean Removal")); }
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
 
 };
 
@@ -56,7 +56,7 @@ public:
     KisEmbossLaplascianFilter();
 public:
     static inline KoID id() { return KoID("emboss laplascian", i18n("Emboss Laplascian")); }
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
 
 };
 
@@ -65,7 +65,7 @@ public:
     KisEmbossInAllDirectionsFilter();
 public:
     static inline KoID id() { return KoID("emboss all directions", i18n("Emboss in All Directions")); }
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
 
 };
 
@@ -74,7 +74,7 @@ public:
     KisEmbossHorizontalVerticalFilter();
 public:
     static inline KoID id() { return KoID("", i18n("Emboss Horizontal & Vertical")); }
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
 
 };
 
@@ -83,7 +83,7 @@ public:
     KisEmbossVerticalFilter();
 public:
     static inline KoID id() { return KoID("emboss vertical only", i18n("Emboss Vertical Only")); }
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
 
 };
 
@@ -92,7 +92,7 @@ public:
     KisEmbossHorizontalFilter();
 public:
     static inline KoID id() { return KoID("emboss horizontal only", i18n("Emboss Horizontal Only")); }
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
 
 };
 
@@ -101,7 +101,7 @@ public:
     KisEmbossDiagonalFilter();
 public:
     static inline KoID id() { return KoID("emboss diagonal", i18n("Emboss Diagonal")); }
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
 
 };
 
@@ -110,7 +110,7 @@ public:
     KisTopEdgeDetectionFilter();
 public:
     static inline KoID id() { return KoID("top edge detections", i18n("Top Edge Detection")); }
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
 
 };
 
@@ -119,7 +119,7 @@ public:
     KisRightEdgeDetectionFilter();
 public:
     static inline KoID id() { return KoID("right edge detections", i18n("Right Edge Detection")); }
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
 
 };
 
@@ -128,7 +128,7 @@ public:
     KisBottomEdgeDetectionFilter();
 public:
     static inline KoID id() { return KoID("bottom edge detections", i18n("Bottom Edge Detection")); }
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
 
 };
 
@@ -137,7 +137,7 @@ public:
     KisLeftEdgeDetectionFilter();
 public:
     static inline KoID id() { return KoID("left edge detections", i18n("Left Edge Detection")); }
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
 
 };
 

@@ -101,7 +101,7 @@ QList<QString> KisBookmarkedConfigurationManager::configurations() const
     return configsKey;
 }
 
-KisSerializableConfiguration* KisBookmarkedConfigurationManager::defaultConfiguration()
+KisSerializableConfiguration* KisBookmarkedConfigurationManager::defaultConfiguration() const
 {
     if(exist(KisBookmarkedConfigurationManager::ConfigDefault.id()))
     {

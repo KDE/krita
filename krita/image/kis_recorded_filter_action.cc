@@ -38,7 +38,10 @@ KisRecordedFilterAction::KisRecordedFilterAction(QString name, KisLayerSP layer,
 {
     d->layer = layer;
     d->filter = filter;
-    d->config = fc->toXML();
+    if(fc)
+    {
+        d->config = fc->toXML();
+    }
 }
 
 KisRecordedFilterAction::~KisRecordedFilterAction()

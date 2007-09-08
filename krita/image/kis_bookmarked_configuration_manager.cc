@@ -73,7 +73,7 @@ KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(QString co
 
 void KisBookmarkedConfigurationManager::save(QString configname, const KisSerializableConfiguration* config)
 {
-    Q_ASSERT( config );
+    if(not config) return;
     KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
     cfg.writeEntry(configname,config->toXML());
 }

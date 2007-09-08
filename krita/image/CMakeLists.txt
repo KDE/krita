@@ -31,6 +31,7 @@ set(kritaimage_LIB_SRCS
    kis_node_facade.cpp
    kis_action_recorder.cc
    kis_recorded_action.cc
+   kis_recorded_filter_action.cc
    kis_recorded_action_factory_registry.cc
    kis_threaded_applicator.cpp
    kis_projection.cc

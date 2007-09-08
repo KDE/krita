@@ -19,6 +19,7 @@
 #include "kis_recorded_action_factory_registry.h"
 
 #include "kis_recorded_paint_actions.h"
+#include "kis_recorded_filter_action.h"
 
 #ifdef Q_CC_MSVC
 #include <iso646.h>
@@ -42,6 +43,7 @@ KisRecordedActionFactoryRegistry* KisRecordedActionFactoryRegistry::instance()
 
 KisRecordedActionFactoryRegistry::KisRecordedActionFactoryRegistry() : d(new Private)
 {
+    add(new KisRecordedFilterActionFactory);
 }
 
 KisRecordedActionFactoryRegistry::~KisRecordedActionFactoryRegistry()

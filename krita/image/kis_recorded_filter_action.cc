@@ -24,6 +24,7 @@
 
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
+#include "kis_filter_registry.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
 
@@ -77,7 +78,7 @@ void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt)
     elt.setAttribute("layer", KisRecordedAction::layerToIndexPath(d->layer));
     elt.setAttribute("filter", d->filter->id());
     // Save configuration
-    KisFilterConfiguration * kfc = d->filter->defaultConfiguration(0);
+    KisFilterConfiguration * kfc = d->filter->defaultConfiguration(d->layer->paintDevice());
     if(kfc)
     {
         QDomElement filterConfigElt = doc.createElement( "Params");
@@ -100,5 +101,19 @@ KisRecordedAction* KisRecordedFilterActionFactory::fromXML(KisImageSP img, const
 {
     QString name = elt.attribute("name");
     KisLayerSP layer = KisRecordedActionFactory::indexPathToLayer(img, elt.attribute("layer"));
-    return 0;
+    const KisFilterSP filter = KisFilterRegistry::instance()->get(elt.attribute("filter"));
+    if(filter)
+    {
+        KisFilterConfiguration* config = filter->defaultConfiguration(layer->paintDevice());
+        QDomElement paramsElt = elt.firstChildElement("Params");
+        if(config and not paramsElt.isNull())
+        {
+            config->fromXML(paramsElt);
+        }
+        KisRecordedFilterAction* rfa = new KisRecordedFilterAction(name, layer, filter, config);
+        delete config;
+        return rfa;
+    } else {
+        return 0;
+    }
 }

@@ -84,4 +84,5 @@ Comment[zh_TW]=8-bit 灰階圖片的色彩模型
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kritagrayplugin
-X-Pigment-Version=1
+X-Pigment-MinVersion=0
+X-Flake-PluginVersion=1

@@ -25,4 +25,5 @@ Comment[zh_TW]=每色頻為 8-bit 與 16-bit 的 YCbCr 圖片色彩模型
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kritaycbcrplugin
-X-Pigment-Version=1
+X-Pigment-MinVersion=0
+X-Flake-PluginVersion=1

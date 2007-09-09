@@ -4,6 +4,7 @@ Name=SpellCheck plugin
 Name[de]=Rechtschreibprüfung-Modul
 Name[pt]='Plugin' de Verificação Ortográfica
 Name[pt_BR]='Plugin' de Verificação Ortográfica
+Name[sv]=Insticksprogram för stavningskontroll
 ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service
 X-KDE-Library=spellcheck

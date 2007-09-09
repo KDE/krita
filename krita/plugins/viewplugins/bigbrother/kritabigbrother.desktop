@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=bigbrother
+Name[sv]=Storebror
 Comment=bigbrother
+Comment[sv]=Storebror
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritabigbrother

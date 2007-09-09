@@ -370,6 +370,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                         calculateArc( relative, curx, cury, angle, tox, toy, rx, ry, largeArc, sweep );
                     else
                         svgArcTo( tox, toy, rx, ry, angle, largeArc, sweep, !relative );
+                    break;
                 }
                 default:
                 {

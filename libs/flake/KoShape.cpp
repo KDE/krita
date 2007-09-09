@@ -870,7 +870,7 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     }
 
     if(attributes & OdfMandatories) {
-        context.xmlWriter().addAttribute("draw:z-index", zIndex());
+        context.xmlWriter().addAttribute("draw:z-index", d->zIndex);
     }
 
     if(attributes & OdfTransformation) {

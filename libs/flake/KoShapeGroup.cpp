@@ -32,6 +32,7 @@
 KoShapeGroup::KoShapeGroup()
 : KoShapeContainer(new SimpleShapeContainerModel())
 {
+    setSize( QSizeF(0,0) );
 }
 
 void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter) {

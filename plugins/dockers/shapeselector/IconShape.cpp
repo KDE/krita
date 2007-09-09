@@ -22,6 +22,8 @@
 #include <QPainter>
 #include <KIcon>
 
+#include "KoViewConverter.h"
+
 IconShape::IconShape(const QString &icon) {
     m_icon = KIcon(icon).pixmap(22);
     setSize(m_icon.size());

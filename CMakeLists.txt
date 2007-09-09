@@ -177,7 +177,6 @@ add_subdirectory(tools)
 add_subdirectory(filters)
 add_subdirectory(shapes)
 macro_optional_add_subdirectory(doc)
-add_subdirectory( cmake )
 message( STATUS "Re-add koshell when ported")
 
 

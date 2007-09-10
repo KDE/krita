@@ -21,6 +21,7 @@
 #define KOOASISSTYLES_H
 
 #include <QtCore/QHash>
+#include <QtGui/QMatrix>
 
 #include <komain_export.h>
 #include <KoXmlReader.h>
@@ -164,6 +165,10 @@ public:
 
     static QPen loadOasisStrokeStyle( const KoStyleStack &styleStack, const QString & stroke, const KoOasisStyles & oasisStyles );
 
+    /// Helper function to parse a transformation attribute
+    static QMatrix loadTransformation( const QString &transformation );
+    /// Helper function to create a transformation attribute
+    static QString saveTransformation( const QMatrix &transformation, bool appendTranslateUnit=true );
 private:
     enum TypeAndLocation
     {

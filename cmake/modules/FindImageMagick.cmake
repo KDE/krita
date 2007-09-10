@@ -101,11 +101,12 @@ else(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
   set(IMAGEMAGICK_FOUND FALSE)
 
   if(MAGICK_CONFIG_EXECUTABLE)
-
+     if(NOT WIN32)
      # use pkg-config to get the directories and then use these values
      # in the FIND_PATH() and FIND_LIBRARY() calls
-     INCLUDE(UsePkgConfig)
-     PKGCONFIG(ImageMagick _libMagickIncDir _libMagickLinkDir _libMagickLinkFlags _libMagickCflags)
+       INCLUDE(UsePkgConfig)
+       PKGCONFIG(ImageMagick _libMagickIncDir _libMagickLinkDir _libMagickLinkFlags _libMagickCflags)
+     endif(NOT WIN32)
 
      find_path(IMAGEMAGICK_INCLUDE_DIR magick/api.h
         /opt/local/include

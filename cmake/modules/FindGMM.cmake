@@ -9,19 +9,8 @@ find_path(GMM_INCLUDE_DIR NAMES gmm/gmm.h
      ${GMM_INCLUDE_PATH}
    )
 
-if(GMM_INCLUDE_DIR)
-  set(GMM_FOUND TRUE)
-endif(GMM_INCLUDE_DIR)
-
-if(GMM_FOUND)
-   if(NOT GMM_FIND_QUIETLY)
-      message(STATUS "Found GMM: ${GMM_INCLUDE_DIR}")
-   endif(NOT GMM_FIND_QUIETLY)
-else(GMM_FOUND)
-   if(GMM_FIND_REQUIRED)
-      message(FATAL_ERROR "Could NOT find GMM")
-   endif(GMM_FIND_REQUIRED)
-endif(GMM_FOUND)
+include(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(GMM DEFAULT_MSG GMM_INCLUDE_DIR )
 
 mark_as_advanced(GMM_INCLUDE_DIR)
 

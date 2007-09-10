@@ -1388,6 +1388,8 @@ void KoOasisStyles::saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& main
     case Qt::SolidPattern:
         styleFill.addProperty( "draw:fill","solid" );
         styleFill.addProperty( "draw:fill-color", brush.color().name() );
+        if( ! brush.isOpaque() )
+            styleFill.addProperty( "draw:opacity", QString("%1%").arg( brush.color().alphaF() * 100.0 ) );
         break;
     case Qt::Dense1Pattern:
         styleFill.addProperty( "draw:transparency", "94%" );
@@ -1760,6 +1762,17 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
         tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
         if ( styleStack.hasProperty( KoXmlNS::draw, "fill-color" ) )
             tmpBrush.setColor(styleStack.property( KoXmlNS::draw, "fill-color" ) );
+        if( styleStack.hasProperty( KoXmlNS::draw, "opacity" ) )
+        {
+            QString opacity = styleStack.property( KoXmlNS::draw, "opacity" );
+            if( ! opacity.isEmpty() && opacity.right( 1 ) == "%" )
+            {
+                float percent = opacity.left( opacity.length()-1 ).toFloat();
+                QColor color = tmpBrush.color();
+                color.setAlphaF( percent / 100.0 );
+                tmpBrush.setColor( color );
+            }
+        }
         if ( styleStack.hasProperty( KoXmlNS::draw, "transparency" ) )
         {
             QString transparency = styleStack.property( KoXmlNS::draw, "transparency" );

@@ -1,3 +1,5 @@
+project(pigment)
+
 include_directories( ${KOMAIN_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LCMS_INCLUDE_DIR} )
 
 set(FILE_OPENEXR_SOURCES)
@@ -5,6 +7,7 @@ set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
 	include_directories(${OPENEXR_INCLUDE_DIR})
 	set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
+    add_definitions(${OPENEXR_DEFINITIONS})
 endif(OPENEXR_FOUND)
 
 set(pigment_SRCS

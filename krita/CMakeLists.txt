@@ -33,6 +33,7 @@ if (SHOULD_BUILD_KRITA)
     if(OPENEXR_FOUND)
         include_directories(${OPENEXR_INCLUDE_DIR})
         set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
+        add_definitions(${OPENEXR_DEFINITIONS})
     endif(OPENEXR_FOUND)
 
     if(WIN32)

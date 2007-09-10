@@ -20,7 +20,7 @@
      </property>
      <widget class="QWidget" name="tab_1" >
       <attribute name="title" >
-       <string>Si&amp;mpe Autocorrection</string>
+       <string>Si&amp;mple Autocorrection</string>
       </attribute>
       <layout class="QVBoxLayout" >
        <item>

@@ -202,12 +202,14 @@ void KoTextFormatterTest::counterAndBigChar()
 
 int main (int argc, char ** argv)
 {
+    KComponentData cData("kotextformattertest");
+
     QApplication app(argc, argv);
 
     // Don't let locale settings lead to different hyphenation output
-    // KGlobal::locale() needs a main component
-    //KGlobal::locale()->setLanguage( QString::fromLatin1( "en_US" ) );
-    //KGlobal::locale()->setCountry( QString::fromLatin1( "C" ) );
+    KLocale *locale = new KLocale(QString(), QLatin1String("en_US"), QLatin1String("C"));
+    delete KGlobal::locale();
+    KGlobal::setLocale(locale);
 
     KoTextFormatterTest test;
     //test.speedTest();

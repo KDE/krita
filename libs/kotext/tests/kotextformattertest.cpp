@@ -205,8 +205,9 @@ int main (int argc, char ** argv)
     QApplication app(argc, argv);
 
     // Don't let locale settings lead to different hyphenation output
-    KGlobal::locale()->setLanguage( QString::fromLatin1( "en_US" ) );
-    KGlobal::locale()->setCountry( QString::fromLatin1( "C" ) );
+    // KGlobal::locale() needs a main component
+    //KGlobal::locale()->setLanguage( QString::fromLatin1( "en_US" ) );
+    //KGlobal::locale()->setCountry( QString::fromLatin1( "C" ) );
 
     KoTextFormatterTest test;
     //test.speedTest();

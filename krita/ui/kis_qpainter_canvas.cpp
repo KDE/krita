@@ -48,7 +48,7 @@
 #include "kis_config.h"
 #include "kis_canvas2.h"
 #include "kis_resource_provider.h"
-#include <qimageblitz/qimageblitz.h>
+#include <qimageblitz.h>
 #include "kis_doc2.h"
 #include "kis_grid_drawer.h"
 #include "kis_selection_manager.h"

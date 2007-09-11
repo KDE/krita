@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Name=SpellCheck plugin
 Name[de]=Rechtschreibprüfung-Modul
+Name[el]=Πρόσθετο ορθογραφικού ελέγχου
+Name[es]=Complemento de verificación ortográfica
 Name[pt]='Plugin' de Verificação Ortográfica
 Name[pt_BR]='Plugin' de Verificação Ortográfica
 Name[sv]=Insticksprogram för stavningskontroll

@@ -1,8 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=bigbrother
+Name[el]=μεγάλος αδερφός
+Name[es]=gran hermano
 Name[sv]=Storebror
 Comment=bigbrother
+Comment[el]=μεγάλος αδερφός
+Comment[es]=gran hermano
 Comment[sv]=Storebror
 ServiceTypes=Krita/ViewPlugin
 Type=Service

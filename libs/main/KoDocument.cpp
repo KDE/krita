@@ -2448,7 +2448,7 @@ QByteArray KoDocument::readNativeFormatMimeType( const KComponentData &component
         else {
             QString instname = componentData.isValid() ? componentData.componentName() : KGlobal::mainComponent().componentName();
             if ( instname != "koshell" ) // hack for koshell
-                kWarning(30003) << service->desktopEntryPath() << ": no X-KDE-NativeMimeType entry!";
+                kWarning(30003) << service->entryPath() << ": no X-KDE-NativeMimeType entry!";
         }
     }
 

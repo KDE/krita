@@ -1,11 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Autocorrection plugin
+Name[ca]=Connector d'autocorrecció
 Name[de]=Autokorrektur-Modul
 Name[el]=Πρόσθετο αυτόματης διόρθωσης
 Name[es]=Complemento de corrección automática
 Name[fa]=وصلۀ اصلاح خودکار
 Name[ga]=Breiseán uathcheartaithe
+Name[ja]=自動修正プラグイン
 Name[ne]=स्वत: सुधार गर्ने प्लगइन
 Name[pt]='Plugin' de correcção automática
 Name[pt_BR]='Plugin' de correcção automática

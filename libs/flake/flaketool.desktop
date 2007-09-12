@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Flake tool definition
+Name[ca]=Definició d'eina de floc
 Name[de]=Flake-Werkzeugdefinition
 Name[el]=Ορισμός εργαλείου flake
 Name[es]=Definición de una herramienta de Flake
@@ -14,6 +15,7 @@ Name[zh_TW]=Flake 工具定義
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Tool
 Comment=Definition of flake tools
+Comment[ca]=Definició d'eines de floc
 Comment[de]=Definition von Flake-Werkzeugen
 Comment[el]=Ορισμός των εργαλείων flake
 Comment[es]=Definición de las herramientas de Flake

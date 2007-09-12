@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Chinese Brush
+Name[ca]=Pinzell xinès
 Name[de]=Chinesischer Pinsel
 Name[el]=Κινέζικο πινέλο
 Name[es]=Pincel chino
@@ -14,6 +15,7 @@ Name[uk]=Китайський пензель
 Name[x-test]=xxChinese Brushxx
 Name[zh_TW]=毛筆刷
 Comment=Chinese Brush
+Comment[ca]=Pinzell xinès
 Comment[de]=Chinesischer Pinsel
 Comment[el]=Κινέζικο πινέλο
 Comment[es]=Pincel chino

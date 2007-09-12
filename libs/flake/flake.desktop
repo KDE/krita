@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Flake Plugin
+Name[ca]=Connector per al KOffice
 Name[de]=Flake-Modul
 Name[el]=Πρόσθετο flake
 Name[es]=Complemento de Flake
@@ -17,6 +18,7 @@ Name[zh_TW]=Flake 外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Flake
 Comment=A plugin that contains a set of a shape and a tool
+Comment[ca]=Un connector que conté un conjunt d'una forma i una eina
 Comment[de]=Ein Modul, dass einen Satz an Objekten und ein Werkzeug enthält
 Comment[el]=Ένα πρόσθετο που περιέχει ένα σύνολο σχήματος και εργαλείου
 Comment[es]=Un complemento que contiene un conjunto de una forma y una herramienta

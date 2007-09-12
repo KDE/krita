@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Text Editing plugin for the KOffce texttool
+Name[ca]=Connector d'edició de text per a l'eina de text del KOffice
 Name[de]=Modul zur Textbearbeitung für das KOffice-Textwerkzeug
 Name[el]=Πρόσθετο επεξεργασίας κειμένου για το KOffice
 Name[es]=Complemento de edición de texto para la herramienta de texto de KOffice
@@ -13,6 +14,7 @@ Name[zh_TW]=KOffice 文字工具的文字編輯外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-EditingPlugin
 Comment=Definition of a text-editing plugin
+Comment[ca]=Definició d'un connector d'edició de text
 Comment[de]=Definition eines Moduls zur Textbearbeitung
 Comment[el]=Καθορισμός ενός πρόσθετου επεξεργασίας κειμένου
 Comment[es]=Definición de un complemento de edición de texto

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Shape definition
+Name[ca]=Definició de forma
 Name[de]=Objektdefinition
 Name[el]=Ορισμός σχήματος
 Name[es]=Definición de la forma
@@ -13,6 +14,7 @@ Name[zh_TW]=形狀定義
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Shape
 Comment=Definition of a flake shape object
+Comment[ca]=Definició d'un objecte amb forma de floc
 Comment[de]=Definition eines Flake-Objektes
 Comment[el]=Καθορισμός ενός αντικειμένου σχήματος flake
 Comment[es]=Definición de un objeto de forma de Flake

@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Smeary Brush
+Name[ca]=Pinzell viscós
 Name[de]=Schmieriger Pinsel
 Name[el]=Πινέλο δαχτυλιάς
 Name[es]=Pincel grasiento
 Name[ga]=Scuab Smeartha
+Name[ja]=よごしブラシ
 Name[ne]=पोतिने ब्रुस
 Name[pt]=Pincel de Fumo
 Name[pt_BR]=Pincel de Fumo
@@ -12,10 +14,12 @@ Name[sv]=Smetig pensel
 Name[x-test]=xxSmeary Brushxx
 Name[zh_TW]=油畫筆刷
 Comment=Smeary brush
+Comment[ca]=Pinzell viscós
 Comment[de]=Schmieriger Pinsel
 Comment[el]=Πινέλο δαχτυλιάς
 Comment[es]=Pincel grasiento
 Comment[ga]=Scuab smeartha
+Comment[ja]=よごしブラシ
 Comment[ne]=पोतिने ब्रुस
 Comment[pt]=Pincel de fumo
 Comment[pt_BR]=Pincel de fumo

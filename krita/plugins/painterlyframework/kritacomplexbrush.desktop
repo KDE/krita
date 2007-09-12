@@ -1,13 +1,16 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Complex Brush
+Name[ca]=Pinzell complex
 Name[el]=Σύνθετο πινέλο
 Name[es]=Pincel complejo
 Name[ga]=Scuab Choimpléascach
+Name[ja]=複合ブラシ
 Name[pt]=Pincel Complexo
 Name[pt_BR]=Pincel Complexo
 Name[sv]=Komplex pensel
 Comment=A brush with complex color loading
+Comment[ca]=Un pinzell amb càrrega de color complexa
 Comment[el]=Ένα πινέλο με σύνθετη χρήση χρωμάτων
 Comment[es]=Un pincel con carga de color compleja
 Comment[pt]=Um pincel com um carregamento complexo de cor

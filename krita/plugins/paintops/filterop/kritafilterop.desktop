@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Filter Op
+Name[ca]=Operador de filtre
 Name[el]=Ενέργεια φίλτρου
 Name[es]=Operación de filtrado
 Name[ne]=फिल्टर कार्य
@@ -9,6 +10,7 @@ Name[pt_BR]=Operação de Filtragem
 Name[sv]=Filtreringsoperation
 Name[zh_TW]=濾鏡工具
 Comment=Filter Op
+Comment[ca]=Operador de filtre
 Comment[el]=Ενέργεια φίλτρου
 Comment[es]=Operación de filtrado
 Comment[ne]=फिल्टर कार्य

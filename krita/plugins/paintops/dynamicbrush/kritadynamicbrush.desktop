@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Dynamic Brush
 Name[bg]=Динамична четка
+Name[ca]=Pinzell dinàmic
 Name[de]=Dynamischer Pinsel
 Name[el]=Δυναμικό πινέλο
 Name[es]=Pincel dinámico
@@ -15,6 +16,7 @@ Name[uk]=Динамічний пензель
 Name[zh_TW]=動態筆刷
 Comment=Dynamic brush
 Comment[bg]=Динамична четка
+Comment[ca]=Pinzell dinàmic
 Comment[de]=Dynamischer Pinsel
 Comment[el]=Δυναμικό πινέλο
 Comment[es]=Pincel dinámico

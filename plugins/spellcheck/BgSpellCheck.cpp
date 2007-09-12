@@ -38,7 +38,7 @@ void BgSpellCheck::start(QTextDocument *document, int startPosition, int endPosi
     m_cursor.setPosition(startPosition);
     m_currentPosition = -1;
     m_endPosition = endPosition;
-    kDebug(31000) << "Starting BgSpellCheck: " << startPosition;
+    // kDebug(31000) << "Starting BgSpellCheck: " << startPosition;
     m_currentBlock = m_cursor.block();
     BackgroundChecker::start();
 }
@@ -51,12 +51,6 @@ QString BgSpellCheck::fetchMoreText()
 
     // checking should end here
     if (position > m_endPosition && m_endPosition > 0) return QString();
-
-    // don't know why, but the bg spell check doesn't emit mispelling for most of the cases
-    // call the foundMisspelling manually until it's solved
-    if (!checkWord(word))
-        foundMisspelling(word, position);
-    // kDebug(31000) << "Current word: " << word << " ; Position: " << position << " : " << checkWord(word);
 
     // check whether we can move to next word (moveNextWord)
     // and whether we are keep selecting the same word again and again (samePosition)
@@ -107,11 +101,9 @@ QString BgSpellCheck::fetchMoreText()
 
 void BgSpellCheck::foundMisspelling(const QString &word, int start)
 {
-    kDebug(31000) << "Mispelling: " << word << " : " << start;
-    int position = m_cursor.selectionStart();
-    emit misspelledWord(word, position, true);
-    if (position != start)
-        BackgroundChecker::continueChecking();
+    // kDebug(31000) << "Mispelling: " << word << " : " << start;
+    emit misspelledWord(word, m_currentPosition + start, true);
+    BackgroundChecker::continueChecking();
 }
 
 #include "BgSpellCheck.moc"

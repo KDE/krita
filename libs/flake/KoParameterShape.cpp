@@ -36,6 +36,7 @@ KoParameterShape::KoParameterShape()
 
 KoParameterShape::~KoParameterShape()
 {
+    delete d;
 }
 
 void KoParameterShape::moveHandle( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )

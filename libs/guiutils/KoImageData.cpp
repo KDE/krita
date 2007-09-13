@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -190,4 +191,14 @@ bool KoImageData::loadFromFile(QIODevice *device) {
 
 const QImage KoImageData::image() const {
     return d->image;
+}
+
+void KoImageData::setImage( const QImage &image ) {
+    // remove prev data
+    delete d->tempImageFile;
+    d->tempImageFile = 0;
+
+    d->image = image;
+    d->imageSize.setWidth( DM_TO_POINT(d->image.width() / (double) d->image.dotsPerMeterX() * 10.0) );
+    d->imageSize.setHeight( DM_TO_POINT(d->image.height() / (double) d->image.dotsPerMeterY() * 10.0) );
 }

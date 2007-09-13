@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -109,6 +110,12 @@ public:
      * @see QImage::isNull()
      */
     const QImage image() const;
+
+    /**
+     * Sets an image to store.
+     * @param image the image to store
+     */
+    void setImage( const QImage &image );
 
     /// If using SaveInStore, the collection will set a url-like location using this method.
     void setStoreHref(const QString &href);

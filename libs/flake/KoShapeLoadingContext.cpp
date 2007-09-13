@@ -27,7 +27,7 @@
 
 class KoShapeLoadingContext::Private {
 public:
-    Private(KoOasisLoadingContext &c) : context(c) {}
+    Private(KoOasisLoadingContext &c) : context(c), imageCollection(0) {}
     ~Private()
     {
         if( shapesForDocument.count() )
@@ -47,6 +47,7 @@ public:
     QMap<QString, KoShapeLayer*> layers;
     QMap<QString, KoShape*> drawIds;
     QList<KoShape*> shapesForDocument;
+    KoImageCollection * imageCollection;
 };
 
 KoShapeLoadingContext::KoShapeLoadingContext( KoOasisLoadingContext & context )
@@ -100,4 +101,14 @@ void KoShapeLoadingContext::transferShapesToDocument( KoShapeControllerBase * co
 
     // the shape controller now owns the shapes, so we can clear the list
     d->shapesForDocument.clear();
+}
+
+void KoShapeLoadingContext::setImageCollection( KoImageCollection * imageCollection )
+{
+    d->imageCollection = imageCollection;
+}
+
+KoImageCollection * KoShapeLoadingContext::imageCollection()
+{
+    return d->imageCollection;
 }

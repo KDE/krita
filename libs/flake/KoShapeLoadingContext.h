@@ -30,6 +30,7 @@ class KoOasisLoadingContext;
 class KoShapeLayer;
 class KoShape;
 class KoShapeControllerBase;
+class KoImageCollection;
 
 /**
  * Context passed to shapes during loading.
@@ -61,15 +62,17 @@ public:
     /// return the shape formerly registered using addShapeId()
     KoShape * shapeById( const QString & id );
 
-    /// sets a shape controller to add shapes during loading (e.g. group loading)
-    void setShapeController( KoShapeControllerBase * shapeController );
-
     /// Adds a shape to the context for later adding to the document
     void addShapeToDocument( KoShape * shape );
 
     /// Transfers ownership of all collected shapes during loading to the shape controller.
     void transferShapesToDocument( KoShapeControllerBase * controller );
 
+    /// Sets the image collection used for loading images
+    void setImageCollection( KoImageCollection * imageCollection );
+
+    /// Returns the image collection for loading images
+    KoImageCollection * imageCollection();
 private:
     class Private;
     Private * const d;

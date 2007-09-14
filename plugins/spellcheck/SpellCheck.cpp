@@ -44,37 +44,24 @@ void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
 {
     if (!m_enableSpellCheck) return;
 
-    m_cursor = QTextCursor(document);
-    selectWord(m_cursor, cursorPosition);
-    // m_cursor.setPosition(m_cursor.selectionStart());
-    // m_cursor.select(QTextCursor::WordUnderCursor);
-    m_word = m_cursor.selectedText();
+    m_cursor.setPosition(cursorPosition);
+    m_cursor.movePosition(QTextCursor::WordLeft);
+    m_cursor.select(QTextCursor::WordUnderCursor);
+    int startPosition = m_cursor.selectionStart();
+    int endPosition;
 
-    int startPos = m_cursor.selectionStart();
-    if (!m_bgSpellCheck->checkWord(m_word.trimmed()))
-        highlightMisspelled(m_word.trimmed(), startPos, true);
-    else
-        highlightMisspelled(m_word, startPos, false);
-
-    int spaceStart = m_cursor.selectionEnd();
-
-    if (m_cursor.movePosition(QTextCursor::NextWord)) {
+    if (m_cursor.movePosition(QTextCursor::NextWord))
         m_cursor.select(QTextCursor::WordUnderCursor);
-        m_word = m_cursor.selectedText();
-        int startPos = m_cursor.selectionStart();
-        if (!m_bgSpellCheck->checkWord(m_word.trimmed()))
-            highlightMisspelled(m_word.trimmed(), startPos, true);
-        else
-            highlightMisspelled(m_word, startPos, false);
+    endPosition = m_cursor.selectionEnd();
 
-        // don't highlight white spaces
-        int spaceEnd = m_cursor.selectionStart();
-        QTextCharFormat format;
-        format.setProperty(KoCharacterStyle::Spelling, false);
-        m_cursor.setPosition(spaceStart);
-        m_cursor.setPosition(spaceEnd, QTextCursor::KeepAnchor);
-        m_cursor.mergeCharFormat(format);
-    }
+    /* clean up the old spelling result, so that white space doesn't copy char format from previous cursor position */
+    m_cursor.setPosition(startPosition);
+    m_cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+    QTextCharFormat format;
+    format.setProperty(KoCharacterStyle::Spelling, false);
+    m_cursor.mergeCharFormat(format);
+
+    m_bgSpellCheck->start(m_document, startPosition, endPosition);
 }
 
 void SpellCheck::finishedParagraph(QTextDocument *document, int cursorPosition)

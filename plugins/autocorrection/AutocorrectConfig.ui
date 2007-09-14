@@ -16,7 +16,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_1" >
       <attribute name="title" >
@@ -100,6 +100,9 @@
        </item>
        <item>
         <widget class="QCheckBox" name="useNumberStyle" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
          <property name="whatsThis" >
           <string>When typing '1)' or similar in front of a paragraph, automatically convert the paragraph to use that numbering style. This has the advantage that further paragraphs will also be numbered and the spacing is done correctly.</string>
          </property>
@@ -110,6 +113,9 @@
        </item>
        <item>
         <widget class="QCheckBox" name="autoSuperScript" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
          <property name="text" >
           <string>Rep&amp;lace 1st... with 1^st...</string>
          </property>
@@ -124,6 +130,9 @@
        </item>
        <item>
         <widget class="QCheckBox" name="useBulletStyle" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
          <property name="whatsThis" >
           <string>When typing '*' or '-' in front of a paragraph, automatically convert the paragraph to use that list-style. Using a list-style formatting means that a correct bullet is used to draw the list.</string>
          </property>
@@ -139,6 +148,9 @@
          </property>
          <item>
           <widget class="QPushButton" name="bulletStyle" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
              <horstretch>0</horstretch>
@@ -152,6 +164,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="defaultBulletStyle" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
              <horstretch>0</horstretch>

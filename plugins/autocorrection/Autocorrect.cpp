@@ -335,16 +335,22 @@ void Autocorrect::superscriptAppendix() {
         }
         else if (i.key() == "othernb") {
             int pos = trimmed.indexOf(i.value());
-            if (pos != -1) {
+            if (pos > 0) {
                 QString number = trimmed.left(pos);
                 QString::ConstIterator constIter = number.constBegin();
                 bool found = true;
-                while (constIter != number.constEnd()) {
-                    if (!constIter->isNumber()) {
-                        found = false;
-                        break;
+                // don't apply superscript to 1th, 2th and 3th
+                if (number.length() == 1 &&
+                        (*constIter == QChar('1') || *constIter == QChar('2') || *constIter == QChar('3')))
+                    found = false;
+                if (found) {
+                    while (constIter != number.constEnd()) {
+                        if (!constIter->isNumber()) {
+                            found = false;
+                            break;
+                        }
+                        ++constIter;
                     }
-                    ++constIter;
                 }
                 if (found && number.length() + i.value().length() == trimmed.length()) {
                     startPos = m_cursor.selectionStart() + pos;

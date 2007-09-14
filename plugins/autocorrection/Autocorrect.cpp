@@ -321,7 +321,50 @@ void Autocorrect::autoNumbering() {
 
 void Autocorrect::superscriptAppendix() {
     if(! m_superscriptAppendix) return;
-    // TODO
+
+    QString trimmed = m_word.trimmed();
+    int startPos = -1;
+    int endPos = -1;
+
+    QHash<QString, QString>::const_iterator i = m_superScriptEntries.constBegin();
+    while (i != m_superScriptEntries.constEnd()) {
+        if (i.key() == trimmed) {
+            startPos = m_cursor.selectionStart() + 1;
+            endPos = startPos - 1 + trimmed.length();
+            break;
+        }
+        else if (i.key() == "othernb") {
+            int pos = trimmed.indexOf(i.value());
+            if (pos != -1) {
+                QString number = trimmed.left(pos);
+                QString::ConstIterator constIter = number.constBegin();
+                bool found = true;
+                while (constIter != number.constEnd()) {
+                    if (!constIter->isNumber()) {
+                        found = false;
+                        break;
+                    }
+                    ++constIter;
+                }
+                if (found && number.length() + i.value().length() == trimmed.length()) {
+                    startPos = m_cursor.selectionStart() + pos;
+                    endPos = startPos - pos + trimmed.length();
+                    break;
+                }
+            }
+        }
+        ++i;
+    }
+
+    if (startPos != -1 && endPos != -1) {
+        QTextCursor cursor(m_cursor);
+        cursor.setPosition(startPos);
+        cursor.setPosition(endPos, QTextCursor::KeepAnchor);
+
+        QTextCharFormat format;
+        format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+        cursor.mergeCharFormat(format); 
+    }
 }
 
 void Autocorrect::capitalizeWeekDays() {

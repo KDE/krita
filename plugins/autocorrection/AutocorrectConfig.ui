@@ -114,7 +114,7 @@
        <item>
         <widget class="QCheckBox" name="autoSuperScript" >
          <property name="enabled" >
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text" >
           <string>Rep&amp;lace 1st... with 1^st...</string>

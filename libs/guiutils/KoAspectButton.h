@@ -23,19 +23,34 @@
 
 #include "koguiutils_export.h"
 
+/**
+ * This button gives a visual indication of weather the 'aspect ratio' is locked.
+ * Typically you would use this alongside 2 spinboxes with a value like a width and height.
+ */
 class KOGUIUTILS_EXPORT KoAspectButton : public QLabel {
     Q_OBJECT
 public:
+    /// constructor
     KoAspectButton(QWidget *parent);
     virtual ~KoAspectButton();
 
 public slots:
-    void setKeepAspectRatio(bool on);
+    /**
+     * Set the visual indicator to be locked or not.
+     * This also emits the keepAspectRatioChanged if the value has changed.
+     * @param keep if true, lock the aspect ratio.
+     */
+    void setKeepAspectRatio(bool keep);
 
 signals:
-    void keepAspectRatioChanged(bool on);
+    /**
+     * This signal is emitted every time the button changes value, either by user interaction or
+     *  by programetically setting it.
+     */
+    void keepAspectRatioChanged(bool keep);
 
 protected:
+    /// reimplemented
     virtual void mouseReleaseEvent(QMouseEvent *);
 
 private:

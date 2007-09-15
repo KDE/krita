@@ -62,7 +62,8 @@ Name=My Flake Shapes Plugin
 ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=myflakeshapesplugin
-X-Flake-Version=1
+X-Flake-MinVersion=1
+X-Flake-PluginVersion=1
 @endverbatim
  *
  */

@@ -22,7 +22,6 @@ macro_optional_find_package(Blitz)
 
 macro_optional_find_package(QCA2)
 macro_optional_find_package(Exif)
-macro_optional_find_package(LibArt)
 macro_optional_find_package(Freetype)
 macro_optional_find_package(Fontconfig)
 

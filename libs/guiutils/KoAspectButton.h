@@ -19,7 +19,7 @@
 #ifndef KOASPECTBUTTON_H
 #define KOASPECTBUTTON_H
 
-#include <QLabel>
+#include <QAbstractButton>
 
 #include "koguiutils_export.h"
 
@@ -27,7 +27,7 @@
  * This button gives a visual indication of weather the 'aspect ratio' is locked.
  * Typically you would use this alongside 2 spinboxes with a value like a width and height.
  */
-class KOGUIUTILS_EXPORT KoAspectButton : public QLabel {
+class KOGUIUTILS_EXPORT KoAspectButton : public QAbstractButton {
     Q_OBJECT
 public:
     /// constructor
@@ -52,6 +52,9 @@ signals:
 protected:
     /// reimplemented
     virtual void mouseReleaseEvent(QMouseEvent *);
+    virtual void paintEvent (QPaintEvent *);
+    virtual QSize sizeHint () const;
+    void keyReleaseEvent (QKeyEvent *e);
 
 private:
     class Private;

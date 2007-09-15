@@ -19,6 +19,7 @@
 #include "KoAspectButton.h"
 
 #include <QPixmap>
+#include <QPainter>
 #include <QIcon>
 #include <QMouseEvent>
 #include <KDebug>
@@ -120,11 +121,11 @@ public:
 };
 
 KoAspectButton::KoAspectButton(QWidget *parent)
-    : QLabel(parent),
+    : QAbstractButton(parent),
     d( new Private() )
 {
-    setPixmap(d->chain);
-    setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
+    //setPixmap(d->chain);
+    //setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 }
 
@@ -143,11 +144,25 @@ void KoAspectButton::setKeepAspectRatio(bool on) {
     if(d->keepAspect == on)
         return;
     d->keepAspect = on;
-    if(d->keepAspect)
-        setPixmap(d->chain);
-    else
-        setPixmap(d->brokenChain);
+    update();
     emit keepAspectRatioChanged(d->keepAspect);
+}
+
+void KoAspectButton::paintEvent (QPaintEvent *) {
+    QPainter painter(this);
+    painter.drawPixmap(0, (height() - 24) / 2, 9, 24, d->keepAspect ? d->chain : d->brokenChain, 0, 0, 9, 24);
+    painter.end();
+}
+
+QSize KoAspectButton::sizeHint () const {
+    return QSize(9, 24);
+}
+
+void KoAspectButton::keyReleaseEvent (QKeyEvent *e) {
+    if(e->text() == " ") {
+        setKeepAspectRatio(! d->keepAspect);
+        e->accept();
+    }
 }
 
 #include "KoAspectButton.moc"

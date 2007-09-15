@@ -8,6 +8,7 @@ include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${PIGMENT_INCLUDES}  $
 ########### next target ###############
 
 set(koguiutils_LIB_SRCS
+    KoAspectButton.cpp
    KoCharSelectDia.cpp
    KoContextHelp.cpp
    KoCsvImportDialog.cpp

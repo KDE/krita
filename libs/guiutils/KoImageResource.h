@@ -27,12 +27,12 @@ class KOGUIUTILS_EXPORT KoImageResource
 
 public:
 
-    KoImageResource();
+    KDE_DEPRECATED KoImageResource();
 
     /// returns a 24 pixels xpm-format image of a chain.
-    const char** chain();
+    KDE_DEPRECATED const char** chain();
     /// returns a 24 pixels xpm-format image of a broken chain.
-    const char** chainBroken();
+    KDE_DEPRECATED const char** chainBroken();
 };
 #endif // __ko_imageresource__
 

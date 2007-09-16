@@ -178,5 +178,6 @@ add_subdirectory(shapes)
 macro_optional_add_subdirectory(doc)
 message( STATUS "Re-add koshell when ported")
 
+MACRO_DISPLAY_FEATURE_LOG()
 
 ADD_CUSTOM_TARGET(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})

@@ -786,7 +786,7 @@ KoPathPoint * KoPathShape::removePoint( const KoPathPointIndex &pointIndex )
 {
     KoSubpath * subpath = subPath( pointIndex.first );
 
-    if ( subpath == 0 || pointIndex.second < 0 || pointIndex.second > subpath->size() )
+    if ( subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size() )
         return 0;
 
     KoPathPoint * point = subpath->takeAt( pointIndex.second );

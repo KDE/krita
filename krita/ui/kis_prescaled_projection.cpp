@@ -26,7 +26,7 @@
 #include <QSize>
 #include <QPainter>
 
-#include <qimageblitz/qimageblitz.h>
+#include <qimageblitz.h>
 
 #include <KoColorProfile.h>
 #include <KoViewConverter.h>

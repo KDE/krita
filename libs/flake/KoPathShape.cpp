@@ -786,7 +786,7 @@ KoPathPoint * KoPathShape::removePoint( const KoPathPointIndex &pointIndex )
 {
     KoSubpath * subpath = subPath( pointIndex.first );
 
-    if ( subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size() )
+    if ( subpath == 0 || pointIndex.second < 0 || pointIndex.second > subpath->size() )
         return 0;
 
     KoPathPoint * point = subpath->takeAt( pointIndex.second );
@@ -803,7 +803,7 @@ KoPathPoint * KoPathShape::removePoint( const KoPathPointIndex &pointIndex )
             subpath->first()->setProperties( ( subpath->first()->properties() & ~KoPathPoint::CanHaveControlPoint1 ) | KoPathPoint::StartSubpath );
         }
     }
-    else if ( pointIndex.second == subpath->size() ) // use size as point is allreay removed
+    else if ( pointIndex.second == subpath->size() ) // use size as point is already removed
     {
         // last point removed, change last point to be the end
         if ( point->properties() & KoPathPoint::CloseSubpath )

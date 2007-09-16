@@ -25,11 +25,21 @@ macro_optional_find_package(Exif)
 macro_optional_find_package(Freetype)
 macro_optional_find_package(Fontconfig)
 
-macro_log_feature(EIGEN_FOUND "Eigen" "Eigen is needed by KSpread, KSpread won't be built" "http://eigen.tuxfamily.org" TRUE "1.0.5")
+macro_log_feature(EIGEN_FOUND "Eigen" "Eigen is needed by KSpread, KSpread won't be built" "http://eigen.tuxfamily.org" FALSE "1.0.5")
 
 macro_log_feature(QCA2_FOUND "libqca2" "QCA2 is needed to compile support for encrypted OpenDocument files" "Module into kdesupport" FALSE "2.0" "" )
 
-macro_log_feature(Boost_FOUND "libboost-dev" "Boost is needed by KPresenter. KPresenter will not be built" "http://www.boost.org" TRUE "")
+macro_log_feature(Boost_FOUND "libboost-dev" "Boost is needed by KPresenter. KPresenter will not be built" "http://www.boost.org" FALSE "")
+
+set(REQUIRED_LCMS_VERSION 115)
+
+if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
+else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+    set(HAVE_REQUIRED_LCMS_VERSION FALSE)
+endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+
+macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "lcms" "LittleCMS is required to build KOffice" "http://www.littlecms.com" TRUE "1.15")
 
 if (APPLE)
    find_package(Carbon REQUIRED)
@@ -96,36 +106,28 @@ set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/k
 # Those are included with e.g. <koproperty/set.h>
 set(KOPROPERTY_INCLUDES ${CMAKE_SOURCE_DIR}/libs ${CMAKE_BINARY_DIR}/libs)
 
-# check if build krita there to be able to test if we can build filters/krita
-set(REQUIRED_LCMS_VERSION 115)
-
-if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    set(SHOULD_BUILD_KRITA TRUE)
-else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-        set(SHOULD_BUILD_KRITA FALSE)
-        message(STATUS  "krita requires LittleCMS 1.15 or greater. Krita will not be built.\n"
-                        "   If you want to compile Krita you should install:\n"
-                        "   lcms 1.15 or newer (http://www.littlecms.com/)")
-endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+set(SHOULD_BUILD_KRITA TRUE)
 
 if(NOT BLITZ_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-   message(STATUS  "Krita requires blitz. Krita will not be built, qimageblitz is available from kdesupport")
 endif(NOT BLITZ_FOUND)
+
+macro_log_feature(BLITZ_FOUND "qimageblitz" "Krita requires qimageblitz. Krita will not be built" "qimageblitz is available from kdesupport" FALSE "")
 
 #Check if build kpresenter here to be able to test if we can build filters/kpresenter
 if(Boost_FOUND)
     set(SHOULD_BUILD_KPRESENTER TRUE)
 else(Boost_FOUND)
     set(SHOULD_BUILD_KPRESENTER FALSE)
-    message(STATUS  "KPresenters requires the boost headers, KPresenter will not be built.\n"
-                    "   If you want to compile KPresenter you should install libboost-dev")
 endif(Boost_FOUND)
 
 add_subdirectory(libs)
 MESSAGE(STATUS "Before koffice-2.0 disable compile of example subdir, not necessary for official release")
 #add_subdirectory(example)
 add_subdirectory(interfaces)
+
+macro_log_feature(FREETYPE_FOUND "FreeType" "Karbon requires FreeType. Karbon will not be built" "http://www.freetype.org" FALSE "")
+macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Karbon requires Fontconfig. Karbon will not be built" "http://fontconfig.org" FALSE "")
 
 if(FREETYPE_FOUND AND FONTCONFIG_FOUND )
    set(SHOULD_BUILD_KARBON true)
@@ -138,10 +140,7 @@ endif(SHOULD_BUILD_KARBON)
 if(EIGEN_FOUND)
     set(SHOULD_BUILD_KSPREAD true)
 else(EIGEN_FOUND)
-        set(SHOULD_BUILD_KSPREAD FALSE)
-        message(STATUS  "KSpread requires the eigen library, KSpread will not be built.\n"
-                        "   If you want to compile KSpread you should install:\n"
-                        "   lib eigen http://eigen.tuxfamily.org")
+    set(SHOULD_BUILD_KSPREAD FALSE)
 endif(EIGEN_FOUND)
 
 if(SHOULD_BUILD_KSPREAD)
@@ -154,12 +153,15 @@ endif(SHOULD_BUILD_KPRESENTER)
 
 macro_optional_add_subdirectory(kdgantt)
 macro_optional_add_subdirectory(kchart)
+
 FIND_PROGRAM(BZIP2_EXECUTABLE NAMES bzip2 )
+
+macro_log_feature(BZIP2_EXECUTABLE "bzip2" "bzip2 program is necessary to compile kexi. kexi will not be built" "http://www.bzip.org" FALSE "")
+
 if( BZIP2_EXECUTABLE )
   macro_optional_add_subdirectory(kexi)
-else( BZIP2_EXECUTABLE )
-  MESSAGE(STATUS "bzip2 program is necessary to compile kexi")
 endif( BZIP2_EXECUTABLE )
+
 macro_optional_add_subdirectory(kformula)
 macro_optional_add_subdirectory(kivio)
 #macro_optional_add_subdirectory(koshell)

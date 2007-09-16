@@ -39,7 +39,6 @@ void BgSpellCheck::start(QTextDocument *document, int startPosition, int endPosi
     m_currentPosition = -1;
     m_endPosition = endPosition;
     // kDebug(31000) << "Starting BgSpellCheck: " << startPosition;
-    m_currentBlock = m_cursor.block();
     BackgroundChecker::start();
 }
 

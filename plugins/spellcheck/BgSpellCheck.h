@@ -48,7 +48,6 @@ signals:
 
 private:
     QTextDocument *m_document;
-    QTextBlock m_currentBlock;
     QTextCursor m_cursor;
 
     int m_currentPosition;

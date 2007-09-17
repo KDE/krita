@@ -15,6 +15,7 @@ add_subdirectory( scripting )
 add_subdirectory( bracketing2hdr )
 add_subdirectory( metadataeditor )
 add_subdirectory( bigbrother )
+add_subdirectory( tonemapping )
 
 find_package(GMM)
 

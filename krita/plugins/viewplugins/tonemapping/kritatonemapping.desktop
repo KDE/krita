@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=tonemapping
+Name[x-test]=xxtonemappingxx
+Comment=tonemapping
+Comment[x-test]=xxtonemappingxx
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritatonemapping
+X-Krita-Version=3

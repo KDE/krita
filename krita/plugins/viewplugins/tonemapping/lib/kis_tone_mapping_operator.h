@@ -32,7 +32,7 @@ class KisToneMappingOperator {
         QString id() const;
         QString name() const;
         virtual KisToneMappingOperatorConfigurationWidget* createConfigurationWidget(QWidget*) const;
-        virtual KisPaintDeviceSP toneMap(KisPaintDeviceSP, KisPropertiesConfiguration* config) = 0;
+        virtual void toneMap(KisPaintDeviceSP, KisPropertiesConfiguration* config) const = 0;
     private:
         struct Private;
         Private* const d;

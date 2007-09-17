@@ -1059,7 +1059,7 @@ void KoPathShape::closeSubpath( KoSubpath *subpath )
 
 void KoPathShape::closeMergeSubpath( KoSubpath *subpath )
 {
-    if ( ! subpath )
+    if ( ! subpath || subpath->size() < 2 )
         return;
 
     KoPathPoint * lastPoint = subpath->last();

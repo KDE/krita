@@ -676,7 +676,7 @@ void KoPathTool::ActivePointHandle::repaint() const
 
 void KoPathTool::ActivePointHandle::mousePressEvent( KoPointerEvent *event ) 
 {
-    if( event->button() & Qt::LeftButton  == 0)
+    if( ( event->button() & Qt::LeftButton ) == 0)
         return;
     if((event->modifiers() & Qt::ShiftButton) == 0) { // no shift pressed.
         // control select adds/removes points to/from the selection

@@ -26,7 +26,7 @@
 #include <pigment_xyz_u16_export.h>
 #include <KoColorModelStandardIds.h>
 
-typedef KoColorSpaceTrait<quint16, 4, 3> XyzU16Traits;
+typedef KoXyzTraits<quint16> XyzU16Traits;
 
 class PIGMENT_XYZ_U16_EXPORT KisXyzU16ColorSpace : public KoLcmsColorSpace<XyzU16Traits>
 {

@@ -207,4 +207,26 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
 struct KoRgbU16Traits : public KoRgbTraits<quint16> {
 };
 
+/** Base class for rgb traits, it provides some convenient functions to
+ * access XYZ channels through an explicit API.
+ */
+template<typename _channels_type_>
+struct KoXyzTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
+    typedef _channels_type_ channels_type; // /me wonders why gcc refuses to build without that line ?, which is pretty annoying as it's less clean
+    static const qint32 x_pos = 2;
+    static const qint32 y_pos = 1;
+    static const qint32 z_pos = 0;
+
+    /**
+     * An RGB pixel
+     */
+    struct Pixel {
+        channels_type X;
+        channels_type Y;
+        channels_type Z;
+        channels_type alpha;
+    };
+};
+
+
 #endif

@@ -37,6 +37,30 @@
 #include <kdebug.h>
 #include <k3staticdeleter.h>
 
+// just for loading the frame attributes
+class FrameShape : public KoShape
+{
+public:
+    virtual void paint(QPainter &painter, const KoViewConverter &converter) {};
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+    {
+        loadOdfAttributes( element, context, FrameAttributes );
+        return true;
+    };
+    virtual void saveOdf( KoShapeSavingContext & context ) const {};
+
+    void setAttributes( KoShape * shape )
+    {
+        if( ! shape )
+            return;
+        shape->setSize( size() );
+        shape->setTransformation( transformation() );
+        shape->setZIndex( zIndex() );
+        shape->setName( name() );
+    }
+};
+
+
 class KoShapeRegistry::Private
 {
 public:
@@ -129,7 +153,13 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
         forEachElement( element, e ) {
             KoShape * shape = createShapeInternal( element, context );
             if ( shape )
+            {
+                FrameShape frame;
+                if( frame.loadOdf( e, context ) )
+                    frame.setAttributes( shape );
+
                 return shape;
+            }
         }
     }
     // Hardwire the group shape into the loading as it should not appear

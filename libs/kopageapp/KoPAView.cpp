@@ -35,6 +35,7 @@
 #include <KoZoomAction.h>
 #include <KoZoomController.h>
 #include <KoTextSelectionHandler.h>
+#include <KoInlineTextObjectManager.h>
 #include <KoSelection.h>
 #include <KoToolDockerFactory.h>
 #include <KoToolDocker.h>
@@ -52,6 +53,7 @@
 #include <klocale.h>
 #include <kicon.h>
 #include <ktoggleaction.h>
+#include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
 
@@ -177,6 +179,11 @@ void KoPAView::initActions()
     m_actionDeletePage->setToolTip( i18n( "Delete a new page after the current one" ) );
     m_actionDeletePage->setWhatsThis( i18n( "Delete a new page after the current one" ) );
     connect( m_actionDeletePage, SIGNAL( triggered() ), this, SLOT( deletePage() ) );
+
+    KActionMenu *actionMenu = new KActionMenu(i18n("Variable"), this);
+    foreach(QAction *action, m_doc->inlineTextObjectManager()->createInsertVariableActions(m_canvas))
+        actionMenu->addAction(action);
+    actionCollection()->addAction("insert_variable", actionMenu);
 }
 
 void KoPAView::viewSnapToGrid()

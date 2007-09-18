@@ -30,6 +30,7 @@
 #include <KoOasisLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
+#include <KoInlineTextObjectManager.h>
 #include <KoShapeStyleWriter.h>
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
@@ -65,6 +66,7 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
     insertPage( new KoPAPage(  masterPage ), 1 );
     insertPage(  new KoPAPage(  masterPage ), 2 );*/
 #endif
+    m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
 }
 
 KoPADocument::~KoPADocument()

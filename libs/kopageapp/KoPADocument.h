@@ -32,6 +32,8 @@ class KoPAPage;
 class KoPAPageBase;
 class KoPAMasterPage;
 
+class KoInlineTextObjectManager;
+
 /// Document class that stores KoPAPage and KoPAMasterPage objects
 class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeControllerBase
 {
@@ -120,6 +122,8 @@ public:
      */
     virtual KoPAMasterPage * newMasterPage();
 
+    /// return the inlineTextObjectManager for this document.
+    KoInlineTextObjectManager *inlineTextObjectManager() const { return m_inlineTextObjectManager; }
 
 protected:
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
@@ -165,6 +169,7 @@ protected:
 private:
     QList<KoPAPageBase*> m_pages;
     QList<KoPAPageBase*> m_masterPages;
+    KoInlineTextObjectManager *m_inlineTextObjectManager;
 };
 
 #endif /* KOPADOCUMENT_H */

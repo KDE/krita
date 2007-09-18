@@ -28,15 +28,19 @@
 #include "compositeops/KoCompositeOpErase.h"
 
 // Observer= 2°, Illuminant= D65
-#define X_r 95.047
-#define Y_r 100.000
-#define Z_r 108.883
+#define X_r (95.047 / 100.0)
+#define Y_r (100.000 / 100.0)
+#define Z_r (108.883 / 100.0)
 
 #define k 0.008856
 #define delta (6.0 / 29.0)
 
 #define UINT16_TO_FLOAT(v) (KoColorSpaceMaths<quint16, typename _CSTraits::channels_type >::scaleToA(v))
+#define L_TO_FLOAT(v) (UINT16_TO_FLOAT(v) * 100.0)
+#define ab_TO_FLOAT(v) ((UINT16_TO_FLOAT(v) - 0.5) * 200.0)
 #define FLOAT_TO_UINT16(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint16>::scaleToA(v))
+#define FLOAT_TO_L(v) FLOAT_TO_UINT16( (v) / 100.0)
+#define FLOAT_TO_ab(v) (FLOAT_TO_UINT16( (v)/200.0 + 0.5))
 
 template <class _CSTraits>
 class KisXyzFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoLAB16Fallback>
@@ -98,9 +102,9 @@ class KisXyzFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoLAB1
                 double fy = f_xyz_to_lab( src->Y / Y_r );
                 double fz = f_xyz_to_lab( src->Z / Z_r );
                 
-                dst->L = FLOAT_TO_UINT16((116 * fy - 16) );
-                dst->a = FLOAT_TO_UINT16((500 * ( fx - fy )) );
-                dst->b = FLOAT_TO_UINT16((200 * ( fy - fz )) );
+                dst->L = FLOAT_TO_L(116 * fy - 16);
+                dst->a = FLOAT_TO_ab(500 * ( fx - fy ));
+                dst->b = FLOAT_TO_ab(200 * ( fy - fz ));
                 dst->alpha = FLOAT_TO_UINT16(src->alpha);
                 
                 nPixels--;
@@ -121,19 +125,20 @@ class KisXyzFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoLAB1
     public:
         virtual void fromLabA16(const quint8 * src8, quint8 * dst8, quint32 nPixels) const
         {
+            kDebug() << "fromLabA16";
             const KoLabU16Traits::Pixel* src = reinterpret_cast<const KoLabU16Traits::Pixel*>(src8);
             typename _CSTraits::Pixel* dst = reinterpret_cast<typename _CSTraits::Pixel*>(dst8);
             while(nPixels > 0)
             {
-                double fy = (UINT16_TO_FLOAT(src->L ) + 16.0) / 116.0;
-                double fx = fy + UINT16_TO_FLOAT(src->a ) / 500.0;
-                double fz = fy - UINT16_TO_FLOAT(src->b ) / 200.0;
+                double fy = ( L_TO_FLOAT(src->L ) + 16.0) / 116.0;
+                double fx = fy + ab_TO_FLOAT(src->a ) / 500.0;
+                double fz = fy - ab_TO_FLOAT(src->b ) / 200.0;
                 
                 dst->X = f_lab_to_xyz(fx, X_r);
                 dst->Y = f_lab_to_xyz(fy, Y_r);
                 dst->Z = f_lab_to_xyz(fz, Z_r);
                 dst->alpha = UINT16_TO_FLOAT(src->alpha);
-                kDebug() << src->L << " " << src->a << " " << src->b << " " << dst->X << " " << dst->Y << " " << dst->Z;
+                
                 nPixels--;
                 dst++;
                 src++;

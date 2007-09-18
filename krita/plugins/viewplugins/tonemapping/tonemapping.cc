@@ -26,11 +26,17 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include "kis_config.h"
-#include "kis_cursor.h"
-#include "kis_global.h"
-#include "kis_types.h"
-#include "kis_view2.h"
+#include <kis_config.h>
+#include <kis_cursor.h>
+#include <kis_global.h>
+#include <kis_layer.h>
+#include <kis_types.h>
+#include <kis_view2.h>
+
+#include "kis_tone_mapping_operators_registry.h"
+#include "kis_tonemapping_dialog.h"
+
+#include "operators/ashikhmin02/kis_ashikhmin02_operator.h"
 
 typedef KGenericFactory<tonemappingPlugin> tonemappingPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatonemapping, tonemappingPluginFactory( "krita" ) )
@@ -50,6 +56,8 @@ tonemappingPlugin::tonemappingPlugin(QObject *parent, const QStringList &)
         m_toneMappingAction  = new KAction(i18n("Tonemapping"), this);
         actionCollection()->addAction("tonemapping", m_toneMappingAction );
         connect(m_toneMappingAction, SIGNAL(triggered()), this, SLOT(slotToneMapping()));
+        
+        KisToneMappingOperatorsRegistry::instance()->add(new KisAshikhmin02Operator);
     }
 }
 
@@ -60,6 +68,10 @@ tonemappingPlugin::~tonemappingPlugin()
 
 void tonemappingPlugin::slotToneMapping()
 {
+    KisToneMappingDialog* dialog = new KisToneMappingDialog(m_view, m_view->activeLayer());
+    dialog->setVisible(true);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    
 }
 
 #include "tonemapping.moc"

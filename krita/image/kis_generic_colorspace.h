@@ -23,13 +23,13 @@
 
 #include <qimage.h>
 
-
 /**
- * This is not a real colorspace, but a fake colorspace you might want
- * to use to be able to use kispaintdevice for big buffer of memory.
- * So, if you want to store an array of 10000x10000 floats and you
- * want to take advantage of Krita's memory management, you would use
- * this colorspace.
+ * KisGenericColorspace is a colorspace you use if you want to store some values
+ * in a KisPaintDevice which are not colors. For instance the results of the 
+ * computation of a wavelets.
+ * 
+ * This allow to create huge arrays of memory even on a computer with limited
+ * memory, because it will benefit from Krita's memory management.
  */
 template<typename _type, int _nbchannels>
 class KisGenericColorspace : public KoColorSpace {

@@ -108,8 +108,6 @@ class KisGenericColorspace : public KoColorSpace {
 
         virtual quint32 colorSpaceType() { return 0; }
 
-        virtual icColorSpaceSignature colorSpaceSignature() { return icMaxEnumData; }
-
         virtual bool willDegrade(ColorSpaceIndependence /*independence*/) { return true; }
     
         virtual bool hasHighDynamicRange() const { return false; }

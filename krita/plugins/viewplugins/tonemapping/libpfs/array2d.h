@@ -142,7 +142,7 @@ namespace pfs
 
     };
 
-
+#if 0
 /**
  * @brief Two dimensional array of floats
  *
@@ -224,7 +224,7 @@ namespace pfs
       for( int i = 0; i < elements; i++ )
         (*array)(i) = value;
     }
-
+#endif
 /**
  * Perform element-by-element multiplication: z = x * y. z can be the same as x or y.
  *
@@ -245,5 +245,7 @@ namespace pfs
     }
 
 }
+
+#include "kis_array2d.h"
 
 #endif

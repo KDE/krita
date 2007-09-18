@@ -38,7 +38,7 @@ void DateVariable::setProperties(const KoProperties *props) {
     m_definition = props->stringProperty("definition");
     if (!props->stringProperty("time").isEmpty())
         m_time = QDateTime::fromString(props->stringProperty("time"), Qt::ISODate);
-    if (props->boolProperty("fixed"))
+    if (props->intProperty("id") == Fixed)
         m_type = Fixed;
     else
         m_type = AutoUpdate;

@@ -32,7 +32,7 @@
  * Base class for registry objects.
  *
  * Items are mapped by QString as a unique Id.
- * 
+ *
  * Exemple of use:
  * @code
  * class KoMyClassRegistry : public KoGenericRegistry\<MyClass*\> {
@@ -88,7 +88,11 @@ public:
     }
 
     /**
-     * Retrieve the object from the registry based on the unique identifier string
+     * Retrieve the object from the registry based on the unique
+     * identifier string.
+     *
+     * XXX: If it's deprecated, what replaces it?
+     *
      * @param id the id
      */
     KDE_DEPRECATED T get(const QString& id) const
@@ -97,7 +101,8 @@ public:
     }
 
     /**
-     * @return if there is an object stored in the registry identified by the id.
+     * @return if there is an object stored in the registry identified
+     * by the id.
      * @param id the unique identifier string
      */
     bool contains(const QString &id) const {

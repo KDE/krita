@@ -570,7 +570,7 @@ bool KoFilterManager::filterAvailable( KoFilterEntry::Ptr entry )
         }
 
         // This code is "borrowed" from klibloader ;)
-        QByteArray symname = "check_" + library->name().toLatin1();
+        QByteArray symname = "check_" + QString( library->name() ).toLatin1();
 	KLibrary::void_function_ptr sym = library->resolveFunction( symname );
         if ( !sym )
         {

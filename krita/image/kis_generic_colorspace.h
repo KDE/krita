@@ -25,8 +25,11 @@
 
 
 /**
- * This is not a real colorspace, but a fake colorspace you might want to use
- * to be able to use kispaintdevice for big buffer of memory.
+ * This is not a real colorspace, but a fake colorspace you might want
+ * to use to be able to use kispaintdevice for big buffer of memory.
+ * So, if you want to store an array of 10000x10000 floats and you
+ * want to take advantage of Krita's memory management, you would use
+ * this colorspace.
  */
 template<typename _type, int _nbchannels>
 class KisGenericColorspace : public KoColorSpace {
@@ -42,14 +45,14 @@ class KisGenericColorspace : public KoColorSpace {
                 {
                     totals[ i ] = 0;
                 }
-    
+
                 const _type* const* colorsT = reinterpret_cast<const _type* const*>( colors );
                 _type* dstT = reinterpret_cast<_type*>( dst );
-                
+
                 while (nColors--)
                 {
                     Q_INT32 weight = *kernelValues;
-    
+
                     if (weight != 0) {
                         for(uint i = 0; i < _nbchannels; i++)
                         {
@@ -87,7 +90,7 @@ class KisGenericColorspace : public KoColorSpace {
         virtual quint32 colorChannelCount() const { return _nbchannels; };
 
         virtual quint32 substanceChannelCount() const { return 0; };
-        
+
         virtual quint32 pixelSize() const { return _nbchannels * sizeof(_type); }
 
         virtual KoColorProfile * profile() const { return 0; }
@@ -109,7 +112,7 @@ class KisGenericColorspace : public KoColorSpace {
         virtual quint32 colorSpaceType() { return 0; }
 
         virtual bool willDegrade(ColorSpaceIndependence /*independence*/) { return true; }
-    
+
         virtual bool hasHighDynamicRange() const { return false; }
 
         virtual KoColorProfile * getProfile() const { return 0; }
@@ -119,7 +122,7 @@ class KisGenericColorspace : public KoColorSpace {
         virtual void fromQColor(const QColor& /*c*/, quint8 /*opacity*/, quint8 */*dst*/, KoColorProfile * /*profile = 0*/) const { }
 
         virtual void toQColor(const quint8 */*src*/, QColor */*c*/, KoColorProfile * /*profile = 0*/) const { }
-        
+
         virtual void toQColor(const quint8 */*src*/, QColor */*c*/, quint8 */*opacity*/, KoColorProfile * /*profile = 0*/) const { }
 
         virtual void singleChannelPixel(quint8 *, const quint8 *, quint32 ) const {}
@@ -142,7 +145,7 @@ class KisGenericColorspace : public KoColorSpace {
         virtual quint8 alpha(const quint8 * /*pixel*/) const { return 0; }
 
         virtual void setAlpha(quint8 * /*pixels*/, quint8 /*alpha*/, qint32 /*nPixels*/) const { }
-        
+
         virtual void multiplyAlpha(quint8 * /*pixels*/, quint8 /*alpha*/, qint32 /*nPixels*/) const { }
 
         virtual void applyAlphaU8Mask(quint8 * /*pixels*/, const quint8 * /*alpha*/, qint32 /*nPixels*/) const { }
@@ -163,7 +166,7 @@ class KisGenericColorspace : public KoColorSpace {
 
             _type** colorsT = reinterpret_cast<_type**>( colors );
             _type* dstT = reinterpret_cast<_type*>( dst );
-            
+
             while (nColors--)
             {
                 qint32 weight = *kernelValues;
@@ -186,7 +189,7 @@ class KisGenericColorspace : public KoColorSpace {
         {
             return 0;
         }
-        
+
         virtual KoColorTransformation *createDesaturateAdjustment() const
         {
             return 0;
@@ -208,9 +211,9 @@ class KisGenericColorspace : public KoColorSpace {
         }
 
         virtual quint8 intensity8(const quint8 * /*src*/) const { return 0; }
-    
+
         virtual KoID mathToolboxId() const { return KoID("",""); }
-    
+
         virtual void bitBlt(quint8 */*dst*/,
                             qint32 /*dststride*/,
                             KoColorSpace * /*srcSpace*/,

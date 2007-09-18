@@ -1,3 +1,4 @@
+    puts Kross::Object
 # Ruby invert script.
 #
 # The ruby invert script inverts all pixels at the activate layer in

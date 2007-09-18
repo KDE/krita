@@ -5,7 +5,7 @@ include_directories(${KOKROSS_INCLUDES})
 
 ########### next target ###############
 
-set(kritascripting_PART_SRCS scriptingpart.cpp kis_script_filter.cc )
+set(kritascripting_PART_SRCS scriptingpart.cpp kis_script_filter.cc kis_script_dock.cc )
 kde4_add_plugin(kritascripting ${kritascripting_PART_SRCS})
 target_link_libraries(kritascripting kritaui ${KDE4_KROSSUI_LIBS} kokross krossmodulekrita)
 install(TARGETS kritascripting DESTINATION ${PLUGIN_INSTALL_DIR})

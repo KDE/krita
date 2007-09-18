@@ -226,4 +226,9 @@ QObject* Module::createImage(int width, int height, const QString& colorspace, c
     return new Image(this, KisImageSP(new KisImage(0, width, height, cs, name)));
 }
 
+QWidget* Module::view()
+{
+    return d->view;
+}
+
 #include "krs_module.moc"

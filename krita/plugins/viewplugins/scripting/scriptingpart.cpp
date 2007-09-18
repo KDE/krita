@@ -57,6 +57,7 @@
 #include "kis_layer_manager.h"
 #include "kis_filter_registry.h"
 
+#include "kis_script_dock.h"
 #include "kis_script_filter.h"
 
 typedef KGenericFactory<ScriptingPart> KritaScriptingFactory;
@@ -65,20 +66,23 @@ K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
 class ScriptingPart::Private
 {
     public:
+        KisView2* view;
 };
 
 ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
     : KoScriptingPart(new Scripting::Module( dynamic_cast<KisView2*>(parent) ), list)
     , d(new Private())
 {
+    d->view = dynamic_cast<KisView2*>(parent);
     kDebug(41011) <<"ScriptingPart Ctor";
     setComponentData(ScriptingPart::componentData());
     setXMLFile(KStandardDirs::locate("data","kritaplugins/scripting.rc"), true);
-
+#if 1
     // Add filters
     Kross::ActionCollection* actioncollection = Kross::Manager::self().actionCollection();
-    if( actioncollection && (actioncollection = actioncollection->collection("filters")) ) {
-        foreach(Kross::Action* action, actioncollection->actions()) {
+    Kross::ActionCollection* actioncollection2;
+    if( actioncollection && (actioncollection2 = actioncollection->collection("filters")) ) {
+        foreach(Kross::Action* action, actioncollection2->actions()) {
             Q_ASSERT(action);
             KisScriptFilter* sf = new KisScriptFilter(action);
             KisFilterRegistry::instance()->add( KisFilterSP(sf) );
@@ -87,7 +91,17 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
            kDebug(41011) <<"Adding scripting filters with id=" << sf->id();
         }
     }
-
+    if( actioncollection and (actioncollection2 = actioncollection->collection("dockers")) ) {
+        foreach(Kross::Action* action, actioncollection2->actions()) {
+            Q_ASSERT(action);
+            KisScriptDockFactory ksdf(action);
+            d->view->createDockWidget( &ksdf );
+//             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
+//             if( ! factory ) continue;
+           kDebug(41011) <<"Adding scripting dockers with id=" /*<< sf->id()*/;
+        }
+    }
+#endif
 }
 
 ScriptingPart::~ScriptingPart()

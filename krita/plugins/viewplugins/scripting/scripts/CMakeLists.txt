@@ -1,4 +1,5 @@
 add_subdirectory( filters )
+add_subdirectory( dockers )
 
 install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/krita/scripts)
 

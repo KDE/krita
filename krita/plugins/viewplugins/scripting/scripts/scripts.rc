@@ -13,7 +13,7 @@
     comment="Draw a sky"
     interpreter="ruby"
     file="extensions/sky.rb" />
-
+  
 	<script
 		name="pilexport"
 		text="Python Imaging Library Export"
@@ -107,6 +107,16 @@
             <property name="categoryId">other_filters</property>
             <property name="categoryName">Other</property>
             <property name="supportsPainting">true</property>
+        </script>
+    </collection>
+    <collection name="dockers" text="Dockers" comment="Dockers for Krita" enabled="false">
+        <script
+            name="Palette Docker"
+            text="Palette Docker"
+            comment="Show a palette docker"
+            interpreter="ruby"
+            file="dockers/palettedocker.rb">
+            <property name="defaultDockPosition">Qt::DockBottom</property>
         </script>
     </collection>
 </KrossScripting>

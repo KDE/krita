@@ -240,7 +240,10 @@ namespace Scripting {
         private:
             QString m_packagePath;
 #endif
-
+            /**
+             * @return the view associated with this plugin
+             */
+            QWidget* view();
         private:
             /// \internal d-pointer class.
             class Private;

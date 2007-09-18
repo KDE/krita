@@ -72,7 +72,7 @@ QVariant KoGenericRegistryModel<T>::data(const QModelIndex &index, int role) con
     }
     if(role == Qt::DisplayRole or role == Qt::EditRole)
     {
-        return QVariant(m_registry->keys()[index.row()]);
+        return QVariant( get(index)->name() );
     }
     return QVariant();
 }

@@ -74,6 +74,7 @@ QVariant KoGenericRegistryModel<T>::data(const QModelIndex &index, int role) con
     {
         return QVariant(m_registry->keys()[index.row()]);
     }
+    return QVariant();
 }
 
 template<typename T>

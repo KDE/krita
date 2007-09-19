@@ -72,5 +72,4 @@ void KisAshikhmin02Operator::toneMap(KisPaintDeviceSP, KisPropertiesConfiguratio
     double lC = config->getDouble("LocalContrastThreshold", 0.5);
     int eqn = config->getInt("Equation", 2);
     if(eqn != 2 or eqn !=4) eqn = 2;
-    
 }

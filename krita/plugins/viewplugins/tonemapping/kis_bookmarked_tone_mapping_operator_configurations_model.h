@@ -15,23 +15,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_TONEMAPPING_DIALOG_H_
-#define _KIS_TONEMAPPING_DIALOG_H_
+#ifndef _KIS_BOOKMARKED_TONE_MAPPING_OPERATOR_CONFIGURATIONS_MODEL_H_
+#define _KIS_BOOKMARKED_TONE_MAPPING_OPERATOR_CONFIGURATIONS_MODEL_H_
 
-#include <QDialog>
+#include <kis_bookmarked_configurations_model.h>
 #include <kis_types.h>
 
-class Ui_WdgToneMappingDialog;
+class KisToneMappingOperator;
+class KisPropertiesConfiguration;
 
-class KisToneMappingDialog : public QDialog {
-    Q_OBJECT
+class  KisBookmarkedToneMappingOperatorConfigurationsModel : public KisBookmarkedConfigurationsModel {
     public:
-        KisToneMappingDialog(QWidget* parent, KisLayerSP layer);
-    protected slots:
-        void slotBookmarkedToneMappingConfigurationSelected(int );
-        void slotOperatorSelected(int );
-        void apply();
-        void editConfigurations();
+        KisBookmarkedToneMappingOperatorConfigurationsModel(KisPaintDeviceSP thumb, KisToneMappingOperator* op);
+        ~KisBookmarkedToneMappingOperatorConfigurationsModel();
+        KisPropertiesConfiguration* configuration(const QModelIndex &index) const;
     private:
         struct Private;
         Private* const d;

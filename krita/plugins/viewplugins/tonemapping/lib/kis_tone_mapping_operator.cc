@@ -19,7 +19,11 @@
 
 #include <QString>
 
+#include <kis_bookmarked_configuration_manager.h>
+#include <kis_properties_configuration.h>
+
 struct KisToneMappingOperator::Private {
+    KisBookmarkedConfigurationManager* bookmarkManager;
     QString id;
     QString name;
 };
@@ -28,10 +32,12 @@ KisToneMappingOperator::KisToneMappingOperator(QString _id, QString _name) : d(n
 {
     d->id = _id;
     d->name = _name;
+    d->bookmarkManager = (new KisBookmarkedConfigurationManager(configEntryGroup(), new KisPropertiesConfigurationFactory() ));
 }
 
 KisToneMappingOperator::~KisToneMappingOperator()
 {
+    delete d->bookmarkManager;
     delete d;
 }
 
@@ -48,4 +54,14 @@ QString KisToneMappingOperator::name() const
 KisToneMappingOperatorConfigurationWidget* KisToneMappingOperator::createConfigurationWidget(QWidget*) const
 {
     return 0;
+}
+
+QString KisToneMappingOperator::configEntryGroup()
+{
+    return id() + "_tone_mapping_operator_bookmarks";
+}
+
+KisBookmarkedConfigurationManager* KisToneMappingOperator::bookmarkManager()
+{
+    return d->bookmarkManager;
 }

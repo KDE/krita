@@ -18,6 +18,7 @@
 #ifndef _KIS_TONE_MAPPING_OPERATOR_H_
 #define _KIS_TONE_MAPPING_OPERATOR_H_
 
+class KisBookmarkedConfigurationManager;
 class KisPropertiesConfiguration;
 class KisToneMappingOperatorConfigurationWidget;
 class QString;
@@ -33,6 +34,12 @@ class KisToneMappingOperator {
         QString name() const;
         virtual KisToneMappingOperatorConfigurationWidget* createConfigurationWidget(QWidget*) const;
         virtual void toneMap(KisPaintDeviceSP, KisPropertiesConfiguration* config) const = 0;
+        /**
+         * @return the bookmark manager for this operator
+         */
+        KisBookmarkedConfigurationManager* bookmarkManager();
+    private:
+        QString configEntryGroup();
     private:
         struct Private;
         Private* const d;

@@ -3,6 +3,7 @@ include_directories(lib/ libpfs/)
 set(kritatonemapping_PART_SRCS
     tonemapping.cc
     kis_tonemapping_dialog.cc
+    kis_bookmarked_tone_mapping_operator_configurations_model.cc
 # Krita Tone Mapping Library
     lib/kis_tone_mapping_operator.cc
     lib/kis_tone_mapping_operators_registry.cc

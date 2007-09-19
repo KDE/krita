@@ -19,8 +19,15 @@
 
 #include <KoGenericRegistryModel.h>
 
+// Krita/Image
 #include <kis_layer.h>
+#include <kis_properties_configuration.h>
 
+// Krita/UI
+#include <kis_bookmarked_configurations_editor.h>
+
+// Krita/Tone-Mapping
+#include "kis_bookmarked_tone_mapping_operator_configurations_model.h"
 #include "kis_tone_mapping_operator.h"
 #include "kis_tone_mapping_operator_configuration_widget.h"
 #include "kis_tone_mapping_operators_registry.h"
@@ -30,12 +37,14 @@
 struct KisToneMappingOperatorConfigurationWidget;
 
 struct KisToneMappingDialog::Private {
-        KisLayerSP layer;
-        Ui_WdgToneMappingDialog uiToneMappingDialog;
-        KoGenericRegistryModel<KisToneMappingOperator*>* operatorsModel;
-        KisToneMappingOperatorConfigurationWidget* currentConfigurationWidget;
-        QWidget* currentCentralWidget;
-        QGridLayout *widgetLayout;
+    KisLayerSP layer;
+    KisPaintDeviceSP thumb;
+    Ui_WdgToneMappingDialog uiToneMappingDialog;
+    KoGenericRegistryModel<KisToneMappingOperator*>* operatorsModel;
+    KisToneMappingOperatorConfigurationWidget* currentConfigurationWidget;
+    QWidget* currentCentralWidget;
+    QGridLayout *widgetLayout;
+    KisBookmarkedToneMappingOperatorConfigurationsModel* currentBookmarkedToneMappingConfigurationsModel;
 };
 
 KisToneMappingDialog::KisToneMappingDialog(QWidget* parent, KisLayerSP _layer) : QDialog(parent), d(new Private)
@@ -43,12 +52,18 @@ KisToneMappingDialog::KisToneMappingDialog(QWidget* parent, KisLayerSP _layer) :
     d->layer = _layer;
     d->currentConfigurationWidget = 0;
     d->currentCentralWidget = 0;
+    d->currentBookmarkedToneMappingConfigurationsModel = 0;
     d->uiToneMappingDialog.setupUi(this);
     d->widgetLayout = new QGridLayout( d->uiToneMappingDialog.centralWidgetHolder );
+    d->thumb = d->layer->paintDevice()->createThumbnailDevice(100, 100);
     connect(d->uiToneMappingDialog.comboBoxOperators, SIGNAL(activated ( int )), SLOT(slotOperatorSelected(int )) );
     connect(d->uiToneMappingDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiToneMappingDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiToneMappingDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
+    connect(d->uiToneMappingDialog.comboBoxPresets, SIGNAL(activated ( int )), SLOT(slotBookmarkedToneMappingConfigurationSelected(int )) );
+    connect(d->uiToneMappingDialog.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
+
+    
     d->operatorsModel = new KoGenericRegistryModel<KisToneMappingOperator*>(KisToneMappingOperatorsRegistry::instance());
     d->uiToneMappingDialog.comboBoxOperators->setModel(d->operatorsModel);
     slotOperatorSelected(0);
@@ -77,7 +92,31 @@ void KisToneMappingDialog::slotOperatorSelected(int index)
             d->currentCentralWidget = new QLabel( i18n("No configuration option."), d->uiToneMappingDialog.centralWidgetHolder );
         }
         d->widgetLayout->addWidget( d->currentCentralWidget, 0 , 0);
+        
+    // Change the list of presets
+        delete d->currentBookmarkedToneMappingConfigurationsModel;
+        d->currentBookmarkedToneMappingConfigurationsModel = new KisBookmarkedToneMappingOperatorConfigurationsModel(d->thumb, tmop );
+        d->uiToneMappingDialog.comboBoxPresets->setModel(  d->currentBookmarkedToneMappingConfigurationsModel );
+
     }
+}
+
+void KisToneMappingDialog::slotBookmarkedToneMappingConfigurationSelected(int index)
+{
+    if(d->currentConfigurationWidget)
+    {
+        QModelIndex modelIndex = d->currentBookmarkedToneMappingConfigurationsModel->index(index,0);
+        KisPropertiesConfiguration* config  = d->currentBookmarkedToneMappingConfigurationsModel->configuration( modelIndex );
+        d->currentConfigurationWidget->setConfiguration( config );
+    }
+}
+
+void KisToneMappingDialog::editConfigurations()
+{
+    KisSerializableConfiguration* config =
+            d->currentConfigurationWidget ? d->currentConfigurationWidget->configuration() : 0;
+    KisBookmarkedConfigurationsEditor editor(this, d->currentBookmarkedToneMappingConfigurationsModel, config);
+    editor.exec();
 }
 
 #include "kis_tonemapping_dialog.moc"

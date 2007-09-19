@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=XYZ (float 16-bit and 32-bit HDR) Color Model
+Name[sv]=XYZ-färgmodell (16-bitars flyttal och 32-bitars HDR)
 Comment=Color model for 16-bit and 32-bit per channel in floating point for High-Dynamic Range XYZ images
+Comment[sv]=Färgmodell för 16-bitars och 32-bitars flyttal per kanal XYZ-bilder med stort dynamiskt omfång
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kritaxyzfloathdrplugin

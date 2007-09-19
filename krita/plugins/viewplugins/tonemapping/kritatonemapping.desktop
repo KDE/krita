@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=tonemapping
+Name[sv]=Tonavbildning
 Comment=tonemapping
+Comment[sv]=Tonavbildning
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritatonemapping

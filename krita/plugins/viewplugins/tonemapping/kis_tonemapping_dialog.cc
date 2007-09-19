@@ -42,6 +42,7 @@ struct KisToneMappingDialog::Private {
     Ui_WdgToneMappingDialog uiToneMappingDialog;
     KoGenericRegistryModel<KisToneMappingOperator*>* operatorsModel;
     KisToneMappingOperatorConfigurationWidget* currentConfigurationWidget;
+    KisToneMappingOperator* currentOperator;
     QWidget* currentCentralWidget;
     QGridLayout *widgetLayout;
     KisBookmarkedToneMappingOperatorConfigurationsModel* currentBookmarkedToneMappingConfigurationsModel;
@@ -52,6 +53,7 @@ KisToneMappingDialog::KisToneMappingDialog(QWidget* parent, KisLayerSP _layer) :
     d->layer = _layer;
     d->currentConfigurationWidget = 0;
     d->currentCentralWidget = 0;
+    d->currentOperator = 0;
     d->currentBookmarkedToneMappingConfigurationsModel = 0;
     d->uiToneMappingDialog.setupUi(this);
     d->widgetLayout = new QGridLayout( d->uiToneMappingDialog.centralWidgetHolder );
@@ -71,7 +73,9 @@ KisToneMappingDialog::KisToneMappingDialog(QWidget* parent, KisLayerSP _layer) :
 
 void KisToneMappingDialog::apply()
 {
-    
+    KisPropertiesConfiguration* config = (d->currentConfigurationWidget) ? d->currentConfigurationWidget->configuration() : new KisPropertiesConfiguration;
+    d->currentOperator->toneMap(d->layer->paintDevice(), config);
+    delete config;
 }
 
 void KisToneMappingDialog::slotOperatorSelected(int index)
@@ -97,7 +101,7 @@ void KisToneMappingDialog::slotOperatorSelected(int index)
         delete d->currentBookmarkedToneMappingConfigurationsModel;
         d->currentBookmarkedToneMappingConfigurationsModel = new KisBookmarkedToneMappingOperatorConfigurationsModel(d->thumb, tmop );
         d->uiToneMappingDialog.comboBoxPresets->setModel(  d->currentBookmarkedToneMappingConfigurationsModel );
-
+        d->currentOperator = tmop;
     }
 }
 

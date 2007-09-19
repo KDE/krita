@@ -60,6 +60,7 @@ void Array2DImpl::init( int sx, int sy, int cols, int rows, int index, KisPaintD
 
 Array2DImpl::~Array2DImpl()
 {
+    delete d->randomAccessor;
     delete d->colorSpace;
     delete d;
 }

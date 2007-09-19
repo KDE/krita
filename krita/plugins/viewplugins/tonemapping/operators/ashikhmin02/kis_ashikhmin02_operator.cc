@@ -90,14 +90,16 @@ void KisAshikhmin02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfi
     double avLum = 0.0;
     double maxLum = 0.0f;
     double minLum = 0.0f;
-    KisRectIterator itR = device->createRectIterator(r.x(), r.y(), r.width(), r.height());
-    while(not itR.isDone())
     {
-        KoXyzTraits<float>::Pixel* data = reinterpret_cast< KoXyzTraits<float>::Pixel* >(itR.rawData());
-        avLum += log( data->Y + 1e-4 );
-        maxLum = ( data->Y > maxLum ) ? data->Y : maxLum ;
-        minLum = ( data->Y < minLum ) ? data->Y : minLum ;
-        ++itR;
+        KisRectIterator itR = device->createRectIterator(r.x(), r.y(), r.width(), r.height());
+        while(not itR.isDone())
+        {
+            KoXyzTraits<float>::Pixel* data = reinterpret_cast< KoXyzTraits<float>::Pixel* >(itR.rawData());
+            avLum += log( data->Y + 1e-4 );
+            maxLum = ( data->Y > maxLum ) ? data->Y : maxLum ;
+            minLum = ( data->Y < minLum ) ? data->Y : minLum ;
+            ++itR;
+        }
     }
     avLum =exp( avLum/ (r.width() * r.height()));
     
@@ -106,22 +108,24 @@ void KisAshikhmin02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfi
     pfs::Array2DImpl L (r.width(),r.height());
     tmo_ashikhmin02(&Y, &L, maxLum, minLum, avLum, simple, lC, eqn);
     
-    KisHLineIterator itSrc = device->createHLineIterator( r.x(), r.y(), r.width());
-    KisHLineIterator itL = L.device()->createHLineIterator( 0,0, r.width());
-    for(int y = 0; y < r.height(); y++)
     {
-        while(not itSrc.isDone())
+        KisHLineIterator itSrc = device->createHLineIterator( r.x(), r.y(), r.width());
+        KisHLineIterator itL = L.device()->createHLineIterator( 0,0, r.width());
+        for(int y = 0; y < r.height(); y++)
         {
-            KoXyzTraits<float>::Pixel* dataSrc = reinterpret_cast< KoXyzTraits<float>::Pixel* >(itSrc.rawData());
-            float* dataL = reinterpret_cast< float* >(itL.rawData());
-            float scale = *dataL / dataSrc->Y;
-            dataSrc->Y = *dataL;
-            dataSrc->X *= scale;
-            dataSrc->Z *= scale;
-            ++itSrc;
-            ++itL;
+            while(not itSrc.isDone())
+            {
+                KoXyzTraits<float>::Pixel* dataSrc = reinterpret_cast< KoXyzTraits<float>::Pixel* >(itSrc.rawData());
+                float* dataL = reinterpret_cast< float* >(itL.rawData());
+                float scale = *dataL / dataSrc->Y;
+                dataSrc->Y = *dataL;
+                dataSrc->X *= scale;
+                dataSrc->Z *= scale;
+                ++itSrc;
+                ++itL;
+            }
+            itSrc.nextRow();
+            itL.nextRow();
         }
-        itSrc.nextRow();
-        itL.nextRow();
     }
 }

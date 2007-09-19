@@ -181,3 +181,30 @@ QMap<QString, QVariant> KisPropertiesConfiguration::getProperties() const
 {
     return d->properties;
 }
+
+// --- factory ---
+
+struct KisPropertiesConfigurationFactory::Private
+{
+};
+
+KisPropertiesConfigurationFactory::KisPropertiesConfigurationFactory() : d(new Private)
+{
+}
+
+KisPropertiesConfigurationFactory::~KisPropertiesConfigurationFactory()
+{
+    delete d;
+}
+
+KisSerializableConfiguration* KisPropertiesConfigurationFactory::createDefault()
+{
+    return new KisPropertiesConfiguration();
+}
+
+KisSerializableConfiguration* KisPropertiesConfigurationFactory::create(const QDomElement& e)
+{
+    KisPropertiesConfiguration* pc = new KisPropertiesConfiguration();
+    pc->fromXML( e );
+    return pc;
+}

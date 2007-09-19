@@ -112,4 +112,15 @@ private:
     Private* const d;
 };
 
+class KRITAIMAGE_EXPORT KisPropertiesConfigurationFactory : public KisSerializableConfigurationFactory {
+    public:
+        KisPropertiesConfigurationFactory();
+        virtual ~KisPropertiesConfigurationFactory();
+        virtual KisSerializableConfiguration* createDefault();
+        virtual KisSerializableConfiguration* create(const QDomElement& e);
+    private:
+        struct Private;
+        Private* const d;
+};
+
 #endif // _KIS_FILTER_CONFIGURATION_H_

@@ -19,6 +19,8 @@
 
 #include "kis_filter_dialog.h"
 
+#include <QTreeView>
+
 // From krita/image
 #include <kis_filter.h>
 #include <kis_filter_config_widget.h>
@@ -28,18 +30,20 @@
 // From krita/ui
 #include "kis_bookmarked_configurations_editor.h"
 #include "kis_bookmarked_filter_configurations_model.h"
+#include "kis_filters_model.h"
 
 #include "ui_wdgfilterdialog.h"
 
 struct KisFilterDialog::Private {
     Private() : currentCentralWidget(0), currentFilterConfigurationWidget(0),
-            currentFilter(0), layer(0), mask(0), currentBookmarkedFilterConfigurationsModel(0)
+            currentFilter(0), layer(0), mask(0), currentBookmarkedFilterConfigurationsModel(0), filtersModel(new KisFiltersModel)
     {
     }
     ~Private()
     {
         delete currentCentralWidget;
         delete widgetLayout;
+        delete filtersModel;
     }
     QWidget* currentCentralWidget;
     KisFilterConfigWidget* currentFilterConfigurationWidget;
@@ -50,6 +54,7 @@ struct KisFilterDialog::Private {
     KisFilterMaskSP mask;
     QGridLayout *widgetLayout;
     KisBookmarkedFilterConfigurationsModel* currentBookmarkedFilterConfigurationsModel;
+    KisFiltersModel* filtersModel;
 };
 
 KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
@@ -63,6 +68,8 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     d->thumb = layer->paintDevice()->createThumbnailDevice(100, 100);
     d->mask = new KisFilterMask();
     d->layer->setPreviewMask( d->mask );
+    d->uiFilterDialog.comboBoxFilters->setModel(d->filtersModel);
+    d->uiFilterDialog.comboBoxFilters->setView(new QTreeView);
     connect(d->uiFilterDialog.comboBoxPresets, SIGNAL(activated ( int )), SLOT(slotBookmarkedFilterConfigurationSelected(int )) );
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));

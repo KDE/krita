@@ -47,6 +47,7 @@ set(kritaui_LIB_SRCS
     kis_filter_manager.cc
     kis_filter_dialog.cc
     kis_filter_handler.cc
+    kis_filters_model.cc
     kis_gradient_chooser.cc
     kis_gradient_slider_widget.cc
     kis_grid_drawer.cpp

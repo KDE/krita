@@ -25,7 +25,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBoxFilter" >
+        <widget class="QComboBox" name="comboBoxFilters" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
            <horstretch>0</horstretch>

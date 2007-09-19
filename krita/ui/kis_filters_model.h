@@ -1,5 +1,7 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ * This file is part of Krita
+ *
+ * Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,34 +19,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_FILTER_DIALOG_H_
-#define _KIS_FILTER_DIALOG_H_
+#ifndef _KIS_FILTERS_MODEL_H_
+#define _KIS_FILTERS_MODEL_H_
 
-#include <QDialog>
+#include <QAbstractItemModel>
 
-#include <kis_types.h>
-
-class KisFilter;
-class KisFilterConfiguration;
-class QModelIndex;
-
-class KisFilterDialog : public QDialog {
-    Q_OBJECT
-    struct Private;
+class KisFiltersModel : public QAbstractItemModel {
     public:
-        KisFilterDialog(QWidget* parent, KisLayerSP device);
-        ~KisFilterDialog();
-        void setFilter(KisFilterSP f);
-    public slots:
-        void updatePreview();
-    protected slots:
-        void slotBookmarkedFilterConfigurationSelected(int );
-        void apply();
-        void editConfigurations();
-    signals:
-        void sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*);
+        KisFiltersModel();
+        virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+        virtual QModelIndex parent(const QModelIndex &child) const;
+        virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+        virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+        virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     private:
-        KisFilterDialog::Private* const d;
+        struct Private;
+        Private* const d;
 };
 
 #endif

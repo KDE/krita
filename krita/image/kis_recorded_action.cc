@@ -37,6 +37,11 @@ KisRecordedAction::KisRecordedAction(QString name, QString id) : d(new Private)
     d->id = id;
 }
 
+KisRecordedAction::KisRecordedAction(const KisRecordedAction& rhs) : d(new Private(*rhs.d))
+{
+    
+}
+
 KisRecordedAction::~KisRecordedAction()
 {
     delete d;

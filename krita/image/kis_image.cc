@@ -314,7 +314,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
     m_d->width = width;
     m_d->height = height;
 
-    m_d->recorder = new KisActionRecorder;
+    m_d->recorder = new KisActionRecorder(this);
 }
 
 bool KisImage::locked() const

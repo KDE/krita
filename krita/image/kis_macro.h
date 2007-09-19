@@ -16,35 +16,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_RECORDED_FILTER_ACTION_H_
-#define _KIS_RECORDED_FILTER_ACTION_H_
+#ifndef _KIS_MACRO_H_
+#define _KIS_MACRO_H_
 
-#include "kis_recorded_action.h"
-
+#include <QList>
+#include <QObject>
 #include <krita_export.h>
 
-class QString;
-class KisFilterConfiguration;
-class QRect;
+#include "kis_serializable_configuration.h"
+#include "kis_types.h"
 
-class KRITAIMAGE_EXPORT KisRecordedFilterAction : public KisRecordedAction {
+class KisRecordedAction;
+
+class KRITAIMAGE_EXPORT KisMacro : public QObject, public KisSerializableConfiguration {
+    Q_OBJECT
     public:
-        KisRecordedFilterAction(QString name, KisLayerSP layer, const KisFilter* filter, KisFilterConfiguration*);
-        KisRecordedFilterAction(const KisRecordedFilterAction&);
-        virtual ~KisRecordedFilterAction();
-        virtual void play();
-        virtual void toXML(QDomDocument& doc, QDomElement& elt);
-        virtual KisRecordedAction* clone() const;
+        KisMacro(KisImageSP _image);
+        KisMacro(KisImageSP _image, const QList<KisRecordedAction*>& _actions);
+    public:
+        void appendActions(const QList<KisRecordedAction*>& actions);
+    public:
+        void play();
+    public: // serialization functions
+        virtual void fromXML(const QDomElement&);
+        virtual void toXML(QDomDocument&, QDomElement&) const;
+    public slots:
+        virtual void addAction(const KisRecordedAction& action);
     private:
         struct Private;
         Private* const d;
-};
-
-class KisRecordedFilterActionFactory : public KisRecordedActionFactory {
-    public:
-        KisRecordedFilterActionFactory();
-        virtual ~KisRecordedFilterActionFactory();
-        virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt);
 };
 
 #endif

@@ -31,15 +31,18 @@ class KisBrush;
 class KisRecordedPaintAction : public KisRecordedAction {
     public:
         KisRecordedPaintAction(QString name, QString id);
+        KisRecordedPaintAction(const KisRecordedPaintAction&);
 };
 
 class KRITAUI_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAction {
     public:
         KisRecordedPolyLinePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId);
+        KisRecordedPolyLinePaintAction(const KisRecordedPolyLinePaintAction&);
         ~KisRecordedPolyLinePaintAction();
         void addPoint(const KisPaintInformation& info);
         virtual void play();
         virtual void toXML(QDomDocument& doc, QDomElement& elt);
+        virtual KisRecordedAction* clone() const;
     private:
         struct Private;
         Private* const d;

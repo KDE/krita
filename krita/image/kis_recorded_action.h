@@ -29,8 +29,10 @@ class QString;
 class KRITAIMAGE_EXPORT KisRecordedAction {
     public:
         KisRecordedAction(QString name, QString id);
+        KisRecordedAction(const KisRecordedAction&);
         virtual ~KisRecordedAction();
         virtual void play() = 0;
+        virtual KisRecordedAction* clone() const = 0;
         virtual void toXML(QDomDocument& doc, QDomElement& elt);
     public:
         QString id();

@@ -221,7 +221,7 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         d->lastConfiguration = config;
         d->manager->setLastFilterHandler(this);
         
-        layer->image()->actionRecorder()->addAction(new KisRecordedFilterAction(d->filter->name(), layer, d->filter, config));
+        layer->image()->actionRecorder()->addAction( KisRecordedFilterAction(d->filter->name(), layer, d->filter, config));
     }
     d->filter->disableProgress();
     QApplication::restoreOverrideCursor();

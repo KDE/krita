@@ -328,7 +328,7 @@ void KisToolFreehand::endPaint()
     {
     } else {
         if (currentLayer()->image())
-            currentLayer()->image()->actionRecorder()->addAction(m_polyLinePaintAction);
+            currentLayer()->image()->actionRecorder()->addAction(*m_polyLinePaintAction);
         m_polyLinePaintAction = 0;
     }
 }

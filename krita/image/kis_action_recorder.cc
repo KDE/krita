@@ -18,13 +18,13 @@
 
 #include "kis_action_recorder.h"
 
+#include "kis_image.h"
 #include "kis_recorded_action.h"
 
 struct KisActionRecorder::Private {
-    QList<KisRecordedAction*> actions;
 };
 
-KisActionRecorder::KisActionRecorder() : d(new Private)
+KisActionRecorder::KisActionRecorder(KisImageSP image) : KisMacro(image), d(new Private)
 {
     
 }
@@ -34,14 +34,14 @@ KisActionRecorder::~KisActionRecorder()
     delete d;
 }
 
-QList<KisRecordedAction*> KisActionRecorder::actions() const
-{
-    return d->actions;
-}
+// QList<KisRecordedAction*> KisActionRecorder::actions() const
+// {
+//     return d->actions;
+// }
 
-void KisActionRecorder::addAction(KisRecordedAction* action)
+void KisActionRecorder::addAction(const KisRecordedAction& action)
 {
-    d->actions.append(action);
+    KisMacro::addAction(action);
     emit(addedAction(action));
 }
 

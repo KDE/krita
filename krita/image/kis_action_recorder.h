@@ -19,31 +19,25 @@
 #ifndef _KIS_ACTION_RECORDER_H_
 #define _KIS_ACTION_RECORDER_H_
 
-#include <QObject>
-
-#include <krita_export.h>
+#include <kis_macro.h>
 
 class KisRecordedAction;
 
-/**
- * XXX: dox?
- */
-class KRITAIMAGE_EXPORT KisActionRecorder : public QObject {
+class KRITAIMAGE_EXPORT KisActionRecorder : public KisMacro {
 
     Q_OBJECT
 
 public:
-    KisActionRecorder();
+    KisActionRecorder(KisImageSP image);
     ~KisActionRecorder();
-    QList<KisRecordedAction*> actions() const;
 
 public slots:
 
-    void addAction(KisRecordedAction* action);
+    void addAction(const KisRecordedAction& action);
 
 signals:
 
-    void addedAction(KisRecordedAction* action);
+    void addedAction(const KisRecordedAction& action);
 
 private:
 

@@ -45,6 +45,10 @@ KisRecordedFilterAction::KisRecordedFilterAction(QString name, KisLayerSP layer,
     }
 }
 
+KisRecordedFilterAction::KisRecordedFilterAction(const KisRecordedFilterAction& rhs) : KisRecordedAction(rhs), d(new Private(*rhs.d))
+{
+}
+
 KisRecordedFilterAction::~KisRecordedFilterAction()
 {
 }
@@ -85,6 +89,11 @@ void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt)
         kfc->toXML(doc, filterConfigElt);
         elt.appendChild(filterConfigElt);
     }
+}
+
+KisRecordedAction* KisRecordedFilterAction::clone() const
+{
+    return new KisRecordedFilterAction(*this);
 }
 
 KisRecordedFilterActionFactory::KisRecordedFilterActionFactory() :

@@ -75,13 +75,7 @@ BigBrotherPlugin::~BigBrotherPlugin()
 
 void BigBrotherPlugin::slotReplay()
 {
-    KisActionRecorder* actionRecorder = m_view->image()->actionRecorder();
-    QList<KisRecordedAction*> actions = actionRecorder->actions();
-    for( QList<KisRecordedAction*>::iterator it = actions.begin();
-         it != actions.end(); ++it)
-    {
-        (*it)->play();
-    }
+    m_view->image()->actionRecorder()->play();
 }
 
 void BigBrotherPlugin::slotSave()
@@ -92,15 +86,7 @@ void BigBrotherPlugin::slotSave()
         QDomDocument doc;
         QDomElement e = doc.createElement("RecordedActions");
         
-        KisActionRecorder* actionRecorder = m_view->image()->actionRecorder();
-        QList<KisRecordedAction*> actions = actionRecorder->actions();
-        for( QList<KisRecordedAction*>::iterator it = actions.begin();
-            it != actions.end(); ++it)
-        {
-            QDomElement eAct = doc.createElement("RecordedAction");
-            (*it)->toXML(doc, eAct);
-            e.appendChild(eAct);
-        }
+        m_view->image()->actionRecorder()->toXML(doc, e);
         
         doc.appendChild(e);
         QFile f(filename);
@@ -134,31 +120,9 @@ void BigBrotherPlugin::slotOpen()
             QDomElement docElem = doc.documentElement();
             if(not docElem.isNull() and docElem.tagName() == "RecordedActions")
             {
-                QDomNode node = docElem.firstChild();
-                while(not node.isNull()) {
-                    QDomElement elt = node.toElement(); // try to convert the node to an element.
-                    if(not elt.isNull() and elt.tagName() == "RecordedAction") {
-                        QString id = elt.attribute("id", "");
-                        if(not id.isNull())
-                        {
-                            kDebug() << "Reconstruct : " << id << endl; // the node really is an element.
-                            KisRecordedActionFactory* raf = KisRecordedActionFactoryRegistry::instance()->get(id);
-                            if(raf)
-                            {
-                                KisRecordedAction* ra = raf->fromXML( m_view->image(), elt);
-                                ra->play();
-                                delete ra;
-                            } else {
-                                kDebug() << "Unknown action : " << id << endl;
-                            }
-                        } else {
-                            kDebug() << "Invalid recorded action: null id";
-                        }
-                    } else {
-                        kDebug() << "Unknown element " << elt.tagName() << (elt.tagName() == "RecordedAction");
-                    }
-                    node = node.nextSibling();
-                }
+                KisMacro m(m_view->image());
+                m.fromXML(docElem);
+                m.play();
             } else {
                 // TODO error message
             }

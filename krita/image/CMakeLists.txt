@@ -62,6 +62,7 @@ set(kritaimage_LIB_SRCS
    kis_image.cc
    kis_iterator.cc
    kis_layer.cc
+   kis_macro.cc
    kis_group_layer.cc
    kis_paint_layer.cc
    kis_nameserver.cc

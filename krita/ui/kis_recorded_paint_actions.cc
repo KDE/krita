@@ -42,8 +42,14 @@ KisRecordedPaintActionsFactory factory;
 
 KisRecordedPaintAction::KisRecordedPaintAction(QString name, QString id) : KisRecordedAction(name, id)
 {
+}
+
+KisRecordedPaintAction::KisRecordedPaintAction(const KisRecordedPaintAction& rhs) : KisRecordedAction(rhs)
+{
     
 }
+
+//--- KisRecordedPolyLinePaintAction ---//
 
 struct KisRecordedPolyLinePaintAction::Private {
     QList<KisPaintInformation> infos;
@@ -59,6 +65,12 @@ KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(QString name, Kis
     d->brush = brush;
     d->paintOpId = paintOpId;
 }
+
+KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const KisRecordedPolyLinePaintAction& rhs) : KisRecordedPaintAction(rhs), d(new Private(*rhs.d))
+{
+    
+}
+
 
 KisRecordedPolyLinePaintAction::~KisRecordedPolyLinePaintAction()
 {
@@ -101,6 +113,11 @@ void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement& elt)
         waypointsElt.appendChild(infoElt);
     }
     elt.appendChild(waypointsElt);
+}
+
+KisRecordedAction* KisRecordedPolyLinePaintAction::clone() const
+{
+    return new KisRecordedPolyLinePaintAction(*this);
 }
 
 KisRecordedPolyLinePaintActionFactory::KisRecordedPolyLinePaintActionFactory() :

@@ -19,6 +19,8 @@
 
 #include "kis_array2d.h"
 
+#include <QRect>
+
 #include "kis_generic_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_random_accessor.h"
@@ -26,7 +28,7 @@
 using namespace pfs;
 
 struct Array2DImpl::Private {
-    int cols, rows, index;
+    int sx, sy, cols, rows, index;
     KisPaintDeviceSP device;
     KisRandomAccessor* randomAccessor;
     KoColorSpace* colorSpace;
@@ -35,18 +37,20 @@ struct Array2DImpl::Private {
 Array2DImpl::Array2DImpl( int cols, int rows) : d(new Private)
 {
     d->colorSpace = new KisGenericColorspace<float, 1>();
-    init(cols, rows, 0, new KisPaintDevice(d->colorSpace));
+    init(0, 0, cols, rows, 0, new KisPaintDevice(d->colorSpace));
 }
 
-Array2DImpl::Array2DImpl( int cols, int rows, int index, KisPaintDeviceSP device ) : d(new Private)
+Array2DImpl::Array2DImpl( QRect r, int index, KisPaintDeviceSP device ) : d(new Private)
 {
     d->colorSpace = 0;
-    init(cols, rows, index, device);
+    init(r.x(), r.y(), r.width(), r.height(), index, device);
 }
 
-void Array2DImpl::init( int cols, int rows, int index, KisPaintDeviceSP device )
+void Array2DImpl::init( int sx, int sy, int cols, int rows, int index, KisPaintDeviceSP device )
 {
     Q_ASSERT(device);
+    d->sx = 0;
+    d->sy = 0;
     d->cols = cols;
     d->rows = rows;
     d->index = index;
@@ -68,13 +72,13 @@ int Array2DImpl::getRows() const
 
 float& Array2DImpl::operator()( int col, int row )
 {
-    d->randomAccessor->moveTo(col, row);
+    d->randomAccessor->moveTo(col - d->sx, row - d->sy);
     return *(reinterpret_cast<float*>(d->randomAccessor->rawData()) + d->index);
 }
 
 const float& Array2DImpl::operator()( int col, int row ) const
 {
-    d->randomAccessor->moveTo(col, row);
+    d->randomAccessor->moveTo(col - d->sx, row - d->sy);
     return *(reinterpret_cast<const float*>(d->randomAccessor->oldRawData()) + d->index);
 }
 
@@ -82,7 +86,7 @@ float& Array2DImpl::operator()( int index )
 {
     int col = index / d->cols;
     int row = index % d->rows;
-    d->randomAccessor->moveTo(col, row);
+    d->randomAccessor->moveTo(col - d->sx, row - d->sy);
     return *(reinterpret_cast<float*>(d->randomAccessor->rawData()) + d->index);
 }
 
@@ -90,6 +94,11 @@ const float& Array2DImpl::operator()( int index ) const
 {
     int col = index / d->cols;
     int row = index % d->rows;
-    d->randomAccessor->moveTo(col, row);
+    d->randomAccessor->moveTo(col - d->sx, row - d->sy);
     return *(reinterpret_cast<const float*>(d->randomAccessor->oldRawData()) + d->index);
+}
+
+KisPaintDeviceSP Array2DImpl::device()
+{
+    return d->device;
 }

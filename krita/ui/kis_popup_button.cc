@@ -70,4 +70,12 @@ void KisPopupButton::showPopupWidget()
     }
 }
 
+void KisPopupButton::hidePopupWidget()
+{
+    if(d->popupWidget)
+    {
+        d->frame->setVisible(false);
+    }
+}
+
 #include "kis_popup_button.moc"

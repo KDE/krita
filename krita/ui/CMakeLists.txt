@@ -98,6 +98,7 @@ set(kritaui_LIB_SRCS
     kis_tool_freehand.cc
     kis_tool_paint.cc
     kis_tool_shape.cc
+    kis_tree_view_popup.cc
     kis_view2.cpp
     kis_zoom_manager.cc
     kobirdeyepanel.cpp

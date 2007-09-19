@@ -68,8 +68,7 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     d->thumb = layer->paintDevice()->createThumbnailDevice(100, 100);
     d->mask = new KisFilterMask();
     d->layer->setPreviewMask( d->mask );
-    d->uiFilterDialog.comboBoxFilters->setModel(d->filtersModel);
-    d->uiFilterDialog.comboBoxFilters->setView(new QTreeView);
+    d->uiFilterDialog.filtersSelector->setModel(d->filtersModel);
     connect(d->uiFilterDialog.comboBoxPresets, SIGNAL(activated ( int )), SLOT(slotBookmarkedFilterConfigurationSelected(int )) );
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));

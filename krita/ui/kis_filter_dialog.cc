@@ -88,7 +88,7 @@ void KisFilterDialog::setFilter(KisFilterSP f)
     delete d->currentCentralWidget;
     KisFilterConfigWidget* widget = d->currentFilter->createConfigurationWidget( d->uiFilterDialog.centralWidgetHolder, d->layer->paintDevice() );
     if(not widget)
-    {
+    { // No widget, so display a label instead
         d->currentFilterConfigurationWidget = 0;
         d->currentCentralWidget = new QLabel( i18n("No configuration option."), d->uiFilterDialog.centralWidgetHolder );
     } else {
@@ -97,9 +97,11 @@ void KisFilterDialog::setFilter(KisFilterSP f)
         d->currentFilterConfigurationWidget->setConfiguration( d->currentFilter->defaultConfiguration( d->layer->paintDevice() ) );
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigPleaseUpdatePreview()), SLOT(updatePreview()));
     }
+    // Change the list of presets
     delete d->currentBookmarkedFilterConfigurationsModel;
     d->currentBookmarkedFilterConfigurationsModel = new KisBookmarkedFilterConfigurationsModel(d->thumb, f );
     d->uiFilterDialog.comboBoxPresets->setModel(  d->currentBookmarkedFilterConfigurationsModel );
+    // Add the widget to the layout
     d->widgetLayout->addWidget( d->currentCentralWidget, 0 , 0);
     d->uiFilterDialog.centralWidgetHolder->setMinimumSize( d->currentCentralWidget->minimumSize() );
     updatePreview();

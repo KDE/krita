@@ -19,10 +19,17 @@
 
 #include "kis_ashikhmin02_operator.h"
 
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceTraits.h>
+
+#include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
 
 #include <kis_tone_mapping_operator_configuration_widget.h>
 
+#include <kis_array2d.h>
+
+#include "tmo_ashikhmin02.h"
 #include "ui_ashikhmin02_configuration_widget.h"
 
 class KisAshikhmin02OperatorConfigurationWidget : public KisToneMappingOperatorConfigurationWidget{
@@ -66,10 +73,55 @@ KisToneMappingOperatorConfigurationWidget* KisAshikhmin02Operator::createConfigu
     return new KisAshikhmin02OperatorConfigurationWidget(wdg);
 }
 
-void KisAshikhmin02Operator::toneMap(KisPaintDeviceSP, KisPropertiesConfiguration* config) const
+void KisAshikhmin02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const
 {
+    QRect r = device->exactBounds();
     bool simple = config->getBool("Simple", false);
     double lC = config->getDouble("LocalContrastThreshold", 0.5);
     int eqn = config->getInt("Equation", 2);
     if(eqn != 2 or eqn !=4) eqn = 2;
+    
+    KoColorSpace* xyzf32 = KoColorSpaceRegistry::instance()->colorSpace( "XyzAF32", "" );
+    Q_ASSERT(xyzf32);
+    device->convertTo( xyzf32 );
+    
+    // Compute luminance
+    
+    double avLum = 0.0;
+    double maxLum = 0.0f;
+    double minLum = 0.0f;
+    KisRectIterator itR = device->createRectIterator(r.x(), r.y(), r.width(), r.height());
+    while(not itR.isDone())
+    {
+        KoXyzTraits<float>::Pixel* data = reinterpret_cast< KoXyzTraits<float>::Pixel* >(itR.rawData());
+        avLum += log( data->Y + 1e-4 );
+        maxLum = ( data->Y > maxLum ) ? data->Y : maxLum ;
+        minLum = ( data->Y < minLum ) ? data->Y : minLum ;
+        ++itR;
+    }
+    avLum =exp( avLum/ (r.width() * r.height()));
+    
+    pfs::Array2DImpl Y( r, KoXyzTraits<float>::y_pos, device);
+    
+    pfs::Array2DImpl L (r.width(),r.height());
+    tmo_ashikhmin02(&Y, &L, maxLum, minLum, avLum, simple, lC, eqn);
+    
+    KisHLineIterator itSrc = device->createHLineIterator( r.x(), r.y(), r.width());
+    KisHLineIterator itL = L.device()->createHLineIterator( 0,0, r.width());
+    for(int y = 0; y < r.height(); y++)
+    {
+        while(not itSrc.isDone())
+        {
+            KoXyzTraits<float>::Pixel* dataSrc = reinterpret_cast< KoXyzTraits<float>::Pixel* >(itSrc.rawData());
+            float* dataL = reinterpret_cast< float* >(itL.rawData());
+            float scale = *dataL / dataSrc->Y;
+            dataSrc->Y = *dataL;
+            dataSrc->X *= scale;
+            dataSrc->Z *= scale;
+            ++itSrc;
+            ++itL;
+        }
+        itSrc.nextRow();
+        itL.nextRow();
+    }
 }

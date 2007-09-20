@@ -29,6 +29,8 @@
 #include <KoColorSpaceAbstract.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <pigment_export.h>
+
 struct KoLcmsColorTransformation : public KoColorTransformation
 {
     KoLcmsColorTransformation() : KoColorTransformation()
@@ -96,6 +98,45 @@ struct KoLcmsDarkenTransformation : public KoColorTransformation
     double m_compensation;
 };
 
+class PIGMENT_EXPORT KoLcmsColorConversionTransformation : public KoColorConversionTransformation {
+    public:
+        KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, KoLcmsColorProfile* srcProfile, const KoColorSpace* dstCs, KoLcmsColorProfile* dstProfile, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_transform(0)
+        {
+            m_transform = this->createTransform(
+                            srcProfile,
+                            dstProfile,
+                            renderingIntent);
+        }
+    public:
+        virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const
+        {
+            Q_ASSERT(m_transform);
+            
+            qint32 srcPixelSize = srcColorSpace()->pixelSize();
+            qint32 dstPixelSize = dstColorSpace()->pixelSize();
+            
+            cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
+
+        // Lcms does nothing to the destination alpha channel so we must convert that manually.
+            while (numPixels > 0) {
+                quint8 alpha = srcColorSpace()->alpha(src);
+                dstColorSpace()->setAlpha(dst, alpha, 1);
+
+                src += srcPixelSize;
+                dst += dstPixelSize;
+                numPixels--;
+            }
+
+        }
+    private:
+        cmsHTRANSFORM createTransform(
+                KoLcmsColorProfile *  srcProfile,
+                KoLcmsColorProfile *  dstProfile,
+                qint32 renderingIntent) const;
+    private:
+        mutable cmsHTRANSFORM m_transform;
+};
+
 class KoLcmsInfo {
     struct Private {
         DWORD cmType;  // The colorspace type as defined by littlecms
@@ -145,10 +186,10 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
     
             KoLcmsColorProfile *  profile;
             mutable const KoColorSpace *lastUsedDstColorSpace;
-            mutable cmsHTRANSFORM lastUsedTransform;
+            mutable KoColorConversionTransformation* lastUsedTransform;
             
         // cmsHTRANSFORM is a void *, so this should work.
-            typedef QMap<const KoColorSpace *, cmsHTRANSFORM>  TransformMap;
+            typedef QMap<const KoColorSpace *, KoColorConversionTransformation*>  TransformMap;
             mutable TransformMap transforms; // Cache for existing transforms
         };
     protected:
@@ -347,6 +388,17 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             }
         }
 
+        virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
+        {
+            KoLcmsColorProfile* dstprofile = toLcmsProfile(dstColorSpace->profile());
+            if(d->profile and dstprofile and dynamic_cast<const KoLcmsInfo*>(dstColorSpace))
+            {
+                return new KoLcmsColorConversionTransformation(this, d->profile, dstColorSpace, dstprofile, renderingIntent);
+            } else {
+                return KoColorSpaceAbstract<_CSTraits>::createColorConverter(dstColorSpace, renderingIntent);
+            }
+        }
+        
         virtual bool convertPixelsTo(const quint8 * src,
                 quint8 * dst,
                 const KoColorSpace * dstColorSpace,
@@ -362,10 +414,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 return true;
             }
 
-            cmsHTRANSFORM tf = 0;
-
-            qint32 srcPixelSize = this->pixelSize();
-            qint32 dstPixelSize = dstColorSpace->pixelSize();
+            KoColorConversionTransformation* tf = 0;
 
             if (d->lastUsedTransform != 0 && d->lastUsedDstColorSpace != 0) {
                 if (dstColorSpace->id() == d->lastUsedDstColorSpace->id() &&
@@ -373,49 +422,23 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                     tf = d->lastUsedTransform;
                     }
             }
-            KoLcmsColorProfile* dstprofile = toLcmsProfile(dstColorSpace->profile());
 
-            if (!tf && d->profile && dstprofile) {
+            if (not tf) {
 
                 if (!d->transforms.contains(dstColorSpace)) {
-                    tf = this->createTransform(dstColorSpace,
-                            d->profile,
-                            dstprofile,
-                            renderingIntent);
-                    if (tf) {
             // XXX: Should we clear the transform cache if it gets too big?
-                        d->transforms[dstColorSpace] = tf;
-                    }
+                    tf = this->createColorConverter(dstColorSpace, renderingIntent);
+                    d->transforms[dstColorSpace] = tf;
                 }
                 else {
                     tf = d->transforms[dstColorSpace];
                 }
 
-                if ( tf ) {
-                    d->lastUsedTransform = tf;
-                    d->lastUsedDstColorSpace = dstColorSpace;
-                }
+                d->lastUsedTransform = tf;
+                d->lastUsedDstColorSpace = dstColorSpace;
             }
+            tf->transform(src, dst, numPixels);
 
-            if (tf) {
-
-                cmsDoTransform(tf, const_cast<quint8 *>(src), dst, numPixels);
-
-        // Lcms does nothing to the destination alpha channel so we must convert that manually.
-                while (numPixels > 0) {
-                    quint8 alpha = this->alpha(src);
-                    dstColorSpace->setAlpha(dst, alpha, 1);
-
-                    src += srcPixelSize;
-                    dst += dstPixelSize;
-                    numPixels--;
-                }
-
-                return true;
-            }
-
-        // Last resort fallback. This happens when either src or dst isn't a lcms colorspace.
-            return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent);
         }
 
         virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const
@@ -605,36 +628,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             cmsFloat2LabEncoded(Out, &LabOut);
 
             return true;
-        }
-        cmsHTRANSFORM createTransform(const KoColorSpace * dstColorSpace,
-                KoColorProfile *  srcKoProfile,
-                KoColorProfile *  dstKoProfile,
-                qint32 renderingIntent) const
-        {
-            KConfigGroup cfg = KGlobal::config()->group("");
-            bool bpCompensation = cfg.readEntry("useBlackPointCompensation", false);
-
-            int flags = 0;
-
-            if (bpCompensation) {
-                flags = cmsFLAGS_BLACKPOINTCOMPENSATION;
-            }
-            const KoLcmsInfo* dstColorSpaceInfo = dynamic_cast<const KoLcmsInfo*>(dstColorSpace);
-            
-            KoLcmsColorProfile *  srcProfile = dynamic_cast<KoLcmsColorProfile *>(srcKoProfile);
-            KoLcmsColorProfile *  dstProfile = dynamic_cast<KoLcmsColorProfile *>(dstKoProfile);
-            
-            if (dstColorSpaceInfo && dstProfile && srcProfile ) {
-                cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
-                        this->colorSpaceType(),
-                        dstProfile->lcmsProfile(),
-                        dstColorSpaceInfo->colorSpaceType(),
-                        renderingIntent,
-                        flags);
-
-                return tf;
-            }
-            return 0;
         }
         Private * const d;
 };

@@ -152,6 +152,11 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
     }
 }
 
+KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
+{
+    return new KoColorConversionTransformation(this, dstColorSpace, renderingIntent);
+}
+
 bool KoColorSpace::convertPixelsTo(const quint8 * src,
                                    quint8 * dst,
                                    const KoColorSpace * dstColorSpace,
@@ -160,16 +165,12 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
 {
     Q_UNUSED(renderingIntent);
 
-	if (*this == *dstColorSpace) {
-		memmove(dst, src, numPixels*pixelSize());
-	} else {
-		// 4 channels: labA, 2 bytes per lab channel
-		quint8 *pixels = new quint8[sizeof(quint16)*4*numPixels];
-		toLabA16(src, pixels,numPixels);
-		dstColorSpace->fromLabA16(pixels, dst,numPixels);
-
-    	delete [] pixels;
-	}
+    if (*this == *dstColorSpace) {
+        memmove(dst, src, numPixels*pixelSize());
+    } else {
+        KoColorConversionTransformation* transfo =new KoColorConversionTransformation(this, dstColorSpace, renderingIntent);
+        transfo->transform(src, dst, numPixels);
+    }
 
     return true;
 }

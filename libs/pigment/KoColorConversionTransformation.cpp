@@ -22,19 +22,14 @@
 #include "KoColorSpace.h"
 
 struct KoColorConversionTransformation::Private {
-    KoColorSpace* srcColorSpace;
-    KoColorSpace* dstColorSpace;
+    const KoColorSpace* srcColorSpace;
+    const KoColorSpace* dstColorSpace;
     Intent renderingIntent;
 };
 
-KoColorConversionTransformation::KoColorConversionTransformation(KoColorSpace* srcCs, KoColorSpace* dstCs, Intent renderingIntent) : d(new Private)
+KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent) : d(new Private)
 {
     d->srcColorSpace = srcCs;
-    setParameters(dstCs, renderingIntent);
-}
-
-void KoColorConversionTransformation::setParameters(KoColorSpace* dstCs, Intent renderingIntent)
-{
     d->dstColorSpace = dstCs;
     d->renderingIntent = renderingIntent;
 }
@@ -55,7 +50,7 @@ KoColorConversionTransformation::Intent KoColorConversionTransformation::renderi
 }
 
 void KoColorConversionTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
-{   
+{
     // 4 channels: labA, 2 bytes per lab channel
     quint8 *pixels = new quint8[sizeof(quint16)*4*nPixels];
     srcColorSpace()->toLabA16(src, pixels,nPixels);
@@ -63,5 +58,3 @@ void KoColorConversionTransformation::transform(const quint8 *src, quint8 *dst, 
 
     delete [] pixels;
 }
-
-

@@ -22,12 +22,14 @@
 
 #include "KoColorTransformation.h"
 
+#include <pigment_export.h>
+
 class KoColorSpace;
 
 /**
  * This is the base class of all color transform that convert the color of a pixel
  */
-class KoColorConversionTransformation : KoColorTransformation{
+class PIGMENT_EXPORT KoColorConversionTransformation : KoColorTransformation{
         struct Private;
     public:
         enum Intent {
@@ -37,9 +39,8 @@ class KoColorConversionTransformation : KoColorTransformation{
             IntentAbsoluteColorimetric =3
         };
     public:
-        KoColorConversionTransformation(KoColorSpace* srcCs, KoColorSpace* cs, Intent renderingIntent = IntentPerceptual);
+        KoColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual);
     public:
-        virtual void setParameters(KoColorSpace* dstCs, Intent renderingIntent);
         const KoColorSpace* srcColorSpace() const;
         const KoColorSpace* dstColorSpace() const;
         Intent renderingIntent();

@@ -401,10 +401,19 @@ public:
     virtual void fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const =0;
 
     /**
+     * Create a color conversion transformation.
+     */
+    virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    
+    /**
      * Convert a byte array of srcLen pixels *src to the specified color space
      * and put the converted bytes into the prepared byte array *dst.
      *
      * Returns false if the conversion failed, true if it succeeded
+     * 
+     * This function is not thread-safe. If you want to apply multiple conversion
+     * in different threads at the same time, you need to create one color converter
+     * per-thread using createColorConverter.
      */
     virtual bool convertPixelsTo(const quint8 * src,
                                  quint8 * dst, const KoColorSpace * dstColorSpace,

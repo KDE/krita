@@ -14,6 +14,7 @@ set(pigment_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpaceRegistry.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpace.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoLcmsColorSpace.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpaceMaths.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoCompositeOp.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorProfile.cpp

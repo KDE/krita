@@ -83,6 +83,14 @@ public:
      */
     inline QColor color() const { return m_color; }
 
+    /**
+     * A channel is less than another channel if its pos is smaller.
+     */
+    inline bool operator<( const KoChannelInfo & info )
+        {
+            return m_pos < info.m_pos;
+        }
+
 private:
 
     QString m_name;

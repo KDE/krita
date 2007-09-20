@@ -24,7 +24,7 @@
 #include <kdebug.h>
 
 ConnectionToolFactory::ConnectionToolFactory(QObject *parent)
-: KoToolFactory(parent, "ConnectionToolFactory_ID", i18n("Connection tool"))
+: KoToolFactory(parent, "ConnectionToolFactory_ID", i18n("Connection Tool"))
 {
     setToolTip (i18n("Connection Creation tool"));
     setToolType (mainToolType());

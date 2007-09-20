@@ -1,8 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=XYZ (float 16-bit and 32-bit HDR) Color Model
+Name[pt]=Modelo de Cor XYZ (v. flutuante de 16-bits e 32-bits HDR)
+Name[pt_BR]=Modelo de Cor XYZ (v. flutuante de 16-bits e 32-bits HDR)
 Name[sv]=XYZ-färgmodell (16-bitars flyttal och 32-bitars HDR)
 Comment=Color model for 16-bit and 32-bit per channel in floating point for High-Dynamic Range XYZ images
+Comment[pt]=Modelo de cor para imagens XYZ com 32 bits de vírgula flutuante por canal
+Comment[pt_BR]=Modelo de cor para imagens XYZ com 32 bits de vírgula flutuante por canal
 Comment[sv]=Färgmodell för 16-bitars och 32-bitars flyttal per kanal XYZ-bilder med stort dynamiskt omfång
 ServiceTypes=KOffice/ColorSpace
 Type=Service

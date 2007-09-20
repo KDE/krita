@@ -1,8 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=tonemapping
+Name[pt]=mapeamento de tons
+Name[pt_BR]=mapeamento de tons
 Name[sv]=Tonavbildning
 Comment=tonemapping
+Comment[pt]=mapeamento de tons
+Comment[pt_BR]=mapeamento de tons
 Comment[sv]=Tonavbildning
 ServiceTypes=Krita/ViewPlugin
 Type=Service

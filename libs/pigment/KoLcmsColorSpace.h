@@ -68,7 +68,7 @@ struct KoLcmsDarkenTransformation : public KoColorTransformation
 {
     KoLcmsDarkenTransformation(const KoColorSpace* cs, cmsHTRANSFORM defaultToLab, cmsHTRANSFORM defaultFromLab, qint32 shade, bool compensate, double compensation) : m_colorSpace(cs), m_defaultToLab(defaultToLab), m_defaultFromLab(defaultFromLab), m_shade(shade), m_compensate(compensate), m_compensation(compensation)
     {
-        
+
     }
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
     {
@@ -111,10 +111,10 @@ class PIGMENT_EXPORT KoLcmsColorConversionTransformation : public KoColorConvers
         virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const
         {
             Q_ASSERT(m_transform);
-            
+
             qint32 srcPixelSize = srcColorSpace()->pixelSize();
             qint32 dstPixelSize = dstColorSpace()->pixelSize();
-            
+
             cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
 
         // Lcms does nothing to the destination alpha channel so we must convert that manually.
@@ -176,18 +176,18 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             cmsHTRANSFORM defaultFromRGB;  // Default transform from 8 bit sRGB
             cmsHTRANSFORM defaultToRGB16;    // Default transform to 16 bit sRGB
             cmsHTRANSFORM defaultFromRGB16;  // Default transform from 16 bit sRGB
-    
+
             mutable cmsHPROFILE   lastRGBProfile;  // Last used profile to transform to/from RGB
             mutable cmsHTRANSFORM lastToRGB;       // Last used transform to transform to RGB
             mutable cmsHTRANSFORM lastFromRGB;     // Last used transform to transform from RGB
-    
+
             cmsHTRANSFORM defaultToLab;
             cmsHTRANSFORM defaultFromLab;
-    
+
             KoLcmsColorProfile *  profile;
             mutable const KoColorSpace *lastUsedDstColorSpace;
             mutable KoColorConversionTransformation* lastUsedTransform;
-            
+
         // cmsHTRANSFORM is a void *, so this should work.
             typedef QMap<const KoColorSpace *, KoColorConversionTransformation*>  TransformMap;
             mutable TransformMap transforms; // Cache for existing transforms
@@ -253,16 +253,16 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                     INTENT_PERCEPTUAL, 0);
         }
     public:
-        
+
         virtual bool hasHighDynamicRange() const { return false; }
         virtual KoColorProfile * profile() const { return lcmsProfile(); }
-        
+
         virtual bool profileIsCompatible(KoColorProfile* profile) const
         {
             KoLcmsColorProfile* p = dynamic_cast<KoLcmsColorProfile*>(profile);
             return (p && p->colorSpaceSignature() == colorSpaceSignature());
         }
-        
+
         virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * koprofile=0) const
         {
             d->qcolordata[2] = color.red();
@@ -398,7 +398,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 return KoColorSpaceAbstract<_CSTraits>::createColorConverter(dstColorSpace, renderingIntent);
             }
         }
-        
+
         virtual bool convertPixelsTo(const quint8 * src,
                 quint8 * dst,
                 const KoColorSpace * dstColorSpace,
@@ -439,6 +439,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             }
             tf->transform(src, dst, numPixels);
 
+            return true;
         }
 
         virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const
@@ -607,7 +608,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         } BCHSWADJUSTS, *LPBCHSWADJUSTS;
 
 
-        static int desaturateSampler(register WORD In[], register WORD Out[], register LPVOID /*Cargo*/) 
+        static int desaturateSampler(register WORD In[], register WORD Out[], register LPVOID /*Cargo*/)
         {
             cmsCIELab LabIn, LabOut;
             cmsCIELCh LChIn, LChOut;

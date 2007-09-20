@@ -337,9 +337,11 @@ void KoPathTool::repaintDecorations()
 
 void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
     // we are moving if we hit a point and use the left mouse button
+    event->ignore();
     if ( m_activeHandle )
     {
         m_activeHandle->mousePressEvent( event );
+        event->accept();
     }
     else
     {

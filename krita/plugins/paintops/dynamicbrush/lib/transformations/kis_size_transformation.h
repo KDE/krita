@@ -33,7 +33,7 @@ class KisSizeTransformation : public KisDynamicTransformation {
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
         virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
         virtual QWidget* createConfigWidget(QWidget* parent);
-    public slots:
+    private slots:
         void setHSensor(KisDynamicSensor*);
         void setVSensor(KisDynamicSensor*);
         void setHMaximum(double v);

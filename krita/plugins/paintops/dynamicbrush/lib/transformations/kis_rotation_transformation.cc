@@ -25,6 +25,8 @@
 #include "kis_dynamic_shape.h"
 #include "kis_dynamic_sensor.h"
 
+#include "ui_RotationTransformationEditor.h"
+
 KisRotationTransformation::KisRotationTransformation(KisDynamicSensor* transfoParameter)
     : KisDynamicTransformation(KisDynamicTransformation::RotationTransformationID), m_transfoParameter(transfoParameter)
 {
@@ -69,6 +71,22 @@ void KisRotationTransformation::fromXML(const QDomElement& rootElt)
         n = n.nextSibling();
     }
 
+}
+
+void KisRotationTransformation::setRotationSensor(KisDynamicSensor* sensor)
+{
+    delete m_transfoParameter;
+    m_transfoParameter = sensor;
+}
+
+QWidget* KisRotationTransformation::createConfigWidget(QWidget* parent)
+{
+    QWidget* editorWidget = new QWidget(parent);
+    Ui_RotationTransformationEditor ste;
+    ste.setupUi(editorWidget);
+    connect(ste.comboBoxRotationSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), this, SLOT(setRotationSensor(KisDynamicSensor* )));
+    
+    return editorWidget;
 }
 
 #include "kis_rotation_transformation.moc"

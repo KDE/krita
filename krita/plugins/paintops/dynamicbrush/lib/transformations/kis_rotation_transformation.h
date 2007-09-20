@@ -32,9 +32,11 @@ class KisRotationTransformation : public KisDynamicTransformation {
     public:
         virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
         virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
-        virtual QWidget* createConfigWidget(QWidget* parent) { Q_UNUSED(parent); return 0; }
+        virtual QWidget* createConfigWidget(QWidget* parent);
         virtual void toXML(QDomDocument&, QDomElement&) const;
         virtual void fromXML(const QDomElement&);
+    private slots:
+        void setRotationSensor(KisDynamicSensor*);
     private:
         KisDynamicSensor* m_transfoParameter;
 };

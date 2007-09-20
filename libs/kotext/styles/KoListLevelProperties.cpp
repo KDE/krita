@@ -259,8 +259,10 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list) {
 }
 
 void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXmlElement& style) {
+    kDebug(32500)<<"style.localName()="<<style.localName();
 
     if( style.localName() == "list-level-style-bullet" ) { // list with bullets
+
         //1.6: KoParagCounter::loadOasisListStyle
         QString bulletChar = style.isNull() ? QString() : style.attributeNS( KoXmlNS::text, "bullet-char", QString() );
         //kDebug()<<"KoListLevelProperties::loadOasis list-level-style-bullet bulletChar="<<bulletChar;
@@ -323,8 +325,7 @@ void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXml
         }
 
     }
-    else if( style.localName() == "list-level-style-number" ) { // it's a numbered list
-
+    else if( style.localName() == "list-level-style-number" || style.localName() == "outline-level-style" ) { // it's a numbered list
         const QString format = style.attributeNS( KoXmlNS::style, "num-format", QString() );
         //kDebug()<<"KoListLevelProperties::loadOasis list-level-style-number format="<<format;
         if( format.isEmpty() ) {
@@ -341,8 +342,10 @@ void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXml
                 setStyle(KoListStyle::RomanLowerItem);
             else if( format[0] == 'I' )
                 setStyle(KoListStyle::UpperRomanItem);
-            else
+            else {
+                kDebug(32500)<<"list-level-style-number fallback!";
                 setStyle(KoListStyle::DecimalItem); // fallback
+            }
         }
 
         //The style:num-prefix and style:num-suffix attributes specify what to display before and after the number.
@@ -353,7 +356,9 @@ void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXml
         if( ! suffix.isNull() )
             setListItemSuffix(suffix);
     }
-    else { // if not defined, we have to use decimals
+    else { // if not defined, we have do nothing
+        kDebug(32500)<<"stylename else:"<<style.localName();
+        //setStyle( KoListStyle::NoItem );
         setStyle(KoListStyle::DecimalItem);
         setListItemSuffix(".");
     }

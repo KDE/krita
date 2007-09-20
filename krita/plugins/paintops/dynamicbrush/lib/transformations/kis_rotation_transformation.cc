@@ -85,6 +85,7 @@ QWidget* KisRotationTransformation::createConfigWidget(QWidget* parent)
     Ui_RotationTransformationEditor ste;
     ste.setupUi(editorWidget);
     connect(ste.comboBoxRotationSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), this, SLOT(setRotationSensor(KisDynamicSensor* )));
+    ste.comboBoxRotationSensor->setCurrent(m_transfoParameter);
     
     return editorWidget;
 }

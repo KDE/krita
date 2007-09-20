@@ -26,7 +26,7 @@
 ConnectionToolFactory::ConnectionToolFactory(QObject *parent)
 : KoToolFactory(parent, "ConnectionToolFactory_ID", i18n("Connection Tool"))
 {
-    setToolTip (i18n("Connection Creation tool"));
+    setToolTip (i18n("Connection creation tool"));
     setToolType (mainToolType());
     setIcon ("connect-no");
     setPriority (9);

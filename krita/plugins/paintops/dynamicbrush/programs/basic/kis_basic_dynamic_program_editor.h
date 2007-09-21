@@ -3,8 +3,7 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,33 +15,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_SENSOR_SELECTOR_H_
-#define _KIS_SENSOR_SELECTOR_H_
+#ifndef _KIS_BASIC_DYNAMIC_PROGRAM_EDITOR_H_
+#define _KIS_BASIC_DYNAMIC_PROGRAM_EDITOR_H_
 
 #include <QWidget>
 
-#include "dynamicbrush_export.h"
+class QModelIndex;
+class Ui_BasicDynamicProgramEditor;
 
-class Ui_SensorSelector;
-class KisDynamicSensor;
-class QHBoxLayout;
-class KoID;
+class KisBasicDynamicProgram;
+class KisBasicModel;
 
-class DYNAMIC_BRUSH_EXPORT KisSensorSelector : public QWidget {
+class KisBasicDynamicProgramEditor : public QWidget {
     Q_OBJECT
     public:
-        KisSensorSelector(QWidget* parent);
-    public:
-        void setCurrent(KisDynamicSensor* sensor);
-    signals:
-        void sensorChanged(KisDynamicSensor* sensor);
-    private slots:
-        void setSensorId(const KoID& id);
+        KisBasicDynamicProgramEditor(KisBasicDynamicProgram* program);
+        ~KisBasicDynamicProgramEditor();
     private:
-        Ui_SensorSelector* sensorSelectorUI;
-        QHBoxLayout* m_layout;
-        QWidget* m_currentConfigWidget;
-        KisDynamicSensor* m_currentSensor;
+        Ui_BasicDynamicProgramEditor* m_basicDynamicProgramEditor;
+        KisBasicDynamicProgram* m_program;
 };
 
 #endif

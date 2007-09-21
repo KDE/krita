@@ -1,19 +1,19 @@
 <ui version="4.0" >
- <class>Form</class>
- <widget class="QWidget" name="Form" >
+ <class>BasicDynamicProgramEditor</class>
+ <widget class="QWidget" name="BasicDynamicProgramEditor" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
     <width>486</width>
-    <height>236</height>
+    <height>245</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" >
    <item>
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
@@ -48,7 +48,7 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="QWidget" native="1" name="widget" />
+        <widget class="KisSensorSelector" name="sizeSensor" />
        </item>
        <item row="2" column="0" >
         <widget class="QLabel" name="label_2" >
@@ -151,7 +151,7 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="QWidget" native="1" name="widget_2" />
+        <widget class="KisSensorSelector" name="angleSensor" />
        </item>
        <item row="1" column="2" >
         <spacer>
@@ -250,7 +250,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QWidget" native="1" name="widget_4" />
+             <widget class="KisSensorSelector" name="scatterSensor" />
             </item>
            </layout>
           </item>
@@ -311,7 +311,7 @@
            </widget>
           </item>
           <item row="2" column="2" >
-           <widget class="QWidget" native="1" name="widget_5" />
+           <widget class="KisSensorSelector" name="scatteringCountSensor" />
           </item>
          </layout>
         </widget>
@@ -353,6 +353,11 @@
    <class>KIntNumInput</class>
    <extends>QWidget</extends>
    <header>knuminput.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisSensorSelector</class>
+   <extends>QComboBox</extends>
+   <header location="global" >kis_sensor_selector.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

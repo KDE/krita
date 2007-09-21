@@ -1,4 +1,4 @@
-include_directories(programs/filterslist lib/ lib/transformations )
+include_directories(programs/filterslist lib/ lib/transformations lib/ui )
 add_subdirectory(lib)
 add_subdirectory(programs)
 
@@ -15,6 +15,7 @@ kde4_add_plugin(kritadynamicbrushpaintop ${kritadynamicbrush_PART_SRCS})
 target_link_libraries(kritadynamicbrushpaintop kritaui kritadynamicbrush
   # link to this to "load" the programs factory
   kritafilterslistdynamicprogram
+  kritabasicdynamicprogram
   )
 
 install(TARGETS kritadynamicbrushpaintop DESTINATION ${PLUGIN_INSTALL_DIR})

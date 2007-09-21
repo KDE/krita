@@ -1,4 +1,3 @@
-# include_directories(../../lib/ ../../lib/transformations)
 
 set( libkritafilterslistdynamicprogram_LIB_SRCS
     kis_filters_list_model.cc

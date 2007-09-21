@@ -9,6 +9,7 @@ Name[ja]=スペルチェックプラグイン
 Name[pt]='Plugin' de Verificação Ortográfica
 Name[pt_BR]='Plugin' de Verificação Ortográfica
 Name[sv]=Insticksprogram för stavningskontroll
+Name[zh_TW]=拼字檢查外掛程式
 ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service
 X-KDE-Library=spellcheck

@@ -58,7 +58,6 @@ KoPADocument::~KoPADocument()
     qDeleteAll( m_pages );
     qDeleteAll( m_masterPages );
     delete m_inlineTextObjectManager;
-    m_inlineTextObjectManager = 0;
 }
 
 void KoPADocument::paintContent( QPainter &painter, const QRect &rect)

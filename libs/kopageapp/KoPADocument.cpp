@@ -50,22 +50,6 @@
 KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoDocument( parentWidget, parent, singleViewMode )
 {
-//    KoPAMasterPage * masterPage = new KoPAMasterPage();
-//    m_masterPages.append( masterPage );
-#ifndef NDEBUG
-    //TODO This produces some pages to be used for testing remove when we have loading support
-/*    KoPathShape *pathShape = new KoPathShape();
-    pathShape->lineTo( QPointF( 100, 100 ) );
-    pathShape->setPosition( QPointF( 100, 100 ) );
-    pathShape->setBorder( new KoLineBorder( 1.0 ) );
-    KoShapeLayer * parentShape = dynamic_cast<KoShapeLayer *>( masterPage->iterator()[0] );
-    if ( parentShape )
-    {
-        parentShape->addChild( pathShape );
-    }
-    insertPage( new KoPAPage(  masterPage ), 1 );
-    insertPage(  new KoPAPage(  masterPage ), 2 );*/
-#endif
     m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
 }
 

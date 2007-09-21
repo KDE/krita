@@ -49,7 +49,7 @@ QString BgSpellCheck::fetchMoreText()
     int position = m_cursor.selectionStart();
 
     // checking should end here
-    if (position > m_endPosition && m_endPosition > 0) return QString();
+    if (position >= m_endPosition && m_endPosition > 0) return QString();
 
     // check whether we can move to next word (moveNextWord)
     // and whether we are keep selecting the same word again and again (samePosition)

@@ -12,9 +12,6 @@
     <height>493</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string/>
-  </property>
   <layout class="QGridLayout" >
    <property name="margin" >
     <number>9</number>

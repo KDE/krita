@@ -9,9 +9,6 @@
     <height>27</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>WdgCPaintOptions</string>
-  </property>
   <layout class="QGridLayout" >
    <property name="margin" >
     <number>9</number>

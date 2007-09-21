@@ -9,9 +9,6 @@
     <height>70</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Form</string>
-  </property>
   <layout class="QVBoxLayout" >
    <property name="leftMargin" >
     <number>0</number>

@@ -9,9 +9,6 @@
     <height>236</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Form</string>
-  </property>
   <layout class="QHBoxLayout" >
    <item>
     <widget class="QTabWidget" name="tabWidget" >

@@ -9,9 +9,6 @@
     <height>538</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Form</string>
-  </property>
   <layout class="QGridLayout" >
    <property name="leftMargin" >
     <number>9</number>

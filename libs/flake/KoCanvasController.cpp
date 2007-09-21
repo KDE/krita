@@ -332,6 +332,7 @@ void KoCanvasController::zoomIn(const QPoint &center)
 
     emit zoomBy(sqrt(2.0));
     recenterPreferred();
+    m_d->canvas->canvasWidget()->update();
 }
 
 void KoCanvasController::zoomOut(const QPoint &center)
@@ -341,6 +342,7 @@ void KoCanvasController::zoomOut(const QPoint &center)
 
     emit zoomBy(sqrt(0.5));
     recenterPreferred();
+    m_d->canvas->canvasWidget()->update();
 }
 
 void KoCanvasController::zoomTo(const QRect &viewRect)
@@ -356,6 +358,7 @@ void KoCanvasController::zoomTo(const QRect &viewRect)
     m_d->preferredCenterFractionY = 1.0 * viewRect.center().y() / m_d->documentSize.height();
 
     emit zoomBy(scale);
+    m_d->canvas->canvasWidget()->update();
 }
 
 void KoCanvasController::setToolOptionWidget(QWidget *widget) {

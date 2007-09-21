@@ -60,7 +60,7 @@ public:
     virtual bool wantsAutoScroll();
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
-    void repaintDecorations();
+    virtual void repaintDecorations();
     /**
      * Returns which selection handle is at params point (or NoHandle if none).
      * @return which selection handle is at params point (or NoHandle if none).

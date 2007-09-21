@@ -56,6 +56,8 @@ public:
     virtual void mouseDoubleClickEvent( KoPointerEvent *event );
 
     /// reimplemented method
+    virtual void repaintDecorations();
+    /// reimplemented method
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
     void setCanvasController(KoCanvasController *controller) { m_controller = controller; }
 

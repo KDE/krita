@@ -105,3 +105,5 @@ void KoZoomTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
     mousePressEvent(event);
 }
 
+void KoZoomTool::repaintDecorations() {
+}

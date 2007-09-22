@@ -27,6 +27,8 @@
 
 #include <KoOasisLoadingContext.h>
 
+class KoTextLoader;
+
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).
  *
@@ -40,16 +42,22 @@ public:
     /**
     * Constructor.
     *
+    * \param loader The KoTextLoader instance the context belongs to.
     * \param doc The document we are loading the content into.
     * \param styles The styles used for loading.
     * \param store The storage backend we are reading from.
     */
-    KoTextLoadingContext( KoDocument* doc, KoOasisStyles& styles, KoStore* store );
+    KoTextLoadingContext( KoTextLoader* loader, KoDocument* doc, KoOasisStyles& styles, KoStore* store );
 
     /**
     * Destructor.
     */
     virtual ~KoTextLoadingContext();
+
+    /**
+    * \return the KoTextLoader instance this context belongs to.
+    */
+    KoTextLoader* loader() const;
 
     /**
     * \return the name of the current list-style. This will return QString::null if

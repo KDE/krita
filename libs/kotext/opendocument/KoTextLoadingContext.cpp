@@ -21,24 +21,33 @@
  */
 
 #include "KoTextLoadingContext.h"
+#include "KoTextLoader.h"
+#include <KoOasisLoadingContext.h>
 
 /// \internal d-pointer class.
 class KoTextLoadingContext::Private
 {
     public:
+        KoTextLoader* loader;
         QString currentListStyleName;
         int currentListLevel;
 };
 
-KoTextLoadingContext::KoTextLoadingContext( KoDocument* doc, KoOasisStyles& styles, KoStore* store )
+KoTextLoadingContext::KoTextLoadingContext( KoTextLoader* loader, KoDocument* doc, KoOasisStyles& styles, KoStore* store )
     : KoOasisLoadingContext( doc, styles, store ), d(new Private())
 {
+    d->loader = loader;
     d->currentListLevel = 1; // default list level is always 1
 }
 
 KoTextLoadingContext::~KoTextLoadingContext()
 {
     delete d;
+}
+
+KoTextLoader* KoTextLoadingContext::loader() const
+{
+    return d->loader;
 }
 
 QString KoTextLoadingContext::currentListStyleName() const

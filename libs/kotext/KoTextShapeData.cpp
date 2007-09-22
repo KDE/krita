@@ -21,11 +21,16 @@
 #include <KoXmlWriter.h>
 
 #include <KDebug>
+#include <QUrl>
 #include <QTextDocument>
 #include <QTextBlock>
+
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
+#include <KoShapeLoadingContext.h>
+#include <KoOasisLoadingContext.h>
 #include <KoShapeSavingContext.h>
+
 #include "KoInlineObject.h"
 #include "KoInlineTextObjectManager.h"
 #include "styles/KoStyleManager.h"
@@ -33,7 +38,8 @@
 #include "styles/KoParagraphStyle.h"
 #include "KoTextDocumentLayout.h"
 
-#include <QUrl>
+#include "opendocument/KoTextLoadingContext.h"
+#include "opendocument/KoTextLoader.h"
 
 class KoTextShapeData::Private {
 public:
@@ -149,11 +155,29 @@ KoText::Direction KoTextShapeData::pageDirection() const {
     return d->direction;
 }
 
+bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) {
+    KoOasisLoadingContext &oasisLoadingContext = context.koLoadingContext();
+
+    KoTextLoadingContext *textLoadingContext = dynamic_cast<KoTextLoadingContext*>( &oasisLoadingContext );
+    Q_ASSERT(textLoadingContext);
+    if( ! textLoadingContext )
+        return false;
+
+    KoTextLoader* loader = textLoadingContext->loader();
+    Q_ASSERT(loader);
+    if( ! loader )
+        return false;
+
+    QTextCursor cursor( document() );
+    loader->loadBody(*textLoadingContext, element, cursor);
+    return true;
+}
+
 void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) const {
     KoXmlWriter *writer = &context.xmlWriter();
     QTextBlock block = d->document->findBlock(from);
     kDebug() << "The document is " << d->document;
-    
+
     KoStyleManager *styleManager = 0;
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (d->document->documentLayout());
     QHash<int, QString> styleNames; // Store an int index for a QTextFormat => ODF style name

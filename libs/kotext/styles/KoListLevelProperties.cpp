@@ -259,13 +259,17 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list) {
 }
 
 void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXmlElement& style) {
-    kDebug(32500)<<"style.localName()="<<style.localName();
+
+    // The text:level attribute specifies the level of the number list style. It can be used on all list-level styles.
+    const int level = qMax(1, style.attributeNS( KoXmlNS::text, "level", QString() ).toInt() );
+    // The text:display-levels attribute specifies the number of levels whose numbers are displayed at the current level.
+    const QString displayLevel = style.attributeNS( KoXmlNS::text, "display-levels", QString() );
 
     if( style.localName() == "list-level-style-bullet" ) { // list with bullets
 
         //1.6: KoParagCounter::loadOasisListStyle
         QString bulletChar = style.isNull() ? QString() : style.attributeNS( KoXmlNS::text, "bullet-char", QString() );
-        //kDebug()<<"KoListLevelProperties::loadOasis list-level-style-bullet bulletChar="<<bulletChar;
+        kDebug(32500)<<"style.localName()="<<style.localName()<<"level="<<level<<"displayLevel="<<displayLevel<<"bulletChar="<<bulletChar;
         if( bulletChar.isEmpty() ) { // list without any visible bullets
             setStyle(KoListStyle::NoItem);
         }
@@ -327,7 +331,7 @@ void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXml
     }
     else if( style.localName() == "list-level-style-number" || style.localName() == "outline-level-style" ) { // it's a numbered list
         const QString format = style.attributeNS( KoXmlNS::style, "num-format", QString() );
-        //kDebug()<<"KoListLevelProperties::loadOasis list-level-style-number format="<<format;
+        kDebug(32500)<<"style.localName()="<<style.localName()<<"level="<<level<<"displayLevel="<<displayLevel<<"format="<<format;
         if( format.isEmpty() ) {
             setStyle(KoListStyle::NoItem);
         }
@@ -357,18 +361,13 @@ void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXml
             setListItemSuffix(suffix);
     }
     else { // if not defined, we have do nothing
-        kDebug(32500)<<"stylename else:"<<style.localName();
+        kDebug(32500)<<"stylename else:"<<style.localName()<<"level="<<level<<"displayLevel="<<displayLevel;
         //setStyle( KoListStyle::NoItem );
         setStyle(KoListStyle::DecimalItem);
         setListItemSuffix(".");
     }
 
-    // The text:level attribute specifies the level of the number list style. It can be used on all list-level styles.
-    const int level = qMax(1, style.attributeNS( KoXmlNS::text, "level", QString() ).toInt() );
     setLevel(level);
-
-    // The text:display-levels attribute specifies the number of levels whose numbers are displayed at the current level.
-    const QString displayLevel = style.attributeNS( KoXmlNS::text, "display-levels", QString() );
     if( ! displayLevel.isNull() )
         setDisplayLevel(displayLevel.toInt());
 }

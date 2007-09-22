@@ -27,8 +27,11 @@
 #include <KoInsets.h>
 
 class QTextDocument;
+class KoXmlElement;
 class KoXmlWriter;
+class KoShapeLoadingContext;
 class KoShapeSavingContext;
+
 /**
  * The data store that is held by each KoTextShape instance.
  * This is a separe object to allow KWord proper to use this class' api and
@@ -119,6 +122,20 @@ public:
      */
     int pageNumber() const;
 
+    /**
+    * Load the TextShape from ODF.
+    *
+    * @see the @a TextShape::loadOdf() method which calls this method.
+    * @see the @a KoTextLoadingContext class which inherits KoShapeLoadingContext.
+    * @see the @a KoTextLoader::loadBoy() method which got called by this method to load the ODF.
+    */
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
+
+    /**
+    * Store the TextShape data as ODF.
+    *
+    * @see TextShape::saveOdf()
+    */
     void saveOdf(KoShapeSavingContext & context, int from = 0, int to = -1) const;
 
     /**

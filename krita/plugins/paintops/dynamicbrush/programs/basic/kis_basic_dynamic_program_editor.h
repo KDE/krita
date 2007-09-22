@@ -31,6 +31,11 @@ class KisBasicDynamicProgramEditor : public QWidget {
     public:
         KisBasicDynamicProgramEditor(KisBasicDynamicProgram* program);
         ~KisBasicDynamicProgramEditor();
+    public slots:
+        void setEnableSize(bool );
+        void setEnableAngle(bool );
+        void setEnableScatter(bool );
+        void setEnableCount(bool );
     private:
         Ui_BasicDynamicProgramEditor* m_basicDynamicProgramEditor;
         KisBasicDynamicProgram* m_program;

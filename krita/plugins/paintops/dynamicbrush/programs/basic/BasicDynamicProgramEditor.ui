@@ -5,68 +5,68 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>486</width>
-    <height>245</height>
+    <width>386</width>
+    <height>232</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" >
    <item>
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
        <string>Size</string>
       </attribute>
       <layout class="QGridLayout" >
-       <item row="0" column="0" >
-        <widget class="QLabel" name="label" >
+       <item row="0" column="0" colspan="2" >
+        <widget class="QCheckBox" name="sizeEnabled" >
+         <property name="text" >
+          <string>enabled</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="labelSizeJitter" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
          <property name="text" >
           <string>Jitter:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1" >
-        <widget class="KIntNumInput" name="kintnuminput" >
-         <property name="minimum" >
+       <item row="1" column="1" >
+        <widget class="KIntNumInput" native="1" name="sizeJitter" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="minimum" stdset="0" >
           <number>0</number>
          </property>
-         <property name="maximum" >
+         <property name="maximum" stdset="0" >
           <number>100</number>
          </property>
-         <property name="suffix" >
+         <property name="suffix" stdset="0" >
           <string>%</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" >
-        <widget class="QLabel" name="label_4" >
+       <item row="2" column="0" >
+        <widget class="QLabel" name="labelSizeSensor" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
          <property name="text" >
           <string>Sensor:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1" >
-        <widget class="KisSensorSelector" name="sizeSensor" />
-       </item>
-       <item row="2" column="0" >
-        <widget class="QLabel" name="label_2" >
-         <property name="text" >
-          <string>Minimum:</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1" >
-        <widget class="KIntNumInput" name="kintnuminput_2" >
-         <property name="minimum" >
-          <number>0</number>
-         </property>
-         <property name="maximum" >
-          <number>100</number>
-         </property>
-         <property name="suffix" >
-          <string>%</string>
+        <widget class="KisSensorSelector" name="sizeSensor" >
+         <property name="enabled" >
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -77,41 +77,73 @@
          </property>
          <property name="sizeHint" >
           <size>
-           <width>40</width>
+           <width>211</width>
            <height>20</height>
           </size>
          </property>
         </spacer>
        </item>
        <item row="3" column="0" >
-        <widget class="QLabel" name="label_3" >
+        <widget class="QLabel" name="labelSizeMinimum" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="text" >
+          <string>Minimum:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" >
+        <widget class="KIntNumInput" native="1" name="sizeMinimum" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="minimum" stdset="0" >
+          <number>0</number>
+         </property>
+         <property name="maximum" stdset="0" >
+          <number>100</number>
+         </property>
+         <property name="suffix" stdset="0" >
+          <string>%</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" >
+        <widget class="QLabel" name="labelSizeMaximum" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
          <property name="text" >
           <string>Maximum:</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1" >
-        <widget class="KIntNumInput" name="kintnuminput_3" >
-         <property name="minimum" >
+       <item row="4" column="1" >
+        <widget class="KIntNumInput" native="1" name="sizeMaximum" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="minimum" stdset="0" >
           <number>0</number>
          </property>
-         <property name="maximum" >
+         <property name="maximum" stdset="0" >
           <number>100</number>
          </property>
-         <property name="suffix" >
+         <property name="suffix" stdset="0" >
           <string>%</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1" >
+       <item row="5" column="1" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint" >
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>79</width>
+           <height>21</height>
           </size>
          </property>
         </spacer>
@@ -123,37 +155,14 @@
        <string>Angle</string>
       </attribute>
       <layout class="QGridLayout" >
-       <item row="0" column="0" >
-        <widget class="QLabel" name="label_5" >
+       <item rowspan="2" row="0" column="0" colspan="3" >
+        <widget class="QCheckBox" name="angleEnabled" >
          <property name="text" >
-          <string>Jitter:</string>
+          <string>enabled</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1" >
-        <widget class="KIntNumInput" name="kintnuminput_4" >
-         <property name="minimum" >
-          <number>0</number>
-         </property>
-         <property name="maximum" >
-          <number>100</number>
-         </property>
-         <property name="suffix" >
-          <string>%</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" >
-        <widget class="QLabel" name="label_6" >
-         <property name="text" >
-          <string>Sensor:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" >
-        <widget class="KisSensorSelector" name="angleSensor" />
-       </item>
-       <item row="1" column="2" >
+       <item rowspan="2" row="1" column="2" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
@@ -166,15 +175,58 @@
          </property>
         </spacer>
        </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="labelAngleJitter" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="text" >
+          <string>Jitter:</string>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="1" >
+        <widget class="KIntNumInput" native="1" name="angleJitter" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="minimum" stdset="0" >
+          <number>0</number>
+         </property>
+         <property name="maximum" stdset="0" >
+          <number>100</number>
+         </property>
+         <property name="suffix" stdset="0" >
+          <string>%</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" >
+        <widget class="QLabel" name="labelAngleSensor" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="text" >
+          <string>Sensor:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" >
+        <widget class="KisSensorSelector" name="angleSensor" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint" >
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>79</width>
+           <height>81</height>
           </size>
          </property>
         </spacer>
@@ -191,68 +243,82 @@
          <property name="title" >
           <string>Scatter</string>
          </property>
-         <layout class="QVBoxLayout" >
-          <item>
-           <layout class="QHBoxLayout" >
-            <item>
-             <widget class="QLabel" name="label_14" >
-              <property name="text" >
-               <string>Amount:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="KIntNumInput" name="kintnuminput_9" >
-              <property name="minimum" >
-               <number>0</number>
-              </property>
-              <property name="maximum" >
-               <number>1000</number>
-              </property>
-              <property name="suffix" >
-               <string>%</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" colspan="3" >
+           <widget class="QCheckBox" name="scatterEnabled" >
+            <property name="text" >
+             <string>enabled</string>
+            </property>
+           </widget>
           </item>
-          <item>
-           <layout class="QHBoxLayout" >
-            <item>
-             <widget class="QLabel" name="label_10" >
-              <property name="text" >
-               <string>Jitter:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="KIntNumInput" name="kintnuminput_6" >
-              <property name="minimum" >
-               <number>0</number>
-              </property>
-              <property name="maximum" >
-               <number>100</number>
-              </property>
-              <property name="suffix" >
-               <string>%</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <item row="1" column="0" colspan="2" >
+           <widget class="QLabel" name="labelScatterAmount" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Amount:</string>
+            </property>
+           </widget>
           </item>
-          <item>
-           <layout class="QHBoxLayout" >
-            <item>
-             <widget class="QLabel" name="label_9" >
-              <property name="text" >
-               <string>Sensor:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="KisSensorSelector" name="scatterSensor" />
-            </item>
-           </layout>
+          <item row="1" column="2" >
+           <widget class="KIntNumInput" native="1" name="scatterAmount" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="minimum" stdset="0" >
+             <number>0</number>
+            </property>
+            <property name="maximum" stdset="0" >
+             <number>1000</number>
+            </property>
+            <property name="suffix" stdset="0" >
+             <string>%</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2" >
+           <widget class="QLabel" name="labelScatterJitter" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Jitter:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" >
+           <widget class="KIntNumInput" native="1" name="scatterJitter" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="minimum" stdset="0" >
+             <number>0</number>
+            </property>
+            <property name="maximum" stdset="0" >
+             <number>100</number>
+            </property>
+            <property name="suffix" stdset="0" >
+             <string>%</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" >
+           <widget class="QLabel" name="labelScatterSensor" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Sensor:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" colspan="2" >
+           <widget class="KisSensorSelector" name="scatterSensor" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -263,55 +329,84 @@
           <string>Count</string>
          </property>
          <layout class="QGridLayout" >
-          <item row="0" column="0" >
-           <widget class="QLabel" name="label_13" >
+          <item row="0" column="0" colspan="2" >
+           <widget class="QCheckBox" name="countEnabled" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>enabled</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QLabel" name="labelCountCount" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
             <property name="text" >
              <string>Count:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1" colspan="2" >
-           <widget class="KIntNumInput" name="kintnuminput_8" >
-            <property name="minimum" >
+          <item row="1" column="1" >
+           <widget class="KIntNumInput" native="1" name="countCount" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="minimum" stdset="0" >
              <number>1</number>
             </property>
-            <property name="maximum" >
+            <property name="maximum" stdset="0" >
              <number>100</number>
             </property>
-            <property name="suffix" >
+            <property name="suffix" stdset="0" >
              <string/>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" >
-           <widget class="QLabel" name="label_12" >
+          <item row="2" column="0" >
+           <widget class="QLabel" name="labelCountJitter" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
             <property name="text" >
              <string>Jitter:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1" colspan="2" >
-           <widget class="KIntNumInput" name="kintnuminput_7" >
-            <property name="minimum" >
+          <item row="2" column="1" >
+           <widget class="KIntNumInput" native="1" name="countJitter" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="minimum" stdset="0" >
              <number>0</number>
             </property>
-            <property name="maximum" >
+            <property name="maximum" stdset="0" >
              <number>100</number>
             </property>
-            <property name="suffix" >
+            <property name="suffix" stdset="0" >
              <string>%</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0" colspan="2" >
-           <widget class="QLabel" name="label_11" >
+          <item row="3" column="0" >
+           <widget class="QLabel" name="labelCountSensor" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
             <property name="text" >
              <string>Sensor:</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="2" >
-           <widget class="KisSensorSelector" name="scatteringCountSensor" />
+          <item row="3" column="1" >
+           <widget class="KisSensorSelector" name="countSensor" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -323,8 +418,8 @@
          </property>
          <property name="sizeHint" >
           <size>
-           <width>40</width>
-           <height>20</height>
+           <width>91</width>
+           <height>113</height>
           </size>
          </property>
         </spacer>
@@ -336,8 +431,8 @@
          </property>
          <property name="sizeHint" >
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>153</width>
+           <height>31</height>
           </size>
          </property>
         </spacer>

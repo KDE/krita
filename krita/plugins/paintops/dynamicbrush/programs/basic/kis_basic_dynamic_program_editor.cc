@@ -31,11 +31,58 @@ KisBasicDynamicProgramEditor::KisBasicDynamicProgramEditor(KisBasicDynamicProgra
 {
     m_basicDynamicProgramEditor = new Ui_BasicDynamicProgramEditor();
     m_basicDynamicProgramEditor->setupUi(this);
-    
+    connect(m_basicDynamicProgramEditor->sizeEnabled, SIGNAL(clicked(bool)), SLOT(setEnableSize(bool)));
+    connect(m_basicDynamicProgramEditor->angleEnabled, SIGNAL(clicked(bool)), SLOT(setEnableAngle(bool)));
+    connect(m_basicDynamicProgramEditor->scatterEnabled, SIGNAL(clicked(bool)), SLOT(setEnableScatter(bool)));
+    connect(m_basicDynamicProgramEditor->countEnabled, SIGNAL(clicked(bool)), SLOT(setEnableCount(bool)));
 }
 KisBasicDynamicProgramEditor::~KisBasicDynamicProgramEditor()
 {
     delete m_basicDynamicProgramEditor;
+}
+
+void KisBasicDynamicProgramEditor::setEnableSize(bool e)
+{
+    m_basicDynamicProgramEditor->sizeJitter->setEnabled(e);
+    m_basicDynamicProgramEditor->labelSizeJitter->setEnabled(e);
+    m_basicDynamicProgramEditor->sizeSensor->setEnabled(e);
+    m_basicDynamicProgramEditor->labelSizeSensor->setEnabled(e);
+    m_basicDynamicProgramEditor->sizeMinimum->setEnabled(e);
+    m_basicDynamicProgramEditor->labelSizeMinimum->setEnabled(e);
+    m_basicDynamicProgramEditor->sizeMaximum->setEnabled(e);
+    m_basicDynamicProgramEditor->labelSizeMaximum->setEnabled(e);
+}
+void KisBasicDynamicProgramEditor::setEnableAngle(bool e)
+{
+    m_basicDynamicProgramEditor->angleJitter->setEnabled(e);
+    m_basicDynamicProgramEditor->labelAngleJitter->setEnabled(e);
+    m_basicDynamicProgramEditor->angleSensor->setEnabled(e);
+    m_basicDynamicProgramEditor->labelAngleSensor->setEnabled(e);
+}
+void KisBasicDynamicProgramEditor::setEnableScatter(bool e)
+{
+    m_basicDynamicProgramEditor->scatterAmount->setEnabled(e);
+    m_basicDynamicProgramEditor->labelScatterAmount->setEnabled(e);
+    m_basicDynamicProgramEditor->scatterJitter->setEnabled(e);
+    m_basicDynamicProgramEditor->labelScatterJitter->setEnabled(e);
+    m_basicDynamicProgramEditor->scatterSensor->setEnabled(e);
+    m_basicDynamicProgramEditor->labelScatterSensor->setEnabled(e);
+    m_basicDynamicProgramEditor->countEnabled->setEnabled(e);
+    if(not e)
+    {
+        setEnableCount(false);
+    } else {
+        setEnableCount( m_basicDynamicProgramEditor->countEnabled->isChecked() );
+    }
+}
+void KisBasicDynamicProgramEditor::setEnableCount(bool e)
+{
+    m_basicDynamicProgramEditor->countCount->setEnabled(e);
+    m_basicDynamicProgramEditor->labelCountCount->setEnabled(e);
+    m_basicDynamicProgramEditor->countJitter->setEnabled(e);
+    m_basicDynamicProgramEditor->labelCountJitter->setEnabled(e);
+    m_basicDynamicProgramEditor->countSensor->setEnabled(e);
+    m_basicDynamicProgramEditor->labelCountSensor->setEnabled(e);
 }
 
 #include "kis_basic_dynamic_program_editor.moc"

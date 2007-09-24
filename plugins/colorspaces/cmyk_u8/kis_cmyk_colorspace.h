@@ -42,10 +42,11 @@ class KisCmykU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual QString name() const { return i18n("CMYK (8-bit integer/channel)"); }
         virtual KoID colorModelId() const { return CMYKAColorModelID; }
         virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
+         virtual int depth() const { return 8; }
 
-        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisCmykU8ColorSpace(parent, p); }
+        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KisCmykU8ColorSpace(parent, p); }
 
-        virtual QString defaultProfile() { return "Adobe CMYK"; }
+        virtual QString defaultProfile() const { return "Adobe CMYK"; }
 };
 
 

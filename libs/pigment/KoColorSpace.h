@@ -42,6 +42,7 @@ class KoCompositeOp;
 class KoColorProfile;
 class KoColorSpaceRegistry;
 class KoColorTransformation;
+class KoColorConversionLink;
 class KisFilter;
 class QBitArray;
 
@@ -632,6 +633,9 @@ private:
     Private * const d;
 };
 
+/**
+ * This class is used to create color spaces.
+ */
 class KoColorSpaceFactory {
 public:
     virtual ~KoColorSpaceFactory() {}
@@ -645,19 +649,53 @@ public:
      */
     virtual QString name() const = 0;
 
-
+    /**
+     * @return a string that identify the color model (for instance "RGB" or "CMYK" ...)
+     * @see KoColorModelStandardIds.h
+     */
     virtual KoID colorModelId() const = 0;
+    /**
+     * @return a string that identify the bit depth (for instance "U8" or "F16" ...)
+     * @see KoColorModelStandardIds.h
+     */
     virtual KoID colorDepthId() const = 0;
 
+    /**
+     * @param profile a pointer to a color profile
+     * @return true if the color profile can be used by a color space created by
+     * this factory
+     */
     virtual bool profileIsCompatible(KoColorProfile* profile) const =0;
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *) = 0;
+    /**
+     * creates a color space using the given profile.
+     */
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *) const = 0;
 
+    /**
+     * @return true if the color space follows ICC specification
+     */
+    virtual bool isIcc() const = 0;
+    /**
+     * @return true if the color space supports High-Dynamic Range.
+     */
+    virtual bool isHdr() const = 0;
+    /**
+     * @return the depth of the colorspace
+     */
+    virtual int depth() const = 0;
+    /**
+     * @return the list of color conversion provided by this colorspace
+     */
+    virtual QList<KoColorConversionLink> colorConversionLinks() const = 0;
+    /**
+     *  @return 
+     */
     /**
      * Returns the default icc profile for use with this colorspace. This may be ""
      *
-     & @return the default icc profile name
-    */
-    virtual QString defaultProfile() = 0;
+     * @return the default icc profile name
+     */
+    virtual QString defaultProfile() const = 0;
 
 };
 

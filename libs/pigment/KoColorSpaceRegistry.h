@@ -60,6 +60,18 @@ public:
     virtual ~KoColorSpaceRegistry();
 
 public:
+   /**
+     * add a color space to the registry
+     * @param item the color space factory to add
+     */
+    void add(KoColorSpaceFactory* item);
+
+    /**
+     * add a color space to the registry
+     * @param id the id of the color space
+     * @param item the color space factory to add
+     */
+    void add(const QString &id, KoColorSpaceFactory* item);
 
     /**
      * register the profile with the color space registry

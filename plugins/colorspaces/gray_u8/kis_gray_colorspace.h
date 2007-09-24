@@ -45,9 +45,11 @@ public:
     virtual KoID colorModelId() const { return GrayAColorModelID; }
     virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisGrayAU8ColorSpace(parent, p); }
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KisGrayAU8ColorSpace(parent, p); }
 
-    virtual QString defaultProfile() { return "gray built-in - (lcms internal)"; }
+    virtual int depth() const { return 8; }
+
+    virtual QString defaultProfile() const { return "gray built-in - (lcms internal)"; }
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_

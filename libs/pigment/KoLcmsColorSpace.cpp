@@ -20,7 +20,9 @@
 */
 
 
-#include <KoLcmsColorSpace.h>
+#include "KoLcmsColorSpace.h"
+
+#include "KoColorConversionLink.h"
 
 cmsHTRANSFORM KoLcmsColorConversionTransformation::createTransform(
         KoLcmsColorProfile *  srcProfile,
@@ -46,3 +48,9 @@ cmsHTRANSFORM KoLcmsColorConversionTransformation::createTransform(
 
     return tf;
 }
+
+QList<KoColorConversionLink> KoLcmsColorSpaceFactory::colorConversionLinks() const
+{
+    return QList<KoColorConversionLink>();
+}
+

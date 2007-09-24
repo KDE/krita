@@ -48,10 +48,11 @@ class KisXyzU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 
         virtual KoID colorModelId() const { return XYZAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
+        virtual int depth() const { return 16; }
 
-        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisXyzU16ColorSpace(parent, p); }
+        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KisXyzU16ColorSpace(parent, p); }
 
-        virtual QString defaultProfile() { return "XYZ built-in - (lcms internal)"; }
+        virtual QString defaultProfile() const { return "XYZ built-in - (lcms internal)"; }
 };
 
 

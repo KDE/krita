@@ -264,7 +264,10 @@ public:
         return false;
     }
 
-    virtual QString defaultProfile() { return "lcms virtual RGB profile - Rec. 709 Linear"; }
+    virtual bool isIcc() const { return false; }
+    virtual bool isHdr() const { return true; }
+    virtual QList<KoColorConversionLink> colorConversionLinks() const;
+    virtual QString defaultProfile() const { return "lcms virtual RGB profile - Rec. 709 Linear"; }
 };
 
 #endif

@@ -50,9 +50,10 @@ class KoRgbU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual KoID colorModelId() const { return RGBAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
 
-        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoRgbU16ColorSpace(parent, p); }
+        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KoRgbU16ColorSpace(parent, p); }
 
-        virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; }
+        virtual QString defaultProfile() const { return "sRGB built-in - (lcms internal)"; }
+        virtual int depth() const { return 16; }
 };
 
 

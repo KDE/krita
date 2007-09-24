@@ -3,8 +3,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation;
- * version 2 of the License.
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,21 +17,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_xyz_f32_hdr_colorspace.h"
+#include "KoColorConversionLink.h"
 
-#include <KoColorConversionLink.h>
+#include <QString>
 
-KisXyzF32HDRColorSpace::KisXyzF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p)
-: KisXyzFloatHDRColorSpace<XyzF32Traits>(colorSpaceId(), i18n("XYZ (32-bit float/channel) for High Dynamic Range imaging"), parent, p)
+struct KoColorConversionLink::Private {
+    QString srcModelId;
+    QString srcDepthId;
+    QString dstModelId;
+    QString dstDepthId;
+    Direction direction;
+};
+
+KoColorConversionLink::KoColorConversionLink(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId, Direction _direction) : d(new Private)
 {
+    d->srcModelId = _srcModelId;
+    d->srcDepthId = _srcDepthId;
+    d->dstModelId = _dstModelId;
+    d->dstDepthId = _dstDepthId;
+    d->direction = _direction;
 }
 
-QString KisXyzF32HDRColorSpace::colorSpaceId()
-{
-    return QString("XyzAF32");
-}
-
-QList<KoColorConversionLink> KisXyzF32HDRColorSpaceFactory::colorConversionLinks() const
-{
-    return QList<KoColorConversionLink>();
-}

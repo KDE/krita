@@ -61,9 +61,12 @@ class KoLabColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual KoID colorModelId() const { return LABAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
 
-        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoLabColorSpace(parent, p); }
+        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KoLabColorSpace(parent, p); }
 
-        virtual QString defaultProfile() { return "Lab built-in - (lcms internal)"; }
+        virtual QString defaultProfile() const { return "Lab built-in - (lcms internal)"; }
+
+        virtual int depth() const { return 16; }
+
 };
 
 

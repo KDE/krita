@@ -31,7 +31,7 @@ install(TARGETS kritargbf32hdr  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### next target ###############
 
-set(kritargbfloathdrplugin_PART_SRCS rgb_float_hdr.cc )
+set(kritargbfloathdrplugin_PART_SRCS rgb_float_hdr.cc kis_rgb_float_hdr_colorspace.cc )
 
 kde4_add_plugin(kritargbfloathdrplugin ${kritargbfloathdrplugin_PART_SRCS})
 

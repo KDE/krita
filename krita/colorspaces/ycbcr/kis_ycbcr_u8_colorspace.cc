@@ -26,6 +26,7 @@
 
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorConversionLink.h>
 
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
@@ -40,4 +41,9 @@ KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace(KoColorSpaceRegistry * parent, KoColo
 
     addCompositeOp( new KoCompositeOpOver<YCbCrU8Traits>( this ) );
     addCompositeOp( new KoCompositeOpErase<YCbCrU8Traits>( this ) );
+}
+
+QList<KoColorConversionLink> KisYCbCrU8ColorSpaceFactory::colorConversionLinks() const
+{
+    return QList<KoColorConversionLink>();
 }

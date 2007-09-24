@@ -20,10 +20,10 @@
 
 #include "KoColorSpaceRegistry.h"
 
-#include "KoColorModelStandardIds.h"
-
-#include "compositeops/KoCompositeOpOver.h"
-#include "compositeops/KoCompositeOpErase.h"
+#include <KoColorModelStandardIds.h>
+#include <KoColorConversionLink.h>
+#include <compositeops/KoCompositeOpOver.h>
+#include <compositeops/KoCompositeOpErase.h>
 
 class KisPainterlyOverlayColorSpaceFactory : public KoColorSpaceFactory
 {
@@ -32,20 +32,30 @@ public:
      QString name() const { return i18n("Painterly Overlay (32 bit float/channel)"); }
 
      virtual KoID colorModelId() const { return KoID("painterlyoverlay", i18n("Painterly Overlay") ); }
-     virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
+     virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
 
      bool profileIsCompatible(KoColorProfile* /*profile*/) const
         {
             return false;
         }
 
-     KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p)
+     KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const
         {
             Q_UNUSED( p );
             return new KisPainterlyOverlayColorSpace("painterlyoverlay", "", parent);
         }
 
-     QString defaultProfile() { return ""; }
+    virtual bool isIcc() const { return false; }
+    
+    virtual bool isHdr() const { return false; }
+    
+    virtual int depth() const { return 32; }
+    
+    virtual QList<KoColorConversionLink> colorConversionLinks() const
+    {
+        return QList<KoColorConversionLink>();
+    }
+     QString defaultProfile() const { return ""; }
 
 };
 

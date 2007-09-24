@@ -52,9 +52,15 @@ public:
         return false;
     }
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisYCbCrU16ColorSpace(parent, p); }
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisYCbCrU16ColorSpace(parent, p); }
 
-    virtual QString defaultProfile() { return ""; }
+    
+    virtual bool isIcc() const { return false; }
+    virtual bool isHdr() const { return false; }
+    virtual QList<KoColorConversionLink> colorConversionLinks() const;
+    virtual int depth() const { return 16; }
+    
+    virtual QString defaultProfile() const { return ""; }
 };
 
 #endif

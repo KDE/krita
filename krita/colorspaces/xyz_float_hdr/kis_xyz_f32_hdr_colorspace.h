@@ -54,12 +54,17 @@ public:
     virtual KoID colorModelId() const { return XYZAColorModelID; }
     virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
     
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisXyzF32HDRColorSpace(parent, p); }
+    virtual bool isIcc() const { return false; }
+    virtual bool isHdr() const { return true; }
+    virtual QList<KoColorConversionLink> colorConversionLinks() const;
+    virtual int depth() const { return 32; }
+
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisXyzF32HDRColorSpace(parent, p); }
     virtual bool profileIsCompatible(KoColorProfile* profile) const
     {
         return profile == 0;
     }
-    QString defaultProfile() { return ""; }
+    QString defaultProfile() const { return ""; }
 };
 
 #endif

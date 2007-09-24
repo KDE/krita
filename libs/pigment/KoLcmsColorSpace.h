@@ -643,6 +643,9 @@ class KoLcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo {
             KoLcmsColorProfile* p = dynamic_cast<KoLcmsColorProfile*>(profile);
             return p && p->colorSpaceSignature() == colorSpaceSignature();
         }
+        virtual bool isIcc() const { return true; }
+        virtual bool isHdr() const { return false; }
+        virtual QList<KoColorConversionLink> colorConversionLinks() const;
 };
 
 #endif

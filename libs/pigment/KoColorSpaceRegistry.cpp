@@ -35,6 +35,7 @@
 
 #include "KoPluginLoader.h"
 #include "KoColorSpace.h"
+#include "KoColorConversionSystem.h"
 #include "KoBasicHistogramProducers.h"
 
 #include "colorprofiles/KoLcmsColorProfile.h"
@@ -49,6 +50,7 @@ struct KoColorSpaceRegistry::Private {
     typedef QList<KisPaintDeviceAction *> PaintActionList;
     QMap<QString, PaintActionList> paintDevActionMap;
     KoColorSpace *alphaCs;
+    KoColorConversionSystem *colorConversionSystem;
     static KoColorSpaceRegistry *singleton;
 };
 
@@ -67,6 +69,7 @@ KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
 
 void KoColorSpaceRegistry::init()
 {
+    d->colorConversionSystem = new KoColorConversionSystem;
     // prepare a list of the profiles
     KGlobal::mainComponent().dirs()->addResourceType("kis_profiles",
                                                      "data", "krita/profiles/");
@@ -146,11 +149,25 @@ void KoColorSpaceRegistry::init()
 
 KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private())
 {
+    d->colorConversionSystem = 0;
 }
 
 KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
+    delete d->colorConversionSystem;
     delete d;
+}
+
+void KoColorSpaceRegistry::add(KoColorSpaceFactory* item)
+{
+    KoGenericRegistry<KoColorSpaceFactory *>::add(item);
+    d->colorConversionSystem->insertColorSpace(item);
+}
+
+void KoColorSpaceRegistry::add(const QString &id, KoColorSpaceFactory* item)
+{
+    KoGenericRegistry<KoColorSpaceFactory *>::add(id, item);
+    d->colorConversionSystem->insertColorSpace(item);
 }
 
 KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & name) const

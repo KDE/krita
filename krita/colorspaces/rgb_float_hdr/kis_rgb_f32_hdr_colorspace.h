@@ -52,8 +52,9 @@ public:
     virtual QString name() const { return i18n("RGB (32-bit float/channel) for High Dynamic Range imaging"); }
     virtual KoID colorModelId() const { return RGBAColorModelID; }
     virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
+    virtual int depth() const { return 32; }
     
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisRgbF32HDRColorSpace(parent, p); }
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisRgbF32HDRColorSpace(parent, p); }
 };
 
 #endif

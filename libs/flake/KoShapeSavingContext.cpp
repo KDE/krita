@@ -84,12 +84,15 @@ void KoShapeSavingContext::removeOption( ShapeSavingOption option) {
 const QString KoShapeSavingContext::drawId( const KoShape * shape, bool insert )
 {
     QMap<const KoShape *, QString>::const_iterator it( m_drawIds.find( shape ) );
-    if ( it == m_drawIds.constEnd() && insert == true )
-    {
-        it = m_drawIds.insert( shape, QString( "shape" ).arg( ++m_drawId ) );
-        return it.value();
+    if ( it == m_drawIds.constEnd() ) {
+        if ( insert == true ) {
+            it = m_drawIds.insert( shape, QString( "shape" ).arg( ++m_drawId ) );
+        }
+        else {
+            return QString();
+        }
     }
-    return QString();
+    return it.value();
 }
 
 void KoShapeSavingContext::addLayerForSaving( const KoShapeLayer * layer )

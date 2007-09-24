@@ -1,3 +1,4 @@
+set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 ########### next target ###############
 
 set(storage_test_SRCS storage_test.cpp )
@@ -38,7 +39,7 @@ target_link_libraries(koxmlreadertest kstore ${QT_QTTEST_LIBRARY} )
 set(storedroptest_SRCS storedroptest.cpp )
 
 
-kde4_add_test_executable(storedroptest ${storedroptest_SRCS})
+kde4_add_executable(storedroptest TEST ${storedroptest_SRCS})
 
 target_link_libraries(storedroptest  ${KDE4_KDECORE_LIBS} kstore )
 

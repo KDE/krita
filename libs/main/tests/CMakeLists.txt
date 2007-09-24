@@ -1,3 +1,4 @@
+set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ${KOMAIN_INCLUDES} )
 
 ########### next target ###############
@@ -58,7 +59,7 @@ target_link_libraries(kooasisstoretest  ${KDE4_KDECORE_LIBS} komain )
 set(rtreetestapp_SRCS rtreetestapp.cpp Tool.cpp )
 
 
-kde4_add_test_executable(rtreetestapp ${rtreetestapp_SRCS})
+kde4_add_executable(rtreetestapp TEST ${rtreetestapp_SRCS})
 
 target_link_libraries(rtreetestapp komain ${QT_QTTEST_LIBRARY} )
 

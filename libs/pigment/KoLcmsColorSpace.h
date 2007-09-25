@@ -633,7 +633,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         Private * const d;
 };
 
-class KoLcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo {
+class PIGMENT_EXPORT KoLcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo {
     public:
         KoLcmsColorSpaceFactory(DWORD cmType, icColorSpaceSignature colorSpaceSignature) : KoLcmsInfo(cmType, colorSpaceSignature)
         {

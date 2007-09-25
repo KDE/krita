@@ -37,6 +37,8 @@ class KisYCbCrU16ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU16Traits>
           else
             return false;
         }
+        virtual KoID colorModelId() const { return YCbCrAColorModelID; }
+        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
 };
 
 class KisYCbCrU16ColorSpaceFactory : public KoColorSpaceFactory
@@ -57,8 +59,7 @@ public:
     
     virtual bool isIcc() const { return false; }
     virtual bool isHdr() const { return false; }
-    virtual QList<KoColorConversionLink> colorConversionLinks() const;
-    virtual int depth() const { return 16; }
+    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
     
     virtual QString defaultProfile() const { return ""; }
 };

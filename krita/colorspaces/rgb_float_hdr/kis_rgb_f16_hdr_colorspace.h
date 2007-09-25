@@ -36,6 +36,8 @@ class KRITA_RGBF16_EXPORT KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpa
 public:
     KisRgbF16HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
 
+    virtual KoID colorModelId() const { return RGBAColorModelID; }
+    virtual KoID colorDepthId() const { return Float16BitsColorDepthID; }
     /**
      * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
      * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
@@ -55,7 +57,6 @@ public:
     virtual QString name() const { return i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"); }
     virtual KoID colorModelId() const { return RGBAColorModelID; }
     virtual KoID colorDepthId() const { return Float16BitsColorDepthID; }
-    virtual int depth() const { return 16; }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisRgbF16HDRColorSpace(parent, p); };
 };

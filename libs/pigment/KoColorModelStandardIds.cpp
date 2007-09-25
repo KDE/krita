@@ -21,6 +21,8 @@
 
 #include <klocale.h>
 
+
+extern const KoID AlphaColorModelID("A", i18n("Alpha"));
 extern const KoID RGBAColorModelID("RGBA", i18n("Red Green Blue"));
 extern const KoID XYZAColorModelID("XYZA", i18n("XYZ"));
 extern const KoID LABAColorModelID("LABA", i18n("L a* b*"));

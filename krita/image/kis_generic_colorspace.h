@@ -78,6 +78,8 @@ class KisGenericColorspace : public KoColorSpace {
         virtual ~KisGenericColorspace() { }
 
     public:
+        virtual KoID colorModelId() const { return KoID("",""); }
+        virtual KoID colorDepthId() const { return KoID("",""); }
         virtual bool profileIsCompatible(KoColorProfile* profile) const {return false;}
 
         //========== Channels =====================================================//

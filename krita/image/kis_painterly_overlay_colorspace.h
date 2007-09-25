@@ -84,6 +84,8 @@ public:
     virtual ~KisPainterlyOverlayColorSpace()
         {
         };
+     virtual KoID colorModelId() const;
+     virtual KoID colorDepthId() const;
 
     static KisPainterlyOverlayColorSpace* instance();
 

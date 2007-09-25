@@ -21,16 +21,18 @@
 #define _KO_COLOR_CONVERSION_LINK_H_
 
 class QString;
+class KoColorSpace;
+class KoColorConversionTransformation;
 
-class KoColorConversionLink {
+#include <pigment_export.h>
+
+class PIGMENT_EXPORT KoColorConversionTransformationFactory {
     public:
-        enum Direction {
-            OutputLink = 1,
-            InputLink = 2,
-            BothDirection = 3
-        };
-    public:
-        KoColorConversionLink(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId, Direction _direction);
+        KoColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId);
+        virtual KoColorConversionTransformation* createColorTransformation(KoColorSpace* srcColorSpace, KoColorSpace* dstColorSpace) =0;
+    protected:
+        bool canBeSource(KoColorSpace* srcCS);
+        bool canBeDestination(KoColorSpace* dstCS);
     private:
         struct Private;
         Private* const d;

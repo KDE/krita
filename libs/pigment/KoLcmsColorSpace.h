@@ -645,7 +645,7 @@ class PIGMENT_EXPORT KoLcmsColorSpaceFactory : public KoColorSpaceFactory, priva
         }
         virtual bool isIcc() const { return true; }
         virtual bool isHdr() const { return false; }
-        virtual QList<KoColorConversionLink> colorConversionLinks() const;
+        virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
 };
 
 #endif

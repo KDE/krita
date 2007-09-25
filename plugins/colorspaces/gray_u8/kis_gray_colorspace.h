@@ -32,6 +32,8 @@ class PIGMENT_GRAY_U8_EXPORT KisGrayAU8ColorSpace : public KoLcmsColorSpace<Gray
     public:
         KisGrayAU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
+        virtual KoID colorModelId() const { return GrayAColorModelID; }
+        virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
 };
 
 class KisGrayAU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
@@ -46,8 +48,6 @@ public:
     virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KisGrayAU8ColorSpace(parent, p); }
-
-    virtual int depth() const { return 8; }
 
     virtual QString defaultProfile() const { return "gray built-in - (lcms internal)"; }
 };

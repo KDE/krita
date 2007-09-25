@@ -35,14 +35,11 @@
 #include <KoID.h>
 #include <pigment_export.h>
 
-
-
-
 class KoCompositeOp;
 class KoColorProfile;
 class KoColorSpaceRegistry;
 class KoColorTransformation;
-class KoColorConversionLink;
+class KoColorConversionTransformationFactory;
 class KisFilter;
 class QBitArray;
 
@@ -243,6 +240,17 @@ public:
      * i18n name.
      */
     virtual QString name() const;
+
+    /**
+     * @return a string that identify the color model (for instance "RGB" or "CMYK" ...)
+     * @see KoColorModelStandardIds.h
+     */
+    virtual KoID colorModelId() const = 0;
+    /**
+     * @return a string that identify the bit depth (for instance "U8" or "F16" ...)
+     * @see KoColorModelStandardIds.h
+     */
+    virtual KoID colorDepthId() const = 0;
 
     virtual bool profileIsCompatible(KoColorProfile* profile) const =0;
 
@@ -680,13 +688,9 @@ public:
      */
     virtual bool isHdr() const = 0;
     /**
-     * @return the depth of the colorspace
-     */
-    virtual int depth() const = 0;
-    /**
      * @return the list of color conversion provided by this colorspace
      */
-    virtual QList<KoColorConversionLink> colorConversionLinks() const = 0;
+    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const = 0;
     /**
      *  @return 
      */

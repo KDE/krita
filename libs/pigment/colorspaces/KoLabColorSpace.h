@@ -37,6 +37,8 @@ class KoLabColorSpace : public KoLcmsColorSpace<KoLabU16Traits>
          * This is the value that the member function id() returns.
          */
         static QString colorSpaceId();
+        virtual KoID colorModelId() const { return LABAColorModelID; }
+        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
 
     private:
         static const quint32 CHANNEL_L = 0;
@@ -64,9 +66,6 @@ class KoLabColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KoLabColorSpace(parent, p); }
 
         virtual QString defaultProfile() const { return "Lab built-in - (lcms internal)"; }
-
-        virtual int depth() const { return 16; }
-
 };
 
 

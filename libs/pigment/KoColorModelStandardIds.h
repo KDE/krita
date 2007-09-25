@@ -24,6 +24,7 @@
 
 #include <pigment_export.h>
 
+extern const KoID PIGMENT_EXPORT AlphaColorModelID;
 extern const KoID PIGMENT_EXPORT RGBAColorModelID;
 extern const KoID PIGMENT_EXPORT XYZAColorModelID;
 extern const KoID PIGMENT_EXPORT LABAColorModelID;

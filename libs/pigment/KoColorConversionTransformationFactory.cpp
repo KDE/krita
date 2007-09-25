@@ -17,24 +17,34 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoColorConversionLink.h"
+#include "KoColorConversionTransformationFactory.h"
 
 #include <QString>
 
-struct KoColorConversionLink::Private {
+#include "KoColorSpace.h"
+
+struct KoColorConversionTransformationFactory::Private {
     QString srcModelId;
     QString srcDepthId;
     QString dstModelId;
     QString dstDepthId;
-    Direction direction;
 };
 
-KoColorConversionLink::KoColorConversionLink(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId, Direction _direction) : d(new Private)
+KoColorConversionTransformationFactory::KoColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId) : d(new Private)
 {
     d->srcModelId = _srcModelId;
     d->srcDepthId = _srcDepthId;
     d->dstModelId = _dstModelId;
     d->dstDepthId = _dstDepthId;
-    d->direction = _direction;
 }
 
+
+bool KoColorConversionTransformationFactory::canBeSource(KoColorSpace* srcCS)
+{
+    return ((srcCS->colorModelId().id() == d->srcModelId) and (srcCS->colorDepthId().id() == d->srcDepthId));
+}
+
+bool KoColorConversionTransformationFactory::canBeDestination(KoColorSpace* dstCS)
+{
+    return ((dstCS->colorModelId().id() == d->dstModelId) and (dstCS->colorDepthId().id() == d->dstDepthId));
+}

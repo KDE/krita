@@ -32,7 +32,9 @@ class KisXyzF32HDRColorSpace : public KisXyzFloatHDRColorSpace<XyzF32Traits>
 public:
     KisXyzF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
 
-    /**
+    virtual KoID colorModelId() const { return XYZAColorModelID; }
+    virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
+   /**
      * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
      * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
      * This is the value that the member function id() returns.
@@ -56,8 +58,7 @@ public:
     
     virtual bool isIcc() const { return false; }
     virtual bool isHdr() const { return true; }
-    virtual QList<KoColorConversionLink> colorConversionLinks() const;
-    virtual int depth() const { return 32; }
+    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisXyzF32HDRColorSpace(parent, p); }
     virtual bool profileIsCompatible(KoColorProfile* profile) const

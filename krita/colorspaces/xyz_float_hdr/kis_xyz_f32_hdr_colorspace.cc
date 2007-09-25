@@ -19,7 +19,7 @@
 
 #include "kis_xyz_f32_hdr_colorspace.h"
 
-#include <KoColorConversionLink.h>
+#include <KoColorConversionTransformationFactory.h>
 
 KisXyzF32HDRColorSpace::KisXyzF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p)
 : KisXyzFloatHDRColorSpace<XyzF32Traits>(colorSpaceId(), i18n("XYZ (32-bit float/channel) for High Dynamic Range imaging"), parent, p)
@@ -31,7 +31,7 @@ QString KisXyzF32HDRColorSpace::colorSpaceId()
     return QString("XyzAF32");
 }
 
-QList<KoColorConversionLink> KisXyzF32HDRColorSpaceFactory::colorConversionLinks() const
+QList<KoColorConversionTransformationFactory*> KisXyzF32HDRColorSpaceFactory::colorConversionLinks() const
 {
-    return QList<KoColorConversionLink>();
+    return QList<KoColorConversionTransformationFactory*>();
 }

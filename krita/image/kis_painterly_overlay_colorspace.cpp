@@ -21,9 +21,11 @@
 #include "KoColorSpaceRegistry.h"
 
 #include <KoColorModelStandardIds.h>
-#include <KoColorConversionLink.h>
+#include <KoColorConversionTransformationFactory.h>
 #include <compositeops/KoCompositeOpOver.h>
 #include <compositeops/KoCompositeOpErase.h>
+
+const KoID painterlyOverlayColorModelID("painterlyoverlay", i18n("Painterly Overlay") );
 
 class KisPainterlyOverlayColorSpaceFactory : public KoColorSpaceFactory
 {
@@ -31,7 +33,7 @@ public:
      QString id() const { return "painterlyoverlay"; }
      QString name() const { return i18n("Painterly Overlay (32 bit float/channel)"); }
 
-     virtual KoID colorModelId() const { return KoID("painterlyoverlay", i18n("Painterly Overlay") ); }
+     virtual KoID colorModelId() const { return painterlyOverlayColorModelID; }
      virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
 
      bool profileIsCompatible(KoColorProfile* /*profile*/) const
@@ -49,11 +51,9 @@ public:
     
     virtual bool isHdr() const { return false; }
     
-    virtual int depth() const { return 32; }
-    
-    virtual QList<KoColorConversionLink> colorConversionLinks() const
+    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const
     {
-        return QList<KoColorConversionLink>();
+        return QList<KoColorConversionTransformationFactory*>();
     }
      QString defaultProfile() const { return ""; }
 
@@ -137,5 +137,14 @@ KisPainterlyOverlayColorSpace::KisPainterlyOverlayColorSpace(const QString &id, 
 
 	addCompositeOp( new KoCompositeOpOver<PainterlyOverlayFloatTraits>( this ) );
 	addCompositeOp( new KoCompositeOpErase<PainterlyOverlayFloatTraits>( this ) );
+}
+
+KoID KisPainterlyOverlayColorSpace::colorModelId() const
+{
+    return painterlyOverlayColorModelID;
+}
+KoID KisPainterlyOverlayColorSpace::colorDepthId() const
+{
+    return Float32BitsColorDepthID;
 }
 

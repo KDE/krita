@@ -35,6 +35,8 @@ public:
     KoRgbU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
     virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
     virtual KoColorTransformation* createInvertTransformation() const;
+    virtual KoID colorModelId() const { return RGBAColorModelID; }
+    virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
 
     /**
      * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
@@ -57,8 +59,6 @@ public:
     virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KoRgbU8ColorSpace(parent, p); }
-
-    virtual int depth() const { return 8; }
 
     virtual QString defaultProfile() const { return "sRGB built-in - (lcms internal)"; }
 };

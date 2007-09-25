@@ -29,6 +29,8 @@ class KoRgbU16ColorSpace : public KoLcmsColorSpace<KoRgbU16Traits>
     public:
         KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
+        virtual KoID colorModelId() const { return RGBAColorModelID; }
+        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
 
     /**
      * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
@@ -53,7 +55,6 @@ class KoRgbU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KoRgbU16ColorSpace(parent, p); }
 
         virtual QString defaultProfile() const { return "sRGB built-in - (lcms internal)"; }
-        virtual int depth() const { return 16; }
 };
 
 

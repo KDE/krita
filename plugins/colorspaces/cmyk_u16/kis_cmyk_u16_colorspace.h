@@ -33,6 +33,8 @@ class KisCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
     public:
         KisCmykU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
+        virtual KoID colorModelId() const { return CMYKAColorModelID; }
+        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
 };
 
 class KisCmykU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
@@ -45,7 +47,6 @@ class KisCmykU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual QString name() const { return i18n("CMYK (16-bit integer/channel)"); }
         virtual KoID colorModelId() const { return CMYKAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual int depth() const { return 16; }
 
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KisCmykU16ColorSpace(parent, p); }
 

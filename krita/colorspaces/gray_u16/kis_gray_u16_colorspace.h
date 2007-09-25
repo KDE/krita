@@ -32,6 +32,8 @@ class KRITA_GRAY_U16_EXPORT KisGrayU16ColorSpace : public KoLcmsColorSpace<GrayU
     public:
         KisGrayU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
+        virtual KoID colorModelId() const { return GrayColorModelID; }
+        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
 };
 
 class KisGrayU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
@@ -43,8 +45,6 @@ public:
     virtual QString name() const { return i18n("Grayscale (16-bit integer/channel)"); }
     virtual KoID colorModelId() const { return GrayColorModelID; }
     virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-
-    virtual int depth() const { return 16; }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KisGrayU16ColorSpace(parent, p); }
 

@@ -57,7 +57,6 @@ class KoShape::Private {
 public:
     Private(KoShape *shape)
         : size( 50, 50 ),
-        pos( 0, 0 ),
         zIndex( 0 ),
         parent( 0 ),
         visible( true ),
@@ -94,7 +93,6 @@ public:
     }
 
     QSizeF size; // size in pt
-    QPointF pos; // position (top left) in pt
     QString shapeId;
     QString name; ///< the shapes names
 
@@ -392,7 +390,6 @@ void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor)
 }
 
 void KoShape::copySettings(const KoShape *shape) {
-    d->pos = shape->position();
     d->size = shape->size();
     d->connectors.clear();
     foreach(QPointF point, shape->connectors())
@@ -865,8 +862,9 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
         QSizeF s( size() );
         context.xmlWriter().addAttributePt( "svg:width", s.width() );
         context.xmlWriter().addAttributePt( "svg:height", s.height() );
-        context.xmlWriter().addAttributePt( "svg:x", d->pos.x() );
-        context.xmlWriter().addAttributePt( "svg:y", d->pos.y() );
+        // the position is hidden in the transformation
+        context.xmlWriter().addAttributePt( "svg:x", 0.0 );
+        context.xmlWriter().addAttributePt( "svg:y", 0.0 );
     }
 
     if(attributes & OdfMandatories) {

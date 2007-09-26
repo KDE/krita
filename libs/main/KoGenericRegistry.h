@@ -127,7 +127,7 @@ public:
         QList<QString> keys(m_hash.keys());
         // we do not use foreach() here because of GCC 3.3.x bug
         for (QList<QString>::const_iterator it(keys.constBegin()); it!=keys.constEnd(); ++it)
-            answer.append(KoID(*it, value(*it)->objectName()));
+            answer.append(KoID(*it, value(*it)->name()));
         return answer;
     }
 

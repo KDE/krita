@@ -391,7 +391,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
         {
             KoLcmsColorProfile* dstprofile = toLcmsProfile(dstColorSpace->profile());
-            if(d->profile && dstprofile && dynamic_cast<const KoLcmsInfo*>(dstColorSpace))
+            if(d->profile and dstprofile and dynamic_cast<const KoLcmsInfo*>(dstColorSpace))
             {
                 return new KoLcmsColorConversionTransformation(this, d->profile, dstColorSpace, dstprofile, renderingIntent);
             } else {
@@ -423,7 +423,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                     }
             }
 
-            if (!tf) {
+            if (not tf) {
 
                 if (!d->transforms.contains(dstColorSpace)) {
             // XXX: Should we clear the transform cache if it gets too big?

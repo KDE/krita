@@ -54,6 +54,8 @@ class KRITAPAINTERLYCOMMON_EXPORT KisKSColorSpace : public KoIncompleteColorSpac
         ~KisKSColorSpace();
 
         KisKSColorSpace(KoColorProfile *p);
+        virtual KoID colorModelId() const;
+        virtual KoID colorDepthId() const;
 
 //         KisKSColorSpace(const KisKSColorSpace&);
 //         KisKSColorSpace operator=(const KisKSColorSpace&);

@@ -51,6 +51,8 @@ class KRITAPAINTERLYCOMMON_EXPORT KisRGBKSColorSpace : public KoIncompleteColorS
         }
 
         KisRGBKSColorSpace();
+        virtual KoID colorModelId() const;
+        virtual KoID colorDepthId() const;
 
 //         KisRGBKSColorSpace(const KisRGBKSColorSpace&);
 //         KisRGBKSColorSpace operator=(const KisRGBKSColorSpace&);

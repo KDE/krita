@@ -21,8 +21,10 @@
 
 #include <klocale.h>
 
-#include "KoColorSpaceRegistry.h"
-#include "KoColorSpaceConstants.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceConstants.h>
+#include <KoColorModelStandardIds.h>
+
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpMultiply.h"
@@ -103,4 +105,14 @@ void KisRGBKSColorSpace::toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 
         srcf += 7;
         dst16 += 4;
     }
+}
+
+KoID KisRGBKSColorSpace::colorModelId() const
+{
+    return KoID("EmanueleRGBColorModel",/*i18n*/("Emanuele's RGB Color Model"));
+}
+
+KoID KisRGBKSColorSpace::colorDepthId() const
+{
+    return Float32BitsColorDepthID;
 }

@@ -252,6 +252,9 @@ public:
      */
     virtual KoID colorDepthId() const = 0;
 
+    /**
+     * @return true if the profile given in argument can be used by this color space
+     */
     virtual bool profileIsCompatible(KoColorProfile* profile) const =0;
 
     /**

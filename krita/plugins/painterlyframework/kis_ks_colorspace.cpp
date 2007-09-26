@@ -23,8 +23,9 @@
 
 #include <KLocale>
 
-#include "KoColorSpaceRegistry.h"
-#include "KoColorProfile.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoColorProfile.h>
+#include <KoColorModelStandardIds.h>
 
 #include "KoColorSpaceConstants.h"
 #include "compositeops/KoCompositeOpOver.h"
@@ -144,4 +145,14 @@ void KisKSColorSpace::toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPi
         srcf += 2*ncols + 1;
         dst16 += 4;
     }
+}
+
+KoID KisKSColorSpace::colorModelId() const
+{
+    return KoID("EmanueleColorModel",/*i18n*/("Emanuele's Color Model"));
+}
+
+KoID KisKSColorSpace::colorDepthId() const
+{
+    return Float32BitsColorDepthID;
 }

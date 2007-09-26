@@ -39,7 +39,7 @@ struct KoColorConversionSystem::NodeKey {
     {}
     bool operator==(const KoColorConversionSystem::NodeKey& rhs) const
     {
-        return modelId == rhs.modelId and depthId == rhs.depthId;
+        return modelId == rhs.modelId && depthId == rhs.depthId;
     }
     QString modelId;
     QString depthId;
@@ -71,7 +71,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
 
 KoColorConversionSystem::Node* KoColorConversionSystem::node(const KoColorConversionSystem::NodeKey& key)
 {
-    if(not d->graph.contains(key))
+    if(!d->graph.contains(key))
     {
         Node* n = new Node;
         n->modelId = key.modelId;
@@ -85,6 +85,6 @@ KoColorConversionSystem::Node* KoColorConversionSystem::node(const KoColorConver
 
 KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent )
 {
-    
+    return 0;
 }
 

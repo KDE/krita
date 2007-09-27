@@ -46,7 +46,7 @@ public:
     virtual void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2) = 0;
     virtual void drawLine(const QPointF& p1, const QPointF& p2) { drawLine( p1.toPoint(), p2.toPoint()); }
     inline void drawLine(const QPoint& p1, const QPoint& p2) { drawLine(p1.x(), p1.y(), p2.x(), p2.y() ); }
-    virtual void draw(QPainter* p, const QRectF& area) {}
+    virtual void draw(QPainter* p, const QRectF& area) { Q_UNUSED( p ); Q_UNUSED( area ); }
 
 protected:
 

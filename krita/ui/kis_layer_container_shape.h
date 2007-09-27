@@ -34,10 +34,6 @@ const QString KIS_LAYER_CONTAINER_ID = "KisLayerContainerShapeID";
    The layer container is the flake shape that corresponds to
    KisGroupLayer. It contains any number of layers, including other
    group layers.
-
-   XXX: Do we need to distinguish between LayerContainers and Layers?
-   Can a LayerContainer, i.e. a KisGroupLayer have masks and
-   selections, and if so, what does it mean? (BSAR)
  */
 class KRITAUI_EXPORT KisLayerContainerShape : public KoShapeLayer
 {

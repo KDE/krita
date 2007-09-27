@@ -37,13 +37,24 @@
 
 KisResourceProvider::KisResourceProvider(KisView2 * view )
     : m_view( view )
-    , m_resourceProvider( view->canvasBase()->resourceProvider() )
 {
+}
+
+KisResourceProvider::~KisResourceProvider()
+{
+    delete m_defaultBrush;
+    delete m_defaultComplex;
+}
+
+void KisResourceProvider::setCanvasResourceProvider( KoCanvasResourceProvider * resourceProvider )
+{
+    m_resourceProvider = resourceProvider;
+
     QVariant v;
-    v.setValue( KoColor(Qt::black, view->image()->colorSpace()) );
+    v.setValue( KoColor(Qt::black, m_view->image()->colorSpace()) );
     m_resourceProvider->setResource( KoCanvasResource::ForegroundColor, v );
 
-    v.setValue( KoColor(Qt::white, view->image()->colorSpace()) );
+    v.setValue( KoColor(Qt::white, m_view->image()->colorSpace()) );
     m_resourceProvider->setResource( KoCanvasResource::BackgroundColor, v );
 
     m_resourceProvider->setResource(CurrentPaintop, KoID( "paintbrush", "Paintbrush" ) );
@@ -70,22 +81,8 @@ KisResourceProvider::KisResourceProvider(KisView2 * view )
     v = qVariantFromValue( static_cast<void *>( m_defaultComplex ));
     m_resourceProvider->setResource(CurrentComplexColor, v );
 
-    // XXX: The X11 monitor profile overrides the settings
-    m_displayProfile = KoIccColorProfile::getScreenProfile();
 
-    if (m_displayProfile == 0) {
-        KisConfig cfg;
-        QString monitorProfileName = cfg.monitorProfile();
-        m_displayProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
-    }
-
-
-}
-
-KisResourceProvider::~KisResourceProvider()
-{
-    delete m_defaultBrush;
-    delete m_defaultComplex;
+    resetDisplayProfile();
 }
 
 
@@ -154,6 +151,19 @@ KisLayerSP KisResourceProvider::currentLayer() const
 KisComplexColor * KisResourceProvider::currentComplexColor() const
 {
 	return static_cast<KisComplexColor *>(m_resourceProvider->resource( CurrentComplexColor ).value<void *>());
+}
+
+void KisResourceProvider::resetDisplayProfile()
+{
+    // XXX: The X11 monitor profile overrides the settings
+    m_displayProfile = KoIccColorProfile::getScreenProfile();
+
+    if (m_displayProfile == 0) {
+        KisConfig cfg;
+        QString monitorProfileName = cfg.monitorProfile();
+        m_displayProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
+    }
+    emit sigDisplayProfileChanged( m_displayProfile );
 }
 
 KoColorProfile * KisResourceProvider::currentDisplayProfile() const

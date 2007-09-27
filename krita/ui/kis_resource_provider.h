@@ -72,6 +72,8 @@ public:
     KisResourceProvider(KisView2 * view);
     ~KisResourceProvider();
 
+    void setCanvasResourceProvider( KoCanvasResourceProvider * resourceProvider );
+
     KoCanvasBase * canvas() const;
 
     KoColor bgColor() const;
@@ -94,6 +96,7 @@ public:
 
     KisComplexColor *currentComplexColor() const;
 
+    void resetDisplayProfile();
     KoColorProfile * currentDisplayProfile() const;
 
     KisImageSP currentImage() const;

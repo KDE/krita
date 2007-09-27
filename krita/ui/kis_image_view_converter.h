@@ -26,11 +26,12 @@
 #include <KoViewConverter.h>
 
 /**
- * ViewConverter to convert from flake-internal points to krita-internal pixels and back.
- * You can use this class whereever the flake tools or shapes come in contact with the
- * krita-image.
- * For usage remember that the document here is the flake-points. And the view is the
- * krita-pixels.
+ * ViewConverter to convert from flake-internal points to
+ * krita-internal pixels and back. You can use this class whereever
+ * the flake tools or shapes come in contact with the krita-image.
+ *
+ * For usage remember that the document here is the flake-points. And
+ * the view is the krita-pixels.
  */
 class KRITAUI_EXPORT KisImageViewConverter : public KoViewConverter {
 public:

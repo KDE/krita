@@ -60,7 +60,7 @@ protected:
     int mMinWidth;
     int mCols;
 
-    friend class KisPaletteDocker; // Because it calls slotColorCellSelected from a FIXME
+    friend class KisPaletteDocker; // Because it calls slotColorCellSelected
 };
 
 #endif

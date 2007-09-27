@@ -132,8 +132,10 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if ( !store->open( "content.xml" ) )
         return false;
 
-    KoStoreDevice contentDev( store );
-    KoXmlWriter* contentWriter = createOasisXmlWriter( &contentDev, "office:document-content" );
+    KoOasisStore oasisStore( store );
+    KoXmlWriter* contentWriter = oasisStore.contentWriter();
+    if ( !contentWriter )
+        return false;
 
     KoGenStyles mainStyles;
     KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
@@ -158,15 +160,11 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     masterStyles.close();
 
-    // for office:body
-    KTemporaryFile contentTmpFile;
-    contentTmpFile.open();
-    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
+    KoXmlWriter * bodyWriter = oasisStore.bodyWriter();
+    bodyWriter->startElement( "office:body" );
+    bodyWriter->startElement( odfTagName( true ) );
 
-    contentTmpWriter.startElement( "office:body" );
-    contentTmpWriter.startElement( odfTagName( true ) );
-
-    paContext.setXmlWriter( contentTmpWriter );
+    paContext.setXmlWriter( *bodyWriter );
     paContext.setOptions( KoPASavingContext::DrawId );
 
     // save pages
@@ -176,21 +174,14 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         paContext.incrementPage();
     }
 
-    contentTmpWriter.endElement(); // office:odfTagName()
-    contentTmpWriter.endElement(); // office:body
-
-    contentTmpFile.close();
+    bodyWriter->endElement(); // office:odfTagName()
+    bodyWriter->endElement(); // office:body
 
     contentWriter->startElement( "office:automatic-styles" );
     saveOdfAutomaticStyles( *contentWriter, mainStyles, false );
     contentWriter->endElement();
 
-    // And now we can copy over the contents from the tempfile to the real one
-    contentWriter->addCompleteElement( &contentTmpFile );
-
-    contentWriter->endElement(); // root element
-    contentWriter->endDocument();
-    delete contentWriter;
+    oasisStore.closeContentWriter();
 
     if ( !store->close() ) // done with content.xml
         return false;

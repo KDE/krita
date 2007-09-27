@@ -131,6 +131,7 @@ KoShape* KoTextFrameLoader::loadImageShape(KoTextLoadingContext& context, const 
     Q_UNUSED(frameElem);
     Q_UNUSED(imageElem);
     Q_UNUSED(cursor);
+    return 0;
 }
 
 KoShape* KoTextFrameLoader::loadTextShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor)
@@ -139,4 +140,5 @@ KoShape* KoTextFrameLoader::loadTextShape(KoTextLoadingContext& context, const K
     Q_UNUSED(frameElem);
     Q_UNUSED(textElem);
     Q_UNUSED(cursor);
+    return 0;
 }

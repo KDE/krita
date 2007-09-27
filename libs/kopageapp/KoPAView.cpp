@@ -197,6 +197,8 @@ void KoPAView::viewGrid()
 
 void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, double zoom )
 {
+    Q_UNUSED(mode);
+    Q_UNUSED(zoom);
     kopaCanvas()->update();
 }
 

@@ -26,6 +26,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoOasisStyles.h>
+#include <KoOasisStore.h>
 #include <KoSavingContext.h>
 #include <KoOasisLoadingContext.h>
 #include <KoShapeManager.h>

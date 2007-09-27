@@ -30,7 +30,6 @@
 #include "kis_painterly_overlay_colorspace.h"
 
 /**
- * XXX: Why inherit KisPaintLayer and not KisPaintDevice? (boud)
  * XXX: Add dox
  */
 class KRITAIMAGE_EXPORT KisComplexColor : public KisPaintDevice {

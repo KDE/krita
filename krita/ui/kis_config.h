@@ -161,8 +161,8 @@ public:
     void setUpdateAllOfQpainterCanvas(bool all);
 
     // Use nearest-neighbour interpolation on KisImage
-    bool fastZoom();
-    void setFastZoom( bool fastZoom );
+    bool useNearestNeigbour();
+    void setUseNearestNeighbour( bool useNearestNeigbour );
 
     // Use Blitz sampling on a QImage
     bool useSampling();

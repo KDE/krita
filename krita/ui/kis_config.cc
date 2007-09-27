@@ -514,14 +514,14 @@ void KisConfig::setUpdateAllOfQpainterCanvas( bool all )
     m_cfg.writeEntry( "update_all_of_qpainter_canvas", all );
 }
 
-bool KisConfig::fastZoom()
+bool KisConfig::useNearestNeigbour()
 {
     return m_cfg.readEntry( "fast_zoom", false );
 }
 
-void KisConfig::setFastZoom( bool fastZoom )
+void KisConfig::setUseNearestNeighbour( bool useNearestNeigbour )
 {
-    m_cfg.writeEntry( "fast_zoom", fastZoom );
+    m_cfg.writeEntry( "fast_zoom", useNearestNeigbour );
 }
 
 

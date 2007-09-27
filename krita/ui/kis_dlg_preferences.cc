@@ -234,7 +234,7 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name  )
     intChunkSize->setValue( cfg.projectionChunkSize() );
     intNumThreads->setValue( cfg.numProjectionThreads() );
     chkUpdateAllOfQPainterCanvas->setChecked( cfg.updateAllOfQPainterCanvas() );
-    chkFastZoom->setChecked( cfg.fastZoom() );
+    chkUseNearestNeighbour->setChecked( cfg.useNearestNeigbour() );
 }
 
 void PerformanceTab::setDefault()
@@ -247,7 +247,7 @@ void PerformanceTab::setDefault()
     intChunkSize->setValue( 512 );
     intNumThreads->setValue( QThread::idealThreadCount()  );
     chkUpdateAllOfQPainterCanvas->setChecked( true );
-    chkFastZoom->setChecked( false );
+    chkUseNearestNeighbour->setChecked( false );
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -895,7 +895,7 @@ bool PreferencesDialog::editPreferences()
         cfg.setAggregateDirtyRegionsInPainter( dialog->m_performanceSettings->chkAggregateDirtyRegions->isChecked() );
         cfg.setUseBoundingRectInProjection( dialog->m_performanceSettings->chkUseBoundingRect->isChecked() );
         cfg.setUpdateAllOfQpainterCanvas( dialog->m_performanceSettings->chkUpdateAllOfQPainterCanvas->isChecked() );
-        cfg.setFastZoom( dialog->m_performanceSettings->chkFastZoom->isChecked() );
+        cfg.setUseNearestNeighbour( dialog->m_performanceSettings->chkUseNearestNeighbour->isChecked() );
         // let the tile manager know
         KisTileManager::instance()->configChanged();
 

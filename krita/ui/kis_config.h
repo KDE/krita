@@ -185,6 +185,7 @@ public:
     bool drawMaskVisualisationOnUnscaledCanvasCache();
     void setDrawMaskVisualisationOnUnscaledCanvasCache( bool drawMaskVisualisationOnUnscaledCanvasCache );
 
+    bool fastZoom() { return false; }
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

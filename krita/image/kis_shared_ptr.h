@@ -26,6 +26,8 @@
 #include <iso646.h>
 #endif
 
+#include <kdebug.h>
+
 #include <kis_shared_data.h>
 
 template<class T>
@@ -126,9 +128,21 @@ class KisSharedPtr {
         inline const T* constData() const { return d; }
 
         inline const T& operator*() const { Q_ASSERT(d); return *d; }
-        inline T& operator*() { Q_ASSERT(d); return *d; }
+        inline T& operator*()
+        {
+            if ( !d )
+                kDebug() << kBacktrace();
+            Q_ASSERT(d); return *d;
+        }
+
         inline const T* operator->() const { Q_ASSERT(d); return d; }
-        inline T* operator->() { Q_ASSERT(d); return d; }
+        inline T* operator->() {
+            if ( !d ) {
+                kDebug() << kBacktrace();
+            }
+
+            Q_ASSERT(d); return d;
+        }
 
         /**
         * @return true if the pointer is null

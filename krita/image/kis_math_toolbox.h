@@ -35,11 +35,14 @@ class KRITAIMAGE_EXPORT KisMathToolbox : public QObject {
     Q_OBJECT
 public:
     struct KisFloatRepresentation {
-        KisFloatRepresentation(uint nsize, uint ndepth) throw(std::bad_alloc )
-            : coeffs(new float[nsize*nsize*ndepth]) ,size(nsize), depth(ndepth)
+        KisFloatRepresentation(uint nsize, uint ndepth)
+            throw(std::bad_alloc )
+            : coeffs(new float[nsize*nsize*ndepth])
+            , size(nsize)
+            , depth(ndepth)
             {
                 // XXX: Valgrind shows that these are being used without being initialised.
-                for (quint32 i = 0; i < nsize*nsize*ndepth; ++i) {
+                for (quint32 i = 0; i < nsize * nsize * ndepth; ++i) {
                     coeffs[i] = 0;
                 }
             }

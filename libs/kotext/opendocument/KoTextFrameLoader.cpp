@@ -125,3 +125,18 @@ void KoTextFrameLoader::loadTextBox(KoTextLoadingContext& context, const KoXmlEl
     }
 }
 
+KoShape* KoTextFrameLoader::loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor)
+{
+    Q_UNUSED(context);
+    Q_UNUSED(frameElem);
+    Q_UNUSED(imageElem);
+    Q_UNUSED(cursor);
+}
+
+KoShape* KoTextFrameLoader::loadTextShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor)
+{
+    Q_UNUSED(context);
+    Q_UNUSED(frameElem);
+    Q_UNUSED(textElem);
+    Q_UNUSED(cursor);
+}

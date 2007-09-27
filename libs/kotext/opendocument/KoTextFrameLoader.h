@@ -68,7 +68,7 @@ class KOTEXT_EXPORT KoTextFrameLoader
         * Load the image frame into the \p cursor .
         */
         virtual void loadImage(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
-        
+
         /**
          * Load the text frame into the \p cursor .
          */
@@ -97,9 +97,9 @@ class KOTEXT_EXPORT KoTextFrameLoader
         * store->close();
         * \endcode
         */
-        virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor) = 0;
-        
-        virtual KoShape* loadTextShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor) = 0;
+        virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
+
+        virtual KoShape* loadTextShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor);
 
     private:
         /// \internal d-pointer class.

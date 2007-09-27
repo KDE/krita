@@ -68,16 +68,18 @@ class KoTextLoader::Private
 {
     public:
         KoStyleManager* stylemanager;
+        KoTextFrameLoader* frameLoader;
         int bodyProgressTotal;
         int bodyProgressValue;
         int lastElapsed;
         QTime dt;
 
-        explicit Private() {
+        explicit Private() : stylemanager(0), frameLoader(0) {
             bodyProgressTotal = bodyProgressValue = lastElapsed = 0;
             dt.start();
         }
         ~Private() {
+            delete frameLoader;
             qDeleteAll(listStyles);
             kDebug() <<"Loading took" << (float)(dt.elapsed()) / 1000 <<" seconds";
         }
@@ -1046,6 +1048,13 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
     }
 }
 //#endif
+
+void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor)
+{
+    if( ! d->frameLoader )
+        d->frameLoader = new KoTextFrameLoader(this);
+    d->frameLoader->loadFrame(context, frameElem, cursor);
+}
 
 void KoTextLoader::startBody(int total)
 {

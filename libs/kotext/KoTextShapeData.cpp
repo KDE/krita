@@ -156,20 +156,34 @@ KoText::Direction KoTextShapeData::pageDirection() const {
 }
 
 bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) {
-    KoOasisLoadingContext &oasisLoadingContext = context.koLoadingContext();
+    KoOasisLoadingContext &oasisContext = context.koLoadingContext();
 
-    KoTextLoadingContext *textLoadingContext = dynamic_cast<KoTextLoadingContext*>( &oasisLoadingContext );
-    Q_ASSERT(textLoadingContext);
-    if( ! textLoadingContext )
-        return false;
-
-    KoTextLoader* loader = textLoadingContext->loader();
-    Q_ASSERT(loader);
-    if( ! loader )
-        return false;
+    bool owner = false;
+    KoTextLoader* loader = 0;
+    KoTextLoadingContext *loaderContext = dynamic_cast<KoTextLoadingContext*>( &oasisContext );
+    if( loaderContext ) { // if the passed context is a KoTextLoadingContext, then we use it to handle the loading of the ODF.
+        loader = loaderContext->loader();
+        Q_ASSERT(loader);
+        if( ! loader )
+            return false;
+    }
+    else { // else we create them on the fly and just provide the default functionality for loading ODF.
+        Q_ASSERT(oasisContext.koDocument());
+        if( ! oasisContext.koDocument() )
+            return false;
+        owner = true;
+        loader = new KoTextLoader(new KoStyleManager);
+        loader->styleManager()->setParent(loader);
+        loaderContext = new KoTextLoadingContext(loader, oasisContext.koDocument(), oasisContext.oasisStyles(), oasisContext.store());
+    }
 
     QTextCursor cursor( document() );
-    loader->loadBody(*textLoadingContext, element, cursor);
+    loader->loadBody(*loaderContext, element, cursor); // now let's load the body from the ODF KoXmlElement.
+
+    if( owner ) {
+        delete loader;
+        delete loaderContext;
+    }
     return true;
 }
 

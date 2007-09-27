@@ -126,8 +126,12 @@ public:
     * Load the TextShape from ODF.
     *
     * @see the @a TextShape::loadOdf() method which calls this method.
-    * @see the @a KoTextLoadingContext class which inherits KoShapeLoadingContext.
-    * @see the @a KoTextLoader::loadBoy() method which got called by this method to load the ODF.
+    * @see the @a KoTextLoadingContext class which inherits KoShapeLoadingContext
+    * and can be used to provide a specialized implementation to handle loading
+    * the ODF. This allows us to let consumers provide there own implementation
+    * to e.g. handle loading of frames or images in there own way.
+    * @see the @a KoTextLoader::loadBoy() method which got called by this method
+    * to load the ODF.
     */
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
 

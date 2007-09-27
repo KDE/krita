@@ -50,7 +50,7 @@ class KisNodeModel;
    tools.
 
 
-   XXX: File format todos
+   XXX: File format TODOs
 
    * load/save the channel flags setting for layers
 

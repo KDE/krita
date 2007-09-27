@@ -52,13 +52,13 @@ class KoColorProfile;
 /**
  * A set of OpenGL textures that contains the projection of a KisImage.
  */
-class KRITAUI_EXPORT KisOpenGLImageTextures : public QObject , public KisShared {
+class KRITAUI_EXPORT KisOpenGLImageTextures : public QObject, public KisShared {
 
     Q_OBJECT
 
 public:
     /**
-     * Obtain a KisOpenGLImageTextures object for the given image. 
+     * Obtain a KisOpenGLImageTextures object for the given image.
      * @param image The image
      * @param monitorProfile The profile of the display device
      */
@@ -130,7 +130,7 @@ public:
     void deactivateHDRExposureProgram();
 
     /**
-     * Returns true if the textures are to be rendered using the high dynamic 
+     * Returns true if the textures are to be rendered using the high dynamic
      * range image program.
      */
     bool usingHDRExposureProgram() const;

@@ -117,18 +117,19 @@ void ScriptingPart::myStarted(Kross::Action*)
 
 void ScriptingPart::myFinished(Kross::Action*)
 {
+#ifdef __GNUC__
+    #warning "ScriptingPart::myFinished: reimplement, somehow the view variable got lost here."
+#endif
 #if 0
 //     kDebug() <<"ScriptingPart::executionFinished";
     d->view->document()->setModified(true);
 
-//FIXME sebsauer, 20070601, who did remove it without providing an replacment?
-//d->view->layerManager()->activeLayer()->setDirty();
+    d->view->layerManager()->activeLayer()->setDirty();
 
     static_cast< Scripting::Progress* >( d->module->progress() )->progressDone();
-    QApplication::restoreOverrideCursor();
     //d->module->deleteLater();
 #endif
-
+    QApplication::restoreOverrideCursor();
     Scripting::Monitor::instance()->finished();
 }
 

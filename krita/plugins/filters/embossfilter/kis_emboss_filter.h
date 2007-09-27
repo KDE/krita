@@ -36,7 +36,7 @@ public:
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
 protected:
-    virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
 private:
     inline int Lim_Max (int Now, int Up, int Max);

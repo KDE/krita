@@ -38,7 +38,7 @@ class KisSimpleNoiseReducer : public KisFilter
         virtual bool supportsPreview() const { return true; }
         virtual bool supportsIncrementalPainting() const { return false; }
     protected:
-        virtual KisFilterConfiguration * designerConfiguration(const KisPaintDeviceSP);
+        virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP);
 };
 
 #endif

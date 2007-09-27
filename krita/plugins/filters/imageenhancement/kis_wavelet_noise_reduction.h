@@ -46,7 +46,7 @@ public:
     virtual bool supportsIncrementalPainting() const { return false; }
     virtual bool supportsThreading() const { return false; }
 private:
-    virtual KisFilterConfiguration * designerConfiguration(const KisPaintDeviceSP);
+    virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP);
 
 };
 

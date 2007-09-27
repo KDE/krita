@@ -46,7 +46,7 @@ KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget
     return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param );
 }
 
-KisFilterConfiguration * KisSimpleNoiseReducer::designerConfiguration(const KisPaintDeviceSP)
+KisFilterConfiguration * KisSimpleNoiseReducer::factoryConfiguration(const KisPaintDeviceSP)
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
     config->setProperty("threshold", 50);

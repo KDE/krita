@@ -45,7 +45,7 @@ class KisFilterFastColorTransfer : public KisFilter
         virtual bool supportsAdjustmentLayers() { return false; }
     public:
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-        virtual KisFilterConfiguration* designerConfiguration(KisPaintDeviceSP);
+        virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP);
 };
 
 #endif

@@ -111,7 +111,7 @@ KisFilterWave::KisFilterWave() : KisFilter(id(), CategoryOther, i18n("&Wave...")
 {
 }
 
-KisFilterConfiguration* KisFilterWave::designerConfiguration(const KisPaintDeviceSP)
+KisFilterConfiguration* KisFilterWave::factoryConfiguration(const KisPaintDeviceSP)
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("wave", 1);
     config->setProperty("horizontalwavelength", 50 );

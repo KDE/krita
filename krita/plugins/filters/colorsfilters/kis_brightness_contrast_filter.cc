@@ -161,7 +161,7 @@ std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesCo
     return list;
 }
 
-KisFilterConfiguration* KisBrightnessContrastFilter::designerConfiguration(const KisPaintDeviceSP)
+KisFilterConfiguration* KisBrightnessContrastFilter::factoryConfiguration(const KisPaintDeviceSP)
 {
     KisFilterConfiguration* config = new KisBrightnessContrastFilterConfiguration( );
     return config;

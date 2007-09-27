@@ -44,7 +44,7 @@ KisFilterConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWid
     return new KisMultiDoubleFilterWidget(id().id(), parent, id().id(), param );
 }
 
-KisFilterConfiguration* KisWaveletNoiseReduction::designerConfiguration(const KisPaintDeviceSP)
+KisFilterConfiguration* KisWaveletNoiseReduction::factoryConfiguration(const KisPaintDeviceSP)
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
     config->setProperty("threshold", BEST_WAVELET_THRESHOLD_VALUE);

@@ -40,7 +40,7 @@ KisFilterConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* par
     return new KisWdgUnsharp(this, parent);
 }
 
-KisFilterConfiguration* KisUnsharpFilter::designerConfiguration(KisPaintDeviceSP)
+KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(KisPaintDeviceSP)
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("halfSize", 5 );

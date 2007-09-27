@@ -44,7 +44,7 @@ class KisFilterNoise : public KisFilter
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
-        virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP);
+        virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
     public:
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 };

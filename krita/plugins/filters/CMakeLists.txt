@@ -1,19 +1,34 @@
 include_directories(${CMAKE_SOURCE_DIR}/krita/ui/obsolete/)
 
 #add_subdirectory( bumpmap )
-MESSAGE(STATUS "Remember to fix the bumpmap filter")
-MESSAGE(STATUS "Remember to port cimg and fix it")
+MESSAGE("Krita: port the bumpmap filter")
+
 #add_subdirectory( cimg )
+MESSAGE("Krita: port cimg and fix it")
+
 add_subdirectory( convolutionfilters )
 add_subdirectory( embossfilter )
 add_subdirectory( example )
 add_subdirectory( imageenhancement )
+
+message("Krita: port the oilpaint filter")
 # add_subdirectory( oilpaintfilter )
+
+message("Krita: port the pixelize filter")
 # add_subdirectory( pixelizefilter )
+
+message("Krita: port the raindrops filter")
 # add_subdirectory( raindropsfilter )
+
+message("Krita: port the round corners filter")
 # add_subdirectory( roundcorners )
+
+message("Krita: port the small tiles filter")
 # add_subdirectory( smalltilesfilter )
+
+message("Krita: port the cubism filter")
 # add_subdirectory( cubismfilter )
+
 add_subdirectory( sobelfilter )
 add_subdirectory( colorsfilters )
 add_subdirectory( wavefilter )

@@ -68,7 +68,7 @@ KisFilterNoise::KisFilterNoise() : KisFilter(id(), CategoryOther, i18n("&Random 
 {
 }
 
-KisFilterConfiguration* KisFilterNoise::designerConfiguration(const KisPaintDeviceSP)
+KisFilterConfiguration* KisFilterNoise::factoryConfiguration(const KisPaintDeviceSP)
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
     config->setProperty("level", 50 );

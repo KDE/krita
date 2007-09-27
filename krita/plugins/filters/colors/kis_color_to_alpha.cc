@@ -40,7 +40,7 @@ KisFilterConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget
     return new KisWdgColorToAlpha(this, parent);
 }
 
-KisFilterConfiguration* KisFilterColorToAlpha::designerConfiguration(KisPaintDeviceSP )
+KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(KisPaintDeviceSP )
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
     config->setProperty("targetcolor", QColor(255,255,255) );

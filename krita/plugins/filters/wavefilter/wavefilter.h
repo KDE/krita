@@ -45,7 +45,7 @@ class KisFilterWave : public KisFilter
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
         virtual bool supportsAdjustmentLayers() { return false; }
-        virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP);
+        virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
     public:
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 };

@@ -62,7 +62,7 @@ KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entr
     d->entry = entry;
 }
 
-KisFilterConfiguration * KisFilter::designerConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration * KisFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     return new KisFilterConfiguration(id(), 0);
 }
@@ -76,7 +76,7 @@ KisFilterConfiguration * KisFilter::defaultConfiguration(const KisPaintDeviceSP 
     }
     if(not fc or not fc->isCompatible(pd) )
     {
-        fc = designerConfiguration(pd);
+        fc = factoryConfiguration(pd);
     }
     return fc;
 }

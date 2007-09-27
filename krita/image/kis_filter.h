@@ -100,7 +100,7 @@ public:
 public:
     /**
      * This function return the configuration set as the default by the user or the default configuration from
-     * the filter writer as returned by designerConfiguration.
+     * the filter writer as returned by factoryConfiguration.
      * This configuration is used by default for the configuration widget and to the process function if there is no
      * configuration widget.
      * @return the default configuration of this widget
@@ -218,8 +218,9 @@ protected:
     void setBookmarkManager(KisBookmarkedConfigurationManager* );
     /// @return the name of config group in KConfig
     inline QString configEntryGroup() { return id() + "_filter_bookmarks"; }
+
     /// @return the default configuration as defined by whoever wrote the plugin
-    virtual KisFilterConfiguration* designerConfiguration(const KisPaintDeviceSP) const; // FIXME: this name sucks so much
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
 protected slots:
 

@@ -62,8 +62,8 @@ void KisImageTester::mergeTests()
 
     QCOMPARE(opacity, OPACITY_TRANSPARENT);
 
-    KisPaintLayer * layer = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE);
-    image->addNode(layer, image->rootLayer(), 0);
+    KisPaintLayerSP layer = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE);
+    image->addNode(layer.data(), image->rootLayer(), 0);
 
     layer->paintDevice()->setPixel(0, 0, QColor(255, 128, 64), OPACITY_OPAQUE);
     layer->setDirty();

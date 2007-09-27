@@ -85,7 +85,7 @@ public:
                          qint32 width,
                          qint32 height,
                          QPainter &painter,
-                         KoColorProfile *profile,
+                         const KoColorProfile *profile,
                          float exposure = 0.0f);
 
     /**
@@ -95,7 +95,7 @@ public:
                            qint32 y1,
                            qint32 width,
                            qint32 height,
-                           KoColorProfile * profile,
+                           const KoColorProfile * profile,
                            float exposure = 0.0f);
 
      /**
@@ -118,7 +118,7 @@ public:
       */
      QImage convertToQImage(const QRect& r,
                             const double xScale, const double yScale,
-                            KoColorProfile *profile,
+                            const KoColorProfile *profile,
                             float exposure = 0.0f,
                             KisSelectionSP mask = 0);
 

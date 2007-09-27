@@ -879,7 +879,7 @@ void KisImage::renderToPainter(qint32 srcX,
                                qint32 width,
                                qint32 height,
                                QPainter &painter,
-                               KoColorProfile *  monitorProfile,
+                               const KoColorProfile *  monitorProfile,
                                float exposure)
 {
     QImage img = convertToQImage(srcX, srcY, width, height, monitorProfile, exposure);
@@ -890,11 +890,11 @@ QImage KisImage::convertToQImage(qint32 x,
                                  qint32 y,
                                  qint32 w,
                                  qint32 h,
-                                 KoColorProfile * profile,
+                                 const KoColorProfile * profile,
                                  float exposure)
 {
     KisPaintDeviceSP dev = m_d->rootLayer->projection();
-    QImage img = dev->convertToQImage(profile, x, y, w, h, exposure);
+    QImage img = dev->convertToQImage(const_cast<KoColorProfile*>( profile ), x, y, w, h, exposure);
 
     if (!img.isNull()) {
 
@@ -921,8 +921,14 @@ QImage KisImage::convertToQImage(qint32 x,
 }
 
 
-QImage KisImage::convertToQImage(const QRect& r, const double xScale, const double yScale, KoColorProfile *profile, float exposure, KisSelectionSP mask)
+QImage KisImage::convertToQImage(const QRect& r, const double xScale, const double yScale, const KoColorProfile *profile, float exposure, KisSelectionSP mask)
 {
+    Q_UNUSED( mask )
+
+#ifdef __GNUC__
+    #warning "KisImage::convertToQImage: Implement direct rendering of current mask onto scaled image pixels"
+#endif
+
     if (r.isEmpty()) {
         return QImage();
     }
@@ -973,7 +979,7 @@ QImage KisImage::convertToQImage(const QRect& r, const double xScale, const doub
     t.restart();
     delete [] imageRow;
 
-    QImage image = colorSpace()->convertToQImage(scaledImageData, r.width(), r.height(), profile, KoColorConversionTransformation::IntentPerceptual, exposure);
+    QImage image = colorSpace()->convertToQImage(scaledImageData, r.width(), r.height(), const_cast<KoColorProfile*>( profile ), KoColorConversionTransformation::IntentPerceptual, exposure);
     delete [] scaledImageData;
 
 #ifdef WORDS_BIGENDIAN

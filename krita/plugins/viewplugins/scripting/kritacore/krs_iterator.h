@@ -229,7 +229,11 @@ class Iterator : public IteratorBase
         {
             KoColorTransformation* invertTransfo = m_layer->colorSpace()->createInvertTransformation();
             invertTransfo->transform(m_it->oldRawData(), m_it->rawData(), 1);
-            delete invertTransfo; // FIXME don't create an invert transfo each time
+#ifdef __GNUC__
+#warning "Fix me: don't create an invert transform each time!"
+#endif
+
+            delete invertTransfo;
         }
 
         void darken(int shade, bool compensate, double compensation)

@@ -134,27 +134,35 @@ void KisPerspectiveGridManager::stopEdition()
 
 void KisPerspectiveGridManager::drawGrid(QRect wr, QPainter *p, bool openGL )
 {
+    Q_UNUSED( wr );
+    Q_UNUSED( p );
+    Q_UNUSED( openGL );
+
+#ifdef __GNUC__
+    #warning "Port the perspective grid to Krita 2.0"
+#endif
+
 // TODO: port
 //     KisImageSP image = m_view->image();
-// 
-// 
+//
+//
 //     if (image && m_toggleGrid->isChecked() && !m_toggleEdition) {
 //         KisPerspectiveGrid* pGrid = image->perspectiveGrid();
-// 
+//
 //         GridDrawer *gridDrawer = 0;
-// 
+//
 //         if (openGL) {
 //             gridDrawer = new OpenGLGridDrawer();
 //         } else {
 //             Q_ASSERT(p);
-// 
+//
 //             if (p) {
 //                 gridDrawer = new QPainterGridDrawer(p);
 //             }
 //         }
-// 
+//
 //         Q_ASSERT(gridDrawer != 0);
-// 
+//
 //         for( QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
 //         {
 //             gridDrawer->drawPerspectiveGrid(image, wr, *it );

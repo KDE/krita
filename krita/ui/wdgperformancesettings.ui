@@ -200,7 +200,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
     </widget>
    </item>
    <item row="8" column="0" colspan="2" >
-    <widget class="QCheckBox" name="chkFastZoom" >
+    <widget class="QCheckBox" name="chkUseNearestNeighbour" >
      <property name="toolTip" >
       <string>Faster but ugly zooming. Not compatible with OpenGL</string>
      </property>

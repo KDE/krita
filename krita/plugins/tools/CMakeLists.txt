@@ -9,3 +9,7 @@ add_subdirectory( tool_star )
 add_subdirectory( tool_transform )
 #add_subdirectory( tool_perspectivegrid )
 #add_subdirectory( tool_perspectivetransform )
+
+message("Krita: Port the perspective grid tool")
+message("Krita: Port the perspective transform tool")
+message("Krita: Port the relevant bezier tools such as magnetic selection")

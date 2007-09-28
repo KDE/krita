@@ -1773,11 +1773,12 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
             default:;
         }
 
-        if( dockWidget->features() & QDockWidget::DockWidgetClosable ) {
-            d->m_dockWidgetMenu->setVisible( visible ); // This doesn't actually work; not sure why
-            d->m_dockWidgetMenu->addAction( dockWidget->toggleViewAction() );
-        }
         addDockWidget( side, dockWidget );
+        if( dockWidget->features() & QDockWidget::DockWidgetClosable ) {
+            d->m_dockWidgetMenu->addAction( dockWidget->toggleViewAction() );
+            if (!visible)
+                dockWidget->hide();
+        }
         d->m_dockWidgetMap.insert( factory->id(), dockWidget );
     } else {
         dockWidget = d->m_dockWidgetMap[ factory->id() ];

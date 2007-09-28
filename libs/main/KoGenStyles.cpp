@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -76,9 +77,9 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
         }
         styleName = makeUniqueName( styleName, flags );
         if ( style.autoStyleInStylesDotXml() )
-            m_autoStylesInStylesDotXml.insert( styleName, true /*unused*/ );
+            m_autoStylesInStylesDotXml.insert( styleName );
         else
-            m_styleNames.insert( styleName, true /*unused*/ );
+            m_styleNames.insert( styleName );
         it = m_styleMap.insert( style, styleName );
         NamedStyle s;
         s.style = &it.key();
@@ -92,16 +93,16 @@ QString KoGenStyles::makeUniqueName( const QString& base, int flags ) const
 {
     // If this name is not used yet, and numbering isn't forced, then the given name is ok.
     if ( ( flags & DontForceNumbering )
-         && m_autoStylesInStylesDotXml.find( base ) == m_autoStylesInStylesDotXml.end()
-         && m_styleNames.find( base ) == m_styleNames.end() )
+         && ! m_autoStylesInStylesDotXml.contains( base )
+         && ! m_styleNames.contains( base ) )
         return base;
     int num = 1;
     QString name;
     do {
         name = base;
         name += QString::number( num++ );
-    } while ( m_autoStylesInStylesDotXml.find( name ) != m_autoStylesInStylesDotXml.end()
-              || m_styleNames.find( name ) != m_styleNames.end() );
+    } while ( m_autoStylesInStylesDotXml.contains( name )
+              || m_styleNames.contains( name ) );
     return name;
 }
 
@@ -138,9 +139,9 @@ KoGenStyle* KoGenStyles::styleForModification( const QString& name )
 
 void KoGenStyles::markStyleForStylesXml( const QString& name )
 {
-    Q_ASSERT( m_styleNames.find( name ) != m_styleNames.end() );
+    Q_ASSERT( m_styleNames.contains( name ) );
     m_styleNames.remove( name );
-    m_autoStylesInStylesDotXml.insert( name, true );
+    m_autoStylesInStylesDotXml.insert( name );
     styleForModification( name )->setAutoStyleInStylesDotXml( true );
 }
 
@@ -153,11 +154,11 @@ void KoGenStyles::dump()
         kDebug(30003) << (*it).name;
     }
     for ( NameMap::const_iterator it = m_styleNames.begin(); it != m_styleNames.end(); ++it ) {
-        kDebug(30003) <<"style:" << it.key();
+        kDebug(30003) <<"style:" << *it;
     }
     for ( NameMap::const_iterator it = m_autoStylesInStylesDotXml.begin(); it != m_autoStylesInStylesDotXml.end(); ++it ) {
-        kDebug(30003) <<"auto style for style.xml:" << it.key();
-        const KoGenStyle* s = style( it.key() );
+        kDebug(30003) <<"auto style for style.xml:" << *it;
+        const KoGenStyle* s = style( *it );
         Q_ASSERT( s );
         Q_ASSERT( s->autoStyleInStylesDotXml() );
     }

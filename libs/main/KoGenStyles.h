@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 #define KOGENSTYLES_H
 
 #include <QMap>
+#include <QSet>
 #include <q3valuevector.h>
 //Added by qt3to4:
 #include <Q3ValueList>
@@ -160,7 +162,7 @@ private:
     /// Map with the style name as key.
     /// This map is mainly used to check for name uniqueness
     /// The value of the bool doesn't matter.
-    typedef QMap<QString, bool> NameMap; // KDE4: QSet
+    typedef QSet<QString> NameMap;
     NameMap m_styleNames;
     NameMap m_autoStylesInStylesDotXml;
 

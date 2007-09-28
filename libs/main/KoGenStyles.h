@@ -20,11 +20,10 @@
 #ifndef KOGENSTYLES_H
 #define KOGENSTYLES_H
 
+#include <QList>
 #include <QMap>
 #include <QSet>
-#include <q3valuevector.h>
 //Added by qt3to4:
-#include <Q3ValueList>
 #include <QString>
 #include <komain_export.h>
 #include "KoGenStyle.h"
@@ -118,7 +117,7 @@ public:
      * otherwise only those NOT marked for styles.xml.
      * @see lookup
      */
-    Q3ValueList<NamedStyle> styles( int type, bool markedForStylesXml = false ) const;
+    QList<NamedStyle> styles( int type, bool markedForStylesXml = false ) const;
 
     /**
      * @return an existing style by name
@@ -153,6 +152,26 @@ public:
      */
     void dump();
 
+    /**
+     * Save automatic styles.
+     *
+     * This creates the office:automatic-styles tag containing all 
+     * automatic styles.
+     *
+     * @param contentWriter
+     * @param stylesDotXml
+     */
+    void saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDotXml );
+
+    /**
+     * Save document styles.
+     *
+     * This creates the office:styles tag containing all document styles.
+     *
+     * @param contentWriter
+     */
+    void saveOdfDocumentStyles( KoXmlWriter* xmlWriter );
+
 private:
     QString makeUniqueName( const QString& base, int flags ) const;
 
@@ -167,7 +186,7 @@ private:
     NameMap m_autoStylesInStylesDotXml;
 
     /// List of styles (used to preserve ordering)
-    typedef Q3ValueVector<NamedStyle> StyleArray;
+    typedef QList<NamedStyle> StyleArray;
     StyleArray m_styleArray;
 
     class Private;

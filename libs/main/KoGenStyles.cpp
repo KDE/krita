@@ -21,8 +21,6 @@
 #include <KoXmlWriter.h>
 #include <float.h>
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 class KoGenStyles::Private
 {
@@ -106,9 +104,9 @@ QString KoGenStyles::makeUniqueName( const QString& base, int flags ) const
     return name;
 }
 
-Q3ValueList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type, bool markedForStylesXml ) const
+QList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type, bool markedForStylesXml ) const
 {
-    Q3ValueList<KoGenStyles::NamedStyle> lst;
+    QList<KoGenStyles::NamedStyle> lst;
     const NameMap& nameMap = markedForStylesXml ? m_autoStylesInStylesDotXml : m_styleNames;
     StyleArray::const_iterator it = m_styleArray.begin();
     const StyleArray::const_iterator end = m_styleArray.end();
@@ -164,3 +162,51 @@ void KoGenStyles::dump()
     }
 }
 
+void KoGenStyles::saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDotXml )
+{
+    QList<KoGenStyles::NamedStyle> stylesList = styles( KoGenStyle::StyleGraphicAuto, stylesDotXml );
+    QList<KoGenStyles::NamedStyle>::const_iterator it = stylesList.begin();
+    for ( ; it != stylesList.end() ; ++it ) {
+        ( *it ).style->writeStyle( xmlWriter, *this, "style:style", ( *it ).name , "style:graphic-properties" );
+    }
+
+    stylesList = styles( KoGenStyle::StyleDrawingPage, stylesDotXml );
+    it = stylesList.begin();
+    for ( ; it != stylesList.end() ; ++it ) {
+        ( *it ).style->writeStyle( xmlWriter, *this, "style:style", ( *it ).name , "style:drawing-page-properties" );
+    }
+
+    stylesList = styles( KoGenStyle::StylePageLayout, stylesDotXml );
+    it = stylesList.begin();
+    for ( ; it != stylesList.end() ; ++it ) {
+        ( *it ).style->writeStyle( xmlWriter, *this, "style:page-layout", (*it).name, "style:page-layout-properties" );
+    }
+}
+
+
+void KoGenStyles::saveOdfDocumentStyles( KoXmlWriter* xmlWriter )
+{
+    QList<KoGenStyles::NamedStyle> stylesList = styles( KoGenStyle::StyleGradientLinear );
+    QList<KoGenStyles::NamedStyle>::const_iterator it = stylesList.begin();
+    for ( ; it != stylesList.end() ; ++it ) {
+        ( *it ).style->writeStyle( xmlWriter, *this, "svg:linearGradient", ( *it ).name, 0, true, true /*add draw:name*/ );
+    }
+
+    stylesList = styles( KoGenStyle::StyleGradientRadial );
+    it = stylesList.begin();
+    for ( ; it != stylesList.end() ; ++it ) {
+        ( *it ).style->writeStyle( xmlWriter, *this, "svg:radialGradient", ( *it ).name, 0, true, true /*add draw:name*/ );
+    }
+
+    stylesList = styles( KoGenStyle::StyleStrokeDash );
+    it = stylesList.begin();
+    for ( ; it != stylesList.end() ; ++it ) {
+        ( *it ).style->writeStyle( xmlWriter, *this, "draw:stroke-dash", ( *it ).name, 0, true, true /*add draw:name*/ );
+    }
+
+    stylesList = styles( KoGenStyle::StyleFillImage );
+    it = stylesList.begin();
+    for ( ; it != stylesList.end() ; ++it ) {
+        ( *it ).style->writeStyle( xmlWriter, *this, "draw:fill-image", ( *it ).name, 0, true, true /*add draw:name*/ );
+    }
+}

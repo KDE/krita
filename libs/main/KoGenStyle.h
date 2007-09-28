@@ -60,13 +60,14 @@ public:
            StyleNumericCurrency = 12,
            StyleNumericText = 13,
            StyleHatch = 14,
-           StyleGraphicAuto = 15,
+           StyleGraphicAuto = 15,       ///< graphic-properties as in 14.13.1 odf spec TODO rename to StyleGraphicProperty
            StylePresentationAuto = 16,
            StyleStrokeDash = 17,        ///< draw:stroke-dash as in 14.14.7 odf spec
            StyleGradient = 18,          ///< draw:gradient as in 14.14.1 odf spec
            StyleGradientLinear = 19,    ///< linear svg:gradient as in 14.14.2 odf spec
            StyleGradientRadial = 20,    ///< radial svg:gradient as in 14.14.2 odf spec
            StyleFillImage = 21,         ///< fill image as in 14.14.4 odf spec
+           StyleDrawingPage = 22,       ///< style for drawing-page as in 14.13.2 odf spec
            StyleFirstCustom = 2500 };   ///< the first style for applications to use
 
     /**

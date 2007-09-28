@@ -82,8 +82,8 @@ QString KoShapeStyleWriter::savePatternStyle( KoGenStyle &style, const QBrush &b
 void KoShapeStyleWriter::writeOfficeStyles( KoXmlWriter* styleWriter )
 {
     KoGenStyles & mainStyles = m_context.mainStyles();
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleGradientLinear );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleGradientLinear );
+    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
 
     for( ; it != styles.end() ; ++it )
         (*it).style->writeStyle( styleWriter, mainStyles, "svg:linearGradient", (*it).name, 0, true, true /*add draw:name*/);

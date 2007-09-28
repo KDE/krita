@@ -37,6 +37,7 @@
 #include <QtGui/QDockWidget>
 #include <QToolBar>
 #include <QApplication>
+#include <Q3ValueList>
 
 //static
 QString KoView::newObjectName()

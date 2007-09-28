@@ -11,6 +11,7 @@ Name[ne]=केड प्लगइन परिवर्तन गर्नु�
 Name[pt]='Plugin' de mudança de capitalização
 Name[pt_BR]='Plugin' de mudança de capitalização
 Name[sv]=Insticksprogram för skiftlägesändring
+Name[x-test]=xxChange case pluginxx
 Name[zh_TW]=改變大小寫外掛程式
 ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service

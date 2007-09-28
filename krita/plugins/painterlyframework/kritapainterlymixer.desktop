@@ -8,6 +8,7 @@ Name[ne]=कलात्मक मिक्सर
 Name[pt]=Mistura de Tintas
 Name[pt_BR]=Mistura de Tintas
 Name[sv]=Målarfärgsblandare
+Name[x-test]=xxPainterly Mixerxx
 Name[zh_TW]=圖畫混合器
 ServiceTypes=Krita/ViewPlugin
 Type=Service

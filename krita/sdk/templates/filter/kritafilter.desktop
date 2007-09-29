@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=%{APPNAME}
+Name[pt_BR]=%{NOME_APLICATIVO}
 Name[x-test]=xx%{APPNAME}xx
 Comment=%{APPNAME}
+Comment[pt_BR]=%{NOME_APLICATIVO}
 Comment[x-test]=xx%{APPNAME}xx
 ServiceTypes=Krita/Filter
 Type=Service

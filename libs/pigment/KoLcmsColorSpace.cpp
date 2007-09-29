@@ -78,47 +78,42 @@ int KoLcmsColorConversionTransformationFactory::depthDecrease() const
 
 quint32 KoLcmsColorConversionTransformationFactory::computeColorSpaceType(QString _modelId, QString _depthId)
 {
-/*extern const KoID PIGMENT_EXPORT ;
-extern const KoID PIGMENT_EXPORT XYZAColorModelID;
-extern const KoID PIGMENT_EXPORT ;
-extern const KoID PIGMENT_EXPORT ;
-extern const KoID PIGMENT_EXPORT GrayAColorModelID;
-extern const KoID PIGMENT_EXPORT ;
-extern const KoID PIGMENT_EXPORT YCbCrAColorModelID;*/
     // Compute the depth part of the type
     quint32 depthType;
     if(_depthId == Integer8BitsColorDepthID.id())
     {
         depthType = BYTES_SH(1);
-    } else if(_depthId == Integer8BitsColorDepthID.id()) {
+    } else if(_depthId == Integer16BitsColorDepthID.id()) {
         depthType = BYTES_SH(2);
     } else {
+        kDebug() << "Unknow bit depth";
         return 0;
     }
     // Compute the model part of the type
     quint32 modelType;
-    if(_depthId == RGBAColorModelID.id())
+    if(_modelId == RGBAColorModelID.id())
     {
         modelType = (COLORSPACE_SH(PT_RGB)|EXTRA_SH(1)|CHANNELS_SH(3)|DOSWAP_SH(1)|SWAPFIRST_SH(1));
-    } else if(_depthId == XYZAColorModelID.id())
+    } else if(_modelId == XYZAColorModelID.id())
     {
         modelType = (COLORSPACE_SH(PT_XYZ)|EXTRA_SH(1)|CHANNELS_SH(3));
-    } else if(_depthId == LABAColorModelID.id())
+    } else if(_modelId == LABAColorModelID.id())
     {
         modelType = (COLORSPACE_SH(PT_Lab)|EXTRA_SH(1)|CHANNELS_SH(3));
-    } else if(_depthId == CMYKAColorModelID.id())
+    } else if(_modelId == CMYKAColorModelID.id())
     {
         modelType = (COLORSPACE_SH(PT_CMYK)|EXTRA_SH(1)|CHANNELS_SH(4));
-    } else if(_depthId == GrayAColorModelID.id())
+    } else if(_modelId == GrayAColorModelID.id())
     {
         modelType = (COLORSPACE_SH(PT_GRAY)|EXTRA_SH(1)|CHANNELS_SH(1));
-    } else if(_depthId == GrayColorModelID.id())
+    } else if(_modelId == GrayColorModelID.id())
     {
         modelType = (COLORSPACE_SH(PT_GRAY)|CHANNELS_SH(1));
-    } else if(_depthId == YCbCrAColorModelID.id())
+    } else if(_modelId == YCbCrAColorModelID.id())
     {
         modelType = (COLORSPACE_SH(PT_YCbCr)|EXTRA_SH(1)|CHANNELS_SH(3));
     } else {
+        kDebug() << "Unknow color model";
         return 0;
     }
     return depthType|modelType;

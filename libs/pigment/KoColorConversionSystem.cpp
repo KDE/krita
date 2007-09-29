@@ -22,16 +22,41 @@
 #include <QHash>
 #include <QString>
 
+#include <kdebug.h>
+
+#include "KoColorConversionTransformationFactory.h"
 #include "KoColorSpace.h"
 
 struct KoColorConversionSystem::Node {
+    Node() : isInitialized(false), colorSpaceFactory(0) {}
+    void init( const KoColorSpaceFactory* _colorSpaceFactory)
+    {
+        Q_ASSERT(not isInitialized);
+        isInitialized = true;
+        isIcc = _colorSpaceFactory->isIcc();
+        isHdr = _colorSpaceFactory->isHdr();
+        colorSpaceFactory = _colorSpaceFactory;
+    }
     QString modelId;
     QString depthId;
-    
+    bool isIcc;
+    bool isHdr;
+    bool isInitialized;
+    QList<Vertex*> outputVertexes;
+    const KoColorSpaceFactory* colorSpaceFactory;
 };
 
 struct KoColorConversionSystem::Vertex {
-    
+    Vertex(Node* _srcNode, Node* _dstNode) : srcNode(_srcNode), dstNode(_dstNode), factoryFromSrc(0), factoryFromDst(0) {}
+    ~Vertex()
+    {
+        delete factoryFromSrc;
+        delete factoryFromDst;
+    }
+    KoColorConversionTransformationFactory* factoryFromSrc; // Factory provided by the destination node
+    KoColorConversionTransformationFactory* factoryFromDst; // Factory provided by the destination node
+    Node* srcNode;
+    Node* dstNode;
 };
 
 struct KoColorConversionSystem::NodeKey {
@@ -52,6 +77,7 @@ uint qHash(const KoColorConversionSystem::NodeKey &key)
 
 struct KoColorConversionSystem::Private {
     QHash<NodeKey, Node*> graph;
+    QList<Vertex*> vertexes;
 };
 
 
@@ -60,16 +86,100 @@ KoColorConversionSystem::KoColorConversionSystem() : d(new Private)
     
 }
 
+KoColorConversionSystem::~KoColorConversionSystem()
+{
+    QList<Node*> nodes = d->graph.values();
+    foreach(Node* node, nodes)
+    {
+        delete node;
+    }
+    foreach(Vertex* vertex, d->vertexes)
+    {
+        delete vertex;
+    }
+    delete d;
+}
+
 void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
 {
+    kDebug() << "Inserting color space " << csf->name() << " (" << csf->id() << ") Model: " << csf->colorModelId() << " Depth: " << csf->colorDepthId() << " into the CCS";
     QString modelId = csf->colorModelId().id();
     QString depthId = csf->colorDepthId().id();
     NodeKey key(modelId, depthId);
-    Node* csNode = node(key);
+    Node* csNode = nodeFor(key);
     Q_ASSERT(csNode);
+    csNode->init(csf);
+    if(csNode->isIcc)
+    { // Construct a link between this color space and all other ICC color space
+        QList<Node*> nodes = d->graph.values();
+        foreach(Node* node, nodes)
+        {
+            if(node->isIcc and node->isInitialized)
+            {
+                // Create the vertex from 1 to 2
+                Vertex* v12 = new Vertex(csNode, node);
+                v12->factoryFromSrc = csf->createICCColorConversionTransformationFactory( node->modelId, node->depthId);
+                Q_ASSERT( v12->factoryFromSrc );
+                d->vertexes.append( v12 );
+                csNode->outputVertexes.append( v12 );
+                // Create the vertex from 2 to 1
+                Vertex* v21 = new Vertex(csNode, node);
+                v21->factoryFromSrc = node->colorSpaceFactory->createICCColorConversionTransformationFactory( csNode->modelId, csNode->depthId);
+                Q_ASSERT( v21->factoryFromSrc );
+                d->vertexes.append( v21 );
+                csNode->outputVertexes.append( v21 );
+            }
+        }
+        // ICC color space can be converted among the same color space to a different profile, hence the need to a vertex on self
+        Vertex* vSelfToSelf = new Vertex(csNode, csNode);
+        vSelfToSelf->factoryFromSrc = csf->createICCColorConversionTransformationFactory(csNode->modelId, csNode->depthId);
+        Q_ASSERT( vSelfToSelf->factoryFromSrc );
+        csNode->outputVertexes.append( vSelfToSelf );
+        d->vertexes.append( vSelfToSelf );
+    }
+    // Construct a link for "custom" transformation
+    QList<KoColorConversionTransformationFactory*> cctfs = csf->colorConversionLinks();
+    foreach(KoColorConversionTransformationFactory* cctf, cctfs)
+    {
+        Node* srcNode = nodeFor(cctf->srcColorModelId(), cctf->srcColorDepthId());
+        Q_ASSERT(srcNode);
+        Node* dstNode = nodeFor(cctf->dstColorModelId(), cctf->dstColorDepthId());
+        Q_ASSERT(dstNode);
+        Q_ASSERT(srcNode == csNode or dstNode == csNode);
+        Vertex* v = 0;
+        // Check if the two nodes are allready connected
+        foreach(Vertex* oV, srcNode->outputVertexes)
+        {
+            if(oV->dstNode = dstNode)
+            {
+                v = oV;
+                break;
+            }
+        }
+        // If the vertex doesn't allready exist, then create it
+        if(not v)
+        {
+            v = new Vertex(srcNode, dstNode);
+        }
+        Q_ASSERT(v);
+        if(dstNode == csNode)
+        {
+            Q_ASSERT(v->factoryFromDst == 0);
+            v->factoryFromDst = cctf;
+        } else
+        {
+            Q_ASSERT(v->factoryFromSrc == 0);
+            v->factoryFromSrc = cctf;
+        }
+    }
 }
 
-KoColorConversionSystem::Node* KoColorConversionSystem::node(const KoColorConversionSystem::NodeKey& key)
+KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(QString _colorModelId, QString _colorDepthId)
+{
+    return nodeFor(NodeKey(_colorModelId, _colorDepthId));
+}
+
+KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const KoColorConversionSystem::NodeKey& key)
 {
     if(!d->graph.contains(key))
     {

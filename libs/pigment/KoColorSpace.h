@@ -691,7 +691,8 @@ public:
      */
     virtual bool isHdr() const = 0;
     /**
-     * @return the list of color conversion provided by this colorspace
+     * @return the list of color conversion provided by this colorspace, the factories
+     * constructed by this functions are owned by the caller of the function
      */
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const = 0;
     

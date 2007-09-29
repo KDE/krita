@@ -31,13 +31,15 @@ class KoColorConversionSystem {
         friend uint qHash(const KoColorConversionSystem::NodeKey &key);
     public:
         KoColorConversionSystem();
+        ~KoColorConversionSystem();
         void insertColorSpace(const KoColorSpaceFactory*);
         KoColorConversionTransformation* createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
     private:
+        Node* nodeFor(const NodeKey& key);
         /**
          * @return the node associated with that key, and create it if needed
          */
-        Node* node(const NodeKey& key);
+        Node* nodeFor(QString colorModelId, QString colorDepthId);
     private:
         struct Private;
         Private* const d;

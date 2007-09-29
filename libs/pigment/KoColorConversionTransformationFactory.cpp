@@ -52,3 +52,20 @@ bool KoColorConversionTransformationFactory::canBeDestination(KoColorSpace* dstC
 {
     return ((dstCS->colorModelId().id() == d->dstModelId) and (dstCS->colorDepthId().id() == d->dstDepthId));
 }
+
+QString KoColorConversionTransformationFactory::srcColorModelId() const
+{
+    return d->srcModelId;
+}
+QString KoColorConversionTransformationFactory::srcColorDepthId() const
+{
+    return d->srcDepthId;
+}
+QString KoColorConversionTransformationFactory::dstColorModelId() const
+{
+    return d->dstModelId;
+}
+QString KoColorConversionTransformationFactory::dstColorDepthId() const
+{
+    return d->dstDepthId;
+}

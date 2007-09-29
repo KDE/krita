@@ -72,6 +72,23 @@ class PIGMENT_EXPORT KoColorConversionTransformationFactory {
          * this function should return the worse case.
          */
         virtual int depthDecrease() const = 0;
+    public:
+        /**
+         * @return the id of the source color model
+         */
+        QString srcColorModelId() const;
+        /**
+         * @return the id of the source color depth
+         */
+        QString srcColorDepthId() const;
+        /**
+         * @return the id of the destination color model
+         */
+        QString dstColorModelId() const;
+        /**
+         * @return the id of the destination color depth
+         */
+        QString dstColorDepthId() const;
     protected:
         /**
          * @param srcCS source color space

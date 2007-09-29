@@ -114,20 +114,21 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         QList<Node*> nodes = d->graph.values();
         foreach(Node* node, nodes)
         {
-            if(node->isIcc and node->isInitialized)
+            if(node->isIcc and node->isInitialized and node != csNode)
             {
                 // Create the vertex from 1 to 2
+                Q_ASSERT(vertexBetween(node, csNode) == 0); // The two color spaces should not be connected yet
                 Vertex* v12 = new Vertex(csNode, node);
                 v12->factoryFromSrc = csf->createICCColorConversionTransformationFactory( node->modelId, node->depthId);
                 Q_ASSERT( v12->factoryFromSrc );
                 d->vertexes.append( v12 );
                 csNode->outputVertexes.append( v12 );
                 // Create the vertex from 2 to 1
-                Vertex* v21 = new Vertex(csNode, node);
+                Vertex* v21 = new Vertex(node, csNode);
                 v21->factoryFromSrc = node->colorSpaceFactory->createICCColorConversionTransformationFactory( csNode->modelId, csNode->depthId);
                 Q_ASSERT( v21->factoryFromSrc );
                 d->vertexes.append( v21 );
-                csNode->outputVertexes.append( v21 );
+                node->outputVertexes.append( v21 );
             }
         }
         // ICC color space can be converted among the same color space to a different profile, hence the need to a vertex on self
@@ -146,16 +147,8 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         Node* dstNode = nodeFor(cctf->dstColorModelId(), cctf->dstColorDepthId());
         Q_ASSERT(dstNode);
         Q_ASSERT(srcNode == csNode or dstNode == csNode);
-        Vertex* v = 0;
         // Check if the two nodes are allready connected
-        foreach(Vertex* oV, srcNode->outputVertexes)
-        {
-            if(oV->dstNode = dstNode)
-            {
-                v = oV;
-                break;
-            }
-        }
+        Vertex* v = vertexBetween(srcNode, dstNode);
         // If the vertex doesn't allready exist, then create it
         if(not v)
         {
@@ -195,6 +188,18 @@ KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const KoColorCon
 
 KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent )
 {
+    return 0;
+}
+
+KoColorConversionSystem::Vertex* KoColorConversionSystem::vertexBetween(KoColorConversionSystem::Node* srcNode, KoColorConversionSystem::Node* dstNode)
+{
+    foreach(Vertex* oV, srcNode->outputVertexes)
+    {
+        if(oV->dstNode == dstNode)
+        {
+            return oV;
+        }
+    }
     return 0;
 }
 

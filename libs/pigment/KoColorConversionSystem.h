@@ -46,6 +46,10 @@ class KoColorConversionSystem {
          * @return the node associated with that key, and create it if needed
          */
         Node* nodeFor(QString colorModelId, QString colorDepthId);
+        /**
+         * @return the vertex between two nodes, or null if the vertex doesn't exist
+         */
+        Vertex* vertexBetween(Node* srcNode, Node* dstNode);
     private:
         struct Private;
         Private* const d;

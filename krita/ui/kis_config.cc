@@ -585,3 +585,14 @@ void KisConfig::setDrawMaskVisualisationOnUnscaledCanvasCache( bool drawMaskVisu
 {
     m_cfg.writeEntry( "drawMaskVisualisationOnUnscaledCanvasCache", drawMaskVisualisationOnUnscaledCanvasCache );
 }
+
+bool KisConfig::noXRender()
+{
+    return m_cfg.readEntry( "NoXRender",  false );
+}
+
+
+void KisConfig::setNoXRender( bool noXRender )
+{
+    m_cfg.writeEntry( "NoXRender",  noXRender );
+}

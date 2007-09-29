@@ -186,6 +186,10 @@ public:
     void setDrawMaskVisualisationOnUnscaledCanvasCache( bool drawMaskVisualisationOnUnscaledCanvasCache );
 
     bool fastZoom() { return false; }
+
+    // If there's no XRender use QPixmaps instead of QImage for the QPainterCanvas
+    bool noXRender();
+    void setNoXRender( bool noXRender );
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

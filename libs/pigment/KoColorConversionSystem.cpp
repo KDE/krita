@@ -53,10 +53,10 @@ struct KoColorConversionSystem::Vertex {
         delete factoryFromSrc;
         delete factoryFromDst;
     }
-    KoColorConversionTransformationFactory* factoryFromSrc; // Factory provided by the destination node
-    KoColorConversionTransformationFactory* factoryFromDst; // Factory provided by the destination node
     Node* srcNode;
     Node* dstNode;
+    KoColorConversionTransformationFactory* factoryFromSrc; // Factory provided by the destination node
+    KoColorConversionTransformationFactory* factoryFromDst; // Factory provided by the destination node
 };
 
 struct KoColorConversionSystem::NodeKey {
@@ -118,25 +118,19 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
             {
                 // Create the vertex from 1 to 2
                 Q_ASSERT(vertexBetween(node, csNode) == 0); // The two color spaces should not be connected yet
-                Vertex* v12 = new Vertex(csNode, node);
+                Vertex* v12 = createVertex(csNode, node);
                 v12->factoryFromSrc = csf->createICCColorConversionTransformationFactory( node->modelId, node->depthId);
                 Q_ASSERT( v12->factoryFromSrc );
-                d->vertexes.append( v12 );
-                csNode->outputVertexes.append( v12 );
                 // Create the vertex from 2 to 1
-                Vertex* v21 = new Vertex(node, csNode);
+                Vertex* v21 = createVertex(node, csNode);
                 v21->factoryFromSrc = node->colorSpaceFactory->createICCColorConversionTransformationFactory( csNode->modelId, csNode->depthId);
                 Q_ASSERT( v21->factoryFromSrc );
-                d->vertexes.append( v21 );
-                node->outputVertexes.append( v21 );
             }
         }
         // ICC color space can be converted among the same color space to a different profile, hence the need to a vertex on self
-        Vertex* vSelfToSelf = new Vertex(csNode, csNode);
+        Vertex* vSelfToSelf = createVertex(csNode, csNode);
         vSelfToSelf->factoryFromSrc = csf->createICCColorConversionTransformationFactory(csNode->modelId, csNode->depthId);
         Q_ASSERT( vSelfToSelf->factoryFromSrc );
-        csNode->outputVertexes.append( vSelfToSelf );
-        d->vertexes.append( vSelfToSelf );
     }
     // Construct a link for "custom" transformation
     QList<KoColorConversionTransformationFactory*> cctfs = csf->colorConversionLinks();
@@ -152,9 +146,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         // If the vertex doesn't allready exist, then create it
         if(not v)
         {
-            v = new Vertex(srcNode, dstNode);
-            srcNode->outputVertexes.append( v );
-            d->vertexes.append( v );
+            v = createVertex(srcNode, dstNode);
         }
         Q_ASSERT(v);
         if(dstNode == csNode)
@@ -204,6 +196,16 @@ KoColorConversionSystem::Vertex* KoColorConversionSystem::vertexBetween(KoColorC
     }
     return 0;
 }
+
+KoColorConversionSystem::Vertex* KoColorConversionSystem::createVertex(Node* srcNode, Node* dstNode)
+{
+    Vertex* v = new Vertex(srcNode, dstNode);
+    srcNode->outputVertexes.append( v );
+    d->vertexes.append( v );
+    return v;
+}
+
+// -- Graph visualisation functions --
 
 QString KoColorConversionSystem::toDot() const
 {

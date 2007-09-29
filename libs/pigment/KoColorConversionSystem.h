@@ -52,6 +52,10 @@ class PIGMENT_EXPORT KoColorConversionSystem {
          * @return the vertex between two nodes, or null if the vertex doesn't exist
          */
         Vertex* vertexBetween(Node* srcNode, Node* dstNode);
+        /**
+         * create a vertex between two nodes and return it.
+         */
+        Vertex* createVertex(Node* srcNode, Node* dstNode);
     private:
         struct Private;
         Private* const d;

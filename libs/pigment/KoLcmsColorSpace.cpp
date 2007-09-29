@@ -45,7 +45,9 @@ class KoLcmsColorConversionTransformationFactory : public KoColorConversionTrans
 KoLcmsColorConversionTransformationFactory::KoLcmsColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId) : KoColorConversionTransformationFactory(_srcModelId, _srcDepthId, _dstModelId, _dstDepthId)
 {
     m_srcColorSpaceType = computeColorSpaceType( _srcModelId, _srcDepthId);
+    Q_ASSERT(m_srcColorSpaceType);
     m_dstColorSpaceType = computeColorSpaceType( _dstModelId, _dstDepthId);
+    Q_ASSERT(m_dstColorSpaceType);
     m_conserveColorInformation = not (_dstModelId == GrayAColorModelID.id() or _dstModelId == GrayColorModelID.id()); // color information is lost when converting to Grayscale
     m_depthDecrease = 0;
     if( _srcDepthId == Integer16BitsColorDepthID.id() and _dstDepthId == Integer8BitsColorDepthID.id())
@@ -76,7 +78,50 @@ int KoLcmsColorConversionTransformationFactory::depthDecrease() const
 
 quint32 KoLcmsColorConversionTransformationFactory::computeColorSpaceType(QString _modelId, QString _depthId)
 {
-    return 0;
+/*extern const KoID PIGMENT_EXPORT ;
+extern const KoID PIGMENT_EXPORT XYZAColorModelID;
+extern const KoID PIGMENT_EXPORT ;
+extern const KoID PIGMENT_EXPORT ;
+extern const KoID PIGMENT_EXPORT GrayAColorModelID;
+extern const KoID PIGMENT_EXPORT ;
+extern const KoID PIGMENT_EXPORT YCbCrAColorModelID;*/
+    // Compute the depth part of the type
+    quint32 depthType;
+    if(_depthId == Integer8BitsColorDepthID.id())
+    {
+        depthType = BYTES_SH(1);
+    } else if(_depthId == Integer8BitsColorDepthID.id()) {
+        depthType = BYTES_SH(2);
+    } else {
+        return 0;
+    }
+    // Compute the model part of the type
+    quint32 modelType;
+    if(_depthId == RGBAColorModelID.id())
+    {
+        modelType = (COLORSPACE_SH(PT_RGB)|EXTRA_SH(1)|CHANNELS_SH(3)|DOSWAP_SH(1)|SWAPFIRST_SH(1));
+    } else if(_depthId == XYZAColorModelID.id())
+    {
+        modelType = (COLORSPACE_SH(PT_XYZ)|EXTRA_SH(1)|CHANNELS_SH(3));
+    } else if(_depthId == LABAColorModelID.id())
+    {
+        modelType = (COLORSPACE_SH(PT_Lab)|EXTRA_SH(1)|CHANNELS_SH(3));
+    } else if(_depthId == CMYKAColorModelID.id())
+    {
+        modelType = (COLORSPACE_SH(PT_CMYK)|EXTRA_SH(1)|CHANNELS_SH(4));
+    } else if(_depthId == GrayAColorModelID.id())
+    {
+        modelType = (COLORSPACE_SH(PT_GRAY)|EXTRA_SH(1)|CHANNELS_SH(1));
+    } else if(_depthId == GrayColorModelID.id())
+    {
+        modelType = (COLORSPACE_SH(PT_GRAY)|CHANNELS_SH(1));
+    } else if(_depthId == YCbCrAColorModelID.id())
+    {
+        modelType = (COLORSPACE_SH(PT_YCbCr)|EXTRA_SH(1)|CHANNELS_SH(3));
+    } else {
+        return 0;
+    }
+    return depthType|modelType;
 }
 
 // -- KoLcmsColorConversionTransformation --

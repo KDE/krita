@@ -100,10 +100,12 @@ struct KoLcmsDarkenTransformation : public KoColorTransformation
 
 class PIGMENT_EXPORT KoLcmsColorConversionTransformation : public KoColorConversionTransformation {
     public:
-        KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, KoLcmsColorProfile* srcProfile, const KoColorSpace* dstCs, KoLcmsColorProfile* dstProfile, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_transform(0)
+        KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, quint32 srcColorSpaceType, KoLcmsColorProfile* srcProfile, const KoColorSpace* dstCs, quint32 dstColorSpaceType, KoLcmsColorProfile* dstProfile, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_transform(0)
         {
             m_transform = this->createTransform(
+                            srcColorSpaceType,
                             srcProfile,
+                            dstColorSpaceType,
                             dstProfile,
                             renderingIntent);
         }
@@ -130,7 +132,9 @@ class PIGMENT_EXPORT KoLcmsColorConversionTransformation : public KoColorConvers
         }
     private:
         cmsHTRANSFORM createTransform(
+                quint32 srcColorSpaceType,
                 KoLcmsColorProfile *  srcProfile,
+                quint32 dstColorSpaceType,
                 KoLcmsColorProfile *  dstProfile,
                 qint32 renderingIntent) const;
     private:
@@ -391,9 +395,10 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
         {
             KoLcmsColorProfile* dstprofile = toLcmsProfile(dstColorSpace->profile());
-            if(d->profile and dstprofile and dynamic_cast<const KoLcmsInfo*>(dstColorSpace))
+            const KoLcmsInfo* dstInfo = dynamic_cast<const KoLcmsInfo*>(dstColorSpace);
+            if(d->profile and dstprofile and dstInfo)
             {
-                return new KoLcmsColorConversionTransformation(this, d->profile, dstColorSpace, dstprofile, renderingIntent);
+                return new KoLcmsColorConversionTransformation(this, colorSpaceType(), d->profile, dstColorSpace, dstInfo->colorSpaceType(), dstprofile, renderingIntent);
             } else {
                 return KoColorSpaceAbstract<_CSTraits>::createColorConverter(dstColorSpace, renderingIntent);
             }

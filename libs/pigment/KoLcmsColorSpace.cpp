@@ -23,9 +23,68 @@
 #include "KoLcmsColorSpace.h"
 
 #include "KoColorConversionTransformationFactory.h"
+#include "KoColorModelStandardIds.h"
+
+// -- KoLcmsColorConversionTransformationFactory --
+
+class KoLcmsColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
+    public:
+        KoLcmsColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId);
+        virtual KoColorConversionTransformation* createColorTransformation(KoColorSpace* srcColorSpace, KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+        virtual bool conserveColorInformation() const;
+        virtual bool conserveDynamicRange() const;
+        virtual int depthDecrease() const;
+    private:
+        quint32 computeColorSpaceType(QString _modelId, QString _depthId);
+    private:
+        quint32 m_srcColorSpaceType, m_dstColorSpaceType;
+        bool m_conserveColorInformation;
+        int m_depthDecrease;
+};
+
+KoLcmsColorConversionTransformationFactory::KoLcmsColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId) : KoColorConversionTransformationFactory(_srcModelId, _srcDepthId, _dstModelId, _dstDepthId)
+{
+    m_srcColorSpaceType = computeColorSpaceType( _srcModelId, _srcDepthId);
+    m_dstColorSpaceType = computeColorSpaceType( _dstModelId, _dstDepthId);
+    m_conserveColorInformation = not (_dstModelId == GrayAColorModelID.id() or _dstModelId == GrayColorModelID.id()); // color information is lost when converting to Grayscale
+    m_depthDecrease = 0;
+    if( _srcDepthId == Integer16BitsColorDepthID.id() and _dstDepthId == Integer8BitsColorDepthID.id())
+    {
+        m_depthDecrease = -8;
+    }
+}
+
+KoColorConversionTransformation* KoLcmsColorConversionTransformationFactory::createColorTransformation(KoColorSpace* srcColorSpace, KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent )
+{
+    return new KoLcmsColorConversionTransformation(srcColorSpace, m_srcColorSpaceType, dynamic_cast<KoLcmsColorProfile*>(srcColorSpace->profile()), dstColorSpace, m_dstColorSpaceType, dynamic_cast<KoLcmsColorProfile*>(dstColorSpace->profile()), renderingIntent);
+}
+
+bool KoLcmsColorConversionTransformationFactory::conserveColorInformation() const
+{
+    return m_conserveColorInformation;
+}
+
+bool KoLcmsColorConversionTransformationFactory::conserveDynamicRange() const
+{
+    return false; // LCMS color transformation allways lose dynamic range
+}
+
+int KoLcmsColorConversionTransformationFactory::depthDecrease() const
+{
+    return m_depthDecrease;
+}
+
+quint32 KoLcmsColorConversionTransformationFactory::computeColorSpaceType(QString _modelId, QString _depthId)
+{
+    return 0;
+}
+
+// -- KoLcmsColorConversionTransformation --
 
 cmsHTRANSFORM KoLcmsColorConversionTransformation::createTransform(
+        quint32 srcColorSpaceType,
         KoLcmsColorProfile *  srcProfile,
+        quint32 dstColorSpaceType,
         KoLcmsColorProfile *  dstProfile,
         qint32 renderingIntent) const
 {
@@ -40,15 +99,16 @@ cmsHTRANSFORM KoLcmsColorConversionTransformation::createTransform(
     Q_ASSERT(dynamic_cast<const KoLcmsInfo*>(srcColorSpace()));
     Q_ASSERT(dynamic_cast<const KoLcmsInfo*>(dstColorSpace()));
     cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
-            dynamic_cast<const KoLcmsInfo*>(srcColorSpace())->colorSpaceType(),
+            srcColorSpaceType,
             dstProfile->lcmsProfile(),
-            dynamic_cast<const KoLcmsInfo*>(dstColorSpace())->colorSpaceType(),
+            dstColorSpaceType,
             renderingIntent,
             flags);
 
     return tf;
 }
 
+// -- KoLcmsColorSpaceFactory --
 QList<KoColorConversionTransformationFactory*> KoLcmsColorSpaceFactory::colorConversionLinks() const
 {
     return QList<KoColorConversionTransformationFactory*>();
@@ -56,5 +116,5 @@ QList<KoColorConversionTransformationFactory*> KoLcmsColorSpaceFactory::colorCon
 
 KoColorConversionTransformationFactory* KoLcmsColorSpaceFactory::createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
 {
-    return 0;
+    return new KoLcmsColorConversionTransformationFactory( colorModelId().id(), colorDepthId().id(), _colorModelId, _colorDepthId);
 }

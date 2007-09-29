@@ -28,9 +28,6 @@ struct KoColorConversionTransformationFactory::Private {
     QString srcDepthId;
     QString dstModelId;
     QString dstDepthId;
-    QString iccModelId;
-    QString iccDepthId;
-    bool isIcc;
 };
 
 KoColorConversionTransformationFactory::KoColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId) : d(new Private)
@@ -39,14 +36,6 @@ KoColorConversionTransformationFactory::KoColorConversionTransformationFactory(Q
     d->srcDepthId = _srcDepthId;
     d->dstModelId = _dstModelId;
     d->dstDepthId = _dstDepthId;
-    d->isIcc = false;
-}
-
-KoColorConversionTransformationFactory::KoColorConversionTransformationFactory(QString _iccModelId, QString _iccDepthId) : d(new Private)
-{
-    d->iccModelId = _iccModelId;
-    d->iccModelId = _iccDepthId;
-    d->isIcc = true;
 }
 
 KoColorConversionTransformationFactory::~KoColorConversionTransformationFactory()
@@ -54,31 +43,12 @@ KoColorConversionTransformationFactory::~KoColorConversionTransformationFactory(
     delete d;
 }
 
-bool KoColorConversionTransformationFactory::isIccConversionTransformation()
-{
-    return d->isIcc;
-}
-
 bool KoColorConversionTransformationFactory::canBeSource(KoColorSpace* srcCS)
 {
-    if(d->isIcc)
-    {
-        return ((srcCS->colorModelId().id() == d->iccModelId) and (srcCS->colorDepthId().id() == d->iccDepthId));
-    }
-    else
-    {
-        return ((srcCS->colorModelId().id() == d->srcModelId) and (srcCS->colorDepthId().id() == d->srcDepthId));
-    }
+    return ((srcCS->colorModelId().id() == d->srcModelId) and (srcCS->colorDepthId().id() == d->srcDepthId));
 }
 
 bool KoColorConversionTransformationFactory::canBeDestination(KoColorSpace* dstCS)
 {
-    if(d->isIcc)
-    {
-        return ((dstCS->colorModelId().id() == d->iccModelId) and (dstCS->colorDepthId().id() == d->iccDepthId));
-    }
-    else
-    {
-        return ((dstCS->colorModelId().id() == d->dstModelId) and (dstCS->colorDepthId().id() == d->dstDepthId));
-    }
+    return ((dstCS->colorModelId().id() == d->dstModelId) and (dstCS->colorDepthId().id() == d->dstDepthId));
 }

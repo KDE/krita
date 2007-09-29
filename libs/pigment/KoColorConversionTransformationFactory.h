@@ -24,6 +24,8 @@ class QString;
 class KoColorSpace;
 class KoColorConversionTransformation;
 
+#include <KoColorConversionTransformation.h>
+
 #include <pigment_export.h>
 
 /**
@@ -42,17 +44,6 @@ class PIGMENT_EXPORT KoColorConversionTransformationFactory {
          * @param _dstDepthId id for the destination depth
          */
         KoColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId);
-        /**
-         * Create a color conversion transformation factory for an ICC color space.
-         * 
-         * @param _iccModelId id for the color model
-         * @param _iccDepthId id for the color depth
-         *
-         * It is assumed that this factory can create a color conversion from and to this color
-         * space, to and from any other ICC color space (wether both color space are powered by
-         * the same color engine or not).
-         */
-        KoColorConversionTransformationFactory(QString _iccModelId, QString _iccDepthId);
         virtual ~KoColorConversionTransformationFactory();
         /**
          * Creates a color transformation between the source color space and the destination
@@ -61,23 +52,18 @@ class PIGMENT_EXPORT KoColorConversionTransformationFactory {
          * @param srcColorSpace source color space
          * @param dstColorSpace destination color space
          */
-        virtual KoColorConversionTransformation* createColorTransformation(KoColorSpace* srcColorSpace, KoColorSpace* dstColorSpace) =0;
-        /**
-         * @return true if this factory creates a color conversion transformation for an ICC
-         * color space
-         */
-        bool isIccConversionTransformation();
+        virtual KoColorConversionTransformation* createColorTransformation(KoColorSpace* srcColorSpace, KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) =0;
         /**
          * @return true if this factory creates a color conversion transformation which
          * conserve color information (typical color transformation that lose that information
          * is anything to grayscale).
          */
-        virtual bool conserveColorInformation(KoColorSpace* srcColorSpace, KoColorSpace* dstColorSpace) const =0;
+        virtual bool conserveColorInformation() const =0;
         /**
          * @return true if this factory creates a color conversion transformation which
          * conserve the dynamic range of the color.
          */
-        virtual bool conserveDynamicRange(KoColorSpace* srcColorSpace, KoColorSpace* dstColorSpace) const = 0;
+        virtual bool conserveDynamicRange() const = 0;
         /**
          * @return indicates how much the information on depth is lost when using a color
          * conversion transformation created by this factory (for instance between RGB8bit and R
@@ -85,7 +71,7 @@ class PIGMENT_EXPORT KoColorConversionTransformationFactory {
          * return 8). If one of the color space has different depths for each of its channel, then
          * this function should return the worse case.
          */
-        virtual int depthDecrease(KoColorSpace* srcColorSpace, KoColorSpace* dstColorSpace) const = 0;
+        virtual int depthDecrease() const = 0;
     protected:
         /**
          * @param srcCS source color space

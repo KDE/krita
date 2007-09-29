@@ -145,6 +145,8 @@ void KoColorSpaceRegistry::init()
     config.blacklist = "ColorSpacePluginsDisabled";
     config.group = "koffice";
     KoPluginLoader::instance()->load("KOffice/ColorSpace","[X-Pigment-MinVersion] <= 0", config);
+    
+    kDebug() << d->colorConversionSystem->toDot();
 }
 
 KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private())

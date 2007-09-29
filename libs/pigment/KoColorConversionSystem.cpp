@@ -198,3 +198,13 @@ KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(c
     return 0;
 }
 
+QString KoColorConversionSystem::toDot() const
+{
+    QString dot = "digraph CCS {\n";
+    foreach(Vertex* oV, d->vertexes)
+    {
+        dot += QString("%1 -> %2\n").arg(oV->srcNode->colorSpaceFactory->id()).arg(oV->dstNode->colorSpaceFactory->id());
+    }
+    dot += "}";
+    return dot;
+}

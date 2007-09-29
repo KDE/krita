@@ -34,6 +34,12 @@ class KoColorConversionSystem {
         ~KoColorConversionSystem();
         void insertColorSpace(const KoColorSpaceFactory*);
         KoColorConversionTransformation* createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    public:
+        /**
+         * This function return a text that can be compiled using dot to display
+         * the graph of color conversion connection.
+         */
+        QString toDot() const;
     private:
         Node* nodeFor(const NodeKey& key);
         /**

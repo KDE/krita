@@ -643,6 +643,7 @@ class PIGMENT_EXPORT KoLcmsColorSpaceFactory : public KoColorSpaceFactory, priva
             KoLcmsColorProfile* p = dynamic_cast<KoLcmsColorProfile*>(profile);
             return p && p->colorSpaceSignature() == colorSpaceSignature();
         }
+        virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const;
         virtual bool isIcc() const { return true; }
         virtual bool isHdr() const { return false; }
         virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;

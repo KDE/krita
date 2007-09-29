@@ -694,6 +694,13 @@ public:
      * @return the list of color conversion provided by this colorspace
      */
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const = 0;
+    
+    /**
+     * This function will create a 
+     * @return a factory to create color conversion objects between two icc color spaces, or null,
+     * if one of the color space is not ICC, or if the ICC engine can't handle the conversion.
+     */
+    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const = 0;
     /**
      *  @return 
      */

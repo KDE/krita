@@ -56,6 +56,10 @@ public:
     virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
     
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisRgbF32HDRColorSpace(parent, p); }
+    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+    {
+        return 0;
+    }
 };
 
 #endif

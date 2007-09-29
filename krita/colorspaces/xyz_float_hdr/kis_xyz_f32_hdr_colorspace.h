@@ -59,6 +59,10 @@ public:
     virtual bool isIcc() const { return false; }
     virtual bool isHdr() const { return true; }
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
+    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+    {
+        return 0;
+    }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisXyzF32HDRColorSpace(parent, p); }
     virtual bool profileIsCompatible(KoColorProfile* profile) const

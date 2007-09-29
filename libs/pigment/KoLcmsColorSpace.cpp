@@ -54,3 +54,7 @@ QList<KoColorConversionTransformationFactory*> KoLcmsColorSpaceFactory::colorCon
     return QList<KoColorConversionTransformationFactory*>();
 }
 
+KoColorConversionTransformationFactory* KoLcmsColorSpaceFactory::createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+{
+    return 0;
+}

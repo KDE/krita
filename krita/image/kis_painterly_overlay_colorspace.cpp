@@ -46,6 +46,10 @@ public:
             Q_UNUSED( p );
             return new KisPainterlyOverlayColorSpace("painterlyoverlay", "", parent);
         }
+    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+    {
+        return 0;
+    }
 
     virtual bool isIcc() const { return false; }
     

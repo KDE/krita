@@ -55,6 +55,10 @@ public:
     }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisYCbCrU16ColorSpace(parent, p); }
+    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+    {
+        return 0;
+    }
 
     
     virtual bool isIcc() const { return false; }

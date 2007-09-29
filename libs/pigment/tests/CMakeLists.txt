@@ -41,3 +41,7 @@ kde4_add_unit_test(TestKoColorSpaceMaths TESTNAME libs-pigment-TestKoColorSpaceM
 
 target_link_libraries(TestKoColorSpaceMaths  ${KDE4_KDECORE_LIBS} pigment ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+set(CSSGraph_GRAPH CSSGraph.cpp)
+kde4_add_executable(CSSGraph ${CSSGraph_GRAPH})
+target_link_libraries(CSSGraph  ${KDE4_KDECORE_LIBS} pigment )

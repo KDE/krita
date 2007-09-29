@@ -24,7 +24,9 @@ class KoColorSpace;
 class KoColorSpaceFactory;
 #include "KoColorConversionTransformation.h"
 
-class KoColorConversionSystem {
+#include <pigment_export.h>
+
+class PIGMENT_EXPORT KoColorConversionSystem {
         struct Node;
         struct Vertex;
         struct NodeKey;
@@ -33,7 +35,7 @@ class KoColorConversionSystem {
         KoColorConversionSystem();
         ~KoColorConversionSystem();
         void insertColorSpace(const KoColorSpaceFactory*);
-        KoColorConversionTransformation* createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+        KoColorConversionTransformation* createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
     public:
         /**
          * This function return a text that can be compiled using dot to display

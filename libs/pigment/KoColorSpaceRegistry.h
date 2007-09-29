@@ -33,6 +33,7 @@ class KisPaintDeviceAction;
 class KoColorSpace;
 class KoColorSpaceFactory;
 class KoColorProfile;
+class KoColorConversionSystem;
 
 /**
  *
@@ -223,6 +224,11 @@ public:
      */
     QList<KoID> colorDepthList(const KoID& colorModelId) const;
     
+    /**
+     * @return the color conversion system use by the registry and the color
+     * spaces to create color conversion transformation
+     */
+    const KoColorConversionSystem* colorConversionSystem() const;
 private:
     KoColorSpaceRegistry();
     KoColorSpaceRegistry(const KoColorSpaceRegistry&);

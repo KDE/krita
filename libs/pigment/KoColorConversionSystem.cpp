@@ -153,6 +153,8 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         if(not v)
         {
             v = new Vertex(srcNode, dstNode);
+            srcNode->outputVertexes.append( v );
+            d->vertexes.append( v );
         }
         Q_ASSERT(v);
         if(dstNode == csNode)
@@ -186,7 +188,7 @@ KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const KoColorCon
 }
 
 
-KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent )
+KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent ) const
 {
     return 0;
 }
@@ -210,6 +212,6 @@ QString KoColorConversionSystem::toDot() const
     {
         dot += QString("%1 -> %2\n").arg(oV->srcNode->colorSpaceFactory->id()).arg(oV->dstNode->colorSpaceFactory->id());
     }
-    dot += "}";
+    dot += "}\n";
     return dot;
 }

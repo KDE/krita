@@ -138,7 +138,7 @@ class KoColorSpaceMaths {
          */
         inline static _Tdst scaleToA(_T a)
         {
-            return (traits_compositetype)a >> ( traits::bits() - KoColorSpaceMathsTraits<_Tdst>::bits() );
+            return (traits_compositetype)a >> ( traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits );
         }
 };
 
@@ -179,6 +179,18 @@ inline float KoColorSpaceMaths<float>::blend(float a, float b, float alpha)
 //------------------------------ half specialization ------------------------------//
 
 #ifdef HAVE_OPENEXR
+
+template<>
+inline float KoColorSpaceMaths<half,float>::scaleToA(half a)
+{
+    return a;
+}
+
+template<>
+inline half KoColorSpaceMaths<float,half>::scaleToA(float a)
+{
+    return (half) a;
+}
 
 template<>
 inline quint8 KoColorSpaceMaths<half,quint8>::scaleToA(half a)

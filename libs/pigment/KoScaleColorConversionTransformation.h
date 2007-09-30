@@ -22,20 +22,21 @@
 #include <KoColorConversionTransformation.h>
 #include <KoColorConversionTransformationFactory.h>
 /**
- * Color transformation from any type of RGB to any other type of RGB, it only scale
- * the channels from one level to an other.
+ * This transformation allows to convert between two color spaces with the same
+ * color model but different channel type.
  */
 template<typename _src_CSTraits_, typename _dst_CSTraits_>
-class KisRgbToRgbColorConversionTransformation : public KoColorConversionTransformation {
+class KoScaleColorConversionTransformation : public KoColorConversionTransformation {
     public:
-        KisRgbToRgbColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs) : KoColorConversionTransformation(srcCs, dstCs)
+        KoScaleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs) : KoColorConversionTransformation(srcCs, dstCs)
         {
+            Q_ASSERT(srcCs->colorModelId() == dstCs->colorModelId());
         }
         virtual void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
         {
             const typename _src_CSTraits_::channels_type* src = _src_CSTraits_::nativeArray(srcU8);
             typename _dst_CSTraits_::channels_type* dst = _dst_CSTraits_::nativeArray(dstU8);
-            for(qint32 i = 0; i< 4*nPixels;i++)
+            for(quint32 i = 0; i< _src_CSTraits_::channels_nb * nPixels;i++)
             {
                 dst[i] = KoColorSpaceMaths<typename _src_CSTraits_::channels_type, typename _dst_CSTraits_::channels_type>::scaleToA(src[i]);
             }
@@ -43,12 +44,12 @@ class KisRgbToRgbColorConversionTransformation : public KoColorConversionTransfo
 };
 
 /**
- * Factory to create transformation from one RGB to an other type of RGB.
+ * Factory to create KoScaleColorConversionTransformation.
  */
 template<typename _src_CSTraits_, typename _dst_CSTraits_>
-class KisRgbToRgbColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
+class KoScaleColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
     public:
-        KisRgbToRgbColorConversionTransformationFactory(QString _srcDepthId, QString _dstDepthId) : KoColorConversionTransformationFactory(RGBAColorModelID.id(),  _srcDepthId, RGBAColorModelID.id(), _dstDepthId),
+        KoScaleColorConversionTransformationFactory(QString colorModelId, QString _srcDepthId, QString _dstDepthId) : KoColorConversionTransformationFactory(colorModelId,  _srcDepthId, colorModelId, _dstDepthId),
                 hdr( ( (srcColorDepthId() == Float16BitsColorDepthID.id()) and 
                        (dstColorDepthId() == Float32BitsColorDepthID.id()) ) or
                      ( (srcColorDepthId() == Float32BitsColorDepthID.id()) and 
@@ -59,7 +60,7 @@ class KisRgbToRgbColorConversionTransformationFactory : public KoColorConversion
             Q_UNUSED(renderingIntent);
             Q_ASSERT(canBeSource(srcColorSpace));
             Q_ASSERT(canBeDestination(dstColorSpace));
-            return new KisRgbToRgbColorConversionTransformation<_src_CSTraits_, _dst_CSTraits_>(srcColorSpace, dstColorSpace);
+            return new KoScaleColorConversionTransformation<_src_CSTraits_, _dst_CSTraits_>(srcColorSpace, dstColorSpace);
         }
         virtual bool conserveColorInformation() const
         {

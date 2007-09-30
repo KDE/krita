@@ -25,7 +25,7 @@
 
 #include "KoColorSpaceTraits.h"
 #include <KoColorModelStandardIds.h>
-#include "kis_rgb_to_rgb_color_conversion_transformation.h"
+#include "KoScaleColorConversionTransformation.h"
 
 typedef KoRgbTraits<float> RgbF32Traits;
 
@@ -61,11 +61,11 @@ public:
     {
         QList<KoColorConversionTransformationFactory*> list;
         // Conversion to RGB Float 32bit
-        list.append(new KisRgbToRgbColorConversionTransformationFactory< KoRgbTraits<quint8>, RgbF32Traits >( Integer8BitsColorDepthID.id(), Float32BitsColorDepthID.id() ) );
-        list.append(new KisRgbToRgbColorConversionTransformationFactory< KoRgbU16Traits, RgbF32Traits >( Integer16BitsColorDepthID.id(), Float32BitsColorDepthID.id() ) );
+        list.append(new KoScaleColorConversionTransformationFactory< KoRgbTraits<quint8>, RgbF32Traits >( RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), Float32BitsColorDepthID.id() ) );
+        list.append(new KoScaleColorConversionTransformationFactory< KoRgbU16Traits, RgbF32Traits >( RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), Float32BitsColorDepthID.id() ) );
         // Conversion from RGB Float 32bit
-        list.append(new KisRgbToRgbColorConversionTransformationFactory< RgbF32Traits, KoRgbTraits<quint8> >( Float32BitsColorDepthID.id(), Integer8BitsColorDepthID.id() ) );
-        list.append(new KisRgbToRgbColorConversionTransformationFactory< RgbF32Traits, KoRgbU16Traits  >( Float32BitsColorDepthID.id(), Integer16BitsColorDepthID.id() ) );
+        list.append(new KoScaleColorConversionTransformationFactory< RgbF32Traits, KoRgbTraits<quint8> >( RGBAColorModelID.id(), Float32BitsColorDepthID.id(), Integer8BitsColorDepthID.id() ) );
+        list.append(new KoScaleColorConversionTransformationFactory< RgbF32Traits, KoRgbU16Traits  >( RGBAColorModelID.id(), Float32BitsColorDepthID.id(), Integer16BitsColorDepthID.id() ) );
         
         return list;
     }

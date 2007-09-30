@@ -266,7 +266,6 @@ public:
 
     virtual bool isIcc() const { return false; }
     virtual bool isHdr() const { return true; }
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
     virtual QString defaultProfile() const { return "lcms virtual RGB profile - Rec. 709 Linear"; }
 };
 

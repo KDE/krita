@@ -28,6 +28,7 @@
 #include "krita_rgbf16_export.h"
 
 #include "KoColorSpaceTraits.h"
+#include "kis_rgb_to_rgb_color_conversion_transformation.h"
 
 typedef KoRgbTraits<half> RgbF16Traits;
 
@@ -59,8 +60,24 @@ public:
     virtual KoID colorDepthId() const { return Float16BitsColorDepthID; }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisRgbF16HDRColorSpace(parent, p); };
+    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const
+    {
+        QList<KoColorConversionTransformationFactory*> list;
+        // Conversion to RGB Float 16bit
+        list.append(new KisRgbToRgbColorConversionTransformationFactory< KoRgbTraits<quint8>, RgbF16Traits >( Integer8BitsColorDepthID.id(), Float16BitsColorDepthID.id() ) );
+        list.append(new KisRgbToRgbColorConversionTransformationFactory< KoRgbU16Traits, RgbF16Traits >( Integer16BitsColorDepthID.id(), Float16BitsColorDepthID.id() ) );
+        list.append(new KisRgbToRgbColorConversionTransformationFactory< KoRgbTraits<float>, RgbF16Traits >( Float32BitsColorDepthID.id(), Float16BitsColorDepthID.id() ) );
+        // Conversion from RGB Float 16bit
+        list.append(new KisRgbToRgbColorConversionTransformationFactory< RgbF16Traits, KoRgbTraits<quint8> >( Float16BitsColorDepthID.id(), Integer8BitsColorDepthID.id() ) );
+        list.append(new KisRgbToRgbColorConversionTransformationFactory< RgbF16Traits, KoRgbU16Traits  >( Float16BitsColorDepthID.id(), Integer16BitsColorDepthID.id() ) );
+        list.append(new KisRgbToRgbColorConversionTransformationFactory< RgbF16Traits, KoRgbTraits<float> >( Float16BitsColorDepthID.id(), Float32BitsColorDepthID.id() ) );
+        
+        return list;
+    }
     virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
     {
+        Q_UNUSED(_colorModelId);
+        Q_UNUSED(_colorDepthId);
         return 0;
     }
 };

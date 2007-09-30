@@ -17,10 +17,3 @@
  */
 
 #include "kis_rgb_float_hdr_colorspace.h"
-
-#include "KoColorConversionTransformationFactory.h"
-
-QList<KoColorConversionTransformationFactory*> KisRgbFloatHDRColorSpaceFactory::colorConversionLinks() const
-{
-    return QList<KoColorConversionTransformationFactory*>();
-}

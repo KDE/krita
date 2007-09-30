@@ -45,6 +45,7 @@ public:
     virtual QString name() const { return i18n("Grayscale (16-bit integer/channel)"); }
     virtual KoID colorModelId() const { return GrayAColorModelID; }
     virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
+    virtual int referenceDepth() const { return 16; }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KisGrayAU16ColorSpace(parent, p); }
 

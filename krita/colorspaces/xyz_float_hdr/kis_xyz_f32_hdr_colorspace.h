@@ -56,6 +56,7 @@ public:
     virtual KoID colorModelId() const { return XYZAColorModelID; }
     virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
     
+    virtual int referenceDepth() const { return 32; }
     virtual bool isIcc() const { return false; }
     virtual bool isHdr() const { return true; }
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;

@@ -53,6 +53,7 @@ public:
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisYCbCrU8ColorSpace(parent, p); }
 
+    virtual int referenceDepth() const { return 8; }
     virtual bool isIcc() const { return false; }
     virtual bool isHdr() const { return false; }
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;

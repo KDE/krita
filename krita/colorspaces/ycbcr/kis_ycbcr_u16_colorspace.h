@@ -59,6 +59,7 @@ public:
     {
         return 0;
     }
+    virtual int referenceDepth() const { return 16; }
 
     
     virtual bool isIcc() const { return false; }

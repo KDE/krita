@@ -40,6 +40,7 @@ struct KoColorSpaceTrait {
     typedef _channels_type_ channels_type;
     static const quint32 channels_nb = _channels_nb_;
     static const qint32 alpha_pos = _alpha_pos_;
+    static const int depth = KoColorSpaceMathsTraits<_channels_type_>::bits;
     /**
      * @return the size in byte of one pixel
      */
@@ -154,7 +155,6 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
     static const qint32 red_pos = 2;
     static const qint32 green_pos = 1;
     static const qint32 blue_pos = 0;
-    static const int depth = KoColorSpaceMathsTraits<_channels_type_>::bits;
     /**
      * An RGB pixel
      */

@@ -50,6 +50,7 @@ class KisXyzU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 
         virtual KoID colorModelId() const { return XYZAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
+        virtual int referenceDepth() const { return 16; }
 
         virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KisXyzU16ColorSpace(parent, p); }
 

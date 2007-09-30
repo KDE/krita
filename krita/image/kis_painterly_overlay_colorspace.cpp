@@ -54,6 +54,7 @@ public:
     virtual bool isIcc() const { return false; }
     
     virtual bool isHdr() const { return false; }
+    virtual int referenceDepth() const { return 32; }
     
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const
     {

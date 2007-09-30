@@ -5,6 +5,7 @@ include_directories( ${KOMAIN_INCLUDES} ${PIGMENT_INCLUDES} )
 
 set(koresources_LIB_SRCS
    KoColorSet.cpp
+   KoPattern.cpp
    KoResource.cpp
 )
 

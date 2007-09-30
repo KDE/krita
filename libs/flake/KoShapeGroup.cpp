@@ -82,8 +82,10 @@ bool KoShapeGroup::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
     bool boundInitialized = false;
     foreach( KoShape * shape, iterator() )
     {
-        if( ! boundInitialized )
+        if( ! boundInitialized ) {
             bound = shape->boundingRect();
+            boundInitialized = true;
+        }
         else
             bound = bound.united( shape->boundingRect() );
     }

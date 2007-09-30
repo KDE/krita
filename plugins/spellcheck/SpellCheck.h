@@ -40,10 +40,27 @@ public:
     void finishedParagraph(QTextDocument *document, int cursorPosition);
     void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
+    QStringList availableBackends() const;
+    QStringList availableLanguages() const;
+
+    // void setDefaultClient(const QString &client);
+    void setDefaultLanguage(const QString &lang);
+    void setBackgroundSpellChecking(bool b);
+    void setSkipAllUppercaseWords(bool b);
+    void setSkipRunTogetherWords(bool b);
+
+    // QString defaultClient() const;
+    QString defaultLanguage() const;
+    bool backgroundSpellChecking();
+    bool skipAllUppercaseWords();
+    bool skipRunTogetherWords();
+
 private slots:
     void highlightMisspelled(const QString &word, int startPosition, bool misspelled = true);
     void dequeueDocument();
     void checkDocument(int position, int charsRemoved, int charsAdded);
+
+    void configureSpellCheck();
 
 private:
     Sonnet::Speller m_speller;

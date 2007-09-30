@@ -7,6 +7,11 @@ set(spellcheck_SRCS
     SpellCheck.cpp
     SpellCheckFactory.cpp
     BgSpellCheck.cpp
+    SpellCheckConfigDialog.cpp
+)
+
+kde4_add_ui_files( spellcheck_SRCS
+    SpellCheckConfig.ui
 )
 
 kde4_add_plugin(spellcheck ${spellcheck_SRCS})

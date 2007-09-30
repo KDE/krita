@@ -28,9 +28,15 @@
 #include <KoCharacterStyle.h>
 
 #include "BgSpellCheck.h"
+#include "SpellCheckConfigDialog.h"
 
 SpellCheck::SpellCheck()
 {
+    /* setup actions for this plugin */
+    QAction *configureAction = new QAction(i18n("Configure &Spell Checking..."), this);
+    connect(configureAction, SIGNAL(triggered()), this, SLOT(configureSpellCheck()));
+    addAction("tool_configure_spellcheck", configureAction);
+
     m_speller = Sonnet::Speller("en_US"); // TODO: make it configurable
     m_bgSpellCheck = new BgSpellCheck(m_speller, this);
     m_enableSpellCheck = true;
@@ -43,6 +49,8 @@ SpellCheck::SpellCheck()
 void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
 {
     if (!m_enableSpellCheck) return;
+
+    Q_UNUSED(document);
 
     m_cursor.setPosition(cursorPosition);
     m_cursor.movePosition(QTextCursor::WordLeft);
@@ -91,6 +99,66 @@ void SpellCheck::checkSection(QTextDocument *document, int startPosition, int en
         m_documentsQueue.enqueue(document);
 }
 
+QStringList SpellCheck::availableBackends() const
+{
+    return m_speller.availableBackends();
+}
+
+QStringList SpellCheck::availableLanguages() const
+{
+    return m_speller.availableLanguages();
+}
+
+/* void SpellCheck::setDefaultClient(const QString &client)
+{
+    m_speller.setDefaultClient(client);
+} */
+
+void SpellCheck::setDefaultLanguage(const QString &lang)
+{
+    m_speller.setDefaultLanguage(lang);
+}
+
+void SpellCheck::setBackgroundSpellChecking(bool b)
+{
+    m_enableSpellCheck = b;
+}
+
+void SpellCheck::setSkipAllUppercaseWords(bool b)
+{
+    m_speller.setAttribute(Speller::CheckUppercase, !b);
+}
+
+void SpellCheck::setSkipRunTogetherWords(bool b)
+{
+    m_speller.setAttribute(Speller::SkipRunTogether, b);
+}
+
+/* QString SpellCheck::defaultClient() const
+{
+    return m_speller.defaultClient();
+} */
+
+QString SpellCheck::defaultLanguage() const
+{
+    return m_speller.defaultLanguage();
+}
+
+bool SpellCheck::backgroundSpellChecking()
+{
+    return m_enableSpellCheck;
+}
+
+bool SpellCheck::skipAllUppercaseWords()
+{
+    return m_speller.testAttribute(Speller::CheckUppercase);
+}
+
+bool SpellCheck::skipRunTogetherWords()
+{
+    return m_speller.testAttribute(Speller::SkipRunTogether);
+}
+
 void SpellCheck::highlightMisspelled(const QString &word, int startPosition, bool misspelled)
 {
     // TODO: Exception, such as words that contain numbers, numbers
@@ -127,6 +195,14 @@ void SpellCheck::checkDocument(int position, int charsRemoved, int charsAdded)
 
     m_bgSpellCheck->start(m_document, startPosition, endPosition);
     // kDebug() << "start position: " << startPosition << " end position: " << endPosition;
+}
+
+void SpellCheck::configureSpellCheck()
+{
+    SpellCheckConfigDialog *cfgDlg = new SpellCheckConfigDialog(this);
+    if (cfgDlg->exec()) {
+        // TODO
+    }
 }
 
 #include "SpellCheck.moc"

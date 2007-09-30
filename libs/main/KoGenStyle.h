@@ -20,8 +20,8 @@
 #ifndef KOGENSTYLE_H
 #define KOGENSTYLE_H
 
+#include <QList>
 #include <QMap>
-#include <q3valuevector.h>
 #include <QString>
 #include <komain_export.h>
 
@@ -42,33 +42,47 @@ public:
      * Possible values for the "type" argument of the KoGenStyle constructor.
      * Those values can be extended by applications (starting at StyleFirstCustom),
      * it's for their own consumption anyway.
-     * (The reason for having the very common ones here, is to make it possible to
-     * use them from libkotext and flake).
+     * If there is a still missing add it here so that it is possible to use the same
+     * saving code in all applications.
      */
-    enum { StylePageLayout = 0,
-           StyleUser = 1,
-           StyleAuto = 2,
-           StyleMaster = 3,
-           StyleList = 4,
-           StyleAutoList = 5,
-           StyleNumericNumber = 6,
-           StyleNumericDate = 7,
-           StyleNumericTime = 8,
-           StyleNumericFraction = 9,
-           StyleNumericPercentage = 10,
-           StyleNumericScientific = 11,
-           StyleNumericCurrency = 12,
-           StyleNumericText = 13,
-           StyleHatch = 14,
-           StyleGraphicAuto = 15,       ///< graphic-properties as in 14.13.1 odf spec TODO rename to StyleGraphicProperty
-           StylePresentationAuto = 16,
-           StyleStrokeDash = 17,        ///< draw:stroke-dash as in 14.14.7 odf spec
-           StyleGradient = 18,          ///< draw:gradient as in 14.14.1 odf spec
-           StyleGradientLinear = 19,    ///< linear svg:gradient as in 14.14.2 odf spec
-           StyleGradientRadial = 20,    ///< radial svg:gradient as in 14.14.2 odf spec
-           StyleFillImage = 21,         ///< fill image as in 14.14.4 odf spec
-           StyleDrawingPage = 22,       ///< style for drawing-page as in 14.13.2 odf spec
-           StyleFirstCustom = 2500 };   ///< the first style for applications to use
+    enum { StylePageLayout = 0,         ///< style:page-layout as in odf 14.3 Page Layout
+           StyleUser = 1,               ///< style:style with style:paragraph-properties as in odf 14.1 Style Element (office:styles)
+           StyleAuto = 2,               ///< style:style with style:paragraph-properties as in odf 14.1 Style Element
+           StyleMaster = 3,             ///< TODO remove This has to be done differently
+           StyleList = 4,               ///< text:list-style as in odf 14.10 List Style (office:styles)
+           StyleAutoList = 5,           ///< text:list-style as in odf 14.10 List Style
+           StyleNumericNumber = 6,      ///< number:number-style as in odf 14.7.1 Number Style
+           StyleNumericDate = 7,        ///< number:date-style as in odf 14.7.4 Date Style
+           StyleNumericTime = 8,        ///< number:time-style as in odf 14.7.5 Time Style
+           StyleNumericFraction = 9,    ///< number:number-style as in odf 14.7.1 Number Style
+           StyleNumericPercentage = 10, ///< number:percentage-style as in odf 14.7.3 Percentage Style
+           StyleNumericScientific = 11, ///< number:number-style as in odf 14.7.1 Number Style
+           StyleNumericCurrency = 12,   ///< number:currency-style as in odf 14.7.2 Currency Style
+           StyleNumericText = 13,       ///< number:text-style 14.7.7 Text Style not used
+           StyleHatch = 14,             ///< draw:hatch as in odf 14.14.3 Hatch (office:styles)
+           StyleGraphicAuto = 15,       ///< style:style with style:graphic-properties as in 14.13.1 Graphic and Presentation Styles 
+           StylePresentationAuto = 16,  ///< style:style with style:graphic-properties as in 14.13.1 Graphic and Presentation Styles 
+           StyleStrokeDash = 17,        ///< draw:stroke-dash as in odf 14.14.7 Stroke Dash (office:styles)
+           StyleGradient = 18,          ///< draw:gradient as in odf 14.14.1 Gradient (office:styles)
+           StyleGradientLinear = 19,    ///< svg:linearGradient as in odf 14.14.2 SVG Gradients (office:styles)
+           StyleGradientRadial = 20,    ///< svg-radialGradient as in odf 14.14.2 SVG Gradients (office:styles)
+           StyleFillImage = 21,         ///< draw:fill-image as in odf 14.14.4 Fill Image (office:styles)
+           StyleDrawingPage = 22,       ///< style:drawing-page-properties as in odf 14.13.2 Drawing Page Style
+                                        ///< style:default-style as in odf 14.2 Default Styles
+                                        // TODO differently
+                                        /// 14.4 Master Pages 
+                                        /// 14.5 Table Templates
+                                        /// 14.6 Font Face Declaration
+           StyleNumberBoolean,          /// number:boolean 14.7.6 Boolean Style not used
+           StyleOpacity,                /// draw:opacity as in odf 14.14.5 Opacity Gradient not used
+           StyleMarker,                 /// draw:marker as in odf 14.14.6 Marker
+           StyleTableColumn,            /// style:table-column-properties as in odf 15.9 Column Formatting Properties (office:style)
+           StyleAutoTableColumn,        /// style:table-column-properties as in odf 15.9 Column Formatting Properties
+           StyleTableRow,               /// style:table-row-properties as in odf 15.10 Table Row Formatting Properties (office:style)
+           StyleAutoTableRow,           /// style:table-row-properties as in odf 15.10 Table Row Formatting Properties
+           StyleTableCall,              /// style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:style)
+           StyleAutoTableCall,          /// style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties
+           StyleFirstCustom = 2500 };   ///< the first style for applications to use StyleFirstCustom IS DEPRECATED
 
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),
@@ -312,7 +326,7 @@ private:
     QMap<QString, QString> m_properties[N_NumTypes];
     QMap<QString, QString> m_attributes;
     typedef QMap<QString, QString> StyleMap;
-    Q3ValueVector<StyleMap> m_maps; // we can't really sort the maps between themselves...
+    QList<StyleMap> m_maps; // we can't really sort the maps between themselves...
 
     bool m_autoStyleInStylesDotXml;
     bool m_defaultStyle;

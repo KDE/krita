@@ -26,6 +26,7 @@
 
 #include "KoColorConversionTransformationFactory.h"
 #include "KoColorSpace.h"
+#include "KoColorModelStandardIds.h"
 
 struct KoColorConversionSystem::Node {
     Node() : isInitialized(false), colorSpaceFactory(0) {}
@@ -36,27 +37,62 @@ struct KoColorConversionSystem::Node {
         isIcc = _colorSpaceFactory->isIcc();
         isHdr = _colorSpaceFactory->isHdr();
         colorSpaceFactory = _colorSpaceFactory;
+        referenceDepth = _colorSpaceFactory->referenceDepth();
+        isGray = ( _colorSpaceFactory->colorModelId() == GrayAColorModelID
+                or _colorSpaceFactory->colorModelId() == GrayColorModelID );
     }
     QString modelId;
     QString depthId;
     bool isIcc;
     bool isHdr;
     bool isInitialized;
+    int referenceDepth;
     QList<Vertex*> outputVertexes;
     const KoColorSpaceFactory* colorSpaceFactory;
+    bool isGray;
 };
 
 struct KoColorConversionSystem::Vertex {
-    Vertex(Node* _srcNode, Node* _dstNode) : srcNode(_srcNode), dstNode(_dstNode), factoryFromSrc(0), factoryFromDst(0) {}
+    Vertex(Node* _srcNode, Node* _dstNode) : srcNode(_srcNode), dstNode(_dstNode), factoryFromSrc(0), factoryFromDst(0)
+    {
+    }
     ~Vertex()
     {
         delete factoryFromSrc;
         delete factoryFromDst;
     }
+    void setFactoryFromSrc(KoColorConversionTransformationFactory* factory)
+    {
+        factoryFromSrc = factory;
+        initParameter(factoryFromSrc);
+    }
+    void setFactoryFromDst(KoColorConversionTransformationFactory* factory)
+    {
+        factoryFromDst = factory;
+        if( not factoryFromSrc) initParameter(factoryFromDst);
+    }
+    void initParameter(KoColorConversionTransformationFactory* transfo)
+    {
+        conserveColorInformation = transfo->conserveColorInformation();
+        conserveDynamicRange = transfo->conserveDynamicRange();
+        depthDecrease = transfo->depthDecrease();
+    }
+    KoColorConversionTransformationFactory* factory()
+    {
+        if(factoryFromSrc) return factoryFromSrc;
+        return factoryFromDst;
+    }
+
     Node* srcNode;
     Node* dstNode;
-    KoColorConversionTransformationFactory* factoryFromSrc; // Factory provided by the destination node
-    KoColorConversionTransformationFactory* factoryFromDst; // Factory provided by the destination node
+
+    bool conserveColorInformation;
+    bool conserveDynamicRange;
+    int depthDecrease;
+    private:
+        KoColorConversionTransformationFactory* factoryFromSrc; // Factory provided by the destination node
+        KoColorConversionTransformationFactory* factoryFromDst; // Factory provided by the destination node
+
 };
 
 struct KoColorConversionSystem::NodeKey {
@@ -68,6 +104,26 @@ struct KoColorConversionSystem::NodeKey {
     }
     QString modelId;
     QString depthId;
+};
+
+struct KoColorConversionSystem::Path {
+    Path() : respectColorCorrectness(true), bitDepthDecrease(0), keepDynamicRange(true), length(0)
+    {}
+    Node* startNode() {
+        return (vertexes.first())->srcNode;
+    }
+    Node* endNode() {
+        return (vertexes.last())->dstNode;
+    }
+    void appendVertex(Vertex* v) {
+        vertexes.append(v);
+//         if(v->
+    }
+    QList<Vertex*> vertexes;
+    bool respectColorCorrectness;
+    int bitDepthDecrease;
+    bool keepDynamicRange;
+    int length;
 };
 
 uint qHash(const KoColorConversionSystem::NodeKey &key)
@@ -119,18 +175,18 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
                 // Create the vertex from 1 to 2
                 Q_ASSERT(vertexBetween(node, csNode) == 0); // The two color spaces should not be connected yet
                 Vertex* v12 = createVertex(csNode, node);
-                v12->factoryFromSrc = csf->createICCColorConversionTransformationFactory( node->modelId, node->depthId);
-                Q_ASSERT( v12->factoryFromSrc );
+                v12->setFactoryFromSrc( csf->createICCColorConversionTransformationFactory( node->modelId, node->depthId) );
+                Q_ASSERT( v12->factory() );
                 // Create the vertex from 2 to 1
                 Vertex* v21 = createVertex(node, csNode);
-                v21->factoryFromSrc = node->colorSpaceFactory->createICCColorConversionTransformationFactory( csNode->modelId, csNode->depthId);
-                Q_ASSERT( v21->factoryFromSrc );
+                v21->setFactoryFromSrc( node->colorSpaceFactory->createICCColorConversionTransformationFactory( csNode->modelId, csNode->depthId) );
+                Q_ASSERT( v21->factory() );
             }
         }
         // ICC color space can be converted among the same color space to a different profile, hence the need to a vertex on self
         Vertex* vSelfToSelf = createVertex(csNode, csNode);
-        vSelfToSelf->factoryFromSrc = csf->createICCColorConversionTransformationFactory(csNode->modelId, csNode->depthId);
-        Q_ASSERT( vSelfToSelf->factoryFromSrc );
+        vSelfToSelf->setFactoryFromSrc( csf->createICCColorConversionTransformationFactory(csNode->modelId, csNode->depthId) );
+        Q_ASSERT( vSelfToSelf->factory() );
     }
     // Construct a link for "custom" transformation
     QList<KoColorConversionTransformationFactory*> cctfs = csf->colorConversionLinks();
@@ -151,14 +207,23 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         Q_ASSERT(v);
         if(dstNode == csNode)
         {
-            Q_ASSERT(v->factoryFromDst == 0);
-            v->factoryFromDst = cctf;
+            v->setFactoryFromDst(cctf);
         } else
         {
-            Q_ASSERT(v->factoryFromSrc == 0);
-            v->factoryFromSrc = cctf;
+            v->setFactoryFromSrc(cctf);
         }
     }
+}
+
+const KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(QString _colorModelId, QString _colorDepthId) const 
+{
+    return nodeFor(NodeKey(_colorModelId, _colorDepthId));
+}
+
+const KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const KoColorConversionSystem::NodeKey& key) const
+{
+    Q_ASSERT(d->graph.contains(key));
+    return d->graph.value(key);
 }
 
 KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(QString _colorModelId, QString _colorDepthId)
@@ -168,7 +233,7 @@ KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(QString _colorMo
 
 KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const KoColorConversionSystem::NodeKey& key)
 {
-    if(!d->graph.contains(key))
+    if(not d->graph.contains(key))
     {
         Node* n = new Node;
         n->modelId = key.modelId;
@@ -207,13 +272,138 @@ KoColorConversionSystem::Vertex* KoColorConversionSystem::createVertex(Node* src
 
 // -- Graph visualisation functions --
 
+QString KoColorConversionSystem::vertexToDot(KoColorConversionSystem::Vertex* v, QString options) const
+{
+    return QString("  %1 -> %2 %3\n").arg(v->srcNode->colorSpaceFactory->id()).arg(v->dstNode->colorSpaceFactory->id()).arg(options);
+}
+
 QString KoColorConversionSystem::toDot() const
 {
     QString dot = "digraph CCS {\n";
     foreach(Vertex* oV, d->vertexes)
     {
-        dot += QString("%1 -> %2\n").arg(oV->srcNode->colorSpaceFactory->id()).arg(oV->dstNode->colorSpaceFactory->id());
+        dot += vertexToDot(oV, "") ;
     }
     dot += "}\n";
     return dot;
+}
+
+QString KoColorConversionSystem::bestPathToDot(QString srcModelId, QString srcDepthId, QString dstModelId, QString dstDepthId) const
+{
+    const Node* srcNode = nodeFor(srcModelId, srcDepthId);
+    const Node* dstNode = nodeFor(dstModelId, dstDepthId);
+    Path* p = findBestPath( srcNode, dstNode);
+    QString dot = "digraph CCS {\n";
+    dot += QString("  %1 [color=red]\n").arg(srcNode->colorSpaceFactory->id());
+    dot += QString("  %1 [color=red]\n").arg(dstNode->colorSpaceFactory->id());
+    foreach(Vertex* oV, d->vertexes)
+    {
+        QString options = "";
+        if(p->vertexes.contains( oV))
+        {
+            options = "[color=red]";
+        }
+        dot += vertexToDot(oV, options) ;
+    }
+    dot += "}\n";
+    return dot;
+}
+
+
+#define CHECK_ONE_AND_NOT_THE_OTHER(name) \
+    if(path1-> name and not path2-> name) \
+    { \
+        return true; \
+    } \
+    if(not path1-> name and path2-> name) \
+    { \
+        return false; \
+    }
+
+template<bool ignoreHdr, bool ignoreColorCorrectness>
+struct PathQualityChecker {
+    PathQualityChecker(int _maxBitDecrease) : maxBitDecrease(_maxBitDecrease) {}
+    /// @return true if the path maximize all the criterions (except lenght)
+    inline bool isGoodPath(KoColorConversionSystem::Path* path)
+    {
+        return ( path->respectColorCorrectness or ignoreColorCorrectness ) and
+               ( path->bitDepthDecrease <= maxBitDecrease) and
+               ( path->keepDynamicRange or ignoreHdr );
+    }
+    /**
+     * Compare two pathes.
+     */
+    inline bool lessWorseThan(KoColorConversionSystem::Path* path1, KoColorConversionSystem::Path* path2)
+    {
+         // There is no point in comparing two pathes which doesn't start from the same node or doesn't end at the same node
+        Q_ASSERT(path1->startNode() == path2->startNode());
+        Q_ASSERT(path1->endNode() == path2->endNode());
+        if(not ignoreHdr)
+        {
+            CHECK_ONE_AND_NOT_THE_OTHER(keepDynamicRange)
+        }
+        if(not ignoreColorCorrectness)
+        {
+            CHECK_ONE_AND_NOT_THE_OTHER(respectColorCorrectness)
+        }
+        if( path1->bitDepthDecrease == path2->bitDepthDecrease)
+        {
+            return path1->length < path2->length; // if they have the same length, well anyway you have to choose one, and there is no point in keeping one and not the other
+        }
+    }
+    int maxBitDecrease;
+};
+
+void KoColorConversionSystem::deletePathes( QList<KoColorConversionSystem::Path*> pathes) const
+{
+    foreach(Path* path, pathes)
+    {
+        delete path;
+    }
+}
+
+template<bool ignoreHdr, bool ignoreColorCorrectness>
+inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
+{
+    PathQualityChecker<ignoreHdr, ignoreColorCorrectness> pQC( qMax(0, dstNode->referenceDepth - srcNode->referenceDepth ) );
+    QHash<Node*, Path*> node2path; // current best path to reach a given node
+    QList<Path*> currentPathes; // list of all pathes
+    // Generate the initial list of pathes
+    foreach( Vertex* v, srcNode->outputVertexes)
+    {
+        Path* p = new Path;
+        p->appendVertex(v);
+        Node* endNode = p->endNode();
+        if( endNode == dstNode)
+        {
+            Q_ASSERT( pQC.isGoodPath(p)); // <- it's a direct link, it has to be a good path, damn it ! or go fix your color space !
+            deletePathes(currentPathes); // clean up
+            return p;
+        }
+        Q_ASSERT(not node2path.contains( endNode )); // That would be a total fuck up if there are two vertexes between two nodes
+        node2path[ endNode ] = p;
+        currentPathes.append( p );
+    }
+    return 0;
+}
+
+template<bool ignoreHdr>
+inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
+{
+    if(srcNode->isGray or dstNode->isGray)
+    {
+        return findBestPathImpl<ignoreHdr, true>(srcNode, dstNode);
+    } else {
+        return findBestPathImpl<ignoreHdr, false>(srcNode, dstNode);
+    }
+}
+
+KoColorConversionSystem::Path* KoColorConversionSystem::findBestPath( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
+{
+    if(srcNode->isHdr and dstNode->isHdr)
+    {
+        return findBestPathImpl<false>(srcNode, dstNode);
+    } else {
+        return findBestPathImpl<true>(srcNode, dstNode);
+    }
 }

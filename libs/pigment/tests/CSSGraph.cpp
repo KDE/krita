@@ -54,6 +54,7 @@ int main(char argc, char** argv)
     if( args->isSet("graphs"))
     {
         std::cout << "full : show all the connection on the graph" << std::endl;
+        std::cout << "bestpath : show the best path for a given transformation" << std::endl;
         exit(0);
     }
     QString graphType = args->getOption("graph");
@@ -65,13 +66,14 @@ int main(char argc, char** argv)
         exit(-1);
     }
     QString outputFileName = args->arg(0);
-    args->clear();
     // Generate the graph
     KApplication app;
     QString dot;
     if(graphType == "full")
     {
         dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->toDot();
+    } else if(graphType == "bestpath") {
+        dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->bestPathToDot("RGBA", "U8", "RGBA", "U16");
     } else {
         std::cout << "Unknow graph type : " << graphType.latin1() << std::endl;
         exit(-1);

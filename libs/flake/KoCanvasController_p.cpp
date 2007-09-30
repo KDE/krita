@@ -44,6 +44,7 @@
 Viewport::Viewport(KoCanvasController* parent)
     : QWidget(parent)
     , m_draggedShape(0)
+    , m_drawShadow( true )
     , m_canvas( 0 )
     , m_documentOffset( QPoint( 0, 0 ) )
 {
@@ -85,6 +86,12 @@ void Viewport::documentOffsetMoved( const QPoint &pt )
     m_documentOffset = pt;
     resetLayout();
 }
+
+void Viewport::setDrawShadow( bool drawShadow )
+{
+    m_drawShadow = drawShadow;
+}
+
 
 void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
 {
@@ -216,7 +223,7 @@ void Viewport::handlePaintEvent(QPainter & painter, QPaintEvent *event)
 {
     Q_UNUSED(event);
     // Draw the shadow around the canvas.
-    if(m_parent->canvas() && m_parent->canvas()->canvasWidget()) {
+    if(m_parent->canvas() && m_parent->canvas()->canvasWidget() && m_drawShadow ) {
         QWidget *canvas = m_parent->canvas()->canvasWidget();
         painter.setPen(Qt::black);
         QRect rect(canvas->x(), canvas->y(), canvas->width(), canvas->height());

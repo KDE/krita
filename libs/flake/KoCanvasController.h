@@ -77,6 +77,14 @@ public:
      */
     void scrollContentsBy ( int dx, int dy );
 
+    /**
+     * Set the shadow option -- by default the canvas controller draws
+     * a black shadow around the canvas widget, which you may or may
+     * not want.
+     *
+     * @param drawShadow if true, the shadow is drawn, if false, not
+     */
+    void setDrawShadow( bool drawShadow );
 
     /**
      * Set the new canvas to be shown as a child

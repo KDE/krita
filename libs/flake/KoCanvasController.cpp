@@ -94,6 +94,12 @@ void KoCanvasController::scrollContentsBy ( int dx, int dy )
     setDocumentOffset();
 }
 
+void KoCanvasController::setDrawShadow( bool drawShadow )
+{
+    m_d->viewportWidget->setDrawShadow( drawShadow );
+}
+
+
 void KoCanvasController::resizeEvent(QResizeEvent * resizeEvent)
 {
     emit sizeChanged(resizeEvent->size());
@@ -517,7 +523,7 @@ void KoCanvasController::wheelEvent( QWheelEvent *event ) {
 void KoCanvasController::activate()
 {
     QWidget *parent = this;
-    while( parent->parentWidget() ) 
+    while( parent->parentWidget() )
         parent = parent->parentWidget();
 
     KoMainWindow *mw = dynamic_cast<KoMainWindow*> (parent);

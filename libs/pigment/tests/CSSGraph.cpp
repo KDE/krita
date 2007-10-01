@@ -47,6 +47,10 @@ int main(char argc, char** argv)
     KCmdLineOptions options;
     options.add("graphs", ki18n("return the list of available graphs"));
     options.add("graph <type>", ki18n("specify the type of graph (see --graphs to get the full list, the default is full)"), "full");
+    options.add("src-color-model <colormodel>", ki18n("specify the source color model"), "");
+    options.add("src-color-depth <colormodel>", ki18n("specify the source color depth"), "");
+    options.add("dst-color-model <colormodel>", ki18n("specify the destination color model"), "");
+    options.add("dst-color-depth <colordepth>", ki18n("specify the destination color depth"), "");
     options.add("output <type>", ki18n("specify the output (can be ps or dot, the default is ps)"), "ps");
     options.add("+outputfile", ki18n("name of the output file"));
     KCmdLineArgs::addCmdLineOptions( options );
@@ -73,7 +77,29 @@ int main(char argc, char** argv)
     {
         dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->toDot();
     } else if(graphType == "bestpath") {
-        dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->bestPathToDot("RGBA", "F32", "XYZA", "F32");
+        QString srcColorModel = args->getOption("src-color-model");
+        QString srcColorDepth = args->getOption("src-color-depth");
+        QString dstColorModel = args->getOption("dst-color-model");
+        QString dstColorDepth = args->getOption("dst-color-depth");
+        if( srcColorModel == "" or srcColorDepth == "")
+        {
+            kError() << "src-color-model and src-color-depth must be specified for the graph bestpath";
+            exit(-1);
+        }
+        if( dstColorModel != "" and dstColorDepth == "")
+        {
+            dstColorDepth = srcColorDepth;
+        } else if( dstColorModel == "" and dstColorDepth != "")
+        {
+            dstColorModel = srcColorModel;
+        }
+        if( dstColorModel == "" and dstColorDepth == "")
+        {
+            kDebug() << "TODO";
+            exit(0);
+        } else {
+            dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->bestPathToDot(srcColorModel, srcColorDepth, dstColorModel, dstColorDepth);
+        }
     } else {
         std::cout << "Unknow graph type : " << graphType.latin1() << std::endl;
         exit(-1);
@@ -94,7 +120,7 @@ int main(char argc, char** argv)
         out << dot;
         QString cmd = QString("dot -Tps %1 -o %2").arg(file.fileName()).arg(outputFileName);
         file.close();
-        kDebug() << cmd;
+//         kDebug() << cmd;
         if(QProcess::execute(cmd) != 0)
         {
             kError() << "An error has occured when executing : '" << cmd << "' it's most likely that the command 'dot' is missing, and that you should install graphviz (from http://www.graphiz.org)";

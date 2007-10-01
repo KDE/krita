@@ -130,9 +130,6 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
 
 bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
-    if ( !store->open( "content.xml" ) )
-        return false;
-
     KoOasisStore oasisStore( store );
     KoXmlWriter* contentWriter = oasisStore.contentWriter();
     if ( !contentWriter )
@@ -183,9 +180,6 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentWriter->endElement();
 
     oasisStore.closeContentWriter();
-
-    if ( !store->close() ) // done with content.xml
-        return false;
 
     //add manifest line for content.xml
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );

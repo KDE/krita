@@ -118,7 +118,7 @@ void KoDocumentInfoDlg::initAboutTab()
     KMimeType::Ptr mime = KMimeType::mimeType( doc->mimeType() );
     if ( ! mime )
         mime = KMimeType::defaultMimeTypePtr();
-    QPixmap p = KIconLoader::global()->loadMimeTypeIcon(mime->iconName(), K3Icon::Desktop, 48 );
+    QPixmap p = KIconLoader::global()->loadMimeTypeIcon(mime->iconName(), KIconLoader::Desktop, 48 );
     d->m_aboutUi->lblPixmap->setPixmap( p );
 
     d->m_aboutUi->leTitle->setText( d->m_info->aboutInfo( "title" ) );
@@ -154,13 +154,13 @@ void KoDocumentInfoDlg::initAboutTab()
 
     if( doc->specialOutputFlag( ) == KoDocument::SaveEncrypted ) {
         if( d->m_toggleEncryption ) {
-            QPixmap p = KIconLoader::global()->loadIcon( "decrypted", K3Icon::Small );
+            QPixmap p = KIconLoader::global()->loadIcon( "decrypted", KIconLoader::Small );
             d->m_aboutUi->lblEncrypted->setText( i18n( "This document will be decrypted" ) );
             d->m_aboutUi->lblEncryptedPic->setPixmap( p );
             d->m_aboutUi->pbEncrypt->setText( i18n( "Do not decrypt" ) );
         }
         else {
-            QPixmap p = KIconLoader::global()->loadIcon( "encrypted", K3Icon::Small );
+            QPixmap p = KIconLoader::global()->loadIcon( "encrypted", KIconLoader::Small );
             d->m_aboutUi->lblEncrypted->setText( i18n( "This document is encrypted" ) );
             d->m_aboutUi->lblEncryptedPic->setPixmap( p );
             d->m_aboutUi->pbEncrypt->setText( i18n( "D&ecrypt" ) );
@@ -168,13 +168,13 @@ void KoDocumentInfoDlg::initAboutTab()
     }
     else {
         if( d->m_toggleEncryption ) {
-            QPixmap p = KIconLoader::global()->loadIcon( "encrypted", K3Icon::Small );
+            QPixmap p = KIconLoader::global()->loadIcon( "encrypted", KIconLoader::Small );
             d->m_aboutUi->lblEncrypted->setText( i18n( "This document will be encrypted." ) );
             d->m_aboutUi->lblEncryptedPic->setPixmap( p );
             d->m_aboutUi->pbEncrypt->setText( i18n( "Do not encrypt" ) );
         }
         else {
-            QPixmap p = KIconLoader::global()->loadIcon( "decrypted", K3Icon::Small );
+            QPixmap p = KIconLoader::global()->loadIcon( "decrypted", KIconLoader::Small );
             d->m_aboutUi->lblEncrypted->setText( i18n( "This document is not encrypted" ) );
             d->m_aboutUi->lblEncryptedPic->setPixmap( p );
             d->m_aboutUi->pbEncrypt->setText( i18n( "&Encrypt" ) );
@@ -189,11 +189,11 @@ void KoDocumentInfoDlg::initAboutTab()
 
 void KoDocumentInfoDlg::initAuthorTab()
 {
-    QPixmap p = KIconLoader::global()->loadIcon( "personal", K3Icon::Desktop, 48 );
+    QPixmap p = KIconLoader::global()->loadIcon( "personal", KIconLoader::Desktop, 48 );
     d->m_authorUi->lblAuthor->setPixmap( p );
-    p = KIconLoader::global()->loadIcon( "kaddressbook", K3Icon::Small );
+    p = KIconLoader::global()->loadIcon( "kaddressbook", KIconLoader::Small );
     d->m_authorUi->pbLoadKABC->setIcon( QIcon( p ) );
-    p= KIconLoader::global()->loadIcon( "eraser", K3Icon::Small );
+    p= KIconLoader::global()->loadIcon( "eraser", KIconLoader::Small );
     d->m_authorUi->pbDelete->setIcon( QIcon( p ) );
 
     d->m_authorUi->leFullName->setText( d->m_info->authorInfo( "creator" ) );
@@ -292,13 +292,13 @@ void KoDocumentInfoDlg::slotToggleEncryption()
 
     if( doc->specialOutputFlag( ) == KoDocument::SaveEncrypted ) {
         if( d->m_toggleEncryption ) {
-            QPixmap p = KIconLoader::global()->loadIcon( "decrypted", K3Icon::Small );
+            QPixmap p = KIconLoader::global()->loadIcon( "decrypted", KIconLoader::Small );
             d->m_aboutUi->lblEncrypted->setText( i18n( "This document will be decrypted" ) );
             d->m_aboutUi->lblEncryptedPic->setPixmap( p );
             d->m_aboutUi->pbEncrypt->setText( i18n( "Do not decrypt" ) );
         }
         else {
-            QPixmap p = KIconLoader::global()->loadIcon( "encrypted", K3Icon::Small );
+            QPixmap p = KIconLoader::global()->loadIcon( "encrypted", KIconLoader::Small );
             d->m_aboutUi->lblEncrypted->setText( i18n( "This document is encrypted" ) );
             d->m_aboutUi->lblEncryptedPic->setPixmap( p );
             d->m_aboutUi->pbEncrypt->setText( i18n( "D&ecrypt" ) );
@@ -306,13 +306,13 @@ void KoDocumentInfoDlg::slotToggleEncryption()
     }
     else {
         if( d->m_toggleEncryption ) {
-            QPixmap p = KIconLoader::global()->loadIcon( "encrypted", K3Icon::Small );
+            QPixmap p = KIconLoader::global()->loadIcon( "encrypted", KIconLoader::Small );
             d->m_aboutUi->lblEncrypted->setText( i18n( "This document will be encrypted." ) );
             d->m_aboutUi->lblEncryptedPic->setPixmap( p );
             d->m_aboutUi->pbEncrypt->setText( i18n( "Do not encrypt" ) );
         }
         else {
-            QPixmap p = KIconLoader::global()->loadIcon( "decrypted", K3Icon::Small );
+            QPixmap p = KIconLoader::global()->loadIcon( "decrypted", KIconLoader::Small );
             d->m_aboutUi->lblEncrypted->setText( i18n( "This document is not encrypted" ) );
             d->m_aboutUi->lblEncryptedPic->setPixmap( p );
             d->m_aboutUi->pbEncrypt->setText( i18n( "&Encrypt" ) );

@@ -67,7 +67,7 @@ const QPixmap &KoTemplate::loadPicture( const KComponentData &componentData ) {
         return m_pixmap;
     } else { // relative path
         KIconLoader iconLoader(componentData);
-        m_pixmap = iconLoader.loadIcon( m_picture, K3Icon::Desktop, 128 );
+        m_pixmap = iconLoader.loadIcon( m_picture, KIconLoader::Desktop, 128 );
         return m_pixmap;
     }
 }

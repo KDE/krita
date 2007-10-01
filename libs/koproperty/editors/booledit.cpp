@@ -86,17 +86,17 @@ static void drawViewerInternal(QPainter *p, const QRect &r, const QVariant &valu
 {
     p->eraseRect(r);
     QRect r2(r);
-    r2.moveLeft(K3Icon::SizeSmall + 6);
+    r2.moveLeft(KIconLoader::SizeSmall + 6);
 
     if(value.isNull() && !nullText.isEmpty()) {
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, nullText);
     }
     else if(value.toBool()) {
-        p->drawPixmap(3, (r.height()-1-K3Icon::SizeSmall)/2, yesIcon);
+        p->drawPixmap(3, (r.height()-1-KIconLoader::SizeSmall)/2, yesIcon);
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("Yes"));
     }
     else {
-        p->drawPixmap(3, (r.height()-1-K3Icon::SizeSmall)/2, noIcon);
+        p->drawPixmap(3, (r.height()-1-KIconLoader::SizeSmall)/2, noIcon);
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("No"));
     }
 }

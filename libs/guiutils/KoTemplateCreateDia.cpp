@@ -395,7 +395,7 @@ void KoTemplateCreateDia::slotSelect() {
         return;
     }
     // ### TODO: do a better remote loading without having to have d->m_tempFile
-    QString path = KIconLoader::global()->iconPath(name, K3Icon::Desktop);
+    QString path = KIconLoader::global()->iconPath(name, KIconLoader::Desktop);
     d->m_customFile = path;
     d->m_customPixmap=QPixmap();
     updatePixmap();

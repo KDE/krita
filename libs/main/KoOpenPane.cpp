@@ -270,7 +270,7 @@ void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
 
 Q3ListViewItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight)
 {
-  return addPane(title, KIcon(icon).pixmap(K3Icon::SizeLarge,K3Icon::SizeLarge),
+  return addPane(title, KIcon(icon).pixmap(KIconLoader::SizeLarge,KIconLoader::SizeLarge),
     widget, sortWeight);
 }
 

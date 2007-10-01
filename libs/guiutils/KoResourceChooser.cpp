@@ -206,20 +206,19 @@ void KoResourceChooser::addItem(QTableWidgetItem *item)
     item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 }
 
-KoPatternChooser::KoPatternChooser( const Q3PtrList<QTableWidgetItem> &list, QWidget *parent, const char *name )
+KoPatternChooser::KoPatternChooser( const QList<QTableWidgetItem*> &list, QWidget *parent, const char *name )
  : QWidget( parent, name )
 {
     // only serves as beautifier for the iconchooser
     //frame = new QHBox( this );
     //frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    chooser = new KoResourceChooser( QSize(30,30), this);
-
+    chooser = new KoResourceChooser( QSize(32,32), this);
+    chooser->setIconSize( QSize(30,30) );
 	QObject::connect( chooser, SIGNAL(itemClicked( QTableWidgetItem * ) ),
 					            this, SIGNAL( selected( QTableWidgetItem * )));
 
-	Q3PtrListIterator<QTableWidgetItem> itr( list );
-	for( itr.toFirst(); itr.current(); ++itr )
-		chooser->addItem( itr.current() );
+    foreach( QTableWidgetItem* item, list )
+        chooser->addItem( item );
 
 	Q3VBoxLayout *mainLayout = new Q3VBoxLayout( this, 1, -1, "main layout" );
 	mainLayout->addWidget( chooser, 10 );
@@ -247,6 +246,15 @@ void KoPatternChooser::addPattern( QTableWidgetItem *pattern )
 QTableWidgetItem *KoPatternChooser::currentPattern()
 {
     return chooser->currentItem();
+}
+
+void KoPatternChooser::removePattern( QTableWidgetItem *pattern )
+{
+    if( ! pattern || pattern->tableWidget() != chooser )
+        return;
+
+    delete chooser->takeItem( pattern->row(), pattern->column() );
+    chooser->update();
 }
 
 #include "KoResourceChooser.moc"

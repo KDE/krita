@@ -85,13 +85,13 @@ class KOGUIUTILS_EXPORT KoPatternChooser : public QWidget
 {
   Q_OBJECT
 public:
-  KoPatternChooser( const Q3PtrList<QTableWidgetItem> &list, QWidget *parent, const char *name = 0 );
+  KoPatternChooser( const QList<QTableWidgetItem*> &list, QWidget *parent, const char *name = 0 );
   ~KoPatternChooser();
 
   QTableWidgetItem *currentPattern();
   void setCurrentPattern( QTableWidgetItem * );
   void addPattern( QTableWidgetItem * );
- 
+  void removePattern( QTableWidgetItem * );
 private:
   KoResourceChooser *chooser;
 

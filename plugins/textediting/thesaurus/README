@@ -1,0 +1,28 @@
+README for Thesaurus/WordNet KDataTool
+Daniel Naber (daniel.naber@t-online.de), 2001-12-01
+
+For user documentation, click the "Help" button in the thesaurus window
+
+Design Goals:
+
+-Make the data file small, so it can be included in KOffice.
+ Make it simple, i.e. don't reinvent functions which are already
+ in WordNet.
+-Provide access to (almost) all WordNet functions for people
+ who have WordNet installed locally
+
+Implementation:
+
+Technically, this is a KDataTool, which means that it will typically
+add an action to a context menu, in this case: "Show related words".
+You can see this in KWord when you click the right mouse button over
+a word or over selected text.
+
+The Thesaurus KDataTool just calls the WordNet binary "wn", which has
+to be in your path. The advantage is that there are no dependencies
+at compile time, as there would be if we used the WordNet library.
+ 
+See Also:
+
+KDict -- if you don't want to install WordNet locally you can still
+use it while you are online

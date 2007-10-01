@@ -41,6 +41,9 @@ struct KoColorConversionSystem::Node {
         isGray = ( _colorSpaceFactory->colorModelId() == GrayAColorModelID
                 or _colorSpaceFactory->colorModelId() == GrayColorModelID );
     }
+    QString id() const {
+        return colorSpaceFactory->id();
+    }
     QString modelId;
     QString depthId;
     bool isIcc;
@@ -107,7 +110,7 @@ struct KoColorConversionSystem::NodeKey {
 };
 
 struct KoColorConversionSystem::Path {
-    Path() : respectColorCorrectness(true), bitDepthDecrease(0), keepDynamicRange(true), length(0)
+    Path() : respectColorCorrectness(true), bitDepthDecrease(0), keepDynamicRange(true)
     {}
     Node* startNode() {
         return (vertexes.first())->srcNode;
@@ -117,13 +120,28 @@ struct KoColorConversionSystem::Path {
     }
     void appendVertex(Vertex* v) {
         vertexes.append(v);
-//         if(v->
+        if(not v->conserveColorInformation) respectColorCorrectness = false;
+        if(not v->conserveDynamicRange) keepDynamicRange = false;
+        bitDepthDecrease += v->depthDecrease;
+    }
+    int length() {
+        return vertexes.size();
+    }
+    bool contains(Node* n)
+    {
+        foreach(Vertex* v, vertexes)
+        {
+            if(v->srcNode == n or v->dstNode == n)
+            {
+                return true;
+            }
+        }
+        return false;
     }
     QList<Vertex*> vertexes;
     bool respectColorCorrectness;
     int bitDepthDecrease;
     bool keepDynamicRange;
-    int length;
 };
 
 uint qHash(const KoColorConversionSystem::NodeKey &key)
@@ -293,6 +311,7 @@ QString KoColorConversionSystem::bestPathToDot(QString srcModelId, QString srcDe
     const Node* srcNode = nodeFor(srcModelId, srcDepthId);
     const Node* dstNode = nodeFor(dstModelId, dstDepthId);
     Path* p = findBestPath( srcNode, dstNode);
+    Q_ASSERT(p);
     QString dot = "digraph CCS {\n";
     dot += QString("  %1 [color=red]\n").arg(srcNode->colorSpaceFactory->id());
     dot += QString("  %1 [color=red]\n").arg(dstNode->colorSpaceFactory->id());
@@ -308,7 +327,6 @@ QString KoColorConversionSystem::bestPathToDot(QString srcModelId, QString srcDe
     dot += "}\n";
     return dot;
 }
-
 
 #define CHECK_ONE_AND_NOT_THE_OTHER(name) \
     if(path1-> name and not path2-> name) \
@@ -348,8 +366,9 @@ struct PathQualityChecker {
         }
         if( path1->bitDepthDecrease == path2->bitDepthDecrease)
         {
-            return path1->length < path2->length; // if they have the same length, well anyway you have to choose one, and there is no point in keeping one and not the other
+            return path1->length() < path2->length(); // if they have the same length, well anyway you have to choose one, and there is no point in keeping one and not the other
         }
+        return path1->bitDepthDecrease < path2->bitDepthDecrease;
     }
     int maxBitDecrease;
 };
@@ -381,9 +400,67 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
             return p;
         }
         Q_ASSERT(not node2path.contains( endNode )); // That would be a total fuck up if there are two vertexes between two nodes
-        node2path[ endNode ] = p;
+        node2path[ endNode ] = new Path( *p );
         currentPathes.append( p );
     }
+    Path* lessWorsePath = 0;
+    // Now loop until a path has been found
+    while( currentPathes.size() > 0 )
+    {
+        foreach(Path* p, currentPathes)
+        {
+            Node* endNode = p->endNode();
+            foreach( Vertex* v, endNode->outputVertexes)
+            {
+                if( not p->contains( v->dstNode ) )
+                {
+                    Path* newP = new Path(*p);
+                    newP->appendVertex( v );
+                    Node* newEndNode = newP->endNode();
+                    if( newEndNode == dstNode)
+                    {
+                        if( pQC.isGoodPath(newP) )
+                        { // Victory
+                            deletePathes(currentPathes); // clean up
+                            return newP;
+                        } else if( not lessWorsePath )
+                        {
+                            lessWorsePath = newP;
+                        } else if( pQC.lessWorseThan( newP, lessWorsePath)  ) {
+                            delete lessWorsePath;
+                            lessWorsePath = newP;
+                        } else {
+                            delete newP;
+                        }
+                    } else {
+                        if( node2path.contains( newEndNode ) )
+                        {
+                            Path* p2 = node2path[newEndNode];
+                            if( pQC.lessWorseThan( newP, p2 ) )
+                            {
+                                node2path[ newEndNode ] = new Path(*newP);
+                                currentPathes.append( newP );
+                                delete p2;
+                            } else {
+                                delete newP;
+                            }
+                        } else {
+                            node2path[ newEndNode ] = new Path(*newP);
+                           currentPathes.append( newP );
+                        }
+                    }
+                }
+            }
+            currentPathes.removeAll( p );
+            delete p;
+        }
+    }
+    if(lessWorsePath)
+    {
+        kWarning() << "No good path from " << srcNode->colorSpaceFactory->id() << " to " << dstNode->colorSpaceFactory->id() << " found !";
+        return lessWorsePath;
+    } 
+    kError() << "No path from " << srcNode->colorSpaceFactory->id() << " to " << dstNode->colorSpaceFactory->id() << " found !";
     return 0;
 }
 

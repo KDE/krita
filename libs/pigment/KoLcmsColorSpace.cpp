@@ -52,7 +52,7 @@ KoLcmsColorConversionTransformationFactory::KoLcmsColorConversionTransformationF
     m_depthDecrease = 0;
     if( _srcDepthId == Integer16BitsColorDepthID.id() and _dstDepthId == Integer8BitsColorDepthID.id())
     {
-        m_depthDecrease = -8;
+        m_depthDecrease = 8;
     }
 }
 

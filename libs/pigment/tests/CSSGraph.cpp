@@ -73,7 +73,7 @@ int main(char argc, char** argv)
     {
         dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->toDot();
     } else if(graphType == "bestpath") {
-        dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->bestPathToDot("RGBA", "U8", "RGBA", "U16");
+        dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->bestPathToDot("RGBA", "F32", "XYZA", "F32");
     } else {
         std::cout << "Unknow graph type : " << graphType.latin1() << std::endl;
         exit(-1);

@@ -54,7 +54,7 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
     , d( new KoDocumentInfoPropsPagePrivate )
 {
     d->m_info = new KoDocumentInfo( this );
-    d->m_url = props->item()->url();
+    d->m_url = props->item().url();
     d->m_dlg = 0;
 
     if ( !d->m_url.isLocalFile() )

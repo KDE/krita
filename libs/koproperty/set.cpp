@@ -530,9 +530,9 @@ void Buffer::intersectedReset(KoProperty::Set& set, KoProperty::Property& prop)
 
 //////////////////////////////////////////////
 
-QMap<QByteArray, QVariant> KoProperty::propertyValues(const Set& set)
+QHash<QByteArray, QVariant> KoProperty::propertyValues(const Set& set)
 {
-	QMap<QByteArray, QVariant> result;
+	QHash<QByteArray, QVariant> result;
 	for (Set::Iterator it(set); it.current(); ++it)
 		result.insert( it.currentKey(), it.current()->value() );
 	

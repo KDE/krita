@@ -42,7 +42,7 @@ class KOPROPERTY_EXPORT GroupContainer : public QWidget
 		Private * const d;
 };
 
-KOPROPERTY_EXPORT QMap<QByteArray, QVariant> propertyValues(const Set& set);
+KOPROPERTY_EXPORT QHash<QByteArray, QVariant> propertyValues(const Set& set);
 
 }
 

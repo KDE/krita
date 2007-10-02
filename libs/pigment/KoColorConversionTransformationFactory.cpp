@@ -45,12 +45,12 @@ KoColorConversionTransformationFactory::~KoColorConversionTransformationFactory(
 
 bool KoColorConversionTransformationFactory::canBeSource(KoColorSpace* srcCS)
 {
-    return ((srcCS->colorModelId().id() == d->srcModelId) and (srcCS->colorDepthId().id() == d->srcDepthId));
+    return ((srcCS->colorModelId().id() == d->srcModelId) && (srcCS->colorDepthId().id() == d->srcDepthId));
 }
 
 bool KoColorConversionTransformationFactory::canBeDestination(KoColorSpace* dstCS)
 {
-    return ((dstCS->colorModelId().id() == d->dstModelId) and (dstCS->colorDepthId().id() == d->dstDepthId));
+    return ((dstCS->colorModelId().id() == d->dstModelId) && (dstCS->colorDepthId().id() == d->dstDepthId));
 }
 
 QString KoColorConversionTransformationFactory::srcColorModelId() const

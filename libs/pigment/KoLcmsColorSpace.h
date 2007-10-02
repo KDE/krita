@@ -396,7 +396,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         {
             KoLcmsColorProfile* dstprofile = toLcmsProfile(dstColorSpace->profile());
             const KoLcmsInfo* dstInfo = dynamic_cast<const KoLcmsInfo*>(dstColorSpace);
-            if(d->profile and dstprofile and dstInfo)
+            if(d->profile && dstprofile && dstInfo)
             {
                 return new KoLcmsColorConversionTransformation(this, colorSpaceType(), d->profile, dstColorSpace, dstInfo->colorSpaceType(), dstprofile, renderingIntent);
             } else {
@@ -428,7 +428,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                     }
             }
 
-            if (not tf) {
+            if (!tf) {
 
                 if (!d->transforms.contains(dstColorSpace)) {
             // XXX: Should we clear the transform cache if it gets too big?

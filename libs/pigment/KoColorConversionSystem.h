@@ -29,17 +29,13 @@ class KoColorSpaceFactory;
 #include <pigment_export.h>
 
 class PIGMENT_EXPORT KoColorConversionSystem {
-        struct Node;
-        struct Vertex;
-        struct NodeKey;
-        struct Path;
-        friend uint qHash(const KoColorConversionSystem::NodeKey &key);
     public:
+        struct Path;
+
         KoColorConversionSystem();
         ~KoColorConversionSystem();
         void insertColorSpace(const KoColorSpaceFactory*);
         KoColorConversionTransformation* createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
-    public:
         /**
          * This function return a text that can be compiled using dot to display
          * the graph of color conversion connection.
@@ -52,8 +48,11 @@ class PIGMENT_EXPORT KoColorConversionSystem {
          */
         QString bestPathToDot(QString srcModelId, QString srcDepthId, QString dstModelId, QString dstDepthId) const;
     private:
+        struct Node;
+        struct Vertex;
+        struct NodeKey;
+
         QString vertexToDot(Vertex* v, QString options) const;
-    private:
         Node* nodeFor(const NodeKey& key);
         const Node* nodeFor(const NodeKey& key) const;
         /**
@@ -78,7 +77,7 @@ class PIGMENT_EXPORT KoColorConversionSystem {
         inline Path* findBestPathImpl(const Node* srcNode, const Node* dstNode) const;
         template<bool ignoreHdr>
         inline Path* findBestPathImpl(const Node* srcNode, const Node* dstNode) const;
-    private:
+        friend uint qHash(const KoColorConversionSystem::NodeKey &key);
         struct Private;
         Private* const d;
 };

@@ -32,14 +32,14 @@ struct KoColorConversionSystem::Node {
     Node() : isInitialized(false), colorSpaceFactory(0) {}
     void init( const KoColorSpaceFactory* _colorSpaceFactory)
     {
-        Q_ASSERT(not isInitialized);
+        Q_ASSERT(!isInitialized);
         isInitialized = true;
         isIcc = _colorSpaceFactory->isIcc();
         isHdr = _colorSpaceFactory->isHdr();
         colorSpaceFactory = _colorSpaceFactory;
         referenceDepth = _colorSpaceFactory->referenceDepth();
         isGray = ( _colorSpaceFactory->colorModelId() == GrayAColorModelID
-                or _colorSpaceFactory->colorModelId() == GrayColorModelID );
+                || _colorSpaceFactory->colorModelId() == GrayColorModelID );
     }
     QString id() const {
         return colorSpaceFactory->id();
@@ -72,7 +72,7 @@ struct KoColorConversionSystem::Vertex {
     void setFactoryFromDst(KoColorConversionTransformationFactory* factory)
     {
         factoryFromDst = factory;
-        if( not factoryFromSrc) initParameter(factoryFromDst);
+        if(!factoryFromSrc) initParameter(factoryFromDst);
     }
     void initParameter(KoColorConversionTransformationFactory* transfo)
     {
@@ -120,8 +120,8 @@ struct KoColorConversionSystem::Path {
     }
     void appendVertex(Vertex* v) {
         vertexes.append(v);
-        if(not v->conserveColorInformation) respectColorCorrectness = false;
-        if(not v->conserveDynamicRange) keepDynamicRange = false;
+        if(!v->conserveColorInformation) respectColorCorrectness = false;
+        if(!v->conserveDynamicRange) keepDynamicRange = false;
         bitDepthDecrease += v->depthDecrease;
     }
     int length() {
@@ -131,7 +131,7 @@ struct KoColorConversionSystem::Path {
     {
         foreach(Vertex* v, vertexes)
         {
-            if(v->srcNode == n or v->dstNode == n)
+            if(v->srcNode == n || v->dstNode == n)
             {
                 return true;
             }
@@ -188,7 +188,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         QList<Node*> nodes = d->graph.values();
         foreach(Node* node, nodes)
         {
-            if(node->isIcc and node->isInitialized and node != csNode)
+            if(node->isIcc && node->isInitialized && node != csNode)
             {
                 // Create the vertex from 1 to 2
                 Q_ASSERT(vertexBetween(node, csNode) == 0); // The two color spaces should not be connected yet
@@ -214,11 +214,11 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         Q_ASSERT(srcNode);
         Node* dstNode = nodeFor(cctf->dstColorModelId(), cctf->dstColorDepthId());
         Q_ASSERT(dstNode);
-        Q_ASSERT(srcNode == csNode or dstNode == csNode);
+        Q_ASSERT(srcNode == csNode || dstNode == csNode);
         // Check if the two nodes are allready connected
         Vertex* v = vertexBetween(srcNode, dstNode);
         // If the vertex doesn't allready exist, then create it
-        if(not v)
+        if(!v)
         {
             v = createVertex(srcNode, dstNode);
         }
@@ -251,7 +251,7 @@ KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(QString _colorMo
 
 KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const KoColorConversionSystem::NodeKey& key)
 {
-    if(not d->graph.contains(key))
+    if(!d->graph.contains(key))
     {
         Node* n = new Node;
         n->modelId = key.modelId;
@@ -329,11 +329,11 @@ QString KoColorConversionSystem::bestPathToDot(QString srcModelId, QString srcDe
 }
 
 #define CHECK_ONE_AND_NOT_THE_OTHER(name) \
-    if(path1-> name and not path2-> name) \
+    if(path1-> name && !path2-> name) \
     { \
         return true; \
     } \
-    if(not path1-> name and path2-> name) \
+    if(!path1-> name && path2-> name) \
     { \
         return false; \
     }
@@ -344,9 +344,9 @@ struct PathQualityChecker {
     /// @return true if the path maximize all the criterions (except lenght)
     inline bool isGoodPath(KoColorConversionSystem::Path* path)
     {
-        return ( path->respectColorCorrectness or ignoreColorCorrectness ) and
-               ( path->bitDepthDecrease <= maxBitDecrease) and
-               ( path->keepDynamicRange or ignoreHdr );
+        return ( path->respectColorCorrectness || ignoreColorCorrectness ) &&
+               ( path->bitDepthDecrease <= maxBitDecrease) &&
+               ( path->keepDynamicRange || ignoreHdr );
     }
     /**
      * Compare two pathes.
@@ -356,11 +356,11 @@ struct PathQualityChecker {
          // There is no point in comparing two pathes which doesn't start from the same node or doesn't end at the same node
         Q_ASSERT(path1->startNode() == path2->startNode());
         Q_ASSERT(path1->endNode() == path2->endNode());
-        if(not ignoreHdr)
+        if(!ignoreHdr)
         {
             CHECK_ONE_AND_NOT_THE_OTHER(keepDynamicRange)
         }
-        if(not ignoreColorCorrectness)
+        if(!ignoreColorCorrectness)
         {
             CHECK_ONE_AND_NOT_THE_OTHER(respectColorCorrectness)
         }
@@ -399,7 +399,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
             deletePathes(currentPathes); // clean up
             return p;
         }
-        Q_ASSERT(not node2path.contains( endNode )); // That would be a total fuck up if there are two vertexes between two nodes
+        Q_ASSERT(!node2path.contains( endNode )); // That would be a total fuck up if there are two vertexes between two nodes
         node2path[ endNode ] = new Path( *p );
         currentPathes.append( p );
     }
@@ -412,7 +412,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
             Node* endNode = p->endNode();
             foreach( Vertex* v, endNode->outputVertexes)
             {
-                if( not p->contains( v->dstNode ) )
+                if(!p->contains( v->dstNode ) )
                 {
                     Path* newP = new Path(*p);
                     newP->appendVertex( v );
@@ -423,7 +423,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
                         { // Victory
                             deletePathes(currentPathes); // clean up
                             return newP;
-                        } else if( not lessWorsePath )
+                        } else if(!lessWorsePath )
                         {
                             lessWorsePath = newP;
                         } else if( pQC.lessWorseThan( newP, lessWorsePath)  ) {
@@ -467,7 +467,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
 template<bool ignoreHdr>
 inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
 {
-    if(srcNode->isGray or dstNode->isGray)
+    if(srcNode->isGray || dstNode->isGray)
     {
         return findBestPathImpl<ignoreHdr, true>(srcNode, dstNode);
     } else {
@@ -477,7 +477,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
 
 KoColorConversionSystem::Path* KoColorConversionSystem::findBestPath( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
 {
-    if(srcNode->isHdr and dstNode->isHdr)
+    if(srcNode->isHdr && dstNode->isHdr)
     {
         return findBestPathImpl<false>(srcNode, dstNode);
     } else {

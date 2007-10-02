@@ -48,9 +48,9 @@ KoLcmsColorConversionTransformationFactory::KoLcmsColorConversionTransformationF
     Q_ASSERT(m_srcColorSpaceType);
     m_dstColorSpaceType = computeColorSpaceType( _dstModelId, _dstDepthId);
     Q_ASSERT(m_dstColorSpaceType);
-    m_conserveColorInformation = not (_dstModelId == GrayAColorModelID.id() or _dstModelId == GrayColorModelID.id()); // color information is lost when converting to Grayscale
+    m_conserveColorInformation = !(_dstModelId == GrayAColorModelID.id() || _dstModelId == GrayColorModelID.id()); // color information is lost when converting to Grayscale
     m_depthDecrease = 0;
-    if( _srcDepthId == Integer16BitsColorDepthID.id() and _dstDepthId == Integer8BitsColorDepthID.id())
+    if( _srcDepthId == Integer16BitsColorDepthID.id() || _dstDepthId == Integer8BitsColorDepthID.id())
     {
         m_depthDecrease = 8;
     }

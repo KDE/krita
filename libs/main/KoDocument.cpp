@@ -1408,8 +1408,7 @@ bool KoDocument::openUrl( const KUrl & _url )
         d->lastErrorMessage = i18n( "Malformed URL\n%1",_url.url() ); // ## used anywhere ?
         return false;
     }
-    if ( !closeUrl() )
-        return false;
+    abortLoad();
 
     KUrl url( _url );
     bool autosaveOpened = false;

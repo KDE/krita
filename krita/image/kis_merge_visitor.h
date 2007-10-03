@@ -126,7 +126,8 @@ public:
             KisPainter gc(m_projection);
             gc.setChannelFlags( layer->channelFlags() );
 
-            KisPaintDeviceSP source = layer->paintDevice();//projection();
+            layer->updateProjection(m_rc);
+            KisPaintDeviceSP source = layer->projection();
 
             if (tempTarget) {
                 KisPaintDeviceSP temp = new KisPaintDevice(source->colorSpace());
@@ -192,7 +193,6 @@ public:
             if (tempTarget) {
                 m_rc = (layer->extent() | tempTarget->extent()) & m_rc;
             }
-
 
             if (m_rc.width() == 0 || m_rc.height() == 0) // Don't even try
                 return true;

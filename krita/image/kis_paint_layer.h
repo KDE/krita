@@ -60,6 +60,11 @@ public:
     KoColorSpace * colorSpace();
 
     void updateProjection(const QRect& r);
+
+    /**
+     * Return the projection paint device, or 0 if the projection does
+     * not exist yet. (For instance, because it hasn't been updated yet.)
+     */
     KisPaintDeviceSP projection() const;
 
     QIcon icon() const;

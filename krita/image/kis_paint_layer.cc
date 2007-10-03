@@ -120,7 +120,6 @@ KisPaintDeviceSP KisPaintLayer::projection() const
     if ( !hasEffectMasks() )
         return m_d->paintDevice;
     else {
-        Q_ASSERT( m_d->projection );
         return m_d->projection;
     }
 }
@@ -128,15 +127,12 @@ KisPaintDeviceSP KisPaintLayer::projection() const
 void KisPaintLayer::updateProjection(const QRect & rc)
 {
 
-    Q_ASSERT( rc.isValid() );
-    Q_ASSERT( isDirty( rc ) );
-    Q_ASSERT( hasEffectMasks() );
-    Q_ASSERT( m_d->paintDevice );
-
     if ( !rc.isValid() ) return ;
-    if ( !isDirty( rc ) ) return;
     if ( !hasEffectMasks() ) return;
     if ( !m_d->paintDevice ) return;
+    if ( !isDirty( rc ) ) return;
+
+    QRegion dirty = dirtyRegion( rc );
 
     if ( !m_d->projection ) {
         m_d->projection = new KisPaintDevice( *m_d->paintDevice );
@@ -145,10 +141,13 @@ void KisPaintLayer::updateProjection(const QRect & rc)
         // Clean up the area before we re-apply the masks.
         KisPainter gc( m_d->projection );
         gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
-        gc.bitBlt( rc.topLeft(), m_d->paintDevice, rc );
+        foreach (QRect rect, dirty.rects() ) {
+            gc.bitBlt( rc.topLeft(), m_d->paintDevice, rect );
+        }
     }
-
-    applyEffectMasks( m_d->projection, rc );
+    foreach ( QRect rect, dirty.rects() ) {
+        applyEffectMasks( m_d->projection, rect );
+    }
 }
 
 

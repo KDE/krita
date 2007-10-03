@@ -177,3 +177,11 @@ set(kis_filter_mask_test_SRCS kis_filter_mask_test.cpp )
 kde4_add_unit_test(KisFilterMaskTest TESTNAME krita-image-KisFilterMaskTest ${kis_filter_mask_test_SRCS})
 
 target_link_libraries(KisFilterMaskTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_paint_layer_test_SRCS kis_paint_layer_test.cpp )
+
+kde4_add_unit_test(KisPaintLayerTest TESTNAME krita-image-KisPaintLayerTest ${kis_paint_layer_test_SRCS})
+
+target_link_libraries(KisPaintLayerTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})

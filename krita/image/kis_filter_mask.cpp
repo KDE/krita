@@ -21,7 +21,7 @@
 #include "kis_filter_configuration.h"
 #include "kis_filter_registry.h"
 
-class KisFilterMask::Private {
+class KRITAIMAGE_EXPORT KisFilterMask::Private {
 public:
 
     KisFilterConfiguration * filterConfig;

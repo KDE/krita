@@ -142,7 +142,7 @@ void KisPaintDeviceTest::testPaintEngine()
     {
         QRectF target(100.0, 200.0, 80.0, 60.0);
         QRectF source(0.0, 0.0, 70.0, 40.0);
-        QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.jpg");
+        QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
 
         gc.drawImage(target, image, source);
         gc2.drawImage(target, image, source );
@@ -182,7 +182,7 @@ void KisPaintDeviceTest::testPaintEngine()
     {
          QRectF target(200.0, 200.0, 80.0, 60.0);
          QRectF source(0.0, 0.0, 70.0, 40.0);
-         QPixmap pixmap(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.jpg");
+         QPixmap pixmap(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
 
          gc.drawPixmap(target, pixmap, source);
          gc2.drawPixmap(target, pixmap, source);
@@ -498,7 +498,7 @@ void KisPaintDeviceTest::testColorSpaceConversion()
 
 void KisPaintDeviceTest::testRoundtripConversion()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.jpg");
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage( image, "" );
@@ -515,7 +515,7 @@ void KisPaintDeviceTest::testRoundtripConversion()
 
 void KisPaintDeviceTest::testThumbnail()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.jpg");
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage( image, "" );

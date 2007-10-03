@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
- *
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,12 +58,6 @@ public:
 
     /// override from KisNode
     void setDirty( const QRegion & region);
-
-//     /**
-//      * Set a projection manager on this group layer. The group layer
-//      * will inform the projection manager of new
-//      */
-//     void setProjectionManager( KisProjectionSP projectionManager );
 
     /**
      * XXX: make the colorspace of a layergroup user-settable: we want

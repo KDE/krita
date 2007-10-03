@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,7 +40,6 @@ class KisGroupLayer::Private
 public:
     Private()
         : projection( 0 )
-//         , projectionManager( 0 )
         , cacheProjection( true )
         , x( 0 )
         , y( 0 )
@@ -48,7 +48,6 @@ public:
 
     KisPaintDeviceSP projection; // The cached composition of all
                                  // layers in this group
-//     KisProjectionSP projectionManager; // owned by KisImage
     bool cacheProjection;
     qint32 x;
     qint32 y;
@@ -97,8 +96,7 @@ void KisGroupLayer::setDirty()
 {
     KisLayer::setDirty();
     emit rectDirtied( extent() );
-//     if ( m_d->projectionManager )
-//         m_d->projectionManager->addDirtyRect( extent() );
+
 }
 
 
@@ -106,8 +104,6 @@ void KisGroupLayer::setDirty(const QRect & rect)
 {
     KisLayer::setDirty( rect );
     emit rectDirtied( rect );
-//     if ( m_d->projectionManager )
-//         m_d->projectionManager->addDirtyRect( rect );
 }
 
 
@@ -115,9 +111,6 @@ void KisGroupLayer::setDirty( const QRegion & region)
 {
     KisLayer::setDirty( region );
     emit regionDirtied( region );
-//     if ( m_d->projectionManager )
-//         m_d->projectionManager->addDirtyRegion( region );
-
 }
 
 
@@ -126,14 +119,7 @@ void KisGroupLayer::updateSettings()
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->cacheProjection = cfg.readEntry( "useProjections", true );
     emit settingsUpdated();
-//     if ( m_d->projectionManager )
-//         m_d->projectionManager->updateSettings();
 }
-
-// void KisGroupLayer::setProjectionManager( KisProjectionSP projectionManager )
-// {
-//     m_d->projectionManager = projectionManager;
-// }
 
 void KisGroupLayer::resetProjection(KisPaintDeviceSP to)
 {

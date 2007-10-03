@@ -51,6 +51,7 @@ private slots:
     void testOrdering();
     void testSetDirty();
     void testChildNodes();
+    void testDirtyRegion();
 };
 
 #endif

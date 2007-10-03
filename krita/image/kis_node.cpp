@@ -139,6 +139,10 @@ void KisNode::setClean()
     m_d->dirtyRegion = QRegion();
 }
 
+QRegion KisNode::dirtyRegion( const QRect & rc )
+{
+    return m_d->dirtyRegion.intersected( QRegion( rc) );
+}
 
 KisNodeSP KisNode::parent() const
 {

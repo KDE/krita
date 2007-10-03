@@ -373,6 +373,19 @@ void KisNodeTest::testChildNodes()
     QVERIFY( subSetOfProps.count() == 2 ); // b, c
 }
 
+void KisNodeTest::testDirtyRegion()
+{
+    KisNodeSP root = new KisNode();
+    root->setDirty(QRect(0, 0, 100, 100));
+    root->setDirty(QRect(50, 50, 100, 100));
+    QRegion dirtyRegion = root->dirtyRegion( QRect(0, 0, 200, 200) );
+    QVector<QRect> rects = dirtyRegion.rects();
+    QVERIFY( rects.count() == 3 );
+    QVERIFY( rects[0] == QRect(0, 0, 100, 50) );
+    QVERIFY( rects[1] == QRect(0, 50, 150, 50) );
+    QVERIFY( rects[2] == QRect(50, 100, 100, 50) );
+}
+
 QTEST_KDEMAIN(KisNodeTest, NoGUI)
 #include "kis_node_test.moc"
 

@@ -124,6 +124,10 @@ public:
      */
     void setClean();
 
+    /**
+     * @return the region from the given rect that is dirty.
+     */
+    QRegion dirtyRegion( const QRect & rc );
 
 public: // Graph methods
 

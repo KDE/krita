@@ -88,7 +88,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
 
   int i = 1;
   QString path;
-  QList<KFileItem> fileList;
+  KFileItemList fileList;
   QStandardItem* rootItem = model()->invisibleRootItem();
 
   do {

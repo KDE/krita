@@ -59,6 +59,10 @@ public:
 
     KoColorSpace * colorSpace();
 
+    /**
+     * Update the projection for the specified rect r, whether that rect is dirty
+     * or not.
+     */
     void updateProjection(const QRect& r);
 
     /**

@@ -36,7 +36,17 @@ const KoID KisFilter::CategoryNonPhotorealistic = KoID("nonphotorealistic_filter
 const KoID KisFilter::CategoryOther = KoID("other_filters", i18n("Other"));
 
 struct KisFilter::Private {
-    Private() : bookmarkManager(0) {}
+    Private()
+        : bookmarkManager(0)
+        , cancelRequested(false)
+        , progressEnabled(false)
+        , autoUpdate(false)
+        , progressTotalSteps(0)
+        , lastProgressPerCent(0)
+        , progressSteps(0)
+    {
+    }
+
     KisBookmarkedConfigurationManager* bookmarkManager;
     bool cancelRequested;
     bool progressEnabled;

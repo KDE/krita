@@ -20,6 +20,7 @@
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
 #include "kis_filter_registry.h"
+#include "kis_selection.h"
 
 class KRITAIMAGE_EXPORT KisFilterMask::Private {
 public:
@@ -62,14 +63,18 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
 void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
 {
     Q_ASSERT( m_d->filterConfig );
-/*
+    if (!m_d->filterConfig) return;
+
+    selection()->updateProjection();
+
+    // XXX: This is actually a problem when we're running multithreaded, so we need to make
+    // selection a paramenter of KisFilter::process
     KisSelectionSP oldSelection = 0;
     if (projection->hasSelection())
         oldSelection = projection->selection();
 
+    projection->setSelection( selection() );
 
-    projection->setSelection
-*/
     KisFilterSP filter = KisFilterRegistry::instance()->value( m_d->filterConfig->name() );
     if (!filter) {
         kWarning() << "Could not retrieve filter with name " <<  m_d->filterConfig->name();
@@ -77,9 +82,8 @@ void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
     }
 
     filter->process( projection, rc, m_d->filterConfig);
-/*
+
     projection->setSelection( oldSelection );
-*/
 }
 
 #include "kis_filter_mask.moc"

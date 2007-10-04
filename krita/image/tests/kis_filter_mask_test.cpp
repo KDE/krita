@@ -44,17 +44,16 @@ void KisFilterMaskTest::testProjection()
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT( kfc );
 
-    // Without a selection
     KisFilterMaskSP mask = new KisFilterMask();
     mask->setFilter( kfc );
 
-    // Check basic apply()
+    // Check basic apply(). Shouldn't do anything, since nothing is selected yet.
     KisPaintDeviceSP projection = new KisPaintDevice( cs );
     projection->convertFromQImage( qimg, 0, 0, 0 );
     mask->apply( projection, QRect( 0, 0, qimg.width(), qimg.height() ) );
 
     QPoint errpoint;
-    if ( !TestUtil::compareQImages( errpoint, inverted, projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+    if ( !TestUtil::compareQImages( errpoint, qimg, projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
         QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
 

@@ -27,10 +27,8 @@
 #include "kis_layer.h"
 #include "kis_selection.h"
 
-class KisMask::Private
+struct KisMask::Private
 {
-
-public:
     KisSelectionSP selection;
 };
 

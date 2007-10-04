@@ -41,6 +41,8 @@ KisTransparencyMask::KisTransparencyMask( const KisTransparencyMask& rhs )
 
 void KisTransparencyMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
 {
+    selection()->updateProjection();
+
     KoColorSpace * cs = projection->colorSpace();
 
     KisHLineIteratorPixel projectionIt = projection->createHLineIterator( rc.x(), rc.y(), rc.width() );
@@ -58,7 +60,6 @@ void KisTransparencyMask::apply( KisPaintDeviceSP projection, const QRect & rc )
         projectionIt.nextRow();
         maskIt.nextRow();
     }
-
 
 }
 

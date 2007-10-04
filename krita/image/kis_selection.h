@@ -104,7 +104,7 @@ public:
      * Invert the selection.
      *
      * XXX: The extent that is inverted is the total
-     * extent of the selection project, not that of the selection
+     * extent of the selection projection, not that of the selection
      * components, the parent paint device or the image. Shouldn't we
      * fix this?
      */

@@ -142,9 +142,10 @@ void KisPaintLayer::updateProjection(const QRect & rc)
         KisPainter gc( m_d->projection );
         gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
         foreach (QRect rect, dirty.rects() ) {
-            gc.bitBlt( rc.topLeft(), m_d->paintDevice, rect );
+            gc.bitBlt( rect.topLeft(), m_d->paintDevice, rect );
         }
     }
+
     foreach ( QRect rect, dirty.rects() ) {
         applyEffectMasks( m_d->projection, rect );
     }

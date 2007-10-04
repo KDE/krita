@@ -31,6 +31,7 @@
 #include "kis_paint_device.h"
 #include "kis_transparency_mask.h"
 #include "testutil.h"
+#include "kis_selection.h"
 
 void KisPaintLayerTest::testProjection()
 {
@@ -81,10 +82,18 @@ void KisPaintLayerTest::testProjection()
     // so nothing gets updated
     QVERIFY( layer->projection().data() != 0 );
 
+    // The selection is initially empty, so after an update, all pixels are still visible
+    layer->updateProjection( qimg.rect() );
+
+    // By default a new transparency mask blanks out the entire layer (photoshop mode "hide all")
+    KisRectConstIterator it = layer->projection()->createRectConstIterator(0, 0, qimg.width(), qimg.height());
+    while (!it.isDone()) {
+        QVERIFY(cs->alpha(it.rawData()) == OPACITY_TRANSPARENT);
+        ++it;
+    }
 
 }
 
+
 QTEST_KDEMAIN(KisPaintLayerTest, GUI)
 #include "kis_paint_layer_test.moc"
-
-

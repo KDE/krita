@@ -24,13 +24,13 @@
 #include "kis_types.h"
 #include "kis_mask.h"
 /**
-   An effect mask is a single channel mask that applies a particular
-   effect to the layer the mask belongs to. It differs from an
-   adjustment layer in that it only works on its parent layer, while
-   adjustment layers work on all layers below it in its layer group.
-   The effect could be a filter, a transformation or anything else
-   that messes up pixels.
-*/
+ * An effect mask is a single channel mask that applies a particular
+ * effect to the layer the mask belongs to. It differs from an
+ * adjustment layer in that it only works on its parent layer, while
+ * adjustment layers work on all layers below it in its layer group.
+ * The effect could be a filter, a transformation or anything else
+ * that messes up pixels.
+ */
 const QString KIS_EFFECT_MASK_ID = "KisEffectMask";
 
 class KRITAIMAGE_EXPORT KisEffectMask : public KisMask
@@ -41,8 +41,7 @@ class KRITAIMAGE_EXPORT KisEffectMask : public KisMask
 public:
 
     /**
-     * Create an empty effect mask. There is filter and no layer
-     * associated with this mask.
+     * Create an empty effect mask.
      */
     KisEffectMask();
 

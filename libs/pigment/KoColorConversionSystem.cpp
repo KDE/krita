@@ -176,7 +176,7 @@ KoColorConversionSystem::~KoColorConversionSystem()
 
 void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
 {
-    kDebug() << "Inserting color space " << csf->name() << " (" << csf->id() << ") Model: " << csf->colorModelId() << " Depth: " << csf->colorDepthId() << " into the CCS";
+    kDebug(31000) << "Inserting color space " << csf->name() << " (" << csf->id() << ") Model: " << csf->colorModelId() << " Depth: " << csf->colorDepthId() << " into the CCS";
     QString modelId = csf->colorModelId().id();
     QString depthId = csf->colorDepthId().id();
     NodeKey key(modelId, depthId);

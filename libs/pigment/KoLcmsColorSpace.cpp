@@ -86,7 +86,7 @@ quint32 KoLcmsColorConversionTransformationFactory::computeColorSpaceType(QStrin
     } else if(_depthId == Integer16BitsColorDepthID.id()) {
         depthType = BYTES_SH(2);
     } else {
-        kDebug() << "Unknow bit depth";
+        kDebug(31000) << "Unknow bit depth";
         return 0;
     }
     // Compute the model part of the type

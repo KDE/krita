@@ -45,7 +45,8 @@ public:
      * If there is a still missing add it here so that it is possible to use the same
      * saving code in all applications.
      */
-    enum { StylePageLayout = 0,         ///< style:page-layout as in odf 14.3 Page Layout
+    enum Type {
+           StylePageLayout = 0,         ///< style:page-layout as in odf 14.3 Page Layout
            StyleUser = 1,               ///< style:style with style:paragraph-properties as in odf 14.1 Style Element (office:styles)
            StyleAuto = 2,               ///< style:style with style:paragraph-properties as in odf 14.1 Style Element
            StyleMaster = 3,             ///< TODO remove This has to be done differently
@@ -73,16 +74,18 @@ public:
                                         /// 14.4 Master Pages 
                                         /// 14.5 Table Templates
                                         /// 14.6 Font Face Declaration
-           StyleNumberBoolean,          /// number:boolean 14.7.6 Boolean Style not used
+           StyleNumericBoolean,         /// number:boolean 14.7.6 Boolean Style not used
            StyleOpacity,                /// draw:opacity as in odf 14.14.5 Opacity Gradient not used
            StyleMarker,                 /// draw:marker as in odf 14.14.6 Marker
+           StyleAutoTable,              /// style:table-properties as in odf 15.8 Table Formatting Properties // office:style needed?
            StyleTableColumn,            /// style:table-column-properties as in odf 15.9 Column Formatting Properties (office:style)
            StyleAutoTableColumn,        /// style:table-column-properties as in odf 15.9 Column Formatting Properties
            StyleTableRow,               /// style:table-row-properties as in odf 15.10 Table Row Formatting Properties (office:style)
            StyleAutoTableRow,           /// style:table-row-properties as in odf 15.10 Table Row Formatting Properties
-           StyleTableCall,              /// style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:style)
-           StyleAutoTableCall,          /// style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties
-           StyleFirstCustom = 2500 };   ///< the first style for applications to use StyleFirstCustom IS DEPRECATED
+           StyleTableCell,              /// style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:style)
+           StyleAutoTableCell,          /// style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties
+           StyleFirstCustom = 2500      ///< the first style for applications to use StyleFirstCustom IS DEPRECATED
+    };
 
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),

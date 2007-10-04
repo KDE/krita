@@ -22,6 +22,9 @@
 #include <float.h>
 #include <kdebug.h>
 
+QList<KoGenStyles::StyleData> KoGenStyles::m_styleData;
+QList<KoGenStyles::StyleData> KoGenStyles::m_autoStyleData;
+
 class KoGenStyles::Private
 {
 };
@@ -164,49 +167,83 @@ void KoGenStyles::dump()
 
 void KoGenStyles::saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDotXml )
 {
-    QList<KoGenStyles::NamedStyle> stylesList = styles( KoGenStyle::StyleGraphicAuto, stylesDotXml );
-    QList<KoGenStyles::NamedStyle>::const_iterator it = stylesList.begin();
-    for ( ; it != stylesList.end() ; ++it ) {
-        ( *it ).style->writeStyle( xmlWriter, *this, "style:style", ( *it ).name , "style:graphic-properties" );
+    xmlWriter->startElement( "office:automatic-styles" );
+
+    QList<StyleData> data( autoStyleData() );
+    QList<StyleData>::iterator dataIt( data.begin() );
+    for ( ; dataIt != data.end(); ++dataIt ) {
+        QList<KoGenStyles::NamedStyle> stylesList = styles( int( ( *dataIt ).m_type ), stylesDotXml );
+        QList<KoGenStyles::NamedStyle>::const_iterator it = stylesList.begin();
+        for ( ; it != stylesList.end() ; ++it ) {
+            ( *it ).style->writeStyle( xmlWriter, *this, dataIt->m_elementName, ( *it ).name,
+                                       dataIt->m_propertiesElementName, true, dataIt->m_drawElement );
+        }
     }
 
-    stylesList = styles( KoGenStyle::StyleDrawingPage, stylesDotXml );
-    it = stylesList.begin();
-    for ( ; it != stylesList.end() ; ++it ) {
-        ( *it ).style->writeStyle( xmlWriter, *this, "style:style", ( *it ).name , "style:drawing-page-properties" );
-    }
-
-    stylesList = styles( KoGenStyle::StylePageLayout, stylesDotXml );
-    it = stylesList.begin();
-    for ( ; it != stylesList.end() ; ++it ) {
-        ( *it ).style->writeStyle( xmlWriter, *this, "style:page-layout", (*it).name, "style:page-layout-properties" );
-    }
+    xmlWriter->endElement(); // office:automatic-styles
 }
 
 
 void KoGenStyles::saveOdfDocumentStyles( KoXmlWriter* xmlWriter )
 {
-    QList<KoGenStyles::NamedStyle> stylesList = styles( KoGenStyle::StyleGradientLinear );
-    QList<KoGenStyles::NamedStyle>::const_iterator it = stylesList.begin();
-    for ( ; it != stylesList.end() ; ++it ) {
-        ( *it ).style->writeStyle( xmlWriter, *this, "svg:linearGradient", ( *it ).name, 0, true, true /*add draw:name*/ );
+    xmlWriter->startElement( "office:styles" );
+
+    QList<StyleData> data( styleData() );
+    QList<StyleData>::iterator dataIt( data.begin() );
+    for ( ; dataIt != data.end(); ++dataIt ) {
+        QList<KoGenStyles::NamedStyle> stylesList = styles( int( ( *dataIt ).m_type ) );
+        QList<KoGenStyles::NamedStyle>::const_iterator it = stylesList.begin();
+        for ( ; it != stylesList.end() ; ++it ) {
+            ( *it ).style->writeStyle( xmlWriter, *this, dataIt->m_elementName, ( *it ).name,
+                                       dataIt->m_propertiesElementName, true, dataIt->m_drawElement );
+        }
     }
 
-    stylesList = styles( KoGenStyle::StyleGradientRadial );
-    it = stylesList.begin();
-    for ( ; it != stylesList.end() ; ++it ) {
-        ( *it ).style->writeStyle( xmlWriter, *this, "svg:radialGradient", ( *it ).name, 0, true, true /*add draw:name*/ );
+    xmlWriter->endElement(); // office:styles
+}
+
+QList<KoGenStyles::StyleData> & KoGenStyles::styleData()
+{
+    if ( m_styleData.empty() ) {
+        m_styleData.append( StyleData( KoGenStyle::StyleUser, "style:style", "style:paragraph-properties", false ) );
+        m_styleData.append( StyleData( KoGenStyle::StyleTableColumn, "style:style", "style:table-column-properties", false ) );
+        m_styleData.append( StyleData( KoGenStyle::StyleTableRow, "style:style", "style:table-row-properties", false ) );
+        m_styleData.append( StyleData( KoGenStyle::StyleTableCell, "style:style", "style:table-cell-properties", false ) );
+        m_styleData.append( StyleData( KoGenStyle::StyleList, "text:list-style", 0, false ) );
+        m_styleData.append( StyleData( KoGenStyle::StyleGradientLinear, "svg:linearGradient", 0, true ) );
+        m_styleData.append( StyleData( KoGenStyle::StyleGradientRadial, "svg:radialGradient", 0, true ) );
+        m_styleData.append( StyleData( KoGenStyle::StyleStrokeDash, "draw:stroke-dash", 0, true ) );
+        m_styleData.append( StyleData( KoGenStyle::StyleFillImage, "draw:fill-image", 0, true ) );
+        m_styleData.append( StyleData( KoGenStyle::StyleHatch, "draw:hatch", "style:graphic-properties", true ) );
+        m_styleData.append( StyleData( KoGenStyle::StyleGradient, "draw:gradient", "style:graphic-properties", true ) );
+        m_styleData.append( StyleData( KoGenStyle::StyleMarker, "draw:marker", "style:graphic-properties", true ) );
+    }
+    return m_styleData;
+}
+
+QList<KoGenStyles::StyleData> & KoGenStyles::autoStyleData()
+{
+    if ( m_autoStyleData.empty() ) {
+        // add office:automatic-styles
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleAuto, "style:style", "style:paragraph-properties", false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleGraphicAuto, "style:style", "style:graphic-properties", false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleDrawingPage, "style:style", "style:drawing-page-properties", false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleAutoTable, "style:style", "style:table-properties", false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleAutoTableColumn, "style:style", "style:table-column-properties", false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleAutoTableRow, "style:style", "style:table-row-properties", false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleAutoTableCell, "style:style", "style:table-cell-properties", false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StylePageLayout, "style:page-layout", "style:page-layout-properties", false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleAutoList, "text:list-style", 0, false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleNumericNumber, "number:number-style", 0, false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleNumericFraction, "number:number-style", 0, false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleNumericScientific, "number:number-style", 0, false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleNumericDate, "number:date-style", 0, false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleNumericTime, "number:time-style", 0, false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleNumericPercentage, "number:percentage-style", 0, false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleNumericCurrency, "number:currency-style", 0, false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleNumericBoolean, "number:boolean-style", 0, false ) );
+        m_autoStyleData.append( StyleData( KoGenStyle::StyleNumericText, "number:text-style", 0, false ) );
     }
 
-    stylesList = styles( KoGenStyle::StyleStrokeDash );
-    it = stylesList.begin();
-    for ( ; it != stylesList.end() ; ++it ) {
-        ( *it ).style->writeStyle( xmlWriter, *this, "draw:stroke-dash", ( *it ).name, 0, true, true /*add draw:name*/ );
-    }
-
-    stylesList = styles( KoGenStyle::StyleFillImage );
-    it = stylesList.begin();
-    for ( ; it != stylesList.end() ; ++it ) {
-        ( *it ).style->writeStyle( xmlWriter, *this, "draw:fill-image", ( *it ).name, 0, true, true /*add draw:name*/ );
-    }
+    return m_autoStyleData;
 }

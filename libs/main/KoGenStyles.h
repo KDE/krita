@@ -173,14 +173,32 @@ public:
     void saveOdfDocumentStyles( KoXmlWriter* xmlWriter );
 
 private:
+    struct StyleData {
+        StyleData( KoGenStyle::Type type, const char * elementName, const char * propertiesElementName, bool drawElement )
+        : m_type( type )
+        , m_elementName( elementName )
+        , m_propertiesElementName( propertiesElementName )
+        , m_drawElement( drawElement )
+        {}
+        KoGenStyle::Type m_type;
+        const char * m_elementName;
+        const char * m_propertiesElementName;
+        bool m_drawElement;
+    };
+
+    QList<StyleData> & styleData();
+    QList<StyleData> & autoStyleData();
+
     QString makeUniqueName( const QString& base, int flags ) const;
+
+    static QList<StyleData> m_styleData;
+    static QList<StyleData> m_autoStyleData;
 
     /// style definition -> name
     StyleMap m_styleMap;
 
     /// Map with the style name as key.
     /// This map is mainly used to check for name uniqueness
-    /// The value of the bool doesn't matter.
     typedef QSet<QString> NameMap;
     NameMap m_styleNames;
     NameMap m_autoStylesInStylesDotXml;

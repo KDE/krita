@@ -31,6 +31,7 @@ private slots:
     void testSelectionComponents();
     void testSelectionActions();
     void testInvertSelection();
+    void testUpdateSelectionProjection();
 };
 
 #endif

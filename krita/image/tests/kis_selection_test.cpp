@@ -26,7 +26,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_pixel_selection.h"
-
+#include "kis_fill_painter.h"
 
 void KisSelectionTest::testSelectionComponents()
 {
@@ -109,7 +109,25 @@ void KisSelectionTest::testInvertSelection()
     QCOMPARE( selection->selected(22,22), MIN_SELECTED);
     QCOMPARE( selection->selected(10,10), MAX_SELECTED);
 }
+void KisSelectionTest::testUpdateSelectionProjection()
+{
+    KisSelectionSP selection = new KisSelection();
+    QVERIFY(selection->selectedExactRect().isNull() );
 
+    // Now fill the layer with some opaque pixels
+    KisFillPainter gc(selection->getOrCreatePixelSelection());
+    gc.fillRect(QRect(0, 0, 100, 100),
+                KoColor(QColor(0, 0, 0, 0), KoColorSpaceRegistry::instance()->rgb8()),
+                MAX_SELECTED);
+    gc.end();
+
+    QVERIFY(selection->pixelSelection()->selectedExactRect() == QRect(0, 0, 100, 100) );
+    QVERIFY(selection->selectedExactRect().isNull() );
+    selection->updateProjection( QRect(0, 0, 100, 100) );
+    QVERIFY(selection->pixelSelection()->selectedExactRect() == QRect( 0, 0, 100, 100 ) );
+
+
+}
 
 
 QTEST_KDEMAIN(KisSelectionTest, NoGUI)

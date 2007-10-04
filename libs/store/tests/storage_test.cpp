@@ -167,7 +167,9 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
     store->enterDirectory( testDir2 );
     store->pushDirectory();
 
-    while ( store->leaveDirectory() );
+    while ( store->leaveDirectory() ) {
+        ;
+    }
     store->enterDirectory( testDir );
     if ( store->currentPath() != QString( testDirResult ) )
         return cleanUp( store, testFile, brokenPath );

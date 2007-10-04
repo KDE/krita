@@ -28,7 +28,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoColorConversionSystem.h"
 
-int main(char argc, char** argv)
+int main(int argc, char** argv)
 {
     KAboutData aboutData("CSSGraph",
                          0,

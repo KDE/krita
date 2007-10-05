@@ -26,7 +26,6 @@
 
 
 class QAbstractItemModel;
-class QStandardItemModel;
 
 namespace KoChart
 {
@@ -91,7 +90,7 @@ namespace KoChart
         ChartInterface();
         virtual ~ChartInterface();
 
-        virtual void setModel( QStandardItemModel* model ) = 0;
+        virtual void setModel( QAbstractItemModel* model ) = 0;
     };
 }
 

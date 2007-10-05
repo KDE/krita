@@ -413,7 +413,8 @@ bool KoDocument::saveFile()
                 backup.setPath( backup.path() + QString::fromLatin1("~") );
                 KFileItem item( entry, url() );
                 Q_ASSERT( item.name() == url().fileName() );
-                KIO::NetAccess::file_copy( url(), backup, item.permissions(), true /*overwrite*/, false /*resume*/, shells().current() );
+		KIO::FileCopyJob *job = KIO::file_copy( url(), backup, item.permissions(),KIO::Overwrite | KIO::HideProgressInfo);
+		job->exec();
             }
         }
     }

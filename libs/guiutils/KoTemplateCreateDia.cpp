@@ -54,7 +54,7 @@
 #include <kconfigbase.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-
+#include <kio/job.h>
 #include <stdlib.h>
 #include <kcomponentdata.h>
 
@@ -325,8 +325,9 @@ void KoTemplateCreateDia::slotOk() {
     if ( !ignore )
     {
         // copy the template file
-        KIO::NetAccess::file_copy( orig, dest, -1, true, false, this );
-
+        KIO::FileCopyJob *job = KIO::file_copy( orig, dest,KIO::Overwrite | KIO::HideProgressInfo);
+        job->exec();
+ 
         // save the picture
         if(d->m_default->isChecked() && !m_pixmap.isNull())
             m_pixmap.save(icon, "PNG");
@@ -346,7 +347,9 @@ void KoTemplateCreateDia::slotOk() {
             if( KIO::NetAccess::exists(orig, true, this) ) {
                 dest.setPath( dir+"/.directory" );
                 // We copy the file with overwrite
-                KIO::NetAccess::file_copy( orig, dest, -1, true, false, this );
+                KIO::FileCopyJob *job = KIO::file_copy( orig, dest,KIO::Overwrite | KIO::HideProgressInfo);
+                job->exec();
+
                 ready=true;
             }
         }

@@ -50,12 +50,12 @@ template<typename _src_CSTraits_, typename _dst_CSTraits_>
 class KoScaleColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
     public:
         KoScaleColorConversionTransformationFactory(QString colorModelId, QString _srcDepthId, QString _dstDepthId) : KoColorConversionTransformationFactory(colorModelId,  _srcDepthId, colorModelId, _dstDepthId),
-                hdr( ( (srcColorDepthId() == Float16BitsColorDepthID.id()) && 
-                       (dstColorDepthId() == Float32BitsColorDepthID.id()) ) ||
-                     ( (srcColorDepthId() == Float32BitsColorDepthID.id()) && 
+                hdr( ( (srcColorDepthId() == Float16BitsColorDepthID.id()) and 
+                       (dstColorDepthId() == Float32BitsColorDepthID.id()) ) or
+                     ( (srcColorDepthId() == Float32BitsColorDepthID.id()) and 
                        (dstColorDepthId() == Float16BitsColorDepthID.id()) ) )
         {}
-        virtual KoColorConversionTransformation* createColorTransformation(KoColorSpace* srcColorSpace, KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual)
+        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual)
         {
             Q_UNUSED(renderingIntent);
             Q_ASSERT(canBeSource(srcColorSpace));

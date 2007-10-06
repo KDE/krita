@@ -26,6 +26,8 @@
 
 #include "KoCompositeOp.h"
 #include "KoColorTransformation.h"
+#include "KoColorConversionSystem.h"
+#include "KoColorSpaceRegistry.h"
 
 struct KoColorSpace::Private {
     QString id;
@@ -154,7 +156,8 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
 
 KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
 {
-    return new KoColorConversionTransformation(this, dstColorSpace, renderingIntent);
+    return d->parent->colorConversionSystem()->createColorConverter( this, dstColorSpace, renderingIntent);
+//     return new KoColorConversionTransformation(this, dstColorSpace, renderingIntent);
 }
 
 bool KoColorSpace::convertPixelsTo(const quint8 * src,

@@ -25,15 +25,12 @@
 #include "KoColorConversionTransformationFactory.h"
 #include "KoColorModelStandardIds.h"
 
-#include <kdebug.h>
-#include <kconfiggroup.h>
-
 // -- KoLcmsColorConversionTransformationFactory --
 
 class KoLcmsColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
     public:
         KoLcmsColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId);
-        virtual KoColorConversionTransformation* createColorTransformation(KoColorSpace* srcColorSpace, KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
         virtual bool conserveColorInformation() const;
         virtual bool conserveDynamicRange() const;
         virtual int depthDecrease() const;
@@ -51,15 +48,15 @@ KoLcmsColorConversionTransformationFactory::KoLcmsColorConversionTransformationF
     Q_ASSERT(m_srcColorSpaceType);
     m_dstColorSpaceType = computeColorSpaceType( _dstModelId, _dstDepthId);
     Q_ASSERT(m_dstColorSpaceType);
-    m_conserveColorInformation = !(_dstModelId == GrayAColorModelID.id() || _dstModelId == GrayColorModelID.id()); // color information is lost when converting to Grayscale
+    m_conserveColorInformation = not (_dstModelId == GrayAColorModelID.id() or _dstModelId == GrayColorModelID.id()); // color information is lost when converting to Grayscale
     m_depthDecrease = 0;
-    if( _srcDepthId == Integer16BitsColorDepthID.id() || _dstDepthId == Integer8BitsColorDepthID.id())
+    if( _srcDepthId == Integer16BitsColorDepthID.id() and _dstDepthId == Integer8BitsColorDepthID.id())
     {
         m_depthDecrease = 8;
     }
 }
 
-KoColorConversionTransformation* KoLcmsColorConversionTransformationFactory::createColorTransformation(KoColorSpace* srcColorSpace, KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent )
+KoColorConversionTransformation* KoLcmsColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent )
 {
     return new KoLcmsColorConversionTransformation(srcColorSpace, m_srcColorSpaceType, dynamic_cast<KoLcmsColorProfile*>(srcColorSpace->profile()), dstColorSpace, m_dstColorSpaceType, dynamic_cast<KoLcmsColorProfile*>(dstColorSpace->profile()), renderingIntent);
 }
@@ -116,7 +113,7 @@ quint32 KoLcmsColorConversionTransformationFactory::computeColorSpaceType(QStrin
     {
         modelType = (COLORSPACE_SH(PT_YCbCr)|EXTRA_SH(1)|CHANNELS_SH(3));
     } else {
-        kDebug() << "Unknow color model";
+        kDebug(31000) << "Unknow color model";
         return 0;
     }
     return depthType|modelType;

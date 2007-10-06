@@ -52,7 +52,7 @@ class PIGMENT_EXPORT KoColorConversionTransformationFactory {
          * @param srcColorSpace source color space
          * @param dstColorSpace destination color space
          */
-        virtual KoColorConversionTransformation* createColorTransformation(KoColorSpace* srcColorSpace, KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) =0;
+        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) =0;
         /**
          * @return true if this factory creates a color conversion transformation which
          * conserve color information (typical color transformation that lose that information
@@ -94,12 +94,12 @@ class PIGMENT_EXPORT KoColorConversionTransformationFactory {
          * @param srcCS source color space
          * @return true if the color space given as argument can be used as a source colorspace
          */
-        bool canBeSource(KoColorSpace* srcCS);
+        bool canBeSource(const KoColorSpace* srcCS);
         /**
          * @param dstCS destination color space
          * @return true if the color space given as argument can be used as a destination colorspace
          */
-        bool canBeDestination(KoColorSpace* dstCS);
+        bool canBeDestination(const KoColorSpace* dstCS);
     private:
         struct Private;
         Private* const d;

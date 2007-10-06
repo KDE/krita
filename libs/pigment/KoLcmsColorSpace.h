@@ -392,17 +392,17 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             }
         }
 
-        virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
-        {
-            KoLcmsColorProfile* dstprofile = toLcmsProfile(dstColorSpace->profile());
-            const KoLcmsInfo* dstInfo = dynamic_cast<const KoLcmsInfo*>(dstColorSpace);
-            if(d->profile && dstprofile && dstInfo)
-            {
-                return new KoLcmsColorConversionTransformation(this, colorSpaceType(), d->profile, dstColorSpace, dstInfo->colorSpaceType(), dstprofile, renderingIntent);
-            } else {
-                return KoColorSpaceAbstract<_CSTraits>::createColorConverter(dstColorSpace, renderingIntent);
-            }
-        }
+//         virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
+//         {
+//             KoLcmsColorProfile* dstprofile = toLcmsProfile(dstColorSpace->profile());
+//             const KoLcmsInfo* dstInfo = dynamic_cast<const KoLcmsInfo*>(dstColorSpace);
+//             if(d->profile and dstprofile and dstInfo)
+//             {
+//                 return new KoLcmsColorConversionTransformation(this, colorSpaceType(), d->profile, dstColorSpace, dstInfo->colorSpaceType(), dstprofile, renderingIntent);
+//             } else {
+//                 return KoColorSpaceAbstract<_CSTraits>::createColorConverter(dstColorSpace, renderingIntent);
+//             }
+//         }
 
         virtual bool convertPixelsTo(const quint8 * src,
                 quint8 * dst,
@@ -428,7 +428,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                     }
             }
 
-            if (!tf) {
+            if (not tf) {
 
                 if (!d->transforms.contains(dstColorSpace)) {
             // XXX: Should we clear the transform cache if it gets too big?

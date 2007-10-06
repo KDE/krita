@@ -32,6 +32,10 @@ class KoColorSpace;
 class PIGMENT_EXPORT KoColorConversionTransformation : KoColorTransformation{
         struct Private;
     public:
+        /**
+         * Possible value for the intent of a color conversion (usefull only for ICC
+         * transformations)
+         */
         enum Intent {
             IntentPerceptual = 0,
             IntentRelativeColorimetric = 1,
@@ -41,9 +45,23 @@ class PIGMENT_EXPORT KoColorConversionTransformation : KoColorTransformation{
     public:
         KoColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual);
     public:
+        /**
+         * @return the source color space for this transformation.
+         */
         const KoColorSpace* srcColorSpace() const;
+        /**
+         * @return the destination color space for this transformation.
+         */
         const KoColorSpace* dstColorSpace() const;
+        /**
+         * @return the rendering intent of this transformation (this is only usefull
+         * for ICC transformations)
+         */
         Intent renderingIntent();
+        /**
+         * perform the color conversion between two buffers.
+         * @param nPixels the number of pixels in the buffers.
+         */
         virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
     private:
         Private * const d;

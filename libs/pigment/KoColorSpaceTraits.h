@@ -37,20 +37,31 @@
  */
 template<typename _channels_type_, int _channels_nb_, int _alpha_pos_>
 struct KoColorSpaceTrait {
+    /// the type of the value of the channels of this color space
     typedef _channels_type_ channels_type;
+    /// the number of channels in this color space
     static const quint32 channels_nb = _channels_nb_;
+    /// the position of the alpha channel in the channels of the pixel (or -1 if no alpha
+    /// channel.
     static const qint32 alpha_pos = _alpha_pos_;
+    /// the number of bit for each channel
     static const int depth = KoColorSpaceMathsTraits<_channels_type_>::bits;
     /**
      * @return the size in byte of one pixel
      */
     static const quint32 pixelSize = channels_nb * sizeof(channels_type);
+    /**
+     * @return the value of the alpha channel for this pixel in the 0..255 range
+     */
     inline static quint8 alpha(const quint8 * U8_pixel)
     {
         if (alpha_pos < 0) return OPACITY_OPAQUE;
         channels_type c = nativeArray(U8_pixel)[alpha_pos];
         return  KoColorSpaceMaths<channels_type,quint8>::scaleToA(c);
     }
+    /**
+     * Set the alpha channel for this pixel from a value in the 0..255 range
+     */
     inline static void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels)
     {
         if (alpha_pos < 0) return;

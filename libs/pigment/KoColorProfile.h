@@ -30,6 +30,9 @@
 class PIGMENT_EXPORT KoColorProfile {
         struct Private;
     public:
+        /**
+         * @param fileName file name to load or save that profile
+         */
         KoColorProfile(QString fileName = "");
         virtual ~KoColorProfile();
         /**
@@ -82,7 +85,13 @@ class PIGMENT_EXPORT KoColorProfile {
          */
         virtual bool isSuitableForDisplay() const =0;
     protected:
+        /**
+         * Allows to define the name of this profile.
+         */
         void setName(const QString &name);
+        /**
+         * Allows to set the information string of that profile.
+         */
         void setInfo(const QString &info);
     private:
         Private* const d;

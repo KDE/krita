@@ -39,18 +39,26 @@ public:
     };
     /// enum to define the value of the channel
     enum enumChannelValueType {
-        UINT8,
-        UINT16,
-        UINT32,
-        FLOAT16,
-        FLOAT32,
-        INT8,
-        INT16,
+        UINT8, ///< use this for an unsigned integer 8bits channel
+        UINT16, ///< use this for an integer 16bits channel
+        UINT32, ///< use this for an unsigned integer 21bits channel
+        FLOAT16, ///< use this for a float 16bits channel
+        FLOAT32, ///< use this for a float 32bits channel
+        INT8, ///< use this for an integer 8bits channel
+        INT16, ///< use this for an integer 16bits channel
         OTHER ///< Use this if the channel is neither an integer or a float
     };
 
 public:
     KoChannelInfo() { }
+    /**
+     * @param name of the channel
+     * @param npos position of the channel in the pixel
+     * @param channelType type of the channel
+     * @param channelValueType type of the numerical data used by the channel
+     * @param size number of bytes (not bits) of the channel
+     * @param color a color to represent that channel (for instance in an histogram)
+     */
     KoChannelInfo( const QString & name, qint32 npos, enumChannelType channelType, enumChannelValueType channelValueType, qint32 size = 1, QColor color = QColor(0,0,0))
     : m_name (name), m_pos (npos), m_channelType(channelType), m_channelValueType(channelValueType), m_size(size), m_color(color) { }
 public:

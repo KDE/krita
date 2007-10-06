@@ -26,6 +26,22 @@
 
 #undef _T
 
+/**
+ * This is an empty shell that needs to be "specialized" for each possible
+ * numerical type (quint8, quint16...).
+ * 
+ * It needs to defines some static constant fields :
+ * - zeroValue : the zero for this numerical type
+ * - unitValue : the maximum value of the normal dynamic range
+ * - max : the maximum value
+ * - min : the minimum value
+ * - epsilon : a value close to zero but different of zero
+ * - bits : the bit depth
+ * 
+ * And some types :
+ * - compositetype the type used for composite operations (usually one with
+ *   a higher bit depth)
+ */
 template<typename _T>
 class KoColorSpaceMathsTraits {
     public:
@@ -114,6 +130,15 @@ class PIGMENT_EXPORT KoColorSpaceMathsTraits<float> {
         static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
+/**
+ * This class defines some elementary operations used by various color
+ * space. It's intended to be generic, but some specialization exists
+ * either for optimization or just for beeing buildable.
+ * 
+ * @param _T some numerical type with an existing trait
+ * @param _Tdst some other numerical type with an existing trait, it is
+ *              only needed if different of _T
+ */
 template<typename _T, typename _Tdst = _T>
 class KoColorSpaceMaths {
     typedef KoColorSpaceMathsTraits<_T> traits;
@@ -124,10 +149,21 @@ class KoColorSpaceMaths {
         {
             return ((traits_compositetype)a * b ) /  KoColorSpaceMathsTraits<_Tdst>::unitValue;
         }
+        /**
+         * Division : (a * MAX ) / b
+         * @param a
+         * @param b
+         */
         inline static _T divide(_T a, _Tdst b)
         {
             return ((traits_compositetype)a *  KoColorSpaceMathsTraits<_Tdst>::unitValue ) / b;
         }
+        /**
+         * Blending : (a * alpha) + b * (1 - alpha)
+         * @param a
+         * @param b
+         * @param alpha
+         */
         inline static _T blend(_T a, _T b, _T alpha)
         {
             traits_compositetype c = ( ((traits_compositetype)a - (traits_compositetype)b) * alpha ) >> traits::bits;

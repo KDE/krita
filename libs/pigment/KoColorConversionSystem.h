@@ -28,6 +28,13 @@ class KoColorSpaceFactory;
 
 #include <pigment_export.h>
 
+/**
+ * This class hold the logic related to pigment's Color Conversion System. It's
+ * basically a graph containing all the possible color transformation between
+ * the color spaces. The most usefull functions are createColorConverter to create
+ * a color conversion between two color spaces, and insertColorSpace which is called
+ * by KoColorSpaceRegistry each time a new color space is added to the registry.
+ */
 class PIGMENT_EXPORT KoColorConversionSystem {
         struct Node;
         struct Vertex;
@@ -35,9 +42,22 @@ class PIGMENT_EXPORT KoColorConversionSystem {
         struct Path;
         friend uint qHash(const KoColorConversionSystem::NodeKey &key);
     public:
+        /**
+         * Construct a Color Conversion System, leave to the KoColorSpaceRegistry to
+         * create it.
+         */
         KoColorConversionSystem();
         ~KoColorConversionSystem();
+        /**
+         * This function is called by the KoColorSpaceRegistry to add a new color space
+         * to the graph of transformation.
+         */
         void insertColorSpace(const KoColorSpaceFactory*);
+        /**
+         * This function is called by the color space to create a color conversion
+         * between two color space. This function search in the graph of transformations
+         * the best possible path between the two color space.
+         */
         KoColorConversionTransformation* createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
     public:
         /**
@@ -54,7 +74,14 @@ class PIGMENT_EXPORT KoColorConversionSystem {
     private:
         QString vertexToDot(Vertex* v, QString options) const;
     private:
+        /**
+         * Query the registry to get the color space associated with this
+         * node. (default profile)
+         */
         KoColorSpace* defaultColorSpaceForNode(const Node* node) const;
+        /**
+         * @return the node corresponding to that key, or create it if needed
+         */
         Node* nodeFor(const NodeKey& key);
         const Node* nodeFor(const NodeKey& key) const;
         /**
@@ -74,9 +101,20 @@ class PIGMENT_EXPORT KoColorConversionSystem {
          * looks for the best path between two nodes
          */
         Path* findBestPath(const Node* srcNode, const Node* dstNode) const;
+        /**
+         * Delete all the pathes of the list given in argument.
+         */
         void deletePathes(QList<KoColorConversionSystem::Path*> pathes) const;
+        /**
+         * Don't call that function, but raher findBestPath
+         * @internal
+         */
         template<bool ignoreHdr, bool ignoreColorCorrectness>
         inline Path* findBestPathImpl(const Node* srcNode, const Node* dstNode) const;
+        /**
+         * Don't call that function, but raher findBestPath
+         * @internal
+         */
         template<bool ignoreHdr>
         inline Path* findBestPathImpl(const Node* srcNode, const Node* dstNode) const;
     private:

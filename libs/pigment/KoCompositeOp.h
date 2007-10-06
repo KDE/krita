@@ -69,13 +69,36 @@ const QString COMPOSITE_COPY_OPACITY = "copy_opacity";
 class PIGMENT_EXPORT KoCompositeOp {
 public:
 
+    /**
+     * @param cs a pointer to the color space that can be used with this composite op
+     * @param id the identifiant for this composite op (not user visible)
+     * @param description an user visible string describing this composite operation
+     * @param category the name of the category where to put that composite op when displayed
+     * @param userVisible define wether or not that composite op should be visible in an user
+     *                    interface
+     */
     KoCompositeOp(KoColorSpace * cs, const QString& id, const QString& description, QString category = "", const bool userVisible = true);
     virtual ~KoCompositeOp() {}
 
+    /**
+     * @return the identifiant of this composite op
+     */
     QString id() const;
+    /**
+     * @return the user visible string for this composite op
+     */
     QString description() const;
+    /**
+     * @return the color space that can use and own this composite op
+     */
     KoColorSpace * colorSpace() const;
+    /**
+     * @return wether this composite op should be visible in the user interface
+     */
     bool userVisible() const;
+    /**
+     * @return the category associated with the composite op
+     */
     QString category() const;
     
     /**

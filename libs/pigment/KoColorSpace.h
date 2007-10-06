@@ -206,6 +206,9 @@ public:
 	 * to floating point range 0 to 1.
 	 */
 	virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const = 0;
+  /**
+   * Write in the pixel the value from the normalized vector.
+   */
 	virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) = 0;
 
     /**

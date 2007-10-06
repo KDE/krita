@@ -935,9 +935,9 @@ KoShapeControllerBase * KisDoc2::shapeController()
     return m_d->shapeController;
 }
 
-KoShape * KisDoc2::shapeForLayer( KisNodeSP layer )
+KoShape * KisDoc2::shapeForNode( KisNodeSP layer )
 {
-    return m_d->shapeController->shapeForLayer( layer );
+    return m_d->shapeController->shapeForNode( layer );
 }
 
 

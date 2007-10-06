@@ -51,7 +51,7 @@ public:
 
     void setInitialShapeForView( KisView2 * view );
 
-    KoShape * shapeForLayer( KisNodeSP layer );
+    KoShape * shapeForNode( KisNodeSP layer );
 
 private slots:
 

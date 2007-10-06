@@ -136,7 +136,7 @@ public:
      */
     KoShapeControllerBase * shapeController();
 
-    KoShape * shapeForLayer( KisNodeSP layer );
+    KoShape * shapeForNode( KisNodeSP layer );
 
     /**
      * The layer model provides a light-weight Qt model-view

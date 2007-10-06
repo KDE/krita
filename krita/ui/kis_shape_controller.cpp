@@ -242,7 +242,7 @@ void KisShapeController::slotLayerAdded( KisLayerSP layer )
     }
 
     // Get the parent -- there is always one, and it should be in the layermap already
-    KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>( shapeForLayer( static_cast<KisLayer*>( layer->parentLayer().data() ) ) );
+    KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>( shapeForNode( static_cast<KisLayer*>( layer->parentLayer().data() ) ) );
     Q_ASSERT( parent );
 
     KoShape * shape = 0;
@@ -285,12 +285,12 @@ void KisShapeController::slotLayerAdded( KisLayerSP layer )
 
 void KisShapeController::slotLayerRemoved( KisLayerSP layer )
 {
-    removeShape( shapeForLayer( layer ) );
+    removeShape( shapeForNode( layer ) );
 }
 
 void KisShapeController::slotLayerMoved( KisLayerSP layer )
 {
-    KoShape * shape = shapeForLayer( layer );
+    KoShape * shape = shapeForNode( layer );
     removeShape( shape );
     slotLayerAdded( layer );
 }
@@ -302,13 +302,13 @@ void KisShapeController::slotLayersChanged( KisGroupLayerSP rootLayer )
     setImage( m_d->image );
 }
 
-KoShape * KisShapeController::shapeForLayer( KisNodeSP layer )
+KoShape * KisShapeController::shapeForNode( KisNodeSP layer )
 {
 
     if ( m_d->layerShapes.contains( layer ) )
         return m_d->layerShapes[layer];
     else {
-        kDebug(41007) <<"KisShapeController::shapeForLayer does not find a shape for layer" << layer <<", this should never happen!";
+        kDebug(41007) <<"KisShapeController::shapeForNode does not find a shape for layer" << layer <<", this should never happen!";
         return 0;
     }
 }

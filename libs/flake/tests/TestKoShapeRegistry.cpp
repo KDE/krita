@@ -137,5 +137,5 @@ void TestKoShapeRegistry::testCreateFramedShapes()
     QVERIFY( shape->shapeId() == KoPathShapeId );
 }
 
-QTEST_KDEMAIN(TestKoShapeRegistry, NoGUI)
+QTEST_KDEMAIN(TestKoShapeRegistry, GUI)
 #include "TestKoShapeRegistry.moc"

@@ -81,7 +81,7 @@
 #include "kis_image_manager.h"
 #include "kis_controlframe.h"
 #include "kis_birdeye_box.h"
-#include "kis_layerbox.h"
+#include "kis_layer_box.h"
 #include "kis_layer_manager.h"
 #include "kis_zoom_manager.h"
 #include "kis_grid_manager.h"

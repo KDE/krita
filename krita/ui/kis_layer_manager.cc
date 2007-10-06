@@ -137,14 +137,14 @@ void KisLayerManager::activateLayer( KisLayerSP layer )
     KoSelection * selection = m_view->canvasBase()->globalShapeManager()->selection();
     Q_ASSERT( selection );
 
-    KoShape * shape = m_view->document()->shapeForLayer( layer );
+    KoShape * shape = m_view->document()->shapeForNode( layer );
     Q_ASSERT( shape );
 
     selection->deselectAll();
     selection->select(shape);
 
     Q_ASSERT( layer->parent() );
-    KoShape * parentShape = m_view->document()->shapeForLayer( static_cast<KisLayer*>( layer->parent().data() ) );
+    KoShape * parentShape = m_view->document()->shapeForNode( static_cast<KisLayer*>( layer->parent().data() ) );
     Q_ASSERT( parentShape );
 
     KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>( parentShape );
@@ -595,7 +595,7 @@ void KisLayerManager::addShapeLayer( KisNodeSP parent, KisLayerSP above )
         // XXX: Make work with nodes!
         KisLayer * parentLayer = dynamic_cast<KisLayer*>( parent.data() );
         KoShapeContainer * parentContainer =
-            dynamic_cast<KoShapeContainer*>( m_doc->shapeForLayer( parentLayer ) );
+            dynamic_cast<KoShapeContainer*>( m_doc->shapeForNode( parentLayer ) );
         if ( !parentContainer ) return;
 
         KisLayerSP layer = new KisShapeLayer(parentContainer, img.data(), img->nextLayerName(), OPACITY_OPAQUE );

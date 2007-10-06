@@ -62,7 +62,7 @@ void KisShapeControllerTest::testSetImage()
     KisLayerSP layer2 = new KisPaintLayer( image, "test2", OPACITY_OPAQUE );
     image->addLayer( layer2 );
 
-    QVERIFY( shapeController->shapeForLayer( layer2 ) != 0 );
+    QVERIFY( shapeController->shapeForNode( layer2 ) != 0 );
     QCOMPARE( ( int )image->rootLayer()->childCount(), 2 );
     QCOMPARE( shapeController->layerMapSize(), 3 );
 

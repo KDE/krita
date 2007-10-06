@@ -68,6 +68,7 @@ public slots:
     void slotSetColorSpace(const KoColorSpace * colorSpace);
     void updateUI();
     void setCurrentLayer( KisLayerSP layer );
+
 signals:
     void sigRequestLayer(KisGroupLayerSP parent, KisLayerSP above);
     void sigRequestGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
@@ -83,9 +84,6 @@ signals:
 
     void sigOpacityChanged(double opacity, bool final);
     void sigItemComposite(const KoCompositeOp*);
-
-private:
-    enum LayerTypes { PAINT_LAYER, GROUP_LAYER, ADJUSTMENT_LAYER, OBJECT_LAYER };
 
 private slots:
     void slotContextMenuRequested( const QPoint &pos, const QModelIndex &index );

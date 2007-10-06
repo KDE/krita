@@ -354,17 +354,23 @@ QList<KoID> KoColorSpaceRegistry::colorDepthList(const KoID& colorModelId) const
     return ids;
 }
 
-QString KoColorSpaceRegistry::colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId)
+QString KoColorSpaceRegistry::colorSpaceId(QString colorModelId, QString colorDepthId)
 {
     QList<KoColorSpaceFactory*> factories = values();
     foreach(KoColorSpaceFactory* factory, factories)
     {
-        if(factory->colorModelId() == colorModelId && factory->colorDepthId() == colorDepthId )
+        if(factory->colorModelId().id() == colorModelId && factory->colorDepthId().id() == colorDepthId )
         {
             return factory->id();
         }
     }
     return "";
+}
+
+
+QString KoColorSpaceRegistry::colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId)
+{
+    return colorSpaceId( colorModelId.id(), colorDepthId.id());
 }
 
 const KoColorConversionSystem* KoColorSpaceRegistry::colorConversionSystem() const

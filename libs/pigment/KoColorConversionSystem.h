@@ -54,6 +54,7 @@ class PIGMENT_EXPORT KoColorConversionSystem {
     private:
         QString vertexToDot(Vertex* v, QString options) const;
     private:
+        KoColorSpace* defaultColorSpaceForNode(const Node* node) const;
         Node* nodeFor(const NodeKey& key);
         const Node* nodeFor(const NodeKey& key) const;
         /**

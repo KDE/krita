@@ -24,9 +24,60 @@
 
 #include <kdebug.h>
 
+#include "KoColorConversionTransformation.h"
 #include "KoColorConversionTransformationFactory.h"
 #include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoColorModelStandardIds.h"
+
+class KoMultipleColorConversionTransformation : public KoColorConversionTransformation {
+    public:
+        KoMultipleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_maxPixelSize(qMax(srcCs->pixelSize(), dstCs->pixelSize()))
+        {
+            
+        }
+        ~KoMultipleColorConversionTransformation()
+        {
+            foreach(KoColorConversionTransformation* transfo, m_transfos)
+            {
+                delete transfo;
+            }
+        }
+        void appendTransfo(KoColorConversionTransformation* transfo)
+        {
+            m_transfos.append( transfo );
+            m_maxPixelSize = qMax(m_maxPixelSize, transfo->srcColorSpace()->pixelSize());
+            m_maxPixelSize = qMax(m_maxPixelSize, transfo->dstColorSpace()->pixelSize());
+        }
+        virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+        {
+            Q_ASSERT(m_transfos.size() > 1); // Be sure to have a more than one transformation
+            quint8 *buff1 = new quint8[m_maxPixelSize*nPixels];
+            quint8 *buff2 = 0;
+            if(m_transfos.size() > 2)
+            {
+                buff2 = new quint8[m_maxPixelSize*nPixels]; // a second buffer is needed
+            }
+            m_transfos.first()->transform( src, buff1, nPixels);
+            int lastIndex = m_transfos.size() - 2;
+            for( int i = 1; i <= lastIndex; i++)
+            {
+                m_transfos[i]->transform( buff1, buff2, nPixels);
+                if(i != lastIndex)
+                {
+                    quint8* tmp = buff1;
+                    buff1 = buff2;
+                    buff2 = tmp;
+                }
+            }
+            m_transfos.last()->transform( buff1, dst, nPixels);
+            delete buff2;
+            delete buff1;
+        }
+    private:
+        QList<KoColorConversionTransformation*> m_transfos;
+        quint32 m_maxPixelSize;
+};
 
 struct KoColorConversionSystem::Node {
     Node() : isInitialized(false), colorSpaceFactory(0) {}
@@ -233,6 +284,11 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
     }
 }
 
+KoColorSpace* KoColorConversionSystem::defaultColorSpaceForNode(const Node* node) const
+{
+    return KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( node->modelId, node->depthId ), 0 );
+}
+
 const KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(QString _colorModelId, QString _colorDepthId) const 
 {
     return nodeFor(NodeKey(_colorModelId, _colorDepthId));
@@ -267,13 +323,29 @@ KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(c
 {
     Path* path = findBestPath( nodeFor( srcColorSpace->colorModelId().id(), srcColorSpace->colorDepthId().id() ), nodeFor( dstColorSpace->colorModelId().id(), dstColorSpace->colorDepthId().id() ) );
     Q_ASSERT(path);
+    KoColorConversionTransformation* transfo = 0;
     if(path->length() == 1)
     { // Direct connection
-        return path->vertexes.first()->factory()->createColorTransformation( srcColorSpace, dstColorSpace, renderingIntent );
+        transfo = path->vertexes.first()->factory()->createColorTransformation( srcColorSpace, dstColorSpace, renderingIntent );
     } else {
-        Q_ASSERT(false);
+        KoMultipleColorConversionTransformation* mccTransfo = new KoMultipleColorConversionTransformation(srcColorSpace, dstColorSpace, renderingIntent);
+        transfo = mccTransfo;
+        KoColorSpace* intermCS = defaultColorSpaceForNode( path->vertexes.first()->dstNode );
+        mccTransfo->appendTransfo( path->vertexes.first()->factory()->createColorTransformation(srcColorSpace, intermCS, renderingIntent) );
+        
+        for(int i = 1; i < path->length() - 1; i++)
+        {
+            Vertex* v = path->vertexes[i];
+            KoColorSpace* intermCS2 = defaultColorSpaceForNode( v->dstNode );
+            mccTransfo->appendTransfo( v->factory()->createColorTransformation(intermCS, intermCS2, renderingIntent) );
+            intermCS2 = intermCS;
+        }
+        mccTransfo->appendTransfo( path->vertexes.last()->factory()->createColorTransformation(intermCS, dstColorSpace, renderingIntent) );
+        
     }
-    return 0;
+    delete path;
+    Q_ASSERT(transfo);
+    return transfo;
 }
 
 KoColorConversionSystem::Vertex* KoColorConversionSystem::vertexBetween(KoColorConversionSystem::Node* srcNode, KoColorConversionSystem::Node* dstNode)

@@ -153,6 +153,14 @@ public:
      * @param colorDepthId id of the color depth
      * @return the id of the wanted colorspace, or "" if no colorspace correspond to those ids
      */
+    QString colorSpaceId(QString colorModelId, QString colorDepthId);
+    /**
+     * It's a convenient function that behave like the above.
+     * Return the id of the colorspace that have the defined colorModelId with colorDepthId.
+     * @param colorModelId id of the color model
+     * @param colorDepthId id of the color depth
+     * @return the id of the wanted colorspace, or "" if no colorspace correspond to those ids
+     */
     QString colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId);
     
     /**

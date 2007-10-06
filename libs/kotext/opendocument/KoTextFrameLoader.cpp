@@ -54,6 +54,7 @@
 #include "../styles/KoListLevelProperties.h"
 
 // KDE + Qt includes
+#include <kdebug.h>
 #include <QDomDocument>
 #include <QTextDocument>
 #include <QTextCursor>

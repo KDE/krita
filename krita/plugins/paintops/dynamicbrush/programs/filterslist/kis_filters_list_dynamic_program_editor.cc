@@ -20,6 +20,7 @@
 
 #include <kdialog.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "ui_FiltersListDynamicProgramEditor.h"
 

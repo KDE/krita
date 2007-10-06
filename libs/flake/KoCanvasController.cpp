@@ -32,7 +32,7 @@
 #include <KoMainWindow.h>
 
 #include <ksharedconfig.h>
-
+#include <kconfiggroup.h>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QScrollBar>

@@ -47,6 +47,7 @@
 #include <kpagedialog.h>
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <kdebug.h>
 
 #include <ktar.h>
 #include <kio/netaccess.h>

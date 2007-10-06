@@ -28,6 +28,7 @@
 #include <kservicetypetrader.h>
 #include <k3staticdeleter.h>
 #include <KConfig>
+#include <KConfigGroup>
 
 class KoPluginLoader::Private {
 public:

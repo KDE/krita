@@ -27,6 +27,7 @@
 
 // kde + qt includes
 #include <kdialog.h>
+#include <kdebug.h>
 #include <QButtonGroup>
 #include <QAbstractButton>
 #include <QMainWindow>

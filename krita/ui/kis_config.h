@@ -22,6 +22,7 @@
 #include <QColor>
 
 #include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 #include "kis_global.h"
 #include "krita_export.h"

@@ -30,6 +30,7 @@
 #endif
 
 #include <kdebug.h>
+#include <kconfiggroup.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -116,7 +117,7 @@ QStringList KoGlobal::_listOfLanguages()
 
 void KoGlobal::createListOfLanguages()
 {
-    KConfig config( "locale", "all_languages", KConfig::NoGlobals );
+    KConfig config("all_languages", KConfig::NoGlobals, "locale");
     // Note that we could also use KLocale::allLanguagesTwoAlpha
 
     QMap<QString, bool> seenLanguages;

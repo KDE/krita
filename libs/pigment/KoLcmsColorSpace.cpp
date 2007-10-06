@@ -25,6 +25,9 @@
 #include "KoColorConversionTransformationFactory.h"
 #include "KoColorModelStandardIds.h"
 
+#include <kdebug.h>
+#include <kconfiggroup.h>
+
 // -- KoLcmsColorConversionTransformationFactory --
 
 class KoLcmsColorConversionTransformationFactory : public KoColorConversionTransformationFactory {

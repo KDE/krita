@@ -26,6 +26,7 @@
 #include <ktemporaryfile.h>
 #include <kdeversion.h>
 #include <kfilterdev.h>
+#include <kdebug.h>
 
 #include <QBuffer>
 #include <QFile>

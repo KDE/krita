@@ -34,6 +34,7 @@
 #include <k3staticdeleter.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 #include "kis_tileddatamanager.h"
 #include "kis_tile.h"

@@ -24,6 +24,7 @@
 #include <QVariant>
 
 #include <kross/core/action.h>
+#include <kdebug.h>
 
 KisScriptDockFactory::KisScriptDockFactory(Kross::Action* act) : m_action(act)
 {

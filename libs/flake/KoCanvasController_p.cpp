@@ -31,8 +31,10 @@
 
 #include <KoProperties.h>
 
-// #include <kdebug.h>
+#include <kdebug.h>
 #include <ksharedconfig.h>
+#include <kglobal.h>
+#include <kconfiggroup.h>
 
 #include <QPainter>
 #include <QDragEnterEvent>

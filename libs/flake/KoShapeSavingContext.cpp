@@ -30,6 +30,8 @@
 
 #include <kmimetype.h>
 
+#include <QtCore/QTime>
+
 KoShapeSavingContext::KoShapeSavingContext( KoXmlWriter &xmlWriter, KoSavingContext &context )
 : m_xmlWriter( &xmlWriter )
 , m_savingOptions( 0 )

@@ -22,6 +22,8 @@
 #include "KoText.h"
 #include "styles/KoCharacterStyle.h"
 
+#include <kdebug.h>
+
 KoHighlightingTab::KoHighlightingTab( QWidget* parent)
     : QWidget ( parent)
 {

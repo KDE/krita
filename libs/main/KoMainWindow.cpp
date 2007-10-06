@@ -50,6 +50,7 @@
 #include <kxmlguifactory.h>
 #include <kfileitem.h>
 #include <ktoolbar.h>
+#include <kdebug.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 

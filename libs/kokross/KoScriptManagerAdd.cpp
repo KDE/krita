@@ -35,6 +35,7 @@
 #include <kurl.h>
 #include <kmimetype.h>
 #include <kfilewidget.h>
+#include <kdebug.h>
 
 /********************************************************************
  * KoScriptManagerAddTypeWidget

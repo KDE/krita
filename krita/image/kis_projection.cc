@@ -25,6 +25,7 @@
 
 #include <kglobal.h>
 #include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 #include "kis_image.h"
 #include "kis_group_layer.h"

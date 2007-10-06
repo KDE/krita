@@ -58,7 +58,9 @@
 #include <QTextBlock>
 #include <QTextList>
 #include <QTextTable>
+#include <QTime>
 #include <klocale.h>
+#include <kdebug.h>
 
 // if defined then debugging is enabled
 #define KOOPENDOCUMENTLOADER_DEBUG

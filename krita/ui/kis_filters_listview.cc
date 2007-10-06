@@ -32,6 +32,7 @@
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <kconfiggroup.h>
 
 #include "kis_types.h"
 #include "kis_paint_device.h"

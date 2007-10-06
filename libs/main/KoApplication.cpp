@@ -31,6 +31,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 #include <QtDBus/QtDBus>
 #include <QFile>
 

@@ -23,6 +23,7 @@
 
 #include <kglobal.h>
 #include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 #include "kis_paint_device.h"
 

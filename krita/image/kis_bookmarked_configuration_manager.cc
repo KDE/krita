@@ -24,6 +24,9 @@
 
 #include <kconfig.h>
 #include <klocale.h>
+#include <kconfiggroup.h>
+#include <kglobal.h>
+#include <kdebug.h>
 
 #include <KoID.h>
 

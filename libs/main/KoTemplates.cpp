@@ -34,7 +34,7 @@
 #include <kiconloader.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
-
+#include <kconfiggroup.h>
 #include <stdlib.h>
 
 

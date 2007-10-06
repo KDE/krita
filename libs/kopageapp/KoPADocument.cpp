@@ -46,6 +46,8 @@
 #include "KoPAStyles.h"
 #include "KoPALoadingContext.h"
 
+#include <kdebug.h>
+
 #include <typeinfo>
 
 KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )

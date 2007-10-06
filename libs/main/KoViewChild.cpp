@@ -21,6 +21,8 @@
 
 #include <QRect>
 
+#include <kdebug.h>
+
 #include <KoView.h>
 #include <KoFrame.h>
 #include <KoDocumentChild.h>

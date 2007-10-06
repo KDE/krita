@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <kdebug.h>
+
 #include "kis_dynamic_sensor_time.h"
 
 #include "ui_SensorTimeConfiguration.h"

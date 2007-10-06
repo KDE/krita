@@ -24,6 +24,7 @@
 #include <KAboutData>
 #include <KCmdLineArgs>
 #include <KApplication>
+#include <KDebug>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorConversionSystem.h"

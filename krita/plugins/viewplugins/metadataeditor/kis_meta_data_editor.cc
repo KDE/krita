@@ -24,6 +24,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_entry.h>

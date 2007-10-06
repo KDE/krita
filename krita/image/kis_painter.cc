@@ -37,6 +37,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 #include "kis_brush.h"
 #include "kis_complex_color.h"

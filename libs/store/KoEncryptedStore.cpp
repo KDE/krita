@@ -37,6 +37,7 @@
 #include <kzip.h>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
+#include <kdebug.h>
 
 struct KoEncryptedStore_EncryptionData {
     // Needed for Key Derivation

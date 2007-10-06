@@ -38,6 +38,7 @@
 
 #include <kdialog.h>
 #include <kfileitem.h>
+#include <kdebug.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <kio/netaccess.h>
@@ -48,6 +49,7 @@
 #include <kxmlguifactory.h>
 #include <KIconLoader>
 #include <kundostack.h>
+#include <kdebug.h>
 
 #include <QBuffer>
 #include <QDir>

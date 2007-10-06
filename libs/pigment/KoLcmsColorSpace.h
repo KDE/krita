@@ -189,12 +189,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             cmsHTRANSFORM defaultFromLab;
 
             KoLcmsColorProfile *  profile;
-            mutable const KoColorSpace *lastUsedDstColorSpace;
-            mutable KoColorConversionTransformation* lastUsedTransform;
-
-        // cmsHTRANSFORM is a void *, so this should work.
-            typedef QMap<const KoColorSpace *, KoColorConversionTransformation*>  TransformMap;
-            mutable TransformMap transforms; // Cache for existing transforms
         };
     protected:
         KoLcmsColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, DWORD cmType,
@@ -204,8 +198,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         {
             d->profile = toLcmsProfile(p);
             d->qcolordata = 0;
-            d->lastUsedDstColorSpace = 0;
-            d->lastUsedTransform = 0;
             d->lastRGBProfile = 0;
             d->lastToRGB = 0;
             d->lastFromRGB = 0;
@@ -338,7 +330,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", dstProfile);
 
             if (data)
-                convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent);
+                this->convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent);
 
             return img;
         }
@@ -390,61 +382,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 dstU16[4*i+3] = KoColorSpaceMaths<quint8,quint16>::scaleToA(this->alpha(src));
                 src += this->pixelSize();
             }
-        }
-
-//         virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
-//         {
-//             KoLcmsColorProfile* dstprofile = toLcmsProfile(dstColorSpace->profile());
-//             const KoLcmsInfo* dstInfo = dynamic_cast<const KoLcmsInfo*>(dstColorSpace);
-//             if(d->profile and dstprofile and dstInfo)
-//             {
-//                 return new KoLcmsColorConversionTransformation(this, colorSpaceType(), d->profile, dstColorSpace, dstInfo->colorSpaceType(), dstprofile, renderingIntent);
-//             } else {
-//                 return KoColorSpaceAbstract<_CSTraits>::createColorConverter(dstColorSpace, renderingIntent);
-//             }
-//         }
-
-        virtual bool convertPixelsTo(const quint8 * src,
-                quint8 * dst,
-                const KoColorSpace * dstColorSpace,
-                quint32 numPixels,
-                KoColorConversionTransformation::Intent renderingIntent) const
-        {
-            if (dstColorSpace->id() == this->id()
-                && dstColorSpace->profile() == profile())
-            {
-                if (src!= dst)
-                    memcpy (dst, src, numPixels * this->pixelSize());
-
-                return true;
-            }
-
-            KoColorConversionTransformation* tf = 0;
-
-            if (d->lastUsedTransform != 0 && d->lastUsedDstColorSpace != 0) {
-                if (dstColorSpace->id() == d->lastUsedDstColorSpace->id() &&
-                    dstColorSpace->profile() == d->lastUsedDstColorSpace->profile()) {
-                    tf = d->lastUsedTransform;
-                    }
-            }
-
-            if (not tf) {
-
-                if (!d->transforms.contains(dstColorSpace)) {
-            // XXX: Should we clear the transform cache if it gets too big?
-                    tf = this->createColorConverter(dstColorSpace, renderingIntent);
-                    d->transforms[dstColorSpace] = tf;
-                }
-                else {
-                    tf = d->transforms[dstColorSpace];
-                }
-
-                d->lastUsedTransform = tf;
-                d->lastUsedDstColorSpace = dstColorSpace;
-            }
-            tf->transform(src, dst, numPixels);
-
-            return true;
         }
 
         virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const

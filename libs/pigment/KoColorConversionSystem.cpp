@@ -333,13 +333,16 @@ KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(c
         KoColorSpace* intermCS = defaultColorSpaceForNode( path->vertexes.first()->dstNode );
         mccTransfo->appendTransfo( path->vertexes.first()->factory()->createColorTransformation(srcColorSpace, intermCS, renderingIntent) );
         
+        kDebug(31000) << path->vertexes.first()->srcNode->id() << " to " << path->vertexes.first()->dstNode->id();
         for(int i = 1; i < path->length() - 1; i++)
         {
             Vertex* v = path->vertexes[i];
+            kDebug(31000) << v->srcNode->id() << " to " << v->dstNode->id();
             KoColorSpace* intermCS2 = defaultColorSpaceForNode( v->dstNode );
             mccTransfo->appendTransfo( v->factory()->createColorTransformation(intermCS, intermCS2, renderingIntent) );
-            intermCS2 = intermCS;
+            intermCS = intermCS2;
         }
+        kDebug(31000) << path->vertexes.last()->srcNode->id() << " to " << path->vertexes.last()->dstNode->id();
         mccTransfo->appendTransfo( path->vertexes.last()->factory()->createColorTransformation(intermCS, dstColorSpace, renderingIntent) );
         
     }

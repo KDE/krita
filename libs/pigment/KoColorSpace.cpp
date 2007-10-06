@@ -39,6 +39,13 @@ struct KoColorSpace::Private {
     KoConvolutionOp* convolutionOp;
     QThreadStorage< QVector<quint8>* > conversionCache;
 
+    mutable const KoColorSpace *lastUsedDstColorSpace;
+    mutable KoColorConversionTransformation* lastUsedTransform;
+
+// cmsHTRANSFORM is a void *, so this should work.
+    typedef QMap<const KoColorSpace *, KoColorConversionTransformation*>  TransformMap;
+    mutable TransformMap transforms; // Cache for existing transforms
+
 };
 
 KoColorSpace::KoColorSpace()
@@ -54,6 +61,8 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceR
     d->parent = parent;
     d->mixColorsOp = mixColorsOp;
     d->convolutionOp = convolutionOp;
+    d->lastUsedDstColorSpace = 0;
+    d->lastUsedTransform = 0;
 }
 
 KoColorSpace::~KoColorSpace()
@@ -157,26 +166,51 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
 KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
 {
     return d->parent->colorConversionSystem()->createColorConverter( this, dstColorSpace, renderingIntent);
-//     return new KoColorConversionTransformation(this, dstColorSpace, renderingIntent);
 }
 
 bool KoColorSpace::convertPixelsTo(const quint8 * src,
-                                   quint8 * dst,
-                                   const KoColorSpace * dstColorSpace,
-                                   quint32 numPixels,
-                                   KoColorConversionTransformation::Intent renderingIntent) const
+        quint8 * dst,
+        const KoColorSpace * dstColorSpace,
+        quint32 numPixels,
+        KoColorConversionTransformation::Intent renderingIntent) const
 {
-    Q_UNUSED(renderingIntent);
+    if (dstColorSpace->id() == this->id()
+        && dstColorSpace->profile() == profile())
+    {
+        if (src!= dst)
+            memcpy (dst, src, numPixels * this->pixelSize());
 
-    if (*this == *dstColorSpace) {
-        memmove(dst, src, numPixels*pixelSize());
-    } else {
-        KoColorConversionTransformation* transfo =new KoColorConversionTransformation(this, dstColorSpace, renderingIntent);
-        transfo->transform(src, dst, numPixels);
+        return true;
     }
+
+    KoColorConversionTransformation* tf = 0;
+
+    if (d->lastUsedTransform != 0 && d->lastUsedDstColorSpace != 0) {
+        if (dstColorSpace->id() == d->lastUsedDstColorSpace->id() &&
+            dstColorSpace->profile() == d->lastUsedDstColorSpace->profile()) {
+            tf = d->lastUsedTransform;
+            }
+    }
+
+    if (not tf) {
+
+        if (!d->transforms.contains(dstColorSpace)) {
+    // XXX: Should we clear the transform cache if it gets too big?
+            tf = this->createColorConverter(dstColorSpace, renderingIntent);
+            d->transforms[dstColorSpace] = tf;
+        }
+        else {
+            tf = d->transforms[dstColorSpace];
+        }
+
+        d->lastUsedTransform = tf;
+        d->lastUsedDstColorSpace = dstColorSpace;
+    }
+    tf->transform(src, dst, numPixels);
 
     return true;
 }
+
 
 void KoColorSpace::bitBlt(quint8 *dst,
                           qint32 dststride,

@@ -24,12 +24,13 @@
 #include <KAboutData>
 #include <KCmdLineArgs>
 #include <KApplication>
-#include <KDebug>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorConversionSystem.h"
 
-int main(int argc, char** argv)
+#include <iostream>
+
+int main(char argc, char** argv)
 {
     KAboutData aboutData("CSSGraph",
                          0,
@@ -38,7 +39,7 @@ int main(int argc, char** argv)
                          ki18n("Output the graph of color conversion of pigment's Color Conversion"),
                          KAboutData::License_LGPL,
                          ki18n("(c) 2007 Cyrille Berger"),
-                         KLocalizedString(),
+                         ki18n(""),
                          "www.koffice.org",
                          "submit@bugs.kde.org");
     KCmdLineArgs::init( argc, argv, &aboutData );
@@ -56,9 +57,11 @@ int main(int argc, char** argv)
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if( args->isSet("graphs"))
     {
-        kWarning() << "full : show all the connection on the graph";
-        kWarning() << "bestpath : show the best path for a given transformation";
-        exit(0);
+        // Don't change those lines to use qDebug derivatives, they need to be outputed
+        // to stdout not stderr.
+        std::cout << "full : show all the connection on the graph" << std::endl;
+        std::cout << "bestpath : show the best path for a given transformation" << std::endl;
+        exit(EXIT_SUCCESS);
     }
     QString graphType = args->getOption("graph");
     QString outputType = args->getOption("output");
@@ -66,7 +69,7 @@ int main(int argc, char** argv)
     {
         kError() << "No output file name specified";
         args->usage();
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     QString outputFileName = args->arg(0);
     // Generate the graph
@@ -80,41 +83,41 @@ int main(int argc, char** argv)
         QString srcColorDepth = args->getOption("src-color-depth");
         QString dstColorModel = args->getOption("dst-color-model");
         QString dstColorDepth = args->getOption("dst-color-depth");
-        if( srcColorModel == "" || srcColorDepth == "")
+        if( srcColorModel == "" or srcColorDepth == "")
         {
             kError() << "src-color-model and src-color-depth must be specified for the graph bestpath";
-            exit(1);
+            exit(EXIT_FAILURE);
         }
-        if( dstColorModel != "" && dstColorDepth == "")
+        if( dstColorModel != "" and dstColorDepth == "")
         {
             dstColorDepth = srcColorDepth;
-        } else if( dstColorModel == "" && dstColorDepth != "")
+        } else if( dstColorModel == "" and dstColorDepth != "")
         {
             dstColorModel = srcColorModel;
         }
-        if( dstColorModel == "" && dstColorDepth == "")
+        if( dstColorModel == "" and dstColorDepth == "")
         {
             kDebug() << "TODO";
-            exit(0);
+            exit(EXIT_SUCCESS);
         } else {
             dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->bestPathToDot(srcColorModel, srcColorDepth, dstColorModel, dstColorDepth);
         }
     } else {
-        kWarning() << "Unknow graph type : " << graphType;
-        exit(1);
+        kError() << "Unknow graph type : " << graphType.latin1();
+        exit(EXIT_FAILURE);
     }
     if(outputType == "dot")
     {
         QFile file(outputFileName);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-            exit(1);
+        if (not file.open(QIODevice::WriteOnly | QIODevice::Text))
+            exit(EXIT_FAILURE);
         QTextStream out(&file);
         out << dot;
     } else if(outputType == "ps")
     {
         QTemporaryFile file;
-        if (!file.open())
-            exit(1);
+        if (not file.open())
+            exit(EXIT_FAILURE);
         QTextStream out(&file);
         out << dot;
         QString cmd = QString("dot -Tps %1 -o %2").arg(file.fileName()).arg(outputFileName);
@@ -125,8 +128,7 @@ int main(int argc, char** argv)
             kError() << "An error has occured when executing : '" << cmd << "' it's most likely that the command 'dot' is missing, and that you should install graphviz (from http://www.graphiz.org)";
         }
     } else {
-        kWarning() << "Unknow output type : " << outputType;
-        exit(1);
+        std::cout << "Unknow output type : " << outputType.latin1() << std::endl;
+        exit(EXIT_FAILURE);
     }
-    return 0;
 }

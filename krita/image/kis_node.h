@@ -58,9 +58,7 @@ public:
      */
     virtual ~KisNode();
 
-    virtual KisNodeSP clone() {
-        return KisNodeSP(new KisNode(*this));
-    }
+    virtual KisNodeSP clone() = 0;
 
     virtual bool accept(KisNodeVisitor &v);
 
@@ -73,10 +71,7 @@ protected:
      * @return false if the given node is not allowed as a subclass to
      * this node
      */
-     virtual bool allowAsChild( KisNodeSP )
-        {
-            return true;
-        }
+    virtual bool allowAsChild( KisNodeSP ) = 0;
 
 public: // dirty region methods. XXX: Make these slots?
 

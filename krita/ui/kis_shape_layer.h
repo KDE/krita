@@ -35,9 +35,6 @@ class QString;
 
 class KoViewConverter;
 
-
-const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
-
 /**
    A KisShapeLayer contains any number of non-krita flakes, such as
    path shapes, text shapes and anything else people come up with.
@@ -57,6 +54,11 @@ public:
 
     KisShapeLayer( KoShapeContainer * parent, KisImageSP img, const QString &name, quint8 opacity );
     virtual ~KisShapeLayer();
+    KisNodeSP clone()
+        {
+            return KisNodeSP( new KisShapeLayer(*this) );
+        }
+    bool allowAsChild( KisNodeSP );
 
 public:
 

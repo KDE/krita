@@ -41,6 +41,12 @@ KisFilterMask::~KisFilterMask()
     delete m_d;
 }
 
+bool KisFilterMask::allowAsChild( KisNodeSP node)
+{
+    Q_UNUSED(node);
+    return false;
+}
+
 KisFilterMask::KisFilterMask( const KisFilterMask& rhs )
     : KisEffectMask( rhs )
     , m_d( new Private() )

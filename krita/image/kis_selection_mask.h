@@ -43,6 +43,8 @@ public:
     virtual ~KisSelectionMask();
     KisSelectionMask( const KisSelectionMask& rhs );
 
+    bool allowAsChild( KisNodeSP );
+
     QIcon icon() const
         {
             return KIcon(""); // XXX: Find nice icon for the subclasses.

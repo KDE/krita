@@ -78,6 +78,14 @@ KisShapeLayer::~KisShapeLayer()
     delete m_d;
 }
 
+bool KisShapeLayer::allowAsChild( KisNodeSP node)
+{
+    if ( node->inherits( "KisMask" ) )
+       return true;
+    else
+        return false;
+}
+
 void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED( converter );

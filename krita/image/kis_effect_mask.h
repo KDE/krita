@@ -31,8 +31,6 @@
  * The effect could be a filter, a transformation or anything else
  * that messes up pixels.
  */
-const QString KIS_EFFECT_MASK_ID = "KisEffectMask";
-
 class KRITAIMAGE_EXPORT KisEffectMask : public KisMask
 {
 
@@ -51,19 +49,6 @@ public:
     QIcon icon() const
         {
             return KIcon(""); // XXX: Find nice icon for the subclasses.
-        }
-
-    virtual QString id() { return KIS_EFFECT_MASK_ID; }
-
-
-    virtual QString nodeType()
-        {
-            return id();
-        }
-
-    virtual bool canHaveChildren()
-        {
-            return false;
         }
 
     /**

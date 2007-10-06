@@ -42,8 +42,16 @@ public:
     KisFilterMask();
 
     virtual ~KisFilterMask();
+
+    KisNodeSP clone()
+    {
+        return KisNodeSP(new KisFilterMask(*this));
+    }
+
+
     KisFilterMask( const KisFilterMask& rhs );
-    virtual QString id() { return "KisFilterMask"; }
+
+    bool allowAsChild( KisNodeSP );
 
     KisFilterConfiguration * filter() const;
     void setFilter(KisFilterConfiguration * filterConfig);

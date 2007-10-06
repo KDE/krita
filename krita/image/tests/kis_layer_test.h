@@ -42,11 +42,6 @@ public:
             return "TEST";
         }
 
-    virtual bool canHaveChildren()
-        {
-            return false;
-        }
-
     void updateProjection(const QRect&)
         {
         }

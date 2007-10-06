@@ -28,8 +28,6 @@
 
 class KisFilterConfiguration;
 
-const QString KIS_ADJUSTMENT_LAYER_ID = "KisAdjustmentLayer";
-
 /**
  * Class that contains a KisFilter and optionally a KisSelection. The combination
  * is used by to influence the rendering of the layers under this layer in the
@@ -37,7 +35,7 @@ const QString KIS_ADJUSTMENT_LAYER_ID = "KisAdjustmentLayer";
  *
  * AdjustmentLayers also function as a kind of "fixating layers".
  *
- * XXX: implement prepareForRemoval with:
+ * XXX_NODE: implement prepareForRemoval with:
          // Adjustment layers should mark the layers underneath them, whose rendering
         // they have cached, dirty on removal. Otherwise, the group won't be re-rendered.
         KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(layer.data());
@@ -66,6 +64,13 @@ public:
     KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
+
+    KisNodeSP clone()
+        {
+            return KisNodeSP(new KisAdjustmentLayer(*this));
+        }
+
+    bool allowAsChild( KisNodeSP );
 
     void updateProjection(const QRect& r);
     KisPaintDeviceSP projection() const;

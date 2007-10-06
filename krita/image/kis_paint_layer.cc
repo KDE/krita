@@ -107,6 +107,13 @@ KisPaintLayer::~KisPaintLayer()
     delete m_d;
 }
 
+bool KisPaintLayer::allowAsChild( KisNodeSP node)
+{
+    if ( node->inherits( "KisMask" ) )
+       return true;
+    else
+        return false;
+}
 
 void KisPaintLayer::init()
 {
@@ -138,7 +145,6 @@ void KisPaintLayer::updateProjection(const QRect & rc)
         m_d->projection = new KisPaintDevice( *m_d->paintDevice );
     }
     else {
-        // Clean up the area before we re-apply the masks.
         KisPainter gc( m_d->projection );
         gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
         foreach (QRect rect, dirty.rects() ) {

@@ -39,6 +39,13 @@ KisSelectionMask::~KisSelectionMask()
     delete m_d;
 }
 
+bool KisSelectionMask::allowAsChild( KisNodeSP node)
+{
+    Q_UNUSED(node);
+    return false;
+}
+
+
 KisSelectionMask::KisSelectionMask( const KisSelectionMask& rhs )
     : KisMask( rhs )
     , m_d( new Private() )

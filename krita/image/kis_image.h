@@ -524,11 +524,6 @@ public slots:
     void slotSelectionChanged(const QRect& r);
 
    void slotProjectionUpdated( const QRect & rc );
-    /**
-       Called whenever a KisCommand has been executed. This notifies
-       the layers, who then notify the layerbox that they are ready
-       for new thumbnails
-    */
 
 private:
     KisImage& operator=(const KisImage& rhs);

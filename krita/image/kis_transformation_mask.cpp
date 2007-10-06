@@ -41,6 +41,13 @@ KisTransformationMask::~KisTransformationMask()
 {
 }
 
+bool KisTransformationMask::allowAsChild( KisNodeSP node)
+{
+    Q_UNUSED(node);
+    return false;
+}
+
+
 KisTransformationMask::KisTransformationMask( const KisTransformationMask& rhs )
     : KisEffectMask( rhs )
 {

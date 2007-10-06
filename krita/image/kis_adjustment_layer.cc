@@ -82,6 +82,15 @@ KisAdjustmentLayer::~KisAdjustmentLayer()
     delete m_d;
 }
 
+bool KisAdjustmentLayer::allowAsChild( KisNodeSP node)
+{
+    if ( node->inherits( "KisMask" ) )
+       return true;
+    else
+        return false;
+}
+
+
 void KisAdjustmentLayer::updateProjection(const QRect& r)
 {
     Q_UNUSED( r );

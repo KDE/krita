@@ -73,6 +73,16 @@ KisCloneLayer::~KisCloneLayer()
     delete m_d;
 }
 
+
+bool KisCloneLayer::allowAsChild( KisNodeSP node)
+{
+    if ( node->inherits( "KisMask" ) )
+        return true;
+    else
+        return false;
+}
+
+
 void KisCloneLayer::updateProjection(const QRect& r)
 {
     if ( !m_d->copyFrom ) return;

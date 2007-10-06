@@ -44,7 +44,16 @@ public:
     KisTransparencyMask();
 
     virtual ~KisTransparencyMask();
+
+    KisNodeSP clone()
+    {
+        return KisNodeSP(new KisTransparencyMask(*this));
+    }
+
     KisTransparencyMask( const KisTransparencyMask& rhs );
+
+
+    bool allowAsChild( KisNodeSP );
 
     virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) const;
 };

@@ -28,7 +28,6 @@
 
 #include <krita_export.h>
 
-const QString KIS_PAINTERLY_OVERLAY_ID = "KisPainterlyOverlay";
 /**
  * KisPainterlyOverlay is a special paintdevice that uses the
  * KisPainterlyOverlayColorSpace to describe the data pertinent to
@@ -53,15 +52,6 @@ public:
             return KIcon(""); // XXX: Find nice icon for the subclasses.
         }
 
-    virtual QString nodeType()
-        {
-            return KIS_PAINTERLY_OVERLAY_ID;
-        }
-
-    virtual bool canHaveChildren()
-        {
-            return false;
-        }
 private:
 
     class Private;

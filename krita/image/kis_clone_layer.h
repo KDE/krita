@@ -28,14 +28,12 @@
 #include <krita_export.h>
 
 
-
 enum CopyLayerType
 {
     COPY_PROJECTION,
     COPY_ORIGINAL
 };
 
-const QString KIS_CLONE_LAYER_ID = "KisCloneLayer";
 
 /**
  * A copy layer adds the contents of another layer in another place in
@@ -57,16 +55,12 @@ public:
     KisCloneLayer(const KisCloneLayer& rhs);
     virtual ~KisCloneLayer();
 
-
-    virtual QString nodeType()
+    KisNodeSP clone()
         {
-            return KIS_CLONE_LAYER_ID;
+            return KisNodeSP(new KisCloneLayer(*this));
         }
 
-    virtual bool canHaveChildren()
-        {
-            return true;
-        }
+    bool allowAsChild( KisNodeSP );
 
     void updateProjection(const QRect& r);
     KisPaintDeviceSP projection() const;

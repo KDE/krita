@@ -25,7 +25,6 @@
 
 class KoColorSpace;
 
-const QString KIS_PAINT_LAYER_ID = "KisPaintLayer";
 /**
  * This layer is of a type that can be d on. A paint layer can
  * have any number of effect masks, a transparency mask, a local
@@ -46,16 +45,12 @@ public:
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
 
-    virtual QString nodeType()
+    KisNodeSP clone()
         {
-            return KIS_PAINT_LAYER_ID;
+            return KisNodeSP(new KisPaintLayer(*this));
         }
 
-    virtual bool canHaveChildren()
-        {
-            return true;
-        }
-
+    bool allowAsChild( KisNodeSP );
 
     KoColorSpace * colorSpace();
 

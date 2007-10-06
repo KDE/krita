@@ -80,6 +80,13 @@ KisGroupLayer::~KisGroupLayer()
     delete m_d;
 }
 
+bool KisGroupLayer::allowAsChild( KisNodeSP node)
+{
+    Q_UNUSED(node);
+    return true;
+}
+
+
 KoColorSpace * KisGroupLayer::colorSpace()
 {
     // Due to virtual void resetProjection(KisPaintDeviceSP to =

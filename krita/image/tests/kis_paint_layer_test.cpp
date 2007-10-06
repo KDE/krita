@@ -32,6 +32,7 @@
 #include "kis_transparency_mask.h"
 #include "testutil.h"
 #include "kis_selection.h"
+#include "kis_fill_painter.h"
 
 void KisPaintLayerTest::testProjection()
 {
@@ -90,6 +91,25 @@ void KisPaintLayerTest::testProjection()
     while (!it.isDone()) {
         QVERIFY(cs->alpha(it.rawData()) == OPACITY_TRANSPARENT);
         ++it;
+    }
+
+    // Now fill the layer with some opaque pixels
+    KisFillPainter gc(transparencyMask->selection()->getOrCreatePixelSelection());
+    gc.fillRect(qimg.rect(), KoColor(QColor(0, 0, 0, 0), cs), MAX_SELECTED);
+    gc.end();
+
+    qDebug() << transparencyMask->selection()->pixelSelection()->selectedExactRect();
+    qDebug() << transparencyMask->selection()->selectedExactRect();
+    transparencyMask->selection()->updateProjection(qimg.rect());
+    qDebug() << transparencyMask->selection()->selectedExactRect();
+
+    layer->updateProjection( qimg.rect() );
+
+    layer->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("aaa.png");
+    // Nothing is transparent anymore, so the projection and the paint device should be identical again
+    QPoint errpoint;
+    if ( !TestUtil::compareQImages( errpoint, qimg, layer->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+        QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
 
 }

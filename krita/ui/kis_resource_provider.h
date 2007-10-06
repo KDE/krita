@@ -110,6 +110,8 @@ public slots:
     void slotGradientActivated(KoResource *gradient);
     void slotPaintopActivated(const KoID & paintop, const KisPaintOpSettings *paintopSettings);
     void slotLayerActivated( const KisLayerSP layer );
+    void slotNodeActivated( const KisNodeSP node );
+
     /**
      * Set the image size in pixels. The resource provider will store
      * the image size in postscript points.

@@ -262,6 +262,12 @@ void KisResourceProvider::slotLayerActivated( const KisLayerSP l )
 
 }
 
+void KisResourceProvider::slotNodeActivated( const KisNodeSP node )
+{
+    // XXX_NODE: implement!
+}
+
+
 void KisResourceProvider::slotSetImageSize( qint32 w, qint32 h )
 {
     if ( KisImageSP image = m_view->image() ) {

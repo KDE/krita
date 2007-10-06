@@ -64,7 +64,7 @@ set(kritaui_LIB_SRCS
     kis_label_zoom.cc
     kis_layer_manager.cc
     kis_layermap_visitor.cc
-    kis_layerbox.cc
+    kis_layer_box.cpp
     kis_load_visitor.cc
     kis_multi_bool_filter_widget.cc
     kis_multi_double_filter_widget.cc
@@ -120,6 +120,7 @@ set(kritaui_LIB_SRCS
     kis_tool_freehand_p.cpp
     kis_imagepipe_brush.cc
     kis_prescaled_projection.cpp
+    kis_node_manager.cpp
 )
 
 if(HAVE_OPENGL AND HAVE_GLEW)

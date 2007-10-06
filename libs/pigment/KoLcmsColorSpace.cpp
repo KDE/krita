@@ -19,11 +19,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #include "KoLcmsColorSpace.h"
-#include "kconfiggroup.h"
 #include "KoColorConversionTransformationFactory.h"
 #include "KoColorModelStandardIds.h"
+
+#include "kconfiggroup.h"
+#include "kdebug.h"
+
 
 // -- KoLcmsColorConversionTransformationFactory --
 

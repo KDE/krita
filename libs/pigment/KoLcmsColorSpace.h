@@ -185,6 +185,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                          KoColorProfile *p) : KoColorSpaceAbstract<_CSTraits>(id, name, parent), KoLcmsInfo( cmType, colorSpaceSignature), d( new Private())
 
         {
+            Q_ASSERT(p); // No profile means the lcms color space can't work
             d->profile = toLcmsProfile(p);
             d->qcolordata = 0;
             d->lastRGBProfile = 0;

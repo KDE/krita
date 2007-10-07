@@ -28,18 +28,7 @@
 #include "KoColorTransformation.h"
 #include "KoColorConversionSystem.h"
 #include "KoColorSpaceRegistry.h"
-
-class KoCopyConversionTransformation : public KoColorConversionTransformation {
-    public:
-        KoCopyConversionTransformation(const KoColorSpace* cs) : KoColorConversionTransformation(cs, cs)
-        {
-        }
-        virtual void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
-        {
-            memcpy(dstU8, srcU8, nPixels * srcColorSpace()->pixelSize());
-        }
-};
-
+#include "KoCopyColorConversionTransformation.h"
 
 struct KoColorSpace::Private {
     QString id;
@@ -241,7 +230,7 @@ KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColo
 {
     if( this == dstColorSpace)
     {
-        return new KoCopyConversionTransformation(this);
+        return new KoCopyColorConversionTransformation(this);
     } else {
         return d->parent->colorConversionSystem()->createColorConverter( this, dstColorSpace, renderingIntent);
     }

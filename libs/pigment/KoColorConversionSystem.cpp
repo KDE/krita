@@ -29,6 +29,7 @@
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorModelStandardIds.h"
+#include "KoCopyColorConversionTransformation.h"
 
 class KoMultipleColorConversionTransformation : public KoColorConversionTransformation {
     public:
@@ -284,6 +285,14 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         {
             v->setFactoryFromSrc(cctf);
         }
+    }
+    // Check if there is a path to convert self into self
+    Vertex* v = vertexBetween(csNode, csNode);
+    if( not v)
+    {
+        v = createVertex(csNode, csNode);
+        kDebug(31000) << "No self to self color conversion, add the copy one";
+        v->setFactoryFromSrc( new KoCopyColorConversionTransformationFactory(modelId, depthId));
     }
 }
 

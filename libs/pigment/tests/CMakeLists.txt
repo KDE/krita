@@ -45,3 +45,12 @@ target_link_libraries(TestKoColorSpaceMaths  ${KDE4_KDECORE_LIBS} pigment ${QT_Q
 set(CSSGraph_GRAPH CSSGraph.cpp)
 kde4_add_executable(CSSGraph ${CSSGraph_GRAPH})
 target_link_libraries(CSSGraph  ${KDE4_KDECORE_LIBS} pigment )
+
+########### next target ###############
+
+set(TestColorConversionSystem_test_SRCS TestColorConversionSystem.cpp )
+
+kde4_add_unit_test(TestColorConversionSystem TESTNAME libs-pigment-TestColorConversionSystem ${TestColorConversionSystem_test_SRCS})
+
+target_link_libraries(TestColorConversionSystem  ${KDE4_KDECORE_LIBS} pigment ${QT_QTTEST_LIBRARY})
+

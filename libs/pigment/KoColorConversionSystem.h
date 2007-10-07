@@ -71,6 +71,11 @@ class PIGMENT_EXPORT KoColorConversionSystem {
          * path of the best color conversion.
          */
         QString bestPathToDot(QString srcModelId, QString srcDepthId, QString dstModelId, QString dstDepthId) const;
+    public:
+        /**
+         * @return true if there is a path between two color spaces
+         */
+        bool existsPath( QString srcModelId, QString srcDepthId, QString dstModelId, QString dstDepthId ) const;
     private:
         QString vertexToDot(Vertex* v, QString options) const;
     private:

@@ -389,6 +389,15 @@ QString KoColorConversionSystem::toDot() const
     return dot;
 }
 
+bool KoColorConversionSystem::existsPath( QString srcModelId, QString srcDepthId, QString dstModelId, QString dstDepthId ) const
+{
+    Path* path = findBestPath( nodeFor( srcModelId, srcDepthId ), nodeFor( dstModelId, dstDepthId ) );
+    bool exist = path;
+    delete path;
+    return exist;
+}
+
+
 QString KoColorConversionSystem::bestPathToDot(QString srcModelId, QString srcDepthId, QString dstModelId, QString dstDepthId) const
 {
     const Node* srcNode = nodeFor(srcModelId, srcDepthId);

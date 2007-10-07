@@ -635,6 +635,10 @@ protected:
      * @param ci a pointer to the information about a channel
      */
     virtual void addChannel(KoChannelInfo * ci);
+    const KoColorConversionTransformation* toLabA16Converter() const;
+    const KoColorConversionTransformation* fromLabA16Converter() const;
+    const KoColorConversionTransformation* toRgbA16Converter() const;
+    const KoColorConversionTransformation* fromRgbA16Converter() const;
 private:
 
     /**

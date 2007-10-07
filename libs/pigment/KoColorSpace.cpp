@@ -184,41 +184,57 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
     }
 }
 
-
-void KoColorSpace::toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
 {
     if(not d->transfoToLABA16)
     {
         d->transfoToLABA16 = d->parent->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16("") ) ;
     }
-    d->transfoToLABA16->transform( src, dst, nPixels);
+    return d->transfoToLABA16;
 }
-
-void KoColorSpace::fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+const KoColorConversionTransformation* KoColorSpace::fromLabA16Converter() const
 {
     if(not d->transfoFromLABA16)
     {
         d->transfoFromLABA16 = d->parent->colorConversionSystem()->createColorConverter( KoColorSpaceRegistry::instance()->lab16("") , this ) ;
     }
-    d->transfoFromLABA16->transform( src, dst, nPixels);
+    return d->transfoFromLABA16;
 }
-
-void KoColorSpace::toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+const KoColorConversionTransformation* KoColorSpace::toRgbA16Converter() const
 {
     if(not d->transfoToRGBA16)
     {
         d->transfoToRGBA16 = d->parent->colorConversionSystem()->createColorConverter( this, KoColorSpaceRegistry::instance()->rgb16("") ) ;
     }
-    d->transfoToRGBA16->transform( src, dst, nPixels);
+    return d->transfoToRGBA16;
 }
-
-void KoColorSpace::fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+const KoColorConversionTransformation* KoColorSpace::fromRgbA16Converter() const
 {
     if(not d->transfoFromRGBA16)
     {
         d->transfoFromRGBA16 = d->parent->colorConversionSystem()->createColorConverter( KoColorSpaceRegistry::instance()->rgb16("") , this ) ;
     }
-    d->transfoFromRGBA16->transform( src, dst, nPixels);
+    return d->transfoFromRGBA16;
+}
+
+void KoColorSpace::toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+{
+    toLabA16Converter()->transform( src, dst, nPixels);
+}
+
+void KoColorSpace::fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+{
+    fromLabA16Converter()->transform( src, dst, nPixels);
+}
+
+void KoColorSpace::toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+{
+    toRgbA16Converter()->transform( src, dst, nPixels);
+}
+
+void KoColorSpace::fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+{
+    fromRgbA16Converter()->transform( src, dst, nPixels);
 }
 
 KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const

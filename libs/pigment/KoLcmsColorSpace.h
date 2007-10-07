@@ -66,7 +66,7 @@ struct KoLcmsColorTransformation : public KoColorTransformation
 
 struct KoLcmsDarkenTransformation : public KoColorTransformation
 {
-    KoLcmsDarkenTransformation(const KoColorSpace* cs, KoColorConversionTransformation* defaultToLab, KoColorConversionTransformation* defaultFromLab, qint32 shade, bool compensate, double compensation) : m_colorSpace(cs), m_defaultToLab(defaultToLab), m_defaultFromLab(defaultFromLab), m_shade(shade), m_compensate(compensate), m_compensation(compensation)
+    KoLcmsDarkenTransformation(const KoColorSpace* cs, const KoColorConversionTransformation* defaultToLab, const KoColorConversionTransformation* defaultFromLab, qint32 shade, bool compensate, double compensation) : m_colorSpace(cs), m_defaultToLab(defaultToLab), m_defaultFromLab(defaultFromLab), m_shade(shade), m_compensate(compensate), m_compensation(compensation)
     {
 
     }
@@ -86,8 +86,8 @@ struct KoLcmsDarkenTransformation : public KoColorTransformation
         delete [] labcache;
     }
     const KoColorSpace* m_colorSpace;
-    KoColorConversionTransformation* m_defaultToLab;
-    KoColorConversionTransformation* m_defaultFromLab;
+    const KoColorConversionTransformation* m_defaultToLab;
+    const KoColorConversionTransformation* m_defaultFromLab;
     qint32 m_shade;
     bool m_compensate;
     double m_compensation;
@@ -177,8 +177,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             mutable cmsHPROFILE   lastRGBProfile;  // Last used profile to transform to/from RGB
             mutable cmsHTRANSFORM lastToRGB;       // Last used transform to transform to RGB
             mutable cmsHTRANSFORM lastFromRGB;     // Last used transform to transform from RGB
-            KoColorConversionTransformation* defaultToLab;
-            KoColorConversionTransformation* defaultFromLab;
             KoLcmsColorProfile *  profile;
         };
     protected:
@@ -194,19 +192,14 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             d->lastFromRGB = 0;
             d->defaultFromRGB = 0;
             d->defaultToRGB = 0;
-            d->defaultToLab = 0;
-            d->defaultFromLab = 0;
         }
         virtual ~KoLcmsColorSpace()
         {
-            delete d->defaultToLab;
-            delete d->defaultFromLab;
             delete d;
         }
 
         void init()
         {
-            kDebug() << "init";
     // Default pixel buffer for QColor conversion
             d->qcolordata = new quint8[3];
             Q_CHECK_PTR(d->qcolordata);
@@ -223,10 +216,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             d->defaultToRGB =  cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
                     d->lastFromRGB, TYPE_BGR_8,
                     INTENT_PERCEPTUAL, 0);
-//             KoColorSpace* lab16CS = KoColorSpaceRegistry::instance()->lab16("");
-            d->defaultToLab = 0; // this->createColorConverter( lab16CS ) ;
-            d->defaultFromLab = 0; // lab16CS->createColorConverter(  this ) ;
-            kDebug() << "endinit";
 
         }
     public:
@@ -422,55 +411,29 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
             return adj;
         }
-        void toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
-        { // Reimplement to spare the creation of a transformation at the upper level
-            d->defaultToLab->transform( src, dst, nPixels);
-        }
-        
-        void fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
-        { // Reimplement to spare the creation of a transformation at the upper level
-            d->defaultFromLab->transform( src, dst, nPixels);
-        }
 
         virtual KoColorTransformation *createDarkenAdjustement(qint32 shade, bool compensate, double compensation) const
         {
-            return new KoLcmsDarkenTransformation(this, d->defaultToLab, d->defaultFromLab, shade, compensate, compensation);
+            return new KoLcmsDarkenTransformation(this, this->toLabA16Converter(), this->fromLabA16Converter(), shade, compensate, compensation); // TODO probable No guarantee of thread safety
         }
 
         virtual quint8 difference(const quint8* src1, const quint8* src2) const
         {
-            if (d->defaultToLab) { // TODO Is it possible ? should probably move the else up in the inheritence
+            quint8 lab1[8], lab2[8];
+            cmsCIELab labF1, labF2;
 
-                quint8 lab1[8], lab2[8];
-                cmsCIELab labF1, labF2;
-
-                if (this->alpha(src1) == OPACITY_TRANSPARENT || this->alpha(src2) == OPACITY_TRANSPARENT)
-                    return (this->alpha(src1) == this->alpha(src2) ? 0 : 255);
-
-                d->defaultToLab->transform( src1, lab1, 1),
-                d->defaultToLab->transform( src2, lab2, 1),
-                cmsLabEncoded2Float(&labF1, (WORD *)lab1);
-                cmsLabEncoded2Float(&labF2, (WORD *)lab2);
-                double diff = cmsDeltaE(&labF1, &labF2);
-                if(diff>255)
-                    return 255;
-                else
-                    return qint8(diff);
-            }
-            else {
-                QColor c1;
-                quint8 opacity1;
-                toQColor(src1, &c1, &opacity1);
-
-                QColor c2;
-                quint8 opacity2;
-                toQColor(src2, &c2, &opacity2);
-
-                quint8 red = abs(c1.red() - c2.red());
-                quint8 green = abs(c1.green() - c2.green());
-                quint8 blue = abs(c1.blue() - c2.blue());
-                return qMax(red, qMax(green, blue));
-            }
+            if (this->alpha(src1) == OPACITY_TRANSPARENT || this->alpha(src2) == OPACITY_TRANSPARENT)
+                return (this->alpha(src1) == this->alpha(src2) ? 0 : 255);
+            Q_ASSERT(this->toLabA16Converter());
+            this->toLabA16Converter()->transform( src1, lab1, 1),
+            this->toLabA16Converter()->transform( src2, lab2, 1),
+            cmsLabEncoded2Float(&labF1, (WORD *)lab1);
+            cmsLabEncoded2Float(&labF2, (WORD *)lab2);
+            double diff = cmsDeltaE(&labF1, &labF2);
+            if(diff>255)
+                return 255;
+            else
+                return qint8(diff);
         }
 
     private:

@@ -25,6 +25,7 @@ set(pigment_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionTransformationFactory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorModelStandardIds.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionSystem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoCopyColorConversionTransformation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoIccColorProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsColorProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsRGBColorProfile.cpp

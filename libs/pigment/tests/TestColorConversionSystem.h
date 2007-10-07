@@ -22,11 +22,18 @@
 
 #include <QtTest/QtTest>
 
+typedef QPair< QString, QString> pStrStr;
+
 class TestColorConversionSystem : public QObject
 {
-    Q_OBJECT
-private slots:
-    void testConnections();
+        Q_OBJECT
+    public:
+        TestColorConversionSystem();
+    private slots:
+        void testConnections();
+        void testGoodConnections();
+    private:
+        QList< pStrStr > listModels;
 };
 
 #endif

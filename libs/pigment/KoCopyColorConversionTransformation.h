@@ -25,39 +25,17 @@
 
 class KoCopyColorConversionTransformation : public KoColorConversionTransformation {
     public:
-        KoCopyColorConversionTransformation(const KoColorSpace* cs) : KoColorConversionTransformation(cs, cs)
-        {
-        }
-        virtual void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
-        {
-            memcpy(dstU8, srcU8, nPixels * srcColorSpace()->pixelSize());
-        }
+        KoCopyColorConversionTransformation(const KoColorSpace* cs);
+        virtual void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const;
 };
 
 class KoCopyColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
     public:
-        KoCopyColorConversionTransformationFactory(QString colorModelId, QString depthId) : KoColorConversionTransformationFactory(colorModelId, depthId, colorModelId, depthId)
-        {}
-        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual)
-        {
-            Q_UNUSED(renderingIntent);
-            Q_ASSERT(canBeSource(srcColorSpace));
-            Q_ASSERT(canBeDestination(dstColorSpace));
-            Q_ASSERT(srcColorSpace == dstColorSpace);
-            return new KoCopyColorConversionTransformation(srcColorSpace);
-        }
-        virtual bool conserveColorInformation() const
-        {
-            return true;
-        }
-        virtual bool conserveDynamicRange() const
-        {
-            return true;
-        }
-        virtual int depthDecrease() const
-        {
-            return 0;
-        }
+        KoCopyColorConversionTransformationFactory(QString colorModelId, QString depthId);
+        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+        virtual bool conserveColorInformation() const;
+        virtual bool conserveDynamicRange() const;
+        virtual int depthDecrease() const;
 };
 
 

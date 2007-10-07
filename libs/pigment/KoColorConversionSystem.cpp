@@ -162,7 +162,7 @@ struct KoColorConversionSystem::NodeKey {
 };
 
 struct KoColorConversionSystem::Path {
-    Path() : respectColorCorrectness(true), bitDepthDecrease(0), keepDynamicRange(true)
+    Path() : respectColorCorrectness(true), bitDepthDecrease(0), keepDynamicRange(true), isGood(false)
     {}
     Node* startNode() {
         return (vertexes.first())->srcNode;
@@ -194,6 +194,7 @@ struct KoColorConversionSystem::Path {
     bool respectColorCorrectness;
     int bitDepthDecrease;
     bool keepDynamicRange;
+    bool isGood;
 };
 
 uint qHash(const KoColorConversionSystem::NodeKey &key)
@@ -409,6 +410,14 @@ bool KoColorConversionSystem::existsPath( QString srcModelId, QString srcDepthId
     return exist;
 }
 
+bool KoColorConversionSystem::existsGoodPath( QString srcModelId, QString srcDepthId, QString dstModelId, QString dstDepthId ) const
+{
+    Path* path = findBestPath( nodeFor( srcModelId, srcDepthId ), nodeFor( dstModelId, dstDepthId ) );
+    bool existAndGood = path and path->isGood;
+    delete path;
+    return existAndGood;
+}
+
 
 QString KoColorConversionSystem::bestPathToDot(QString srcModelId, QString srcDepthId, QString dstModelId, QString dstDepthId) const
 {
@@ -501,6 +510,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
         {
             Q_ASSERT( pQC.isGoodPath(p)); // <- it's a direct link, it has to be a good path, damn it ! or go fix your color space !
             deletePathes(currentPathes); // clean up
+            p->isGood = true;
             return p;
         }
         Q_ASSERT(not node2path.contains( endNode )); // That would be a total fuck up if there are two vertexes between two nodes
@@ -526,6 +536,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
                         if( pQC.isGoodPath(newP) )
                         { // Victory
                             deletePathes(currentPathes); // clean up
+                            newP->isGood = true;
                             return newP;
                         } else if( not lessWorsePath )
                         {
@@ -561,10 +572,10 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
     }
     if(lessWorsePath)
     {
-        kWarning() << "No good path from " << srcNode->colorSpaceFactory->id() << " to " << dstNode->colorSpaceFactory->id() << " found !";
+        kWarning(31000) << "No good path from " << srcNode->colorSpaceFactory->id() << " to " << dstNode->colorSpaceFactory->id() << " found !";
         return lessWorsePath;
     } 
-    kError() << "No path from " << srcNode->colorSpaceFactory->id() << " to " << dstNode->colorSpaceFactory->id() << " found !";
+    kError(31000) << "No path from " << srcNode->colorSpaceFactory->id() << " to " << dstNode->colorSpaceFactory->id() << " found !";
     return 0;
 }
 
@@ -581,7 +592,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
 
 KoColorConversionSystem::Path* KoColorConversionSystem::findBestPath( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
 {
-    kDebug(/*31000*/) << "Find best path between " << srcNode->id() << " and " << dstNode->id();
+//     kDebug(31000) << "Find best path between " << srcNode->id() << " and " << dstNode->id();
     if(srcNode->isHdr and dstNode->isHdr)
     {
         return findBestPathImpl<false>(srcNode, dstNode);

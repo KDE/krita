@@ -70,10 +70,6 @@ class KoScaleColorConversionTransformationFactory : public KoColorConversionTran
         {
             return hdr;
         }
-        virtual int depthDecrease() const
-        {
-            return qMax(0, _src_CSTraits_::depth - _dst_CSTraits_::depth);
-        }
     private:
         bool hdr;
 };

@@ -130,7 +130,6 @@ struct KoColorConversionSystem::Vertex {
     {
         conserveColorInformation = transfo->conserveColorInformation();
         conserveDynamicRange = transfo->conserveDynamicRange();
-        depthDecrease = transfo->depthDecrease();
     }
     KoColorConversionTransformationFactory* factory()
     {
@@ -143,7 +142,6 @@ struct KoColorConversionSystem::Vertex {
 
     bool conserveColorInformation;
     bool conserveDynamicRange;
-    int depthDecrease;
     private:
         KoColorConversionTransformationFactory* factoryFromSrc; // Factory provided by the destination node
         KoColorConversionTransformationFactory* factoryFromDst; // Factory provided by the destination node
@@ -162,7 +160,7 @@ struct KoColorConversionSystem::NodeKey {
 };
 
 struct KoColorConversionSystem::Path {
-    Path() : respectColorCorrectness(true), bitDepthDecrease(0), keepDynamicRange(true), isGood(false)
+    Path() : respectColorCorrectness(true), referenceDepth(0), keepDynamicRange(true), isGood(false)
     {}
     Node* startNode() {
         return (vertexes.first())->srcNode;
@@ -171,10 +169,14 @@ struct KoColorConversionSystem::Path {
         return (vertexes.last())->dstNode;
     }
     void appendVertex(Vertex* v) {
+        if(vertexes.empty())
+        {
+            referenceDepth = v->srcNode->colorSpaceFactory->referenceDepth();
+        }
         vertexes.append(v);
         if(not v->conserveColorInformation) respectColorCorrectness = false;
         if(not v->conserveDynamicRange) keepDynamicRange = false;
-        bitDepthDecrease += v->depthDecrease;
+        referenceDepth = qMin( referenceDepth, v->dstNode->colorSpaceFactory->referenceDepth());
     }
     int length() {
         return vertexes.size();
@@ -192,7 +194,7 @@ struct KoColorConversionSystem::Path {
     }
     QList<Vertex*> vertexes;
     bool respectColorCorrectness;
-    int bitDepthDecrease;
+    int referenceDepth;
     bool keepDynamicRange;
     bool isGood;
 };
@@ -453,12 +455,13 @@ QString KoColorConversionSystem::bestPathToDot(QString srcModelId, QString srcDe
 
 template<bool ignoreHdr, bool ignoreColorCorrectness>
 struct PathQualityChecker {
-    PathQualityChecker(int _maxBitDecrease) : maxBitDecrease(_maxBitDecrease) {}
+    PathQualityChecker(int _referenceDepth) : referenceDepth(_referenceDepth) {}
     /// @return true if the path maximize all the criterions (except lenght)
     inline bool isGoodPath(KoColorConversionSystem::Path* path)
     {
+        kDebug() << path->referenceDepth << " " << referenceDepth;
         return ( path->respectColorCorrectness or ignoreColorCorrectness ) and
-               ( path->bitDepthDecrease <= maxBitDecrease) and
+               ( path->referenceDepth >= referenceDepth) and
                ( path->keepDynamicRange or ignoreHdr );
     }
     /**
@@ -477,13 +480,13 @@ struct PathQualityChecker {
         {
             CHECK_ONE_AND_NOT_THE_OTHER(respectColorCorrectness)
         }
-        if( path1->bitDepthDecrease == path2->bitDepthDecrease)
+        if( path1->referenceDepth == path2->referenceDepth)
         {
             return path1->length() < path2->length(); // if they have the same length, well anyway you have to choose one, and there is no point in keeping one and not the other
         }
-        return path1->bitDepthDecrease < path2->bitDepthDecrease;
+        return path1->referenceDepth > path2->referenceDepth;
     }
-    int maxBitDecrease;
+    int referenceDepth;
 };
 
 void KoColorConversionSystem::deletePathes( QList<KoColorConversionSystem::Path*> pathes) const
@@ -497,7 +500,7 @@ void KoColorConversionSystem::deletePathes( QList<KoColorConversionSystem::Path*
 template<bool ignoreHdr, bool ignoreColorCorrectness>
 inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
 {
-    PathQualityChecker<ignoreHdr, ignoreColorCorrectness> pQC( qMax(0, srcNode->referenceDepth - dstNode->referenceDepth ) );
+    PathQualityChecker<ignoreHdr, ignoreColorCorrectness> pQC( qMin(srcNode->referenceDepth, dstNode->referenceDepth ) );
     QHash<Node*, Path*> node2path; // current best path to reach a given node
     QList<Path*> currentPathes; // list of all pathes
     // Generate the initial list of pathes

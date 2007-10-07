@@ -35,13 +35,11 @@ class KoLcmsColorConversionTransformationFactory : public KoColorConversionTrans
         virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
         virtual bool conserveColorInformation() const;
         virtual bool conserveDynamicRange() const;
-        virtual int depthDecrease() const;
     private:
         quint32 computeColorSpaceType(QString _modelId, QString _depthId);
     private:
         quint32 m_srcColorSpaceType, m_dstColorSpaceType;
         bool m_conserveColorInformation;
-        int m_depthDecrease;
 };
 
 KoLcmsColorConversionTransformationFactory::KoLcmsColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId) : KoColorConversionTransformationFactory(_srcModelId, _srcDepthId, _dstModelId, _dstDepthId)
@@ -51,11 +49,6 @@ KoLcmsColorConversionTransformationFactory::KoLcmsColorConversionTransformationF
     m_dstColorSpaceType = computeColorSpaceType( _dstModelId, _dstDepthId);
     Q_ASSERT(m_dstColorSpaceType);
     m_conserveColorInformation = not (_dstModelId == GrayAColorModelID.id() or _dstModelId == GrayColorModelID.id()); // color information is lost when converting to Grayscale
-    m_depthDecrease = 0;
-    if( _srcDepthId == Integer16BitsColorDepthID.id() and _dstDepthId == Integer8BitsColorDepthID.id())
-    {
-        m_depthDecrease = 8;
-    }
 }
 
 KoColorConversionTransformation* KoLcmsColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent )
@@ -71,11 +64,6 @@ bool KoLcmsColorConversionTransformationFactory::conserveColorInformation() cons
 bool KoLcmsColorConversionTransformationFactory::conserveDynamicRange() const
 {
     return false; // LCMS color transformation allways lose dynamic range
-}
-
-int KoLcmsColorConversionTransformationFactory::depthDecrease() const
-{
-    return m_depthDecrease;
 }
 
 quint32 KoLcmsColorConversionTransformationFactory::computeColorSpaceType(QString _modelId, QString _depthId)
@@ -138,8 +126,6 @@ cmsHTRANSFORM KoLcmsColorConversionTransformation::createTransform(
     if (bpCompensation) {
         flags = cmsFLAGS_BLACKPOINTCOMPENSATION;
     }
-    Q_ASSERT(dynamic_cast<const KoLcmsInfo*>(srcColorSpace()));
-    Q_ASSERT(dynamic_cast<const KoLcmsInfo*>(dstColorSpace()));
     cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
             srcColorSpaceType,
             dstProfile->lcmsProfile(),

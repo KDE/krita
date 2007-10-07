@@ -64,14 +64,6 @@ class PIGMENT_EXPORT KoColorConversionTransformationFactory {
          * conserve the dynamic range of the color.
          */
         virtual bool conserveDynamicRange() const = 0;
-        /**
-         * @return indicates how much the information on depth is lost when using a color
-         * conversion transformation created by this factory (for instance between RGB8bit and R
-         * RGB16bit, this function should return 0, while between RGB16bit and RGB8bit the function
-         * return 8). If one of the color space has different depths for each of its channel, then
-         * this function should return the worse case.
-         */
-        virtual int depthDecrease() const = 0;
     public:
         /**
          * @return the id of the source color model

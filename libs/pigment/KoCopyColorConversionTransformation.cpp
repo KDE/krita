@@ -52,7 +52,3 @@ bool KoCopyColorConversionTransformationFactory::conserveDynamicRange() const
 {
     return true;
 }
-int KoCopyColorConversionTransformationFactory::depthDecrease() const
-{
-    return 0;
-}

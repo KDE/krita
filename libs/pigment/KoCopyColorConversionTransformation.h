@@ -35,7 +35,6 @@ class KoCopyColorConversionTransformationFactory : public KoColorConversionTrans
         virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
         virtual bool conserveColorInformation() const;
         virtual bool conserveDynamicRange() const;
-        virtual int depthDecrease() const;
 };
 
 

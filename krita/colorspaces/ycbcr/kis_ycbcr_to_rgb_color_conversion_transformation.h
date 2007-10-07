@@ -65,10 +65,6 @@ class KisYCbCrToRgbColorConversionTransformationFactory : public KoColorConversi
         {
             return false;
         }
-        virtual int depthDecrease() const
-        {
-            return qMax(0, _src_CSTraits_::depth - _dst_CSTraits_::depth);
-        }
     private:
         bool hdr;
 };

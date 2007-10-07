@@ -35,13 +35,6 @@
 #define k 0.008856
 #define delta (6.0 / 29.0)
 
-#define UINT16_TO_FLOAT(v) (KoColorSpaceMaths<quint16, typename _CSTraits::channels_type >::scaleToA(v))
-#define L_TO_FLOAT(v) (UINT16_TO_FLOAT(v) * 100.0)
-#define ab_TO_FLOAT(v) ((UINT16_TO_FLOAT(v) - 0.5) * 200.0)
-#define FLOAT_TO_UINT16(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint16>::scaleToA(v))
-#define FLOAT_TO_L(v) FLOAT_TO_UINT16( (v) / 100.0)
-#define FLOAT_TO_ab(v) (FLOAT_TO_UINT16( (v)/200.0 + 0.5))
-
 template <class _CSTraits>
 class KisXyzFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoLAB16Fallback>
 {
@@ -81,70 +74,7 @@ class KisXyzFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoLAB1
             addCompositeOp( new KoCompositeOpErase<_CSTraits>( this ) );
 
         }
-    private:
-        inline double f_xyz_to_lab(double v) const
-        {
-            if(v > k)
-            {
-                return powf(v, 1.0/3.0);
-            } else {
-                return 7.787 * v + 16.0 / 116.0;
-            }
-        }
     public:
-        virtual void toLabA16(const quint8 * src8, quint8 * dst8, quint32 nPixels) const
-        {
-            KoLabU16Traits::Pixel* dst = reinterpret_cast<KoLabU16Traits::Pixel*>(dst8);
-            const typename _CSTraits::Pixel* src = reinterpret_cast<const typename _CSTraits::Pixel*>(src8);
-            while(nPixels > 0)
-            {
-                double fx = f_xyz_to_lab( src->X / X_r );
-                double fy = f_xyz_to_lab( src->Y / Y_r );
-                double fz = f_xyz_to_lab( src->Z / Z_r );
-                
-                dst->L = FLOAT_TO_L(116 * fy - 16);
-                dst->a = FLOAT_TO_ab(500 * ( fx - fy ));
-                dst->b = FLOAT_TO_ab(200 * ( fy - fz ));
-                dst->alpha = FLOAT_TO_UINT16(src->alpha);
-                
-                nPixels--;
-                dst++;
-                src++;
-            }
-        }
-    private:
-        inline double f_lab_to_xyz(double v, double r) const
-        {
-            if( v > delta)
-            {
-                return r * pow(v, 3.0);
-            } else {
-                return r * (v - 16.0 / 116.0) * 3.0 * delta *delta;
-            }
-        }
-    public:
-        virtual void fromLabA16(const quint8 * src8, quint8 * dst8, quint32 nPixels) const
-        {
-            kDebug() << "fromLabA16";
-            const KoLabU16Traits::Pixel* src = reinterpret_cast<const KoLabU16Traits::Pixel*>(src8);
-            typename _CSTraits::Pixel* dst = reinterpret_cast<typename _CSTraits::Pixel*>(dst8);
-            while(nPixels > 0)
-            {
-                double fy = ( L_TO_FLOAT(src->L ) + 16.0) / 116.0;
-                double fx = fy + ab_TO_FLOAT(src->a ) / 500.0;
-                double fz = fy - ab_TO_FLOAT(src->b ) / 200.0;
-                
-                dst->X = f_lab_to_xyz(fx, X_r);
-                dst->Y = f_lab_to_xyz(fy, Y_r);
-                dst->Z = f_lab_to_xyz(fz, Z_r);
-                dst->alpha = UINT16_TO_FLOAT(src->alpha);
-                
-                nPixels--;
-                dst++;
-                src++;
-            }
-            
-        }
         virtual bool profileIsCompatible(KoColorProfile* profile) const
         {
             return profile == 0;

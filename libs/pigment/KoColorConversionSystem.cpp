@@ -459,7 +459,6 @@ struct PathQualityChecker {
     /// @return true if the path maximize all the criterions (except lenght)
     inline bool isGoodPath(KoColorConversionSystem::Path* path)
     {
-        kDebug() << path->referenceDepth << " " << referenceDepth;
         return ( path->respectColorCorrectness or ignoreColorCorrectness ) and
                ( path->referenceDepth >= referenceDepth) and
                ( path->keepDynamicRange or ignoreHdr );

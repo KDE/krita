@@ -49,6 +49,7 @@ QString KisScriptFilter::category() const
 
 void KisScriptFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
 {
+    Q_UNUSED(config);
     d->action->trigger();
 
     emit scriptProcess(new Scripting::ConstPaintDevice(src, 0), srcTopLeft, new Scripting::PaintDevice(dst, 0), dstTopLeft, size, 0);

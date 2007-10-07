@@ -277,7 +277,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
                 KisImageSP dst = KisImageSP(new KisImage(d.undoAdapter(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
                 d.setCurrentImage( dst );
-                dst->addLayer(l->clone(), dst->rootLayer(), KisLayerSP(0));
+                dst->addLayer(static_cast<KisLayer*>(l->clone().data()), dst->rootLayer());
 
                 d.setOutputMimeType(mimefilter.toLatin1());
                 d.exp0rt(url);

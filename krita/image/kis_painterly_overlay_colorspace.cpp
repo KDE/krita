@@ -82,7 +82,7 @@ KisPainterlyOverlayColorSpace * KisPainterlyOverlayColorSpace::instance()
 
 
 KisPainterlyOverlayColorSpace::KisPainterlyOverlayColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent)
-    : KoIncompleteColorSpace<PainterlyOverlayFloatTraits, KoRGB16Fallback>(id, name, parent)
+    : KoIncompleteColorSpace<PainterlyOverlayFloatTraits>(id, name, parent, parent->rgb16(""))
 {
     addChannel(new KoChannelInfo(i18n("Adsorbency"),
                                  PainterlyOverlayFloatTraits::adsorbency_pos * sizeof(float),

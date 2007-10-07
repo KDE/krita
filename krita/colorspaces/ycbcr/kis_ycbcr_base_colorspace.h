@@ -20,7 +20,7 @@
 #include "klocale.h"
 #include <KoIncompleteColorSpace.h>
 #include <KoColorSpaceTraits.h>
-#include <KoFallBack.h>
+#include <KoColorSpaceRegistry.h>
 
 #define UINT8_TO_NATIVE(v) (KoColorSpaceMaths<quint8, typename _CSTraits::channels_type >::scaleToA(v))
 #define NATIVE_TO_UINT8(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint8>::scaleToA(v))
@@ -29,11 +29,11 @@
 
 
 template <class _CSTraits>
-class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB16Fallback>
+class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits>
 {
     public:
         KisYCbCrBaseColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent)
-          : KoIncompleteColorSpace<_CSTraits, KoRGB16Fallback>(id, name, parent)
+          : KoIncompleteColorSpace<_CSTraits>(id, name, parent, parent->rgb16(""))
         {
 
         }

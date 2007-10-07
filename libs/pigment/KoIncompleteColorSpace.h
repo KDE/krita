@@ -20,7 +20,7 @@
 #ifndef _KO_INCOMPLETE_COLOR_SPACE_H_
 #define _KO_INCOMPLETE_COLOR_SPACE_H_
 
-#include <KoFallBack.h>
+#include <KoFallBackColorTransformation.h>
 #include <KoColorSpaceAbstract.h>
 
 /**
@@ -28,20 +28,15 @@
  * defined in KoColorSpace and/or if your colorspace is unsupported by
  * LCMS.
  *
- * If you choose _fallback_ == KoRGB16Fallback, you need to
- * reimplement toRgbA16/fromRgbA16.
- *
- * If you choose _fallback_ == KoLAB16Fallback, you need to
- * reimplement toLabA16/fromLabA16.
  */
-template<class _CSTraits, class _fallback_>
+template<class _CSTraits>
 class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
     protected:
         KoIncompleteColorSpace(const QString &id,
                                const QString &name,
-                               KoColorSpaceRegistry * parent)
+                               KoColorSpaceRegistry * parent, KoColorSpace* fallBack)
             : KoColorSpaceAbstract<_CSTraits>(id, name, parent),
-              m_fallBackColorSpace(_fallback_::createColorSpace())
+              m_fallBackColorSpace(fallBack)
         {
             m_qcolordata = new quint16[4];
             m_convertionCache.resize( m_fallBackColorSpace->pixelSize() );
@@ -114,23 +109,24 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
 
         virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const
         {
-          return _fallback_::createTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createBrightnessContrastAdjustment( transferValues ));
+          return new KoFallBackColorTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createBrightnessContrastAdjustment( transferValues ));
         }
 
 
         virtual KoColorTransformation *createDesaturateAdjustment() const
         {
-          return _fallback_::createTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createDesaturateAdjustment());
+          return new KoFallBackColorTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createDesaturateAdjustment());
         }
 
         virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const* transferValues) const
         {
-          return _fallback_::createTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createPerChannelAdjustment( transferValues ));
+          return new KoFallBackColorTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createPerChannelAdjustment( transferValues ));
         }
 
         virtual KoColorTransformation *createDarkenAdjustement(qint32 shade, bool compensate, double compensation) const
         {
-            return new KoFallBackDarkenTransformation( this, shade, compensate, compensation );
+            return 0; // TODO: The darken transformation allways requires a conversion to lab, merge all implementation in one at KoAsbtractColorSpace level
+//             return new KoFallBackDarkenTransformation( this, shade, compensate, compensation );
         }
 
         virtual quint8 difference(const quint8* src1U8, const quint8* src2U8) const

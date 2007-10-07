@@ -24,7 +24,6 @@
 #include <QString>
 #include <KoIncompleteColorSpace.h>
 #include <KoColorSpaceTraits.h>
-#include <KoFallBack.h>
 
 /**
  *
@@ -76,7 +75,7 @@ typedef KisPainterlyOverlayColorSpaceTraits<float> PainterlyOverlayFloatTraits;
 typedef PainterlyOverlayFloatTraits::Cell PropertyCell;
 
 class KRITAIMAGE_EXPORT KisPainterlyOverlayColorSpace
-    : public KoIncompleteColorSpace<PainterlyOverlayFloatTraits, KoRGB16Fallback>
+    : public KoIncompleteColorSpace<PainterlyOverlayFloatTraits>
 {
 
 public:

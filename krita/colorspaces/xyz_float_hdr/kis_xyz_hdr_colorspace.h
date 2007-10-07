@@ -23,6 +23,7 @@
 #include <math.h>
 
 #include "KoIncompleteColorSpace.h"
+#include "KoColorSpaceRegistry.h"
 
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
@@ -36,11 +37,11 @@
 #define delta (6.0 / 29.0)
 
 template <class _CSTraits>
-class KisXyzFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoLAB16Fallback>
+class KisXyzFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 {
     public:
         KisXyzFloatHDRColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoColorProfile *profile)
-          : KoIncompleteColorSpace<_CSTraits, KoLAB16Fallback>(id, name, parent)
+          : KoIncompleteColorSpace<_CSTraits>(id, name, parent, parent->lab16(""))
         {
             Q_UNUSED(profile);
             

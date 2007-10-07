@@ -11,29 +11,30 @@ if(OPENEXR_FOUND)
 endif(OPENEXR_FOUND)
 
 set(pigment_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpaceRegistry.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpace.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoLcmsColorSpace.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpaceMaths.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoCompositeOp.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorProfile.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoBasicHistogramProducers.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoHistogramProducer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoColor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversions.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionSystem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionTransformation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionTransformationFactory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorModelStandardIds.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionSystem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorProfile.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpace.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpaceMaths.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpaceRegistry.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoCompositeOp.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoCopyColorConversionTransformation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoFallBackColorTransformation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoHistogramProducer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoLcmsColorSpace.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoIccColorProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsColorProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsRGBColorProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoAlphaColorSpace.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoLabColorSpace.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU8CompositeOp.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU8ColorSpace.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU16ColorSpace.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU8ColorSpace.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU8CompositeOp.cpp
 )
 
 add_subdirectory(tests)

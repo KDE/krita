@@ -42,7 +42,7 @@ struct KisRGBKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 7, 6
 
 typedef KisRGBKSColorSpaceTraits<float> RGBKSTraits;
 
-class KRITAPAINTERLYCOMMON_EXPORT KisRGBKSColorSpace : public KoIncompleteColorSpace<RGBKSTraits, KoRGB16Fallback>
+class KRITAPAINTERLYCOMMON_EXPORT KisRGBKSColorSpace : public KoIncompleteColorSpace<RGBKSTraits>
 {
     public:
 

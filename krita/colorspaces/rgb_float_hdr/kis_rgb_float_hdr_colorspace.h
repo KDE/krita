@@ -23,7 +23,6 @@
 #include <math.h>
 
 #include "KoIncompleteColorSpace.h"
-#include "KoFallBack.h"
 #include "KoLcmsRGBColorProfile.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpaceTraits.h"
@@ -38,11 +37,11 @@
 #define FLOAT_TO_UINT16(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint16>::scaleToA(v))
 
 template <class _CSTraits>
-class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB16Fallback>
+class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 {
     public:
         KisRgbFloatHDRColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoColorProfile *profile)
-          : KoIncompleteColorSpace<_CSTraits, KoRGB16Fallback>(id, name, parent)
+          : KoIncompleteColorSpace<_CSTraits>(id, name, parent, parent->rgb16(""))
         {
             // We assume an alpha channel at the moment
             Q_ASSERT(_CSTraits::alpha_pos != -1);

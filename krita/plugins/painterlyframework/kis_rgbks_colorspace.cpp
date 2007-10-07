@@ -36,7 +36,7 @@
 #include "kis_rgbks_colorspace.h"
 
 KisRGBKSColorSpace::KisRGBKSColorSpace()
-    : KoIncompleteColorSpace<RGBKSTraits, KoRGB16Fallback>("rgbkscolorspace", "RGB/KS ColorSpace (Float)", KoColorSpaceRegistry::instance())
+    : KoIncompleteColorSpace<RGBKSTraits>("rgbkscolorspace", "RGB/KS ColorSpace (Float)", KoColorSpaceRegistry::instance(), KoColorSpaceRegistry::instance()->rgb16(""))
 {
     for (quint32 i = 0; i < 6; i+=2) {
         addChannel(new KoChannelInfo(i18n("Absorption"),

@@ -40,7 +40,7 @@
 #include "kis_ks_colorspace.h"
 
 KisKSColorSpace::KisKSColorSpace(KoColorProfile *p)
-    : KoIncompleteColorSpace<KSTraits, KoRGB16Fallback>("kscolorspace", "", KoColorSpaceRegistry::instance())
+    : KoIncompleteColorSpace<KSTraits>("kscolorspace", "", KoColorSpaceRegistry::instance(), KoColorSpaceRegistry::instance()->rgb16(""))
 {
     if (profileIsCompatible(p))
         m_profile = dynamic_cast<KisIlluminantProfile*>(p);

@@ -46,7 +46,7 @@ struct KisKSColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 2*WLS_N
 
 typedef KisKSColorSpaceTraits<float> KSTraits;
 
-class KRITAPAINTERLYCOMMON_EXPORT KisKSColorSpace : public KoIncompleteColorSpace<KSTraits, KoRGB16Fallback>
+class KRITAPAINTERLYCOMMON_EXPORT KisKSColorSpace : public KoIncompleteColorSpace<KSTraits>
 {
 
     public:

@@ -64,35 +64,6 @@ struct KoLcmsColorTransformation : public KoColorTransformation
     cmsHTRANSFORM cmstransform;
 };
 
-struct KoLcmsDarkenTransformation : public KoColorTransformation
-{
-    KoLcmsDarkenTransformation(const KoColorSpace* cs, const KoColorConversionTransformation* defaultToLab, const KoColorConversionTransformation* defaultFromLab, qint32 shade, bool compensate, double compensation) : m_colorSpace(cs), m_defaultToLab(defaultToLab), m_defaultFromLab(defaultFromLab), m_shade(shade), m_compensate(compensate), m_compensation(compensation)
-    {
-
-    }
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
-    {
-        quint16 * labcache = new quint16[nPixels * 4];
-        m_defaultToLab->transform(src, reinterpret_cast<quint8*>(labcache), nPixels);
-        for ( int i = 0; i < nPixels * 4; ++i ) {
-            if ( m_compensate ) {
-                labcache[i] = static_cast<quint16>( ( labcache[i] * m_shade ) / ( m_compensation * 255 ) );
-            }
-            else {
-                labcache[i] = static_cast<quint16>( labcache[i] * m_shade  / 255 );
-            }
-        }
-        m_defaultFromLab->transform(reinterpret_cast<quint8*>(labcache), dst, nPixels);
-        delete [] labcache;
-    }
-    const KoColorSpace* m_colorSpace;
-    const KoColorConversionTransformation* m_defaultToLab;
-    const KoColorConversionTransformation* m_defaultFromLab;
-    qint32 m_shade;
-    bool m_compensate;
-    double m_compensation;
-};
-
 class PIGMENT_EXPORT KoLcmsColorConversionTransformation : public KoColorConversionTransformation {
     public:
         KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, quint32 srcColorSpaceType, KoLcmsColorProfile* srcProfile, const KoColorSpace* dstCs, quint32 dstColorSpaceType, KoLcmsColorProfile* dstProfile, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_transform(0)
@@ -411,11 +382,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             delete [] transferFunctions;
 
             return adj;
-        }
-
-        virtual KoColorTransformation *createDarkenAdjustement(qint32 shade, bool compensate, double compensation) const
-        {
-            return new KoLcmsDarkenTransformation(this, this->toLabA16Converter(), this->fromLabA16Converter(), shade, compensate, compensation); // TODO probable No guarantee of thread safety
         }
 
         virtual quint8 difference(const quint8* src1, const quint8* src2) const

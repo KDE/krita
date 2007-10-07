@@ -106,7 +106,9 @@ struct KoColorSpaceTrait {
  * KoLabU16Traits::setL( p, KoLabU16Traits::L(p) / 10 );
  * oneKoColorSpace->fromLabA16(p, somepointertodata, 1);
  */
-struct KoLabU16Traits : public KoColorSpaceTrait<quint16, 4,3> {
+template<typename _channels_type_>
+struct KoLabTraits : public KoColorSpaceTrait<quint16, 4,3> {
+    typedef _channels_type_ channels_type; // /me wonders why gcc refuses to build without that line ?, which is pretty annoying as it's less clean
     static const qint32 L_pos = 0;
     static const qint32 a_pos = 1;
     static const qint32 b_pos = 2;
@@ -115,10 +117,10 @@ struct KoLabU16Traits : public KoColorSpaceTrait<quint16, 4,3> {
      * An Lab pixel
      */
     struct Pixel {
-        quint16 L;
-        quint16 a;
-        quint16 b;
-        quint16 alpha;
+        channels_type L;
+        channels_type a;
+        channels_type b;
+        channels_type alpha;
     };
 
     /// @return the L component
@@ -154,6 +156,13 @@ struct KoLabU16Traits : public KoColorSpaceTrait<quint16, 4,3> {
         channels_type* d = nativeArray(data);
         d[b_pos] = nv;
     }
+};
+
+/** Use this class in conjonction with KoColorSpace::toRgbA16 and
+ * KoColorSpace::fromRgbA16 data.
+ * @see KoLabU16Traits for an exemple of use.
+ */
+struct KoLabU16Traits : public KoLabTraits<quint16> {
 };
 
 /** Base class for rgb traits, it provides some convenient functions to

@@ -27,9 +27,12 @@
 #include <KoColorSpace.h>
 #include "KoColorSpaceConstants.h"
 #include <KoColorSpaceMaths.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoIntegerMaths.h>
 #include "KoCompositeOp.h"
 #include "KoColorTransformation.h"
+#include "KoFallBackColorTransformation.h"
+#include "KoLabDarkenColorTransformation.h"
 
 namespace {
 
@@ -94,7 +97,7 @@ namespace {
 
                 memset(totals, 0, sizeof(totals));
 
-                // Compute the total for each channel by summing each colors multiplied by the weight
+                // Compute the total for each channel by summing each colors multiplied by the weightlabcache
 
                 while(nColors--)
                 {
@@ -392,6 +395,11 @@ class KoColorSpaceAbstract : public KoColorSpace {
         virtual KoColorTransformation* createInvertTransformation() const
         {
             return new KoInvertColorTransformation(this);
+        }
+
+         virtual KoColorTransformation *createDarkenAdjustement(qint32 shade, bool compensate, double compensation) const
+        {
+            return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(""), new KoLabDarkenColorTransformation<quint16>( shade, compensate, compensation) );
         }
 
         virtual KoID mathToolboxId() const

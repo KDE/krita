@@ -384,7 +384,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of source pixels
      */
-    virtual void toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const = 0;
+    virtual void toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const;
 
     /**
      * Convert the specified data from Lab (D50). to this colorspace. All colorspaces are
@@ -394,7 +394,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of pixels in the array
      */
-    virtual void fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const = 0;
+    virtual void fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const;
 
     /**
      * Convert the specified data to sRGB 16 bits. All colorspaces are guaranteed to support this
@@ -403,7 +403,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of source pixels
      */
-    virtual void toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const =0;
+    virtual void toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const;
 
     /**
      * Convert the specified data from sRGB 16 bits. to this colorspace. All colorspaces are
@@ -413,7 +413,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of pixels in the array
      */
-    virtual void fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const =0;
+    virtual void fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const;
 
     /**
      * Create a color conversion transformation.

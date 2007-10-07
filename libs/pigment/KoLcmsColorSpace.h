@@ -66,14 +66,14 @@ struct KoLcmsColorTransformation : public KoColorTransformation
 
 struct KoLcmsDarkenTransformation : public KoColorTransformation
 {
-    KoLcmsDarkenTransformation(const KoColorSpace* cs, cmsHTRANSFORM defaultToLab, cmsHTRANSFORM defaultFromLab, qint32 shade, bool compensate, double compensation) : m_colorSpace(cs), m_defaultToLab(defaultToLab), m_defaultFromLab(defaultFromLab), m_shade(shade), m_compensate(compensate), m_compensation(compensation)
+    KoLcmsDarkenTransformation(const KoColorSpace* cs, KoColorConversionTransformation* defaultToLab, KoColorConversionTransformation* defaultFromLab, qint32 shade, bool compensate, double compensation) : m_colorSpace(cs), m_defaultToLab(defaultToLab), m_defaultFromLab(defaultFromLab), m_shade(shade), m_compensate(compensate), m_compensation(compensation)
     {
 
     }
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
     {
         quint16 * labcache = new quint16[nPixels * 4];
-        cmsDoTransform( m_defaultToLab, const_cast<quint8*>( src ), reinterpret_cast<quint8*>( labcache ), nPixels );
+        m_defaultToLab->transform(src, reinterpret_cast<quint8*>(labcache), nPixels);
         for ( int i = 0; i < nPixels * 4; ++i ) {
             if ( m_compensate ) {
                 labcache[i] = static_cast<quint16>( ( labcache[i] * m_shade ) / ( m_compensation * 255 ) );
@@ -82,17 +82,12 @@ struct KoLcmsDarkenTransformation : public KoColorTransformation
                 labcache[i] = static_cast<quint16>( labcache[i] * m_shade  / 255 );
             }
         }
-        cmsDoTransform( m_defaultFromLab, reinterpret_cast<quint8*>( labcache ), dst, nPixels );
-        // Copy alpha
-        for ( int i = 0; i < nPixels; ++i ) {
-            quint8 alpha = m_colorSpace->alpha( src );
-            m_colorSpace->setAlpha( dst, alpha, 1 );
-        }
+        m_defaultFromLab->transform(reinterpret_cast<quint8*>(labcache), dst, nPixels);
         delete [] labcache;
     }
     const KoColorSpace* m_colorSpace;
-    cmsHTRANSFORM m_defaultToLab;
-    cmsHTRANSFORM m_defaultFromLab;
+    KoColorConversionTransformation* m_defaultToLab;
+    KoColorConversionTransformation* m_defaultFromLab;
     qint32 m_shade;
     bool m_compensate;
     double m_compensation;
@@ -178,16 +173,12 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             mutable quint8 * qcolordata; // A small buffer for conversion from and to qcolor.
             cmsHTRANSFORM defaultToRGB;    // Default transform to 8 bit sRGB
             cmsHTRANSFORM defaultFromRGB;  // Default transform from 8 bit sRGB
-            cmsHTRANSFORM defaultToRGB16;    // Default transform to 16 bit sRGB
-            cmsHTRANSFORM defaultFromRGB16;  // Default transform from 16 bit sRGB
 
             mutable cmsHPROFILE   lastRGBProfile;  // Last used profile to transform to/from RGB
             mutable cmsHTRANSFORM lastToRGB;       // Last used transform to transform to RGB
             mutable cmsHTRANSFORM lastFromRGB;     // Last used transform to transform from RGB
-
-            cmsHTRANSFORM defaultToLab;
-            cmsHTRANSFORM defaultFromLab;
-
+            KoColorConversionTransformation* defaultToLab;
+            KoColorConversionTransformation* defaultFromLab;
             KoLcmsColorProfile *  profile;
         };
     protected:
@@ -203,18 +194,19 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             d->lastFromRGB = 0;
             d->defaultFromRGB = 0;
             d->defaultToRGB = 0;
-            d->defaultFromLab = 0;
             d->defaultToLab = 0;
-            d->defaultToRGB16 = 0;
-            d->defaultFromRGB16 = 0;
+            d->defaultFromLab = 0;
         }
         virtual ~KoLcmsColorSpace()
         {
+            delete d->defaultToLab;
+            delete d->defaultFromLab;
             delete d;
         }
 
         void init()
         {
+            kDebug() << "init";
     // Default pixel buffer for QColor conversion
             d->qcolordata = new quint8[3];
             Q_CHECK_PTR(d->qcolordata);
@@ -231,22 +223,11 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             d->defaultToRGB =  cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
                     d->lastFromRGB, TYPE_BGR_8,
                     INTENT_PERCEPTUAL, 0);
+//             KoColorSpace* lab16CS = KoColorSpaceRegistry::instance()->lab16("");
+            d->defaultToLab = 0; // this->createColorConverter( lab16CS ) ;
+            d->defaultFromLab = 0; // lab16CS->createColorConverter(  this ) ;
+            kDebug() << "endinit";
 
-            d->defaultFromRGB16 = cmsCreateTransform(d->lastFromRGB, TYPE_BGRA_16,
-                    d->profile->lcmsProfile(), this->colorSpaceType(),
-                    INTENT_PERCEPTUAL, 0);
-
-            d->defaultToRGB16 =  cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
-                    d->lastFromRGB, TYPE_BGRA_16,
-                    INTENT_PERCEPTUAL, 0);
-
-            cmsHPROFILE hLab  = cmsCreateLabProfile(NULL);
-
-            d->defaultFromLab = cmsCreateTransform(hLab,  (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), d->profile->lcmsProfile(), this->colorSpaceType(),
-                    INTENT_PERCEPTUAL, 0);
-
-            d->defaultToLab = cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(), hLab,  (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)),
-                    INTENT_PERCEPTUAL, 0);
         }
     public:
 
@@ -333,55 +314,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 this->convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent);
 
             return img;
-        }
-        virtual void toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
-        {
-            if ( d->defaultToLab == 0 ) return;
-
-            cmsDoTransform( d->defaultToLab, const_cast<quint8 *>( src ), dst, nPixels );
-            quint16* dstU16 = reinterpret_cast<quint16*>(dst);
-            for(quint32 i = 0; i < nPixels; i++)
-            {
-                dstU16[4*i+3] = KoColorSpaceMaths<quint8,quint16>::scaleToA(this->alpha(src));
-                src += this->pixelSize();
-            }
-        }
-
-        virtual void fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
-        {
-            if ( d->defaultFromLab == 0 ) return;
-
-            cmsDoTransform( d->defaultFromLab,  const_cast<quint8 *>( src ), dst,  nPixels );
-            const quint16* srcU16 = reinterpret_cast<const quint16*>(src);
-            for(quint32 i = 0; i < nPixels; i++)
-            {
-                this->setAlpha(dst, KoColorSpaceMaths<quint16,quint8>::scaleToA(srcU16[4*i+3]), 1 );
-                dst += this->pixelSize();
-            }
-        }
-        virtual void fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
-        {
-            if ( d->defaultFromRGB16 == 0 ) return;
-
-            cmsDoTransform( d->defaultFromRGB16,  const_cast<quint8 *>( src ), dst,  nPixels );
-            const quint16* srcU16 = reinterpret_cast<const quint16*>(src);
-            for(quint32 i = 0; i < nPixels; i++)
-            {
-                this->setAlpha(dst, KoColorSpaceMaths<quint16,quint8>::scaleToA(srcU16[4*i+3]), 1 );
-                dst += this->pixelSize();
-            }
-        }
-        virtual void toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
-        {
-            if ( d->defaultToRGB16 == 0 ) return;
-
-            cmsDoTransform( d->defaultToRGB16, const_cast<quint8 *>( src ), dst, nPixels );
-            quint16* dstU16 = reinterpret_cast<quint16*>(dst);
-            for(quint32 i = 0; i < nPixels; i++)
-            {
-                dstU16[4*i+3] = KoColorSpaceMaths<quint8,quint16>::scaleToA(this->alpha(src));
-                src += this->pixelSize();
-            }
         }
 
         virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const
@@ -490,6 +422,15 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
             return adj;
         }
+        void toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+        { // Reimplement to spare the creation of a transformation at the upper level
+            d->defaultToLab->transform( src, dst, nPixels);
+        }
+        
+        void fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+        { // Reimplement to spare the creation of a transformation at the upper level
+            d->defaultFromLab->transform( src, dst, nPixels);
+        }
 
         virtual KoColorTransformation *createDarkenAdjustement(qint32 shade, bool compensate, double compensation) const
         {
@@ -498,7 +439,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
         virtual quint8 difference(const quint8* src1, const quint8* src2) const
         {
-            if (d->defaultToLab) {
+            if (d->defaultToLab) { // TODO Is it possible ? should probably move the else up in the inheritence
 
                 quint8 lab1[8], lab2[8];
                 cmsCIELab labF1, labF2;
@@ -506,8 +447,8 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 if (this->alpha(src1) == OPACITY_TRANSPARENT || this->alpha(src2) == OPACITY_TRANSPARENT)
                     return (this->alpha(src1) == this->alpha(src2) ? 0 : 255);
 
-                cmsDoTransform( d->defaultToLab, const_cast<quint8*>( src1 ), lab1, 1);
-                cmsDoTransform( d->defaultToLab, const_cast<quint8*>( src2 ), lab2, 1);
+                d->defaultToLab->transform( src1, lab1, 1),
+                d->defaultToLab->transform( src2, lab2, 1),
                 cmsLabEncoded2Float(&labF1, (WORD *)lab1);
                 cmsLabEncoded2Float(&labF2, (WORD *)lab2);
                 double diff = cmsDeltaE(&labF1, &labF2);

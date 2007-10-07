@@ -111,23 +111,6 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             }
             return img;
         }
-        virtual void toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
-        {
-            _fallback_::toLabA16( this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
-        }
-
-        virtual void fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
-        {
-            _fallback_::fromLabA16(this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
-        }
-        virtual void fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
-        {
-            _fallback_::fromRgbA16(this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
-        }
-        virtual void toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
-        {
-            _fallback_::toRgbA16(this, m_fallBackColorSpace, src, dst, m_convertionCache, nPixels);
-        }
 
         virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const
         {

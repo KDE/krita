@@ -104,58 +104,6 @@ class KoRGB16FallbackColorTransformation : public KoColorTransformation {
 class KoRGB16Fallback {
   public:
     /**
-     * Use internally by KoIncompleteColorSpace to convert to LabA16
-     */
-    static inline void toLabA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
-    {
-        int length = nPixels * fallBackCS->pixelSize();
-        if(length > buf.size())
-        {
-            buf.resize(length);
-        }
-        cs->toRgbA16( src, (quint8*)buf.data(), nPixels);
-        fallBackCS->toLabA16( (quint8*)buf.data(), dst, nPixels);
-    }
-    /**
-     * Use internally by KoIncompleteColorSpace to convert from LabA16
-     */
-    static inline void fromLabA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
-    {
-        int length = nPixels * fallBackCS->pixelSize();
-        if(length > buf.size())
-        {
-            buf.resize(length);
-        }
-        fallBackCS->fromLabA16(src, (quint8*)buf.data(), nPixels);
-        cs->fromRgbA16( (quint8*)buf.data(), dst, nPixels);
-    }
-    /**
-     * Should not be called or that mean the fallback doesn't work
-     */
-    static inline void fromRgbA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
-    {
-        Q_UNUSED(cs);
-        Q_UNUSED(fallBackCS);
-        Q_UNUSED(src);
-        Q_UNUSED(dst);
-        Q_UNUSED(buf);
-        Q_UNUSED(nPixels);
-        kFatal() << "THIS FUNCTION SHOULDN'T BE EXECUTED YOU NEED TO REIMPLEMENT fromRgbA16 IN YOUR COLORSPACE";
-    }
-    /**
-     * Should not be called or that mean the fallback doesn't work
-     */
-    static inline  void toRgbA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
-    {
-        Q_UNUSED(cs);
-        Q_UNUSED(fallBackCS);
-        Q_UNUSED(src);
-        Q_UNUSED(dst);
-        Q_UNUSED(buf);
-        Q_UNUSED(nPixels);
-        kFatal() << "THIS FUNCTION SHOULDN'T BE CALLED YOU NEED TO REIMPLEMENT toRgbA16 IN YOUR COLORSPACE";
-    }
-    /**
      * Use internally by KoIncompleteColorSpace to create the fallback colorspace
      */
     static inline KoColorSpace* createColorSpace()
@@ -213,58 +161,6 @@ class KoLAB16FallbackColorTransformation : public KoColorTransformation {
  */
 class KoLAB16Fallback {
   public:
-    /**
-     * Use internally by KoIncompleteColorSpace to convert to LabA16
-     */
-    static inline void toRgbA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
-    {
-        int length = nPixels * fallBackCS->pixelSize();
-        if(length > buf.size())
-        {
-            buf.resize(length);
-        }
-        cs->toLabA16( src, (quint8*)buf.data(), nPixels);
-        fallBackCS->toRgbA16( (quint8*)buf.data(), dst, nPixels);
-    }
-    /**
-     * Use internally by KoIncompleteColorSpace to convert from LabA16
-     */
-    static inline void fromRgbA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
-    {
-        int length = nPixels * fallBackCS->pixelSize();
-        if(length > buf.size())
-        {
-            buf.resize(length);
-        }
-        fallBackCS->fromRgbA16(src, (quint8*)buf.data(), nPixels);
-        cs->fromLabA16( (quint8*)buf.data(), dst, nPixels);
-    }
-    /**
-     * Should not be called or that mean the fallback doesn't work
-     */
-    static inline void fromLabA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
-    {
-        Q_UNUSED(cs);
-        Q_UNUSED(fallBackCS);
-        Q_UNUSED(src);
-        Q_UNUSED(dst);
-        Q_UNUSED(buf);
-        Q_UNUSED(nPixels);
-        kFatal() << "THIS FUNCTION SHOULDN'T BE EXECUTED YOU NEED TO REIMPLEMENT fromLabA16 IN YOUR COLORSPACE";
-    }
-    /**
-     * Should not be called or that mean the fallback doesn't work
-     */
-    static inline  void toLabA16(const KoColorSpace* cs, const KoColorSpace* fallBackCS, const quint8 * src, quint8 * dst, QByteArray& buf, const quint32 nPixels)
-    {
-        Q_UNUSED(cs);
-        Q_UNUSED(fallBackCS);
-        Q_UNUSED(src);
-        Q_UNUSED(dst);
-        Q_UNUSED(buf);
-        Q_UNUSED(nPixels);
-        kFatal() << "THIS FUNCTION SHOULDN'T BE CALLED YOU NEED TO REIMPLEMENT toLabA16 IN YOUR COLORSPACE";
-    }
     /**
      * Use internally by KoIncompleteColorSpace to create the fallback colorspace
      */

@@ -29,6 +29,18 @@
 #include "KoColorConversionSystem.h"
 #include "KoColorSpaceRegistry.h"
 
+class KoCopyConversionTransformation : public KoColorConversionTransformation {
+    public:
+        KoCopyConversionTransformation(const KoColorSpace* cs) : KoColorConversionTransformation(cs, cs)
+        {
+        }
+        virtual void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
+        {
+            memcpy(dstU8, srcU8, nPixels * srcColorSpace()->pixelSize());
+        }
+};
+
+
 struct KoColorSpace::Private {
     QString id;
     QString name;
@@ -41,6 +53,11 @@ struct KoColorSpace::Private {
 
     mutable const KoColorSpace *lastUsedDstColorSpace;
     mutable KoColorConversionTransformation* lastUsedTransform;
+    
+    mutable KoColorConversionTransformation* transfoToRGBA16;
+    mutable KoColorConversionTransformation* transfoFromRGBA16;
+    mutable KoColorConversionTransformation* transfoToLABA16;
+    mutable KoColorConversionTransformation* transfoFromLABA16;
 
 // cmsHTRANSFORM is a void *, so this should work.
     typedef QMap<const KoColorSpace *, KoColorConversionTransformation*>  TransformMap;
@@ -63,6 +80,10 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceR
     d->convolutionOp = convolutionOp;
     d->lastUsedDstColorSpace = 0;
     d->lastUsedTransform = 0;
+    d->transfoToRGBA16 = 0;
+    d->transfoFromRGBA16 = 0;
+    d->transfoToLABA16 = 0;
+    d->transfoFromLABA16 = 0;
 }
 
 KoColorSpace::~KoColorSpace()
@@ -163,9 +184,51 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
     }
 }
 
+
+void KoColorSpace::toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+{
+    if(not d->transfoToLABA16)
+    {
+        d->transfoToLABA16 = d->parent->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16("") ) ;
+    }
+    d->transfoToLABA16->transform( src, dst, nPixels);
+}
+
+void KoColorSpace::fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+{
+    if(not d->transfoFromLABA16)
+    {
+        d->transfoFromLABA16 = d->parent->colorConversionSystem()->createColorConverter( KoColorSpaceRegistry::instance()->lab16("") , this ) ;
+    }
+    d->transfoFromLABA16->transform( src, dst, nPixels);
+}
+
+void KoColorSpace::toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+{
+    if(not d->transfoToRGBA16)
+    {
+        d->transfoToRGBA16 = d->parent->colorConversionSystem()->createColorConverter( this, KoColorSpaceRegistry::instance()->rgb16("") ) ;
+    }
+    d->transfoToRGBA16->transform( src, dst, nPixels);
+}
+
+void KoColorSpace::fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
+{
+    if(not d->transfoFromRGBA16)
+    {
+        d->transfoFromRGBA16 = d->parent->colorConversionSystem()->createColorConverter( KoColorSpaceRegistry::instance()->rgb16("") , this ) ;
+    }
+    d->transfoFromRGBA16->transform( src, dst, nPixels);
+}
+
 KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
 {
-    return d->parent->colorConversionSystem()->createColorConverter( this, dstColorSpace, renderingIntent);
+    if( this == dstColorSpace)
+    {
+        return new KoCopyConversionTransformation(this);
+    } else {
+        return d->parent->colorConversionSystem()->createColorConverter( this, dstColorSpace, renderingIntent);
+    }
 }
 
 bool KoColorSpace::convertPixelsTo(const quint8 * src,

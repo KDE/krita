@@ -62,6 +62,8 @@ public:
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
     virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
     {
+        Q_UNUSED(_colorModelId);
+        Q_UNUSED(_colorDepthId);
         return 0;
     }
 

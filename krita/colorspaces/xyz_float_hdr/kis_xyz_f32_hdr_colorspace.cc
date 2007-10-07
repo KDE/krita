@@ -23,6 +23,8 @@
 #include <KoScaleColorConversionTransformation.h>
 #include "kis_xyz_to_lab_color_conversion_transformation.h"
 #include "kis_lab_to_xyz_color_conversion_transformation.h"
+#include "kis_xyz_to_rgb_color_conversion_transformation.h"
+#include "kis_rgb_to_xyz_color_conversion_transformation.h"
 
 KisXyzF32HDRColorSpace::KisXyzF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p)
 : KisXyzFloatHDRColorSpace<XyzF32Traits>(colorSpaceId(), i18n("XYZ (32-bit float/channel) for High Dynamic Range imaging"), parent, p)
@@ -40,9 +42,11 @@ QList<KoColorConversionTransformationFactory*> KisXyzF32HDRColorSpaceFactory::co
     // Conversion to XYZ Float 32bit
     list.append(new KoScaleColorConversionTransformationFactory< KoXyzTraits<quint16>, XyzF32Traits >( XYZAColorModelID.id(), Integer16BitsColorDepthID.id(), Float32BitsColorDepthID.id() ) );
     list.append(new KisLabToXyzColorConversionTransformationFactory<XyzF32Traits>(Float32BitsColorDepthID.id()));
+    list.append(new KisRgbToXyzColorConversionTransformationFactory< KoRgbTraits<float>, XyzF32Traits>(Float32BitsColorDepthID.id(), Float32BitsColorDepthID.id()));
     // Conversion from XYZ Float 32bit
     list.append(new KoScaleColorConversionTransformationFactory< XyzF32Traits, KoXyzTraits<quint16> >( XYZAColorModelID.id(), Float32BitsColorDepthID.id(), Integer16BitsColorDepthID.id() ) );
     list.append(new KisXyzToLabColorConversionTransformationFactory<XyzF32Traits>(Float32BitsColorDepthID.id()));
+    list.append(new KisXyzToRgbColorConversionTransformationFactory< XyzF32Traits, KoRgbTraits<float> >(Float32BitsColorDepthID.id(), Float32BitsColorDepthID.id()));
     
     return list;
 }

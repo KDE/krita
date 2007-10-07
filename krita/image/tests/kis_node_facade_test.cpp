@@ -84,7 +84,7 @@ void KisNodeFacadeTest::testCreation()
 {
     TestGraphListener graphListener;
 
-    KisNodeSP node = new KisNode();
+    KisNodeSP node = new TestNodeA();
     QVERIFY( node->graphListener() == 0 );
 
     KisNodeFacade facade(node);
@@ -122,16 +122,16 @@ void KisNodeFacadeTest::testOrdering()
 {
     TestGraphListener graphListener;
 
-    KisNodeSP root = new KisNode();
+    KisNodeSP root = new TestNodeA();
     root->setGraphListener( &graphListener );
 
     KisNodeFacade facade( root );
 
-    KisNodeSP node1 = new KisNode();
-    KisNodeSP node2 = new KisNode();
-    KisNodeSP node3 = new KisNode();
-    KisNodeSP node4 = new KisNode();
-    KisNodeSP node5 = new KisNode();
+    KisNodeSP node1 = new TestNodeA();
+    KisNodeSP node2 = new TestNodeA();
+    KisNodeSP node3 = new TestNodeA();
+    KisNodeSP node4 = new TestNodeA();
+    KisNodeSP node5 = new TestNodeA();
 
      /*
       +---------+
@@ -387,16 +387,16 @@ void KisNodeFacadeTest::testMove()
 {
     TestGraphListener graphListener;
 
-    KisNodeSP root = new KisNode();
+    KisNodeSP root = new TestNodeA();
     root->setGraphListener( &graphListener );
 
     KisNodeFacade facade( root );
 
-    KisNodeSP node1 = new KisNode();
+    KisNodeSP node1 = new TestNodeA();
     node1->setName( "node1" );
-    KisNodeSP node2 = new KisNode();
+    KisNodeSP node2 = new TestNodeA();
     node2->setName( "node2" );
-    KisNodeSP node3 = new KisNode();
+    KisNodeSP node3 = new TestNodeA();
     node3->setName( "node3" );
 
     facade.addNode( node1 );
@@ -417,5 +417,3 @@ void KisNodeFacadeTest::testMove()
 
 QTEST_KDEMAIN(KisNodeFacadeTest, NoGUI)
 #include "kis_node_facade_test.moc"
-
-

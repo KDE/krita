@@ -79,20 +79,12 @@ public:
         }
 };
 
-class TestNode : public KisNode
-{
-public:
-
-    void setDirty() {
-        KisNode::setDirty( QRect( -1000, -1000, 2000, 200 ) );
-    }
-};
 
 void KisNodeTest::testCreation()
 {
     TestGraphListener graphListener;
 
-    KisNode * node = new KisNode();
+    KisNode * node = new TestNodeA();
     QVERIFY( node->graphListener() == 0 );
 
     node->setGraphListener( &graphListener );
@@ -126,12 +118,12 @@ void KisNodeTest::testOrdering()
 {
     TestGraphListener graphListener;
 
-    KisNodeSP root = new KisNode();
+    KisNodeSP root = new TestNodeA();
     root->setGraphListener( &graphListener );
-    KisNodeSP node1 = new KisNode();
-    KisNodeSP node2 = new KisNode();
-    KisNodeSP node3 = new KisNode();
-    KisNodeSP node4 = new KisNode();
+    KisNodeSP node1 = new TestNodeA();
+    KisNodeSP node2 = new TestNodeA();
+    KisNodeSP node3 = new TestNodeA();
+    KisNodeSP node4 = new TestNodeA();
 
      /*
       +---------+
@@ -335,7 +327,7 @@ void KisNodeTest::testSetDirty()
 
 void KisNodeTest::testChildNodes()
 {
-    KisNodeSP root = new KisNode();
+    KisNodeSP root = new TestNodeA();
     KisNodeSP a = new TestNodeA();
     root->add( a, 0 );
     a->setVisible( true );
@@ -375,7 +367,7 @@ void KisNodeTest::testChildNodes()
 
 void KisNodeTest::testDirtyRegion()
 {
-    KisNodeSP root = new KisNode();
+    KisNodeSP root = new TestNodeA();
     root->setDirty(QRect(0, 0, 100, 100));
     root->setDirty(QRect(50, 50, 100, 100));
     QRegion dirtyRegion = root->dirtyRegion( QRect(0, 0, 200, 200) );

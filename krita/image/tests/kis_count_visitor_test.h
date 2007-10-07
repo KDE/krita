@@ -26,16 +26,25 @@
 class TestNodeA : public KisNode
 {
     Q_OBJECT
+public:
+    KisNodeSP clone() { return new TestNodeA(*this); }
+    bool allowAsChild( KisNodeSP ) { return true; }
 };
 
 class TestNodeB : public KisNode
 {
     Q_OBJECT
+public:
+    KisNodeSP clone() { return new TestNodeB(*this); }
+    bool allowAsChild( KisNodeSP ) { return true; }
 };
 
 class TestNodeC : public KisNode
 {
     Q_OBJECT
+public:
+    KisNodeSP clone() { return new TestNodeC(*this); }
+    bool allowAsChild( KisNodeSP ) { return true; }
 };
 
 

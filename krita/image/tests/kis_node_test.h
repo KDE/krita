@@ -23,21 +23,41 @@
 
 #include "kis_node.h"
 
+class TestNode : public KisNode
+{
+    Q_OBJECT
+public:
+    KisNodeSP clone() { return new TestNode(*this); }
+    bool allowAsChild( KisNodeSP ) { return true; }
+    void setDirty() {
+        KisNode::setDirty( QRect( -1000, -1000, 2000, 200 ) );
+    }
+};
+
+
 class TestNodeA : public KisNode
 {
     Q_OBJECT
+public:
+    KisNodeSP clone() { return new TestNodeA(*this); }
+    bool allowAsChild( KisNodeSP ) { return true; }
 };
 
 class TestNodeB : public KisNode
 {
     Q_OBJECT
+public:
+    KisNodeSP clone() { return new TestNodeB(*this); }
+    bool allowAsChild( KisNodeSP ) { return true; }
 };
 
 class TestNodeC : public KisNode
 {
     Q_OBJECT
+public:
+    KisNodeSP clone() { return new TestNodeC(*this); }
+    bool allowAsChild( KisNodeSP ) { return true; }
 };
-
 
 
 

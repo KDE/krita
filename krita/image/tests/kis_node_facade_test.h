@@ -21,6 +21,18 @@
 
 #include <QtTest/QtTest>
 
+#include "kis_node.h"
+
+class TestNodeA : public KisNode
+{
+
+    Q_OBJECT
+public:
+    KisNodeSP clone() { return new TestNodeA(*this); }
+    bool allowAsChild( KisNodeSP ) { return true; }
+};
+
+
 class KisNodeFacadeTest : public QObject
 {
     Q_OBJECT

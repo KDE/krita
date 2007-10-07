@@ -36,6 +36,8 @@ public:
         {
         }
 
+    KisNodeSP clone() { return new TestLayer(*this); }
+    bool allowAsChild( KisNodeSP node) { return true; }
 
     virtual QString nodeType()
         {

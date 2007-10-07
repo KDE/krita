@@ -41,7 +41,7 @@
 void KisCountVisitorTest::testCounting()
 {
 
-    KisNodeSP root = new TestNodeA();
+    KisNodeSP root = new RootNode();
     KisNodeFacade facade( root );
 
     facade.addNode( new TestNodeA() );

@@ -23,6 +23,15 @@
 
 #include "kis_node.h"
 
+class RootNode : public KisNode
+{
+    Q_OBJECT
+public:
+    KisNodeSP clone() { return new RootNode(*this); }
+    bool allowAsChild( KisNodeSP ) { return true; }
+};
+
+
 class TestNodeA : public KisNode
 {
     Q_OBJECT

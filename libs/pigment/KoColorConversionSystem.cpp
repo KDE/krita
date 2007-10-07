@@ -93,7 +93,7 @@ struct KoColorConversionSystem::Node {
                 or _colorSpaceFactory->colorModelId() == GrayColorModelID );
     }
     QString id() const {
-        return colorSpaceFactory->id();
+        return modelId + " " + depthId;
     }
     QString modelId;
     QString depthId;
@@ -236,6 +236,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
     csNode->init(csf);
     if(csNode->isIcc)
     { // Construct a link between this color space and all other ICC color space
+        kDebug(31000) << csf->id() << " is an ICC color space, connecting to others";
         QList<Node*> nodes = d->graph.values();
         foreach(Node* node, nodes)
         {
@@ -259,12 +260,14 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
     }
     // Construct a link for "custom" transformation
     QList<KoColorConversionTransformationFactory*> cctfs = csf->colorConversionLinks();
+    kDebug(31000) << csf->id() << " has " << cctfs.size() << " direct connections";
     foreach(KoColorConversionTransformationFactory* cctf, cctfs)
     {
         Node* srcNode = nodeFor(cctf->srcColorModelId(), cctf->srcColorDepthId());
         Q_ASSERT(srcNode);
         Node* dstNode = nodeFor(cctf->dstColorModelId(), cctf->dstColorDepthId());
         Q_ASSERT(dstNode);
+        kDebug(31000) << "Connecting " << srcNode->id() << " to " << dstNode->id();
         Q_ASSERT(srcNode == csNode or dstNode == csNode);
         // Check if the two nodes are allready connected
         Vertex* v = vertexBetween(srcNode, dstNode);

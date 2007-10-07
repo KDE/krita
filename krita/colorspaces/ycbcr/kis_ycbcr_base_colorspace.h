@@ -2,16 +2,15 @@
  *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
@@ -83,40 +82,6 @@ class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits, KoRGB16F
                 NATIVE_TO_UINT8(_CSTraits::computeGreen( src->Y, src->Cb, src->Cr)),
                 NATIVE_TO_UINT8(_CSTraits::computeBlue( src->Y, src->Cb, src->Cr) ) );
             *opacity = NATIVE_TO_UINT8(src->alpha);
-        }
-
-        virtual void fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
-        {
-            typename _CSTraits::Pixel* dst = reinterpret_cast<typename _CSTraits::Pixel*>(dstU8);
-            const quint16* src = reinterpret_cast<const quint16*>(srcU8);
-            while(nPixels > 0)
-            {
-                typename _CSTraits::channels_type red = UINT16_TO_NATIVE(src[KoRgbU16Traits::red_pos]);
-                typename _CSTraits::channels_type green = UINT16_TO_NATIVE(src[KoRgbU16Traits::green_pos]);
-                typename _CSTraits::channels_type blue = UINT16_TO_NATIVE(src[KoRgbU16Traits::blue_pos]);
-                dst->Y = _CSTraits::computeY( red, green, blue);
-                dst->Cb = _CSTraits::computeCb( red, green, blue);
-                dst->Cr = _CSTraits::computeCr( red, green, blue);
-                dst->alpha = UINT16_TO_NATIVE(src[KoRgbU16Traits::alpha_pos]);
-                src +=4;
-                dst ++;
-                nPixels--;
-            }
-        }
-        virtual void toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
-        {
-            const typename _CSTraits::Pixel* src = reinterpret_cast< const typename _CSTraits::Pixel*>(srcU8);
-            quint16* dst = reinterpret_cast<quint16*>(dstU8);
-            while(nPixels > 0)
-            {
-                dst[ KoRgbU16Traits::red_pos ] = NATIVE_TO_UINT16(_CSTraits::computeRed( src->Y, src->Cb, src->Cr));
-                dst[ KoRgbU16Traits::green_pos ] = NATIVE_TO_UINT16(_CSTraits::computeGreen( src->Y, src->Cb, src->Cr));
-                dst[ KoRgbU16Traits::blue_pos ] = NATIVE_TO_UINT16(_CSTraits::computeBlue( src->Y, src->Cb, src->Cr));
-                dst[KoRgbU16Traits::alpha_pos] = NATIVE_TO_UINT16(src->alpha);
-                src ++;
-                dst += 4;
-                nPixels--;
-            }
         }
     private:
 };

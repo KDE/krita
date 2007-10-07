@@ -26,6 +26,7 @@
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorConversionTransformationFactory.h>
+#include <KoScaleColorConversionTransformation.h>
 #include "kis_ycbcr_to_rgb_color_conversion_transformation.h"
 #include "kis_rgb_to_ycbcr_color_conversion_transformation.h"
 
@@ -51,6 +52,7 @@ QList<KoColorConversionTransformationFactory*> KisYCbCrU16ColorSpaceFactory::col
     list.append(new KisYCbCrToRgbColorConversionTransformationFactory< YCbCrU16Traits, KoRgbTraits<quint16> >( YCbCrAColorModelID.id(), Integer16BitsColorDepthID.id(), RGBAColorModelID.id(), Integer16BitsColorDepthID.id() ) );
     // Conversion from RGB16bit
     list.append(new KisRgbToYCbCrColorConversionTransformationFactory< KoRgbTraits<quint16>, YCbCrU16Traits >( RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), YCbCrAColorModelID.id(), Integer16BitsColorDepthID.id() ) );
+    list.append(new KoScaleColorConversionTransformationFactory< YCbCrU16Traits, KoYCbCrTraits<quint8> >( YCbCrAColorModelID.id(), Integer16BitsColorDepthID.id(), Integer8BitsColorDepthID.id() ) );
     
     return list;
 }

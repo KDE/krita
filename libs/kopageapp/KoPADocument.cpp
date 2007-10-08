@@ -43,7 +43,6 @@
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"
 #include "KoPASavingContext.h"
-#include "KoPAStyles.h"
 #include "KoPALoadingContext.h"
 
 #include <kdebug.h>
@@ -177,9 +176,7 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     bodyWriter->endElement(); // office:odfTagName()
     bodyWriter->endElement(); // office:body
 
-    contentWriter->startElement( "office:automatic-styles" );
-    saveOdfAutomaticStyles( *contentWriter, mainStyles, false );
-    contentWriter->endElement();
+    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
 
     oasisStore.closeContentWriter();
 
@@ -208,7 +205,7 @@ void KoPADocument::saveOdfAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyl
         ( *it ).style->writeStyle( &contentWriter, mainStyles, "style:style", ( *it ).name , "style:graphic-properties" );
     }
 
-    styles = mainStyles.styles( KoPAStyles::STYLE_PAGE, stylesDotXml );
+    styles = mainStyles.styles( KoGenStyle::StyleDrawingPage, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         //qDebug() << "style:style" << ( *it ).name;
@@ -229,6 +226,10 @@ void KoPADocument::saveOdfDocumentStyles( KoStore * store, KoShapeSavingContext 
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
     KoGenStyles & mainStyles = context.mainStyles();
 
+#if 1
+    mainStyles.saveOdfDocumentStyles( stylesWriter );
+    mainStyles.saveOdfAutomaticStyles( stylesWriter, true );
+#else
     stylesWriter->startElement( "office:styles" );
 
     KoShapeStyleWriter styleHandler( context );
@@ -239,6 +240,7 @@ void KoPADocument::saveOdfDocumentStyles( KoStore * store, KoShapeSavingContext 
     stylesWriter->startElement( "office:automatic-styles" );
     saveOdfAutomaticStyles( *stylesWriter, mainStyles, true );
     stylesWriter->endElement(); // office:automatic-styles
+#endif
 
     stylesWriter->addCompleteElement( masterStyles );
 

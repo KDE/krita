@@ -19,7 +19,6 @@
 
 #include "KoPAPageBase.h"
 #include "KoPASavingContext.h"
-#include "KoPAStyles.h"
 #include "KoPALoadingContext.h"
 
 #include <QDebug>
@@ -105,7 +104,7 @@ void KoPAPageBase::saveOdfShapes( KoShapeSavingContext &context ) const
 
 QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext &paContext ) const
 {
-    KoGenStyle style( KoPAStyles::STYLE_PAGE, "drawing-page" );
+    KoGenStyle style( KoGenStyle::StyleDrawingPage, "drawing-page" );
 
     if ( paContext.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
         style.setAutoStyleInStylesDotXml( true );

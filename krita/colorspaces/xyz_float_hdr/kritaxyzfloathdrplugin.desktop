@@ -10,6 +10,7 @@ Name[sv]=XYZ-färgmodell (16-bitars flyttal och 32-bitars HDR)
 Name[x-test]=xxXYZ (float 16-bit and 32-bit HDR) Color Modelxx
 Name[zh_TW]=XYZ（浮點 16 位元與 32 位元 HDR）色彩模型
 Comment=Color model for 16-bit and 32-bit per channel in floating point for High-Dynamic Range XYZ images
+Comment[de]=Farbmodell für 16-bit und 32-bit pro Kanal in Fließkomma für High-Dynamic Range XYZ-Bilder
 Comment[el]=Χρωματικό μοντέλο για 16-bit και 32-bit δεκαδικούς ανά κανάλι για εικόνες XYZ υψηλού δυναμικού εύρους (HDR)
 Comment[es]=Modelo de color para imágenes XYZ de intervalo muy dinámico de 16 y 32 bits por canal en coma flotante
 Comment[ja]=16 ビットおよび 32 ビット浮動小数点数/チャンネルのハイダイナミックレンジ XYZ 画像のためのカラーモデル

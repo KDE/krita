@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,7 +41,7 @@ static int compareMap( const QMap<QString, QString>& map1, const QMap<QString, Q
 }
 
 
-KoGenStyle::KoGenStyle( int type, const char* familyName,
+KoGenStyle::KoGenStyle( Type type, const char* familyName,
                         const QString& parentName )
     : m_type( type ), m_familyName( familyName ), m_parentName( parentName ),
       m_autoStyleInStylesDotXml( false ), m_defaultStyle( false )

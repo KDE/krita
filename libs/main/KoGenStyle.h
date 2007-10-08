@@ -40,51 +40,47 @@ class KOMAIN_EXPORT KoGenStyle
 public:
     /**
      * Possible values for the "type" argument of the KoGenStyle constructor.
-     * Those values can be extended by applications (starting at StyleFirstCustom),
-     * it's for their own consumption anyway.
      * If there is a still missing add it here so that it is possible to use the same
      * saving code in all applications.
      */
     enum Type {
-           StylePageLayout = 0,         ///< style:page-layout as in odf 14.3 Page Layout
-           StyleUser = 1,               ///< style:style with style:paragraph-properties as in odf 14.1 Style Element (office:styles)
-           StyleAuto = 2,               ///< style:style with style:paragraph-properties as in odf 14.1 Style Element
-           StyleMaster = 3,             ///< TODO remove This has to be done differently
-           StyleList = 4,               ///< text:list-style as in odf 14.10 List Style (office:styles)
-           StyleAutoList = 5,           ///< text:list-style as in odf 14.10 List Style
-           StyleNumericNumber = 6,      ///< number:number-style as in odf 14.7.1 Number Style
-           StyleNumericDate = 7,        ///< number:date-style as in odf 14.7.4 Date Style
-           StyleNumericTime = 8,        ///< number:time-style as in odf 14.7.5 Time Style
-           StyleNumericFraction = 9,    ///< number:number-style as in odf 14.7.1 Number Style
-           StyleNumericPercentage = 10, ///< number:percentage-style as in odf 14.7.3 Percentage Style
-           StyleNumericScientific = 11, ///< number:number-style as in odf 14.7.1 Number Style
-           StyleNumericCurrency = 12,   ///< number:currency-style as in odf 14.7.2 Currency Style
-           StyleNumericText = 13,       ///< number:text-style 14.7.7 Text Style not used
-           StyleHatch = 14,             ///< draw:hatch as in odf 14.14.3 Hatch (office:styles)
-           StyleGraphicAuto = 15,       ///< style:style with style:graphic-properties as in 14.13.1 Graphic and Presentation Styles 
-           StylePresentationAuto = 16,  ///< style:style with style:graphic-properties as in 14.13.1 Graphic and Presentation Styles 
-           StyleStrokeDash = 17,        ///< draw:stroke-dash as in odf 14.14.7 Stroke Dash (office:styles)
-           StyleGradient = 18,          ///< draw:gradient as in odf 14.14.1 Gradient (office:styles)
-           StyleGradientLinear = 19,    ///< svg:linearGradient as in odf 14.14.2 SVG Gradients (office:styles)
-           StyleGradientRadial = 20,    ///< svg-radialGradient as in odf 14.14.2 SVG Gradients (office:styles)
-           StyleFillImage = 21,         ///< draw:fill-image as in odf 14.14.4 Fill Image (office:styles)
-           StyleDrawingPage = 22,       ///< style:drawing-page-properties as in odf 14.13.2 Drawing Page Style
-                                        ///< style:default-style as in odf 14.2 Default Styles
-                                        // TODO differently
-                                        /// 14.4 Master Pages 
+           StylePageLayout,             ///< style:page-layout as in odf 14.3 Page Layout
+           StyleUser,                   ///< style:style with style:paragraph-properties as in odf 14.1 Style Element (office:styles)
+           StyleAuto,                   ///< style:style with style:paragraph-properties as in odf 14.1 Style Element
+           StyleList,                   ///< text:list-style as in odf 14.10 List Style (office:styles)
+           StyleAutoList,               ///< text:list-style as in odf 14.10 List Style
+           StyleNumericNumber,          ///< number:number-style as in odf 14.7.1 Number Style
+           StyleNumericDate,            ///< number:date-style as in odf 14.7.4 Date Style
+           StyleNumericTime,            ///< number:time-style as in odf 14.7.5 Time Style
+           StyleNumericFraction,        ///< number:number-style as in odf 14.7.1 Number Style
+           StyleNumericPercentage,      ///< number:percentage-style as in odf 14.7.3 Percentage Style
+           StyleNumericScientific,      ///< number:number-style as in odf 14.7.1 Number Style
+           StyleNumericCurrency,        ///< number:currency-style as in odf 14.7.2 Currency Style
+           StyleNumericText,            ///< number:text-style 14.7.7 Text Style not used
+           StyleHatch,                  ///< draw:hatch as in odf 14.14.3 Hatch (office:styles)
+           StyleGraphicAuto,            ///< style:style with style:graphic-properties as in 14.13.1 Graphic and Presentation Styles 
+           StylePresentationAuto,       ///< style:style with style:graphic-properties as in 14.13.1 Graphic and Presentation Styles 
+           StyleStrokeDash,             ///< draw:stroke-dash as in odf 14.14.7 Stroke Dash (office:styles)
+           StyleGradient,               ///< draw:gradient as in odf 14.14.1 Gradient (office:styles)
+           StyleGradientLinear,         ///< svg:linearGradient as in odf 14.14.2 SVG Gradients (office:styles)
+           StyleGradientRadial,         ///< svg-radialGradient as in odf 14.14.2 SVG Gradients (office:styles)
+           StyleFillImage,              ///< draw:fill-image as in odf 14.14.4 Fill Image (office:styles)
+           StyleDrawingPage,            ///< style:drawing-page-properties as in odf 14.13.2 Drawing Page Style
+           StyleNumericBoolean,         ///< number:boolean 14.7.6 Boolean Style not used
+           StyleOpacity,                ///< draw:opacity as in odf 14.14.5 Opacity Gradient not used
+           StyleMarker,                 ///< draw:marker as in odf 14.14.6 Marker
+           StyleAutoTable,              ///< style:table-properties as in odf 15.8 Table Formatting Properties // office:style needed?
+           StyleTableColumn,            ///< style:table-column-properties as in odf 15.9 Column Formatting Properties (office:style)
+           StyleAutoTableColumn,        ///< style:table-column-properties as in odf 15.9 Column Formatting Properties
+           StyleTableRow,               ///< style:table-row-properties as in odf 15.10 Table Row Formatting Properties (office:style)
+           StyleAutoTableRow,           ///< style:table-row-properties as in odf 15.10 Table Row Formatting Properties
+           StyleTableCell,              ///< style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:style)
+           StyleAutoTableCell,          ///< style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties
+                                        //   TODO differently
+           StyleMaster                  ///< 14.4 Master Pages
+                                        /// style:default-style as in odf 14.2 Default Styles
                                         /// 14.5 Table Templates
                                         /// 14.6 Font Face Declaration
-           StyleNumericBoolean,         /// number:boolean 14.7.6 Boolean Style not used
-           StyleOpacity,                /// draw:opacity as in odf 14.14.5 Opacity Gradient not used
-           StyleMarker,                 /// draw:marker as in odf 14.14.6 Marker
-           StyleAutoTable,              /// style:table-properties as in odf 15.8 Table Formatting Properties // office:style needed?
-           StyleTableColumn,            /// style:table-column-properties as in odf 15.9 Column Formatting Properties (office:style)
-           StyleAutoTableColumn,        /// style:table-column-properties as in odf 15.9 Column Formatting Properties
-           StyleTableRow,               /// style:table-row-properties as in odf 15.10 Table Row Formatting Properties (office:style)
-           StyleAutoTableRow,           /// style:table-row-properties as in odf 15.10 Table Row Formatting Properties
-           StyleTableCell,              /// style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:style)
-           StyleAutoTableCell,          /// style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties
-           StyleFirstCustom = 2500      ///< the first style for applications to use StyleFirstCustom IS DEPRECATED
     };
 
     /**
@@ -99,7 +95,7 @@ public:
      *
      * @param parentName If set, name of the parent style from which this one inherits.
      */
-    explicit KoGenStyle( int type = 0, const char* familyName = 0,
+    explicit KoGenStyle( Type type = StylePageLayout, const char* familyName = 0,
                          const QString& parentName = QString() );
     ~KoGenStyle();
 
@@ -125,7 +121,7 @@ public:
     bool isDefaultStyle() const { return m_defaultStyle; }
 
     /// Return the type of this style, as set in the constructor
-    int type() const { return m_type; }
+    Type type() const { return m_type; }
 
     /// Return the family name
     const char* familyName() const { return m_familyName.data(); }
@@ -322,7 +318,7 @@ private:
 private:
     // Note that the copy constructor and assignment operator are allowed.
     // Better not use pointers below!
-    int m_type;
+    Type m_type;
     QByteArray m_familyName;
     QString m_parentName;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)

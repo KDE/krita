@@ -40,7 +40,7 @@ int main(char argc, char** argv)
                          ki18n("Output the graph of color conversion of pigment's Color Conversion"),
                          KAboutData::License_LGPL,
                          ki18n("(c) 2007 Cyrille Berger"),
-                         ki18n(""),
+                         KLocalizedString(),
                          "www.koffice.org",
                          "submit@bugs.kde.org");
     KCmdLineArgs::init( argc, argv, &aboutData );

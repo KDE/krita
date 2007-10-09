@@ -21,11 +21,27 @@
 #include "PageVariable.h"
 
 #include <KoProperties.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 PageVariableFactory::PageVariableFactory(QObject *parent)
     : KoInlineObjectFactory(parent, "page")
 {
+    KoInlineObjectTemplate var1;
+    var1.id = "pagecount";
+    var1.name = i18n("Page Count");
+    KoProperties *props = new KoProperties();
+    props->setProperty("count", true);
+    var1.properties = props;
+    addTemplate(var1);
+
+    KoInlineObjectTemplate var2;
+    var2.id = "pagenumber";
+    var2.name = i18n("Page Number");
+    props = new KoProperties();
+    props->setProperty("count", false);
+    var2.properties = props;
+    addTemplate(var2);
 }
 
 KoInlineObject *PageVariableFactory::createInlineObject(const KoProperties *properties) const {

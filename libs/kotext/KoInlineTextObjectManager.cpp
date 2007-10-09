@@ -58,8 +58,12 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     m_objects.insert(m_lastObjectId, object);
     object->setManager(this);
     object->setup();
-    if(object->propertyChangeListener())
+    if(object->propertyChangeListener()) {
         m_listeners.append(object);
+        QHash<int, QVariant>::iterator i;
+        for (i = m_properties.begin(); i != m_properties.end(); ++i)
+            object->propertyChanged((KoInlineObject::Property)(i.key()), i.value());
+    }
 
     KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
     if (bookmark &&

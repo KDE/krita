@@ -27,6 +27,7 @@
 // Dynamic Brush lib includes
 #include "kis_dynamic_coloring.h"
 #include "kis_dynamic_program_factory_registry.h"
+#include "kis_dynamic_sensor.h"
 #include "kis_dynamic_shape.h"
 #include "kis_dynamic_transformation.h"
 #include "kis_dynamic_transformations_factory.h"
@@ -50,19 +51,27 @@ KisBasicDynamicProgram::KisBasicDynamicProgram(const QString& name) : KisDynamic
     m_sizeMinimum(0),
     m_sizeMaximum(200),
     m_sizeJitter(0),
+    m_sizeSensor(0),
     m_angleEnabled(false),
     m_angleJitter(0),
+    m_angleSensor(0),
     m_scatterEnabled(false),
     m_scatterAmount(0),
     m_scatterJitter(0),
+    m_scatterSensor(0),
     m_enableCout(false),
     m_countCount(1),
-    m_countJitter(0)
+    m_countJitter(0),
+    m_countSensor(0)
 {
 }
 
 KisBasicDynamicProgram::~KisBasicDynamicProgram()
 {
+    delete m_sizeSensor;
+    delete m_angleSensor;
+    delete m_scatterSensor;
+    delete m_countSensor;
 }
 
 void KisBasicDynamicProgram::apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo)
@@ -103,6 +112,14 @@ void KisBasicDynamicProgram::fromXML(const QDomElement& elt)
                 setEnableCount(kpc.getInt( "countEnabled", 0) );
                 setCountCount(kpc.getInt( "countCount", 0) );
                 setCountJitter(kpc.getInt( "countJitter", 0) );
+            } else if (e.tagName() == "sizeSensor") {
+                m_sizeSensor = KisDynamicSensor::createFromXML(e);
+            } else if (e.tagName() == "angleSensor") {
+                m_angleSensor = KisDynamicSensor::createFromXML(e);
+            } else if (e.tagName() == "scatterSensor") {
+                m_scatterSensor = KisDynamicSensor::createFromXML(e);
+            } else if (e.tagName() == "countSensor") {
+                m_countSensor = KisDynamicSensor::createFromXML(e);
             }
         }
         n = n.nextSibling();
@@ -128,6 +145,30 @@ void KisBasicDynamicProgram::toXML(QDomDocument& doc, QDomElement& rootElt) cons
     QDomElement paramsElt = doc.createElement( "params" );
     rootElt.appendChild( paramsElt );
     kpc.toXML( doc, paramsElt);
+    if(m_sizeSensor)
+    {
+        QDomElement eSensor = doc.createElement( "sizeSensor" );
+        m_sizeSensor->toXML( doc, eSensor);
+        rootElt.appendChild( eSensor );
+    }
+    if(m_angleSensor)
+    {
+        QDomElement eSensor = doc.createElement( "angleSensor" );
+        m_angleSensor->toXML( doc, eSensor);
+        rootElt.appendChild( eSensor );
+    }
+    if(m_scatterSensor)
+    {
+        QDomElement eSensor = doc.createElement( "scatterSensor" );
+        m_scatterSensor->toXML( doc, eSensor);
+        rootElt.appendChild( eSensor );
+    }
+    if(m_countSensor)
+    {
+        QDomElement eSensor = doc.createElement( "countSensor" );
+        m_countSensor->toXML( doc, eSensor);
+        rootElt.appendChild( eSensor );
+    }
     KisDynamicProgram::toXML(doc, rootElt);
 }
 
@@ -174,6 +215,16 @@ void KisBasicDynamicProgram::setSizeJitter(int sj)
     emit(programChanged());
 }
 
+KisDynamicSensor* KisBasicDynamicProgram::sizeSensor() const
+{
+    return m_sizeSensor;
+}
+void KisBasicDynamicProgram::setSizeSensor(KisDynamicSensor* s)
+{
+    m_sizeSensor = s;
+    emit(programChanged());
+}
+
 bool KisBasicDynamicProgram::isAngleEnabled() const
 {
     return m_angleEnabled;
@@ -193,6 +244,16 @@ int KisBasicDynamicProgram::angleJitter() const
 void KisBasicDynamicProgram::setAngleJitter(int aj)
 {
     m_angleJitter = aj;
+    emit(programChanged());
+}
+
+KisDynamicSensor* KisBasicDynamicProgram::angleSensor() const
+{
+    return m_angleSensor;
+}
+void KisBasicDynamicProgram::setAngleSensor(KisDynamicSensor* s)
+{
+    m_angleSensor = s;
     emit(programChanged());
 }
 
@@ -230,6 +291,16 @@ void KisBasicDynamicProgram::setScatterJitter(int sj)
     emit(programChanged());
 }
 
+KisDynamicSensor* KisBasicDynamicProgram::scatterSensor() const
+{
+    return m_scatterSensor;
+}
+void KisBasicDynamicProgram::setScatterSensor(KisDynamicSensor* s)
+{
+    m_scatterSensor = s;
+    emit(programChanged());
+}
+
 bool KisBasicDynamicProgram::isCountEnabled() const
 {
     return m_enableCout;
@@ -260,6 +331,16 @@ int KisBasicDynamicProgram::countJitter() const
 void KisBasicDynamicProgram::setCountJitter(int cj)
 {
     m_countJitter = cj;
+    emit(programChanged());
+}
+
+KisDynamicSensor* KisBasicDynamicProgram::countSensor() const
+{
+    return m_countSensor;
+}
+void KisBasicDynamicProgram::setCountSensor(KisDynamicSensor* s)
+{
+    m_countSensor = s;
     emit(programChanged());
 }
 

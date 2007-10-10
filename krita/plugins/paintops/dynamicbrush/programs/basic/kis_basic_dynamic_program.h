@@ -22,6 +22,7 @@
 
 #include <QList>
 
+class KisDynamicSensor;
 class KisDynamicTransformation;
 
 class KisBasicDynamicProgram : public KisDynamicProgram {
@@ -44,41 +45,53 @@ class KisBasicDynamicProgram : public KisDynamicProgram {
         int sizeMinimum() const;
         int sizeMaximum() const;
         int sizeJitter() const;
+        KisDynamicSensor* sizeSensor() const;
         bool isAngleEnabled() const;
         int angleJitter() const;
+        KisDynamicSensor* angleSensor() const;
         bool isScatterEnabled() const;
         int scatterAmount() const;
         int scatterJitter() const;
+        KisDynamicSensor* scatterSensor() const;
         bool isCountEnabled() const;
         int countCount() const;
         int countJitter() const;
+        KisDynamicSensor* countSensor() const;
     public slots:
         void setEnableSize(bool );
         void setSizeMinimum(int );
         void setSizeMaximum(int );
         void setSizeJitter(int );
+        void setSizeSensor(KisDynamicSensor* );
         void setEnableAngle(bool );
         void setAngleJitter(int );
+        void setAngleSensor(KisDynamicSensor* );
         void setEnableScatter(bool );
         void setScatterAmount(int );
         void setScatterJitter(int );
+        void setScatterSensor(KisDynamicSensor* );
         void setEnableCount(bool );
         void setCountCount(int );
         void setCountJitter(int );
+        void setCountSensor(KisDynamicSensor* );
     private:
         QList<KisDynamicTransformation*> m_transformations;
         bool m_sizeEnabled;
         int m_sizeMinimum;
         int m_sizeMaximum;
         int m_sizeJitter;
+        KisDynamicSensor* m_sizeSensor;
         bool m_angleEnabled;
         int m_angleJitter;
-        int m_scatterEnabled;
+        KisDynamicSensor* m_angleSensor;
+        bool m_scatterEnabled;
         int m_scatterAmount;
         int m_scatterJitter;
+        KisDynamicSensor* m_scatterSensor;
         bool m_enableCout;
         int m_countCount;
         int m_countJitter;
+        KisDynamicSensor* m_countSensor;
 };
 
 class KisBasicDynamicProgramFactory : public KisDynamicProgramFactory {

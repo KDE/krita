@@ -144,8 +144,6 @@ double KoUnit::fromUserValue( double value ) const
         return INCH_TO_POINT( value );
     case Pica:
         return PI_TO_POINT( value );
-    case Didot:
-        return DD_TO_POINT( value );
     case Cicero:
         return CC_TO_POINT( value );
     case Pixel:

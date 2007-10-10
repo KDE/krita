@@ -48,7 +48,6 @@ class KoXmlWriter;
 #define POINT_TO_DD(px)((px)*0.006490083)
 #define POINT_TO_CC(px)((px)*0.077880997)
 #define PI_TO_POINT(pi)((pi)*12)
-#define DD_TO_POINT(dd)((dd)*154.08124)
 #define CC_TO_POINT(cc)((cc)*12.840103)
 /**
  * %KOffice stores everything in pt (using "double") internally.

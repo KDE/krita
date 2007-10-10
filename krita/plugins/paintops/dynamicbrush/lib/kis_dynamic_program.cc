@@ -20,6 +20,8 @@
 
 #include <QDomElement>
 
+#include <kdebug.h>
+
 #include "kis_filters_list_dynamic_program.h"
 
 struct KisDynamicProgram::Private {
@@ -96,6 +98,7 @@ KisSerializableConfiguration* KisDynamicProgramsFactory::create(const QDomElemen
     QString type = e.attribute("type", "");
     QString name = e.attribute("name", "");
     KisDynamicProgramFactory* factory = KisDynamicProgramFactoryRegistry::instance()->value( type );
+    kDebug() << "Type is : " << type;
     Q_ASSERT(factory);
     KisDynamicProgram* program = factory->program( name );
     Q_ASSERT(program);

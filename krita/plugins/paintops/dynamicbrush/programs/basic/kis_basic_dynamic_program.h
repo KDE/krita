@@ -25,6 +25,7 @@
 class KisDynamicTransformation;
 
 class KisBasicDynamicProgram : public KisDynamicProgram {
+    Q_OBJECT
     public:
         KisBasicDynamicProgram(const QString& name) : KisDynamicProgram(name, "basic")
         {
@@ -40,8 +41,46 @@ class KisBasicDynamicProgram : public KisDynamicProgram {
         virtual QWidget* createEditor(QWidget* parent);
         virtual void fromXML(const QDomElement&);
         virtual void toXML(QDomDocument&, QDomElement&) const;
+    public:
+        bool isSizeEnabled() const;
+        int sizeMinimum() const;
+        int sizeMaximum() const;
+        int sizeJitter() const;
+        bool isAngleEnabled() const;
+        int angleJitter() const;
+        bool isScatterEnabled() const;
+        int scatterAmount() const;
+        int scatterJitter() const;
+        bool isCountEnabled() const;
+        int countCount() const;
+        int countJitter() const;
+    public slots:
+        void setEnableSize(bool );
+        void setSizeMinimum(int );
+        void setSizeMaximum(int );
+        void setSizeJitter(int );
+        void setEnableAngle(bool );
+        void setAngleJitter(int );
+        void setEnableScatter(bool );
+        void setScatterAmount(int );
+        void setScatterJitter(int );
+        void setEnableCount(bool );
+        void setCountCount(int );
+        void setCountJitter(int );
     private:
         QList<KisDynamicTransformation*> m_transformations;
+        bool m_sizeEnabled;
+        int m_sizeMinimum;
+        int m_sizeMaximum;
+        int m_sizeJitter;
+        bool m_angleEnabled;
+        int m_angleJitter;
+        int m_scatterEnabled;
+        int m_scatterAmount;
+        int m_scatterJitter;
+        bool m_enableCout;
+        int m_countCount;
+        int m_countJitter;
 };
 
 class KisBasicDynamicProgramFactory : public KisDynamicProgramFactory {

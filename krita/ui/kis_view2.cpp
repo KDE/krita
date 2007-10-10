@@ -182,6 +182,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->canvas = new KisCanvas2( m_d->viewConverter, this, doc->shapeController() );
     m_d->canvasController->setCanvas( m_d->canvas );
     m_d->resourceProvider = new KisResourceProvider( this );
+    m_d->resourceProvider->setCanvasResourceProvider(m_d->canvas->resourceProvider());
     createManagers();
 
     createActions();

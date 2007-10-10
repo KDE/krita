@@ -150,7 +150,7 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     setActiveRange(0, 0);
     setShowMousePosition(false);
     setShowSelectionBorders(false);
-    setShowIndents(false); 
+    setShowIndents(false);
     setShowTabs(false);
 
     setRightToLeft(false);
@@ -317,7 +317,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
                 }
 
                 QString numberText = QString::number(stepCount * numberStep);
-                if (d->m_rightToLeft) // this is done in a hacky way with the fine tuning done above 
+                if (d->m_rightToLeft) // this is done in a hacky way with the fine tuning done above
                     numberText = QString::number(hackyLength - stepCount * numberStep);
                 painter.drawText(QPointF(pos - 0.5*fontMetrics.width(numberText), rectangle.bottom() -12), numberText);
 
@@ -650,7 +650,6 @@ double KoRuler::numberStepForUnit() const
     double numberStep;
 
     switch(d->m_unit.indexInList()) {
-        case KoUnit::Didot:
         case KoUnit::Inch:
         case KoUnit::Centimeter:
         case KoUnit::Decimeter:
@@ -756,14 +755,14 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
             d->m_selectOffset = x - pos.x();
             d->m_selected = 1;
         }
-    
+
         x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_paragraphIndent)
                             + d->m_offset);
         if (pos.x() >= x-10 && pos.x() <= x && pos.y() > height()-10) {
             d->m_selectOffset = x - pos.x();
             d->m_selected = 2;
         }
-    
+
         x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_endIndent)
                             + d->m_offset);
         if (pos.x() >= x && pos.x() <= x+10 && pos.y() > height()-10) {
@@ -777,14 +776,14 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
             d->m_selectOffset = x - pos.x();
             d->m_selected = 1;
         }
-    
+
         x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_paragraphIndent)
                             + d->m_offset);
         if (pos.x() >= x && pos.x() <= x+10 && pos.y() > height()-10) {
             d->m_selectOffset = x - pos.x();
             d->m_selected = 2;
         }
-    
+
         x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_endIndent)
                             + d->m_offset);
         if (pos.x() >= x-10 && pos.x() <= x && pos.y() > height()-10) {

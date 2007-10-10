@@ -45,7 +45,6 @@ class KoXmlWriter;
 #define MM_TO_INCH(mm) ((mm)*0.039370147)
 #define INCH_TO_MM(inch) ((inch)*25.399956)
 #define POINT_TO_PI(px)((px)*0.083333333)
-#define POINT_TO_DD(px)((px)*0.006490083)
 #define POINT_TO_CC(px)((px)*0.077880997)
 #define PI_TO_POINT(pi)((pi)*12)
 #define CC_TO_POINT(cc)((cc)*12.840103)
@@ -65,7 +64,6 @@ public:
         Centimeter = 3,
         Decimeter = 4,
         Pica = 5, // pica
-        Didot = 6, // didot
         Cicero = 7, // cicero
         Pixel = 8, // pixel (not really used yet
 // XXX update LastUnit and rulers to allow for the new Pixel!
@@ -150,21 +148,6 @@ public:
     static double toPica( double ptValue ) {
         // "pi" values are rounded to 0.00001 inches
         return floor( POINT_TO_PI( ptValue ) * 100000.0 ) / 100000.0;
-    }
-
-
-    /// Deprecated use toDidot()
-    static double KDE_DEPRECATED toDD( double ptValue ) {
-        return toDidot(ptValue);
-    }
-
-    /**
-     * Prepare ptValue to be displayed in didot
-     * This method will round to 0.00001 precision, use POINT_TO_DD() for lossless conversion.
-     */
-    static double toDidot( double ptValue ) {
-        // "dd" values are rounded to 0.00001 inches
-        return floor( POINT_TO_DD( ptValue ) * 100000.0 ) / 100000.0;
     }
 
 

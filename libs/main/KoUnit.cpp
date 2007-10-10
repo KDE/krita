@@ -62,8 +62,6 @@ QString KoUnit::unitDescription( KoUnit _unit )
         return i18n("Inches (in)");
     case KoUnit::Pica:
         return i18n("Pica (pi)");
-    case KoUnit::Didot:
-        return i18n("Didot (dd)");
     case KoUnit::Cicero:
         return i18n("Cicero (cc)");
     case KoUnit::Point:
@@ -88,8 +86,6 @@ double KoUnit::toUserValue( double ptValue )
         return toInch( ptValue );
     case Pica:
         return toPica( ptValue );
-    case Didot:
-        return toDidot( ptValue );
     case Cicero:
         return toCicero( ptValue );
     case Pixel:
@@ -114,8 +110,6 @@ double KoUnit::ptToUnit( const double ptValue, const KoUnit unit )
         return POINT_TO_INCH( ptValue );
     case Pica:
         return POINT_TO_PI( ptValue );
-    case Didot:
-        return POINT_TO_DD( ptValue );
     case Cicero:
         return POINT_TO_CC( ptValue );
     case Pixel:
@@ -205,7 +199,6 @@ KoUnit KoUnit::unit( const QString &_unitName, bool* ok )
     if ( _unitName == QString::fromLatin1( "in" )
          || _unitName == QString::fromLatin1("inch") /*compat*/ ) return KoUnit(Inch);
     if ( _unitName == QString::fromLatin1( "pi" ) ) return KoUnit(Pica);
-    if ( _unitName == QString::fromLatin1( "dd" ) ) return KoUnit(Didot);
     if ( _unitName == QString::fromLatin1( "cc" ) ) return KoUnit(Cicero);
     if ( _unitName == QString::fromLatin1( "pt" ) ) return KoUnit(Point);
     if ( ok )
@@ -220,7 +213,6 @@ QString KoUnit::unitName( KoUnit _unit )
     if ( _unit.m_unit == Decimeter ) return QString::fromLatin1( "dm" );
     if ( _unit.m_unit == Inch ) return QString::fromLatin1( "in" );
     if ( _unit.m_unit == Pica ) return QString::fromLatin1( "pi" );
-    if ( _unit.m_unit == Didot ) return QString::fromLatin1( "dd" );
     if ( _unit.m_unit == Cicero ) return QString::fromLatin1( "cc" );
     if ( _unit.m_unit == Pixel ) return QString::fromLatin1( "px" );
     return QString::fromLatin1( "pt" );

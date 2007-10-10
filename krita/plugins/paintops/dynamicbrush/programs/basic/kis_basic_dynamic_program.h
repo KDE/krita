@@ -27,9 +27,7 @@ class KisDynamicTransformation;
 class KisBasicDynamicProgram : public KisDynamicProgram {
     Q_OBJECT
     public:
-        KisBasicDynamicProgram(const QString& name) : KisDynamicProgram(name, "basic")
-        {
-        }
+        KisBasicDynamicProgram(const QString& name);
         ~KisBasicDynamicProgram();
         virtual void apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo);
         inline QList<KisDynamicTransformation*>::iterator beginTransformation() { return m_transformations.begin(); }

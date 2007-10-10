@@ -45,6 +45,22 @@ class Factory {
 
 static Factory factory;
 
+KisBasicDynamicProgram::KisBasicDynamicProgram(const QString& name) : KisDynamicProgram(name, "basic"),
+    m_sizeEnabled(false),
+    m_sizeMinimum(0),
+    m_sizeMaximum(200),
+    m_sizeJitter(0),
+    m_angleEnabled(false),
+    m_angleJitter(0),
+    m_scatterEnabled(false),
+    m_scatterAmount(0),
+    m_scatterJitter(0),
+    m_enableCout(false),
+    m_countCount(1),
+    m_countJitter(0)
+{
+}
+
 KisBasicDynamicProgram::~KisBasicDynamicProgram()
 {
 }
@@ -76,8 +92,8 @@ void KisBasicDynamicProgram::fromXML(const QDomElement& elt)
                 KisPropertiesConfiguration kpc;
                 kpc.fromXML(e);
                 setEnableSize(kpc.getBool( "sizeEnabled", false) );
-                setSizeMinimum(kpc.getDouble( "sizeMinimum", 0.0) );
-                setSizeMaximum(kpc.getDouble( "sizeMaximum", 2.0) );
+                setSizeMinimum(kpc.getInt( "sizeMinimum", 0) );
+                setSizeMaximum(kpc.getInt( "sizeMaximum", 200) );
                 setSizeJitter(kpc.getInt( "sizeJitter", 0) );
                 setEnableAngle(kpc.getBool( "angleEnabled", false) );
                 setAngleJitter(kpc.getInt( "angleJitter", 0) );

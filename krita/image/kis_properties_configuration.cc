@@ -46,7 +46,7 @@ KisPropertiesConfiguration::KisPropertiesConfiguration(const KisPropertiesConfig
 
 void KisPropertiesConfiguration::fromXML(const QString & s )
 {
-    kDebug() << "From XML (s) !!!!" << endl;
+//     kDebug() << "From XML (s) !!!!" << endl;
     clearProperties();
 
     QDomDocument doc;

@@ -27,10 +27,13 @@
 #ifndef koRuler_h
 #define koRuler_h
 
-#include <QWidget>
 
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
+#include <kdeversion.h>
 #include <KoUnit.h>
+
+#include <QWidget>
+#include <QTextOption>
 
 class QPaintEvent;
 
@@ -43,8 +46,8 @@ class KoRulerPrivate;
  */
 class KOGUIUTILS_EXPORT KoRuler : public QWidget
 {
-    Q_OBJECT
-    public:
+Q_OBJECT
+public:
         /**
          * Creates a ruler with the orientation @p orientation
          * @param parent parent widget
@@ -54,6 +57,7 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
         KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter);
         ~KoRuler();
 
+#if QT_VERSION < KDE_MAKE_VERSION(4,4,0) // remove when 4.4 is mandatory
         /// enum for a type of tabulator used
         enum TabType {
             LeftTab,        ///< A left-tab
@@ -61,10 +65,14 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
             CenterTab,      ///< A centered-tab
             DelimiterTab    ///< A tab stopping at a certain delimiter-character
         };
+#endif
 
         /// For paragraphs each tab definition is represented by this struct.
         struct Tab {
             double position;    ///< distance in point from the start of the text-shape
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+        QTextOption::
+#endif
             TabType type;       ///< Determine which type is used.
         };
 
@@ -195,7 +203,7 @@ signals:
          */
         void tabsChanged(bool final);
 
-    protected:
+protected:
         virtual void paintEvent(QPaintEvent* event);
         virtual void mousePressEvent ( QMouseEvent* ev );
         virtual void mouseReleaseEvent ( QMouseEvent* ev );
@@ -204,7 +212,7 @@ signals:
         /// @return The step in unit between numbers on the ruler
         double numberStepForUnit() const;
 
-    private:
+private:
         KoRulerPrivate * const d;
 };
 

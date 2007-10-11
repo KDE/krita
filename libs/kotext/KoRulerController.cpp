@@ -61,6 +61,7 @@ public:
         ruler->setRightToLeft(block.layout()->textOption().textDirection() == Qt::RightToLeft);
         ruler->setShowTabs(true);
 
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
         QList<KoRuler::Tab> tabs;
         QVariant variant = format.property(KoParagraphStyle::TabPositions);
         if(! variant.isNull()) {
@@ -68,11 +69,12 @@ public:
                 KoText::Tab textTab = var.value<KoText::Tab>();
                 KoRuler::Tab tab;
                 tab.position = textTab.position;
-                tab.type = static_cast<KoRuler::TabType> (textTab.type);
+                tab.type = textTab.type;
                 tabs.append(tab);
             }
         }
         ruler->updateTabs(tabs);
+#endif
     }
 
     void indentsChanged() {
@@ -93,15 +95,18 @@ public:
         if(! block.isValid())
             return;
         QList<QVariant> list;
+
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
         // TODO update the tabs from the parag instead of overwriting them, since this now causes massive dataloss.
         foreach(KoRuler::Tab tab, ruler->tabs()) { // TODO sort on position
             QVariant v;
             KoText::Tab textTab;
             textTab.position = tab.position;
-            textTab.type = static_cast<KoText::TabType> (tab.type);
+            textTab.type = tab.type;
             v.setValue(textTab);
             list.append(v);
         }
+#endif
 
         QTextCursor cursor(block);
         QTextBlockFormat bf = cursor.blockFormat();

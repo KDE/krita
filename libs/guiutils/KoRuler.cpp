@@ -33,24 +33,26 @@
 #include <KoViewConverter.h>
 
 class RulerTabChooser : public QWidget {
-    public:
-        RulerTabChooser(QWidget *parent) : QWidget(parent), m_type(KoRuler::LeftTab) {}
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+public:
+        RulerTabChooser(QWidget *parent) : QWidget(parent), m_type(QTextOption::LeftTab) {}
         virtual ~RulerTabChooser() {}
-        KoRuler::TabType type() {return m_type;}
+
+        QTextOption::TabType type() {return m_type;}
         void mousePressEvent(QMouseEvent *)
         {
             switch(m_type) {
-            case KoRuler::LeftTab:
-                m_type = KoRuler::RightTab;
+            case QTextOption::LeftTab:
+                m_type = QTextOption::RightTab;
                 break;
-            case KoRuler::RightTab:
-                m_type = KoRuler::CenterTab;
+            case QTextOption::RightTab:
+                m_type = QTextOption::CenterTab;
                 break;
-            case KoRuler::CenterTab:
-                m_type = KoRuler::DelimiterTab;
+            case QTextOption::CenterTab:
+                m_type = QTextOption::DelimiterTab;
                 break;
-            case KoRuler::DelimiterTab:
-                m_type = KoRuler::LeftTab;
+            case QTextOption::DelimiterTab:
+                m_type = QTextOption::LeftTab;
                 break;
             }
             update();
@@ -69,25 +71,25 @@ class RulerTabChooser : public QWidget {
             painter.translate(0,-height()/2+5);
 
             switch (m_type) {
-            case KoRuler::LeftTab:
+            case QTextOption::LeftTab:
                 polygon << QPointF(x+0.5, height() - 8.5)
                     << QPointF(x-5.5, height() - 2.5)
                     << QPointF(x+0.5, height() - 2.5);
                 painter.drawPolygon(polygon);
                 break;
-            case KoRuler::RightTab:
+            case QTextOption::RightTab:
                 polygon << QPointF(x+0.5, height() - 8.5)
                     << QPointF(x+6.5, height() - 2.5)
                     << QPointF(x+0.5, height() - 2.5);
                 painter.drawPolygon(polygon);
                 break;
-            case KoRuler::CenterTab:
+            case QTextOption::CenterTab:
                 polygon << QPointF(x+0.5, height() - 8.5)
                     << QPointF(x-5.5, height() - 2.5)
                     << QPointF(x+6.5, height() - 2.5);
                 painter.drawPolygon(polygon);
                 break;
-            case KoRuler::DelimiterTab:
+            case QTextOption::DelimiterTab:
                 polygon << QPointF(x-5.5, height() - 2.5)
                     << QPointF(x+0.5, height() - 8.5)
                     << QPointF(x+6.5, height() - 2.5);
@@ -98,13 +100,14 @@ class RulerTabChooser : public QWidget {
             }
         }
 
-    private:
-        KoRuler::TabType m_type;
+private:
+    QTextOption::TabType m_type;
+#endif
 };
 
 class KoRulerPrivate {
     public:
-    KoRulerPrivate(const KoViewConverter *vc) : m_viewConverter(vc), m_mouseCoordinate(-1) {}
+    KoRulerPrivate(const KoViewConverter *vc) : m_viewConverter(vc), m_mouseCoordinate(-1), m_tabChooser(0) {}
         KoUnit m_unit;
         Qt::Orientation m_orientation;
         const KoViewConverter* m_viewConverter;
@@ -159,11 +162,10 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
     updateMouseCoordinate(-1);
     d->m_selected = 0;
 
-    if(orientation == Qt::Horizontal) {
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+    if(orientation == Qt::Horizontal)
         d->m_tabChooser = new RulerTabChooser(parent);
-    } else {
-        d->m_tabChooser = 0;
-    }
+#endif
 }
 
 KoRuler::~KoRuler()
@@ -431,6 +433,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
             painter.setRenderHint( QPainter::Antialiasing, false );
         }
 
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
         if (d->m_showTabs) {
             QPolygonF polygon;
 
@@ -448,25 +451,25 @@ void KoRuler::paintEvent(QPaintEvent* event)
 
                 polygon.clear();
                 switch (t.type) {
-                case LeftTab:
+                case QTextOption::LeftTab:
                     polygon << QPointF(x+0.5, height() - 8.5)
                         << QPointF(x-5.5, height() - 2.5)
                         << QPointF(x+0.5, height() - 2.5);
                     painter.drawPolygon(polygon);
                     break;
-                case RightTab:
+                case QTextOption::RightTab:
                     polygon << QPointF(x+0.5, height() - 8.5)
                         << QPointF(x+6.5, height() - 2.5)
                         << QPointF(x+0.5, height() - 2.5);
                     painter.drawPolygon(polygon);
                     break;
-                case CenterTab:
+                case QTextOption::CenterTab:
                     polygon << QPointF(x+0.5, height() - 8.5)
                         << QPointF(x-5.5, height() - 2.5)
                         << QPointF(x+6.5, height() - 2.5);
                     painter.drawPolygon(polygon);
                     break;
-                case DelimiterTab:
+                case QTextOption::DelimiterTab:
                     polygon << QPointF(x-5.5, height() - 2.5)
                         << QPointF(x+0.5, height() - 8.5)
                         << QPointF(x+6.5, height() - 2.5);
@@ -478,6 +481,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
             }
             painter.setRenderHint( QPainter::Antialiasing, false );
         }
+#endif
     } else {
         if(d->m_offset > 0) {
             painter.translate(0, d->m_offset);
@@ -712,29 +716,30 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
                 x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + t.position)
                         + d->m_offset);
 
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
             switch (t.type) {
-            case LeftTab:
+            case QTextOption::LeftTab:
                 if (pos.x() >= x-6 && pos.x() <= x) {
                     d->m_selected = 4;
                     d->m_selectOffset = x - pos.x();
                     d->m_tabIndex = i;
                 }
                 break;
-            case RightTab:
+            case QTextOption::RightTab:
                 if (pos.x() >= x && pos.x() <= x+6) {
                     d->m_selected = 4;
                     d->m_selectOffset = x - pos.x();
                     d->m_tabIndex = i;
                 }
                 break;
-            case CenterTab:
+            case QTextOption::CenterTab:
                 if (pos.x() >= x-6 && pos.x() <= x+6) {
                     d->m_selected = 4;
                     d->m_selectOffset = x - pos.x();
                     d->m_tabIndex = i;
                 }
                 break;
-            case DelimiterTab:
+            case QTextOption::DelimiterTab:
                 if (pos.x() >= x-6 && pos.x() <= x+6) {
                     d->m_selected = 4;
                     d->m_selectOffset = x - pos.x();
@@ -744,6 +749,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
             default:
                 break;
             }
+#endif
             i++;
         }
     }
@@ -792,6 +798,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         }
     }
 
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     if (d->m_showTabs && d->m_selected == 0) {
         // still haven't found something so let assume the user wants to add a tab
         double tabpos = d->m_viewConverter->viewToDocumentX(pos.x() - d->m_offset)
@@ -803,6 +810,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         d->m_tabIndex = d->m_tabs.count() - 1;
         update();
     }
+#endif
 }
 
 void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )

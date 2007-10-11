@@ -45,7 +45,11 @@ QStringList KoText::underlineStyleList() {
 
 KoText::Tab::Tab()
     : position(0.),
-    type(LeftTab),
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+    type(QTextOption::LeftTab),
+#else
+    type(LeftTab), // remove when 4.4 is mandatory
+#endif
     leaderStyle(QTextCharFormat::NoUnderline),
     textStyleId(0)
 {

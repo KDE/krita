@@ -147,7 +147,7 @@ KoInlineTextObjectManager *KoTextDocumentLayout::inlineObjectTextManager() {
 QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const {
     // nobody calls this code and I have no way of implementing it anyway...
     Q_UNUSED(block);
-    kWarning() << "KoTextDocumentLayout::blockBoundingRect is not implemented";
+    //kWarning() << "KoTextDocumentLayout::blockBoundingRect is not implemented";
     return QRectF(0, 0, 10, 10);
 }
 
@@ -187,7 +187,6 @@ int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accu
         }
         for(int i=0; i < layout->lineCount(); i++) {
             QTextLine line = layout->lineAt(i);
-            updateTabsForLine(block, i);
             // kDebug() <<" + line[" << line.textStart() <<"]:" << line.y() <<"-" << line.height();
             if(point.y() > line.y() + line.height()) {
                 position = line.textStart() + line.textLength();
@@ -355,20 +354,6 @@ KoShape* KoTextDocumentLayout::shapeForPosition(int position) const {
             return shape;
     }
     return 0;
-}
-
-// static
-void KoTextDocumentLayout::updateTabsForLine(const QTextBlock &block, int lineNumber) {
-    if(! block.isValid()) return;
-    KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*> (block.userData());
-    if(blockData == 0) return;
-    QList<KoTextBlockData::TabLineData> tabsData = blockData->tabLineData();
-    if(tabsData.count() <= lineNumber) return;
-
-    KoTextBlockData::TabLineData tabs = tabsData[lineNumber];
-    QTextOption textOption = block.layout()->textOption();
-    textOption.setTabArray(tabs.tabs);
-    block.layout()->setTextOption(textOption);
 }
 
 #include "KoTextDocumentLayout.moc"

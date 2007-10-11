@@ -32,7 +32,6 @@ public:
     QString partialCounterText;
     QPointF counterPos;
     KoTextBlockBorderData *border;
-    QList<TabLineData> tabs;
 };
 
 KoTextBlockData::KoTextBlockData()
@@ -99,13 +98,5 @@ const QPointF &KoTextBlockData::counterPosition() const {
 
 KoTextBlockBorderData *KoTextBlockData::border() const {
     return d->border;
-}
-
-void KoTextBlockData::setTabLineData(const QList<KoTextBlockData::TabLineData> &lines) {
-    d->tabs = lines;
-}
-
-QList<KoTextBlockData::TabLineData> KoTextBlockData::tabLineData() const {
-    return d->tabs;
 }
 

@@ -67,11 +67,6 @@ public:
     /// return the exact text that will be painted as the counter
     QString counterText() const;
 
-    /// set a list of tab-data objects for this block.  One item per line.
-    void setTabLineData(const QList<KoTextBlockData::TabLineData> &lines);
-    /// return the tabLineData
-    QList<TabLineData> tabLineData() const;
-
     /**
      * set the text that is used for the counter at this level.
      * If this represents a parag with counter 3.1 then the text is the '1'

@@ -198,8 +198,6 @@ public:
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
 
-    static void updateTabsForLine(const QTextBlock &block, int lineNumber);
-
 public slots:
     /// make sure we start a layout run (returns immediately)
     void scheduleLayout();

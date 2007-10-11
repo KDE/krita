@@ -158,7 +158,7 @@ public:
      * This creates the office:automatic-styles tag containing all 
      * automatic styles.
      *
-     * @param contentWriter
+     * @param xmlWriter
      * @param stylesDotXml
      */
     void saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDotXml );
@@ -168,9 +168,18 @@ public:
      *
      * This creates the office:styles tag containing all document styles.
      *
-     * @param contentWriter
+     * @param xmlWriter
      */
     void saveOdfDocumentStyles( KoXmlWriter* xmlWriter );
+
+    /**
+     * Save master styles.
+     *
+     * This creates the office:master-styles tag containing all master styles.
+     *
+     * @param xmlWriter
+     */
+    void saveOdfMasterStyles( KoXmlWriter* xmlWriter );
 
 private:
     QString makeUniqueName( const QString& base, int flags ) const;

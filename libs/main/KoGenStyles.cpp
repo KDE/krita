@@ -244,3 +244,17 @@ void KoGenStyles::saveOdfDocumentStyles( KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement(); // office:styles
 }
+
+void KoGenStyles::saveOdfMasterStyles( KoXmlWriter* xmlWriter )
+{
+    xmlWriter->startElement( "office:master-styles" );
+
+    QList<KoGenStyles::NamedStyle> stylesList = styles( KoGenStyle::StyleMaster );
+    QList<KoGenStyles::NamedStyle>::const_iterator it = stylesList.begin();
+    for ( ; it != stylesList.end() ; ++it ) {
+        ( *it ).style->writeStyle( xmlWriter, *this, "style:master-page", ( *it ).name, 0 );
+    }
+
+    xmlWriter->endElement(); // office:styles
+}
+

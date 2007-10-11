@@ -29,8 +29,6 @@
 #include "kis_dynamic_program_factory_registry.h"
 #include "kis_dynamic_sensor.h"
 #include "kis_dynamic_shape.h"
-#include "kis_dynamic_transformation.h"
-#include "kis_dynamic_transformations_factory.h"
 
 // basic program includes
 #include "kis_basic_dynamic_program_editor.h"
@@ -77,12 +75,6 @@ KisBasicDynamicProgram::~KisBasicDynamicProgram()
 void KisBasicDynamicProgram::apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo)
 {
 
-}
-
-void KisBasicDynamicProgram::appendTransformation(KisDynamicTransformation* transfo) {
-    kDebug(41006) << "Append transfo : " << transfo->name();
-    m_transformations.append(transfo);
-    emit(programChanged());
 }
 
 QWidget* KisBasicDynamicProgram::createEditor(QWidget* /*parent*/)

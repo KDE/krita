@@ -23,7 +23,6 @@
 #include <QList>
 
 class KisDynamicSensor;
-class KisDynamicTransformation;
 
 class KisBasicDynamicProgram : public KisDynamicProgram {
     Q_OBJECT
@@ -31,12 +30,6 @@ class KisBasicDynamicProgram : public KisDynamicProgram {
         KisBasicDynamicProgram(const QString& name);
         ~KisBasicDynamicProgram();
         virtual void apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo);
-        inline QList<KisDynamicTransformation*>::iterator beginTransformation() { return m_transformations.begin(); }
-        inline QList<KisDynamicTransformation*>::iterator endTransformation() { return m_transformations.end(); }
-        inline KisDynamicTransformation* transfoAt(uint i) { return m_transformations[i]; }
-        inline void removeTransformationAt(uint i) { m_transformations.removeAt(i); }
-        inline uint countTransformations() const { return m_transformations.size(); }
-        void appendTransformation(KisDynamicTransformation* transfo);
         virtual QWidget* createEditor(QWidget* parent);
         virtual void fromXML(const QDomElement&);
         virtual void toXML(QDomDocument&, QDomElement&) const;
@@ -75,7 +68,6 @@ class KisBasicDynamicProgram : public KisDynamicProgram {
         void setCountJitter(int );
         void setCountSensor(KisDynamicSensor* );
     private:
-        QList<KisDynamicTransformation*> m_transformations;
         bool m_sizeEnabled;
         int m_sizeMinimum;
         int m_sizeMaximum;

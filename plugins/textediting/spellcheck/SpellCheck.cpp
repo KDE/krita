@@ -163,15 +163,12 @@ void SpellCheck::highlightMisspelled(const QString &word, int startPosition, boo
 {
     // TODO: Exception, such as words that contain numbers, numbers
     // kDebug(31000) << "Highlighting: " << word << " : " << startPosition;
-    m_document->blockSignals(true);
     m_cursor.setPosition(startPosition);
     m_cursor.setPosition(startPosition + word.trimmed().length(), QTextCursor::KeepAnchor);
 
     QTextCharFormat format;
     format.setProperty(KoCharacterStyle::Spelling, misspelled);
     m_cursor.mergeCharFormat(format);
-
-    m_document->blockSignals(false);
 }
 
 void SpellCheck::dequeueDocument()

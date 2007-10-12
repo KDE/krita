@@ -111,7 +111,7 @@ void KisFilterManager::updateGUI()
     KisLayerSP layer = d->view->activeLayer();
     KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>( layer.data()));
 
-    bool enable = player or (  not (layer->locked() or  not layer->visible()) );
+    bool enable = player and (not layer->locked()) and layer->visible();
     
     d->reapplyAction->setEnabled(enable);
     

@@ -21,9 +21,11 @@
 #include <QTest>
 #include <QCoreApplication>
 
+
 #include <qtest_kde.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <ktemporaryfile.h>
 
@@ -45,6 +47,7 @@ void KisFilesTest::testFiles()
             KisDoc2 doc;
             doc.import( sourceFileInfo.absoluteFilePath() );
             QVERIFY(doc.image());
+            doc.image()->convertTo( KoColorSpaceRegistry::instance()->rgb8());
             KTemporaryFile tmpFile;
             tmpFile.setSuffix(".png");
             tmpFile.open();

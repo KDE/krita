@@ -25,9 +25,9 @@ class KoGenStyles;
 
 class KOMAIN_EXPORT KoSavingContext
 {
-public:    
+public:
     enum SavingMode { Store, Flat };
-    
+
     /**
      * Constructor
      * @param mainStyles
@@ -38,7 +38,7 @@ public:
     ~KoSavingContext();
 
     KoGenStyles& mainStyles() { return m_mainStyles; }
-    
+
     /// @return the saving mode: Store (a KoStore will be used) or Flat (all data must be inline in the XML)
     SavingMode savingMode() const { return m_savingMode; }
 

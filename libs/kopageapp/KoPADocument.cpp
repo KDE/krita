@@ -229,6 +229,7 @@ void KoPADocument::saveOdfDocumentStyles( KoStore * store, KoShapeSavingContext 
 #if 1
     mainStyles.saveOdfDocumentStyles( stylesWriter );
     mainStyles.saveOdfAutomaticStyles( stylesWriter, true );
+    mainStyles.saveOdfMasterStyles( stylesWriter );
 #else
     stylesWriter->startElement( "office:styles" );
 
@@ -240,9 +241,9 @@ void KoPADocument::saveOdfDocumentStyles( KoStore * store, KoShapeSavingContext 
     stylesWriter->startElement( "office:automatic-styles" );
     saveOdfAutomaticStyles( *stylesWriter, mainStyles, true );
     stylesWriter->endElement(); // office:automatic-styles
-#endif
 
     stylesWriter->addCompleteElement( masterStyles );
+#endif
 
     stylesWriter->endElement(); // root element (office:document-styles)
     stylesWriter->endDocument();

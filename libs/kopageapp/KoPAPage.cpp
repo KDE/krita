@@ -38,18 +38,25 @@ KoPAPage::~KoPAPage()
 {
 }
 
+void KoPAPage::saveOdf( KoShapeSavingContext & context ) const
+{
+    KoPASavingContext &paContext = static_cast<KoPASavingContext&>( context );
+
+    paContext.xmlWriter().startElement( "draw:page" );
+    paContext.xmlWriter().addAttribute( "draw:id", "page" + QString::number( paContext.page() ) );
+    paContext.xmlWriter().addAttribute( "draw:master-page-name", paContext.masterPageName( m_masterPage ) );
+    paContext.xmlWriter().addAttribute( "draw:style-name", saveOdfPageStyle( paContext ) );
+
+    saveOdfPageContent( paContext );
+
+    paContext.xmlWriter().endElement();
+}
+
 KoPageLayout & KoPAPage::pageLayout()
 {
     Q_ASSERT( m_masterPage );
 
     return m_masterPage->pageLayout();
-}
-
-void KoPAPage::createOdfPageTag( KoPASavingContext &paContext ) const
-{
-    paContext.xmlWriter().startElement( "draw:page" );
-    paContext.xmlWriter().addAttribute( "draw:id", "page" + QString::number( paContext.page() ) );
-    paContext.xmlWriter().addAttribute( "draw:master-page-name", paContext.masterPageName( m_masterPage ) );
 }
 
 void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )

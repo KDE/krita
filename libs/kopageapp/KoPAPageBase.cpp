@@ -64,18 +64,11 @@ void KoPAPageBase::paintComponent(QPainter& painter, const KoViewConverter& conv
     Q_UNUSED(converter);
 }
 
-void KoPAPageBase::saveOdf( KoShapeSavingContext & context ) const
+void KoPAPageBase::saveOdfPageContent( KoPASavingContext & paContext ) const
 {
-    KoPASavingContext &paContext = static_cast<KoPASavingContext&>( context );
-    createOdfPageTag( paContext );
-
-    context.xmlWriter().addAttribute( "draw:style-name", saveOdfPageStyle( paContext ) );
-
-    saveOdfShapes( context );
+    saveOdfShapes( paContext );
     saveOdfAnimations( paContext );
-    saveOdfPresentationNotes();        
-
-    context.xmlWriter().endElement(); //draw:page
+    saveOdfPresentationNotes();
 }
 
 void KoPAPageBase::saveOdfShapes( KoShapeSavingContext &context ) const

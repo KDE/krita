@@ -19,6 +19,7 @@
 
 #include "KoPAMasterPage.h"
 
+#include <QBuffer>
 #include <KoGenStyle.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
@@ -39,27 +40,49 @@ KoPAMasterPage::~KoPAMasterPage()
 {
 }
 
-void KoPAMasterPage::createOdfPageTag( KoPASavingContext &paContext ) const
+void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
 {
+    KoPASavingContext &paContext = static_cast<KoPASavingContext&>( context );
+
     KoGenStyle pageLayoutStyle = pageLayout().saveOasis();
     pageLayoutStyle.setAutoStyleInStylesDotXml( true );
     pageLayoutStyle.addAttribute( "style:page-usage", "all" );
     QString pageLayoutName( paContext.mainStyles().lookup( pageLayoutStyle, "pm" ) );
 
-    paContext.xmlWriter().startElement( "style:master-page" );
-    paContext.xmlWriter().addAttribute( "style:name", pageTitle() );
-    paContext.addMasterPage( this, pageTitle() );
-    paContext.xmlWriter().addAttribute( "style:page-layout-name", pageLayoutName );
+    KoGenStyle pageMaster( KoGenStyle::StyleMaster );
+    pageMaster.addAttribute( "style:page-layout-name", pageLayoutName );
+    pageMaster.addAttribute( "style:display-name", pageTitle() );
+
+    KoXmlWriter &savedWriter = paContext.xmlWriter();
+
+    QBuffer buffer;
+    buffer.open( QIODevice::WriteOnly );
+    KoXmlWriter xmlWriter( &buffer );
+
+    paContext.setXmlWriter( xmlWriter );
+
+    saveOdfPageContent( paContext );
+
+    paContext.setXmlWriter( savedWriter );
+
+    QString contentElement = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    pageMaster.addChildElement( "content", contentElement );
+    paContext.addMasterPage( this, paContext.mainStyles().lookup( pageMaster, "Default" ) );
 }
 
 void KoPAMasterPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
 {
-    setPageTitle( element.attributeNS( KoXmlNS::style, "name" ) );
+    if ( element.hasAttributeNS( KoXmlNS::style, "display-name" ) ) {
+        setPageTitle( element.attributeNS( KoXmlNS::style, "display-name" ) );
+    }
+    else {
+        setPageTitle( element.attributeNS( KoXmlNS::style, "name" ) );
+    }
     QString pageLayoutName = element.attributeNS( KoXmlNS::style, "page-layout-name" );
     const KoOasisStyles& styles = loadingContext.koLoadingContext().oasisStyles();
     const KoXmlElement* masterPageStyle = styles.findStyle( pageLayoutName );
     KoPageLayout pageLayout = KoPageLayout::standardLayout();
-    
+
     if ( masterPageStyle ) {
         pageLayout.loadOasis( *masterPageStyle );
     }

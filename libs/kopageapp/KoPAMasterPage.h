@@ -32,6 +32,9 @@ public:
     explicit KoPAMasterPage();
     ~KoPAMasterPage();
 
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext & context ) const;
+
     /// @return the page layout set for this masterpage
     KoPageLayout & pageLayout() { return m_pageLayout; }
     const KoPageLayout & pageLayout() const { return m_pageLayout; }
@@ -40,11 +43,9 @@ public:
     void setPageLayout(const KoPageLayout& layout) { m_pageLayout = layout; }
 
 protected:
-    virtual void createOdfPageTag( KoPASavingContext &paContext ) const;
-
     /// Reimplemented from KoPageBase
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
-    
+
     KoPageLayout m_pageLayout;
 };
 

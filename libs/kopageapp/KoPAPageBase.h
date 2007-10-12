@@ -56,7 +56,7 @@ public:
      * @param context the pageapp saving context
      * @return true on success, false otherwise
      */
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf( KoShapeSavingContext & context ) const = 0;
 
     // reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
@@ -81,13 +81,9 @@ public:
 
 protected:
     /**
-     * @brief Create the page tag
-     *
-     * Master pages and normal pages use different tags
-     *
      * @param paContext the pageapp saving context
      */
-    virtual void createOdfPageTag( KoPASavingContext & paContext ) const = 0;
+    void saveOdfPageContent( KoPASavingContext & paContext ) const;
 
     /**
      * @brief Save the shapes of a page

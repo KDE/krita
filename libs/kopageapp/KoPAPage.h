@@ -34,6 +34,9 @@ public:
     explicit KoPAPage( KoPAMasterPage * masterPage );
     ~KoPAPage();
 
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext & context ) const;
+
     /// @return the layout set by the masterpage
     KoPageLayout & pageLayout();
 
@@ -41,12 +44,11 @@ public:
     void setMasterPage( KoPAMasterPage * masterPage );
     /// @return the masterpage of this page
     KoPAMasterPage * masterPage() { return m_masterPage; }
-protected:
-    virtual void createOdfPageTag( KoPASavingContext &paContext ) const;
 
+protected:
     /// Reimplemented from KoPageBase
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
-    
+
     KoPAMasterPage * m_masterPage;
 };
 

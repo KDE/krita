@@ -14,8 +14,8 @@ kde4_add_plugin(kritadynamicbrushpaintop ${kritadynamicbrush_PART_SRCS})
 
 target_link_libraries(kritadynamicbrushpaintop kritaui kritadynamicbrush
   # link to this to "load" the programs factory
-  kritafilterslistdynamicprogram
-  kritabasicdynamicprogram
+#   kritafilterslistdynamicprogram
+  kritabasicdynamicshapeprogram
   )
 
 install(TARGETS kritadynamicbrushpaintop DESTINATION ${PLUGIN_INSTALL_DIR})

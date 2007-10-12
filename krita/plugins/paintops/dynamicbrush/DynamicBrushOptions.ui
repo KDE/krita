@@ -5,17 +5,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>356</width>
-    <height>43</height>
+    <width>679</width>
+    <height>61</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item>
     <widget class="QLabel" name="label" >
      <property name="text" >
@@ -27,12 +21,12 @@
     <widget class="QComboBox" name="comboBoxShapes" >
      <item>
       <property name="text" >
-       <string>Autobrush</string>
+       <string>Brush</string>
       </property>
      </item>
      <item>
       <property name="text" >
-       <string>Brush</string>
+       <string>Bristles</string>
       </property>
      </item>
     </widget>
@@ -45,7 +39,33 @@
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="comboBoxPrograms" />
+    <widget class="QComboBox" name="comboBoxShapePrograms" />
+   </item>
+   <item>
+    <widget class="QLabel" name="label_3" >
+     <property name="text" >
+      <string>Coloring:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBoxColoring" >
+     <item>
+      <property name="text" >
+       <string>Plain</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_4" >
+     <property name="text" >
+      <string>Program:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBoxColoringPrograms" />
    </item>
    <item>
     <spacer>
@@ -54,8 +74,8 @@
      </property>
      <property name="sizeHint" >
       <size>
-       <width>40</width>
-       <height>20</height>
+       <width>51</width>
+       <height>43</height>
       </size>
      </property>
     </spacer>

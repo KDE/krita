@@ -1,3 +1,3 @@
-add_subdirectory( filterslist )
-add_subdirectory( basic )
+# add_subdirectory( filterslist )
+add_subdirectory( basicshape )
 

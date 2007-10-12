@@ -26,11 +26,12 @@ class Ui_DynamicProgramsEditor;
 class KisBookmarkedConfigurationManager;
 class KisBookmarkedConfigurationsModel;
 class KisDynamicProgram;
+class KisDynamicProgramFactoryRegistry;
 
 class KisDynamicProgramsEditor : public KDialog {
     Q_OBJECT
     public:
-        KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager);
+        KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager, const KisDynamicProgramFactoryRegistry* factoryRegistry);
         ~KisDynamicProgramsEditor();
     public slots:
         void setCurrentProgram(const QString& text);
@@ -43,6 +44,7 @@ class KisDynamicProgramsEditor : public KDialog {
         KisBookmarkedConfigurationManager* m_bookmarksManager;
         KisBookmarkedConfigurationsModel* m_bookmarksModel;
         KisDynamicProgram* m_currentProgram;
+        const KisDynamicProgramFactoryRegistry* m_factoryRegistry;
 };
 
 #endif

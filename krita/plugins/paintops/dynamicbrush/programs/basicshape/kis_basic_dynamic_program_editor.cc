@@ -23,8 +23,6 @@
 #include "ui_BasicDynamicProgramEditor.h"
 
 #include "kis_basic_dynamic_program.h"
-#include "kis_dynamic_transformation.h"
-#include "kis_dynamic_transformations_factory.h"
 
 KisBasicDynamicProgramEditor::KisBasicDynamicProgramEditor(KisBasicDynamicProgram* program) :
         m_program(program)

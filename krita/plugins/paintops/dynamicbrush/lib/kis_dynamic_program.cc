@@ -3,8 +3,7 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,8 +20,6 @@
 #include <QDomElement>
 
 #include <kdebug.h>
-
-#include "kis_filters_list_dynamic_program.h"
 
 struct KisDynamicProgram::Private {
     QString name;
@@ -52,14 +49,14 @@ void KisDynamicProgram::toXML(QDomDocument& /*doc*/, QDomElement& e) const
     e.setAttribute("name", name());
 }
 
-//----------- KisDynamicProgramFactory -----------//
+//------- KisDynamicProgramFactory -------//
 
 struct KisDynamicProgramFactory::Private {
     QString id;
     QString name;
 };
 
-KisDynamicProgramFactory::KisDynamicProgramFactory(QString id, QString name) : d(new Private)
+KisDynamicProgramFactory::KisDynamicProgramFactory(QString id, QString name) :d(new Private)
 {
     d->id = id;
     d->name = name;
@@ -67,6 +64,7 @@ KisDynamicProgramFactory::KisDynamicProgramFactory(QString id, QString name) : d
 
 KisDynamicProgramFactory::~KisDynamicProgramFactory()
 {
+    delete d;
 }
 
 QString KisDynamicProgramFactory::id() const
@@ -79,31 +77,9 @@ QString KisDynamicProgramFactory::name() const
     return d->name;
 }
 
-//----------- KisDynamicProgramsFactory -----------//
+//------- KisDynamicProgramFactoryRegistry -------//
 
-#include "kis_dynamic_program_factory_registry.h"
-
-KisDynamicProgramsFactory::~KisDynamicProgramsFactory()
-{
-}
-
-KisSerializableConfiguration* KisDynamicProgramsFactory::createDefault()
-{
-    return new KisDynamicDummyProgram("");
-}
-
-
-KisSerializableConfiguration* KisDynamicProgramsFactory::create(const QDomElement& e)
-{
-    QString type = e.attribute("type", "");
-    QString name = e.attribute("name", "");
-    KisDynamicProgramFactory* factory = KisDynamicProgramFactoryRegistry::instance()->value( type );
-    kDebug() << "Type is : " << type;
-    Q_ASSERT(factory);
-    KisDynamicProgram* program = factory->program( name );
-    Q_ASSERT(program);
-    program->fromXML(e);
-    return program;
-}
+KisDynamicProgramFactoryRegistry::~KisDynamicProgramFactoryRegistry()
+{}
 
 #include "kis_dynamic_program.moc"

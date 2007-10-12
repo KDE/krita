@@ -27,11 +27,11 @@
 
 #include "ui_DynamicProgramsEditor.h"
 
-#include "kis_dynamic_program.h"
-#include "kis_dynamic_program_factory_registry.h"
+#include "kis_dynamic_coloring_program_factory_registry.h"
+#include "kis_dynamic_shape_program_factory_registry.h"
 
-KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager) : KDialog(parent), m_dynamicProgramsEditor(0), m_currentEditor(0), m_frameVBoxLayout(0),m_bookmarksManager(bookmarksManager),
-    m_bookmarksModel(new KisBookmarkedConfigurationsModel(bookmarksManager))
+KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager, const KisDynamicProgramFactoryRegistry* factoryRegistry) : KDialog(parent), m_dynamicProgramsEditor(0), m_currentEditor(0), m_frameVBoxLayout(0),m_bookmarksManager(bookmarksManager),
+    m_bookmarksModel(new KisBookmarkedConfigurationsModel(bookmarksManager)), m_factoryRegistry(factoryRegistry)
 {
     setCaption(i18n("Edit dynamic programs"));
     setButtons(KDialog::Close);
@@ -44,7 +44,7 @@ KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent, KisBookmarke
     connect(m_dynamicProgramsEditor->comboBoxPrograms, SIGNAL(currentIndexChanged( const QString &) ), this, SLOT(setCurrentProgram(const QString&)));
     connect(m_dynamicProgramsEditor->pushButtonAdd, SIGNAL(pressed()), SLOT(addProgram()));
     m_dynamicProgramsEditor->comboBoxPrograms->setModel(m_bookmarksModel);
-    m_dynamicProgramsEditor->comboBoxProgramsType->setIDList( KisDynamicProgramFactoryRegistry::instance()->listKeys() );
+    m_dynamicProgramsEditor->comboBoxProgramsType->setIDList( m_factoryRegistry->programTypes() );
 }
 
 KisDynamicProgramsEditor::~KisDynamicProgramsEditor()
@@ -68,7 +68,7 @@ void KisDynamicProgramsEditor::addProgram()
 {
     int index = m_dynamicProgramsEditor->comboBoxProgramsType->currentIndex();
     QString id = m_dynamicProgramsEditor->comboBoxProgramsType->currentItem().id();
-    KisDynamicProgramFactory* factory = KisDynamicProgramFactoryRegistry::instance()->value( id );
+    KisDynamicProgramFactory* factory = m_factoryRegistry->programFactory( id );
     Q_ASSERT(factory);
     KisDynamicProgram* program = factory->program( m_bookmarksManager->uniqueName( ki18n("New program %1") ) );
     Q_ASSERT(program);

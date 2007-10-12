@@ -48,9 +48,9 @@
 #include "kis_dynamic_brush.h"
 #include "kis_dynamic_brush_registry.h"
 #include "kis_dynamic_coloring.h"
+#include "kis_dynamic_coloring_program.h"
 #include "kis_dynamic_shape.h"
-#include "kis_dynamic_program.h"
-#include "kis_size_transformation.h"
+#include "kis_dynamic_shape_program.h"
 
 KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
 {
@@ -65,23 +65,27 @@ KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, K
 KisPaintOpSettings *KisDynamicOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED(inputDevice);
-    return new KisDynamicOpSettings(parent, m_bookmarksManager);
+    return new KisDynamicOpSettings(parent, m_shapeBookmarksManager, m_coloringBookmarksManager);
 }
 
-KisDynamicOpSettings::KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager) :
+KisDynamicOpSettings::KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* shapeBookmarksManager, KisBookmarkedConfigurationManager* coloringBookmarksManager) :
         QObject(parent),
         KisPaintOpSettings(parent),
         m_optionsWidget(new QWidget(parent)),
         m_uiOptions(new Ui_DynamicBrushOptions()),
-        m_bookmarksModel(new KisBookmarkedConfigurationsModel(bookmarksManager))
+        m_shapeBookmarksModel(new KisBookmarkedConfigurationsModel(shapeBookmarksManager)),
+        m_coloringBookmarksModel(new KisBookmarkedConfigurationsModel(coloringBookmarksManager))
 {
     m_uiOptions->setupUi(m_optionsWidget);
-    m_uiOptions->comboBoxPrograms->setModel( m_bookmarksModel );
+    m_uiOptions->comboBoxShapePrograms->setModel( m_shapeBookmarksModel );
+    m_uiOptions->comboBoxColoringPrograms->setModel( m_coloringBookmarksModel );
 }
 
 KisDynamicOpSettings::~KisDynamicOpSettings()
 {
     delete m_uiOptions;
+    delete m_shapeBookmarksModel;
+    delete m_coloringBookmarksModel;
 }
 
 // TEMP
@@ -92,11 +96,16 @@ KisDynamicOpSettings::~KisDynamicOpSettings()
 KisDynamicBrush* KisDynamicOpSettings::createBrush() const
 {
     KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
-    QModelIndex modelIndex = m_bookmarksModel->index(
-            m_uiOptions->comboBoxPrograms->currentIndex(),0);
-    KisDynamicProgram* program = static_cast<KisDynamicProgram*>(m_bookmarksModel->configuration( modelIndex ) );
-    Q_ASSERT(program);
-    current->setProgram(program);
+    QModelIndex shapeModelIndex = m_shapeBookmarksModel->index(
+            m_uiOptions->comboBoxShapePrograms->currentIndex(),0);
+    KisDynamicShapeProgram* shapeProgram = static_cast<KisDynamicShapeProgram*>(m_shapeBookmarksModel->configuration( shapeModelIndex ) );
+    Q_ASSERT(shapeProgram);
+    current->setShapeProgram(shapeProgram);
+    QModelIndex coloringModelIndex = m_coloringBookmarksModel->index(
+            m_uiOptions->comboBoxColoringPrograms->currentIndex(),0);
+    KisDynamicColoringProgram* coloringProgram = static_cast<KisDynamicColoringProgram*>(m_coloringBookmarksModel->configuration( coloringModelIndex ) );
+    Q_ASSERT(coloringProgram);
+    current->setColoringProgram(coloringProgram);
     return current;
 }
 
@@ -144,7 +153,8 @@ void KisDynamicOp::paintAt(const KisPaintInformation& info)
     KisDynamicShape* dabsrc = m_brush->shape()->clone();
     KisDynamicColoring* coloringsrc = m_brush->coloring()->clone();
 
-    m_brush->program()->apply(dabsrc, coloringsrc, adjustedInfo);
+    m_brush->shapeProgram()->apply(dabsrc, adjustedInfo);
+    m_brush->coloringProgram()->apply(coloringsrc, adjustedInfo);
 
 
 

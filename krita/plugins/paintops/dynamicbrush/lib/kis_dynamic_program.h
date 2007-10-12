@@ -3,8 +3,7 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,6 +29,7 @@ class KisDynamicShape;
 class KisDynamicColoring;
 class KisPaintInformation;
 class QWidget;
+class KoID;
 
 /**
  * This is the base class of a dynamic program.
@@ -47,10 +47,6 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicProgram : public QObject, public KisSeriali
         QString name() const;
         QString id() const;
         QString type() const;
-        /**
-         * Apply the program on the shape and the coloring
-         */
-        virtual void apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo) = 0;
         /**
          * Create and return an editor for that program.
          * @return a QWidget which display editing option for that program
@@ -71,26 +67,17 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactory {
         virtual ~KisDynamicProgramFactory();
         QString id() const;
         QString name() const;
-        virtual KisDynamicProgram* program(QString name) = 0;
+        virtual KisDynamicProgram* program(QString name) const = 0;
     private:
         struct Private;
         Private* const d;
 };
 
-class KisDynamicDummyProgram : public KisDynamicProgram {
+class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactoryRegistry {
     public:
-        KisDynamicDummyProgram(const QString& name) : KisDynamicProgram(name, "dummy") { }
-        virtual void apply(KisDynamicShape* , KisDynamicColoring* , const KisPaintInformation& ) { }
-        virtual QWidget* createEditor(QWidget* ) { return 0; }
+        virtual ~KisDynamicProgramFactoryRegistry();
+        virtual KisDynamicProgramFactory* programFactory(QString id) const =0;
+        virtual QList<KoID> programTypes() const =0;
 };
-
-class DYNAMIC_BRUSH_EXPORT KisDynamicProgramsFactory : public KisSerializableConfigurationFactory {
-    public:
-        virtual ~KisDynamicProgramsFactory();
-        virtual KisSerializableConfiguration* createDefault();
-        virtual KisSerializableConfiguration* create(const QDomElement&);
-};
-
-
 
 #endif

@@ -35,8 +35,8 @@ class KisBookmarkedConfigurationsModel;
 
 class KisDynamicOpFactory : public KisPaintOpFactory  {
     public:
-        KisDynamicOpFactory(KisBookmarkedConfigurationManager* bookmarksManager) :
-          m_bookmarksManager(bookmarksManager)
+        KisDynamicOpFactory(KisBookmarkedConfigurationManager* shapeBookmarksManager, KisBookmarkedConfigurationManager* coloringBookmarksManager) :
+          m_shapeBookmarksManager(shapeBookmarksManager), m_coloringBookmarksManager(coloringBookmarksManager)
         {}
         virtual ~KisDynamicOpFactory() {}
 
@@ -46,13 +46,14 @@ class KisDynamicOpFactory : public KisPaintOpFactory  {
         virtual QString pixmap() { return "dynamicbrush.png"; }
         virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     private:
-        KisBookmarkedConfigurationManager* m_bookmarksManager;
+        KisBookmarkedConfigurationManager* m_shapeBookmarksManager;
+        KisBookmarkedConfigurationManager* m_coloringBookmarksManager;
 };
 
 class KisDynamicOpSettings : public QObject, public KisPaintOpSettings {
     Q_OBJECT
     public:
-        KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* configurationManager);
+        KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* shapeConfigurationManager, KisBookmarkedConfigurationManager* coloringConfigurationManager);
         virtual ~KisDynamicOpSettings();
         virtual QWidget *widget() const { return m_optionsWidget; }
         /// @return a brush with the current shapes, coloring and program
@@ -60,7 +61,8 @@ class KisDynamicOpSettings : public QObject, public KisPaintOpSettings {
     private:
         QWidget* m_optionsWidget;
         Ui_DynamicBrushOptions* m_uiOptions;
-        KisBookmarkedConfigurationsModel* m_bookmarksModel;
+        KisBookmarkedConfigurationsModel* m_shapeBookmarksModel;
+        KisBookmarkedConfigurationsModel* m_coloringBookmarksModel;
 };
 
 class KisDynamicOp : public KisPaintOp {

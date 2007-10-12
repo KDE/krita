@@ -26,7 +26,7 @@
 
 // Dynamic Brush lib includes
 #include "kis_dynamic_coloring.h"
-#include "kis_dynamic_program_factory_registry.h"
+#include "kis_dynamic_shape_program_factory_registry.h"
 #include "kis_dynamic_sensor.h"
 #include "kis_dynamic_shape.h"
 
@@ -38,13 +38,13 @@ class Factory {
     public:
         Factory()
         {
-            KisDynamicProgramFactoryRegistry::instance()->add( new KisBasicDynamicProgramFactory );
+            KisDynamicShapeProgramFactoryRegistry::instance()->add( new KisBasicDynamicProgramFactory );
         }
 };
 
 static Factory factory;
 
-KisBasicDynamicProgram::KisBasicDynamicProgram(const QString& name) : KisDynamicProgram(name, "basic"),
+KisBasicDynamicProgram::KisBasicDynamicProgram(const QString& name) : KisDynamicShapeProgram(name, "basic"),
     m_sizeEnabled(false),
     m_sizeMinimum(0),
     m_sizeMaximum(200),
@@ -72,7 +72,7 @@ KisBasicDynamicProgram::~KisBasicDynamicProgram()
     delete m_countSensor;
 }
 
-void KisBasicDynamicProgram::apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo)
+void KisBasicDynamicProgram::apply(KisDynamicShape* shape, const KisPaintInformation& adjustedInfo) const
 {
 
 }
@@ -339,11 +339,11 @@ void KisBasicDynamicProgram::setCountSensor(KisDynamicSensor* s)
 //--- KisBasicDynamicProgramFactory ---//
 
 KisBasicDynamicProgramFactory::KisBasicDynamicProgramFactory() :
-    KisDynamicProgramFactory("basic", i18n("Basic"))
+    KisDynamicShapeProgramFactory("basic", i18n("Basic"))
 {
 }
 
-KisDynamicProgram* KisBasicDynamicProgramFactory::program(QString name)
+KisDynamicShapeProgram* KisBasicDynamicProgramFactory::shapeProgram(QString name) const
 {
     return new KisBasicDynamicProgram(name);
 }

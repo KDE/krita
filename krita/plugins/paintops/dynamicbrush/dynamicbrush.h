@@ -34,10 +34,12 @@ class DynamicBrush : public KParts::Plugin
         DynamicBrush(QObject *parent, const QStringList &);
         virtual ~DynamicBrush();
     private slots:
-        void slotEditDynamicPrograms();
+        void slotEditDynamicShapePrograms();
+        void slotEditDynamicColoringPrograms();
     private:
         KisView2 * m_view;
-        KisBookmarkedConfigurationManager* m_bookmarksManager;
+        KisBookmarkedConfigurationManager* m_shapeBookmarksManager;
+        KisBookmarkedConfigurationManager* m_coloringBookmarksManager;
 };
 
 #endif // DYNAMIC_BRUSH_H

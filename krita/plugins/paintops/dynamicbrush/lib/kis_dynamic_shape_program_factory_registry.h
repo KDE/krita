@@ -15,24 +15,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_dynamic_program_factory_registry.h"
+#ifndef _KIS_DYNAMIC_SHAPE_PROGRAM_FACTORY_REGISTRY_H_
+#define _KIS_DYNAMIC_SHAPE_PROGRAM_FACTORY_REGISTRY_H_
 
-struct KisDynamicProgramFactoryRegistry::Private {
-    static KisDynamicProgramFactoryRegistry* instance;
+#include "dynamicbrush_export.h"
+
+#include "KoGenericRegistry.h"
+
+#include "kis_dynamic_shape_program.h"
+
+class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgramFactoryRegistry : public KoGenericRegistry<KisDynamicShapeProgramFactory*>, public KisDynamicProgramFactoryRegistry {
+        KisDynamicShapeProgramFactoryRegistry();
+    public:
+        static KisDynamicShapeProgramFactoryRegistry* instance();
+        virtual KisDynamicProgramFactory* programFactory(QString id) const;
+        virtual QList<KoID> programTypes() const;
+    private:
+        struct Private;
+        Private* const d;
 };
 
-KisDynamicProgramFactoryRegistry* KisDynamicProgramFactoryRegistry::Private::instance = 0;
-
-KisDynamicProgramFactoryRegistry::KisDynamicProgramFactoryRegistry() : d(new Private)
-{
-}
-
-KisDynamicProgramFactoryRegistry* KisDynamicProgramFactoryRegistry::instance()
-{
-    if(Private::instance ==0)
-    {
-        Private::instance = new KisDynamicProgramFactoryRegistry;
-    }
-    return Private::instance;
-}
-
+#endif

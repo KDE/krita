@@ -29,19 +29,11 @@
 #include <kis_view2.h>
 
 #include "kis_dynamicop.h"
-#include "kis_dynamic_program.h"
+#include "kis_dynamic_shape_program.h"
+#include "kis_dynamic_coloring_program.h"
 #include "kis_dynamic_programs_editor.h"
-
-#if 0
-// TEMP
-#include <kis_dynamic_brush.h>
-#include <kis_dynamic_brush_registry.h>
-#include <kis_filters_list_dynamic_program.h>
-#include <kis_size_transformation.h>
-#include <kis_rotation_transformation.h>
-#include <kis_dynamic_sensor.h>
-// TEMP
-#endif
+#include "kis_dynamic_coloring_program_factory_registry.h"
+#include "kis_dynamic_shape_program_factory_registry.h"
 
 #include <kis_bookmarked_configuration_manager.h>
 
@@ -49,14 +41,14 @@ typedef KGenericFactory<DynamicBrush> DynamicBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritadynamicbrushpaintop, DynamicBrushFactory("kritacore"))
 
 DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent), m_bookmarksManager( new KisBookmarkedConfigurationManager("dynamicop", new KisDynamicProgramsFactory()) )
+    : KParts::Plugin(parent), m_shapeBookmarksManager( new KisBookmarkedConfigurationManager("dynamicopshape", new KisDynamicShapeProgramsFactory()) ), m_coloringBookmarksManager( new KisBookmarkedConfigurationManager("dynamicopcoloring", new KisDynamicColoringProgramsFactory()) )
 
 {
     setComponentData(DynamicBrushFactory::componentData());
 
     // This is not a gui plugin; only load it when the doc is created.
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add (new KisDynamicOpFactory(m_bookmarksManager));
+    r->add (new KisDynamicOpFactory(m_coloringBookmarksManager, m_shapeBookmarksManager));
 #if 0
     {
         // TODO: remove this, temp stuff for testing only
@@ -88,9 +80,12 @@ DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/dynamicbrush.rc"), true);
 
-        KAction *action  = new KAction(i18n("Edit dynamic programs"), this);
-        actionCollection()->addAction("EditDynamicPrograms", action );
-        connect(action, SIGNAL(triggered()), this, SLOT(slotEditDynamicPrograms()));
+        KAction *action  = new KAction(i18n("Edit dynamic shape programs"), this);
+        actionCollection()->addAction("EditDynamicShapePrograms", action );
+        connect(action, SIGNAL(triggered()), this, SLOT(slotEditDynamicShapePrograms()));
+        action  = new KAction(i18n("Edit dynamic coloring programs"), this);
+        actionCollection()->addAction("EditDynamicColoringPrograms", action );
+        connect(action, SIGNAL(triggered()), this, SLOT(slotEditDynamicColoringPrograms()));
     }
 }
 
@@ -98,10 +93,15 @@ DynamicBrush::~DynamicBrush()
 {
 }
 
-void DynamicBrush::slotEditDynamicPrograms()
+void DynamicBrush::slotEditDynamicShapePrograms()
 {
-    kDebug(41006) <<" BOUH";
-    KisDynamicProgramsEditor editor(m_view, m_bookmarksManager);
+    KisDynamicProgramsEditor editor(m_view, m_shapeBookmarksManager, KisDynamicShapeProgramFactoryRegistry::instance());
+    editor.exec();
+}
+
+void DynamicBrush::slotEditDynamicColoringPrograms()
+{
+    KisDynamicProgramsEditor editor(m_view, m_coloringBookmarksManager, KisDynamicColoringProgramFactoryRegistry::instance());
     editor.exec();
 }
 

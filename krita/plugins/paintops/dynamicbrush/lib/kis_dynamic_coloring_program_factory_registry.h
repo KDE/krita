@@ -15,19 +15,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_DYNAMIC_PROGRAM_FACTORY_REGISTRY_H_
-#define _KIS_DYNAMIC_PROGRAM_FACTORY_REGISTRY_H_
+#ifndef _KIS_DYNAMIC_COLORING_PROGRAM_FACTORY_REGISTRY_H_
+#define _KIS_DYNAMIC_COLORING_PROGRAM_FACTORY_REGISTRY_H_
 
 #include "dynamicbrush_export.h"
 
 #include "KoGenericRegistry.h"
 
-#include "kis_dynamic_program.h"
+#include "kis_dynamic_coloring_program.h"
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactoryRegistry : public KoGenericRegistry<KisDynamicProgramFactory*> {
-        KisDynamicProgramFactoryRegistry();
+class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgramFactoryRegistry : public KoGenericRegistry<KisDynamicColoringProgramFactory*>, public KisDynamicProgramFactoryRegistry {
+        KisDynamicColoringProgramFactoryRegistry();
     public:
-        static KisDynamicProgramFactoryRegistry* instance();
+        static KisDynamicColoringProgramFactoryRegistry* instance();
+        virtual KisDynamicProgramFactory* programFactory(QString id) const;
+        virtual QList<KoID> programTypes() const;
     private:
         struct Private;
         Private* const d;

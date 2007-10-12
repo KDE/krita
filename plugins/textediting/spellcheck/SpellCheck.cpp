@@ -87,7 +87,7 @@ void SpellCheck::checkSection(QTextDocument *document, int startPosition, int en
         if (m_document)
             disconnect(m_document, SIGNAL(contentsChange(int,int,int)), this, SLOT(checkDocument(int,int,int)));
         m_document = document;
-        connect(m_document, SIGNAL(contentsChange(int,int,int)), this, SLOT(checkDocument(int,int,int)));
+        //connect(m_document, SIGNAL(contentsChange(int,int,int)), this, SLOT(checkDocument(int,int,int)));
     }
 
     m_cursor = QTextCursor(document);

@@ -278,7 +278,7 @@ public:
      *  @param closeElement set it to false to be able to add more child elements to the style element
      *  @param drawElement set it to true to add "draw:name" (used for gradient/hatch style) otherwise add "style:name"
      */
-    void writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name,
+    void writeStyle( KoXmlWriter* writer, const KoGenStyles& styles, const char* elementName, const QString& name,
                      const char* propertiesElementName, bool closeElement = true, bool drawElement = false ) const;
 
     /**

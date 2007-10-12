@@ -67,7 +67,7 @@ void KoGenStyle::writeStyleProperties( KoXmlWriter* writer, PropertyType i,
     }
 }
 
-void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
+void KoGenStyle::writeStyle( KoXmlWriter* writer, const KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
 {
     //kDebug(30003) <<"writing out style" << name <<" display-name=" << m_attributes["style:display-name"] <<" family=" << m_familyName;
     writer->startElement( elementName );

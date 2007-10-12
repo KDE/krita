@@ -212,7 +212,12 @@ void KoGenStyles::dump()
     }
 }
 
-void KoGenStyles::saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDotXml )
+void KoGenStyles::addFontFace( const QString& fontName )
+{
+    m_fontFaces.insert( fontName );
+}
+
+void KoGenStyles::saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDotXml ) const
 {
     xmlWriter->startElement( "office:automatic-styles" );
 
@@ -229,7 +234,7 @@ void KoGenStyles::saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDot
 }
 
 
-void KoGenStyles::saveOdfDocumentStyles( KoXmlWriter* xmlWriter )
+void KoGenStyles::saveOdfDocumentStyles( KoXmlWriter* xmlWriter ) const
 {
     xmlWriter->startElement( "office:styles" );
 
@@ -245,7 +250,7 @@ void KoGenStyles::saveOdfDocumentStyles( KoXmlWriter* xmlWriter )
     xmlWriter->endElement(); // office:styles
 }
 
-void KoGenStyles::saveOdfMasterStyles( KoXmlWriter* xmlWriter )
+void KoGenStyles::saveOdfMasterStyles( KoXmlWriter* xmlWriter ) const
 {
     xmlWriter->startElement( "office:master-styles" );
 
@@ -258,3 +263,19 @@ void KoGenStyles::saveOdfMasterStyles( KoXmlWriter* xmlWriter )
     xmlWriter->endElement(); // office:styles
 }
 
+void KoGenStyles::saveOdfFontFaceDecls( KoXmlWriter* xmlWriter ) const
+{
+    xmlWriter->startElement( "office:font-face-decls" );
+
+    QSet<QString>::const_iterator it( m_fontFaces.begin() );
+
+    for ( ; it != m_fontFaces.end(); ++it )
+    {
+        xmlWriter->startElement( "style:font-face" );
+        xmlWriter->addAttribute( "style:name", *it );
+        xmlWriter->addAttribute( "svg:font-family", *it );
+        xmlWriter->endElement(); // style:font-face
+    }
+
+    xmlWriter->endElement(); // office:font-face-decls
+}

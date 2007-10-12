@@ -148,6 +148,14 @@ public:
     void markStyleForStylesXml( const QString& name );
 
     /**
+     * add a font face declaration
+     *
+     * see odf 2.6 Font Face Declarations
+     * and odf 14.6 Font Face Declaration
+     */
+    void addFontFace( const QString& fontName );
+
+    /**
      * Outputs debug information
      */
     void dump();
@@ -161,7 +169,7 @@ public:
      * @param xmlWriter
      * @param stylesDotXml
      */
-    void saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDotXml );
+    void saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDotXml ) const;
 
     /**
      * Save document styles.
@@ -170,7 +178,7 @@ public:
      *
      * @param xmlWriter
      */
-    void saveOdfDocumentStyles( KoXmlWriter* xmlWriter );
+    void saveOdfDocumentStyles( KoXmlWriter* xmlWriter ) const;
 
     /**
      * Save master styles.
@@ -179,7 +187,15 @@ public:
      *
      * @param xmlWriter
      */
-    void saveOdfMasterStyles( KoXmlWriter* xmlWriter );
+    void saveOdfMasterStyles( KoXmlWriter* xmlWriter ) const;
+
+    /**
+     * Save font face declarations
+     *
+     * This creates the office:font-face-decls tag containing all font face 
+     * declarations
+     */
+    void saveOdfFontFaceDecls( KoXmlWriter* xmlWriter ) const;
 
 private:
     QString makeUniqueName( const QString& base, int flags ) const;
@@ -196,6 +212,9 @@ private:
     /// List of styles (used to preserve ordering)
     typedef QList<NamedStyle> StyleArray;
     StyleArray m_styleArray;
+
+    /// font faces
+    QSet<QString> m_fontFaces;
 
     class Private;
     Private * const d;

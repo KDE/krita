@@ -178,8 +178,7 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
     }
 
     QTextCursor cursor( document() );
-    if (!document()->isEmpty())
-        document()->clear();
+    document()->clear();
     loader->loadBody(*loaderContext, element, cursor); // now let's load the body from the ODF KoXmlElement.
 
     if( owner ) {
@@ -271,6 +270,8 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
         }
     }
     while(block.isValid() && ((to == -1) || (block.position() < to))) {
+        if ((block.begin().atEnd()) && (!block.next().isValid()))   // Do not add an extra empty line at the end...
+            break;
         writer->startElement( "text:p", false );
         if (styleNames.contains(allFormats.indexOf(block.blockFormat())))
             writer->addAttribute("text:style-name", styleNames[allFormats.indexOf(block.blockFormat())]);

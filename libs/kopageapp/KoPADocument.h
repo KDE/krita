@@ -129,9 +129,6 @@ protected:
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
     virtual const char *odfTagName( bool withNamespace ) = 0;
 
-    void saveOdfAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, bool stylesDotXml );
-    void saveOdfDocumentStyles( KoStore * store, KoShapeSavingContext& context, QFile *masterStyles );
-
     /**
      * This function is called by at the end of addShape. This is used 
      * e.g. for doing work on the application which is in the KoShapeAppData.

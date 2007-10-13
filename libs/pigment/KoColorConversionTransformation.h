@@ -62,7 +62,7 @@ class PIGMENT_EXPORT KoColorConversionTransformation : KoColorTransformation{
          * perform the color conversion between two buffers.
          * @param nPixels the number of pixels in the buffers.
          */
-        virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
+        virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const =0;
     private:
         Private * const d;
 };

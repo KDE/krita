@@ -48,13 +48,3 @@ KoColorConversionTransformation::Intent KoColorConversionTransformation::renderi
 {
     return d->renderingIntent;
 }
-
-void KoColorConversionTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
-{
-    // 4 channels: labA, 2 bytes per lab channel
-    quint8 *pixels = new quint8[sizeof(quint16)*4*nPixels];
-    srcColorSpace()->toLabA16(src, pixels,nPixels);
-    dstColorSpace()->fromLabA16(pixels, dst,nPixels);
-
-    delete [] pixels;
-}

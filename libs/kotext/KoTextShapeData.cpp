@@ -178,6 +178,8 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
     }
 
     QTextCursor cursor( document() );
+    if (!document()->isEmpty())
+        document()->clear();
     loader->loadBody(*loaderContext, element, cursor); // now let's load the body from the ODF KoXmlElement.
 
     if( owner ) {

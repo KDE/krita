@@ -224,6 +224,8 @@ KoColorConversionSystem::KoColorConversionSystem() : d(new Private)
     d->alphaNode->canBeCrossed = false;
     d->alphaNode->init(0);
     d->alphaNode->isGray = true; // <- FIXME: it's a little bit hacky as alpha doesn't really have color information
+    Vertex* v = createVertex(d->alphaNode, d->alphaNode);
+    v->setFactoryFromSrc( new KoCopyColorConversionTransformationFactory(AlphaColorModelID.id(), Integer8BitsColorDepthID.id()));
 }
 
 KoColorConversionSystem::~KoColorConversionSystem()
@@ -410,7 +412,7 @@ KoColorConversionSystem::Vertex* KoColorConversionSystem::createVertex(Node* src
 
 QString KoColorConversionSystem::vertexToDot(KoColorConversionSystem::Vertex* v, QString options) const
 {
-    return QString("  %1 -> %2 %3\n").arg(v->srcNode->id()).arg(v->dstNode->id()).arg(options);
+    return QString("  \"%1\" -> \"%2\" %3\n").arg(v->srcNode->id()).arg(v->dstNode->id()).arg(options);
 }
 
 QString KoColorConversionSystem::toDot() const

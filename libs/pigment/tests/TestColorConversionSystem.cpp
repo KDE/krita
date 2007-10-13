@@ -21,9 +21,11 @@
 
 #include <qtest_kde.h>
 
+#include <kdebug.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorConversionSystem.h>
+#include <KoColorModelStandardIds.h>
 
 TestColorConversionSystem::TestColorConversionSystem()
 {
@@ -34,6 +36,7 @@ TestColorConversionSystem::TestColorConversionSystem()
             listModels.append( pStrStr( modelId.id(), depthId.id() ) );
         }
     }
+    listModels.append( pStrStr(AlphaColorModelID.id(), Integer8BitsColorDepthID.id() ) );
 }
 
 void TestColorConversionSystem::testConnections()

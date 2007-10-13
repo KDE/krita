@@ -716,25 +716,10 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
 
         //listStyle->applyStyle(cursor.block(), level + 1);
         //listStyle->applyStyle(cursor.block());
-        kDebug() << "Here 1?";
-        int startPosition = cursor.position();
-        kDebug() << "Here 2?";
-        loadBody(context, e, cursor);
-        kDebug() << "Here 3?";
-        int endPosition = cursor.position();
-        kDebug() << "Here 4?";
-        cursor.setPosition(startPosition);
-        kDebug() << "Here 5?";
         QTextBlock current = cursor.block();
-        kDebug() << "Here 6?";
-        list->add(current);
-        kDebug() << "Here 7?";
-        cursor.setPosition(endPosition);
-        
-        /*QTextBlock current = cursor.block();
         list->add(current);
 
-        loadBody(context, e, cursor);*/
+        loadBody(context, e, cursor);
 
         if( ! listStyle->hasPropertiesForLevel(level) ) { // set default style
             KoListLevelProperties props;

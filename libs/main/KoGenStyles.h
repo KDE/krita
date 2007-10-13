@@ -23,11 +23,11 @@
 #include <QList>
 #include <QMap>
 #include <QSet>
-//Added by qt3to4:
 #include <QString>
 #include <komain_export.h>
 #include "KoGenStyle.h"
 
+class KoStore;
 
 /**
  * @brief Repository of styles used during saving of OASIS/OOo file.
@@ -161,6 +161,18 @@ public:
     void dump();
 
     /**
+     * Save the styles into the styles.xml file
+     *
+     * This saves all styles and font face declarations to the styles.xml file which
+     * belong there. This creates the file and creates an entry in the manifest.
+     *
+     * @param store
+     * @param mainfestwriter
+     * @return if it was successful
+     */
+    bool saveOdfStylesDotXml( KoStore* store, KoXmlWriter* manifestWriter );
+
+    /**
      * Save automatic styles.
      *
      * This creates the office:automatic-styles tag containing all 
@@ -212,6 +224,9 @@ private:
     /// List of styles (used to preserve ordering)
     typedef QList<NamedStyle> StyleArray;
     StyleArray m_styleArray;
+
+    /// map for saving default styles
+    QMap<int, KoGenStyle> m_defaultStyles;
 
     /// font faces
     QSet<QString> m_fontFaces;

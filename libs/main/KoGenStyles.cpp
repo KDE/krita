@@ -18,7 +18,11 @@
 */
 
 #include "KoGenStyles.h"
+
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
+#include <KoDocument.h>
 #include <float.h>
 #include <kdebug.h>
 
@@ -88,6 +92,19 @@ KoGenStyles::~KoGenStyles()
 
 QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int flags )
 {
+    // if it is a default style it has to be saved differently
+    if ( style.isDefaultStyle() ) {
+        // we can have only one default style per type
+        Q_ASSERT( !m_defaultStyles.contains( style.type() ) );
+        // default style is only possible for style:style in office:style types
+        Q_ASSERT( style.type() == KoGenStyle::StyleUser ||
+                  style.type() == KoGenStyle::StyleTableColumn ||
+                  style.type() == KoGenStyle::StyleTableRow ||
+                  style.type() == KoGenStyle::StyleTableCell );
+        m_defaultStyles.insert( style.type(), style );
+        // default styles don't have a name
+        return QString( "" );
+    }
     StyleMap::iterator it = m_styleMap.find( style );
     if ( it == m_styleMap.end() ) {
         // Not found, try if this style is in fact equal to its parent (the find above
@@ -217,6 +234,31 @@ void KoGenStyles::addFontFace( const QString& fontName )
     m_fontFaces.insert( fontName );
 }
 
+bool KoGenStyles::saveOdfStylesDotXml( KoStore* store, KoXmlWriter* manifestWriter )
+{
+    if ( !store->open( "styles.xml" ) )
+        return false;
+
+    manifestWriter->addManifestEntry( "styles.xml",  "text/xml" );
+
+    KoStoreDevice stylesDev( store );
+    KoXmlWriter* stylesWriter = KoDocument::createOasisXmlWriter( &stylesDev, "office:document-styles" );
+
+    saveOdfFontFaceDecls( stylesWriter );
+    saveOdfDocumentStyles( stylesWriter );
+    saveOdfAutomaticStyles( stylesWriter, true );
+    saveOdfMasterStyles( stylesWriter );
+
+    stylesWriter->endElement(); // root element (office:document-styles)
+    stylesWriter->endDocument();
+    delete stylesWriter;
+
+    if ( !store->close() ) // done with styles.xml
+        return false;
+
+    return true;
+}
+
 void KoGenStyles::saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDotXml ) const
 {
     xmlWriter->startElement( "office:automatic-styles" );
@@ -237,6 +279,14 @@ void KoGenStyles::saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDot
 void KoGenStyles::saveOdfDocumentStyles( KoXmlWriter* xmlWriter ) const
 {
     xmlWriter->startElement( "office:styles" );
+
+    for ( int i = 0; i < numStyleData; ++i ) {
+        QMap<int, KoGenStyle>::iterator it( m_defaultStyles.find( styleData[i].m_type ) );
+        if ( it != m_defaultStyles.end() ) {
+            it.value().writeStyle( xmlWriter, *this, "style:default-style", "",
+                                   styleData[i].m_propertiesElementName, true, styleData[i].m_drawElement );
+        }
+    }
 
     for ( int i = 0; i < numStyleData; ++i ) {
         QList<KoGenStyles::NamedStyle> stylesList = styles( int( styleData[i].m_type ) );
@@ -265,17 +315,19 @@ void KoGenStyles::saveOdfMasterStyles( KoXmlWriter* xmlWriter ) const
 
 void KoGenStyles::saveOdfFontFaceDecls( KoXmlWriter* xmlWriter ) const
 {
-    xmlWriter->startElement( "office:font-face-decls" );
+    if ( !m_fontFaces.isEmpty() ) {
+        xmlWriter->startElement( "office:font-face-decls" );
 
-    QSet<QString>::const_iterator it( m_fontFaces.begin() );
+        QSet<QString>::const_iterator it( m_fontFaces.begin() );
 
-    for ( ; it != m_fontFaces.end(); ++it )
-    {
-        xmlWriter->startElement( "style:font-face" );
-        xmlWriter->addAttribute( "style:name", *it );
-        xmlWriter->addAttribute( "svg:font-family", *it );
-        xmlWriter->endElement(); // style:font-face
+        for ( ; it != m_fontFaces.end(); ++it )
+        {
+            xmlWriter->startElement( "style:font-face" );
+            xmlWriter->addAttribute( "style:name", *it );
+            xmlWriter->addAttribute( "svg:font-family", *it );
+            xmlWriter->endElement(); // style:font-face
+        }
+
+        xmlWriter->endElement(); // office:font-face-decls
     }
-
-    xmlWriter->endElement(); // office:font-face-decls
 }

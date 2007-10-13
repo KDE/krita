@@ -29,12 +29,9 @@ target_link_libraries(filter_graph  ${KDE4_KDECORE_LIBS} komain )
 
 ########### next target ###############
 
-set(kogenstylestest_SRCS kogenstylestest.cpp )
-
-
-kde4_add_unit_test(kogenstylestest TESTNAME libs-komain-kogenstylestest ${kogenstylestest_SRCS})
-
-target_link_libraries(kogenstylestest  ${KDE4_KDECORE_LIBS} komain )
+set(TestKoGenStyles_SRCS TestKoGenStyles.cpp )
+kde4_add_unit_test(TestKoGenStyles TESTNAME libs-komain-TestKoGenStyles ${TestKoGenStyles_SRCS})
+target_link_libraries(TestKoGenStyles  ${KDE4_KDECORE_LIBS} komain ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

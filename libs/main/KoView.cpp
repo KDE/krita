@@ -680,6 +680,16 @@ void KoView::setupGlobalActions()
   connect( actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()) );
 }
 
+void KoView::setupPrinter( QPrinter & )
+{
+    kDebug(30003) <<"KoView::setupPrinter not implemented by the application!";
+}
+
+void KoView::print( QPrinter & )
+{
+    kDebug(30003) <<"KoView::print not implemented by the application!";
+}
+
 void KoView::setupPrinter( KPrinter & )
 {
     kDebug(30003) <<"KoView::setupPrinter not implemented by the application!";
@@ -689,6 +699,7 @@ void KoView::print( KPrinter & )
 {
     kDebug(30003) <<"KoView::print not implemented by the application!";
 }
+
 
 void KoView::newView() {
     Q_ASSERT( ( d!=0L && d->m_doc ) );

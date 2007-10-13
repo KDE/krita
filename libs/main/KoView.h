@@ -40,7 +40,8 @@ class KoDockFactory;
 
 // KDE classes
 class KStatusBar;
-class KPrinter;
+class QPrinter;
+class KPrinter; // XXX for compatibility while porting
 class KXmlGuiWindow;
 class KAction;
 class KActionCollection;
@@ -304,18 +305,18 @@ public:
 //   virtual DCOPObject * dcopObject();
 
   /**
-   * Overload this method to setup KPrinter before the actual printing.
+   * Overload this method to setup QPrinter before the actual printing.
    *
    * @see #print
    */
+  virtual void setupPrinter( QPrinter &printer );
   virtual void setupPrinter( KPrinter &printer );
-
   // BCI: make it return a bool, so that aborting doesn't still fire up the print preview afterwards
   /**
    * Overload this method with your own printing code.
    */
+  virtual void print( QPrinter &printer );
   virtual void print( KPrinter &printer );
-
   /**
    * @return the KoMainWindow in which this view is currently.
    * WARNING: this could be 0L, if the main window isn't a koffice main window.

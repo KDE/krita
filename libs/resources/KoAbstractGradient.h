@@ -35,6 +35,8 @@ public:
     virtual bool load() = 0;
     virtual bool save() = 0;
 
+    virtual QGradient* toQGradient() const = 0;
+
     void setColorSpace(KoColorSpace* colorSpace);
     KoColorSpace * colorSpace() const;
 

@@ -154,7 +154,7 @@ KisResourceServerRegistry::KisResourceServerRegistry()
     t2.start();
 
     KisResourceServer<KisPattern>* patternServer = new KisResourceServer<KisPattern>("kis_patterns");
-    ResourceLoaderThread t3 (patternServer, getFileNames("*.pat", "kis_patterns"));
+    ResourceLoaderThread t3 (patternServer, getFileNames("*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp:*.pat", "kis_patterns"));
     t3.start();
 
     KisResourceServer<KisGradient>* gradientServer = new KisResourceServer<KisGradient>("kis_gradients");

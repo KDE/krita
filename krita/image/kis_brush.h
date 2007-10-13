@@ -75,7 +75,7 @@ public:
     virtual bool load();
     /// synchronous, doesn't emit any signal (none defined!)
     virtual bool save();
-    virtual QImage img();
+    virtual QImage img() const;
     virtual bool saveToDevice(QIODevice* dev) const;
 
     /**

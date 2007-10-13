@@ -24,7 +24,7 @@
 #include <kio/job.h>
 
 #include "kis_debug_areas.h"
-#include "KoResource.h"
+#include <KoPattern.h>
 #include <krita_export.h>
 #include "kis_types.h"
 
@@ -32,7 +32,7 @@ class QImage;
 class KoColorSpace;
 class KisPaintDevice;
 
-class KRITAIMAGE_EXPORT KisPattern : public KoResource {
+class KRITAIMAGE_EXPORT KisPattern : public KoPattern {
 
     Q_OBJECT
 
@@ -41,38 +41,15 @@ public:
     KisPattern(KisPaintDevice* image, int x, int y, int w, int h);
     virtual ~KisPattern();
 
-    virtual bool load();
-    virtual bool save();
-    virtual QImage img();
-
     /**
      * returns a KisPaintDeviceSP made with colorSpace as the ColorSpace strategy
      * for use in the fill painter.
      **/
     KisPaintDeviceSP image(KoColorSpace * colorSpace);
 
-    qint32 width() const;
-    qint32 height() const;
-
-    void setImage(const QImage& img);
-
     KisPattern* clone() const;
-
-protected:
-    void setWidth(qint32 w);
-    void setHeight(qint32 h);
-
 private:
-    bool init();
-
-private:
-    QByteArray m_data;
-    QImage m_img;
     QMap<QString, KisPaintDeviceSP> m_colorspaces;
-    bool m_hasFile;
-
-    qint32 m_width;
-    qint32 m_height;
 };
 
 #endif

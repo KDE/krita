@@ -297,7 +297,7 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     return true;
 }
 
-QImage KisImagePipeBrush::img()
+QImage KisImagePipeBrush::img() const
 {
     if (m_brushes.isEmpty()) {
         return QImage();

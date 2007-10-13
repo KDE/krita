@@ -116,7 +116,7 @@ public:
     /**
       @return the next image in the pipe.
       */
-    virtual QImage img();
+    virtual QImage img() const;
 
     /**
        @return the next mask in the pipe.

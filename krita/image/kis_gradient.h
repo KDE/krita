@@ -234,7 +234,7 @@ public:
 
     virtual bool load();
     virtual bool save();
-    virtual QImage img();
+    virtual QImage img() const;
     virtual QImage generatePreview(int width, int height) const;
 
     void colorAt(KoColor& dst, double t) const;

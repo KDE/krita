@@ -357,7 +357,7 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
     return true;
 }
 
-QImage KisBrush::img()
+QImage KisBrush::img() const
 {
     QImage image = m_img;
 

@@ -75,7 +75,7 @@ bool KisGradient::save()
     return false;
 }
 
-QImage KisGradient::img()
+QImage KisGradient::img() const
 {
     return m_img;
 }

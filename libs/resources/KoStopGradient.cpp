@@ -99,7 +99,7 @@ QGradient* KoStopGradient::toQGradient() const
     for (QList<KoGradientStop>::const_iterator i = m_stops.begin(); i != m_stops.end(); ++i) {
         i->second.toQColor(&color, &opacity);
         color.setAlpha(opacity);
-        gradient->setColorAt( i->first , i->second.toQColor() );
+        gradient->setColorAt( i->first , color );
     }
     return gradient;
 }

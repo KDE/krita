@@ -43,16 +43,6 @@ public:
      */
     QString addFillStyle( KoGenStyle &style, const QBrush &brush );
 
-    /**
-     * Writes the office:styles from the internal saving context to the given xml writer.
-     *
-     * Writes styles like gradients, stroke-dash or fill-images. The office:styles tag
-     * has to be opened and closed outside to allow other office:styles to be written.
-     *
-     * @param styleWriter the xml writer used for writing the styles
-     */
-    void writeOfficeStyles( KoXmlWriter* styleWriter );
-
 private:
     /// Saves pattern style
     QString savePatternStyle( KoGenStyle &style, const QBrush &brush );

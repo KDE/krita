@@ -78,28 +78,3 @@ QString KoShapeStyleWriter::savePatternStyle( KoGenStyle &style, const QBrush &b
 
     return m_context.mainStyles().lookup( patternStyle, "picture" );
 }
-
-void KoShapeStyleWriter::writeOfficeStyles( KoXmlWriter* styleWriter )
-{
-    KoGenStyles & mainStyles = m_context.mainStyles();
-    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleGradientLinear );
-    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-
-    for( ; it != styles.end() ; ++it )
-        (*it).style->writeStyle( styleWriter, mainStyles, "svg:linearGradient", (*it).name, 0, true, true /*add draw:name*/);
-
-    styles = mainStyles.styles( KoGenStyle::StyleGradientRadial );
-    it = styles.begin();
-    for( ; it != styles.end() ; ++it )
-        (*it).style->writeStyle( styleWriter, mainStyles, "svg:radialGradient", (*it).name, 0, true, true /*add draw:name*/);
-
-    styles = mainStyles.styles( KoGenStyle::StyleStrokeDash );
-    it = styles.begin();
-    for( ; it != styles.end() ; ++it )
-        (*it).style->writeStyle( styleWriter, mainStyles, "draw:stroke-dash", (*it).name, 0, true, true /*add draw:name*/);
-
-    styles = mainStyles.styles( KoGenStyle::StyleFillImage );
-    it = styles.begin();
-    for( ; it != styles.end() ; ++it )
-        (*it).style->writeStyle( styleWriter, mainStyles, "draw:fill-image", (*it).name, 0, true, true /*add draw:name*/);
-}

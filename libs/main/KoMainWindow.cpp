@@ -1243,7 +1243,7 @@ void KoMainWindow::print(bool quick) {
         return;
     }
 
-    KPrinter printer( true /*, QPrinter::HighResolution*/ );
+    QPrinter printer( QPrinter::HighResolution );
     QString title = rootView()->koDocument()->documentInfo()->aboutInfo( "title" );
     QString fileName = rootView()->koDocument()->url().fileName();
 
@@ -1264,9 +1264,10 @@ void KoMainWindow::print(bool quick) {
         title = i18n("%1 unsaved document (%2)",programName,KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
     }
     printer.setDocName( title );
+#if 0 // XXX
     printer.setDocFileName( fileName );
     printer.setDocDirectory( rootView()->koDocument()->url().directory() );
-
+#endif
     // ### TODO: apply global koffice settings here
 
     rootView()->setupPrinter( printer );
@@ -1288,7 +1289,7 @@ void KoMainWindow::slotFilePrintPreview()
         kWarning() << "KoMainWindow::slotFilePrint : No root view!";
         return;
     }
-    KPrinter printer( false );
+    QPrinter printer( QPrinter::HighResolution );
     KTemporaryFile tmpFile;
     tmpFile.setAutoRemove(false);
     // The temp file is deleted by KoPrintPreview
@@ -1296,8 +1297,10 @@ void KoMainWindow::slotFilePrintPreview()
 
     // This line has to be before setupPrinter to let the apps decide what to
     // print and what not (if they want to :)
+#if 0 //XXX_PORT
     printer.setFromTo( printer.minPage(), printer.maxPage() );
     printer.setPreviewOnly( true );
+#endif
     rootView()->setupPrinter( printer );
 
     QString oldFileName = printer.outputFileName();
@@ -1306,16 +1309,19 @@ void KoMainWindow::slotFilePrintPreview()
     printer.setNumCopies( 1 );
     // Disable kdeprint's own preview, we'd get two. This shows that KPrinter needs
     // a "don't use the previous settings" mode. The current way is really too much of a hack.
+#if 0
     QString oldKDEPreview = printer.option( "kde-preview" );
     printer.setOption( "kde-preview", "0" );
-
+#endif
     rootView()->print(printer);
     //KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.fileName());
 
     // Restore previous values
     printer.setOutputFileName( oldFileName );
     printer.setNumCopies( oldNumCopies );
+#if 0
     printer.setOption( "kde-preview", oldKDEPreview );
+#endif
 }
 
 void KoMainWindow::slotConfigureKeys()
@@ -1798,7 +1804,7 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
     return dockWidget;
 }
 
-QList<QDockWidget*> KoMainWindow::dockWidgets() 
+QList<QDockWidget*> KoMainWindow::dockWidgets()
 {
     return d->m_dockWidgetMap.values();
 }

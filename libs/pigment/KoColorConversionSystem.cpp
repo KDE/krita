@@ -24,6 +24,7 @@
 
 #include <kdebug.h>
 
+#include "KoColorConversionAlphaTransformation.h"
 #include "KoColorConversionTransformation.h"
 #include "KoColorConversionTransformationFactory.h"
 #include "KoColorSpace.h"
@@ -81,17 +82,21 @@ class KoMultipleColorConversionTransformation : public KoColorConversionTransfor
 };
 
 struct KoColorConversionSystem::Node {
-    Node() : isInitialized(false), colorSpaceFactory(0) {}
+    Node() : isIcc(false), isHdr(false), referenceDepth(0), isGray(false), isInitialized(false), canBeCrossed(true), colorSpaceFactory(0) {}
     void init( const KoColorSpaceFactory* _colorSpaceFactory)
     {
         Q_ASSERT(not isInitialized);
         isInitialized = true;
-        isIcc = _colorSpaceFactory->isIcc();
-        isHdr = _colorSpaceFactory->isHdr();
-        colorSpaceFactory = _colorSpaceFactory;
-        referenceDepth = _colorSpaceFactory->referenceDepth();
-        isGray = ( _colorSpaceFactory->colorModelId() == GrayAColorModelID
-                or _colorSpaceFactory->colorModelId() == GrayColorModelID );
+        
+        if(_colorSpaceFactory)
+        {
+            isIcc = _colorSpaceFactory->isIcc();
+            isHdr = _colorSpaceFactory->isHdr();
+            colorSpaceFactory = _colorSpaceFactory;
+            referenceDepth = _colorSpaceFactory->referenceDepth();
+            isGray = ( _colorSpaceFactory->colorModelId() == GrayAColorModelID
+                    or _colorSpaceFactory->colorModelId() == GrayColorModelID );
+        }
     }
     QString id() const {
         return modelId + " " + depthId;
@@ -105,6 +110,7 @@ struct KoColorConversionSystem::Node {
     QList<Vertex*> outputVertexes;
     const KoColorSpaceFactory* colorSpaceFactory;
     bool isGray;
+    bool canBeCrossed;
 };
 
 struct KoColorConversionSystem::Vertex {
@@ -171,12 +177,12 @@ struct KoColorConversionSystem::Path {
     void appendVertex(Vertex* v) {
         if(vertexes.empty())
         {
-            referenceDepth = v->srcNode->colorSpaceFactory->referenceDepth();
+            referenceDepth = v->srcNode->referenceDepth;
         }
         vertexes.append(v);
         if(not v->conserveColorInformation) respectColorCorrectness = false;
         if(not v->conserveDynamicRange) keepDynamicRange = false;
-        referenceDepth = qMin( referenceDepth, v->dstNode->colorSpaceFactory->referenceDepth());
+        referenceDepth = qMin( referenceDepth, v->dstNode->referenceDepth);
     }
     int length() {
         return vertexes.size();
@@ -207,12 +213,17 @@ uint qHash(const KoColorConversionSystem::NodeKey &key)
 struct KoColorConversionSystem::Private {
     QHash<NodeKey, Node*> graph;
     QList<Vertex*> vertexes;
+    Node* alphaNode;
 };
 
 
 KoColorConversionSystem::KoColorConversionSystem() : d(new Private)
 {
-    
+    // Create the Alpha 8bit
+    d->alphaNode = nodeFor(AlphaColorModelID.id(), Integer8BitsColorDepthID.id());
+    d->alphaNode->canBeCrossed = false;
+    d->alphaNode->init(0);
+    d->alphaNode->isGray = true; // <- FIXME: it's a little bit hacky as alpha doesn't really have color information
 }
 
 KoColorConversionSystem::~KoColorConversionSystem()
@@ -238,6 +249,14 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
     Node* csNode = nodeFor(key);
     Q_ASSERT(csNode);
     csNode->init(csf);
+    // Alpha connection
+    Q_ASSERT(vertexBetween(d->alphaNode, csNode) == 0); // The two color spaces should not be connected yet
+    Vertex* vFromAlpha = createVertex(d->alphaNode, csNode);
+    vFromAlpha->setFactoryFromSrc( new KoColorConversionFromAlphaTransformationFactory( modelId, depthId ) );
+    Q_ASSERT(vertexBetween(csNode, d->alphaNode) == 0); // The two color spaces should not be connected yet
+    Vertex* vToAlpha = createVertex(csNode, d->alphaNode);
+    vToAlpha->setFactoryFromDst( new KoColorConversionToAlphaTransformationFactory( modelId, depthId ) );
+    // ICC Connection
     if(csNode->isIcc)
     { // Construct a link between this color space and all other ICC color space
         kDebug(31000) << csf->id() << " is an ICC color space, connecting to others";
@@ -247,11 +266,12 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
             if(node->isIcc and node->isInitialized and node != csNode)
             {
                 // Create the vertex from 1 to 2
-                Q_ASSERT(vertexBetween(node, csNode) == 0); // The two color spaces should not be connected yet
+                Q_ASSERT(vertexBetween(csNode, node) == 0); // The two color spaces should not be connected yet
                 Vertex* v12 = createVertex(csNode, node);
                 v12->setFactoryFromSrc( csf->createICCColorConversionTransformationFactory( node->modelId, node->depthId) );
                 Q_ASSERT( v12->factory() );
                 // Create the vertex from 2 to 1
+                Q_ASSERT(vertexBetween(node, csNode) == 0); // The two color spaces should not be connected yet
                 Vertex* v21 = createVertex(node, csNode);
                 v21->setFactoryFromSrc( node->colorSpaceFactory->createICCColorConversionTransformationFactory( csNode->modelId, csNode->depthId) );
                 Q_ASSERT( v21->factory() );
@@ -390,7 +410,7 @@ KoColorConversionSystem::Vertex* KoColorConversionSystem::createVertex(Node* src
 
 QString KoColorConversionSystem::vertexToDot(KoColorConversionSystem::Vertex* v, QString options) const
 {
-    return QString("  %1 -> %2 %3\n").arg(v->srcNode->colorSpaceFactory->id()).arg(v->dstNode->colorSpaceFactory->id()).arg(options);
+    return QString("  %1 -> %2 %3\n").arg(v->srcNode->id()).arg(v->dstNode->id()).arg(options);
 }
 
 QString KoColorConversionSystem::toDot() const
@@ -428,8 +448,8 @@ QString KoColorConversionSystem::bestPathToDot(QString srcModelId, QString srcDe
     Path* p = findBestPath( srcNode, dstNode);
     Q_ASSERT(p);
     QString dot = "digraph CCS {\n";
-    dot += QString("  %1 [color=red]\n").arg(srcNode->colorSpaceFactory->id());
-    dot += QString("  %1 [color=red]\n").arg(dstNode->colorSpaceFactory->id());
+    dot += QString("  %1 [color=red]\n").arg(srcNode->id());
+    dot += QString("  %1 [color=red]\n").arg(dstNode->id());
     foreach(Vertex* oV, d->vertexes)
     {
         QString options = "";
@@ -514,10 +534,12 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
             deletePathes(currentPathes); // clean up
             p->isGood = true;
             return p;
+        } else if( endNode->canBeCrossed)
+        {
+            Q_ASSERT(not node2path.contains( endNode )); // That would be a total fuck up if there are two vertexes between two nodes
+            node2path[ endNode ] = new Path( *p );
+            currentPathes.append( p );
         }
-        Q_ASSERT(not node2path.contains( endNode )); // That would be a total fuck up if there are two vertexes between two nodes
-        node2path[ endNode ] = new Path( *p );
-        currentPathes.append( p );
     }
     Path* lessWorsePath = 0;
     // Now loop until a path has been found
@@ -549,7 +571,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
                         } else {
                             delete newP;
                         }
-                    } else {
+                    } else if( endNode->canBeCrossed) {
                         if( node2path.contains( newEndNode ) )
                         {
                             Path* p2 = node2path[newEndNode];
@@ -574,10 +596,10 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
     }
     if(lessWorsePath)
     {
-        kWarning(31000) << "No good path from " << srcNode->colorSpaceFactory->id() << " to " << dstNode->colorSpaceFactory->id() << " found !";
+        kWarning(31000) << "No good path from " << srcNode->id() << " to " << dstNode->id() << " found !";
         return lessWorsePath;
     } 
-    kError(31000) << "No path from " << srcNode->colorSpaceFactory->id() << " to " << dstNode->colorSpaceFactory->id() << " found !";
+    kError(31000) << "No path from " << srcNode->id() << " to " << dstNode->id() << " found !";
     return 0;
 }
 

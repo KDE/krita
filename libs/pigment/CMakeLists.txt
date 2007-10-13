@@ -13,6 +13,7 @@ endif(OPENEXR_FOUND)
 set(pigment_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/KoBasicHistogramProducers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionAlphaTransformation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionSystem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionTransformation.cpp

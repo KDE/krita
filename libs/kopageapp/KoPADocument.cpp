@@ -19,8 +19,6 @@
 
 #include "KoPADocument.h"
 
-#include <KTemporaryFile>
-
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
@@ -139,27 +137,17 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoGenStyles mainStyles;
     KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
 
-    // for office:master-styles
-    KTemporaryFile masterStyles;
-    masterStyles.open();
-    KoXmlWriter masterStylesTmpWriter( &masterStyles, 1 );
-
-    KoPASavingContext paContext( masterStylesTmpWriter, savingContext, 1 );
+    KoXmlWriter * bodyWriter = oasisStore.bodyWriter();
+    KoPASavingContext paContext( *bodyWriter, savingContext, 1 );
 
     paContext.setOptions( KoPASavingContext::DrawId | KoPASavingContext::AutoStyleInStyleXml );
-
-    masterStylesTmpWriter.startElement( "office:master-styles" );
 
     // save master pages
     foreach( KoPAPageBase *page, m_masterPages )
     {
         page->saveOdf( paContext );
     }
-    masterStylesTmpWriter.endElement();
 
-    masterStyles.close();
-
-    KoXmlWriter * bodyWriter = oasisStore.bodyWriter();
     bodyWriter->startElement( "office:body" );
     bodyWriter->startElement( odfTagName( true ) );
 

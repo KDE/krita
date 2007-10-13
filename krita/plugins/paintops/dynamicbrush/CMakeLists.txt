@@ -16,6 +16,7 @@ target_link_libraries(kritadynamicbrushpaintop kritaui kritadynamicbrush
   # link to this to "load" the programs factory
 #   kritafilterslistdynamicprogram
   kritabasicdynamicshapeprogram
+  kritabasicdynamiccoloringprogram
   )
 
 install(TARGETS kritadynamicbrushpaintop DESTINATION ${PLUGIN_INSTALL_DIR})

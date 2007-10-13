@@ -20,15 +20,13 @@
 
 #include "kis_dynamic_shape_program.h"
 
-#include <QList>
-
 class KisDynamicSensor;
 
 class KisBasicDynamicProgram : public KisDynamicShapeProgram {
     Q_OBJECT
     public:
         KisBasicDynamicProgram(const QString& name);
-        ~KisBasicDynamicProgram();
+        virtual ~KisBasicDynamicProgram();
         virtual void apply(KisDynamicShape* shape, const KisPaintInformation& adjustedInfo) const;
         virtual QWidget* createEditor(QWidget* parent);
         virtual void fromXML(const QDomElement&);

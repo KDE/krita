@@ -15,28 +15,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_BASIC_DYNAMIC_PROGRAM_EDITOR_H_
-#define _KIS_BASIC_DYNAMIC_PROGRAM_EDITOR_H_
+#include "kis_basic_dynamic_coloring_program_editor.h"
 
-#include <QWidget>
+#include "ui_BasicDynamicColoringProgramEditor.h"
 
-class Ui_BasicDynamicProgramEditor;
+KisBasicDynamicColoringProgramEditor::KisBasicDynamicColoringProgramEditor(KisBasicDynamicColoringProgram* program) :
+        m_program(program)
+{
+    m_basicDynamicColoringProgramEditor = new Ui_BasicDynamicColoringProgramEditor();
+    m_basicDynamicColoringProgramEditor->setupUi(this);
+}
 
-class KisBasicDynamicProgram;
+KisBasicDynamicColoringProgramEditor::~KisBasicDynamicColoringProgramEditor()
+{
+    delete m_basicDynamicColoringProgramEditor;
+}
 
-class KisBasicDynamicProgramEditor : public QWidget {
-    Q_OBJECT
-    public:
-        KisBasicDynamicProgramEditor(KisBasicDynamicProgram* program);
-        ~KisBasicDynamicProgramEditor();
-    public slots:
-        void setEnableSize(bool );
-        void setEnableAngle(bool );
-        void setEnableScatter(bool );
-        void setEnableCount(bool );
-    private:
-        Ui_BasicDynamicProgramEditor* m_basicDynamicProgramEditor;
-        KisBasicDynamicProgram* m_program;
-};
-
-#endif
+#include "kis_basic_dynamic_coloring_program_editor.moc"

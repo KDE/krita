@@ -25,7 +25,6 @@
 #include "kis_properties_configuration.h"
 
 // Dynamic Brush lib includes
-#include "kis_dynamic_coloring.h"
 #include "kis_dynamic_shape_program_factory_registry.h"
 #include "kis_dynamic_sensor.h"
 #include "kis_dynamic_shape.h"
@@ -44,7 +43,7 @@ class Factory {
 
 static Factory factory;
 
-KisBasicDynamicProgram::KisBasicDynamicProgram(const QString& name) : KisDynamicShapeProgram(name, "basic"),
+KisBasicDynamicProgram::KisBasicDynamicProgram(const QString& name) : KisDynamicShapeProgram(name, "basicshape"),
     m_sizeEnabled(false),
     m_sizeMinimum(0),
     m_sizeMaximum(200),
@@ -116,7 +115,7 @@ void KisBasicDynamicProgram::fromXML(const QDomElement& elt)
         }
         n = n.nextSibling();
     }
-    KisDynamicProgram::fromXML(elt);
+    KisDynamicShapeProgram::fromXML(elt);
 }
 
 void KisBasicDynamicProgram::toXML(QDomDocument& doc, QDomElement& rootElt) const
@@ -161,7 +160,7 @@ void KisBasicDynamicProgram::toXML(QDomDocument& doc, QDomElement& rootElt) cons
         m_countSensor->toXML( doc, eSensor);
         rootElt.appendChild( eSensor );
     }
-    KisDynamicProgram::toXML(doc, rootElt);
+    KisDynamicShapeProgram::toXML(doc, rootElt);
 }
 
 bool KisBasicDynamicProgram::isSizeEnabled() const
@@ -339,7 +338,7 @@ void KisBasicDynamicProgram::setCountSensor(KisDynamicSensor* s)
 //--- KisBasicDynamicProgramFactory ---//
 
 KisBasicDynamicProgramFactory::KisBasicDynamicProgramFactory() :
-    KisDynamicShapeProgramFactory("basic", i18n("Basic"))
+    KisDynamicShapeProgramFactory("basicshape", i18n("Basic"))
 {
 }
 

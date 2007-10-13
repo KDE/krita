@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>Form</class>
- <widget class="QWidget" name="Form" >
+ <class>BasicDynamicColoringProgramEditor</class>
+ <widget class="QWidget" name="BasicDynamicColoringProgramEditor" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -41,17 +41,17 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="KIntNumInput" name="sizeJitter" >
+        <widget class="KIntNumInput" native="1" name="sizeJitter" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" >
+         <property name="minimum" stdset="0" >
           <number>0</number>
          </property>
-         <property name="maximum" >
+         <property name="maximum" stdset="0" >
           <number>100</number>
          </property>
-         <property name="suffix" >
+         <property name="suffix" stdset="0" >
           <string>%</string>
          </property>
         </widget>
@@ -98,17 +98,17 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="KIntNumInput" name="sizeMaximum_4" >
+        <widget class="KIntNumInput" native="1" name="sizeMaximum_4" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" >
+         <property name="minimum" stdset="0" >
           <number>0</number>
          </property>
-         <property name="maximum" >
+         <property name="maximum" stdset="0" >
           <number>100</number>
          </property>
-         <property name="suffix" >
+         <property name="suffix" stdset="0" >
           <string>%</string>
          </property>
         </widget>
@@ -155,17 +155,17 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="KIntNumInput" name="sizeMaximum_3" >
+        <widget class="KIntNumInput" native="1" name="sizeMaximum_3" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" >
+         <property name="minimum" stdset="0" >
           <number>0</number>
          </property>
-         <property name="maximum" >
+         <property name="maximum" stdset="0" >
           <number>100</number>
          </property>
-         <property name="suffix" >
+         <property name="suffix" stdset="0" >
           <string>%</string>
          </property>
         </widget>
@@ -212,17 +212,17 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="KIntNumInput" name="sizeMaximum_2" >
+        <widget class="KIntNumInput" native="1" name="sizeMaximum_2" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" >
+         <property name="minimum" stdset="0" >
           <number>0</number>
          </property>
-         <property name="maximum" >
+         <property name="maximum" stdset="0" >
           <number>100</number>
          </property>
-         <property name="suffix" >
+         <property name="suffix" stdset="0" >
           <string>%</string>
          </property>
         </widget>
@@ -269,17 +269,17 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="KIntNumInput" name="sizeMaximum" >
+        <widget class="KIntNumInput" native="1" name="sizeMaximum" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" >
+         <property name="minimum" stdset="0" >
           <number>0</number>
          </property>
-         <property name="maximum" >
+         <property name="maximum" stdset="0" >
           <number>100</number>
          </property>
-         <property name="suffix" >
+         <property name="suffix" stdset="0" >
           <string>%</string>
          </property>
         </widget>

@@ -138,6 +138,10 @@ class KoRulerPrivate {
         int m_selectOffset;
 
         RulerTabChooser *m_tabChooser;
+
+    static int compareTabs(KoRuler::Tab &tab1, KoRuler::Tab &tab2) {
+        return tab1.position < tab2.position;
+    }
 };
 
 
@@ -696,7 +700,10 @@ void KoRuler::updateTabs(const QList<KoRuler::Tab> &tabs)
 }
 
 QList<KoRuler::Tab> KoRuler::tabs() const {
-    return d->m_tabs;
+    QList<Tab> answer = d->m_tabs;
+    qSort(answer.begin(), answer.end(), d->compareTabs);
+
+    return answer;
 }
 
 void KoRuler::mousePressEvent ( QMouseEvent* ev )

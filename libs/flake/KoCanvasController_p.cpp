@@ -46,7 +46,7 @@
 Viewport::Viewport(KoCanvasController* parent)
     : QWidget(parent)
     , m_draggedShape(0)
-    , m_drawShadow( true )
+    , m_drawShadow( false )
     , m_canvas( 0 )
     , m_documentOffset( QPoint( 0, 0 ) )
 {

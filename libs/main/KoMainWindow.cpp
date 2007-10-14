@@ -1763,7 +1763,11 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
 
     if( !d->m_dockWidgetMap.contains( factory->id() ) ) {
         dockWidget = factory->createDockWidget();
-        Q_ASSERT(dockWidget);
+
+        // It is quite possible that a dock factory cannot create the dock; don't
+        // do anything in that case.
+        if (!dockWidget) return 0;
+
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent( this );
         Qt::DockWidgetArea side = Qt::RightDockWidgetArea;

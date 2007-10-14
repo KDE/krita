@@ -146,7 +146,7 @@ bool KisReflectanceColorSpace::profileIsCompatible(KoColorProfile* profile) cons
 
 void KisReflectanceColorSpace::fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
 {
-	kDebug() << "fromRgbA16 CALLED!" << endl;
+    //kDebug() << "fromRgbA16 CALLED!" << endl;
 	const quint32 ncols = WLS_NUMBER;
 	const quint16 *src16 = reinterpret_cast<const quint16 *>(srcU8);
 	float *dstf = reinterpret_cast<float *>(dstU8);

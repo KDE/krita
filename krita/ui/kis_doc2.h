@@ -139,10 +139,15 @@ public:
     KoShape * shapeForNode( KisNodeSP layer );
 
     /**
+     * Add a node to the shape controller
+     */
+    KoShape * addShape( const KisNodeSP node);
+
+    /**
      * The layer model provides a light-weight Qt model-view
      * compatible model on the internal Krita image layer hierarchy.
      */
-    KisNodeModel * layerModel();
+    KisNodeModel * nodeModel();
 
 public slots:
     void slotImageUpdated();

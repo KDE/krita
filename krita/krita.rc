@@ -104,7 +104,8 @@
 
 <Menu name="Mask"><text>&amp;Mask</text>
     <Menu name="MaskNew"><text>New</text>
-        <Action name="create_transparency_mask"/>
+        <Action name="create_transparency_mask_hide_all"/>
+        <Action name="create_transparency_mask_show_all"/>
         <Action name="create_filter_mask"/>
         <Action name="create_transformation_mask"/>
 	<Action name="duplicate_mask"/>

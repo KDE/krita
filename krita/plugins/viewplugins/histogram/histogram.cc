@@ -68,14 +68,11 @@ true);
 
         m_view = (KisView2*) parent;
         if (KisImageSP img = m_view->image()) {
-            connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged()));
-            connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(slotLayersChanged()));
-            connect(m_view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayersChanged()));
-            connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), this, SLOT(slotLayersChanged()));
-            connect(img.data(), SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
-                    this, SLOT(slotLayersChanged()));
-            connect(img.data(), SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
-                    this, SLOT(slotLayersChanged()));
+            connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged()));
+            connect(img.data(), SIGNAL(sigNodeHasBeenAdded( KisNode *, int )), SLOT(slotLayersChanged()));
+            connect(m_view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(slotLayersChanged()));
+            connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(slotLayersChanged()));
+            connect(img.data(), SIGNAL(sigNodeHasBeenRemoved( KisNode *, int )), SLOT(slotLayersChanged()));
             m_img = img.data();
         }
     }

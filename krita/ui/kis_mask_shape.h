@@ -31,16 +31,15 @@ class KoShapeContainer;
 #define KIS_MASK_SHAPE_ID "KisMaskShapeID"
 
 /**
-   A KisMaskShape is a flake shape wrapper around a KisMask. A KisMask
-   is a single-channel (for now) 8-bit (for now) mask that belongs to
-   a layer. Examples of masks are alpha masks (that hide part of a
-   layer), filter masks (that filter part of a layer), selection masks
-   (that determine which part of a layer is selected), painterly masks
-   (that add some aspect of real-world media to the colors represented
-   by a layer) or channel masks (that contain a single color channel
-   extracted from the actual layer).
-*/
-
+ *  A KisMaskShape is a flake shape wrapper around a KisMask. A KisMask
+ *  is a single-channel (for now) 8-bit (for now) mask that belongs to
+ *  a layer. Examples of masks are alpha masks (that hide part of a
+ *  layer), filter masks (that filter part of a layer), selection masks
+ *  (that determine which part of a layer is selected), painterly masks
+ *  (that add some aspect of real-world media to the colors represented
+ *  by a layer) or channel masks (that contain a single color channel
+ *  extracted from the actual layer).
+ */
 class KisMaskShape : public KoShape
 {
 public:

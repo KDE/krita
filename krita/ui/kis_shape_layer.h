@@ -36,7 +36,6 @@ class QString;
 class KoViewConverter;
 
 const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
-
 /**
    A KisShapeLayer contains any number of non-krita flakes, such as
    path shapes, text shapes and anything else people come up with.

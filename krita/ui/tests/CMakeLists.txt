@@ -1,6 +1,8 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
+add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+
 ########### next target ###############
 
 set(kis_node_model_test_SRCS kis_node_model_test.cpp )
@@ -36,15 +38,6 @@ target_link_libraries(squeezedcombobox_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTT
 
 ########### next target ###############
 
-set(kis_files_test_SRCS kis_files_test.cpp )
-
-kde4_add_unit_test(kis_files_test TESTNAME krita-ui-kis_files_test ${kis_files_test_SRCS})
-
-target_link_libraries(kis_files_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
-
-########### end ###############
-
 set(kis_prescaled_projection_test_SRCS kis_prescaled_projection_test.cpp )
 
 kde4_add_unit_test(KisPrescaledProjectionTest TESTNAME krita-ui-kis_prescaled_projection_test ${kis_prescaled_projection_test_SRCS})
@@ -52,3 +45,12 @@ kde4_add_unit_test(KisPrescaledProjectionTest TESTNAME krita-ui-kis_prescaled_pr
 target_link_libraries(KisPrescaledProjectionTest  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
 
 ########### end ###############
+set(kis_files_test_SRCS kis_files_test.cpp )
+
+kde4_add_unit_test(kis_files_test TESTNAME krita-ui-kis_files_test ${kis_files_test_SRCS})
+
+target_link_libraries(kis_files_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
+
+
+########### end ###############
+

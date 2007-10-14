@@ -52,20 +52,6 @@ public:
                           KisCanvas2 * canvas, KisGridDrawer * gridDrawer );
 
     /**
-     * Prescale the canvas represention of the image (if necessary, it
-     * is for QPainter, not for OpenGL).
-     */
-    virtual void preScale() {}
-
-    /**
-     * Prescale the canvas represetation of the image.
-     *
-     * @param rc The target rect in view coordinates of the prescaled
-     * image, pre-translated with the document offset
-     */
-    virtual void preScale( const QRect & rc ) { Q_UNUSED( rc ); }
-
-    /**
      * Returns one check of the background checkerboard pattern.
      *
      * @param checkSize the size of the check

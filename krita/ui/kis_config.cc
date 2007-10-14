@@ -173,7 +173,7 @@ void KisConfig::setWorkingColorSpace(const QString & workingColorSpace)
 
 QString KisConfig::printerColorSpace() const
 {
-    return m_cfg.readEntry("printerColorSpace", "CMYK");
+    return m_cfg.readEntry("printerColorSpace", "RGBA");
 }
 
 void KisConfig::setPrinterColorSpace(const QString & printerColorSpace)

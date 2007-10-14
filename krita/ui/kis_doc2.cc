@@ -127,7 +127,7 @@ public:
 
     ~KisDocPrivate()
         {
-            // Don't delete m_d->shapeController or m_d->layerModel because it's in a QObject hierarchy.
+            // Don't delete m_d->shapeController or m_d->nodeModel because it's in a QObject hierarchy.
             //delete undoAdapter;
             //delete nserver;
         }
@@ -143,7 +143,7 @@ public:
 
     KisImageSP image;
     KisShapeController * shapeController;
-    KisNodeModel * layerModel;
+    KisNodeModel * nodeModel;
 };
 
 
@@ -213,7 +213,7 @@ bool KisDoc2::init()
 //     }
 
     m_d->shapeController = new KisShapeController( this, m_d->nserver );
-    m_d->layerModel = new KisNodeModel( this );
+    m_d->nodeModel = new KisNodeModel( this );
 
     return true;
 }
@@ -941,9 +941,15 @@ KoShape * KisDoc2::shapeForNode( KisNodeSP layer )
 }
 
 
-KisNodeModel * KisDoc2::layerModel()
+KoShape * KisDoc2::addShape(const KisNodeSP node)
 {
-    return m_d->layerModel;
+    m_d->shapeController->slotNodeAdded( const_cast<KisNode*>(node.data()), 0 );
+    return m_d->shapeController->shapeForNode( node );
+}
+
+KisNodeModel * KisDoc2::nodeModel()
+{
+    return m_d->nodeModel;
 }
 
 void KisDoc2::setIOSteps(qint32 nsteps)
@@ -1011,7 +1017,7 @@ void KisDoc2::setCurrentImage(KisImageSP image)
     m_d->image = image;
     m_d->image->setUndoAdapter( m_d->undoAdapter );
     m_d->shapeController->setImage( image );
-    m_d->layerModel->setImage( image );
+    m_d->nodeModel->setImage( image );
     setUndo(true);
 
     emit sigLoadingFinished();

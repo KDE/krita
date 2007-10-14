@@ -43,7 +43,8 @@ class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
 class KisImageManager;
-
+class KisNodeManager;
+class KisMaskManager;
 
 /**
  * Krita view class
@@ -74,8 +75,9 @@ public:
     virtual void updateReadWrite( bool readwrite ) { Q_UNUSED(readwrite); }
     void slotChildActivated(bool a);
     void canvasAddChild( KoViewChild * child );
-    virtual void print(KPrinter &printer);
-    virtual void setupPrinter(KPrinter &printer);
+
+    virtual void print(QPrinter &printer);
+    virtual void setupPrinter(QPrinter &printer);
 
 public:  // Krita specific interfaces
 
@@ -107,6 +109,18 @@ public:  // Krita specific interfaces
     /// The layer manager handles everything action related to
     /// layers
     KisLayerManager * layerManager();
+
+    /// The mask manager handles everything action-related to masks
+    KisMaskManager * maskManager();
+
+    /// The node manager handles everything about nodes
+    KisNodeManager * nodeManager();
+
+    /**
+     * Convenience method to get at the active node, which may be
+     * a layer or a mask or a selection
+     */
+    KisNodeSP activeNode();
 
     /// Convenience method to get at the active layer
     KisLayerSP activeLayer();

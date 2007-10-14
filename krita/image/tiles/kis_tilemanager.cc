@@ -476,7 +476,7 @@ quint8* KisTileManager::findTileFor(qint32 pixelSize)
                 m_pools[i] = new quint8[pixelSize * m_tileSize * m_tilesPerPool];
             }
             catch ( std::bad_alloc ) {
-                kDebug() <<">>>>>>> Could not allocated memory" << pixelSize <<"" << m_tileSize <<"" << m_tilesPerPool;
+                kError() <<">>>>>>> Could not allocate memory" << pixelSize <<"" << m_tileSize <<"" << m_tilesPerPool;
                 // XXX: bart! What shall we do here?
                 abort();
             }

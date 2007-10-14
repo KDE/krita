@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2007 Boudewijn Rempt <boud@kde.org>
  *
@@ -42,9 +43,11 @@ void kislayermodel_test::testRowcount()
     model.setImage( img );
 
     KisLayerSP l1 = new KisPaintLayer(img, "first", 200, img->colorSpace());
-    QVERIFY( model.rowCount() == 1 );
+    img->addNode(l1.data(), img->root() );
+    QCOMPARE( model.rowCount(), 1 );
 
     KisLayerSP l2 = new KisPaintLayer(img, "second", 200, img->colorSpace());
+    img->addNode(l2.data(), img->root());
     QVERIFY( model.rowCount() == 2 );
 
     KisGroupLayerSP parent = new KisGroupLayer(img, "group 1", 200);
@@ -73,6 +76,7 @@ void kislayermodel_test::testModelIndex()
     model.setImage( img );
 
     KisLayerSP first = new KisPaintLayer(img, "first", 200, img->colorSpace());
+    img->addNode(first.data());
     QModelIndex idx = model.index( 0, 0 );
 
     QVERIFY( idx.isValid() );
@@ -81,6 +85,7 @@ void kislayermodel_test::testModelIndex()
     QVERIFY( model.hasChildren( idx ) == false );
 
     KisLayerSP second = new KisPaintLayer(img, "second", 200, img->colorSpace() );
+    img->addNode(second.data());
     QModelIndex idx2 = model.index( 1, 0 );
 
     QVERIFY( idx2.isValid() );

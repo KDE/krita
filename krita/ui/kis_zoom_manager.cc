@@ -112,7 +112,9 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
     connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
             m_verticalRuler, SLOT(setOffset(int)));
 
-    connect( m_canvasController, SIGNAL( canvasMousePositionChanged(const QPoint & ) ), this, SLOT( mousePositionChanged( const QPoint & ) ) );
+    connect( m_canvasController,
+             SIGNAL( canvasMousePositionChanged(const QPoint & ) ),
+             SLOT( mousePositionChanged( const QPoint & ) ) );
 
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
             this, SLOT(slotZoomChanged(KoZoomMode::Mode, double)));
@@ -166,9 +168,9 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
     m_view->canvasBase()->preScale();
     m_view->canvas()->update();
 
-    m_canvasController->setDocumentSize(
-            QSize( int(0.5 + m_zoomHandler->documentToViewX(img->width() / img->xRes())),
-                   int(0.5 + m_zoomHandler->documentToViewY(img->height() / img->yRes())) ) );
+    QSize sz = QSize( int(0.5 + m_zoomHandler->documentToViewX(img->width() / img->xRes())),
+                      int(0.5 + m_zoomHandler->documentToViewY(img->height() / img->yRes())) );
+    m_canvasController->setDocumentSize( sz );
 
     // Finally ask the canvasController to recenter
     m_canvasController->recenterPreferred();

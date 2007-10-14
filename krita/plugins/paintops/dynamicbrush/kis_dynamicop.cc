@@ -54,6 +54,7 @@
 
 KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
 {
+    Q_UNUSED(image);
     const KisDynamicOpSettings *dosettings = dynamic_cast<const KisDynamicOpSettings *>(settings);
     Q_ASSERT(dosettings);
 
@@ -64,6 +65,7 @@ KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, K
 
 KisPaintOpSettings *KisDynamicOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
+    Q_UNUSED(image);
     Q_UNUSED(inputDevice);
     return new KisDynamicOpSettings(parent, m_shapeBookmarksManager, m_coloringBookmarksManager);
 }

@@ -42,7 +42,6 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 
-
 #include <kis_clone_layer.h>
 #include <kis_shape_layer.h>
 #include <kis_adjustment_layer.h>
@@ -123,37 +122,7 @@ KisPaintDeviceSP KisLayerManager::activeDevice()
 
 void KisLayerManager::activateLayer( KisLayerSP layer )
 {
-
     Q_ASSERT( layer );
-
-    // XXX: Set the selection on the shape manager to the active layer
-    // and set call KoSelection::setActiveLayer( KoShapeLayer* layer )
-    // with the parent of the active layer.
-
-    Q_ASSERT( m_view );
-    Q_ASSERT( m_view->canvasBase() );
-    Q_ASSERT( m_view->canvasBase()->globalShapeManager() );
-
-    KoSelection * selection = m_view->canvasBase()->globalShapeManager()->selection();
-    Q_ASSERT( selection );
-
-    KoShape * shape = m_view->document()->shapeForNode( layer );
-    Q_ASSERT( shape );
-
-    selection->deselectAll();
-    selection->select(shape);
-
-    Q_ASSERT( layer->parent() );
-    KoShape * parentShape = m_view->document()->shapeForNode( static_cast<KisLayer*>( layer->parent().data() ) );
-    Q_ASSERT( parentShape );
-
-    KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>( parentShape );
-    Q_ASSERT( shapeLayer );
-
-    // So the KoShapeController class can set the right parent on
-    // layers we add.
-    selection->setActiveLayer( shapeLayer );
-
     m_activeLayer = layer;
     emit sigLayerActivated( layer );
     layersUpdated();
@@ -501,7 +470,7 @@ void KisLayerManager::layerAdd()
         addLayer(img->rootLayer(), KisLayerSP(0));
 }
 
-void KisLayerManager::addLayer(KisNodeSP parent, KisLayerSP above)
+void KisLayerManager::addLayer(KisNodeSP parent, KisNodeSP above)
 {
     KisImageSP img = m_view->image();
     if (img) {
@@ -518,7 +487,7 @@ void KisLayerManager::addLayer(KisNodeSP parent, KisLayerSP above)
     }
 }
 
-void KisLayerManager::addGroupLayer(KisNodeSP parent, KisLayerSP above)
+void KisLayerManager::addGroupLayer(KisNodeSP parent, KisNodeSP above)
 {
     KisImageSP img = m_view->image();
     if (img) {
@@ -544,7 +513,7 @@ void KisLayerManager::addCloneLayer()
         addCloneLayer(img->rootLayer(), KisLayerSP(0));
 }
 
-void KisLayerManager::addCloneLayer( KisNodeSP parent, KisLayerSP above )
+void KisLayerManager::addCloneLayer( KisNodeSP parent, KisNodeSP above )
 {
     KisImageSP img = m_view->image();
     if ( img ) {
@@ -588,7 +557,7 @@ void KisLayerManager::addShapeLayer()
 }
 
 
-void KisLayerManager::addShapeLayer( KisNodeSP parent, KisLayerSP above )
+void KisLayerManager::addShapeLayer( KisNodeSP parent, KisNodeSP above )
 {
     KisImageSP img = m_view->image();
     if ( img ) {
@@ -615,7 +584,7 @@ void KisLayerManager::addAdjustmentLayer()
     addAdjustmentLayer( activeLayer()->parent(), activeLayer() );
 }
 
-void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisLayerSP above)
+void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
 {
     Q_ASSERT(parent);
     Q_ASSERT(above);
@@ -671,7 +640,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisLayerSP above)
     }
 }
 
-void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisLayerSP above, const QString & name,
+void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, const QString & name,
                                  KisFilterConfiguration * filter, KisSelectionSP selection)
 {
     Q_ASSERT(parent);

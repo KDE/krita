@@ -117,7 +117,7 @@ public slots:
      * the image size in postscript points.
      */
     void slotSetImageSize( qint32 w, qint32 h );
-    void slotSetDisplayProfile( KoColorProfile * profile );
+    void slotSetDisplayProfile( const KoColorProfile * profile );
 
 private slots:
 

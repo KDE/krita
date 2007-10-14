@@ -39,7 +39,7 @@
 #include "kis_shape_controller.h"
 #include "kis_types.h"
 #include "kis_transparency_mask.h"
-#include "kis_node.h"
+
 #include "kis_shape_controller_test.h"
 
 
@@ -51,6 +51,7 @@ void KisShapeControllerTest::testSetImage()
     KisShapeController * shapeController = new KisShapeController(doc, nameServer);
 
     KisImageSP image = new KisImage(0, 512, 512, 0, "shape controller test");
+    connect( image, SIGNAL(sigLayerAdded( KisLayerSP )), this, SLOT(testLayerAdded( KisLayerSP )) );
     KisLayerSP layer = new KisPaintLayer( image, "test1", OPACITY_OPAQUE );
     image->addLayer( layer );
 

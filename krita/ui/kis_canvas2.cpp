@@ -36,6 +36,7 @@
 #include "KoToolProxy.h"
 #include "KoSelection.h"
 
+#include "kis_prescaled_projection.h"
 #include "kis_image.h"
 #include "kis_doc2.h"
 #include "kis_shape_layer.h"
@@ -69,7 +70,6 @@ public:
         , currentCanvasIsOpenGL( false )
         , currentCanvasUsesOpenGLShaders( false )
         , toolProxy( new KoToolProxy(parent) )
-        , fastZooming( false )
         {
         }
 
@@ -88,89 +88,27 @@ public:
     bool currentCanvasIsOpenGL;
     bool currentCanvasUsesOpenGLShaders;
     KoToolProxy * toolProxy;
-    QImage canvasCache; // XXX: use KisQPainterImageContext to share
-                        // cache data between views. Finish that
-                        // class. Or another way to tile the canvas
-                        // cache instead of having a QImage as big as
-                        // the image in pixels.
     QPoint documentOffset;
     KoShapeControllerBase * sc;
-    bool fastZooming;
-
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
 #endif
     bool updateAllOfQPainterCanvas;
+    KisPrescaledProjectionSP prescaledProjection;
 };
 
 KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc)
     : KoCanvasBase(sc)
     , m_d ( new KisCanvas2Private(this, viewConverter, view) )
 {
-    KisConfig cfg;
-
-    m_d->updateAllOfQPainterCanvas = cfg.updateAllOfQPainterCanvas();
-    m_d->fastZooming = cfg.fastZoom();
-    if ( m_d->canvasWidget && m_d->canvasWidget->widget() )
-        m_d->canvasWidget->widget()->update();
-
-    resetMonitorProfile();
     createCanvas();
-    connect( view->canvasController(), SIGNAL( moveDocumentOffset( const QPoint& ) ),
-             this, SLOT( documentOffsetMoved( const QPoint& ) ) );
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-
+    connect( view->canvasController(), SIGNAL( moveDocumentOffset( const QPoint& ) ), SLOT( documentOffsetMoved( const QPoint& ) ) );
+    connect( KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 }
 
 KisCanvas2::~KisCanvas2()
 {
     delete m_d;
-}
-
-void KisCanvas2::createQPainterCanvas()
-{
-#ifdef HAVE_OPENGL
-    m_d->openGLImageTextures = 0;
-#endif
-    setCanvasWidget( new KisQPainterCanvas( this, m_d->view ) );
-    m_d->currentCanvasIsOpenGL = false;
-     KisConfig cfg;
-     m_d->updateAllOfQPainterCanvas = cfg.updateAllOfQPainterCanvas();
-}
-
-void KisCanvas2::createOpenGLCanvas()
-{
-#ifdef HAVE_OPENGL
-    if ( QGLFormat::hasOpenGL() ) {
-        // XXX: The image isn't done loading here!
-        m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile);
-        setCanvasWidget( new KisOpenGLCanvas2( this, m_d->view, m_d->openGLImageTextures ) );
-        m_d->currentCanvasIsOpenGL = true;
-        m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
-    }
-    else {
-        kWarning() << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
-        createQPainterCanvas();
-    }
-#endif
-}
-
-void KisCanvas2::createCanvas()
-{
-    KisConfig cfg;
-    if ( cfg.useOpenGL() ) {
-#ifdef HAVE_OPENGL
-        createOpenGLCanvas();
-#else
-        kWarning() << "OpenGL requested while its not available, starting qpainter canvas";
-        createQPainterCanvas();
-#endif
-    }
-    else {
-        createQPainterCanvas();
-
-    }
-
 }
 
 void KisCanvas2::setCanvasWidget(QWidget * widget)
@@ -187,11 +125,6 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
         Q_ASSERT(controller->canvas() == this);
         controller->changeCanvasWidget(widget);
     }
-}
-
-KisView2* KisCanvas2::view()
-{
-    return m_d->view;
 }
 
 void KisCanvas2::gridSize(double *horizontal, double *vertical) const
@@ -231,32 +164,6 @@ KoShapeManager * KisCanvas2::globalShapeManager() const
     return m_d->shapeManager;
 }
 
-QRect KisCanvas2::viewRectFromDoc( const QRectF & rc )
-{
-    QRect viewRect = m_d->viewConverter->documentToView(rc).toAlignedRect();
-    viewRect = viewRect.translated( -m_d->documentOffset );
-    viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasWidget->widget()->width(), m_d->canvasWidget->widget()->height() ) );
-    return viewRect;
-}
-
-
-QRect KisCanvas2::viewRectFromImagePixels( const QRect & rc )
-{
-    double pppx,pppy;
-    pppx = image()->xRes();
-    pppy = image()->yRes();
-
-    QRectF docRect;
-    docRect.setCoords((rc.left() - 2) / pppx, (rc.top() - 2) / pppy, (rc.right() + 2) / pppx, (rc.bottom() + 2) / pppy);
-
-    QRect viewRect = m_d->viewConverter->documentToView(docRect).toAlignedRect();
-    viewRect = viewRect.translated( -m_d->documentOffset );
-    viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasWidget->widget()->width(), m_d->canvasWidget->widget()->height() ) );
-
-    return viewRect;
-
-}
-
 void KisCanvas2::updateCanvas(const QRectF& rc)
 {
     // updateCanvas is called from tools, never from the projection
@@ -274,70 +181,9 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     }
 }
 
-void KisCanvas2::updateCanvasProjection( const QRect & rc )
-{
-#ifdef HAVE_OPENGL
-    // Should never have an OpenGL image context and get here as that
-    // connects to the image directly.
-    Q_ASSERT( m_d->openGLImageTextures.isNull() );
-#endif
-    // XXX: Use the KisQPainterImageContext here
-
-    // When using fast zoom, we don't have a canvas cache
-    if ( !m_d->fastZooming ) {
-        QPainter p( &m_d->canvasCache );
-        p.setCompositionMode( QPainter::CompositionMode_Source );
-
-        QImage updateImage = image()->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
-                                                      m_d->monitorProfile,
-                                                      m_d->view->resourceProvider()->HDRExposure());
-
-        KisLayerSP layer = resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
-        if (!layer) return;
-
-        KisPaintDeviceSP dev = layer->paintDevice();
-        if (!dev) return;
-
-        if (dev->hasSelection()){
-            KisSelectionSP selection = dev->selection();
-
-            QTime t;
-            t.start();
-            selection->paint(&updateImage, rc);
-            kDebug(41010) << "Mask visualisation rendering took: " << t.elapsed();
-
-        }
-
-        p.drawImage( rc.x(), rc.y(), updateImage, 0, 0, rc.width(), rc.height() );
-        p.end();
-
-    }
-    else {
-        // XXX: Draw the selection also if we're using fast scaling
-        // instead of the canvas cache
-    }
-
-    QRect vRect = viewRectFromImagePixels( rc );
-
-    if ( !vRect.isEmpty() ) {
-
-        m_d->canvasWidget->preScale( vRect );
-
-        if ( m_d->updateAllOfQPainterCanvas ) {
-            m_d->canvasWidget->widget()->update();
-        }
-        else {
-            m_d->canvasWidget->widget()->update( vRect );
-        }
-    }
+void KisCanvas2::updateInputMethodInfo() {
+    // TODO call (the protected) QWidget::updateMicroFocus() on the proper canvas widget...
 }
-
-
-void KisCanvas2::updateCanvas()
-{
-    m_d->canvasWidget->widget()->update();
-}
-
 
 const KoViewConverter* KisCanvas2::viewConverter() const
 {
@@ -359,36 +205,127 @@ KoToolProxy * KisCanvas2::toolProxy() const {
     return m_d->toolProxy;
 }
 
+void KisCanvas2::createQPainterCanvas()
+{
+#ifdef HAVE_OPENGL
+    m_d->openGLImageTextures = 0;
+#endif
+    m_d->currentCanvasIsOpenGL = false;
+
+    KisQPainterCanvas * canvasWidget = new KisQPainterCanvas( this, m_d->view );
+    m_d->prescaledProjection = new KisPrescaledProjection();
+    m_d->prescaledProjection->setViewConverter( m_d->viewConverter );
+
+    canvasWidget->setPrescaledProjection( m_d->prescaledProjection );
+
+    KisConfig cfg;
+    m_d->updateAllOfQPainterCanvas = cfg.updateAllOfQPainterCanvas();
+
+    connect( KisConfigNotifier::instance(), SIGNAL(configChanged()), m_d->prescaledProjection, SLOT(updateSettings()));
+    connect( m_d->view->resourceProvider(), SIGNAL( sigDisplayProfileChanged( const KoColorProfile * profile ) ), m_d->prescaledProjection, SLOT( setMonitorProfile( const KoColorProfile * ) ) );
+
+    setCanvasWidget( canvasWidget );
+}
+
+void KisCanvas2::createOpenGLCanvas()
+{
+#ifdef HAVE_OPENGL
+    if ( QGLFormat::hasOpenGL() ) {
+        // XXX: The image isn't done loading here!
+        m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile);
+        setCanvasWidget( new KisOpenGLCanvas2( this, m_d->view, m_d->openGLImageTextures ) );
+        m_d->currentCanvasIsOpenGL = true;
+        m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
+    }
+    else {
+        kWarning() << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
+        createQPainterCanvas();
+    }
+#endif
+}
+
+void KisCanvas2::createCanvas()
+{
+    KisConfig cfg;
+    if ( cfg.useOpenGL() ) {
+#ifdef HAVE_OPENGL
+        createOpenGLCanvas();
+#else
+        kWarning() << "OpenGL requested while its not available, starting qpainter canvas";
+        createQPainterCanvas();
+#endif
+    }
+    else {
+        createQPainterCanvas();
+
+    }
+
+}
+
+KisView2* KisCanvas2::view()
+{
+    return m_d->view;
+}
+
+
+QRect KisCanvas2::viewRectFromDoc( const QRectF & rc )
+{
+    QRect viewRect = m_d->viewConverter->documentToView(rc).toAlignedRect();
+    viewRect = viewRect.translated( -m_d->documentOffset );
+    viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasWidget->widget()->width(), m_d->canvasWidget->widget()->height() ) );
+    return viewRect;
+}
+
+
+void KisCanvas2::updateCanvasProjection( const QRect & rc )
+{
+#ifdef HAVE_OPENGL
+    // Should never have an OpenGL image context and get here as that
+    // connects to the image directly.
+    Q_ASSERT( m_d->openGLImageTextures.isNull() );
+#endif
+    // XXX: Use the KisQPainterImageContext here
+
+    // If this does anything, it updates the pixel-for-pixel
+    // projection of the KisImage
+    m_d->prescaledProjection->updateCanvasProjection( rc );
+
+    QRect vRect = m_d->prescaledProjection->viewRectFromImagePixels( rc );
+
+    if ( !vRect.isEmpty() ) {
+
+        // If so desired, rescale all of the visible area so we don't
+        // see any jitter when using algorithms that cannot handle the
+        // +/- half pixel inaccuracy of our algorithms
+        if ( m_d->updateAllOfQPainterCanvas ) {
+            m_d->prescaledProjection->preScale();
+        }
+        else {
+            m_d->prescaledProjection->preScale( vRect );
+        }
+
+        // Regardless, the actual
+        m_d->canvasWidget->widget()->update( vRect );
+
+    }
+}
+
+
+void KisCanvas2::updateCanvas()
+{
+    m_d->canvasWidget->widget()->update();
+}
+
+
 KisImageSP KisCanvas2::image()
 {
     return m_d->view->image();
 
 }
 
-QImage KisCanvas2::canvasCache()
-{
-    return m_d->canvasCache;
-}
-
 KoColorProfile *  KisCanvas2::monitorProfile()
 {
-    if (m_d->monitorProfile == 0) {
-        resetMonitorProfile();
-    }
     return m_d->monitorProfile;
-}
-
-
-void KisCanvas2::resetMonitorProfile()
-{
-    // XXX: The X11 monitor profile overrides the settings
-    m_d->monitorProfile = KoIccColorProfile::getScreenProfile();
-
-    if (m_d->monitorProfile == 0) {
-        KisConfig cfg;
-        QString monitorProfileName = cfg.monitorProfile();
-        m_d->monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
-    }
 }
 
 KisImageSP KisCanvas2::currentImage()
@@ -398,10 +335,8 @@ KisImageSP KisCanvas2::currentImage()
 
 void KisCanvas2::setImageSize( qint32 w, qint32 h )
 {
-    // Fast zoom takes the pixels directly from the QImage and doesn't
-    // cache the image in a qimage
-    if ( !m_d->fastZooming )
-        m_d->canvasCache = QImage( w, h, QImage::Format_ARGB32 );
+    if ( m_d->prescaledProjection )
+        m_d->prescaledProjection->setImageSize( w, h );
 }
 
 void KisCanvas2::connectCurrentImage()
@@ -414,6 +349,11 @@ void KisCanvas2::connectCurrentImage()
 #endif
         connect(m_d->view->image(), SIGNAL(sigImageUpdated(const QRect &)), SLOT(updateCanvasProjection(const QRect &)));
         connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize( qint32, qint32)) );
+
+        if ( m_d->prescaledProjection ) {
+            m_d->prescaledProjection->setImage( m_d->view->image() );
+        }
+
 #ifdef HAVE_OPENGL
     }
 #endif
@@ -431,7 +371,6 @@ void KisCanvas2::disconnectCurrentImage()
 
 void KisCanvas2::resetCanvas()
 {
-    resetMonitorProfile();
     KisConfig cfg;
 
 #if HAVE_OPENGL
@@ -453,7 +392,6 @@ void KisCanvas2::resetCanvas()
     }
 #endif
     m_d->updateAllOfQPainterCanvas = cfg.updateAllOfQPainterCanvas();
-    m_d->fastZooming = cfg.fastZoom();
     m_d->canvasWidget->widget()->update();
 }
 
@@ -465,7 +403,8 @@ void KisCanvas2::documentOffsetMoved( const QPoint &documentOffset )
 
 void KisCanvas2::preScale()
 {
-    m_d->canvasWidget->preScale();
+    if ( !m_d->currentCanvasIsOpenGL && m_d->prescaledProjection )
+        m_d->prescaledProjection->preScale();
 }
 
 bool KisCanvas2::usingHDRExposureProgram()
@@ -480,18 +419,14 @@ bool KisCanvas2::usingHDRExposureProgram()
     return false;
 }
 
-bool KisCanvas2::useFastZooming()
-{
-    return m_d->fastZooming;
-}
-
 void KisCanvas2::slotConfigChanged()
 {
     resetCanvas();
 }
 
-void KisCanvas2::updateInputMethodInfo() {
-    // TODO call (the protected) QWidget::updateMicroFocus() on the proper canvas widget...
+void KisCanvas2::slotSetDisplayProfile( const KoColorProfile * profile )
+{
+    m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
 }
 
 #include "kis_canvas2.moc"

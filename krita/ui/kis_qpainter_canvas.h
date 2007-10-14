@@ -21,6 +21,7 @@
 #include <QWidget>
 
 #include "kis_abstract_canvas_widget.h"
+#include "kis_prescaled_projection.h"
 
 class QImage;
 class QPaintEvent;
@@ -47,7 +48,7 @@ public:
 
     virtual ~KisQPainterCanvas();
 
-
+    void setPrescaledProjection( KisPrescaledProjectionSP prescaledProjection );
 public: // QWidget
 
     /// reimplemented method from superclass
@@ -96,20 +97,6 @@ public: // KisAbstractCanvasWidget
     KoToolProxy * toolProxy();
 
     void documentOffsetMoved( QPoint );
-
-    void preScale();
-
-    void preScale( const QRect & rc );
-
-private:
-
-    /**
-     * draw a scaled QImage of the projection onto the gc
-     *
-     * @param rc The desired rect in pixels
-     * @param gc The painter we draw on
-     */
-    void  drawScaledImage( const QRect & rc, QPainter &gc);
 
 private:
 

@@ -61,17 +61,18 @@
 #include <kis_layer.h>
 #include <kis_group_layer.h>
 #include <kis_mask.h>
+#include <kis_node.h>
 
 #include "kis_cmb_composite.h"
 #include "kis_view2.h"
-#include "kis_layer_manager.h"
+#include "kis_node_manager.h"
 #include "kis_node_model.h"
 
 KisLayerBox::KisLayerBox()
     : QDockWidget( i18n("Layers" ) )
     , Ui::WdgLayerBox()
     , m_image( 0 )
-    , m_layerManager( 0 )
+    , m_nodeManager( 0 )
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
@@ -85,7 +86,7 @@ KisLayerBox::KisLayerBox()
     listLayers->viewport()->installEventFilter(this);
     connect(listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
             this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));
-
+    connect(listLayers, SIGNAL(clicked(const QModelIndex&)), SLOT(slotNodeActivated(const QModelIndex&)));
     m_viewModeMenu = new KMenu( this );
     QActionGroup *group = new QActionGroup( this );
     QList<QAction*> actions;
@@ -123,13 +124,17 @@ KisLayerBox::KisLayerBox()
 
     m_newLayerMenu = new KMenu(this);
     bnAdd->setMenu(m_newLayerMenu);
-    bnAdd->setPopupMode(QToolButton::InstantPopup);
-
-    m_newLayerMenu->addAction(KIcon("document-new"), i18n("&New Layer"), this, SLOT(slotNewLayer()));
+    bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
+    connect( bnAdd, SIGNAL(clicked()), SLOT(slotNewPaintLayer()) );
+    m_newLayerMenu->addAction(KIcon("document-new"), i18n("&New Layer"), this, SLOT(slotNewPaintLayer()));
     m_newLayerMenu->addAction(KIcon("folder"), i18n("New &Group Layer"), this, SLOT(slotNewGroupLayer()));
     m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("New &Clone Layer"), this, SLOT(slotNewCloneLayer()));
     m_newLayerMenu->addAction(KIcon("bookmark"), i18n("New &Shape Layer"), this, SLOT(slotNewShapeLayer()));
     m_newLayerMenu->addAction(KIcon("tool_filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
+    m_newLayerMenu->addSeparator();
+    m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
+    m_newLayerMenu->addAction(KIcon("bookmark"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
+    m_newLayerMenu->addAction(KIcon("tool_filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
 
     connect(bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
     connect(bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
@@ -143,30 +148,24 @@ KisLayerBox::~KisLayerBox()
 {
 }
 
-void KisLayerBox::setImage(KisLayerManager * layerManager, KisImageSP img, KisNodeModel * nodeModel)
+void KisLayerBox::setImage(KisNodeManager * nodeManager, KisImageSP img, KisNodeModel * nodeModel)
 {
 
     if (m_image == img)
         return;
 
     m_nodeModel = nodeModel;
-    m_layerManager = layerManager;
+    m_nodeManager = nodeManager;
 
     if (m_image)
         m_image->disconnect(this);
 
     if (img) {
 
-        connect(m_layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(updateUI()));
-        connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(updateUI()));
-        connect(img.data(), SIGNAL(sigLayerRemoved( KisLayerSP )),
-                this, SLOT(updateUI()));
-        connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)),
-                this, SLOT(updateUI()));
-        connect(img.data(), SIGNAL(sigLayerMoved( KisLayerSP )),
-                this, SLOT(updateUI()));
-        connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(updateUI()));
-
+        connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), this, SLOT(updateUI()));
+        connect(m_nodeModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(updateUI()));
+        connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(updateUI()));
+        connect(m_nodeModel, SIGNAL(modelReset()), this, SLOT(updateUI()));
 
         listLayers->setModel( nodeModel );
 
@@ -190,7 +189,7 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
         if (mi.isValid())
             slotPropertiesClicked();
         else
-            slotNewLayer();
+            slotNewPaintLayer();
         return true;
     }
 
@@ -200,28 +199,30 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 void KisLayerBox::updateUI()
 {
     Q_ASSERT(! m_image.isNull());
-    kDebug(41007)  <<"###### KisLayerBox::updateUI" << m_layerManager->activeLayer();
+    kDebug(41007)  <<"###### KisLayerBox::updateUI" << m_nodeManager->activeNode();
 
-    bnDelete->setEnabled(m_layerManager->activeLayer());
-    bnRaise->setEnabled(m_layerManager->activeLayer() && (m_layerManager->activeLayer()->prevSibling() || m_layerManager->activeLayer()->parentLayer()));
-    bnLower->setEnabled(m_layerManager->activeLayer() && m_layerManager->activeLayer()->nextSibling());
-    doubleOpacity->setEnabled(m_layerManager->activeLayer());
-    cmbComposite->setEnabled(m_layerManager->activeLayer());
-    if (KisLayerSP active = m_layerManager->activeLayer())
+    bnDelete->setEnabled(m_nodeManager->activeNode());
+    bnRaise->setEnabled(m_nodeManager->activeNode() && (m_nodeManager->activeNode()->prevSibling() || m_nodeManager->activeNode()->parent()));
+    bnLower->setEnabled(m_nodeManager->activeNode() && m_nodeManager->activeNode()->nextSibling());
+    doubleOpacity->setEnabled(m_nodeManager->activeNode());
+    cmbComposite->setEnabled(m_nodeManager->activeNode());
+    if (KisNodeSP active = m_nodeManager->activeNode())
     {
-        if (m_layerManager->activeLayer()->paintDevice())
-            slotSetColorSpace(m_layerManager->activeLayer()->paintDevice()->colorSpace());
+        if (m_nodeManager->activePaintDevice())
+            slotSetColorSpace(m_nodeManager->activePaintDevice()->colorSpace());
         else
             slotSetColorSpace(m_image->colorSpace());
+#if 0 // XXX_NODE
         slotSetOpacity(active->opacity() * 100.0 / 255);
         slotSetCompositeOp(active->compositeOp());
+#endif
     }
 }
 
-void KisLayerBox::setCurrentLayer( KisLayerSP layer )
+void KisLayerBox::setCurrentNode( KisNodeSP node )
 {
-    if ( layer && m_nodeModel ) {
-        listLayers->setCurrentIndex( m_nodeModel->indexFromNode( layer.data() ) );
+    if ( node && m_nodeModel ) {
+        listLayers->setCurrentIndex( m_nodeModel->indexFromNode( node ) );
     }
 
 }
@@ -259,19 +260,29 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addSeparator();
         menu.addAction(KIcon("edit-delete"), i18n("&Remove Layer"), this, SLOT(slotRmClicked()));
         QMenu *sub = menu.addMenu(KIcon("document-new"), i18n("&New"));
-        sub->addAction(KIcon("document-new"), i18n("&Paint Layer"), this, SLOT(slotNewLayer()));
+
+        sub->addAction(KIcon("document-new"), i18n("&Paint Layer"), this, SLOT(slotNewPaintLayer()));
         sub->addAction(KIcon("folder"), i18n("&Group Layer"), this, SLOT(slotNewGroupLayer()));
         sub->addAction(KIcon("edit-copy"), i18n("&Clone Layer"), this, SLOT(slotNewCloneLayer()));
         sub->addAction(KIcon("bookmark"), i18n("&Shape Layer"), this, SLOT(slotNewShapeLayer()));
         sub->addAction(KIcon("tool_filter"), i18n("&Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
+        menu.addSeparator();
+        sub->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
+        sub->addAction(KIcon("bookmark"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
+        sub->addAction(KIcon("tool_filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
+
     }
     else
     {
-        menu.addAction(KIcon("document-new"), i18n("&New Layer"), this, SLOT(slotNewLayer()));
+        menu.addAction(KIcon("document-new"), i18n("&New Layer"), this, SLOT(slotNewPaintLayer()));
         menu.addAction(KIcon("folder"), i18n("New &Group Layer"), this, SLOT(slotNewGroupLayer()));
         menu.addAction(KIcon("edit-copy"), i18n("New &Clone Layer"), this, SLOT(slotNewCloneLayer()));
         menu.addAction(KIcon("bookmark"), i18n("New &Shape Layer"), this, SLOT(slotNewShapeLayer()));
         menu.addAction(KIcon("tool_filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
+        menu.addSeparator();
+        menu.addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
+        menu.addAction(KIcon("bookmark"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
+        menu.addAction(KIcon("tool_filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
     }
     menu.exec(pos);
 }
@@ -291,86 +302,141 @@ void KisLayerBox::slotThumbnailView()
     listLayers->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
 }
 
-void KisLayerBox::getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above)
+bool allowAsChild( const QString & parentType, const QString & childType )
 {
-    KisGroupLayerSP root = m_image->rootLayer();
-    if (KisLayerSP active = m_layerManager->activeLayer())
-    {
-        if (KisGroupLayer* pactive = qobject_cast<KisGroupLayer*>(active.data()))
-        {
-            parent = pactive;
-            above = dynamic_cast<KisLayer*>( parent->firstChild().data() );
+    // XXX_NODE: do we want to allow masks to apply on masks etc? Selections on masks?
+    if ( parentType == "KisPaintLayer" || parentType == "KisGroupLayer" || parentType == "KisAdjustmentLayer" || parentType == "KisShapeLayer" ) {
+        if (childType == "KisFilterMask" || childType == "KisTransformationMask" || childType == "KisTransparencyMask" || childType == "KisSelectionMask") {
+            return true;
         }
-        else
-        {
-            parent = root;
-            above = active;
-            if (active->parentLayer())
-                parent = dynamic_cast<KisGroupLayer*>( active->parentLayer().data() );
-        }
+        return false;
     }
-    else
+    else if ( parentType == "KisGroupLayer" ) {
+        return true;
+    }
+    else if ( parentType == "KisFilterMask" || parentType == "KisTransformationMask" || parentType == "KisTransparencyMask" || parentType == "KisSelectionMask")
     {
-        parent = root;
-        above = dynamic_cast<KisLayer*>( m_image->rootLayer()->firstChild().data() );
+        return false;
     }
+
+    return true;
 }
 
-void KisLayerBox::slotNewLayer()
+void KisLayerBox::getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above)
 {
-    KisGroupLayerSP parent;
-    KisLayerSP above;
+    KisNodeSP root = m_image->root();
+    KisNodeSP active =  m_nodeManager->activeNode();
 
-    getNewLayerLocation(parent, above);
+    if (!active)
+        active = root->firstChild();
+    // Find the first node above the current node that can have the desired
+    // layer type as child. XXX_NODE: disable the menu entries for node types
+    // that are not compatible with the active node type.
+    while (active) {
+        if ( allowAsChild(active->metaObject()->className(), nodeType) ) {
+            parent = active;
+            if ( m_nodeManager->activeNode()->parent() == parent ) {
+                above = m_nodeManager->activeNode();
+            }
+            else {
+                above = parent->firstChild();
+            }
+            return;
+        }
+        active = active->parent();
+    }
+    parent = root;
+    above = parent->firstChild();
+    kDebug() << parent << ", above " << above;
+}
 
-    emit sigRequestLayer(parent, above);
+void KisLayerBox::slotNewPaintLayer()
+{
+    KisNodeSP parent;
+    KisNodeSP above;
+
+    getNewNodeLocation("KisPaintLayer", parent, above);
+
+    emit sigRequestNewNode("KisPaintLayer", parent, above);
 }
 
 void KisLayerBox::slotNewGroupLayer()
 {
-    KisGroupLayerSP parent;
-    KisLayerSP above;
+    KisNodeSP parent;
+    KisNodeSP above;
 
-    getNewLayerLocation(parent, above);
+    getNewNodeLocation("KisGroupLayer", parent, above);
 
-    emit sigRequestGroupLayer(parent, above);
+    emit sigRequestNewNode("KisGroupLayer", parent, above);
 }
 
 void KisLayerBox::slotNewCloneLayer()
 {
-    KisGroupLayerSP parent;
-    KisLayerSP above;
+    KisNodeSP parent;
+    KisNodeSP above;
 
-    getNewLayerLocation( parent, above );
+    getNewNodeLocation("KisCloneLayer", parent, above);
 
-    emit sigRequestCloneLayer( parent, above );
+    emit sigRequestNewNode( "KisCloneLayer", parent, above );
 }
 
 
 void KisLayerBox::slotNewShapeLayer()
 {
-    KisGroupLayerSP parent;
-    KisLayerSP above;
+    KisNodeSP parent;
+    KisNodeSP above;
 
-    getNewLayerLocation( parent, above );
+    getNewNodeLocation("KisShapeLayer", parent, above);
 
-    emit sigRequestShapeLayer( parent, above );
+    emit sigRequestNewNode("KisShapeLayer", parent, above );
 }
 
 
 void KisLayerBox::slotNewAdjustmentLayer()
 {
-    KisGroupLayerSP parent;
-    KisLayerSP above;
+    KisNodeSP parent;
+    KisNodeSP above;
 
-    getNewLayerLocation(parent, above);
+    getNewNodeLocation("KisAdjustmentLayer", parent, above);
 
-    emit sigRequestAdjustmentLayer(parent, above);
+    emit sigRequestNewNode("KisAdjustmentLayer", parent, above);
 }
+
+void KisLayerBox::slotNewTransparencyMask()
+{
+    KisNodeSP parent;
+    KisNodeSP above;
+
+    getNewNodeLocation("KisTransparencyMask", parent, above);
+
+    emit sigRequestNewNode("KisTransparencyMask", parent, above);
+}
+
+void KisLayerBox::slotNewEffectMask()
+{
+    KisNodeSP parent;
+    KisNodeSP above;
+
+    getNewNodeLocation("KisFilterMask", parent, above);
+
+    emit sigRequestNewNode("KisFilterMask", parent, above);
+}
+
+
+void KisLayerBox::slotNewTransformationMask()
+{
+    KisNodeSP parent;
+    KisNodeSP above;
+
+    getNewNodeLocation("KisTransformationMask", parent, above);
+
+    emit sigRequestNewNode("KisTransformationMask", parent, above);
+}
+
 
 void KisLayerBox::slotRmClicked()
 {
-    QModelIndexList l = selectedLayers();
+    QModelIndexList l = selectedNodes();
 
     for (int i = 0, n = l.count(); i < n; ++i)
         m_image->removeNode(m_nodeModel->nodeFromIndex(l.at(i)));
@@ -378,7 +444,7 @@ void KisLayerBox::slotRmClicked()
 
 void KisLayerBox::slotRaiseClicked()
 {
-    QModelIndexList l = selectedLayers();
+    QModelIndexList l = selectedNodes();
 
     KisNodeSP layer = m_nodeModel->nodeFromIndex(l.first());
     if( l.count() == 1 && layer == layer->parent()->firstChild() && layer->parent() != m_image->root())
@@ -400,7 +466,7 @@ void KisLayerBox::slotRaiseClicked()
 
 void KisLayerBox::slotLowerClicked()
 {
-    QModelIndexList l = selectedLayers();
+    QModelIndexList l = selectedNodes();
 
     for (int i = l.count() - 1; i >= 0; --i)
         if (KisNodeSP layer = m_nodeModel->nodeFromIndex(l[i]))
@@ -418,8 +484,14 @@ void KisLayerBox::slotLowerClicked()
 
 void KisLayerBox::slotPropertiesClicked()
 {
-    if (KisLayerSP active = m_layerManager->activeLayer())
-        emit sigRequestLayerProperties(active);
+    if (KisNodeSP active = m_nodeManager->activeNode())
+        emit sigRequestNodeProperties(active);
+}
+
+void KisLayerBox::slotNodeActivated(const QModelIndex & node)
+{
+    kDebug() << "slotNodeActivated " << node;
+    m_nodeManager->activateNode( m_nodeModel->nodeFromIndex( node ) );
 }
 
 void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
@@ -432,10 +504,10 @@ void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
     cmbComposite->blockSignals(!enable);
 }
 
-QModelIndexList KisLayerBox::selectedLayers() const
+QModelIndexList KisLayerBox::selectedNodes() const
 {
     QModelIndexList l = listLayers->selectionModel()->selectedIndexes();
-    if (l.count() < 2 && m_layerManager->activeLayer() && !l.contains(listLayers->currentIndex()))
+    if (l.count() < 2 && m_nodeManager->activeNode() && !l.contains(listLayers->currentIndex()))
     {
         l.clear();
         l.append(listLayers->currentIndex());

@@ -38,7 +38,7 @@
 
 struct KisFilterManager::Private {
     Private() : reapplyAction(0), actionCollection(0) {
-        
+
     }
     QAction* reapplyAction;
     QHash<QString, KActionMenu*> filterActionMenus;
@@ -62,13 +62,13 @@ KisFilterManager::~KisFilterManager()
 void KisFilterManager::setup(KActionCollection * ac)
 {
     d->actionCollection = ac;
-    
+
     // Setup reapply action
     d->reapplyAction = new KAction( i18n("Apply Filter Again"), this );
     d->actionCollection->addAction( "filter_apply_again", d->reapplyAction );
     d->reapplyAction->setShortcut( QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F) );
     d->reapplyAction->setEnabled( false );
-    
+
     // Setup list of filters
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
     for ( QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it ) {
@@ -96,9 +96,9 @@ void KisFilterManager::insertFilter(QString name)
         d->filterActionMenus[category.id()] = actionMenu;
         kDebug(41007) <<"Creating entry menu for" << category.id() <<" with name" << category.name();
     }
-    
+
     KisFilterHandler* handler = new KisFilterHandler( this, f, d->view);
-    
+
     KAction * a = new KAction(f->menuEntry(), this);
     d->actionCollection->addAction(QString("krita_filter_%1").arg(name), a);
     d->filters2Action[f.data()] = a;
@@ -108,13 +108,16 @@ void KisFilterManager::insertFilter(QString name)
 
 void KisFilterManager::updateGUI()
 {
+    if ( !d->view ) return;
+    if ( !d->view->activeLayer() ) return;
+
     KisLayerSP layer = d->view->activeLayer();
     KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>( layer.data()));
 
     bool enable = player and (not layer->locked()) and layer->visible();
-    
+
     d->reapplyAction->setEnabled(enable);
-    
+
     for(QHash<KisFilter*, KAction*>::iterator it = d->filters2Action.begin();
         it != d->filters2Action.end(); ++it)
     {

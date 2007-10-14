@@ -50,6 +50,12 @@ public:
      */
     KisMaskSP activeMask();
 
+    /**
+     * @return the paint device associated with the currently
+     *         active mask, if there is one.
+     */
+    KisPaintDeviceSP activeDevice();
+
 signals:
 
     void sigMaskActivated( KisMaskSP mask );
@@ -57,20 +63,20 @@ signals:
 public slots:
 
     /**
-     * Activate a new mask. There can be only one mask active per
-     * view; and if the mask is active, it becomes the paint device.
-     */
-    void activateMask( KisMaskSP mask );
-
-    /**
      * Create a new transparency mask.
      */
     void createTransparencyMask();
+    void createTransparencyMask( KisNodeSP parent, KisNodeSP above )
+        {
+        }
 
     /**
      * Create a new filter mask.
      */
     void createFilterMask();
+    void createFilterMask( KisNodeSP parent, KisNodeSP above )
+        {
+        }
 
     /**
      * create a new transformation mask. If the transform tool is
@@ -78,6 +84,9 @@ public slots:
      * the mask from that.
      */
     void createTransformationMask();
+    void createTransformationMask( KisNodeSP parent, KisNodeSP above )
+        {
+        }
 
     /**
      * Create a new local selection from the active mask.
@@ -161,6 +170,18 @@ public slots:
      * menu items
      */
     void masksUpdated();
+
+private:
+
+    friend class KisNodeManager;
+
+    /**
+     * Activate a new mask. There can be only one mask active per
+     * view; and if the mask is active, it becomes the paint device.
+     */
+    void activateMask( KisMaskSP mask );
+
+
 
 private:
     KisView2 * m_view;

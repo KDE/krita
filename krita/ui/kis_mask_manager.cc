@@ -40,6 +40,7 @@
 #include "kis_dlg_adjustment_layer.h"
 #include "kis_mask_widgets.h"
 #include "kis_selection.h"
+#include "kis_pixel_selection.h"
 
 KisMaskManager::KisMaskManager( KisView2 * view)
     : m_view( view )
@@ -144,6 +145,16 @@ KisMaskSP KisMaskManager::activeMask()
     return m_activeMask;
 }
 
+KisPaintDeviceSP KisMaskManager::activeDevice()
+{
+    if ( m_activeMask ) {
+        KisSelectionSP selection = m_activeMask->selection();
+        if (selection)
+            return m_activeMask->selection()->getOrCreatePixelSelection();
+    }
+    return 0;
+}
+
 void KisMaskManager::activateMask( KisMaskSP mask )
 {
     m_activeMask = mask;
@@ -152,6 +163,8 @@ void KisMaskManager::activateMask( KisMaskSP mask )
 
 void KisMaskManager::createTransparencyMask()
 {
+    // XXX: if there's a selection, set the selection on the mask
+    //      if there's no selection, select everything
     KisLayerSP activeLayer = m_view->activeLayer();
     if ( activeLayer ) {
         KisMaskSP mask = new KisTransparencyMask();

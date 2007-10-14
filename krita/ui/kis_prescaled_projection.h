@@ -21,6 +21,7 @@
 #include <QObject>
 
 #include <krita_export.h>
+#include <kis_shared.h>
 
 class QPixmap;
 class QImage;
@@ -33,6 +34,9 @@ class KoViewConverter;
 class KoColorProfile;
 
 #include <kis_types.h>
+
+class KisPrescaledProjection;
+typedef KisSharedPtr<KisPrescaledProjection> KisPrescaledProjectionSP;
 
 /**
  * KisPrescaledProjection is responsible for keeping around a
@@ -62,7 +66,7 @@ class KoColorProfile;
  * should become either a QImage the size of the nearest pyramid level
  * or a tiled QImage representation like the OpenGL image textures.
  */
-class KRITAUI_EXPORT KisPrescaledProjection : QObject
+class KRITAUI_EXPORT KisPrescaledProjection : public QObject, public KisShared
 {
     Q_OBJECT
 
@@ -91,14 +95,16 @@ public:
     /**
      * The pre-scaled pixmap includes the underlying checker
      * represenation. It is only generated when the drawCheckers() is
-     * true, otherwise it is empty.
+     * true, otherwise it is empty. The prescaled pixmal is exactly as
+     * big as the canvas widget in pixels.
      */
     QPixmap prescaledPixmap() const;
 
     /**
      * Return the prescaled QImage. This image has a transparency
      * channel and is therefore suitable for generated a prescaled
-     * representation of an image for the KritaShape.
+     * representation of an image for the KritaShape. The prescaled
+     * image is exactly as big as the canvas widget in pixels.
      */
     QImage prescaledQImage() const;
 
@@ -108,6 +114,13 @@ public:
      * pixels, keeping track of zoom levels.
      */
     void setViewConverter( KoViewConverter * viewConverter );
+
+    /**
+     * Return the intersection of the widget size and the given rect
+     * in image pixels converted to widget pixels.
+     */
+    QRect viewRectFromImagePixels( const QRect & imageRect );
+
 
 public slots:
 
@@ -127,6 +140,8 @@ public slots:
     /**
      * The image projection has changed, now update the canvas
      * representation of it.
+     *
+     * @param rc the are to be updated in image pixels
      */
     void updateCanvasProjection( const QRect & rc );
 
@@ -144,19 +159,20 @@ public slots:
 
     /**
      * preScale and draw onto the scaled projection the specfied rect,
-     * in KisImage pixels.
+     * in canvas view pixels.
      */
     void preScale( const QRect & rc );
 
     /**
-     * Resize the prescaled image.
+     * Resize the prescaled image. The size is given in canvas
+     * widget pixels.
      */
-    void resizePrescaledImage( QSize newSize, QSize oldSize );
+    void resizePrescaledImage( QSize newSize );
 
     /**
      * Set the current monitor profile
      */
-    void setMonitorProfile( KoColorProfile * profile );
+    void setMonitorProfile( const KoColorProfile * profile );
 
     /**
      * Set the current HDR exposure
@@ -175,16 +191,42 @@ public slots:
      */
     void showCurrentMask( bool showMask );
 
+
+
 signals:
 
     /**
      * emitted whenever the prescaled image is ready for painting.
      * This can happen in two stages: a coarse first stage and a
      * smooth second stage.
+     *
+     * @param rc the updated area in image pixels
      */
     void sigPrescaledProjectionUpdated( const QRect & rc );
 
+private slots:
+
+   /**
+    * The timer has fired, and we're going to smoothly scale the
+    * entire rect that's been aggregated, in the main thread (for
+    * now).
+    */
+    void slotDoSmoothScale();
+
 private:
+
+    friend class KisPrescaledProjectionTest;
+
+    void setSettingsForTests(bool updateAllQPainterCanvas,
+                             bool useDeferredSmoothing,
+                             bool useNearestNeighbour,
+                             bool useQtScaling,
+                             bool useSampling,
+                             bool smoothBetween100And200Percent,
+                             bool drawCheckers,
+                             bool drawMaskVisualisationOnUnscaledCanvasCache,
+                             bool cacheKisImageAsQImage,
+                             bool showMask);
 
     KisPrescaledProjection( const KisPrescaledProjection & );
     KisPrescaledProjection operator=( const KisPrescaledProjection & );
@@ -194,18 +236,28 @@ private:
      *
      * @param rc The desired rect in KisImage pixels
      * @param gc The painter we draw on
+     * @param isDeferredAction we're in the smoothing cycle, so go
+     * directly to the blitz code
      */
-    void drawScaledImage( const QRect & rc,  QPainter & gc );
+    void drawScaledImage( const QRect & rc,  QPainter & gc, bool isDeferredAction = false );
 
     /**
-     * Return the intersection of the widget size and the given rect
-     * in image pixels converted to widget pixels.
+     * Return the aligned rect in image pixels.
      */
-    QRect viewRectFromImagePixels( const QRect & imageRect );
+    QRect imageRectFromViewPortPixels( const QRect & viewportRect );
+
+    /**
+     * Update the internal unscaled canvas cache from the kisimage, if
+     * the settings allow that.
+     *
+     * @param imageRect the rect to be updated in image pixels
+     */
+    void updateUnscaledCache( const QRect & imageRect);
 
     struct Private;
     Private * const m_d;
 
 };
+
 
 #endif

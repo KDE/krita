@@ -95,8 +95,6 @@ public: // KoCanvasBase implementation
 
     QWidget* canvasWidget();
 
-    QImage canvasCache();
-
     virtual KoUnit unit() const;
 
     virtual KoToolProxy* toolProxy() const;
@@ -125,7 +123,6 @@ public: // KisCanvas2 methods
     KisView2* view();
 
     bool usingHDRExposureProgram();
-    bool useFastZooming();
 
 public slots:
 
@@ -153,9 +150,13 @@ private slots:
      */
     void slotConfigChanged();
 
+    /**
+     * Called whenever the display monitor profile resource changes
+     */
+    void slotSetDisplayProfile( const KoColorProfile * profile );
+
 private:
 
-    void resetMonitorProfile();
     void resetCanvas();
 
     KisCanvas2(const KisCanvas2&);
@@ -170,7 +171,6 @@ private:
      * the widget.
      */
     QRect viewRectFromDoc( const QRectF & docRect );
-    QRect viewRectFromImagePixels( const QRect & imageRect );
 
 private:
 

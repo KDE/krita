@@ -70,7 +70,6 @@ signals:
 
 public slots:
 
-    void activateLayer( KisLayerSP layer );
 
     void imgResizeToActiveLayer();
 
@@ -82,19 +81,6 @@ public slots:
     void layerProperties();
     void showLayerProperties(KisLayerSP layer);
 
-    void layerAdd();
-    void addLayer(KisNodeSP parent, KisLayerSP above);
-    void addGroupLayer(KisNodeSP parent, KisLayerSP above);
-
-    void addCloneLayer();
-    void addCloneLayer( KisNodeSP parent, KisLayerSP above );
-
-    void addShapeLayer();
-    void addShapeLayer( KisNodeSP parent, KisLayerSP above );
-
-    void addAdjustmentLayer();
-    void addAdjustmentLayer(KisNodeSP parent, KisLayerSP above);
-    void addAdjustmentLayer(KisNodeSP parent, KisLayerSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
 
     void layerRemove();
     void layerDuplicate();
@@ -118,6 +104,27 @@ public slots:
 
     void saveLayerAsImage();
     bool activeLayerHasSelection();
+
+    void layerAdd();
+    void addLayer(KisNodeSP parent, KisNodeSP above);
+    void addGroupLayer(KisNodeSP parent, KisNodeSP above);
+
+    void addCloneLayer();
+    void addCloneLayer( KisNodeSP parent, KisNodeSP above );
+
+    void addShapeLayer();
+    void addShapeLayer( KisNodeSP parent, KisNodeSP above );
+
+    void addAdjustmentLayer();
+    void addAdjustmentLayer(KisNodeSP parent, KisNodeSP above);
+    void addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
+
+private:
+
+    friend class KisNodeManager;
+
+    void activateLayer( KisLayerSP layer );
+
 
 private:
 

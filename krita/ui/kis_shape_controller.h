@@ -56,12 +56,11 @@ public:
 private slots:
 
     friend class KisShapeControllerTest;
-
+    friend class KisDoc2;
     // These slots keep track of changes in the layer stack and make
     // sure that the shape stack doesn't get out of sync
-    void slotLayerAdded( KisLayerSP layer );
-    void slotLayerRemoved( KisLayerSP layer );
-    void slotLayerMoved( KisLayerSP layer );
+    void slotNodeAdded( KisNode* node, int index );
+    void slotNodeRemoved( KisNode*node, int index  );
     void slotLayersChanged( KisGroupLayerSP rootLayer );
 
 private:

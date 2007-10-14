@@ -18,6 +18,8 @@
 
 #include "kis_qpainter_canvas.h"
 
+#include "kis_canvas2.h"
+
 #include <QPaintEvent>
 #include <QRect>
 #include <QPainter>
@@ -45,10 +47,9 @@
 #include <kis_layer.h>
 
 
+#include "kis_prescaled_projection.h"
 #include "kis_config.h"
-#include "kis_canvas2.h"
 #include "kis_resource_provider.h"
-#include <qimageblitz.h>
 #include "kis_doc2.h"
 #include "kis_grid_drawer.h"
 #include "kis_selection_manager.h"
@@ -71,11 +72,11 @@ public:
         {
         }
 
+    KisPrescaledProjectionSP prescaledProjection;
     KoToolProxy * toolProxy;
     KisCanvas2 * canvas;
     const KoViewConverter * viewConverter;
     QBrush checkBrush;
-    QImage prescaledImage;
     QPoint documentOffset;
     KisGridDrawer* gridDrawer;
     double currentExposure;
@@ -106,7 +107,10 @@ KisQPainterCanvas::~KisQPainterCanvas()
     delete m_d;
 }
 
-#define EPSILON 1e-6
+void KisQPainterCanvas::setPrescaledProjection( KisPrescaledProjectionSP prescaledProjection )
+{
+    m_d->prescaledProjection = prescaledProjection;
+}
 
 void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
@@ -120,7 +124,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     if (img->colorSpace()->hasHighDynamicRange() &&
         (m_d->currentExposure != m_d->canvas->view()->resourceProvider()->HDRExposure())) {
-        // XXX: If we had a dirty region we could just update areas as
+        // XXX: If we had a dirty region we could just recomposite areas as
         // they become visible.
         // YYY: As soon as we start using
         // KisProjection::setRegionOfInterest(), only the visible
@@ -140,38 +144,49 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     gc.translate( -ev->rect().topLeft() );
 
     gc.setCompositionMode( QPainter::CompositionMode_Source );
-    double sx, sy;
-    m_d->viewConverter->zoom(&sx, &sy);
 
     t.start();
-    if ( cfg.scrollCheckers() ) {
+    // Don't draw the checks if we draw a cached pixmap, because we
+    // need alpha transparency for checks. The precached pixmap
+    // already should contain checks.
+    if ( !cfg.noXRender() ) {
 
-        QRect fillRect = ev->rect();
+        if ( cfg.scrollCheckers() ) {
 
-        if (m_d->documentOffset.x() > 0) {
-            fillRect.adjust(0, 0, m_d->documentOffset.x(), 0);
-        } else {
-            fillRect.adjust(m_d->documentOffset.x(), 0, 0, 0);
+            QRect fillRect = ev->rect();
+
+            if (m_d->documentOffset.x() > 0) {
+                fillRect.adjust(0, 0, m_d->documentOffset.x(), 0);
+            } else {
+                fillRect.adjust(m_d->documentOffset.x(), 0, 0, 0);
+            }
+            if (m_d->documentOffset.y() > 0) {
+                fillRect.adjust(0, 0, 0, m_d->documentOffset.y());
+            } else {
+                fillRect.adjust(0, m_d->documentOffset.y(), 0, 0);
+            }
+            gc.save();
+            gc.translate(-m_d->documentOffset );
+            kDebug(41010) << "qpainter canvas fillRect: " << fillRect;
+            gc.fillRect( fillRect, m_d->checkBrush );
+            gc.restore();
         }
-        if (m_d->documentOffset.y() > 0) {
-            fillRect.adjust(0, 0, 0, m_d->documentOffset.y());
-        } else {
-            fillRect.adjust(0, m_d->documentOffset.y(), 0, 0);
+        else {
+            // Checks
+            kDebug(41010) << "qpainter canvas fillRect: " << ev->rect();
+            gc.fillRect(ev->rect(), m_d->checkBrush );
         }
-        gc.save();
-        gc.translate(-m_d->documentOffset );
-        gc.fillRect( fillRect, m_d->checkBrush );
-        gc.restore();
+        kDebug(41010) <<"Painting checks:" << t.elapsed();
     }
-    else {
-        // Checks
-        gc.fillRect(ev->rect(), m_d->checkBrush );
-    }
-    kDebug(41010) <<"Painting checks:" << t.elapsed();
-
     t.restart();
     gc.setCompositionMode( QPainter::CompositionMode_SourceOver );
-    gc.drawImage( ev->rect(), m_d->prescaledImage, ev->rect() );
+
+    if ( cfg.noXRender() ) {
+        gc.drawPixmap( ev->rect(), m_d->prescaledProjection->prescaledPixmap(), ev->rect() );
+    }
+    else {
+        gc.drawImage( ev->rect(), m_d->prescaledProjection->prescaledQImage(), ev->rect() );
+    }
     kDebug(41010) <<"Drawing image:" << t.elapsed();
 
 #ifdef DEBUG_REPAINT
@@ -275,192 +290,16 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
 
 void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
 {
-    qint32 width = m_d->prescaledImage.width();
-    qint32 height = m_d->prescaledImage.height();
-
-    QRegion exposedRegion = QRect(0, 0, width, height);
-
-    qint32 oldCanvasXOffset = m_d->documentOffset.x();
-    qint32 oldCanvasYOffset = m_d->documentOffset.y();
-
+    kDebug(41010) << "KisQPainterCanvas::documentOffsetMoved " << pt;
     m_d->documentOffset = pt;
-
-    QImage img = QImage( width, height, QImage::Format_ARGB32 );
-    QPainter gc( &img );
-    gc.setCompositionMode( QPainter::CompositionMode_Source );
-
-    if (!m_d->prescaledImage.isNull()) {
-
-        if (oldCanvasXOffset != m_d->documentOffset.x() || oldCanvasYOffset != m_d->documentOffset.y()) {
-
-            qint32 deltaX = m_d->documentOffset.x() - oldCanvasXOffset;
-            qint32 deltaY = m_d->documentOffset.y() - oldCanvasYOffset;
-
-            gc.drawImage( -deltaX, -deltaY, m_d->prescaledImage );
-            exposedRegion -= QRegion(QRect(-deltaX, -deltaY, width - deltaX, height - deltaY));
-        }
-    }
-
-
-    if (!m_d->prescaledImage.isNull() && !exposedRegion.isEmpty()) {
-
-        QVector<QRect> rects = exposedRegion.rects();
-
-        for (int i = 0; i < rects.count(); i++) {
-            QRect r = rects[i];
-            drawScaledImage( r, gc);
-        }
-    }
-    m_d->prescaledImage = img;
+    m_d->prescaledProjection->documentOffsetMoved( pt );
     update();
-}
-
-
-void KisQPainterCanvas::drawScaledImage( const QRect & r, QPainter &gc )
-{
-    KisImageSP img = m_d->canvas->image();
-    if (img == 0) return;
-    QRect rc = r;
-
-    double sx, sy;
-    m_d->viewConverter->zoom(&sx, &sy);
-
-    // Compute the scale factors
-    double scaleX = sx / img->xRes();
-    double scaleY = sy / img->yRes();
-
-    QImage canvasImage = m_d->canvas->canvasCache();
-
-    // compute how large a fully scaled image is
-    QSize dstSize = QSize(int(canvasImage.width() * scaleX ), int( canvasImage.height() * scaleY));
-
-    // Don't go outside the image (will crash the sampleImage method below)
-    QRect drawRect = rc.translated( m_d->documentOffset).intersected(QRect(QPoint(),dstSize));
-
-    // Go from the widget coordinates to points
-    QRectF imageRect = m_d->viewConverter->viewToDocument( rc.translated( m_d->documentOffset ) );
-
-    double pppx,pppy;
-    pppx = img->xRes();
-    pppy = img->yRes();
-
-    // Go from points to pixels
-    imageRect.setCoords(imageRect.left() * pppx, imageRect.top() * pppy,
-                        imageRect.right() * pppx, imageRect.bottom() * pppy);
-
-    // Don't go outside the image and convert to whole pixels
-    QRect alignedImageRect = imageRect.intersected( canvasImage.rect() ).toAlignedRect();
-
-    if ( m_d->canvas->useFastZooming() ) {
-
-        // XXX: Check whether the right coordinates are used
-
-        QTime t;
-        t.start();
-        QImage tmpImage = img->convertToQImage( alignedImageRect, scaleX, scaleY, m_d->canvas->monitorProfile(), m_d->currentExposure );
-        kDebug(41010 ) << "KisImage::convertToQImage" << t.elapsed();
-        gc.drawImage( rc.topLeft(), tmpImage );
-
-    }
-    else {
-
-        // Don't scale if not necessary;
-        if ( scaleX == 1.0 && scaleY == 1.0 ) {
-            gc.drawImage( rc.topLeft(), canvasImage.copy( drawRect ) );
-        }
-        else {
-            QSize sz = QSize( ( int )( alignedImageRect.width() * scaleX ), ( int )( alignedImageRect.height() * scaleY ));
-            QImage croppedImage = canvasImage.copy( alignedImageRect );
-
-            if ( sx >= 1.0 && sy >= 1.0 ) {
-                QTime t;
-                t.start();
-                QImage img2 = croppedImage.scaled( sz, Qt::KeepAspectRatio, Qt::FastTransformation );
-                kDebug(41010) << "QImage fast scaling " << t.elapsed();
-                gc.drawImage( rc.topLeft(), img2 );
-            }
-            else {
-
-
-                QTime t;
-                t.start();
-#ifndef USE_QT_SCALING
-                QImage img2 = Blitz::smoothScale( croppedImage, sz );
-                kDebug(41010) <<"Blitz scale:" << t.elapsed();
-#else
-                t.restart();
-                QImage img2 = croppedImage.scaled( sz, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-                kDebug(41010) <<"qimage smooth scale:" << t.elapsed();
-#endif
-                gc.drawImage( rc.topLeft(), img2 );
-
-
-                //gc.drawImage( rc.topLeft(), ImageUtils::scale(croppedImage, sz.width(), sz.height() ));
-
-            }
-        }
-
-    }
 }
 
 void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
 {
-    QTime t;
-    t.start();
-
-
-    QSize newSize = e->size();
-    QSize oldSize = m_d->prescaledImage.size();
-
-    QImage img = QImage(e->size(), QImage::Format_ARGB32);
-    QPainter gc( &img );
-    gc.setCompositionMode( QPainter::CompositionMode_Source );
-    gc.drawImage( 0, 0, m_d->prescaledImage, 0, 0, m_d->prescaledImage.width(), m_d->prescaledImage.height() );
-
-    if ( newSize.width() > oldSize.width() || newSize.height() > oldSize.height() ) {
-
-        QRect right( oldSize.width(), 0, newSize.width() - oldSize.width(), newSize.height() );
-        if ( right.width() > 0 ) {
-            drawScaledImage( right, gc);
-        }
-        // Subtract the right hand overlap part (right.width() from
-        // the bottom band so we don't scale the same area twice.
-        QRect bottom( 0, oldSize.height(), newSize.width() - right.width(), newSize.height() - oldSize.height() );
-        if ( bottom.height() > 0 ) {
-            drawScaledImage( bottom, gc);
-        }
-
-    }
-    m_d->prescaledImage = img;
-
-    kDebug(41010) <<"Resize event:" << t.elapsed();
-}
-
-void KisQPainterCanvas::preScale()
-{
-    // Thread this!
-    QTime t;
-    t.start();
-    m_d->prescaledImage = QImage( size(), QImage::Format_ARGB32);
-
-    QPainter gc( &m_d->prescaledImage );
-    gc.setCompositionMode( QPainter::CompositionMode_Source );
-
-    drawScaledImage( QRect( QPoint( 0, 0 ), size() ), gc);
-    kDebug(41010) <<"preScale():" << t.elapsed();
-
-}
-
-void KisQPainterCanvas::preScale( const QRect & rc )
-{
-    if ( !rc.isEmpty() ) {
-        QTime t;
-        t.start();
-        QPainter gc( &m_d->prescaledImage );
-        gc.setCompositionMode( QPainter::CompositionMode_Source );
-        drawScaledImage( rc, gc);
-        kDebug(41010) <<"Prescaling took" << t.elapsed();
-    }
+    kDebug(41010) << "KisQPainterCanvas::resizeEvent : " << e->size();
+    m_d->prescaledProjection->resizePrescaledImage( e->size() );
 }
 
 #include "kis_qpainter_canvas.moc"

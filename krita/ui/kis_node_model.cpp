@@ -44,7 +44,7 @@ KisNodeModel::~KisNodeModel()
 
 void KisNodeModel::setImage( KisImageSP image )
 {
-    kDebug(41007) <<"KisNodeModel::setImage" << image;
+    //kDebug(41007) <<"KisNodeModel::setImage " << image;
     if ( m_d->image ) {
         m_d->image->disconnect( this );
     }
@@ -62,7 +62,7 @@ void KisNodeModel::setImage( KisImageSP image )
 
 KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index)
 {
-    kDebug(41007) <<"KisNodeModel::nodeFromIndex" << index;
+    //kDebug(41007) <<"KisNodeModel::nodeFromIndex " << index;
 
     if( !index.isValid() )
         return KisNodeSP(0);
@@ -75,7 +75,7 @@ KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index)
 
 vKisNodeSP KisNodeModel::nodesFromIndexes(const QModelIndexList &indexes)
 {
-    kDebug(41007) <<"KisNodeModel::nodesFromIndexes" << indexes.count();
+    //kDebug(41007) <<"KisNodeModel::nodesFromIndexes " << indexes.count();
     vKisNodeSP out;
     for (int i = 0, n = indexes.count(); i < n; ++i)
         if (KisNodeSP node = nodeFromIndex(indexes.at(i)))
@@ -85,6 +85,7 @@ vKisNodeSP KisNodeModel::nodesFromIndexes(const QModelIndexList &indexes)
 
 QModelIndex KisNodeModel::indexFromNode(const KisNodeSP node) const
 {
+    //kDebug(41007) << "KisNodeModel::indexFromNode " << node;
     Q_ASSERT(node);
     if ( node->parent() )
         return createIndex(node->parent()->index( node ), 0, ( void* )node.data());
@@ -96,11 +97,11 @@ QModelIndex KisNodeModel::indexFromNode(const KisNodeSP node) const
 
 int KisNodeModel::rowCount(const QModelIndex &parent) const
 {
-    kDebug(41007) <<"KisNodeModel::rowCount" << parent;
+    //kDebug(41007) <<"KisNodeModel::rowCount" << parent;
 
     if (!parent.isValid()) {
         // Root node
-        kDebug(41007) <<"Root node:" << m_d->image->root() <<", childcount:" << m_d->image->root()->childCount();;
+        //kDebug(41007) <<"Root node:" << m_d->image->root() <<", childcount:" << m_d->image->root()->childCount();;
         return m_d->image->root()->childCount();
     }
     else  {
@@ -115,7 +116,7 @@ int KisNodeModel::columnCount(const QModelIndex&) const
 
 QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) const
 {
-    kDebug(41007) <<"KisNodeModel::index(row =" << row <<", column=" << column <<", parent=" << parent <<" parent is valid:" << parent.isValid();
+    //kDebug(41007) <<"KisNodeModel::index(row =" << row <<", column=" << column <<", parent=" << parent <<" parent is valid:" << parent.isValid();
 
     if (!hasIndex(row, column, parent))
     {
@@ -136,7 +137,7 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
 
 QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 {
-    kDebug(41007) <<"KisNodeModel::parent" << index;
+    //kDebug(41007) <<"KisNodeModel::parent " << index;
     if (!index.isValid())
         return QModelIndex();
 
@@ -144,14 +145,14 @@ QModelIndex KisNodeModel::parent(const QModelIndex &index) const
     Q_ASSERT(index.internalPointer());
 
     KisNode * l = static_cast<KisNode*>( index.internalPointer() );
-    kDebug(41007) <<" node:" << l <<", name:" << l->name() <<", parent:" << l->parent();
+    //kDebug(41007) <<" node:" << l <<", name:" << l->name() <<", parent:" << l->parent();
 
     KisNode *p = l->parent().data();
 
     // If the parent is the root node, we want to return an invalid
     // parent, because the qt model shouldn't know about our root node.
     if ( p && p->parent().data() ) {
-        kDebug(41007) <<"parent node:" << p <<", name:" << p->name() <<", parent:" << p->parent();
+        //kDebug(41007) <<"parent node:" << p <<", name:" << p->name() <<", parent:" << p->parent();
         return indexFromNode( p );
     }
     else
@@ -161,7 +162,7 @@ QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 
 QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 {
-//     kDebug(41007) <<"KisNodeModel::data(index=" << index <<", role=" << role;
+    //kDebug(41007) <<"KisNodeModel::data(index=" << index <<", role=" << role;
     if (!index.isValid())
         return QVariant();
 
@@ -190,7 +191,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 {
-    kDebug(41007) <<"KisNodeModel::flags" << index;
+    //kDebug(41007) <<"KisNodeModel::flags" << index;
     if (!index.isValid())
         return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
 
@@ -209,7 +210,7 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 
 bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    kDebug(41007) <<"KisNodeModel::setData( index=" << index <<", value=" << value <<", role=" << role;
+    //kDebug(41007) <<"KisNodeModel::setData( index=" << index <<", value=" << value <<", role=" << role;
     if (!index.isValid())
         return false;
 
@@ -244,32 +245,32 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 void KisNodeModel::beginInsertNodes( KisNode * parent, int index )
 {
-    kDebug(41007) <<"KisNodeModel::beginInsertNodes parent=" << parent <<", index=" << index;
+    //kDebug(41007) <<"KisNodeModel::beginInsertNodes parent=" << parent <<", index=" << index;
     beginInsertRows( indexFromNode( parent ), index, index );
 }
 
 void KisNodeModel::endInsertNodes( KisNode *, int)
 {
-    kDebug(41007) <<"KisNodeModel::endInsertNodes";
+    //kDebug(41007) <<"KisNodeModel::endInsertNodes";
     endInsertRows();
 }
 
 void KisNodeModel::beginRemoveNodes( KisNode * parent, int index )
 {
-    kDebug(41007) <<"KisNodeModel::beginRemoveNodes parent=" << parent <<", index=" << index;
+    //kDebug(41007) <<"KisNodeModel::beginRemoveNodes parent=" << parent <<", index=" << index;
     beginRemoveRows( indexFromNode( parent ), index, index );
 }
 
 void KisNodeModel::endRemoveNodes( KisNode *, int )
 {
-    kDebug(41007) <<"KisNodeModel::endRemoveNodes";
+    //kDebug(41007) <<"KisNodeModel::endRemoveNodes";
     endRemoveRows();
 }
 
 #if 0
 QMimeData * KisNodeModel::mimeData ( const QModelIndexList & indexes ) const
 {
-    kDebug(41007) <<"KisNodeModel::mimeData";
+    //kDebug(41007) <<"KisNodeModel::mimeData";
     QMimeData* data = new QMimeData;
     // TODO: manage the drag
 
@@ -288,8 +289,8 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
 #endif
 
 // TODO: manage the drop
-    kDebug(41007) <<"KisNodeModel::dropMimeData";
-    kDebug(41007) <<"KisNodeModel::dropMimeData" << data->formats();
+    //kDebug(41007) <<"KisNodeModel::dropMimeData";
+    //kDebug(41007) <<"KisNodeModel::dropMimeData" << data->formats();
 //     const QString format = "application/x-qabstractitemmodeldatalist";
 /*    if(not data->hasFormat( format ))
     {
@@ -299,16 +300,16 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
     QDataStream stream(&encoded, QIODevice::ReadOnly);*/
     if(action == Qt::CopyAction)
     {
-        kDebug(41007) <<"KisNodeModel::dropMimeData copy action";
+        //kDebug(41007) <<"KisNodeModel::dropMimeData copy action";
 /*        while (!stream.atEnd()) {
             int r, c;
             QMap<int, QVariant> v;
             stream >> r >> c >> v;
-            kDebug(41007) <<"KisNodeModel::dropMimeData copy action" << r <<"" << c;
+            //kDebug(41007) <<"KisNodeModel::dropMimeData copy action" << r <<"" << c;
         }*/
         return true;
     } else if(action == Qt::MoveAction) {
-        kDebug(41007) <<"KisNodeModel::dropMimeData move action";
+        //kDebug(41007) <<"KisNodeModel::dropMimeData move action";
         return true;
     }
     return false;

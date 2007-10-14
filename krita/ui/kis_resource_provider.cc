@@ -279,9 +279,9 @@ void KisResourceProvider::slotSetImageSize( qint32 w, qint32 h )
     }
 }
 
-void KisResourceProvider::slotSetDisplayProfile( KoColorProfile * profile )
+void KisResourceProvider::slotSetDisplayProfile( const KoColorProfile * profile )
 {
-    m_displayProfile = profile;
+    m_displayProfile = const_cast<KoColorProfile*>(profile);
     emit sigDisplayProfileChanged( profile );
 }
 

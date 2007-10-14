@@ -78,13 +78,16 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-//     if (!currentImage())
-// 		return;
+    if (!currentImage())
+ 		return;
 
     if (!currentBrush())
         return;
 
     if (!currentComplexColor())
+        return;
+
+    if (!currentLayer())
         return;
 
     if (!currentLayer()->paintDevice())

@@ -3,7 +3,8 @@
  *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
- *  Copyright (C) 2007 Thomas Zander <zander@kde.or>
+ *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ *  Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,6 +49,8 @@ class KisLayerManager;
 
 /**
  * A widget that visualized the layer structure.
+ *
+ * TODO: drag & drop -- see also the mimetype stuff in the node model.
  */
 class KisLayerBox : public QDockWidget, public Ui::WdgLayerBox {
 
@@ -58,34 +61,29 @@ public:
     virtual ~KisLayerBox();
 
     void setUpdatesAndSignalsEnabled(bool enable);
-    void setImage(KisLayerManager * layerManager, KisImageSP image, KisNodeModel * nodeModel);
+    void setImage(KisNodeManager * nodeManager, KisImageSP image, KisNodeModel * nodeModel);
 
     virtual bool eventFilter(QObject *object, QEvent *event);
 
 public slots:
+
     void slotSetCompositeOp(const KoCompositeOp* compositeOp);
     void slotSetOpacity(double opacity);
     void slotSetColorSpace(const KoColorSpace * colorSpace);
     void updateUI();
-    void setCurrentLayer( KisLayerSP layer );
+    void setCurrentNode( KisNodeSP node );
 
 signals:
-    void sigRequestLayer(KisGroupLayerSP parent, KisLayerSP above);
-    void sigRequestGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
-    void sigRequestAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above);
-    void sigRequestCloneLayer( KisGroupLayerSP parent, KisLayerSP above );
-    void sigRequestShapeLayer( KisGroupLayerSP parent, KisLayerSP above );
 
-    void sigRequestTransparencyMask( KisLayerSP parent, KisMaskSP above );
-    void sigRequestFilterMask( KisLayerSP parent, KisMaskSP above );
-    void sigRequestTransformationMask( KisLayerSP parent, KisMaskSP above );
-
-    void sigRequestLayerProperties(KisLayerSP layer);
-
+    // XXX: create a node factory and a node factory registry in for now just
+    //      use strings
+    void sigRequestNewNode( const QString & nodetype, KisNodeSP parent, KisNodeSP above );
+    void sigRequestNodeProperties(KisNodeSP node);
     void sigOpacityChanged(double opacity, bool final);
     void sigItemComposite(const KoCompositeOp*);
 
 private slots:
+
     void slotContextMenuRequested( const QPoint &pos, const QModelIndex &index );
 
     void slotMinimalView();
@@ -97,23 +95,27 @@ private slots:
     void slotLowerClicked();
     void slotPropertiesClicked();
 
-    void slotNewLayer();
+    void slotNewPaintLayer();
     void slotNewGroupLayer();
     void slotNewAdjustmentLayer();
     void slotNewCloneLayer();
     void slotNewShapeLayer();
+    void slotNewTransparencyMask();
+    void slotNewEffectMask();
+    void slotNewTransformationMask();
 
-
+    void slotNodeActivated( const QModelIndex & );
 
 private:
-    void getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above);
-    QModelIndexList selectedLayers() const;
+    void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above);
+    QModelIndexList selectedNodes() const;
 
     KMenu *m_viewModeMenu;
     KMenu *m_newLayerMenu;
     KisImageSP m_image;
     KisNodeModel * m_nodeModel;
-    KisLayerManager * m_layerManager;
+    KisNodeManager * m_nodeManager;
+
 };
 
 class KisLayerBoxFactory : public KoDockFactory

@@ -31,15 +31,18 @@ class KActionCollection;
 
 class KoCompositeOp;
 class KoColorSpace;
+class KoCompositeOp;
 
 class KisDoc2;
 class KisFilterStrategy;
 class KisView2;
 class KisFilterConfiguration;
-
+class KisLayerManager;
+class KisMaskManager;
 
 /**
- * XXX
+ * The node manager passes requests for new layers or masks on to the mask and layer
+ * managers.
  */
 class KRITAUI_EXPORT KisNodeManager : public QObject {
 
@@ -56,15 +59,36 @@ public:
     /// Convenience function to get the active layer
     KisNodeSP activeNode();
 
+    /// Get the paint device the user wants to paint on now
+    KisPaintDeviceSP activePaintDevice();
+
+    /// Get the class that manages the layer user interface
+    KisLayerManager * layerManager();
+
+    /// Get the class that manages the user interface for the masks
+    KisMaskManager * maskManager();
+
 signals:
 
     void sigNodeActivated( KisNodeSP layer );
 
 public slots:
 
+    void createNode( const QString & node, KisNodeSP parent, KisNodeSP above);
     void activateNode( KisNodeSP layer );
     void nodesUpdated();
-
+    void nodeProperties( KisNodeSP node )
+        {
+            // XXX_NODE
+        }
+    void nodeOpacityChanged( double, bool )
+        {
+            // XXX_NODE
+        }
+    void nodeCompositeOpChanged( const KoCompositeOp* )
+        {
+            // XXX_NODE
+        }
 private:
 
     struct Private;

@@ -31,6 +31,45 @@ class KisBasicDynamicColoringProgram : public KisDynamicColoringProgram {
         virtual QWidget* createEditor(QWidget* parent);
         virtual void fromXML(const QDomElement&);
         virtual void toXML(QDomDocument&, QDomElement&) const;
+    public:
+        bool isMixerEnabled() const;
+        int mixerJitter() const;
+        KisDynamicSensor* mixerSensor() const;
+        bool isHueEnabled() const;
+        int hueJitter() const;
+        KisDynamicSensor* hueSensor() const;
+        bool isSaturationEnabled() const;
+        int saturationJitter() const;
+        KisDynamicSensor* saturationSensor() const;
+        bool isBrightnessEnabled() const;
+        int brightnessJitter() const;
+        KisDynamicSensor* brightnessSensor() const;
+    public slots:
+        void setMixerEnable(bool );
+        void setMixerJitter(int );
+        void setMixerSensor(KisDynamicSensor* );
+        void setHueEnable(bool );
+        void setHueJitter(int );
+        void setHueSensor(KisDynamicSensor* );
+        void setSaturationEnable(bool );
+        void setSaturationJitter(int );
+        void setSaturationSensor(KisDynamicSensor* );
+        void setBrightnessEnable(bool );
+        void setBrightnessJitter(int );
+        void setBrightnessSensor(KisDynamicSensor* );
+    private:
+        bool m_mixerEnabled;
+        int m_mixerJitter;
+        KisDynamicSensor* m_mixerSensor;
+        bool m_hueEnabled;
+        int m_hueJitter;
+        KisDynamicSensor* m_hueSensor;
+        bool m_saturationEnabled;
+        int m_saturationJitter;
+        KisDynamicSensor* m_saturationSensor;
+        bool m_brightnessEnabled;
+        int m_brightnessJitter;
+        KisDynamicSensor* m_brightnessSensor;
 };
 
 class KisBasicDynamicColoringProgramFactory : public KisDynamicColoringProgramFactory {

@@ -17,6 +17,8 @@
 
 #include "kis_basic_dynamic_coloring_program_editor.h"
 
+#include "kis_basic_dynamic_coloring_program.h"
+
 #include "ui_BasicDynamicColoringProgramEditor.h"
 
 KisBasicDynamicColoringProgramEditor::KisBasicDynamicColoringProgramEditor(KisBasicDynamicColoringProgram* program) :
@@ -29,6 +31,40 @@ KisBasicDynamicColoringProgramEditor::KisBasicDynamicColoringProgramEditor(KisBa
     connect(m_basicDynamicColoringProgramEditor->hueEnabled, SIGNAL(clicked(bool)), SLOT(setHueEnable(bool)));
     connect(m_basicDynamicColoringProgramEditor->saturationEnabled, SIGNAL(clicked(bool)), SLOT(setSaturationEnable(bool)));
     connect(m_basicDynamicColoringProgramEditor->brightnessEnabled, SIGNAL(clicked(bool)), SLOT(setBrightnessEnable(bool)));
+    // Connect to edit the program
+    // Connect to edit the mixer
+    connect(m_basicDynamicColoringProgramEditor->mixerEnabled, SIGNAL(clicked(bool)), program, SLOT(setMixerEnable(bool)));
+    connect(m_basicDynamicColoringProgramEditor->mixerJitter, SIGNAL(valueChanged(int)), program, SLOT(setMixerJitter(int)));
+    connect(m_basicDynamicColoringProgramEditor->mixerSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), program, SLOT(setMixerSensor(KisDynamicSensor* )));
+    // Connect to edit the hue
+    connect(m_basicDynamicColoringProgramEditor->hueEnabled, SIGNAL(clicked(bool)), program, SLOT(setHueEnable(bool)));
+    connect(m_basicDynamicColoringProgramEditor->hueJitter, SIGNAL(valueChanged(int)), program, SLOT(setHueJitter(int)));
+    connect(m_basicDynamicColoringProgramEditor->hueSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), program, SLOT(setHueSensor(KisDynamicSensor* )));
+    // Connect to edit the saturation
+    connect(m_basicDynamicColoringProgramEditor->saturationEnabled, SIGNAL(clicked(bool)), program, SLOT(setSaturationEnable(bool)));
+    connect(m_basicDynamicColoringProgramEditor->saturationJitter, SIGNAL(valueChanged(int)), program, SLOT(setSaturationJitter(int)));
+    connect(m_basicDynamicColoringProgramEditor->saturationSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), program, SLOT(setSaturationSensor(KisDynamicSensor* )));
+    // Connect to edit the brightness
+    connect(m_basicDynamicColoringProgramEditor->brightnessEnabled, SIGNAL(clicked(bool)), program, SLOT(setBrightnessEnable(bool)));
+    connect(m_basicDynamicColoringProgramEditor->brightnessJitter, SIGNAL(valueChanged(int)), program, SLOT(setBrightnessJitter(int)));
+    connect(m_basicDynamicColoringProgramEditor->brightnessSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), program, SLOT(setBrightnessSensor(KisDynamicSensor* )));
+    // Set the value
+    setMixerEnable(program->isMixerEnabled());
+    m_basicDynamicColoringProgramEditor->mixerEnabled->setChecked( program->isMixerEnabled() );
+    m_basicDynamicColoringProgramEditor->mixerJitter->setValue( program->mixerJitter() );
+    m_basicDynamicColoringProgramEditor->mixerSensor->setCurrent( program->mixerSensor() );
+    setHueEnable(program->isHueEnabled());
+    m_basicDynamicColoringProgramEditor->hueEnabled->setChecked( program->isHueEnabled() );
+    m_basicDynamicColoringProgramEditor->hueJitter->setValue( program->hueJitter() );
+    m_basicDynamicColoringProgramEditor->hueSensor->setCurrent( program->hueSensor() );
+    setSaturationEnable(program->isSaturationEnabled());
+    m_basicDynamicColoringProgramEditor->saturationEnabled->setChecked( program->isSaturationEnabled() );
+    m_basicDynamicColoringProgramEditor->saturationJitter->setValue( program->saturationJitter() );
+    m_basicDynamicColoringProgramEditor->saturationSensor->setCurrent( program->saturationSensor() );
+    setBrightnessEnable(program->isBrightnessEnabled());
+    m_basicDynamicColoringProgramEditor->brightnessEnabled->setChecked( program->isBrightnessEnabled() );
+    m_basicDynamicColoringProgramEditor->brightnessJitter->setValue( program->brightnessJitter() );
+    m_basicDynamicColoringProgramEditor->brightnessSensor->setCurrent( program->brightnessSensor() );
 }
 
 KisBasicDynamicColoringProgramEditor::~KisBasicDynamicColoringProgramEditor()

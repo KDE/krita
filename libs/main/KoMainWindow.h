@@ -163,7 +163,7 @@ public:
      * Returns the dockwidget specified by the @p factory. If the dock widget doesn't exist yet it's created.
      * Add a "view_palette_action_menu" action to your view menu if you want to use closable dock widgets.
      * @param factory the factory used to create the dock widget if needed
-     * @return the dock widget specified by @p factory
+     * @return the dock widget specified by @p factory (may be 0)
      */
     QDockWidget* createDockWidget(KoDockFactory* factory);
 

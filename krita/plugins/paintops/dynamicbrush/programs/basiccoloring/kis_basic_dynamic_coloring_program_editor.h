@@ -29,6 +29,11 @@ class KisBasicDynamicColoringProgramEditor : public QWidget {
     public:
         KisBasicDynamicColoringProgramEditor(KisBasicDynamicColoringProgram* program);
         ~KisBasicDynamicColoringProgramEditor();
+    public slots:
+        void setMixerEnable(bool v);
+        void setHueEnable(bool v);
+        void setSaturationEnable(bool v);
+        void setBrightnessEnable(bool v);
     private:
         Ui_BasicDynamicColoringProgramEditor* m_basicDynamicColoringProgramEditor;
         KisBasicDynamicColoringProgram* m_program;

@@ -24,14 +24,14 @@
       </attribute>
       <layout class="QGridLayout" >
        <item row="0" column="0" colspan="2" >
-        <widget class="QCheckBox" name="sizeEnabled" >
+        <widget class="QCheckBox" name="mixerEnabled" >
          <property name="text" >
           <string>enabled</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0" >
-        <widget class="QLabel" name="label_5" >
+        <widget class="QLabel" name="labelMixerJitter" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -41,23 +41,23 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="KIntNumInput" native="1" name="sizeJitter" >
+        <widget class="KIntNumInput" name="mixerJitter" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" stdset="0" >
+         <property name="minimum" >
           <number>0</number>
          </property>
-         <property name="maximum" stdset="0" >
+         <property name="maximum" >
           <number>100</number>
          </property>
-         <property name="suffix" stdset="0" >
+         <property name="suffix" >
           <string>%</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0" >
-        <widget class="QLabel" name="labelSizeSensor" >
+        <widget class="QLabel" name="labelMixerSensor" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -67,7 +67,7 @@
         </widget>
        </item>
        <item row="2" column="1" >
-        <widget class="KisSensorSelector" name="sizeSensor" >
+        <widget class="KisSensorSelector" name="mixerSensor" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -81,14 +81,14 @@
       </attribute>
       <layout class="QGridLayout" >
        <item row="0" column="0" colspan="2" >
-        <widget class="QCheckBox" name="sizeEnabled_2" >
+        <widget class="QCheckBox" name="hueEnabled" >
          <property name="text" >
           <string>enabled</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0" >
-        <widget class="QLabel" name="label_4" >
+        <widget class="QLabel" name="labelHueJitter" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -98,23 +98,23 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="KIntNumInput" native="1" name="sizeMaximum_4" >
+        <widget class="KIntNumInput" name="hueJitter" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" stdset="0" >
+         <property name="minimum" >
           <number>0</number>
          </property>
-         <property name="maximum" stdset="0" >
+         <property name="maximum" >
           <number>100</number>
          </property>
-         <property name="suffix" stdset="0" >
+         <property name="suffix" >
           <string>%</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0" >
-        <widget class="QLabel" name="labelSizeSensor_2" >
+        <widget class="QLabel" name="labelHueSensor" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -124,7 +124,7 @@
         </widget>
        </item>
        <item row="2" column="1" >
-        <widget class="KisSensorSelector" name="sizeSensor_2" >
+        <widget class="KisSensorSelector" name="hueSensor" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -138,14 +138,14 @@
       </attribute>
       <layout class="QGridLayout" >
        <item row="0" column="0" colspan="2" >
-        <widget class="QCheckBox" name="sizeEnabled_3" >
+        <widget class="QCheckBox" name="saturationEnabled" >
          <property name="text" >
           <string>enabled</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0" >
-        <widget class="QLabel" name="label_3" >
+        <widget class="QLabel" name="labelSaturationJitter" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -155,23 +155,23 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="KIntNumInput" native="1" name="sizeMaximum_3" >
+        <widget class="KIntNumInput" name="saturationJitter" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" stdset="0" >
+         <property name="minimum" >
           <number>0</number>
          </property>
-         <property name="maximum" stdset="0" >
+         <property name="maximum" >
           <number>100</number>
          </property>
-         <property name="suffix" stdset="0" >
+         <property name="suffix" >
           <string>%</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0" >
-        <widget class="QLabel" name="labelSizeSensor_3" >
+        <widget class="QLabel" name="labelSaturationSensor" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -181,7 +181,7 @@
         </widget>
        </item>
        <item row="2" column="1" >
-        <widget class="KisSensorSelector" name="sizeSensor_3" >
+        <widget class="KisSensorSelector" name="saturationSensor" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -195,14 +195,14 @@
       </attribute>
       <layout class="QGridLayout" >
        <item row="0" column="0" colspan="2" >
-        <widget class="QCheckBox" name="sizeEnabled_4" >
+        <widget class="QCheckBox" name="brightnessEnabled" >
          <property name="text" >
           <string>enabled</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0" >
-        <widget class="QLabel" name="label_2" >
+        <widget class="QLabel" name="labelBrightnessJitter" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -212,23 +212,23 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="KIntNumInput" native="1" name="sizeMaximum_2" >
+        <widget class="KIntNumInput" name="brightnessJitter" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" stdset="0" >
+         <property name="minimum" >
           <number>0</number>
          </property>
-         <property name="maximum" stdset="0" >
+         <property name="maximum" >
           <number>100</number>
          </property>
-         <property name="suffix" stdset="0" >
+         <property name="suffix" >
           <string>%</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0" >
-        <widget class="QLabel" name="labelSizeSensor_4" >
+        <widget class="QLabel" name="labelBrightnessSensor" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -238,64 +238,7 @@
         </widget>
        </item>
        <item row="2" column="1" >
-        <widget class="KisSensorSelector" name="sizeSensor_4" >
-         <property name="enabled" >
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_5" >
-      <attribute name="title" >
-       <string>Purity</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <item row="0" column="0" colspan="2" >
-        <widget class="QCheckBox" name="sizeEnabled_5" >
-         <property name="text" >
-          <string>enabled</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" >
-        <widget class="QLabel" name="label" >
-         <property name="enabled" >
-          <bool>false</bool>
-         </property>
-         <property name="text" >
-          <string>Jitter:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" >
-        <widget class="KIntNumInput" native="1" name="sizeMaximum" >
-         <property name="enabled" >
-          <bool>false</bool>
-         </property>
-         <property name="minimum" stdset="0" >
-          <number>0</number>
-         </property>
-         <property name="maximum" stdset="0" >
-          <number>100</number>
-         </property>
-         <property name="suffix" stdset="0" >
-          <string>%</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" >
-        <widget class="QLabel" name="labelSizeSensor_5" >
-         <property name="enabled" >
-          <bool>false</bool>
-         </property>
-         <property name="text" >
-          <string>Sensor:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" >
-        <widget class="KisSensorSelector" name="sizeSensor_5" >
+        <widget class="KisSensorSelector" name="brightnessSensor" >
          <property name="enabled" >
           <bool>false</bool>
          </property>

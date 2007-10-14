@@ -42,6 +42,6 @@ QDockWidget* KisScriptDockFactory::createDockWidget()
     QDockWidget* qdw = dynamic_cast<QDockWidget*>(v.value<QObject*>());
     if(qdw)
         return qdw;
-    kDebug() << "The script didn't delivered its promise of providing a QDockWidget";
-    return new QDockWidget();
+    kWarning() << "The script didn't delivered its promise of providing a QDockWidget";
+    return 0;
 }

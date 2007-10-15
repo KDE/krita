@@ -12,7 +12,7 @@ set(kofficegrayau8colorspace_LIB_SRCS kis_gray_colorspace.cc )
 
 kde4_add_library(kofficegrayau8colorspace SHARED ${kofficegrayau8colorspace_LIB_SRCS})
 
-target_link_libraries(kofficegrayau8colorspace  ${KDE4_KDECORE_LIBS} pigment )
+target_link_libraries(kofficegrayau8colorspace  ${KDE4_KDECORE_LIBS} pigmentcms )
 
 set_target_properties(kofficegrayau8colorspace PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kofficegrayau8colorspace  DESTINATION ${LIB_INSTALL_DIR})
@@ -27,7 +27,7 @@ kde4_add_plugin(kofficegrayau8plugin ${kofficegrayau8plugin_PART_SRCS})
 
 
 
-target_link_libraries(kofficegrayau8plugin  ${KDE4_KDECORE_LIBS} kofficegrayau8colorspace pigment )
+target_link_libraries(kofficegrayau8plugin  ${KDE4_KDECORE_LIBS} kofficegrayau8colorspace pigmentcms )
 
 install(TARGETS kofficegrayau8plugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 

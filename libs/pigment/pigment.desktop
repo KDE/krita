@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KOffice/ColorSpace
-Comment=A module implementing a complete colorspace for use with libpigment
+Comment=A module implementing a complete colorspace for use with Pigment Color Manipulation System
 Comment[ca]=Un mòdul que implementa un espai de colors complet per a usar-lo amb libpigment
 Comment[de]=Ein Modul, das einen kompletten Farbraum zur Benutzung mit libpigment implementiert
 Comment[el]=Ένα άρθρωμα που υλοποιεί έναν πλήρη χρωματικό χώρο για χρήση με το libpigment

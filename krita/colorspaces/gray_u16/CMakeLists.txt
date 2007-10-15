@@ -4,7 +4,7 @@ kde4_add_plugin(krita_gray_u16_plugin ${krita_gray_u16_plugin_PART_SRCS})
 
 
 
-target_link_libraries(krita_gray_u16_plugin  ${KDE4_KDECORE_LIBS} pigment )
+target_link_libraries(krita_gray_u16_plugin  ${KDE4_KDECORE_LIBS} pigmentcms )
 
 install(TARGETS krita_gray_u16_plugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 

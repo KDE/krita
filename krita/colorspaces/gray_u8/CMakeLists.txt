@@ -12,7 +12,7 @@ set(kritagrayscale_LIB_SRCS kis_gray_colorspace.cc )
 
 kde4_add_library(kritagrayscale SHARED ${kritagrayscale_LIB_SRCS})
 
-target_link_libraries(kritagrayscale  ${KDE4_KDECORE_LIBS} pigment )
+target_link_libraries(kritagrayscale  ${KDE4_KDECORE_LIBS} pigmentcms )
 
 set_target_properties(kritagrayscale PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kritagrayscale  DESTINATION ${LIB_INSTALL_DIR})
@@ -27,7 +27,7 @@ kde4_add_plugin(kritagrayplugin ${kritagrayplugin_PART_SRCS})
 
 
 
-target_link_libraries(kritagrayplugin  ${KDE4_KDECORE_LIBS} kritagrayscale pigment )
+target_link_libraries(kritagrayplugin  ${KDE4_KDECORE_LIBS} kritagrayscale pigmentcms )
 
 install(TARGETS kritagrayplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 

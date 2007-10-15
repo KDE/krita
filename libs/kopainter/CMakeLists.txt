@@ -10,7 +10,7 @@ set(kopainter_LIB_SRCS
 
 kde4_add_library(kopainter SHARED ${kopainter_LIB_SRCS})
 
-target_link_libraries(kopainter  ${KDE4_KDECORE_LIBS} koguiutils pigment)
+target_link_libraries(kopainter  ${KDE4_KDECORE_LIBS} koguiutils pigmentcms)
 
 set_target_properties(kopainter PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kopainter  DESTINATION ${LIB_INSTALL_DIR})

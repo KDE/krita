@@ -14,7 +14,7 @@ kde4_add_plugin(kritacmykplugin ${kritacmykplugin_PART_SRCS})
 
 
 
-target_link_libraries(kritacmykplugin  ${KDE4_KDECORE_LIBS} pigment )
+target_link_libraries(kritacmykplugin  ${KDE4_KDECORE_LIBS} pigmentcms )
 
 install(TARGETS kritacmykplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 

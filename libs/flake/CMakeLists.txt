@@ -119,7 +119,7 @@ kde4_add_ui_files(flake_SRCS
 
 kde4_add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS} komain kstore pigment)
+target_link_libraries(flake ${KDE4_KDEUI_LIBS} komain kstore pigmentcms)
 
 if(HAVE_OPENGL)
     target_link_libraries(flake ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})

@@ -113,14 +113,14 @@ void KoPathBreakAtPointCommand::redo()
         {
             if ( last.m_pathShape )
             {
-                last.m_pathShape->repaint();
+                last.m_pathShape->update();
             }
             last = pd;
         }
     }
     if ( last.m_pathShape )
     {
-        last.m_pathShape->repaint();
+        last.m_pathShape->update();
     }
 
     m_deletePoints = false;
@@ -152,14 +152,14 @@ void KoPathBreakAtPointCommand::undo()
         {
             if ( lastPathShape )
             {
-                lastPathShape->repaint();
+                lastPathShape->update();
             }
             lastPathShape = pathShape;
         }
     }
     if ( lastPathShape )
     {
-        lastPathShape->repaint();
+        lastPathShape->update();
     }
 
     m_deletePoints = true;

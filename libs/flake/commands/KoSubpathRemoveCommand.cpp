@@ -42,7 +42,7 @@ KoSubpathRemoveCommand::~KoSubpathRemoveCommand()
 void KoSubpathRemoveCommand::redo()
 {
     QUndoCommand::redo();
-    m_pathShape->repaint();
+    m_pathShape->update();
     m_subpath = m_pathShape->removeSubpath( m_subpathIndex );
     if ( m_subpath )
     {
@@ -54,7 +54,7 @@ void KoSubpathRemoveCommand::redo()
         {
             point->map( matrix );
         }
-        m_pathShape->repaint();
+        m_pathShape->update();
     }
 }
 
@@ -65,7 +65,7 @@ void KoSubpathRemoveCommand::undo()
     {
         m_pathShape->addSubpath( m_subpath, m_subpathIndex );
         m_pathShape->normalize();
-        m_pathShape->repaint();
+        m_pathShape->update();
         m_subpath = 0;
     }
 }

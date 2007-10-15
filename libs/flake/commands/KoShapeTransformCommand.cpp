@@ -52,9 +52,9 @@ void KoShapeTransformCommand::redo()
     for( int i = 0; i < shapeCount; ++i )
     {
         KoShape * shape = d->shapes[i];
-        shape->repaint();
+        shape->update();
         shape->setTransformation( d->newState[i] );
-        shape->repaint();
+        shape->update();
     }
 }
 
@@ -66,8 +66,8 @@ void KoShapeTransformCommand::undo()
     for( int i = 0; i < shapeCount; ++i )
     {
         KoShape * shape = d->shapes[i];
-        shape->repaint();
+        shape->update();
         shape->setTransformation( d->oldState[i] );
-        shape->repaint();
+        shape->update();
     }
 }

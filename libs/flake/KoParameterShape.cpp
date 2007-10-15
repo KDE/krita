@@ -47,12 +47,12 @@ void KoParameterShape::moveHandle( int handleId, const QPointF & point, Qt::Keyb
         return;
     }
 
-    repaint();
+    update();
     // function to do special stuff
     moveHandleAction( handleId, documentToShape( point ), modifiers );
 
     updatePath( size() );
-    repaint();
+    update();
 }
 
 

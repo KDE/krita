@@ -152,9 +152,9 @@ void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMod
 
     foreach( KoShape *shape, m_selectedShapes )
     {
-        shape->repaint();
+        shape->update();
         shape->applyAbsoluteTransformation( applyMatrix );
-        shape->repaint();
+        shape->update();
     }
     m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( applyMatrix );
     m_shearMatrix = matrix;

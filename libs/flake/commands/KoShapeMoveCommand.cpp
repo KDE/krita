@@ -48,18 +48,18 @@ KoShapeMoveCommand::~KoShapeMoveCommand() {
 void KoShapeMoveCommand::redo() {
     QUndoCommand::redo();
     for(int i=0; i < d->shapes.count(); i++) {
-        d->shapes.at(i)->repaint();
+        d->shapes.at(i)->update();
         d->shapes.at(i)->setPosition( d->newPositions.at(i) );
-        d->shapes.at(i)->repaint();
+        d->shapes.at(i)->update();
     }
 }
 
 void KoShapeMoveCommand::undo() {
     QUndoCommand::undo();
     for(int i=0; i < d->shapes.count(); i++) {
-        d->shapes.at(i)->repaint();
+        d->shapes.at(i)->update();
         d->shapes.at(i)->setPosition( d->previousPositions.at(i) );
-        d->shapes.at(i)->repaint();
+        d->shapes.at(i)->update();
     }
 }
 

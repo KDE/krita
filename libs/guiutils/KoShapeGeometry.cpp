@@ -62,12 +62,12 @@ void KoShapeGeometry::open(KoShape *shape) {
 }
 
 void KoShapeGeometry::updateShape() {
-    m_shape->repaint();
+    m_shape->update();
     QPointF pos(widget.left->value(), widget.top->value());
     m_shape->setAbsolutePosition(pos);
     QSizeF size(widget.width->value(), widget.height->value());
     m_shape->setSize(size);
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void KoShapeGeometry::protectSizeChanged(int protectSizeState) {

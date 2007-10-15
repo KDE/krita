@@ -114,14 +114,14 @@ void KoSubpathJoinCommand::redo()
         pathShape->join( m_pointData1.m_pointIndex.first );
     }
     pathShape->normalize();
-    pathShape->repaint();
+    pathShape->update();
 }
 
 void KoSubpathJoinCommand::undo()
 {
     QUndoCommand::undo();
     KoPathShape * pathShape = m_pointData1.m_pathShape;
-    pathShape->repaint();
+    pathShape->update();
     if ( m_pointData1.m_pointIndex.first == m_pointData2.m_pointIndex.first )
     {
         pathShape->openSubpath( m_pointData1.m_pointIndex );
@@ -159,6 +159,6 @@ void KoSubpathJoinCommand::undo()
     point2->setProperties( m_oldProperties2 );
 
     pathShape->normalize();
-    pathShape->repaint();
+    pathShape->update();
 }
 

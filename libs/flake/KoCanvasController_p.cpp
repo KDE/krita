@@ -171,7 +171,7 @@ void Viewport::handleDropEvent(QDropEvent *event) {
 
         // repaint selection before selecting newly create shape
         foreach( KoShape * shape, selection->selectedShapes() )
-            shape->repaint();
+            shape->update();
 
         selection->deselectAll();
         selection->select(m_draggedShape);
@@ -195,10 +195,10 @@ QPointF Viewport::correctPosition(const QPoint &point) const {
 void Viewport::handleDragMoveEvent (QDragMoveEvent *event) {
     if(m_draggedShape == 0)
         return;
-    m_draggedShape->repaint();
+    m_draggedShape->update();
     repaint(m_draggedShape);
     m_draggedShape->setAbsolutePosition( correctPosition(event->pos()) );
-    m_draggedShape->repaint();
+    m_draggedShape->update();
     repaint(m_draggedShape);
 }
 

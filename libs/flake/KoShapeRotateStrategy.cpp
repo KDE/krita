@@ -71,9 +71,9 @@ void KoShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     QMatrix applyMatrix = matrix * m_rotationMatrix.inverted();
     m_rotationMatrix = matrix;
     foreach( KoShape * shape, m_selectedShapes ) {
-        shape->repaint();
+        shape->update();
         shape->applyAbsoluteTransformation( applyMatrix );
-        shape->repaint();
+        shape->update();
     }
     m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( applyMatrix );
 }

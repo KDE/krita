@@ -341,22 +341,22 @@ int KoShape::zIndex() const {
     return d->zIndex;
 }
 
-void KoShape::repaint() const {
+void KoShape::update() const {
     if ( !d->shapeManagers.empty() )
     {
         QRectF rect( boundingRect() );
         foreach( KoShapeManager * manager, d->shapeManagers )
-            manager->repaint( rect, this, true );
+            manager->update( rect, this, true );
     }
 }
 
-void KoShape::repaint(const QRectF &shape) const {
+void KoShape::update(const QRectF &shape) const {
     if ( !d->shapeManagers.empty() && isVisible() )
     {
         QRectF rect(absoluteTransformation(0).mapRect(shape));
         foreach( KoShapeManager * manager, d->shapeManagers )
         {
-            manager->repaint(rect);
+            manager->update(rect);
         }
     }
 }

@@ -391,7 +391,7 @@ public:
      * <p>This method will return immediately and only request a repaint. Successive calls
      * will be merged into an appropriate repaint action.
      */
-    virtual void repaint() const;
+    virtual void update() const;
 
     /**
      * Request a repaint to be queued.
@@ -402,7 +402,7 @@ public:
      * will be merged into an appropriate repaint action.
      * @param shape the rectangle (in pt) to queue for repaint.
      */
-    void repaint(const QRectF &shape) const;
+    void update(const QRectF &shape) const;
 
     /**
      * This is a method used to sort a list using the STL sorting methods.

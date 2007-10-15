@@ -115,13 +115,13 @@ void ConnectionTool::mouseMoveEvent( KoPointerEvent *event ) {
             continue;
         if(! oldList.contains(shape))
 // TODO do a for loop to repaint only the actual points.
-            shape->repaint(); // because it will have connections painted on top.
+            shape->update(); // because it will have connections painted on top.
         m_shapesPaintedWithConnections.append(shape);
     }
     foreach(KoShape *shape, oldList) {
         if(! m_shapesPaintedWithConnections.contains(shape))
 // TODO do a for loop to repaint only the actual points.
-            shape->repaint(); // because it used to have connections painted, but no longer will.
+            shape->update(); // because it used to have connections painted, but no longer will.
     }
 
     m_lastMousePos = event->point;

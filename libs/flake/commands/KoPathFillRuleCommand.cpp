@@ -52,7 +52,7 @@ void KoPathFillRuleCommand::redo () {
     QUndoCommand::redo();
     foreach( KoPathShape *shape, d->shapes ) {
         shape->setFillRule( d->newFillRule );
-        shape->repaint();
+        shape->update();
     }
 }
 
@@ -61,7 +61,7 @@ void KoPathFillRuleCommand::undo () {
     QList<Qt::FillRule>::iterator ruleIt = d->oldFillRules.begin();
     foreach( KoPathShape *shape, d->shapes ) {
         shape->setFillRule( *ruleIt );
-        shape->repaint();
+        shape->update();
         ruleIt++;
     }
 }

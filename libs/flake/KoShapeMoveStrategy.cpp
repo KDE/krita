@@ -82,9 +82,9 @@ void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
         m_canvas->clipToDocument(shape, diff);
         QPointF newPos (shape->position() + diff);
         m_newPositions[i] = newPos;
-        shape->repaint();
+        shape->update();
         shape->setPosition(newPos);
-        shape->repaint();
+        shape->update();
         i++;
     }
     m_canvas->shapeManager()->selection()->setPosition(m_initialSelectionPosition + m_diff);

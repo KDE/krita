@@ -45,14 +45,14 @@ void KoPathPointMoveCommand::redo()
         matrix.translate( offset.x(), offset.y() );
 
         // repaint old bounding rect
-        it.key()->repaint();
+        it.key()->update();
         foreach( KoPathPoint *p, it.value() )
         {
             p->map( matrix, true );
         }
         it.key()->normalize();
         // repaint new bounding rect
-        it.key()->repaint();
+        it.key()->update();
     }
     m_undoCalled = false;
 }

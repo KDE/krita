@@ -38,7 +38,7 @@ void KoPathBaseCommand::repaint( bool normalizeShapes )
     {
         if( normalizeShapes )
             shape->normalize();
-        shape->repaint();
+        shape->update();
     }
 }
 

@@ -42,17 +42,17 @@ KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, QList<do
 void KoShapeShearCommand::redo() {
     QUndoCommand::redo();
     for(int i=0; i < m_shapes.count(); i++) {
-        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->update();
         m_shapes.at(i)->setShear( m_newShearXs.at(i), m_newShearYs.at(i));
-        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->update();
     }
 }
 
 void KoShapeShearCommand::undo() {
     QUndoCommand::undo();
     for(int i=0; i < m_shapes.count(); i++) {
-        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->update();
         m_shapes.at(i)->setShear( m_previousShearXs.at(i), m_previousShearYs.at(i) );
-        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->update();
     }
 }

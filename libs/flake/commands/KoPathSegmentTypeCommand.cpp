@@ -80,7 +80,7 @@ void KoPathSegmentTypeCommand::redo()
     for ( ; it != m_pointDataList.end(); ++it )
     {
         KoPathShape * pathShape = it->m_pathShape;
-        pathShape->repaint();
+        pathShape->update();
 
         KoPathSegment segment = pathShape->segmentByIndex( it->m_pointIndex );
 
@@ -99,7 +99,7 @@ void KoPathSegmentTypeCommand::redo()
         }
 
         pathShape->normalize();
-        pathShape->repaint();
+        pathShape->update();
     }
 }
 
@@ -109,7 +109,7 @@ void KoPathSegmentTypeCommand::undo()
     for ( int i = 0; i < m_pointDataList.size(); ++i )
     {
         const KoPathPointData & pd = m_pointDataList.at( i );
-        pd.m_pathShape->repaint();
+        pd.m_pathShape->update();
         KoPathSegment segment = pd.m_pathShape->segmentByIndex( pd.m_pointIndex );
         const SegmentTypeData segmentData( m_segmentData.at( i ) );
         if ( m_segmentType == Curve )
@@ -121,7 +121,7 @@ void KoPathSegmentTypeCommand::undo()
         segment.second->setProperties( segmentData.m_properties1 );
 
         pd.m_pathShape->normalize();
-        pd.m_pathShape->repaint();
+        pd.m_pathShape->update();
     }
 }
 

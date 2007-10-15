@@ -63,14 +63,14 @@ void  Canvas::addCommand (QUndoCommand *command) {
 void Canvas::mousePressEvent(QMouseEvent *event) {
     KoShape *clickedShape = shapeManager()->shapeAt(event->pos());
     foreach(KoShape *shape, shapeManager()->selection()->selectedShapes())
-        shape->repaint();
+        shape->update();
     shapeManager()->selection()->deselectAll();
     m_emitItemSelected = false;
     if(clickedShape == 0)
         return;
     m_emitItemSelected = true;
     shapeManager()->selection()->select(clickedShape);
-    clickedShape->repaint();
+    clickedShape->update();
 }
 
 void Canvas::tabletEvent(QTabletEvent *event) {
@@ -186,7 +186,7 @@ void  Canvas::dropEvent(QDropEvent *event) {
     event->setDropAction(Qt::MoveAction);
     event->accept();
     foreach(KoShape *shape, shapeManager()->selection()->selectedShapes()) {
-        shape->repaint();
+        shape->update();
         if(dynamic_cast<FolderShape*>(shape)) { // is a folder
             shape->setPosition(event->pos() - offset);
         }
@@ -207,7 +207,7 @@ void  Canvas::dropEvent(QDropEvent *event) {
                 shape->setPosition(event->pos() - offset);
             }
         }
-        shape->repaint();
+        shape->update();
     }
 }
 

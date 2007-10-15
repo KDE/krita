@@ -87,7 +87,7 @@ void KoPathSeparateCommand::redo()
             d->controller->addShape( p );
     }
     foreach( KoPathShape* p, d->paths )
-        p->repaint();
+        p->update();
 }
 
 void KoPathSeparateCommand::undo()
@@ -104,5 +104,5 @@ void KoPathSeparateCommand::undo()
     d->isSeparated = false;
 
     foreach( KoPathShape* p, d->paths )
-        p->repaint();
+        p->update();
 }

@@ -309,7 +309,7 @@ void KoTextDocumentLayout::layout() {
             double posY = m_state->y();
             bool moreText = m_state->nextParag();
             if(m_state->shape && m_state->y() > posY)
-                m_state->shape->repaint(QRectF(0, posY,
+                m_state->shape->update(QRectF(0, posY,
                             m_state->shape->size().width(), m_state->y() - posY));
 
             if(! moreText)
@@ -333,7 +333,7 @@ void KoTextDocumentLayout::layout() {
         repaintRect.moveTop(repaintRect.y() - m_state->docOffsetInShape());
         repaintRect.setX(0.0); // just take full width since we can't force a repaint of
         repaintRect.setWidth(m_state->shape->size().width()); // where lines were before layout.
-        m_state->shape->repaint(repaintRect);
+        m_state->shape->update(repaintRect);
     }
 }
 

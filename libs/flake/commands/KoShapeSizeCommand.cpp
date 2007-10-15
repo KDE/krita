@@ -49,9 +49,9 @@ void KoShapeSizeCommand::redo () {
     QUndoCommand::redo();
     int i=0;
     foreach(KoShape *shape, d->shapes) {
-        shape->repaint();
+        shape->update();
         shape->setSize(d->newSizes[i++]);
-        shape->repaint();
+        shape->update();
     }
 }
 
@@ -59,8 +59,8 @@ void KoShapeSizeCommand::undo () {
     QUndoCommand::undo();
     int i=0;
     foreach(KoShape *shape, d->shapes) {
-        shape->repaint();
+        shape->update();
         shape->setSize(d->previousSizes[i++]);
-        shape->repaint();
+        shape->update();
     }
 }

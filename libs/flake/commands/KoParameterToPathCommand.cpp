@@ -97,7 +97,7 @@ void KoParameterToPathCommand::redo()
         KoParameterShape * parameterShape = m_shapes.at( i );
         parameterShape->setModified( true );
         parameterShape->m_subpaths = m_newSubpaths[i];
-        parameterShape->repaint();
+        parameterShape->update();
     }
     m_newPointsActive = true;
 }
@@ -110,7 +110,7 @@ void KoParameterToPathCommand::undo()
         KoParameterShape * parameterShape = m_shapes.at( i );
         parameterShape->setModified( false );
         parameterShape->m_subpaths = m_oldSubpaths[i];
-        parameterShape->repaint();
+        parameterShape->update();
     }
     m_newPointsActive = false;
 }

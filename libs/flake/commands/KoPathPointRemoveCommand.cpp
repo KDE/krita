@@ -144,7 +144,7 @@ void KoPathPointRemoveCommand::redo()
     for ( int i = m_pointDataList.size() - 1; i >= 0; --i )
     {
         const KoPathPointData &pd = m_pointDataList.at( i );
-        pd.m_pathShape->repaint();
+        pd.m_pathShape->update();
         m_points[i] = pd.m_pathShape->removePoint( pd.m_pointIndex );
 
         if ( lastPathShape != pd.m_pathShape )
@@ -159,7 +159,7 @@ void KoPathPointRemoveCommand::redo()
                 {
                     m_points.at( j )->map( matrix );
                 }
-                lastPathShape->repaint();
+                lastPathShape->update();
                 updateBefore = i + 1;
             }
             lastPathShape = pd.m_pathShape;
@@ -176,7 +176,7 @@ void KoPathPointRemoveCommand::redo()
         {
             m_points.at( j )->map( matrix );
         }
-        lastPathShape->repaint();
+        lastPathShape->update();
     }
 
     m_deletePoints = true;
@@ -192,7 +192,7 @@ void KoPathPointRemoveCommand::undo()
         if ( lastPathShape && lastPathShape != pd.m_pathShape )
         {
             lastPathShape->normalize();
-            lastPathShape->repaint();
+            lastPathShape->update();
         }
         pd.m_pathShape->insertPoint( m_points[i], pd.m_pointIndex );
         lastPathShape = pd.m_pathShape;
@@ -200,7 +200,7 @@ void KoPathPointRemoveCommand::undo()
     if ( lastPathShape )
     {
         lastPathShape->normalize();
-        lastPathShape->repaint();
+        lastPathShape->update();
     }
     m_deletePoints = false;
 }

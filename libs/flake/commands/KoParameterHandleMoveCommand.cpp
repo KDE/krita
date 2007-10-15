@@ -40,17 +40,17 @@ KoParameterHandleMoveCommand::~KoParameterHandleMoveCommand()
 void KoParameterHandleMoveCommand::redo()
 {
     QUndoCommand::redo();
-    m_shape->repaint();
+    m_shape->update();
     m_shape->moveHandle( m_handleId, m_endPoint );
-    m_shape->repaint();
+    m_shape->update();
 }
 
 /// revert the actions done in redo
 void KoParameterHandleMoveCommand::undo()
 {
     QUndoCommand::undo();
-    m_shape->repaint();
+    m_shape->update();
     m_shape->moveHandle( m_handleId, m_startPoint );
-    m_shape->repaint();
+    m_shape->update();
 }
 

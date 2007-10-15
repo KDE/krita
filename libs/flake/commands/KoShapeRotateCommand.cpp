@@ -37,17 +37,17 @@ KoShapeRotateCommand::KoShapeRotateCommand(const QList<KoShape*> &shapes, QList<
 void KoShapeRotateCommand::redo() {
     QUndoCommand::redo();
     for(int i=0; i < m_shapes.count(); i++) {
-        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->update();
         m_shapes.at(i)->rotate( m_newAngles.at(i) );
-        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->update();
     }
 }
 
 void KoShapeRotateCommand::undo() {
     QUndoCommand::undo();
     for(int i=0; i < m_shapes.count(); i++) {
-        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->update();
         m_shapes.at(i)->rotate( m_previousAngles.at(i) );
-        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->update();
     }
 }

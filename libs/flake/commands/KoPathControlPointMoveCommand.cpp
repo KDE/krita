@@ -48,7 +48,7 @@ void KoPathControlPointMoveCommand::redo()
     KoPathPoint * point = pathShape->pointByIndex( m_pointData.m_pointIndex );
     if ( point )
     {
-        pathShape->repaint();
+        pathShape->update();
 
         if ( m_pointType == KoPathPoint::ControlPoint1 )
         {
@@ -92,7 +92,7 @@ void KoPathControlPointMoveCommand::redo()
         }
 
         pathShape->normalize();
-        pathShape->repaint();
+        pathShape->update();
     }
 }
 

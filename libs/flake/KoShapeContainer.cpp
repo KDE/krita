@@ -44,9 +44,9 @@ public:
         if(relation->m_inside == clipping)
             return;
         relation->m_inside = clipping;
-        relation->child()->repaint();
+        relation->child()->update();
         relation->child()->notifyChanged();
-        relation->child()->repaint();
+        relation->child()->update();
     }
 
     bool childClipped(const KoShape *child) const {
@@ -238,10 +238,10 @@ bool KoShapeContainer::childClipped(const KoShape *child) const {
 }
 
 void KoShapeContainer::repaint() const {
-    KoShape::repaint();
+    KoShape::update();
     if(d->children)
         foreach ( KoShape *shape, d->children->iterator())
-            shape->repaint();
+            shape->update();
 }
 
 QList<KoShape*> KoShapeContainer::iterator() const {

@@ -40,18 +40,18 @@ KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QLis
 void KoShapeReorderCommand::redo() {
     QUndoCommand::redo();
     for(int i=0; i < m_shapes.count(); i++) {
-        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->update();
         m_shapes.at(i)->setZIndex( m_newIndexes.at(i) );
-        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->update();
     }
 }
 
 void KoShapeReorderCommand::undo() {
     QUndoCommand::undo();
     for(int i=0; i < m_shapes.count(); i++) {
-        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->update();
         m_shapes.at(i)->setZIndex( m_previousIndexes.at(i) );
-        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->update();
     }
 }
 

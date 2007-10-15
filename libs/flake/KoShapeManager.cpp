@@ -119,7 +119,7 @@ void KoShapeManager::add( KoShape *shape, bool repaint )
         d->tree.insert( br, shape );
     }
     if ( repaint ) {
-        shape->repaint();
+        shape->update();
     }
 
     // add the children of a KoShapeContainer
@@ -136,7 +136,7 @@ void KoShapeManager::add( KoShape *shape, bool repaint )
 
 void KoShapeManager::remove( KoShape *shape )
 {
-    shape->repaint();
+    shape->update();
     shape->removeShapeManager( this );
     d->selection->deselect( shape );
     d->aggregate4update.remove( shape );
@@ -321,7 +321,7 @@ QList<KoShape *> KoShapeManager::shapesAt( const QRectF &rect, bool omitHiddenSh
         return d->tree.intersects( rect );
 }
 
-void KoShapeManager::repaint( QRectF &rect, const KoShape *shape, bool selectionHandles )
+void KoShapeManager::update( QRectF &rect, const KoShape *shape, bool selectionHandles )
 {
     d->canvas->updateCanvas( rect );
     if ( selectionHandles && d->selection->isSelected( shape ) )

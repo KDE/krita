@@ -143,7 +143,7 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     int i = 0;
     foreach(KoShape *shape, m_selectedShapes)
     {
-        shape->repaint();
+        shape->update();
 
         // this uses resize for the zooming part
         shape->applyAbsoluteTransformation( m_unwindMatrix );
@@ -185,7 +185,7 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
 
         shape->applyAbsoluteTransformation( m_windMatrix );
 
-        shape->repaint();
+        shape->update();
         i++;
     }
     m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( matrix * m_scaleMatrix.inverted() );

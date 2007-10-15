@@ -75,7 +75,7 @@ void KritaShape::slotLoadingFinished()
     if ( m_d && m_d->doc && m_d->doc->image() ) {
         // XXX: Resize image to correct aspect ratio
         m_waiter.wakeAll();
-        repaint();
+        update();
     }
     m_mutex.unlock();
 
@@ -103,7 +103,7 @@ void KritaShape::paint( QPainter& painter, const KoViewConverter& converter )
 
 void KritaShape::setDisplayProfile( const QString & profileName ) {
     m_d->displayProfile = KoColorSpaceRegistry::instance()->profileByName( profileName );
-    repaint();
+    update();
 }
 
 void KritaShape::saveOdf( KoShapeSavingContext & context ) const {

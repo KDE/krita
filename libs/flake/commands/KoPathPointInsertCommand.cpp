@@ -116,7 +116,7 @@ void KoPathPointInsertCommand::redo()
         }
 
         pathShape->insertPoint( m_points.at( i ), pointData.m_pointIndex );
-        pathShape->repaint();
+        pathShape->update();
     }
     m_deletePoints = false;
 }
@@ -155,7 +155,7 @@ void KoPathPointInsertCommand::undo()
             qSwap( controlPoint1, m_controlPoints[i].second );
             after->setControlPoint1( controlPoint1 );
         }
-        pathShape->repaint();
+        pathShape->update();
     }
     m_deletePoints = true;
 }

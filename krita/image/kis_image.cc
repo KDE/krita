@@ -168,7 +168,7 @@ void KisImage::aboutToAddANode( KisNode *parent, int index )
 
 void KisImage::nodeHasBeenAdded( KisNode *parent, int index )
 {
-
+    kDebug() << "parent: " << parent << ", index: " << index;
     // XXX: Temporarily for compatibility
 
     KisLayer * layer = dynamic_cast<KisLayer*>( parent->at( index ).data() );
@@ -190,7 +190,6 @@ void KisImage::nodeHasBeenAdded( KisNode *parent, int index )
         props.setProperty( "temporary", false );
 
         if ( !layer->check( props ) ) {
-
             emit sigLayerMoved( layer );
         }
     }

@@ -247,16 +247,12 @@ bool KisNode::add( KisNodeSP newNode, KisNodeSP aboveThis )
 
     if ( aboveThis != 0 ) {
 
-        idx = this->index( aboveThis );
+        idx = this->index( aboveThis ) + 1;
 
         if ( m_d->graphListener )
             m_d->graphListener->aboutToAddANode( this, idx );
 
-        if ( idx >= ( int )childCount() )
-            m_d->nodes.append(newNode);
-        else {
-            m_d->nodes.insert( idx + 1, newNode );
-        }
+        m_d->nodes.insert( idx + 1, newNode );
     }
     else
     {

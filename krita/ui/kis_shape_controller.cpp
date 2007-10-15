@@ -235,7 +235,7 @@ void KisShapeController::setInitialShapeForView( KisView2 * view )
 
 void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
 {
-    kDebug(41007) << "parentnode: " << parentNode << ", index: " << index;
+    kDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>> parentnode: " << parentNode << ", index: " << index << ", " << parentNode->at(index);
 
     KisNodeSP node = parentNode->at( index );
 
@@ -246,7 +246,7 @@ void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
     }
 
     // Get the parent -- there is always one, and it should be in the nodemap already
-    KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>( shapeForNode( node->parent().data() ) );
+    KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>( shapeForNode( parentNode ) );
     Q_ASSERT( parent );
 
     KoShape * shape = 0;

@@ -280,7 +280,7 @@ void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
         canvas->shapeManager()->add(shape);
         canvas->canvasWidget()->update();
     }
-
+    kDebug(41007) << "Added " << node << " as shape " << shape << " to the document";
 }
 
 void KisShapeController::slotNodeRemoved( KisNode* parent, int index )

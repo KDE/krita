@@ -21,7 +21,7 @@
 
 #include <QString>
 
-#include <KoShapeLayer.h>
+#include <KoShapeContainer.h>
 #include <kis_types.h>
 #include <krita_export.h>
 
@@ -35,7 +35,7 @@ const QString KIS_LAYER_CONTAINER_ID = "KisLayerContainerShapeID";
    KisGroupLayer. It contains any number of layers, including other
    group layers.
  */
-class KRITAUI_EXPORT KisLayerContainerShape : public KoShapeLayer
+class KRITAUI_EXPORT KisLayerContainerShape : public KoShapeContainer
 {
 
 public:

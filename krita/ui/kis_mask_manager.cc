@@ -163,53 +163,66 @@ void KisMaskManager::activateMask( KisMaskSP mask )
 
 void KisMaskManager::createTransparencyMask()
 {
-    // XXX: if there's a selection, set the selection on the mask
-    //      if there's no selection, select everything
-    KisLayerSP activeLayer = m_view->activeLayer();
-    if ( activeLayer ) {
-        KisMaskSP mask = new KisTransparencyMask();
-        mask->setName( i18n( "Transparency Mask" ) ); // XXX:Auto-increment a number here, like with layers
-//         mask->setParent( activeLayer );
-//         if ( m_activeMask )
-//             activeLayer->addEffectMask( mask, m_activeMask );
-//         else
-//             activeLayer->addEffectMask( mask );
-//         activateMask( mask );
+
+    KisLayerSP parent = m_view->activeLayer();
+    if ( parent ) {
+        if ( parent == 0 )
+            createTransparencyMask( parent.data(), parent->firstChild() );
+        else
+            createTransparencyMask( parent.data(), m_activeMask.data() );
     }
 }
 
+void KisMaskManager::createTransparencyMask( KisNodeSP parent, KisNodeSP above )
+{
+    // XXX: if there's a selection, set the selection on the mask
+    //      if there's no selection, select everything
+    KisMaskSP mask = new KisTransparencyMask();
+    mask->setName( i18n( "Transparency Mask" ) ); // XXX:Auto-increment a number here, like with layers
+    mask->setActive( true );
+    m_view->image()->addNode( mask, parent, above );
+    activateMask( mask );
+}
+
+
 void KisMaskManager::createFilterMask()
 {
-    KisLayerSP activeLayer = m_view->activeLayer();
+    KisLayerSP parent = m_view->activeLayer();
 
-    if ( activeLayer ) {
+    if ( parent ) {
+        if ( m_activeMask == 0 )
+            createFilterMask( parent.data(), parent->firstChild() );
+        else
+            createFilterMask( parent.data(), m_activeMask.data() );
 
-        KisPaintDeviceSP dev = activeLayer->projection();
+    }
+}
 
-        KisDlgAdjustmentLayer dlg(dev, m_view->image()->nextLayerName(), i18n("New Filter Effect"), m_view, "dlgadjustmentlayer");
+void KisMaskManager::createFilterMask( KisNodeSP parent, KisNodeSP above )
+{
+    KisLayerSP layer = dynamic_cast<KisLayer*>(parent.data());
+    if (! layer )
+        return;
 
-        if (dlg.exec() == QDialog::Accepted) {
-            KisSelectionSP selection = KisSelectionSP(0);
-            if (dev->hasSelection()) {
-                selection = dev->selection();
-            }
-            KisFilterConfiguration * filter = dlg.filterConfiguration();
-            QString name = dlg.layerName();
+    KisPaintDeviceSP dev = layer->projection();
 
-            KisFilterMask * mask = new KisFilterMask();
+    KisDlgAdjustmentLayer dlg(dev, m_view->image()->nextLayerName(), i18n("New Filter Mask"), m_view, "dlgfiltermask");
 
-//             mask->setParent( activeLayer );
-            mask->setActive( true );
-            mask->setFilter( filter );
-            mask->setName( name );
-
-//             if ( m_activeMask )
-//                 activeLayer->addEffectMask( mask, m_activeMask );
-//             else
-//                 activeLayer->addEffectMask( mask );
-
-            activateMask( mask );
+    if (dlg.exec() == QDialog::Accepted) {
+        KisSelectionSP selection = KisSelectionSP(0);
+        if (dev->hasSelection()) {
+            selection = dev->selection();
         }
+        KisFilterConfiguration * filter = dlg.filterConfiguration();
+        QString name = dlg.layerName();
+
+        KisFilterMask * mask = new KisFilterMask();
+
+        mask->setActive( true );
+        mask->setFilter( filter );
+        mask->setName( name );
+        m_view->image()->addNode( mask, parent, above );
+        activateMask( mask );
     }
 }
 
@@ -218,27 +231,31 @@ void KisMaskManager::createTransformationMask()
     KisLayerSP activeLayer = m_view->activeLayer();
 
     if ( activeLayer ) {
-        KisDlgTransformationEffect dlg(QString(), 1.0, 1.0, 0.0, 0.0, 0.0, 0, 0, KoID( "Mitchell" ), m_view);
-        if ( dlg.exec() == QDialog::Accepted ) {
-            KisTransformationMask * mask = new KisTransformationMask();
-//             mask->setParent( activeLayer );
-            mask->setName( dlg.transformationEffect()->maskName() );
-            mask->setXScale( dlg.transformationEffect()->xScale() );
-            mask->setYScale( dlg.transformationEffect()->yScale() );
-            mask->setXShear( dlg.transformationEffect()->xShear() );
-            mask->setYShear( dlg.transformationEffect()->yShear() );
-            mask->setRotation( dlg.transformationEffect()->rotation() );
-            mask->setXTranslation( dlg.transformationEffect()->moveX() );
-            mask->setYTranslation( dlg.transformationEffect()->moveY() );
-            mask->setFilterStrategy( dlg.transformationEffect()->filterStrategy() );
-            mask->setActive( true );
-//             if ( m_activeMask )
-//                 activeLayer->addEffectMask( mask, m_activeMask );
-//             else
-//                 activeLayer->addEffectMask( mask );
-            activateMask( mask );
-        }
+        if ( m_activeMask == 0 )
+            createTransformationMask( activeLayer.data(), activeLayer->firstChild() );
+        else
+            createTransformationMask( activeLayer.data(), m_activeMask.data() );
+    }
+}
 
+void KisMaskManager::createTransformationMask( KisNodeSP parent, KisNodeSP above )
+{
+    KisDlgTransformationEffect dlg(QString(), 1.0, 1.0, 0.0, 0.0, 0.0, 0, 0, KoID( "Mitchell" ), m_view);
+    if ( dlg.exec() == QDialog::Accepted ) {
+        KisTransformationMask * mask = new KisTransformationMask();
+
+        mask->setName( dlg.transformationEffect()->maskName() );
+        mask->setXScale( dlg.transformationEffect()->xScale() );
+        mask->setYScale( dlg.transformationEffect()->yScale() );
+        mask->setXShear( dlg.transformationEffect()->xShear() );
+        mask->setYShear( dlg.transformationEffect()->yShear() );
+        mask->setRotation( dlg.transformationEffect()->rotation() );
+        mask->setXTranslation( dlg.transformationEffect()->moveX() );
+        mask->setYTranslation( dlg.transformationEffect()->moveY() );
+        mask->setFilterStrategy( dlg.transformationEffect()->filterStrategy() );
+        mask->setActive( true );
+        m_view->image()->addNode( mask, parent, above );
+        activateMask( mask );
     }
 }
 

@@ -99,7 +99,8 @@ void KisLayerShape::setPosition( const QPointF & position )
     KisImageSP image = m_d->layer->image();
     if ( image ) {
         // XXX: Does flake handle undo for us?
-        QPoint p( position.x() / image->xRes(), position.y() / image->yRes() );
+        QPointF pf( position.x() / image->xRes(), position.y() / image->yRes() );
+        QPoint p = pf.toPoint();
         m_d->layer->setX( p.x() );
         m_d->layer->setY( p.y() );
     }

@@ -129,7 +129,7 @@ void KisNodeManager::createNode( const QString & nodeType, KisNodeSP parent, Kis
         m_d->layerManager->addCloneLayer( parent, above );
     }
     else if ( nodeType == "KisTransparencyMask" ) {
-        m_d->maskManager->createTransformationMask( parent, above );
+        m_d->maskManager->createTransparencyMask( parent, above );
     }
     else if ( nodeType == "KisFilterMask" ) {
         m_d->maskManager->createFilterMask( parent, above );
@@ -173,13 +173,6 @@ void KisNodeManager::activateNode( KisNodeSP node )
     if (!parentShape) {
         parentShape = m_d->view->document()->addShape( node->parent() );
     }
-
-    KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>( parentShape );
-    Q_ASSERT( shapeLayer );
-
-    // So the KoShapeController class can set the right parent on
-    // layers we add.
-    selection->setActiveLayer( shapeLayer );
 
     m_d->activeNode = node;
     if ( KisLayerSP layer = dynamic_cast<KisLayer*>( node.data() ) ) {

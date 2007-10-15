@@ -34,7 +34,7 @@ public:
 };
 
 KisLayerContainerShape::KisLayerContainerShape( KoShapeContainer *parent, KisLayerSP groupLayer )
-    : KoShapeLayer()
+    : KoShapeContainer()
     , m_d( new Private )
 {
     m_d->groupLayer = groupLayer;

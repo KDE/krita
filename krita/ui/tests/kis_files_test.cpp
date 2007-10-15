@@ -25,6 +25,7 @@
 #include <qtest_kde.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
+#include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
 #include <ktemporaryfile.h>
@@ -47,7 +48,11 @@ void KisFilesTest::testFiles()
             KisDoc2 doc;
             doc.import( sourceFileInfo.absoluteFilePath() );
             QVERIFY(doc.image());
-            doc.image()->convertTo( KoColorSpaceRegistry::instance()->rgb8());
+            QString id = doc.image()->colorSpace()->id();
+            if(id != "GRAYA" and id != "GRAYA16" and id != "RGBA" and id != "RGBA16")
+            {
+              doc.image()->convertTo( KoColorSpaceRegistry::instance()->rgb8());
+            }
             KTemporaryFile tmpFile;
             tmpFile.setSuffix(".png");
             tmpFile.open();
@@ -66,7 +71,6 @@ void KisFilesTest::testFiles()
                 for(int i = 0; i < sourceImg.numBytes(); i++)
                 {
 //                     kDebug() <<(int)resultImg.bits()[i] << " " << (int)sourceImg.bits()[i] << endl;
-//                     QVERIFY2( qAbs(resultImg.bits()[i] - sourceImg.bits()[i]) < 10, 
                     QVERIFY2( resultImg.bits()[i] == sourceImg.bits()[i], 
                             QString("pixel %1 is different : %2 %3 in file %4").arg(i)
                             .arg((int)resultImg.bits()[i])

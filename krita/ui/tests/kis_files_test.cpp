@@ -65,10 +65,13 @@ void KisFilesTest::testFiles()
             {
                 for(int i = 0; i < sourceImg.numBytes(); i++)
                 {
-                    kDebug() <<(int)resultImg.bits()[i] << " " << (int)sourceImg.bits()[i] << endl;
-//                     QVERIFY2(resultImg.bits()[i] == sourceImg.bits()[i], QString("pixel %1 is different : %2 %3").arg(i)
-//                             .arg((int)resultImg.bits()[i])
-//                             .arg((int)sourceImg.bits()[i]).toAscii().data());
+//                     kDebug() <<(int)resultImg.bits()[i] << " " << (int)sourceImg.bits()[i] << endl;
+//                     QVERIFY2( qAbs(resultImg.bits()[i] - sourceImg.bits()[i]) < 10, 
+                    QVERIFY2( resultImg.bits()[i] == sourceImg.bits()[i], 
+                            QString("pixel %1 is different : %2 %3 in file %4").arg(i)
+                            .arg((int)resultImg.bits()[i])
+                            .arg((int)sourceImg.bits()[i])
+                            .arg(sourceFileInfo.fileName()).toAscii().data());
                 }
             }
         }

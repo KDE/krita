@@ -96,8 +96,6 @@ bool KisNodeFacade::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThi
     if ( !node ) return false;
     if ( !parent ) return false;
 
-    kDebug() << "Adding node " << node << " parent " << parent << " above " << aboveThis;
-
     return parent->add( node, aboveThis );
 }
 

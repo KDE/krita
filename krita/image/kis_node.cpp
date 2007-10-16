@@ -252,7 +252,7 @@ bool KisNode::add( KisNodeSP newNode, KisNodeSP aboveThis )
         if ( m_d->graphListener )
             m_d->graphListener->aboutToAddANode( this, idx );
 
-        m_d->nodes.insert( idx + 1, newNode );
+        m_d->nodes.insert( idx, newNode );
     }
     else
     {

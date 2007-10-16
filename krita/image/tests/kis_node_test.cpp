@@ -136,6 +136,7 @@ void KisNodeTest::testOrdering()
      */
 
     graphListener.resetBools();
+    QVERIFY( root->lastChild() == 0 );
     root->add( node1, root->lastChild() );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
@@ -145,6 +146,7 @@ void KisNodeTest::testOrdering()
     QVERIFY( root->lastChild() == node1 );
     graphListener.resetBools();
 
+    QVERIFY( root->lastChild() == node1 );
     root->add( node2, root->lastChild() );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
@@ -154,7 +156,9 @@ void KisNodeTest::testOrdering()
     QVERIFY( root->lastChild() == node2 );
     graphListener.resetBools();
 
+    QVERIFY( root->lastChild() == node2 );
     root->add( node3, node1 );
+    QVERIFY( root->lastChild() == node2 );
     QVERIFY( graphListener.beforeInsertRow == true );
     QVERIFY( graphListener.afterInsertRow == true );
     QVERIFY( graphListener.beforeRemoveRow == false );

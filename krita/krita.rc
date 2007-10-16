@@ -96,6 +96,7 @@
   <Action name="mirrorLayerY"/>
   <Separator/>
   <Action name="layer_properties"/>
+  <DefineGroup name="layer_properties_merge" />
   <Separator/>
   <Action name="merge_layer"/>
   <Action name="merge_all_shape_layers"/>

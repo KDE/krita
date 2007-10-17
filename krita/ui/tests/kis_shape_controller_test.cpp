@@ -101,10 +101,10 @@ void KisShapeControllerTest::testAddShape()
     QCOMPARE( shapeController.layerMapSize(), 6 );
 
     image->removeLayer( layer2 );
-    QCOMPARE( shapeController.layerMapSize(), 1 );
+    QCOMPARE( shapeController.layerMapSize(), 2 );
 
     image->removeLayer( layer );
-    QCOMPARE( shapeController.layerMapSize(), 0 );
+    QCOMPARE( shapeController.layerMapSize(), 1 );
 
     shapeController.setImage( 0 );
 

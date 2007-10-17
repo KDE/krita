@@ -79,6 +79,7 @@ bool KoColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
         child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
     }
     layer->setDirty();
+    layer->setCompositeOp( m_dstColorSpace->compositeOp( layer->compositeOp()->id() ) );
     return true;
 }
 
@@ -87,6 +88,7 @@ bool KoColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
     layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
     layer->setChannelFlags( m_emptyChannelFlags );
     layer->setDirty();
+    layer->setCompositeOp( m_dstColorSpace->compositeOp( layer->compositeOp()->id() ) );
     return true;
 }
 

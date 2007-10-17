@@ -1,16 +1,9 @@
-
-
-
-
-
 ########### install files ###############
 
 install(FILES
     Adobe.icm 
     Apple.icm 
     CIE.icm 
-    CMY.icm 
-    cmyk.icm 
     ColorMatch.icm 
     lcmslabi.icm 
     lcmsxyzi.icm 
@@ -26,5 +19,3 @@ install(FILES
     ycc601.icm 
     ycc709.icm
     DESTINATION ${DATA_INSTALL_DIR}/krita/profiles)
-
-

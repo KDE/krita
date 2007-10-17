@@ -73,6 +73,8 @@ void KoColorSpaceRegistry::init()
     // prepare a list of the profiles
     KGlobal::mainComponent().dirs()->addResourceType("kis_profiles",
                                                      "data", "krita/profiles/");
+    KGlobal::mainComponent().dirs()->addResourceType("kis_profiles",
+                                                     "data", "pigment/profiles/");
 
     QStringList profileFilenames;
     profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.icm");

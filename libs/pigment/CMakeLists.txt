@@ -1,3 +1,5 @@
+add_subdirectory( colorprofiles )
+
 project(pigmentcms)
 
 include_directories( ${KOMAIN_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LCMS_INCLUDE_DIR} )

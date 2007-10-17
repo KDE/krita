@@ -36,8 +36,6 @@ private slots:
     void testSetImage();
     void testAddShape();
     void testRemoveShape();
-    void testSetInitialShapeForView();
-    void testShapeForLayer();
 
 };
 

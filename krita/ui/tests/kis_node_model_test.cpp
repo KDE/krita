@@ -60,8 +60,8 @@ void kisnodemodel_test::testRowcount()
 
     QVERIFY( model.rowCount() == 3 );
 
-    // Is placed on top of the stack, internal idx = 2, qt idx = 0
-    QModelIndex idx = model.index( 0, 0 );
+    QModelIndex idx = model.index( 2, 0 );
+    kDebug() << "node: " << model.nodeFromIndex(idx);
     QVERIFY( idx.isValid() );
     QVERIFY( !idx.parent().isValid() );
     QVERIFY( model.hasChildren( idx ) );
@@ -101,10 +101,11 @@ void kisnodemodel_test::testModelIndex()
     KisPaintLayerSP child = new KisPaintLayer(img, "child", 200);
     img->addLayer( child, parent );
 
-    QModelIndex parentIdx = model.index( 0, 0 );
+    QModelIndex parentIdx = model.index( 2, 0 );
 
     QVERIFY( parentIdx.isValid() );
     QVERIFY( !parentIdx.parent().isValid() );
+    kDebug() << model.nodeFromIndex(parentIdx);
     QVERIFY( parentIdx.internalPointer() == parent.data() );
     QVERIFY( model.hasChildren( parentIdx ) );
 

@@ -16,12 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISLAYERMODEL_TEST_H
-#define KISLAYERMODEL_TEST_H
+#ifndef KISNODEMODEL_TEST_H
+#define KISNODEMODEL_TEST_H
 
 #include <QtTest/QtTest>
 
-class kislayermodel_test : public QObject
+class kisnodemodel_test : public QObject
 {
     Q_OBJECT
 

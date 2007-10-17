@@ -112,19 +112,30 @@ void KisShapeController::setImage( KisImageSP image )
         }
 
         connect( m_d->image, SIGNAL( sigNodeHasBeenAdded( KisNode *, int ) ), SLOT( slotNodeAdded( KisNode*, int ) ) );
-        connect( m_d->image, SIGNAL( sigNodeHasBeenRemoved( KisNode *, int ) ), SLOT( slotNodeRemoved( KisNode*, int) ) );
+        connect( m_d->image, SIGNAL( sigAboutToRemoveANode( KisNode *, int ) ), SLOT( slotNodeRemoved( KisNode*, int) ) );
         connect( m_d->image, SIGNAL( sigLayersChanged( KisGroupLayerSP ) ), this, SLOT( slotLayersChanged( KisGroupLayerSP ) ) );
     }
 }
 
 void KisShapeController::removeShape( KoShape* shape )
 {
+    kDebug() << "Going to remove " << shape;
     if ( !shape ) return;
 
-    KoShapeContainer * container = shape->parent();
-    kDebug(41007) <<"parent is" << container;
+    // Also remove all the children, if any
+    {
+        KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>( shape );
+        if ( parent ) {
+            qDebug() << "children " << parent->childCount();
+            foreach( KoShape * child, parent->iterator() ) {
+                removeShape( child );
+            }
+        }
+    }
 
-    if ( container ) {
+#if 0 // This bites with recursive deleting of all children of the current node
+    if ( KoShapeContainer * container = shape->parent() ) {
+        kDebug(41007) <<"parent is" << container;
         container->removeChild( shape );
 
         // If there are no longer children, remove the container
@@ -133,7 +144,7 @@ void KisShapeController::removeShape( KoShape* shape )
             removeShape( container );
         }
     }
-
+#endif
     if ( shape->shapeId() == KIS_LAYER_SHAPE_ID
          || shape->shapeId() == KIS_SHAPE_LAYER_ID
          || shape->shapeId() == KIS_LAYER_CONTAINER_ID
@@ -145,6 +156,18 @@ void KisShapeController::removeShape( KoShape* shape )
             canvas->shapeManager()->remove(shape);
             canvas->canvasWidget()->update();
         }
+    }
+
+    KisNodeMap::iterator begin = m_d->nodeShapes.begin();
+    KisNodeMap::iterator end = m_d->nodeShapes.end();
+    KisNodeMap::iterator it = begin;
+    while (it != end) {
+        if (it.value() == shape ) {
+            kDebug() << "Going to delete node " << it.key() << " with shape " << it.value() << ", because it's the same as " << shape;
+            m_d->nodeShapes.remove(it.key());
+            break;
+        }
+        ++it;
     }
 
     m_d->doc->setModified( true );
@@ -235,8 +258,6 @@ void KisShapeController::setInitialShapeForView( KisView2 * view )
 
 void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
 {
-    kDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>> parentnode: " << parentNode << ", index: " << index << ", " << parentNode->at(index);
-
     KisNodeSP node = parentNode->at( index );
 
     // Check whether the layer is already in the map
@@ -286,7 +307,9 @@ void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
 void KisShapeController::slotNodeRemoved( KisNode* parent, int index )
 {
     KisNodeSP node = parent->at( index );
-
+    kDebug() << "Going to remove node " << node << " from parent " << parent;
+    KoShape * shape = shapeForNode( node );
+    kDebug() << "Going to remove node " << node << " from parent " << parent << "( shape: " << shape << ")";
     removeShape( shapeForNode( node ) );
 }
 
@@ -299,7 +322,6 @@ void KisShapeController::slotLayersChanged( KisGroupLayerSP rootLayer )
 
 KoShape * KisShapeController::shapeForNode( KisNodeSP node )
 {
-
     if ( m_d->nodeShapes.contains( node) )
         return m_d->nodeShapes[node];
     else {

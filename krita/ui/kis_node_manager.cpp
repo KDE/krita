@@ -109,7 +109,6 @@ KisMaskManager * KisNodeManager::maskManager()
 
 void KisNodeManager::createNode( const QString & nodeType, KisNodeSP parent, KisNodeSP above)
 {
-    kDebug() << "Create node of type " << nodeType << " with parent " << parent << " above " << above;
     // XXX: make factories for this kind of stuff,
     //      with a registry
 

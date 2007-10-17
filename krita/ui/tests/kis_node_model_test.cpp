@@ -35,7 +35,7 @@
 
 #include "kis_node_model_test.h"
 
-void kislayermodel_test::testRowcount()
+void kisnodemodel_test::testRowcount()
 {
     KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
 
@@ -68,7 +68,7 @@ void kislayermodel_test::testRowcount()
     QVERIFY( model.rowCount(idx) == 1 );
 }
 
-void kislayermodel_test::testModelIndex()
+void kisnodemodel_test::testModelIndex()
 {
     KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
 
@@ -126,7 +126,7 @@ void kislayermodel_test::testModelIndex()
     QVERIFY(!idx.isValid());
 }
 
-void kislayermodel_test::testGroupLayers()
+void kisnodemodel_test::testGroupLayers()
 {
     KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
 
@@ -154,7 +154,7 @@ void kislayermodel_test::testGroupLayers()
 
 }
 
-QTEST_KDEMAIN(kislayermodel_test, GUI)
+QTEST_KDEMAIN(kisnodemodel_test, GUI)
 
 #include "kis_node_model_test.moc"
 

@@ -46,12 +46,13 @@ public:
     ~KisShapeController();
 
     void setImage( KisImageSP image );
-    void addShape( KoShape* shape );
-    void removeShape( KoShape* shape );
-
+    KoShape * shapeForNode( KisNodeSP layer );
     void setInitialShapeForView( KisView2 * view );
 
-    KoShape * shapeForNode( KisNodeSP layer );
+private:
+
+    void addShape( KoShape* shape );
+    void removeShape( KoShape* shape );
 
 private slots:
 

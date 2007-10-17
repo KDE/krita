@@ -39,61 +39,75 @@
 #include "kis_shape_controller.h"
 #include "kis_types.h"
 #include "kis_transparency_mask.h"
-#include "kis_node.h"
+
 #include "kis_shape_controller_test.h"
-
-
 
 void KisShapeControllerTest::testSetImage()
 {
-    KisDoc2 * doc = new KisDoc2();
-    KisNameServer * nameServer = new KisNameServer();
-    KisShapeController * shapeController = new KisShapeController(doc, nameServer);
+    KisDoc2 doc;
+    KisNameServer nameServer;
+    KisShapeController shapeController (&doc, &nameServer);
 
     KisImageSP image = new KisImage(0, 512, 512, 0, "shape controller test");
+    QCOMPARE( ( int )image->rootLayer()->childCount(), 0 );
+
     KisLayerSP layer = new KisPaintLayer( image, "test1", OPACITY_OPAQUE );
     image->addLayer( layer );
+    QCOMPARE( ( int )image->rootLayer()->childCount(), 1 );
 
-    shapeController->setImage( image );
+    shapeController.setImage( image );
+    QCOMPARE( shapeController.layerMapSize(), 2 );
 
-    QCOMPARE( shapeController->layerMapSize(), 2 );
-
-    KisLayerSP layer2 = new KisPaintLayer( image, "test2", OPACITY_OPAQUE );
-    image->addLayer( layer2 );
-
-    QVERIFY( shapeController->shapeForNode( layer2 ) != 0 );
-    QCOMPARE( ( int )image->rootLayer()->childCount(), 2 );
-    QCOMPARE( shapeController->layerMapSize(), 3 );
-
-    KisLayerSP layer3 = new KisCloneLayer( layer, image, "clonetest", OPACITY_OPAQUE );
-    image->addLayer( layer3, image->rootLayer() );
-    QCOMPARE( shapeController->layerMapSize(), 4 );
-
-    KisLayerSP layer4 = new KisGroupLayer( image, "grouptest", OPACITY_OPAQUE );
-    image->addLayer( layer4, image->rootLayer() );
-    QCOMPARE( shapeController->layerMapSize(), 5 );
-
-//     KisMaskSP mask1 = new KisTransparencyMask();
-//     mask1->setParentLayer( layer );
-//     layer->addEffectMask( mask1 );
-//     QCOMPARE( shapeController->maskMapSize(), 1 );
-
-    image->removeLayer( layer2 );
-    QCOMPARE( shapeController->layerMapSize(), 1 );
-
-    image->removeLayer( layer );
-    QCOMPARE( shapeController->layerMapSize(), 0 );
-
-    shapeController->setImage( 0 );
-
-    delete shapeController;
-    delete nameServer;
-    delete doc;
+    shapeController.setImage( 0 );
+    QCOMPARE( shapeController.layerMapSize(), 0 );
 
 }
 
 void KisShapeControllerTest::testAddShape()
 {
+
+    KisDoc2 doc;
+    KisNameServer nameServer;
+    KisShapeController shapeController (&doc, &nameServer);
+
+    KisImageSP image = new KisImage(0, 512, 512, 0, "shape controller test");
+    QCOMPARE( ( int )image->rootLayer()->childCount(), 0 );
+
+    KisLayerSP layer = new KisPaintLayer( image, "test1", OPACITY_OPAQUE );
+    image->addLayer( layer );
+    QCOMPARE( ( int )image->rootLayer()->childCount(), 1 );
+
+    shapeController.setImage( image );
+    QCOMPARE( shapeController.layerMapSize(), 2 );
+
+    KisGroupLayerSP layer2 = new KisGroupLayer( image, "test2", OPACITY_OPAQUE );
+    image->addLayer( layer2.data() );
+
+    QVERIFY( shapeController.shapeForNode( layer2.data() ) != 0 );
+    QCOMPARE( ( int )image->rootLayer()->childCount(), 2 );
+    QCOMPARE( shapeController.layerMapSize(), 3 );
+
+    KisLayerSP layer3 = new KisCloneLayer( layer, image, "clonetest", OPACITY_OPAQUE );
+    image->addLayer( layer3, layer2 );
+    QCOMPARE( ( int )image->rootLayer()->childCount(), 2 );
+    QCOMPARE( shapeController.layerMapSize(), 4 );
+
+    KisLayerSP layer4 = new KisGroupLayer( image, "grouptest", OPACITY_OPAQUE );
+    image->addLayer( layer4, layer2 );
+    QCOMPARE( shapeController.layerMapSize(), 5 );
+
+    KisMaskSP mask1 = new KisTransparencyMask();
+    image->addNode( mask1.data(), layer3.data() );
+    QCOMPARE( shapeController.layerMapSize(), 6 );
+
+    image->removeLayer( layer2 );
+    QCOMPARE( shapeController.layerMapSize(), 1 );
+
+    image->removeLayer( layer );
+    QCOMPARE( shapeController.layerMapSize(), 0 );
+
+    shapeController.setImage( 0 );
+
 
 }
 

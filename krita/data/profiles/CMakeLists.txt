@@ -18,4 +18,4 @@ install(FILES
     WideGamut.icm 
     ycc601.icm 
     ycc709.icm
-    DESTINATION ${DATA_INSTALL_DIR}/krita/profiles)
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/color/icc/krita)

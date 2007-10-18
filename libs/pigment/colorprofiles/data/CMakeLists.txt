@@ -1,4 +1,4 @@
 install(FILES
     CMY.icm 
     cmyk.icm 
-    DESTINATION ${DATA_INSTALL_DIR}/pigment/profiles)
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/color/icc/pigment)

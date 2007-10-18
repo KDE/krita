@@ -71,32 +71,13 @@ void KoColorSpaceRegistry::init()
 {
     d->colorConversionSystem = new KoColorConversionSystem;
     // prepare a list of the profiles
-    KGlobal::mainComponent().dirs()->addResourceType("kis_profiles",
-                                                     "data", "krita/profiles/");
-    KGlobal::mainComponent().dirs()->addResourceType("kis_profiles",
-                                                     "data", "pigment/profiles/");
+    KGlobal::mainComponent().dirs()->addResourceType("kis_profiles", 0, "share/color/icc/");
 
     QStringList profileFilenames;
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.icm");
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.ICM");
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.ICC");
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.icc");
-
-    QDir dir("/usr/share/color/icc/", "*.icc;*.ICC;*.icm;*.ICM");
-
-    QStringList filenames = dir.entryList();
-
-    for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
-        profileFilenames += dir.absoluteFilePath(*it);
-    }
-
-    dir.setPath(QDir::homePath() + "/.color/icc/");
-    filenames = dir.entryList();
-
-    for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
-        profileFilenames += dir.absoluteFilePath(*it);
-    }
-
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.icm",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.ICM",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.ICC",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.icc",  KStandardDirs::Recursive);
     // Set lcms to return NUll/false etc from failing calls, rather than aborting the app.
     cmsErrorAction(LCMS_ERROR_SHOW);
 

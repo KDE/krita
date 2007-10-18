@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,6 +55,7 @@ public:
     bool backgroundSpellChecking();
     bool skipAllUppercaseWords();
     bool skipRunTogetherWords();
+    void setDocument(QTextDocument *doc);
 
 private slots:
     void highlightMisspelled(const QString &word, int startPosition, bool misspelled = true);
@@ -64,12 +66,13 @@ private slots:
 
 private:
     Sonnet::Speller m_speller;
-    QTextCursor m_cursor;
     QTextDocument *m_document;
     QString m_word;
     BgSpellCheck *m_bgSpellCheck;
     QQueue<QTextDocument *> m_documentsQueue;
     bool m_enableSpellCheck;
+    bool m_allowSignals;
+    QTextCharFormat m_defaultMisspelledFormat;
 };
 
 #endif

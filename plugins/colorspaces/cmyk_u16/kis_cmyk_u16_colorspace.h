@@ -43,6 +43,7 @@ class KisCmykU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
         KisCmykU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_CMYK5_16, icSigCmykData)
         {
         }
+        virtual bool userVisible() const { return true; }
         virtual QString id() const { return "CMYKA16"; }
         virtual QString name() const { return i18n("CMYK (16-bit integer/channel)"); }
         virtual KoID colorModelId() const { return CMYKAColorModelID; }

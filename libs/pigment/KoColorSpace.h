@@ -668,6 +668,11 @@ public:
     virtual QString name() const = 0;
 
     /**
+     * @return true if the color space should be shown in an User Interface, or false
+     *         other wise.
+     */
+    virtual bool userVisible() const =0;
+    /**
      * @return a string that identify the color model (for instance "RGB" or "CMYK" ...)
      * @see KoColorModelStandardIds.h
      */

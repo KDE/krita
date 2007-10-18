@@ -49,7 +49,11 @@ class PIGMENT_EXPORT KoColorSpaceRegistry : public QObject,  public KoGenericReg
 
 
     Q_OBJECT
-
+public:
+    enum ColorSpaceListVisibility {
+        OnlyUserVisible = 1, ///< Only user visible color space
+        AllColorSpaces = 4 ///< All color space even those not visible to the user
+    };
 public:
 
     /**
@@ -226,11 +230,11 @@ public:
     /**
      * @return the list of available color models
      */
-    QList<KoID> colorModelsList() const;
+    QList<KoID> colorModelsList(ColorSpaceListVisibility option ) const;
     /**
      * @return the list of available color models for the given colorModelId
      */
-    QList<KoID> colorDepthList(const KoID& colorModelId) const;
+    QList<KoID> colorDepthList(const KoID& colorModelId, ColorSpaceListVisibility option ) const;
     
     /**
      * @return the color conversion system use by the registry and the color

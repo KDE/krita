@@ -29,9 +29,9 @@
 
 TestColorConversionSystem::TestColorConversionSystem()
 {
-    foreach( KoID modelId, KoColorSpaceRegistry::instance()->colorModelsList())
+    foreach( KoID modelId, KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces))
     {
-        foreach( KoID depthId, KoColorSpaceRegistry::instance()->colorDepthList(modelId))
+        foreach( KoID depthId, KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces))
         {
             listModels.append( pStrStr( modelId.id(), depthId.id() ) );
         }

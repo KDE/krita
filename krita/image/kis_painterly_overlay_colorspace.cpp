@@ -32,7 +32,8 @@ class KisPainterlyOverlayColorSpaceFactory : public KoColorSpaceFactory
 public:
      QString id() const { return "painterlyoverlay"; }
      QString name() const { return i18n("Painterly Overlay (32 bit float/channel)"); }
-
+     
+     virtual bool userVisible() const { return false; }
      virtual KoID colorModelId() const { return painterlyOverlayColorModelID; }
      virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
 

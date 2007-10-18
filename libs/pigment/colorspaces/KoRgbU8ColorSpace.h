@@ -53,6 +53,7 @@ public:
 
     KoRgbU8ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_BGRA_8,icSigRgbData )
     {}
+    virtual bool userVisible() const { return true; }
     virtual QString id() const { return KoRgbU8ColorSpace::colorSpaceId(); }
     virtual QString name() const { return i18n("RGB (8-bit integer/channel)"); }
     virtual KoID colorModelId() const { return RGBAColorModelID; }

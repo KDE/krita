@@ -47,6 +47,7 @@ class KisXyzU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
         }
         virtual QString id() const { return "XYZA16"; }
         virtual QString name() const { return i18n("XYZ (16-bit integer/channel)"); }
+        virtual bool userVisible() const { return true; }
 
         virtual KoID colorModelId() const { return XYZAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }

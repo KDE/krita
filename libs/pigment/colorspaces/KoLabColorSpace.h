@@ -55,6 +55,7 @@ class KoLabColorSpaceFactory : public KoLcmsColorSpaceFactory
     public:
         KoLabColorSpaceFactory() : KoLcmsColorSpaceFactory( (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), icSigLabData)
         {}
+        virtual bool userVisible() const { return true; }
         /// reimplemented from KoColorSpaceFactory
         virtual QString id() const { return KoLabColorSpace::colorSpaceId(); }
         /// reimplemented from KoColorSpaceFactory

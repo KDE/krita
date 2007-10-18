@@ -309,13 +309,14 @@ KoColorSpace * KoColorSpaceRegistry::lab16(KoColorProfile * profile)
     return colorSpace(KoLabColorSpace::colorSpaceId(), profile);
 }
 
-QList<KoID> KoColorSpaceRegistry::colorModelsList() const
+QList<KoID> KoColorSpaceRegistry::colorModelsList(ColorSpaceListVisibility option ) const
 {
     QList<KoID> ids;
     QList<KoColorSpaceFactory*> factories = values();
     foreach(KoColorSpaceFactory* factory, factories)
     {
-        if(!ids.contains(factory->colorModelId()))
+        if(not ids.contains(factory->colorModelId())
+           and ( option == AllColorSpaces or factory->userVisible() ) )
         {
             ids << factory->colorModelId();
         }
@@ -323,13 +324,15 @@ QList<KoID> KoColorSpaceRegistry::colorModelsList() const
     return ids;
 }
 
-QList<KoID> KoColorSpaceRegistry::colorDepthList(const KoID& colorModelId) const
+QList<KoID> KoColorSpaceRegistry::colorDepthList(const KoID& colorModelId, ColorSpaceListVisibility option ) const
 {
     QList<KoID> ids;
     QList<KoColorSpaceFactory*> factories = values();
     foreach(KoColorSpaceFactory* factory, factories)
     {
-        if(!ids.contains(factory->colorDepthId()) && factory->colorModelId() == colorModelId )
+        if(not ids.contains(factory->colorDepthId())
+           and factory->colorModelId() == colorModelId
+           and ( option == AllColorSpaces or factory->userVisible() ))
         {
             ids << factory->colorDepthId();
         }
@@ -342,7 +345,7 @@ QString KoColorSpaceRegistry::colorSpaceId(QString colorModelId, QString colorDe
     QList<KoColorSpaceFactory*> factories = values();
     foreach(KoColorSpaceFactory* factory, factories)
     {
-        if(factory->colorModelId().id() == colorModelId && factory->colorDepthId().id() == colorDepthId )
+        if(factory->colorModelId().id() == colorModelId and factory->colorDepthId().id() == colorDepthId )
         {
             return factory->id();
         }

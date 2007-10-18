@@ -44,6 +44,7 @@ public:
     virtual QString name() const { return i18n("YCBCR (8-bit integer/channel)"); }
     virtual KoID colorModelId() const { return YCbCrAColorModelID; }
     virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
+    virtual bool userVisible() const { return true; }
 
     virtual bool profileIsCompatible(KoColorProfile* /*profile*/) const
     {

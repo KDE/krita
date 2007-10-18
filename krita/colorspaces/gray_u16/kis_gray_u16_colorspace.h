@@ -43,6 +43,7 @@ public:
     {}
     virtual QString id() const { return "GRAY16"; }
     virtual QString name() const { return i18n("Grayscale (16-bit integer/channel)"); }
+    virtual bool userVisible() const { return false; }
     virtual KoID colorModelId() const { return GrayColorModelID; }
     virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
     virtual int referenceDepth() const { return 16; }

@@ -40,6 +40,7 @@ class KisCmykU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
     public:
         KisCmykU8ColorSpaceFactory(): KoLcmsColorSpaceFactory(TYPE_CMYK5_8, icSigCmykData)
         {}
+        virtual bool userVisible() const { return true; }
         virtual QString id() const { return "CMYK"; }
         virtual QString name() const { return i18n("CMYK (8-bit integer/channel)"); }
         virtual KoID colorModelId() const { return CMYKAColorModelID; }

@@ -49,6 +49,7 @@ class KoRgbU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual QString id() const { return KoRgbU16ColorSpace::colorSpaceId(); }
         virtual QString name() const { return i18n("RGB (16-bit integer/channel)"); }
         
+        virtual bool userVisible() const { return true; }
         virtual KoID colorModelId() const { return RGBAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
         virtual int referenceDepth() const { return 16; }

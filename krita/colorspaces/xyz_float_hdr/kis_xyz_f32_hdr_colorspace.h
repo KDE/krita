@@ -55,6 +55,7 @@ public:
     virtual QString name() const { return i18n("XYZ (32-bit float/channel) for High Dynamic Range imaging"); }
     virtual KoID colorModelId() const { return XYZAColorModelID; }
     virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
+    virtual bool userVisible() const { return true; }
     
     virtual int referenceDepth() const { return 32; }
     virtual bool isIcc() const { return false; }

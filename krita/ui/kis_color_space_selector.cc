@@ -33,7 +33,7 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
 {
     d->colorSpaceSelector = new Ui_WdgColorSpaceSelector;
     d->colorSpaceSelector->setupUi(this);
-    d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList());
+    d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));
     fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
     connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
         this, SLOT(fillCmbDepths(const KoID &)));
@@ -73,7 +73,7 @@ void KisColorSpaceSelector::fillCmbProfiles()
  void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
 {
     d->colorSpaceSelector->cmbColorDepth->clear();
-    d->colorSpaceSelector->cmbColorDepth->setIDList(KoColorSpaceRegistry::instance()->colorDepthList(id));
+    d->colorSpaceSelector->cmbColorDepth->setIDList(KoColorSpaceRegistry::instance()->colorDepthList(id, KoColorSpaceRegistry::OnlyUserVisible));
 }
 
 KoColorSpace* KisColorSpaceSelector::currentColorSpace()

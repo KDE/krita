@@ -56,6 +56,7 @@ public:
     virtual KoID colorModelId() const { return RGBAColorModelID; }
     virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
     virtual int referenceDepth() const { return 32; }
+    virtual bool userVisible() const { return true; }
     
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisRgbF32HDRColorSpace(parent, p); }
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const

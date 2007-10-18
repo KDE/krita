@@ -46,6 +46,7 @@ public:
     virtual KoID colorModelId() const { return GrayAColorModelID; }
     virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
     virtual int referenceDepth() const { return 16; }
+    virtual bool userVisible() const { return true; }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KisGrayAU16ColorSpace(parent, p); }
 

@@ -101,6 +101,8 @@ KisProjection::~KisProjection()
 
 void KisProjection::lock()
 {
+    m_d->weaver->requestAbort();
+    m_d->weaver->finish();
     m_d->locked = true;
 }
 
@@ -195,6 +197,7 @@ void KisProjection::slotUpdateUi( Job* job )
 
 void KisProjection::scheduleRect( const QRect & rc )
 {
+    Q_ASSERT(! m_d->locked );
     QRect interestingRect;
 
     if ( m_d->useRegionOfInterest ) {

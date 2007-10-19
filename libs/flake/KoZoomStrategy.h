@@ -40,7 +40,8 @@ public:
     KoZoomStrategy( KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked );
 
     /// Execute the zoom
-    void finishInteraction( Qt::KeyboardModifiers modifiers );
+    virtual void finishInteraction( Qt::KeyboardModifiers modifiers );
+    virtual void cancelInteraction();
 private:
     KoCanvasController *m_controller;
 };

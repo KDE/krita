@@ -94,6 +94,7 @@ void KoZoomTool::keyReleaseEvent(QKeyEvent *event) {
         useCursor(m_outCursor);
     else
         useCursor(m_inCursor);
+    KoInteractionTool::keyReleaseEvent(event);
 }
 
 void KoZoomTool::activate(bool temporary) {

@@ -289,11 +289,11 @@ public slots:
     /**
      * Call this slot whenever the size of your document in pixels
      * changes, for instance when zooming.
-     *
-     * XXX: Should this be the size in document coordinates and use
-     *      the viewconverter internally to resize?
+     * @param newSize the new size, in pixels, of the document.
+     * @param recalculateCenter if true the offset in the document we center on after calling
+     *      recenterPreferred() will be recalculated for the new document size so the visual offset stays the same.
      */
-    void setDocumentSize( const QSize & sz );
+    void setDocumentSize( const QSize &newSize, bool recalculateCenter = true);
 
 protected slots:
 

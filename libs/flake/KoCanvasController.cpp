@@ -30,6 +30,7 @@
 #include "KoCanvasBase.h"
 #include "KoCanvasObserver.h"
 #include <KoMainWindow.h>
+#include <KDebug>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -385,8 +386,14 @@ void KoCanvasController::setToolOptionWidget(QWidget *widget) {
     emit toolOptionWidgetChanged(widget);
 }
 
-void KoCanvasController::setDocumentSize( const QSize & sz )
+void KoCanvasController::setDocumentSize( const QSize & sz, bool recalculateCenter )
 {
+    if (!recalculateCenter) {
+        // assume the distance from the top stays equal and recalculate the center.
+        m_d->preferredCenterFractionX = m_d->documentSize.width() * m_d->preferredCenterFractionX / sz.width();
+        m_d->preferredCenterFractionY = m_d->documentSize.height() * m_d->preferredCenterFractionY / sz.height();
+    }
+
     m_d->ignoreScrollSignals = true;
     m_d->documentSize = sz;
     m_d->viewportWidget->setDocumentSize( sz );

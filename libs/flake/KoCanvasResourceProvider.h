@@ -46,6 +46,7 @@ namespace KoCanvasResource {
         CompositeOpacity,
         HandleRadius,       ///< The handle radius used for drawing handles of any kind
         PageSize,           ///< The size of the (current) page in postscript points.
+        DocumentIsLoading,  ///< A boolean that is set to true while loading is happening.
         KarbonStart = 1000,      ///< Base number for karbon specific values.
         KexiStart = 2000,        ///< Base number for kexi specific values.
         KivioStart = 3000,       ///< Base number for kivio specific values.

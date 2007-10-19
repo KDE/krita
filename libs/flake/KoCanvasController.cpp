@@ -30,7 +30,6 @@
 #include "KoCanvasBase.h"
 #include "KoCanvasObserver.h"
 #include <KoMainWindow.h>
-#include <KDebug>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -375,10 +374,14 @@ void KoCanvasController::zoomTo(const QRect &viewRect)
     else
         scale = 1.0 * viewport()->width() / viewRect.width();
 
-    m_d->preferredCenterFractionX = 1.0 * viewRect.center().x() / m_d->documentSize.width();
-    m_d->preferredCenterFractionY = 1.0 * viewRect.center().y() / m_d->documentSize.height();
+    const double preferredCenterFractionX = 1.0 * viewRect.center().x() / m_d->documentSize.width();
+    const double preferredCenterFractionY = 1.0 * viewRect.center().y() / m_d->documentSize.height();
 
     emit zoomBy(scale);
+
+    m_d->preferredCenterFractionX = preferredCenterFractionX;
+    m_d->preferredCenterFractionY = preferredCenterFractionY;
+    recenterPreferred();
     m_d->canvas->canvasWidget()->update();
 }
 

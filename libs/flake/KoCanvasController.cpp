@@ -172,6 +172,21 @@ int KoCanvasController::visibleWidth() const {
 void KoCanvasController::setCanvasMode( CanvasMode mode )
 {
     m_d->canvasMode = mode;
+    switch(mode) {
+        case AlignTop:
+            m_d->preferredCenterFractionX = 0;
+            m_d->preferredCenterFractionY = 0.5;
+            break;
+        case Centered:
+            m_d->preferredCenterFractionX = 0.5;
+            m_d->preferredCenterFractionY = 0.5;
+            break;
+        case Infinite:
+        case Presentation:
+            m_d->preferredCenterFractionX = 0;
+            m_d->preferredCenterFractionY = 0;
+            break;
+    };
 }
 
 KoCanvasController::CanvasMode KoCanvasController::canvasMode() const
@@ -213,6 +228,7 @@ void KoCanvasController::updateCanvasOffsetX() {
     emit canvasOffsetXChanged(canvasOffsetX());
     if(m_d->viewportWidget && m_d->viewportWidget->canvas())
         m_d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
+    m_d->preferredCenterFractionX = (horizontalScrollBar()->value() + horizontalScrollBar()->pageStep() /2.0) / m_d->documentSize.width();
 }
 
 void KoCanvasController::updateCanvasOffsetY() {
@@ -221,6 +237,7 @@ void KoCanvasController::updateCanvasOffsetY() {
     emit canvasOffsetYChanged(canvasOffsetY());
     if(m_d->viewportWidget && m_d->viewportWidget->canvas())
         m_d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
+    m_d->preferredCenterFractionY = (verticalScrollBar()->value() + verticalScrollBar()->pageStep() /2.0) / m_d->documentSize.height();
 }
 
 bool KoCanvasController::eventFilter(QObject* watched, QEvent* event) {
@@ -318,17 +335,14 @@ void KoCanvasController::recenterPreferred()
 
     QScrollBar *hBar = horizontalScrollBar();
     // try to centralize the centerpoint which we want to make visible
-    {//if( hBar && hBar->isVisible() ) {
-        topLeft.rx() = qMax( topLeft.x(), hBar->minimum() );
-        topLeft.rx() = qMin( topLeft.x(), hBar->maximum() );
-        hBar->setValue( topLeft.x() );
-    }
+    topLeft.rx() = qMax( topLeft.x(), hBar->minimum() );
+    topLeft.rx() = qMin( topLeft.x(), hBar->maximum() );
+    hBar->setValue( topLeft.x() );
+
     QScrollBar *vBar = verticalScrollBar();
-    {//if( vBar && vBar->isVisible() ) {
-        topLeft.ry() = qMax( topLeft.y(), vBar->minimum() );
-        topLeft.ry() = qMin( topLeft.y(), vBar->maximum() );
-        vBar->setValue( topLeft.y() );
-    }
+    topLeft.ry() = qMax( topLeft.y(), vBar->minimum() );
+    topLeft.ry() = qMin( topLeft.y(), vBar->maximum() );
+    vBar->setValue( topLeft.y() );
 }
 
 void KoCanvasController::zoomIn(const QPoint &center)

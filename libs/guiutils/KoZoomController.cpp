@@ -105,6 +105,7 @@ void KoZoomController::setZoomMode(KoZoomMode::Mode mode)
 
 void KoZoomController::setPageSize(const QSizeF &pageSize)
 {
+    if(d->pageSize == pageSize) return;
     d->pageSize = pageSize;
 
     if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
@@ -117,10 +118,15 @@ void KoZoomController::setDocumentSize( const QSizeF &documentSize )
 {
     d->documentSize = documentSize;
     d->canvasController->setDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize() );
+
+    // Finally ask the canvasController to recenter
+    d->canvasController->recenterPreferred();
 }
 
 void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
 {
+    if (d->zoomHandler->zoomMode() == mode && d->zoomHandler->zoom() == zoom)
+        return; // no change
     d->zoomHandler->setZoomMode(mode);
 
     if(mode == KoZoomMode::ZOOM_CONSTANT)

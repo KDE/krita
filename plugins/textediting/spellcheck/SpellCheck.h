@@ -57,6 +57,9 @@ public:
     bool skipRunTogetherWords();
     void setDocument(QTextDocument *doc);
 
+public slots:
+    void resourceChanged( int key, const QVariant & res );
+
 private slots:
     void highlightMisspelled(const QString &word, int startPosition, bool misspelled = true);
     void dequeueDocument();
@@ -72,6 +75,7 @@ private:
     QQueue<QTextDocument *> m_documentsQueue;
     bool m_enableSpellCheck;
     bool m_allowSignals;
+    bool m_documentIsLoading;
     QTextCharFormat m_defaultMisspelledFormat;
 };
 

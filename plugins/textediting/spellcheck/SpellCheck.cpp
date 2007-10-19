@@ -28,6 +28,7 @@
 #include <KDebug>
 
 #include <KoCharacterStyle.h>
+#include <KoCanvasResourceProvider.h>
 
 #include "BgSpellCheck.h"
 #include "SpellCheckConfigDialog.h"
@@ -36,7 +37,8 @@ SpellCheck::SpellCheck()
     : m_document(0),
     m_bgSpellCheck(0),
     m_enableSpellCheck(true),
-    m_allowSignals(true)
+    m_allowSignals(true),
+    m_documentIsLoading(false)
 {
     /* setup actions for this plugin */
     QAction *configureAction = new QAction(i18n("Configure &Spell Checking..."), this);
@@ -56,7 +58,7 @@ SpellCheck::SpellCheck()
 void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
 {
     setDocument(document);
-    if (!m_enableSpellCheck) return;
+    if (m_documentIsLoading || !m_enableSpellCheck) return;
 
     QTextCursor cursor(document);
     selectWord(cursor, cursorPosition);
@@ -73,7 +75,7 @@ void SpellCheck::finishedParagraph(QTextDocument *document, int cursorPosition)
 void SpellCheck::checkSection(QTextDocument *document, int startPosition, int endPosition)
 {
     setDocument(document);
-    if (!m_enableSpellCheck) return;
+    if (m_documentIsLoading || !m_enableSpellCheck) return;
 
     if (m_documentsQueue.isEmpty()) {
         kDebug(31000) << "Document queue is empty";
@@ -130,7 +132,7 @@ QString SpellCheck::defaultLanguage() const
 
 bool SpellCheck::backgroundSpellChecking()
 {
-    return m_enableSpellCheck;
+    return !m_documentIsLoading && m_enableSpellCheck;
 }
 
 bool SpellCheck::skipAllUppercaseWords()
@@ -252,6 +254,11 @@ void SpellCheck::configureSpellCheck()
     if (cfgDlg->exec()) {
         // TODO
     }
+}
+
+void SpellCheck::resourceChanged( int key, const QVariant & res ) {
+    if (key == KoCanvasResource::DocumentIsLoading)
+        m_documentIsLoading = res.toBool();
 }
 
 #include "SpellCheck.moc"

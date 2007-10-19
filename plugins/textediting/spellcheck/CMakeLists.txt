@@ -1,6 +1,6 @@
 project(spellcheck)
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOMAIN_INCLUDES} )
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} )
 
 set(spellcheck_SRCS
     SpellCheckPlugin.cpp

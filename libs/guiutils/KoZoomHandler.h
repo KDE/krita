@@ -105,6 +105,8 @@ public:
      */
     void setZoom( double zoom );
 
+    double zoom() const { return m_zoom; }
+
     /**
      * Change the zoom mode
      * @param zoomMode the zoom mode.

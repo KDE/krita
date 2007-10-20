@@ -65,12 +65,9 @@ class KoMultipleColorConversionTransformation : public KoColorConversionTransfor
             for( int i = 1; i <= lastIndex; i++)
             {
                 m_transfos[i]->transform( buff1, buff2, nPixels);
-                if(i != lastIndex)
-                {
-                    quint8* tmp = buff1;
-                    buff1 = buff2;
-                    buff2 = tmp;
-                }
+                quint8* tmp = buff1;
+                buff1 = buff2;
+                buff2 = tmp;
             }
             m_transfos.last()->transform( buff1, dst, nPixels);
             delete buff2;

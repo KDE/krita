@@ -210,7 +210,7 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 
 bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    //kDebug(41007) <<"KisNodeModel::setData( index=" << index <<", value=" << value <<", role=" << role;
+    kDebug(41007) <<"KisNodeModel::setData( index=" << index <<", value=" << value <<", role=" << role;
     if (!index.isValid())
         return false;
 

@@ -79,8 +79,6 @@ public slots:
     void layerToggleLocked();
     void actLayerVisChanged(int show);
     void layerProperties();
-    void showLayerProperties(KisLayerSP layer);
-
 
     void layerRemove();
     void layerDuplicate();

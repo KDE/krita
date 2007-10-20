@@ -283,7 +283,10 @@ void KisMaskManager::mirrorMaskX() {}
 
 void KisMaskManager::mirrorMaskY() {}
 
-void KisMaskManager::maskProperties() {}
+void KisMaskManager::maskProperties()
+{
+
+}
 
 void KisMaskManager::masksUpdated() {}
 

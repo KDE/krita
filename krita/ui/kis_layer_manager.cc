@@ -79,6 +79,50 @@
 #include "kis_zoom_manager.h"
 #include "kis_canvas2.h"
 
+namespace {
+class KisChangeFilterCmd : public QUndoCommand {
+typedef QUndoCommand super;
+public:
+            // The QStrings are the _serialized_ configs
+KisChangeFilterCmd(KisAdjustmentLayerSP layer,
+                   KisFilterConfiguration* config,
+                   const QString& before,
+                   const QString& after) : super(i18n("Change Filter"))
+{
+    m_layer = layer;
+    m_config = config;
+    m_before = before;
+    m_after = after;
+}
+public:
+virtual void redo()
+{
+    QApplication::setOverrideCursor(KisCursor::waitCursor());
+    m_config->fromLegacyXML(m_after);
+                //Q_ASSERT(m_after == m_config->toString());
+    m_layer->setFilter(m_config);
+    m_layer->setDirty();
+    QApplication::restoreOverrideCursor();
+}
+
+virtual void undo()
+{
+    QApplication::setOverrideCursor(KisCursor::waitCursor());
+    m_config->fromLegacyXML(m_before);
+                //Q_ASSERT(m_before == m_config->toString());
+    m_layer->setFilter(m_config);
+    m_layer->setDirty();
+    QApplication::restoreOverrideCursor();
+}
+private:
+KisAdjustmentLayerSP m_layer;
+KisFilterConfiguration* m_config;
+QString m_before;
+QString m_after;
+};
+}
+
+
 KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
     : m_view( view )
     , m_doc( doc )
@@ -235,16 +279,6 @@ void KisLayerManager::updateGUI()
         nvisible = nlayers - img->nHiddenLayers();
     }
 
-#if 0
-
-    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(layer.data());
-
-    if (pl && ( m_currentColorChooserDisplay != KoID("BLA") ||
-                pl->paintDevice()->colorSpace()->id() != m_currentColorChooserDisplay)) {
-        m_currentColorChooserDisplay = pl->paintDevice()->colorSpace()->id();
-    }
-#endif
-
     bool enable = img && layer && layer->visible() && !layer->locked();
 
     m_layerDup->setEnabled(enable);
@@ -348,58 +382,8 @@ void KisLayerManager::actLayerVisChanged(int show)
 
 void KisLayerManager::layerProperties()
 {
-    if ( activeLayer() )
-        showLayerProperties( activeLayer() );
-}
+    KisLayerSP layer = m_activeLayer;
 
-namespace {
-        class KisChangeFilterCmd : public QUndoCommand {
-            typedef QUndoCommand super;
-        public:
-            // The QStrings are the _serialized_ configs
-            KisChangeFilterCmd(KisAdjustmentLayerSP layer,
-                               KisFilterConfiguration* config,
-                               const QString& before,
-                               const QString& after) : super(i18n("Change Filter"))
-            {
-                m_layer = layer;
-                m_config = config;
-                m_before = before;
-                m_after = after;
-            }
-        public:
-            virtual void redo()
-            {
-                QApplication::setOverrideCursor(KisCursor::waitCursor());
-                m_config->fromLegacyXML(m_after);
-                //Q_ASSERT(m_after == m_config->toString());
-                m_layer->setFilter(m_config);
-                m_layer->setDirty();
-                QApplication::restoreOverrideCursor();
-            }
-
-            virtual void undo()
-            {
-                QApplication::setOverrideCursor(KisCursor::waitCursor());
-                m_config->fromLegacyXML(m_before);
-                //Q_ASSERT(m_before == m_config->toString());
-                m_layer->setFilter(m_config);
-                m_layer->setDirty();
-                QApplication::restoreOverrideCursor();
-            }
-        private:
-            KisAdjustmentLayerSP m_layer;
-            KisFilterConfiguration* m_config;
-            QString m_before;
-            QString m_after;
-        };
-}
-
-
-
-void KisLayerManager::showLayerProperties(KisLayerSP layer)
-{
-    Q_ASSERT( layer );
     if ( !layer ) return;
 
     KoColorSpace * cs = 0;
@@ -419,9 +403,9 @@ void KisLayerManager::showLayerProperties(KisLayerSP layer)
         if (dlg.exec() == QDialog::Accepted)
         {
             KisChangeFilterCmd * cmd = new KisChangeFilterCmd(alayer,
-                    dlg.filterConfiguration(),
-                    before,
-                    dlg.filterConfiguration()->toLegacyXML());
+                dlg.filterConfiguration(),
+                before,
+                dlg.filterConfiguration()->toLegacyXML());
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
             m_doc->setModified( true );
@@ -443,22 +427,27 @@ void KisLayerManager::showLayerProperties(KisLayerSP layer)
                 layer->opacity() != dlg.getOpacity() ||
                 layer->compositeOp() != dlg.getCompositeOp() ||
                 oldChannelFlags != newChannelFlags
-                )
+               )
             {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 m_view->undoAdapter()->addCommand(new KisImageLayerPropsCommand(layer->image(),
-                                                                                layer,
-                                                                                dlg.getOpacity(),
-                                                                                dlg.getCompositeOp(),
-                                                                                dlg.getName(),
-                                                                                newChannelFlags));
+                    layer,
+                    dlg.getOpacity(),
+                    dlg.getCompositeOp(),
+                    dlg.getName(),
+                    newChannelFlags));
                 layer->setDirty();
                 QApplication::restoreOverrideCursor();
                 m_doc->setModified( true );
             }
         }
     }
+
 }
+
+
+
+
 
 void KisLayerManager::layerAdd()
 {
@@ -663,7 +652,6 @@ void KisLayerManager::layerRemove()
         KisLayerSP layer = activeLayer();
 
         if (layer) {
-
 
             img->removeLayer(layer);
 

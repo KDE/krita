@@ -89,18 +89,6 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
     if (!image) return;
 
 
-    if (image->colorSpace()->willDegrade(TO_LAB16)) {
-        if (KMessageBox::warningContinueCancel(m_view,
-            i18n("This conversion will convert your %1 image through 16-bit L*a*b* and back.\n"
-                    "Watercolor and openEXR colorspaces will even be converted through 8-bit RGB.\n"
-                    , image->colorSpace()->name()),
-            i18n("Colorspace Conversion"),
-            KGuiItem(i18n("Continue")),
-            KStandardGuiItem::cancel(),
-            "lab16degradation") != KMessageBox::Continue) return;
-
-    }
-
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
@@ -126,18 +114,6 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
 
     KisPaintDeviceSP dev = m_view->activeDevice();
     if (!dev) return;
-
-    if (dev->colorSpace()->willDegrade(TO_LAB16)) {
-        if (KMessageBox::warningContinueCancel(m_view,
-            i18n("This conversion will convert your %1 layer through 16-bit L*a*b* and back.\n"
-                    "Watercolor and openEXR colorspaces will even be converted through 8-bit RGB.\n"
-                    , dev->colorSpace()->name()),
-            i18n("Colorspace Conversion"),
-            KGuiItem(i18n("Continue")),
-            KStandardGuiItem::cancel(),
-            "lab16degradation") != KMessageBox::Continue) return;
-
-    }
 
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);

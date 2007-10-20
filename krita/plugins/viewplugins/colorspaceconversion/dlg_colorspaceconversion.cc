@@ -38,6 +38,8 @@
 
 #include "dlg_colorspaceconversion.h"
 
+// TODO: add a label that would display if there isn't a good color conversion path (use KoColorConversionSystem::isGoodPath), all color spaces shiped with KOffice are expected to have a good path, but better warn the user in case
+
 DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
                           const char * name)
     : super (parent)

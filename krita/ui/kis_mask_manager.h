@@ -167,7 +167,7 @@ public slots:
     /**
      * Show the mask properties dialog
      */
-    void showMaskProperties();
+    void maskProperties();
 
     /**
      * called whenever the mask stack is updated to enable/disable all
@@ -184,7 +184,6 @@ private:
      * view; and if the mask is active, it becomes the paint device.
      */
     void activateMask( KisMaskSP mask );
-
 
 
 private:

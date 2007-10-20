@@ -77,18 +77,9 @@ public slots:
     void createNode( const QString & node, KisNodeSP parent, KisNodeSP above);
     void activateNode( KisNodeSP layer );
     void nodesUpdated();
-    void nodeProperties( KisNodeSP node )
-        {
-            // XXX_NODE
-        }
-    void nodeOpacityChanged( double, bool )
-        {
-            // XXX_NODE
-        }
-    void nodeCompositeOpChanged( const KoCompositeOp* )
-        {
-            // XXX_NODE
-        }
+    void nodeProperties( KisNodeSP node );
+    void nodeOpacityChanged( double opacity, bool final);
+    void nodeCompositeOpChanged( const KoCompositeOp* op );
 private:
 
     struct Private;

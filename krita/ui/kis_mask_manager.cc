@@ -130,7 +130,7 @@ void KisMaskManager::setup( KActionCollection * actionCollection )
 
     m_maskProperties  = new KAction(i18n("Mask Properties"), this);
     actionCollection->addAction("mask_properties", m_maskProperties );
-    connect(m_maskProperties, SIGNAL(triggered()), this, SLOT(showMaskProperties()));
+    connect(m_maskProperties, SIGNAL(triggered()), this, SLOT(maskProperties()));
 
 
 }
@@ -283,7 +283,7 @@ void KisMaskManager::mirrorMaskX() {}
 
 void KisMaskManager::mirrorMaskY() {}
 
-void KisMaskManager::showMaskProperties() {}
+void KisMaskManager::maskProperties() {}
 
 void KisMaskManager::masksUpdated() {}
 

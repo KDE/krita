@@ -201,5 +201,25 @@ void KisNodeManager::nodesUpdated()
 
 }
 
+void KisNodeManager::nodeProperties( KisNodeSP node )
+{
+    if ( node->inherits( "KisLayer" ) ) {
+        m_d->layerManager->layerProperties();
+    }
+    else if ( node->inherits( "KisMask") ) {
+        m_d->maskManager->maskProperties();
+    }
+}
+
+void KisNodeManager::nodeOpacityChanged( double opacity, bool final)
+{
+    m_d->layerManager->layerOpacity( opacity, final );
+}
+
+void KisNodeManager::nodeCompositeOpChanged( const KoCompositeOp* op )
+{
+    m_d->layerManager->layerCompositeOp( op );
+}
+
 #include "kis_node_manager.moc"
 

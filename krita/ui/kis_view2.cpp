@@ -703,16 +703,18 @@ void KisView2::loadPlugins()
     KService::List::ConstIterator iter;
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
+
         KService::Ptr service = *iter;
+        kDebug(41006) <<"found plugin" << service->property("Name").toString() <<"";
         int errCode = 0;
         KParts::Plugin* plugin =
             KService::createInstance<KParts::Plugin> ( service, this, QStringList(), &errCode);
         if ( plugin ) {
-//             kDebug(41006) <<"found plugin" << service->property("Name").toString() <<"";
+            kDebug(41006) <<"createdplugin" << service->property("Name").toString() <<"";
             insertChildClient(plugin);
         }
         else {
-//             kDebug(41006) <<"found plugin" << service->property("Name").toString() <<"," << errCode <<"";
+            kDebug(41006) <<"failed to create plugin" << service->property("Name").toString() <<"," << errCode <<"";
             if( errCode == KLibLoader::ErrNoLibrary)
             {
                 kWarning() <<" Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();

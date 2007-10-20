@@ -71,13 +71,13 @@ void KoColorSpaceRegistry::init()
 {
     d->colorConversionSystem = new KoColorConversionSystem;
     // prepare a list of the profiles
-    KGlobal::mainComponent().dirs()->addResourceType("kis_profiles", 0, "share/color/icc/");
+    KGlobal::mainComponent().dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
 
     QStringList profileFilenames;
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.icm",  KStandardDirs::Recursive);
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.ICM",  KStandardDirs::Recursive);
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.ICC",  KStandardDirs::Recursive);
-    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "*.icc",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.icm",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.ICM",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.ICC",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.icc",  KStandardDirs::Recursive);
     // Set lcms to return NUll/false etc from failing calls, rather than aborting the app.
     cmsErrorAction(LCMS_ERROR_SHOW);
 

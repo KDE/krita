@@ -131,8 +131,6 @@ const KComponentData &KisFactory2::componentData()
         s_instance->dirs()->addResourceDir("kis_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
 
         s_instance->dirs()->addResourceType("kis_profiles", "data", "krita/profiles/");
-        s_instance->dirs()->addResourceDir("kis_profiles", "/usr/share/color/icc");
-        s_instance->dirs()->addResourceDir("kis_profiles", QDir::homePath() + QString("/.icc"));
 
         s_instance->dirs()->addResourceType("kis_palettes", "data", "krita/palettes/");
         s_instance->dirs()->addResourceDir("kis_palettes", "/usr/share/create/swatches");

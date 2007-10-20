@@ -74,7 +74,7 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
     initTool();
     initSpots();
 
-    m_bErase->setIcon(KIcon("edit-delete"));
+    m_bErase->setIcon(KIcon("edit-delete"));n
     connect(m_bErase, SIGNAL(clicked()), m_canvas, SLOT(slotClear()));
 }
 

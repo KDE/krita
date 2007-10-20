@@ -301,8 +301,7 @@ void KisMaskManager::maskProperties()
                                         KoID(mask->filterStrategy()->id()),
                                         m_view);
         if ( dlg.exec() == QDialog::Accepted ) {
-            KisTransformationMask * mask = new KisTransformationMask();
-
+            // XXX_NODE: make undoable
             mask->setName( dlg.transformationEffect()->maskName() );
             mask->setXScale( dlg.transformationEffect()->xScale() );
             mask->setYScale( dlg.transformationEffect()->yScale() );
@@ -315,7 +314,27 @@ void KisMaskManager::maskProperties()
         }
     }
     else if ( m_activeMask->inherits( "KisEffectMask") ) {
-        //KisEffectMask * mask = static_cast<KisEffectMask*>( m_activeMask.data() );
+#if 0
+        KisEffectMask * mask = static_cast<KisEffectMask*>( m_activeMask.data() );
+
+        KisLayerSP layer = dynamic_cast<KisLayer*>(mask->parent().data());
+        if (! layer )
+            return;
+
+        KisPaintDeviceSP dev = layer->projection();
+        KisDlgAdjLayerProps dlg(alayer, alayer->name(), i18n("Adjustment Layer Properties"), m_view, "dlgadjlayerprops");
+        QString before = dlg.filterConfiguration()->toLegacyXML();
+        if (dlg.exec() == QDialog::Accepted)
+        {
+            KisChangeFilterCmd * cmd = new KisChangeFilterCmd(alayer,
+                dlg.filterConfiguration(),
+                before,
+                dlg.filterConfiguration()->toLegacyXML());
+            cmd->redo();
+            m_view->undoAdapter()->addCommand(cmd);
+            m_doc->setModified( true );
+        }
+#endif
     }
     else {
         // Not much to show for transparency masks?

@@ -316,6 +316,25 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     // read all PNG info up to image data
     png_read_info(png_ptr, info_ptr);
 
+    
+    if (info_ptr->color_type == PNG_COLOR_TYPE_GRAY && info_ptr->bit_depth < 8)
+    {
+      png_set_expand (png_ptr);
+    }
+
+    if (info_ptr->color_type == PNG_COLOR_TYPE_PALETTE && info_ptr->bit_depth < 8)
+    {
+      png_set_packing (png_ptr);
+    }
+
+  
+    if (info_ptr->color_type != PNG_COLOR_TYPE_PALETTE &&
+      (info_ptr->valid & PNG_INFO_tRNS))
+    {
+      png_set_expand (png_ptr);
+    }
+    png_read_update_info(png_ptr, info_ptr);
+
     // Read information about the png
     png_uint_32 width, height;
     int color_nb_bits, color_type, interlace_type;
@@ -444,13 +463,23 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     if(color_type == PNG_COLOR_TYPE_PALETTE) {
         png_get_PLTE(png_ptr, info_ptr, &palette, &num_palette);
     }
-//     png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL );
-//     png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr); // By using this function libpng will take care of freeing memory
-//    png_read_image(png_ptr, row_pointers);
-
-    // Finish reading the file
-//    png_read_end(png_ptr, end_info);
-//    fclose(fp);
+    
+    // Read the transparency palette
+    quint8 palette_alpha[256];
+    memset(palette_alpha, 255, 256);
+    if (png_get_valid (png_ptr, info_ptr, PNG_INFO_tRNS))
+    {
+        if( color_type == PNG_COLOR_TYPE_PALETTE )
+        {
+            png_bytep alpha_ptr;
+            int num_alpha;
+            png_get_tRNS (png_ptr, info_ptr, &alpha_ptr, &num_alpha, NULL);
+            for (int i = 0; i < num_alpha; ++i)
+            {
+                palette_alpha[i] = alpha_ptr[i];
+            }
+        }
+    }
 
     // Creating the KisImageSP
     if( m_img == 0 ) {
@@ -487,8 +516,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                         quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
                         d[0] = *(src++);
                         if(transform) cmsDoTransform(transform, d, d, 1);
-                        if(hasalpha) d[1] = *(src++);
-                        else d[1] = quint16_MAX;
+                        if(hasalpha) {
+                            d[1] = *(src++);
+                        } else {
+                            d[1] = quint16_MAX;
+                        }
                         ++it;
                     }
                 } else  {
@@ -497,8 +529,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                         quint8 *d = it.rawData();
                         d[0] = (quint8)(stream.nextValue() * coeff);
                         if(transform) cmsDoTransform(transform, d, d, 1);
-                        if(hasalpha) d[1] = (quint8)(stream.nextValue() * coeff);
-                        else d[1] = UCHAR_MAX;
+                        if(hasalpha) {
+                            d[1] = (quint8)(stream.nextValue() * coeff);
+                        } else {
+                            d[1] = UCHAR_MAX;
+                        }
                         ++it;
                     }
                 }
@@ -538,11 +573,18 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     KisPNGReadStream stream(row_pointer, color_nb_bits);
                     while (!it.isDone()) {
                         quint8 *d = it.rawData();
-                        png_color c = palette[ stream.nextValue() ];
-                        d[2] = c.red;
-                        d[1] = c.green;
-                        d[0] = c.blue;
-                        d[3] = UCHAR_MAX;
+                        quint8 index = stream.nextValue();
+                        quint8 alpha = palette_alpha[ index ];
+                        if(alpha == 0)
+                        {
+                            memset(d, 0, 4);
+                        } else {
+                            png_color c = palette[ index ];
+                            d[2] = c.red;
+                            d[1] = c.green;
+                            d[0] = c.blue;
+                            d[3] = alpha;
+                        }
                         ++it;
                     }
                 }

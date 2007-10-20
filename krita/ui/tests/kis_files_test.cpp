@@ -44,13 +44,14 @@ void KisFilesTest::testFiles()
         if( not sourceFileInfo.isHidden())
         {
             QFileInfo resultFileInfo(  QString(FILES_DATA_DIR) + "/results/" + sourceFileInfo.fileName() + ".png" );
-            QVERIFY(resultFileInfo.exists());
+            QVERIFY2(resultFileInfo.exists(), QString( "Result file %1 not found" ).arg(resultFileInfo.fileName()).toAscii().data() );
             KisDoc2 doc;
             doc.import( sourceFileInfo.absoluteFilePath() );
             QVERIFY(doc.image());
             QString id = doc.image()->colorSpace()->id();
             if(id != "GRAYA" and id != "GRAYA16" and id != "RGBA" and id != "RGBA16")
             {
+              kDebug() << "Images need conversion";
               doc.image()->convertTo( KoColorSpaceRegistry::instance()->rgb8());
             }
             KTemporaryFile tmpFile;
@@ -59,23 +60,34 @@ void KisFilesTest::testFiles()
             tmpFile.setAutoRemove(false);
             doc.setOutputMimeType("image/png");
             doc.saveAs( "file://" + tmpFile.fileName());
+            doc.saveAs( KUrl("file:///home/cyrille/test2.png" ) );
             QImage resultImg(resultFileInfo.absoluteFilePath());
             QImage sourceImg(tmpFile.fileName());
+            resultImg.save("/home/cyrille/testResult.png");
             resultImg = resultImg.convertToFormat(QImage::Format_ARGB32);
+            resultImg.save("/home/cyrille/testResultRGB.png");
+            sourceImg.save("/home/cyrille/testSource.png");
             sourceImg = sourceImg.convertToFormat(QImage::Format_ARGB32);
+            sourceImg.save("/home/cyrille/testSourceRGB.png");
             QVERIFY(resultImg.width() == sourceImg.width());
             QVERIFY(resultImg.height() == sourceImg.height());
             QVERIFY(resultImg.numBytes() == sourceImg.numBytes());
             if(memcmp(resultImg.bits(), sourceImg.bits(), sourceImg.numBytes()) != 0)
             {
-                for(int i = 0; i < sourceImg.numBytes(); i++)
+                for(int i = 0; i < sourceImg.numBytes(); i+=4)
                 {
-//                     kDebug() <<(int)resultImg.bits()[i] << " " << (int)sourceImg.bits()[i] << endl;
-                    QVERIFY2( resultImg.bits()[i] == sourceImg.bits()[i], 
-                            QString("pixel %1 is different : %2 %3 in file %4").arg(i)
-                            .arg((int)resultImg.bits()[i])
-                            .arg((int)sourceImg.bits()[i])
-                            .arg(sourceFileInfo.fileName()).toAscii().data());
+                    int alpha = resultImg.bits()[i + 3];
+                    if( resultImg.bits()[i + 3] == sourceImg.bits()[i + 3] and resultImg.bits()[i + 3] != 0 )
+                    {
+                        for(int j = 0; j < 4; j++ )
+                        {
+                            QVERIFY2( resultImg.bits()[i+j] == sourceImg.bits()[i+j], 
+                                    QString("byte %1 is different : result: %2 krita: %3 in file %4").arg(i+j)
+                                    .arg((int)resultImg.bits()[i+j])
+                                    .arg((int)sourceImg.bits()[i+j])
+                                    .arg(sourceFileInfo.fileName()).toAscii().data());
+                        }
+                    }
                 }
             }
         }

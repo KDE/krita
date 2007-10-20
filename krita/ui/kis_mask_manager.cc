@@ -285,7 +285,41 @@ void KisMaskManager::mirrorMaskY() {}
 
 void KisMaskManager::maskProperties()
 {
+    if (!m_activeMask) return;
 
+    if ( m_activeMask->inherits( "KisTransformationMask") ) {
+        KisTransformationMask * mask = static_cast<KisTransformationMask*>( m_activeMask.data() );
+
+        KisDlgTransformationEffect dlg( mask->name(),
+                                        mask->xScale(),
+                                        mask->yScale(),
+                                        mask->xShear(),
+                                        mask->yShear(),
+                                        mask->rotation(),
+                                        mask->xTranslate(),
+                                        mask->yTranslate(),
+                                        KoID(mask->filterStrategy()->id()),
+                                        m_view);
+        if ( dlg.exec() == QDialog::Accepted ) {
+            KisTransformationMask * mask = new KisTransformationMask();
+
+            mask->setName( dlg.transformationEffect()->maskName() );
+            mask->setXScale( dlg.transformationEffect()->xScale() );
+            mask->setYScale( dlg.transformationEffect()->yScale() );
+            mask->setXShear( dlg.transformationEffect()->xShear() );
+            mask->setYShear( dlg.transformationEffect()->yShear() );
+            mask->setRotation( dlg.transformationEffect()->rotation() );
+            mask->setXTranslation( dlg.transformationEffect()->moveX() );
+            mask->setYTranslation( dlg.transformationEffect()->moveY() );
+            mask->setFilterStrategy( dlg.transformationEffect()->filterStrategy() );
+        }
+    }
+    else if ( m_activeMask->inherits( "KisEffectMask") ) {
+        //KisEffectMask * mask = static_cast<KisEffectMask*>( m_activeMask.data() );
+    }
+    else {
+        // Not much to show for transparency masks?
+    }
 }
 
 void KisMaskManager::masksUpdated() {}

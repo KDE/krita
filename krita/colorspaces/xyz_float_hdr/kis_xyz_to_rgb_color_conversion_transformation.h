@@ -28,13 +28,13 @@ class KisXyzToRgbColorConversionTransformation : public KoColorConversionTransfo
         }
         virtual void transform(const quint8 *src8, quint8 *dst8, qint32 nPixels) const
         {
-            KoRgbU16Traits::Pixel* dst = reinterpret_cast<KoRgbU16Traits::Pixel*>(dst8);
+            typename _rgb_CSTraits_::Pixel* dst = reinterpret_cast<typename _rgb_CSTraits_::Pixel*>(dst8);
             const typename _xyz_CSTraits_::Pixel* src = reinterpret_cast<const typename _xyz_CSTraits_::Pixel*>(src8);
             while(nPixels > 0)
             {
-                dst->red = 3.24071 * src->X -0.969258 * src->Y + 0.0556352 * src->Z;
-                dst->green = -1.53726 * src->X + 1.87599 * src->Y - 0.203996 * src->Z;
-                dst->blue = -0.498571 * src->X + 0.0415557 * src->Y + 1.05707 * src->Z;
+                dst->red = 3.240708 * src->X -1.537259 * src->Y - 0.498570 * src->Z;
+                dst->green = -0.969257 * src->X + 1.875995 * src->Y - 0.041555 * src->Z;
+                dst->blue = 0.055636 * src->X - 0.203996 * src->Y + 1.057069 * src->Z;
                 dst->alpha = src->alpha;
                 
                 nPixels--;

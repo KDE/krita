@@ -69,7 +69,7 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     connect(radioBtnPreview, SIGNAL(toggled(bool)), this, SLOT(setPreviewDisplayed(bool)));
 
     connect(checkBoxAutoUpdate, SIGNAL(toggled(bool)), this, SLOT(slotSetAutoUpdate(bool)));
-    btnZoomOneToOne->setIcon(KIcon("viewmag1"));
+    btnZoomOneToOne->setIcon(KIcon("zoom-original"));
     connect(btnZoomOneToOne, SIGNAL(clicked()), this, SLOT(zoomOneToOne()));
 
 

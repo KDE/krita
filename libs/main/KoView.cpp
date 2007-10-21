@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
 
 // local directory
 #include "KoView.h"
+#include "KoView_p.h"
 #include "KoDockRegistry.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
@@ -806,5 +808,18 @@ QToolBar* KoView::viewBar()
     return d->m_viewBar;
 }
 
-#include "KoView.moc"
+QList<QAction*> KoView::createChangeUnitActions() {
+    QList<QAction*> answer;
+    answer.append(new UnitChangeAction(KoUnit::Millimeter, this, d->m_doc));
+    answer.append(new UnitChangeAction(KoUnit::Centimeter, this, d->m_doc));
+    answer.append(new UnitChangeAction(KoUnit::Decimeter, this, d->m_doc));
+    answer.append(new UnitChangeAction(KoUnit::Inch, this, d->m_doc));
+    answer.append(new UnitChangeAction(KoUnit::Pica, this, d->m_doc));
+    answer.append(new UnitChangeAction(KoUnit::Cicero, this, d->m_doc));
+    answer.append(new UnitChangeAction(KoUnit::Point, this, d->m_doc));
 
+    return answer;
+}
+
+#include "KoView_p.moc"
+#include "KoView.moc"

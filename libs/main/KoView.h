@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -397,6 +398,9 @@ public:
    * @return the view bar. The bar is created only if this function is called.
    */
   QToolBar* viewBar();
+
+    /// create a list of actions that when activated will change the unit on the document.
+    QList<QAction*> createChangeUnitActions();
 
 public slots:
     /**

@@ -726,10 +726,9 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
     QPoint pos = ev->pos();
     d->selected = KoRulerPrivate::None;
 
-    int x;
-
     if (d->showTabs && pos.y() > height() - 9) {
         int i = 0;
+        int x;
         foreach (Tab t, d->tabs) {
             if (d->rightToLeft)
                 x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - t.position)
@@ -777,44 +776,44 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
     }
 
     if (d->rightToLeft) {
-        x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - d->firstLineIndent
+        int x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - d->firstLineIndent
                 - d->paragraphIndent) + d->offset);
-        if (pos.x() >= x-10 && pos.x() <= x && pos.y() <10) {
+        if (pos.x() >= x - 8 && pos.x() <= x +8 && pos.y() < height() / 2) {
             d->selectOffset = x - pos.x();
             d->selected = KoRulerPrivate::FirstLineIndent;
         }
 
         x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - d->paragraphIndent)
                             + d->offset);
-        if (pos.x() >= x-10 && pos.x() <= x && pos.y() > height()-10) {
+        if (pos.x() >= x - 8 && pos.x() <= x +8 && pos.y() > height() / 2) {
             d->selectOffset = x - pos.x();
             d->selected = KoRulerPrivate::ParagraphIndent;
         }
 
         x = int(d->viewConverter->documentToViewX(d->activeRangeStart + d->endIndent)
                             + d->offset);
-        if (pos.x() >= x && pos.x() <= x+10 && pos.y() > height()-10) {
+        if (pos.x() >= x - 8 && pos.x() <= x + 8) {
             d->selectOffset = x - pos.x();
             d->selected = KoRulerPrivate::EndIndent;
         }
     } else {
-        x = int(d->viewConverter->documentToViewX(d->activeRangeStart
+        int x = int(d->viewConverter->documentToViewX(d->activeRangeStart
              + d->firstLineIndent + d->paragraphIndent) + d->offset);
-        if (pos.x() >= x && pos.x() <= x+10 && pos.y() <10) {
+        if (pos.x() >= x -8 && pos.x() <= x + 8 && pos.y() < height() / 2) {
             d->selectOffset = x - pos.x();
             d->selected = KoRulerPrivate::FirstLineIndent;
         }
 
         x = int(d->viewConverter->documentToViewX(d->activeRangeStart + d->paragraphIndent)
                             + d->offset);
-        if (pos.x() >= x && pos.x() <= x+10 && pos.y() > height()-10) {
+        if (pos.x() >= x - 8 && pos.x() <= x + 8 && pos.y() > height()/2) {
             d->selectOffset = x - pos.x();
             d->selected = KoRulerPrivate::ParagraphIndent;
         }
 
         x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - d->endIndent)
                             + d->offset);
-        if (pos.x() >= x-10 && pos.x() <= x && pos.y() > height()-10) {
+        if (pos.x() >= x - 8 && pos.x() <= x + 8) {
             d->selectOffset = x - pos.x();
             d->selected = KoRulerPrivate::EndIndent;
         }
@@ -913,7 +912,6 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         emit tabsChanged(false);
         break;
     case KoRulerPrivate::None:
-    default:
         break;
     }
     update();

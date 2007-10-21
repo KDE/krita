@@ -103,6 +103,7 @@ public:
     bool showTabs;
     QList<KoRuler::Tab> tabs;
     int currentTab; //indext of selected tab - only valid when selected indicates tab
+    KoRuler::Tab deletedTab;
 
     bool rightToLeft;
     enum Selection {

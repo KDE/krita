@@ -896,6 +896,14 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         emit indentsChanged(false);
         break;
     case KoRulerPrivate::Tab:
+        if (d->currentTab < 0) { // tab is deleted.
+            if (ev->pos().y() < height()) { // reinstante it.
+                d->currentTab = d->tabs.count();
+                d->tabs.append(d->deletedTab);
+            }
+            else
+                break;
+        }
         if (d->rightToLeft)
             d->tabs[d->currentTab].position = d->activeRangeEnd -
                 d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset - d->offset);
@@ -908,6 +916,11 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
             d->tabs[d->currentTab].position = 0;
         if (d->tabs[d->currentTab].position > activeLength)
             d->tabs[d->currentTab].position = activeLength;
+
+        if (ev->pos().y() > height() + 20) { // moved out of the ruler, delete it.
+            d->deletedTab = d->tabs.takeAt(d->currentTab);
+            d->currentTab = -1;
+        }
 
         emit tabsChanged(false);
         break;

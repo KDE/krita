@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-//#include <KoGlobal.h>
 #include "KoUnit.h"
 #include <KoXmlWriter.h>
 
@@ -73,7 +72,7 @@ QString KoUnit::unitDescription( KoUnit _unit )
     }
 }
 
-double KoUnit::toUserValue( double ptValue )
+double KoUnit::toUserValue( double ptValue ) const
 {
     switch ( m_unit ) {
     case Millimeter:
@@ -120,7 +119,7 @@ double KoUnit::ptToUnit( const double ptValue, const KoUnit unit )
     }
 }
 
-QString KoUnit::toUserStringValue( double ptValue )
+QString KoUnit::toUserStringValue( double ptValue ) const
 {
     return KGlobal::locale()->formatNumber( toUserValue( ptValue ) );
 }
@@ -148,7 +147,7 @@ double KoUnit::fromUserValue( double value ) const
     }
 }
 
-double KoUnit::fromUserValue( const QString& value, bool* ok )
+double KoUnit::fromUserValue( const QString& value, bool* ok ) const
 {
     return fromUserValue( KGlobal::locale()->readNumber( value, ok ) );
 }

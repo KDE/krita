@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef kounit_h
-#define kounit_h
+#ifndef KOUNIT_H
+#define KOUNIT_H
 #include <QString>
 #include <QStringList>
 #include <math.h> // for floor
@@ -87,11 +87,6 @@ public:
         return floor( ptValue * 1000.0 ) / 1000.0;
     }
 
-    /// Deprecated, use toMillimeter()
-    static double KDE_DEPRECATED toMM( double ptValue ) {
-        return toMillimeter(ptValue);
-    }
-
     /**
      * Prepare ptValue to be displayed in mm
      * This method will round to 0.0001 precision, use POINT_TO_MM() for lossless conversion.
@@ -101,22 +96,12 @@ public:
         return floor( POINT_TO_MM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
-    /// Deprecated, use toCentimeter()
-    static double KDE_DEPRECATED toCM( double ptValue ) {
-        return toCentimeter(ptValue);
-    }
-
     /**
      * Prepare ptValue to be displayed in cm
      * This method will round to 0.0001 precision, use POINT_TO_CM() for lossless conversion.
      */
     static double toCentimeter( double ptValue ) {
         return floor( POINT_TO_CM( ptValue ) * 10000.0 ) / 10000.0;
-    }
-
-    /// Deprecated use toDecimeter
-    static double KDE_DEPRECATED toDM( double ptValue ) {
-        return toDecimeter(ptValue);
     }
 
     /**
@@ -136,11 +121,6 @@ public:
         return floor( POINT_TO_INCH( ptValue ) * 100000.0 ) / 100000.0;
     }
 
-    /// Deprecated use toPica()
-    static double KDE_DEPRECATED toPI( double ptValue ) {
-        return toPica(ptValue);
-    }
-
     /**
      * Prepare ptValue to be displayed in pica
      * This method will round to 0.00001 precision, use POINT_TO_PI() for lossless conversion.
@@ -148,12 +128,6 @@ public:
     static double toPica( double ptValue ) {
         // "pi" values are rounded to 0.00001 inches
         return floor( POINT_TO_PI( ptValue ) * 100000.0 ) / 100000.0;
-    }
-
-
-    /// Deprecated use toCicero()
-    static double KDE_DEPRECATED toCC( double ptValue ) {
-        return toCicero(ptValue);
     }
 
     /**
@@ -168,26 +142,22 @@ public:
     /**
      * This method is the one to use to display a value in a dialog
      * \return the value @p ptValue converted to unit and rounded, ready to be displayed
-     * Old name: ptToUnit
      */
-    double toUserValue( double ptValue );
+    double toUserValue( double ptValue ) const;
 
     /**
      * Convert the value @p ptValue to a given unit @p unit
      * Unlike KoUnit::ptToUnit the return value remains unrounded, so that it can be used in complex calculation
      * \return the converted value
-     * Old name: ptToUnitUnrounded
      */
     static double ptToUnit( const double ptValue, const KoUnit unit );
 
     /// This method is the one to use to display a value in a dialog
     /// @return the value @p ptValue converted the unit and rounded, ready to be displayed
-    /// Old name: userValue
-    QString toUserStringValue( double ptValue );
+    QString toUserStringValue( double ptValue ) const;
 
     /// This method is the one to use to read a value from a dialog
     /// @return the value converted to points for internal use
-    /// Old name: ptFromUnit
     double fromUserValue( double value ) const;
 
     /// This method is the one to use to read a value from a dialog
@@ -195,7 +165,7 @@ public:
     /// @param ok if set, the pointed bool is set to true if the value could be
     /// converted to a double, and to false otherwise.
     /// @return the value converted to points for internal use
-    double fromUserValue( const QString& value, bool* ok = 0 );
+    double fromUserValue( const QString& value, bool* ok = 0 ) const;
 
     /// Convert a unit name into a KoUnit
     /// @param _unitName name to convert
@@ -217,10 +187,9 @@ public:
     /// Save a unit in OASIS format
     static void saveOasis(KoXmlWriter* settingsWriter, KoUnit _unit);
 
-    private:
-        Unit m_unit;
-        double m_pixelConversion;
+private:
+    Unit m_unit;
+    double m_pixelConversion;
 };
-
 
 #endif

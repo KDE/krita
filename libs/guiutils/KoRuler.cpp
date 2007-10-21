@@ -3,6 +3,7 @@
    Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
    Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 */
 
 #include "KoRuler.h"
+#include "KoRuler_p.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -32,243 +34,173 @@
 
 #include <KoViewConverter.h>
 
-class RulerTabChooser : public QWidget {
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-public:
-        RulerTabChooser(QWidget *parent) : QWidget(parent), m_type(QTextOption::LeftTab) {}
-        virtual ~RulerTabChooser() {}
-
-        QTextOption::TabType type() {return m_type;}
-        void mousePressEvent(QMouseEvent *)
-        {
-            switch(m_type) {
-            case QTextOption::LeftTab:
-                m_type = QTextOption::RightTab;
-                break;
-            case QTextOption::RightTab:
-                m_type = QTextOption::CenterTab;
-                break;
-            case QTextOption::CenterTab:
-                m_type = QTextOption::DelimiterTab;
-                break;
-            case QTextOption::DelimiterTab:
-                m_type = QTextOption::LeftTab;
-                break;
-            }
-            update();
-        }
-
-        void paintEvent(QPaintEvent *)
-        {
-            QPainter painter(this);
-            QPolygonF polygon;
-
-            painter.setPen(palette().color(QPalette::Text));
-            painter.setBrush(palette().color(QPalette::Text));
-            painter.setRenderHint( QPainter::Antialiasing );
-
-            double x= width()/2;
-            painter.translate(0,-height()/2+5);
-
-            switch (m_type) {
-            case QTextOption::LeftTab:
-                polygon << QPointF(x+0.5, height() - 8.5)
-                    << QPointF(x-5.5, height() - 2.5)
-                    << QPointF(x+0.5, height() - 2.5);
-                painter.drawPolygon(polygon);
-                break;
-            case QTextOption::RightTab:
-                polygon << QPointF(x+0.5, height() - 8.5)
-                    << QPointF(x+6.5, height() - 2.5)
-                    << QPointF(x+0.5, height() - 2.5);
-                painter.drawPolygon(polygon);
-                break;
-            case QTextOption::CenterTab:
-                polygon << QPointF(x+0.5, height() - 8.5)
-                    << QPointF(x-5.5, height() - 2.5)
-                    << QPointF(x+6.5, height() - 2.5);
-                painter.drawPolygon(polygon);
-                break;
-            case QTextOption::DelimiterTab:
-                polygon << QPointF(x-5.5, height() - 2.5)
-                    << QPointF(x+0.5, height() - 8.5)
-                    << QPointF(x+6.5, height() - 2.5);
-                painter.drawPolyline(polygon);
-                break;
-            default:
-                break;
-            }
-        }
-
-private:
-    QTextOption::TabType m_type;
-#endif
-};
-
-class KoRulerPrivate {
-    public:
-    KoRulerPrivate(const KoViewConverter *vc) : m_viewConverter(vc), m_mouseCoordinate(-1), m_tabChooser(0) {}
-        KoUnit m_unit;
-        Qt::Orientation m_orientation;
-        const KoViewConverter* m_viewConverter;
-
-        int m_offset;
-        double m_rulerLength;
-        double m_activeRangeStart;
-        double m_activeRangeEnd;
-
-        int m_mouseCoordinate;
-        int m_showMousePosition;
-
-        bool m_showSelectionBorders;
-        double m_firstSelectionBorder;
-        double m_secondSelectionBorder;
-
-        bool m_showIndents;
-        double m_firstLineIndent;
-        double m_paragraphIndent;
-        double m_endIndent;
-
-        bool m_showTabs;
-        QList<KoRuler::Tab> m_tabs;
-        int m_tabIndex; //indext of selected tab - only valid when m_selected indicates tab
-
-        bool m_rightToLeft;
-        int m_selected;
-        int m_selectOffset;
-
-        RulerTabChooser *m_tabChooser;
-
-    static int compareTabs(KoRuler::Tab &tab1, KoRuler::Tab &tab2) {
-        return tab1.position < tab2.position;
+void RulerTabChooser::mousePressEvent(QMouseEvent *)
+{
+    switch(m_type) {
+    case QTextOption::LeftTab:
+        m_type = QTextOption::RightTab;
+        break;
+    case QTextOption::RightTab:
+        m_type = QTextOption::CenterTab;
+        break;
+    case QTextOption::CenterTab:
+        m_type = QTextOption::DelimiterTab;
+        break;
+    case QTextOption::DelimiterTab:
+        m_type = QTextOption::LeftTab;
+        break;
     }
-};
-
-
-KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter)
-  : QWidget(parent)
-  , d( new KoRulerPrivate( viewConverter) )
-{
-    d->m_orientation = orientation;
-
-    setUnit(KoUnit(KoUnit::Point));
-    setRulerLength(0);
-    setOffset(0);
-    setActiveRange(0, 0);
-    setShowMousePosition(false);
-    setShowSelectionBorders(false);
-    setShowIndents(false);
-    setShowTabs(false);
-
-    setRightToLeft(false);
-    d->m_firstLineIndent = d->m_paragraphIndent = 0;
-    d->m_endIndent = 0;
-    updateMouseCoordinate(-1);
-    d->m_selected = 0;
-
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-    if(orientation == Qt::Horizontal)
-        d->m_tabChooser = new RulerTabChooser(this);
-#endif
-}
-
-KoRuler::~KoRuler()
-{
-    delete d;
-}
-
-KoUnit KoRuler::unit() const
-{
-    return d->m_unit;
-}
-
-void KoRuler::setUnit(KoUnit unit)
-{
-    d->m_unit = unit;
     update();
 }
 
-double KoRuler::rulerLength() const
-{
-    return d->m_rulerLength;
-}
-
-Qt::Orientation KoRuler::orientation() const
-{
-    return d->m_orientation;
-}
-
-void KoRuler::setOffset(int offset)
-{
-    d->m_offset = offset;
-    update();
-}
-
-void KoRuler::setRulerLength(double length)
-{
-    d->m_rulerLength = length;
-    update();
-}
-
-void KoRuler::paintEvent(QPaintEvent* event)
+void RulerTabChooser::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.setClipRegion(event->region());
+    QPolygonF polygon;
 
-    double numberStep = numberStepForUnit(); // number step in unit
+    painter.setPen(palette().color(QPalette::Text));
+    painter.setBrush(palette().color(QPalette::Text));
+    painter.setRenderHint( QPainter::Antialiasing );
 
-    QRectF rectangle;
-    QRectF activeRangeRectangle;
-    double lengthPixel = 0;
-    int numberStepPixel = 0;
+    double x= width()/2;
+    painter.translate(0,-height()/2+5);
 
-    if(orientation() == Qt::Horizontal) {
-        lengthPixel = d->m_viewConverter->documentToViewX(rulerLength());
-        numberStepPixel = qRound(d->m_viewConverter->documentToViewX(
-            d->m_unit.fromUserValue(numberStep)));
-        rectangle.setX(qMax(0, d->m_offset));
-        rectangle.setY(5);
-        rectangle.setWidth(qMin((double)width() - 1.0 - rectangle.x(), (d->m_offset >= 0 ) ? lengthPixel : lengthPixel + d->m_offset ));
-        rectangle.setHeight(height() - 10.0);
-        activeRangeRectangle.setX(qMax(rectangle.x() + 1,
-              d->m_viewConverter->documentToViewX(d->m_activeRangeStart) + d->m_offset));
-        activeRangeRectangle.setY(rectangle.y() + 1);
-        activeRangeRectangle.setRight(qMin(rectangle.right() - 1,
-              d->m_viewConverter->documentToViewX(d->m_activeRangeEnd) + d->m_offset));
-        activeRangeRectangle.setHeight(rectangle.height() - 2);
-    } else {
-        lengthPixel = d->m_viewConverter->documentToViewY(rulerLength());
-        numberStepPixel = qRound(d->m_viewConverter->documentToViewY(
-            d->m_unit.fromUserValue(numberStep)));
-        rectangle.setX(0);
-        rectangle.setY(qMax(0, d->m_offset));
-        rectangle.setWidth(width() - 1.0);
-        rectangle.setHeight(qMin((double)height() - 1.0 - rectangle.y(), (d->m_offset >= 0 ) ? lengthPixel : lengthPixel + d->m_offset ));
-        activeRangeRectangle.setX(rectangle.x() + 1);
-        activeRangeRectangle.setY(qMax(rectangle.y() + 1,
-            d->m_viewConverter->documentToViewY(d->m_activeRangeStart) + d->m_offset));
-        activeRangeRectangle.setWidth(rectangle.width() - 2);
-        activeRangeRectangle.setBottom(qMin(rectangle.bottom() - 1,
-            d->m_viewConverter->documentToViewY(d->m_activeRangeEnd) + d->m_offset));
+    switch (m_type) {
+    case QTextOption::LeftTab:
+        polygon << QPointF(x+0.5, height() - 8.5)
+            << QPointF(x-5.5, height() - 2.5)
+            << QPointF(x+0.5, height() - 2.5);
+        painter.drawPolygon(polygon);
+        break;
+    case QTextOption::RightTab:
+        polygon << QPointF(x+0.5, height() - 8.5)
+            << QPointF(x+6.5, height() - 2.5)
+            << QPointF(x+0.5, height() - 2.5);
+        painter.drawPolygon(polygon);
+        break;
+    case QTextOption::CenterTab:
+        polygon << QPointF(x+0.5, height() - 8.5)
+            << QPointF(x-5.5, height() - 2.5)
+            << QPointF(x+6.5, height() - 2.5);
+        painter.drawPolygon(polygon);
+        break;
+    case QTextOption::DelimiterTab:
+        polygon << QPointF(x-5.5, height() - 2.5)
+            << QPointF(x+0.5, height() - 8.5)
+            << QPointF(x+6.5, height() - 2.5);
+        painter.drawPolyline(polygon);
+        break;
+    default:
+        break;
     }
+}
+#endif
 
-    painter.setPen(palette().color(QPalette::Mid));
+static int compareTabs(KoRuler::Tab &tab1, KoRuler::Tab &tab2) {
+    return tab1.position < tab2.position;
+}
+
+QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainter &painter) {
+    lengthInPixel = d->viewConverter->documentToViewX(d->rulerLength);
+    QRectF rectangle;
+    rectangle.setX(qMax(0, d->offset));
+    rectangle.setY(2);
+    rectangle.setWidth(qMin((double) d->ruler->width() - 1.0 - rectangle.x(), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
+    rectangle.setHeight( d->ruler->height() - 4.0);
+    QRectF activeRangeRectangle;
+    activeRangeRectangle.setX(qMax(rectangle.x() + 1,
+          d->viewConverter->documentToViewX(d->activeRangeStart) + d->offset));
+    activeRangeRectangle.setY(rectangle.y() + 1);
+    activeRangeRectangle.setRight(qMin(rectangle.right() - 1,
+          d->viewConverter->documentToViewX(d->activeRangeEnd) + d->offset));
+    activeRangeRectangle.setHeight(rectangle.height() - 2);
+
+    painter.setPen(d->ruler->palette().color(QPalette::Mid));
     painter.drawRect(rectangle);
 
-    if(d->m_activeRangeStart != d->m_activeRangeEnd) {
-        painter.fillRect(activeRangeRectangle, palette().brush(QPalette::Base));
+    if(d->activeRangeStart != d->activeRangeEnd)
+        painter.fillRect(activeRangeRectangle, d->ruler->palette().brush(QPalette::Base));
+
+    if(d->showSelectionBorders) {
+        // Draw first selection border
+        if(d->firstSelectionBorder > 0) {
+            double border = d->viewConverter->documentToViewX(d->firstSelectionBorder);
+            painter.drawLine(QPointF(border, rectangle.y() + 1), QPointF(border, rectangle.bottom() - 1));
+        }
+        // Draw second selection border
+        if(d->secondSelectionBorder > 0) {
+            double border = d->viewConverter->documentToViewX(d->secondSelectionBorder);
+            painter.drawLine(QPointF(border, rectangle.y() + 1), QPointF(border, rectangle.bottom() - 1));
+        }
     }
 
-    QFont font = KGlobalSettings::toolBarFont();
-    QFontMetrics fontMetrics(font);
-    int textLength = 0;
+    return rectangle;
+}
 
+void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &painter) {
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+    if (! d->showTabs)
+        return;
+    QPolygonF polygon;
+
+    painter.setBrush(d->ruler->palette().color(QPalette::Text));
+    painter.setRenderHint( QPainter::Antialiasing );
+
+    foreach (KoRuler::Tab t, d->tabs) {
+        double x;
+        if (d->rightToLeft)
+            x = d->viewConverter->documentToViewX(d->activeRangeEnd - t.position)
+                    + qMin(0, d->offset);
+        else
+            x = d->viewConverter->documentToViewX(d->activeRangeStart + t.position)
+                    + qMin(0, d->offset);
+
+        polygon.clear();
+        switch (t.type) {
+        case QTextOption::LeftTab:
+            polygon << QPointF(x+0.5, d->ruler->height() - 8.5)
+                << QPointF(x-5.5, d->ruler->height() - 2.5)
+                << QPointF(x+0.5, d->ruler->height() - 2.5);
+            painter.drawPolygon(polygon);
+            break;
+        case QTextOption::RightTab:
+            polygon << QPointF(x+0.5, d->ruler->height() - 8.5)
+                << QPointF(x+6.5, d->ruler->height() - 2.5)
+                << QPointF(x+0.5, d->ruler->height() - 2.5);
+            painter.drawPolygon(polygon);
+            break;
+        case QTextOption::CenterTab:
+            polygon << QPointF(x+0.5, d->ruler->height() - 8.5)
+                << QPointF(x-5.5, d->ruler->height() - 2.5)
+                << QPointF(x+6.5, d->ruler->height() - 2.5);
+            painter.drawPolygon(polygon);
+            break;
+        case QTextOption::DelimiterTab:
+            polygon << QPointF(x-5.5, d->ruler->height() - 2.5)
+                << QPointF(x+0.5, d->ruler->height() - 8.5)
+                << QPointF(x+6.5, d->ruler->height() - 2.5);
+            painter.drawPolyline(polygon);
+            break;
+        default:
+            break;
+        }
+    }
+    //painter.setRenderHint( QPainter::Antialiasing, false );
+#endif
+}
+
+void HorizontalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle) {
+    double numberStep = d->numberStepForUnit(); // number step in unit
+    QRectF activeRangeRectangle;
+    int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
+    QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
     // Calc the longest text length
-    for(int i = 0; i < lengthPixel; i += numberStepPixel) {
+    int textLength = 0;
+    for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
         textLength = qMax(textLength, fontMetrics.width(
             QString::number((i / numberStepPixel) * numberStep)));
     }
-
     textLength += 4;  // Add some padding
 
     // Change number step so all digits fits
@@ -278,20 +210,18 @@ void KoRuler::paintEvent(QPaintEvent* event)
     }
 
     int start=0;
-
     // Calc the first number step
-    if(d->m_offset < 0) {
-        start = qAbs(d->m_offset);
-    }
+    if(d->offset < 0)
+        start = qAbs(d->offset);
 
-    int mouseCoord = d->m_mouseCoordinate - start;
+    const int mouseCoord = d->mouseCoordinate - start;
 
     // make a little hack so rulers shows correctly inversed number aligned
-    double lengthInUnit = d->m_unit.toUserValue(rulerLength());
-    double hackyLength = lengthInUnit - fmod(lengthInUnit, numberStep);
-    if(d->m_rightToLeft && orientation() == Qt::Horizontal) {
-        start -= int(d->m_viewConverter->documentToViewX(fmod(rulerLength(),
-                    d->m_unit.fromUserValue(numberStep))));
+    const double lengthInUnit = d->unit.toUserValue(d->rulerLength);
+    const double hackyLength = lengthInUnit - fmod(lengthInUnit, numberStep);
+    if(d->rightToLeft) {
+        start -= int(d->viewConverter->documentToViewX(fmod(d->rulerLength,
+                    d->unit.fromUserValue(numberStep))));
     }
 
     int stepCount = (start / numberStepPixel) + 1;
@@ -299,272 +229,117 @@ void KoRuler::paintEvent(QPaintEvent* event)
     int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
 
     int pos = 0;
-    painter.setPen(palette().color(QPalette::Text));
+    painter.setPen(d->ruler->palette().color(QPalette::Text));
 
-    if(orientation() == Qt::Horizontal) {
-        if(d->m_offset > 0) {
-            painter.translate(d->m_offset, 0);
+    if(d->offset > 0)
+        painter.translate(d->offset, 0);
+
+    const int len = qRound(rectangle.width()) + start;
+    int nextStep = qRound(d->viewConverter->documentToViewX(
+        d->unit.fromUserValue(numberStep * stepCount)));
+    int nextHalfStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
+        numberStep * 0.5 * halfStepCount)));
+    int nextQuarterStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
+        numberStep * 0.25 * quarterStepCount)));
+
+    for(int i = start; i < len; ++i) {
+        pos = i - start;
+
+        if(i == nextStep) {
+            if(pos != 0)
+                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() -10));
+
+            QString numberText = QString::number(stepCount * numberStep);
+            if (d->rightToLeft) // this is done in a hacky way with the fine tuning done above
+                numberText = QString::number(hackyLength - stepCount * numberStep);
+            painter.drawText(QPointF(pos - 0.5*fontMetrics.width(numberText), rectangle.bottom() -12), numberText);
+
+            ++stepCount;
+            nextStep = qRound(d->viewConverter->documentToViewX(
+                d->unit.fromUserValue(numberStep * stepCount)));
+            ++halfStepCount;
+            nextHalfStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
+                numberStep * 0.5 * halfStepCount)));
+            ++quarterStepCount;
+            nextQuarterStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
+                numberStep * 0.25 * quarterStepCount)));
         }
+        else if(i == nextHalfStep) {
+            if(pos != 0)
+                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 8));
 
-        int len = qRound(rectangle.width()) + start;
-        int nextStep = qRound(d->m_viewConverter->documentToViewX(
-            d->m_unit.fromUserValue(numberStep * stepCount)));
-        int nextHalfStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
-            numberStep * 0.5 * halfStepCount)));
-        int nextQuarterStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
-            numberStep * 0.25 * quarterStepCount)));
-
-        for(int i = start; i < len; ++i) {
-            pos = i - start;
-
-            if(i == nextStep) {
-                if(pos != 0) {
-                    painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() -10));
-                }
-
-                QString numberText = QString::number(stepCount * numberStep);
-                if (d->m_rightToLeft) // this is done in a hacky way with the fine tuning done above
-                    numberText = QString::number(hackyLength - stepCount * numberStep);
-                painter.drawText(QPointF(pos - 0.5*fontMetrics.width(numberText), rectangle.bottom() -12), numberText);
-
-                ++stepCount;
-                nextStep = qRound(d->m_viewConverter->documentToViewX(
-                    d->m_unit.fromUserValue(numberStep * stepCount)));
-                ++halfStepCount;
-                nextHalfStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
-                    numberStep * 0.5 * halfStepCount)));
-                ++quarterStepCount;
-                nextQuarterStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
-                    numberStep * 0.25 * quarterStepCount)));
-            } else if(i == nextHalfStep) {
-                if(pos != 0) {
-                    painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 8));
-                }
-
-                ++halfStepCount;
-                nextHalfStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
-                    numberStep * 0.5 * halfStepCount)));
-                ++quarterStepCount;
-                nextQuarterStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
-                    numberStep * 0.25 * quarterStepCount)));
-            } else if(i == nextQuarterStep) {
-                if(pos != 0) {
-                    painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 4));
-                }
-
-                ++quarterStepCount;
-                nextQuarterStep = qRound(d->m_viewConverter->documentToViewX(d->m_unit.fromUserValue(
-                    numberStep * 0.25 * quarterStepCount)));
-            }
+            ++halfStepCount;
+            nextHalfStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
+                numberStep * 0.5 * halfStepCount)));
+            ++quarterStepCount;
+            nextQuarterStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
+                numberStep * 0.25 * quarterStepCount)));
         }
+        else if(i == nextQuarterStep) {
+            if(pos != 0)
+                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 4));
 
-        // Draw the mouse indicator
-        if(d->m_showMousePosition && (mouseCoord > 0) && (mouseCoord < rectangle.width()) ) {
-            painter.drawLine(QPointF(mouseCoord, rectangle.y() + 1),
-                              QPointF(mouseCoord, rectangle.bottom() - 1));
+            ++quarterStepCount;
+            nextQuarterStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
+                numberStep * 0.25 * quarterStepCount)));
         }
+    }
 
-        if(d->m_showSelectionBorders) {
-            // Draw first selection border
-            if(d->m_firstSelectionBorder > 0) {
-                double border = d->m_viewConverter->documentToViewX(d->m_firstSelectionBorder);
-                painter.drawLine(QPointF(border, rectangle.y() + 1), QPointF(border, rectangle.bottom() - 1));
-            }
-            // Draw second selection border
-            if(d->m_secondSelectionBorder > 0) {
-                double border = d->m_viewConverter->documentToViewX(d->m_secondSelectionBorder);
-                painter.drawLine(QPointF(border, rectangle.y() + 1), QPointF(border, rectangle.bottom() - 1));
-            }
-        }
-
-        if (d->m_showIndents) {
-            QPolygonF polygon;
-
-            painter.setBrush(palette().brush(QPalette::Base));
-            painter.setRenderHint( QPainter::Antialiasing );
-
-            double x;
-            // Draw first line start indent
-            if (d->m_rightToLeft) {
-                x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd
-                        - d->m_firstLineIndent - d->m_paragraphIndent) + qMin(0, d->m_offset);
-                x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
-                polygon << QPointF(x+0.5, 0.5)
-                        << QPointF(x-9.5, 5.5)
-                        << QPointF(x+0.5, 10.5)
-                        << QPointF(x+0.5, 0.5);
-                painter.drawPolygon(polygon);
-            } else {
-                x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart
-                        + d->m_firstLineIndent + d->m_paragraphIndent) + qMin(0, d->m_offset);
-                x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
-                polygon << QPointF(x+0.5, 0.5)
-                        << QPointF(x+10.5, 5.5)
-                        << QPointF(x+0.5, 10.5)
-                        << QPointF(x+0.5, 0.5);
-                painter.drawPolygon(polygon);
-            }
-            // Draw rest of the lines start indent or end indent if mode is rightToLeft
-            polygon.clear();
-            if (d->m_rightToLeft)
-                x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_endIndent)
-                        + qMin(0, d->m_offset);
-            else
-                x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart
-                             + d->m_paragraphIndent) + qMin(0, d->m_offset);
-            x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
-            polygon << QPointF(x+0.5, height() - 10.5)
-                        << QPointF(x+10.5, height() - 5.5)
-                        << QPointF(x+0.5, height() - 0.5)
-                        << QPointF(x+0.5, height() - 10.5);
-            painter.drawPolygon(polygon);
-
-            // Draw end indent or paragraph indent if mode is rightToLeft
-            polygon.clear();
-            if (d->m_rightToLeft)
-                x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd
-                             - d->m_paragraphIndent) + qMin(0, d->m_offset);
-            else
-                x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_endIndent)
-                        + qMin(0, d->m_offset);
-            x = int(x+0.5); //go to nearest integer so that the 0.5 added below ensures sharp lines
-            polygon << QPointF(x+0.5, height() - 10.5)
-                        << QPointF(x-9.5, height() - 5.5)
-                        << QPointF(x+0.5, height() - 0.5)
-                        << QPointF(x+0.5, height() - 10.5);
-            painter.drawPolygon(polygon);
-
-            painter.setRenderHint( QPainter::Antialiasing, false );
-        }
-
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-        if (d->m_showTabs) {
-            QPolygonF polygon;
-
-            painter.setBrush(palette().color(QPalette::Text));
-            painter.setRenderHint( QPainter::Antialiasing );
-
-            foreach (Tab t, d->m_tabs) {
-                double x;
-                if (d->m_rightToLeft)
-                    x = d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - t.position)
-                            + qMin(0, d->m_offset);
-                else
-                    x = d->m_viewConverter->documentToViewX(d->m_activeRangeStart + t.position)
-                            + qMin(0, d->m_offset);
-
-                polygon.clear();
-                switch (t.type) {
-                case QTextOption::LeftTab:
-                    polygon << QPointF(x+0.5, height() - 8.5)
-                        << QPointF(x-5.5, height() - 2.5)
-                        << QPointF(x+0.5, height() - 2.5);
-                    painter.drawPolygon(polygon);
-                    break;
-                case QTextOption::RightTab:
-                    polygon << QPointF(x+0.5, height() - 8.5)
-                        << QPointF(x+6.5, height() - 2.5)
-                        << QPointF(x+0.5, height() - 2.5);
-                    painter.drawPolygon(polygon);
-                    break;
-                case QTextOption::CenterTab:
-                    polygon << QPointF(x+0.5, height() - 8.5)
-                        << QPointF(x-5.5, height() - 2.5)
-                        << QPointF(x+6.5, height() - 2.5);
-                    painter.drawPolygon(polygon);
-                    break;
-                case QTextOption::DelimiterTab:
-                    polygon << QPointF(x-5.5, height() - 2.5)
-                        << QPointF(x+0.5, height() - 8.5)
-                        << QPointF(x+6.5, height() - 2.5);
-                    painter.drawPolyline(polygon);
-                    break;
-                default:
-                    break;
-                }
-            }
-            painter.setRenderHint( QPainter::Antialiasing, false );
-        }
-#endif
-    } else {
-        if(d->m_offset > 0) {
-            painter.translate(0, d->m_offset);
-        }
-
-        int len = qRound(rectangle.height()) + start;
-        int nextStep = qRound(d->m_viewConverter->documentToViewY(
-            d->m_unit.fromUserValue(numberStep * stepCount)));
-        int nextHalfStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
-            numberStep * 0.5 * halfStepCount)));
-        int nextQuarterStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
-            numberStep * 0.25 * quarterStepCount)));
-
-        for(int i = start; i < len; ++i) {
-            pos = i - start;
-
-            if(i == nextStep) {
-                if(pos != 0) {
-                    painter.drawLine(QPointF(rectangle.right() - 10, pos), QPointF(rectangle.right() - 1, pos));
-                }
-
-                QString numberText = QString::number(stepCount * numberStep);
-                painter.drawText(QPointF(rectangle.right() - 12 -fontMetrics.width(numberText),
-                         pos + 4), numberText);
-
-                ++stepCount;
-                nextStep = qRound(d->m_viewConverter->documentToViewY(
-                    d->m_unit.fromUserValue(numberStep * stepCount)));
-                ++halfStepCount;
-                nextHalfStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
-                    numberStep * 0.5 * halfStepCount)));
-                ++quarterStepCount;
-                nextQuarterStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
-                    numberStep * 0.25 * quarterStepCount)));
-            } else if(i == nextHalfStep) {
-                if(pos != 0) {
-                    painter.drawLine(QPointF(rectangle.right() - 8, pos), QPointF(rectangle.right() - 1, pos));
-                }
-
-                ++halfStepCount;
-                nextHalfStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
-                    numberStep * 0.5 * halfStepCount)));
-                ++quarterStepCount;
-                nextQuarterStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
-                    numberStep * 0.25 * quarterStepCount)));
-            } else if(i == nextQuarterStep) {
-                if(pos != 0) {
-                    painter.drawLine(QPointF(rectangle.right() - 4, pos), QPointF(rectangle.right() - 1, pos));
-                }
-
-                ++quarterStepCount;
-                nextQuarterStep = qRound(d->m_viewConverter->documentToViewY(d->m_unit.fromUserValue(
-                    numberStep * 0.25 * quarterStepCount)));
-            }
-        }
-
-        // Draw the mouse indicator
-        if(d->m_showMousePosition && (mouseCoord > 0) && (mouseCoord < rectangle.height()) ) {
-            painter.drawLine(QPointF(rectangle.x() + 1, mouseCoord),
-                              QPointF(rectangle.right() - 1, mouseCoord));
-        }
-
-        if(d->m_showSelectionBorders) {
-            // Draw first selection border
-            if(d->m_firstSelectionBorder > 0) {
-                double border = d->m_viewConverter->documentToViewY(d->m_firstSelectionBorder);
-                painter.drawLine(QPointF(rectangle.x() + 1, border), QPointF(rectangle.right() - 1, border));
-            }
-            // Draw second selection border
-            if(d->m_secondSelectionBorder > 0) {
-                double border = d->m_viewConverter->documentToViewY(d->m_secondSelectionBorder);
-                painter.drawLine(QPointF(rectangle.x() + 1, border), QPointF(rectangle.right() - 1, border));
-            }
-        }
+    // Draw the mouse indicator
+    if(d->showMousePosition && (mouseCoord > 0) && (mouseCoord < rectangle.width()) ) {
+        painter.drawLine(QPointF(mouseCoord, rectangle.y() + 1),
+                          QPointF(mouseCoord, rectangle.bottom() - 1));
     }
 }
 
-QSize KoRuler::minimumSizeHint() const
-{
+void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &painter) {
+    QPolygonF polygon;
+
+    painter.setBrush(d->ruler->palette().brush(QPalette::Base));
+    painter.setRenderHint( QPainter::Antialiasing );
+
+    double x;
+    // Draw first line start indent
+    if (d->rightToLeft)
+        x = d->activeRangeEnd - d->firstLineIndent - d->paragraphIndent;
+    else
+        x = d->activeRangeStart + d->firstLineIndent + d->paragraphIndent;
+    // convert and use the +0.5 to go to nearest integer so that the 0.5 added below ensures sharp lines
+    x = int(d->viewConverter->documentToViewX(x) + qMin(0, d->offset) +0.5);
+    polygon << QPointF(x+6.5, 0.5)
+        << QPointF(x+0.5, 8.5)
+        << QPointF(x-5.5, 0.5)
+        << QPointF(x+5.5, 0.5);
+    painter.drawPolygon(polygon);
+
+    // draw the hanging indent.
+    if (d->rightToLeft)
+        x = d->activeRangeStart + d->endIndent;
+    else
+        x = d->activeRangeStart + d->paragraphIndent;
+    // convert and use the +0.5 to go to nearest integer so that the 0.5 added below ensures sharp lines
+    x = int(d->viewConverter->documentToViewX(x) + qMin(0, d->offset) +0.5);
+    const int bottom = d->ruler->height();
+    polygon.clear();
+    polygon << QPointF(x+6.5, bottom - 0.5)
+        << QPointF(x+0.5, bottom - 8.5)
+        << QPointF(x-5.5, bottom - 0.5)
+        << QPointF(x+5.5, bottom - 0.5);
+    painter.drawPolygon(polygon);
+
+    // Draw end-indent or paragraph indent if mode is rightToLeft
+    double diff;
+    if (d->rightToLeft)
+        diff = d->viewConverter->documentToViewX(d->activeRangeEnd
+                     - d->paragraphIndent) + qMin(0, d->offset) - x;
+    else
+        diff = d->viewConverter->documentToViewX(d->activeRangeEnd - d->endIndent)
+                + qMin(0, d->offset) - x;
+    polygon.translate(diff, 0);
+    painter.drawPolygon(polygon);
+}
+
+QSize HorizontalPaintingStrategy::sizeHint() {
     QSize size;
     QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm(font);
@@ -573,135 +348,375 @@ QSize KoRuler::minimumSizeHint() const
 
     size.setWidth( minimum );
     size.setHeight( minimum );
-
     return size;
+}
+
+QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainter &painter) {
+    lengthInPixel = d->viewConverter->documentToViewY(d->rulerLength);
+    QRectF rectangle;
+    rectangle.setX(2);
+    rectangle.setY(qMax(0, d->offset));
+    rectangle.setWidth(d->ruler->width() - 4.0);
+    rectangle.setHeight(qMin((double)d->ruler->height() - 1.0 - rectangle.y(), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
+
+    QRectF activeRangeRectangle;
+    activeRangeRectangle.setX(rectangle.x() + 1);
+    activeRangeRectangle.setY(qMax(rectangle.y() + 1,
+        d->viewConverter->documentToViewY(d->activeRangeStart) + d->offset));
+    activeRangeRectangle.setWidth(rectangle.width() - 2);
+    activeRangeRectangle.setBottom(qMin(rectangle.bottom() - 1,
+        d->viewConverter->documentToViewY(d->activeRangeEnd) + d->offset));
+
+    painter.setPen(d->ruler->palette().color(QPalette::Mid));
+    painter.drawRect(rectangle);
+
+    if(d->showSelectionBorders) {
+        // Draw first selection border
+        if(d->firstSelectionBorder > 0) {
+            double border = d->viewConverter->documentToViewY(d->firstSelectionBorder);
+            painter.drawLine(QPointF(rectangle.x() + 1, border), QPointF(rectangle.right() - 1, border));
+        }
+        // Draw second selection border
+        if(d->secondSelectionBorder > 0) {
+            double border = d->viewConverter->documentToViewY(d->secondSelectionBorder);
+            painter.drawLine(QPointF(rectangle.x() + 1, border), QPointF(rectangle.right() - 1, border));
+        }
+    }
+
+    if(d->activeRangeStart != d->activeRangeEnd)
+        painter.fillRect(activeRangeRectangle, d->ruler->palette().brush(QPalette::Base));
+    return rectangle;
+}
+
+void VerticalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle) {
+    double numberStep = d->numberStepForUnit(); // number step in unit
+    int numberStepPixel = qRound(d->viewConverter->documentToViewY( d->unit.fromUserValue(numberStep)));
+    QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
+    // Calc the longest text length
+    int textLength = 0;
+    for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
+        textLength = qMax(textLength, fontMetrics.width(
+            QString::number((i / numberStepPixel) * numberStep)));
+    }
+    textLength += 4;  // Add some padding
+
+    // Change number step so all digits fits
+    while(textLength > numberStepPixel) {
+        numberStepPixel += numberStepPixel;
+        numberStep += numberStep;
+    }
+
+    // Calc the first number step
+    const int start = d->offset < 0 ? qAbs(d->offset) : 0;
+
+    // make a little hack so rulers shows correctly inversed number aligned
+    int stepCount = (start / numberStepPixel) + 1;
+    int halfStepCount = (start / qRound(numberStepPixel * 0.5)) + 1;
+    int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
+
+    const int mouseCoord = d->mouseCoordinate - start;
+    painter.setPen(d->ruler->palette().color(QPalette::Text));
+
+    if(d->offset > 0)
+        painter.translate(0, d->offset);
+
+    const int len = qRound(rectangle.height()) + start;
+    int nextStep = qRound(d->viewConverter->documentToViewY(
+        d->unit.fromUserValue(numberStep * stepCount)));
+    int nextHalfStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
+        numberStep * 0.5 * halfStepCount)));
+    int nextQuarterStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
+        numberStep * 0.25 * quarterStepCount)));
+
+    int pos = 0;
+    for(int i = start; i < len; ++i) {
+        pos = i - start;
+
+        if(i == nextStep) {
+            if(pos != 0)
+                painter.drawLine(QPointF(rectangle.right() - 10, pos), QPointF(rectangle.right() - 1, pos));
+
+            QString numberText = QString::number(stepCount * numberStep);
+            painter.drawText(QPointF(rectangle.right() - 12 -fontMetrics.width(numberText),
+                     pos + 4), numberText);
+
+            ++stepCount;
+            nextStep = qRound(d->viewConverter->documentToViewY(
+                d->unit.fromUserValue(numberStep * stepCount)));
+            ++halfStepCount;
+            nextHalfStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
+                numberStep * 0.5 * halfStepCount)));
+            ++quarterStepCount;
+            nextQuarterStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
+                numberStep * 0.25 * quarterStepCount)));
+        } else if(i == nextHalfStep) {
+            if(pos != 0)
+                painter.drawLine(QPointF(rectangle.right() - 8, pos), QPointF(rectangle.right() - 1, pos));
+
+            ++halfStepCount;
+            nextHalfStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
+                numberStep * 0.5 * halfStepCount)));
+            ++quarterStepCount;
+            nextQuarterStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
+                numberStep * 0.25 * quarterStepCount)));
+        } else if(i == nextQuarterStep) {
+            if(pos != 0)
+                painter.drawLine(QPointF(rectangle.right() - 4, pos), QPointF(rectangle.right() - 1, pos));
+
+            ++quarterStepCount;
+            nextQuarterStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
+                numberStep * 0.25 * quarterStepCount)));
+        }
+    }
+
+    // Draw the mouse indicator
+    if(d->showMousePosition && (mouseCoord > 0) && (mouseCoord < rectangle.height()) ) {
+        painter.drawLine(QPointF(rectangle.x() + 1, mouseCoord),
+                          QPointF(rectangle.right() - 1, mouseCoord));
+    }
+}
+
+QSize VerticalPaintingStrategy::sizeHint() {
+    QSize size;
+    QFont font = KGlobalSettings::toolBarFont();
+    QFontMetrics fm(font);
+
+    int minimum = fm.height() + 14;
+
+    size.setWidth( minimum );
+    size.setHeight( minimum );
+    return size;
+}
+
+KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::Orientation o)
+    : unit(KoUnit(KoUnit::Point)),
+    orientation(o),
+    viewConverter(vc),
+    offset(0),
+    rulerLength(0),
+    activeRangeStart(0),
+    activeRangeEnd(0),
+    mouseCoordinate(-1),
+    showMousePosition(0),
+    showSelectionBorders(false),
+    firstSelectionBorder(0),
+    secondSelectionBorder(0),
+    showIndents(false),
+    firstLineIndent(0),
+    paragraphIndent(0),
+    endIndent(0),
+    showTabs(false),
+    currentTab(0),
+    rightToLeft(false),
+    selected(0),
+    selectOffset(0),
+    tabChooser(0),
+    paintingStrategy(o == Qt::Horizontal ?
+            (PaintingStrategy*)new HorizontalPaintingStrategy() : (PaintingStrategy*)new VerticalPaintingStrategy()),
+    ruler(parent)
+{
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+    if(orientation == Qt::Horizontal)
+        tabChooser = new RulerTabChooser(parent);
+#endif
+}
+
+double KoRulerPrivate::numberStepForUnit() const
+{
+    switch(unit.indexInList()) {
+        case KoUnit::Inch:
+        case KoUnit::Centimeter:
+        case KoUnit::Decimeter:
+            return 1.0;
+            break;
+        case KoUnit::Millimeter:
+        case KoUnit::Pica:
+        case KoUnit::Cicero:
+            return 10.0;
+            break;
+        case KoUnit::Point:
+        default:
+            return 100.0;
+    }
+}
+
+
+double KoRulerPrivate::doSnapping(const double value) const
+{
+    double numberStep = unit.fromUserValue(numberStepForUnit()/4.0);
+    return numberStep * qRound(value / numberStep);
+}
+
+
+KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter)
+  : QWidget(parent)
+  , d( new KoRulerPrivate( this, viewConverter, orientation) )
+{
+}
+
+KoRuler::~KoRuler()
+{
+    delete d;
+}
+
+KoUnit KoRuler::unit() const
+{
+    return d->unit;
+}
+
+void KoRuler::setUnit(KoUnit unit)
+{
+    d->unit = unit;
+    update();
+}
+
+double KoRuler::rulerLength() const
+{
+    return d->rulerLength;
+}
+
+Qt::Orientation KoRuler::orientation() const
+{
+    return d->orientation;
+}
+
+void KoRuler::setOffset(int offset)
+{
+    d->offset = offset;
+    update();
+}
+
+void KoRuler::setRulerLength(double length)
+{
+    d->rulerLength = length;
+    update();
+}
+
+void KoRuler::paintEvent(QPaintEvent* event)
+{
+    QPainter painter(this);
+    painter.setClipRegion(event->region());
+    painter.save();
+    QRectF rectangle = d->paintingStrategy->drawBackground(d, painter);
+    painter.restore();
+    painter.save();
+    d->paintingStrategy->drawRulerStripes(d, painter, rectangle);
+    painter.restore();
+    if (d->showIndents) {
+        painter.save();
+        d->paintingStrategy->drawIndents(d, painter);
+        painter.restore();
+    }
+    d->paintingStrategy->drawTabs(d, painter);
+}
+
+QSize KoRuler::minimumSizeHint() const
+{
+    return d->paintingStrategy->sizeHint();
 }
 
 QSize KoRuler::sizeHint() const
 {
-    return minimumSizeHint();
+    return d->paintingStrategy->sizeHint();
 }
 
 void KoRuler::setActiveRange(double start, double end)
 {
-    d->m_activeRangeStart = start;
-    d->m_activeRangeEnd = end;
+    d->activeRangeStart = start;
+    d->activeRangeEnd = end;
     update();
 }
 
 void KoRuler::updateMouseCoordinate(int coordinate)
 {
-    if(d->m_mouseCoordinate == coordinate)
+    if(d->mouseCoordinate == coordinate)
         return;
-    d->m_mouseCoordinate = coordinate;
+    d->mouseCoordinate = coordinate;
     update();
 }
 
 void KoRuler::setShowMousePosition(bool show)
 {
-    d->m_showMousePosition = show;
+    d->showMousePosition = show;
     update();
 }
 
 void KoRuler::setRightToLeft(bool isRightToLeft)
 {
-    d->m_rightToLeft = isRightToLeft;
+    d->rightToLeft = isRightToLeft;
     update();
 }
 
 void KoRuler::setShowIndents(bool show)
 {
-    d->m_showIndents = show;
+    d->showIndents = show;
     update();
 }
 
 void KoRuler::setFirstLineIndent(double indent)
 {
-    d->m_firstLineIndent = indent;
+    d->firstLineIndent = indent;
     update();
 }
 
 void KoRuler::setParagraphIndent(double indent)
 {
-    d->m_paragraphIndent = indent;
+    d->paragraphIndent = indent;
     update();
 }
 
 void KoRuler::setEndIndent(double indent)
 {
-    d->m_endIndent = indent;
+    d->endIndent = indent;
     update();
 }
 
 double KoRuler::firstLineIndent() const
 {
-    return d->m_firstLineIndent;
+    return d->firstLineIndent;
 }
 
 double KoRuler::paragraphIndent() const
 {
-    return d->m_paragraphIndent;
+    return d->paragraphIndent;
 }
 
 double KoRuler::endIndent() const
 {
-    return d->m_endIndent;
+    return d->endIndent;
 }
 
 QWidget *KoRuler::tabChooser()
 {
-    return d->m_tabChooser;
-}
-
-double KoRuler::numberStepForUnit() const
-{
-    double numberStep;
-
-    switch(d->m_unit.indexInList()) {
-        case KoUnit::Inch:
-        case KoUnit::Centimeter:
-        case KoUnit::Decimeter:
-            numberStep = 1.0;
-            break;
-        case KoUnit::Millimeter:
-        case KoUnit::Pica:
-        case KoUnit::Cicero:
-            numberStep = 10.0;
-            break;
-        case KoUnit::Point:
-        default:
-            numberStep = 100.0;
-    }
-
-    return numberStep;
+    return d->tabChooser;
 }
 
 void KoRuler::setShowSelectionBorders(bool show)
 {
-    d->m_showSelectionBorders = show;
+    d->showSelectionBorders = show;
     update();
 }
 
 void KoRuler::updateSelectionBorders(double first, double second)
 {
-    d->m_firstSelectionBorder = first;
-    d->m_secondSelectionBorder = second;
+    d->firstSelectionBorder = first;
+    d->secondSelectionBorder = second;
     update();
 }
 
 void KoRuler::setShowTabs(bool show)
 {
-    d->m_showTabs = show;
+    d->showTabs = show;
 }
 
 void KoRuler::updateTabs(const QList<KoRuler::Tab> &tabs)
 {
-    d->m_tabs = tabs;
+    d->tabs = tabs;
 }
 
 QList<KoRuler::Tab> KoRuler::tabs() const {
-    QList<Tab> answer = d->m_tabs;
-    qSort(answer.begin(), answer.end(), d->compareTabs);
+    QList<Tab> answer = d->tabs;
+    qSort(answer.begin(), answer.end(), compareTabs);
 
     return answer;
 }
@@ -709,48 +724,48 @@ QList<KoRuler::Tab> KoRuler::tabs() const {
 void KoRuler::mousePressEvent ( QMouseEvent* ev )
 {
     QPoint pos = ev->pos();
-    d->m_selected = 0;
+    d->selected = 0;
 
     int x;
 
-    if (d->m_showTabs && pos.y() > height() - 9) {
+    if (d->showTabs && pos.y() > height() - 9) {
         int i = 0;
-        foreach (Tab t, d->m_tabs) {
-            if (d->m_rightToLeft)
-                x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - t.position)
-                        + d->m_offset);
+        foreach (Tab t, d->tabs) {
+            if (d->rightToLeft)
+                x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - t.position)
+                        + d->offset);
             else
-                x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + t.position)
-                        + d->m_offset);
+                x = int(d->viewConverter->documentToViewX(d->activeRangeStart + t.position)
+                        + d->offset);
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
             switch (t.type) {
             case QTextOption::LeftTab:
                 if (pos.x() >= x-6 && pos.x() <= x) {
-                    d->m_selected = 4;
-                    d->m_selectOffset = x - pos.x();
-                    d->m_tabIndex = i;
+                    d->selected = 4;
+                    d->selectOffset = x - pos.x();
+                    d->currentTab = i;
                 }
                 break;
             case QTextOption::RightTab:
                 if (pos.x() >= x && pos.x() <= x+6) {
-                    d->m_selected = 4;
-                    d->m_selectOffset = x - pos.x();
-                    d->m_tabIndex = i;
+                    d->selected = 4;
+                    d->selectOffset = x - pos.x();
+                    d->currentTab = i;
                 }
                 break;
             case QTextOption::CenterTab:
                 if (pos.x() >= x-6 && pos.x() <= x+6) {
-                    d->m_selected = 4;
-                    d->m_selectOffset = x - pos.x();
-                    d->m_tabIndex = i;
+                    d->selected = 4;
+                    d->selectOffset = x - pos.x();
+                    d->currentTab = i;
                 }
                 break;
             case QTextOption::DelimiterTab:
                 if (pos.x() >= x-6 && pos.x() <= x+6) {
-                    d->m_selected = 4;
-                    d->m_selectOffset = x - pos.x();
-                    d->m_tabIndex = i;
+                    d->selected = 4;
+                    d->selectOffset = x - pos.x();
+                    d->currentTab = i;
                 }
                 break;
             default:
@@ -761,60 +776,60 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         }
     }
 
-    if (d->m_rightToLeft) {
-        x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_firstLineIndent
-                - d->m_paragraphIndent) + d->m_offset);
+    if (d->rightToLeft) {
+        x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - d->firstLineIndent
+                - d->paragraphIndent) + d->offset);
         if (pos.x() >= x-10 && pos.x() <= x && pos.y() <10) {
-            d->m_selectOffset = x - pos.x();
-            d->m_selected = 1;
+            d->selectOffset = x - pos.x();
+            d->selected = 1;
         }
 
-        x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_paragraphIndent)
-                            + d->m_offset);
+        x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - d->paragraphIndent)
+                            + d->offset);
         if (pos.x() >= x-10 && pos.x() <= x && pos.y() > height()-10) {
-            d->m_selectOffset = x - pos.x();
-            d->m_selected = 2;
+            d->selectOffset = x - pos.x();
+            d->selected = 2;
         }
 
-        x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_endIndent)
-                            + d->m_offset);
+        x = int(d->viewConverter->documentToViewX(d->activeRangeStart + d->endIndent)
+                            + d->offset);
         if (pos.x() >= x && pos.x() <= x+10 && pos.y() > height()-10) {
-            d->m_selectOffset = x - pos.x();
-            d->m_selected = 3;
+            d->selectOffset = x - pos.x();
+            d->selected = 3;
         }
     } else {
-        x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart
-             + d->m_firstLineIndent + d->m_paragraphIndent) + d->m_offset);
+        x = int(d->viewConverter->documentToViewX(d->activeRangeStart
+             + d->firstLineIndent + d->paragraphIndent) + d->offset);
         if (pos.x() >= x && pos.x() <= x+10 && pos.y() <10) {
-            d->m_selectOffset = x - pos.x();
-            d->m_selected = 1;
+            d->selectOffset = x - pos.x();
+            d->selected = 1;
         }
 
-        x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeStart + d->m_paragraphIndent)
-                            + d->m_offset);
+        x = int(d->viewConverter->documentToViewX(d->activeRangeStart + d->paragraphIndent)
+                            + d->offset);
         if (pos.x() >= x && pos.x() <= x+10 && pos.y() > height()-10) {
-            d->m_selectOffset = x - pos.x();
-            d->m_selected = 2;
+            d->selectOffset = x - pos.x();
+            d->selected = 2;
         }
 
-        x = int(d->m_viewConverter->documentToViewX(d->m_activeRangeEnd - d->m_endIndent)
-                            + d->m_offset);
+        x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - d->endIndent)
+                            + d->offset);
         if (pos.x() >= x-10 && pos.x() <= x && pos.y() > height()-10) {
-            d->m_selectOffset = x - pos.x();
-            d->m_selected = 3;
+            d->selectOffset = x - pos.x();
+            d->selected = 3;
         }
     }
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-    if (d->m_showTabs && d->m_selected == 0) {
+    if (d->showTabs && d->selected == 0) {
         // still haven't found something so let assume the user wants to add a tab
-        double tabpos = d->m_viewConverter->viewToDocumentX(pos.x() - d->m_offset)
-                    - d->m_activeRangeStart;
-        Tab t = {tabpos, d->m_tabChooser->type()};
-        d->m_tabs.append(t);
-        d->m_selectOffset = 0;
-        d->m_selected = 4;
-        d->m_tabIndex = d->m_tabs.count() - 1;
+        double tabpos = d->viewConverter->viewToDocumentX(pos.x() - d->offset)
+                    - d->activeRangeStart;
+        Tab t = {tabpos, d->tabChooser->type()};
+        d->tabs.append(t);
+        d->selectOffset = 0;
+        d->selected = 4;
+        d->currentTab = d->tabs.count() - 1;
         update();
     }
 #endif
@@ -824,85 +839,79 @@ void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
 {
     mouseMoveEvent(ev); // handle any last movement
 
-    if( d->m_selected >0 && d->m_selected < 4)
+    if( d->selected >0 && d->selected < 4)
         emit indentsChanged(true);
 
-    if( d->m_selected == 4)
+    if( d->selected == 4)
         emit tabsChanged(true);
 
-    d->m_selected = 0;
-}
-
-double KoRuler::doSnapping(const double value) const
-{
-    double numberStep = d->m_unit.fromUserValue(numberStepForUnit()/4.0);
-    return numberStep * int(value / numberStep + 0.5);
+    d->selected = 0;
 }
 
 void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
 {
     QPoint pos = ev->pos();
-    double activeLength = d->m_activeRangeEnd - d->m_activeRangeStart;
+    double activeLength = d->activeRangeEnd - d->activeRangeStart;
 
-    switch(d->m_selected) {
+    switch(d->selected) {
     case 0:
     default:
         break;
     case 1:
-        if (d->m_rightToLeft)
-            d->m_firstLineIndent = d->m_activeRangeEnd - d->m_paragraphIndent -
-                d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset - d->m_offset);
+        if (d->rightToLeft)
+            d->firstLineIndent = d->activeRangeEnd - d->paragraphIndent -
+                d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset - d->offset);
         else
-            d->m_firstLineIndent = d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset
-                - d->m_offset) - d->m_activeRangeStart - d->m_paragraphIndent;
+            d->firstLineIndent = d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset
+                - d->offset) - d->activeRangeStart - d->paragraphIndent;
         if( ! (ev->modifiers() & Qt::ShiftModifier))
-            d->m_firstLineIndent = doSnapping(d->m_firstLineIndent);
+            d->firstLineIndent = d->doSnapping(d->firstLineIndent);
 
         emit indentsChanged(false);
         break;
     case 2:
-        if (d->m_rightToLeft)
-            d->m_paragraphIndent = d->m_activeRangeEnd -
-                d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset - d->m_offset);
+        if (d->rightToLeft)
+            d->paragraphIndent = d->activeRangeEnd -
+                d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset - d->offset);
         else
-            d->m_paragraphIndent = d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset
-                - d->m_offset) - d->m_activeRangeStart;
+            d->paragraphIndent = d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset
+                - d->offset) - d->activeRangeStart;
         if( ! (ev->modifiers() & Qt::ShiftModifier))
-            d->m_paragraphIndent = doSnapping(d->m_paragraphIndent);
-        if (d->m_paragraphIndent < 0)
-            d->m_paragraphIndent = 0;
-        if (d->m_paragraphIndent + d->m_endIndent > activeLength)
-            d->m_paragraphIndent = activeLength - d->m_endIndent;;
+            d->paragraphIndent = d->doSnapping(d->paragraphIndent);
+        if (d->paragraphIndent < 0)
+            d->paragraphIndent = 0;
+        if (d->paragraphIndent + d->endIndent > activeLength)
+            d->paragraphIndent = activeLength - d->endIndent;;
         emit indentsChanged(false);
         break;
     case 3:
-        if (d->m_rightToLeft)
-            d->m_endIndent = d->m_viewConverter->viewToDocumentX(pos.x()
-                 + d->m_selectOffset - d->m_offset) - d->m_activeRangeStart;
+        if (d->rightToLeft)
+            d->endIndent = d->viewConverter->viewToDocumentX(pos.x()
+                 + d->selectOffset - d->offset) - d->activeRangeStart;
         else
-            d->m_endIndent = d->m_activeRangeEnd - d->m_viewConverter->viewToDocumentX(pos.x()
-                 + d->m_selectOffset - d->m_offset);
+            d->endIndent = d->activeRangeEnd - d->viewConverter->viewToDocumentX(pos.x()
+                 + d->selectOffset - d->offset);
         if( ! (ev->modifiers() & Qt::ShiftModifier))
-            d->m_endIndent = doSnapping(d->m_endIndent);
-        if (d->m_endIndent < 0)
-            d->m_endIndent = 0;
-        if (d->m_paragraphIndent + d->m_endIndent > activeLength)
-            d->m_endIndent = activeLength - d->m_paragraphIndent;;
+            d->endIndent = d->doSnapping(d->endIndent);
+        if (d->endIndent < 0)
+            d->endIndent = 0;
+        if (d->paragraphIndent + d->endIndent > activeLength)
+            d->endIndent = activeLength - d->paragraphIndent;;
         emit indentsChanged(false);
         break;
     case 4:
-        if (d->m_rightToLeft)
-            d->m_tabs[d->m_tabIndex].position = d->m_activeRangeEnd -
-                d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset - d->m_offset);
+        if (d->rightToLeft)
+            d->tabs[d->currentTab].position = d->activeRangeEnd -
+                d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset - d->offset);
         else
-            d->m_tabs[d->m_tabIndex].position = d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset
-                - d->m_offset) - d->m_activeRangeStart;
+            d->tabs[d->currentTab].position = d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset
+                - d->offset) - d->activeRangeStart;
         if( ! (ev->modifiers() & Qt::ShiftModifier))
-            d->m_tabs[d->m_tabIndex].position = doSnapping(d->m_tabs[d->m_tabIndex].position);
-        if (d->m_tabs[d->m_tabIndex].position < 0)
-            d->m_tabs[d->m_tabIndex].position = 0;
-        if (d->m_tabs[d->m_tabIndex].position > activeLength)
-            d->m_tabs[d->m_tabIndex].position = activeLength;
+            d->tabs[d->currentTab].position = d->doSnapping(d->tabs[d->currentTab].position);
+        if (d->tabs[d->currentTab].position < 0)
+            d->tabs[d->currentTab].position = 0;
+        if (d->tabs[d->currentTab].position > activeLength)
+            d->tabs[d->currentTab].position = activeLength;
 
         emit tabsChanged(false);
         break;

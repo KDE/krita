@@ -212,6 +212,9 @@ protected:
         /// @return The step in unit between numbers on the ruler
         double numberStepForUnit() const;
 
+        /// @return The rounding of value to the nearest multiple of stepValue
+        double doSnapping(const double value) const;
+
 private:
         KoRulerPrivate * const d;
 };

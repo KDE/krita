@@ -168,7 +168,7 @@ KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConve
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     if(orientation == Qt::Horizontal)
-        d->m_tabChooser = new RulerTabChooser(parent);
+        d->m_tabChooser = new RulerTabChooser(this);
 #endif
 }
 
@@ -833,6 +833,12 @@ void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
     d->m_selected = 0;
 }
 
+double KoRuler::doSnapping(const double value) const
+{
+    double numberStep = d->m_unit.fromUserValue(numberStepForUnit()/4.0);
+    return numberStep * int(value / numberStep + 0.5);
+}
+
 void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
 {
     QPoint pos = ev->pos();
@@ -849,6 +855,8 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         else
             d->m_firstLineIndent = d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset
                 - d->m_offset) - d->m_activeRangeStart - d->m_paragraphIndent;
+        if( ! (ev->modifiers() & Qt::ShiftModifier))
+            d->m_firstLineIndent = doSnapping(d->m_firstLineIndent);
 
         emit indentsChanged(false);
         break;
@@ -859,6 +867,8 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         else
             d->m_paragraphIndent = d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset
                 - d->m_offset) - d->m_activeRangeStart;
+        if( ! (ev->modifiers() & Qt::ShiftModifier))
+            d->m_paragraphIndent = doSnapping(d->m_paragraphIndent);
         if (d->m_paragraphIndent < 0)
             d->m_paragraphIndent = 0;
         if (d->m_paragraphIndent + d->m_endIndent > activeLength)
@@ -872,6 +882,8 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         else
             d->m_endIndent = d->m_activeRangeEnd - d->m_viewConverter->viewToDocumentX(pos.x()
                  + d->m_selectOffset - d->m_offset);
+        if( ! (ev->modifiers() & Qt::ShiftModifier))
+            d->m_endIndent = doSnapping(d->m_endIndent);
         if (d->m_endIndent < 0)
             d->m_endIndent = 0;
         if (d->m_paragraphIndent + d->m_endIndent > activeLength)
@@ -885,6 +897,8 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         else
             d->m_tabs[d->m_tabIndex].position = d->m_viewConverter->viewToDocumentX(pos.x() + d->m_selectOffset
                 - d->m_offset) - d->m_activeRangeStart;
+        if( ! (ev->modifiers() & Qt::ShiftModifier))
+            d->m_tabs[d->m_tabIndex].position = doSnapping(d->m_tabs[d->m_tabIndex].position);
         if (d->m_tabs[d->m_tabIndex].position < 0)
             d->m_tabs[d->m_tabIndex].position = 0;
         if (d->m_tabs[d->m_tabIndex].position > activeLength)

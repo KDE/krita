@@ -41,7 +41,7 @@ QStringList KoUnit::listOfUnitName(bool hidePixel)
 }
 
 
-uint KoUnit::indexInList(bool hidePixel)
+uint KoUnit::indexInList(bool hidePixel) const
 {
     if(hidePixel && m_unit > Pixel)
         return m_unit-1;

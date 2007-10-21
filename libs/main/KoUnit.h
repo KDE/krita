@@ -209,7 +209,7 @@ public:
 
     /// Get the index of this unit in the list of names
     /// @param hidePixel count as if the Pixel unit hadn't been shown in the list
-    uint indexInList(bool hidePixel=true);
+    uint indexInList(bool hidePixel=true) const;
 
     /// parse common %KOffice and OO values, like "10cm", "5mm" to pt
     static double parseValue( const QString& value, double defaultVal = 0.0 );

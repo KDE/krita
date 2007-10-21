@@ -508,7 +508,7 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     showTabs(false),
     currentTab(0),
     rightToLeft(false),
-    selected(0),
+    selected(None),
     selectOffset(0),
     tabChooser(0),
     paintingStrategy(o == Qt::Horizontal ?
@@ -724,7 +724,7 @@ QList<KoRuler::Tab> KoRuler::tabs() const {
 void KoRuler::mousePressEvent ( QMouseEvent* ev )
 {
     QPoint pos = ev->pos();
-    d->selected = 0;
+    d->selected = KoRulerPrivate::None;
 
     int x;
 
@@ -742,28 +742,28 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
             switch (t.type) {
             case QTextOption::LeftTab:
                 if (pos.x() >= x-6 && pos.x() <= x) {
-                    d->selected = 4;
+                    d->selected = KoRulerPrivate::Tab;
                     d->selectOffset = x - pos.x();
                     d->currentTab = i;
                 }
                 break;
             case QTextOption::RightTab:
                 if (pos.x() >= x && pos.x() <= x+6) {
-                    d->selected = 4;
+                    d->selected = KoRulerPrivate::Tab;
                     d->selectOffset = x - pos.x();
                     d->currentTab = i;
                 }
                 break;
             case QTextOption::CenterTab:
                 if (pos.x() >= x-6 && pos.x() <= x+6) {
-                    d->selected = 4;
+                    d->selected = KoRulerPrivate::Tab;
                     d->selectOffset = x - pos.x();
                     d->currentTab = i;
                 }
                 break;
             case QTextOption::DelimiterTab:
                 if (pos.x() >= x-6 && pos.x() <= x+6) {
-                    d->selected = 4;
+                    d->selected = KoRulerPrivate::Tab;
                     d->selectOffset = x - pos.x();
                     d->currentTab = i;
                 }
@@ -781,54 +781,54 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
                 - d->paragraphIndent) + d->offset);
         if (pos.x() >= x-10 && pos.x() <= x && pos.y() <10) {
             d->selectOffset = x - pos.x();
-            d->selected = 1;
+            d->selected = KoRulerPrivate::FirstLineIndent;
         }
 
         x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - d->paragraphIndent)
                             + d->offset);
         if (pos.x() >= x-10 && pos.x() <= x && pos.y() > height()-10) {
             d->selectOffset = x - pos.x();
-            d->selected = 2;
+            d->selected = KoRulerPrivate::ParagraphIndent;
         }
 
         x = int(d->viewConverter->documentToViewX(d->activeRangeStart + d->endIndent)
                             + d->offset);
         if (pos.x() >= x && pos.x() <= x+10 && pos.y() > height()-10) {
             d->selectOffset = x - pos.x();
-            d->selected = 3;
+            d->selected = KoRulerPrivate::EndIndent;
         }
     } else {
         x = int(d->viewConverter->documentToViewX(d->activeRangeStart
              + d->firstLineIndent + d->paragraphIndent) + d->offset);
         if (pos.x() >= x && pos.x() <= x+10 && pos.y() <10) {
             d->selectOffset = x - pos.x();
-            d->selected = 1;
+            d->selected = KoRulerPrivate::FirstLineIndent;
         }
 
         x = int(d->viewConverter->documentToViewX(d->activeRangeStart + d->paragraphIndent)
                             + d->offset);
         if (pos.x() >= x && pos.x() <= x+10 && pos.y() > height()-10) {
             d->selectOffset = x - pos.x();
-            d->selected = 2;
+            d->selected = KoRulerPrivate::ParagraphIndent;
         }
 
         x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - d->endIndent)
                             + d->offset);
         if (pos.x() >= x-10 && pos.x() <= x && pos.y() > height()-10) {
             d->selectOffset = x - pos.x();
-            d->selected = 3;
+            d->selected = KoRulerPrivate::EndIndent;
         }
     }
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-    if (d->showTabs && d->selected == 0) {
+    if (d->showTabs && d->selected == KoRulerPrivate::None) {
         // still haven't found something so let assume the user wants to add a tab
         double tabpos = d->viewConverter->viewToDocumentX(pos.x() - d->offset)
                     - d->activeRangeStart;
         Tab t = {tabpos, d->tabChooser->type()};
         d->tabs.append(t);
         d->selectOffset = 0;
-        d->selected = 4;
+        d->selected = KoRulerPrivate::Tab;
         d->currentTab = d->tabs.count() - 1;
         update();
     }
@@ -839,13 +839,13 @@ void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
 {
     mouseMoveEvent(ev); // handle any last movement
 
-    if( d->selected >0 && d->selected < 4)
+    if( d->selected != KoRulerPrivate::None)
         emit indentsChanged(true);
 
-    if( d->selected == 4)
+    if( d->selected == KoRulerPrivate::Tab)
         emit tabsChanged(true);
 
-    d->selected = 0;
+    d->selected = KoRulerPrivate::None;
 }
 
 void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
@@ -854,10 +854,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
     double activeLength = d->activeRangeEnd - d->activeRangeStart;
 
     switch(d->selected) {
-    case 0:
-    default:
-        break;
-    case 1:
+    case KoRulerPrivate::FirstLineIndent:
         if (d->rightToLeft)
             d->firstLineIndent = d->activeRangeEnd - d->paragraphIndent -
                 d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset - d->offset);
@@ -869,7 +866,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
 
         emit indentsChanged(false);
         break;
-    case 2:
+    case KoRulerPrivate::ParagraphIndent:
         if (d->rightToLeft)
             d->paragraphIndent = d->activeRangeEnd -
                 d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset - d->offset);
@@ -884,7 +881,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
             d->paragraphIndent = activeLength - d->endIndent;;
         emit indentsChanged(false);
         break;
-    case 3:
+    case KoRulerPrivate::EndIndent:
         if (d->rightToLeft)
             d->endIndent = d->viewConverter->viewToDocumentX(pos.x()
                  + d->selectOffset - d->offset) - d->activeRangeStart;
@@ -899,7 +896,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
             d->endIndent = activeLength - d->paragraphIndent;;
         emit indentsChanged(false);
         break;
-    case 4:
+    case KoRulerPrivate::Tab:
         if (d->rightToLeft)
             d->tabs[d->currentTab].position = d->activeRangeEnd -
                 d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset - d->offset);
@@ -914,6 +911,9 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
             d->tabs[d->currentTab].position = activeLength;
 
         emit tabsChanged(false);
+        break;
+    case KoRulerPrivate::None:
+    default:
         break;
     }
     update();

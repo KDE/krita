@@ -105,7 +105,14 @@ public:
     int currentTab; //indext of selected tab - only valid when selected indicates tab
 
     bool rightToLeft;
-    int selected;
+    enum Selection {
+        None,
+        Tab,
+        FirstLineIndent,
+        ParagraphIndent,
+        EndIndent
+    };
+    Selection selected;
     int selectOffset;
 
     RulerTabChooser *tabChooser;

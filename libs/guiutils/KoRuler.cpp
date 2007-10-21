@@ -30,6 +30,7 @@
 
 #include <QPainter>
 #include <QResizeEvent>
+#include <QMenu>
 #include <QMouseEvent>
 
 #include <KoViewConverter.h>
@@ -214,8 +215,6 @@ void HorizontalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPain
     if(d->offset < 0)
         start = qAbs(d->offset);
 
-    const int mouseCoord = d->mouseCoordinate - start;
-
     // make a little hack so rulers shows correctly inversed number aligned
     const double lengthInUnit = d->unit.toUserValue(d->rulerLength);
     const double hackyLength = lengthInUnit - fmod(lengthInUnit, numberStep);
@@ -286,7 +285,9 @@ void HorizontalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPain
     }
 
     // Draw the mouse indicator
-    if(d->showMousePosition && (mouseCoord > 0) && (mouseCoord < rectangle.width()) ) {
+    const int mouseCoord = d->mouseCoordinate - start;
+    if(d->selected == KoRulerPrivate::None && d->showMousePosition &&
+            (mouseCoord > 0) && (mouseCoord < rectangle.width()) ) {
         painter.drawLine(QPointF(mouseCoord, rectangle.y() + 1),
                           QPointF(mouseCoord, rectangle.bottom() - 1));
     }
@@ -414,7 +415,6 @@ void VerticalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPainte
     int halfStepCount = (start / qRound(numberStepPixel * 0.5)) + 1;
     int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
 
-    const int mouseCoord = d->mouseCoordinate - start;
     painter.setPen(d->ruler->palette().color(QPalette::Text));
 
     if(d->offset > 0)
@@ -470,6 +470,7 @@ void VerticalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPainte
     }
 
     // Draw the mouse indicator
+    const int mouseCoord = d->mouseCoordinate - start;
     if(d->showMousePosition && (mouseCoord > 0) && (mouseCoord < rectangle.height()) ) {
         painter.drawLine(QPointF(rectangle.x() + 1, mouseCoord),
                           QPointF(rectangle.right() - 1, mouseCoord));
@@ -721,10 +722,25 @@ QList<KoRuler::Tab> KoRuler::tabs() const {
     return answer;
 }
 
+void KoRuler::setPopupActionList(const QList<QAction*> &popupActionList) {
+    d->popupActions = popupActionList;
+}
+
+QList<QAction*> KoRuler::popupActionList() const {
+    return d->popupActions;
+}
+
 void KoRuler::mousePressEvent ( QMouseEvent* ev )
 {
-    QPoint pos = ev->pos();
     d->selected = KoRulerPrivate::None;
+    if (ev->button() == Qt::RightButton && !d->popupActions.isEmpty())
+        QMenu::exec(d->popupActions, ev->globalPos());
+    if (ev->button() != Qt::LeftButton) {
+        ev->ignore();
+        return;
+    }
+
+    QPoint pos = ev->pos();
 
     if (d->showTabs && pos.y() > height() - 9) {
         int i = 0;

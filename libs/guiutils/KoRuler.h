@@ -98,8 +98,17 @@ public:
         /// Returns 0 for vertical rulers,
         QWidget *tabChooser();
 
-        virtual QSize minimumSizeHint() const;
-        virtual QSize sizeHint() const;
+    /**
+     * set a list of actions that will be shown in a popup should the user right click on this ruler.
+     * @param popupActionList the list of actions
+     * @see popupActionList()
+     */
+    void setPopupActionList(const QList<QAction*> &popupActionList);
+    /**
+     * Return the actions list.
+     * @see setPopupActionList()
+     */
+    QList<QAction*> popupActionList() const;
 
     public slots:
         /// Set the unit of the ruler
@@ -208,6 +217,9 @@ protected:
         virtual void mousePressEvent ( QMouseEvent* ev );
         virtual void mouseReleaseEvent ( QMouseEvent* ev );
         virtual void mouseMoveEvent ( QMouseEvent* ev );
+    virtual QSize minimumSizeHint() const;
+    virtual QSize sizeHint() const;
+
 
 private:
         KoRulerPrivate * const d;

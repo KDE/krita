@@ -116,6 +116,8 @@ public:
     Selection selected;
     int selectOffset;
 
+    QList<QAction*> popupActions;
+
     RulerTabChooser *tabChooser;
     PaintingStrategy * const paintingStrategy;
     KoRuler *ruler;

@@ -23,13 +23,23 @@ const quint32 KisTiledRandomAccessor::CACHESIZE = 4; // Define the number of til
 
 KisTiledRandomAccessor::KisTiledRandomAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, bool writable) :
     m_ktm(ktm),
-    m_tilesCache(new KisTileInfo*[4]),
+    m_tilesCache(new KisTileInfo*[CACHESIZE]),
     m_tilesCacheSize(0),
     m_pixelSize (m_ktm->pixelSize()),
     m_writable(writable)
 {
     Q_ASSERT(ktm != 0);
     moveTo(x, y);
+}
+
+KisTiledRandomAccessor::KisTiledRandomAccessor(const KisTiledRandomAccessor& lhs)
+{
+    m_ktm = lhs.m_ktm;
+    m_tilesCache = new KisTileInfo*[CACHESIZE];
+    m_tilesCacheSize = 0;
+    m_pixelSize = lhs.m_pixelSize;
+    m_writable = lhs.m_writable;
+    moveTo(lhs.m_lastX, lhs.m_lastY);
 }
 
 KisTiledRandomAccessor::~KisTiledRandomAccessor()
@@ -45,6 +55,8 @@ KisTiledRandomAccessor::~KisTiledRandomAccessor()
 
 void KisTiledRandomAccessor::moveTo(qint32 x, qint32 y)
 {
+    m_lastX = x;
+    m_lastY = y;
     // Look in the cache if the tile if the data is available
     for( uint i = 0; i < m_tilesCacheSize; i++)
     {

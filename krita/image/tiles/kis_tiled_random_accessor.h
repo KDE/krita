@@ -37,6 +37,7 @@ class KisTiledRandomAccessor : public KShared {
     };
     public:
         KisTiledRandomAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, bool writable);
+        KisTiledRandomAccessor(const KisTiledRandomAccessor& lhs);
         ~KisTiledRandomAccessor();
 
 
@@ -59,6 +60,7 @@ class KisTiledRandomAccessor : public KShared {
         quint8* m_data;
         const quint8* m_oldData;
         bool m_writable;
+        int m_lastX, m_lastY;
         static const quint32 CACHESIZE; // Define the number of tiles we keep in cache
 
 };

@@ -18,6 +18,11 @@
 #ifndef _KIS_TRANSFORMATION_MASK_
 #define _KIS_TRANSFORMATION_MASK_
 
+
+#include <QUndoCommand>
+
+#include <klocale.h>
+
 #include "kis_types.h"
 #include "kis_effect_mask.h"
 #include <kis_filter_strategy.h>
@@ -25,12 +30,12 @@
 
 class KisFilterStrategy;
 
+
 /**
  * A transformation mask applies a particular transformation to the
  * pixels of a paint device that are selected by the mask paint
  * device.
  */
-
 class KRITAIMAGE_EXPORT KisTransformationMask : public KisEffectMask
 {
     Q_OBJECT
@@ -149,5 +154,55 @@ private:
     KisFilterStrategy * m_filter;
 
 };
+
+class KRITAIMAGE_EXPORT KisTransformationSettingsCommand : public QUndoCommand {
+
+public:
+    /**
+     *
+     */
+    KisTransformationSettingsCommand(KisTransformationMaskSP mask,
+                                     const QString & old_name,
+                                     double old_xscale,
+                                     double old_yscale,
+                                     double old_xshear,
+                                     double old_yshear,
+                                     double old_rotation,
+                                     qint32 old_xtranslate,
+                                     qint32 old_ytranslate,
+                                     KisFilterStrategy * old_filter,
+                                     const QString & new_name,
+                                     double new_xscale,
+                                     double new_yscale,
+                                     double new_xshear,
+                                     double new_yshear,
+                                     double new_rotation,
+                                     qint32 new_xtranslate,
+                                     qint32 new_ytranslate,
+                                     KisFilterStrategy * new_filter);
+
+    virtual void redo();
+
+    virtual void undo();
+
+private:
+
+    KisTransformationMaskSP m_mask;
+
+    QString m_old_name;
+    double m_old_xscale, m_old_yscale;
+    double m_old_xshear, m_old_yshear;
+    double m_old_rotation;
+    qint32 m_old_xtranslate, m_old_ytranslate;
+    KisFilterStrategy * m_old_filter;
+
+    QString m_new_name;
+    double m_new_xscale, m_new_yscale;
+    double m_new_xshear, m_new_yshear;
+    double m_new_rotation;
+    qint32 m_new_xtranslate, m_new_ytranslate;
+    KisFilterStrategy * m_new_filter;
+};
+
 
 #endif //_KIS_TRANSFORMATION_MASK_

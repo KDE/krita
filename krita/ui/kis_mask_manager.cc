@@ -305,15 +305,29 @@ void KisMaskManager::maskProperties()
                                         m_view);
         if ( dlg.exec() == QDialog::Accepted ) {
             // XXX_NODE: make undoable
-            mask->setName( dlg.transformationEffect()->maskName() );
-            mask->setXScale( dlg.transformationEffect()->xScale() );
-            mask->setYScale( dlg.transformationEffect()->yScale() );
-            mask->setXShear( dlg.transformationEffect()->xShear() );
-            mask->setYShear( dlg.transformationEffect()->yShear() );
-            mask->setRotation( dlg.transformationEffect()->rotation() );
-            mask->setXTranslation( dlg.transformationEffect()->moveX() );
-            mask->setYTranslation( dlg.transformationEffect()->moveY() );
-            mask->setFilterStrategy( dlg.transformationEffect()->filterStrategy() );
+            KisTransformationSettingsCommand * cmd = new KisTransformationSettingsCommand
+                ( mask,
+                  mask->name(),
+                  mask->xScale(),
+                  mask->yScale(),
+                  mask->xShear(),
+                  mask->yShear(),
+                  mask->rotation(),
+                  mask->xTranslate(),
+                  mask->yTranslate(),
+                  mask->filterStrategy(),
+                  dlg.transformationEffect()->maskName(),
+                  dlg.transformationEffect()->xScale(),
+                  dlg.transformationEffect()->yScale(),
+                  dlg.transformationEffect()->xShear(),
+                  dlg.transformationEffect()->yShear(),
+                  dlg.transformationEffect()->rotation(),
+                  dlg.transformationEffect()->moveX(),
+                  dlg.transformationEffect()->moveY(),
+                  dlg.transformationEffect()->filterStrategy() );
+            cmd->redo();
+            m_view->undoAdapter()->addCommand(cmd);
+            m_view->document()->setModified( true );
         }
     }
     else if ( m_activeMask->inherits( "KisFilterMask") ) {

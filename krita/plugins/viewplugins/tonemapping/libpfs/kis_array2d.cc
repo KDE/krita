@@ -49,8 +49,8 @@ Array2DImpl::Array2DImpl( QRect r, int index, KisPaintDeviceSP device ) : d(new 
 void Array2DImpl::init( int sx, int sy, int cols, int rows, int index, KisPaintDeviceSP device )
 {
     Q_ASSERT(device);
-    d->sx = 0;
-    d->sy = 0;
+    d->sx = sx;
+    d->sy = sy;
     d->cols = cols;
     d->rows = rows;
     d->index = index;
@@ -71,31 +71,43 @@ int Array2DImpl::getCols() const
 int Array2DImpl::getRows() const
 { return d->rows; }
 
+int Array2DImpl::colToDevice(int col) const
+{
+    Q_ASSERT(col >= 0 and col < d->cols);
+    return col + d->sx;
+}
+
+int Array2DImpl::rowToDevice(int row) const
+{
+    Q_ASSERT(row >= 0 and row < d->rows);
+    return row + d->sy;
+}
+
 float& Array2DImpl::operator()( int col, int row )
 {
-    d->randomAccessor->moveTo(col - d->sx, row - d->sy);
+    d->randomAccessor->moveTo(colToDevice(col), rowToDevice(row) );
     return *(reinterpret_cast<float*>(d->randomAccessor->rawData()) + d->index);
 }
 
 const float& Array2DImpl::operator()( int col, int row ) const
 {
-    d->randomAccessor->moveTo(col - d->sx, row - d->sy);
+    d->randomAccessor->moveTo(colToDevice(col), rowToDevice(row) );
     return *(reinterpret_cast<const float*>(d->randomAccessor->oldRawData()) + d->index);
 }
 
 float& Array2DImpl::operator()( int index )
 {
-    int col = index / d->cols;
-    int row = index % d->rows;
-    d->randomAccessor->moveTo(col - d->sx, row - d->sy);
+    int col = index % d->cols;
+    int row = index / d->rows;
+    d->randomAccessor->moveTo(colToDevice(col), rowToDevice(row) );
     return *(reinterpret_cast<float*>(d->randomAccessor->rawData()) + d->index);
 }
 
 const float& Array2DImpl::operator()( int index ) const
 {
-    int col = index / d->cols;
-    int row = index % d->rows;
-    d->randomAccessor->moveTo(col - d->sx, row - d->sy);
+    int col = index % d->cols;
+    int row = index / d->rows;
+    d->randomAccessor->moveTo(colToDevice(col), rowToDevice(row) );
     return *(reinterpret_cast<const float*>(d->randomAccessor->oldRawData()) + d->index);
 }
 

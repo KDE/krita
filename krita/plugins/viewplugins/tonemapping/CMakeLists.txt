@@ -11,8 +11,8 @@ set(kritatonemapping_PART_SRCS
 # PFS Library (only needed for most operators)
     libpfs/kis_array2d.cc
 # ashikhmin 02 operator
-    operators/ashikhmin02/tmo_ashikhmin02.cpp
-    operators/ashikhmin02/kis_ashikhmin02_operator.cc
+#     operators/ashikhmin02/tmo_ashikhmin02.cpp
+#     operators/ashikhmin02/kis_ashikhmin02_operator.cc
 
 
 )

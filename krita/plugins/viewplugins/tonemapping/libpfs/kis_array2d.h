@@ -46,6 +46,8 @@ namespace pfs
             KisPaintDeviceSP device();
         private:
             void init( int sx, int sy, int cols, int rows, int index, KisPaintDeviceSP device );
+            inline int colToDevice(int col) const;
+            inline int rowToDevice(int row) const;
         private:
             struct Private;
             Private* const d;

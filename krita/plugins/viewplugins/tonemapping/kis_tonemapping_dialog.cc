@@ -73,8 +73,18 @@ KisToneMappingDialog::KisToneMappingDialog(QWidget* parent, KisLayerSP _layer) :
 
 void KisToneMappingDialog::apply()
 {
+    d->layer->image()->lock();
     KisPropertiesConfiguration* config = (d->currentConfigurationWidget) ? d->currentConfigurationWidget->configuration() : new KisPropertiesConfiguration;
+    KoColorSpace* colorSpace = d->currentOperator->colorSpace();
+    if( d->layer->paintDevice()->colorSpace() != colorSpace)
+    {
+        d->layer->paintDevice()->convertTo(colorSpace);
+//         d->layer->setCompositeOp( colorSpace->compositeOp( d->layer->compositeOp()->id() ) );
+        d->layer->setChannelFlags( QBitArray() );
+    }
     d->currentOperator->toneMap(d->layer->paintDevice(), config);
+    d->layer->setDirty();
+    d->layer->image()->unlock();
     delete config;
 }
 

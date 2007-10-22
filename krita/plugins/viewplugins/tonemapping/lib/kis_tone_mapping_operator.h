@@ -23,6 +23,7 @@ class KisPropertiesConfiguration;
 class KisToneMappingOperatorConfigurationWidget;
 class QString;
 class QWidget;
+class KoColorSpace;
 
 #include "kis_types.h"
 
@@ -34,6 +35,10 @@ class KisToneMappingOperator {
         QString name() const;
         virtual KisToneMappingOperatorConfigurationWidget* createConfigurationWidget(QWidget*) const;
         virtual void toneMap(KisPaintDeviceSP, KisPropertiesConfiguration* config) const = 0;
+        /**
+         * @return the color space used by this color space
+         */
+        virtual KoColorSpace* colorSpace() const = 0;
         /**
          * @return the bookmark manager for this operator
          */

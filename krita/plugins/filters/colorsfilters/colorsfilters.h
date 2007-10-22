@@ -58,7 +58,7 @@ class KisDesaturateFilter : public KisFilter {
         static inline KoID id() { return KoID("desaturate", i18n("Desaturate")); }
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
-        virtual bool supportsIncrementalPainting() { return false; }
+        virtual bool supportsIncrementalPainting() const { return false; }
 
         virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
         virtual bool workWith(KoColorSpace* cs);

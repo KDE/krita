@@ -32,7 +32,7 @@ class KisBlurFilter : public KisFilter
         static inline KoID id() { return KoID("blur", i18n("Blur")); }
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
-        virtual bool supportsIncrementalPainting() { return false; }
+        virtual bool supportsIncrementalPainting() const { return false; }
         virtual bool supportsAdjustmentLayers() { return false; }
         virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
         virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);

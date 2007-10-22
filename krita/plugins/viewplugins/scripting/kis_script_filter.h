@@ -44,7 +44,7 @@ class KisScriptFilter : public KisFilter {
         virtual bool supportsPainting();
         virtual bool supportsPreview();
         virtual bool supportsAdjustmentLayers();
-        virtual bool supportsIncrementalPainting();
+        virtual bool supportsIncrementalPainting() const;
         virtual bool supportsThreading();
     private:
         class Private;

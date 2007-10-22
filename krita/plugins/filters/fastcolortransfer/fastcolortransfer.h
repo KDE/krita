@@ -41,7 +41,7 @@ class KisFilterFastColorTransfer : public KisFilter
         static inline KoID id() { return KoID("colortransfer", i18n("Color Transfer")); }
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
-        virtual bool supportsIncrementalPainting() { return false; }
+        virtual bool supportsIncrementalPainting() const { return false; }
         virtual bool supportsAdjustmentLayers() { return false; }
     public:
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);

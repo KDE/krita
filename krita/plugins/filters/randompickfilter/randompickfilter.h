@@ -43,7 +43,7 @@ class KisFilterRandomPick : public KisFilter
         static inline KoID id() { return KoID("randompick", i18n("Random Pick")); }
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
-        virtual bool supportsIncrementalPainting() { return false; }
+        virtual bool supportsIncrementalPainting() const { return false; }
         virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
     public:
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);

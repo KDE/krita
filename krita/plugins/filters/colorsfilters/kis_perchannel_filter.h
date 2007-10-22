@@ -78,7 +78,7 @@ public:
     static inline KoID id() { return KoID("perchannel", i18n("Color Adjustment")); }
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
-    virtual bool supportsIncrementalPainting() { return false; }
+    virtual bool supportsIncrementalPainting() const { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
 
     virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }

@@ -69,7 +69,7 @@ bool KisScriptFilter::supportsAdjustmentLayers()
     return d->action->property("supportsAdjustmentLayers").toBool();
 }
 
-bool KisScriptFilter::supportsIncrementalPainting()
+bool KisScriptFilter::supportsIncrementalPainting() const
 {
     return d->action->property("supportsIncrementalPainting").toBool();
 }

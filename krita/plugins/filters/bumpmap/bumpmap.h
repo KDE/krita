@@ -76,7 +76,7 @@ public:
     virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
-    virtual bool supportsIncrementalPainting() { return true; }
+    virtual bool supportsIncrementalPainting() const { return true; }
 
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);

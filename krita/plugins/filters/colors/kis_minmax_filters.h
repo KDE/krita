@@ -32,7 +32,7 @@ class KisFilterMax : public KisFilter
         static inline KoID id() { return KoID("maximize", i18n("Maximize Channel")); }
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
-        virtual bool supportsIncrementalPainting() { return false; }
+        virtual bool supportsIncrementalPainting() const { return false; }
         virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
 };
 
@@ -45,7 +45,7 @@ class KisFilterMin : public KisFilter
         static inline KoID id() { return KoID("minimize", i18n("Minimize Channel")); }
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
-        virtual bool supportsIncrementalPainting() { return false; }
+        virtual bool supportsIncrementalPainting() const { return false; }
         virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
 };
 

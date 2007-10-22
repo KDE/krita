@@ -43,7 +43,7 @@ class KisFilterLensCorrection : public KisFilter
         static inline KoID id() { return KoID("lenscorrection", i18n("Lens Correction")); }
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
-        virtual bool supportsIncrementalPainting() { return false; }
+        virtual bool supportsIncrementalPainting() const { return false; }
         virtual bool supportsAdjustmentLayers() { return false; }
         virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
     public:

@@ -21,7 +21,7 @@ public:
     static inline KoID id() { return KoID("%{APPNAMELC}", i18n("%{APPNAME}")); }
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
-    virtual bool supportsIncrementalPainting() { return false; }
+    virtual bool supportsIncrementalPainting() const { return false; }
 };
 
 #endif

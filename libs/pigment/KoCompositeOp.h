@@ -78,7 +78,7 @@ public:
      *                    interface
      */
     KoCompositeOp(KoColorSpace * cs, const QString& id, const QString& description, QString category = "", const bool userVisible = true);
-    virtual ~KoCompositeOp() {}
+    virtual ~KoCompositeOp();
 
     /**
      * @return the identifiant of this composite op

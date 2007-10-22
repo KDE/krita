@@ -36,6 +36,10 @@ KoCompositeOp::KoCompositeOp() : d(new Private)
 
 }
 
+KoCompositeOp::~KoCompositeOp()
+{
+    delete d;
+}
 
 KoCompositeOp::KoCompositeOp(KoColorSpace * cs, const QString& id,  const QString& description, QString category, const bool userVisible)
     : d(new Private)

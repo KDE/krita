@@ -110,7 +110,7 @@ KisPaintDeviceSP KisLayer::original() const
 }
 
 
-void KisLayer::setChannelFlags( QBitArray & channelFlags )
+void KisLayer::setChannelFlags( const QBitArray & channelFlags )
 {
     Q_ASSERT( ( ( quint32 )channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()) );
     m_d->channelFlags = channelFlags;

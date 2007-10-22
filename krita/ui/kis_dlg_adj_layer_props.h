@@ -23,7 +23,6 @@
 class KLineEdit;
 
 class KisFilter;
-class KisPreviewWidget;
 class KisFilterConfiguration;
 class KisFilterConfigWidget;
 class KisImage;
@@ -45,11 +44,12 @@ public:
      * @param parent the widget parent of this dialog
      * @param name the QObject name, if any
      */
-    KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
-                          const QString & layerName,
-                          const QString & caption,
-                          QWidget *parent = 0,
-                          const char *name = 0);
+    KisDlgAdjLayerProps( KisPaintDeviceSP paintDevice,
+                         KisFilterConfiguration * configuration,
+                         const QString & layerName,
+                         const QString & caption,
+                         QWidget *parent = 0,
+                         const char *name = 0);
 
     KisFilterConfiguration * filterConfiguration() const;
     QString layerName() const;
@@ -57,12 +57,9 @@ public:
 protected slots:
 
     void slotNameChanged( const QString & );
-    void slotConfigChanged();
-    void refreshPreview();
 
 private:
     KisImage * m_image;
-    KisPreviewWidget * m_preview;
     KisFilterConfigWidget * m_currentConfigWidget;
     KisFilter* m_currentFilter;
     KisFilterConfiguration * m_currentConfiguration;

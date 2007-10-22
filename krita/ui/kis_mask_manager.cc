@@ -25,6 +25,8 @@
 
 #include <KoID.h>
 
+#include "kis_filter_configuration.h"
+#include "kis_node_commands.h"
 #include "kis_dlg_transformation_effect.h"
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>
@@ -41,6 +43,7 @@
 #include "kis_mask_widgets.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
+#include "kis_dlg_adj_layer_props.h"
 
 KisMaskManager::KisMaskManager( KisView2 * view)
     : m_view( view )
@@ -313,28 +316,26 @@ void KisMaskManager::maskProperties()
             mask->setFilterStrategy( dlg.transformationEffect()->filterStrategy() );
         }
     }
-    else if ( m_activeMask->inherits( "KisEffectMask") ) {
-#if 0
-        KisEffectMask * mask = static_cast<KisEffectMask*>( m_activeMask.data() );
+    else if ( m_activeMask->inherits( "KisFilterMask") ) {
+        KisFilterMask * mask = static_cast<KisFilterMask*>( m_activeMask.data() );
 
         KisLayerSP layer = dynamic_cast<KisLayer*>(mask->parent().data());
         if (! layer )
             return;
 
         KisPaintDeviceSP dev = layer->projection();
-        KisDlgAdjLayerProps dlg(alayer, alayer->name(), i18n("Adjustment Layer Properties"), m_view, "dlgadjlayerprops");
+        KisDlgAdjLayerProps dlg( layer->projection(), mask->filter(),  mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops" );
         QString before = dlg.filterConfiguration()->toLegacyXML();
         if (dlg.exec() == QDialog::Accepted)
         {
-            KisChangeFilterCmd * cmd = new KisChangeFilterCmd(alayer,
+            KisChangeFilterCmd<KisFilterMaskSP> * cmd = new KisChangeFilterCmd<KisFilterMaskSP>(mask,
                 dlg.filterConfiguration(),
                 before,
                 dlg.filterConfiguration()->toLegacyXML());
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
-            m_doc->setModified( true );
+            m_view->document()->setModified( true );
         }
-#endif
     }
     else {
         // Not much to show for transparency masks?

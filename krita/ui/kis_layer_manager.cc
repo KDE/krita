@@ -356,7 +356,11 @@ void KisLayerManager::layerProperties()
 
     if (KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data())))
     {
-        KisDlgAdjLayerProps dlg(alayer, alayer->name(), i18n("Adjustment Layer Properties"), m_view, "dlgadjlayerprops");
+        KisPaintDeviceSP dev = alayer->projection();
+        KisLayerSP prev = dynamic_cast<KisLayer*>( alayer->prevSibling().data() );
+        if ( prev ) dev = prev->projection();
+
+        KisDlgAdjLayerProps dlg( dev, alayer->filter(), alayer->name(), i18n("Adjustment Layer Properties"), m_view, "dlgadjlayerprops");
         QString before = dlg.filterConfiguration()->toLegacyXML();
         if (dlg.exec() == QDialog::Accepted)
         {

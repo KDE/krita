@@ -31,7 +31,6 @@
 #include "kis_filter_registry.h"
 #include "kis_filters_listview.h"
 #include "kis_image.h"
-#include "kis_previewwidget.h"
 #include "kis_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_paint_device.h"
@@ -41,7 +40,8 @@
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
 
-KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
+KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
+                                         KisFilterConfiguration * configuration,
                                          const QString & layerName,
                                          const QString & caption,
                                          QWidget *parent,
@@ -53,42 +53,11 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
 
     setObjectName(name);
 
-    Q_ASSERT( layer );
-    m_layer = layer.data();
-
-    KisLayerSP next = dynamic_cast<KisLayer*>( layer->nextSibling().data() );
-    Q_ASSERT( next );
-
-    m_currentConfiguration = layer->filter();
+    m_currentConfiguration = configuration;
     m_currentFilter = KisFilterRegistry::instance()->get(m_currentConfiguration->name()).data();
     if (!m_currentFilter) {
         kWarning() <<"No filter specified!";
     }
-
-    KisPaintDeviceSP dev = 0;
-
-    if(next)
-    {
-        KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(next.data());
-        if (pl) {
-            dev = pl->paintDevice();
-        }
-        else {
-            KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(next.data());
-            if (gl) {
-                dev = gl->projection();
-            }
-            else {
-                KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(next.data());
-                if (al) {
-                    dev = al->cachedPaintDevice();
-                }
-            }
-        }
-    }  else {
-        dev = new KisPaintDevice(m_layer->image()->colorSpace());
-    }
-
     setCaption(caption);
     QWidget * page = new QWidget(this);
     page->setObjectName("page widget");
@@ -96,12 +65,6 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     layout->setMargin(0);
     layout->setSpacing(6);
     setMainWidget(page);
-
-    m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
-    m_preview->slotSetDevice( dev );
-
-    connect( m_preview, SIGNAL(updated()), this, SLOT(refreshPreview()));
-    layout->addWidget(m_preview, 1, Qt::AlignLeft);
 
     QVBoxLayout *v1 = new QVBoxLayout( );
     layout->addLayout(v1);
@@ -120,7 +83,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
     if ( m_currentFilter ) {
-        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, dev);
+        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, paintDevice);
         if (m_currentConfigWidget) {
             m_currentConfigWidget->setConfiguration( m_currentConfiguration );
         }
@@ -131,8 +94,6 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     }
     else {
         v1->addWidget( m_currentConfigWidget );
-        connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));
-        refreshPreview();
     }
 
     enableButtonOk( !m_layerName->text().isEmpty() );
@@ -154,39 +115,5 @@ QString KisDlgAdjLayerProps::layerName() const
     return m_layerName->text();
 }
 
-void KisDlgAdjLayerProps::slotConfigChanged()
-{
-    if(m_preview->getAutoUpdate())
-    {
-        refreshPreview();
-    } else {
-        m_preview->needUpdate();
-    }
-}
-
-void KisDlgAdjLayerProps::refreshPreview()
-{
-    if (!m_preview) {
-        kDebug(41007) <<"no preview!";
-        return;
-    }
-
-    KisPaintDeviceSP layer =  m_preview->getDevice();
-
-    if (!layer) {
-        return;
-    }
-
-    if (!m_currentFilter) {
-        return;
-    }
-    KisFilterConfiguration* config = m_currentConfigWidget->configuration();
-
-    QRect rect = layer->extent();
-    KisTransaction cmd("Temporary transaction", layer);
-    m_currentFilter->process(layer, rect, config);
-    m_preview->slotUpdate();
-    cmd.undo();
-}
 
 #include "kis_dlg_adj_layer_props.moc"

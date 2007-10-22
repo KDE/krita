@@ -29,7 +29,7 @@ class KisFilterColorToAlpha : public KisFilter {
     public:
         virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
         static inline KoID id() { return KoID("colortoalpha", i18n("Color to Alpha")); }
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() const { return true; }
         virtual bool supportsPreview() const { return true; }
         virtual bool supportsIncrementalPainting() const { return false; }
         virtual bool supportsAdjustmentLayers() const { return false; }

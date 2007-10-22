@@ -38,7 +38,7 @@ public:
 public:
     virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, const KisFilterConfiguration*, const QRect&);
     static inline KoID id() { return KoID("invertthread", i18n("Invert with Threads")); }
-    virtual bool supportsPainting() { return true; }
+    virtual bool supportsPainting() const { return true; }
     virtual bool supportsPreview() const { return true; }
     virtual bool supportsIncrementalPainting() const { return false; }
 };

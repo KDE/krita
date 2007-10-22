@@ -48,7 +48,7 @@ public:
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     static inline KoID id() { return KoID("raindrops", i18n("Raindrops")); }
-    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() const { return false; }
     virtual bool supportsPreview() const { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisRainDropsFilterConfiguration( 30, 80, 20)); return list; }

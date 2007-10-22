@@ -37,8 +37,7 @@ public:
 
     static inline KoID id() { return KoID("sobel", i18n("Sobel")); }
 
-    virtual bool supportsPainting() { return false; }
-
+    virtual bool supportsPainting() const { return false; }
     virtual bool supportsPreview() const { return true; }
 
 public:

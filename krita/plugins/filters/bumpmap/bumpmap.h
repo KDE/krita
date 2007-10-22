@@ -74,7 +74,7 @@ public:
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
-    virtual bool supportsPainting() { return true; }
+    virtual bool supportsPainting() const { return true; }
     virtual bool supportsPreview() const { return true; }
     virtual bool supportsIncrementalPainting() const { return true; }
 

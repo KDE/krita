@@ -41,7 +41,7 @@ class KisScriptFilter : public KisFilter {
     signals:
         void scriptProcess( QObject* src, const QPoint& srcTopLeft, QObject* dst, const QPoint& dstTopLeft, const QSize& size, QObject* config );
     public:
-        virtual bool supportsPainting();
+        virtual bool supportsPainting() const;
         virtual bool supportsPreview() const;
         virtual bool supportsAdjustmentLayers() const;
         virtual bool supportsIncrementalPainting() const;

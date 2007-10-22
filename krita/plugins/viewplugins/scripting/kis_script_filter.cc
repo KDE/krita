@@ -56,7 +56,7 @@ void KisScriptFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
     setProgressDone(); // Must be called even if you don't really support progression
 }
 
-bool KisScriptFilter::supportsPainting()
+bool KisScriptFilter::supportsPainting() const
 {
     return d->action->property("supportsPainting").toBool();
 }

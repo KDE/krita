@@ -50,6 +50,11 @@ public:
             return KIcon(""); // XXX: Find nice icon for the subclasses.
         }
 
+    KisNodeSP clone()
+    {
+        return KisNodeSP(new KisSelectionMask(*this));
+    }
+
 
     KisSelectionSP selection() const;
 

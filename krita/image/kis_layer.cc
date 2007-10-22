@@ -186,7 +186,10 @@ void KisLayer::setImage(KisImageSP image)
 
 KisSelectionMaskSP KisLayer::selectionMask() const
 {
-    return 0;
+    QList<KisNodeSP> masks = childNodes( QStringList( "KisSelectionMask" ), KoProperties() );
+    Q_ASSERT(masks.size() == 1); // Or do we allow more than one selection mask to a layer?
+    KisSelectionMaskSP selection = dynamic_cast<KisSelectionMask*>(masks[0].data());
+    return selection;
 }
 
 bool KisLayer::hasEffectMasks() const

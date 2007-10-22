@@ -64,7 +64,7 @@ bool KisScriptFilter::supportsPreview()
 {
     return d->action->property("supportsPreview").toBool();
 }
-bool KisScriptFilter::supportsAdjustmentLayers()
+bool KisScriptFilter::supportsAdjustmentLayers() const
 {
     return d->action->property("supportsAdjustmentLayers").toBool();
 }

@@ -26,6 +26,7 @@
 #include <kis_properties_configuration.h>
 
 #include <kis_tone_mapping_operator_configuration_widget.h>
+#include "kis_tone_mapping_operators_registry.h"
 
 #include <kis_array2d.h>
 
@@ -64,6 +65,8 @@ class KisAshikhmin02OperatorConfigurationWidget : public KisToneMappingOperatorC
         Ui_Ashikhmin02OperatorConfigurationWidget widget;
 };
 
+PUBLISH_OPERATOR(KisAshikhmin02Operator);
+
 KisAshikhmin02Operator::KisAshikhmin02Operator() : KisToneMappingOperator("ashikhminO2", i18n("Ashikhmin 02"))
 {
 }
@@ -75,7 +78,7 @@ KisToneMappingOperatorConfigurationWidget* KisAshikhmin02Operator::createConfigu
 
 KoColorSpace* KisAshikhmin02Operator::colorSpace() const
 {
-    return KoColorSpaceRegistry::instance()->colorSpace( "XyzAF32", "" );
+    return KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( XYZAColorModelID, Float32BitsColorDepthID), "" );
 }
 
 void KisAshikhmin02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const

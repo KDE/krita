@@ -13,12 +13,18 @@ set(kritatonemapping_PART_SRCS
 # ashikhmin 02 operator
 #     operators/ashikhmin02/tmo_ashikhmin02.cpp
 #     operators/ashikhmin02/kis_ashikhmin02_operator.cc
+# reinhard 05 operator
+    operators/reinhard05/tmo_reinhard05.cpp
+    operators/reinhard05/kis_reinhard05_operator.cc
 
 
 )
 
 
-kde4_add_ui_files(kritatonemapping_PART_SRCS operators/ashikhmin02/ashikhmin02_configuration_widget.ui wdgtonemappingdialog.ui)
+kde4_add_ui_files(kritatonemapping_PART_SRCS
+#     operators/ashikhmin02/ashikhmin02_configuration_widget.ui
+    operators/reinhard05/reinhard05_configuration_widget.ui
+    wdgtonemappingdialog.ui )
 
 kde4_add_plugin(kritatonemapping ${kritatonemapping_PART_SRCS})
 

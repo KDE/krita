@@ -36,8 +36,6 @@
 #include "kis_tone_mapping_operators_registry.h"
 #include "kis_tonemapping_dialog.h"
 
-// #include "operators/ashikhmin02/kis_ashikhmin02_operator.h"
-
 typedef KGenericFactory<tonemappingPlugin> tonemappingPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatonemapping, tonemappingPluginFactory( "krita" ) )
 
@@ -56,8 +54,6 @@ tonemappingPlugin::tonemappingPlugin(QObject *parent, const QStringList &)
         m_toneMappingAction  = new KAction(i18n("Tonemapping"), this);
         actionCollection()->addAction("tonemapping", m_toneMappingAction );
         connect(m_toneMappingAction, SIGNAL(triggered()), this, SLOT(slotToneMapping()));
-        
-//         KisToneMappingOperatorsRegistry::instance()->add(new KisAshikhmin02Operator);
     }
 }
 

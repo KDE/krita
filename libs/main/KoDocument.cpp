@@ -50,6 +50,7 @@
 #include <KIconLoader>
 #include <kundostack.h>
 #include <kdebug.h>
+#include <kdeprintdialog.h>
 
 #include <QBuffer>
 #include <QDir>
@@ -59,6 +60,8 @@
 #include <QDBusConnection>
 #include <QLayout>
 #include <QApplication>
+#include <QtGui/QPrinter>
+#include <QtGui/QPrintDialog>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KUrl didn't like it,
@@ -223,11 +226,12 @@ void KoBrowserExtension::print()
     KoViewWrapperWidget * wrapper = static_cast<KoViewWrapperWidget *>( doc->widget() );
     KoView * view = wrapper->koView();
     // TODO remove code duplication (KoMainWindow), by moving this to KoView
-    KPrinter printer;
+    QPrinter printer;
+    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printer, view->printDialogPages(), view);
     // ### TODO: apply global koffice settings here
-    view->setupPrinter( printer );
-    if ( printer.setup( view ) )
-        view->print( printer );
+    view->setupPrinter( printer, *printDialog );
+    if ( printDialog->exec() )
+        view->print( printer, *printDialog );
 }
 
 KoDocument::KoDocument( QWidget * parentWidget, QObject* parent, bool singleViewMode )

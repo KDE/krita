@@ -53,12 +53,15 @@
 #include <kdebug.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
+#include <kdeprintdialog.h>
 
 //   // qt includes
 #include <QDockWidget>
 #include <QApplication>
 #include <QProgressBar>
 #include <QSplitter>
+#include <QtGui/QPrinter>
+#include <QtGui/QPrintDialog>
 
 class KoPartManager : public KParts::PartManager
 {
@@ -1270,10 +1273,12 @@ void KoMainWindow::print(bool quick) {
 #endif
     // ### TODO: apply global koffice settings here
 
-    rootView()->setupPrinter( printer );
+    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printer, rootView()->printDialogPages(), this);
 
-    if ( quick ||  printer.setup( this ) )
-        rootView()->print( printer );
+    rootView()->setupPrinter( printer, *printDialog );
+
+    if ( quick ||  printDialog->exec() )
+        rootView()->print( printer, *printDialog );
 }
 
 
@@ -1301,7 +1306,10 @@ void KoMainWindow::slotFilePrintPreview()
     printer.setFromTo( printer.minPage(), printer.maxPage() );
     printer.setPreviewOnly( true );
 #endif
-    rootView()->setupPrinter( printer );
+
+    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printer, rootView()->printDialogPages(), this);
+
+    rootView()->setupPrinter( printer, *printDialog );
 
     QString oldFileName = printer.outputFileName();
     printer.setOutputFileName( tmpFile.fileName() );
@@ -1313,7 +1321,7 @@ void KoMainWindow::slotFilePrintPreview()
     QString oldKDEPreview = printer.option( "kde-preview" );
     printer.setOption( "kde-preview", "0" );
 #endif
-    rootView()->print(printer);
+    rootView()->print(printer, *printDialog);
     //KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.fileName());
 
     // Restore previous values

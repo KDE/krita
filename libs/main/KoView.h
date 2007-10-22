@@ -42,7 +42,7 @@ class KoDockFactory;
 // KDE classes
 class KStatusBar;
 class QPrinter;
-class KPrinter; // XXX for compatibility while porting
+class QPrintDialog;
 class KXmlGuiWindow;
 class KAction;
 class KActionCollection;
@@ -310,14 +310,20 @@ public:
    *
    * @see #print
    */
-  virtual void setupPrinter( QPrinter &printer );
-  virtual void setupPrinter( KPrinter &printer );
+  virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog );
   // BCI: make it return a bool, so that aborting doesn't still fire up the print preview afterwards
   /**
    * Overload this method with your own printing code.
    */
-  virtual void print( QPrinter &printer );
-  virtual void print( KPrinter &printer );
+  virtual void print( QPrinter &printer, QPrintDialog &printDialog );
+  /**
+   * Overload this method with your own printing code if you require special
+   * print dialog page(s).  Default is an empty list.
+   *
+   * This is interim code, to be replaced for Qt4.4
+   */
+  virtual QList<QWidget*> printDialogPages();
+
   /**
    * @return the KoMainWindow in which this view is currently.
    * WARNING: this could be 0L, if the main window isn't a koffice main window.
@@ -504,6 +510,7 @@ private:
   virtual void setupGlobalActions( void );
   KoViewPrivate * const d;
   int autoScrollAcceleration( int offset ) const;
+
 };
 
 #endif

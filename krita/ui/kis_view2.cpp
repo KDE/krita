@@ -603,12 +603,12 @@ void KisView2::disconnectCurrentImage()
     }
 }
 
-void KisView2::setupPrinter(QPrinter &p)
+void KisView2::setupPrinter(QPrinter &printer, QPrintDialog &printDialog)
 {
     //p.setMinMax(1, 1);
 }
 
-void KisView2::print(QPrinter& printer)
+void KisView2::print(QPrinter& printer, QPrintDialog &printDialog)
 {
     QPainter gc(&printer);
 

@@ -25,7 +25,7 @@
 
 #include "komain_export.h"
 
-#include <kprinter.h>
+#include <QtGui/QPrinter>
 
 /// The page formats koffice supports
 namespace KoPageFormat
@@ -85,7 +85,7 @@ namespace KoPageFormat
      * (you may want to take care of those cases separately).
      * Usually passed to KPrinter::setPageSize().
      */
-    KOMAIN_EXPORT KPrinter::PageSize printerPageSize( Format format );
+    KOMAIN_EXPORT QPrinter::PageSize printerPageSize( Format format );
 
     /**
      * Returns the width (in mm) for a given page format and orientation

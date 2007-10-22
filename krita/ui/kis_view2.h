@@ -76,8 +76,8 @@ public:
     void slotChildActivated(bool a);
     void canvasAddChild( KoViewChild * child );
 
-    virtual void print(QPrinter &printer);
-    virtual void setupPrinter(QPrinter &printer);
+    virtual void print(QPrinter &printer, QPrintDialog &printDialog);
+    virtual void setupPrinter(QPrinter &printer, QPrintDialog &printDialog);
 
 public:  // Krita specific interfaces
 

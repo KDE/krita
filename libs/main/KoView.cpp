@@ -81,6 +81,9 @@ public:
                           // since this only happens in ~QObject, and views
                           // get deleted by ~KoDocument].
   QTimer *m_scrollTimer;
+  //Temporary until Qt4.4. provides API for add/set/get of pages
+  QList<QWidget*> m_printDialogPages;
+
 
   // Hmm sorry for polluting the private class with such a big inner class.
   // At the beginning it was a little struct :)
@@ -682,26 +685,20 @@ void KoView::setupGlobalActions()
   connect( actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()) );
 }
 
-void KoView::setupPrinter( QPrinter & )
+void KoView::setupPrinter( QPrinter &, QPrintDialog &printDialog )
 {
     kDebug(30003) <<"KoView::setupPrinter not implemented by the application!";
 }
 
-void KoView::print( QPrinter & )
+void KoView::print( QPrinter &, QPrintDialog &printDialog )
 {
     kDebug(30003) <<"KoView::print not implemented by the application!";
 }
 
-void KoView::setupPrinter( KPrinter & )
+QList<QWidget*> KoView::printDialogPages()
 {
-    kDebug(30003) <<"KoView::setupPrinter not implemented by the application!";
+    return QList<QWidget*>();
 }
-
-void KoView::print( KPrinter & )
-{
-    kDebug(30003) <<"KoView::print not implemented by the application!";
-}
-
 
 void KoView::newView() {
     Q_ASSERT( ( d!=0L && d->m_doc ) );

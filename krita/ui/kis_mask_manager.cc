@@ -45,6 +45,7 @@
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include "kis_dlg_adj_layer_props.h"
+#include "kis_selection_mask.h"
 
 KisMaskManager::KisMaskManager( KisView2 * view)
     : m_view( view )
@@ -263,7 +264,17 @@ void KisMaskManager::createTransformationMask( KisNodeSP parent, KisNodeSP above
     }
 }
 
-void KisMaskManager::maskToSelection() {}
+void KisMaskManager::maskToSelection()
+{
+    // XXX_NODE: this only starts working correctly when we have ripped the selection out
+    //           of kis_paint_device.
+    if (!m_activeMask) return;
+    KisLayerSP parent = m_view->activeLayer();
+    KisSelectionMaskSP selectionMask = new KisSelectionMask();
+    selectionMask->setSelection( m_activeMask->selection() );
+    m_activeMask->setSelection( new KisSelection() );
+    m_view->image()->addNode( selectionMask, parent, m_activeMask );
+}
 
 void KisMaskManager::maskToLayer() {}
 

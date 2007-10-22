@@ -54,7 +54,7 @@ public:
     virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, const KisFilterConfiguration* , const QRect&);
     static inline KoID id() { return KoID("cubism", i18n("Cubism")); }
     virtual bool supportsPainting() { return false; }
-    virtual bool supportsPreview() { return true; }
+    virtual bool supportsPreview() const { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisCubismFilterConfiguration(10,10)); return list; }
     virtual bool workWith(KoColorSpace* cs);

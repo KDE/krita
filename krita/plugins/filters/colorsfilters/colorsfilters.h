@@ -39,7 +39,7 @@ public:
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     static inline KoID id() { return KoID("autocontrast", i18n("Auto Contrast")); }
-    virtual bool supportsPreview() { return true; }
+    virtual bool supportsPreview() const { return true; }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsThreading() { return false; }
 
@@ -57,7 +57,7 @@ class KisDesaturateFilter : public KisFilter {
         virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
         static inline KoID id() { return KoID("desaturate", i18n("Desaturate")); }
         virtual bool supportsPainting() { return true; }
-        virtual bool supportsPreview() { return true; }
+        virtual bool supportsPreview() const { return true; }
         virtual bool supportsIncrementalPainting() const { return false; }
 
         virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }

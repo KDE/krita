@@ -44,7 +44,7 @@ public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     static inline KoID id() { return KoID("roundcorners", i18n("Round Corners")); }
     virtual bool supportsPainting() { return false; }
-    virtual bool supportsPreview() { return true; }
+    virtual bool supportsPreview() const { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
         { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisRoundCornersFilterConfiguration(30)); return list; }
 public:

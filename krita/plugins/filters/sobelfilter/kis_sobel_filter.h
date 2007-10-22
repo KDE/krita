@@ -39,7 +39,7 @@ public:
 
     virtual bool supportsPainting() { return false; }
 
-    virtual bool supportsPreview() { return true; }
+    virtual bool supportsPreview() const { return true; }
 
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);

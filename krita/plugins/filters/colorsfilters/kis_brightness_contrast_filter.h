@@ -70,7 +70,7 @@ public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     static inline KoID id() { return KoID("brightnesscontrast", i18n("Brightness / Contrast")); }
     virtual bool supportsPainting() { return true; }
-    virtual bool supportsPreview() { return true; }
+    virtual bool supportsPreview() const { return true; }
     virtual bool supportsIncrementalPainting() const { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);

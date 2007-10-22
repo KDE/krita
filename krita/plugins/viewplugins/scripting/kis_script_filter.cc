@@ -60,7 +60,7 @@ bool KisScriptFilter::supportsPainting()
 {
     return d->action->property("supportsPainting").toBool();
 }
-bool KisScriptFilter::supportsPreview()
+bool KisScriptFilter::supportsPreview() const
 {
     return d->action->property("supportsPreview").toBool();
 }

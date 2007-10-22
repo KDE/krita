@@ -52,7 +52,7 @@ public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
     static inline KoID id() { return KoID("smalltiles", i18n("Small Tiles")); }
     virtual bool supportsPainting() { return true; }
-    virtual bool supportsPreview() { return true; }
+    virtual bool supportsPreview() const { return true; }
     virtual bool supportsIncrementalPainting() const { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSmallTilesFilterConfiguration(2)); return list; }

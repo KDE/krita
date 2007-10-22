@@ -20,7 +20,7 @@ public:
     virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; }
     static inline KoID id() { return KoID("%{APPNAMELC}", i18n("%{APPNAME}")); }
     virtual bool supportsPainting() { return true; }
-    virtual bool supportsPreview() { return true; }
+    virtual bool supportsPreview() const { return true; }
     virtual bool supportsIncrementalPainting() const { return false; }
 };
 

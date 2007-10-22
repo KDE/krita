@@ -42,7 +42,7 @@ class KisFilterNoise : public KisFilter
         virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; }
         static inline KoID id() { return KoID("noise", i18n("Noise")); }
         virtual bool supportsPainting() { return true; }
-        virtual bool supportsPreview() { return true; }
+        virtual bool supportsPreview() const { return true; }
         virtual bool supportsIncrementalPainting() const { return false; }
         virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
     public:

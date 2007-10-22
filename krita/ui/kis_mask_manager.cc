@@ -25,6 +25,7 @@
 
 #include <KoID.h>
 
+#include "kis_transaction.h"
 #include "kis_filter_configuration.h"
 #include "kis_node_commands.h"
 #include "kis_dlg_transformation_effect.h"
@@ -282,9 +283,55 @@ void KisMaskManager::maskToTop() {}
 
 void KisMaskManager::maskToBottom() {}
 
-void KisMaskManager::mirrorMaskX() {}
+void KisMaskManager::mirrorMaskX()
+{
+    // XXX_NODE: This is a load of copy-past from KisLayerManager -- how can I fix that?
+    // XXX_NODE: we should also mirror the shape-based part of the selection!
+    if (!m_activeMask) return;
 
-void KisMaskManager::mirrorMaskY() {}
+    KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreatePixelSelection().data();
+    if (!dev) return;
+
+    KisTransaction * t = 0;
+    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
+        t = new KisTransaction(i18n("Mirror Layer X"), dev);
+        Q_CHECK_PTR(t);
+    }
+
+    dev->mirrorX();
+
+    if (t) m_view->undoAdapter()->addCommand(t);
+
+    m_view->document()->setModified(true);
+    m_activeMask->selection()->updateProjection();
+    masksUpdated();
+    m_view->canvas()->update();
+}
+
+void KisMaskManager::mirrorMaskY()
+{
+    // XXX_NODE: This is a load of copy-past from KisLayerManager -- how can I fix that?
+    // XXX_NODE: we should also mirror the shape-based part of the selection!
+    if (!m_activeMask) return;
+
+    KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreatePixelSelection().data();
+    if (!dev) return;
+
+    KisTransaction * t = 0;
+    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
+        t = new KisTransaction(i18n("Mirror Layer X"), dev);
+        Q_CHECK_PTR(t);
+    }
+
+    dev->mirrorY();
+
+    if (t) m_view->undoAdapter()->addCommand(t);
+
+    m_view->document()->setModified(true);
+    m_activeMask->selection()->updateProjection();
+    masksUpdated();
+    m_view->canvas()->update();
+}
 
 void KisMaskManager::maskProperties()
 {
@@ -356,6 +403,9 @@ void KisMaskManager::maskProperties()
     }
 }
 
-void KisMaskManager::masksUpdated() {}
+void KisMaskManager::masksUpdated()
+{
+    m_view->updateGUI();
+}
 
 #include "kis_mask_manager.moc"

@@ -872,7 +872,6 @@ void KisLayerManager::mergeLayer()
 
 void KisLayerManager::layersUpdated()
 {
-
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 

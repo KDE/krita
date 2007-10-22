@@ -78,49 +78,7 @@
 #include "kis_view2.h"
 #include "kis_zoom_manager.h"
 #include "kis_canvas2.h"
-
-namespace {
-class KisChangeFilterCmd : public QUndoCommand {
-typedef QUndoCommand super;
-public:
-            // The QStrings are the _serialized_ configs
-KisChangeFilterCmd(KisAdjustmentLayerSP layer,
-                   KisFilterConfiguration* config,
-                   const QString& before,
-                   const QString& after) : super(i18n("Change Filter"))
-{
-    m_layer = layer;
-    m_config = config;
-    m_before = before;
-    m_after = after;
-}
-public:
-virtual void redo()
-{
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
-    m_config->fromLegacyXML(m_after);
-                //Q_ASSERT(m_after == m_config->toString());
-    m_layer->setFilter(m_config);
-    m_layer->setDirty();
-    QApplication::restoreOverrideCursor();
-}
-
-virtual void undo()
-{
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
-    m_config->fromLegacyXML(m_before);
-                //Q_ASSERT(m_before == m_config->toString());
-    m_layer->setFilter(m_config);
-    m_layer->setDirty();
-    QApplication::restoreOverrideCursor();
-}
-private:
-KisAdjustmentLayerSP m_layer;
-KisFilterConfiguration* m_config;
-QString m_before;
-QString m_after;
-};
-}
+#include <kis_node_commands.h>
 
 
 KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
@@ -402,10 +360,11 @@ void KisLayerManager::layerProperties()
         QString before = dlg.filterConfiguration()->toLegacyXML();
         if (dlg.exec() == QDialog::Accepted)
         {
-            KisChangeFilterCmd * cmd = new KisChangeFilterCmd(alayer,
-                dlg.filterConfiguration(),
-                before,
-                dlg.filterConfiguration()->toLegacyXML());
+            KisChangeFilterCmd<KisAdjustmentLayerSP> * cmd
+                = new KisChangeFilterCmd<KisAdjustmentLayerSP>(alayer,
+                                                               dlg.filterConfiguration(),
+                                                               before,
+                                                               dlg.filterConfiguration()->toLegacyXML());
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
             m_doc->setModified( true );

@@ -7,6 +7,7 @@ Comment[es]=Un módulo que implementa un espacio de color completo para usarlo c
 Comment[pt]=Um módulo que implementa um espaço de cores completo para usar com o Sistema de Manipulação de Cores por Pigmentos
 Comment[pt_BR]=Um módulo que implementa um espaço de cores completo para usar com a Sistema de Manipulação de Pigmeto de Cor
 Comment[sv]=En modul som implementerar en fullständig färgrymd för användning med systemet för hantering av pigmentfärg
+Comment[x-test]=xxA module implementing a complete colorspace for use with Pigment Color Manipulation Systemxx
 Comment[zh_TW]=實作完整色彩空間以使用 Pigment 色彩處理系統的模組
 [PropertyDef::X-Pigment-MinVersion]
 Type=int

@@ -21,6 +21,7 @@
 class KisBookmarkedConfigurationManager;
 class KisPropertiesConfiguration;
 class KisToneMappingOperatorConfigurationWidget;
+class QRect;
 class QString;
 class QWidget;
 class KoColorSpace;
@@ -52,6 +53,8 @@ class KisToneMappingOperator {
          * @return the bookmark manager for this operator
          */
         KisBookmarkedConfigurationManager* bookmarkManager();
+    protected:
+        void applyLuminance(KisPaintDeviceSP src, KisPaintDeviceSP lumi, const QRect& r) const;
     private:
         QString configEntryGroup();
     private:

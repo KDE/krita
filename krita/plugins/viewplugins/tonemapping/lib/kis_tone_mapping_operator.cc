@@ -19,7 +19,10 @@
 
 #include <QString>
 
+#include <KoColorSpaceTraits.h>
+
 #include <kis_bookmarked_configuration_manager.h>
+#include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
 
 struct KisToneMappingOperator::Private {
@@ -50,6 +53,29 @@ QString KisToneMappingOperator::name() const
 {
     return d->name;
 }
+
+void KisToneMappingOperator::applyLuminance(KisPaintDeviceSP src, KisPaintDeviceSP lumi, const QRect& r) const
+{
+    KisHLineIterator itSrc = src->createHLineIterator( r.x(), r.y(), r.width());
+    KisHLineIterator itL = lumi->createHLineIterator( 0,0, r.width());
+    for(int y = 0; y < r.height(); y++)
+    {
+        while(not itSrc.isDone())
+        {
+            KoXyzTraits<float>::Pixel* dataSrc = reinterpret_cast< KoXyzTraits<float>::Pixel* >(itSrc.rawData());
+            float* dataL = reinterpret_cast< float* >(itL.rawData());
+            float scale = *dataL / dataSrc->Y;
+            dataSrc->Y = *dataL;
+            dataSrc->X *= scale;
+            dataSrc->Z *= scale;
+            ++itSrc;
+            ++itL;
+        }
+        itSrc.nextRow();
+        itL.nextRow();
+    }
+}
+
 
 KisToneMappingOperatorConfigurationWidget* KisToneMappingOperator::createConfigurationWidget(QWidget*) const
 {

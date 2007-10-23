@@ -115,25 +115,6 @@ void KisAshikhmin02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfi
    tmo_ashikhmin02(&Y, &L, maxLum, minLum, avLum, simple, lC, eqn);
     
     kDebug() << "Apply luminance";
-    {
-        KisHLineIterator itSrc = device->createHLineIterator( r.x(), r.y(), r.width());
-        KisHLineIterator itL = L.device()->createHLineIterator( 0,0, r.width());
-        for(int y = 0; y < r.height(); y++)
-        {
-            while(not itSrc.isDone())
-            {
-                KoXyzTraits<float>::Pixel* dataSrc = reinterpret_cast< KoXyzTraits<float>::Pixel* >(itSrc.rawData());
-                float* dataL = reinterpret_cast< float* >(itL.rawData());
-                float scale = *dataL / dataSrc->Y;
-                dataSrc->Y = *dataL;
-                dataSrc->X *= scale;
-                dataSrc->Z *= scale;
-                ++itSrc;
-                ++itL;
-            }
-            itSrc.nextRow();
-            itL.nextRow();
-        }
-    }
+    applyLuminance(device, L.device(), r);
     kDebug() << "Finished";
 }

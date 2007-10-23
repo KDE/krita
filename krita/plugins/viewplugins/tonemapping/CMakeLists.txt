@@ -12,7 +12,6 @@ set(kritatonemapping_PART_SRCS
     lib/kis_tone_mapping_operator_configuration_widget.cc
 # PFS Library (only needed for most operators)
     libpfs/kis_array2d.cc
-    libpfs/pfs.cpp
 # ashikhmin 02 operator
 #     operators/ashikhmin02/tmo_ashikhmin02.cpp
 #     operators/ashikhmin02/kis_ashikhmin02_operator.cc

@@ -58,7 +58,7 @@ public:
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisCubismFilterConfiguration(10,10)); return list; }
     virtual bool workWith(KoColorSpace* cs);
-    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_RGBA8; }
+    virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_RGBA8; }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);

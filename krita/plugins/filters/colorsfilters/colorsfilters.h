@@ -43,7 +43,7 @@ public:
     virtual bool supportsPainting() const { return false; }
     virtual bool supportsThreading() { return false; }
 
-    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
+    virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
     virtual bool workWith(KoColorSpace* cs);
 
 };
@@ -60,7 +60,7 @@ class KisDesaturateFilter : public KisFilter {
         virtual bool supportsPreview() const { return true; }
         virtual bool supportsIncrementalPainting() const { return false; }
 
-        virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
+        virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
         virtual bool workWith(KoColorSpace* cs);
 
     private:

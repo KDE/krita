@@ -702,7 +702,7 @@ KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget)
     }
 }
 
-ColorSpaceIndependence KisCImgFilter::colorSpaceIndependence()
+ColorSpaceIndependence KisCImgFilter::colorSpaceIndependence() const
 {
     KoColorSpace* rgb16CS = KoColorSpaceRegistry::instance()->colorSpace("RGBA16", 0);
     if(rgb16CS)

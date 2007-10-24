@@ -58,7 +58,7 @@ public:
     static inline KoID id() { return KoID("cimg", i18n("Image Restoration (cimg-based)")); }
     virtual bool supportsPainting() const { return false; }
     virtual bool supportsPreview() const { return false; }
-    virtual ColorSpaceIndependence colorSpaceIndependence();
+    virtual ColorSpaceIndependence colorSpaceIndependence() const;
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration * configuration(QWidget*);

@@ -75,7 +75,7 @@ public:
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
 
-    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
+    virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
     virtual bool workWith(KoColorSpace* cs);
 };
 

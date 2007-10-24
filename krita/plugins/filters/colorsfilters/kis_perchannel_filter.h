@@ -81,7 +81,7 @@ public:
     virtual bool supportsIncrementalPainting() const { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
 
-    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; }
+    virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
 private:
 };
 

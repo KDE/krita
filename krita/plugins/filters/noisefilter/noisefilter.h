@@ -39,7 +39,7 @@ class KisFilterNoise : public KisFilter
         KisFilterNoise();
     public:
         virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
-        virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; }
+        virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
         static inline KoID id() { return KoID("noise", i18n("Noise")); }
         virtual bool supportsPainting() const { return true; }
         virtual bool supportsPreview() const { return true; }

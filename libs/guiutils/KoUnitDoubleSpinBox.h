@@ -51,6 +51,7 @@ public:
      * @param parent the parent widget
      */
     explicit KoUnitDoubleSpinBox( QWidget *parent = 0);
+    ~KoUnitDoubleSpinBox();
     /**
      * Create a new spinBox with specified range.
      * Use this constructor to set the range, steps and value in points in one go. We don't advice

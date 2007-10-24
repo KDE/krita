@@ -56,6 +56,10 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent)
     connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
 }
 
+KoUnitDoubleSpinBox::~KoUnitDoubleSpinBox()
+{
+    delete d;
+}
 
 // deprecated;
 KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,

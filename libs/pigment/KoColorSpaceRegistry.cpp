@@ -85,23 +85,26 @@ void KoColorSpaceRegistry::init()
     if (!profileFilenames.empty()) {
         KoColorProfile * profile = 0;
         for ( QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it ) {
-            profile = new KoLcmsColorProfile(*it);
+            profile = new KoIccColorProfile(*it);
             Q_CHECK_PTR(profile);
 
             profile->load();
             if (profile->valid()) {
+                kDebug() << "Valid profile : " << profile->name();
                 d->profileMap[profile->name()] = profile;
+            } else {
+                kDebug() << "Invalid profile : " << profile->name();
             }
         }
     }
 
-    KoColorProfile *labProfile = new KoLcmsColorProfile(cmsCreateLabProfile(NULL));
+    KoColorProfile *labProfile = KoLcmsColorProfile::createFromLcmsProfile(cmsCreateLabProfile(NULL));
     addProfile(labProfile);
     add(new KoLabColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
                 new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
                 (KoID("LABAHISTO", i18n("L*a*b* Histogram")), lab16()));
-    KoColorProfile *rgbProfile = new KoLcmsColorProfile(cmsCreate_sRGBProfile());
+    KoColorProfile *rgbProfile = KoLcmsColorProfile::createFromLcmsProfile(cmsCreate_sRGBProfile());
     addProfile(rgbProfile);
     add(new KoRgbU16ColorSpaceFactory());
 
@@ -117,7 +120,8 @@ void KoColorSpaceRegistry::init()
     LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
     cmsFreeGamma(Gamma);
-    KoColorProfile *defProfile = new KoLcmsColorProfile(hProfile);
+    KoColorProfile *defProfile = KoLcmsColorProfile::createFromLcmsProfile(hProfile);
+    kDebug() << "Gray " << defProfile->name();
     addProfile(defProfile);
 
     // Create the built-in colorspaces

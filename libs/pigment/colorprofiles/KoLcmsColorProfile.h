@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOCOLORPROFILE_H
-#define KOCOLORPROFILE_H
+#ifndef _KO_LCMS_COLORPROFILE_H
+#define _KO_LCMS_COLORPROFILE_H
 
 #include "KoIccColorProfile.h"
 
@@ -34,8 +34,10 @@
  * This class contains an LCMS color profile. Use it with care outside KoLcmsColorSpace.
  */
 class PIGMENT_EXPORT KoLcmsColorProfile : public KoIccColorProfile {
-
-public:
+    friend class KoIccColorProfile;
+protected:
+    KoLcmsColorProfile( KoIccColorProfile::Data *);
+#if 0
     /**
      * Initialize the profile using the raw data. Use it after reading the profile data
      * inside an image file.
@@ -52,12 +54,15 @@ public:
      * Initialize the profile from the LCMS color profile
      */
     explicit KoLcmsColorProfile(const cmsHPROFILE profile);
+#endif
+public:
+    /**
+     * @return an ICC profile created from an LCMS profile
+     */
+    static KoIccColorProfile* createFromLcmsProfile(const cmsHPROFILE profile);
+public:
 
     virtual ~KoLcmsColorProfile();
-
-    virtual bool load();
-    
-    virtual bool save();
 
     /**
      * @return the ICC color space signature
@@ -97,7 +102,7 @@ public:
 
 protected:
     KoLcmsColorProfile();
-    void setProfile(const cmsHPROFILE profile);
+//     void setProfile(const cmsHPROFILE profile);
 
 private:
     bool init();

@@ -1,3 +1,5 @@
+#if 0
+
 /*
  * Copyright (C) 2007 Adrian Page <adrian@pagenet.plus.com>
  *
@@ -75,3 +77,4 @@ private:
 
 #endif // KOLCMSRGBCOLORPROFILE_H
 
+#endif

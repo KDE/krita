@@ -22,15 +22,34 @@
 
 #include "KoColorProfile.h"
 
+class KoLcmsColorProfile;
+
 /**
  * This class contains an ICC color profile.
  */
 class PIGMENT_EXPORT KoIccColorProfile : public KoColorProfile {
-    struct Private;
+    protected:
+        class Data {
+            public:
+                Data();
+                Data(QByteArray rawData);
+                QByteArray rawData();
+                void setRawData(QByteArray );
+            private:
+                struct Private;
+                Private* const d;
+        };
+//     protected:
+    public:
+        KoIccColorProfile( Data *);
     public:
         KoIccColorProfile(QString fileName = "");
         KoIccColorProfile(const QByteArray& rawData);
         virtual ~KoIccColorProfile();
+        
+        virtual bool load();
+        virtual bool save();
+
         /**
         * @return an array with the raw data of the profile
         */
@@ -42,6 +61,8 @@ class PIGMENT_EXPORT KoIccColorProfile : public KoColorProfile {
     protected:
         void setRawData(const QByteArray& rawData);
     public:
+        KoLcmsColorProfile* asLcms() const;
+    public:
         /**
         *
         * XXX: We need to make sure we always have the right profile even
@@ -50,7 +71,10 @@ class PIGMENT_EXPORT KoIccColorProfile : public KoColorProfile {
         * @return the color profile of the screen.
         */
         static KoIccColorProfile *getScreenProfile(int screen = -1);
+    protected:
+        virtual bool init();
     private:
+        struct Private;
         Private* const d;
 };
 

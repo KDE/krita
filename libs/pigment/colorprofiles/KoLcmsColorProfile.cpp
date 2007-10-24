@@ -27,9 +27,6 @@
 #include <cmath>
 #include <lcms.h>
 
-#include <QImage>
-#include <QFile>
-
 #include <kdebug.h>
 
 class KoLcmsColorProfile::Private {
@@ -48,10 +45,39 @@ public:
 };
 
 KoLcmsColorProfile::KoLcmsColorProfile()
-    : d(new Private())
+    : KoIccColorProfile(0), d(new Private())
 {
+    d->profile = 0;
 }
 
+KoLcmsColorProfile::KoLcmsColorProfile( KoIccColorProfile::Data * data)
+    : KoIccColorProfile(data), d(new Private())
+{
+    d->profile = 0;
+    init();
+}
+
+KoIccColorProfile* KoLcmsColorProfile::createFromLcmsProfile(const cmsHPROFILE profile)
+{
+    size_t  bytesNeeded = 0;
+    // Make a raw data image ready for saving
+    _cmsSaveProfileToMem(profile, 0, &bytesNeeded); // calc size
+    QByteArray rawData;
+    rawData.resize(bytesNeeded);
+    if(rawData.size() >= (int)bytesNeeded)
+    {
+        _cmsSaveProfileToMem(profile, rawData.data(), &bytesNeeded); // fill buffer
+    }
+    else
+    {
+        kError() << "Couldn't resize the profile buffer, system is probably running out of memory.";
+        rawData.resize(0);
+    }
+    return new KoIccColorProfile(rawData);
+}
+
+
+#if 0
 KoLcmsColorProfile::KoLcmsColorProfile(const QByteArray& rawData)
     : KoIccColorProfile(rawData), d(new Private())
 {
@@ -69,6 +95,7 @@ KoLcmsColorProfile::KoLcmsColorProfile(const cmsHPROFILE profile)
 {
     setProfile(profile);
 }
+#endif
 
 KoLcmsColorProfile::~KoLcmsColorProfile()
 {
@@ -76,6 +103,7 @@ KoLcmsColorProfile::~KoLcmsColorProfile()
     delete d;
 }
 
+#if 0
 void KoLcmsColorProfile::setProfile(const cmsHPROFILE profile)
 {
     d->profile = profile;
@@ -99,26 +127,14 @@ void KoLcmsColorProfile::setProfile(const cmsHPROFILE profile)
     setRawData(rawData);
     init();
 }
-
-bool KoLcmsColorProfile::load()
-{
-    QFile file(fileName());
-    file.open(QIODevice::ReadOnly);
-    QByteArray rawData = file.readAll();
-    setRawData(rawData);
-    d->profile = cmsOpenProfileFromMem((void*)rawData.constData(), (DWORD)rawData.size());
-    file.close();
-
-    if (d->profile == 0) {
-        kWarning() << "Failed to load profile from " << fileName();
-    }
-
-    return init();
-
-}
+#endif
 
 bool KoLcmsColorProfile::init()
 {
+    if( d->profile ) cmsCloseProfile(d->profile);
+
+    d->profile = cmsOpenProfileFromMem((void*)rawData().constData(), (DWORD)rawData().size());
+
     if (d->profile) {
         d->colorSpaceSignature = cmsGetColorSpace(d->profile);
         d->deviceClass = cmsGetDeviceClass(d->profile);
@@ -168,11 +184,6 @@ cmsHPROFILE KoLcmsColorProfile::lcmsProfile()
 	return d->profile;
 }
 
-bool KoLcmsColorProfile::save()
-{
-    return false;
-}
-
 icColorSpaceSignature KoLcmsColorProfile::colorSpaceSignature() const {
     return d->colorSpaceSignature;
 }
@@ -213,4 +224,3 @@ bool operator==( const KoLcmsColorProfile & p1,  const KoLcmsColorProfile & p2 )
 {
     return p1.d->profile == p2.d->profile;
 }
-

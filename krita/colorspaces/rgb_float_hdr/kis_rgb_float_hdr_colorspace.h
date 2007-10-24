@@ -23,7 +23,7 @@
 #include <math.h>
 
 #include "KoIncompleteColorSpace.h"
-#include "KoLcmsRGBColorProfile.h"
+#include "KoLcmsColorProfile.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpaceTraits.h"
 #include "KoChannelInfo.h"

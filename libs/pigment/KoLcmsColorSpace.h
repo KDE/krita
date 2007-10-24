@@ -157,7 +157,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
         {
             Q_ASSERT(p); // No profile means the lcms color space can't work
-            d->profile = toLcmsProfile(p);
+            d->profile = asLcmsProfile(p);
             d->qcolordata = 0;
             d->lastRGBProfile = 0;
             d->lastToRGB = 0;
@@ -207,7 +207,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             d->qcolordata[1] = color.green();
             d->qcolordata[0] = color.blue();
 
-            KoLcmsColorProfile* profile = toLcmsProfile(koprofile);
+            KoLcmsColorProfile* profile = asLcmsProfile(koprofile);
             if (profile == 0) {
 	    // Default sRGB
                 if (!d->defaultFromRGB) return;
@@ -236,7 +236,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
         virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * koprofile =0) const
         {
-            KoLcmsColorProfile* profile = toLcmsProfile(koprofile);
+            KoLcmsColorProfile* profile = asLcmsProfile(koprofile);
             if (profile == 0) {
 	// Default sRGB transform
                 if (!d->defaultToRGB) return;
@@ -407,13 +407,16 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         inline KoLcmsColorProfile* lcmsProfile() const {
             return d->profile;
         }
-        inline static KoLcmsColorProfile* toLcmsProfile(KoColorProfile* p)
+        inline static KoLcmsColorProfile* asLcmsProfile(KoColorProfile* p)
         {
-            KoLcmsColorProfile* lp = dynamic_cast<KoLcmsColorProfile*>(p);
-            if(lp) return lp;
+            if(not p) return 0;
             KoIccColorProfile* iccp = dynamic_cast<KoIccColorProfile*>(p);
-            if(iccp) return new KoLcmsColorProfile(iccp->rawData());
-            return 0;
+            if( not iccp )
+            {
+                return 0;
+            }
+            Q_ASSERT(iccp->asLcms());
+            return iccp->asLcms();
         }
         typedef struct {
             double Saturation;

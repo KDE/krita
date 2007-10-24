@@ -28,38 +28,89 @@
 #include <QX11Info>
 #endif
 
-struct KoIccColorProfile::Private
-{
+#include <QFile>
+
+#include <kdebug.h>
+
+#include "KoLcmsColorProfile.h"
+
+struct KoIccColorProfile::Data::Private {
     QByteArray rawData;
 };
 
-KoIccColorProfile::KoIccColorProfile(QString fileName) : KoColorProfile(fileName), d(new Private)
+KoIccColorProfile::Data::Data() : d(new Private)
 {
-    
 }
-
-KoIccColorProfile::KoIccColorProfile(const QByteArray& rawData) : KoColorProfile(""), d(new Private)
-{
-    setRawData(rawData);
-}
-
-KoIccColorProfile::~KoIccColorProfile()
-{
-    delete d;
-}
-
-QByteArray KoIccColorProfile::rawData() const {
-    return d->rawData;
-}
-
-void KoIccColorProfile::setRawData(const QByteArray& rawData)
+KoIccColorProfile::Data::Data(QByteArray rawData) : d(new Private)
 {
     d->rawData = rawData;
 }
 
+QByteArray KoIccColorProfile::Data::rawData()
+{
+    return d->rawData;
+}
+
+void KoIccColorProfile::Data::setRawData(QByteArray rawData)
+{
+    d->rawData = rawData;
+}
+
+struct KoIccColorProfile::Private
+{
+    KoIccColorProfile::Data* data;
+    bool ownData;
+    KoLcmsColorProfile* lcmsProfile;
+};
+
+KoIccColorProfile::KoIccColorProfile( Data * data) : KoColorProfile(""), d(new Private)
+{
+    d->ownData = false;
+    d->data = data;
+    d->lcmsProfile = 0;
+}
+
+
+KoIccColorProfile::KoIccColorProfile(QString fileName) : KoColorProfile(fileName), d(new Private)
+{
+    d->ownData = true;
+    d->data = new Data();
+    d->lcmsProfile = 0;
+}
+
+KoIccColorProfile::KoIccColorProfile(const QByteArray& rawData) : KoColorProfile(""), d(new Private)
+{
+    d->ownData = true;
+    d->data = new Data();
+    d->lcmsProfile = 0;
+    setRawData(rawData);
+    init();
+}
+
+KoIccColorProfile::~KoIccColorProfile()
+{
+    delete d->lcmsProfile;
+    if(d->ownData)
+    {
+        delete d->data;
+    }
+    delete d;
+}
+
+QByteArray KoIccColorProfile::rawData() const {
+    return d->data->rawData();
+}
+
+void KoIccColorProfile::setRawData(const QByteArray& rawData)
+{
+    d->data->setRawData( rawData );
+}
+
 bool KoIccColorProfile::valid() const
 {
-    return true;
+    if(d->lcmsProfile)
+        return d->lcmsProfile->valid();
+    return false;
 }
 
 KoIccColorProfile *KoIccColorProfile::getScreenProfile(int screen )
@@ -104,15 +155,64 @@ KoIccColorProfile *KoIccColorProfile::getScreenProfile(int screen )
 
 bool KoIccColorProfile::isSuitableForOutput() const
 {
+    if(d->lcmsProfile)
+        return d->lcmsProfile->isSuitableForOutput();
     return false;
 }
 
 bool KoIccColorProfile::isSuitableForPrinting() const
 {
+    if(d->lcmsProfile)
+        return d->lcmsProfile->isSuitableForPrinting();
     return false;
 }
 
 bool KoIccColorProfile::isSuitableForDisplay() const
 {
+    if(d->lcmsProfile)
+        return d->lcmsProfile->isSuitableForDisplay();
     return false;
+}
+
+
+bool KoIccColorProfile::load()
+{
+    QFile file(fileName());
+    file.open(QIODevice::ReadOnly);
+    QByteArray rawData = file.readAll();
+    setRawData(rawData);
+    file.close();
+    if(init())
+    {
+        return true;
+    } else {
+        kWarning() << "Failed to load profile from " << fileName();
+    }
+}
+
+bool KoIccColorProfile::save()
+{
+    return false;
+}
+
+bool KoIccColorProfile::init()
+{
+    if(not d->lcmsProfile)
+    {
+        d->lcmsProfile = new KoLcmsColorProfile(d->data);
+    }
+    if(d->lcmsProfile->init())
+    {
+        setName(d->lcmsProfile->name());
+        setInfo(d->lcmsProfile->info());
+        return true;
+    } else {
+        return false;
+    }
+}
+
+KoLcmsColorProfile* KoIccColorProfile::asLcms() const
+{
+    Q_ASSERT( d->lcmsProfile );
+    return d->lcmsProfile;
 }

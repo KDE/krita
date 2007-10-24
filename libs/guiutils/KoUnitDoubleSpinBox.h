@@ -63,8 +63,8 @@ public:
      * @param unit the displaying unit
      * @param precision the amount of digits after the separator. 2 means 0.00 will be shown.
      */
-    KDE_DEPRECATED KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
-                         KoUnit unit = KoUnit(KoUnit::Point), unsigned int precision = 2);
+    KDE_CONSTRUCTOR_DEPRECATED KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper,
+      double step, double value = 0.0, KoUnit unit = KoUnit(KoUnit::Point), unsigned int precision = 2);
     /**
      * Set the new value in points which will then be converted to the current unit for display
      * @param newValue the new value

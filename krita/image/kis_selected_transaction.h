@@ -27,6 +27,9 @@
 
 #include "krita_export.h"
 
+/**
+ * ???
+ */
 class KRITAIMAGE_EXPORT KisSelectedTransaction : public KisTransaction {
 
 public:

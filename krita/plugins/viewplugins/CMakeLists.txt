@@ -13,7 +13,7 @@ add_subdirectory( rotateimage )
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( together )
-add_subdirectory( scripting )
+# add_subdirectory( scripting ) # TODO: port it to the change of KisFilter
 add_subdirectory( bracketing2hdr )
 add_subdirectory( metadataeditor )
 add_subdirectory( bigbrother )

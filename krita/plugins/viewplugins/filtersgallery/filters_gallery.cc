@@ -109,26 +109,24 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
             }
             KisFilterConfiguration* config = dlg.currentConfigWidget()->configuration();
 
-            filter->enableProgress();
             m_view->statusBar()->progress()->setSubject(filter, true, true);
-            filter->setProgressDisplay(m_view->statusBar()->progress());
+//             filter->setProgressDisplay(m_view->statusBar()->progress()); // TODO: port to KoProgressUpdater
 
             KisTransaction * cmd = new KisTransaction(filter->name(), dev);
 
             filter->process(dev, rect, config);
 
             delete config;
-            if (filter->cancelRequested()) {
-                cmd->undo();
-                delete cmd;
-            } else {
+//             if (filter->cancelRequested()) { // TODO: port to
+//                 cmd->undo();
+//                 delete cmd;
+//             } else {
                 dev->setDirty(rect);
                 if (img->undo())
                     img->undoAdapter()->addCommand(cmd);
                 else
                     delete cmd;
-            }
-            filter->disableProgress();
+//             }
             QApplication::restoreOverrideCursor();
 
         }

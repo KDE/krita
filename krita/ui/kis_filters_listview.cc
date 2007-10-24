@@ -75,7 +75,6 @@ public:
                 setFinished(true);
                 return;
             }
-            m_item->filter()->disableProgress();
             m_item->filter()->process(m_dev, m_bounds, m_item->filterConfiguration());
 
             if (!m_canceled) {

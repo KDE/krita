@@ -30,6 +30,7 @@
 #include <kis_bookmarked_configuration_manager.h>
 #include <kis_filter.h>
 #include <kis_filter_configuration.h>
+#include <kis_filter_processing_information.h>
 #include <kis_layer.h>
 #include <kis_recorded_filter_action.h>
 
@@ -63,8 +64,8 @@ public:
             // updates should be separate things, because we may be
             // using the same filter instance from several threads.
             // Use Thomas' progress code here.
-            const_cast<KisFilter*>( m_filter )->process( m_dev, marginRect.topLeft(),
-                               dst, marginRect.topLeft(),
+            const_cast<KisFilter*>( m_filter )->process( KisFilterConstantProcessingInformation( m_dev, marginRect.topLeft()), KisFilterProcessingInformation(
+                               dst, marginRect.topLeft() ),
                                marginRect.size(),
                                m_config );
             KisPainter p( m_dev );
@@ -200,13 +201,13 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         KisThreadedApplicator applicator(dev, rect, &factory, d->filter->overlapMarginNeeded( config ));
         applicator.execute();
     }
-    if (d->filter->cancelRequested()) {
+/*    if (d->filter->cancelRequested()) { // TODO: port to the progress display reporter
         delete config;
         if (cmd) {
             cmd->undo();
             delete cmd;
         }
-    } else {
+    } else */{
         dev->setDirty(rect);
         d->view->document()->setModified(true);
         if (cmd) d->view->document()->addCommand(cmd);
@@ -223,7 +224,7 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         
         layer->image()->actionRecorder()->addAction( KisRecordedFilterAction(d->filter->name(), layer, d->filter, config));
     }
-    d->filter->disableProgress();
+    
     QApplication::restoreOverrideCursor();
 }
 

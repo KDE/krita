@@ -21,6 +21,7 @@
 
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_filter_configuration.h"
+#include "kis_filter_processing_information.h"
 #include "kis_paint_device.h"
 #include "kis_types.h"
 
@@ -38,25 +39,12 @@ const KoID KisFilter::CategoryOther = KoID("other_filters", i18n("Other"));
 struct KisFilter::Private {
     Private()
         : bookmarkManager(0)
-        , cancelRequested(false)
-        , progressEnabled(false)
-        , autoUpdate(false)
-        , progressTotalSteps(0)
-        , lastProgressPerCent(0)
-        , progressSteps(0)
     {
     }
 
     KisBookmarkedConfigurationManager* bookmarkManager;
-    bool cancelRequested;
-    bool progressEnabled;
-    bool autoUpdate;
-    qint32 progressTotalSteps;
-    qint32 lastProgressPerCent;
-    qint32 progressSteps;
 
     KoID id;
-    KisProgressDisplayInterface * progressDisplay;
     KoID category; // The category in the filter menu this filter fits
     QString entry; // the i18n'ed accelerated menu text
 };
@@ -67,7 +55,6 @@ KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entr
 {
     setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisFilterConfigurationFactory(id.id(), 1) ));
     d->id = id;
-    d->progressDisplay = 0;
     d->category = category;
     d->entry = entry;
 }
@@ -96,85 +83,6 @@ KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, const Ki
     return 0;
 }
 
-void KisFilter::setProgressDisplay(KisProgressDisplayInterface * progressDisplay)
-{
-    d->progressDisplay = progressDisplay;
-}
-
-KisProgressDisplayInterface* KisFilter::progressDisplay()
-{
-    return d->progressDisplay;
-}
-
-
-void KisFilter::enableProgress() {
-    d->progressEnabled = true;
-    d->cancelRequested = false;
-}
-
-void KisFilter::disableProgress() {
-    d->progressEnabled = false;
-    d->cancelRequested = false;
-}
-
-void KisFilter::setProgressTotalSteps(qint32 totalSteps)
-{
-    if (d->progressEnabled) {
-
-        d->progressTotalSteps = totalSteps;
-        d->lastProgressPerCent = 0;
-        d->progressSteps = 0;
-        emit notifyProgress(0);
-    }
-}
-
-void KisFilter::setProgress(qint32 progress)
-{
-    if (d->progressEnabled) {
-        qint32 progressPerCent = (progress * 100) / d->progressTotalSteps;
-        d->progressSteps = progress;
-
-        if (progressPerCent != d->lastProgressPerCent) {
-
-            d->lastProgressPerCent = progressPerCent;
-            emit notifyProgress(progressPerCent);
-        }
-    }
-}
-
-void KisFilter::incProgress()
-{
-    setProgress(++d->progressSteps);
-
-}
-
-void KisFilter::setProgressStage(const QString& stage, qint32 progress)
-{
-    if (d->progressEnabled) {
-
-        qint32 progressPerCent = (progress * 100) / d->progressTotalSteps;
-
-        d->lastProgressPerCent = progressPerCent;
-        emit notifyProgressStage(stage, progressPerCent);
-    }
-}
-
-void KisFilter::setProgressDone()
-{
-    if (d->progressEnabled) {
-        emit notifyProgressDone();
-    }
-}
-
-
-bool KisFilter::autoUpdate() {
-    return d->autoUpdate;
-}
-
-void KisFilter::setAutoUpdate(bool set) {
-    d->autoUpdate = set;
-}
-
 QRect KisFilter::enlargeRect(QRect rect, const KisFilterConfiguration* c) const {
     int margin = overlapMarginNeeded(c);
     rect.setLeft(rect.left() - margin);
@@ -184,24 +92,11 @@ QRect KisFilter::enlargeRect(QRect rect, const KisFilterConfiguration* c) const 
     return rect;
 }
 
-void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config)
+void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater)
 {
-    process(device, rect.topLeft(), device, rect.topLeft(), rect.size(), config);
-}
-
-void KisFilter::cancel()
-{
-    d->cancelRequested = true;
-}
-
-bool KisFilter::progressEnabled() const
-{
-    return d->progressEnabled;
-}
-
-bool KisFilter::cancelRequested() const
-{
-    return d->progressEnabled && d->cancelRequested;
+    KisFilterProcessingInformation info(device, rect.topLeft());
+    process(info, info, rect.size(), config, progressUpdater);
 }
 
 KisBookmarkedConfigurationManager* KisFilter::bookmarkManager()
@@ -226,7 +121,5 @@ QString KisFilter::name() const { return d->id.name(); }
 KoID KisFilter::menuCategory() const { return d->category; }
 
 QString KisFilter::menuEntry() const { return d->entry; }
-
-qint32 KisFilter::progress() { return d->progressSteps; }
 
 #include "kis_filter.moc"

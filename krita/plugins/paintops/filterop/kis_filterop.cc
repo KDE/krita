@@ -26,23 +26,24 @@
 
 #include <kdebug.h>
 
-#include "KoColorSpace.h"
-#include "KoCompositeOp.h"
-#include "KoInputDevice.h"
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
+#include <KoInputDevice.h>
 
-#include "kis_brush.h"
-#include "kis_global.h"
-#include "kis_paint_device.h"
-#include "kis_painter.h"
-#include "kis_filter.h"
-#include "kis_filter_configuration.h"
-#include "kis_filter_config_widget.h"
-#include "kis_filter_registry.h"
-#include "kis_layer.h"
-#include "kis_types.h"
-#include "kis_iterators_pixel.h"
-#include "kis_paintop.h"
-#include "kis_selection.h"
+#include <kis_brush.h>
+#include <kis_global.h>
+#include <kis_paint_device.h>
+#include <kis_painter.h>
+#include <kis_filter.h>
+#include <kis_filter_configuration.h>
+#include <kis_filter_config_widget.h>
+#include <kis_filter_processing_information.h>
+#include <kis_filter_registry.h>
+#include <kis_layer.h>
+#include <kis_types.h>
+#include <kis_iterators_pixel.h>
+#include <kis_paintop.h>
+#include <kis_selection.h>
 
 #include "ui_FilterOpOptionsWidget.h"
 
@@ -81,7 +82,10 @@ KisFilterOpSettings::KisFilterOpSettings(QWidget* parent) :
     }
     m_uiOptions->filtersList->setIDList( l2 );
     connect(m_uiOptions->filtersList, SIGNAL(activated(const KoID &)), SLOT(setCurrentFilter(const KoID &)));
-    setCurrentFilter( l2.first() );
+    if(not l2.empty())
+    {
+        setCurrentFilter( l2.first() );
+    }
 }
 
 void KisFilterOpSettings::setLayer( KisLayerSP layer )
@@ -95,7 +99,10 @@ void KisFilterOpSettings::setLayer( KisLayerSP layer )
         if( !m_currentFilterConfigWidget ||
             ( m_currentFilterConfigWidget && m_currentFilterConfigWidget->configuration()->isCompatible(m_paintDevice)) )
         {
-            setCurrentFilter(KoID(m_currentFilter->id()));
+            if(m_currentFilter)
+            {
+                setCurrentFilter(KoID(m_currentFilter->id()));
+            }
         }
     }
     else
@@ -203,9 +210,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 #endif
 
     // Filter the paint device
-    filter->disableProgress();
-    filter->process(source(), QPoint(x,y), tmpDev, QPoint(0,0), QSize(maskWidth, maskHeight), m_settings->filterConfig());
-    filter->enableProgress();
+    filter->process( KisFilterConstantProcessingInformation( source(), QPoint(x,y)), KisFilterProcessingInformation(tmpDev, QPoint(0,0) ), QSize(maskWidth, maskHeight), m_settings->filterConfig());
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 

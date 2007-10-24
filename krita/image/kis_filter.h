@@ -38,6 +38,9 @@ class KisProgressDisplayInterface;
 class KisFilterConfigWidget;
 class KisFilterConfiguration;
 class QWidget;
+class KisFilterProcessingInformation;
+class KisFilterConstantProcessingInformation;
+class KoProgressUpdater;
 
 /**
  * Basic interface of a Krita filter.
@@ -65,9 +68,6 @@ public:
 
 public:
 
-    virtual void setProgressDisplay(KisProgressDisplayInterface * progressDisplay);
-    virtual KisProgressDisplayInterface*progressDisplay( );
-
     /**
      * Override this function with the implementation of your filter.
      *
@@ -84,18 +84,18 @@ public:
      *        when filtering. Is _empty_ when all channels need to be filtered.
      * @param config the parameters of the filter
      */
-    virtual void process(const KisPaintDeviceSP src,
-                         const QPoint& srcTopLeft,
-                         KisPaintDeviceSP dst,
-                         const QPoint& dstTopLeft,
+    virtual void process(KisFilterConstantProcessingInformation src,
+                         KisFilterProcessingInformation dst,
                          const QSize& size,
-                         const KisFilterConfiguration* config
-        ) = 0;
+                         const KisFilterConfiguration* config,
+                         KoProgressUpdater* progressUpdater = 0
+        ) const = 0;
 
     /**
      * Provided for convenience only when source and destination are the same
      */
-    void process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config);
+    void process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater = 0);
 
 public:
     /**
@@ -178,11 +178,6 @@ public:
      */
     virtual bool workWith(KoColorSpace* cs) const { Q_UNUSED(cs); return true; }
 
-    virtual void enableProgress();
-    virtual void disableProgress();
-
-    bool autoUpdate();
-
     /// @return Unique identification for this filter
     QString id() const;
     QString name() const;
@@ -201,18 +196,6 @@ public:
      */
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev);
 
-    /**
-     * call this to cancel the current filtering
-     */
-    virtual void cancel();
-
-    virtual void setAutoUpdate(bool set);
-    bool progressEnabled() const;
-    /**
-     * @return true if cancel was requested and if progress is enabled
-     */
-    bool cancelRequested() const;
-
 protected:
 
     void setBookmarkManager(KisBookmarkedConfigurationManager* );
@@ -221,16 +204,6 @@ protected:
 
     /// @return the default configuration as defined by whoever wrote the plugin
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-
-protected slots:
-
-    // Convenience functions for progress display.
-    void setProgressTotalSteps(qint32 totalSteps);
-    void setProgress(qint32 progress);
-    void incProgress();
-    void setProgressStage(const QString& stage, qint32 progress);
-    void setProgressDone();
-    qint32 progress();
 
 private:
     struct Private;

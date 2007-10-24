@@ -52,6 +52,16 @@ public:
     bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
     /**
+     * Save pages
+     *
+     * This is used by saveOasis and for copy and paste of pages.
+     *
+     * For all pages that are specified also the master slide has to be specified.
+     */
+    bool saveOasisPages( KoXmlWriter* bodyWriter, KoGenStyles &mainStyles,
+                         QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages );
+
+    /**
      * Get page by index.
      *
      * @param index of the page

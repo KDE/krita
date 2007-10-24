@@ -135,15 +135,32 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         return false;
 
     KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
-
     KoXmlWriter * bodyWriter = oasisStore.bodyWriter();
+
+    if ( !saveOasisPages( bodyWriter, mainStyles, m_pages, m_masterPages ) ) {
+        return false;
+    }
+
+    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
+
+    oasisStore.closeContentWriter();
+
+    //add manifest line for content.xml
+    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+
+    return mainStyles.saveOdfStylesDotXml( store, manifestWriter );
+}
+
+bool KoPADocument::saveOasisPages( KoXmlWriter* bodyWriter, KoGenStyles &mainStyles,
+                                   QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages )
+{
+    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
     KoPASavingContext paContext( *bodyWriter, savingContext, 1 );
 
     paContext.setOptions( KoPASavingContext::DrawId | KoPASavingContext::AutoStyleInStyleXml );
 
     // save master pages
-    foreach( KoPAPageBase *page, m_masterPages )
+    foreach( KoPAPageBase *page, masterPages )
     {
         page->saveOdf( paContext );
     }
@@ -155,7 +172,7 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     paContext.setOptions( KoPASavingContext::DrawId );
 
     // save pages
-    foreach ( KoPAPageBase *page, m_pages )
+    foreach ( KoPAPageBase *page, pages )
     {
         page->saveOdf( paContext );
         paContext.incrementPage();
@@ -164,14 +181,7 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     bodyWriter->endElement(); // office:odfTagName()
     bodyWriter->endElement(); // office:body
 
-    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
-
-    oasisStore.closeContentWriter();
-
-    //add manifest line for content.xml
-    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-
-    return mainStyles.saveOdfStylesDotXml( store, manifestWriter );
+    return true;
 }
 
 KoPAPageBase* KoPADocument::pageByIndex( int index, bool masterPage ) const

@@ -41,7 +41,7 @@ public:
     static inline KoID id() { return KoID("autocontrast", i18n("Auto Contrast")); }
     virtual bool supportsPreview() const { return true; }
     virtual bool supportsPainting() const { return false; }
-    virtual bool supportsThreading() { return false; }
+    virtual bool supportsThreading() const { return false; }
 
     virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
     virtual bool workWith(KoColorSpace* cs);

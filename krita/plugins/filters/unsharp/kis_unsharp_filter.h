@@ -33,7 +33,7 @@ class KisUnsharpFilter : public KisFilter
         virtual bool supportsPainting() const { return true; }
         virtual bool supportsPreview() const { return true; }
         virtual bool supportsIncrementalPainting() const { return false; }
-        virtual bool supportsAdjustmentLayers() { return false; }
+        virtual bool supportsAdjustmentLayers() const { return false; }
         virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
     public:
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);

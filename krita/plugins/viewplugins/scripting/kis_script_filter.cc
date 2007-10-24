@@ -73,7 +73,8 @@ bool KisScriptFilter::supportsIncrementalPainting() const
 {
     return d->action->property("supportsIncrementalPainting").toBool();
 }
-bool KisScriptFilter::supportsThreading()
+
+bool KisScriptFilter::supportsThreading() const
 {
     return d->action->property("supportsThreading").toBool();
 }

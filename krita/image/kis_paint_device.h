@@ -28,15 +28,18 @@
 #include <QPaintDevice>
 #include <QPaintEngine>
 
-#include "kis_types.h"
 #include "kdebug.h"
-#include "kis_global.h"
-#include "kis_image.h"
+
 #include "KoColorSpace.h"
 #include "KoColor.h"
-#include <krita_export.h>
+
+#include "kis_types.h"
+#include "kis_global.h"
+#include "kis_image.h"
 #include <kis_shared.h>
 #include "kis_iterators_pixel.h"
+
+#include <krita_export.h>
 
 class QRect;
 class QImage;
@@ -531,35 +534,35 @@ public:
      * @return the current selection or create one if this paintdevice
      * hasn't got a selection yet.
      */
-    KisSelectionSP selection();
+    KisSelectionSP KDE_DEPRECATED selection();
 
     /**
      * @return the current selection or create one if this
      * paintdevice hasn't got a selection yet.
      */
-    const KisSelectionSP selection() const;
+    const KisSelectionSP KDE_DEPRECATED selection() const;
 
 
     /** Whether there is a valid selection for this paintdevice. */
-    bool hasSelection() const;
+    bool KDE_DEPRECATED hasSelection() const;
 
    /** Whether the previous selection was deselected. */
-    bool selectionDeselected();
+    bool KDE_DEPRECATED selectionDeselected();
 
     /** Deselect the selection for this paintdevice. */
-    void deselect();
+    void KDE_DEPRECATED deselect();
 
     /** Reinstates the old selection */
-    void reselect();
+    void KDE_DEPRECATED reselect();
 
     /** Clear the selected pixels from the paint device */
-    void clearSelection();
+    void KDE_DEPRECATED clearSelection();
 
     /**
      * Apply a mask to the image data, i.e. multiply each pixel's opacity by its
      * selectedness in the mask.
      */
-    void applySelectionMask(KisSelectionSP mask);
+    void KDE_DEPRECATED applySelectionMask(KisSelectionSP mask);
 
 
     /**
@@ -567,12 +570,12 @@ public:
      * returns the old selection, if there was an old selection,
      * otherwise 0
      */
-    KisSelectionSP setSelection(KisSelectionSP selection);
+    KisSelectionSP KDE_DEPRECATED setSelection(KisSelectionSP selection);
 
     /**
      * Notify the owning image that the current selection has changed.
      */
-    void emitSelectionChanged();
+    void KDE_DEPRECATED emitSelectionChanged();
 
 
     /**
@@ -580,7 +583,7 @@ public:
      *
      * @param r the area for which the selection has changed
      */
-    void emitSelectionChanged(const QRect& r);
+    void KDE_DEPRECATED emitSelectionChanged(const QRect& r);
 
     /**
      * XXX

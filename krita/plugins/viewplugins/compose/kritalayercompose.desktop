@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Compose Layer plugin
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritalayercompose
+X-Krita-Version=3

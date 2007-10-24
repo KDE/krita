@@ -474,6 +474,7 @@ public:
      * use this type of iterator if you are combining two differents layers.
      * @param w width
      * @param h height
+     * @param selection an up-to-date selection that has the same origin as the paint device
      * @return an iterator which points to the first pixel of an rectangle
      */
     KisRectIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, KisSelection * selection = 0);
@@ -484,28 +485,32 @@ public:
      * use this type of iterator if you are combining two differents layers.
      * @param w width
      * @param h height
-     * @return an iterator which points to the first pixel of an rectangle, this iterator
+     * @param selection an up-to-date selection that has the same origin as the paint device* @return an iterator which points to the first pixel of an rectangle, this iterator
      * does not allow to change the pixel values
      */
     KisRectConstIteratorPixel createRectConstIterator(qint32 left, qint32 top, qint32 w, qint32 h, KisSelection * selection = 0) const;
 
     /**
+     * @param selection an up-to-date selection that has the same origin as the paint device
      * @return an iterator which points to the first pixel of a horizontal line, this iterator
      * does not allow to change the pixel values
      */
     KisHLineConstIteratorPixel createHLineConstIterator(qint32 x, qint32 y, qint32 w, KisSelection * selection = 0) const;
 
     /**
+    * @param selection an up-to-date selection that has the same origin as the paint device
      * @return an iterator which points to the first pixel of a horizontal line
      */
     KisHLineIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w, KisSelection * selection = 0);
 
     /**
+     * @param selection an up-to-date selection that has the same origin as the paint device
      * This function return an iterator which points to the first pixel of a vertical line
      */
     KisVLineIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h, KisSelection * selection = 0);
 
     /**
+     * @param selection an up-to-date selection that has the same origin as the paint device
      * This function return an iterator which points to the first pixel of a vertical line
      */
     KisVLineConstIteratorPixel createVLineConstIterator(qint32 x, qint32 y, qint32 h, KisSelection * selection = 0) const;
@@ -514,7 +519,8 @@ public:
      * This function creates a random accessor which allow to randomly access any pixels on
      * the paint device.
      * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
-     * you can
+     * you can.
+     * @param selection an up-to-date selection that has the same origin as the paint device
      */
     KisRandomAccessorPixel createRandomAccessor(qint32 x, qint32 y, KisSelection * selection = 0);
 
@@ -522,12 +528,14 @@ public:
      * This function creates a random accessor which allow to randomly access any pixels on
      * the paint device.
      * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
-     * you can
+     * you can.
+     * @param selection an up-to-date selection that has the same origin as the paint device
      */
     KisRandomConstAccessorPixel createRandomConstAccessor(qint32 x, qint32 y, KisSelection * selection = 0) const;
 
     /**
      * This function create a random accessor which can easily access to sub pixel values.
+     * @param selection an up-to-date selection that has the same origin as the paint device
      */
     KisRandomSubAccessorPixel createRandomSubAccessor( KisSelection * selection = 0) const;
 

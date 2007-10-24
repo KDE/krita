@@ -31,11 +31,12 @@
  */
 class KRITAIMAGE_EXPORT KisFilterConstantProcessingInformation {
     public:
-        KisFilterConstantProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft);
+        KisFilterConstantProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
         /**
          * @return the paint device
          */
         const KisPaintDeviceSP paintDevice() const;
+        const KisSelectionSP selection() const;
         /**
          * @return the top left pixel that need to process
          */
@@ -52,7 +53,7 @@ class KRITAIMAGE_EXPORT KisFilterConstantProcessingInformation {
  */
 class KRITAIMAGE_EXPORT KisFilterProcessingInformation : public KisFilterConstantProcessingInformation {
     public:
-        KisFilterProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft);
+        KisFilterProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
         /**
          * @return the paint device
          */

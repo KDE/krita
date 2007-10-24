@@ -197,17 +197,20 @@ public:
     void crop(const QRect & r);
 
     /**
-     * Complete erase the current paint device. Its size will become 0.
+     * Complete erase the current paint device. Its size will become 0. This
+     * does not take the selection into account.
      */
     virtual void clear();
 
     /**
-     * Clear the given rectangle to transparent black
+     * Clear the given rectangle to transparent black. This does not take the selection
+     * into account.
      */
     void clear( const QRect & rc );
 
     /**
-     * Fill the given rectangle with the given pixel.
+     * Fill the given rectangle with the given pixel. This does not take the
+     * selection into account.
      */
     void fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel);
 
@@ -459,11 +462,11 @@ public:
     /**
      * Mirror the device along the X axis
      */
-    void mirrorX();
+    void mirrorX( KisSelection * selection = 0);
     /**
      * Mirror the device along the Y axis
      */
-    void mirrorY();
+    void mirrorY( KisSelection * selection = 0);
 
     /**
      * Create an iterator over a rectangle section of a paint device, the path followed by
@@ -473,7 +476,7 @@ public:
      * @param h height
      * @return an iterator which points to the first pixel of an rectangle
      */
-    KisRectIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h);
+    KisRectIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, KisSelection * selection = 0);
 
     /**
      * Create an iterator over a rectangle section of a paint device, the path followed by
@@ -484,28 +487,28 @@ public:
      * @return an iterator which points to the first pixel of an rectangle, this iterator
      * does not allow to change the pixel values
      */
-    KisRectConstIteratorPixel createRectConstIterator(qint32 left, qint32 top, qint32 w, qint32 h) const;
+    KisRectConstIteratorPixel createRectConstIterator(qint32 left, qint32 top, qint32 w, qint32 h, KisSelection * selection = 0) const;
 
     /**
      * @return an iterator which points to the first pixel of a horizontal line, this iterator
      * does not allow to change the pixel values
      */
-    KisHLineConstIteratorPixel createHLineConstIterator(qint32 x, qint32 y, qint32 w) const;
+    KisHLineConstIteratorPixel createHLineConstIterator(qint32 x, qint32 y, qint32 w, KisSelection * selection = 0) const;
 
     /**
      * @return an iterator which points to the first pixel of a horizontal line
      */
-    KisHLineIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w);
+    KisHLineIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w, KisSelection * selection = 0);
 
     /**
      * This function return an iterator which points to the first pixel of a vertical line
      */
-    KisVLineIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h);
+    KisVLineIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h, KisSelection * selection = 0);
 
     /**
      * This function return an iterator which points to the first pixel of a vertical line
      */
-    KisVLineConstIteratorPixel createVLineConstIterator(qint32 x, qint32 y, qint32 h) const;
+    KisVLineConstIteratorPixel createVLineConstIterator(qint32 x, qint32 y, qint32 h, KisSelection * selection = 0) const;
 
     /**
      * This function creates a random accessor which allow to randomly access any pixels on
@@ -513,7 +516,7 @@ public:
      * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
      * you can
      */
-    KisRandomAccessorPixel createRandomAccessor(qint32 x, qint32 y);
+    KisRandomAccessorPixel createRandomAccessor(qint32 x, qint32 y, KisSelection * selection = 0);
 
     /**
      * This function creates a random accessor which allow to randomly access any pixels on
@@ -521,12 +524,12 @@ public:
      * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
      * you can
      */
-    KisRandomConstAccessorPixel createRandomConstAccessor(qint32 x, qint32 y) const;
+    KisRandomConstAccessorPixel createRandomConstAccessor(qint32 x, qint32 y, KisSelection * selection = 0) const;
 
     /**
      * This function create a random accessor which can easily access to sub pixel values.
      */
-    KisRandomSubAccessorPixel createRandomSubAccessor() const;
+    KisRandomSubAccessorPixel createRandomSubAccessor( KisSelection * selection = 0) const;
 
 public:
 
@@ -534,7 +537,7 @@ public:
      * @return the current selection or create one if this paintdevice
      * hasn't got a selection yet.
      */
-    KisSelectionSP KDE_DEPRECATED selection();
+        KisSelectionSP KDE_DEPRECATED selection();
 
     /**
      * @return the current selection or create one if this

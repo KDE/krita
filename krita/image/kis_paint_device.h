@@ -545,7 +545,9 @@ public:
      * @return the current selection or create one if this paintdevice
      * hasn't got a selection yet.
      */
-        KisSelectionSP KDE_DEPRECATED selection();
+    KisSelectionSP KDE_DEPRECATED selection();
+
+public:
 
     /**
      * @return the current selection or create one if this

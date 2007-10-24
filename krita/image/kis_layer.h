@@ -103,6 +103,12 @@ public:
      */
     virtual KisSelectionMaskSP selectionMask() const;
 
+    /**
+     * @return the selection contained in the first KisSelectionMask associated
+     * with this layer or the image, if either exists, otherwise, return 0.
+     */
+    virtual KisSelectionSP selection() const;
+
     virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
     virtual void setSectionModelProperties( const KoDocumentSectionModel::PropertyList &properties  );
 

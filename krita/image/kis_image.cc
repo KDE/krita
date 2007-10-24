@@ -100,7 +100,7 @@ public:
 
     vKisAnnotationSP annotations;
 
-    KisSelectionSP globalSelection;
+    KisSelectionSP globalSelection; // XXX_SELECTION: Use the selection from the root layer for this
 
 };
 

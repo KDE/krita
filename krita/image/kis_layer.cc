@@ -192,6 +192,15 @@ KisSelectionMaskSP KisLayer::selectionMask() const
     return selection;
 }
 
+KisSelectionSP KisLayer::selection() const
+{
+    KisSelectionMaskSP selMask = selectionMask();
+    if (selMask)
+        return selMask->selection();
+    else
+        return m_d->image->globalSelection();
+}
+
 bool KisLayer::hasEffectMasks() const
 {
     QList<KisNodeSP> masks = childNodes( QStringList( "KisEffectMask" ), KoProperties() );

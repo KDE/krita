@@ -68,12 +68,12 @@ void KisRecordedFilterAction::play()
     // Filters should work only on the visible part of an image.
     QRect rect = r1.intersect(r2);
 
-    if (dev->hasSelection()) {
-        QRect r3 = dev->selection()->selectedExactRect();
+    if (KisSelectionSP selection = d->layer->selection()) {
+        QRect r3 = selection->selectedExactRect();
         rect = rect.intersect(r3);
     }
 
-    const_cast<KisFilter*>(d->filter)->process( d->layer->paintDevice(), rect, kfc);
+    const_cast<KisFilter*>(d->filter)->process( dev, rect, kfc);
 }
 
 void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt)
@@ -103,7 +103,7 @@ KisRecordedFilterActionFactory::KisRecordedFilterActionFactory() :
 
 KisRecordedFilterActionFactory::~KisRecordedFilterActionFactory()
 {
-    
+
 }
 
 KisRecordedAction* KisRecordedFilterActionFactory::fromXML(KisImageSP img, const QDomElement& elt)

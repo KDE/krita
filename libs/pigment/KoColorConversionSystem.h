@@ -36,12 +36,12 @@ class KoColorSpaceFactory;
  * by KoColorSpaceRegistry each time a new color space is added to the registry.
  */
 class PIGMENT_EXPORT KoColorConversionSystem {
+    public:
         struct Node;
         struct Vertex;
         struct NodeKey;
-        struct Path;
         friend uint qHash(const KoColorConversionSystem::NodeKey &key);
-    public:
+        struct Path;
         /**
          * Construct a Color Conversion System, leave to the KoColorSpaceRegistry to
          * create it.
@@ -119,7 +119,7 @@ class PIGMENT_EXPORT KoColorConversionSystem {
          * @internal
          */
         template<bool ignoreHdr, bool ignoreColorCorrectness>
-        inline Path* findBestPathImpl(const Node* srcNode, const Node* dstNode) const;
+        inline Path* findBestPathImpl2(const Node* srcNode, const Node* dstNode) const;
         /**
          * Don't call that function, but raher findBestPath
          * @internal

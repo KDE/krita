@@ -516,7 +516,7 @@ void KoColorConversionSystem::deletePathes( QList<KoColorConversionSystem::Path*
 }
 
 template<bool ignoreHdr, bool ignoreColorCorrectness>
-inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
+inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
 {
     PathQualityChecker<ignoreHdr, ignoreColorCorrectness> pQC( qMin(srcNode->referenceDepth, dstNode->referenceDepth ) );
     QHash<Node*, Path*> node2path; // current best path to reach a given node
@@ -607,9 +607,9 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
 {
     if(srcNode->isGray or dstNode->isGray)
     {
-        return findBestPathImpl<ignoreHdr, true>(srcNode, dstNode);
+        return findBestPathImpl2<ignoreHdr, true>(srcNode, dstNode);
     } else {
-        return findBestPathImpl<ignoreHdr, false>(srcNode, dstNode);
+        return findBestPathImpl2<ignoreHdr, false>(srcNode, dstNode);
     }
 }
 

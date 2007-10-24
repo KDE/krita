@@ -23,11 +23,11 @@
 
 #include <kdeversion.h>
 
-#include <QStringList>
-#include <QChar>
-#include <QTextCharFormat>
-#include <QMetaType>
-#include <QTextOption>
+#include <QtCore/QStringList>
+#include <QtCore/QChar>
+#include <QtGui/QTextCharFormat>
+#include <QtCore/QMetaType>
+#include <QtGui/QTextOption>
 
 /**
  * Generic namespace of the KOffice Text library for helper methods and data.

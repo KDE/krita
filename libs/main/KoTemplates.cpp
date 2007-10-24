@@ -272,7 +272,7 @@ void KoTemplateTree::readTemplates() {
                 // If a desktop file, then read the name from it.
                 // Otherwise (or if no name in it?) use file name
                 if (KDesktopFile::isDesktopFile(filePath)) {
-                    KConfig _config(filePath, KConfig::OnlyLocal);
+                    KConfig _config(filePath, KConfig::SimpleConfig);
                     KConfigGroup config( &_config, "Desktop Entry" );
                     if (config.readEntry("Type")=="Link") {
                         text=config.readEntry("Name");
@@ -293,7 +293,7 @@ void KoTemplateTree::readTemplates() {
                             continue;
 
                         //kDebug() <<"hidden:" << hidden_str;
-                        templatePath=config.readPathEntry("URL");
+                        templatePath=config.readPathEntry("URL", QString());
                         //kDebug() <<"Link to :" << templatePath;
                         if(templatePath[0]!='/') {
                             if(templatePath.left(6)=="file:/") // I doubt this will happen
@@ -357,7 +357,7 @@ void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
         fileName = path + fill + name + ".desktop";
     }
 
-    KConfig _config( fileName, KConfig::OnlyLocal);
+    KConfig _config( fileName, KConfig::SimpleConfig);
     KConfigGroup config( &_config, "Desktop Entry" );
     config.writeEntry("Type", "Link");
     config.writePathEntry("URL", t->file());

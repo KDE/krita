@@ -92,10 +92,10 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
   QStandardItem* rootItem = model()->invisibleRootItem();
 
   do {
-    path = config.readPathEntry(QString("File%1").arg(i));
+    path = config.readPathEntry(QString("File%1").arg(i), QString());
 
     if(!path.isEmpty()) {
-      QString name = config.readPathEntry(QString("Name%1").arg(i));
+      QString name = config.readPathEntry(QString("Name%1").arg(i), QString());
 
       KUrl url(path);
 

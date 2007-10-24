@@ -46,8 +46,8 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_compone
   KGuiItem openGItem(i18n("Use This Template"));
   m_openButton->setGuiItem(openGItem);
   KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
-  QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName");
-  d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate");
+  QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName", QString());
+  d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
   connect(m_alwaysUseCheckBox, SIGNAL(clicked()), this, SLOT(alwaysUseClicked()));
 
   QStandardItem* selectItem = 0;

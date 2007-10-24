@@ -27,6 +27,7 @@
 #include <QImage>
 #include <QVector>
 #include <QRect>
+#include <QVarLengthArray>
 
 #include <kdebug.h>
 
@@ -190,8 +191,8 @@ void KisSelection::paint(QImage* img, const QRect & r)
     Q_ASSERT(img->width() == width);
     Q_ASSERT(img->height() == height);
 
-    quint8* buffer = new quint8[width*height];
-    readBytes(buffer, r.x(), r.y(), width, height);
+    QVarLengthArray<quint8> buffer(width*height);
+    readBytes(&buffer[0], r.x(), r.y(), width, height);
 
     for (qint32 y = 0; y < height; y++) {
 

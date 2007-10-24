@@ -63,7 +63,8 @@ class KRITAIMAGE_EXPORT KisConvolutionPainter : public KisPainter
 public:
 
     KisConvolutionPainter();
-    KisConvolutionPainter(KisPaintDeviceSP device);
+    KisConvolutionPainter(KisPaintDeviceSP device );
+    KisConvolutionPainter(KisPaintDeviceSP device, KisSelectionSP selection);
 
     /**
      * Convolve all channels in src using the specified kernel; there is only one kernel for all

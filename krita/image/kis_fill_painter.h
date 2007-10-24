@@ -52,6 +52,14 @@ public:
      */
     KisFillPainter(KisPaintDeviceSP device);
 
+    KisFillPainter(KisPaintDeviceSP device, KisSelectionSP selection);
+
+private:
+
+    void initFillPainter();
+
+public:
+
     /**
      * Fill a rectangle with black transparent pixels (0, 0, 0, 0 for RGBA).
      */
@@ -177,7 +185,7 @@ private:
     void genericFillStart(int startX, int startY, KisPaintDeviceSP projection);
     void genericFillEnd(KisPaintDeviceSP filled);
 
-    KisPixelSelectionSP m_selection;
+    KisPixelSelectionSP m_fillSelection;
 
     int m_threshold;
     int m_size;

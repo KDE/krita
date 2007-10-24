@@ -63,8 +63,10 @@ class KRITAIMAGE_EXPORT KisPainter : public KisProgressSubject {
 public:
     /// Construct painter without a device
     KisPainter();
+
     /// Construct a painter, and begin painting on the device
-    KisPainter(KisPaintDeviceSP device);
+    KisPainter( KisPaintDeviceSP device );
+    KisPainter(KisPaintDeviceSP device, KisSelectionSP selection);
     virtual ~KisPainter();
 
 private:
@@ -75,7 +77,8 @@ public:
     /**
      * Start painting on the specified device. Not undoable.
      */
-    void begin(KisPaintDeviceSP device);
+    void begin( KisPaintDeviceSP device );
+    void begin( KisPaintDeviceSP device, KisSelectionSP selection );
 
     /**
      * Finish painting on the current device
@@ -606,6 +609,7 @@ private:
 
 protected:
     KisPaintDeviceSP m_device;
+    KisSelectionSP m_selection;
     KisTransaction  *m_transaction;
 
     QRegion m_dirtyRegion;

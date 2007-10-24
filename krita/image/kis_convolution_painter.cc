@@ -79,22 +79,28 @@ KisConvolutionPainter::KisConvolutionPainter()
 {
 }
 
-KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : KisPainter(device)
+KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device)
+    : KisPainter(device)
 {
 }
+
+KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelectionSP selection)
+: KisPainter(device, selection)
+{
+}
+
 
 void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
                                         KisConvolutionBorderOp borderOp )
 {
     // Make the area we cover as small as possible
-    if (m_device->hasSelection()) {
+    if ( m_selection ) {
 
-        QRect r = m_device->selection()->selectedRect().intersect(QRect(x, y, w, h));
+        QRect r = m_selection->selectedRect().intersect(QRect(x, y, w, h));
         x = r.x();
         y = r.y();
         w = r.width();
         h = r.height();
-
     }
 
     if ( w == 0 && h == 0 ) return;

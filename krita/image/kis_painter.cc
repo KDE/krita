@@ -64,11 +64,21 @@
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 
 KisPainter::KisPainter()
+    : m_selection( 0 )
 {
     init();
 }
 
-KisPainter::KisPainter(KisPaintDeviceSP device)
+KisPainter::KisPainter( KisPaintDeviceSP device )
+    : m_selection( 0 )
+{
+    init();
+    Q_ASSERT(device);
+    begin(device);
+}
+
+KisPainter::KisPainter(KisPaintDeviceSP device, KisSelectionSP selection)
+    : m_selection(selection)
 {
     init();
     Q_ASSERT(device);
@@ -102,10 +112,15 @@ KisPainter::~KisPainter()
     end();
 }
 
-void KisPainter::begin(KisPaintDeviceSP device)
+void KisPainter::begin( KisPaintDeviceSP device )
+{
+    begin( device, 0 );
+}
+
+void KisPainter::begin( KisPaintDeviceSP device, KisSelectionSP selection )
 {
     if (!device) return;
-
+    m_selection = selection;
     Q_ASSERT( device->colorSpace() );
 
     if (m_transaction) {
@@ -117,6 +132,9 @@ void KisPainter::begin(KisPaintDeviceSP device)
     m_compositeOp = m_colorSpace->compositeOp( COMPOSITE_OVER );
     m_pixelSize = device->pixelSize();
 }
+
+
+
 
 QUndoCommand *KisPainter::end()
 {
@@ -496,11 +514,12 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
                               qint32 sw, qint32 sh)
 {
     if (m_device.isNull()) return;
-    if (!m_device->hasSelection()) {
+    if ( !m_selection ) {
         bitBlt(dx, dy, op, srcdev, opacity, sx, sy, sw, sh);
     }
-    else
-        bltSelection(dx,dy,op,srcdev, m_device->selection(),opacity,sx,sy,sw,sh);
+    else {
+        bltSelection(dx, dy, op, srcdev, m_selection, opacity, sx, sy, sw, sh );
+    }
 }
 
 double KisPainter::paintLine(const KisPaintInformation &pi1,

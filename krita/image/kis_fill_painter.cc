@@ -62,14 +62,22 @@ namespace {
 KisFillPainter::KisFillPainter()
     : KisPainter()
 {
-    m_width = m_height = -1;
-    m_sampleMerged = false;
-    m_careForSelection = false;
-    m_fuzzy = false;
+    initFillPainter();
 }
 
 KisFillPainter::KisFillPainter(KisPaintDeviceSP device)
     : KisPainter(device)
+{
+    initFillPainter();
+}
+
+KisFillPainter::KisFillPainter(KisPaintDeviceSP device, KisSelectionSP selection)
+    : KisPainter( device, selection )
+{
+    initFillPainter();
+}
+
+void KisFillPainter::initFillPainter()
 {
     m_width = m_height = -1;
     m_sampleMerged = false;
@@ -182,7 +190,7 @@ void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP p
     m_size = m_width * m_height;
 
     // Create a selection from the surrounding area
-    m_selection = createFloodSelection(startX, startY, projection);
+    m_fillSelection = createFloodSelection(startX, startY, projection);
 }
 
 void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
@@ -191,10 +199,10 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
         return;
     }
 
-    QRect rc = m_selection->selectedExactRect();
+    QRect rc = m_fillSelection->selectedExactRect();
 
     // Sets dirty!
-    bltMask(rc.x(), rc.y(), m_compositeOp, filled, m_selection, m_opacity,
+    bltMask(rc.x(), rc.y(), m_compositeOp, filled, m_fillSelection, m_opacity,
                  rc.x(), rc.y(), rc.width(), rc.height());
 
     emit notifyProgressDone();
@@ -217,8 +225,8 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
 // correct! (BSAR)
 
     if (m_width < 0 || m_height < 0) {
-        if (m_device->hasSelection() && m_careForSelection) {
-            QRect rc = m_device->selection()->selectedExactRect();
+        if (m_selection && m_careForSelection) {
+            QRect rc = m_selection->selectedExactRect();
             m_width = rc.width() - (startX - rc.x());
             m_height = rc.height() - (startY - rc.y());
         }
@@ -271,10 +279,10 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
     int progressPercent = 0; int pixelsDone = 0; int currentPercent = 0;
     emit notifyProgressStage(i18n("Making fill outline..."), 0);
 
-    bool hasSelection = m_careForSelection && sourceDevice->hasSelection();
+    bool hasSelection = m_careForSelection && m_selection;
     KisSelectionSP srcSel = KisSelectionSP(0);
     if (hasSelection) {
-        srcSel = sourceDevice->selection();
+        srcSel = m_selection;
         if(!srcSel->hasPixelSelection())
             srcSel->setPixelSelection(KisPixelSelectionSP(new KisPixelSelection(sourceDevice)));
     }

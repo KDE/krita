@@ -47,7 +47,11 @@ KisDoubleWidget::~KisDoubleWidget()
 
 void KisDoubleWidget::init(double min, double max)
 {
-    m_spinBox = new KDoubleSpinBox(min, max, 0.05, 0, this);
+    m_spinBox = new QDoubleSpinBox(this);
+    m_spinBox->setMinimum(min);
+    m_spinBox->setMaximum(max);
+    m_spinBox->setSingleStep(0.05);
+    m_spinBox->setValue(0);
     m_spinBox->setObjectName("spinbox");
     connect(m_spinBox, SIGNAL(valueChanged(double)), this, SLOT(setSliderValue(double)));
 
@@ -131,7 +135,7 @@ void KisDoubleWidget::sliderValueChanged(int value)
 
 void KisDoubleWidget::setPrecision(int precision)
 {
-    m_spinBox->setPrecision(precision);
+    m_spinBox->setDecimals(precision);
 }
 
 void KisDoubleWidget::setSingleStep(double step)

@@ -26,7 +26,7 @@
 #include <QSlider>
 
 class QHBoxLayout;
-class KDoubleSpinBox;
+class QDoubleSpinBox;
 
 class KisDoubleWidget : public QWidget
 {
@@ -69,7 +69,7 @@ private:
 protected:
     QHBoxLayout* m_layout;
     QSlider* m_slider;
-    KDoubleSpinBox *m_spinBox;
+    QDoubleSpinBox *m_spinBox;
 };
 
 #endif // KIS_DOUBLE_WIDGET_H

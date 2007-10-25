@@ -181,5 +181,6 @@ install( FILES
     threadAction/KoAction.h
     KoDockFactory.h
     KoViewChild.h
+    komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR})
 

@@ -197,7 +197,7 @@ DoubleSpinBox::DoubleSpinBox (double lower, double upper, double step, double va
         setMaximum(upper);
         setValue(value);
         setSingleStep(step);
-                
+        setDecimals(precision);         
 	lineEdit()->setAlignment(Qt::AlignLeft);
 	installEventFilter(lineEdit());
 	installEventFilter(this);

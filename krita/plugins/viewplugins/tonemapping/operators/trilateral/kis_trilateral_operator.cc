@@ -60,7 +60,7 @@ class KisTrilateralOperatorConfigurationWidget : public KisToneMappingOperatorCo
         Ui_TrilateralOperatorConfigurationWidget widget;
 };
 
-PUBLISH_OPERATOR(KisTrilateralOperator);
+PUBLISH_OPERATOR(KisTrilateralOperator)
 
 KisTrilateralOperator::KisTrilateralOperator() : KisToneMappingOperator("trilateral", i18n("Trilateral"))
 {

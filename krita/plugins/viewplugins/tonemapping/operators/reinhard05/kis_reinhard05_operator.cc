@@ -58,7 +58,7 @@ class KisReinhard05OperatorConfigurationWidget : public KisToneMappingOperatorCo
         Ui_Reinhard05OperatorConfigurationWidget widget;
 };
 
-PUBLISH_OPERATOR(KisReinhard05Operator);
+PUBLISH_OPERATOR(KisReinhard05Operator)
 
 KisReinhard05Operator::KisReinhard05Operator() : KisToneMappingOperator("reinhard05", i18n("Reinhard 05"))
 {

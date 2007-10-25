@@ -23,7 +23,7 @@
 #include <math.h>
 
 #include "KoIncompleteColorSpace.h"
-#include "KoLcmsColorProfile.h"
+#include "KoLcmsColorProfileContainer.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpaceTraits.h"
 #include "KoChannelInfo.h"
@@ -50,10 +50,12 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             Q_ASSERT(profile);
 
             m_profile = 0;
+            m_profileLcms = 0;
 
             if (profile) {
-                m_profile = dynamic_cast<KoLcmsColorProfile *>(profile);
+                m_profile = dynamic_cast<KoIccColorProfile *>(profile);
                 Q_ASSERT(m_profile != 0);
+                m_profileLcms = m_profile->asLcms();
             }
 
             // We use an RgbU16 colorspace to convert exposed pixels into
@@ -98,9 +100,9 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 
         virtual bool profileIsCompatible(KoColorProfile* profile) const
         {
-            KoLcmsColorProfile *lcmsProfile = dynamic_cast<KoLcmsColorProfile *>(profile);
+            KoIccColorProfile *lcmsProfile = dynamic_cast<KoIccColorProfile *>(profile);
             if (lcmsProfile) {
-                if (lcmsProfile->colorSpaceSignature() == icSigRgbData) {
+                if (lcmsProfile->asLcms()->colorSpaceSignature() == icSigRgbData) {
                     return true;
                 }
             }
@@ -243,7 +245,8 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             return (quint16)qBound(minU16, qRound(value * maxU16), maxU16);
         }
 
-        KoLcmsColorProfile *m_profile;
+        KoIccColorProfile *m_profile;
+        KoLcmsColorProfileContainer *m_profileLcms;
         KoColorSpace *m_rgbU16ColorSpace;
 
         friend class KisRgbFloatHDRColorSpaceTest;
@@ -254,9 +257,9 @@ class KisRgbFloatHDRColorSpaceFactory : public KoColorSpaceFactory
 public:
     virtual bool profileIsCompatible(KoColorProfile* profile) const
     {
-        KoLcmsColorProfile *lcmsProfile = dynamic_cast<KoLcmsColorProfile *>(profile);
+        KoIccColorProfile *lcmsProfile = dynamic_cast<KoIccColorProfile *>(profile);
         if (lcmsProfile) {
-            if (lcmsProfile->colorSpaceSignature() == icSigRgbData) {
+            if (lcmsProfile->asLcms()->colorSpaceSignature() == icSigRgbData) {
                 return true;
             }
         }

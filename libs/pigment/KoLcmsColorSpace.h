@@ -25,7 +25,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
-#include <colorprofiles/KoLcmsColorProfile.h>
+#include <colorprofiles/KoLcmsColorProfileContainer.h>
 #include <KoColorSpaceAbstract.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -66,7 +66,7 @@ struct KoLcmsColorTransformation : public KoColorTransformation
 
 class PIGMENT_EXPORT KoLcmsColorConversionTransformation : public KoColorConversionTransformation {
     public:
-        KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, quint32 srcColorSpaceType, KoLcmsColorProfile* srcProfile, const KoColorSpace* dstCs, quint32 dstColorSpaceType, KoLcmsColorProfile* dstProfile, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_transform(0)
+        KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, quint32 srcColorSpaceType, KoLcmsColorProfileContainer* srcProfile, const KoColorSpace* dstCs, quint32 dstColorSpaceType, KoLcmsColorProfileContainer* dstProfile, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_transform(0)
         {
             m_transform = this->createTransform(
                             srcColorSpaceType,
@@ -99,9 +99,9 @@ class PIGMENT_EXPORT KoLcmsColorConversionTransformation : public KoColorConvers
     private:
         cmsHTRANSFORM createTransform(
                 quint32 srcColorSpaceType,
-                KoLcmsColorProfile *  srcProfile,
+                KoLcmsColorProfileContainer *  srcProfile,
                 quint32 dstColorSpaceType,
-                KoLcmsColorProfile *  dstProfile,
+                KoLcmsColorProfileContainer *  dstProfile,
                 qint32 renderingIntent) const;
     private:
         mutable cmsHTRANSFORM m_transform;
@@ -148,7 +148,8 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             mutable cmsHPROFILE   lastRGBProfile;  // Last used profile to transform to/from RGB
             mutable cmsHTRANSFORM lastToRGB;       // Last used transform to transform to RGB
             mutable cmsHTRANSFORM lastFromRGB;     // Last used transform to transform from RGB
-            KoLcmsColorProfile *  profile;
+            KoLcmsColorProfileContainer *  profile;
+            KoColorProfile* colorProfile;
         };
     protected:
         KoLcmsColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, DWORD cmType,
@@ -158,6 +159,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         {
             Q_ASSERT(p); // No profile means the lcms color space can't work
             d->profile = asLcmsProfile(p);
+            d->colorProfile = p;
             d->qcolordata = 0;
             d->lastRGBProfile = 0;
             d->lastToRGB = 0;
@@ -193,12 +195,12 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
     public:
 
         virtual bool hasHighDynamicRange() const { return false; }
-        virtual KoColorProfile * profile() const { return lcmsProfile(); }
+        virtual KoColorProfile * profile() const { return d->colorProfile; }
 
         virtual bool profileIsCompatible(KoColorProfile* profile) const
         {
-            KoLcmsColorProfile* p = dynamic_cast<KoLcmsColorProfile*>(profile);
-            return (p && p->colorSpaceSignature() == colorSpaceSignature());
+            KoIccColorProfile* p = dynamic_cast<KoIccColorProfile*>(profile);
+            return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
         }
 
         virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * koprofile=0) const
@@ -207,7 +209,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             d->qcolordata[1] = color.green();
             d->qcolordata[0] = color.blue();
 
-            KoLcmsColorProfile* profile = asLcmsProfile(koprofile);
+            KoLcmsColorProfileContainer* profile = asLcmsProfile(koprofile);
             if (profile == 0) {
 	    // Default sRGB
                 if (!d->defaultFromRGB) return;
@@ -236,7 +238,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
         virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * koprofile =0) const
         {
-            KoLcmsColorProfile* profile = asLcmsProfile(koprofile);
+            KoLcmsColorProfileContainer* profile = asLcmsProfile(koprofile);
             if (profile == 0) {
 	// Default sRGB transform
                 if (!d->defaultToRGB) return;
@@ -404,10 +406,10 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         }
 
     private:
-        inline KoLcmsColorProfile* lcmsProfile() const {
+        inline KoLcmsColorProfileContainer* lcmsProfile() const {
             return d->profile;
         }
-        inline static KoLcmsColorProfile* asLcmsProfile(KoColorProfile* p)
+        inline static KoLcmsColorProfileContainer* asLcmsProfile(KoColorProfile* p)
         {
             if(not p) return 0;
             KoIccColorProfile* iccp = dynamic_cast<KoIccColorProfile*>(p);
@@ -456,7 +458,7 @@ class PIGMENT_EXPORT KoLcmsColorSpaceFactory : public KoColorSpaceFactory, priva
         }
         virtual bool profileIsCompatible(KoColorProfile* profile) const
         {
-            KoLcmsColorProfile* p = dynamic_cast<KoLcmsColorProfile*>(profile);
+            KoLcmsColorProfileContainer* p = dynamic_cast<KoLcmsColorProfileContainer*>(profile);
             return p && p->colorSpaceSignature() == colorSpaceSignature();
         }
         virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const;

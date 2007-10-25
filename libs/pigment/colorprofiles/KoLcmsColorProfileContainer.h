@@ -31,30 +31,12 @@
 #include <QString>
 
 /**
- * This class contains an LCMS color profile. Use it with care outside KoLcmsColorSpace.
+ * This class contains an LCMS color profile. Don't use it outside KoLcmsColorSpace.
  */
-class PIGMENT_EXPORT KoLcmsColorProfile : public KoIccColorProfile {
+class PIGMENT_EXPORT KoLcmsColorProfileContainer : public KoIccColorProfile::Container {
     friend class KoIccColorProfile;
 protected:
-    KoLcmsColorProfile( KoIccColorProfile::Data *);
-#if 0
-    /**
-     * Initialize the profile using the raw data. Use it after reading the profile data
-     * inside an image file.
-     * @param rawData profile data
-     */
-    explicit KoLcmsColorProfile(const QByteArray& rawData);
-    /**
-     * Initialize a profile from the disk. You need to call the function \ref load to actually
-     * load the profile data in memory.
-     * @param file filename of the profile
-     */
-    explicit KoLcmsColorProfile(const QString& file);
-    /**
-     * Initialize the profile from the LCMS color profile
-     */
-    explicit KoLcmsColorProfile(const cmsHPROFILE profile);
-#endif
+    KoLcmsColorProfileContainer( KoIccColorProfile::Data *);
 public:
     /**
      * @return an ICC profile created from an LCMS profile
@@ -62,7 +44,7 @@ public:
     static KoIccColorProfile* createFromLcmsProfile(const cmsHPROFILE profile);
 public:
 
-    virtual ~KoLcmsColorProfile();
+    virtual ~KoLcmsColorProfileContainer();
 
     /**
      * @return the ICC color space signature
@@ -90,8 +72,6 @@ public:
      */
     cmsHPROFILE lcmsProfile();
 
-    friend bool operator==( const KoLcmsColorProfile &,  const KoLcmsColorProfile & );
-
     virtual bool valid() const;
 
     virtual bool isSuitableForOutput() const;
@@ -99,9 +79,11 @@ public:
     virtual bool isSuitableForPrinting() const;
 
     virtual bool isSuitableForDisplay() const;
+    virtual QString name() const;
+    virtual QString info() const;
 
 protected:
-    KoLcmsColorProfile();
+    KoLcmsColorProfileContainer();
 //     void setProfile(const cmsHPROFILE profile);
 
 private:

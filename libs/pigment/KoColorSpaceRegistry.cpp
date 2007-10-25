@@ -38,7 +38,7 @@
 #include "KoColorConversionSystem.h"
 #include "KoBasicHistogramProducers.h"
 
-#include "colorprofiles/KoLcmsColorProfile.h"
+#include "colorprofiles/KoLcmsColorProfileContainer.h"
 #include "colorspaces/KoAlphaColorSpace.h"
 #include "colorspaces/KoLabColorSpace.h"
 #include "colorspaces/KoRgbU16ColorSpace.h"
@@ -98,13 +98,13 @@ void KoColorSpaceRegistry::init()
         }
     }
 
-    KoColorProfile *labProfile = KoLcmsColorProfile::createFromLcmsProfile(cmsCreateLabProfile(NULL));
+    KoColorProfile *labProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLabProfile(NULL));
     addProfile(labProfile);
     add(new KoLabColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
                 new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
                 (KoID("LABAHISTO", i18n("L*a*b* Histogram")), lab16()));
-    KoColorProfile *rgbProfile = KoLcmsColorProfile::createFromLcmsProfile(cmsCreate_sRGBProfile());
+    KoColorProfile *rgbProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreate_sRGBProfile());
     addProfile(rgbProfile);
     add(new KoRgbU16ColorSpaceFactory());
 
@@ -120,7 +120,7 @@ void KoColorSpaceRegistry::init()
     LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
     cmsFreeGamma(Gamma);
-    KoColorProfile *defProfile = KoLcmsColorProfile::createFromLcmsProfile(hProfile);
+    KoColorProfile *defProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(hProfile);
     kDebug() << "Gray " << defProfile->name();
     addProfile(defProfile);
 

@@ -32,7 +32,7 @@
 
 #include <kdebug.h>
 
-#include "KoLcmsColorProfile.h"
+#include "KoLcmsColorProfileContainer.h"
 
 struct KoIccColorProfile::Data::Private {
     QByteArray rawData;
@@ -56,11 +56,19 @@ void KoIccColorProfile::Data::setRawData(QByteArray rawData)
     d->rawData = rawData;
 }
 
+KoIccColorProfile::Container::Container()
+{
+}
+
+KoIccColorProfile::Container::~Container()
+{
+}
+
 struct KoIccColorProfile::Private
 {
     KoIccColorProfile::Data* data;
     bool ownData;
-    KoLcmsColorProfile* lcmsProfile;
+    KoLcmsColorProfileContainer* lcmsProfile;
 };
 
 KoIccColorProfile::KoIccColorProfile( Data * data) : KoColorProfile(""), d(new Private)
@@ -199,7 +207,7 @@ bool KoIccColorProfile::init()
 {
     if(not d->lcmsProfile)
     {
-        d->lcmsProfile = new KoLcmsColorProfile(d->data);
+        d->lcmsProfile = new KoLcmsColorProfileContainer(d->data);
     }
     if(d->lcmsProfile->init())
     {
@@ -211,7 +219,7 @@ bool KoIccColorProfile::init()
     }
 }
 
-KoLcmsColorProfile* KoIccColorProfile::asLcms() const
+KoLcmsColorProfileContainer* KoIccColorProfile::asLcms() const
 {
     Q_ASSERT( d->lcmsProfile );
     return d->lcmsProfile;

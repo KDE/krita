@@ -22,13 +22,17 @@
 
 #include "KoColorProfile.h"
 
-class KoLcmsColorProfile;
+class KoLcmsColorProfileContainer;
 
 /**
  * This class contains an ICC color profile.
  */
 class PIGMENT_EXPORT KoIccColorProfile : public KoColorProfile {
-    protected:
+    public:
+        /**
+         * Contains the data associated with a profile. This is
+         * shared through internal representation.
+         */
         class Data {
             public:
                 Data();
@@ -39,7 +43,22 @@ class PIGMENT_EXPORT KoIccColorProfile : public KoColorProfile {
                 struct Private;
                 Private* const d;
         };
-//     protected:
+        /**
+         * This class should be used to wrap the ICC profile
+         * representation coming from various CMS engine.
+         */
+        class Container {
+            public:
+                Container();
+                virtual ~Container();
+            public:
+                virtual QString name() const =0;
+                virtual QString info() const =0;
+                virtual bool valid() const =0;
+                virtual bool isSuitableForOutput() const =0;
+                virtual bool isSuitableForPrinting() const =0;
+                virtual bool isSuitableForDisplay() const =0;
+        };
     public:
         KoIccColorProfile( Data *);
     public:
@@ -61,7 +80,7 @@ class PIGMENT_EXPORT KoIccColorProfile : public KoColorProfile {
     protected:
         void setRawData(const QByteArray& rawData);
     public:
-        KoLcmsColorProfile* asLcms() const;
+        KoLcmsColorProfileContainer* asLcms() const;
     public:
         /**
         *

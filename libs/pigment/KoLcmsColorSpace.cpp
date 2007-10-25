@@ -53,7 +53,7 @@ KoLcmsColorConversionTransformationFactory::KoLcmsColorConversionTransformationF
 
 KoColorConversionTransformation* KoLcmsColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent )
 {
-    return new KoLcmsColorConversionTransformation(srcColorSpace, m_srcColorSpaceType, dynamic_cast<KoLcmsColorProfile*>(srcColorSpace->profile()), dstColorSpace, m_dstColorSpaceType, dynamic_cast<KoLcmsColorProfile*>(dstColorSpace->profile()), renderingIntent);
+    return new KoLcmsColorConversionTransformation(srcColorSpace, m_srcColorSpaceType, dynamic_cast<KoIccColorProfile*>(srcColorSpace->profile())->asLcms(), dstColorSpace, m_dstColorSpaceType, dynamic_cast<KoIccColorProfile*>(dstColorSpace->profile())->asLcms(), renderingIntent);
 }
 
 bool KoLcmsColorConversionTransformationFactory::conserveColorInformation() const
@@ -113,9 +113,9 @@ quint32 KoLcmsColorConversionTransformationFactory::computeColorSpaceType(QStrin
 
 cmsHTRANSFORM KoLcmsColorConversionTransformation::createTransform(
         quint32 srcColorSpaceType,
-        KoLcmsColorProfile *  srcProfile,
+        KoLcmsColorProfileContainer *  srcProfile,
         quint32 dstColorSpaceType,
-        KoLcmsColorProfile *  dstProfile,
+        KoLcmsColorProfileContainer *  dstProfile,
         qint32 renderingIntent) const
 {
     KConfigGroup cfg = KGlobal::config()->group("");

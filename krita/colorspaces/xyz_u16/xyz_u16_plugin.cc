@@ -36,7 +36,7 @@ XYZU16Plugin::XYZU16Plugin(QObject *parent, const QStringList &)
     KoColorSpaceFactory * csf = new KisXyzU16ColorSpaceFactory();
     f->add(csf);
     
-    KoColorProfile *xyzProfile = KoLcmsColorProfile::createFromLcmsProfile(cmsCreateXYZProfile());
+    KoColorProfile *xyzProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreateXYZProfile());
     f->addProfile(xyzProfile);
     
     KoColorSpace * colorSpaceXYZU16 = new KisXyzU16ColorSpace(f, KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile()));

@@ -74,7 +74,7 @@ class KOPROPERTY_EXPORT IntEdit : public Widget
 
 // Double editor
 
-class DoubleSpinBox : public KDoubleSpinBox
+class DoubleSpinBox : public QDoubleSpinBox
 {
 	Q_OBJECT
 
@@ -85,7 +85,7 @@ class DoubleSpinBox : public KDoubleSpinBox
 		virtual ~DoubleSpinBox() {;}
 
 		virtual bool eventFilter(QObject *o, QEvent *e);
-		QLineEdit * lineEdit() const { return KDoubleSpinBox::lineEdit(); }
+		QLineEdit * lineEdit() const { return QDoubleSpinBox::lineEdit(); }
 
 	public slots:
 		virtual void setValue( const QVariant& value );

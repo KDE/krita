@@ -191,8 +191,13 @@ IntEdit::setReadOnlyInternal(bool readOnly)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DoubleSpinBox::DoubleSpinBox (double lower, double upper, double step, double value, int precision, DoubleEdit *parent)
-: KDoubleSpinBox(lower, upper, step, value, parent, precision)
+: QDoubleSpinBox(parent)
 {
+        setMinimum(lower);
+        setMaximum(upper);
+        setValue(value);
+        setSingleStep(step);
+                
 	lineEdit()->setAlignment(Qt::AlignLeft);
 	installEventFilter(lineEdit());
 	installEventFilter(this);
@@ -231,7 +236,7 @@ DoubleSpinBox::eventFilter(QObject *o, QEvent *e)
 		return true; //avoid value changes for read-only widget
 	}
 
-	return KDoubleSpinBox::eventFilter(o, e);
+	return QDoubleSpinBox::eventFilter(o, e);
 }
 
 
@@ -242,7 +247,7 @@ void DoubleSpinBox::setValue( const QVariant& value )
 	if (value.isNull())
 		lineEdit()->clear();
 	else
-		KDoubleSpinBox::setValue(value.toDouble());
+		QDoubleSpinBox::setValue(value.toDouble());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////

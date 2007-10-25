@@ -166,11 +166,11 @@
                   </widget>
                 </item>
                 <item>
-                  <widget class="KDoubleSpinBox" name="doubleCustom" >
+                  <widget class="QDoubleSpinBox" name="doubleCustom" >
                     <property name="maximum" >
                       <number>360</number>
                     </property>
-                    <property name="lineStep" >
+                    <property name="singleStep" >
                       <number>1</number>
                     </property>
                   </widget>
@@ -201,13 +201,6 @@
   <layoutdefault spacing="6" margin="11" />
   <pixmapfunction></pixmapfunction>
   <customwidgets>
-    <customwidget>
-      <class>KDoubleSpinBox</class>
-      <extends>QSpinBox</extends>
-      <header>knuminput.h</header>
-      <container>1</container>
-      <pixmap></pixmap>
-    </customwidget>
   </customwidgets>
   <images>
     <image name="image0" >

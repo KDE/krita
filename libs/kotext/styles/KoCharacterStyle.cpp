@@ -31,6 +31,7 @@
 #include <KoUnit.h>
 #include <KoGenStyle.h>
 
+#include <kdeversion.h>
 #include <KDebug>
 
 class KoCharacterStyle::Private {
@@ -96,13 +97,13 @@ KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style)
 }
 
 
-KoCharacterStyle::KoCharacterStyle(const QTextFormat &textFormat)
+KoCharacterStyle::KoCharacterStyle(const QTextCharFormat &format)
     : QObject(0), d( new Private() )
 {
-    QMapIterator<int, QVariant> i(textFormat.properties());
-    while (i.hasNext()) {
-        i.next();
-        d->setProperty(i.key(), i.value());
+    QMapIterator<int, QVariant> iter(format.properties());
+    while (iter.hasNext()) {
+        iter.next();
+        d->setProperty(iter.key(), iter.value());
     }
 }
 
@@ -174,6 +175,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         KoCharacterStyle::UnderlineType,
         KoCharacterStyle::UnderlineColor,
         KoCharacterStyle::TransformText,
+        KoCharacterStyle::HasHyphenation,
         -1
     };
 
@@ -184,6 +186,23 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
             format.setProperty(properties[i], variant);
         i++;
     }
+
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+    QVariant variant = d->stylesPrivate->value(TransformText);
+    if(!variant.isNull()) {
+        switch(static_cast<Transform>(variant.toInt())) {
+        case Capitalize:
+            format.setProperty(TransformText, Capitalize);
+            // fall through
+        case NoTransform:
+            format.setFontCapitalization(QFont::NormalCaps);
+            break;
+        case SmallCaps: format.setFontCapitalization(QFont::SmallCaps); break;
+        case Uppercase: format.setFontCapitalization(QFont::Uppercase); break;
+        case Lowercase: format.setFontCapitalization(QFont::Lowercase); break;
+        }
+    }
+#endif
 }
 
 void KoCharacterStyle::applyStyle(QTextBlock &block) const {

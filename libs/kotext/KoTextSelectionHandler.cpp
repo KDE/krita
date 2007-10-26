@@ -18,7 +18,6 @@
  */
 
 #include "KoTextSelectionHandler.h"
-#include "KoFontDia.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextShapeData.h"
 #include "KoInlineTextObjectManager.h"
@@ -30,6 +29,7 @@
 #include "styles/KoStyleManager.h"
 
 #include <kdebug.h>
+#include <KLocale>
 #include <QTextCharFormat>
 #include <QtGui/QFontDatabase>
 #include <QFont>
@@ -235,7 +235,7 @@ class FontResizer : public CharFormatVisitor {
         defaultSizes = fontDB.standardSizes();
     }
     void visit(QTextCharFormat &format) const {
-        const int current = format.fontPointSize();
+        const qreal current = format.fontPointSize();
         int prev = 1;
         foreach(int pt, defaultSizes) {
             if(type == Grow && pt > current || type == Shrink && pt >= current) {
@@ -349,13 +349,6 @@ QString KoTextSelectionHandler::selectedText() const {
 
 void KoTextSelectionHandler::insert(const QString &text) {
     d->caret->insertText(text);
-}
-
-void KoTextSelectionHandler::selectFont(QWidget *parent) {
-    KoFontDia *fontDlg = new KoFontDia( d->caret->charFormat());
-    fontDlg->exec();
-    d->caret->setCharFormat(fontDlg->format());
-    delete fontDlg;
 }
 
 void KoTextSelectionHandler::insertInlineObject(KoInlineObject *inliner) {
@@ -489,7 +482,6 @@ bool KoTextSelectionHandler::deleteInlineObjects(bool backward) {
         QString selected = cursor.selectedText();
         cursor.setPosition(cursor.selectionStart() + 1);
         int position = cursor.position();
-        int counter = 0;
         const QChar *data = selected.constData();
         for (int i = 0; i < selected.length(); i++) {
             if (data->unicode() == 0xFFFC) {

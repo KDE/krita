@@ -82,7 +82,7 @@ public:
 
     /// Text transformation
     enum Transform {
-        NoneTransform = 0, ///< No text-transformation. This is the default value.
+        NoTransform = 0, ///< No text-transformation. This is the default value.
         SmallCaps, ///< Small capitalized letters.
         Uppercase, ///< Uppercase characters. E.g. "My teXT"=>"MY TEXT"
         Lowercase, ///< Lowercase characters. E.g. "My teXT"=>"my text"
@@ -97,7 +97,7 @@ public:
     /// Copy constructor
     KoCharacterStyle(const KoCharacterStyle &other);
     /// Copy constructor
-    KoCharacterStyle(const QTextFormat &textFormat);
+    KoCharacterStyle(const QTextCharFormat &format);
     /// Destructor
     ~KoCharacterStyle();
 

@@ -18,12 +18,6 @@ set(libkohyphen_SRCS
 	)
 
 set(kotext_LIB_SRCS ${libkohyphen_SRCS}
-    KoFontTab.cpp 
-    KoHighlightingTab.cpp 
-    KoDecorationTab.cpp 
-    KoLayoutTab.cpp 
-    KoLanguageTab.cpp 
-    KoFontDia.cpp 
     KoTextShapeData.cpp
     KoText.cpp
     KoTextBlockData.cpp
@@ -72,11 +66,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
 
 kde4_add_ui_files(kotext_LIB_SRCS
    timedateformatwidget.ui
-   kolanguagetabbase.ui
-    KoDecorationTab.ui
     KoParagDecorationTab.ui
-    KoLayoutTab.ui
-    KoHighlightingTab.ui
     KoCompletionBase.ui
 )
 

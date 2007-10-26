@@ -113,7 +113,6 @@ public slots:
     void setTextColor(const QColor &color);
     void setTextBackgroundColor(const QColor &color);
     void insert(const QString &text);
-    void selectFont(QWidget *parent = 0);
     void increaseIndent();
     void decreaseIndent();
     void nextParagraph();

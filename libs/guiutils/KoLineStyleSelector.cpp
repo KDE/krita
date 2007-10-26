@@ -73,6 +73,11 @@ KoLineStyleSelector::KoLineStyleSelector( QWidget * parent )
     setItemDelegate( new KoLineStyleItemDelegate( this ) );
 }
 
+KoLineStyleSelector::~KoLineStyleSelector()
+{
+    delete d;
+}
+
 void KoLineStyleSelector::paintEvent( QPaintEvent *pe )
 {
     QComboBox::paintEvent( pe );

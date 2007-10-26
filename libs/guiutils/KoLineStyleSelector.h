@@ -31,6 +31,7 @@ class KOGUIUTILS_EXPORT KoLineStyleSelector : public QComboBox
     Q_OBJECT
 public:
     KoLineStyleSelector( QWidget * parent = 0 );
+    virtual ~KoLineStyleSelector();
 
     /**
      * Adds a new line style to the combobox.

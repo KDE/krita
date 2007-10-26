@@ -82,14 +82,18 @@ void KisToolSelectBrush::initPaint(KoPointerEvent* /*e*/)
     KisPaintDeviceSP dev = currentLayer()->paintDevice();
     if (m_painter)
         delete m_painter;
-    bool hasSelection = dev->hasSelection();
-    if (currentImage()->undo()) m_transaction = new KisSelectedTransaction(i18n("Selection Brush"), dev);
+    bool hasSelection = currentLayer()->selection();
+#if 0 // XXX_SELECTION
+    if (currentImage()->undo())
+        m_transaction = new KisSelectedTransaction(i18n("Selection Brush"), dev);
+
     if(! hasSelection)
     {
         dev->selection()->clear();
         dev->emitSelectionChanged();
     }
-    KisSelectionSP selection = dev->selection();
+#endif
+    KisSelectionSP selection = currentLayer()->selection();
 
     m_target = selection.data();
     m_painter = new KisPainter(selection);
@@ -121,8 +125,10 @@ void KisToolSelectBrush::endPaint()
         }
         delete m_painter;
         m_painter = 0;
+#if 0
         if (currentLayer()->paintDevice())
             currentLayer()->paintDevice()->emitSelectionChanged();
+#endif
         //notifyModified();
     }
 }

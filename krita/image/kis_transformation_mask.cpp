@@ -63,21 +63,9 @@ KisTransformationMask::KisTransformationMask( const KisTransformationMask& rhs )
 
 void KisTransformationMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
 {
-    // Create a selection
-    KisSelectionSP selection = new KisSelection( 0, const_cast<KisTransformationMask*>( this ) );
-
-    // Make the selection as small as the required rect
-    selection->crop( rc );
-
-    // Save the old selection to restore it later
-    KisSelectionSP oldSelection = projection->setSelection( selection );
-
     // Transform
     KisTransformWorker worker( projection, m_xscale, m_yscale, m_xshear, m_yshear, m_rotation, m_xtranslate, m_ytranslate, 0, m_filter );
     worker.run();
-
-    // Restore the old selection
-    projection->setSelection( oldSelection );
 }
 
 KisTransformationSettingsCommand::KisTransformationSettingsCommand(KisTransformationMaskSP mask,

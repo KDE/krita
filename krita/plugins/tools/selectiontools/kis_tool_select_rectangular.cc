@@ -188,14 +188,15 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
 
         if (currentImage() && currentLayer()->paintDevice()) {
 
-            KisPaintDeviceSP dev = currentLayer()->paintDevice();
-            bool hasSelection = dev->hasSelection();
+            bool hasSelection = currentLayer()->selection();
             QRect rc(m_startPos.toPoint(), m_endPos.toPoint());
             rc = rc.normalized();
 
             if(m_selectionMode == PIXEL_SELECTION){
+#if 0 // XXX_SELECTION
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);
-                KisPixelSelectionSP getOrCreatePixelSelection = dev->selection()->getOrCreatePixelSelection();
+#endif
+                KisPixelSelectionSP getOrCreatePixelSelection = currentLayer()->selection()->getOrCreatePixelSelection();
 
                 // We don't want the border of the 'rectangle' to be included in our selection
                 rc.setSize(rc.size() - QSize(1,1));
@@ -207,7 +208,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                         getOrCreatePixelSelection->invert();
                 }
 
-                KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
+                KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
                 tmpSel->select(rc);
                 switch(m_selectAction)
                 {
@@ -224,6 +225,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                     default:
                         break;
                 }
+#if 0
                 m_canvas->addCommand(t);
 
                 if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
@@ -233,6 +235,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                     dev->setDirty(currentImage()->bounds());
                     dev->emitSelectionChanged();
                 }
+#endif
             }
             else {
                 QRectF documentRect = convertToPt(bound);
@@ -257,11 +260,12 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                     shape = path;
                 }
 
-                KisSelectionSP selection = dev->selection();
+                KisSelectionSP selection = currentLayer()->selection();
 
                 KisShapeSelection* shapeSelection;
                 if(!selection->hasShapeSelection()) {
-                    shapeSelection = new KisShapeSelection(currentImage(), dev);
+                    // XXX_SELECTION (call to KisShapeSelection needs redesigned)
+                    shapeSelection = new KisShapeSelection(currentImage(), 0);
                     QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
                     cmd->redo();
                     selection->setShapeSelection(shapeSelection);

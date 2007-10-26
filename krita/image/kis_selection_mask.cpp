@@ -77,9 +77,6 @@ void KisSelectionMask::setSelection(KisSelectionSP selection)
 
     m_d->selection->setInterestedInDirtyness(true);
 
-    if (!m_d->selection->hasSelection())
-        m_d->selection->setSelection(m_d->selection);
-
     setDirty();
 }
 

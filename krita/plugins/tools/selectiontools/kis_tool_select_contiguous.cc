@@ -88,9 +88,10 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
             return;
 
         KisPaintDeviceSP dev = currentLayer()->paintDevice();
-        bool hasSelection = dev->hasSelection();
-        KisPixelSelectionSP getOrCreatePixelSelection = dev->selection()->getOrCreatePixelSelection();
-
+        bool hasSelection = currentLayer()->selection();
+        if ( !hasSelection ) return; // XXX_SELECTION
+        KisPixelSelectionSP getOrCreatePixelSelection =
+            currentLayer()->selection()->getOrCreatePixelSelection();
 
         if (!dev || !currentLayer()->visible())
             return;
@@ -100,9 +101,11 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         KisFillPainter fillpainter(dev);
         fillpainter.setFillThreshold(m_fuzziness);
         fillpainter.setSampleMerged(m_sampleMerged);
-        KisPixelSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage() );
+        KisPixelSelectionSP selection =
+            fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage() );
+#if 0
         KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
-
+#endif
         if(! hasSelection || m_selectAction == SELECTION_REPLACE)
         {
             getOrCreatePixelSelection->clear();
@@ -125,7 +128,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
             default:
                 break;
         }
-
+#if 0
         if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
             dev->setDirty(selection->selectedRect());
             dev->emitSelectionChanged(selection->selectedRect());
@@ -135,7 +138,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         }
 
         m_canvas->addCommand(t);
-
+#endif
         QApplication::restoreOverrideCursor();
     }
 }

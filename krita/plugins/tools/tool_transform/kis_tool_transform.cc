@@ -201,11 +201,11 @@ void KisToolTransform::initHandles()
     m_origDevice = new KisPaintDevice(*dev.data());
     Q_ASSERT(m_origDevice);
 
-    if(dev->hasSelection())
+    KisSelectionSP selection = m_currentLayer->selection();
+    if(selection)
     {
-        KisSelectionSP sel = dev->selection();
-        QRect r = sel->selectedExactRect();
-        m_origSelection = new KisSelection(*sel.data());
+        QRect r = selection->selectedExactRect();
+        m_origSelection = new KisSelection(*selection.data());
         r.getRect(&x, &y, &w, &h);
     }
     else {
@@ -676,14 +676,15 @@ void KisToolTransform::transform()
     {
         QRect rc = m_origSelection->selectedRect();
         rc = rc.normalized();
-        m_currentLayer->paintDevice()->selection()->clear();
-        KisPainter sgc(KisPaintDeviceSP(m_currentLayer->paintDevice()->selection().data()));
+        // XXX_SELECTION This used to create a new selection!
+        if ( m_currentLayer->selection() ) m_currentLayer->selection()->clear();
+        KisPainter sgc(KisPaintDeviceSP(m_currentLayer->selection().data()));
         sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, KisPaintDeviceSP(m_origSelection.data()), rc.x(), rc.y(), rc.width(), rc.height());
         sgc.end();
     }
     else
-        if(m_currentLayer->paintDevice()->hasSelection())
-            m_currentLayer->paintDevice()->selection()->clear();
+        if(m_currentLayer->selection())
+            m_currentLayer->selection()->clear();
 
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento

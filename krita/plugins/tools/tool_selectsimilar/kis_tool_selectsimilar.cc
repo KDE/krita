@@ -137,11 +137,11 @@ useCursor(m_subtractCursor);
             return;
 
         QPointF pos = convertToPixelCoord(e);
-
-        bool hasSelection = dev->hasSelection();
-        KisSelectionSP selection = dev->selection();
+        KisSelectionSP selection = currentLayer()->selection();
+        bool hasSelection = selection;
+#if 0 // XXX_SELECTIOn
         KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
-
+#endif
         if (!hasSelection || m_defaultSelectAction == SELECTION_REPLACE)
         {
             selection->clear();
@@ -154,13 +154,13 @@ useCursor(m_subtractCursor);
 
         // XXX we should make this configurable: "allow to select transparent"
         // if (opacity > OPACITY_TRANSPARENT)
-        selectByColor(dev, dev->selection(), c.data(), m_fuzziness, m_currentSelectAction);
-
+        selectByColor(dev, selection, c.data(), m_fuzziness, m_currentSelectAction);
+#if 0
         dev->setDirty();
         dev->emitSelectionChanged();
 
         m_canvas->addCommand(t);
-
+#endif
 //         QApplication::restoreOverrideCursor();
     }
 }

@@ -184,8 +184,8 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
     // Filters should work only on the visible part of an image.
     QRect rect = r1.intersect(r2);
 
-    if (dev->hasSelection()) {
-        QRect r3 = dev->selection()->selectedExactRect();
+    if (KisSelectionSP selection = layer->selection() ) {
+        QRect r3 = selection->selectedExactRect();
         rect = rect.intersect(r3);
     }
 
@@ -221,10 +221,10 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         }
         d->lastConfiguration = config;
         d->manager->setLastFilterHandler(this);
-        
+
         layer->image()->actionRecorder()->addAction( KisRecordedFilterAction(d->filter->name(), layer, d->filter, config));
     }
-    
+
     QApplication::restoreOverrideCursor();
 }
 

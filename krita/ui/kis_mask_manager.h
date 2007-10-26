@@ -89,6 +89,8 @@ public slots:
         }
     void createSelectionMask( KisNodeSP parent, KisNodeSP above )
         {
+            Q_UNUSED( parent );
+            Q_UNUSED( above );
             // XXX: implement when selection is no longer part of KisPaintDevice
         }
 

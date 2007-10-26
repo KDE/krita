@@ -68,8 +68,6 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
         m_d->selection = new KisSelection( *rhs.m_d->selection.data() );
 //        m_d->selection->setParentLayer(this);
         m_d->selection->setInterestedInDirtyness(true);
-        if (!m_d->selection->hasSelection())
-            m_d->selection->setSelection(m_d->selection);
     }
     m_d->cachedPaintDevice = new KisPaintDevice( *rhs.m_d->cachedPaintDevice.data() );
     m_d->showSelection = false;
@@ -168,9 +166,6 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
     gc.end();
 
     m_d->selection->setInterestedInDirtyness(true);
-
-    if (!m_d->selection->hasSelection())
-        m_d->selection->setSelection(m_d->selection);
 
     setDirty();
 }

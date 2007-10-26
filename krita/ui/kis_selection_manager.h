@@ -78,15 +78,9 @@ public slots:
     void fillPattern();
     void reselect();
     void invert();
+    void smooth();
     void copySelectionToNewLayer();
     void feather();
-    void expand();
-    void contract();
-    void smooth();
-    void similar();
-    void transform();
-    void load();
-    void save();
     void toggleDisplaySelection();
 
     void timerEvent();

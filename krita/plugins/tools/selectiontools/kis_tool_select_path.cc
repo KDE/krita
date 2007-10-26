@@ -111,7 +111,7 @@ void KisToolSelectPath::addPathShape()
 
     KisImageSP image = currentLayer->image();
     KisPaintDeviceSP dev = currentLayer->paintDevice();
-    bool hasSelection = dev->hasSelection();
+    bool hasSelection = currentLayer->selection();
 
     m_shape->normalize();
 
@@ -119,9 +119,10 @@ void KisToolSelectPath::addPathShape()
     shape->close();
     m_shape = 0;
 
-    if(m_selectionMode == PIXEL_SELECTION){
-        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Path Selection"), dev);
-        KisPixelSelectionSP getOrCreatePixelSelection = dev->selection()->getOrCreatePixelSelection();
+    // XXX_SELECTION: create a new selection here if there isn't one
+    if(hasSelection && m_selectionMode == PIXEL_SELECTION ){
+//        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Path Selection"), dev);
+        KisPixelSelectionSP getOrCreatePixelSelection = currentLayer->selection()->getOrCreatePixelSelection();
 
 
         if(! hasSelection || m_selectAction == SELECTION_REPLACE)
@@ -162,6 +163,7 @@ void KisToolSelectPath::addPathShape()
             default:
                 break;
         }
+#if 0
         if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
             QRect rect(painter.dirtyRegion().boundingRect());
             dev->setDirty(rect);
@@ -171,10 +173,11 @@ void KisToolSelectPath::addPathShape()
             dev->emitSelectionChanged();
         }
         m_canvas->addCommand(t);
+#endif
         delete shape;
     }
     else {
-        KisSelectionSP selection = dev->selection();
+        KisSelectionSP selection = currentLayer->selection();
 
         KisShapeSelection* shapeSelection;
         if(!selection->hasShapeSelection()) {

@@ -97,6 +97,7 @@
 #include "kis_projection.h"
 #include "kis_node.h"
 #include "kis_node_manager.h"
+#include "kis_selection.h"
 
 class KisView2::KisView2Private {
 
@@ -383,6 +384,15 @@ KisImageManager * KisView2::imageManager()
     return m_d->imageManager;
 }
 
+KisSelectionSP KisView2::selection()
+{
+    KisLayerSP layer = activeLayer();
+    if ( layer )
+        return layer->selection(); // falls through to the global
+                                   // selection, or 0 in the end
+}
+
+
 KisUndoAdapter * KisView2::undoAdapter()
 {
     return m_d->doc->undoAdapter();
@@ -610,6 +620,7 @@ void KisView2::setupPrinter(QPrinter &printer, QPrintDialog &printDialog)
 
 void KisView2::print(QPrinter& printer, QPrintDialog &printDialog)
 {
+    Q_UNUSED( printDialog );
     QPainter gc(&printer);
 
     KisImageSP img = image();

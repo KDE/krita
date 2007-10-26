@@ -1,5 +1,5 @@
 include_directories(${CMAKE_SOURCE_DIR}/krita/ui/obsolete/)
-
+#MESSAGE("Krita: port _all_ filters")
 # #add_subdirectory( bumpmap )
 # MESSAGE("Krita: port the bumpmap filter")
 # 

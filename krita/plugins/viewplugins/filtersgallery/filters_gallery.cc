@@ -103,8 +103,9 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
 
             QRect rect = r1.intersect(r2);
 
-            if (dev->hasSelection()) {
-                QRect r3 = dev->selection()->selectedExactRect();
+            KisSelectionSP selection = m_view->selection();
+            if ( selection ) {
+                QRect r3 = selection->selectedExactRect();
                 rect = rect.intersect(r3);
             }
             KisFilterConfiguration* config = dlg.currentConfigWidget()->configuration();

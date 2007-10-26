@@ -33,9 +33,9 @@ class KRITAIMAGE_EXPORT KisGradientPainter : public KisPainter
 
 public:
 
-        KisGradientPainter();
-        KisGradientPainter(KisPaintDeviceSP device);
-
+    KisGradientPainter();
+    KisGradientPainter(KisPaintDeviceSP device);
+    KisGradientPainter(KisPaintDeviceSP device, KisSelectionSP selection);
 
     enum enumGradientShape {
         GradientShapeLinear,

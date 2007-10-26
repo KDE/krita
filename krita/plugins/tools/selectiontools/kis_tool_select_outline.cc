@@ -101,13 +101,13 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
         if (currentImage() && currentLayer()->paintDevice()) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
             KisPaintDeviceSP dev = currentLayer()->paintDevice();
-            bool hasSelection = dev->hasSelection();
+            KisSelectionSP selection = currentLayer()->selection();
 
             if(m_selectionMode == PIXEL_SELECTION){
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Outline Selection"), dev);
-                KisPixelSelectionSP getOrCreatePixelSelection = dev->selection()->getOrCreatePixelSelection();
+                KisPixelSelectionSP getOrCreatePixelSelection = selection->getOrCreatePixelSelection();
 
-                if (!hasSelection || m_selectAction == SELECTION_REPLACE)
+                if (!selection || m_selectAction == SELECTION_REPLACE)
                 {
                     getOrCreatePixelSelection->clear();
                     if(m_selectAction == SELECTION_SUBTRACT)
@@ -144,8 +144,8 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                     default:
                         break;
                 }
-
-                if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
+#if 0
+                if(selection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
                     QRegion dirty(painter.dirtyRegion());
                     dev->setDirty(dirty);
                     dev->emitSelectionChanged(dirty.boundingRect());
@@ -155,7 +155,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 }
 
                 m_canvas->addCommand(t);
-
+#endif
             }
             else {
 
@@ -172,7 +172,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                     path->normalize();
 
 
-                    KisSelectionSP selection = dev->selection();
+                    KisSelectionSP selection = currentLayer()->selection();
 
                     KisShapeSelection* shapeSelection;
                     if(!selection->hasShapeSelection()) {

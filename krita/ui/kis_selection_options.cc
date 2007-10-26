@@ -55,13 +55,7 @@ int KisSelectionOptions::action()
 
 void KisSelectionOptions::slotActivated()
 {
-    if (!m_canvas) return;
-
-    KisPaintDeviceSP dev = m_canvas->view()->activeDevice();
-    if (!dev) return;
-
-    if (dev->hasSelection()) {
-    }
+    // XXX_SELECTION
 }
 
 bool KisSelectionOptions::antiAliasSelection()

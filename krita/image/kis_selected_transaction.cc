@@ -25,13 +25,15 @@
 KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent) :
     KisTransaction(name, device, parent),
     m_device(device),
-    m_hadSelection(device->hasSelection())
+    m_hadSelection(false /*device->hasSelection()*/)
 {
+#if 0 // XXX_SELECTION
     m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(device->selection()->getOrCreatePixelSelection().data()));
     if(! m_hadSelection) {
         m_device->deselect(); // let us not be the cause of select
     }
     m_firstRedo = true;
+#endif
 }
 
 KisSelectedTransaction::~KisSelectedTransaction()
@@ -41,6 +43,7 @@ KisSelectedTransaction::~KisSelectedTransaction()
 
 void KisSelectedTransaction::redo()
 {
+#if 0
     //QUndoStack calls redo(), so the first call needs to be blocked
     if(m_firstRedo)
     {
@@ -58,10 +61,12 @@ void KisSelectedTransaction::redo()
 
     m_device->setDirty(m_device->image()->bounds());
     m_device->emitSelectionChanged();
+#endif
 }
 
 void KisSelectedTransaction::undo()
 {
+#if 0
     m_redoHasSelection = m_device->hasSelection();
 
     KisTransaction::undo();
@@ -73,10 +78,12 @@ void KisSelectedTransaction::undo()
 
     m_device->setDirty(m_device->image()->bounds());
     m_device->emitSelectionChanged();
+#endif
 }
 
 void KisSelectedTransaction::undoNoUpdate()
 {
+#if 0
     m_redoHasSelection = m_device->hasSelection();
 
     KisTransaction::undoNoUpdate();
@@ -85,4 +92,5 @@ void KisSelectedTransaction::undoNoUpdate()
         m_device->selection();
     else
         m_device->deselect();
+#endif
 }

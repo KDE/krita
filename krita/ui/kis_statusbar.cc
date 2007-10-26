@@ -110,13 +110,11 @@ void KisStatusBar::setSelection( KisImageSP img )
         return;
     }
 
-    KisPaintDeviceSP dev = m_view->activeDevice();
-    if (dev) {
-        if (dev->hasSelection()) {
-            QRect r = dev->selection()->selectedExactRect();
-            m_statusBarSelectionLabel->setText( i18n("Selection Active: x = %1 y = %2 width = %3 height = %4",r.x(),r.y(), r.width(), r.height()));
-            return;
-        }
+    KisSelectionSP selection = m_view->selection();
+    if ( selection ) {
+        QRect r = selection->selectedExactRect();
+        m_statusBarSelectionLabel->setText( i18n("Selection Active: x = %1 y = %2 width = %3 height = %4",r.x(),r.y(), r.width(), r.height()));
+        return;
     }
 
     m_statusBarSelectionLabel->setText(i18n("No Selection"));

@@ -53,14 +53,18 @@ void KisRotateVisitor::rotate(double angle, QPointF centerOfRotation, KisProgres
 
     KisPaintDeviceSP rotated = rotate(m_dev, angle, centerOfRotation);
 
+#if 0 // XXX_SELECTION
     if (!m_dev->hasSelection()) {
+#endif
         // Clear everything
         m_dev->clear();
+#if 0
     } else {
+
         // Clear selected pixels
         m_dev->clearSelection();
     }
-
+#endif
     KisPainter p(m_dev);
     QRect r = rotated->extent();
 
@@ -87,7 +91,7 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
 
 
     KisPaintDeviceSP sheared;
-
+#if 0
     if (m_dev->hasSelection()) {
         sheared = new KisPaintDevice(m_dev->colorSpace(), "sheared");
         KisPainter p1(sheared);
@@ -96,18 +100,23 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
          sheared = xShear(sheared, shearX);
     }
     else {
+#endif
         sheared = xShear(m_dev, shearX);
+#if 0
     }
+#endif
 
      sheared = yShear(sheared, shearY);
-
+#if 0
      if (!m_dev->hasSelection()) {
+#endif
         m_dev->clear();
+#if 0
      } else {
          // Clear selected pixels
          m_dev->clearSelection();
      }
-
+#endif
     KisPainter p2(m_dev);
     r = sheared->extent();
 

@@ -539,64 +539,15 @@ public:
      */
     KisRandomSubAccessorPixel createRandomSubAccessor( KisSelection * selection = 0) const;
 
-public:
-
-    /**
-     * @return the current selection or create one if this paintdevice
-     * hasn't got a selection yet.
-     */
-    KisSelectionSP KDE_DEPRECATED selection();
-
-public:
-
-    /**
-     * @return the current selection or create one if this
-     * paintdevice hasn't got a selection yet.
-     */
-    const KisSelectionSP KDE_DEPRECATED selection() const;
-
-
-    /** Whether there is a valid selection for this paintdevice. */
-    bool KDE_DEPRECATED hasSelection() const;
-
-   /** Whether the previous selection was deselected. */
-    bool KDE_DEPRECATED selectionDeselected();
-
-    /** Deselect the selection for this paintdevice. */
-    void KDE_DEPRECATED deselect();
-
-    /** Reinstates the old selection */
-    void KDE_DEPRECATED reselect();
 
     /** Clear the selected pixels from the paint device */
-    void KDE_DEPRECATED clearSelection();
+    void clearSelection( KisSelectionSP selection);
 
     /**
      * Apply a mask to the image data, i.e. multiply each pixel's opacity by its
      * selectedness in the mask.
      */
-    void KDE_DEPRECATED applySelectionMask(KisSelectionSP mask);
-
-
-    /**
-     * Sets the selection of this paint device to the new selection,
-     * returns the old selection, if there was an old selection,
-     * otherwise 0
-     */
-    KisSelectionSP KDE_DEPRECATED setSelection(KisSelectionSP selection);
-
-    /**
-     * Notify the owning image that the current selection has changed.
-     */
-    void KDE_DEPRECATED emitSelectionChanged();
-
-
-    /**
-     * Notify the owning image that the current selection has changed.
-     *
-     * @param r the area for which the selection has changed
-     */
-    void KDE_DEPRECATED emitSelectionChanged(const QRect& r);
+    void applySelectionMask(KisSelectionSP mask);
 
     /**
      * XXX

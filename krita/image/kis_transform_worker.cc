@@ -29,10 +29,14 @@
 #include "kis_layer.h"
 #include "kis_painter.h"
 
-KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, double yscale,
-                    double xshear, double yshear, double rotation,
-                    qint32 xtranslate, qint32 ytranslate,
-                    KisProgressDisplayInterface *progress, KisFilterStrategy *filter, bool fixBorderAlpha)
+KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
+                                       double xscale, double yscale,
+                                       double xshear, double yshear,
+                                       double rotation,
+                                       qint32 xtranslate, qint32 ytranslate,
+                                       KisProgressDisplayInterface *progress,
+                                       KisFilterStrategy *filter,
+                                       bool fixBorderAlpha)
 {
     m_dev= dev;
     m_xscale = xscale;
@@ -49,6 +53,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, doub
 
 void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
+#if 0 // XXX_SELECTION
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
@@ -96,10 +101,12 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
             break;
         }
     }
+#endif
 }
 
 void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
+#if 0
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
@@ -145,10 +152,12 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
             break;
         }
     }
+#endif
 }
 
 void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
+#if 0
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
@@ -200,10 +209,12 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
             break;
         }
     }
+#endif
 }
 
 void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
+#if 0
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
@@ -252,6 +263,7 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
             break;
         }
     }
+#endif
 }
 
 template <class iter> iter createIterator(KisPaintDevice *dev, qint32 start, qint32 lineNum, qint32 len);
@@ -273,6 +285,7 @@ template <class iter> void calcDimensions (KisPaintDevice *dev, qint32 &srcStart
 template <> void calcDimensions <KisHLineIteratorPixel>
 (KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines)
 {
+#if 0
     if(dev->hasSelection())
     {
         QRect r = dev->selection()->selectedExactRect();
@@ -285,11 +298,13 @@ template <> void calcDimensions <KisHLineIteratorPixel>
         srcLen = rc.width();
         numLines = rc.height();
     }
+#endif
 }
 
 template <> void calcDimensions <KisVLineIteratorPixel>
 (KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines)
 {
+#if 0
     if(dev->hasSelection())
     {
         QRect r = dev->selection()->selectedExactRect();
@@ -302,6 +317,7 @@ template <> void calcDimensions <KisVLineIteratorPixel>
         numLines= rc.width();
         srcLen = rc.height();
     }
+#endif
 }
 
 struct FilterValues
@@ -311,8 +327,12 @@ struct FilterValues
     ~FilterValues() {delete [] weight;}
 };
 
-template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, double shear, qint32 dx, KisFilterStrategy *filterStrategy, bool fixBorderAlpha)
+template <class T>
+void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
+                                       double floatscale, double shear, qint32 dx,
+                                       KisFilterStrategy *filterStrategy, bool fixBorderAlpha)
 {
+#if 0
     qint32 lineNum,srcStart,firstLine,srcLen,numLines;
     qint32 center, begin, end;    /* filter calculation variables */
     quint8 *data;
@@ -525,10 +545,12 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     delete [] tmpLine;
     delete [] tmpSel;
     delete [] filterWeights;
+#endif
 }
 
 bool KisTransformWorker::run()
 {
+#if 0
     //progress info
     m_cancelRequested = false;
     if(m_progress)
@@ -536,8 +558,8 @@ bool KisTransformWorker::run()
     m_progressTotalSteps = 0;
     m_progressStep = 0;
     QRect r;
-    if(m_dev->hasSelection())
-        r = m_dev->selection()->selectedExactRect();
+    if( m_sourceSelection )
+        r = m_sourceSelection->selectedExactRect();
     else
         r = m_dev->exactBounds();
 
@@ -624,8 +646,9 @@ bool KisTransformWorker::run()
     {
         if(rotQuadrant==0)
         {
-            // Though not nessesay in the general case because we make several passes
-            // We need to move (not just copy) the data to a temp dev so we can move them back
+            // Though not necessary in the general case because we
+            // make several passes We need to move (not just copy) the
+            // data to a temp dev so we can move them back
             rotateNone(srcdev, tmpdev1);
             srcdev = tmpdev1;
         }
@@ -683,4 +706,6 @@ bool KisTransformWorker::run()
     m_dev->emitSelectionChanged();
 
     return m_cancelRequested;
+#endif
+    return false;
 }

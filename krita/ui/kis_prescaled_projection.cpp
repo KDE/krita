@@ -672,17 +672,6 @@ void KisPrescaledProjection::updateUnscaledCache( const QRect & rc )
                 if ( KisSelectionMaskSP selectionMask = layer->selectionMask() ) {
                     selection = selectionMask->selection();
                 }
-
-                // XXX: transitional! Remove when we use
-                // KisSelectionMask instead of the selection in
-                // the paintdevice. That way we can also select on
-                // groups etc.
-                if ( !selection && m_d->currentNode->inherits( "KisPaintLayer" ) ) {
-                    KisPaintDeviceSP dev = ( dynamic_cast<KisPaintLayer*>( m_d->currentNode.data() ) )->paintDevice();
-                    if ( dev ) {
-                        selection = dev->selection();
-                    }
-                }
             }
         }
         selection->paint(&updateImage, rc);

@@ -469,24 +469,32 @@ namespace {
 
 KisGradientPainter::KisGradientPainter()
     : KisPainter()
+    , m_gradient( 0 )
 {
-    m_gradient = 0;
 }
 
-KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device) : KisPainter(device), m_gradient(0)
+KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device)
+    : KisPainter(device)
+    , m_gradient(0)
+{
+}
+
+KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device, KisSelectionSP selection)
+    : KisPainter( device, selection )
+    , m_gradient( 0 )
 {
 }
 
 bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
-                       const QPointF& gradientVectorEnd,
-                       enumGradientShape shape,
-                       enumGradientRepeat repeat,
-                       double antiAliasThreshold,
-                       bool reverseGradient,
-                       qint32 startx,
-                       qint32 starty,
-                       qint32 width,
-                       qint32 height)
+                                       const QPointF& gradientVectorEnd,
+                                       enumGradientShape shape,
+                                       enumGradientRepeat repeat,
+                                       double antiAliasThreshold,
+                                       bool reverseGradient,
+                                       qint32 startx,
+                                       qint32 starty,
+                                       qint32 width,
+                                       qint32 height)
 {
     Q_UNUSED( antiAliasThreshold );
     m_cancelRequested = false;
@@ -535,8 +543,8 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     //If the device has a selection only iterate over that selection
     QRect r;
-    if( m_device->hasSelection() ) {
-        r = m_device->selection()->selectedExactRect();
+    if( m_selection ) {
+        r = m_selection->selectedExactRect();
         startx = r.x();
         starty = r.y();
         width = r.width();

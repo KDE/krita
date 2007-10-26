@@ -151,11 +151,13 @@ void KisToolSelectPolygonal::finish()
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         KisPaintDeviceSP dev = currentLayer()->paintDevice();
 
-        bool hasSelection = dev->hasSelection();
+        bool hasSelection = currentLayer()->selection();
 
-        if(m_selectionMode == PIXEL_SELECTION){
+        if ( hasSelection && m_selectionMode == PIXEL_SELECTION ) {
+#if 0 // XXX_SELECTION
             KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Polygonal Selection"), dev);
-            KisPixelSelectionSP getOrCreatePixelSelection = dev->selection()->getOrCreatePixelSelection();
+#endif
+            KisPixelSelectionSP getOrCreatePixelSelection = currentLayer()->selection()->getOrCreatePixelSelection();
 
             if (!hasSelection || m_selectAction == SELECTION_REPLACE)
             {
@@ -193,7 +195,7 @@ void KisToolSelectPolygonal::finish()
                 default:
                     break;
             }
-
+#if 0
             if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
                 QRect rect(painter.dirtyRegion().boundingRect());
                 dev->setDirty(rect);
@@ -203,6 +205,7 @@ void KisToolSelectPolygonal::finish()
                 dev->emitSelectionChanged();
             }
             m_canvas->addCommand(t);
+#endif
         }
         else {
 
@@ -218,7 +221,7 @@ void KisToolSelectPolygonal::finish()
                 path->close();
                 path->normalize();
 
-                KisSelectionSP selection = dev->selection();
+                KisSelectionSP selection = currentLayer()->selection();
 
                 KisShapeSelection* shapeSelection;
                 if(!selection->hasShapeSelection()) {

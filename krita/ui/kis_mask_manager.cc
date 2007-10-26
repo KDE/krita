@@ -214,15 +214,12 @@ void KisMaskManager::createFilterMask( KisNodeSP parent, KisNodeSP above )
     KisDlgAdjustmentLayer dlg(dev, m_view->image()->nextLayerName(), i18n("New Filter Mask"), m_view, "dlgfiltermask");
 
     if (dlg.exec() == QDialog::Accepted) {
-        KisSelectionSP selection = KisSelectionSP(0);
-        if (dev->hasSelection()) {
-            selection = dev->selection();
-        }
+        KisSelectionSP selection = layer->selection();
         KisFilterConfiguration * filter = dlg.filterConfiguration();
         QString name = dlg.layerName();
 
         KisFilterMask * mask = new KisFilterMask();
-
+        mask->setSelection( selection ); // XXX: do a copy?
         mask->setActive( true );
         mask->setFilter( filter );
         mask->setName( name );

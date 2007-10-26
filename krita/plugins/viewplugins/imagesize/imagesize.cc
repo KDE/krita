@@ -160,7 +160,8 @@ void ImageSize::slotSelectionScale()
 
     if (!layer) return;
 
-    if (!layer->hasSelection()) return;
+    KisSelectionSP selection = m_view->selection();
+    if (!selection) return;
 
 
     DlgLayerSize * dlgSize = new DlgLayerSize(m_view, "SelectionScale");
@@ -170,7 +171,7 @@ void ImageSize::slotSelectionScale()
 
     KisConfig cfg;
 
-    QRect rc = layer->selection()->selectedRect();
+    QRect rc = selection->selectedRect();
 
     dlgSize->setWidth(rc.width());
     dlgSize->setHeight(rc.height());
@@ -178,7 +179,7 @@ void ImageSize::slotSelectionScale()
     if (dlgSize->exec() == QDialog::Accepted) {
         qint32 w = dlgSize->width();
         qint32 h = dlgSize->height();
-        KisTransformWorker worker(layer->selection().data(),
+        KisTransformWorker worker( selection.data(),
                 (double)w / ((double)(rc.width())),
                 (double)h / ((double)(rc.height())),
                 0, 0, 0.0, 0, 0, m_view->statusBar()->progress(),

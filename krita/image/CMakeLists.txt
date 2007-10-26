@@ -25,6 +25,7 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   kis_filter_mask.cpp
    kis_paintop_settings.cpp
    kis_base_node.cpp
    kis_node.cpp
@@ -52,7 +53,6 @@ set(kritaimage_LIB_SRCS
    kis_fill_painter.cc
    kis_filter.cc
    kis_filter_registry.cc
-   kis_filter_mask.cpp
    kis_filter_processing_information.cc
    kis_filter_strategy.cc
    kis_filter_configuration.cc
@@ -77,12 +77,10 @@ set(kritaimage_LIB_SRCS
    kis_random_accessor.cpp
    kis_random_sub_accessor.cpp
    kis_rotate_visitor.cc
-   kis_selected_transaction.cc
    kis_selection.cc
    kis_serializable_configuration.cc
    kis_shared.cc
    kis_transaction.cc
-   kis_transform_worker.cc
    kis_vec.cc
    kis_math_toolbox.cpp
    kis_filter_strategy.h
@@ -102,7 +100,10 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_value.cc
    metadata/kis_meta_data_schema.cc
    metadata/kis_meta_data_io_backend.cc
-   metadata/kis_meta_data_entry.cc )
+   metadata/kis_meta_data_entry.cc 
+   kis_selected_transaction.cc
+   kis_transform_worker.cc
+)
 
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})

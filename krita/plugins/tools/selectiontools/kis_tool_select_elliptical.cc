@@ -159,14 +159,14 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
             if (!currentImage())
                 return;
 
-            if (currentImage() && currentLayer()->paintDevice()) {
-                KisPaintDeviceSP dev = currentLayer()->paintDevice();
+            bool hasSelection = currentLayer()->selection();
 
-            bool hasSelection = dev->hasSelection();
-
-            if(m_selectionMode == PIXEL_SELECTION){
+            if( hasSelection && m_selectionMode == PIXEL_SELECTION ) {
+#if 0
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
-                KisPixelSelectionSP getOrCreatePixelSelection = dev->selection()->getOrCreatePixelSelection();
+#endif
+                KisPixelSelectionSP getOrCreatePixelSelection =
+                    currentLayer()->selection()->getOrCreatePixelSelection();
 
                 if (!hasSelection || m_selectAction == SELECTION_REPLACE)
                 {
@@ -175,7 +175,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                         getOrCreatePixelSelection->invert();
                 }
 
-                KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
+                KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
                 KisPainter painter(tmpSel);
                 painter.setBounds( currentImage()->bounds() );
@@ -206,7 +206,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                     default:
                         break;
                 }
-
+#if 0
                 if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
                     QRect rect(painter.dirtyRegion().boundingRect());
                     dev->setDirty(rect);
@@ -216,6 +216,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                     dev->emitSelectionChanged();
                 }
                 m_canvas->addCommand(t);
+#endif
             }
             else {
                 QRectF documentRect = convertToPt(QRectF(m_startPos, m_endPos));
@@ -241,11 +242,11 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 }
 
 
-                KisSelectionSP selection = dev->selection();
+                KisSelectionSP selection = currentLayer()->selection();
 
                 KisShapeSelection* shapeSelection;
                 if(!selection->hasShapeSelection()) {
-                    shapeSelection = new KisShapeSelection(currentImage(), dev);
+                    shapeSelection = new KisShapeSelection(currentImage(), 0);
                     QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
                     cmd->redo();
                     selection->setShapeSelection(shapeSelection);
@@ -259,7 +260,6 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
             }
 
 //                 QApplication::restoreOverrideCursor();
-            }
         }
         m_selecting = false;
     }

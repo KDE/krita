@@ -580,10 +580,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
 
     KisDlgAdjustmentLayer dlg(dev, img->nextLayerName(), i18n("New Adjustment Layer"), m_view, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {
-        KisSelectionSP selection = KisSelectionSP(0);
-        if (dev->hasSelection()) {
-            selection = dev->selection();
-        }
+        KisSelectionSP selection = l->selection();
         KisFilterConfiguration * filter = dlg.filterConfiguration();
         QString name = dlg.layerName();
 
@@ -791,8 +788,9 @@ void KisLayerManager::rotateLayer(double radians)
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
     QRect r;
-    if(dev->hasSelection())
-        r = dev->selection()->selectedExactRect();
+
+    if(KisSelectionSP selection = activeLayer()->selection())
+        r = selection->selectedExactRect();
     else
         r = dev->exactBounds();
     double cx = r.x()+r.width()/2.0;
@@ -923,7 +921,7 @@ void KisLayerManager::saveLayerAsImage()
 
 bool KisLayerManager::activeLayerHasSelection()
 {
-    return ( activeDevice() && activeDevice()->hasSelection() );
+    return ( activeLayer()->selection() != 0 );
 }
 
 

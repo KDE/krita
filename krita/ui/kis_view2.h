@@ -138,6 +138,11 @@ public:  // Krita specific interfaces
     /// current image
     KisImageManager * imageManager();
 
+    /// Convenience method to get at the active selection (the
+    /// selection of the current layer, or, if that does not exist,
+    /// the global selection.
+    KisSelectionSP selection();
+
     /// The undo adapter is used to add commands to the undo stack
     KisUndoAdapter * undoAdapter();
 

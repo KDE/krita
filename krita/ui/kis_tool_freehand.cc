@@ -231,9 +231,11 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             layer->setTemporaryTarget(m_target);
             layer->setTemporaryCompositeOp(m_compositeOp);
             layer->setTemporaryOpacity(m_opacity);
-
-            if (device->hasSelection())
+// XXX_SELECTION
+#if 0
+            if ( layer->selection() )
                 m_target->setSelection(device->selection());
+#endif
         }
     } else {
         m_target = device;

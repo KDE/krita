@@ -193,9 +193,13 @@ DlgColorRange::DlgColorRange( KisView2 * view, KisPaintDeviceSP dev, QWidget *  
 
     if (m_view->image()->undo()) m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev);
 
-    if(! m_dev->hasSelection())
-        m_dev->selection()->getOrCreatePixelSelection()->clear();
-    m_selection = m_dev->selection()->getOrCreatePixelSelection();
+    KisSelectionSP selection = m_view->selection();
+
+    if( !selection ) {
+        // XXX_SELECTION: create a new selection here
+        //m_dev->selection()->getOrCreatePixelSelection()->clear();
+    }
+    m_selection = selection->getOrCreatePixelSelection();
 
         updatePreview();
 
@@ -346,8 +350,11 @@ void DlgColorRange::slotSelectClicked()
 
 void DlgColorRange::slotDeselectClicked()
 {
-    m_dev->selection()->getOrCreatePixelSelection()->clear();
-    updatePreview();
+    if ( m_view->selection() ) {
+        m_view->selection()->getOrCreatePixelSelection()->clear();
+        updatePreview();
+    }
+
 }
 
 

@@ -1,6 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Compose Layer plugin
+Name[pt]='Plugin' de camada de composição
+Name[pt_BR]='Plugin' de camada de composição
+Name[sv]=Insticksprogram för lagersammansättning
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritalayercompose

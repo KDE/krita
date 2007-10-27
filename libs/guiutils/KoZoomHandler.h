@@ -77,6 +77,8 @@ public:
     /**
      * Set a resolution for X and Y of the output device.
      * The zoom factor is not changed.
+     *
+     * XXX: Is this also in dots per inch?
      */
     void setResolution( double resolutionX, double resolutionY );
 
@@ -98,7 +100,7 @@ public:
      * @param zoom the zoom factor (e.g. 100 for 100%)
      * \deprecated
      */
-    void setZoom( int zoom );
+    KDE_DEPRECATED void setZoom( int zoom );
     /**
      * Change the zoom level, keeping the resolution unchanged.
      * @param zoom the zoom factor (e.g. 1.0 for 100%)

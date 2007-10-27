@@ -101,7 +101,6 @@ void KoToolBox::setup() {
     setWidget(widget);
     layout()->setAlignment(widget, Qt::AlignLeft | Qt::AlignTop);
     layout()->setMargin(0);
-
     QList<QString> empty;
     setButtonsVisible(m_canvas, empty);
 }

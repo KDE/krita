@@ -34,19 +34,19 @@ public:
     {
         ZOOM_CONSTANT = 0,  ///< zoom x %
         ZOOM_WIDTH    = 1,  ///< zoom pagewidth
-        ZOOM_PAGE     = 2,   ///< zoom to pagesize
+        ZOOM_PAGE     = 2,  ///< zoom to pagesize
         ZOOM_PIXELS   = 4   ///< zoom to actual pixels
     };
 
     Q_DECLARE_FLAGS(Modes, Mode)
-    
+
     /// \param mode the mode name
     /// \return the to Mode converted QString \c mode
     static Mode toMode(const QString& mode);
-    
+
     /// \return the to QString converted and translated Mode \c mode
     static QString toString(Mode mode);
-    
+
     /// \param mode the mode name
     /// \return true if \c mode isn't dependent on windowsize
     static bool isConstant(const QString& mode)

@@ -89,6 +89,8 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 {
 #ifdef DEBUG_VALIDATOR
     kDebug(30004) <<"KoUnitDoubleSpinBox::validate :" << input <<" at" << pos;
+#else
+    Q_UNUSED(pos);
 #endif
 
     QRegExp regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end

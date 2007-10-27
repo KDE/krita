@@ -36,19 +36,24 @@ class QSize;
 /**
  * This controller class handles zoom levels for any canvas.
  *
- * For each KoCanvasController you should have one instance of this class to go with it. This class then creates
- * a KoZoomAction and basically handles all zooming for you.
+ * For each KoCanvasController you should have one instance of this
+ * class to go with it. This class then creates a KoZoomAction and
+ * basically handles all zooming for you.
  *
- * All you need to do is connect to the setDocumentSize() slot and keep the controller up-to-date
- * if your on-screen document ever changes (note that this is in document units, so this is a
- * zoom independent size).
- * If you choose to have zoom modes of 'page' and 'width' you are required to set the page size
- * using the setPageSize() method.
- * Addiotionally you can connect to the zoomChanged() signal if you want to store the latest
- * zoom level and mode, for example to restore the last used one at next restart.
- * 
- * The specialAspectMode toggle is only a UI element. It does nothing except emit the
- * aspectModeChanged signal.
+ * All you need to do is connect to the setDocumentSize() slot and
+ * keep the controller up-to-date if your on-screen document ever
+ * changes (note that this is in document units, so this is a zoom
+ * independent size).
+ *
+ * If you choose to have zoom modes of 'page' and 'width' you are
+ * required to set the page size using the setPageSize() method.
+ *
+ * Additionally you can connect to the zoomChanged() signal if you
+ * want to store the latest zoom level and mode, for example to
+ * restore the last used one at next restart.
+ *
+ * The specialAspectMode toggle is only a UI element. It does nothing
+ * except emit the aspectModeChanged signal.
  *
  */
 class KOGUIUTILS_EXPORT KoZoomController : public QObject {

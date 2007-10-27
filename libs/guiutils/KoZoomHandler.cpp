@@ -52,7 +52,7 @@ void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 void KoZoomHandler::setResolutionToStandard()
 {
     setResolution( POINT_TO_INCH( double(KoGlobal::dpiX())),
-                     POINT_TO_INCH( double(KoGlobal::dpiY())) );
+                   POINT_TO_INCH( double(KoGlobal::dpiY())) );
 }
 
 void KoZoomHandler::setResolution( double resolutionX, double resolutionY )

@@ -21,10 +21,6 @@ set(koguiutils_LIB_SRCS
    KoImageResource.cpp
    KoInsertLink.cpp
    KoItemToolTip.cpp
-   #KoPageLayoutColumns.cpp
-   #KoPageLayoutDia.cpp
-   #KoPageLayoutHeader.cpp
-   #KoPageLayoutSize.cpp 
    KoPartSelectDia.cpp
    KoPartSelectAction.cpp
    KoPictureFilePreview.cpp
@@ -63,6 +59,7 @@ set(koguiutils_LIB_SRCS
    KoLineStyleSelector.cpp
     KoProgressUpdater.cpp
     KoPrintingDialog.cpp
+   KoShapePainter.cpp
 )
 
 kde4_add_ui_files( koguiutils_LIB_SRCS
@@ -96,10 +93,6 @@ install(
     KoImageResource.h
     KoInsertLink.h
     KoItemToolTip.h
-    #KoPageLayoutColumns.h
-    #KoPageLayoutDia.h
-    #KoPageLayoutHeader.h
-    #KoPageLayoutSize.h
     KoPartSelectAction.h
     KoPartSelectDia.h
     KoPictureFilePreview.h
@@ -117,6 +110,7 @@ install(
     KoToolBoxFactory.h
     KoToolDocker.h
     KoToolDockerFactory.h
+    KoShapePainter.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}
 )

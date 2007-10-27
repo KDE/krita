@@ -32,12 +32,12 @@
 #include <kcomponentdata.h>
 
 #include "KoResource.h"
+#include "KoSegmentGradient.h"
 #include "kis_factory2.h"
 #include "KoGenericRegistry.h"
 #include "kis_resourceserver.h"
 #include "kis_brush.h"
 #include "kis_imagepipe_brush.h"
-#include "kis_gradient.h"
 #include "kis_pattern.h"
 #include "KoColorSet.h"
 #include <kogradientmanager.h>
@@ -157,7 +157,7 @@ KisResourceServerRegistry::KisResourceServerRegistry()
     ResourceLoaderThread t3 (patternServer, getFileNames("*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp:*.pat", "kis_patterns"));
     t3.start();
 
-    KisResourceServer<KisGradient>* gradientServer = new KisResourceServer<KisGradient>("kis_gradients");
+    KisResourceServer<KoSegmentGradient>* gradientServer = new KisResourceServer<KoSegmentGradient>("kis_gradients");
     ResourceLoaderThread t4 (gradientServer, getFileNames(KoGradientManager::filters().join( ":" ), "kis_gradients"));
     t4.start();
 

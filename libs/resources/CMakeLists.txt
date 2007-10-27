@@ -8,6 +8,7 @@ set(koresources_LIB_SRCS
    KoPattern.cpp
    KoAbstractGradient.cpp
    KoStopGradient.cpp
+   KoSegmentGradient.cc
    KoResource.cpp
 )
 

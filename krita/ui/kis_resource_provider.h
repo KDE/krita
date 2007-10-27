@@ -32,7 +32,7 @@
 
 class KisPaintOpSettings;
 class KisBrush;
-class KisGradient;
+class KoSegmentGradient;
 class KisPattern;
 class KoResource;
 
@@ -40,7 +40,7 @@ class KoResource;
    KisResourceProvider contains the per-view current settings that
    influence painting, like paintop, color, gradients and so on.
 
-   XXX: KisBrush, KisGradient, KisPattern and the other pointers
+   XXX: KisBrush, KoSegmentGradient, KisPattern and the other pointers
    should really be shared pointers. That would be much safer. Also
    note: we should have a koffice-wide provider of brushes, patterns
    and gradients.
@@ -87,7 +87,7 @@ public:
 
     KisBrush *currentBrush() const;
     KisPattern *currentPattern() const;
-    KisGradient *currentGradient() const;
+    KoSegmentGradient *currentGradient() const;
 
     KoID currentPaintop() const;
     const KisPaintOpSettings *currentPaintopSettings() const;
@@ -129,7 +129,7 @@ signals:
     void sigFGColorChanged(const KoColor &);
     void sigBGColorChanged(const KoColor &);
     void sigBrushChanged(KisBrush * brush);
-    void sigGradientChanged(KisGradient * gradient);
+    void sigGradientChanged(KoSegmentGradient * gradient);
     void sigPatternChanged(KisPattern * pattern);
     void sigPaintopChanged(KoID paintop, const KisPaintOpSettings *paintopSettings);
     void sigLayerChanged( const KisLayerSP layer );

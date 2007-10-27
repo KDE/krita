@@ -187,9 +187,12 @@ void KisLayer::setImage(KisImageSP image)
 KisSelectionMaskSP KisLayer::selectionMask() const
 {
     QList<KisNodeSP> masks = childNodes( QStringList( "KisSelectionMask" ), KoProperties() );
-    Q_ASSERT(masks.size() == 1); // Or do we allow more than one selection mask to a layer?
-    KisSelectionMaskSP selection = dynamic_cast<KisSelectionMask*>(masks[0].data());
-    return selection;
+    Q_ASSERT(masks.size() <= 1); // Or do we allow more than one selection mask to a layer?
+    if(masks.size() == 1) {
+        KisSelectionMaskSP selection = dynamic_cast<KisSelectionMask*>(masks[0].data());
+        return selection;
+    }
+    return 0;
 }
 
 KisSelectionSP KisLayer::selection() const

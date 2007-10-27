@@ -216,7 +216,7 @@ KisOpenGLConicalSymetricGradientShader::KisOpenGLConicalSymetricGradientShader(K
 
 //-----------------------------------------------------------------------------
 
-KisOpenGLGradientProgram::KisOpenGLGradientProgram(const KisGradient *gradient,
+KisOpenGLGradientProgram::KisOpenGLGradientProgram(const KoSegmentGradient *gradient,
                                                    KisGradientPainter::enumGradientShape shape,
                                                    KisGradientPainter::enumGradientRepeat repeat,
                                                    bool reverseGradient,

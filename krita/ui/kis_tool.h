@@ -32,7 +32,7 @@
 class KoCanvasBase;
 class KisBrush;
 class KisPattern;
-class KisGradient;
+class KoSegmentGradient;
 class KisComplexColor;
 class KisPaintOpSettings;
 
@@ -111,7 +111,7 @@ protected:
     KisImageSP currentImage();
     KisBrush* currentBrush();
     KisPattern* currentPattern();
-    KisGradient * currentGradient();
+    KoSegmentGradient * currentGradient();
     KisLayerSP currentLayer();
     KoColor currentFgColor();
     KoColor currentBgColor();

@@ -1,26 +1,26 @@
 /*
- *  kis_gradient.cc - part of Krayon
- *
- *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
- *                2001 John Califf
- *                2004 Boudewijn Rempt <boud@valdyas.org>
- *                2004 Adrian Page <adrian@pagenet.plus.com>
- *                2004 Sven Langkamp <sven.langkamp@gmail.com>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+   Copyright (c) 2000 Matthias Elter <elter@kde.org>
+                 2001 John Califf
+                 2004 Boudewijn Rempt <boud@valdyas.org>
+                 2004 Adrian Page <adrian@pagenet.plus.com>
+                 2004, 2007 Sven Langkamp <sven.langkamp@gmail.com>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+#include "KoSegmentGradient.h"
 
 #include <cfloat>
 #include <cmath>
@@ -31,33 +31,30 @@
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
-#include "kogradientmanager.h"
 
 #include <kdebug.h>
 #include <klocale.h>
-
-#include "kis_gradient.h"
 
 
 #define PREVIEW_WIDTH 64
 #define PREVIEW_HEIGHT 64
 
-KisGradientSegment::RGBColorInterpolationStrategy *KisGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
-KisGradientSegment::HSVCWColorInterpolationStrategy *KisGradientSegment::HSVCWColorInterpolationStrategy::m_instance = 0;
-KisGradientSegment::HSVCCWColorInterpolationStrategy *KisGradientSegment::HSVCCWColorInterpolationStrategy::m_instance = 0;
+KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
+KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::m_instance = 0;
+KoGradientSegment::HSVCCWColorInterpolationStrategy *KoGradientSegment::HSVCCWColorInterpolationStrategy::m_instance = 0;
 
-KisGradientSegment::LinearInterpolationStrategy *KisGradientSegment::LinearInterpolationStrategy::m_instance = 0;
-KisGradientSegment::CurvedInterpolationStrategy *KisGradientSegment::CurvedInterpolationStrategy::m_instance = 0;
-KisGradientSegment::SineInterpolationStrategy *KisGradientSegment::SineInterpolationStrategy::m_instance = 0;
-KisGradientSegment::SphereIncreasingInterpolationStrategy *KisGradientSegment::SphereIncreasingInterpolationStrategy::m_instance = 0;
-KisGradientSegment::SphereDecreasingInterpolationStrategy *KisGradientSegment::SphereDecreasingInterpolationStrategy::m_instance = 0;
+KoGradientSegment::LinearInterpolationStrategy *KoGradientSegment::LinearInterpolationStrategy::m_instance = 0;
+KoGradientSegment::CurvedInterpolationStrategy *KoGradientSegment::CurvedInterpolationStrategy::m_instance = 0;
+KoGradientSegment::SineInterpolationStrategy *KoGradientSegment::SineInterpolationStrategy::m_instance = 0;
+KoGradientSegment::SphereIncreasingInterpolationStrategy *KoGradientSegment::SphereIncreasingInterpolationStrategy::m_instance = 0;
+KoGradientSegment::SphereDecreasingInterpolationStrategy *KoGradientSegment::SphereDecreasingInterpolationStrategy::m_instance = 0;
 
-KisGradient::KisGradient(const QString& file)
-    : KoResource(file), m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() )
+KoSegmentGradient::KoSegmentGradient(const QString& file)
+    : KoAbstractGradient(file)
 {
 }
 
-KisGradient::~KisGradient()
+KoSegmentGradient::~KoSegmentGradient()
 {
     for (int i = 0; i < m_segments.count(); i++) {
         delete m_segments[i];
@@ -65,74 +62,118 @@ KisGradient::~KisGradient()
     }
 }
 
-bool KisGradient::load()
+bool KoSegmentGradient::load()
 {
     return init();
 }
 
-bool KisGradient::save()
+bool KoSegmentGradient::save()
 {
     return false;
 }
 
-QImage KisGradient::img() const
+QImage KoSegmentGradient::img() const
 {
     return m_img;
 }
 
-bool KisGradient::init()
+bool KoSegmentGradient::init()
 {
-    KoGradientManager gradLoader;
-    KoGradient* grad = gradLoader.loadGradient(filename());
+    QFile file(filename());
 
-    if( !grad )
+    if(!file.open(QIODevice::ReadOnly))
         return false;
 
-    m_segments.clear();
+    QByteArray m_data = file.readAll();
+    file.close();
 
-    if( grad->colorStops.count() > 1 ) {
-        KoColorStop *colstop;
-        for(colstop = grad->colorStops.first(); colstop; colstop = grad->colorStops.next()) {
-            KoColorStop *colstopNext = grad->colorStops.next();
+    QTextStream fileContent(m_data, QIODevice::ReadOnly);
+    fileContent.setAutoDetectUnicode(true);
 
-            if(colstopNext) {
-                double midp = colstop->midpoint;
-                midp = colstop->offset + ((colstopNext->offset - colstop->offset) * midp);
+    QString header = fileContent.readLine();
 
-                quint8 data[4];
-                data[2] = static_cast<quint8>(colstop->color1 * 255 + 0.5);
-                data[1] = static_cast<quint8>(colstop->color2 * 255 + 0.5);
-                data[0] = static_cast<quint8>(colstop->color3 * 255 + 0.5);
-                data[3] = static_cast<quint8>(colstop->opacity * OPACITY_OPAQUE + 0.5);
-
-                KoColor leftColor(data, m_colorSpace);
-
-                data[2] = static_cast<quint8>(colstopNext->color1 * 255 + 0.5);
-                data[1] = static_cast<quint8>(colstopNext->color2 * 255 + 0.5);
-                data[0] = static_cast<quint8>(colstopNext->color3 * 255 + 0.5);
-                data[3] = static_cast<quint8>(colstopNext->opacity * OPACITY_OPAQUE + 0.5);
-
-                KoColor rightColor(data, m_colorSpace);
-
-                KisGradientSegment *segment = new KisGradientSegment(colstop->interpolation, colstop->colorType, colstop->offset, midp, colstopNext->offset, leftColor, rightColor);
-                Q_CHECK_PTR(segment);
-
-                if ( !segment->isValid() ) {
-                    delete segment;
-                    return false;
-                }
-
-                m_segments.push_back(segment);
-                grad->colorStops.prev();
-            }
-            else {
-                grad->colorStops.prev();
-                break;
-            }
-        }
+    if (header != "GIMP Gradient") {
+        return false;
     }
-    else
+
+    QString nameDefinition = fileContent.readLine();
+    QString numSegmentsText;
+
+    if (nameDefinition.startsWith("Name: ")) {
+        QString nameText = nameDefinition.right(nameDefinition.length() - 6);
+        setName(i18n(nameText.ascii()));
+
+        numSegmentsText = fileContent.readLine();
+    }
+    else {
+        // Older format without name.
+
+        numSegmentsText = nameDefinition;
+    }
+
+    kdDebug() << "Loading gradient: " << name() << endl;
+
+    int numSegments;
+    bool ok;
+
+    numSegments = numSegmentsText.toInt(&ok);
+
+    if (!ok || numSegments < 1) {
         return false;
+    }
+
+    kdDebug() << "Number of segments = " << numSegments << endl;
+
+    KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+
+    for (int i = 0; i < numSegments; i++) {
+
+        QString segmentText = fileContent.readLine();
+        QTextStream segmentFields(&segmentText);
+        QStringList values = segmentText.split(" ");
+
+        double leftOffset = values[0].toDouble();
+        double middleOffset = values[1].toDouble();
+        double rightOffset = values[2].toDouble();
+
+        double leftRed = values[3].toDouble();
+        double leftGreen = values[4].toDouble();
+        double leftBlue = values[5].toDouble();
+        double leftAlpha = values[6].toDouble();
+
+        double rightRed = values[7].toDouble();
+        double rightGreen = values[8].toDouble();
+        double rightBlue = values[9].toDouble();
+        double rightAlpha = values[10].toDouble();
+
+        int interpolationType = values[11].toInt();
+        int colorInterpolationType = values[12].toInt();
+
+        quint8 data[4];
+        data[2] = static_cast<quint8>(leftRed * 255 + 0.5);
+        data[1] = static_cast<quint8>(leftGreen * 255 + 0.5);
+        data[0] = static_cast<quint8>(leftBlue * 255 + 0.5);
+        data[3] = static_cast<quint8>(leftAlpha * OPACITY_OPAQUE + 0.5);
+
+        KoColor leftColor(data, rgbColorSpace);
+
+        data[2] = static_cast<quint8>(rightRed * 255 + 0.5);
+        data[1] = static_cast<quint8>(rightGreen * 255 + 0.5);
+        data[0] = static_cast<quint8>(rightBlue * 255 + 0.5);
+        data[3] = static_cast<quint8>(rightAlpha * OPACITY_OPAQUE + 0.5);
+
+        KoColor rightColor(data, rgbColorSpace);
+
+        KoGradientSegment *segment = new KoGradientSegment(interpolationType, colorInterpolationType, leftOffset, middleOffset, rightOffset, leftColor, rightColor);
+        Q_CHECK_PTR(segment);
+
+        if ( !segment -> isValid() ) {
+            delete segment;
+            return false;
+        }
+
+        m_segments.push_back(segment);
+    }
 
     if (!m_segments.isEmpty()) {
         m_img = generatePreview(PREVIEW_WIDTH, PREVIEW_HEIGHT);
@@ -144,7 +185,7 @@ bool KisGradient::init()
     }
 }
 
-void KisGradient::setImage(const QImage& img)
+void KoSegmentGradient::setImage(const QImage& img)
 {
     m_img = img;
     m_img.detach();
@@ -152,12 +193,12 @@ void KisGradient::setImage(const QImage& img)
     setValid(true);
 }
 
-KisGradientSegment *KisGradient::segmentAt(double t) const
+KoGradientSegment *KoSegmentGradient::segmentAt(double t) const
 {
     Q_ASSERT(t >= 0 || t <= 1);
     Q_ASSERT(!m_segments.empty());
 
-    for(QList<KisGradientSegment *>::const_iterator it = m_segments.begin(); it!= m_segments.end(); ++it)
+    for(QList<KoGradientSegment *>::const_iterator it = m_segments.begin(); it!= m_segments.end(); ++it)
     {
         if (t > (*it)->startOffset() - DBL_EPSILON && t < (*it)->endOffset() + DBL_EPSILON) {
             return *it;
@@ -167,9 +208,9 @@ KisGradientSegment *KisGradient::segmentAt(double t) const
     return 0;
 }
 
-void KisGradient::colorAt(KoColor& dst, double t) const
+void KoSegmentGradient::colorAt(KoColor& dst, double t) const
 {
-    const KisGradientSegment *segment = segmentAt(t);
+    const KoGradientSegment *segment = segmentAt(t);
     Q_ASSERT(segment != 0);
 
     if (segment) {
@@ -177,7 +218,7 @@ void KisGradient::colorAt(KoColor& dst, double t) const
     }
 }
 
-QImage KisGradient::generatePreview(int width, int height) const
+QImage KoSegmentGradient::generatePreview(int width, int height) const
 {
     QImage img(width, height, QImage::Format_RGB32);
 
@@ -209,7 +250,24 @@ QImage KisGradient::generatePreview(int width, int height) const
     return img;
 }
 
-KisGradientSegment::KisGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const KoColor& startColor, const KoColor& endColor)
+QGradient* KoSegmentGradient::toQGradient() const
+{
+    QGradient* gradient = new QLinearGradient();;
+
+    QColor color;
+    quint8 opacity;
+    foreach(KoGradientSegment* segment, m_segments) {
+        segment->startColor().toQColor(&color, &opacity);
+        color.setAlpha(opacity);
+        gradient->setColorAt( segment->startOffset() , color );
+        segment->endColor().toQColor(&color, &opacity);
+        color.setAlpha(opacity);
+        gradient->setColorAt( segment->endOffset() , color );
+    }
+    return gradient;
+}
+
+KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const KoColor& startColor, const KoColor& endColor)
 {
     m_interpolator = 0;
 
@@ -291,32 +349,32 @@ KisGradientSegment::KisGradientSegment(int interpolationType, int colorInterpola
     m_endColor = endColor;
 }
 
-const KoColor& KisGradientSegment::startColor() const
+const KoColor& KoGradientSegment::startColor() const
 {
     return m_startColor;
 }
 
-const KoColor& KisGradientSegment::endColor() const
+const KoColor& KoGradientSegment::endColor() const
 {
     return m_endColor;
 }
 
-double KisGradientSegment::startOffset() const
+double KoGradientSegment::startOffset() const
 {
     return m_startOffset;
 }
 
-double KisGradientSegment::middleOffset() const
+double KoGradientSegment::middleOffset() const
 {
     return m_middleOffset;
 }
 
-double KisGradientSegment::endOffset() const
+double KoGradientSegment::endOffset() const
 {
     return m_endOffset;
 }
 
-void KisGradientSegment::setStartOffset(double t)
+void KoGradientSegment::setStartOffset(double t)
 {
     m_startOffset = t;
     m_length = m_endOffset - m_startOffset;
@@ -328,7 +386,7 @@ void KisGradientSegment::setStartOffset(double t)
         m_middleT = (m_middleOffset - m_startOffset) / m_length;
     }
 }
-void KisGradientSegment::setMiddleOffset(double t)
+void KoGradientSegment::setMiddleOffset(double t)
 {
     m_middleOffset = t;
 
@@ -340,7 +398,7 @@ void KisGradientSegment::setMiddleOffset(double t)
     }
 }
 
-void KisGradientSegment::setEndOffset(double t)
+void KoGradientSegment::setEndOffset(double t)
 {
     m_endOffset = t;
     m_length = m_endOffset - m_startOffset;
@@ -353,12 +411,12 @@ void KisGradientSegment::setEndOffset(double t)
     }
 }
 
-int KisGradientSegment::interpolation() const
+int KoGradientSegment::interpolation() const
 {
     return m_interpolator->type();
 }
 
-void KisGradientSegment::setInterpolation(int interpolationType)
+void KoGradientSegment::setInterpolation(int interpolationType)
 {
     switch (interpolationType) {
     case INTERP_LINEAR:
@@ -379,12 +437,12 @@ void KisGradientSegment::setInterpolation(int interpolationType)
     }
 }
 
-int KisGradientSegment::colorInterpolation() const
+int KoGradientSegment::colorInterpolation() const
 {
     return m_colorInterpolator->type();
 }
 
-void KisGradientSegment::setColorInterpolation(int colorInterpolationType)
+void KoGradientSegment::setColorInterpolation(int colorInterpolationType)
 {
     switch (colorInterpolationType) {
     case COLOR_INTERP_RGB:
@@ -399,7 +457,7 @@ void KisGradientSegment::setColorInterpolation(int colorInterpolationType)
     }
 }
 
-void KisGradientSegment::colorAt(KoColor& dst, double t) const
+void KoGradientSegment::colorAt(KoColor& dst, double t) const
 {
     Q_ASSERT(t > m_startOffset - DBL_EPSILON && t < m_endOffset + DBL_EPSILON);
 
@@ -418,19 +476,19 @@ void KisGradientSegment::colorAt(KoColor& dst, double t) const
 
 }
 
-bool KisGradientSegment::isValid() const
+bool KoGradientSegment::isValid() const
 {
     if (m_interpolator == 0 || m_colorInterpolator ==0)
         return false;
     return true;
 }
 
-KisGradientSegment::RGBColorInterpolationStrategy::RGBColorInterpolationStrategy()
+KoGradientSegment::RGBColorInterpolationStrategy::RGBColorInterpolationStrategy()
     : m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() ), buffer(m_colorSpace),m_start(m_colorSpace), m_end(m_colorSpace)
 {
 }
 
-KisGradientSegment::RGBColorInterpolationStrategy *KisGradientSegment::RGBColorInterpolationStrategy::instance()
+KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::instance()
 {
     if (m_instance == 0) {
         m_instance = new RGBColorInterpolationStrategy();
@@ -440,7 +498,7 @@ KisGradientSegment::RGBColorInterpolationStrategy *KisGradientSegment::RGBColorI
     return m_instance;
 }
 
-void KisGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const
+void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const
 {
     m_start.fromKoColor(start);
     m_end.fromKoColor(end);
@@ -458,12 +516,12 @@ void KisGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, do
     dst.fromKoColor(buffer);
 }
 
-KisGradientSegment::HSVCWColorInterpolationStrategy::HSVCWColorInterpolationStrategy()
+KoGradientSegment::HSVCWColorInterpolationStrategy::HSVCWColorInterpolationStrategy()
     : m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() )
 {
 }
 
-KisGradientSegment::HSVCWColorInterpolationStrategy *KisGradientSegment::HSVCWColorInterpolationStrategy::instance()
+KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::instance()
 {
     if (m_instance == 0) {
         m_instance = new HSVCWColorInterpolationStrategy();
@@ -473,7 +531,7 @@ KisGradientSegment::HSVCWColorInterpolationStrategy *KisGradientSegment::HSVCWCo
     return m_instance;
 }
 
-void KisGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const
+void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const
 {
     QColor sc;
     QColor ec;
@@ -505,13 +563,13 @@ void KisGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, 
     dst.fromQColor(result, opacity);
 }
 
-KisGradientSegment::HSVCCWColorInterpolationStrategy::HSVCCWColorInterpolationStrategy() :
+KoGradientSegment::HSVCCWColorInterpolationStrategy::HSVCCWColorInterpolationStrategy() :
         m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() )
 {
 }
 
 
-KisGradientSegment::HSVCCWColorInterpolationStrategy *KisGradientSegment::HSVCCWColorInterpolationStrategy::instance()
+KoGradientSegment::HSVCCWColorInterpolationStrategy *KoGradientSegment::HSVCCWColorInterpolationStrategy::instance()
 {
     if (m_instance == 0) {
         m_instance = new HSVCCWColorInterpolationStrategy();
@@ -521,7 +579,7 @@ KisGradientSegment::HSVCCWColorInterpolationStrategy *KisGradientSegment::HSVCCW
     return m_instance;
 }
 
-void KisGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const
+void KoGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const
 {
     QColor sc;
     QColor se;
@@ -553,7 +611,7 @@ void KisGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst,
     dst.fromQColor( result, opacity);
 }
 
-KisGradientSegment::LinearInterpolationStrategy *KisGradientSegment::LinearInterpolationStrategy::instance()
+KoGradientSegment::LinearInterpolationStrategy *KoGradientSegment::LinearInterpolationStrategy::instance()
 {
     if (m_instance == 0) {
         m_instance = new LinearInterpolationStrategy();
@@ -563,7 +621,7 @@ KisGradientSegment::LinearInterpolationStrategy *KisGradientSegment::LinearInter
     return m_instance;
 }
 
-double KisGradientSegment::LinearInterpolationStrategy::calcValueAt(double t, double middle)
+double KoGradientSegment::LinearInterpolationStrategy::calcValueAt(double t, double middle)
 {
     Q_ASSERT(t > -DBL_EPSILON && t < 1 + DBL_EPSILON);
     Q_ASSERT(middle > -DBL_EPSILON && middle < 1 + DBL_EPSILON);
@@ -590,17 +648,17 @@ double KisGradientSegment::LinearInterpolationStrategy::calcValueAt(double t, do
     return value;
 }
 
-double KisGradientSegment::LinearInterpolationStrategy::valueAt(double t, double middle) const
+double KoGradientSegment::LinearInterpolationStrategy::valueAt(double t, double middle) const
 {
     return calcValueAt(t, middle);
 }
 
-KisGradientSegment::CurvedInterpolationStrategy::CurvedInterpolationStrategy()
+KoGradientSegment::CurvedInterpolationStrategy::CurvedInterpolationStrategy()
 {
     m_logHalf = log(0.5);
 }
 
-KisGradientSegment::CurvedInterpolationStrategy *KisGradientSegment::CurvedInterpolationStrategy::instance()
+KoGradientSegment::CurvedInterpolationStrategy *KoGradientSegment::CurvedInterpolationStrategy::instance()
 {
     if (m_instance == 0) {
         m_instance = new CurvedInterpolationStrategy();
@@ -610,7 +668,7 @@ KisGradientSegment::CurvedInterpolationStrategy *KisGradientSegment::CurvedInter
     return m_instance;
 }
 
-double KisGradientSegment::CurvedInterpolationStrategy::valueAt(double t, double middle) const
+double KoGradientSegment::CurvedInterpolationStrategy::valueAt(double t, double middle) const
 {
     Q_ASSERT(t > -DBL_EPSILON && t < 1 + DBL_EPSILON);
     Q_ASSERT(middle > -DBL_EPSILON && middle < 1 + DBL_EPSILON);
@@ -626,7 +684,7 @@ double KisGradientSegment::CurvedInterpolationStrategy::valueAt(double t, double
     return value;
 }
 
-KisGradientSegment::SineInterpolationStrategy *KisGradientSegment::SineInterpolationStrategy::instance()
+KoGradientSegment::SineInterpolationStrategy *KoGradientSegment::SineInterpolationStrategy::instance()
 {
     if (m_instance == 0) {
         m_instance = new SineInterpolationStrategy();
@@ -636,7 +694,7 @@ KisGradientSegment::SineInterpolationStrategy *KisGradientSegment::SineInterpola
     return m_instance;
 }
 
-double KisGradientSegment::SineInterpolationStrategy::valueAt(double t, double middle) const
+double KoGradientSegment::SineInterpolationStrategy::valueAt(double t, double middle) const
 {
     double lt = LinearInterpolationStrategy::calcValueAt(t, middle);
     double value = (sin(-M_PI_2 + M_PI * lt) + 1.0) / 2.0;
@@ -644,7 +702,7 @@ double KisGradientSegment::SineInterpolationStrategy::valueAt(double t, double m
     return value;
 }
 
-KisGradientSegment::SphereIncreasingInterpolationStrategy *KisGradientSegment::SphereIncreasingInterpolationStrategy::instance()
+KoGradientSegment::SphereIncreasingInterpolationStrategy *KoGradientSegment::SphereIncreasingInterpolationStrategy::instance()
 {
     if (m_instance == 0) {
         m_instance = new SphereIncreasingInterpolationStrategy();
@@ -654,7 +712,7 @@ KisGradientSegment::SphereIncreasingInterpolationStrategy *KisGradientSegment::S
     return m_instance;
 }
 
-double KisGradientSegment::SphereIncreasingInterpolationStrategy::valueAt(double t, double middle) const
+double KoGradientSegment::SphereIncreasingInterpolationStrategy::valueAt(double t, double middle) const
 {
     double lt = LinearInterpolationStrategy::calcValueAt(t, middle) - 1;
     double value = sqrt(1 - lt * lt);
@@ -662,7 +720,7 @@ double KisGradientSegment::SphereIncreasingInterpolationStrategy::valueAt(double
     return value;
 }
 
-KisGradientSegment::SphereDecreasingInterpolationStrategy *KisGradientSegment::SphereDecreasingInterpolationStrategy::instance()
+KoGradientSegment::SphereDecreasingInterpolationStrategy *KoGradientSegment::SphereDecreasingInterpolationStrategy::instance()
 {
     if (m_instance == 0) {
         m_instance = new SphereDecreasingInterpolationStrategy();
@@ -672,7 +730,7 @@ KisGradientSegment::SphereDecreasingInterpolationStrategy *KisGradientSegment::S
     return m_instance;
 }
 
-double KisGradientSegment::SphereDecreasingInterpolationStrategy::valueAt(double t, double middle) const
+double KoGradientSegment::SphereDecreasingInterpolationStrategy::valueAt(double t, double middle) const
 {
     double lt = LinearInterpolationStrategy::calcValueAt(t, middle);
     double value = 1 - sqrt(1 - lt * lt);
@@ -680,5 +738,5 @@ double KisGradientSegment::SphereDecreasingInterpolationStrategy::valueAt(double
     return value;
 }
 
-#include "kis_gradient.moc"
+#include "KoSegmentGradient.moc"
 

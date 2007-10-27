@@ -38,7 +38,7 @@ class KisIconWidget;
 class KisAutobrush;
 class KisBrush;
 class KisBrushChooser;
-class KisGradient;
+class KoSegmentGradient;
 class KisGradientChooser;
 class KisItemChooser;
 class KisPattern;
@@ -67,7 +67,7 @@ public slots:
 
     void slotBrushChanged(KisBrush * brush);
     void slotPatternChanged(KisPattern * pattern);
-    void slotGradientChanged(KisGradient * gradient);
+    void slotGradientChanged(KoSegmentGradient * gradient);
 
 private:
 

@@ -38,7 +38,7 @@
 
 #include "kis_brush.h"
 #include "kis_debug_areas.h"
-#include "kis_gradient.h"
+#include "KoSegmentGradient.h"
 #include "kis_image.h"
 #include "kis_iterators_pixel.h"
 #include "kis_layer.h"

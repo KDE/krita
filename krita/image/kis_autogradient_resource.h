@@ -22,13 +22,15 @@
 
 #include <QList>
 
-#include "kis_gradient.h"
+#include <KoSegmentGradient.h>
+#include <krita_export.h>
 
-class KRITAIMAGE_EXPORT KisAutogradientResource : public KisGradient
+class KRITAIMAGE_EXPORT KisAutogradientResource 
+    : public KoSegmentGradient
 {
 
 public:
-    KisAutogradientResource() : KisGradient("") {}
+    KisAutogradientResource() : KoSegmentGradient("") {}
 
 public:
 
@@ -44,7 +46,7 @@ public:
      * The offset will maximally be moved till the middle of the current or the previous
      * segment
      */
-    void moveSegmentStartOffset( KisGradientSegment* segment, double t);
+    void moveSegmentStartOffset( KoGradientSegment* segment, double t);
 
     /**
      * Moves the endoffset of the specified segment to the specified value
@@ -53,25 +55,25 @@ public:
      * The offset will maximally be moved till the middle of the current or the following
      * segment
      */
-    void moveSegmentEndOffset( KisGradientSegment* segment, double t);
+    void moveSegmentEndOffset( KoGradientSegment* segment, double t);
 
     /**
      * Moves the Middle of the specified segment to the specified value
      * The offset will maximally be moved till the endoffset or startoffset of the segment
      */
-    void moveSegmentMiddleOffset( KisGradientSegment* segment, double t);
+    void moveSegmentMiddleOffset( KoGradientSegment* segment, double t);
 
 
-    void splitSegment( KisGradientSegment* segment );
-    void duplicateSegment( KisGradientSegment* segment );
-    void mirrorSegment( KisGradientSegment* segment );
+    void splitSegment( KoGradientSegment* segment );
+    void duplicateSegment( KoGradientSegment* segment );
+    void mirrorSegment( KoGradientSegment* segment );
 
     /**
      * Removes the specific segment from the gradient.
      * @return The segment which will be at the place of the old segment.
      * 0 if the segment is not in the gradient or it is not possible to remove the segment.
      */
-    KisGradientSegment* removeSegment( KisGradientSegment* segment );
+    KoGradientSegment* removeSegment( KoGradientSegment* segment );
 
     /**
      * Checks if it's possible to remove an segment(at least two segments in the gradient)

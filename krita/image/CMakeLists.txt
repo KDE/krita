@@ -57,7 +57,6 @@ set(kritaimage_LIB_SRCS
    kis_filter_strategy.cc
    kis_filter_configuration.cc
    kis_filter_config_widget.cc
-   kis_gradient.cc
    kis_gradient_painter.cc
    kis_histogram.cc
    kis_image.cc

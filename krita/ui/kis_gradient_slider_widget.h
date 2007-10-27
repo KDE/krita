@@ -27,7 +27,7 @@
 class KAction;
 class KMenu;
 class KisAutogradientResource;
-class KisGradientSegment;
+class KoGradientSegment;
 
 class KisGradientSliderWidget : public QWidget
 {
@@ -39,11 +39,11 @@ public:
 public:
     virtual void paintEvent ( QPaintEvent * );
     void setGradientResource( KisAutogradientResource* agr);
-    KisGradientSegment* selectedSegment() { return m_selectedSegment; }
+    KoGradientSegment* selectedSegment() { return m_selectedSegment; }
 
 signals:
-    void sigSelectedSegment(KisGradientSegment*);
-    void sigChangedSegment(KisGradientSegment*);
+    void sigSelectedSegment(KoGradientSegment*);
+    void sigChangedSegment(KoGradientSegment*);
 
 protected:
     virtual void mousePressEvent( QMouseEvent * e );
@@ -74,8 +74,8 @@ private:
     };
 
     KisAutogradientResource* m_autogradientResource;
-    KisGradientSegment* m_currentSegment;
-    KisGradientSegment* m_selectedSegment;
+    KoGradientSegment* m_currentSegment;
+    KoGradientSegment* m_selectedSegment;
     KMenu* m_segmentMenu;
     int m_drag;
     KAction *m_removeSegmentAction;

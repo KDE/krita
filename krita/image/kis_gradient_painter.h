@@ -24,7 +24,7 @@
 #include "kis_painter.h"
 #include <krita_export.h>
 
-class KisGradient;
+class KoSegmentGradient;
 
 
 // XXX: Need to set dirtyRegion in KisPainter
@@ -52,8 +52,8 @@ public:
         GradientRepeatAlternate
     };
 
-    void setGradient(KisGradient& gradient) { m_gradient = &gradient; }
-    void setGradient(KisGradient* gradient) { m_gradient = gradient; }
+    void setGradient(KoSegmentGradient& gradient) { m_gradient = &gradient; }
+    void setGradient(KoSegmentGradient* gradient) { m_gradient = gradient; }
 
     /**
      * Paint a gradient in the rect between startx, starty, width and height.
@@ -73,7 +73,7 @@ public:
 
 
 private:
-    KisGradient *m_gradient;
+    KoSegmentGradient *m_gradient;
 
 
 };

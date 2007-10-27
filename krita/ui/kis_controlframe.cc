@@ -42,6 +42,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <KoDualColorButton.h>
+#include <KoSegmentGradient.h>
 
 #include "kis_resourceserver.h"
 #include "kis_resource_provider.h"
@@ -54,11 +55,10 @@
 #include "kis_iconwidget.h"
 #include "kis_brush.h"
 #include "kis_pattern.h"
-#include "kis_gradient.h"
 #include "kis_brush_chooser.h"
 #include "kis_view2.h"
 #include "kis_autobrush.h"
-#include "kis_autogradient.h"
+//#include "kis_autogradient.h"
 #include "kis_config.h"
 #include "kis_paintop_box.h"
 #include "kis_custom_brush.h"
@@ -184,7 +184,7 @@ void KisControlFrame::slotPatternChanged(KisPattern * pattern)
 }
 
 
-void KisControlFrame::slotGradientChanged(KisGradient * gradient)
+void KisControlFrame::slotGradientChanged(KoSegmentGradient * gradient)
 {
         KisIconItem *item;
         if (!gradient)

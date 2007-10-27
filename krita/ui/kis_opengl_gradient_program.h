@@ -35,7 +35,7 @@ class KoColorSpace;
 class KRITAUI_EXPORT KisOpenGLGradientProgram : public KisOpenGLProgram
 {
 public:
-    KisOpenGLGradientProgram(const KisGradient *gradient,
+    KisOpenGLGradientProgram(const KoSegmentGradient *gradient,
                              KisGradientPainter::enumGradientShape shape,
                              KisGradientPainter::enumGradientRepeat repeat,
                              bool reverseGradient,

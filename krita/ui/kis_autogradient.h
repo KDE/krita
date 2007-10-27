@@ -23,7 +23,7 @@
 #include "ui_wdgautogradient.h"
 
 class KoResource;
-class KisGradientSegment;
+class KoGradientSegment;
 class KisAutogradientResource;
 
 class KisAutogradient : public QWidget, public Ui::KisWdgAutogradient
@@ -38,8 +38,8 @@ class KisAutogradient : public QWidget, public Ui::KisWdgAutogradient
     private:
         KisAutogradientResource* m_autogradientResource;
     private slots:
-        void slotSelectedSegment(KisGradientSegment* segment);
-        void slotChangedSegment(KisGradientSegment* segment);
+        void slotSelectedSegment(KoGradientSegment* segment);
+        void slotChangedSegment(KoGradientSegment* segment);
         void slotChangedInterpolation(int type);
         void slotChangedColorInterpolation(int type);
         void slotChangedLeftColor( const QColor& color);

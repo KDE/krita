@@ -30,6 +30,7 @@
 
 #include <KoCanvasResourceProvider.h>
 #include <KoTool.h>
+#include <KoSegmentGradient.h>
 
 #include <krita_export.h>
 
@@ -37,7 +38,6 @@
 #include <kis_image.h>
 
 #include <kis_brush.h>
-#include <kis_gradient.h>
 #include <kis_pattern.h>
 
 #include "kis_tool.h"

@@ -26,7 +26,7 @@
 #include "kis_view2.h"
 #include "kis_global.h"
 #include "kis_icon_item.h"
-#include "kis_gradient.h"
+#include "KoSegmentGradient.h"
 #include "kis_autogradient.h"
 #include "kis_resource_provider.h"
 
@@ -73,7 +73,7 @@ void KisGradientChooser::update(QTableWidgetItem *item)
     KisIconItem *kisItem = static_cast<KisIconItem *>(item);
 
     if (item) {
-        KisGradient *gradient = static_cast<KisGradient *>(kisItem->resource());
+        KoSegmentGradient *gradient = static_cast<KoSegmentGradient *>(kisItem->resource());
 
         m_lbName->setText(gradient->name());
     }

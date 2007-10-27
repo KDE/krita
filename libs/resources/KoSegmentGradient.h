@@ -1,28 +1,26 @@
 /*
- *  kis_gradient.h - part of Krayon
- *
- *  Copyright (c) 2000 Matthias Elter  <elter@kde.org>
- *                2004 Boudewijn Rempt <boud@valdyas.org>
- *                2004 Adrian Page <adrian@pagenet.plus.com>
- *                2004 Sven Langkamp <sven.langkamp@gmail.com>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+   Copyright (c) 2000 Matthias Elter  <elter@kde.org>
+                 2004 Boudewijn Rempt <boud@valdyas.org>
+                 2004 Adrian Page <adrian@pagenet.plus.com>
+                 2004, 2007 Sven Langkamp <sven.langkamp@gmail.com>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef KIS_GRADIENT_H
-#define KIS_GRADIENT_H
+#ifndef KOSEGMENTGRADIENT_H
+#define KOSEGMENTGRADIENT_H
 
 #include <QList>
 #include <QColor>
@@ -30,10 +28,10 @@
 #include <kio/job.h>
 
 #include <KoResource.h>
+#include "KoAbstractGradient.h"
 #include "KoColor.h"
 
-#include "kis_global.h"
-#include "krita_export.h"
+#include <koresource_export.h>
 
 class QImage;
 
@@ -51,9 +49,9 @@ enum {
     COLOR_INTERP_HSV_CW
 };
 
-class KRITAIMAGE_EXPORT KisGradientSegment {
+class KORESOURCES_EXPORT KoGradientSegment {
     public:
-        KisGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const KoColor& startColor, const KoColor& endColor);
+        KoGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const KoColor& startColor, const KoColor& endColor);
 
         // startOffset <= t <= endOffset
         void colorAt(KoColor&, double t) const;
@@ -224,13 +222,13 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
         KoColor m_endColor;
 };
 
-class KRITAIMAGE_EXPORT KisGradient : public KoResource {
+class KORESOURCES_EXPORT KoSegmentGradient : public KoAbstractGradient {
 
     Q_OBJECT
 
 public:
-    KisGradient(const QString& file);
-    virtual ~KisGradient();
+    KoSegmentGradient(const QString& file);
+    virtual ~KoSegmentGradient();
 
     virtual bool load();
     virtual bool save();
@@ -238,18 +236,16 @@ public:
     virtual QImage generatePreview(int width, int height) const;
 
     void colorAt(KoColor& dst, double t) const;
-    KoColorSpace * colorSpace() const { return m_colorSpace; }
 
-    KisGradientSegment *segmentAt(double t) const;
+    KoGradientSegment *segmentAt(double t) const;
+
+    virtual QGradient* toQGradient() const;
 
 protected:
-    inline void pushSegment( KisGradientSegment* segment ) { m_segments.push_back(segment); }
+    inline void pushSegment( KoGradientSegment* segment ) { m_segments.push_back(segment); }
     void setImage(const QImage& img);
 
-    QList<KisGradientSegment *> m_segments;
-
-protected:
-    KoColorSpace * m_colorSpace;
+    QList<KoGradientSegment *> m_segments;
 
 private:
     bool init();
@@ -258,5 +254,5 @@ private:
     QImage m_img;
 };
 
-#endif // KIS_GRADIENT_H
+#endif // KOSEGMENTGRADIENT_H
 

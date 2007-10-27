@@ -61,13 +61,13 @@ inline void splitCoordinate(double coordinate, qint32 *whole, double *fraction)
 
 void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc)
 {
-  
+
     if(not m_dab)
     {
       m_dab = new KisPaintDevice(painter()->device()->colorSpace());
     }
-  
-  
+
+
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
@@ -95,14 +95,18 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
     qint32 sy = dabRect.y();//dstRect.y() - y;
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
+#if 0
 //     kDebug() << sx <<"" << sy <<"" << sw <<"" << sh;
     if (painter()->device()->hasSelection()) {
         painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_dab,
                                 painter()->device()->selection(), painter()->opacity(), sx, sy, sw, sh);
     }
+
     else {
-        painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_dab, painter()->opacity(), sx, sy, sw, sh);
-    }
+#endif
+
+    painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_dab, painter()->opacity(), sx, sy, sw, sh);
+//    }
 
 }
 

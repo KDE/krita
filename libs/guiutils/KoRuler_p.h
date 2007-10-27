@@ -79,6 +79,7 @@ private:
 class KoRulerPrivate {
 public:
     KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::Orientation orientation);
+    ~KoRulerPrivate();
     KoUnit unit;
     const Qt::Orientation orientation;
     const KoViewConverter * const viewConverter;

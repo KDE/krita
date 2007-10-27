@@ -522,6 +522,11 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
 #endif
 }
 
+KoRulerPrivate::~KoRulerPrivate()
+{
+    delete paintingStrategy;
+}
+
 double KoRulerPrivate::numberStepForUnit() const
 {
     switch(unit.indexInList()) {

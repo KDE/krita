@@ -42,6 +42,7 @@ public:
      * @param crp the resource provider for the canvas this ruler and the text tool belong to.
      */
     KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceProvider *crp);
+    ~KoRulerController();
 
 private:
     class Private;

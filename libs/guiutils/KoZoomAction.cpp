@@ -80,6 +80,11 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bo
     connect( this, SIGNAL( triggered( const QString& ) ), SLOT( triggered( const QString& ) ) );
 }
 
+KoZoomAction::~KoZoomAction()
+{
+    delete d;
+}
+
 void KoZoomAction::setZoom( double zoom )
 {
     setEffectiveZoom(zoom);

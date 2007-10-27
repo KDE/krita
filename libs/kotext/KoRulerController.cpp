@@ -139,5 +139,10 @@ KoRulerController::KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceP
     connect(horizontalRuler, SIGNAL(tabsChanged(bool)), this, SLOT(tabsChanged(bool)));
 }
 
+KoRulerController::~KoRulerController()
+{
+    delete d;
+}
+
 #include <KoRulerController.moc>
 

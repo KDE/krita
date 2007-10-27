@@ -49,6 +49,7 @@ public:
    * @param parent The action's parent object.
    */
   KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bool doSpecialAspectMode, QObject *parent);
+  ~KoZoomAction();
 
     /**
      * Reimplemented from @see QActionWidgetFactory.

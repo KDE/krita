@@ -36,6 +36,10 @@ public:
     {
         action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), doSpecialAspectMode, 0);
     }
+    ~Private()
+    {
+        delete action;
+    }
 
     /// so we know when the canvasController changes size
     void setAvailableSize()

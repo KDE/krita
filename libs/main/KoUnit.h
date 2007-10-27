@@ -64,8 +64,8 @@ public:
         Centimeter = 3,
         Decimeter = 4,
         Pica = 5, // pica
-        Cicero = 7, // cicero
-        Pixel = 8, // pixel (not really used yet
+        Cicero = 6, // cicero
+        Pixel = 7, // pixel (not really used yet
 // XXX update LastUnit and rulers to allow for the new Pixel!
         LastUnit = Pixel// update when adding a new unit
         // when adding a new unit, make sure to implement support for it in koRuler too

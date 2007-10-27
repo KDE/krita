@@ -89,7 +89,7 @@ namespace KoChart
         ChartInterface();
         virtual ~ChartInterface();
 
-        virtual void setModel( QAbstractItemModel* model ) = 0;
+        virtual void setModel( QAbstractItemModel* model, bool takeOwnershipOfModel = false ) = 0;
     };
 }
 

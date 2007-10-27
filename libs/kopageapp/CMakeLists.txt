@@ -20,6 +20,8 @@ set( kopageapp_LIB_SRCS
      KoPAViewMode.cpp
      KoPAViewModeNormal.cpp
      KoPALoadingContext.cpp
+     KoPADocumentModel.cpp
+     KoPADocumentStructureDocker.cpp
      commands/KoPAPageInsertCommand.cpp
      commands/KoPAPageDeleteCommand.cpp
      commands/KoPAPageMoveCommand.cpp

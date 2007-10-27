@@ -36,6 +36,10 @@ public:
     {
         m_model = new QStandardItemModel;
     }
+    ~KoDetailsPanePrivate()
+    {
+        delete m_model;
+    }
 
     KComponentData m_componentData;
     QStandardItemModel* m_model;

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KOffice/ColorSpace
 Comment=A module implementing a complete colorspace for use with Pigment Color Manipulation System
+Comment[el]=Ένα άρθρωμα που υλοποιεί έναν πλήρη χρωματικό χώρο με χρήση του συστήματος χειρισμού χρωμάτων βαφής
 Comment[es]=Un módulo que implementa un espacio de color completo para usarlo con el sistema de manipulación de colores Pigment
 Comment[pt]=Um módulo que implementa um espaço de cores completo para usar com o Sistema de Manipulação de Cores por Pigmentos
 Comment[pt_BR]=Um módulo que implementa um espaço de cores completo para usar com a Sistema de Manipulação de Pigmeto de Cor

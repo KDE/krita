@@ -23,7 +23,6 @@
 #include "KoShapeLayer.h"
 
 #include <KoGenStyles.h>
-#include <KoSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -32,11 +31,12 @@
 
 #include <QtCore/QTime>
 
-KoShapeSavingContext::KoShapeSavingContext( KoXmlWriter &xmlWriter, KoSavingContext &context )
+KoShapeSavingContext::KoShapeSavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, SavingMode savingMode )
 : m_xmlWriter( &xmlWriter )
 , m_savingOptions( 0 )
 , m_drawId( 0 )
-, m_context( context )
+, m_mainStyles( mainStyles )
+, m_savingMode( savingMode )
 {
 }
 
@@ -56,7 +56,7 @@ void KoShapeSavingContext::setXmlWriter( KoXmlWriter &_xmlWriter )
 
 KoGenStyles & KoShapeSavingContext::mainStyles() 
 {
-    return m_context.mainStyles(); 
+    return m_mainStyles; 
 }
 
 bool KoShapeSavingContext::isSet( ShapeSavingOption option ) const

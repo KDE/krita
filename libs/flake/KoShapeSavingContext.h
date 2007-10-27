@@ -30,7 +30,6 @@
 
 class KoShape;
 class KoXmlWriter;
-class KoSavingContext;
 class KoGenStyles;
 class KoShapeLayer;
 class QPixmap;
@@ -42,6 +41,8 @@ class KoStore;
 class FLAKE_EXPORT KoShapeSavingContext
 {
 public:
+    enum SavingMode { Store, Flat };
+
     /// The Style used for saving the shape
     enum ShapeSavingOption
     {
@@ -68,10 +69,11 @@ public:
     /**
      * @brief Constructor
      * @param xmlWriter used for writing the xml
-     * @param context the saveing context used
+     * @param mainStyles
+     * @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
      */
-    KoShapeSavingContext( KoXmlWriter &xmlWriter, KoSavingContext &context );
-    ~KoShapeSavingContext();
+    KoShapeSavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, SavingMode savingMode = Store );
+    virtual ~KoShapeSavingContext();
 
     /**
      * @brief Get the xml writer
@@ -167,7 +169,8 @@ private:
     QMap<QString, QPixmap> m_pixmaps;
     int m_drawId;
 
-    KoSavingContext &m_context;
+    KoGenStyles& m_mainStyles;
+    SavingMode m_savingMode;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( KoShapeSavingContext::KoShapeSavingOptions )

@@ -58,6 +58,8 @@ bool KoStopGradient::load()
     }
     if(m_stops.count() >= 2)
         setValid(true);
+
+    return true;
 }
 
 bool KoStopGradient::save()
@@ -102,6 +104,57 @@ QGradient* KoStopGradient::toQGradient() const
         gradient->setColorAt( i->first , color );
     }
     return gradient;
+}
+
+KoStopGradient * KoStopGradient::fromQGradient( QGradient * gradient )
+{
+    if( ! gradient )
+        return 0;
+
+    KoStopGradient * newGradient = new KoStopGradient( "" );
+    newGradient->setType( gradient->type() );
+    newGradient->setSpread( gradient->spread() );
+
+    switch( gradient->type() )
+    {
+        case QGradient::LinearGradient:
+        {
+            QLinearGradient * g = static_cast<QLinearGradient*>( gradient );
+            newGradient->m_start = g->start();
+            newGradient->m_stop = g->finalStop();
+            newGradient->m_focalPoint = g->start();
+            break;
+        }
+        case QGradient::RadialGradient:
+        {
+            QRadialGradient * g = static_cast<QRadialGradient*>( gradient );
+            newGradient->m_start = g->center();
+            newGradient->m_stop = g->center() + QPointF( g->radius(), 0 );
+            newGradient->m_focalPoint = g->focalPoint();
+            break;
+        }
+        case QGradient::ConicalGradient:
+        {
+            QConicalGradient * g = static_cast<QConicalGradient*>( gradient );
+            double radian = g->angle() * M_PI / 180.0;
+            newGradient->m_start = g->center();
+            newGradient->m_stop = QPointF( 100.0 * cos( radian ), 100.0 * sin( radian ) ); 
+            newGradient->m_focalPoint = g->center();
+            break;
+        }
+        default:
+            delete newGradient;
+            return 0;
+    }
+
+    foreach( QGradientStop stop, gradient->stops() )
+    {
+        KoColor color;
+        color.fromQColor( stop.second );
+        newGradient->m_stops.append(KoGradientStop(stop.first, color));
+    }
+
+    return newGradient;
 }
 
 void KoStopGradient::loadKarbonGradient(QFile* file)

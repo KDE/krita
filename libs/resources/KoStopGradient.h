@@ -46,6 +46,9 @@ public:
 
     virtual QGradient* toQGradient() const;
 
+    /// Creates KoStopGradient from a QGradient
+    static KoStopGradient * fromQGradient( QGradient * gradient );
+
 protected:
     QList<KoGradientStop> m_stops;
     QPointF m_start;

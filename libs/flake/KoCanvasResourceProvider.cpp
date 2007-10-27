@@ -36,6 +36,11 @@ KoCanvasResourceProvider::KoCanvasResourceProvider(QObject * parent)
     setHandleRadius( 3 );
 }
 
+KoCanvasResourceProvider::~KoCanvasResourceProvider()
+{
+    delete d;
+}
+
 void KoCanvasResourceProvider::setResource( int key, const QVariant & value )
 {
     if ( d->resources.contains( key ) ) {

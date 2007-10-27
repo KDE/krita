@@ -76,7 +76,7 @@ public:
      * @param parent the parent QObject, used for memory management.
      */
     explicit KoCanvasResourceProvider(QObject * parent);
-    ~KoCanvasResourceProvider() {}
+    ~KoCanvasResourceProvider();
 
     /**
      * Set a resource of any type.

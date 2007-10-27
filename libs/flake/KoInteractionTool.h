@@ -86,8 +86,10 @@ public: // Events
 
 protected:
     KoInteractionStrategy *m_currentStrategy; ///< the strategy that is 'in progress'
+    QWidget* createOptionWidget();
 
 private:
+    void setupActions();
     void recalcSelectionBox();
     void updateCursor();
     /// Returns rotation angle of given handle of the current selection

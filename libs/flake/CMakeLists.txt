@@ -14,6 +14,8 @@ set(flake_SRCS
     KoCanvasResourceProvider.cpp
     KoInteractionStrategy.cpp
     KoInteractionTool.cpp
+    KoInteractionToolWidget.cpp
+    KoInteractionToolFactory.cpp
     KoPathShape.cpp
     KoPathPoint.cpp
     KoSelection.cpp
@@ -36,7 +38,6 @@ set(flake_SRCS
     KoShapeRegistry.cpp
     KoToolFactory.cpp
     KoCreateShapesToolFactory.cpp
-    KoInteractionToolFactory.cpp
     KoPathShapeFactory.cpp
     KoShapeFactory.cpp
     KoShapeUserData.cpp
@@ -113,6 +114,7 @@ set(flake_SRCS
 )
 
 kde4_add_ui_files(flake_SRCS
+    KoInteractionToolWidget.ui
     PathToolOptionWidgetBase.ui
 )
 

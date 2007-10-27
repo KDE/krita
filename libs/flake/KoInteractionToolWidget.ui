@@ -1,0 +1,310 @@
+<ui version="4.0" >
+ <class>KoInteractionToolWidget</class>
+ <widget class="QTabWidget" name="KoInteractionToolWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>222</width>
+    <height>341</height>
+   </rect>
+  </property>
+  <property name="currentIndex" >
+   <number>0</number>
+  </property>
+  <widget class="QWidget" name="geometryTab" >
+   <attribute name="title" >
+    <string>Geometry</string>
+   </attribute>
+   <layout class="QGridLayout" >
+    <item row="0" column="0" >
+     <widget class="QGroupBox" name="positionGroup" >
+      <property name="title" >
+       <string>Position</string>
+      </property>
+      <property name="alignment" >
+       <set>Qt::AlignHCenter</set>
+      </property>
+      <property name="flat" >
+       <bool>true</bool>
+      </property>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>31</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="1" colspan="2" >
+        <widget class="QLabel" name="rectLabel" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>31</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0" colspan="2" >
+        <widget class="QLabel" name="positionXLabel" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Ignored" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Position x:</string>
+         </property>
+         <property name="buddy" >
+          <cstring>positionXSpinBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" colspan="2" >
+        <widget class="QDoubleSpinBox" name="positionXSpinBox" />
+       </item>
+       <item row="2" column="0" colspan="2" >
+        <widget class="QLabel" name="positionYLabel" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Ignored" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Position y:</string>
+         </property>
+         <property name="buddy" >
+          <cstring>positionYSpinBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2" colspan="2" >
+        <widget class="QDoubleSpinBox" name="positionYSpinBox" />
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="0" >
+     <widget class="QGroupBox" name="dimensionGroup" >
+      <property name="title" >
+       <string>Dimensions</string>
+      </property>
+      <property name="alignment" >
+       <set>Qt::AlignHCenter</set>
+      </property>
+      <property name="flat" >
+       <bool>true</bool>
+      </property>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="widthLabel" >
+         <property name="text" >
+          <string>Width:</string>
+         </property>
+         <property name="buddy" >
+          <cstring>widthSpinBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QDoubleSpinBox" name="widthSpinBox" />
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="heightLabel" >
+         <property name="text" >
+          <string>Height:</string>
+         </property>
+         <property name="buddy" >
+          <cstring>heightSpinBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QDoubleSpinBox" name="heightSpinBox" />
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="advancedTab" >
+   <attribute name="title" >
+    <string>Advanced</string>
+   </attribute>
+   <layout class="QGridLayout" >
+    <item row="0" column="0" >
+     <widget class="QLabel" name="orderLabel" >
+      <property name="text" >
+       <string>Order:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" >
+     <widget class="QToolButton" name="bringToFront" >
+      <property name="text" >
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2" >
+     <widget class="QToolButton" name="raiseLevel" >
+      <property name="text" >
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3" >
+     <widget class="QToolButton" name="lowerLevel" >
+      <property name="text" >
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="4" >
+     <widget class="QToolButton" name="sendBack" >
+      <property name="text" >
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="5" >
+     <widget class="QGroupBox" name="alignmentGroup" >
+      <property name="title" >
+       <string>Aligment</string>
+      </property>
+      <property name="alignment" >
+       <set>Qt::AlignHCenter</set>
+      </property>
+      <property name="flat" >
+       <bool>true</bool>
+      </property>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="horizontalLabel" >
+         <property name="text" >
+          <string>Horizontal:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QToolButton" name="leftAlign" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2" >
+        <widget class="QToolButton" name="hCenterAlign" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3" >
+        <widget class="QToolButton" name="rightAlign" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="verticalLabel" >
+         <property name="text" >
+          <string>Vertical:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QToolButton" name="topAlign" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" >
+        <widget class="QToolButton" name="vCenterAlign" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3" >
+        <widget class="QToolButton" name="bottomAlign" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="5" >
+     <widget class="QGroupBox" name="transformationGroup" >
+      <property name="title" >
+       <string>Transformation</string>
+      </property>
+      <property name="alignment" >
+       <set>Qt::AlignHCenter</set>
+      </property>
+      <property name="flat" >
+       <bool>true</bool>
+      </property>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QComboBox" name="rotateCombo" />
+       </item>
+       <item row="0" column="1" >
+        <widget class="QPushButton" name="rotateButton" >
+         <property name="text" >
+          <string>Rotate</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QComboBox" name="scaleCombo" />
+       </item>
+       <item row="1" column="1" >
+        <widget class="QPushButton" name="scaleButton" >
+         <property name="text" >
+          <string>Scale</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QComboBox" name="shearCombo" />
+       </item>
+       <item row="2" column="1" >
+        <widget class="QPushButton" name="shearButton" >
+         <property name="text" >
+          <string>Shear</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -33,12 +33,15 @@
 #include "KoSelection.h"
 #include "KoShapeManager.h"
 #include "KoInteractionStrategy.h"
+#include "KoInteractionToolWidget.h"
 #include "KoCanvasBase.h"
 #include "KoPanTool.h"
 #include "KoCanvasResourceProvider.h"
 #include "commands/KoShapeMoveCommand.h"
 
 #include <QUndoCommand>
+#include <kaction.h>
+#include <kicon.h>
 #include <kcursor.h>
 #include <kstandarddirs.h>
 #include <k3staticdeleter.h>
@@ -73,6 +76,8 @@ KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
     m_currentStrategy(0),
     d( new Private())
 {
+    setupActions();
+
     QPixmap rotatePixmap, shearPixmap;
     rotatePixmap.load(KStandardDirs::locate("data", "koffice/icons/rotate.png"));
     shearPixmap.load(KStandardDirs::locate("data", "koffice/icons/shear.png"));
@@ -123,6 +128,60 @@ KoInteractionTool::~KoInteractionTool()
 bool KoInteractionTool::wantsAutoScroll()
 {
     return true;
+}
+
+void KoInteractionTool::setupActions()
+{
+    KAction* actionBringToFront = new KAction( KIcon( "bring_forward" ),
+                                               i18n( "Bring to &Front" ), this );
+    addAction( "object_move_totop", actionBringToFront );
+    actionBringToFront->setShortcut( QKeySequence( "Ctrl+Shift+]" ) );
+//    connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
+
+    KAction* actionRaise = new KAction( KIcon( "raise" ), i18n( "&Raise" ), this );
+    addAction( "object_move_up", actionRaise );
+    actionRaise->setShortcut( QKeySequence( "Ctrl+]" ) );
+//    connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
+
+    KAction* actionLower = new KAction( KIcon( "lower" ), i18n( "&Lower" ), this );
+    addAction( "object_move_down", actionLower );
+    actionLower->setShortcut( QKeySequence( "Ctrl+[" ) );
+//    connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
+
+    KAction* actionSendToBack = new KAction( KIcon( "send_backward" ),
+                                             i18n( "Send to &Back" ), this );
+    addAction( "object_move_tobottom", actionSendToBack );
+    actionSendToBack->setShortcut( QKeySequence( "Ctrl+Shift+[" ) );
+//    connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
+
+    KAction* actionAlignLeft = new KAction( KIcon( "aoleft" ),
+                                            i18n( "Align Left" ), this );
+    addAction( "object_align_horizontal_left", actionAlignLeft );
+//    connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
+
+    KAction* actionAlignCenter = new KAction( KIcon( "aocenterh" ),
+                                              i18n( "Horizontally Center" ), this );
+    addAction( "object_align_horizontal_center", actionAlignCenter );
+//    connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
+
+    KAction* actionAlignRight = new KAction( KIcon( "aoright" ),
+                                             i18n( "Align Right" ), this );
+    addAction( "object_align_horizontal_right", actionAlignRight );
+//    connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
+
+    KAction* actionAlignTop = new KAction( KIcon( "aotop" ), i18n( "Align Top" ), this );
+    addAction( "object_align_vertical_top", actionAlignTop );
+//    connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
+
+    KAction* actionAlignMiddle = new KAction( KIcon( "aocenterv" ),
+                                              i18n( "Vertically Center" ), this );
+    addAction( "object_align_vertical_center", actionAlignMiddle );
+//    connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
+
+    KAction* actionAlignBottom = new KAction( KIcon( "aobottom" ),
+                                              i18n( "Align Bottom" ), this );
+    addAction( "object_align_vertical_bottom", actionAlignBottom );
+//    connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
 }
 
 double KoInteractionTool::rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation )
@@ -613,6 +672,11 @@ void KoInteractionTool::activate(bool temporary) {
     useCursor(Qt::ArrowCursor, true);
     repaintDecorations();
 }
+
+QWidget* KoInteractionTool::createOptionWidget() {
+    return new KoInteractionToolWidget( this );
+}
+
 
 // ##########  SelectionDecorator ############
 QImage * SelectionDecorator::s_rotateCursor=0;

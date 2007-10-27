@@ -196,6 +196,15 @@ void KoScriptingPart::slotFinished(Kross::Action* action)
     if( d->module && d->module == action->object( d->module->objectName() ) ) {
         //d->view->document()->setModified(true);
         //QApplication::restoreOverrideCursor();
+        KoView* view = d->module ? d->module->view() : 0;
+        if( view && view->shell() /* && view == view->shell()->rootView() */ ) {
+            if( action->hadError() ) {
+                if( action->errorTrace().isNull() )
+                    KMessageBox::error(view, action->errorMessage());
+                else
+                    KMessageBox::detailedError(view, action->errorMessage(), action->errorTrace());
+            }
+        }
         myFinished(action);
     }
 }
@@ -206,15 +215,6 @@ void KoScriptingPart::slotFinalized(Kross::Action* action)
     disconnect(action, SIGNAL(finalized(Kross::Action*)), this, SLOT(slotFinalized(Kross::Action*)));
     d->actions.removeAll(action);
     if( d->module && d->module == action->object( d->module->objectName() ) ) {
-        KoView* view = d->module ? d->module->view() : 0;
-        if( view && view->shell() /* && view == view->shell()->rootView() */ ) {
-            if( action->hadError() ) {
-                if( action->errorTrace().isNull() )
-                    KMessageBox::error(view, action->errorMessage());
-                else
-                    KMessageBox::detailedError(view, action->errorMessage(), action->errorTrace());
-            }
-        }
         myFinalized(action);
     }
 }

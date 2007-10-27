@@ -100,12 +100,13 @@ void KoPAView::initGUI()
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
 
     m_zoomController = new KoZoomController( m_canvasController, &m_zoomHandler, actionCollection(), false );
+    connect( m_zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, double ) ),
+             this, SLOT( slotZoomChanged( KoZoomMode::Mode, double ) ) );
 
     m_zoomAction = m_zoomController->zoomAction();
     addStatusBarItem( m_zoomAction->createWidget( statusBar() ), 0 );
 
-    connect( m_zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, double ) ),
-             this, SLOT( slotZoomChanged( KoZoomMode::Mode, double ) ) );
+    m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
     m_viewMode = new KoPAViewModeNormal( this, m_canvas );
 

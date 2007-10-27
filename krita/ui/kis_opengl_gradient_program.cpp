@@ -24,10 +24,10 @@
 #include <cfloat>
 
 #include <kdebug.h>
+#include <KoSegmentGradient.h>
 
 #include "kis_opengl.h"
 #include "kis_opengl_fragment_shader.h"
-#include "kis_gradient.h"
 #include "kis_debug_areas.h"
 
 //-----------------------------------------------------------------------------

@@ -344,8 +344,8 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     rServer = KisResourceServerRegistry::instance()->value("GradientServer");
     m_gradientMediator->connectServer(rServer);
 
-    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KisGradient *)),
-            this, SLOT(slotGradientChanged( KisGradient *)));
+    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoSegmentGradient *)),
+            this, SLOT(slotGradientChanged( KoSegmentGradient *)));
 
     m_gradientChooser->setCurrent( 0 );
     m_gradientMediator->setActiveItem( m_gradientChooser->currentItem() );

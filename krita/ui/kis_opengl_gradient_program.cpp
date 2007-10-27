@@ -260,7 +260,7 @@ KisOpenGLGradientProgram::~KisOpenGLGradientProgram()
     delete m_gradientShader;
 }
 
-void KisOpenGLGradientProgram::createGradientColorsTexture(const KisGradient *gradient,
+void KisOpenGLGradientProgram::createGradientColorsTexture(const KoSegmentGradient *gradient,
                                                            KisGradientPainter::enumGradientRepeat repeat,
                                                            bool reverseGradient,
                                                            KoColorSpace *colorSpace,

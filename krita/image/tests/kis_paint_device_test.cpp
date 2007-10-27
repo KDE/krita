@@ -50,7 +50,6 @@ void KisPaintDeviceTest::testCreation()
     QVERIFY( dev->pixelSize() == cs->pixelSize() );
     QVERIFY( dev->channelCount() == cs->channelCount() );
     QVERIFY( dev->dataManager() != 0 );
-    QVERIFY( dev->hasSelection() == false );
     QVERIFY( dev->paintEngine() != 0 );
 
     KisImageSP image = new KisImage(0, 1000, 1000, cs, "merge test");
@@ -65,7 +64,6 @@ void KisPaintDeviceTest::testCreation()
     QVERIFY( dev->pixelSize() == cs->pixelSize() );
     QVERIFY( dev->channelCount() == cs->channelCount() );
     QVERIFY( dev->dataManager() != 0 );
-    QVERIFY( dev->hasSelection() == false );
     QVERIFY( dev->paintEngine() != 0 );
 
     // Let the layer go out of scope and see what happens

@@ -117,11 +117,11 @@ target_link_libraries(KisPainterlyOverlayTest  ${KDE4_KDEUI_LIBS} koguiutils kom
 
 ########### next target ###############
 
-set(kis_selection_test_SRCS kis_selection_test.cpp )
+#set(kis_selection_test_SRCS kis_selection_test.cpp )
 
-kde4_add_unit_test(KisSelectionTest TESTNAME krita-image-SelectionTest ${kis_selection_test_SRCS})
+#kde4_add_unit_test(KisSelectionTest TESTNAME krita-image-SelectionTest ${kis_selection_test_SRCS})
 
-target_link_libraries(KisSelectionTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
+#target_link_libraries(KisSelectionTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

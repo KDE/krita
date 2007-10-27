@@ -31,6 +31,7 @@ class KoShapeSavingContext;
 class KoPAPage;
 class KoPAPageBase;
 class KoPAMasterPage;
+class KoPASavingContext;
 
 class KoInlineTextObjectManager;
 
@@ -58,8 +59,7 @@ public:
      *
      * For all pages that are specified also the master slide has to be specified.
      */
-    bool saveOasisPages( KoXmlWriter* bodyWriter, KoGenStyles &mainStyles,
-                         QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages );
+    bool saveOasisPages( KoPASavingContext & paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages );
 
     /**
      * Get page by index.

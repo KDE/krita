@@ -42,8 +42,8 @@ public:
      * @param context the saving context
      * @param page the starting page number
      */
-	KoPASavingContext( KoXmlWriter &xmlWriter, KoSavingContext &context, int page );
-     
+    KoPASavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int page, SavingMode savingMode = Store ); //TODO default
+
     /**
      * @brief Destructor
      */

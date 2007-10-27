@@ -25,7 +25,6 @@
 #include <KoXmlReader.h>
 #include <KoOasisStyles.h>
 #include <KoOasisStore.h>
-#include <KoSavingContext.h>
 #include <KoOasisLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
@@ -137,7 +136,9 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoGenStyles mainStyles;
     KoXmlWriter * bodyWriter = oasisStore.bodyWriter();
 
-    if ( !saveOasisPages( bodyWriter, mainStyles, m_pages, m_masterPages ) ) {
+    KoPASavingContext paContext( *bodyWriter, mainStyles, 1, KoShapeSavingContext::Store );
+
+    if ( !saveOasisPages( paContext, m_pages, m_masterPages ) ) {
         return false;
     }
 
@@ -151,35 +152,29 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     return mainStyles.saveOdfStylesDotXml( store, manifestWriter );
 }
 
-bool KoPADocument::saveOasisPages( KoXmlWriter* bodyWriter, KoGenStyles &mainStyles,
-                                   QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages )
+bool KoPADocument::saveOasisPages( KoPASavingContext &paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages )
 {
-    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
-    KoPASavingContext paContext( *bodyWriter, savingContext, 1 );
-
     paContext.setOptions( KoPASavingContext::DrawId | KoPASavingContext::AutoStyleInStyleXml );
 
     // save master pages
-    foreach( KoPAPageBase *page, masterPages )
-    {
+    foreach( KoPAPageBase *page, masterPages ) {
         page->saveOdf( paContext );
     }
 
-    bodyWriter->startElement( "office:body" );
-    bodyWriter->startElement( odfTagName( true ) );
+    KoXmlWriter & bodyWriter = paContext.xmlWriter();
+    bodyWriter.startElement( "office:body" );
+    bodyWriter.startElement( odfTagName( true ) );
 
-    paContext.setXmlWriter( *bodyWriter );
     paContext.setOptions( KoPASavingContext::DrawId );
 
     // save pages
-    foreach ( KoPAPageBase *page, pages )
-    {
+    foreach ( KoPAPageBase *page, pages ) {
         page->saveOdf( paContext );
         paContext.incrementPage();
     }
 
-    bodyWriter->endElement(); // office:odfTagName()
-    bodyWriter->endElement(); // office:body
+    bodyWriter.endElement(); // office:odfTagName()
+    bodyWriter.endElement(); // office:body
 
     return true;
 }

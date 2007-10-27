@@ -21,9 +21,9 @@
 
 #include <QPixmap>
 
-KoPASavingContext::KoPASavingContext( KoXmlWriter &xmlWriter, KoSavingContext &context, int page )
-: KoShapeSavingContext( xmlWriter, context )
-, m_page( page )    
+KoPASavingContext::KoPASavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int page, SavingMode savingMode )
+: KoShapeSavingContext( xmlWriter, mainStyles, savingMode )
+, m_page( page )
 {
 }
 

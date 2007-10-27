@@ -31,9 +31,9 @@
 #include <QSet>
 #include <QBrush>
 
-#include <flake_export.h>
-
 #include <KoXmlReaderForward.h>
+
+#include "flake_export.h"
 
 class QPainter;
 class QRectF;

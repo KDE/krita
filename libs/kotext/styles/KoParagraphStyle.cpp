@@ -148,7 +148,7 @@ KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
 
 KoParagraphStyle::KoParagraphStyle(const QTextFormat &textFormat)
     : QObject(),
-              d(new Private())
+    d(new Private())
 {
     d->stylesPrivate = new StylePrivate();
     QMapIterator<int, QVariant> i(textFormat.properties());

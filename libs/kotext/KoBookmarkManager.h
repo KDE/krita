@@ -41,6 +41,7 @@ class KOTEXT_EXPORT KoBookmarkManager : public QObject {
 public:
     /// constructor
     KoBookmarkManager();
+    ~KoBookmarkManager();
 
     /// @return a bookmark with the specified name
     KoBookmark *retrieveBookmark(const QString &name);

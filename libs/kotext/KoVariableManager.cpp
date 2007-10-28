@@ -41,6 +41,11 @@ setValue("Foo", "Baz");
 setValue("Bike", "Shed");
 }
 
+KoVariableManager::~KoVariableManager()
+{
+    delete d;
+}
+
 void KoVariableManager::setValue(const QString &name, const QString &value) {
     int key;
     // we store the mapping from name to key

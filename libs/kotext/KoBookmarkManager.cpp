@@ -36,6 +36,11 @@ KoBookmarkManager::KoBookmarkManager()
 {
 }
 
+KoBookmarkManager::~KoBookmarkManager()
+{
+    delete d;
+}
+
 void KoBookmarkManager::insert(const QString &name, KoBookmark *bookmark) {
     d->bookmarkHash[name] = bookmark;
     d->bookmarkNameList.append(name);

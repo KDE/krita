@@ -42,6 +42,7 @@ class KOTEXT_EXPORT KoVariableManager {
 public:
     /// constructor
     explicit KoVariableManager(KoInlineTextObjectManager *inlineObjectManager);
+    ~KoVariableManager();
 
     /**
      * Set or create a variable to the new value.

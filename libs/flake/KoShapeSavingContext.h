@@ -27,12 +27,12 @@
 #include <QFlags>
 #include <QMap>
 #include <QString>
+#include <QPixmap>
 
 class KoShape;
 class KoXmlWriter;
 class KoGenStyles;
 class KoShapeLayer;
-class QPixmap;
 class KoStore;
 
 /**

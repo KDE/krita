@@ -34,6 +34,11 @@ KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSp
     d->renderingIntent = renderingIntent;
 }
 
+KoColorConversionTransformation::~KoColorConversionTransformation()
+{
+    delete d;
+}
+
 const KoColorSpace* KoColorConversionTransformation::srcColorSpace() const
 {
     return d->srcColorSpace;

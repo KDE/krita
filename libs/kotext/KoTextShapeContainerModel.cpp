@@ -48,6 +48,11 @@ KoTextShapeContainerModel::KoTextShapeContainerModel()
 {
 }
 
+KoTextShapeContainerModel::~KoTextShapeContainerModel()
+{
+   delete d;
+}
+
 void KoTextShapeContainerModel::add(KoShape *child) {
     if(d->children.contains(child))
         return;

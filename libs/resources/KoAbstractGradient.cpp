@@ -34,6 +34,7 @@ KoAbstractGradient::KoAbstractGradient(const QString& filename)
 
 KoAbstractGradient::~KoAbstractGradient()
 {
+   delete d;
 }
 
 void KoAbstractGradient::setColorSpace(KoColorSpace* colorSpace)

@@ -44,7 +44,7 @@ public:
      * @see KoShape::setTransformation()
      */
     KoShapeTransformCommand( const QList<KoShape*> &shapes, const QList<QMatrix> &oldState, const QList<QMatrix> &newState, QUndoCommand * parent = 0 );
-
+    ~KoShapeTransformCommand();
     /// redo the command
     void redo();
     /// revert the actions done in redo

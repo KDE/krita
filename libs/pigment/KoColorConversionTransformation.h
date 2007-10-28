@@ -44,6 +44,7 @@ class PIGMENTCMS_EXPORT KoColorConversionTransformation : KoColorTransformation{
         };
     public:
         KoColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual);
+        ~KoColorConversionTransformation();
     public:
         /**
          * @return the source color space for this transformation.

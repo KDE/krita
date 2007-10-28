@@ -94,6 +94,7 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLay
 }
 
 KoTextDocumentLayout::~KoTextDocumentLayout() {
+    delete d;
     delete m_state;
     m_state = 0;
 }

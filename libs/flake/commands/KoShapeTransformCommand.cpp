@@ -44,6 +44,11 @@ KoShapeTransformCommand::KoShapeTransformCommand( const QList<KoShape*> &shapes,
     d->newState = newState;
 }
 
+KoShapeTransformCommand::~KoShapeTransformCommand()
+{
+    delete d;
+}
+
 void KoShapeTransformCommand::redo()
 {
     QUndoCommand::redo();

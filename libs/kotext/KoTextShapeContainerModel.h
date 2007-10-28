@@ -35,6 +35,7 @@ class KOTEXT_EXPORT KoTextShapeContainerModel : public KoShapeContainerModel {
 public:
     /// constructor
     KoTextShapeContainerModel();
+    ~KoTextShapeContainerModel();
 
     /// reimplemented from KoShapeContainerModel
     virtual void add(KoShape *child);

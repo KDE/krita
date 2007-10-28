@@ -169,14 +169,6 @@ public:
     void closeMerge();
 
     /**
-     * @brief The path is updated
-     *
-     * This is called when a point of the path is updated. It will be used 
-     * to make it possible to cache things.
-     */
-    void update();
-
-    /**
      * @brief Normalizes the path data.
      *
      * The path points are transformed so that the top-left corner

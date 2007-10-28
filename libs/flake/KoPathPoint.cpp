@@ -83,21 +83,21 @@ KoPathPoint& KoPathPoint::operator=( const KoPathPoint &rhs )
 void KoPathPoint::setPoint( const QPointF & point ) 
 {
     d->point = point;
-    d->shape->update();
+    d->shape->notifyChanged();
 }
 
 void KoPathPoint::setControlPoint1( const QPointF & point ) 
 { 
     d->controlPoint1 = point; 
     d->properties |= HasControlPoint1; 
-    d->shape->update(); 
+    d->shape->notifyChanged(); 
 }
 
 void KoPathPoint::setControlPoint2( const QPointF & point ) 
 { 
     d->controlPoint2 = point; 
     d->properties |= HasControlPoint2; 
-    d->shape->update();
+    d->shape->notifyChanged();
 }
 
 void KoPathPoint::setProperties( KoPointProperties properties ) 
@@ -109,7 +109,7 @@ void KoPathPoint::setProperties( KoPointProperties properties )
         properties &= ~IsSymmetric;
     }
     d->properties = properties;
-    d->shape->update();
+    d->shape->notifyChanged();
 }
 
 void KoPathPoint::setProperty( KoPointProperty property )
@@ -210,7 +210,7 @@ void KoPathPoint::map( const QMatrix &matrix, bool mapGroup )
         d->controlPoint1 = matrix.map( d->controlPoint1 );
         d->controlPoint2 = matrix.map( d->controlPoint2 );
     }
-    d->shape->update(); 
+    d->shape->notifyChanged(); 
 }
 
 void KoPathPoint::paint( QPainter &painter, const QSizeF &size, KoPointTypes types, bool active )

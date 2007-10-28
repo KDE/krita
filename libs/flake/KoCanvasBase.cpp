@@ -45,7 +45,7 @@ KoCanvasBase::KoCanvasBase( KoShapeControllerBase * shapeControllerBase )
     : d(new Private())
 {
     KConfigGroup cfg( KGlobal::config()->group("canvas") );
-    d->isAntialiased = cfg.readEntry("antialiasing", false);
+    d->isAntialiased = cfg.readEntry("antialiasing", true);
     d->resourceProvider = new KoCanvasResourceProvider(0);
     d->shapeController = new KoShapeController( this, shapeControllerBase );
 }

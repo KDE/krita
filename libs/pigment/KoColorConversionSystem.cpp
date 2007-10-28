@@ -515,11 +515,17 @@ void KoColorConversionSystem::deletePathes( QList<KoColorConversionSystem::Path*
     }
 }
 
+class Node2PathHash : public QHash<KoColorConversionSystem::Node*, KoColorConversionSystem::Path*>
+{
+public:
+    ~Node2PathHash() { qDeleteAll(*this); }
+};
+
 template<bool ignoreHdr, bool ignoreColorCorrectness>
 inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
 {
     PathQualityChecker<ignoreHdr, ignoreColorCorrectness> pQC( qMin(srcNode->referenceDepth, dstNode->referenceDepth ) );
-    QHash<Node*, Path*> node2path; // current best path to reach a given node
+    Node2PathHash node2path; // current best path to reach a given node
     QList<Path*> currentPathes; // list of all pathes
     // Generate the initial list of pathes
     foreach( Vertex* v, srcNode->outputVertexes)

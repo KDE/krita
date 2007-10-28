@@ -49,6 +49,8 @@ public:
             ruler->setShowTabs(false);
             return;
         }
+        ruler->setShowIndents(true);
+        ruler->setShowTabs(true);
         if(block.position() <= lastPosition && block.position() + block.length() > lastPosition)
             return; // nothing changed.
         lastPosition = block.position();

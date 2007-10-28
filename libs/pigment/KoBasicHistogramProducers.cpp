@@ -39,7 +39,7 @@ const qint32 qint32_MAX = (2147483647);
 const qint32 qint32_MIN = (-2147483647-1);
 
 
-KoColorSpace* KoGenericLabHistogramProducer::m_labCs = 0;
+static KoColorSpace* m_labCs = 0;
 
 
 KoBasicHistogramProducer::KoBasicHistogramProducer(const KoID& id, int channels, int nrOfBins, KoColorSpace *cs)

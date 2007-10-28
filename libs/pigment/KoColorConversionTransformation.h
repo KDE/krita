@@ -29,7 +29,7 @@ class KoColorSpace;
 /**
  * This is the base class of all color transform that convert the color of a pixel
  */
-class PIGMENT_EXPORT KoColorConversionTransformation : KoColorTransformation{
+class PIGMENTCMS_EXPORT KoColorConversionTransformation : KoColorTransformation{
         struct Private;
     public:
         /**

@@ -48,7 +48,7 @@ class KoColorSpaceMathsTraits {
 };
 
 template<>
-class PIGMENT_EXPORT KoColorSpaceMathsTraits<quint8> {
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint8> {
     public:
         typedef qint32 compositetype;
         static const quint8 zeroValue = 0;
@@ -61,7 +61,7 @@ class PIGMENT_EXPORT KoColorSpaceMathsTraits<quint8> {
 };
 
 template<>
-class PIGMENT_EXPORT KoColorSpaceMathsTraits<quint16> {
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint16> {
     public:
         typedef qint64 compositetype;
         static const quint16 zeroValue = 0;
@@ -74,7 +74,7 @@ class PIGMENT_EXPORT KoColorSpaceMathsTraits<quint16> {
 };
 
 template<>
-class PIGMENT_EXPORT KoColorSpaceMathsTraits<qint16> {
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<qint16> {
     public:
         typedef qint64 compositetype;
         static const qint16 zeroValue = 0;
@@ -87,7 +87,7 @@ class PIGMENT_EXPORT KoColorSpaceMathsTraits<qint16> {
 };
 
 template<>
-class PIGMENT_EXPORT KoColorSpaceMathsTraits<quint32> {
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint32> {
     public:
         typedef qint64 compositetype;
         static const quint32 zeroValue = 0;
@@ -104,7 +104,7 @@ class PIGMENT_EXPORT KoColorSpaceMathsTraits<quint32> {
 #include <half.h>
                  
 template<>
-class PIGMENT_EXPORT KoColorSpaceMathsTraits<half> {
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<half> {
     public:
         typedef double compositetype;
         static const half zeroValue;
@@ -118,7 +118,7 @@ class PIGMENT_EXPORT KoColorSpaceMathsTraits<half> {
 #endif
 
 template<>
-class PIGMENT_EXPORT KoColorSpaceMathsTraits<float> {
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<float> {
     public:
         typedef double compositetype;
         static const float zeroValue;

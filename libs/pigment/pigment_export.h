@@ -26,19 +26,19 @@
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined _WIN32 || defined _WIN64
 
-#ifndef PIGMENT_EXPORT
-# if defined(MAKE_PIGMENT_LIB)
+#ifndef PIGMENTCMS_EXPORT
+# if defined(MAKE_PIGMENTCMS_LIB)
    /* We are building this library */ 
-#  define PIGMENT_EXPORT KDE_EXPORT
+#  define PIGMENTCMS_EXPORT KDE_EXPORT
 # else
    /* We are using this library */ 
-#  define PIGMENT_EXPORT KDE_IMPORT
+#  define PIGMENTCMS_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #else /* UNIX */
 
-#define PIGMENT_EXPORT KDE_EXPORT
+#define PIGMENTCMS_EXPORT KDE_EXPORT
 
 #endif
 

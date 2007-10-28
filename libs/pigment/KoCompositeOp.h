@@ -66,7 +66,7 @@ const QString COMPOSITE_COPY_OPACITY = "copy_opacity";
 /**
  * Base for colorspace-specific blending modes.
  */
-class PIGMENT_EXPORT KoCompositeOp {
+class PIGMENTCMS_EXPORT KoCompositeOp {
 public:
 
     /**

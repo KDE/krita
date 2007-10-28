@@ -27,7 +27,7 @@ class KoLcmsColorProfileContainer;
 /**
  * This class contains an ICC color profile.
  */
-class PIGMENT_EXPORT KoIccColorProfile : public KoColorProfile {
+class PIGMENTCMS_EXPORT KoIccColorProfile : public KoColorProfile {
     public:
         /**
          * Contains the data associated with a profile. This is

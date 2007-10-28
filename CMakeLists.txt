@@ -7,11 +7,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(GENERIC_KOFFICE_LIB_VERSION "5.0.0")
 set(GENERIC_KOFFICE_LIB_SOVERSION "5")
 
-IF(MSVC)
-  # A fix for Klingon C++ dialect. Do not try this at home.
-  add_definitions(-Dand=&& -Dor=|| -Dnot=!)
-ENDIF(MSVC)
-
 # search packages used by KDE
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)

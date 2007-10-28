@@ -47,7 +47,7 @@ class KoColorSpace;
  * in which they are found in the channels() method. This is potentially different from
  * the order in which they are internally ordered!
  **/
-class PIGMENT_EXPORT KoHistogramProducer : public KShared {
+class PIGMENTCMS_EXPORT KoHistogramProducer : public KShared {
 public:
     KoHistogramProducer() : m_skipTransparent(true), m_skipUnselected(true) {}
     virtual ~KoHistogramProducer() {}
@@ -95,7 +95,7 @@ protected:
 
 typedef KSharedPtr<KoHistogramProducer> KoHistogramProducerSP;
 
-class PIGMENT_EXPORT KoHistogramProducerFactory {
+class PIGMENTCMS_EXPORT KoHistogramProducerFactory {
 public:
     KoHistogramProducerFactory(const KoID& id) : m_id(id) {}
     virtual ~KoHistogramProducerFactory() {}
@@ -111,7 +111,7 @@ protected:
     KoID m_id;
 };
 
-class PIGMENT_EXPORT KoHistogramProducerFactoryRegistry
+class PIGMENTCMS_EXPORT KoHistogramProducerFactoryRegistry
     : public KoGenericRegistry<KoHistogramProducerFactory*> {
 public:
     virtual ~KoHistogramProducerFactoryRegistry();

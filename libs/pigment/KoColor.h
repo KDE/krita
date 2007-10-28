@@ -31,7 +31,7 @@ class KoColorSpace;
  * A KoColor describes a color in a certain colorspace.
  *
  */
-class PIGMENT_EXPORT KoColor {
+class PIGMENTCMS_EXPORT KoColor {
 
 public:
     /// Create an empty KoColor. It will be valid, but also black and transparent

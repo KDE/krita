@@ -27,7 +27,7 @@
 /**
  * A class for creating an lcms RGB profile from a set of chromaticities.
  */
-class PIGMENT_EXPORT KoLcmsRGBColorProfile : public KoLcmsColorProfile {
+class PIGMENTCMS_EXPORT KoLcmsRGBColorProfile : public KoLcmsColorProfile {
 
 public:
     /**

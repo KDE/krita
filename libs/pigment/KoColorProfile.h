@@ -27,7 +27,7 @@
 /**
  * Contains information needed for color transformation.
  */
-class PIGMENT_EXPORT KoColorProfile {
+class PIGMENTCMS_EXPORT KoColorProfile {
         struct Private;
     public:
         /**

@@ -35,7 +35,7 @@ typedef KoColorSpaceTrait<quint8, 1, 0> AlphaU8Traits;
  * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a color common to the mask. The default color is white.
  */
-class PIGMENT_EXPORT KoAlphaColorSpace : public KoColorSpaceAbstract<AlphaU8Traits> {
+class PIGMENTCMS_EXPORT KoAlphaColorSpace : public KoColorSpaceAbstract<AlphaU8Traits> {
 public:
     explicit KoAlphaColorSpace(KoColorSpaceRegistry * parent);
     virtual ~KoAlphaColorSpace();

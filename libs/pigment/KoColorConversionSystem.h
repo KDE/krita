@@ -35,7 +35,7 @@ class KoColorSpaceFactory;
  * a color conversion between two color spaces, and insertColorSpace which is called
  * by KoColorSpaceRegistry each time a new color space is added to the registry.
  */
-class PIGMENT_EXPORT KoColorConversionSystem {
+class PIGMENTCMS_EXPORT KoColorConversionSystem {
     public:
         struct Node;
         struct Vertex;

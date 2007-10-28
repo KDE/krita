@@ -12,6 +12,11 @@ if(OPENEXR_FOUND)
     add_definitions(${OPENEXR_DEFINITIONS})
 endif(OPENEXR_FOUND)
 
+IF(MSVC)
+  # Remove support for Klingon C++ dialect which is used in pigment library ;)
+  add_definitions(-Dand= -Dor= -Dnot=)
+ENDIF(MSVC)
+
 set(pigmentcms_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/KoBasicHistogramProducers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColor.cpp

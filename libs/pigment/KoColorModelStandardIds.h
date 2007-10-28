@@ -24,18 +24,18 @@
 
 #include <pigment_export.h>
 
-extern const KoID PIGMENT_EXPORT AlphaColorModelID;
-extern const KoID PIGMENT_EXPORT RGBAColorModelID;
-extern const KoID PIGMENT_EXPORT XYZAColorModelID;
-extern const KoID PIGMENT_EXPORT LABAColorModelID;
-extern const KoID PIGMENT_EXPORT CMYKAColorModelID;
-extern const KoID PIGMENT_EXPORT GrayAColorModelID;
-extern const KoID PIGMENT_EXPORT GrayColorModelID;
-extern const KoID PIGMENT_EXPORT YCbCrAColorModelID;
+extern const KoID PIGMENTCMS_EXPORT AlphaColorModelID;
+extern const KoID PIGMENTCMS_EXPORT RGBAColorModelID;
+extern const KoID PIGMENTCMS_EXPORT XYZAColorModelID;
+extern const KoID PIGMENTCMS_EXPORT LABAColorModelID;
+extern const KoID PIGMENTCMS_EXPORT CMYKAColorModelID;
+extern const KoID PIGMENTCMS_EXPORT GrayAColorModelID;
+extern const KoID PIGMENTCMS_EXPORT GrayColorModelID;
+extern const KoID PIGMENTCMS_EXPORT YCbCrAColorModelID;
 
-extern const KoID PIGMENT_EXPORT Integer8BitsColorDepthID;
-extern const KoID PIGMENT_EXPORT Integer16BitsColorDepthID;
-extern const KoID PIGMENT_EXPORT Float16BitsColorDepthID;
-extern const KoID PIGMENT_EXPORT Float32BitsColorDepthID;
+extern const KoID PIGMENTCMS_EXPORT Integer8BitsColorDepthID;
+extern const KoID PIGMENTCMS_EXPORT Integer16BitsColorDepthID;
+extern const KoID PIGMENTCMS_EXPORT Float16BitsColorDepthID;
+extern const KoID PIGMENTCMS_EXPORT Float32BitsColorDepthID;
 
 #endif

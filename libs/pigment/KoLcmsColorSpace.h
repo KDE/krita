@@ -64,7 +64,7 @@ struct KoLcmsColorTransformation : public KoColorTransformation
     cmsHTRANSFORM cmstransform;
 };
 
-class PIGMENT_EXPORT KoLcmsColorConversionTransformation : public KoColorConversionTransformation {
+class PIGMENTCMS_EXPORT KoLcmsColorConversionTransformation : public KoColorConversionTransformation {
     public:
         KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, quint32 srcColorSpaceType, KoLcmsColorProfileContainer* srcProfile, const KoColorSpace* dstCs, quint32 dstColorSpaceType, KoLcmsColorProfileContainer* dstProfile, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_transform(0)
         {
@@ -451,7 +451,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         Private * const d;
 };
 
-class PIGMENT_EXPORT KoLcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo {
+class PIGMENTCMS_EXPORT KoLcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo {
     public:
         KoLcmsColorSpaceFactory(DWORD cmType, icColorSpaceSignature colorSpaceSignature) : KoLcmsInfo(cmType, colorSpaceSignature)
         {

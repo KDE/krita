@@ -31,7 +31,7 @@ class KoColorTransformation;
  * Use this color transformation to encapsulate an other KoColorTransformation
  * and perform a color conversion before and after using that KoColorTransformation.
  */
-class PIGMENT_EXPORT KoFallBackColorTransformation : public KoColorTransformation {
+class PIGMENTCMS_EXPORT KoFallBackColorTransformation : public KoColorTransformation {
     public:
         /**
          * @param cs color space of the source and destination pixels

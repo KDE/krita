@@ -33,7 +33,7 @@
 /**
  * This class contains an LCMS color profile. Don't use it outside KoLcmsColorSpace.
  */
-class PIGMENT_EXPORT KoLcmsColorProfileContainer : public KoIccColorProfile::Container {
+class PIGMENTCMS_EXPORT KoLcmsColorProfileContainer : public KoIccColorProfile::Container {
     friend class KoIccColorProfile;
 protected:
     KoLcmsColorProfileContainer( KoIccColorProfile::Data *);

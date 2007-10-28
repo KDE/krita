@@ -125,7 +125,7 @@ public:
  * Some subclasses implement only some parts and are named Traits
  *
  */
-class PIGMENT_EXPORT KoColorSpace {
+class PIGMENTCMS_EXPORT KoColorSpace {
 
 protected:
     /// Only for use by classes that serve as baseclass for real color spaces

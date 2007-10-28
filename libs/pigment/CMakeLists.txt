@@ -14,7 +14,7 @@ endif(OPENEXR_FOUND)
 
 IF(MSVC)
   # Remove support for Klingon C++ dialect which is used in pigment library ;)
-  add_definitions(-Dand= -Dor= -Dnot=)
+  add_definitions(-Dand=&& -Dor=|| -Dnot=!)
 ENDIF(MSVC)
 
 set(pigmentcms_SRCS

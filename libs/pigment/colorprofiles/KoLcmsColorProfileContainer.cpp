@@ -3,7 +3,8 @@
  *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
  *                2001 John Califf
  *                2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
+ *  Copyright (c) 2007 Adrian Page <adrian@pagenet.plus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 #include <lcms.h>
 
 #include <kdebug.h>
+#include <KoChromaticities.h>
 
 class KoLcmsColorProfileContainer::Private {
 public:
@@ -60,7 +62,7 @@ KoLcmsColorProfileContainer::KoLcmsColorProfileContainer( KoIccColorProfile::Dat
     init();
 }
 
-KoIccColorProfile* KoLcmsColorProfileContainer::createFromLcmsProfile(const cmsHPROFILE profile)
+QByteArray KoLcmsColorProfileContainer::lcmsProfileToByteArray(const cmsHPROFILE profile)
 {
     size_t  bytesNeeded = 0;
     // Make a raw data image ready for saving
@@ -78,6 +80,67 @@ KoIccColorProfile* KoLcmsColorProfileContainer::createFromLcmsProfile(const cmsH
     }
     cmsCloseProfile(profile);
     return new KoIccColorProfile(rawData);
+}
+
+KoIccColorProfile* KoLcmsColorProfileContainer::createFromLcmsProfile(const cmsHPROFILE profile)
+{
+    return new KoIccColorProfile( lcmsProfileToByteArray(profile) );
+}
+
+#define lcmsToPigmentViceVersaStructureCopy(dst, src  ) \
+ dst .x = src .x; \
+ dst .y = src .y; \
+ dst .Y = src .Y;
+
+QByteArray KoLcmsColorProfileContainer::createFromChromacities(const KoRGBChromaticities& _chromacities, double gamma, QString _profileName)
+{
+    cmsCIExyYTRIPLE primaries;
+    cmsCIExyY whitePoint;
+    lcmsToPigmentViceVersaStructureCopy(primaries.Red, _chromacities.primaries.Red);
+    lcmsToPigmentViceVersaStructureCopy(primaries.Green, _chromacities.primaries.Green);
+    lcmsToPigmentViceVersaStructureCopy(primaries.Blue, _chromacities.primaries.Blue);
+    lcmsToPigmentViceVersaStructureCopy(whitePoint, _chromacities.whitePoint);
+    const int numGammaTableEntries = 256;
+    LPGAMMATABLE gammaTable = cmsBuildGamma(numGammaTableEntries, gamma);
+
+    const int numTransferFunctions = 3;
+    LPGAMMATABLE transferFunctions[numTransferFunctions];
+
+    for (int i = 0; i < numTransferFunctions; ++i) {
+        transferFunctions[i] = gammaTable;
+    }
+
+    cmsHPROFILE profile = cmsCreateRGBProfile(&whitePoint, &primaries, 
+                                              transferFunctions);
+    QString name = _profileName;
+
+    if (name.isEmpty()) {
+        name = QString("lcms virtual RGB profile - R(%1, %2) G(%3, %4) B(%5, %6) W(%7, %8) gamma %9")
+                                   .arg(primaries.Red.x)
+                                   .arg(primaries.Red.y)
+                                   .arg(primaries.Green.x)
+                                   .arg(primaries.Green.y)
+                                   .arg(primaries.Blue.x)
+                                   .arg(primaries.Blue.y)
+                                   .arg(whitePoint.x)
+                                   .arg(whitePoint.y)
+                                   .arg(gamma);
+    }
+
+    // icSigProfileDescriptionTag is the compulsory tag and is the profile name
+    // displayed by other applications.
+    cmsAddTag(profile, icSigProfileDescriptionTag, name.toLatin1().data());
+
+    cmsAddTag(profile, icSigDeviceModelDescTag, name.toLatin1().data());
+
+    // Clear the default manufacturer's tag that is set to "(lcms internal)" 
+    QByteArray ba("");
+    cmsAddTag(profile, icSigDeviceMfgDescTag, ba.data());
+
+    cmsFreeGamma(gammaTable);
+    QByteArray profileArray = lcmsProfileToByteArray(profile);
+    cmsCloseProfile(profile);
+    return profileArray;
 }
 
 KoLcmsColorProfileContainer::~KoLcmsColorProfileContainer()
@@ -176,4 +239,68 @@ QString KoLcmsColorProfileContainer::name() const
 QString KoLcmsColorProfileContainer::info() const
 {
     return d->info;
+}
+
+static KoCIExyY RGB2xyY(cmsHPROFILE RGBProfile, double red, double green, double blue)
+{
+    cmsHPROFILE XYZProfile = cmsCreateXYZProfile();
+
+    const DWORD inputFormat = TYPE_RGB_DBL;
+    const DWORD outputFormat = TYPE_XYZ_DBL;
+    const DWORD transformFlags = cmsFLAGS_NOTPRECALC;
+
+    cmsHTRANSFORM transform = cmsCreateTransform(RGBProfile, inputFormat, XYZProfile, outputFormat, 
+                                                 INTENT_ABSOLUTE_COLORIMETRIC, transformFlags);
+
+    struct XYZPixel {
+        double X;
+        double Y;
+        double Z;
+    };
+    struct RGBPixel {
+        double red;
+        double green;
+        double blue;
+    };
+
+    XYZPixel xyzPixel;
+    RGBPixel rgbPixel;
+
+    rgbPixel.red = red;
+    rgbPixel.green = green;
+    rgbPixel.blue = blue;
+
+    const unsigned int numPixelsToTransform = 1;
+
+    cmsDoTransform(transform, &rgbPixel, &xyzPixel, numPixelsToTransform);
+
+    cmsCIEXYZ xyzPixelXYZ;
+
+    xyzPixelXYZ.X = xyzPixel.X;
+    xyzPixelXYZ.Y = xyzPixel.Y;
+    xyzPixelXYZ.Z = xyzPixel.Z;
+
+    cmsCIExyY xyzPixelxyY;
+
+    cmsXYZ2xyY(&xyzPixelxyY, &xyzPixelXYZ);
+
+    cmsDeleteTransform(transform);
+    cmsCloseProfile(XYZProfile);
+    KoCIExyY res;
+    lcmsToPigmentViceVersaStructureCopy( res, xyzPixelxyY);
+    return res;
+}
+
+KoRGBChromaticities* KoLcmsColorProfileContainer::chromaticitiesFromProfile() const
+{
+    if(cmsGetColorSpace(d->profile) != icSigRgbData) return 0;
+
+    KoRGBChromaticities* chromaticities = new KoRGBChromaticities();
+
+    chromaticities->primaries.Red = RGB2xyY(d->profile, 1.0f, 0.0f, 0.0f);
+    chromaticities->primaries.Green = RGB2xyY(d->profile, 0.0f, 1.0f, 0.0f);
+    chromaticities->primaries.Blue = RGB2xyY(d->profile, 0.0f, 0.0f, 1.0f);
+    chromaticities->whitePoint = RGB2xyY(d->profile, 1.0f, 1.0f, 1.0f);
+
+    return chromaticities;
 }

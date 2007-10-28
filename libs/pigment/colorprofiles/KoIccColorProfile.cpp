@@ -32,6 +32,8 @@
 
 #include <kdebug.h>
 
+#include <KoChromaticities.h>
+
 #include "KoLcmsColorProfileContainer.h"
 
 struct KoIccColorProfile::Data::Private {
@@ -69,21 +71,32 @@ struct KoIccColorProfile::Private
     KoIccColorProfile::Data* data;
     bool ownData;
     KoLcmsColorProfileContainer* lcmsProfile;
+    KoRGBChromaticities* chromacities;
 };
+
+KoIccColorProfile::KoIccColorProfile(const KoRGBChromaticities& chromacities, double gamma, QString name ) : KoColorProfile(""), d(new Private)
+{
+    d->chromacities = new KoRGBChromaticities(chromacities);
+    d->data = new Data();
+    d->lcmsProfile = 0;
+    d->data->setRawData( KoLcmsColorProfileContainer::createFromChromacities(chromacities, gamma, name) );
+    init();
+}
 
 KoIccColorProfile::KoIccColorProfile( Data * data) : KoColorProfile(""), d(new Private)
 {
     d->ownData = false;
     d->data = data;
     d->lcmsProfile = 0;
+    d->chromacities = 0;
 }
-
 
 KoIccColorProfile::KoIccColorProfile(QString fileName) : KoColorProfile(fileName), d(new Private)
 {
     d->ownData = true;
     d->data = new Data();
     d->lcmsProfile = 0;
+    d->chromacities = 0;
 }
 
 KoIccColorProfile::KoIccColorProfile(const QByteArray& rawData) : KoColorProfile(""), d(new Private)

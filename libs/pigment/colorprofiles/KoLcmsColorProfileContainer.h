@@ -2,7 +2,7 @@
  * This file is part of the KDE project
  *  Copyright (c) 2000 Matthias Elter  <elter@kde.org>
  *                2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,6 +30,9 @@
 #include <QByteArray>
 #include <QString>
 
+
+struct KoRGBChromaticities;
+
 /**
  * This class contains an LCMS color profile. Don't use it outside KoLcmsColorSpace.
  */
@@ -37,6 +40,9 @@ class PIGMENTCMS_EXPORT KoLcmsColorProfileContainer : public KoIccColorProfile::
     friend class KoIccColorProfile;
 protected:
     KoLcmsColorProfileContainer( KoIccColorProfile::Data *);
+private:
+    static QByteArray lcmsProfileToByteArray(const cmsHPROFILE profile);
+    static QByteArray createFromChromacities(const KoRGBChromaticities& chromacities, double gamma, QString name);
 public:
     /**
      * @return an ICC profile created from an LCMS profile
@@ -85,6 +91,8 @@ public:
 protected:
     KoLcmsColorProfileContainer();
 //     void setProfile(const cmsHPROFILE profile);
+private:
+    KoRGBChromaticities* chromaticitiesFromProfile() const;
 
 private:
     bool init();

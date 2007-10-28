@@ -23,6 +23,7 @@
 #include "KoColorProfile.h"
 
 class KoLcmsColorProfileContainer;
+class KoRGBChromaticities;
 
 /**
  * This class contains an ICC color profile.
@@ -59,9 +60,10 @@ class PIGMENTCMS_EXPORT KoIccColorProfile : public KoColorProfile {
                 virtual bool isSuitableForPrinting() const =0;
                 virtual bool isSuitableForDisplay() const =0;
         };
-    public:
+    private:
         KoIccColorProfile( Data *);
     public:
+        KoIccColorProfile(const KoRGBChromaticities& chromacities, double gamma, QString name = "");
         KoIccColorProfile(QString fileName = "");
         KoIccColorProfile(const QByteArray& rawData);
         virtual ~KoIccColorProfile();

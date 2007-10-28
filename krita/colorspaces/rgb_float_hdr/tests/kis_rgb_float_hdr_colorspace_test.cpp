@@ -6,6 +6,7 @@
 #include <qtest_kde.h>
 
 #include "KoColorSpace.h"
+#include "KoChromaticities.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoLcmsRGBColorProfile.h"
 #include "../kis_rgb_f32_hdr_colorspace.h"
@@ -87,10 +88,9 @@ U16Pixel F32PixelToU16Pixel(const F32Pixel f32Pixel, float exposure)
 
 void KisRgbFloatHDRColorSpaceTest::testProfile()
 {
-#if 0
     const QString colorSpaceId = KisRgbF32HDRColorSpace::colorSpaceId();
 
-    KoLcmsRGBColorProfile::Chromaticities chromaticities;
+    KoRGBChromaticities chromaticities;
 
     chromaticities.primaries.Red.x = 0.7347f;
     chromaticities.primaries.Red.y = 0.2653f;
@@ -107,7 +107,7 @@ void KisRgbFloatHDRColorSpaceTest::testProfile()
 
     const double gamma = 1.0;
 
-    KoLcmsRGBColorProfile *profile = new KoLcmsRGBColorProfile(chromaticities, gamma);
+    KoIccColorProfile *profile = new KoIccColorProfile(chromaticities, gamma);
 
     KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, profile);
     QVERIFY2(colorSpace != 0, "Created colorspace");
@@ -137,15 +137,15 @@ void KisRgbFloatHDRColorSpaceTest::testProfile()
         u16Pixels[pixel] = F32PixelToU16Pixel(f32Pixels[pixel], exposure);
     }
 
-    KoLcmsColorProfile *destinationProfile = new KoLcmsColorProfile(cmsCreate_sRGBProfile());
-    cmsHPROFILE destinationLcmsProfile = destinationProfile->lcmsProfile();
+    KoIccColorProfile *destinationProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreate_sRGBProfile());
+    cmsHPROFILE destinationLcmsProfile = destinationProfile->asLcms()->lcmsProfile();
 
     const DWORD inputFormat = TYPE_BGRA_16;
     const DWORD outputFormat = TYPE_BGRA_8;
     const int renderingIntent = INTENT_PERCEPTUAL;
     const DWORD flags = cmsFLAGS_NOTPRECALC;
 
-    cmsHTRANSFORM transform = cmsCreateTransform(profile->lcmsProfile(), 
+    cmsHTRANSFORM transform = cmsCreateTransform(profile->asLcms()->lcmsProfile(), 
                                                  inputFormat, 
                                                  destinationLcmsProfile, 
                                                  outputFormat, 
@@ -196,12 +196,10 @@ void KisRgbFloatHDRColorSpaceTest::testProfile()
     QCOMPARE(qGreen(imagePixel), (int)u8Pixels[pixelX].green);
     QCOMPARE(qBlue(imagePixel), (int)u8Pixels[pixelX].blue);
     QCOMPARE(qAlpha(imagePixel), (int)u8Pixels[pixelX].alpha);
-#endif
 }
 
 void KisRgbFloatHDRColorSpaceTest::testFactory()
 {
-#if 0
     QString colorSpaceId;
 #ifdef HAVE_OPENEXR
     colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Float16BitsColorDepthID);
@@ -211,7 +209,7 @@ void KisRgbFloatHDRColorSpaceTest::testFactory()
     colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Float32BitsColorDepthID);
     QCOMPARE(colorSpaceId, KisRgbF32HDRColorSpace::colorSpaceId());
 
-    KoLcmsRGBColorProfile::Chromaticities chromaticities;
+    KoRGBChromaticities chromaticities;
 
     chromaticities.primaries.Red.x = 0.6400f;
     chromaticities.primaries.Red.y = 0.3300f;
@@ -228,7 +226,7 @@ void KisRgbFloatHDRColorSpaceTest::testFactory()
 
     const double gamma = 1.0;
 
-    KoLcmsRGBColorProfile *profile = new KoLcmsRGBColorProfile(chromaticities, gamma);
+    KoIccColorProfile *profile = new KoIccColorProfile(chromaticities, gamma);
 
     KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(colorSpaceId);
     QVERIFY(colorSpaceFactory);
@@ -239,12 +237,11 @@ void KisRgbFloatHDRColorSpaceTest::testFactory()
     QVERIFY2(colorSpace != 0, "Created colorspace");
     QVERIFY2(colorSpace->profile() != 0, "Has a profile by default");
 
-    KoLcmsColorProfile *lcmsProfile = static_cast<KoLcmsColorProfile *>(colorSpace->profile());
+    KoIccColorProfile *lcmsProfile = static_cast<KoIccColorProfile *>(colorSpace->profile());
 
-    LPGAMMATABLE redGamma = cmsReadICCGamma(lcmsProfile->lcmsProfile(), icSigRedTRCTag);
+    LPGAMMATABLE redGamma = cmsReadICCGamma(lcmsProfile->asLcms()->lcmsProfile(), icSigRedTRCTag);
 
     QCOMPARE(testRound(cmsEstimateGamma(redGamma)), gamma);
-#endif
 }
 
 template <class ColorSpaceTraits>

@@ -25,8 +25,9 @@
 #include <klocale.h>
 #include <kgenericfactory.h>
 
-#include "KoColorSpaceRegistry.h"
-#include "KoBasicHistogramProducers.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoBasicHistogramProducers.h>
+#include <KoChromaticities.h>
 
 #include "kis_rgb_f32_hdr_colorspace.h"
 
@@ -43,9 +44,8 @@ RGBFloatHDRPlugin::RGBFloatHDRPlugin(QObject *parent, const QStringList &)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
 
-#if 0
     // Create default profile for rgb float hdr colorspaces.
-    KoLcmsRGBColorProfile::Chromaticities chromaticities;
+    KoRGBChromaticities chromaticities;
 
     chromaticities.primaries.Red.x = 0.6400f;
     chromaticities.primaries.Red.y = 0.3300f;
@@ -62,33 +62,31 @@ RGBFloatHDRPlugin::RGBFloatHDRPlugin(QObject *parent, const QStringList &)
 
     const double gamma = 1.0;
 
-    KoLcmsRGBColorProfile *profile = new KoLcmsRGBColorProfile(chromaticities, gamma, "lcms virtual RGB profile - Rec. 709 Linear");
+    KoIccColorProfile *profile = new KoIccColorProfile(chromaticities, gamma, "lcms virtual RGB profile - Rec. 709 Linear");
 
     f->addProfile(profile);
-#else
-    KoColorProfile* profile = 0;
-#endif
+
 #ifdef HAVE_OPENEXR
     // Register F16 HDR colorspace
     {
-//         KoColorSpace * colorSpaceRGBF16Half  = new KisRgbF16HDRColorSpace(f, profile);
-//         KoColorSpaceFactory *csf  = new KisRgbF16HDRColorSpaceFactory();
-//         Q_CHECK_PTR(colorSpaceRGBF16Half);
-//         f->add(csf);
-//         KoHistogramProducerFactoryRegistry::instance()->add(
-//                     new KoBasicHistogramProducerFactory<KoBasicF16HalfHistogramProducer>
-//                     (KoID("RGBF16HALFHISTO", i18n("Float16 Half Histogram")), colorSpaceRGBF16Half) );
+        KoColorSpace * colorSpaceRGBF16Half  = new KisRgbF16HDRColorSpace(f, profile);
+        KoColorSpaceFactory *csf  = new KisRgbF16HDRColorSpaceFactory();
+        Q_CHECK_PTR(colorSpaceRGBF16Half);
+        f->add(csf);
+        KoHistogramProducerFactoryRegistry::instance()->add(
+                    new KoBasicHistogramProducerFactory<KoBasicF16HalfHistogramProducer>
+                    (KoID("RGBF16HALFHISTO", i18n("Float16 Half Histogram")), colorSpaceRGBF16Half) );
     }
 #endif
     // Register F32 HDR colorspace
     {
-//         KoColorSpace * colorSpaceRGBF32  = new KisRgbF32HDRColorSpace(f, profile);
-//         KoColorSpaceFactory *csf  = new KisRgbF32HDRColorSpaceFactory();
-//         Q_CHECK_PTR(colorSpaceRGBF32);
-//         f->add(csf);
-//         KoHistogramProducerFactoryRegistry::instance()->add(
-//                     new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-//                     (KoID("RGBF32HALFHISTO", i18n("Float32 Half Histogram")), colorSpaceRGBF32) );
+        KoColorSpace * colorSpaceRGBF32  = new KisRgbF32HDRColorSpace(f, profile);
+        KoColorSpaceFactory *csf  = new KisRgbF32HDRColorSpaceFactory();
+        Q_CHECK_PTR(colorSpaceRGBF32);
+        f->add(csf);
+        KoHistogramProducerFactoryRegistry::instance()->add(
+                    new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
+                    (KoID("RGBF32HALFHISTO", i18n("Float32 Half Histogram")), colorSpaceRGBF32) );
     }
 }
 

@@ -181,6 +181,9 @@ protected:
     /// called by KoCanvasController to set the controller that handles this canvas.
     void setCanvasController(KoCanvasController *controller);
 
+    /// Return true if the canvas is painted with antialiasing turned on.
+    bool isAntialiased() const;
+
 private:
     // we need a KoShapeControllerBase so that it can work
     KoCanvasBase();

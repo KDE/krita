@@ -23,6 +23,11 @@
 #include "KoShapeController.h"
 #include "KoCanvasController.h"
 
+#include <KGlobal>
+#include <KConfigGroup>
+#include <KSharedPtr>
+#include <KSharedConfig>
+
 class KoCanvasBase::Private {
 public:
     Private() : shapeController(0), resourceProvider(0), controller(0) {}
@@ -33,11 +38,14 @@ public:
     KoShapeController *shapeController;
     KoCanvasResourceProvider * resourceProvider;
     KoCanvasController *controller;
+    bool isAntialiased : 1;
 };
 
 KoCanvasBase::KoCanvasBase( KoShapeControllerBase * shapeControllerBase )
     : d(new Private())
 {
+    KConfigGroup cfg( KGlobal::config()->group("canvas") );
+    d->isAntialiased = cfg.readEntry("antialiasing", false);
     d->resourceProvider = new KoCanvasResourceProvider(0);
     d->shapeController = new KoShapeController( this, shapeControllerBase );
 }
@@ -72,4 +80,9 @@ KoCanvasController * KoCanvasBase::canvasController() const
 }
 
 void KoCanvasBase::clipToDocument(const KoShape *, QPointF &) const {
+}
+
+bool KoCanvasBase::isAntialiased() const
+{
+    return d->isAntialiased;
 }

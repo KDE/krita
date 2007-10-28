@@ -61,7 +61,7 @@ KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
 , m_doc( document )
 , m_activePage( 0 )
-, m_viewMode( 0 )                   
+, m_viewMode( 0 )
 {
     initGUI();
     initActions();
@@ -140,13 +140,16 @@ void KoPAView::initGUI()
     createDockWidget( &toolBoxFactory );
     KoToolDockerFactory toolDockerFactory;
     KoToolDocker* toolDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
-    connect( m_canvasController, SIGNAL( toolOptionWidgetChanged( QWidget* ) ), 
+    connect( m_canvasController, SIGNAL( toolOptionWidgetChanged( QWidget* ) ),
              toolDocker, SLOT( newOptionWidget( QWidget* ) ) );
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(m_canvas, SIGNAL(documentSize(const QSize&)), m_canvasController, SLOT(setDocumentSize(const QSize&)));
     connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
+
+    KoPADocumentStructureDockerFactory structureDockerFactory( m_doc, m_doc );
+    m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
 
     show();
 }
@@ -257,7 +260,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
 {
     if ( !page )
         return;
-    
+
     m_activePage = page;
     QList<KoShape*> shapes = page->iterator();
     shapeManager()->setShapes( shapes, false );
@@ -267,7 +270,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
         shapeManager()->selection()->setActiveLayer( layer );
     }
 
-    // if the page is not a master page itself set shapes of the master page 
+    // if the page is not a master page itself set shapes of the master page
     KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
     if ( paPage ) {
         KoPAMasterPage * masterPage = paPage->masterPage();

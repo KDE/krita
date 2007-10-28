@@ -108,7 +108,7 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
     rectangle.setX(qMax(0, d->offset));
     rectangle.setY(2);
     rectangle.setWidth(qMin((double) d->ruler->width() - 1.0 - rectangle.x(), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
-    rectangle.setHeight( d->ruler->height() - 4.0);
+    rectangle.setHeight( d->ruler->height() - 6.0);
     QRectF activeRangeRectangle;
     activeRangeRectangle.setX(qMax(rectangle.x() + 1,
           d->viewConverter->documentToViewX(d->activeRangeStart) + d->offset));
@@ -195,12 +195,15 @@ void HorizontalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPain
     double numberStep = d->numberStepForUnit(); // number step in unit
     QRectF activeRangeRectangle;
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
+    const bool adjustMillimeters = d->unit.indexInList() == KoUnit::Millimeter;
     QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
     // Calc the longest text length
     int textLength = 0;
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
-        textLength = qMax(textLength, fontMetrics.width(
-            QString::number((i / numberStepPixel) * numberStep)));
+        int number = qRound((i / numberStepPixel) * numberStep);
+        if (adjustMillimeters)
+            number /= 10;
+        textLength = qMax(textLength, fontMetrics.width(QString::number(number)));
     }
     textLength += 4;  // Add some padding
 
@@ -248,10 +251,16 @@ void HorizontalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPain
             if(pos != 0)
                 painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() -10));
 
-            QString numberText = QString::number(stepCount * numberStep);
-            if (d->rightToLeft) // this is done in a hacky way with the fine tuning done above
+            int number = qRound(stepCount * numberStep);
+            if (adjustMillimeters)
+                number /= 10;
+            QString numberText = QString::number(number);
+            int x = pos;
+            if (d->rightToLeft) { // this is done in a hacky way with the fine tuning done above
                 numberText = QString::number(hackyLength - stepCount * numberStep);
-            painter.drawText(QPointF(pos - 0.5*fontMetrics.width(numberText), rectangle.bottom() -12), numberText);
+                x -= fontMetrics.width(numberText);
+            }
+            painter.drawText(QPointF(x, rectangle.bottom() -6), numberText);
 
             ++stepCount;
             nextStep = qRound(d->viewConverter->documentToViewX(
@@ -265,7 +274,7 @@ void HorizontalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPain
         }
         else if(i == nextHalfStep) {
             if(pos != 0)
-                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 8));
+                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 6));
 
             ++halfStepCount;
             nextHalfStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
@@ -345,7 +354,7 @@ QSize HorizontalPaintingStrategy::sizeHint() {
     QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm(font);
 
-    int minimum = fm.height() + 14;
+    int minimum = fm.height() + 6;
 
     size.setWidth( minimum );
     size.setHeight( minimum );
@@ -355,9 +364,9 @@ QSize HorizontalPaintingStrategy::sizeHint() {
 QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainter &painter) {
     lengthInPixel = d->viewConverter->documentToViewY(d->rulerLength);
     QRectF rectangle;
-    rectangle.setX(2);
+    rectangle.setX(0);
     rectangle.setY(qMax(0, d->offset));
-    rectangle.setWidth(d->ruler->width() - 4.0);
+    rectangle.setWidth(d->ruler->width() - 1.0);
     rectangle.setHeight(qMin((double)d->ruler->height() - 1.0 - rectangle.y(), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
 
     QRectF activeRangeRectangle;
@@ -395,13 +404,16 @@ void VerticalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPainte
     QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
     // Calc the longest text length
     int textLength = 0;
+    const bool adjustMillimeters = d->unit.indexInList() == KoUnit::Millimeter;
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
-        textLength = qMax(textLength, fontMetrics.width(
-            QString::number((i / numberStepPixel) * numberStep)));
+        int number = qRound((i / numberStepPixel) * numberStep);
+        if (adjustMillimeters)
+            number /= 10;
+        textLength = qMax(textLength, fontMetrics.width(QString::number(number)));
     }
     textLength += 4;  // Add some padding
 
-    // Change number step so all digits fits
+    // Change number step so all digits will fit
     while(textLength > numberStepPixel) {
         numberStepPixel += numberStepPixel;
         numberStep += numberStep;
@@ -433,12 +445,18 @@ void VerticalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPainte
         pos = i - start;
 
         if(i == nextStep) {
+            painter.save();
+            painter.translate(rectangle.right()-10, pos);
             if(pos != 0)
-                painter.drawLine(QPointF(rectangle.right() - 10, pos), QPointF(rectangle.right() - 1, pos));
+                painter.drawLine(QPointF(0, 0), QPointF(9, 0));
 
-            QString numberText = QString::number(stepCount * numberStep);
-            painter.drawText(QPointF(rectangle.right() - 12 -fontMetrics.width(numberText),
-                     pos + 4), numberText);
+            painter.rotate(-90);
+            int number = qRound(stepCount * numberStep);
+            if (adjustMillimeters)
+                number /= 10;
+            QString numberText = QString::number(number);
+            painter.drawText(QPointF(-fontMetrics.width(numberText) / 2.0, -2), numberText);
+            painter.restore();
 
             ++stepCount;
             nextStep = qRound(d->viewConverter->documentToViewY(
@@ -451,7 +469,7 @@ void VerticalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPainte
                 numberStep * 0.25 * quarterStepCount)));
         } else if(i == nextHalfStep) {
             if(pos != 0)
-                painter.drawLine(QPointF(rectangle.right() - 8, pos), QPointF(rectangle.right() - 1, pos));
+                painter.drawLine(QPointF(rectangle.right() - 6, pos), QPointF(rectangle.right() - 1, pos));
 
             ++halfStepCount;
             nextHalfStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
@@ -482,7 +500,7 @@ QSize VerticalPaintingStrategy::sizeHint() {
     QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm(font);
 
-    int minimum = fm.height() + 14;
+    int minimum = fm.height() + 6;
 
     size.setWidth( minimum );
     size.setHeight( minimum );
@@ -534,12 +552,10 @@ double KoRulerPrivate::numberStepForUnit() const
         case KoUnit::Centimeter:
         case KoUnit::Decimeter:
             return 1.0;
-            break;
         case KoUnit::Millimeter:
         case KoUnit::Pica:
         case KoUnit::Cicero:
             return 10.0;
-            break;
         case KoUnit::Point:
         default:
             return 100.0;

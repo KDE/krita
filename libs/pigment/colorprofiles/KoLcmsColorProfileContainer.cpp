@@ -76,6 +76,7 @@ KoIccColorProfile* KoLcmsColorProfileContainer::createFromLcmsProfile(const cmsH
         kError() << "Couldn't resize the profile buffer, system is probably running out of memory.";
         rawData.resize(0);
     }
+    cmsCloseProfile(profile);
     return new KoIccColorProfile(rawData);
 }
 

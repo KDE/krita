@@ -32,6 +32,7 @@
 #include <QResizeEvent>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QToolTip>
 
 #include <KoViewConverter.h>
 
@@ -562,18 +563,66 @@ double KoRulerPrivate::numberStepForUnit() const
     }
 }
 
-
 double KoRulerPrivate::doSnapping(const double value) const
 {
     double numberStep = unit.fromUserValue(numberStepForUnit()/4.0);
     return numberStep * qRound(value / numberStep);
 }
 
+KoRulerPrivate::Selection KoRulerPrivate::selectionAtPosition(const QPoint pos, int *selectOffset ) {
+    const int height = ruler->height();
+    if (rightToLeft) {
+        int x = int(viewConverter->documentToViewX(activeRangeEnd - firstLineIndent - paragraphIndent) + offset);
+        if (pos.x() >= x - 8 && pos.x() <= x +8 && pos.y() < height / 2) {
+            if (selectOffset)
+                *selectOffset = x - pos.x();
+            return KoRulerPrivate::FirstLineIndent;
+        }
+
+        x = int(viewConverter->documentToViewX(activeRangeEnd - paragraphIndent) + offset);
+        if (pos.x() >= x - 8 && pos.x() <= x +8 && pos.y() > height / 2) {
+            if (selectOffset)
+                *selectOffset = x - pos.x();
+            return KoRulerPrivate::ParagraphIndent;
+        }
+
+        x = int(viewConverter->documentToViewX(activeRangeStart + endIndent) + offset);
+        if (pos.x() >= x - 8 && pos.x() <= x + 8) {
+            if (selectOffset)
+                *selectOffset = x - pos.x();
+            return KoRulerPrivate::EndIndent;
+        }
+    }
+    else {
+        int x = int(viewConverter->documentToViewX(activeRangeStart + firstLineIndent + paragraphIndent) + offset);
+        if (pos.x() >= x -8 && pos.x() <= x + 8 && pos.y() < height / 2) {
+            if (selectOffset)
+                *selectOffset = x - pos.x();
+            return KoRulerPrivate::FirstLineIndent;
+        }
+
+        x = int(viewConverter->documentToViewX(activeRangeStart + paragraphIndent) + offset);
+        if (pos.x() >= x - 8 && pos.x() <= x + 8 && pos.y() > height/2) {
+            if (selectOffset)
+                *selectOffset = x - pos.x();
+            return KoRulerPrivate::ParagraphIndent;
+        }
+
+        x = int(viewConverter->documentToViewX(activeRangeEnd - endIndent) + offset);
+        if (pos.x() >= x - 8 && pos.x() <= x + 8) {
+            if (selectOffset)
+                *selectOffset = x - pos.x();
+            return KoRulerPrivate::EndIndent;
+        }
+    }
+    return KoRulerPrivate::None;
+}
 
 KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter)
   : QWidget(parent)
   , d( new KoRulerPrivate( this, viewConverter, orientation) )
 {
+    setMouseTracking( true );
 }
 
 KoRuler::~KoRuler()
@@ -812,49 +861,8 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         }
     }
 
-    if (d->rightToLeft) {
-        int x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - d->firstLineIndent
-                - d->paragraphIndent) + d->offset);
-        if (pos.x() >= x - 8 && pos.x() <= x +8 && pos.y() < height() / 2) {
-            d->selectOffset = x - pos.x();
-            d->selected = KoRulerPrivate::FirstLineIndent;
-        }
-
-        x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - d->paragraphIndent)
-                            + d->offset);
-        if (pos.x() >= x - 8 && pos.x() <= x +8 && pos.y() > height() / 2) {
-            d->selectOffset = x - pos.x();
-            d->selected = KoRulerPrivate::ParagraphIndent;
-        }
-
-        x = int(d->viewConverter->documentToViewX(d->activeRangeStart + d->endIndent)
-                            + d->offset);
-        if (pos.x() >= x - 8 && pos.x() <= x + 8) {
-            d->selectOffset = x - pos.x();
-            d->selected = KoRulerPrivate::EndIndent;
-        }
-    } else {
-        int x = int(d->viewConverter->documentToViewX(d->activeRangeStart
-             + d->firstLineIndent + d->paragraphIndent) + d->offset);
-        if (pos.x() >= x -8 && pos.x() <= x + 8 && pos.y() < height() / 2) {
-            d->selectOffset = x - pos.x();
-            d->selected = KoRulerPrivate::FirstLineIndent;
-        }
-
-        x = int(d->viewConverter->documentToViewX(d->activeRangeStart + d->paragraphIndent)
-                            + d->offset);
-        if (pos.x() >= x - 8 && pos.x() <= x + 8 && pos.y() > height()/2) {
-            d->selectOffset = x - pos.x();
-            d->selected = KoRulerPrivate::ParagraphIndent;
-        }
-
-        x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - d->endIndent)
-                            + d->offset);
-        if (pos.x() >= x - 8 && pos.x() <= x + 8) {
-            d->selectOffset = x - pos.x();
-            d->selected = KoRulerPrivate::EndIndent;
-        }
-    }
+    if (d->selected == KoRulerPrivate::None)
+        d->selected = d->selectionAtPosition(ev->pos(), &d->selectOffset);
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     if (d->showTabs && d->selected == KoRulerPrivate::None) {
@@ -887,6 +895,7 @@ void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
 void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
 {
     QPoint pos = ev->pos();
+
     double activeLength = d->activeRangeEnd - d->activeRangeStart;
 
     switch(d->selected) {
@@ -962,7 +971,17 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         emit tabsChanged(false);
         break;
     case KoRulerPrivate::None:
-        break;
+        KoRulerPrivate::Selection selection = d->selectionAtPosition(pos);
+        QString text;
+        switch(selection) {
+        case KoRulerPrivate::FirstLineIndent: text = i18n("First line indent"); break;
+        case KoRulerPrivate::ParagraphIndent: text = i18n("Left indent"); break;
+        case KoRulerPrivate::EndIndent: text = i18n("Right indent"); break;
+        default:
+            break;
+        }
+        QToolTip::showText(mapToGlobal(QPoint(pos.x(), 8)), text, this, QRect());
+        d->mouseCoordinate = pos.x();
     }
     update();
 }

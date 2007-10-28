@@ -126,6 +126,7 @@ public:
     double numberStepForUnit() const;
     /// @return The rounding of value to the nearest multiple of stepValue
     double doSnapping(const double value) const;
+    Selection selectionAtPosition(const QPoint pos, int *selectOffset = 0);
 
     friend class VerticalPaintingStrategy;
     friend class HorizontalPaintingStrategy;

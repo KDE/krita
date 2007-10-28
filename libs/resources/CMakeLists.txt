@@ -10,6 +10,8 @@ set(koresources_LIB_SRCS
    KoStopGradient.cpp
    KoSegmentGradient.cc
    KoResource.cpp
+   KoResourceServer.cpp
+   KoResourceServerRegistry.cpp
 )
 
 kde4_add_library(koresources SHARED ${koresources_LIB_SRCS})

@@ -136,7 +136,7 @@ void KoInteractionTool::setupActions()
                                                i18n( "Bring to &Front" ), this );
     addAction( "object_move_totop", actionBringToFront );
     actionBringToFront->setShortcut( QKeySequence( "Ctrl+Shift+]" ) );
-//    connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
+//     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
     KAction* actionRaise = new KAction( KIcon( "raise" ), i18n( "&Raise" ), this );
     addAction( "object_move_up", actionRaise );
@@ -157,31 +157,31 @@ void KoInteractionTool::setupActions()
     KAction* actionAlignLeft = new KAction( KIcon( "aoleft" ),
                                             i18n( "Align Left" ), this );
     addAction( "object_align_horizontal_left", actionAlignLeft );
-//    connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
+    connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
     KAction* actionAlignCenter = new KAction( KIcon( "aocenterh" ),
                                               i18n( "Horizontally Center" ), this );
     addAction( "object_align_horizontal_center", actionAlignCenter );
-//    connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
+    connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
 
     KAction* actionAlignRight = new KAction( KIcon( "aoright" ),
                                              i18n( "Align Right" ), this );
     addAction( "object_align_horizontal_right", actionAlignRight );
-//    connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
+    connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
 
     KAction* actionAlignTop = new KAction( KIcon( "aotop" ), i18n( "Align Top" ), this );
     addAction( "object_align_vertical_top", actionAlignTop );
-//    connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
+    connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
 
     KAction* actionAlignMiddle = new KAction( KIcon( "aocenterv" ),
                                               i18n( "Vertically Center" ), this );
     addAction( "object_align_vertical_center", actionAlignMiddle );
-//    connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
+    connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
 
     KAction* actionAlignBottom = new KAction( KIcon( "aobottom" ),
                                               i18n( "Align Bottom" ), this );
     addAction( "object_align_vertical_bottom", actionAlignBottom );
-//    connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
+    connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
 }
 
 double KoInteractionTool::rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation )
@@ -673,6 +673,54 @@ void KoInteractionTool::activate(bool temporary) {
     repaintDecorations();
 }
 
+void KoInteractionTool::selectionAlignHorizontalLeft() {
+
+    selectionAlign(KoShapeAlignCommand::HorizontalLeftAlignment);
+}
+
+void KoInteractionTool::selectionAlignHorizontalCenter() {
+
+    selectionAlign(KoShapeAlignCommand::HorizontalCenterAlignment);
+}
+
+
+void KoInteractionTool::selectionAlignHorizontalRight() {
+
+    selectionAlign(KoShapeAlignCommand::HorizontalRightAlignment);
+}
+
+void KoInteractionTool::selectionAlignVerticalTop() {
+
+    selectionAlign(KoShapeAlignCommand::VerticalTopAlignment);
+}
+
+void KoInteractionTool::selectionAlignVerticalCenter() {
+
+    selectionAlign(KoShapeAlignCommand::VerticalCenterAlignment);
+}
+
+void KoInteractionTool::selectionAlignVerticalBottom() {
+
+    selectionAlign(KoShapeAlignCommand::VerticalBottomAlignment);
+}
+
+
+void KoInteractionTool::selectionAlign(KoShapeAlignCommand::Align align)
+{
+    KoSelection* selection = m_canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+    if( selectedShapes.count() < 1)
+        return;
+
+    QRectF bRect = selection->boundingRect();
+    KoShapeAlignCommand *cmd = new KoShapeAlignCommand( selectedShapes, align, bRect);
+
+    m_canvas->addCommand( cmd );
+}
+
 QWidget* KoInteractionTool::createOptionWidget() {
     return new KoInteractionToolWidget( this );
 }
@@ -855,3 +903,6 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     } */
 #endif
 }
+
+
+#include "KoInteractionTool.moc"

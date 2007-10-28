@@ -24,6 +24,7 @@
 
 #include "KoTool.h"
 #include "KoSelection.h"
+#include "commands/KoShapeAlignCommand.h"
 
 #include <flake_export.h>
 
@@ -46,6 +47,7 @@ class KoInteractionStrategy;
  */
 class FLAKE_EXPORT KoInteractionTool : public KoTool
 {
+    Q_OBJECT
 public:
     /**
      * Constructor for basic interaction tool where user actions are translated
@@ -74,6 +76,14 @@ public:
 public slots:
     void activate(bool temporary = false);
 
+private slots:
+    void selectionAlignHorizontalLeft();
+    void selectionAlignHorizontalCenter();
+    void selectionAlignHorizontalRight();
+    void selectionAlignVerticalTop();
+    void selectionAlignVerticalCenter();
+    void selectionAlignVerticalBottom();
+
 public: // Events
 
     virtual void mousePressEvent( KoPointerEvent *event );
@@ -94,6 +104,8 @@ private:
     void updateCursor();
     /// Returns rotation angle of given handle of the current selection
     double rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation );
+
+    void selectionAlign(KoShapeAlignCommand::Align align);
 
     KoInteractionTool(const KoInteractionTool&);
     KoInteractionTool& operator=(const KoInteractionTool&);

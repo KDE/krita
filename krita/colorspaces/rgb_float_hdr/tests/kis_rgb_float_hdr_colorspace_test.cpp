@@ -8,7 +8,6 @@
 #include "KoColorSpace.h"
 #include "KoChromaticities.h"
 #include "KoColorSpaceRegistry.h"
-#include "KoLcmsRGBColorProfile.h"
 #include "../kis_rgb_f32_hdr_colorspace.h"
 
 #ifdef HAVE_OPENEXR

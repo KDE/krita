@@ -48,13 +48,18 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_oilpaint_filter.h"
 
-KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), "artistic", i18n("&Oilpaint..."))
+KisOilPaintFilter::KisOilPaintFilter() : KisFilter( id(), KisFilter::CategoryArtistic, i18n("&Oilpaint...") )
 {
 }
 
-void KisOilPaintFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
+void KisOilPaintFilter::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
-
+#if 0
     if (!configuration) {
         kWarning() << "No configuration object for oilpaint filter\n";
         return;
@@ -71,6 +76,7 @@ void KisOilPaintFilter::process(const KisPaintDeviceSP src, const QPoint& srcTop
 
 
     OilPaint(src, dst, srcTopLeft, dstTopLeft, width, height, brushSize, smooth);
+#endif
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -89,8 +95,8 @@ void KisOilPaintFilter::process(const KisPaintDeviceSP src, const QPoint& srcTop
 
 void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h, int BrushSize, int Smoothness)
 {
-    setProgressTotalSteps(h);
-    setProgressStage(i18n("Applying oilpaint filter..."),0);
+//     setProgressTotalSteps(h);
+//     setProgressStage(i18n("Applying oilpaint filter..."),0);
 
     QRect bounds(srcTopLeft.x(), srcTopLeft.y(), w, h);
 
@@ -100,7 +106,7 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
     for (qint32 yOffset = 0; yOffset < h; yOffset++) {
 
 
-        while (!it.isDone() && !cancelRequested()) {
+        while (!it.isDone() ) { //&& !cancelRequested()) {
 
             if (it.isSelected()) {
 
@@ -113,10 +119,10 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
         }
         it.nextRow();
         dstIt.nextRow();
-        setProgress(yOffset);
+//         setProgress(yOffset);
     }
 
-    setProgressDone();
+    //    setProgressDone();
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -232,7 +238,8 @@ KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* pa
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size"), "brushSize" ) );
     param.push_back( KisIntegerWidgetParam( 10, 255, 30, i18n("Smooth"), "smooth" ) );
-    return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
+    // return new KisMultiIntegerFilterWidget(id.name(), parent, id().id(), param );
+    return 0;
 }
 
 KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget)

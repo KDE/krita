@@ -50,12 +50,18 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
-KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), "map", i18n("&Round Corners..."))
+KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::CategoryMap, i18n("&Round Corners..."))
 {
 }
 
-void KisRoundCornersFilter::process( const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration )
+void KisRoundCornersFilter::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     if (!src ||
         srcTopLeft.isNull() ||
         !dst ||
@@ -150,13 +156,15 @@ void KisRoundCornersFilter::process( const KisPaintDeviceSP src, const QPoint& s
         setProgress(y);
     }
     setProgressDone();
+#endif
 }
 
 KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 100, 30, i18n("Radius"), "radius" ) );
-    return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
+    //return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
+    return 0;
 }
 
 KisFilterConfiguration* KisRoundCornersFilter::configuration(QWidget* nwidget)

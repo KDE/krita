@@ -41,12 +41,12 @@ class KisCImgconfigWidget : public KisFilterConfigWidget {
 
 public:
 
-    KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent = 0, const char * name = 0, Qt::WFlags f = 0 );
+    KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent = 0, Qt::WFlags f = 0 );
     virtual ~KisCImgconfigWidget() {}
 
 public:
 
-    KisCImgFilterConfiguration * config();
+    KisFilterConfiguration* configuration() const;
     void setConfiguration(KisFilterConfiguration * config);
 
 private:

@@ -110,8 +110,14 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), "colors", i18n("Invert with
 {
 }
 
-void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, const KisFilterConfiguration* /*config*/, const QRect& rect)
+void KisFilterInvert::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     kDebug(41006) <<"Going to invert" << rect <<"";
     int h2 = rect.height() / 2;
     int w2 = rect.width() / 2;
@@ -136,4 +142,5 @@ void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, const 
     setProgress(4);
 
     setProgressDone();
+#endif
 }

@@ -183,8 +183,14 @@ std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfigurat
 }
 
 
-void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
+void KisPerChannelFilter::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     if (!config) {
         kWarning() <<"No configuration object for per-channel filter";
         return;
@@ -270,6 +276,7 @@ void KisPerChannelFilter::process(const KisPaintDeviceSP src, const QPoint& srcT
     }
 
     setProgressDone();
+#endif
 }
 
 void KisPerChannelConfigWidget::setActiveChannel(int ch)

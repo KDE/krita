@@ -32,14 +32,14 @@
 #include "kis_progress_subject.h"
 #include "krita_export.h"
 
+#include "kis_filter_processing_information.h"
+
 class KoColorSpace;
 class KisBookmarkedConfigurationManager;
 class KisProgressDisplayInterface;
 class KisFilterConfigWidget;
 class KisFilterConfiguration;
 class QWidget;
-class KisFilterProcessingInformation;
-class KisFilterConstantProcessingInformation;
 class KoProgressUpdater;
 
 /**

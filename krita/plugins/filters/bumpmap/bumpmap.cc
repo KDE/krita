@@ -89,7 +89,8 @@ KritaBumpmap::~KritaBumpmap()
 {
 }
 
-KisFilterBumpmap::KisFilterBumpmap() : KisFilter(KoID("bumpmap", i18n("Bumpmap")), "map", i18n("&Bumpmap..."))
+KisFilterBumpmap::KisFilterBumpmap()
+    : KisFilter(KoID("bumpmap", i18n("Bumpmap")), KisFilter::CategoryMap, i18n("&Bumpmap..."))
 {
 }
 
@@ -112,7 +113,7 @@ namespace {
 
 KisFilterConfiguration* KisFilterBumpmap::factoryConfiguration(const KisPaintDeviceSP)
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(m_id.id(), 0);
+    KisFilterConfiguration* config = new KisFilterConfiguration(id(), 0);
     config->setProperty("bumpmap", "");
     config->setProperty("azimuth", 135.0);
     config->setProperty("elevation", 45.0);
@@ -130,8 +131,14 @@ KisFilterConfiguration* KisFilterBumpmap::factoryConfiguration(const KisPaintDev
 }
 
 
-void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
+void KisFilterBumpmap::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     if (!src) return;
     if (!dst) return;
     if (!config) return;
@@ -391,7 +398,7 @@ void KisFilterBumpmap::process(const KisPaintDeviceSP src, const QPoint& srcTopL
     delete [] bm_row2;
     delete [] bm_row3;
     setProgressDone();
-
+#endif
 }
 
 KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev)
@@ -411,12 +418,11 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, const KisPain
     Q_ASSERT(m_filter);
     Q_ASSERT(m_device);
 
-    m_page = new WdgBumpmap(this);
+    m_page = new BumpmapWidget(this);
     QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
     l->addWidget(m_page);
-    m_filter->setAutoUpdate(false);
     m_page->txtSourceLayer->setText( "" );
     connect( m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
 }

@@ -91,8 +91,14 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-void KisSobelFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration)
+void KisSobelFilter::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     //read the filter configuration values from the KisFilterConfiguration object
     bool doHorizontal = configuration->getBool("doHorizontally", true);
     bool doVertical = configuration->getBool("doVertically", true);
@@ -186,6 +192,7 @@ void KisSobelFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLef
     delete[] curRow;
     delete[] nextRow;
     delete[] dest;
+#endif
 }
 
 

@@ -21,11 +21,12 @@
 #include <kgenericfactory.h>
 #include "kis_cubism_filter_plugin.h"
 #include "kis_cubism_filter.h"
+#include "kis_filter_registry.h"
 
 typedef KGenericFactory<KisCubismFilterPlugin> KisCubismFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacubismfilter, KisCubismFilterPluginFactory( "krita" ) )
 
-KisCubismFilterPlugin::KisCubismFilterPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent, name)
+KisCubismFilterPlugin::KisCubismFilterPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
 {
     setComponentData(KisCubismFilterPluginFactory::componentData());
 

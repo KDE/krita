@@ -94,7 +94,7 @@ layer, the current layer will be used.</string>
        <number>6</number>
       </property>
       <item row="1" column="1" >
-       <widget class="KDoubleSpinBox" name="dblElevation" >
+       <widget class="QDoubleSpinBox" name="dblElevation" >
         <property name="value" >
          <number>45</number>
         </property>
@@ -127,7 +127,7 @@ layer, the current layer will be used.</string>
        </widget>
       </item>
       <item row="2" column="1" >
-       <widget class="KDoubleSpinBox" name="dblDepth" >
+       <widget class="QDoubleSpinBox" name="dblDepth" >
         <property name="value" >
          <number>3</number>
         </property>
@@ -218,7 +218,7 @@ layer, the current layer will be used.</string>
        </widget>
       </item>
       <item row="0" column="1" >
-       <widget class="KDoubleSpinBox" name="dblAzimuth" >
+       <widget class="QDoubleSpinBox" name="dblAzimuth" >
 	       <property name="maximum">
 		       <number>360</number>
 	       </property>
@@ -334,7 +334,7 @@ layer, the current layer will be used.</string>
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>KDoubleSpinBox</class>
+   <class>QDoubleSpinBox</class>
    <extends>QSpinBox</extends>
    <header>knuminput.h</header>
    <container>1</container>

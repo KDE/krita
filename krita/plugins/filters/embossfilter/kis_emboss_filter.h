@@ -29,10 +29,16 @@ class KisEmbossFilter : public KisFilter
 public:
     KisEmbossFilter();
 public:
-    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
+    void process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater = 0
+        ) const;
     static inline KoID id() { return KoID("emboss", i18n("Emboss")); }
     virtual bool supportsPainting() const { return false; }
     virtual bool supportsPreview() const { return true; }
+    virtual void cancel() {}
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
 protected:

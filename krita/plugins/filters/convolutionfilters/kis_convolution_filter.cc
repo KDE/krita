@@ -30,8 +30,14 @@
 #include "kis_progress_display_interface.h"
 #include "kis_progress_subject.h"
 
-void KisConvolutionFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration)
+void KisConvolutionFilter::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     if (!configuration) {
         setProgressDone();
         return;
@@ -57,6 +63,7 @@ void KisConvolutionFilter::process(const KisPaintDeviceSP src, const QPoint& src
     }
 
     setProgressDone();
+#endif
 }
 
 int KisConvolutionFilter::overlapMarginNeeded(KisFilterConfiguration* /*c*/) const {

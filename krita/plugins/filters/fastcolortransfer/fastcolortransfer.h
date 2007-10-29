@@ -26,26 +26,32 @@
 
 class FastColorTransferPlugin : public KParts::Plugin
 {
-    public:
-        FastColorTransferPlugin(QObject *parent, const QStringList &);
-        virtual ~FastColorTransferPlugin();
+public:
+    FastColorTransferPlugin(QObject *parent, const QStringList &);
+    virtual ~FastColorTransferPlugin();
 };
 
 class KisFilterFastColorTransfer : public KisFilter
 {
-    public:
-        KisFilterFastColorTransfer();
-    public:
-        virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
-        virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
-        static inline KoID id() { return KoID("colortransfer", i18n("Color Transfer")); }
-        virtual bool supportsPainting() const { return true; }
-        virtual bool supportsPreview() const { return true; }
-        virtual bool supportsIncrementalPainting() const { return false; }
-        virtual bool supportsAdjustmentLayers() const { return false; }
-    public:
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-        virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP);
+public:
+    KisFilterFastColorTransfer();
+public:
+    void process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater = 0
+        ) const;
+    virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
+    static inline KoID id() { return KoID("colortransfer", i18n("Color Transfer")); }
+    virtual void cancel() {}
+    virtual bool supportsPainting() const { return true; }
+    virtual bool supportsPreview() const { return true; }
+    virtual bool supportsIncrementalPainting() const { return false; }
+    virtual bool supportsAdjustmentLayers() const { return false; }
+public:
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP);
 };
 
 #endif

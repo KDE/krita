@@ -51,12 +51,18 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
-KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), "artistic", i18n("&Pixelize..."))
+KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::CategoryArtistic, i18n("&Pixelize..."))
 {
 }
 
-void KisPixelizeFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration )
+void KisPixelizeFilter::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
 // FIXME THIS FILTER DOESN'T WORK WELL IF SRC != DST !!!
     Q_ASSERT( src );
     Q_ASSERT( dst );
@@ -150,6 +156,7 @@ void KisPixelizeFilter::process(const KisPaintDeviceSP src, const QPoint& srcTop
     }
 
     setProgressDone();
+#endif
 }
 
 KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
@@ -157,7 +164,8 @@ KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* pa
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel width"), "pixelWidth" ) );
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel height"), "pixelHeight" ) );
-    return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
+    //    return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
+    return 0;
 }
 
 KisFilterConfiguration* KisPixelizeFilter::configuration(QWidget* nwidget)

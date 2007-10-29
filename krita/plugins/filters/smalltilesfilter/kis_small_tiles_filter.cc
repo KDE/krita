@@ -64,22 +64,29 @@ void KisSmallTilesFilterConfiguration::fromXML(const QString & s)
 
 QString KisSmallTilesFilterConfiguration::toString()
 {
-    m_properties.clear();
+    clearProperties();
     setProperty("numberOfTiles()", m_numberOfTiles);
 
-    return KisFilterConfiguration::toString();
+    return KisFilterConfiguration::toLegacyXML();
 }
 
-KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "map", i18n("&Small Tiles..."))
+KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::CategoryMap, i18n("&Small Tiles..."))
 {
 }
 
-void KisSmallTilesFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration)
+void KisSmallTilesFilter::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
         //read the filter configuration values from the KisFilterConfiguration object
         quint32 numberOfTiles = ((KisSmallTilesFilterConfiguration*)configuration)->numberOfTiles();
 
 /*        createSmallTiles(src, dst, rect, numberOfTiles);
+#endif
 }
 
 void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, quint32 numberOfTiles)
@@ -130,13 +137,15 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
     gc.end();
 
     setProgressDone();
+#endif
 }
 
 KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 5, 1, i18n("Number of tiles"), "smalltiles" ) );
-    return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
+    //return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
+    return 0;
 }
 
 KisFilterConfiguration* KisSmallTilesFilter::configuration(QWidget* nwidget)

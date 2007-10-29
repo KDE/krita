@@ -445,7 +445,7 @@ void KisView2::createGUI()
 {
     KoToolManager::instance()->addController(m_d->canvasController);
 
-    KoToolBoxFactory toolBoxFactory( m_d->canvasController, "Krita" );
+    KoToolBoxFactory toolBoxFactory( m_d->canvasController, "Tools" );
     createDockWidget( &toolBoxFactory );
 
     KoColorDockerFactory colorDockerFactory;

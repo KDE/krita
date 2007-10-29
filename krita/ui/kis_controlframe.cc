@@ -200,7 +200,8 @@ void KisControlFrame::slotGradientChanged(KoSegmentGradient * gradient)
 void KisControlFrame::createBrushesChooser(KisView2 * view)
 {
 
-    m_brushChooserPopup = new QWidget(m_brushWidget, "brush_chooser_popup");
+    m_brushChooserPopup = new QWidget(m_brushWidget);
+    m_brushWidget->setObjectName( "brush_chooser_popup" );
 
     QHBoxLayout * l = new QHBoxLayout(m_brushChooserPopup);
     l->setObjectName("brushpopuplayout");
@@ -270,8 +271,8 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
 
 void KisControlFrame::createPatternsChooser(KisView2 * view)
 {
-    m_patternChooserPopup = new QWidget(m_patternWidget, "pattern_chooser_popup");
-
+    m_patternChooserPopup = new QWidget(m_patternWidget);
+    m_patternChooserPopup->setObjectName( "pattern_chooser_popup" );
     QHBoxLayout * l2 = new QHBoxLayout(m_patternChooserPopup);
     l2->setObjectName("patternpopuplayout");
     l2->setMargin(2);
@@ -317,8 +318,8 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
 
 void KisControlFrame::createGradientsChooser(KisView2 * view)
 {
-    m_gradientChooserPopup = new QWidget(m_gradientWidget, "gradient_chooser_popup");
-
+    m_gradientChooserPopup = new QWidget(m_gradientWidget);
+    m_gradientChooserPopup->setObjectName( "gradient_chooser_popup" );
     QHBoxLayout * l2 = new QHBoxLayout(m_gradientChooserPopup);
     l2->setObjectName("gradientpopuplayout");
     l2->setMargin(2);

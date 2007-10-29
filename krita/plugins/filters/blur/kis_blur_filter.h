@@ -25,19 +25,25 @@
 
 class KisBlurFilter : public KisFilter
 {
-    public:
-        KisBlurFilter();
-    public:
-        virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
-        static inline KoID id() { return KoID("blur", i18n("Blur")); }
-        virtual bool supportsPainting() const { return true; }
-        virtual bool supportsPreview() const { return true; }
-        virtual bool supportsIncrementalPainting() const { return false; }
-        virtual bool supportsAdjustmentLayers() const  { return false; }
-        virtual ColorSpaceIndependence colorspaceIndependence() const { return FULLY_INDEPENDENT; }
-        virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
-    public:
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+public:
+    KisBlurFilter();
+public:
+    void process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater = 0
+        ) const;
+    static inline KoID id() { return KoID("blur", i18n("Blur")); }
+    virtual void cancel() {}
+    virtual bool supportsPainting() const { return true; }
+    virtual bool supportsPreview() const { return true; }
+    virtual bool supportsIncrementalPainting() const { return false; }
+    virtual bool supportsAdjustmentLayers() const  { return false; }
+    virtual ColorSpaceIndependence colorspaceIndependence() const { return FULLY_INDEPENDENT; }
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
+public:
+    KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 };
 
 #endif

@@ -38,10 +38,16 @@ class KisFilterWave : public KisFilter
     public:
         KisFilterWave();
     public:
-        virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
+    void process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater = 0
+        ) const;
         virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
         static inline KoID id() { return KoID("wave", i18n("Wave")); }
-        virtual bool supportsPainting() const { return true; }
+    virtual void cancel() {}
+    virtual bool supportsPainting() const { return true; }
         virtual bool supportsPreview() const { return true; }
         virtual bool supportsIncrementalPainting() const { return false; }
         virtual bool supportsAdjustmentLayers() const { return false; }

@@ -72,9 +72,14 @@ KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDevi
  *                     understand. You get the diference between the colors and
  *                     increase it. After this, get the gray tone
  */
-void KisEmbossFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration )
+void KisEmbossFilter::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
-
+#if 0
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 embossdepth = configuration->getInt("depth",30);
 
@@ -128,6 +133,7 @@ void KisEmbossFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
     }
 
     setProgressDone();
+#endif
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

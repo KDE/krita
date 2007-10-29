@@ -35,18 +35,24 @@ public:
 
 class KisFilterRandomPick : public KisFilter
 {
-    public:
-        KisFilterRandomPick();
-    public:
-        virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft,  const QSize& size, const KisFilterConfiguration* config);
-        virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
-        static inline KoID id() { return KoID("randompick", i18n("Random Pick")); }
-        virtual bool supportsPainting() const { return true; }
-        virtual bool supportsPreview() const { return true; }
-        virtual bool supportsIncrementalPainting() const { return false; }
-        virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
-    public:
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+public:
+    KisFilterRandomPick();
+public:
+    void process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater = 0
+        ) const;
+    virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
+    static inline KoID id() { return KoID("randompick", i18n("Random Pick")); }
+    virtual void cancel() {}
+    virtual bool supportsPainting() const { return true; }
+    virtual bool supportsPreview() const { return true; }
+    virtual bool supportsIncrementalPainting() const { return false; }
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
+public:
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 };
 
 #endif

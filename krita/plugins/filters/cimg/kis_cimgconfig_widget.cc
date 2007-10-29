@@ -29,8 +29,8 @@
 #include "kis_cimgconfig_widget.h"
 #include "kis_cimg_filter.h"
 
-KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, const char * name, Qt::WFlags f)
-    : KisFilterConfigWidget(parent, name, f)
+KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, Qt::WFlags f)
+    : KisFilterConfigWidget(parent, f)
 {
     m_page = new WdgCImg(this);
     Q_CHECK_PTR(m_page);
@@ -39,9 +39,7 @@ KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, c
     Q_CHECK_PTR(l);
 
     l->addWidget(m_page);
-    nfilter->setAutoUpdate(false);
 
-//     connect(  m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_page->numDetail, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_page->numGradient, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_page->numTimeStep, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));
@@ -55,7 +53,7 @@ KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, c
 }
 
 
-KisCImgFilterConfiguration * KisCImgconfigWidget::config()
+KisFilterConfiguration* KisCImgconfigWidget::configuration() const
 {
     KisCImgFilterConfiguration * cfg = new KisCImgFilterConfiguration();
     Q_CHECK_PTR(cfg);

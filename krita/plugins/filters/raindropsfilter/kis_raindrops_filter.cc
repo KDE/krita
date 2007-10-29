@@ -49,7 +49,7 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_raindrops_filter.h"
 
-KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), "artistic", i18n("&Raindrops..."))
+KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::CategoryArtistic, i18n("&Raindrops..."))
 {
 }
 
@@ -73,8 +73,14 @@ KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), "artistic", i18n("&Ra
  */
 
 
-void KisRainDropsFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* configuration)
+void KisRainDropsFilter::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 DropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();
     quint32 number = ((KisRainDropsFilterConfiguration*)configuration)->number();
@@ -327,6 +333,7 @@ void KisRainDropsFilter::process(const KisPaintDeviceSP src, const QPoint& srcTo
     FreeBoolArray (BoolMatrix, Width);
 
     setProgressDone();
+#endif
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -401,7 +408,7 @@ KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* p
     param.push_back( KisIntegerWidgetParam( 1, 200, 80, i18n("Drop size"), "dropsize" ) );
     param.push_back( KisIntegerWidgetParam( 1, 500, 80, i18n("Number"), "number" ) );
     param.push_back( KisIntegerWidgetParam( 1, 100, 30, i18n("Fish eyes"), "fishEyes" ) );
-    return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
+    return new KisMultiIntegerFilterWidget(id().name(), parent, id().id(), param );
 }
 
 KisFilterConfiguration* KisRainDropsFilter::configuration(QWidget* nwidget)

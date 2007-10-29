@@ -73,8 +73,14 @@ KisFilterMax::KisFilterMax() : KisFilter(id(), CategoryColors, i18n("M&aximize C
 {
 }
 
-void KisFilterMax::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
+void KisFilterMax::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     Q_UNUSED( config );
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
@@ -114,15 +120,23 @@ void KisFilterMax::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
         ++dstIt;
     }
     setProgressDone(); // Must be called even if you don't really support progression
+#endif
 }
 
 KisFilterMin::KisFilterMin() : KisFilter(id(), CategoryColors, i18n("M&inimize Channel"))
 {
 }
 
-void KisFilterMin::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* /*config*/)
+void KisFilterMin::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     Q_ASSERT(src != 0);
+
     Q_ASSERT(dst != 0);
 
     KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
@@ -160,5 +174,6 @@ void KisFilterMin::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft,
         ++dstIt;
     }
     setProgressDone(); // Must be called even if you don't really support progression
+#endif
 }
 

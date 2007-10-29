@@ -31,7 +31,7 @@ protected:
     virtual ~KisProgressSubject();
 
 public:
-    virtual void cancel() = 0;
+     virtual void cancel() = 0;
 
 signals:
     void notifyProgress(int percent);

@@ -174,9 +174,14 @@ bool KisBrightnessContrastFilter::workWith(KoColorSpace* cs)
 }
 
 
-void KisBrightnessContrastFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
+void KisBrightnessContrastFilter::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
-
+#if 0
     if (!config) {
         kWarning() << "No configuration object for brightness/contrast filter\n";
         return;
@@ -249,6 +254,7 @@ void KisBrightnessContrastFilter::process(const KisPaintDeviceSP src, const QPoi
     }
 
     setProgressDone();
+#endif
 }
 
 KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)

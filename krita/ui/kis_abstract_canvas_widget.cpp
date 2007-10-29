@@ -39,6 +39,8 @@ void KisAbstractCanvasWidget::drawDecorations( QPainter & gc, bool ants, bool gr
     // Setup the painter to take care of the offset; all that the
     // classes that do painting need to keep track of is resolution
     gc.setRenderHint( QPainter::Antialiasing );
+    gc.setRenderHint( QPainter::TextAntialiasing );
+    gc.setRenderHint( QPainter::HighQualityAntialiasing );
     gc.setRenderHint( QPainter::SmoothPixmapTransform );
     gc.translate( QPoint( -documentOffset.x(), -documentOffset.y() ) );
 

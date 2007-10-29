@@ -130,8 +130,14 @@ KisFilterConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterWave::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
+void KisFilterWave::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     Q_ASSERT(src.data() != 0);
     Q_ASSERT(dst.data() != 0);
 
@@ -172,4 +178,5 @@ void KisFilterWave::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
     delete horizontalcurve;
     delete verticalcurve;
     setProgressDone(); // Must be called even if you don't really support progression
+#endif
 }

@@ -20,7 +20,7 @@
 
 #ifndef _KIS_POLYGON_H_
 #define _KIS_POLYGON_H_
-
+#include <QPointF>
 #include <q3valuevector.h>
 
 typedef Q3ValueVector<QPointF> KoPointVector;

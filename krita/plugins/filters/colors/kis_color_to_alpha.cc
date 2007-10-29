@@ -48,8 +48,14 @@ KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(KisPaintDevi
     return config;
 }
 
-void KisFilterColorToAlpha::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
+void KisFilterColorToAlpha::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
@@ -89,4 +95,5 @@ void KisFilterColorToAlpha::process(const KisPaintDeviceSP src, const QPoint& sr
     }
     delete[] color;
     setProgressDone(); // Must be called even if you don't really support progression
+#endif
 }

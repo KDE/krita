@@ -73,8 +73,14 @@ KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(KisPain
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
+void KisFilterFastColorTransfer::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
@@ -190,4 +196,5 @@ void KisFilterFastColorTransfer::process(const KisPaintDeviceSP src, const QPoin
     }
     dst->convertTo(oldCS);
     setProgressDone(); // Must be called even if you don't really support progression
+#endif
 }

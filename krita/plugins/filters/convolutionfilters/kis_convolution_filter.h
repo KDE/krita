@@ -33,10 +33,16 @@ public:
         : KisFilter( id, category, entry )
         {}
 public:
-    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
+    void process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater = 0
+        ) const;
     virtual bool supportsIncrementalPainting() const { return false; }
     virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
     virtual int overlapMarginNeeded(KisFilterConfiguration* c) const;
+    virtual void cancel() {}
 protected:
 
     KisKernelSP m_matrix;

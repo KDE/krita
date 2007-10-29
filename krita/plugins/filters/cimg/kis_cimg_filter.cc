@@ -91,7 +91,7 @@ void KisCImgFilterConfiguration::fromXML(const QString & s)
 
 QString KisCImgFilterConfiguration::toString()
 {
-    m_properties.clear();
+    clearProperties();
 
     setProperty("nb_iter", nb_iter);
     setProperty("dt", dt);
@@ -104,11 +104,11 @@ QString KisCImgFilterConfiguration::toString()
     setProperty("gauss_prec", gauss_prec);
     setProperty("linear", linear);
 
-    return KisFilterConfiguration::toString();
+    return KisFilterConfiguration::toLegacyXML();
 }
 
 KisCImgFilter::KisCImgFilter()
-    : KisFilter(id(), "enhance", i18n("&CImg Image Restoration...")),
+: KisFilter(id(), KisFilter::CategoryEnhance, i18n("&CImg Image Restoration...")),
       eigen(CImg<>(2,1), CImg<>(2,2))
 {
     restore = true;
@@ -159,8 +159,14 @@ KisCImgFilter::KisCImgFilter()
 }
 
 
-void KisCImgFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
+void KisCImgFilter::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     Q_UNUSED(dst); ///////////////////// WTF !
 
     qint32 width = rect.width();
@@ -272,7 +278,7 @@ void KisCImgFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft
     } else {
         // Everything went wrong; notify user and restore old state
     }
-
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -614,12 +620,12 @@ void KisCImgFilter::compute_LIC(int &progressSteps)
         // Compute the LIC along w in backward and forward directions
         cimg_mapXY(dest,x,y)
         {
-            setProgress(progressSteps);
-            progressSteps++;
-
-            if (cancelRequested()) {
-                return;
-            }
+//             setProgress(progressSteps);
+//             progressSteps++;
+//
+//             if (cancelRequested()) {
+//                 return;
+//             }
 
             if (!mask.data || mask(x,y)) compute_LIC_back_forward(x,y);
         }
@@ -645,8 +651,8 @@ bool KisCImgFilter::process()
 {
         if (!prepare()) return false;
 
-    setProgressTotalSteps(dest.width * dest.height * nb_iter * (int)ceil(180 / dtheta));
-    setProgressStage(i18n("Applying image restoration filter..."), 0);
+//     setProgressTotalSteps(dest.width * dest.height * nb_iter * (int)ceil(180 / dtheta));
+//     setProgressStage(i18n("Applying image restoration filter..."), 0);
 
         //-------------------------------------
         // Begin regularization PDE iterations
@@ -663,9 +669,9 @@ bool KisCImgFilter::process()
                 // Compute LIC's along different angle projections a_\alpha
                 compute_LIC(progressSteps);
 
-        if (cancelRequested()) {
-            break;
-        }
+//         if (cancelRequested()) {
+//             break;
+//         }
 
                 // Average all the LIC's
                 compute_average_LIC();
@@ -674,7 +680,7 @@ bool KisCImgFilter::process()
                 img = dest;
         }
 
-    setProgressDone();
+//     setProgressDone();
         // Save result and end program
         //-----------------------------
         if (visuflow) dest.mul(flow.get_norm_pointwise()).normalize(0,255);
@@ -698,7 +704,7 @@ KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget)
         return cfg;
 
     } else {
-        return widget->config();
+        return widget->configuration();
     }
 }
 

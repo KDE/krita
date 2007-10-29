@@ -67,8 +67,14 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), CategoryAdjust, i18n("&Inve
 {
 }
 
-void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
+void KisFilterInvert::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
+#if 0
     Q_UNUSED( config );
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
@@ -163,4 +169,5 @@ void KisFilterInvert::process(const KisPaintDeviceSP src, const QPoint& srcTopLe
     // Two inversions make no inversion? No -- because we're reading
     // from the oldData in both loops without saving the transaction
     // in between, both inversion loops invert the original image.
+#endif
 }

@@ -51,9 +51,14 @@ KisFilterConfiguration* KisWaveletNoiseReduction::factoryConfiguration(const Kis
     return config;
 }
 
-void KisWaveletNoiseReduction::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& areaSize, const KisFilterConfiguration* config)
+void KisWaveletNoiseReduction::process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater
+        ) const
 {
-
+#if 0
     float threshold;
 
     if(!config)
@@ -122,4 +127,5 @@ void KisWaveletNoiseReduction::process(const KisPaintDeviceSP src, const QPoint&
     disconnect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
 
     setProgressDone(); // Must be called even if you don't really support progression
+#endif
 }

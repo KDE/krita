@@ -31,12 +31,12 @@
 
 #include "ui_wdgbumpmap.h"
 
-class WdgBumpmap : public QWidget, public Ui::WdgBumpmap
+class BumpmapWidget : public QWidget, public Ui::WdgBumpmap
 {
     Q_OBJECT
 
     public:
-        WdgBumpmap(QWidget *parent) : QWidget(parent) { setupUi(this); }
+        BumpmapWidget(QWidget *parent) : QWidget(parent) { setupUi(this); }
 };
 
 namespace krita {
@@ -72,7 +72,14 @@ class KisFilterBumpmap : public KisFilter
 public:
     KisFilterBumpmap();
 public:
-    virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
+    void process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater = 0
+        ) const;
+
+    virtual void cancel() {}
     virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
     virtual bool supportsPainting() const { return true; }
     virtual bool supportsPreview() const { return true; }
@@ -93,7 +100,7 @@ public:
     void setConfiguration(KisFilterConfiguration * config);
     KisFilterConfiguration* configuration() const;
 
-    WdgBumpmap * m_page;
+    BumpmapWidget * m_page;
 
 private:
 

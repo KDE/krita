@@ -49,7 +49,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KDoubleSpinBox" name="doubleResolution" />
+      <widget class="QDoubleSpinBox" name="doubleResolution" />
      </item>
     </layout>
    </item>
@@ -69,7 +69,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KDoubleSpinBox" name="doubleResolution_2" />
+      <widget class="QDoubleSpinBox" name="doubleResolution_2" />
      </item>
     </layout>
    </item>
@@ -89,7 +89,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KDoubleSpinBox" name="doubleResolution_5" />
+      <widget class="QDoubleSpinBox" name="doubleResolution_5" />
      </item>
     </layout>
    </item>
@@ -98,7 +98,7 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
-   <class>KDoubleSpinBox</class>
+   <class>QDoubleSpinBox</class>
    <extends>QSpinBox</extends>
    <header>knuminput.h</header>
    <container>1</container>

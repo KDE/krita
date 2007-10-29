@@ -28,11 +28,17 @@ class KisUnsharpFilter : public KisFilter
     public:
         KisUnsharpFilter();
     public:
-        virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
+    void process(KisFilterConstantProcessingInformation src,
+                 KisFilterProcessingInformation dst,
+                 const QSize& size,
+                 const KisFilterConfiguration* config,
+                 KoProgressUpdater* progressUpdater = 0
+        ) const;
         static inline KoID id() { return KoID("unsharpmask", i18n("Unsharp Mask")); }
         virtual bool supportsPainting() const { return true; }
         virtual bool supportsPreview() const { return true; }
-        virtual bool supportsIncrementalPainting() const { return false; }
+    virtual void cancel() {}
+    virtual bool supportsIncrementalPainting() const { return false; }
         virtual bool supportsAdjustmentLayers() const { return false; }
         virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
     public:

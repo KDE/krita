@@ -107,7 +107,7 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
         qDebug() << "Master:" << it.key();
         KoPAMasterPage * masterPage = newMasterPage();
         masterPage->loadOdf( *( it.value() ), paContext );
-        m_masterPages.append( masterPage );
+        insertPage( masterPage, -1 );
         paContext.addMasterPage (it.key(), masterPage);
     }
 

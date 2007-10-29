@@ -139,7 +139,7 @@ QByteArray KoLcmsColorProfileContainer::createFromChromacities(const KoRGBChroma
 
     cmsFreeGamma(gammaTable);
     QByteArray profileArray = lcmsProfileToByteArray(profile);
-    cmsCloseProfile(profile);
+//     cmsCloseProfile(profile);
     return profileArray;
 }
 

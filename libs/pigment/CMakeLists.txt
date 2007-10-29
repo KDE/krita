@@ -37,7 +37,6 @@ set(pigmentcms_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/KoLcmsColorSpace.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoIccColorProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsColorProfileContainer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsRGBColorProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoAlphaColorSpace.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoLabColorSpace.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU16ColorSpace.cpp

@@ -33,6 +33,7 @@ Name[sr@latin]=Alat za izbor sličnih boja
 Name[sv]=Välj liknande färg-verktyg
 Name[uk]=Засіб вибору подібних кольорів
 Name[x-test]=xxSelect Similar Colors Toolxx
+Name[zh_CN]=选择相似颜色工具
 Name[zh_TW]=選取近似色彩工具
 ServiceTypes=Krita/Tool
 Type=Service

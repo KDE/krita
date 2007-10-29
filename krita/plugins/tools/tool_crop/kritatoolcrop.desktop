@@ -37,6 +37,7 @@ Name[sr@latin]=Alat za sasecanje
 Name[sv]=Beskärningsverktyg
 Name[uk]=Засіб обрізування
 Name[x-test]=xxCrop Toolxx
+Name[zh_CN]=裁剪工具
 Name[zh_TW]=剪裁工具
 ServiceTypes=Krita/Tool
 Type=Service

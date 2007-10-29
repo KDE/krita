@@ -46,6 +46,7 @@ Comment[sr@latin]=Model boja za slike u sivim nijansama, 16-bitno celobrojno po 
 Comment[sv]=Färgmodell för 16-bitars heltal per kanal gråskalebilder
 Comment[uk]=Модель кольору для зображень відтінків сірого, 16-біт/канал
 Comment[x-test]=xxColor model for 16-bit integer per channel Grayscale imagesxx
+Comment[zh_CN]=每通道 16 位整数的灰度图像色彩模型
 Comment[zh_TW]=每色頻為 16-bit 的灰階圖片色彩模型
 ServiceTypes=KOffice/ColorSpace
 Type=Service

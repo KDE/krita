@@ -36,6 +36,7 @@ Name[sv]=Transformeringsverktyg
 Name[uk]=Засіб перетворення
 Name[uz]=Айлантириш асбоби
 Name[x-test]=xxTransform Toolxx
+Name[zh_CN]=变形工具
 Name[zh_TW]=變形工具
 ServiceTypes=Krita/Tool
 Type=Service

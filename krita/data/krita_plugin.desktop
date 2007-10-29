@@ -35,6 +35,7 @@ Comment[sv]=Grafisk gränssnittsfunktion för Krita
 Comment[uk]=Функціональність графічного інтерфейсу для Krita
 Comment[uz]=Krita график интерфейси
 Comment[x-test]=xxGUI functionality for Kritaxx
+Comment[zh_CN]=Krita 的图形界面模块
 Comment[zh_TW]=Krita 的 GUI 功能
 [PropertyDef::X-Krita-Version]
 Type=int

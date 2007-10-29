@@ -30,6 +30,7 @@ Name[sv]=Fallskugga
 Name[uk]=Тінь
 Name[uz]=Соя тушириш
 Name[x-test]=xxDropshadowxx
+Name[zh_CN]=阴影
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritadropshadow

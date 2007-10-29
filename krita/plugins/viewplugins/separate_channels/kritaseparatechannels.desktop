@@ -32,6 +32,7 @@ Name[sv]=Insticksprogram för separata kanaler
 Name[uk]=Втулок розділення каналів
 Name[uz]=Каналларни ажратиш учун плагин
 Name[x-test]=xxSeparate Channels Pluginxx
+Name[zh_CN]=独立通道插件
 Name[zh_TW]=分離色頻外掛程式
 ServiceTypes=Krita/ViewPlugin
 Type=Service

@@ -33,6 +33,7 @@ Name[sv]=Insticksprogram med histogram
 Name[uk]=Втулок гістограм
 Name[uz]=Гистограмма плагини
 Name[x-test]=xxHistogram Pluginxx
+Name[zh_CN]=直方图插件
 Name[zh_TW]=直方圖外掛程式
 ServiceTypes=Krita/ViewPlugin
 Type=Service

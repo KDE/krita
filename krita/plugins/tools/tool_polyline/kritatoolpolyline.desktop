@@ -38,6 +38,7 @@ Name[sv]=Flerlinjesverktyg
 Name[uk]=Засіб ламаної лінії
 Name[uz]=Кўпбурчак асбоби
 Name[x-test]=xxPolyline Toolxx
+Name[zh_CN]=折线工具
 Name[zh_TW]=任意線工具
 ServiceTypes=Krita/Tool
 Type=Service

@@ -28,6 +28,7 @@
 #include <KFind>
 #include <KLocale>
 #include <KMessageBox>
+#include <KAction>
 
 #include <QAction>
 #include <QTextDocument>

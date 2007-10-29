@@ -5,8 +5,6 @@
 
 #include <kdebug.h>
 
-#include "../colorprofiles/KoLcmsRGBColorProfile.h"
-
 double testRounding(double value)
 {
     double factor;

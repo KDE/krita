@@ -79,7 +79,7 @@ QByteArray KoLcmsColorProfileContainer::lcmsProfileToByteArray(const cmsHPROFILE
         rawData.resize(0);
     }
     cmsCloseProfile(profile);
-    return new KoIccColorProfile(rawData);
+    return rawData;
 }
 
 KoIccColorProfile* KoLcmsColorProfileContainer::createFromLcmsProfile(const cmsHPROFILE profile)

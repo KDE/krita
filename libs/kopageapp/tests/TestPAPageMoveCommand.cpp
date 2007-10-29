@@ -26,17 +26,11 @@
 
 void TestPAPageMoveCommand::initTestCase()
 {
-    KoPAMasterPage *page = dynamic_cast<KoPAMasterPage *>( m_doc.pageByIndex( 0, true ) );
-    QVERIFY( page != 0 );
-
-    m_doc.takePage( page );
-
-    m_pages.insert( 0, page );
-
-    for( int i = 1; i < 5; ++i )
+    for( int i = 0; i < 5; ++i )
     {
         m_pages.insert( i, new KoPAMasterPage() );
     }
+    m_doc.insertPage( m_pages[0], -1 );
 }
 
 void TestPAPageMoveCommand::cleanupTestCase()
@@ -45,17 +39,17 @@ void TestPAPageMoveCommand::cleanupTestCase()
 
 void TestPAPageMoveCommand::init()
 {
-    for( int i = 0; i < 5; ++i )
+    for ( int i = 1; i < 5; ++i )
     {
-        m_doc.insertPage( m_pages[i], i );
+        m_doc.insertPage( m_pages[i], -1 );
     }
 }
 
 void TestPAPageMoveCommand::cleanup()
 {
-    foreach( KoPAMasterPage * page, m_pages )
+    for ( int i = 1; i < 5; ++i )
     {
-        m_doc.takePage( page );
+        m_doc.takePage( m_pages[i] );
     }
 }
 

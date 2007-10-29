@@ -30,6 +30,12 @@ void TestPAPageInsertCommand::redoUndo()
 {
     MockDocument doc;
 
+    KoPAMasterPage * master1 = new KoPAMasterPage();
+    doc.insertPage( master1, 0 );
+
+    KoPAPage * page1 = new KoPAPage( master1 );
+    doc.insertPage( page1, 0 );
+
     KoPAPage * p1 = dynamic_cast<KoPAPage *>( doc.pageByIndex( 0, false ) );
     KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>( doc.pageByIndex( 0, true ) );
 
@@ -78,6 +84,9 @@ void TestPAPageInsertCommand::redoUndo()
 void TestPAPageInsertCommand::redoUndoMaster()
 {
     MockDocument doc;
+
+    KoPAMasterPage * master1 = new KoPAMasterPage();
+    doc.insertPage( master1, 0 );
 
     KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>( doc.pageByIndex( 0, true ) );
 

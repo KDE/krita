@@ -78,13 +78,14 @@ QByteArray KoLcmsColorProfileContainer::lcmsProfileToByteArray(const cmsHPROFILE
         kError() << "Couldn't resize the profile buffer, system is probably running out of memory.";
         rawData.resize(0);
     }
-    cmsCloseProfile(profile);
     return rawData;
 }
 
 KoIccColorProfile* KoLcmsColorProfileContainer::createFromLcmsProfile(const cmsHPROFILE profile)
 {
-    return new KoIccColorProfile( lcmsProfileToByteArray(profile) );
+    KoIccColorProfile* iccprofile = new KoIccColorProfile( lcmsProfileToByteArray(profile) );
+    cmsCloseProfile(profile);
+    return iccprofile;
 }
 
 #define lcmsToPigmentViceVersaStructureCopy(dst, src  ) \
@@ -139,7 +140,7 @@ QByteArray KoLcmsColorProfileContainer::createFromChromacities(const KoRGBChroma
 
     cmsFreeGamma(gammaTable);
     QByteArray profileArray = lcmsProfileToByteArray(profile);
-//     cmsCloseProfile(profile);
+    cmsCloseProfile(profile);
     return profileArray;
 }
 

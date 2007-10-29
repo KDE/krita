@@ -41,10 +41,18 @@ class PIGMENTCMS_EXPORT KoLcmsColorProfileContainer : public KoIccColorProfile::
 protected:
     KoLcmsColorProfileContainer( KoIccColorProfile::Data *);
 private:
+    /**
+     * Create a byte array from a lcms profile.
+     */
     static QByteArray lcmsProfileToByteArray(const cmsHPROFILE profile);
+    /**
+     * Create a byte array holding an ICC profile generated with the given RGB Chromaticities
+     */
     static QByteArray createFromChromacities(const KoRGBChromaticities& chromacities, double gamma, QString name);
 public:
     /**
+     * @param profile lcms memory structure with the profile, it is freed after the call
+     *                to this function
      * @return an ICC profile created from an LCMS profile
      */
     static KoIccColorProfile* createFromLcmsProfile(const cmsHPROFILE profile);

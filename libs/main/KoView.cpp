@@ -161,7 +161,6 @@ KoView::KoView( KoDocument *document, QWidget *parent )
            this, SLOT( endOperation() ) );
 
 
-  actionCollection()->setAssociatedWidget(this);
   setupGlobalActions();
 
   KStatusBar * sb = statusBar();
@@ -193,6 +192,8 @@ KoView::KoView( KoDocument *document, QWidget *parent )
         KoDockFactory *factory = KoDockRegistry::instance()->value(docker);
         createDockWidget(factory);
     }
+
+  actionCollection()->associateWidget(this);
 }
 
 KoView::~KoView()

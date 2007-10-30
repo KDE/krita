@@ -919,7 +919,7 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h)
     return dev->convertToQImage( KoColorSpaceRegistry::instance()->rgb8()->profile() );
 }
 
-KisRectIteratorPixel KisPaintDevice::createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, KisSelection * selection)
+KisRectIteratorPixel KisPaintDevice::createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection)
 {
 #ifdef CACHE_EXACT_BOUNDS
     m_d->exactBounds &= QRect( left, top, w, h );
@@ -932,7 +932,7 @@ KisRectIteratorPixel KisPaintDevice::createRectIterator(qint32 left, qint32 top,
     return KisRectIteratorPixel(m_datamanager.data(), selectionDm, left, top, w, h, m_d->x, m_d->y);
 }
 
-KisRectConstIteratorPixel KisPaintDevice::createRectConstIterator(qint32 left, qint32 top, qint32 w, qint32 h, KisSelection * selection) const
+KisRectConstIteratorPixel KisPaintDevice::createRectConstIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
@@ -943,7 +943,7 @@ KisRectConstIteratorPixel KisPaintDevice::createRectConstIterator(qint32 left, q
     return KisRectConstIteratorPixel(dm, selectionDm, left, top, w, h, m_d->x, m_d->y);
 }
 
-KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(qint32 x, qint32 y, qint32 w, KisSelection * selection)
+KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection)
 {
 #ifdef CACHE_EXACT_BOUNDS
     m_d->exactBounds &= QRect( x, y, w, 1 );
@@ -957,7 +957,7 @@ KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(qint32 x, qint32 y, q
     return KisHLineIteratorPixel(m_datamanager.data(), selectionDm, x, y, w, m_d->x, m_d->y);
 }
 
-KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, qint32 y, qint32 w, KisSelection * selection) const
+KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
@@ -968,7 +968,7 @@ KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, q
     return KisHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y);
 }
 
-KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, qint32 h, KisSelection * selection)
+KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection)
 {
 #ifdef CACHE_EXACT_BOUNDS
     m_d->exactBounds &= QRect( x, y, 1, h );
@@ -982,7 +982,7 @@ KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, q
     return KisVLineIteratorPixel(m_datamanager.data(), selectionDm, x, y, h, m_d->x, m_d->y);
 }
 
-KisVLineConstIteratorPixel  KisPaintDevice::createVLineConstIterator(qint32 x, qint32 y, qint32 h, KisSelection * selection) const
+KisVLineConstIteratorPixel  KisPaintDevice::createVLineConstIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
@@ -993,7 +993,7 @@ KisVLineConstIteratorPixel  KisPaintDevice::createVLineConstIterator(qint32 x, q
     return KisVLineConstIteratorPixel(dm, selectionDm, x, y, h, m_d->x, m_d->y);
 }
 
-KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(qint32 x, qint32 y, KisSelection * selection)
+KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(qint32 x, qint32 y, const KisSelection * selection)
 {
     KisDataManager* selectionDm = 0;
 
@@ -1003,7 +1003,7 @@ KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(qint32 x, qint32 y, 
     return KisRandomAccessorPixel(m_datamanager.data(), selectionDm, x, y, m_d->x, m_d->y);
 }
 
-KisRandomConstAccessorPixel KisPaintDevice::createRandomConstAccessor(qint32 x, qint32 y, KisSelection * selection) const
+KisRandomConstAccessorPixel KisPaintDevice::createRandomConstAccessor(qint32 x, qint32 y, const KisSelection * selection) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
@@ -1014,7 +1014,7 @@ KisRandomConstAccessorPixel KisPaintDevice::createRandomConstAccessor(qint32 x, 
     return KisRandomConstAccessorPixel(dm, selectionDm, x, y, m_d->x, m_d->y);
 }
 
-KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor( KisSelection * selection ) const
+KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor( const KisSelection * selection ) const
 {
     KisPaintDevice* pd = const_cast<KisPaintDevice*>(this);
     return KisRandomSubAccessorPixel(pd);

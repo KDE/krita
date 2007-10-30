@@ -20,7 +20,6 @@
 #define KIS_SHEAR_VISITOR_H_
 
 #include "kis_types.h"
-#include "kis_progress_subject.h"
 #include "kis_node_visitor.h"
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"

@@ -1,5 +1,16 @@
 
-set(kritapanorama_PART_SRCS panorama.cc harris_detector.cpp matching.cpp kis_interest_points_detector.cpp kis_images_blender.cpp)
+set(kritapanorama_PART_SRCS
+    panorama.cc
+    harris_detector.cpp
+    matching.cpp
+    kis_interest_points_detector.cpp
+    kis_images_blender.cpp
+# hessian detector
+    hessiandetector/APImage.cpp
+    hessiandetector/Descriptor.cpp
+    hessiandetector/HessianDetector.cpp
+    hessiandetector/kis_hessian_detector.cpp
+    )
 
 
 kde4_add_ui_files(kritapanorama_PART_SRCS wdgpanoramacreation.ui )

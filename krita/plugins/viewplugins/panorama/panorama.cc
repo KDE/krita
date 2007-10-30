@@ -52,6 +52,7 @@
 #include "imagematchmodel_p.h"
 #include "homographyimagematchmodel_p.h"
 #include "kis_images_blender.h"
+#include "hessiandetector/kis_hessian_detector.h"
 
 #include "ui_wdgpanoramacreation.h"
 
@@ -74,7 +75,8 @@ PanoramaPlugin::PanoramaPlugin(QObject *parent, const QStringList &)
         actionCollection()->addAction("PanoramaLayer", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotCreatePanoramaLayer()));
     }
-    KisInterestPointsDetector::setInterestPointDetector(0, new HarrisPointDetector);
+//     KisInterestPointsDetector::setInterestPointDetector(0, new HarrisPointDetector);
+    KisInterestPointsDetector::setInterestPointDetector(1, new KisHessianDetector());
 }
 
 PanoramaPlugin::~PanoramaPlugin()

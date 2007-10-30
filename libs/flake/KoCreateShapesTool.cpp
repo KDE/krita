@@ -24,6 +24,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 
+#include "KoPointerEvent.h"
 #include "KoInteractionStrategy.h"
 
 
@@ -49,6 +50,11 @@ KoCreateShapesTool::~KoCreateShapesTool()
 void KoCreateShapesTool::paint( QPainter &painter, const KoViewConverter &converter) {
     if ( m_currentStrategy )
         m_currentStrategy->paint( painter, converter);
+}
+
+void KoCreateShapesTool::mouseMoveEvent( KoPointerEvent *event ) {
+    if(m_currentStrategy)
+        m_currentStrategy->handleMouseMove( event->point, event->modifiers() );
 }
 
 void KoCreateShapesTool::mouseReleaseEvent( KoPointerEvent *event ) {

@@ -70,6 +70,9 @@ KisThreadedApplicator::~KisThreadedApplicator()
 
 void KisThreadedApplicator::execute()
 {
+    // XXX_PROGRESS: compute the total number of jobs we're going to
+    // start first, so we can set the KoProgressUpdater up in the
+    // right way.
     int h = m_d->rc.height();
     int w = m_d->rc.width();
     int x = m_d->rc.x();

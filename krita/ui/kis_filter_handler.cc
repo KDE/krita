@@ -63,7 +63,7 @@ public:
             // XXX: Make KisFilter::process const! The progress
             // updates should be separate things, because we may be
             // using the same filter instance from several threads.
-            // Use Thomas' progress code here.
+            // Use Thomas' progress code here. XXX_PROGRESS: nearly there!
             const_cast<KisFilter*>( m_filter )->process( KisFilterConstantProcessingInformation( m_dev, marginRect.topLeft()), KisFilterProcessingInformation(
                                dst, marginRect.topLeft() ),
                                marginRect.size(),
@@ -93,6 +93,7 @@ public:
 
     ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin )
         {
+            // XXX_PROGRESS: pass KoProgressUpdater here
             return new KisFilterJob( m_filter, m_config, parent, dev, rc, margin );
         }
 

@@ -34,12 +34,12 @@ public:
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
 
     static inline KoID id() { return KoID("sobel", i18n("Sobel")); }
 
-    virtual void cancel() {}
+    
     virtual bool supportsPainting() const { return false; }
     virtual bool supportsPreview() const { return true; }
 

@@ -34,10 +34,10 @@ public:
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
-    virtual void cancel() {}
+    
         static inline KoID id() { return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer")); }
         virtual bool supportsPainting() const { return false; }
         virtual bool supportsPreview() const { return true; }

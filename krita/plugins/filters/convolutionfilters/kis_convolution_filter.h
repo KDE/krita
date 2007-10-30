@@ -27,7 +27,7 @@
 #include "kis_convolution_painter.h"
 
 class KisConvolutionFilter : public KisFilter {
-    Q_OBJECT
+
 public:
     KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry)
         : KisFilter( id, category, entry )
@@ -37,12 +37,12 @@ public:
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
     virtual bool supportsIncrementalPainting() const { return false; }
     virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
     virtual int overlapMarginNeeded(KisFilterConfiguration* c) const;
-    virtual void cancel() {}
+
 protected:
 
     KisKernelSP m_matrix;

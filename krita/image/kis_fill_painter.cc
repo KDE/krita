@@ -175,7 +175,6 @@ void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP projec
 }
 
 void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP projection) {
-    m_cancelRequested = false;
 
     if (m_width < 0 || m_height < 0) {
         if (m_device->image()) {
@@ -194,7 +193,7 @@ void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP p
 }
 
 void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
-    if (m_cancelRequested) {
+    if ( m_progressUpdater->interrupted() ) {
         m_width = m_height = -1;
         return;
     }
@@ -205,7 +204,7 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
     bltMask(rc.x(), rc.y(), m_compositeOp, filled, m_fillSelection, m_opacity,
                  rc.x(), rc.y(), rc.width(), rc.height());
 
-    emit notifyProgressDone();
+    m_progressUpdater->setProgress(100);
 
     m_width = m_height = -1;
 }
@@ -277,7 +276,7 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
     memset(map, None, m_size * sizeof(Status));
 
     int progressPercent = 0; int pixelsDone = 0; int currentPercent = 0;
-    emit notifyProgressStage(i18n("Making fill outline..."), 0);
+    if (m_progressUpdater) m_progressUpdater->setProgress(0);
 
     bool hasSelection = m_careForSelection && m_selection;
     KisSelectionSP srcSel = KisSelectionSP(0);
@@ -408,7 +407,7 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
         if (m_size > 0) {
             progressPercent = (pixelsDone * 100) / m_size;
             if (progressPercent > currentPercent) {
-                emit notifyProgress(progressPercent);
+                m_progressUpdater->setProgress(progressPercent);
                 currentPercent = progressPercent;
             }
         }

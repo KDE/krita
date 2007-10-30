@@ -21,7 +21,6 @@
 #ifndef _KIS_DROPSHADOW_H_
 #define _KIS_DROPSHADOW_H_
 
-#include <kis_progress_subject.h>
 #include <kis_paint_device.h>
 
 typedef enum
@@ -33,9 +32,9 @@ typedef enum
 
 class QColor;
 class KisView2;
-class KisProgressDisplayInterface;
+class KoUpdater;
 
-class KisDropshadow : public KisProgressSubject {
+class KisDropshadow : public QObject {
 
     Q_OBJECT
 
@@ -44,16 +43,13 @@ public:
     KisDropshadow(KisView2 * view);
     virtual ~KisDropshadow() {}
 
-    void dropshadow(KisProgressDisplayInterface * progress, qint32 xoffset, qint32 yoffset, qint32 blurradius, QColor color, quint8 opacity, bool allowResize);
-
-public: // Implement KisProgressSubject
-        virtual void cancel() { m_cancelRequested = true; }
+    void dropshadow(KoUpdater * progress, qint32 xoffset, qint32 yoffset, qint32 blurradius, QColor color, quint8 opacity, bool allowResize);
 
 private:
-    void gaussianblur (KisPaintDeviceSP src, KisPaintDeviceSP dst,
+    void gaussianblur (KoUpdater * progress, KisPaintDeviceSP src, KisPaintDeviceSP dst,
                        QRect& rect, double horz, double vert,
                        BlurMethod method,
-                       KisProgressDisplayInterface * progressDisplay);
+                       KoUpdater * progressDisplay);
     //gaussian blur helper functions
     void find_constants(double n_p[], double n_m[], double d_p[], double d_m[], double bd_p[], double bd_m[], double  std_dev);
     void transfer_pixels(double *src1, double *src2, quint8  *dest, qint32 bytes, qint32 width);
@@ -64,7 +60,6 @@ private:
 
 private:
     KisView2 * m_view;
-    bool m_cancelRequested;
 
 };
 

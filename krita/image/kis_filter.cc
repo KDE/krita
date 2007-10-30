@@ -51,8 +51,7 @@ struct KisFilter::Private {
 };
 
 KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entry)
-    : KisProgressSubject(0, id.id().toLatin1())
-    , d(new Private)
+    : d(new Private)
 {
     setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisFilterConfigurationFactory(id.id(), 1) ));
     d->id = id;
@@ -94,7 +93,7 @@ QRect KisFilter::enlargeRect(QRect rect, const KisFilterConfiguration* c) const 
 }
 
 void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater)
+                 KoUpdater* progressUpdater)
 {
     KisFilterProcessingInformation info(device, rect.topLeft());
     process(info, info, rect.size(), config, progressUpdater);
@@ -122,5 +121,3 @@ QString KisFilter::name() const { return d->id.name(); }
 KoID KisFilter::menuCategory() const { return d->category; }
 
 QString KisFilter::menuEntry() const { return d->entry; }
-
-#include "kis_filter.moc"

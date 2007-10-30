@@ -22,12 +22,12 @@
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
 #include "kis_perspective_math.h"
-#include "kis_progress_display_interface.h"
+#include "KoProgressUpdater.h"
 #include "kis_random_sub_accessor.h"
 #include "kis_selection.h"
 
-KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KisProgressDisplayInterface *progress)
-    : KisProgressSubject(), m_dev(dev), m_cancelRequested(false), m_progress(progress)
+KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdater *progress)
+    : m_dev(dev), m_progressUpdater->interrupted()(false), m_progress(progress)
 
 {
     QRect m_r;
@@ -78,8 +78,6 @@ void KisPerspectiveTransformWorker::run()
     { // ensure that the random sub accessor is deleted first
         KisRandomSubAccessorPixel srcAcc = srcdev->createRandomSubAccessor();
         // Initialise progress
-        if(m_progress)
-            m_progress->setSubject(this, true, true);
         m_lastProgressReport = 0;
         m_progressStep = 0;
         m_progressTotalSteps = m_r.width() * m_r.height();
@@ -106,9 +104,9 @@ void KisPerspectiveTransformWorker::run()
             if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
             {
                 m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-                emit notifyProgress(m_lastProgressReport);
+                m_progressUpdater->setProgress(m_lastProgressReport);
             }
-            if (m_cancelRequested) {
+            if (m_progressUpdater->interrupted()) {
                 break;
             }
             ++dstIt;

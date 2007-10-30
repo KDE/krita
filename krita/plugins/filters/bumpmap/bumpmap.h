@@ -76,10 +76,10 @@ public:
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
 
-    virtual void cancel() {}
+    
     virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
     virtual bool supportsPainting() const { return true; }
     virtual bool supportsPreview() const { return true; }

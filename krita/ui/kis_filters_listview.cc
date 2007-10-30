@@ -34,6 +34,8 @@
 #include <kglobalsettings.h>
 #include <kconfiggroup.h>
 
+#include <KoProgressUpdater.h>
+
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_cursor.h"
@@ -65,7 +67,7 @@ public:
 
     void requestAbort()
         {
-            m_item->filter()->cancel();
+            if ( m_item->progressUpdater() ) m_item->progressUpdater()->cancel();
             m_canceled = true;
         }
 
@@ -192,6 +194,7 @@ void KisFiltersListView::buildPreviews()
 
     QRect bounds = m_thumb->exactBounds();
 
+// XXX_PROGRESS: Get a KoProgressUpdater and give every filter their own updater
     foreach(QString id, KisFilterRegistry::instance()->keys()) {
         KisFilterSP filter = KisFilterRegistry::instance()->value(id);
         // Check if filter support the preview and work with the current colorspace
@@ -206,7 +209,7 @@ void KisFiltersListView::buildPreviews()
                 itc != configlist.end();
                 itc++)
             {
-                KisFiltersIconViewItem * item = new KisFiltersIconViewItem(filter.data(), itc.value());
+                KisFiltersIconViewItem * item = new KisFiltersIconViewItem(filter.data(), itc.value(), 0);
                 // XXX: deep copy the thumb?
                 item->setText( filter->name() );
                 KisPaintDeviceSP thumbPreview = new KisPaintDevice(*m_thumb);

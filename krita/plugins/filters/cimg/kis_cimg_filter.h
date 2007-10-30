@@ -58,11 +58,11 @@ public:
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
     static inline KoID id() { return KoID("cimg", i18n("Image Restoration (cimg-based)")); }
     virtual bool supportsPainting() const { return false; }
-    virtual void cancel() {};
+    ;
     virtual bool supportsPreview() const { return false; }
     virtual ColorSpaceIndependence colorSpaceIndependence() const;
 public:

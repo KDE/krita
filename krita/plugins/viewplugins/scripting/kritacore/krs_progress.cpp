@@ -20,14 +20,13 @@
 
 #include <kdebug.h>
 
-#include <kis_progress_display_interface.h>
+#include <KoProgressUpdater.h>
 #include <kis_view2.h>
 
 using namespace Scripting;
 
 Progress::Progress(KisView2* view)
-    : KisProgressSubject()
-    , m_view(view)
+    : m_view(view)
     , m_progressTotalSteps(0)
 {
 }
@@ -52,7 +51,7 @@ void Progress::setProgressTotalSteps(uint totalSteps)
     m_progressTotalSteps = totalSteps > 1 ? totalSteps : 1;
     m_progressSteps = 0;
     m_lastProgressPerCent = 0;
-    emit notifyProgress(0);
+    m_progressUpdater->setProgress(0);
 }
 
 void Progress::setProgress(uint progress)
@@ -66,7 +65,7 @@ void Progress::setProgress(uint progress)
     if (progressPerCent != m_lastProgressPerCent) {
 
         m_lastProgressPerCent = progressPerCent;
-        emit notifyProgress(progressPerCent);
+        m_progressUpdater->setProgress(progressPerCent);
     }
 }
 
@@ -82,13 +81,13 @@ void Progress::setProgressStage(const QString& stage, uint progress)
 
     uint progressPerCent = (progress * 100) / m_progressTotalSteps;
     m_lastProgressPerCent = progress;
-    emit notifyProgressStage( stage, progressPerCent);
+    m_progressUpdater->setProgressStage( stage, progressPerCent);
 }
 
 void Progress::progressDone()
 {
     m_progressTotalSteps = 0;
-    emit notifyProgressDone();
+    m_progressUpdater->setProgress(100);
 }
 
 #include "krs_progress.moc"

@@ -46,7 +46,7 @@ class KisActionRecorder;
 class KisUndoAdapter;
 class KisFilterStrategy;
 class KoColorProfile;
-class KisProgressDisplayInterface;
+class KoUpdater;
 class KisPerspectiveGrid;
 
 /**
@@ -199,17 +199,17 @@ public:
     /**
      * Execute a scale transform on all layers in this image.
      */
-    void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
+    void scale(double sx, double sy, KoUpdater *m_progress, KisFilterStrategy *filterStrategy);
 
     /**
      * Execute a rotate transform on all layers in this image.
      */
-    void rotate(double radians, KisProgressDisplayInterface *m_progress);
+    void rotate(double radians, KoUpdater *m_progress);
 
     /**
      * Execute a shear transform on all layers in this image.
      */
-    void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
+    void shear(double angleX, double angleY, KoUpdater *m_progress);
 
     /**
      * Convert the image and all its layers to the dstColorSpace

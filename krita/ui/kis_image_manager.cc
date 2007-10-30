@@ -40,7 +40,6 @@
 #include "kis_import_catcher.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
-#include "kis_label_progress.h"
 #include "kis_dlg_image_properties.h"
 #include "kis_image_commands.h"
 
@@ -116,7 +115,8 @@ void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, bool cropLayers)
 void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy)
 {
     if (!m_view->image()) return;
-    m_view->image()->scale(sx, sy, m_view->statusBar()->progress(), filterStrategy);
+    // XXX_PROGRESS
+    m_view->image()->scale(sx, sy, 0, filterStrategy);
     m_view->image()->setModified();
     m_view->layerManager()->layersUpdated();
 }
@@ -124,7 +124,8 @@ void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy 
 void KisImageManager::rotateCurrentImage(double radians)
 {
     if (!m_view->image()) return;
-    m_view->image()->rotate(radians, m_view->statusBar()->progress());
+    // XXX_PROGRESS
+    m_view->image()->rotate(radians, 0);
     m_view->image()->setModified();
     m_view->layerManager()->layersUpdated();
 }
@@ -132,7 +133,8 @@ void KisImageManager::rotateCurrentImage(double radians)
 void KisImageManager::shearCurrentImage(double angleX, double angleY)
 {
     if (!m_view->image()) return;
-    m_view->image()->shear(angleX, angleY, m_view->statusBar()->progress());
+    // XXX_PROGRESS
+    m_view->image()->shear(angleX, angleY, 0);
     m_view->image()->setModified();
     m_view->layerManager()->layersUpdated();
 }

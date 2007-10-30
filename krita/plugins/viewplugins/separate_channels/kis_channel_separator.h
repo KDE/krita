@@ -21,11 +21,8 @@
 #ifndef _KIS_CHANNEL_SEPARATOR_H_
 #define _KIS_CHANNEL_SEPARATOR_H_
 
-#include <kis_progress_subject.h>
-
+class KoUpdater;
 class KisView2;
-class KisProgressDisplayInterface;
-
 
 enum enumSepAlphaOptions {
     COPY_ALPHA_TO_SEPARATIONS = 0,
@@ -45,24 +42,18 @@ enum enumSepOutput {
     TO_IMAGES = 1
 };
 
-class KisChannelSeparator : public KisProgressSubject {
-
-    Q_OBJECT
+class KisChannelSeparator {
 
 public:
 
     KisChannelSeparator(KisView2 * view);
     virtual ~KisChannelSeparator() {}
 
-    void separate(KisProgressDisplayInterface * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor);
+    void separate(KoUpdater * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor);
 
-public: // Implement KisProgressSubject
-        virtual void cancel() { m_cancelRequested = true; }
-
-            
 private:
+
     KisView2 * m_view;
-    bool m_cancelRequested;
 
 };
 

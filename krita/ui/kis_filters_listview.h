@@ -41,6 +41,7 @@ class KisFilter;
 class KisFilterConfiguration;
 class KisFiltersIconViewItem;
 class KisFiltersListView;
+class KoUpdater;
 
 using namespace ThreadWeaver;
 
@@ -49,19 +50,23 @@ class KRITAUI_EXPORT KisFiltersIconViewItem : public QListWidgetItem
 
 public:
 
-    KisFiltersIconViewItem( KisFilter * filter, KisFilterConfiguration * config )
+    KisFiltersIconViewItem( KisFilter * filter, KisFilterConfiguration * config, KoUpdater * progressUpdater )
         : QListWidgetItem()
         , m_filter( filter )
         , m_config( config )
+        , m_updater( progressUpdater )
         {
         }
 
     KisFilter * filter() { return m_filter; }
     KisFilterConfiguration * filterConfiguration() { return m_config; }
+    KoUpdater * progressUpdater() { return m_updater; }
+
 private:
 
     KisFilter * m_filter;
     KisFilterConfiguration * m_config;
+    KoUpdater * m_updater;
 };
 
 class KRITAUI_EXPORT KisFiltersListView : public QListWidget {

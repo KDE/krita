@@ -577,7 +577,7 @@ void KisToolPerspectiveTransform::transform()
     if (!m_currentImage || !m_currentLayer->paintDevice())
         return;
 
-    KisProgressDisplayInterface *progress = m_subject->progressDisplay();
+    KoUpdater *progress = m_subject->progressDisplay();
 
     // This mementoes the current state of the active device.
     PerspectiveTransformCmd * transaction = new PerspectiveTransformCmd(this, m_currentLayer->paintDevice(), m_origDevice,

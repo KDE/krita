@@ -20,17 +20,16 @@
 
 
 #include "kis_types.h"
-#include "kis_progress_subject.h"
 
 class KisPaintDevice;
-class KisProgressDisplayInterface;
+class KoUpdater;
 
-class KRITAIMAGE_EXPORT KisRotateVisitor : public KisProgressSubject {
+class KRITAIMAGE_EXPORT KisRotateVisitor {
 
     /* Structs for the image rescaling routine */
 
 public:
-    KisRotateVisitor();
+    KisRotateVisitor( KoUpdater * updater );
     ~KisRotateVisitor();
 
     void visitKisPaintDevice(KisPaintDevice* dev);
@@ -39,30 +38,27 @@ public:
      * Rotate the paint device with the specified angle around the
      * center of the paint device
      */
-    void rotate(double angle, KisProgressDisplayInterface *progress);
+    void rotate(double angle, KoUpdater *progress);
 
     /**
      * rotate the paintdevice with the specified angle around the
      * middle of width and height.
      */
-    void rotate(double angle, qint32 width, qint32 height, KisProgressDisplayInterface *progress);
-    void shear(double angleX, double angleY, KisProgressDisplayInterface *progress);
+    void rotate(double angle, qint32 width, qint32 height, KoUpdater *progress);
+    void shear(double angleX, double angleY, KoUpdater *progress);
 
 private:
 
-    void rotate( double angle, QPointF center, KisProgressDisplayInterface *progress);
+    void rotate( double angle, QPointF center, KoUpdater *progress);
 
     KisPaintDeviceSP m_dev;
 
-    // Implement KisProgressSubject
-    bool m_cancelRequested;
-    virtual void cancel() { m_cancelRequested = true; }
+    KoUpdater *m_progressUpdater;
 
     void initProgress(qint32 totalSteps);
     void incrementProgress();
     void setProgressDone();
 
-    KisProgressDisplayInterface *m_progress;
     qint32 m_progressStep;
     qint32 m_progressTotalSteps;
     qint32 m_lastProgressPerCent;
@@ -77,7 +73,8 @@ private:
 
 };
 
-inline KisRotateVisitor::KisRotateVisitor()
+inline KisRotateVisitor::KisRotateVisitor( KoUpdater * progressUpdater )
+    : m_progressUpdater(progressUpdater)
 {
 }
 

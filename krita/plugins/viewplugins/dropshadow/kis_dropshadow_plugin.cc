@@ -34,7 +34,7 @@
 #include "kis_layer.h"
 #include <kis_statusbar.h>
 
-
+#include <KoProgressUpdater.h>
 #include "kis_dropshadow_plugin.h"
 #include "kis_dropshadow.h"
 #include "dlg_dropshadow.h"
@@ -79,7 +79,10 @@ void KisDropshadowPlugin::slotDropshadow()
     if (dlgDropshadow->exec() == QDialog::Accepted) {
 
         KisDropshadow dropshadow(m_view);
-        dropshadow.dropshadow(m_view->statusBar()->progress(),
+        KoProgressUpdater pu( m_view->statusBar()->progress() );
+        pu.start();
+        KoUpdater u = pu.startSubtask();
+        dropshadow.dropshadow(& u,
                            dlgDropshadow->getXOffset(),
                            dlgDropshadow->getYOffset(),
                            dlgDropshadow->getBlurRadius(),

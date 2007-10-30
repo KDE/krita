@@ -41,7 +41,7 @@ public:
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 
@@ -49,7 +49,7 @@ public:
     virtual bool supportsPainting() const { return false; }
     virtual bool supportsPreview() const { return true; }
     virtual bool supportsIncrementalPainting() const { return false; }
-    virtual void cancel() {}
+    
     virtual bool supportsThreading() const { return false; }
 private:
     virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP);

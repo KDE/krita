@@ -43,7 +43,7 @@
 #include "KoPointerEvent.h"
 #include "kis_pattern.h"
 #include "kis_fill_painter.h"
-#include "kis_progress_display_interface.h"
+#include "KoProgressUpdater.h"
 #include "kis_selection.h"
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
@@ -143,7 +143,7 @@ bool KisToolFill::flood(int startX, int startY)
         m_fillPainter->setWidth( currentImage()->width() );
         m_fillPainter->setHeight( currentImage()->height() );
         // Enable this code again when I know how progress works
-        //  KisProgressDisplayInterface *progress = ??
+        //  KoUpdater *progress = ??
 //     if (progress) {
 // 	progress->setSubject(m_fillPainter, true, true);
 //     }

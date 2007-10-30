@@ -21,25 +21,23 @@
 #define KIS_TRANSFORM_WORKER_H_
 
 #include "kis_types.h"
-#include "kis_progress_subject.h"
 
 class KisPaintDevice;
-class KisProgressDisplayInterface;
+class KoUpdater;
 class KisFilterStrategy;
 
-class KRITAIMAGE_EXPORT KisTransformWorker : public KisProgressSubject {
+class KRITAIMAGE_EXPORT KisTransformWorker {
 
 public:
     KisTransformWorker(KisPaintDeviceSP dev,
                        double  xscale, double  yscale,
                        double  xshear, double  yshear, double rotation,
                        qint32  xtranslate, qint32  ytranslate,
-                       KisProgressDisplayInterface *progress,
+                       KoUpdater *progress,
                        KisFilterStrategy *filter, bool fixBorderAlpha=false);
     ~KisTransformWorker();
 
 public:
-    bool isCanceled() { return m_cancelRequested;}
 
     bool run();
 
@@ -62,16 +60,9 @@ private:
     double  m_xscale, m_yscale;
     double  m_xshear, m_yshear, m_rotation;
     qint32  m_xtranslate, m_ytranslate;
-    KisProgressDisplayInterface *m_progress;
+    KoUpdater *m_progress;
     KisFilterStrategy *m_filter;
 
-    // Implement KisProgressSubject
-    bool m_cancelRequested;
-    virtual void cancel() { m_cancelRequested = true; }
-    qint32 m_progressTotalSteps;
-    qint32 m_progressStep;
-    qint32 m_progressScaler;
-    qint32 m_lastProgressReport;
     bool m_fixBorderAlpha;
 };
 

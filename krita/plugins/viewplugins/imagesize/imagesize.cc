@@ -36,6 +36,7 @@
 #include <kgenericfactory.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
+#include <KoProgressUpdater.h>
 
 #include <kis_config.h>
 #include <kis_image.h>
@@ -176,13 +177,16 @@ void ImageSize::slotSelectionScale()
     dlgSize->setWidth(rc.width());
     dlgSize->setHeight(rc.height());
 
+    KoProgressUpdater pu( m_view->statusBar()->progress() );
+    KoUpdater u = pu.startSubtask();
+
     if (dlgSize->exec() == QDialog::Accepted) {
         qint32 w = dlgSize->width();
         qint32 h = dlgSize->height();
         KisTransformWorker worker( selection.data(),
                 (double)w / ((double)(rc.width())),
                 (double)h / ((double)(rc.height())),
-                0, 0, 0.0, 0, 0, m_view->statusBar()->progress(),
+                0, 0, 0.0, 0, 0, &u,
                 dlgSize->filterType()
                 );
         worker.run();

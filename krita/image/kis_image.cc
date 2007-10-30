@@ -423,7 +423,7 @@ void KisImage::emitSizeChanged()
 }
 
 
-void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress, KisFilterStrategy *filterStrategy)
+void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrategy *filterStrategy)
 {
     QStringList list;
     list << "KisLayer";
@@ -472,7 +472,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
 
 
 
-void KisImage::rotate(double radians, KisProgressDisplayInterface *progress)
+void KisImage::rotate(double radians, KoUpdater *progress)
 {
     lock();
 
@@ -510,7 +510,7 @@ void KisImage::rotate(double radians, KisProgressDisplayInterface *progress)
     }
 }
 
-void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *progress)
+void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
 {
     const double pi=3.1415926535897932385;
 

@@ -41,13 +41,13 @@ public:
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
     static inline KoID id() { return KoID("autocontrast", i18n("Auto Contrast")); }
     virtual bool supportsPreview() const { return true; }
     virtual bool supportsPainting() const { return false; }
     virtual bool supportsThreading() const { return false; }
-    virtual void cancel() {}
+    
     virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
     virtual bool workWith(KoColorSpace* cs);
 
@@ -63,13 +63,13 @@ public:
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
     static inline KoID id() { return KoID("desaturate", i18n("Desaturate")); }
     virtual bool supportsPainting() const { return true; }
     virtual bool supportsPreview() const { return true; }
     virtual bool supportsIncrementalPainting() const { return false; }
-    virtual void cancel() {}
+    
     virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
     virtual bool workWith(KoColorSpace* cs);
 

@@ -23,7 +23,7 @@
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 #include "kis_transform_worker.h"
-#include "kis_progress_display_interface.h"
+#include "KoProgressUpdater.h"
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
 #include "kis_layer.h"
@@ -34,7 +34,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
                                        double xshear, double yshear,
                                        double rotation,
                                        qint32 xtranslate, qint32 ytranslate,
-                                       KisProgressDisplayInterface *progress,
+                                       KoUpdater *progress,
                                        KisFilterStrategy *filter,
                                        bool fixBorderAlpha)
 {
@@ -95,9 +95,9 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
         {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-            emit notifyProgress(m_lastProgressReport);
+            m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if (m_cancelRequested) {
+        if (m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -146,9 +146,9 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
         {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-            emit notifyProgress(m_lastProgressReport);
+            m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if (m_cancelRequested) {
+        if (m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -203,9 +203,9 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
         {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-            emit notifyProgress(m_lastProgressReport);
+            m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if (m_cancelRequested) {
+        if (m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -257,9 +257,9 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
         {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-            emit notifyProgress(m_lastProgressReport);
+            m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if (m_cancelRequested) {
+        if (m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -535,9 +535,9 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
         {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-            emit notifyProgress(m_lastProgressReport);
+            m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if (m_cancelRequested) {
+        if (m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -552,9 +552,6 @@ bool KisTransformWorker::run()
 {
 #if 0
     //progress info
-    m_cancelRequested = false;
-    if(m_progress)
-        m_progress->setSubject(this, true, true);
     m_progressTotalSteps = 0;
     m_progressStep = 0;
     QRect r;
@@ -659,14 +656,14 @@ bool KisTransformWorker::run()
         rotateNone(srcdev, m_dev);
 
         //progress info
-        emit notifyProgressDone();
+        m_progressUpdater->setProgress(100);
         m_dev->emitSelectionChanged();
 
-        return m_cancelRequested;
+        return m_progressUpdater->interrupted();
     }
 
-    if ( m_cancelRequested) {
-        emit notifyProgressDone();
+    if ( m_progressUpdater->interrupted()) {
+        m_progressUpdater->setProgress(100);
         return false;
     }
 
@@ -674,8 +671,8 @@ bool KisTransformWorker::run()
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
 
-    if ( m_cancelRequested) {
-        emit notifyProgressDone();
+    if ( m_progressUpdater->interrupted()) {
+        m_progressUpdater->setProgress(100);
         return false;
     }
 
@@ -685,8 +682,8 @@ bool KisTransformWorker::run()
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
 
-    if ( m_cancelRequested) {
-        emit notifyProgressDone();
+    if ( m_progressUpdater->interrupted()) {
+        m_progressUpdater->setProgress(100);
         return false;
     }
 
@@ -702,10 +699,10 @@ bool KisTransformWorker::run()
     m_dev->setDirty();
 
     //progress info
-    emit notifyProgressDone();
+    m_progressUpdater->setProgress(100);
     m_dev->emitSelectionChanged();
 
-    return m_cancelRequested;
+    return m_progressUpdater->interrupted();
 #endif
     return false;
 }

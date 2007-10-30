@@ -657,7 +657,7 @@ void KisToolTransform::transform()
         return;
 
     QPointF t = m_translate - rot(m_originalCenter.x() * m_scaleX, m_originalCenter.y() * m_scaleY);
-    //KisProgressDisplayInterface *progress = m_subject->progressDisplay();
+    //KoUpdater *progress = m_subject->progressDisplay();
 
     // This mementoes the current state of the active device.
     TransformCmd * transaction = new TransformCmd(this, m_currentLayer->paintDevice(), m_scaleX,
@@ -692,13 +692,14 @@ void KisToolTransform::transform()
     KisTransformWorker worker(m_currentLayer->paintDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), 0/*progress*/, m_filter);
     worker.run();
 
-    // If canceled, go back to the memento
-    if(worker.isCanceled())
-    {
-        transaction->undo();
-        delete transaction;
-        return;
-    }
+// XXX_PROGRESS, XXX_LAYERS
+//     // If canceled, go back to the memento
+//     if(worker.isCanceled())
+//     {
+//         transaction->undo();
+//         delete transaction;
+//         return;
+//     }
 
     m_currentLayer->paintDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
 

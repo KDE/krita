@@ -38,7 +38,7 @@
  */
 class KisShearVisitor : public KisNodeVisitor {
 public:
-    KisShearVisitor(double xshear, double yshear, KisProgressDisplayInterface *progress)
+    KisShearVisitor(double xshear, double yshear, KoUpdater *progress)
         : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {}
 
     void setStrategy(KisFilterStrategy* strategy) { m_strategy = strategy; }
@@ -70,7 +70,7 @@ public:
         //KisTransformWorker w(dev, 1.0, 1.0, m_xshear, m_yshear, 0, 0, 0, m_progress, strategy);
         //w.run();
 
-        KisRotateVisitor v;
+        KisRotateVisitor v( m_progress );
         v.visitKisPaintDevice(dev.data());
         v.shear(m_xshear, m_yshear, m_progress);
 
@@ -100,7 +100,7 @@ public:
 private:
     double m_xshear;
     double m_yshear;
-    KisProgressDisplayInterface* m_progress;
+    KoUpdater* m_progress;
     KisFilterStrategy* m_strategy;
     KisUndoAdapter* m_undo;
 };

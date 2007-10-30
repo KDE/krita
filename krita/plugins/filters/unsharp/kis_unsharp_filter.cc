@@ -53,7 +53,7 @@ void KisUnsharpFilter::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater
+                 KoUpdater* progressUpdater
         ) const
 {
 #if 0
@@ -91,7 +91,7 @@ void KisUnsharpFilter::process(KisFilterConstantProcessingInformation src,
     painter.applyMatrix(kernel, srcTopLeft.x(), srcTopLeft.y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);
 
     if (painter.cancelRequested()) {
-        cancel();
+        progressUpdater->cancel();
     }
 
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), areaSize.width());

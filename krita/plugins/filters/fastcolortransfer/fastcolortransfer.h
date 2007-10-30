@@ -40,11 +40,11 @@ public:
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
     virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
     static inline KoID id() { return KoID("colortransfer", i18n("Color Transfer")); }
-    virtual void cancel() {}
+    
     virtual bool supportsPainting() const { return true; }
     virtual bool supportsPreview() const { return true; }
     virtual bool supportsIncrementalPainting() const { return false; }

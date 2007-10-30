@@ -56,7 +56,7 @@ void KisBlurFilter::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater
+                 KoUpdater* progressUpdater
         ) const
 {
 #if 0
@@ -123,7 +123,7 @@ void KisBlurFilter::process(KisFilterConstantProcessingInformation src,
     painter.applyMatrix(kernel, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
     if (painter.cancelRequested()) {
-        cancel();
+        progressUpdater->cancel();
     }
 
     setProgressDone(); // Must be called even if you don't really support progression

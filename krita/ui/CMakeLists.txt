@@ -60,7 +60,6 @@ set(kritaui_LIB_SRCS
     kis_int_spinbox_p.cc
     kis_itemchooser.cc
     kis_label_cursor_pos.cc
-    kis_label_progress.cc
     kis_label_zoom.cc
     kis_layer_manager.cc
     kis_layermap_visitor.cc

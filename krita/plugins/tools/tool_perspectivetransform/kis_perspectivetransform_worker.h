@@ -25,27 +25,23 @@
 #include <QRect>
 
 class QPointF;
-class KisProgressDisplayInterface;
+class KoUpdater;
 
 class KisPerspectiveTransformWorker : public KisProgressSubject
 {
     public:
-        KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KisProgressDisplayInterface *progress);
+        KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdater *progress);
     
         ~KisPerspectiveTransformWorker();
         
         void run();
-        bool isCanceled() { return m_cancelRequested; };
-    private:
-        virtual void cancel() { m_cancelRequested = true; }
     private:
         qint32 m_progressTotalSteps;
         qint32 m_lastProgressReport;
         qint32 m_progressStep;
         double m_xcenter, m_ycenter, m_p, m_q;
         KisPaintDeviceSP m_dev;
-        bool m_cancelRequested;
-        KisProgressDisplayInterface *m_progress;
+        KoUpdater *m_progress;
         double m_matrix[3][3];
         QRect m_r;
 };

@@ -29,24 +29,23 @@
 
 #include "kis_types.h"
 #include "KoID.h"
-#include "kis_progress_subject.h"
 #include "krita_export.h"
 
 #include "kis_filter_processing_information.h"
 
 class KoColorSpace;
 class KisBookmarkedConfigurationManager;
-class KisProgressDisplayInterface;
+class KoUpdater;
 class KisFilterConfigWidget;
 class KisFilterConfiguration;
 class QWidget;
-class KoProgressUpdater;
+class KoUpdater;
 
 /**
  * Basic interface of a Krita filter.
  */
-class KRITAIMAGE_EXPORT KisFilter : public KisProgressSubject, public KisShared {
-    Q_OBJECT
+class KRITAIMAGE_EXPORT KisFilter : public KisShared {
+
 public:
     static const KoID CategoryAdjust;
     static const KoID CategoryArtistic;
@@ -88,14 +87,14 @@ public:
                          KisFilterProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config,
-                         KoProgressUpdater* progressUpdater = 0
+                         KoUpdater* progressUpdater = 0
         ) const = 0;
 
     /**
      * Provided for convenience only when source and destination are the same
      */
     void process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0);
+                 KoUpdater* progressUpdater = 0);
 
 public:
     /**

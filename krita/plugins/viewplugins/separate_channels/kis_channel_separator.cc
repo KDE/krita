@@ -36,6 +36,7 @@
 
 
 #include <KoFilterManager.h>
+#include <KoProgressUpdater.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -49,7 +50,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_progress_subject.h>
-#include <kis_progress_display_interface.h>
+#include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_view2.h>
@@ -64,7 +65,7 @@ KisChannelSeparator::KisChannelSeparator(KisView2 * view)
 {
 }
 
-void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor)
+void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor)
 {
     KisImageSP image = m_view->image();
     if ( !image ) return;
@@ -72,10 +73,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     KisPaintDeviceSP src = m_view->activeDevice();
     if (!src) return;
 
-    m_cancelRequested = false;
-    if ( progress )
-        progress->setSubject(this, true, true);
-    emit notifyProgressStage(i18n("Separating image..."), 0);
+    progressUpdater->setProgress( 0 );
 
     KoColorSpace * dstCs = 0;
 
@@ -211,17 +209,17 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
         ++i;
 
-        emit notifyProgress((i * 100) / numberOfChannels);
-        if (m_cancelRequested) {
+        progressUpdater->setProgress((i * 100) / numberOfChannels);
+        if (progressUpdater->interrupted()) {
             break;
         }
     }
 
     vKisPaintDeviceSP_it deviceIt = layers.begin();
 
-    emit notifyProgressDone();
+    progressUpdater->setProgress(100);
 
-    if (!m_cancelRequested) {
+    if (!progressUpdater->interrupted()) {
 
         KisUndoAdapter * undo = 0;
         if ((undo = image->undoAdapter()) && undo->undo()) {
@@ -294,8 +292,3 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         image->setModified();
     }
 }
-
-
-
-
-#include "kis_channel_separator.moc"

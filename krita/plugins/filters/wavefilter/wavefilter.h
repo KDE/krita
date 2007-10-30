@@ -42,11 +42,11 @@ class KisFilterWave : public KisFilter
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
         virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
         static inline KoID id() { return KoID("wave", i18n("Wave")); }
-    virtual void cancel() {}
+    
     virtual bool supportsPainting() const { return true; }
         virtual bool supportsPreview() const { return true; }
         virtual bool supportsIncrementalPainting() const { return false; }

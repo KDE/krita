@@ -77,7 +77,7 @@ void KisFilterMax::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater
+                 KoUpdater* progressUpdater
         ) const
 {
 #if 0
@@ -131,7 +131,7 @@ void KisFilterMin::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater
+                 KoUpdater* progressUpdater
         ) const
 {
 #if 0

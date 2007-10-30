@@ -27,14 +27,14 @@
 
 #include "kis_painter.h"
 #include "kis_convolution_painter.h"
-#include "kis_progress_display_interface.h"
+#include "KoProgressUpdater.h"
 #include "kis_progress_subject.h"
 
 void KisConvolutionFilter::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater
+                 KoUpdater* progressUpdater
         ) const
 {
 #if 0
@@ -59,7 +59,7 @@ void KisConvolutionFilter::process(KisFilterConstantProcessingInformation src,
     painter.applyMatrix(m_matrix, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
     if (painter.cancelRequested()) {
-        cancel();
+        progressUpdater->cancel();
     }
 
     setProgressDone();
@@ -69,5 +69,3 @@ void KisConvolutionFilter::process(KisFilterConstantProcessingInformation src,
 int KisConvolutionFilter::overlapMarginNeeded(KisFilterConfiguration* /*c*/) const {
     return qMax(m_matrix->width / 2, m_matrix->height / 2);
 }
-
-#include "kis_convolution_filter.moc"

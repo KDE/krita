@@ -26,8 +26,6 @@
 
 #include <kio/job.h>
 
-#include <kis_progress_subject.h>
-
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_annotation.h"
@@ -60,7 +58,8 @@ enum KisImageBuilder_Result {
 /**
  * This class allows to import/export a PNG from either a file or a QIODevice.
  */
-class KRITAUI_EXPORT KisPNGConverter : public KisProgressSubject {
+// XXX_PROGRESS (pass KoUpdater to the png converter)
+class KRITAUI_EXPORT KisPNGConverter : public QObject {
         Q_OBJECT
     public:
         /**

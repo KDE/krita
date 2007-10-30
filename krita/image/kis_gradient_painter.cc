@@ -497,7 +497,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        qint32 height)
 {
     Q_UNUSED( antiAliasThreshold );
-    m_cancelRequested = false;
 
     if (!m_gradient) return false;
 
@@ -557,7 +556,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     int linesProcessed = 0;
     int lastProgressPercent = 0;
 
-    emit notifyProgressStage(i18n("Rendering gradient..."), 0);
+    m_progressUpdater->setProgress( 0 );
 
 
  /*   if (antiAliasThreshold < 1 - DBL_EPSILON) {
@@ -591,22 +590,22 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         int progressPercent = (linesProcessed * 100) / height;
 
         if (progressPercent > lastProgressPercent) {
-            emit notifyProgress(progressPercent);
+            m_progressUpdater->setProgress(progressPercent);
             lastProgressPercent = progressPercent;
 
-            if (m_cancelRequested) {
+            if (m_progressUpdater->interrupted()) {
                 break;
             }
         }
 
-        if (m_cancelRequested) {
+        if (m_progressUpdater->interrupted()) {
             break;
         }
     }
 
-/*    if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
+/*    if (!m_progressUpdater->interrupted() && antiAliasThreshold < 1 - DBL_EPSILON) {
 
-        emit notifyProgressStage(i18n("Anti-aliasing gradient..."), lastProgressPercent);
+        m_progressUpdater->setProgressStage(i18n("Anti-aliasing gradient..."), lastProgressPercent);
         quint8 * layerPointer = layer.bits();
         for (int y = starty; y <= endy; y++) {
             for (int x = startx; x <= endx; x++) {
@@ -698,28 +697,28 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                 int progressPercent = (pixelsProcessed * 100) / totalPixels;
 
                 if (progressPercent > lastProgressPercent) {
-                    emit notifyProgress(progressPercent);
+                    m_progressUpdater->setProgress(progressPercent);
                     lastProgressPercent = progressPercent;
 
-                    if (m_cancelRequested) {
+                    if (m_progressUpdater->interrupted()) {
                         break;
                     }
                 }
                 layerPointer += 4;
             }
 
-            if (m_cancelRequested) {
+            if (m_progressUpdater->interrupted()) {
                 break;
             }
         }
     }*/
 
-    if (!m_cancelRequested) {
+    if (!m_progressUpdater->interrupted()) {
         bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);
     }
     delete shapeStrategy;
 
-    emit notifyProgressDone();
+    m_progressUpdater->setProgress(100);
 
-    return !m_cancelRequested;
+    return !m_progressUpdater->interrupted();
 }

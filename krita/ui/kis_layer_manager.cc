@@ -70,7 +70,6 @@
 #include "kis_doc2.h"
 #include "kis_filter_manager.h"
 #include "kis_image_commands.h"
-#include "kis_label_progress.h"
 #include "kis_layer_commands.h"
 #include "kis_resource_provider.h"
 #include "kis_selection_manager.h"
@@ -764,7 +763,8 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
         Q_CHECK_PTR(t);
     }
 
-    KisTransformWorker worker(dev, sx, sy, 0, 0, 0.0, 0, 0, m_view->statusBar()->progress(), filterStrategy);
+    // XXX_PROGRESS: pass KoUpdater
+    KisTransformWorker worker(dev, sx, sy, 0, 0, 0.0, 0, 0, 0, filterStrategy);
     worker.run();
 
     if (t) m_view->undoAdapter()->addCommand(t);
@@ -797,7 +797,7 @@ void KisLayerManager::rotateLayer(double radians)
     double cy = r.y()+r.height()/2.0;
     qint32 tx = qint32(cx*cos(radians) - cy*sin(radians) - cx + 0.5);
     qint32 ty = qint32(cy*cos(radians) + cx*sin(radians) - cy + 0.5);
-    KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, radians, -tx, -ty, m_view->statusBar()->progress(), filter);
+    KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, radians, -tx, -ty, 0, filter);
     tw.run();
 
     if (t) m_view->undoAdapter()->addCommand(t);
@@ -819,7 +819,7 @@ void KisLayerManager::shearLayer(double angleX, double angleY)
         undo->beginMacro(i18n("Shear layer"));
     }
 
-    KisShearVisitor v(angleX, angleY, m_view->statusBar()->progress());
+    KisShearVisitor v(angleX, angleY, 0);
     v.setUndoAdapter(undo);
     layer->accept(v);
 

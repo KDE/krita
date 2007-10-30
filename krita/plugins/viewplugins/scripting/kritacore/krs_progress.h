@@ -39,7 +39,7 @@ class KROSSKRITACORE_EXPORT Progress : public KisProgressSubject
 
     public:
         void activateAsSubject();
-        virtual void cancel() {}
+        
 
     public slots:
 

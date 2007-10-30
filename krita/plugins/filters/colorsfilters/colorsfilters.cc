@@ -91,7 +91,7 @@ void KisAutoContrast::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater
+                 KoUpdater* progressUpdater
         ) const
 {
 #if 0
@@ -261,7 +261,7 @@ void KisDesaturateFilter::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater
+                 KoUpdater* progressUpdater
         ) const
 {
 #if 0

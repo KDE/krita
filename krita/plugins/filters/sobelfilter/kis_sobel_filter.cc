@@ -43,7 +43,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_paint_device.h>
-#include <kis_progress_display_interface.h>
+#include <KoProgressUpdater.h>
 
 #include "kis_multi_bool_filter_widget.h"
 #include "kis_sobel_filter.h"
@@ -95,7 +95,7 @@ void KisSobelFilter::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater
+                 KoUpdater* progressUpdater
         ) const
 {
 #if 0

@@ -27,6 +27,8 @@
 #include <kgenericfactory.h>
 #include <kactioncollection.h>
 
+#include <KoProgressUpdater.h>
+
 #include <kis_view2.h>
 #include <kis_types.h>
 #include <kis_image.h>
@@ -83,8 +85,11 @@ void KisSeparateChannelsPlugin::slotSeparate()
 
     if (dlgSeparate->exec() == QDialog::Accepted) {
 
+        KoProgressUpdater pu( m_view->statusBar()->progress() );
+        KoUpdater u = pu.startSubtask();
+
         KisChannelSeparator separator(m_view);
-        separator.separate(m_view->statusBar()->progress(),
+        separator.separate(&u,
                            dlgSeparate->getAlphaOptions(),
                            dlgSeparate->getSource(),
                            dlgSeparate->getOutput(),

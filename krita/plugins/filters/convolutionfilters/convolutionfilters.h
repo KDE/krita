@@ -31,7 +31,7 @@ public:
     static inline KoID id() { return KoID("gaussian blur", i18n("Gaussian Blur")); }
     virtual bool supportsPainting() const { return true; }
     virtual bool supportsIncrementalPainting() const { return false; }
-    virtual void cancel() {}
+    
 };
 
 class KisSharpenFilter : public KisConvolutionFilter {
@@ -41,7 +41,7 @@ public:
     static inline KoID id() { return KoID("sharpen", i18n("Sharpen")); }
     virtual bool supportsPainting() const { return true; }
     virtual bool supportsIncrementalPainting() const { return false; }
-    virtual void cancel() {}
+    
 };
 
 class KisMeanRemovalFilter : public KisConvolutionFilter {
@@ -50,7 +50,7 @@ public:
 public:
     static inline KoID id() { return KoID("mean removal", i18n("Mean Removal")); }
     virtual bool supportsPainting() const { return false; }
-    virtual void cancel() {}
+    
 
 };
 
@@ -60,7 +60,7 @@ public:
 public:
     static inline KoID id() { return KoID("emboss laplascian", i18n("Emboss Laplascian")); }
     virtual bool supportsPainting() const { return false; }
-    virtual void cancel() {}
+    
 
 };
 
@@ -70,7 +70,7 @@ public:
 public:
     static inline KoID id() { return KoID("emboss all directions", i18n("Emboss in All Directions")); }
     virtual bool supportsPainting() const { return false; }
-    virtual void cancel() {}
+    
 
 };
 
@@ -80,7 +80,7 @@ public:
 public:
     static inline KoID id() { return KoID("", i18n("Emboss Horizontal & Vertical")); }
     virtual bool supportsPainting() const { return false; }
-    virtual void cancel() {}
+    
 };
 
 class KisEmbossVerticalFilter : public KisConvolutionFilter {
@@ -89,7 +89,7 @@ public:
 public:
     static inline KoID id() { return KoID("emboss vertical only", i18n("Emboss Vertical Only")); }
     virtual bool supportsPainting() const { return false; }
-    virtual void cancel() {}
+    
 
 };
 
@@ -99,7 +99,7 @@ public:
 public:
     static inline KoID id() { return KoID("emboss horizontal only", i18n("Emboss Horizontal Only")); }
     virtual bool supportsPainting() const { return false; }
-    virtual void cancel() {}
+    
 };
 
 class KisEmbossDiagonalFilter : public KisConvolutionFilter {
@@ -108,7 +108,7 @@ public:
 public:
     static inline KoID id() { return KoID("emboss diagonal", i18n("Emboss Diagonal")); }
     virtual bool supportsPainting() const { return false; }
-    virtual void cancel() {}
+    
 };
 
 class KisTopEdgeDetectionFilter : public KisConvolutionFilter {
@@ -117,7 +117,7 @@ public:
 public:
     static inline KoID id() { return KoID("top edge detections", i18n("Top Edge Detection")); }
     virtual bool supportsPainting() const { return false; }
-    virtual void cancel() {}
+    
 };
 
 class KisRightEdgeDetectionFilter : public KisConvolutionFilter {
@@ -126,7 +126,7 @@ public:
 public:
     static inline KoID id() { return KoID("right edge detections", i18n("Right Edge Detection")); }
     virtual bool supportsPainting() const { return false; }
-    virtual void cancel() {}
+    
 };
 
 class KisBottomEdgeDetectionFilter : public KisConvolutionFilter {
@@ -135,7 +135,7 @@ public:
 public:
     static inline KoID id() { return KoID("bottom edge detections", i18n("Bottom Edge Detection")); }
     virtual bool supportsPainting() const { return false; }
-    virtual void cancel() {}
+    
 };
 
 class KisLeftEdgeDetectionFilter : public KisConvolutionFilter {
@@ -144,7 +144,7 @@ public:
 public:
     static inline KoID id() { return KoID("left edge detections", i18n("Left Edge Detection")); }
     virtual bool supportsPainting() const { return false; }
-    virtual void cancel() {}
+    
 };
 
 

@@ -117,10 +117,8 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
     // Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
     if (w < kw || h < kh || (kw&1) == 0 || (kh&1) == 0 || kernel->factor == 0 ) return;
 
-    m_cancelRequested = false;
     int lastProgressPercent = 0;
-    emit notifyProgress(0);
-
+    if (m_progressUpdater) m_progressUpdater->setProgress(0);
     KoColorSpace * cs = m_device->colorSpace();
     KoConvolutionOp * convolutionOp = cs->convolutionOp();
 
@@ -213,10 +211,10 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
         int progressPercent = 100 - ((((y + h) - row) * 100) / h);
 
         if (progressPercent > lastProgressPercent) {
-            emit notifyProgress(progressPercent);
+            m_progressUpdater->setProgress(progressPercent);
             lastProgressPercent = progressPercent;
 
-            if (m_cancelRequested) {
+            if (m_progressUpdater->interrupted()) {
                 for (int i = 0; i < cacheSize; i++)
                     delete[] pixelPtrCache[i];
                 delete[] pixelPtrCache;
@@ -229,7 +227,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
 
     addDirtyRect(QRect(x, y, w, h));
 
-    emit notifyProgressDone();
+    m_progressUpdater->setProgress(100);
 
     for (int i = 0; i < cacheSize; i++)
         delete[] pixelPtrCache[i];
@@ -409,10 +407,10 @@ void KisConvolutionPainter::applyMatrixRepeat( KisKernelSP kernel, qint32 x, qin
         int progressPercent = 100 - ((((y + h) - row) * 100) / h);
 
         if (progressPercent > lastProgressPercent) {
-            emit notifyProgress(progressPercent);
+            m_progressUpdater->setProgress(progressPercent);
             lastProgressPercent = progressPercent;
 
-            if (m_cancelRequested) {
+            if (m_progressUpdater->interrupted()) {
                 for (int i = 0; i < cacheSize; i++)
                     delete[] pixelPtrCache[i];
                 delete[] pixelPtrCache;
@@ -425,7 +423,7 @@ void KisConvolutionPainter::applyMatrixRepeat( KisKernelSP kernel, qint32 x, qin
 
     addDirtyRect(QRect(x, y, w, h));
 
-    emit notifyProgressDone();
+    m_progressUpdater->setProgress(100);
 
     for (int i = 0; i < cacheSize; i++)
         delete[] pixelPtrCache[i];

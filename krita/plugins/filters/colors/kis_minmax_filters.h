@@ -32,14 +32,14 @@ class KisFilterMax : public KisFilter
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
         static inline KoID id() { return KoID("maximize", i18n("Maximize Channel")); }
         virtual bool supportsPainting() const { return true; }
         virtual bool supportsPreview() const { return true; }
         virtual bool supportsIncrementalPainting() const { return false; }
         virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
-    virtual void cancel() {}
+    
 };
 
 class KisFilterMin : public KisFilter
@@ -51,14 +51,14 @@ class KisFilterMin : public KisFilter
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
         static inline KoID id() { return KoID("minimize", i18n("Minimize Channel")); }
         virtual bool supportsPainting() const { return true; }
         virtual bool supportsPreview() const { return true; }
         virtual bool supportsIncrementalPainting() const { return false; }
         virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
-    virtual void cancel() {}
+    
 };
 
 #endif

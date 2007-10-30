@@ -27,8 +27,8 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 
-#include "kis_progress_subject.h"
-#include "KoColorSpace.h"
+#include <KoColorSpace.h>
+#include <KoProgressUpdater.h>
 #include "kis_selection.h"
 
 #include <krita_export.h>
@@ -57,7 +57,7 @@ class KisPaintInformation;
  * For more complex operations, you might want to have a look at the subclasses
  * of KisPainter: KisConvolutionPainter, KisFillPainter and KisGradientPainter
  */
-class KRITAIMAGE_EXPORT KisPainter : public KisProgressSubject {
+class KRITAIMAGE_EXPORT KisPainter {
 
 
 public:
@@ -68,10 +68,6 @@ public:
     KisPainter( KisPaintDeviceSP device );
     KisPainter(KisPaintDeviceSP device, KisSelectionSP selection);
     virtual ~KisPainter();
-
-private:
-    // Implement KisProgressSubject
-    virtual void cancel() { m_cancelRequested = true; }
 
 public:
     /**
@@ -84,6 +80,14 @@ public:
      * Finish painting on the current device
      */
     QUndoCommand *end();
+
+    /**
+     * If set, the painter action is cancelable, if the action supports that.
+     */
+    void setProgress(KoUpdater * progressUpdater)
+        {
+            m_progressUpdater = progressUpdater;
+        }
 
     /// Begin an undoable paint operation
     void beginTransaction(const QString& customName = QString::null);
@@ -574,9 +578,6 @@ public:
     /// Get the currently set dab
     KisPaintDeviceSP dab() const { return m_dab; }
 
-    /// Is cancel Requested by the KisProgressSubject for this painter
-    bool cancelRequested() const { return m_cancelRequested; }
-
     /// Set the composite op for this painter
     void setCompositeOp(const KoCompositeOp * op) { m_compositeOp = op; }
     const KoCompositeOp * compositeOp() { return m_compositeOp; }
@@ -611,6 +612,7 @@ protected:
     KisPaintDeviceSP m_device;
     KisSelectionSP m_selection;
     KisTransaction  *m_transaction;
+    KoUpdater * m_progressUpdater;
 
     QRegion m_dirtyRegion;
     QRect m_dirtyRect;
@@ -630,7 +632,6 @@ protected:
     quint8 m_opacity;
     KisPaintOp * m_paintOp;
     double m_pressure;
-    bool m_cancelRequested;
     qint32 m_pixelSize;
     KoColorSpace * m_colorSpace;
     KoColorProfile *  m_profile;

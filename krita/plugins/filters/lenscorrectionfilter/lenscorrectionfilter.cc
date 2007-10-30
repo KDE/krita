@@ -93,7 +93,7 @@ void KisFilterLensCorrection::process(KisFilterConstantProcessingInformation src
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater
+                 KoUpdater* progressUpdater
         ) const
 {
 #if 0

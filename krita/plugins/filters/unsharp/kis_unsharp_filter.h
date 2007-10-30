@@ -32,12 +32,12 @@ class KisUnsharpFilter : public KisFilter
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater = 0
         ) const;
         static inline KoID id() { return KoID("unsharpmask", i18n("Unsharp Mask")); }
         virtual bool supportsPainting() const { return true; }
         virtual bool supportsPreview() const { return true; }
-    virtual void cancel() {}
+    
     virtual bool supportsIncrementalPainting() const { return false; }
         virtual bool supportsAdjustmentLayers() const { return false; }
         virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }

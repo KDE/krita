@@ -47,7 +47,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_progress_subject.h>
-#include <kis_progress_display_interface.h>
+#include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_view2.h>
@@ -66,7 +66,7 @@ KisDropshadow::KisDropshadow(KisView2 * view)
 {
 }
 
-void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xoffset, qint32 yoffset, qint32 blurradius, QColor color, quint8 opacity, bool allowResize)
+void KisDropshadow::dropshadow(KoUpdater * progressUpdater, qint32 xoffset, qint32 yoffset, qint32 blurradius, QColor color, quint8 opacity, bool allowResize)
 {
     KisImageSP image = m_view->image();
     if (!image) return;
@@ -76,11 +76,6 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
 
     KisPaintDeviceSP dev = m_view->activeDevice();
     if (!dev) return;
-
-    m_cancelRequested = false;
-    if ( progress )
-        progress->setSubject(this, true, true);
-    emit notifyProgressStage(i18n("Add drop shadow..."), 0);
 
     if (image->undo()) {
         image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
@@ -110,17 +105,17 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
         }
         srcIt.nextRow();
         dstIt.nextRow();
-        emit notifyProgress((row * 100) / rect.height() );
+        progressUpdater->setProgress((row * 100) / rect.height() );
     }
 
     if( blurradius > 0 )
     {
         bShadowDev = new KisPaintDevice( KoColorSpaceRegistry::instance()->colorSpace("RGBA",0 ), "bShadow");
-        gaussianblur(shadowDev, bShadowDev, rect, blurradius, blurradius, BLUR_RLE, progress);
+        gaussianblur(progressUpdater, shadowDev, bShadowDev, rect, blurradius, blurradius, BLUR_RLE, progressUpdater);
         shadowDev = bShadowDev;
     }
 
-    if (!m_cancelRequested) {
+    if (!progressUpdater->interrupted()) {
         shadowDev->move (xoffset,yoffset);
 
         KisGroupLayerSP parent = image->rootLayer();
@@ -166,10 +161,10 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
         image->undoAdapter()->endMacro();
     }
 
-    emit notifyProgressDone();
+    progressUpdater->setProgress(100);
 }
 
-void KisDropshadow::gaussianblur (KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev, QRect& rect, double horz, double vert, BlurMethod method, KisProgressDisplayInterface *)
+void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev, QRect& rect, double horz, double vert, BlurMethod method, KoUpdater *)
 {
     qint32 width, height;
     qint32 bytes;
@@ -209,7 +204,7 @@ void KisDropshadow::gaussianblur (KisPaintDeviceSP srcDev, KisPaintDeviceSP dstD
 
     if (width < 1 || height < 1) return;
 
-    emit notifyProgressStage(i18n("Blur..."), 0);
+    progressUpdater->setProgress(0);
 
     bytes = srcDev->pixelSize();
 
@@ -376,7 +371,7 @@ void KisDropshadow::gaussianblur (KisPaintDeviceSP srcDev, KisPaintDeviceSP dstD
             dstDev->writeBytes(dest, col + x1, y1, 1, height);
 
             progress += height * vert;
-            if ((col % 5) == 0) emit notifyProgress( (quint32)((progress * 100) / max_progress));
+            if ((col % 5) == 0) progressUpdater->setProgress( (quint32)((progress * 100) / max_progress));
         }
     }
 
@@ -529,7 +524,7 @@ void KisDropshadow::gaussianblur (KisPaintDeviceSP srcDev, KisPaintDeviceSP dstD
 
             progress += width * horz;
             //if ((row % 5) == 0) gimp_progress_update (progress / max_progress);
-            if ((row % 5) == 0) emit notifyProgress( (quint32)((progress * 100) / max_progress ));
+            if ((row % 5) == 0) progressUpdater->setProgress( (quint32)((progress * 100) / max_progress ));
         }
     }
 

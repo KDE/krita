@@ -20,16 +20,13 @@
 #define KIS_STATUSBAR_H
 
 #include <QObject>
+#include <QProgressBar>
 
 #include <kis_types.h>
-#include "kis_label_progress.h"
 
 class QLabel;
 class KStatusBar;
 class KSqueezedTextLabel;
-
-
-class KisLabelProgress;
 class KisView2;
 
 /// XXX: Conform to Karbon in our statusbar
@@ -50,20 +47,15 @@ public slots:
     void setSelection( KisImageSP img );
     void setProfile( KisImageSP img );
     void setHelp( const QString &t );
-
-    KisProgressDisplayInterface * progress()
+    void updateStatusBarProfileLabel();
+    QProgressBar * progress()
         {
             return m_progress;
         }
-
-
-
-    void updateStatusBarProfileLabel();
-
 private:
 
     KisView2 * m_view;
-
+    QProgressBar * m_progress;
     KStatusBar * m_statusbar;
 
     QLabel *m_statusBarZoomLabel; // Make interactive line edit
@@ -73,9 +65,6 @@ private:
     KSqueezedTextLabel *m_statusBarSelectionLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;
     KSqueezedTextLabel *m_statusBarHelpLabel;
-
-    KisLabelProgress *m_progress;
-
 
 };
 

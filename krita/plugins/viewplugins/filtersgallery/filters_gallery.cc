@@ -31,7 +31,7 @@
 #include "KoColorSpaceRegistry.h"
 
 #include "kis_undo_adapter.h"
-#include "kis_progress_display_interface.h"
+#include "KoProgressUpdater.h"
 #include "kis_dlg_filtersgallery.h"
 #include "kis_filter.h"
 #include "kis_filters_listview.h"
@@ -109,9 +109,9 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
                 rect = rect.intersect(r3);
             }
             KisFilterConfiguration* config = dlg.currentConfigWidget()->configuration();
-
-            m_view->statusBar()->progress()->setSubject(filter, true, true);
-//             filter->setProgressDisplay(m_view->statusBar()->progress()); // TODO: port to KoProgressUpdater
+// XXX_PROGRESS
+//            m_view->statusBar()->progress()->setSubject(filter, true, true);
+//             filter->setProgressDisplay(m_view->statusBar()->progress()); // TODO: port to KoUpdater
 
             KisTransaction * cmd = new KisTransaction(filter->name(), dev);
 

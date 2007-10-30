@@ -64,7 +64,7 @@ void KisSimpleNoiseReducer::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater
+                 KoUpdater* progressUpdater
         ) const
 {
 #if 0
@@ -94,7 +94,7 @@ void KisSimpleNoiseReducer::process(KisFilterConstantProcessingInformation src,
     painter.applyMatrix(kernel, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
     if (painter.cancelRequested()) {
-        cancel();
+        progressUpdater->cancel();
     }
 
 

@@ -38,7 +38,6 @@ set(kritaimage_LIB_SRCS
    kis_projection.cc
    kis_adjustment_layer.cc
    kis_paint_engine.cc
-   kis_progress_subject.cc
    kis_qimage_mask.cc
    kis_autobrush_resource.cc
    kis_autogradient_resource.cc

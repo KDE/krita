@@ -44,7 +44,7 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_progress_display_interface.h>
+#include <KoProgressUpdater.h>
 
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_pixelize_filter.h"
@@ -59,7 +59,7 @@ void KisPixelizeFilter::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoProgressUpdater* progressUpdater
+                 KoUpdater* progressUpdater
         ) const
 {
 #if 0

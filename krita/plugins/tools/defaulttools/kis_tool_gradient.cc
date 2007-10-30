@@ -48,7 +48,7 @@
 #include "kis_double_widget.h"
 #include "kis_gradient_painter.h"
 #include "kis_painter.h"
-#include "kis_progress_display_interface.h"
+#include "KoProgressUpdater.h"
 #include "kis_resource_provider.h"
 #include "kis_config.h"
 #include "kis_layer.h"
@@ -270,7 +270,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             painter.setCompositeOp(m_compositeOp);
 
 
-            /* KisProgressDisplayInterface *progress = m_subject->progressDisplay();
+            /* KoUpdater *progress = m_subject->progressDisplay();
 
             if (progress) {
                 progress->setSubject(&painter, true, true);

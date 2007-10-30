@@ -34,7 +34,7 @@
 #include "kis_external_layer_iface.h"
 #include "kis_undo_adapter.h"
 
-class KisProgressDisplayInterface;
+class KoUpdater;
 class KisFilterStrategy;
 
 class KisTransformVisitor : public KisNodeVisitor {
@@ -43,7 +43,7 @@ public:
 
     KisTransformVisitor(KisImageSP img, double  xscale, double  yscale,
         double  /*xshear*/, double  /*yshear*/, double angle,
-        qint32  tx, qint32  ty, KisProgressDisplayInterface *progress, KisFilterStrategy *filter)
+        qint32  tx, qint32  ty, KoUpdater *progress, KisFilterStrategy *filter)
         : KisNodeVisitor()
         , m_sx(xscale)
         , m_sy(yscale)
@@ -114,7 +114,7 @@ private:
     qint32 m_tx, m_ty;
     KisFilterStrategy *m_filter;
     double m_angle;
-    KisProgressDisplayInterface *m_progress;
+    KoUpdater *m_progress;
     KisImageSP m_img;
 };
 

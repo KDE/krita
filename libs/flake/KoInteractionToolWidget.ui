@@ -189,7 +189,7 @@
     <item row="1" column="0" colspan="5" >
      <widget class="QGroupBox" name="alignmentGroup" >
       <property name="title" >
-       <string>Aligment</string>
+       <string>Alignment</string>
       </property>
       <property name="alignment" >
        <set>Qt::AlignHCenter</set>

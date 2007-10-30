@@ -238,8 +238,7 @@ KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* pa
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size"), "brushSize" ) );
     param.push_back( KisIntegerWidgetParam( 10, 255, 30, i18n("Smooth"), "smooth" ) );
-    // return new KisMultiIntegerFilterWidget(id.name(), parent, id().id(), param );
-    return 0;
+    return new KisMultiIntegerFilterWidget( id().id(),  parent,  id().id(),  param );
 }
 
 KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget)

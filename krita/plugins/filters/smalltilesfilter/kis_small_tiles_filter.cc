@@ -144,8 +144,8 @@ KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* 
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 5, 1, i18n("Number of tiles"), "smalltiles" ) );
-    //return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
-    return 0;
+    return new KisMultiIntegerFilterWidget( id().id(),  parent,  id().id(),  param );
+
 }
 
 KisFilterConfiguration* KisSmallTilesFilter::configuration(QWidget* nwidget)

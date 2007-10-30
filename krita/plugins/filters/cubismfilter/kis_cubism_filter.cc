@@ -442,8 +442,7 @@ KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* pare
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile size"), "tileSize" ) );
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile saturation"), "tileSaturation" ) );
-    //    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
-    return 0;
+    return new KisMultiIntegerFilterWidget( id().id(),  parent,  id().id(),  param );
 }
 
 KisFilterConfiguration* KisCubismFilter::configuration(QWidget* nwidget)

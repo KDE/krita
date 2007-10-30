@@ -647,10 +647,10 @@ void KoInteractionTool::recalcSelectionBox() {
     d->selectionBox[KoFlake::BottomLeftHandle] = outline.value(3);
     d->selectionBox[KoFlake::LeftMiddleHandle] = (outline.value(3)+outline.value(0))/2;
     d->selectionBox[KoFlake::TopLeftHandle] = outline.value(0);
-    if(koSelection()->count() == 1) {
+    if (koSelection()->count() == 1) {
+#if 0        // TODO detect mirroring
         KoShape *s = koSelection()->firstSelectedShape();
-        // TODO detect mirroring
-        /*
+
         if(s->scaleX() < 0) { // vertically mirrored: swap left / right
             qSwap(d->selectionBox[KoFlake::TopLeftHandle], d->selectionBox[KoFlake::TopRightHandle]);
             qSwap(d->selectionBox[KoFlake::LeftMiddleHandle], d->selectionBox[KoFlake::RightMiddleHandle]);
@@ -661,7 +661,7 @@ void KoInteractionTool::recalcSelectionBox() {
             qSwap(d->selectionBox[KoFlake::TopMiddleHandle], d->selectionBox[KoFlake::BottomMiddleHandle]);
             qSwap(d->selectionBox[KoFlake::TopRightHandle], d->selectionBox[KoFlake::BottomRightHandle]);
         }
-        */
+#endif
     }
 }
 

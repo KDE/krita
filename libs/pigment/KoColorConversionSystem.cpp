@@ -79,7 +79,7 @@ class KoMultipleColorConversionTransformation : public KoColorConversionTransfor
 };
 
 struct KoColorConversionSystem::Node {
-    Node() : isIcc(false), isHdr(false), referenceDepth(0), isGray(false), isInitialized(false), canBeCrossed(true), colorSpaceFactory(0) {}
+    Node() : isIcc(false), isHdr(false), isInitialized(false), referenceDepth(0), isGray(false), canBeCrossed(true), colorSpaceFactory(0) {}
     void init( const KoColorSpaceFactory* _colorSpaceFactory)
     {
         Q_ASSERT(not isInitialized);

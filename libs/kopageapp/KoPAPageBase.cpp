@@ -152,6 +152,9 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
     return true;
 }
 
-void KoPAPageBase::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
+void KoPAPageBase::loadOdfPageTag( const KoXmlElement &element, 
+                                   KoPALoadingContext &loadingContext )
 {
+    Q_UNUSED( element );
+    Q_UNUSED( loadingContext );
 }

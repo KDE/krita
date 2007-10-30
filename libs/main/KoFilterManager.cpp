@@ -570,13 +570,13 @@ bool KoFilterManager::filterAvailable( KoFilterEntry::Ptr entry )
         }
 
         // This code is "borrowed" from klibloader ;)
-        QByteArray symname = "check_" + QString( library->name() ).toLatin1();
+        QByteArray symname = "check_" + QString( library->objectName() ).toLatin1();
 	KLibrary::void_function_ptr sym = library->resolveFunction( symname );
         if ( !sym )
         {
-            kWarning( 30500 ) << "The library " << library->name()
-                               << " does not offer a check_" << library->name()
-                               << " function." << endl;
+            kWarning( 30500 ) << "The library " << library->objectName()
+                              << " does not offer a check_" << library->objectName()
+                              << " function." << endl;
             m_filterAvailable[ key ] = false;
         }
         else {

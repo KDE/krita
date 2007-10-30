@@ -364,6 +364,9 @@ QMimeData * KoPADocumentModel::mimeData( const QModelIndexList & indexes ) const
 
 bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
 {
+    Q_UNUSED( row );
+    Q_UNUSED( column );
+
     // check if the action is supported
     if( ! data || action != Qt::MoveAction )
         return false;

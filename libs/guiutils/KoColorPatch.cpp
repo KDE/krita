@@ -48,6 +48,8 @@ KoColor KoColorPatch::color() const
 
 void KoColorPatch::mousePressEvent (QMouseEvent *e )
 {
+    Q_UNUSED( e );
+
     emit triggered(this);
 }
 

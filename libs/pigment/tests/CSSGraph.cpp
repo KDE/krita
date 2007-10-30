@@ -104,7 +104,7 @@ int main(int argc, char** argv)
             dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->bestPathToDot(srcColorModel, srcColorDepth, dstColorModel, dstColorDepth);
         }
     } else {
-        kError() << "Unknow graph type : " << graphType.latin1();
+        kError() << "Unknow graph type : " << graphType.toLatin1();
         exit(EXIT_FAILURE);
     }
     if(outputType == "dot")
@@ -129,7 +129,7 @@ int main(int argc, char** argv)
             kError() << "An error has occured when executing : '" << cmd << "' it's most likely that the command 'dot' is missing, and that you should install graphviz (from http://www.graphiz.org)";
         }
     } else {
-        std::cout << "Unknow output type : " << outputType.latin1() << std::endl;
+        kDebug() << "Unknow output type : " << outputType;
         exit(EXIT_FAILURE);
     }
 }

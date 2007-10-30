@@ -57,14 +57,20 @@ public:
         return false;
     }
 
-    virtual void addCommand(QUndoCommand *command) {};
+    virtual void addCommand(QUndoCommand *command)
+    {
+        Q_UNUSED( command );
+    };
 
     virtual KoShapeManager *shapeManager() const
     {
         return m_shapeManager;
     };
 
-    virtual void updateCanvas(const QRectF& rc) {};
+    virtual void updateCanvas(const QRectF& rc) 
+    {
+        Q_UNUSED( rc );
+    };
 
     virtual KoToolProxy * toolProxy() const
     {

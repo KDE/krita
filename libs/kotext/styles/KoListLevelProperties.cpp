@@ -260,12 +260,17 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list) {
 
 void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXmlElement& style) {
 
-    // The text:level attribute specifies the level of the number list style. It can be used on all list-level styles.
-    const int level = qMax(1, style.attributeNS( KoXmlNS::text, "level", QString() ).toInt() );
-    // The text:display-levels attribute specifies the number of levels whose numbers are displayed at the current level.
-    const QString displayLevel = style.attributeNS( KoXmlNS::text, "display-levels", QString() );
+    Q_UNUSED( context );
 
-    if( style.localName() == "list-level-style-bullet" ) { // list with bullets
+    // The text:level attribute specifies the level of the number list
+    // style. It can be used on all list-level styles.
+    const int level = qMax(1, style.attributeNS( KoXmlNS::text, "level", QString() ).toInt() );
+    // The text:display-levels attribute specifies the number of
+    // levels whose numbers are displayed at the current level.
+    const QString displayLevel = style.attributeNS( KoXmlNS::text,
+                                                    "display-levels", QString() );
+
+    if ( style.localName() == "list-level-style-bullet" ) { // list with bullets
 
         //1.6: KoParagCounter::loadOasisListStyle
         QString bulletChar = style.isNull() ? QString() : style.attributeNS( KoXmlNS::text, "bullet-char", QString() );

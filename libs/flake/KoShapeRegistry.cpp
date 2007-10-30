@@ -41,13 +41,21 @@
 class FrameShape : public KoShape
 {
 public:
-    virtual void paint(QPainter &painter, const KoViewConverter &converter) {};
+    virtual void paint(QPainter &painter, const KoViewConverter &converter) 
+    {
+        Q_UNUSED( painter );
+        Q_UNUSED( converter );
+    };
+
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
     {
         loadOdfAttributes( element, context, FrameAttributes );
         return true;
     };
-    virtual void saveOdf( KoShapeSavingContext & context ) const {};
+    virtual void saveOdf( KoShapeSavingContext & context ) const 
+    {
+        Q_UNUSED( context );
+    };
 
     void setAttributes( KoShape * shape )
     {

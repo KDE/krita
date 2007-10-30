@@ -101,7 +101,7 @@ bool KoSegmentGradient::init()
 
     if (nameDefinition.startsWith("Name: ")) {
         QString nameText = nameDefinition.right(nameDefinition.length() - 6);
-        setName(i18n(nameText.ascii()));
+        setName(i18n(nameText.toAscii()));
 
         numSegmentsText = fileContent.readLine();
     }
@@ -111,7 +111,7 @@ bool KoSegmentGradient::init()
         numSegmentsText = nameDefinition;
     }
 
-    kdDebug() << "Loading gradient: " << name() << endl;
+    kDebug() << "Loading gradient: " << name() << endl;
 
     int numSegments;
     bool ok;
@@ -122,7 +122,7 @@ bool KoSegmentGradient::init()
         return false;
     }
 
-    kdDebug() << "Number of segments = " << numSegments << endl;
+    kDebug() << "Number of segments = " << numSegments << endl;
 
     KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 

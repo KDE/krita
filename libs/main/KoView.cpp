@@ -688,6 +688,8 @@ void KoView::setupGlobalActions()
 
 void KoView::setupPrinter( QPrinter &, QPrintDialog &printDialog )
 {
+    Q_UNUSED( printDialog );
+
     kDebug(30003) <<"KoView::setupPrinter not implemented by the application!";
 }
 

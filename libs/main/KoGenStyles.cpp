@@ -263,7 +263,7 @@ void KoGenStyles::saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDot
 {
     xmlWriter->startElement( "office:automatic-styles" );
 
-    for ( int i = 0; i < numAutoStyleData; ++i ) {
+    for ( uint i = 0; i < numAutoStyleData; ++i ) {
         QList<KoGenStyles::NamedStyle> stylesList = styles( int( autoStyleData[i].m_type ), stylesDotXml );
         QList<KoGenStyles::NamedStyle>::const_iterator it = stylesList.begin();
         for ( ; it != stylesList.end() ; ++it ) {
@@ -280,7 +280,7 @@ void KoGenStyles::saveOdfDocumentStyles( KoXmlWriter* xmlWriter ) const
 {
     xmlWriter->startElement( "office:styles" );
 
-    for ( int i = 0; i < numStyleData; ++i ) {
+    for ( uint i = 0; i < numStyleData; ++i ) {
         QMap<int, KoGenStyle>::iterator it( m_defaultStyles.find( styleData[i].m_type ) );
         if ( it != m_defaultStyles.end() ) {
             it.value().writeStyle( xmlWriter, *this, "style:default-style", "",
@@ -288,7 +288,7 @@ void KoGenStyles::saveOdfDocumentStyles( KoXmlWriter* xmlWriter ) const
         }
     }
 
-    for ( int i = 0; i < numStyleData; ++i ) {
+    for ( uint i = 0; i < numStyleData; ++i ) {
         QList<KoGenStyles::NamedStyle> stylesList = styles( int( styleData[i].m_type ) );
         QList<KoGenStyles::NamedStyle>::const_iterator it = stylesList.begin();
         for ( ; it != stylesList.end() ; ++it ) {

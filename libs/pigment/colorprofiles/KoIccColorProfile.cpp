@@ -203,12 +203,11 @@ bool KoIccColorProfile::load()
     QByteArray rawData = file.readAll();
     setRawData(rawData);
     file.close();
-    if(init())
-    {
+    if (init())
         return true;
-    } else {
-        kWarning() << "Failed to load profile from " << fileName();
-    }
+
+    kWarning() << "Failed to load profile from " << fileName();
+    return false;
 }
 
 bool KoIccColorProfile::save()

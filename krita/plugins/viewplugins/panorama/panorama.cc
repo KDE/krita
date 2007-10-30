@@ -75,8 +75,8 @@ PanoramaPlugin::PanoramaPlugin(QObject *parent, const QStringList &)
         actionCollection()->addAction("PanoramaLayer", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotCreatePanoramaLayer()));
     }
-//     KisInterestPointsDetector::setInterestPointDetector(0, new HarrisPointDetector);
-    KisInterestPointsDetector::setInterestPointDetector(1, new KisHessianDetector());
+    KisInterestPointsDetector::setInterestPointDetector(0, new HarrisPointDetector);
+//     KisInterestPointsDetector::setInterestPointDetector(1, new KisHessianDetector());
 }
 
 PanoramaPlugin::~PanoramaPlugin()

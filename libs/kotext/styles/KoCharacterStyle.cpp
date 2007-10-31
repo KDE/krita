@@ -194,12 +194,12 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         case Capitalize:
             format.setProperty(TransformText, Capitalize);
             // fall through
-        case NoTransform:
-            format.setFontCapitalization(QFont::NormalCaps);
+        case MixedCase:
+            format.setFontCapitalization(QFont::MixedCase);
             break;
         case SmallCaps: format.setFontCapitalization(QFont::SmallCaps); break;
-        case Uppercase: format.setFontCapitalization(QFont::Uppercase); break;
-        case Lowercase: format.setFontCapitalization(QFont::Lowercase); break;
+        case AllUppercase: format.setFontCapitalization(QFont::AllUppercase); break;
+        case AllLowercase: format.setFontCapitalization(QFont::AllLowercase); break;
         }
     }
 #endif
@@ -624,9 +624,9 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
     else if ( styleStack.hasProperty( KoXmlNS::fo, "text-transform" ) ) {
         QString textTransform = styleStack.property( KoXmlNS::fo, "text-transform" );
         if ( textTransform == "uppercase" )
-            setTransform( Uppercase );
+            setTransform( AllUppercase );
         else if ( textTransform == "lowercase" )
-            setTransform( Lowercase );
+            setTransform( AllLowercase );
         else if ( textTransform == "capitalize" )
             setTransform( Capitalize );
     }

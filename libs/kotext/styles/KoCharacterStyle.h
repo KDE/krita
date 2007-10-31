@@ -82,10 +82,10 @@ public:
 
     /// Text transformation
     enum Transform {
-        NoTransform = 0, ///< No text-transformation. This is the default value.
+        MixedCase = 0, ///< No text-transformation. This is the default value.
         SmallCaps, ///< Small capitalized letters.
-        Uppercase, ///< Uppercase characters. E.g. "My teXT"=>"MY TEXT"
-        Lowercase, ///< Lowercase characters. E.g. "My teXT"=>"my text"
+        AllUppercase, ///< Uppercase characters. E.g. "My teXT"=>"MY TEXT"
+        AllLowercase, ///< Lowercase characters. E.g. "My teXT"=>"my text"
         Capitalize ///< Capitalize characters. E.g. "my text"=>"My Text"
     };
 

@@ -46,7 +46,7 @@
 #include <kis_undo_adapter.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_progress_subject.h>
+
 #include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

@@ -21,13 +21,12 @@
 #define KIS_PERSPECTIVETRANSFORM_WORKER_H
 
 #include "kis_types.h"
-#include "kis_progress_subject.h"
 #include <QRect>
 
 class QPointF;
 class KoUpdater;
 
-class KisPerspectiveTransformWorker : public KisProgressSubject
+class KisPerspectiveTransformWorker : public QObject
 {
     public:
         KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdater *progress);

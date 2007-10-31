@@ -28,7 +28,6 @@
 #include "kis_painter.h"
 #include "kis_convolution_painter.h"
 #include "KoProgressUpdater.h"
-#include "kis_progress_subject.h"
 
 void KisConvolutionFilter::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,

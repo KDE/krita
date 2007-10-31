@@ -99,7 +99,7 @@ bool KoPictureBase::saveAsBase64( KoXmlWriter& writer ) const
     buffer.open(QIODevice::ReadWrite);
     if ( !save( &buffer ) )
         return false;
-    QByteArray encoded = KCodecs::base64Encode( buffer.buffer() );
+    QByteArray encoded = buffer.buffer().toBase64();
     writer.addTextNode( encoded );
     return true;
 }

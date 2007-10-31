@@ -347,9 +347,7 @@ QString KoPictureShared::getMimeType(void) const
 bool KoPictureShared::loadFromBase64( const QByteArray& str )
 {
     clear();
-    QByteArray data;
-    KCodecs::base64Decode( str, data );
-    return identifyAndLoad( data );
+    return identifyAndLoad( QByteArray::fromBase64(str) );
 }
 
 bool KoPictureShared::load(QIODevice* io, const QString& extension)

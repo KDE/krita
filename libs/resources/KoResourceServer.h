@@ -25,50 +25,104 @@
 #include <QString>
 #include <QStringList>
 #include <QList>
+#include <QFileInfo>
 
-#include "KoGenericRegistry.h"
+#include <kdebug.h>
+
+#include "KoResource.h"
+
 #include <koresource_export.h>
 
 class KoResource;
 
-class KORESOURCES_EXPORT KoResourceServerBase : public QObject {
-    Q_OBJECT
+class KoResource;
+
+class KORESOURCES_EXPORT KoResourceServerBase {
+
 public:
-    KoResourceServerBase(const QString & type);
-    virtual ~KoResourceServerBase();
+    KoResourceServerBase() {}
+    virtual ~KoResourceServerBase() {}
 
-    void loadResources(QStringList filenames);
-    /// Adds an already loaded resource to the server
-    void addResource(KoResource* resource);
-    /// Remove a resource from resourceserver and hard disk
-    void removeResource(KoResource* resource);
-    QList<KoResource*> resources();
-    QString type() { return m_type; }
-    QString id() const { return QString(); }
-    QString name() const { return QString(); }
-
-signals:
-    void resourceAdded(KoResource*);
-
-protected:
-    virtual KoResource* createResource( const QString & filename ) = 0;
-
-private:
-    QList<KoResource*> m_resources;
-    QString m_type;
-
-    bool m_loaded;
-
+    virtual void loadResources(QStringList filenames) = 0;
 };
 
 template <class T> class KoResourceServer : public KoResourceServerBase {
 
 public:
-    KoResourceServer(const QString & type) : KoResourceServerBase(type) {}
+    KoResourceServer() : m_loaded(false) {}
     virtual ~KoResourceServer() {}
 
+    void loadResources(QStringList filenames) {
+        QStringList uniqueFiles;
+
+        while (!filenames.empty())
+        {
+            QString front = filenames.first();
+            filenames.pop_front();
+
+            QString fname = QFileInfo(front).fileName();
+            //ebug() << "Loading " << fname << "\n";
+            // XXX: Don't load resources with the same filename. Actually, we should look inside
+            //      the resource to find out whether they are really the same, but for now this
+            //      will prevent the same brush etc. showing up twice.
+            if (uniqueFiles.empty() || uniqueFiles.indexOf(fname) == -1) {
+                uniqueFiles.append(fname);
+                T* resource = createResource(front);
+                if (resource->load() && resource->valid())
+                {
+                    m_resources.append(resource);
+                    Q_CHECK_PTR(resource);
+                }
+                else {
+                    delete resource;
+                }
+            }
+        }
+        m_loaded = true;
+}
+
+
+    /// Adds an already loaded resource to the server
+    void addResource(T* resource) {
+        if (!resource->valid()) {
+            kWarning(41001) << "Tried to add an invalid resource!";
+            return;
+        }
+        resource->save();
+
+        m_resources.append(resource);
+    }
+
+    /// Remove a resource from resourceserver and hard disk
+    void removeResource(T* resource) {
+        int index = m_resources.indexOf( resource );
+        if( index < 0 )
+            return;
+
+        QFile file( resource->filename() );
+
+        if( file.remove() )
+        {
+            m_resources.removeAt( index );
+            delete resource;
+        }
+    }
+
+    QList<T*> resources() {
+        if(!m_loaded) {
+            return QList<T*>();
+        }
+        return m_resources;
+    }
+
+protected:
+    virtual T* createResource( const QString & filename ) { return new T(filename); }
+
 private:
-    KoResource* createResource(const QString & filename) { return new T(filename); }
+    QList<T*> m_resources;
+
+    bool m_loaded;
+
 };
 
 #endif // KORESOURCESERVER_H

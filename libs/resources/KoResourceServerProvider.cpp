@@ -19,7 +19,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "KoResourceServerRegistry.h"
+#include "KoResourceServerProvider.h"
 
 #include <QFileInfo>
 #include <QStringList>
@@ -31,9 +31,36 @@
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
-#include "KoResource.h"
-#include "KoPattern.h"
-#include "KoColorSet.h"
+#include "KoSegmentGradient.h"
+#include "KoStopGradient.h"
+
+class GradientResourceServer : public KoResourceServer<KoAbstractGradient> {
+
+public:
+
+    GradientResourceServer() : KoResourceServer<KoAbstractGradient>()
+    {
+    }
+
+private:
+    virtual KoAbstractGradient* createResource( const QString & filename ) {
+
+        QString fileExtension;
+        int index = filename.lastIndexOf('.');
+
+        if (index != -1)
+            fileExtension = filename.mid(index).toLower();
+
+        KoAbstractGradient* grad = 0;
+
+        if(fileExtension == ".svg" || fileExtension == ".kgr")
+            grad = new KoStopGradient(filename);
+        else if(fileExtension == ".ggr" )
+            grad = new KoSegmentGradient(filename);
+
+        return grad;
+    }
+};
 
 class ResourceLoaderThread : public QThread {
 
@@ -59,9 +86,9 @@ private:
 
 };
 
-KoResourceServerRegistry *KoResourceServerRegistry::m_singleton = 0;
+KoResourceServerProvider *KoResourceServerProvider::m_singleton = 0;
 
-KoResourceServerRegistry::KoResourceServerRegistry()
+KoResourceServerProvider::KoResourceServerProvider()
 {
     KGlobal::mainComponent().dirs()->addResourceType("ko_patterns", "data", "krita/patterns/");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
@@ -71,42 +98,53 @@ KoResourceServerRegistry::KoResourceServerRegistry()
     KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
 
-    KoResourceServer<KoPattern>* patternServer = new KoResourceServer<KoPattern>("ko_patterns");
-    ResourceLoaderThread t1 (patternServer, getFileNames("*.pat", "ko_patterns"));
+    m_patternServer = new KoResourceServer<KoPattern>();
+    ResourceLoaderThread t1 (m_patternServer, getFileNames("*.pat", "ko_patterns"));
     t1.start();
 
-//     KoResourceServer<KisGradient>* gradientServer = new KoResourceServer<KisGradient>("ko_gradients");
-//     ResourceLoaderThread t2 (gradientServer, getFileNames(KoGradientManager::filters().join( ":" ), "ko_gradients"));
-//     t2.start();
+    m_gradientServer = new GradientResourceServer();
+    ResourceLoaderThread t2 (m_gradientServer, getFileNames("*.kgr:*.svg:*.ggr", "ko_gradients"));
+    t2.start();
 
-//     KoResourceServer<KoColorSet>* paletteServer = new KoResourceServer<KoColorSet>("kis_palettes");
-//     ResourceLoaderThread t3 (paletteServer, getFileNames("*.gpl:*.pal:*.act", "kis_palettes") );
-//     t3.start();
+    m_paletteServer = new KoResourceServer<KoColorSet>();
+    ResourceLoaderThread t3 (m_paletteServer, getFileNames("*.gpl:*.pal:*.act", "kis_palettes") );
+    t3.start();
 
     t1.wait();
-//     t2.wait();
-//     t3.wait();
-
-    add( "PatternServer", patternServer );
-//     add( "GradientServer", gradientServer );
-//     add( "PaletteServer", paletteServer );
-
+    t2.wait();
+    t3.wait();
 }
 
-KoResourceServerRegistry::~KoResourceServerRegistry()
+KoResourceServerProvider::~KoResourceServerProvider()
 {
 }
 
-KoResourceServerRegistry* KoResourceServerRegistry::instance()
+KoResourceServerProvider* KoResourceServerProvider::instance()
 {
-     if(KoResourceServerRegistry::m_singleton == 0)
+     if(KoResourceServerProvider::m_singleton == 0)
      {
-         KoResourceServerRegistry::m_singleton = new KoResourceServerRegistry();
+         KoResourceServerProvider::m_singleton = new KoResourceServerProvider();
      }
-    return KoResourceServerRegistry::m_singleton;
+    return KoResourceServerProvider::m_singleton;
 }
 
-QStringList KoResourceServerRegistry::getFileNames( const QString & extensions, const QString & type )
+KoResourceServer<KoPattern>* KoResourceServerProvider::patternServer()
+{
+    return m_patternServer;
+}
+
+KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer()
+{
+    return m_gradientServer;
+}
+
+KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
+{
+    return m_paletteServer;
+}
+
+
+QStringList KoResourceServerProvider::getFileNames( const QString & extensions, const QString & type )
 {
     QStringList extensionList = extensions.split(":");
     QStringList fileNames;

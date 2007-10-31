@@ -32,10 +32,10 @@ public:
     KoAbstractGradient(const QString& filename);
     virtual ~KoAbstractGradient();
 
-    virtual bool load() = 0;
-    virtual bool save() = 0;
+    virtual bool load() { return false; }
+    virtual bool save() { return false; }
 
-    virtual QGradient* toQGradient() const = 0;
+    virtual QGradient* toQGradient() const { return new QGradient(); }
 
     void setColorSpace(KoColorSpace* colorSpace);
     KoColorSpace * colorSpace() const;

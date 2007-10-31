@@ -19,29 +19,37 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef KORESOURCESERVERREGISTRY_H
-#define KORESOURCESERVERREGISTRY_H
+#ifndef KORESOURCESERVERPROVIDER_H
+#define KORESOURCESERVERPROVIDER_H
 
-#include "KoGenericRegistry.h"
 #include <koresource_export.h>
 
 #include "KoResourceServer.h"
+#include "KoPattern.h"
+#include "KoAbstractGradient.h"
+#include "KoColorSet.h"
 
-class KORESOURCES_EXPORT KoResourceServerRegistry : public KoGenericRegistry<KoResourceServerBase*>
+class KORESOURCES_EXPORT KoResourceServerProvider
 {
 public:
-    virtual ~KoResourceServerRegistry();
+    virtual ~KoResourceServerProvider();
 
-    static KoResourceServerRegistry* instance();
+    static KoResourceServerProvider* instance();
 
+    KoResourceServer<KoPattern>* patternServer();
+    KoResourceServer<KoAbstractGradient>* gradientServer();
+    KoResourceServer<KoColorSet>* paletteServer();
 private:
-    KoResourceServerRegistry();
-    KoResourceServerRegistry(const KoResourceServerRegistry&);
-    KoResourceServerRegistry operator=(const KoResourceServerRegistry&);
+    KoResourceServerProvider();
+    KoResourceServerProvider(const KoResourceServerProvider&);
+    KoResourceServerProvider operator=(const KoResourceServerProvider&);
 
     QStringList getFileNames( const QString & extensions, const QString & type );
 
-    static KoResourceServerRegistry *m_singleton;
+    static KoResourceServerProvider *m_singleton;
+    KoResourceServer<KoPattern>* m_patternServer;
+    KoResourceServer<KoAbstractGradient>* m_gradientServer;
+    KoResourceServer<KoColorSet>* m_paletteServer;
 };
 
-#endif // KORESOURCESERVERREGISTRY_H
+#endif // KORESOURCESERVERPROVIDER_H

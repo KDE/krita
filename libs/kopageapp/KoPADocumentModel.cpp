@@ -84,7 +84,6 @@ QModelIndex KoPADocumentModel::index( int row, int column, const QModelIndex &pa
     // check if parent is root node
     if( ! parent.isValid() )
     {
-	kDebug () << "Create page index!" << row;
         if( row >= 0 && row < m_document->pages().count() )
             return createIndex( row, column, m_document->pages().at(row) );
         else

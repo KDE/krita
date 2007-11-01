@@ -20,7 +20,7 @@
 
 #include <QImage>
 
-#include <KoOasisStore.h>
+#include <KoOdfWriteStore.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
@@ -30,7 +30,7 @@
 #include "kis_paint_layer.h"
 #include "kis_png_converter.h"
 
-KisOasisSaveDataVisitor::KisOasisSaveDataVisitor(KoOasisStore* os, KoXmlWriter* manifestWriter) : m_oasisStore(os), m_manifestWriter(manifestWriter)
+KisOasisSaveDataVisitor::KisOasisSaveDataVisitor(KoOdfWriteStore* os, KoXmlWriter* manifestWriter) : m_oasisStore(os), m_manifestWriter(manifestWriter)
 {}
 
 bool KisOasisSaveDataVisitor::visit(KisPaintLayer *layer)

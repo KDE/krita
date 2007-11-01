@@ -22,7 +22,7 @@
 #include <QDomNode>
 
 #include <KoColorSpaceRegistry.h>
-#include <KoOasisStore.h>
+#include <KoOdfReadStore.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 

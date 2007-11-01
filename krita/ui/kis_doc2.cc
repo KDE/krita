@@ -51,7 +51,8 @@
 #include <KoFilterManager.h>
 #include <KoID.h>
 #include <KoMainWindow.h>
-#include <KoOasisStore.h>
+#include <KoOdfReadStore.h>
+#include <KoOdfWriteStore.h>
 #include <KoQueryTrader.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -239,7 +240,7 @@ bool KisDoc2::loadOasis( const KoXmlDocument& doc, KoOasisStyles&, const KoXmlDo
     for (KoXmlNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "office:body") {
             KoXmlElement elem = node.toElement();
-            KoOasisStore* oasisStore =  new KoOasisStore( store );
+            KoOdfReadStore* oasisStore =  new KoOdfReadStore( store );
             KisOasisLoadVisitor olv(this,oasisStore);
             olv.loadImage(elem);
             if (!olv.image() )
@@ -258,7 +259,7 @@ bool KisDoc2::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
 {
     kDebug(41008) <<"saving with OpenRaster";
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-    KoOasisStore* oasisStore =  new KoOasisStore( store );
+    KoOdfWriteStore* oasisStore =  new KoOdfWriteStore( store );
     KoXmlWriter* contentWriter = oasisStore->contentWriter();
     if ( !contentWriter ) {
         delete oasisStore;

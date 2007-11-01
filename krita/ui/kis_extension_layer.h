@@ -65,7 +65,7 @@ public:
             return true;
         }
 
-    bool oasisSaveVisitorCallback( KoOasisStore * os, KoXmlWriter * writer )
+    bool oasisSaveVisitorCallback( KoOdfWriteStore * os, KoXmlWriter * writer )
         {
             Q_UNUSED( os );
             Q_UNUSED( writer );
@@ -73,7 +73,7 @@ public:
             return true;
         }
 
-    bool oasisSaveDataVisitorCallback( KoOasisStore * os,  KoXmlWriter * manifestWriter )
+    bool oasisSaveDataVisitorCallback( KoOdfWriteStore * os,  KoXmlWriter * manifestWriter )
         {
             Q_UNUSED( os );
             Q_UNUSED( manifestWriter );
@@ -88,7 +88,7 @@ public:
             return true;
         }
 
-   bool oasisLoadDataVisitor( KoOasisStore * os,  const QMap<KisLayer *, QString>& filenames )
+   bool oasisLoadDataVisitor( KoOdfReadStore * os,  const QMap<KisLayer *, QString>& filenames )
         {
             Q_UNUSED( os );
             Q_UNUSED( filenames );

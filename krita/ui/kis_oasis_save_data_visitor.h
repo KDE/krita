@@ -23,7 +23,7 @@
 
 #include "kis_node_visitor.h"
 
-class KoOasisStore;
+class KoOdfWriteStore;
 class KoXmlWriter;
 
 class KisAdjustmentLayer;
@@ -32,7 +32,7 @@ class KisPaintLayer;
 
 class KisOasisSaveDataVisitor : public KisNodeVisitor {
 public:
-    KisOasisSaveDataVisitor(KoOasisStore* os, KoXmlWriter* manifestWriter);
+    KisOasisSaveDataVisitor(KoOdfWriteStore* os, KoXmlWriter* manifestWriter);
     virtual ~KisOasisSaveDataVisitor() {}
 
 public:
@@ -44,7 +44,7 @@ public:
             return true;
         }
 private:
-    KoOasisStore* m_oasisStore;
+    KoOdfWriteStore* m_oasisStore;
     KoXmlWriter* m_manifestWriter;
 };
 

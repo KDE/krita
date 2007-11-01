@@ -17,7 +17,7 @@
 */
 
 #include <KoXmlReader.h>
-#include <KoOasisStore.h>
+#include <KoOdfReadStore.h>
 #include <KoDom.h>
 #include <kdebug.h>
 #include <assert.h>
@@ -26,7 +26,7 @@
 
 void testMimeForPath( KoXmlDocument& doc )
 {
-    QString mime = KoOasisStore::mimeForPath( doc, "Object 1" );
+    QString mime = KoOdfReadStore::mimeForPath( doc, "Object 1" );
     kDebug() << mime;
     assert( !mime.isNull() );
     assert( !mime.isEmpty() );

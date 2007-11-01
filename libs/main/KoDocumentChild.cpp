@@ -19,7 +19,7 @@
 */
 
 #include "KoDocumentChild.h"
-#include "KoOasisStore.h"
+#include "KoOdfReadStore.h"
 #include <KoDocument.h>
 #include <KoQueryTrader.h>
 #include <KoXmlReader.h>
@@ -215,7 +215,7 @@ bool KoDocumentChild::loadOasisDocument( KoStore* store, const KoXmlDocument& ma
     }
     if ( !path.endsWith( '/' ) )
         path += '/';
-    const QString mimeType = KoOasisStore::mimeForPath( manifestDoc, path );
+    const QString mimeType = KoOdfReadStore::mimeForPath( manifestDoc, path );
     kDebug(30003) <<"path for manifest file=" << path <<" mimeType=" << mimeType;
     if ( mimeType.isEmpty() ) {
         kError(30003) << "Manifest doesn't have media-type for " << path << endl;

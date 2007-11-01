@@ -30,7 +30,8 @@
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
 #include "KoOasisStyles.h"
-#include "KoOasisStore.h"
+#include "KoOdfReadStore.h"
+#include "KoOdfWriteStore.h"
 #include "KoXmlNS.h"
 #include "KoOpenPane.h"
 
@@ -1028,7 +1029,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
         kDebug(30003) <<"Saving to OASIS format";
         // Tell KoStore not to touch the file names
         store->disallowNameExpansion();
-        KoOasisStore oasisStore( store );
+        KoOdfWriteStore oasisStore( store );
         KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
 
         if ( !saveOasis( store, manifestWriter ) )
@@ -1860,7 +1861,6 @@ bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
     {
         store->disallowNameExpansion();
 
-        KoOasisStore oasisStore( store );
         // We could check the 'mimetype' file, but let's skip that and be tolerant.
 
         if ( !loadOasisFromStore( store ) ) {
@@ -1899,7 +1899,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
 
     if ( oasis && store->hasFile( "meta.xml" ) ) {
         KoXmlDocument metaDoc;
-        KoOasisStore oasisStore( store );
+        KoOdfReadStore oasisStore( store );
         if ( oasisStore.loadAndParse( "meta.xml", metaDoc, d->lastErrorMessage ) ) {
             d->m_docInfo->loadOasis( metaDoc );
         }
@@ -1922,7 +1922,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
     if ( oasis && store->hasFile( "VersionList.xml" ) ) {
         KMessageBox::information( 0, i18n("This document contains several versions. Go to File->Versions to open an old version."), QString(), "informVersionsAtLoading" );
         KoXmlDocument versionInfo;
-        KoOasisStore oasisStore( store );
+        KoOdfReadStore oasisStore( store );
         if ( oasisStore.loadAndParse( "VersionList.xml", versionInfo, d->lastErrorMessage ) )
         {
             KoXmlNode list = KoDom::namedItemNS( versionInfo, KoXmlNS::VL, "version-list" );
@@ -1996,7 +1996,7 @@ bool KoDocument::loadOasisFromStore( KoStore* store )
     KoOasisStyles oasisStyles;
     KoXmlDocument contentDoc;
     KoXmlDocument settingsDoc;
-    KoOasisStore oasisStore( store );
+    KoOdfReadStore oasisStore( store );
     bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, d->lastErrorMessage );
     if ( !ok )
         return false;
@@ -2011,7 +2011,7 @@ bool KoDocument::loadOasisFromStore( KoStore* store )
     // TODO post 1.4, pass manifestDoc to the apps so that they don't have to do it themselves
     // (when calling KoDocumentChild::loadOasisDocument)
     //QDomDocument manifestDoc;
-    //KoOasisStore oasisStore( store );
+    //KoOdfReadStore oasisStore( store );
     //if ( !oasisStore.loadAndParse( "tar:/META-INF/manifest.xml", manifestDoc, d->lastErrorMessage ) )
     //    return false;
 
@@ -2053,7 +2053,7 @@ bool KoDocument::addVersion( const QString& comment )
     kDebug(30003) <<"Saving to OASIS format";
     // Tell KoStore not to touch the file names
     store->disallowNameExpansion();
-    KoOasisStore oasisStore( store );
+    KoOdfWriteStore oasisStore( store );
     KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
 
     if ( !saveOasis( store, manifestWriter ) )

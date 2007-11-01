@@ -17,7 +17,7 @@
 */
 
 #include "KoOasisLoadingContext.h"
-#include <KoOasisStore.h>
+#include <KoOdfReadStore.h>
 #include <KoOasisStyles.h>
 #include <KoStore.h>
 #include <KoXmlNS.h>
@@ -34,7 +34,7 @@ KoOasisLoadingContext::KoOasisLoadingContext( KoDocument* doc,
       m_metaXmlParsed( false ), m_useStylesAutoStyles( false ), d( 0 )
 {
     // Ideally this should be done by KoDocument and passed as argument here...
-    KoOasisStore oasisStore( store );
+    KoOdfReadStore oasisStore( store );
     QString dummy;
     (void)oasisStore.loadAndParse( "tar:/META-INF/manifest.xml", m_manifestDoc, dummy );
 }
@@ -113,7 +113,7 @@ void KoOasisLoadingContext::parseMeta() const
         if ( m_store->hasFile( "meta.xml" ) )
         {
             KoXmlDocument metaDoc;
-            KoOasisStore oasisStore( m_store );
+            KoOdfReadStore oasisStore( m_store );
             QString errorMsg;
             if ( oasisStore.loadAndParse( "meta.xml", metaDoc, errorMsg ) ) {
                 KoXmlNode meta   = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );

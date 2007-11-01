@@ -30,7 +30,7 @@
 #include "complexbrush.h"
 
 typedef KGenericFactory<ComplexBrush> ComplexBrushFactory;
-K_EXPORT_COMPONENT_FACTORY(kritacomplexbrush, ComplexBrushFactory("kritacore"))
+K_EXPORT_COMPONENT_FACTORY(kritacomplexbrush, ComplexBrushFactory("krita"))
 
 ComplexBrush::ComplexBrush(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)

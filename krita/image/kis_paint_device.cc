@@ -51,7 +51,7 @@
 #include "kis_random_accessor.h"
 #include "kis_random_sub_accessor.h"
 #include "kis_selection.h"
-#include "kis_layer.h"
+#include "kis_node.h"
 #include "kis_painterly_overlay.h"
 #include "kis_paint_device.h"
 #include "kis_datamanager.h"
@@ -67,7 +67,7 @@ class KisPaintDevice::Private {
 
 public:
 
-    KisLayerWSP parentLayer;
+    KisNodeWSP parent;
     qint32 x;
     qint32 y;
     KoColorSpace * colorSpace;
@@ -83,88 +83,13 @@ public:
 
 };
 
-
-namespace {
-
-    class KisPaintDeviceCommand : public QUndoCommand {
-        typedef QUndoCommand super;
-
-    public:
-        KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice);
-        virtual ~KisPaintDeviceCommand() {}
-
-    protected:
-        void setUndo(bool undo);
-
-        KisPaintDeviceSP m_paintDevice;
-    };
-
-    KisPaintDeviceCommand::KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice) :
-        super(name), m_paintDevice(paintDevice)
-    {
-    }
-
-    void KisPaintDeviceCommand::setUndo(bool undo)
-    {
-        if (m_paintDevice->undoAdapter()) {
-            m_paintDevice->undoAdapter()->setUndo(undo);
-        }
-    }
-
-    class KisConvertLayerTypeCmd : public KisPaintDeviceCommand {
-        typedef KisPaintDeviceCommand super;
-
-    public:
-        KisConvertLayerTypeCmd(KisPaintDeviceSP paintDevice,
-                       KisDataManagerSP beforeData, KoColorSpace * beforeColorSpace,
-                       KisDataManagerSP afterData, KoColorSpace * afterColorSpace
-                ) : super(i18n("Convert Layer Type"), paintDevice)
-            {
-                m_beforeData = beforeData;
-                m_beforeColorSpace = beforeColorSpace;
-                m_afterData = afterData;
-                m_afterColorSpace = afterColorSpace;
-            }
-
-        virtual ~KisConvertLayerTypeCmd()
-            {
-            }
-
-    public:
-        virtual void redo()
-            {
-                setUndo(false);
-                m_paintDevice->setDataManager(m_afterData, m_afterColorSpace);
-                setUndo(true);
-            }
-
-        virtual void undo()
-            {
-                setUndo(false);
-                m_paintDevice->setDataManager(m_beforeData, m_beforeColorSpace);
-                setUndo(true);
-            }
-
-    private:
-        KisDataManagerSP m_beforeData;
-        KoColorSpace * m_beforeColorSpace;
-
-        KisDataManagerSP m_afterData;
-        KoColorSpace * m_afterColorSpace;
-    };
-
-}
-
 KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name)
     : QObject(0)
     , m_d( new Private() )
 {
     setObjectName(name);
 
-    if (colorSpace == 0) {
-        kWarning(41001) << "Cannot create paint device without colorspace!\n";
-        return;
-    }
+    Q_ASSERT(colorSpace);
 
     m_d->x = 0;
     m_d->y = 0;
@@ -180,7 +105,7 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name)
 
     Q_CHECK_PTR(m_datamanager);
 
-    m_d->parentLayer = 0;
+    m_d->parent = 0;
 
     m_d->colorSpace = colorSpace;
 
@@ -188,7 +113,7 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, const QString& name)
 
 }
 
-KisPaintDevice::KisPaintDevice(KisLayerWSP parent, KoColorSpace * colorSpace, const QString& name)
+KisPaintDevice::KisPaintDevice(KisNodeWSP parent, KoColorSpace * colorSpace, const QString& name)
     : QObject(0)
     , m_d( new Private() )
 {
@@ -198,14 +123,9 @@ KisPaintDevice::KisPaintDevice(KisLayerWSP parent, KoColorSpace * colorSpace, co
     m_d->x = 0;
     m_d->y = 0;
 
-    m_d->parentLayer = parent;
+    m_d->parent = parent;
 
-    if (colorSpace == 0 && parent != 0 && parent->image() != 0) {
-        m_d->colorSpace = parent->image()->colorSpace();
-    }
-    else {
-        m_d->colorSpace = colorSpace;
-    }
+    m_d->colorSpace = colorSpace;
 
     m_d->pixelSize = m_d->colorSpace->pixelSize();
     m_d->nChannels = m_d->colorSpace->channelCount();
@@ -228,7 +148,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
     , m_d( new Private() )
 {
     if (this != &rhs) {
-        m_d->parentLayer = 0;
+        m_d->parent = 0;
         if (rhs.m_datamanager) {
             m_datamanager = new KisDataManager(*rhs.m_datamanager);
             Q_CHECK_PTR(m_datamanager);
@@ -316,8 +236,8 @@ void KisPaintDevice::setDirty(const QRect & rc)
 #ifdef CACHE_EXACT_BOUNDS
     m_d->exactBounds |= rc;
 #endif
-    if ( m_d->parentLayer.isValid() )
-        m_d->parentLayer->setDirty( rc );
+    if ( m_d->parent.isValid() )
+        m_d->parent->setDirty( rc );
 }
 
 void KisPaintDevice::setDirty( const QRegion & region )
@@ -325,26 +245,15 @@ void KisPaintDevice::setDirty( const QRegion & region )
 #ifdef CACHE_EXACT_BOUNDS
     m_d->exactBounds |= region.boundingRect();
 #endif
-    if ( m_d->parentLayer.isValid() )
-        m_d->parentLayer->setDirty( region );
+    if ( m_d->parent.isValid() )
+        m_d->parent->setDirty( region );
 }
 
 void KisPaintDevice::setDirty()
 {
-    if ( m_d->parentLayer.isValid() )
-        m_d->parentLayer->setDirty();
+    if ( m_d->parent.isValid() )
+        m_d->parent->setDirty();
 }
-
-KisImageSP KisPaintDevice::image() const
-{
-    if ( m_d->parentLayer.isValid() ) {
-        if ( m_d->parentLayer ) {
-            return m_d->parentLayer->image();
-        }
-    }
-    return 0;
-}
-
 
 void KisPaintDevice::move(qint32 x, qint32 y)
 {
@@ -708,9 +617,10 @@ void KisPaintDevice::convertTo(KoColorSpace * dstColorSpace, KoColorConversionTr
 
     setDataManager(dst.m_datamanager, dstColorSpace);
 
-    if (undoAdapter() && undoAdapter()->undo()) {
-        undoAdapter()->addCommand(new KisConvertLayerTypeCmd(KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_d->colorSpace));
-    }
+// XXX: make undoable
+//     if (undoAdapter() && undoAdapter()->undo()) {
+//         undoAdapter()->addCommand(new KisConvertLayerTypeCmd(KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_d->colorSpace));
+//     }
 
     delete weaver;
     // XXX: emit colorSpaceChanged(dstColorSpace);
@@ -736,21 +646,10 @@ void KisPaintDevice::setDataManager(KisDataManagerSP data, KoColorSpace * colorS
     m_d->nChannels = m_d->colorSpace->channelCount();
 
     setDirty(extent());
-//         m_d->parentLayer->notifyPropertyChanged();
 #ifdef CACHE_EXACT_BOUNDS
     m_d->exactBounds = extent();
 #endif
 
-}
-
-KisUndoAdapter *KisPaintDevice::undoAdapter() const
-{
-    if ( m_d->parentLayer.isValid() ) {
-        if (m_d->parentLayer && m_d->parentLayer->image()) {
-            return m_d->parentLayer->image()->undoAdapter();
-        }
-    }
-    return 0;
 }
 
 void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcProfileName,
@@ -802,17 +701,11 @@ QImage KisPaintDevice::convertToQImage(KoColorProfile *  dstProfile, float expos
     x1 = - x();
     y1 = - y();
 
-    if (image()) {
-        w = image()->width();
-        h = image()->height();
-    }
-    else {
-        QRect rc = exactBounds();
-        x1 = rc.x();
-        y1 = rc.y();
-        w = rc.width();
-        h = rc.height();
-    }
+    QRect rc = exactBounds();
+    x1 = rc.x();
+    y1 = rc.y();
+    w = rc.width();
+    h = rc.height();
 
     return convertToQImage(dstProfile, x1, y1, w, h, exposure);
 }
@@ -851,17 +744,9 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
     thumbnail->clear();
 
     int srcw, srch;
-    if( image() )
-    {
-        srcw = image()->width();
-        srch = image()->height();
-    }
-    else
-    {
-        const QRect e = exactBounds();
-        srcw = e.width();
-        srch = e.height();
-    }
+    const QRect e = extent();
+    srcw = e.width();
+    srch = e.height();
 
     if (w > srcw)
     {

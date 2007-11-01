@@ -83,13 +83,13 @@ public:
 
     /**
      * Create a new paint device with the specified colorspace. The
-     * parentLayer will be notified of changes to this paint device.
+     * parent node will be notified of changes to this paint device.
      *
-     * @param parentLayer the layer that contains this paint device.
+     * @param parent the node that contains this paint device.
      * @param colorSpace the colorspace of this paint device
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisLayerWSP parentLayer, KoColorSpace * colorSpace, const QString& name = QString());
+    KisPaintDevice(KisNodeWSP parent, KoColorSpace * colorSpace, const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
@@ -548,18 +548,6 @@ public:
      * selectedness in the mask.
      */
     void applySelectionMask(KisSelectionSP mask);
-
-    /**
-     * XXX
-     */
-    KisUndoAdapter *undoAdapter() const;
-
-
-    /**
-     * Returns the image associated with this paint device, or 0 if
-     * this paint device is not associated with an image.
-     */
-    KisImageSP image() const;
 
 signals:
 

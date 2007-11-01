@@ -71,7 +71,6 @@ void KisPaintDeviceTest::testCreation()
         KisPaintLayerSP l2 = new KisPaintLayer( image, "blabla", 250 );
         dev = new KisPaintDevice( l2.data(), cs, "test3" );
     }
-    QVERIFY( dev->image() == 0 );
 
 }
 

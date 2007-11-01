@@ -151,10 +151,10 @@ public:
     /** Returns the fill threshold, see setFillThreshold for details */
     int fillThreshold() const { return m_threshold; }
 
-    /** Sets the width of the layer */
+    /** Sets the width of the paint device */
     void setWidth(int w) { m_width = w; }
 
-    /** Sets the height of the layer */
+    /** Sets the height of the paint device */
     void setHeight(int h) { m_height = h; }
 
     /** If sample merged is set to true, the paint device will get the bounds of the

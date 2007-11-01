@@ -26,12 +26,14 @@ class KisSelectionMask::Private
 {
 public:
     KisSelectionSP selection;
+    KisImageWSP image;
 };
 
-KisSelectionMask::KisSelectionMask()
+KisSelectionMask::KisSelectionMask( KisImageWSP image )
     : KisMask( "selection" )
     , m_d( new Private() )
 {
+    m_d->image = image;
 }
 
 KisSelectionMask::~KisSelectionMask()
@@ -68,7 +70,7 @@ void KisSelectionMask::setSelection(KisSelectionSP selection)
 
     if (selection) {
         gc.bitBlt(0, 0, cs->compositeOp(COMPOSITE_COPY), KisPaintDeviceSP(selection.data()),
-                  0, 0, image()->bounds().width(), image()->bounds().height());
+                  0, 0, m_d->image->bounds().width(), m_d->image->bounds().height());
     } else {
         gc.fillRect(image()->bounds(), KoColor(Qt::white, cs), MAX_SELECTED);
     }
@@ -116,8 +118,8 @@ QRect KisSelectionMask::extent() const
 {
     if (m_d->selection)
         return m_d->selection->selectedRect();
-    else if (image() )
-        return image()->bounds();
+    else if ( m_d->image )
+        return m_d->image->bounds();
     else
         return QRect();
 }
@@ -126,16 +128,13 @@ QRect KisSelectionMask::exactBounds() const
 {
     if (m_d->selection)
         return m_d->selection->selectedExactRect();
-    else if (image())
-        return image()->bounds();
+    else if (m_d->image)
+        return m_d->image->bounds();
     else
         return QRect();
 }
 
 KisImageSP KisSelectionMask::image() const
 {
-    if ( m_d->selection )
-        return m_d->selection->image();
-    else
-        return 0;
+    return m_d->image;
 }

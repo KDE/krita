@@ -38,7 +38,7 @@ public:
      * Create an empty selection mask. There is filter and no layer
      * associated with this mask.
      */
-    KisSelectionMask();
+    KisSelectionMask(KisImageWSP image);
 
     virtual ~KisSelectionMask();
     KisSelectionMask( const KisSelectionMask& rhs );

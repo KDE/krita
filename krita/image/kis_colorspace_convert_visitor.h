@@ -34,6 +34,83 @@
 #include "kis_filter_registry.h"
 #include "kis_filter.h"
 
+
+// XXX: Make undoable (used to be in KisPaintDevice, should be in
+// KisLayer)
+#if 0
+namespace {
+
+    class KisPaintDeviceCommand : public QUndoCommand {
+        typedef QUndoCommand super;
+
+    public:
+        KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice);
+        virtual ~KisPaintDeviceCommand() {}
+
+    protected:
+        void setUndo(bool undo);
+
+        KisPaintDeviceSP m_paintDevice;
+    };
+
+    KisPaintDeviceCommand::KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice) :
+        super(name), m_paintDevice(paintDevice)
+    {
+    }
+
+    void KisPaintDeviceCommand::setUndo(bool undo)
+    {
+        if (m_paintDevice->undoAdapter()) {
+            m_paintDevice->undoAdapter()->setUndo(undo);
+        }
+    }
+
+    class KisConvertLayerTypeCmd : public KisPaintDeviceCommand {
+        typedef KisPaintDeviceCommand super;
+
+    public:
+        KisConvertLayerTypeCmd(KisPaintDeviceSP paintDevice,
+                       KisDataManagerSP beforeData, KoColorSpace * beforeColorSpace,
+                       KisDataManagerSP afterData, KoColorSpace * afterColorSpace
+                ) : super(i18n("Convert Layer Type"), paintDevice)
+            {
+                m_beforeData = beforeData;
+                m_beforeColorSpace = beforeColorSpace;
+                m_afterData = afterData;
+                m_afterColorSpace = afterColorSpace;
+            }
+
+        virtual ~KisConvertLayerTypeCmd()
+            {
+            }
+
+    public:
+        virtual void redo()
+            {
+                setUndo(false);
+                m_paintDevice->setDataManager(m_afterData, m_afterColorSpace);
+                setUndo(true);
+            }
+
+        virtual void undo()
+            {
+                setUndo(false);
+                m_paintDevice->setDataManager(m_beforeData, m_beforeColorSpace);
+                setUndo(true);
+            }
+
+    private:
+        KisDataManagerSP m_beforeData;
+        KoColorSpace * m_beforeColorSpace;
+
+        KisDataManagerSP m_afterData;
+        KoColorSpace * m_afterColorSpace;
+    };
+
+}
+#endif
+
+
 class KoColorSpaceConvertVisitor :public KisNodeVisitor {
 public:
     KoColorSpaceConvertVisitor(KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent);

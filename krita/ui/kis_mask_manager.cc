@@ -267,7 +267,7 @@ void KisMaskManager::maskToSelection()
     //           of kis_paint_device.
     if (!m_activeMask) return;
     KisLayerSP parent = m_view->activeLayer();
-    KisSelectionMaskSP selectionMask = new KisSelectionMask();
+    KisSelectionMaskSP selectionMask = new KisSelectionMask( m_view->image() );
     selectionMask->setSelection( m_activeMask->selection() );
     m_activeMask->setSelection( new KisSelection() );
     m_view->image()->addNode( selectionMask, parent, m_activeMask );

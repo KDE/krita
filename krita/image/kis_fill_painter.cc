@@ -108,7 +108,8 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPatte
     if (!pattern) return;
     if (!pattern->valid()) return;
     if (!m_device) return;
-
+    if ( w < 1 ) return;
+    if ( h < 1 ) return;
 
     KisPaintDeviceSP patternLayer = pattern->image(m_device->colorSpace());
 
@@ -175,16 +176,8 @@ void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP projec
 }
 
 void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP projection) {
-
-    if (m_width < 0 || m_height < 0) {
-        if (m_device->image()) {
-            m_width = m_device->image()->width();
-            m_height = m_device->image()->height();
-        }
-        else {
-            m_width = m_height = 500;
-        }
-    }
+    Q_ASSERT( m_width > 0 );
+    Q_ASSERT( m_height > 0 );
 
     m_size = m_width * m_height;
 
@@ -220,25 +213,15 @@ typedef enum { None = 0, Added = 1, Checked = 2 } Status;
 
 KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP projection) {
 
-// XXX: This always returns a rect with x = 0, it seems. That can't be
-// correct! (BSAR)
-
     if (m_width < 0 || m_height < 0) {
         if (m_selection && m_careForSelection) {
             QRect rc = m_selection->selectedExactRect();
             m_width = rc.width() - (startX - rc.x());
             m_height = rc.height() - (startY - rc.y());
         }
-        else if (m_device->image()) {
-            m_width = m_device->image()->width();
-            m_height = m_device->image()->height();
-        }
-        else {
-            m_width = m_height = 500;
-        }
     }
     // Otherwise the width and height should have been set
-    Q_ASSERT( m_width >= 0 && m_height >= 0 );
+    Q_ASSERT( m_width > 0 && m_height > 0 );
 
     // Don't try to fill if we start outside the borders, just return an empty 'fill'
     if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)

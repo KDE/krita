@@ -23,7 +23,7 @@
 
 #include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(kofficedockers, KGenericFactory<Plugin>( "Plugin" ) )
+K_EXPORT_COMPONENT_FACTORY(kofficedockers, KGenericFactory<Plugin>( "koffice-dockers" ) )
 
 Plugin::Plugin( QObject *parent, const QStringList& )
     : QObject(parent)

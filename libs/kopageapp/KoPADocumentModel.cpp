@@ -116,27 +116,18 @@ QModelIndex KoPADocumentModel::parent( const QModelIndex &child ) const
     if( ! childShape )
         return QModelIndex();
 
-    // check if child shape is a layer, and return invalid model index if it is
-    KoShapeLayer *childlayer = dynamic_cast<KoShapeLayer*>( childShape );
-    if( childlayer )
-        return QModelIndex();
-
     // get the children's parent shape
     KoShapeContainer *parentShape = childShape->parent();
     if( ! parentShape )
         return QModelIndex();
 
-    // check if the parent is a layer
-    KoShapeLayer *parentLayer = dynamic_cast<KoShapeLayer*>( parentShape );
-    if( parentLayer ) {
-        KoPAPageBase * page = dynamic_cast<KoPAPageBase*>( parentLayer->parent() );
-        if ( page )
-            return createIndex( m_document->pages().count() - 1 - m_document->pages().indexOf( page ), 0, parentLayer );
-    }
     // get the grandparent to determine the row of the parent shape
     KoShapeContainer *grandParentShape = parentShape->parent();
     if( ! grandParentShape )
-        return QModelIndex();
+    {
+        KoPAPageBase* page = dynamic_cast<KoPAPageBase*>( parentShape);
+        return createIndex( m_document->pages().indexOf( page ), 0, parentShape );
+    }
 
     return createIndex( indexFromChild( grandParentShape, parentShape ), 0, parentShape );
 }

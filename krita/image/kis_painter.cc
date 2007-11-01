@@ -100,6 +100,7 @@ void KisPainter::init()
     m_pressure = PRESSURE_MIN;
     m_antiAliasPolygonFill = true;
     m_bounds = QRect();
+    m_progressUpdater = 0;
 
     KConfigGroup cfg = KGlobal::config()->group("");
     m_useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", true);

@@ -713,9 +713,13 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         }
     }*/
 
-    if (m_progressUpdater && m_progressUpdater->interrupted()) {
-        bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);
+    if (m_progressUpdater) {
+        if(!m_progressUpdater->interrupted())
+            bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);
     }
+    else
+        bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);
+
     delete shapeStrategy;
 
     if (m_progressUpdater) m_progressUpdater->setProgress(100);

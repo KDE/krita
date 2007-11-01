@@ -24,7 +24,7 @@
 #include <QBuffer>
 #include <QRegExp>
 #include <KoStore.h>
-#include <KoOasisStore.h>
+#include <KoOdfWriteStore.h>
 #include <KoDocumentAdaptor.h>
 
 /************************************************************************************************
@@ -210,7 +210,7 @@ class KoScriptingOdfStore::Private
             //qDebug()<<"KoScriptingOdfStore::getByteArray() Reading ByteArray.";
             QBuffer buffer(&byteArray);
             KoStore* store = KoStore::createStore(&buffer, KoStore::Write, "KrossScript", KoStore::Tar);
-            KoOasisStore oasisStore(store);
+            KoOdfWriteStore oasisStore(store);
             QByteArray mime = getMimeType();
             KoXmlWriter* manifestWriter = mime.isNull() ? 0 : oasisStore.manifestWriter(mime);
             if( ! document->saveOasis(store, manifestWriter) ) {

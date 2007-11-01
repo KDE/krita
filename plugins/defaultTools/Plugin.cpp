@@ -24,7 +24,7 @@
 
 #include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(defaulttools, KGenericFactory<Plugin>( "Plugin" ) )
+K_EXPORT_COMPONENT_FACTORY(defaulttools, KGenericFactory<Plugin>( "koffice-defaulttools" ) )
 
 Plugin::Plugin(QObject * parent, const QStringList &)
     : QObject(parent)

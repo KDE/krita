@@ -598,7 +598,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
             }
         }
 
-        if (if (m_progressUpdater) m_progressUpdater && m_progressUpdater->interrupted()) {
+        if (m_progressUpdater && m_progressUpdater->interrupted()) {
             break;
         }
     }

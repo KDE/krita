@@ -50,7 +50,7 @@ KisPixelSelection::KisPixelSelection()
     , m_d( new Private )
 {
     m_d->parentPaintDevice = 0;
-    m_d->interestedInDirtyness = false;
+    m_d->interestedInDirtyness = true;
 
 }
 
@@ -60,7 +60,7 @@ KisPixelSelection::KisPixelSelection(KisPaintDeviceSP dev)
 {
     Q_ASSERT(dev);
     m_d->parentPaintDevice = dev;
-    m_d->interestedInDirtyness = false;
+    m_d->interestedInDirtyness = true;
 }
 
 
@@ -70,7 +70,7 @@ KisPixelSelection::KisPixelSelection( KisPaintDeviceSP parent, KisMaskSP mask )
 {
     Q_ASSERT(parent);
     m_d->parentPaintDevice = parent;
-    m_d->interestedInDirtyness = false;
+    m_d->interestedInDirtyness = true;
     m_datamanager = mask->selection()->getOrCreatePixelSelection()->dataManager();
 }
 
@@ -144,6 +144,25 @@ void KisPixelSelection::select(QRect r)
     KisFillPainter painter(KisPaintDeviceSP(this));
     KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     painter.fillRect(r, KoColor(Qt::white, cs), MAX_SELECTED);
+}
+
+void KisPixelSelection::applySelection(KisPixelSelectionSP selection, selectionMode mode)
+{
+    switch(mode)
+    {
+        case SELECTION_REPLACE:
+        case SELECTION_ADD:
+            addSelection(selection);
+            break;
+        case SELECTION_SUBTRACT:
+            subtractSelection(selection);
+            break;
+        case SELECTION_INTERSECT:
+            intersectSelection(selection);
+            break;
+        default:
+            break;
+    }
 }
 
 void KisPixelSelection::addSelection(KisPixelSelectionSP selection)

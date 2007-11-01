@@ -87,6 +87,12 @@ public:
 
     void select(QRect r);
 
+    /**
+     * Apply a selection to the selection using the specified selection mode
+     * Note: SELECTION_REPLACE will be treated as SELECTION_ADD
+     */
+    void applySelection(KisPixelSelectionSP selection, selectionMode mode);
+
     /** Add a selection */
     void addSelection(KisPixelSelectionSP selection);
 

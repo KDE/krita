@@ -28,7 +28,7 @@
 
 #include <KoStore.h>
 #include <KoGenStyles.h>
-#include <KoOasisStore.h>
+#include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
 #include "KoShapeSavingContext.h"
 
@@ -53,7 +53,7 @@ bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
     Q_ASSERT( store );
     Q_ASSERT( !store->bad() );
 
-    KoOasisStore oasisStore( store );
+    KoOdfWriteStore oasisStore( store );
 
     KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
     KoXmlWriter* contentWriter = oasisStore.contentWriter();

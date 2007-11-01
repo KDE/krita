@@ -55,6 +55,8 @@ set(komain_LIB_SRCS
    KoDom.cpp
    KoVersionDialog.cpp
    KoOasisStore.cpp
+   KoOdfReadStore.cpp
+   KoOdfWriteStore.cpp
    kkbdaccessextensions.cpp
    KoOpenPane.cpp
    KoTemplates.cpp

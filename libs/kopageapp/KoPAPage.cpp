@@ -43,6 +43,7 @@ void KoPAPage::saveOdf( KoShapeSavingContext & context ) const
     KoPASavingContext &paContext = static_cast<KoPASavingContext&>( context );
 
     paContext.xmlWriter().startElement( "draw:page" );
+    paContext.xmlWriter().addAttribute( "draw:name", name () );
     paContext.xmlWriter().addAttribute( "draw:id", "page" + QString::number( paContext.page() ) );
     paContext.xmlWriter().addAttribute( "draw:master-page-name", paContext.masterPageName( m_masterPage ) );
     paContext.xmlWriter().addAttribute( "draw:style-name", saveOdfPageStyle( paContext ) );
@@ -61,7 +62,7 @@ KoPageLayout & KoPAPage::pageLayout()
 
 void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
 {
-    setPageTitle( element.attributeNS( KoXmlNS::draw, "name" ) );
+    setName( element.attributeNS( KoXmlNS::draw, "name" ) );
     QString master = element.attributeNS (KoXmlNS::draw, "master-page-name" );
     setMasterPage( loadingContext.masterPageFromName( master ) );
 }

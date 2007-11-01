@@ -65,18 +65,6 @@ public:
     /// @return the layout of the page
     virtual KoPageLayout & pageLayout() = 0;
 
-    /**
-     * @brief Get page title
-     * @return page title
-     */
-    QString pageTitle() const;
-
-    /**
-     * @brief Set page title
-     * @param title set page title
-     */
-    void setPageTitle( const QString &title);
-
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
 
 protected:
@@ -140,9 +128,6 @@ protected:
      * @param paContext the pageapp loading context
      */
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
-
-private:    
-    QString m_pageTitle;
 };
 
 #endif /* KOPAPAGEBASE_H */

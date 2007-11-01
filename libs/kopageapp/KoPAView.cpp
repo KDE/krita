@@ -370,4 +370,9 @@ void KoPAView::setActionEnabled( int actions, bool enable )
     }
 }
 
+KoPADocumentStructureDocker* KoPAView::documentStructureDocker() const
+{
+    return m_documentStructureDocker;
+}
+
 #include "KoPAView.moc"

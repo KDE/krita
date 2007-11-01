@@ -114,6 +114,9 @@ protected:
     /// creates the actions (called from the constructor)
     void initActions();
 
+    /// Returns the document structure docker
+    KoPADocumentStructureDocker* documentStructureDocker() const;
+
 protected slots:
     void viewSnapToGrid();
     void viewGrid();

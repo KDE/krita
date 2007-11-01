@@ -33,7 +33,7 @@ KoPAMasterPage::KoPAMasterPage()
 : KoPAPageBase()
 {
     m_pageLayout = KoPageLayout::standardLayout();
-    setPageTitle ( "Standard" );
+    setName( "Standard" );
 }
 
 KoPAMasterPage::~KoPAMasterPage()
@@ -51,7 +51,7 @@ void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
 
     KoGenStyle pageMaster( KoGenStyle::StyleMaster );
     pageMaster.addAttribute( "style:page-layout-name", pageLayoutName );
-    pageMaster.addAttribute( "style:display-name", pageTitle() );
+    pageMaster.addAttribute( "style:display-name", name() );
 
     KoXmlWriter &savedWriter = paContext.xmlWriter();
 
@@ -73,10 +73,10 @@ void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
 void KoPAMasterPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
 {
     if ( element.hasAttributeNS( KoXmlNS::style, "display-name" ) ) {
-        setPageTitle( element.attributeNS( KoXmlNS::style, "display-name" ) );
+        setName( element.attributeNS( KoXmlNS::style, "display-name" ) );
     }
     else {
-        setPageTitle( element.attributeNS( KoXmlNS::style, "name" ) );
+        setName( element.attributeNS( KoXmlNS::style, "name" ) );
     }
     QString pageLayoutName = element.attributeNS( KoXmlNS::style, "page-layout-name" );
     const KoOasisStyles& styles = loadingContext.koLoadingContext().oasisStyles();

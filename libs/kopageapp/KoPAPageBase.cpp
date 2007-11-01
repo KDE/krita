@@ -48,16 +48,6 @@ KoPAPageBase::~KoPAPageBase()
 {
 }
 
-QString KoPAPageBase::pageTitle() const
-{
-    return m_pageTitle;
-}
-
-void KoPAPageBase::setPageTitle( const QString &title )
-{
-    m_pageTitle = title;
-}
-
 void KoPAPageBase::paintComponent(QPainter& painter, const KoViewConverter& converter)
 {
     Q_UNUSED(painter);

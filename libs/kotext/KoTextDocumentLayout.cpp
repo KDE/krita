@@ -80,6 +80,7 @@ public:
     KoInlineTextObjectManager *inlineTextObjectManager;
     bool scheduled;
     KoTextDocumentLayout *parent;
+    KoPostscriptPaintDevice *paintDevice;
 };
 
 // ------------------- KoTextDocumentLayout --------------------
@@ -88,12 +89,14 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLay
     m_state(layout),
     d(new Private(this))
 {
-    setPaintDevice( new KoPostscriptPaintDevice() );
+    d->paintDevice = new KoPostscriptPaintDevice();
+    setPaintDevice( d->paintDevice );
     if(m_state == 0)
         m_state = new LayoutStateDummy();
 }
 
 KoTextDocumentLayout::~KoTextDocumentLayout() {
+    delete d->paintDevice;
     delete d;
     delete m_state;
     m_state = 0;

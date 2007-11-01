@@ -24,7 +24,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoOasisStyles.h>
-#include <KoOasisStore.h>
+#include <KoOdfWriteStore.h>
 #include <KoOasisLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
@@ -128,7 +128,7 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
 
 bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
-    KoOasisStore oasisStore( store );
+    KoOdfWriteStore oasisStore( store );
     KoXmlWriter* contentWriter = oasisStore.contentWriter();
     if ( !contentWriter )
         return false;

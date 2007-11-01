@@ -30,7 +30,7 @@
 #include "cpaintbrush.h"
 
 typedef KGenericFactory<CPaintBrush> CPaintBrushFactory;
-K_EXPORT_COMPONENT_FACTORY(kritacpaintbrush, CPaintBrushFactory("kritacore"))
+K_EXPORT_COMPONENT_FACTORY(kritacpaintbrush, CPaintBrushFactory("krita"))
 
 CPaintBrush::CPaintBrush(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)

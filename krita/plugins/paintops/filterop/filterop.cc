@@ -31,7 +31,7 @@
 #include "kis_paintop_registry.h"
 
 typedef KGenericFactory<FilterOp> FilterOpFactory;
-K_EXPORT_COMPONENT_FACTORY(kritafilterop, FilterOpFactory("kritacore"))
+K_EXPORT_COMPONENT_FACTORY(kritafilterop, FilterOpFactory("krita"))
 
 FilterOp::FilterOp(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)

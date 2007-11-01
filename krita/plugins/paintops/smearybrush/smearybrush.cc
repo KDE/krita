@@ -30,7 +30,7 @@
 #include "smearybrush.h"
 
 typedef KGenericFactory<SmearyBrush> SmearyBrushFactory;
-K_EXPORT_COMPONENT_FACTORY(kritasmearybrush, SmearyBrushFactory("kritacore"))
+K_EXPORT_COMPONENT_FACTORY(kritasmearybrush, SmearyBrushFactory("krita"))
 
 SmearyBrush::SmearyBrush(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)

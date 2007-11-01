@@ -37,7 +37,7 @@
 #include "defaultpaintops_plugin.h"
 
 typedef KGenericFactory<DefaultPaintOpsPlugin> DefaultPaintOpsPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritadefaultpaintops, DefaultPaintOpsPluginFactory( "kritacore" ) )
+K_EXPORT_COMPONENT_FACTORY( kritadefaultpaintops, DefaultPaintOpsPluginFactory( "krita" ) )
 
 
 DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QStringList &)

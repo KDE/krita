@@ -207,6 +207,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
 KoColorSetWidget::~KoColorSetWidget()
 {
+    delete d->colorSet;
     delete d;
 }
 

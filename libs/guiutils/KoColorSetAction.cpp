@@ -58,6 +58,7 @@ KoColorSetAction::KoColorSetAction(QObject *parent)
 
 KoColorSetAction::~KoColorSetAction()
 {
+    delete d->colorSetWidget;
     delete d;
 }
 

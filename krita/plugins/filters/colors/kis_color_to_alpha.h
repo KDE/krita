@@ -34,12 +34,6 @@ class KisFilterColorToAlpha : public KisFilter {
                  KoUpdater* progressUpdater = 0
         ) const;
         static inline KoID id() { return KoID("colortoalpha", i18n("Color to Alpha")); }
-        virtual bool supportsPainting() const { return true; }
-        
-        virtual bool supportsPreview() const { return true; }
-        virtual bool supportsIncrementalPainting() const { return false; }
-        virtual bool supportsAdjustmentLayers() const { return false; }
-        virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
     public:
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
         virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP dev);

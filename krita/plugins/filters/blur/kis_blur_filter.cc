@@ -34,6 +34,11 @@
 
 KisBlurFilter::KisBlurFilter() : KisFilter(id(), CategoryBlur, i18n("&Blur..."))
 {
+    setSupportsPainting(true);
+    setSupportsPreview(true);
+    setSupportsIncrementalPainting(false);
+    setSupportsAdjustmentLayers(false);
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
 KisFilterConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP )

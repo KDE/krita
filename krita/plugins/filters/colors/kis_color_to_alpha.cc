@@ -36,6 +36,11 @@
 
 KisFilterColorToAlpha::KisFilterColorToAlpha() : KisFilter(id(), CategoryColors, i18n("&Color to Alpha..."))
 {
+    setSupportsPainting(true);
+    setSupportsPreview(true);
+    setSupportsIncrementalPainting(false);
+    setSupportsAdjustmentLayers(false);
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
 KisFilterConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP )

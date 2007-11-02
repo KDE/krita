@@ -39,7 +39,7 @@ const KoID KisFilter::CategoryOther = KoID("other_filters", i18n("Other"));
 
 struct KisFilter::Private {
     Private()
-        : bookmarkManager(0), supportsPainting(false), supportsPreview(true), supportsAdjustmentLayers(false), supportsIncrementalPainting(true), supportsThreading(true)
+        : bookmarkManager(0), supportsPainting(false), supportsPreview(true), supportsAdjustmentLayers(false), supportsIncrementalPainting(true), supportsThreading(true), colorSpaceIndependence(FULLY_INDEPENDENT)
     {
     }
 
@@ -53,6 +53,7 @@ struct KisFilter::Private {
     bool supportsAdjustmentLayers;
     bool supportsIncrementalPainting;
     bool supportsThreading;
+    ColorSpaceIndependence colorSpaceIndependence;
 };
 
 KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entry)
@@ -152,6 +153,11 @@ bool KisFilter::supportsThreading() const
     return d->supportsThreading;
 }
 
+ColorSpaceIndependence KisFilter::colorSpaceIndependence() const
+{
+    return d->colorSpaceIndependence;
+}
+
 void KisFilter::setSupportsPainting(bool v)
 {
     d->supportsPainting = v;
@@ -168,7 +174,17 @@ void KisFilter::setSupportsIncrementalPainting(bool v)
 {
     d->supportsIncrementalPainting = v;
 }
-bool KisFilter::setSupportsThreading(bool v)
+void KisFilter::setSupportsThreading(bool v)
 {
     d->supportsThreading = v;
+}
+
+void KisFilter::setColorSpaceIndependence(ColorSpaceIndependence v)
+{
+    d->colorSpaceIndependence = v;
+}
+
+QString KisFilter::configEntryGroup()
+{
+    return id() + "_filter_bookmarks";
 }

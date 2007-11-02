@@ -133,15 +133,6 @@ public:
       */
     virtual QRect enlargeRect(QRect rect, const KisFilterConfiguration* = 0) const;
 
-
-    /**
-     * Determine the colorspace independence of this filter.
-     * @see ColorSpaceIndependence
-     *
-     * @return the degree of independence
-     */
-    virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_RGBA8; }
-
     /**
      * Determine if this filter can work with this colorSpace. For instance, some
      * colorspaces don't depend on lcms, and cannot do certain tasks. The colorsfilters
@@ -197,12 +188,20 @@ public:
      */
     bool supportsThreading() const;
     
+    /**
+     * Determine the colorspace independence of this filter.
+     * @see ColorSpaceIndependence
+     *
+     * @return the degree of independence
+     */
+    ColorSpaceIndependence colorSpaceIndependence() const;
 protected:
     void setSupportsPainting(bool v);
     void setSupportsPreview(bool v);
     void setSupportsAdjustmentLayers(bool v);
     void setSupportsIncrementalPainting(bool v);
-    bool setSupportsThreading(bool v);
+    void setSupportsThreading(bool v);
+    void setColorSpaceIndependence(ColorSpaceIndependence v);
     
 protected:
 
@@ -210,7 +209,7 @@ protected:
     
     void setBookmarkManager(KisBookmarkedConfigurationManager* );
     /// @return the name of config group in KConfig
-    inline QString configEntryGroup() { return id() + "_filter_bookmarks"; }
+    QString configEntryGroup();
 
     /// @return the default configuration as defined by whoever wrote the plugin
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;

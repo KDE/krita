@@ -72,28 +72,6 @@ void KisOasisLoadVisitor::loadPaintLayer(const KoXmlElement& elem, KisPaintLayer
     loadLayerInfo(elem, pL.data());
 
     QString filename = m_layerFilenames[pL.data()];
-    kDebug(41008) <<"Loading file :" << filename;
-/*    if (m_oasisStore->store()->open(filename) ) {
-        KoStoreDevice io ( m_oasisStore->store() );
-        if ( !io.open( QIODevice::ReadOnly ) )
-        {
-            kDebug(41008) <<"Couldn't open for reading:" << filename;
-//             return false;
-        }
-        QImage img;
-        if ( ! img.load( &io, "PNG" ) )
-        {
-            kDebug(41008) <<"Loading PNG failed:" << filename;
-            m_oasisStore->store()->close();
-            io.close();
-//             return false;
-        }
-        pL->paintDevice()->convertFromQImage(img, "");
-        io.close();
-        m_oasisStore->store()->close();
-        kDebug(41008) <<"Loading was successful";
-//         return true;
-    }*/
     kDebug(41008) <<"Loading was unsuccessful";
 }
 
@@ -126,8 +104,8 @@ void KisOasisLoadVisitor::loadGroupLayer(const KoXmlElement& elem, KisGroupLayer
                     }
 //                     KisPaintLayerSP layer = new KisPaintLayer( m_image.data(), "", opacity); // TODO: support of colorspacess
 //                     m_layerFilenames[layer.data()] = srcAttr;
-                    if (m_oasisStore->store()->open(filename) ) {
-                        KoStoreDevice io ( m_oasisStore->store() );
+                    if (m_oasisStore->open(filename) ) {
+                        KoStoreDevice io ( m_oasisStore );
                         if ( !io.open( QIODevice::ReadOnly ) )
                         {
                             kDebug(41008) <<"Couldn't open for reading:" << filename;
@@ -136,7 +114,7 @@ void KisOasisLoadVisitor::loadGroupLayer(const KoXmlElement& elem, KisGroupLayer
                         KisPNGConverter pngConv(0, gL->image()->undoAdapter() );
                         pngConv.buildImage( &io );
                         io.close();
-                        m_oasisStore->store()->close();
+                        m_oasisStore->close();
                         KisPaintLayerSP layer = new KisPaintLayer( gL->image() , "", opacity, pngConv.image()->projection());
                         m_image->addLayer(layer, gL, gL->childCount() );
                         loadPaintLayer(subelem, layer);

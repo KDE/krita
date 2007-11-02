@@ -240,8 +240,7 @@ bool KisDoc2::loadOasis( const KoXmlDocument& doc, KoOasisStyles&, const KoXmlDo
     for (KoXmlNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "office:body") {
             KoXmlElement elem = node.toElement();
-            KoOdfReadStore* oasisStore =  new KoOdfReadStore( store );
-            KisOasisLoadVisitor olv(this,oasisStore);
+            KisOasisLoadVisitor olv(this,store);
             olv.loadImage(elem);
             if (!olv.image() )
                 return false;

@@ -23,7 +23,7 @@
 
 #include <KoXmlReader.h>
 
-class KoOdfReadStore;
+class KoStore;
 class KisPaintLayer;
 class KisGroupLayer;
 class KisAdjustmentLayer;
@@ -31,7 +31,7 @@ class KisDoc2;
 
 class KisOasisLoadVisitor {
 public:
-    KisOasisLoadVisitor(KisDoc2* doc, KoOdfReadStore* os) : m_doc(doc), m_oasisStore(os) {}
+    KisOasisLoadVisitor(KisDoc2* doc, KoStore* os) : m_doc(doc), m_oasisStore(os) {}
     virtual ~KisOasisLoadVisitor() {}
 
 public:
@@ -46,7 +46,7 @@ private:
     KisImageSP m_image;
     KisDoc2* m_doc;
     QMap<KisLayer *, QString> m_layerFilenames;
-    KoOdfReadStore* m_oasisStore;
+    KoStore* m_oasisStore;
 };
 
 

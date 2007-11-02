@@ -80,7 +80,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoShapeControllerBase 
     , m_document( document )
     , m_model( 0 )
 {
-    setWindowTitle( i18n( "Page Or Slide Or Sheet View" ) ); // XXX: Set this from your view
+    setWindowTitle( i18n( "Document" ) );
 
     QWidget *mainWidget = new QWidget( this );
     QGridLayout* layout = new QGridLayout( mainWidget );

@@ -126,12 +126,12 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
     if(d->showSelectionBorders) {
         // Draw first selection border
         if(d->firstSelectionBorder > 0) {
-            double border = d->viewConverter->documentToViewX(d->firstSelectionBorder);
+            double border = d->viewConverter->documentToViewX(d->firstSelectionBorder) + d->offset;
             painter.drawLine(QPointF(border, rectangle.y() + 1), QPointF(border, rectangle.bottom() - 1));
         }
         // Draw second selection border
         if(d->secondSelectionBorder > 0) {
-            double border = d->viewConverter->documentToViewX(d->secondSelectionBorder);
+            double border = d->viewConverter->documentToViewX(d->secondSelectionBorder) + d->offset;
             painter.drawLine(QPointF(border, rectangle.y() + 1), QPointF(border, rectangle.bottom() - 1));
         }
     }
@@ -385,21 +385,22 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
     painter.setPen(d->ruler->palette().color(QPalette::Mid));
     painter.drawRect(rectangle);
 
+    if(d->activeRangeStart != d->activeRangeEnd)
+        painter.fillRect(activeRangeRectangle, d->ruler->palette().brush(QPalette::Base));
+    
     if(d->showSelectionBorders) {
         // Draw first selection border
         if(d->firstSelectionBorder > 0) {
-            double border = d->viewConverter->documentToViewY(d->firstSelectionBorder);
+            double border = d->viewConverter->documentToViewY(d->firstSelectionBorder) + d->offset;
             painter.drawLine(QPointF(rectangle.x() + 1, border), QPointF(rectangle.right() - 1, border));
         }
         // Draw second selection border
         if(d->secondSelectionBorder > 0) {
-            double border = d->viewConverter->documentToViewY(d->secondSelectionBorder);
+            double border = d->viewConverter->documentToViewY(d->secondSelectionBorder) + d->offset;
             painter.drawLine(QPointF(rectangle.x() + 1, border), QPointF(rectangle.right() - 1, border));
         }
     }
 
-    if(d->activeRangeStart != d->activeRangeEnd)
-        painter.fillRect(activeRangeRectangle, d->ruler->palette().brush(QPalette::Base));
     return rectangle;
 }
 
@@ -797,7 +798,9 @@ void KoRuler::updateSelectionBorders(double first, double second)
 {
     d->firstSelectionBorder = first;
     d->secondSelectionBorder = second;
-    update();
+
+    if(d->showSelectionBorders)
+        update();
 }
 
 void KoRuler::setShowTabs(bool show)

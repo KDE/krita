@@ -32,7 +32,6 @@
 #include <QResizeEvent>
 #include <QMenu>
 #include <QMouseEvent>
-#include <QToolTip>
 
 #include <KoViewConverter.h>
 
@@ -296,10 +295,15 @@ void HorizontalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPain
 
     // Draw the mouse indicator
     const int mouseCoord = d->mouseCoordinate - start;
-    if(d->selected == KoRulerPrivate::None && d->showMousePosition &&
-            (mouseCoord > 0) && (mouseCoord < rectangle.width()) ) {
-        painter.drawLine(QPointF(mouseCoord, rectangle.y() + 1),
-                          QPointF(mouseCoord, rectangle.bottom() - 1));
+    if (d->selected == KoRulerPrivate::None || d->selected == KoRulerPrivate::HotSpot) {
+        const qreal top = rectangle.y() + 1;
+        const qreal bottom = rectangle.bottom() -1;
+        if (d->selected == KoRulerPrivate::None && d->showMousePosition && mouseCoord > 0 && mouseCoord < rectangle.width() )
+            painter.drawLine(QPointF(mouseCoord, top), QPointF(mouseCoord, bottom));
+        foreach (KoRulerPrivate::HotSpotData hp, d->hotspots) {
+            const qreal x = d->viewConverter->documentToViewX(hp.position) + d->offset;
+            painter.drawLine(QPointF(x, top), QPointF(x, bottom));
+        }
     }
 }
 
@@ -489,10 +493,16 @@ void VerticalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPainte
     }
 
     // Draw the mouse indicator
-    const int mouseCoord = d->mouseCoordinate - start;
-    if(d->showMousePosition && (mouseCoord > 0) && (mouseCoord < rectangle.height()) ) {
-        painter.drawLine(QPointF(rectangle.x() + 1, mouseCoord),
-                          QPointF(rectangle.right() - 1, mouseCoord));
+    const int mouseCoord = d->mouseCoordinate - start - d->offset;
+    if (d->selected == KoRulerPrivate::None || d->selected == KoRulerPrivate::HotSpot) {
+        const qreal left = rectangle.left() + 1;
+        const qreal right = rectangle.right() -1;
+        if (d->selected == KoRulerPrivate::None && d->showMousePosition && mouseCoord > 0 && mouseCoord < rectangle.height() )
+            painter.drawLine(QPointF(left, mouseCoord), QPointF(right, mouseCoord));
+        foreach (KoRulerPrivate::HotSpotData hp, d->hotspots) {
+            const qreal y = d->viewConverter->documentToViewY(hp.position) + d->offset;
+            painter.drawLine(QPointF(left, y), QPointF(right, y));
+        }
     }
 }
 
@@ -526,7 +536,7 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     paragraphIndent(0),
     endIndent(0),
     showTabs(false),
-    currentTab(0),
+    currentIndex(0),
     rightToLeft(false),
     selected(None),
     selectOffset(0),
@@ -615,7 +625,22 @@ KoRulerPrivate::Selection KoRulerPrivate::selectionAtPosition(const QPoint pos, 
             return KoRulerPrivate::EndIndent;
         }
     }
+
     return KoRulerPrivate::None;
+}
+
+int KoRulerPrivate::hotSpotIndex(const QPoint pos) {
+    for(int counter = 0; counter < hotspots.count(); counter++) {
+        bool hit;
+        if (orientation == Qt::Horizontal)
+            hit = qAbs(viewConverter->documentToViewX(hotspots[counter].position) - pos.x() + offset) < 3;
+        else
+            hit = qAbs(viewConverter->documentToViewY(hotspots[counter].position) - pos.y() + offset) < 3;
+
+        if (hit)
+            return counter;
+    }
+    return -1;
 }
 
 KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter)
@@ -812,6 +837,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
 
     QPoint pos = ev->pos();
 
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     if (d->showTabs && pos.y() > height() - 9) {
         int i = 0;
         int x;
@@ -823,46 +849,53 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
                 x = int(d->viewConverter->documentToViewX(d->activeRangeStart + t.position)
                         + d->offset);
 
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
             switch (t.type) {
             case QTextOption::LeftTab:
                 if (pos.x() >= x-6 && pos.x() <= x) {
                     d->selected = KoRulerPrivate::Tab;
                     d->selectOffset = x - pos.x();
-                    d->currentTab = i;
+                    d->currentIndex = i;
                 }
                 break;
             case QTextOption::RightTab:
                 if (pos.x() >= x && pos.x() <= x+6) {
                     d->selected = KoRulerPrivate::Tab;
                     d->selectOffset = x - pos.x();
-                    d->currentTab = i;
+                    d->currentIndex = i;
                 }
                 break;
             case QTextOption::CenterTab:
                 if (pos.x() >= x-6 && pos.x() <= x+6) {
                     d->selected = KoRulerPrivate::Tab;
                     d->selectOffset = x - pos.x();
-                    d->currentTab = i;
+                    d->currentIndex = i;
                 }
                 break;
             case QTextOption::DelimiterTab:
                 if (pos.x() >= x-6 && pos.x() <= x+6) {
                     d->selected = KoRulerPrivate::Tab;
                     d->selectOffset = x - pos.x();
-                    d->currentTab = i;
+                    d->currentIndex = i;
                 }
                 break;
             default:
                 break;
             }
-#endif
             i++;
         }
     }
+#endif
 
     if (d->selected == KoRulerPrivate::None)
         d->selected = d->selectionAtPosition(ev->pos(), &d->selectOffset);
+    if (d->selected == KoRulerPrivate::None) {
+        int hotSpotIndex = d->hotSpotIndex(ev->pos());
+        if (hotSpotIndex >= 0) {
+            d->selected = KoRulerPrivate::HotSpot;
+            d->currentIndex = d->currentIndex;
+            update();
+        }
+    }
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     if (d->showTabs && d->selected == KoRulerPrivate::None) {
@@ -873,7 +906,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         d->tabs.append(t);
         d->selectOffset = 0;
         d->selected = KoRulerPrivate::Tab;
-        d->currentTab = d->tabs.count() - 1;
+        d->currentIndex = d->tabs.count() - 1;
         update();
     }
 #endif
@@ -942,35 +975,52 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         emit indentsChanged(false);
         break;
     case KoRulerPrivate::Tab:
-        if (d->currentTab < 0) { // tab is deleted.
+        if (d->currentIndex < 0) { // tab is deleted.
             if (ev->pos().y() < height()) { // reinstante it.
-                d->currentTab = d->tabs.count();
+                d->currentIndex = d->tabs.count();
                 d->tabs.append(d->deletedTab);
             }
             else
                 break;
         }
         if (d->rightToLeft)
-            d->tabs[d->currentTab].position = d->activeRangeEnd -
+            d->tabs[d->currentIndex].position = d->activeRangeEnd -
                 d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset - d->offset);
         else
-            d->tabs[d->currentTab].position = d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset
+            d->tabs[d->currentIndex].position = d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset
                 - d->offset) - d->activeRangeStart;
         if( ! (ev->modifiers() & Qt::ShiftModifier))
-            d->tabs[d->currentTab].position = d->doSnapping(d->tabs[d->currentTab].position);
-        if (d->tabs[d->currentTab].position < 0)
-            d->tabs[d->currentTab].position = 0;
-        if (d->tabs[d->currentTab].position > activeLength)
-            d->tabs[d->currentTab].position = activeLength;
+            d->tabs[d->currentIndex].position = d->doSnapping(d->tabs[d->currentIndex].position);
+        if (d->tabs[d->currentIndex].position < 0)
+            d->tabs[d->currentIndex].position = 0;
+        if (d->tabs[d->currentIndex].position > activeLength)
+            d->tabs[d->currentIndex].position = activeLength;
 
         if (ev->pos().y() > height() + 20) { // moved out of the ruler, delete it.
-            d->deletedTab = d->tabs.takeAt(d->currentTab);
-            d->currentTab = -1;
+            d->deletedTab = d->tabs.takeAt(d->currentIndex);
+            d->currentIndex = -1;
         }
 
         emit tabsChanged(false);
         break;
+    case KoRulerPrivate::HotSpot:
+        qreal newPos;
+        if (d->orientation == Qt::Horizontal)
+            newPos= d->viewConverter->viewToDocumentX(pos.x() - d->offset);
+        else
+            newPos= d->viewConverter->viewToDocumentY(pos.y() - d->offset);
+        d->hotspots[d->currentIndex].position = newPos;
+        emit hotSpotChanged(d->hotspots[d->currentIndex].id, newPos);
+        break;
     case KoRulerPrivate::None:
+        d->mouseCoordinate = d->orientation == Qt::Horizontal ?  pos.x() : pos.y();
+        int hotSpotIndex = d->hotSpotIndex(pos);
+        if (hotSpotIndex >= 0) {
+            setCursor(QCursor( d->orientation == Qt::Horizontal ? Qt::SplitHCursor : Qt::SplitVCursor ));
+            break;
+        }
+        unsetCursor();
+
         KoRulerPrivate::Selection selection = d->selectionAtPosition(pos);
         QString text;
         switch(selection) {
@@ -980,10 +1030,43 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         default:
             break;
         }
-        QToolTip::showText(mapToGlobal(QPoint(pos.x(), 8)), text, this, QRect());
-        d->mouseCoordinate = pos.x();
+        setToolTip(text);
     }
     update();
+}
+
+void KoRuler::clearHotSpots() {
+    if (d->hotspots.isEmpty())
+        return;
+    d->hotspots.clear();
+    update();
+}
+
+void KoRuler::setHotSpot(qreal position, int id) {
+    foreach(KoRulerPrivate::HotSpotData hs, d->hotspots) {
+        if (hs.id == id) {
+            hs.position = position;
+            update();
+            return;
+        }
+    }
+    // not there yet, then insert it.
+    KoRulerPrivate::HotSpotData hs;
+    hs.position = position;
+    hs.id = id;
+    d->hotspots.append(hs);
+}
+
+bool KoRuler::removeHotSpot(int id) {
+    QList<KoRulerPrivate::HotSpotData>::Iterator iter = d->hotspots.begin();
+    while(iter != d->hotspots.end()) {
+        if (iter->id == id) {
+            d->hotspots.erase(iter);
+            update();
+            return true;
+        }
+    }
+    return false;
 }
 
 #include "KoRuler.moc"

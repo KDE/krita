@@ -103,8 +103,14 @@ public:
 
     bool showTabs;
     QList<KoRuler::Tab> tabs;
-    int currentTab; //indext of selected tab - only valid when selected indicates tab
+    int currentIndex; //indext of selected tab or selected HotSpot - only valid when selected indicates tab or hotspot
     KoRuler::Tab deletedTab;
+
+    struct HotSpotData {
+        qreal position;
+        int id;
+    };
+    QList<HotSpotData> hotspots;
 
     bool rightToLeft;
     enum Selection {
@@ -112,7 +118,8 @@ public:
         Tab,
         FirstLineIndent,
         ParagraphIndent,
-        EndIndent
+        EndIndent,
+        HotSpot
     };
     Selection selected;
     int selectOffset;
@@ -127,6 +134,7 @@ public:
     /// @return The rounding of value to the nearest multiple of stepValue
     double doSnapping(const double value) const;
     Selection selectionAtPosition(const QPoint pos, int *selectOffset = 0);
+    int hotSpotIndex(const QPoint pos);
 
     friend class VerticalPaintingStrategy;
     friend class HorizontalPaintingStrategy;

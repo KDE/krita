@@ -199,6 +199,10 @@ public:
 
     QList<Tab> tabs() const;
 
+    void clearHotSpots();
+    void setHotSpot(qreal position, int id = -1);
+    bool removeHotSpot(int id);
+
 signals:
         /**
          * emitted when any of the indents is moved by the user.
@@ -211,6 +215,8 @@ signals:
          * @param final false until the user releases the mouse. So you can implement live update.
          */
         void tabsChanged(bool final);
+
+    void hotSpotChanged(int id, qreal newPosition);
 
 protected:
         virtual void paintEvent(QPaintEvent* event);

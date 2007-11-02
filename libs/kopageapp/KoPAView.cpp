@@ -104,7 +104,7 @@ void KoPAView::initGUI()
              this, SLOT( slotZoomChanged( KoZoomMode::Mode, double ) ) );
 
     m_zoomAction = m_zoomController->zoomAction();
-    addStatusBarItem( m_zoomAction->createWidget( statusBar() ), 0 );
+    addStatusBarItem( m_zoomAction->createWidget( statusBar() ), 0, true );
 
     m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 

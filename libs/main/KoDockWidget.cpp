@@ -230,7 +230,13 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
     if (!floatRect.isNull()) top = floatRect.y();
     else if (!closeRect.isNull()) top = closeRect.y();
     
-    QRect collapseRect = QRect(QPoint(fw, top), d->closeButton->size());
+    QSize size = d->collapseButton->size();
+    if (!closeRect.isNull()) {
+        size = d->closeButton->size();
+    } else if (!floatRect.isNull()) {
+        size = d->floatButton->size();
+    }
+    QRect collapseRect = QRect(QPoint(fw, top), size);
     d->collapseButton->setGeometry(collapseRect);
 }
 

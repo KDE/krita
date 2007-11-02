@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include "kis_filter.h"
+#include "kis_filter_processing_information.h"
 
 #include "kritacore/krs_paint_device.h"
 
@@ -30,16 +31,16 @@ namespace Kross {
     class Action;
 }
 
-class KisScriptFilter : public KisFilter {
+class KisScriptFilter : public QObject, public KisFilter {
     Q_OBJECT
     public:
         KisScriptFilter(Kross::Action* action);
         virtual ~KisScriptFilter();
-        virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config);
+        virtual void process(KisFilterConstantProcessingInformation srcInfo, KisFilterProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const;
     public Q_SLOTS:
         QString category() const;
     signals:
-        void scriptProcess( QObject* src, const QPoint& srcTopLeft, QObject* dst, const QPoint& dstTopLeft, const QSize& size, QObject* config );
+        void scriptProcess( QObject* src, const QPoint& srcTopLeft, QObject* dst, const QPoint& dstTopLeft, const QSize& size, QObject* config ) const;
     public:
         virtual bool supportsPainting() const;
         virtual bool supportsPreview() const;

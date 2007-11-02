@@ -1,3 +1,5 @@
+#if 0
+
 /*
  *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
@@ -89,5 +91,7 @@ class KROSSKRITACORE_EXPORT Progress : public KisProgressSubject
 };
 
 }
+
+#endif
 
 #endif

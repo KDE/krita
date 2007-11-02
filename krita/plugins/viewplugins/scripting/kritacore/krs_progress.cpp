@@ -1,3 +1,5 @@
+#if 0
+
 /*
  *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
@@ -91,3 +93,5 @@ void Progress::progressDone()
 }
 
 #include "krs_progress.moc"
+
+#endif

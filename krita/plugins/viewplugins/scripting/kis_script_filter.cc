@@ -47,12 +47,12 @@ QString KisScriptFilter::category() const
     return d->action->property("category").toString();
 }
 
-void KisScriptFilter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, const KisFilterConfiguration* config)
+void KisScriptFilter::process(KisFilterConstantProcessingInformation srcInfo, KisFilterProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const
 {
     Q_UNUSED(config);
     d->action->trigger();
 
-    emit scriptProcess(new Scripting::ConstPaintDevice(src, 0), srcTopLeft, new Scripting::PaintDevice(dst, 0), dstTopLeft, size, 0);
+    emit scriptProcess(new Scripting::ConstPaintDevice(srcInfo.paintDevice(), 0), srcInfo.topLeft(), new Scripting::PaintDevice(dstInfo.paintDevice(), 0), dstInfo.topLeft(), size, 0);
 }
 
 bool KisScriptFilter::supportsPainting() const

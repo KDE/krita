@@ -77,7 +77,7 @@ namespace Scripting {
     {
         public:
             KisView2* view;
-            Progress* progress;
+//             Progress* progress;
     };
 
 }
@@ -87,7 +87,7 @@ Module::Module(KisView2* view)
 	, d(new Private())
 {
     d->view = view;
-    d->progress = 0;
+//     d->progress = 0;
     /*
     Kross::Manager::self().addObject(d->view->canvasSubject()->document(), "KritaDocument");
     Kross::Manager::self().addObject(d->view, "KritaView");
@@ -96,7 +96,7 @@ Module::Module(KisView2* view)
 
 Module::~Module()
 {
-    delete d->progress;
+//     delete d->progress;
     delete d;
 }
 
@@ -107,9 +107,9 @@ KoDocument* Module::doc()
 
 QObject* Module::progress()
 {
-    if(! d->progress)
-        d->progress = new Progress(d->view);
-    return d->progress;
+//     if(! d->progress)
+//         d->progress = new Progress(d->view);
+//     return d->progress;
 }
 
 QObject* Module::image()

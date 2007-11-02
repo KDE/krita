@@ -20,8 +20,11 @@
 
 #include "kis_minmax_filters.h"
 
+#include <KoProgressUpdater.h>
+
 #include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
+#include <kis_selection.h>
 
 typedef void (*funcMaxMin)(const quint8* , quint8* , uint );
 
@@ -73,23 +76,25 @@ KisFilterMax::KisFilterMax() : KisFilter(id(), CategoryColors, i18n("M&aximize C
 {
 }
 
-void KisFilterMax::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisFilterMax::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
-    Q_UNUSED( config );
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
-    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height() );
-    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection() );
+    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection());
 
     int pixelsProcessed = 0;
-    setProgressTotalSteps(size.width() * size.height());
+    int totalCost = size.width() * size.height() / 100;
 
     KoColorSpace * cs = src->colorSpace();
     qint32 nC = cs->colorChannelCount();
@@ -115,35 +120,35 @@ void KisFilterMax::process(KisFilterConstantProcessingInformation src,
         {
             F( srcIt.oldRawData(), dstIt.rawData(), nC);
         }
-        setProgress(++pixelsProcessed);
+        progressUpdater->setProgress((++pixelsProcessed) / totalCost);
         ++srcIt;
         ++dstIt;
     }
-    setProgressDone(); // Must be called even if you don't really support progression
-#endif
 }
 
 KisFilterMin::KisFilterMin() : KisFilter(id(), CategoryColors, i18n("M&inimize Channel"))
 {
 }
 
-void KisFilterMin::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisFilterMin::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
     Q_ASSERT(src != 0);
-
     Q_ASSERT(dst != 0);
 
-    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
-    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
+    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection());
 
     int pixelsProcessed = 0;
-    setProgressTotalSteps(size.width() * size.height());
+    int totalCost = size.width() * size.height() / 100;
 
     KoColorSpace * cs = src->colorSpace();
     qint32 nC = cs->colorChannelCount();
@@ -169,11 +174,9 @@ void KisFilterMin::process(KisFilterConstantProcessingInformation src,
         {
             F( srcIt.oldRawData(), dstIt.rawData(), nC);
         }
-        setProgress(++pixelsProcessed);
+        progressUpdater->setProgress((++pixelsProcessed) / totalCost);
         ++srcIt;
         ++dstIt;
     }
-    setProgressDone(); // Must be called even if you don't really support progression
-#endif
 }
 

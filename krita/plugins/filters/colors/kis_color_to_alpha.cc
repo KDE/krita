@@ -25,8 +25,11 @@
 
 #include <kcolorbutton.h>
 
+#include <KoProgressUpdater.h>
+
 #include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
+#include <kis_selection.h>
 
 #include "ui_wdgcolortoalphabase.h"
 #include "kis_wdg_color_to_alpha.h"
@@ -48,14 +51,17 @@ KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(KisPaintDevi
     return config;
 }
 
-void KisFilterColorToAlpha::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisFilterColorToAlpha::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
@@ -65,11 +71,12 @@ void KisFilterColorToAlpha::process(KisFilterConstantProcessingInformation src,
     QColor cTA = (config->getProperty("targetcolor", value)) ? value.value<QColor>() : QColor(255,255,255);
     int threshold = (config->getProperty("threshold", value)) ? value.toInt() : 0;
 
-    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height() );
-    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection() );
+    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection() );
 
     int pixelsProcessed = 0;
-    setProgressTotalSteps(size.width() * size.height());
+    int totalCost = size.width() * size.height() / 100;
+    int currentProgress = 0;
 
     KoColorSpace * cs = src->colorSpace();
     qint32 pixelsize = cs->pixelSize();
@@ -89,11 +96,9 @@ void KisFilterColorToAlpha::process(KisFilterConstantProcessingInformation src,
                 cs->setAlpha(dstIt.rawData(), (255 * d ) / threshold, 1 );
             }
         }
-        setProgress(++pixelsProcessed);
+        progressUpdater->setProgress((++currentProgress) / totalCost);
         ++srcIt;
         ++dstIt;
     }
     delete[] color;
-    setProgressDone(); // Must be called even if you don't really support progression
-#endif
 }

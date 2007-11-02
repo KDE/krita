@@ -52,26 +52,30 @@ KisFilterConfiguration* KisBlurFilter::factoryConfiguration(const KisPaintDevice
     return config;
 }
 
-void KisBlurFilter::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisBlurFilter::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
 
     if (dst != src) { // TODO: fix the convolution painter to avoid that stupid copy
 //         kDebug() <<"src != dst";
-        KisPainter gc(dst);
+        KisPainter gc(dst, dstInfo.selection());
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
     }
 
-    setProgressTotalSteps(size.width() * size.height());
+    
+//     int totalCost = size.width() * size.height(); // TODO: use progress reporter
 
     if(!config) config = new KisFilterConfiguration(id().id(), 1);
 
@@ -119,14 +123,9 @@ void KisBlurFilter::process(KisFilterConstantProcessingInformation src,
     }
 
     KisKernelSP kernel = KisKernelSP(KisKernel::fromQImage(mask));
-    KisConvolutionPainter painter( dst );
+    KisConvolutionPainter painter( dst, dstInfo.selection() );
+    painter.setProgress( progressUpdater );
     painter.applyMatrix(kernel, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
-    if (painter.cancelRequested()) {
-        progressUpdater->cancel();
-    }
-
-    setProgressDone(); // Must be called even if you don't really support progression
-#endif
 }
 

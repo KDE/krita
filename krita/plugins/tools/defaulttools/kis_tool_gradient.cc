@@ -287,6 +287,10 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
                 m_canvas->addCommand(painter.endTransaction());
             }
         }
+        QRectF bound;
+        bound.setTopLeft(m_startPos);
+        bound.setBottomRight(m_endPos);
+        m_canvas->updateCanvas(convertToPt(bound.normalized()));
     }
 }
 

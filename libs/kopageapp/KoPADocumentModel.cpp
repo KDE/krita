@@ -149,12 +149,18 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
             QString name = shape->name();
             if( name.isEmpty() )
             {
-                if( dynamic_cast<KoShapeLayer*>( shape ) )
+                if ( dynamic_cast<KoPAPageBase *>( shape ) ) {
+                    name = i18n("Page");
+                }
+                else if( dynamic_cast<KoShapeLayer*>( shape ) ) {
                     name = i18n("Layer");
-                else if( dynamic_cast<KoShapeContainer*>( shape ) )
+                }
+                else if( dynamic_cast<KoShapeContainer*>( shape ) ) {
                     name = i18n("Group");
-                else
+                }
+                else {
                     name = i18n("Shape");
+                }
             }
             return name + QString(" (%1)").arg( shape->zIndex() );
         }

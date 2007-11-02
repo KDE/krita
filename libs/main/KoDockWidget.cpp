@@ -144,6 +144,8 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->collapseButton->setVisible(true);
     
     connect(dockWidget, SIGNAL(featuresChanged(QDockWidget::DockWidgetFeatures)), SLOT(featuresChanged(QDockWidget::DockWidgetFeatures)));
+    
+    d->featuresChanged(0);
 }
 
 KoDockWidgetTitleBar::~KoDockWidgetTitleBar()
@@ -256,6 +258,9 @@ void KoDockWidgetTitleBar::Private::toggleCollapsed()
 
 void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatures)
 {
+    QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
+    closeButton->setVisible(hasFeature(q, QDockWidget::DockWidgetClosable));
+    floatButton->setVisible(hasFeature(q, QDockWidget::DockWidgetFloatable));
     thePublic->resizeEvent(0);
 }
 

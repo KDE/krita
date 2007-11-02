@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "KoDockWidget.h"
+#include "KoDockWidgetTitleBar.h"
 
 #include <kdebug.h>
 #include <kicon.h>
@@ -264,13 +264,4 @@ void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatu
     thePublic->resizeEvent(0);
 }
 
-
-
-KoDockWidget::KoDockWidget(const QString& title, QWidget* parent, Qt::WindowFlags flags)
-    : QDockWidget(title, parent, flags)
-{
-    setTitleBarWidget(new KoDockWidgetTitleBar(this));
-}
-
-
-#include "KoDockWidget.moc"
+#include "KoDockWidgetTitleBar.moc"

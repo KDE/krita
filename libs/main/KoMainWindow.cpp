@@ -30,7 +30,7 @@
 #include "KoVersionDialog.h"
 #include "kkbdaccessextensions.h"
 #include "KoDockFactory.h"
-#include "KoDockWidget.h"
+#include "KoDockWidgetTitleBar.h"
 
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>

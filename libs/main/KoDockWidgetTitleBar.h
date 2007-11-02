@@ -16,17 +16,10 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef KODOCKWIDGET_H_
-#define KODOCKWIDGET_H_
+#ifndef KODOCKWIDGETTITLEBAR_H_
+#define KODOCKWIDGETTITLEBAR_H_
 
 #include <QtGui/QDockWidget>
-
-class QAbstractButton;
-
-class KoDockWidget : public QDockWidget {
-public:
-    KoDockWidget(const QString & title, QWidget * parent = 0, Qt::WindowFlags flags = 0);
-};
 
 class KoDockWidgetTitleBar : public QWidget {
     Q_OBJECT
@@ -48,4 +41,4 @@ private:
     Private * const d;
 };
 
-#endif // KODOCKWIDGET_H_
+#endif // KODOCKWIDGETTITLEBAR_H_

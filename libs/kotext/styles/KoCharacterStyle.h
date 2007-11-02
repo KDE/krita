@@ -136,6 +136,14 @@ public:
     void setTextOutline (const QPen &pen);
     /// See similar named method on QTextCharFormat
     QPen textOutline () const;
+    /// See similar named method on QTextCharFormat
+    void setFontLetterSpacing(qreal spacing);
+    /// See similar named method on QTextCharFormat
+    qreal fontLetterSpacing() const;
+    /// See similar named method on QTextCharFormat
+    void setFontWordSpacing(qreal spacing);
+    /// See similar named method on QTextCharFormat
+    qreal fontWordSpacing() const;
 
     /// See similar named method on QTextCharFormat
     void setBackground (const QBrush &brush);
@@ -176,6 +184,7 @@ public:
     void setUnderlineType (LineType lineType);
     /// Get the current font underline color of this KoCharacterStyle
     LineType underlineType () const;
+
 
     /// Set the text tranformation.
     void setTransform(Transform transformtext);

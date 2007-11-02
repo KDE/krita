@@ -168,6 +168,10 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         QTextFormat::TextOutline,
         QTextFormat::BackgroundBrush,
         QTextFormat::ForegroundBrush,
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+        QTextFormat::FontLetterSpacing,
+        QTextFormat::FontWordSpacing,
+#endif
         KoCharacterStyle::StrikeOutStyle,
         KoCharacterStyle::StrikeOutType,
         KoCharacterStyle::StrikeOutColor,
@@ -426,6 +430,34 @@ void KoCharacterStyle::setUnderlineColor (const QColor &color) {
 
 QColor KoCharacterStyle::underlineColor () const {
     return d->propertyColor(UnderlineColor);
+}
+
+void KoCharacterStyle::setFontLetterSpacing(qreal spacing) {
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+    d->setProperty(QTextCharFormat::FontLetterSpacing, spacing);
+#endif
+}
+
+qreal KoCharacterStyle::fontLetterSpacing() const {
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+    return d->propertyDouble(QTextCharFormat::FontLetterSpacing);
+#else
+    return 0.0;
+#endif
+}
+
+void KoCharacterStyle::setFontWordSpacing(qreal spacing) {
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+    d->setProperty(QTextCharFormat::FontWordSpacing, spacing);
+#endif
+}
+
+qreal KoCharacterStyle::fontWordSpacing() const {
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+    return d->propertyDouble(QTextCharFormat::FontWordSpacing);
+#else
+    return 0.0;
+#endif
 }
 
 

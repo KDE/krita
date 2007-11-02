@@ -106,16 +106,6 @@ public:
      */
     virtual KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP) const;
 
-    /**
-     * If true, this filter can be used in painting tools as a paint operation
-     */
-    virtual bool supportsPainting() const { return false; }
-
-    /// This filter can be displayed in a preview dialog
-    virtual bool supportsPreview() const { return false; }
-
-    /// This filter can be used in adjustment layers
-    virtual bool supportsAdjustmentLayers() const { return supportsPreview(); }
 
     /**
      * @return the bookmark manager for this filter
@@ -126,19 +116,6 @@ public:
      * @return the bookmark manager for this filter
      */
     const KisBookmarkedConfigurationManager* bookmarkManager() const;
-
-    /**
-     * Can this filter work incrementally when painting, or do we need to work
-     * on the state as it was before painting started. The former is faster.
-     */
-    virtual bool supportsIncrementalPainting() const { return true; }
-
-    /**
-     * This filter supports cutting up the work area and filtering
-     * each chunk in a separate thread. Filters that need access to the
-     * whole area for correct computations should return false.
-     */
-    virtual bool supportsThreading() const { return true; }
 
     /**
      * Used when threading is used -- the overlap margin is passed to the
@@ -194,9 +171,43 @@ public:
      * @param dev the paintdevice this filter will act on
      */
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev);
+    // "Support" functions
+public:
+    /**
+     * If true, this filter can be used in painting tools as a paint operation
+     */
+    bool supportsPainting() const;
 
+    /// This filter can be displayed in a preview dialog
+    bool supportsPreview() const;
+
+    /// This filter can be used in adjustment layers
+    bool supportsAdjustmentLayers() const;
+
+    /**
+     * Can this filter work incrementally when painting, or do we need to work
+     * on the state as it was before painting started. The former is faster.
+     */
+    bool supportsIncrementalPainting() const;
+
+    /**
+     * This filter supports cutting up the work area and filtering
+     * each chunk in a separate thread. Filters that need access to the
+     * whole area for correct computations should return false.
+     */
+    bool supportsThreading() const;
+    
+protected:
+    void setSupportsPainting(bool v);
+    void setSupportsPreview(bool v);
+    void setSupportsAdjustmentLayers(bool v);
+    void setSupportsIncrementalPainting(bool v);
+    bool setSupportsThreading(bool v);
+    
 protected:
 
+    
+    
     void setBookmarkManager(KisBookmarkedConfigurationManager* );
     /// @return the name of config group in KConfig
     inline QString configEntryGroup() { return id() + "_filter_bookmarks"; }

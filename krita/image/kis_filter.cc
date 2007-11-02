@@ -39,7 +39,7 @@ const KoID KisFilter::CategoryOther = KoID("other_filters", i18n("Other"));
 
 struct KisFilter::Private {
     Private()
-        : bookmarkManager(0)
+        : bookmarkManager(0), supportsPainting(false), supportsPreview(true), supportsAdjustmentLayers(false), supportsIncrementalPainting(true), supportsThreading(true)
     {
     }
 
@@ -48,6 +48,11 @@ struct KisFilter::Private {
     KoID id;
     KoID category; // The category in the filter menu this filter fits
     QString entry; // the i18n'ed accelerated menu text
+    bool supportsPainting;
+    bool supportsPreview;
+    bool supportsAdjustmentLayers;
+    bool supportsIncrementalPainting;
+    bool supportsThreading;
 };
 
 KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entry)
@@ -121,3 +126,49 @@ QString KisFilter::name() const { return d->id.name(); }
 KoID KisFilter::menuCategory() const { return d->category; }
 
 QString KisFilter::menuEntry() const { return d->entry; }
+
+bool KisFilter::supportsPainting() const
+{
+    return d->supportsPainting;
+}
+
+bool KisFilter::supportsPreview() const
+{
+    return d->supportsPreview;
+}
+
+bool KisFilter::supportsAdjustmentLayers() const
+{
+    return d->supportsAdjustmentLayers;
+}
+
+bool KisFilter::supportsIncrementalPainting() const
+{
+    return d->supportsIncrementalPainting;
+}
+
+bool KisFilter::supportsThreading() const
+{
+    return d->supportsThreading;
+}
+
+void KisFilter::setSupportsPainting(bool v)
+{
+    d->supportsPainting = v;
+}
+void KisFilter::setSupportsPreview(bool v)
+{
+    d->supportsPreview = v;
+}
+void KisFilter::setSupportsAdjustmentLayers(bool v)
+{
+    d->supportsAdjustmentLayers = v;
+}
+void KisFilter::setSupportsIncrementalPainting(bool v)
+{
+    d->supportsIncrementalPainting = v;
+}
+bool KisFilter::setSupportsThreading(bool v)
+{
+    d->supportsThreading = v;
+}

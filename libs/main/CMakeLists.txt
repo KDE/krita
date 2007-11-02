@@ -72,6 +72,7 @@ set(komain_LIB_SRCS
     KoGridData.cpp
     KoGuidesData.cpp
     KoDockRegistry.cpp
+    KoDockWidget.cpp
 )
 
 

@@ -186,7 +186,7 @@ void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP p
 }
 
 void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
-    if ( m_progressUpdater->interrupted() ) {
+    if ( m_progressUpdater && m_progressUpdater->interrupted() ) {
         m_width = m_height = -1;
         return;
     }
@@ -197,7 +197,7 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
     bltMask(rc.x(), rc.y(), m_compositeOp, filled, m_fillSelection, m_opacity,
                  rc.x(), rc.y(), rc.width(), rc.height());
 
-    m_progressUpdater->setProgress(100);
+    if ( m_progressUpdater ) m_progressUpdater->setProgress(100);
 
     m_width = m_height = -1;
 }
@@ -390,7 +390,7 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
         if (m_size > 0) {
             progressPercent = (pixelsDone * 100) / m_size;
             if (progressPercent > currentPercent) {
-                m_progressUpdater->setProgress(progressPercent);
+                if ( m_progressUpdater ) m_progressUpdater->setProgress(progressPercent);
                 currentPercent = progressPercent;
             }
         }

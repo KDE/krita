@@ -310,7 +310,7 @@ void KKbdAccessExtensions::nextHandle()
             QWidgetList* allWidgets = getAllPanels();
             int index = allWidgets->indexOf(panel);
             panel = 0;
-            if (index > -1)
+            if (index > -1 && allWidgets->count() > index +1)
                 panel = allWidgets->at(index+1);
             delete allWidgets;
             d->handleNdx = 1;

@@ -31,6 +31,7 @@
 #include "KoCompositeOp.h"
 #include "KoID.h"
 
+#include "kis_bookmarked_configuration_manager.h"
 #include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
 #include "kis_perchannel_filter.h"
@@ -39,6 +40,22 @@
 #include "kcurve.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
+
+class KisPerChannelFilterConfigurationFactory : public KisFilterConfigurationFactory {
+    public:
+        KisPerChannelFilterConfigurationFactory() :KisFilterConfigurationFactory("perchannel", 1) {}
+        virtual ~KisPerChannelFilterConfigurationFactory() { }
+        virtual KisSerializableConfiguration* createDefault()
+        {
+            return new KisPerChannelFilterConfiguration(0);
+        }
+        virtual KisSerializableConfiguration* create(const QDomElement& e)
+        {
+            KisFilterConfiguration* fc = new KisPerChannelFilterConfiguration(0);
+            fc->fromXML( e );
+            return fc;
+        }
+};
 
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     : KisFilterConfiguration( "perchannel", 1 )
@@ -170,27 +187,33 @@ QString KisPerChannelFilterConfiguration::toString()
     return doc.toString();
 }
 
+KisPerChannelFilter::KisPerChannelFilter() : KisFilter( id(), CategoryAdjust, i18n("&Color Adjustment curves..."))
+{
+    setSupportsPainting(true);
+    setSupportsPreview(true);
+    setSupportsIncrementalPainting(false);
+    setColorSpaceIndependence(TO_LAB16);
+    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisPerChannelFilterConfigurationFactory()));
+}
+
 KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev)
 {
     return new KisPerChannelConfigWidget(parent, dev);
 }
 
-std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfiguration(KisPaintDeviceSP dev)
-{
-    std::list<KisFilterConfiguration*> list;
-    list.insert(list.begin(), new KisPerChannelFilterConfiguration(dev->colorSpace()->colorChannelCount()));
-    return list;
-}
-
-
-void KisPerChannelFilter::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisPerChannelFilter::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    Q_ASSERT(src != 0);
+    Q_ASSERT(dst != 0);
     if (!config) {
         kWarning() <<"No configuration object for per-channel filter";
         return;
@@ -216,17 +239,17 @@ void KisPerChannelFilter::process(KisFilterConstantProcessingInformation src,
 
 
     if (src!=dst) {
-        KisPainter gc(dst);
+        KisPainter gc(dst, dstInfo.selection());
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
     }
 
-    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height() );
+    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection() );
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
-    setProgressTotalSteps(size.width() * size.height());
+    qint32 totalCost = (size.width() * size.height()) / 100;
     qint32 pixelsProcessed = 0;
 
-    while( ! iter.isDone()  && !cancelRequested())
+    while( ! iter.isDone()  && !progressUpdater->interrupted())
     {
         quint32 npix=0, maxpix = iter.nConseqPixels();
         quint8 selectedness = iter.selectedness();
@@ -272,11 +295,9 @@ void KisPerChannelFilter::process(KisFilterConstantProcessingInformation src,
                 pixelsProcessed++;
                 break;
         }
-        setProgress(pixelsProcessed);
+        progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
 
-    setProgressDone();
-#endif
 }
 
 void KisPerChannelConfigWidget::setActiveChannel(int ch)

@@ -40,12 +40,29 @@
 
 #include "kis_filter_config_widget.h"
 #include "kis_brightness_contrast_filter.h"
+#include "kis_bookmarked_configuration_manager.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterator.h"
 #include "kcurve.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
+
+class KisBrightnessContrastFilterConfigurationFactory : public KisFilterConfigurationFactory {
+    public:
+        KisBrightnessContrastFilterConfigurationFactory() :KisFilterConfigurationFactory("brightnesscontrast", 1) {}
+        virtual ~KisBrightnessContrastFilterConfigurationFactory() { }
+        virtual KisSerializableConfiguration* createDefault()
+        {
+            return new KisBrightnessContrastFilterConfiguration();
+        }
+        virtual KisSerializableConfiguration* create(const QDomElement& e)
+        {
+            KisFilterConfiguration* fc = new KisBrightnessContrastFilterConfiguration();
+            fc->fromXML( e );
+            return fc;
+        }
+};
 
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
     : KisFilterConfiguration( "brightnesscontrast", 1 )
@@ -145,20 +162,17 @@ QString KisBrightnessContrastFilterConfiguration::toString()
 KisBrightnessContrastFilter::KisBrightnessContrastFilter()
     : KisFilter( id(), CategoryAdjust, i18n("&Brightness/Contrast curve..."))
 {
-
+    setSupportsPainting(true);
+    setSupportsPreview(true);
+    setSupportsIncrementalPainting(false);
+    setColorSpaceIndependence(TO_LAB16);
+    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisBrightnessContrastFilterConfigurationFactory()));
+    
 }
 
 KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev)
 {
     return new KisBrightnessContrastConfigWidget(parent, dev);
-}
-
-std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesConfiguration(KisPaintDeviceSP /*dev*/)
-{
-    //XXX should really come up with a list of configurations
-    std::list<KisFilterConfiguration*> list;
-    list.insert(list.begin(), new KisBrightnessContrastFilterConfiguration( ));
-    return list;
 }
 
 KisFilterConfiguration* KisBrightnessContrastFilter::factoryConfiguration(const KisPaintDeviceSP)
@@ -174,14 +188,19 @@ bool KisBrightnessContrastFilter::workWith(KoColorSpace* cs)
 }
 
 
-void KisBrightnessContrastFilter::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisBrightnessContrastFilter::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    Q_ASSERT(src != 0);
+    Q_ASSERT(dst != 0);
     if (!config) {
         kWarning() << "No configuration object for brightness/contrast filter\n";
         return;
@@ -191,7 +210,7 @@ void KisBrightnessContrastFilter::process(KisFilterConstantProcessingInformation
     Q_ASSERT(config);
 
     if (src!=dst) {
-        KisPainter gc(dst);
+        KisPainter gc(dst, dstInfo.selection());
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
     }
@@ -200,12 +219,12 @@ void KisBrightnessContrastFilter::process(KisFilterConstantProcessingInformation
         configBC->m_adjustment = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
     }
 
-    KisRectIteratorPixel iter = dst->createRectIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
+    KisRectIteratorPixel iter = dst->createRectIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), dstInfo.selection());
 
-    setProgressTotalSteps(size.width() * size.height());
+    qint32 totalCost = (size.width() * size.height()) / 100;
     qint32 pixelsProcessed = 0;
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
-    while( ! iter.isDone()  && !cancelRequested())
+    while( ! iter.isDone()  && !progressUpdater->interrupted())
     {
         quint32 npix=0, maxpix = iter.nConseqPixels();
         quint8 selectedness = iter.selectedness();
@@ -250,11 +269,9 @@ void KisBrightnessContrastFilter::process(KisFilterConstantProcessingInformation
                 pixelsProcessed++;
                 break;
         }
-        setProgress(pixelsProcessed);
+        progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
 
-    setProgressDone();
-#endif
 }
 
 KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)

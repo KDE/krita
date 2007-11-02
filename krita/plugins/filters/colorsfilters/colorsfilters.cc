@@ -87,14 +87,19 @@ bool KisAutoContrast::workWith(KoColorSpace* cs)
     return (cs->profile() != 0);
 }
 
-void KisAutoContrast::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisAutoContrast::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    Q_ASSERT(src != 0);
+    Q_ASSERT(dst != 0);
     Q_UNUSED( config );
     // initialize
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
@@ -162,26 +167,22 @@ void KisAutoContrast::process(KisFilterConstantProcessingInformation src,
 
     KisSelectionSP dstSel;
     if (dst != src) {
-        KisPainter gc(dst);
+        KisPainter gc(dst, dstInfo.selection());
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
-        if (src->hasSelection()) {
-            dstSel = dst->selection();
-            dst->setSelection(src->selection());
-        }
     }
 
     // apply
     KoColorTransformation *adj = src->colorSpace()->createBrightnessContrastAdjustment(cfg->transfer);
 
-    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
+    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
 
-    setProgressTotalSteps(size.width() * size.height());
+    qint32 totalCost = (size.width() * size.height()) / 100;
     qint32 pixelsProcessed = 0;
 
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
 
-    while( ! iter.isDone()  && !cancelRequested())
+    while( ! iter.isDone()  && !progressUpdater->interrupted())
     {
         quint32 npix=0, maxpix = iter.nConseqPixels();
         quint8 selectedness = iter.selectedness();
@@ -225,15 +226,9 @@ void KisAutoContrast::process(KisFilterConstantProcessingInformation src,
                 pixelsProcessed++;
                 break;
         }
-        setProgress(pixelsProcessed);
-    }
-    // Restore selection
-    if (src != dst && src->hasSelection()) {
-        dst->setSelection(dstSel);
+        progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
     delete adj;
-    setProgressDone();
-#endif
 }
 
 
@@ -242,14 +237,11 @@ void KisAutoContrast::process(KisFilterConstantProcessingInformation src,
 KisDesaturateFilter::KisDesaturateFilter()
     : KisFilter(id(), CategoryAdjust, i18n("&Desaturate"))
 {
-    m_lastCS = 0;
-    m_adj = 0;
 
 }
 
 KisDesaturateFilter::~KisDesaturateFilter()
 {
-    delete m_adj;
 }
 
 bool KisDesaturateFilter::workWith(KoColorSpace* cs)
@@ -257,34 +249,36 @@ bool KisDesaturateFilter::workWith(KoColorSpace* cs)
     return (cs->profile() != 0);
 }
 
-void KisDesaturateFilter::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisDesaturateFilter::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    Q_ASSERT(src != 0);
+    Q_ASSERT(dst != 0);
     Q_UNUSED( config );
 
     if (dst != src) {
-        KisPainter gc(dst);
+        KisPainter gc(dst, dstInfo.selection());
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
     }
+    
+    KoColorTransformation * m_adj = src->colorSpace()->createDesaturateAdjustment();
 
-    if (m_adj == 0 || (m_lastCS && m_lastCS != src->colorSpace())) {
-        m_adj = src->colorSpace()->createDesaturateAdjustment();
-        m_lastCS = src->colorSpace();
-    }
+    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
 
-    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
-
-    setProgressTotalSteps(size.width() * size.height());
+    qint32 totalCost = size.width() * size.height() / 100;
     qint32 pixelsProcessed = 0;
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
 
-    while( ! iter.isDone()  && !cancelRequested())
+    while( ! iter.isDone()  && !progressUpdater->interrupted())
     {
         quint32 npix=0, maxpix = iter.nConseqPixels();
         quint8 selectedness = iter.selectedness();
@@ -329,8 +323,6 @@ void KisDesaturateFilter::process(KisFilterConstantProcessingInformation src,
                 pixelsProcessed++;
                 break;
         }
-        setProgress(pixelsProcessed);
+        progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
-    setProgressDone();
-#endif
 }

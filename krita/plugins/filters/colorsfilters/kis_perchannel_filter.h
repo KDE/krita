@@ -70,10 +70,9 @@ class KisPerChannelFilter
     : public KisFilter
 {
 public:
-    KisPerChannelFilter() : KisFilter( id(), CategoryAdjust, i18n("&Color Adjustment curves...")) {}
+    KisPerChannelFilter();
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-//     virtual KisFilterConfiguration* configuration() { return new KisPerChannelFilterConfiguration(0); }
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
@@ -81,12 +80,6 @@ public:
                  KoUpdater* progressUpdater = 0
         ) const;
     static inline KoID id() { return KoID("perchannel", i18n("Color Adjustment")); }
-    virtual bool supportsPainting() const { return true; }
-    virtual bool supportsPreview() const { return true; }
-    virtual bool supportsIncrementalPainting() const { return false; }
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
-    
-    virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
 private:
 };
 

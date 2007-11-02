@@ -74,13 +74,8 @@ public:
                  KoUpdater* progressUpdater = 0
         ) const;
     static inline KoID id() { return KoID("brightnesscontrast", i18n("Brightness / Contrast")); }
-    virtual bool supportsPainting() const { return true; }
-    virtual bool supportsPreview() const { return true; }
-    virtual bool supportsIncrementalPainting() const { return false; }
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
     
-    virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
     virtual bool workWith(KoColorSpace* cs);
 };
 

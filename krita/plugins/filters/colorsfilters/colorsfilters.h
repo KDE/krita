@@ -73,10 +73,6 @@ public:
     virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
     virtual bool workWith(KoColorSpace* cs);
 
-private:
-
-    KoColorSpace * m_lastCS;
-    KoColorTransformation * m_adj;
 };
 
 #endif

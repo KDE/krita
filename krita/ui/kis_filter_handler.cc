@@ -25,6 +25,7 @@
 #include <kguiitem.h>
 
 #include <KoColorSpace.h>
+#include <KoProgressUpdater.h>
 
 #include <kis_action_recorder.h>
 #include <kis_bookmarked_configuration_manager.h>
@@ -34,6 +35,7 @@
 #include <kis_layer.h>
 #include <kis_recorded_filter_action.h>
 
+#include "kis_statusbar.h"
 #include "kis_doc2.h"
 #include "kis_filter_dialog.h"
 #include "kis_filter_manager.h"
@@ -47,27 +49,30 @@ public:
 
     KisFilterJob( const KisFilter* filter,
                   const KisFilterConfiguration * config,
-                  QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin )
+                  QObject * parent, KisPaintDeviceSP dev, 
+                  const QRect & rc, 
+                  int margin,
+                  KoUpdater * updater  )
         : KisJob( parent, dev, rc, margin )
         , m_filter( filter )
         , m_config( config )
+        , m_updater( updater)
         {
         }
 
 
     virtual void run()
         {
+            // XXX: Is it really necessary to output the filter on a second paint device and
+            //      then blit it back? (boud)
             KisPaintDeviceSP dst = new KisPaintDevice( m_dev->colorSpace() );
             QRect marginRect = m_rc.adjusted( -m_margin, -m_margin, m_margin, m_margin );
 
-            // XXX: Make KisFilter::process const! The progress
-            // updates should be separate things, because we may be
-            // using the same filter instance from several threads.
-            // Use Thomas' progress code here. XXX_PROGRESS: nearly there!
-            const_cast<KisFilter*>( m_filter )->process( KisFilterConstantProcessingInformation( m_dev, marginRect.topLeft()), KisFilterProcessingInformation(
-                               dst, marginRect.topLeft() ),
+            m_filter->process( KisFilterConstantProcessingInformation( m_dev, marginRect.topLeft()), 
+                               KisFilterProcessingInformation( dst, marginRect.topLeft() ),
                                marginRect.size(),
-                               m_config );
+                               m_config,
+                               m_updater );
             KisPainter p( m_dev );
             p.setCompositeOp( m_dev->colorSpace()->compositeOp( COMPOSITE_COPY ) );
             p.bitBlt( m_rc.topLeft(), dst, m_rc );
@@ -78,7 +83,7 @@ private:
 
     const KisFilter * m_filter;
     const KisFilterConfiguration * m_config;
-
+    KoUpdater * m_updater;
 };
 
 class KisFilterJobFactory : public KisJobFactory {
@@ -91,10 +96,10 @@ public:
         }
 
 
-    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin )
+    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin, KoUpdater * updater )
         {
             // XXX_PROGRESS: pass KoProgressUpdater here
-            return new KisFilterJob( m_filter, m_config, parent, dev, rc, margin );
+            return new KisFilterJob( m_filter, m_config, parent, dev, rc, margin, updater );
         }
 
 private:
@@ -122,11 +127,13 @@ struct KisFilterHandler::Private {
     KisFilterConfiguration* lastConfiguration;
 };
 
-KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view) : QObject(parent), d(new Private)
+KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view) 
+    : QObject(parent)
+    , m_d(new Private)
 {
-    d->filter = f;
-    d->view = view;
-    d->manager = parent;
+    m_d->filter = f;
+    m_d->view = view;
+    m_d->manager = parent;
 }
 
 KisFilterHandler::~KisFilterHandler()
@@ -135,23 +142,23 @@ KisFilterHandler::~KisFilterHandler()
 
 void KisFilterHandler::showDialog()
 {
-    KisPaintDeviceSP dev = d->view->activeDevice();
-    if (dev->colorSpace()->willDegrade(d->filter->colorSpaceIndependence())) {
+    KisPaintDeviceSP dev = m_d->view->activeDevice();
+    if (dev->colorSpace()->willDegrade(m_d->filter->colorSpaceIndependence())) {
         // Warning bells!
-        if (d->filter->colorSpaceIndependence() == TO_LAB16) {
-            if (KMessageBox::warningContinueCancel(d->view,
+        if (m_d->filter->colorSpaceIndependence() == TO_LAB16) {
+            if (KMessageBox::warningContinueCancel(m_d->view,
                                                    i18n("The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. ",
-                                                        d->filter->name(),
+                                                        m_d->filter->name(),
                                                         dev->colorSpace()->name()),
                                                    i18n("Filter Will Convert Your Layer Data"),
                                                    KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
                                                    "lab16degradation") != KMessageBox::Continue) return;
 
         }
-        else if (d->filter->colorSpaceIndependence() == TO_RGBA16) {
-            if (KMessageBox::warningContinueCancel(d->view,
+        else if (m_d->filter->colorSpaceIndependence() == TO_RGBA16) {
+            if (KMessageBox::warningContinueCancel(m_d->view,
                                                    i18n("The %1 filter will convert your %2 data to 16-bit RGBA and vice versa. ",
-                                                        d->filter->name() , dev->colorSpace()->name()),
+                                                        m_d->filter->name() , dev->colorSpace()->name()),
                                                    i18n("Filter Will Convert Your Layer Data"),
                                                    KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
                                                    "rgba16degradation") != KMessageBox::Continue) return;
@@ -159,8 +166,8 @@ void KisFilterHandler::showDialog()
     }
 
 
-    KisFilterDialog* dialog = new KisFilterDialog( d->view , d->view->activeLayer());
-    dialog->setFilter( d->filter );
+    KisFilterDialog* dialog = new KisFilterDialog( m_d->view , m_d->view->activeLayer());
+    dialog->setFilter( m_d->filter );
     connect(dialog, SIGNAL(sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*)),
             SLOT(apply(KisLayerSP, KisFilterConfiguration*)));
     dialog->setVisible(true);
@@ -169,7 +176,7 @@ void KisFilterHandler::showDialog()
 
 void KisFilterHandler::reapply()
 {
-    apply(d->view->activeLayer(), d->lastConfiguration);
+    apply(m_d->view->activeLayer(), m_d->lastConfiguration);
 }
 
 void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
@@ -191,39 +198,40 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
     }
 
     KisTransaction * cmd = 0;
-    if (layer->image()->undo()) cmd = new KisTransaction(d->filter->name(), dev);
+    if (layer->image()->undo()) cmd = new KisTransaction(m_d->filter->name(), dev);
 
-    if ( !d->filter->supportsThreading() ) {
-        d->filter->process(dev, rect, config);
+    if ( !m_d->filter->supportsThreading() ) {
+        m_d->filter->process(dev, rect, config);
     }
     else {
         // Chop up in rects.
-        KisFilterJobFactory factory( d->filter, config );
-        KisThreadedApplicator applicator(dev, rect, &factory, d->filter->overlapMarginNeeded( config ));
+        KisFilterJobFactory factory( m_d->filter, config );
+        KoProgressUpdater updater( m_d->view->statusBar()->progress() );
+        KisThreadedApplicator applicator(dev, rect, &factory, m_d->filter->overlapMarginNeeded( config ), &updater);
         applicator.execute();
     }
-/*    if (d->filter->cancelRequested()) { // TODO: port to the progress display reporter
+/*    if (m_d->filter->cancelRequested()) { // TODO: port to the progress display reporter
         delete config;
         if (cmd) {
-            cmd->undo();
+            cmm_d->undo();
             delete cmd;
         }
     } else */{
         dev->setDirty(rect);
-        d->view->document()->setModified(true);
-        if (cmd) d->view->document()->addCommand(cmd);
-        if(d->filter->bookmarkManager())
+        m_d->view->document()->setModified(true);
+        if (cmd) m_d->view->document()->addCommand(cmd);
+        if(m_d->filter->bookmarkManager())
         {
-            d->filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config);
+            m_d->filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config);
         }
-        if(d->lastConfiguration != config)
+        if(m_d->lastConfiguration != config)
         {
-            delete d->lastConfiguration;
+            delete m_d->lastConfiguration;
         }
-        d->lastConfiguration = config;
-        d->manager->setLastFilterHandler(this);
+        m_d->lastConfiguration = config;
+        m_d->manager->setLastFilterHandler(this);
 
-        layer->image()->actionRecorder()->addAction( KisRecordedFilterAction(d->filter->name(), layer, d->filter, config));
+        layer->image()->actionRecorder()->addAction( KisRecordedFilterAction(m_d->filter->name(), layer, m_d->filter, config));
     }
 
     QApplication::restoreOverrideCursor();
@@ -231,7 +239,7 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
 
 const KisFilterSP KisFilterHandler::filter() const
 {
-    return d->filter;
+    return m_d->filter;
 }
 
 

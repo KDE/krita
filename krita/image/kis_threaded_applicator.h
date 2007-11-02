@@ -25,6 +25,10 @@
 
 #include "kis_types.h"
 #include <krita_export.h>
+
+class KoUpdater;
+class KoProgressUpdater;
+
 /**
    A threadweaver job that knows about paint devices and rects. Note
    that it is the task of the job implementation to handle the margin!
@@ -67,7 +71,7 @@ public:
     virtual ~KisJobFactory() {}
 
 
-    virtual ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin) = 0;
+    virtual ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin, KoUpdater * updater) = 0;
 };
 
 /**
@@ -90,8 +94,10 @@ public:
                       will have the specified margin. When the results
                       are put together again, the margin is cut off.
                       Use this for convolutions, for instance.
+       @param updater The master KoProgressUpdater that will track updates for
+              all threads.
     */
-    KisThreadedApplicator( KisPaintDeviceSP dev, const QRect & rc, KisJobFactory * jobFactory, int margin = 0 );
+    KisThreadedApplicator( KisPaintDeviceSP dev, const QRect & rc, KisJobFactory * jobFactory, int margin = 0, KoProgressUpdater * updater = 0 );
     ~KisThreadedApplicator();
 
     /**

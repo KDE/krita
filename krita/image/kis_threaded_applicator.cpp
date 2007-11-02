@@ -17,6 +17,8 @@
  */
 #include "kis_threaded_applicator.h"
 
+#include <math.h>
+
 #include <QRect>
 
 #include <threadweaver/ThreadWeaver.h>
@@ -24,6 +26,8 @@
 #include <kglobal.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+
+#include <KoProgressUpdater.h>
 
 #include "kis_paint_device.h"
 
@@ -40,16 +44,18 @@ public:
     int maxThreads;
     int tileSize;
     Weaver * weaver;
+    KoProgressUpdater * progressUpdater;
 };
 
 
-KisThreadedApplicator::KisThreadedApplicator( KisPaintDeviceSP dev, const QRect & rc, KisJobFactory * jobFactory, int margin )
+KisThreadedApplicator::KisThreadedApplicator( KisPaintDeviceSP dev, const QRect & rc, KisJobFactory * jobFactory, int margin, KoProgressUpdater * progressUpdater )
     : m_d( new Private() )
 {
     m_d->dev = dev;
     m_d->rc = rc;
     m_d->jobFactory = jobFactory;
     m_d->margin = margin;
+    m_d->progressUpdater = progressUpdater;
 
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->maxThreads = cfg.readEntry("maxthreads",  10);
@@ -82,26 +88,30 @@ void KisThreadedApplicator::execute()
     // at the bottom, we have as few and as long runs of pixels left
     // as possible.
     if ( w <= m_d->tileSize && h <= m_d->tileSize ) {
-        Job * job = m_d->jobFactory->createJob( this, m_d->dev, m_d->rc, m_d->margin );
+        KoUpdater updater = m_d->progressUpdater->startSubtask();
+        Job * job = m_d->jobFactory->createJob( this, m_d->dev, m_d->rc, m_d->margin, &updater );
         m_d->weaver->enqueue( job );
     }
+    else {
+        int numTasks = static_cast<int>( ceil( w / m_d->tileSize ) * ceil( h / m_d->tileSize) );
+        m_d->progressUpdater->start( numTasks );    
 
-
-    int wleft = w;
-    int col = 0;
-    while ( wleft > 0 ) {
-        int hleft = h;
-        int row = 0;
-        while ( hleft > 0 ) {
-            QRect subrect( col + x, row + y, qMin( wleft, m_d->tileSize ), qMin( hleft, m_d->tileSize ) );
-            Job * job = m_d->jobFactory->createJob( this, m_d->dev, subrect, m_d->margin );
-            m_d->weaver->enqueue( job );
-            hleft -= m_d->tileSize;
-            row += m_d->tileSize;
-
+        int wleft = w;
+        int col = 0;
+        while ( wleft > 0 ) {
+            int hleft = h;
+            int row = 0;
+            while ( hleft > 0 ) {
+                QRect subrect( col + x, row + y, qMin( wleft, m_d->tileSize ), qMin( hleft, m_d->tileSize ) );
+                KoUpdater updater = m_d->progressUpdater->startSubtask(); // Will be deleted by the progress updater    
+                Job * job = m_d->jobFactory->createJob( this, m_d->dev, subrect, m_d->margin, &updater );
+                m_d->weaver->enqueue( job );
+                hleft -= m_d->tileSize;
+                row += m_d->tileSize;
+            }
+            wleft -= m_d->tileSize;
+            col += m_d->tileSize;
         }
-        wleft -= m_d->tileSize;
-        col += m_d->tileSize;
     }
     m_d->weaver->finish();
 }

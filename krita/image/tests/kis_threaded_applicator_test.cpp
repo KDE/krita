@@ -18,6 +18,7 @@
 
 #include <qtest_kde.h>
 
+#include <KoProgressUpdater.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
@@ -66,7 +67,7 @@ public:
 
 class TestJobFactory : public KisJobFactory {
 public:
-    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin)
+    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin, KoUpdater * updater = 0)
         {
             return new TestJob( parent, dev, rc, margin );
         }

@@ -115,7 +115,7 @@ KisPainter::~KisPainter()
 
 void KisPainter::begin( KisPaintDeviceSP device )
 {
-    begin( device, 0 );
+    begin( device, m_selection );
 }
 
 void KisPainter::begin( KisPaintDeviceSP device, KisSelectionSP selection )

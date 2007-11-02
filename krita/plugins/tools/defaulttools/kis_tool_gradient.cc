@@ -260,7 +260,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
         if (currentImage() && (device = currentLayer()->paintDevice())) {
 
-            KisGradientPainter painter(device);
+            KisGradientPainter painter(device, currentLayer()->selection());
 
             painter.beginTransaction(i18n("Gradient"));
 

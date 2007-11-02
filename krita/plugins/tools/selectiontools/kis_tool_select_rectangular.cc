@@ -186,7 +186,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
         if (m_endPos.x() > currentImage()->width())
             m_endPos.setX(currentImage()->width());
 
-        if (currentImage() && currentLayer()->paintDevice()) {
+        if (currentImage()) {
 
             bool hasSelection = currentLayer()->selection();
             QRect rc(m_startPos.toPoint(), m_endPos.toPoint());
@@ -196,6 +196,9 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
 #if 0 // XXX_SELECTION
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);
 #endif
+                if(!hasSelection)
+                    currentImage()->setGlobalSelection();
+
                 KisPixelSelectionSP getOrCreatePixelSelection = currentLayer()->selection()->getOrCreatePixelSelection();
 
                 // We don't want the border of the 'rectangle' to be included in our selection
@@ -210,32 +213,19 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
 
                 KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
                 tmpSel->select(rc);
-                switch(m_selectAction)
-                {
-                    case SELECTION_REPLACE:
-                    case SELECTION_ADD:
-                        getOrCreatePixelSelection->addSelection(tmpSel);
-                        break;
-                    case SELECTION_SUBTRACT:
-                        getOrCreatePixelSelection->subtractSelection(tmpSel);
-                        break;
-                    case SELECTION_INTERSECT:
-                        getOrCreatePixelSelection->intersectSelection(tmpSel);
-                        break;
-                    default:
-                        break;
-                }
+                getOrCreatePixelSelection->applySelection(tmpSel, m_selectionMode);
+                currentLayer()->selection()->updateProjection();
+
 #if 0
                 m_canvas->addCommand(t);
-
-                if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
-                    dev->setDirty(rc);
-                    dev->emitSelectionChanged(rc);
-                } else {
-                    dev->setDirty(currentImage()->bounds());
-                    dev->emitSelectionChanged();
-                }
 #endif
+                if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
+                    getOrCreatePixelSelection->setDirty(rc);
+                } else {
+                    getOrCreatePixelSelection->setDirty(currentImage()->bounds());
+
+                }
+
             }
             else {
                 QRectF documentRect = convertToPt(bound);

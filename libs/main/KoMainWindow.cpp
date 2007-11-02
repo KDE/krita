@@ -30,6 +30,7 @@
 #include "KoVersionDialog.h"
 #include "kkbdaccessextensions.h"
 #include "KoDockFactory.h"
+#include "KoDockWidget.h"
 
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
@@ -1771,10 +1772,14 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
 
     if( !d->m_dockWidgetMap.contains( factory->id() ) ) {
         dockWidget = factory->createDockWidget();
-
+        
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
         if (!dockWidget) return 0;
+
+        if (!dockWidget->titleBarWidget()) {
+            dockWidget->setTitleBarWidget(new KoDockWidgetTitleBar(dockWidget));
+        }
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent( this );

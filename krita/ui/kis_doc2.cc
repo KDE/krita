@@ -51,7 +51,6 @@
 #include <KoFilterManager.h>
 #include <KoID.h>
 #include <KoMainWindow.h>
-#include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoQueryTrader.h>
 #include <KoStore.h>

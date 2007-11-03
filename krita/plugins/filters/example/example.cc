@@ -31,6 +31,7 @@
 #include <kgenericfactory.h>
 
 #include <KoColorTransformation.h>
+#include <KoProgressUpdater.h>
 
 #include <kis_types.h>
 #include <kis_selection.h>
@@ -65,21 +66,29 @@ KritaExample::~KritaExample()
 
 KisFilterInvert::KisFilterInvert() : KisFilter(id(), CategoryAdjust, i18n("&Invert"))
 {
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
+    setSupportsPainting(true);
+    setSupportsPreview(true);
+    setSupportsIncrementalPainting(false);
 }
 
-void KisFilterInvert::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisFilterInvert::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
     Q_UNUSED( config );
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
 
-    setProgressTotalSteps(size.width() * size.height());
+    int cost = (size.width() * size.height()) / 100;
+    int count = 0;
 
     KoColorSpace * cs = src->colorSpace();
 
@@ -103,6 +112,7 @@ void KisFilterInvert::process(KisFilterConstantProcessingInformation src,
             }
             ++srcIt;
             ++dstIt;
+            progressUpdater->setProgress( (++count) / cost);
 
         }
         srcIt.nextRow();
@@ -163,11 +173,9 @@ void KisFilterInvert::process(KisFilterConstantProcessingInformation src,
 
 #endif
     delete inverter;
-    setProgressDone(); // Must be called even if you don't really support progression
 
 
     // Two inversions make no inversion? No -- because we're reading
     // from the oldData in both loops without saving the transaction
     // in between, both inversion loops invert the original image.
-#endif
 }

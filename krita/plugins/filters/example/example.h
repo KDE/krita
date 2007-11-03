@@ -42,11 +42,7 @@ public:
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater = 0
         ) const;
-    virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
     static inline KoID id() { return KoID("invert", i18n("Invert")); }
-    virtual bool supportsPainting() const { return true; }
-    virtual bool supportsPreview() const { return true; }
-    virtual bool supportsIncrementalPainting() const { return false; }
     
 };
 

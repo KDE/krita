@@ -220,7 +220,15 @@ void Canvas::paintEvent(QPaintEvent * e) {
     pen.setWidth(1);
     foreach(KoShape *shape, shapeManager()->selection()->selectedShapes()) {
         painter.save();
-        painter.translate(shape->position().x(), shape->position().y());
+        qreal shapeX = shape->position().x(), shapeY = shape->position().y();
+        KoShape* parent = shape->parent ();
+        while(parent)
+        {
+            shapeX += parent->position().x();
+            shapeY += parent->position().y();
+            parent = parent->parent();
+        }
+        painter.translate(shapeX, shapeY);
         painter.strokePath(shape->outline(), pen);
         painter.restore();
     }

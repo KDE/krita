@@ -29,19 +29,27 @@
 #include "kis_convolution_painter.h"
 #include "KoProgressUpdater.h"
 
-void KisConvolutionFilter::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+KisConvolutionFilter::KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry)
+    : KisFilter( id, category, entry )
+{
+    setSupportsIncrementalPainting( false );
+    setColorSpaceIndependence( FULLY_INDEPENDENT);
+}
+
+
+void KisConvolutionFilter::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
-    if (!configuration) {
-        setProgressDone();
-        return;
-    }
-
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    Q_ASSERT(src != 0);
+    Q_ASSERT(dst != 0);
 
     if (dst != src) { // TODO: fix the convolution painter to avoid that stupid copy
 //         kDebug() <<"src != dst";
@@ -50,19 +58,11 @@ void KisConvolutionFilter::process(KisFilterConstantProcessingInformation src,
         gc.end();
     }
 
-    KisConvolutionPainter painter( dst );
-    if (progressDisplay())
-        progressDisplay()->setSubject( &painter, true, true );
+    KisConvolutionPainter painter( dst, dstInfo.selection() );
 
-//     KisKernelSP kernel = ((KisConvolutionConfiguration*)configuration)->matrix();
+    painter.setProgress( progressUpdater );
     painter.applyMatrix(m_matrix, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
-    if (painter.cancelRequested()) {
-        progressUpdater->cancel();
-    }
-
-    setProgressDone();
-#endif
 }
 
 int KisConvolutionFilter::overlapMarginNeeded(KisFilterConfiguration* /*c*/) const {

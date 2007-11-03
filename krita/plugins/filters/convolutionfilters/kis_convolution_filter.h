@@ -29,9 +29,7 @@
 class KisConvolutionFilter : public KisFilter {
 
 public:
-    KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry)
-        : KisFilter( id, category, entry )
-        {}
+    KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry);
 public:
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
@@ -39,10 +37,7 @@ public:
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater = 0
         ) const;
-    virtual bool supportsIncrementalPainting() const { return false; }
-    virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
     virtual int overlapMarginNeeded(KisFilterConfiguration* c) const;
-
 protected:
 
     KisKernelSP m_matrix;

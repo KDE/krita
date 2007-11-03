@@ -40,7 +40,7 @@ if(require 'Qt')
         $wdg = Qt::DockWidget.new(Qt::Object::tr("Palette"))
         $label = PaletteWidget.new($wdg)
         $wdg.setWidget($label)
-        $kikoo = Kikoo.new
+        #$kikoo = Kikoo.new
         voidptr = Qt::Internal.smoke2kross($wdg)
         ko = Kross::Object::fromVoidPtr(voidptr)
         return ko

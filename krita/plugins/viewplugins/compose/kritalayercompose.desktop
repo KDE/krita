@@ -5,6 +5,7 @@ Name[el]=Πρόσθετο σύνθεσης στρώματος
 Name[pt]='Plugin' de camada de composição
 Name[pt_BR]=Plugin de Camada de Composição
 Name[sv]=Insticksprogram för lagersammansättning
+Name[x-test]=xxCompose Layer pluginxx
 Name[zh_TW]=編寫佈局外掛程式
 ServiceTypes=Krita/ViewPlugin
 Type=Service

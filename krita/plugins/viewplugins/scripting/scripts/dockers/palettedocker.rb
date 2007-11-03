@@ -18,9 +18,15 @@ if(require 'Qt')
 #         end
 #     end 
     class PaletteWidget < Qt::Widget
+        slots 'slotLinkActivated(QString)'
         def initialize(parent)
             super(parent)
             @count = 5
+            @label = Qt::Label.new("<a href=\"myLink\">Link</a>", self)
+            connect(@label, SIGNAL('linkActivated(QString)'), self, SLOT('slotLinkActivated(QString)'))
+        end
+        def slotLinkActivated(link)
+            puts "slotLinkActivated " + link
         end
 #         def paintEvent( event )
 #             painter = Qt::Painter.new( self )

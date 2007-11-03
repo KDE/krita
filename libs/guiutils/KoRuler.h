@@ -197,10 +197,30 @@ public:
          */
         void updateTabs(const QList<Tab> &tabs);
 
+    /***
+     * Return the list of tabs set on this ruler.
+     */
     QList<Tab> tabs() const;
 
+    /**
+     * Clear all previously set hotspots.
+     * A hotspot is a position on the ruler that the user can manipulate by dragging.
+     */
     void clearHotSpots();
+
+    /**
+     * Add or set a hotspot.
+     * A hotspot is a position on the ruler that the user can manipulate by dragging.
+     * @param position the new position of the hotspot.
+     * @param id the unique id for the hotspot. If the id has not been set before, it will be added.
+     */
     void setHotSpot(qreal position, int id = -1);
+
+    /**
+     * Remove a previously set hotspot, returning true if one is actually returned.
+     * @param id the unique id for the hotspot.
+     * A hotspot is a position on the ruler that the user can manipulate by dragging.
+     */
     bool removeHotSpot(int id);
 
 signals:

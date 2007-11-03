@@ -28,6 +28,8 @@ class QDockWidget;
 
 /**
  * Base class for factories used to create new dock widgets.
+ * @see KoDockRegistry
+ * @see KoCanvasObserver
  */
 class KOMAIN_EXPORT KoDockFactory
 {

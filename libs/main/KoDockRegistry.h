@@ -27,12 +27,13 @@
 #include <QObject>
 
 /**
- * This singleton class keeps a register of all available flake tools,
- * or rather, of the factories that the KoToolBox (and KoToolManager) will use
- * to create flake tools.
+ * This singleton class keeps a register of all available dockers,
+ * or rather, of the factories that can create the QDockWidget instances
+ * for the mainwindows.
+ * Note that adding your KoDockFactory to this registry will mean it will automatically be
+ * added to an application, no extra code is required for that.
  *
- * XXX: Make it possible for this class to load not just flake tools,
-   but also the app-specific KoTool-based tools. (BSAR)
+ * @see KoCanvasObserver
  */
 class KOMAIN_EXPORT KoDockRegistry : public QObject, public KoGenericRegistry<KoDockFactory*> {
     Q_OBJECT

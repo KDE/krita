@@ -37,12 +37,14 @@
 #include <knuminput.h>
 
 #include "KoIntegerMaths.h"
+#include "KoProgressUpdater.h"
 
 #include <kis_iterators_pixel.h>
 #include <kis_random_accessor.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_paint_device.h>
+#include <kis_selection.h>
 #include <kis_types.h>
 
 #include "kis_multi_integer_filter_widget.h"
@@ -50,6 +52,9 @@
 
 KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), CategoryEmboss, i18n("&Emboss with Variable Depth..."))
 {
+    setSupportsPainting( false );
+    setSupportsPreview( true );
+    setColorSpaceIndependence(TO_RGBA8);
 }
 
 KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDeviceSP) const
@@ -72,16 +77,22 @@ KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDevi
  *                     understand. You get the diference between the colors and
  *                     increase it. After this, get the gray tone
  */
-void KisEmbossFilter::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisEmbossFilter::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    Q_ASSERT(src != 0);
+    Q_ASSERT(dst != 0);
+    
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 embossdepth = configuration->getInt("depth",30);
+    quint32 embossdepth = config->getInt("depth",30);
 
     //the actual filter function from digikam. It needs a pointer to a quint8 array
     //with the actual pixel data.
@@ -92,20 +103,19 @@ void KisEmbossFilter::process(KisFilterConstantProcessingInformation src,
     int Width = size.width();
     int Height = size.height();
 
-    setProgressTotalSteps(Height);
-    setProgressStage(i18n("Applying emboss filter..."),0);
+    int totalCost = Height / 100;
 
-    KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
+    KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
     QColor color1;
     QColor color2;
     quint8 opacity = 0;
 
-    for (int y = 0 ; !cancelRequested() && (y < Height) ; ++y)
+    for (int y = 0 ; ! progressUpdater->interrupted() && (y < Height) ; ++y)
     {
         KisRandomConstAccessorPixel acc = src->createRandomConstAccessor(srcTopLeft.x(), srcTopLeft.y());
 
-        for (int x = 0 ; !cancelRequested() && (x < Width) ; ++x, ++it, ++dstIt)
+        for (int x = 0 ; progressUpdater->interrupted() && (x < Width) ; ++x, ++it, ++dstIt)
         {
             if (dstIt.isSelected()) {
 
@@ -129,11 +139,9 @@ void KisEmbossFilter::process(KisFilterConstantProcessingInformation src,
         }
         it.nextRow();
         dstIt.nextRow();
-        setProgress(y);
+        progressUpdater->setProgress(y / totalCost);
     }
 
-    setProgressDone();
-#endif
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -153,7 +161,7 @@ void KisEmbossFilter::process(KisFilterConstantProcessingInformation src,
  *                      "for step", when necessary, until reach the last possible value
  */
 
-int KisEmbossFilter::Lim_Max (int Now, int Up, int Max)
+int KisEmbossFilter::Lim_Max (int Now, int Up, int Max) const
 {
     --Max;
     while (Now > Max - Up)
@@ -161,7 +169,7 @@ int KisEmbossFilter::Lim_Max (int Now, int Up, int Max)
     return (Up);
 }
 
-KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP)
+KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth"), "depth" ) );

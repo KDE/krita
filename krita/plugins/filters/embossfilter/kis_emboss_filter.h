@@ -36,16 +36,14 @@ public:
                  KoUpdater* progressUpdater = 0
         ) const;
     static inline KoID id() { return KoID("emboss", i18n("Emboss")); }
-    virtual bool supportsPainting() const { return false; }
-    virtual bool supportsPreview() const { return true; }
     
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 protected:
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
 private:
-    inline int Lim_Max (int Now, int Up, int Max);
+    inline int Lim_Max (int Now, int Up, int Max) const;
 };
 
 #endif

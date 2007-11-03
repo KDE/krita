@@ -30,7 +30,7 @@ class KisWdgBlur : public KisFilterConfigWidget
 {
     Q_OBJECT
     public:
-        KisWdgBlur( KisFilter* nfilter, QWidget * parent);
+        KisWdgBlur( QWidget * parent);
         inline const Ui_WdgBlur* widget() const { return m_widget; }
         virtual void setConfiguration(KisFilterConfiguration*);
         virtual KisFilterConfiguration* configuration() const;

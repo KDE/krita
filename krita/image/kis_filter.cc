@@ -84,7 +84,7 @@ KisFilterConfiguration * KisFilter::defaultConfiguration(const KisPaintDeviceSP 
     return fc;
 }
 
-KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, const KisPaintDeviceSP)
+KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, const KisPaintDeviceSP) const
 {
     return 0;
 }
@@ -184,7 +184,7 @@ void KisFilter::setColorSpaceIndependence(ColorSpaceIndependence v)
     d->colorSpaceIndependence = v;
 }
 
-QString KisFilter::configEntryGroup()
+QString KisFilter::configEntryGroup() const
 {
     return id() + "_filter_bookmarks";
 }

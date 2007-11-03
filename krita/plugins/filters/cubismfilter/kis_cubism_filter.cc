@@ -61,6 +61,9 @@
 
 KisCubismFilter::KisCubismFilter() : KisFilter(id(), KisFilter::CategoryArtistic, i18n("&Cubism..."))
 {
+    setSupportsPainting(false);
+    setSupportsPreview(true);
+    setColorSpaceIndependence(TO_RGBA8);
 }
 
 bool KisCubismFilter::workWith(KoColorSpace* /*cs*/)
@@ -69,50 +72,52 @@ bool KisCubismFilter::workWith(KoColorSpace* /*cs*/)
 }
 
 
-void KisCubismFilter::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisCubismFilter::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
-                 const KisFilterConfiguration* config,
+                 const KisFilterConfiguration* configuration,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
     Q_ASSERT(src);
     Q_ASSERT(dst);
     Q_ASSERT(configuration);
 
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 tileSize = ((KisCubismFilterConfiguration*)configuration)->tileSize();
-    quint32 tileSaturation = ((KisCubismFilterConfiguration*)configuration)->tileSaturation();
+    quint32 tileSize = configuration->getInt("tileSize");
+    quint32 tileSaturation = configuration->getInt("tileSaturation");
 
     KoColorSpace * cs = src->colorSpace();
-    QString id = cs->id().id();
+    QString id = cs->id();
 
     if (id == "RGBA" || id == "GRAY" || id == "CMYK") {
-        cubism(src, dst, rect, tileSize, tileSaturation);
+        cubism(src, srcTopLeft, dst, dstTopLeft, size, tileSize, tileSaturation);
     }
     else {
-        if (src->image()) src->image()->lock();
+//         if (src->image()) src->image()->lock();
 
         KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "temporary");
         KisPainter gc(dev);
-        gc.bitBlt(0, 0, COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+        gc.bitBlt(0, 0, COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
 
 //         kDebug() << src->colorSpace()->id().id();
-        cubism(dev, dev, QRect(0, 0, rect.width(), rect.height()), tileSize, tileSaturation);
+        cubism(dev, QPoint(0, 0), dev, QPoint(0, 0), size, tileSize, tileSaturation);
 
-        gc.begin(dst);
-        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, dev, 0, 0, rect.width(), rect.height());
+        gc.begin(dst, dstInfo.selection());
+        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, dev, 0, 0, size.width(), size.height());
         gc.end();
-        if (src->image()) src->image()->unlock();
+//         if (src->image()) src->image()->unlock();
 
 //         kDebug() << src->colorSpace()->id().id();
     }
-#endif
 }
 
-void KisCubismFilter::randomizeIndices (qint32 count, qint32* indices)
+void KisCubismFilter::randomizeIndices (qint32 count, qint32* indices) const
 {
         qint32 index1, index2;
         qint32 tmp;
@@ -130,7 +135,7 @@ void KisCubismFilter::randomizeIndices (qint32 count, qint32* indices)
         }
 }
 
-qint32 KisCubismFilter::randomIntNumber(qint32 lowestNumber, qint32 highestNumber)
+qint32 KisCubismFilter::randomIntNumber(qint32 lowestNumber, qint32 highestNumber) const
 {
         if(lowestNumber > highestNumber)
         {
@@ -142,7 +147,7 @@ qint32 KisCubismFilter::randomIntNumber(qint32 lowestNumber, qint32 highestNumbe
         return lowestNumber + (( highestNumber - lowestNumber ) * rand() )/ RAND_MAX;
 }
 
-double KisCubismFilter::randomDoubleNumber(double lowestNumber, double highestNumber)
+double KisCubismFilter::randomDoubleNumber(double lowestNumber, double highestNumber) const
 {
         if(lowestNumber > highestNumber)
         {
@@ -155,7 +160,7 @@ double KisCubismFilter::randomDoubleNumber(double lowestNumber, double highestNu
         return lowestNumber + range * rand() / (double)RAND_MAX;
 }
 
-double KisCubismFilter::calcAlphaBlend (double* vec, double  oneOverDist, double  x, double  y)
+double KisCubismFilter::calcAlphaBlend (double* vec, double  oneOverDist, double  x, double  y) const
 {
 
         if ( oneOverDist==0 )
@@ -171,7 +176,7 @@ double KisCubismFilter::calcAlphaBlend (double* vec, double  oneOverDist, double
         }
 }
 
-void KisCubismFilter::convertSegment (qint32 x1, qint32 y1, qint32 x2, qint32  y2, qint32 offset, qint32* min, qint32* max, qint32 xmin, qint32 xmax)
+void KisCubismFilter::convertSegment (qint32 x1, qint32 y1, qint32 x2, qint32  y2, qint32 offset, qint32* min, qint32* max, qint32 xmin, qint32 xmax) const
 {
         if (y1 > y2)
         {
@@ -204,7 +209,8 @@ void KisCubismFilter::convertSegment (qint32 x1, qint32 y1, qint32 x2, qint32  y
 
 #define USE_READABLE_BUT_SLOW_CODE
 
-void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, const quint8* col, quint8* /*s*/, QRect rect)
+void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint dstTopLeft, const QSize& size, KisPolygon* poly, const quint8* col, quint8* dest) const
+// void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, const quint8* col, quint8* /*s*/, QRect rect) const
 {
         qint32         val;
         qint32         alpha;
@@ -212,6 +218,7 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
         qint32         x, y;
         double          xx, yy;
         double          vec[2];
+        QRect rect(dstTopLeft, size);
         qint32         x1 = rect.left(), y1 = rect.top(), x2 = rect.right(), y2 = rect.bottom();
 //         qint32         selWidth, selHeight;
         qint32         *vals, *valsIter, *valsEnd;
@@ -365,13 +372,13 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
     delete[] maxScanlines;
 }
 
-void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, quint32 tileSize, quint32 tileSaturation)
+void KisCubismFilter::cubism(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint dstTopLeft, const QSize& size, quint32 tileSize, quint32 tileSaturation) const
 {
     Q_ASSERT(src);
     Q_ASSERT(dst);
 
         //fill the destination image with the background color (black for now)
-        KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
+        KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
         qint32 depth = src->colorSpace()->colorChannelCount();
         while( ! dstIt.isDone() )
         {
@@ -383,8 +390,8 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
         }
 
         //compute number of rows and columns
-        qint32 cols = ( rect.width() + tileSize - 1) / tileSize;
-        qint32 rows = ( rect.height() + tileSize - 1) / tileSize;
+        qint32 cols = ( size.width() + tileSize - 1) / tileSize;
+        qint32 rows = ( size.height() + tileSize - 1) / tileSize;
         qint32 numTiles = (rows + 1) * (cols + 1);
 
 //         setProgressTotalSteps(numTiles);
@@ -408,8 +415,8 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
         {
                 i = randomIndices[count] / (cols + 1);
                 j = randomIndices[count] % (cols + 1);
-                x = j * tileSize + (tileSize / 4.0) - randomDoubleNumber(0, tileSize/2.0) + rect.x();
-                y = i * tileSize + (tileSize / 4.0) - randomDoubleNumber(0, tileSize/2.0) + rect.y();
+                x = j * tileSize + (tileSize / 4.0) - randomDoubleNumber(0, tileSize/2.0) + dstTopLeft.x();
+                y = i * tileSize + (tileSize / 4.0) - randomDoubleNumber(0, tileSize/2.0) + dstTopLeft.y();
                 width = (tileSize + randomDoubleNumber(0, tileSize / 4.0) - tileSize / 8.0) * tileSaturation;
                 height = (tileSize + randomDoubleNumber (0, tileSize / 4.0) - tileSize / 8.0) * tileSaturation;
                 theta = randomDoubleNumber(0, 2*M_PI);
@@ -421,15 +428,15 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
                 poly->rotate( theta );
                 poly->translate ( x, y );
                 //  bounds check on x, y
-                ix = (qint32) CLAMP (x, rect.x(), rect.x() + rect.width() - 1);
-                iy = (qint32) CLAMP (y, rect.y(), rect.y() + rect.height() - 1);
+                ix = (qint32) CLAMP (x, dstTopLeft.x(), dstTopLeft.x() + size.width() - 1);
+                iy = (qint32) CLAMP (y, dstTopLeft.y(), dstTopLeft.y() + size.height() - 1);
 
                 //read the pixel at ix, iy
-                KisRectIteratorPixel srcIt = src->createRectIterator(ix,iy,1,1, false);
+                KisRectIteratorPixel srcIt = src->createRectIterator(ix,iy,1,1, false); // TODO use a random accessor here
                 srcPixel = srcIt.oldRawData();
                 if (srcPixel[pixelSize - 1])
                 {
-                    fillPolyColor (src, dst, poly, srcPixel, dstPixel, rect);
+                    fillPolyColor (src, srcTopLeft, dst, dstTopLeft, size, poly, srcPixel, dstPixel);
                 }
                 count++;
 //                 if ((count % 5) == 0) setProgress(count);
@@ -437,7 +444,7 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
 
 }
 
-KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
+KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/) const
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile size"), "tileSize" ) );
@@ -445,13 +452,10 @@ KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* pare
     return new KisMultiIntegerFilterWidget( id().id(),  parent,  id().id(),  param );
 }
 
-KisFilterConfiguration* KisCubismFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisCubismFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-    if( widget == 0 )
-    {
-        return new KisCubismFilterConfiguration( 10, 10);
-    } else {
-        return new KisCubismFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
-    }
+    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    config->setProperty("tileSize", 10 );
+    config->setProperty("tileSaturation", 10 );
+    return config;
 }

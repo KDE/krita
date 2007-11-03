@@ -36,9 +36,9 @@ public:
         ) const;
     static inline KoID id() { return KoID("blur", i18n("Blur")); }
     
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev) const;
 };
 
 #endif

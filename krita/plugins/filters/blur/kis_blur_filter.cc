@@ -41,12 +41,12 @@ KisBlurFilter::KisBlurFilter() : KisFilter(id(), CategoryBlur, i18n("&Blur..."))
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisFilterConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP )
+KisFilterConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP ) const
 {
-    return new KisWdgBlur(this, parent);
+    return new KisWdgBlur(parent);
 }
 
-KisFilterConfiguration* KisBlurFilter::factoryConfiguration(const KisPaintDeviceSP)
+KisFilterConfiguration* KisBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("halfWidth", 5 );

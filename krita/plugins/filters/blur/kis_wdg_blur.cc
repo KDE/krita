@@ -33,10 +33,8 @@
 
 #include "ui_wdgblur.h"
 
-KisWdgBlur::KisWdgBlur( KisFilter* nfilter, QWidget * parent) : KisFilterConfigWidget ( parent )
+KisWdgBlur::KisWdgBlur( QWidget * parent) : KisFilterConfigWidget ( parent )
 {
-    Q_UNUSED(nfilter);
-
     m_widget = new Ui_WdgBlur();
     m_widget->setupUi(this);
     linkSpacingToggled(true);

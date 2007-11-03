@@ -35,8 +35,8 @@ class KisFilterColorToAlpha : public KisFilter {
         ) const;
         static inline KoID id() { return KoID("colortoalpha", i18n("Color to Alpha")); }
     public:
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-        virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP dev);
+        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev) const;
+        virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP dev) const;
 };
 
 

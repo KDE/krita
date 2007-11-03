@@ -161,7 +161,7 @@ public:
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on
      */
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const;
     // "Support" functions
 public:
     /**
@@ -209,7 +209,7 @@ protected:
     
     void setBookmarkManager(KisBookmarkedConfigurationManager* );
     /// @return the name of config group in KConfig
-    QString configEntryGroup();
+    QString configEntryGroup() const;
 
     /// @return the default configuration as defined by whoever wrote the plugin
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;

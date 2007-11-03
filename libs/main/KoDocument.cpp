@@ -1993,35 +1993,11 @@ bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
 
 bool KoDocument::loadOasisFromStore( KoStore* store )
 {
-    KoOasisStyles oasisStyles;
-    KoXmlDocument contentDoc;
-    KoXmlDocument settingsDoc;
-    KoOdfReadStore oasisStore( store );
-    bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, d->lastErrorMessage );
-    if ( !ok )
+    KoOdfReadStore odfStore( store );
+    if ( ! odfStore.loadAndParse( d->lastErrorMessage ) ) {
         return false;
-
-    KoXmlDocument stylesDoc;
-    (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, d->lastErrorMessage );
-    // Load styles from style.xml
-    oasisStyles.createStyleMap( stylesDoc, true );
-    // Also load styles from content.xml
-    oasisStyles.createStyleMap( contentDoc, false );
-
-    // TODO post 1.4, pass manifestDoc to the apps so that they don't have to do it themselves
-    // (when calling KoDocumentChild::loadOasisDocument)
-    //QDomDocument manifestDoc;
-    //KoOdfReadStore oasisStore( store );
-    //if ( !oasisStore.loadAndParse( "tar:/META-INF/manifest.xml", manifestDoc, d->lastErrorMessage ) )
-    //    return false;
-
-    if ( store->hasFile( "settings.xml" ) ) {
-        (void)oasisStore.loadAndParse( "settings.xml", settingsDoc, d->lastErrorMessage );
     }
-    if ( !loadOasis( contentDoc, oasisStyles, settingsDoc, store ) )
-        return false;
-
-    return true;
+    return loadOdf( odfStore );
 }
 
 bool KoDocument::addVersion( const QString& comment )

@@ -3,6 +3,7 @@
  *  Copyright (c) 2001 Toshitaka Fujioka  <fujioka@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004-2007 Boudewijn Rempt <boud@valdyas.org<
+ *  Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,7 +70,7 @@ public:
     virtual bool wantExportConfirmation() const { return false; }
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
-    virtual bool loadOasis( const KoXmlDocument&, KoOasisStyles&, const KoXmlDocument&, KoStore* );
+    virtual bool loadOdf( KoOdfReadStore & odfStore );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
     virtual bool loadChildren( KoStore* store);
     virtual bool loadXML(QIODevice *, const KoXmlDocument& doc);

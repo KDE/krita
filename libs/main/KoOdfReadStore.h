@@ -20,8 +20,9 @@
 #define KOODFREADSTORE_H
 
 class QString;
-class KoStore;
 class QIODevice;
+class KoStore;
+class KoOasisStyles;
 class KoXmlDocument;
 
 /**
@@ -42,6 +43,11 @@ public:
     ~KoOdfReadStore();
 
     KoStore* store() const;
+    KoOasisStyles & styles();
+    const KoXmlDocument & contentDoc() const;
+    const KoXmlDocument & settingsDoc() const;
+
+    bool loadAndParse( QString & errorMessage );
 
     /** 
      * Load a file from an odf store

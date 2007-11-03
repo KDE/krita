@@ -26,6 +26,7 @@
 #include <KoXmlReader.h>
 
 #include "KoDocument.h"
+#include "KoOasisStyles.h"
 #include "KoXmlNS.h"
 
 struct KoOdfReadStore::Private
@@ -35,6 +36,10 @@ struct KoOdfReadStore::Private
     {}
 
     KoStore * store;
+    KoOasisStyles styles;
+    KoXmlDocument stylesDoc;
+    KoXmlDocument contentDoc;
+    KoXmlDocument settingsDoc;
 };
 
 KoOdfReadStore::KoOdfReadStore( KoStore* store )
@@ -50,6 +55,46 @@ KoOdfReadStore::~KoOdfReadStore()
 KoStore * KoOdfReadStore::store() const
 {
     return d->store;
+}
+
+KoOasisStyles & KoOdfReadStore::styles()
+{
+    return d->styles;
+}
+
+const KoXmlDocument & KoOdfReadStore::contentDoc() const
+{
+    return d->contentDoc;
+}
+
+const KoXmlDocument & KoOdfReadStore::settingsDoc() const
+{
+    return d->settingsDoc;
+}
+
+bool KoOdfReadStore::loadAndParse( QString & errorMessage )
+{
+    if ( !loadAndParse( "content.xml", d->contentDoc, errorMessage ) ) {
+        return false;
+    }
+
+    loadAndParse( "styles.xml", d->stylesDoc, errorMessage );
+    // Load styles from style.xml
+    d->styles.createStyleMap( d->stylesDoc, true );
+    // Also load styles from content.xml
+    d->styles.createStyleMap( d->contentDoc, false );
+
+    // TODO post 1.4, pass manifestDoc to the apps so that they don't have to do it themselves
+    // (when calling KoDocumentChild::loadOasisDocument)
+    //QDomDocument manifestDoc;
+    //KoOdfReadStore oasisStore( store );
+    //if ( !oasisStore.loadAndParse( "tar:/META-INF/manifest.xml", manifestDoc, d->lastErrorMessage ) )
+    //    return false;
+
+    if ( d->store->hasFile( "settings.xml" ) ) {
+        loadAndParse( "settings.xml", d->settingsDoc, errorMessage );
+    }
+    return true;
 }
 
 bool KoOdfReadStore::loadAndParse( const QString& fileName, KoXmlDocument& doc, QString& errorMessage )

@@ -47,8 +47,7 @@ public:
     void paintContent( QPainter &painter, const QRect &rect);
 
     bool loadXML( QIODevice *, const KoXmlDocument & doc );
-    bool loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
-                    const KoXmlDocument & settings, KoStore* store );
+    bool loadOdf( KoOdfReadStore & odfStore );
 
     bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 

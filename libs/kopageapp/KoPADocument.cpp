@@ -24,6 +24,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoOasisStyles.h>
+#include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoOasisLoadingContext.h>
 #include <KoShapeManager.h>
@@ -74,17 +75,13 @@ bool KoPADocument::loadXML( QIODevice *, const KoXmlDocument & doc )
     return true;
 }
 
-bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
-                              const KoXmlDocument & settings, KoStore* store )
+bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
 {
-    Q_UNUSED( doc );
-    Q_UNUSED( settings );
-
     emit sigProgress( 0 );
-    KoOasisLoadingContext loadingContext( this, oasisStyles, store );
+    KoOasisLoadingContext loadingContext( this, odfStore.styles(), odfStore.store() );
     KoPALoadingContext paContext( loadingContext );
 
-    KoXmlElement content = doc.documentElement();
+    KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
 
     if ( realBody.isNull() ) {
@@ -100,7 +97,7 @@ bool KoPADocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisSty
     }
 
     //load master pages
-    const QHash<QString, KoXmlElement*> masterStyles( oasisStyles.masterPages() );
+    const QHash<QString, KoXmlElement*> masterStyles( odfStore.styles().masterPages() );
     QHash<QString, KoXmlElement*>::const_iterator it( masterStyles.constBegin() );
     for ( ; it != masterStyles.constEnd(); ++it )
     {

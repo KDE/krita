@@ -40,6 +40,7 @@ class QXmlSimpleReader;
 class QUndoCommand;
 
 class KoStore;
+class KoOdfReadStore;
 class KoMainWindow;
 class KoChild;
 class KoDocumentChild;
@@ -495,11 +496,10 @@ public:
     /**
      *  Reimplement this method to load the contents of your %KOffice document,
      *  from the XML document ("content.xml"). The styles have been parsed already,
-     *  you can find them in the oasisStyles parameter. The store can be used
+     *  you can find them in the odfStore.styles(). The store can be used
      *  to load images and embedded documents.
      */
-    virtual bool loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
-                            const KoXmlDocument & settings, KoStore* store ) = 0;
+    virtual bool loadOdf( KoOdfReadStore & odfStore ) = 0;
 
     /**
      *  Reimplement this method to save the contents of your %KOffice document,

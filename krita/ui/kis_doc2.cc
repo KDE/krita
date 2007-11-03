@@ -4,6 +4,7 @@
  *  Copyright (c) 2001 Toshitaka Fujioka  <fujioka@kde.org>
  *  Copyright (c) 2002, 2003 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004-2007 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,6 +52,7 @@
 #include <KoFilterManager.h>
 #include <KoID.h>
 #include <KoMainWindow.h>
+#include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoQueryTrader.h>
 #include <KoStore.h>
@@ -232,14 +234,14 @@ QDomDocument KisDoc2::saveXML()
     return doc;
 }
 
-bool KisDoc2::loadOasis( const KoXmlDocument& doc, KoOasisStyles&, const KoXmlDocument&, KoStore* store)
+bool KisDoc2::loadOdf( KoOdfReadStore & odfStore )
 {
     kDebug(41008) <<"loading with OpenRaster";
-    KoXmlNode root = doc.documentElement();
+    KoXmlNode root = odfStore.contentDoc().documentElement();
     for (KoXmlNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "office:body") {
             KoXmlElement elem = node.toElement();
-            KisOasisLoadVisitor olv(this,store);
+            KisOasisLoadVisitor olv(this,odfStore.store());
             olv.loadImage(elem);
             if (!olv.image() )
                 return false;

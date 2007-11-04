@@ -203,7 +203,7 @@ KoScriptingActionDocker::KoScriptingActionDocker(QWidget* parent, KoScriptingMod
     kDebug();
     d->module = module;
     d->action = action;
-    d->action->addObject(this, "KoScriptingDocker", Kross::ChildrenInterface::AutoConnectSignals);
+    d->action->addObject(this, "KoDocker", Kross::ChildrenInterface::AutoConnectSignals);
     connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(slotVisibilityChanged(bool)));
 }
 

@@ -36,6 +36,7 @@
 #include <kdebug.h>
 
 #include <kross/core/manager.h>
+#include <kross/core/action.h>
 #include <kross/ui/model.h>
 #include <kross/ui/view.h>
 
@@ -49,13 +50,19 @@ class KoScriptingDockerFactory::Private
     public:
         /// The parent QWidget instance.
         QPointer<QWidget> parent;
+        /// The module, can be NULL.
+        KoScriptingModule* module;
+        /// The action, can be NULL.
+        Kross::Action* action;
 };
 
-KoScriptingDockerFactory::KoScriptingDockerFactory(QWidget* parent)
+KoScriptingDockerFactory::KoScriptingDockerFactory(QWidget* parent, KoScriptingModule* module, Kross::Action* action)
     : KoDockFactory()
     , d(new Private())
 {
     d->parent = parent;
+    d->module = module;
+    d->action = action;
 }
 
 KoScriptingDockerFactory::~KoScriptingDockerFactory()
@@ -65,7 +72,7 @@ KoScriptingDockerFactory::~KoScriptingDockerFactory()
 
 QString KoScriptingDockerFactory::id() const
 {
-    return "Scripting";
+    return d->action ? d->action->name() : "Scripting";
 }
 
 Qt::Dock KoScriptingDockerFactory::defaultDockPosition() const
@@ -75,8 +82,12 @@ Qt::Dock KoScriptingDockerFactory::defaultDockPosition() const
 
 QDockWidget* KoScriptingDockerFactory::createDockWidget()
 {
-    QDockWidget *dw =  new KoScriptingDocker(d->parent);
-    dw->setObjectName(id());
+    QDockWidget *dw = 0;
+    if( d->action )
+        dw = new KoScriptingActionDocker(d->parent, d->module, d->action);
+    else
+        dw = new KoScriptingDocker(d->parent);
+    dw->setObjectName( id() );
     return dw;
 }
 
@@ -170,6 +181,62 @@ void KoScriptingDocker::slotDoubleClicked()
 {
     //kDebug()<<"KoScriptingDocker::slotDoubleClicked()";
     d->view->slotRun();
+}
+
+/***********************************************************************
+ * KoScriptingDocker
+ */
+
+/// \internal d-pointer class.
+class KoScriptingActionDocker::Private
+{
+    public:
+        QWidget* widget;
+        KoScriptingModule* module;
+        Kross::Action* action;
+};
+
+KoScriptingActionDocker::KoScriptingActionDocker(QWidget* parent, KoScriptingModule* module, Kross::Action* action)
+    : QDockWidget(action->text(), parent)
+    , d(new Private())
+{
+    kDebug();
+    d->module = module;
+    d->action = action;
+    d->action->addObject(this, "KoScriptingDocker", Kross::ChildrenInterface::AutoConnectSignals);
+    connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(slotVisibilityChanged(bool)));
+}
+
+KoScriptingActionDocker::~KoScriptingActionDocker()
+{
+    kDebug();
+    d->action->finalize();
+    delete d;
+}
+
+void KoScriptingActionDocker::slotVisibilityChanged(bool visible)
+{
+    kDebug()<<"visible="<<visible;
+    if( visible ) {
+        if( d->action->isFinalized() ) {
+            //KoView* view = d->module->view();
+            //KoMainWindow* mainwindow = view ? view->shell() : 0;
+            d->action->trigger();
+        }
+    }
+    else {
+        //d->action->finalize();
+    }
+}
+
+QWidget* KoScriptingActionDocker::widget()
+{
+    return QDockWidget::widget();
+}
+
+void KoScriptingActionDocker::setWidget(QWidget* widget)
+{
+    QDockWidget::setWidget(widget);
 }
 
 #include "KoScriptingDocker.moc"

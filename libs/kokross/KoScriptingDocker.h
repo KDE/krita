@@ -25,6 +25,12 @@
 
 #include "kokross_export.h"
 
+namespace Kross {
+    class Action;
+}
+
+class KoScriptingModule;
+
 /**
 * The KoScriptingDockerFactory class implements a factory to
 * create \a KoScriptingDocker instances.
@@ -37,8 +43,11 @@ class KOKROSS_EXPORT KoScriptingDockerFactory : public KoDockFactory
         * Constructor.
         *
         * \param parent The parent QWidget of the \a KoScriptingDocker .
+        * \param module The optional \a KoScriptingModule instance.
+        * \param action The optional action. If this is NULL we will use a
+        * \a KoScriptingDocker class else a \a KoScriptingActionDocker is used.
         */
-        explicit KoScriptingDockerFactory(QWidget* parent);
+        explicit KoScriptingDockerFactory(QWidget* parent, KoScriptingModule* module = 0, Kross::Action* action = 0);
 
         /**
         * Destructor.
@@ -109,6 +118,56 @@ class KOKROSS_EXPORT KoScriptingDocker : public QDockWidget
         * selected action.
         */
         void slotDoubleClicked();
+
+    private:
+        /// \internal d-pointer class.
+        class Private;
+        /// \internal d-pointer instance.
+        Private* const d;
+};
+
+/**
+* The KoScriptingActionDocker class implements a docking widget that displays
+* a docker and uses a \a Kross::Action instance to create optional widgets
+* in it using a scripting language.
+*/
+class KOKROSS_EXPORT KoScriptingActionDocker : public QDockWidget
+{
+        Q_OBJECT
+    public:
+
+        /**
+        * Constructor.
+        *
+        * \param parent The parent QWidget of the \a KoScriptingDocker .
+        * \param module The \a KoScriptingModule instance.
+        * \param action The action the docker should dacorate. This action
+        * will be used to create the widgets, etc. in the docker using scripts.
+        */
+        KoScriptingActionDocker(QWidget* parent, KoScriptingModule* module, Kross::Action* action);
+
+        /**
+        * Destructor.
+        */
+        virtual ~KoScriptingActionDocker();
+
+    public Q_SLOTS:
+
+        /**
+        * Returns the widget that should be displayed within this docker.
+        */
+        QWidget* widget();
+    
+        /**
+        * Set the widget that should be displayed within this docker.
+        */
+        void setWidget(QWidget* widget);
+
+    Q_SIGNALS:
+        //void visibilityChanged(bool visible);
+
+    private Q_SLOTS:
+        void slotVisibilityChanged(bool visible);
 
     private:
         /// \internal d-pointer class.

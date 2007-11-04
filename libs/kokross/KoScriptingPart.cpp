@@ -111,6 +111,18 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule* const module, const QStringL
         QDockWidget* docker = mainwindow->createDockWidget(&factory);
         Q_UNUSED(docker);
     }
+
+    if( view ) {
+        if( Kross::ActionCollection* c = Kross::Manager::self().actionCollection()->collection("docker") ) {
+            foreach(Kross::Action* a, c->actions()) {
+                a->addObject(d->module);
+                KoScriptingDockerFactory *f = new KoScriptingDockerFactory(view, d->module, a);
+                QDockWidget *dock = view->createDockWidget(f);
+                //dock->setEnabled(false);
+                kDebug(41011) <<"Adding scripting docker with id=" << f->id();
+            }
+        }
+    }
 }
 
 KoScriptingPart::~KoScriptingPart()

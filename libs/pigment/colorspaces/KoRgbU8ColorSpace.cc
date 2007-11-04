@@ -51,6 +51,7 @@ public:
                 dst[0] = KoColorSpaceMathsTraits<quint8>::max - src[0];
                 dst[1] = KoColorSpaceMathsTraits<quint8>::max - src[1];
                 dst[2] = KoColorSpaceMathsTraits<quint8>::max - src[2];
+                dst[3] = src[3];
 
                 src += m_psize;
                 dst += m_psize;

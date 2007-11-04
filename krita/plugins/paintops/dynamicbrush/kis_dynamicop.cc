@@ -3,8 +3,7 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -49,6 +48,7 @@
 #include "kis_dynamic_brush_registry.h"
 #include "kis_dynamic_coloring.h"
 #include "kis_dynamic_coloring_program.h"
+#include "kis_dynamic_scattering.h"
 #include "kis_dynamic_shape.h"
 #include "kis_dynamic_shape_program.h"
 #include "shapes/kis_bristle_shape.h"
@@ -146,22 +146,6 @@ KisDynamicOp::~KisDynamicOp()
 
 void KisDynamicOp::paintAt(const KisPaintInformation& info)
 {
-    KisPaintInformation adjustedInfo(info);
-
-
-//     kDebug(41006) << info.pressure <<"" << info.xTilt <<"" << info.yTilt;
-
-    // Painting should be implemented according to the following algorithm:
-    // retrieve brush
-    // if brush == mask
-    //          retrieve mask
-    // else if brush == image
-    //          retrieve image
-    // subsample (mask | image) for position -- pos should be double!
-    // apply filters to mask (color | gradient | pattern | etc.
-    // composite filtered mask into temporary layer
-    // composite temporary layer into target layer
-    // @see: doc/brush.txt
 
     if (not painter()->device()) return;
 
@@ -171,15 +155,25 @@ void KisDynamicOp::paintAt(const KisPaintInformation& info)
     quint8 origOpacity = painter()->opacity();
     KoColor origColor = painter()->paintColor();
 
-    KisDynamicShape* dabsrc = m_brush->shape()->clone();
-    KisDynamicColoring* coloringsrc = m_brush->coloring()->clone();
+    KisDynamicScattering scatter = m_brush->shapeProgram()->scattering( info );
+    
+    double maxDist = scatter.maximumDistance();
+    
+    for(int i = 0; i < scatter.count(); i ++)
+    {
+        KisPaintInformation localInfo(info);
+        
+        localInfo.pos += QPointF( maxDist * (rand() / (double) RAND_MAX - 0.5), maxDist * (rand() / (double) RAND_MAX - 0.5) );
+        
+        KisDynamicShape* dabsrc = m_brush->shape()->clone();
+        KisDynamicColoring* coloringsrc = m_brush->coloring()->clone();
+    
+        m_brush->shapeProgram()->apply(dabsrc, localInfo);
+        m_brush->coloringProgram()->apply(coloringsrc, localInfo);
+        dabsrc->paintAt(localInfo.pos, localInfo, coloringsrc );
+    }
 
-    m_brush->shapeProgram()->apply(dabsrc, adjustedInfo);
-    m_brush->coloringProgram()->apply(coloringsrc, adjustedInfo);
 
-
-
-    dabsrc->paintAt(info.pos, adjustedInfo, coloringsrc );
 
 
     painter()->setOpacity(origOpacity);

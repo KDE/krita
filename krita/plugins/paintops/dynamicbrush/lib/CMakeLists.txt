@@ -7,6 +7,7 @@ set(kritadynamicbrushlib_LIB_SRCS
     kis_dynamic_coloring_program.cc
     kis_dynamic_coloring_program_factory_registry.cc
     kis_dynamic_program.cc
+    kis_dynamic_scattering.cc
     kis_dynamic_sensor.cc
     kis_dynamic_shape.cc
     kis_dynamic_shape_program.cc

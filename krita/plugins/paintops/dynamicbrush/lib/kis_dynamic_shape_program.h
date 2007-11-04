@@ -3,8 +3,7 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,6 +25,7 @@
 #include <QString>
 #include <QObject>
 
+class KisDynamicScattering;
 class KisDynamicShape;
 class KisPaintInformation;
 class QWidget;
@@ -42,6 +42,10 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgram : public KisDynamicProgram {
         KisDynamicShapeProgram(const QString& name, const QString& type);
     public:
         virtual ~KisDynamicShapeProgram();
+        /**
+         * Compute the scattering information for that program.
+         */
+        virtual KisDynamicScattering scattering( const KisPaintInformation& info ) const =0;
         /**
          * Apply the program on the shape and the Shape
          */

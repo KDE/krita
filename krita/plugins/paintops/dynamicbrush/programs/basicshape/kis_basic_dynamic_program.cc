@@ -22,10 +22,12 @@
 
 #include <klocale.h>
 
+#include "kis_paint_information.h"
 #include "kis_properties_configuration.h"
 
 // Dynamic Brush lib includes
 #include "kis_dynamic_shape_program_factory_registry.h"
+#include "kis_dynamic_scattering.h"
 #include "kis_dynamic_sensor.h"
 #include "kis_dynamic_shape.h"
 
@@ -76,6 +78,24 @@ inline double jitter(int amount, double v)
     v = (1.0 + (rand() - RAND_MAX / 2 ) * amount / (RAND_MAX * 50) ) * v;
     if(v >= 1.0) v= 1.0;
     return v;
+}
+
+KisDynamicScattering KisBasicDynamicProgram::scattering( const KisPaintInformation& info ) const
+{
+    int count = 1;
+    double distance = 0.0;
+    
+    if( m_scatterEnabled )
+    {
+        double v = jitter( m_scatterJitter, m_scatterSensor->parameter( info ) );
+        distance = v * info.movement.length() * m_scatterAmount * 0.01;
+    }
+    if( m_enableCout )
+    {
+        double v = jitter( m_countJitter, m_countSensor->parameter( info ) );
+        count = ceil( m_countCount * v );
+    }
+    return KisDynamicScattering(count, distance);
 }
 
 void KisBasicDynamicProgram::apply(KisDynamicShape* shape, const KisPaintInformation& info) const

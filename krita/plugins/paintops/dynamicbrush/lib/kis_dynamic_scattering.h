@@ -15,24 +15,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_DYNAMIC_COLORING_PROGRAM_FACTORY_REGISTRY_H_
-#define _KIS_DYNAMIC_COLORING_PROGRAM_FACTORY_REGISTRY_H_
+#ifndef _KIS_DYNAMIC_SCATTERING_H_
+#define _KIS_DYNAMIC_SCATTERING_H_
 
 #include "dynamicbrush_export.h"
 
-#include "KoGenericRegistry.h"
-
-#include "kis_dynamic_coloring_program.h"
-
-class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgramFactoryRegistry : public KoGenericRegistry<KisDynamicColoringProgramFactory*>, public KisDynamicProgramFactoryRegistry {
-        KisDynamicColoringProgramFactoryRegistry();
+/**
+ * This class holds the information about the scattering around the drawing.
+ */
+class DYNAMIC_BRUSH_EXPORT KisDynamicScattering {
     public:
-        static KisDynamicColoringProgramFactoryRegistry* instance();
-        virtual KisDynamicProgramFactory* programFactory(QString id) const;
-        virtual QList<KoID> programTypes() const;
+        KisDynamicScattering(int _count, double _maximumDistance);
+        int count();
+        double maximumDistance();
     private:
-        struct Private;
-        Private* const d;
+        int m_count;
+        double m_maximumDistance;
 };
 
 #endif

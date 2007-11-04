@@ -3,8 +3,7 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,6 +21,8 @@
 
 #include <kdebug.h>
 
+#include "kis_dynamic_scattering.h"
+
 struct KisDynamicShapeProgram::Private {
 };
 
@@ -33,6 +34,7 @@ KisDynamicShapeProgram::~KisDynamicShapeProgram() { delete d; }
 class KisDynamicDummyShapeProgram : public KisDynamicShapeProgram {
     public:
         KisDynamicDummyShapeProgram(const QString& name) : KisDynamicShapeProgram(name, "dummy") { }
+        virtual KisDynamicScattering scattering( const KisPaintInformation& info ) const { return KisDynamicScattering(1, 0.0); }
         virtual void apply( KisDynamicShape* , const KisPaintInformation& ) const { }
         virtual QWidget* createEditor(QWidget* ) { return 0; }
 };

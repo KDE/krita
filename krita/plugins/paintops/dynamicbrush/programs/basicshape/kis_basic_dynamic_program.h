@@ -27,6 +27,7 @@ class KisBasicDynamicProgram : public KisDynamicShapeProgram {
     public:
         KisBasicDynamicProgram(const QString& name);
         virtual ~KisBasicDynamicProgram();
+        virtual KisDynamicScattering scattering( const KisPaintInformation& info ) const;
         virtual void apply(KisDynamicShape* shape, const KisPaintInformation& adjustedInfo) const;
         virtual QWidget* createEditor(QWidget* parent);
         virtual void fromXML(const QDomElement&);

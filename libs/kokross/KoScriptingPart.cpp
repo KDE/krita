@@ -115,6 +115,8 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule* const module, const QStringL
     if( view ) {
         if( Kross::ActionCollection* c = Kross::Manager::self().actionCollection()->collection("docker") ) {
             foreach(Kross::Action* a, c->actions()) {
+                if( ! a->isEnabled() )
+                    continue;
                 a->addObject(d->module);
                 KoScriptingDockerFactory *f = new KoScriptingDockerFactory(view, d->module, a);
                 QDockWidget *dock = view->createDockWidget(f);

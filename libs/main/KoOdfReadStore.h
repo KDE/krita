@@ -42,11 +42,53 @@ public:
 
     ~KoOdfReadStore();
 
+    /**
+     * Get the store
+     */
     KoStore* store() const;
+
+    /**
+     * Get the styles
+     *
+     * To get a usable result loadAndParse( QString ) has to be called first.
+     *
+     * @return styles
+     */
     KoOasisStyles & styles();
+
+    /**
+     * Get the content document
+     *
+     * To get a usable result loadAndParse( QString ) has to be called first.
+     *
+     * This gives you the content of the content.xml file
+     */
     const KoXmlDocument & contentDoc() const;
+
+    /**
+     * Get the settings document
+     *
+     * To get a usable result loadAndParse( QString ) has to be called first.
+     *
+     * This gives you the content of the settings.xml file
+     */
     const KoXmlDocument & settingsDoc() const;
 
+    /**
+     * Load and parse
+     *
+     * This function loads and parses the content.xml, styles.xml and the settings.xml
+     * file in the store. The sytles are already parsed.
+     *
+     * After this function is called you can access the data via
+     * styles()
+     * contentDoc()
+     * settingsDoc()
+     *
+     * @param errorMessage The errorMessage is set in case an error is encounted.
+     * @return true if loading and parsing was successful, false otherwise. In case of an error
+     * the errorMessage is updated accordingly.
+     */
     bool loadAndParse( QString & errorMessage );
 
     /** 

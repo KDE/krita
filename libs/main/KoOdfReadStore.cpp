@@ -37,6 +37,7 @@ struct KoOdfReadStore::Private
 
     KoStore * store;
     KoOasisStyles styles;
+    // it is needed to keep the stylesDoc around so that you can access the styles
     KoXmlDocument stylesDoc;
     KoXmlDocument contentDoc;
     KoXmlDocument settingsDoc;

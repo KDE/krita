@@ -18,7 +18,7 @@ if(require 'Qt')
 #         end
 #     end 
     class PaletteWidget < Qt::Widget
-        slots 'slotLinkActivated(QString)'
+#        slots 'slotLinkActivated(QString)'
         def initialize(parent)
             super(parent)
             @count = 5

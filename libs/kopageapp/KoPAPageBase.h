@@ -92,7 +92,7 @@ protected:
      * @return true on success, false otherwise
      */
     virtual bool saveOdfAnimations( KoPASavingContext & paContext ) const { Q_UNUSED( paContext ); return true; }
-    
+
     /**
      * @brief Save presentation notes
      *

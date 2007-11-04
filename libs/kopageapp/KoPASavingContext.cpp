@@ -48,7 +48,7 @@ QString KoPASavingContext::masterPageName( const KoPAMasterPage * masterPage )
     return QString();
 }
 
-void KoPASavingContext::incrementPage() 
+void KoPASavingContext::incrementPage()
 {
     m_page++;
 }

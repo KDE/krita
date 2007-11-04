@@ -69,7 +69,7 @@ public:
     /**
      * @brief Increment the page
      */
-    void incrementPage(); 
+    void incrementPage();
 
     /**
      * @brief Get the current page number

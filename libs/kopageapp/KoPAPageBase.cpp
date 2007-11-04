@@ -71,7 +71,7 @@ void KoPAPageBase::saveOdfShapes( KoShapeSavingContext &context ) const
 
         Q_ASSERT( layer );
         if ( layer ) {
-            QList<KoShape*> layerShapes( layer->iterator() ); 
+            QList<KoShape*> layerShapes( layer->iterator() );
             foreach( KoShape *layerShape, layerShapes ) {
                 tlshapes.append( layerShape );
             }
@@ -142,7 +142,7 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
     return true;
 }
 
-void KoPAPageBase::loadOdfPageTag( const KoXmlElement &element, 
+void KoPAPageBase::loadOdfPageTag( const KoXmlElement &element,
                                    KoPALoadingContext &loadingContext )
 {
     Q_UNUSED( element );

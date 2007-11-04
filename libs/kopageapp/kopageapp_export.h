@@ -25,11 +25,11 @@
 
 #ifndef KOPAGEAPP_EXPORT
 # if defined(MAKE_KOPAGEAPP_LIB)
-   /* We are building this library */ 
+   /* We are building this library */
 #  define KOPAGEAPP_EXPORT KDE_EXPORT
 #  define KOPAGEAPP_TEST_EXPORT KDE_EXPORT
 # else
-   /* We are using this library */ 
+   /* We are using this library */
 #  define KOPAGEAPP_EXPORT KDE_IMPORT
 #  define KOPAGEAPP_TEST_EXPORT KDE_IMPORT
 # endif

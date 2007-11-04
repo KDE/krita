@@ -27,7 +27,7 @@ class KoPAPage;
 class KOPAGEAPP_EXPORT KoPAViewModeNormal : public KoPAViewMode
 {
 public:
-	KoPAViewModeNormal( KoPAView * view, KoPACanvas * m_canvas );
+    KoPAViewModeNormal( KoPAView * view, KoPACanvas * m_canvas );
     ~KoPAViewModeNormal();
 
     void paintEvent( QPaintEvent* event );

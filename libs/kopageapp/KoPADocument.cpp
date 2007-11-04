@@ -236,7 +236,7 @@ void KoPADocument::addShape( KoShape * shape )
     // the KoShapeController sets the active layer as parent
     KoPAPageBase * page( pageByShape( shape ) );
 
-    bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0; 
+    bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0;
 
     foreach( KoView *view, views() )
     {
@@ -268,9 +268,9 @@ void KoPADocument::removeShape( KoShape *shape )
 
     KoPAPageBase * page( pageByShape( shape ) );
 
-    bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0; 
+    bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0;
 
-    foreach( KoView *view, views() ) 
+    foreach( KoView *view, views() )
     {
         KoPAView * kopaView = static_cast<KoPAView*>( view );
         KoPAPage * p;
@@ -306,7 +306,7 @@ KoPAPageBase * KoPADocument::pageByShape( KoShape * shape ) const
 
 void KoPADocument::setActionEnabled( int actions, bool enable )
 {
-    foreach( KoView *view, views() ) 
+    foreach( KoView *view, views() )
     {
         KoPAView * kopaView = static_cast<KoPAView*>( view );
         kopaView->setActionEnabled( actions, enable );
@@ -326,7 +326,7 @@ void KoPADocument::insertPage( KoPAPageBase* page, int index )
     }
 
     pages.insert( index, page );
-    
+
     if ( pages.size() == 2 ) {
         setActionEnabled( KoPAView::ActionDeletePage, true );
     }
@@ -355,7 +355,7 @@ void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
     if ( pages.size() == 2 ) {
         setActionEnabled( KoPAView::ActionDeletePage, true );
     }
-    
+
     // move active view to new page
 }
 

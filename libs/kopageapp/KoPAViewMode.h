@@ -35,7 +35,7 @@ class QPointF;
 class KOPAGEAPP_EXPORT KoPAViewMode
 {
 public:
-	KoPAViewMode( KoPAView * view, KoPACanvas * canvas );
+    KoPAViewMode( KoPAView * view, KoPACanvas * canvas );
     virtual ~KoPAViewMode();
 
     virtual void paintEvent( QPaintEvent* event ) = 0;
@@ -97,7 +97,7 @@ public:
      * @return view view used by the view mode
      */
     KoPAView * view() const;
-    
+
 protected:
     KoPACanvas * m_canvas;
     KoToolProxy * m_toolProxy;

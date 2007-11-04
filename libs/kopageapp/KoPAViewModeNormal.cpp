@@ -34,7 +34,7 @@
 KoPAViewModeNormal::KoPAViewModeNormal( KoPAView * view, KoPACanvas * canvas )
 : KoPAViewMode( view, canvas )
 , m_masterMode( false )
-, m_savedPage( 0 )                       
+, m_savedPage( 0 )
 {
 }
 
@@ -100,7 +100,7 @@ void KoPAViewModeNormal::keyPressEvent( QKeyEvent *event )
             case Qt::Key_End:
                 m_view->navigatePage( KoPageApp::PageLast );
                 break;
-            default:    
+            default:
                 event->ignore();
                 break;
         }

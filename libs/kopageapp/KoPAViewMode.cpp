@@ -22,9 +22,9 @@
 #include "KoPACanvas.h"
 
 KoPAViewMode::KoPAViewMode( KoPAView * view, KoPACanvas * canvas )
-: m_canvas( canvas )    
+: m_canvas( canvas )
 , m_toolProxy( canvas->toolProxy() )
-, m_view( view )    
+, m_view( view )
 {
 }
 
@@ -32,9 +32,9 @@ KoPAViewMode::~KoPAViewMode()
 {
 }
 
-void KoPAViewMode::setMasterMode( bool master ) 
-{ 
-    Q_UNUSED(master); 
+void KoPAViewMode::setMasterMode( bool master )
+{
+    Q_UNUSED(master);
 }
 
 bool KoPAViewMode::masterMode()
@@ -42,12 +42,12 @@ bool KoPAViewMode::masterMode()
     return false;
 }
 
-void KoPAViewMode::activate( KoPAViewMode * previousViewMode ) 
-{ 
-    Q_UNUSED( previousViewMode ); 
+void KoPAViewMode::activate( KoPAViewMode * previousViewMode )
+{
+    Q_UNUSED( previousViewMode );
 }
 
-void KoPAViewMode::deactivate() 
+void KoPAViewMode::deactivate()
 {
 }
 

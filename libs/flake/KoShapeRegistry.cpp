@@ -22,6 +22,7 @@
 #include "KoShapeRegistry.h"
 #include "KoPathShapeFactory.h"
 #include "KoShapeLoadingContext.h"
+#include "KoShapeSavingContext.h"
 #include "KoShapeGroup.h"
 
 #include <KoPluginLoader.h>
@@ -33,6 +34,7 @@
 #include <QString>
 #include <QHash>
 #include <QMultiMap>
+#include <QPainter>
 
 #include <kdebug.h>
 #include <k3staticdeleter.h>

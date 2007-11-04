@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>386</width>
-    <height>232</height>
+    <width>637</width>
+    <height>250</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" >
@@ -38,17 +38,17 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="KIntNumInput" native="1" name="sizeJitter" >
+        <widget class="KIntNumInput" name="sizeJitter" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" stdset="0" >
+         <property name="minimum" >
           <number>0</number>
          </property>
-         <property name="maximum" stdset="0" >
+         <property name="maximum" >
           <number>100</number>
          </property>
-         <property name="suffix" stdset="0" >
+         <property name="suffix" >
           <string>%</string>
          </property>
         </widget>
@@ -94,17 +94,20 @@
         </widget>
        </item>
        <item row="3" column="1" >
-        <widget class="KIntNumInput" native="1" name="sizeMinimum" >
+        <widget class="KIntNumInput" name="sizeMinimum" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" stdset="0" >
-          <number>0</number>
-         </property>
-         <property name="maximum" stdset="0" >
+         <property name="value" >
           <number>100</number>
          </property>
-         <property name="suffix" stdset="0" >
+         <property name="minimum" >
+          <number>0</number>
+         </property>
+         <property name="maximum" >
+          <number>200</number>
+         </property>
+         <property name="suffix" >
           <string>%</string>
          </property>
         </widget>
@@ -120,17 +123,20 @@
         </widget>
        </item>
        <item row="4" column="1" >
-        <widget class="KIntNumInput" native="1" name="sizeMaximum" >
+        <widget class="KIntNumInput" name="sizeMaximum" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" stdset="0" >
-          <number>0</number>
-         </property>
-         <property name="maximum" stdset="0" >
+         <property name="value" >
           <number>100</number>
          </property>
-         <property name="suffix" stdset="0" >
+         <property name="minimum" >
+          <number>0</number>
+         </property>
+         <property name="maximum" >
+          <number>200</number>
+         </property>
+         <property name="suffix" >
           <string>%</string>
          </property>
         </widget>
@@ -186,17 +192,17 @@
         </widget>
        </item>
        <item row="2" column="1" >
-        <widget class="KIntNumInput" native="1" name="angleJitter" >
+        <widget class="KIntNumInput" name="angleJitter" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
-         <property name="minimum" stdset="0" >
+         <property name="minimum" >
           <number>0</number>
          </property>
-         <property name="maximum" stdset="0" >
+         <property name="maximum" >
           <number>100</number>
          </property>
-         <property name="suffix" stdset="0" >
+         <property name="suffix" >
           <string>%</string>
          </property>
         </widget>
@@ -262,17 +268,17 @@
            </widget>
           </item>
           <item row="1" column="2" >
-           <widget class="KIntNumInput" native="1" name="scatterAmount" >
+           <widget class="KIntNumInput" name="scatterAmount" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
-            <property name="minimum" stdset="0" >
+            <property name="minimum" >
              <number>0</number>
             </property>
-            <property name="maximum" stdset="0" >
+            <property name="maximum" >
              <number>1000</number>
             </property>
-            <property name="suffix" stdset="0" >
+            <property name="suffix" >
              <string>%</string>
             </property>
            </widget>
@@ -288,17 +294,17 @@
            </widget>
           </item>
           <item row="2" column="2" >
-           <widget class="KIntNumInput" native="1" name="scatterJitter" >
+           <widget class="KIntNumInput" name="scatterJitter" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
-            <property name="minimum" stdset="0" >
+            <property name="minimum" >
              <number>0</number>
             </property>
-            <property name="maximum" stdset="0" >
+            <property name="maximum" >
              <number>100</number>
             </property>
-            <property name="suffix" stdset="0" >
+            <property name="suffix" >
              <string>%</string>
             </property>
            </widget>
@@ -350,17 +356,17 @@
            </widget>
           </item>
           <item row="1" column="1" >
-           <widget class="KIntNumInput" native="1" name="countCount" >
+           <widget class="KIntNumInput" name="countCount" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
-            <property name="minimum" stdset="0" >
+            <property name="minimum" >
              <number>1</number>
             </property>
-            <property name="maximum" stdset="0" >
+            <property name="maximum" >
              <number>100</number>
             </property>
-            <property name="suffix" stdset="0" >
+            <property name="suffix" >
              <string/>
             </property>
            </widget>
@@ -376,17 +382,17 @@
            </widget>
           </item>
           <item row="2" column="1" >
-           <widget class="KIntNumInput" native="1" name="countJitter" >
+           <widget class="KIntNumInput" name="countJitter" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
-            <property name="minimum" stdset="0" >
+            <property name="minimum" >
              <number>0</number>
             </property>
-            <property name="maximum" stdset="0" >
+            <property name="maximum" >
              <number>100</number>
             </property>
-            <property name="suffix" stdset="0" >
+            <property name="suffix" >
              <string>%</string>
             </property>
            </widget>

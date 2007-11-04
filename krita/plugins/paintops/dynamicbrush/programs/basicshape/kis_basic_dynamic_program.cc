@@ -71,9 +71,27 @@ KisBasicDynamicProgram::~KisBasicDynamicProgram()
     delete m_countSensor;
 }
 
-void KisBasicDynamicProgram::apply(KisDynamicShape* shape, const KisPaintInformation& adjustedInfo) const
+inline double jitter(int amount, double v)
 {
+    v = (1.0 + (rand() - RAND_MAX / 2 ) * amount / (RAND_MAX * 50) ) * v;
+    if(v >= 1.0) v= 1.0;
+    return v;
+}
 
+void KisBasicDynamicProgram::apply(KisDynamicShape* shape, const KisPaintInformation& info) const
+{
+    if(m_sizeEnabled)
+    {
+        double v = jitter( m_sizeJitter, m_sizeSensor->parameter( info ) );
+        v = m_sizeMinimum * (1.0 -v) + m_sizeMaximum * v;
+        v *= 0.01;
+        shape->resize( v, v);
+    }
+    if(m_angleEnabled)
+    {
+        double v = jitter( m_angleJitter, m_angleSensor->parameter( info ) );
+        shape->rotate( v );
+    }
 }
 
 QWidget* KisBasicDynamicProgram::createEditor(QWidget* /*parent*/)

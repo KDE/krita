@@ -36,6 +36,9 @@ public:
     explicit KoPACanvas( KoPAView * view, KoPADocument * doc );
     ~KoPACanvas();
 
+    /// Returns pointer to the KoPADocument
+    KoPADocument* document() const { return m_doc; }
+
     /// reimplemented method
     virtual void gridSize( double *horizontal, double *vertical ) const;
     /// reimplemented method

@@ -60,6 +60,9 @@ void KoPADocumentModel::update()
 
 int KoPADocumentModel::rowCount( const QModelIndex &parent ) const
 {
+    if(!m_document)
+        return 0;
+
     // check if parent is root node
     if( ! parent.isValid() )
         return m_document->pages().count();
@@ -81,6 +84,9 @@ int KoPADocumentModel::columnCount( const QModelIndex & ) const
 
 QModelIndex KoPADocumentModel::index( int row, int column, const QModelIndex &parent ) const
 {
+    if( !m_document )
+        return QModelIndex();
+    
     // check if parent is root node
     if( ! parent.isValid() )
     {
@@ -106,7 +112,7 @@ QModelIndex KoPADocumentModel::index( int row, int column, const QModelIndex &pa
 QModelIndex KoPADocumentModel::parent( const QModelIndex &child ) const
 {
     // check if child is root node
-    if( ! child.isValid() )
+    if( ! child.isValid() || !m_document )
         return QModelIndex();
 
     Q_ASSERT(child.model() == this);
@@ -134,7 +140,7 @@ QModelIndex KoPADocumentModel::parent( const QModelIndex &child ) const
 
 QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
 {
-    if( ! index.isValid() )
+    if( ! index.isValid() || !m_document )
         return QVariant();
 
     Q_ASSERT(index.model() == this);
@@ -204,6 +210,9 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
 
 Qt::ItemFlags KoPADocumentModel::flags(const QModelIndex &index) const
 {
+    if( !m_document )
+        return 0;
+
     if( ! index.isValid() )
         return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
 
@@ -218,7 +227,7 @@ Qt::ItemFlags KoPADocumentModel::flags(const QModelIndex &index) const
 
 bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value, int role )
 {
-    if( ! index.isValid() )
+    if( ! index.isValid() || !m_document )
         return false;
 
     Q_ASSERT(index.model() == this);
@@ -311,6 +320,9 @@ KoShape * KoPADocumentModel::childFromIndex( KoShapeContainer *parent, int row )
 
 int KoPADocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *child ) const
 {
+    if ( !m_document )
+        return 0;
+
     return parent->iterator().indexOf( child );
 
     if( parent != m_lastContainer )
@@ -499,6 +511,9 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
 
 QModelIndex KoPADocumentModel::parentIndexFromShape( const KoShape * child )
 {
+    if( !m_document )
+        return QModelIndex();
+
     // check if child shape is a layer, and return invalid model index if it is
     const KoShapeLayer *childlayer = dynamic_cast<const KoShapeLayer*>( child );
     if( childlayer )
@@ -524,6 +539,12 @@ QModelIndex KoPADocumentModel::parentIndexFromShape( const KoShape * child )
         return QModelIndex();
 
     return createIndex( indexFromChild( grandParentShape, parentShape ), 0, parentShape );
+}
+
+void KoPADocumentModel::setDocument( KoPADocument* document )
+{
+    m_document = document;
+    update();
 }
 
 #include "KoPADocumentModel.moc"

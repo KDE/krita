@@ -32,9 +32,12 @@ class KoPADocumentModel : public KoDocumentSectionModel
 {
 public:
     /// Constructs a new document section model using the specified documents data
-    KoPADocumentModel( KoPADocument *document );
+    KoPADocumentModel( KoPADocument *document = 0 );
     /// Triggers an update of the complete model
     void update();
+    
+    /// Set the document used in the model
+    void setDocument(KoPADocument* document);
 
     // from QAbstractItemModel
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;

@@ -21,6 +21,7 @@
 #include "KoPADocumentModel.h"
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"
+#include "KoPACanvas.h"
 #if 0 // XXX: Add undo for reordering pages, look at Karbon
 #include <KarbonLayerReorderCommand.h>
 #endif
@@ -57,8 +58,8 @@ enum ButtonIds
     Button_Delete
 };
 
-KoPADocumentStructureDockerFactory::KoPADocumentStructureDockerFactory( KoShapeControllerBase *shapeController, KoPADocument *document )
-    : m_shapeController( shapeController ), m_document( document )
+KoPADocumentStructureDockerFactory::KoPADocumentStructureDockerFactory( KoPACanvas* canvas )
+    : m_canvas( canvas )
 {
 }
 
@@ -69,15 +70,15 @@ QString KoPADocumentStructureDockerFactory::id() const
 
 QDockWidget* KoPADocumentStructureDockerFactory::createDockWidget()
 {
-    KoPADocumentStructureDocker* widget = new KoPADocumentStructureDocker( m_shapeController, m_document);
-    widget->setObjectName(id());
+    KoPADocumentStructureDocker* docker = new KoPADocumentStructureDocker();
+    docker->setCanvas( m_canvas );
 
-    return widget;
+    return docker;
 }
 
-KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoShapeControllerBase *shapeController, KoPADocument *document )
-    : m_shapeController( shapeController )
-    , m_document( document )
+KoPADocumentStructureDocker::KoPADocumentStructureDocker( QWidget* parent )
+    : QDockWidget( parent )
+    , m_canvas( 0 )
     , m_model( 0 )
 {
     setWindowTitle( i18n( "Document" ) );
@@ -120,7 +121,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoShapeControllerBase 
 
     connect( buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 
-    m_model = new KoPADocumentModel( m_document );
+    m_model = new KoPADocumentModel();
     m_sectionView->setItemsExpandable( true );
     m_sectionView->setModel( m_model );
     m_sectionView->setDisplayMode( KoDocumentSectionView::MinimalMode );
@@ -209,10 +210,9 @@ void KoPADocumentStructureDocker::addLayer()
     {
         KoShapeLayer* layer = new KoShapeLayer();
         layer->setName( name );
-        KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        QUndoCommand *cmd = new KoShapeCreateCommand( m_shapeController, layer, 0 );
+        QUndoCommand *cmd = new KoShapeCreateCommand( m_canvas->document(), layer, 0 );
         cmd->setText( i18n( "Create Layer") );
-        canvasController->canvas()->addCommand( cmd );
+        m_canvas->addCommand( cmd );
         m_model->update();
     }
 }
@@ -230,7 +230,7 @@ void KoPADocumentStructureDocker::deleteItem()
 
     if( selectedLayers.count() )
     {
-        if( m_document->pages().count() > selectedPages.count() )
+        if( m_canvas->document()->pages().count() > selectedPages.count() )
         {
             QList<KoShape*> deleteShapes;
             foreach( KoPAPageBase* page, selectedPages )
@@ -238,7 +238,7 @@ void KoPADocumentStructureDocker::deleteItem()
                 deleteShapes += page->iterator();
                 deleteShapes.append( page );
             }
-            cmd = new KoShapeDeleteCommand( m_shapeController, deleteShapes );
+            cmd = new KoShapeDeleteCommand( m_canvas->document(), deleteShapes );
             cmd->setText( i18n( "Delete Layer" ) );
         }
         else
@@ -248,13 +248,12 @@ void KoPADocumentStructureDocker::deleteItem()
     }
     else if( selectedShapes.count() )
     {
-        cmd = new KoShapeDeleteCommand( m_shapeController, selectedShapes );
+        cmd = new KoShapeDeleteCommand( m_canvas->document(), selectedShapes );
     }
 
     if( cmd )
     {
-        KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        canvasController->canvas()->addCommand( cmd );
+        m_canvas->addCommand( cmd );
         m_model->update();
     }
 }
@@ -267,8 +266,6 @@ void KoPADocumentStructureDocker::raiseItem()
 
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
-
-    KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
 
     QUndoCommand *cmd = 0;
 
@@ -283,12 +280,12 @@ void KoPADocumentStructureDocker::raiseItem()
     }
     else if( selectedShapes.count() )
     {
-        cmd = KoShapeReorderCommand::createCommand( selectedShapes, canvas->shapeManager(), KoShapeReorderCommand::RaiseShape );
+        cmd = KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::RaiseShape );
     }
 
     if( cmd )
     {
-        canvas->addCommand( cmd );
+        m_canvas->addCommand( cmd );
         m_model->update();
     }
 }
@@ -301,8 +298,6 @@ void KoPADocumentStructureDocker::lowerItem()
 
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
-
-    KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
 
     QUndoCommand *cmd = 0;
 
@@ -317,12 +312,12 @@ void KoPADocumentStructureDocker::lowerItem()
     }
     else if( selectedShapes.count() )
     {
-        cmd = KoShapeReorderCommand::createCommand( selectedShapes, canvas->shapeManager(), KoShapeReorderCommand::LowerShape );
+        cmd = KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::LowerShape );
     }
 
     if( cmd )
     {
-        canvas->addCommand( cmd );
+        m_canvas->addCommand( cmd );
         m_model->update();
     }
 }
@@ -347,6 +342,12 @@ void KoPADocumentStructureDocker::extractSelectedLayersAndShapes( QList<KoPAPage
         else if( ! selectedItems.contains( index.parent() ) )
             shapes.append( shape );
     }
+}
+
+void KoPADocumentStructureDocker::setCanvas( KoCanvasBase* canvas) 
+{ 
+    m_canvas = static_cast<KoPACanvas*> ( canvas ); 
+    m_model->setDocument( m_canvas->document() );
 }
 
 #include "KoPADocumentStructureDocker.moc"

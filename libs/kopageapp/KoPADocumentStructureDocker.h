@@ -21,35 +21,38 @@
 
 #include <QDockWidget>
 #include <KoDockFactory.h>
+#include <KoCanvasObserver.h>
 
-class KoPADocument;
 class KoDocumentSectionView;
-class KoShapeControllerBase;
 class KoShape;
 class KoShapeLayer;
 class KoPADocumentModel;
 class QModelIndex;
 class KoPAPageBase;
+class KoPACanvas;
 
 class KoPADocumentStructureDockerFactory : public KoDockFactory
 {
 public:
-    KoPADocumentStructureDockerFactory( KoShapeControllerBase *shapeController, KoPADocument *document );
+    KoPADocumentStructureDockerFactory( KoPACanvas* canvas );
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
+
 private:
-    KoShapeControllerBase * m_shapeController;
-    KoPADocument *m_document;
+    KoPACanvas* m_canvas;
 };
 
-class KoPADocumentStructureDocker : public QDockWidget
+class KoPADocumentStructureDocker : public QDockWidget, public KoCanvasObserver
 {
 Q_OBJECT
 
 public:
-    KoPADocumentStructureDocker( KoShapeControllerBase *shapeController, KoPADocument *document );
+    explicit KoPADocumentStructureDocker( QWidget* parent = 0 );
     virtual ~KoPADocumentStructureDocker();
+    
+    virtual void setCanvas( KoCanvasBase* canvas);
+
 public slots:
     void updateView();
 private slots:
@@ -61,8 +64,7 @@ private slots:
     void itemClicked( const QModelIndex &index );
 private:
     void extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );
-    KoShapeControllerBase *m_shapeController;
-    KoPADocument *m_document;
+    KoPACanvas* m_canvas;
     KoDocumentSectionView *m_sectionView;
     KoPADocumentModel *m_model;
 };

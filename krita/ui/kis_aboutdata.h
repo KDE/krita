@@ -59,6 +59,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor(ki18n("Sven Langkamp"), KLocalizedString(), "sven.langkamp@gmail.com");
     aboutData->addAuthor(ki18n("Toshitaka Fujioka"), KLocalizedString(), "fujioka@kde.org");
     aboutData->addAuthor(ki18n("Thomas Zander"), KLocalizedString(), "zander@kde.org");
+    aboutData->addAuthor(ki18n("Tom Burdick"), KLocalizedString(), "tburdi1@uic.edu");
     aboutData->addAuthor(ki18n("Sander Koning"), KLocalizedString(), "sanderkoning@kde.nl");
     aboutData->addAuthor(ki18n("Andreas Lundin"), KLocalizedString(), "adde@update.uu.se");
     return aboutData;

@@ -48,7 +48,7 @@ DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
 
     // This is not a gui plugin; only load it when the doc is created.
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add (new KisDynamicOpFactory(m_coloringBookmarksManager, m_shapeBookmarksManager));
+    r->add (new KisDynamicOpFactory(m_shapeBookmarksManager, m_coloringBookmarksManager ));
 #if 0
     {
         // TODO: remove this, temp stuff for testing only

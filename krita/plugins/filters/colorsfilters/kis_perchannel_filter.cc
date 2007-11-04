@@ -249,7 +249,7 @@ void KisPerChannelFilter::process(KisFilterConstantProcessingInformation srcInfo
     qint32 totalCost = (size.width() * size.height()) / 100;
     qint32 pixelsProcessed = 0;
 
-    while( ! iter.isDone()  && !progressUpdater->interrupted())
+    while( not iter.isDone()  and (progressUpdater and not progressUpdater->interrupted()))
     {
         quint32 npix=0, maxpix = iter.nConseqPixels();
         quint8 selectedness = iter.selectedness();
@@ -295,7 +295,7 @@ void KisPerChannelFilter::process(KisFilterConstantProcessingInformation srcInfo
                 pixelsProcessed++;
                 break;
         }
-        progressUpdater->setProgress(pixelsProcessed / totalCost);
+        if(progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
 
 }

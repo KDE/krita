@@ -101,7 +101,7 @@ void KisFilterColorToAlpha::process(KisFilterConstantProcessingInformation srcIn
                 cs->setAlpha(dstIt.rawData(), (255 * d ) / threshold, 1 );
             }
         }
-        progressUpdater->setProgress((++currentProgress) / totalCost);
+        if(progressUpdater) progressUpdater->setProgress((++currentProgress) / totalCost);
         ++srcIt;
         ++dstIt;
     }

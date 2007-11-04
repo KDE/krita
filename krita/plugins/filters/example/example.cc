@@ -112,7 +112,7 @@ void KisFilterInvert::process(KisFilterConstantProcessingInformation srcInfo,
             }
             ++srcIt;
             ++dstIt;
-            progressUpdater->setProgress( (++count) / cost);
+            if(progressUpdater) progressUpdater->setProgress( (++count) / cost);
 
         }
         srcIt.nextRow();

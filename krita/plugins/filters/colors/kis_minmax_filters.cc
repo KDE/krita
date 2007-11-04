@@ -124,7 +124,7 @@ void KisFilterMax::process(KisFilterConstantProcessingInformation srcInfo,
         {
             F( srcIt.oldRawData(), dstIt.rawData(), nC);
         }
-        progressUpdater->setProgress((++pixelsProcessed) / totalCost);
+        if(progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
         ++srcIt;
         ++dstIt;
     }
@@ -182,7 +182,7 @@ void KisFilterMin::process(KisFilterConstantProcessingInformation srcInfo,
         {
             F( srcIt.oldRawData(), dstIt.rawData(), nC);
         }
-        progressUpdater->setProgress((++pixelsProcessed) / totalCost);
+        if(progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
         ++srcIt;
         ++dstIt;
     }

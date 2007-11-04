@@ -269,7 +269,7 @@ void KisBrightnessContrastFilter::process(KisFilterConstantProcessingInformation
                 pixelsProcessed++;
                 break;
         }
-        progressUpdater->setProgress(pixelsProcessed / totalCost);
+        if(progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
 
 }

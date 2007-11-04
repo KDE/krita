@@ -42,6 +42,7 @@
 #include <QToolBar>
 #include <QApplication>
 #include <Q3ValueList>
+#include <QPrintDialog>
 
 //static
 QString KoView::newObjectName()

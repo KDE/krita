@@ -155,7 +155,7 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
                 else if( dynamic_cast<KoShapeLayer*>( shape ) ) {
                     name = i18n("Layer");
                 }
-                else if( dynamic_cast<KoShapeContainer*>( shape ) ) {
+                else if( dynamic_cast<KoShapeGroup*>( shape ) ) {
                     name = i18n("Group");
                 }
                 else {

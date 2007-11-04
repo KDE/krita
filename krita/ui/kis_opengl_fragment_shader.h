@@ -36,6 +36,13 @@ public:
      * @param sourceCodeFilename the file to read the source code from
      */
     KisOpenGLFragmentShader(const QString& sourceCodeFilename);
+
+    /**
+     * Loads the shader source code from the given QVector<QString>
+     *
+     * @param sourceCodeStrings the vector of source strings to load from
+     */
+    KisOpenGLFragmentShader(const QVector<QString> &sourceCodeStrings);
 };
 
 #endif // KIS_OPENGL_FRAGMENT_SHADER_H_

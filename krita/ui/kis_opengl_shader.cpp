@@ -113,6 +113,25 @@ void KisOpenGLShader::loadSourceCode(QString sourceCodeFilename)
     loadSourceCode(sourceCodeStrings.count(), &(sourceCodeStrings[0]), NULL);
 }
 
+void KisOpenGLShader::loadSourceCode(QVector<QString> sourceCodeStrings)
+{
+    QVector<const GLcharARB *> sourceCodeStringsGL;
+    QVector<GLsizei> sourceCodeStringLengths;
+
+    foreach(const QString &sourceString, sourceCodeStrings) {
+        QByteArray string = sourceString.toAscii();
+        sourceCodeStringsGL.append(string.constData());
+        sourceCodeStringLengths.append(string.size());
+    }
+
+    if (sourceCodeStrings.isEmpty()) {
+        kDebug(DBG_AREA_UI) <<"Shader source code vector is empty";
+        return;
+    }
+
+    loadSourceCode(sourceCodeStringsGL.count(), &(sourceCodeStringsGL[0]), &(sourceCodeStringLengths[0]));
+}
+
 bool KisOpenGLShader::isValid() const
 {
     return m_valid;

@@ -26,3 +26,8 @@ KisOpenGLFragmentShader::KisOpenGLFragmentShader(const QString& sourceCodeFilena
     loadSourceCode(sourceCodeFilename);
 }
 
+KisOpenGLFragmentShader::KisOpenGLFragmentShader(const QVector<QString>& sourceCodeStrings)
+    : KisOpenGLShader(GL_FRAGMENT_SHADER_ARB)
+{
+    loadSourceCode(sourceCodeStrings);
+}

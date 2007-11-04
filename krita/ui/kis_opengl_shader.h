@@ -42,6 +42,17 @@ public:
     virtual ~KisOpenGLShader();
 
     /**
+     * Load the shader source code from the QVector<QString> of strings specified by sourceCodeStrings.
+     *
+     * The source code strings can be freed after loading as the shader makes a copy.
+     *
+     * This is a wrapper for the glShaderSource() function.
+     *
+     * @param sourceCodeStrings An array of pointers to the source code strings
+     */
+    void loadSourceCode(QVector<QString> sourceCodeStrings);
+
+    /**
      * Load the shader source code from the array of strings specified by sourceCodeStrings. The number of strings
      * in the array is specified by numSourceCodeStrings. If stringLengths is NULL, each string is assumed to be
      * null terminated. If stringLengths is a value other than NULL, it points to an array containing a string length

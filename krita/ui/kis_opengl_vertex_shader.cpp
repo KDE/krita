@@ -26,3 +26,8 @@ KisOpenGLVertexShader::KisOpenGLVertexShader(const QString& sourceCodeFilename)
     loadSourceCode(sourceCodeFilename);
 }
 
+KisOpenGLVertexShader::KisOpenGLVertexShader(const QVector<QString>& sourceCodeStrings)
+    : KisOpenGLShader(GL_VERTEX_SHADER_ARB)
+{
+    loadSourceCode(sourceCodeStrings);
+}

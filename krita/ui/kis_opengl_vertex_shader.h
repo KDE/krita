@@ -35,6 +35,13 @@ public:
      * @param sourceCodeFilename the file to read the source code from
      */
     KisOpenGLVertexShader(const QString& sourceCodeFilename);
+
+    /**
+     * Loads the shader source code from the given QVector<QString>
+     *
+     * @param sourceCodeStrings the vector of source strings to load from
+     */
+    KisOpenGLVertexShader(const QVector<QString> &sourceCodeStrings);
 };
 
 #endif // KIS_OPENGL_VERTEX_SHADER_H_

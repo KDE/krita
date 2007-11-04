@@ -40,6 +40,7 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicBrush {
         inline const KisDynamicColoring* coloring() const { return m_coloring; }
         inline KisDynamicShapeProgram* shapeProgram() const { return m_shapeProgram; }
         inline KisDynamicColoringProgram* coloringProgram() const { return m_coloringProgram; }
+        void setShape(KisDynamicShape* shape);
         void setShapeProgram(KisDynamicShapeProgram* p);
         void setColoringProgram(KisDynamicColoringProgram* p);
         void startPainting(KisPainter* _painter);

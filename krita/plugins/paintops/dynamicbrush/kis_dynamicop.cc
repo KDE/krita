@@ -51,6 +51,8 @@
 #include "kis_dynamic_coloring_program.h"
 #include "kis_dynamic_shape.h"
 #include "kis_dynamic_shape_program.h"
+#include "shapes/kis_bristle_shape.h"
+#include "shapes/kis_dab_shape.h"
 
 KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
 {
@@ -94,7 +96,6 @@ KisDynamicOpSettings::~KisDynamicOpSettings()
 #include <kis_dynamic_brush.h>
 // TEMP
 
-
 KisDynamicBrush* KisDynamicOpSettings::createBrush() const
 {
     KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
@@ -108,6 +109,24 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush() const
     KisDynamicColoringProgram* coloringProgram = static_cast<KisDynamicColoringProgram*>(m_coloringBookmarksModel->configuration( coloringModelIndex ) );
     Q_ASSERT(coloringProgram);
     current->setColoringProgram(coloringProgram);
+    switch(m_uiOptions->comboBoxShapes->currentIndex())
+    {
+        case 1:
+            current->setShape(new KisBristleShape());
+            break;
+        default:
+        case 0:
+        {
+            // TODO Take the real parameters.
+            KisAutoMaskShape* dabsrc = new KisAutoMaskShape;
+            dabsrc->autoDab.shape = KisAutoMaskShape::KisAutoDab::ShapeCircle;
+            dabsrc->autoDab.width = 10;
+            dabsrc->autoDab.height = 10;
+            dabsrc->autoDab.hfade = 2;
+            dabsrc->autoDab.vfade = 2;
+            current->setShape(dabsrc);
+        }
+    }
     return current;
 }
 

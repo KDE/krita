@@ -31,7 +31,7 @@ class KisPaintInformation;
 
 #include "kis_dynamic_shape.h"
 
-struct KisDabShape : public KisDynamicShape {
+struct DYNAMIC_BRUSH_EXPORT KisDabShape : public KisDynamicShape {
     KisDabShape();
     virtual ~KisDabShape();
     virtual quint8 alphaAt(int x, int y) = 0;
@@ -45,7 +45,7 @@ struct KisDabShape : public KisDynamicShape {
     KisPaintDeviceSP m_dab;
 };
 
-struct KisAlphaMaskShape : public KisDabShape {
+struct DYNAMIC_BRUSH_EXPORT KisAlphaMaskShape : public KisDabShape {
     KisAlphaMaskShape();
     virtual ~KisAlphaMaskShape();
     virtual quint8 alphaAt(int x, int y);
@@ -53,7 +53,7 @@ struct KisAlphaMaskShape : public KisDabShape {
     KisQImagemaskSP alphaMask;
 };
 
-class KisAutoMaskShape : public KisDabShape {
+class DYNAMIC_BRUSH_EXPORT KisAutoMaskShape : public KisDabShape {
   public:
         struct KisAutoDab {
             enum Shape {

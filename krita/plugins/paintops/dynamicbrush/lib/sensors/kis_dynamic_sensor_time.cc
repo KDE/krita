@@ -17,6 +17,8 @@
 
 #include <kdebug.h>
 
+#include <QDomElement>
+
 #include "kis_dynamic_sensor_time.h"
 
 #include "ui_SensorTimeConfiguration.h"
@@ -67,6 +69,19 @@ QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent)
     stc.spinBoxLength->setValue(m_length);
     connect(stc.spinBoxLength, SIGNAL(valueChanged ( int )), SLOT(setLength(int )));
     return wdg;
+}
+
+void KisDynamicSensorTime::toXML(QDomDocument& doc, QDomElement& e) const
+{
+    KisDynamicSensor::toXML(doc, e);
+    e.setAttribute("periodic", m_periodic);
+    e.setAttribute("length", m_length);
+}
+
+void KisDynamicSensorTime::fromXML(const QDomElement& e)
+{
+    m_periodic = e.attribute("periodic","0").toInt();
+    m_length = e.attribute("length","30").toInt();
 }
 
 #include "kis_dynamic_sensor_time.moc"

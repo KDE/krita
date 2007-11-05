@@ -39,6 +39,7 @@ KoToolBox::KoToolBox(KoCanvasController *canvas, const QString &title)
 {
     m_buttonGroup = new QButtonGroup(this);
     setFeatures(DockWidgetMovable | DockWidgetFloatable);
+    setProperty("KoDockWidgetCollapsable", false);
     setWindowTitle(title);
     setObjectName("ToolBox_"+ title);
 

@@ -1777,8 +1777,12 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
         // do anything in that case.
         if (!dockWidget) return 0;
 
-        if (!dockWidget->titleBarWidget()) {
-            dockWidget->setTitleBarWidget(new KoDockWidgetTitleBar(dockWidget));
+        // Check if the dock widget is supposed to be collapsable
+        QVariant isCollapsable = dockWidget->property("KoDockWidgetCollapsable");
+        if (!isCollapsable.isValid() || isCollapsable.toBool()) {
+            if (!dockWidget->titleBarWidget()) {
+                dockWidget->setTitleBarWidget(new KoDockWidgetTitleBar(dockWidget));
+            }
         }
 
         dockWidget->setObjectName(factory->id());

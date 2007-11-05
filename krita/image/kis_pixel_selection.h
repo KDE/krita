@@ -91,7 +91,7 @@ public:
      * Apply a selection to the selection using the specified selection mode
      * Note: SELECTION_REPLACE will be treated as SELECTION_ADD
      */
-    void applySelection(KisPixelSelectionSP selection, selectionMode mode);
+    void applySelection(KisPixelSelectionSP selection, selectionAction action);
 
     /** Add a selection */
     void addSelection(KisPixelSelectionSP selection);

@@ -30,7 +30,7 @@ class KRITAUI_EXPORT KisShapeSelection : public QObject, public KoShapeContainer
     Q_OBJECT
 
 public:
-    KisShapeSelection(KisImageSP image, KisPaintDeviceSP dev);
+    KisShapeSelection(KisImageSP image, KisSelectionSP selection);
     virtual ~KisShapeSelection();
 
     ///Not implemented
@@ -63,7 +63,6 @@ private:
     int m_dashOffset;
     QTimer* m_timer;
     KisImageSP m_image;
-    KisPaintDeviceSP m_parentPaintDevice;
     QPainterPath m_outline;
     bool m_dirty;
 

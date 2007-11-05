@@ -26,7 +26,7 @@ class KisShapeSelection;
 
 class KisShapeSelectionModel: public KoShapeContainerModel {
 public:
-    KisShapeSelectionModel(KisImageSP image, KisPaintDeviceSP dev, KisShapeSelection* shapeSelection);
+    KisShapeSelectionModel(KisImageSP image, KisSelectionSP selection, KisShapeSelection* shapeSelection);
     ~KisShapeSelectionModel();
 
     void add(KoShape *child);
@@ -45,7 +45,7 @@ public:
 private:
     QMap<KoShape*, QRectF> m_shapeMap;
     KisImageSP m_image;
-    KisPaintDeviceSP m_parentPaintDevice;
+    KisSelectionSP m_parentSelection;
     KisShapeSelection* m_shapeSelection;
 };
 

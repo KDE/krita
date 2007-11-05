@@ -23,11 +23,9 @@
 #include "kis_paint_device.h"
 #include "kis_shape_selection.h"
 
-KisShapeSelectionModel::KisShapeSelectionModel(KisImageSP image,
-                                               KisPaintDeviceSP dev,
-                                               KisShapeSelection* shapeSelection)
+KisShapeSelectionModel::KisShapeSelectionModel(KisImageSP image, KisSelectionSP selection, KisShapeSelection* shapeSelection)
  : m_image(image)
- , m_parentPaintDevice(dev)
+ , m_parentSelection(selection)
  , m_shapeSelection(shapeSelection)
 {
 }
@@ -43,40 +41,28 @@ void KisShapeSelectionModel::add(KoShape *child) {
     child->setBorder(0);
     child->setBackground(Qt::NoBrush);
 
-    if(count() == 0) {
-        m_parentPaintDevice->setDirty(m_image->bounds());
-    }
-    else {
-        QRect updateRect = child->boundingRect().toAlignedRect();
-
-        QMatrix matrix;
-        matrix.scale(m_image->xRes(), m_image->yRes());
-        updateRect = matrix.mapRect(updateRect);
-        m_parentPaintDevice->setDirty(updateRect);
-    }
-
     m_shapeMap.insert(child, child->boundingRect());
     m_shapeSelection->setDirty();
 
-// XXX_SELECTION
-//    m_parentPaintDevice->emitSelectionChanged();
+    QRect updateRect = child->boundingRect().toAlignedRect();
+    QMatrix matrix;
+    matrix.scale(m_image->xRes(), m_image->yRes());
+    updateRect = matrix.mapRect(updateRect);
+    m_parentSelection->updateProjection(updateRect);
+
+    m_image->slotSelectionChanged();
 }
 
 void KisShapeSelectionModel::remove(KoShape *child)
 {
-    if(count() == 0) {
-        m_parentPaintDevice->setDirty(m_image->bounds());
-    }
-    else {
-        QRect updateRect = child->boundingRect().toAlignedRect();
+    QRect updateRect = child->boundingRect().toAlignedRect();
 
-        QMatrix matrix;
-        matrix.scale(m_image->xRes(), m_image->yRes());
-        updateRect = matrix.mapRect(updateRect);
-        m_parentPaintDevice->setDirty(updateRect);
-    }
-// XXX_SELECTION
-//        m_parentPaintDevice->emitSelectionChanged();
+    QMatrix matrix;
+    matrix.scale(m_image->xRes(), m_image->yRes());
+    updateRect = matrix.mapRect(updateRect);
+    m_parentSelection->updateProjection(updateRect);
+
+    m_image->slotSelectionChanged();
 
     m_shapeMap.remove(child);
     m_shapeSelection->setDirty();
@@ -118,9 +104,8 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
     changedRect = matrix.mapRect(changedRect);
 
     m_shapeMap[child] = child->boundingRect();
-    m_parentPaintDevice->setDirty(changedRect.toAlignedRect());
-// XXX_SELECTION
-//        m_parentPaintDevice->emitSelectionChanged(changedRect.toAlignedRect());
+    m_parentSelection->updateProjection(changedRect.toAlignedRect());
+    m_image->slotSelectionChanged(changedRect.toAlignedRect());
 }
 
 bool KisShapeSelectionModel::isChildLocked(const KoShape *child) const {

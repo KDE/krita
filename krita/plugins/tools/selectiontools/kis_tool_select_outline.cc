@@ -46,7 +46,7 @@
 #include "kis_paintop_registry.h"
 #include "kis_canvas2.h"
 #include "kis_pixel_selection.h"
-#include "kis_shape_selection.h"
+#include "kis_selection_tool_helper.h"
 
 KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::load("tool_outline_selection_cursor.png", 5, 5))
@@ -98,28 +98,18 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
         m_dragging = false;
         deactivate();
 
-        if (currentImage() && currentLayer()->paintDevice()) {
+        if (currentImage()) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
-            KisPaintDeviceSP dev = currentLayer()->paintDevice();
-            KisSelectionSP selection = currentLayer()->selection();
+
+            KisSelectionToolHelper helper(m_canvas->shapeController(), currentLayer(), i18n("Outline Selection"));
 
             if(m_selectionMode == PIXEL_SELECTION){
-                KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Outline Selection"), dev);
-                KisPixelSelectionSP getOrCreatePixelSelection = selection->getOrCreatePixelSelection();
 
-                if (!selection || m_selectAction == SELECTION_REPLACE)
-                {
-                    getOrCreatePixelSelection->clear();
-                    if(m_selectAction == SELECTION_SUBTRACT)
-                        getOrCreatePixelSelection->invert();
-                }
-
-
-                KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
+                KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
                 KisPainter painter(tmpSel);
                 painter.setBounds( currentImage()->bounds() );
-                painter.setPaintColor(KoColor(Qt::black, getOrCreatePixelSelection->colorSpace()));
+                painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
                 painter.setOpacity(OPACITY_OPAQUE);
@@ -129,33 +119,8 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
                 painter.paintPolygon(m_points);
 
-                switch(m_selectAction)
-                {
-                    case SELECTION_REPLACE:
-                    case SELECTION_ADD:
-                        getOrCreatePixelSelection->addSelection(tmpSel);
-                        break;
-                    case SELECTION_SUBTRACT:
-                        getOrCreatePixelSelection->subtractSelection(tmpSel);
-                        break;
-                    case SELECTION_INTERSECT:
-                        getOrCreatePixelSelection->intersectSelection(tmpSel);
-                        break;
-                    default:
-                        break;
-                }
-#if 0
-                if(selection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
-                    QRegion dirty(painter.dirtyRegion());
-                    dev->setDirty(dirty);
-                    dev->emitSelectionChanged(dirty.boundingRect());
-                } else {
-                    dev->setDirty(currentImage()->bounds());
-                    dev->emitSelectionChanged();
-                }
-
-                m_canvas->addCommand(t);
-#endif
+                QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
+                m_canvas->addCommand(cmd);
             }
             else {
 
@@ -171,22 +136,8 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                     path->close();
                     path->normalize();
 
-
-                    KisSelectionSP selection = currentLayer()->selection();
-
-                    KisShapeSelection* shapeSelection;
-                    if(!selection->hasShapeSelection()) {
-                        shapeSelection = new KisShapeSelection(currentImage(), dev);
-                        QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
-                        cmd->redo();
-                        selection->setShapeSelection(shapeSelection);
-                    }
-                    else {
-                        shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
-                    }
-                    QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
+                    QUndoCommand* cmd = helper.addSelectionShape(path);
                     m_canvas->addCommand(cmd);
-                    shapeSelection->addChild(path);
                 }
             }
             QApplication::restoreOverrideCursor();

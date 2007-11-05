@@ -36,9 +36,8 @@
 #include "kis_tool_select_path.h"
 #include "kis_selection.h"
 #include "kis_selection_options.h"
-#include "kis_selected_transaction.h"
 #include "kis_canvas2.h"
-#include "kis_shape_selection.h"
+#include "kis_selection_tool_helper.h"
 #include "kis_pixel_selection.h"
 #include "kis_resource_provider.h"
 #include "kis_paintop_registry.h"
@@ -119,18 +118,9 @@ void KisToolSelectPath::addPathShape()
     shape->close();
     m_shape = 0;
 
-    // XXX_SELECTION: create a new selection here if there isn't one
-    if(hasSelection && m_selectionMode == PIXEL_SELECTION ){
-//        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Path Selection"), dev);
-        KisPixelSelectionSP getOrCreatePixelSelection = currentLayer->selection()->getOrCreatePixelSelection();
+    KisSelectionToolHelper helper(m_canvas->shapeController(), currentLayer, i18n("Path Selection"));
 
-
-        if(! hasSelection || m_selectAction == SELECTION_REPLACE)
-        {
-            getOrCreatePixelSelection->clear();
-            if(m_selectAction==SELECTION_SUBTRACT)
-                getOrCreatePixelSelection->invert();
-        }
+    if( m_selectionMode == PIXEL_SELECTION ){
 
         KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
 
@@ -148,50 +138,14 @@ void KisToolSelectPath::addPathShape()
         matrix.translate(shape->position().x(), shape->position().y());
         painter.fillPainterPath(matrix.map(shape->outline()));
 
-        switch(m_selectAction)
-        {
-            case SELECTION_REPLACE:
-            case SELECTION_ADD:
-                getOrCreatePixelSelection->addSelection(tmpSel);
-                break;
-            case SELECTION_SUBTRACT:
-                getOrCreatePixelSelection->subtractSelection(tmpSel);
-                break;
-            case SELECTION_INTERSECT:
-                getOrCreatePixelSelection->intersectSelection(tmpSel);
-                break;
-            default:
-                break;
-        }
-#if 0
-        if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
-            QRect rect(painter.dirtyRegion().boundingRect());
-            dev->setDirty(rect);
-            dev->emitSelectionChanged(rect);
-        } else {
-            dev->setDirty(image->bounds());
-            dev->emitSelectionChanged();
-        }
-        m_canvas->addCommand(t);
-#endif
+        QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
+        m_canvas->addCommand(cmd);
+
         delete shape;
     }
     else {
-        KisSelectionSP selection = currentLayer->selection();
-
-        KisShapeSelection* shapeSelection;
-        if(!selection->hasShapeSelection()) {
-            shapeSelection = new KisShapeSelection(image, dev);
-            QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
-            cmd->redo();
-            selection->setShapeSelection(shapeSelection);
-        }
-        else {
-            shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
-        }
-        QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
+        QUndoCommand* cmd = helper.addSelectionShape(shape);
         m_canvas->addCommand(cmd);
-        shapeSelection->addChild(shape);
     }
 }
 

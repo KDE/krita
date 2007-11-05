@@ -146,9 +146,9 @@ void KisPixelSelection::select(QRect r)
     painter.fillRect(r, KoColor(Qt::white, cs), MAX_SELECTED);
 }
 
-void KisPixelSelection::applySelection(KisPixelSelectionSP selection, selectionMode mode)
+void KisPixelSelection::applySelection(KisPixelSelectionSP selection, selectionAction action)
 {
-    switch(mode)
+    switch(action)
     {
         case SELECTION_REPLACE:
         case SELECTION_ADD:

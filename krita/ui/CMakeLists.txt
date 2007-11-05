@@ -120,6 +120,7 @@ set(kritaui_LIB_SRCS
     kis_imagepipe_brush.cc
     kis_prescaled_projection.cpp
     kis_node_manager.cpp
+    kis_selection_tool_helper.cpp
 )
 
 if(HAVE_OPENGL AND HAVE_GLEW)

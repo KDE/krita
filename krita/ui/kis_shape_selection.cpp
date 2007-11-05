@@ -31,10 +31,9 @@
 
 #include <kdebug.h>
 
-KisShapeSelection::KisShapeSelection(KisImageSP image, KisPaintDeviceSP dev)
-    : KoShapeContainer(new KisShapeSelectionModel(image, dev, this))
+KisShapeSelection::KisShapeSelection(KisImageSP image, KisSelectionSP selection)
+    : KoShapeContainer(new KisShapeSelectionModel(image, selection, this))
     , m_image(image)
-    , m_parentPaintDevice(dev)
 {
     m_dashOffset = 0;
     m_timer = new QTimer(this);

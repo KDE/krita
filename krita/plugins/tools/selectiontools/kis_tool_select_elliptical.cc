@@ -41,12 +41,11 @@
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 #include "kis_layer.h"
-#include "kis_selection.h"
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"
 #include "kis_canvas2.h"
 #include "kis_pixel_selection.h"
-#include "kis_shape_selection.h"
+#include "kis_selection_tool_helper.h"
 
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6))
@@ -159,21 +158,9 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
             if (!currentImage())
                 return;
 
-            bool hasSelection = currentLayer()->selection();
+            KisSelectionToolHelper helper(m_canvas->shapeController(), currentLayer(), i18n("Elliptical Selection"));
 
-            if( hasSelection && m_selectionMode == PIXEL_SELECTION ) {
-#if 0
-                KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
-#endif
-                KisPixelSelectionSP getOrCreatePixelSelection =
-                    currentLayer()->selection()->getOrCreatePixelSelection();
-
-                if (!hasSelection || m_selectAction == SELECTION_REPLACE)
-                {
-                    getOrCreatePixelSelection->clear();
-                    if(m_selectAction == SELECTION_SUBTRACT)
-                        getOrCreatePixelSelection->invert();
-                }
+            if( m_selectionMode == PIXEL_SELECTION ) {
 
                 KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
@@ -191,32 +178,8 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 painter.paintEllipse(QRectF(m_startPos, m_endPos), PRESSURE_DEFAULT/*e->pressure()*/,
                                      e->xTilt(), e->yTilt());
 
-                switch(m_selectAction)
-                {
-                    case SELECTION_REPLACE:
-                    case SELECTION_ADD:
-                        getOrCreatePixelSelection->addSelection(tmpSel);
-                        break;
-                    case SELECTION_SUBTRACT:
-                        getOrCreatePixelSelection->subtractSelection(tmpSel);
-                        break;
-                    case SELECTION_INTERSECT:
-                        getOrCreatePixelSelection->intersectSelection(tmpSel);
-                        break;
-                    default:
-                        break;
-                }
-#if 0
-                if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
-                    QRect rect(painter.dirtyRegion().boundingRect());
-                    dev->setDirty(rect);
-                    dev->emitSelectionChanged(rect);
-                } else {
-                    dev->setDirty(currentImage()->bounds());
-                    dev->emitSelectionChanged();
-                }
-                m_canvas->addCommand(t);
-#endif
+                QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
+                m_canvas->addCommand(cmd);
             }
             else {
                 QRectF documentRect = convertToPt(QRectF(m_startPos, m_endPos));
@@ -241,22 +204,8 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                     shape = path;
                 }
 
-
-                KisSelectionSP selection = currentLayer()->selection();
-
-                KisShapeSelection* shapeSelection;
-                if(!selection->hasShapeSelection()) {
-                    shapeSelection = new KisShapeSelection(currentImage(), 0);
-                    QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
-                    cmd->redo();
-                    selection->setShapeSelection(shapeSelection);
-                }
-                else {
-                    shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
-                }
-                QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
+                QUndoCommand* cmd = helper.addSelectionShape(shape);
                 m_canvas->addCommand(cmd);
-                shapeSelection->addChild(shape);
             }
 
 //                 QApplication::restoreOverrideCursor();

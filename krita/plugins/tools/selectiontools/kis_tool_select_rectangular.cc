@@ -27,6 +27,7 @@
 #include <QPen>
 #include <QLayout>
 #include <QVBoxLayout>
+#include <QUndoCommand>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -44,10 +45,10 @@
 #include "KoPointerEvent.h"
 #include "kis_selection.h"
 #include "kis_selection_options.h"
-#include <kis_selected_transaction.h>
 #include "kis_canvas2.h"
 #include "kis_shape_selection.h"
 #include "kis_pixel_selection.h"
+#include "kis_selection_tool_helper.h"
 
 KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6))
@@ -174,99 +175,50 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
         if (!currentImage())
             return;
 
-        if (m_endPos.y() < 0)
-            m_endPos.setY(0);
+        QRect rc(m_startPos.toPoint(), m_endPos.toPoint());
+        rc = rc.intersected(currentImage()->bounds());
+        rc = rc.normalized();
 
-        if (m_endPos.y() > currentImage()->height())
-            m_endPos.setY(currentImage()->height());
+        KisSelectionToolHelper helper(m_canvas->shapeController(), currentLayer(), i18n("Rectangular Selection"));
 
-        if (m_endPos.x() < 0)
-            m_endPos.setX(0);
+        if(m_selectionMode == PIXEL_SELECTION){
 
-        if (m_endPos.x() > currentImage()->width())
-            m_endPos.setX(currentImage()->width());
+            // We don't want the border of the 'rectangle' to be included in our selection
+            rc.setSize(rc.size() - QSize(1,1));
 
-        if (currentImage()) {
+            KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+            tmpSel->select(rc);
 
-            bool hasSelection = currentLayer()->selection();
-            QRect rc(m_startPos.toPoint(), m_endPos.toPoint());
-            rc = rc.normalized();
+            QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
+            m_canvas->addCommand(cmd);
+        }
+        else {
+            QRectF documentRect = convertToPt(bound);
 
-            if(m_selectionMode == PIXEL_SELECTION){
-#if 0 // XXX_SELECTION
-                KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);
-#endif
-                if(!hasSelection)
-                    currentImage()->setGlobalSelection();
+            KisSelectionSP selection = currentLayer()->selection();
 
-                KisPixelSelectionSP getOrCreatePixelSelection = currentLayer()->selection()->getOrCreatePixelSelection();
-
-                // We don't want the border of the 'rectangle' to be included in our selection
-                rc.setSize(rc.size() - QSize(1,1));
-
-                if(! hasSelection || m_selectAction == SELECTION_REPLACE)
-                {
-                    getOrCreatePixelSelection->clear();
-                    if(m_selectAction==SELECTION_SUBTRACT)
-                        getOrCreatePixelSelection->invert();
-                }
-
-                KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
-                tmpSel->select(rc);
-                getOrCreatePixelSelection->applySelection(tmpSel, m_selectionMode);
-                currentLayer()->selection()->updateProjection();
-
-#if 0
-                m_canvas->addCommand(t);
-#endif
-                if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
-                    getOrCreatePixelSelection->setDirty(rc);
-                } else {
-                    getOrCreatePixelSelection->setDirty(currentImage()->bounds());
-
-                }
-
+            KoShape* shape;
+            KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoRectangleShape");
+            if(rectFactory) {
+                shape = rectFactory->createDefaultShape();
+                shape->setSize(documentRect.size());
+                shape->setPosition(documentRect.topLeft());
             }
             else {
-                QRectF documentRect = convertToPt(bound);
-
-                KoShape* shape;
-                KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoRectangleShape");
-                if(rectFactory) {
-                    shape = rectFactory->createDefaultShape();
-                    shape->setSize(documentRect.size());
-                    shape->setPosition(documentRect.topLeft());
-                }
-                else {
-                    //Fallback if the plugin wasn't found
-                    KoPathShape* path = new KoPathShape();
-                    path->setShapeId( KoPathShapeId );
-                    path->moveTo( documentRect.topLeft() );
-                    path->lineTo( documentRect.topLeft() + QPointF(documentRect.width(), 0) );
-                    path->lineTo( documentRect.bottomRight() );
-                    path->lineTo( documentRect.topLeft() + QPointF(0, documentRect.height()) );
-                    path->close();
-                    path->normalize();
-                    shape = path;
-                }
-
-                KisSelectionSP selection = currentLayer()->selection();
-
-                KisShapeSelection* shapeSelection;
-                if(!selection->hasShapeSelection()) {
-                    // XXX_SELECTION (call to KisShapeSelection needs redesigned)
-                    shapeSelection = new KisShapeSelection(currentImage(), 0);
-                    QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
-                    cmd->redo();
-                    selection->setShapeSelection(shapeSelection);
-                }
-                else {
-                    shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
-                }
-                QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
-                m_canvas->addCommand(cmd);
-                shapeSelection->addChild(shape);
+                //Fallback if the plugin wasn't found
+                KoPathShape* path = new KoPathShape();
+                path->setShapeId( KoPathShapeId );
+                path->moveTo( documentRect.topLeft() );
+                path->lineTo( documentRect.topLeft() + QPointF(documentRect.width(), 0) );
+                path->lineTo( documentRect.bottomRight() );
+                path->lineTo( documentRect.topLeft() + QPointF(0, documentRect.height()) );
+                path->close();
+                path->normalize();
+                shape = path;
             }
+
+            QUndoCommand* cmd = helper.addSelectionShape(shape);
+            m_canvas->addCommand(cmd);
         }
         m_selecting = false;
     }

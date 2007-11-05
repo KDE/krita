@@ -30,8 +30,6 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <knuminput.h>
@@ -46,14 +44,12 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_selection_options.h"
-#include "kis_selection.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "kis_selection_options.h"
 #include "kis_fill_painter.h"
-#include "kis_undo_adapter.h"
-#include "kis_selected_transaction.h"
 #include "kis_pixel_selection.h"
+#include "kis_selection_tool_helper.h"
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
     : super(canvas, KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6))
@@ -88,10 +84,6 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
             return;
 
         KisPaintDeviceSP dev = currentLayer()->paintDevice();
-        bool hasSelection = currentLayer()->selection();
-        if ( !hasSelection ) return; // XXX_SELECTION
-        KisPixelSelectionSP getOrCreatePixelSelection =
-            currentLayer()->selection()->getOrCreatePixelSelection();
 
         if (!dev || !currentLayer()->visible())
             return;
@@ -103,42 +95,11 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         fillpainter.setSampleMerged(m_sampleMerged);
         KisPixelSelectionSP selection =
             fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage() );
-#if 0
-        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
-#endif
-        if(! hasSelection || m_selectAction == SELECTION_REPLACE)
-        {
-            getOrCreatePixelSelection->clear();
-            if(m_selectAction==SELECTION_SUBTRACT)
-                getOrCreatePixelSelection->invert();
-        }
 
-        switch(m_selectAction)
-        {
-            case SELECTION_REPLACE:
-            case SELECTION_ADD:
-                getOrCreatePixelSelection->addSelection(selection);
-                break;
-            case SELECTION_SUBTRACT:
-                getOrCreatePixelSelection->subtractSelection(selection);
-                break;
-            case SELECTION_INTERSECT:
-                getOrCreatePixelSelection->intersectSelection(selection);
-                break;
-            default:
-                break;
-        }
-#if 0
-        if(hasSelection && m_selectAction != SELECTION_REPLACE && m_selectAction != SELECTION_INTERSECT) {
-            dev->setDirty(selection->selectedRect());
-            dev->emitSelectionChanged(selection->selectedRect());
-        } else {
-            dev->setDirty(currentImage()->bounds());
-            dev->emitSelectionChanged();
-        }
+        KisSelectionToolHelper helper(m_canvas->shapeController(), currentLayer(), i18n("Contiguous Area Selection"));
+        QUndoCommand* cmd = helper.selectPixelSelection(selection, m_selectAction);
+        m_canvas->addCommand(cmd);
 
-        m_canvas->addCommand(t);
-#endif
         QApplication::restoreOverrideCursor();
     }
 }

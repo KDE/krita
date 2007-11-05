@@ -89,8 +89,10 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
             return;
 
         QPoint pos = convertToIntPixelCoord(e);
-
+        QRect rc = currentImage()->bounds();
         KisFillPainter fillpainter(dev);
+        fillpainter.setHeight( rc.height() );
+        fillpainter.setWidth( rc.width() );
         fillpainter.setFillThreshold(m_fuzziness);
         fillpainter.setSampleMerged(m_sampleMerged);
         KisPixelSelectionSP selection =

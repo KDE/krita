@@ -28,7 +28,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_paint_device.h"
-#include "kis_effect_mask.h"
+#include "kis_filter_mask.h"
 
 #include "kis_types.h"
 #include "kis_layer.h"
@@ -214,6 +214,18 @@ void KisLayerTest::testMoveLayer()
     QVERIFY( image->root()->at( 2 ) == node2.data() );
 
 }
+
+void KisLayerTest::testHasEffectMasks()
+{
+    KisLayerSP layer = new TestLayer( 0, "layer1", OPACITY_OPAQUE) ;
+    QVERIFY( layer->hasEffectMasks() == false );
+    KisFilterMaskSP mask = new KisFilterMask();
+    layer->setPreviewMask( mask );
+    QVERIFY( layer->hasEffectMasks() );
+    layer->removePreviewMask();
+    QVERIFY( layer->hasEffectMasks() == false );
+}
+
 
 QTEST_KDEMAIN(KisLayerTest, NoGUI)
 #include "kis_layer_test.moc"

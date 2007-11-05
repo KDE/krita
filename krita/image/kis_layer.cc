@@ -206,10 +206,12 @@ KisSelectionSP KisLayer::selection() const
 
 bool KisLayer::hasEffectMasks() const
 {
-    QList<KisNodeSP> masks = childNodes( QStringList( "KisEffectMask" ), KoProperties() );
+    if (m_d->previewMask) return true;
 
-    // If all these things don't exist, we have no effectMasks.
-    return !(  m_d->previewMask == 0 && masks.isEmpty() );
+    QList<KisNodeSP> masks = childNodes( QStringList( "KisEffectMask" ), KoProperties() );
+    if (!masks.isEmpty()) return true;
+
+    return false;
 }
 
 void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect & rc )

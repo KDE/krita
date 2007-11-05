@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
- *               2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -76,7 +77,7 @@ private:
     /**
      * @brief Select points in rect
      *
-     * @param rect in document coordinated 
+     * @param rect in document coordinated
      * @param clearSelection if set clear the current selection before the selection
      */
     void selectPoints( const QRectF &rect, bool clearSelection );
@@ -107,15 +108,15 @@ private:
 
     class ActiveHandle
     {
-    public:    
+    public:
         ActiveHandle( KoPathTool *tool )
         : m_tool( tool )
         {}
         virtual ~ActiveHandle() {}
-        virtual void paint( QPainter &painter, const KoViewConverter &converter ) = 0; 
+        virtual void paint( QPainter &painter, const KoViewConverter &converter ) = 0;
         virtual void repaint() const = 0;
         virtual void mousePressEvent( KoPointerEvent *event ) = 0;
-        // test if handle is still valid 
+        // test if handle is still valid
         virtual bool check() = 0;
 
         KoPathTool *m_tool;
@@ -140,7 +141,7 @@ private:
 
     class ActiveParameterHandle : public ActiveHandle
     {
-    public:    
+    public:
         ActiveParameterHandle( KoPathTool *tool, KoParameterShape *parameterShape, int handleId )
         : ActiveHandle( tool )
         , m_parameterShape( parameterShape )
@@ -155,23 +156,36 @@ private:
         int m_handleId;
     };
 
+    class ActiveConnectionHandle : public ActiveParameterHandle
+    {
+    public:
+        ActiveConnectionHandle( KoPathTool *tool, KoParameterShape *parameterShape, int handleId )
+        : ActiveParameterHandle( tool, parameterShape, handleId )
+            {
+            }
+
+        // XXX: Later: create a paint even to distinguish a connection
+        // handle  from another handle type
+        void mousePressEvent( KoPointerEvent *event );
+    };
+
     /**
      * @brief Handle the selection of points
      *
-     * This class handles the selection of points. It makes sure 
+     * This class handles the selection of points. It makes sure
      * the canvas is repainted when the selection changes.
      */
     class FLAKE_TEST_EXPORT KoPathPointSelection
     {
-    public:    
+    public:
         explicit KoPathPointSelection( KoPathTool * tool )
         : m_tool( tool )
         {}
         ~KoPathPointSelection() {}
 
         /// @brief Draw the selected points
-        void paint( QPainter &painter, const KoViewConverter &converter ); 
-        
+        void paint( QPainter &painter, const KoViewConverter &converter );
+
         /**
          * @brief Add a point to the selection
          *
@@ -179,14 +193,14 @@ private:
          * @param clear if true the selection will be cleared before adding the point
          */
         void add( KoPathPoint * point, bool clear );
-        
+
         /**
          * @brief Remove a point form the selection
          *
          * @param point to remove from the selection
          */
         void remove( KoPathPoint * point );
-        
+
         /**
          * @brief Clear the selection
          */
@@ -237,7 +251,7 @@ private:
         /**
          * @brief Get the selected point map
          *
-         * @return KoSelectedPointMap containing all objects and selected points 
+         * @return KoSelectedPointMap containing all objects and selected points
          * typedef QMap<KoPathShape *, QSet<KoPathPoint *> > KoSelectedPointMap;
          */
         const KoPathShapePointMap & selectedPointMap() const { return m_shapePointMap; }
@@ -253,7 +267,7 @@ private:
          * This function checks which points are no longer valid and removes them
          * from the selection.
          * If e.g. some points are selected and the shape which contains the points
-         * is removed by undo, the points are no longer valid and have therefore to 
+         * is removed by undo, the points are no longer valid and have therefore to
          * be removed from the selection.
          */
         void update();
@@ -270,7 +284,7 @@ private:
 
     ActiveHandle * m_activeHandle;       ///< the currently active handle
     int m_handleRadius;                ///< the radius of the control point handles
-    /// the point selection 
+    /// the point selection
     KoPathPointSelection m_pointSelection;
 
     friend class ActiveNoHandle;

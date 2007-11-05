@@ -493,6 +493,10 @@ QList<QPointF> KoShape::connectors() const {
     return d->connectors.toList();
 }
 
+QList<QPointF> KoShape::connectionPoints() const {
+    return d->connectors.toList();
+}
+
 void KoShape::setBackground ( const QBrush & brush ) {
     d->backgroundBrush = brush;
 }
@@ -594,6 +598,12 @@ void KoShape::removeConnection(KoShapeConnection *connection) {
 
 QList<KoShapeConnection*> KoShape::connections() const {
     return d->connections;
+}
+
+void KoShape::removeConnectionPoint( uint index )
+{
+    if( index < d->connectors.count() )
+        d->connectors.remove( index );
 }
 
 QString KoShape::name() const {

@@ -48,6 +48,7 @@ set(flake_SRCS
     KoPathTool.cpp
     KoPathPointRubberSelectStrategy.cpp
     KoPathPointMoveStrategy.cpp
+    KoPathConnectionPointStrategy.cpp
     KoPathControlPointMoveStrategy.cpp
     KoPointGroup.cpp
     KoParameterShape.cpp
@@ -81,6 +82,9 @@ set(flake_SRCS
     KoShapeConfigWidgetBase.cpp
     KoDrag.cpp
     KoDragOdfSaveHelper.cpp
+    KoConnectionShape.cpp
+    KoConnectionShapeFactory.cpp
+    KoConnectionShapeConfigWidget.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -113,11 +117,13 @@ set(flake_SRCS
     commands/KoParameterToPathCommand.cpp
     commands/KoShapeTransformCommand.cpp
     commands/KoPathFillRuleCommand.cpp
+    commands/KoConnectionShapeTypeCommand.cpp
 )
 
 kde4_add_ui_files(flake_SRCS
     KoInteractionToolWidget.ui
     PathToolOptionWidgetBase.ui
+    KoConnectionShapeConfigWidget.ui
 )
 
 

@@ -277,12 +277,11 @@ public:
     void addConnectionPoint( const QPointF &point );
 
     /**
-     * Return a list of the connectors that have been added to this shape.
-     * Note that altering the list or the points in there will not have any
-     * effect on the shape.
+     * Return a list of the connection points that have been added to this shape.
      * @return a list of the connectors that have been added to this shape.
      */
-    QList<QPointF> connectors() const;
+    KDE_DEPRECATED QList<QPointF> connectors() const;
+    QList<QPointF> connectionPoints() const;
 
     /**
      * Set the background of the shape.
@@ -729,6 +728,9 @@ protected:
      * This is typically called only from the destructor of the KoShapeConnection class.
      */
     void removeConnection(KoShapeConnection *connection);
+
+    /// Removes connection point with given index
+    void removeConnectionPoint( uint index );
 
 private:
     friend class KoShapeManager;

@@ -21,6 +21,7 @@
  */
 #include "KoShapeRegistry.h"
 #include "KoPathShapeFactory.h"
+#include "KoConnectionShapeFactory.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeGroup.h"
@@ -105,6 +106,7 @@ void KoShapeRegistry::init() {
 
     // Also add our hard-coded basic shape
     add( new KoPathShapeFactory(this, QStringList()) );
+    add( new KoConnectionShapeFactory( this ) );
 
     // Now all shape factories are registered with us, determine their
     // assocated odf tagname & priority and prepare ourselves for

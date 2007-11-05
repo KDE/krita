@@ -232,7 +232,7 @@ private:
 
     friend class KisNodeFacade;
     friend class KisNodeTest;
-
+    friend class KisLayer; // Note: only for setting the preview mask!
     /**
      * Set the parent of this node.
      */

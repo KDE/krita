@@ -26,6 +26,7 @@
 #include "kis_paint_device.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
+#include "kis_pixel_selection.h"
 
 struct KisMask::Private
 {
@@ -83,6 +84,14 @@ KisSelectionSP KisMask::selection() const
 void KisMask::setSelection( KisSelectionSP selection )
 {
     m_d->selection = selection;
+}
+
+void KisMask::select( const QRect & rc, quint8 selectedness )
+{
+    Q_ASSERT( m_d->selection );
+    KisPixelSelectionSP psel = m_d->selection->getOrCreatePixelSelection();
+    psel->select( rc, selectedness );
+    m_d->selection->updateProjection();
 }
 
 #include "kis_mask.moc"

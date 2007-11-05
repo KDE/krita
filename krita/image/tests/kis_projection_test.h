@@ -27,6 +27,7 @@ class KisProjectionTest : public QObject
 
 private slots:
 
+    
     void testDirty();
     void stressTestDirty();
 };

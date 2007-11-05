@@ -57,7 +57,6 @@ void KisFilterMaskTest::testProjection()
         QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
 
-
     // Check in image stack
     KisImageSP image = new KisImage(0, qimg.width(), qimg.height(), cs, "merge test");
 
@@ -73,6 +72,8 @@ void KisFilterMaskTest::testProjection()
     if ( !TestUtil::compareQImages( errpoint, inverted, root->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
         QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
+
+    delete kfc;
 }
 
 QTEST_KDEMAIN(KisFilterMaskTest, GUI)

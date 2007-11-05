@@ -85,7 +85,7 @@ public:
 
     QImage maskImage( KisImageSP image ) const;
 
-    void select(QRect r);
+    void select(const QRect & r, quint8 selectedness = MAX_SELECTED);
 
     /**
      * Apply a selection to the selection using the specified selection mode

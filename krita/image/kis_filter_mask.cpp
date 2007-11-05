@@ -69,6 +69,8 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
 
 void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
 {
+    kDebug() << "applying filter mask on projection  " << projection << " with rect " << rc;
+    kDebug() << "and filter config " << m_d->filterConfig;
     Q_ASSERT( m_d->filterConfig );
     if (!m_d->filterConfig) return;
 

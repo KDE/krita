@@ -25,8 +25,12 @@
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
+#include "kis_filter.h"
+#include "kis_filter_configuration.h"
+#include "kis_filter_registry.h"
+#include "kis_merge_visitor.h"
 
-#include "kis_effect_mask.h"
+#include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_transformation_mask.h"
 
@@ -35,10 +39,51 @@
 #include "kis_clone_layer.h"
 #include "kis_adjustment_layer.h"
 
+#include "testutil.h"
 
-void KisMergeVisitorTest::testMerge()
+void KisMergeVisitorTest::initTestCase()
 {
-    QFAIL( "Implement!" );
+    original = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    inverted = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+    colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    image = new KisImage(0, original.width(), original.height(), colorSpace, "merge test");
+
+    
+}
+
+void KisMergeVisitorTest::testMergePreview()
+{
+    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
+    layer->paintDevice()->convertFromQImage( original, 0, 0, 0  );
+    image->addNode( layer.data() );
+
+    KisFilterMaskSP mask = new KisFilterMask();
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT( f );
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    Q_ASSERT( kfc );
+    mask->setFilter( kfc );
+    mask->select( image->bounds() );
+    layer->setPreviewMask( mask );
+    layer->setDirty( image->bounds() );
+    
+    KisPaintDeviceSP projection = new KisPaintDevice(colorSpace);
+    KisMergeVisitor v( projection, image->bounds() );
+    layer->accept( v );
+    
+    QPoint errpoint;
+    if ( !TestUtil::compareQImages( errpoint,
+                                    inverted,
+                                    projection->convertToQImage(0, 0, 0, original.width(), original.height() ) ) ) {
+
+        projection->convertToQImage(0, 0, 0, original.width(), original.height() ).save("bla.png");
+        QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " )
+            .arg( errpoint.x() )
+            .arg( errpoint.y() )
+            .toAscii() );
+    }
+    delete kfc;
+    
 }
 
 

@@ -45,7 +45,6 @@ public:
 
     void run()
         {
-
             m_rootLayer->updateProjection( m_rc );
             // XXX: Also convert to QImage in the thread?
         }

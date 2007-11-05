@@ -24,6 +24,7 @@
 #include "kis_types.h"
 #include "kis_node.h"
 #include "kis_paint_device.h"
+#include "kis_global.h"
 
 #include <krita_export.h>
 
@@ -106,8 +107,12 @@ public:
      * Change the selection to the specified selection object. The
      * selection is deep copied.
      */
-    void setSelection( KisSelectionSP selection );
+     void setSelection( KisSelectionSP selection );
 
+     /**
+      * Selected the specified rect with the specified amount of selectedness.
+      */ 
+     void select( const QRect & rc, quint8 selectedness = MAX_SELECTED );
 private:
 
     struct Private;

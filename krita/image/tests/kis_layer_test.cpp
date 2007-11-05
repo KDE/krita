@@ -40,7 +40,7 @@ void KisLayerTest::testCreation()
 {
 
     KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "merge test");
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
 
     KisLayerSP layer = new TestLayer( image, "test", OPACITY_OPAQUE );
     QCOMPARE( layer->name(), QString( "test" ) );
@@ -76,7 +76,7 @@ void KisLayerTest::testCreation()
 void KisLayerTest::testOrdering()
 {
     KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace( "RGBA", 0 );
-    KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "merge test" );
+    KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "layer test" );
 
     KisLayerSP layer1 = new TestLayer( image, "layer1", OPACITY_OPAQUE );
     KisLayerSP layer2 = new TestLayer( image, "layer2", OPACITY_OPAQUE );
@@ -160,7 +160,7 @@ void KisLayerTest::testOrdering()
 void KisLayerTest::testMoveNode()
 {
     KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace( "RGBA", 0 );
-    KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "merge test" );
+    KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "layer test" );
 
     KisLayerSP node1 = new TestLayer( image, "layer1", OPACITY_OPAQUE );
     KisLayerSP node2 = new TestLayer( image, "layer2", OPACITY_OPAQUE );
@@ -190,7 +190,7 @@ void KisLayerTest::testMoveNode()
 void KisLayerTest::testMoveLayer()
 {
     KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace( "RGBA", 0 );
-    KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "merge test" );
+    KisImageSP image = new KisImage( 0, 512, 512, colorSpace, "layer test" );
 
     KisLayerSP node1 = new TestLayer( image, "layer1", OPACITY_OPAQUE );
     KisLayerSP node2 = new TestLayer( image, "layer2", OPACITY_OPAQUE );

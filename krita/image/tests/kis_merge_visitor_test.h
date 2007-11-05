@@ -21,14 +21,26 @@
 
 #include <QtTest/QtTest>
 
+#include "kis_types.h"
+#include <QImage>
+
+class KoColorSpace;
+
+
 class KisMergeVisitorTest : public QObject
 {
     Q_OBJECT
 
 private slots:
+    void initTestCase();
+    void testMergePreview();
 
-    void testMerge();
 
+private:
+    KoColorSpace * colorSpace;
+    KisImageSP image;
+    QImage original;
+    QImage inverted;
 };
 
 #endif

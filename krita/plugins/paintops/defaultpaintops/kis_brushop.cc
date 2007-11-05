@@ -188,7 +188,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 {
     KisPaintInformation adjustedInfo(info);
     if (!m_pressureSize)
-        adjustedInfo.pressure = PRESSURE_DEFAULT;
+        adjustedInfo.setPressure( PRESSURE_DEFAULT );
 
 
     // Painting should be implemented according to the following algorithm:
@@ -215,7 +215,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP device = painter()->device();
 
     QPointF hotSpot = brush->hotSpot(adjustedInfo);
-    QPointF pt = info.pos - hotSpot;
+    QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
@@ -235,9 +235,9 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
     if (m_pressureOpacity) {
         if (!m_customOpacity)
-            painter()->setOpacity((qint8)(origOpacity * info.pressure));
+            painter()->setOpacity((qint8)(origOpacity * info.pressure()));
         else
-            painter()->setOpacity((qint8)(origOpacity * scaleToCurve(info.pressure, m_opacityCurve)));
+            painter()->setOpacity((qint8)(origOpacity * scaleToCurve(info.pressure(), m_opacityCurve)));
     }
 
     if (m_pressureDarken) {
@@ -245,9 +245,9 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
         // Darken docs aren't really clear about what exactly the amount param can have as value...
         quint32 darkenAmount;
         if (!m_customDarken)
-            darkenAmount = (qint32)(255  - 75 * info.pressure);
+            darkenAmount = (qint32)(255  - 75 * info.pressure());
         else
-            darkenAmount = (qint32)(255  - 75 * scaleToCurve(info.pressure, m_darkenCurve));
+            darkenAmount = (qint32)(255  - 75 * scaleToCurve(info.pressure(), m_darkenCurve));
 
         KoColorTransformation* transfo = darkened.colorSpace()->createDarkenAdjustement(darkenAmount, false, 0.0);
         transfo->transform(origColor.data(), darkened.data(), 1);
@@ -263,7 +263,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
         dab = computeDab(mask);
     }
 
-    painter()->setPressure(adjustedInfo.pressure);
+    painter()->setPressure(adjustedInfo.pressure());
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(adjustedInfo),
                           brush->maskHeight(adjustedInfo));
@@ -302,8 +302,8 @@ double KisBrushOp::paintLine(const KisPaintInformation &pi1,
     KisPaintInformation adjustedInfo1(pi1);
     KisPaintInformation adjustedInfo2(pi2);
     if ( !m_pressureSize ) {
-        adjustedInfo1.pressure = PRESSURE_DEFAULT;
-        adjustedInfo2.pressure = PRESSURE_DEFAULT;
+        adjustedInfo1.setPressure( PRESSURE_DEFAULT );
+        adjustedInfo2.setPressure( PRESSURE_DEFAULT );
     }
     return KisPaintOp::paintLine( adjustedInfo1, adjustedInfo2, savedDist );
 }

@@ -119,7 +119,7 @@ void KisSmearyOp::paintAt(const KisPaintInformation& info)
     kc.convertTo(colorSpace);
 
     QPointF hotSpot = brush->hotSpot(info);
-    QPointF pt = info.pos - hotSpot;
+    QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
@@ -133,16 +133,16 @@ void KisSmearyOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP dab = KisPaintDeviceSP(new KisPaintDevice(colorSpace, "smeary dab"));
     Q_CHECK_PTR(dab);
 
-    painter()->setPressure(info.pressure);
+    painter()->setPressure(info.pressure());
 
     // Compute the position of the tufts. The tufts are arranged in a line
     // perpendicular to the motion of the brush, i.e, the straight line between
     // the current position and the previous position.
     // The tufts are spread out through the pressure
 
-    QPointF previousPoint = info.movement.toKoPoint();
+    QPointF previousPoint = info.movement().toKoPoint();
     KisVector2D brushVector(-previousPoint.y(), previousPoint.x());
-    KisVector2D currentPointVector = KisVector2D(info.pos);
+    KisVector2D currentPointVector = KisVector2D(info.pos());
     brushVector.normalize();
 
     KisVector2D vl, vr;

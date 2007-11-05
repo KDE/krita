@@ -100,7 +100,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP dab = painter()->dab();
 
     QPointF hotSpot = brush->hotSpot(info);
-    QPointF pt = info.pos - hotSpot;
+    QPointF pt = info.pos() - hotSpot;
 
     qint32 x;
     double xFraction;
@@ -119,7 +119,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
     }
 
     painter()->setDab(dab); // Cache dab for future paints in the painter.
-    painter()->setPressure(info.pressure); // Cache pressure in the current painter.
+    painter()->setPressure(info.pressure()); // Cache pressure in the current painter.
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());

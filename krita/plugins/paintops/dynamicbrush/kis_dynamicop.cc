@@ -163,14 +163,14 @@ void KisDynamicOp::paintAt(const KisPaintInformation& info)
     {
         KisPaintInformation localInfo(info);
         
-        localInfo.pos += QPointF( maxDist * (rand() / (double) RAND_MAX - 0.5), maxDist * (rand() / (double) RAND_MAX - 0.5) );
+        localInfo.setPos(localInfo.pos() + QPointF( maxDist * (rand() / (double) RAND_MAX - 0.5), maxDist * (rand() / (double) RAND_MAX - 0.5) ) );
         
         KisDynamicShape* dabsrc = m_brush->shape()->clone();
         KisDynamicColoring* coloringsrc = m_brush->coloring()->clone();
     
         m_brush->shapeProgram()->apply(dabsrc, localInfo);
         m_brush->coloringProgram()->apply(coloringsrc, localInfo);
-        dabsrc->paintAt(localInfo.pos, localInfo, coloringsrc );
+        dabsrc->paintAt(localInfo.pos(), localInfo, coloringsrc );
     }
 
 

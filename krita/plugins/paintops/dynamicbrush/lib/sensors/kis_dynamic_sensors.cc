@@ -34,7 +34,7 @@ KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle() : KisDynamicSensor(
 
 double KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
 {
-    double angle = atan2(info.movement.y() , info.movement.x());
+    double angle = atan2(info.movement().y() , info.movement().x());
     double v = modulo(m_angle - angle + M_PI, 2.0 * M_PI) - M_PI;
     if(v < 0)
     {

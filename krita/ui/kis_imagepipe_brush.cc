@@ -382,10 +382,10 @@ void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const {
             case KisPipeBrushParasite::Random:
                 index = int(float(m_parasite.rank[i])*KRandom::random() / RAND_MAX); break;
             case KisPipeBrushParasite::Pressure:
-                index = static_cast<int>(info.pressure * (m_parasite.rank[i] - 1) + 0.5); break;
+                index = static_cast<int>(info.pressure() * (m_parasite.rank[i] - 1) + 0.5); break;
             case KisPipeBrushParasite::Angular:
                 // + M_PI_2 to be compatible with the gimp
-                angle = atan2(info.movement.y(), info.movement.x()) + M_PI_2;
+                angle = atan2(info.movement().y(), info.movement().x()) + M_PI_2;
                 // We need to be in the [0..2*Pi[ interval so that we can more nicely select it
                 if (angle < 0)
                     angle += 2.0 * M_PI;
@@ -405,7 +405,7 @@ void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const {
 }
 
 bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info) {
-    if (info.movement.isNull() && m_parasite.needsMovement)
+    if (info.movement().isNull() && m_parasite.needsMovement)
         return false;
     return true;
 }

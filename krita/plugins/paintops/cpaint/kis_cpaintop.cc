@@ -180,19 +180,19 @@ void KisCPaintOp::paintAt(const KisPaintInformation& info)
 
     sampleCount++;
     Sample * newSample = new Sample;
-    newSample->setPressure ( info.pressure * 500 );
-    newSample->setX ( info.pos.x() );
-    newSample->setY ( info.pos.y() );
-    newSample->setTiltX ( info.xTilt );
-    newSample->setTiltY ( info.yTilt );
+    newSample->setPressure ( info.pressure() * 500 );
+    newSample->setX ( info.pos().x() );
+    newSample->setY ( info.pos().y() );
+    newSample->setTiltX ( info.xTilt() );
+    newSample->setTiltY ( info.yTilt() );
 
 
     if ( newStrokeFlag ) {
-        m_lastPoint = info.pos;
+        m_lastPoint = info.pos();
         m_stroke = new Stroke( m_currentBrush);
         m_stroke->setColor( m_color );
         m_stroke->sampleV.push_back( newSample );
-        m_stroke->storeOldPath( info.pos.x(), info.pos.y() );
+        m_stroke->storeOldPath( info.pos().x(), info.pos().y() );
         newStrokeFlag = false;
     }
     else {
@@ -218,7 +218,7 @@ void KisCPaintOp::paintAt(const KisPaintInformation& info)
         painter()->bitBlt( QPoint( 0, 0 ), dab, m_tempImage.rect() );
 
     }
-    m_lastPoint = info.pos;
+    m_lastPoint = info.pos();
 }
 
 #include "kis_cpaintop.moc"

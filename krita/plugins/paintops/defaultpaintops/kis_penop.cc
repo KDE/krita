@@ -69,7 +69,7 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
         return;
 
     QPointF hotSpot = brush->hotSpot(info);
-    QPointF pt = info.pos - hotSpot;
+    QPointF pt = info.pos() - hotSpot;
 
     qint32 x = qRound(pt.x());
     qint32 y = qRound(pt.y());
@@ -85,7 +85,7 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
         dab = computeDab(mask);
     }
 
-    painter()->setPressure(info.pressure);
+    painter()->setPressure(info.pressure());
     QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 

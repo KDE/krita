@@ -20,16 +20,50 @@
 
 #include <QDomElement>
 
+struct KisPaintInformation::Private {
+    QPointF pos;
+    double pressure;
+    double xTilt;
+    double yTilt;
+    KisVector2D movement;
+};
 
-void KisPaintInformation::toXML(QDomDocument&, QDomElement& e)
+KisPaintInformation::KisPaintInformation(const QPointF & pos, double pressure,
+                        double xTilt, double yTilt,
+                        KisVector2D movement)
+    : d(new Private)
 {
-    e.setAttribute("pointX", pos.x());
-    e.setAttribute("pointY", pos.y());
-    e.setAttribute("pressure", pressure);
-    e.setAttribute("xTilt", xTilt);
-    e.setAttribute("yTilt", yTilt);
-    e.setAttribute("movementX", movement.x());
-    e.setAttribute("movementY", movement.y());
+    d->pos = pos;
+    d->pressure = pressure;
+    d->xTilt = xTilt;
+    d->yTilt = yTilt;
+    d->movement = movement;
+}
+
+KisPaintInformation::KisPaintInformation(const KisPaintInformation& rhs) : d(new Private(*rhs.d))
+{
+}
+
+void KisPaintInformation::operator=(const KisPaintInformation& rhs)
+{
+    *d = *rhs.d;
+}
+
+KisPaintInformation::~KisPaintInformation()
+{
+    delete d;
+}
+
+
+void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
+{
+    e.setAttribute("pointX", pos().x());
+    e.setAttribute("pointY", pos().y());
+    e.setAttribute("pressure", pressure());
+    e.setAttribute("xTilt", xTilt());
+    e.setAttribute("yTilt", yTilt());
+    e.setAttribute("movementX", movement().x());
+    e.setAttribute("movementY", movement().y());
 }
 
 KisPaintInformation KisPaintInformation::fromXML(QDomElement& e)
@@ -42,4 +76,39 @@ KisPaintInformation KisPaintInformation::fromXML(QDomElement& e)
     double movementX = e.attribute("movementX","0.0").toDouble();
     double movementY = e.attribute("movementY","0.0").toDouble();
     return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt, KisVector2D(movementX, movementY));
+}
+
+QPointF KisPaintInformation::pos() const
+{
+    return d->pos;
+}
+
+void KisPaintInformation::setPos(const QPointF& p)
+{
+    d->pos = p;
+}
+
+double KisPaintInformation::pressure() const
+{
+    return d->pressure;
+}
+
+void KisPaintInformation::setPressure(double p)
+{
+    d->pressure = p;
+}
+
+double KisPaintInformation::xTilt() const
+{
+    return d->xTilt;
+}
+
+double KisPaintInformation::yTilt() const
+{
+    return d->yTilt;
+}
+
+KisVector2D KisPaintInformation::movement() const
+{
+    return d->movement;
 }

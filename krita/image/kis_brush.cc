@@ -382,7 +382,7 @@ KisQImagemaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX
         createScaledBrushes();
     }
 
-    double scale = scaleForPressure(info.pressure);
+    double scale = scaleForPressure(info.pressure());
 
     const ScaledBrush *aboveBrush = 0;
     const ScaledBrush *belowBrush = 0;
@@ -421,7 +421,7 @@ KisPaintDeviceSP KisBrush::image(KoColorSpace * /*colorSpace*/, const KisPaintIn
         createScaledBrushes();
     }
 
-    double scale = scaleForPressure(info.pressure);
+    double scale = scaleForPressure(info.pressure());
 
     const ScaledBrush *aboveBrush = 0;
     const ScaledBrush *belowBrush = 0;
@@ -508,7 +508,7 @@ void KisBrush::setHotSpot(QPointF pt)
 
 QPointF KisBrush::hotSpot(const KisPaintInformation& info) const
 {
-    double scale = scaleForPressure(info.pressure);
+    double scale = scaleForPressure(info.pressure());
     double w = width() * scale;
     double h = height() * scale;
 
@@ -614,13 +614,13 @@ double KisBrush::scaleForPressure(double pressure)
 qint32 KisBrush::maskWidth(const KisPaintInformation& info) const
 {
     // Add one for sub-pixel shift
-    return static_cast<qint32>(ceil(width() * scaleForPressure(info.pressure)) + 1);
+    return static_cast<qint32>(ceil(width() * scaleForPressure(info.pressure())) + 1);
 }
 
 qint32 KisBrush::maskHeight(const KisPaintInformation& info) const
 {
     // Add one for sub-pixel shift
-    return static_cast<qint32>(ceil(height() * scaleForPressure(info.pressure)) + 1);
+    return static_cast<qint32>(ceil(height() * scaleForPressure(info.pressure())) + 1);
 }
 
 KisQImagemaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const

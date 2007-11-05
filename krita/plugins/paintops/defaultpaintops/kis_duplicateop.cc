@@ -162,7 +162,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     if (not m_duplicateStartIsSet)
     {
         m_duplicateStartIsSet = true;
-        m_duplicateStart = info.pos;
+        m_duplicateStart = info.pos();
     }
 
     bool heal = m_settings->healing();
@@ -175,7 +175,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
         return;
 
     QPointF hotSpot = brush->hotSpot(info);
-    QPointF pt = info.pos - hotSpot;
+    QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
@@ -201,7 +201,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
         dab = computeDab(mask, KoColorSpaceRegistry::instance()->alpha8());
     }
 
-    painter()->setPressure(info.pressure);
+    painter()->setPressure(info.pressure());
 
     QPointF srcPointF = pt - m_settings->offset();
     QPoint srcPoint = QPoint(x - static_cast<qint32>(m_settings->offset().x()),

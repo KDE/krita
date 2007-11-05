@@ -36,29 +36,32 @@ public:
 
     KisPaintInformation(const QPointF & pos = QPointF(), double pressure = PRESSURE_DEFAULT,
                         double xTilt = 0.0, double yTilt = 0.0,
-                        KisVector2D movement = KisVector2D())
-        : pos(pos), pressure(pressure)
-        , xTilt(xTilt)
-        , yTilt(yTilt)
-        , movement(movement)
-        {
-        }
+                        KisVector2D movement = KisVector2D());
+    KisPaintInformation(const KisPaintInformation& rhs);
+    void operator=(const KisPaintInformation& rhs);
+    ~KisPaintInformation();
 
-    QPointF pos;
+    QPointF pos() const;
+    void setPos(const QPointF& p);
         
     /// The pressure of the value (from 0.0 to 1.0)
-    double pressure;
+    double pressure() const;
+    /// Set the pressure
+    void setPressure(double p);
 
     /// The tilt of the pen on the horizontal axis (from 0.0 to 1.0)
-    double xTilt;
+    double xTilt() const;
 
     /// The tilt of the pen on the vertical axis (from 0.0 to 1.0)
-    double yTilt;
+    double yTilt() const;
 
     /// The movement of the pen is equal to current position minus the last position of the call to paintAt
-    KisVector2D movement;
+    KisVector2D movement() const;
     
-    void toXML(QDomDocument&, QDomElement&);
+    void toXML(QDomDocument&, QDomElement&) const;
     static KisPaintInformation fromXML(QDomElement&);
+private:
+    struct Private;
+    Private* const d;
 };
 #endif

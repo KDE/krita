@@ -32,7 +32,7 @@ KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(
 
 double KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
 {
-    m_time += pi.movement.length();
+    m_time += pi.movement().length();
     if( m_time > m_length)
     {
         if(m_periodic)

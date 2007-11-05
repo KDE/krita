@@ -171,7 +171,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     KoColorSpace * colorSpace = source()->colorSpace();
 
     QPointF hotSpot = brush->hotSpot(info);
-    QPointF pt = info.pos - hotSpot;
+    QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
@@ -188,7 +188,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     // wouldn't be useful at all.
     KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
 
-    painter()->setPressure(info.pressure);
+    painter()->setPressure(info.pressure());
 
     qint32 maskWidth = mask->width();
     qint32 maskHeight = mask->height();

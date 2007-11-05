@@ -88,7 +88,7 @@ KisDynamicScattering KisBasicDynamicProgram::scattering( const KisPaintInformati
     if( m_scatterEnabled )
     {
         double v = jitter( m_scatterJitter, m_scatterSensor->parameter( info ) );
-        distance = v * info.movement.length() * m_scatterAmount * 0.01;
+        distance = v * info.movement().length() * m_scatterAmount * 0.01;
     }
     if( m_enableCout )
     {

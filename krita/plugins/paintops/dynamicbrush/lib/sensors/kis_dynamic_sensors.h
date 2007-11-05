@@ -38,7 +38,7 @@ class KisDynamicSensorSpeed : public KisDynamicSensor {
         KisDynamicSensorSpeed();
         virtual ~KisDynamicSensorSpeed() { }
         virtual double parameter(const KisPaintInformation& info)
-        { return 1.0 + info.movement.length() * 0.1; }
+        { return 1.0 + info.movement().length() * 0.1; }
 };
 
 class KisDynamicSensorDrawingAngle : public KisDynamicSensor {
@@ -59,7 +59,7 @@ class KisDynamicSensorPressure : public KisDynamicSensor {
         KisDynamicSensorPressure();
         virtual ~KisDynamicSensorPressure() { }
         virtual double parameter(const KisPaintInformation& info)
-        { return info.pressure; }
+        { return info.pressure(); }
 };
 
 class KisDynamicSensorXTilt : public KisDynamicSensor {
@@ -67,7 +67,7 @@ class KisDynamicSensorXTilt : public KisDynamicSensor {
         KisDynamicSensorXTilt();
         virtual ~KisDynamicSensorXTilt() { }
         virtual double parameter(const KisPaintInformation& info)
-        { return 1.0 - fabs( info.xTilt ) / 60.0; }
+        { return 1.0 - fabs( info.xTilt() ) / 60.0; }
 };
 
 class KisDynamicSensorYTilt : public KisDynamicSensor {
@@ -75,7 +75,7 @@ class KisDynamicSensorYTilt : public KisDynamicSensor {
         KisDynamicSensorYTilt();
         virtual ~KisDynamicSensorYTilt() { }
         virtual double parameter(const KisPaintInformation& info)
-        { return 1.0 - fabs( info.yTilt ) / 60.0; }
+        { return 1.0 - fabs( info.yTilt() ) / 60.0; }
 };
 
 #endif

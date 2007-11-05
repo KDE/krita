@@ -85,7 +85,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info) )
         return;
     QPointF hotSpot = brush->hotSpot(info);
-    QPointF pt = info.pos - hotSpot;
+    QPointF pt = info.pos() - hotSpot;
 
     qint32 destX;
     double xFraction;

@@ -42,15 +42,14 @@ void KisPixelSelectionTest::testCreation()
     KisPixelSelectionSP selection = new KisPixelSelection();
     QVERIFY( selection );
     QVERIFY( selection->isTotallyUnselected(QRect( 0, 0, 512, 512 )) );
-    QVERIFY( selection->interestedInDirtyness() == false );
+    QVERIFY( selection->interestedInDirtyness() == true );
 
     selection = new KisPixelSelection( dev );
     QVERIFY( selection );
     QVERIFY( selection->isTotallyUnselected(QRect( 0, 0, 512, 512 )) );
-    QVERIFY( selection->interestedInDirtyness() == false );
+    QVERIFY( selection->interestedInDirtyness() == true );
     selection->setInterestedInDirtyness( true );
     selection->setDirty( QRect( 10, 10, 10, 10 ) );
-
 
     selection = new KisPixelSelection( dev, mask.data() );
 
@@ -63,6 +62,17 @@ void KisPixelSelectionTest::testInvert()
     selection->invert();
     QCOMPARE( selection->selected( 20, 20), MAX_SELECTED);
 }
+void KisPixelSelectionTest::testSelect()
+{
+    KisPixelSelectionSP selection = new KisPixelSelection();
+    selection->select(QRect(0, 0, 512, 441));
+    for ( int i = 0; i < 441; ++i ) {
+        for ( int j = 0; j < 512; ++j ) {
+            QVERIFY(selection->selected( j, i ) == MAX_SELECTED);
+        }
+    }
+}
+
 
 QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI)
 #include "kis_pixel_selection_test.moc"

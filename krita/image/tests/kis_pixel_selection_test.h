@@ -29,6 +29,7 @@ private slots:
 
     void testCreation();
     void testInvert();
+    void testSelect();
 
 };
 

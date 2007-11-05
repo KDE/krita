@@ -163,11 +163,12 @@ void KisTileManager::deregisterTile(KisTile* tile) {
     if (!m_tileMap.contains(tile)) {
             return;
     }
-    // Q_ASSERT(m_tileMap.contains(tile));
+    
     m_bigKritaLock.lock();
-
+    Q_ASSERT(m_tileMap.contains(tile));
     TileInfo* info = m_tileMap[tile];
-
+    Q_ASSERT(info);
+    
     if (info->onFile) { // It was once mmapped
         // To freelist
         FreeInfo* freeInfo = new FreeInfo();
@@ -233,6 +234,9 @@ void KisTileManager::maySwapTile(const KisTile* tile)
     m_bigKritaLock.lock();
 
     TileInfo* info = m_tileMap[tile];
+
+    Q_ASSERT(info);
+    
     m_swappableList.push_back(info);
     info->validNode = true;
     info->node = -- m_swappableList.end();

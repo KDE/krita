@@ -86,7 +86,7 @@ void KisFilterMaskTest::testInImage()
 
     KisFilterMaskSP mask = new KisFilterMask();
     mask->setFilter( kfc );
-    mask->select(qimg.rect());
+    mask->select(qimg.rect(), MAX_SELECTED);
     
     // Check in image stack
     KisImageSP image = new KisImage(0, qimg.width(), qimg.height(), cs, "merge test");
@@ -96,13 +96,12 @@ void KisFilterMaskTest::testInImage()
 
     image->addNode( layer.data() );
     image->addNode( mask.data(), layer.data() );
-
-    KisGroupLayerSP root = image->rootLayer();
-    root->updateProjection( QRect( 0, 0, qimg.width(), qimg.height() ) );
+    layer->setDirty( qimg.rect() );
 
     QPoint errpoint;
-    if ( !TestUtil::compareQImages( errpoint, inverted, root->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
-        root->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest3.png");
+    if ( !TestUtil::compareQImages( errpoint, inverted,
+                image->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+        image->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest3.png");
         QFAIL( QString( "Failed to create inverted image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
 

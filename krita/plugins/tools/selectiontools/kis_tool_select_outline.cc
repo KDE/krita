@@ -214,7 +214,7 @@ QWidget* KisToolSelectOutline::optionWidget()
 }
 
 void KisToolSelectOutline::slotSetAction(int action) {
-    if (action >= SELECTION_ADD && action <= SELECTION_INTERSECT)
+    if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT)
         m_selectAction =(selectionAction)action;
 }
 

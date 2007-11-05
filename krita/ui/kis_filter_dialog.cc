@@ -26,6 +26,9 @@
 #include <kis_filter_config_widget.h>
 #include <kis_filter_mask.h>
 #include <kis_layer.h>
+#include <kis_selection.h>
+#include <kis_pixel_selection.h>
+#include <kis_paint_device.h>
 
 // From krita/ui
 #include "kis_bookmarked_configurations_editor.h"
@@ -35,16 +38,24 @@
 #include "ui_wdgfilterdialog.h"
 
 struct KisFilterDialog::Private {
-    Private() : currentCentralWidget(0), currentFilterConfigurationWidget(0),
-            currentFilter(0), layer(0), mask(0), currentBookmarkedFilterConfigurationsModel(0), filtersModel(new KisFiltersModel)
+    Private() 
+        : currentCentralWidget(0)
+        , currentFilterConfigurationWidget(0)
+        , currentFilter(0)
+        , layer(0)
+        , mask(0)
+        , currentBookmarkedFilterConfigurationsModel(0)
+        , filtersModel(new KisFiltersModel)
     {
     }
+
     ~Private()
     {
         delete currentCentralWidget;
         delete widgetLayout;
         delete filtersModel;
     }
+
     QWidget* currentCentralWidget;
     KisFilterConfigWidget* currentFilterConfigurationWidget;
     KisFilterSP currentFilter;
@@ -66,10 +77,16 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     d->widgetLayout = new QGridLayout( d->uiFilterDialog.centralWidgetHolder );
     d->layer = layer;
     d->thumb = layer->paintDevice()->createThumbnailDevice(100, 100);
+
     d->mask = new KisFilterMask();
+    KisPixelSelectionSP psel = d->mask->selection()->getOrCreatePixelSelection();
+    psel->select( QRect( 0, 0, 500, 500 ) );
+    d->mask->selection()->updateProjection();
+    
     d->layer->setPreviewMask( d->mask );
     d->uiFilterDialog.filtersSelector->setModel(d->filtersModel);
-    connect(d->uiFilterDialog.comboBoxPresets, SIGNAL(activated ( int )), SLOT(slotBookmarkedFilterConfigurationSelected(int )) );
+    connect(d->uiFilterDialog.comboBoxPresets, SIGNAL(activated ( int )),
+            SLOT(slotBookmarkedFilterConfigurationSelected(int )) );
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
@@ -84,17 +101,21 @@ KisFilterDialog::~KisFilterDialog()
 
 void KisFilterDialog::setFilter(KisFilterSP f)
 {
+    kDebug() << "setFilter: " << f;
     d->currentFilter = f;
     delete d->currentCentralWidget;
-    KisFilterConfigWidget* widget = d->currentFilter->createConfigurationWidget( d->uiFilterDialog.centralWidgetHolder, d->layer->paintDevice() );
+    KisFilterConfigWidget* widget =
+        d->currentFilter->createConfigurationWidget( d->uiFilterDialog.centralWidgetHolder, d->layer->paintDevice() );
     if(not widget)
     { // No widget, so display a label instead
         d->currentFilterConfigurationWidget = 0;
-        d->currentCentralWidget = new QLabel( i18n("No configuration option."), d->uiFilterDialog.centralWidgetHolder );
+        d->currentCentralWidget = new QLabel( i18n("No configuration option."),
+                                              d->uiFilterDialog.centralWidgetHolder );
     } else {
         d->currentFilterConfigurationWidget = widget;
         d->currentCentralWidget = widget;
-        d->currentFilterConfigurationWidget->setConfiguration( d->currentFilter->defaultConfiguration( d->layer->paintDevice() ) );
+        d->currentFilterConfigurationWidget->setConfiguration(
+            d->currentFilter->defaultConfiguration( d->layer->paintDevice() ) );
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigPleaseUpdatePreview()), SLOT(updatePreview()));
     }
     // Change the list of presets
@@ -109,16 +130,19 @@ void KisFilterDialog::setFilter(KisFilterSP f)
 
 void KisFilterDialog::updatePreview()
 {
-    kDebug(41007) <<"KisFilterDialog::updatePreview()";
-    if( not d->currentFilter ) return;
-    if( d->currentFilterConfigurationWidget )
-    {
+    kDebug() <<">>>>  KisFilterDialog::updatePreview()";
+
+    if ( not d->currentFilter ) return;
+
+    if ( d->currentFilterConfigurationWidget ) {
         KisFilterConfiguration* config = d->currentFilterConfigurationWidget->configuration();
         d->mask->setFilter( config );
-    } else {
+    }
+    else {
         d->mask->setFilter( d->currentFilter->defaultConfiguration( d->layer->paintDevice() ) );
     }
-    d->mask->setDirty();
+    kDebug() << "d->mask " << d->mask->filter();
+    d->mask->setDirty(QRect(0, 0, 500, 500));
 }
 
 void KisFilterDialog::apply()

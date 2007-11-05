@@ -102,8 +102,8 @@ void KisFilterInvert::process(KisFilterConstantProcessingInformation srcInfo,
 // clear. Note that using nextRow() instead of recreating the iterators
 // for every row makes a huge difference.
 
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
 
     for ( int row = 0; row < size.height(); ++row ) {
         while ( !srcIt.isDone() ) {

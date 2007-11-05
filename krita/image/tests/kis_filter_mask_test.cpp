@@ -46,17 +46,48 @@ void KisFilterMaskTest::testProjection()
 
     KisFilterMaskSP mask = new KisFilterMask();
     mask->setFilter( kfc );
-
+    
     // Check basic apply(). Shouldn't do anything, since nothing is selected yet.
     KisPaintDeviceSP projection = new KisPaintDevice( cs );
     projection->convertFromQImage( qimg, 0, 0, 0 );
     mask->apply( projection, QRect( 0, 0, qimg.width(), qimg.height() ) );
-
+    mask->select(qimg.rect(), MIN_SELECTED);
+    
     QPoint errpoint;
     if ( !TestUtil::compareQImages( errpoint, qimg, projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+        projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest1.png");
         QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
 
+    projection = new KisPaintDevice( cs );
+    projection->convertFromQImage( qimg, 0, 0, 0 );
+    mask->select(qimg.rect(), MAX_SELECTED);
+    mask->apply( projection, QRect( 0, 0, qimg.width(), qimg.height() ) );
+
+    if ( !TestUtil::compareQImages( errpoint, inverted, projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+        projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest2.png");
+        QFAIL( QString( "Failed to create inverted image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+    }
+    
+}
+
+
+void KisFilterMaskTest::testInImage()
+{
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+
+    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage inverted( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT( f );
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    Q_ASSERT( kfc );
+
+    KisFilterMaskSP mask = new KisFilterMask();
+    mask->setFilter( kfc );
+    mask->select(qimg.rect());
+    
     // Check in image stack
     KisImageSP image = new KisImage(0, qimg.width(), qimg.height(), cs, "merge test");
 
@@ -64,13 +95,15 @@ void KisFilterMaskTest::testProjection()
     layer->paintDevice()->convertFromQImage( qimg, 0, 0, 0 );
 
     image->addNode( layer.data() );
-    image->addNode(mask.data(), layer.data());
+    image->addNode( mask.data(), layer.data() );
 
     KisGroupLayerSP root = image->rootLayer();
     root->updateProjection( QRect( 0, 0, qimg.width(), qimg.height() ) );
 
+    QPoint errpoint;
     if ( !TestUtil::compareQImages( errpoint, inverted, root->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
-        QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+        root->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest3.png");
+        QFAIL( QString( "Failed to create inverted image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
 
     delete kfc;

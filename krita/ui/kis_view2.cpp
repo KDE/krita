@@ -390,6 +390,7 @@ KisSelectionSP KisView2::selection()
     if ( layer )
         return layer->selection(); // falls through to the global
                                    // selection, or 0 in the end
+    return 0;
 }
 
 

@@ -812,9 +812,9 @@ namespace KOffice {
     void Graph::buildGraph()
     {
         // Make sure that all available parts are added to the graph
-        Q3ValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
-        Q3ValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
-        Q3ValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
+        const QList<KoDocumentEntry> parts( KoDocumentEntry::query(KoDocumentEntry::AllEntries) );
+        QList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
+        QList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
         while ( partIt != partEnd ) {
             QStringList nativeMimeTypes = ( *partIt ).service()->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
@@ -827,9 +827,10 @@ namespace KOffice {
             ++partIt;
         }
 
-        Q3ValueList<KoFilterEntry::Ptr> filters( KoFilterEntry::query() ); // no constraint here - we want *all* :)
-        Q3ValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
-        Q3ValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
+        // no constraint here - we want *all* :)
+        const QList<KoFilterEntry::Ptr> filters( KoFilterEntry::query() );
+        QList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
+        QList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
         for ( ; it != end; ++it ) {
             // First add the "starting points" to the dict
@@ -900,9 +901,9 @@ namespace KOffice {
     QByteArray Graph::findKOfficePart() const
     {
         // Here we simply try to find the closest KOffice mimetype
-        Q3ValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
-        Q3ValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
-        Q3ValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
+        const QList<KoDocumentEntry> parts( KoDocumentEntry::query(KoDocumentEntry::AllEntries) );
+        QList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
+        QList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
         const Vertex *v = 0;
 

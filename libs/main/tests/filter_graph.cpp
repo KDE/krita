@@ -18,9 +18,7 @@
 */
 
 #include <QFile>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
+#include <QByteArray>
 #include <QList>
 #include <KoQueryTrader.h>
 #include <KoFilterManager.h>
@@ -31,7 +29,7 @@ int main( int /*argc*/, char ** /*argv*/ )
 {
     KComponentData componentData( "filter_graph" );  // we need an instance when using the trader
 
-    Q3CString output = "digraph filters {\n";
+    QByteArray output = "digraph filters {\n";
 
     // The following code is shamelessly copied over from KOffice::Graph::buildGraph
     // It wasn't feasible to do some serious changes in the lib for that tiny bit
@@ -40,9 +38,9 @@ int main( int /*argc*/, char ** /*argv*/ )
     QList<QString> vertices; // to keep track of already inserted values, not performance critical
 
     // Make sure that all available parts are added to the graph
-    Q3ValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
-    Q3ValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
-    Q3ValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
+    const QList<KoDocumentEntry> parts( KoDocumentEntry::query(KoDocumentEntry::AllEntries) );
+    QList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
+    QList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
     while ( partIt != partEnd ) {
         //kDebug() << ( *partIt ).service()->desktopEntryName();
@@ -64,9 +62,9 @@ int main( int /*argc*/, char ** /*argv*/ )
         ++partIt;
     }
 
-    Q3ValueList<KoFilterEntry::Ptr> filters( KoFilterEntry::query() ); // no constraint here - we want *all* :)
-    Q3ValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
-    Q3ValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
+    const QList<KoFilterEntry::Ptr> filters( KoFilterEntry::query() ); // no constraint here - we want *all* :)
+    QList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
+    QList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
     for ( ; it != end; ++it ) {
         kDebug() <<"import" << ( *it )->import <<" export" << ( *it )->export_;
@@ -113,7 +111,7 @@ int main( int /*argc*/, char ** /*argv*/ )
 
     QFile f( "graph.dot" );
     if ( f.open( QIODevice::WriteOnly ) )
-        f.write( output.data(), output.size() - 1 );
+        f.write( output );
     f.close();
     return 0;
 }

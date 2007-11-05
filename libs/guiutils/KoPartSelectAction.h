@@ -22,7 +22,6 @@
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <KoQueryTrader.h>
-#include <Q3ValueList>
 #include "koguiutils_export.h"
 
 class KActionCollection;
@@ -55,7 +54,7 @@ protected slots:
     void slotActionActivated();
 
 private:
-    Q3ValueList<KoDocumentEntry> m_lstEntries;
+    QList<KoDocumentEntry> m_lstEntries;
     KoDocumentEntry m_documentEntry;
 };
 

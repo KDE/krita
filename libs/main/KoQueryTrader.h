@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright     2007       David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +23,7 @@
 
 #include <kservice.h>
 #include <ksharedptr.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 #include <komain_export.h>
 
 class QObject;
@@ -39,9 +40,15 @@ class KOMAIN_EXPORT KoDocumentEntry
 {
 
 public:
-  KoDocumentEntry() { m_service = 0L; } // for QValueList
-  explicit KoDocumentEntry( KService::Ptr service );
-  ~KoDocumentEntry() { }
+    /**
+     * Represents an invalid entry (as returned by queryByMimeType for instance)
+     */
+    explicit KoDocumentEntry();
+    /**
+     * Represents a valid entry
+     */
+    explicit KoDocumentEntry( const KService::Ptr& service );
+    ~KoDocumentEntry();
 
   KService::Ptr service() const { return m_service; }
 
@@ -72,6 +79,19 @@ public:
    */
   KoDocument* createDoc( QString* errorMsg = 0, KoDocument* parent = 0 ) const;
 
+  enum QueryFlag {
+    AllEntries = 0,
+    /**
+     * OnlyEmbeddableDocuments specifies if only KOffice Parts should be
+     * listed which are embeddable into other koDocuments, or all (if false)
+     * (eg.: it makes no sense to embed Kexi into KWord,
+     *  but it makes sense to embed it into KoShell)
+     */
+    OnlyEmbeddableDocuments = 1
+    // bitfield
+  };
+  Q_DECLARE_FLAGS(QueryFlags, QueryFlag)
+
   /**
    *  This function will query ksycoca to find all available components.
    *  The result will only contain parts, which are embeddable into a document
@@ -80,26 +100,7 @@ public:
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
-  static Q3ValueList<KoDocumentEntry> query( const QString &  _constr = QString() );
-
-  /**
-   *  This function will query the system to find all available filters.
-   *
-   *  @param _onlyDocEmb specifies if only KOffice Parts should be listed which are
-   *                 embeddable into other koDocuments, or all (if false)
-   *                 (eg.: it makes no sense to embed Kexi into KWord,
-   *                 but it makes sense to embed it into KoShell)
-   *  @param _constr is a constraint expression as used by KDEDs trader interface.
-   *                 You can use it to set additional restrictions on the available
-   *                 components.
-   */
-  // ### TODO: MERGE WITH ABOVE METHODE WHEN BIC+SIC CHANGES ARE ALLOWED
-  static Q3ValueList<KoDocumentEntry> query( bool _onlyDocEmb,const QString& _constr);
-  /* this is how the signature should be looking after merging
-  static QValueList<KoDocumentEntry> query( bool _onlyDocEmb =true, const QString& _constr = QString() );
-  or better: use an enum for the first arg.
-  */
-
+  static QList<KoDocumentEntry> query( QueryFlags flags, const QString &  _constr = QString() );
 
   /**
    *  This is a convenience function.
@@ -113,6 +114,8 @@ private:
   KService::Ptr m_service;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoDocumentEntry::QueryFlags)
+
 /**
  *  Represents an available filter.
  */
@@ -122,8 +125,8 @@ class KOMAIN_EXPORT KoFilterEntry : public KShared
 public:
   typedef KSharedPtr<KoFilterEntry> Ptr;
 
-  KoFilterEntry() : weight( 0 ) { m_service = 0L; } // for QValueList
-  KoFilterEntry( KService::Ptr service );
+  //KoFilterEntry() : weight( 0 ) { m_service = 0L; } // for QList
+  explicit KoFilterEntry( const KService::Ptr& service );
   ~KoFilterEntry() { }
 
   KoFilter* createFilter( KoFilterChain* chain, QObject* parent = 0 );
@@ -167,7 +170,7 @@ public:
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
-  static Q3ValueList<KoFilterEntry::Ptr> query( const QString& _constr = QString() );
+  static QList<KoFilterEntry::Ptr> query( const QString& _constr = QString() );
 
   KService::Ptr service() const { return m_service; }
 

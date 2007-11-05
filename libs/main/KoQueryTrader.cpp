@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright     2007       David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,8 +28,6 @@
 #include <kdebug.h>
 #include <kservicetypetrader.h>
 #include <QFile>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <limits.h> // UINT_MAX
 
@@ -45,15 +44,24 @@
  *
  *******************************************************************/
 
-KoDocumentEntry::KoDocumentEntry( KService::Ptr service )
+KoDocumentEntry::KoDocumentEntry()
+    : m_service( 0 )
+{
+}
+
+KoDocumentEntry::KoDocumentEntry( const KService::Ptr& service )
   : m_service( service )
+{
+}
+
+KoDocumentEntry::~KoDocumentEntry()
 {
 }
 
 KoDocument* KoDocumentEntry::createDoc( QString* errorMsg, KoDocument* parent ) const
 {
-    // TODO use KParts::ComponentFactory::createInstanceFromService( m_service )
-    // to get better error handling.
+    // TODO use m_service->createInstance() to get better error handling,
+    // and use of non-deprecated API.
     KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName(m_service->library()) );
 
     if( !factory ) {
@@ -87,13 +95,13 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
 {
   QString constr = QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1' or '%2' in [X-KDE-ExtraNativeMimeTypes]" ).arg( mimetype ).arg( mimetype );
 
-  Q3ValueList<KoDocumentEntry> vec = query( false,constr );
+  QList<KoDocumentEntry> vec = query( AllEntries, constr );
   if ( vec.isEmpty() )
   {
     kWarning(30003) << "Got no results with " << constr;
     // Fallback to the old way (which was probably wrong, but better be safe)
     QString constr = QString::fromLatin1( "'%1' in ServiceTypes" ).arg( mimetype );
-    vec = query( constr );
+    vec = query( AllEntries, constr );
     if ( vec.isEmpty() )
     {
       // Still no match. Either the mimetype itself is unknown, or we have no service for it.
@@ -114,15 +122,10 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
   return KoDocumentEntry( vec[0] );
 }
 
-Q3ValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
-{
-  return query(true,_constr);
-}
-
-Q3ValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QString & _constr )
+QList<KoDocumentEntry> KoDocumentEntry::query( QueryFlags flags, const QString & _constr )
 {
 
-  Q3ValueList<KoDocumentEntry> lst;
+  QList<KoDocumentEntry> lst;
   QString constr;
   if ( !_constr.isEmpty() ) {
       constr = "(";
@@ -131,8 +134,10 @@ Q3ValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QSt
   }
   constr += " exist Library";
 
+  const bool onlyDocEmb = flags & OnlyEmbeddableDocuments;
+
   // Query the trader
-  KService::List offers = KServiceTypeTrader::self()->query( "KOfficePart", constr );
+  const KService::List offers = KServiceTypeTrader::self()->query( "KOfficePart", constr );
 
   KService::List::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
@@ -144,7 +149,7 @@ Q3ValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QSt
     if ( (*it)->noDisplay() )
         continue;
     // Maybe this could be done as a trader constraint too.
-    if ( (!_onlyDocEmb) || ((*it)->property("X-KDE-NOTKoDocumentEmbeddable").toString()!="1") )
+    if ( (!onlyDocEmb) || ((*it)->property("X-KDE-NOTKoDocumentEmbeddable").toString()!="1") )
     {
       KoDocumentEntry d( *it );
       // Append converted offer
@@ -168,7 +173,7 @@ Q3ValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QSt
  *
  *******************************************************************/
 
-KoFilterEntry::KoFilterEntry( KService::Ptr service )
+KoFilterEntry::KoFilterEntry( const KService::Ptr& service )
   : m_service( service )
 {
   import = service->property( "X-KDE-Import" ).toStringList();
@@ -178,10 +183,10 @@ KoFilterEntry::KoFilterEntry( KService::Ptr service )
   available = service->property( "X-KDE-Available" ).toString();
 }
 
-Q3ValueList<KoFilterEntry::Ptr> KoFilterEntry::query( const QString & _constr )
+QList<KoFilterEntry::Ptr> KoFilterEntry::query( const QString & _constr )
 {
   kDebug(30500) <<"KoFilterEntry::query(" << _constr <<" )";
-  Q3ValueList<KoFilterEntry::Ptr> lst;
+  QList<KoFilterEntry::Ptr> lst;
 
   KService::List offers = KServiceTypeTrader::self()->query( "KOfficeFilter", _constr );
 
@@ -221,3 +226,4 @@ KoFilter* KoFilterEntry::createFilter( KoFilterChain* chain, QObject* parent )
     filter->m_chain = chain;
     return filter;
 }
+

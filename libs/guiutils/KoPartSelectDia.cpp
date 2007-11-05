@@ -23,8 +23,7 @@
 #include <klocale.h>
 #include <q3listview.h>
 #include <QPixmap>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 /****************************************************
  *
@@ -52,8 +51,8 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
 	     this, SLOT( selectionChanged( Q3ListViewItem * ) ) );
 
     // Query for documents
-    m_lstEntries = KoDocumentEntry::query();
-    Q3ValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
+    m_lstEntries = KoDocumentEntry::query(KoDocumentEntry::OnlyEmbeddableDocuments);
+    QList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
 	if (!serv->genericName().isEmpty()) {
@@ -75,7 +74,7 @@ void KoPartSelectDia::selectionChanged( Q3ListViewItem *item )
 KoDocumentEntry KoPartSelectDia::entry()
 {
     if ( listview->currentItem() ) {
-	Q3ValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
+	QList<KoDocumentEntry>::const_iterator it = m_lstEntries.begin();
 	for ( ; it != m_lstEntries.end(); ++it ) {
 	    if ( ( *it ).service()->name() == listview->currentItem()->text( 0 ) )
 		return *it;
@@ -86,16 +85,12 @@ KoDocumentEntry KoPartSelectDia::entry()
 
 KoDocumentEntry KoPartSelectDia::selectPart( QWidget *parent )
 {
-    KoDocumentEntry e;
+    KoPartSelectDia dlg( parent, "PartSelect" );
+    dlg.setFocus();
+    if (dlg.exec() == QDialog::Accepted)
+        return dlg.entry();
 
-    KoPartSelectDia *dlg = new KoPartSelectDia( parent, "PartSelect" );
-    dlg->setFocus();
-    if (dlg->exec() == QDialog::Accepted)
-	e = dlg->entry();
-
-    delete dlg;
-
-    return e;
+    return KoDocumentEntry();
 }
 
 #include <KoPartSelectDia.moc>

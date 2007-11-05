@@ -73,7 +73,7 @@ public:
     }
     /// Return the list of available languages, in their internal form
     /// e.g. "fr" or "en_US", here called "tag"
-    static QStringList listTagOfLanguages() { // TODO rename to listOfLanguageTags
+    static QStringList listOfLanguageTags() {
         return self()->_listOfLanguageTags();
     }
     /// For a given language display name, return its tag

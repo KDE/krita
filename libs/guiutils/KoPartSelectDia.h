@@ -22,8 +22,6 @@
 
 #include <kdialog.h>
 #include <KoQueryTrader.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include "koguiutils_export.h"
 
 class Q3ListView;
@@ -65,7 +63,7 @@ private slots:
     void selectionChanged( Q3ListViewItem * );
 
 private:
-    Q3ValueList<KoDocumentEntry> m_lstEntries;
+    QList<KoDocumentEntry> m_lstEntries;
     Q3ListView *listview;
 };
 

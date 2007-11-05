@@ -21,7 +21,6 @@
 
 #include <kdebug.h>
 #include <kactioncollection.h>
-#include <Q3ValueList>
 #include <kicon.h>
 #ifdef __GNUC__
 #warning "KDE4: TODO change argument as kactionmenu (when all will compile)"
@@ -54,8 +53,8 @@ void KoPartSelectAction::init(KActionCollection *ac, const char *name)
 {
     Q_ASSERT(ac);
     // Query for documents
-    m_lstEntries = KoDocumentEntry::query();
-    Q3ValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
+    m_lstEntries = KoDocumentEntry::query(KoDocumentEntry::OnlyEmbeddableDocuments);
+    QList<KoDocumentEntry>::const_iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
         if (!serv->genericName().isEmpty()) {

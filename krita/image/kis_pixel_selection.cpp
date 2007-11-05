@@ -456,7 +456,7 @@ void KisPixelSelection::renderToProjection(KisSelection* projection)
 {
     QRect updateRect = selectedExactRect();
     KisPainter painter(projection);
-    painter.bitBlt(updateRect.x(), updateRect.y(), COMPOSITE_OVER, KisPaintDeviceSP(this),
+    painter.bitBlt(updateRect.x(), updateRect.y(), COMPOSITE_COPY, KisPaintDeviceSP(this),
                    updateRect.x(), updateRect.y(), updateRect.width(), updateRect.height());
     painter.end();
 }
@@ -466,7 +466,7 @@ void KisPixelSelection::renderToProjection(KisSelection* projection, const QRect
     QRect updateRect = r.intersected(selectedExactRect());
     if(updateRect.isValid()) {
         KisPainter painter(projection);
-        painter.bitBlt(updateRect.x(), updateRect.y(), COMPOSITE_OVER, KisPaintDeviceSP(this),
+        painter.bitBlt(updateRect.x(), updateRect.y(), COMPOSITE_COPY, KisPaintDeviceSP(this),
                        updateRect.x(), updateRect.y(), updateRect.width(), updateRect.height());
         painter.end();
     }

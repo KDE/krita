@@ -59,6 +59,7 @@ void KisSelectionTest::testSelectionActions()
     tmpSel->select(QRect(10,0,20,20));
 
     pixelSelection->addSelection(tmpSel);
+    selection->updateProjection();
     QCOMPARE( selection->selectedExactRect(), QRect( 0, 0, 30, 20 ) );
 
 
@@ -66,12 +67,15 @@ void KisSelectionTest::testSelectionActions()
     pixelSelection->select(QRect(0,0,20,20));
 
     pixelSelection->subtractSelection(tmpSel);
+    selection->updateProjection();
     QCOMPARE( selection->selectedExactRect(), QRect( 0, 0, 10, 20 ) );
 
     pixelSelection->clear();
+    selection->updateProjection();
     pixelSelection->select(QRect(0,0,20,20));
 
     pixelSelection->intersectSelection(tmpSel);
+    selection->updateProjection();
     QCOMPARE( selection->selectedExactRect(), QRect( 10, 0, 10, 20 ) );
 }
 

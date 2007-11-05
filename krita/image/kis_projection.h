@@ -46,13 +46,6 @@ using namespace ThreadWeaver;
    been recomposited
    * The canvas widget catches this signal and schedules an update
      which Qt aggregates into a paint event.
-
-
-   XXX: Add a way to wait for recomposition for a particular rect to
-        completed?
-
-   XXX: Add regions-of-interest so kis_projection will only recomposit
-        the interesting regions
  */
 class KRITAIMAGE_EXPORT KisProjection : public QObject, public KisShared {
 

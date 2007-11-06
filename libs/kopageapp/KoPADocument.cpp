@@ -96,27 +96,10 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
         return false;
     }
 
-    //load master pages
-    const QHash<QString, KoXmlElement*> masterStyles( odfStore.styles().masterPages() );
-    QHash<QString, KoXmlElement*>::const_iterator it( masterStyles.constBegin() );
-    for ( ; it != masterStyles.constEnd(); ++it )
-    {
-        qDebug() << "Master:" << it.key();
-        KoPAMasterPage * masterPage = newMasterPage();
-        masterPage->loadOdf( *( it.value() ), paContext );
-        insertPage( masterPage, -1 );
-        paContext.addMasterPage (it.key(), masterPage);
-    }
-
-    KoXmlElement element;
-    forEachElement( element, body )
-    {
-        if ( element.tagName() == "page" && element.namespaceURI() == KoXmlNS::draw ) {
-            KoPAPage* page = newPage();
-            page->loadOdf( element, paContext );
-
-            insertPage( page, -1 );
-        }
+    m_masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );
+    m_pages = loadOdfPages( body, paContext );
+    if ( m_pages.size() > 1 ) {
+        setActionEnabled( KoPAView::ActionDeletePage, false );
     }
 
     emit sigProgress( 100 );
@@ -147,6 +130,37 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 
     return mainStyles.saveOdfStylesDotXml( store, manifestWriter );
+}
+
+QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoXmlElement*> masterStyles, KoPALoadingContext & context )
+{
+    QList<KoPAPageBase *> masterPages;
+
+    QHash<QString, KoXmlElement*>::const_iterator it( masterStyles.constBegin() );
+    for ( ; it != masterStyles.constEnd(); ++it )
+    {
+        qDebug() << "Master:" << it.key();
+        KoPAMasterPage * masterPage = newMasterPage();
+        masterPage->loadOdf( *( it.value() ), context );
+        masterPages.append( masterPage );
+        context.addMasterPage( it.key(), masterPage );
+    }
+    return masterPages;
+}
+
+QList<KoPAPageBase *> KoPADocument::loadOdfPages( KoXmlElement & body, KoPALoadingContext & context )
+{
+    QList<KoPAPageBase *> pages;
+    KoXmlElement element;
+    forEachElement( element, body )
+    {
+        if ( element.tagName() == "page" && element.namespaceURI() == KoXmlNS::draw ) {
+            KoPAPage* page = newPage();
+            page->loadOdf( element, context );
+            pages.append( page );
+        }
+    }
+    return pages;
 }
 
 bool KoPADocument::saveOasisPages( KoPASavingContext &paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages )

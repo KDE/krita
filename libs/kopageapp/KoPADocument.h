@@ -31,6 +31,7 @@ class KoShapeSavingContext;
 class KoPAPage;
 class KoPAPageBase;
 class KoPAMasterPage;
+class KoPALoadingContext;
 class KoPASavingContext;
 
 class KoInlineTextObjectManager;
@@ -50,6 +51,22 @@ public:
     bool loadOdf( KoOdfReadStore & odfStore );
 
     bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+
+    /**
+     * Load master pages
+     *
+     * @param masterStyles
+     * @param context
+     */
+    QList<KoPAPageBase *> loadOdfMasterPages( const QHash<QString, KoXmlElement*> masterStyles, KoPALoadingContext & context );
+
+    /**
+     * Load pages
+     *
+     * @param body
+     * @param context
+     */
+    QList<KoPAPageBase *> loadOdfPages( KoXmlElement & body, KoPALoadingContext & context );
 
     /**
      * Save pages

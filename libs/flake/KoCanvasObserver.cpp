@@ -17,26 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCANVASOBSERVER_H
-#define KOCANVASOBSERVER_H
+#include "KoCanvasObserver.h";
 
-class KoCanvasBase;
+KoCanvasObserver::KoCanvasObserver() {
+}
 
-#include <flake_export.h>
-
-/**
- * An abstract canvas observer interface class.
- * Dockers that want to be notified of active canvas changes
- * should implement that interface so that the tool controller
- * can give them the active canvas.
- */
-class FLAKE_EXPORT KoCanvasObserver
-{
-public:
-    KoCanvasObserver();
-    virtual ~KoCanvasObserver();
-    virtual void setCanvas(KoCanvasBase *canvas) = 0;
-
-};
-
-#endif // KOCANVASOBSERVER_H
+KoCanvasObserver::~KoCanvasObserver() {
+}

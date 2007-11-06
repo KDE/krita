@@ -38,6 +38,7 @@
 #include <QtGui/QScrollBar>
 #include <QtCore/QEvent>
 #include <QtGui/QDockWidget>
+#include <QtCore/QTimer>
 
 #include <config-opengl.h>
 
@@ -124,7 +125,7 @@ void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
     canvas->setCanvasController(this);
 
     emit canvasSet(this);
-    activate();
+    QTimer::singleShot(0, this, SLOT(activate()));
 }
 
 KoCanvasBase* KoCanvasController::canvas() const {

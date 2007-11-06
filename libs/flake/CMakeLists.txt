@@ -11,6 +11,7 @@ add_subdirectory(pics)
 
 set(flake_SRCS
     KoCanvasBase.cpp
+    KoCanvasObserver.cpp
     KoCanvasResourceProvider.cpp
     KoInteractionStrategy.cpp
     KoInteractionTool.cpp

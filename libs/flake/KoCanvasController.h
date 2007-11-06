@@ -328,6 +328,8 @@ private:
     void emitPointerPositionChangedSignals(QEvent *event);
 
     friend class KoToolManager;
+
+private slots:
     /**
      * Gets called by the tool manager if this canvas controller is the current active canvas controller.
      */

@@ -90,10 +90,10 @@ void KoColorSpaceRegistry::init()
 
             profile->load();
             if (profile->valid()) {
-                kDebug() << "Valid profile : " << profile->name();
+                kDebug(31000) << "Valid profile : " << profile->name();
                 d->profileMap[profile->name()] = profile;
             } else {
-                kDebug() << "Invalid profile : " << profile->name();
+                kDebug(31000) << "Invalid profile : " << profile->name();
             }
         }
     }
@@ -121,7 +121,7 @@ void KoColorSpaceRegistry::init()
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
     cmsFreeGamma(Gamma);
     KoColorProfile *defProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(hProfile);
-    kDebug() << "Gray " << defProfile->name();
+    kDebug(31000) << "Gray " << defProfile->name();
     addProfile(defProfile);
 
     // Create the built-in colorspaces

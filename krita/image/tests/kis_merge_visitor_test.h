@@ -34,7 +34,7 @@ class KisMergeVisitorTest : public QObject
 private slots:
     void initTestCase();
     void testMergePreview();
-
+    void testMergePreviewTwice();
 
 private:
     KoColorSpace * colorSpace;

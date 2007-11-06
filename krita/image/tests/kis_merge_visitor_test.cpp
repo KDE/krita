@@ -83,7 +83,37 @@ void KisMergeVisitorTest::testMergePreview()
     delete kfc;
     
 }
+void KisMergeVisitorTest::testMergePreviewTwice()
+{
+    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
+    layer->paintDevice()->convertFromQImage( original, 0, 0, 0  );
 
+    KisFilterMaskSP mask = new KisFilterMask();
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT( f );
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    Q_ASSERT( kfc );
+    mask->setFilter( kfc );
+    mask->select( original.rect() );
+    layer->setPreviewMask( mask );
+
+    KisPaintDeviceSP projection = new KisPaintDevice(colorSpace);
+    KisMergeVisitor v( projection, original.rect() );
+    layer->accept( v );
+    layer->accept( v );
+    
+    QPoint errpoint;
+    if ( !TestUtil::compareQImages( errpoint,
+                                    inverted,
+                                    projection->convertToQImage(0, 0, 0, original.width(), original.height() ) ) ) {
+
+        projection->convertToQImage(0, 0, 0, original.width(), original.height() ).save("bla.png");
+        QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " )
+            .arg( errpoint.x() )
+            .arg( errpoint.y() )
+            .toAscii() );
+    }
+    delete kfc;}
 
 QTEST_KDEMAIN(KisMergeVisitorTest, NoGUI)
 #include "kis_merge_visitor_test.moc"

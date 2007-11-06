@@ -27,13 +27,11 @@
 #include <QList>
 #include <QFileInfo>
 
-#include <kdebug.h>
-
 #include "KoResource.h"
 
-#include <koresource_export.h>
+#include "koresource_export.h"
 
-class KoResource;
+#include <KDebug>
 
 class KoResource;
 
@@ -85,7 +83,7 @@ public:
     /// Adds an already loaded resource to the server
     void addResource(T* resource) {
         if (!resource->valid()) {
-            kWarning(41001) << "Tried to add an invalid resource!";
+            kWarning(30009) << "Tried to add an invalid resource!";
             return;
         }
         resource->save();

@@ -200,7 +200,7 @@ bool KoPattern::init(QByteArray& data)
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k++) {
                 if (k > data.size()) {
-                    kWarning() <<"failed in gray";
+                    kWarning(30009) <<"failed in gray";
                     return false;
                 }
 
@@ -215,7 +215,7 @@ bool KoPattern::init(QByteArray& data)
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k++) {
                 if (k + 2 > data.size()) {
-                    kWarning() <<"failed in grayA";
+                    kWarning(30009) <<"failed in grayA";
                     return false;
                 }
 
@@ -229,7 +229,7 @@ bool KoPattern::init(QByteArray& data)
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++) {
                 if (k + 3 > data.size()) {
-                    kWarning() <<"failed in RGB";
+                    kWarning(30009) <<"failed in RGB";
                     return false;
                 }
 
@@ -244,7 +244,7 @@ bool KoPattern::init(QByteArray& data)
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++) {
                 if (k + 4 > data.size()) {
-                    kWarning() <<"failed in RGBA";
+                    kWarning(30009) <<"failed in RGBA";
                     return false;
                 }
 

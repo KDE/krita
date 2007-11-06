@@ -111,7 +111,7 @@ bool KoSegmentGradient::init()
         numSegmentsText = nameDefinition;
     }
 
-    kDebug() << "Loading gradient: " << name() << endl;
+    kDebug(30009) << "Loading gradient: " << name() << endl;
 
     int numSegments;
     bool ok;
@@ -122,7 +122,7 @@ bool KoSegmentGradient::init()
         return false;
     }
 
-    kDebug() << "Number of segments = " << numSegments << endl;
+    kDebug(30009) << "Number of segments = " << numSegments << endl;
 
     KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 

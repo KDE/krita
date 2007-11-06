@@ -40,5 +40,10 @@ KoPAMasterPage* KoPALoadingContext::masterPageFromName( const QString& name )
 
 void KoPALoadingContext::addMasterPage( const QString& name, KoPAMasterPage* master )
 {
-    m_masterPages.insert (name, master);
+    m_masterPages.insert( name, master );
+}
+
+const QMap<QString, KoPAMasterPage *> & KoPALoadingContext::masterPages()
+{
+    return m_masterPages;
 }

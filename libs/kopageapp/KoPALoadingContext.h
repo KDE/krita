@@ -54,6 +54,11 @@ public:
      */
     void addMasterPage( const QString& name, KoPAMasterPage* master );
 
+    /**
+     * Get the master pages
+     */
+    const QMap<QString, KoPAMasterPage *> & masterPages();
+
 private:
     QMap<QString, KoPAMasterPage*> m_masterPages;
 };

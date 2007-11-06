@@ -21,10 +21,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-
-
-#include <kdebug.h>
-
 #include "kis_global.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node_visitor.h"
@@ -93,7 +89,6 @@ void KisNode::setGraphListener( KisNodeGraphListener * graphListener )
 
 void KisNode::setDirty()
 {
-    kDebug() << name() << "Extent: " << extent();
     setDirty( extent() );
 }
 
@@ -104,7 +99,6 @@ void KisNode::setDirty(const QRect & rc)
 
 void KisNode::setDirty( const QRegion & region)
 {
-  kDebug() << "KisNode::setDirty " << region;
     QMutexLocker(&m_d->regionLock);
 
     if ( region.isEmpty() ) return;

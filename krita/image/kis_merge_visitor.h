@@ -50,7 +50,6 @@ public:
         KisNodeVisitor()
         {
             Q_ASSERT(projection);
-
             m_projection = projection;
             m_rc = rc;
         }
@@ -59,9 +58,6 @@ public:
 
     bool visit( KisExternalLayer * layer )
         {
-//             kDebug(41010) <<"Visiting on external layer" << layer->name() <<", visible:" << layer->visible() <<", extent:"
-//                           << layer->extent() << ", paint rect: " << m_rc;
-
             if (m_projection.isNull()) {
                 return false;
             }
@@ -100,9 +96,6 @@ public:
                 return false;
             }
 
-//             kDebug(41010) <<"Visiting on paint layer" << layer->name() <<", visible:" << layer->visible()
-//                           << ", temporary: " << layer->temporary() << ", extent: "
-//                           << layer->extent() << ", paint rect: " << m_rc;
             if (!layer->visible())
                 return true;
 
@@ -143,9 +136,6 @@ public:
 
     bool visit(KisGroupLayer *layer)
         {
-//             kDebug(41010) <<"Visiting on group layer" << layer->name() <<", visible:" << layer->visible() <<", extent:"
-//                           << layer->extent() << ", paint rect: " << m_rc;
-
 
             if (m_projection.isNull()) {
                 return false;
@@ -179,9 +169,6 @@ public:
 
     bool visit(KisAdjustmentLayer* layer)
         {
-//             kDebug(41010) <<"Visiting on adjustment layer" << layer->name() <<", visible:" << layer->visible() <<", extent:"
-//                           << layer->extent() << ", paint rect: " << m_rc;
-
             if (m_projection.isNull()) {
                 return true;
             }
@@ -282,9 +269,6 @@ public:
 
     bool visit( KisCloneLayer * layer )
         {
-//             kDebug(41010) <<"Visiting on clone layer" << layer->name() <<", visible:" << layer->visible() <<", extent:"
-//                           << layer->extent() << ", paint rect: " << m_rc;
-
 
             if (m_projection.isNull()) {
                 return false;

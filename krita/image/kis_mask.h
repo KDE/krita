@@ -113,6 +113,13 @@ public:
       * Selected the specified rect with the specified amount of selectedness.
       */ 
      void select( const QRect & rc, quint8 selectedness = MAX_SELECTED );
+
+     /**
+      * The extent and bounds of the mask are those of the selection inside
+      */
+    QRect extent() const;
+    QRect exactBounds() const;
+    
 private:
 
     struct Private;

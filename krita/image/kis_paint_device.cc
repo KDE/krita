@@ -29,7 +29,6 @@
 #include <QThread>
 #include <threadweaver/ThreadWeaver.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <kconfiggroup.h>
 
 #include "KoColorProfile.h"

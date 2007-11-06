@@ -81,8 +81,8 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     : KisLayer(img, name, opacity)
     , m_d( new Private() )
 {
-//     Q_ASSERT(img);
-    if ( img && colorSpace == 0 )
+     Q_ASSERT(img);
+    if ( colorSpace == 0 )
         colorSpace = img->colorSpace();
     Q_ASSERT( colorSpace );
     m_d->paintDevice = new KisPaintDevice(this, colorSpace, name);
@@ -133,7 +133,6 @@ KisPaintDeviceSP KisPaintLayer::projection() const
 
 void KisPaintLayer::updateProjection(const QRect & rc)
 {
-
     if ( !rc.isValid() ) return ;
     if ( !hasEffectMasks() ) return;
     if ( !m_d->paintDevice ) return;

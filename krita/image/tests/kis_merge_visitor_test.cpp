@@ -55,7 +55,6 @@ void KisMergeVisitorTest::testMergePreview()
 {
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
     layer->paintDevice()->convertFromQImage( original, 0, 0, 0  );
-    image->addNode( layer.data() );
 
     KisFilterMaskSP mask = new KisFilterMask();
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
@@ -63,12 +62,11 @@ void KisMergeVisitorTest::testMergePreview()
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT( kfc );
     mask->setFilter( kfc );
-    mask->select( image->bounds() );
+    mask->select( original.rect() );
     layer->setPreviewMask( mask );
-    layer->setDirty( image->bounds() );
-    
+
     KisPaintDeviceSP projection = new KisPaintDevice(colorSpace);
-    KisMergeVisitor v( projection, image->bounds() );
+    KisMergeVisitor v( projection, original.rect() );
     layer->accept( v );
     
     QPoint errpoint;

@@ -91,7 +91,20 @@ void KisMask::select( const QRect & rc, quint8 selectedness )
     Q_ASSERT( m_d->selection );
     KisPixelSelectionSP psel = m_d->selection->getOrCreatePixelSelection();
     psel->select( rc, selectedness );
-    m_d->selection->updateProjection();
+    m_d->selection->updateProjection( rc );
 }
+
+QRect KisMask::extent() const
+{
+    Q_ASSERT( m_d->selection );
+    return m_d->selection->selectedRect();
+}
+
+QRect KisMask::exactBounds() const
+{
+    Q_ASSERT( m_d->selection );
+    return m_d->selection->selectedExactRect();
+}
+    
 
 #include "kis_mask.moc"

@@ -311,7 +311,6 @@ void KisSelection::updateProjection()
     if(m_hasShapeSelection) {
         m_shapeSelection->renderToProjection(this);
     }
-    kDebug(41010) << "Selection rendering took: " << t.elapsed();
 }
 
 void KisSelection::updateProjection(const QRect& r)
@@ -328,5 +327,4 @@ void KisSelection::updateProjection(const QRect& r)
     if(m_hasShapeSelection) {
         m_shapeSelection->renderToProjection(this, r);
     }
-    kDebug(41010) << "Selection rendering took: " << t.elapsed();
 }

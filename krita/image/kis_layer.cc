@@ -17,7 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kdebug.h>
 #include <kicon.h>
 #include <klocale.h>
 #include <QIcon>
@@ -37,6 +36,7 @@
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
 #include "kis_meta_data_store.h"
+#include "kis_selection.h"
 
 class KisLayer::Private {
 
@@ -216,24 +216,19 @@ bool KisLayer::hasEffectMasks() const
 
 void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect & rc )
 {
-    kDebug() << "apply effectMasks " << projection << " on " << rc;
-    if ( isDirty(rc) ) {
+    QList<KisNodeSP> masks = childNodes( QStringList( "KisEffectMask" ), KoProperties() );
 
-        QList<KisNodeSP> masks = childNodes( QStringList( "KisEffectMask" ), KoProperties() );
+    // Then loop through the effect masks and apply them
+    for ( int i = 0; i < masks.size(); ++i ) {
 
-        // Then loop through the effect masks and apply them
-        for ( int i = 0; i < masks.size(); ++i ) {
+        const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>( masks.at( i ).data() );
 
-            const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>( masks.at( i ).data() );
+        if ( effectMask )
+            effectMask->apply( projection, rc );
+    }
 
-            if ( effectMask )
-                effectMask->apply( projection, rc );
-        }
-
-        kDebug() << " Then apply the preview mask " << m_d->previewMask;
-        if ( m_d->previewMask )
-            m_d->previewMask->apply( projection, rc );
-
+    if ( m_d->previewMask ) {
+        m_d->previewMask->apply( projection, rc );
     }
 }
 

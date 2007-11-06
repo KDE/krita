@@ -275,6 +275,7 @@ void KoToolProxy::setActiveTool(KoTool *tool) {
     d->activeTool = tool;
     connect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
     d->selectionChanged(d->activeTool->selection() && d->activeTool->selection()->hasSelection());
+    emit toolChanged(tool->toolId());
 }
 
 void KoToolProxy::setCanvasController(KoCanvasController *controller) {

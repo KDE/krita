@@ -109,6 +109,13 @@ signals:
      */
     void selectionChanged(bool hasSelection);
 
+    /**
+     * Emitted every time a tool is changed.
+     * @param toolId the id of the tool.
+     * @see KoTool::toolId()
+     */
+    void toolChanged(const QString &toolId);
+
 protected:
     friend class KoToolManager;
     /// the toolManager tells us which KoCanvasController this toolProxy is working for.

@@ -74,7 +74,7 @@ void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
     Q_ASSERT( m_d->filterConfig );
     if (!m_d->filterConfig) return;
 
-    selection()->updateProjection();
+    selection()->updateProjection(rc);
 
     KisFilterConstantProcessingInformation src( projection,  rc.topLeft(), selection() );
     KisFilterProcessingInformation dst( projection, rc.topLeft(), selection() );

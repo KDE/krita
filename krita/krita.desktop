@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita
-Name[eo]=Krito
 Name[km]= Krita
 Name[ne]=क्रिता
 Name[x-test]=xxKritaxx
@@ -13,6 +12,7 @@ GenericName[ca]=Programa d'edició d'imatges
 GenericName[da]=Maling & billedredigering
 GenericName[de]=Mal- und Bildbearbeitungsprogramm
 GenericName[el]=Επεξεργασία και ζωγραφική εικόνων
+GenericName[eo]=Pentrado kaj Bildredaktado
 GenericName[es]=Pintura y edición de imágenes
 GenericName[et]=Joonistamine ja pilditöötlus
 GenericName[fa]=رنگ‌آمیزی و ویرایش تصویر
@@ -51,6 +51,7 @@ Comment[ca]=Edita i pinta imatges
 Comment[da]=Redigér og mal billeder
 Comment[de]=Bilder zeichnen und bearbeiten
 Comment[el]=Επεξεργασία και ζωγραφική εικόνων
+Comment[eo]=Redakti kaj pentri bildojn
 Comment[es]=Editar y pintar imágenes
 Comment[et]=Piltide töötlemine ja joonistamine
 Comment[fa]=ویرایش و رنگ‌آمیزی تصاویر

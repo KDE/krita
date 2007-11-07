@@ -64,8 +64,8 @@ bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
     }
 
     KoGenStyles mainStyles;
-    //KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
-    //KoShapeSavingContext * context = helper.context( bodyWriter, mainStyles );
+    KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
+    KoShapeSavingContext * context = helper.context( bodyWriter, mainStyles );
 
     if ( !helper.writeBody() ) {
         return false;

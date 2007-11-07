@@ -138,8 +138,14 @@ void KisGroupLayer::resetProjection(KisPaintDeviceSP to)
 }
 
 bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) const {
-    return l && l->paintDevice()->colorSpace() == image()->colorSpace() && l->visible()
-        && l->opacity() == OPACITY_OPAQUE && !l->temporaryTarget();// && !l->hasMask();
+    if (!l) return false;
+    if (!l->paintDevice()) return false;
+    if (l->paintDevice()->colorSpace() != image()->colorSpace()) return false;
+    if (!l->visible()) return false;
+    if (l->opacity() != OPACITY_OPAQUE) return false;
+    if (l->temporaryTarget()) return false;
+
+    return true;
 }
 
 KisPaintDeviceSP KisGroupLayer::projection() const
@@ -148,8 +154,8 @@ KisPaintDeviceSP KisGroupLayer::projection() const
     // paint device as the projection if the child is visible
     if (parent().isNull() && childCount() == 1) {
         KisPaintLayer * l = dynamic_cast<KisPaintLayer*>(firstChild().data());
-        if (paintLayerInducesProjectionOptimization(l)) {
-            return l->paintDevice();
+        if (l && paintLayerInducesProjectionOptimization(l)) {
+            return l->projection();
         }
     }
     return m_d->projection;

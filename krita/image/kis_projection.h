@@ -57,6 +57,12 @@ public:
     virtual ~KisProjection();
 
     /**
+     * Makes the projection finish the current tasks before accepting
+     * new ones.
+     */
+    void sync();
+
+    /**
        Lock the projection: we will add new rects to the dirty region,
        but not composite until unlocked
     */

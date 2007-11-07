@@ -684,9 +684,12 @@ KisGroupLayerSP KisImage::rootLayer() const
 
 KisPaintDeviceSP KisImage::projection()
 {
+    m_d->projection->sync();
+    
     Q_ASSERT( m_d->rootLayer );
-    Q_ASSERT( m_d->rootLayer->projection() );
-    return m_d->rootLayer->projection();
+    KisPaintDeviceSP projection = m_d->rootLayer->projection();
+    Q_ASSERT( projection );
+    return projection;
 }
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP group)

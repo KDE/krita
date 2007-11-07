@@ -17,7 +17,7 @@
  */
 
 #include <qtest_kde.h>
-
+#include <QThread>
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_filter.h"
@@ -98,10 +98,12 @@ void KisFilterMaskTest::testInImage()
     image->addNode( mask.data(), layer.data() );
     layer->setDirty( qimg.rect() );
 
+    KisPaintDeviceSP pd = image->projection();
+
     QPoint errpoint;
     if ( !TestUtil::compareQImages( errpoint, inverted,
-                image->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
-        image->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest3.png");
+                pd->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+        pd->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest3.png");
         QFAIL( QString( "Failed to create inverted image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
 

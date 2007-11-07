@@ -61,7 +61,6 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     Q_ASSERT(img);
     Q_ASSERT(dev);
     m_d->paintDevice = dev;
-    m_d->projection = 0;
 
     init();
 }
@@ -73,7 +72,6 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
 {
     Q_ASSERT(img);
     m_d->paintDevice = new KisPaintDevice(this, img->colorSpace(), name);
-    m_d->projection = 0;
     init();
 }
 
@@ -86,7 +84,6 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
         colorSpace = img->colorSpace();
     Q_ASSERT( colorSpace );
     m_d->paintDevice = new KisPaintDevice(this, colorSpace, name);
-    m_d->projection = 0;
     init();
 }
 
@@ -96,9 +93,6 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
     , m_d (new Private)
 {
     m_d->paintDevice = new KisPaintDevice( *rhs.m_d->paintDevice.data() );
-    m_d->projection = 0;
-
-
     init();
 }
 

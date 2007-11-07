@@ -22,7 +22,7 @@
 #include <QThread>
 
 #include <threadweaver/ThreadWeaver.h>
-
+#include <kdebug.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -41,10 +41,12 @@ public:
         , m_rc( rc )
         , m_rootLayer( layer )
         {
+            kDebug() << "queing job for layer " << layer->name() << " on rect " << rc;
         }
 
     void run()
         {
+            kDebug() << "starting updateprojection for layer " << m_rootLayer->name() << " on rect " << m_rc;
             m_rootLayer->updateProjection( m_rc );
             // XXX: Also convert to QImage in the thread?
         }
@@ -96,6 +98,11 @@ KisProjection::~KisProjection()
     m_d->weaver->finish();
     delete m_d->weaver;
     delete m_d;
+}
+
+void KisProjection::sync()
+{
+    m_d->weaver->finish();
 }
 
 void KisProjection::lock()

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,8 +30,11 @@
 #include <KoOasisLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
+#include <KoTextShapeData.h>
+#include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoShapeStyleWriter.h>
+#include <KoStyleManager.h>
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
 #include <KoDom.h>
@@ -47,17 +51,27 @@
 
 #include <typeinfo>
 
+class KoPADocument::Private {
+public:
+
+    QList<KoPAPageBase*> pages;
+    QList<KoPAPageBase*> masterPages;
+    KoInlineTextObjectManager *inlineTextObjectManager;
+    KoStyleManager *styleManager;
+};
+
 KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
-: KoDocument( parentWidget, parent, singleViewMode )
+: KoDocument( parentWidget, parent, singleViewMode ),
+    d(new Private())
 {
-    m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
+    d->inlineTextObjectManager = new KoInlineTextObjectManager(this);
+    d->styleManager = new KoStyleManager(this);
 }
 
 KoPADocument::~KoPADocument()
 {
-    qDeleteAll( m_pages );
-    qDeleteAll( m_masterPages );
-    delete m_inlineTextObjectManager;
+    qDeleteAll( d->pages );
+    qDeleteAll( d->masterPages );
 }
 
 void KoPADocument::paintContent( QPainter &painter, const QRect &rect)
@@ -96,9 +110,9 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
         return false;
     }
 
-    m_masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );
-    m_pages = loadOdfPages( body, paContext );
-    if ( m_pages.size() > 1 ) {
+    d->masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );
+    d->pages = loadOdfPages( body, paContext );
+    if ( d->pages.size() > 1 ) {
         setActionEnabled( KoPAView::ActionDeletePage, false );
     }
 
@@ -118,7 +132,7 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     KoPASavingContext paContext( *bodyWriter, mainStyles, 1, KoShapeSavingContext::Store );
 
-    if ( !saveOasisPages( paContext, m_pages, m_masterPages ) ) {
+    if ( !saveOasisPages( paContext, d->pages, d->masterPages ) ) {
         return false;
     }
 
@@ -194,17 +208,17 @@ KoPAPageBase* KoPADocument::pageByIndex( int index, bool masterPage ) const
 {
     if ( masterPage )
     {
-        return m_masterPages.at( index );
+        return d->masterPages.at( index );
     }
     else
     {
-        return m_pages.at( index );
+        return d->pages.at( index );
     }
 }
 
 KoPAPageBase* KoPADocument::pageByNavigation( KoPAPageBase * currentPage, KoPageApp::PageNavigation pageNavigation ) const
 {
-    const QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( currentPage ) ? m_masterPages : m_pages;
+    const QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( currentPage ) ? d->masterPages : d->pages;
 
     Q_ASSERT( ! pages.isEmpty() );
 
@@ -246,6 +260,13 @@ void KoPADocument::addShape( KoShape * shape )
 {
     if(!shape)
         return;
+
+    KoTextShapeData *data = qobject_cast<KoTextShapeData*> (shape->userData());
+    if (data) { // its a text shape.
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (data->document()->documentLayout());
+        if(lay)
+            lay->setStyleManager(d->styleManager);
+    }
 
     // the KoShapeController sets the active layer as parent
     KoPAPageBase * page( pageByShape( shape ) );
@@ -332,7 +353,7 @@ void KoPADocument::insertPage( KoPAPageBase* page, int index )
     if ( !page )
         return;
 
-    QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? m_masterPages : m_pages;
+    QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? d->masterPages : d->pages;
 
     if ( index > pages.size() || index < 0 )
     {
@@ -351,7 +372,7 @@ void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
     if ( !page )
         return;
 
-    QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? m_masterPages : m_pages;
+    QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? d->masterPages : d->pages;
 
     int index = 0;
 
@@ -377,7 +398,7 @@ int KoPADocument::takePage( KoPAPageBase *page )
 {
     Q_ASSERT( page );
 
-    QList<KoPAPageBase *>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? m_masterPages : m_pages;
+    QList<KoPAPageBase *>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? d->masterPages : d->pages;
 
     int index = pages.indexOf( page );
 
@@ -407,7 +428,7 @@ int KoPADocument::takePage( KoPAPageBase *page )
 
 QList<KoPAPageBase*> KoPADocument::pages() const
 {
-    return m_pages;
+    return d->pages;
 }
 
 KoPAPage * KoPADocument::newPage( KoPAMasterPage * masterPage )
@@ -418,6 +439,11 @@ KoPAPage * KoPADocument::newPage( KoPAMasterPage * masterPage )
 KoPAMasterPage * KoPADocument::newMasterPage()
 {
     return new KoPAMasterPage();
+}
+
+/// return the inlineTextObjectManager for this document.
+KoInlineTextObjectManager *KoPADocument::inlineTextObjectManager() const {
+    return d->inlineTextObjectManager;
 }
 
 

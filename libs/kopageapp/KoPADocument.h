@@ -149,7 +149,7 @@ public:
     virtual KoPAMasterPage * newMasterPage();
 
     /// return the inlineTextObjectManager for this document.
-    KoInlineTextObjectManager *inlineTextObjectManager() const { return m_inlineTextObjectManager; }
+    KoInlineTextObjectManager *inlineTextObjectManager() const;
 
 protected:
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
@@ -190,9 +190,8 @@ protected:
     void setActionEnabled( int actions, bool enable );
 
 private:
-    QList<KoPAPageBase*> m_pages;
-    QList<KoPAPageBase*> m_masterPages;
-    KoInlineTextObjectManager *m_inlineTextObjectManager;
+    class Private;
+    Private * const d;
 };
 
 #endif /* KOPADOCUMENT_H */

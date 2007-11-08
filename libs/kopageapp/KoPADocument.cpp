@@ -72,6 +72,7 @@ KoPADocument::~KoPADocument()
 {
     qDeleteAll( d->pages );
     qDeleteAll( d->masterPages );
+    delete d;
 }
 
 void KoPADocument::paintContent( QPainter &painter, const QRect &rect)

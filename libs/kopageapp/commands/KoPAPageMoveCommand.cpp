@@ -26,7 +26,7 @@
 
 KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, QUndoCommand *parent )
 : QUndoCommand( parent )
-, m_document( document )    
+, m_document( document )
 , m_page( page )
 , m_after( after )
 , m_index( -1 )

@@ -26,9 +26,9 @@
 
 KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBase *page, QUndoCommand *parent )
 : QUndoCommand( parent )
-, m_document( document )    
+, m_document( document )
 , m_page( page )
-, m_index( -1 )                
+, m_index( -1 )
 , m_deletePage( false )
 {
     Q_ASSERT( document );

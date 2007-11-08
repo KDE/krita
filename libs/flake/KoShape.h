@@ -730,7 +730,7 @@ protected:
     void removeConnection(KoShapeConnection *connection);
 
     /// Removes connection point with given index
-    void removeConnectionPoint( uint index );
+    void removeConnectionPoint( int index );
 
 private:
     friend class KoShapeManager;

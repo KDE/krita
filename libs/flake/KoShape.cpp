@@ -600,7 +600,7 @@ QList<KoShapeConnection*> KoShape::connections() const {
     return d->connections;
 }
 
-void KoShape::removeConnectionPoint( uint index )
+void KoShape::removeConnectionPoint( int index )
 {
     if( index < d->connectors.count() )
         d->connectors.remove( index );

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -56,15 +57,13 @@ KoDockWidgetTitleBarButton::KoDockWidgetTitleBarButton(KoDockWidgetTitleBar *tit
 QSize KoDockWidgetTitleBarButton::sizeHint() const
 {
     ensurePolished();
-    
-    int size = 2*style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, 0, this);
-    if (!icon().isNull()) {
-        int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
-        const QPixmap pm = icon().pixmap(iconSize);
-        size += qMax(pm.width(), pm.height());
-    }
-    
-    return QSize(size, size);
+
+    const int margin = style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, 0, this);
+    if (icon().isNull())
+        return QSize(margin, margin);
+    int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
+    const QPixmap pm = icon().pixmap(iconSize);
+    return QSize(pm.width() + margin, pm.height() + margin);
 }
 
 // redraw the button when the mouse enters or leaves it
@@ -252,6 +251,8 @@ void KoDockWidgetTitleBar::Private::toggleFloating()
 void KoDockWidgetTitleBar::Private::toggleCollapsed()
 {
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
+    if (q == 0) // there does not *have* to be anything on the dockwidget.
+        return;
     q->widget()->setVisible(!q->widget()->isVisible());
     collapseButton->setIcon(q->widget()->isVisible() ? openIcon : closeIcon);
 }

@@ -34,10 +34,12 @@
  *  KoShape::setUserData(). This makes it possible to store additional data per
  *  shape in a way that allows applications to not know the implementation of a
  *  specific KoShape extending class.
+ *
  *  Each subclass should provide a reimplementation of the destructor to ensure that
  *  any private data is automatically cleaned up when user data objects are deleted.
+ *
  *  Please note that this object is a QObject to allow a
- *  qobject_cast<MyData*> (shape->userData()) to work which is useful in an environment
+ *  <code>qobject_cast<MyData*> (shape->userData())</code> to work which is useful in an environment
  *  where classes from plugins may not be castable using a static_cast or a dynamic_cast
  */
 class FLAKE_EXPORT KoShapeUserData : public QObject {

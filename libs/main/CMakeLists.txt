@@ -3,7 +3,7 @@
 add_subdirectory( tests )
 add_subdirectory( threadAction/tests )
 
-include_directories( ${KOSTORE_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
+include_directories( ${KOODF_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 
 ########### next target ###############
 

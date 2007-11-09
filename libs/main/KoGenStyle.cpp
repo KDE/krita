@@ -23,7 +23,6 @@
 
 #include <float.h>
 
-#include <Q3ValueList>
 #include <kdebug.h>
 
 // Returns -1, 0 (equal) or 1

@@ -519,8 +519,9 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
         updateUnscaledCache( alignedImageRect );
     }
 
-    kDebug() << "alignedImageRect = " << alignedImageRect << "drawRect = " << drawRect << " rc = " << rc;
+    kDebug() << "alignedImageRect = " << alignedImageRect << "drawRect = " << drawRect << " rc = " << rc << " dstSize = " << dstSize;
     
+    QPointF rcTopLeftUnscaled( rc.topLeft().x() / scaleX, rc.topLeft().y() / scaleY );
     // And now for deciding what to do and when -- the complicated bit
     if ( scaleX > 1.0 - EPSILON && scaleY > 1.0 - EPSILON ) {
 
@@ -528,7 +529,6 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
         // result, according to pippin. The default blitz filter is
         // called "blackman"
         
-        QPointF rcTopLeftUnscaled( rc.topLeft().x() / scaleX, rc.topLeft().y() /scaleY  );
         if ( m_d->smoothBetween100And200Percent && scaleX < 2.0 - EPSILON && scaleY < 2.0 - EPSILON  ) {
             QImage img;
             if ( !m_d->cacheKisImageAsQImage ) {
@@ -575,10 +575,9 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
 
         // Short circuit if we're in the deferred smoothing stage.
         if ( isDeferredAction ) {
-            gc.drawImage( rc.topLeft(), Blitz::smoothScale( croppedImage, dstSize ) );
+            gc.drawImage( rcTopLeftUnscaled, Blitz::smoothScale( croppedImage, dstSize ) );
             return;
         }
-
         // Use nearest neighbour interpolation from the raw KisImage
         if ( m_d->useNearestNeighbour || m_d->useDeferredSmoothing ) {
             if ( m_d->useDeferredSmoothing ) {
@@ -588,8 +587,8 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
                 m_d->rectsToSmooth += rc;
                 m_d->smoothingTimer.start(50);
             }
-            QImage tmpImage = m_d->image->convertToQImage( alignedImageRect, scaleX, scaleY, m_d->monitorProfile, m_d->exposure );
-            gc.drawImage( rc.topLeft(), tmpImage );
+            QImage tmpImage = m_d->image->convertToQImage( drawRect, 1.0 / scaleX, 1.0 / scaleY, m_d->monitorProfile, m_d->exposure );
+            gc.drawImage( rcTopLeftUnscaled, tmpImage );
         }
         else {
             // If we don't cache the image as an unscaled QImage, get
@@ -599,13 +598,13 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
             }
 
             if ( m_d->useQtScaling ) {
-                gc.drawImage( rc.topLeft(), croppedImage.scaled( dstSize, Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+                gc.drawImage( rc.topLeft(), croppedImage.scaled( rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
             }
             else if ( m_d->useSampling ) {
-                gc.drawImage( rc.topLeft(), sampleImage(croppedImage, dstSize.width(), dstSize.height(), drawRect) );
+                gc.drawImage( rc.topLeft(), sampleImage(croppedImage, rc.size().width(), rc.size().height(), drawRect) );
             }
             else { // Smooth scaling using blitz
-                gc.drawImage( rc.topLeft(), Blitz::smoothScale( croppedImage, dstSize ) );
+                gc.drawImage( rc.topLeft(), Blitz::smoothScale( croppedImage, rc.size() ) );
             }
         }
     }

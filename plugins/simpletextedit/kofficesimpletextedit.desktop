@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Simple Text Edit
+Comment=Simpler Text Edit docker
+ServiceTypes=KOffice/Dock
+Type=Service
+X-KDE-Library=kofficesimpletextedit
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

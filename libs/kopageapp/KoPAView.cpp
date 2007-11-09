@@ -24,6 +24,8 @@
 #include <QToolBar>
 #include <QScrollBar>
 #include <QTimer>
+#include <QApplication>
+#include <QClipboard>
 
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
@@ -40,15 +42,19 @@
 #include <KoToolDocker.h>
 #include <KoShapeLayer.h>
 #include <KoRulerController.h>
+#include <KoDrag.h>
 
 #include "KoPACanvas.h"
 #include "KoPADocument.h"
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"
 #include "KoPAViewModeNormal.h"
+#include "KoPAOdfPageSaveHelper.h"
+#include "KoPAPastePage.h"
 #include "commands/KoPAPageInsertCommand.h"
 #include "commands/KoPAPageDeleteCommand.h"
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kicon.h>
 #include <ktoggleaction.h>
@@ -155,6 +161,10 @@ void KoPAView::initGUI()
 
 void KoPAView::initActions()
 {
+    actionCollection()->addAction( KStandardAction::Cut, "edit_cut", this, SLOT( editCut() ) );
+    actionCollection()->addAction( KStandardAction::Copy, "edit_copy", this, SLOT( editCopy() ) );
+    actionCollection()->addAction( KStandardAction::Paste, "edit_paste", this, SLOT( editPaste() ) );
+
     m_actionViewShowGrid  = new KToggleAction(i18n("Show &Grid"), this);
     actionCollection()->addAction("view_grid", m_actionViewShowGrid );
 
@@ -196,6 +206,34 @@ void KoPAView::viewSnapToGrid()
 void KoPAView::viewGrid()
 {
 
+}
+
+void KoPAView::editCut()
+{
+}
+
+void KoPAView::editCopy()
+{
+    QList<KoPAPageBase *> pages;
+    pages.append( m_activePage );
+    KoPAOdfPageSaveHelper saveHelper( m_doc, pages );
+    KoDrag drag;
+    // TODO use the correct type
+    drag.setOdf( "application/vnd.oasis.opendocument.presentation", saveHelper );
+    //drag.setData( "text/plain", "Test" );
+    drag.addToClipboard();
+}
+
+void KoPAView::editPaste()
+{
+    const QMimeData * data = QApplication::clipboard()->mimeData();
+
+    // TODO also test for ....graphics
+    const char * mimeType = "application/vnd.oasis.opendocument.presentation";
+    if ( data->hasFormat( mimeType ) ) {
+        KoPAPastePage paste( m_doc, m_activePage );
+        paste.paste( mimeType, data );
+    }
 }
 
 void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, double zoom )

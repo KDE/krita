@@ -122,6 +122,10 @@ protected slots:
     void viewGrid();
     void slotZoomChanged( KoZoomMode::Mode mode, double zoom );
 
+    void editCut();
+    void editCopy();
+    void editPaste();
+
     /// Change the current view mode to work on master pages
     void setMasterMode( bool master );
 

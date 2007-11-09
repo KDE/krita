@@ -55,7 +55,7 @@ KoShape* KoConnectionShapeFactory::createShape( const KoProperties* params ) con
 
 bool KoConnectionShapeFactory::supports(const KoXmlElement & e) const
 {
-    return ( e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw );
+    return ( e.localName() == "connector" && e.namespaceURI() == KoXmlNS::draw );
 }
 
 QList<KoShapeConfigWidgetBase*> KoConnectionShapeFactory::createShapeOptionPanels()

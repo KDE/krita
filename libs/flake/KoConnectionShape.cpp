@@ -24,7 +24,9 @@
 #include <KoViewConverter.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
 
@@ -38,7 +40,7 @@ struct KoConnectionShape::Private
 {
     Private()
     : shape1(0), shape2(0), connectionPointIndex1(-1), connectionPointIndex2(-1)
-    , connectionType(Standard)
+    , connectionType(Standard), forceUpdate(false)
     {}
     KoSubpath points;
     KoShape * shape1;
@@ -46,6 +48,7 @@ struct KoConnectionShape::Private
     int connectionPointIndex1;
     int connectionPointIndex2;
     Type connectionType;
+    bool forceUpdate;
 };
 
 
@@ -67,7 +70,7 @@ KoConnectionShape::~KoConnectionShape()
     delete d;
 }
 
-void KoConnectionShape::paint( QPainter& painter, const KoViewConverter& converter ) {
+void KoConnectionShape::paint( QPainter&, const KoViewConverter& ) {
     // TODO find a better place to update the connections (maybe inside the shape manager?)
     if( isParametricShape() )
         updateConnections();
@@ -79,12 +82,54 @@ void KoConnectionShape::saveOdf( KoShapeSavingContext & context ) const
 
 bool KoConnectionShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
-    return false;
+    loadOdfAttributes( element, context, OdfMandatories );
+
+    QString type = element.attributeNS( KoXmlNS::draw, "type", "standard" );
+    if( type == "lines" )
+        d->connectionType = Lines;
+    else if( type == "line" )
+        d->connectionType = Straight;
+    else if( type == "curve" )
+        d->connectionType = Curve;
+    else
+        d->connectionType = Standard;
+
+    if( element.hasAttributeNS( KoXmlNS::draw, "start-shape" ) )
+    {
+        QString shapeId1 = element.attributeNS( KoXmlNS::draw, "start-shape", "" );
+        d->shape1 = context.shapeById( shapeId1 );
+        d->connectionPointIndex1 = element.attributeNS( KoXmlNS::draw, "start-glue-point", "" ).toInt();
+    }
+    else
+    {
+        m_handles[0].setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x1", QString() ) ) );
+        m_handles[0].setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y1", QString() ) ) );
+    }
+
+    if( element.hasAttributeNS( KoXmlNS::draw, "end-shape" ) )
+    {
+        QString shapeId2 = element.attributeNS( KoXmlNS::draw, "end-shape", "" );
+        d->shape2 = context.shapeById( shapeId2 );
+        d->connectionPointIndex2 = element.attributeNS( KoXmlNS::draw, "end-glue-point", "" ).toInt();
+    }
+    else
+    {
+        m_handles[1].setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x2", QString() ) ) );
+        m_handles[1].setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y2", QString() ) ) );
+    }
+
+    QString skew = element.attributeNS( KoXmlNS::draw, "line-skew", "" );
+    QStringList skewValues = skew.simplified().split( ' ', QString::SkipEmptyParts );
+    // TODO apply skew values once we support them
+
+    updateConnections();
+
+    return true;
 }
 
 void KoConnectionShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
 {
-    if ( handleId > m_handles.size() ) 
+    if ( handleId > m_handles.size() )
         return;
 
     m_handles[handleId] = point;
@@ -219,6 +264,7 @@ KoConnection KoConnectionShape::connection2() const
 void KoConnectionShape::updateConnections()
 {
     bool updateHandles = false;
+
     if( handleConnected( 0 ) )
     {
         QList<QPointF> connectionPoints = d->shape1->connectionPoints();
@@ -247,11 +293,12 @@ void KoConnectionShape::updateConnections()
             }
         }
     }
-    if( updateHandles )
+    if( updateHandles || d->forceUpdate )
     {
         update(); // ugly, for repainting the connection we just changed
         updatePath( QSizeF() );
         update(); // ugly, for repainting the connection we just changed
+        d->forceUpdate = false;
     }
 }
 
@@ -281,7 +328,8 @@ QPointF KoConnectionShape::escapeDirection( int handleId ) const
     QPointF direction;
     if( handleConnected( handleId ) )
     {
-        QPointF handlePoint = absoluteTransformation(0).map( m_handles[handleId] );
+        QMatrix absoluteMatrix = absoluteTransformation(0);
+        QPointF handlePoint = absoluteMatrix.map( m_handles[handleId] );
         QPointF centerPoint;
         if( handleId == 0 )
             centerPoint = d->shape1->absolutePosition( KoFlake::CenteredPositon );
@@ -300,7 +348,13 @@ QPointF KoConnectionShape::escapeDirection( int handleId ) const
             direction = QPointF( 0.0, -1.0 );
         else
             direction = QPointF( 1.0, 0.0 );
+
+        // transform escape direction by using our own transformation matrix
+        QMatrix invMatrix = absoluteMatrix.inverted();
+        direction = invMatrix.map( direction ) - invMatrix.map( QPointF() );
+        direction /= sqrt( direction.x()*direction.x() + direction.y()*direction.y() );
     }
+
     return direction;
 }
 
@@ -359,4 +413,22 @@ QPointF KoConnectionShape::perpendicularDirection( const QPointF &p1, const QPoi
         perpendicular *= -1.0;
 
     return perpendicular;
+}
+
+void KoConnectionShape::shapeChanged(ChangeType type)
+{
+    if( ! isParametricShape() )
+        return;
+
+    switch( type )
+    {
+        case RotationChanged:
+        case ShearChanged:
+        case ScaleChanged:
+        case GenericMatrixChange:
+            d->forceUpdate = true;
+        break;
+        default:
+            return;
+    }
 }

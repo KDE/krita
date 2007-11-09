@@ -85,10 +85,11 @@ protected:
     /// reimplemented
     void updatePath( const QSizeF &size );
 
+    /// reimplemented
+    virtual void shapeChanged(ChangeType type);
+
     /// Returns if given handle is connected to a shape
     bool handleConnected( int handleId ) const;
-
-    enum Quadrant { None, Left, Bottom, Right, Top };
 
     /// Returns escape direction of given handle
     QPointF escapeDirection( int handleId ) const;

@@ -22,7 +22,7 @@
 
 #include <qdom.h>
 
-#include <komain_export.h>
+#include <koodf_export.h>
 #include <KoXmlReader.h>
 
 /**
@@ -61,7 +61,7 @@ namespace KoDom {
      *
      * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
      */
-    KOMAIN_EXPORT KoXmlElement namedItemNS( const KoXmlNode& node, const char* nsURI, const char* localName );
+    KOODF_EXPORT KoXmlElement namedItemNS( const KoXmlNode& node, const char* nsURI, const char* localName );
 
 }
 #if 0

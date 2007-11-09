@@ -23,8 +23,6 @@
 #include <koodf_export.h>
 /**
  * Repository of XML namespaces used for OASIS documents.
- * Note: if we have code which needs often those as QStrings, then maybe
- * we need static const QString& versions of them too. Needs an init() though.
  */
 class KOODF_EXPORT KoXmlNS {
 public:
@@ -51,6 +49,8 @@ public:
     static const char* const VL;
 
     static const char* const koffice;
+private:
+    KoXmlNS(); // don't create an instance of me :)
 };
 
 #endif /* KOXMLNS_H */

@@ -23,7 +23,7 @@
 #include <QString>
 #include <QStringList>
 #include <math.h> // for floor
-#include <komain_export.h>
+#include <koodf_export.h>
 
 class KoXmlWriter;
 
@@ -53,7 +53,7 @@ class KoXmlWriter;
  * When displaying a value to the user, the value is converted to the user's unit
  * of choice, and rounded to a reasonable precision to avoid 0.999999
  */
-class KOMAIN_EXPORT KoUnit
+class KOODF_EXPORT KoUnit
 {
 public:
     /** Length units supported by KOffice. */

@@ -27,7 +27,7 @@
 
 #include <kdemacros.h>
 
-#include "komain_export.h"
+#include "koodf_export.h"
 #include <KoXmlReader.h>
 
 /**
@@ -56,7 +56,7 @@
  *  or KoOasisLoadingContext::addStyles to automatically push a style and all its
  *  parent styles onto the stack.
  */
-class KOMAIN_EXPORT  KoStyleStack
+class KOODF_EXPORT KoStyleStack
 {
 public:
     /**

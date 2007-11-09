@@ -9,7 +9,10 @@ include_directories( ${KOSTORE_INCLUDES} )
 #endif( QCA2_FOUND )
 
 set(koodf_LIB_SRCS
-   KoXmlNS.cpp
+    KoXmlNS.cpp
+    KoDom.cpp
+    KoUnit.cpp
+    KoStyleStack.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
@@ -22,5 +25,8 @@ install(TARGETS koodf DESTINATION ${LIB_INSTALL_DIR} )
 
 install( FILES
     KoXmlNS.h
+    KoDom.h
+    KoUnit.h
+    KoStyleStack.h
 DESTINATION ${INCLUDE_INSTALL_DIR})
 

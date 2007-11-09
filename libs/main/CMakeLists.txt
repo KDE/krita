@@ -17,7 +17,6 @@ set(komain_LIB_SRCS
    KoDocumentAdaptor.cpp
    KoProperties.cpp
    KoGlobal.cpp
-   KoUnit.cpp
    KoFilterManager.cpp
    KoMainWindow.cpp
    KoApplication.cpp
@@ -44,14 +43,12 @@ set(komain_LIB_SRCS
    KoChild.cpp
    kofficeversion.cc
    KoOasisStyles.cpp
-   KoStyleStack.cpp
    KoGenStyles.cpp
    KoGenStyle.cpp
    KoOasisSettings.cpp
    KoPageFormat.cpp
    KoPageLayout.cpp
    KoFileDialog.cpp
-   KoDom.cpp
    KoVersionDialog.cpp
    KoOdfReadStore.cpp
    KoOdfWriteStore.cpp
@@ -122,7 +119,6 @@ install( FILES
     KoFilter.h
     KoFilterChain.h
     KoGlobal.h
-    KoUnit.h
     KoID.h
     KoGenericRegistry.h
     KoDocument.h 
@@ -144,12 +140,10 @@ install( FILES
     KoPictureCollection.h 
     kofficeversion.h 
     KoOasisStyles.h 
-    KoStyleStack.h 
     KoGenStyles.h 
     KoOasisSettings.h 
     KoPageFormat.h 
     KoPageLayout.h 
-    KoDom.h 
     KoVersionDialog.h 
     kkbdaccessextensions.h 
     KoOpenPane.h 

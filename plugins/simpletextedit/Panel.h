@@ -41,10 +41,10 @@ private slots:
     void resourceChanged (int key, const QVariant &value);
 
 private:
-    void loadIcons();
+    void applyAction(QAction *action, QToolButton *button, const QString &iconName);
 
     KoCanvasBase *m_canvas;
-    QHash<QString, QAction *> m_actions;
+    QObject *m_parent;
 
     Ui::Panel widget;
 };

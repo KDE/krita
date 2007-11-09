@@ -32,7 +32,8 @@
 
 Panel::Panel(QWidget *parent)
     :QDockWidget(i18n("Format"), parent),
-    m_canvas(0)
+    m_canvas(0),
+    m_parent(0)
 {
     QWidget *mainWidget = new QWidget(this);
     widget.setupUi(mainWidget);
@@ -47,8 +48,6 @@ Panel::Panel(QWidget *parent)
     stylesGroup->addButton(widget.style1);
     stylesGroup->addButton(widget.style2);
     stylesGroup->addButton(widget.style3);
-
-    loadIcons();
 }
 
 Panel::~Panel()
@@ -67,37 +66,52 @@ void Panel::setCanvas (KoCanvasBase *canvas)
 void Panel::toolChangeDetected(const QString &toolId) {
     if (toolId != "TextToolFactory_ID")
         return;
+    delete m_parent;
+    m_parent = new QObject(this);
     // current tool is the text tool
-    m_actions = m_canvas->toolProxy()->actions();
-    widget.bold->setDefaultAction(m_actions["format_bold"]);
-    widget.italic->setDefaultAction(m_actions["format_italic"]);
-    widget.underline->setDefaultAction(m_actions["format_underline"]);
-    widget.center->setDefaultAction(m_actions["format_aligncenter"]);
+    QHash<QString, QAction *> actions = m_canvas->toolProxy()->actions();
+    applyAction(actions.value("format_bold"), widget.bold, "bold");
+    applyAction(actions.value("format_italic"), widget.italic, "italic");
+    applyAction(actions.value("format_underline"), widget.underline, "underline");
+    applyAction(actions.value("format_aligncenter"), widget.center, "middle");
     if(QApplication::isRightToLeft()) {
-        widget.left->setDefaultAction(m_actions["format_alignright"]);
-        widget.right->setDefaultAction(m_actions["format_alignleft"]);
+        applyAction(actions.value("format_alignright"), widget.left, "left");
+        applyAction(actions.value("format_alignleft"), widget.right, "right");
     }
     else {
-        widget.left->setDefaultAction(m_actions["format_alignleft"]);
-        widget.right->setDefaultAction(m_actions["format_alignright"]);
+        applyAction(actions.value("format_alignright"), widget.right, "left");
+        applyAction(actions.value("format_alignleft"), widget.left, "right");
     }
-
-    loadIcons();
 }
-
 
 void Panel::resourceChanged (int key, const QVariant &value) {
     if (key == KoText::CurrentTextDocument) {
-        kDebug() << "new document...";
+        //kDebug() << "new document...";
     }
 }
 
-void Panel::loadIcons() {
-    KIcon bold("koffice_simple_format_bold_active");
-    //bold.actualSize(QSize(50,50));
-    widget.bold->setMinimumSize(QSize(48, 48));
-    widget.bold->setIcon(bold);
-    widget.italic->setIcon(bold);
+void Panel::applyAction(QAction *action, QToolButton *button, const QString &iconName) {
+    Q_ASSERT(button);
+    button->setEnabled(action);
+    button->setMinimumSize(QSize(48, 48));
+    button->setIconSize(QSize(48, 48));
+    KIcon icon("koffice_simple_format_"+ iconName + (action ? "_active" : " _inactive"));
+    if(action == 0) {
+        button->setIcon(icon);
+        return;
+    }
+
+    QAction *newAction = new QAction(m_parent);
+    newAction->setToolTip(action->toolTip());
+    newAction->setIcon(icon);
+    newAction->setWhatsThis(action->whatsThis());
+    newAction->setCheckable(action->isCheckable());
+    button->setDefaultAction(newAction);
+    connect(newAction, SIGNAL(triggered(bool)), action, SLOT(trigger()));
 }
+
+/* nice to haves
+   Make the icon size 'configurable' using a context menu.
+ */
 
 #include "Panel.moc"

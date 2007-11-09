@@ -24,6 +24,7 @@
 KoPASavingContext::KoPASavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int page, SavingMode savingMode )
 : KoShapeSavingContext( xmlWriter, mainStyles, savingMode )
 , m_page( page )
+, m_masterPageIndex( 0 )
 {
 }
 
@@ -46,6 +47,14 @@ QString KoPASavingContext::masterPageName( const KoPAMasterPage * masterPage )
     // this should not happen
     Q_ASSERT( it != m_masterPageNames.constEnd() );
     return QString();
+}
+
+QString KoPASavingContext::masterPageElementName()
+{
+    if ( ! isSet( KoShapeSavingContext::UniqueMasterPages ) ) {
+        ++m_masterPageIndex;
+    }
+    return QString( "content_%1" ).arg( m_masterPageIndex );
 }
 
 void KoPASavingContext::incrementPage()

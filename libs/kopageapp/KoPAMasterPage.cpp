@@ -66,7 +66,7 @@ void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
     paContext.setXmlWriter( savedWriter );
 
     QString contentElement = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-    pageMaster.addChildElement( "content", contentElement );
+    pageMaster.addChildElement( paContext.masterPageElementName(), contentElement );
     paContext.addMasterPage( this, paContext.mainStyles().lookup( pageMaster, "Default" ) );
 }
 

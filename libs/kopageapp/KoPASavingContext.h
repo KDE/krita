@@ -67,6 +67,20 @@ public:
     QString masterPageName( const KoPAMasterPage * masterPage );
 
     /**
+     * @brief Get the element name use in saving
+     *
+     * The ement name is used for saving the content of the master page style.
+     * This makes it possible to save 2 master pages with the same content when
+     * the element name is different.
+     *
+     * If KoShapeSavingContext::UniqueMasterPages is set duplicate master pages
+     * will be merged into one.
+     *
+     * @return element name
+     */
+    QString masterPageElementName();
+
+    /**
      * @brief Increment the page
      */
     void incrementPage();
@@ -81,6 +95,7 @@ public:
 private:
     QMap<const KoPAMasterPage *, QString> m_masterPageNames;
     int m_page;
+    int m_masterPageIndex;
 };
 
 #endif /* KOPASAVINGCONTEXT_H */

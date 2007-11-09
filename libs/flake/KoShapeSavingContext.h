@@ -62,7 +62,11 @@ public:
          */
         AutoStyleInStyleXml = 4,
         FrameOpened = 8,     ///< If a 'draw:frame' tag has been openened shape properties should be saved differently
-        MainTextFrame = 16
+        MainTextFrame = 16,
+        /**
+         * If set duplicate master pages will be merged to one
+         */
+        UniqueMasterPages = 32
     };
     Q_DECLARE_FLAGS( KoShapeSavingOptions, ShapeSavingOption )
 

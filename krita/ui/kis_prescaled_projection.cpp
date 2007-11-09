@@ -211,7 +211,8 @@ void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
 {
     kDebug() << "Setting image size from " << m_d->imageSize << " to " << w << ", " << h;
     // XXX: Make the limit of 50 megs configurable
-    if ( w * h * 4 > 50 * 1024 * 1024 ) {
+    if ( ( w * h * 4 ) > ( 50 * 1024 * 1024 ) )
+    {
         m_d->prescaledQImage = QImage();
         m_d->prescaledQImage.fill( QColor( 255, 0, 0, 128 ).rgba() );
         m_d->cacheKisImageAsQImage = false;
@@ -510,42 +511,71 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
 
     // Don't go outside the image
     QRect alignedImageRect = imageRect.intersected( m_d->image->bounds() ).toAlignedRect();
+    alignedImageRect.setBottom( alignedImageRect.bottom() + 1); // FIXME <= it's a work around in a Qt bug (bouuuh) (reported to them see http://trolltech.com/developer/task-tracker/index_html?method=entry&id=187008 ) the returned .toAlignedRect() is one pixel too small
+    alignedImageRect.setRight( alignedImageRect.right() + 1);
 
     // the size of the rect after scaling
     QSize scaledSize = QSize( ( int )( alignedImageRect.width() * scaleX ), ( int )( alignedImageRect.height() * scaleY ));
 
+    // Compute the corresponding area on the canvas
+    QRectF rcFromAligned;
+    rcFromAligned.setCoords( alignedImageRect.left(), alignedImageRect.top(),
+                         alignedImageRect.right(), alignedImageRect.bottom() );
+    rcFromAligned.setCoords( alignedImageRect.left() / xRes, alignedImageRect.top() / yRes,
+                         (alignedImageRect.right() + 1.0 ) / xRes, (alignedImageRect.bottom() + 1.0 ) / yRes );
+    m_d->viewConverter->documentToViewY( rcFromAligned.height() );
+    rcFromAligned = m_d->viewConverter->documentToView( rcFromAligned ).translated( -m_d->documentOffset) ;
+    
     // Apparently we have never before tried to draw the image
     if ( m_d->cacheKisImageAsQImage && m_d->unscaledCache.isNull() ) {
         updateUnscaledCache( alignedImageRect );
     }
-
-    kDebug() << "alignedImageRect = " << alignedImageRect << "drawRect = " << drawRect << " rc = " << rc << " dstSize = " << dstSize;
     
-    QPointF rcTopLeftUnscaled( rc.topLeft().x() / scaleX, rc.topLeft().y() / scaleY );
+#if 0
+    kDebug() << "#####################################";
+    kDebug() << " xRed = " << xRes << " yRes = " << yRes;
+    kDebug() << " m_d->viewConverter->documentToView( imageRect ) = " << m_d->viewConverter->documentToView( imageRect );
+    kDebug() << " rc.translated( m_d->documentOffset ) = " << rc.translated( m_d->documentOffset );
+    kDebug() << " m_d->viewConverter->documentToView( m_d->viewConverter->viewToDocument( rc ) ) = " << m_d->viewConverter->documentToView( m_d->viewConverter->viewToDocument( rc ) );
+    kDebug() << " imageRect = " << imageRect << " " << imageRect.bottomRight() << " " << imageRect.right() << " , " << imageRect.bottom();
+    kDebug() << " imageRect.toRect() = " << imageRect.toRect();
+    kDebug() << " alignedImageRect = " << alignedImageRect << " " << alignedImageRect.bottomRight();
+    kDebug() << " scaledSize = " << scaledSize;
+    kDebug() << " imageRect.intersected( m_d->image->bounds() ) = " << imageRect.intersected( m_d->image->bounds() );
+    kDebug() << " m_d->image->bounds() = " << m_d->image->bounds();
+    kDebug() << " rcFromAligned = " << rcFromAligned << " " << rcFromAligned.bottomRight();
+    kDebug() << " drawRect = " << drawRect;
+    kDebug() << " rc = " << rc;
+    kDebug() << " dstSize = " << dstSize;
+    kDebug() << "#####################################";
+#endif
+    
+    QPointF rcTopLeftUnscaled( rcFromAligned.topLeft().x() / scaleX, rcFromAligned.topLeft().y() / scaleY );
     // And now for deciding what to do and when -- the complicated bit
     if ( scaleX > 1.0 - EPSILON && scaleY > 1.0 - EPSILON ) {
 
         // Between 1.0 and 2.0, a box filter often gives a much nicer
         // result, according to pippin. The default blitz filter is
         // called "blackman"
-        
         if ( m_d->smoothBetween100And200Percent && scaleX < 2.0 - EPSILON && scaleY < 2.0 - EPSILON  ) {
+            kDebug() << "smoothBetween100And200Percent" << endl;
             QImage img;
             if ( !m_d->cacheKisImageAsQImage ) {
                 img = m_d->image->convertToQImage( drawRect, 1.0 / scaleX, 1.0 / scaleY, m_d->monitorProfile, m_d->exposure );
-                gc.drawImage( rc.topLeft(), img );
+                gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
+                gc.drawImage( rcFromAligned.topLeft(), img );
             }
             else {
                 img = m_d->unscaledCache.copy( alignedImageRect );
                 gc.save();
                 gc.scale(scaleX, scaleY);
+                gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
                 gc.drawImage(rcTopLeftUnscaled, img);
                 gc.restore();
             }
         }
         else {
             QImage img;
-
             // Get the image directly from the KisImage
             if ( m_d->useNearestNeighbour || !m_d->cacheKisImageAsQImage ) {
                 img = m_d->image->convertToQImage( alignedImageRect, 1.0, 1.0, m_d->monitorProfile, m_d->exposure );
@@ -559,10 +589,12 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
             // gwenview, which got it from mosfet, who got it from
             // ImageMagick
             if ( m_d->useSampling ) {
-                gc.drawImage( rcTopLeftUnscaled, sampleImage(img, dstSize.width(), dstSize.height(), drawRect) );
+                kDebug() << "useSampling" << endl;
+                gc.drawImage( rcFromAligned.topLeft(), sampleImage(img, dstSize.width(), dstSize.height(), drawRect) );
             }
             else {
-            //    Else, let QPainter do the scaling, like we did in 1.6
+                // Else, let QPainter do the scaling, like we did in 1.6
+                kDebug() << "1.6 way" << endl;
                 gc.save();
                 gc.scale(scaleX, scaleY);
                 gc.drawImage( rcTopLeftUnscaled, img);
@@ -575,11 +607,13 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
 
         // Short circuit if we're in the deferred smoothing stage.
         if ( isDeferredAction ) {
+            kDebug() << " isDeferredAction ";
             gc.drawImage( rcTopLeftUnscaled, Blitz::smoothScale( croppedImage, dstSize ) );
             return;
         }
         // Use nearest neighbour interpolation from the raw KisImage
         if ( m_d->useNearestNeighbour || m_d->useDeferredSmoothing ) {
+            kDebug() << " useNearestNeighbour || m_d->useDeferredSmoothing";
             if ( m_d->useDeferredSmoothing ) {
                 // XXX: Start smoothing job. The job will be replaced
                 // by the next smoothing job if it is added before
@@ -594,18 +628,29 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
             // If we don't cache the image as an unscaled QImage, get
             // an unscaled QImage for this rect from KisImage.
             if ( !m_d->cacheKisImageAsQImage ) {
+                kDebug() << " !m_d->cacheKisImageAsQImage";
                 croppedImage = m_d->image->convertToQImage( alignedImageRect.x(), alignedImageRect.y(), alignedImageRect.width(), alignedImageRect.height(), m_d->monitorProfile, m_d->exposure );
             }
-
+            QSize s = rcFromAligned.size().toSize();
+            double scaleXbis = rcFromAligned.width() / s.width();
+            double scaleYbis = rcFromAligned.height() / s.height();
+            gc.save();
+            gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
+            gc.scale( scaleXbis, scaleYbis);
+            QPointF pt( rcFromAligned.topLeft().x() / scaleXbis, rcFromAligned.topLeft().y() / scaleYbis );
             if ( m_d->useQtScaling ) {
-                gc.drawImage( rc.topLeft(), croppedImage.scaled( rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+                kDebug() << " m_d->useQtScaling";
+                gc.drawImage( pt, croppedImage.scaled( s, Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
             }
             else if ( m_d->useSampling ) {
-                gc.drawImage( rc.topLeft(), sampleImage(croppedImage, rc.size().width(), rc.size().height(), drawRect) );
+                kDebug() << " m_d->useSampling";
+                gc.drawImage( pt, sampleImage(croppedImage, s.width(), s.height(), drawRect) );
             }
             else { // Smooth scaling using blitz
-                gc.drawImage( rc.topLeft(), Blitz::smoothScale( croppedImage, rc.size() ) );
+                kDebug() << " else";
+                gc.drawImage( pt, Blitz::smoothScale( croppedImage, s, Qt::IgnoreAspectRatio ) );
             }
+            gc.restore();
         }
     }
 }

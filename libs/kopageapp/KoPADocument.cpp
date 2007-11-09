@@ -427,9 +427,9 @@ int KoPADocument::takePage( KoPAPageBase *page )
     return index;
 }
 
-QList<KoPAPageBase*> KoPADocument::pages() const
+QList<KoPAPageBase*> KoPADocument::pages( bool masterPages ) const
 {
-    return d->pages;
+    return masterPages ? d->masterPages : d->pages;
 }
 
 KoPAPage * KoPADocument::newPage( KoPAMasterPage * masterPage )

@@ -128,7 +128,7 @@ public:
     void addShape( KoShape *shape );
     void removeShape( KoShape* shape );
 
-    QList<KoPAPageBase*> pages() const;
+    QList<KoPAPageBase*> pages( bool masterPages = false ) const;
 
     /**
      * Get a new page for inserting into the document

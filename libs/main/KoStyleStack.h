@@ -22,9 +22,8 @@
 #define KOSTYLESTACK_H
 
 
-#include <q3valuelist.h>
-#include <qdom.h>
-#include <q3valuestack.h>
+#include <QtCore/QList>
+#include <QtCore/QStack>
 
 #include <kdemacros.h>
 
@@ -154,13 +153,13 @@ private:
 
 private:
     /// For save/restore: stack of "marks". Each mark is an index in m_stack.
-    Q3ValueStack<int> m_marks;
+    QStack<int> m_marks;
 
     /**
      * We use QValueList instead of QValueStack because we need access to all styles
      * not only the top one.
      */
-    Q3ValueList<KoXmlElement> m_stack;
+    QList<KoXmlElement> m_stack;
 
     QByteArray m_propertiesTagName;
 

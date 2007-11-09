@@ -24,8 +24,6 @@
 #include "KoXmlNS.h"
 
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 //#define DEBUG_STYLESTACK
 
@@ -104,7 +102,7 @@ QString KoStyleStack::property( const char* nsURI, const char* name, const char*
         fullName += '-';
         fullName += detail;
     }
-    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
+    QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -125,11 +123,11 @@ bool KoStyleStack::hasProperty( const char* nsURI, const char* name, const char*
         fullName += '-';
         fullName += detail;
     }
-    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
+    QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
-        KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
+        const KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
         if ( properties.hasAttributeNS( nsURI, name ) ||
              ( detail && properties.hasAttributeNS( nsURI, fullName ) ) )
             return true;
@@ -143,7 +141,7 @@ double KoStyleStack::fontSize(const double defaultFontPointSize) const
 {
     const QString name = "font-size";
     double percent = 1;
-    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end(); // reverse iterator
+    QList<KoXmlElement>::ConstIterator it = m_stack.end(); // reverse iterator
 
     while ( it != m_stack.begin() )
     {
@@ -170,7 +168,7 @@ double KoStyleStack::fontSize(const double defaultFontPointSize) const
 
 bool KoStyleStack::hasChildNode( const char* nsURI, const char* localName ) const
 {
-    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
+    QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -184,7 +182,7 @@ bool KoStyleStack::hasChildNode( const char* nsURI, const char* localName ) cons
 
 KoXmlElement KoStyleStack::childNode( const char* nsURI, const char* localName) const
 {
-    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
+    QList<KoXmlElement>::ConstIterator it = m_stack.end();
 
     while ( it != m_stack.begin() )
     {
@@ -209,7 +207,7 @@ bool KoStyleStack::isUserStyle( const KoXmlElement& e, const QString& family ) c
 
 QString KoStyleStack::userStyleName( const QString& family ) const
 {
-    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
+    QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -223,7 +221,7 @@ QString KoStyleStack::userStyleName( const QString& family ) const
 
 QString KoStyleStack::userStyleDisplayName( const QString& family ) const
 {
-    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
+    QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;

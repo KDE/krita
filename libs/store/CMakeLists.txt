@@ -16,7 +16,6 @@ set(kstore_LIB_SRCS
    KoTarStore.cpp 
    KoDirectoryStore.cpp 
    KoZipStore.cpp 
-   KoStoreDrag.cpp 
    KoStoreBase.cpp 
    KoXmlReader.cpp
    KoXmlWriter.cpp
@@ -26,8 +25,7 @@ set(kstore_LIB_SRCS
 
 kde4_add_library(kstore SHARED ${kstore_LIB_SRCS})
 
-# needs qt3support for Q3StoredDrag
-target_link_libraries(kstore ${KDE4_KIO_LIBS} ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(kstore ${KDE4_KIO_LIBS})
 
 if( QCA2_FOUND )
 target_link_libraries(kstore ${QCA2_LIBRARIES})

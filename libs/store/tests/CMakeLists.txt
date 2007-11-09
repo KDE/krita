@@ -41,7 +41,7 @@ set(storedroptest_SRCS storedroptest.cpp )
 
 kde4_add_executable(storedroptest TEST ${storedroptest_SRCS})
 
-target_link_libraries(storedroptest  ${KDE4_KDECORE_LIBS} kstore )
+target_link_libraries(storedroptest  ${KDE4_KDECORE_LIBS} kstore ${QT_QT3SUPPORT_LIBRARY})
 
 ########### next target ###############
 

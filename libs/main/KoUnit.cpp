@@ -157,18 +157,23 @@ double KoUnit::parseValue( const QString& _value, double defaultVal )
     if( _value.isEmpty() )
         return defaultVal;
 
-    QString value(_value);
-
-    value.simplified();
+    QString value(_value.simplified());
     value.remove( ' ' );
 
-    int index = value.indexOf( QRegExp( "[a-z]+$" ) );
-    if ( index == -1 )
+    int firstLetter = -1;
+    for (int i = 0; i < value.length(); ++i ) {
+        if (value.at(i).isLetter()) {
+            firstLetter = i;
+            break;
+        }
+    }
+
+    if ( firstLetter == -1 )
         return value.toDouble();
 
-    QString unit = value.mid( index );
-    value.truncate ( index );
-    double val = value.toDouble();
+    const QString unit = value.mid( firstLetter );
+    value.truncate( firstLetter );
+    const double val = value.toDouble();
 
     if ( unit == "pt" )
         return val;

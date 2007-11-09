@@ -280,7 +280,8 @@ void KisPrescaledProjection::updateSettings()
                   << "\t useNearestNeighbour: " << m_d->useNearestNeighbour << "\n"
                   << "\t useQtScaling: " << m_d->useQtScaling << "\n"
                   << "\t useSampling: " << m_d->useSampling << "\n"
-                  << "\t smoothBetween100And200Percent: " << m_d->smoothBetween100And200Percent;
+                  << "\t smoothBetween100And200Percent: " << m_d->smoothBetween100And200Percent << "\n"
+                  << "\t cacheKisImageAsQImage: " << m_d->cacheKisImageAsQImage ;
 }
 
 void KisPrescaledProjection::documentOffsetMoved( const QPoint &documentOffset )
@@ -518,23 +519,27 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
         updateUnscaledCache( alignedImageRect );
     }
 
+    kDebug() << "alignedImageRect = " << alignedImageRect << "drawRect = " << drawRect << " rc = " << rc;
+    
     // And now for deciding what to do and when -- the complicated bit
     if ( scaleX > 1.0 - EPSILON && scaleY > 1.0 - EPSILON ) {
 
         // Between 1.0 and 2.0, a box filter often gives a much nicer
         // result, according to pippin. The default blitz filter is
         // called "blackman"
+        
+        QPointF rcTopLeftUnscaled( rc.topLeft().x() / scaleX, rc.topLeft().y() /scaleY  );
         if ( m_d->smoothBetween100And200Percent && scaleX < 2.0 - EPSILON && scaleY < 2.0 - EPSILON  ) {
             QImage img;
             if ( !m_d->cacheKisImageAsQImage ) {
-                img = m_d->image->convertToQImage( drawRect, scaleX, scaleY, m_d->monitorProfile, m_d->exposure );
+                img = m_d->image->convertToQImage( drawRect, 1.0 / scaleX, 1.0 / scaleY, m_d->monitorProfile, m_d->exposure );
                 gc.drawImage( rc.topLeft(), img );
             }
             else {
-                img = m_d->unscaledCache.copy( drawRect );
+                img = m_d->unscaledCache.copy( alignedImageRect );
                 gc.save();
                 gc.scale(scaleX, scaleY);
-                gc.drawImage(rc.topLeft(), img);
+                gc.drawImage(rcTopLeftUnscaled, img);
                 gc.restore();
             }
         }
@@ -543,24 +548,24 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
 
             // Get the image directly from the KisImage
             if ( m_d->useNearestNeighbour || !m_d->cacheKisImageAsQImage ) {
-                img = m_d->image->convertToQImage( drawRect, 1.0, 1.0, m_d->monitorProfile, m_d->exposure );
+                img = m_d->image->convertToQImage( alignedImageRect, 1.0, 1.0, m_d->monitorProfile, m_d->exposure );
             }
             else {
                 // Crop the canvascache
-                img = m_d->unscaledCache.copy( drawRect );
+                img = m_d->unscaledCache.copy( alignedImageRect );
             }
 
             // If so desired, use the sampleImage originally taken from
             // gwenview, which got it from mosfet, who got it from
             // ImageMagick
             if ( m_d->useSampling ) {
-                gc.drawImage( rc.topLeft(), sampleImage(img, dstSize.width(), dstSize.height(), drawRect) );
+                gc.drawImage( rcTopLeftUnscaled, sampleImage(img, dstSize.width(), dstSize.height(), drawRect) );
             }
             else {
-                // Else, let QPainter do the scaling, like we did in 1.6
+            //    Else, let QPainter do the scaling, like we did in 1.6
                 gc.save();
                 gc.scale(scaleX, scaleY);
-                gc.drawImage(rc.topLeft(), img);
+                gc.drawImage( rcTopLeftUnscaled, img);
                 gc.restore();
             }
         }

@@ -1,4 +1,5 @@
 add_subdirectory( store )
+add_subdirectory( odf )
 add_subdirectory( main )
 add_subdirectory( guiutils )
 add_subdirectory( koproperty )

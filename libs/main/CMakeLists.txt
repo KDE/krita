@@ -51,7 +51,6 @@ set(komain_LIB_SRCS
    KoPageFormat.cpp
    KoPageLayout.cpp
    KoFileDialog.cpp
-   KoXmlNS.cpp
    KoDom.cpp
    KoVersionDialog.cpp
    KoOdfReadStore.cpp
@@ -93,26 +92,7 @@ kde4_add_ui_files( komain_LIB_SRCS
 
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
-# sebsauer, 2007-08-05:
-#
-# I keep to get
-#   ldd -r `which kword`
-#   undefined symbol: _ZNK11QPushButton15minimumSizeHintEv  (/home/kde4/kde4/lib/libkde3support.so.4)
-# if something like
-#   target_link_libraries(komain kstore ${KDE4_KPARTS_LIBS} ${KDE4_KABC_LIBS} ${KDE4_KDEPRINT_LIBS} kowmf ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBS})
-#   target_link_libraries(komain kstore ${KDE4_KABC_LIBS} ${KDE4_KDEPRINT_LIBS} kowmf ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBS})
-#   [...]
-# is used here.
-#
-# This may happen cause older cmake's like those shipped with Kubuntu feisty is seeking for libs
-# within /usr rather then the used install-prefix.
-#
-# To work around this just uncomment following target_link_libraries-line and disable the
-# other target_link_libraries-line.
-#
-#target_link_libraries(komain kstore ${KDE4_KPARTS_LIBS} ${KDE4_KABC_LIBS} ${KDE4_KDEPRINT_LIBS} kowmf ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBRARY})
-
-target_link_libraries(komain kstore ${KDE4_KPARTS_LIBS} ${KDE4_KABC_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBS})
+target_link_libraries(komain koodf kstore ${KDE4_KPARTS_LIBS} ${KDE4_KABC_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBS})
 
 set_target_properties(komain PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS komain DESTINATION ${LIB_INSTALL_DIR} )
@@ -169,7 +149,6 @@ install( FILES
     KoOasisSettings.h 
     KoPageFormat.h 
     KoPageLayout.h 
-    KoXmlNS.h 
     KoDom.h 
     KoVersionDialog.h 
     kkbdaccessextensions.h 

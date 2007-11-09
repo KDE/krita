@@ -20,13 +20,13 @@
 #ifndef KOXMLNS_H
 #define KOXMLNS_H
 
-#include <komain_export.h>
+#include <koodf_export.h>
 /**
  * Repository of XML namespaces used for OASIS documents.
  * Note: if we have code which needs often those as QStrings, then maybe
  * we need static const QString& versions of them too. Needs an init() though.
  */
-class KOMAIN_EXPORT KoXmlNS {
+class KOODF_EXPORT KoXmlNS {
 public:
     static const char* const office;
     static const char* const meta;

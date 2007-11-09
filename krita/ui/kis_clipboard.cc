@@ -19,6 +19,7 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QMimeData>
 #include <QObject>
 #include <QImage>
 #include <QMessageBox>
@@ -29,7 +30,6 @@
 #include "kdebug.h"
 
 #include "KoStore.h"
-#include "KoStoreDrag.h"
 #include <KoColorSpaceRegistry.h>
 #include <colorprofiles/KoIccColorProfile.h>
 

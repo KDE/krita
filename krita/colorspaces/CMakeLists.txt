@@ -8,4 +8,4 @@ add_subdirectory( gray_u16 )
 add_subdirectory( xyz_u16 )
 add_subdirectory( xyz_float_hdr )
 add_subdirectory( ycbcr )
-
+add_subdirectory( extensions )

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KOffice/ColorSpaceExtension
+Comment=A module implementing an extension to a colorspace of the Pigment Color Manipulation System
+[PropertyDef::X-Pigment-MinVersion]
+Type=int
+[PropertyDef::X-Flake-PluginVersion]
+Type=int

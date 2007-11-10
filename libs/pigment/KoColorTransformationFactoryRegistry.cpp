@@ -19,6 +19,8 @@
 
 #include "KoColorTransformationFactoryRegistry.h"
 
+#include "KoColorTransformationFactory.h"
+
 struct KoColorTransformationFactoryRegistry::Private
 {
     static KoColorTransformationFactoryRegistry* s_registry;
@@ -36,12 +38,14 @@ KoColorTransformationFactoryRegistry::~KoColorTransformationFactoryRegistry()
     delete d;
 }
 
-void KoColorTransformationFactoryRegistry::add(KoColorTransformationFactory* factory)
+
+#include <kdebug.h>
+void KoColorTransformationFactoryRegistry::addColorTransformationFactory(KoColorTransformationFactory* factory)
 {
     instance()->add(factory);
 }
 
- KoColorTransformationFactoryRegistry* KoColorTransformationFactoryRegistry::instance()
+KoColorTransformationFactoryRegistry* KoColorTransformationFactoryRegistry::instance()
 {
     if(Private::s_registry == 0)
     {

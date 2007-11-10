@@ -132,6 +132,13 @@ void KoColorSpaceRegistry::init()
     config.blacklist = "ColorSpacePluginsDisabled";
     config.group = "koffice";
     KoPluginLoader::instance()->load("KOffice/ColorSpace","[X-Pigment-MinVersion] <= 0", config);
+
+    KoPluginLoader::PluginsConfig configExtensions;
+    configExtensions.whiteList = "ColorSpaceExtensionsPlugins";
+    configExtensions.blacklist = "ColorSpaceExtensionsPluginsDisabled";
+    configExtensions.group = "koffice";
+    KoPluginLoader::instance()->load("KOffice/ColorSpaceExtension","[X-Pigment-MinVersion] <= 0", configExtensions);
+
 }
 
 KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private())

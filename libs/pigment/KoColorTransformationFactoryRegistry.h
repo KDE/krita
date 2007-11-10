@@ -39,7 +39,7 @@ class PIGMENTCMS_EXPORT KoColorTransformationFactoryRegistry : private KoGeneric
         /**
          * Add a KoColorTransformationFactory to the registry.
          */
-        static void add(KoColorTransformationFactory* factory);
+        static void addColorTransformationFactory(KoColorTransformationFactory* factory);
     private:
         static KoColorTransformationFactoryRegistry* instance();
     private:

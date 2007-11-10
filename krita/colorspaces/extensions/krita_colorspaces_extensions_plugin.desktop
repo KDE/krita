@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Some extensions to color spaces
+Comment=Some extensions to color spaces
+ServiceTypes=KOffice/ColorSpaceExtension
+Type=Service
+X-Pigment-MinVersion=0
+X-Flake-PluginVersion=1
+X-KDE-Library=krita_colorspaces_extensions

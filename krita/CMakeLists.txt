@@ -55,7 +55,6 @@ if (SHOULD_BUILD_KRITA)
         # For generated files from .ui
         ${CMAKE_BINARY_DIR}/krita/ui
 
-        ${KOPAINTER_INCLUDES}
         ${KOGUIUTILS_INCLUDES}
         ${LCMS_INCLUDE_DIR}
         ${PIGMENT_INCLUDES}

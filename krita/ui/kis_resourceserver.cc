@@ -40,7 +40,6 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_pattern.h"
 #include "KoColorSet.h"
-#include <kogradientmanager.h>
 
 KisResourceServerBase::KisResourceServerBase(const QString & type)
     : m_type(type), m_loaded(false)
@@ -158,7 +157,7 @@ KisResourceServerRegistry::KisResourceServerRegistry()
     t3.start();
 
     KisResourceServer<KoSegmentGradient>* gradientServer = new KisResourceServer<KoSegmentGradient>("kis_gradients");
-    ResourceLoaderThread t4 (gradientServer, getFileNames(KoGradientManager::filters().join( ":" ), "kis_gradients"));
+    ResourceLoaderThread t4 (gradientServer, getFileNames("*.ggr", "kis_gradients"));
     t4.start();
 
 

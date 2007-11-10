@@ -41,7 +41,7 @@ class KOTEXT_EXPORT KoTextSelectionHandler : public KoToolSelection {
     Q_OBJECT
 public:
     explicit KoTextSelectionHandler(QObject *parent = 0);
-    ~KoTextSelectionHandler();
+    virtual ~KoTextSelectionHandler();
 
     QString selectedText() const;
 

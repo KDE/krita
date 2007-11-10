@@ -26,9 +26,12 @@
 
 #include "KoCompositeOp.h"
 #include "KoColorTransformation.h"
+#include "KoColorTransformationFactory.h"
+#include "KoColorTransformationFactoryRegistry.h"
 #include "KoColorConversionSystem.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoCopyColorConversionTransformation.h"
+#include "KoFallBackColorTransformation.h"
 
 struct KoColorSpace::Private {
     QString id;
@@ -435,4 +438,25 @@ QVector<quint8> * KoColorSpace::threadLocalConversionCache(quint32 size) const
             ba->resize( size );
     }
     return ba;
+}
+
+KoColorTransformation* KoColorSpace::createColorTransformation( QString id, QHash<QString, QVariant> parameters) const
+{
+    KoColorTransformationFactory* factory = KoColorTransformationFactoryRegistry::instance()->get( id );
+    if(not factory) return 0;
+    QPair<KoID, KoID> model( colorModelId(), colorDepthId() );
+    QList< QPair<KoID, KoID> > models = factory->supportedModels();
+    if(models.contains(model))
+    {
+        return factory->createTransformation( this, parameters);
+    } else {
+        // Find the best solution
+        KoColorConversionTransformation* csToFallBack = 0;
+        KoColorConversionTransformation* fallBackToCs = 0;
+        KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverters(this, models, csToFallBack, fallBackToCs);
+        Q_ASSERT(csToFallBack);
+        Q_ASSERT(fallBackToCs);
+        KoColorTransformation* transfo = factory->createTransformation(fallBackToCs->srcColorSpace(), parameters);
+        return new KoFallBackColorTransformation( csToFallBack, fallBackToCs, transfo);
+    }
 }

@@ -26,6 +26,7 @@
 
 class KoColorSpace;
 class KoColorTransformation;
+class KoColorConversionTransformation;
 
 /**
  * Use this color transformation to encapsulate an other KoColorTransformation
@@ -34,11 +35,29 @@ class KoColorTransformation;
 class PIGMENTCMS_EXPORT KoFallBackColorTransformation : public KoColorTransformation {
     public:
         /**
+         * Create a fall back color transformation using the given two color
+         * space. This constructor will initialize his own color conversion
+         * objects.
+         * 
+         * The created object takes owner ship of the transormation and will
+         * take charge of deleting it.
+         *
          * @param cs color space of the source and destination pixels
          * @param fallBackCS color space use natively by the color transformation
-         * @param transfo the color transformation
+         * @param transfo the color transformation (working in the fallback color space)
          */
-        KoFallBackColorTransformation(const KoColorSpace* cs, const KoColorSpace* fallBackCS, KoColorTransformation* transfo);
+        KoFallBackColorTransformation(const KoColorSpace* _cs, const KoColorSpace* _fallBackCS, KoColorTransformation* _transfo);
+        /**
+         * Creates a fall back color transformation using the two transformation
+         * given as parameters. The created object take owner ship over the
+         * conversion and the color transformations and will take charge of
+         * deleting them.
+         *
+         * @param csToFallBack transformation from the color space to the fallback
+         * @param fallBackToCs transformation from the fallback to the color space
+         * @param transfo the color transformation (working in the fallback color space)
+         */
+        KoFallBackColorTransformation(KoColorConversionTransformation* _csToFallBack, KoColorConversionTransformation* _fallBackToCs, KoColorTransformation* _transfo);
         virtual ~KoFallBackColorTransformation();
         virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
     private:

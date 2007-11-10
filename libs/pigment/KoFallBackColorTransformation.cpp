@@ -32,12 +32,24 @@ struct KoFallBackColorTransformation::Private {
     mutable qint32 buffSize;
 };
 
-KoFallBackColorTransformation::KoFallBackColorTransformation(const KoColorSpace* cs, const KoColorSpace* fallBackCS, KoColorTransformation* transfo) : d(new Private)
+KoFallBackColorTransformation::KoFallBackColorTransformation(const KoColorSpace* _cs, const KoColorSpace* _fallBackCS, KoColorTransformation* _transfo) : d(new Private)
 {
-    d->fallBackColorSpace = fallBackCS;
-    d->csToFallBack = cs->createColorConverter( fallBackCS);
-    d->fallBackToCs = fallBackCS->createColorConverter( cs );
-    d->colorTransformation = transfo;
+    d->fallBackColorSpace = _fallBackCS;
+    d->csToFallBack = _cs->createColorConverter( _fallBackCS);
+    d->fallBackToCs = _fallBackCS->createColorConverter( _cs );
+    d->colorTransformation = _transfo;
+    d->buff = 0;
+    d->buffSize = 0;
+}
+
+KoFallBackColorTransformation::KoFallBackColorTransformation(KoColorConversionTransformation* _csToFallBack, KoColorConversionTransformation* _fallBackToCs, KoColorTransformation* _transfo) : d(new Private)
+{
+    Q_ASSERT(_csToFallBack->srcColorSpace() == _fallBackToCs->dstColorSpace());
+    Q_ASSERT(_fallBackToCs->srcColorSpace() == _csToFallBack->dstColorSpace());
+    d->fallBackColorSpace = _fallBackToCs->dstColorSpace();
+    d->csToFallBack = _csToFallBack;
+    d->fallBackToCs = _fallBackToCs;
+    d->colorTransformation = _transfo;
     d->buff = 0;
     d->buffSize = 0;
 }

@@ -35,9 +35,9 @@ class KoColorSpaceFactory;
 class KoColorProfile;
 class KoColorConversionSystem;
 
+// XXX: USE STATIC DELETER! USE STATIC DELETER!
+
 /**
- *
- * XXX: USE STATIC DELETER! USE STATIC DELETER!
  *
  * The registry for colorspaces and profiles.
  * This class contains:
@@ -241,6 +241,7 @@ public:
      * spaces to create color conversion transformation
      */
     const KoColorConversionSystem* colorConversionSystem() const;
+    
 private:
     KoColorSpaceRegistry();
     KoColorSpaceRegistry(const KoColorSpaceRegistry&);
@@ -253,4 +254,3 @@ private:
 };
 
 #endif // KOCOLORSPACEFACTORYREGISTRY_H
-

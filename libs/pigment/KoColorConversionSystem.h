@@ -22,9 +22,11 @@
 
 class KoColorSpace;
 class KoColorSpaceFactory;
+class KoID;
 #include "KoColorConversionTransformation.h"
 
 #include <QList>
+#include <QPair>
 
 #include <pigment_export.h>
 
@@ -59,6 +61,25 @@ class PIGMENTCMS_EXPORT KoColorConversionSystem {
          * the best possible path between the two color space.
          */
         KoColorConversionTransformation* createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+        
+        /**
+         * This function creates two transformations, one from the color space and one to the
+         * color space. The destination color space is picked from a list of color space, such
+         * as the conversion between the two color space is of the best quality.
+         * 
+         * The typical use case of this function is for KoColorTransformationFactory which
+         * doesn't support all color spaces, so unsupported color space have to find an
+         * acceptable conversion in order to use that KoColorTransformationFactory.
+         * 
+         * @param colorSpace the source color space
+         * @param possibilities a list of color space among which we need to find the best
+         *                      conversion
+         * @param fromCS the conversion from the source color space will be affected to this
+         *               variable
+         * @param toCS the revert conversion to the source color space will be affected to this
+         *             variable
+         */
+        void createColorConverters(const KoColorSpace* colorSpace, QList< QPair<KoID, KoID> >& possibilities, KoColorConversionTransformation*& fromCS, KoColorConversionTransformation*& toCS) const;
     public:
         /**
          * This function return a text that can be compiled using dot to display
@@ -83,6 +104,7 @@ class PIGMENTCMS_EXPORT KoColorConversionSystem {
     private:
         QString vertexToDot(Vertex* v, QString options) const;
     private:
+        KoColorConversionTransformation* createTransformationFromPath(const Path* path, const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
         /**
          * Query the registry to get the color space associated with this
          * node. (default profile)
@@ -118,14 +140,12 @@ class PIGMENTCMS_EXPORT KoColorConversionSystem {
          * Don't call that function, but raher findBestPath
          * @internal
          */
-        template<bool ignoreHdr, bool ignoreColorCorrectness>
-        inline Path* findBestPathImpl2(const Node* srcNode, const Node* dstNode) const;
+        inline Path* findBestPathImpl2(const Node* srcNode, const Node* dstNode, bool ignoreHdr, bool ignoreColorCorrectness) const;
         /**
          * Don't call that function, but raher findBestPath
          * @internal
          */
-        template<bool ignoreHdr>
-        inline Path* findBestPathImpl(const Node* srcNode, const Node* dstNode) const;
+        inline Path* findBestPathImpl(const Node* srcNode, const Node* dstNode, bool ignoreHdr) const;
     private:
         struct Private;
         Private* const d;

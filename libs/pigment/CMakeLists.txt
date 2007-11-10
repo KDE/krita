@@ -30,6 +30,8 @@ set(pigmentcms_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpace.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpaceMaths.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpaceRegistry.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorTransformationFactory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorTransformationFactoryRegistry.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoCompositeOp.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoCopyColorConversionTransformation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoFallBackColorTransformation.cpp

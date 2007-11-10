@@ -25,6 +25,17 @@
 /**
  * This is the base class of all color transform that takes one pixel in input
  * and one pixel in output.
+ * 
+ * They are created by color spaces.
+ * 
+ * For instance:
+ * @code
+ * KoColorSpace* cs = KoColorSpaceRegistry::rgb8();
+ * quint8 pixelsSrc[ nbpixels * cs->pixelSize() ];
+ * quint8 pixelsDst[ nbpixels * cs->pixelSize() ];
+ * KoColorTransformation* transfo = cs->createInvertTransformation();
+ * transfo->transform( pixelsSrc, pixelsDst, nbpixels );
+ * @endcode
  */
 class KoColorTransformation {
   public:

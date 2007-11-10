@@ -629,6 +629,8 @@ public:
      */
     virtual QList<KisFilter*> createBackgroundFilters() const
         { return QList<KisFilter*>(); }
+    
+    KoColorTransformation* createColorTransformation( QString id, QHash<QString, QVariant> parameters) const;
 protected:
     /**
      * Use this function in the constructor of your colorspace to add the information about a channel.

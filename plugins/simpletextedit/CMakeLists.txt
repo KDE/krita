@@ -16,7 +16,7 @@ kde4_add_ui_files( kofficesimpletextedit_SRCS
 
 kde4_add_plugin(kofficesimpletextedit ${kofficesimpletextedit_SRCS})
 
-target_link_libraries(kofficesimpletextedit flake)
+target_link_libraries(kofficesimpletextedit kotext flake)
 
 install(TARGETS kofficesimpletextedit DESTINATION ${PLUGIN_INSTALL_DIR})
 

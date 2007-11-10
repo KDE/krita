@@ -27,6 +27,7 @@
 #include <ui_Panel.h>
 
 class QAction;
+class KoTextSelectionHandler;
 
 class Panel : public QDockWidget, public KoCanvasObserver {
     Q_OBJECT
@@ -40,11 +41,17 @@ private slots:
     void toolChangeDetected(const QString &toolId);
     void resourceChanged (int key, const QVariant &value);
 
+    void style1ButtonClicked();
+    void style2ButtonClicked();
+    void style3ButtonClicked();
+
 private:
     void applyAction(QAction *action, QToolButton *button, const QString &iconName);
 
     KoCanvasBase *m_canvas;
     QObject *m_parent;
+    QAction *m_style1;
+    KoTextSelectionHandler *m_handler;
 
     Ui::Panel widget;
 };

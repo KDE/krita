@@ -23,6 +23,7 @@
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
 #include <KoCanvasResourceProvider.h>
+#include <KoTextSelectionHandler.h>
 #include <KoText.h>
 
 #include <KDebug>
@@ -33,7 +34,8 @@
 Panel::Panel(QWidget *parent)
     :QDockWidget(i18n("Format"), parent),
     m_canvas(0),
-    m_parent(0)
+    m_parent(0),
+    m_handler(0)
 {
     QWidget *mainWidget = new QWidget(this);
     widget.setupUi(mainWidget);
@@ -61,6 +63,11 @@ void Panel::setCanvas (KoCanvasBase *canvas)
     connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(toolChangeDetected(const QString&)));
     connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int,const QVariant &)),
             this, SLOT(resourceChanged(int,const QVariant&)));
+
+    m_style1 = new QAction(i18n("Style Sans Serif"), this);
+    m_style1->setToolTip( i18n("Set the current text to use a Sans Serif style") );
+    m_style1->setCheckable( true );
+    //connect (m_style1, SIGNAL(triggered()), 
 }
 
 void Panel::toolChangeDetected(const QString &toolId) {
@@ -82,6 +89,14 @@ void Panel::toolChangeDetected(const QString &toolId) {
         applyAction(actions.value("format_alignright"), widget.right, "left");
         applyAction(actions.value("format_alignleft"), widget.left, "right");
     }
+
+    applyAction(actions.value("fontsizeup"), widget.sizeUp, "sizeup");
+    applyAction(actions.value("fontsizedown"), widget.sizeDown, "sizedown");
+    applyAction(m_style1, widget.style1, "sans");
+
+    m_handler = 0;
+    if (m_canvas)
+        m_handler = qobject_cast<KoTextSelectionHandler*> (m_canvas->toolProxy()->selection());
 }
 
 void Panel::resourceChanged (int key, const QVariant &value) {
@@ -109,6 +124,17 @@ void Panel::applyAction(QAction *action, QToolButton *button, const QString &ico
     button->setDefaultAction(newAction);
     connect(newAction, SIGNAL(triggered(bool)), action, SLOT(trigger()));
 }
+
+void Panel::style1ButtonClicked() {
+    kDebug() << "style1ButtonClicked";
+}
+
+void Panel::style2ButtonClicked() {
+}
+
+void Panel::style3ButtonClicked() {
+}
+
 
 /* nice to haves
    Make the icon size 'configurable' using a context menu.

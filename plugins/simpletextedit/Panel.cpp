@@ -18,6 +18,7 @@
  */
 
 #include "Panel.h"
+#include "ActionHelper.h"
 
 #include <KoDockRegistry.h>
 #include <KoCanvasBase.h>
@@ -50,6 +51,21 @@ Panel::Panel(QWidget *parent)
     stylesGroup->addButton(widget.style1);
     stylesGroup->addButton(widget.style2);
     stylesGroup->addButton(widget.style3);
+
+    m_style1 = new QAction(i18n("Style Sans Serif"), this);
+    m_style1->setToolTip( i18n("Set the current text to use a Sans Serif style") );
+    m_style1->setCheckable( true );
+    connect (m_style1, SIGNAL(triggered()), this, SLOT(style1ButtonClicked()));
+
+    m_style2 = new QAction(i18n("Style Serif"), this);
+    m_style2->setToolTip( i18n("Set the current text to use a Serif style") );
+    m_style2->setCheckable( true );
+    connect (m_style2, SIGNAL(triggered()), this, SLOT(style2ButtonClicked()));
+
+    m_style3 = new QAction(i18n("Style Script"), this);
+    m_style3->setToolTip( i18n("Set the current text to use a Script style") );
+    m_style3->setCheckable( true );
+    connect (m_style3, SIGNAL(triggered()), this, SLOT(style3ButtonClicked()));
 }
 
 Panel::~Panel()
@@ -63,11 +79,6 @@ void Panel::setCanvas (KoCanvasBase *canvas)
     connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(toolChangeDetected(const QString&)));
     connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int,const QVariant &)),
             this, SLOT(resourceChanged(int,const QVariant&)));
-
-    m_style1 = new QAction(i18n("Style Sans Serif"), this);
-    m_style1->setToolTip( i18n("Set the current text to use a Sans Serif style") );
-    m_style1->setCheckable( true );
-    //connect (m_style1, SIGNAL(triggered()), 
 }
 
 void Panel::toolChangeDetected(const QString &toolId) {
@@ -93,10 +104,15 @@ void Panel::toolChangeDetected(const QString &toolId) {
     applyAction(actions.value("fontsizeup"), widget.sizeUp, "sizeup");
     applyAction(actions.value("fontsizedown"), widget.sizeDown, "sizedown");
     applyAction(m_style1, widget.style1, "sans");
+    applyAction(m_style2, widget.style2, "serif");
+    applyAction(m_style3, widget.style3, "script");
 
     m_handler = 0;
     if (m_canvas)
         m_handler = qobject_cast<KoTextSelectionHandler*> (m_canvas->toolProxy()->selection());
+    m_style1->setEnabled(m_handler);
+    m_style2->setEnabled(m_handler);
+    m_style3->setEnabled(m_handler);
 }
 
 void Panel::resourceChanged (int key, const QVariant &value) {
@@ -122,17 +138,22 @@ void Panel::applyAction(QAction *action, QToolButton *button, const QString &ico
     newAction->setWhatsThis(action->whatsThis());
     newAction->setCheckable(action->isCheckable());
     button->setDefaultAction(newAction);
-    connect(newAction, SIGNAL(triggered(bool)), action, SLOT(trigger()));
+    new ActionHelper(m_parent, action, newAction);
 }
 
 void Panel::style1ButtonClicked() {
-    kDebug() << "style1ButtonClicked";
+    if (m_handler == 0) return;
+    m_handler->setFontFamily("Sans Serif");
 }
 
 void Panel::style2ButtonClicked() {
+    if (m_handler == 0) return;
+    m_handler->setFontFamily("Serif");
 }
 
 void Panel::style3ButtonClicked() {
+    if (m_handler == 0) return;
+    m_handler->setFontFamily("Script");
 }
 
 

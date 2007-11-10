@@ -16,44 +16,26 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef PANEL_H
-#define PANEL_H
+#ifndef ACTIONHELPER_H
+#define ACTIONHELPER_H
 
-#include <KoCanvasObserver.h>
-
-#include <QDockWidget>
-#include <QHash>
-
-#include <ui_Panel.h>
+#include <QObject>
 
 class QAction;
-class KoTextSelectionHandler;
 
-class Panel : public QDockWidget, public KoCanvasObserver {
+class ActionHelper : public QObject {
     Q_OBJECT
 public:
-    Panel(QWidget *parent = 0);
-    ~Panel();
-
-    virtual void setCanvas (KoCanvasBase *canvas);
+    ActionHelper(QObject *parent, QAction *original, QAction *shadow);
 
 private slots:
-    void toolChangeDetected(const QString &toolId);
-    void resourceChanged (int key, const QVariant &value);
-
-    void style1ButtonClicked();
-    void style2ButtonClicked();
-    void style3ButtonClicked();
+    void originalTriggered(bool on);
+    void shadowTriggered(bool on);
 
 private:
-    void applyAction(QAction *action, QToolButton *button, const QString &iconName);
-
-    KoCanvasBase *m_canvas;
-    QObject *m_parent;
-    QAction *m_style1, *m_style2, *m_style3;
-    KoTextSelectionHandler *m_handler;
-
-    Ui::Panel widget;
+    QAction *m_original;
+    QAction *m_shadow;
+    bool m_blockSignals;
 };
 
 #endif

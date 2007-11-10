@@ -101,7 +101,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
             return;
 
         KisPaintDeviceSP device = currentLayer()->paintDevice();
-        KisPainter painter (device);
+        KisPainter painter (device, currentLayer()->selection());
         painter.beginTransaction (i18n("Star"));
         painter.setBounds( currentImage()->bounds() );
         painter.setPaintColor(currentFgColor());

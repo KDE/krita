@@ -143,7 +143,7 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
             return;
 
         delete m_painter;
-        m_painter = new KisPainter( device );
+        m_painter = new KisPainter( device, currentLayer()->selection() );
         Q_CHECK_PTR(m_painter);
 
         m_painter->beginTransaction (i18n ("Rectangle"));

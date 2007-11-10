@@ -123,7 +123,7 @@ void KisToolPolygon::finish()
 
     KisPaintDeviceSP device = currentLayer()->paintDevice();
     if (device) {
-        KisPainter painter (device);
+        KisPainter painter (device, currentLayer()->selection());
         if (currentImage()->undo()) painter.beginTransaction (i18n ("Polygon"));
         painter.setBounds( currentImage()->bounds() );
         painter.setPaintColor(currentFgColor());

@@ -394,16 +394,6 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     qint32 sy = dstRect.y() - y;
     sw = dstRect.width();
     sh = dstRect.height();
-// XXX_SELECTION
-#if 0
-    if (source()->hasSelection()) {
-        painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_target,
-                                source()->selection(), painter()->opacity(), sx, sy, sw, sh);
-    }
-    else {
-#endif
-        painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_target, painter()->opacity(), sx, sy, sw, sh);
-//    }
 
-
+    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_target, painter()->opacity(), sx, sy, sw, sh);
 }

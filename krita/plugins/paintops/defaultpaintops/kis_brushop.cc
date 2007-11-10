@@ -280,15 +280,8 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     qint32 sy = dstRect.y() - y;
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
-#if 0 // XXX_SELECTION
-    if (source()->hasSelection()) {
-        painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab,
-                                source()->selection(), painter()->opacity(), sx, sy, sw, sh);
-    }
-    else {
-#endif
-        painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
-//    }
+
+    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
 
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);

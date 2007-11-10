@@ -244,17 +244,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    // XXX_SELECTION
-#if 0
-    if (source()->hasSelection()) {
-        painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), tmpDev,
-                                source()->selection(), painter()->opacity(), sx, sy, sw, sh);
-    }
-    else {
-#endif
-        painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), tmpDev, painter()->opacity(), sx, sy, sw, sh);
-//    }
-
+    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), tmpDev, painter()->opacity(), sx, sy, sw, sh);
 }
 
 #include "kis_filterop.moc"

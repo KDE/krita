@@ -398,7 +398,7 @@ void KisPainter::bltMask(qint32 dx, qint32 dy,
         srcRect &= srcdev->exactBounds();
     }
 
-    srcRect &= selMask->exactBounds();
+    srcRect &= selMask->exactBounds().translated( -dx + sx, -dy + sy );
 
     if (srcRect.isEmpty()) {
         return;

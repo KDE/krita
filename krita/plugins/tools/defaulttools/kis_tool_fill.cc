@@ -103,7 +103,7 @@ bool KisToolFill::flood ( int startX, int startY )
         delete m_fillPainter;
         m_fillPainter = 0;
 
-        m_painter = new KisPainter ( device );
+        m_painter = new KisPainter ( device, currentLayer()->selection() );
         Q_CHECK_PTR ( m_painter );
 
 

@@ -231,16 +231,11 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             layer->setTemporaryTarget(m_target);
             layer->setTemporaryCompositeOp(m_compositeOp);
             layer->setTemporaryOpacity(m_opacity);
-// XXX_SELECTION
-#if 0
-            if ( layer->selection() )
-                m_target->setSelection(device->selection());
-#endif
         }
     } else {
         m_target = device;
     }
-    m_painter = new KisPainter( m_target );
+    m_painter = new KisPainter( m_target, currentLayer()->selection() );
     Q_CHECK_PTR(m_painter);
     m_source = device;
     m_painter->beginTransaction(m_transactionText);
@@ -289,7 +284,7 @@ void KisToolFreehand::endPaint()
             if (!m_paintIncremental) {
                 m_painter->endTransaction();
 
-                KisPainter painter( m_source );
+                KisPainter painter( m_source, currentLayer()->selection());
                 painter.setCompositeOp(m_compositeOp);
 
                 painter.beginTransaction(m_transactionText);

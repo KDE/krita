@@ -100,7 +100,7 @@ void KisToolPolyline::finish()
     KisPaintDeviceSP device = currentLayer()->paintDevice();
     if (!device) return;
 
-    KisPainter painter (device);
+    KisPainter painter (device, currentLayer()->selection());
     painter.beginTransaction (i18n ("Polyline"));
 
     painter.setPaintColor(currentFgColor());

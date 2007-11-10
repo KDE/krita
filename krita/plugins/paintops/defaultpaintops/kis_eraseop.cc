@@ -126,16 +126,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     qint32 sy = dstRect.y() - destY;
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
-// XXX_SELECTION
-#if 0
-    if (source()->hasSelection()) {
-        painter()->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab,
-                                source()->selection(), painter()->opacity(), sx, sy, sw, sh);
-    }
-    else {
-#endif
-        painter()->bitBlt(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab, painter()->opacity(), sx, sy, sw, sh);
-//    }
 
+    painter()->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab, painter()->opacity(), sx, sy, sw, sh);
 }
 

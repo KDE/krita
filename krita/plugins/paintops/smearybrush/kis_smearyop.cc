@@ -160,16 +160,8 @@ void KisSmearyOp::paintAt(const KisPaintInformation& info)
 
     vr = vr - vl;
     vr.normalize();
-#if 0
-    if (source()->hasSelection()) {
-        painter()->bltSelection(x - 32, y - 32, painter()->compositeOp(), dab,
-                                source()->selection(), painter()->opacity(), x - 32, y -32, 64, 64);
-    }
-    else {
-#endif
-        painter()->bitBlt(x - 32, y - 32, painter()->compositeOp(), dab, painter()->opacity(), x - 32, y -32, 64, 64);
-//    }
 
+    painter()->bltSelection(x - 32, y - 32, painter()->compositeOp(), dab, painter()->opacity(), x - 32, y -32, 64, 64);
 }
 
 

@@ -631,7 +631,7 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
                 kDebug() << " !m_d->cacheKisImageAsQImage";
                 croppedImage = m_d->image->convertToQImage( alignedImageRect.x(), alignedImageRect.y(), alignedImageRect.width(), alignedImageRect.height(), m_d->monitorProfile, m_d->exposure );
             }
-            QSize s = rcFromAligned.size().toSize();
+            QSize s( ceil(rcFromAligned.size().width()), ceil(rcFromAligned.size().height()) );
             double scaleXbis = rcFromAligned.width() / s.width();
             double scaleYbis = rcFromAligned.height() / s.height();
             gc.save();

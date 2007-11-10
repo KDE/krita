@@ -77,6 +77,45 @@ KoOdfWriteStore::~KoOdfWriteStore()
     delete d;
 }
 
+KoXmlWriter* KoOdfWriteStore::createOasisXmlWriter( QIODevice* dev, const char* rootElementName )
+{
+    KoXmlWriter* writer = new KoXmlWriter( dev );
+    writer->startDocument( rootElementName );
+    writer->startElement( rootElementName );
+
+    if ( qstrcmp( rootElementName, "VL:version-list" ) == 0 ) {
+        writer->addAttribute( "xmlns:VL", KoXmlNS::VL );
+        writer->addAttribute( "xmlns:dc", KoXmlNS::dc );
+        return writer;
+    }
+
+    writer->addAttribute( "xmlns:office", KoXmlNS::office );
+    writer->addAttribute( "xmlns:meta", KoXmlNS::meta );
+
+    if ( qstrcmp( rootElementName, "office:document-meta" ) != 0 ) {
+        writer->addAttribute( "xmlns:config", KoXmlNS::config );
+        writer->addAttribute( "xmlns:text", KoXmlNS::text );
+        writer->addAttribute( "xmlns:table", KoXmlNS::table );
+        writer->addAttribute( "xmlns:draw", KoXmlNS::draw );
+        writer->addAttribute( "xmlns:presentation", KoXmlNS::presentation );
+        writer->addAttribute( "xmlns:dr3d", KoXmlNS::dr3d );
+        writer->addAttribute( "xmlns:chart", KoXmlNS::chart );
+        writer->addAttribute( "xmlns:form", KoXmlNS::form );
+        writer->addAttribute( "xmlns:script", KoXmlNS::script );
+        writer->addAttribute( "xmlns:style", KoXmlNS::style );
+        writer->addAttribute( "xmlns:number", KoXmlNS::number );
+        writer->addAttribute( "xmlns:math", KoXmlNS::math );
+        writer->addAttribute( "xmlns:svg", KoXmlNS::svg );
+        writer->addAttribute( "xmlns:fo", KoXmlNS::fo );
+        writer->addAttribute( "xmlns:koffice", KoXmlNS::koffice );
+    }
+    // missing: office:version="1.0"
+
+    writer->addAttribute( "xmlns:dc", KoXmlNS::dc );
+    writer->addAttribute( "xmlns:xlink", KoXmlNS::xlink );
+    return writer;
+}
+
 KoStore* KoOdfWriteStore::store() const
 {
     return d->store;
@@ -89,7 +128,7 @@ KoXmlWriter* KoOdfWriteStore::contentWriter()
             return 0;
         }
         d->storeDevice = new KoStoreDevice( d->store );
-        d->contentWriter = KoDocument::createOasisXmlWriter( d->storeDevice, "office:document-content" );
+        d->contentWriter = createOasisXmlWriter( d->storeDevice, "office:document-content" );
     }
     return d->contentWriter;
 }

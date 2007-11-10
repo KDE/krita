@@ -21,6 +21,7 @@
 
 class QString;
 class QIODevice;
+class QXmlSimpleReader;
 class KoStore;
 class KoOasisStyles;
 class KoXmlDocument;
@@ -41,6 +42,11 @@ public:
     explicit KoOdfReadStore( KoStore* store );
 
     ~KoOdfReadStore();
+
+    /**
+     * setup the XML reader, so that we don't have to duplicate the code.
+     */
+    static void setupXmlReader( QXmlSimpleReader& reader, bool namespaceProcessing = false );
 
     /**
      * Get the store

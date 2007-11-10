@@ -25,7 +25,6 @@
 #include <KoStore.h>
 #include <KoXmlReader.h>
 
-#include "KoDocument.h"
 #include "KoOasisStyles.h"
 #include "KoXmlNS.h"
 
@@ -51,6 +50,21 @@ KoOdfReadStore::KoOdfReadStore( KoStore* store )
 KoOdfReadStore::~KoOdfReadStore()
 {
     delete d;
+}
+
+void KoOdfReadStore::setupXmlReader( QXmlSimpleReader& reader, bool namespaceProcessing )
+{
+    if ( namespaceProcessing )
+    {
+        reader.setFeature( "http://xml.org/sax/features/namespaces", true );
+        reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", false );
+    }
+    else
+    {
+        reader.setFeature( "http://xml.org/sax/features/namespaces", false );
+        reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", true );
+    }
+    reader.setFeature( "http://trolltech.com/xml/features/report-whitespace-only-CharData", true );
 }
 
 KoStore * KoOdfReadStore::store() const
@@ -132,7 +146,7 @@ bool KoOdfReadStore::loadAndParse( QIODevice* fileDevice, KoXmlDocument& doc, QS
     QXmlInputSource source( fileDevice );
     // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
     QXmlSimpleReader reader;
-    KoDocument::setupXmlReader( reader, true /*namespaceProcessing*/ );
+    setupXmlReader( reader, true /*namespaceProcessing*/ );
 
     bool ok = doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );
     if ( !ok )

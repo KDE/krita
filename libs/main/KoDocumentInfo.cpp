@@ -22,6 +22,7 @@
 #include "KoDom.h"
 #include "KoDocument.h"
 #include "kofficeversion.h"
+#include "KoOdfWriteStore.h"
 
 #include <QDateTime>
 #include <KoStoreDevice.h>
@@ -114,7 +115,7 @@ bool KoDocumentInfo::saveOasis( KoStore* store )
     saveParameters();
 
     KoStoreDevice dev( store );
-    KoXmlWriter* xmlWriter = KoDocument::createOasisXmlWriter( &dev,
+    KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter( &dev,
             "office:document-meta" );
     xmlWriter->startElement( "office:meta" );
 

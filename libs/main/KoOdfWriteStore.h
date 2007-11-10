@@ -19,6 +19,7 @@
 #ifndef KOODFWRITESTORE_H
 #define KOODFWRITESTORE_H
 
+class QIODevice;
 class KoXmlWriter;
 class KoStore;
 
@@ -51,6 +52,24 @@ public:
     explicit KoOdfWriteStore( KoStore* store );
 
     ~KoOdfWriteStore();
+
+    /**
+     * Return an XML writer for saving Oasis XML into the device @p dev,
+     * including the XML processing instruction,
+     * and the root element with all its namespaces.
+     * You can add more namespaces afterwards with addAttribute.
+     *
+     * @param dev the device into which the XML will be written.
+     * @param rootElementName the tag name of the root element.
+     *    This is either office:document, office:document-content,
+     *    office:document-styles, office:document-meta or office:document-settings
+     * @return the KoXmlWriter instance. It becomes owned by the caller, which
+     * must delete it at some point.
+     *
+     * Once done with writing the contents of the root element, you
+     * will need to call endElement(); endDocument(); before destroying the KoXmlWriter.
+     */
+    static KoXmlWriter* createOasisXmlWriter( QIODevice* dev, const char* rootElementName );
 
     KoStore* store() const;
 

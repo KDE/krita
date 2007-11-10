@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -210,11 +211,6 @@ public:
      * and returns the KService instance for it.
      */
     static KService::Ptr readNativeService( const KComponentData &instance = KComponentData() );
-
-    /**
-     * setup the XML reader, so that we don't have to duplicate the code.
-     */
-    static void setupXmlReader( QXmlSimpleReader& reader, bool namespaceProcessing = false );
 
     /**
      * To be preferred when a document exists. It is fast when calling
@@ -518,28 +514,9 @@ public:
      *  including processing instruction, complete DOCTYPE tag (with systemId and publicId), and root element.
      *  @param tagName the name of the tag for the root element
      *  @param version the DTD version (usually the application's version).
-     *  @deprecated use createOasisXmlWriter instead
+     *  @deprecated use KoOdfWriteStore::createOasisXmlWriter instead
      */
     KDE_DEPRECATED QDomDocument createDomDocument( const QString& tagName, const QString& version ) const;
-
-    /**
-     *  Return an XML writer for saving Oasis XML into the device @p dev,
-     *  including the XML processing instruction,
-     *  and the root element with all its namespaces.
-     *  You can add more namespaces afterwards with addAttribute.
-     *
-     *  @param dev the device into which the XML will be written.
-     *  @param rootElementName the tag name of the root element.
-     *     This is either office:document, office:document-content,
-     *     office:document-styles, office:document-meta or office:document-settings
-     *  @return the KoXmlWriter instance. It becomes owned by the caller, which
-     *  must delete it at some point.
-     *
-     * Once done with writing the contents of the root element, you
-     * will need to call endElement(); endDocument(); before destroying the KoXmlWriter.
-     * @note OASIS-specific
-     */
-    static KoXmlWriter* createOasisXmlWriter( QIODevice* dev, const char* rootElementName );
 
     /**
      *  Return a correctly created QDomDocument for an old (1.3-style) %KOffice document,

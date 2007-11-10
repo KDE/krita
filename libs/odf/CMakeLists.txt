@@ -12,6 +12,9 @@ set(koodf_LIB_SRCS
     KoXmlNS.cpp
     KoDom.cpp
     KoUnit.cpp
+    KoGenStyle.cpp
+    KoGenStyles.cpp
+    KoOdfWriteStore.cpp
     KoStyleStack.cpp
 )
 
@@ -27,6 +30,9 @@ install( FILES
     KoXmlNS.h
     KoDom.h
     KoUnit.h
+    KoGenStyle.h
+    KoGenStyles.h
+    KoOdfWriteStore.h
     KoStyleStack.h
 DESTINATION ${INCLUDE_INSTALL_DIR})
 

@@ -24,7 +24,7 @@
 #include <QMap>
 #include <QSet>
 #include <QString>
-#include <komain_export.h>
+#include <koodf_export.h>
 #include "KoGenStyle.h"
 
 class KoStore;
@@ -57,7 +57,7 @@ class KoStore;
  *
  * @author David Faure <faure@kde.org>
  */
-class KOMAIN_EXPORT KoGenStyles
+class KOODF_EXPORT KoGenStyles
 {
 public:
     KoGenStyles();

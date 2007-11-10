@@ -43,15 +43,12 @@ set(komain_LIB_SRCS
    KoChild.cpp
    kofficeversion.cc
    KoOasisStyles.cpp
-   KoGenStyles.cpp
-   KoGenStyle.cpp
    KoOasisSettings.cpp
    KoPageFormat.cpp
    KoPageLayout.cpp
    KoFileDialog.cpp
    KoVersionDialog.cpp
    KoOdfReadStore.cpp
-   KoOdfWriteStore.cpp
    kkbdaccessextensions.cpp
    KoOpenPane.cpp
    KoTemplates.cpp
@@ -140,7 +137,6 @@ install( FILES
     KoPictureCollection.h 
     kofficeversion.h 
     KoOasisStyles.h 
-    KoGenStyles.h 
     KoOasisSettings.h 
     KoPageFormat.h 
     KoPageLayout.h 
@@ -149,7 +145,6 @@ install( FILES
     KoOpenPane.h 
     KoOasisLoadingContext.h 
     KoRTree.h
-    KoGenStyle.h
     threadAction/KoJobsListPolicy.h
     threadAction/KoExecutePolicy.h
     threadAction/KoAction.h

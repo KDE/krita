@@ -23,7 +23,7 @@
 #include <QList>
 #include <QMap>
 #include <QString>
-#include <komain_export.h>
+#include <koodf_export.h>
 
 class KoGenStyles;
 class KoXmlWriter;
@@ -35,7 +35,7 @@ class KoXmlWriter;
  *
  * @author David Faure <faure@kde.org>
  */
-class KOMAIN_EXPORT KoGenStyle
+class KOODF_EXPORT KoGenStyle
 {
 public:
     /**

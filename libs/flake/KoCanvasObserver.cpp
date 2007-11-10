@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoCanvasObserver.h";
+#include "KoCanvasObserver.h"
 
 KoCanvasObserver::KoCanvasObserver() {
 }

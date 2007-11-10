@@ -55,6 +55,7 @@ KoTool::~KoTool()
 {
     if (d->optionWidget && !d->optionWidget->parentWidget())
         delete d->optionWidget;
+    delete d;
 }
 
 void KoTool::activate(bool temporary) {

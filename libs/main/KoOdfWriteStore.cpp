@@ -29,7 +29,6 @@
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 
-#include "KoDocument.h"
 #include "KoXmlNS.h"
 
 struct KoOdfWriteStore::Private

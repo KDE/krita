@@ -66,7 +66,7 @@ public:
      * @param body
      * @param context
      */
-    QList<KoPAPageBase *> loadOdfPages( KoXmlElement & body, KoPALoadingContext & context );
+    QList<KoPAPageBase *> loadOdfPages( const KoXmlElement & body, KoPALoadingContext & context );
 
     /**
      * Save pages

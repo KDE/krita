@@ -163,7 +163,7 @@ QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoX
     return masterPages;
 }
 
-QList<KoPAPageBase *> KoPADocument::loadOdfPages( KoXmlElement & body, KoPALoadingContext & context )
+QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoPALoadingContext & context )
 {
     QList<KoPAPageBase *> pages;
     KoXmlElement element;

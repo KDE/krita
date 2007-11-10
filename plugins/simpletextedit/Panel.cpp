@@ -66,6 +66,9 @@ Panel::Panel(QWidget *parent)
     m_style3->setToolTip( i18n("Set the current text to use a Script style") );
     m_style3->setCheckable( true );
     connect (m_style3, SIGNAL(triggered()), this, SLOT(style3ButtonClicked()));
+
+    // TODO enable 'font color'
+    widget.color->setVisible(false);
 }
 
 Panel::~Panel()
@@ -118,17 +121,40 @@ void Panel::toolChangeDetected(const QString &toolId) {
 void Panel::resourceChanged (int key, const QVariant &value) {
     if (key == KoText::CurrentTextDocument) {
         //kDebug() << "new document...";
+        if (value.isNull() && m_parent) {
+            delete m_parent;
+            m_parent = 0;
+            // load 'disabled' widgets.
+            applyAction(0, widget.bold, "bold");
+            applyAction(0, widget.italic, "italic");
+            applyAction(0, widget.underline, "underline");
+            applyAction(0, widget.center, "middle");
+            if(QApplication::isRightToLeft()) {
+                applyAction(0, widget.left, "left");
+                applyAction(0, widget.right, "right");
+            }
+            else {
+                applyAction(0, widget.right, "left");
+                applyAction(0, widget.left, "right");
+            }
+
+            applyAction(0, widget.sizeUp, "sizeup");
+            applyAction(0, widget.sizeDown, "sizedown");
+            applyAction(0, widget.style1, "sans");
+            applyAction(0, widget.style2, "serif");
+            applyAction(0, widget.style3, "script");
+        }
     }
 }
 
 void Panel::applyAction(QAction *action, QToolButton *button, const QString &iconName) {
     Q_ASSERT(button);
     button->setEnabled(action);
-    button->setMinimumSize(QSize(48, 48));
-    button->setIconSize(QSize(48, 48));
-    KIcon icon("koffice_simple_format_"+ iconName + (action ? "_active" : " _inactive"));
+    button->setIconSize(QSize(42, 42));
+    KIcon icon("koffice_simple_format_"+ iconName + (action ? "_active" : "_inactive"));
     if(action == 0) {
         button->setIcon(icon);
+        button->setEnabled(false);
         return;
     }
 

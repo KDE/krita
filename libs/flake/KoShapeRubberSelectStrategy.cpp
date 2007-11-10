@@ -52,9 +52,11 @@ void KoShapeRubberSelectStrategy::paint( QPainter &painter, const KoViewConverte
     painter.setPen( QPen( sb, 0 ) );
     painter.setBrush( sb );
     QRectF paintRect = converter.documentToView(m_selectRect);
+    paintRect = paintRect.normalized();
+    paintRect.adjust( 0., -0.5, 0.5, 0. );
     if(painter.hasClipping())
         paintRect = paintRect.intersect(painter.clipRegion().boundingRect());
-    painter.drawRect( paintRect);
+    painter.drawRect( paintRect );
 }
 
 void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::KeyboardModifiers modifiers) {

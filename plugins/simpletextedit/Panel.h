@@ -46,7 +46,7 @@ private slots:
     void style3ButtonClicked();
 
 private:
-    void applyAction(QAction *action, QToolButton *button, const QString &iconName);
+    void applyAction(QAction *action, QToolButton *button, const QString &iconName, bool partOfGroup);
 
     KoCanvasBase *m_canvas;
     QObject *m_parent;

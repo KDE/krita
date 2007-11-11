@@ -26,7 +26,7 @@ class QAction;
 class ActionHelper : public QObject {
     Q_OBJECT
 public:
-    ActionHelper(QObject *parent, QAction *original, QAction *shadow);
+    ActionHelper(QObject *parent, QAction *original, QAction *shadow, bool partOfGroup);
 
 private slots:
     void originalTriggered(bool on);
@@ -36,6 +36,7 @@ private:
     QAction *m_original;
     QAction *m_shadow;
     bool m_blockSignals;
+    bool m_partOfGroup;
 };
 
 #endif

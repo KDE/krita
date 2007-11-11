@@ -91,24 +91,24 @@ void Panel::toolChangeDetected(const QString &toolId) {
     m_parent = new QObject(this);
     // current tool is the text tool
     QHash<QString, QAction *> actions = m_canvas->toolProxy()->actions();
-    applyAction(actions.value("format_bold"), widget.bold, "bold");
-    applyAction(actions.value("format_italic"), widget.italic, "italic");
-    applyAction(actions.value("format_underline"), widget.underline, "underline");
-    applyAction(actions.value("format_aligncenter"), widget.center, "middle");
+    applyAction(actions.value("format_bold"), widget.bold, "bold", false);
+    applyAction(actions.value("format_italic"), widget.italic, "italic", false);
+    applyAction(actions.value("format_underline"), widget.underline, "underline", false);
+    applyAction(actions.value("format_aligncenter"), widget.center, "middle", true);
     if(QApplication::isRightToLeft()) {
-        applyAction(actions.value("format_alignright"), widget.left, "left");
-        applyAction(actions.value("format_alignleft"), widget.right, "right");
+        applyAction(actions.value("format_alignright"), widget.left, "left", true);
+        applyAction(actions.value("format_alignleft"), widget.right, "right", true);
     }
     else {
-        applyAction(actions.value("format_alignright"), widget.right, "left");
-        applyAction(actions.value("format_alignleft"), widget.left, "right");
+        applyAction(actions.value("format_alignright"), widget.right, "left", true);
+        applyAction(actions.value("format_alignleft"), widget.left, "right", true);
     }
 
-    applyAction(actions.value("fontsizeup"), widget.sizeUp, "sizeup");
-    applyAction(actions.value("fontsizedown"), widget.sizeDown, "sizedown");
-    applyAction(m_style1, widget.style1, "sans");
-    applyAction(m_style2, widget.style2, "serif");
-    applyAction(m_style3, widget.style3, "script");
+    applyAction(actions.value("fontsizeup"), widget.sizeUp, "sizeup", false);
+    applyAction(actions.value("fontsizedown"), widget.sizeDown, "sizedown", false);
+    applyAction(m_style1, widget.style1, "sans", true);
+    applyAction(m_style2, widget.style2, "serif", true);
+    applyAction(m_style3, widget.style3, "script", true);
 
     m_handler = 0;
     if (m_canvas)
@@ -120,34 +120,33 @@ void Panel::toolChangeDetected(const QString &toolId) {
 
 void Panel::resourceChanged (int key, const QVariant &value) {
     if (key == KoText::CurrentTextDocument) {
-        //kDebug() << "new document...";
         if (value.isNull() && m_parent) {
             delete m_parent;
             m_parent = 0;
             // load 'disabled' widgets.
-            applyAction(0, widget.bold, "bold");
-            applyAction(0, widget.italic, "italic");
-            applyAction(0, widget.underline, "underline");
-            applyAction(0, widget.center, "middle");
+            applyAction(0, widget.bold, "bold", false);
+            applyAction(0, widget.italic, "italic", false);
+            applyAction(0, widget.underline, "underline", false);
+            applyAction(0, widget.center, "middle", true);
             if(QApplication::isRightToLeft()) {
-                applyAction(0, widget.left, "left");
-                applyAction(0, widget.right, "right");
+                applyAction(0, widget.left, "left", true);
+                applyAction(0, widget.right, "right", true);
             }
             else {
-                applyAction(0, widget.right, "left");
-                applyAction(0, widget.left, "right");
+                applyAction(0, widget.right, "left", true);
+                applyAction(0, widget.left, "right", true);
             }
 
-            applyAction(0, widget.sizeUp, "sizeup");
-            applyAction(0, widget.sizeDown, "sizedown");
-            applyAction(0, widget.style1, "sans");
-            applyAction(0, widget.style2, "serif");
-            applyAction(0, widget.style3, "script");
+            applyAction(0, widget.sizeUp, "sizeup", false);
+            applyAction(0, widget.sizeDown, "sizedown", false);
+            applyAction(0, widget.style1, "sans", true);
+            applyAction(0, widget.style2, "serif", true);
+            applyAction(0, widget.style3, "script", true);
         }
     }
 }
 
-void Panel::applyAction(QAction *action, QToolButton *button, const QString &iconName) {
+void Panel::applyAction(QAction *action, QToolButton *button, const QString &iconName, bool partOfGroup) {
     Q_ASSERT(button);
     button->setEnabled(action);
     button->setIconSize(QSize(42, 42));
@@ -164,7 +163,7 @@ void Panel::applyAction(QAction *action, QToolButton *button, const QString &ico
     newAction->setWhatsThis(action->whatsThis());
     newAction->setCheckable(action->isCheckable());
     button->setDefaultAction(newAction);
-    new ActionHelper(m_parent, action, newAction);
+    new ActionHelper(m_parent, action, newAction, partOfGroup);
 }
 
 void Panel::style1ButtonClicked() {

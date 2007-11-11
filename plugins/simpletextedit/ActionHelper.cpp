@@ -21,16 +21,17 @@
 #include <QAction>
 #include <QDebug>
 
-ActionHelper::ActionHelper(QObject *parent, QAction *original, QAction *shadow)
-    : QObject(parent), m_original(original), m_shadow(shadow), m_blockSignals(false)
+ActionHelper::ActionHelper(QObject *parent, QAction *original, QAction *shadow, bool partOfGroup)
+    : QObject(parent), m_original(original), m_shadow(shadow),
+    m_blockSignals(false), m_partOfGroup(partOfGroup)
 {
-    connect(original, SIGNAL(triggered(bool)), this, SLOT(originalTriggered(bool)));
+    connect(original, SIGNAL(toggled(bool)), this, SLOT(originalTriggered(bool)));
     connect(shadow, SIGNAL(triggered(bool)), this, SLOT(shadowTriggered(bool)));
 }
 
 void ActionHelper::originalTriggered(bool on) {
     if (m_blockSignals) return;
-    if (m_shadow->isCheckable() && m_shadow->isChecked() == on)
+    if (m_shadow->isCheckable() && m_shadow->isChecked() == on || !on && m_partOfGroup)
         return;
     m_blockSignals = true;
     m_shadow->trigger();
@@ -40,6 +41,8 @@ void ActionHelper::originalTriggered(bool on) {
 void ActionHelper::shadowTriggered(bool on) {
     if (m_blockSignals) return;
     if (m_original->isCheckable() && m_original->isChecked() == on)
+        return;
+    if (m_shadow->isCheckable() && !on && m_partOfGroup)
         return;
     m_blockSignals = true;
     m_original->trigger();

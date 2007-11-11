@@ -9,10 +9,10 @@
     <height>257</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Panel</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout" >
+   <property name="margin" >
+    <number>5</number>
+   </property>
    <item row="0" column="0" colspan="3" >
     <widget class="QLabel" name="label" >
      <property name="text" >
@@ -157,16 +157,13 @@
    </item>
    <item row="8" column="0" colspan="3" >
     <spacer name="verticalSpacer" >
-     <property name="spacerName" stdset="0" >
-      <string>verticalSpacer</string>
-     </property>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
-       <width>131</width>
-       <height>40</height>
+       <width>1</width>
+       <height>0</height>
       </size>
      </property>
     </spacer>

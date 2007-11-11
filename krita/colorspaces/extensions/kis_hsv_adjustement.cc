@@ -24,6 +24,7 @@
 #include <half.h>
 #endif
 
+#include <kdebug.h>
 #include <klocale.h>
 
 #include <KoColorConversions.h>
@@ -146,7 +147,7 @@ KoColorTransformation* KisHSVAdjustementFactory::createTransformation(const KoCo
     }
     if( colorSpace->colorModelId() != RGBAColorModelID)
     {
-        kDebug() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustementFactory::createTransformation";
+        kError() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustementFactory::createTransformation";
         return 0;
     }
     if( colorSpace->colorDepthId() == Integer8BitsColorDepthID )
@@ -166,7 +167,7 @@ KoColorTransformation* KisHSVAdjustementFactory::createTransformation(const KoCo
     {
         return new KisHSVAdjustement< float >(h,s,v);
     } else {
-        kDebug() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustementFactory::createTransformation";
+        kError() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustementFactory::createTransformation";
         return 0;
     }
 }

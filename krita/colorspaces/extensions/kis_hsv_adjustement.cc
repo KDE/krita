@@ -37,6 +37,45 @@
 #define SCALE_FROM_FLOAT( v  ) KoColorSpaceMaths< float, _channel_type_>::scaleToA( v )
 
 template<typename _channel_type_>
+void clamp( float* r, float* g, float* b);
+
+#define FLOAT_CLAMP( v ) * v = (*v < 0.0) ? 0.0 : ( (*v>1.0) ? 1.0 : *v )
+
+template<>
+void clamp<quint8>( float* r, float* g, float* b)
+{
+    FLOAT_CLAMP(r);
+    FLOAT_CLAMP(g);
+    FLOAT_CLAMP(b);
+}
+
+template<>
+void clamp<quint16>( float* r, float* g, float* b)
+{
+    FLOAT_CLAMP(r);
+    FLOAT_CLAMP(g);
+    FLOAT_CLAMP(b);
+}
+
+#ifdef HAVE_OPENEXR
+template<>
+void clamp<half>( float* r, float* g, float* b)
+{
+    Q_UNUSED(r);
+    Q_UNUSED(g);
+    Q_UNUSED(b);
+}
+#endif
+
+template<>
+void clamp<float>( float* r, float* g, float* b)
+{
+    Q_UNUSED(r);
+    Q_UNUSED(g);
+    Q_UNUSED(b);
+}
+
+template<typename _channel_type_>
 class KisHSVAdjustement : public KoColorTransformation {
     typedef KoRgbTraits<_channel_type_> RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
@@ -53,8 +92,13 @@ class KisHSVAdjustement : public KoColorTransformation {
             while( nPixels > 0)
             {
                 RGBToHSV( SCALE_TO_FLOAT( src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s,&v );
-                
+                h += m_adj_h;
+                if(h > 360) h -= 360;
+                if(h < 0 ) h += 360;
+                s += m_adj_s;
+                v += m_adj_v;
                 HSVToRGB( h, s, v, &r, &g, &b);
+                clamp< _channel_type_ >( &r, &g, &b);
                 dst->red = SCALE_FROM_FLOAT( r );
                 dst->green = SCALE_FROM_FLOAT( g );
                 dst->blue = SCALE_FROM_FLOAT( b );
@@ -82,6 +126,7 @@ QList< QPair< KoID, KoID > > KisHSVAdjustementFactory::supportedModels() const
     l.append( QPair< KoID, KoID >( RGBAColorModelID , Integer16BitsColorDepthID ) );
     l.append( QPair< KoID, KoID >( RGBAColorModelID , Float16BitsColorDepthID ) );
     l.append( QPair< KoID, KoID >( RGBAColorModelID , Float32BitsColorDepthID ) );
+    return l;
 }
 
 KoColorTransformation* KisHSVAdjustementFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const

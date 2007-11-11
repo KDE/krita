@@ -49,6 +49,7 @@
 #include <kis_painter.h>
 #include <kis_selection.h>
 #include "kis_histogram.h"
+#include "kis_hsv_adjustement_filter.h"
 #include "kis_brightness_contrast_filter.h"
 #include "kis_perchannel_filter.h"
 #include "kis_filter_registry.h"
@@ -63,10 +64,11 @@ ColorsFilters::ColorsFilters(QObject *parent, const QStringList &)
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisBrightnessContrastFilter()));
-        manager->add(KisFilterSP(new KisAutoContrast()));
-        manager->add(KisFilterSP(new KisPerChannelFilter()));
-        manager->add(KisFilterSP(new KisDesaturateFilter()));
+        manager->add(new KisBrightnessContrastFilter());
+        manager->add(new KisAutoContrast());
+        manager->add(new KisPerChannelFilter());
+        manager->add(new KisDesaturateFilter());
+        manager->add(new KisHSVAdjustementFilter());
     }
 }
 

@@ -97,6 +97,10 @@ public slots:
      */
     void setFontSize(int size);
 
+    /**
+     * Alter the font family of the current selection, but keep the rest of the font properties alone.
+     * @param familyName the new famility name.  Examples are "Times", "Sans" etc.
+     */
     void setFontFamily(const QString &familyName);
 
     /**

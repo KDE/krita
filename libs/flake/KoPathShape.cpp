@@ -490,6 +490,105 @@ KoPathPoint * KoPathShape::arcTo( double rx, double ry, double startAngle, doubl
     return newEndPoint;
 }
 
+const double veryBigNumber = 1.0e8;
+const double isNearRange = 0.001;
+
+KoPathPoint *KoPathShape::arcTo( const QPointF &p1, const QPointF &p2, const double r )
+{
+    /* This routine is inspired by code in GNU ghostscript.
+     *
+     *           |- P1B3 -|
+     *
+     *          |- - - T12- - -|
+     *
+     *  -   - P1 x....__--o.....x P2
+     *  |   |    :  _/    B3
+     * P1B0      : /
+     *      |    :/
+     *  |        |
+     *  -  T10   o B0
+     *           |
+     *      |    |
+     *           |
+     *      |    |
+     *      -    x P0
+     */
+    if ( m_subpaths.empty() )
+    {
+        moveTo( QPointF( 0, 0 ) );
+    }
+    KoPathPoint * lastPoint = m_subpaths.last()->last();
+
+    if ( r < 0.0 )
+        return lastPoint;
+
+    // We need to calculate the tangent points. Therefore calculate tangents
+    // T10=P1P0 and T12=P1P2 first.
+    QPointF currentPoint = lastPoint->point();
+    double dx0 = currentPoint.x() - p1.x();
+    double dy0 = currentPoint.y() - p1.y();
+    double dx2 = p2.x() - p1.x();
+    double dy2 = p2.y() - p1.y();
+
+    // Calculate distance squares.
+    double dsqT10 = dx0 * dx0 + dy0 * dy0;
+    double dsqT12 = dx2 * dx2 + dy2 * dy2;
+
+    // We now calculate tan(a/2) where a is the angle between T10 and T12.
+    // We benefit from the facts T10*T12 = |T10|*|T12|*cos(a),
+    // |T10xT12| = |T10|*|T12|*sin(a) (cross product) and tan(a/2) = sin(a)/[1-cos(a)].
+    double num = dy0 * dx2 - dy2 * dx0;
+
+    double denom = sqrt( dsqT10 * dsqT12 ) - ( dx0 * dx2 + dy0 * dy2 );
+
+    KoPathPoint * newEndPoint = lastPoint;
+
+    // The points are colinear.
+    if ( 1.0 + denom == 1.0 ) {
+        // Just add a line.
+        newEndPoint = lineTo( p1 );
+    } else {
+        // |P1B0| = |P1B3| = r * tan(a/2).
+        double dP1B0 = fabs( r * num / denom );
+
+        // B0 = P1 + |P1B0| * T10/|T10|.
+        QPointF b0 = p1 + QPointF( dx0, dy0 ) * ( dP1B0 / sqrt( dsqT10 ) );
+
+        // If B0 deviates from current point P0, add a line to it.
+        if( (currentPoint.x() >= b0.x() - isNearRange && currentPoint.x() <= b0.x() + isNearRange && currentPoint.y() >= b0.y() - isNearRange && currentPoint.y() <= b0.y() + isNearRange) )
+            lineTo( b0 );
+
+        // B3 = P1 + |P1B3| * T12/|T12|.
+        QPointF b3 = p1 + QPointF( dx2, dy2 ) * ( dP1B0 / sqrt( dsqT12 ) );
+
+        // The two bezier-control points are located on the tangents at a fraction
+        // of the distance[ tangent points <-> tangent intersection ].
+        const QPointF d = p1 - b0;
+
+        double distsq = d.x() * d.x() + d.y() * d.y();
+
+        double rsq = r * r;
+
+        double fract;
+
+        // r is very small.
+        if ( distsq >= rsq * veryBigNumber ) {
+            // Assume dist = r = 0.
+            fract = 0.0;
+        } else {
+            fract = ( 4.0 / 3.0 ) / ( 1.0 + sqrt( 1.0 + distsq / rsq ) );
+        }
+
+        QPointF b1 = b0 + ( p1 - b0 ) * fract;
+        QPointF b2 = b3 + ( p1 - b3 ) * fract;
+
+        // Finally add the bezier-segment.
+        newEndPoint = curveTo( b1, b2, b3 );
+    }
+
+    return newEndPoint;
+}
+
 int KoPathShape::arcToCurve( double rx, double ry, double startAngle, double sweepAngle, const QPointF & offset, QPointF * curvePoints ) const
 {
     int pointCnt = 0;

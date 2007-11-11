@@ -152,6 +152,9 @@ public:
      */
     KoPathPoint * arcTo( double rx, double ry, double startAngle, double sweepAngle );
 
+
+    KoPathPoint * arcTo( const QPointF &p1, const QPointF &p2, const double r );
+
     /**
      * @brief close the current subpath
      */

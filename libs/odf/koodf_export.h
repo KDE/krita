@@ -24,7 +24,7 @@
 #include <kdemacros.h>
 
 #ifndef KOODF_EXPORT
-# if defined(MAKE_LIBKOODF_LIB)
+# if defined(MAKE_KOODF_LIB)
    /* We are building this library */ 
 #  define KOODF_EXPORT KDE_EXPORT
 # else

@@ -106,7 +106,7 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KDECORE_LIBS} pigmentcms komain koresources ${KDE4_THREADWEAVER_LIBRARIES} )
+target_link_libraries(kritaimage ${KDE4_KDECORE_LIBS} pigmentcms komain koguiutils koresources ${KDE4_THREADWEAVER_LIBRARIES} )
 
 set_target_properties(kritaimage PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kritaimage  DESTINATION ${LIB_INSTALL_DIR})

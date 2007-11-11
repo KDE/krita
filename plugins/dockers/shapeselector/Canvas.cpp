@@ -31,6 +31,7 @@
 #include <QMouseEvent>
 #include <QToolTip>
 #include <QUndoCommand>
+#include <QPainter>
 
 #include <kdebug.h>
 

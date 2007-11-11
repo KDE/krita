@@ -27,6 +27,7 @@
 #include <KoShapeConnection.h>
 
 #include <kdebug.h>
+#include <QPainter>
 
 ConnectionTool::ConnectionTool(KoCanvasBase *canvas)
 : KoTool(canvas),

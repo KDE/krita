@@ -22,6 +22,7 @@
 
 #include "KoShape.h"
 #include "KoShapeManager.h"
+#include <QPainter>
 
 class KoShapeManagerPaintingStrategy::Private
 {

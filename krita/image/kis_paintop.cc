@@ -185,7 +185,6 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
     KisVector2D start(pi1.pos());
 
     KisVector2D dragVec = end - start;
-    KisVector2D movement = dragVec;
 
     if (savedDist < 0) {
         paintAt(pi1);
@@ -256,7 +255,7 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
         double xTilt = (1 - t) * pi1.xTilt() + t * pi2.xTilt();
         double yTilt = (1 - t) * pi1.yTilt() + t * pi2.yTilt();
 
-        paintAt(KisPaintInformation(p, pressure, xTilt, yTilt, movement));
+        paintAt(KisPaintInformation(p, pressure, xTilt, yTilt, dragVec));
         dist -= spacing;
     }
 

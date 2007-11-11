@@ -123,10 +123,10 @@ KisDynamicShape* KisAutoMaskShape::clone() const
 
 void KisAutoMaskShape::resize(double xs, double ys)
 {
-    autoDab.width *= (int)(2 * xs);
-    autoDab.hfade *= (int)(2 * xs);
-    autoDab.height *= (int)(2 * ys);
-    autoDab.vfade *= (int)(2 * ys);
+    autoDab.width = (int)(autoDab.width * xs);
+    autoDab.hfade = (int)(autoDab.hfade * xs);
+    autoDab.height = (int)(autoDab.height * ys);
+    autoDab.vfade = (int)(autoDab.vfade * ys);
 }
 
 void KisAutoMaskShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* coloringsrc,const QPointF &/*pos*/, const KisPaintInformation& /*info*/)

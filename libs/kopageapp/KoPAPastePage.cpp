@@ -43,74 +43,40 @@ KoPAPastePage::KoPAPastePage( KoPADocument * doc, KoPAPageBase * activePage )
 {
 }
 
-bool KoPAPastePage::paste( const QString & mimeType, const QMimeData * data )
+bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStore )
 {
-    QByteArray arr = data->data( mimeType );
-    bool retval = false;
-    if ( !arr.isEmpty() ) {
-        QBuffer buffer( &arr );
-        KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
-        KoOdfReadStore odfStore( store );
+    KoOasisLoadingContext loadingContext( m_doc, odfStore.styles(), odfStore.store() );
+    KoPALoadingContext paContext( loadingContext );
 
-        QString errorMessage;
-        if ( ! odfStore.loadAndParse( errorMessage ) ) {
-            kError() << "loading and parsing failed:" << errorMessage << endl;
-            return false;
-        }
+    QList<KoPAPageBase *> masterPages( m_doc->loadOdfMasterPages( odfStore.styles().masterPages(), paContext ) );
+    QList<KoPAPageBase *> pages( m_doc->loadOdfPages( body, paContext ) );
 
-        KoOasisLoadingContext loadingContext( m_doc, odfStore.styles(), odfStore.store() );
-        KoPALoadingContext paContext( loadingContext );
-
-        KoXmlElement content = odfStore.contentDoc().documentElement();
-        KoXmlElement realBody( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
-
-        if ( realBody.isNull() ) {
-            kError() << "No body tag found!" << endl;
-            return false;
-        }
-
-        KoXmlElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "presentation" );
-
-        if ( body.isNull() ) {
-            body = KoDom::namedItemNS( realBody, KoXmlNS::office, "drawing" );
-            if ( body.isNull() ) {
-                kError() << "No office:presentation nor office:drawing tag found!" << endl;
-                return false;
-            }
-        }
-
-        QList<KoPAPageBase *> masterPages( m_doc->loadOdfMasterPages( odfStore.styles().masterPages(), paContext ) );
-        QList<KoPAPageBase *> pages( m_doc->loadOdfPages( body, paContext ) );
-
-        KoPAPageBase * insertAfterPage = 0;
-        KoPAPageBase * insertAfterMasterPage = 0;
-        if ( dynamic_cast<KoPAMasterPage *>( m_activePage ) ) {
-            insertAfterMasterPage = m_activePage;
-            insertAfterPage = m_doc->pages( false ).last();
-        }
-        else {
-            insertAfterPage = m_activePage;
-            insertAfterMasterPage = m_doc->pages( true ).last();
-        }
-
-        QUndoCommand * cmd = new QUndoCommand( i18n( "Paste Page" ) );
-
-        foreach( KoPAPageBase * masterPage, masterPages )
-        {
-            new KoPAPageInsertCommand( m_doc, masterPage, insertAfterMasterPage, cmd );
-            insertAfterMasterPage = masterPage;
-        }
-
-        foreach( KoPAPageBase * page, pages )
-        {
-            new KoPAPageInsertCommand( m_doc, page, insertAfterPage, cmd );
-            insertAfterPage = page;
-        }
-
-        m_doc->addCommand( cmd );
-
-        retval = true;
+    KoPAPageBase * insertAfterPage = 0;
+    KoPAPageBase * insertAfterMasterPage = 0;
+    if ( dynamic_cast<KoPAMasterPage *>( m_activePage ) ) {
+        insertAfterMasterPage = m_activePage;
+        insertAfterPage = m_doc->pages( false ).last();
+    }
+    else {
+        insertAfterPage = m_activePage;
+        insertAfterMasterPage = m_doc->pages( true ).last();
     }
 
-    return retval;
+    QUndoCommand * cmd = new QUndoCommand( i18n( "Paste Page" ) );
+
+    foreach( KoPAPageBase * masterPage, masterPages )
+    {
+        new KoPAPageInsertCommand( m_doc, masterPage, insertAfterMasterPage, cmd );
+        insertAfterMasterPage = masterPage;
+    }
+
+    foreach( KoPAPageBase * page, pages )
+    {
+        new KoPAPageInsertCommand( m_doc, page, insertAfterPage, cmd );
+        insertAfterPage = page;
+    }
+
+    m_doc->addCommand( cmd );
+
+    return true;
 }

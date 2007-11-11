@@ -17,24 +17,29 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOPAPASTEPAGE_H
-#define KOPAPASTEPAGE_H
+#ifndef KOODFPASTE_H
+#define KOODFPASTE_H
 
-#include "KoOdfPaste.h"
+#include <KoOdf.h>
 
-class KoPADocument;
-class KoPAPageBase;
+#include <komain_export.h>
 
-class KoPAPastePage : public KoOdfPaste
+class QString;
+class QMimeData;
+class KoXmlElement;
+class KoOdfReadStore;
+
+//TODO export
+class KOMAIN_EXPORT KoOdfPaste
 {
 public:
-    KoPAPastePage( KoPADocument * doc, KoPAPageBase * m_activePage );
+    KoOdfPaste();
+    virtual ~KoOdfPaste();
+
+    bool paste( KoOdf::DocumentType documentType, const QMimeData * data );
 
 protected:
-    bool process( const KoXmlElement & body, KoOdfReadStore & odfStore );
-
-    KoPADocument * m_doc;
-    KoPAPageBase * m_activePage;
+    virtual bool process( const KoXmlElement & body, KoOdfReadStore & odfStore ) = 0;
 };
 
-#endif /* KOPAPASTEPAGE_H */
+#endif /* KOODFPASTE_H */

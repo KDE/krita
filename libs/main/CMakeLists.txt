@@ -48,6 +48,7 @@ set(komain_LIB_SRCS
    KoPageLayout.cpp
    KoFileDialog.cpp
    KoVersionDialog.cpp
+   KoOdfPaste.cpp
    KoOdfReadStore.cpp
    kkbdaccessextensions.cpp
    KoOpenPane.cpp
@@ -144,6 +145,7 @@ install( FILES
     kkbdaccessextensions.h 
     KoOpenPane.h 
     KoOasisLoadingContext.h 
+    KoOdfPaste.h
     KoRTree.h
     threadAction/KoJobsListPolicy.h
     threadAction/KoExecutePolicy.h

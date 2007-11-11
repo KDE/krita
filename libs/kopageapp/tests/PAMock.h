@@ -22,6 +22,8 @@
 
 #include "KoPADocument.h"
 
+#include <KoOdf.h>
+
 class KoView;
 
 class MockDocument : public KoPADocument
@@ -32,6 +34,7 @@ public:
     {}
     KoView *createViewInstance( QWidget * /* parent */ ) { return 0; }
     const char *odfTagName( bool ) { return ""; }
+    virtual KoOdf::DocumentType documentType() const { return KoOdf::Presentation; }
 };
 
 

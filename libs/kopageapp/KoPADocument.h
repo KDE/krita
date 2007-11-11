@@ -22,6 +22,7 @@
 
 #include <QObject>
 
+#include <KoOdf.h>
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
 #include "KoPageApp.h"
@@ -147,6 +148,12 @@ public:
      * Reimplement when you need a derivered class in your kopageapplication 
      */
     virtual KoPAMasterPage * newMasterPage();
+
+    /**
+     * Get the type of the document
+     */
+    virtual KoOdf::DocumentType documentType() const = 0;
+
 
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const;

@@ -218,8 +218,7 @@ void KoPAView::editCopy()
     pages.append( m_activePage );
     KoPAOdfPageSaveHelper saveHelper( m_doc, pages );
     KoDrag drag;
-    // TODO use the correct type
-    drag.setOdf( "application/vnd.oasis.opendocument.presentation", saveHelper );
+    drag.setOdf( KoOdf::mimeType( m_doc->documentType() ), saveHelper );
     //drag.setData( "text/plain", "Test" );
     drag.addToClipboard();
 }
@@ -228,11 +227,14 @@ void KoPAView::editPaste()
 {
     const QMimeData * data = QApplication::clipboard()->mimeData();
 
-    // TODO also test for ....graphics
-    const char * mimeType = "application/vnd.oasis.opendocument.presentation";
-    if ( data->hasFormat( mimeType ) ) {
-        KoPAPastePage paste( m_doc, m_activePage );
-        paste.paste( mimeType, data );
+    KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
+
+    for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
+    {
+        if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
+            KoPAPastePage paste( m_doc, m_activePage );
+            paste.paste( documentTypes[i], data );
+        }
     }
 }
 

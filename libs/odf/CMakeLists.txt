@@ -9,6 +9,7 @@ include_directories( ${KOSTORE_INCLUDES} )
 #endif( QCA2_FOUND )
 
 set(koodf_LIB_SRCS
+    KoOdf.cpp
     KoXmlNS.cpp
     KoDom.cpp
     KoUnit.cpp
@@ -27,6 +28,7 @@ install(TARGETS koodf DESTINATION ${LIB_INSTALL_DIR} )
 
 
 install( FILES
+    KoOdf.h
     KoXmlNS.h
     KoDom.h
     KoUnit.h

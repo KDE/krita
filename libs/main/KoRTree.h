@@ -22,17 +22,20 @@
 #ifndef KORTREE_H
 #define KORTREE_H
 
+#include <KDebug>
+
 #include <QPair>
 #include <QMap>
 #include <QList>
 #include <QVector>
-#include <QDebug>
 #include <QPointF>
 #include <QRectF>
-#include <QPainter>
 #include <qvarlengtharray.h>
 
 // #define KOFFICE_RTREE_DEBUG
+#ifdef KOFFICE_RTREE_DEBUG
+#include <QPainter>
+#endif
 
 /**
  * @brief The KoRTree class is a template class that provides a R-tree.
@@ -334,7 +337,7 @@ void KoRTree<T>::insertHelper( const QRectF& bb, const T& data, int id )
     {
         nbb.setWidth(0.0001);
         nbb.setHeight(0.0001);
-        qWarning( "KoRTree::insert bouningBox isNull setting size to (%fx%f) ", nbb.width(), nbb.height() );
+        kWarning(30003) <<  "KoRTree::insert bouningBox isNull setting size to" << nbb.size();
     }
 
     LeafNode * leaf = m_root->chooseLeaf( nbb );
@@ -394,7 +397,7 @@ void KoRTree<T>::remove( const T&data )
     LeafNode * leaf = m_leafMap[data];
     if ( leaf == 0 )
     {
-        //qWarning( "KoRTree<T>::remove( const T&data) data not found" );
+        kWarning(30003) << "KoRTree<T>::remove( const T&data) data not found";
         return;
     }
     m_leafMap.remove(data);
@@ -1038,7 +1041,7 @@ void KoRTree<T>::LeafNode::remove( const T& data )
     }
     if ( old_counter == this->m_counter )
     {
-        qWarning( "LeafNode::remove( const T&data) data not found" );
+        kWarning(30003) << "LeafNode::remove( const T&data) data not found";
     }
 }
 

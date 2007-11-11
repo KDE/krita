@@ -1,7 +1,26 @@
 KOffice libs uses so called CamelCase naming for all files in the libraries.
 Example:  KoParagDia.cpp
-Extensions are always .cpp and .h
+File extensions are always .cpp and .h
 We prefer one class per file.  This is to make the filename match the class, which
 obviously does not work if there is more then one class in the file.
 When there is a private class that is not used outside the file it's ok to have it
 in the same file as another class.
+
+KOffice and Namespaces
+======================
+KOffice in general does not use namespaces, but uses a prefix for each class.
+Application maintainers may have a slightly different rule.
+
+The libs certainly don't use namespaces and (exported) classes in the libs use
+the name prefix 'Ko'.
+This allows you to see that any class that starts with 'Ko' is from the KOffice libs.
+Note that this implies that the naming prefix 'Ko' is restricted to the libs, classes
+outside the libs are not allowed to use it.
+
+Futher names are
+KW for KWord classes
+KoPA for the libs/kopageapp library
+KPr for KPresenter
+Kis for Krita (from KImage-shop)
+
+

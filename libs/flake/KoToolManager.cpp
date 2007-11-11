@@ -323,8 +323,10 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
 
     // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
     d->canvasData->canvas->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
-    foreach(QAction *action, d->canvasData->activeTool->actions().values())
+    foreach(QAction *action, d->canvasData->activeTool->actions().values()) {
         action->setEnabled(true);
+        d->canvasData->canvas->addAction(action);
+    }
     d->canvasData->activeTool->activate(temporary);
 
     postSwitchTool();

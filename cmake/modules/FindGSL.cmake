@@ -23,6 +23,7 @@ ELSE (GSL_INCLUDE_DIR AND GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_VERSION)
 	FIND_PATH (GSL_INCLUDE_DIR gsl_multimin.h
 		/usr/include/gsl
 		/usr/local/include/gsl
+        ${CMAKE_INCLUDE_PATH}/gsl
 	)
 
 	FIND_PROGRAM (GSL_CONFIG gsl-config)

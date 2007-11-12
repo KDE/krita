@@ -79,8 +79,8 @@ void KisThreadedApplicator::execute()
     // XXX_PROGRESS: compute the total number of jobs we're going to
     // start first, so we can set the KoProgressUpdater up in the
     // right way.
-    int h = m_d->rc.height();
-    int w = m_d->rc.width();
+    double h = m_d->rc.height();
+    double w = m_d->rc.width();
     int x = m_d->rc.x();
     int y = m_d->rc.y();
 
@@ -93,7 +93,7 @@ void KisThreadedApplicator::execute()
         m_d->weaver->enqueue( job );
     }
     else {
-        int numTasks = static_cast<int>( ceil( w / m_d->tileSize ) * ceil( h / m_d->tileSize) );
+        int numTasks = static_cast<int>( ceil( w / m_d->tileSize * h / m_d->tileSize) );
         m_d->progressUpdater->start( numTasks );    
 
         int wleft = w;

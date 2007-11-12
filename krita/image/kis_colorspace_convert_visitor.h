@@ -113,7 +113,7 @@ namespace {
 
 class KoColorSpaceConvertVisitor :public KisNodeVisitor {
 public:
-    KoColorSpaceConvertVisitor(KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent);
+    KoColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent);
     virtual ~KoColorSpaceConvertVisitor();
 
 public:
@@ -128,12 +128,12 @@ public:
     bool visit(KisAdjustmentLayer* layer);
 
 private:
-    KoColorSpace *m_dstColorSpace;
+    const KoColorSpace *m_dstColorSpace;
     KoColorConversionTransformation::Intent m_renderingIntent;
     QBitArray m_emptyChannelFlags;
 };
 
-KoColorSpaceConvertVisitor::KoColorSpaceConvertVisitor(KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) :
+KoColorSpaceConvertVisitor::KoColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) :
     KisNodeVisitor(),
     m_dstColorSpace(dstColorSpace),
     m_renderingIntent(renderingIntent)

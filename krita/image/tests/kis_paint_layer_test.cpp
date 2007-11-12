@@ -38,7 +38,7 @@ void KisPaintLayerTest::testProjection()
 {
 
     QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisImageSP image = new KisImage(0, qimg.width(), qimg.height(), cs, "merge test");
 
     KisPaintLayerSP layer = new KisPaintLayer( image, "test", OPACITY_OPAQUE );

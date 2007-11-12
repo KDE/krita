@@ -86,7 +86,7 @@ bool KisLoadVisitor::visit(KisPaintLayer *layer)
         data = m_store->read(m_store->size());
         m_store->close();
         // Create a colorspace with the embedded profile
-        KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(layer->paintDevice()->colorSpace()->id(), new KoIccColorProfile(data));
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(layer->paintDevice()->colorSpace()->id(), new KoIccColorProfile(data));
         // replace the old colorspace
         layer->paintDevice()->setDataManager(layer->paintDevice()->dataManager(), cs);
 

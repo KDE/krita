@@ -456,7 +456,7 @@ void KisSelectionManager::copy()
     KisPaintDeviceSP clip = KisPaintDeviceSP(new KisPaintDevice(dev->colorSpace(), "clip"));
     Q_CHECK_PTR(clip);
 
-    KoColorSpace * cs = clip->colorSpace();
+    const KoColorSpace * cs = clip->colorSpace();
 
     // TODO if the source is linked... copy from all linked layers?!?
 

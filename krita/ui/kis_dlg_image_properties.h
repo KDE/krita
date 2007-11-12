@@ -45,7 +45,7 @@ public:
                           const char *name = 0);
     virtual ~KisDlgImageProperties();
 
-    KoColorSpace * colorSpace();
+    const KoColorSpace * colorSpace();
     KoColorProfile * profile();
 
 private slots:

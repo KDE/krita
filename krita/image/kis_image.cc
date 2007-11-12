@@ -87,7 +87,7 @@ public:
 
     KoUnit unit;
 
-    KoColorSpace * colorSpace;
+    const KoColorSpace * colorSpace;
 
     KisGroupLayerSP rootLayer; // The layers are contained in here
     QList<KisLayer*> dirtyLayers; // for thumbnails
@@ -107,7 +107,7 @@ public:
 
 
 
-KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace, const QString& name)
+KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)
     : QObject(0)
     , KisShared()
     , m_d( new KisImagePrivate() )
@@ -287,7 +287,7 @@ void KisImage::rollBackLayerName()
     m_d->nserver->rollback();
 }
 
-void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace)
+void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace)
 {
     if (colorSpace == 0) {
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -562,7 +562,7 @@ void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
     }
 }
 
-void KisImage::convertTo(KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
+void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
 {
     if ( m_d->colorSpace == dstColorSpace )
     {
@@ -571,7 +571,7 @@ void KisImage::convertTo(KoColorSpace * dstColorSpace, KoColorConversionTransfor
 
     lock();
 
-    KoColorSpace * oldCs = m_d->colorSpace;
+    const KoColorSpace * oldCs = m_d->colorSpace;
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Convert Image Type"));
@@ -593,7 +593,7 @@ void KisImage::convertTo(KoColorSpace * dstColorSpace, KoColorConversionTransfor
     }
 }
 
-KoColorProfile * KisImage::profile() const
+const KoColorProfile * KisImage::profile() const
 {
     return colorSpace()->profile();
 }
@@ -602,13 +602,13 @@ void KisImage::setProfile(const KoColorProfile * profile)
 {
     if (profile == 0) return;
 
-    KoColorSpace * dstCs= KoColorSpaceRegistry::instance()->colorSpace( colorSpace()->id(),
+    const KoColorSpace * dstCs= KoColorSpaceRegistry::instance()->colorSpace( colorSpace()->id(),
                                                                                          profile);
     if (dstCs) {
 
         lock();
 
-        KoColorSpace * oldCs = colorSpace();
+        const KoColorSpace * oldCs = colorSpace();
         setColorSpace(dstCs);
         emit(sigProfileChanged(const_cast<KoColorProfile *>(profile)));
 
@@ -1066,12 +1066,12 @@ void KisImage::slotSelectionChanged(const QRect& r)
     }
 }
 
-KoColorSpace * KisImage::colorSpace() const
+const KoColorSpace * KisImage::colorSpace() const
 {
     return m_d->colorSpace;
 }
 
-void KisImage::setColorSpace(KoColorSpace * colorSpace)
+void KisImage::setColorSpace(const KoColorSpace * colorSpace)
 {
     m_d->colorSpace = colorSpace;
     m_d->rootLayer->resetProjection();
@@ -1128,7 +1128,7 @@ void KisImage::removeAnnotation(const QString& type)
 
 vKisAnnotationSP_it KisImage::beginAnnotations()
 {
-    KoColorProfile * profile = colorSpace()->profile();
+    const KoColorProfile * profile = colorSpace()->profile();
     KisAnnotationSP annotation;
 
     if (profile)
@@ -1137,7 +1137,7 @@ vKisAnnotationSP_it KisImage::beginAnnotations()
         // XXX productName(), or just "ICC Profile"?
         if( profile->valid())
         {
-            KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
+            const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (!iccprofile->rawData().isEmpty())
             {
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());

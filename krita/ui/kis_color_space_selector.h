@@ -29,7 +29,7 @@ class KisColorSpaceSelector : public QWidget {
     public:
         KisColorSpaceSelector(QWidget* parent);
         ~KisColorSpaceSelector();
-        KoColorSpace* currentColorSpace();
+        const KoColorSpace* currentColorSpace();
         void setCurrentColorModel(const KoID& id);
         void setCurrentColorDepth(const KoID& id);
     private slots:

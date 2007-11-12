@@ -168,7 +168,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     KisBrush * brush = painter()->brush();
     if (not brush) return;
 
-    KoColorSpace * colorSpace = source()->colorSpace();
+    const KoColorSpace * colorSpace = source()->colorSpace();
 
     QPointF hotSpot = brush->hotSpot(info);
     QPointF pt = info.pos() - hotSpot;

@@ -69,7 +69,7 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask) {
     return computeDab(mask, d->painter->device()->colorSpace());
 }
 
-KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, KoColorSpace *cs)
+KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, const KoColorSpace *cs)
 {
     // XXX: According to the SeaShore source, the Gimp uses a
     // temporary layer the size of the layer that is being painted

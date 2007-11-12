@@ -33,7 +33,7 @@ class KOGUIUTILS_EXPORT KoXYColorSelector : public KXYSelector
   Q_OBJECT
 
 public:
-    explicit KoXYColorSelector( KoColorSpace* colorSpace,  QWidget *parent=0 );
+    explicit KoXYColorSelector( const KoColorSpace* colorSpace,  QWidget *parent=0 );
 
     void setColors( const KoColor& topLeftColor, const KoColor& topRightColor,  const KoColor& bottomLeftColor, const KoColor& bottomRightColor);
 
@@ -43,7 +43,7 @@ protected:
 private:
     KoColor m_colors[4];
     enum {TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT};
-    KoColorSpace* m_colorSpace;
+    const KoColorSpace* m_colorSpace;
 };
 
 #endif

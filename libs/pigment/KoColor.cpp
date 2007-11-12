@@ -35,7 +35,7 @@ public:
     }
 
     quint8 * data;
-    KoColorSpace * colorSpace;
+    const KoColorSpace * colorSpace;
 };
 
 KoColor::KoColor()
@@ -47,7 +47,7 @@ KoColor::KoColor()
     d->colorSpace->setAlpha(d->data, OPACITY_OPAQUE, 1);
 }
 
-KoColor::KoColor(KoColorSpace * colorSpace)
+KoColor::KoColor(const KoColorSpace * colorSpace)
     : d(new Private())
 {
     d->colorSpace = colorSpace;
@@ -61,7 +61,7 @@ KoColor::~KoColor()
     delete d;
 }
 
-KoColor::KoColor(const QColor & color, KoColorSpace * colorSpace)
+KoColor::KoColor(const QColor & color, const KoColorSpace * colorSpace)
     : d(new Private())
 {
     d->colorSpace = colorSpace;
@@ -75,7 +75,7 @@ KoColor::KoColor(const QColor & color, KoColorSpace * colorSpace)
 }
 
 
-KoColor::KoColor(const QColor & color, quint8 alpha, KoColorSpace * colorSpace)
+KoColor::KoColor(const QColor & color, quint8 alpha, const KoColorSpace * colorSpace)
     : d(new Private())
 {
     d->colorSpace = colorSpace;
@@ -87,7 +87,7 @@ KoColor::KoColor(const QColor & color, quint8 alpha, KoColorSpace * colorSpace)
     d->colorSpace->fromQColor(color, alpha, d->data);
 }
 
-KoColor::KoColor(const quint8 * data, KoColorSpace * colorSpace)
+KoColor::KoColor(const quint8 * data, const KoColorSpace * colorSpace)
     : d(new Private())
 {
     d->colorSpace = colorSpace;
@@ -97,7 +97,7 @@ KoColor::KoColor(const quint8 * data, KoColorSpace * colorSpace)
 }
 
 
-KoColor::KoColor(const KoColor &src, KoColorSpace * colorSpace)
+KoColor::KoColor(const KoColor &src, const KoColorSpace * colorSpace)
     : d(new Private())
 {
     d->colorSpace = colorSpace;
@@ -139,7 +139,7 @@ bool KoColor::operator==(const KoColor &other) const
     return memcmp(d->data, other.d->data, d->colorSpace->pixelSize()) == 0;
 }
 
-void KoColor::convertTo(KoColorSpace * cs)
+void KoColor::convertTo(const KoColorSpace * cs)
 {
     //kDebug(DBG_AREA_CMS) <<"Our colormodel:" << d->colorSpace->id().name()
     //      << ", new colormodel: " << cs->id().name() << "\n";
@@ -158,7 +158,7 @@ void KoColor::convertTo(KoColorSpace * cs)
 }
 
 
-void KoColor::setColor(quint8 * data, KoColorSpace * colorSpace)
+void KoColor::setColor(quint8 * data, const KoColorSpace * colorSpace)
 {
     delete [] d->data;
     d->data = new quint8[colorSpace->pixelSize()];
@@ -236,7 +236,7 @@ void KoColor::fromKoColor(const KoColor& src)
     src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace(), 1);
 }
 
-KoColorProfile *  KoColor::profile() const
+const KoColorProfile *  KoColor::profile() const
 {
     return d->colorSpace->profile();
 }
@@ -245,7 +245,7 @@ quint8 * KoColor::data() const {
     return d->data;
 }
 
-KoColorSpace * KoColor::colorSpace() const {
+const KoColorSpace * KoColor::colorSpace() const {
     return d->colorSpace;
 }
 

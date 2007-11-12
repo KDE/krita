@@ -31,7 +31,7 @@ class KoCompositeOpBurn : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOp
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
     public:
 
-        KoCompositeOpBurn(KoColorSpace * cs)
+        KoCompositeOpBurn(const KoColorSpace * cs)
         : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpBurn<_CSTraits> >(cs, COMPOSITE_BURN, i18n("Burn" ) )
         {
         }

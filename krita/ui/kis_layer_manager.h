@@ -64,7 +64,7 @@ public:
 signals:
 
     /// XXX: Move this to kisview or to kisresourceprovider? (BSAR)
-    void currentColorSpaceChanged(KoColorSpace * cs);
+    void currentColorSpaceChanged(const KoColorSpace * cs);
     void sigActiveSelectionChanged(KisImageSP image);
     void sigLayerActivated( KisLayerSP layer );
 

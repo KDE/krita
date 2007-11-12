@@ -80,7 +80,7 @@ class KisGenericColorspace : public KoColorSpace {
     public:
         virtual KoID colorModelId() const { return KoID("",""); }
         virtual KoID colorDepthId() const { return KoID("",""); }
-        virtual bool profileIsCompatible(KoColorProfile* profile) const {return false;}
+        virtual bool profileIsCompatible(const KoColorProfile* profile) const {return false;}
 
         //========== Channels =====================================================//
 
@@ -95,7 +95,7 @@ class KisGenericColorspace : public KoColorSpace {
 
         virtual quint32 pixelSize() const { return _nbchannels * sizeof(_type); }
 
-        virtual KoColorProfile * profile() const { return 0; }
+        virtual const KoColorProfile * profile() const { return 0; }
 
         virtual bool willDegrade(ColorSpaceIndependence ) const {return true;}
 
@@ -103,7 +103,7 @@ class KisGenericColorspace : public KoColorSpace {
 
         virtual QString normalisedChannelValueText(const quint8 */*pixel*/, quint32 /*channelIndex*/) const { return "invalid"; };
 		virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const { return; }
-		virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) { return; }
+		virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const { return; }
 
         virtual quint8 scaleToU8(const quint8 * /*srcPixel*/, qint32 /*channelPos*/) const { return 0; }
 
@@ -117,20 +117,18 @@ class KisGenericColorspace : public KoColorSpace {
 
         virtual bool hasHighDynamicRange() const { return false; }
 
-        virtual KoColorProfile * getProfile() const { return 0; }
+        virtual void fromQColor(const QColor& /*c*/, quint8 */*dst*/, const KoColorProfile */* profile = 0*/) const { }
 
-        virtual void fromQColor(const QColor& /*c*/, quint8 */*dst*/, KoColorProfile */* profile = 0*/) const { }
+        virtual void fromQColor(const QColor& /*c*/, quint8 /*opacity*/, quint8 */*dst*/, const KoColorProfile * /*profile = 0*/) const { }
 
-        virtual void fromQColor(const QColor& /*c*/, quint8 /*opacity*/, quint8 */*dst*/, KoColorProfile * /*profile = 0*/) const { }
+        virtual void toQColor(const quint8 */*src*/, QColor */*c*/, const KoColorProfile * /*profile = 0*/) const { }
 
-        virtual void toQColor(const quint8 */*src*/, QColor */*c*/, KoColorProfile * /*profile = 0*/) const { }
-
-        virtual void toQColor(const quint8 */*src*/, QColor */*c*/, quint8 */*opacity*/, KoColorProfile * /*profile = 0*/) const { }
+        virtual void toQColor(const quint8 */*src*/, QColor */*c*/, quint8 */*opacity*/, const KoColorProfile * /*profile = 0*/) const { }
 
         virtual void singleChannelPixel(quint8 *, const quint8 *, quint32 ) const {}
 
         virtual QImage convertToQImage(const quint8 */*data*/, qint32 /*width*/, qint32 /*height*/,
-                                       KoColorProfile *  /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent = INTENT_PERCEPTUAL*/,
+                                       const KoColorProfile *  /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent = INTENT_PERCEPTUAL*/,
                                        float /*exposure = 0.0f*/) const { return QImage(); }
 
         virtual void toLabA16(const quint8 * /*src*/, quint8 * /*dst*/, const quint32 /*nPixels*/) const { }

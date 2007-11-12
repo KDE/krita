@@ -1,32 +1,27 @@
+GC.disable
+# GC.disable
 # require 'Krita'
 require 'KritaDockFactory'
-if(require 'Qt')
-#     class Kikoo < Qt::Object
-#         slots 'timeout()'
-#         def initialize()
-#             super()
-#             @timer = Qt::Timer.new
-#             connect(@timer, SIGNAL('timeout()'), SLOT('timeout()'))
-#             @timer.start(100) 
-#         end
-#         def timeout
-#             while(true)
-#                 puts "kikoo"
-#                 Qt::Application.instance().processEvents
-#                 sleep(0.1)
-#             end
-#         end
-#     end 
+if(require 'korundum4')
+    class Kikoo < Qt::Object
+        slots 'timeout()'
+        def initialize()
+            super()
+            @timer = Qt::Timer.new
+            connect(@timer, SIGNAL('timeout()'), SLOT('timeout()'))
+            @timer.start(100)
+        end
+        def timeout
+            while(true)
+                puts "kikoo #{Qt::EventLoop::AllEvents | Qt::EventLoop::WaitForMoreEvents | Qt::EventLoop::DeferredDeletion}"
+                Qt::Application.instance().processEvents(Qt::EventLoop::AllEvents | Qt::EventLoop::WaitForMoreEvents | Qt::EventLoop::DeferredDeletion)
+            end
+        end
+    end 
     class PaletteWidget < Qt::Widget
-#        slots 'slotLinkActivated(QString)'
         def initialize(parent)
             super(parent)
             @count = 5
-            @label = Qt::Label.new("<a href=\"myLink\">Link</a>", self)
-            connect(@label, SIGNAL('linkActivated(QString)'), self, SLOT('slotLinkActivated(QString)'))
-        end
-        def slotLinkActivated(link)
-            puts "slotLinkActivated " + link
         end
 #         def paintEvent( event )
 #             painter = Qt::Painter.new( self )
@@ -46,9 +41,9 @@ if(require 'Qt')
         $wdg = Qt::DockWidget.new(Qt::Object::tr("Palette"))
         $label = PaletteWidget.new($wdg)
         $wdg.setWidget($label)
-        #$kikoo = Kikoo.new
         voidptr = Qt::Internal.smoke2kross($wdg)
         ko = Kross::Object::fromVoidPtr(voidptr)
+#         $kikoo = Kikoo.new
         return ko
     end
 

@@ -31,7 +31,7 @@
 #include "kis_iterator_test.h"
 #include "kis_paint_device.h"
 
-void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)( KoColorSpace*cs ) )
+void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)( const KoColorSpace*cs ) )
 {
     QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
 
@@ -41,12 +41,12 @@ void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)( KoColor
 
         QList<KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
         if ( profiles.size() == 0 ) {
-            KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
+            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
             if ( cs ) ( this->*funcPtr )( cs );
         }
         else {
             foreach( KoColorProfile * profile, profiles ) {
-                KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
+                const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
                 if ( cs ) ( this->*funcPtr )( cs );
             }
 
@@ -54,7 +54,7 @@ void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)( KoColor
     }
 }
 
-void KisIteratorTest::writeBytes( KoColorSpace * colorSpace )
+void KisIteratorTest::writeBytes( const KoColorSpace * colorSpace )
 {
 
 
@@ -95,7 +95,7 @@ void KisIteratorTest::writeBytes( KoColorSpace * colorSpace )
     delete[] bytes;
 }
 
-void KisIteratorTest::fill( KoColorSpace * colorSpace )
+void KisIteratorTest::fill( const KoColorSpace * colorSpace )
 {
 
     KisPaintDevice dev( colorSpace, "test");
@@ -127,7 +127,7 @@ void KisIteratorTest::fill( KoColorSpace * colorSpace )
     delete[] bytes;
 }
 
-void KisIteratorTest::rectIter( KoColorSpace * colorSpace )
+void KisIteratorTest::rectIter( const KoColorSpace * colorSpace )
 {
 
     KisPaintDevice dev( colorSpace, "test");
@@ -171,7 +171,7 @@ void KisIteratorTest::rectIter( KoColorSpace * colorSpace )
     delete[] bytes;
 }
 
-void KisIteratorTest::hLineIter( KoColorSpace * colorSpace )
+void KisIteratorTest::hLineIter( const KoColorSpace * colorSpace )
 {
     KisPaintDevice dev( colorSpace, "test");
 
@@ -228,7 +228,7 @@ void KisIteratorTest::hLineIter( KoColorSpace * colorSpace )
     delete[] bytes;
 }
 
-void KisIteratorTest::vLineIter( KoColorSpace * colorSpace )
+void KisIteratorTest::vLineIter( const KoColorSpace * colorSpace )
 {
 
     KisPaintDevice dev( colorSpace, "test");
@@ -269,7 +269,7 @@ void KisIteratorTest::vLineIter( KoColorSpace * colorSpace )
 
 }
 
-void KisIteratorTest::randomAccessor( KoColorSpace * colorSpace )
+void KisIteratorTest::randomAccessor( const KoColorSpace * colorSpace )
 {
 
     KisPaintDevice dev( colorSpace, "test");

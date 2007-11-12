@@ -98,7 +98,7 @@ public:
 protected:
 
     virtual KisPaintDeviceSP computeDab(KisQImagemaskSP mask);
-    virtual KisPaintDeviceSP computeDab(KisQImagemaskSP mask, KoColorSpace *cs);
+    virtual KisPaintDeviceSP computeDab(KisQImagemaskSP mask, const KoColorSpace *cs);
 
     /**
      * Split the coordinate into whole + fraction, where fraction is always >= 0.

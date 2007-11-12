@@ -91,7 +91,7 @@ private:
     Q3ValueVector<ComboboxInfo> m_comboInfo;
     QPixmap m_pix;
     KisHistogramSP m_histogram;
-    KoColorSpace* m_cs;
+    const KoColorSpace* m_cs;
     KoHistogramProducerSP m_currentProducer;
     QList<KoChannelInfo *> m_channels;
     // Maps the channels in m_channels to a real channel offset in the producer->channels()

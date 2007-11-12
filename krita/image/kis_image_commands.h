@@ -97,15 +97,15 @@ private:
 class KisImageConvertTypeCommand : public KisImageCommand {
 
 public:
-    KisImageConvertTypeCommand(KisImageSP image, KoColorSpace * beforeColorSpace, KoColorSpace * afterColorSpace);
+    KisImageConvertTypeCommand(KisImageSP image, const KoColorSpace * beforeColorSpace, const KoColorSpace * afterColorSpace);
     virtual ~KisImageConvertTypeCommand() {}
 
     virtual void redo();
     virtual void undo();
 
 private:
-    KoColorSpace * m_beforeColorSpace;
-    KoColorSpace * m_afterColorSpace;
+    const KoColorSpace * m_beforeColorSpace;
+    const KoColorSpace * m_afterColorSpace;
 };
 
 
@@ -123,17 +123,17 @@ public:
      * @param newProfile the new image profile
      * @param newResolution the new image resolution which will be used for xRes and yRes
      */
-    KisImagePropsCommand(KisImageSP image, KoColorSpace* newColorSpace, KoColorProfile* newProfile);
+    KisImagePropsCommand(KisImageSP image, const KoColorSpace* newColorSpace, const KoColorProfile* newProfile);
     virtual ~KisImagePropsCommand() {}
 
     virtual void redo();
     virtual void undo();
 
 private:
-    KoColorSpace * m_newColorSpace;
-    KoColorSpace * m_oldColorSpace;
-    KoColorProfile* m_newProfile;
-    KoColorProfile* m_oldProfile;
+    const KoColorSpace * m_newColorSpace;
+    const KoColorSpace * m_oldColorSpace;
+    const KoColorProfile* m_newProfile;
+    const KoColorProfile* m_oldProfile;
 };
 
 

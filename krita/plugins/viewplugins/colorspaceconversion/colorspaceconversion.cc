@@ -97,7 +97,7 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
         // XXX: Do the rest of the stuff
         KoID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();
-        KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         image->convertTo(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
@@ -122,7 +122,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
         KoID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();
-        KoColorSpace * cs = KoColorSpaceRegistry::instance() ->
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance() ->
                 colorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());

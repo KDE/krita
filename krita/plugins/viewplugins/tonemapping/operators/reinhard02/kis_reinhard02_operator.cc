@@ -77,7 +77,7 @@ KisToneMappingOperatorConfigurationWidget* KisReinhard02Operator::createConfigur
     return new KisReinhard02OperatorConfigurationWidget(wdg);
 }
 
-KoColorSpace* KisReinhard02Operator::colorSpace() const
+const KoColorSpace* KisReinhard02Operator::colorSpace() const
 {
     return KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( XYZAColorModelID, Float32BitsColorDepthID), "" );
 }

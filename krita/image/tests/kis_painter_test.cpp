@@ -31,7 +31,7 @@
 #include "kis_painter.h"
 #include "kis_pixel_selection.h"
 
-void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( KoColorSpace*cs ) )
+void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( const KoColorSpace*cs ) )
 {
     QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
 
@@ -41,7 +41,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( KoColorSp
 
         QList<KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
         if ( profiles.size() == 0 ) {
-            KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
+            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
             if ( cs->compositeOp( COMPOSITE_OVER ) != 0) {
                 if ( cs ) ( this->*funcPtr )( cs );
             }
@@ -51,7 +51,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( KoColorSp
         }
         else {
             foreach( KoColorProfile * profile, profiles ) {
-                KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
+                const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
                 if ( cs->compositeOp( COMPOSITE_OVER ) != 0) {
                     if ( cs ) ( this->*funcPtr )( cs );
                 }
@@ -82,7 +82,7 @@ Note: the bltMask tests assume the following geometry:
   +----------------+
                   30,30
  */
-void KisPainterTest::testPaintDeviceBltMask(KoColorSpace * cs)
+void KisPainterTest::testPaintDeviceBltMask(const KoColorSpace * cs)
 {
 
     KisPaintDeviceSP dst = new KisPaintDevice( cs, "dst");
@@ -118,7 +118,7 @@ void KisPainterTest::testPaintDeviceBltMask()
     allCsApplicator( &KisPainterTest::testPaintDeviceBltMask );
 }
 
-void KisPainterTest::testPaintDeviceBltMaskIrregular(KoColorSpace * cs)
+void KisPainterTest::testPaintDeviceBltMaskIrregular(const KoColorSpace * cs)
 {
 
     KisPaintDeviceSP dst = new KisPaintDevice( cs, "dst");
@@ -168,7 +168,7 @@ void KisPainterTest::testPaintDeviceBltMaskIrregular()
     allCsApplicator( &KisPainterTest::testPaintDeviceBltMaskIrregular );
 }
 
-void KisPainterTest::testPaintDeviceBltMaskInverted(KoColorSpace * cs)
+void KisPainterTest::testPaintDeviceBltMaskInverted(const KoColorSpace * cs)
 {
 
     KisPaintDeviceSP dst = new KisPaintDevice( cs, "dst");

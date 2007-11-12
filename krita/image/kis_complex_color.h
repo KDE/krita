@@ -37,8 +37,8 @@ class KRITAIMAGE_EXPORT KisComplexColor : public KisPaintDevice {
 
 public:
 
-    KisComplexColor(KoColorSpace *colorSpace);
-    KisComplexColor(KoColorSpace *colorSpace, const KoColor &kc);
+    KisComplexColor(const KoColorSpace *colorSpace);
+    KisComplexColor(const KoColorSpace *colorSpace, const KoColor &kc);
     ~KisComplexColor();
 
     void fromKoColor(const KoColor &kc);

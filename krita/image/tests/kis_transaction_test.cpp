@@ -30,7 +30,7 @@
 
 void KisTransactionTest::testUndo()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
 
     quint8* pixel = cs->allocPixelBuffer( 1 );
@@ -66,7 +66,7 @@ void KisTransactionTest::testUndo()
 
 void KisTransactionTest::testRedo()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
 
     quint8* pixel = cs->allocPixelBuffer( 1 );

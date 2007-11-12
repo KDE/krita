@@ -112,7 +112,7 @@ void NewLayerDialog::fillCmbComposite(const KoID & s)
         return;
     }
 
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(s,"");
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(s,"");
     if (cs) {
         m_page->cmbComposite->setCompositeOpList(cs->userVisiblecompositeOps());
     }

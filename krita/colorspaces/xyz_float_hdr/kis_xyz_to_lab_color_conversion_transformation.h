@@ -67,7 +67,7 @@ class KisXyzToLabColorConversionTransformationFactory : public KoColorConversion
     public:
         KisXyzToLabColorConversionTransformationFactory(QString _srcDepthId) : KoColorConversionTransformationFactory(XYZAColorModelID.id(),  _srcDepthId, LABAColorModelID.id(), Integer16BitsColorDepthID.id())
         {}
-        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual)
+        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
         {
             Q_UNUSED(renderingIntent);
             Q_ASSERT(canBeSource(srcColorSpace));

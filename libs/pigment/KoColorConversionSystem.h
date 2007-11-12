@@ -109,7 +109,7 @@ class PIGMENTCMS_EXPORT KoColorConversionSystem {
          * Query the registry to get the color space associated with this
          * node. (default profile)
          */
-        KoColorSpace* defaultColorSpaceForNode(const Node* node) const;
+        const KoColorSpace* defaultColorSpaceForNode(const Node* node) const;
         /**
          * @return the node corresponding to that key, or create it if needed
          */

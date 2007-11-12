@@ -147,7 +147,7 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::buttonClicked()
 {
-    KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
+    const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
 
     QColor qc(Qt::white);
 

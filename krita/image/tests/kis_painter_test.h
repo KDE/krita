@@ -28,10 +28,10 @@ class KisPainterTest : public QObject
     Q_OBJECT
 
 private:
-    void allCsApplicator(void (KisPainterTest::* funcPtr)( KoColorSpace*cs ) );
-    void testPaintDeviceBltMask( KoColorSpace * cs );
-    void testPaintDeviceBltMaskIrregular( KoColorSpace * cs );
-    void testPaintDeviceBltMaskInverted( KoColorSpace * cs );
+    void allCsApplicator(void (KisPainterTest::* funcPtr)( const KoColorSpace*cs ) );
+    void testPaintDeviceBltMask( const KoColorSpace * cs );
+    void testPaintDeviceBltMaskIrregular( const KoColorSpace * cs );
+    void testPaintDeviceBltMaskInverted( const KoColorSpace * cs );
 
 
 

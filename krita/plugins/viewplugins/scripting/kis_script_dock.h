@@ -23,10 +23,22 @@
 
 #include <KoDockFactory.h>
 #include <QObject>
+#include <QTimer>
 
 namespace Kross {
     class Action;
 }
+
+class Kikoo : public QObject
+{
+    Q_OBJECT
+    public:
+        Kikoo();
+    private slots:
+        void timeout();
+    private:
+        QTimer timer;
+};
 
 class KisScriptDockFactory : public QObject, public KoDockFactory {
     public:

@@ -238,7 +238,7 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
                 opacity = e.attribute("opacity", "1.0").toFloat();
 
                 QColor tmpColor;
-                KoColorSpace* stopColorSpace;
+                const KoColorSpace* stopColorSpace;
                 switch(e.attribute("colorSpace").toUShort()) {
                     case 1:  // cmyk
                         color1 = e.attribute( "v1", "0.0" ).toFloat();
@@ -320,7 +320,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
     {
     }*/
 
-    KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
     bool bbox = element.attribute( "gradientUnits" ) != "userSpaceOnUse";
 

@@ -67,7 +67,7 @@ public:
      * @param nPixels The number of pixels
      * @param colorSpace the colorspace that can decode the pixel data.
      */
-    virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, KoColorSpace* colorSpace) = 0;
+    virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace* colorSpace) = 0;
 
     // Methods to set what exactly is being added to the bins
     virtual void setView(double from, double width) = 0;
@@ -102,9 +102,9 @@ public:
     /// Factory method, generates a new KoHistogramProducer
     virtual KoHistogramProducerSP generate() = 0;
     /// Returns if a colorspace can be used with this producer
-    virtual bool isCompatibleWith(KoColorSpace* colorSpace) const = 0;
+    virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const = 0;
     /// Returns a float in the [0.0, 1.0] range, 0.0 means this is a very generic method
-    virtual float preferrednessLevelWith(KoColorSpace* colorSpace) const = 0;
+    virtual float preferrednessLevelWith(const KoColorSpace* colorSpace) const = 0;
     virtual QString id() const { return m_id.id(); }
     virtual QString name() const { return m_id.name(); }
 protected:
@@ -117,7 +117,7 @@ public:
     virtual ~KoHistogramProducerFactoryRegistry();
     static KoHistogramProducerFactoryRegistry* instance();
     /// returns a list, sorted by preferrence: higher preferance comes first
-    QList<KoID> listKeysCompatibleWith(KoColorSpace* colorSpace) const;
+    QList<KoID> listKeysCompatibleWith(const KoColorSpace* colorSpace) const;
 
 private:
    KoHistogramProducerFactoryRegistry();

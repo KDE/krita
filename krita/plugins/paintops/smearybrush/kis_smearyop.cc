@@ -114,7 +114,7 @@ void KisSmearyOp::paintAt(const KisPaintInformation& info)
         return;
 
     KisPaintDeviceSP device = painter()->device();
-    KoColorSpace * colorSpace = device->colorSpace();
+    const KoColorSpace * colorSpace = device->colorSpace();
     KoColor kc = painter()->paintColor();
     kc.convertTo(colorSpace);
 

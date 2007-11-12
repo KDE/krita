@@ -42,7 +42,7 @@ class KoCompositeOpAlphaBase : public KoCompositeOp {
     typedef typename _CSTraits::channels_type channels_type;
 public:
 
-    KoCompositeOpAlphaBase(KoColorSpace * cs, const QString& id, const QString& description)
+    KoCompositeOpAlphaBase(const KoColorSpace * cs, const QString& id, const QString& description)
         : KoCompositeOp(cs, id, description )
         {
         }

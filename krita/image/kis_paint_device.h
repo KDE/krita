@@ -79,7 +79,7 @@ public:
      * @param colorSpace the colorspace of this paint device
      * @param name for debugging purposes
      */
-    KisPaintDevice(KoColorSpace * colorSpace, const QString& name = QString());
+    KisPaintDevice(const KoColorSpace * colorSpace, const QString& name = QString());
 
     /**
      * Create a new paint device with the specified colorspace. The
@@ -89,7 +89,7 @@ public:
      * @param colorSpace the colorspace of this paint device
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisNodeWSP parent, KoColorSpace * colorSpace, const QString& name = QString());
+    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
@@ -290,13 +290,13 @@ public:
     /**
      *   Converts the paint device to a different colorspace
      */
-    void convertTo(KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    void convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
 
     /**
      * Changes the profile of the colorspace of this paint device to the given
      * profile. If the given profile is 0, nothing happens.
      */
-    void setProfile(KoColorProfile * profile);
+    void setProfile(const KoColorProfile * profile);
 
     /**
      * Fill this paint device with the data from img; starting at (offsetX, offsetY)
@@ -316,7 +316,7 @@ public:
      * like sRGB).
      * @param exposure The exposure setting used to render a preview of a high dynamic range image.
      */
-    virtual QImage convertToQImage(KoColorProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h, float exposure = 0.0f);
+    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h, float exposure = 0.0f);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -327,7 +327,7 @@ public:
      * like sRGB).
      * @param exposure The exposure setting used to render a preview of a high dynamic range image.
      */
-    virtual QImage convertToQImage(KoColorProfile *  dstProfile, float exposure = 0.0f);
+    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, float exposure = 0.0f);
 
     /**
      * Creates a paint device thumbnail of the paint device, retaining
@@ -394,7 +394,7 @@ public:
     /**
      * @return the colorspace of the pixels in this paint device
      */
-    KoColorSpace * colorSpace() const;
+    const KoColorSpace * colorSpace() const;
 
     /**
      * @return the internal datamanager that keeps the pixels.
@@ -404,7 +404,7 @@ public:
     /**
      * Replace the pixel data, color strategy, and profile.
      */
-    void setDataManager(KisDataManagerSP data, KoColorSpace * colorSpace);
+    void setDataManager(KisDataManagerSP data, const KoColorSpace * colorSpace);
 
     /**
      * Return the number of bytes a pixel takes.
@@ -552,8 +552,8 @@ public:
 signals:
 
     void ioProgress(qint8 percentage);
-    void profileChanged(KoColorProfile *  profile);
-    void colorSpaceChanged(KoColorSpace *colorspace);
+    void profileChanged(const KoColorProfile *  profile);
+    void colorSpaceChanged(const KoColorSpace *colorspace);
 
     /**
      * Emitted when the default empty painterly overlay for this paint

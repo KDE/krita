@@ -152,7 +152,7 @@ KisSelectionSP KisAdjustmentLayer::selection() const
 void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 {
     m_d->selection = new KisSelection();
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     KisFillPainter gc(KisPaintDeviceSP(m_d->selection.data()));
 

@@ -31,7 +31,7 @@
 class KoColorConversionFromAlphaTransformationFactory : public KoColorConversionTransformationFactory {
     public:
         KoColorConversionFromAlphaTransformationFactory(QString _dstModelId, QString _dstDepthId);
-        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
         virtual bool conserveColorInformation() const;
         virtual bool conserveDynamicRange() const;
 };
@@ -44,7 +44,7 @@ class KoColorConversionFromAlphaTransformationFactory : public KoColorConversion
 class KoColorConversionToAlphaTransformationFactory : public KoColorConversionTransformationFactory {
     public:
         KoColorConversionToAlphaTransformationFactory(QString _dstModelId, QString _dstDepthId);
-        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
         virtual bool conserveColorInformation() const;
         virtual bool conserveDynamicRange() const;
 };

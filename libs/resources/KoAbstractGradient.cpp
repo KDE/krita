@@ -20,7 +20,7 @@
 #include "KoColorSpaceRegistry.h"
 
 struct KoAbstractGradient::Private {
-    KoColorSpace* colorSpace;
+    const KoColorSpace* colorSpace;
     QGradient::Spread spread;
     QGradient::Type type;
 };
@@ -42,7 +42,7 @@ void KoAbstractGradient::setColorSpace(KoColorSpace* colorSpace)
     d->colorSpace = colorSpace;
 }
 
-KoColorSpace* KoAbstractGradient::colorSpace() const
+const KoColorSpace* KoAbstractGradient::colorSpace() const
 {
     return d->colorSpace;
 }

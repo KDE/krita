@@ -75,7 +75,7 @@ void KisToneMappingDialog::apply()
 {
     d->layer->image()->lock();
     KisPropertiesConfiguration* config = (d->currentConfigurationWidget) ? d->currentConfigurationWidget->configuration() : new KisPropertiesConfiguration;
-    KoColorSpace* colorSpace = d->currentOperator->colorSpace();
+    const KoColorSpace* colorSpace = d->currentOperator->colorSpace();
     if( d->layer->paintDevice()->colorSpace() != colorSpace)
     {
         d->layer->paintDevice()->convertTo(colorSpace);

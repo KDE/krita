@@ -58,7 +58,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public 
     Q_OBJECT
 
 public:
-    KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, KoColorSpace * colorSpace, const QString& name);
+    KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
 
@@ -214,10 +214,10 @@ public:
     /**
      * Convert the image and all its layers to the dstColorSpace
      */
-    void convertTo(KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    void convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
 
     // Get the profile associated with this image
-    KoColorProfile *  profile() const;
+    const KoColorProfile *  profile() const;
 
     /**
      * Set the profile of the image to the new profile and do the same for
@@ -260,7 +260,7 @@ public:
      * The default colorspace of this image: new layers will have this colorspace
      * and the projection will have this colorspace.
      */
-    KoColorSpace * colorSpace() const;
+    const KoColorSpace * colorSpace() const;
 
     /**
      * X resolution in pixels per pt
@@ -439,7 +439,7 @@ public:
     */
     void notifyLayerUpdated(KisLayerSP layer);
 
-    void setColorSpace(KoColorSpace * colorSpace);
+    void setColorSpace(const KoColorSpace * colorSpace);
     void setRootLayer(KisGroupLayerSP rootLayer);
 
     /**
@@ -496,7 +496,7 @@ signals:
 
     void sigSizeChanged(qint32 w, qint32 h);
     void sigProfileChanged(KoColorProfile *  profile);
-    void sigColorSpaceChanged(KoColorSpace*  cs);
+    void sigColorSpaceChanged(const KoColorSpace*  cs);
 
     /**
      * Inform the model that we're going to add a layer.
@@ -527,7 +527,7 @@ public slots:
 
 private:
     KisImage& operator=(const KisImage& rhs);
-    void init(KisUndoAdapter * adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace);
+    void init(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace);
     void emitSizeChanged();
     void preparePaintLayerAfterAdding( KisLayerSP layer );
 

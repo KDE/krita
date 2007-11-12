@@ -358,12 +358,12 @@ KoAlphaColorSpace::~KoAlphaColorSpace()
 {
 }
 
-void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 *dst, KoColorProfile * /*profile*/) const
+void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
     dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
-void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 opacity, quint8 *dst, KoColorProfile * /*profile*/) const
+void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 opacity, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
     dst[PIXEL_MASK] = opacity;
 }
@@ -373,12 +373,12 @@ void KoAlphaColorSpace::alpha(const quint8 *pixel, quint8 *alpha) const
     *alpha = *pixel;
 }
 
-void KoAlphaColorSpace::toQColor(const quint8 * /*src*/, QColor *c, KoColorProfile * /*profile*/) const
+void KoAlphaColorSpace::toQColor(const quint8 * /*src*/, QColor *c, const KoColorProfile * /*profile*/) const
 {
     c->setRgb(255, 255, 255);
 }
 
-void KoAlphaColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/) const
+void KoAlphaColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, const KoColorProfile * /*profile*/) const
 {
     c->setRgb(255, 255, 255);
     *opacity = src[PIXEL_MASK];
@@ -466,7 +466,7 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, q
 }
 
 QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   KoColorProfile *  /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/,
+                                   const KoColorProfile *  /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/,
                                    float /*exposure*/) const
 {
     QImage img(width, height, QImage::Format_RGB32);

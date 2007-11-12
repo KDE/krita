@@ -75,10 +75,10 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
     progressUpdater->setProgress( 0 );
 
-    KoColorSpace * dstCs = 0;
+    const KoColorSpace * dstCs = 0;
 
     quint32 numberOfChannels = src->channelCount();
-    KoColorSpace * srcCs  = src->colorSpace();
+    const KoColorSpace * srcCs  = src->colorSpace();
     QList<KoChannelInfo *> channels = srcCs->channels();
 
     // Use the flattened image, if required

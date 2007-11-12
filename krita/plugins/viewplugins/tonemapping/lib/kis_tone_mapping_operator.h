@@ -48,7 +48,7 @@ class KisToneMappingOperator {
         /**
          * @return the color space used by this color space
          */
-        virtual KoColorSpace* colorSpace() const = 0;
+        virtual const KoColorSpace* colorSpace() const = 0;
         /**
          * @return the bookmark manager for this operator
          */

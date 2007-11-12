@@ -28,7 +28,7 @@
 
 APImage::APImage(KisPaintDeviceSP _device, const QRect& _area) : m_area(_area)
 {
-    KoColorSpace* graycs = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
+    const KoColorSpace* graycs = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
     m_device = new KisPaintDevice(*_device);
     m_device->convertTo(graycs);
     m_randomAccessor = new KisRandomAccessor( m_device->createRandomAccessor(0,0) );

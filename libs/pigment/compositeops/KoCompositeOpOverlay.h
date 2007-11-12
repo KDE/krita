@@ -31,7 +31,7 @@ class KoCompositeOpOverlay : public KoCompositeOpAlphaBase<_CSTraits, KoComposit
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
     public:
 
-        KoCompositeOpOverlay(KoColorSpace * cs)
+        KoCompositeOpOverlay(const KoColorSpace * cs)
         : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOverlay<_CSTraits> >(cs, COMPOSITE_OVERLAY, i18n("Overlay" ) )
         {
         }

@@ -73,7 +73,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->cmbColorSpaces->setEnabled(false);
 
     QString profilename;
-    if (KoColorProfile* profile = const_cast<KoColorSpace *>(colorSpace)->profile())
+    if (const KoColorProfile* profile = colorSpace->profile())
         profilename = profile->name();
     m_page->cmbProfile->addSqueezedItem(profilename);
     m_page->cmbProfile->setEnabled(false);

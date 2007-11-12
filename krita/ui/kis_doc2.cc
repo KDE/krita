@@ -376,7 +376,7 @@ KisImageSP KisDoc2::loadImage(const KoXmlElement& element)
     double xres;
     double yres;
     QString colorspacename;
-    KoColorSpace * cs;
+    const KoColorSpace * cs;
 
     if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
         if ((name = element.attribute("name")).isNull())
@@ -535,7 +535,7 @@ KisLayerSP KisDoc2::loadPaintLayer(const KoXmlElement& element, KisImageSP img,
 {
     QString attr;
     KisPaintLayerSP layer;
-    KoColorSpace * cs;
+    const KoColorSpace * cs;
 
     QString colorspacename;
     QString profileProductName;
@@ -697,11 +697,11 @@ bool KisDoc2::completeSaving(KoStore *store)
         }
     }
     if (img->profile()) {
-        KoColorProfile *profile = img->profile();
+        const KoColorProfile *profile = img->profile();
         KisAnnotationSP annotation;
         if (profile)
         {
-            KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
+            const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (iccprofile and !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
         }
@@ -792,7 +792,7 @@ KoDocument* KisDoc2::hitTest(const QPoint &pos, KoView* view, const QMatrix& mat
 }
 
 
-KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * colorspace)
+KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace)
 {
     if (!init())
         return KisImageSP(0);
@@ -808,7 +808,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
     KisPaintLayer *layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE,colorspace);
     Q_CHECK_PTR(layer);
 
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFillPainter painter;
 
     layer->paintDevice()->fill( 0, 0, width, height, KoColor(Qt::white, cs).data() );
@@ -823,7 +823,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, K
     return img;
 }
 
-bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * cs, const KoColor &bgColor, const QString &description, const double imgResolution)
+bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &description, const double imgResolution)
 {
     if (!init())
         return false;
@@ -1027,7 +1027,7 @@ void KisDoc2::setCurrentImage(KisImageSP image)
 void KisDoc2::initEmpty()
 {
     KisConfig cfg;
-    KoColorSpace * rgb = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * rgb = KoColorSpaceRegistry::instance()->rgb8();
     newImage("", cfg.defImgWidth(), cfg.defImgHeight(), rgb);
 }
 

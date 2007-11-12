@@ -31,7 +31,7 @@ class KoCompositeOpOver : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOp
     typedef typename _CSTraits::channels_type channels_type;
     public:
 
-        KoCompositeOpOver(KoColorSpace * cs)
+        KoCompositeOpOver(const KoColorSpace * cs)
         : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOver<_CSTraits> >(cs, COMPOSITE_OVER, i18n("Normal" ) )
         {
         }

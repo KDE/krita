@@ -34,7 +34,7 @@
 
 void KisFilterMaskTest::testProjection()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
 
     QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
@@ -74,7 +74,7 @@ void KisFilterMaskTest::testProjection()
 
 void KisFilterMaskTest::testInImage()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
 
     QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );

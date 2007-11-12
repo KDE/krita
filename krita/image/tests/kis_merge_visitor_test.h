@@ -37,7 +37,7 @@ private slots:
     void testMergePreviewTwice();
 
 private:
-    KoColorSpace * colorSpace;
+    const KoColorSpace * colorSpace;
     KisImageSP image;
     QImage original;
     QImage inverted;

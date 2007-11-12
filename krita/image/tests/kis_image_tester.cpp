@@ -49,7 +49,7 @@ void KisImageTester::mergeTests()
     KoColorSpaceRegistry * reg = KoColorSpaceRegistry::instance();
     QVERIFY2( reg, "Could not get colorspace registry" );
 
-    KoColorSpace * colorSpace = reg->colorSpace("RGBA", 0);
+    const KoColorSpace * colorSpace = reg->colorSpace("RGBA", 0);
 
     KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, colorSpace, "merge test");
 

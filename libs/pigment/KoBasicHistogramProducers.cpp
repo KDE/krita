@@ -39,10 +39,10 @@ const qint32 qint32_MAX = (2147483647);
 const qint32 qint32_MIN = (-2147483647-1);
 
 
-static KoColorSpace* m_labCs = 0;
+static const KoColorSpace* m_labCs = 0;
 
 
-KoBasicHistogramProducer::KoBasicHistogramProducer(const KoID& id, int channels, int nrOfBins, KoColorSpace *cs)
+KoBasicHistogramProducer::KoBasicHistogramProducer(const KoID& id, int channels, int nrOfBins, const KoColorSpace *cs)
     : m_channels(channels),
       m_nrOfBins(nrOfBins),
       m_colorSpace(cs),
@@ -90,7 +90,7 @@ void KoBasicHistogramProducer::makeExternalToInternal() {
 
 // ------------ U8 ---------------------
 
-KoBasicU8HistogramProducer::KoBasicU8HistogramProducer(const KoID& id, KoColorSpace *cs)
+KoBasicU8HistogramProducer::KoBasicU8HistogramProducer(const KoID& id, const KoColorSpace *cs)
     : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs)
 {
 }
@@ -99,7 +99,7 @@ QString KoBasicU8HistogramProducer::positionToString(double pos) const {
     return QString("%1").arg(static_cast<quint8>(pos * UINT8_MAX));
 }
 
-void KoBasicU8HistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs)
+void KoBasicU8HistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *cs)
 {
     qint32 pSize = cs->pixelSize();
 
@@ -138,7 +138,7 @@ void KoBasicU8HistogramProducer::addRegionToBin(const quint8 * pixels, const qui
 
 // ------------ U16 ---------------------
 
-KoBasicU16HistogramProducer::KoBasicU16HistogramProducer(const KoID& id, KoColorSpace *cs)
+KoBasicU16HistogramProducer::KoBasicU16HistogramProducer(const KoID& id, const KoColorSpace *cs)
     : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs)
 {
 }
@@ -153,7 +153,7 @@ double KoBasicU16HistogramProducer::maximalZoom() const
     return 1.0 / 255.0;
 }
 
-void KoBasicU16HistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs)
+void KoBasicU16HistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *cs)
 {
     // The view
     quint16 from = static_cast<quint16>(m_from * UINT16_MAX);
@@ -207,7 +207,7 @@ void KoBasicU16HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
 }
 
 // ------------ Float32 ---------------------
-KoBasicF32HistogramProducer::KoBasicF32HistogramProducer(const KoID& id, KoColorSpace *cs)
+KoBasicF32HistogramProducer::KoBasicF32HistogramProducer(const KoID& id, const KoColorSpace *cs)
     : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs)
 {
 }
@@ -221,7 +221,7 @@ double KoBasicF32HistogramProducer::maximalZoom() const {
     return 1.0 / 255.0;
 }
 
-void KoBasicF32HistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs) {
+void KoBasicF32HistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *cs) {
     // The view
     float from = static_cast<float>(m_from);
     float width = static_cast<float>(m_width);
@@ -280,7 +280,7 @@ void KoBasicF32HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
 #ifdef HAVE_OPENEXR
 // ------------ Float16 Half ---------------------
 KoBasicF16HalfHistogramProducer::KoBasicF16HalfHistogramProducer(const KoID& id,
-                                                                   KoColorSpace *cs)
+                                                                   const KoColorSpace *cs)
     : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs) {
 }
 
@@ -293,7 +293,7 @@ double KoBasicF16HalfHistogramProducer::maximalZoom() const {
     return 1.0 / 255.0;
 }
 
-void KoBasicF16HalfHistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs) {
+void KoBasicF16HalfHistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *cs) {
     // The view
     float from = static_cast<float>(m_from);
     float width = static_cast<float>(m_width);
@@ -367,7 +367,7 @@ double KoGenericRGBHistogramProducer::maximalZoom() const {
 }
 
 
-void KoGenericRGBHistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs)
+void KoGenericRGBHistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *cs)
 {
     for (int i = 0; i < m_channels; i++) {
         m_outRight[i] = 0;
@@ -443,7 +443,7 @@ double KoGenericLabHistogramProducer::maximalZoom() const {
 }
 
 
-void KoGenericLabHistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels,  KoColorSpace *cs)
+void KoGenericLabHistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels,  const KoColorSpace *cs)
 {
     for (int i = 0; i < m_channels; i++) {
         m_outRight[i] = 0;

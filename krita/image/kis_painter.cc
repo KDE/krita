@@ -226,7 +226,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     if ( src->depth() != 32 ) return;
 
     QRect srcRect = QRect( sx, sy, sw, sh );
-    KoColorSpace * srcCs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * srcCs = KoColorSpaceRegistry::instance()->rgb8();
 
     // Make sure we don't try to blit outside the source image
     if ( src->rect().isValid() && op != srcCs->compositeOp( COMPOSITE_COPY ) ) {
@@ -310,7 +310,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
     addDirtyRect( QRect( dx, dy, sw, sh ) );
 
-    KoColorSpace * srcCs = srcdev->colorSpace();
+    const KoColorSpace * srcCs = srcdev->colorSpace();
 
     qint32 dstY = dy;
     qint32 srcY = sy;
@@ -412,7 +412,7 @@ void KisPainter::bltMask(qint32 dx, qint32 dy,
     sw = srcRect.width();
     sh = srcRect.height();
 
-    KoColorSpace * srcCs = srcdev->colorSpace();
+    const KoColorSpace * srcCs = srcdev->colorSpace();
 
     qint32 dstY = dy;
     qint32 srcY = sy;

@@ -36,7 +36,7 @@
  */
 class KisChangeProfileVisitor :public KisNodeVisitor {
 public:
-    KisChangeProfileVisitor(KoColorSpace *oldColorSpace, KoColorSpace *dstColorSpace);
+    KisChangeProfileVisitor(const KoColorSpace *oldColorSpace, const KoColorSpace *dstColorSpace);
     virtual ~KisChangeProfileVisitor();
 
 public:
@@ -50,12 +50,12 @@ public:
     bool visit(KisAdjustmentLayer* layer);
 
 private:
-    KoColorSpace *m_oldColorSpace;
-    KoColorSpace *m_dstColorSpace;
+    const KoColorSpace *m_oldColorSpace;
+    const KoColorSpace *m_dstColorSpace;
 };
 
-KisChangeProfileVisitor::KisChangeProfileVisitor(KoColorSpace * oldColorSpace,
-                                                 KoColorSpace *dstColorSpace) :
+KisChangeProfileVisitor::KisChangeProfileVisitor(const KoColorSpace * oldColorSpace,
+                                                 const KoColorSpace *dstColorSpace) :
     KisNodeVisitor(),
     m_oldColorSpace(oldColorSpace),
     m_dstColorSpace(dstColorSpace)
@@ -86,7 +86,7 @@ bool KisChangeProfileVisitor::visit(KisPaintLayer *layer)
     if (!layer->paintDevice()) return false;
     if (!layer->paintDevice()->colorSpace()) return false;
 
-    KoColorSpace * cs = layer->paintDevice()->colorSpace();
+    const KoColorSpace * cs = layer->paintDevice()->colorSpace();
 
     if (cs == m_oldColorSpace) {
 

@@ -143,7 +143,7 @@ public:
      *
      * @param cs the colorspace that we want to know this filter works with
      */
-    virtual bool workWith(KoColorSpace* cs) const { Q_UNUSED(cs); return true; }
+    virtual bool workWith(const KoColorSpace* cs) const { Q_UNUSED(cs); return true; }
 
     /// @return Unique identification for this filter
     QString id() const;

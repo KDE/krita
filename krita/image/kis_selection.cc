@@ -118,7 +118,7 @@ void KisSelection::clear()
 void KisSelection::clear(const QRect& r)
 {
     KisFillPainter painter(KisPaintDeviceSP(this));
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     painter.fillRect(r, KoColor(Qt::white, cs), *(dataManager()->defaultPixel()));
 }
 

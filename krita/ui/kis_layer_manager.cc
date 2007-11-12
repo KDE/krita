@@ -343,7 +343,7 @@ void KisLayerManager::layerProperties()
 
     if ( !layer ) return;
 
-    KoColorSpace * cs = 0;
+    const KoColorSpace * cs = 0;
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>( layer.data() );
     if ( pl ) {
         cs = pl->paintDevice()->colorSpace();

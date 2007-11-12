@@ -43,12 +43,12 @@ KoColorConversionTransformationFactory::~KoColorConversionTransformationFactory(
     delete d;
 }
 
-bool KoColorConversionTransformationFactory::canBeSource(const KoColorSpace* srcCS)
+bool KoColorConversionTransformationFactory::canBeSource(const KoColorSpace* srcCS) const
 {
     return ((srcCS->colorModelId().id() == d->srcModelId) and (srcCS->colorDepthId().id() == d->srcDepthId));
 }
 
-bool KoColorConversionTransformationFactory::canBeDestination(const KoColorSpace* dstCS)
+bool KoColorConversionTransformationFactory::canBeDestination(const KoColorSpace* dstCS) const
 {
     return ((dstCS->colorModelId().id() == d->dstModelId) and (dstCS->colorDepthId().id() == d->dstDepthId));
 }

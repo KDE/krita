@@ -108,7 +108,7 @@ void KisRgbFloatHDRColorSpaceTest::testProfile()
 
     KoIccColorProfile *profile = new KoIccColorProfile(chromaticities, gamma);
 
-    KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, profile);
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, profile);
     QVERIFY2(colorSpace != 0, "Created colorspace");
 
     QCOMPARE(colorSpace->profile(), profile);
@@ -232,11 +232,11 @@ void KisRgbFloatHDRColorSpaceTest::testFactory()
 
     QVERIFY(colorSpaceFactory->profileIsCompatible(profile));
 
-    KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, 0);
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, 0);
     QVERIFY2(colorSpace != 0, "Created colorspace");
     QVERIFY2(colorSpace->profile() != 0, "Has a profile by default");
 
-    KoIccColorProfile *lcmsProfile = static_cast<KoIccColorProfile *>(colorSpace->profile());
+    const KoIccColorProfile *lcmsProfile = static_cast<const KoIccColorProfile *>(colorSpace->profile());
 
     LPGAMMATABLE redGamma = cmsReadICCGamma(lcmsProfile->asLcms()->lcmsProfile(), icSigRedTRCTag);
 
@@ -247,7 +247,7 @@ template <class ColorSpaceTraits>
 void KisRgbFloatHDRColorSpaceTest::testChannels(const QString &colorSpaceId, 
                                                 const KoChannelInfo::enumChannelValueType channelValueType)
 {
-    KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, 0);
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, 0);
     QVERIFY(colorSpace != 0);
 
     QList<KoChannelInfo*> channels = colorSpace->channels();

@@ -38,7 +38,7 @@ public:
     virtual QGradient* toQGradient() const { return new QGradient(); }
 
     void setColorSpace(KoColorSpace* colorSpace);
-    KoColorSpace * colorSpace() const;
+    const KoColorSpace * colorSpace() const;
 
     void setSpread(QGradient::Spread spreadMethod);
     QGradient::Spread spread() const;

@@ -23,7 +23,7 @@
 #include "KoColorSpace.h"
 
 struct KoCompositeOp::Private {
-    KoColorSpace * colorSpace;
+    const KoColorSpace * colorSpace;
     QString id;
     QString description;
     QString category;
@@ -41,7 +41,7 @@ KoCompositeOp::~KoCompositeOp()
     delete d;
 }
 
-KoCompositeOp::KoCompositeOp(KoColorSpace * cs, const QString& id,  const QString& description, QString category, const bool userVisible)
+KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id,  const QString& description, QString category, const bool userVisible)
     : d(new Private)
 {
     d->colorSpace = cs;
@@ -69,11 +69,6 @@ QString KoCompositeOp::category() const
     return d->category;
 }
 
-KoColorSpace* KoCompositeOp::colorSpace()
-{
-    return d->colorSpace;
-}
-
 QString KoCompositeOp::id() const
 {
     return d->id;
@@ -84,7 +79,7 @@ QString KoCompositeOp::description() const
     return d->description;
 }
 
-KoColorSpace * KoCompositeOp::colorSpace() const
+const KoColorSpace * KoCompositeOp::colorSpace() const
 {
     return d->colorSpace;
 }

@@ -32,7 +32,7 @@ class KoCompositeOpDodge : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeO
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
     public:
 
-        KoCompositeOpDodge(KoColorSpace * cs)
+        KoCompositeOpDodge(const KoColorSpace * cs)
         : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDodge<_CSTraits> >(cs, COMPOSITE_DODGE, i18n("Dodge" ) )
         {
         }

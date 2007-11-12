@@ -38,7 +38,7 @@
 
 void KisPaintDeviceTest::testCreation()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
     QVERIFY( dev->objectName() == QString() );
 
@@ -78,7 +78,7 @@ void KisPaintDeviceTest::testPaintEngine()
 {
     // Create a paint device and a QImage. Let the paintEngine paint
     // on both, then do a pixel-by-pixel comparison
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
     quint8* pixel = cs->allocPixelBuffer( 1 );
     cs->fromQColor( Qt::white, pixel );
@@ -280,7 +280,7 @@ void KisPaintDeviceTest::testPaintEngine()
 void KisPaintDeviceTest::testStore()
 {
 
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
 
     KoStore * readStore =
@@ -318,7 +318,7 @@ void KisPaintDeviceTest::testStore()
 
 void KisPaintDeviceTest::testGeometry()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
 
     quint8* pixel = cs->allocPixelBuffer( 1 );
@@ -365,7 +365,7 @@ void KisPaintDeviceTest::testGeometry()
 
 void KisPaintDeviceTest::testClear()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
 
     QVERIFY( dev->extent() == QRect(2147483647,2147483647, 0, 0) );
@@ -391,7 +391,7 @@ void KisPaintDeviceTest::testClear()
 
 void KisPaintDeviceTest::testCrop()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
     quint8* pixel = cs->allocPixelBuffer( 1 );
     cs->fromQColor( Qt::white, pixel );
@@ -410,7 +410,7 @@ void KisPaintDeviceTest::testCrop()
 
 void KisPaintDeviceTest::testRoundtripReadWrite()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
     dev->convertFromQImage( image, "");
@@ -454,13 +454,13 @@ void KisPaintDeviceTest::testColorSpaceConversion()
     QTime t;
     t.start();
 
-    QList<KoColorSpace*> colorSpaces = TestUtil::allColorSpaces();
+    QList<const KoColorSpace*> colorSpaces = TestUtil::allColorSpaces();
     int failedColorSpaces = 0;
 
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
 
-    foreach ( KoColorSpace * srcCs, colorSpaces ) {
-        foreach( KoColorSpace * dstCs,  colorSpaces ) {
+    foreach ( const KoColorSpace * srcCs, colorSpaces ) {
+        foreach( const KoColorSpace * dstCs,  colorSpaces ) {
 
             KisPaintDeviceSP dev  = new KisPaintDevice( srcCs );
             dev->convertFromQImage( image, "");
@@ -496,7 +496,7 @@ void KisPaintDeviceTest::testColorSpaceConversion()
 void KisPaintDeviceTest::testRoundtripConversion()
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage( image, "" );
     QImage result = dev->convertToQImage(0, 0, 0, 640, 441);
@@ -513,7 +513,7 @@ void KisPaintDeviceTest::testRoundtripConversion()
 void KisPaintDeviceTest::testThumbnail()
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage( image, "" );
     {
@@ -531,7 +531,7 @@ void KisPaintDeviceTest::testThumbnail()
 
 void KisPaintDeviceTest::testPixel()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     QColor c = Qt::red;
@@ -552,7 +552,7 @@ void KisPaintDeviceTest::testPixel()
 
 void KisPaintDeviceTest::testDirty()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisImageSP image = new KisImage(0, 512, 512, cs, "merge test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
     KisPaintDeviceSP dev = layer->paintDevice();
@@ -587,7 +587,7 @@ void KisPaintDeviceTest::testDirty()
 
 void KisPaintDeviceTest::testMirror()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
 
 
@@ -651,7 +651,7 @@ void KisPaintDeviceTest::testMirror()
 
 void KisPaintDeviceTest::testMirrorTransaction()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
 
     quint8* pixel = cs->allocPixelBuffer( 1 );
@@ -720,7 +720,7 @@ void KisPaintDeviceTest::testSelection()
 
 void KisPaintDeviceTest::testPlanarReadWrite()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
 
     quint8* pixel = cs->allocPixelBuffer( 1 );

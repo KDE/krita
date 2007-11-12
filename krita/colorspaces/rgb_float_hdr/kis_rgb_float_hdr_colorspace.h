@@ -96,11 +96,11 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 
         virtual bool hasHighDynamicRange() const { return true; }
 
-        virtual KoColorProfile *profile() const { return m_profile; }
+        virtual const KoColorProfile *profile() const { return m_profile; }
 
-        virtual bool profileIsCompatible(KoColorProfile* profile) const
+        virtual bool profileIsCompatible(const KoColorProfile* profile) const
         {
-            KoIccColorProfile *lcmsProfile = dynamic_cast<KoIccColorProfile *>(profile);
+            const KoIccColorProfile *lcmsProfile = dynamic_cast<const KoIccColorProfile *>(profile);
             if (lcmsProfile) {
                 if (lcmsProfile->asLcms()->colorSpaceSignature() == icSigRgbData) {
                     return true;
@@ -116,7 +116,7 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             return true;
         }
 
-        virtual void fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile * /*profile*/) const
+        virtual void fromQColor(const QColor& c, quint8 *dstU8, const KoColorProfile * /*profile*/) const
         {
             typename _CSTraits::channels_type* dst = _CSTraits::nativeArray(dstU8);
             dst[ _CSTraits::red_pos ] = UINT8_TO_FLOAT(c.red());
@@ -124,7 +124,7 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             dst[ _CSTraits::blue_pos ] = UINT8_TO_FLOAT(c.blue());
         }
 
-        virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KoColorProfile * /*profile*/) const
+        virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, const KoColorProfile * /*profile*/) const
         {
             typename _CSTraits::channels_type* dst = _CSTraits::nativeArray(dstU8);
             dst[ _CSTraits::red_pos ] = UINT8_TO_FLOAT(c.red());
@@ -133,13 +133,13 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             dst[ _CSTraits::alpha_pos ] = UINT8_TO_FLOAT(opacity);
         }
 
-        virtual void toQColor(const quint8 *srcU8, QColor *c, KoColorProfile * /*profile*/) const
+        virtual void toQColor(const quint8 *srcU8, QColor *c, const KoColorProfile * /*profile*/) const
         {
             const typename _CSTraits::channels_type* src = _CSTraits::nativeArray(srcU8);
             c->setRgb(FLOAT_TO_UINT8(src[_CSTraits::red_pos]), FLOAT_TO_UINT8(src[_CSTraits::green_pos]), FLOAT_TO_UINT8(src[_CSTraits::blue_pos]));
         }
 
-        virtual void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/) const
+        virtual void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, const KoColorProfile * /*profile*/) const
         {
             const typename _CSTraits::channels_type* src = _CSTraits::nativeArray(srcU8);
             c->setRgb(FLOAT_TO_UINT8(src[_CSTraits::red_pos]), FLOAT_TO_UINT8(src[_CSTraits::green_pos]), FLOAT_TO_UINT8(src[_CSTraits::blue_pos]));
@@ -157,7 +157,7 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 
 
         virtual QImage convertToQImage(const quint8 *dataU8, qint32 width, qint32 height,
-                                       KoColorProfile *dstProfile,
+                                       const KoColorProfile *dstProfile,
                                        KoColorConversionTransformation::Intent renderingIntent, 
                                        float exposure) const
         {
@@ -247,7 +247,7 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 
         KoIccColorProfile *m_profile;
         KoLcmsColorProfileContainer *m_profileLcms;
-        KoColorSpace *m_rgbU16ColorSpace;
+        const KoColorSpace *m_rgbU16ColorSpace;
 
         friend class KisRgbFloatHDRColorSpaceTest;
 };
@@ -255,9 +255,9 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 class KisRgbFloatHDRColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
-    virtual bool profileIsCompatible(KoColorProfile* profile) const
+    virtual bool profileIsCompatible(const KoColorProfile* profile) const
     {
-        KoIccColorProfile *lcmsProfile = dynamic_cast<KoIccColorProfile *>(profile);
+        const KoIccColorProfile *lcmsProfile = dynamic_cast<const KoIccColorProfile *>(profile);
         if (lcmsProfile) {
             if (lcmsProfile->asLcms()->colorSpaceSignature() == icSigRgbData) {
                 return true;

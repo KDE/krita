@@ -40,20 +40,20 @@ public:
     virtual ~KoColor();
 
     /// Create a null KoColor. It will be valid, but all channels will be set to 0
-    explicit KoColor(KoColorSpace * colorSpace);
+    explicit KoColor(const KoColorSpace * colorSpace);
     /// Create a KoColor from a QColor. The QColor is immediately converted to native. The QColor
     /// is assumed to have the current monitor profile.
-    KoColor(const QColor & color, KoColorSpace * colorSpace);
+    KoColor(const QColor & color, const KoColorSpace * colorSpace);
 
     /// Create a KoColor from a QColor. The QColor is immediately converted to native. The QColor
     /// is assumed to have the current monitor profile.
-    KoColor(const QColor & color, quint8 alpha, KoColorSpace * colorSpace);
+    KoColor(const QColor & color, quint8 alpha, const KoColorSpace * colorSpace);
 
     /// Create a KoColor using a native color strategy. The data is copied.
-    KoColor(const quint8 * data, KoColorSpace * colorSpace);
+    KoColor(const quint8 * data, const KoColorSpace * colorSpace);
 
     /// Create a KoColor by converting src into another colorspace
-    KoColor(const KoColor &src, KoColorSpace * colorSpace);
+    KoColor(const KoColor &src, const KoColorSpace * colorSpace);
 
     /// Copy constructor -- deep copies the colors.
     KoColor(const KoColor & rhs);
@@ -68,17 +68,17 @@ public:
     bool operator==(const KoColor &other) const;
 
     /// return the current colorSpace
-    KoColorSpace * colorSpace() const;
+    const KoColorSpace * colorSpace() const;
 
     /// return the current profile
-    KoColorProfile *  profile() const;
+    const KoColorProfile *  profile() const;
 
     /// Convert this KoColor to the specified colorspace. If the specified colorspace is the
     /// same as the original colorspace, do nothing. Returns the converted KoColor.
-    void convertTo(KoColorSpace * cs);
+    void convertTo(const KoColorSpace * cs);
 
     /// Replace the existing color data, and colorspace with the specified data.
-    void setColor(quint8 * data, KoColorSpace * colorSpace = 0);
+    void setColor(quint8 * data, const KoColorSpace * colorSpace = 0);
 
     /// Convert the color from src and replace the value of the current color with the converted data.
     /// Don't convert the color if src and this have the same colorspace.

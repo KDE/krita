@@ -93,7 +93,7 @@ KisDlgImageProperties::~KisDlgImageProperties()
     delete m_page;
 }
 
-KoColorSpace * KisDlgImageProperties::colorSpace()
+const KoColorSpace * KisDlgImageProperties::colorSpace()
 {
     return KoColorSpaceRegistry::instance()->colorSpace(m_page->cmbColorSpaces->currentItem(), m_page->cmbProfile->currentText());
 }

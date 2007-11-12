@@ -195,15 +195,15 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
     public:
 
         virtual bool hasHighDynamicRange() const { return false; }
-        virtual KoColorProfile * profile() const { return d->colorProfile; }
+        virtual const KoColorProfile * profile() const { return d->colorProfile; }
 
-        virtual bool profileIsCompatible(KoColorProfile* profile) const
+        virtual bool profileIsCompatible(const KoColorProfile* profile) const
         {
-            KoIccColorProfile* p = dynamic_cast<KoIccColorProfile*>(profile);
+            const KoIccColorProfile* p = dynamic_cast<const KoIccColorProfile*>(profile);
             return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
         }
 
-        virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * koprofile=0) const
+        virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * koprofile=0) const
         {
             d->qcolordata[2] = color.red();
             d->qcolordata[1] = color.green();
@@ -230,13 +230,13 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             this->setAlpha(dst, OPACITY_OPAQUE, 1);
         }
 
-        virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, KoColorProfile * profile=0) const
+        virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, const KoColorProfile * profile=0) const
         {
             this->fromQColor(color, dst, profile);
             this->setAlpha(dst, opacity, 1);
         }
 
-        virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * koprofile =0) const
+        virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * koprofile =0) const
         {
             KoLcmsColorProfileContainer* profile = asLcmsProfile(koprofile);
             if (profile == 0) {
@@ -256,22 +256,20 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             c->setRgb(d->qcolordata[2], d->qcolordata[1], d->qcolordata[0]);
         }
 
-        virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile =0) const
+        virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, const KoColorProfile * profile =0) const
         {
             this->toQColor(src, c, profile);
             *opacity = this->alpha(src);
         }
         virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                KoColorProfile *dstProfile,
+                const KoColorProfile *dstProfile,
                 KoColorConversionTransformation::Intent renderingIntent, float exposure) const
 
         {
             Q_UNUSED(exposure);
             QImage img = QImage(width, height, QImage::Format_ARGB32);
 
-            KoColorSpace * dstCS;
-
-            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", dstProfile);
+            const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->rgb8(dstProfile);
 
             if (data)
                 this->convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent);
@@ -409,10 +407,10 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         inline KoLcmsColorProfileContainer* lcmsProfile() const {
             return d->profile;
         }
-        inline static KoLcmsColorProfileContainer* asLcmsProfile(KoColorProfile* p)
+        inline static KoLcmsColorProfileContainer* asLcmsProfile(const KoColorProfile* p)
         {
             if(not p) return 0;
-            KoIccColorProfile* iccp = dynamic_cast<KoIccColorProfile*>(p);
+            const KoIccColorProfile* iccp = dynamic_cast<const KoIccColorProfile*>(p);
             if( not iccp )
             {
                 return 0;
@@ -456,10 +454,10 @@ class PIGMENTCMS_EXPORT KoLcmsColorSpaceFactory : public KoColorSpaceFactory, pr
         KoLcmsColorSpaceFactory(DWORD cmType, icColorSpaceSignature colorSpaceSignature) : KoLcmsInfo(cmType, colorSpaceSignature)
         {
         }
-        virtual bool profileIsCompatible(KoColorProfile* profile) const
+        virtual bool profileIsCompatible(const KoColorProfile* profile) const
         {
-            KoLcmsColorProfileContainer* p = dynamic_cast<KoLcmsColorProfileContainer*>(profile);
-            return p && p->colorSpaceSignature() == colorSpaceSignature();
+            const KoIccColorProfile* p = dynamic_cast<const KoIccColorProfile*>(profile);
+            return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
         }
         virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const;
         virtual bool isIcc() const { return true; }

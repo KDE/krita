@@ -71,7 +71,7 @@ KisToneMappingOperatorConfigurationWidget* KisTrilateralOperator::createConfigur
     return new KisTrilateralOperatorConfigurationWidget(wdg);
 }
 
-KoColorSpace* KisTrilateralOperator::colorSpace() const
+const KoColorSpace* KisTrilateralOperator::colorSpace() const
 {
     return KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( XYZAColorModelID, Float32BitsColorDepthID), "" );
 }

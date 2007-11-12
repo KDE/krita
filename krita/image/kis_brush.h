@@ -85,7 +85,7 @@ public:
     virtual KisQImagemaskSP mask(const KisPaintInformation& info,
                                  double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
-    virtual KisPaintDeviceSP image(KoColorSpace * colorSpace, const KisPaintInformation& info,
+    virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace, const KisPaintInformation& info,
                              double subPixelX = 0, double subPixelY = 0) const;
 
     void setHotSpot(QPointF);

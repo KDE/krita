@@ -44,7 +44,7 @@ KoHistogramProducerFactoryRegistry* KoHistogramProducerFactoryRegistry::instance
 }
 
 QList<KoID> KoHistogramProducerFactoryRegistry::listKeysCompatibleWith(
-        KoColorSpace* colorSpace) const
+        const KoColorSpace* colorSpace) const
 {
     QList<KoID> list;
     QList<float> preferredList;

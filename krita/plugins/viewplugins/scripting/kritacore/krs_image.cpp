@@ -62,7 +62,7 @@ QString Image::colorSpaceId() const
 
 bool Image::convertToColorspace(const QString& colorspacename)
 {
-    KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
+    const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
     if(!dstCS)
     {
         kWarning(41011) << QString("Colorspace %1 is not available, please check your installation.").arg(colorspacename);
@@ -100,7 +100,7 @@ QObject* Image::createPaintLayer(const QString& name, int opacity)
 QObject* Image::createPaintLayer(const QString& name, int opacity, const QString& colorspacename)
 {
     opacity = CLAMP(opacity, 0, 255);
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
     KisPaintLayer* layer = cs ? new KisPaintLayer(m_image.data(), name, opacity, cs)
                               : new KisPaintLayer(m_image.data(), name, opacity);
     layer->setVisible(true);

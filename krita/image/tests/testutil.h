@@ -95,23 +95,23 @@ bool comparePaintDevices( QPoint & pt, const KisPaintDeviceSP dev1, const KisPai
 
 
 
-QList<KoColorSpace*> allColorSpaces()
+QList<const KoColorSpace*> allColorSpaces()
 {
 
 
-    QList<KoColorSpace*> colorSpaces;
+    QList<const KoColorSpace*> colorSpaces;
 
     QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
 
     foreach( QString csId, csIds ) {
         QList<KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
         if ( profiles.size() == 0 ) {
-            KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
+            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
             colorSpaces.append( cs );
         }
         else {
             foreach( KoColorProfile * profile, profiles ) {
-                KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
+                const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
                 colorSpaces.append( cs );
             }
         }

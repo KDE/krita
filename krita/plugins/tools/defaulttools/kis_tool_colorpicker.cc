@@ -115,7 +115,7 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
             // radius 2 ==> 9 pixels, 3 => 9 pixels, etc
             static int counts[] = { 0, 1, 9, 25, 45, 69, 109, 145, 193, 249 };
 
-            KoColorSpace* cs = dev->colorSpace();
+            const KoColorSpace* cs = dev->colorSpace();
             int pixelSize = cs->pixelSize();
 
             quint8* data = new quint8[pixelSize];

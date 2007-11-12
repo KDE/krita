@@ -47,7 +47,7 @@ const PropertyCell hardDefault = {
 
 const double DEFAULT_SCALE = 1.0;
 
-KisComplexColor::KisComplexColor(KoColorSpace *colorSpace)
+KisComplexColor::KisComplexColor(const KoColorSpace *colorSpace)
     : KisPaintDevice(colorSpace)
 {
     m_scaling = DEFAULT_SCALE;
@@ -58,7 +58,7 @@ KisComplexColor::KisComplexColor(KoColorSpace *colorSpace)
     fromKoColor(kc);
 }
 
-KisComplexColor::KisComplexColor(KoColorSpace *colorSpace, const KoColor &kc)
+KisComplexColor::KisComplexColor(const KoColorSpace *colorSpace, const KoColor &kc)
     : KisPaintDevice(colorSpace)
 {
     m_scaling = DEFAULT_SCALE;

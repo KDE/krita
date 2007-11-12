@@ -633,7 +633,7 @@ protected:
     KisPaintOp * m_paintOp;
     double m_pressure;
     qint32 m_pixelSize;
-    KoColorSpace * m_colorSpace;
+    const KoColorSpace * m_colorSpace;
     KoColorProfile *  m_profile;
     KisPaintDeviceSP m_dab;
     const KoCompositeOp * m_compositeOp;

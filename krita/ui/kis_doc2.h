@@ -102,13 +102,13 @@ public:
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    bool newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * cs, const KoColor &bgColor, const QString &imgDescription, const double imgResolution);
+    bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &imgDescription, const double imgResolution);
 
     /**
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    KisImageSP newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * colorspace);
+    KisImageSP newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace);
 
     KisImageSP image();
 

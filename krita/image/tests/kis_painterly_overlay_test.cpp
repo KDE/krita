@@ -30,21 +30,21 @@ void KisPainterlyOverlayTester::testConstructor()
     Q_ASSERT( overlay );
     delete overlay;
 
-    KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
+    const KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
     Q_ASSERT( cs );
 
 }
 
 void KisPainterlyOverlayTester::testPainterlyOverlayColorSpace()
 {
-    KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
+    const KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
     Q_ASSERT( cs );
     QCOMPARE( cs->pixelSize(), uint(8 * sizeof( float )) );
 }
 
 void KisPainterlyOverlayTester::testPainterlyOverlayColorSpaceCell()
 {
-    KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
+    const KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
     Q_ASSERT( cs );
     Q_ASSERT( cs->compositeOp( COMPOSITE_OVER ) != 0 );
     Q_ASSERT( cs->compositeOp( COMPOSITE_COPY ) != 0 );
@@ -71,7 +71,7 @@ void KisPainterlyOverlayTester::testPainterlyOverlay()
 {
     KisPainterlyOverlaySP overlay = new KisPainterlyOverlay();
     Q_ASSERT( overlay );
-    KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
+    const KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
     Q_ASSERT( cs );
     QVERIFY( overlay->colorSpace() == cs );
     quint8 * bytes = cs->allocPixelBuffer( 1 );

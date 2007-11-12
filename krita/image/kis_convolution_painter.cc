@@ -119,7 +119,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
 
     int lastProgressPercent = 0;
     if (m_progressUpdater) m_progressUpdater->setProgress(0);
-    KoColorSpace * cs = m_device->colorSpace();
+    const KoColorSpace * cs = m_device->colorSpace();
     KoConvolutionOp * convolutionOp = cs->convolutionOp();
 
     // Determine whether we convolve border pixels, or not.
@@ -247,7 +247,7 @@ void KisConvolutionPainter::applyMatrixRepeat( KisKernelSP kernel, qint32 x, qin
     xLastMinuskhw = x + (w - khalfWidth);
     yLastMinuskhh = y + (h - khalfHeight);
 
-    KoColorSpace * cs = m_device->colorSpace();
+    const KoColorSpace * cs = m_device->colorSpace();
     KoConvolutionOp * convolutionOp = cs->convolutionOp();
 
     // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorspace.

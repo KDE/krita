@@ -52,7 +52,7 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const quint8 
 
     dev->exactBounds(x, y, w, h);
 
-    KoColorSpace * cs = dev->colorSpace();
+    const KoColorSpace * cs = dev->colorSpace();
 
     KisHLineConstIterator hiter = dev->createHLineConstIterator(x, y, w);
     KisHLineIterator selIter = selection->createHLineIterator(x, y, w);

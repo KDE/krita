@@ -84,7 +84,7 @@ public:
     /**
      * @return the structure to use with LCMS functions
      */
-    cmsHPROFILE lcmsProfile();
+    cmsHPROFILE lcmsProfile() const;
 
     virtual bool valid() const;
 

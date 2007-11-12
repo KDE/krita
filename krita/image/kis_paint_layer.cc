@@ -75,7 +75,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     init();
 }
 
-KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KoColorSpace * colorSpace)
+KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
     : KisLayer(img, name, opacity)
     , m_d( new Private() )
 {
@@ -111,7 +111,7 @@ bool KisPaintLayer::allowAsChild( KisNodeSP node)
 
 void KisPaintLayer::init()
 {
-    connect( m_d->paintDevice.data(), SIGNAL( colorSpaceChanged( KoColorSpace* ) ), this, SLOT( slotColorSpaceChanged() ) );
+    connect( m_d->paintDevice.data(), SIGNAL( colorSpaceChanged( const KoColorSpace* ) ), this, SLOT( slotColorSpaceChanged() ) );
     connect( m_d->paintDevice.data(), SIGNAL( profileChanged( KoColorProfile* ) ), this, SLOT( slotColorSpaceChanged() ) );
 }
 
@@ -162,7 +162,7 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() con
 {
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     l << KoDocumentSectionModel::Property(i18n("Colorspace"), m_d->paintDevice->colorSpace()->name());
-    if( KoColorProfile *profile = m_d->paintDevice->colorSpace()->profile() )
+    if( const KoColorProfile *profile = m_d->paintDevice->colorSpace()->profile() )
         l << KoDocumentSectionModel::Property(i18n("Profile"), profile->name());
     return l;
 }
@@ -173,7 +173,7 @@ KisLayerSP KisPaintLayer::clone() const
 }
 
 
-KoColorSpace * KisPaintLayer::colorSpace()
+const KoColorSpace * KisPaintLayer::colorSpace()
 {
     return m_d->paintDevice->colorSpace();
 }

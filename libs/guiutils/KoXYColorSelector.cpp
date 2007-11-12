@@ -22,7 +22,7 @@
 #include <QColor>
 #include <QPainter>
 
-KoXYColorSelector::KoXYColorSelector( KoColorSpace* colorSpace, QWidget *parent )
+KoXYColorSelector::KoXYColorSelector( const KoColorSpace* colorSpace, QWidget *parent )
     : KXYSelector( parent )
     , m_colorSpace(colorSpace)
 {

@@ -37,7 +37,7 @@ public:
      virtual KoID colorModelId() const { return painterlyOverlayColorModelID; }
      virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
 
-     bool profileIsCompatible(KoColorProfile* /*profile*/) const
+     bool profileIsCompatible(const KoColorProfile* /*profile*/) const
         {
             return false;
         }
@@ -65,16 +65,16 @@ public:
 
 };
 
-KisPainterlyOverlayColorSpace * KisPainterlyOverlayColorSpace::instance()
+const KisPainterlyOverlayColorSpace * KisPainterlyOverlayColorSpace::instance()
 {
     KoColorSpaceRegistry * registry = KoColorSpaceRegistry::instance();
-    KisPainterlyOverlayColorSpace * cs =
-        dynamic_cast<KisPainterlyOverlayColorSpace*>( registry->colorSpace( "painterlyoverlay", 0 ) );
+    const KisPainterlyOverlayColorSpace * cs =
+        dynamic_cast<const KisPainterlyOverlayColorSpace*>( registry->colorSpace( "painterlyoverlay", 0 ) );
 
     if ( !cs ) {
         KisPainterlyOverlayColorSpaceFactory * f = new KisPainterlyOverlayColorSpaceFactory();
         registry->add( f );
-        cs = dynamic_cast<KisPainterlyOverlayColorSpace*>( registry->colorSpace( "painterlyoverlay", 0 ) );
+        cs = dynamic_cast<const KisPainterlyOverlayColorSpace*>( registry->colorSpace( "painterlyoverlay", 0 ) );
     }
 
     return cs;

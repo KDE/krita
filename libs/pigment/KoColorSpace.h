@@ -209,7 +209,7 @@ public:
   /**
    * Write in the pixel the value from the normalized vector.
    */
-	virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) = 0;
+	virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const = 0;
 
     /**
      * Convert the value of the channel at the specified position into
@@ -258,7 +258,7 @@ public:
     /**
      * @return true if the profile given in argument can be used by this color space
      */
-    virtual bool profileIsCompatible(KoColorProfile* profile) const =0;
+    virtual bool profileIsCompatible(const KoColorProfile* profile) const =0;
 
     /**
      * If false, images in this colorspace will degrade considerably by
@@ -302,7 +302,7 @@ public:
     /**
      * Return the profile of this color space. This may be 0
      */
-    virtual KoColorProfile * profile() const = 0;
+    virtual const KoColorProfile * profile() const = 0;
 
 //================= Conversion functions ==================================//
 
@@ -316,7 +316,7 @@ public:
      * @param dst a pointer to a pixel
      * @param profile the optional profile that describes the color values of QColor
      */
-    virtual void fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile = 0) const = 0;
+    virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const = 0;
 
     /**
      * The fromQColor methods take a given color defined as an RGB QColor
@@ -328,7 +328,7 @@ public:
      * @param dst a pointer to a pixel
      * @param profile the optional profile that describes the color values of QColor
      */
-    virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0) const = 0;
+    virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, const KoColorProfile * profile = 0) const = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -339,7 +339,7 @@ public:
      * @param c the QColor that will be filled with the color at src
      * @param profile the optional profile that describes the color in c, for instance the monitor profile
      */
-    virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile = 0) const = 0;
+    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -351,7 +351,7 @@ public:
      * @param opacity a pointer to a byte that will be filled with the opacity a src
      * @param profile the optional profile that describes the color in c, for instance the monitor profile
      */
-    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile = 0) const = 0;
+    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, const KoColorProfile * profile = 0) const = 0;
 
     /**
      * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
@@ -368,7 +368,7 @@ public:
      * @param exposure The exposure setting for rendering a preview of a high dynamic range image.
      */
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
                                    float exposure = 0.0f) const = 0;
 
     /**
@@ -564,7 +564,7 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
 			qint32 dststride,
-			KoColorSpace * srcSpace,
+			const KoColorSpace * srcSpace,
 			const quint8 *src,
 			qint32 srcRowStride,
 			const quint8 *srcAlphaMask,
@@ -579,7 +579,7 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
 			qint32 dststride,
-			KoColorSpace * srcSpace,
+			const KoColorSpace * srcSpace,
 			const quint8 *src,
 			qint32 srcRowStride,
 			const quint8 *srcAlphaMask,
@@ -594,7 +594,7 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
 			qint32 dststride,
-			KoColorSpace * srcSpace,
+			const KoColorSpace * srcSpace,
 			const quint8 *src,
 			qint32 srcRowStride,
 			const quint8 *srcAlphaMask,
@@ -610,7 +610,7 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
 			qint32 dststride,
-			KoColorSpace * srcSpace,
+			const KoColorSpace * srcSpace,
 			const quint8 *src,
 			qint32 srcRowStride,
 			const quint8 *srcAlphaMask,
@@ -690,7 +690,7 @@ public:
      * @return true if the color profile can be used by a color space created by
      * this factory
      */
-    virtual bool profileIsCompatible(KoColorProfile* profile) const =0;
+    virtual bool profileIsCompatible(const KoColorProfile* profile) const =0;
     /**
      * creates a color space using the given profile.
      */

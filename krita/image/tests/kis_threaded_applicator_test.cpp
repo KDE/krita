@@ -75,7 +75,7 @@ public:
 
 void KisThreadedApplicatorTest::testApplication()
 {
-    KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     TestJobFactory factory;
 
     KisPaintDeviceSP test = new KisPaintDevice( colorSpace, "test" );

@@ -142,7 +142,7 @@ QImage KisPixelSelection::maskImage( KisImageSP image ) const
 void KisPixelSelection::select(const QRect & r, quint8 selectedness )
 {
     KisFillPainter painter(KisPaintDeviceSP(this));
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     painter.fillRect(r, KoColor(Qt::white, cs), selectedness);
 }
 
@@ -202,7 +202,7 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
 void KisPixelSelection::clear(QRect r)
 {
     KisFillPainter painter(KisPaintDeviceSP(this));
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     painter.fillRect(r, KoColor(Qt::white, cs), MIN_SELECTED);
 }
 

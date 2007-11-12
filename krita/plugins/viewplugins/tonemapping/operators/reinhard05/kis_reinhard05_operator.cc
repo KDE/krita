@@ -69,7 +69,7 @@ KisToneMappingOperatorConfigurationWidget* KisReinhard05Operator::createConfigur
     return new KisReinhard05OperatorConfigurationWidget(wdg);
 }
 
-KoColorSpace* KisReinhard05Operator::colorSpace() const
+const KoColorSpace* KisReinhard05Operator::colorSpace() const
 {
     return KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( RGBAColorModelID, Float32BitsColorDepthID), "" );
 }
@@ -78,7 +78,7 @@ void KisReinhard05Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfig
 {
     kDebug() << "Create a copy of the paint device as XYZAF32";
     QRect r = device->exactBounds();
-    KoColorSpace* XYZACs = KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( XYZAColorModelID, Float32BitsColorDepthID), "" );
+    const KoColorSpace* XYZACs = KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( XYZAColorModelID, Float32BitsColorDepthID), "" );
     Q_ASSERT(XYZACs);
     KisPaintDeviceSP deviceXYZ = new KisPaintDevice(*device);
     deviceXYZ->convertTo(XYZACs);

@@ -124,7 +124,7 @@ bool KoSegmentGradient::init()
 
     kDebug(30009) << "Number of segments = " << numSegments << endl;
 
-    KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
     for (int i = 0; i < numSegments; i++) {
 

@@ -30,7 +30,7 @@ class KoCompositeOpMultiply : public KoCompositeOpAlphaBase<_CSTraits, KoComposi
     typedef typename _CSTraits::channels_type channels_type;
     public:
 
-        KoCompositeOpMultiply(KoColorSpace * cs)
+        KoCompositeOpMultiply(const KoColorSpace * cs)
         : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpMultiply<_CSTraits> >(cs, COMPOSITE_MULT, i18n("Multiply" ) )
         {
         }

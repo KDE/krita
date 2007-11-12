@@ -20,7 +20,7 @@ void TestKoColorSpaceRegistry::testRgbU8()
     KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     QVERIFY(colorSpace != 0);
 
-    KoColorProfile *profile = colorSpace->profile();
+    const KoColorProfile *profile = colorSpace->profile();
     QVERIFY(profile != 0);
 
     QCOMPARE(profile->name(), colorSpaceFactory->defaultProfile());
@@ -63,7 +63,7 @@ void TestKoColorSpaceRegistry::testRgbU16()
     KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb16();
     QVERIFY(colorSpace != 0);
 
-    KoColorProfile *profile = colorSpace->profile();
+    const KoColorProfile *profile = colorSpace->profile();
     QVERIFY(profile != 0);
 
     QCOMPARE(profile->name(), colorSpaceFactory->defaultProfile());
@@ -106,7 +106,7 @@ void TestKoColorSpaceRegistry::testLab()
     KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->lab16();
     QVERIFY(colorSpace != 0);
 
-    KoColorProfile *profile = colorSpace->profile();
+    const KoColorProfile *profile = colorSpace->profile();
     QVERIFY(profile != 0);
 
     QCOMPARE(profile->name(), colorSpaceFactory->defaultProfile());

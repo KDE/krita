@@ -31,7 +31,7 @@ class KoCompositeOpDivide : public KoCompositeOpAlphaBase<_CSTraits, KoComposite
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
     public:
 
-        KoCompositeOpDivide(KoColorSpace * cs)
+        KoCompositeOpDivide(const KoColorSpace * cs)
         : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDivide<_CSTraits> >(cs, COMPOSITE_DIVIDE, i18n("Divide" ) )
         {
         }

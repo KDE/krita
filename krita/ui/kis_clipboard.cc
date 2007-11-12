@@ -110,11 +110,11 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     }
 
     if (selection->colorSpace()->profile()) {
-        KoColorProfile *profile = selection->colorSpace()->profile();
+        const KoColorProfile *profile = selection->colorSpace()->profile();
         KisAnnotationSP annotation;
         if (profile)
         {
-            KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
+            const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (iccprofile and !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
         }
@@ -181,7 +181,7 @@ KisPaintDeviceSP KisClipboard::clip()
             store->close();
         }
 
-        KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
 
         m_clip = new KisPaintDevice(cs, "clip");
 
@@ -209,7 +209,7 @@ KisPaintDeviceSP KisClipboard::clip()
             behaviour = QMessageBox::question(0,i18n("Pasting data from simple source"),i18n("The image data you are trying to paste has no color profile information.\n\nOn the web and in simple applications the data are supposed to be in sRGB color format.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret these data?"),i18n("As &Web"),i18n("As on &Monitor"));
         }
 
-        KoColorSpace * cs;
+        const KoColorSpace * cs;
         QString profileName("");
         if (behaviour == PASTE_ASSUME_MONITOR)
             profileName = cfg.monitorProfile();
@@ -279,7 +279,7 @@ QSize KisClipboard::clipSize()
             store->close();
         }
 
-        KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
 
         clip = new KisPaintDevice(cs, "clip");
 

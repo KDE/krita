@@ -101,7 +101,7 @@ class KORESOURCES_EXPORT KoGradientSegment {
             RGBColorInterpolationStrategy();
 
             static RGBColorInterpolationStrategy *m_instance;
-            KoColorSpace * m_colorSpace;
+            const KoColorSpace * m_colorSpace;
             KoColor buffer;
             mutable KoColor m_start;
             mutable KoColor m_end;
@@ -117,7 +117,7 @@ class KORESOURCES_EXPORT KoGradientSegment {
             HSVCWColorInterpolationStrategy();
 
             static HSVCWColorInterpolationStrategy *m_instance;
-            KoColorSpace * m_colorSpace;
+            const KoColorSpace * m_colorSpace;
         };
 
         class HSVCCWColorInterpolationStrategy : public ColorInterpolationStrategy {
@@ -130,7 +130,7 @@ class KORESOURCES_EXPORT KoGradientSegment {
             HSVCCWColorInterpolationStrategy();
 
             static HSVCCWColorInterpolationStrategy *m_instance;
-            KoColorSpace * m_colorSpace;
+            const KoColorSpace * m_colorSpace;
         };
 
         class InterpolationStrategy {

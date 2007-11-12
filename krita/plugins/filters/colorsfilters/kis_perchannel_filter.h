@@ -58,7 +58,7 @@ public:
     quint16 nTransfers;
     // Caching of adjustment
     bool dirty;
-    KoColorSpace* oldCs;
+    const KoColorSpace* oldCs;
     KoColorTransformation* adjustment;
 };
 

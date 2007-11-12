@@ -164,7 +164,7 @@ void KisPrescaledProjectionTest::testCoordinateConversionRoundTrip()
 {
     KisPrescaledProjection projection;
 
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage( 0, 100, 100, cs, "projection test" );
     image->setResolution( 300, 300 );
 
@@ -195,7 +195,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
 
     // Undo adapter not necessary
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage( 0, qimage.width(), qimage.height(), cs, "projection test" );
 
     // 300 dpi recalculated to pixels per point (of which there are 72
@@ -225,7 +225,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
 
     // Undo adapter not necessary
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage( 0, qimage.width(), qimage.height(), cs, "projection test" );
 
     // 300 dpi recalculated to pixels per point (of which there are 72

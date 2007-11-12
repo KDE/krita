@@ -69,7 +69,7 @@ public:
     }
 
     virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisXyzF32HDRColorSpace(parent, p); }
-    virtual bool profileIsCompatible(KoColorProfile* profile) const
+    virtual bool profileIsCompatible(const KoColorProfile* profile) const
     {
         return profile == 0;
     }

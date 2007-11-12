@@ -89,9 +89,9 @@ private:
     ChannelType m_activeChannel;
     KoColor m_currentColor;
 
-    KoColorSpace *rgbColorSpace();
-    KoColorSpace *labColorSpace();
-    KoColorSpace *cmykColorSpace();
+    const KoColorSpace *rgbColorSpace();
+    const KoColorSpace *labColorSpace();
+    const KoColorSpace *cmykColorSpace();
 
     void announceColor();
     void updateValues();

@@ -132,7 +132,7 @@ public:
      * @param profileName the name of the KoColorProfile to be combined with the colorspace
      * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
-    KoColorSpace *  colorSpace(const KoID &csID, const QString & profileName) {
+    const KoColorSpace *  colorSpace(const KoID &csID, const QString & profileName) {
         return colorSpace(csID.id(), profileName);
     }
 
@@ -142,14 +142,14 @@ public:
      * @param profile the profile be combined with the colorspace
      * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
-    KoColorSpace * colorSpace(const QString &colorSpaceId, const KoColorProfile *profile);
+    const KoColorSpace * colorSpace(const QString &colorSpaceId, const KoColorProfile *profile);
 
     /**
      * Return a colorspace that works with the parameter profile.
      * @param profileName the name of the KoColorProfile to be combined with the colorspace
      * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
-    KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profileName);
+    const KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profileName);
 
     /**
      * Return the id of the colorspace that have the defined colorModelId with colorDepthId.
@@ -170,7 +170,7 @@ public:
     /**
      * Convenience method to get the often used alpha colorspace
      */
-    KoColorSpace * alpha8();
+    const KoColorSpace * alpha8();
 
     /**
      * Convenience method to get an RGB 8bit colorspace. If a profile is not specified,
@@ -178,14 +178,14 @@ public:
      * @param profileName the name of an RGB color profile
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
-    KoColorSpace * rgb8(const QString &profileName = QString());
+    const KoColorSpace * rgb8(const QString &profileName = QString());
     
     /**
      * Convenience method to get an RGB 8bit colorspace with the given profile.
      * @param profile an RGB profile
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
-    KoColorSpace * rgb8(KoColorProfile * profile);
+    const KoColorSpace * rgb8(const KoColorProfile * profile);
     
     /**
      * Convenience method to get an RGB 16bit colorspace. If a profile is not specified,
@@ -193,14 +193,14 @@ public:
      * @param profileName the name of an RGB color profile
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
-    KoColorSpace * rgb16(const QString &profileName = QString());
+    const KoColorSpace * rgb16(const QString &profileName = QString());
 
     /**
      * Convenience method to get an RGB 16bit colorspace with the given profile.
      * @param profile an RGB profile
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
-    KoColorSpace * rgb16(KoColorProfile * profile);
+    const KoColorSpace * rgb16(const KoColorProfile * profile);
 
     /**
      * Convenience method to get an Lab 16bit colorspace. If a profile is not specified,
@@ -208,24 +208,24 @@ public:
      * @param profileName the name of an Lab color profile
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
-    KoColorSpace * lab16(const QString &profileName = QString());
+    const KoColorSpace * lab16(const QString &profileName = QString());
 
     /**
      * Convenience method to get an Lab 16bit colorspace with the given profile.
      * @param profile an Lab profile
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
-    KoColorSpace * lab16(KoColorProfile * profile);
+    const KoColorSpace * lab16(const KoColorProfile * profile);
 
     /**
      * add a KisConstructPaintDeviceAction to the registry for a colorspace
      */
-    void addPaintDeviceAction(KoColorSpace* colorSpace, KisPaintDeviceAction* action);
+    void addPaintDeviceAction(const KoColorSpace* colorSpace, KisPaintDeviceAction* action);
 
     /**
      * Get a list of KisConstructPaintDeviceAction for a colorspace
      */
-    QList<KisPaintDeviceAction *> paintDeviceActionsFor(KoColorSpace* colorSpace);
+    QList<KisPaintDeviceAction *> paintDeviceActionsFor(const KoColorSpace* colorSpace);
 
     /**
      * @return the list of available color models

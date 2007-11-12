@@ -83,7 +83,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater, qint32 xoffset, qint
 
     KisPaintDeviceSP shadowDev = KisPaintDeviceSP(new KisPaintDevice( KoColorSpaceRegistry::instance()->colorSpace("RGBA",0 ), "Shadow"));
     KisPaintDeviceSP bShadowDev;
-    KoColorSpace *rgb8cs = shadowDev->colorSpace();
+    const KoColorSpace *rgb8cs = shadowDev->colorSpace();
 
     QRect rect = dev->exactBounds();
 

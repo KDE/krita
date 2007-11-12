@@ -899,17 +899,17 @@ void KoUniColorChooser::updateValues()
     m_bIn->blockSignals(false);
 }
 
-KoColorSpace *KoUniColorChooser::rgbColorSpace()
+const KoColorSpace *KoUniColorChooser::rgbColorSpace()
 {
     return KoColorSpaceRegistry::instance()->rgb8();
 }
 
-KoColorSpace *KoUniColorChooser::labColorSpace()
+const KoColorSpace *KoUniColorChooser::labColorSpace()
 {
-    return KoColorSpaceRegistry::instance()->colorSpace("LABA",0);
+    return KoColorSpaceRegistry::instance()->lab16();
 }
 
-KoColorSpace *KoUniColorChooser::cmykColorSpace()
+const KoColorSpace *KoUniColorChooser::cmykColorSpace()
 {
     return KoColorSpaceRegistry::instance()->colorSpace("CMYK",0);
 }

@@ -415,7 +415,7 @@ KisQImagemaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX
     return outputMask;
 }
 
-KisPaintDeviceSP KisBrush::image(KoColorSpace * /*colorSpace*/, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisPaintDeviceSP KisBrush::image(const KoColorSpace * /*colorSpace*/, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_scaledBrushes.isEmpty()) {
         createScaledBrushes();
@@ -1262,7 +1262,7 @@ void KisBrush::generateBoundary() {
         dev = image(KoColorSpaceRegistry::instance()->colorSpace("RGBA",0), KisPaintInformation());
     } else {
         KisQImagemaskSP amask = mask(KisPaintInformation());
-        KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA",0);
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA",0);
         dev = new KisPaintDevice(cs, "tmp for generateBoundary");
 
         KisHLineIteratorPixel it = dev->createHLineIterator(0, 0, w);

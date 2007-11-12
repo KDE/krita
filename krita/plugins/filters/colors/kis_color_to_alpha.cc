@@ -83,7 +83,7 @@ void KisFilterColorToAlpha::process(KisFilterConstantProcessingInformation srcIn
     int totalCost = size.width() * size.height() / 100;
     int currentProgress = 0;
 
-    KoColorSpace * cs = src->colorSpace();
+    const KoColorSpace * cs = src->colorSpace();
     qint32 pixelsize = cs->pixelSize();
 
     quint8* color = new quint8[pixelsize];

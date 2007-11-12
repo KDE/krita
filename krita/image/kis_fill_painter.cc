@@ -242,8 +242,8 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
     m_size = m_width * m_height;
 
     KisPixelSelectionSP selection = KisPixelSelectionSP(new KisPixelSelection(m_device));
-    KoColorSpace * colorSpace = selection->colorSpace();
-    KoColorSpace * devColorSpace = sourceDevice->colorSpace();
+    const KoColorSpace * colorSpace = selection->colorSpace();
+    const KoColorSpace * devColorSpace = sourceDevice->colorSpace();
 
     quint8* source = new quint8[sourceDevice->pixelSize()];
     KisHLineConstIteratorPixel pixelIt = sourceDevice->createHLineConstIterator(startX, startY, startX+1);

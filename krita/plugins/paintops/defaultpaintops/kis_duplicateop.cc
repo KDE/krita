@@ -306,7 +306,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
         quint16 dataSrcDev[4];
         double* matrix = new double[ 3 * sw * sh ];
         // First divide
-        KoColorSpace* deviceCs = source()->colorSpace();
+        const KoColorSpace* deviceCs = source()->colorSpace();
         KisHLineConstIteratorPixel deviceIt = source()->createHLineConstIterator(x, y, sw );
         KisHLineIteratorPixel srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
         double* matrixIt = &matrix[0];

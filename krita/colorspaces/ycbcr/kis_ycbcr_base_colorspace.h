@@ -38,11 +38,11 @@ class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits>
 
         }
 
-        virtual bool profileIsCompatible(KoColorProfile* /*profile*/) const
+        virtual bool profileIsCompatible(const KoColorProfile* /*profile*/) const
         {
             return false;
         }
-        virtual void fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile * /*profile*/) const
+        virtual void fromQColor(const QColor& c, quint8 *dstU8, const KoColorProfile * /*profile*/) const
         {
             typename _CSTraits::Pixel *dst = reinterpret_cast< typename _CSTraits::Pixel *>(dstU8);
             typename _CSTraits::channels_type red = UINT8_TO_NATIVE(c.red());
@@ -53,7 +53,7 @@ class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits>
             dst->Cr = _CSTraits::computeCr( red, green, blue);
         }
 
-        virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KoColorProfile * /*profile*/) const
+        virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, const KoColorProfile * /*profile*/) const
         {
             typename _CSTraits::Pixel *dst = reinterpret_cast<typename _CSTraits::Pixel *>(dstU8);
             typename _CSTraits::channels_type red = UINT8_TO_NATIVE(c.red());
@@ -65,7 +65,7 @@ class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits>
             dst->alpha = UINT8_TO_NATIVE(opacity);
         }
 
-        virtual void toQColor(const quint8 *srcU8, QColor *c, KoColorProfile * /*profile*/) const
+        virtual void toQColor(const quint8 *srcU8, QColor *c, const KoColorProfile * /*profile*/) const
         {
             const typename _CSTraits::Pixel* src = reinterpret_cast<const typename _CSTraits::Pixel *>(srcU8);
             c->setRgb(
@@ -74,7 +74,7 @@ class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits>
                 NATIVE_TO_UINT8(_CSTraits::computeBlue( src->Y, src->Cb, src->Cr) ) );
         }
 
-        virtual void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/) const
+        virtual void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, const KoColorProfile * /*profile*/) const
         {
             const typename _CSTraits::Pixel* src = reinterpret_cast<const typename _CSTraits::Pixel *>(srcU8);
             c->setRgb(

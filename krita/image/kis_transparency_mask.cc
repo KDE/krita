@@ -49,7 +49,7 @@ void KisTransparencyMask::apply( KisPaintDeviceSP projection, const QRect & rc )
 {
     selection()->updateProjection();
 
-    KoColorSpace * cs = projection->colorSpace();
+    const KoColorSpace * cs = projection->colorSpace();
 
     KisHLineIteratorPixel projectionIt = projection->createHLineIterator( rc.x(), rc.y(), rc.width() );
     KisHLineConstIteratorPixel maskIt = selection()->createHLineConstIterator( rc.x(), rc.y(), rc.width() );

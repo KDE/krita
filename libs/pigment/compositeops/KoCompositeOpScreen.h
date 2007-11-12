@@ -31,7 +31,7 @@ class KoCompositeOpScreen : public KoCompositeOpAlphaBase<_CSTraits, KoComposite
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
     public:
 
-        KoCompositeOpScreen(KoColorSpace * cs)
+        KoCompositeOpScreen(const KoColorSpace * cs)
         : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpScreen<_CSTraits> >(cs, COMPOSITE_SCREEN, i18n("Screen" ) )
         {
         }

@@ -58,7 +58,7 @@ extern "C"
         KisDoc2* doc = new KisDoc2(0, 0, true);
 
         // dirty hack to get an image defined
-        KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         doc->newImage("unnamed", 100,100,cs /*,KoColor(QColor(255,255,255),cs)*/);
         //doc->prepareForImport();
 
@@ -217,7 +217,7 @@ QObject* Module::createImage(int width, int height, const QString& colorspace, c
         kWarning(41011) << i18n("Invalid image size");
         return 0;
     }
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorspace, 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorspace, 0);
     if(!cs)
     {
         kWarning(41011) << i18n("Colorspace %1 is not available, please check your installation.", colorspace );

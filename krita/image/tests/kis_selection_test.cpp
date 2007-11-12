@@ -81,7 +81,7 @@ void KisSelectionTest::testSelectionActions()
 
 void KisSelectionTest::testInvertSelection()
 {
-    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs, "tmp");
     quint8* pixel = cs->allocPixelBuffer( 1 );
     cs->fromQColor( Qt::white, pixel );

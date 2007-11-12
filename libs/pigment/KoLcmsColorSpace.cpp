@@ -32,7 +32,7 @@
 class KoLcmsColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
     public:
         KoLcmsColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId);
-        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
         virtual bool conserveColorInformation() const;
         virtual bool conserveDynamicRange() const;
     private:
@@ -51,9 +51,9 @@ KoLcmsColorConversionTransformationFactory::KoLcmsColorConversionTransformationF
     m_conserveColorInformation = not (_dstModelId == GrayAColorModelID.id() or _dstModelId == GrayColorModelID.id()); // color information is lost when converting to Grayscale
 }
 
-KoColorConversionTransformation* KoLcmsColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent )
+KoColorConversionTransformation* KoLcmsColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent ) const
 {
-    return new KoLcmsColorConversionTransformation(srcColorSpace, m_srcColorSpaceType, dynamic_cast<KoIccColorProfile*>(srcColorSpace->profile())->asLcms(), dstColorSpace, m_dstColorSpaceType, dynamic_cast<KoIccColorProfile*>(dstColorSpace->profile())->asLcms(), renderingIntent);
+    return new KoLcmsColorConversionTransformation(srcColorSpace, m_srcColorSpaceType, dynamic_cast<const KoIccColorProfile*>(srcColorSpace->profile())->asLcms(), dstColorSpace, m_dstColorSpaceType, dynamic_cast<const KoIccColorProfile*>(dstColorSpace->profile())->asLcms(), renderingIntent);
 }
 
 bool KoLcmsColorConversionTransformationFactory::conserveColorInformation() const

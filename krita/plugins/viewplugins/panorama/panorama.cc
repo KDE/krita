@@ -198,7 +198,7 @@ void PanoramaPlugin::createPanorama(QList<PanoramaImage>& images, KisPaintDevice
     int height = 1000; // TODO TMP variable
     kDebug(41006) <<"Creating panorama with" << images.size() <<" images";
     kDebug(41006) <<"Detecting interest points";
-    KoColorSpace* graycs = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
+    const KoColorSpace* graycs = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
     if(not graycs)
     {
         kDebug(41006) <<"Gray 8bit is not installed."; // TODO: message box

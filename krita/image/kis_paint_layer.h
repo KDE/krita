@@ -41,7 +41,7 @@ class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisIndirectPaint
 public:
     KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev);
     KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity);
-    KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KoColorSpace * colorSpace);
+    KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, const KoColorSpace * colorSpace);
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
 
@@ -52,7 +52,7 @@ public:
 
     bool allowAsChild( KisNodeSP );
 
-    KoColorSpace * colorSpace();
+    const KoColorSpace * colorSpace();
 
     /**
      * Update the projection for the specified rect r, whether that rect is dirty

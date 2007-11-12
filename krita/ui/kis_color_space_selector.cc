@@ -76,7 +76,7 @@ void KisColorSpaceSelector::fillCmbProfiles()
     d->colorSpaceSelector->cmbColorDepth->setIDList(KoColorSpaceRegistry::instance()->colorDepthList(id, KoColorSpaceRegistry::OnlyUserVisible));
 }
 
-KoColorSpace* KisColorSpaceSelector::currentColorSpace()
+const KoColorSpace* KisColorSpaceSelector::currentColorSpace()
 {
     return KoColorSpaceRegistry::instance()->colorSpace( 
             KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem())

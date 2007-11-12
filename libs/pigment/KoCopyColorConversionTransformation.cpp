@@ -36,7 +36,7 @@ void KoCopyColorConversionTransformation::transform(const quint8 *srcU8, quint8 
 // --- KoCopyColorConversionTransformationFactory ---
 KoCopyColorConversionTransformationFactory::KoCopyColorConversionTransformationFactory(QString colorModelId, QString depthId) : KoColorConversionTransformationFactory(colorModelId, depthId, colorModelId, depthId)
 {}
-KoColorConversionTransformation* KoCopyColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
+KoColorConversionTransformation* KoCopyColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
 {
     Q_UNUSED(renderingIntent);
     Q_ASSERT(canBeSource(srcColorSpace));

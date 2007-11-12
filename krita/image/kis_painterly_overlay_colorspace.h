@@ -86,7 +86,7 @@ public:
      virtual KoID colorModelId() const;
      virtual KoID colorDepthId() const;
 
-    static KisPainterlyOverlayColorSpace* instance();
+    static const KisPainterlyOverlayColorSpace* instance();
 
 private: // This is a singleton
 
@@ -104,12 +104,12 @@ public:
             return true;
         }
 
-    bool profileIsCompatible(KoColorProfile* profile) const
+    bool profileIsCompatible(const KoColorProfile* profile) const
         {
             Q_UNUSED( profile );
             return false;
         }
-    void fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile * profile) const
+    void fromQColor(const QColor& c, quint8 *dstU8, const KoColorProfile * profile) const
         {
             Q_UNUSED( c );
             Q_UNUSED( dstU8 );
@@ -118,7 +118,7 @@ public:
             Q_ASSERT( 0 == 1 );
         }
 
-    void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KoColorProfile * profile) const
+    void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, const KoColorProfile * profile) const
         {
             Q_UNUSED( c );
             Q_UNUSED( opacity );
@@ -128,7 +128,7 @@ public:
             Q_ASSERT( 0 == 1 );
         }
 
-    void toQColor(const quint8 *srcU8, QColor *c, KoColorProfile * profile) const
+    void toQColor(const quint8 *srcU8, QColor *c, const KoColorProfile * profile) const
         {
             Q_UNUSED( srcU8 );
             Q_UNUSED( c );
@@ -137,7 +137,7 @@ public:
             Q_ASSERT( 0 == 1 );
         }
 
-    void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KoColorProfile * profile) const
+    void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, const KoColorProfile * profile) const
         {
             Q_UNUSED( srcU8 );
             Q_UNUSED( c );

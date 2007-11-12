@@ -26,9 +26,28 @@
 #include <kross/core/action.h>
 #include <kdebug.h>
 
+#include <QApplication>
+#include <QEventLoop>
+
+Kikoo::Kikoo()
+{
+    connect(&timer, SIGNAL(timeout()), SLOT(timeout()));
+    timer.start(100);
+}
+
+void Kikoo::timeout()
+{
+    while(true)
+    {
+        kDebug() << "C++ Event Loop";
+        QApplication::instance()->processEvents(QEventLoop::AllEvents | QEventLoop::WaitForMoreEvents | QEventLoop::DeferredDeletion);
+    }
+}
+
 KisScriptDockFactory::KisScriptDockFactory(Kross::Action* act) : m_action(act)
 {
     m_action->addObject(this, "KritaDockFactory", Kross::ChildrenInterface::AutoConnectSignals);
+//     new Kikoo();
 }
 
 QString KisScriptDockFactory::id() const
@@ -45,3 +64,5 @@ QDockWidget* KisScriptDockFactory::createDockWidget()
     kWarning() << "The script didn't delivered its promise of providing a QDockWidget";
     return 0;
 }
+
+#include "kis_script_dock.moc"

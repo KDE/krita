@@ -50,7 +50,7 @@ class KisYCbCrToRgbColorConversionTransformationFactory : public KoColorConversi
     public:
         KisYCbCrToRgbColorConversionTransformationFactory(QString _srcColorModelId, QString _srcDepthId, QString _dstColorModelId, QString _dstDepthId) : KoColorConversionTransformationFactory(_srcColorModelId,  _srcDepthId, _dstColorModelId, _dstDepthId)
         {}
-        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual)
+        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
         {
             Q_UNUSED(renderingIntent);
             Q_ASSERT(canBeSource(srcColorSpace));

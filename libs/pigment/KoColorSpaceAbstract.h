@@ -63,7 +63,7 @@ class CompositeCopy : public KoCompositeOp {
             Q_UNUSED( channelFlags );
             quint8 *dst = dstRowStart;
             const quint8 *src = srcRowStart;
-            KoColorSpace* cs = colorSpace();
+            const KoColorSpace* cs = colorSpace();
             qint32 bytesPerPixel = cs->pixelSize();
 
             while (rows > 0) {
@@ -302,7 +302,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
 			}
 		}
 
-		virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values)
+		virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const
 		{
 			Q_ASSERT((int)values.count() == (int)_CSTraits::channels_nb);
 			typename _CSTraits::channels_type c;

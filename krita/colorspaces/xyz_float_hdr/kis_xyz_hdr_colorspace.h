@@ -76,7 +76,7 @@ class KisXyzFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 
         }
     public:
-        virtual bool profileIsCompatible(KoColorProfile* profile) const
+        virtual bool profileIsCompatible(const KoColorProfile* profile) const
         {
             return profile == 0;
         }

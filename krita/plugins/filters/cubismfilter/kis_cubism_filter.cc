@@ -91,7 +91,7 @@ void KisCubismFilter::process(KisFilterConstantProcessingInformation srcInfo,
     quint32 tileSize = configuration->getInt("tileSize");
     quint32 tileSaturation = configuration->getInt("tileSaturation");
 
-    KoColorSpace * cs = src->colorSpace();
+    const KoColorSpace * cs = src->colorSpace();
     QString id = cs->id();
 
     if (id == "RGBA" || id == "GRAY" || id == "CMYK") {

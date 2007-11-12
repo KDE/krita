@@ -183,7 +183,7 @@ bool KoLcmsColorProfileContainer::init()
     return false;
 }
 
-cmsHPROFILE KoLcmsColorProfileContainer::lcmsProfile()
+cmsHPROFILE KoLcmsColorProfileContainer::lcmsProfile() const
 {
 #if 0
 	if (d->profile = 0) {

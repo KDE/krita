@@ -100,7 +100,7 @@ void KisImageResizeCommand::undo()
 
 
 
-KisImageConvertTypeCommand::KisImageConvertTypeCommand(KisImageSP image, KoColorSpace * beforeColorSpace, KoColorSpace * afterColorSpace)
+KisImageConvertTypeCommand::KisImageConvertTypeCommand(KisImageSP image, const KoColorSpace * beforeColorSpace, const KoColorSpace * afterColorSpace)
     : KisImageCommand(i18n("Convert Image Type"), image)
 {
     m_beforeColorSpace = beforeColorSpace;
@@ -125,7 +125,7 @@ void KisImageConvertTypeCommand::undo()
 
 
 
-KisImagePropsCommand::KisImagePropsCommand(KisImageSP image,KoColorSpace* newColorSpace, KoColorProfile* newProfile)
+KisImagePropsCommand::KisImagePropsCommand(KisImageSP image, const KoColorSpace* newColorSpace, const KoColorProfile* newProfile)
     : KisImageCommand(i18n("Property Changes"), image)
     , m_newColorSpace( newColorSpace )
     , m_newProfile(newProfile)

@@ -45,7 +45,7 @@ public:
      * returns a KisPaintDeviceSP made with colorSpace as the ColorSpace strategy
      * for use in the fill painter.
      **/
-    KisPaintDeviceSP image(KoColorSpace * colorSpace);
+    KisPaintDeviceSP image(const KoColorSpace * colorSpace);
 
     KisPattern* clone() const;
 private:

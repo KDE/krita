@@ -143,7 +143,7 @@ void KisAutoMaskShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* c
     }
 
     // Apply the coloring
-    KoColorSpace * colorSpace = stamp->colorSpace();
+    const KoColorSpace * colorSpace = stamp->colorSpace();
 
     // Convert the kiscolor to the right colorspace.
     KoColor kc;

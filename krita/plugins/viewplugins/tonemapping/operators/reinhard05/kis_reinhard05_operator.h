@@ -27,7 +27,7 @@ class KisReinhard05Operator : public KisToneMappingOperator {
         KisReinhard05Operator();
         virtual KisToneMappingOperatorConfigurationWidget* createConfigurationWidget(QWidget*) const;
         virtual void toneMap(KisPaintDeviceSP, KisPropertiesConfiguration* config) const;
-        virtual KoColorSpace* colorSpace() const ;
+        virtual const KoColorSpace* colorSpace() const ;
 };
 
 #endif

@@ -59,7 +59,7 @@ KisPattern::~KisPattern()
 {
 }
 
-KisPaintDeviceSP KisPattern::image(KoColorSpace * colorSpace) {
+KisPaintDeviceSP KisPattern::image(const KoColorSpace * colorSpace) {
     // Check if there's already a pattern prepared for this colorspace
     QMap<QString, KisPaintDeviceSP>::const_iterator it = m_colorspaces.find(colorSpace->id());
     if (it != m_colorspaces.end())

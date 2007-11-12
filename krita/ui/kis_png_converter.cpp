@@ -57,7 +57,7 @@ namespace {
     const quint8 PIXEL_ALPHA = 3;
 
 
-    int getColorTypeforColorSpace( KoColorSpace * cs , bool alpha)
+    int getColorTypeforColorSpace( const KoColorSpace * cs , bool alpha)
     {
         if ( KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16") )
         {
@@ -386,7 +386,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
 
     // Retrieve a pointer to the colorspace
-    KoColorSpace* cs;
+    const KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput())
     {
         kDebug(41008) << "image has embedded profile: " << profile -> name() << "\n";

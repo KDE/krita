@@ -291,7 +291,7 @@ void DlgColorRange::slotSelectClicked()
     // XXX: Multithread this!
     qint32 x, y, w, h;
     m_dev->exactBounds(x, y, w, h);
-    KoColorSpace * cs = m_dev->colorSpace();
+    const KoColorSpace * cs = m_dev->colorSpace();
     quint8 opacity;
 
     KisHLineConstIterator hiter = m_dev->createHLineConstIterator(x, y, w);

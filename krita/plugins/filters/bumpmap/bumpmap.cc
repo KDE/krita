@@ -97,7 +97,7 @@ KisFilterBumpmap::KisFilterBumpmap()
 namespace {
     void convertRow(const KisPaintDevice * orig, quint8 * row, qint32 x, qint32 y, qint32 w,  quint8 * lut, qint32 waterlevel)
     {
-        KoColorSpace * csOrig = orig->colorSpace();
+        const KoColorSpace * csOrig = orig->colorSpace();
 
         KisHLineConstIteratorPixel origIt = orig->createHLineConstIterator(x, y, w);
         for (int i = 0; i < w; ++i) {

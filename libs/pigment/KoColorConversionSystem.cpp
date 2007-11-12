@@ -138,7 +138,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
     }
 }
 
-KoColorSpace* KoColorConversionSystem::defaultColorSpaceForNode(const Node* node) const
+const KoColorSpace* KoColorConversionSystem::defaultColorSpaceForNode(const Node* node) const
 {
     return KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( node->modelId, node->depthId ), 0 );
 }
@@ -210,7 +210,7 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
         }
     }
     Q_ASSERT(bestPath);
-    KoColorSpace* endColorSpace = defaultColorSpaceForNode(bestPath->endNode());
+    const KoColorSpace* endColorSpace = defaultColorSpaceForNode(bestPath->endNode());
     fromCS = createTransformationFromPath( bestPath, colorSpace, endColorSpace);
     Path* returnPath = findBestPath(  bestPath->endNode(), csNode);
     Q_ASSERT( returnPath );
@@ -232,7 +232,7 @@ KoColorConversionTransformation* KoColorConversionSystem::createTransformationFr
     } else {
         KoMultipleColorConversionTransformation* mccTransfo = new KoMultipleColorConversionTransformation(srcColorSpace, dstColorSpace, renderingIntent);
         transfo = mccTransfo;
-        KoColorSpace* intermCS = defaultColorSpaceForNode( path->vertexes.first()->dstNode );
+        const KoColorSpace* intermCS = defaultColorSpaceForNode( path->vertexes.first()->dstNode );
         mccTransfo->appendTransfo( path->vertexes.first()->factory()->createColorTransformation(srcColorSpace, intermCS, renderingIntent) );
         
         kDebug(31000) << path->vertexes.first()->srcNode->id() << " to " << path->vertexes.first()->dstNode->id();
@@ -240,7 +240,7 @@ KoColorConversionTransformation* KoColorConversionSystem::createTransformationFr
         {
             Vertex* v = path->vertexes[i];
             kDebug(31000) << v->srcNode->id() << " to " << v->dstNode->id();
-            KoColorSpace* intermCS2 = defaultColorSpaceForNode( v->dstNode );
+            const KoColorSpace* intermCS2 = defaultColorSpaceForNode( v->dstNode );
             mccTransfo->appendTransfo( v->factory()->createColorTransformation(intermCS, intermCS2, renderingIntent) );
             intermCS = intermCS2;
         }

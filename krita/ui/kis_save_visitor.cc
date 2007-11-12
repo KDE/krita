@@ -72,11 +72,11 @@ bool KisSaveVisitor::visit(KisPaintLayer *layer)
     }
 
     if (layer->paintDevice()->colorSpace()->profile()) {
-        KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
+        const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
         KisAnnotationSP annotation;
         if (profile)
         {
-            KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
+            const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (iccprofile and !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
         }

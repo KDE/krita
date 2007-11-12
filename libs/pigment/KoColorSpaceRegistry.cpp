@@ -46,10 +46,10 @@
 
 struct KoColorSpaceRegistry::Private {
     QMap<QString, KoColorProfile * > profileMap;
-    QMap<QString, KoColorSpace * > csMap;
+    QMap<QString, const KoColorSpace * > csMap;
     typedef QList<KisPaintDeviceAction *> PaintActionList;
     QMap<QString, PaintActionList> paintDevActionMap;
-    KoColorSpace *alphaCs;
+    const KoColorSpace *alphaCs;
     KoColorConversionSystem *colorConversionSystem;
     static KoColorSpaceRegistry *singleton;
 };
@@ -201,17 +201,17 @@ void KoColorSpaceRegistry::addProfile(KoColorProfile *p)
       }
 }
 
-void KoColorSpaceRegistry::addPaintDeviceAction(KoColorSpace* cs,
+void KoColorSpaceRegistry::addPaintDeviceAction(const KoColorSpace* cs,
         KisPaintDeviceAction* action) {
     d->paintDevActionMap[cs->id()].append(action);
 }
 
 QList<KisPaintDeviceAction *>
-KoColorSpaceRegistry::paintDeviceActionsFor(KoColorSpace* cs) {
+KoColorSpaceRegistry::paintDeviceActionsFor(const KoColorSpace* cs) {
     return d->paintDevActionMap[cs->id()];
 }
 
-KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QString &pName)
+const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QString &pName)
 {
     QString profileName = pName;
 
@@ -241,7 +241,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QStri
             kDebug(31000) <<"Profile not found :" << profileName;
             return 0;
         }
-        KoColorSpace *cs = csf->createColorSpace(this, p);
+        const KoColorSpace *cs = csf->createColorSpace(this, p);
         if(!cs)
             return 0;
 
@@ -255,11 +255,11 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QStri
 }
 
 
-KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoColorProfile *profile)
+const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoColorProfile *profile)
 {
     if( profile )
     {
-        KoColorSpace *cs = colorSpace( csID, profile->name());
+        const KoColorSpace *cs = colorSpace( csID, profile->name());
 
         if(!cs)
         {
@@ -285,37 +285,37 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoCol
     }
 }
 
-KoColorSpace * KoColorSpaceRegistry::alpha8()
+const KoColorSpace * KoColorSpaceRegistry::alpha8()
 {
    return d->alphaCs;
 }
 
-KoColorSpace * KoColorSpaceRegistry::rgb8(const QString &profileName)
+const KoColorSpace * KoColorSpaceRegistry::rgb8(const QString &profileName)
 {
     return colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profileName);
 }
 
-KoColorSpace * KoColorSpaceRegistry::rgb8(KoColorProfile * profile)
+const KoColorSpace * KoColorSpaceRegistry::rgb8(const KoColorProfile * profile)
 {
     return colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profile);
 }
 
-KoColorSpace * KoColorSpaceRegistry::rgb16(const QString &profileName)
+const KoColorSpace * KoColorSpaceRegistry::rgb16(const QString &profileName)
 {
     return colorSpace(KoRgbU16ColorSpace::colorSpaceId(), profileName);
 }
 
-KoColorSpace * KoColorSpaceRegistry::rgb16(KoColorProfile * profile)
+const KoColorSpace * KoColorSpaceRegistry::rgb16(const KoColorProfile * profile)
 {
     return colorSpace(KoRgbU16ColorSpace::colorSpaceId(), profile);
 }
 
-KoColorSpace * KoColorSpaceRegistry::lab16(const QString &profileName)
+const KoColorSpace * KoColorSpaceRegistry::lab16(const QString &profileName)
 {
     return colorSpace(KoLabColorSpace::colorSpaceId(), profileName);
 }
 
-KoColorSpace * KoColorSpaceRegistry::lab16(KoColorProfile * profile)
+const KoColorSpace * KoColorSpaceRegistry::lab16(const KoColorProfile * profile)
 {
     return colorSpace(KoLabColorSpace::colorSpaceId(), profile);
 }

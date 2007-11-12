@@ -85,7 +85,7 @@ void Brush::repositionBristles ( double pre )
                     px = x;
                 if ( fabs (py) > y+DY )
                     py = y;
-                m_bristles[i++].SetPos ( px, py );
+                m_bristles[i++].setPos ( px, py );
             }
             y += dy;
         }
@@ -109,27 +109,27 @@ void Brush::repositionBristles ( double pre )
             if ( indx < 2 )
                 indx = 2;
 
-            if ( m_bristles[indx-2].GetInkAmount() - m_size < 0 )
-                i1 = m_bristles[indx-2].GetInkAmount();
+            if ( m_bristles[indx-2].getInkAmount() - m_size < 0 )
+                i1 = m_bristles[indx-2].getInkAmount();
             else
                 i1 = m_size;
-            if ( m_bristles[indx-1].GetInkAmount() - m_size < 0 )
-                i2 = m_bristles[indx-1].GetInkAmount();
+            if ( m_bristles[indx-1].getInkAmount() - m_size < 0 )
+                i2 = m_bristles[indx-1].getInkAmount();
             else
                 i2 =  m_size;
-            if ( m_bristles[indx+1].GetInkAmount() - m_size < 0 )
-                i3 = m_bristles[indx+1].GetInkAmount();
+            if ( m_bristles[indx+1].getInkAmount() - m_size < 0 )
+                i3 = m_bristles[indx+1].getInkAmount();
             else
                 i3 =  m_size;
-            if ( m_bristles[indx+2].GetInkAmount() - m_size < 0 )
-                i4 = m_bristles[indx+2].GetInkAmount();
+            if ( m_bristles[indx+2].getInkAmount() - m_size < 0 )
+                i4 = m_bristles[indx+2].getInkAmount();
             else
                 i4 =  m_size;
-            m_bristles[indx-2].SetInkAmount ( m_bristles[indx-2].GetInkAmount()-i1 );
-            m_bristles[indx-1].SetInkAmount ( m_bristles[indx-2].GetInkAmount()-i2 );
-            m_bristles[indx+1].SetInkAmount ( m_bristles[indx+1].GetInkAmount()-i3 );
-            m_bristles[indx+2].SetInkAmount ( m_bristles[indx+2].GetInkAmount()-i4 );
-            m_bristles[indx].SetInkAmount ( m_bristles[indx].GetInkAmount()+i1+i2+i3+i4 );
+            m_bristles[indx-2].setInkAmount ( m_bristles[indx-2].getInkAmount()-i1 );
+            m_bristles[indx-1].setInkAmount ( m_bristles[indx-2].getInkAmount()-i2 );
+            m_bristles[indx+1].setInkAmount ( m_bristles[indx+1].getInkAmount()-i3 );
+            m_bristles[indx+2].setInkAmount ( m_bristles[indx+2].getInkAmount()-i4 );
+            m_bristles[indx].setInkAmount ( m_bristles[indx].getInkAmount()+i1+i2+i3+i4 );
         }
     }
 }
@@ -157,15 +157,15 @@ void Brush::setBristlesPos ()
                 py = gauss::gaussian ( y, .5*DY, 1 );
                 if ( fabs (py) > y+DY )
                     py = y;
-                m_bristles[m_numBristles].SetPos ( px, py );
+                m_bristles[m_numBristles].setPos ( px, py );
                 p = sqrt(px * px + py * py)/( m_radius) * MAXPRESSURE;
-                m_bristles[m_numBristles].SetPreThres ( p );
+                m_bristles[m_numBristles].setPreThres ( p );
 
                 tx = (px /  m_radius) * (px /  m_radius) * 60.0;
                 ty = (py /  m_radius) * (py /  m_radius) * 60.0;
 
-                m_bristles[m_numBristles].SetTXThres ( tx );
-                m_bristles[m_numBristles].SetTYThres ( ty );
+                m_bristles[m_numBristles].setTXThres ( tx );
+                m_bristles[m_numBristles].setTYThres ( ty );
                 m_numBristles++;
             }
             y += DY;
@@ -191,8 +191,8 @@ void Brush::addInk ()
         if ( indx > m_numBristles - 1 )
             indx = m_numBristles / 2;
 
-        if ( m_bristles[indx].GetInkAmount() < MAXINK ) {
-            double ink = m_bristles[indx].DistanceFromCenter() / m_radius;
+        if ( m_bristles[indx].getInkAmount() < MAXINK ) {
+            double ink = m_bristles[indx].distanceFromCenter() / m_radius;
             ink = 10.0 / ink + gauss::gaussian ( 10.0, 5.0, 0 );
             double ink2 = ink;
             if ( ink2 > 200 ) ink2 = 200;
@@ -215,7 +215,7 @@ void Brush::removeInk ()
         if ( indx > m_numBristles-1 )
             indx = m_numBristles / 2;
 
-        if ( m_bristles[indx].GetInkAmount() > 0 ) {
+        if ( m_bristles[indx].getInkAmount() > 0 ) {
             m_bristles[indx].depleteInk(1);
             totalInk--;
         }

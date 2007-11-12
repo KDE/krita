@@ -47,18 +47,6 @@
 #include "bristle.h"
 
 
-namespace {
-// XXX: Remove this with Qt 4.3
-    static QRect toAlignedRect(QRectF rc)
-    {
-        int xmin = int(floor(rc.x()));
-        int xmax = int(ceil(rc.x() + rc.width()));
-        int ymin = int(floor(rc.y()));
-        int ymax = int(ceil(rc.y() + rc.height()));
-        return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
-    }
-}
-
 KisCPaintOpFactory::KisCPaintOpFactory()
 {
     m_brushes.resize( 6 );
@@ -81,7 +69,8 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
                                           KisImageSP image)
 {
     Q_UNUSED( image );
-
+    kDebug() << settings;
+    
     const KisCPaintOpSettings * cpaintOpSettings =
         dynamic_cast<const KisCPaintOpSettings*>( settings );
 
@@ -102,7 +91,7 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
     return op;
 }
 
-KisPaintOpSettings *KisCPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice)
+KisPaintOpSettings *KisCPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED( inputDevice );
     return new KisCPaintOpSettings( parent,  m_brushes);
@@ -191,13 +180,13 @@ void KisCPaintOp::paintAt(const KisPaintInformation& info)
         m_lastPoint = info.pos();
         m_stroke = new Stroke( m_currentBrush);
         m_stroke->setColor( m_color );
-        m_stroke->sampleV.push_back( newSample );
+        m_stroke->storeSample( newSample );
         m_stroke->storeOldPath( info.pos().x(), info.pos().y() );
         newStrokeFlag = false;
     }
     else {
         if ( m_stroke )
-            m_stroke->sampleV.push_back( newSample );
+            m_stroke->storeSample( newSample );
         else {
             delete newSample;
             sampleCount--;
@@ -207,16 +196,9 @@ void KisCPaintOp::paintAt(const KisPaintInformation& info)
 
     if ( m_stroke ) {
         int brushSize = m_currentBrush->size();
-//         QPainter gc( device.data() );
-//         gc.setRenderHint(QPainter::Antialiasing);
-//         m_stroke->draw( gc );
-//         gc.end();
-
         KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace());
-        dab->convertFromQImage( m_tempImage, "" ); // Use monitor profile?
-
+        m_stroke->draw( dab );
         painter()->bitBlt( QPoint( 0, 0 ), dab, m_tempImage.rect() );
-
     }
     m_lastPoint = info.pos();
 }

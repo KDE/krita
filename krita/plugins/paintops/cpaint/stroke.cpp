@@ -17,10 +17,14 @@
  */
 
 #include <QPainter>
+#include <QRect>
+
+#include <kdebug.h>
 
 #include <KoColor.h>
 
-
+#include <kis_vec.h>
+#include <kis_paint_device.h>
 
 #include "brush.h"
 #include "bristle.h"
@@ -29,84 +33,109 @@
 
 
 // Constructor
-Stroke::Stroke (Brush * br )
+Stroke::Stroke (Brush * brush )
 {
-    brush = br;
-    numBristles = brush->numberOfBristles();
-    oldPathx = new vector<double> [numBristles];
-    oldPathy = new vector<double> [numBristles];
-    valid = new vector<int> [numBristles];
+    m_brush = brush;
+    m_numBristles = brush->numberOfBristles();
+    m_oldPathx.resize(m_numBristles);
+    m_oldPathy.resize(m_numBristles);
+    m_valid.resize(m_numBristles);
 }
 
 Stroke::~Stroke()
 {
-    sampleV.erase ( sampleV.begin(), sampleV.end() );
-    oldPathx->erase( oldPathx->begin(), oldPathx->end() );
-    oldPathy->erase( oldPathy->begin(), oldPathy->end() );
-    valid->erase( valid->begin(), valid->end() );
-    delete valid;
-    delete oldPathx;
-    delete oldPathy;
+    foreach (Sample* sample, m_samples) delete sample;
 }
 
 
 void Stroke::storeOldPath ( double x1, double y1 )
 {
     int i;
+    for ( i=0; i < m_numBristles; i++ ) {
+        m_oldPathx[i].append( x1 );
+        m_oldPathy[i].append( y1 );
+        m_valid[i].append( true );
+    }
+}
 
-    for ( i=0; i<numBristles; i++ ) {
-        oldPathx[i].push_back ( x1 );
-        oldPathy[i].push_back ( y1 );
-        valid[i].push_back ( 1 );
+void Stroke::drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color )
+{
+
+    if (!dev) return;
+
+    QPointF pos1 = QPointF( x1, y1 );
+    QPointF pos2 = QPointF( x2, y2 );
+
+    KisVector2D end(pos2);
+    KisVector2D start(pos1);
+
+    KisVector2D dragVec = end - start;
+    KisVector2D movement = dragVec;
+
+    double xScale = 1;
+    double yScale = 1;
+
+    double dist = dragVec.length();
+
+    if (dist < 1) {
+        return;
+    }
+
+    dragVec.normalize();
+
+    KisVector2D step(0, 0);
+
+    //kDebug() << "drawLine " << x1 << ", " << y1 << " : " << x2 << ", " << y2 << ". Width: " << width << ", dist: " << dist << endl;
+
+    while (dist >= 1) {
+        step += dragVec;
+        QPoint p = QPointF(start.x() + (step.x() / xScale), start.y() + (step.y() / yScale)).toPoint();
+        
+        dev->setPixel(p.x(), p.y(), color);
+        dist -= 1;
     }
 }
 
 // draw the stroke by drawing the old paths, then the new segment
-void Stroke::draw (QPainter & gc)
+void Stroke::draw (KisPaintDeviceSP dev)
 {
-    int i;
-    int x = 0;
-    int y = 0;
+    
+    if ( m_samples.size() <= 1 ) return; // No sample to initialize from
 
-    double tiltx, tilty;
-    double pre = 0.0;
-
-    numBristles = brush->numberOfBristles();
-
-    // get info from the last sample
-    if ( sampleV.size() >= 1 ) {
-        i = sampleV.size()-1;
-        pre = (double)sampleV[i]->pressure();
-        x = sampleV[i]->x();
-        y = sampleV[i]->y();
-        tiltx = sampleV[i]->tiltX();
-        tilty = sampleV[i]->tiltY();
-    }
-    else {
-        return; // There was no sample to initialize from
-    }
+    int i = m_samples.size() - 1;
+    double pressure = (double)m_samples[i]->pressure();
+    int x = m_samples[i]->x();
+    int y = m_samples[i]->y();
+    double tiltx = m_samples[i]->tiltX();
+    double tilty = m_samples[i]->tiltY();
 
     // using pressure info to reposition bristles
-    brush->repositionBristles( pre );
+    m_brush->repositionBristles( pressure );
 
     // draw the new segment
-    for ( i = 0; i < numBristles; i++ ) {
-        if ( testThreshold ( i, pre, tiltx, tilty ) ) {
-            if ( valid[i][oldPathx[i].size()-1] ) {
-                gc.setPen( QPen( m_color.toQColor(), brush->m_bristles[i].GetThickness() ) );
-                gc.drawLine( oldPathx[i][oldPathx[i].size() - 1], oldPathy[i][oldPathy[i].size() - 1],
-                             brush->m_bristles[i].GetX() + x, brush->m_bristles[i].GetY() + y );
-                brush->m_bristles[i].depleteInk ( 1 ); //remove one unit of ink from bristle
+    for ( i = 0; i < m_numBristles; i++ ) {
+        if ( testThreshold ( i, pressure, tiltx, tilty ) ) {
+            if ( m_valid[i] [ m_oldPathx[i].size() -1 ] ) {
+                drawLine( dev,
+                          m_oldPathx[i][m_oldPathx[i].size()-1],
+                          m_oldPathy[i][m_oldPathy[i].size()-1],
+                          m_brush->m_bristles[i].getX() + x,
+                          m_brush->m_bristles[i].getY() + y,
+                          m_brush->m_bristles[i].getThickness(),
+                          m_color);
+                          
+                m_brush->m_bristles[i].depleteInk ( 1 ); //remove one unit of ink from bristle
             }
-            valid[i].push_back ( 1 );
+            m_valid[i].append( true );
         }
-        else
-            valid[i].push_back ( 0 );
-
+        else {
+            m_valid[i].append( false );
+        }
         // store new positions in oldPaths
-        oldPathx[i].push_back ( brush->m_bristles[i].GetX()+x );
-        oldPathy[i].push_back ( brush->m_bristles[i].GetY()+y );
+        m_oldPathx[i].append( m_brush->m_bristles[i].getX()+x );
+        m_oldPathy[i].append( m_brush->m_bristles[i].getY()+y );
     }
+
 }
 
 
@@ -115,17 +144,19 @@ void Stroke::setColor ( const KoColor & color )
     m_color = color;
 }
 
-bool Stroke::testThreshold ( int i, double pre, double tx, double ty )
+void Stroke::storeSample ( Sample * sample )
 {
-    if ( ( brush->m_bristles[i].GetPreThres() < pre )
-         && brush->m_bristles[i].GetInkAmount() > 0 )
+    m_samples.append( sample );
+}
+
+bool Stroke::testThreshold ( int i, double pressure, double tx, double ty )
+{
+    if ( ( m_brush->m_bristles[i].getPreThres() < pressure )
+         && m_brush->m_bristles[i].getInkAmount() > 0 )
         return 1;
     else
         return 0;
 }
-
-
-
 
 
 

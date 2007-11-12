@@ -31,7 +31,7 @@ void Bristle::initializeThickness ( int size )
 
 
 // called by constructor of brush
-void Bristle::SetPos ( double x1, double y1 )
+void Bristle::setPos ( double x1, double y1 )
 {
     x = x1;
     y = y1;
@@ -45,7 +45,7 @@ void Bristle::setInitialPosition ( double x1, double y1 )
 }
 
 
-void Bristle::Reposition ( double p )
+void Bristle::reposition ( double p )
 {
     lastx = x;
     lasty = y;
@@ -54,7 +54,7 @@ void Bristle::Reposition ( double p )
 }
 
 
-double Bristle::DistanceFromCenter ()
+double Bristle::distanceFromCenter ()
 {
     return sqrt ( x*x + y*y );
 }

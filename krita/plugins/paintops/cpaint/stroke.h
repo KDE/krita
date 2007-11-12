@@ -19,44 +19,54 @@
 #ifndef STROKE_H
 #define STROKE_H
 
-#include <vector>
 #include <math.h>
 #include <stdio.h>
+
+#include <QVector>
+
+#include <kis_types.h>
 
 class Brush;
 class Sample;
 class KoColor;
+class QRect;
+
 
 using namespace std;
 
 class Stroke {
 
-public:
-
-    vector<Sample*> sampleV;
 
 public:
 
     Stroke (Brush *brush);
     virtual ~Stroke();
 
-    void draw (QPainter &);
+    void draw (KisPaintDeviceSP dev);
     void setColor ( const KoColor & c );
     void storeOldPath ( double, double );
+    void storeSample ( Sample * sample );
+    
+private:
+
+    void drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color );
+    
+    // test whether a bristle is touching the paper or not
+    // by testing the pressure threshold and test if there is any ink
+    bool testThreshold ( int, double, double, double );
 
 private:
 
     KoColor m_color;
+    
+    QVector<Sample*> m_samples;
 
-    double lastx1, lasty1, lastx2, lasty2;
-    vector<double> *oldPathx, *oldPathy;
-    vector<int> *valid;
-    Brush *brush;
-    int numBristles;
-
-    // test whether a bristle is touching the paper or not
-    // by testing the pressure threshold and test if there is any ink
-    bool testThreshold ( int, double, double, double );
+    double m_lastx1, m_lasty1, m_lastx2, m_lasty2;
+    QVector< QVector<double> > m_oldPathx;
+    QVector< QVector<double> > m_oldPathy;
+    QVector< QVector<bool> > m_valid;
+    Brush * m_brush;
+    int m_numBristles;
 
 
 };

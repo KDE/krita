@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2000 Clara Chan
+ *  Copyright (c) 2007 Boudewijn Rempt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,7 +18,6 @@
  */
 #ifndef SAMPLE_H
 #define SAMPLE_H
-
 
 class Sample {
 

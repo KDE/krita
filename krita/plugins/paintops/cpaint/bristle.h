@@ -28,48 +28,47 @@ class Bristle {
 
     friend class Brush;
 
-
 public:
 
     Bristle () { inkAmount = 0; }
 
     ~Bristle () {}
 
-    void InitPos ( double );
+    void initPos ( double );
 
-    void SetPos ( double, double );
+    void setPos ( double, double );
 
-    void SetPreThres ( double p ) { pressureThres = p; }
+    void setPreThres ( double p ) { pressureThres = p; }
 
-    void SetTXThres ( double tx ) { txThres = tx; }
+    void setTXThres ( double tx ) { txThres = tx; }
 
-    void SetTYThres ( double ty ) { tyThres = ty; }
+    void setTYThres ( double ty ) { tyThres = ty; }
 
     void setInitialPosition ( double, double );
 
-    int GetX () { return static_cast<int>(x); }
+    int getX () { return static_cast<int>(x); }
 
-    int GetY () { return static_cast<int>(y); }
+    int getY () { return static_cast<int>(y); }
 
-    double GetPreThres () { return pressureThres; }
+    double getPreThres () { return pressureThres; }
 
-    double GetTXThres () { return txThres; }
+    double getTXThres () { return txThres; }
 
-    double GetTYThres () { return tyThres; }
+    double getTYThres () { return tyThres; }
 
-    void Reposition ( double );
+    void reposition ( double );
 
-    double GetThickness () { return thickness; }
+    double getThickness () { return thickness; }
 
-    int GetInkAmount () { return inkAmount; }
+    int getInkAmount () { return inkAmount; }
 
-    void SetInkAmount ( int i ) { inkAmount = i; }
+    void setInkAmount ( int i ) { inkAmount = i; }
 
     void depleteInk ( int i ) { inkAmount -= i; }
 
     void addInk ( int i ) { inkAmount += i; }
 
-    double DistanceFromCenter ();
+    double distanceFromCenter ();
 
     void initializeThickness ( int );
 

@@ -3,6 +3,10 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KOffice/ColorSpaceExtension
 Comment=A module implementing an extension to a colorspace of the Pigment Color Manipulation System
+Comment[es]=Un módulo que implementa una extensión a un espacio de color del sistema de manipulación de colores Pigment
+Comment[pt]=Um módulo que implementa um espaço de cores completo para usar com o Sistema de Manipulação de Cores por Pigmentos
+Comment[pt_BR]=Um módulo que implementa um espaço de cores completo para usar com o Sistema de Manipulação de Cores por Pigmentos
+Comment[sv]=En modul som implementerar en fullständig färgrymd för användning med systemet för hantering av pigmentfärg
 [PropertyDef::X-Pigment-MinVersion]
 Type=int
 [PropertyDef::X-Flake-PluginVersion]

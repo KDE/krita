@@ -1,7 +1,15 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Some extensions to color spaces
+Name[es]=Algunas extensiones a los espacios de color
+Name[pt]=Algumas extensões para os espaços de cores
+Name[pt_BR]=Algumas extensões para os espaços de cores
+Name[sv]=Vissa utökningar till färgrymder
 Comment=Some extensions to color spaces
+Comment[es]=Algunas extensiones a los espacios de color
+Comment[pt]=Algumas extensões para os espaços de cores
+Comment[pt_BR]=Algumas extensões para os espaços de cores
+Comment[sv]=Vissa utökningar till färgrymder
 ServiceTypes=KOffice/ColorSpaceExtension
 Type=Service
 X-Pigment-MinVersion=0

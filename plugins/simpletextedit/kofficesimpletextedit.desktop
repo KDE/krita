@@ -1,11 +1,15 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Simple Text Edit
+Name[es]=Editor de texto sencillo
 Name[pt]=Edição de Texto Simples
 Name[pt_BR]=Edição de Texto Simples
+Name[sv]=Enkel texteditor
 Comment=Simpler Text Edit docker
+Comment[es]=Anclaje del editor de texto sencillo
 Comment[pt]=Área acoplável de edição de texto simples
 Comment[pt_BR]=Área acoplável de edição de texto simples
+Comment[sv]=Enkel dockningstexteditor
 ServiceTypes=KOffice/Dock
 Type=Service
 X-KDE-Library=kofficesimpletextedit

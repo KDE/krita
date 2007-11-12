@@ -23,12 +23,13 @@
 
 struct KisFilterConstantProcessingInformation::Private
 {
+    Private() {};
     KisPaintDeviceSP device;
     const KisSelectionSP selection;
     QPoint topLeft;
 };
 
-KisFilterConstantProcessingInformation::KisFilterConstantProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection) : d(new Private)
+KisFilterConstantProcessingInformation::KisFilterConstantProcessingInformation(const KisPaintDeviceSP &device, const QPoint& topLeft, const KisSelectionSP selection) : d(new Private)
 {
     d->device = device;
     d->selection = selection;

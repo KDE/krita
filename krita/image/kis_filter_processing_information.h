@@ -31,7 +31,7 @@
  */
 class KRITAIMAGE_EXPORT KisFilterConstantProcessingInformation {
     public:
-        KisFilterConstantProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
+        KisFilterConstantProcessingInformation(const KisPaintDeviceSP &device, const QPoint& topLeft, const KisSelectionSP selection = 0);
         /**
          * @return the paint device
          */

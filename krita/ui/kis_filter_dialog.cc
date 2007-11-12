@@ -106,7 +106,7 @@ void KisFilterDialog::setFilter(KisFilterSP f)
     delete d->currentCentralWidget;
     KisFilterConfigWidget* widget =
         d->currentFilter->createConfigurationWidget( d->uiFilterDialog.centralWidgetHolder, d->layer->paintDevice() );
-    if(not widget)
+    if( !widget )
     { // No widget, so display a label instead
         d->currentFilterConfigurationWidget = 0;
         d->currentCentralWidget = new QLabel( i18n("No configuration option."),
@@ -132,7 +132,7 @@ void KisFilterDialog::updatePreview()
 {
     kDebug() <<">>>>  KisFilterDialog::updatePreview()";
 
-    if ( not d->currentFilter ) return;
+    if ( !d->currentFilter ) return;
 
     if ( d->currentFilterConfigurationWidget ) {
         KisFilterConfiguration* config = d->currentFilterConfigurationWidget->configuration();
@@ -147,13 +147,19 @@ void KisFilterDialog::updatePreview()
 
 void KisFilterDialog::apply()
 {
-    if( not d->currentFilter ) return;
+    if ( !d->currentFilter ) return;
+    
     KisFilterConfiguration* config = 0;
     if( d->currentFilterConfigurationWidget )
     {
         config = d->currentFilterConfigurationWidget->configuration();
     }
     emit(sigPleaseApplyFilter(d->layer, config));
+}
+
+void KisFilterDialog::reject()
+{
+    d->layer->removePreviewMask();
 }
 
 void KisFilterDialog::slotBookmarkedFilterConfigurationSelected(int index)

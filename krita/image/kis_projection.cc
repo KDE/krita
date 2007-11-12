@@ -41,12 +41,12 @@ public:
         , m_rc( rc )
         , m_rootLayer( layer )
         {
-            kDebug() << "queing job for layer " << layer->name() << " on rect " << rc;
+            kDebug(41010) << "queing job for layer " << layer->name() << " on rect " << rc;
         }
 
     void run()
         {
-            kDebug() << "starting updateprojection for layer " << m_rootLayer->name() << " on rect " << m_rc;
+            kDebug(41010) << "starting updateprojection for layer " << m_rootLayer->name() << " on rect " << m_rc;
             m_rootLayer->updateProjection( m_rc );
             // XXX: Also convert to QImage in the thread?
         }

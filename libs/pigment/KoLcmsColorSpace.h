@@ -409,9 +409,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         }
         inline static KoLcmsColorProfileContainer* asLcmsProfile(const KoColorProfile* p)
         {
-            if(not p) return 0;
+            if(!p) return 0;
             const KoIccColorProfile* iccp = dynamic_cast<const KoIccColorProfile*>(p);
-            if( not iccp )
+            if( !iccp )
             {
                 return 0;
             }

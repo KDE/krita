@@ -23,7 +23,7 @@
 #include "KoColorProfile.h"
 
 class KoLcmsColorProfileContainer;
-class KoRGBChromaticities;
+struct KoRGBChromaticities;
 
 /**
  * This class contains an ICC color profile.

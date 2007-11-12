@@ -201,7 +201,7 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
         path->isGood = pQC.isGoodPath( path );
         if( not bestPath)
         {
-            bestPath == path;
+            bestPath = path;
         } else if ( (not bestPath->isGood and path->isGood ) or pQC.lessWorseThan(path, bestPath )  ) {
             delete bestPath;
             bestPath = path;

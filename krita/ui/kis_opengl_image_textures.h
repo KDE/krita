@@ -178,7 +178,7 @@ protected:
     static void createHDRExposureProgramIfCan();
     static bool imageCanUseHDRExposureProgram(KisImageSP image);
     static bool imageCanShareTextures(KisImageSP image);
-    static bool haveHDRTextureFormat(KoColorSpace *colorSpace);
+    static bool haveHDRTextureFormat(const KoColorSpace *colorSpace);
 
 protected slots:
     void slotImageUpdated(const QRect &);

@@ -458,7 +458,7 @@ void KisOpenGLImageTextures::deactivateHDRExposureProgram()
 #endif
 }
 
-bool KisOpenGLImageTextures::haveHDRTextureFormat(KoColorSpace *colorSpace)
+bool KisOpenGLImageTextures::haveHDRTextureFormat(const KoColorSpace *colorSpace)
 {
 #ifdef HAVE_GLEW
     KisOpenGL::makeContextCurrent();

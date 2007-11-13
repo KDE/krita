@@ -23,7 +23,7 @@
 
 struct KisFilterConstantProcessingInformation::Private
 {
-    Private() {};
+    Private() {}
     KisPaintDeviceSP device;
     const KisSelectionSP selection;
     QPoint topLeft;

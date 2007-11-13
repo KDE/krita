@@ -204,7 +204,7 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
                 src += this->pixelSize();
             }
         }
-        virtual void fromRgbA16(const quint8 * srcU8, quint8 * dstU8, const quint32 nPixels) const
+        virtual void fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
         {
             typename _CSTraits::channels_type* dst = _CSTraits::nativeArray(dstU8);
             const quint16* src = reinterpret_cast<const quint16*>(srcU8);
@@ -213,7 +213,7 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
                 dst[i] = UINT16_TO_FLOAT(src[i]);
             }
         }
-        virtual void toRgbA16(const quint8 * srcU8, quint8 * dstU8, const quint32 nPixels) const
+        virtual void toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
         {
             const typename _CSTraits::channels_type* src = _CSTraits::nativeArray(srcU8);
             quint16* dst = reinterpret_cast<quint16*>(dstU8);
@@ -236,7 +236,7 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 
             // After adjusting by the exposure, map 1.0 to 3.5 f-stops below 1.0
             // I.e. scale by 1/(2^3.5).
-            const float middleGreyScaleFactor = 0.0883883;
+            const float middleGreyScaleFactor = 0.0883883F;
             value *= middleGreyScaleFactor;
 
             const int minU16 = 0;

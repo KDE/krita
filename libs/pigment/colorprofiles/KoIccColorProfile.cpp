@@ -69,7 +69,6 @@ KoIccColorProfile::Container::~Container()
 struct KoIccColorProfile::Private
 {
     KoIccColorProfile::Data* data;
-    bool ownData;
     KoLcmsColorProfileContainer* lcmsProfile;
     KoRGBChromaticities* chromacities;
 };
@@ -83,17 +82,8 @@ KoIccColorProfile::KoIccColorProfile(const KoRGBChromaticities& chromacities, do
     init();
 }
 
-KoIccColorProfile::KoIccColorProfile( Data * data) : KoColorProfile(""), d(new Private)
-{
-    d->ownData = false;
-    d->data = data;
-    d->lcmsProfile = 0;
-    d->chromacities = 0;
-}
-
 KoIccColorProfile::KoIccColorProfile(QString fileName) : KoColorProfile(fileName), d(new Private)
 {
-    d->ownData = true;
     d->data = new Data();
     d->lcmsProfile = 0;
     d->chromacities = 0;
@@ -101,7 +91,6 @@ KoIccColorProfile::KoIccColorProfile(QString fileName) : KoColorProfile(fileName
 
 KoIccColorProfile::KoIccColorProfile(const QByteArray& rawData) : KoColorProfile(""), d(new Private)
 {
-    d->ownData = true;
     d->data = new Data();
     d->lcmsProfile = 0;
     setRawData(rawData);
@@ -111,10 +100,7 @@ KoIccColorProfile::KoIccColorProfile(const QByteArray& rawData) : KoColorProfile
 KoIccColorProfile::~KoIccColorProfile()
 {
     delete d->lcmsProfile;
-    if(d->ownData)
-    {
-        delete d->data;
-    }
+    delete d->data;
     delete d;
 }
 

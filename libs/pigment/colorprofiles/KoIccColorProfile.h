@@ -60,8 +60,6 @@ class PIGMENTCMS_EXPORT KoIccColorProfile : public KoColorProfile {
                 virtual bool isSuitableForPrinting() const =0;
                 virtual bool isSuitableForDisplay() const =0;
         };
-    private:
-        KoIccColorProfile( Data *);
     public:
         KoIccColorProfile(const KoRGBChromaticities& chromacities, double gamma, QString name = "");
         KoIccColorProfile(QString fileName = "");

@@ -220,7 +220,7 @@ KisOpenGLGradientProgram::KisOpenGLGradientProgram(const KoSegmentGradient *grad
                                                    KisGradientPainter::enumGradientShape shape,
                                                    KisGradientPainter::enumGradientRepeat repeat,
                                                    bool reverseGradient,
-                                                   KoColorSpace *colorSpace,
+                                                   const KoColorSpace *colorSpace,
                                                    KoColorProfile *monitorProfile,
                                                    double opacity)
 {
@@ -263,7 +263,7 @@ KisOpenGLGradientProgram::~KisOpenGLGradientProgram()
 void KisOpenGLGradientProgram::createGradientColorsTexture(const KoSegmentGradient *gradient,
                                                            KisGradientPainter::enumGradientRepeat repeat,
                                                            bool reverseGradient,
-                                                           KoColorSpace *colorSpace,
+                                                           const KoColorSpace *colorSpace,
                                                            KoColorProfile *monitorProfile,
                                                            double opacity)
 {

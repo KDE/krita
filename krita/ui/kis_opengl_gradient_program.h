@@ -39,7 +39,7 @@ public:
                              KisGradientPainter::enumGradientShape shape,
                              KisGradientPainter::enumGradientRepeat repeat,
                              bool reverseGradient,
-                             KoColorSpace *colorSpace,
+                             const KoColorSpace *colorSpace,
                              KoColorProfile *monitorProfile,
                              double opacity);
     ~KisOpenGLGradientProgram();
@@ -50,7 +50,7 @@ private:
     void createGradientColorsTexture(const KoSegmentGradient *gradient,
                                      KisGradientPainter::enumGradientRepeat repeat,
                                      bool reverseGradient,
-                                     KoColorSpace *colorSpace,
+                                     const KoColorSpace *colorSpace,
                                      KoColorProfile *monitorProfile,
                                      double opacity);
     GLuint m_gradientColorsTexture;

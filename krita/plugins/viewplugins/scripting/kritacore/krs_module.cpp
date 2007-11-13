@@ -110,6 +110,7 @@ QObject* Module::progress()
 //     if(! d->progress)
 //         d->progress = new Progress(d->view);
 //     return d->progress;
+    return NULL;    // FIXME
 }
 
 QObject* Module::image()

@@ -31,6 +31,7 @@
 #include <QDropEvent>
 #include <QDragEnterEvent>
 #include <QApplication>
+#include <QPrintDialog>
 
 #include <k3urldrag.h>
 #include <kaction.h>

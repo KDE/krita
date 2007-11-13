@@ -21,6 +21,7 @@
 #ifndef _KIS_SMALL_TILES_FILTER_H_
 #define _KIS_SMALL_TILES_FILTER_H_
 
+#include "kis_paint_device.h"
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
 

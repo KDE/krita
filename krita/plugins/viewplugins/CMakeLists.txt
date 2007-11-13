@@ -24,9 +24,10 @@ find_package(GMM)
 macro_log_feature(EIGEN_FOUND "Eigen" "The Krita panorama plugin will not be built" "http://eigen.tuxfamily.org" FALSE "")
 macro_log_feature(GMM_FOUND "GMM" "The Krita panorama plugin will not be built" "Available from kdesupport" FALSE "")
 
-if(EIGEN_FOUND AND GMM_FOUND)
+# current gmm version in kdesupport does not work with msvc
+if(EIGEN_FOUND AND GMM_FOUND AND NOT MSVC)
     add_subdirectory( panorama )
-endif(EIGEN_FOUND AND GMM_FOUND)
+endif(EIGEN_FOUND AND GMM_FOUND AND NOT MSVC)
 
 macro_optional_find_package(GLUT)
 

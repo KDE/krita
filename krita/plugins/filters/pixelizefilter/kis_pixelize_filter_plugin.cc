@@ -19,6 +19,7 @@
  */
 
 #include <kgenericfactory.h>
+#include "kis_paint_device.h"
 #include "kis_pixelize_filter_plugin.h"
 #include "kis_pixelize_filter.h"
 #include "kis_global.h"

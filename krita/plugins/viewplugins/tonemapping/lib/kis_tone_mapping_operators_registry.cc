@@ -30,7 +30,7 @@ KisToneMappingOperatorsRegistry::KisToneMappingOperatorsRegistry() : d(new Priva
 
 KisToneMappingOperatorsRegistry* KisToneMappingOperatorsRegistry::instance()
 {
-    if(not Private::s_instance)
+    if(!Private::s_instance)
     {
         Private::s_instance = new KisToneMappingOperatorsRegistry;
     }

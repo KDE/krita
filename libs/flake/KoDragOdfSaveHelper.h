@@ -29,6 +29,7 @@ class KoXmlWriter;
 class FLAKE_EXPORT KoDragOdfSaveHelper
 {
 public:
+    KoDragOdfSaveHelper();
     virtual ~KoDragOdfSaveHelper();
 
     /**

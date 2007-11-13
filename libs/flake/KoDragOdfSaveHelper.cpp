@@ -19,6 +19,10 @@
 
 #include "KoDragOdfSaveHelper.h"
 
+KoDragOdfSaveHelper::KoDragOdfSaveHelper()
+: m_context( 0 )
+{
+}
 KoDragOdfSaveHelper::~KoDragOdfSaveHelper()
 {
     delete m_context;

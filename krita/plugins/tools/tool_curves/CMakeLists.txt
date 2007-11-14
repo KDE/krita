@@ -1,21 +1,18 @@
 
 
 set(kritatoolcurves_PART_SRCS
-    tool_curves.cc
+#    tool_curves.cc
     kis_curve_framework.cc
-    kis_tool_curve.cc
-    kis_tool_bezier.cc
-    kis_tool_bezier_paint.cc
-    kis_tool_bezier_select.cc
-    kis_tool_moutline.cc
-    kis_tool_example.cc
+#    kis_tool_curve.cc
+#    kis_tool_bezier.cc
+#    kis_tool_bezier_paint.cc
+#    kis_tool_bezier_select.cc
+#    kis_tool_moutline.cc
+#    kis_tool_example.cc
     kis_curve_framework2.cpp
     )
 
-#kde4_add_ui_files(kritatoolcurves_PART_SRCS wdg_tool_crop.ui)
-
 kde4_add_plugin(kritatoolcurves ${kritatoolcurves_PART_SRCS})
-
 
 
 target_link_libraries(kritatoolcurves kritaui)

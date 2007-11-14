@@ -52,7 +52,7 @@ ToolCurves::ToolCurves(QObject *parent, const QStringList &)
         r->add(new KisToolBezierPaintFactory());
         r->add(new KisToolBezierSelectFactory());
         r->add(new KisToolMagneticFactory());
-	r->add(new KisToolExampleFactory());
+	    r->add(new KisToolExampleFactory());
     }
 
 }

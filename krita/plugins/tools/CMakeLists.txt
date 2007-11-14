@@ -1,7 +1,7 @@
 add_subdirectory( defaulttools )
 add_subdirectory( selectiontools )
 add_subdirectory( tool_crop )
-#add_subdirectory( tool_curves )
+add_subdirectory( tool_curves )
 add_subdirectory( tool_polygon )
 add_subdirectory( tool_polyline )
 add_subdirectory( tool_selectsimilar )
@@ -12,4 +12,3 @@ add_subdirectory( tool_transform )
 
 message("Krita: Port the perspective grid tool")
 message("Krita: Port the perspective transform tool")
-message("Krita: Port the relevant bezier tools such as magnetic selection")

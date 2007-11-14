@@ -81,7 +81,7 @@ KisCurve KisCurve::selectedPivots(bool selected)
 
 KisCurve KisCurve::subCurve(const QPointF& tend)
 {
-    return subCurve(find(tend).previousPivot(),find(tend));
+    return subCurve(find(tend).previousPivot(), find(tend));
 }
 
 KisCurve KisCurve::subCurve(const CurvePoint& tend)

@@ -20,14 +20,9 @@
 #include "KoPAPastePage.h"
 
 #include <QBuffer>
-#include <QByteArray>
-#include <QMimeData>
 #include <QString>
-#include <KoStore.h>
 #include <KoOdfReadStore.h>
-#include <KoXmlReader.h>
-#include <KoDom.h>
-#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
 #include "KoPALoadingContext.h"
@@ -53,7 +48,7 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
 
     KoPAPageBase * insertAfterPage = 0;
     KoPAPageBase * insertAfterMasterPage = 0;
-    if ( dynamic_cast<KoPAMasterPage *>( m_activePage ) ) {
+    if ( dynamic_cast<KoPAMasterPage *>( m_activePage ) || m_activePage == 0 && pages.empty() ) {
         insertAfterMasterPage = m_activePage;
         insertAfterPage = m_doc->pages( false ).last();
     }
@@ -62,6 +57,72 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
         insertAfterMasterPage = m_doc->pages( true ).last();
     }
 
+    if ( ! pages.empty() ) {
+        KoGenStyles mainStyles;
+        QBuffer buffer;
+        buffer.open( QIODevice::WriteOnly );
+        KoXmlWriter xmlWriter( &buffer );
+        KoPASavingContext savingContext( xmlWriter, mainStyles, 1, KoShapeSavingContext::Store );
+        savingContext.addOption( KoShapeSavingContext::UniqueMasterPages );
+        QList<KoPAPageBase*> emptyList;
+        QList<KoPAPageBase*> existingMasterPages = m_doc->pages( true );
+        m_doc->saveOasisPages( savingContext, emptyList, existingMasterPages );
+
+        QMap<QString, KoPAMasterPage*> masterPageNames;
+
+        foreach ( KoPAPageBase * page, existingMasterPages )
+        {
+            KoPAMasterPage * masterPage = dynamic_cast<KoPAMasterPage*>( page );
+            Q_ASSERT( masterPage );
+            if ( masterPage ) {
+                QString masterPageName( savingContext.masterPageName( masterPage ) );
+                if ( !masterPageNames.contains( masterPageName ) ) {
+                    masterPageNames.insert( masterPageName, masterPage );
+                }
+            }
+
+        }
+
+        m_doc->saveOasisPages( savingContext, emptyList, masterPages );
+
+        QMap<KoPAMasterPage*, KoPAMasterPage*> updateMasterPage;
+        foreach ( KoPAPageBase * page, masterPages )
+        {
+            KoPAMasterPage * masterPage = dynamic_cast<KoPAMasterPage*>( page );
+            Q_ASSERT( masterPage );
+            if ( masterPage ) {
+                QString masterPageName( savingContext.masterPageName( masterPage ) );
+                QMap<QString, KoPAMasterPage*>::const_iterator existingMasterPage( masterPageNames.find( masterPageName ) );
+                if ( existingMasterPage != masterPageNames.end() ) {
+                    updateMasterPage.insert( masterPage, existingMasterPage.value() );
+                }
+            }
+        }
+
+        // update pages which have a duplicate master page
+        foreach ( KoPAPageBase * page, pages )
+        {
+            KoPAPage * p = dynamic_cast<KoPAPage*>( page );
+            Q_ASSERT( p );
+            if ( p ) {
+                KoPAMasterPage * masterPage( p->masterPage() );
+                QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( updateMasterPage.find( masterPage ) );
+                if ( pageIt != updateMasterPage.end() ) {
+                    p->setMasterPage( pageIt.value() );
+                }
+            }
+        }
+
+        // delete dumplicate master pages;
+        QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( updateMasterPage.begin() );
+        for ( ; pageIt != updateMasterPage.end(); ++pageIt )
+        {
+            masterPages.removeAll( pageIt.key() );
+            delete pageIt.key();
+        }
+    }
+
+    // TODO use plural if it is more then one page
     QUndoCommand * cmd = new QUndoCommand( i18n( "Paste Page" ) );
 
     foreach( KoPAPageBase * masterPage, masterPages )

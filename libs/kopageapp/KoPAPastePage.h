@@ -22,13 +22,29 @@
 
 #include "KoOdfPaste.h"
 
+#include "kopageapp_export.h"
+
 class KoPADocument;
 class KoPAPageBase;
 
-class KoPAPastePage : public KoOdfPaste
+class KOPAGEAPP_TEST_EXPORT KoPAPastePage : public KoOdfPaste
 {
 public:
-    KoPAPastePage( KoPADocument * doc, KoPAPageBase * m_activePage );
+    /**
+     * Paste pages
+     *
+     * This uses intelligent paste of pages. 
+     * o When copying a page and the master page of that page already exists the 
+     *   master page is not created, instead the existing master page is used. 
+     * o When copying a page and the master page of that page does not yet exists
+     *   the master page of that page is also created.
+     * o When copying a master page a copy of the page is always created.
+     *
+     * @param doc The document in which the pages are pasted.
+     * @param activePage The page after which the pages are pasted. If 0 at the 
+     *        pages are inserted at the beginning.
+     */
+    KoPAPastePage( KoPADocument * doc, KoPAPageBase * activePage );
 
 protected:
     bool process( const KoXmlElement & body, KoOdfReadStore & odfStore );

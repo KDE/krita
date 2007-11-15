@@ -180,7 +180,8 @@ QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoP
 
 bool KoPADocument::saveOasisPages( KoPASavingContext &paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages )
 {
-    paContext.setOptions( KoPASavingContext::DrawId | KoPASavingContext::AutoStyleInStyleXml );
+    paContext.addOption( KoPASavingContext::DrawId );
+    paContext.addOption( KoPASavingContext::AutoStyleInStyleXml );
 
     // save master pages
     foreach( KoPAPageBase *page, masterPages ) {
@@ -191,7 +192,7 @@ bool KoPADocument::saveOasisPages( KoPASavingContext &paContext, QList<KoPAPageB
     bodyWriter.startElement( "office:body" );
     bodyWriter.startElement( odfTagName( true ) );
 
-    paContext.setOptions( KoPASavingContext::DrawId );
+    paContext.removeOption( KoPASavingContext::AutoStyleInStyleXml );
 
     // save pages
     foreach ( KoPAPageBase *page, pages ) {

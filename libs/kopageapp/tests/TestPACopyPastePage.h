@@ -17,25 +17,31 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef PAMOCK_H
-#define PAMOCK_H
+#ifndef TESTPACOPYPASTEPAGE_H
+#define TESTPACOPYPASTEPAGE_H
 
-#include "KoPADocument.h"
+#include <QtTest/QtTest>
 
-#include <KoOdf.h>
+class QMimeData;
+class MockDocument;
+class KoPAPageBase;
 
-class KoView;
-
-class MockDocument : public KoPADocument
+class TestPACopyPastePage : public QObject
 {
-public:
-    MockDocument()
-    : KoPADocument( 0, 0 )
-    {}
-    KoView *createViewInstance( QWidget * /* parent */ ) { return 0; }
-    const char *odfTagName( bool b ) { return KoOdf::bodyContentElement( KoOdf::Presentation, b ); }
-    virtual KoOdf::DocumentType documentType() const { return KoOdf::Presentation; }
+    Q_OBJECT
+private:
+    void copyAndPaste( MockDocument * doc, QList<KoPAPageBase *> & pages, KoPAPageBase * after );
+    QMimeData * copy( MockDocument * doc, QList<KoPAPageBase *> & pages );
+    void paste( MockDocument * doc, QMimeData * data, KoPAPageBase * after );
+    void addShape( KoPAPageBase * page );
+
+    QPointF m_pos;
+private slots:
+    void copyPasteSinglePage();
+    void copyPasteSingleMasterPage();
+    void copyPasteMuliplePages();
+    void copyPasteMulipleMasterPages();
+    void copyPasteMixedPages();
 };
 
-
-#endif // PAMOCK_H
+#endif /* TESTPACOPYPASTEPAGE_H */

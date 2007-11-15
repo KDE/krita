@@ -738,6 +738,36 @@ void KisPainter::paintPolygon(const vQPointF& points)
     }
 }
 
+void KisPainter::paintPainterPath(const QPainterPath& path)
+{
+    QPointF lastPoint, nextPoint;
+    int elementCount = path.elementCount();
+    for( int i = 0; i < elementCount; i++ )
+    {
+        QPainterPath::Element element = path.elementAt( i );
+        switch( element.type )
+        {
+            case QPainterPath::MoveToElement:
+                lastPoint =  QPointF( element.x, element.y );
+                break;
+            case QPainterPath::LineToElement:
+                nextPoint =  QPointF( element.x, element.y );
+                paintLine( KisPaintInformation( lastPoint ), KisPaintInformation( nextPoint ));
+                lastPoint = nextPoint;
+                break;
+            case QPainterPath::CurveToElement:
+                nextPoint =  QPointF( path.elementAt(i+2).x, path.elementAt(i+2).y );
+                paintBezierCurve( KisPaintInformation( lastPoint ),
+                                  QPointF( path.elementAt(i).x, path.elementAt(i).y),
+                                  QPointF( path.elementAt(i+1).x, path.elementAt(i+1).y),
+                                  KisPaintInformation( nextPoint ));
+                lastPoint = nextPoint;
+                break;
+            default:
+                continue;
+        }
+    }
+}
 
 void KisPainter::fillPainterPath(const QPainterPath& path)
 {

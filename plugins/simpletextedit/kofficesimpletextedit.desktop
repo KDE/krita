@@ -1,11 +1,14 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Simple Text Edit
+Name[el]=Απλή επεξεργασία κειμένου
 Name[es]=Editor de texto sencillo
+Name[fi]=Yksinkertainen tekstieditori
 Name[pt]=Edição de Texto Simples
 Name[pt_BR]=Edição de Texto Simples
 Name[sv]=Enkel texteditor
 Comment=Simpler Text Edit docker
+Comment[el]=Προσάρτηση απλής επεξεργασίας κειμένου
 Comment[es]=Anclaje del editor de texto sencillo
 Comment[pt]=Área acoplável de edição de texto simples
 Comment[pt_BR]=Área acoplável de edição de texto simples

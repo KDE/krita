@@ -61,6 +61,15 @@ public:
      */
     void addToClipboard();
 
+    /**
+     * Get the mime data
+     *
+     * This transfers the ownership of the mimeData to the caller
+     *
+     * This function is for use in automated tests
+     */
+    QMimeData * mimeData();
+
 private:
     QMimeData * m_mimeData;
 };

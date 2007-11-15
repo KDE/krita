@@ -109,3 +109,10 @@ void KoDrag::addToClipboard()
         m_mimeData = 0;
     }
 }
+
+QMimeData * KoDrag::mimeData()
+{
+    QMimeData * mimeData = m_mimeData;
+    m_mimeData = 0;
+    return mimeData;
+}

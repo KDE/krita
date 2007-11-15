@@ -37,7 +37,7 @@ void KoPASavingContext::addMasterPage( const KoPAMasterPage * masterPage, const 
     m_masterPageNames.insert( masterPage, name );
 }
 
-QString KoPASavingContext::masterPageName( const KoPAMasterPage * masterPage )
+QString KoPASavingContext::masterPageName( const KoPAMasterPage * masterPage ) const
 {
     QMap<const KoPAMasterPage *, QString>::const_iterator it( m_masterPageNames.find( masterPage ) );
     if (  it != m_masterPageNames.constEnd() ) {

@@ -64,7 +64,7 @@ public:
      *
      * @return the style name of the masterPage
      */
-    QString masterPageName( const KoPAMasterPage * masterPage );
+    QString masterPageName( const KoPAMasterPage * masterPage ) const;
 
     /**
      * @brief Get the element name use in saving

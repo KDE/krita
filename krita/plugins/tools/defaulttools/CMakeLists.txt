@@ -8,6 +8,7 @@ set(kritadefaulttools_PART_SRCS
     kis_tool_ellipse.cc
     kis_tool_gradient.cc
     kis_tool_measure.cc
+    kis_tool_path.cc
     )
 
 kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui)

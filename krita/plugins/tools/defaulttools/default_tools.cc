@@ -35,6 +35,7 @@
 #include "kis_tool_line.h"
 #include "kis_tool_ellipse.h"
 #include "kis_tool_measure.h"
+#include "kis_tool_path.h"
 
 
 typedef KGenericFactory<DefaultTools> DefaultToolsFactory;
@@ -54,6 +55,7 @@ DefaultTools::DefaultTools(QObject *parent, const QStringList &)
     r->add(new KisToolEllipseFactory(r, QStringList()));
     r->add(new KisToolRectangleFactory(r, QStringList()));
     r->add(new KisToolMeasureFactory(r, QStringList()));
+    r->add(new KisToolPathFactory(r, QStringList()));
 }
 
 DefaultTools::~DefaultTools()

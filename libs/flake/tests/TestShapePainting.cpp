@@ -5,9 +5,13 @@
 #include "KoShapeManager.h"
 #include "MockShapes.h"
 
+#include <kcomponentdata.h>
+
 void TestShapePainting::testPaintShape() {
     MockShape shape;
     MockContainer container;
+
+    KComponentData componentData( "TestShapePainting" );  // we need an instance for that canvas
 
     container.addChild(&shape);
     QCOMPARE(shape.parent(), &container);

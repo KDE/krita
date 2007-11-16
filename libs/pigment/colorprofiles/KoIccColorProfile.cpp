@@ -131,7 +131,7 @@ KoIccColorProfile *KoIccColorProfile::getScreenProfile(int screen )
     unsigned long bytes_after;
     quint8 * str;
 
-    static Atom icc_atom = XInternAtom( QX11Info::display(), "_ICC_PROFILE", False );
+    static Atom icc_atom = XInternAtom( QX11Info::display(), "_ICC_PROFILE", True );
 
     if  ( XGetWindowProperty ( QX11Info::display(),
                     QX11Info::appRootWindow( screen ),

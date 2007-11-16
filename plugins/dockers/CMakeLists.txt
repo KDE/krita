@@ -13,8 +13,13 @@ set(kofficedockers_SRCS
     shapeselector/FolderShape.cpp
     shapeselector/FolderShapeModel.cpp
 
+    strokedocker/StrokeDocker.cpp
+    strokedocker/StrokeDockerFactory.cpp
+
     Plugin.cpp
 )
+
+add_subdirectory( strokedocker/pics )
 
 #kde4_add_ui_files( kofficedockers_SRCS
 #)

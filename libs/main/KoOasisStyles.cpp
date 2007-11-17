@@ -1574,7 +1574,6 @@ QString KoOasisStyles::saveOasisGradientStyle( KoGenStyles &mainStyles, const QB
     {
         const QRadialGradient *gradient = static_cast<const QRadialGradient*>( brush.gradient() );
         gradientStyle = KoGenStyle( KoGenStyle::StyleGradientRadial /*no family name*/ );
-        gradientStyle.addAttribute( "draw:style", "radial" );
         gradientStyle.addAttributePt( "svg:cx", gradient->center().x() );
         gradientStyle.addAttributePt( "svg:cy", gradient->center().y() );
         gradientStyle.addAttributePt( "svg:r",  gradient->radius() );
@@ -1585,7 +1584,6 @@ QString KoOasisStyles::saveOasisGradientStyle( KoGenStyles &mainStyles, const QB
     {
         const QLinearGradient *gradient = static_cast<const QLinearGradient*>( brush.gradient() );
         gradientStyle = KoGenStyle( KoGenStyle::StyleGradientLinear /*no family name*/ );
-        gradientStyle.addAttribute( "draw:style", "linear" );
         gradientStyle.addAttributePt( "svg:x1", gradient->start().x() );
         gradientStyle.addAttributePt( "svg:y1", gradient->start().y() );
         gradientStyle.addAttributePt( "svg:x2", gradient->finalStop().x() );

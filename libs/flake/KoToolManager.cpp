@@ -87,6 +87,10 @@ public:
     {
         tabletEventTimer.setSingleShot(true);
     }
+    ~Private()
+    {
+        qDeleteAll(tools);
+    }
 
     QList<ToolHelper*> tools; // list of all available tools via their factories.
     ToolHelper *defaultTool; // the pointer thingy

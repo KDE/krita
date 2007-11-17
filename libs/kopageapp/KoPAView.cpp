@@ -78,6 +78,8 @@ KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 KoPAView::~KoPAView()
 {
     KoToolManager::instance()->removeCanvasController( m_canvasController );
+    delete m_zoomController;
+    delete m_viewMode;
 }
 
 

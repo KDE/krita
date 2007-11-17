@@ -50,14 +50,15 @@ void KoXYColorSelector::drawContents( QPainter *painter )
     colors[2] = m_colors[2].data();
     colors[3] = m_colors[3].data();
 
-    QImage image(contentsRect().width(), contentsRect().height(), QImage::Format_ARGB32 );
+    QRect contentsRect_(contentsRect());
+    QImage image(contentsRect_.width(), contentsRect_.height(), QImage::Format_ARGB32 );
     KoMixColorsOp * mixOp = m_colorSpace->mixColorsOp();
 
-    for (int x = 0; x < contentsRect().width(); x++)
-        for (int y = 0; y < contentsRect().height(); y++){
+    for (int x = 0; x < contentsRect_.width(); x++)
+        for (int y = 0; y < contentsRect_.height(); y++){
 
-            double xVal = static_cast<double>(x) / (contentsRect().width() - 1);
-            double yVal = static_cast<double>(y) / (contentsRect().height() - 1);
+            double xVal = static_cast<double>(x) / (contentsRect_.width() - 1);
+            double yVal = static_cast<double>(y) / (contentsRect_.height() - 1);
 
             quint8 colorWeights[4];
             colorWeights[0] = static_cast<quint8>((1.0 - yVal) * (1.0 - xVal) * 255 + 0.5);
@@ -72,7 +73,7 @@ void KoXYColorSelector::drawContents( QPainter *painter )
             image.setPixel(x, y, color.rgba());
         }
 
-    painter->drawImage( contentsRect(), image, QRect( 0, 0, image.width(), image.height()) );
+    painter->drawImage( contentsRect_, image, QRect( 0, 0, image.width(), image.height()) );
 }
 
 #include "KoXYColorSelector.moc"

@@ -55,7 +55,8 @@ void KoColorSlider::drawContents( QPainter *painter )
   p.fillRect(0, 4, 4, 4, Qt::darkGray);
   p.fillRect(4, 4, 4, 4, Qt::lightGray);
   p.end();
-  painter->fillRect(contentsRect(), QBrush(checker));
+  QRect contentsRect_(contentsRect());
+  painter->fillRect(contentsRect_, QBrush(checker));
 
   KoColor c = m_minColor; // smart way to fetch colorspace
   QColor color;
@@ -67,12 +68,12 @@ void KoColorSlider::drawContents( QPainter *painter )
 
   KoMixColorsOp * mixOp = c.colorSpace()->mixColorsOp();
 
-  QImage image(contentsRect().width(), contentsRect().height(), QImage::Format_ARGB32 );
+  QImage image(contentsRect_.width(), contentsRect_.height(), QImage::Format_ARGB32 );
 
   if( orientation() == Qt::Horizontal ) {
-    for (int x = 0; x < contentsRect().width(); x++) {
+    for (int x = 0; x < contentsRect_.width(); x++) {
 
-        double t = static_cast<double>(x) / (contentsRect().width() - 1);
+        double t = static_cast<double>(x) / (contentsRect_.width() - 1);
 
         quint8 colorWeights[2];
         colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
@@ -83,14 +84,14 @@ void KoColorSlider::drawContents( QPainter *painter )
         c.toQColor(&color, &opacity);
         color.setAlpha(opacity);
 
-        for (int y = 0; y < contentsRect().height(); y++)
+        for (int y = 0; y < contentsRect_.height(); y++)
           image.setPixel(x, y, color.rgba());
     }
   }
   else {
-    for (int y = 0; y < contentsRect().height(); y++) {
+    for (int y = 0; y < contentsRect_.height(); y++) {
 
-        double t = static_cast<double>(y) / (contentsRect().height() - 1);
+        double t = static_cast<double>(y) / (contentsRect_.height() - 1);
 
         quint8 colorWeights[2];
         colorWeights[0] = static_cast<quint8>((t) * 255 + 0.5);
@@ -101,11 +102,11 @@ void KoColorSlider::drawContents( QPainter *painter )
         c.toQColor(&color, &opacity);
         color.setAlpha(opacity);
 
-        for (int x = 0; x < contentsRect().width(); x++)
+        for (int x = 0; x < contentsRect_.width(); x++)
           image.setPixel(x, y, color.rgba());
     }
   }
-  painter->drawImage( contentsRect(), image, QRect( 0, 0, image.width(), image.height()) );
+  painter->drawImage( contentsRect_, image, QRect( 0, 0, image.width(), image.height()) );
 }
 
 #include "KoColorSlider.moc"

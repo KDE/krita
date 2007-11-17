@@ -43,6 +43,7 @@ set(komain_LIB_SRCS
    KoChild.cpp
    kofficeversion.cc
    KoOasisStyles.cpp
+   KoOdfGraphicStyles.cpp
    KoOasisSettings.cpp
    KoPageFormat.cpp
    KoPageLayout.cpp
@@ -138,6 +139,7 @@ install( FILES
     KoPictureCollection.h 
     kofficeversion.h 
     KoOasisStyles.h 
+    KoOdfGraphicStyles.h 
     KoOasisSettings.h 
     KoPageFormat.h 
     KoPageLayout.h 

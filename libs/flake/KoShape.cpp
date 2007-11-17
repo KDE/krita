@@ -44,6 +44,7 @@
 #include <KoGenStyle.h>
 #include <KoUnit.h>
 #include <KoOasisStyles.h>
+#include <KoOdfGraphicStyles.h>
 #include <KoOasisLoadingContext.h>
 
 #include <QPainter>
@@ -729,11 +730,11 @@ QBrush KoShape::loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext
     KoStyleStack &styleStack = context.koLoadingContext().styleStack();
     QString fill = getStyleProperty( "fill", element, context );
     if ( fill == "solid" || fill == "hatch" )
-        return KoOasisStyles::loadOasisFillStyle( styleStack, fill, context.koLoadingContext().oasisStyles() );
+        return KoOdfGraphicStyles::loadOasisFillStyle( styleStack, fill, context.koLoadingContext().oasisStyles() );
     else if( fill == "gradient" )
-        return KoOasisStyles::loadOasisGradientStyle( styleStack, context.koLoadingContext().oasisStyles(), size() );
+        return KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.koLoadingContext().oasisStyles(), size() );
     else if( fill == "bitmap" )
-        return KoOasisStyles::loadOasisPatternStyle( styleStack, context.koLoadingContext(), size() );
+        return KoOdfGraphicStyles::loadOasisPatternStyle( styleStack, context.koLoadingContext(), size() );
 
     return QBrush();
 }
@@ -744,7 +745,7 @@ KoShapeBorderModel * KoShape::loadOdfStroke( const KoXmlElement & element, KoSha
     QString stroke = getStyleProperty( "stroke", element, context );
     if( stroke == "solid" || stroke == "dash" )
     {
-        QPen pen = KoOasisStyles::loadOasisStrokeStyle( styleStack, stroke, context.koLoadingContext().oasisStyles() );
+        QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle( styleStack, stroke, context.koLoadingContext().oasisStyles() );
 
         KoLineBorder * border = new KoLineBorder();
         border->setLineWidth( pen.widthF() );

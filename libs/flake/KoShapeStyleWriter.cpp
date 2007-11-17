@@ -25,7 +25,7 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
-#include <KoOasisStyles.h>
+#include <KoOdfGraphicStyles.h>
 
 KoShapeStyleWriter::KoShapeStyleWriter( KoShapeSavingContext &context )
     : m_context( context )
@@ -46,7 +46,7 @@ QString KoShapeStyleWriter::addFillStyle( KoGenStyle &style, const QBrush &fill 
             style.addProperty( "draw:fill-image-name", savePatternStyle( style, fill ) );
             break;
         default:
-            KoOasisStyles::saveOasisFillStyle( style, m_context.mainStyles(), fill );
+            KoOdfGraphicStyles::saveOasisFillStyle( style, m_context.mainStyles(), fill );
             break;
     }
 

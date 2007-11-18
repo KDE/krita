@@ -23,7 +23,7 @@
 #include <QtCore/QHash>
 #include <QtGui/QMatrix>
 
-#include <komain_export.h>
+#include <koodf_export.h>
 #include <KoXmlReader.h>
 
 class KoGenStyles;
@@ -38,7 +38,7 @@ class KoOasisLoadingContext;
 /**
  * Repository of styles used during loading of OASIS/OOo file
  */
-class KOMAIN_EXPORT KoOasisStyles
+class KOODF_EXPORT KoOasisStyles
 {
 public:
     KoOasisStyles();

@@ -15,6 +15,7 @@ set(koodf_LIB_SRCS
     KoUnit.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
+    KoOasisStyles.cpp
     KoOdfWriteStore.cpp
     KoStyleStack.cpp
 )
@@ -34,6 +35,7 @@ install( FILES
     KoUnit.h
     KoGenStyle.h
     KoGenStyles.h
+    KoOasisStyles.h
     KoOdfWriteStore.h
     KoStyleStack.h
 DESTINATION ${INCLUDE_INSTALL_DIR})

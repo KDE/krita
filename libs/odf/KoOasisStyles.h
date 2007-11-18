@@ -23,17 +23,13 @@
 #include <QtCore/QHash>
 #include <QtGui/QMatrix>
 
-#include <koodf_export.h>
 #include <KoXmlReader.h>
+
+#include "koodf_export.h"
+#include "KoOdfNumberStyles.h"
 
 class KoGenStyles;
 class KoXmlWriter;
-class QBrush;
-class QPen;
-class QSizeF;
-class KoGenStyle;
-class KoStyleStack;
-class KoOasisLoadingContext;
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -115,40 +111,10 @@ public:
      */
     QHash<QString, KoXmlElement*> autoStyles(const QString& family, bool stylesDotXml = false ) const;
 
-    /// Prefix and suffix are always included into formatStr. Having them as separate fields simply
-    /// allows to extract them from formatStr, to display them in separate widgets.
-    struct NumericStyleFormat
-    {
-        QString formatStr;
-        QString prefix;
-        QString suffix;
-        enum { Number, Scientific, Fraction, Currency, Percentage,
-               Date, Time, Boolean, Text } type;
-        int precision;
-        QString currencySymbol;
-    };
-
-    typedef QHash<QString, NumericStyleFormat> DataFormatsMap;
+    typedef QHash<QString, KoOdfNumberStyles::NumericStyleFormat> DataFormatsMap;
     /// Value (date/time/number...) formats found while parsing styles. Used e.g. for fields.
     /// Key: format name. Value:
     const DataFormatsMap& dataFormats() const;
-
-    static QString saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
-                                       const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
-                                       const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format,
-                                           const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format,
-                                             const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format,
-                                         const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format,
-                                             const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format, const QString &symbol,
-                                           const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format,
-                                       const QString &_prefix = QString() , const QString &_suffix= QString() );
 
     /// Helper function to parse a transformation attribute
     static QMatrix loadTransformation( const QString &transformation );
@@ -164,20 +130,12 @@ private:
     /// Add styles to styles map
     void insertStyles( const KoXmlElement& styles, TypeAndLocation typeAndLocation = CustomInStyles );
 
-private:
     void insertOfficeStyles( const KoXmlElement& styles );
     void insertStyle( const KoXmlElement& style, TypeAndLocation typeAndLocation );
-    void importDataStyle( const KoXmlElement& parent );
-    static bool saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text, bool &antislash );
-    static void parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text );
-    static bool saveOasisKlocaleTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text );
-    static void parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text );
-    static void addKofficeNumericStyleExtension( KoXmlWriter & elementWriter, const QString &_suffix, const QString &_prefix );
 
     KoOasisStyles( const KoOasisStyles & ); // forbidden
     KoOasisStyles& operator=( const KoOasisStyles & ); // forbidden
 
-private:
     class Private;
     Private * const d;
 };

@@ -948,7 +948,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
                                 QString dateFormat = "";
                                 if (!dataStyle.isEmpty()) {
                                     if (context.oasisStyles().dataFormats().contains(dataStyle)) {
-                                        KoOasisStyles::NumericStyleFormat dataFormat = context.oasisStyles().dataFormats().value(dataStyle);
+                                        KoOdfNumberStyles::NumericStyleFormat dataFormat = context.oasisStyles().dataFormats().value(dataStyle);
                                         dateFormat = dataFormat.prefix + dataFormat.formatStr + dataFormat.suffix;
                                     }
                                 }

@@ -1,6 +1,7 @@
 /*  This file is part of the KDE project
     Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
     Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -19,17 +20,21 @@
 #include "KoResource.h"
 
 #include <QDomElement>
+#include <QtCore/QFileInfo>
 
 struct KoResource::Private {
     QString name;
     QString filename;
     bool valid;
+    bool removable;
 };
 
 KoResource::KoResource(const QString& filename) : d(new Private)
 {
     d->filename = filename;
     d->valid = false;
+    QFileInfo fileInfo( filename );
+    d->removable = fileInfo.isWritable();
 }
 
 KoResource::~KoResource()
@@ -45,6 +50,8 @@ QString KoResource::filename() const
 void KoResource::setFilename(const QString& filename)
 {
     d->filename = filename;
+    QFileInfo fileInfo( filename );
+    d->removable = ! fileInfo.exists() || fileInfo.isWritable();
 }
 
 QString KoResource::name() const
@@ -71,6 +78,11 @@ void KoResource::toXML(QDomDocument& , QDomElement& e) const
 {
     e.setAttribute("name", name());
     e.setAttribute("filename", filename());
+}
+
+bool KoResource::removable() const
+{
+    return d->removable;
 }
 
 #include "KoResource.moc"

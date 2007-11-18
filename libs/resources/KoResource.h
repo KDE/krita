@@ -65,7 +65,10 @@ public:
     virtual QImage img() const {return QImage(); }
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
-    
+
+    /// Returns if resource can be removed by the user
+    bool removable() const;
+
 public:
     QString filename() const;
     void setFilename(const QString& filename);

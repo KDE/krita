@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
-  Copyright (c) 1999 Carsten Pfeiffer (pfeiffer@kde.org)
-  Copyright (c) 2002 Igor Jansen (rm@kde.org)
+   Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
+   Copyright (c) 2002 Igor Jansen <rm@kde.org>
+   Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -102,9 +103,12 @@ bool KoResourceChooser::viewportEvent(QEvent *e )
         QHelpEvent *he = static_cast<QHelpEvent*>(e);
         QStyleOptionViewItem option = viewOptions();
         QModelIndex index = model()->buddy( indexAt(he->pos()));
-        option.rect = visualRect( index );
-        d->tip.showTip( this, he->pos(), option, index );
-        return true;
+        if( index.isValid() )
+        {
+            option.rect = visualRect( index );
+            d->tip.showTip( this, he->pos(), option, index );
+            return true;
+        }
     }
 
     return QTableWidget::viewportEvent( e );
@@ -116,15 +120,22 @@ void KoResourceChooser::resizeEvent(QResizeEvent *e)
 {
     QTableWidget::resizeEvent(e);
 
+    setupItems();
+}
+
+void KoResourceChooser::setupItems()
+{
     int oldNColumns = columnCount();
     int nColumns = width( ) / d->m_itemWidth;
     if(nColumns == 0)
         nColumns = 1;
 
     int oldNRows = rowCount();
-    int nRows = (d->m_itemCount - 1)/ nColumns +1;
+    int nRows = d->m_itemCount / nColumns;
+    if( nRows * nColumns < d->m_itemCount )
+        nRows++;
 
-    if(nColumns > oldNColumns)
+    if(nColumns > oldNColumns )
     {
         // We are now wider than before so we must reorder from the top
 
@@ -132,10 +143,12 @@ void KoResourceChooser::resizeEvent(QResizeEvent *e)
         int newRow = 0, newColumn = 0, oldRow = 0, oldColumn = 0;
         for(int i = 0; i < d->m_itemCount; i++)
         {
-            QTableWidgetItem *theItem;
-            theItem = takeItem(oldRow, oldColumn);
-            setItem(newRow, newColumn, theItem);
-            newColumn++;
+            QTableWidgetItem *theItem = takeItem(oldRow, oldColumn);
+            if( theItem )
+            {
+                setItem(newRow, newColumn, theItem);
+                newColumn++;
+            }
             if(newColumn == nColumns)
             {
                 newColumn = 0;
@@ -158,10 +171,12 @@ void KoResourceChooser::resizeEvent(QResizeEvent *e)
                       oldRow = oldNRows - 1, oldColumn = d->m_itemCount - oldRow * oldNColumns;
         for(int i = 0; i < d->m_itemCount; i++)
         {
-            QTableWidgetItem *theItem;
-            theItem = takeItem(oldRow, oldColumn);
-            setItem(newRow, newColumn, theItem);
-            newColumn--;
+            QTableWidgetItem *theItem = takeItem(oldRow, oldColumn);
+            if( theItem )
+            {
+                setItem(newRow, newColumn, theItem);
+                newColumn--;
+            }
             if(newColumn < 0)
             {
                 newColumn = nColumns - 1;
@@ -172,6 +187,35 @@ void KoResourceChooser::resizeEvent(QResizeEvent *e)
             {
                 oldColumn = oldNColumns - 1;
                 oldRow--;
+            }
+        }
+    }
+    else if( oldNRows != nRows )
+    {
+        // We have a different row count, probably because of removing items
+
+        if( nRows > oldNRows )
+            setRowCount(nRows);// make sure there is enough space for our reordering
+        int newRow = 0, newColumn = 0, oldRow = 0, oldColumn = 0;
+        int oldCount = oldNColumns * oldNRows;
+        for(int i = 0; i < oldCount; i++)
+        {
+            QTableWidgetItem *theItem = takeItem(oldRow, oldColumn);
+            if( theItem )
+            {
+                setItem(newRow, newColumn, theItem);
+                newColumn++;
+            }
+            if(newColumn == nColumns)
+            {
+                newColumn = 0;
+                newRow++;
+            }
+            oldColumn++;
+            if(oldColumn == oldNColumns)
+            {
+                oldColumn = 0;
+                oldRow++;
             }
         }
     }
@@ -198,12 +242,26 @@ QTableWidgetItem *KoResourceChooser::itemAt(int index)
 void KoResourceChooser::addItem(QTableWidgetItem *item)
 {
     int row = d->m_itemCount / columnCount();
-    int col = d->m_itemCount - row* columnCount();
+    int col = d->m_itemCount - row * columnCount();
     if(row+1 > rowCount())
         setRowCount(row+1);
     setItem(row, col, item);
     d->m_itemCount++;
     item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+}
+
+void KoResourceChooser::removeItem( QTableWidgetItem * item )
+{
+    if( ! item )
+        return;
+    QTableWidgetItem * removeItem = takeItem( row( item ), column( item ) );
+    if( removeItem )
+    {
+        delete removeItem;
+        d->m_itemCount--;
+        update();
+        setupItems();
+    }
 }
 
 KoPatternChooser::KoPatternChooser( const QList<QTableWidgetItem*> &list, QWidget *parent, const char *name )
@@ -253,8 +311,7 @@ void KoPatternChooser::removePattern( QTableWidgetItem *pattern )
     if( ! pattern || pattern->tableWidget() != chooser )
         return;
 
-    delete chooser->takeItem( pattern->row(), pattern->column() );
-    chooser->update();
+    chooser->removeItem( pattern );
 }
 
 #include "KoResourceChooser.moc"

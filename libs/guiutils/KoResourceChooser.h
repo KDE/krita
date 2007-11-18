@@ -59,6 +59,7 @@ public:
     virtual ~KoResourceChooser();
 
     void addItem(QTableWidgetItem *item);
+    void removeItem( QTableWidgetItem * item );
     QTableWidgetItem *itemAt(int index);
 
     /// Extensions to Qt::ItemDataRole.
@@ -73,6 +74,7 @@ protected:
     virtual void keyPressEvent(QKeyEvent * e);
     virtual bool viewportEvent(QEvent * e);
 
+    void setupItems();
 private:
     struct Private;
     Private* const d;

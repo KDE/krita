@@ -3,6 +3,7 @@
     Copyright (c) 1999 Matthias Elter <elter@kde.org>
     Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
     Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
+    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -95,18 +96,19 @@ public:
     }
 
     /// Remove a resource from resourceserver and hard disk
-    void removeResource(T* resource) {
+    bool removeResource(T* resource) {
         int index = m_resources.indexOf( resource );
         if( index < 0 )
-            return;
+            return false;
 
         QFile file( resource->filename() );
 
-        if( file.remove() )
-        {
-            m_resources.removeAt( index );
-            delete resource;
-        }
+        if( ! file.remove() )
+            return false;
+
+        m_resources.removeAt( index );
+        delete resource;
+        return true;
     }
 
     QList<T*> resources() {

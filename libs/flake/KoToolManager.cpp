@@ -528,12 +528,6 @@ KoCanvasController *KoToolManager::activeCanvasController() const {
     return d->canvasData->canvas;
 }
 
-KoToolProxy *KoToolManager::createToolProxy(KoCanvasBase *parentCanvas) {
-    KoToolProxy *tp = new KoToolProxy(parentCanvas);
-    d->proxies.insert(parentCanvas, tp);
-    return tp;
-}
-
 QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes) {
     QList<QString> types;
     foreach(KoShape *shape, shapes)

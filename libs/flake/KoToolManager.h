@@ -100,9 +100,6 @@ public:
     static KoToolManager* instance();
     ~KoToolManager();
 
-    /// You can just create a toolProxy with new, no need to use this method.
-    KDE_DEPRECATED KoToolProxy *createToolProxy(KoCanvasBase *parentCanvas);
-
     /**
      * Register actions for switching to tools at the actionCollection parameter.
      * The actions will have the text / shortcut as stated by the toolFactory.

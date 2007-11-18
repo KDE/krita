@@ -60,6 +60,12 @@ private:
 
         return grad;
     }
+
+    /// Returns path where to save user defined gradients to
+    virtual QString saveLocation()
+    {
+        return KGlobal::mainComponent().dirs()->saveLocation("ko_gradients" );
+    }
 };
 
 class ResourceLoaderThread : public QThread {

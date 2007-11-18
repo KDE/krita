@@ -81,14 +81,17 @@ public:
 
 
     /// Adds an already loaded resource to the server
-    void addResource(T* resource) {
+    bool addResource(T* resource) {
         if (!resource->valid()) {
             kWarning(30009) << "Tried to add an invalid resource!";
-            return;
+            return false;
         }
-        resource->save();
+        if( ! resource->save() )
+            return false;
 
         m_resources.append(resource);
+
+        return true;
     }
 
     /// Remove a resource from resourceserver and hard disk
@@ -111,6 +114,10 @@ public:
             return QList<T*>();
         }
         return m_resources;
+    }
+
+    virtual QString saveLocation() {
+        return QString();
     }
 
 protected:

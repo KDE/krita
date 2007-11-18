@@ -64,7 +64,48 @@ bool KoStopGradient::load()
 
 bool KoStopGradient::save()
 {
-    return false;
+    QFile fileOut( filename() );
+    if( ! fileOut.open( QIODevice::WriteOnly ) )
+        return false;
+
+    QTextStream stream( &fileOut );
+
+    const QString spreadMethod[3] = {
+        QString("spreadMethod=\"pad\" "),
+        QString("spreadMethod=\"reflect\" "),
+        QString("spreadMethod=\"repeat\" ")
+    };
+
+    const QString indent = "    ";
+
+    stream << "<svg>" << endl;
+
+    stream << indent;
+    stream << "<linearGradient id=\"" << name() << "\" ";
+    stream << "gradientUnits=\"objectBoundingBox\" ";
+    stream << spreadMethod[spread()];
+    stream << ">" << endl;
+
+    QColor color;
+    quint8 opacity;
+
+    // color stops
+    foreach( KoGradientStop stop, m_stops )
+    {
+        stop.second.toQColor( &color, &opacity );
+        stream << indent << indent;
+        stream << "<stop stop-color=\"";
+        stream << color.name();
+        stream << "\" offset=\"" << QString().setNum( stop.first );
+        stream << "\" stop-opacity=\"" << static_cast<float>( opacity ) / 255.0f << "\"" << " />" << endl;
+    }
+    stream << indent;
+    stream << "</linearGradient>" << endl;
+    stream << "</svg>" << endl;
+
+    fileOut.close();
+
+    return true;
 }
 
 QGradient* KoStopGradient::toQGradient() const

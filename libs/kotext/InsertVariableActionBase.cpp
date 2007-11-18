@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "InsertVariableActionBase.h"
+#include "InsertVariableActionBase_p.h"
 #include "KoVariable.h"
 #include "KoTextSelectionHandler.h"
 
@@ -48,4 +48,4 @@ void InsertVariableActionBase::activated() {
         kWarning(32500) << "InsertVariableAction: No texttool selected while trying to insert variable\n";
 }
 
-#include "InsertVariableActionBase.moc"
+#include "InsertVariableActionBase_p.moc"

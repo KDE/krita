@@ -20,7 +20,7 @@
 #ifndef INSERTNAMEDVARIABLEACTION_H
 #define INSERTNAMEDVARIABLEACTION_H
 
-#include "InsertVariableActionBase.h"
+#include "InsertVariableActionBase_p.h"
 
 #include <QString>
 

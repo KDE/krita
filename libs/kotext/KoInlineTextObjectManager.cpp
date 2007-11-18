@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoInlineTextObjectManager.h"
-#include "InsertNamedVariableAction.h"
-#include "InsertTextReferenceAction.h"
+#include "InsertNamedVariableAction_p.h"
+#include "InsertTextReferenceAction_p.h"
 #include "KoInlineObjectRegistry.h"
 #include "KoTextLocator.h"
 #include "KoBookmark.h"

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "InsertNamedVariableAction.h"
+#include "InsertNamedVariableAction_p.h"
 #include "KoInlineTextObjectManager.h"
 
 InsertNamedVariableAction::InsertNamedVariableAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager, const QString &name)

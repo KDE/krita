@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "InsertVariableAction.h"
+#include "InsertVariableAction_p.h"
 #include "KoVariable.h"
 
 #include <KoCanvasBase.h>

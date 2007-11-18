@@ -21,7 +21,6 @@
 #define KOOASISSTYLES_H
 
 #include <QtCore/QHash>
-#include <QtGui/QMatrix>
 
 #include <KoXmlReader.h>
 
@@ -116,10 +115,6 @@ public:
     /// Key: format name. Value:
     const DataFormatsMap& dataFormats() const;
 
-    /// Helper function to parse a transformation attribute
-    static QMatrix loadTransformation( const QString &transformation );
-    /// Helper function to create a transformation attribute
-    static QString saveTransformation( const QMatrix &transformation, bool appendTranslateUnit=true );
 private:
     enum TypeAndLocation
     {

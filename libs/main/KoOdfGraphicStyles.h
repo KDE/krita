@@ -23,6 +23,8 @@
 
 #include <komain_export.h>
 
+#include <QtGui/QMatrix>
+
 class QBrush;
 class QPen;
 class QString;
@@ -54,6 +56,12 @@ public:
     static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOasisStyles & oasisStyles );
 
     static QPen loadOasisStrokeStyle( const KoStyleStack &styleStack, const QString & stroke, const KoOasisStyles & oasisStyles );
+
+    /// Helper function to parse a transformation attribute
+    static QMatrix loadTransformation( const QString &transformation );
+
+    /// Helper function to create a transformation attribute
+    static QString saveTransformation( const QMatrix &transformation, bool appendTranslateUnit=true );
 };
 
 #endif /* KOODFGRAPHICSTYLES_H */

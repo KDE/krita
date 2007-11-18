@@ -30,9 +30,6 @@
 #include <kglobal.h>
 
 #include <KoXmlReader.h>
-#include <KoXmlWriter.h>
-
-#include <math.h>
 
 class KoOasisStyles::Private
 {
@@ -254,96 +251,6 @@ void KoOasisStyles::insertStyle( const KoXmlElement& e, TypeAndLocation typeAndL
         d->dataFormats.insert( numberStyle.first, numberStyle.second );
     }
     // The rest (text:*-configuration and text:outline-style) is to be done by the apps.
-}
-
-QMatrix KoOasisStyles::loadTransformation( const QString &transformation )
-{
-    QMatrix matrix;
-
-    // Split string for handling 1 transform statement at a time
-    QStringList subtransforms = transformation.split(')', QString::SkipEmptyParts);
-    QStringList::ConstIterator it = subtransforms.begin();
-    QStringList::ConstIterator end = subtransforms.end();
-    for(; it != end; ++it)
-    {
-        QStringList subtransform = (*it).split('(', QString::SkipEmptyParts);
-
-        subtransform[0] = subtransform[0].trimmed().toLower();
-        subtransform[1] = subtransform[1].simplified();
-        QRegExp reg("[,( ]");
-        QStringList params = subtransform[1].split(reg, QString::SkipEmptyParts);
-
-        if(subtransform[0].startsWith(';') || subtransform[0].startsWith(','))
-            subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
-
-        if(subtransform[0] == "rotate")
-        {
-            // TODO find out what oo2 really does when rotating, it seems severly broken
-            if(params.count() == 3)
-            {
-                double x = KoUnit::parseValue( params[1] );
-                double y = KoUnit::parseValue( params[2] );
-
-                matrix.translate(x, y);
-                // oo2 rotates by radians
-                matrix.rotate( params[0].toDouble()*180.0/M_PI );
-                matrix.translate(-x, -y);
-            }
-            else
-            {
-                // oo2 rotates by radians
-                matrix.rotate( params[0].toDouble()*180.0/M_PI );
-            }
-        }
-        else if(subtransform[0] == "translate")
-        {
-            if(params.count() == 2)
-            {
-                double x = KoUnit::parseValue( params[0] );
-                double y = KoUnit::parseValue( params[1] );
-                matrix.translate(x, y);
-            }
-            else    // Spec : if only one param given, assume 2nd param to be 0
-                matrix.translate( KoUnit::parseValue( params[0] ) , 0);
-        }
-        else if(subtransform[0] == "scale")
-        {
-            if(params.count() == 2)
-                matrix.scale(params[0].toDouble(), params[1].toDouble());
-            else    // Spec : if only one param given, assume uniform scaling
-                matrix.scale(params[0].toDouble(), params[0].toDouble());
-        }
-        else if(subtransform[0] == "skewx")
-            matrix.shear(tan(params[0].toDouble()), 0.0F);
-        else if(subtransform[0] == "skewy")
-            matrix.shear(tan(params[0].toDouble()), 0.0F);
-        else if(subtransform[0] == "skewy")
-            matrix.shear(0.0F, tan(params[0].toDouble()));
-        else if(subtransform[0] == "matrix")
-        {
-            if(params.count() >= 6)
-                matrix.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), KoUnit::parseValue( params[4] ), KoUnit::parseValue( params[5] ) );
-        }
-    }
-
-    return matrix;
-}
-
-QString KoOasisStyles::saveTransformation( const QMatrix &transformation, bool appendTranslateUnit )
-{
-    QString transform;
-    if( appendTranslateUnit )
-        transform = QString( "matrix(%1 %2 %3 %4 %5pt %6pt)" )
-            .arg( transformation.m11() ).arg( transformation.m12() )
-            .arg( transformation.m21() ).arg( transformation.m22() )
-            .arg( transformation.dx() ) .arg( transformation.dy() );
-    else
-        transform = QString( "matrix(%1 %2 %3 %4 %5 %6)" )
-            .arg( transformation.m11() ).arg( transformation.m12() )
-            .arg( transformation.m21() ).arg( transformation.m22() )
-            .arg( transformation.dx() ) .arg( transformation.dy() );
-
-    return transform;
 }
 
 const KoXmlElement* KoOasisStyles::defaultStyle( const QString& family ) const

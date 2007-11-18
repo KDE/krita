@@ -107,7 +107,8 @@ public:
       @param srcRowStart pointer to the start of the byte array we will mix with dest
       @param srcRowStride length of the rows of the block of src in bytes
        pixels (may be different from the rowstride of the dst pixels,
-       in which case the smaller value is used).
+       in which case the smaller value is used). If srcRowStride is null
+       it is assumed that the source is a constant color.
       @param maskRowStart start of the byte mask that determines whether and if so, then how much of src is used for blending
       @param maskRowStride length of the mask scanlines in bytes
       @param rows number of scanlines to blend

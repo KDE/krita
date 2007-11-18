@@ -55,6 +55,7 @@ public:
     {
         // XXX: How to use channelflags here? It would be cool to
         // erase all green from an image, for example.
+        qint32 srcInc = (srcstride == 0) ? _CSTraits::channels_nb : 0;
         Q_UNUSED( channelFlags );
         while (rows-- > 0)
         {
@@ -62,7 +63,7 @@ public:
             channels_type *d = reinterpret_cast<channels_type *>(dstRowStart);
             const quint8 *mask = maskRowStart;
 
-            for (qint32 i = cols; i > 0; i--, s+=_CSTraits::channels_nb, d+=_CSTraits::channels_nb)
+            for (qint32 i = cols; i > 0; i--, s+=srcInc, d+=_CSTraits::channels_nb)
             {
                 channels_type srcAlpha = s[_CSTraits::alpha_pos];
 

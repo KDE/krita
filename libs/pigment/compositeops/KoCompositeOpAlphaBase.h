@@ -60,6 +60,7 @@ public:
                    quint8 U8_opacity,
                    const QBitArray & channelFlags) const
         {
+            qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
             if ( _CSTraits::alpha_pos == -1 ) {
 
                 qint32 pixelSize = colorSpace()->pixelSize();
@@ -91,8 +92,8 @@ public:
                         _compositeOp::composeColorChannels( NATIVE_OPACITY_OPAQUE, srcN, dstN, pixelSize, channelFlags );
 
                         columns--;
-                        srcN+=_CSTraits::channels_nb;
-                        dstN+=_CSTraits::channels_nb;
+                        srcN += srcInc;
+                        dstN += _CSTraits::channels_nb;
                     }
 
                     rows--;
@@ -157,7 +158,7 @@ public:
                             }
                         }
                         columns--;
-                        srcN+=_CSTraits::channels_nb;
+                        srcN += srcInc;
                         dstN+=_CSTraits::channels_nb;
                     }
 

@@ -61,13 +61,26 @@ class CompositeCopy : public KoCompositeOp {
             Q_UNUSED( maskRowStart );
             Q_UNUSED( maskRowStride );
             Q_UNUSED( channelFlags );
+            
+            qint32 srcInc = (srcRowStride == 0) ? 0 : colorSpace()->pixelSize();
+            
             quint8 *dst = dstRowStart;
             const quint8 *src = srcRowStart;
             const KoColorSpace* cs = colorSpace();
             qint32 bytesPerPixel = cs->pixelSize();
 
             while (rows > 0) {
-                memcpy(dst, src, numColumns * bytesPerPixel);
+                if(srcInc == 0)
+                {
+                    quint8* dstN = dst;
+                    qint32 columns = numColumns;
+                    while (columns > 0) {
+                      memcpy( dstN, src, bytesPerPixel);
+                      dst += colorSpace()->pixelSize();
+                    }
+                } else {
+                    memcpy(dst, src, numColumns * bytesPerPixel);
+                }
 
                 if (opacity != OPACITY_OPAQUE) {
                     cs->multiplyAlpha(dst, opacity, numColumns);

@@ -23,22 +23,14 @@
 #include "KoGenStyles.h"
 #include "KoXmlNS.h"
 #include "KoUnit.h"
-#include "KoPictureShared.h"
-#include "KoOasisLoadingContext.h"
 
-#include <QtGui/QBrush>
 #include <QtCore/QBuffer>
-#include <QtGui/QPen>
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <klocale.h>
 
-#include <KoStyleStack.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <KoStore.h>
-#include <KoStoreDevice.h>
 
 #include <math.h>
 

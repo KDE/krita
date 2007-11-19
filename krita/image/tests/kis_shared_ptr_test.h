@@ -24,9 +24,14 @@
 class KisSharedPtrTest : public QObject
 {
     Q_OBJECT
+
 private slots:
 
-    void testCreation();
+    void testRefTwoSharedPointersOneInstance();
+    void testCopy();
+    void testCopy2();
+    void testWeakSP();
+
 
 };
 

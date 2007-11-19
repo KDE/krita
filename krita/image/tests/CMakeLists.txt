@@ -2,13 +2,6 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 ########### next target ###############
 
-set(kis_sharedptr_test_SRCS kis_sharedptr_test.cpp )
-
-kde4_add_unit_test(KisSharedPtrTest TESTNAME krita-image-KisSharedPtrTest ${kis_sharedptr_test_SRCS})
-
-target_link_libraries(KisSharedPtrTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
 
 set(kis_base_node_test_SRCS kis_base_node_test.cpp )
 

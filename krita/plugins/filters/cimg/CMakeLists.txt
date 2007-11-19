@@ -14,7 +14,9 @@ endif(Q_WS_MAC)
 
 kde4_add_plugin(kritacimg ${kritacimg_PART_SRCS})
 
-
+if(MINGW)
+target_link_libraries(kritacimg gdi32)
+endif(MINGW)
 
 target_link_libraries(kritacimg kritaui)
 

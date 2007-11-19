@@ -24,7 +24,7 @@
 
 #if 1
 
-#include <iostream.h>
+#include <iostream>
 #include <stdlib.h>
 #include <math.h>
 //#define NDEBUG // uncomment to remove checking of assert()
@@ -57,9 +57,9 @@ template <class ElType>
         void  rprint()const;  //print entries on a single line
         void resize(int n);
         int operator==(const vector<ElType>& v)const;
-        friend   vector<ElType> operator*(ElType c,vector<ElType>& v );
-        friend   vector<ElType> operator*(vector<ElType>& v,ElType c );
-        friend ostream& operator<<(ostream& s,vector<ElType>& v);
+        friend vector<ElType> operator* (ElType c,vector<ElType>& v );
+        friend vector<ElType> operator*(vector<ElType>& v,ElType c );
+        friend std::ostream& operator<<(std::ostream& s,vector<ElType>& v);
 };
 template <class ElType>
         void vector<ElType>::zero()
@@ -129,10 +129,10 @@ template <class ElType>
         void  vector<ElType>::rprint()const  //print entries on a single line
 {
     int i;
-    cout << "VECTOR: ";
-    cout << "(";
-    for(i=0;i<len-1;i++) cout << data[i] << ",";
-    cout << data[len-1] << ")" << endl;
+    std::cout << "VECTOR: ";
+    std::cout << "(";
+    for(i=0;i<len-1;i++) std::cout << data[i] << ",";
+    std::cout << data[len-1] << ")" << std::endl;
     return;
 }
 template <class ElType>
@@ -164,7 +164,7 @@ template <class ElType>
     return ans;
 }
 template <class ElType>
-        ostream& operator<<(ostream& s,vector<ElType>& v)
+        std::ostream& operator<<(std::ostream& s,vector<ElType>& v)
 {
     s << "(";
     for(int i=0;i<v.len-1;i++) s << v.data[i] << ", ";
@@ -192,7 +192,7 @@ template <class ElType>
         matrix<ElType> operator-(const matrix<ElType>& a);
         matrix<ElType> transpose();
     //matrix<ElType> inverse();
-        friend ostream& operator<<(ostream& s,matrix<ElType>& m);
+        friend std::ostream& operator<<(std::ostream& s,matrix<ElType>& m);
         friend void ludcmp(matrix<ElType>& a,vector<int>& indx,double &d);
         friend void lubksb(matrix<ElType>&a,vector<int>& indx,vector<ElType>&b);
 };
@@ -357,7 +357,7 @@ template <class ElType>
     return ans;
 }
 template <class ElType>
-        ostream& operator<<(ostream& s,matrix<ElType>& m)
+        std::ostream& operator<<(std::ostream& s,matrix<ElType>& m)
 {
     for(int i=0; i<m.rows;i++) s << m[i];
     return s;
@@ -381,7 +381,7 @@ void ludcmp(matrix<ElType>& a, vector<int>& indx,double& d)
 //         kdDebug() << "new search" << endl;
         for (j=0;j<n;j++) { if ((temp=fabs(a[i][j])) > big) big=temp;
 /*            kdDebug() << temp << " " << fabs(a[i][j]) << " "<< big <<endl; */}
-            if (big == 0.0) { cerr << "Singular matrix in routine LUDCMP" << endl; big = TINY;}
+            if (big == 0.0) { std::cerr << "Singular matrix in routine LUDCMP" << std::endl; big = TINY;}
             vv[i]=1.0/big;
     }
     for (j=0;j<n;j++)

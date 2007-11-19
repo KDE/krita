@@ -84,7 +84,7 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), CategoryAdjust, i18n("&Auto
 {
 }
 
-bool KisAutoContrast::workWith(KoColorSpace* cs)
+bool KisAutoContrast::workWith(const KoColorSpace* cs)
 {
     return (cs->profile() != 0);
 }
@@ -246,7 +246,7 @@ KisDesaturateFilter::~KisDesaturateFilter()
 {
 }
 
-bool KisDesaturateFilter::workWith(KoColorSpace* cs)
+bool KisDesaturateFilter::workWith(const KoColorSpace* cs)
 {
     return (cs->profile() != 0);
 }

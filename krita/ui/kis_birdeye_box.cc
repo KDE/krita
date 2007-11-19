@@ -291,7 +291,7 @@ void KisBirdEyeBox::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
 #endif
 }
 
-void KisBirdEyeBox::slotImageColorSpaceChanged(KoColorSpace *cs)
+void KisBirdEyeBox::slotImageColorSpaceChanged(const KoColorSpace *cs)
 {
     if (cs->hasHighDynamicRange()) {
         m_exposureDoubleWidget->show();

@@ -40,7 +40,7 @@ public:
         ) const;
     static inline KoID id() { return KoID("cubism", i18n("Cubism")); }
     
-    virtual bool workWith(KoColorSpace* cs);
+    virtual bool workWith(const KoColorSpace* cs);
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev) const;
 protected:

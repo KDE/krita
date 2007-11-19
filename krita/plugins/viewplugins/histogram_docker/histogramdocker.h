@@ -44,7 +44,7 @@ public:
 private slots:
     void producerChanged(QAction *action);
     void popupMenu(const QPoint & pos);
-    void colorSpaceChanged(KoColorSpace* cs);
+    void colorSpaceChanged(const KoColorSpace* cs);
 private:
     KoHistogramProducerFactory* m_factory;
     KisCachedHistogramObserver::Producers m_producers;

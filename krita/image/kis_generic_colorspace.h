@@ -138,7 +138,7 @@ class KisGenericColorSpace : public KoColorSpace {
         virtual void fromRgbA16(const quint8 * , quint8 * , const quint32 ) const {}
 
         virtual bool convertPixelsTo(const quint8 * /*src*/,
-                                     quint8 * /*dst*/, KoColorSpace * /*dstColorSpace*/,
+                                     quint8 * /*dst*/, const KoColorSpace * /*dstColorSpace*/,
                                      quint32 /*numPixels*/,
                                      KoColorConversionTransformation::Intent /*renderingIntent = INTENT_PERCEPTUAL*/) const { return false; }
 

@@ -48,7 +48,7 @@ public slots:
     void slotDocCommandExecuted();
     void slotImageUpdated(QRect r);
     void slotImageSizeChanged(qint32 w, qint32 h);
-    void slotImageColorSpaceChanged(KoColorSpace *cs);
+    void slotImageColorSpaceChanged(const KoColorSpace *cs);
 
 protected slots:
     void exposureValueChanged(double exposure);

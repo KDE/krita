@@ -49,7 +49,7 @@ public:
     virtual bool supportsThreading() const { return false; }
     
     virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
-    virtual bool workWith(KoColorSpace* cs);
+    virtual bool workWith(const KoColorSpace* cs);
 
 };
 
@@ -71,7 +71,7 @@ public:
     virtual bool supportsIncrementalPainting() const { return false; }
     
     virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
-    virtual bool workWith(KoColorSpace* cs);
+    virtual bool workWith(const KoColorSpace* cs);
 
 };
 

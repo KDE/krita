@@ -122,8 +122,8 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
                 new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));
         connect(&m_popup, SIGNAL(triggered(QAction *)),
                 this, SLOT(producerChanged(QAction *)));
-        connect(img.data(), SIGNAL(sigColorSpaceChanged(KoColorSpace*)),
-                this, SLOT(colorSpaceChanged(KoColorSpace*))); // No need to force updates here
+        connect(img.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)),
+                this, SLOT(colorSpaceChanged(const KoColorSpace*))); // No need to force updates here
 
         // Add it to the control palette
         m_view->createDock(i18n("Histogram"), m_hview);
@@ -195,7 +195,7 @@ void KritaHistogramDocker::popupMenu(const QPoint& pos)
     m_popup.popup(pos, m_popup.actions().at(m_currentProducerPos));
 }
 
-void KritaHistogramDocker::colorSpaceChanged(KoColorSpace* cs)
+void KritaHistogramDocker::colorSpaceChanged(const KoColorSpace* cs)
 {
     m_cs = cs;
 

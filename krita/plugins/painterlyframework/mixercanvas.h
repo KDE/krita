@@ -46,7 +46,7 @@ public:
     ~MixerCanvas();
 
     void setResources(KoCanvasResourceProvider *rp);
-    void setLayer(KoColorSpace *cs);
+    void setLayer(const KoColorSpace *cs);
 
     KisPaintLayer *layer()
         {

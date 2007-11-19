@@ -182,7 +182,7 @@ KisFilterConfiguration* KisBrightnessContrastFilter::factoryConfiguration(const 
 }
 
 
-bool KisBrightnessContrastFilter::workWith(KoColorSpace* cs)
+bool KisBrightnessContrastFilter::workWith(const KoColorSpace* cs)
 {
     return (cs->profile() != 0);
 }

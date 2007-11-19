@@ -70,8 +70,8 @@ namespace {
 
     public:
         KisConvertLayerTypeCmd(KisPaintDeviceSP paintDevice,
-                       KisDataManagerSP beforeData, KoColorSpace * beforeColorSpace,
-                       KisDataManagerSP afterData, KoColorSpace * afterColorSpace
+                       KisDataManagerSP beforeData, const KoColorSpace * beforeColorSpace,
+                       KisDataManagerSP afterData, const KoColorSpace * afterColorSpace
                 ) : super(i18n("Convert Layer Type"), paintDevice)
             {
                 m_beforeData = beforeData;
@@ -101,10 +101,10 @@ namespace {
 
     private:
         KisDataManagerSP m_beforeData;
-        KoColorSpace * m_beforeColorSpace;
+        const KoColorSpace * m_beforeColorSpace;
 
         KisDataManagerSP m_afterData;
-        KoColorSpace * m_afterColorSpace;
+        const KoColorSpace * m_afterColorSpace;
     };
 
 }

@@ -121,7 +121,7 @@ void MixerCanvas::checkCurrentLayer()
     }
 }
 
-void MixerCanvas::setLayer(KoColorSpace *cs)
+void MixerCanvas::setLayer(const KoColorSpace *cs)
 {
     m_layer = new KisPaintLayer(0, "Artistic Mixer Layer", 255, cs);
     m_layer->paintDevice()->createPainterlyOverlay();

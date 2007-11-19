@@ -69,7 +69,7 @@ private:
 
     KisResourceProvider *m_resources;
 
-    KoColorSpace *m_colorspace;
+    const KoColorSpace *m_colorspace;
     KisIlluminantProfile *m_illuminant;
 };
 

@@ -66,7 +66,7 @@ KisCubismFilter::KisCubismFilter() : KisFilter(id(), KisFilter::CategoryArtistic
     setColorSpaceIndependence(TO_RGBA8);
 }
 
-bool KisCubismFilter::workWith(KoColorSpace* /*cs*/)
+bool KisCubismFilter::workWith(const KoColorSpace* /*cs*/)
 {
     return true;
 }

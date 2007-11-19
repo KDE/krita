@@ -97,7 +97,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
     KisBrush * brush = painter()->brush();
     if (! brush->canPaintFor(info) )
         return;
-    KisPaintDeviceSP dab = painter()->dab();
+    KisPaintDeviceSP dab = 0;
 
     QPointF hotSpot = brush->hotSpot(info);
     QPointF pt = info.pos() - hotSpot;
@@ -114,8 +114,10 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
         dab = brush->image(device->colorSpace(), info, xFraction, yFraction);
     }
     else {
-        KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
-        dab = computeDab(mask);
+        dab = cachedDab( );
+        KoColor color = painter()->paintColor();
+        color.convertTo( dab->colorSpace() );
+        brush->mask(dab, color, info, xFraction, yFraction);
     }
 
     painter()->setDab(dab); // Cache dab for future paints in the painter.

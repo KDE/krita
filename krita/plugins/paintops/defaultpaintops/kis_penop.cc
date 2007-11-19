@@ -81,8 +81,10 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     }
     else {
         // Compute mask without sub-pixel positioning
-        KisQImagemaskSP mask = brush->mask(info);
-        dab = computeDab(mask);
+        dab = cachedDab( );
+        KoColor color = painter()->paintColor();
+        color.convertTo( dab->colorSpace() );
+        brush->mask(dab, color, info);
     }
 
     painter()->setPressure(info.pressure());

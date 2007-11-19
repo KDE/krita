@@ -95,25 +95,20 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &destX, &xFraction);
     splitCoordinate(pt.y(), &destY, &yFraction);
 
-    KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
+    KisPaintDeviceSP dab = cachedDab( );
+    KoColor color( dab->colorSpace() );
+    brush->mask(dab, color, info, xFraction, yFraction); // <- TODO invert
 
-    KisPaintDeviceSP dab = KisPaintDeviceSP(new KisPaintDevice(device->colorSpace(), "erase op dab"));
-    Q_CHECK_PTR(dab);
-
-    qint32 maskWidth = mask->width();
-    qint32 maskHeight = mask->height();
-
-    QRect dstRect;
-
-    KisRectIteratorPixel it = dab->createRectIterator(0, 0, maskWidth, maskHeight);
+    KisRectIteratorPixel it = dab->createRectIterator(0, 0, brush->maskWidth(info), brush->maskHeight(info));
     const KoColorSpace* cs = dab->colorSpace();
     while (!it.isDone()) {
-        cs->setAlpha(it.rawData(), quint8_MAX - mask->alphaAt(it.x(), it.y()), 1);
+        cs->setAlpha(it.rawData(), quint8_MAX - cs->alpha(it.rawData()), 1);
         ++it;
     }
 
-    QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
-    dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
+    QRect dabRect = QRect(0, 0, brush->maskWidth(info),
+                          brush->maskHeight(info));
+    QRect dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
 
 
     if ( painter()->bounds().isValid() ) {

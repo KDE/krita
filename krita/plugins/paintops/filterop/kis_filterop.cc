@@ -186,12 +186,12 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 
     // Filters always work with a mask, never with an image; that
     // wouldn't be useful at all.
-    KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
+//     KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
 
     painter()->setPressure(info.pressure());
 
-    qint32 maskWidth = mask->width();
-    qint32 maskHeight = mask->height();
+    qint32 maskWidth = brush->maskWidth(info);
+    qint32 maskHeight = brush->maskHeight(info);
 
     // Create a temporary paint device
     KisPaintDeviceSP tmpDev = KisPaintDeviceSP(new KisPaintDevice(colorSpace, "filterop tmpdev"));
@@ -214,6 +214,10 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 
+    KisPaintDeviceSP dab = cachedDab();
+    brush->mask(dab, tmpDev, info, xFraction, yFraction);
+    
+#if 0
     KisHLineIterator hiter = tmpDev->createHLineIterator(0, 0, maskWidth);
 
     for (int y = 0; y < maskHeight; y++)
@@ -229,6 +233,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
         hiter.nextRow();
 
     }
+#endif
 
     // Blit the paint device onto the layer
     QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
@@ -244,7 +249,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), tmpDev, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
 }
 
 #include "kis_filterop.moc"

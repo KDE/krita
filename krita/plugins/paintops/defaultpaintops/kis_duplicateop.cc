@@ -117,7 +117,7 @@ bool KisDuplicateOpSettings::perspectiveCorrection() const
 }
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings* settings, KisPainter * painter, KisImageSP image)
-    : KisPaintOp(painter), m_srcdev(0), m_target(0), m_image( image )
+    : KisPaintOp(painter), m_srcdev(0), m_image( image )
     , m_settings(settings)
     , m_duplicateStartIsSet(false)
 {
@@ -189,18 +189,6 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.y(), &y, &yFraction);
     xFraction = yFraction = 0.0;
 
-    KisPaintDeviceSP dab = 0;
-
-    if (brush->brushType() == IMAGE ||
-        brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(source()->colorSpace(), info, xFraction, yFraction);
-        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
-    }
-    else {
-        KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
-        dab = computeDab(mask, KoColorSpaceRegistry::instance()->alpha8());
-    }
-
     painter()->setPressure(info.pressure());
 
     QPointF srcPointF = pt - m_settings->offset();
@@ -208,8 +196,8 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
                              y - static_cast<qint32>(m_settings->offset().y()));
 
 
-    qint32 sw = dab->extent().width();
-    qint32 sh = dab->extent().height();
+    qint32 sw = brush->maskWidth( info );
+    qint32 sh = brush->maskHeight( info );
 
     if (srcPoint.x() < 0 )
         srcPoint.setX(0);
@@ -219,7 +207,6 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     if( !(m_srcdev && m_srcdev->colorSpace() != source()->colorSpace()) )
     {
         m_srcdev = new KisPaintDevice(source()->colorSpace(), "duplicate source dev");
-        m_target = new KisPaintDevice(source()->colorSpace(), "duplicate target dev");
     }
     Q_CHECK_PTR(m_srcdev);
 
@@ -373,16 +360,11 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 //     copySelection.bitBlt(0, 0, COMPOSITE_OVER, dab, 0, 0, sw, sh);
 //     copySelection.end();
 
-    // copy the srcdev onto a new device, after applying the dab selection
-    copyPainter.begin(m_target);
-
-    copyPainter.bltMask(0, 0, m_srcdev->colorSpace()->compositeOp(COMPOSITE_OVER), m_srcdev, dab,
-                             OPACITY_OPAQUE, 0, 0, sw, sh);
-    copyPainter.end();
-
+    KisPaintDeviceSP dab = cachedDab( );
+    brush->mask(dab, m_srcdev, info, xFraction, yFraction);
+    
     QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
-
 
     if ( painter()->bounds().isValid() ) {
         dstRect &= painter()->bounds();
@@ -395,5 +377,5 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     sw = dstRect.width();
     sh = dstRect.height();
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_target, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
 }

@@ -36,6 +36,7 @@
 class QString;
 class QPoint;
 class QIODevice;
+class KoColor;
 
 class KoColorSpace;
 
@@ -82,8 +83,8 @@ public:
        @return a mask computed from the grey-level values of the
        pixels in the brush.
     */
-    virtual KisQImagemaskSP mask(const KisPaintInformation& info,
-                                 double subPixelX = 0, double subPixelY = 0) const;
+    virtual void mask(KisPaintDeviceSP dst, const KoColor& color, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
+    virtual void mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
     virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace, const KisPaintInformation& info,
                              double subPixelX = 0, double subPixelY = 0) const;

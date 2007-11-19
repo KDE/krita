@@ -28,8 +28,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "KoColorSpaceRegistry.h"
+#include <KoColor.h>
+#include <KoColorSpaceRegistry.h>
 
+#include "kis_datamanager.h"
 #include "kis_paint_device.h"
 #include "kis_global.h"
 #include "kis_brush.h"
@@ -376,12 +378,18 @@ QImage KisBrush::img() const
     return image;
 }
 
-KisQImagemaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX, double subPixelY) const
+//       d->color = d->painter->paintColor();
+//       d->previousPaintColor = d->painter->paintColor();
+//       d->color.convertTo(cs);
+//       d->color.fromKoColor( d->painter->paintColor());
+//       d->dab->dataManager()->setDefaultPixel( d->color.data() );
+
+void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_scaledBrushes.isEmpty()) {
         createScaledBrushes();
     }
-
+    
     double scale = scaleForPressure(info.pressure());
 
     const ScaledBrush *aboveBrush = 0;
@@ -411,8 +419,37 @@ KisQImagemaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX
             outputMask = scaleSinglePixelMask(s, aboveBrush->mask()->alphaAt(0, 0), subPixelX, subPixelY);
         }
     }
+    
+    // Generate the paint device from the mask
+    Q_ASSERT(color.colorSpace() == dst->colorSpace());
+    
+    const KoColorSpace* cs = dst->colorSpace();
+    dst->dataManager()->setDefaultPixel( color.data() );
+    
+    quint8 * maskData = outputMask->data();
+    qint32 maskWidth = outputMask->width();
+    qint32 maskHeight = outputMask->height();
 
-    return outputMask;
+    // Apply the alpha mask
+    KisHLineIteratorPixel hiter = dst->createHLineIterator(0, 0, maskWidth);
+    for (int y = 0; y < maskHeight; y++)
+    {
+        while(! hiter.isDone())
+        {
+            int hiterConseq = hiter.nConseqHPixels();
+            cs->setAlpha( hiter.rawData(), OPACITY_OPAQUE, hiterConseq );
+            cs->applyAlphaU8Mask( hiter.rawData(), maskData, hiterConseq);
+            hiter += hiterConseq;
+            maskData += hiterConseq;
+        }
+        hiter.nextRow();
+    }
+    
+}
+
+void KisBrush::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
+{
+  
 }
 
 KisPaintDeviceSP KisBrush::image(const KoColorSpace * /*colorSpace*/, const KisPaintInformation& info, double subPixelX, double subPixelY) const
@@ -1261,6 +1298,10 @@ void KisBrush::generateBoundary() {
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
         dev = image(KoColorSpaceRegistry::instance()->colorSpace("RGBA",0), KisPaintInformation());
     } else {
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+        dev = new KisPaintDevice(cs, "tmp for generateBoundary");
+        mask(dev, KoColor( cs ), KisPaintInformation() );
+#if 0
         KisQImagemaskSP amask = mask(KisPaintInformation());
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA",0);
         dev = new KisPaintDevice(cs, "tmp for generateBoundary");
@@ -1276,6 +1317,7 @@ void KisBrush::generateBoundary() {
             }
             it.nextRow();
         }
+#endif
     }
 
     m_boundary = new KisBoundary(dev.data());

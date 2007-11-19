@@ -65,6 +65,20 @@ KisPaintOp::~KisPaintOp()
     delete d;
 }
 
+KisPaintDeviceSP KisPaintOp::cachedDab(  )
+{
+  return cachedDab( d->painter->device()->colorSpace() );
+}
+
+KisPaintDeviceSP KisPaintOp::cachedDab( const KoColorSpace *cs )
+{
+  if( !d->dab or d->dab->colorSpace() != cs ) {
+      d->dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
+  }
+  return d->dab;
+}
+
+#if 0
 KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask) {
     return computeDab(mask, d->painter->device()->colorSpace());
 }
@@ -116,6 +130,8 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, const KoColorSpace
 
     return d->dab;
 }
+
+#endif
 
 void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fraction)
 {

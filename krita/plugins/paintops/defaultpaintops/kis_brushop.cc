@@ -255,14 +255,6 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
         delete transfo;
     }
 
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), adjustedInfo, xFraction, yFraction);
-    }
-    else {
-        KisQImagemaskSP mask = brush->mask(adjustedInfo, xFraction, yFraction);
-        dab = computeDab(mask);
-    }
-
     painter()->setPressure(adjustedInfo.pressure());
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(adjustedInfo),
@@ -280,6 +272,16 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     qint32 sy = dstRect.y() - y;
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
+
+    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
+        dab = brush->image(device->colorSpace(), adjustedInfo, xFraction, yFraction);
+    }
+    else {
+        dab = cachedDab( );
+        KoColor color = painter()->paintColor();
+        color.convertTo( dab->colorSpace() );
+        brush->mask(dab, color, info, xFraction, yFraction);
+    }
 
     painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
 

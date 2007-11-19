@@ -18,11 +18,11 @@
 
 #include <qtest_kde.h>
 
-#include "kis_integer_maths_tester.h"
+#include "TestKoIntegerMaths.h"
 #include "KoIntegerMaths.h"
 
 
-void KisIntegerMathsTester::UINT8Tests()
+void TestKoIntegerMaths::UINT8Tests()
 {
     QCOMPARE((int)UINT8_MULT(0, 255), 0);
     QCOMPARE((int)UINT8_MULT(255, 255), 255);
@@ -52,7 +52,7 @@ void KisIntegerMathsTester::UINT8Tests()
     QCOMPARE((int)UINT8_BLEND(128, 64, 255), 128);
 }
 
-void KisIntegerMathsTester::UINT16Tests()
+void TestKoIntegerMaths::UINT16Tests()
 {
     QCOMPARE((int)UINT16_MULT(0, 65535), 0);
     QCOMPARE((int)UINT16_MULT(65535, 65535), 65535);
@@ -79,7 +79,7 @@ void KisIntegerMathsTester::UINT16Tests()
     QCOMPARE((int)UINT16_BLEND(32768, 16384, 65535), 32767);
 }
 
-void KisIntegerMathsTester::conversionTests()
+void TestKoIntegerMaths::conversionTests()
 {
     QCOMPARE((int)UINT8_TO_UINT16(255), 65535);
     QCOMPARE((int)UINT8_TO_UINT16(0), 0);
@@ -90,7 +90,7 @@ void KisIntegerMathsTester::conversionTests()
     QCOMPARE((int)UINT16_TO_UINT8(128 * 257), 128);
 }
 
-QTEST_KDEMAIN(KisIntegerMathsTester, NoGUI)
-#include "kis_integer_maths_tester.moc"
+QTEST_KDEMAIN(TestKoIntegerMaths, NoGUI)
+#include "TestKoIntegerMaths.moc"
 
 

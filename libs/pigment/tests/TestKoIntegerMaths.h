@@ -21,7 +21,7 @@
 
 #include <QtTest/QtTest>
 
-class KisIntegerMathsTester : public QObject
+class TestKoIntegerMaths : public QObject
 {
     Q_OBJECT
 

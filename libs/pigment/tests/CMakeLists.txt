@@ -54,3 +54,9 @@ kde4_add_unit_test(TestColorConversionSystem TESTNAME libs-pigment-TestColorConv
 
 target_link_libraries(TestColorConversionSystem  ${KDE4_KDECORE_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestKoIntegerMaths_test_SRCS TestKoIntegerMaths.cpp )
+kde4_add_unit_test(TestKoIntegerMaths TESTNAME libs-pigment-TestKoIntegerMaths ${TestKoIntegerMaths_test_SRCS})
+target_link_libraries(TestKoIntegerMaths  ${KDE4_KDECORE_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
+

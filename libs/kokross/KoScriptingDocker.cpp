@@ -192,7 +192,7 @@ class KoScriptingActionDocker::Private
 {
     public:
         QWidget* widget;
-        KoScriptingModule* module;
+        QPointer<KoScriptingModule> module;
         Kross::Action* action;
 };
 
@@ -218,7 +218,7 @@ void KoScriptingActionDocker::slotVisibilityChanged(bool visible)
 {
     kDebug()<<"visible="<<visible;
     if( visible ) {
-        if( d->action->isFinalized() ) {
+        if( d->module && d->action->isFinalized() ) {
             //KoView* view = d->module->view();
             //KoMainWindow* mainwindow = view ? view->shell() : 0;
             d->action->trigger();

@@ -55,7 +55,7 @@ void ${CLASSNAME}Test::testCreation()
 }
 
 
-QTEST_KDEMAIN(${CLASSNAME}Test, GUI)
+QTEST_KDEMAIN(${CLASSNAME}Test, GUI);
 #include "${HEADER}_test.moc"
 """)
 

@@ -1,4 +1,4 @@
-#add_subdirectory( tests )
+add_subdirectory( tests )
 
 include_directories( ${KOSTORE_INCLUDES} )
 
@@ -15,8 +15,12 @@ set(koodf_LIB_SRCS
     KoUnit.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
+    KoOasisLoadingContext.cpp
+    KoOasisSettings.cpp
     KoOasisStyles.cpp
     KoOdfNumberStyles.cpp
+    KoOdfPaste.cpp
+    KoOdfReadStore.cpp
     KoOdfWriteStore.cpp
     KoStyleStack.cpp
 )
@@ -36,8 +40,13 @@ install( FILES
     KoUnit.h
     KoGenStyle.h
     KoGenStyles.h
+    KoOasisLoadingContext.h
+    KoOasisSettings.h
+    KoOasisStyles.cpp
     KoOasisStyles.h
     KoOdfNumberStyles.h
+    KoOdfPaste.h
+    KoOdfReadStore.h
     KoOdfWriteStore.h
     KoStyleStack.h
 DESTINATION ${INCLUDE_INSTALL_DIR})

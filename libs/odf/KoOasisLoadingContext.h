@@ -24,7 +24,7 @@ class KoOasisStyles;
 class KoStore;
 
 #include <QMap>
-#include <komain_export.h>
+#include <koodf_export.h>
 #include <QStringList>
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>
@@ -34,7 +34,7 @@ class KoStore;
  *
  * @author David Faure <faure@kde.org>
  */
-class KOMAIN_EXPORT KoOasisLoadingContext
+class KOODF_EXPORT KoOasisLoadingContext
 {
 public:
     /**

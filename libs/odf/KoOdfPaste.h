@@ -22,7 +22,7 @@
 
 #include <KoOdf.h>
 
-#include <komain_export.h>
+#include <koodf_export.h>
 
 class QString;
 class QMimeData;
@@ -30,7 +30,7 @@ class KoXmlElement;
 class KoOdfReadStore;
 
 //TODO export
-class KOMAIN_EXPORT KoOdfPaste
+class KOODF_EXPORT KoOdfPaste
 {
 public:
     KoOdfPaste();

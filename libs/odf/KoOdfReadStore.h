@@ -33,9 +33,9 @@ class KoXmlDocument;
  *
  * @author: David Faure <faure@kde.org>
  */
-#include <komain_export.h>
+#include <koodf_export.h>
 
-class KOMAIN_EXPORT KoOdfReadStore
+class KOODF_EXPORT KoOdfReadStore
 {
 public:
     /// @param store recontents the property of the caller

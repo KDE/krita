@@ -43,18 +43,14 @@ set(komain_LIB_SRCS
    KoChild.cpp
    kofficeversion.cc
    KoOdfGraphicStyles.cpp
-   KoOasisSettings.cpp
    KoPageFormat.cpp
    KoPageLayout.cpp
    KoFileDialog.cpp
    KoVersionDialog.cpp
-   KoOdfPaste.cpp
-   KoOdfReadStore.cpp
    kkbdaccessextensions.cpp
    KoOpenPane.cpp
    KoTemplates.cpp
    KoDetailsPane.cpp
-   KoOasisLoadingContext.cpp
    KoDocumentInfoPropsPage.cpp
    KoTemplatesPane.cpp
    KoRecentDocumentsPane.cpp
@@ -138,14 +134,11 @@ install( FILES
     KoPictureCollection.h 
     kofficeversion.h 
     KoOdfGraphicStyles.h 
-    KoOasisSettings.h 
     KoPageFormat.h 
     KoPageLayout.h 
     KoVersionDialog.h 
     kkbdaccessextensions.h 
     KoOpenPane.h 
-    KoOasisLoadingContext.h 
-    KoOdfPaste.h
     KoRTree.h
     threadAction/KoJobsListPolicy.h
     threadAction/KoExecutePolicy.h

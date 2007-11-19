@@ -28,6 +28,5 @@ void KisAutobrushResourceTest::testCreation()
     KisAutobrushResource test();
 }
 
-
-QTEST_KDEMAIN(KisAutobrushResourceTest, GUI)
+QTEST_KDEMAIN(KisAutobrushResourceTest, GUI);
 #include "kis_autobrush_resource_test.moc"

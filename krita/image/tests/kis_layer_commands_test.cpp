@@ -28,5 +28,5 @@ void KisLayerCommandsTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisLayerCommandsTest, GUI)
+QTEST_KDEMAIN(KisLayerCommandsTest, GUI);
 #include "kis_layer_commands_test.moc"

@@ -29,5 +29,5 @@ void KisMacroTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisMacroTest, GUI)
+QTEST_KDEMAIN(KisMacroTest, GUI);
 #include "kis_macro_test.moc"

@@ -29,5 +29,5 @@ void KisSharedTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisSharedTest, GUI)
+QTEST_KDEMAIN(KisSharedTest, GUI);
 #include "kis_shared_test.moc"

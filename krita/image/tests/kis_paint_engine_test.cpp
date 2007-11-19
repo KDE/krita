@@ -29,5 +29,5 @@ void KisPaintEngineTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisPaintEngineTest, GUI)
+QTEST_KDEMAIN(KisPaintEngineTest, GUI);
 #include "kis_paint_engine_test.moc"

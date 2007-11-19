@@ -29,5 +29,5 @@ void KisPaintopSettingsTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisPaintopSettingsTest, GUI)
+QTEST_KDEMAIN(KisPaintopSettingsTest, GUI);
 #include "kis_paintop_settings_test.moc"

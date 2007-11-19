@@ -29,5 +29,5 @@ void KisPerspectiveMathTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisPerspectiveMathTest, GUI)
+QTEST_KDEMAIN(KisPerspectiveMathTest, GUI);
 #include "kis_perspective_math_test.moc"

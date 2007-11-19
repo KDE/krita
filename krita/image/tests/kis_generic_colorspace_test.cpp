@@ -29,5 +29,5 @@ void KisGenericColorSpaceTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisGenericColorSpaceTest, GUI)
+QTEST_KDEMAIN(KisGenericColorSpaceTest, GUI);
 #include "kis_generic_colorspace_test.moc"

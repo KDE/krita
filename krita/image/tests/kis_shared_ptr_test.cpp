@@ -29,5 +29,5 @@ void KisSharedPtrTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisSharedPtrTest, GUI)
+QTEST_KDEMAIN(KisSharedPtrTest, GUI);
 #include "kis_shared_ptr_test.moc"

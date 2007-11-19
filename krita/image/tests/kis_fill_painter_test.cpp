@@ -29,5 +29,5 @@ void KisFillPainterTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisFillPainterTest, GUI)
+QTEST_KDEMAIN(KisFillPainterTest, GUI);
 #include "kis_fill_painter_test.moc"

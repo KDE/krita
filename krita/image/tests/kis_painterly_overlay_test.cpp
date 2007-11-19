@@ -121,5 +121,5 @@ void KisPainterlyOverlayTest::testPainterlyOverlay()
 
 }
 
-QTEST_KDEMAIN(KisPainterlyOverlayTest, NoGUI)
+QTEST_KDEMAIN(KisPainterlyOverlayTest, NoGUI);
 #include "kis_painterly_overlay_test.moc"

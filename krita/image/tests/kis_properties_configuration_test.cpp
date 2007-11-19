@@ -77,6 +77,6 @@ void KisPropertiesConfigurationTest::testConfig(KisPropertiesConfiguration* conf
     QVERIFY( config->getBool("v4", not v4) == v4);
 }
 
-QTEST_KDEMAIN(KisPropertiesConfigurationTest, NoGUI)
+QTEST_KDEMAIN(KisPropertiesConfigurationTest, NoGUI);
 
 #include "kis_properties_configuration_test.moc"

@@ -36,7 +36,7 @@ void KisEffectMaskTest::testCaching()
 }
 
 
-QTEST_KDEMAIN(KisEffectMaskTest, NoGUI)
+QTEST_KDEMAIN(KisEffectMaskTest, NoGUI);
 #include "kis_effect_mask_test.moc"
 
 

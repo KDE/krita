@@ -29,5 +29,5 @@ void KisCropVisitorTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisCropVisitorTest, GUI)
+QTEST_KDEMAIN(KisCropVisitorTest, GUI);
 #include "kis_crop_visitor_test.moc"

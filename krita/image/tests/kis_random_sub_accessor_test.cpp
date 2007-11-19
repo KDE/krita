@@ -29,5 +29,5 @@ void KisRandomSubAccessorTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisRandomSubAccessorTest, GUI)
+QTEST_KDEMAIN(KisRandomSubAccessorTest, GUI);
 #include "kis_random_sub_accessor_test.moc"

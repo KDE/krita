@@ -29,5 +29,5 @@ void KisExtentVisitorTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisExtentVisitorTest, GUI)
+QTEST_KDEMAIN(KisExtentVisitorTest, GUI);
 #include "kis_extent_visitor_test.moc"

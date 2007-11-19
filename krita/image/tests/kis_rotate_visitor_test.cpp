@@ -32,5 +32,5 @@ void KisRotateVisitorTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisRotateVisitorTest, GUI)
+QTEST_KDEMAIN(KisRotateVisitorTest, GUI);
 #include "kis_rotate_visitor_test.moc"

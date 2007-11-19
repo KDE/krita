@@ -227,6 +227,6 @@ void KisLayerTest::testHasEffectMasks()
 }
 
 
-QTEST_KDEMAIN(KisLayerTest, NoGUI)
+QTEST_KDEMAIN(KisLayerTest, NoGUI);
 #include "kis_layer_test.moc"
 

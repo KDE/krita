@@ -21,13 +21,32 @@
 
 #include "kis_paintop_registry_test.h"
 
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+
 #include "kis_paintop_registry.h"
+#include "kis_paint_layer.h"
+#include "kis_image.h"
+#include "kis_painter.h"
 
 void KisPaintopRegistryTest::testCreation()
 {
-    KisPaintOpRegistry test();
+    KisPaintOpRegistry * reg = KisPaintOpRegistry::instance();
+    QVERIFY( reg->count() > 0 );
 }
 
+void KisPaintopRegistryTest::testDefaultPaintops()
+{
+    KisPaintOpRegistry * reg = KisPaintOpRegistry::instance();
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "paintop registry test");
+    KisPaintLayerSP l = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
+    image->addNode( l.data() );
 
-QTEST_KDEMAIN(KisPaintopRegistryTest, GUI)
+    KisPainter p( l->paintDevice() );
+    
+    KisPaintOp * op = reg->paintOp("paintbrush", 0, &p, image);
+}
+
+QTEST_KDEMAIN(KisPaintopRegistryTest, GUI);
 #include "kis_paintop_registry_test.moc"

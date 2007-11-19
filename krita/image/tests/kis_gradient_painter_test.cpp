@@ -29,5 +29,5 @@ void KisGradientPainterTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisGradientPainterTest, GUI)
+QTEST_KDEMAIN(KisGradientPainterTest, GUI);
 #include "kis_gradient_painter_test.moc"

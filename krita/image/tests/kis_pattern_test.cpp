@@ -29,5 +29,5 @@ void KisPatternTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisPatternTest, GUI)
+QTEST_KDEMAIN(KisPatternTest, GUI);
 #include "kis_pattern_test.moc"

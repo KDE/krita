@@ -30,5 +30,5 @@ void KisVecTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisVecTest, GUI)
+QTEST_KDEMAIN(KisVecTest, GUI);
 #include "kis_vec_test.moc"

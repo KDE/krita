@@ -28,5 +28,5 @@ void KisSerializableConfigurationTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisSerializableConfigurationTest, GUI)
+QTEST_KDEMAIN(KisSerializableConfigurationTest, GUI);
 #include "kis_serializable_configuration_test.moc"

@@ -48,5 +48,5 @@ void KisPaintDeviceActionTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisPaintDeviceActionTest, GUI)
+QTEST_KDEMAIN(KisPaintDeviceActionTest, GUI);
 #include "kis_paint_device_action_test.moc"

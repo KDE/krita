@@ -29,5 +29,5 @@ void KisShearVisitorTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisShearVisitorTest, GUI)
+QTEST_KDEMAIN(KisShearVisitorTest, GUI);
 #include "kis_shear_visitor_test.moc"

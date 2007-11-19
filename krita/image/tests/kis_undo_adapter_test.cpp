@@ -29,5 +29,5 @@ void KisUndoAdapterTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisUndoAdapterTest, GUI)
+QTEST_KDEMAIN(KisUndoAdapterTest, GUI);
 #include "kis_undo_adapter_test.moc"

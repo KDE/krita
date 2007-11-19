@@ -28,5 +28,5 @@ void KisNodeGraphListenerTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisNodeGraphListenerTest, GUI)
+QTEST_KDEMAIN(KisNodeGraphListenerTest, GUI);
 #include "kis_node_graph_listener_test.moc"

@@ -29,5 +29,5 @@ void KisRecordedActionFactoryRegistryTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisRecordedActionFactoryRegistryTest, GUI)
+QTEST_KDEMAIN(KisRecordedActionFactoryRegistryTest, GUI);
 #include "kis_recorded_action_factory_registry_test.moc"

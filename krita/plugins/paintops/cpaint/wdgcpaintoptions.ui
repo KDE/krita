@@ -114,46 +114,6 @@
          <iconset>brush6.png</iconset>
         </property>
        </item>
-       <item>
-        <property name="text" >
-         <string/>
-        </property>
-        <property name="icon" >
-         <iconset>images/brush2.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string/>
-        </property>
-        <property name="icon" >
-         <iconset>images/brush3.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string/>
-        </property>
-        <property name="icon" >
-         <iconset>images/brush4.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string/>
-        </property>
-        <property name="icon" >
-         <iconset>images/brush5.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string/>
-        </property>
-        <property name="icon" >
-         <iconset>images/brush6.png</iconset>
-        </property>
-       </item>
       </widget>
      </item>
      <item>

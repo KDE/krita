@@ -286,7 +286,7 @@ void KisToolTransform::setFunctionalCursor()
     int rotOctant = 8 + int(8.5 + m_a* 4 / M_PI);
 
     int s;
-    if(m_scaleX*m_scaleY<0)
+    if ( (m_scaleX * m_scaleY) < 0 )
         s = -1;
     else
         s=1;

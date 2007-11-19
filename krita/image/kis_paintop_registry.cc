@@ -87,7 +87,7 @@ KisPaintOpSettings * KisPaintOpRegistry::settings(const KoID& id, QWidget * pare
     return 0;
 }
 
-bool KisPaintOpRegistry::userVisible(const KoID & id, KoColorSpace* cs) const
+bool KisPaintOpRegistry::userVisible(const KoID & id, const KoColorSpace* cs) const
 {
 
     KisPaintOpFactorySP f = value(id.id());

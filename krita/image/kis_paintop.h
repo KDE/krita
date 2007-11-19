@@ -151,7 +151,7 @@ public:
      * in various tools. If false, it won't show up in the toolchest.
      * The KoColorSpace argument can be used when certain paintops only support a specific cs
      */
-    virtual bool userVisible(KoColorSpace * cs = 0);
+    virtual bool userVisible(const KoColorSpace * cs = 0);
 
     /**
      * Create and return an (abstracted) widget with options for this paintop when used with the

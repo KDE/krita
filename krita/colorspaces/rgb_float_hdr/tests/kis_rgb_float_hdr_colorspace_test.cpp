@@ -307,4 +307,3 @@ void KisRgbFloatHDRColorSpaceTest::testF16Channels()
 
 QTEST_KDEMAIN(KisRgbFloatHDRColorSpaceTest, NoGUI)
 #include "kis_rgb_float_hdr_colorspace_test.moc"
-

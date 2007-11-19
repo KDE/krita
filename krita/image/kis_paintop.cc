@@ -294,7 +294,7 @@ KisPaintDeviceSP KisPaintOp::source()
 }
 
 
-bool KisPaintOpFactory::userVisible(KoColorSpace * cs )
+bool KisPaintOpFactory::userVisible(const KoColorSpace * cs )
 {
     return cs && cs->id() != "WET";
 }

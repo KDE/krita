@@ -56,7 +56,7 @@ public:
     KisPaintOpSettings * settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image) const;
 
     // Whether we should show this paintop in the toolchest
-    bool userVisible(const KoID & id, KoColorSpace* cs) const;
+    bool userVisible(const KoID & id, const KoColorSpace* cs) const;
 
     // Get the name of the icon to show in the toolchest
     QString pixmap(const KoID & id) const;

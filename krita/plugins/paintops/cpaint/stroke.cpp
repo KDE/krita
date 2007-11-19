@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <math.h>
 
 #include <QPainter>
 #include <QRect>
@@ -24,6 +25,7 @@
 #include <KoColor.h>
 
 #include <kis_vec.h>
+#include <kis_random_accessor.h>
 #include <kis_paint_device.h>
 
 #include "brush.h"
@@ -94,6 +96,59 @@ void Stroke::drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, do
         dev->setPixel(p.x(), p.y(), color);
         dist -= 1;
     }
+}
+
+void Stroke::drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color )
+{
+    // From Wikipedia...
+    
+    if (!dev) return;
+    
+    if (x2 < x1) {
+        double tmp = x2;
+        x2 = x1;
+        x1 = tmp;
+        tmp = y2;
+        y2 = y1;
+        y1 = tmp;
+    }
+
+    double dx = x2 - x1;
+    double dy = y2 - y1;
+    double gradient = dy / dx;
+
+    double xend = round(x1);
+    double yend = y1 + gradient * (xend - x1);
+    double tmp;
+    double xgap = 1 - modf(x1 + 0.5, &tmp);
+    
+    double xpxl1 = xend;  // this will be used in the main loop
+    
+    double ypxl1 = static_cast<int>(yend); // Remove the fractional part the fast way
+
+    dev->setPixel(xpxl1, ypxl1, Qt::black, (1 - modf(yend, &tmp)) * xgap);
+    dev->setPixel(xpxl1, ypxl1 + 1, Qt::black, modf(yend, &tmp) * xgap);
+
+    double intery = yend + gradient; // first y-intersection for the main loop
+
+    // handle second endpoint
+    xend = round(x2);
+    yend = y2 + gradient * (xend - x2);
+    xgap = modf(x2 + 0.5, &tmp);
+
+    double xpxl2 = xend;  // this will be used in the main loop
+    double ypxl2 = static_cast<int>(yend);
+    
+    dev->setPixel(xpxl2, ypxl2, Qt::black, (1 - modf(yend, &tmp)) * xgap);
+    dev->setPixel(xpxl2, ypxl2 + 1, Qt::black, modf(yend, &tmp) * xgap);
+
+    // main loop
+    for (int x = xpxl1 + 1; x < xpxl2; ++x) {
+        dev->setPixel(x, static_cast<int>(intery), Qt::black, (1 - modf(intery, &tmp)));
+        dev->setPixel(x, static_cast<int>(intery) + 1, Qt::black, modf(intery, &tmp));
+        intery = intery + gradient;
+    }
+    
 }
 
 // draw the stroke by drawing the old paths, then the new segment

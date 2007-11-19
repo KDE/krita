@@ -50,6 +50,7 @@ public:
 private:
 
     void drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color );
+    void drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color );
     
     // test whether a bristle is touching the paper or not
     // by testing the pressure threshold and test if there is any ink

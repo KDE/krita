@@ -71,7 +71,7 @@ private slots:
 private slots:
 
     void slotItemSelected(int index);
-    void colorSpaceChanged(KoColorSpace *cs);
+    void colorSpaceChanged(const KoColorSpace *cs);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCurrentLayerChanged(KisLayerSP layer);
     

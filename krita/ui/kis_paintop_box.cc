@@ -37,6 +37,7 @@
 #include <kstandarddirs.h>
 
 #include <KoToolManager.h>
+#include <KoColorSpace.h>
 
 #include <kis_paintop_registry.h>
 #include <kis_resource_provider.h>
@@ -63,7 +64,7 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
     m_cmbPaintops = new QComboBox(this);
     m_cmbPaintops->setObjectName("KisPaintopBox::m_cmbPaintops");
     m_cmbPaintops->setMinimumWidth(150);
-    m_cmbPaintops->setToolTip("Styles of painting for the painting tools");
+    m_cmbPaintops->setToolTip(i18n("Artist's materials"));
 
     m_layout = new QHBoxLayout(this);
     m_layout->setMargin(1);
@@ -76,12 +77,13 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
     // XXX: Let's see... Are all paintops loaded and ready?
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
     for ( QList<KoID>::Iterator it = keys.begin(); it != keys.end(); ++it ) {
+        kDebug() << it->name();
         // add all paintops, and show/hide them afterwards
         addItem(*it);
     }
 
-    connect(view->layerManager(), SIGNAL(currentColorSpaceChanged(KoColorSpace*)),
-            this, SLOT(colorSpaceChanged(KoColorSpace*)));
+    connect(view->layerManager(), SIGNAL(currentColorSpaceChanged(const KoColorSpace*)),
+            this, SLOT(colorSpaceChanged(const KoColorSpace*)));
     connect(view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)),  SLOT(slotCurrentLayerChanged(KisLayerSP)));
 
     connect(KoToolManager::instance(),
@@ -113,14 +115,17 @@ void KisPaintopBox::slotItemSelected(int index)
     }
 }
 
-void KisPaintopBox::colorSpaceChanged(KoColorSpace *cs)
+void KisPaintopBox::colorSpaceChanged(const KoColorSpace *cs)
 {
+    kDebug() << "colorSpaceChanged"  << cs;
+    
     m_displayedOps.clear();
     m_cmbPaintops->clear();
 
     foreach (KoID paintopId, m_paintops) {
+        kDebug() << paintopId;
         if (KisPaintOpRegistry::instance()->userVisible(paintopId, cs)) {
-
+            kDebug() << " visible: ";
             QPixmap pm = paintopPixmap(paintopId);
 
             if (pm.isNull()) {
@@ -160,8 +165,6 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
 
 void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
 {
-
-
     KoID paintop;
     InputDevicePaintopMap::iterator it = m_currentID.find(inputDevice);
 
@@ -226,6 +229,7 @@ const KoID& KisPaintopBox::currentPaintop()
 
 void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 {
+    kDebug() << paintop.name();
     m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
 
     updateOptionWidget();

@@ -25,12 +25,15 @@ class QDomDocument;
 
 class KRITAIMAGE_EXPORT KisSerializableConfiguration {
     public:
+
         virtual ~KisSerializableConfiguration() {};
+
         /**
         * Fill the object from the XML encoded representation in s.
         * This function use the "OpenRaster" style XML.
         */
         virtual void fromXML(const QString&);
+
         /**
         * Fill the object from the XML encoded representation in s.
         * This function use the "OpenRaster" style XML.
@@ -42,6 +45,7 @@ class KRITAIMAGE_EXPORT KisSerializableConfiguration {
         * This function use the "OpenRaster" style XML.
         */
         virtual void toXML(QDomDocument&, QDomElement&) const = 0;
+
         /**
         * Create a serialized version of this object
         * This function use the "OpenRaster" style XML.

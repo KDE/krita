@@ -20,7 +20,7 @@
 #define KIS_ITERATORS_PIXEL_H_
 
 #include "kis_iterator.h"
-#include "kis_iteratorpixeltrait.h"
+#include "kis_iterator_pixel_trait.h"
 
 template<class T, typename TSelect>
 

@@ -38,7 +38,7 @@ public:
      * @param layer The layer the command will be working on.
      */
     KisLayerCommand(const QString& name, KisLayerSP layer);
-    virtual ~KisLayerCommand() {}
+    virtual ~KisLayerCommand();
 
 protected:
     KisLayerSP m_layer;

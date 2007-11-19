@@ -21,6 +21,7 @@
 #define KIS_TRANSFORM_WORKER_H_
 
 #include "kis_types.h"
+#include "krita_export.h"
 
 class KisPaintDevice;
 class KoUpdater;
@@ -65,10 +66,5 @@ private:
 
     bool m_fixBorderAlpha;
 };
-
-
-inline KisTransformWorker::~KisTransformWorker()
-{
-}
 
 #endif // KIS_TRANSFORM_VISITOR_H_

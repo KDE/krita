@@ -35,8 +35,8 @@ class KRITAIMAGE_EXPORT KisRecordedAction {
         virtual KisRecordedAction* clone() const = 0;
         virtual void toXML(QDomDocument& doc, QDomElement& elt);
     public:
-        QString id();
-        QString name();
+        QString id() const;
+        QString name() const;
     protected:
         static QString layerToIndexPath(KisLayerSP);
     private:
@@ -49,8 +49,8 @@ class KRITAIMAGE_EXPORT KisRecordedActionFactory {
         KisRecordedActionFactory(QString id);
         virtual ~KisRecordedActionFactory();
         virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt) =0;
-        QString id();
-        QString name();
+        QString id() const;
+        QString name() const;
     protected:
         static KisLayerSP indexPathToLayer(KisImageSP img, QString);
     private:

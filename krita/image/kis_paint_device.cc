@@ -46,7 +46,7 @@
 #include "kis_filter.h"
 #include "kis_iterator.h"
 #include "kis_iterators_pixel.h"
-#include "kis_iteratorpixeltrait.h"
+#include "kis_iterator_pixel_trait.h"
 #include "kis_random_accessor.h"
 #include "kis_random_sub_accessor.h"
 #include "kis_selection.h"

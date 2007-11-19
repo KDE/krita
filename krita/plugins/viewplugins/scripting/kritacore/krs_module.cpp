@@ -221,7 +221,7 @@ QObject* Module::createImage(int width, int height, const QString& colorspace, c
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorspace, 0);
     if(!cs)
     {
-        kWarning(41011) << i18n("Colorspace %1 is not available, please check your installation.", colorspace );
+        kWarning(41011) << i18n("ColorSpace %1 is not available, please check your installation.", colorspace );
         return 0;
     }
     return new Image(this, KisImageSP(new KisImage(0, width, height, cs, name)));

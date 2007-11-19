@@ -32,7 +32,7 @@
 #include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_node_model.h"
-#include "kis_nameserver.h"
+#include "kis_name_server.h"
 #include "kis_paint_layer.h"
 #include "kis_clone_layer.h"
 #include "kis_group_layer.h"

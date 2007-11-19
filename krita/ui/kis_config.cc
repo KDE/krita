@@ -555,14 +555,14 @@ void KisConfig::setUseQtSmoothScaling( bool useQtSmootScaling )
     m_cfg.writeEntry( "qt_smooth_scaling", useQtSmootScaling );
 }
 
-bool KisConfig::threadColorspaceConversion()
+bool KisConfig::threadColorSpaceConversion()
 {
     return m_cfg.readEntry( "thread_colorspace_conversion", false );
 }
 
-void KisConfig::setThreadColorspaceConversion( bool threadColorspaceConversion )
+void KisConfig::setThreadColorSpaceConversion( bool threadColorSpaceConversion )
 {
-    m_cfg.writeEntry( "thread_colorspace_conversion", threadColorspaceConversion );
+    m_cfg.writeEntry( "thread_colorspace_conversion", threadColorSpaceConversion );
 }
 
 bool KisConfig::cacheKisImageAsQImage()

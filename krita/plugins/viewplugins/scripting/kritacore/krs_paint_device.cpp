@@ -50,12 +50,12 @@ PaintDevice::~PaintDevice()
 {
 }
 
-bool PaintDevice::convertToColorspace(const QString& colorspacename)
+bool PaintDevice::convertToColorSpace(const QString& colorspacename)
 {
     const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
     if(!dstCS)
     {
-        kWarning(41011) << QString("Colorspace %1 is not available, please check your installation.").arg(colorspacename) << endl;
+        kWarning(41011) << QString("ColorSpace %1 is not available, please check your installation.").arg(colorspacename) << endl;
         return false;
     }
     paintDevice()->convertTo(dstCS);

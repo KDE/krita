@@ -111,10 +111,10 @@ namespace {
 #endif
 
 
-class KoColorSpaceConvertVisitor :public KisNodeVisitor {
+class KisColorSpaceConvertVisitor :public KisNodeVisitor {
 public:
-    KoColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent);
-    virtual ~KoColorSpaceConvertVisitor();
+    KisColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent);
+    virtual ~KisColorSpaceConvertVisitor();
 
 public:
 
@@ -133,18 +133,18 @@ private:
     QBitArray m_emptyChannelFlags;
 };
 
-KoColorSpaceConvertVisitor::KoColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) :
+KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) :
     KisNodeVisitor(),
     m_dstColorSpace(dstColorSpace),
     m_renderingIntent(renderingIntent)
 {
 }
 
-KoColorSpaceConvertVisitor::~KoColorSpaceConvertVisitor()
+KisColorSpaceConvertVisitor::~KisColorSpaceConvertVisitor()
 {
 }
 
-bool KoColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
+bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
 {
     // Clear the projection, we will have to re-render everything.
     // The image is already set to the new colorspace, so this'll work.
@@ -160,7 +160,7 @@ bool KoColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
     return true;
 }
 
-bool KoColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
+bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
 {
     layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
     layer->setChannelFlags( m_emptyChannelFlags );
@@ -170,7 +170,7 @@ bool KoColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
 }
 
 
-bool KoColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
+bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
 {
     if (layer->filter()->name() == "perchannel") {
         // Per-channel filters need to be reset because of different number

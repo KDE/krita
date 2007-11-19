@@ -69,12 +69,12 @@ class Image : public QObject
          * For example (in Ruby) :
          * @code
          * # set the colorspace to "CMYK"
-         * image.convertToColorspace("CMYK")
+         * image.convertToColorSpace("CMYK")
          * # following line will print "CMYK" now.
          * image.colorSpaceId()
          * @endcode
          */
-        bool convertToColorspace(const QString& colorspacename);
+        bool convertToColorSpace(const QString& colorspacename);
 
         /**
          * Resize the image.

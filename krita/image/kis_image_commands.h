@@ -28,6 +28,8 @@
 #include "kis_types.h"
 
 class KoCompositeOp;
+class KoColorSpace;
+class KoColorProfile;
 
 /// the base command for commands altering a KisImage
 class KisImageCommand : public QUndoCommand {
@@ -40,7 +42,7 @@ public:
      * @param image The image the command will be working on.
      */
     KisImageCommand(const QString& name, KisImageSP image);
-    virtual ~KisImageCommand() {}
+    virtual ~KisImageCommand();
 
 protected:
     /**
@@ -69,7 +71,6 @@ public:
      * @param lockImage Locking state of the image, while redo.
      */
     KisImageLockCommand(KisImageSP image, bool lockImage);
-    virtual ~KisImageLockCommand() {}
 
     virtual void redo();
     virtual void undo();
@@ -83,7 +84,6 @@ class KisImageResizeCommand : public KisImageCommand {
 
 public:
     KisImageResizeCommand(KisImageSP image, qint32 width, qint32 height, qint32 oldWidth, qint32 oldHeight);
-    virtual ~KisImageResizeCommand() {}
 
     virtual void redo();
     virtual void undo();
@@ -98,7 +98,6 @@ class KisImageConvertTypeCommand : public KisImageCommand {
 
 public:
     KisImageConvertTypeCommand(KisImageSP image, const KoColorSpace * beforeColorSpace, const KoColorSpace * afterColorSpace);
-    virtual ~KisImageConvertTypeCommand() {}
 
     virtual void redo();
     virtual void undo();
@@ -124,7 +123,6 @@ public:
      * @param newResolution the new image resolution which will be used for xRes and yRes
      */
     KisImagePropsCommand(KisImageSP image, const KoColorSpace* newColorSpace, const KoColorProfile* newProfile);
-    virtual ~KisImagePropsCommand() {}
 
     virtual void redo();
     virtual void undo();
@@ -141,7 +139,6 @@ class KisImageChangeLayersCommand : public KisImageCommand {
 
 public:
     KisImageChangeLayersCommand(KisImageSP image, KisNodeSP oldRootLayer, KisNodeSP newRootLayer, const QString& name);
-    virtual ~KisImageChangeLayersCommand() {}
 
     virtual void redo();
     virtual void undo();
@@ -161,7 +158,6 @@ public:
      * @param layer the layer to add
      */
     KisImageLayerAddCommand(KisImageSP image, KisNodeSP layer);
-    virtual ~KisImageLayerAddCommand() {}
 
     virtual void redo();
     virtual void undo();
@@ -186,7 +182,6 @@ public:
      * @param wasAbove the layer above the layer
      */
     KisImageLayerRemoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP wasParent, KisNodeSP wasAbove);
-    virtual ~KisImageLayerRemoveCommand() {}
 
     virtual void redo();
     virtual void undo();
@@ -211,7 +206,6 @@ public:
      * @param wasAbove the layer that was above the layer before the move
      */
     KisImageLayerMoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP wasParent, KisNodeSP wasAbove);
-    virtual ~KisImageLayerMoveCommand() {}
 
     virtual void redo();
     virtual void undo();
@@ -241,8 +235,7 @@ public:
      * @param name the new layer name
      */
     KisImageLayerPropsCommand(KisImageSP image, KisLayerSP layer, qint32 opacity, const KoCompositeOp* compositeOp, const QString& name, QBitArray channelFlags);
-    virtual ~KisImageLayerPropsCommand() {}
-
+    virtual ~KisImageLayerPropsCommand();
     virtual void redo();
     virtual void undo();
 

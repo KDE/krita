@@ -165,9 +165,9 @@ bool KisLoadVisitor::visit(KisAdjustmentLayer* layer)
         }
     }
 
+    layer->setDirty( m_img->bounds() );
     return true;
 
-    layer->setDirty( m_img->bounds() );
 
 }
 

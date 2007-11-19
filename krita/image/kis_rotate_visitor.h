@@ -18,7 +18,7 @@
 #ifndef KIS_ROTATE_VISITOR_H_
 #define KIS_ROTATE_VISITOR_H_
 
-
+#include "krita_export.h"
 #include "kis_types.h"
 
 class KisPaintDevice;
@@ -73,17 +73,4 @@ private:
 
 };
 
-inline KisRotateVisitor::KisRotateVisitor( KoUpdater * progressUpdater )
-    : m_progressUpdater(progressUpdater)
-{
-}
-
-inline KisRotateVisitor::~KisRotateVisitor()
-{
-}
-
-inline void KisRotateVisitor::visitKisPaintDevice(KisPaintDevice* dev)
-{
-    m_dev = dev;
-}
 #endif // KIS_ROTATE_VISITOR_H_

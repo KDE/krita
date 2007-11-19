@@ -20,7 +20,6 @@
 #define _KIS_SHARED_DATA_H_
 
 #include <qatomic.h>
-#include <kis_shared_ptr.h>
 
 /**
  * XXX: Add documentation!

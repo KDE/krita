@@ -24,7 +24,7 @@
 #include <kdebug.h>
 
 
-void KisPainterlyOverlayTester::testConstructor()
+void KisPainterlyOverlayTest::testConstructor()
 {
     KisPainterlyOverlay * overlay = new KisPainterlyOverlay();
     Q_ASSERT( overlay );
@@ -35,14 +35,14 @@ void KisPainterlyOverlayTester::testConstructor()
 
 }
 
-void KisPainterlyOverlayTester::testPainterlyOverlayColorSpace()
+void KisPainterlyOverlayTest::testPainterlyOverlayColorSpace()
 {
     const KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
     Q_ASSERT( cs );
     QCOMPARE( cs->pixelSize(), uint(8 * sizeof( float )) );
 }
 
-void KisPainterlyOverlayTester::testPainterlyOverlayColorSpaceCell()
+void KisPainterlyOverlayTest::testPainterlyOverlayColorSpaceCell()
 {
     const KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
     Q_ASSERT( cs );
@@ -67,7 +67,7 @@ void KisPainterlyOverlayTester::testPainterlyOverlayColorSpaceCell()
     delete cell;
 }
 
-void KisPainterlyOverlayTester::testPainterlyOverlay()
+void KisPainterlyOverlayTest::testPainterlyOverlay()
 {
     KisPainterlyOverlaySP overlay = new KisPainterlyOverlay();
     Q_ASSERT( overlay );
@@ -121,5 +121,5 @@ void KisPainterlyOverlayTester::testPainterlyOverlay()
 
 }
 
-QTEST_KDEMAIN(KisPainterlyOverlayTester, NoGUI)
+QTEST_KDEMAIN(KisPainterlyOverlayTest, NoGUI)
 #include "kis_painterly_overlay_test.moc"

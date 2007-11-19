@@ -621,7 +621,7 @@ QString PerfTest::selectionTest(quint32 testCount)
 
 QString PerfTest::colorConversionTest(quint32 testCount)
 {
-    QString report = QString("* Colorspace conversion test\n");
+    QString report = QString("* ColorSpace conversion test\n");
 
     KisDoc2 * doc = m_view->canvasSubject()->document();
     QList<KoID> l = KoColorSpaceRegistry::instance()->listKeys();

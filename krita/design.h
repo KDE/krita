@@ -7,7 +7,7 @@
   Krita is built around two core libraries: pigment and kritaimage.
 
   The pigment library abstracts colorspaces and color
-  transformations. Colorspaces provide functions to manipulate pixels. The
+  transformations. ColorSpaces provide functions to manipulate pixels. The
   kritcolor library loads colorspace plugins to extend the range of
   available colorspaces. Pigment is part of the KOffice libraries.
 

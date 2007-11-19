@@ -36,7 +36,7 @@ struct Array2DImpl::Private {
 
 Array2DImpl::Array2DImpl( int cols, int rows) : d(new Private)
 {
-    d->colorSpace = new KisGenericColorspace<float, 1>();
+    d->colorSpace = new KisGenericColorSpace<float, 1>();
     init(0, 0, cols, rows, 0, new KisPaintDevice(d->colorSpace));
 }
 

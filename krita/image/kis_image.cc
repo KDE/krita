@@ -54,7 +54,7 @@
 #include "kis_layer.h"
 #include "kis_merge_visitor.h"
 
-#include "kis_nameserver.h"
+#include "kis_name_server.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_action.h"
 #include "kis_paint_layer.h"
@@ -580,7 +580,7 @@ void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTr
 
     setColorSpace(dstColorSpace);
 
-    KoColorSpaceConvertVisitor visitor(dstColorSpace, renderingIntent);
+    KisColorSpaceConvertVisitor visitor(dstColorSpace, renderingIntent);
     m_d->rootLayer->accept(visitor);
 
     unlock();

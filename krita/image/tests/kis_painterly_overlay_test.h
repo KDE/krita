@@ -21,7 +21,7 @@
 
 #include <QtTest/QtTest>
 
-class KisPainterlyOverlayTester : public QObject
+class KisPainterlyOverlayTest : public QObject
 {
     Q_OBJECT
 

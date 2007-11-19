@@ -51,6 +51,12 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
     m_fixBorderAlpha = fixBorderAlpha;
 }
 
+KisTransformWorker::~KisTransformWorker()
+{
+}
+
+
+
 void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
 #if 0 // XXX_SELECTION

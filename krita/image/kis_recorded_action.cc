@@ -47,12 +47,12 @@ KisRecordedAction::~KisRecordedAction()
     delete d;
 }
 
-QString KisRecordedAction::id()
+QString KisRecordedAction::id() const
 {
     return d->id;
 }
 
-QString KisRecordedAction::name()
+QString KisRecordedAction::name() const
 {
     return d->name;
 }
@@ -90,12 +90,12 @@ KisRecordedActionFactory::~KisRecordedActionFactory()
     delete d;
 }
 
-QString KisRecordedActionFactory::id()
+QString KisRecordedActionFactory::id() const
 {
     return d->id;
 }
 
-QString KisRecordedActionFactory::name()
+QString KisRecordedActionFactory::name() const
 {
     return QString();
 }

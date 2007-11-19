@@ -40,7 +40,7 @@
 #include "kis_layermap_visitor.h"
 #include "kis_layer_shape.h"
 #include "kis_mask_shape.h"
-#include "kis_nameserver.h"
+#include "kis_name_server.h"
 #include "kis_mask.h"
 #include "kis_shape_layer.h"
 #include "kis_view2.h"

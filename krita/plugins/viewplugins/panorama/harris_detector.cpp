@@ -40,7 +40,7 @@
 #define THRESHOLD_LAMBDA 10.0
 #define FEATURES_QUANTITY 1000
 
-typedef KisGenericColorspace<float, 8> KisEightFloatColorSpace;
+typedef KisGenericColorSpace<float, 8> KisEightFloatColorSpace;
 
 #define DERIVATION_SIGMA 1.0
 

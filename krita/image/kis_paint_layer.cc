@@ -161,7 +161,7 @@ QIcon KisPaintLayer::icon() const
 KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("Colorspace"), m_d->paintDevice->colorSpace()->name());
+    l << KoDocumentSectionModel::Property(i18n("ColorSpace"), m_d->paintDevice->colorSpace()->name());
     if( const KoColorProfile *profile = m_d->paintDevice->colorSpace()->profile() )
         l << KoDocumentSectionModel::Property(i18n("Profile"), profile->name());
     return l;

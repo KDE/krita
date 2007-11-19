@@ -428,3 +428,19 @@ void KisRotateVisitor::setProgressDone()
 }
 
 
+
+KisRotateVisitor::KisRotateVisitor( KoUpdater * progressUpdater )
+    : m_progressUpdater(progressUpdater)
+{
+}
+
+KisRotateVisitor::~KisRotateVisitor()
+{
+}
+
+void KisRotateVisitor::visitKisPaintDevice(KisPaintDevice* dev)
+{
+    m_dev = dev;
+}
+
+

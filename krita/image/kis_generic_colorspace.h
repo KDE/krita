@@ -24,7 +24,7 @@
 #include <qimage.h>
 
 /**
- * KisGenericColorspace is a colorspace you use if you want to store some values
+ * KisGenericColorSpace is a colorspace you use if you want to store some values
  * in a KisPaintDevice which are not colors. For instance the results of the 
  * computation of a wavelets.
  * 
@@ -32,12 +32,12 @@
  * memory, because it will benefit from Krita's memory management.
  */
 template<typename _type, int _nbchannels>
-class KisGenericColorspace : public KoColorSpace {
+class KisGenericColorSpace : public KoColorSpace {
 
-    class KisGenericColorspaceConvolutionOpImpl : public KoConvolutionOp{
+    class KisGenericColorSpaceConvolutionOpImpl : public KoConvolutionOp{
         public:
-            KisGenericColorspaceConvolutionOpImpl() { }
-            virtual ~KisGenericColorspaceConvolutionOpImpl() { }
+            KisGenericColorSpaceConvolutionOpImpl() { }
+            virtual ~KisGenericColorSpaceConvolutionOpImpl() { }
             virtual void convolveColors(const quint8* const* colors, const qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors, const QBitArray & channelFlags) const
             {
                 _type totals[ _nbchannels ];
@@ -72,10 +72,10 @@ class KisGenericColorspace : public KoColorSpace {
 
     public:
 
-        KisGenericColorspace() :
-        KoColorSpace("genericcolorspace", "genericcolorspace",0, 0, new KisGenericColorspaceConvolutionOpImpl)
+        KisGenericColorSpace() :
+        KoColorSpace("genericcolorspace", "genericcolorspace",0, 0, new KisGenericColorSpaceConvolutionOpImpl)
         { }
-        virtual ~KisGenericColorspace() { }
+        virtual ~KisGenericColorSpace() { }
 
     public:
         virtual KoID colorModelId() const { return KoID("",""); }

@@ -28,6 +28,11 @@ KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :
 {
 }
 
+KisLayerCommand::~KisLayerCommand()
+{
+}
+
+
 KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, quint8 oldOpacity, quint8 newOpacity) :
     KisLayerCommand(i18n("Layer Opacity"), layer)
 {

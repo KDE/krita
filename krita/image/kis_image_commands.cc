@@ -38,6 +38,11 @@ KisImageCommand::KisImageCommand(const QString& name, KisImageSP image)
 {
 }
 
+KisImageCommand::~KisImageCommand()
+{
+}
+
+
 void KisImageCommand::setUndo(bool undo)
 {
     if (m_image->undoAdapter()) {
@@ -249,6 +254,10 @@ KisImageLayerPropsCommand::KisImageLayerPropsCommand(KisImageSP image, KisLayerS
     m_opacity = opacity;
     m_compositeOp = compositeOp;
     m_channelFlags = channelFlags;
+}
+
+KisImageLayerPropsCommand::~KisImageLayerPropsCommand()
+{
 }
 
 void KisImageLayerPropsCommand::redo()

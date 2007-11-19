@@ -18,6 +18,8 @@
 #ifndef KIS_NODE_GRAPH_LISTENER_H_
 #define KIS_NODE_GRAPH_LISTENER_H_
 
+class KisNode;
+
 /**
  * Implementations of this class are called by nodes whenever the node
  * graph changes. These implementations can then emit the right

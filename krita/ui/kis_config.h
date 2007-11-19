@@ -177,8 +177,8 @@ public:
     bool useQtSmoothScaling();
     void setUseQtSmoothScaling( bool useQtSmootScaling );
 
-    bool threadColorspaceConversion();
-    void setThreadColorspaceConversion( bool threadColorspaceConversion );
+    bool threadColorSpaceConversion();
+    void setThreadColorSpaceConversion( bool threadColorSpaceConversion );
 
     bool cacheKisImageAsQImage();
     void setCacheKisImageAsQImage( bool cacheKisImageAsQImage );

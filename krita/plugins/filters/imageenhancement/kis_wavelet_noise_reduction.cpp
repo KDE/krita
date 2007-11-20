@@ -74,7 +74,7 @@ void KisWaveletNoiseReduction::process(KisFilterConstantProcessingInformation sr
     int maxrectsize = qMax( areaSize.width(), areaSize.height());
     for(size = 2; size < maxrectsize; size *= 2) ;
 
-    KisMathToolbox* mathToolbox = KisMathToolboxFactoryRegistry::instance()->get( src->colorSpace()->mathToolboxId().id() );
+    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->get( src->colorSpace()->mathToolboxId().id() );
     QRect srcRect(srcTopLeft, areaSize);
     setProgressTotalSteps(mathToolbox->fastWaveletTotalSteps(srcRect) * 2 + size*size*depth );
     connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));

@@ -23,10 +23,6 @@
 
 #include "kis_types.h"
 
-void KisTypesTest::testCreation()
-{
-}
-
 
 QTEST_KDEMAIN(KisTypesTest, GUI);
 #include "kis_types_test.moc"

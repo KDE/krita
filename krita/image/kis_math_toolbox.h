@@ -32,9 +32,13 @@
 #include <new>
 
 class KRITAIMAGE_EXPORT KisMathToolbox : public QObject {
+
     Q_OBJECT
+
 public:
+
     struct KisFloatRepresentation {
+
         KisFloatRepresentation(uint nsize, uint ndepth)
             throw(std::bad_alloc )
             : coeffs(new float[nsize*nsize*ndepth])
@@ -46,24 +50,36 @@ public:
                     coeffs[i] = 0;
                 }
             }
+
         ~KisFloatRepresentation() { if(coeffs) delete[] coeffs; }
+
         float* coeffs;
         uint size;
         uint depth;
     };
+
     typedef KisFloatRepresentation KisWavelet;
+
 public:
+
     KisMathToolbox(KoID id);
+
     ~KisMathToolbox();
+
 public:
+
     inline QString id() { return m_id.id(); }
+
     inline QString name() { return m_id.name(); }
+
     /**
      * This function initialize a wavelet structure
      * @param lay the layer that will be used for the transformation
      */
     inline KisWavelet* initWavelet(KisPaintDeviceSP lay, const QRect&) throw(std::bad_alloc );
+
     inline uint fastWaveletTotalSteps(const QRect&);
+
     /**
      * This function reconstruct the layer from the information of a wavelet
      * @param src layer from which the wavelet will be computed
@@ -73,6 +89,7 @@ public:
      * the buffer
      */
     virtual KisWavelet* fastWaveletTransformation(KisPaintDeviceSP src, const QRect&, KisWavelet* buff = 0) =0;
+
     /**
      * This function reconstruct the layer from the information of a wavelet
      * @param dst layer on which the wavelet will be untransform
@@ -83,41 +100,52 @@ public:
      * the buffer
      */
     virtual void fastWaveletUntransformation(KisPaintDeviceSP dst, const QRect&, KisWavelet* wav, KisWavelet* buff = 0) =0;
+
 signals:
+
     void nextStep();
+
 protected:
+
     /**
      * This function transform a paint device into a KisFloatRepresentation, this function is colorspace independent,
      * for Wavelet, Pyramid and FFT the data is always the exact value of the channel stored in a float.
      */
     void transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*, const QRect&);
+
     /**
      * This function transform a KisFloatRepresentation into a paint device, this function is colorspace independent,
      * for Wavelet, Pyramid and FFT the data is always the exact value of the channel stored in a float.
      */
     void transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentation*, const QRect&);
+
 private:
+
     KoID m_id;
+
 };
 
-class KRITAIMAGE_EXPORT KisMathToolboxFactoryRegistry : public KoGenericRegistry<KisMathToolbox*> {
+class KRITAIMAGE_EXPORT KisMathToolboxRegistry 
+    : public KoGenericRegistry<KisMathToolbox*> 
+{
+
 public:
 
-
-    virtual ~KisMathToolboxFactoryRegistry();
-    static KisMathToolboxFactoryRegistry * instance();
+    virtual ~KisMathToolboxRegistry();
+    static KisMathToolboxRegistry * instance();
 
 private:
 
-    KisMathToolboxFactoryRegistry();
-    KisMathToolboxFactoryRegistry( const KisMathToolboxFactoryRegistry& );
-    KisMathToolboxFactoryRegistry operator=( const KisMathToolboxFactoryRegistry& );
+    KisMathToolboxRegistry();
+    KisMathToolboxRegistry( const KisMathToolboxRegistry& );
+    KisMathToolboxRegistry operator=( const KisMathToolboxRegistry& );
 
-    static KisMathToolboxFactoryRegistry * m_singleton;
+    static KisMathToolboxRegistry * m_singleton;
 };
 
 
-inline KisMathToolbox::KisWavelet* KisMathToolbox::initWavelet(KisPaintDeviceSP src, const QRect& rect) throw(std::bad_alloc )
+inline KisMathToolbox::KisWavelet* KisMathToolbox::initWavelet(KisPaintDeviceSP src, const QRect& rect) 
+    throw(std::bad_alloc )
 {
     int size;
     int maxrectsize = (rect.height() < rect.width()) ? rect.width() : rect.height();

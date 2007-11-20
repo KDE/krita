@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include <Q3MemArray>
 
-KisMathToolboxFactoryRegistry * KisMathToolboxFactoryRegistry::m_singleton = 0;
+KisMathToolboxRegistry * KisMathToolboxRegistry::m_singleton = 0;
 
 KisMathToolbox::KisMathToolbox(KoID id) : m_id(id)
 {
@@ -40,19 +40,20 @@ KisMathToolbox::~KisMathToolbox()
 {
 }
 
-KisMathToolboxFactoryRegistry * KisMathToolboxFactoryRegistry::instance()
+KisMathToolboxRegistry * KisMathToolboxRegistry::instance()
 {
-    if ( KisMathToolboxFactoryRegistry::m_singleton == 0 ) {
-        KisMathToolboxFactoryRegistry::m_singleton = new KisMathToolboxFactoryRegistry();
+    if ( KisMathToolboxRegistry::m_singleton == 0 ) {
+        KisMathToolboxRegistry::m_singleton = new KisMathToolboxRegistry();
     }
-    return KisMathToolboxFactoryRegistry::m_singleton;
+    return KisMathToolboxRegistry::m_singleton;
 }
 
-KisMathToolboxFactoryRegistry::KisMathToolboxFactoryRegistry()
+KisMathToolboxRegistry::KisMathToolboxRegistry()
 {
-    add(new KisBasicMathToolbox());
+    add( new KisBasicMathToolbox() );
 }
-KisMathToolboxFactoryRegistry::~KisMathToolboxFactoryRegistry()
+
+KisMathToolboxRegistry::~KisMathToolboxRegistry()
 {
 }
 
@@ -71,7 +72,6 @@ void fromDouble(quint8* data, int channelpos, double v )
 }
 
 typedef void (*PtrFromDouble)(quint8*, int, double);
-
 
 void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation* fr, const QRect& rect)
 {

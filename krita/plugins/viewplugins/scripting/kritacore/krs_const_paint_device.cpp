@@ -114,7 +114,7 @@ QObject* ConstPaintDevice::createHistogram(const QString& histoname, uint typenr
 
 QObject* ConstPaintDevice::fastWaveletTransformation()
 {
-    KisMathToolbox* mathToolbox = KisMathToolboxFactoryRegistry::instance()->value( paintDevice()->colorSpace()->mathToolboxId().id() );
+    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value( paintDevice()->colorSpace()->mathToolboxId().id() );
     QRect rect = paintDevice()->exactBounds();
     KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(paintDevice(), rect);
     return new Wavelet(wav);

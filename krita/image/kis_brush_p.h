@@ -18,6 +18,8 @@
 #ifndef KIS_ALPHA_MASK_
 #define KIS_ALPHA_MASK_
 
+#include "kis_brush.h"
+
 #include <QImage>
 #include <QVector>
 
@@ -27,7 +29,6 @@
 #include <KoColorSpace.h>
 
 #include "kis_global.h"
-#include <krita_export.h>
 #include "kis_types.h"
 
 /**
@@ -35,7 +36,7 @@
  * in brush creation. It is not a generic alpha mask that can be used with
  * KisPaintDevices: use a KisSelection for that.
  */
-class KRITAIMAGE_EXPORT KisQImagemask : public KisShared {
+class KisQImagemask : public KisShared {
 
  public:
     /**
@@ -118,6 +119,25 @@ private:
     QVector<quint8> m_data;
     qint32 m_width;
     qint32 m_height;
+};
+
+class KisBrush::ScaledBrush {
+public:
+    ScaledBrush();
+    ScaledBrush(KisQImagemaskSP scaledMask, const QImage& scaledImage, double scale, double xScale, double yScale);
+
+    double scale() const { return m_scale; }
+    double xScale() const { return m_xScale; }
+    double yScale() const { return m_yScale; }
+    KisQImagemaskSP mask() const { return m_mask; }
+    QImage image() const { return m_image; }
+
+private:
+    KisQImagemaskSP m_mask;
+    QImage m_image;
+    double m_scale;
+    double m_xScale;
+    double m_yScale;
 };
 
 #endif // KIS_ALPHA_MASK_

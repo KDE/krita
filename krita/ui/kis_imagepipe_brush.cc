@@ -39,7 +39,6 @@
 #include "kis_global.h"
 #include "kis_paint_device.h"
 #include "kis_brush.h"
-#include "kis_qimage_mask.h"
 #include "kis_layer.h"
 #include "kis_boundary.h"
 

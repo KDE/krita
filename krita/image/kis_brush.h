@@ -29,7 +29,6 @@
 
 #include "KoResource.h"
 #include "kis_paint_information.h"
-#include "kis_qimage_mask.h"
 
 #include "krita_export.h"
 
@@ -52,6 +51,7 @@ enum enumBrushType {
 };
 
 class KRITAIMAGE_EXPORT KisBrush : public KoResource {
+  class ScaledBrush;
 
     Q_OBJECT
 
@@ -132,24 +132,6 @@ protected:
     static double scaleForPressure(double pressure);
 
 private:
-    class ScaledBrush {
-    public:
-        ScaledBrush();
-        ScaledBrush(KisQImagemaskSP scaledMask, const QImage& scaledImage, double scale, double xScale, double yScale);
-
-        double scale() const { return m_scale; }
-        double xScale() const { return m_xScale; }
-        double yScale() const { return m_yScale; }
-        KisQImagemaskSP mask() const { return m_mask; }
-        QImage image() const { return m_image; }
-
-    private:
-        KisQImagemaskSP m_mask;
-        QImage m_image;
-        double m_scale;
-        double m_xScale;
-        double m_yScale;
-    };
 
 
     bool init();

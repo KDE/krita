@@ -35,7 +35,6 @@
 #include "kis_brush.h"
 #include "kis_types.h"
 #include "kis_paintop.h"
-#include "kis_qimage_mask.h"
 
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"
@@ -50,7 +49,6 @@ struct KisPaintOp::Private
     KisPaintDeviceSP dab;
     KoColor color;
     KoColor previousPaintColor;
-    KisQImagemaskSP previousMask;
     KisPainter * painter;
 };
 
@@ -77,61 +75,6 @@ KisPaintDeviceSP KisPaintOp::cachedDab( const KoColorSpace *cs )
   }
   return d->dab;
 }
-
-#if 0
-KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask) {
-    return computeDab(mask, d->painter->device()->colorSpace());
-}
-
-KisPaintDeviceSP KisPaintOp::computeDab(KisQImagemaskSP mask, const KoColorSpace *cs)
-{
-    // XXX: According to the SeaShore source, the Gimp uses a
-    // temporary layer the size of the layer that is being painted
-    // on. This layer is cleared between painting actions. Our
-    // temporary layer, dab, is for every paintAt, composited with
-    // the target layer. We only use a real temporary layer for things
-    // like filter tools -- and for indirect painting, it turns out.
-
-
-    qint32 maskWidth = mask->width();
-    qint32 maskHeight = mask->height();
-
-    if( !d->dab or d->dab->colorSpace() != cs or not( d->previousPaintColor == d->painter->paintColor() ) ) {
-        d->dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
-        d->color = d->painter->paintColor();
-        d->previousPaintColor = d->painter->paintColor();
-        d->color.convertTo(cs);
-        d->color.fromKoColor( d->painter->paintColor());
-        d->dab->dataManager()->setDefaultPixel( d->color.data() );
-    } else if(d->previousMask == mask) {
-        return d->dab;
-    }
-    d->previousMask = mask;
-
-    // Convert the kiscolor to the right colorspace. TODO: check if the paintColor has change
-    Q_CHECK_PTR(d->dab);
-
-    quint8 * maskData = mask->data();
-
-    // Apply the alpha mask
-    KisHLineIteratorPixel hiter = d->dab->createHLineIterator(0, 0, maskWidth);
-    for (int y = 0; y < maskHeight; y++)
-    {
-        while(! hiter.isDone())
-        {
-            int hiterConseq = hiter.nConseqHPixels();
-            cs->setAlpha( hiter.rawData(), OPACITY_OPAQUE, hiterConseq );
-            cs->applyAlphaU8Mask( hiter.rawData(), maskData, hiterConseq);
-            hiter += hiterConseq;
-            maskData += hiterConseq;
-        }
-        hiter.nextRow();
-    }
-
-    return d->dab;
-}
-
-#endif
 
 void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fraction)
 {

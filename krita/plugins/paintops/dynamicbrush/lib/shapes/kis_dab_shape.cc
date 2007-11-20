@@ -21,13 +21,13 @@
 #include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
-#include <kis_qimage_mask.h>
 
 #include "kis_dynamic_coloring.h"
 
 quint8 KisAlphaMaskShape::alphaAt(int x, int y)
 {
-    return alphaMask->alphaAt(x,y);
+    return 255;
+//     return alphaMask->alphaAt(x,y);
 }
 
 quint8 KisAutoMaskShape::alphaAt(int x, int y)

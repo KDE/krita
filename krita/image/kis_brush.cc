@@ -20,6 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_brush.h"
+
 #include <QDomElement>
 #include <QFile>
 #include <QImage>
@@ -34,11 +36,11 @@
 #include "kis_datamanager.h"
 #include "kis_paint_device.h"
 #include "kis_global.h"
-#include "kis_brush.h"
 #include "kis_boundary.h"
-#include "kis_qimage_mask.h"
 #include "kis_iterators_pixel.h"
 #include "kis_image.h"
+
+#include "kis_brush_p.h"
 
 #include <netinet/in.h> // htonl
 

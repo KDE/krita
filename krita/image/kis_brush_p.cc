@@ -25,7 +25,7 @@
 #include <KoColorSpace.h>
 
 #include "kis_global.h"
-#include "kis_qimage_mask.h"
+#include "kis_brush_p.h"
 
 KisQImagemask::KisQImagemask(const QImage& img, bool hasColor)
 {

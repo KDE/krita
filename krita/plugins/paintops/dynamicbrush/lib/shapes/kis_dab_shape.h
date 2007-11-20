@@ -49,7 +49,6 @@ struct DYNAMIC_BRUSH_EXPORT KisAlphaMaskShape : public KisDabShape {
     virtual ~KisAlphaMaskShape();
     virtual quint8 alphaAt(int x, int y);
     virtual void resize(double xs, double ys);
-    KisQImagemaskSP alphaMask;
 };
 
 class DYNAMIC_BRUSH_EXPORT KisAutoMaskShape : public KisDabShape {

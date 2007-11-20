@@ -27,6 +27,8 @@ class KisVecTest : public QObject
 private slots:
 
     void testCreation();
+    void testVec2D();
+    void testVec3D();
 
 };
 

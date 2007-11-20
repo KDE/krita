@@ -25,10 +25,26 @@
 
 void KisVecTest::testCreation()
 {
-    KisVector2D v2d();
-    KisVector3D v3d();
+    KisVector2D v2d;
+    QVERIFY(v2d.x() == 0.0);
+    QVERIFY(v2d.y() == 0.0);
+
+    KisVector3D v3d;
+    QVERIFY(v3d.x() == 0.0);
+    QVERIFY(v3d.y() == 0.0);
+    QVERIFY(v3d.z() == 0.0);
 }
 
 
-QTEST_KDEMAIN(KisVecTest, GUI);
+void KisVecTest::testVec2D()
+{
+}
+
+
+void KisVecTest::testVec3D()
+{
+}
+
+
+QTEST_KDEMAIN(KisVecTest, NoGUI);
 #include "kis_vec_test.moc"

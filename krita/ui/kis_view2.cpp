@@ -32,6 +32,7 @@
 #include <QDragEnterEvent>
 #include <QApplication>
 #include <QPrintDialog>
+#include <QObject>
 
 #include <k3urldrag.h>
 #include <kaction.h>
@@ -46,7 +47,7 @@
 #include <kstandardaction.h>
 #include <ktogglefullscreenaction.h>
 #include <kurl.h>
-#include <kxmlguifactory.h>
+#include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
 
@@ -62,6 +63,7 @@
 #include <KoToolDockerFactory.h>
 #include <KoColorDocker.h>
 #include "KoColorSpaceRegistry.h"
+#include <KoDockRegistry.h>
 
 #include <kactioncollection.h>
 
@@ -415,12 +417,11 @@ void KisView2::slotLoadingFinished()
 
     m_d->nodeManager->nodesUpdated();
 
-    KoToolDockerFactory toolDockerFactory;
-    KoToolDocker * d =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
+    KoToolDocker * d = shell()->findChild<KoToolDocker*>("KoToolOptionsDocker" );
     if(d)
         connect(m_d->canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), d, SLOT(newOptionWidget(QWidget*)));
     else
-        kWarning(41007) <<"Could not create tool docker:" << d;
+        kWarning(41007) <<"Could not find tool docker:" << d;
 
     connectCurrentImage();
 
@@ -432,7 +433,7 @@ void KisView2::slotLoadingFinished()
     }
 
 
-    if ( KisNodeSP node =img->rootLayer()->firstChild() ) {
+    if ( KisNodeSP node = img->rootLayer()->firstChild() ) {
         m_d->layerBox->setCurrentNode( node );
         m_d->nodeManager->activateNode( node );
     }
@@ -447,28 +448,72 @@ void KisView2::createGUI()
 {
     KoToolManager::instance()->addController(m_d->canvasController);
 
+    // Remove the plugin dock widgets
+    QList<QDockWidget*> dockWidgets = shell()->dockWidgets();
+    foreach( QDockWidget * dockWidget, dockWidgets ) {
+        shell()->removeDockWidget( dockWidget );
+    }
+
     KoToolBoxFactory toolBoxFactory( m_d->canvasController, "Tools" );
     createDockWidget( &toolBoxFactory );
 
-    KoColorDockerFactory colorDockerFactory;
-    KoColorDocker * docker = qobject_cast<KoColorDocker*>( createDockWidget( &colorDockerFactory ) );
-    Q_UNUSED( docker );
-
-    KisPaletteDockerFactory paletteDockerFactory(this);
-    KisPaletteDocker* paletteDocker = qobject_cast<KisPaletteDocker*>( createDockWidget( &paletteDockerFactory ) );
-    Q_UNUSED( paletteDocker );
+    KoToolDockerFactory toolDockerFactory;
+    createDockWidget( &toolDockerFactory );
 
     KisBirdEyeBoxFactory birdeyeFactory(this);
     m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>( createDockWidget( &birdeyeFactory ) );
 
+
+    KisPaletteDockerFactory paletteDockerFactory(this);
+    createDockWidget( &paletteDockerFactory );
+   
+    KoColorDockerFactory colorDockerFactory;
+    createDockWidget( &colorDockerFactory );
+
     KisLayerBoxFactory layerboxFactory;
     m_d->layerBox = qobject_cast<KisLayerBox*>( createDockWidget( &layerboxFactory ) );
 
+    // Add the plugin dock widgets again
+    foreach( QDockWidget * dockWidget, dockWidgets ) {
+        shell()->addDockWidget( Qt::RightDockWidgetArea, dockWidget );
+
+    }
+
+    QDockWidget * birdEyeBox = qobject_cast<QDockWidget*>( shell()->findChild<QDockWidget*>( "KisBirdeyeBox" ));
+    QDockWidget * toolBox = qobject_cast<QDockWidget*>( shell()->findChild<QDockWidget*>("KoToolOptionsDocker" ));
+    QDockWidget * colorDocker = qobject_cast<QDockWidget*>( shell()->findChild<QDockWidget*>("KoColorDocker"));
+    QDockWidget * paletteDocker = qobject_cast<QDockWidget*>( shell()->findChild<QDockWidget*>("KisPaletteDocker"));
+    QDockWidget * strokeDocker = qobject_cast<QDockWidget*>( shell()->findChild<QDockWidget*>("Stroke Properties"));
+
+    if (birdEyeBox != 0 && toolBox != 0) {
+        shell()->tabifyDockWidget(birdEyeBox, toolBox);
+    }
+    
+    if (colorDocker != 0 && paletteDocker != 0 && strokeDocker != 0) {
+        shell()->tabifyDockWidget(colorDocker, paletteDocker);
+        shell()->tabifyDockWidget(paletteDocker, strokeDocker);
+    }
+    colorDocker->show();
+
+    KConfigGroup group( KGlobal::config(), "GUI" );
+    QFont dockWidgetFont  = KGlobalSettings::generalFont();
+    double pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
+    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
+    dockWidgetFont.setPointSizeF(pointSize);
+
+    foreach( QObject * object, shell()->children() )
+    {
+        if (object->inherits("QTabBar")) {
+            QTabBar * tabBar = qobject_cast<QTabBar*>(object);
+            tabBar->setFont( dockWidgetFont );
+        }
+    }
+    
     m_d->statusBar = KoView::statusBar() ? new KisStatusBar( KoView::statusBar(), this ) : 0;
     connect(m_d->canvasController, SIGNAL( documentMousePositionChanged(const QPointF & )),
             m_d->statusBar, SLOT( documentMousePositionChanged( const QPointF & ) ) );
 
-    m_d->controlFrame = new KisControlFrame( mainWindow(), this );
+    m_d->controlFrame = new KisControlFrame( mainWindow(), this );    
 
     show();
 
@@ -483,8 +528,6 @@ void KisView2::createGUI()
 
     connect(m_d->layerBox, SIGNAL(sigItemComposite(const KoCompositeOp*)),
             m_d->nodeManager, SLOT(nodeCompositeOpChanged(const KoCompositeOp*)));
-
-
 
 }
 

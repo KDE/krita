@@ -126,7 +126,7 @@ public:
 
     virtual QString id() const
         {
-            return QString( "Layers" );
+            return QString( "KisLayerBox" );
         }
 
     virtual QDockWidget* createDockWidget()

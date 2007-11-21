@@ -48,5 +48,5 @@ void KisPaintopRegistryTest::testDefaultPaintops()
     KisPaintOp * op = reg->paintOp("paintbrush", 0, &p, image);
 }
 
-QTEST_KDEMAIN(KisPaintopRegistryTest, GUI);
+QTEST_KDEMAIN(KisPaintopRegistryTest, GUI)
 #include "kis_paintop_registry_test.moc"

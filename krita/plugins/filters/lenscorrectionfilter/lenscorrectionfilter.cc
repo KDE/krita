@@ -72,7 +72,7 @@ KisFilterLensCorrection::KisFilterLensCorrection() : KisFilter(id(), CategoryOth
 {
 }
 
-KisFilterConfiguration* KisFilterLensCorrection::factoryConfiguration(const KisPaintDeviceSP)
+KisFilterConfiguration* KisFilterLensCorrection::factoryConfiguration(const KisPaintDeviceSP) const
 {
     QVariant value;
     KisFilterConfiguration* config = new KisFilterConfiguration("lenscorrection", 1);

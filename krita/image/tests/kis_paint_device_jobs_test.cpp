@@ -29,5 +29,5 @@ void KisPaintDeviceJobsTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisPaintDeviceJobsTest, GUI);
+QTEST_KDEMAIN(KisPaintDeviceJobsTest, GUI)
 #include "kis_paint_device_jobs_test.moc"

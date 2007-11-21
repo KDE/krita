@@ -50,7 +50,7 @@ public:
     virtual bool supportsPainting() const { return true; }
     virtual bool supportsPreview() const { return true; }
     virtual bool supportsIncrementalPainting() const { return false; }
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 };

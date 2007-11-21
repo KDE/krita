@@ -75,7 +75,7 @@ KisFilterConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* 
     return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent);
 }
 
-KisFilterConfiguration* KisFilterRandomPick::factoryConfiguration(const KisPaintDeviceSP)
+KisFilterConfiguration* KisFilterRandomPick::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("randompick", 1);
     config->setProperty("level", 50 );

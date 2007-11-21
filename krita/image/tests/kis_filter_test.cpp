@@ -43,5 +43,5 @@ void KisFilterTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisFilterTest, GUI);
+QTEST_KDEMAIN(KisFilterTest, GUI)
 #include "kis_filter_test.moc"

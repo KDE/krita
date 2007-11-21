@@ -43,7 +43,7 @@ class KisUnsharpFilter : public KisFilter
         virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
     public:
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-        virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP);
+        virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP) const;
 };
 
 #endif

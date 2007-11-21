@@ -140,7 +140,7 @@ void KisCountVisitorTest::testCounting()
     }
 }
 
-QTEST_KDEMAIN(KisCountVisitorTest, NoGUI);
+QTEST_KDEMAIN(KisCountVisitorTest, NoGUI)
 #include "kis_count_visitor_test.moc"
 
 

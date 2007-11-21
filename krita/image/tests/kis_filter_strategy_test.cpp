@@ -29,5 +29,5 @@ void KisFilterStrategyTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisFilterStrategyTest, GUI);
+QTEST_KDEMAIN(KisFilterStrategyTest, GUI)
 #include "kis_filter_strategy_test.moc"

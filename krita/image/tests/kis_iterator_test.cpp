@@ -330,5 +330,5 @@ void KisIteratorTest::randomAccessor()
     allCsApplicator( &KisIteratorTest::randomAccessor );
 }
 
-QTEST_KDEMAIN(KisIteratorTest, NoGUI);
+QTEST_KDEMAIN(KisIteratorTest, NoGUI)
 #include "kis_iterator_test.moc"

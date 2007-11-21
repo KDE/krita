@@ -29,5 +29,5 @@ void KisTransformVisitorTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisTransformVisitorTest, GUI);
+QTEST_KDEMAIN(KisTransformVisitorTest, GUI)
 #include "kis_transform_visitor_test.moc"

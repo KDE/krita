@@ -108,7 +108,7 @@ void KisBaseNodeTest::testProperties()
     }
 }
 
-QTEST_KDEMAIN(KisBaseNodeTest, GUI);
+QTEST_KDEMAIN(KisBaseNodeTest, GUI)
 #include "kis_base_node_test.moc"
 
 

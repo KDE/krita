@@ -31,7 +31,7 @@ void KisGroupLayerTest::testProjection()
 
 }
 
-QTEST_KDEMAIN(KisGroupLayerTest, GUI);
+QTEST_KDEMAIN(KisGroupLayerTest, GUI)
 #include "kis_group_layer_test.moc"
 
 

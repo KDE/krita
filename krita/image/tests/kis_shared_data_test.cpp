@@ -29,5 +29,5 @@ void KisSharedDataTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisSharedDataTest, GUI);
+QTEST_KDEMAIN(KisSharedDataTest, GUI)
 #include "kis_shared_data_test.moc"

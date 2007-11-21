@@ -64,7 +64,7 @@ KisFilterConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QW
     return new KisWdgFastColorTransfer(this, parent);
 }
 
-KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(KisPaintDeviceSP)
+KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("filename", "" ); // TODO: put an exemple image in share/krita, like a sunset that what's give the best results

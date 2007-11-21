@@ -84,7 +84,7 @@ KisFilterConfiguration * KisFilter::defaultConfiguration(const KisPaintDeviceSP 
     return fc;
 }
 
-KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, const KisPaintDeviceSP) const
+KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, const KisPaintDeviceSP)
 {
     return 0;
 }

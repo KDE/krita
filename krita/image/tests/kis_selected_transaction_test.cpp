@@ -29,5 +29,5 @@ void KisSelectedTransactionTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisSelectedTransactionTest, GUI);
+QTEST_KDEMAIN(KisSelectedTransactionTest, GUI)
 #include "kis_selected_transaction_test.moc"

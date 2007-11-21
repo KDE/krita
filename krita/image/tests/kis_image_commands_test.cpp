@@ -28,5 +28,5 @@ void KisImageCommandsTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisImageCommandsTest, GUI);
+QTEST_KDEMAIN(KisImageCommandsTest, GUI)
 #include "kis_image_commands_test.moc"

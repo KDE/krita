@@ -29,5 +29,5 @@ void KisConvolutionPainterTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisConvolutionPainterTest, GUI);
+QTEST_KDEMAIN(KisConvolutionPainterTest, GUI)
 #include "kis_convolution_painter_test.moc"

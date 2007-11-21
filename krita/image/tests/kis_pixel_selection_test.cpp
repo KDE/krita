@@ -74,7 +74,7 @@ void KisPixelSelectionTest::testSelect()
 }
 
 
-QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI);
+QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI)
 #include "kis_pixel_selection_test.moc"
 
 

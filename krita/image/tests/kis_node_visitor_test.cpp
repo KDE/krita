@@ -29,5 +29,5 @@ void KisNodeVisitorTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisNodeVisitorTest, GUI);
+QTEST_KDEMAIN(KisNodeVisitorTest, GUI)
 #include "kis_node_visitor_test.moc"

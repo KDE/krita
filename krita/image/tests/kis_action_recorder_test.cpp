@@ -29,5 +29,5 @@ void KisActionRecorderTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisActionRecorderTest, GUI);
+QTEST_KDEMAIN(KisActionRecorderTest, GUI)
 #include "kis_action_recorder_test.moc"

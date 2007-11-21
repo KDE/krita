@@ -29,5 +29,5 @@ void KisFilterProcessingInformationTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisFilterProcessingInformationTest, GUI);
+QTEST_KDEMAIN(KisFilterProcessingInformationTest, GUI)
 #include "kis_filter_processing_information_test.moc"

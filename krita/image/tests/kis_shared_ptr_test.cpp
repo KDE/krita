@@ -149,7 +149,7 @@ void KisSharedPtrTest::testWeakSP()
 }
 
 
-QTEST_KDEMAIN(KisSharedPtrTest, NoGUI);
+QTEST_KDEMAIN(KisSharedPtrTest, NoGUI)
 #include "kis_shared_ptr_test.moc"
 
 

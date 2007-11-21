@@ -767,7 +767,7 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     QVERIFY( opacity1 == 155 );
 }
 
-QTEST_KDEMAIN(KisPaintDeviceTest, GUI);
+QTEST_KDEMAIN(KisPaintDeviceTest, GUI)
 #include "kis_paint_device_test.moc"
 
 

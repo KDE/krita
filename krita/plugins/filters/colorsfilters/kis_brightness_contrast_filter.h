@@ -74,7 +74,7 @@ public:
                  KoUpdater* progressUpdater = 0
         ) const;
     static inline KoID id() { return KoID("brightnesscontrast", i18n("Brightness / Contrast")); }
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP);
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
     
     virtual bool workWith(const KoColorSpace* cs);
 };

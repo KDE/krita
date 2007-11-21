@@ -176,6 +176,7 @@ KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(Q
 }
 
 KisFilterConfiguration* KisBrightnessContrastFilter::factoryConfiguration(const KisPaintDeviceSP)
+    const
 {
     KisFilterConfiguration* config = new KisBrightnessContrastFilterConfiguration( );
     return config;

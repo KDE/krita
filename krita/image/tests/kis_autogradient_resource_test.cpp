@@ -29,5 +29,5 @@ void KisAutogradientResourceTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisAutogradientResourceTest, GUI);
+QTEST_KDEMAIN(KisAutogradientResourceTest, GUI)
 #include "kis_autogradient_resource_test.moc"

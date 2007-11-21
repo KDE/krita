@@ -41,7 +41,7 @@ void KisProjectionTest::stressTestDirty()
 }
 
 
-QTEST_KDEMAIN(KisProjectionTest, NoGUI);
+QTEST_KDEMAIN(KisProjectionTest, NoGUI)
 #include "kis_projection_test.moc"
 
 

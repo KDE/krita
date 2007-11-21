@@ -51,7 +51,7 @@ public:
     virtual bool supportsAdjustmentLayers() const { return false; }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP);
+    virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP) const;
 };
 
 #endif

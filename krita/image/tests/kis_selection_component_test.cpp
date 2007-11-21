@@ -28,5 +28,5 @@ void KisSelectionComponentTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisSelectionComponentTest, GUI);
+QTEST_KDEMAIN(KisSelectionComponentTest, GUI)
 #include "kis_selection_component_test.moc"

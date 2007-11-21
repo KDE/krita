@@ -52,5 +52,5 @@ void KisFilterConfigurationTest::testSetGetProperty()
 }
 
 
-QTEST_KDEMAIN(KisFilterConfigurationTest, NoGUI);
+QTEST_KDEMAIN(KisFilterConfigurationTest, NoGUI)
 #include "kis_filter_configuration_test.moc"

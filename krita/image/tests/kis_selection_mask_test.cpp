@@ -29,5 +29,5 @@ void KisSelectionMaskTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisSelectionMaskTest, GUI);
+QTEST_KDEMAIN(KisSelectionMaskTest, GUI)
 #include "kis_selection_mask_test.moc"

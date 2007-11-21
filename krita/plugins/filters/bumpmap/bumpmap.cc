@@ -111,7 +111,7 @@ namespace {
 
 }
 
-KisFilterConfiguration* KisFilterBumpmap::factoryConfiguration(const KisPaintDeviceSP)
+KisFilterConfiguration* KisFilterBumpmap::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id(), 0);
     config->setProperty("bumpmap", "");

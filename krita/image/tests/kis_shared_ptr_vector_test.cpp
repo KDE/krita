@@ -33,5 +33,5 @@ void KisSharedPtrVectorTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisSharedPtrVectorTest, GUI);
+QTEST_KDEMAIN(KisSharedPtrVectorTest, GUI)
 #include "kis_shared_ptr_vector_test.moc"

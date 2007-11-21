@@ -100,7 +100,7 @@ void KisTransactionTest::testRedo()
     QVERIFY( c2 == Qt::white );
 }
 
-QTEST_KDEMAIN(KisTransactionTest, GUI);
+QTEST_KDEMAIN(KisTransactionTest, GUI)
 #include "kis_transaction_test.moc"
 
 

@@ -52,7 +52,7 @@ public:
     
     virtual bool supportsThreading() const { return false; }
 private:
-    virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP);
+    virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
 
 };
 

@@ -42,5 +42,5 @@ void KisMaskTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisMaskTest, GUI);
+QTEST_KDEMAIN(KisMaskTest, GUI)
 #include "kis_mask_test.moc"

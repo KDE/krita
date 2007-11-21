@@ -29,5 +29,5 @@ void KisHistogramTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisHistogramTest, GUI);
+QTEST_KDEMAIN(KisHistogramTest, GUI)
 #include "kis_histogram_test.moc"

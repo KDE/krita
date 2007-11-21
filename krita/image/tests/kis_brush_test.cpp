@@ -29,5 +29,5 @@ void KisBrushTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisBrushTest, GUI);
+QTEST_KDEMAIN(KisBrushTest, GUI)
 #include "kis_brush_test.moc"

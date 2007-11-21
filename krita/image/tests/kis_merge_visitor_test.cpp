@@ -115,6 +115,6 @@ void KisMergeVisitorTest::testMergePreviewTwice()
     }
     delete kfc;}
 
-QTEST_KDEMAIN(KisMergeVisitorTest, NoGUI);
+QTEST_KDEMAIN(KisMergeVisitorTest, NoGUI)
 #include "kis_merge_visitor_test.moc"
 

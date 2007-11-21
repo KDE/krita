@@ -29,5 +29,5 @@ void KisComplexColorTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisComplexColorTest, GUI);
+QTEST_KDEMAIN(KisComplexColorTest, GUI)
 #include "kis_complex_color_test.moc"

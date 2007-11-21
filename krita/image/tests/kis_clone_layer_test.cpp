@@ -29,5 +29,5 @@ void KisCloneLayerTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisCloneLayerTest, GUI);
+QTEST_KDEMAIN(KisCloneLayerTest, GUI)
 #include "kis_clone_layer_test.moc"

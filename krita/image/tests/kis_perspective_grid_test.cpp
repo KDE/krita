@@ -29,5 +29,5 @@ void KisPerspectiveGridTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisPerspectiveGridTest, GUI);
+QTEST_KDEMAIN(KisPerspectiveGridTest, GUI)
 #include "kis_perspective_grid_test.moc"

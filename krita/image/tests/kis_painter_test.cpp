@@ -296,7 +296,7 @@ void KisPainterTest::testSelectionBltMaskIrregular()
 
 
 
-QTEST_KDEMAIN(KisPainterTest, NoGUI);
+QTEST_KDEMAIN(KisPainterTest, NoGUI)
 #include "kis_painter_test.moc"
 
 

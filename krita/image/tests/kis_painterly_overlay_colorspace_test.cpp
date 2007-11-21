@@ -29,5 +29,5 @@ void KisPainterlyOverlayColorSpaceTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisPainterlyOverlayColorSpaceTest, GUI);
+QTEST_KDEMAIN(KisPainterlyOverlayColorSpaceTest, GUI)
 #include "kis_painterly_overlay_colorspace_test.moc"

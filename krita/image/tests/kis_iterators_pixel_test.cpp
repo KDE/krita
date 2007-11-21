@@ -28,5 +28,5 @@ void KisIteratorsPixelTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisIteratorsPixelTest, GUI);
+QTEST_KDEMAIN(KisIteratorsPixelTest, GUI)
 #include "kis_iterators_pixel_test.moc"

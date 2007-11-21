@@ -161,7 +161,7 @@ public:
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on
      */
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const;
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev);
     // "Support" functions
 public:
     /**

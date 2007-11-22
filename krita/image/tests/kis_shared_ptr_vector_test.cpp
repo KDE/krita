@@ -29,7 +29,7 @@ class Test : public KShared
 
 void KisSharedPtrVectorTest::testCreation()
 {
-    KisSharedPtrVector<Test> test();
+    KisSharedPtrVector<Test> test;
 }
 
 

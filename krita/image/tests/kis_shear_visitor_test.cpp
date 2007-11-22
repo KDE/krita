@@ -23,9 +23,15 @@
 
 #include "kis_shear_visitor.h"
 
+
+#include <KoProgressUpdater.h>
+
+
 void KisShearVisitorTest::testCreation()
 {
-    KisShearVisitor test();
+    KoProgressUpdater pu(0);
+    KoUpdater updater = pu.startSubtask();
+    KisShearVisitor test(0.5, 0.5, &updater);
 }
 
 

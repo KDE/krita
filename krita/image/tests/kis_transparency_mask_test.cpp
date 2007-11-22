@@ -25,7 +25,7 @@
 
 void KisTransparencyMaskTest::testCreation()
 {
-    KisTransparencyMask test();
+    KisTransparencyMask test;
 }
 
 

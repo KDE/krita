@@ -25,7 +25,8 @@
 
 void KisDataManagerTest::testCreation()
 {
-    KisDataManager test();
+    quint8 c = 0;
+    KisDataManager test(1, &c);
 }
 
 

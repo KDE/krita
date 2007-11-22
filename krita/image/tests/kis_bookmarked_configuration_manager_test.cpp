@@ -22,10 +22,44 @@
 #include "kis_bookmarked_configuration_manager_test.h"
 
 #include "kis_bookmarked_configuration_manager.h"
+#include "kis_serializable_configuration.h"
+
+class TestConfiguration : public KisSerializableConfiguration
+{
+public:
+
+    void fromXML(const QDomElement&)
+        {
+        }
+
+    void toXML(QDomDocument&, QDomElement&) const 
+        {
+        }
+};
+
+class TestConfigurationFactory : public KisSerializableConfigurationFactory
+{
+public:
+
+    virtual KisSerializableConfiguration* createDefault() 
+        {
+            return &tc;
+        }            
+
+    virtual KisSerializableConfiguration* create(const QDomElement&)
+        {
+            return &tc;
+        }       
+private:
+
+    TestConfiguration tc;
+};
+
 
 void KisBookmarkedConfigurationManagerTest::testCreation()
 {
-    KisBookmarkedConfigurationManager test();
+    TestConfigurationFactory tcf;
+    KisBookmarkedConfigurationManager test("Test", &tcf);
 }
 
 

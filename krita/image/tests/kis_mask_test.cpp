@@ -24,6 +24,12 @@
 #include "kis_mask.h"
 class TestMask : public KisMask
 {
+public:
+
+    TestMask() : KisMask("TestMask")
+        {
+        }
+    
     KisNodeSP clone()
         {
         }       
@@ -38,7 +44,7 @@ class TestMask : public KisMask
 
 void KisMaskTest::testCreation()
 {
-    TestMask test();
+    TestMask test;
 }
 
 

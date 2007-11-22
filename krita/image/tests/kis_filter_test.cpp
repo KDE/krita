@@ -25,21 +25,26 @@
 
 class TestFilter : public KisFilter 
 {
+public:
+
+    TestFilter()
+        : KisFilter(KoID("test", "test"), KoID("test", "test"), "TestFilter" )
+        {
+        }    
  
     void process(KisFilterConstantProcessingInformation src,
                          KisFilterProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater = 0
-        ) const 
-    {
-    }
+                         KoUpdater* progressUpdater = 0) const 
+        {
+        }
  
 };
 
 void KisFilterTest::testCreation()
 {
-    TestFilter test();
+    TestFilter test;
 }
 
 

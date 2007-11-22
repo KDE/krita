@@ -20,12 +20,17 @@
 #include <qtest_kde.h>
 
 #include "kis_complex_color_test.h"
-
+#include <KoColor.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
 #include "kis_complex_color.h"
 
 void KisComplexColorTest::testCreation()
 {
-    KisComplexColor test();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoColor cl(Qt::red, cs);
+    KisComplexColor a(cs);
+    KisComplexColor b(cs, cl);
 }
 
 

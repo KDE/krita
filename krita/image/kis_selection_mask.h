@@ -1,7 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
- *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -28,7 +27,7 @@
 /**
  * An selection mask is a single channel mask that applies a
  * particular selection to the layer the mask belongs to. A selection
- * can contain both
+ * can contain both vector and pixel selection components.
 */
 class KRITAIMAGE_EXPORT KisSelectionMask : public KisMask
 {

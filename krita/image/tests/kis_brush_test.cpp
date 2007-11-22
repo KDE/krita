@@ -21,11 +21,25 @@
 
 #include "kis_brush_test.h"
 
+#include <QString>
+#include <QDir>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+
 #include "kis_brush.h"
+#include "kis_types.h"
+#include "kis_paint_device.h"
 
 void KisBrushTest::testCreation()
 {
-    KisBrush test();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice( cs );
+    QImage img( 512, 512, QImage::Format_ARGB32 );
+
+    KisBrush a(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr");
+    KisBrush b(dev, 0, 0, 10, 10);
+    KisBrush c(img, "bla");
+    KisBrush d(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gih");
 }
 
 

@@ -23,9 +23,22 @@
 
 #include "kis_transform_visitor.h"
 
+#include <KoProgressUpdater.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include "kis_types.h"
+#include "kis_image.h"
+#include "kis_filter_strategy.h"
+
 void KisTransformVisitorTest::testCreation()
 {
-    KisTransformVisitor test();
+    KoProgressUpdater pu(0);
+    KoUpdater updater = pu.startSubtask();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP img = new KisImage(0, 10, 10, cs, "bla");
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+    KisTransformVisitor test(img, 1.5, 1.5, 0, 0, 1.5, 0, 0, &updater, filter);
+    delete filter;
 }
 
 

@@ -25,7 +25,8 @@
 
 void KisAutobrushResourceTest::testCreation()
 {
-    KisAutobrushResource test();
+    KisAutobrushCircleShape circle(10, 10, 1.0, 1.0);
+    KisAutobrushRectShape rect(10, 10, 1.0, 1.0);
 }
 
 QTEST_KDEMAIN(KisAutobrushResourceTest, GUI)

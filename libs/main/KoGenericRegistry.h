@@ -91,11 +91,9 @@ public:
      * Retrieve the object from the registry based on the unique
      * identifier string.
      *
-     * XXX: If it's deprecated, what replaces it?
-     *
      * @param id the id
      */
-    KDE_DEPRECATED T get(const QString& id) const
+    T get(const QString& id) const
     {
         return value(id);
     }

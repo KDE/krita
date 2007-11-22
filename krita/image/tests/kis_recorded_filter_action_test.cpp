@@ -22,10 +22,22 @@
 #include "kis_recorded_filter_action_test.h"
 
 #include "kis_recorded_filter_action.h"
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include "kis_paint_layer.h"
+#include "kis_filter.h"
+#include "kis_filter_configuration.h"
+#include "kis_filter_registry.h"
 
 void KisRecordedFilterActionTest::testCreation()
 {
-    KisRecordedFilterAction test();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisImageSP image = new KisImage(0, 10, 10, cs, "merge test");
+    KisPaintLayerSP layer = new KisPaintLayer( image, "test", OPACITY_OPAQUE );
+
+    KisRecordedFilterAction test("invert", layer, f, kfc);
 }
 
 

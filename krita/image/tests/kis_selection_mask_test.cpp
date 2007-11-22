@@ -22,10 +22,16 @@
 #include "kis_selection_mask_test.h"
 
 #include "kis_selection_mask.h"
+#include "kis_image.h"
+#include "kis_types.h"
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 
 void KisSelectionMaskTest::testCreation()
 {
-    KisSelectionMask test();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP img = new KisImage(0, 10, 10, cs, "bla");
+    KisSelectionMask test(img);
 }
 
 

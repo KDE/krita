@@ -25,7 +25,7 @@
 
 void KisTransformWorkerTest::testCreation()
 {
-//    KisTransformWorker test();
+//    KisTransformWorker test;
     QFAIL("cannot create tranform worker");
 }
 

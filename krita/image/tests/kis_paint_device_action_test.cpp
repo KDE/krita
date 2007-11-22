@@ -44,7 +44,7 @@ public:
 
 void KisPaintDeviceActionTest::testCreation()
 {
-    TestAction test();
+    TestAction test;
 }
 
 

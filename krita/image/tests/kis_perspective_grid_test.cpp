@@ -25,7 +25,7 @@
 
 void KisPerspectiveGridTest::testCreation()
 {
-    KisPerspectiveGrid test();
+    KisPerspectiveGrid test;
 }
 
 

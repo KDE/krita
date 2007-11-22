@@ -21,11 +21,18 @@
 
 #include "kis_filter_processing_information_test.h"
 
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include "kis_paint_device.h"
+#include "kis_types.h"
+#include "kis_selection.h"
 #include "kis_filter_processing_information.h"
 
 void KisFilterProcessingInformationTest::testCreation()
 {
-    KisFilterProcessingInformation test();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    KisFilterProcessingInformation test(dev, QPoint(0, 0));
 }
 
 

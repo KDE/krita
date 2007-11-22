@@ -25,7 +25,7 @@
 
 void KisPatternTest::testCreation()
 {
-    KisPattern test();
+    KisPattern test(QString(FILES_DATA_DIR) + QDir::separator() + "pattern.pat");
 }
 
 

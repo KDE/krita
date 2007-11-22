@@ -20,12 +20,20 @@
 #include <qtest_kde.h>
 
 #include "kis_clone_layer_test.h"
-
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include "kis_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_clone_layer.h"
 
 void KisCloneLayerTest::testCreation()
 {
-    KisCloneLayer test();
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
+    KisLayerSP layer = new KisPaintLayer( image, "clone test", OPACITY_OPAQUE );
+
+    KisCloneLayer test(layer, image, "clonetest", OPACITY_OPAQUE
+);
 }
 
 

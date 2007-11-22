@@ -23,11 +23,35 @@
 
 #include "kis_perspective_math.h"
 
-void KisPerspectiveMathTest::testCreation()
+void KisPerspectiveMathTest::testComputeMatrixTransfo()
 {
-    KisPerspectiveMath test();
+    QFAIL("Implement!");
 }
 
+void KisPerspectiveMathTest::testComputeMatrixTransfoToPerspective()
+{
+    QFAIL("Implement!");
+}
 
-QTEST_KDEMAIN(KisPerspectiveMathTest, GUI)
+void KisPerspectiveMathTest::testComputeMatrixTransfoFromPerspective()
+{
+    QFAIL("Implement!");
+}
+
+void KisPerspectiveMathTest::testMatProd()
+{
+    QFAIL("Implement!");
+}
+
+void KisPerspectiveMathTest::testComputeLineEquation()
+{
+    QFAIL("Implement!");
+}
+
+void KisPerspectiveMathTest::testComputeIntersection()
+{
+    QFAIL("Implement!");
+}
+
+QTEST_KDEMAIN(KisPerspectiveMathTest, GUI);
 #include "kis_perspective_math_test.moc"

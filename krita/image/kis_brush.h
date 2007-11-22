@@ -66,7 +66,7 @@ public:
              qint32 & dataPos);
 
     /// Load brush from the specified paint device, in the specified region
-    KisBrush(KisPaintDevice* image, int x, int y, int w, int h);
+    KisBrush(KisPaintDeviceSP image, int x, int y, int w, int h);
 
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
     KisBrush(const QImage& image, const QString& name = QString(""));
@@ -135,7 +135,7 @@ private:
 
 
     bool init();
-    bool initFromPaintDev(KisPaintDevice* image, int x, int y, int w, int h);
+    bool initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, int h);
     void createScaledBrushes() const;
 
     KisQImagemaskSP scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const;

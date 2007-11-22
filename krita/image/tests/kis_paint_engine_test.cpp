@@ -25,7 +25,7 @@
 
 void KisPaintEngineTest::testCreation()
 {
-    KisPaintEngine test();
+    KisPaintEngine test;
 }
 
 

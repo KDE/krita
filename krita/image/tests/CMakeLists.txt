@@ -453,18 +453,6 @@ target_link_libraries(KisPerspectiveMathTest  ${KDE4_KDEUI_LIBS} komain kritaima
 
 ########### next target ###############
 
-set(kis_random_accessor_test_SRCS kis_random_accessor_test.cpp )
-kde4_add_unit_test(KisRandomAccessorTest TESTNAME krita-image-KisRandomAccessorTest ${kis_random_accessor_test_SRCS})
-target_link_libraries(KisRandomAccessorTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_random_sub_accessor_test_SRCS kis_random_sub_accessor_test.cpp )
-kde4_add_unit_test(KisRandomSubAccessorTest TESTNAME krita-image-KisRandomSubAccessorTest ${kis_random_sub_accessor_test_SRCS})
-target_link_libraries(KisRandomSubAccessorTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_recorded_action_factory_registry_test_SRCS kis_recorded_action_factory_registry_test.cpp )
 kde4_add_unit_test(KisRecordedActionFactoryRegistryTest TESTNAME krita-image-KisRecordedActionFactoryRegistryTest ${kis_recorded_action_factory_registry_test_SRCS})
 target_link_libraries(KisRecordedActionFactoryRegistryTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
@@ -513,18 +501,6 @@ target_link_libraries(KisSerializableConfigurationTest  ${KDE4_KDEUI_LIBS} komai
 
 ########### next target ###############
 
-set(kis_shared_data_test_SRCS kis_shared_data_test.cpp )
-kde4_add_unit_test(KisSharedDataTest TESTNAME krita-image-KisSharedDataTest ${kis_shared_data_test_SRCS})
-target_link_libraries(KisSharedDataTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_shared_test_SRCS kis_shared_test.cpp )
-kde4_add_unit_test(KisSharedTest TESTNAME krita-image-KisSharedTest ${kis_shared_test_SRCS})
-target_link_libraries(KisSharedTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_shared_ptr_test_SRCS kis_shared_ptr_test.cpp )
 kde4_add_unit_test(KisSharedPtrTest TESTNAME krita-image-KisSharedPtrTest ${kis_shared_ptr_test_SRCS})
 target_link_libraries(KisSharedPtrTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
@@ -570,12 +546,6 @@ target_link_libraries(KisTransparencyMaskTest  ${KDE4_KDEUI_LIBS} komain kritaim
 set(kis_types_test_SRCS kis_types_test.cpp )
 kde4_add_unit_test(KisTypesTest TESTNAME krita-image-KisTypesTest ${kis_types_test_SRCS})
 target_link_libraries(KisTypesTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_undo_adapter_test_SRCS kis_undo_adapter_test.cpp )
-kde4_add_unit_test(KisUndoAdapterTest TESTNAME krita-image-KisUndoAdapterTest ${kis_undo_adapter_test_SRCS})
-target_link_libraries(KisUndoAdapterTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

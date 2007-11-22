@@ -20,12 +20,29 @@
 #include <qtest_kde.h>
 
 #include "kis_adjustment_layer_test.h"
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "kis_adjustment_layer.h"
+#include "kis_filter_configuration.h"
+#include "kis_filter.h"
+#include "kis_filter_registry.h"
+#include "kis_image.h"
+#include "kis_selection.h"
+#include "kis_types.h"
 
 void KisAdjustmentLayerTest::testCreation()
 {
-    KisAdjustmentLayer test();
+
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT( f );
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    Q_ASSERT( kfc );
+
+
+    KisAdjustmentLayer test(image, "test", kfc, 0);
 }
 
 

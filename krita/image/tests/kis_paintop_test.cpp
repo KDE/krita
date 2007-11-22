@@ -22,10 +22,17 @@
 #include "kis_paintop_test.h"
 
 #include "kis_paintop.h"
+#include "kis_painter.h"
 
 class TestPaintOp : public KisPaintOp
 {
 public:
+
+    TestPaintOp( KisPainter * gc)
+        : KisPaintOp( gc )
+        {
+        }
+
     void paintAt(const KisPaintInformation&)
         {
         }
@@ -34,7 +41,8 @@ public:
 
 void KisPaintopTest::testCreation()
 {
-    TestPaintOp test();
+    KisPainter p;
+    TestPaintOp test( &p);
 }
 
 

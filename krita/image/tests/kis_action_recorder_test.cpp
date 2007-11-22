@@ -21,11 +21,19 @@
 
 #include "kis_action_recorder_test.h"
 
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include "kis_types.h"
+#include "kis_image.h"
 #include "kis_action_recorder.h"
 
 void KisActionRecorderTest::testCreation()
 {
-    KisActionRecorder test();
+
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "paintop registry test");
+
+    KisActionRecorder test(image);
 }
 
 

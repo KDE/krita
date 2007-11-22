@@ -25,7 +25,7 @@
 
 void KisRecordedActionFactoryRegistryTest::testCreation()
 {
-    KisRecordedActionFactoryRegistry test();
+    KisRecordedActionFactoryRegistry test;
 }
 
 

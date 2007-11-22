@@ -100,7 +100,7 @@ KisBrush::KisBrush(const QString& filename,
     dataPos += m_header_size + (width() * height() * m_bytes);
 }
 
-KisBrush::KisBrush(KisPaintDevice* image, int x, int y, int w, int h)
+KisBrush::KisBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     : KoResource(QString(""))
 {
     m_brushType = INVALID;
@@ -277,7 +277,7 @@ bool KisBrush::init()
     return true;
 }
 
-bool KisBrush::initFromPaintDev(KisPaintDevice* image, int x, int y, int w, int h) {
+bool KisBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, int h) {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
     setImage(image->convertToQImage(0, x, y, w, h));
@@ -493,7 +493,7 @@ KisPaintDeviceSP KisBrush::image(const KoColorSpace * /*colorSpace*/, const KisP
     int outputWidth = outputImage.width();
     int outputHeight = outputImage.height();
 
-    KisPaintDevice *layer = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "brush");
+    KisPaintDeviceSP layer = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "brush");
 
     Q_CHECK_PTR(layer);
 
@@ -524,7 +524,7 @@ KisPaintDeviceSP KisBrush::image(const KoColorSpace * /*colorSpace*/, const KisP
         iter.nextRow();
     }
 
-    return KisPaintDeviceSP(layer);
+    return layer;
 }
 
 void KisBrush::setHotSpot(QPointF pt)

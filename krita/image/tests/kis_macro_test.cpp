@@ -22,10 +22,44 @@
 #include "kis_macro_test.h"
 
 #include "kis_macro.h"
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include "kis_image.h"
+
+#include "kis_recorded_action.h"
+
+class TestAction : public KisRecordedAction
+{
+public:
+
+    TestAction(const QString & name, const QString & id)
+        : KisRecordedAction(name, id)
+        {
+        }
+
+    void play()
+        {
+        }
+
+    KisRecordedAction* clone() const
+        {
+            return new TestAction(name(), id());
+        }
+
+};
+
 
 void KisMacroTest::testCreation()
 {
-    KisMacro test();
+    QList<KisRecordedAction*> actions;
+    TestAction tc("bla", "bla");
+    actions << &tc;
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, cs, "test");
+
+    KisMacro a(image);
+    KisMacro b(image, actions);
 }
 
 

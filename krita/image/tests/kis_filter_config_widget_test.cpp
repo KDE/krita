@@ -26,6 +26,10 @@
 class TestWidget : public KisFilterConfigWidget
 {
 public:
+    TestWidget()
+        : KisFilterConfigWidget(0)
+        {
+        }   
 
     void setConfiguration(KisFilterConfiguration*)
         {
@@ -39,7 +43,7 @@ public:
 
 void KisFilterConfigWidgetTest::testCreation()
 {
-    TestWidget test();
+    TestWidget test;
 }
 
 

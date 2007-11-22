@@ -25,7 +25,7 @@
 
 void KisNameServerTest::testCreation()
 {
-    KisNameServer test();
+    KisNameServer test;
 }
 
 

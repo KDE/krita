@@ -22,10 +22,14 @@
 #include "kis_change_profile_visitor_test.h"
 
 #include "kis_change_profile_visitor.h"
+#include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
 
 void KisChangeProfileVisitorTest::testCreation()
 {
-    KisChangeProfileVisitor test();
+    const KoColorSpace * a = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * b = KoColorSpaceRegistry::instance()->rgb8();
+    KisChangeProfileVisitor test(a, b);
 }
 
 

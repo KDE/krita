@@ -25,9 +25,15 @@
 
 void KisFilterStrategyTest::testCreation()
 {
-    KisFilterStrategy test();
+    KisFilterStrategyRegistry *reg = KisFilterStrategyRegistry::instance();
+    KisHermiteFilterStrategy hermite;
+    KisBoxFilterStrategy box;
+    KisTriangleFilterStrategy triangle; 
+    KisBellFilterStrategy bell;
+    KisBSplineFilterStrategy bspline;
+    KisLanczos3FilterStrategy  lanczos3;
+    KisMitchellFilterStrategy  mitchell;
 }
-
 
 QTEST_KDEMAIN(KisFilterStrategyTest, GUI)
 #include "kis_filter_strategy_test.moc"

@@ -25,7 +25,7 @@
 
 void KisGenericColorSpaceTest::testCreation()
 {
-    KisGenericColorSpace<float, 8> test();
+    KisGenericColorSpace<float, 8> test;
 }
 
 

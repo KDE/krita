@@ -25,7 +25,7 @@
 
 void KisAutogradientResourceTest::testCreation()
 {
-    KisAutogradientResource test();
+    KisAutogradientResource test;
 }
 
 

@@ -22,10 +22,18 @@
 #include "kis_selected_transaction_test.h"
 
 #include "kis_selected_transaction.h"
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include "kis_paint_device.h"
+#include <QUndoCommand>
+#include "kis_types.h"
 
 void KisSelectedTransactionTest::testCreation()
 {
-    KisSelectedTransaction test();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    QUndoCommand cmd;
+    KisSelectedTransaction test("bla", dev, &cmd);
 }
 
 

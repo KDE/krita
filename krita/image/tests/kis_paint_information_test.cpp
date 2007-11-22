@@ -25,7 +25,7 @@
 
 void KisPaintInformationTest::testCreation()
 {
-    KisPaintInformation test();
+    KisPaintInformation test;
 }
 
 

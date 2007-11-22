@@ -22,10 +22,16 @@
 #include "kis_boundary_test.h"
 
 #include "kis_boundary.h"
+#include "kis_types.h"
+#include "kis_paint_device.h"
+#include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
 
 void KisBoundaryTest::testCreation()
 {
-    KisBoundary test();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice( cs );
+    KisBoundary test(dev);
 }
 
 

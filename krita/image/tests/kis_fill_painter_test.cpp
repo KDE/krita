@@ -25,7 +25,7 @@
 
 void KisFillPainterTest::testCreation()
 {
-    KisFillPainter test();
+    KisFillPainter test;
 }
 
 

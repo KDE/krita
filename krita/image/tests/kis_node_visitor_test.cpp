@@ -25,7 +25,7 @@
 
 void KisNodeVisitorTest::testCreation()
 {
-    KisNodeVisitor test();
+    KisNodeVisitor test;
 }
 
 

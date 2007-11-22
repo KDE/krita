@@ -25,7 +25,7 @@
 
 void KisConvolutionPainterTest::testCreation()
 {
-    KisConvolutionPainter test();
+    KisConvolutionPainter test;
 }
 
 

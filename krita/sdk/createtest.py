@@ -51,7 +51,7 @@ IMPLEMENTATION=Template("""${GPL}
 
 void ${CLASSNAME}Test::testCreation()
 {
-    ${CLASSNAME} test();
+    ${CLASSNAME} test;
 }
 
 

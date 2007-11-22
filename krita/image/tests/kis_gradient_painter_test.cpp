@@ -25,7 +25,7 @@
 
 void KisGradientPainterTest::testCreation()
 {
-    KisGradientPainter test();
+    KisGradientPainter test;
 }
 
 

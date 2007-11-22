@@ -19,7 +19,7 @@
 #define KIS_PAINT_ENGINE
 
 #include <QPaintEngine>
-
+#include "krita_export.h"
 class QPaintDevice;
 class QPaintEngineState;
 class QRect;
@@ -42,7 +42,7 @@ class QImage;
    @see KisPaintDevice
    @see KoColorSpace
 */
-class KisPaintEngine : public QPaintEngine
+class KRITAIMAGE_EXPORT KisPaintEngine : public QPaintEngine
 {
 public:
 

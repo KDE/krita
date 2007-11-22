@@ -25,7 +25,8 @@
 
 void KisExtentVisitorTest::testCreation()
 {
-    KisExtentVisitor test();
+    QRect rc(0, 0, 100, 100);
+    KisExtentVisitor test( rc, true );
 }
 
 

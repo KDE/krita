@@ -25,7 +25,7 @@
 
 void KisBasicMathToolboxTest::testCreation()
 {
-    KisBasicMathToolbox test();
+    KisBasicMathToolbox test;
 }
 
 

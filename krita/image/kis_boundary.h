@@ -22,9 +22,7 @@
 #include <QPair>
 #include <krita_export.h>
 
-
-
-class KisPaintDevice;
+#include "kis_types.h"
 
 /**
  * Generates an 'outline' for a paint device. It should look a bit like the outline of a
@@ -36,13 +34,13 @@ class KisPaintDevice;
  **/
 class KRITAIMAGE_EXPORT KisBoundary {
 public:
-    KisBoundary(KisPaintDevice* dev);
+    KisBoundary(KisPaintDeviceSP dev);
     void generateBoundary(int w, int h);
 
 private:
     typedef QPair<QPointF, int> PointPair; // int->length
     bool isDark(quint8 val);
-    KisPaintDevice* m_device;
+    KisPaintDeviceSP m_device;
     int m_fuzzyness;
 
     typedef QList<PointPair> PointPairList;

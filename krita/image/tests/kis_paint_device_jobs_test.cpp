@@ -21,11 +21,25 @@
 
 #include "kis_paint_device_jobs_test.h"
 
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+
 #include "kis_paint_device_jobs.h"
 
 void KisPaintDeviceJobsTest::testCreation()
 {
-    ConversionJob test();
+    const KoColorSpace * srcCs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace * dstCs = KoColorSpaceRegistry::instance()->lab16();
+
+    quint8* src = new quint8[ 64 * 4 ];
+    memset(src, 0, 64 * 4);
+    quint8* dst = new quint8[ 64 * 8 ];
+    memset(dst, 0, 64 * 8);
+
+    ConversionJob test(src, dst, srcCs, dstCs, 64,  KoColorConversionTransformation::IntentPerceptual, 0);
+
+    delete[] src;
+    delete[] dst;
 }
 
 

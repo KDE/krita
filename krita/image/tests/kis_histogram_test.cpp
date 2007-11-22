@@ -21,11 +21,21 @@
 
 #include "kis_histogram_test.h"
 
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoHistogramProducer.h>
+#include "kis_paint_device.h"
 #include "kis_histogram.h"
 
 void KisHistogramTest::testCreation()
 {
-    KisHistogram test();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    QList<KoID> producers = KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(cs);
+    foreach(KoID id, producers) {
+        KoHistogramProducerSP producer = KoHistogramProducerFactoryRegistry::instance()->get(id.id())->generate();
+        KisHistogram test(dev, producer, LINEAR);
+    }
 }
 
 

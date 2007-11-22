@@ -64,7 +64,7 @@ public:
      * @return this color
      */
     KoColor &operator=(const KoColor &other);
-    
+
     bool operator==(const KoColor &other) const;
 
     /// return the current colorSpace
@@ -100,8 +100,8 @@ public:
     /// Convenient function for converting from a QColor and setting the opacity
     void fromQColor(const QColor& c, quint8 opacity) const;
 
-    /// For easy memcpy'ing etc.   WARNING; violates encapsulation.
-    KDE_DEPRECATED quint8 * data() const;
+    /// For easy memcpy'ing etc.
+    quint8 * data() const;
 
 #ifndef NODEBUG
     /// use kDebug calls to print internal info

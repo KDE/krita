@@ -23,6 +23,7 @@
 #include <KoZoomHandler.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
+#include <KoProgressBar.h>
 
 #include <KDebug>
 #include <KLocale>
@@ -30,7 +31,6 @@
 #include <QPrinter>
 #include <QGridLayout>
 #include <QLabel>
-#include <QProgressBar>
 #include <QPushButton>
 #include <QTimer>
 
@@ -139,7 +139,7 @@ KoPrintingDialog::KoPrintingDialog(QWidget *parent)
     setLayout(grid);
     d->pageNumber = new QLabel(this);
     grid->addWidget(d->pageNumber, 0, 0);
-    QProgressBar *bar = new QProgressBar(this);
+    KoProgressBar *bar = new KoProgressBar(this);
     d->progress = new KoProgressUpdater(bar);
     grid->addWidget(bar, 1, 0, 1, 3);
     d->button = new QPushButton(i18n("Stop"), this);

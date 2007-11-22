@@ -20,8 +20,8 @@
 #define KIS_STATUSBAR_H
 
 #include <QObject>
-#include <QProgressBar>
 
+#include <KoProgressBar.h>
 #include <kis_types.h>
 
 class QLabel;
@@ -48,14 +48,14 @@ public slots:
     void setProfile( KisImageSP img );
     void setHelp( const QString &t );
     void updateStatusBarProfileLabel();
-    QProgressBar * progress()
+    KoProgressBar * progress()
         {
             return m_progress;
         }
 private:
 
     KisView2 * m_view;
-    QProgressBar * m_progress;
+    KoProgressBar * m_progress;
     KStatusBar * m_statusbar;
 
     QLabel *m_statusBarZoomLabel; // Make interactive line edit

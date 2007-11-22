@@ -24,11 +24,24 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
+#include <KoProgressUpdater.h>
+#include "kis_paint_device.h"
+
 /**
  * Routines that are useful for writing efficient tests
  */
 
 namespace TestUtil {
+
+
+struct TestProgressBar : public KoProgressProxy
+{
+    int maximum() const {}
+    void setValue( int value ) {}
+    void setRange( int minimum, int maximum ) {}
+    void setFormat( const QString & format ) {}
+};
+
 
 bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2 )
 {

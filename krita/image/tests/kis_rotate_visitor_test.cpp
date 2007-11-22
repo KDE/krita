@@ -23,10 +23,11 @@
 
 #include <kis_rotate_visitor.h>
 #include <KoProgressUpdater.h>
-
+#include "testutil.h"
 void KisRotateVisitorTest::testCreation()
 {
-    KoProgressUpdater pu(0);
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
     KoUpdater updater = pu.startSubtask();
     KisRotateVisitor test(&updater);
 }

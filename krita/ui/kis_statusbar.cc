@@ -20,7 +20,7 @@
 
 #include <QLabel>
 #include <QFontMetrics>
-#include <QProgressBar>
+#include <KoProgressBar.h>
 #include <ksqueezedtextlabel.h>
 #include <kstatusbar.h>
 #include <klocale.h>
@@ -36,6 +36,7 @@
 #include "kis_view2.h"
 #include "kis_canvas2.h"
 #include "KoViewConverter.h"
+#include "KoProgressBar.h"
 
 enum {
     IMAGE_SIZE_ID,
@@ -61,7 +62,7 @@ KisStatusBar::KisStatusBar(KStatusBar * sb, KisView2 * view )
 
     //int height = m_statusBarProfileLabel->height();
 
-    m_progress = new QProgressBar(sb);
+    m_progress = new KoProgressBar(sb);
     m_progress->setMaximumWidth(225);
     m_progress->setMinimumWidth(225);
     m_progress->setMaximumHeight(sb->fontMetrics().height() );

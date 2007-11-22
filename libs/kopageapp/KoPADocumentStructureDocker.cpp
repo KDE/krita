@@ -86,7 +86,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( QWidget* parent )
     QWidget *mainWidget = new QWidget( this );
     QGridLayout* layout = new QGridLayout( mainWidget );
     layout->addWidget( m_sectionView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, 4 );
-
+    m_sectionView->setDisplayMode( KoDocumentSectionView::DetailedMode );
     QButtonGroup *buttonGroup = new QButtonGroup( mainWidget );
     buttonGroup->setExclusive( false );
 

@@ -153,7 +153,7 @@ if(SHOULD_BUILD_KPRESENTER)
 endif(SHOULD_BUILD_KPRESENTER)
 
 macro_optional_add_subdirectory(kdgantt)
-macro_optional_add_subdirectory(kchart)
+#macro_optional_add_subdirectory(kchart)
 
 FIND_PROGRAM(BZIP2_EXECUTABLE NAMES bzip2 )
 
@@ -167,7 +167,7 @@ macro_optional_add_subdirectory(kformula)
 macro_optional_add_subdirectory(kivio)
 #macro_optional_add_subdirectory(koshell)
 macro_optional_add_subdirectory(kounavail)
-macro_optional_add_subdirectory(kplato)
+#macro_optional_add_subdirectory(kplato)
 macro_optional_add_subdirectory(krita)
 #macro_optional_add_subdirectory(kugar)
 macro_optional_add_subdirectory(kword)

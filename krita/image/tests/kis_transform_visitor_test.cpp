@@ -29,10 +29,11 @@
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_filter_strategy.h"
-
+#include "testutil.h"
 void KisTransformVisitorTest::testCreation()
 {
-    KoProgressUpdater pu(0);
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
     KoUpdater updater = pu.startSubtask();
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP img = new KisImage(0, 10, 10, cs, "bla");

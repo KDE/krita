@@ -26,10 +26,10 @@
 #include <QMutex>
 #include <QPointer>
 
-class QProgressBar;
 class KoUpdater;
 class KoProgressUpdaterPrivate;
 class KoAction;
+class KoProgressProxy;
 
 /**
  * Allow multiple subtasks to safely update and report progress.
@@ -63,7 +63,7 @@ public:
      * Constructor.
      * @param progressBar the progress bar to update.
      */
-    KoProgressUpdater(QProgressBar *progressBar);
+    KoProgressUpdater(KoProgressProxy *progressBar);
     /// destructor
     virtual ~KoProgressUpdater();
 
@@ -73,8 +73,8 @@ public:
      * the progressBar as well as the text in the progressbar.
      * @param range the total range of progress bar makes.
      * @param text The text to show in the progressBar.
-     * @see QProgressBar::setRange()
-     * @see QProgressBar::setFormat()
+     * @see KoProgressProxy::setRange()
+     * @see KoProgressProxy::setFormat()
      */
     void start(int range = 100, const QString &text = "%p%");
 
@@ -145,6 +145,26 @@ protected:
 
 private:
     QPointer<KoProgressUpdaterPrivate> d;
+};
+
+/**
+ * A proxy interface for a real progress status reporting thing, either
+ * a widget such as a KoProgressProxy childclass that also inherits this
+ * interface, or something that prints progress to stdout.
+ */
+class KoProgressProxy {
+
+public:
+
+    virtual ~KoProgressProxy()
+        {
+        }
+
+    virtual int maximum() const = 0;
+    virtual void setValue( int value ) = 0;
+    virtual void setRange( int minimum, int maximum ) = 0;
+    virtual void setFormat( const QString & format ) = 0;
+
 };
 
 #endif

@@ -22,7 +22,6 @@
 #include <threadAction/KoExecutePolicy.h>
 #include <threadweaver/ThreadWeaver.h>
 
-#include <QProgressBar>
 #include <QString>
 // #include <KDebug>
 
@@ -63,7 +62,7 @@ private:
 
 class KoProgressUpdater::Private {
 public:
-    Private(QProgressBar *p)
+    Private(KoProgressProxy *p)
         : progressBar(p),
         totalWeight(0),
         currentProgress(0),
@@ -102,7 +101,7 @@ public:
     }
 
 
-    QProgressBar *progressBar;
+    KoProgressProxy *progressBar;
     QList<KoProgressUpdaterPrivate*> subtasks;
     int totalWeight;
     int currentProgress; // used for the update and updateUi methods. Don't use elsewhere
@@ -111,7 +110,7 @@ public:
 };
 
 
-KoProgressUpdater::KoProgressUpdater(QProgressBar *progressBar)
+KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar)
     : d(new Private(progressBar))
 {
     Q_ASSERT(d->progressBar);

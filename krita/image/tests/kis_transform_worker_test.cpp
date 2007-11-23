@@ -21,14 +21,28 @@
 
 #include "kis_transform_worker_test.h"
 
+#include <KoProgressUpdater.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include "kis_types.h"
+#include "kis_image.h"
+#include "kis_filter_strategy.h"
+#include "kis_paint_device.h"
 #include "kis_transform_worker.h"
+#include "testutil.h"
 
 void KisTransformWorkerTest::testCreation()
 {
-//    KisTransformWorker test;
-    QFAIL("cannot create tranform worker");
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdater updater = pu.startSubtask();
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP img = new KisImage(0, 10, 10, cs, "bla");
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs, "bla");
+    KisTransformWorker tw(dev, 1.0, 1.0, 1.0, 1.0, 1.5, 0, 0, &updater, filter, true);
 }
 
 
-QTEST_KDEMAIN(KisTransformWorkerTest, GUI)
+QTEST_KDEMAIN(KisTransformWorkerTest, GUI);
 #include "kis_transform_worker_test.moc"

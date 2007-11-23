@@ -348,7 +348,15 @@ void KisMaskManager::maskToLayer()
     image->addNode(layer.data(), activeLayer->parent(), activeLayer.data());
 }
 
-void KisMaskManager::duplicateMask() {}
+void KisMaskManager::duplicateMask()
+{
+    if (!m_activeMask) return;
+    if (!m_view || !m_view->image()) return;
+    if (m_activeMask->inherits("KisSelectionMask")) return; // Cannot duplicate selection masks
+    KisNodeSP dup = m_activeMask->clone();
+    m_view->image()->addNode(dup, m_activeMask->parent(), m_activeMask.data());
+    
+}
 
 void KisMaskManager::showMask() {}
 
@@ -478,7 +486,7 @@ void KisMaskManager::maskProperties()
         }
     }
     else {
-        // Not much to show for transparency masks?
+        // Not much to show for transparency or selection masks?
     }
 }
 

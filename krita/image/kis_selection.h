@@ -142,6 +142,9 @@ public:
      */
     QRect selectedExactRect() const;
 
+    /**
+     * paint a mask-like representation of the selection onto the given QImage
+     */
     void paint(QImage* img, const QRect & r);
 
     /**

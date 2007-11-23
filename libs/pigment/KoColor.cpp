@@ -241,7 +241,11 @@ const KoColorProfile *  KoColor::profile() const
     return d->colorSpace->profile();
 }
 
-quint8 * KoColor::data() const {
+quint8 * KoColor::data() {
+    return d->data;
+}
+
+const quint8 * KoColor::data() const {
     return d->data;
 }
 

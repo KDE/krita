@@ -101,7 +101,10 @@ public:
     void fromQColor(const QColor& c, quint8 opacity) const;
 
     /// For easy memcpy'ing etc.
-    quint8 * data() const;
+    quint8 * data();
+
+    /// For easy memcpy'ing etc.
+    const quint8 * data() const;
 
 #ifndef NODEBUG
     /// use kDebug calls to print internal info

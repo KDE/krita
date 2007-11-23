@@ -998,7 +998,7 @@ bool KisPaintDevice::setPixel(qint32 x, qint32 y, const QColor& c, quint8  opaci
 
 bool KisPaintDevice::setPixel(qint32 x, qint32 y, const KoColor& kc)
 {
-    quint8 * pix;
+    const quint8 * pix;
     if (kc.colorSpace() != m_d->colorSpace) {
         KoColor kc2 (kc, m_d->colorSpace);
         pix = kc2.data();

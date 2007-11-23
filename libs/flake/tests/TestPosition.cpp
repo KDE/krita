@@ -72,7 +72,7 @@ void TestPosition::testAbsolutePosition() {
     shape1->setPosition(QPointF(10, 10));
 
     QCOMPARE(shape1->absolutePosition(), QPointF(10 + 25, 10 + 25) );
-    QCOMPARE(shape1->absolutePosition(KoFlake::CenteredPositon), QPointF(10 + 25, 10 + 25) );
+    QCOMPARE(shape1->absolutePosition(KoFlake::CenteredPosition), QPointF(10 + 25, 10 + 25) );
     QCOMPARE(shape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(10 + 50, 10) );
     QCOMPARE(shape1->absolutePosition(KoFlake::BottomRightCorner), QPointF(10, 10 + 50) );
 

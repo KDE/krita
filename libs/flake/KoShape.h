@@ -459,7 +459,7 @@ public:
      * @param anchor The place on the (unaltered) shape that you want the position of.
      * @return the point that is the absolute, centered position of this shape.
      */
-    QPointF absolutePosition(KoFlake::Position anchor = KoFlake::CenteredPositon) const;
+    QPointF absolutePosition(KoFlake::Position anchor = KoFlake::CenteredPosition) const;
 
     /**
      * Move this shape to an absolute position where the end location will be the same
@@ -475,7 +475,7 @@ public:
      * @param newPosition the new absolute center of the shape.
      * @param anchor The place on the (unaltered) shape that you set the position of.
      */
-    void setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor = KoFlake::CenteredPositon);
+    void setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor = KoFlake::CenteredPosition);
 
     /**
      * Set a data object on the shape to be used by an application.

@@ -375,7 +375,7 @@ QPointF KoShape::absolutePosition(KoFlake::Position anchor) const {
         case KoFlake::TopRightCorner: point = QPointF(size().width(), 0.0); break;
         case KoFlake::BottomLeftCorner: point = QPointF(0.0, size().height()); break;
         case KoFlake::BottomRightCorner: point = QPointF(size().width(), size().height()); break;
-        case KoFlake::CenteredPositon: point = QPointF(size().width() / 2.0, size().height() / 2.0); break;
+        case KoFlake::CenteredPosition: point = QPointF(size().width() / 2.0, size().height() / 2.0); break;
     }
     return absoluteTransformation(0).map(point);
 }

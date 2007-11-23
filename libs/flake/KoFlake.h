@@ -60,7 +60,7 @@ public:
         TopRightCorner, ///< the top right corner
         BottomLeftCorner, ///< the bottom left corner
         BottomRightCorner, ///< the bottom right corner
-        CenteredPositon ///< the centred corner
+        CenteredPosition ///< the centred corner
     };
 
 

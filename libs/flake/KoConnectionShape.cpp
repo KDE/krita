@@ -332,9 +332,9 @@ QPointF KoConnectionShape::escapeDirection( int handleId ) const
         QPointF handlePoint = absoluteMatrix.map( m_handles[handleId] );
         QPointF centerPoint;
         if( handleId == 0 )
-            centerPoint = d->shape1->absolutePosition( KoFlake::CenteredPositon );
+            centerPoint = d->shape1->absolutePosition( KoFlake::CenteredPosition );
         else
-            centerPoint = d->shape2->absolutePosition( KoFlake::CenteredPositon );
+            centerPoint = d->shape2->absolutePosition( KoFlake::CenteredPosition );
 
         double angle = atan2( handlePoint.y()-centerPoint.y(), handlePoint.x()-centerPoint.x() );
         if( angle < 0.0 )

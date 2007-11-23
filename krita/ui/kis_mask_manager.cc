@@ -313,6 +313,7 @@ void KisMaskManager::maskToSelection()
     if (!image) return;
     image->setGlobalSelection(m_activeMask->selection());
     image->removeNode(m_activeMask.data());
+    m_activeMask = 0;
 }
 
 void KisMaskManager::maskToLayer()
@@ -345,30 +346,26 @@ void KisMaskManager::maskToLayer()
     }
     
     image->removeNode(m_activeMask.data());
+    m_activeMask = 0;
     image->addNode(layer.data(), activeLayer->parent(), activeLayer.data());
 }
 
 void KisMaskManager::duplicateMask()
 {
     if (!m_activeMask) return;
-    if (!m_view || !m_view->image()) return;
+    if (!!m_view->image()) return;
     if (m_activeMask->inherits("KisSelectionMask")) return; // Cannot duplicate selection masks
     KisNodeSP dup = m_activeMask->clone();
     m_view->image()->addNode(dup, m_activeMask->parent(), m_activeMask.data());
     
 }
 
-void KisMaskManager::showMask() {}
-
-void KisMaskManager::removeMask() {}
-
-void KisMaskManager::raiseMask() {}
-
-void KisMaskManager::lowerMask() {}
-
-void KisMaskManager::maskToTop() {}
-
-void KisMaskManager::maskToBottom() {}
+void KisMaskManager::removeMask()
+{
+    if (!m_activeMask) return;
+    if (!m_view->image()) return;
+    m_view->image()->removeNode(m_activeMask.data());
+}
 
 void KisMaskManager::mirrorMaskX()
 {
@@ -472,7 +469,7 @@ void KisMaskManager::maskProperties()
             return;
 
         KisPaintDeviceSP dev = layer->projection();
-        KisDlgAdjLayerProps dlg( layer->projection(), mask->filter(),  mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops" );
+        KisDlgAdjLayerProps dlg( layer->projection(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops" );
         QString before = dlg.filterConfiguration()->toLegacyXML();
         if (dlg.exec() == QDialog::Accepted)
         {
@@ -494,5 +491,39 @@ void KisMaskManager::masksUpdated()
 {
     m_view->updateGUI();
 }
+
+void KisMaskManager::showMask()
+{
+    // XXX: make sure the canvas knows it should paint the active mask as a mask
+}
+
+void KisMaskManager::raiseMask()
+{
+    if (!m_activeMask) return;
+    if (!m_view->image()) return;
+    m_view->image()->raiseNode(m_activeMask.data());
+}
+
+void KisMaskManager::lowerMask()
+{
+    if (!m_activeMask) return;
+    if (!m_view->image()) return;
+    m_view->image()->lowerNode(m_activeMask.data());
+}
+
+void KisMaskManager::maskToTop()
+{
+    if (!m_activeMask) return;
+    if (!m_view->image()) return;
+    m_view->image()->toTop(m_activeMask.data());
+}
+
+void KisMaskManager::maskToBottom()
+{
+    if (!m_activeMask) return;
+    if (!m_view->image()) return;
+    m_view->image()->toBottom(m_activeMask.data());
+}
+
 
 #include "kis_mask_manager.moc"

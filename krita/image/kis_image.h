@@ -393,12 +393,6 @@ public:
     /// Move layer down one slot
     bool KDE_DEPRECATED lowerLayer(KisLayerSP layer);
 
-    /// Move layer to top slot
-    bool KDE_DEPRECATED toTop(KisLayerSP layer);
-
-    /// Move layer to bottom slot
-    bool KDE_DEPRECATED toBottom(KisLayerSP layer);
-
     /**
      * Return the number of layers (not other nodes) that are in this
      * image.

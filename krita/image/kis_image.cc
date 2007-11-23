@@ -756,18 +756,6 @@ bool KisImage::lowerLayer(KisLayerSP layer)
     return lowerNode( layer.data() );
 }
 
-bool KisImage::toTop(KisLayerSP layer)
-{
-    KisNode* node = dynamic_cast<KisNode*>( layer.data() );
-    return KisNodeFacade::toTop( node );
-}
-
-bool KisImage::toBottom(KisLayerSP layer)
-{
-    KisNode* node = dynamic_cast<KisNode*>( layer.data() );
-    return KisNodeFacade::toBottom( node );
-}
-
 bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
 {
     // XXX: Temporary until everything is moved to handling just nodes

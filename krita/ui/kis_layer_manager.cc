@@ -681,7 +681,7 @@ void KisLayerManager::layerFront()
         return;
 
     layer = activeLayer();
-    img->toTop(layer);
+    img->toTop(layer.data());
 }
 
 void KisLayerManager::layerBack()
@@ -692,7 +692,7 @@ void KisLayerManager::layerBack()
     KisLayerSP layer;
 
     layer = activeLayer();
-    img->toBottom(layer);
+    img->toBottom(layer.data());
 }
 
 void KisLayerManager::rotateLayer180()

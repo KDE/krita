@@ -31,6 +31,8 @@ public:
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
+    virtual Qt::Dock defaultDockPosition() const;
+
 };
 
 #endif // STROKEDOCKERFACTORY_H

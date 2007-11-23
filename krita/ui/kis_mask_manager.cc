@@ -46,6 +46,8 @@
 #include "kis_pixel_selection.h"
 #include "kis_dlg_adj_layer_props.h"
 #include "kis_selection_mask.h"
+#include "kis_selection.h"
+#include "kis_paint_device.h"
 
 KisMaskManager::KisMaskManager( KisView2 * view)
     : m_view( view )
@@ -304,16 +306,46 @@ void KisMaskManager::createSelectionMask( KisNodeSP parent, KisNodeSP above )
 
 void KisMaskManager::maskToSelection()
 {
+    // XXX: should we remove the mask when setting the mask as selection?
+    // XXX: should the selection be layer-local, or global?
     if (!m_activeMask) return;
-    KisLayerSP parent = m_view->activeLayer();
-    KisSelectionMaskSP selectionMask = new KisSelectionMask( m_view->image() );
-    selectionMask->setSelection( m_activeMask->selection() );
-    m_activeMask->setSelection( new KisSelection() );
-    m_view->image()->addNode( selectionMask, parent, m_activeMask );
+    KisImageSP image = m_view->image();
+    if (!image) return;
+    image->setGlobalSelection(m_activeMask->selection());
+    image->removeNode(m_activeMask.data());
 }
 
 void KisMaskManager::maskToLayer()
 {
+    // XXX: Should we also be able to create other layertypes than paint layer from masks?
+    // XXX: Right now, I create black pixels with the alpha channel set to the selection,
+    //      should we create grayscale pixels?
+    if (!m_activeMask) return;
+    KisImageSP image = m_view->image();
+    if (!image) return;
+    KisLayerSP activeLayer = m_view->activeLayer();
+    if (!activeLayer) return;
+
+    KisSelectionSP selection = m_activeMask->selection();
+    selection->updateProjection();
+    KisPaintLayerSP layer =
+        new KisPaintLayer(image, m_activeMask->name(), OPACITY_OPAQUE);
+
+    const KoColorSpace * cs = layer->colorSpace();
+    QRect rc = selection->selectedExactRect();
+    KoColor color(Qt::black, cs);
+    int pixelsize = cs->pixelSize();
+    KisHLineIteratorPixel dstiter = layer->paintDevice()->createHLineIterator(rc.x(), rc.y(), rc.width(), selection);
+    for (int row = 0; row < rc.height(); ++row) {
+        while (!dstiter.isDone()) {
+            cs->setAlpha(color.data(), dstiter.selectedness(), 1);
+            memcpy(dstiter.rawData(), color.data(), pixelsize);
+        }
+        dstiter.nextRow();
+    }
+    
+    image->removeNode(m_activeMask.data());
+    image->addNode(layer.data(), activeLayer->parent(), activeLayer.data());
 }
 
 void KisMaskManager::duplicateMask() {}

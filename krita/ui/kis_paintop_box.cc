@@ -77,7 +77,6 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
     // XXX: Let's see... Are all paintops loaded and ready?
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
     for ( QList<KoID>::Iterator it = keys.begin(); it != keys.end(); ++it ) {
-        kDebug() << it->name();
         // add all paintops, and show/hide them afterwards
         addItem(*it);
     }
@@ -117,15 +116,11 @@ void KisPaintopBox::slotItemSelected(int index)
 
 void KisPaintopBox::colorSpaceChanged(const KoColorSpace *cs)
 {
-    kDebug() << "colorSpaceChanged"  << cs;
-    
     m_displayedOps.clear();
     m_cmbPaintops->clear();
 
     foreach (KoID paintopId, m_paintops) {
-        kDebug() << paintopId;
         if (KisPaintOpRegistry::instance()->userVisible(paintopId, cs)) {
-            kDebug() << " visible: ";
             QPixmap pm = paintopPixmap(paintopId);
 
             if (pm.isNull()) {
@@ -229,7 +224,6 @@ const KoID& KisPaintopBox::currentPaintop()
 
 void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 {
-    kDebug() << paintop.name();
     m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
 
     updateOptionWidget();

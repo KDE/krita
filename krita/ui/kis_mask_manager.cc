@@ -53,11 +53,11 @@ KisMaskManager::KisMaskManager( KisView2 * view)
     , m_createTransparencyMask( 0 )
     , m_createFilterMask( 0 )
     , m_createTransformationMask( 0 )
+    , m_createSelectionMask( 0 )
     , m_maskToSelection( 0 )
     , m_maskToLayer( 0 )
     , m_duplicateMask( 0 )
     , m_showMask( 0 )
-    , m_enableMask( 0 )
     , m_removeMask( 0 )
     , m_raiseMask( 0 )
     , m_lowerMask( 0 )
@@ -85,6 +85,10 @@ void KisMaskManager::setup( KActionCollection * actionCollection )
     actionCollection->addAction("create_transformation_mask", m_createTransformationMask );
     connect(m_createTransformationMask, SIGNAL(triggered()), this, SLOT(createTransformationMask()));
 
+    m_createSelectionMask = new KAction(i18n("Selection Mask..."), this);
+    actionCollection->addAction("create_selection_mask", m_createSelectionMask );
+    connect(m_createSelectionMask, SIGNAL(triggered()), this, SLOT(createSelectionmask()));
+
     m_maskToSelection  = new KAction(i18n("Mask To Selection"), this);
     actionCollection->addAction("create_selection_from_mask", m_maskToSelection );
     connect(m_maskToSelection, SIGNAL(triggered()), this, SLOT(maskToSelection()));
@@ -96,10 +100,6 @@ void KisMaskManager::setup( KActionCollection * actionCollection )
     m_duplicateMask = new KAction( i18n( "Duplicate Mask" ), this );
     actionCollection->addAction( "duplicate_mask", m_duplicateMask );
     connect( m_duplicateMask, SIGNAL( triggered() ), this, SLOT( duplicateMask() ) );
-
-    m_enableMask = new KToggleAction( i18n( "Enable Mask" ), this );
-    actionCollection->addAction( "enable_mask", m_enableMask );
-    connect( m_enableMask, SIGNAL( triggered() ), this, SLOT( enableMask() ) );
 
     m_removeMask  = new KAction(i18n("Remove Mask"), this);
     actionCollection->addAction("remove_mask", m_removeMask );
@@ -137,12 +137,12 @@ void KisMaskManager::setup( KActionCollection * actionCollection )
     actionCollection->addAction("mask_properties", m_maskProperties );
     connect(m_maskProperties, SIGNAL(triggered()), this, SLOT(maskProperties()));
 
-
 }
 
 void KisMaskManager::updateGUI()
 {
-
+    // XXX: enable/disable menu items according to whether there's a mask selected currently
+    // XXX: disable the selection mask item if there's already a selection mask
 }
 
 KisMaskSP KisMaskManager::activeMask()
@@ -152,6 +152,8 @@ KisMaskSP KisMaskManager::activeMask()
 
 KisPaintDeviceSP KisMaskManager::activeDevice()
 {
+    // XXX: we may need to also have a possibility of getting the vector part of the
+    // selection here
     if ( m_activeMask ) {
         KisSelectionSP selection = m_activeMask->selection();
         if (selection)
@@ -168,7 +170,6 @@ void KisMaskManager::activateMask( KisMaskSP mask )
 
 void KisMaskManager::createTransparencyMask()
 {
-
     KisLayerSP parent = m_view->activeLayer();
     if ( parent ) {
         if ( parent == 0 )
@@ -180,9 +181,11 @@ void KisMaskManager::createTransparencyMask()
 
 void KisMaskManager::createTransparencyMask( KisNodeSP parent, KisNodeSP above )
 {
-    // XXX: if there's a selection, set the selection on the mask
-    //      if there's no selection, select everything
     KisMaskSP mask = new KisTransparencyMask();
+    KisSelectionSP selection = m_view->selection();
+    if (selection) {
+        mask->setSelection(selection);
+    }
     mask->setName( i18n( "Transparency Mask" ) ); // XXX:Auto-increment a number here, like with layers
     mask->setActive( true );
     m_view->image()->addNode( mask, parent, above );
@@ -214,12 +217,14 @@ void KisMaskManager::createFilterMask( KisNodeSP parent, KisNodeSP above )
     KisDlgAdjustmentLayer dlg(dev, m_view->image()->nextLayerName(), i18n("New Filter Mask"), m_view, "dlgfiltermask");
 
     if (dlg.exec() == QDialog::Accepted) {
-        KisSelectionSP selection = layer->selection();
         KisFilterConfiguration * filter = dlg.filterConfiguration();
         QString name = dlg.layerName();
 
         KisFilterMask * mask = new KisFilterMask();
-        mask->setSelection( selection ); // XXX: do a copy?
+        KisSelectionSP selection = m_view->selection();
+        if (selection) {
+            mask->setSelection(selection);
+        }
         mask->setActive( true );
         mask->setFilter( filter );
         mask->setName( name );
@@ -246,6 +251,10 @@ void KisMaskManager::createTransformationMask( KisNodeSP parent, KisNodeSP above
     if ( dlg.exec() == QDialog::Accepted ) {
         KisTransformationMask * mask = new KisTransformationMask();
 
+        KisSelectionSP selection = m_view->selection();
+        if (selection) {
+            mask->setSelection(selection);
+        }
         mask->setName( dlg.transformationEffect()->maskName() );
         mask->setXScale( dlg.transformationEffect()->xScale() );
         mask->setYScale( dlg.transformationEffect()->yScale() );
@@ -261,10 +270,40 @@ void KisMaskManager::createTransformationMask( KisNodeSP parent, KisNodeSP above
     }
 }
 
+void KisMaskManager::createSelectionmask()
+{
+    KisLayerSP activeLayer = m_view->activeLayer();
+
+    if ( activeLayer ) {
+        if ( m_activeMask == 0 && activeLayer->selectionMask() == 0 )
+            createSelectionMask( activeLayer.data(), activeLayer->firstChild() );
+        else
+            createSelectionMask( activeLayer.data(), m_activeMask.data() );
+    }
+}
+    
+void KisMaskManager::createSelectionMask( KisNodeSP parent, KisNodeSP above )
+{
+    if (parent->inherits("KisLayer")) {
+        KisLayer * layer = dynamic_cast<KisLayer*>(parent.data());
+        if (layer && layer->selectionMask()) {
+            return;
+        }
+    }
+    KisMaskSP mask = new KisSelectionMask(m_view->image());
+    KisSelectionSP selection = m_view->selection();
+    if (selection) {
+        mask->setSelection(selection);
+    }
+    mask->setName( i18n( "Selection" ) ); // XXX:Auto-increment a number here, like with layers
+    mask->setActive( true );
+    m_view->image()->addNode( mask, parent, above );
+    activateMask( mask );
+}
+
+
 void KisMaskManager::maskToSelection()
 {
-    // XXX_NODE: this only starts working correctly when we have ripped the selection out
-    //           of kis_paint_device.
     if (!m_activeMask) return;
     KisLayerSP parent = m_view->activeLayer();
     KisSelectionMaskSP selectionMask = new KisSelectionMask( m_view->image() );
@@ -273,13 +312,13 @@ void KisMaskManager::maskToSelection()
     m_view->image()->addNode( selectionMask, parent, m_activeMask );
 }
 
-void KisMaskManager::maskToLayer() {}
+void KisMaskManager::maskToLayer()
+{
+}
 
 void KisMaskManager::duplicateMask() {}
 
 void KisMaskManager::showMask() {}
-
-void KisMaskManager::enableMask() {}
 
 void KisMaskManager::removeMask() {}
 

@@ -135,6 +135,7 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
     m_newLayerMenu->addAction(KIcon("bookmark"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
     m_newLayerMenu->addAction(KIcon("tool_filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
+    m_newLayerMenu->addAction(KIcon("edit-paste"), i18n("&Local Selection..."), this, SLOT(slotNewSelectionMask()));
 
     connect(bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
     connect(bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
@@ -270,6 +271,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         sub->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
         sub->addAction(KIcon("bookmark"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
         sub->addAction(KIcon("tool_filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
+        sub->addAction(KIcon("edit-paste"), i18n("&Local Selection..."), this, SLOT(slotNewSelectionMask()));
 
     }
     else
@@ -283,6 +285,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
         menu.addAction(KIcon("bookmark"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
         menu.addAction(KIcon("tool_filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
+        menu.addAction(KIcon("edit-paste"), i18n("&Local Selection..."), this, SLOT(slotNewSelectionMask()));
     }
     menu.exec(pos);
 }
@@ -347,7 +350,6 @@ void KisLayerBox::getNewNodeLocation(const QString & nodeType, KisNodeSP &parent
     }
     parent = root;
     above = parent->firstChild();
-    kDebug() << parent << ", above " << above;
 }
 
 void KisLayerBox::slotNewPaintLayer()
@@ -434,6 +436,17 @@ void KisLayerBox::slotNewTransformationMask()
 }
 
 
+void KisLayerBox::slotNewSelectionMask()
+{
+    KisNodeSP parent;
+    KisNodeSP above;
+
+    getNewNodeLocation("KisSelectionMask", parent, above);
+
+    emit sigRequestNewNode("KisSelectionMask", parent, above);
+}
+
+
 void KisLayerBox::slotRmClicked()
 {
     QModelIndexList l = selectedNodes();
@@ -490,7 +503,6 @@ void KisLayerBox::slotPropertiesClicked()
 
 void KisLayerBox::slotNodeActivated(const QModelIndex & node)
 {
-    kDebug() << "slotNodeActivated " << node;
     m_nodeManager->activateNode( m_nodeModel->nodeFromIndex( node ) );
 }
 

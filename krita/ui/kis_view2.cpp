@@ -662,6 +662,9 @@ void KisView2::disconnectCurrentImage()
 
 void KisView2::setupPrinter(QPrinter &printer, QPrintDialog &printDialog)
 {
+    Q_UNUSED(printer);
+    Q_UNUSED(printDialog);
+    // XXX: implement printing
     //p.setMinMax(1, 1);
 }
 
@@ -763,16 +766,13 @@ void KisView2::loadPlugins()
     {
 
         KService::Ptr service = *iter;
-        kDebug(41006) <<"found plugin" << service->property("Name").toString() <<"";
         int errCode = 0;
         KParts::Plugin* plugin =
             KService::createInstance<KParts::Plugin> ( service, this, QStringList(), &errCode);
         if ( plugin ) {
-            kDebug(41006) <<"createdplugin" << service->property("Name").toString() <<"";
             insertChildClient(plugin);
         }
         else {
-            kDebug(41006) <<"failed to create plugin" << service->property("Name").toString() <<"," << errCode <<"";
             if( errCode == KLibLoader::ErrNoLibrary)
             {
                 kWarning() <<" Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();

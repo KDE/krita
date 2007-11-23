@@ -103,6 +103,7 @@ private slots:
     void slotNewTransparencyMask();
     void slotNewEffectMask();
     void slotNewTransformationMask();
+    void slotNewSelectionMask();
 
     void slotNodeActivated( const QModelIndex & );
 

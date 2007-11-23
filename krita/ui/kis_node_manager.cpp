@@ -137,14 +137,13 @@ void KisNodeManager::createNode( const QString & nodeType, KisNodeSP parent, Kis
         m_d->maskManager->createTransformationMask( parent, above );
     }
     else if ( nodeType == "KisSelectionMask" ) {
-        // XXX_NODE: Create per-layer selections
+        m_d->maskManager->createSelectionMask( parent, above );
     }
 
 }
 
 void KisNodeManager::activateNode( KisNodeSP node )
 {
-    kDebug() << "Activate node " << node;
     Q_ASSERT( node );
 
     // XXX: Set the selection on the shape manager to the active layer

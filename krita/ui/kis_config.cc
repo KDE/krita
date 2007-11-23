@@ -506,7 +506,7 @@ void KisConfig::setUseRegionOfInterestInProjection( bool use )
 
 bool KisConfig::updateAllOfQPainterCanvas()
 {
-    return m_cfg.readEntry( "update_all_of_qpainter_canvas", true );
+    return m_cfg.readEntry( "update_all_of_qpainter_canvas", false );
 }
 
 void KisConfig::setUpdateAllOfQpainterCanvas( bool all )
@@ -590,7 +590,6 @@ bool KisConfig::noXRender()
 {
     return m_cfg.readEntry( "NoXRender",  false );
 }
-
 
 void KisConfig::setNoXRender( bool noXRender )
 {

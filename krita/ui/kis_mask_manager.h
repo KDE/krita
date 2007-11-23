@@ -83,16 +83,8 @@ public slots:
     /**
      * Create a local, i.e., per-layer selection object.
      */
-    void createSelectionmask()
-        {
-            // XXX: implement when selection is no longer part of KisPaintDevice
-        }
-    void createSelectionMask( KisNodeSP parent, KisNodeSP above )
-        {
-            Q_UNUSED( parent );
-            Q_UNUSED( above );
-            // XXX: implement when selection is no longer part of KisPaintDevice
-        }
+    void createSelectionmask();
+    void createSelectionMask( KisNodeSP parent, KisNodeSP above );
 
     /**
      * Create a new local selection from the active mask.
@@ -111,20 +103,11 @@ public slots:
      */
     void duplicateMask();
 
-
     /**
      * Show the mask as an overlay. The mask properties determine the
      * color and opacity of the mask.
      */
     void showMask();
-
-
-    /**
-     * Enable the mask effect. Similar to hiding a layer. The mask
-     * effect can be enabled and disabled independently from whether
-     * the mask visualisation is shown.
-     */
-    void enableMask();
 
     /**
      * Delete the mask
@@ -196,12 +179,12 @@ private:
     KAction *m_createTransparencyMask;
     KAction *m_createFilterMask;
     KAction *m_createTransformationMask;
+    KAction *m_createSelectionMask;
     KAction *m_maskToSelection;
     KAction *m_maskToLayer;
     KAction *m_duplicateMask;
 
     KToggleAction *m_showMask;
-    KToggleAction *m_enableMask;
     KAction *m_removeMask;
 
     KAction *m_raiseMask;

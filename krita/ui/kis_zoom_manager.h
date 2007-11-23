@@ -52,7 +52,8 @@ public:
 
     void setup(KActionCollection * actionCollection);
     void updateGUI();
-
+    KoZoomController * zoomController() { return m_zoomController; }
+    
 private slots:
 
     void slotZoomChanged(KoZoomMode::Mode mode, double zoom);
@@ -60,7 +61,7 @@ private slots:
     void toggleShowRulers(bool show);
     void mousePositionChanged(const QPoint &pos);
     void changeAspectMode(bool aspectMode);
-
+    
 private:
 
     KisView2 * m_view;

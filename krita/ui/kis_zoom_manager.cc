@@ -150,6 +150,8 @@ void KisZoomManager::updateGUI()
 
 void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, double zoom)
 {
+    Q_UNUSED(mode);
+    Q_UNUSED(zoom);
     KisImageSP img = m_view->image();
 
     m_view->canvasBase()->preScale();

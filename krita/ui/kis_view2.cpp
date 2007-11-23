@@ -438,6 +438,8 @@ void KisView2::slotLoadingFinished()
         m_d->nodeManager->activateNode( node );
     }
 
+    m_d->zoomManager->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+
     updateGUI();
 //     kDebug(41007) <<"image finished loading, active layer:" << img->activeLayer() <<", root layer:" << img->rootLayer();
 

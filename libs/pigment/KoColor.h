@@ -28,8 +28,8 @@ class KoColorProfile;
 class KoColorSpace;
 
 /**
- * A KoColor describes a color in a certain colorspace.
- *
+ * A KoColor describes a color in a certain colorspace. The color is stored in a buffer
+ * that can be manipulated by the function of the color space.
  */
 class PIGMENTCMS_EXPORT KoColor {
 
@@ -100,10 +100,18 @@ public:
     /// Convenient function for converting from a QColor and setting the opacity
     void fromQColor(const QColor& c, quint8 opacity) const;
 
-    /// For easy memcpy'ing etc.
+    /**
+     * @return the buffer associated with this color object to be used with the
+     *         transformation object created by the color space of this KoColor
+     *         or to copy to a different buffer from the same color space
+     */
     quint8 * data();
 
-    /// For easy memcpy'ing etc.
+    /**
+     * @return the buffer associated with this color object to be used with the
+     *         transformation object created by the color space of this KoColor
+     *         or to copy to a different buffer from the same color space
+     */
     const quint8 * data() const;
 
 #ifndef NODEBUG

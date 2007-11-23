@@ -129,11 +129,6 @@ void KisZoomManager::mousePositionChanged(const QPoint &pos)
     m_verticalRuler->updateMouseCoordinate(pos.y());
 }
 
-void KisZoomManager::slotActualSize()
-{
-    //slotZoomChanged(KoZoomMode::ZOOM_CONSTANT, 100);
-}
-
 void KisZoomManager::toggleShowRulers(bool show)
 {
     m_horizontalRuler->setVisible(show);

@@ -57,7 +57,6 @@ public:
 private slots:
 
     void slotZoomChanged(KoZoomMode::Mode mode, double zoom);
-    void slotActualSize();
     void toggleShowRulers(bool show);
     void mousePositionChanged(const QPoint &pos);
     void changeAspectMode(bool aspectMode);

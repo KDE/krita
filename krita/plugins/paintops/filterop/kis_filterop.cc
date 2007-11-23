@@ -170,7 +170,8 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 
     const KoColorSpace * colorSpace = source()->colorSpace();
 
-    QPointF hotSpot = brush->hotSpot(info);
+    double scale = KisPaintOp::scaleForPressure( info.pressure() );
+    QPointF hotSpot = brush->hotSpot(scale);
     QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -190,8 +191,8 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 
     painter()->setPressure(info.pressure());
 
-    qint32 maskWidth = brush->maskWidth(info);
-    qint32 maskHeight = brush->maskHeight(info);
+    qint32 maskWidth = brush->maskWidth(scale);
+    qint32 maskHeight = brush->maskHeight(scale);
 
     // Create a temporary paint device
     KisPaintDeviceSP tmpDev = KisPaintDeviceSP(new KisPaintDevice(colorSpace, "filterop tmpdev"));
@@ -215,7 +216,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 
     KisPaintDeviceSP dab = cachedDab();
-    brush->mask(dab, tmpDev, info, xFraction, yFraction);
+    brush->mask(dab, tmpDev, scale, 0.0, info, xFraction, yFraction);
     
 #if 0
     KisHLineIterator hiter = tmpDev->createHLineIterator(0, 0, maskWidth);

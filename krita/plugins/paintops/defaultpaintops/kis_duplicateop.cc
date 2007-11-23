@@ -174,7 +174,8 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info) )
         return;
 
-    QPointF hotSpot = brush->hotSpot(info);
+    double scale = KisPaintOp::scaleForPressure( info.pressure() );
+    QPointF hotSpot = brush->hotSpot(scale);
     QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -196,8 +197,8 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
                              y - static_cast<qint32>(m_settings->offset().y()));
 
 
-    qint32 sw = brush->maskWidth( info );
-    qint32 sh = brush->maskHeight( info );
+    qint32 sw = brush->maskWidth( scale );
+    qint32 sh = brush->maskHeight( scale );
 
     if (srcPoint.x() < 0 )
         srcPoint.setX(0);
@@ -361,9 +362,9 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 //     copySelection.end();
 
     KisPaintDeviceSP dab = cachedDab( );
-    brush->mask(dab, m_srcdev, info, xFraction, yFraction);
+    brush->mask(dab, m_srcdev, scale, 0.0, info, xFraction, yFraction);
     
-    QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
+    QRect dabRect = QRect(0, 0, brush->maskWidth(scale), brush->maskHeight(scale));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     if ( painter()->bounds().isValid() ) {

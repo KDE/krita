@@ -121,11 +121,10 @@ public:
     /**
        @return the next mask in the pipe.
     */
-    virtual void mask(KisPaintDeviceSP dst, const KoColor& color, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
-    virtual void mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
+    virtual void mask(KisPaintDeviceSP dst, const KoColor& color, double scale, double angle, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
+    virtual void mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scale, double angle, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
     
-    virtual KisPaintDeviceSP image(KoColorSpace * colorSpace, const KisPaintInformation& info,
-                             double subPixelX = 0, double subPixelY = 0) const;
+    virtual KisPaintDeviceSP image(KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
 
     virtual bool useColorAsMask() const;
     virtual void setUseColorAsMask(bool useColorAsMask);

@@ -99,7 +99,8 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
         return;
     KisPaintDeviceSP dab = 0;
 
-    QPointF hotSpot = brush->hotSpot(info);
+    double scale = KisPaintOp::scaleForPressure( info.pressure() );
+    QPointF hotSpot = brush->hotSpot(scale);
     QPointF pt = info.pos() - hotSpot;
 
     qint32 x;
@@ -111,19 +112,19 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.y(), &y, &yFraction);
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), info, xFraction, yFraction);
+        dab = brush->image(device->colorSpace(), scale, 0.0 , info, xFraction, yFraction);
     }
     else {
         dab = cachedDab( );
         KoColor color = painter()->paintColor();
         color.convertTo( dab->colorSpace() );
-        brush->mask(dab, color, info, xFraction, yFraction);
+        brush->mask(dab, color, scale, 0.0, info, xFraction, yFraction);
     }
 
     painter()->setDab(dab); // Cache dab for future paints in the painter.
     painter()->setPressure(info.pressure()); // Cache pressure in the current painter.
 
-    QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
+    QRect dabRect = QRect(0, 0, brush->maskWidth(scale), brush->maskHeight(scale));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     if ( painter()->bounds().isValid() ) {

@@ -58,6 +58,9 @@ public:
     /// The movement of the pen is equal to current position minus the last position of the call to paintAt
     KisVector2D movement() const;
     
+    /// Rotation computed from the movement
+    double angle() const;
+    
     void toXML(QDomDocument&, QDomElement&) const;
     static KisPaintInformation fromXML(QDomElement&);
 private:

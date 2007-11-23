@@ -96,6 +96,7 @@ public:
     virtual bool incremental() { return false; }
 
 protected:
+    static double scaleForPressure(double pressure);
 
     KisPaintDeviceSP cachedDab();
     KisPaintDeviceSP cachedDab( const KoColorSpace *cs );

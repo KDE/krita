@@ -42,6 +42,7 @@
 
 
 #define BEZIER_FLATNESS_THRESHOLD 0.5
+#define MAXIMUM_SCALE 2
 
 struct KisPaintOp::Private
 {
@@ -152,8 +153,8 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
 
     // XXX: The spacing should vary as the pressure changes along the line.
     // This is a quick simplification.
-    double xSpacing = d->painter->brush()->xSpacing((pi1.pressure() + pi2.pressure()) / 2);
-    double ySpacing = d->painter->brush()->ySpacing((pi1.pressure() + pi2.pressure()) / 2);
+    double xSpacing = d->painter->brush()->xSpacing( scaleForPressure( (pi1.pressure() + pi2.pressure()) / 2) );
+    double ySpacing = d->painter->brush()->ySpacing( scaleForPressure( (pi1.pressure() + pi2.pressure()) / 2) );
 
     if (xSpacing < 0.5) {
         xSpacing = 0.5;
@@ -236,6 +237,22 @@ KisPaintDeviceSP KisPaintOp::source()
     return d->painter->device();
 }
 
+double KisPaintOp::scaleForPressure(double pressure)
+{
+    double scale = pressure / PRESSURE_DEFAULT;
+
+    if (scale < 0) {
+        scale = 0;
+    }
+
+    if (scale > MAXIMUM_SCALE) {
+        scale = MAXIMUM_SCALE;
+    }
+
+    return scale;
+}
+
+//------------------------ KisPaintOpFactory ------------------------//
 
 bool KisPaintOpFactory::userVisible(const KoColorSpace * cs )
 {
@@ -252,4 +269,3 @@ QString KisPaintOpFactory::pixmap()
 {
     return "";
 }
-

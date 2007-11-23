@@ -76,37 +76,95 @@ public:
     virtual bool load();
     /// synchronous, doesn't emit any signal (none defined!)
     virtual bool save();
+    /**
+     * @return a preview of the brush
+     */
     virtual QImage img() const;
+    /**
+     * save the content of this brush to an IO device
+     */
     virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
-       @return a mask computed from the grey-level values of the
-       pixels in the brush.
-    */
-    virtual void mask(KisPaintDeviceSP dst, const KoColor& color, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
-    virtual void mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
+     * 
+     * @param dst the destination that will be draw on the image
+     * @param color the color use on the destination
+     * @param scale a scale applied on the alpha mask
+     * @param angle a rotation applied on the alpha mask
+     * @param info the painting information (this is only and should only be used by
+     *             KisImagePipeBrush and only to be backward compatible with the Gimp,
+     *             KisImagePipeBrush is ignoring scale and angle information)
+     * @param subPixelX sub position of the brush (contained between 0.0 and 1.0)
+     * @param subPixelY sub position of the brush (contained between 0.0 and 1.0)
+     * 
+     * @return a mask computed from the grey-level values of the
+     * pixels in the brush.
+     */
+    virtual void mask(KisPaintDeviceSP dst, const KoColor& color, double scale, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+    /**
+     * This function creates a mask from a paint device, it basically takes the source paint device
+     * color information, and set the alpha value from the brush mask information. 
+     * 
+     * @param dst the destination that will be draw on the image
+     * @param src is a paint device containing the color information used on the destination
+     * @param scale a scale applied on the alpha mask
+     * @param angle a rotation applied on the alpha mask
+     * @param info the painting information (this is only and should only be used by
+     *             KisImagePipeBrush and only to be backward compatible with the Gimp,
+     *             KisImagePipeBrush is ignoring scale and angle information)
+     * @param subPixelX sub position of the brush (contained between 0.0 and 1.0)
+     * @param subPixelY sub position of the brush (contained between 0.0 and 1.0)
+     * 
+     * @return a mask computed from the grey-level values of the
+     * pixels in the brush.
+     */
+    virtual void mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scale, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
-    virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace, const KisPaintInformation& info,
-                             double subPixelX = 0, double subPixelY = 0) const;
+    virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
 
     void setHotSpot(QPointF);
-    QPointF hotSpot(const KisPaintInformation& info = KisPaintInformation()) const;
+    QPointF hotSpot(double scale = 1.0) const;
 
-    void setSpacing(double s) { m_spacing = s; }
-    double spacing() const { return m_spacing; }
-    double xSpacing(double pressure = PRESSURE_DEFAULT) const;
-    double ySpacing(double pressure = PRESSURE_DEFAULT) const;
+    /**
+     * Change the spacing of the brush.
+     * @param spacing a spacing of 1.0 means that strokes will be seperated from one time the size
+     *                of the brush.
+     */
+    void setSpacing(double spacing);
+    /**
+     * @return the spacing between two strokes for this brush
+     */
+    double spacing() const;
+    /**
+     * @return the horizontal spacing
+     */
+    double xSpacing(double scale = 1.0) const;
+    /**
+     * @return the vertical spacing
+     */
+    double ySpacing(double scale = 1.0) const;
 
-    // Dimensions in pixels of the mask/image at a given pressure.
-    qint32 maskWidth(const KisPaintInformation& info) const;
-    qint32 maskHeight(const KisPaintInformation& info) const;
+    /**
+     * @return the width of the mask for the given scale
+     */
+    qint32 maskWidth(double scale) const;
+    /**
+     * @return the height of the mask for the given scale
+     */
+    qint32 maskHeight(double scale) const;
 
-    virtual void setUseColorAsMask(bool useColorAsMask) { m_useColorAsMask = useColorAsMask; }
-    virtual bool useColorAsMask() const { return m_useColorAsMask; }
+    virtual void setUseColorAsMask(bool useColorAsMask);
+    virtual bool useColorAsMask() const;
     virtual bool hasColor() const;
 
     virtual void makeMaskImage();
+    /**
+     * @return the width (for scale == 1.0)
+     */
     qint32 width() const;
+    /**
+     * @return the height (for scale == 1.0)
+     */
     qint32 height() const;
 
     virtual enumBrushType brushType() const;
@@ -118,18 +176,23 @@ public:
      * Returns true if this brush can return something useful for the info. This is used
      * by Pipe Brushes that can't paint sometimes
      **/
-    virtual bool canPaintFor(const KisPaintInformation& /*info*/) { return true; }
+    virtual bool canPaintFor(const KisPaintInformation& /*info*/);
 
+    /**
+     * Makes a copy of this brush.
+     */
     virtual KisBrush* clone() const;
 
+    /**
+     * Serialize this brush to XML.
+     */
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
 protected:
     void setWidth(qint32 w);
     void setHeight(qint32 h);
     void setImage(const QImage& img);
-    void setBrushType(enumBrushType type) { m_brushType = type; }
-    static double scaleForPressure(double pressure);
+    void setBrushType(enumBrushType type);
 
 private:
 
@@ -153,27 +216,8 @@ private:
     // Initialize our boundary
     void generateBoundary();
 
-    QByteArray m_data;
-    bool m_ownData;
-    QPointF m_hotSpot;
-    double m_spacing;
-    bool m_useColorAsMask;
-    bool m_hasColor;
-    QImage m_img;
-    mutable QVector<ScaledBrush> m_scaledBrushes;
-
-    qint32 m_width;
-    qint32 m_height;
-
-    quint32 m_header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
-    quint32 m_version;      /*  brush file version #  */
-    quint32 m_bytes;        /*  depth of brush in bytes */
-    quint32 m_magic_number; /*  GIMP brush magic number  */
-
-    enumBrushType m_brushType;
-
-    KisBoundary* m_boundary;
-
+    struct Private;
+    Private* const d;
 };
 #endif // KIS_BRUSH_
 

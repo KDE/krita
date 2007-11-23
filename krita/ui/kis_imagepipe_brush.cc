@@ -307,25 +307,25 @@ QImage KisImagePipeBrush::img() const
 }
 
 
-void KisImagePipeBrush::mask(KisPaintDeviceSP dst, const KoColor& color, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
+void KisImagePipeBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scale, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
 {
     if (m_brushes.isEmpty()) return;
     selectNextBrush(info);
-    m_brushes.at(m_currentBrush)->mask(dst, color, info, subPixelX, subPixelY);
+    m_brushes.at(m_currentBrush)->mask(dst, color, 1.0, 0.0, info, subPixelX, subPixelY);
 }
 
-void KisImagePipeBrush::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
+void KisImagePipeBrush::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scale, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
 {
     if (m_brushes.isEmpty()) return;
     selectNextBrush(info);
-    m_brushes.at(m_currentBrush)->mask(dst, src, info, subPixelX, subPixelY);
+    m_brushes.at(m_currentBrush)->mask(dst, src, 1.0, 0.0, info, subPixelX, subPixelY);
 }
 
-KisPaintDeviceSP KisImagePipeBrush::image(KoColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisPaintDeviceSP KisImagePipeBrush::image(KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_brushes.isEmpty()) return KisPaintDeviceSP(0);
     selectNextBrush(info);
-    return m_brushes.at(m_currentBrush)->image(colorSpace, info, subPixelX, subPixelY);
+    return m_brushes.at(m_currentBrush)->image(colorSpace, 1.0, 0.0, info, subPixelX, subPixelY);
 }
 
 void KisImagePipeBrush::setParasiteString(const QString& parasite)
@@ -392,7 +392,7 @@ void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const {
                 index = static_cast<int>(info.pressure() * (m_parasite.rank[i] - 1) + 0.5); break;
             case KisPipeBrushParasite::Angular:
                 // + M_PI_2 to be compatible with the gimp
-                angle = atan2(info.movement().y(), info.movement().x()) + M_PI_2;
+                angle = info.angle() + M_PI_2;
                 // We need to be in the [0..2*Pi[ interval so that we can more nicely select it
                 if (angle < 0)
                     angle += 2.0 * M_PI;

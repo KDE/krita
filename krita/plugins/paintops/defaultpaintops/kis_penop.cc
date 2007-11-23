@@ -68,7 +68,8 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info) )
         return;
 
-    QPointF hotSpot = brush->hotSpot(info);
+    double scale = KisPaintOp::scaleForPressure( info.pressure() );
+    QPointF hotSpot = brush->hotSpot(scale);
     QPointF pt = info.pos() - hotSpot;
 
     qint32 x = qRound(pt.x());
@@ -77,18 +78,18 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP dab = KisPaintDeviceSP(0);
     if (brush->brushType() == IMAGE ||
         brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), info);
+        dab = brush->image(device->colorSpace(), scale, 0.0, info);
     }
     else {
         // Compute mask without sub-pixel positioning
         dab = cachedDab( );
         KoColor color = painter()->paintColor();
         color.convertTo( dab->colorSpace() );
-        brush->mask(dab, color, info);
+        brush->mask(dab, color, scale, 0.0, info);
     }
 
     painter()->setPressure(info.pressure());
-    QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
+    QRect dabRect = QRect(0, 0, brush->maskWidth(scale), brush->maskHeight(scale));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
 

@@ -70,57 +70,80 @@ namespace {
     quint32 const GimpV2BrushMagic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' << 0);
 }
 
+struct KisBrush::Private {
+    QByteArray data;
+    bool ownData;
+    QPointF hotSpot;
+    double spacing;
+    bool useColorAsMask;
+    bool hasColor;
+    QImage img;
+    mutable QVector<ScaledBrush> scaledBrushes;
+
+    qint32 width;
+    qint32 height;
+
+    quint32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
+    quint32 version;      /*  brush file version #  */
+    quint32 bytes;        /*  depth of brush in bytes */
+    quint32 magic_number; /*  GIMP brush magic number  */
+
+    enumBrushType brushType;
+
+    KisBoundary* boundary;
+};
+
 #define DEFAULT_SPACING 0.25
 #define MAXIMUM_SCALE 2
 
-KisBrush::KisBrush(const QString& filename) : KoResource(filename)
+KisBrush::KisBrush(const QString& filename) : KoResource(filename), d(new Private)
 {
-    m_brushType = INVALID;
-    m_ownData = true;
-    m_useColorAsMask = false;
-    m_hasColor = false;
-    m_spacing = DEFAULT_SPACING;
-    m_boundary = 0;
+    d->brushType = INVALID;
+    d->ownData = true;
+    d->useColorAsMask = false;
+    d->hasColor = false;
+    d->spacing = DEFAULT_SPACING;
+    d->boundary = 0;
 }
 
 KisBrush::KisBrush(const QString& filename,
            const QByteArray& data,
-           qint32 & dataPos) : KoResource(filename)
+           qint32 & dataPos) : KoResource(filename), d(new Private)
 {
-    m_brushType = INVALID;
-    m_ownData = false;
-    m_useColorAsMask = false;
-    m_hasColor = false;
-    m_spacing = DEFAULT_SPACING;
-    m_boundary = 0;
+    d->brushType = INVALID;
+    d->ownData = false;
+    d->useColorAsMask = false;
+    d->hasColor = false;
+    d->spacing = DEFAULT_SPACING;
+    d->boundary = 0;
 
-    m_data = QByteArray::fromRawData(data.data() + dataPos, data.size() - dataPos);
+    d->data = QByteArray::fromRawData(data.data() + dataPos, data.size() - dataPos);
     init();
-    m_data.clear();
-    dataPos += m_header_size + (width() * height() * m_bytes);
+    d->data.clear();
+    dataPos += d->header_size + (width() * height() * d->bytes);
 }
 
 KisBrush::KisBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
-    : KoResource(QString(""))
+    : KoResource(QString("")), d(new Private)
 {
-    m_brushType = INVALID;
-    m_ownData = true;
-    m_useColorAsMask = false;
-    m_hasColor = true;
-    m_spacing = DEFAULT_SPACING;
-    m_boundary = 0;
+    d->brushType = INVALID;
+    d->ownData = true;
+    d->useColorAsMask = false;
+    d->hasColor = true;
+    d->spacing = DEFAULT_SPACING;
+    d->boundary = 0;
 
     initFromPaintDev(image, x, y, w, h);
 }
 
 KisBrush::KisBrush(const QImage& image, const QString& name)
-    : KoResource(QString(""))
+    : KoResource(QString("")), d(new Private)
 {
-    m_ownData = false;
-    m_useColorAsMask = false;
-    m_hasColor = true;
-    m_spacing = DEFAULT_SPACING;
-    m_boundary = 0;
+    d->ownData = false;
+    d->useColorAsMask = false;
+    d->hasColor = true;
+    d->spacing = DEFAULT_SPACING;
+    d->boundary = 0;
 
     setImage(image);
     setName(name);
@@ -130,16 +153,17 @@ KisBrush::KisBrush(const QImage& image, const QString& name)
 
 KisBrush::~KisBrush()
 {
-    m_scaledBrushes.clear();
-    delete m_boundary;
+    d->scaledBrushes.clear();
+    delete d->boundary;
+    delete d;
 }
 
 bool KisBrush::load()
 {
-    if (m_ownData) {
+    if (d->ownData) {
         QFile file(filename());
         file.open(QIODevice::ReadOnly);
-        m_data = file.readAll();
+        d->data = file.readAll();
         file.close();
     }
     return init();
@@ -149,25 +173,25 @@ bool KisBrush::init()
 {
     GimpBrushHeader bh;
 
-    if (sizeof(GimpBrushHeader) > (uint)m_data.size()) {
+    if (sizeof(GimpBrushHeader) > (uint)d->data.size()) {
         return false;
     }
 
-    memcpy(&bh, m_data, sizeof(GimpBrushHeader));
+    memcpy(&bh, d->data, sizeof(GimpBrushHeader));
     bh.header_size = ntohl(bh.header_size);
-    m_header_size = bh.header_size;
+    d->header_size = bh.header_size;
 
     bh.version = ntohl(bh.version);
-    m_version = bh.version;
+    d->version = bh.version;
 
     bh.width = ntohl(bh.width);
     bh.height = ntohl(bh.height);
 
     bh.bytes = ntohl(bh.bytes);
-    m_bytes = bh.bytes;
+    d->bytes = bh.bytes;
 
     bh.magic_number = ntohl(bh.magic_number);
-    m_magic_number = bh.magic_number;
+    d->magic_number = bh.magic_number;
 
     if (bh.version == 1) {
         // No spacing in version 1 files so use Gimp default
@@ -183,7 +207,7 @@ bool KisBrush::init()
 
     setSpacing(bh.spacing / 100.0);
 
-    if (bh.header_size > (uint)m_data.size() || bh.header_size == 0) {
+    if (bh.header_size > (uint)d->data.size() || bh.header_size == 0) {
         return false;
     }
 
@@ -192,12 +216,12 @@ bool KisBrush::init()
     if (bh.version == 1) {
         // Version 1 has no magic number or spacing, so the name
         // is at a different offset. Character encoding is undefined.
-        const char *text = m_data.constData()+sizeof(GimpBrushV1Header);
+        const char *text = d->data.constData()+sizeof(GimpBrushV1Header);
         name = QString::fromAscii(text, bh.header_size - sizeof(GimpBrushV1Header));
     } else {
         // ### Version = 3->cinepaint; may be float16 data!
         // Version >=2: UTF-8 encoding is used
-        name = QString::fromUtf8(m_data.constData()+sizeof(GimpBrushHeader),
+        name = QString::fromUtf8(d->data.constData()+sizeof(GimpBrushHeader),
                                   bh.header_size - sizeof(GimpBrushHeader));
     }
 
@@ -215,9 +239,9 @@ bool KisBrush::init()
         imageFormat = QImage::Format_ARGB32;
     }
 
-    m_img = QImage(bh.width, bh.height, imageFormat);
+    d->img = QImage(bh.width, bh.height, imageFormat);
 
-    if (m_img.isNull()) {
+    if (d->img.isNull()) {
         return false;
     }
 
@@ -226,50 +250,50 @@ bool KisBrush::init()
     if (bh.bytes == 1) {
         // Grayscale
 
-        if (static_cast<qint32>(k + bh.width * bh.height) > m_data.size()) {
+        if (static_cast<qint32>(k + bh.width * bh.height) > d->data.size()) {
             return false;
         }
 
-        m_brushType = MASK;
-        m_hasColor = false;
+        d->brushType = MASK;
+        d->hasColor = false;
 
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k++) {
-                qint32 val = 255 - static_cast<uchar>(m_data[k]);
-                m_img.setPixel(x, y, qRgb(val, val, val));
+                qint32 val = 255 - static_cast<uchar>(d->data[k]);
+                d->img.setPixel(x, y, qRgb(val, val, val));
             }
         }
     } else if (bh.bytes == 4) {
         // RGBA
 
-        if (static_cast<qint32>(k + (bh.width * bh.height * 4)) > m_data.size()) {
+        if (static_cast<qint32>(k + (bh.width * bh.height * 4)) > d->data.size()) {
             return false;
         }
 
-        m_brushType = IMAGE;
-        m_hasColor = true;
+        d->brushType = IMAGE;
+        d->hasColor = true;
 
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k += 4) {
-                m_img.setPixel(x, y, qRgba(m_data[k],
-                               m_data[k+1],
-                               m_data[k+2],
-                               m_data[k+3]));
+                d->img.setPixel(x, y, qRgba(d->data[k],
+                               d->data[k+1],
+                               d->data[k+2],
+                               d->data[k+3]));
             }
         }
     } else {
         return false;
     }
 
-    setWidth(m_img.width());
-    setHeight(m_img.height());
+    setWidth(d->img.width());
+    setHeight(d->img.height());
     //createScaledBrushes();
-    if (m_ownData) {
-        m_data.resize(0); // Save some memory, we're using enough of it as it is.
+    if (d->ownData) {
+        d->data.resize(0); // Save some memory, we're using enough of it as it is.
     }
 
 
-    if (m_img.width() == 0 || m_img.height() == 0)
+    if (d->img.width() == 0 || d->img.height() == 0)
         setValid(false);
     else
         setValid(true);
@@ -283,8 +307,8 @@ bool KisBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, int
     setImage(image->convertToQImage(0, x, y, w, h));
     setName(image->objectName());
 
-    m_brushType = IMAGE;
-    m_hasColor = true;
+    d->brushType = IMAGE;
+    d->hasColor = true;
 
     return true;
 }
@@ -336,7 +360,7 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
         bytes.resize(width() * height());
         for (qint32 y = 0; y < height(); y++) {
             for (qint32 x = 0; x < width(); x++) {
-                QRgb c = m_img.pixel(x, y);
+                QRgb c = d->img.pixel(x, y);
                 bytes[k++] = static_cast<char>(255 - qRed(c)); // red == blue == green
             }
         }
@@ -345,7 +369,7 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
         for (qint32 y = 0; y < height(); y++) {
             for (qint32 x = 0; x < width(); x++) {
                 // order for gimp brushes, v2 is: RGBA
-                QRgb pixel = m_img.pixel(x,y);
+                QRgb pixel = d->img.pixel(x,y);
                 bytes[k++] = static_cast<char>(qRed(pixel));
                 bytes[k++] = static_cast<char>(qGreen(pixel));
                 bytes[k++] = static_cast<char>(qBlue(pixel));
@@ -363,7 +387,7 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
 
 QImage KisBrush::img() const
 {
-    QImage image = m_img;
+    QImage image = d->img;
 
     if (hasColor() && useColorAsMask()) {
         image.detach();
@@ -386,13 +410,14 @@ QImage KisBrush::img() const
 //       d->color.fromKoColor( d->painter->paintColor());
 //       d->dab->dataManager()->setDefaultPixel( d->color.data() );
 
-void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scale, double angle, const KisPaintInformation& info_, double subPixelX, double subPixelY) const
 {
-    if (m_scaledBrushes.isEmpty()) {
+    Q_UNUSED(info_);
+    if (d->scaledBrushes.isEmpty()) {
         createScaledBrushes();
     }
     
-    double scale = scaleForPressure(info.pressure());
+//     double scale = scaleForPressure(info.pressure());
 
     const ScaledBrush *aboveBrush = 0;
     const ScaledBrush *belowBrush = 0;
@@ -449,18 +474,18 @@ void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, const KisPaintIn
     
 }
 
-void KisBrush::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
+void KisBrush::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scale, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
 {
   
 }
 
-KisPaintDeviceSP KisBrush::image(const KoColorSpace * /*colorSpace*/, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisPaintDeviceSP KisBrush::image(const KoColorSpace * /*colorSpace*/, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
-    if (m_scaledBrushes.isEmpty()) {
+    if (d->scaledBrushes.isEmpty()) {
         createScaledBrushes();
     }
 
-    double scale = scaleForPressure(info.pressure());
+//     double scale = scaleForPressure(info.pressure());
 
     const ScaledBrush *aboveBrush = 0;
     const ScaledBrush *belowBrush = 0;
@@ -542,12 +567,11 @@ void KisBrush::setHotSpot(QPointF pt)
     else if (y >= height())
         y = height() - 1;
 
-    m_hotSpot = QPointF(x, y);
+    d->hotSpot = QPointF(x, y);
 }
 
-QPointF KisBrush::hotSpot(const KisPaintInformation& info) const
+QPointF KisBrush::hotSpot(double scale) const
 {
-    double scale = scaleForPressure(info.pressure());
     double w = width() * scale;
     double h = height() * scale;
 
@@ -560,7 +584,7 @@ QPointF KisBrush::hotSpot(const KisPaintInformation& info) const
         h = 1;
     }
 
-    // XXX: This should take m_hotSpot into account, though it
+    // XXX: This should take d->hotSpot into account, though it
     // isn't specified by gimp brushes so it would default to the center
     // anyway.
     QPointF p(w / 2, h / 2);
@@ -569,35 +593,35 @@ QPointF KisBrush::hotSpot(const KisPaintInformation& info) const
 
 enumBrushType KisBrush::brushType() const
 {
-    if (m_brushType == IMAGE && useColorAsMask()) {
+    if (d->brushType == IMAGE && useColorAsMask()) {
         return MASK;
     }
     else {
-        return m_brushType;
+        return d->brushType;
     }
 }
 
 bool KisBrush::hasColor() const
 {
-    return m_hasColor;
+    return d->hasColor;
 }
 
 void KisBrush::createScaledBrushes() const
 {
-    if (!m_scaledBrushes.isEmpty())
-        m_scaledBrushes.clear();
+    if (!d->scaledBrushes.isEmpty())
+        d->scaledBrushes.clear();
 
     // Construct a series of brushes where each one's dimensions are
     // half the size of the previous one.
-    int width = m_img.width() * MAXIMUM_SCALE;
-    int height = m_img.height() * MAXIMUM_SCALE;
+    int width = d->img.width() * MAXIMUM_SCALE;
+    int height = d->img.height() * MAXIMUM_SCALE;
 
     QImage scaledImage;
 
     while (true) {
 
-        if (width >= m_img.width() && height >= m_img.height()) {
-            scaledImage = scaleImage(m_img, width, height);
+        if (width >= d->img.width() && height >= d->img.height()) {
+            scaledImage = scaleImage(d->img, width, height);
         }
         else {
             // Scale down the previous image once we're below 1:1.
@@ -607,11 +631,11 @@ void KisBrush::createScaledBrushes() const
         KisQImagemaskSP scaledMask = KisQImagemaskSP(new KisQImagemask(scaledImage, hasColor()));
         Q_CHECK_PTR(scaledMask);
 
-        double xScale = static_cast<double>(width) / m_img.width();
-        double yScale = static_cast<double>(height) / m_img.height();
+        double xScale = static_cast<double>(width) / d->img.width();
+        double yScale = static_cast<double>(height) / d->img.height();
         double scale = xScale;
 
-        m_scaledBrushes.append(ScaledBrush(scaledMask, hasColor() ? scaledImage : QImage(), scale, xScale, yScale));
+        d->scaledBrushes.append(ScaledBrush(scaledMask, hasColor() ? scaledImage : QImage(), scale, xScale, yScale));
 
         if (width == 1 && height == 1) {
             break;
@@ -625,41 +649,26 @@ void KisBrush::createScaledBrushes() const
 
 }
 
-double KisBrush::xSpacing(double pressure) const
+double KisBrush::xSpacing(double scale) const
 {
-    return width() * scaleForPressure(pressure) * m_spacing;
+    return width() * scale * d->spacing;
 }
 
-double KisBrush::ySpacing(double pressure) const
+double KisBrush::ySpacing(double scale) const
 {
-    return height() * scaleForPressure(pressure) * m_spacing;
+    return height() * scale * d->spacing;
 }
 
-double KisBrush::scaleForPressure(double pressure)
-{
-    double scale = pressure / PRESSURE_DEFAULT;
-
-    if (scale < 0) {
-        scale = 0;
-    }
-
-    if (scale > MAXIMUM_SCALE) {
-        scale = MAXIMUM_SCALE;
-    }
-
-    return scale;
-}
-
-qint32 KisBrush::maskWidth(const KisPaintInformation& info) const
+qint32 KisBrush::maskWidth(double scale) const
 {
     // Add one for sub-pixel shift
-    return static_cast<qint32>(ceil(width() * scaleForPressure(info.pressure())) + 1);
+    return static_cast<qint32>(ceil(width() * scale) + 1);
 }
 
-qint32 KisBrush::maskHeight(const KisPaintInformation& info) const
+qint32 KisBrush::maskHeight(double scale) const
 {
     // Add one for sub-pixel shift
-    return static_cast<qint32>(ceil(height() * scaleForPressure(info.pressure())) + 1);
+    return static_cast<qint32>(ceil(height() * scale) + 1);
 }
 
 KisQImagemaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const
@@ -989,21 +998,21 @@ void KisBrush::findScaledBrushes(double scale, const ScaledBrush **aboveBrush, c
     int current = 0;
 
     while (true) {
-        *aboveBrush = &(m_scaledBrushes[current]);
+        *aboveBrush = &(d->scaledBrushes[current]);
 
         if (fabs((*aboveBrush)->scale() - scale) < DBL_EPSILON) {
             // Scale matches exactly
             break;
         }
 
-        if (current == m_scaledBrushes.count() - 1) {
+        if (current == d->scaledBrushes.count() - 1) {
             // This is the last one
             break;
         }
 
-        if (scale > m_scaledBrushes[current + 1].scale() + DBL_EPSILON) {
+        if (scale > d->scaledBrushes[current + 1].scale() + DBL_EPSILON) {
             // We fit in between the two.
-            *belowBrush = &(m_scaledBrushes[current + 1]);
+            *belowBrush = &(d->scaledBrushes[current + 1]);
             break;
         }
 
@@ -1203,79 +1212,37 @@ QImage KisBrush::interpolate(const QImage& image1, const QImage& image2, double 
     return outputImage;
 }
 
-KisBrush::ScaledBrush::ScaledBrush()
-{
-    m_mask = 0;
-    m_image = QImage();
-    m_scale = 1;
-    m_xScale = 1;
-    m_yScale = 1;
-}
-
-KisBrush::ScaledBrush::ScaledBrush(KisQImagemaskSP scaledMask, const QImage& scaledImage, double scale, double xScale, double yScale)
-{
-    m_mask = scaledMask;
-    m_image = scaledImage;
-    m_scale = scale;
-    m_xScale = xScale;
-    m_yScale = yScale;
-
-    if (!m_image.isNull()) {
-        // Convert image to pre-multiplied by alpha.
-
-        m_image.detach();
-
-        for (int y = 0; y < m_image.height(); y++) {
-            for (int x = 0; x < m_image.width(); x++) {
-
-                QRgb pixel = m_image.pixel(x, y);
-
-                int red = qRed(pixel);
-                int green = qGreen(pixel);
-                int blue = qBlue(pixel);
-                int alpha = qAlpha(pixel);
-
-                red = (red * alpha) / 255;
-                green = (green * alpha) / 255;
-                blue = (blue * alpha) / 255;
-
-                m_image.setPixel(x, y, qRgba(red, green, blue, alpha));
-            }
-        }
-    }
-}
-
 void KisBrush::setImage(const QImage& img)
 {
-    m_img = img;
-    m_img.detach();
+    d->img = img;
+    d->img.detach();
 
     setWidth(img.width());
     setHeight(img.height());
 
-    m_scaledBrushes.clear();
+    d->scaledBrushes.clear();
 
     setValid(true);
 }
 
 qint32 KisBrush::width() const
 {
-    return m_width;
+    return d->width;
 }
 
 void KisBrush::setWidth(qint32 w)
 {
-    m_width = w;
+    d->width = w;
 }
 
 qint32 KisBrush::height() const
 {
-    return m_height;
+    return d->height;
 }
 
 void KisBrush::setHeight(qint32 h)
 {
-    m_height = h;
+    d->height = h;
 }
 
 /*QImage KisBrush::outline(double pressure) {
@@ -1294,15 +1261,15 @@ void KisBrush::setHeight(qint32 h)
 
 void KisBrush::generateBoundary() {
     KisPaintDeviceSP dev;
-    int w = maskWidth(KisPaintInformation());
-    int h = maskHeight(KisPaintInformation());
+    int w = maskWidth(1.0);
+    int h = maskHeight(1.0);
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
-        dev = image(KoColorSpaceRegistry::instance()->colorSpace("RGBA",0), KisPaintInformation());
+        dev = image(KoColorSpaceRegistry::instance()->colorSpace("RGBA",0), 1.0, 0.0,KisPaintInformation());
     } else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         dev = new KisPaintDevice(cs, "tmp for generateBoundary");
-        mask(dev, KoColor( cs ), KisPaintInformation() );
+        mask(dev, KoColor( cs ), 1.0, 0.0, KisPaintInformation() );
 #if 0
         KisQImagemaskSP amask = mask(KisPaintInformation());
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA",0);
@@ -1322,14 +1289,14 @@ void KisBrush::generateBoundary() {
 #endif
     }
 
-    m_boundary = new KisBoundary(dev.data());
-    m_boundary->generateBoundary(w, h);
+    d->boundary = new KisBoundary(dev.data());
+    d->boundary->generateBoundary(w, h);
 }
 
 KisBoundary KisBrush::boundary() {
-    if (!m_boundary)
+    if (!d->boundary)
         generateBoundary();
-    return *m_boundary;
+    return *d->boundary;
 }
 
 void KisBrush::makeMaskImage() {
@@ -1338,37 +1305,37 @@ void KisBrush::makeMaskImage() {
 
     QImage img(width(), height(), QImage::Format_RGB32);
 
-    if (m_img.width() == img.width() && m_img.height() == img.height()) {
+    if (d->img.width() == img.width() && d->img.height() == img.height()) {
         for (int x = 0; x < width(); x++) {
             for (int y = 0; y < height(); y++) {
-                QRgb c = m_img.pixel(x, y);
+                QRgb c = d->img.pixel(x, y);
                 int a = (qGray(c) * qAlpha(c)) / 255; // qGray(black) = 0
                 img.setPixel(x, y, qRgba(a, a, a, 255));
             }
         }
 
-        m_img = img;
+        d->img = img;
     }
 
-    m_brushType = MASK;
-    m_hasColor = false;
-    m_useColorAsMask = false;
-    delete m_boundary;
-    m_boundary = 0;
-    m_scaledBrushes.clear();
+    d->brushType = MASK;
+    d->hasColor = false;
+    d->useColorAsMask = false;
+    delete d->boundary;
+    d->boundary = 0;
+    d->scaledBrushes.clear();
 }
 
 KisBrush* KisBrush::clone() const {
     KisBrush* c = new KisBrush("");
-    c->m_spacing = m_spacing;
-    c->m_useColorAsMask = m_useColorAsMask;
-    c->m_hasColor = m_useColorAsMask;
-    c->m_img = m_img;
-    c->m_width = m_width;
-    c->m_height = m_height;
-    c->m_ownData = false;
-    c->m_hotSpot = m_hotSpot;
-    c->m_brushType = m_brushType;
+    c->d->spacing = d->spacing;
+    c->d->useColorAsMask = d->useColorAsMask;
+    c->d->hasColor = d->useColorAsMask;
+    c->d->img = d->img;
+    c->d->width = d->width;
+    c->d->height = d->height;
+    c->d->ownData = false;
+    c->d->hotSpot = d->hotSpot;
+    c->d->brushType = d->brushType;
     c->setValid(true);
 
     return c;
@@ -1380,5 +1347,33 @@ void KisBrush::toXML(QDomDocument& d, QDomElement& e) const
     KoResource::toXML(d,e);
 }
 
-#include "kis_brush.moc"
+void KisBrush::setSpacing(double s)
+{
+    d->spacing = s;
+}
 
+double KisBrush::spacing() const
+{
+    return d->spacing;
+}
+
+void KisBrush::setUseColorAsMask(bool useColorAsMask)
+{
+    d->useColorAsMask = useColorAsMask;
+}
+bool KisBrush::useColorAsMask() const
+{
+    return d->useColorAsMask;
+}
+
+void KisBrush::setBrushType(enumBrushType type)
+{
+    d->brushType = type;
+}
+
+bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
+{
+    return true;
+}
+
+#include "kis_brush.moc"

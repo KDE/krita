@@ -26,18 +26,20 @@ struct KisPaintInformation::Private {
     double xTilt;
     double yTilt;
     KisVector2D movement;
+    double angle;
 };
 
-KisPaintInformation::KisPaintInformation(const QPointF & pos, double pressure,
-                        double xTilt, double yTilt,
-                        KisVector2D movement)
+KisPaintInformation::KisPaintInformation(const QPointF & pos_, double pressure_,
+                        double xTilt_, double yTilt_,
+                        KisVector2D movement_)
     : d(new Private)
 {
-    d->pos = pos;
-    d->pressure = pressure;
-    d->xTilt = xTilt;
-    d->yTilt = yTilt;
-    d->movement = movement;
+    d->pos = pos_;
+    d->pressure = pressure_;
+    d->xTilt = xTilt_;
+    d->yTilt = yTilt_;
+    d->movement = movement_;
+    d->angle = atan2(movement_.y(), movement_.x());
 }
 
 KisPaintInformation::KisPaintInformation(const KisPaintInformation& rhs) : d(new Private(*rhs.d))
@@ -111,4 +113,9 @@ double KisPaintInformation::yTilt() const
 KisVector2D KisPaintInformation::movement() const
 {
     return d->movement;
+}
+
+double KisPaintInformation::angle() const
+{
+    return d->angle;
 }

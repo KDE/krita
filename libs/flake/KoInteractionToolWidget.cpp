@@ -92,6 +92,9 @@ KoInteractionToolWidget::KoInteractionToolWidget( KoInteractionTool* tool,
     rightAlign->setDefaultAction( m_tool->action( "object_align_horizontal_right" ) );
     hCenterAlign->setDefaultAction( m_tool->action( "object_align_horizontal_center" ) );
     leftAlign->setDefaultAction( m_tool->action( "object_align_horizontal_left" ) );
+
+    updatePosition();
+    updateSize();
 }
 
 bool KoInteractionToolWidget::eventFilter( QObject* object, QEvent* event )
@@ -138,6 +141,9 @@ void KoInteractionToolWidget::updatePosition()
     if( selection->count() )
         selPosition = selection->absolutePosition( position );
 
+    positionXSpinBox->setEnabled( selection->count() );
+    positionYSpinBox->setEnabled( selection->count() );
+
     positionXSpinBox->blockSignals(true);
     positionYSpinBox->blockSignals(true);
     positionXSpinBox->setValue( selPosition.x() );
@@ -180,6 +186,9 @@ void KoInteractionToolWidget::updateSize()
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
     if( selection->count() )
         selSize = selection->boundingRect().size();
+
+    widthSpinBox->setEnabled( selection->count() );
+    heightSpinBox->setEnabled( selection->count() );
 
     widthSpinBox->blockSignals(true);
     heightSpinBox->blockSignals(true);

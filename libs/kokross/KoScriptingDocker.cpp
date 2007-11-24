@@ -75,9 +75,9 @@ QString KoScriptingDockerFactory::id() const
     return d->action ? d->action->name() : "Scripting";
 }
 
-Qt::Dock KoScriptingDockerFactory::defaultDockPosition() const
+KoDockFactory::DockPosition  KoScriptingDockerFactory::defaultDockPosition() const
 {
-    return Qt::DockMinimized;
+    return DockMinimized;
 }
 
 QDockWidget* KoScriptingDockerFactory::createDockWidget()

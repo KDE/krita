@@ -62,7 +62,7 @@ class KOKROSS_EXPORT KoScriptingDockerFactory : public KoDockFactory
         /**
         * \return the default docking area.
         */
-        virtual Qt::Dock defaultDockPosition() const;
+        virtual KoDockFactory::DockPosition defaultDockPosition() const;
 
         /**
         * \return a newly created \a KoScriptingDocker instance.

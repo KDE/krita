@@ -31,9 +31,9 @@ QString Factory::id() const
     return QString("Simple Text Editor");
 }
 
-Qt::Dock Factory::defaultDockPosition() const
+KoDockFactory::DockPosition Factory::defaultDockPosition() const
 {
-     return Qt::DockMinimized;
+     return DockMinimized;
 }
 
 QDockWidget* Factory::createDockWidget()

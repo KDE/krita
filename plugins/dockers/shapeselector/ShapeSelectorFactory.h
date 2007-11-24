@@ -32,7 +32,7 @@ public:
     ShapeSelectorFactory();
 
     virtual QString id() const;
-    Qt::Dock defaultDockPosition() const;
+    KoDockFactory::DockPosition defaultDockPosition() const;
     QDockWidget* createDockWidget();
 };
 

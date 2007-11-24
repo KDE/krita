@@ -34,6 +34,15 @@ class QDockWidget;
 class KOMAIN_EXPORT KoDockFactory
 {
 public:
+    enum DockPosition {
+        DockTornOff, ///< Floating as its own top level window
+        DockTop,    ///< Above the central widget
+        DockBottom, ///< Below the central widget
+        DockRight,  ///< Right of the centra widget
+        DockLeft,   ///< Left of the centra widget
+        DockMinimized,  ///< Not docked, but reachable via the menu
+    };
+
     KoDockFactory() {}
     virtual ~KoDockFactory() {}
 
@@ -41,7 +50,7 @@ public:
     virtual QString id() const = 0;
 
     /// @return the dock widget area the widget should appear in by default
-    virtual Qt::Dock defaultDockPosition() const { return Qt::DockRight; }
+    virtual DockPosition defaultDockPosition() const { return DockRight; }
 
     /// Returns true if the dock widget should get a collapsable header.
     virtual bool isCollapsable() const { return true; }

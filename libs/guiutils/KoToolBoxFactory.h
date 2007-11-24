@@ -36,7 +36,7 @@ public:
     ~KoToolBoxFactory();
 
     virtual QString id() const;
-    Qt::Dock defaultDockPosition() const;
+    KoDockFactory::DockPosition defaultDockPosition() const;
     QDockWidget* createDockWidget();
     virtual bool isCollapsable() const { return false; }
 

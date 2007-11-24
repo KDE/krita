@@ -123,7 +123,7 @@ KoPathTool::~KoPathTool() {
 QWidget * KoPathTool::createOptionWidget() {
     PathToolOptionWidget *widget = new PathToolOptionWidget(this);
     connect(this, SIGNAL(typeChanged(int)), widget, SLOT(setSelectionType(int)));
-    connect(this, SIGNAL(pathChanged(KoPathShape*)), widget, SLOT(setSelectedPath(KoPathShape*)));
+    //connect(this, SIGNAL(pathChanged(KoPathShape*)), widget, SLOT(setSelectedPath(KoPathShape*)));
     updateOptionsWidget();
     return widget;
 }

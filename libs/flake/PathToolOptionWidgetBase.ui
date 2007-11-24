@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>262</width>
-    <height>246</height>
+    <width>182</width>
+    <height>249</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
@@ -31,7 +31,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex" >
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="pathPage" >
       <layout class="QGridLayout" >
@@ -51,6 +51,9 @@
         <widget class="QGroupBox" name="stylesGroup" >
          <property name="title" >
           <string>Styles</string>
+         </property>
+         <property name="flat" >
+          <bool>true</bool>
          </property>
          <layout class="QGridLayout" >
           <property name="leftMargin" >
@@ -116,26 +119,29 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="3" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
-       </item>
-       <item row="0" column="1" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item row="1" column="0" >
         <widget class="QGroupBox" name="actionsGroup" >
          <property name="title" >
           <string>Actions</string>
+         </property>
+         <property name="flat" >
+          <bool>true</bool>
          </property>
          <layout class="QGridLayout" >
           <property name="leftMargin" >
@@ -198,21 +204,21 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="4" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
-       </item>
-       <item row="1" column="1" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -236,17 +242,6 @@
        <property name="bottomMargin" >
         <number>0</number>
        </property>
-       <item row="0" column="0" colspan="2" >
-        <widget class="QStackedWidget" name="configWidget" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
-           <horstretch>0</horstretch>
-           <verstretch>1</verstretch>
-          </sizepolicy>
-         </property>
-         <widget class="QWidget" name="page_2" />
-        </widget>
-       </item>
        <item row="1" column="0" >
         <widget class="QPushButton" name="convertToPath" >
          <property name="text" >
@@ -267,19 +262,35 @@
          </property>
         </spacer>
        </item>
+       <item row="2" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
     </widget>
    </item>
    <item>
-    <widget class="QWidget" native="1" name="spacer" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
-       <horstretch>0</horstretch>
-       <verstretch>12</verstretch>
-      </sizepolicy>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

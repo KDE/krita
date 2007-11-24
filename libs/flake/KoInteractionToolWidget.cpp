@@ -248,6 +248,7 @@ void KoInteractionToolWidget::sizeHasChanged()
         new KoShapeTransformCommand( selectedShapes, oldState, newState, cmd );
         m_tool->canvas()->addCommand( cmd );
         updateSize();
+        updatePosition();
     }
 }
 

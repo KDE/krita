@@ -16,6 +16,9 @@ set(kofficedockers_SRCS
     strokedocker/StrokeDocker.cpp
     strokedocker/StrokeDockerFactory.cpp
 
+    shapeproperties/ShapePropertiesDocker.cpp
+    shapeproperties/ShapePropertiesDockerFactory.cpp
+
     Plugin.cpp
 )
 

@@ -35,6 +35,16 @@ class PIGMENTCMS_EXPORT KoColorProfile {
          */
         KoColorProfile(QString fileName = "");
         virtual ~KoColorProfile();
+        
+        /**
+         * Create a copy of this profile.
+         * Data that shall not change during the life time of the profile shouldn't be
+         * duplicated but shared, like for instance ICC data.
+         * 
+         * Data that shall be changed like a palette or hdr information such as exposure
+         * must be duplicated while cloning.
+         */
+        virtual KoColorProfile* clone() const =0;
         /**
          * Load the profile in memory.
          * @return true if the profile has been successfully loaded

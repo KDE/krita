@@ -26,9 +26,12 @@ class KoDockWidgetTitleBar : public QWidget {
 public:
     KoDockWidgetTitleBar(QDockWidget* dockWidget);
     virtual ~KoDockWidgetTitleBar();
-    
+
     virtual QSize minimumSizeHint() const; ///< reimplemented from QWidget
     virtual QSize sizeHint () const; ///< reimplemented from QWidget
+
+    void setCollapsed(bool collapsed);
+
 protected:
     virtual void paintEvent(QPaintEvent* event); ///< reimplemented from QWidget
     virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget

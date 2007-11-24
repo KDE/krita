@@ -1772,16 +1772,17 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
 
     if( !d->m_dockWidgetMap.contains( factory->id() ) ) {
         dockWidget = factory->createDockWidget();
-        
+
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
         if (!dockWidget) return 0;
 
+        KoDockWidgetTitleBar *titleBar = 0;
         // Check if the dock widget is supposed to be collapsable
-        QVariant isCollapsable = dockWidget->property("KoDockWidgetCollapsable");
-        if (!isCollapsable.isValid() || isCollapsable.toBool()) {
+        if (factory->isCollapsable()) {
             if (!dockWidget->titleBarWidget()) {
-                dockWidget->setTitleBarWidget(new KoDockWidgetTitleBar(dockWidget));
+                titleBar = new KoDockWidgetTitleBar(dockWidget);
+                dockWidget->setTitleBarWidget(titleBar);
             }
         }
 
@@ -1807,13 +1808,12 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
             if (!visible)
                 dockWidget->hide();
         }
+        if (titleBar && factory->defaultCollapsed()) // TODO persist this somehow
+            titleBar->setCollapsed(true);
         d->m_dockWidgetMap.insert( factory->id(), dockWidget );
     } else {
         dockWidget = d->m_dockWidgetMap[ factory->id() ];
     }
-
-    // XXX: Create koffice-wide dialog pane with the palette font size
-    // option
 
     KConfigGroup group( KGlobal::config(), "GUI" );
     QFont dockWidgetFont  = KGlobalSettings::generalFont();

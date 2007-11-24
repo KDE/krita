@@ -43,6 +43,14 @@ public:
     /// @return the dock widget area the widget should appear in by default
     virtual Qt::Dock defaultDockPosition() const { return Qt::DockRight; }
 
+    /// Returns true if the dock widget should get a collapsable header.
+    virtual bool isCollapsable() const { return true; }
+    /**
+     * In case the docker is collapsable, returns true if the dock widget
+     * will start collapsed by default.
+     */
+    virtual bool defaultCollapsed() const { return false; }
+
     /// Creates the dock widget
     /// @return the created dock widget
     virtual QDockWidget* createDockWidget() = 0;

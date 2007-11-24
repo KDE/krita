@@ -38,6 +38,7 @@ public:
     virtual QString id() const;
     Qt::Dock defaultDockPosition() const;
     QDockWidget* createDockWidget();
+    virtual bool isCollapsable() const { return false; }
 
 private:
     class Private;

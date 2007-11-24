@@ -39,10 +39,10 @@ class KoDockWidgetTitleBarButton : public QAbstractButton
 {
 public:
     KoDockWidgetTitleBarButton(KoDockWidgetTitleBar *titleBar);
-    
+
     QSize sizeHint() const;
     inline QSize minimumSizeHint() const { return sizeHint(); }
-    
+
     virtual void enterEvent(QEvent *event);
     virtual void leaveEvent(QEvent *event);
     virtual void paintEvent(QPaintEvent *event);
@@ -115,11 +115,11 @@ public:
     KIcon openIcon, closeIcon;
     QAbstractButton* closeButton;
     QAbstractButton* floatButton;
-    QAbstractButton* collapseButton;    
-    
+    QAbstractButton* collapseButton;
+
     void toggleFloating();
     void toggleCollapsed();
-    void featuresChanged(QDockWidget::DockWidgetFeatures features);    
+    void featuresChanged(QDockWidget::DockWidgetFeatures features);
 };
 
 KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
@@ -241,6 +241,13 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
     d->collapseButton->setGeometry(collapseRect);
 }
 
+void KoDockWidgetTitleBar::setCollapsed(bool collapsed)
+{
+    QDockWidget *q = qobject_cast<QDockWidget*>(parentWidget());
+    if (q && q->isVisible() == collapsed)
+        d->toggleCollapsed();
+}
+
 void KoDockWidgetTitleBar::Private::toggleFloating()
 {
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
@@ -264,5 +271,4 @@ void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatu
     floatButton->setVisible(hasFeature(q, QDockWidget::DockWidgetFloatable));
     thePublic->resizeEvent(0);
 }
-
 #include "KoDockWidgetTitleBar.moc"

@@ -106,6 +106,7 @@ KoIccColorProfile::KoIccColorProfile(const QByteArray& rawData) : KoColorProfile
     d->shared->count ++;
     d->shared->data = new Data();
     d->shared->lcmsProfile = 0;
+    d->shared->chromacities = 0;
     setRawData(rawData);
     init();
 }
@@ -152,7 +153,6 @@ bool KoIccColorProfile::valid() const
 
 KoIccColorProfile *KoIccColorProfile::getScreenProfile(int screen )
 {
-
 #ifdef Q_WS_X11
 
     Atom type;
@@ -174,18 +174,17 @@ KoIccColorProfile *KoIccColorProfile::getScreenProfile(int screen )
                     &format,
                     &nitems,
                     &bytes_after,
-                    (unsigned char **) &str)
+                    (unsigned char **) &str) == Success
                 ) {
-
         QByteArray bytes (nitems, '\0');
         bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
         return new KoIccColorProfile(bytes);
     } else {
-        return NULL;
+        return 0;
     }
 #else
-    return NULL;
+    return 0;
 
 #endif
 }

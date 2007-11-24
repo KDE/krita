@@ -56,8 +56,12 @@ void KoShapeGroup::saveOdf( KoShapeSavingContext & context ) const {
     saveOdfAttributes(context, OdfMandatories);
     context.xmlWriter().addAttributePt( "svg:y", position().y() );
 
-    foreach(KoShape* shape, iterator()) // store children.
+    QList<KoShape*> shapes = iterator();
+    qSort( shapes.begin(), shapes.end(), KoShape::compareShapeZIndex );
+
+    foreach(KoShape* shape, shapes ) {
         shape->saveOdf(context);
+    }
 
     saveOdfConnections(context);
     context.xmlWriter().endElement();

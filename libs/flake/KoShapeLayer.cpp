@@ -58,8 +58,12 @@ void KoShapeLayer::saveOdf( KoShapeSavingContext & context ) const {
     // save later according to parag 9.1.3
     context.addLayerForSaving( this );
 
-    foreach(KoShape* shape, iterator())
+    QList<KoShape*> shapes = iterator();
+    qSort( shapes.begin(), shapes.end(), KoShape::compareShapeZIndex );
+
+    foreach(KoShape* shape, shapes ) {
         shape->saveOdf(context);
+    }
 }
 
 bool KoShapeLayer::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {

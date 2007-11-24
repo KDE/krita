@@ -677,16 +677,13 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
             }
         }
         if ( element.hasAttributeNS( KoXmlNS::draw, "z-index" ) ) {
-            // TODO what do we do in case of copy/paste
-            setZIndex( element.attributeNS( KoXmlNS::draw, "z-index" ).toInt() );
+            context.addShapeZIndex( this, element.attributeNS( KoXmlNS::draw, "z-index" ).toInt() );
         }
-        else {
-            // TODO what do we do in the case the z-index is not there then the order in the doc
-            // is the the order of the z-index
-        }
+        setZIndex( context.zIndex() );
 
-        if( element.hasAttributeNS( KoXmlNS::draw, "name" ) )
+        if( element.hasAttributeNS( KoXmlNS::draw, "name" ) ) {
             setName( element.attributeNS( KoXmlNS::draw, "name" ) );
+        }
 
         loadStyle( element, context );
     }
@@ -876,10 +873,6 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
         // the position is hidden in the transformation
         context.xmlWriter().addAttributePt( "svg:x", 0.0 );
         context.xmlWriter().addAttributePt( "svg:y", 0.0 );
-    }
-
-    if(attributes & OdfMandatories) {
-        context.xmlWriter().addAttribute("draw:z-index", d->zIndex);
     }
 
     if(attributes & OdfTransformation) {

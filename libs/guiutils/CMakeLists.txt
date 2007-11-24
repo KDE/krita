@@ -61,6 +61,7 @@ set(koguiutils_LIB_SRCS
     KoPrintingDialog.cpp
    KoShapePainter.cpp
    KoProgressBar.cpp
+   KoPositionSelector.cpp
 )
 
 kde4_add_ui_files( koguiutils_LIB_SRCS

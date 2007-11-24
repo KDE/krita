@@ -73,6 +73,24 @@ public:
 
     /// Returns the image collection for loading images
     KoImageCollection * imageCollection();
+
+    /// Get current z-index
+    int zIndex();
+
+    /// Set z-index
+    void setZIndex( int index );
+
+    /**
+     * Add the z-index 
+     * 
+     * Used for document which use the z-index instead of the order of the shapes
+     * in the document.
+     */
+    void addShapeZIndex( KoShape * shape, int index );
+
+    /// Get the save z-indices
+    const QMap<KoShape*, int> & shapeZIndices();
+
 private:
     class Private;
     Private * const d;

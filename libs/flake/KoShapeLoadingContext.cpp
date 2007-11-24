@@ -27,7 +27,11 @@
 
 class KoShapeLoadingContext::Private {
 public:
-    Private(KoOasisLoadingContext &c) : context(c), imageCollection(0) {}
+    Private(KoOasisLoadingContext &c)
+    : context( c )
+    , imageCollection( 0 )
+    , zIndex( 0 )
+    {}
     ~Private()
     {
         if( shapesForDocument.count() )
@@ -48,6 +52,8 @@ public:
     QMap<QString, KoShape*> drawIds;
     QList<KoShape*> shapesForDocument;
     KoImageCollection * imageCollection;
+    QMap<KoShape*, int> zIndices;
+    int zIndex;
 };
 
 KoShapeLoadingContext::KoShapeLoadingContext( KoOasisLoadingContext & context )
@@ -111,4 +117,24 @@ void KoShapeLoadingContext::setImageCollection( KoImageCollection * imageCollect
 KoImageCollection * KoShapeLoadingContext::imageCollection()
 {
     return d->imageCollection;
+}
+
+int KoShapeLoadingContext::zIndex()
+{
+    return d->zIndex++;
+}
+
+void KoShapeLoadingContext::setZIndex( int index )
+{
+    d->zIndex = index;
+}
+
+void KoShapeLoadingContext::addShapeZIndex( KoShape * shape, int index )
+{
+    d->zIndices.insert( shape, index );
+}
+
+const QMap<KoShape*, int> & KoShapeLoadingContext::shapeZIndices()
+{
+    return d->zIndices;
 }

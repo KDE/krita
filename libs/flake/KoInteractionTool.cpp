@@ -51,12 +51,13 @@
 
 class KoInteractionTool::Private {
 public:
-    Private() : lastHandle(KoFlake::NoHandle), mouseWasInsideHandles( false ), moveCommand(0) { }
+    Private() : lastHandle(KoFlake::NoHandle), hotPosition( KoFlake::TopLeftCorner ), mouseWasInsideHandles( false ), moveCommand(0) { }
     ~Private() {
         moveCommand = 0;
     }
 
     KoFlake::SelectionHandle lastHandle;
+    KoFlake::Position hotPosition;
     bool mouseWasInsideHandles;
     QPointF selectionBox[8];
     QPolygonF selectionOutline;
@@ -401,6 +402,7 @@ void KoInteractionTool::paint( QPainter &painter, const KoViewConverter &convert
                  true, true);
         decorator.setSelection(koSelection());
         decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
+        decorator.setHotPosition( d->hotPosition );
         decorator.paint(painter, converter);
     }
 }
@@ -722,13 +724,21 @@ void KoInteractionTool::selectionAlign(KoShapeAlignCommand::Align align)
 }
 
 QWidget* KoInteractionTool::createOptionWidget() {
-    return new KoInteractionToolWidget( this );
+    KoInteractionToolWidget * w = new KoInteractionToolWidget( this );
+    connect( w, SIGNAL( hotPositionChanged( KoFlake::Position ) ), this, SLOT( updateHotPosition( KoFlake::Position ) ) );
+    return w;
 }
 
+void KoInteractionTool::updateHotPosition( KoFlake::Position hotPosition )
+{
+    d->hotPosition = hotPosition;
+    repaintDecorations();
+}
 
 // ##########  SelectionDecorator ############
 QImage * SelectionDecorator::s_rotateCursor=0;
 static K3StaticDeleter<QImage> staticRotateCursorDeleter;
+KoFlake::Position SelectionDecorator::m_hotPosition = KoFlake::TopLeftCorner;
 
 SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
         bool rotationHandles, bool shearHandles)
@@ -749,6 +759,11 @@ void SelectionDecorator::setSelection(KoSelection *selection) {
 
 void SelectionDecorator::setHandleRadius( int radius ) {
     m_handleRadius = radius;
+}
+
+void SelectionDecorator::setHotPosition( KoFlake::Position hotPosition )
+{
+    m_hotPosition = hotPosition;
 }
 
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter) {
@@ -825,6 +840,12 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     rect.moveCenter((outline.value(2)+outline.value(3))/2);
     painter.drawRect(rect);
     rect.moveCenter((outline.value(3)+outline.value(0))/2);
+    painter.drawRect(rect);
+
+    // draw the hot position
+    painter.setBrush(Qt::red);
+    QPointF pos = m_selection->absolutePosition( m_hotPosition );
+    rect.moveCenter( converter.documentToView( pos ) );
     painter.drawRect(rect);
 
 

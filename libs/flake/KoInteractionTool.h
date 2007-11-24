@@ -84,6 +84,8 @@ private slots:
     void selectionAlignVerticalCenter();
     void selectionAlignVerticalBottom();
 
+    void updateHotPosition( KoFlake::Position hotPosition );
+
 public: // Events
 
     virtual void mousePressEvent( KoPointerEvent *event );
@@ -151,9 +153,14 @@ public:
      * @param radius the new handle radius
      */
     void setHandleRadius( int radius );
+
+    /// Sets the hot position to highlight
+    static void setHotPosition( KoFlake::Position hotPosition );
+
 private:
     bool m_rotationHandles, m_shearHandles;
     KoFlake::SelectionHandle m_arrows;
+    static KoFlake::Position m_hotPosition;
     KoSelection *m_selection;
     int m_handleRadius;
     static QImage *s_rotateCursor;

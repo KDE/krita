@@ -169,4 +169,9 @@ void KoTool::setPopupActionList(const QList<QAction*> &list) {
     d->popupActionList = list;
 }
 
+KoCanvasBase * KoTool::canvas() const
+{
+    return m_canvas;
+}
+
 #include "KoTool.moc"

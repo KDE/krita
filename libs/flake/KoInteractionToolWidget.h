@@ -20,9 +20,10 @@
 #define KOINTERACTIONTOOLWIDGET_H
 
 #include <ui_KoInteractionToolWidget.h>
+#include "KoFlake.h"
 
 class KoInteractionTool;
-class QLabel;
+class QRadioButton;
 
 class KoInteractionToolWidget : public QTabWidget, Ui::KoInteractionToolWidget {
     Q_OBJECT
@@ -32,12 +33,23 @@ public:
 public slots:
     void updateControls();
 */
+signals:
+    /// emits whenever the hot (selected) position changes
+    void hotPositionChanged( KoFlake::Position hotPosition );
+
 protected:
     bool eventFilter( QObject *obj, QEvent *event );
 
+private slots:
+    void updatePosition();
+    void positionHasChanged();
 private:
-    QLabel* m_rectLabel;
-
+    KoFlake::Position selectedPosition();
+    QRadioButton * topLeft;
+    QRadioButton * topRight;
+    QRadioButton * bottomLeft;
+    QRadioButton * bottomRight;
+    QRadioButton * center;
     KoInteractionTool* m_tool;
 };
 

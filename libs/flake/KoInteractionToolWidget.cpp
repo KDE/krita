@@ -19,9 +19,15 @@
 
 #include "KoInteractionToolWidget.h"
 #include "KoInteractionTool.h"
-#include <QLabel>
+#include "KoCanvasBase.h"
+#include "KoShapeManager.h"
+#include "KoSelection.h"
+#include "commands/KoShapeMoveCommand.h"
+
 #include <QPainter>
 #include <QSize>
+#include <QtGui/QRadioButton>
+#include <QtGui/QLabel>
 
 KoInteractionToolWidget::KoInteractionToolWidget( KoInteractionTool* tool,
                                     QWidget* parent ) : QTabWidget( parent )
@@ -29,7 +35,46 @@ KoInteractionToolWidget::KoInteractionToolWidget( KoInteractionTool* tool,
     m_tool = tool;
 
     setupUi( this );
-    rectLabel->installEventFilter( this );
+
+    topLeft = new QRadioButton( "", rectWidget );
+    topLeft->setChecked( true );
+    topLeft->setToolTip( i18n( "Top-Left Corner" ) );
+    topRight = new QRadioButton( "", rectWidget );
+    topRight->setToolTip( i18n( "Top-Right Corner" ) );
+    bottomLeft = new QRadioButton( "", rectWidget );
+    bottomLeft->setToolTip( i18n( "Bottom-Left Corner" ) );
+    bottomRight = new QRadioButton( "", rectWidget );
+    bottomRight->setToolTip( i18n( "Bottom-Right Corner" ) );
+    center = new QRadioButton( "", rectWidget );
+    center->setToolTip( i18n( "Center Point" ) );
+
+    QGridLayout * g = new QGridLayout( rectWidget );
+    g->addWidget( topLeft, 0, 0, 1, 1, Qt::AlignLeft );
+    g->addWidget( topRight, 0, 2, 1, 1, Qt::AlignRight );
+    g->addWidget( center, 1, 1, 1, 1, Qt::AlignCenter );
+    g->addWidget( bottomLeft, 2, 0, 1, 1, Qt::AlignLeft );
+    g->addWidget( bottomRight, 2, 2, 1, 1, Qt::AlignRight );
+
+    g->setRowStretch( 0, 0 );
+    g->setRowStretch( 1, 1 );
+    g->setRowStretch( 2, 0 );
+    g->setColumnStretch( 0, 0 );
+    g->setColumnStretch( 1, 1 );
+    g->setColumnStretch( 2, 0 );
+
+    connect( topLeft, SIGNAL(clicked()), this, SLOT(updatePosition()) );
+    connect( topRight, SIGNAL(clicked()), this, SLOT(updatePosition()) );
+    connect( center, SIGNAL(clicked()), this, SLOT(updatePosition()) );
+    connect( bottomLeft, SIGNAL(clicked()), this, SLOT(updatePosition()) );
+    connect( bottomRight, SIGNAL(clicked()), this, SLOT(updatePosition()) );
+
+    connect( positionXSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
+    connect( positionYSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
+
+    KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
+    connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updatePosition() ) );
+
+    rectWidget->installEventFilter( this );
 
     bringToFront->setDefaultAction( m_tool->action( "object_move_totop" ) );
     raiseLevel->setDefaultAction( m_tool->action( "object_move_up" ) );
@@ -49,17 +94,78 @@ bool KoInteractionToolWidget::eventFilter( QObject* object, QEvent* event )
         return true;
     }
     else if( event->type() == QEvent::Paint ) {
-        QPainter p( rectLabel );
-        QRect r( 5, 5, rectLabel->width()-10, rectLabel->height()-10 );
+        QPainter p( rectWidget );
+        int offset = topLeft->height() >> 1;
+        int left = topLeft->pos().x() + offset;
+        int right = topRight->pos().x() + offset;
+        int top = topLeft->pos().y() + offset;
+        int bottom = bottomLeft->pos().y() + offset;
+        QRect r( left, top, right-left, bottom-top );
         p.drawRect( r );
-        p.drawRect( QRect( r.topLeft() - QPoint( 2, 2 ), QSize( 4, 4 ) ) );
-        p.drawRect( QRect( r.topRight() - QPoint( 2, 2 ), QSize( 4, 4 ) ) );
-        p.drawRect( QRect( r.bottomLeft() - QPoint( 2, 2 ), QSize( 4, 4 ) ) );
-        p.drawRect( QRect( r.bottomRight() - QPoint( 2, 2 ), QSize( 4, 4 ) ) );
         return true;
     }
     else
         return QObject::eventFilter( object, event ); // standart event processing
+}
+
+KoFlake::Position KoInteractionToolWidget::selectedPosition()
+{
+    KoFlake::Position position = KoFlake::TopLeftCorner;
+    if( topRight->isChecked() )
+        position = KoFlake::TopRightCorner;
+    else if( bottomLeft->isChecked() )
+        position = KoFlake::BottomLeftCorner;
+    else if( bottomRight->isChecked() )
+        position = KoFlake::BottomRightCorner;
+    else if( center->isChecked() )
+        position = KoFlake::CenteredPosition;
+
+    return position;
+}
+
+void KoInteractionToolWidget::updatePosition()
+{
+    KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
+    if( selection->count() )
+    {
+        KoFlake::Position position = selectedPosition();
+        QPointF p = selection->absolutePosition( position );
+
+        positionXSpinBox->blockSignals(true);
+        positionYSpinBox->blockSignals(true);
+        positionXSpinBox->setValue( p.x() );
+        positionYSpinBox->setValue( p.y() );
+        positionXSpinBox->blockSignals(false);
+        positionYSpinBox->blockSignals(false);
+
+        emit hotPositionChanged( position );
+    }
+}
+
+void KoInteractionToolWidget::positionHasChanged()
+{
+    KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
+    if( ! selection->count() )
+        return;
+
+    KoFlake::Position position = selectedPosition();
+    QPointF newPos( positionXSpinBox->value(), positionYSpinBox->value() );
+    QPointF oldPos = selection->absolutePosition( position );
+    if( oldPos == newPos )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+    QPointF moveBy = newPos - oldPos;
+    QList<QPointF> oldPositions;
+    QList<QPointF> newPositions;
+    foreach( KoShape* shape, selectedShapes )
+    {
+        oldPositions.append( shape->position() );
+        newPositions.append( shape->position() + moveBy );
+    }
+    selection->setPosition( selection->position() + moveBy );
+    m_tool->canvas()->addCommand( new KoShapeMoveCommand( selectedShapes, oldPositions, newPositions ) );
+    updatePosition();
 }
 
 #include <KoInteractionToolWidget.moc>

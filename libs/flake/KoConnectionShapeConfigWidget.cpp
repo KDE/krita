@@ -24,7 +24,6 @@
 KoConnectionShapeConfigWidget::KoConnectionShapeConfigWidget()
 {
     widget.setupUi( this );
-    layout()->setContentsMargins( 0,0,0,0 );
 
     widget.connectionType->clear();
     widget.connectionType->addItem( i18n("Standard") );

@@ -23,6 +23,8 @@
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "commands/KoShapeMoveCommand.h"
+#include "commands/KoShapeSizeCommand.h"
+#include "commands/KoShapeTransformCommand.h"
 
 #include <QPainter>
 #include <QSize>
@@ -71,8 +73,12 @@ KoInteractionToolWidget::KoInteractionToolWidget( KoInteractionTool* tool,
     connect( positionXSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
     connect( positionYSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
 
+    connect( widthSpinBox, SIGNAL( editingFinished() ), this, SLOT( sizeHasChanged() ) );
+    connect( heightSpinBox, SIGNAL( editingFinished() ), this, SLOT( sizeHasChanged() ) );
+
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
     connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updatePosition() ) );
+    connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updateSize() ) );
 
     rectWidget->installEventFilter( this );
 
@@ -125,21 +131,21 @@ KoFlake::Position KoInteractionToolWidget::selectedPosition()
 
 void KoInteractionToolWidget::updatePosition()
 {
+    QPointF selPosition( 0, 0 );
+    KoFlake::Position position = selectedPosition();
+
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
     if( selection->count() )
-    {
-        KoFlake::Position position = selectedPosition();
-        QPointF p = selection->absolutePosition( position );
+        selPosition = selection->absolutePosition( position );
 
-        positionXSpinBox->blockSignals(true);
-        positionYSpinBox->blockSignals(true);
-        positionXSpinBox->setValue( p.x() );
-        positionYSpinBox->setValue( p.y() );
-        positionXSpinBox->blockSignals(false);
-        positionYSpinBox->blockSignals(false);
+    positionXSpinBox->blockSignals(true);
+    positionYSpinBox->blockSignals(true);
+    positionXSpinBox->setValue( selPosition.x() );
+    positionYSpinBox->setValue( selPosition.y() );
+    positionXSpinBox->blockSignals(false);
+    positionYSpinBox->blockSignals(false);
 
-        emit hotPositionChanged( position );
-    }
+    emit hotPositionChanged( position );
 }
 
 void KoInteractionToolWidget::positionHasChanged()
@@ -166,6 +172,74 @@ void KoInteractionToolWidget::positionHasChanged()
     selection->setPosition( selection->position() + moveBy );
     m_tool->canvas()->addCommand( new KoShapeMoveCommand( selectedShapes, oldPositions, newPositions ) );
     updatePosition();
+}
+
+void KoInteractionToolWidget::updateSize()
+{
+    QSizeF selSize( 0, 0 );
+    KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
+    if( selection->count() )
+        selSize = selection->boundingRect().size();
+
+    widthSpinBox->blockSignals(true);
+    heightSpinBox->blockSignals(true);
+    widthSpinBox->setValue( selSize.width() );
+    heightSpinBox->setValue( selSize.height() );
+    widthSpinBox->blockSignals(false);
+    heightSpinBox->blockSignals(false);
+}
+
+void KoInteractionToolWidget::sizeHasChanged()
+{
+    QSizeF newSize( widthSpinBox->value(), heightSpinBox->value() );
+
+    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    QRectF rect = selection->boundingRect();
+
+    if( rect.width() != newSize.width() || rect.height() != newSize.height() )
+    {
+        QMatrix resizeMatrix;
+        resizeMatrix.translate( rect.x(), rect.y() );
+        resizeMatrix.scale( newSize.width() / rect.width(), newSize.height() / rect.height() );
+        resizeMatrix.translate( -rect.x(), -rect.y() );
+
+        QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+        QList<QSizeF> oldSizes, newSizes;
+        QList<QMatrix> oldState;
+        QList<QMatrix> newState;
+
+        foreach( KoShape* shape, selectedShapes )
+        {
+            QSizeF oldSize = shape->size();
+            oldState << shape->transformation();
+            QMatrix shapeMatrix = shape->absoluteTransformation(0);
+
+            // calculate the matrix we would apply to the local shape matrix
+            // that tells us the effective scale values we have to use for the resizing
+            QMatrix localMatrix = shapeMatrix * resizeMatrix * shapeMatrix.inverted();
+            // save the effective scale values
+            double scaleX = localMatrix.m11();
+            double scaleY = localMatrix.m22();
+
+            // calculate the scale matrix which is equivalent to our resizing above
+            QMatrix scaleMatrix = (QMatrix().scale( scaleX, scaleY ));
+            scaleMatrix =  shapeMatrix.inverted() * scaleMatrix * shapeMatrix;
+
+            // calculate the new size of the shape, using the effective scale values
+            oldSizes << oldSize;
+            newSizes << QSizeF( scaleX * oldSize.width(), scaleY * oldSize.height() );
+            // apply the rest of the transformation without the resizing part
+            shape->applyAbsoluteTransformation( scaleMatrix.inverted() * resizeMatrix );
+            newState << shape->transformation();
+        }
+        m_tool->repaintDecorations();
+        selection->applyAbsoluteTransformation( resizeMatrix );
+        QUndoCommand * cmd = new QUndoCommand(i18n("Resize"));
+        new KoShapeSizeCommand( selectedShapes, oldSizes, newSizes, cmd );
+        new KoShapeTransformCommand( selectedShapes, oldState, newState, cmd );
+        m_tool->canvas()->addCommand( cmd );
+        updateSize();
+    }
 }
 
 #include <KoInteractionToolWidget.moc>

@@ -43,6 +43,8 @@ protected:
 private slots:
     void updatePosition();
     void positionHasChanged();
+    void updateSize();
+    void sizeHasChanged();
 private:
     KoFlake::Position selectedPosition();
     QRadioButton * topLeft;

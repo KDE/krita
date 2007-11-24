@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,12 +23,13 @@
 #include "KoParameterShape.h"
 #include <klocale.h>
 
-KoParameterHandleMoveCommand::KoParameterHandleMoveCommand( KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, QUndoCommand *parent )
+KoParameterHandleMoveCommand::KoParameterHandleMoveCommand( KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, Qt::KeyboardModifiers keyModifiers, QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_shape( shape )
 , m_handleId( handleId )
 , m_startPoint( startPoint )
 , m_endPoint( endPoint )
+, m_keyModifiers( keyModifiers )
 {
     setText( i18n( "Change parameter" ) );
 }
@@ -41,7 +43,7 @@ void KoParameterHandleMoveCommand::redo()
 {
     QUndoCommand::redo();
     m_shape->update();
-    m_shape->moveHandle( m_handleId, m_endPoint );
+    m_shape->moveHandle( m_handleId, m_endPoint, m_keyModifiers );
     m_shape->update();
 }
 

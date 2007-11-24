@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@ KoParameterChangeStrategy::KoParameterChangeStrategy( KoTool *tool, KoCanvasBase
 , m_parameterShape( parameterShape )
 , m_handleId( handleId )    
 , m_startPoint( m_parameterShape->shapeToDocument( m_parameterShape->handlePosition( handleId ) ) )
+, m_lastModifierUsed(0)
 {
 }
 
@@ -36,15 +38,17 @@ KoParameterChangeStrategy::~KoParameterChangeStrategy()
 void KoParameterChangeStrategy::handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers )
 {
     m_parameterShape->moveHandle( m_handleId, mouseLocation, modifiers );
+    m_lastModifierUsed = modifiers;
+    m_releasePoint = mouseLocation;
 }
 
 QUndoCommand* KoParameterChangeStrategy::createCommand()
 {
     KoParameterHandleMoveCommand *cmd = 0;
     // check if handle position changed
-    if ( m_startPoint != m_parameterShape->handlePosition( m_handleId ) )
+    if ( m_startPoint != QPointF(0,0) && m_startPoint != m_releasePoint )
     {
-        cmd = new KoParameterHandleMoveCommand( m_parameterShape, m_handleId, m_startPoint, m_parameterShape->shapeToDocument( m_parameterShape->handlePosition( m_handleId ) ) );
+        cmd = new KoParameterHandleMoveCommand( m_parameterShape, m_handleId, m_startPoint, m_releasePoint, m_lastModifierUsed );
     }
     return cmd;
 }

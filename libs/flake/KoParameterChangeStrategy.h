@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,9 +44,11 @@ public:
     virtual QUndoCommand* createCommand();
 
 private:
-    KoParameterShape * m_parameterShape; ///< the parametric shape we are working on
-    int m_handleId;                      ///< the id of the control point
-    QPointF m_startPoint;                ///< the starting position of the control point
+    KoParameterShape * const m_parameterShape; ///< the parametric shape we are working on
+    const int m_handleId;                      ///< the id of the control point
+    const QPointF m_startPoint;                ///< the starting position of the control point
+    Qt::KeyboardModifiers m_lastModifierUsed;
+    QPointF m_releasePoint;
 };
 
 #endif /* KOPATHPARAMETERCHANGESTRATEGY_H */

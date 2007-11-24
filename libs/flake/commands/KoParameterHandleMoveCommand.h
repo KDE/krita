@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,9 +38,10 @@ public:
      * @param handleId the ID under which the parameterShape knows the handle in KoParameterShape::moveHandle()
      * @param startPoint The old position
      * @param endPoint The new position
+     * @param keyModifiers the key modifiers used while moving.
      * @param parent the parent command if this is a compound undo command.
      */
-    KoParameterHandleMoveCommand( KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, QUndoCommand *parent = 0 );
+    KoParameterHandleMoveCommand( KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, Qt::KeyboardModifiers keyModifiers, QUndoCommand *parent = 0 );
     virtual ~KoParameterHandleMoveCommand();
 
     /// redo the command
@@ -51,6 +53,7 @@ private:
     int m_handleId;
     QPointF m_startPoint;
     QPointF m_endPoint;
+    Qt::KeyboardModifiers m_keyModifiers;
 };
 
 #endif // KOPARAMETERHANDLEMOVECOMMAND_H

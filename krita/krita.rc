@@ -88,7 +88,7 @@
   <Action name="bottomlayer"/>
   <Separator/>
   <Action name="resizelayertoowner"/>
-  <Separator/
+  <Separator/>
   <Action name="save_layer_as_image"/>
   <Action name="layer_to_image"/>
   <Separator/>

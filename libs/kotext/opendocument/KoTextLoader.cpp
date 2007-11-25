@@ -276,7 +276,7 @@ void KoTextLoader::loadAllStyles(KoTextLoadingContext& context)
     }
 }
 
-void KoTextLoader::loadSettings(KoTextLoadingContext& context, const QDomDocument& settings)
+void KoTextLoader::loadSettings(KoTextLoadingContext& context, const KoXmlDocument& settings)
 {
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug(32500)<<"KoTextLoader::loadSettings";

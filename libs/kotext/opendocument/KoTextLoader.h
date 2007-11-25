@@ -48,7 +48,6 @@ class KoImageCollection;
 class KoImageData;
 class KoTextAnchor;
 
-//class QDomDocument;
 class QTextCursor;
 //class QColor;
 
@@ -94,7 +93,7 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
         /**
         * Load the settings.
         */
-        virtual void loadSettings(KoTextLoadingContext& context, const QDomDocument& settings);
+        virtual void loadSettings(KoTextLoadingContext& context, const KoXmlDocument& settings);
 
         /**
         * Load the page layout.

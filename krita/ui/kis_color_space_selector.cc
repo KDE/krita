@@ -62,9 +62,9 @@ void KisColorSpaceSelector::fillCmbProfiles()
     KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s);
     if (csf == 0) return;
 
-    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
+    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
-    foreach (KoColorProfile *profile, profileList) {
+    foreach (const KoColorProfile *profile, profileList) {
         d->colorSpaceSelector->cmbProfile->addSqueezedItem(profile->name());
     }
     d->colorSpaceSelector->cmbProfile->setCurrent(csf->defaultProfile());

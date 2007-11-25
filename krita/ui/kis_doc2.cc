@@ -893,7 +893,7 @@ void KisDoc2::paintContent(QPainter& painter, const QRect& rc)
 {
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
+    const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
     QRect rect = rc & m_d->image->bounds();
     m_d->image->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
 }

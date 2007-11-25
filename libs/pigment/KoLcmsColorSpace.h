@@ -169,6 +169,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         }
         virtual ~KoLcmsColorSpace()
         {
+            delete d->colorProfile;
             delete d;
         }
 

@@ -39,7 +39,7 @@ class KritaShape::Private
 {
 public:
     KUrl url;
-    KoColorProfile * displayProfile;
+    const KoColorProfile * displayProfile;
     KisDoc2 * doc;
 };
 

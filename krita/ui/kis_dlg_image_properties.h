@@ -46,7 +46,7 @@ public:
     virtual ~KisDlgImageProperties();
 
     const KoColorSpace * colorSpace();
-    KoColorProfile * profile();
+    const KoColorProfile * profile();
 
 private slots:
 

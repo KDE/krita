@@ -186,9 +186,9 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
     if ( !csf )
     return;
 
-    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
+    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
-    foreach (KoColorProfile *profile, profileList) {
+    foreach (const KoColorProfile *profile, profileList) {
         if (profile->isSuitableForDisplay())
             m_page->cmbMonitorProfile->addSqueezedItem(profile->name());
     }
@@ -205,9 +205,9 @@ void ColorSettingsTab::refillPrintProfiles(const KoID & s)
     if ( !csf )
         return;
 
-    QList<KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
+    QList<const KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
-    foreach (KoColorProfile *profile, profileList) {
+    foreach (const KoColorProfile *profile, profileList) {
         if (profile->isSuitableForPrinting() )
             m_page->cmbPrintProfile->addSqueezedItem(profile->name());
     }

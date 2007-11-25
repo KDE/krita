@@ -698,7 +698,7 @@ public:
     /**
      * creates a color space using the given profile.
      */
-    virtual KoColorSpace *createColorSpace(KoColorProfile *) const = 0;
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const = 0;
 
     /**
      * @return true if the color space follows ICC specification

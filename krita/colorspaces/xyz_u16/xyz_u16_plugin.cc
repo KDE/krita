@@ -39,7 +39,7 @@ XYZU16Plugin::XYZU16Plugin(QObject *parent, const QStringList &)
     KoColorProfile *xyzProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreateXYZProfile());
     f->addProfile(xyzProfile);
     
-    KoColorSpace * colorSpaceXYZU16 = new KisXyzU16ColorSpace( KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile()));
+    KoColorSpace * colorSpaceXYZU16 = new KisXyzU16ColorSpace( KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile())->clone());
     Q_CHECK_PTR(colorSpaceXYZU16);
     
     KoHistogramProducerFactoryRegistry::instance()->add(

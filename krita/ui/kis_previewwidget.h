@@ -109,7 +109,7 @@ private:
     KisPaintDeviceSP m_previewDevice;
     
     double m_zoom;
-    KoColorProfile * m_profile;
+    const KoColorProfile * m_profile;
 
     KisPaintDeviceSP m_origDevice;
 };

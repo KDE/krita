@@ -680,7 +680,7 @@ void KisView2::print(QPrinter& printer, QPrintDialog &printDialog)
 
     KisConfig cfg;
     QString printerProfileName = cfg.printerProfile();
-    KoColorProfile *printerProfile = KoColorSpaceRegistry::instance()->profileByName(printerProfileName);
+    const KoColorProfile *printerProfile = KoColorSpaceRegistry::instance()->profileByName(printerProfileName);
 
     double exposure = m_d->canvas->resourceProvider()->resource(KisResourceProvider::HdrExposure ).toDouble();
 

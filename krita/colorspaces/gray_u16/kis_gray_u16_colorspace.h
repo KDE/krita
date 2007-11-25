@@ -49,7 +49,7 @@ public:
     virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
     virtual int referenceDepth() const { return 16; }
 
-    virtual KoColorSpace *createColorSpace( KoColorProfile *p) const { return new KisGrayU16ColorSpace( p); }
+    virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KisGrayU16ColorSpace( p->clone() ); }
 
     virtual QString defaultProfile() const { return "gray built-in - (lcms internal)"; }
 };

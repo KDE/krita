@@ -97,7 +97,7 @@ public:
     KisComplexColor *currentComplexColor() const;
 
     void resetDisplayProfile();
-    KoColorProfile * currentDisplayProfile() const;
+    const KoColorProfile * currentDisplayProfile() const;
 
     KisImageSP currentImage() const;
 
@@ -141,7 +141,7 @@ private:
     KoCanvasResourceProvider * m_resourceProvider;
     KisBrush * m_defaultBrush;
     KisComplexColor *m_defaultComplex;
-    KoColorProfile * m_displayProfile;
+    const KoColorProfile * m_displayProfile;
 
 };
 

@@ -48,7 +48,7 @@ public:
     virtual ~KisDlgApplyProfile();
 
 
-    KoColorProfile *  profile() const;
+    const KoColorProfile *  profile() const;
     int renderIntent() const;
 
     void fillCmbProfiles(const KoID & s);

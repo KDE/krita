@@ -164,7 +164,7 @@ void KoColorSpaceRegistry::add(const QString &id, KoColorSpaceFactory* item)
     d->colorConversionSystem->insertColorSpace(item);
 }
 
-KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & name) const
+const KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & name) const
 {
     if (d->profileMap.find(name) == d->profileMap.end()) {
         return 0;
@@ -173,14 +173,14 @@ KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & name) cons
     return d->profileMap[name];
 }
 
-QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const QString &id)
+QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const QString &id)
 {
     return profilesFor(value(id));
 }
 
-QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoColorSpaceFactory * csf)
+QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoColorSpaceFactory * csf)
 {
-    QList<KoColorProfile *>  profiles;
+    QList<const KoColorProfile *>  profiles;
 
     QMap<QString, KoColorProfile * >::Iterator it;
     for (it = d->profileMap.begin(); it != d->profileMap.end(); ++it) {
@@ -235,7 +235,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             return 0;
         }
 
-        KoColorProfile *p = profileByName(profileName);
+        const KoColorProfile *p = profileByName(profileName);
         if(!p && !profileName.isEmpty())
         {
             kDebug(31000) <<"Profile not found :" << profileName;
@@ -271,7 +271,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
                 return 0;
             }
 
-            cs = csf->createColorSpace( const_cast<KoColorProfile *>(profile));
+            cs = csf->createColorSpace( profile);
             if(!cs )
                 return 0;
 

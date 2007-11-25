@@ -117,13 +117,13 @@ QList<const KoColorSpace*> allColorSpaces()
     QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
 
     foreach( QString csId, csIds ) {
-        QList<KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
+        QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
         if ( profiles.size() == 0 ) {
             const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
             colorSpaces.append( cs );
         }
         else {
-            foreach( KoColorProfile * profile, profiles ) {
+            foreach( const KoColorProfile * profile, profiles ) {
                 const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
                 colorSpaces.append( cs );
             }

@@ -39,7 +39,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( const KoC
 
         kDebug() <<"Testing with" << csId;
 
-        QList<KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
+        QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
         if ( profiles.size() == 0 ) {
             const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
             if ( cs->compositeOp( COMPOSITE_OVER ) != 0) {
@@ -50,7 +50,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( const KoC
             }
         }
         else {
-            foreach( KoColorProfile * profile, profiles ) {
+            foreach( const KoColorProfile * profile, profiles ) {
                 const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
                 if ( cs->compositeOp( COMPOSITE_OVER ) != 0) {
                     if ( cs ) ( this->*funcPtr )( cs );

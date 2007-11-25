@@ -90,9 +90,9 @@ void DlgColorSpaceConversion::fillCmbDestProfile(const KoID & s)
 {
     m_page->cmbDestProfile->clear();
 
-    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(s);
+    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(s);
 
-    foreach (KoColorProfile *profile, profileList) {
+    foreach (const KoColorProfile *profile, profileList) {
         m_page->cmbDestProfile->addSqueezedItem(profile->name());
 
     }

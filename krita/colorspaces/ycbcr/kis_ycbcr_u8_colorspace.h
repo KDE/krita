@@ -52,7 +52,11 @@ public:
         return false;
     }
 
-    virtual KoColorSpace *createColorSpace( KoColorProfile * p) const { return new KisYCbCrU8ColorSpace(p); }
+    virtual KoColorSpace *createColorSpace( const KoColorProfile * p) const
+    {
+        Q_UNUSED(p);
+        return new KisYCbCrU8ColorSpace(0);
+    }
 
     virtual int referenceDepth() const { return 8; }
     virtual bool isIcc() const { return false; }

@@ -166,7 +166,7 @@ void KisResourceProvider::resetDisplayProfile()
     emit sigDisplayProfileChanged( m_displayProfile );
 }
 
-KoColorProfile * KisResourceProvider::currentDisplayProfile() const
+const KoColorProfile * KisResourceProvider::currentDisplayProfile() const
 {
     return m_displayProfile;
 

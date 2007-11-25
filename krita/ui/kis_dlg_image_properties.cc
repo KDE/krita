@@ -98,9 +98,9 @@ const KoColorSpace * KisDlgImageProperties::colorSpace()
     return KoColorSpaceRegistry::instance()->colorSpace(m_page->cmbColorSpaces->currentItem(), m_page->cmbProfile->currentText());
 }
 
-KoColorProfile * KisDlgImageProperties::profile()
+const KoColorProfile * KisDlgImageProperties::profile()
 {
-    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( m_image->colorSpace()->id() );
+    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( m_image->colorSpace()->id() );
     qint32 index = m_page->cmbProfile->currentIndex();
 
     if (index < profileList.count()) {
@@ -116,9 +116,9 @@ void KisDlgImageProperties::fillCmbProfiles(const KoID & s)
     KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());
     m_page->cmbProfile->clear();
     if (csf) {
-        QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
+        QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
-        foreach (KoColorProfile *profile, profileList) {
+        foreach (const KoColorProfile *profile, profileList) {
             m_page->cmbProfile->addSqueezedItem(profile->name());
         }
     }

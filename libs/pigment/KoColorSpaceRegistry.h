@@ -92,7 +92,7 @@ public:
      * @see addProfile()
      * @see KoColorProfile::productName()
      */
-    KoColorProfile *  profileByName(const QString & name) const ;
+    const KoColorProfile *  profileByName(const QString & name) const ;
 
     /**
      * Return the list of profiles for the argument colorspacefactory.
@@ -102,7 +102,7 @@ public:
      * @param factory the factory with which all the returned profiles will work.
      * @return a list of profiles for the factory
      */
-    QList<KoColorProfile *>  profilesFor(KoColorSpaceFactory * factory);
+    QList<const KoColorProfile *>  profilesFor(KoColorSpaceFactory * factory);
 
     /**
      * Return the list of profiles for a colorspace with the argument id.
@@ -112,7 +112,7 @@ public:
      * @param id the colorspace-id with which all the returned profiles will work.
      * @return a list of profiles for the factory
      */
-    QList<KoColorProfile *>  profilesFor(KoID id) {
+    QList<const KoColorProfile *>  profilesFor(KoID id) {
         return profilesFor(id.id());
     }
 
@@ -124,7 +124,7 @@ public:
      * @param colorSpaceId the colorspace-id with which all the returned profiles will work.
      * @return a list of profiles for the factory
      */
-    QList<KoColorProfile *>  profilesFor(const QString &colorSpaceId);
+    QList<const KoColorProfile *>  profilesFor(const QString &colorSpaceId);
 
     /**
      * Return a colorspace that works with the parameter profile.

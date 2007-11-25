@@ -42,7 +42,7 @@ public:
             return false;
         }
 
-     KoColorSpace *createColorSpace( KoColorProfile * p) const
+     KoColorSpace *createColorSpace( const KoColorProfile * p) const
         {
             Q_UNUSED( p );
             return new KisPainterlyOverlayColorSpace("painterlyoverlay", "");

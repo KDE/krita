@@ -55,7 +55,11 @@ public:
         return false;
     }
 
-    virtual KoColorSpace *createColorSpace( KoColorProfile * p) const { return new KisYCbCrU16ColorSpace( p); }
+    virtual KoColorSpace *createColorSpace( const KoColorProfile * p) const
+    {
+        Q_UNUSED(p);
+        return new KisYCbCrU16ColorSpace( 0);
+    }
     virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
     {
         return 0;

@@ -69,7 +69,10 @@ public:
         return 0;
     }
 
-    virtual KoColorSpace *createColorSpace( KoColorProfile * p) const { return new KisXyzF32HDRColorSpace( p); }
+    virtual KoColorSpace *createColorSpace( const KoColorProfile * p) const {
+        Q_UNUSED(p);
+        return new KisXyzF32HDRColorSpace( 0 );
+    }
     virtual bool profileIsCompatible(const KoColorProfile* profile) const
     {
         return profile == 0;

@@ -49,7 +49,10 @@ public:
     virtual int referenceDepth() const { return 8; }
     virtual bool userVisible() const { return false; }
 
-    virtual KoColorSpace *createColorSpace( KoColorProfile *p) const { return new KisGrayColorSpace( p); }
+    virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const
+    {
+        return new KisGrayColorSpace( p->clone() );
+    }
 
     virtual QString defaultProfile() const { return "gray built-in - (lcms internal)"; }
 };

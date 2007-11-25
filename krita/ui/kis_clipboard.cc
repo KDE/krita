@@ -133,7 +133,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     QImage qimg;
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    KoColorProfile *  monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
+    const KoColorProfile *  monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
     qimg = selection->convertToQImage(monitorProfile);
 
     QMimeData *mimeData = new QMimeData;

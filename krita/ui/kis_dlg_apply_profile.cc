@@ -74,13 +74,13 @@ KisDlgApplyProfile::~KisDlgApplyProfile()
 }
 
 
-KoColorProfile *  KisDlgApplyProfile::profile() const
+const KoColorProfile *  KisDlgApplyProfile::profile() const
 {
     QString profileName;
 
     profileName = m_page->cmbProfile->currentText();
 
-    return KoColorSpaceRegistry::instance()->profileByName(profileName);
+    return KoColorSpaceRegistry::instance()->profileByName( profileName);
 }
 
 int KisDlgApplyProfile::renderIntent() const
@@ -101,9 +101,9 @@ void KisDlgApplyProfile::fillCmbProfiles(const KoID & s)
     KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());
     if (csf == 0) return;
 
-    QList<KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
+    QList<const KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
-    foreach (KoColorProfile *profile, profileList) {
+    foreach (const KoColorProfile *profile, profileList) {
             m_page->cmbProfile->addSqueezedItem(profile->name());
     }
     m_page->cmbProfile->setCurrent(csf->defaultProfile());

@@ -96,9 +96,9 @@ void NewLayerDialog::fillCmbProfiles(const KoID & s)
     KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());
     if (csf == 0) return;
 
-    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
+    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
-    foreach (KoColorProfile *profile, profileList) {
+    foreach (const KoColorProfile *profile, profileList) {
         m_page->cmbProfile->addSqueezedItem(profile->name());
     }
     m_page->cmbProfile->setCurrent(csf->defaultProfile());

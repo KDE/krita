@@ -22,49 +22,25 @@
 #include "DefaultTool.h"
 #include "DefaultToolWidget.h"
 #include "SelectionDecorator.h"
-
-#include <KoPointerEvent.h>
-#include <KoToolManager.h>
-#include <KoShape.h>
-#include <KoSelection.h>
-#include <KoShapeManager.h>
-#include <KoInteractionStrategy.h>
-#include <KoCanvasBase.h>
-#include <KoPanTool.h>
-#include <KoCanvasResourceProvider.h>
-#include <commands/KoShapeMoveCommand.h>
-
-#include <QMouseEvent>
-#include <QPainter>
-#include <QPainterPath>
-#include <QBitmap>
-#include <QTransform>
-#include <QUndoCommand>
-#include <kaction.h>
-#include <kicon.h>
-#include <kcursor.h>
-#include <kstandarddirs.h>
-#include <k3staticdeleter.h>
-#include <kdebug.h>
-
-#include "KoInteractionStrategy.h"
-#include "KoSelection.h"
-#include "KoShapeManager.h"
-#include "KoPointerEvent.h"
-#include "KoShapeRubberSelectStrategy.h"
 #include "ShapeMoveStrategy.h"
 #include "ShapeRotateStrategy.h"
 #include "ShapeShearStrategy.h"
 #include "ShapeResizeStrategy.h"
-#include "KoCreateShapesTool.h"
-#include "KoInteractionTool.h"
-#include "KoCanvasBase.h"
-#include "KoTool.h"
-#include "KoShapeContainer.h"
 
-#include <QUndoCommand>
+#include <KoPointerEvent.h>
+#include <KoToolManager.h>
+#include <KoSelection.h>
+#include <KoShapeManager.h>
+#include <KoCanvasBase.h>
+#include <KoCanvasResourceProvider.h>
+#include <KoShapeRubberSelectStrategy.h>
+#include <commands/KoShapeMoveCommand.h>
 
-#include <QMouseEvent>
+#include <QAction>
+#include <QKeyEvent>
+#include <kstandarddirs.h>
+
+#include <math.h>
 
 #define HANDLE_DISTANCE 10
 
@@ -128,53 +104,53 @@ bool DefaultTool::wantsAutoScroll()
 
 void DefaultTool::setupActions()
 {
-    KAction* actionBringToFront = new KAction( KIcon( "bring_forward" ),
+    QAction* actionBringToFront = new QAction( KIcon( "bring_forward" ),
                                                i18n( "Bring to &Front" ), this );
     addAction( "object_move_totop", actionBringToFront );
     actionBringToFront->setShortcut( QKeySequence( "Ctrl+Shift+]" ) );
 //     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
-    KAction* actionRaise = new KAction( KIcon( "raise" ), i18n( "&Raise" ), this );
+    QAction* actionRaise = new QAction( KIcon( "raise" ), i18n( "&Raise" ), this );
     addAction( "object_move_up", actionRaise );
     actionRaise->setShortcut( QKeySequence( "Ctrl+]" ) );
 //    connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-    KAction* actionLower = new KAction( KIcon( "lower" ), i18n( "&Lower" ), this );
+    QAction* actionLower = new QAction( KIcon( "lower" ), i18n( "&Lower" ), this );
     addAction( "object_move_down", actionLower );
     actionLower->setShortcut( QKeySequence( "Ctrl+[" ) );
 //    connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
-    KAction* actionSendToBack = new KAction( KIcon( "send_backward" ),
+    QAction* actionSendToBack = new QAction( KIcon( "send_backward" ),
                                              i18n( "Send to &Back" ), this );
     addAction( "object_move_tobottom", actionSendToBack );
     actionSendToBack->setShortcut( QKeySequence( "Ctrl+Shift+[" ) );
 //    connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
-    KAction* actionAlignLeft = new KAction( KIcon( "aoleft" ),
+    QAction* actionAlignLeft = new QAction( KIcon( "aoleft" ),
                                             i18n( "Align Left" ), this );
     addAction( "object_align_horizontal_left", actionAlignLeft );
     connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
-    KAction* actionAlignCenter = new KAction( KIcon( "aocenterh" ),
+    QAction* actionAlignCenter = new QAction( KIcon( "aocenterh" ),
                                               i18n( "Horizontally Center" ), this );
     addAction( "object_align_horizontal_center", actionAlignCenter );
     connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
 
-    KAction* actionAlignRight = new KAction( KIcon( "aoright" ),
+    QAction* actionAlignRight = new QAction( KIcon( "aoright" ),
                                              i18n( "Align Right" ), this );
     addAction( "object_align_horizontal_right", actionAlignRight );
     connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
 
-    KAction* actionAlignTop = new KAction( KIcon( "aotop" ), i18n( "Align Top" ), this );
+    QAction* actionAlignTop = new QAction( KIcon( "aotop" ), i18n( "Align Top" ), this );
     addAction( "object_align_vertical_top", actionAlignTop );
     connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
 
-    KAction* actionAlignMiddle = new KAction( KIcon( "aocenterv" ),
+    QAction* actionAlignMiddle = new QAction( KIcon( "aocenterv" ),
                                               i18n( "Vertically Center" ), this );
     addAction( "object_align_vertical_center", actionAlignMiddle );
     connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
 
-    KAction* actionAlignBottom = new KAction( KIcon( "aobottom" ),
+    QAction* actionAlignBottom = new QAction( KIcon( "aobottom" ),
                                               i18n( "Align Bottom" ), this );
     addAction( "object_align_vertical_bottom", actionAlignBottom );
     connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));

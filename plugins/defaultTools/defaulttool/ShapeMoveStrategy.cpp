@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,20 +22,12 @@
 #include "ShapeMoveStrategy.h"
 #include "SelectionDecorator.h"
 
-#include "KoCanvasBase.h"
-#include "KoShapeManager.h"
-#include "KoShapeContainer.h"
-#include "KoShapeContainerModel.h"
-#include "KoSelection.h"
-#include "KoPointerEvent.h"
-#include "KoCanvasResourceProvider.h"
-#include "KoInteractionTool.h"
-#include "commands/KoShapeMoveCommand.h"
-
-#include <kdebug.h>
-#include <QPainter>
-#include <QMouseEvent>
-#include <QPainterPath>
+#include <KoCanvasBase.h>
+#include <KoShapeManager.h>
+#include <KoShapeContainer.h>
+#include <KoShapeContainerModel.h>
+#include <KoCanvasResourceProvider.h>
+#include <commands/KoShapeMoveCommand.h>
 
 ShapeMoveStrategy::ShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoInteractionStrategy(tool, canvas)

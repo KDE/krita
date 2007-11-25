@@ -22,7 +22,7 @@
 #ifndef SHAPEMOVESTRATEGY_H
 #define SHAPEMOVESTRATEGY_H
 
-#include "KoInteractionStrategy.h"
+#include <KoInteractionStrategy.h>
 
 #include <QPointF>
 

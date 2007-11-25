@@ -23,16 +23,15 @@
 #define DEFAULTTOOL_H
 
 #include <KoInteractionTool.h>
-#include <KoSelection.h>
+#include <KoFlake.h>
 #include <commands/KoShapeAlignCommand.h>
 
-//#include <k3staticdeleter.h>
-
-#include <QImage>
+#include <QPolygonF>
 #include <QTime>
 
 class KoInteractionStrategy;
 class KoShapeMoveCommand;
+class KoSelection;
 
 /**
  * The default tool (associated with the arrow icon) implements the default

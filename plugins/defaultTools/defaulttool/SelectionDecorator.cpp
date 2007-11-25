@@ -21,31 +21,10 @@
 
 #include "SelectionDecorator.h"
 
-#include <QMouseEvent>
-#include <QPainter>
-#include <QPainterPath>
-#include <QBitmap>
-#include <QTransform>
-
-#include "KoPointerEvent.h"
-#include "KoToolManager.h"
-#include "KoShape.h"
-#include "KoSelection.h"
-#include "KoShapeManager.h"
-#include "KoInteractionStrategy.h"
-//#include "KoInteractionToolWidget.h"
-#include "KoCanvasBase.h"
-#include "KoPanTool.h"
-#include "KoCanvasResourceProvider.h"
-#include "commands/KoShapeMoveCommand.h"
-
-#include <QUndoCommand>
-#include <kaction.h>
-#include <kicon.h>
-#include <kcursor.h>
+#include <KoShape.h>
+#include <KoSelection.h>
 #include <kstandarddirs.h>
 #include <k3staticdeleter.h>
-#include <kdebug.h>
 
 #define HANDLE_DISTANCE 10
 
@@ -238,5 +217,3 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 #endif
 }
 
-
-#include "SelectionDecorator.moc"

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *

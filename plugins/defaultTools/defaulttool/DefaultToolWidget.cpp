@@ -18,13 +18,14 @@
  */
 
 #include "DefaultToolWidget.h"
-#include "KoInteractionTool.h"
-#include "KoCanvasBase.h"
-#include "KoShapeManager.h"
-#include "KoSelection.h"
-#include "commands/KoShapeMoveCommand.h"
-#include "commands/KoShapeSizeCommand.h"
-#include "commands/KoShapeTransformCommand.h"
+
+#include <KoInteractionTool.h>
+#include <KoCanvasBase.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <commands/KoShapeMoveCommand.h>
+#include <commands/KoShapeSizeCommand.h>
+#include <commands/KoShapeTransformCommand.h>
 
 #include <QPainter>
 #include <QSize>

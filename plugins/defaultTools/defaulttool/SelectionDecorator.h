@@ -22,19 +22,12 @@
 #ifndef SELECTIONDECORATOR_H
 #define SELECTIONDECORATOR_H
 
-#include "KoTool.h"
-#include "KoSelection.h"
-#include "commands/KoShapeAlignCommand.h"
-
-#include <flake_export.h>
-
-//#include <k3staticdeleter.h>
-
-#include <QImage>
-#include <QTime>
+#include <KoViewConverter.h>
+#include <KoFlake.h>
+#include <QPainter>
 
 class KoInteractionStrategy;
-
+class KoSelection;
 
 /**
  * The SelectionDecorator is used to paint extra user-interface items on top of a selection.

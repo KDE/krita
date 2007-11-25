@@ -31,12 +31,26 @@ class KoShape;
 #define KoInteractionTool_ID "InteractionTool"
 
 /**
- * The default tool (associated with the arrow icon) implements the default
- * interactions you have with flake objects.<br>
- * The tool provides scaling, moving, selecting, rotation and soon skewing of
- * any number of shapes.
- * <p>Note that the implementation of those different strategies are delegated
- * to the InteractionStrategy class and its subclasses.
+ * The interaction tool adds to the normal KoTool class the concept of strategies
+ * as a means to get one tool to have different actions the user can perform using the mouse.
+ * Each time the user presses the mouse until she releases the mouse a strategy object
+ * will be created, used and disgarded.
+ * If the usage of a tool fits this pattern you need to inherit from this class instead of the
+ * plain KoTool and reimplement your createStrategy() method which returns a tool-specific
+ * strategy where all the real interaction code is placed.
+ * A tool can then become as simple as this;
+ * @code
+    class MyTool : public KoInteractionTool
+    {
+    public:
+        MyTool::MyTool(KoCanvasBase *canvas) : KoInteractionTool( canvas ) { }
+
+        KoInteractionStrategy *MyTool::createStrategy(KoPointerEvent *event) {
+            return new MyStrategy(this, m_canvas, event->point);
+        }
+    };
+ * @endcode
+ * Whereas your strategy (MyStrategy in the example) will contain the interaction code.
  */
 class FLAKE_EXPORT KoInteractionTool : public KoTool
 {
@@ -53,8 +67,6 @@ public:
 public:
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
-public: // Events
-
     virtual void mousePressEvent( KoPointerEvent *event );
     virtual void mouseMoveEvent( KoPointerEvent *event );
     virtual void mouseReleaseEvent( KoPointerEvent *event );
@@ -65,7 +77,12 @@ public: // Events
 protected:
     KoInteractionStrategy *m_currentStrategy; ///< the strategy that is 'in progress'
 
+    /**
+     * Reimplement this factory method to create your strategy to be used for mouse interaction.
+     * @returns a new strategy, or 0 when there is nothing to do.
+     */
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event) = 0;
+
     /// checks recursively if the shape or one of its parents is not visible or locked
     static bool shapeIsEditable( const KoShape * shape );
 

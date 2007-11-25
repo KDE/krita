@@ -88,7 +88,7 @@
         </widget>
        </item>
        <item row="1" column="2" colspan="2" >
-        <widget class="QDoubleSpinBox" name="positionXSpinBox" >
+        <widget class="KoUnitDoubleSpinBox" name="positionXSpinBox" >
          <property name="minimum" >
           <double>-10000.000000000000000</double>
          </property>
@@ -114,7 +114,7 @@
         </widget>
        </item>
        <item row="2" column="2" colspan="2" >
-        <widget class="QDoubleSpinBox" name="positionYSpinBox" >
+        <widget class="KoUnitDoubleSpinBox" name="positionYSpinBox" >
          <property name="minimum" >
           <double>-10000.000000000000000</double>
          </property>
@@ -165,7 +165,7 @@
         </widget>
        </item>
        <item row="0" column="2" >
-        <widget class="QDoubleSpinBox" name="widthSpinBox" >
+        <widget class="KoUnitDoubleSpinBox" name="widthSpinBox" >
          <property name="minimum" >
           <double>-10000.000000000000000</double>
          </property>
@@ -185,7 +185,7 @@
         </widget>
        </item>
        <item row="1" column="2" >
-        <widget class="QDoubleSpinBox" name="heightSpinBox" >
+        <widget class="KoUnitDoubleSpinBox" name="heightSpinBox" >
          <property name="minimum" >
           <double>-10000.000000000000000</double>
          </property>
@@ -396,6 +396,11 @@
    <extends>QWidget</extends>
    <header>KoAspectButton.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KoUnitDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>KoUnitDoubleSpinBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

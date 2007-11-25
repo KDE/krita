@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,6 +33,8 @@ class DefaultToolWidget : public QTabWidget, Ui::DefaultToolWidget {
 public:
     explicit DefaultToolWidget( KoInteractionTool* tool, QWidget *parent = 0 );
 
+    /// Sets the unit used by the unit aware child widgets
+    void setUnit( const KoUnit &unit );
 signals:
     /// emits whenever the hot (selected) position changes
     void hotPositionChanged( KoFlake::Position hotPosition );

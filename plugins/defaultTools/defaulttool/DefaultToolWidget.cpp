@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 
 #include <KoInteractionTool.h>
 #include <KoCanvasBase.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <commands/KoShapeMoveCommand.h>
@@ -38,6 +40,8 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     m_tool = tool;
 
     setupUi( this );
+
+    setUnit( m_tool->canvas()->unit() );
 
     connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ), this, SLOT( updatePosition() ) );
 
@@ -85,8 +89,8 @@ void DefaultToolWidget::updatePosition()
 
     positionXSpinBox->blockSignals(true);
     positionYSpinBox->blockSignals(true);
-    positionXSpinBox->setValue( selPosition.x() );
-    positionYSpinBox->setValue( selPosition.y() );
+    positionXSpinBox->changeValue( selPosition.x() );
+    positionYSpinBox->changeValue( selPosition.y() );
     positionXSpinBox->blockSignals(false);
     positionYSpinBox->blockSignals(false);
 
@@ -133,8 +137,8 @@ void DefaultToolWidget::updateSize()
 
     widthSpinBox->blockSignals(true);
     heightSpinBox->blockSignals(true);
-    widthSpinBox->setValue( selSize.width() );
-    heightSpinBox->setValue( selSize.height() );
+    widthSpinBox->changeValue( selSize.width() );
+    heightSpinBox->changeValue( selSize.height() );
     widthSpinBox->blockSignals(false);
     heightSpinBox->blockSignals(false);
 }
@@ -200,6 +204,15 @@ void DefaultToolWidget::sizeHasChanged()
         updateSize();
         updatePosition();
     }
+}
+
+void DefaultToolWidget::setUnit( const KoUnit &unit )
+{
+    // TODO find a way to get notified whenever the unit changes
+    positionXSpinBox->setUnit( unit );
+    positionYSpinBox->setUnit( unit );
+    widthSpinBox->setUnit( unit );
+    heightSpinBox->setUnit( unit );
 }
 
 #include <DefaultToolWidget.moc>

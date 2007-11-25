@@ -384,9 +384,11 @@ void KoShapeManager::updateTree()
         QList<KoShape*> shapesWithCollisionDetection;
     };
     DetectCollision detector;
+    bool selectionModified = false;
     foreach ( KoShape *shape, d->aggregate4update ) {
         if(d->shapeIndexesBeforeUpdate.contains(shape))
             detector.detect(d->tree, shape, d->shapeIndexesBeforeUpdate[shape]);
+        selectionModified = selectionModified || d->selection->isSelected(shape);
     }
 
     foreach ( KoShape * shape, d->aggregate4update )
@@ -409,6 +411,10 @@ void KoShapeManager::updateTree()
     d->shapeIndexesBeforeUpdate.clear();
 
     detector.fireSignals();
+    if (selectionModified) {
+        emit selectionContentChanged();
+        d->selection->updateSizeAndPosition();
+    }
 }
 
 const QList<KoShape *> & KoShapeManager::shapes() const {

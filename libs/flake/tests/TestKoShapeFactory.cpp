@@ -20,7 +20,7 @@
 #include <qtest_kde.h>
 
 #include <KoOasisLoadingContext.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoPathShapeFactory.h>
 #include <KoShape.h>
@@ -114,8 +114,8 @@ void TestKoShapeFactory::testOdfElement()
 
     // XXX: When loading is implemented, these no doubt have to be
     // sensibly filled.
-    KoOasisStyles styles;
-    KoOasisLoadingContext oasisContext(0, styles, 0);
+    KoOdfStylesReader stylesReader;
+    KoOasisLoadingContext oasisContext(0, stylesReader, 0);
     KoShapeLoadingContext shapeContext( oasisContext );
 
     QVERIFY( shape->loadOdf( pathElement, shapeContext ) );

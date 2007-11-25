@@ -174,7 +174,7 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
         owner = true;
         loader = new KoTextLoader(new KoStyleManager);
         loader->styleManager()->setParent(loader);
-        loaderContext = new KoTextLoadingContext(loader, oasisContext.koDocument(), oasisContext.oasisStyles(), oasisContext.store());
+        loaderContext = new KoTextLoadingContext(loader, oasisContext.koDocument(), oasisContext.stylesReader(), oasisContext.store());
     }
 
     QTextCursor cursor( document() );

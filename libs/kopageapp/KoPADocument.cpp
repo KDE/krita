@@ -24,7 +24,7 @@
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoOasisLoadingContext.h>

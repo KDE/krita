@@ -23,7 +23,7 @@
 #include "opendocument/KoTextLoadingContext.h"
 
 #include <KoStyleStack.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>
 #include <kdebug.h>
 #include <QTextCursor>

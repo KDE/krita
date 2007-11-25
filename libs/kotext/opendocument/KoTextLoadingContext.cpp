@@ -33,8 +33,8 @@ class KoTextLoadingContext::Private
         int currentListLevel;
 };
 
-KoTextLoadingContext::KoTextLoadingContext( KoTextLoader* loader, KoDocument* doc, KoOasisStyles& styles, KoStore* store )
-    : KoOasisLoadingContext( doc, styles, store ), d(new Private())
+KoTextLoadingContext::KoTextLoadingContext( KoTextLoader* loader, KoDocument* doc, KoOdfStylesReader& stylesReader, KoStore* store )
+    : KoOasisLoadingContext( doc, stylesReader, store ), d(new Private())
 {
     d->loader = loader;
     d->currentListLevel = 1; // default list level is always 1
@@ -84,7 +84,7 @@ static KoXmlElement findListLevelStyle( const KoXmlElement& fullListStyle, int l
 
 bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, int level )
 {
-    KoXmlElement* fullListStyle = oasisStyles().listStyles()[listStyleName];
+    KoXmlElement* fullListStyle = stylesReader().listStyles()[listStyleName];
     if ( !fullListStyle ) {
         kWarning(32500) << "List style " << listStyleName << " not found!";
         return false;
@@ -95,7 +95,7 @@ bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, int level
 
 bool KoOasisContext::pushOutlineListLevelStyle( int level )
 {
-    KoXmlElement outlineStyle = KoDom::namedItemNS( oasisStyles().officeStyle(), KoXmlNS::text, "outline-style" );
+    KoXmlElement outlineStyle = KoDom::namedItemNS( stylesReader().officeStyle(), KoXmlNS::text, "outline-style" );
     return pushListLevelStyle( "<outline-style>", outlineStyle, level );
 }
 

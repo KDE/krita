@@ -17,7 +17,7 @@ set(koodf_LIB_SRCS
     KoGenStyles.cpp
     KoOasisLoadingContext.cpp
     KoOasisSettings.cpp
-    KoOasisStyles.cpp
+    KoOdfStylesReader.cpp
     KoOdfNumberStyles.cpp
     KoOdfPaste.cpp
     KoOdfReadStore.cpp
@@ -42,8 +42,8 @@ install( FILES
     KoGenStyles.h
     KoOasisLoadingContext.h
     KoOasisSettings.h
-    KoOasisStyles.cpp
-    KoOasisStyles.h
+    KoOdfStylesReader.cpp
+    KoOdfStylesReader.h
     KoOdfNumberStyles.h
     KoOdfPaste.h
     KoOdfReadStore.h

@@ -27,7 +27,7 @@
 #include <QtXml>
 
 #include <KoOasisLoadingContext.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 
 #include "KoShapeRegistry.h"
 #include "KoShape.h"
@@ -77,8 +77,8 @@ void TestKoShapeRegistry::testCreateShapes()
 
     // XXX: When loading is implemented, these no doubt have to be
     // sensibly filled.
-    KoOasisStyles styles;
-    KoOasisLoadingContext oasisContext(0, styles, 0);
+    KoOdfStylesReader stylesReader;
+    KoOasisLoadingContext oasisContext(0, stylesReader, 0);
     KoShapeLoadingContext shapeContext( oasisContext );
 
     KoShape * shape = registry->createShapeFromOdf(bodyElement, shapeContext);
@@ -124,8 +124,8 @@ void TestKoShapeRegistry::testCreateFramedShapes()
 
     // XXX: When loading is implemented, these no doubt have to be
     // sensibly filled.
-    KoOasisStyles styles;
-    KoOasisLoadingContext oasisContext(0, styles, 0);
+    KoOdfStylesReader stylesReader;
+    KoOasisLoadingContext oasisContext(0, stylesReader, 0);
     KoShapeLoadingContext shapeContext( oasisContext );
 
     KoShape * shape = registry->createShapeFromOdf(bodyElement, shapeContext);

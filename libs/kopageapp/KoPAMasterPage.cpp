@@ -23,7 +23,7 @@
 #include <KoGenStyle.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoOasisLoadingContext.h>
 
 #include "KoPASavingContext.h"
@@ -79,7 +79,7 @@ void KoPAMasterPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingCon
         setName( element.attributeNS( KoXmlNS::style, "name" ) );
     }
     QString pageLayoutName = element.attributeNS( KoXmlNS::style, "page-layout-name" );
-    const KoOasisStyles& styles = loadingContext.koLoadingContext().oasisStyles();
+    const KoOdfStylesReader& styles = loadingContext.koLoadingContext().stylesReader();
     const KoXmlElement* masterPageStyle = styles.findStyle( pageLayoutName );
     KoPageLayout pageLayout = KoPageLayout::standardLayout();
 

@@ -23,7 +23,7 @@ class QString;
 class QIODevice;
 class QXmlSimpleReader;
 class KoStore;
-class KoOasisStyles;
+class KoOdfStylesReader;
 class KoXmlDocument;
 
 /**
@@ -60,7 +60,7 @@ public:
      *
      * @return styles
      */
-    KoOasisStyles & styles();
+    KoOdfStylesReader & styles();
 
     /**
      * Get the content document

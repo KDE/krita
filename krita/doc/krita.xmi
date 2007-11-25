@@ -1295,7 +1295,7 @@ pixels in the brush." visibility="public" xmi.id="705" type="virtual KisAlphaMas
     </UML:Operation>
     <UML:Operation visibility="public" xmi.id="998" type="virtual bool" name="loadOasis" >
      <UML:Parameter visibility="private" xmi.id="999" value="" type="const QDomDocument &amp;" />
-     <UML:Parameter visibility="private" xmi.id="1000" value="" type="KoOasisStyles &amp;" />
+     <UML:Parameter visibility="private" xmi.id="1000" value="" type="KoOdfStylesReader &amp;" />
     </UML:Operation>
     <UML:Operation visibility="public" xmi.id="1001" type="virtual bool" name="loadXML" >
      <UML:Parameter visibility="private" xmi.id="1002" value="" type="QIODevice *" />

@@ -48,7 +48,7 @@
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22026" isRoot="false" isAbstract="false" name="KisUndoAdapter&amp;" elementReference="22003" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22052" isRoot="false" isAbstract="false" name="KoStore*" elementReference="22051" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22058" isRoot="false" isAbstract="false" name="const QDomDocument&amp;" elementReference="22057" />
-    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22061" isRoot="false" isAbstract="false" name="KoOasisStyles&amp;" elementReference="22060" />
+    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22061" isRoot="false" isAbstract="false" name="KoOdfStylesReader&amp;" elementReference="22060" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22068" isRoot="false" isAbstract="false" name="KoXmlWriter*" elementReference="22067" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22074" isRoot="false" isAbstract="false" name="QIODevice*" elementReference="22073" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22083" isRoot="false" isAbstract="false" name="const QPoint&amp;" elementReference="22082" />
@@ -1134,7 +1134,7 @@ due to an undo or redo action." isSpecification="false" isLeaf="false" visibilit
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22036" isRoot="false" isAbstract="false" name="KoDocument" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22051" isRoot="false" isAbstract="false" name="KoStore" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22057" isRoot="false" isAbstract="false" name="QDomDocument" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22060" isRoot="false" isAbstract="false" name="KoOasisStyles" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22060" isRoot="false" isAbstract="false" name="KoOdfStylesReader" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22067" isRoot="false" isAbstract="false" name="KoXmlWriter" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22073" isRoot="false" isAbstract="false" name="QIODevice" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22078" isRoot="false" isAbstract="false" name="QByteArray" />

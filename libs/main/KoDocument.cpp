@@ -30,7 +30,7 @@
 #include "KoMainWindow.h"
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
-#include "KoOasisStyles.h"
+#include "KoOdfStylesReader.h"
 #include "KoOdfReadStore.h"
 #include "KoOdfWriteStore.h"
 #include "KoXmlNS.h"

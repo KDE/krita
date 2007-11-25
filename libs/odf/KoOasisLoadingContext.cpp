@@ -18,7 +18,7 @@
 
 #include "KoOasisLoadingContext.h"
 #include <KoOdfReadStore.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoStore.h>
 #include <KoXmlNS.h>
 #include <kdebug.h>
@@ -29,8 +29,8 @@ class KoOasisLoadingContext::Private
 };
 
 KoOasisLoadingContext::KoOasisLoadingContext( KoDocument* doc,
-                                              KoOasisStyles& styles, KoStore* store )
-    : m_doc( doc ), m_store( store ), m_styles( styles ),
+                                              KoOdfStylesReader& stylesReader, KoStore* store )
+    : m_doc( doc ), m_store( store ), m_stylesReader( stylesReader ),
       m_metaXmlParsed( false ), m_useStylesAutoStyles( false ), d( 0 )
 {
     // Ideally this should be done by KoDocument and passed as argument here...
@@ -54,13 +54,13 @@ void KoOasisLoadingContext::fillStyleStack( const KoXmlElement& object, const ch
         bool isStyleAutoStyle = false;
         if ( m_useStylesAutoStyles ) {
             // When loading something from styles.xml, look into the styles.xml auto styles first
-            style = m_styles.findStyleAutoStyle( styleName, family );
+            style = m_stylesReader.findStyleAutoStyle( styleName, family );
             // and fallback to looking at styles(), which includes the user styles from styles.xml
             if ( style )
                 isStyleAutoStyle = true;
         }
         if ( !style )
-            style = m_styles.findStyle( styleName, family );
+            style = m_stylesReader.findStyle( styleName, family );
         if ( style )
             addStyles( style, family, isStyleAutoStyle );
         else
@@ -78,18 +78,18 @@ void KoOasisLoadingContext::addStyles( const KoXmlElement* style, const char* fa
         const KoXmlElement* parentStyle = 0;
         if ( usingStylesAutoStyles ) {
             // When loading something from styles.xml, look into the styles.xml auto styles first
-            parentStyle = m_styles.findStyleAutoStyle( parentStyleName, family );
+            parentStyle = m_stylesReader.findStyleAutoStyle( parentStyleName, family );
             // and fallback to looking at styles(), which includes the user styles from styles.xml
         }
         if ( !parentStyle )
-            parentStyle = m_styles.findStyle( parentStyleName, family );
+            parentStyle = m_stylesReader.findStyle( parentStyleName, family );
         if ( parentStyle )
             addStyles( parentStyle, family, usingStylesAutoStyles );
         else
             kWarning(32500) << "Parent style not found: " << parentStyleName;
     }
     else if ( family ) {
-        const KoXmlElement* def = m_styles.defaultStyle( family );
+        const KoXmlElement* def = m_stylesReader.defaultStyle( family );
         if ( def ) { // on top of all, the default style for this family
             //kDebug(32500) <<"pushing default style" << style->attributeNS( KoXmlNS::style,"name", QString() );
             m_styleStack.push( *def );

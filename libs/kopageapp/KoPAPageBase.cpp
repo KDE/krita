@@ -32,7 +32,7 @@
 #include <KoShapeRegistry.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoXmlWriter.h>
 #include <KoViewConverter.h>
@@ -115,7 +115,7 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
     // load layers and shapes 
     // This needs some work as this is only for layers which are the same for all pages
     KoXmlElement layerElement;
-    forEachElement( layerElement, loadingContext.koLoadingContext().oasisStyles().layerSet() )
+    forEachElement( layerElement, loadingContext.koLoadingContext().stylesReader().layerSet() )
     {
         KoShapeLayer * layer = new KoShapeLayer();
         if ( layer->loadOdf( layerElement, loadingContext ) ) {

@@ -25,7 +25,7 @@
 #include <QTextCursor>
 
 #include <KoStyleStack.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoUnit.h>
@@ -504,8 +504,8 @@ void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
         fontName = styleStack.property( KoXmlNS::style, "font-family" );
     if ( styleStack.hasProperty( KoXmlNS::style, "font-name" ) ) {
         // This font name is a reference to a font face declaration.
-        KoOasisStyles &styles = context.oasisStyles();
-        const KoXmlElement *fontFace = styles.findStyle(styleStack.property( KoXmlNS::style, "font-name" ));
+        KoOdfStylesReader &stylesReader = context.stylesReader();
+        const KoXmlElement *fontFace = stylesReader.findStyle(styleStack.property( KoXmlNS::style, "font-name" ));
         if (fontFace != 0)
             fontName = fontFace->attributeNS(KoXmlNS::svg, "font-family", "");
     }

@@ -28,7 +28,7 @@
 //#include "frames/KWTextFrame.h"
 
 // koffice
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoOasisSettings.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>

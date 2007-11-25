@@ -28,7 +28,7 @@
 //#include "frames/KWTextFrame.h"
 
 // koffice
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoOasisSettings.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
@@ -151,7 +151,7 @@ void KoTextLoader::loadStyles(KoTextLoadingContext& context, QList<KoXmlElement*
 {
 #if 0 //1.6:
     QStringList followingStyles;
-    QList<KoXmlElement*> userStyles = context.oasisStyles().customStyles( "paragraph" ).values();
+    QList<KoXmlElement*> userStyles = context.stylesReader().customStyles( "paragraph" ).values();
     bool defaultStyleDeleted = false;
     int stylesLoaded = 0;
     const unsigned int nStyles = userStyles.count();
@@ -241,8 +241,8 @@ void KoTextLoader::loadAllStyles(KoTextLoadingContext& context)
     // User styles are named and appear in the gui while automatic styles are just a way to
     // save formatting changes done by the user. There is no real tech diff between them
     // except how we present them to the user.
-    loadStyles(context, context.oasisStyles().autoStyles("paragraph").values());
-    loadStyles(context, context.oasisStyles().customStyles("paragraph").values());
+    loadStyles(context, context.stylesReader().autoStyles("paragraph").values());
+    loadStyles(context, context.stylesReader().customStyles("paragraph").values());
 
     // we always need the default style
     if( ! d->paragraphStyle("Standard") ) {
@@ -252,7 +252,7 @@ void KoTextLoader::loadAllStyles(KoTextLoadingContext& context)
     }
 
     // handle the list styles
-    QHash<QString, KoXmlElement*> listStyles = context.oasisStyles().listStyles();
+    QHash<QString, KoXmlElement*> listStyles = context.stylesReader().listStyles();
     for(QHash<QString, KoXmlElement*>::Iterator it = listStyles.begin(); it != listStyles.end(); ++it) {
         #ifdef KOOPENDOCUMENTLOADER_DEBUG
             kDebug(32500)<<"listStyle="<<it.key();
@@ -264,7 +264,7 @@ void KoTextLoader::loadAllStyles(KoTextLoadingContext& context)
     }
 
     // outline-styles used e.g. for headers
-    KoXmlElement outlineStyle = KoDom::namedItemNS( context.oasisStyles().officeStyle(), KoXmlNS::text, "outline-style" );
+    KoXmlElement outlineStyle = KoDom::namedItemNS( context.stylesReader().officeStyle(), KoXmlNS::text, "outline-style" );
     KoXmlElement tag;
     forEachElement(tag, outlineStyle) {
         #ifdef KOOPENDOCUMENTLOADER_DEBUG
@@ -433,7 +433,7 @@ void KoTextLoader::loadParagraph(KoTextLoadingContext& context, const KoXmlEleme
         kDebug(32500)<<"styleName="<<styleName<<" userStyleName="<<userStyleName<<" userStyle="<<(userStyle?"YES":"NULL");
     #endif
     if ( !styleName.isEmpty() ) {
-        const KoXmlElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
+        const KoXmlElement* paragraphStyle = context.stylesReader().findStyle( styleName, "paragraph" );
         QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString() ) : QString();
         if ( masterPageName.isEmpty() )
             masterPageName = "Standard";
@@ -486,7 +486,7 @@ void KoTextLoader::loadParagraph(KoTextLoadingContext& context, const KoXmlEleme
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
     context.styleStack().setTypeProperties( "paragraph" );
     const QString textStyleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
-    const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.oasisStyles().findStyle( textStyleName, "paragraph" );
+    const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.stylesReader().findStyle( textStyleName, "paragraph" );
     KoCharacterStyle *charstyle = 0;
     if( textStyleElem ) {
         context.addStyles( textStyleElem, "paragraph" );
@@ -559,7 +559,7 @@ void KoTextLoader::loadHeading(KoTextLoadingContext& context, const KoXmlElement
 
     /*
     //1.6: KoOasisContext::pushOutlineListLevelStyle
-    //KoXmlElement outlineStyle = KoDom::namedItemNS( oasisStyles().officeStyle(), KoXmlNS::text, "outline-style" );
+    //KoXmlElement outlineStyle = KoDom::namedItemNS( stylesReader().officeStyle(), KoXmlNS::text, "outline-style" );
     KoListStyle* listStyle = 0;
     if( level > 0 ) {
         listStyle = new KoListStyle();
@@ -571,7 +571,7 @@ void KoTextLoader::loadHeading(KoTextLoadingContext& context, const KoXmlElement
     //1.6: KWTextParag::loadOasis
     QString styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
     if ( !styleName.isEmpty() ) {
-        const KoXmlElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
+        const KoXmlElement* paragraphStyle = context.stylesReader().findStyle( styleName, "paragraph" );
         //QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString() ) : QString();
         //if ( masterPageName.isEmpty() ) masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
         //#ifdef KOOPENDOCUMENTLOADER_DEBUG
@@ -866,7 +866,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
 
             context.styleStack().setTypeProperties( "text" );
             const QString textStyleName = ts.attributeNS( KoXmlNS::text, "style-name", QString() );
-            const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.oasisStyles().findStyle( textStyleName, "text" );
+            const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.stylesReader().findStyle( textStyleName, "text" );
             KoCharacterStyle *charstyle = 0;
             if( textStyleElem ) {
                 #ifdef KOOPENDOCUMENTLOADER_DEBUG
@@ -947,8 +947,8 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
                                 QString dataStyle = ts.attributeNS(KoXmlNS::style, "data-style-name");
                                 QString dateFormat = "";
                                 if (!dataStyle.isEmpty()) {
-                                    if (context.oasisStyles().dataFormats().contains(dataStyle)) {
-                                        KoOdfNumberStyles::NumericStyleFormat dataFormat = context.oasisStyles().dataFormats().value(dataStyle);
+                                    if (context.stylesReader().dataFormats().contains(dataStyle)) {
+                                        KoOdfNumberStyles::NumericStyleFormat dataFormat = context.stylesReader().dataFormats().value(dataStyle);
                                         dateFormat = dataFormat.prefix + dataFormat.formatStr + dataFormat.suffix;
                                     }
                                 }

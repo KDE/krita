@@ -47,7 +47,6 @@ class KoChild;
 class KoDocumentChild;
 class KoView;
 class KoDocumentInfo;
-class KoOasisStyles;
 class KoOpenPane;
 
 

@@ -36,7 +36,7 @@
 #include <KoXmlWriter.h>
 
 #include "KoOasisLoadingContext.h"
-#include "KoOasisStyles.h"
+#include "KoOdfStylesReader.h"
 #include "KoPictureShared.h"
 
 void KoOdfGraphicStyles::saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush )
@@ -192,11 +192,11 @@ QString KoOdfGraphicStyles::saveOasisGradientStyle( KoGenStyles &mainStyles, con
     return mainStyles.lookup( gradientStyle, "gradient" );
 }
 
-QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStack, const KoOasisStyles & oasisStyles, const QSizeF &size )
+QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStack, const KoOdfStylesReader & stylesReader, const QSizeF &size )
 {
     QString styleName = styleStack.property( KoXmlNS::draw, "fill-gradient-name" );
 
-    KoXmlElement* e = oasisStyles.drawStyles()[styleName];
+    KoXmlElement* e = stylesReader.drawStyles()[styleName];
     if( ! e )
         return QBrush();
 
@@ -324,7 +324,7 @@ QBrush KoOdfGraphicStyles::loadOasisPatternStyle( const KoStyleStack &styleStack
 {
     QString styleName = styleStack.property( KoXmlNS::draw, "fill-image-name" );
 
-    KoXmlElement* e = context.oasisStyles().drawStyles()[styleName];
+    KoXmlElement* e = context.stylesReader().drawStyles()[styleName];
     if( ! e )
         return QBrush();
 
@@ -434,7 +434,7 @@ QBrush KoOdfGraphicStyles::loadOasisPatternStyle( const KoStyleStack &styleStack
     return resultBrush;
 }
 
-QBrush KoOdfGraphicStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOasisStyles & oasisStyles )
+QBrush KoOdfGraphicStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOdfStylesReader & stylesReader )
 {
     QBrush tmpBrush;
     if ( fill == "solid" )
@@ -501,7 +501,7 @@ QBrush KoOdfGraphicStyles::loadOasisFillStyle( const KoStyleStack &styleStack, c
 
         //type not defined by default
         //try to use style.
-        KoXmlElement* draw = oasisStyles.drawStyles()[style];
+        KoXmlElement* draw = stylesReader.drawStyles()[style];
         if ( draw)
         {
             kDebug(30003)<<"We have a style";
@@ -588,7 +588,7 @@ QBrush KoOdfGraphicStyles::loadOasisFillStyle( const KoStyleStack &styleStack, c
     return tmpBrush;
 }
 
-QPen KoOdfGraphicStyles::loadOasisStrokeStyle( const KoStyleStack &styleStack, const QString & stroke, const KoOasisStyles & oasisStyles )
+QPen KoOdfGraphicStyles::loadOasisStrokeStyle( const KoStyleStack &styleStack, const QString & stroke, const KoOdfStylesReader & stylesReader )
 {
     QPen tmpPen;
 
@@ -620,7 +620,7 @@ QPen KoOdfGraphicStyles::loadOasisStrokeStyle( const KoStyleStack &styleStack, c
         {
             QString dashStyleName = styleStack.property( KoXmlNS::draw, "stroke-dash" );
 
-            KoXmlElement * dashElement = oasisStyles.drawStyles()[ dashStyleName ];
+            KoXmlElement * dashElement = stylesReader.drawStyles()[ dashStyleName ];
             if( dashElement )
             {
                 QVector<qreal> dashes;

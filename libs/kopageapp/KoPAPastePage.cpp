@@ -24,7 +24,7 @@
 #include <KoOdfReadStore.h>
 #include <KoXmlWriter.h>
 #include <KoOasisLoadingContext.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include "KoPALoadingContext.h"
 #include "KoPADocument.h"
 #include "KoPAMasterPage.h"

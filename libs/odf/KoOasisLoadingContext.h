@@ -20,7 +20,7 @@
 #define KOOASISLOADINGCONTEXT_H
 
 class KoDocument;
-class KoOasisStyles;
+class KoOdfStylesReader;
 class KoStore;
 
 #include <QMap>
@@ -38,22 +38,22 @@ class KOODF_EXPORT KoOasisLoadingContext
 {
 public:
     /**
-     * Stores reference to the KoOasisStyles and stored passed by
-     * KoDocument. Make sure that the KoOasisStyles instance outlives
+     * Stores reference to the KoOdfStylesReader and stored passed by
+     * KoDocument. Make sure that the KoOdfStylesReader instance outlives
      * this KoOasisLoadingContext instance. (This is the case during
-     * loading, when using the KoOasisStyles given by KoDocument)
+     * loading, when using the KoOdfStylesReader given by KoDocument)
      *
      * @param doc the KoDocument being loaded
-     * @param styles reference to the KoOasisStyles parsed by KoDocument
+     * @param styles reference to the KoOdfStylesReader parsed by KoDocument
      * @param store pointer to store, if available, for e.g. loading images.
      */
-    KoOasisLoadingContext( KoDocument* doc, KoOasisStyles& styles, KoStore* store );
+    KoOasisLoadingContext( KoDocument* doc, KoOdfStylesReader& stylesReader, KoStore* store );
     virtual ~KoOasisLoadingContext();
 
     KoDocument* koDocument() { return m_doc; }
     KoStore* store() { return m_store; }
 
-    KoOasisStyles& oasisStyles() { return m_styles; }
+    KoOdfStylesReader& stylesReader() { return m_stylesReader; }
     KoStyleStack& styleStack() { return m_styleStack; }
 
     const KoXmlDocument& manifestDocument() const { return m_manifestDoc; }
@@ -102,7 +102,7 @@ private:
 private:
     KoDocument* m_doc;
     KoStore* m_store;
-    KoOasisStyles& m_styles;
+    KoOdfStylesReader& m_stylesReader;
     KoStyleStack m_styleStack;
 
     mutable QString m_generator;

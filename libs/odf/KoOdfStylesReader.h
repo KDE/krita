@@ -33,11 +33,11 @@ class KoXmlWriter;
 /**
  * Repository of styles used during loading of OASIS/OOo file
  */
-class KOODF_EXPORT KoOasisStyles
+class KOODF_EXPORT KoOdfStylesReader
 {
 public:
-    KoOasisStyles();
-    ~KoOasisStyles();
+    KoOdfStylesReader();
+    ~KoOdfStylesReader();
 
     /// Look into @p doc for styles and remember them
     /// @param doc document to look into
@@ -128,8 +128,8 @@ private:
     void insertOfficeStyles( const KoXmlElement& styles );
     void insertStyle( const KoXmlElement& style, TypeAndLocation typeAndLocation );
 
-    KoOasisStyles( const KoOasisStyles & ); // forbidden
-    KoOasisStyles& operator=( const KoOasisStyles & ); // forbidden
+    KoOdfStylesReader( const KoOdfStylesReader & ); // forbidden
+    KoOdfStylesReader& operator=( const KoOdfStylesReader & ); // forbidden
 
     class Private;
     Private * const d;

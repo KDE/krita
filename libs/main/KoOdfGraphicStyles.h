@@ -34,7 +34,7 @@ class KoGenStyle;
 class KoGenStyles;
 class KoStyleStack;
 
-class KoOasisStyles;
+class KoOdfStylesReader;
 class KoOasisLoadingContext;
 
 class KOMAIN_EXPORT KoOdfGraphicStyles
@@ -47,15 +47,15 @@ public:
     /// Saves gradient style of brush into mainStyles and returns the styles name
     static QString saveOasisGradientStyle( KoGenStyles &mainStyles, const QBrush &brush );
 
-    /// Loads gradient style from style stack and oasisStyles adapted to the given size and returns a brush
-    static QBrush loadOasisGradientStyle( const KoStyleStack &styleStack, const KoOasisStyles & oasisStyles, const QSizeF &size );
+    /// Loads gradient style from style stack and stylesReader adapted to the given size and returns a brush
+    static QBrush loadOasisGradientStyle( const KoStyleStack &styleStack, const KoOdfStylesReader & stylesReader, const QSizeF &size );
 
     /// Loads pattern style from style stack and oasisstyle adapted to the given size
     static QBrush loadOasisPatternStyle( const KoStyleStack &styleStack, KoOasisLoadingContext & context, const QSizeF &size );
 
-    static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOasisStyles & oasisStyles );
+    static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOdfStylesReader & stylesReader );
 
-    static QPen loadOasisStrokeStyle( const KoStyleStack &styleStack, const QString & stroke, const KoOasisStyles & oasisStyles );
+    static QPen loadOasisStrokeStyle( const KoStyleStack &styleStack, const QString & stroke, const KoOdfStylesReader & stylesReader );
 
     /// Helper function to parse a transformation attribute
     static QMatrix loadTransformation( const QString &transformation );

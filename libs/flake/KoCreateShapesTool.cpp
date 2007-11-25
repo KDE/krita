@@ -26,6 +26,7 @@
 
 #include "KoPointerEvent.h"
 #include "KoInteractionStrategy.h"
+#include "KoCreateShapeStrategy.h"
 
 
 class KoCreateShapesTool::Private {
@@ -52,11 +53,6 @@ void KoCreateShapesTool::paint( QPainter &painter, const KoViewConverter &conver
         m_currentStrategy->paint( painter, converter);
 }
 
-void KoCreateShapesTool::mouseMoveEvent( KoPointerEvent *event ) {
-    if(m_currentStrategy)
-        m_currentStrategy->handleMouseMove( event->point, event->modifiers() );
-}
-
 void KoCreateShapesTool::mouseReleaseEvent( KoPointerEvent *event ) {
     KoInteractionTool::mouseReleaseEvent(event);
     emit KoTool::done();
@@ -77,3 +73,8 @@ void KoCreateShapesTool::setShapeProperties( KoProperties *properties ) {
 KoProperties const * KoCreateShapesTool::shapeProperties() {
     return d->newShapeProperties;
 }
+
+KoInteractionStrategy *KoCreateShapesTool::createStrategy(KoPointerEvent *event) {
+    return new KoCreateShapeStrategy(this, m_canvas, event->point);
+}
+

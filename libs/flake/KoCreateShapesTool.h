@@ -46,8 +46,7 @@ public:
     explicit KoCreateShapesTool( KoCanvasBase *canvas );
     /// destructor
     virtual ~KoCreateShapesTool();
-    void mouseMoveEvent( KoPointerEvent *event );
-    void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent( KoPointerEvent *event );
 
     void paint( QPainter &painter, const KoViewConverter &converter );
 
@@ -75,6 +74,9 @@ public:
      * @return the properties to be used for creating the next shape
      */
     KoProperties const * shapeProperties();
+
+protected:
+    virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
 
 private:
     friend class KoCreateShapeStrategy;

@@ -73,70 +73,7 @@ QPointF KoInteractionStrategy::snapToGrid( const QPointF &point, Qt::KeyboardMod
 }
 
 // static
-KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoPointerEvent *event, KoInteractionTool *parent, KoCanvasBase *canvas) {
-    if((event->buttons() & Qt::LeftButton) == 0)
-        return 0;  // Nothing to do for middle/right mouse button
-
-    KoCreateShapesTool *crs = dynamic_cast<KoCreateShapesTool*>(parent);
-    if(crs)
-        return new KoCreateShapeStrategy(crs, canvas, event->point);
-
-    KoShapeManager *shapeManager = canvas->shapeManager();
-    KoSelection *select = shapeManager->selection();
-    bool insideSelection, editableShape=false;
-    KoFlake::SelectionHandle handle = parent->handleAt(event->point, &insideSelection);
-
-    foreach (KoShape* shape, select->selectedShapes()) {
-        if( isEditable( shape ) ) {
-            editableShape = true;
-            break;
-        }
-    }
-
-    if(editableShape && (event->modifiers() == Qt::NoModifier )) {
-        // manipulation of selected shapes goes first
-        if(handle != KoFlake::NoHandle) {
-            if(insideSelection)
-                return new KoShapeResizeStrategy(parent, canvas, event->point, handle);
-            if(handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||
-                        handle == KoFlake::BottomMiddleHandle || handle == KoFlake::LeftMiddleHandle)
-                return new KoShapeShearStrategy(parent, canvas, event->point, handle);
-            return new KoShapeRotateStrategy(parent, canvas, event->point);
-        }
-        // This is wrong now when there is a single rotated object as you get it also when pressing outside of the object
-        if(select->boundingRect().contains(event->point))
-            return new KoShapeMoveStrategy(parent, canvas, event->point);
-    }
-
-    KoShape * object( shapeManager->shapeAt( event->point, (event->modifiers() & Qt::ShiftModifier) ? KoFlake::NextUnselected : KoFlake::ShapeOnTop ) );
-    if( !object && handle == KoFlake::NoHandle) {
-        if ( ( event->modifiers() & Qt::ControlModifier ) == 0 )
-        {
-            parent->repaintDecorations();
-            select->deselectAll();
-        }
-        return new KoShapeRubberSelectStrategy(parent, canvas, event->point);
-    }
-
-    if(select->isSelected(object)) {
-        if ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier ) {
-            parent->repaintDecorations();
-            select->deselect(object);
-        }
-    }
-    else if(handle == KoFlake::NoHandle) { // clicked on object which is not selected
-        parent->repaintDecorations();
-        if ( ( event->modifiers() & Qt::ControlModifier ) == 0 )
-            shapeManager->selection()->deselectAll();
-        select->select(object);
-        parent->repaintDecorations();
-        return new KoShapeMoveStrategy(parent, canvas, event->point);
-    }
-    return 0;
-}
-
-// static
-bool KoInteractionStrategy::isEditable( KoShape * shape ) {
+bool KoInteractionStrategy::isEditable( const KoShape * shape ) {
     Q_ASSERT(shape);
 
     if( !shape || !shape->isVisible() || shape->isLocked() )

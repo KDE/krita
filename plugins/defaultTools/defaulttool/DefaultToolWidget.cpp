@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoInteractionToolWidget.h"
+#include "DefaultToolWidget.h"
 #include "KoInteractionTool.h"
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
@@ -31,7 +31,7 @@
 #include <QtGui/QRadioButton>
 #include <QtGui/QLabel>
 
-KoInteractionToolWidget::KoInteractionToolWidget( KoInteractionTool* tool,
+DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
                                     QWidget* parent ) : QTabWidget( parent )
 {
     m_tool = tool;
@@ -97,7 +97,7 @@ KoInteractionToolWidget::KoInteractionToolWidget( KoInteractionTool* tool,
     updateSize();
 }
 
-bool KoInteractionToolWidget::eventFilter( QObject* object, QEvent* event )
+bool DefaultToolWidget::eventFilter( QObject* object, QEvent* event )
 {
     if( event->type() == QEvent::MouseButtonPress ) {
         return true;
@@ -117,7 +117,7 @@ bool KoInteractionToolWidget::eventFilter( QObject* object, QEvent* event )
         return QObject::eventFilter( object, event ); // standart event processing
 }
 
-KoFlake::Position KoInteractionToolWidget::selectedPosition()
+KoFlake::Position DefaultToolWidget::selectedPosition()
 {
     KoFlake::Position position = KoFlake::TopLeftCorner;
     if( topRight->isChecked() )
@@ -132,7 +132,7 @@ KoFlake::Position KoInteractionToolWidget::selectedPosition()
     return position;
 }
 
-void KoInteractionToolWidget::updatePosition()
+void DefaultToolWidget::updatePosition()
 {
     QPointF selPosition( 0, 0 );
     KoFlake::Position position = selectedPosition();
@@ -154,7 +154,7 @@ void KoInteractionToolWidget::updatePosition()
     emit hotPositionChanged( position );
 }
 
-void KoInteractionToolWidget::positionHasChanged()
+void DefaultToolWidget::positionHasChanged()
 {
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
     if( ! selection->count() )
@@ -180,7 +180,7 @@ void KoInteractionToolWidget::positionHasChanged()
     updatePosition();
 }
 
-void KoInteractionToolWidget::updateSize()
+void DefaultToolWidget::updateSize()
 {
     QSizeF selSize( 0, 0 );
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
@@ -198,7 +198,7 @@ void KoInteractionToolWidget::updateSize()
     heightSpinBox->blockSignals(false);
 }
 
-void KoInteractionToolWidget::sizeHasChanged()
+void DefaultToolWidget::sizeHasChanged()
 {
     QSizeF newSize( widthSpinBox->value(), heightSpinBox->value() );
 
@@ -252,4 +252,4 @@ void KoInteractionToolWidget::sizeHasChanged()
     }
 }
 
-#include <KoInteractionToolWidget.moc>
+#include <DefaultToolWidget.moc>

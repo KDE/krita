@@ -16,19 +16,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOINTERACTIONTOOLWIDGET_H
-#define KOINTERACTIONTOOLWIDGET_H
+#ifndef DEFAULTTOOLWIDGET_H
+#define DEFAULTTOOLWIDGET_H
 
-#include <ui_KoInteractionToolWidget.h>
-#include "KoFlake.h"
+#include <ui_DefaultToolWidget.h>
+#include <KoFlake.h>
+
+#include <QTabWidget>
 
 class KoInteractionTool;
 class QRadioButton;
 
-class KoInteractionToolWidget : public QTabWidget, Ui::KoInteractionToolWidget {
+class DefaultToolWidget : public QTabWidget, Ui::DefaultToolWidget {
     Q_OBJECT
 public:
-    explicit KoInteractionToolWidget( KoInteractionTool* tool, QWidget *parent = 0 );
+    explicit DefaultToolWidget( KoInteractionTool* tool, QWidget *parent = 0 );
 /*
 public slots:
     void updateControls();

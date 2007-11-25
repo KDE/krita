@@ -18,6 +18,7 @@
  */
 #include "Plugin.h"
 #include "ConnectionToolFactory.h"
+#include "defaulttool/DefaultToolFactory.h"
 
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
@@ -30,6 +31,7 @@ Plugin::Plugin(QObject * parent, const QStringList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new ConnectionToolFactory(parent));
+    KoToolRegistry::instance()->add(new DefaultToolFactory(parent));
 }
 
 #include "Plugin.moc"

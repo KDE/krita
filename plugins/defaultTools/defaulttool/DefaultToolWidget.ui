@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>KoInteractionToolWidget</class>
- <widget class="QTabWidget" name="KoInteractionToolWidget" >
+ <class>DefaultToolWidget</class>
+ <widget class="QTabWidget" name="DefaultToolWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>

@@ -39,11 +39,6 @@ KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
     m_outCursor = QCursor(outPixmap);
 }
 
-void KoZoomTool::paint( QPainter &painter, const KoViewConverter &converter) {
-    if ( m_currentStrategy )
-        m_currentStrategy->paint( painter, converter);
-}
-
 void KoZoomTool::wheelEvent ( KoPointerEvent * event )
 {
     if(event->modifiers() & Qt::ControlModifier)
@@ -62,10 +57,6 @@ void KoZoomTool::mouseReleaseEvent( KoPointerEvent *event ) {
     KoInteractionTool::mouseReleaseEvent(event);
     if(m_temporary)
         emit KoTool::done();
-}
-
-void KoZoomTool::mousePressEvent( KoPointerEvent *event ) {
-    m_currentStrategy = new KoZoomStrategy(this, m_controller, event->point);
 }
 
 void KoZoomTool::mouseMoveEvent( KoPointerEvent *event ) {
@@ -106,5 +97,6 @@ void KoZoomTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
     mousePressEvent(event);
 }
 
-void KoZoomTool::repaintDecorations() {
+KoInteractionStrategy *KoZoomTool::createStrategy(KoPointerEvent *event) {
+    return new KoZoomStrategy(this, m_controller, event->point);
 }

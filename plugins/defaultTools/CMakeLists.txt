@@ -1,6 +1,9 @@
 project( defaulttools )
 
-include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOMAIN_INCLUDES} )
+include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${KOGUIUTIL_INCLUDES})
+
+add_subdirectory(pics)
+
 
 ########### Flake Plugin library ###############
 
@@ -8,10 +11,19 @@ SET ( defaulttools_SRCS
     Plugin.cpp
     ConnectionTool.cpp
     ConnectionToolFactory.cpp
+    defaulttool/DefaultTool.cpp
+    defaulttool/DefaultToolFactory.cpp
+    defaulttool/DefaultToolWidget.cpp
+    defaulttool/ShapeMoveStrategy.cpp
+    defaulttool/ShapeResizeStrategy.cpp
+    defaulttool/ShapeRotateStrategy.cpp
+    defaulttool/ShapeShearStrategy.cpp
+    defaulttool/SelectionDecorator.cpp
 )
 
-#kde4_add_ui_files(defaulttools_SRCS
-#)
+kde4_add_ui_files(defaulttools_SRCS
+    defaulttool/DefaultToolWidget.ui
+)
 
 kde4_add_plugin(defaulttools ${defaulttools_SRCS})
 target_link_libraries(defaulttools flake koguiutils kotext)

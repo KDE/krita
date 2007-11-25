@@ -23,17 +23,10 @@
 #define KOINTERACTIONTOOL_H
 
 #include "KoTool.h"
-#include "KoSelection.h"
-#include "commands/KoShapeAlignCommand.h"
-
-#include <flake_export.h>
-
-//#include <k3staticdeleter.h>
-
-#include <QImage>
-#include <QTime>
+#include "flake_export.h"
 
 class KoInteractionStrategy;
+class KoShape;
 
 #define KoInteractionTool_ID "InteractionTool"
 
@@ -58,112 +51,30 @@ public:
     virtual ~KoInteractionTool();
 
 public:
-
-    virtual bool wantsAutoScroll();
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
-
-    virtual void repaintDecorations();
-    /**
-     * Returns which selection handle is at params point (or NoHandle if none).
-     * @return which selection handle is at params point (or NoHandle if none).
-     * @param point the location (in pt) where we should look for a handle
-     * @param innerHandleMeaning this boolean is altered to true if the point
-     *   is inside the selection rectangle and false if it is just outside.
-     *   The value of innerHandleMeaning is undefined if the handle location is NoHandle
-     */
-    KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
-
-public slots:
-    void activate(bool temporary = false);
-
-private slots:
-    void selectionAlignHorizontalLeft();
-    void selectionAlignHorizontalCenter();
-    void selectionAlignHorizontalRight();
-    void selectionAlignVerticalTop();
-    void selectionAlignVerticalCenter();
-    void selectionAlignVerticalBottom();
-
-    void updateHotPosition( KoFlake::Position hotPosition );
 
 public: // Events
 
     virtual void mousePressEvent( KoPointerEvent *event );
     virtual void mouseMoveEvent( KoPointerEvent *event );
     virtual void mouseReleaseEvent( KoPointerEvent *event );
-    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
 
 protected:
     KoInteractionStrategy *m_currentStrategy; ///< the strategy that is 'in progress'
-    QWidget* createOptionWidget();
+
+    virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event) = 0;
+    /// checks recursively if the shape or one of its parents is not visible or locked
+    static bool shapeIsEditable( const KoShape * shape );
 
 private:
-    void setupActions();
-    void recalcSelectionBox();
-    void updateCursor();
-    /// Returns rotation angle of given handle of the current selection
-    double rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation );
-
-    void selectionAlign(KoShapeAlignCommand::Align align);
-
     KoInteractionTool(const KoInteractionTool&);
     KoInteractionTool& operator=(const KoInteractionTool&);
 
-    QRectF handlesSize();
-
-    // convenience method;
-    KoSelection * koSelection();
-
     class Private;
     Private * const d;
-};
-
-/**
- * The SelectionDecorator is used to paint extra user-interface items on top of a selection.
- */
-class SelectionDecorator {
-public:
-    /**
-     * Constructor.
-     * @param arrows the direction that needs highlighting. (currently unused)
-     * @param rotationHandles if true; the rotation handles will be drawn
-     * @param shearHandles if true; the shearhandles will be drawn
-     */
-    SelectionDecorator(KoFlake::SelectionHandle arrows, bool rotationHandles, bool shearHandles);
-    ~SelectionDecorator() {}
-
-    /**
-     * paint the decortations.
-     * @param painter the painter to paint to.
-     * @param converter to convert between internal and view coordinates.
-     */
-    void paint(QPainter &painter, const KoViewConverter &converter);
-
-    /**
-     * set the selection that is to be painted.
-     * @param selection the current selection.
-     */
-    void setSelection(KoSelection *selection);
-
-    /**
-     * set the radius of the selection handles
-     * @param radius the new handle radius
-     */
-    void setHandleRadius( int radius );
-
-    /// Sets the hot position to highlight
-    static void setHotPosition( KoFlake::Position hotPosition );
-
-private:
-    bool m_rotationHandles, m_shearHandles;
-    KoFlake::SelectionHandle m_arrows;
-    static KoFlake::Position m_hotPosition;
-    KoSelection *m_selection;
-    int m_handleRadius;
-    static QImage *s_rotateCursor;
 };
 
 #endif /* KOINTERACTIONTOOL_H */

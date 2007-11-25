@@ -38,6 +38,7 @@
 #include <KoID.h>
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
+#include <KoSelection.h>
 #include <KoCompositeOp.h>
 #include <KoShapeManager.h>
 

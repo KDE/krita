@@ -27,9 +27,9 @@
 #include "KoCreatePathToolFactory.h"
 #include "KoCreateShapesToolFactory.h"
 #include "KoCreateShapesTool.h"
-#include "KoInteractionToolFactory.h"
 #include "KoPathToolFactory.h"
 #include "KoCanvasController.h"
+#include "KoShape.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
 #include "KoCanvasBase.h"
@@ -83,7 +83,7 @@ public:
 
 class KoToolManager::Private {
 public:
-    Private() : defaultTool(0), canvasData(0)
+    Private() : canvasData(0)
     {
         tabletEventTimer.setSingleShot(true);
     }
@@ -93,7 +93,6 @@ public:
     }
 
     QList<ToolHelper*> tools; // list of all available tools via their factories.
-    ToolHelper *defaultTool; // the pointer thingy
 
     QHash<KoTool*, int> uniqueToolIds; // for the changedTool signal
     QHash<KoCanvasController*, QList<CanvasData*> > canvasses;
@@ -166,8 +165,6 @@ void KoToolManager::setup() {
     d->tools.append( new ToolHelper(new KoPathToolFactory(this)) );
     d->tools.append( new ToolHelper(new KoZoomToolFactory(this)) );
     d->tools.append( new ToolHelper(new KoPanToolFactory(this)) );
-    d->defaultTool = new ToolHelper(new KoInteractionToolFactory(this));
-    d->tools.append(d->defaultTool);
 
     KoShapeRegistry::instance();
     KoToolRegistry *registry = KoToolRegistry::instance();
@@ -397,8 +394,8 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
     if(tp)
         tp->setCanvasController(controller);
 
-    if (cd->activeTool == 0)
-        toolActivated(d->defaultTool);
+//   if (cd->activeTool == 0)
+//       toolActivated(d->defaultTool); // TODO
 
     Connector *connector = new Connector(controller->canvas()->shapeManager());
     connect(connector, SIGNAL(selectionChanged(QList<KoShape*>)), this,

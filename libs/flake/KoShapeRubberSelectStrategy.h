@@ -26,6 +26,8 @@
 
 #include <QRectF>
 
+#include <flake_export.h>
+
 class QPainter;
 class QPointF;
 
@@ -35,7 +37,7 @@ class KoTool;
 /**
  * Implement the rubber band selection of flake objects.
  */
-class KoShapeRubberSelectStrategy : public KoInteractionStrategy
+class FLAKE_EXPORT KoShapeRubberSelectStrategy : public KoInteractionStrategy
 {
 public:
     /**

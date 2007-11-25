@@ -22,10 +22,11 @@
 #ifndef KOINTERACTIONSTRATEGY_H
 #define KOINTERACTIONSTRATEGY_H
 
+#include "flake_export.h"
+#include "KoSelection.h"
+
 #include <QList>
 #include <QPainter>
-
-#include <KoSelection.h>
 
 class KoPointerEvent;
 class QUndoCommand;
@@ -44,7 +45,7 @@ class KoTool;
  * The mouseMove events are forwarded to the handleMouseMove() method and the interaction
  * is either finished with finishInteraction() or cancelInteraction() (never both).
  */
-class KoInteractionStrategy
+class FLAKE_EXPORT KoInteractionStrategy
 {
 public:
     /// Destructor
@@ -79,11 +80,6 @@ public:
      */
     virtual void finishInteraction( Qt::KeyboardModifiers modifiers ) = 0;
 
-    /**
-     * This instanciates a new strategy object and decides which one created based on the params.
-     */
-    static KoInteractionStrategy* createStrategy(KoPointerEvent *event, KoInteractionTool *parentTool, KoCanvasBase *canvas);
-
 protected:
     /// protected constructor. Use the createStrategy method()
     KoInteractionStrategy(KoTool *parent, KoCanvasBase *canvas);
@@ -101,8 +97,9 @@ protected:
      */
     QPointF snapToGrid( const QPointF &point, Qt::KeyboardModifiers modifiers );
 
+    friend class KoInteractionTool;
     /// checks recursively if the shape or one of its parents is not visible or locked
-    static bool isEditable( KoShape * shape );
+    static bool isEditable( const KoShape * shape );
 
 protected: // members
     KoTool *m_parent; ///< the KoTool instance that controls this strategy.

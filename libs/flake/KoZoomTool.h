@@ -43,8 +43,6 @@ public:
     /// reimplemented method
     virtual void mouseReleaseEvent( KoPointerEvent *event );
     /// reimplemented method
-    virtual void mousePressEvent( KoPointerEvent *event );
-    /// reimplemented method
     virtual void mouseMoveEvent( KoPointerEvent *event );
     /// reimplemented method
     virtual void keyPressEvent( QKeyEvent *event );
@@ -55,13 +53,12 @@ public:
     /// reimplemented method
     virtual void mouseDoubleClickEvent( KoPointerEvent *event );
 
-    /// reimplemented method
-    virtual void repaintDecorations();
-    /// reimplemented method
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
     void setCanvasController(KoCanvasController *controller) { m_controller = controller; }
 
 private:
+    /// reimplemented method
+    virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
+
     KoCanvasController *m_controller;
     QCursor m_inCursor;
     QCursor m_outCursor;

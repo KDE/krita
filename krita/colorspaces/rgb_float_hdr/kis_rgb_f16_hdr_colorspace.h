@@ -62,7 +62,7 @@ public:
     virtual int referenceDepth() const { return 16; }
     virtual bool userVisible() const { return true; }
 
-    virtual KoColorSpace *createColorSpace( KoColorProfile * p) const { return new KisRgbF16HDRColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace( KoColorProfile * p) const { return new KisRgbF16HDRColorSpace( p); };
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const
     {
         QList<KoColorConversionTransformationFactory*> list;

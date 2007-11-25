@@ -123,8 +123,6 @@ else(Boost_FOUND)
 endif(Boost_FOUND)
 
 add_subdirectory(libs)
-MESSAGE(STATUS "Before koffice-2.0 disable compile of example subdir, not necessary for official release")
-#add_subdirectory(example)
 add_subdirectory(interfaces)
 
 macro_log_feature(FREETYPE_FOUND "FreeType" "Karbon requires FreeType. Karbon will not be built" "http://www.freetype.org" FALSE "")

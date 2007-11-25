@@ -39,37 +39,7 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
 
     setupUi( this );
 
-    topLeft = new QRadioButton( "", rectWidget );
-    topLeft->setChecked( true );
-    topLeft->setToolTip( i18n( "Top-Left Corner" ) );
-    topRight = new QRadioButton( "", rectWidget );
-    topRight->setToolTip( i18n( "Top-Right Corner" ) );
-    bottomLeft = new QRadioButton( "", rectWidget );
-    bottomLeft->setToolTip( i18n( "Bottom-Left Corner" ) );
-    bottomRight = new QRadioButton( "", rectWidget );
-    bottomRight->setToolTip( i18n( "Bottom-Right Corner" ) );
-    center = new QRadioButton( "", rectWidget );
-    center->setToolTip( i18n( "Center Point" ) );
-
-    QGridLayout * g = new QGridLayout( rectWidget );
-    g->addWidget( topLeft, 0, 0, 1, 1, Qt::AlignLeft );
-    g->addWidget( topRight, 0, 2, 1, 1, Qt::AlignRight );
-    g->addWidget( center, 1, 1, 1, 1, Qt::AlignCenter );
-    g->addWidget( bottomLeft, 2, 0, 1, 1, Qt::AlignLeft );
-    g->addWidget( bottomRight, 2, 2, 1, 1, Qt::AlignRight );
-
-    g->setRowStretch( 0, 0 );
-    g->setRowStretch( 1, 1 );
-    g->setRowStretch( 2, 0 );
-    g->setColumnStretch( 0, 0 );
-    g->setColumnStretch( 1, 1 );
-    g->setColumnStretch( 2, 0 );
-
-    connect( topLeft, SIGNAL(clicked()), this, SLOT(updatePosition()) );
-    connect( topRight, SIGNAL(clicked()), this, SLOT(updatePosition()) );
-    connect( center, SIGNAL(clicked()), this, SLOT(updatePosition()) );
-    connect( bottomLeft, SIGNAL(clicked()), this, SLOT(updatePosition()) );
-    connect( bottomRight, SIGNAL(clicked()), this, SLOT(updatePosition()) );
+    connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ), this, SLOT( updatePosition() ) );
 
     connect( positionXSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
     connect( positionYSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
@@ -80,8 +50,6 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
     connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updatePosition() ) );
     connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updateSize() ) );
-
-    rectWidget->installEventFilter( this );
 
     bringToFront->setDefaultAction( m_tool->action( "object_move_totop" ) );
     raiseLevel->setDefaultAction( m_tool->action( "object_move_up" ) );
@@ -98,45 +66,10 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     updateSize();
 }
 
-bool DefaultToolWidget::eventFilter( QObject* object, QEvent* event )
-{
-    if( event->type() == QEvent::MouseButtonPress ) {
-        return true;
-    }
-    else if( event->type() == QEvent::Paint ) {
-        QPainter p( rectWidget );
-        int offset = topLeft->height() >> 1;
-        int left = topLeft->pos().x() + offset;
-        int right = topRight->pos().x() + offset;
-        int top = topLeft->pos().y() + offset;
-        int bottom = bottomLeft->pos().y() + offset;
-        QRect r( left, top, right-left, bottom-top );
-        p.drawRect( r );
-        return true;
-    }
-    else
-        return QObject::eventFilter( object, event ); // standart event processing
-}
-
-KoFlake::Position DefaultToolWidget::selectedPosition()
-{
-    KoFlake::Position position = KoFlake::TopLeftCorner;
-    if( topRight->isChecked() )
-        position = KoFlake::TopRightCorner;
-    else if( bottomLeft->isChecked() )
-        position = KoFlake::BottomLeftCorner;
-    else if( bottomRight->isChecked() )
-        position = KoFlake::BottomRightCorner;
-    else if( center->isChecked() )
-        position = KoFlake::CenteredPosition;
-
-    return position;
-}
-
 void DefaultToolWidget::updatePosition()
 {
     QPointF selPosition( 0, 0 );
-    KoFlake::Position position = selectedPosition();
+    KoFlake::Position position = positionSelector->position();
 
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
     if( selection->count() )
@@ -161,7 +94,7 @@ void DefaultToolWidget::positionHasChanged()
     if( ! selection->count() )
         return;
 
-    KoFlake::Position position = selectedPosition();
+    KoFlake::Position position = positionSelector->position();
     QPointF newPos( positionXSpinBox->value(), positionYSpinBox->value() );
     QPointF oldPos = selection->absolutePosition( position );
     if( oldPos == newPos )

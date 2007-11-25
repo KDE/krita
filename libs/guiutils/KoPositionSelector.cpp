@@ -59,8 +59,8 @@ public:
     void setGeometry (const QRect &geom) {
         QSize prefSize = calcSizes();
 
-        const int columnWidth = qRound(geom.width() / ((double) maxCol + 1));
-        const int rowHeight = qRound(geom.height() / ((double) maxRow + 1));
+        const int columnWidth = qRound(geom.width() / ((double) maxCol));
+        const int rowHeight = qRound(geom.height() / ((double) maxRow));
         foreach(Item item, items) {
             QPoint point( item.column * columnWidth, item.row * rowHeight );
             QRect rect(point + geom.topLeft(), prefSize);
@@ -76,7 +76,8 @@ public:
             if(prefSize.isEmpty()) {
                 QAbstractButton *but = dynamic_cast<QAbstractButton*> (item.child->widget());
                 Q_ASSERT(but);
-                prefSize = but->iconSize();
+                //prefSize = but->iconSize();
+                prefSize = QSize( but->height(), but->height() );
             }
             maxRow = qMax(maxRow, item.row);
             maxCol = qMax(maxRow, item.column);
@@ -88,7 +89,10 @@ public:
     }
 
     QLayoutItem *itemAt (int index) const {
-        return items.at(index).child;
+        if( index < count() )
+            return items.at(index).child;
+        else
+            return 0;
     }
 
     QLayoutItem *takeAt (int index) {
@@ -190,9 +194,9 @@ void KoPositionSelector::positionChanged(int position) {
 void KoPositionSelector::paintEvent (QPaintEvent *) {
     QPainter painter( this );
     QPen pen(Qt::black);
-    pen.setWidth(3);
+    pen.setWidth(2);
     painter.setPen(pen);
-    painter.drawRect(d->topLeft->width() / 2 - 2, d->topLeft->height() / 2, d->bottomRight->x(), d->bottomRight->y());
+    painter.drawRect(d->topLeft->width() / 2, d->topLeft->height() / 2, d->bottomRight->x(), d->bottomRight->y());
     painter.end();
 }
 

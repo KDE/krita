@@ -31,16 +31,10 @@ class DefaultToolWidget : public QTabWidget, Ui::DefaultToolWidget {
     Q_OBJECT
 public:
     explicit DefaultToolWidget( KoInteractionTool* tool, QWidget *parent = 0 );
-/*
-public slots:
-    void updateControls();
-*/
+
 signals:
     /// emits whenever the hot (selected) position changes
     void hotPositionChanged( KoFlake::Position hotPosition );
-
-protected:
-    bool eventFilter( QObject *obj, QEvent *event );
 
 private slots:
     void updatePosition();
@@ -48,12 +42,6 @@ private slots:
     void updateSize();
     void sizeHasChanged();
 private:
-    KoFlake::Position selectedPosition();
-    QRadioButton * topLeft;
-    QRadioButton * topRight;
-    QRadioButton * bottomLeft;
-    QRadioButton * bottomRight;
-    QRadioButton * center;
     KoInteractionTool* m_tool;
 };
 

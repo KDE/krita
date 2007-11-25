@@ -43,7 +43,7 @@
         </spacer>
        </item>
        <item row="0" column="1" colspan="2" >
-        <widget class="QWidget" native="1" name="rectWidget" >
+        <widget class="KoPositionSelector" native="1" name="positionSelector" >
          <property name="minimumSize" >
           <size>
            <width>75</width>
@@ -368,6 +368,14 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KoPositionSelector</class>
+   <extends>QWidget</extends>
+   <header>KoPositionSelector.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

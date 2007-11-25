@@ -1,6 +1,6 @@
 project( defaulttools )
 
-include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${KOGUIUTIL_INCLUDES})
+include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES})
 
 add_subdirectory(pics)
 

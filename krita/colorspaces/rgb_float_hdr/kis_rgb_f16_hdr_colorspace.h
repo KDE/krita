@@ -35,7 +35,7 @@ typedef KoRgbTraits<half> RgbF16Traits;
 class KRITA_RGBF16_EXPORT KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>
 {
 public:
-    KisRgbF16HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+    KisRgbF16HDRColorSpace( KoColorProfile *p);
 
     virtual KoID colorModelId() const { return RGBAColorModelID; }
     virtual KoID colorDepthId() const { return Float16BitsColorDepthID; }
@@ -62,7 +62,7 @@ public:
     virtual int referenceDepth() const { return 16; }
     virtual bool userVisible() const { return true; }
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisRgbF16HDRColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace( KoColorProfile * p) const { return new KisRgbF16HDRColorSpace(parent, p); };
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const
     {
         QList<KoColorConversionTransformationFactory*> list;

@@ -25,8 +25,8 @@
 
 #include "kis_rgb_f16_hdr_colorspace.h"
 
-KisRgbF16HDRColorSpace::KisRgbF16HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p)
-: KisRgbFloatHDRColorSpace<RgbF16Traits>(colorSpaceId(), i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"), parent, p)
+KisRgbF16HDRColorSpace::KisRgbF16HDRColorSpace( KoColorProfile *p)
+: KisRgbFloatHDRColorSpace<RgbF16Traits>(colorSpaceId(), i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"), p)
 {
 }
 
@@ -37,6 +37,6 @@ QString KisRgbF16HDRColorSpace::colorSpaceId()
 
 KoColorSpace* KisRgbF16HDRColorSpace::clone() const
 {
-    return new KisRgbF16HDRColorSpace(0, profile()->clone());
+    return new KisRgbF16HDRColorSpace( profile()->clone());
 }
 

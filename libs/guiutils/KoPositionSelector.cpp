@@ -76,8 +76,8 @@ public:
             if(prefSize.isEmpty()) {
                 QAbstractButton *but = dynamic_cast<QAbstractButton*> (item.child->widget());
                 Q_ASSERT(but);
-                //prefSize = but->iconSize();
-                prefSize = QSize( but->height(), but->height() );
+                prefSize = but->iconSize();
+                //prefSize = QSize( but->height(), but->height() );
             }
             maxRow = qMax(maxRow, item.row);
             maxCol = qMax(maxRow, item.column);

@@ -37,7 +37,6 @@ struct KoColorSpace::Private {
     QString id;
     QString name;
     QHash<QString, KoCompositeOp *> compositeOps;
-    KoColorSpaceRegistry * parent;
     QList<KoChannelInfo *> channels;
     KoMixColorsOp* mixColorsOp;
     KoConvolutionOp* convolutionOp;
@@ -62,12 +61,11 @@ KoColorSpace::KoColorSpace()
 {
 }
 
-KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp )
+KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp )
     : d (new Private())
 {
     d->id = id;
     d->name = name;
-    d->parent = parent;
     d->mixColorsOp = mixColorsOp;
     d->convolutionOp = convolutionOp;
     d->lastUsedDstColorSpace = 0;
@@ -180,7 +178,7 @@ const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
 {
     if(not d->transfoToLABA16)
     {
-        d->transfoToLABA16 = d->parent->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16("") ) ;
+        d->transfoToLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16("") ) ;
     }
     return d->transfoToLABA16;
 }
@@ -188,7 +186,7 @@ const KoColorConversionTransformation* KoColorSpace::fromLabA16Converter() const
 {
     if(not d->transfoFromLABA16)
     {
-        d->transfoFromLABA16 = d->parent->colorConversionSystem()->createColorConverter( KoColorSpaceRegistry::instance()->lab16("") , this ) ;
+        d->transfoFromLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter( KoColorSpaceRegistry::instance()->lab16("") , this ) ;
     }
     return d->transfoFromLABA16;
 }
@@ -196,7 +194,7 @@ const KoColorConversionTransformation* KoColorSpace::toRgbA16Converter() const
 {
     if(not d->transfoToRGBA16)
     {
-        d->transfoToRGBA16 = d->parent->colorConversionSystem()->createColorConverter( this, KoColorSpaceRegistry::instance()->rgb16("") ) ;
+        d->transfoToRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter( this, KoColorSpaceRegistry::instance()->rgb16("") ) ;
     }
     return d->transfoToRGBA16;
 }
@@ -204,7 +202,7 @@ const KoColorConversionTransformation* KoColorSpace::fromRgbA16Converter() const
 {
     if(not d->transfoFromRGBA16)
     {
-        d->transfoFromRGBA16 = d->parent->colorConversionSystem()->createColorConverter( KoColorSpaceRegistry::instance()->rgb16("") , this ) ;
+        d->transfoFromRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter( KoColorSpaceRegistry::instance()->rgb16("") , this ) ;
     }
     return d->transfoFromRGBA16;
 }
@@ -235,7 +233,7 @@ KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColo
     {
         return new KoCopyColorConversionTransformation(this);
     } else {
-        return d->parent->colorConversionSystem()->createColorConverter( this, dstColorSpace, renderingIntent);
+        return KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter( this, dstColorSpace, renderingIntent);
     }
 }
 
@@ -460,3 +458,4 @@ KoColorTransformation* KoColorSpace::createColorTransformation( QString id, QHas
         return new KoFallBackColorTransformation( csToFallBack, fallBackToCs, transfo);
     }
 }
+

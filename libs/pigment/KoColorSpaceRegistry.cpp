@@ -125,7 +125,7 @@ void KoColorSpaceRegistry::init()
     addProfile(defProfile);
 
     // Create the built-in colorspaces
-    d->alphaCs = new KoAlphaColorSpace(this);
+    d->alphaCs = new KoAlphaColorSpace();
 
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "ColorSpacePlugins";
@@ -241,7 +241,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             kDebug(31000) <<"Profile not found :" << profileName;
             return 0;
         }
-        const KoColorSpace *cs = csf->createColorSpace(this, p);
+        const KoColorSpace *cs = csf->createColorSpace( p);
         if(!cs)
             return 0;
 
@@ -271,7 +271,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
                 return 0;
             }
 
-            cs = csf->createColorSpace(this, const_cast<KoColorProfile *>(profile));
+            cs = csf->createColorSpace( const_cast<KoColorProfile *>(profile));
             if(!cs )
                 return 0;
 

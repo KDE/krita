@@ -38,7 +38,7 @@ CMYKU8Plugin::CMYKU8Plugin(QObject *parent, const QStringList &)
     KoColorSpaceFactory * csf = new KisCmykU8ColorSpaceFactory();
     f->add(csf);
     
-    KoColorSpace * colorSpaceCMYKU8 = new KisCmykU8ColorSpace(f, KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile()));
+    KoColorSpace * colorSpaceCMYKU8 = new KisCmykU8ColorSpace( KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile()));
     Q_CHECK_PTR(colorSpaceCMYKU8);
     
     KoHistogramProducerFactoryRegistry::instance()->add(

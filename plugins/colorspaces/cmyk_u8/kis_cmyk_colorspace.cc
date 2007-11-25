@@ -28,8 +28,8 @@
 #include "compositeops/KoCompositeOpDivide.h"
 #include "compositeops/KoCompositeOpBurn.h"
 
-KisCmykU8ColorSpace::KisCmykU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
- KoLcmsColorSpace<CmykU8Traits>("CMYK", i18n("CMYK (8-bit integer/channel)"), parent, TYPE_CMYK5_8, icSigCmykData, p)
+KisCmykU8ColorSpace::KisCmykU8ColorSpace( KoColorProfile *p) :
+ KoLcmsColorSpace<CmykU8Traits>("CMYK", i18n("CMYK (8-bit integer/channel)"),  TYPE_CMYK5_8, icSigCmykData, p)
 {
     addChannel(new KoChannelInfo(i18n("Cyan"), 0 * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::cyan));
     addChannel(new KoChannelInfo(i18n("Magenta"), 1 * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::magenta));
@@ -55,6 +55,6 @@ bool KisCmykU8ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 
 KoColorSpace* KisCmykU8ColorSpace::clone() const
 {
-    return new KisCmykU8ColorSpace(0, profile()->clone());
+    return new KisCmykU8ColorSpace( profile()->clone());
 }
 

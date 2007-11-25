@@ -29,7 +29,7 @@ typedef KoColorSpaceTrait<quint8, 5, 4> CmykU8Traits;
 class KisCmykU8ColorSpace : public KoLcmsColorSpace<CmykU8Traits>
 {
     public:
-        KisCmykU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+        KisCmykU8ColorSpace( KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
         virtual KoID colorModelId() const { return CMYKAColorModelID; }
         virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
@@ -48,7 +48,7 @@ class KisCmykU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
         virtual int referenceDepth() const { return 8; }
 
-        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KisCmykU8ColorSpace(parent, p); }
+        virtual KoColorSpace *createColorSpace( KoColorProfile *p) const { return new KisCmykU8ColorSpace(p); }
 
         virtual QString defaultProfile() const { return "Adobe CMYK"; }
 };

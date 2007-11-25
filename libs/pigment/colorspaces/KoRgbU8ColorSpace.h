@@ -32,7 +32,7 @@ class KoRgbU8ColorSpace : public KoLcmsColorSpace<RgbU8Traits>
 
 public:
 
-    KoRgbU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+    KoRgbU8ColorSpace( KoColorProfile *p);
     virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
     virtual KoColorTransformation* createInvertTransformation() const;
     virtual KoID colorModelId() const { return RGBAColorModelID; }
@@ -61,7 +61,7 @@ public:
     virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
     virtual int referenceDepth() const { return 8; }
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KoRgbU8ColorSpace(parent, p); }
+    virtual KoColorSpace *createColorSpace( KoColorProfile * p) const { return new KoRgbU8ColorSpace( p); }
 
     virtual QString defaultProfile() const { return "sRGB built-in - (lcms internal)"; }
 };

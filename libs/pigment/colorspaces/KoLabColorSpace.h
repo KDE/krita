@@ -27,7 +27,7 @@
 class KoLabColorSpace : public KoLcmsColorSpace<KoLabU16Traits>
 {
     public:
-        KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+        KoLabColorSpace( KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
         virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
 
@@ -66,7 +66,7 @@ class KoLabColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
         virtual int referenceDepth() const { return 16; }
 
-        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KoLabColorSpace(parent, p); }
+        virtual KoColorSpace *createColorSpace( KoColorProfile *p) const { return new KoLabColorSpace( p); }
 
         virtual QString defaultProfile() const { return "Lab built-in - (lcms internal)"; }
 };

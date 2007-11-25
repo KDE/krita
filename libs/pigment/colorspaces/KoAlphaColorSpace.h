@@ -37,7 +37,7 @@ typedef KoColorSpaceTrait<quint8, 1, 0> AlphaU8Traits;
  */
 class PIGMENTCMS_EXPORT KoAlphaColorSpace : public KoColorSpaceAbstract<AlphaU8Traits> {
 public:
-    explicit KoAlphaColorSpace(KoColorSpaceRegistry * parent);
+    KoAlphaColorSpace();
     virtual ~KoAlphaColorSpace();
     virtual KoID colorModelId() const { return AlphaColorModelID; }
     virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }

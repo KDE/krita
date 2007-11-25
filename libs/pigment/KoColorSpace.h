@@ -37,7 +37,6 @@
 
 class KoCompositeOp;
 class KoColorProfile;
-class KoColorSpaceRegistry;
 class KoColorTransformation;
 class KoColorConversionTransformationFactory;
 class KisFilter;
@@ -133,7 +132,7 @@ protected:
 
 public:
     /// Should be called by real color spaces
-    KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp );
+    KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp );
     virtual ~KoColorSpace();
 
     virtual bool operator==(const KoColorSpace& rhs) const {
@@ -144,7 +143,7 @@ public:
 public:
 
     /**
-     * Use this function to created a cloned version of this color space,
+     * Use this function to create a cloned version of this color space,
      * and of its profile.
      */
     virtual KoColorSpace* clone() const = 0;
@@ -699,7 +698,7 @@ public:
     /**
      * creates a color space using the given profile.
      */
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *) const = 0;
+    virtual KoColorSpace *createColorSpace(KoColorProfile *) const = 0;
 
     /**
      * @return true if the color space follows ICC specification

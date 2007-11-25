@@ -30,7 +30,7 @@ typedef KoXyzTraits<float> XyzF32Traits;
 class KisXyzF32HDRColorSpace : public KisXyzFloatHDRColorSpace<XyzF32Traits>
 {
 public:
-    KisXyzF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+    KisXyzF32HDRColorSpace( KoColorProfile *p);
 
     virtual KoID colorModelId() const { return XYZAColorModelID; }
     virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
@@ -69,7 +69,7 @@ public:
         return 0;
     }
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisXyzF32HDRColorSpace(parent, p); }
+    virtual KoColorSpace *createColorSpace( KoColorProfile * p) const { return new KisXyzF32HDRColorSpace( p); }
     virtual bool profileIsCompatible(const KoColorProfile* profile) const
     {
         return profile == 0;

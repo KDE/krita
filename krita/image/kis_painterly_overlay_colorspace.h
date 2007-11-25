@@ -93,7 +93,7 @@ private: // This is a singleton
 
     friend class KisPainterlyOverlayColorSpaceFactory;
 
-    KisPainterlyOverlayColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent);
+    KisPainterlyOverlayColorSpace(const QString &id, const QString &name);
     KisPainterlyOverlayColorSpace(const KisPainterlyOverlayColorSpace&);
     KisPainterlyOverlayColorSpace operator=(const KisPainterlyOverlayColorSpace&);
 

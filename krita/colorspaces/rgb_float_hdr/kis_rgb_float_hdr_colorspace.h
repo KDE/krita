@@ -40,8 +40,8 @@ template <class _CSTraits>
 class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 {
     public:
-        KisRgbFloatHDRColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoColorProfile *profile)
-          : KoIncompleteColorSpace<_CSTraits>(id, name, parent, parent->rgb16(""))
+        KisRgbFloatHDRColorSpace(const QString &id, const QString &name, KoColorProfile *profile)
+          : KoIncompleteColorSpace<_CSTraits>(id, name, KoColorSpaceRegistry::instance()->rgb16(""))
         {
             // We assume an alpha channel at the moment
             Q_ASSERT(_CSTraits::alpha_pos != -1);

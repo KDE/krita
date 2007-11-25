@@ -42,10 +42,10 @@ public:
             return false;
         }
 
-     KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const
+     KoColorSpace *createColorSpace( KoColorProfile * p) const
         {
             Q_UNUSED( p );
-            return new KisPainterlyOverlayColorSpace("painterlyoverlay", "", parent);
+            return new KisPainterlyOverlayColorSpace("painterlyoverlay", "");
         }
     virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
     {
@@ -87,8 +87,8 @@ const KisPainterlyOverlayColorSpace * KisPainterlyOverlayColorSpace::instance()
 
 
 
-KisPainterlyOverlayColorSpace::KisPainterlyOverlayColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent)
-    : KoIncompleteColorSpace<PainterlyOverlayFloatTraits>(id, name, parent, parent->rgb16(""))
+KisPainterlyOverlayColorSpace::KisPainterlyOverlayColorSpace(const QString &id, const QString &name)
+    : KoIncompleteColorSpace<PainterlyOverlayFloatTraits>(id, name, KoColorSpaceRegistry::instance()->rgb16(""))
 {
     addChannel(new KoChannelInfo(i18n("Adsorbency"),
                                  PainterlyOverlayFloatTraits::adsorbency_pos * sizeof(float),

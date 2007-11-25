@@ -65,8 +65,8 @@ private:
     quint32 m_psize;
 };
 
-KoRgbU8ColorSpace::KoRgbU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-    KoLcmsColorSpace<RgbU8Traits>(colorSpaceId(), i18n("RGB 8-bit integer/channel)"), parent, TYPE_BGRA_8, icSigRgbData, p)
+KoRgbU8ColorSpace::KoRgbU8ColorSpace( KoColorProfile *p) :
+    KoLcmsColorSpace<RgbU8Traits>(colorSpaceId(), i18n("RGB 8-bit integer/channel)"),  TYPE_BGRA_8, icSigRgbData, p)
 {
     addChannel(new KoChannelInfo(i18n("Red"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255,0,0)));
     addChannel(new KoChannelInfo(i18n("Green"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0,255,0)));
@@ -98,6 +98,6 @@ QString KoRgbU8ColorSpace::colorSpaceId()
 
 KoColorSpace* KoRgbU8ColorSpace::clone() const
 {
-    return new KoRgbU8ColorSpace(0, profile()->clone());
+    return new KoRgbU8ColorSpace( profile()->clone());
 }
 

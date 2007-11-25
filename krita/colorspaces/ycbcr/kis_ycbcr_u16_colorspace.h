@@ -29,7 +29,7 @@ typedef KoYCbCrTraits<quint16> YCbCrU16Traits;
 class KisYCbCrU16ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU16Traits>
 {
     public:
-        KisYCbCrU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+        KisYCbCrU16ColorSpace( KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence) const {
           if (independence == TO_RGBA8 )
             return true;
@@ -55,7 +55,7 @@ public:
         return false;
     }
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisYCbCrU16ColorSpace(parent, p); }
+    virtual KoColorSpace *createColorSpace( KoColorProfile * p) const { return new KisYCbCrU16ColorSpace( p); }
     virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
     {
         return 0;

@@ -29,7 +29,7 @@ typedef KoYCbCrTraits<quint8> YCbCrU8Traits;
 class KisYCbCrU8ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU8Traits>
 {
     public:
-        KisYCbCrU8ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+        KisYCbCrU8ColorSpace( KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence /*independence*/) const {
             return false;
         }
@@ -52,7 +52,7 @@ public:
         return false;
     }
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) const { return new KisYCbCrU8ColorSpace(parent, p); }
+    virtual KoColorSpace *createColorSpace( KoColorProfile * p) const { return new KisYCbCrU8ColorSpace(p); }
 
     virtual int referenceDepth() const { return 8; }
     virtual bool isIcc() const { return false; }

@@ -24,8 +24,8 @@
 
 #include "compositeops/KoCompositeOps.h"
 
-KoRgbU16ColorSpace::KoRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
- KoLcmsColorSpace<KoRgbU16Traits>(colorSpaceId(), i18n("RGB 16-bit integer/channel)"), parent, TYPE_BGRA_16, icSigRgbData, p)
+KoRgbU16ColorSpace::KoRgbU16ColorSpace( KoColorProfile *p) :
+ KoLcmsColorSpace<KoRgbU16Traits>(colorSpaceId(), i18n("RGB 16-bit integer/channel)"),  TYPE_BGRA_16, icSigRgbData, p)
 {
     addChannel(new KoChannelInfo(i18n("Red"), 2* sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(255,0,0)));
     addChannel(new KoChannelInfo(i18n("Green"), 1* sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(0,255,0)));
@@ -51,6 +51,6 @@ QString KoRgbU16ColorSpace::colorSpaceId()
 
 KoColorSpace* KoRgbU16ColorSpace::clone() const
 {
-    return new KoRgbU16ColorSpace(0, profile()->clone());
+    return new KoRgbU16ColorSpace( profile()->clone());
 }
 

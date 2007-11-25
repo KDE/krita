@@ -40,8 +40,8 @@ template <class _CSTraits>
 class KisXyzFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 {
     public:
-        KisXyzFloatHDRColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, KoColorProfile *profile)
-          : KoIncompleteColorSpace<_CSTraits>(id, name, parent, parent->lab16(""))
+        KisXyzFloatHDRColorSpace(const QString &id, const QString &name,  KoColorProfile *profile)
+          : KoIncompleteColorSpace<_CSTraits>(id, name, KoColorSpaceRegistry::instance()->lab16(""))
         {
             Q_UNUSED(profile);
             

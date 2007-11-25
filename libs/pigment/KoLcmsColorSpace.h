@@ -152,9 +152,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             KoColorProfile* colorProfile;
         };
     protected:
-        KoLcmsColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent, DWORD cmType,
+        KoLcmsColorSpace(const QString &id, const QString &name,  DWORD cmType,
                          icColorSpaceSignature colorSpaceSignature,
-                         KoColorProfile *p) : KoColorSpaceAbstract<_CSTraits>(id, name, parent), KoLcmsInfo( cmType, colorSpaceSignature), d( new Private())
+                         KoColorProfile *p) : KoColorSpaceAbstract<_CSTraits>(id, name), KoLcmsInfo( cmType, colorSpaceSignature), d( new Private())
 
         {
             Q_ASSERT(p); // No profile means the lcms color space can't work

@@ -28,8 +28,8 @@
 #include "compositeops/KoCompositeOpDivide.h"
 #include "compositeops/KoCompositeOpBurn.h"
 
-KisXyzU16ColorSpace::KisXyzU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
- KoLcmsColorSpace<XyzU16Traits>("XYZA16", i18n("XYZ (16-bit integer/channel)"), parent, TYPE_XYZA_16, icSigXYZData, p)
+KisXyzU16ColorSpace::KisXyzU16ColorSpace(KoColorProfile *p) :
+ KoLcmsColorSpace<XyzU16Traits>("XYZA16", i18n("XYZ (16-bit integer/channel)"),  TYPE_XYZA_16, icSigXYZData, p)
 {
     addChannel(new KoChannelInfo(i18n("X"), XyzU16Traits::x_pos * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
     addChannel(new KoChannelInfo(i18n("Y"), XyzU16Traits::y_pos * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::magenta));
@@ -54,6 +54,6 @@ bool KisXyzU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 
 KoColorSpace* KisXyzU16ColorSpace::clone() const
 {
-    return new KisXyzU16ColorSpace(0, profile()->clone());
+    return new KisXyzU16ColorSpace( profile()->clone());
 }
 

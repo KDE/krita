@@ -344,8 +344,8 @@ namespace {
 
 }
 
-KoAlphaColorSpace::KoAlphaColorSpace(KoColorSpaceRegistry * parent) :
-    KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask"),  parent )
+KoAlphaColorSpace::KoAlphaColorSpace() :
+    KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask") )
 {
     addChannel(new KoChannelInfo(i18n("Alpha"), 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
     addCompositeOp( new CompositeOver( this ) );
@@ -482,6 +482,6 @@ QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint
 
 KoColorSpace* KoAlphaColorSpace::clone() const
 {
-    return new KoAlphaColorSpace(0);
+    return new KoAlphaColorSpace();
 }
 

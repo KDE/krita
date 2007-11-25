@@ -45,7 +45,7 @@ XYZFloatHDRPlugin::XYZFloatHDRPlugin(QObject *parent, const QStringList &)
 
     // Register F32 HDR colorspace
     {
-        KoColorSpace * colorSpaceXYZF32  = new KisXyzF32HDRColorSpace(f, 0);
+        KoColorSpace * colorSpaceXYZF32  = new KisXyzF32HDRColorSpace(0);
         KoColorSpaceFactory *csf  = new KisXyzF32HDRColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceXYZF32);
         f->add(csf);

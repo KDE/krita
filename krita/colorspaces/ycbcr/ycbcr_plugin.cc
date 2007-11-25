@@ -42,7 +42,7 @@ YCbCrPlugin::YCbCrPlugin(QObject *parent, const QStringList &)
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     // Register U16 YCbCr colorspace
     {
-        KoColorSpace * colorSpaceYCbCr16  = new KisYCbCrU16ColorSpace(f, 0);
+        KoColorSpace * colorSpaceYCbCr16  = new KisYCbCrU16ColorSpace( 0);
         KoColorSpaceFactory *csf  = new KisYCbCrU16ColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceYCbCr16);
         f->add(csf);
@@ -52,7 +52,7 @@ YCbCrPlugin::YCbCrPlugin(QObject *parent, const QStringList &)
     }
     // Register U8 YCbCr colorspace
     {
-        KoColorSpace * colorSpaceYCbCr8  = new KisYCbCrU8ColorSpace(f, 0);
+        KoColorSpace * colorSpaceYCbCr8  = new KisYCbCrU8ColorSpace( 0);
         KoColorSpaceFactory *csf  = new KisYCbCrU8ColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceYCbCr8);
         f->add(csf);

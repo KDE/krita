@@ -30,8 +30,8 @@
 #include "compositeops/KoCompositeOpDivide.h"
 #include "compositeops/KoCompositeOpBurn.h"
 
-KisGrayAU16ColorSpace ::KisGrayAU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-            KoLcmsColorSpace<GrayAU16Traits>("GRAYA16", i18n("Grayscale 16-bit integer/channel)"), parent, TYPE_GRAYA_16, icSigGrayData, p)
+KisGrayAU16ColorSpace ::KisGrayAU16ColorSpace( KoColorProfile *p) :
+            KoLcmsColorSpace<GrayAU16Traits>("GRAYA16", i18n("Grayscale 16-bit integer/channel)"),  TYPE_GRAYA_16, icSigGrayData, p)
 {
     addChannel(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
     addChannel(new KoChannelInfo(i18n("Alpha"), 1, KoChannelInfo::ALPHA, KoChannelInfo::UINT16));
@@ -47,5 +47,5 @@ KisGrayAU16ColorSpace ::KisGrayAU16ColorSpace(KoColorSpaceRegistry * parent, KoC
 
 KoColorSpace* KisGrayAU16ColorSpace::clone() const
 {
-    return new KisGrayAU16ColorSpace(0, profile()->clone());
+    return new KisGrayAU16ColorSpace( profile()->clone());
 }

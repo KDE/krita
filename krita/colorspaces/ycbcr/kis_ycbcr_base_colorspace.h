@@ -32,8 +32,8 @@ template <class _CSTraits>
 class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits>
 {
     public:
-        KisYCbCrBaseColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent)
-          : KoIncompleteColorSpace<_CSTraits>(id, name, parent, parent->rgb16(""))
+        KisYCbCrBaseColorSpace(const QString &id, const QString &name)
+          : KoIncompleteColorSpace<_CSTraits>(id, name, KoColorSpaceRegistry::instance()->rgb16(""))
         {
 
         }

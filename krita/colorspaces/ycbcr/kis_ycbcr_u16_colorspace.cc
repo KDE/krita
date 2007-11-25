@@ -33,8 +33,8 @@
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 
-KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile */*p*/)
-: KisYCbCrBaseColorSpace<YCbCrU16Traits>("YCbCrAU16", i18n("YCbCr (16-bit integer/channel)"), parent)
+KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace( KoColorProfile */*p*/)
+: KisYCbCrBaseColorSpace<YCbCrU16Traits>("YCbCrAU16", i18n("YCbCr (16-bit integer/channel)"))
 {
     addChannel(new KoChannelInfo(i18n("Y"), YCbCrU16Traits::y_pos * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(255,0,0)));
     addChannel(new KoChannelInfo(i18n("Cb"), YCbCrU16Traits::cb_pos * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(0,255,0)));
@@ -59,6 +59,6 @@ QList<KoColorConversionTransformationFactory*> KisYCbCrU16ColorSpaceFactory::col
 
 KoColorSpace* KisYCbCrU16ColorSpace::clone() const
 {
-    return new KisYCbCrU16ColorSpace(0, 0);
+    return new KisYCbCrU16ColorSpace( 0);
 }
 

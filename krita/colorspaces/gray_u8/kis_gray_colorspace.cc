@@ -26,8 +26,8 @@
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 
-KisGrayColorSpace ::KisGrayColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-            KoLcmsColorSpace<GrayU8Traits>("GRAYU8", i18n("Grayscale without alpha (8-bit integer/channel)"), parent, TYPE_GRAY_8, icSigGrayData, p)
+KisGrayColorSpace ::KisGrayColorSpace( KoColorProfile *p) :
+            KoLcmsColorSpace<GrayU8Traits>("GRAYU8", i18n("Grayscale without alpha (8-bit integer/channel)"), TYPE_GRAY_8, icSigGrayData, p)
 {
     addChannel(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
 
@@ -39,5 +39,5 @@ KisGrayColorSpace ::KisGrayColorSpace(KoColorSpaceRegistry * parent, KoColorProf
 
 KoColorSpace* KisGrayColorSpace::clone() const
 {
-    return new KisGrayColorSpace(0, profile()->clone());
+    return new KisGrayColorSpace(profile()->clone());
 }

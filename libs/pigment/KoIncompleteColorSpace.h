@@ -34,8 +34,8 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
     protected:
         KoIncompleteColorSpace(const QString &id,
                                const QString &name,
-                               KoColorSpaceRegistry * parent, const KoColorSpace* fallBack)
-            : KoColorSpaceAbstract<_CSTraits>(id, name, parent),
+                               const KoColorSpace* fallBack)
+            : KoColorSpaceAbstract<_CSTraits>(id, name),
               m_fallBackColorSpace(fallBack)
         {
             m_qcolordata = new quint16[4];

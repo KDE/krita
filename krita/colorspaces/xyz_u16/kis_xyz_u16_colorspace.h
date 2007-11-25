@@ -31,7 +31,7 @@ typedef KoXyzTraits<quint16> XyzU16Traits;
 class PIGMENT_XYZ_U16_EXPORT KisXyzU16ColorSpace : public KoLcmsColorSpace<XyzU16Traits>
 {
     public:
-        KisXyzU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
+        KisXyzU16ColorSpace( KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
         virtual KoID colorModelId() const { return XYZAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
@@ -54,7 +54,7 @@ class KisXyzU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
         virtual int referenceDepth() const { return 16; }
 
-        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) const { return new KisXyzU16ColorSpace(parent, p); }
+        virtual KoColorSpace *createColorSpace( KoColorProfile *p) const { return new KisXyzU16ColorSpace( p); }
 
         virtual QString defaultProfile() const { return "XYZ built-in - (lcms internal)"; }
 };

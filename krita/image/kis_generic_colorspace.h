@@ -73,7 +73,7 @@ class KisGenericColorSpace : public KoColorSpace {
     public:
 
         KisGenericColorSpace() :
-        KoColorSpace("genericcolorspace", "genericcolorspace",0, 0, new KisGenericColorSpaceConvolutionOpImpl)
+        KoColorSpace("genericcolorspace", "genericcolorspace",0, new KisGenericColorSpaceConvolutionOpImpl)
         { }
         virtual ~KisGenericColorSpace() { }
 

@@ -26,8 +26,8 @@
 #include "kis_xyz_to_rgb_color_conversion_transformation.h"
 #include "kis_rgb_to_xyz_color_conversion_transformation.h"
 
-KisXyzF32HDRColorSpace::KisXyzF32HDRColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p)
-: KisXyzFloatHDRColorSpace<XyzF32Traits>(colorSpaceId(), i18n("XYZ (32-bit float/channel) for High Dynamic Range imaging"), parent, p)
+KisXyzF32HDRColorSpace::KisXyzF32HDRColorSpace( KoColorProfile *p)
+: KisXyzFloatHDRColorSpace<XyzF32Traits>(colorSpaceId(), i18n("XYZ (32-bit float/channel) for High Dynamic Range imaging"),  p)
 {
 }
 
@@ -53,5 +53,5 @@ QList<KoColorConversionTransformationFactory*> KisXyzF32HDRColorSpaceFactory::co
 
 KoColorSpace* KisXyzF32HDRColorSpace::clone() const
 {
-    return new KisXyzF32HDRColorSpace(0, 0);
+    return new KisXyzF32HDRColorSpace( 0);
 }

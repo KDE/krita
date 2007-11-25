@@ -114,6 +114,7 @@ void KisQPainterCanvas::setPrescaledProjection( KisPrescaledProjectionSP prescal
 
 void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
+    m_d->prescaledProjection->setHDRExposure(m_d->canvas->view()->resourceProvider()->HDRExposure());
     QPixmap pm( ev->rect().size() );
 
     KisConfig cfg;

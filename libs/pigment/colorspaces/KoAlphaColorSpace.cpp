@@ -480,3 +480,8 @@ QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint
     return img;
 }
 
+KoColorSpace* KoAlphaColorSpace::clone() const
+{
+    return new KoAlphaColorSpace(0);
+}
+

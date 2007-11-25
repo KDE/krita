@@ -65,6 +65,11 @@ public:
 
 };
 
+KoColorSpace* KisPainterlyOverlayColorSpace::clone() const
+{
+    return 0;
+}
+
 const KisPainterlyOverlayColorSpace * KisPainterlyOverlayColorSpace::instance()
 {
     KoColorSpaceRegistry * registry = KoColorSpaceRegistry::instance();

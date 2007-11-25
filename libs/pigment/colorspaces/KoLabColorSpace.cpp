@@ -74,6 +74,11 @@ QString KoLabColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32
 
 }
 
+KoColorSpace* KoLabColorSpace::clone() const
+{
+    return new KoLabColorSpace(0, profile()->clone());
+}
+
 QString KoLabColorSpace::colorSpaceId()
 {
     return QString("LABA");

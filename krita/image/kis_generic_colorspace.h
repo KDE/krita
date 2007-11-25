@@ -84,6 +84,9 @@ class KisGenericColorSpace : public KoColorSpace {
 
         //========== Channels =====================================================//
 
+        virtual KoColorSpace* clone() const {
+            return new KisGenericColorSpace();
+        }
     /// Return a vector describing all the channels this color model has.
         virtual QList<KoChannelInfo *> channels() const { return QList<KoChannelInfo *>(); }
 

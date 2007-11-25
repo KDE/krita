@@ -34,6 +34,7 @@ class KRITA_GRAY_U8_EXPORT KisGrayColorSpace : public KoLcmsColorSpace<GrayU8Tra
         virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
         virtual KoID colorModelId() const { return GrayColorModelID; }
         virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
+        virtual KoColorSpace* clone() const;
 };
 
 class KisGrayColorSpaceFactory : public KoLcmsColorSpaceFactory

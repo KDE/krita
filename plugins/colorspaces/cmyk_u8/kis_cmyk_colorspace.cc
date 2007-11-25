@@ -53,3 +53,8 @@ bool KisCmykU8ColorSpace::willDegrade(ColorSpaceIndependence independence) const
         return false;
 }
 
+KoColorSpace* KisCmykU8ColorSpace::clone() const
+{
+    return new KisCmykU8ColorSpace(0, profile()->clone());
+}
+

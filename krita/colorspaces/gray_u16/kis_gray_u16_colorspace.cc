@@ -38,3 +38,8 @@ KisGrayU16ColorSpace ::KisGrayU16ColorSpace(KoColorSpaceRegistry * parent, KoCol
     addCompositeOp( new KoCompositeOpOver<GrayU16Traits>( this ) );
     addCompositeOp( new KoCompositeOpErase<GrayU16Traits>( this ) );
 }
+
+KoColorSpace* KisGrayU16ColorSpace::clone() const
+{
+    return new KisGrayU16ColorSpace(0, profile()->clone());
+}

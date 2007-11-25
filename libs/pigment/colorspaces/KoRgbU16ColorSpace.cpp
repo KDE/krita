@@ -49,3 +49,8 @@ QString KoRgbU16ColorSpace::colorSpaceId()
     return QString("RGBA16");
 }
 
+KoColorSpace* KoRgbU16ColorSpace::clone() const
+{
+    return new KoRgbU16ColorSpace(0, profile()->clone());
+}
+

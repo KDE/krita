@@ -56,3 +56,9 @@ QList<KoColorConversionTransformationFactory*> KisYCbCrU16ColorSpaceFactory::col
     
     return list;
 }
+
+KoColorSpace* KisYCbCrU16ColorSpace::clone() const
+{
+    return new KisYCbCrU16ColorSpace(0, 0);
+}
+

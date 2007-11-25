@@ -36,3 +36,8 @@ KisGrayColorSpace ::KisGrayColorSpace(KoColorSpaceRegistry * parent, KoColorProf
     addCompositeOp( new KoCompositeOpOver<GrayU8Traits>( this ) );
     addCompositeOp( new KoCompositeOpErase<GrayU8Traits>( this ) );
 }
+
+KoColorSpace* KisGrayColorSpace::clone() const
+{
+    return new KisGrayColorSpace(0, profile()->clone());
+}

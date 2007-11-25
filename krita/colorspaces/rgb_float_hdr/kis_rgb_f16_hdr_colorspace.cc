@@ -35,3 +35,8 @@ QString KisRgbF16HDRColorSpace::colorSpaceId()
     return QString("RGBAF16HALF");
 }
 
+KoColorSpace* KisRgbF16HDRColorSpace::clone() const
+{
+    return new KisRgbF16HDRColorSpace(0, profile()->clone());
+}
+

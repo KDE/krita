@@ -35,6 +35,7 @@ class PIGMENT_XYZ_U16_EXPORT KisXyzU16ColorSpace : public KoLcmsColorSpace<XyzU1
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
         virtual KoID colorModelId() const { return XYZAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
+        virtual KoColorSpace* clone() const;
 };
 
 #define TYPE_XYZA_16 (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1))

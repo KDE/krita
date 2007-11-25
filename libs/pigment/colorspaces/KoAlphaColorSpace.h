@@ -41,6 +41,7 @@ public:
     virtual ~KoAlphaColorSpace();
     virtual KoID colorModelId() const { return AlphaColorModelID; }
     virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
+    virtual KoColorSpace* clone() const;
 
 public:
     virtual bool willDegrade(ColorSpaceIndependence independence) const

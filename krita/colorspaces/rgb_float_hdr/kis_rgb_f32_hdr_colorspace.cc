@@ -35,3 +35,8 @@ QString KisRgbF32HDRColorSpace::colorSpaceId()
     return QString("RGBAF32");
 }
 
+KoColorSpace* KisRgbF32HDRColorSpace::clone() const
+{
+    return new KisRgbF32HDRColorSpace(0, profile()->clone());
+}
+

@@ -39,6 +39,7 @@ class KoLabColorSpace : public KoLcmsColorSpace<KoLabU16Traits>
         static QString colorSpaceId();
         virtual KoID colorModelId() const { return LABAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
+        virtual KoColorSpace* clone() const;
 
     private:
         static const quint32 CHANNEL_L = 0;

@@ -40,6 +40,7 @@ public:
      * This is the value that the member function id() returns.
      */
     static QString colorSpaceId();
+    virtual KoColorSpace* clone() const;
 };
 
 

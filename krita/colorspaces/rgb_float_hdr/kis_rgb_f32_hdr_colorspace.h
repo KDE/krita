@@ -36,6 +36,7 @@ public:
 
     virtual KoID colorModelId() const { return RGBAColorModelID; }
     virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
+    virtual KoColorSpace* clone() const;
     /**
      * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
      * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.

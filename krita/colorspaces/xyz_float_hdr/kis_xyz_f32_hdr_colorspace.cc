@@ -50,3 +50,8 @@ QList<KoColorConversionTransformationFactory*> KisXyzF32HDRColorSpaceFactory::co
     
     return list;
 }
+
+KoColorSpace* KisXyzF32HDRColorSpace::clone() const
+{
+    return new KisXyzF32HDRColorSpace(0, 0);
+}

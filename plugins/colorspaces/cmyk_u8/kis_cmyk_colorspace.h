@@ -33,6 +33,7 @@ class KisCmykU8ColorSpace : public KoLcmsColorSpace<CmykU8Traits>
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
         virtual KoID colorModelId() const { return CMYKAColorModelID; }
         virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
+        virtual KoColorSpace* clone() const;
 };
 
 class KisCmykU8ColorSpaceFactory : public KoLcmsColorSpaceFactory

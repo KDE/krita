@@ -31,6 +31,7 @@ class KoRgbU16ColorSpace : public KoLcmsColorSpace<KoRgbU16Traits>
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
         virtual KoID colorModelId() const { return RGBAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
+        virtual KoColorSpace* clone() const;
 
     /**
      * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 

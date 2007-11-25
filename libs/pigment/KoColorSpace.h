@@ -143,6 +143,11 @@ public:
 
 public:
 
+    /**
+     * Use this function to created a cloned version of this color space,
+     * and of its profile.
+     */
+    virtual KoColorSpace* clone() const = 0;
     //========== Channels =====================================================//
 
     /// Return a list describing all the channels this color model has.

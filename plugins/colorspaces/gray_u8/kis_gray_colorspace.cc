@@ -44,3 +44,8 @@ KisGrayAU8ColorSpace ::KisGrayAU8ColorSpace(KoColorSpaceRegistry * parent, KoCol
     addCompositeOp( new KoCompositeOpDivide<GrayAU8Traits>( this ) );
     addCompositeOp( new KoCompositeOpBurn<GrayAU8Traits>( this ) );
 }
+
+KoColorSpace* KisGrayAU8ColorSpace::clone() const
+{
+    return new KisGrayAU8ColorSpace(0, profile()->clone());
+}

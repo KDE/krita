@@ -55,3 +55,9 @@ QList<KoColorConversionTransformationFactory*> KisYCbCrU8ColorSpaceFactory::colo
     list.append(new KoScaleColorConversionTransformationFactory< YCbCrU8Traits, KoYCbCrTraits<quint16> >( YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id(), Integer16BitsColorDepthID.id() ) );
     return list;
 }
+
+KoColorSpace* KisYCbCrU8ColorSpace::clone() const
+{
+    return new KisYCbCrU8ColorSpace(0, 0);
+}
+

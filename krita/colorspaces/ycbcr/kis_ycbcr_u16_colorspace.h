@@ -38,6 +38,7 @@ class KisYCbCrU16ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU16Traits>
         }
         virtual KoID colorModelId() const { return YCbCrAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
+        virtual KoColorSpace* clone() const;
 };
 
 class KisYCbCrU16ColorSpaceFactory : public KoColorSpaceFactory

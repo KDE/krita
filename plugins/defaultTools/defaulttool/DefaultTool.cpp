@@ -640,6 +640,7 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
     KoShapeAlignCommand *cmd = new KoShapeAlignCommand( selectedShapes, align, bRect);
 
     m_canvas->addCommand( cmd );
+    selection->updateSizeAndPosition();
 }
 
 QWidget* DefaultTool::createOptionWidget() {

@@ -165,4 +165,9 @@ void KoAspectButton::keyReleaseEvent (QKeyEvent *e) {
     }
 }
 
+bool KoAspectButton::keepAspectRatio() const
+{
+    return d->keepAspect;
+}
+
 #include "KoAspectButton.moc"

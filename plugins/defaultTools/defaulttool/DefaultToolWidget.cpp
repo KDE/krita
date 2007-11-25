@@ -50,6 +50,9 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
     connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updatePosition() ) );
     connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updateSize() ) );
+    KoShapeManager * manager = m_tool->canvas()->shapeManager();
+    connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updatePosition() ) );
+    connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updateSize() ) );
 
     bringToFront->setDefaultAction( m_tool->action( "object_move_totop" ) );
     raiseLevel->setDefaultAction( m_tool->action( "object_move_up" ) );
@@ -61,6 +64,8 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     rightAlign->setDefaultAction( m_tool->action( "object_align_horizontal_right" ) );
     hCenterAlign->setDefaultAction( m_tool->action( "object_align_horizontal_center" ) );
     leftAlign->setDefaultAction( m_tool->action( "object_align_horizontal_left" ) );
+
+    aspectButton->setKeepAspectRatio( false );
 
     updatePosition();
     updateSize();
@@ -118,11 +123,13 @@ void DefaultToolWidget::updateSize()
 {
     QSizeF selSize( 0, 0 );
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
-    if( selection->count() )
+    uint selectionCount = selection->count();
+    if( selectionCount )
         selSize = selection->boundingRect().size();
 
-    widthSpinBox->setEnabled( selection->count() );
-    heightSpinBox->setEnabled( selection->count() );
+    widthSpinBox->setEnabled( selectionCount );
+    heightSpinBox->setEnabled( selectionCount );
+    aspectButton->setEnabled( selectionCount );
 
     widthSpinBox->blockSignals(true);
     heightSpinBox->blockSignals(true);
@@ -138,6 +145,15 @@ void DefaultToolWidget::sizeHasChanged()
 
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
     QRectF rect = selection->boundingRect();
+
+    if( aspectButton->keepAspectRatio() )
+    {
+        double aspect = rect.width() / rect.height();
+        if( rect.width() != newSize.width() )
+            newSize.setHeight( newSize.width() / aspect );
+        else if( rect.height() != newSize.height() )
+            newSize.setWidth( newSize.height() * aspect );
+    }
 
     if( rect.width() != newSize.width() || rect.height() != newSize.height() )
     {

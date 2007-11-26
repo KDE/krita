@@ -7,7 +7,7 @@
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHxOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
  *
@@ -130,9 +130,10 @@ void KoProgressUpdaterTest::testSimpleThreadedProgress()
     KoUpdater u = pu.startSubtask();
     TestJob t(&u);
     t.start();
-    t.wait();
-    QTest::qSleep(250); // allow the action to do its job.
-    QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+    while (!t.isFinished()) {
+        QTest::qSleep(250); // allow the action to do its job.
+        QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+    }
     QCOMPARE(bar.value, 100);
 }
 
@@ -165,10 +166,10 @@ void KoProgressUpdaterTest::testThreadedSubUpdaters()
     TestJob t2(&u2, 6);
     t1.start();
     t2.start();
-    t2.wait();
-    t1.wait();
-    QTest::qSleep(250); // allow the action to do its job.
-    QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+    while ( t1.isRunning() || t2.isRunning() ) {
+        QTest::qSleep(250); // allow the action to do its job.
+        QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+    }
     QCOMPARE(bar.value, 100);
 }
 

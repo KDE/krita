@@ -58,6 +58,9 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updatePosition() ) );
     connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updateSize() ) );
 
+    connect( m_tool->canvas()->resourceProvider(), SIGNAL( resourceChanged( int, const QVariant& ) ),
+        this, SLOT( resourceChanged( int, const QVariant& ) ) );
+
     bringToFront->setDefaultAction( m_tool->action( "object_move_totop" ) );
     raiseLevel->setDefaultAction( m_tool->action( "object_move_up" ) );
     lowerLevel->setDefaultAction( m_tool->action( "object_move_down" ) );
@@ -213,6 +216,12 @@ void DefaultToolWidget::setUnit( const KoUnit &unit )
     positionYSpinBox->setUnit( unit );
     widthSpinBox->setUnit( unit );
     heightSpinBox->setUnit( unit );
+}
+
+void DefaultToolWidget::resourceChanged( int key, const QVariant & res )
+{
+    if( key == KoCanvasResource::Unit )
+        setUnit( m_tool->canvas()->unit() );
 }
 
 #include <DefaultToolWidget.moc>

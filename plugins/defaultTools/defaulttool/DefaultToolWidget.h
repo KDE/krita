@@ -44,6 +44,8 @@ private slots:
     void positionHasChanged();
     void updateSize();
     void sizeHasChanged();
+    void resourceChanged( int key, const QVariant & res );
+
 private:
     KoInteractionTool* m_tool;
 };

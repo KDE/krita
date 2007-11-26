@@ -128,6 +128,11 @@ int KoCanvasResourceProvider::handleRadius()
     return resource( KoCanvasResource::HandleRadius ).toInt();
 }
 
+void KoCanvasResourceProvider::setUnitChanged()
+{
+    setResource( KoCanvasResource::Unit, true );
+}
+
 bool KoCanvasResourceProvider::boolResource(int key) const {
     if(! d->resources.contains(key))
         return false;

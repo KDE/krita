@@ -51,27 +51,28 @@ KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(KisPaintDeviceSP)
 
 void KisUnsharpFilter::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
-                 const QSize& size,
+                 const QSize& areaSize,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-#if 0
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
 
-    setProgressTotalSteps(areaSize.width() * areaSize.height());
+    KoProgressUpdater updater(progressUpdater);
+    updater.start();
+    // Two sub-sub tasks that each go from 0 to 100.
+    KoUpdater convolutionUpdater = updater.startSubtask();
+    KoUpdater filterUpdater = updater.startSubtask();
 
     if(!config) config = new KisFilterConfiguration(id().id(), 1);
 
     QVariant value;
     uint halfSize = (config->getProperty("halfSize", value)) ? value.toUInt() : 5;
-    uint size = 2 * halfSize + 1;
+    uint brushsize = 2 * halfSize + 1;
     double amount = (config->getProperty("amount", value)) ? value.toDouble() : 0.5;
     uint threshold = (config->getProperty("threshold", value)) ? value.toUInt() : 10;
 
 //     kDebug() <<" brush size =" << size <<"" << halfSize;
-    KisAutobrushShape* kas = new KisAutobrushCircleShape(size, size , halfSize, halfSize);
+    KisAutobrushShape* kas = new KisAutobrushCircleShape(brushsize, brushsize, halfSize, halfSize);
 
     QImage mask;
     kas->createBrush(&mask);
@@ -79,24 +80,24 @@ void KisUnsharpFilter::process(KisFilterConstantProcessingInformation src,
 
     KisKernelSP kernel = KisKernelSP(KisKernel::fromQImage(mask));
 
-    KisPaintDeviceSP interm = KisPaintDeviceSP(new KisPaintDevice(*src));
-    KoColorSpace * cs = src->colorSpace();
+    KisPaintDeviceSP interm = KisPaintDeviceSP(new KisPaintDevice(*src.paintDevice()));
+    KoColorSpace * cs = interm->colorSpace();
     KoConvolutionOp * convolutionOp = cs->convolutionOp();
     QBitArray channelFlags = cs->channelFlags(); // Only convolve color channels
 
     KisConvolutionPainter painter( interm );
+    painter.setProgress( &convolutionUpdater );
     painter.setChannelFlags( channelFlags );
-    painter.beginTransaction("bouuh"); // XXX: What's this? Someone
-                                       // doing a Niobe impersonation?
-    painter.applyMatrix(kernel, srcTopLeft.x(), srcTopLeft.y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);
+    painter.beginTransaction("convolution step");
+    painter.applyMatrix(kernel, src.topLeft().x(), src.topLeft().y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);
 
-    if (painter.cancelRequested()) {
-        progressUpdater->cancel();
+    if (progressUpdater->interrupted()) {
+        return;
     }
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), areaSize.width());
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), areaSize.width());
-    KisHLineConstIteratorPixel intermIt = interm->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), areaSize.width());
+    KisHLineIteratorPixel dstIt = dst.paintDevice()->createHLineIterator(dst.topLeft().x(), dst.topLeft().y(), areaSize.width());
+    KisHLineConstIteratorPixel srcIt = src.paintDevice()->createHLineConstIterator(src.topLeft().x(), src.topLeft().y(), areaSize.width());
+    KisHLineConstIteratorPixel intermIt = interm->createHLineConstIterator(src.topLeft().x(), src.topLeft().y(), areaSize.width());
 
     int cdepth = cs -> pixelSize();
     quint8 *colors[2];
@@ -110,6 +111,8 @@ void KisUnsharpFilter::process(KisFilterConstantProcessingInformation src,
     // XXX: Added static cast to avoid warning
     weights[0] = static_cast<qint32>(factor * ( 1. + amount));
     weights[1] = static_cast<qint32>(-factor * amount);
+
+    int steps = 100 / areaSize.width() * areaSize.height();
 
     for( int j = 0; j < areaSize.height(); j++)
     {
@@ -125,10 +128,15 @@ void KisUnsharpFilter::process(KisFilterConstantProcessingInformation src,
                     convolutionOp->convolveColors(colors, weights, dstIt.rawData(),  factor, 0, 2, channelFlags );
                 }
             }
-            setProgress(++pixelsProcessed);
+            ++pixelsProcessed;
+            filterUpdater.setProgress(steps * pixelsProcessed);
             ++srcIt;
             ++dstIt;
             ++intermIt;
+        }
+        
+        if (progressUpdater->interrupted()) {
+            return;
         }
         srcIt.nextRow();
         dstIt.nextRow();
@@ -138,6 +146,5 @@ void KisUnsharpFilter::process(KisFilterConstantProcessingInformation src,
     delete colors[1];
 
 
-    setProgressDone(); // Must be called even if you don't really support progression
-#endif
+    progressUpdater->setProgress(100);
 }

@@ -62,14 +62,16 @@ RGBFloatHDRPlugin::RGBFloatHDRPlugin(QObject *parent, const QStringList &)
 
     const double gamma = 1.0;
 
-    KoIccColorProfile *profile = new KoIccColorProfile(chromaticities, gamma, "lcms virtual RGB profile - Rec. 709 Linear");
+    KoIccColorProfile *iccProfile = new KoIccColorProfile(chromaticities, gamma, "lcms virtual RGB profile - Rec. 709 Linear");
+    KoHdrColorProfile *hdrProfile = new KoHdrColorProfile();
+    hdrProfile->setIccColorProfile( iccProfile );
 
-    f->addProfile(profile);
+    f->addProfile(hdrProfile);
 
 #ifdef HAVE_OPENEXR
     // Register F16 HDR colorspace
     {
-        KoColorSpace * colorSpaceRGBF16Half  = new KisRgbF16HDRColorSpace(profile);
+        KoColorSpace * colorSpaceRGBF16Half  = new KisRgbF16HDRColorSpace(hdrProfile->clone());
         KoColorSpaceFactory *csf  = new KisRgbF16HDRColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceRGBF16Half);
         f->add(csf);
@@ -80,7 +82,7 @@ RGBFloatHDRPlugin::RGBFloatHDRPlugin(QObject *parent, const QStringList &)
 #endif
     // Register F32 HDR colorspace
     {
-        KoColorSpace * colorSpaceRGBF32  = new KisRgbF32HDRColorSpace( profile);
+        KoColorSpace * colorSpaceRGBF32  = new KisRgbF32HDRColorSpace( hdrProfile->clone());
         KoColorSpaceFactory *csf  = new KisRgbF32HDRColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceRGBF32);
         f->add(csf);

@@ -23,6 +23,7 @@
 #include <math.h>
 
 #include "KoIncompleteColorSpace.h"
+#include "KoHdrColorProfile.h"
 #include "KoLcmsColorProfileContainer.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpaceTraits.h"
@@ -35,6 +36,32 @@
 #define FLOAT_TO_UINT8(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint8>::scaleToA(v))
 #define UINT16_TO_FLOAT(v) (KoColorSpaceMaths<quint16, typename _CSTraits::channels_type >::scaleToA(v))
 #define FLOAT_TO_UINT16(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint16>::scaleToA(v))
+
+class KisRgbFloatHDRColorSpaceFactory : public KoColorSpaceFactory
+{
+    public:
+        virtual bool profileIsCompatible(const KoColorProfile* profile) const
+        {
+            return isHdrRgbColorProfile(profile);
+        }
+    
+        virtual bool isIcc() const { return false; }
+        virtual bool isHdr() const { return true; }
+        virtual QString defaultProfile() const { return "lcms virtual RGB profile - Rec. 709 Linear"; }
+    public:
+        static bool isHdrRgbColorProfile( const KoColorProfile* profile)
+        {
+            const KoHdrColorProfile* hdrProfile = dynamic_cast<const KoHdrColorProfile *>(profile);
+            if( hdrProfile )
+            {
+                if ( hdrProfile->iccProfile()->asLcms()->colorSpaceSignature() == icSigRgbData)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+};
 
 template <class _CSTraits>
 class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
@@ -53,9 +80,9 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             m_profileLcms = 0;
 
             if (profile) {
-                m_profile = dynamic_cast<KoIccColorProfile *>(profile);
+                m_profile = dynamic_cast<KoHdrColorProfile *>(profile);
                 Q_ASSERT(m_profile != 0);
-                m_profileLcms = m_profile->asLcms();
+                m_profileLcms = m_profile->iccProfile()->asLcms();
             }
 
             // We use an RgbU16 colorspace to convert exposed pixels into
@@ -100,13 +127,7 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 
         virtual bool profileIsCompatible(const KoColorProfile* profile) const
         {
-            const KoIccColorProfile *lcmsProfile = dynamic_cast<const KoIccColorProfile *>(profile);
-            if (lcmsProfile) {
-                if (lcmsProfile->asLcms()->colorSpaceSignature() == icSigRgbData) {
-                    return true;
-                }
-            }
-            return false;
+            return KisRgbFloatHDRColorSpaceFactory::isHdrRgbColorProfile(profile);
         }
 
         virtual bool willDegrade(ColorSpaceIndependence /*independence*/) const 
@@ -245,30 +266,11 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             return (quint16)qBound(minU16, qRound(value * maxU16), maxU16);
         }
 
-        KoIccColorProfile *m_profile;
+        KoHdrColorProfile *m_profile;
         KoLcmsColorProfileContainer *m_profileLcms;
         const KoColorSpace *m_rgbU16ColorSpace;
 
         friend class KisRgbFloatHDRColorSpaceTest;
-};
-
-class KisRgbFloatHDRColorSpaceFactory : public KoColorSpaceFactory
-{
-public:
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const
-    {
-        const KoIccColorProfile *lcmsProfile = dynamic_cast<const KoIccColorProfile *>(profile);
-        if (lcmsProfile) {
-            if (lcmsProfile->asLcms()->colorSpaceSignature() == icSigRgbData) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    virtual bool isIcc() const { return false; }
-    virtual bool isHdr() const { return true; }
-    virtual QString defaultProfile() const { return "lcms virtual RGB profile - Rec. 709 Linear"; }
 };
 
 #endif

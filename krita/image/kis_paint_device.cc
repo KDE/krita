@@ -69,7 +69,7 @@ public:
     KisNodeWSP parent;
     qint32 x;
     qint32 y;
-    const KoColorSpace * colorSpace;
+    KoColorSpace * colorSpace;
     qint32 pixelSize;
     qint32 nChannels;
     QPaintEngine * paintEngine;
@@ -106,7 +106,7 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
 
     m_d->parent = 0;
 
-    m_d->colorSpace = colorSpace;
+    m_d->colorSpace = colorSpace->clone();
 
     m_d->paintEngine = new KisPaintEngine();
 
@@ -124,13 +124,13 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
 
     m_d->parent = parent;
 
-    m_d->colorSpace = colorSpace;
+    m_d->colorSpace = colorSpace->clone();
 
     m_d->pixelSize = m_d->colorSpace->pixelSize();
     m_d->nChannels = m_d->colorSpace->channelCount();
 
     quint8 *defaultPixel = new quint8[ m_d->pixelSize ];
-    colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, defaultPixel);
+    m_d->colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, defaultPixel);
 
     m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
     delete [] defaultPixel;
@@ -168,6 +168,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
 
 KisPaintDevice::~KisPaintDevice()
 {
+    delete m_d->colorSpace;
     delete m_d->paintEngine;
     delete m_d;
 }
@@ -621,6 +622,7 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
 //         undoAdapter()->addCommand(new KisConvertLayerTypeCmd(KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_d->colorSpace));
 //     }
 
+    delete oldColorSpace;
     delete weaver;
     // XXX: emit colorSpaceChanged(dstColorSpace);
 }
@@ -633,14 +635,14 @@ void KisPaintDevice::setProfile(const KoColorProfile * profile)
             KoColorSpaceRegistry::instance()->colorSpace( colorSpace()->id(),
                                                                       const_cast<KoColorProfile*>(profile)); // FIXME don't const_cast and anyway should clone when cloning is available
     if (dstSpace)
-        m_d->colorSpace = dstSpace;
+        m_d->colorSpace = dstSpace->clone();
     emit profileChanged(profile);
 }
 
 void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * colorSpace)
 {
     m_datamanager = data;
-    m_d->colorSpace = colorSpace;
+    m_d->colorSpace = colorSpace->clone();
     m_d->pixelSize = m_d->colorSpace->pixelSize();
     m_d->nChannels = m_d->colorSpace->channelCount();
 
@@ -1091,6 +1093,12 @@ quint32 KisPaintDevice::channelCount() const
     Q_ASSERT(m_d->nChannels > 0);
     return m_d->nChannels;
 ;
+}
+
+KoColorSpace * KisPaintDevice::colorSpace()
+{
+    Q_ASSERT(m_d->colorSpace != 0);
+    return m_d->colorSpace;
 }
 
 const KoColorSpace * KisPaintDevice::colorSpace() const

@@ -67,7 +67,7 @@ public:
 
 KoColorSpace* KisPainterlyOverlayColorSpace::clone() const
 {
-    return 0;
+    return new KisPainterlyOverlayColorSpace("painterlyoverlay", "");
 }
 
 const KisPainterlyOverlayColorSpace * KisPainterlyOverlayColorSpace::instance()

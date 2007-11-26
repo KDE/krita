@@ -23,8 +23,6 @@
 #include <threadweaver/ThreadWeaver.h>
 
 #include <QString>
-// #include <KDebug>
-
 
 class KoProgressUpdaterPrivate : public QObject {
 public:
@@ -58,6 +56,8 @@ private:
     int m_weight;
     bool m_interrupted;
     KoProgressUpdater *m_parent;
+    int min;
+    int max;
 };
 
 class KoProgressUpdater::Private {
@@ -75,7 +75,7 @@ public:
         // serially from one thread only. With an updateUi followed directly after
         // this one (forced to the Gui Thread).
         lock.lock();
-        int totalProgress =0;
+        int totalProgress = 0;
         foreach(KoProgressUpdaterPrivate *updater, subtasks) {
             if(updater->interrupted()) {
                 currentProgress = -1;
@@ -99,7 +99,6 @@ public:
         }
         progressBar->setValue(currentProgress);
     }
-
 
     KoProgressProxy *progressBar;
     QList<KoProgressUpdaterPrivate*> subtasks;
@@ -164,7 +163,9 @@ void KoProgressUpdater::cancel() {
 
 
 // -------- KoUpdater ----------
-KoUpdater::KoUpdater(const KoUpdater &other) {
+KoUpdater::KoUpdater(const KoUpdater &other)
+    : KoProgressProxy( other )
+{
     d = other.d;
 }
 
@@ -173,6 +174,7 @@ KoUpdater::KoUpdater(KoProgressUpdaterPrivate *p)
     d = p;
     Q_ASSERT(p);
     Q_ASSERT(!d.isNull());
+    setRange(0, 100);
 }
 
 void KoUpdater::cancel() {
@@ -195,6 +197,32 @@ bool KoUpdater::interrupted() const {
     if(d.isNull())
         return true;
     return d->interrupted();
+}
+
+int KoUpdater::maximum() const
+{
+    return 100;
+}
+
+void KoUpdater::setValue( int value )
+{
+    if ( value < min ) value = min;
+    if ( value > max ) value = max;
+    // Go from range to percent
+    setProgress( (100 / range) * value + 1 );
+}
+
+void KoUpdater::setRange( int minimum, int maximum )
+{
+    min = minimum - 1;
+    max = maximum;
+    range = max - min;
+}
+
+void KoUpdater::setFormat( const QString & format )
+{
+    Q_UNUSED(format);
+    // XXX: Do nothing
 }
 
 #include <KoProgressUpdater.moc>

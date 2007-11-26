@@ -98,8 +98,29 @@ protected:
 private:
     class Private;
     Private * const d;
-    Q_PRIVATE_SLOT(d, void update())
-    Q_PRIVATE_SLOT(d, void updateUi())
+    Q_PRIVATE_SLOT(d, void update());
+    Q_PRIVATE_SLOT(d, void updateUi());
+};
+
+
+/**
+ * A proxy interface for a real progress status reporting thing, either
+ * a widget such as a KoProgressProxy childclass that also inherits this
+ * interface, or something that prints progress to stdout.
+ */
+class KoProgressProxy {
+
+public:
+
+    virtual ~KoProgressProxy()
+        {
+        }
+
+    virtual int maximum() const = 0;
+    virtual void setValue( int value ) = 0;
+    virtual void setRange( int minimum, int maximum ) = 0;
+    virtual void setFormat( const QString & format ) = 0;
+
 };
 
 /**
@@ -107,9 +128,15 @@ private:
  * This class is not thread safe, and it should only be used from one thread.
  * The thread it is used in can be different from any other subtask or the
  * KoProgressUpdater, though.
+ *
+ * It is possible to create a KoProgressUpdater on a KoUpdater for when you
+ * need to recursively split up progress reporting. (For instance, when your
+ * progress reporting routine can be called by other progress reporting
+ * routines.)
+ *
  * @see KoProgressUpdater::startSubtask()
  */
-class KOGUIUTILS_EXPORT KoUpdater {
+class KOGUIUTILS_EXPORT KoUpdater : public KoProgressProxy {
 public:
     /// copy constructor.
     KoUpdater(const KoUpdater &other);
@@ -134,38 +161,30 @@ public:
      * @return true when this task should stop processing immediately.
      */
     bool interrupted() const;
+    
     /**
      * return the progress this subtask has made.
      */
     int progress() const;
+    
+public: // KoProgressProxy implementation
+   
+    int maximum() const;
+    void setValue( int value );
+    void setRange( int minimum, int maximum );
+    void setFormat( const QString & format );
 
 protected:
     friend class KoProgressUpdater;
     KoUpdater(KoProgressUpdaterPrivate *p);
 
-private:
-    QPointer<KoProgressUpdaterPrivate> d;
-};
-
-/**
- * A proxy interface for a real progress status reporting thing, either
- * a widget such as a KoProgressProxy childclass that also inherits this
- * interface, or something that prints progress to stdout.
- */
-class KoProgressProxy {
-
 public:
-
-    virtual ~KoProgressProxy()
-        {
-        }
-
-    virtual int maximum() const = 0;
-    virtual void setValue( int value ) = 0;
-    virtual void setRange( int minimum, int maximum ) = 0;
-    virtual void setFormat( const QString & format ) = 0;
-
+    QPointer<KoProgressUpdaterPrivate> d;
+    int range;
+    int min;
+    int max;
 };
+
 
 #endif
 

@@ -26,12 +26,15 @@ class KoProgressUpdaterTest : public QObject
 {
     Q_OBJECT
 
-private slots:
 
+private slots:
+    
     void testCreation();
     void testSimpleProgress();
-    void testSimpleThreadedProgress();
     void testSubUpdaters();
     void testThreadedSubUpdaters();
+    void testSimpleThreadedProgress();
+    void testRecursiveProgress();
+
 };
 #endif

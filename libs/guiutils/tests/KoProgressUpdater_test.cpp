@@ -21,7 +21,6 @@
 #include "KoProgressUpdater_test.h"
 
 #include "KoProgressUpdater.h"
-
 #include <QThread>
 
 class TestJob : public QThread {
@@ -40,10 +39,12 @@ public:
             for (int i = 1; i < m_steps + 1; ++i) {
                 sleep(1);
                 m_updater->setProgress((100 / m_steps) * i);
-                qDebug() << "progress: " << m_updater->progress();
-                if ( m_updater->interrupted() )
+                if ( m_updater->interrupted() ) {
+                    m_updater->setProgress(100);
                     return;
+                }
             }
+            m_updater->setProgress(100);
         }
 
 private:
@@ -76,7 +77,6 @@ public:
         
     void setValue( int v )
         {
-            qDebug() << v;
             value = v;
         }
         
@@ -114,10 +114,12 @@ void KoProgressUpdaterTest::testSimpleProgress()
     KoProgressUpdater pu(&bar);
     pu.start();
     KoUpdater updater = pu.startSubtask();
+    updater.setProgress(50);
+    QTest::qSleep(250); // allow the action to do its job.
+    QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
     updater.setProgress(100);
     QTest::qSleep(250); // allow the action to do its job.
     QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
-      
     QCOMPARE(bar.value, 100);
 }
 void KoProgressUpdaterTest::testSimpleThreadedProgress()
@@ -127,6 +129,7 @@ void KoProgressUpdaterTest::testSimpleThreadedProgress()
     pu.start();
     KoUpdater u = pu.startSubtask();
     TestJob t(&u);
+    t.start();
     t.wait();
     QTest::qSleep(250); // allow the action to do its job.
     QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
@@ -162,8 +165,25 @@ void KoProgressUpdaterTest::testThreadedSubUpdaters()
     TestJob t2(&u2, 6);
     t1.start();
     t2.start();
-    t1.wait();
     t2.wait();
+    t1.wait();
+    QTest::qSleep(250); // allow the action to do its job.
+    QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+    QCOMPARE(bar.value, 100);
+}
+
+void KoProgressUpdaterTest::testRecursiveProgress()
+{
+    TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    pu.start();
+    KoUpdater u1 = pu.startSubtask();
+
+    KoProgressUpdater pu2(&u1);
+    pu2.start();
+    KoUpdater u2 = pu2.startSubtask();
+    u2.setProgress(100);
+
     QTest::qSleep(250); // allow the action to do its job.
     QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
     QCOMPARE(bar.value, 100);

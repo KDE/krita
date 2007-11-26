@@ -19,3 +19,9 @@ kde4_add_unit_test(zoomcontroller_test TESTNAME libs-koguiutils-zoomcontroller_t
 target_link_libraries(zoomcontroller_test  ${KDE4_KDEUI_LIBS} koguiutils komain ${QT_QTTEST_LIBRARY})
 
 ########### end ###############
+
+########### next target ###############
+
+set(KoProgressUpdater_test_SRCS KoProgressUpdater_test.cpp )
+kde4_add_unit_test(KoProgressUpdaterTest TESTNAME libs-koguiutils-KoProgressUpdaterTest ${KoProgressUpdater_test_SRCS})
+target_link_libraries(KoProgressUpdaterTest  ${KDE4_KDEUI_LIBS} koguiutils komain ${QT_QTTEST_LIBRARY})

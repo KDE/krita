@@ -44,7 +44,7 @@ void KisPaintDeviceTest::testCreation()
 
     dev = new KisPaintDevice( cs, "test" );
     QVERIFY( dev->objectName() == "test" );
-    QVERIFY( dev->colorSpace() == cs );
+    QVERIFY( *dev->colorSpace() == *cs );
     QVERIFY( dev->x() == 0 );
     QVERIFY( dev->y() == 0 );
     QVERIFY( dev->pixelSize() == cs->pixelSize() );
@@ -58,7 +58,7 @@ void KisPaintDeviceTest::testCreation()
     dev = new KisPaintDevice( layer.data(), cs, "test2" );
     QVERIFY( dev->name() == dev->objectName() );
     QVERIFY( dev->objectName() == QString( "test2" ) );
-    QVERIFY( dev->colorSpace() == cs );
+    QVERIFY( *dev->colorSpace() == *cs );
     QVERIFY( dev->x() == 0 );
     QVERIFY( dev->y() == 0 );
     QVERIFY( dev->pixelSize() == cs->pixelSize() );

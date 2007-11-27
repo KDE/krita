@@ -63,7 +63,7 @@ RGBFloatHDRPlugin::RGBFloatHDRPlugin(QObject *parent, const QStringList &)
     const double gamma = 1.0;
 
     KoIccColorProfile *iccProfile = new KoIccColorProfile(chromaticities, gamma, "lcms virtual RGB profile - Rec. 709 Linear");
-    KoHdrColorProfile *hdrProfile = new KoHdrColorProfile();
+    KoHdrColorProfile *hdrProfile = new KoHdrColorProfile("lcms virtual RGB profile - Rec. 709 Linear", "");
     hdrProfile->setIccColorProfile( iccProfile );
 
     f->addProfile(hdrProfile);

@@ -131,8 +131,7 @@ class KisGenericColorSpace : public KoColorSpace {
         virtual void singleChannelPixel(quint8 *, const quint8 *, quint32 ) const {}
 
         virtual QImage convertToQImage(const quint8 */*data*/, qint32 /*width*/, qint32 /*height*/,
-                                       const KoColorProfile *  /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent = INTENT_PERCEPTUAL*/,
-                                       float /*exposure = 0.0f*/) const { return QImage(); }
+                                       const KoColorProfile *  /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent = INTENT_PERCEPTUAL*/) const { return QImage(); }
 
         virtual void toLabA16(const quint8 * /*src*/, quint8 * /*dst*/, const quint32 /*nPixels*/) const { }
 

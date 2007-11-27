@@ -466,8 +466,7 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, q
 }
 
 QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile *  /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/,
-                                   float /*exposure*/) const
+                                   const KoColorProfile *  /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const
 {
     QImage img(width, height, QImage::Format_RGB32);
 

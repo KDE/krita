@@ -179,9 +179,9 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 
         virtual QImage convertToQImage(const quint8 *dataU8, qint32 width, qint32 height,
                                        const KoColorProfile *dstProfile,
-                                       KoColorConversionTransformation::Intent renderingIntent, 
-                                       float exposure) const
+                                       KoColorConversionTransformation::Intent renderingIntent) const
         {
+            double exposure = m_profile->hdrExposure();
             int numPixelsToConvert = width * height;
             KoRgbU16Traits::Pixel *u16Pixels = new KoRgbU16Traits::Pixel[numPixelsToConvert];
             KoRgbU16Traits::Pixel *dstPixel = u16Pixels;

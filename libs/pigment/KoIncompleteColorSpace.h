@@ -84,10 +84,9 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             *opacity = this->alpha(src);
         }
         virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                const KoColorProfile *dstProfile, KoColorConversionTransformation::Intent renderingIntent, float exposure) const
+                const KoColorProfile *dstProfile, KoColorConversionTransformation::Intent renderingIntent) const
 
         {
-            Q_UNUSED(exposure);
             Q_UNUSED(dstProfile);
             Q_UNUSED(renderingIntent);
             QImage img = QImage(width, height, QImage::Format_ARGB32);

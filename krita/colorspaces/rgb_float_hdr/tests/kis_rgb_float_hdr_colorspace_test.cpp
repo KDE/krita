@@ -172,8 +172,7 @@ void KisRgbFloatHDRColorSpaceTest::testProfile()
                                                imageWidth, 
                                                imageHeight, 
                                                destinationProfile, 
-                                               (KoColorConversionTransformation::Intent)renderingIntent, 
-                                               exposure);
+                                               (KoColorConversionTransformation::Intent)renderingIntent);
 
     QCOMPARE(image.width(), imageWidth);
     QCOMPARE(image.height(), imageHeight);

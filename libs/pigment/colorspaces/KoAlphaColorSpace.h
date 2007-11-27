@@ -79,8 +79,7 @@ public:
     virtual bool hasHighDynamicRange() const { return false; }
     virtual const KoColorProfile* profile() const { return 0; }
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent,
-                                   float exposure = 0.0f) const;
+                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent) const;
 
     virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const
     {

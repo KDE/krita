@@ -23,11 +23,15 @@
 
 struct KoHdrColorProfile::Private {
     KoIccColorProfile* iccProfile;
+    double exposure;
 };
 
-KoHdrColorProfile::KoHdrColorProfile() : d(new Private)
+KoHdrColorProfile::KoHdrColorProfile(const QString &name, const QString &info) : d(new Private)
 {
     d->iccProfile = 0;
+    d->exposure = 0.0;
+    setName(name);
+    setInfo(info);
 }
 
 KoHdrColorProfile::KoHdrColorProfile(const KoHdrColorProfile& rhs) : d(new Private(*rhs.d))
@@ -77,4 +81,14 @@ bool KoHdrColorProfile::isSuitableForPrinting() const
 bool KoHdrColorProfile::isSuitableForDisplay() const
 {
     return true;
+}
+
+double KoHdrColorProfile::hdrExposure() const
+{
+    return d->exposure;
+}
+
+void KoHdrColorProfile::setHdrExposure(double exposure)
+{
+    d->exposure = exposure;
 }

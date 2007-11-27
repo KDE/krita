@@ -26,7 +26,7 @@ class KoIccColorProfile;
 
 class PIGMENTCMS_EXPORT KoHdrColorProfile : public KoColorProfile {
     public:
-        KoHdrColorProfile();
+        KoHdrColorProfile(const QString &name, const QString &info);
         KoHdrColorProfile(const KoHdrColorProfile&);
         virtual ~KoHdrColorProfile();
 
@@ -38,10 +38,12 @@ class PIGMENTCMS_EXPORT KoHdrColorProfile : public KoColorProfile {
         virtual bool isSuitableForOutput() const;
         virtual bool isSuitableForPrinting() const;
         virtual bool isSuitableForDisplay() const;
+        
+        double hdrExposure() const;
+        void setHdrExposure(double exposure);
     private:
         struct Private;
         Private* const d;
 };
-
 
 #endif

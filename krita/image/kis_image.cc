@@ -969,7 +969,7 @@ QImage KisImage::convertToQImage(const QRect& r, const double xScale, const doub
     t.restart();
     delete [] imageRow;
 
-    QImage image = colorSpace()->convertToQImage(scaledImageData, r.width(), r.height(), const_cast<KoColorProfile*>( profile ), KoColorConversionTransformation::IntentPerceptual, exposure);
+    QImage image = colorSpace()->convertToQImage(scaledImageData, r.width(), r.height(), const_cast<KoColorProfile*>( profile ), KoColorConversionTransformation::IntentPerceptual);
     delete [] scaledImageData;
 
 #ifdef WORDS_BIGENDIAN

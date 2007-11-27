@@ -264,10 +264,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         }
         virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                 const KoColorProfile *dstProfile,
-                KoColorConversionTransformation::Intent renderingIntent, float exposure) const
+                KoColorConversionTransformation::Intent renderingIntent) const
 
         {
-            Q_UNUSED(exposure);
             QImage img = QImage(width, height, QImage::Format_ARGB32);
 
             const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->rgb8(dstProfile);

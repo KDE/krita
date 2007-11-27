@@ -369,11 +369,9 @@ public:
      * @param height in pixels
      * @param dstProfile destination profile
      * @param renderingIntent the rendering intent
-     * @param exposure The exposure setting for rendering a preview of a high dynamic range image.
      */
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                   float exposure = 0.0f) const = 0;
+                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const = 0;
 
     /**
      * This functions allocates the ncessary memory for numPixels number of pixels.

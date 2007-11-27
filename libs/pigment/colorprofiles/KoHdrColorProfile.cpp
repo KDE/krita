@@ -34,7 +34,7 @@ KoHdrColorProfile::KoHdrColorProfile(const QString &name, const QString &info) :
     setInfo(info);
 }
 
-KoHdrColorProfile::KoHdrColorProfile(const KoHdrColorProfile& rhs) : d(new Private(*rhs.d))
+KoHdrColorProfile::KoHdrColorProfile(const KoHdrColorProfile& rhs) : KoColorProfile(), d(new Private(*rhs.d))
 {
     if(d->iccProfile)
     {
@@ -91,4 +91,14 @@ double KoHdrColorProfile::hdrExposure() const
 void KoHdrColorProfile::setHdrExposure(double exposure)
 {
     d->exposure = exposure;
+}
+
+bool KoHdrColorProfile::operator==(const KoColorProfile& rhs) const
+{
+    const KoHdrColorProfile* rhsHdr = dynamic_cast<const KoHdrColorProfile*>(&rhs);
+    if(rhsHdr)
+    {
+        return *iccProfile() == *rhsHdr->iccProfile();
+    }
+    return false;
 }

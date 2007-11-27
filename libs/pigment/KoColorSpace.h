@@ -135,9 +135,7 @@ public:
     KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp );
     virtual ~KoColorSpace();
 
-    virtual bool operator==(const KoColorSpace& rhs) const {
-        return id() == rhs.id();
-    }
+    virtual bool operator==(const KoColorSpace& rhs) const;
 
 
 public:

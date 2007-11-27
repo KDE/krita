@@ -41,6 +41,7 @@ class PIGMENTCMS_EXPORT KoHdrColorProfile : public KoColorProfile {
         
         double hdrExposure() const;
         void setHdrExposure(double exposure);
+        virtual bool operator==(const KoColorProfile&) const;
     private:
         struct Private;
         Private* const d;

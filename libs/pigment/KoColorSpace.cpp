@@ -30,6 +30,7 @@
 #include "KoColorTransformationFactoryRegistry.h"
 #include "KoColorConversionSystem.h"
 #include "KoColorSpaceRegistry.h"
+#include "KoColorProfile.h"
 #include "KoCopyColorConversionTransformation.h"
 #include "KoFallBackColorTransformation.h"
 
@@ -81,6 +82,12 @@ KoColorSpace::~KoColorSpace()
     delete d->mixColorsOp;
     delete d->convolutionOp;
     delete d;
+}
+
+bool KoColorSpace::operator==(const KoColorSpace& rhs) const {
+    const KoColorProfile* p1 = rhs.profile();
+    const KoColorProfile* p2 = profile();
+    return id() == rhs.id() and (*p1 == *p2 ) ;
 }
 
 QString KoColorSpace::id() const {return d->id;}
@@ -336,7 +343,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           const KoCompositeOp * op,
                           const QBitArray & channelFlags) const
 {
-    Q_ASSERT(op->colorSpace() == this);
+    Q_ASSERT(*op->colorSpace() == *this);
 
     if (rows <= 0 || cols <= 0)
         return;
@@ -387,7 +394,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           qint32 cols,
                           const KoCompositeOp * op) const
 {
-    Q_ASSERT(op->colorSpace() == this);
+    Q_ASSERT(*op->colorSpace() == *this);
 
     if (rows <= 0 || cols <= 0)
         return;

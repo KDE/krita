@@ -80,6 +80,7 @@ class PIGMENTCMS_EXPORT KoIccColorProfile : public KoColorProfile {
         virtual bool isSuitableForOutput() const;
         virtual bool isSuitableForPrinting() const;
         virtual bool isSuitableForDisplay() const;
+        virtual bool operator==(const KoColorProfile&) const;
     protected:
         void setRawData(const QByteArray& rawData);
     public:

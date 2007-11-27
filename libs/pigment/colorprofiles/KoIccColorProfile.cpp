@@ -251,3 +251,14 @@ KoLcmsColorProfileContainer* KoIccColorProfile::asLcms() const
     Q_ASSERT( d->shared->lcmsProfile );
     return d->shared->lcmsProfile;
 }
+
+bool KoIccColorProfile::operator==(const KoColorProfile& rhs) const
+{
+    const KoIccColorProfile* rhsIcc = dynamic_cast<const KoIccColorProfile*>(&rhs);
+    if(rhsIcc)
+    {
+        return d->shared == rhsIcc->d->shared;
+    }
+    return false;
+}
+

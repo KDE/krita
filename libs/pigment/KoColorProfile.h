@@ -94,6 +94,8 @@ class PIGMENTCMS_EXPORT KoColorProfile {
          * @return true if this profile is suitable to use for display
          */
         virtual bool isSuitableForDisplay() const =0;
+        
+        virtual bool operator==(const KoColorProfile&) const = 0;
     protected:
         /**
          * Allows to define the name of this profile.

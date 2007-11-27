@@ -87,7 +87,7 @@ KoColorSpace::~KoColorSpace()
 bool KoColorSpace::operator==(const KoColorSpace& rhs) const {
     const KoColorProfile* p1 = rhs.profile();
     const KoColorProfile* p2 = profile();
-    return id() == rhs.id() and (*p1 == *p2 ) ;
+    return id() == rhs.id() and ((p1 == p2) or (*p1 == *p2 ));
 }
 
 QString KoColorSpace::id() const {return d->id;}
@@ -259,18 +259,17 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
     }
 
     KoColorConversionTransformation* tf = 0;
-
+#if 0
     if (d->lastUsedTransform != 0 && d->lastUsedDstColorSpace != 0) {
         if (*dstColorSpace == *d->lastUsedDstColorSpace) {
             tf = d->lastUsedTransform;
             }
     }
-
     if (not tf) {
-
         if (!d->transforms.contains(dstColorSpace)) {
-    // XXX: Should we clear the transform cache if it gets too big?
+#endif    // XXX: Should we clear the transform cache if it gets too big?
             tf = this->createColorConverter(dstColorSpace, renderingIntent);
+#if 0
             d->transforms[dstColorSpace] = tf;
         }
         else {
@@ -280,6 +279,7 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
         d->lastUsedTransform = tf;
         d->lastUsedDstColorSpace = dstColorSpace;
     }
+#endif
     tf->transform(src, dst, numPixels);
 
     return true;

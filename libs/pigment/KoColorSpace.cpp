@@ -236,7 +236,7 @@ void KoColorSpace::fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels)
 
 KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
 {
-    if( this == dstColorSpace)
+    if( *this == *dstColorSpace)
     {
         return new KoCopyColorConversionTransformation(this);
     } else {
@@ -250,8 +250,7 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
         quint32 numPixels,
         KoColorConversionTransformation::Intent renderingIntent) const
 {
-    if (dstColorSpace->id() == this->id()
-        && dstColorSpace->profile() == profile())
+    if (*dstColorSpace == *this)
     {
         if (src!= dst)
             memcpy (dst, src, numPixels * this->pixelSize());
@@ -262,8 +261,7 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
     KoColorConversionTransformation* tf = 0;
 
     if (d->lastUsedTransform != 0 && d->lastUsedDstColorSpace != 0) {
-        if (dstColorSpace->id() == d->lastUsedDstColorSpace->id() &&
-            dstColorSpace->profile() == d->lastUsedDstColorSpace->profile()) {
+        if (*dstColorSpace == *lastUsedDstColorSpace) {
             tf = d->lastUsedTransform;
             }
     }

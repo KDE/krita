@@ -33,8 +33,10 @@ private slots:
     void testSimpleProgress();
     void testSubUpdaters();
     void testThreadedSubUpdaters();
-    void testRecursiveProgress();
     void testSimpleThreadedProgress();
+    void testRecursiveProgress();
+    void testThreadedRecursiveProgress();
+    
 
 };
 #endif

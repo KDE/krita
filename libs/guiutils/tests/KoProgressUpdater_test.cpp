@@ -7,7 +7,7 @@
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
- * but WITHxOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
  *
@@ -183,12 +183,41 @@ void KoProgressUpdaterTest::testRecursiveProgress()
     KoProgressUpdater pu2(&u1);
     pu2.start();
     KoUpdater u2 = pu2.startSubtask();
+    u2.setProgress(50);
     u2.setProgress(100);
-
-    QTest::qSleep(250); // allow the action to do its job.
-    QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+    while(bar.value < 100) {
+        QCoreApplication::processEvents();
+        QTest::qSleep(250);
+    }
     QCOMPARE(bar.value, 100);
 }
+
+void KoProgressUpdaterTest::testThreadedRecursiveProgress()
+{
+    TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    pu.start();
+    KoUpdater u1 = pu.startSubtask();
+
+    KoProgressUpdater pu2(&u1);
+    pu2.start();
+    KoUpdater u2 = pu2.startSubtask();
+
+    TestJob t1(&u2);
+    t1.start();
+    
+    while (t1.isRunning() ) {
+        QTest::qSleep(250); // allow the action to do its job.
+        QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+    }
+    
+    while(bar.value < 100) {
+        QCoreApplication::processEvents();
+        QTest::qSleep(250);
+    }
+    QCOMPARE(bar.value, 100);
+}
+
 
 QTEST_KDEMAIN(KoProgressUpdaterTest, GUI);
 #include "KoProgressUpdater_test.moc"

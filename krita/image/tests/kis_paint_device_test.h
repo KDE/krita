@@ -25,10 +25,6 @@ class KisPaintDeviceTest : public QObject
 {
     Q_OBJECT
 
-    // XXX: put these back when pigment is fixed
-    void testColorSpaceConversion();
-    void testRoundtripConversion();
-
 private slots:
 
     void testCreation();
@@ -45,6 +41,9 @@ private slots:
     void testMirror();
     void testRoundtripReadWrite();
     void testPlanarReadWrite();
+    void testColorSpaceConversion();
+    void testRoundtripConversion();
+
 };
 
 #endif

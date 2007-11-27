@@ -80,9 +80,7 @@ class KRITAIMAGE_EXPORT KisPainterlyOverlayColorSpace
 
 public:
 
-    virtual ~KisPainterlyOverlayColorSpace()
-        {
-        };
+    virtual ~KisPainterlyOverlayColorSpace();
      virtual KoID colorModelId() const;
      virtual KoID colorDepthId() const;
      virtual KoColorSpace* clone() const;
@@ -164,6 +162,8 @@ public:
             // Don't call this!
             Q_ASSERT( 0 == 1 );
         }
-
+public:
+    struct Private;
+    Private* const d;
 };
 #endif

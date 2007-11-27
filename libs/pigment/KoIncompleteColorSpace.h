@@ -36,7 +36,7 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                                const QString &name,
                                const KoColorSpace* fallBack)
             : KoColorSpaceAbstract<_CSTraits>(id, name),
-              m_fallBackColorSpace(fallBack)
+              m_fallBackColorSpace(fallBack->clone() )
         {
             m_qcolordata = new quint16[4];
             m_convertionCache.resize( m_fallBackColorSpace->pixelSize() );

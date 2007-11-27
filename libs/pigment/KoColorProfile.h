@@ -34,6 +34,7 @@ class PIGMENTCMS_EXPORT KoColorProfile {
          * @param fileName file name to load or save that profile
          */
         KoColorProfile(QString fileName = "");
+        KoColorProfile(const KoColorProfile& profile);
         virtual ~KoColorProfile();
         
         /**

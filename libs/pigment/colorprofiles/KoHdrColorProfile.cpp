@@ -34,7 +34,7 @@ KoHdrColorProfile::KoHdrColorProfile(const QString &name, const QString &info) :
     setInfo(info);
 }
 
-KoHdrColorProfile::KoHdrColorProfile(const KoHdrColorProfile& rhs) : KoColorProfile(), d(new Private(*rhs.d))
+KoHdrColorProfile::KoHdrColorProfile(const KoHdrColorProfile& rhs) : KoColorProfile(rhs), d(new Private(*rhs.d))
 {
     if(d->iccProfile)
     {

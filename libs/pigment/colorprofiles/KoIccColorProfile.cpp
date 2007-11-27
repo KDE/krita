@@ -111,7 +111,7 @@ KoIccColorProfile::KoIccColorProfile(const QByteArray& rawData) : KoColorProfile
     init();
 }
 
-KoIccColorProfile::KoIccColorProfile(const KoIccColorProfile& rhs) : d(new Private(*rhs.d))
+KoIccColorProfile::KoIccColorProfile(const KoIccColorProfile& rhs) : KoColorProfile(rhs), d(new Private(*rhs.d))
 {
     Q_ASSERT( d->shared );
     d->shared->count++;

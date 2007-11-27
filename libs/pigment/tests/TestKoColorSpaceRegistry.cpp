@@ -50,7 +50,7 @@ void TestKoColorSpaceRegistry::testRgbU8()
     profile = colorSpace->profile();
     QVERIFY(profile != 0);
 
-    QCOMPARE(profile, testProfile);
+    QCOMPARE(*profile, *testProfile);
 }
 
 void TestKoColorSpaceRegistry::testRgbU16()
@@ -93,7 +93,7 @@ void TestKoColorSpaceRegistry::testRgbU16()
     profile = colorSpace->profile();
     QVERIFY(profile != 0);
 
-    QCOMPARE(profile, testProfile);
+    QCOMPARE(*profile, *testProfile);
 }
 
 void TestKoColorSpaceRegistry::testLab()
@@ -141,7 +141,7 @@ void TestKoColorSpaceRegistry::testLab()
     profile = colorSpace->profile();
     QVERIFY(profile != 0);
 
-    QCOMPARE(profile, testProfile);
+    QCOMPARE(*profile, *testProfile);
 }
 
 QTEST_KDEMAIN(TestKoColorSpaceRegistry, NoGUI)

@@ -34,6 +34,9 @@ KoColorProfile::KoColorProfile(QString fileName) : d(new Private)
     d->fileName = fileName;
 }
 
+KoColorProfile::KoColorProfile(const KoColorProfile& profile) : d(new Private(*profile.d)) {
+}
+
 KoColorProfile::~KoColorProfile()
 {
     delete d;

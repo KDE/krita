@@ -92,7 +92,7 @@ void KisPainterTest::testPaintDeviceBltMask(const KoColorSpace * cs)
 
     QCOMPARE( src->exactBounds(), QRect( 0, 0, 20, 20 ) );
 
-    KisPixelSelectionSP mask = KisPixelSelectionSP(new KisPixelSelection(dst));
+    KisPixelSelectionSP mask = new KisPixelSelection(dst);
     mask->select(QRect(10,10,20,20));
     QCOMPARE( mask->selectedExactRect(), QRect( 10, 10, 20, 20 ) );
 

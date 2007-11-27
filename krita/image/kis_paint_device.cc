@@ -157,7 +157,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         }
         m_d->x = rhs.m_d->x;
         m_d->y = rhs.m_d->y;
-        m_d->colorSpace = rhs.m_d->colorSpace;
+        m_d->colorSpace = rhs.m_d->colorSpace->clone();
 
         m_d->pixelSize = rhs.m_d->pixelSize;
 
@@ -632,8 +632,7 @@ void KisPaintDevice::setProfile(const KoColorProfile * profile)
     if (profile == 0) return;
 
     const KoColorSpace * dstSpace =
-            KoColorSpaceRegistry::instance()->colorSpace( colorSpace()->id(),
-                                                                      const_cast<KoColorProfile*>(profile)); // FIXME don't const_cast and anyway should clone when cloning is available
+            KoColorSpaceRegistry::instance()->colorSpace( colorSpace()->id(), profile);
     if (dstSpace)
         m_d->colorSpace = dstSpace->clone();
     emit profileChanged(profile);

@@ -198,7 +198,7 @@ KisSelectionMaskSP KisLayer::selectionMask() const
 KisSelectionSP KisLayer::selection() const
 {
     KisSelectionMaskSP selMask = selectionMask();
-    if (selMask)
+    if (selMask && selMask->active())
         return selMask->selection();
     else
         return m_d->image->globalSelection();

@@ -27,6 +27,7 @@
 #include <QImage>
 #include <QVector>
 #include <QRect>
+#include <QRegion>
 #include <QVarLengthArray>
 
 #include <kdebug.h>
@@ -240,6 +241,13 @@ void KisSelection::setDirty(const QRect& rc)
 {
     if (m_interestedInDirtyness)
         KisPaintDevice::setDirty(rc);
+}
+
+
+void KisSelection::setDirty(const QRegion& reg)
+{
+    if (m_interestedInDirtyness)
+        KisPaintDevice::setDirty(reg);
 }
 
 void KisSelection::setDirty()

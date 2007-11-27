@@ -28,7 +28,12 @@
 #include "krita_export.h"
 
 /**
- * ???
+ * KisSelectedTransaction records changes to the selection for the undo stack. There
+ * are two selections in Krita: the global selection and the per-layer selection mask.
+ * A particular action only works with one of these selections (in the future, we may
+ * want to merge the global and local selection).
+ *
+ * KisSelectedTransaction remembers which selection was changed.
  */
 class KRITAIMAGE_EXPORT KisSelectedTransaction : public KisTransaction {
 

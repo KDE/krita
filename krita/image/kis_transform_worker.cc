@@ -663,7 +663,6 @@ bool KisTransformWorker::run()
 
         //progress info
         m_progressUpdater->setProgress(100);
-        m_dev->emitSelectionChanged();
 
         return m_progressUpdater->interrupted();
     }
@@ -706,7 +705,6 @@ bool KisTransformWorker::run()
 
     //progress info
     m_progressUpdater->setProgress(100);
-    m_dev->emitSelectionChanged();
 
     return m_progressUpdater->interrupted();
 #endif

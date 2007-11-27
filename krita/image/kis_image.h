@@ -459,6 +459,7 @@ public:
 
 signals:
 
+    /// ???
     void sigActiveSelectionChanged(KisImageSP image);
 
     /// Emitted after a layer's properties (visible, locked, opacity, composite op, name, ...) change

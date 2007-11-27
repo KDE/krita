@@ -32,11 +32,6 @@
 /**
  * KisPixelSelection contains a byte-map representation of a layer, where
  * the value of a byte signifies whether a corresponding pixel is selected, or not.
- *
- * NOTE: If you need to manually call emitSelectionChanged on the owner paint device
- *       of a selection. KisPixelSelection does not emit any signals by itself because
- *       often you want to combine several actions in to perfom one operation and you
- *       do not want recomposition to happen all the time.
  */
 class KRITAIMAGE_EXPORT KisPixelSelection : public KisPaintDevice, public KisSelectionComponent {
 

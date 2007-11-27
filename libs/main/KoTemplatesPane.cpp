@@ -136,13 +136,14 @@ void KoTemplatesPane::alwaysUseClicked()
   QStandardItem* item = model()->itemFromIndex(m_documentList->selectionModel()->currentIndex());
 
   if(!m_alwaysUseCheckBox->isChecked()) {
-    KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
-    cfgGrp.writeEntry("AlwaysUseTemplate", QString());
     d->m_alwaysUseTemplate = QString();
   } else {
     d->m_alwaysUseTemplate = item->data(Qt::UserRole + 1).toString();
   }
 
+  KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+  cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
+  cfgGrp.sync();
   emit alwaysUseChanged(this, d->m_alwaysUseTemplate);
 }
 

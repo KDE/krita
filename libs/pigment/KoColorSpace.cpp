@@ -261,7 +261,7 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
     KoColorConversionTransformation* tf = 0;
 
     if (d->lastUsedTransform != 0 && d->lastUsedDstColorSpace != 0) {
-        if (*dstColorSpace == *lastUsedDstColorSpace) {
+        if (*dstColorSpace == *d->lastUsedDstColorSpace) {
             tf = d->lastUsedTransform;
             }
     }

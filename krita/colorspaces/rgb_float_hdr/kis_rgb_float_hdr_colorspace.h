@@ -126,6 +126,7 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
         virtual bool hasHighDynamicRange() const { return true; }
 
         virtual const KoColorProfile *profile() const { return m_profile; }
+        virtual KoColorProfile * profile() { return m_profile; }
 
         virtual bool profileIsCompatible(const KoColorProfile* profile) const
         {

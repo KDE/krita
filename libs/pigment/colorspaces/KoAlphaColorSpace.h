@@ -78,6 +78,7 @@ public:
 
     virtual bool hasHighDynamicRange() const { return false; }
     virtual const KoColorProfile* profile() const { return 0; }
+    virtual KoColorProfile* profile() { return 0; }
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent) const;
 

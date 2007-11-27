@@ -305,6 +305,10 @@ public:
      * Return the profile of this color space. This may be 0
      */
     virtual const KoColorProfile * profile() const = 0;
+    /**
+     * Return the profile of this color space. This may be 0
+     */
+    virtual KoColorProfile * profile() = 0;
 
 //================= Conversion functions ==================================//
 

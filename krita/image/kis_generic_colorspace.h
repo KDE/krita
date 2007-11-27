@@ -99,6 +99,7 @@ class KisGenericColorSpace : public KoColorSpace {
         virtual quint32 pixelSize() const { return _nbchannels * sizeof(_type); }
 
         virtual const KoColorProfile * profile() const { return 0; }
+        virtual KoColorProfile * profile() { return 0; }
 
         virtual bool willDegrade(ColorSpaceIndependence ) const {return true;}
 

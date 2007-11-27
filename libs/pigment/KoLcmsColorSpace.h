@@ -200,6 +200,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
         virtual bool hasHighDynamicRange() const { return false; }
         virtual const KoColorProfile * profile() const { return d->colorProfile; }
+        virtual KoColorProfile * profile() { return d->colorProfile; }
 
         virtual bool profileIsCompatible(const KoColorProfile* profile) const
         {

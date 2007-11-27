@@ -19,6 +19,7 @@
 #include <QList>
 
 #include <QTableWidgetItem>
+#include <KoResourceItemChooser.h>
 
 #include "kdebug.h"
 
@@ -61,14 +62,14 @@ void KisResourceMediator::connectServer(KisResourceServerBase* rServer)
 KoResource *KisResourceMediator::currentResource() const
 {
     if (m_activeItem) {
-        Q_ASSERT(dynamic_cast<KisIconItem*>(m_activeItem));
-        return static_cast<KisIconItem*>(m_activeItem)->resource();
+        Q_ASSERT(dynamic_cast<KoResourceItem*>(m_activeItem));
+        return static_cast<KoResourceItem*>(m_activeItem)->resource();
     }
 
     return 0;
 }
 
-KisIconItem *KisResourceMediator::itemFor(KoResource *r) const
+KoResourceItem *KisResourceMediator::itemFor(KoResource *r) const
 {
     if (m_items.contains(r))
     {
@@ -79,12 +80,12 @@ KisIconItem *KisResourceMediator::itemFor(KoResource *r) const
 
 KoResource *KisResourceMediator::resourceFor(QTableWidgetItem *item) const
 {
-    KisIconItem *kisitem = dynamic_cast<KisIconItem*>(item);
+    KoResourceItem *kisitem = dynamic_cast<KoResourceItem*>(item);
 
     return kisitem ? kisitem->resource() : 0;
 }
 
-KoResource *KisResourceMediator::resourceFor(KisIconItem *item) const
+KoResource *KisResourceMediator::resourceFor(KoResourceItem *item) const
 {
     return item ? item->resource() : 0;
 }
@@ -96,7 +97,7 @@ QWidget *KisResourceMediator::chooserWidget() const
 
 void KisResourceMediator::setActiveItem(QTableWidgetItem *item)
 {
-    KisIconItem *kisitem = dynamic_cast<KisIconItem*>(item);
+    KoResourceItem *kisitem = dynamic_cast<KoResourceItem*>(item);
 
     if (kisitem) {
         m_activeItem = kisitem;
@@ -109,7 +110,7 @@ void KisResourceMediator::rServerAddedResource(KoResource *resource)
 {
     if (resource && resource->valid()) {
 
-        KisIconItem *item = new KisIconItem(resource);
+        KoResourceItem *item = new KoResourceItem(resource);
         Q_CHECK_PTR(item);
 
         m_items[resource] = item;

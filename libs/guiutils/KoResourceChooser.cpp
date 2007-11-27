@@ -38,7 +38,6 @@
 #include <kglobal.h>
 // #include <kdebug.h>
 
-
 QTextDocument *KoIconToolTip::createDocument( const QModelIndex &index )
 {
     QTextDocument *doc = new QTextDocument( this );
@@ -238,6 +237,13 @@ QTableWidgetItem *KoResourceChooser::itemAt(int index)
     return item(row,col);
 }
 
+void KoResourceChooser::setIconSize ( const QSize & size )
+{
+    d->m_itemWidth = size.width();
+    d->m_itemHeight = size.height();
+    QTableWidget::setIconSize(size);
+}
+
 // adds an item to the end
 void KoResourceChooser::addItem(QTableWidgetItem *item)
 {
@@ -262,56 +268,6 @@ void KoResourceChooser::removeItem( QTableWidgetItem * item )
         update();
         setupItems();
     }
-}
-
-KoPatternChooser::KoPatternChooser( const QList<QTableWidgetItem*> &list, QWidget *parent, const char *name )
- : QWidget( parent, name )
-{
-    // only serves as beautifier for the iconchooser
-    //frame = new QHBox( this );
-    //frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    chooser = new KoResourceChooser( QSize(32,32), this);
-    chooser->setIconSize( QSize(30,30) );
-	QObject::connect( chooser, SIGNAL(itemClicked( QTableWidgetItem * ) ),
-					            this, SIGNAL( selected( QTableWidgetItem * )));
-
-    foreach( QTableWidgetItem* item, list )
-        chooser->addItem( item );
-
-	Q3VBoxLayout *mainLayout = new Q3VBoxLayout( this, 1, -1, "main layout" );
-	mainLayout->addWidget( chooser, 10 );
-}
-
-
-KoPatternChooser::~KoPatternChooser()
-{
-  delete chooser;
-  //delete frame;
-}
-
-// set the active pattern in the chooser - does NOT emit selected() (should it?)
-void KoPatternChooser::setCurrentPattern( QTableWidgetItem *pattern )
-{
-    chooser->setCurrentItem( pattern );
-}
-
-void KoPatternChooser::addPattern( QTableWidgetItem *pattern )
-{
-    chooser->addItem( pattern );
-}
-
-// return the active pattern
-QTableWidgetItem *KoPatternChooser::currentPattern()
-{
-    return chooser->currentItem();
-}
-
-void KoPatternChooser::removePattern( QTableWidgetItem *pattern )
-{
-    if( ! pattern || pattern->tableWidget() != chooser )
-        return;
-
-    chooser->removeItem( pattern );
 }
 
 #include "KoResourceChooser.moc"

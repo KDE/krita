@@ -43,6 +43,7 @@
 #include <kactioncollection.h>
 #include <KoDualColorButton.h>
 #include <KoSegmentGradient.h>
+#include <KoResourceItemChooser.h>
 
 #include "kis_resourceserver.h"
 #include "kis_resource_provider.h"
@@ -159,41 +160,41 @@ void KisControlFrame::slotSetGradient(QTableWidgetItem *item)
 
 void KisControlFrame::slotBrushChanged(KisBrush * brush)
 {
-        KisIconItem *item;
+        KoResourceItem *item;
 
         if((item = m_brushMediator->itemFor(brush)))
         {
                 slotSetBrush(item);
         } else {
-                slotSetBrush( new KisIconItem(brush) );
+                slotSetBrush( new KoResourceItem(brush) );
         }
 
 }
 
 void KisControlFrame::slotPatternChanged(KisPattern * pattern)
 {
-        KisIconItem *item;
+        KoResourceItem *item;
         if (!pattern)
                 return;
 
         if ( (item = m_patternMediator->itemFor(pattern)) )
                 slotSetPattern(item);
         else
-                slotSetPattern( new KisIconItem(pattern) );
+                slotSetPattern( new KoResourceItem(pattern) );
 
 }
 
 
 void KisControlFrame::slotGradientChanged(KoSegmentGradient * gradient)
 {
-        KisIconItem *item;
+        KoResourceItem *item;
         if (!gradient)
                 return;
 
         if ( (item = m_gradientMediator->itemFor(gradient)) )
                 slotSetGradient(item);
         else
-                slotSetGradient( new KisIconItem(gradient) );
+                slotSetGradient( new KoResourceItem(gradient) );
 
 }
 

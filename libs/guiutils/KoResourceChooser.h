@@ -62,6 +62,8 @@ public:
     void removeItem( QTableWidgetItem * item );
     QTableWidgetItem *itemAt(int index);
 
+    void setIconSize ( const QSize & size );
+
     /// Extensions to Qt::ItemDataRole.
     enum ItemDataRole
     {
@@ -79,27 +81,5 @@ private:
     struct Private;
     Private* const d;
 };
-
-// This is a first attempt at a pattern chooser widget abstraction which is at least
-// useful for two applications(karbon and krita). It is really a light version of
-// kis_patternchooser. (Rob)
-class KOGUIUTILS_EXPORT KoPatternChooser : public QWidget
-{
-  Q_OBJECT
-public:
-  KoPatternChooser( const QList<QTableWidgetItem*> &list, QWidget *parent, const char *name = 0 );
-  ~KoPatternChooser();
-
-  QTableWidgetItem *currentPattern();
-  void setCurrentPattern( QTableWidgetItem * );
-  void addPattern( QTableWidgetItem * );
-  void removePattern( QTableWidgetItem * );
-private:
-  KoResourceChooser *chooser;
-
-signals:
-  void selected( QTableWidgetItem * );
-};
-
 
 #endif // KO_ICONCHOOSER_H

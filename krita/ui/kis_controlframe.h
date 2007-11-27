@@ -33,7 +33,7 @@ class QTabWidget;
 class KToolBar;
 
 class QTableWidgetItem;
-class KisIconWidget;
+class KoResourceItem;
 
 class KisAutobrush;
 class KisBrush;
@@ -41,10 +41,10 @@ class KisBrushChooser;
 class KoSegmentGradient;
 class KisGradientChooser;
 class KisItemChooser;
-class KisPattern;
 class KisResourceMediator;
 class KisPaintopBox;
 class KisView2;
+class KisIconWidget;
 
 
 /**

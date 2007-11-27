@@ -21,6 +21,7 @@
 #include <QVBoxLayout>
 
 #include <klocale.h>
+#include <KoResourceItemChooser.h>
 
 #include "KoColorSpace.h"
 #include "kis_pattern_chooser.h"
@@ -47,7 +48,7 @@ KisPatternChooser::~KisPatternChooser()
 
 void KisPatternChooser::update(QTableWidgetItem *item)
 {
-    KisIconItem *kisItem = static_cast<KisIconItem *>(item);
+    KoResourceItem *kisItem = static_cast<KoResourceItem *>(item);
 
     if (item) {
         KisPattern *pattern = static_cast<KisPattern *>(kisItem->resource());

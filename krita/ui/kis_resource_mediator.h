@@ -24,7 +24,7 @@
 
 class QTableWidgetItem;
 class KisItemChooser;
-class KisIconItem;
+class KoResourceItem;
 class KoResource;
 class KisResourceServerBase;
 
@@ -46,9 +46,9 @@ public:
 public:
     void connectServer(KisResourceServerBase* rServer);
     KoResource *currentResource() const;
-    KisIconItem *itemFor(KoResource *r) const;
+    KoResourceItem *itemFor(KoResource *r) const;
     KoResource *resourceFor(QTableWidgetItem *item) const;
-    KoResource *resourceFor(KisIconItem *item) const;
+    KoResource *resourceFor(KoResourceItem *item) const;
     QWidget *chooserWidget() const;
 
 public slots:
@@ -63,7 +63,7 @@ private slots:
 
 private:
     KisItemChooser *m_chooser;
-    QMap<KoResource*, KisIconItem*> m_items;
+    QMap<KoResource*, KoResourceItem*> m_items;
     QTableWidgetItem *m_activeItem;
 };
 

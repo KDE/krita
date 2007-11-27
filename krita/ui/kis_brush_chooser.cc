@@ -22,10 +22,10 @@
 #include <QGridLayout>
 #include <klocale.h>
 
+#include <KoResourceItemChooser.h>
 #include "kis_double_widget.h"
 #include "kis_brush_chooser.h"
 #include "kis_global.h"
-#include "kis_icon_item.h"
 #include "kis_brush.h"
 
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
@@ -66,7 +66,7 @@ KisBrushChooser::~KisBrushChooser()
 
 void KisBrushChooser::slotSetItemSpacing(double spacingValue)
 {
-    KisIconItem *item = static_cast<KisIconItem *>(currentItem());
+    KoResourceItem *item = static_cast<KoResourceItem *>(currentItem());
 
     if (item) {
         KisBrush *brush = static_cast<KisBrush *>(item->resource());
@@ -76,19 +76,19 @@ void KisBrushChooser::slotSetItemSpacing(double spacingValue)
 
 void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 {
-    KisIconItem *item = static_cast<KisIconItem *>(currentItem());
+    KoResourceItem *item = static_cast<KoResourceItem *>(currentItem());
 
     if (item) {
         KisBrush *brush = static_cast<KisBrush *>(item->resource());
         brush->setUseColorAsMask(useColorAsMask);
-        item->updatePixmaps();
+//         item->updatePixmaps();
         emit selected(currentItem());
     }
 }
 
 void KisBrushChooser::update(QTableWidgetItem *item)
 {
-    KisIconItem *kisItem = static_cast<KisIconItem *>(item);
+    KoResourceItem *kisItem = static_cast<KoResourceItem *>(item);
 
     if (kisItem) {
         KisBrush *brush = static_cast<KisBrush *>(kisItem->resource());

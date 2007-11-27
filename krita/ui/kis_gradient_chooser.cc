@@ -22,6 +22,7 @@
 #include <QVBoxLayout>
 
 #include <klocale.h>
+#include <KoResourceItemChooser.h>
 
 #include "kis_view2.h"
 #include "kis_global.h"
@@ -70,7 +71,7 @@ KisGradientChooser::~KisGradientChooser()
 
 void KisGradientChooser::update(QTableWidgetItem *item)
 {
-    KisIconItem *kisItem = static_cast<KisIconItem *>(item);
+    KoResourceItem *kisItem = static_cast<KoResourceItem *>(item);
 
     if (item) {
         KoSegmentGradient *gradient = static_cast<KoSegmentGradient *>(kisItem->resource());

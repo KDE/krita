@@ -60,6 +60,7 @@ void ShapePropertiesDocker::setCanvas( KoCanvasBase *canvas )
 {
     if( d->canvas )
     {
+        Q_ASSERT( d->canvas->shapeManager() );
         disconnect( d->canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), 
             this, SLOT( selectionChanged() ) );
         disconnect( d->canvas->resourceProvider(), SIGNAL( resourceChanged( int, const QVariant& ) ),

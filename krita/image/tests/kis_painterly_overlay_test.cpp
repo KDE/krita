@@ -73,7 +73,7 @@ void KisPainterlyOverlayTest::testPainterlyOverlay()
     Q_ASSERT( overlay );
     const KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
     Q_ASSERT( cs );
-    QVERIFY( overlay->colorSpace() == cs );
+    QVERIFY( *overlay->colorSpace() == *cs );
     quint8 * bytes = cs->allocPixelBuffer( 1 );
     memset( bytes, 0,  cs->pixelSize());
 

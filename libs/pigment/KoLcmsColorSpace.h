@@ -31,6 +31,8 @@
 
 #include <pigment_export.h>
 
+#include "colorprofiles/KoHdrColorProfile.h"
+
 struct KoLcmsColorTransformation : public KoColorTransformation
 {
     KoLcmsColorTransformation() : KoColorTransformation()
@@ -158,6 +160,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
         {
             Q_ASSERT(p); // No profile means the lcms color space can't work
+            Q_ASSERT(profileIsCompatible(p));
             d->profile = asLcmsProfile(p);
             d->colorProfile = p;
             d->qcolordata = 0;
@@ -202,7 +205,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         virtual bool profileIsCompatible(const KoColorProfile* profile) const
         {
             const KoIccColorProfile* p = dynamic_cast<const KoIccColorProfile*>(profile);
-            return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
+            return (p and p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
         }
 
         virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * koprofile=0) const
@@ -458,7 +461,7 @@ class PIGMENTCMS_EXPORT KoLcmsColorSpaceFactory : public KoColorSpaceFactory, pr
         virtual bool profileIsCompatible(const KoColorProfile* profile) const
         {
             const KoIccColorProfile* p = dynamic_cast<const KoIccColorProfile*>(profile);
-            return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
+            return (p and p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
         }
         virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const;
         virtual bool isIcc() const { return true; }

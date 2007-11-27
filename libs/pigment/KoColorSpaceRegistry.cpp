@@ -211,6 +211,16 @@ KoColorSpaceRegistry::paintDeviceActionsFor(const KoColorSpace* cs) {
     return d->paintDevActionMap[cs->id()];
 }
 
+bool KoColorSpaceRegistry::isCached(QString csId, QString profileName) const
+{
+    return not (d->csMap.find(idsToCacheName(csId, profileName)) == d->csMap.end());
+}
+
+QString KoColorSpaceRegistry::idsToCacheName(QString csId, QString profileName) const
+{
+  return csId + "<comb>" + profileName;
+}
+
 const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QString &pName)
 {
     QString profileName = pName;
@@ -225,9 +235,9 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         profileName = csf->defaultProfile();
     }
 
-    QString name = csID + "<comb>" + profileName;
+    QString name = idsToCacheName(csID, profileName);
 
-    if (d->csMap.find(name) == d->csMap.end()) {
+    if (not isCached(csID, profileName)) {
         KoColorSpaceFactory *csf = value(csID);
         if(!csf)
         {
@@ -259,7 +269,11 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 {
     if( profile )
     {
-        const KoColorSpace *cs = colorSpace( csID, profile->name());
+        const KoColorSpace *cs = 0;
+        if(isCached( csID, profile->name() ) )
+        {
+            cs = colorSpace( csID, profile->name());
+        }
 
         if(!cs)
         {

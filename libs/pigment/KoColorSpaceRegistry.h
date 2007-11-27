@@ -243,6 +243,9 @@ public:
     const KoColorConversionSystem* colorConversionSystem() const;
     
 private:
+    bool isCached(QString csId, QString profileName) const;
+    QString idsToCacheName(QString csId, QString profileName) const;
+private:
     KoColorSpaceRegistry();
     KoColorSpaceRegistry(const KoColorSpaceRegistry&);
     KoColorSpaceRegistry operator=(const KoColorSpaceRegistry&);

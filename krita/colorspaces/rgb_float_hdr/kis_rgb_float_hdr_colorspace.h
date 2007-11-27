@@ -87,7 +87,9 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 
             // We use an RgbU16 colorspace to convert exposed pixels into
             // QImages.
-            m_rgbU16ColorSpace = KoColorSpaceRegistry::instance()->rgb16(profile);
+            
+            m_rgbU16ColorSpace = KoColorSpaceRegistry::instance()->rgb16( m_profile->iccProfile() );
+            
             Q_ASSERT(m_rgbU16ColorSpace);
 
             const KoChannelInfo::enumChannelValueType channelValueType = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::channelValueType;

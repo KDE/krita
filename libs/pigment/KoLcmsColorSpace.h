@@ -182,7 +182,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             d->qcolordata = new quint8[3];
             Q_CHECK_PTR(d->qcolordata);
 
-            if (d->profile == 0) { return; }
             Q_ASSERT(d->profile );
 
     // For conversions from default rgb

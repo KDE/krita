@@ -192,14 +192,12 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             const Pixel *srcPixels = reinterpret_cast<const Pixel *>(dataU8);
             const Pixel *srcPixel = srcPixels;
 
-            const float exposureFactor = pow(2, exposure + 2.47393);
-
             // Apply exposure and convert to u16.
             while (numPixelsToConvert > 0) {
 
-                dstPixel->red = convertToDisplay(srcPixel->red, exposureFactor);
-                dstPixel->green = convertToDisplay(srcPixel->green, exposureFactor);
-                dstPixel->blue = convertToDisplay(srcPixel->blue, exposureFactor);
+                dstPixel->red = m_profile->channelToDisplay( srcPixel->red);
+                dstPixel->green = m_profile->channelToDisplay(srcPixel->green);
+                dstPixel->blue = m_profile->channelToDisplay(srcPixel->blue);
                 dstPixel->alpha = KoColorSpaceMaths<typename _CSTraits::channels_type, quint16>::scaleToA(srcPixel->alpha);
 
                 ++dstPixel;
@@ -253,21 +251,6 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             typename _CSTraits::channels_type red;
             typename _CSTraits::channels_type alpha;
         };
-
-        quint16 convertToDisplay(typename _CSTraits::channels_type value, float exposureFactor) const
-        {
-            value *= exposureFactor;
-
-            // After adjusting by the exposure, map 1.0 to 3.5 f-stops below 1.0
-            // I.e. scale by 1/(2^3.5).
-            const float middleGreyScaleFactor = 0.0883883F;
-            value *= middleGreyScaleFactor;
-
-            const int minU16 = 0;
-            const int maxU16 = 65535;
-
-            return (quint16)qBound(minU16, qRound(value * maxU16), maxU16);
-        }
 
         KoHdrColorProfile *m_profile;
         KoLcmsColorProfileContainer *m_profileLcms;

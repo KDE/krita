@@ -19,17 +19,27 @@
 
 #include "KoHdrColorProfile.h"
 
+#include <math.h>
+
 #include "KoIccColorProfile.h"
 
 struct KoHdrColorProfile::Private {
     KoIccColorProfile* iccProfile;
     double exposure;
+    double exposureFactor;
+    double invExposureFactor;
+    double middleGreyScaleFactor;
 };
 
 KoHdrColorProfile::KoHdrColorProfile(const QString &name, const QString &info) : d(new Private)
 {
     d->iccProfile = 0;
-    d->exposure = 0.0;
+    
+    // After adjusting by the exposure, map 1.0 to 3.5 f-stops below 1.0
+    // I.e. scale by 1/(2^3.5).
+    d->middleGreyScaleFactor = 0.0883883;
+    
+    setHdrExposure(0.0);
     setName(name);
     setInfo(info);
 }
@@ -91,6 +101,8 @@ double KoHdrColorProfile::hdrExposure() const
 void KoHdrColorProfile::setHdrExposure(double exposure)
 {
     d->exposure = exposure;
+    d->exposureFactor = pow(2, exposure + 2.47393) * d->middleGreyScaleFactor;
+    d->invExposureFactor = 1.0 / d->exposureFactor;
 }
 
 bool KoHdrColorProfile::operator==(const KoColorProfile& rhs) const
@@ -102,3 +114,20 @@ bool KoHdrColorProfile::operator==(const KoColorProfile& rhs) const
     }
     return false;
 }
+
+quint16 KoHdrColorProfile::channelToDisplay(double value)
+{
+    value *= d->exposureFactor;
+    
+    const int minU16 = 0;
+    const int maxU16 = 65535;
+    
+    return (quint16)qBound(minU16, qRound(value * maxU16), maxU16);
+}
+
+double KoHdrColorProfile::displayToChannel(quint16 value)
+{
+    return value * d->invExposureFactor;
+}
+
+

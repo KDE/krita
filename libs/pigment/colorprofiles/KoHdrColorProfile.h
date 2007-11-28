@@ -24,13 +24,29 @@
 
 class KoIccColorProfile;
 
+/**
+ * This object contains the color profile associated to an HDR color
+ * space : the exposure settings used for LDR to HDR conversion and
+ * an eventual ICC color profile for color correction of the LDR values.
+ */
 class PIGMENTCMS_EXPORT KoHdrColorProfile : public KoColorProfile {
     public:
+        /**
+         * Create an HDR profile with a null exposure and no ICC profile.
+         */
         KoHdrColorProfile(const QString &name, const QString &info);
         KoHdrColorProfile(const KoHdrColorProfile&);
         virtual ~KoHdrColorProfile();
 
+        /**
+         * @return the current ICC Profile (it can be null)
+         */
         const KoIccColorProfile* iccProfile() const;
+        /**
+         * Set the ICC Profile for this color profile. This
+         * profile will take ownership over the ICC profile, so
+         * clone it before.
+         */
         void setIccColorProfile(KoIccColorProfile* profile);
     
         virtual KoColorProfile* clone() const;
@@ -39,9 +55,20 @@ class PIGMENTCMS_EXPORT KoHdrColorProfile : public KoColorProfile {
         virtual bool isSuitableForPrinting() const;
         virtual bool isSuitableForDisplay() const;
         
+        /**
+         * @return the current exposure
+         */
         double hdrExposure() const;
+        /**
+         * Set the exposure for this profile. The exposure is a settings
+         * that allows to simulate the exposure time of a silver film
+         * camera.
+         */
         void setHdrExposure(double exposure);
         virtual bool operator==(const KoColorProfile&) const;
+    public:
+        quint16 channelToDisplay(double value);
+        double displayToChannel(quint16 value);
     private:
         struct Private;
         Private* const d;

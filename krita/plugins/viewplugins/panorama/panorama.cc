@@ -20,6 +20,7 @@
 #include "panorama.h"
 
 #include <stdlib.h>
+#include <algorithm>
 
 #include <kactioncollection.h>
 #include <kcomponentdata.h>

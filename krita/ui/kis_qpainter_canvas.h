@@ -58,6 +58,9 @@ public: // QWidget
     void mouseMoveEvent(QMouseEvent *e);
 
     /// reimplemented method from superclass
+    void contextMenuEvent(QContextMenuEvent *e);
+
+    /// reimplemented method from superclass
     void mousePressEvent(QMouseEvent *e);
 
     /// reimplemented method from superclass

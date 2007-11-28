@@ -46,8 +46,8 @@ KisLayerComposePlugin::KisLayerComposePlugin(QObject *parent, const QStringList 
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/imageseparate.rc"), true);
         m_view = (KisView2*) parent;
-        KAction *action  = new KAction(i18n("Separate Image..."), this);
-        actionCollection()->addAction("separate", action );
+        KAction *action  = new KAction(i18n("Compose Layer..."), this);
+        actionCollection()->addAction("layercompose", action );
         connect(action, SIGNAL(triggered(bool) ), SLOT(slotSeparate()));
     }
 }

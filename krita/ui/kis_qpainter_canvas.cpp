@@ -217,16 +217,17 @@ void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e) {
     m_d->toolProxy->mouseMoveEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
 }
 
+void KisQPainterCanvas::contextMenuEvent(QContextMenuEvent *e) {
+    m_d->canvas->view()->unplugActionList( "flake_tool_actions" );
+    m_d->canvas->view()->plugActionList( "flake_tool_actions",
+                                         m_d->toolProxy->popupActionList() );
+    QMenu *menu = dynamic_cast<QMenu*> (m_d->canvas->view()->factory()->container("image_popup", m_d->canvas->view()));
+    if(menu)
+        menu->exec( e->globalPos() );
+}
+
 void KisQPainterCanvas::mousePressEvent(QMouseEvent *e) {
     m_d->toolProxy->mousePressEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
-    if(e->button() == Qt::RightButton) {
-        m_d->canvas->view()->unplugActionList( "flake_tool_actions" );
-        m_d->canvas->view()->plugActionList( "flake_tool_actions",
-                                             m_d->toolProxy->popupActionList() );
-        QMenu *menu = dynamic_cast<QMenu*> (m_d->canvas->view()->factory()->container("image_popup", m_d->canvas->view()));
-        if(menu)
-            menu->exec( e->globalPos() );
-    }
 }
 
 void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e) {

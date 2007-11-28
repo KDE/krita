@@ -80,8 +80,6 @@ void KisBlurFilter::process(KisFilterConstantProcessingInformation srcInfo,
     }
 
     
-//     int totalCost = size.width() * size.height(); // TODO: use progress reporter
-
     if(!config) config = new KisFilterConfiguration(id().id(), 1);
 
     QVariant value;

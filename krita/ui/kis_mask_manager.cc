@@ -276,8 +276,8 @@ void KisMaskManager::createSelectionmask()
 {
     KisLayerSP activeLayer = m_view->activeLayer();
 
-    if ( activeLayer ) {
-        if ( m_activeMask == 0 && activeLayer->selectionMask() == 0 )
+    if ( activeLayer && activeLayer->selectionMask() == 0 ) {
+        if ( m_activeMask == 0 )
             createSelectionMask( activeLayer.data(), activeLayer->firstChild() );
         else
             createSelectionMask( activeLayer.data(), m_activeMask.data() );

@@ -80,13 +80,6 @@ void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
 
     if (m_painter)
         delete m_painter;
-#if 0
-    if(! dev->hasSelection())
-    {
-        dev->selection()->clear();
-        dev->emitSelectionChanged();
-    }
-#endif
     KisSelectionSP selection = currentLayer()->selection();
 
     m_target = selection;
@@ -111,10 +104,6 @@ void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
 
 void KisToolSelectEraser::endPaint() {
     super::endPaint();
-#if 0
-    if (currentImage() && currentLayer()->paintDevice())
-        currentLayer()->paintDevice()->emitSelectionChanged();
-#endif
 }
 
 QWidget* KisToolSelectEraser::createOptionWidget()

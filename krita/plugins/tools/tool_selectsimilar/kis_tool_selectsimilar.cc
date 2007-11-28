@@ -157,8 +157,6 @@ useCursor(m_subtractCursor);
         selectByColor(dev, selection, c.data(), m_fuzziness, m_currentSelectAction);
 #if 0
         dev->setDirty();
-        dev->emitSelectionChanged();
-
         m_canvas->addCommand(t);
 #endif
 //         QApplication::restoreOverrideCursor();

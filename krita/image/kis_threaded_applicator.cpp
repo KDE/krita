@@ -48,7 +48,11 @@ public:
 };
 
 
-KisThreadedApplicator::KisThreadedApplicator( KisPaintDeviceSP dev, const QRect & rc, KisJobFactory * jobFactory, int margin, KoProgressUpdater * progressUpdater )
+KisThreadedApplicator::KisThreadedApplicator( KisPaintDeviceSP dev,
+    const QRect & rc,
+    KisJobFactory * jobFactory,
+    KoProgressUpdater * progressUpdater,
+    int margin)
     : m_d( new Private() )
 {
     m_d->dev = dev;
@@ -76,9 +80,6 @@ KisThreadedApplicator::~KisThreadedApplicator()
 
 void KisThreadedApplicator::execute()
 {
-    // XXX_PROGRESS: compute the total number of jobs we're going to
-    // start first, so we can set the KoProgressUpdater up in the
-    // right way.
     double h = m_d->rc.height();
     double w = m_d->rc.width();
     int x = m_d->rc.x();
@@ -94,7 +95,7 @@ void KisThreadedApplicator::execute()
     }
     else {
         int numTasks = static_cast<int>( ceil( w / m_d->tileSize * h / m_d->tileSize) );
-        m_d->progressUpdater->start( numTasks );    
+        m_d->progressUpdater->start( numTasks );
 
         int wleft = w;
         int col = 0;

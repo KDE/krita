@@ -19,6 +19,8 @@
 
 #include <QString>
 
+#include <KoProgressUpdater.h>
+
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_filter_configuration.h"
 #include "kis_filter_processing_information.h"
@@ -36,6 +38,15 @@ const KoID KisFilter::CategoryEnhance = KoID("enhance_filters", i18n("Enhance"))
 const KoID KisFilter::CategoryMap = KoID("map_filters", i18n("Map"));
 const KoID KisFilter::CategoryNonPhotorealistic = KoID("nonphotorealistic_filters", i18n("Non-photorealistic"));
 const KoID KisFilter::CategoryOther = KoID("other_filters", i18n("Other"));
+
+struct DummyProgressBar : public KoProgressProxy
+{
+    int max;
+    int maximum() const { return max; }
+    void setValue( int value ) {}
+    void setRange( int minimum, int maximum ) { max = maximum; }
+    void setFormat( const QString & format ) {}
+};
 
 struct KisFilter::Private {
     Private()
@@ -98,11 +109,34 @@ QRect KisFilter::enlargeRect(QRect rect, const KisFilterConfiguration* c) const 
     return rect;
 }
 
+void KisFilter::process(KisFilterConstantProcessingInformation src,
+                         KisFilterProcessingInformation dst,
+                         const QSize& size,
+                         const KisFilterConfiguration* config) const
+{
+    DummyProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    pu.start();
+    KoUpdater updater = pu.startSubtask();
+    process(src, dst, size, config, &updater);
+}        
+        
 void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater)
+                 KoUpdater* progressUpdater) const
 {
     KisFilterProcessingInformation info(device, rect.topLeft());
     process(info, info, rect.size(), config, progressUpdater);
+}
+
+void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config) const
+{
+    DummyProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    pu.start();
+    KoUpdater updater = pu.startSubtask();
+    
+    KisFilterProcessingInformation info(device, rect.topLeft());
+    process(info, info, rect.size(), config, &updater);
 }
 
 KisBookmarkedConfigurationManager* KisFilter::bookmarkManager()

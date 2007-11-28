@@ -87,15 +87,31 @@ public:
                          KisFilterProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater = 0
+                         KoUpdater* progressUpdater
         ) const = 0;
+
+    /**
+     * Provided for convenience when no progress reporting is needed.
+     */
+    virtual void process(KisFilterConstantProcessingInformation src,
+                         KisFilterProcessingInformation dst,
+                         const QSize& size,
+                         const KisFilterConfiguration* config
+        ) const;
+
 
     /**
      * Provided for convenience only when source and destination are the same
      */
     void process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0);
+                 KoUpdater* progressUpdater) const;
 
+    /**
+     * Provided for convenience only when source and destination are the same and no progress reporting
+     * is necessary.
+     */
+    void process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config) const;
+    
 public:
     /**
      * This function return the configuration set as the default by the user or the default configuration from

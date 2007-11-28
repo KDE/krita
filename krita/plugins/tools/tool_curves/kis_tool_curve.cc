@@ -520,10 +520,8 @@ void KisToolCurve::selectCurve()
     if(hasSelection) {
         QRect dirty(painter.dirtyRegion());
         dev->setDirty(dirty);
-        dev->emitSelectionChanged(dirty);
     } else {
         dev->setDirty();
-        dev->emitSelectionChanged();
     }
 
     if (m_currentImage->undo())

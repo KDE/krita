@@ -90,14 +90,15 @@ public:
        @param rc The part of the paintdevice that needs to be acted on
        @param jobFactory The factory class that creates the
               specialized jobs
+       @param updater The master KoProgressUpdater that will track updates for
+              all threads.
        @param margin. If present, the rects parcelled out to the jobs
                       will have the specified margin. When the results
                       are put together again, the margin is cut off.
                       Use this for convolutions, for instance.
-       @param updater The master KoProgressUpdater that will track updates for
-              all threads.
+
     */
-    KisThreadedApplicator( KisPaintDeviceSP dev, const QRect & rc, KisJobFactory * jobFactory, int margin = 0, KoProgressUpdater * updater = 0 );
+    KisThreadedApplicator( KisPaintDeviceSP dev, const QRect & rc, KisJobFactory * jobFactory, KoProgressUpdater * updater, int margin = 0);
     ~KisThreadedApplicator();
 
     /**

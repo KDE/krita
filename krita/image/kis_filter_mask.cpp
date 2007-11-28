@@ -85,7 +85,7 @@ void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
         return;
     }
 
-    filter->process( src,  dst, rc.size(), m_d->filterConfig);
+    filter->process( src, dst, rc.size(), m_d->filterConfig);
 
 }
 

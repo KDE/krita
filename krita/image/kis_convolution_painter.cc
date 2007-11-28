@@ -210,7 +210,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
 
         int progressPercent = 100 - ((((y + h) - row) * 100) / h);
 
-        if (progressPercent > lastProgressPercent) {
+        if (m_progressUpdater && progressPercent > lastProgressPercent) {
             m_progressUpdater->setProgress(progressPercent);
             lastProgressPercent = progressPercent;
 
@@ -227,7 +227,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
 
     addDirtyRect(QRect(x, y, w, h));
 
-    m_progressUpdater->setProgress(100);
+    if (m_progressUpdater) m_progressUpdater->setProgress(100);
 
     for (int i = 0; i < cacheSize; i++)
         delete[] pixelPtrCache[i];
@@ -406,7 +406,7 @@ void KisConvolutionPainter::applyMatrixRepeat( KisKernelSP kernel, qint32 x, qin
 
         int progressPercent = 100 - ((((y + h) - row) * 100) / h);
 
-        if (progressPercent > lastProgressPercent) {
+        if (m_progressUpdater && progressPercent > lastProgressPercent) {
             m_progressUpdater->setProgress(progressPercent);
             lastProgressPercent = progressPercent;
 
@@ -423,7 +423,7 @@ void KisConvolutionPainter::applyMatrixRepeat( KisKernelSP kernel, qint32 x, qin
 
     addDirtyRect(QRect(x, y, w, h));
 
-    m_progressUpdater->setProgress(100);
+    if (m_progressUpdater) m_progressUpdater->setProgress(100);
 
     for (int i = 0; i < cacheSize; i++)
         delete[] pixelPtrCache[i];

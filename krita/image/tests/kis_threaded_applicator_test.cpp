@@ -26,6 +26,7 @@
 #include "kis_paint_layer.h"
 #include "kis_threaded_applicator_test.h"
 #include "kis_threaded_applicator.h"
+#include "testutil.h"
 
 class TestJob : public KisJob {
 public:
@@ -77,14 +78,15 @@ void KisThreadedApplicatorTest::testApplication()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     TestJobFactory factory;
-
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater updater(&bar);
     KisPaintDeviceSP test = new KisPaintDevice( colorSpace, "test" );
 
     quint8 *bytes = test->colorSpace()->allocPixelBuffer( 1 );
     memset( bytes, 128, test->colorSpace()->pixelSize() );
     test->fill( 0, 0, 1000, 1000, bytes );
 
-    KisThreadedApplicator applicator( test, QRect( 0, 0, 1000, 1000 ), &factory);
+    KisThreadedApplicator applicator( test, QRect( 0, 0, 1000, 1000 ), &factory, &updater);
     applicator.execute();
 
     KisRectConstIteratorPixel it = test->createRectConstIterator(0, 0, 1000, 1000 );

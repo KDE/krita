@@ -432,7 +432,6 @@ void KisSelectionManager::cut()
 #if 0 // XXX_SELECTION
     dev->clearSelection();
     dev->deselect();
-    dev->emitSelectionChanged();
 #endif
     if (img->undo()) {
         img->undoAdapter()->addCommand(t);
@@ -588,7 +587,6 @@ void KisSelectionManager::selectAll()
     dev->selection()->getOrCreatePixelSelection()->clear();
     dev->selection()->getOrCreatePixelSelection()->invert();
     dev->setDirty(img->bounds());
-    dev->emitSelectionChanged();
 #endif
     if (img->undo())
         img->undoAdapter()->addCommand(t);
@@ -614,7 +612,6 @@ void KisSelectionManager::deselect()
         dev->deselect();
     }
     dev->setDirty(img->bounds());
-    dev->emitSelectionChanged();
 
     if (img->undo())
         img->undoAdapter()->addCommand(t);
@@ -640,7 +637,6 @@ void KisSelectionManager::clear()
 #if 0 // XXX_SELECTION
     dev->clearSelection();
     dev->setDirty(img->bounds());
-    dev->emitSelectionChanged();
 #endif
     if (img->undo()) img->undoAdapter()->addCommand(t);
 }
@@ -679,7 +675,6 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
 // XXX_SELECTION
 #if 0
     dev->setDirty();
-    dev->emitSelectionChanged();
 #endif
     if (img->undo()) {
         img->undoAdapter()->addCommand(painter2.endTransaction());
@@ -717,7 +712,6 @@ void KisSelectionManager::reselect()
 
     dev->reselect(); // sets hasSelection=true
     dev->setDirty(img->bounds());
-    dev->emitSelectionChanged();
 
     if (img->undo())
         img->undoAdapter()->addCommand(t);
@@ -746,7 +740,6 @@ void KisSelectionManager::invert()
 
 
     dev->setDirty(img->bounds());
-    dev->emitSelectionChanged();
     if (t) {
         img->undoAdapter()->addCommand(t);
     }
@@ -827,7 +820,6 @@ void KisSelectionManager::feather()
     painter.end();
 #if 0
     dev->setDirty(img->bounds());
-    dev->emitSelectionChanged();
 #endif
     if (img->undo())
         img->undoAdapter()->addCommand(t);
@@ -989,7 +981,6 @@ void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
     delete[] out;
 #if 0
     dev->setDirty(img->bounds());
-    dev->emitSelectionChanged();
 
     if (t) {
         img->undoAdapter()->addCommand(t);
@@ -1227,7 +1218,6 @@ void KisSelectionManager::smooth()
     delete[] out;
 #if 0
     dev->setDirty(img->bounds());
-    dev->emitSelectionChanged();
 #endif
 }
 
@@ -1301,7 +1291,6 @@ void KisSelectionManager::erode()
     delete[] out;
 #if 0
     dev->setDirty();
-    dev->emitSelectionChanged();
 #endif
 }
 
@@ -1375,9 +1364,6 @@ void KisSelectionManager::dilate()
     delete[] out;
 
     layer->setDirty();
-#if 0
-    dev->emitSelectionChanged();
-#endif
 }
 
 void KisSelectionManager::border(qint32 xradius, qint32 yradius)
@@ -1434,7 +1420,6 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
 #if 0
         img->undoAdapter()->addCommand(t);
         dev->setDirty(img->bounds());
-        dev->emitSelectionChanged();
 #endif
         return;
     }
@@ -1628,7 +1613,6 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
 #if 0
     img->undoAdapter()->addCommand(t);
     dev->setDirty(img->bounds());
-    dev->emitSelectionChanged();
 #endif
 }
 

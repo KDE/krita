@@ -207,7 +207,7 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         // Chop up in rects.
         KisFilterJobFactory factory( m_d->filter, config );
         KoProgressUpdater updater( m_d->view->statusBar()->progress() );
-        KisThreadedApplicator applicator(dev, rect, &factory, m_d->filter->overlapMarginNeeded( config ), &updater);
+        KisThreadedApplicator applicator(dev, rect, &factory, &updater, m_d->filter->overlapMarginNeeded( config ));
         applicator.execute();
     }
 /*    if (m_d->filter->cancelRequested()) { // TODO: port to the progress display reporter

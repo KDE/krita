@@ -43,6 +43,7 @@ set(kritaui_LIB_SRCS
     kis_dlg_preferences.cc
     kis_doc2.cc
     kis_double_widget.cc
+    kis_exposure_visitor.cc
     kis_factory2.cc
     kis_filter_manager.cc
     kis_filter_dialog.cc

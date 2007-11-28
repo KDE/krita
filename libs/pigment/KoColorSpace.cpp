@@ -259,7 +259,7 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
     }
 
     KoColorConversionTransformation* tf = 0;
-#if 0
+#if 1
     if (d->lastUsedTransform != 0 && d->lastUsedDstColorSpace != 0) {
         if (*dstColorSpace == *d->lastUsedDstColorSpace) {
             tf = d->lastUsedTransform;
@@ -269,7 +269,7 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
         if (!d->transforms.contains(dstColorSpace)) {
 #endif    // XXX: Should we clear the transform cache if it gets too big?
             tf = this->createColorConverter(dstColorSpace, renderingIntent);
-#if 0
+#if 1
             d->transforms[dstColorSpace] = tf;
         }
         else {

@@ -161,6 +161,16 @@ QCursor KoTool::cursor() const {
     return d->previousCursor;
 }
 
+void KoTool::deleteSelection()
+{
+}
+
+void KoTool::cut()
+{
+    copy();
+    deleteSelection();
+}
+
 QList<QAction*> KoTool::popupActionList() const {
     return d->popupActionList;
 }

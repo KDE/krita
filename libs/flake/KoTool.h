@@ -210,6 +210,21 @@ public:
     virtual void copy() const { }
 
     /**
+     * Delete the tools selection.
+     * The default implementation is empty to aid tools that don'e have any selection.
+     * @see selection()
+     */
+    virtual void deleteSelection();
+
+    /**
+     * Cut the tools selection and copy it to the clipboard.
+     * The default implementation calls copy() and then deleteSelection()
+     * @see copy()
+     * @see deleteSelection()
+     */
+    virtual void cut();
+
+    /**
      * Paste the clipboard selection.
      * A tool typically has one or more shapes selected and pasting should do something meaningful
      * for this specific shape and tool combination.  Inserting text in a text tool, for example.

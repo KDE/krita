@@ -101,7 +101,7 @@ double KoHdrColorProfile::hdrExposure() const
 void KoHdrColorProfile::setHdrExposure(double exposure)
 {
     d->exposure = exposure;
-    d->exposureFactor = pow(2, exposure + 2.47393) * d->middleGreyScaleFactor;
+    d->exposureFactor = pow(2, exposure + 2.47393) * d->middleGreyScaleFactor* 65535.0;
     d->invExposureFactor = 1.0 / d->exposureFactor;
 }
 
@@ -122,7 +122,7 @@ quint16 KoHdrColorProfile::channelToDisplay(double value)
     const int minU16 = 0;
     const int maxU16 = 65535;
     
-    return (quint16)qBound(minU16, qRound(value * maxU16), maxU16);
+    return (quint16)qBound(minU16, qRound(value), maxU16);
 }
 
 double KoHdrColorProfile::displayToChannel(quint16 value)

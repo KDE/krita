@@ -179,8 +179,8 @@ KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(c
     Q_ASSERT(path);
     KoColorConversionTransformation* transfo = createTransformationFromPath(path, srcColorSpace, dstColorSpace, renderingIntent);
     delete path;
-    Q_ASSERT(transfo->srcColorSpace() == srcColorSpace);
-    Q_ASSERT(transfo->dstColorSpace() == dstColorSpace);
+    Q_ASSERT(*transfo->srcColorSpace() == *srcColorSpace);
+    Q_ASSERT(*transfo->dstColorSpace() == *dstColorSpace);
     Q_ASSERT(transfo);
     return transfo;
 }
@@ -215,8 +215,8 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
     Path* returnPath = findBestPath(  bestPath->endNode(), csNode);
     Q_ASSERT( returnPath );
     toCS = createTransformationFromPath( returnPath, endColorSpace, colorSpace );
-    Q_ASSERT( toCS->dstColorSpace() == fromCS->srcColorSpace());
-    Q_ASSERT( fromCS->dstColorSpace() == toCS->srcColorSpace());
+    Q_ASSERT( *toCS->dstColorSpace() == *fromCS->srcColorSpace());
+    Q_ASSERT( *fromCS->dstColorSpace() == *toCS->srcColorSpace());
 }
 
 KoColorConversionTransformation* KoColorConversionSystem::createTransformationFromPath(const Path* path, const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent ) const

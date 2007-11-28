@@ -44,8 +44,8 @@ KoFallBackColorTransformation::KoFallBackColorTransformation(const KoColorSpace*
 
 KoFallBackColorTransformation::KoFallBackColorTransformation(KoColorConversionTransformation* _csToFallBack, KoColorConversionTransformation* _fallBackToCs, KoColorTransformation* _transfo) : d(new Private)
 {
-    Q_ASSERT(_csToFallBack->srcColorSpace() == _fallBackToCs->dstColorSpace());
-    Q_ASSERT(_fallBackToCs->srcColorSpace() == _csToFallBack->dstColorSpace());
+    Q_ASSERT(*_csToFallBack->srcColorSpace() == *_fallBackToCs->dstColorSpace());
+    Q_ASSERT(*_fallBackToCs->srcColorSpace() == *_csToFallBack->dstColorSpace());
     d->fallBackColorSpace = _fallBackToCs->dstColorSpace();
     d->csToFallBack = _csToFallBack;
     d->fallBackToCs = _fallBackToCs;

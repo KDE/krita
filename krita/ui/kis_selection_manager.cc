@@ -452,7 +452,7 @@ void KisSelectionManager::copy()
 
     QRect r = selection->selectedExactRect();
 
-    KisPaintDeviceSP clip = KisPaintDeviceSP(new KisPaintDevice(dev->colorSpace(), "clip"));
+    KisPaintDeviceSP clip = new KisPaintDevice(dev->colorSpace(), "clip");
     Q_CHECK_PTR(clip);
 
     const KoColorSpace * cs = clip->colorSpace();
@@ -521,7 +521,7 @@ KisLayerSP KisSelectionManager::paste()
 
 /*XXX CBR have an idea of asking the user if he is about to paste a clip in another cs than that of
   the image if that is what he want rather than silently converting
-  if (clip->colorSpace != img ->colorSpace())
+  if ( ! ( *clip->colorSpace == *img ->colorSpace()) )
   if (dlg->exec() == QDialog::Accepted)
   layer->convertTo(img->colorSpace());
 */
@@ -556,7 +556,7 @@ void KisSelectionManager::pasteNew()
     Q_ASSERT(doc->undoAdapter() != 0);
     doc->undoAdapter()->setUndo(false);
 
-    KisImageSP img = KisImageSP(new KisImage(doc->undoAdapter(), r.width(), r.height(), clip->colorSpace(), "Pasted"));
+    KisImageSP img = new KisImage(doc->undoAdapter(), r.width(), r.height(), clip->colorSpace(), "Pasted");
     KisPaintLayer *layer = new KisPaintLayer(img.data(), clip->objectName(), OPACITY_OPAQUE, clip->colorSpace());
 
     KisPainter p(layer->paintDevice());
@@ -652,7 +652,7 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
     KisSelectionSP selection = m_parent->selection();
     if ( !selection ) return;
 
-    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(dev->colorSpace()));
+    KisPaintDeviceSP filled = new KisPaintDevice(dev->colorSpace());
 
     // XXX_SELECTION: pass the selection to the right painter?
     KisFillPainter painter(filled);

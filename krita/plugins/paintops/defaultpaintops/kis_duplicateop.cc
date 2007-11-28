@@ -205,7 +205,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     if( srcPoint.y() < 0)
         srcPoint.setY(0);
-    if( !(m_srcdev && m_srcdev->colorSpace() != source()->colorSpace()) )
+    if( !(m_srcdev && !(*m_srcdev->colorSpace() == *source()->colorSpace())) )
     {
         m_srcdev = new KisPaintDevice(source()->colorSpace(), "duplicate source dev");
     }

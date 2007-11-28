@@ -448,7 +448,7 @@ void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scale, do
     }
     
     // Generate the paint device from the mask
-    Q_ASSERT(color.colorSpace() == dst->colorSpace());
+    Q_ASSERT(*color.colorSpace() == *dst->colorSpace());
     
     const KoColorSpace* cs = dst->colorSpace();
     dst->dataManager()->setDefaultPixel( color.data() );

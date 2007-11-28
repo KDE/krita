@@ -475,7 +475,7 @@ void KisPaintDeviceTest::testColorSpaceConversion()
                 logFailure( "pixelsize", srcCs, dstCs );
                 failedColorSpaces++;
             }
-            if ( dev->colorSpace()->name() != dstCs->name() ) {
+            if ( !(*dev->colorSpace() == *dstCs) ) {
                 logFailure( "dest cs", srcCs, dstCs );
                 failedColorSpaces++;
             }

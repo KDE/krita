@@ -84,7 +84,7 @@ const KoColorSpace* KisReinhard02Operator::colorSpace() const
 
 void KisReinhard02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const
 {
-    Q_ASSERT( device->colorSpace() == colorSpace() );
+    Q_ASSERT( *device->colorSpace() == *colorSpace() );
     QRect r = device->exactBounds();
     kDebug() << "Tonemaping with Reinhard02 operator on " << r;
     

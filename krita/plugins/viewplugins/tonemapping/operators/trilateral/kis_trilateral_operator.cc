@@ -78,7 +78,7 @@ const KoColorSpace* KisTrilateralOperator::colorSpace() const
 
 void KisTrilateralOperator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const
 {
-    Q_ASSERT( device->colorSpace() == colorSpace() );
+    Q_ASSERT( *device->colorSpace() == *colorSpace() );
     QRect r = device->exactBounds();
     kDebug() << "Tonemaping with Trilateral operator on " << r;
     

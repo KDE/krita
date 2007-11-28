@@ -41,7 +41,7 @@ void KisPlainColoring::colorAt(int x, int y, KoColor* c)
     Q_UNUSED( x );
     Q_UNUSED( y );
 
-    if(not m_cacheColor or c->colorSpace() != m_cacheColor->colorSpace())
+    if(not m_cacheColor or not (*c->colorSpace() == *m_cacheColor->colorSpace()))
     {
         if(m_cacheColor) delete m_cacheColor;
         m_cacheColor = new KoColor( c->colorSpace() );

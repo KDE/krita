@@ -516,8 +516,7 @@ bool KisPaintDevice::read(KoStore *store)
 
 void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
 {
-    if (   colorSpace()->id() == dstColorSpace->id()
-        && colorSpace()->profile() == dstColorSpace->profile() )
+    if (   *colorSpace() == *dstColorSpace )
     {
         return;
     }

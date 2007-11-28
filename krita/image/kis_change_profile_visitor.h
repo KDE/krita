@@ -88,7 +88,7 @@ bool KisChangeProfileVisitor::visit(KisPaintLayer *layer)
 
     const KoColorSpace * cs = layer->paintDevice()->colorSpace();
 
-    if (cs == m_oldColorSpace) {
+    if (*cs == *m_oldColorSpace) {
 
         layer->paintDevice()->setProfile(m_dstColorSpace->profile());
 

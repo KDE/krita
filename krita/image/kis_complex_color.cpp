@@ -126,7 +126,7 @@ KoColor KisComplexColor::simpleColor()
 
 KoColor KisComplexColor::defaultColor()
 {
-    if (!m_defaultColor.colorSpace() || m_defaultColor.colorSpace()->id() != colorSpace()->id())
+    if (!m_defaultColor.colorSpace() || !(*m_defaultColor.colorSpace() == *colorSpace()))
         m_defaultColor.convertTo(colorSpace());
     return m_defaultColor;
 }

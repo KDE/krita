@@ -564,7 +564,7 @@ void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
 
 void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
 {
-    if ( m_d->colorSpace == dstColorSpace )
+    if ( *m_d->colorSpace == *dstColorSpace )
     {
         return;
     }

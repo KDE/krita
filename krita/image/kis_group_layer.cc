@@ -140,7 +140,7 @@ void KisGroupLayer::resetProjection(KisPaintDeviceSP to)
 bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) const {
     if (!l) return false;
     if (!l->paintDevice()) return false;
-    if (l->paintDevice()->colorSpace() != image()->colorSpace()) return false;
+    if (!(*l->paintDevice()->colorSpace() == *image()->colorSpace())) return false;
     if (!l->visible()) return false;
     if (l->opacity() != OPACITY_OPAQUE) return false;
     if (l->temporaryTarget()) return false;

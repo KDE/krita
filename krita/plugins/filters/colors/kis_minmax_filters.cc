@@ -87,6 +87,7 @@ void KisFilterMax::process(KisFilterConstantProcessingInformation srcInfo,
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(config);
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();

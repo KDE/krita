@@ -131,6 +131,12 @@ QUndoCommand* KoShapeController::removeShapes( const QList<KoShape*> &shapes, QU
     return new KoShapeDeleteCommand( d->shapeController, shapes, parent );
 }
 
-void KoShapeController::setShapeControllerBase(KoShapeControllerBase* shapeControllerBase) {
+void KoShapeController::setShapeControllerBase(KoShapeControllerBase* shapeControllerBase)
+{
     d->shapeController = shapeControllerBase;
+}
+
+KoShapeControllerBase * KoShapeController::shapeControllerBase()
+{
+    return d->shapeController;
 }

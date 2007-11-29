@@ -48,6 +48,17 @@ KisPopupButton::~KisPopupButton()
     delete d;
 }
 
+void KisPopupButton::setAllwaysVisible(bool v)
+{
+    if(v)
+    {
+        d->frame->setFrameStyle( Qt::SubWindow );
+        showPopupWidget();
+    } else {
+        d->frame->setFrameStyle( Qt::Popup );
+    }
+}
+
 void KisPopupButton::setPopupWidget(QWidget* widget)
 {
     delete d->popupWidget;

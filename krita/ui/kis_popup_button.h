@@ -38,6 +38,12 @@ class KRITAUI_EXPORT KisPopupButton : public QPushButton {
          * the owner and parent of the widget.
          */
         void setPopupWidget(QWidget* widget);
+        /**
+         * This function allow to force the popup to be visible.
+         * @param v set to true to force the popup to be visible, set to false
+         *          to allow the popup to be hidden
+         */
+        void setAllwaysVisible(bool v);
     public slots:
         void showPopupWidget();
         void hidePopupWidget();

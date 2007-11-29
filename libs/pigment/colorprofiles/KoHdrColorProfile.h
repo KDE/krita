@@ -67,8 +67,8 @@ class PIGMENTCMS_EXPORT KoHdrColorProfile : public KoColorProfile {
         void setHdrExposure(double exposure);
         virtual bool operator==(const KoColorProfile&) const;
     public:
-        quint16 channelToDisplay(double value);
-        double displayToChannel(quint16 value);
+        quint16 channelToDisplay(double value) const;
+        double displayToChannel(quint16 value) const;
     private:
         struct Private;
         Private* const d;

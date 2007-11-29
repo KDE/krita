@@ -29,6 +29,7 @@
 
 #include "KoColorSpaceTraits.h"
 #include "KoScaleColorConversionTransformation.h"
+#include "kis_exposure_corrected_rgb_to_rgb.h"
 
 typedef KoRgbTraits<half> RgbF16Traits;
 
@@ -70,12 +71,12 @@ public:
     {
         QList<KoColorConversionTransformationFactory*> list;
         // Conversion to RGB Float 16bit
-        list.append(new KoScaleColorConversionTransformationFactory< KoRgbTraits<quint8>, RgbF16Traits >( RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), Float16BitsColorDepthID.id() ) );
-        list.append(new KoScaleColorConversionTransformationFactory< KoRgbU16Traits, RgbF16Traits >( RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), Float16BitsColorDepthID.id() ) );
+        list.append(new KisExposureCorrectedIntegerRgbToFloatRgbConversionTransformationFactory< KoRgbTraits<quint8>, RgbF16Traits >( Integer8BitsColorDepthID.id(), Float16BitsColorDepthID.id() ) );
+        list.append(new KisExposureCorrectedIntegerRgbToFloatRgbConversionTransformationFactory< KoRgbU16Traits, RgbF16Traits >( Integer16BitsColorDepthID.id(), Float16BitsColorDepthID.id() ) );
         list.append(new KoScaleColorConversionTransformationFactory< KoRgbTraits<float>, RgbF16Traits >( RGBAColorModelID.id(), Float32BitsColorDepthID.id(), Float16BitsColorDepthID.id() ) );
         // Conversion from RGB Float 16bit
-        list.append(new KoScaleColorConversionTransformationFactory< RgbF16Traits, KoRgbTraits<quint8> >( RGBAColorModelID.id(), Float16BitsColorDepthID.id(), Integer8BitsColorDepthID.id() ) );
-        list.append(new KoScaleColorConversionTransformationFactory< RgbF16Traits, KoRgbU16Traits  >( RGBAColorModelID.id(), Float16BitsColorDepthID.id(), Integer16BitsColorDepthID.id() ) );
+        list.append(new KisExposureCorrectedFloatRgbToIntegerRgbConversionTransformationFactory< RgbF16Traits, KoRgbTraits<quint8> >( Float16BitsColorDepthID.id(), Integer8BitsColorDepthID.id() ) );
+        list.append(new KisExposureCorrectedFloatRgbToIntegerRgbConversionTransformationFactory< RgbF16Traits, KoRgbU16Traits  >( Float16BitsColorDepthID.id(), Integer16BitsColorDepthID.id() ) );
         list.append(new KoScaleColorConversionTransformationFactory< RgbF16Traits, KoRgbTraits<float> >( RGBAColorModelID.id(), Float16BitsColorDepthID.id(), Float32BitsColorDepthID.id() ) );
         
         return list;

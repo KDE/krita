@@ -115,7 +115,7 @@ bool KoHdrColorProfile::operator==(const KoColorProfile& rhs) const
     return false;
 }
 
-quint16 KoHdrColorProfile::channelToDisplay(double value)
+quint16 KoHdrColorProfile::channelToDisplay(double value) const
 {
     value *= d->exposureFactor;
     
@@ -125,7 +125,7 @@ quint16 KoHdrColorProfile::channelToDisplay(double value)
     return (quint16)qBound(minU16, qRound(value), maxU16);
 }
 
-double KoHdrColorProfile::displayToChannel(quint16 value)
+double KoHdrColorProfile::displayToChannel(quint16 value) const
 {
     return value * d->invExposureFactor;
 }

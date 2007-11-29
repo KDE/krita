@@ -247,6 +247,7 @@ void KisPerChannelFilter::process(KisFilterConstantProcessingInformation srcInfo
     KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection() );
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
     qint32 totalCost = (size.width() * size.height()) / 100;
+    if( totalCost == 0 ) totalCost = 1;
     qint32 pixelsProcessed = 0;
 
     while( not iter.isDone()  and (progressUpdater and not progressUpdater->interrupted()))

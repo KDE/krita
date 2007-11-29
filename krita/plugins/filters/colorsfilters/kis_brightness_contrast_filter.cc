@@ -223,6 +223,7 @@ void KisBrightnessContrastFilter::process(KisFilterConstantProcessingInformation
     KisRectIteratorPixel iter = dst->createRectIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), dstInfo.selection());
 
     qint32 totalCost = (size.width() * size.height()) / 100;
+    if( totalCost == 0 ) totalCost = 1;
     qint32 pixelsProcessed = 0;
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
     while( ! iter.isDone()  && !progressUpdater->interrupted())

@@ -65,6 +65,7 @@ void KisHSVAdjustmentFilter::process(KisFilterConstantProcessingInformation srcI
     }
     int count = 0;
     int cost = size.width() * size.height();
+    if( cost == 0 ) cost = 1;
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
 

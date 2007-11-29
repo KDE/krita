@@ -158,6 +158,7 @@ void KisFilterMin::process(KisFilterConstantProcessingInformation srcInfo,
 
     int pixelsProcessed = 0;
     int totalCost = size.width() * size.height() / 100;
+    if( totalCost == 0 ) totalCost = 1;
 
     const KoColorSpace * cs = src->colorSpace();
     qint32 nC = cs->colorChannelCount();

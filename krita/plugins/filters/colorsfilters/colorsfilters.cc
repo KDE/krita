@@ -185,6 +185,7 @@ void KisAutoContrast::process(KisFilterConstantProcessingInformation srcInfo,
     KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
 
     qint32 totalCost = (size.width() * size.height()) / 100;
+    if( totalCost == 0 ) totalCost = 1;
     qint32 pixelsProcessed = 0;
 
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
@@ -286,6 +287,7 @@ void KisDesaturateFilter::process(KisFilterConstantProcessingInformation srcInfo
     KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
 
     qint32 totalCost = size.width() * size.height() / 100;
+    if( totalCost == 0 ) totalCost = 1;
     qint32 pixelsProcessed = 0;
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
 

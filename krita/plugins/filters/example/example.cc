@@ -88,6 +88,7 @@ void KisFilterInvert::process(KisFilterConstantProcessingInformation srcInfo,
     Q_ASSERT(!dst.isNull());
 
     int cost = (size.width() * size.height()) / 100;
+    if( cost == 0 ) cost = 1;
     int count = 0;
 
     const KoColorSpace * cs = src->colorSpace();

@@ -80,6 +80,7 @@ void KisFilterColorToAlpha::process(KisFilterConstantProcessingInformation srcIn
     KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection() );
 
     int totalCost = size.width() * size.height() / 100;
+    if( totalCost == 0 ) totalCost = 1;
     int currentProgress = 0;
 
     const KoColorSpace * cs = src->colorSpace();

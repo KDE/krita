@@ -21,13 +21,13 @@
 #include <QRect>
 #include <q3valuelist.h>
 
-#include <ksharedptr.h>
+#include <kis_shared.h>
 
 #include <kis_tileddatamanager.h>
 
 class KisTile;
 
-class KisTiledRandomAccessor : public KShared {
+class KisTiledRandomAccessor : public KisShared {
     struct KisTileInfo {
         KisTile* tile;
         KisTile* oldtile;

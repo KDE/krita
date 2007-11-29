@@ -96,6 +96,8 @@ public:
     KoToolSelection* selection();
 
     /// Forwarded to the current KoTool
+    void cut();
+    /// Forwarded to the current KoTool
     void copy() const;
     /// Forwarded to the current KoTool
     bool paste();

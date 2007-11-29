@@ -21,6 +21,8 @@
 
 #include "kis_node_visitor.h"
 
+class KoColorProfile;
+
 /**
  * Set the exposure 
  */
@@ -34,6 +36,8 @@ class KisExposureVisitor : public KisNodeVisitor {
         virtual bool visit(KisPaintLayer *layer);
         virtual bool visit(KisGroupLayer *layer);
         virtual bool visit(KisAdjustmentLayer* layer);
+    protected:
+        void setExposureToProfile(KoColorProfile* profile);
     private:
         double m_exposure;
 };

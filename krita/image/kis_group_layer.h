@@ -70,7 +70,8 @@ public:
      * resulting in a grayscale projection that is then merged with an
      * rgb image stack.
      */
-    const KoColorSpace * colorSpace();
+    const KoColorSpace * colorSpace() const;
+    KoColorSpace * colorSpace();
 
     /**
        Return the united extents of all layers in this group layer;

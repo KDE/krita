@@ -82,7 +82,15 @@ bool KisGroupLayer::allowAsChild( KisNodeSP node) const
 }
 
 
-const KoColorSpace * KisGroupLayer::colorSpace()
+const KoColorSpace * KisGroupLayer::colorSpace() const
+{
+    // Due to virtual void resetProjection(KisPaintDeviceSP to =
+    // 0), the colorspace of the group layer can be different from the
+    // colorspace of the image. (XXX: is that desirable? BSAR)
+    return m_d->projection->colorSpace();
+}
+
+KoColorSpace * KisGroupLayer::colorSpace()
 {
     // Due to virtual void resetProjection(KisPaintDeviceSP to =
     // 0), the colorspace of the group layer can be different from the

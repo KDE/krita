@@ -31,6 +31,15 @@ KisExposureVisitor::KisExposureVisitor(double exposure) : m_exposure(exposure)
     
 }
 
+void KisExposureVisitor::setExposureToProfile(KoColorProfile* profile)
+{
+    KoHdrColorProfile* hdrProfile = dynamic_cast<KoHdrColorProfile*>(profile);
+    if(hdrProfile)
+    {
+        hdrProfile->setHdrExposure(m_exposure);
+    }
+}
+
 bool KisExposureVisitor::visit( KisExternalLayer * e)
 {
     Q_UNUSED( e );
@@ -38,15 +47,12 @@ bool KisExposureVisitor::visit( KisExternalLayer * e)
 }
 bool KisExposureVisitor::visit(KisPaintLayer *layer)
 {
-    KoHdrColorProfile* hdrProfile = dynamic_cast<KoHdrColorProfile*>(layer->paintDevice()->colorSpace()->profile());
-    if(hdrProfile)
-    {
-        hdrProfile->setHdrExposure(m_exposure);
-    }
+    setExposureToProfile(layer->paintDevice()->colorSpace()->profile());
     return true;
 }
 bool KisExposureVisitor::visit(KisGroupLayer *layer)
 {
+    setExposureToProfile(layer->colorSpace()->profile());
     KisLayerSP child = dynamic_cast<KisLayer*>( layer->firstChild().data() );
     while (child) {
         child->accept(*this);

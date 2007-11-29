@@ -24,20 +24,26 @@
 #include "kis_filter.h"
 
 class KisFilterColorToAlpha : public KisFilter {
-    public:
-        KisFilterColorToAlpha();
-    public:
+
+public:
+     
+    KisFilterColorToAlpha();
+
+    using KisFilter::process;
+    
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
-        static inline KoID id() { return KoID("colortoalpha", i18n("Color to Alpha")); }
-    public:
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev) const;
-        virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP dev) const;
-};
+        
+    static inline KoID id() { return KoID("colortoalpha", i18n("Color to Alpha")); }
+    
+public:
 
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP dev) const;
+};
 
 #endif

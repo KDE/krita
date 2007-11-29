@@ -47,21 +47,21 @@ class KisRainDropsFilter : public KisFilter
 public:
     KisRainDropsFilter();
 public:
+    using KisFilter::process;
+    
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
     static inline KoID id() { return KoID("raindrops", i18n("Raindrops")); }
     
-    virtual bool supportsPainting() const { return false; }
-    virtual bool supportsPreview() const { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisRainDropsFilterConfiguration( 30, 80, 20)); return list; }
 
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
 private:
     bool** CreateBoolArray (uint Columns, uint Rows);

@@ -77,7 +77,7 @@ public:
      * Activate the program, making it the active program object in the render
      * context.
      */
-    virtual void activate() const;
+    virtual void activate();
 
     /**
      * Deactivate the program so that it is no longer the active program object

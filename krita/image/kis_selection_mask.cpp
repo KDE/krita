@@ -41,7 +41,7 @@ KisSelectionMask::~KisSelectionMask()
     delete m_d;
 }
 
-bool KisSelectionMask::allowAsChild( KisNodeSP node)
+bool KisSelectionMask::allowAsChild( KisNodeSP node) const
 {
     Q_UNUSED(node);
     return false;

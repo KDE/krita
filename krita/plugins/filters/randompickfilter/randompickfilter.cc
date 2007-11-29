@@ -67,22 +67,12 @@ KritaRandomPickFilter::~KritaRandomPickFilter()
 
 KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), CategoryOther, i18n("&Random Pick..."))
 {
+    setColorSpaceIndependence( FULLY_INDEPENDENT );
+    setSupportsPainting( true );
+    setSupportsPreview( true );
+    setSupportsIncrementalPainting( false );
 }
 
-KisFilterConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
-{
-    Q_UNUSED(dev);
-    return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent);
-}
-
-KisFilterConfiguration* KisFilterRandomPick::factoryConfiguration(const KisPaintDeviceSP) const
-{
-    KisFilterConfiguration* config = new KisFilterConfiguration("randompick", 1);
-    config->setProperty("level", 50 );
-    config->setProperty("windowsize", 2.5 );
-    config->setProperty("opacity", 100 );
-    return config;
-}
 
 void KisFilterRandomPick::process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
@@ -91,6 +81,11 @@ void KisFilterRandomPick::process(KisFilterConstantProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
 #if 0
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
@@ -131,4 +126,19 @@ void KisFilterRandomPick::process(KisFilterConstantProcessingInformation src,
 
     setProgressDone(); // Must be called even if you don't really support progression
 #endif
+}
+
+KisFilterConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev)
+{
+    Q_UNUSED(dev);
+    return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent);
+}
+
+KisFilterConfiguration* KisFilterRandomPick::factoryConfiguration(const KisPaintDeviceSP) const
+{
+    KisFilterConfiguration* config = new KisFilterConfiguration("randompick", 1);
+    config->setProperty("level", 50 );
+    config->setProperty("windowsize", 2.5 );
+    config->setProperty("opacity", 100 );
+    return config;
 }

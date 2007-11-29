@@ -194,7 +194,7 @@ QString KisOpenGLProgram::getInfoLog() const
     return infoLog;
 }
 
-void KisOpenGLProgram::activate() const
+void KisOpenGLProgram::activate()
 {
     if (m_program != 0 && m_isValid) {
         KIS_OPENGL_CLEAR_ERROR();

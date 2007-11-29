@@ -234,7 +234,7 @@ bool HessianDetector::_boxFilterDetect() {
     //cout << "Max vector size:"<< orderedList.max_size() << ", capacity:" << orderedList.capacity() << "\n";
 
 
-    const int iMax=std::numeric_limits<int>::max();
+    //const int iMax=std::numeric_limits<int>::max();
 
     //TODO:
     //leave out pixels close to the edge; number of left-out pixels

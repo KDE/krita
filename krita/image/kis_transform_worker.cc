@@ -59,6 +59,8 @@ KisTransformWorker::~KisTransformWorker()
 
 void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
 #if 0 // XXX_SELECTION
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
@@ -112,6 +114,8 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 
 void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
 #if 0
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
@@ -163,6 +167,9 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
 
 void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+
 #if 0
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
@@ -220,6 +227,9 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
 
 void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+
 #if 0
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
@@ -291,6 +301,11 @@ template <class iter> void calcDimensions (KisPaintDevice *dev, qint32 &srcStart
 template <> void calcDimensions <KisHLineIteratorPixel>
 (KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines)
 {
+    Q_UNUSED(dev);
+    Q_UNUSED(srcStart);
+    Q_UNUSED(srcLen);
+    Q_UNUSED(firstLine);
+    Q_UNUSED(numLines);
 #if 0
     if(dev->hasSelection())
     {
@@ -310,6 +325,12 @@ template <> void calcDimensions <KisHLineIteratorPixel>
 template <> void calcDimensions <KisVLineIteratorPixel>
 (KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines)
 {
+
+    Q_UNUSED(dev);
+    Q_UNUSED(srcStart);
+    Q_UNUSED(srcLen);
+    Q_UNUSED(firstLine);
+    Q_UNUSED(numLines);
 #if 0
     if(dev->hasSelection())
     {
@@ -338,6 +359,14 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
                                        double floatscale, double shear, qint32 dx,
                                        KisFilterStrategy *filterStrategy, bool fixBorderAlpha)
 {
+
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(floatscale);
+    Q_UNUSED(shear);
+    Q_UNUSED(dx);
+    Q_UNUSED(filterStrategy);
+    Q_UNUSED(fixBorderAlpha);
 #if 0
     qint32 lineNum,srcStart,firstLine,srcLen,numLines;
     qint32 center, begin, end;    /* filter calculation variables */

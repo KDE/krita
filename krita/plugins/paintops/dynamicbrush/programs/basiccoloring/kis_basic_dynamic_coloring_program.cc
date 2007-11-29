@@ -63,10 +63,13 @@ KisBasicDynamicColoringProgram::~KisBasicDynamicColoringProgram()
 
 void KisBasicDynamicColoringProgram::apply(KisDynamicColoring* coloring, const KisPaintInformation& adjustedInfo) const
 {
+    Q_UNUSED(coloring);
+    Q_UNUSED(adjustedInfo);
 }
 
 QWidget* KisBasicDynamicColoringProgram::createEditor(QWidget* parent)
 {
+    Q_UNUSED(parent);
     return new KisBasicDynamicColoringProgramEditor(this);
 }
 

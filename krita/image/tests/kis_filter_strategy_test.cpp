@@ -26,6 +26,7 @@
 void KisFilterStrategyTest::testCreation()
 {
     KisFilterStrategyRegistry *reg = KisFilterStrategyRegistry::instance();
+    Q_UNUSED(reg);
     KisHermiteFilterStrategy hermite;
     KisBoxFilterStrategy box;
     KisTriangleFilterStrategy triangle; 

@@ -19,6 +19,7 @@
 #define _KIS_BASIC_DYNAMIC_PROGRAM_H_
 
 #include "kis_dynamic_shape_program.h"
+#include "kis_serializable_configuration.h"
 
 class KisDynamicSensor;
 
@@ -30,6 +31,10 @@ class KisBasicDynamicProgram : public KisDynamicShapeProgram {
         virtual KisDynamicScattering scattering( const KisPaintInformation& info ) const;
         virtual void apply(KisDynamicShape* shape, const KisPaintInformation& adjustedInfo) const;
         virtual QWidget* createEditor(QWidget* parent);
+        
+        using KisSerializableConfiguration::fromXML;
+        using KisSerializableConfiguration::toXML;
+        
         virtual void fromXML(const QDomElement&);
         virtual void toXML(QDomDocument&, QDomElement&) const;
     public:

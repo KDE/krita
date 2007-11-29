@@ -43,19 +43,26 @@ class KisPixelizeFilter : public KisFilter
 public:
     KisPixelizeFilter();
 public:
+
+    using KisFilter::process;
+    
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0) const;
+                 KoUpdater* progressUpdater) const;
+                 
     static inline KoID id() { return KoID("pixelize", i18n("Pixelize")); }
-    virtual bool supportsPainting() const { return true; }
     
-    virtual bool supportsPreview() const { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
-        { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisPixelizeFilterConfiguration(10,10)); return list; }
+        {
+            std::list<KisFilterConfiguration*> list;
+            list.insert(list.begin(),
+            new KisPixelizeFilterConfiguration(10,10));
+            return list;
+        }
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
     virtual KisFilterConfiguration * configuration();
 };

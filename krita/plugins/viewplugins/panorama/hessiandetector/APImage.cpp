@@ -63,15 +63,25 @@ int APImage::getHeightBW() {
 	return m_area.height();
 }
 void APImage::scale(double factor) {
+    Q_UNUSED(factor);
 }
 
 void APImage::drawCircle(int x,int y, int radius) {
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    Q_UNUSED(radius);
 }
 void APImage::drawRectangle(int x,int y, int radius) {
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    Q_UNUSED(radius);
 }
 
 void APImage::drawLine(int x1,int y1, int x2,int y2) {
-
+    Q_UNUSED(x1);
+    Q_UNUSED(y1);
+    Q_UNUSED(x2);
+    Q_UNUSED(y2);
 }
 
 /**

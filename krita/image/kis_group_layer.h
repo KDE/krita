@@ -43,16 +43,14 @@ public:
     KisGroupLayer(const KisGroupLayer& rhs);
     virtual ~KisGroupLayer();
 
-    KisNodeSP clone()
+    KisNodeSP clone() const
     {
         return KisNodeSP(new KisGroupLayer(*this));
     }
 
-    bool allowAsChild( KisNodeSP );
+    bool allowAsChild( KisNodeSP ) const;
 
     QIcon icon() const;
-
-    KisLayerSP clone() const;
 
     /// override from KisBaseNode
     void updateSettings();

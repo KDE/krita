@@ -36,6 +36,9 @@ class KisScriptFilter : public QObject, public KisFilter {
     public:
         KisScriptFilter(Kross::Action* action);
         virtual ~KisScriptFilter();
+
+        using KisFilter::process;
+        
         virtual void process(KisFilterConstantProcessingInformation srcInfo, KisFilterProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const;
     public Q_SLOTS:
         QString category() const;

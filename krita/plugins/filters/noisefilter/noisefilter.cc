@@ -66,6 +66,10 @@ KritaNoiseFilter::~KritaNoiseFilter()
 
 KisFilterNoise::KisFilterNoise() : KisFilter(id(), CategoryOther, i18n("&Random Noise..."))
 {
+    setColorSpaceIndependence( FULLY_INDEPENDENT );
+    setSupportsPainting( true );
+    setSupportsPreview( true );
+    setSupportsIncrementalPainting( false );
 }
 
 KisFilterConfiguration* KisFilterNoise::factoryConfiguration(const KisPaintDeviceSP) const
@@ -76,7 +80,7 @@ KisFilterConfiguration* KisFilterNoise::factoryConfiguration(const KisPaintDevic
     return config;
 }
 
-KisFilterConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev)
 {
     Q_UNUSED(dev);
     return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);
@@ -89,6 +93,11 @@ void KisFilterNoise::process(KisFilterConstantProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
 #if 0
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);

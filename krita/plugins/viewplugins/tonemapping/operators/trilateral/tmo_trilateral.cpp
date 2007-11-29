@@ -65,8 +65,8 @@ typedef double  COLOR[3];       /* red, green, blue (or X,Y,Z) */
 //--- end of defines.h
 /////////////////////////////////////////////////////////////////////////////////
 
-static COLOR   **tmp_image;
-static double  **tmp_float;
+//static COLOR   **tmp_image;
+//static double  **tmp_float;
 static double    sigma_c          = 21.;         /* The only user paramter                */
 static double    saturation       = 1.0;
 static double    base_range       = 5.0;
@@ -109,7 +109,7 @@ void bilateral_filter (double **x_grad, double **y_grad,
   int    half_size = (int) ((filter_size - 1.) / 2.);
 
   fprintf (stderr, "\tBilaterial filtering (%i)\n", half_size);
-  int sj;
+  //int sj;
   for (y = 0; y < height; y++)
 	{
 

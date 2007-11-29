@@ -456,15 +456,18 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                                         points.push_back(hp );
                                     } else {
                                         // insert the new corner at his right place
+                                        bool inserted = false;
                                         for(it = points.begin(); it != points.end(); it++)
                                         {
                                             if( hp->low() >= static_cast<HarrisPoint*>(*it)->low())
                                             {
     //                                             kDebug(41006) <<"insert point";
                                                 points.insert(it, hp);
+                                                inserted = true;
                                                 break;
                                             }
                                         }
+                                        if (!inserted) delete hp;
                                     }
                                 } else { // hp wasn't added to the list, remove it
                                     delete hp;

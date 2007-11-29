@@ -62,7 +62,8 @@ void Stroke::storeOldPath ( double x1, double y1 )
 
 void Stroke::drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color )
 {
-
+    Q_UNUSED(width);
+    
     if (!dev) return;
 
     QPointF pos1 = QPointF( x1, y1 );
@@ -100,6 +101,8 @@ void Stroke::drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, do
 
 void Stroke::drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color )
 {
+    Q_UNUSED(width);
+    Q_UNUSED(color);
     // From Wikipedia...
     
     if (!dev) return;
@@ -206,6 +209,9 @@ void Stroke::storeSample ( Sample * sample )
 
 bool Stroke::testThreshold ( int i, double pressure, double tx, double ty )
 {
+    Q_UNUSED(tx);
+    Q_UNUSED(ty);
+    
     if ( ( m_brush->m_bristles[i].getPreThres() < pressure )
          && m_brush->m_bristles[i].getInkAmount() > 0 )
         return 1;

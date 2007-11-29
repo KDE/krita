@@ -43,6 +43,7 @@ const QString Filter::name()
 
 const QVariant Filter::property(const QString& name)
 {
+    Q_UNUSED(name);
     QVariant value;
 //     return m_filter->configuration()->getProperty(name, value) ? value : QVariant();
     return value;
@@ -50,6 +51,8 @@ const QVariant Filter::property(const QString& name)
 
 void Filter::setProperty(const QString& name, const QVariant& value)
 {
+    Q_UNUSED(name);
+    Q_UNUSED(value);
 //     m_filter->configuration()->setProperty(name, value);
 }
 
@@ -61,6 +64,7 @@ QVariantMap Filter::properties()
 
 void Filter::fromXML(const QString& xml)
 {
+    Q_UNUSED(xml);
 //     m_filter->configuration()->fromXML( xml );
 }
 

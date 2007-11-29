@@ -412,7 +412,9 @@ QImage KisBrush::img() const
 
 void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scale, double angle, const KisPaintInformation& info_, double subPixelX, double subPixelY) const
 {
+    Q_UNUSED(angle);
     Q_UNUSED(info_);
+    
     if (d->scaledBrushes.isEmpty()) {
         createScaledBrushes();
     }
@@ -476,11 +478,20 @@ void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scale, do
 
 void KisBrush::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scale, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
 {
-  
+    Q_UNUSED(dst);
+    Q_UNUSED(src);
+    Q_UNUSED(scale);
+    Q_UNUSED(angle);
+    Q_UNUSED(info);
+    Q_UNUSED(subPixelX);
+    Q_UNUSED(subPixelY);
 }
 
-KisPaintDeviceSP KisBrush::image(const KoColorSpace * /*colorSpace*/, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
+    Q_UNUSED(colorSpace);
+    Q_UNUSED(info);
+    Q_UNUSED(angle);
     if (d->scaledBrushes.isEmpty()) {
         createScaledBrushes();
     }

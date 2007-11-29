@@ -123,7 +123,7 @@ KisSelectionManager::KisSelectionManager(KisView2 * parent, KisDoc2 * doc)
     // XXX: Make sure no timers are running all the time! We need to
     // provide a signal to tell the selection manager that we've got a
     // current selection now (global or local).
-    connect(timer, SIGNAL(timeout()), this, SLOT(timerEvent()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(selectionTimerEvent()));
 
     KoSelection * selection = m_parent->canvasBase()->globalShapeManager()->selection();
     Q_ASSERT( selection );
@@ -526,7 +526,7 @@ KisLayerSP KisSelectionManager::paste()
   layer->convertTo(img->colorSpace());
 */
 	if(!img->addNode( layer ,
-                          m_parent->activeLayer()->parentLayer().data(),
+                          m_parent->activeLayer()->parent(),
                           m_parent->activeLayer().data() ) ) {
             return 0;
         }
@@ -557,13 +557,13 @@ void KisSelectionManager::pasteNew()
     doc->undoAdapter()->setUndo(false);
 
     KisImageSP img = new KisImage(doc->undoAdapter(), r.width(), r.height(), clip->colorSpace(), "Pasted");
-    KisPaintLayer *layer = new KisPaintLayer(img.data(), clip->objectName(), OPACITY_OPAQUE, clip->colorSpace());
+    KisPaintLayerSP layer = new KisPaintLayer(img.data(), clip->objectName(), OPACITY_OPAQUE, clip->colorSpace());
 
     KisPainter p(layer->paintDevice());
     p.bitBlt(0, 0, COMPOSITE_COPY, clip, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
     p.end();
 
-    img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
+    img->addNode(layer.data(), img->rootLayer());
     doc->setCurrentImage(img);
 
     doc->undoAdapter()->setUndo(true);
@@ -1699,7 +1699,7 @@ void KisSelectionManager::computeTransition (quint8* transition, quint8** buf, q
         transition[x] = 0;
 }
 
-void KisSelectionManager::timerEvent()
+void KisSelectionManager::selectionTimerEvent()
 {
     KisSelectionSP selection = m_parent->selection();
     if ( !selection ) return;

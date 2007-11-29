@@ -27,6 +27,9 @@
 class KisExposureVisitor : public KisNodeVisitor {
     public:
         KisExposureVisitor(double exposure);
+
+        using KisNodeVisitor::visit;
+        
         virtual bool visit( KisExternalLayer * );
         virtual bool visit(KisPaintLayer *layer);
         virtual bool visit(KisGroupLayer *layer);

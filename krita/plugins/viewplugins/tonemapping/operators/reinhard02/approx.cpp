@@ -63,14 +63,15 @@ double pyramid_lookup( int x, int y, int level )
     return(Pyramid[level][y][x]);
 }
 
-void build_pyramid( double **luminance, int image_width, int image_height )
+void build_pyramid( double **/*luminance*/, int image_width, int image_height )
 {
+  
   int k;
   int x, y;
   int i, j;
-  int width, height;
+  int width; //, height;
   int max_dim;
-  int pyramid_height;
+  //int pyramid_height;
   double sum = 0;
   
   double a = 0.4;

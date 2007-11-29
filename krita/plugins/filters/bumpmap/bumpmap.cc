@@ -92,6 +92,12 @@ KritaBumpmap::~KritaBumpmap()
 KisFilterBumpmap::KisFilterBumpmap()
     : KisFilter(KoID("bumpmap", i18n("Bumpmap")), KisFilter::CategoryMap, i18n("&Bumpmap..."))
 {
+    setColorSpaceIndependence( TO_LAB16 );
+    setSupportsPainting( true );
+    setSupportsPreview( true );
+    setSupportsIncrementalPainting( true );
+
+
 }
 
 namespace {
@@ -138,6 +144,11 @@ void KisFilterBumpmap::process(KisFilterConstantProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
 #if 0
     if (!src) return;
     if (!dst) return;

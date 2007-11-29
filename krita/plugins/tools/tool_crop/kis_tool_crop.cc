@@ -65,9 +65,9 @@ KisToolCrop::~KisToolCrop()
 {
 }
 
-void KisToolCrop::activate()
+void KisToolCrop::activate( bool tmp )
 {
-    super::activate();
+    super::activate( tmp );
 
 #if 0
     // No current crop rectangle, try to use the selection of the device to make a rectangle

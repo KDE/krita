@@ -247,7 +247,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
             if (outputOps == TO_LAYERS) {
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer( image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
-                image->addLayer(KisLayerSP(l.data()), image->rootLayer(), KisLayerSP(0));
+                image->addNode( l.data(), image->rootLayer().data() );
             }
             else {
                 QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
@@ -275,7 +275,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
                 KisImageSP dst = KisImageSP(new KisImage(d.undoAdapter(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
                 d.setCurrentImage( dst );
-                dst->addLayer(static_cast<KisLayer*>(l->clone().data()), dst->rootLayer());
+                dst->addNode(l->clone().data(), dst->rootLayer().data());
 
                 d.setOutputMimeType(mimefilter.toLatin1());
                 d.exp0rt(url);

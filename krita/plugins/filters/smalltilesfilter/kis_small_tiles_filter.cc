@@ -72,6 +72,9 @@ QString KisSmallTilesFilterConfiguration::toString()
 
 KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::CategoryMap, i18n("&Small Tiles..."))
 {
+    setSupportsPainting( true );
+    setSupportsPreview( true );
+    setSupportsIncrementalPainting( false );
 }
 
 void KisSmallTilesFilter::process(KisFilterConstantProcessingInformation src,
@@ -81,6 +84,11 @@ void KisSmallTilesFilter::process(KisFilterConstantProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
 #if 0
         //read the filter configuration values from the KisFilterConfiguration object
         quint32 numberOfTiles = ((KisSmallTilesFilterConfiguration*)configuration)->numberOfTiles();
@@ -140,7 +148,7 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
 #endif
 }
 
-KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
+KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 5, 1, i18n("Number of tiles"), "smalltiles" ) );

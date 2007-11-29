@@ -32,6 +32,9 @@ class KisPaintLayer;
 
 class KisOasisSaveDataVisitor : public KisNodeVisitor {
 public:
+
+    using KisNodeVisitor::visit;
+
     KisOasisSaveDataVisitor(KoOdfWriteStore* os, KoXmlWriter* manifestWriter);
     virtual ~KisOasisSaveDataVisitor() {}
 

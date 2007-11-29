@@ -72,7 +72,7 @@ public:
 
 public slots:
 
-    virtual void activate();
+    virtual void activate( bool );
     virtual void deactivate();
 private:
     QRectF boundingRect();

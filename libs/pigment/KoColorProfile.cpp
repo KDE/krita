@@ -45,8 +45,11 @@ KoColorProfile::~KoColorProfile()
 bool KoColorProfile::load()
 { return false; }
 
-bool KoColorProfile::save(QString /*fileName*/)
-{ return false; }
+bool KoColorProfile::save( const QString & filename )
+{
+    Q_UNUSED( filename );
+    return false;
+}
 
 
 QString KoColorProfile::name() const

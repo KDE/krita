@@ -914,6 +914,7 @@ QImage KisImage::convertToQImage(qint32 x,
 QImage KisImage::convertToQImage(const QRect& r, const double xScale, const double yScale, const KoColorProfile *profile, float exposure, KisSelectionSP mask)
 {
     Q_UNUSED( mask )
+    Q_UNUSED( exposure );
 
 #ifdef __GNUC__
     #warning "KisImage::convertToQImage: Implement direct rendering of current mask onto scaled image pixels"

@@ -22,6 +22,9 @@
 #define __ko_imageresource__
 #include <koguiutils_export.h>
 
+/**
+ * XXX: What should we use instead of these deprecated methods?
+ */
 class KOGUIUTILS_EXPORT KoImageResource
 {
 public:

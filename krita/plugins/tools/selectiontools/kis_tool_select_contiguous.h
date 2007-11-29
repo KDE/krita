@@ -54,7 +54,7 @@ public slots:
     virtual void slotSetFuzziness(int);
     virtual void slotSetAction(int);
     virtual void slotSetSampleMerged(int);
-    virtual void activate();
+    virtual void activate( bool );
 
 private:
     KisSelectionOptions * m_optWidget;

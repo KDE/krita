@@ -22,8 +22,9 @@
 #include "kis_shared_ptr_vector_test.h"
 
 #include "kis_shared_ptr_vector.h"
+#include "kis_shared.h"
 
-class Test : public KShared
+class Test : public KisShared
 {
 };
 

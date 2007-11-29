@@ -65,12 +65,12 @@ public:
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
 
-    KisNodeSP clone()
+    KisNodeSP clone() const
         {
             return KisNodeSP(new KisAdjustmentLayer(*this));
         }
 
-    bool allowAsChild( KisNodeSP );
+    bool allowAsChild( KisNodeSP ) const;
 
     void updateProjection(const QRect& r);
     KisPaintDeviceSP projection() const;
@@ -78,9 +78,6 @@ public:
 
     QIcon icon() const;
     KoDocumentSectionModel::PropertyList sectionModelProperties() const;
-
-    /// Return a copy of this layer
-    KisLayerSP clone() const;
 
 public:
 

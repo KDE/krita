@@ -38,6 +38,10 @@ class KRITAIMAGE_EXPORT KisMacro : public QObject, public KisSerializableConfigu
     public:
         void play();
     public: // serialization functions
+    
+        using KisSerializableConfiguration::fromXML;
+        using KisSerializableConfiguration::toXML;
+        
         virtual void fromXML(const QDomElement&);
         virtual void toXML(QDomDocument&, QDomElement&) const;
     public slots:

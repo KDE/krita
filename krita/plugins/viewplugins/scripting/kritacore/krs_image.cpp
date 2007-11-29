@@ -101,10 +101,10 @@ QObject* Image::createPaintLayer(const QString& name, int opacity, const QString
 {
     opacity = CLAMP(opacity, 0, 255);
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
-    KisPaintLayer* layer = cs ? new KisPaintLayer(m_image.data(), name, opacity, cs)
+    KisPaintLayerSP layer = cs ? new KisPaintLayer(m_image.data(), name, opacity, cs)
                               : new KisPaintLayer(m_image.data(), name, opacity);
     layer->setVisible(true);
-    m_image->addLayer(layer, m_image->rootLayer(), 0);
+    m_image->addNode(layer.data(), m_image->rootLayer().data());
     return new PaintLayer( layer, m_doc);
 }
 

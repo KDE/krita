@@ -109,6 +109,12 @@ KritaWaveFilter::~KritaWaveFilter()
 
 KisFilterWave::KisFilterWave() : KisFilter(id(), CategoryOther, i18n("&Wave..."))
 {
+    setColorSpaceIndependence( FULLY_INDEPENDENT );
+    setSupportsPainting( true );
+    setSupportsPreview( true );
+    setSupportsIncrementalPainting( false );
+    setSupportsAdjustmentLayers( false );
+    
 }
 
 KisFilterConfiguration* KisFilterWave::factoryConfiguration(const KisPaintDeviceSP) const
@@ -125,7 +131,7 @@ KisFilterConfiguration* KisFilterWave::factoryConfiguration(const KisPaintDevice
     return config;
 }
 
-KisFilterConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
+KisFilterConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/)
 {
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }
@@ -137,6 +143,12 @@ void KisFilterWave::process(KisFilterConstantProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
+    
 #if 0
     Q_ASSERT(src.data() != 0);
     Q_ASSERT(dst.data() != 0);

@@ -56,9 +56,9 @@ KisToolSelectEraser::~KisToolSelectEraser()
 {
 }
 
-void KisToolSelectEraser::activate()
+void KisToolSelectEraser::activate( bool tmp )
 {
-    super::activate();
+    super::activate( tmp );
 
     if (!m_optWidget)
         return;

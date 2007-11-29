@@ -711,6 +711,8 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, float
 
 QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, float exposure)
 {
+    Q_UNUSED(exposure);
+    
     if (w < 0)
         return QImage();
 
@@ -892,7 +894,7 @@ KisRandomConstAccessorPixel KisPaintDevice::createRandomConstAccessor(qint32 x, 
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
 
-    if(selection)
+    if ( selection )
         selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
 
     return KisRandomConstAccessorPixel(dm, selectionDm, x, y, m_d->x, m_d->y);
@@ -900,6 +902,8 @@ KisRandomConstAccessorPixel KisPaintDevice::createRandomConstAccessor(qint32 x, 
 
 KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor( const KisSelection * selection ) const
 {
+    // XXX: shouldn't we use the selection here?
+    Q_UNUSED(selection);
     KisPaintDevice* pd = const_cast<KisPaintDevice*>(this);
     return KisRandomSubAccessorPixel(pd);
 }

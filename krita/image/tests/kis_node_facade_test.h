@@ -28,8 +28,8 @@ class TestNodeA : public KisNode
 
     Q_OBJECT
 public:
-    KisNodeSP clone() { return new TestNodeA(*this); }
-    bool allowAsChild( KisNodeSP ) { return true; }
+    KisNodeSP clone() const { return new TestNodeA(*this); }
+    bool allowAsChild( KisNodeSP ) const { return true; }
 };
 
 

@@ -32,12 +32,19 @@ public:
         {
         }    
  
+    using KisFilter::process;
+ 
     void process(KisFilterConstantProcessingInformation src,
                          KisFilterProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater = 0) const 
+                         KoUpdater* progressUpdater) const
         {
+            Q_UNUSED(src);
+            Q_UNUSED(dst);
+            Q_UNUSED(size);
+            Q_UNUSED(config);
+            Q_UNUSED(progressUpdater);
         }
  
 };

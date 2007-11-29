@@ -94,6 +94,7 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
 KisPaintOpSettings *KisCPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED( inputDevice );
+    Q_UNUSED( image );
     return new KisCPaintOpSettings( parent,  m_brushes);
 }
 
@@ -116,7 +117,7 @@ KisCPaintOpSettings::KisCPaintOpSettings( QWidget * parent,  Q3ValueVector<Brush
 
 int KisCPaintOpSettings::brush() const
 {
-    return m_options->cmbBrush->currentItem();
+    return m_options->cmbBrush->currentIndex();
 }
 
 int KisCPaintOpSettings::ink() const
@@ -132,7 +133,7 @@ int KisCPaintOpSettings::water() const
 
 void KisCPaintOpSettings::resetCurrentBrush()
 {
-    Brush * b = m_brushes[m_options->cmbBrush->currentItem()];
+    Brush * b = m_brushes[m_options->cmbBrush->currentIndex()];
     b->addInk();
 }
 
@@ -195,7 +196,7 @@ void KisCPaintOp::paintAt(const KisPaintInformation& info)
     }
 
     if ( m_stroke ) {
-        int brushSize = m_currentBrush->size();
+        //int brushSize = m_currentBrush->size();
         KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace());
         m_stroke->draw( dab );
         painter()->bitBlt( QPoint( 0, 0 ), dab, m_tempImage.rect() );

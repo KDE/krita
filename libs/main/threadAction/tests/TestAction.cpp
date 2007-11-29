@@ -58,5 +58,39 @@ void TestAction::test() {
     }
 }
 
+void TestAction::testExecuteTwice()
+{
+    m_notifier->count = 0;
+    KoAction action;
+    action.setExecutePolicy(KoExecutePolicy::directPolicy);
+    connect(&action, SIGNAL(triggered(const QVariant &)), this, SLOT(notify()), Qt::DirectConnection);
+    action.setWeaver(ThreadWeaver::Weaver::instance());
+    action.execute();
+
+    QCOMPARE(m_notifier->count, 1);
+
+    KoExecutePolicy *policies[4] = { KoExecutePolicy::onlyLastPolicy,
+        KoExecutePolicy::queuedPolicy,
+        KoExecutePolicy::directPolicy,
+        KoExecutePolicy::simpleQueuedPolicy };
+    for(int i=0; i < 4; i++) {
+        action.setExecutePolicy(policies[i]);
+        m_notifier->count = 0;
+        //qDebug() << " test " << i+1;
+        QMutex mutex;
+        mutex.lock();
+        action.execute();
+        QTest::qSleep(250); // allow the action to do its job.
+        QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+        action.execute();
+        QTest::qSleep(250); // allow the action to do its job.
+        QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+        bool success = m_notifier->count != 0 || m_notifier->waiter.wait(&mutex, 550);
+        mutex.unlock();
+        QCOMPARE(success, true);
+        QCOMPARE(m_notifier->count, 2);
+    }
+}
+
 QTEST_MAIN(TestAction)
 #include "TestAction.moc"

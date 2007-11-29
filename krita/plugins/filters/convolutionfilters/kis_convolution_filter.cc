@@ -44,6 +44,8 @@ void KisConvolutionFilter::process(KisFilterConstantProcessingInformation srcInf
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(config);
+    
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();
@@ -65,6 +67,6 @@ void KisConvolutionFilter::process(KisFilterConstantProcessingInformation srcInf
 
 }
 
-int KisConvolutionFilter::overlapMarginNeeded(KisFilterConfiguration* /*c*/) const {
+int KisConvolutionFilter::overlapMarginNeeded(const KisFilterConfiguration* /*c*/) const {
     return qMax(m_matrix->width / 2, m_matrix->height / 2);
 }

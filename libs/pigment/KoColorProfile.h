@@ -30,7 +30,8 @@
 class PIGMENTCMS_EXPORT KoColorProfile {
         struct Private;
     public:
-        /**
+
+       /**
          * @param fileName file name to load or save that profile
          */
         KoColorProfile(QString fileName = "");
@@ -57,7 +58,7 @@ class PIGMENTCMS_EXPORT KoColorProfile {
          * @param fileName destination
          * @return true if the profile has been successfully saved
          */
-        virtual bool save(QString fileName);
+        virtual bool save(const QString & fileName);
     
         /**
          * @return true if the profile is valid, false if it isn't been loaded in memory yet, or

@@ -72,19 +72,17 @@ class KisFilterBumpmap : public KisFilter
 public:
     KisFilterBumpmap();
 public:
+
+    using KisFilter::process;
+
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
 
     
-    virtual ColorSpaceIndependence colorSpaceIndependence() const { return TO_LAB16; }
-    virtual bool supportsPainting() const { return true; }
-    virtual bool supportsPreview() const { return true; }
-    virtual bool supportsIncrementalPainting() const { return true; }
-
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };

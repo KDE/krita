@@ -35,6 +35,8 @@ public:
     KisOasisSaveVisitor(KoOdfWriteStore* os);
     virtual ~KisOasisSaveVisitor() {}
 
+    using KisNodeVisitor::visit;
+    
 public:
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);

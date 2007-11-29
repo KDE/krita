@@ -44,12 +44,16 @@ public:
     KisToolSelectSimilar(KoCanvasBase * canvas);
     virtual ~KisToolSelectSimilar();
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter) {}
+    virtual void paint(QPainter& gc, const KoViewConverter &converter)
+        {
+            Q_UNUSED(gc);
+            Q_UNUSED(converter);
+        }
     virtual void mousePressEvent(KoPointerEvent *e);
 
 public slots:
 
-    void activate();
+    void activate( bool );
     void deactivate();
 
     virtual void slotSetFuzziness(int);

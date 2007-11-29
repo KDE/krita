@@ -42,7 +42,7 @@ KisFilterMask::~KisFilterMask()
     delete m_d;
 }
 
-bool KisFilterMask::allowAsChild( KisNodeSP node)
+bool KisFilterMask::allowAsChild( KisNodeSP node) const
 {
     Q_UNUSED(node);
     return false;

@@ -53,6 +53,8 @@
 
 KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::CategoryArtistic, i18n("&Pixelize..."))
 {
+    setSupportsPainting( true );
+    setSupportsPreview( true );
 }
 
 void KisPixelizeFilter::process(KisFilterConstantProcessingInformation src,
@@ -62,6 +64,11 @@ void KisPixelizeFilter::process(KisFilterConstantProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
 #if 0
 // FIXME THIS FILTER DOESN'T WORK WELL IF SRC != DST !!!
     Q_ASSERT( src );
@@ -159,7 +166,7 @@ void KisPixelizeFilter::process(KisFilterConstantProcessingInformation src,
 #endif
 }
 
-KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
+KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel width"), "pixelWidth" ) );

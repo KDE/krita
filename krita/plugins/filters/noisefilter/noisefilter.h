@@ -38,21 +38,18 @@ class KisFilterNoise : public KisFilter
     public:
         KisFilterNoise();
     public:
+
+    using KisFilter::process;
+    
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
-        virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
-        static inline KoID id() { return KoID("noise", i18n("Noise")); }
-        virtual bool supportsPainting() const { return true; }
-    
-    virtual bool supportsPreview() const { return true; }
-        virtual bool supportsIncrementalPainting() const { return false; }
-        virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    public:
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    static inline KoID id() { return KoID("noise", i18n("Noise")); }
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
 };
 
 #endif

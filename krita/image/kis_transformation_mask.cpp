@@ -41,7 +41,7 @@ KisTransformationMask::~KisTransformationMask()
 {
 }
 
-bool KisTransformationMask::allowAsChild( KisNodeSP node)
+bool KisTransformationMask::allowAsChild( KisNodeSP node) const
 {
     Q_UNUSED(node);
     return false;
@@ -63,6 +63,7 @@ KisTransformationMask::KisTransformationMask( const KisTransformationMask& rhs )
 
 void KisTransformationMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
 {
+    Q_UNUSED( rc );
     // Transform
     KisTransformWorker worker( projection, m_xscale, m_yscale, m_xshear, m_yshear, m_rotation, m_xtranslate, m_ytranslate, 0, m_filter );
     worker.run();

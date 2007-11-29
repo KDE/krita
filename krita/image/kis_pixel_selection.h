@@ -137,6 +137,7 @@ public:
     bool interestedInDirtyness() const;
 
     void setDirty(const QRect & rc);
+    void setDirty(const QRegion & region);
     void setDirty();
 
     QVector<QPolygon> outline();

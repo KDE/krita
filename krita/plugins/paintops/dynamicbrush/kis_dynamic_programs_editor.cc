@@ -65,7 +65,7 @@ void KisDynamicProgramsEditor::setCurrentProgram(const QString& text)
 
 void KisDynamicProgramsEditor::addProgram()
 {
-    int index = m_dynamicProgramsEditor->comboBoxProgramsType->currentIndex();
+    //int index = m_dynamicProgramsEditor->comboBoxProgramsType->currentIndex();
     QString id = m_dynamicProgramsEditor->comboBoxProgramsType->currentItem().id();
     KisDynamicProgramFactory* factory = m_factoryRegistry->programFactory( id );
     Q_ASSERT(factory);

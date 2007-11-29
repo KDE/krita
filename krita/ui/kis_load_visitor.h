@@ -29,6 +29,9 @@ class KoStore;
 
 class KisLoadVisitor : public KisNodeVisitor {
 public:
+
+    using KisNodeVisitor::visit;
+
     KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, QString name);
 
 public:

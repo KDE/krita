@@ -30,6 +30,8 @@ class KisSaveVisitor : public KisNodeVisitor {
 public:
     KisSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, QString name);
 
+    using KisNodeVisitor::visit;
+    
 public:
     void setExternalUri(QString &uri);
 

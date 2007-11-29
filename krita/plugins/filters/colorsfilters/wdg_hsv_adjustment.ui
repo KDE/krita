@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>WdgHSVAdjustement</class>
- <widget class="QWidget" name="WdgHSVAdjustement" >
+ <class>WdgHSVAdjustment</class>
+ <widget class="QWidget" name="WdgHSVAdjustment" >
   <property name="geometry" >
    <rect>
     <x>0</x>

@@ -70,6 +70,11 @@ KritaLensCorrectionFilter::~KritaLensCorrectionFilter()
 
 KisFilterLensCorrection::KisFilterLensCorrection() : KisFilter(id(), CategoryOther, i18n("&Lens Correction..."))
 {
+        setColorSpaceIndependence( FULLY_INDEPENDENT );
+        setSupportsPainting( true );
+        setSupportsPreview( true );
+        setSupportsIncrementalPainting( false );
+        setSupportsAdjustmentLayers( false );
 }
 
 KisFilterConfiguration* KisFilterLensCorrection::factoryConfiguration(const KisPaintDeviceSP) const
@@ -84,7 +89,7 @@ KisFilterConfiguration* KisFilterLensCorrection::factoryConfiguration(const KisP
     return config;
 }
 
-KisFilterConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
+KisFilterConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/)
 {
     return new KisWdgLensCorrection((KisFilter*)this, (QWidget*)parent);
 }
@@ -96,6 +101,11 @@ void KisFilterLensCorrection::process(KisFilterConstantProcessingInformation src
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
 #if 0
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);

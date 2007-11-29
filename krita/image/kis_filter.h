@@ -122,7 +122,6 @@ public:
      */
     virtual KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP) const;
 
-
     /**
      * @return the bookmark manager for this filter
      */
@@ -211,7 +210,9 @@ public:
      * @return the degree of independence
      */
     ColorSpaceIndependence colorSpaceIndependence() const;
+
 protected:
+
     void setSupportsPainting(bool v);
     void setSupportsPreview(bool v);
     void setSupportsAdjustmentLayers(bool v);

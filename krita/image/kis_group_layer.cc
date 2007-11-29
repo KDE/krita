@@ -70,17 +70,12 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
     updateSettings();
 }
 
-KisLayerSP KisGroupLayer::clone() const
-{
-    return KisLayerSP(new KisGroupLayer(*this));
-}
-
 KisGroupLayer::~KisGroupLayer()
 {
     delete m_d;
 }
 
-bool KisGroupLayer::allowAsChild( KisNodeSP node)
+bool KisGroupLayer::allowAsChild( KisNodeSP node) const
 {
     Q_UNUSED(node);
     return true;

@@ -338,7 +338,10 @@ QPoint KisComplexColor::setCenter(QPoint p)
 }
 
 KisPaintDeviceSP KisComplexColor::dab(int w, int h)
-{/*
+{
+    Q_UNUSED(w);
+    Q_UNUSED(h);
+/*
    if (w > m_size.width() || h > m_size.height())
    return 0;
 

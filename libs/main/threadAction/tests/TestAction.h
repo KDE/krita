@@ -13,11 +13,12 @@ public:
 private:
     class Notifier;
     Notifier *m_notifier;
-    Q_PRIVATE_SLOT(m_notifier, void notify())
+    Q_PRIVATE_SLOT(m_notifier, void notify());
 
 private slots:
     // tests
     void test();
+    void testExecuteTwice();
 };
 
 #endif

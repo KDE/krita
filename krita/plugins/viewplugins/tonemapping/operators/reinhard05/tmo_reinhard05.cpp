@@ -90,7 +90,7 @@ void tmo_reinhard05( pfs::Array2D* R, pfs::Array2D* G, pfs::Array2D* B,
     for( y=0 ; y<im_height ; y++ )
     {
       float l = (*Y)(x,y);
-      float col;
+      float col = 0;
       if( l != 0.0f )
       {
         for( int c=0 ; c<3 ; c++ )

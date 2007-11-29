@@ -48,6 +48,8 @@ namespace {
 
     public:
 
+        using KoCompositeOp::composite;
+        
         void composite(quint8 *dst,
                        qint32 dststride,
                        const quint8 *src,
@@ -145,6 +147,8 @@ namespace {
 
     public:
 
+        using KoCompositeOp::composite;
+
         void composite(quint8 *dst,
                        qint32 dststride,
                        const quint8 *src,
@@ -220,6 +224,8 @@ namespace {
 
     public:
 
+        using KoCompositeOp::composite;
+
         void composite(quint8 *dst,
                        qint32 dststride,
                        const quint8 *src,
@@ -284,6 +290,7 @@ namespace {
 
     public:
 
+        using KoCompositeOp::composite;
 
         void composite(quint8 *dst,
                        qint32 dststride,
@@ -366,11 +373,6 @@ void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 *dst, const KoCol
 void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 opacity, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
     dst[PIXEL_MASK] = opacity;
-}
-
-void KoAlphaColorSpace::alpha(const quint8 *pixel, quint8 *alpha) const
-{
-    *alpha = *pixel;
 }
 
 void KoAlphaColorSpace::toQColor(const quint8 * /*src*/, QColor *c, const KoColorProfile * /*profile*/) const

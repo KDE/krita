@@ -118,10 +118,14 @@ void KisLayerShape::addChild( KoShape * shape )
 
 void KisLayerShape::saveOdf( KoShapeSavingContext & context ) const
 {
+    Q_UNUSED(context);
+    
     // TODO
 }
 
 bool KisLayerShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
+    Q_UNUSED(element);
+    Q_UNUSED(context);
     return false; // TODO
 }

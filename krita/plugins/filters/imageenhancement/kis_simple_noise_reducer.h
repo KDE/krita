@@ -30,18 +30,16 @@ public:
    KisSimpleNoiseReducer();
    ~KisSimpleNoiseReducer();
 public:
+    using KisFilter::process;
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
     
         static inline KoID id() { return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer")); }
-        virtual bool supportsPainting() const { return false; }
-        virtual bool supportsPreview() const { return true; }
-        virtual bool supportsIncrementalPainting() const { return false; }
     protected:
         virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
 };

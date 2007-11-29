@@ -42,14 +42,14 @@ public:
     virtual ~KisSelectionMask();
     KisSelectionMask( const KisSelectionMask& rhs );
 
-    bool allowAsChild( KisNodeSP );
+    bool allowAsChild( KisNodeSP ) const;
 
     QIcon icon() const
         {
             return KIcon(""); // XXX: Find nice icon for the subclasses.
         }
 
-    KisNodeSP clone()
+    KisNodeSP clone() const
     {
         return KisNodeSP(new KisSelectionMask(*this));
     }

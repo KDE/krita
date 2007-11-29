@@ -33,6 +33,8 @@
 class KisLayerMapVisitor : public KisNodeVisitor {
 public:
 
+    using KisNodeVisitor::visit;
+
     /**
      * @param layerMap: the map that maps layers to layer shapes and
      * masks to mask shapes.

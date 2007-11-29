@@ -66,9 +66,9 @@ KisToolSelectRectangular::~KisToolSelectRectangular()
 {
 }
 
-void KisToolSelectRectangular::activate()
+void KisToolSelectRectangular::activate( bool tmp )
 {
-    super::activate();
+    super::activate( tmp );
 
     if (!m_optWidget)
         return;

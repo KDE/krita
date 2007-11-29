@@ -184,7 +184,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
         if(!parent)
             parent = m_view->image()->rootLayer();
         above = qobject_cast<KisLayer*>( parent->firstChild().data() );
-        img->addLayer(layer, parent, above);
+        img->addNode(layer.data(), parent.data(), above.data());
 
         createHDRPaintDevice( m_imagesFrames, layer->paintDevice() );
         m_view->canvas()->update();
@@ -522,7 +522,7 @@ void Bracketing2HDRPlugin::computeCameraResponse(QList<BracketingFrame> frames)
 bool Bracketing2HDRPlugin::loadImagesInMemory()
 {
     m_imagesFrames.clear();
-    double apexNorm;
+    double apexNorm = 0.0;
     for(int i = 0; i < m_wdgBracketing2HDR->tableWidgetImages->rowCount(); i++)
     {
         // read the info about the frame in the table

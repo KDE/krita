@@ -45,12 +45,12 @@ public:
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
 
-    KisNodeSP clone()
+    KisNodeSP clone() const
         {
             return KisNodeSP(new KisPaintLayer(*this));
         }
 
-    bool allowAsChild( KisNodeSP );
+    bool allowAsChild( KisNodeSP ) const;
 
     const KoColorSpace * colorSpace();
 
@@ -68,7 +68,6 @@ public:
 
     QIcon icon() const;
     KoDocumentSectionModel::PropertyList sectionModelProperties() const;
-    KisLayerSP clone() const;
 
 public:
 

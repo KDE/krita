@@ -31,8 +31,10 @@
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
     : KisFilter(id(), CategoryEnhance, i18n("&Gaussian Noise Reduction"))
 {
+    setSupportsPainting( false );
+    setSupportsPreview( true );
+    setSupportsIncrementalPainting( false );
 }
-
 
 KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 {
@@ -67,6 +69,12 @@ void KisSimpleNoiseReducer::process(KisFilterConstantProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
+    
 #if 0
     int threshold, windowsize;
     if(config ==0)

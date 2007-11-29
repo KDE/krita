@@ -37,6 +37,8 @@
 
 class CompositeCopy : public KoCompositeOp {
 
+    using KoCompositeOp::composite;
+
     public:
 
         explicit CompositeCopy(KoColorSpace * cs)
@@ -349,14 +351,17 @@ class KoColorSpaceAbstract : public KoColorSpace {
                 }
             }
         }
+
         virtual quint8 alpha(const quint8 * U8_pixel) const
         {
             return _CSTraits::alpha(U8_pixel);
         }
+        
         virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const
         {
             _CSTraits::setAlpha(pixels, alpha, nPixels);
         }
+
         virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const
         {
             if (_CSTraits::alpha_pos < 0) return;

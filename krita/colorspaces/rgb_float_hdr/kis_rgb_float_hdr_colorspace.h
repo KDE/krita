@@ -67,6 +67,9 @@ template <class _CSTraits>
 class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
 {
     public:
+
+        using KoIncompleteColorSpace<_CSTraits>::difference;
+    
         KisRgbFloatHDRColorSpace(const QString &id, const QString &name, KoColorProfile *profile)
           : KoIncompleteColorSpace<_CSTraits>(id, name, KoColorSpaceRegistry::instance()->rgb16(""))
         {
@@ -185,6 +188,7 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
                                        KoColorConversionTransformation::Intent renderingIntent) const
         {
             double exposure = m_profile->hdrExposure();
+            Q_UNUSED(exposure); // XXX: Shouldn't we use exposure here?
             int numPixelsToConvert = width * height;
             KoRgbU16Traits::Pixel *u16Pixels = new KoRgbU16Traits::Pixel[numPixelsToConvert];
             KoRgbU16Traits::Pixel *dstPixel = u16Pixels;
@@ -192,7 +196,7 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             const Pixel *srcPixels = reinterpret_cast<const Pixel *>(dataU8);
             const Pixel *srcPixel = srcPixels;
 
-            // Apply exposure and convert to u16.
+            // XXX: Apply exposure and convert to u16.
             while (numPixelsToConvert > 0) {
 
                 dstPixel->red = m_profile->channelToDisplay( srcPixel->red);

@@ -37,6 +37,9 @@
  */
 class KisShearVisitor : public KisNodeVisitor {
 public:
+
+    using KisNodeVisitor::visit;
+
     KisShearVisitor(double xshear, double yshear, KoUpdater *progress)
         : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {}
 

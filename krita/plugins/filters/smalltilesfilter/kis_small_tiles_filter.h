@@ -32,7 +32,8 @@ public:
         : KisFilterConfiguration( "smalltiles", 1 )
         , m_numberOfTiles(numberOfTiles) {}
 
-
+    using KisFilterConfiguration::fromXML;
+    
     virtual void fromXML( const QString&  );
     virtual QString toString();
 
@@ -50,22 +51,25 @@ public:
     KisSmallTilesFilter();
 
 public:
+    using KisFilter::process;
+    
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
     static inline KoID id() { return KoID("smalltiles", i18n("Small Tiles")); }
     
-    virtual bool supportsPainting() const { return true; }
-    virtual bool supportsPreview() const { return true; }
-    virtual bool supportsIncrementalPainting() const { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
-    { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSmallTilesFilterConfiguration(2)); return list; }
+        {
+          std::list<KisFilterConfiguration*> list;
+          list.insert(list.begin(), new KisSmallTilesFilterConfiguration(2));
+          return list;
+        }
 
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
     virtual KisFilterConfiguration * configuration(QWidget*);
     virtual KisFilterConfiguration * configuration() { return new KisSmallTilesFilterConfiguration( 2 ); }
 

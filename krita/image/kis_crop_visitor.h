@@ -39,6 +39,8 @@ class KisCropVisitor : public KisNodeVisitor {
 
 public:
 
+    using KisNodeVisitor::visit;
+
     KisCropVisitor( const QRect & rc, bool movelayers = true)
         : KisNodeVisitor()
         , m_rect(rc), m_movelayers(movelayers)

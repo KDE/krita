@@ -50,6 +50,9 @@
 
 KisOilPaintFilter::KisOilPaintFilter() : KisFilter( id(), KisFilter::CategoryArtistic, i18n("&Oilpaint...") )
 {
+    setSupportsPainting( true );
+    setSupportsPreview( true );
+    
 }
 
 void KisOilPaintFilter::process(KisFilterConstantProcessingInformation src,
@@ -59,6 +62,11 @@ void KisOilPaintFilter::process(KisFilterConstantProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
 #if 0
     if (!configuration) {
         kWarning() << "No configuration object for oilpaint filter\n";
@@ -233,7 +241,7 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
 }
 
 
-KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
+KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size"), "brushSize" ) );

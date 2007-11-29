@@ -64,12 +64,14 @@ public:
 
     virtual ~KoRgbU8CompositeOp() {}
 
+    using KoCompositeOp::composite;
+
     void composite(quint8 *dstRowStart, qint32 dstRowStride,
-			   const quint8 *srcRowStart, qint32 srcRowStride,
-			   const quint8 *maskRowStart, qint32 maskRowStride,
-			   qint32 rows, qint32 numColumns,
-			   quint8 opacity,
-			   const QBitArray & channelFlags) const;
+                   const quint8 *srcRowStart, qint32 srcRowStride,
+                   const quint8 *maskRowStart, qint32 maskRowStride,
+                   qint32 rows, qint32 numColumns,
+                   quint8 opacity,
+                   const QBitArray & channelFlags) const;
 
 private:
     void compositeOver(quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, const quint8 *mask, qint32 maskRowSize, qint32 rows, qint32 columns, quint8 opacity, const QBitArray & channelFlags) const;

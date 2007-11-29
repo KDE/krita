@@ -32,6 +32,7 @@
 KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, Qt::WFlags f)
     : KisFilterConfigWidget(parent, f)
 {
+    Q_UNUSED(nfilter);
     m_page = new WdgCImg(this);
     Q_CHECK_PTR(m_page);
 

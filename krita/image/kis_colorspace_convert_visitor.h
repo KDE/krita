@@ -116,6 +116,8 @@ public:
     KisColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent);
     virtual ~KisColorSpaceConvertVisitor();
 
+    using KisNodeVisitor::visit;
+    
 public:
 
     bool visit( KisExternalLayer * )

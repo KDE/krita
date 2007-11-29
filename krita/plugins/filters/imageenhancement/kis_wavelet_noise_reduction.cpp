@@ -30,6 +30,10 @@
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
     : KisFilter(id(), CategoryEnhance, i18n("&Wavelet Noise Reducer"))
 {
+    setSupportsPainting( false );
+    setSupportsPreview( true );
+    setSupportsIncrementalPainting( false );
+    setSupportsThreading( false );
 }
 
 
@@ -37,7 +41,7 @@ KisWaveletNoiseReduction::~KisWaveletNoiseReduction()
 {
 }
 
-KisFilterConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP )
+KisFilterConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP )
 {
     vKisDoubleWidgetParam param;
     param.push_back( KisDoubleWidgetParam( 0.0, 256.0, BEST_WAVELET_THRESHOLD_VALUE, i18n("Threshold"), "threshold" ) );
@@ -58,6 +62,11 @@ void KisWaveletNoiseReduction::process(KisFilterConstantProcessingInformation sr
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
 #if 0
     float threshold;
 

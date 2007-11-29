@@ -74,7 +74,7 @@ KisCloneLayer::~KisCloneLayer()
 }
 
 
-bool KisCloneLayer::allowAsChild( KisNodeSP node)
+bool KisCloneLayer::allowAsChild( KisNodeSP node) const
 {
     if ( node->inherits( "KisMask" ) )
         return true;
@@ -162,12 +162,6 @@ KoDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() con
     if ( m_d->copyFrom )
         l << KoDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
     return l;
-}
-
-/// Return a copy of this layer
-KisLayerSP KisCloneLayer::clone() const
-{
-    return KisLayerSP( new KisCloneLayer( *this ) );
 }
 
 qint32 KisCloneLayer::x() const

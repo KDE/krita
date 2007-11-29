@@ -78,7 +78,7 @@ KisShapeLayer::~KisShapeLayer()
     delete m_d;
 }
 
-bool KisShapeLayer::allowAsChild( KisNodeSP node)
+bool KisShapeLayer::allowAsChild( KisNodeSP node) const
 {
     if ( node->inherits( "KisMask" ) )
        return true;
@@ -130,14 +130,6 @@ bool KisShapeLayer::saveToXML(QDomDocument doc, QDomElement elem)
     Q_UNUSED(doc);
     Q_UNUSED(elem);
     return false;
-}
-
-KisLayerSP KisShapeLayer::clone() const
-{
-#ifdef __GNUC__
-    #warning "Implement KisShapeLayer::clone()"
-#endif
-    return 0;
 }
 
 qint32 KisShapeLayer::x() const

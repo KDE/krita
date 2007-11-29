@@ -61,9 +61,9 @@ KisToolSelectOutline::~KisToolSelectOutline()
 {
 }
 
-void KisToolSelectOutline::activate()
+void KisToolSelectOutline::activate( bool temporary )
 {
-    super::activate();
+    super::activate( temporary );
 
     if (!m_optWidget)
         return;

@@ -280,6 +280,12 @@ void KisPixelSelection::setDirty(const QRect& rc)
         KisPaintDevice::setDirty(rc);
 }
 
+void KisPixelSelection::setDirty(const QRegion & region)
+{
+    if (m_d->interestedInDirtyness)
+        KisPaintDevice::setDirty(region);
+}
+
 void KisPixelSelection::setDirty()
 {
     if (m_d->interestedInDirtyness)

@@ -39,7 +39,7 @@ KisPaletteDocker::KisPaletteDocker( KisView2 * view )
 
     m_currentPalette = 0;
 
-    QVBoxLayout *layout = new QVBoxLayout( mainWidget );
+//    QVBoxLayout *layout = new QVBoxLayout( mainWidget );
 
     //m_paletteView = new KisPaletteView(this, 0, mMinWidth, mCols);
     //layout->addWidget( m_paletteView );

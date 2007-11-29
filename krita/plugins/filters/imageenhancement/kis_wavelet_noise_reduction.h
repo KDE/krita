@@ -37,20 +37,19 @@ public:
     ~KisWaveletNoiseReduction();
 
 public:
+
+    using KisFilter::process;
+    
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
 
     static inline KoID id() { return KoID("waveletnoisereducer", i18n("Wavelet Noise Reducer")); }
-    virtual bool supportsPainting() const { return false; }
-    virtual bool supportsPreview() const { return true; }
-    virtual bool supportsIncrementalPainting() const { return false; }
-    
-    virtual bool supportsThreading() const { return false; }
+
 private:
     virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
 

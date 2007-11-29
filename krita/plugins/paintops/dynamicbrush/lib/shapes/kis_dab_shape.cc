@@ -26,6 +26,8 @@
 
 quint8 KisAlphaMaskShape::alphaAt(int x, int y)
 {
+    Q_UNUSED(x);
+    Q_UNUSED(y);
     return 255;
 //     return alphaMask->alphaAt(x,y);
 }

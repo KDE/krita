@@ -65,9 +65,9 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 {
 }
 
-void KisToolSelectContiguous::activate()
+void KisToolSelectContiguous::activate( bool tmp ) 
 {
-    super::activate();
+    super::activate( tmp );
 
     if (!m_optWidget)
         return;

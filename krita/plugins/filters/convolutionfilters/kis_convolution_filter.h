@@ -31,13 +31,15 @@ class KisConvolutionFilter : public KisFilter {
 public:
     KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry);
 public:
+    using KisFilter::process;
+    
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
-    virtual int overlapMarginNeeded(KisFilterConfiguration* c) const;
+    virtual int overlapMarginNeeded(const KisFilterConfiguration* c) const;
 protected:
 
     KisKernelSP m_matrix;

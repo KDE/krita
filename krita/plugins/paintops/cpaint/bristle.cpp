@@ -40,6 +40,9 @@ void Bristle::setPos ( double x1, double y1 )
 
 void Bristle::setInitialPosition ( double x1, double y1 )
 {
+    Q_UNUSED(x1);
+    Q_UNUSED(y1);
+    
     lastx = x;
     lasty = y;
 }

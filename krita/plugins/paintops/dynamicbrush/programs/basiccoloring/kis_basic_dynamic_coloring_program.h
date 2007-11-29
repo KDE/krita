@@ -19,6 +19,7 @@
 #define _KIS_BASIC_DYNAMIC_COLORING_PROGRAM_H_
 
 #include "kis_dynamic_coloring_program.h"
+#include "kis_serializable_configuration.h"
 
 class KisDynamicSensor;
 
@@ -29,6 +30,10 @@ class KisBasicDynamicColoringProgram : public KisDynamicColoringProgram {
         virtual ~KisBasicDynamicColoringProgram();
         virtual void apply(KisDynamicColoring* coloring, const KisPaintInformation& adjustedInfo) const;
         virtual QWidget* createEditor(QWidget* parent);
+
+        using KisSerializableConfiguration::fromXML;
+        using KisSerializableConfiguration::toXML;
+        
         virtual void fromXML(const QDomElement&);
         virtual void toXML(QDomDocument&, QDomElement&) const;
     public:

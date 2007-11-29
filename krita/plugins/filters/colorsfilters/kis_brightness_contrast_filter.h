@@ -41,7 +41,8 @@ class WdgBrightnessContrast : public QWidget, public Ui::WdgBrightnessContrast
 class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration {
 
 public:
-
+    using KisFilterConfiguration::fromXML;
+    
     KisBrightnessContrastFilterConfiguration();
     virtual ~KisBrightnessContrastFilterConfiguration();
     virtual void fromXML( const QString&  );
@@ -64,19 +65,21 @@ public:
     KisBrightnessContrastFilter();
 
 public:
+    using KisFilter::process;
 
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration * configuration() { return new KisBrightnessContrastFilterConfiguration(); }
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
     static inline KoID id() { return KoID("brightnesscontrast", i18n("Brightness / Contrast")); }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    
-    virtual bool workWith(const KoColorSpace* cs);
+
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration * configuration() { return new KisBrightnessContrastFilterConfiguration(); }
+        
+    virtual bool workWith(const KoColorSpace* cs) const;
 };
 
 

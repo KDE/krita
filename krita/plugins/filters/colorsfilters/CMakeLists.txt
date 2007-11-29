@@ -2,7 +2,7 @@
 
 set(kritacolorsfilters_PART_SRCS
     colorsfilters.cc
-    kis_hsv_adjustement_filter.cc
+    kis_hsv_adjustment_filter.cpp
     kis_perchannel_filter.cc
     kis_brightness_contrast_filter.cc
     )
@@ -10,7 +10,7 @@ set(kritacolorsfilters_PART_SRCS
 kde4_add_ui_files(kritacolorsfilters_PART_SRCS
     wdg_perchannel.ui
     wdg_brightness_contrast.ui
-    wdg_hsv_adjustement.ui
+    wdg_hsv_adjustment.ui
     )
 
 kde4_add_plugin(kritacolorsfilters ${kritacolorsfilters_PART_SRCS})

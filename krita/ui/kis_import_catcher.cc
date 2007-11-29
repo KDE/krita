@@ -60,7 +60,7 @@ void KisImportCatcher::slotLoadingFinished()
                 // plus 1 other).
                 importedImageLayer = dynamic_cast<KisLayer*>( importedImageLayer->firstChild().data() );
                 if ( importedImageLayer )
-                    importedImage->removeLayer(importedImageLayer);
+                    importedImage->removeNode(importedImageLayer.data());
             }
 
             importedImageLayer->setName(m_url.prettyUrl());

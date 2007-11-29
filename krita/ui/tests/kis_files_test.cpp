@@ -76,7 +76,6 @@ void KisFilesTest::testFiles()
             {
                 for(int i = 0; i < sourceImg.numBytes(); i+=4)
                 {
-                    int alpha = resultImg.bits()[i + 3];
                     if( resultImg.bits()[i + 3] == sourceImg.bits()[i + 3] and resultImg.bits()[i + 3] != 0 )
                     {
                         for(int j = 0; j < 4; j++ )

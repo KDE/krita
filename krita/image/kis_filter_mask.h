@@ -43,7 +43,7 @@ public:
 
     virtual ~KisFilterMask();
 
-    KisNodeSP clone()
+    KisNodeSP clone() const
     {
         return KisNodeSP(new KisFilterMask(*this));
     }
@@ -51,7 +51,7 @@ public:
 
     KisFilterMask( const KisFilterMask& rhs );
 
-    bool allowAsChild( KisNodeSP );
+    bool allowAsChild( KisNodeSP ) const;
 
     KisFilterConfiguration * filter() const;
     void setFilter(KisFilterConfiguration * filterConfig);

@@ -41,7 +41,8 @@ public:
     }
 
 public:
-
+    using KoCompositeOp::composite;
+    
     void composite(quint8 *dstRowStart,
                     qint32 dststride,
                     const quint8 *srcRowStart,

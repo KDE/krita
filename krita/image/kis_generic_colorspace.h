@@ -34,11 +34,18 @@
 template<typename _type, int _nbchannels>
 class KisGenericColorSpace : public KoColorSpace {
 
+    using KoColorSpace::bitBlt;
+    
     class KisGenericColorSpaceConvolutionOpImpl : public KoConvolutionOp{
         public:
-            KisGenericColorSpaceConvolutionOpImpl() { }
-            virtual ~KisGenericColorSpaceConvolutionOpImpl() { }
-            virtual void convolveColors(const quint8* const* colors, const qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors, const QBitArray & channelFlags) const
+        
+            KisGenericColorSpaceConvolutionOpImpl() {}
+            
+            virtual ~KisGenericColorSpaceConvolutionOpImpl() {}
+            
+            virtual void convolveColors(const quint8* const* colors, const qint32* kernelValues,
+                                        quint8 *dst, qint32 factor, qint32 offset, qint32 nColors,
+                                        const QBitArray & channelFlags) const
             {
                 _type totals[ _nbchannels ];
                 for(uint i = 0; i < _nbchannels; i++)
@@ -56,7 +63,8 @@ class KisGenericColorSpace : public KoColorSpace {
                     if (weight != 0) {
                         for(uint i = 0; i < _nbchannels; i++)
                         {
-                            totals[ i ] += (*colorsT)[ i ] * weight ;
+                            if ( channelFlags.isEmpty() || (channelFlags.count() == _nbchannels && channelFlags[i] ) )
+                                totals[ i ] += (*colorsT)[ i ] * weight ;
                         }
                     }
                     colorsT++;
@@ -80,7 +88,7 @@ class KisGenericColorSpace : public KoColorSpace {
     public:
         virtual KoID colorModelId() const { return KoID("",""); }
         virtual KoID colorDepthId() const { return KoID("",""); }
-        virtual bool profileIsCompatible(const KoColorProfile* profile) const {return false;}
+        virtual bool profileIsCompatible(const KoColorProfile* /*profile*/) const {return false;}
 
         //========== Channels =====================================================//
 
@@ -106,8 +114,8 @@ class KisGenericColorSpace : public KoColorSpace {
         virtual QString channelValueText(const quint8 */*pixel*/, quint32 /*channelIndex*/) const { return "invalid"; };
 
         virtual QString normalisedChannelValueText(const quint8 */*pixel*/, quint32 /*channelIndex*/) const { return "invalid"; };
-		virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const { return; }
-		virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const { return; }
+		virtual void normalisedChannelsValue(const quint8 */*pixel*/, QVector<float> &/*channels*/) const {}
+		virtual void fromNormalisedChannelsValue(quint8 */*pixel*/, const QVector<float> &/*values*/) const {}
 
         virtual quint8 scaleToU8(const quint8 * /*srcPixel*/, qint32 /*channelPos*/) const { return 0; }
 
@@ -177,7 +185,8 @@ class KisGenericColorSpace : public KoColorSpace {
                 if (weight != 0) {
                     for(uint i = 0; i < _nbchannels; i++)
                     {
-                        totals[ i ] += (*colorsT)[ i ] * weight ;
+                        if ( channelFlags.isEmpty() || (channelFlags.count() == _nbchannels && channelFlags[i] ) )
+                            totals[ i ] += (*colorsT)[ i ] * weight ;
                     }
                 }
                 colorsT++;
@@ -229,8 +238,6 @@ class KisGenericColorSpace : public KoColorSpace {
                             qint32 /*cols*/,
                             const KoCompositeOp& /*op*/) { }
 
-        virtual QList<KisFilter*> createBackgroundFilters()
-        { return QList<KisFilter*>(); };
 };
 
 #endif // KIS_COLORSPACE_H_

@@ -34,7 +34,11 @@ KisDynamicShapeProgram::~KisDynamicShapeProgram() { delete d; }
 class KisDynamicDummyShapeProgram : public KisDynamicShapeProgram {
     public:
         KisDynamicDummyShapeProgram(const QString& name) : KisDynamicShapeProgram(name, "dummy") { }
-        virtual KisDynamicScattering scattering( const KisPaintInformation& info ) const { return KisDynamicScattering(1, 0.0); }
+        virtual KisDynamicScattering scattering( const KisPaintInformation& info ) const
+            {
+                Q_UNUSED(info);
+                return KisDynamicScattering(1, 0.0);
+            }
         virtual void apply( KisDynamicShape* , const KisPaintInformation& ) const { }
         virtual QWidget* createEditor(QWidget* ) { return 0; }
 };

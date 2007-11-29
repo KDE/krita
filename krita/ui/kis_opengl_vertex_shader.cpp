@@ -31,3 +31,4 @@ KisOpenGLVertexShader::KisOpenGLVertexShader(const QVector<QString>& sourceCodeS
 {
     loadSourceCode(sourceCodeStrings);
 }
+

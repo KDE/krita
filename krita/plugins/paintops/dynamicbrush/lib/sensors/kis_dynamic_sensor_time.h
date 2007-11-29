@@ -21,10 +21,14 @@
 #include "kis_vec.h"
 
 #include "kis_dynamic_sensor.h"
-
+// 
 class KisDynamicSensorTime : public KisDynamicSensor {
     Q_OBJECT
     public:
+        using KisSerializableConfiguration::fromXML;
+        using KisSerializableConfiguration::toXML;
+
+    
         KisDynamicSensorTime();
         virtual ~KisDynamicSensorTime() { }
         virtual double parameter(const KisPaintInformation& );
@@ -32,6 +36,8 @@ class KisDynamicSensorTime : public KisDynamicSensor {
     public slots:
         virtual void setPeriodic(bool periodic);
         virtual void setLength(int length);
+
+        
         virtual void toXML(QDomDocument&, QDomElement&) const;
         virtual void fromXML(const QDomElement&);
     private:

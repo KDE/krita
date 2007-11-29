@@ -111,6 +111,16 @@ KisCImgFilter::KisCImgFilter()
 : KisFilter(id(), KisFilter::CategoryEnhance, i18n("&CImg Image Restoration...")),
       eigen(CImg<>(2,1), CImg<>(2,2))
 {
+    setSupportsPainting( false );
+    setSupportsPreview( false );
+    const KoColorSpace* rgb16CS = KoColorSpaceRegistry::instance()->rgb16();
+    if(rgb16CS)
+    {
+        setColorSpaceIndependence(TO_RGBA16);
+    } else {
+        setColorSpaceIndependence(TO_RGBA8);
+    }
+
     restore = true;
     inpaint = false;
     resize = false;
@@ -166,6 +176,11 @@ void KisCImgFilter::process(KisFilterConstantProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
 #if 0
     Q_UNUSED(dst); ///////////////////// WTF !
 
@@ -705,16 +720,5 @@ KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget)
 
     } else {
         return widget->configuration();
-    }
-}
-
-ColorSpaceIndependence KisCImgFilter::colorSpaceIndependence() const
-{
-    const KoColorSpace* rgb16CS = KoColorSpaceRegistry::instance()->rgb16();
-    if(rgb16CS)
-    {
-        return TO_RGBA16;
-    } else {
-        return TO_RGBA8;
     }
 }

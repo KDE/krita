@@ -258,6 +258,7 @@ void _write_fn(png_structp png_ptr, png_bytep data, png_size_t length)
 static
 void _flush_fn(png_structp png_ptr)
 {
+    Q_UNUSED(png_ptr);
 }
 
 
@@ -499,7 +500,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
 
     double coeff = quint8_MAX / (double)( pow(2, color_nb_bits ) - 1 );
-    KisPaintLayer* layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), UCHAR_MAX);
+    KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), UCHAR_MAX);
     for (png_uint_32 y = 0; y < height; y++) {
         KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width);
 
@@ -593,7 +594,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 return KisImageBuilder_RESULT_UNSUPPORTED;
         }
     }
-    m_img->addLayer(KisLayerSP( layer ), m_img->rootLayer(), KisLayerSP( 0 ));
+    m_img->addNode( layer.data(), m_img->rootLayer().data() );
 
     png_read_end(png_ptr, end_info);
     iod->close();

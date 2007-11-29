@@ -28,6 +28,9 @@ class TestConfiguration : public KisSerializableConfiguration
 {
 public:
 
+    using KisSerializableConfiguration::fromXML;
+    using KisSerializableConfiguration::toXML;
+
     void fromXML(const QDomElement&)
         {
         }

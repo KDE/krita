@@ -43,9 +43,9 @@ struct DummyProgressBar : public KoProgressProxy
 {
     int max;
     int maximum() const { return max; }
-    void setValue( int value ) {}
-    void setRange( int minimum, int maximum ) { max = maximum; }
-    void setFormat( const QString & format ) {}
+    void setValue( int ) {}
+    void setRange( int, int maximum ) { max = maximum; }
+    void setFormat( const QString & ) {}
 };
 
 struct KisFilter::Private {

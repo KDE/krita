@@ -49,7 +49,7 @@ public:
 
     virtual ~KisTransformationMask();
 
-    KisNodeSP clone()
+    KisNodeSP clone() const
     {
         return KisNodeSP(new KisTransformationMask(*this));
     }
@@ -57,7 +57,7 @@ public:
 
     KisTransformationMask( const KisTransformationMask& rhs );
 
-    bool allowAsChild( KisNodeSP );
+    bool allowAsChild( KisNodeSP ) const;
 
     void setXScale( double xscale )
         {

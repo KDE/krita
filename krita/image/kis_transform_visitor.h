@@ -41,6 +41,8 @@ class KisTransformVisitor : public KisNodeVisitor {
 
 public:
 
+    using KisNodeVisitor::visit;
+    
     KisTransformVisitor(KisImageSP img, double  xscale, double  yscale,
         double  /*xshear*/, double  /*yshear*/, double angle,
         qint32  tx, qint32  ty, KoUpdater *progress, KisFilterStrategy *filter)

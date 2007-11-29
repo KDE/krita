@@ -170,7 +170,7 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
     
 }
 
-KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev)
 {
     return new KisBrightnessContrastConfigWidget(parent, dev);
 }
@@ -183,7 +183,7 @@ KisFilterConfiguration* KisBrightnessContrastFilter::factoryConfiguration(const 
 }
 
 
-bool KisBrightnessContrastFilter::workWith(const KoColorSpace* cs)
+bool KisBrightnessContrastFilter::workWith(const KoColorSpace* cs) const
 {
     return (cs->profile() != 0);
 }

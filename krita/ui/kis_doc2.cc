@@ -458,7 +458,7 @@ void KisDoc2::loadLayers(const KoXmlElement& element, KisImageSP img, KisGroupLa
                     }
                     else {
                         img->nextLayerName(); // Make sure the nameserver is current with the number of layers.
-                        img->addLayer(layer, parent, KisLayerSP(0));
+                        img->addNode(layer.data(), parent.data());
                     }
                 }
             }
@@ -672,7 +672,6 @@ bool KisDoc2::completeSaving(KoStore *store)
 
     totalSteps = img->nlayers();
 
-
     setIOSteps(totalSteps + 1);
 
     // Save the layers data
@@ -805,7 +804,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, c
     Q_CHECK_PTR(img);
     connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
 
-    KisPaintLayer *layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE,colorspace);
+    KisPaintLayerSP layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE,colorspace);
     Q_CHECK_PTR(layer);
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -813,7 +812,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, c
 
     layer->paintDevice()->fill( 0, 0, width, height, KoColor(Qt::white, cs).data() );
 
-    img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
+    img->addNode(layer.data(), img->rootLayer().data() );
 
     setCurrentImage(img );
     layer->setDirty();
@@ -832,7 +831,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
 
     quint8 opacity = OPACITY_OPAQUE;//bgColor.alpha();
     KisImageSP img;
-    KisPaintLayer *layer;
+    KisPaintLayerSP layer;
 
     if (!cs) return false;
 
@@ -864,7 +863,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
         actions.at(i)->act(layer->paintDevice(), img->width(), img->height());
 
     img->setBackgroundColor(bgColor);
-    img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
+    img->addNode(layer.data(), img->rootLayer().data() );
 
     setCurrentImage( img );
 

@@ -51,6 +51,7 @@ KisBookmarkedConfigurationsModel::~KisBookmarkedConfigurationsModel()
 
 int KisBookmarkedConfigurationsModel::rowCount(const QModelIndex &parent ) const
 {
+    Q_UNUSED(parent);
     return 2 + d->configsKey.size();
 }
 

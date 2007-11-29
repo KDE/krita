@@ -52,6 +52,9 @@
 
 KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::CategoryMap, i18n("&Round Corners..."))
 {
+    setSupportsPainting( false );
+    setSupportsPreview( true );
+
 }
 
 void KisRoundCornersFilter::process(KisFilterConstantProcessingInformation src,
@@ -61,6 +64,13 @@ void KisRoundCornersFilter::process(KisFilterConstantProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
+
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
+    
 #if 0
     if (!src ||
         srcTopLeft.isNull() ||
@@ -159,7 +169,7 @@ void KisRoundCornersFilter::process(KisFilterConstantProcessingInformation src,
 #endif
 }
 
-KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
+KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 100, 30, i18n("Radius"), "radius" ) );

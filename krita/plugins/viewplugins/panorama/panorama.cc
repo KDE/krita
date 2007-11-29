@@ -155,7 +155,7 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
         if(!parent)
             parent = m_view->image()->rootLayer();
         above = qobject_cast<KisLayer*>( parent->firstChild().data() );
-        m_view->image()->addLayer(layer, parent, above);
+        m_view->image()->addNode(layer.data(), parent.data(), above.data());
 
 
         QRect dstArea;

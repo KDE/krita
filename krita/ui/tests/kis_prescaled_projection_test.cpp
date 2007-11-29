@@ -145,7 +145,7 @@ bool KisPrescaledProjectionTest::testProjectionScenario( KisPrescaledProjection 
     projection.documentOffsetMoved( QPoint( 30, 50 ) );
     projection.prescaledQImage().save( name + "_prescaled_projection_17.png" );
 
-
+    return true;
 }
 
 void KisPrescaledProjectionTest::testCreation()

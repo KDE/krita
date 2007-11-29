@@ -76,6 +76,12 @@ public:
     virtual bool loadXML(QIODevice *, const KoXmlDocument& doc);
     virtual QByteArray mimeType() const;
     virtual QWidget* createCustomDocumentWidget(QWidget *parent);
+    
+    virtual KParts::Part * hitTest(QWidget * w, const QPoint& pt)
+        {
+            return KoDocument::hitTest(w, pt);
+        }
+        
     virtual KoDocument* hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix = QMatrix());
 
     /**

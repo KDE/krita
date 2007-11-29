@@ -26,6 +26,7 @@
 void KisFilterRegistryTest::testCreation()
 {
     KisFilterRegistry * test = KisFilterRegistry::instance();
+    Q_UNUSED(test);
 }
 
 

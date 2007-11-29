@@ -36,11 +36,13 @@ class KisFilterInvert : public KisFilter
 public:
     KisFilterInvert();
 public:
+    using KisFilter::process;
+    
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
     static inline KoID id() { return KoID("invert", i18n("Invert")); }
     

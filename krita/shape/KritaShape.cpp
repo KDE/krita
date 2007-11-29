@@ -108,8 +108,11 @@ void KritaShape::setDisplayProfile( const QString & profileName ) {
 
 void KritaShape::saveOdf( KoShapeSavingContext & context ) const {
     // TODO
+    Q_UNUSED(context);
 }
 bool KritaShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+    Q_UNUSED(element);
+    Q_UNUSED(context);
     return false; // TODO
 }
 

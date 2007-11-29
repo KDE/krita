@@ -20,7 +20,7 @@
 #include <qtest_kde.h>
 
 #include "kis_mask_test.h"
-
+#include "kis_node.h"
 #include "kis_mask.h"
 class TestMask : public KisMask
 {
@@ -30,11 +30,12 @@ public:
         {
         }
     
-    KisNodeSP clone()
+    KisNodeSP clone() const
         {
+            return new TestMask(*this);
         }       
 
-    bool allowAsChild(KisNodeSP)
+    bool allowAsChild(KisNodeSP) const
         {
             return false;
         }

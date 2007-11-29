@@ -37,7 +37,7 @@ public:
         }
 
     KisNodeSP clone() { return new TestLayer(*this); }
-    bool allowAsChild( KisNodeSP node) { return true; }
+    bool allowAsChild( KisNodeSP ) const { return true; }
 
     virtual QString nodeType()
         {
@@ -63,7 +63,7 @@ public:
             return QIcon();
         }
 
-    KisLayerSP clone() const
+    KisNodeSP clone() const
         {
             return new TestLayer(image(), name(), opacity());
         }

@@ -101,7 +101,7 @@ KisPaintLayer::~KisPaintLayer()
     delete m_d;
 }
 
-bool KisPaintLayer::allowAsChild( KisNodeSP node)
+bool KisPaintLayer::allowAsChild( KisNodeSP node) const
 {
     if ( node->inherits( "KisMask" ) )
        return true;
@@ -166,12 +166,6 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() con
         l << KoDocumentSectionModel::Property(i18n("Profile"), profile->name());
     return l;
 }
-
-KisLayerSP KisPaintLayer::clone() const
-{
-    return KisLayerSP(new KisPaintLayer(*this));
-}
-
 
 const KoColorSpace * KisPaintLayer::colorSpace()
 {

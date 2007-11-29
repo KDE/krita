@@ -42,6 +42,9 @@
 
 class KisMergeVisitor : public KisNodeVisitor {
 public:
+
+    using KisNodeVisitor::visit;
+
     /**
      * Don't even _think_ of creating a merge visitor without a projection; without a projection,
      * the adjustmentlayers won't work.

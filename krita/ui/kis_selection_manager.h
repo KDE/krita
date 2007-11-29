@@ -83,7 +83,7 @@ public slots:
     void feather();
     void toggleDisplaySelection();
 
-    void timerEvent();
+    void selectionTimerEvent();
     void shapeSelectionChanged();
 
 public:

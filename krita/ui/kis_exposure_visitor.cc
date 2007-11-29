@@ -33,6 +33,7 @@ KisExposureVisitor::KisExposureVisitor(double exposure) : m_exposure(exposure)
 
 bool KisExposureVisitor::visit( KisExternalLayer * e)
 {
+    Q_UNUSED( e );
     return true;
 }
 bool KisExposureVisitor::visit(KisPaintLayer *layer)
@@ -51,8 +52,10 @@ bool KisExposureVisitor::visit(KisGroupLayer *layer)
         child->accept(*this);
         child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
     }
+    return true;
 }
 bool KisExposureVisitor::visit(KisAdjustmentLayer* layer)
 {
+    Q_UNUSED(layer);
     return true;
 }

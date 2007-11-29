@@ -61,10 +61,10 @@ KisToolSelectPolygonal::~KisToolSelectPolygonal()
 {
 }
 
-void KisToolSelectPolygonal::activate()
+void KisToolSelectPolygonal::activate( bool tmp )
 {
     m_points.clear();
-    super::activate();
+    super::activate( tmp );
 
     if (!m_optWidget)
         return;

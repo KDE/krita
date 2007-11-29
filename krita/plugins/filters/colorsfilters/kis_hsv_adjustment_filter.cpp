@@ -17,13 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_hsv_adjustement_filter.h"
+#include "kis_hsv_adjustment_filter.h"
 
 #include <KoProgressUpdater.h>
 
 #include "kis_paint_device.h"
 
-KisHSVAdjustementFilter::KisHSVAdjustementFilter()
+KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
     : KisFilter( id(), CategoryAdjust, i18n("&HSV Adujstement..."))
 {
     setSupportsPainting(true);
@@ -31,12 +31,13 @@ KisHSVAdjustementFilter::KisHSVAdjustementFilter()
     setSupportsIncrementalPainting(false);
 }
 
-KisFilterConfigWidget * KisHSVAdjustementFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev) const
+KisFilterConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev)
 {
+    Q_UNUSED(dev);
     return new KisHSVConfigWidget(parent);
 }
 
-void KisHSVAdjustementFilter::process(KisFilterConstantProcessingInformation srcInfo,
+void KisHSVAdjustmentFilter::process(KisFilterConstantProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
@@ -56,10 +57,10 @@ void KisHSVAdjustementFilter::process(KisFilterConstantProcessingInformation src
         params["s"] = config->getInt("s", 0) * 0.01;
         params["v"] = config->getInt("v", 0) * 0.01;
     }
-    KoColorTransformation* transfo = src->colorSpace()->createColorTransformation( "hsv_adjustement", params);
+    KoColorTransformation* transfo = src->colorSpace()->createColorTransformation( "hsv_adjustment", params);
     if( not transfo )
     {
-        kError() << "hsv_adjustement transformation is unavailable, go check your installation";
+        kError() << "hsv_adjustment transformation is unavailable, go check your installation";
         return;
     }
     int count = 0;
@@ -84,14 +85,14 @@ void KisHSVAdjustementFilter::process(KisFilterConstantProcessingInformation src
     delete transfo;
 }
 
-KisFilterConfiguration* KisHSVAdjustementFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration* KisHSVAdjustmentFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     return new KisFilterConfiguration(id().id(), 0);
 }
 
 KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f ) : KisFilterConfigWidget(parent, f)
 {
-    m_page = new Ui_WdgHSVAdjustement();
+    m_page = new Ui_WdgHSVAdjustment();
     m_page->setupUi(this);
     connect(m_page->hue, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
     connect(m_page->value, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
@@ -105,7 +106,7 @@ KisHSVConfigWidget::~KisHSVConfigWidget()
 
 KisFilterConfiguration * KisHSVConfigWidget::configuration() const
 {
-    KisFilterConfiguration* c = new KisFilterConfiguration(KisHSVAdjustementFilter::id().id(), 0);
+    KisFilterConfiguration* c = new KisFilterConfiguration(KisHSVAdjustmentFilter::id().id(), 0);
     c->setProperty( "h", m_page->hue->value() );
     c->setProperty( "s", m_page->saturation->value() );
     c->setProperty( "v", m_page->value->value() );

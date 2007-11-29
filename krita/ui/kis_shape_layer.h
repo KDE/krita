@@ -55,11 +55,11 @@ public:
 
     KisShapeLayer( KoShapeContainer * parent, KisImageSP img, const QString &name, quint8 opacity );
     virtual ~KisShapeLayer();
-    KisNodeSP clone()
+    KisNodeSP clone() const
         {
             return KisNodeSP( new KisShapeLayer(*this) );
         }
-    bool allowAsChild( KisNodeSP );
+    bool allowAsChild( KisNodeSP ) const;
 
 public:
 
@@ -90,9 +90,6 @@ public:
     }
 
     bool saveToXML(QDomDocument doc, QDomElement elem);
-
-    // KisLayer implementation
-    KisLayerSP clone() const;
 
     qint32 x() const;
     void setX(qint32);

@@ -36,22 +36,18 @@ class KisFilterFastColorTransfer : public KisFilter
 public:
     KisFilterFastColorTransfer();
 public:
+    using KisFilter::process;
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
-    virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
     static inline KoID id() { return KoID("colortransfer", i18n("Color Transfer")); }
-    
-    virtual bool supportsPainting() const { return true; }
-    virtual bool supportsPreview() const { return true; }
-    virtual bool supportsIncrementalPainting() const { return false; }
-    virtual bool supportsAdjustmentLayers() const { return false; }
+
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP) const;
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
 #endif

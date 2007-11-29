@@ -35,25 +35,26 @@ public:
 
 class KisFilterWave : public KisFilter
 {
-    public:
-        KisFilterWave();
-    public:
+public:
+    
+    KisFilterWave();
+
+public:
+
+    using KisFilter::process;
+    
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
-        virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
-        static inline KoID id() { return KoID("wave", i18n("Wave")); }
+    static inline KoID id() { return KoID("wave", i18n("Wave")); }
     
-    virtual bool supportsPainting() const { return true; }
-        virtual bool supportsPreview() const { return true; }
-        virtual bool supportsIncrementalPainting() const { return false; }
-        virtual bool supportsAdjustmentLayers() const { return false; }
-        virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    public:
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+public:
+        
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
 };
 
 #endif

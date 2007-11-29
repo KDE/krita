@@ -56,15 +56,20 @@ FastColorTransferPlugin::~FastColorTransferPlugin()
 
 KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), CategoryColors, i18n("&Color Transfer..."))
 {
+    setColorSpaceIndependence( FULLY_INDEPENDENT );
+    setSupportsPainting( true );
+    setSupportsPreview( true );
+    setSupportsIncrementalPainting( false );
+    setSupportsAdjustmentLayers( false );
 }
 
 
-KisFilterConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP )
+KisFilterConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP )
 {
     return new KisWdgFastColorTransfer(this, parent);
 }
 
-KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(KisPaintDeviceSP) const
+KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("filename", "" ); // TODO: put an exemple image in share/krita, like a sunset that what's give the best results
@@ -80,6 +85,11 @@ void KisFilterFastColorTransfer::process(KisFilterConstantProcessingInformation 
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
 #if 0
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);

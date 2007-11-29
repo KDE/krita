@@ -45,6 +45,8 @@ class KRITAIMAGE_EXPORT KisCountVisitor : public KisNodeVisitor
 {
 public:
 
+    using KisNodeVisitor::visit;
+
     KisCountVisitor( const QStringList & nodeTypes, const KoProperties & properties )
         : m_nodeTypes( nodeTypes )
         , m_properties( properties )

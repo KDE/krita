@@ -89,7 +89,7 @@ void KisOasisLoadVisitor::loadGroupLayer(const KoXmlElement& elem, KisGroupLayer
                     opacity = subelem.attribute("opacity").toInt();
                 }
                 KisGroupLayerSP layer = new KisGroupLayer(m_image.data(), "", opacity);
-                m_image->addLayer(layer, gL, gL->childCount() );
+                m_image->addNode(layer.data(), gL.data(), gL->childCount() );
                 loadGroupLayer(subelem, layer);
             } else if(node.nodeName()== "image:layer")
             {
@@ -115,7 +115,7 @@ void KisOasisLoadVisitor::loadGroupLayer(const KoXmlElement& elem, KisGroupLayer
                         io.close();
                         m_oasisStore->close();
                         KisPaintLayerSP layer = new KisPaintLayer( gL->image() , "", opacity, pngConv.image()->projection());
-                        m_image->addLayer(layer, gL, gL->childCount() );
+                        m_image->addNode(layer.data(), gL.data(), gL->childCount() );
                         loadPaintLayer(subelem, layer);
                         kDebug(41008) <<"Loading was successful";
                 //         return true;
@@ -133,7 +133,7 @@ void KisOasisLoadVisitor::loadGroupLayer(const KoXmlElement& elem, KisGroupLayer
                 }
                 KisFilterConfiguration * kfc = f->defaultConfiguration(0);
                 KisAdjustmentLayerSP layer = new KisAdjustmentLayer( gL->image() , "", kfc, KisSelectionSP(0));
-                m_image->addLayer(layer, gL, gL->childCount() );
+                m_image->addNode(layer.data(), gL.data(), gL->childCount() );
                 loadAdjustementLayer(subelem, layer);
 
             }

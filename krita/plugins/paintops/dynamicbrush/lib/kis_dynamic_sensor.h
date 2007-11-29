@@ -74,6 +74,10 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicSensor : public QObject, public KisSerializ
          */
         inline QString id() const { return m_id.id(); }
         inline QString name() const { return m_id.name(); }
+
+        using KisSerializableConfiguration::fromXML;
+        using KisSerializableConfiguration::toXML;
+        
         virtual void toXML(QDomDocument&, QDomElement&) const;
         virtual void fromXML(const QDomElement&);
     private:

@@ -46,6 +46,7 @@ void KisPaintopRegistryTest::testDefaultPaintops()
     KisPainter p( l->paintDevice() );
     
     KisPaintOp * op = reg->paintOp("paintbrush", 0, &p, image);
+    Q_UNUSED(op);
 }
 
 QTEST_KDEMAIN(KisPaintopRegistryTest, GUI)

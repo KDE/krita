@@ -70,7 +70,10 @@ QString KisRecordedAction::layerToIndexPath(KisLayerSP _layer)
     KisNodeSP parent = 0;
     while((parent = layer->parent()))
     {
-        path = (QString("\\%0").arg(layer->parent()->index( layer ))) + path;
+        int index = parent->index( layer );
+        if ( index >= 0 ) {
+            path = (QString("\\%0").arg(index)) + path;
+        }
         layer = parent;
     }
     return path;

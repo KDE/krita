@@ -63,9 +63,9 @@ KisToolSelectElliptical::~KisToolSelectElliptical()
 {
 }
 
-void KisToolSelectElliptical::activate()
+void KisToolSelectElliptical::activate( bool tmp )
 {
-    super::activate();
+    super::activate( tmp );
 
     if (!m_optWidget)
         return;

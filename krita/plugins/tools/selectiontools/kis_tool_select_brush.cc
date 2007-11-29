@@ -61,9 +61,9 @@ KisToolSelectBrush::~KisToolSelectBrush()
 {
 }
 
-void KisToolSelectBrush::activate()
+void KisToolSelectBrush::activate( bool tmp )
 {
-    super::activate();
+    super::activate( tmp );
 
     if (!m_optWidget)
         return;
@@ -82,8 +82,9 @@ void KisToolSelectBrush::initPaint(KoPointerEvent* /*e*/)
     KisPaintDeviceSP dev = currentLayer()->paintDevice();
     if (m_painter)
         delete m_painter;
-    bool hasSelection = currentLayer()->selection();
 #if 0 // XXX_SELECTION
+    bool hasSelection = currentLayer()->selection();
+
     if (currentImage()->undo())
         m_transaction = new KisSelectedTransaction(i18n("Selection Brush"), dev);
 

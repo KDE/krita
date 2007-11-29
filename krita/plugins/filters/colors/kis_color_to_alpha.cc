@@ -43,12 +43,12 @@ KisFilterColorToAlpha::KisFilterColorToAlpha() : KisFilter(id(), CategoryColors,
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisFilterConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP ) const
+KisFilterConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP )
 {
     return new KisWdgColorToAlpha( parent);
 }
 
-KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(KisPaintDeviceSP ) const
+KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(const KisPaintDeviceSP ) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
     config->setProperty("targetcolor", QColor(255,255,255) );
@@ -79,7 +79,6 @@ void KisFilterColorToAlpha::process(KisFilterConstantProcessingInformation srcIn
     KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection() );
     KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection() );
 
-    int pixelsProcessed = 0;
     int totalCost = size.width() * size.height() / 100;
     int currentProgress = 0;
 

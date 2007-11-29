@@ -29,17 +29,27 @@
 
 struct KisFiltersModel::Private {
     struct Node {
+
+        virtual ~Node() {}
+        
         QString name;
         QString displayRole() { return name; }
         virtual int childrenCount() = 0;
+        
     };
     struct Filter : public Node {
+
+        virtual ~Filter() {}
+        
         QString id;
         QPixmap icon;
         KisFilterSP filter;
         virtual int childrenCount() { return 0; }
     };
     struct Category : public Node {
+    
+        virtual ~Category() {}
+        
         QString id;
         QList<Filter> filters;
         virtual int childrenCount() { return filters.count(); }
@@ -83,8 +93,10 @@ int KisFiltersModel::rowCount(const QModelIndex &parent) const
         return d->categoriesKeys.count();
     }
 }
+
 int KisFiltersModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return 1;
 }
 

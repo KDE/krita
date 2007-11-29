@@ -51,6 +51,8 @@
 
 KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::CategoryArtistic, i18n("&Raindrops..."))
 {
+    setSupportsPainting( false );
+    setSupportsPreview( true );
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -80,6 +82,13 @@ void KisRainDropsFilter::process(KisFilterConstantProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
+
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
+    
 #if 0
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 DropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();
@@ -402,7 +411,7 @@ uchar KisRainDropsFilter::LimitValues (int ColorValue)
     return ((uchar) ColorValue);
 }
 
-KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
+KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 1, 200, 80, i18n("Drop size"), "dropsize" ) );

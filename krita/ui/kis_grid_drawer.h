@@ -77,6 +77,8 @@ public:
     OpenGLGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter);
     virtual ~OpenGLGridDrawer();
 
+    using KisGridDrawer::drawLine;
+
     void setPen(const QPen& pen);
     void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2);
 };

@@ -66,7 +66,7 @@ KisCubismFilter::KisCubismFilter() : KisFilter(id(), KisFilter::CategoryArtistic
     setColorSpaceIndependence(TO_RGBA8);
 }
 
-bool KisCubismFilter::workWith(const KoColorSpace* /*cs*/)
+bool KisCubismFilter::workWith(const KoColorSpace* /*cs*/) const
 {
     return true;
 }
@@ -79,6 +79,8 @@ void KisCubismFilter::process(KisFilterConstantProcessingInformation srcInfo,
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(progressUpdater);
+    
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();
@@ -212,6 +214,9 @@ void KisCubismFilter::convertSegment (qint32 x1, qint32 y1, qint32 x2, qint32  y
 void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint dstTopLeft, const QSize& size, KisPolygon* poly, const quint8* col, quint8* dest) const
 // void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, const quint8* col, quint8* /*s*/, QRect rect) const
 {
+    Q_UNUSED(srcTopLeft);
+    Q_UNUSED(dest);
+    
         qint32         val;
         qint32         alpha;
         quint8         buf[4];
@@ -444,7 +449,7 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, const QPoint& srcTopLeft, Kis
 
 }
 
-KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/) const
+KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile size"), "tileSize" ) );

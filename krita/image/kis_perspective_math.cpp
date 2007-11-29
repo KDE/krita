@@ -388,6 +388,7 @@ namespace math { // TODO: use eigen
     void ludcmp(matrix<ElType>& a, vector<int>& indx,double& d)
     {
         int i,imax,j,k;
+        imax = 0;
         ElType  big,dum,sum,temp;
         int n=a.rows;
         vector<ElType> vv(n);
@@ -402,6 +403,7 @@ namespace math { // TODO: use eigen
             if (big == 0.0) { std::cerr << "Singular matrix in routine LUDCMP" << std::endl; big = TINY;}
             vv[i]=1.0/big;
         }
+        
         for (j=0;j<n;j++)
         {
             for (i=0;i<j;i++)

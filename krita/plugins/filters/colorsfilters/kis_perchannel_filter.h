@@ -47,6 +47,8 @@ public:
     KisPerChannelFilterConfiguration(int n);
     ~KisPerChannelFilterConfiguration();
 
+    using KisFilterConfiguration::fromXML;
+
     virtual void fromXML( const QString&  );
     virtual QString toString();
 
@@ -73,11 +75,13 @@ public:
     KisPerChannelFilter();
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    
+    using KisFilter::process;
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
     static inline KoID id() { return KoID("perchannel", i18n("Color Adjustment")); }
 private:

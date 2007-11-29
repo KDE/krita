@@ -38,7 +38,7 @@ KisTransparencyMask::KisTransparencyMask( const KisTransparencyMask& rhs )
 {
 }
 
-bool KisTransparencyMask::allowAsChild( KisNodeSP node)
+bool KisTransparencyMask::allowAsChild( KisNodeSP node) const
 {
     Q_UNUSED(node);
     return false;

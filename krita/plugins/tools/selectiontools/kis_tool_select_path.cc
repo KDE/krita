@@ -55,9 +55,9 @@ KisToolSelectPath::~KisToolSelectPath()
 {
 }
 
-void KisToolSelectPath::activate()
+void KisToolSelectPath::activate( bool tmp )
 {
-    super::activate();
+    super::activate( tmp );
 
     if (!m_optWidget)
         return;
@@ -110,7 +110,7 @@ void KisToolSelectPath::addPathShape()
 
     KisImageSP image = currentLayer->image();
     KisPaintDeviceSP dev = currentLayer->paintDevice();
-    bool hasSelection = currentLayer->selection();
+//    bool hasSelection = currentLayer->selection();
 
     m_shape->normalize();
 

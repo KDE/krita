@@ -70,10 +70,13 @@ void KisShapeSelectionModel::remove(KoShape *child)
 
 void KisShapeSelectionModel::setClipping(const KoShape *child, bool clipping)
 {
+    Q_UNUSED(child);
+    Q_UNUSED(clipping);
 }
 
 bool KisShapeSelectionModel::childClipped(const KoShape *child) const
 {
+    Q_UNUSED(child);
     return false;
 }
 

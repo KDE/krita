@@ -39,6 +39,8 @@ public:
     KisChangeProfileVisitor(const KoColorSpace *oldColorSpace, const KoColorSpace *dstColorSpace);
     virtual ~KisChangeProfileVisitor();
 
+    using KisNodeVisitor::visit;
+
 public:
     bool visit( KisExternalLayer * )
         {

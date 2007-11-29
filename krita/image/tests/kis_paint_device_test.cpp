@@ -56,7 +56,6 @@ void KisPaintDeviceTest::testCreation()
     KisPaintLayerSP layer = new KisPaintLayer( image, "bla", 125 );
 
     dev = new KisPaintDevice( layer.data(), cs, "test2" );
-    QVERIFY( dev->name() == dev->objectName() );
     QVERIFY( dev->objectName() == QString( "test2" ) );
     QVERIFY( *dev->colorSpace() == *cs );
     QVERIFY( dev->x() == 0 );

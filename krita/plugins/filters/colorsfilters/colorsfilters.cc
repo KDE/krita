@@ -49,7 +49,7 @@
 #include <kis_painter.h>
 #include <kis_selection.h>
 #include "kis_histogram.h"
-#include "kis_hsv_adjustement_filter.h"
+#include "kis_hsv_adjustment_filter.h"
 #include "kis_brightness_contrast_filter.h"
 #include "kis_perchannel_filter.h"
 #include "kis_filter_registry.h"
@@ -68,7 +68,7 @@ ColorsFilters::ColorsFilters(QObject *parent, const QStringList &)
         manager->add(new KisAutoContrast());
         manager->add(new KisPerChannelFilter());
         manager->add(new KisDesaturateFilter());
-        manager->add(new KisHSVAdjustementFilter());
+        manager->add(new KisHSVAdjustmentFilter());
     }
 }
 
@@ -82,9 +82,14 @@ ColorsFilters::~ColorsFilters()
 
 KisAutoContrast::KisAutoContrast() : KisFilter(id(), CategoryAdjust, i18n("&Auto Contrast"))
 {
+    setSupportsPreview( true );
+    setSupportsPainting( false );
+    setSupportsThreading( false );
+    setColorSpaceIndependence( TO_LAB16 );
+    
 }
 
-bool KisAutoContrast::workWith(const KoColorSpace* cs)
+bool KisAutoContrast::workWith(const KoColorSpace* cs) const
 {
     return (cs->profile() != 0);
 }
@@ -244,9 +249,13 @@ KisDesaturateFilter::KisDesaturateFilter()
 
 KisDesaturateFilter::~KisDesaturateFilter()
 {
+    setSupportsPainting( true );
+    setSupportsPreview( true );
+    setSupportsIncrementalPainting( false );
+    setColorSpaceIndependence( TO_LAB16 );
 }
 
-bool KisDesaturateFilter::workWith(const KoColorSpace* cs)
+bool KisDesaturateFilter::workWith(const KoColorSpace* cs) const
 {
     return (cs->profile() != 0);
 }

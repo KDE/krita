@@ -45,7 +45,7 @@ public:
     virtual QWidget* optionWidget();
 
 public slots:
-    virtual void activate();
+    virtual void activate( bool tmp );
 
 protected:
     virtual void initPaint(KoPointerEvent *e);

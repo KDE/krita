@@ -30,6 +30,9 @@ struct KoRGBChromaticities;
  */
 class PIGMENTCMS_EXPORT KoIccColorProfile : public KoColorProfile {
     public:
+
+        using KoColorProfile::save;
+        
         /**
          * Contains the data associated with a profile. This is
          * shared through internal representation.

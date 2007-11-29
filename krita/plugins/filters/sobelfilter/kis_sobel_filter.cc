@@ -71,6 +71,8 @@
 
 KisSobelFilter::KisSobelFilter() : KisFilter(id(), CategoryEdgeDetection, i18n("&Sobel..."))
 {
+    setSupportsPainting( false );
+    setSupportsPreview( true );
 }
 
 
@@ -98,6 +100,13 @@ void KisSobelFilter::process(KisFilterConstantProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
+
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_UNUSED(size);
+    Q_UNUSED(config);
+    Q_UNUSED(progressUpdater);
+    
 #if 0
     //read the filter configuration values from the KisFilterConfiguration object
     bool doHorizontal = configuration->getBool("doHorizontally", true);
@@ -196,7 +205,7 @@ void KisSobelFilter::process(KisFilterConstantProcessingInformation src,
 }
 
 
-KisFilterConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
+KisFilterConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP)
 {
     vKisBoolWidgetParam param;
     param.push_back( KisBoolWidgetParam( true, i18n("Sobel horizontally"), "doHorizontally" ) );

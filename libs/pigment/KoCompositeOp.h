@@ -116,10 +116,10 @@ public:
       @param opacity transparency with which to blend
     */
     virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
-			   const quint8 *srcRowStart, qint32 srcRowStride,
-			   const quint8 *maskRowStart, qint32 maskRowStride,
-			   qint32 rows, qint32 numColumns,
-			   quint8 opacity) const;
+               const quint8 *srcRowStart, qint32 srcRowStride,
+               const quint8 *maskRowStart, qint32 maskRowStride,
+               qint32 rows, qint32 numColumns,
+               quint8 opacity) const;
 
     /**
      * Same as previous, but with a bit array that determines which channels
@@ -132,11 +132,11 @@ public:
      * only the gray channel is copied.
      */
     virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
-			   const quint8 *srcRowStart, qint32 srcRowStride,
-			   const quint8 *maskRowStart, qint32 maskRowStride,
-			   qint32 rows, qint32 numColumns,
-			   quint8 opacity,
-			   const QBitArray & channelFlags) const = 0;
+               const quint8 *srcRowStart, qint32 srcRowStride,
+               const quint8 *maskRowStart, qint32 maskRowStride,
+               qint32 rows, qint32 numColumns,
+               quint8 opacity,
+               const QBitArray & channelFlags) const = 0;
     private:
         KoCompositeOp();
         struct Private;

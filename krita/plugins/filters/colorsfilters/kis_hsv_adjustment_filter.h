@@ -25,7 +25,7 @@
 
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
-#include "ui_wdg_hsv_adjustement.h"
+#include "ui_wdg_hsv_adjustment.h"
 
 class QWidget;
 class KoColorTransformation;
@@ -33,23 +33,26 @@ class KoColorTransformation;
 /**
  * This class affect Intensity Y of the image
  */
-class KisHSVAdjustementFilter : public KisFilter
+class KisHSVAdjustmentFilter : public KisFilter
 {
 
 public:
 
-    KisHSVAdjustementFilter();
+    KisHSVAdjustmentFilter();
 
 public:
 
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev) const;
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+
+    using KisFilter::process;
+
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
-    static inline KoID id() { return KoID("hsvadjustement", i18n("HSV Adjustement")); }
+    static inline KoID id() { return KoID("hsvadjustment", i18n("HSV Adjustment")); }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
     
 };
@@ -63,7 +66,7 @@ public:
 
     virtual KisFilterConfiguration * configuration() const;
     virtual void setConfiguration( KisFilterConfiguration * config );
-    Ui_WdgHSVAdjustement * m_page;
+    Ui_WdgHSVAdjustment * m_page;
 };
 
 #endif

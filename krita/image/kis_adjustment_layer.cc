@@ -80,7 +80,7 @@ KisAdjustmentLayer::~KisAdjustmentLayer()
     delete m_d;
 }
 
-bool KisAdjustmentLayer::allowAsChild( KisNodeSP node)
+bool KisAdjustmentLayer::allowAsChild( KisNodeSP node) const
 {
     if ( node->inherits( "KisMask" ) )
        return true;
@@ -117,12 +117,6 @@ KoDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties(
     l << KoDocumentSectionModel::Property(i18n("Filter"), KisFilterRegistry::instance()->value(filter()->name())->name());
     return l;
 }
-
-KisLayerSP KisAdjustmentLayer::clone() const
-{
-    return KisLayerSP(new KisAdjustmentLayer(*this));
-}
-
 
 void KisAdjustmentLayer::resetCache()
 {

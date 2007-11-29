@@ -33,14 +33,19 @@
 
 KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), CategoryEnhance, i18n("&Unsharp Mask..."))
 {
+        setSupportsPainting(true);
+        setSupportsPreview(true);
+        setSupportsIncrementalPainting(false);
+        setSupportsAdjustmentLayers(false);
+        setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisFilterConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP )
+KisFilterConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP )
 {
     return new KisWdgUnsharp(this, parent);
 }
 
-KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(KisPaintDeviceSP) const
+KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("halfSize", 5 );

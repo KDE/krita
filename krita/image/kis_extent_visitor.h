@@ -37,6 +37,8 @@ class KisExtentVisitor : public KisNodeVisitor {
 
 public:
 
+    using KisNodeVisitor::visit;
+
     /**
      * @param rc: the extent of the image
      * @param exact: if exact is true, we use the very slow exactBounds

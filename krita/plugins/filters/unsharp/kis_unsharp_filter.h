@@ -25,25 +25,23 @@
 
 class KisUnsharpFilter : public KisFilter
 {
-    public:
-        KisUnsharpFilter();
-    public:
+public:
+    
+    KisUnsharpFilter();
+
+    using KisFilter::process;
+    
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
-        static inline KoID id() { return KoID("unsharpmask", i18n("Unsharp Mask")); }
-        virtual bool supportsPainting() const { return true; }
-        virtual bool supportsPreview() const { return true; }
+
+    static inline KoID id() { return KoID("unsharpmask", i18n("Unsharp Mask")); }
     
-    virtual bool supportsIncrementalPainting() const { return false; }
-        virtual bool supportsAdjustmentLayers() const { return false; }
-        virtual ColorSpaceIndependence colorspaceIndependence() { return FULLY_INDEPENDENT; }
-    public:
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-        virtual KisFilterConfiguration* factoryConfiguration(KisPaintDeviceSP) const;
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
 #endif

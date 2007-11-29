@@ -52,6 +52,10 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicProgram : public QObject, public KisSeriali
          * @return a QWidget which display editing option for that program
          */
         virtual QWidget* createEditor(QWidget* parent) = 0;
+
+        using KisSerializableConfiguration::fromXML;
+        using KisSerializableConfiguration::toXML;
+        
         virtual void fromXML(const QDomElement&);
         virtual void toXML(QDomDocument&, QDomElement&) const;
     signals:

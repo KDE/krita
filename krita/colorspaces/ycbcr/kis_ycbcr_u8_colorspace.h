@@ -62,8 +62,11 @@ public:
     virtual bool isIcc() const { return false; }
     virtual bool isHdr() const { return false; }
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
-    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+    virtual KoColorConversionTransformationFactory*
+        createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
     {
+        Q_UNUSED(_colorModelId);
+        Q_UNUSED(_colorDepthId);
         return 0;
     }
 

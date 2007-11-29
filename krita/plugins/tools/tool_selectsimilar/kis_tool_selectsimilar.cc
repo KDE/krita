@@ -102,9 +102,9 @@ KisToolSelectSimilar::~KisToolSelectSimilar()
 {
 }
 
-void KisToolSelectSimilar::activate()
+void KisToolSelectSimilar::activate( bool tmp )
 {
-    super::activate();
+    super::activate( tmp );
 //    m_timer->start(50);
 //    setPickerCursor(m_currentSelectAction);
 

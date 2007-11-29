@@ -26,6 +26,7 @@
 void KisPainterlyOverlayColorSpaceTest::testCreation()
 {
     const KisPainterlyOverlayColorSpace * cs =  KisPainterlyOverlayColorSpace::instance();
+    Q_UNUSED(cs);
 }
 
 

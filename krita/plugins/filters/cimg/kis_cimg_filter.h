@@ -30,6 +30,8 @@ class KisCImgFilterConfiguration : public KisFilterConfiguration
 
 public:
 
+    using KisFilterConfiguration::fromXML;
+    
     KisCImgFilterConfiguration();
     virtual QString toString();
     virtual void fromXML(const QString & s);
@@ -54,17 +56,17 @@ class KisCImgFilter : public KisFilter
 public:
     KisCImgFilter();
 public:
+
+    using KisFilter::process;
+    
     void process(KisFilterConstantProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0
+                 KoUpdater* progressUpdater
         ) const;
     static inline KoID id() { return KoID("cimg", i18n("Image Restoration (cimg-based)")); }
-    virtual bool supportsPainting() const { return false; }
-    ;
-    virtual bool supportsPreview() const { return false; }
-    virtual ColorSpaceIndependence colorSpaceIndependence() const;
+
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration * configuration(QWidget*);

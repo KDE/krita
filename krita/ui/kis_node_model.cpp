@@ -279,7 +279,7 @@ QMimeData * KisNodeModel::mimeData ( const QModelIndexList & indexes ) const
 
 bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
 {
-
+    Q_UNUSED( data );
     Q_UNUSED( row );
     Q_UNUSED( column );
     Q_UNUSED( parent );

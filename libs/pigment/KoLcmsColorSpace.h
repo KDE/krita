@@ -33,40 +33,7 @@
 
 #include "colorprofiles/KoHdrColorProfile.h"
 
-struct KoLcmsColorTransformation : public KoColorTransformation
-{
-    KoLcmsColorTransformation() : KoColorTransformation()
-    {
-        csProfile = 0;
-        cmstransform = 0;
-        profiles[0] = 0;
-        profiles[1] = 0;
-        profiles[2] = 0;
-    }
-
-    ~KoLcmsColorTransformation() {
-
-        if (cmstransform)
-            cmsDeleteTransform(cmstransform);
-        if (profiles[0] && profiles[0] != csProfile)
-            cmsCloseProfile(profiles[0]);
-        if(profiles[1] && profiles[1] != csProfile)
-            cmsCloseProfile(profiles[1]);
-        if(profiles[2] && profiles[2] != csProfile)
-            cmsCloseProfile(profiles[2]);
-    }
-
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
-    {
-        cmsDoTransform(cmstransform, const_cast<quint8 *>(src), dst, nPixels);
-    }
-
-    cmsHPROFILE csProfile;
-    cmsHPROFILE profiles[3];
-    cmsHTRANSFORM cmstransform;
-};
-
-class PIGMENTCMS_EXPORT KoLcmsColorConversionTransformation : public KoColorConversionTransformation {
+class KoLcmsColorConversionTransformation : public KoColorConversionTransformation {
     public:
         KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, quint32 srcColorSpaceType, KoLcmsColorProfileContainer* srcProfile, const KoColorSpace* dstCs, quint32 dstColorSpaceType, KoLcmsColorProfileContainer* dstProfile, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_transform(0)
         {
@@ -142,6 +109,48 @@ class KoLcmsInfo {
  */
 template<class _CSTraits>
 class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo {
+        struct KoLcmsColorTransformation : public KoColorTransformation
+        {
+            KoLcmsColorTransformation(const KoColorSpace* colorSpace) : KoColorTransformation(), m_colorSpace(colorSpace)
+            {
+                csProfile = 0;
+                cmstransform = 0;
+                profiles[0] = 0;
+                profiles[1] = 0;
+                profiles[2] = 0;
+            }
+        
+            ~KoLcmsColorTransformation() {
+        
+                if (cmstransform)
+                    cmsDeleteTransform(cmstransform);
+                if (profiles[0] && profiles[0] != csProfile)
+                    cmsCloseProfile(profiles[0]);
+                if(profiles[1] && profiles[1] != csProfile)
+                    cmsCloseProfile(profiles[1]);
+                if(profiles[2] && profiles[2] != csProfile)
+                    cmsCloseProfile(profiles[2]);
+            }
+        
+            virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+            {
+                cmsDoTransform(cmstransform, const_cast<quint8 *>(src), dst, nPixels);
+                qint32 numPixels = nPixels;
+                qint32 pixelSize = m_colorSpace->pixelSize();
+                while (numPixels > 0) {
+                    quint8 alpha = m_colorSpace->alpha(src);
+                    m_colorSpace->setAlpha(dst, alpha, 1);
+        
+                    src += pixelSize;
+                    dst += pixelSize;
+                    numPixels--;
+                }
+            }
+            const KoColorSpace* m_colorSpace;
+            cmsHPROFILE csProfile;
+            cmsHPROFILE profiles[3];
+            cmsHTRANSFORM cmstransform;
+        };
         struct Private {
             mutable quint8 * qcolordata; // A small buffer for conversion from and to qcolor.
             cmsHTRANSFORM defaultToRGB;    // Default transform to 8 bit sRGB
@@ -293,7 +302,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             for(int i =0; i < 256; i++)
                 transferFunctions[0]->GammaTable[i] = transferValues[i];
 
-            KoLcmsColorTransformation *adj = new KoLcmsColorTransformation;
+            KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
             adj->profiles[1] = cmsCreateLinearizationDeviceLink(icSigLabData, transferFunctions);
             cmsSetDeviceClass(adj->profiles[1], icSigAbstractClass);
 
@@ -309,7 +318,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         {
             if (!d->profile) return 0;
 
-            KoLcmsColorTransformation *adj = new KoLcmsColorTransformation;
+            KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
 
             adj->profiles[0] = d->profile->lcmsProfile();
             adj->profiles[2] = d->profile->lcmsProfile();
@@ -376,7 +385,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 }
             }
 
-            KoLcmsColorTransformation *adj = new KoLcmsColorTransformation;
+            KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
             adj->profiles[0] = cmsCreateLinearizationDeviceLink(this->colorSpaceSignature(), transferFunctions);
             adj->profiles[1] = NULL;
             adj->profiles[2] = NULL;

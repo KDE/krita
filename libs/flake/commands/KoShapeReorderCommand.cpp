@@ -93,10 +93,12 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
                 }
             }
             else if(move == LowerShape) {
-                if(--iter == sortedShapes.begin()) continue; // already at bottom
+                if(iter == sortedShapes.begin()) continue; // already at bottom
+                iter--; // go to the one below
                 int newIndex = (*iter)->zIndex()-1;
                 changedShapes.append(shape);
                 newIndexes.append(newIndex);
+                if(iter == sortedShapes.begin()) continue; // moved to the bottom
                 --iter; // skip the one we want to get below
                 while(iter != sortedShapes.begin() && newIndex >= (*iter)->zIndex()) {
                     changedShapes.append(*iter);

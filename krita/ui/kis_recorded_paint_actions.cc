@@ -96,7 +96,7 @@ void KisRecordedPolyLinePaintAction::play(KisUndoAdapter* adapter) const
     double savedDist = 0.0;
     for(int i = 0; i < d->infos.size() - 1; i++)
     {
-        savedDist = painter.paintLine(d->infos[i],d->infos[i+1]);
+        savedDist = painter.paintLine(d->infos[i],d->infos[i+1], savedDist);
     }
     d->layer->setDirty( painter.dirtyRegion() );
     if (adapter) adapter->addCommand( cmd );

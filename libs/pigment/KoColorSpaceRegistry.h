@@ -34,6 +34,7 @@ class KoColorSpace;
 class KoColorSpaceFactory;
 class KoColorProfile;
 class KoColorConversionSystem;
+class KoColorConversionCache;
 
 // XXX: USE STATIC DELETER! USE STATIC DELETER!
 
@@ -241,6 +242,11 @@ public:
      * spaces to create color conversion transformation
      */
     const KoColorConversionSystem* colorConversionSystem() const;
+    
+    /**
+     * @return the cache of color conversion transformation to be use by KoColorSpace
+     */
+    KoColorConversionCache* colorConversionCache() const;
     
 private:
     bool isCached(QString csId, QString profileName) const;

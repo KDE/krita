@@ -35,6 +35,7 @@
 
 #include "KoPluginLoader.h"
 #include "KoColorSpace.h"
+#include "KoColorConversionCache.h"
 #include "KoColorConversionSystem.h"
 #include "KoBasicHistogramProducers.h"
 
@@ -51,6 +52,7 @@ struct KoColorSpaceRegistry::Private {
     QMap<QString, PaintActionList> paintDevActionMap;
     const KoColorSpace *alphaCs;
     KoColorConversionSystem *colorConversionSystem;
+    KoColorConversionCache* colorConversionCache;
     static KoColorSpaceRegistry *singleton;
 };
 
@@ -70,6 +72,7 @@ KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
 void KoColorSpaceRegistry::init()
 {
     d->colorConversionSystem = new KoColorConversionSystem;
+    d->colorConversionCache = new KoColorConversionCache;
     // prepare a list of the profiles
     KGlobal::mainComponent().dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
 
@@ -144,11 +147,13 @@ void KoColorSpaceRegistry::init()
 KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private())
 {
     d->colorConversionSystem = 0;
+    d->colorConversionCache = 0;
 }
 
 KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
     delete d->colorConversionSystem;
+    delete d->colorConversionCache;
     delete d;
 }
 
@@ -387,6 +392,11 @@ QString KoColorSpaceRegistry::colorSpaceId(const KoID& colorModelId, const KoID&
 const KoColorConversionSystem* KoColorSpaceRegistry::colorConversionSystem() const
 {
     return d->colorConversionSystem;
+}
+
+KoColorConversionCache* KoColorSpaceRegistry::colorConversionCache() const
+{
+    return d->colorConversionCache;
 }
 
 #include "KoColorSpaceRegistry.moc"

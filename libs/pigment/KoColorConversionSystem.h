@@ -36,6 +36,8 @@ class KoID;
  * the color spaces. The most usefull functions are createColorConverter to create
  * a color conversion between two color spaces, and insertColorSpace which is called
  * by KoColorSpaceRegistry each time a new color space is added to the registry.
+ *
+ * This class is not part of public API, and can be changed without notice.
  */
 class PIGMENTCMS_EXPORT KoColorConversionSystem {
     public:

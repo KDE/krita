@@ -28,6 +28,7 @@
 #include "KoColorTransformation.h"
 #include "KoColorTransformationFactory.h"
 #include "KoColorTransformationFactoryRegistry.h"
+#include "KoColorConversionCache.h"
 #include "KoColorConversionSystem.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
@@ -43,17 +44,11 @@ struct KoColorSpace::Private {
     KoConvolutionOp* convolutionOp;
     QThreadStorage< QVector<quint8>* > conversionCache;
 
-    mutable const KoColorSpace *lastUsedDstColorSpace;
-    mutable KoColorConversionTransformation* lastUsedTransform;
     
     mutable KoColorConversionTransformation* transfoToRGBA16;
     mutable KoColorConversionTransformation* transfoFromRGBA16;
     mutable KoColorConversionTransformation* transfoToLABA16;
     mutable KoColorConversionTransformation* transfoFromLABA16;
-
-// cmsHTRANSFORM is a void *, so this should work.
-    typedef QMap<const KoColorSpace *, KoColorConversionTransformation*>  TransformMap;
-    mutable TransformMap transforms; // Cache for existing transforms
 
 };
 
@@ -69,8 +64,6 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     d->name = name;
     d->mixColorsOp = mixColorsOp;
     d->convolutionOp = convolutionOp;
-    d->lastUsedDstColorSpace = 0;
-    d->lastUsedTransform = 0;
     d->transfoToRGBA16 = 0;
     d->transfoFromRGBA16 = 0;
     d->transfoToLABA16 = 0;
@@ -79,6 +72,7 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
 
 KoColorSpace::~KoColorSpace()
 {
+    KoColorSpaceRegistry::instance()->colorConversionCache()->colorSpaceIsDestroyed(this);
     delete d->mixColorsOp;
     delete d->convolutionOp;
     delete d;
@@ -250,38 +244,8 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
         quint32 numPixels,
         KoColorConversionTransformation::Intent renderingIntent) const
 {
-    if (*dstColorSpace == *this)
-    {
-        if (src!= dst)
-            memcpy (dst, src, numPixels * this->pixelSize());
-
-        return true;
-    }
-
-    KoColorConversionTransformation* tf = 0;
-#if 1
-    if (d->lastUsedTransform != 0 && d->lastUsedDstColorSpace != 0) {
-        if (*dstColorSpace == *d->lastUsedDstColorSpace) {
-            tf = d->lastUsedTransform;
-            }
-    }
-    if (not tf) {
-        if (!d->transforms.contains(dstColorSpace)) {
-#endif    // XXX: Should we clear the transform cache if it gets too big?
-            tf = this->createColorConverter(dstColorSpace, renderingIntent);
-#if 1
-            d->transforms[dstColorSpace] = tf;
-        }
-        else {
-            tf = d->transforms[dstColorSpace];
-        }
-
-        d->lastUsedTransform = tf;
-        d->lastUsedDstColorSpace = dstColorSpace;
-    }
-#endif
-    tf->transform(src, dst, numPixels);
-
+    KoCachedColorConversionTransformation cct = KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(this, dstColorSpace, renderingIntent);
+    cct.transformation()->transform(src, dst, numPixels);
     return true;
 }
 

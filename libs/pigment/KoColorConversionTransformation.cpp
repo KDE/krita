@@ -53,3 +53,15 @@ KoColorConversionTransformation::Intent KoColorConversionTransformation::renderi
 {
     return d->renderingIntent;
 }
+
+void KoColorConversionTransformation::setSrcColorSpace(const KoColorSpace* cs) const
+{
+    Q_ASSERT(*d->srcColorSpace == *cs);
+    d->srcColorSpace = cs;
+}
+
+void KoColorConversionTransformation::setDstColorSpace(const KoColorSpace* cs) const
+{
+    Q_ASSERT(*d->dstColorSpace == *cs);
+    d->dstColorSpace = cs;
+}

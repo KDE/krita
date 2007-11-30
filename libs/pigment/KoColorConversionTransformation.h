@@ -25,11 +25,13 @@
 #include <pigment_export.h>
 
 class KoColorSpace;
+class KoColorConversionCache;
 
 /**
  * This is the base class of all color transform that convert the color of a pixel
  */
 class PIGMENTCMS_EXPORT KoColorConversionTransformation : KoColorTransformation{
+        friend class KoColorConversionCache;
         struct Private;
     public:
         /**
@@ -64,6 +66,9 @@ class PIGMENTCMS_EXPORT KoColorConversionTransformation : KoColorTransformation{
          * @param nPixels the number of pixels in the buffers.
          */
         virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const =0;
+    private:
+        void setSrcColorSpace(const KoColorSpace*) const;
+        void setDstColorSpace(const KoColorSpace*) const;
     private:
         Private * const d;
 };

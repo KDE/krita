@@ -19,7 +19,11 @@
 
 #include <qtest_kde.h>
 
-#include "kis_filter_test.h"
+#include "kis_filter_job_test.h"
+
+#include <KoProgressUpdater.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "kis_filter_configuration.h"
 #include "kis_filter_registry.h"
@@ -28,58 +32,53 @@
 #include "kis_filter.h"
 #include "testutil.h"
 #include "kis_threaded_applicator.h"
+#include "kis_filter_job.h"
+#include "testutil.h"
+#include "kis_fill_painter.h"
 
-class TestFilter : public KisFilter 
+void KisFilterJobTest::testCreation()
 {
-public:
-
-    TestFilter()
-        : KisFilter(KoID("test", "test"), KoID("test", "test"), "TestFilter" )
-        {
-        }    
- 
-    using KisFilter::process;
- 
-    void process(KisFilterConstantProcessingInformation src,
-                         KisFilterProcessingInformation dst,
-                         const QSize& size,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater) const
-        {
-            Q_UNUSED(src);
-            Q_UNUSED(dst);
-            Q_UNUSED(size);
-            Q_UNUSED(config);
-            Q_UNUSED(progressUpdater);
-        }
- 
-};
-
-void KisFilterTest::testCreation()
-{
-    TestFilter test;
-}
-
-void KisFilterTest::testSingleThreaded()
-{
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-
-    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage inverted( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
-    KisPaintDeviceSP dev = new KisPaintDevice(cs, "filter test");
-    dev->convertFromQImage(qimg, "", 0, 0);
-    
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT( f );
 
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT( kfc );
 
-    KisFilterConstantProcessingInformation src( dev,  QPoint(0, 0), 0 );
-    KisFilterProcessingInformation dst( dev, QPoint(0, 0), 0 );
-    
-    f->process(src, dst, qimg.size(), kfc);
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdater up = pu.startSubtask();
 
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    
+    KisFilterJobFactory factory(f, kfc);
+    ThreadWeaver::Job * job = factory.createJob(0, dev, QRect(0, 0, 2000, 2000), f->overlapMarginNeeded(kfc), &up);
+    Q_ASSERT(job);
+}
+
+void KisFilterJobTest::testInWeaver()
+{
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT( f );
+
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    Q_ASSERT( kfc );
+
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage inverted( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+    KisPaintDeviceSP dev = new KisPaintDevice(cs, "filter test");
+    dev->convertFromQImage(qimg, "", 0, 0);
+
+    KisFilterJobFactory factory(f, kfc);
+
+    KisThreadedApplicator applicator(dev, QRect(0, 0, 2000, 2000), &factory, &pu, f->overlapMarginNeeded( kfc ));
+    applicator.execute();
+
+    
     QPoint errpoint;
     if ( !TestUtil::compareQImages( errpoint, inverted, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
         dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest2.png");
@@ -87,5 +86,5 @@ void KisFilterTest::testSingleThreaded()
     }
 }
 
-QTEST_KDEMAIN(KisFilterTest, GUI);
-#include "kis_filter_test.moc"
+QTEST_KDEMAIN(KisFilterJobTest, GUI);
+#include "kis_filter_job_test.moc"

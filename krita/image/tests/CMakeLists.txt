@@ -558,3 +558,9 @@ target_link_libraries(KisVecTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTE
 set(kis_filter_config_widget_test_SRCS kis_filter_config_widget_test.cpp )
 kde4_add_unit_test(KisFilterConfigWidgetTest TESTNAME krita-image-KisFilterConfigWidgetTest ${kis_filter_config_widget_test_SRCS})
 target_link_libraries(KisFilterConfigWidgetTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_filter_job_test_SRCS kis_filter_job_test.cpp )
+kde4_add_unit_test(KisFilterJobTest TESTNAME krita-image-KisFilterJobTest ${kis_filter_job_test_SRCS})
+target_link_libraries(KisFilterJobTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})

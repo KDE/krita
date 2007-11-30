@@ -19,6 +19,7 @@
 
 #include <math.h>
 
+#include <QThread>
 #include <QRect>
 
 #include <threadweaver/ThreadWeaver.h>
@@ -62,8 +63,8 @@ KisThreadedApplicator::KisThreadedApplicator( KisPaintDeviceSP dev,
     m_d->progressUpdater = progressUpdater;
 
     KConfigGroup cfg = KGlobal::config()->group("");
-    m_d->maxThreads = cfg.readEntry("maxthreads",  10);
-    m_d->tileSize = cfg.readEntry( "threadingtilesize", 512 );
+    m_d->maxThreads = cfg.readEntry("maxthreads",  QThread::idealThreadCount() );
+    m_d->tileSize = cfg.readEntry( "threadingtilesize", 256 );
 
     m_d->weaver = new Weaver();
     m_d->weaver->setMaximumNumberOfThreads( m_d->maxThreads );
@@ -104,7 +105,7 @@ void KisThreadedApplicator::execute()
             int row = 0;
             while ( hleft > 0 ) {
                 QRect subrect( col + x, row + y, qMin( wleft, m_d->tileSize ), qMin( hleft, m_d->tileSize ) );
-                KoUpdater updater = m_d->progressUpdater->startSubtask(); // Will be deleted by the progress updater    
+                KoUpdater updater = m_d->progressUpdater->startSubtask(); 
                 Job * job = m_d->jobFactory->createJob( this, m_d->dev, subrect, m_d->margin, &updater );
                 m_d->weaver->enqueue( job );
                 hleft -= m_d->tileSize;

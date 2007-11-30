@@ -174,7 +174,7 @@ void KisFilterInvert::process(KisFilterConstantProcessingInformation srcInfo,
 
 #endif
     delete inverter;
-
+    //if(progressUpdater) progressUpdater->setProgress( 100 );
 
     // Two inversions make no inversion? No -- because we're reading
     // from the oldData in both loops without saving the transaction

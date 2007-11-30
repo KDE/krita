@@ -43,70 +43,7 @@
 #include "kis_view2.h"
 #include "kis_painter.h"
 #include "kis_threaded_applicator.h"
-
-class KisFilterJob : public KisJob {
-public:
-
-    KisFilterJob( const KisFilter* filter,
-                  const KisFilterConfiguration * config,
-                  QObject * parent, KisPaintDeviceSP dev, 
-                  const QRect & rc, 
-                  int margin,
-                  KoUpdater * updater  )
-        : KisJob( parent, dev, rc, margin )
-        , m_filter( filter )
-        , m_config( config )
-        , m_updater( updater)
-        {
-        }
-
-
-    virtual void run()
-        {
-            // XXX: Is it really necessary to output the filter on a second paint device and
-            //      then blit it back? (boud)
-            KisPaintDeviceSP dst = new KisPaintDevice( m_dev->colorSpace() );
-            QRect marginRect = m_rc.adjusted( -m_margin, -m_margin, m_margin, m_margin );
-
-            m_filter->process( KisFilterConstantProcessingInformation( m_dev, marginRect.topLeft()), 
-                               KisFilterProcessingInformation( dst, marginRect.topLeft() ),
-                               marginRect.size(),
-                               m_config,
-                               m_updater );
-            KisPainter p( m_dev );
-            p.setCompositeOp( m_dev->colorSpace()->compositeOp( COMPOSITE_COPY ) );
-            p.bitBlt( m_rc.topLeft(), dst, m_rc );
-            p.end();
-        }
-
-private:
-
-    const KisFilter * m_filter;
-    const KisFilterConfiguration * m_config;
-    KoUpdater * m_updater;
-};
-
-class KisFilterJobFactory : public KisJobFactory {
-public:
-
-    KisFilterJobFactory( const KisFilter* filter, const KisFilterConfiguration * config )
-        : m_filter( filter )
-        , m_config( config )
-        {
-        }
-
-
-    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin, KoUpdater * updater )
-        {
-            // XXX_PROGRESS: pass KoProgressUpdater here
-            return new KisFilterJob( m_filter, m_config, parent, dev, rc, margin, updater );
-        }
-
-private:
-
-    const KisFilter * m_filter;
-    const KisFilterConfiguration * m_config;
-};
+#include "kis_filter_job.h"
 
 struct KisFilterHandler::Private {
 

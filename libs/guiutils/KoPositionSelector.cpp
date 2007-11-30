@@ -24,6 +24,10 @@
 #include <QButtonGroup>
 #include <QButtonGroup>
 #include <QPainter>
+#include <QDebug>
+#include <QStyleOption>
+
+#define GAP 5
 
 class KoPositionSelector::Private {
 public:
@@ -59,10 +63,17 @@ public:
     void setGeometry (const QRect &geom) {
         QSize prefSize = calcSizes();
 
-        const int columnWidth = qRound(geom.width() / ((double) maxCol));
-        const int rowHeight = qRound(geom.height() / ((double) maxRow));
+        qreal columnWidth, rowHeight;
+        if (geom.width() < minimum.width())
+            columnWidth = geom.width() / (qreal) maxCol;
+        else
+            columnWidth = prefSize.width() + GAP;
+        if (geom.height() < minimum.height())
+            rowHeight = geom.height() / (qreal) maxRow;
+        else
+            rowHeight = prefSize.height() + GAP;
         foreach(Item item, items) {
-            QPoint point( item.column * columnWidth, item.row * rowHeight );
+            QPoint point( qRound(item.column * columnWidth), qRound(item.row * rowHeight) );
             QRect rect(point + geom.topLeft(), prefSize);
             item.child->setGeometry(rect);
         }
@@ -76,14 +87,16 @@ public:
             if(prefSize.isEmpty()) {
                 QAbstractButton *but = dynamic_cast<QAbstractButton*> (item.child->widget());
                 Q_ASSERT(but);
-                prefSize = but->iconSize();
-                //prefSize = QSize( but->height(), but->height() );
+                QStyleOptionButton opt;
+                opt.initFrom(but);
+                prefSize = QSize(1,1) + QSize(but->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth, &opt, but),
+                        but->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight, &opt, but));
             }
             maxRow = qMax(maxRow, item.row);
             maxCol = qMax(maxRow, item.column);
         }
         maxCol++; maxRow++; // due to being zero-based.
-        preferred = QSize(maxCol * prefSize.width() + (maxCol-1) * 5, maxRow * prefSize.height() + (maxRow-1) * 5);
+        preferred = QSize(maxCol * prefSize.width() + (maxCol-1) * GAP, maxRow * prefSize.height() + (maxRow-1) * GAP);
         minimum = QSize(maxCol * prefSize.width(), maxRow * prefSize.height());
         return prefSize;
     }
@@ -194,7 +207,12 @@ void KoPositionSelector::positionChanged(int position) {
 void KoPositionSelector::paintEvent (QPaintEvent *) {
     QPainter painter( this );
     QPen pen(Qt::black);
-    pen.setWidth(2);
+    int width;
+    if (d->topLeft->width() %2 == 0)
+        width = 2;
+    else
+        width = 3;
+    pen.setWidth(width);
     painter.setPen(pen);
     painter.drawRect(d->topLeft->width() / 2, d->topLeft->height() / 2, d->bottomRight->x(), d->bottomRight->y());
     painter.end();

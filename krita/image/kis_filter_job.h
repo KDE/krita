@@ -20,6 +20,7 @@
 #define KIS_FILTER_JOB_H
 
 #include "kis_threaded_applicator.h"
+#include "krita_export.h"
 
 class KisFilter;
 class KisFilterConfiguration;
@@ -51,7 +52,7 @@ private:
     KoUpdater * m_updater;
 };
 
-class KisFilterJobFactory : public KisJobFactory {
+class KRITAIMAGE_EXPORT KisFilterJobFactory : public KisJobFactory {
 public:
 
     KisFilterJobFactory( const KisFilter* filter, const KisFilterConfiguration * config );

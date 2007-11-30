@@ -53,6 +53,7 @@
 #include <kundostack.h>
 #include <kdebug.h>
 #include <kdeprintdialog.h>
+#include <knotification.h>
 
 #include <QBuffer>
 #include <QDir>
@@ -482,6 +483,13 @@ bool KoDocument::saveFile()
         setConfirmNonNativeSave ( isExporting (), false );
     }
     emit clearStatusBarMessage();
+
+    if ( ret ) {
+        KNotification *notify = new KNotification("DocumentSaved");
+        notify->setText( i18n("Document <i>%1</i> saved", url().url()) );
+        notify->addContext("url", url().url());
+        QTimer::singleShot(0, notify, SLOT(sendEvent()));
+    }
 
     return ret;
 }
@@ -1665,6 +1673,11 @@ bool KoDocument::openFile()
     if ( ok )
     {
         setMimeTypeAfterLoading( typeName );
+
+        KNotification *notify = new KNotification("DocumentLoaded");
+        notify->setText( i18n("Document <i>%1</i> loaded", url().url()) );
+        notify->addContext("url", url().url());
+        QTimer::singleShot(0, notify, SLOT(sendEvent()));
     }
     d->m_bLoading = false;
     return ok;

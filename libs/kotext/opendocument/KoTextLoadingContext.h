@@ -34,6 +34,23 @@ class KoTextLoader;
  *
  * This class extends the \a KoOasisLoadingContext class with KoText specific
  * functionality like for example handling of lists.
+ *
+ * The context is used within the \a KoTextLoader class to provide additional
+ * state informations like the \a KoDocument and the \a KoStore we operate on.
+ *
+ * In the \a KoTextShapeData::loadOdf() method the \a KoTextLoader is used
+ * with a KoTextLoadingContext instance like this;
+ *
+ * \code
+ * KoStyleManager *stylemanager = new KoStyleManager();
+ * KoTextLoader *loader = new KoTextLoader(stylemanager);
+ * KoDocument* doc = oasisContext.koDocument();
+ * KoOdfStylesReader& styles = oasisContext.stylesReader();
+ * KoStore *store = oasisContext.store()
+ * KoTextLoadingContext *loaderContext = new KoTextLoadingContext(loader, doc, styles, store);
+ * QTextCursor cursor( document() );
+ * loader->loadBody(*loaderContext, element, cursor); // load the body from the ODF KoXmlElement.
+ * \endcode
  */
 class KOTEXT_EXPORT KoTextLoadingContext : public KoOasisLoadingContext
 {
